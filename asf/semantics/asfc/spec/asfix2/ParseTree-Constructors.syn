@@ -1,0 +1,15 @@
+%%%% $Id$
+
+%% Introduce function symbols for each elementary notion
+%% that may occur in a parse tree.
+
+imports ATerms
+exports
+  context-free syntax
+    "w"             -> AFun
+    "l"             -> AFun
+    "sort"          -> AFun
+    "meta-var"      -> AFun
+    "sep"           -> AFun
+    "iter"          -> AFun
+    "iter-sep"      -> AFun

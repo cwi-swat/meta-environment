@@ -1,0 +1,15 @@
+imports Integers
+
+exports
+  %%%sorts AInt
+  %%%context-free syntax
+  %%%  IntCon -> AInt
+  context-free syntax
+    succ(IntCon) -> IntCon
+    %%%succ(AInt) -> AInt
+    %%%gtr(AInt,AInt) -> AInt
+    gtr(IntCon,IntCon) -> IntCon
+
+  variables
+    Aint[0-9]* -> IntCon
+    %%%Aint[0-9]* -> AInt

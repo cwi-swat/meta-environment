@@ -181,8 +181,8 @@ equations
               %%%add-rules([(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2],C-rule*1) = C-rule*3,
               %%%add-rules([(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2],C-rule*2) = C-rule*4
               ===============================================================================
-              select-on-ofs-first-arg([(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                (C-rule*1,[(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2)
+              select-on-ofs-first-arg([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                (C-rule*1,[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2)
 
 %% If a rule has not a variable as first argument, its ofs is used to select
 %% the other rules of the set.
@@ -190,17 +190,17 @@ equations
               get-funid(Term1) = Funid2,
               select-on-ofs-first-arg(Funid2,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg([(Term1,Aint*),Fv-path*|
+              select-on-ofs-first-arg([(Term1,Aint+),Fv-path*|
                                        Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                ([(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                ([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
                  C-rule*2)
 
   [soofa-1'5] get-funid(Term1) = Funid2,
               select-on-ofs-first-arg(Funid2,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg([((Term1,Aint*),Fv-path+),Fv-path*|
+              select-on-ofs-first-arg([((Term1,Aint+),Fv-path+),Fv-path*|
                                        Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                ([((Term1,Aint*),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
+                ([((Term1,Aint+),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
                  C-rule*2)
 
 %% If there are no rewrite rules we are finished.
@@ -211,9 +211,9 @@ equations
               select-on-ofs-first-arg(Funid1,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
               select-on-ofs-first-arg(Funid1,
-                                      [(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                                      [(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
                 (C-rule*1,
-                 C-rule*2;[(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid],
+                 C-rule*2;[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid],
                  C-rule*3)
 
 %% If a rule has not a variable as first argument, but the ofs of the first
@@ -222,8 +222,8 @@ equations
               get-funid(Term1) = Funid1,
               select-on-ofs-first-arg(Funid1,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg(Funid1,[(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                ([(Term1,Aint*),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,C-rule*2,C-rule*3)
+              select-on-ofs-first-arg(Funid1,[(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
+                ([(Term1,Aint+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,C-rule*2,C-rule*3)
 
 %% Otherwise, it is added to the second set.
   [soofa-2'4] is-var-term(Term1) = false,
@@ -231,17 +231,17 @@ equations
               Funid1 != Funid3,
               select-on-ofs-first-arg(Funid1,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg(Funid1,[(Term1,Aint*),Fv-path*|
+              select-on-ofs-first-arg(Funid1,[(Term1,Aint+),Fv-path*|
                                               Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                (C-rule*1,[(Term1,Aint*),Fv-path*|
+                (C-rule*1,[(Term1,Aint+),Fv-path*|
                            Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,C-rule*3)
 
   [soofa-2'5] get-funid(Term1) = Funid1,
               select-on-ofs-first-arg(Funid1,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg(Funid1,[((Term1,Aint*),Fv-path+),Fv-path*|
+              select-on-ofs-first-arg(Funid1,[((Term1,Aint+),Fv-path+),Fv-path*|
                                               Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
-                ([((Term1,Aint*),Fv-path+),Fv-path*|
+                ([((Term1,Aint+),Fv-path+),Fv-path*|
                   Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1,
                  C-rule*2,C-rule*3)
 
@@ -250,10 +250,10 @@ equations
               Funid1 != Funid3,
               select-on-ofs-first-arg(Funid1,C-rule*) = (C-rule*1,C-rule*2,C-rule*3)
               ======================================================================
-              select-on-ofs-first-arg(Funid1,[((Term1,Aint*),Fv-path+),Fv-path*|
+              select-on-ofs-first-arg(Funid1,[((Term1,Aint+),Fv-path+),Fv-path*|
                                               Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*) =
                 (C-rule*1,
-                 [((Term1,Aint*),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
+                 [((Term1,Aint+),Fv-path+),Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
                  C-rule*3)
 
 %% If there are no rewrite rules we are finished.
@@ -292,12 +292,12 @@ equations
 %% If a rule has a variable as first argument it is appended to the second set.
   [rofa-1'2] remove-ofs-first-arg(C-rule*1) = C-rule*2
              =========================================
-             remove-ofs-first-arg([(Term1,Aint*),Fv-path+|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
+             remove-ofs-first-arg([(Term1,Aint+),Fv-path+|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
                [Fv-path+|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
 
   [rofa-1'3] remove-ofs-first-arg(C-rule*1) = C-rule*2
              =========================================
-             remove-ofs-first-arg([((Term1,Aint*),Fv-path+),Fv-path*|
+             remove-ofs-first-arg([((Term1,Aint+),Fv-path+),Fv-path*|
                                    Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
                [Fv-path+,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
 
@@ -310,19 +310,19 @@ equations
             remove-first-arg([Fv-path,Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) =
                [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
 
-  [gfvp-1'1] get-first-vf-path([(Term1,Aint*),Fv-path*|
-                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint*)
+  [gfvp-1'1] get-first-vf-path([(Term1,Aint+),Fv-path*|
+                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint+)
 
-  [gfvp-1'2] get-first-vf-path([((Term1,Aint*),Fv-path+),Fv-path*|
-                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint*)
+  [gfvp-1'2] get-first-vf-path([((Term1,Aint+),Fv-path+),Fv-path*|
+                                Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint+)
 
-  [isvp-1'1] is-single-vf-path([(Term1,Aint*)|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = true
+  [isvp-1'1] is-single-vf-path([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = true
 
-  [default-isvp-1'2] is-single-vf-path(C-rule*) = false
+  [default-isvp-1'2] is-single-vf-path(C-rule+) = false
 
   [isvp-1'1] is-empty-vf-path([|Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = true
 
-  [default-isvp-1'2] is-empty-vf-path(C-rule*) = false
+  [default-isvp-1'2] is-empty-vf-path(C-rule+) = false
 
   [ma-1'1] make-atmp(natcon(Char+)) = identifier("a""r""g" Char+) %%%identifier("t""m""p" Char+)
 

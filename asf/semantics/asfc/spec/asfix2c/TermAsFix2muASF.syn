@@ -1,0 +1,29 @@
+%%  TermAsFix2muASF
+
+imports AsFix2Sign-C
+
+exports
+  context-free syntax
+    "term-equ2rules" "(" AFun "," ATerm "," NameTable ")" -> FuncRuleTableTuple
+  context-free syntax
+    make-c-list-cons({Term ","}*,{Term ","}*) -> Term
+
+hiddens
+  context-free syntax
+    "term2muasf" "(" ATerm "," NameTable ")"              -> FuncTermTableTuple
+    "term-args2muasf" "(" ATermList "," NameTable ")"     -> FuncTermTableTuple
+    "term-listargs2muasf" "(" ATermList "," NameTable ")" -> FuncTermTableTuple
+    "term-conds2muasf" "(" ATermList "," NameTable ")"    -> FuncCondTableTuple
+    "term-cond2muasf" "(" ATerm "," NameTable ")"         -> FuncCondTableTuple
+
+hiddens
+  variables
+    "CeqEqu"[0-9']*       -> ATerm
+    "Alhs"[0-9']*         -> ATerm
+    "Arhs"[0-9']*         -> ATerm
+    "Aterm"[0-9']*        -> ATerm
+    "Args"[0-9']*         -> ATermList
+    "Afunc"[0-9']*        -> ATerm
+    "Attr"[0-9']*         -> ATerm
+     "Aconds"[0-9']*      -> ATermList
+     "Acond"[0-9']*       -> ATerm

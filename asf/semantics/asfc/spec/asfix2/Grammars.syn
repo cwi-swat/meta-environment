@@ -1,0 +1,52 @@
+imports ATermTools %%% Literals ATerms
+
+exports
+  sorts Symbol Symbols Production Productions Grammar Attributes
+
+  context-free syntax
+      "Layout"        -> AFun
+      "Text"          -> AFun
+      "ATerm"         -> AFun
+  context-free syntax
+     Literal                                          -> Symbol
+     AFun                                             -> Symbol
+     AFun ":" Symbol                                  -> Symbol
+     Symbol "*"                                       -> Symbol
+     "{" Symbol Symbol "}" "*"                        -> Symbol
+      Symbol "+"                                      -> Symbol
+     "{" Symbol Symbol "}" "+"                        -> Symbol
+
+     Symbol*                                          -> Symbols
+
+     Symbols "->" Symbol Attributes                   -> Production
+     Production*                                      -> Productions
+     "lexical syntax" Productions
+     "context-free syntax" Productions                -> Grammar
+                                                      -> Attributes
+     "{" { ATerm  ","}* "}"                           -> Attributes
+
+  priorities
+    {Symbol "+" -> Symbol, Symbol "*" -> Symbol} >
+    AFun ":" Symbol  -> Symbol >  AFun "(" ATerms ")" -> ATerm
+
+  context-free syntax
+     Symbols "++" Symbols                             -> Symbols {right}
+     Productions "++" Productions                     -> Productions {right}
+     normg(Grammar)                                   -> Productions
+     normp(Productions)                               -> Productions
+     norm(Symbols)                                    -> Symbols
+
+hiddens
+variables
+   [ABC] [0-9']*                -> Symbol
+   "\\alpha" [0-9']*            -> Symbol*
+   "\\beta" [0-9']*             -> Symbol*
+   "\\alpha" "+" [0-9']*        -> Symbol+
+   "\\beta" "+" [0-9']*         -> Symbol+
+   Attrs                        -> Attributes
+   Attr"*" [0-9']*              -> {ATerm ","}*
+
+   P[0-9']*                     -> Production
+   P"*"[0-9']*                  -> Production*
+   P"+"[0-9']*                  -> Production+
+   Gram                         -> Grammar

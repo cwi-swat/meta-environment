@@ -1,0 +1,51 @@
+%% The module {\tt Check-List-Pats} looks whether in
+%% a \muasf\ specification certain list matching patterns
+%% occur.
+%% These patterns will be transform into simpler list
+%% matching algorithms later on.
+%% First, it is checked whether patterns like:
+%% lookup(V,{set}(*V1,V,*V2)) = ... occur in the \muasf\
+%% specification.
+
+imports Remove-Lists-Aux
+
+exports
+  context-free syntax
+    rule-contains-list-vars(Rule)     -> Bool
+    rule-contains-lists(Rule)         -> Bool
+    is-special-rule(Rule)             -> Bool
+    is-like-rule(FunId,Rule)          -> Bool
+    is-lhs(FunId,Term)                -> Bool
+    is-rhs(FunId,Term)                -> Bool
+    is-list-elem-list-elem-list(Term) -> Bool
+    is-list-elem-list-list(Term)      -> Bool
+    is-list-list-elem-list(Term)      -> Bool
+%%%    is-list-elem-list(Term)           -> Bool
+%%%    is-list-list(Term)                -> Bool
+    contains-lhs-pattern(FunId,Term)  -> Bool
+    contains-rhs-pattern(FunId,Term)  -> Bool
+
+hiddens
+  context-free syntax
+    conds-contains-list-vars({Cond "&"}*) -> Bool
+    cond-contains-list-vars(Cond)         -> Bool
+    terms-contains-list-vars({Term ","}*) -> Bool
+    term-contains-list-vars(Term)         -> Bool
+  context-free syntax
+    conds-contains-lists({Cond "&"}*) -> Bool
+    cond-contains-lists(Cond)         -> Bool
+    terms-contains-lists({Term ","}*) -> Bool
+    term-contains-lists(Term)         -> Bool
+  context-free syntax
+    are-lhs-args(FunId,{Term ","}+)     -> Bool
+    are-rhs-args(FunId,{Term ","}+)     -> Bool
+
+exports
+  context-free syntax
+    contains-zero-or-one-list-vars-in-rule(Rule)         -> Bool
+    contains-zero-or-one-list-vars-in-terms({Term ","}+) -> Bool
+    contains-zero-or-one-list-vars-in-term(Term)         -> Bool
+    contains-zero-or-one-list-vars-in-list(Term)         -> Bool
+    contains-zero-or-one-list-vars-in-conds({Cond "&"}+) -> Bool
+    contains-zero-or-one-list-vars-in-cond(Cond)         -> Bool
+    contains-no-list-var(Term)                           -> Bool

@@ -1,0 +1,8 @@
+imports ATypes
+
+exports
+  context-free syntax
+     value(AVar, ATermList)          -> ATerm
+     assign(AVar, ATermList, ATerm)  -> ATermList
+     undefined(AVar, ATermList)      -> Bool
+     substitute(ATerm, ATermList)    -> ATerm

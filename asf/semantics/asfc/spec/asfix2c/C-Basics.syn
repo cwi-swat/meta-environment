@@ -1,0 +1,72 @@
+%%  C-Basics
+
+imports  C MuASF-Basics %%%Remove-Conds-Aux
+
+exports
+  sorts FTS-tuple FT-tuple C-env TE-pair ADS-tuple ADSI-tuple DCAS-tuple
+        E-tuple A-set PA-tuple EI-pair
+  context-free syntax
+    "(" {FuncDef ";"}* "," Declaration-list-opt ","
+        Statement-list-opt ")"                         -> FTS-tuple
+    "(" {FuncDef ";"}* "," Declaration-list-opt ")"    -> FT-tuple
+    "(" Term "," Expression ")"                        -> TE-pair
+    "(" {TE-pair ","}* ")"                             -> C-env
+    "(" Statement-list-opt "," C-env "," IntCon ")"    -> DCAS-tuple
+    "(" Argument-expression-list ","
+        Statement-list-opt "," IntCon ")"              -> ADS-tuple
+    "(" %%%Argument-expression-list ","
+        Declaration-list-opt ","
+        Statement-list-opt "," IntCon ")"              -> ADSI-tuple
+    "(" Expression ")"                                 -> E-tuple
+    "(" Expression "," IntCon ")"                      -> EI-pair
+    "(" {EI-pair ","}* ")"                             -> A-set
+    "(" Parameter-list ","
+        Argument-expression-list "," IntCon ")"        -> PA-tuple
+
+  context-free syntax
+    remove-funcdef(FunId,{FuncDef ";"}*) -> FuncDefList
+
+exports
+  context-free syntax
+    Argument-expression-list "++" Argument-expression-list -> Argument-expression-list {left}
+    Statement-list-opt "++" Statement-list-opt             -> Statement-list-opt {left}
+    Statement-list-opt "++r" Statement-list-opt            -> Statement-list-opt
+    Declaration-list-opt "++" Declaration-list-opt         -> Declaration-list-opt {left}
+    Declaration-list-opt "++d" Statement-list-opt          -> Statement-list-opt
+    Parameter-declaration "++" Parameter-list              -> Parameter-list
+    C-env "++" C-env                                       -> C-env {left}
+
+  context-free syntax
+    celookup(Term,C-env)                     -> E-tuple
+    cecontains(Term,C-env)                   -> Bool
+    make-c-temp(IntCon)                      -> Primary-expression
+    get-funid(Term,{NamePair ","}*)          -> FunId
+    make-call-id(FunId)                      -> Primary-expression
+    make-c-name(FunId)                       -> Identifier
+    make-id-name(Identifier)                 -> FunId
+    is-char(FunId)                           -> Bool
+    is-true(FunId)                           -> Bool
+    is-false(FunId)                          -> Bool
+    translate-char(FunId)                    -> Expression
+    space                                    -> FunId
+    is-external(Annotations)                 -> Bool
+%%%    is-lazy(Annotations)                     -> Bool
+%%%    is-memo(Annotations)                     -> Bool
+%%%    is-constructor(Annotations)              -> Bool
+
+  variables
+    Decls[0-9]*         -> Declaration-list
+    Decl[0-9]*          -> Declaration
+    Decl"*"[0-9]*       -> Declaration-list-opt
+    Decl"+"[0-9]*       -> Declaration+
+    ActualArg"*"[0-9]*  -> {Expression ","}*
+    ActualArg"+"[0-9]*  -> {Expression ","}+
+    FormalArg"+"[0-9']* -> {Parameter-declaration ","}+
+    Tepair"*"[0-9]*     -> {TE-pair ","}*
+    Cenv[0-9]*          -> C-env
+    Exp[0-9]*           -> Expression
+hiddens
+  variables
+    Char[0-9]*       -> CHAR
+    Char[\*][0-9]*   -> CHAR*
+    Char[\+][0-9]*   -> CHAR+

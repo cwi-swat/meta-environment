@@ -1,0 +1,13 @@
+%%  ATermPrint
+
+imports ATerms
+
+exports
+  context-free syntax
+    print(ATerm)          -> Literal
+    print-trms(ATerms)    -> Literal
+
+hiddens
+  variables
+    "c*"[0-9']*  -> CHAR*
+    "c+"[0-9']*  -> CHAR+

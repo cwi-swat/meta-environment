@@ -1,0 +1,64 @@
+%%  Improve-C-code
+
+imports Rules2C-Aux
+
+exports
+  context-free syntax
+    "improve" "(" Statement-list-opt "," Argument-expression-list ")" -> Statement-list
+    "remove-tail-rec" "(" Statement-list-opt "," Identifier ")"       -> Statement-list
+
+hiddens
+  sorts
+    Expressions-pair SE-tuple DE-tuple
+  context-free syntax
+    "<" Argument-expression-list "|" Argument-expression-list ">" -> Expressions-pair
+    "<" Statement-list-opt "|" Argument-expression-list ">"       -> SE-tuple
+    "<" Declaration-list-opt "|" Argument-expression-list ">"     -> DE-tuple
+  context-free syntax
+    "improve-while-stats" "(" Statement-list "|"
+                              Argument-expression-list "|"
+                              Argument-expression-list")"             -> Statement-list-opt
+    "improve-stats" "(" Statement-list ","
+                        Argument-expression-list ")"                  -> Statement-list-opt
+%% The second argument of {\tt improve-stat} is the list of expressions used in the body.
+    "improve-stat" "(" Statement "|"
+                       Argument-expression-list "|"
+                       Argument-expression-list ")"                   -> SE-tuple
+    "improve-decls" "(" Declaration-list-opt ","
+                        Argument-expression-list ")"                  -> DE-tuple
+    "improve-decl" "(" Declaration ","
+                       Argument-expression-list ")"                   -> DE-tuple
+    "used-in-stats" "(" Statement-list ")"                            -> Argument-expression-list {memo}
+    "used-in-stat" "(" Statement ")"                                  -> Argument-expression-list
+    "used-in-decls" "(" Declaration-list-opt ","
+                        Argument-expression-list ")"                  -> Argument-expression-list
+    "used-in-decl" "(" Declaration "," Argument-expression-list ")"   -> Argument-expression-list
+    "used-in-expr" "(" Expression ")"                                 -> Argument-expression-list
+    "used-in-exprs" "(" {Expression ","}+ ")"                         -> Argument-expression-list
+    "filter" Expression "given" Argument-expression-list              -> Expressions-pair
+    "filter-exprs" {Expression ","}+ "given" Argument-expression-list -> Expressions-pair
+    "new-stats" "(" Argument-expression-list "|"
+                    Argument-expression-list ")"                      -> SE-tuple
+    "is-simple-expression" "(" Expression ")"                         -> Bool
+    Argument-expression-list "(+)" Argument-expression-list           -> Argument-expression-list {left}
+    Expression "(s)" Argument-expression-list                         -> Argument-expression-list
+    Argument-expression-list "-/-" Argument-expression-list           -> Argument-expression-list {left}
+    Argument-expression-list "-s-" Expression                         -> Argument-expression-list
+
+  sorts
+    SB-tuple
+  context-free syntax
+    "<" Statement-list-opt "|" Bool ">" -> SB-tuple
+  context-free syntax
+    add-label "(" Bool  "," Identifier "," Statement-list-opt ")"                  -> Statement-list-opt
+    remove-tail-rec-stats "(" Statement-list-opt "," Identifier "," Identifier ")" -> SB-tuple
+    remove-tail-rec-stat "(" Statement "," Identifier "," Identifier ")"           -> SB-tuple
+    transform-args "(" Argument-expression-list "|" Int ")"                        -> Statement-list-opt
+
+hiddens
+  variables
+    Expression"*"[0-9]* -> {Expression ","}*
+    Expression"+"[0-9]* -> {Expression ","}+
+    Id[0-9]*            -> Identifier
+    Stats"*"[0-9']*     -> Statement*
+    ICon[0-9]*           -> Integer-constant

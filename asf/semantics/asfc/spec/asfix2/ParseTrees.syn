@@ -1,0 +1,48 @@
+%% Define the generic interface for parse trees.
+
+imports Grammars
+exports
+   context-free syntax
+      make(AFun, ATermList)                  -> ATerm
+      init(AFun)                             -> ATerm
+      get-cons(ATerm)                        -> AFun
+      get-list-tail-with-sep(ATermList)      -> ATermList
+      get-list-tail(ATermList)               -> ATermList
+      wmap(ATerm, ATerm)                     -> ATermList
+      "fun-wmap"                             -> AFun
+      "wid"                                  -> AFun
+
+      is-cons(AFun, ATerm)                   -> Bool
+      is(Symbol, ATerm)                      -> Bool
+      is(Symbol)                             -> AFun
+      cons2lit(AFun)                         -> Literal
+      position(AFun,ATermList, Int)          -> NatCon
+      named-elem(AFun, ATermList, ATermList) -> ATerm
+
+      %%%ATerm "[" AFun "]"                   -> ATerm
+
+      ATerm "[" {AFun "."}+ "]"               -> ATerm
+
+      %%%ATerm "[" AFun ":=" ATerm "]"       -> ATerm
+      ATerm "[" {AFun "."}+ ":=" ATerm "]"   -> ATerm
+
+      ATerm "[<" AFun "]"                    -> ATerm
+      ATerm "[<" AFun ":=" ATerm "]"         -> ATerm
+
+      ATerm "[>" AFun "]"                    -> ATerm
+      ATerm "[>" AFun ":=" ATerm "]"         -> ATerm
+
+      ATerm "[" {AFun "."}+ "++=" ATermList "]"  -> ATerm
+      ATerm "[" {AFun "."}+ "@="  ATerm "]"      -> ATerm
+      ATerm "[" {AFun "."}+ "*="  ATerm "]"      -> ATerm
+      pp( ATerm )                                -> Literal
+
+hiddens
+   variables
+      [ABC][0-9']* -> Symbol
+      Tvar [0-9']*     -> ATerm
+      Lvar [0-9']*     -> Literal
+      Svar [0-9']*     -> AFun
+      [AB]var [0-9']*  -> ATerm
+      Iter             -> Literal
+      Fields [0-9']* -> {AFun "."}+

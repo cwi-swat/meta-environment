@@ -1,0 +1,15 @@
+%%%% $Id$
+
+imports ATerm-Lists
+exports
+  context-free syntax
+    get(ATermList, ATerm)  -> ATerm
+    getf                   -> AFun
+    eget(ATermList, ATerm) -> ATerm
+    egetf                  -> AFun
+    put(ATermList, ATerm)  -> ATermList
+    putf                   -> AFun
+    cput(ATermList, ATerm) -> ATermList
+    cputf                  -> AFun
+    def(ATermList, ATerm)  -> Bool
+    deff                   -> AFun

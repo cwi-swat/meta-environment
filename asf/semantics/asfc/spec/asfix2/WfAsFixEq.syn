@@ -1,0 +1,5 @@
+imports WfAsFixTerm ATermTools
+exports
+  context-free syntax
+    wf-CondEquation  -> AFun
+    wf-Condition     -> AFun

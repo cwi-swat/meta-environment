@@ -133,48 +133,48 @@ equations
                 conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
 
   [ar2cs-2'3] is-var-term(Term) = true,
-              make-select-stat(Aint*) = Decl*,
-              conds2cstats([(Term,Aint*)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+              make-select-stat(Aint+) = Decl*,
+              conds2cstats([(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
                            Namepair*,Aint1) = (Stat*,Aint2)
               ===================================================
-              asfrules2cstats(,[(Term,Aint*)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+              asfrules2cstats(,[(Term,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
                               Namepair*,Aint1) =
                 (Decl* ++d Stat*,Aint2)
 
   [ar2cs-2'4] is-var-term(Term) = true,
               remove-ofs-first-arg(C-rule*1) = C-rule*2,
-              make-select-stat(Aint*) = Decl*,
+              make-select-stat(Aint+) = Decl*,
               select-on-ofs-first-arg([Fv-path+|
                                        Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2) =
                 (C-rule*3,C-rule*4),
               asfrules2cstats(C-rule*3,C-rule*4,Namepair*,Aint1) = (Stat*,Aint2)
               ==================================================================
-              asfrules2cstats(,[(Term,Aint*),Fv-path+|
+              asfrules2cstats(,[(Term,Aint+),Fv-path+|
                                 Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
                               Namepair*,Aint1) =
                 (Decl* ++d Stat*,Aint2)
 
-  [ar2cs-2'5] get-first-vf-path(C-rule+) = (Funid,Aint*),
+  [ar2cs-2'5] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = true,
-              make-select-stat(Aint*) = Decl*,
+              make-select-stat(Aint+) = Decl*,
               list2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
               =====================================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
                 (Decl* ++d Stat*1,Aint2)
 
-  [ar2cs-2'6] get-first-vf-path(C-rule+) = (Funid,Aint*),
+  [ar2cs-2'6] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
-              make-c-expression((Funid,Aint*),Namepair*) = Ltest,
-              make-select-stat(Aint*) = Decl*,
+              make-c-expression((Funid,Aint+),Namepair*) = Ltest,
+              make-select-stat(Aint+) = Decl*,
               asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2),
               make-cond(Ltest,Stat*1) = Stat*2
               ================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
                 (Decl* ++d Stat*2,Aint2)
 
-  [ar2cs-2'7] get-first-vf-path(C-rule+1) = (Funid,Aint*),
+  [ar2cs-2'7] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-list-funid(Funid) = true,
-              make-select-stat(Aint*) = Decl*,
+              make-select-stat(Aint+) = Decl*,
               list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
               select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
               asfrules2cstats(C-rule*1,C-rule*2,Namepair*,Aint1) = (Stat*2,Aint3),
@@ -185,9 +185,9 @@ equations
               asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1) =
                 (Stat*4,Aint4)
 
-  [ar2cs-2'8] get-first-vf-path(C-rule+1) = (Funid,Aint*),
-              make-c-expression((Funid,Aint*),Namepair*) = Ltest,
-              make-select-stat(Aint*) = Decl*,
+  [ar2cs-2'8] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+              make-c-expression((Funid,Aint+),Namepair*) = Ltest,
+              make-select-stat(Aint+) = Decl*,
               is-list-funid(Funid) = false,
               asfrules2cstats1(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
               select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
@@ -201,7 +201,7 @@ equations
   [ar2cs-3'1] asfrules2cstats1([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
                 conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
 
-  [ar2cs-3'2] asfrules2cstats1([(Term1,Aint*)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
+  [ar2cs-3'2] asfrules2cstats1([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
                 conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
 
   [ar2cs-3'3] is-empty-vf-path(C-rule+1) = false,
@@ -222,7 +222,7 @@ equations
   [ar2cs-4'2] is-var-term(Term1) = false,
               remove-ofs-first-arg(C-rule*1) = C-rule*2
               =========================================
-              asfrules2cstats2([(Term1,Aint*)|
+              asfrules2cstats2([(Term1,Aint+)|
                                 Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
                                Namepair*,Aint) =
                 conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
@@ -230,12 +230,12 @@ equations
 
   [ar2cs-4'3] is-var-term(Term1) = true,
               %%%is-protected(Funid,Namepair*) = Bool,
-              make-select-stat(Aint*) = Decl*,
+              make-select-stat(Aint+) = Decl*,
               remove-ofs-first-arg(C-rule*1) = C-rule*2,
               conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
                            Namepair*,Aint1) = (Stat*,Aint2)
               =============================================
-              asfrules2cstats2([(Term1,Aint*)|
+              asfrules2cstats2([(Term1,Aint+)|
                                 Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
                                Namepair*,Aint1) =
                 (Decl* ++d Stat*,Aint2)
@@ -279,11 +279,11 @@ equations
               =======================================================
               sigargs2cbuild(Sigarg,Sigarg+,Aint1) = (ActualArgs',,succ(Aint2))
 
-  [l2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint*),
-             make-atmp(Aint*) = Expression,
+  [l2cs-1'1] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+             make-atmp(Aint+) = Expression,
              make-c-temp(Aint1) = Expression2,
              listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = (Stat*2,Aint2),
-             make-c-expression((Funid,Aint*),Namepair*) = Ltest,
+             make-c-expression((Funid,Aint+),Namepair*) = Ltest,
              Expression2 = arg_0(Expression); = Stat*1,
              Stat*1 ++ Stat*2 = Stat*3,
              make-cond(Ltest,Stat*3) = Stat*4
@@ -303,8 +303,8 @@ equations
 
   [lps2cs-1'3] select-on-same-list-pat(C-rule;C-rule+1) = (C-rule+2,C-rule*),
                listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),
-               get-first-vf-path(C-rule+2) = (Funid,Aint*),
-               make-atmp(Aint*) = Expression,
+               get-first-vf-path(C-rule+2) = (Funid,Aint+),
+               make-atmp(Aint+) = Expression,
                listpatterns2cstats(C-rule*,Expression1,Namepair*,Aint2) = (Stat*2,Aint3),
                Expression1 = arg_0(Expression); = Stat*3,
                Stat*3 ++ Stat*2 = Stat*4,
@@ -320,13 +320,13 @@ equations
                                  [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
                                  Expression1,Namepair*,Aint1) = (Decl*,Stat*,Aint2)
               ===========================================================================
-              listpattern2cstats([((Term,Aint*),Fv-path+),Fv-path*|
+              listpattern2cstats([((Term,Aint+),Fv-path+),Fv-path*|
                                   Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
                                   Expression1,Namepair*,Aint1) = (Decl*,Stat*,Aint2)
 
   [lp2cs-1'1] is-cons(Term) = true
               ====================
-              listpattern2cstats(Bool,((Term,Aint*),Fv-path+),
+              listpattern2cstats(Bool,((Term,Aint+),Fv-path+),
                                  [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*,
                                  Expression,Namepair*,Aint) =
                  listpattern2cstats(Bool,Fv-path+,
@@ -338,18 +338,18 @@ equations
 %% was not a list variable.
   [lp2cs-1'2] is-var-term(Term) = true,
               is-list-var-term(Term) = false,
-              make-atmp(Aint*) = Expression2,
+              make-atmp(Aint+) = Expression2,
               add-env(C-rule+1,((Term,Expression2))) = C-rule+2,
               listpattern2cstats(false,Fv-path+,C-rule+2,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1,Stat*1,Aint2),
-              make-decl(Aint*) = Decl*2,
+              make-decl(Aint+) = Decl*2,
               if (not_empty_list(Expression)) {
                 Expression2 = list_head(Expression);
                 Expression = list_tail(Expression); ++
                 Stat*1 } = Stat*2
               ===================
-              listpattern2cstats(false,(Term,Aint*),Fv-path+,
+              listpattern2cstats(false,(Term,Aint+),Fv-path+,
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1 ++ Decl*2,Stat*2,Aint2)
@@ -359,17 +359,17 @@ equations
 %% function {\tt listpattern2cstats} has a false as argument.
   [lp2cs-1'3] is-var-term(Term) = true,
               is-list-var-term(Term) = false,
-              make-atmp(Aint*) = Expression2,
+              make-atmp(Aint+) = Expression2,
               add-env(C-rule+1,((Term,Expression2))) = C-rule+2,
               listpattern2cstats(false,Fv-path+,C-rule+2,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1,Stat*1,Aint2),
-              make-decl(Aint*) = Decl*2,
+              make-decl(Aint+) = Decl*2,
               Expression2 = list_head(Expression);
               Expression = list_tail(Expression); ++
               Stat*1 = Stat*2
               ===============
-              listpattern2cstats(true,(Term,Aint*),Fv-path+,
+              listpattern2cstats(true,(Term,Aint+),Fv-path+,
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1 ++ Decl*2,Stat*2,Aint2)
@@ -378,12 +378,12 @@ equations
 %% test in the loop. So, at the next level no check is needed.
   [lp2cs-1'4] is-var-term(Term) = true,
               is-star-var(Term) = true,
-              make-atmp(Aint*) = CConstant,
+              make-atmp(Aint+) = CConstant,
               add-env(C-rule+1,((Term,slice(CConstant[0],CConstant[1])))) = C-rule+2,
               listpattern2cstats(true,Fv-path+,C-rule+2,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1,Stat*1,Aint2),
-              make-array-decl(Aint*) = Decl*2,
+              make-array-decl(Aint+) = Decl*2,
               CConstant[0] = Expression;
               CConstant[1] = Expression;
               while (not_empty_list(Expression)) {
@@ -391,7 +391,7 @@ equations
                 CConstant[1] = list_tail(CConstant[1]);
                 Expression = CConstant[1]; } = Stat*3
               =======================================
-              listpattern2cstats(Bool,(Term,Aint*),Fv-path+,
+              listpattern2cstats(Bool,(Term,Aint+),Fv-path+,
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1 ++ Decl*2,Stat*3,Aint2)
@@ -400,12 +400,12 @@ equations
 %% test in the loop. So, at the next level no check is needed.
   [lp2cs-1'5] is-var-term(Term) = true,
               is-plus-var(Term) = true,
-              make-atmp(Aint*) = CConstant,
+              make-atmp(Aint+) = CConstant,
               add-env(C-rule+1,((Term,slice(CConstant[0],CConstant[1])))) = C-rule+2,
               listpattern2cstats(true,Fv-path+,C-rule+2,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1,Stat*1,Aint2),
-              make-array-decl(Aint*) = Decl*2,
+              make-array-decl(Aint+) = Decl*2,
               CConstant[0] = Expression;
               if (not_empty_list(Expression)) {
                 Expression = list_tail(Expression);
@@ -415,7 +415,7 @@ equations
                   CConstant[1] = list_tail(CConstant[1]);
                   Expression = CConstant[1];}} = Stat*2
               =========================================
-              listpattern2cstats(Bool,(Term,Aint*),Fv-path+,
+              listpattern2cstats(Bool,(Term,Aint+),Fv-path+,
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (Decl*1 ++ Decl*2,Stat*2,Aint2)
@@ -432,7 +432,7 @@ equations
                  if (Ltest) {
                  Stat*1 }} = Stat*2
               =====================
-              listpattern2cstats(false,(Funid,Aint*),Fv-path+,
+              listpattern2cstats(false,(Funid,Aint+),Fv-path+,
                                  C-rule+,Expression,Namepair*,Aint1) =
                 (Decl*,Stat*2,Aint2)
 
@@ -447,7 +447,7 @@ equations
               if (Ltest) {
                 Stat*1 } = Stat*2
               =====================
-              listpattern2cstats(true,(Funid,Aint*),Fv-path+,
+              listpattern2cstats(true,(Funid,Aint+),Fv-path+,
                                  C-rule+,Expression,Namepair*,Aint1) =
                 (Decl*,Stat*2,Aint2)
 
@@ -457,7 +457,7 @@ equations
               asfrules2cstats2(C-rule+2,
                                Namepair*,Aint1)  = (Stat*1,Aint2)
               =========================================================
-              listpattern2cstats(Bool,(Term,Aint*),
+              listpattern2cstats(Bool,(Term,Aint+),
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (,Stat*1,Aint2)
@@ -469,23 +469,23 @@ equations
                                Namepair*,Aint1) = (Stat*1,Aint2),
               if (not_empty_list(Expression)) { Stat*1 } = Stat*2
               =====================================================
-              listpattern2cstats(Bool,(Term,Aint*),
+              listpattern2cstats(Bool,(Term,Aint+),
                                  C-rule+1,
                                  Expression,Namepair*,Aint1) =
                 (,Stat*2,Aint2)
 
   [lp2cs-1'10] is-var-term(Term) = true,
                is-list-var-term(Term) = false,
-               make-atmp(Aint*) = Expression2,
+               make-atmp(Aint+) = Expression2,
                add-env(C-rule+1,((Term,Expression2))) = C-rule+2,
                asfrules2cstats2(C-rule+2,
                                 Namepair*,Aint1) = (Stat*1,Aint2),
                if (is_single_element(Expression)) {
                   Expression2 = list_head(Expression); ++
                   Stat*1} = Stat*2,
-               make-decl(Aint*) = Decl*
+               make-decl(Aint+) = Decl*
                ========================
-               listpattern2cstats(Bool,(Term,Aint*),
+               listpattern2cstats(Bool,(Term,Aint+),
                                   C-rule+1,
                                   Expression,Namepair*,Aint1) =
                  (Decl*,Stat*2,Aint2)
@@ -498,5 +498,5 @@ equations
                   if (Ltest) {
                   Stat*1}} = Stat*2
                ====================
-               listpattern2cstats(Bool,(Funid,Aint*),C-rule+,Expression,Namepair*,Aint1) =
+               listpattern2cstats(Bool,(Funid,Aint+),C-rule+,Expression,Namepair*,Aint1) =
                  (,Stat*2,Aint2)

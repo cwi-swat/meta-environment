@@ -1,0 +1,50 @@
+%% The module {\tt AsFix-Basics} provides some
+%% basic functionality to deal with \asfix.
+%%
+%% A predicate to check whether a sortnames
+%% occurs in the list of sort definitions.
+%% Functions to obtain the tail of an \asfix\
+%% list.
+%% A predicate to check whether an equation
+%% is a default equation.
+
+imports AsFix2muASFnames
+
+exports
+  sorts SortList
+  context-free syntax
+    "{" {ATerm ";"}* "}"              -> SortList
+    includes-sortname(ATerm,SortList) -> Bool
+
+%%%  context-free syntax
+%%%    is-aux-module(ATerm) -> Bool
+
+  context-free syntax
+    get-tail(AFun,ATermList)    -> ATermList
+    get-iter-tail(ATermList)    -> ATermList
+    get-itersep-tail(ATermList) -> ATermList
+
+%%%  context-free syntax
+%%%    is-CHAR-list(ATerm) -> Bool
+%%%    is-asfix-list(ATerm)      -> Bool
+
+  context-free syntax
+    is-default(ATerm) -> Bool
+
+  context-free syntax
+    is-bracket-func(ATerm) -> Bool
+
+hiddens
+  context-free syntax
+    is-attribute(ATermList,ATerm) -> Bool
+
+exports
+  variables
+    Char[\*][0-9]*   -> CHAR*
+    Cffunc[0-9']*    -> ATerm
+    Lexsort"*"[0-9]* -> {ATerm ";"}*
+    Symbol[0-9']*    -> ATerm
+    Attrib[0-9']*   -> ATerm
+    Attribs[0-9']*   -> ATermList
+    Aname[0-9']*        -> ATerm
+    Amodule[0-9']*      -> ATerm

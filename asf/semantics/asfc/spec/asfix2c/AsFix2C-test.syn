@@ -1,0 +1,15 @@
+%%  AsFix2C
+
+imports AsFix2muASF-C Remove-Lists-C MuASF2C
+        Make-Left-Linear Make-Assign-Conds-C Normalize-Conds
+        WfAsFix %%% Remove-Conds
+exports
+  context-free syntax
+    asfix2c(ATerm) -> CProgram
+  context-free syntax
+    asfix2muasf1(ATerm) -> Module
+    asfix2muasf2(ATerm) -> Module
+
+hiddens
+  variables
+    Cprogram[0-9]* -> CProgram

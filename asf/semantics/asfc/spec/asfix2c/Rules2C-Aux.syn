@@ -1,5 +1,4 @@
 %%  Rules2C-Aux
-module Rules2C-Aux
 
 imports C-Basics
 
@@ -54,11 +53,11 @@ exports
 exports
   context-free syntax
     get-first-vf-path({C-Rule ";"}+)     -> FV-Path
-    is-empty-vf-path({C-Rule ";"}*)      -> Bool
-    is-single-vf-path({C-Rule ";"}*)     -> Bool
-    make-atmp({IntCon ","}*)             -> Identifier
+    is-empty-vf-path({C-Rule ";"}+)      -> Bool
+    is-single-vf-path({C-Rule ";"}+)     -> Bool
+    make-atmp({IntCon ","}+)             -> Identifier
     make-atmp2({IntCon ","}+)            -> Identifier
-    make-select-stat({IntCon ","}*)      -> Declaration-list-opt
+    make-select-stat({IntCon ","}+)      -> Declaration-list-opt
 %%%    make-select-stat({IntCon ","}+,Bool) -> Declaration-list-opt
     make-array-decl({IntCon ","}+)       -> Declaration-list
     make-decl({IntCon ","}+)             -> Declaration-list
@@ -82,26 +81,26 @@ hiddens
 
 exports
   variables
-    "C-rule"[0-9]*     -> C-Rule
-    "C-rule*"[0-9]*    -> {C-Rule ";"}*
-    "C-rule+"[0-9]*    -> {C-Rule ";"}+
-    "Fv-path"[0-9]*    -> FV-Path
-    "Fv-path*"[0-9]*   -> {FV-Path ","}*
-    "Fv-path+"[0-9]*   -> {FV-Path ","}+
-    "Aint*"[0-9]*      -> {IntCon ","}*
-    "Aint+"[0-9]*      -> {IntCon ","}+
-    "Aset"[0-9]*       -> A-set
-    "Aexp"[0-9]*       -> Expression
-    "Expr"[0-9]*       -> Expression
-    "Expression"[0-9]* -> Expression
-    "Eipair"[0-9]*     -> EI-pair
-    "Eipair*"[0-9]*    -> {EI-pair ","}*
-    "Eipair+"[0-9]*    -> {EI-pair ","}+
-    "Cint"[0-9]*       -> Integer-constant
+    C-rule[0-9]*     -> C-Rule
+    C-rule"*"[0-9]*  -> {C-Rule ";"}*
+    C-rule"+"[0-9]*  -> {C-Rule ";"}+
+    Fv-path[0-9]*    -> FV-Path
+    Fv-path"*"[0-9]* -> {FV-Path ","}*
+    Fv-path"+"[0-9]* -> {FV-Path ","}+
+    Aint"*"[0-9]*    -> {IntCon ","}*
+    Aint"+"[0-9]*    -> {IntCon ","}+
+    Aset[0-9]*      -> A-set
+    Aexp[0-9]*      -> Expression
+    Expr[0-9]*      -> Expression
+    Expression[0-9]* -> Expression
+    Eipair[0-9]*    -> EI-pair
+    Eipair"*"[0-9]* -> {EI-pair ","}*
+    Eipair"+"[0-9]* -> {EI-pair ","}+
+    Cint[0-9]*       -> Integer-constant
 hiddens
   variables
-    "Char"[0-9]*    -> CHAR
-    "Char*"[0-9]*   -> CHAR*
-    "Char+"[0-9]*   -> CHAR+
-    "Ct-lhs"[0-9]*  -> Term
-    "Ct-rhs"[0-9]*  -> Term
+    Char[0-9]*       -> CHAR
+    Char[\*][0-9]*   -> CHAR*
+    Char[\+][0-9]*   -> CHAR+
+    Ct-lhs[0-9]*     -> Term
+    Ct-rhs[0-9]*     -> Term
