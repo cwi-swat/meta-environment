@@ -87,10 +87,8 @@ the ``button'' in the lower right corner of the window."
 package require Tcldot
 
 #----------------------------------------------------------------------
-# global variables (bweghh!)
+# constants
 #----------------------------------------------------------------------
-global saveFill fileName printCommand g c statuslist
-
 
 # switch to enable/diable printing of diagnostics to stderr
 set DIAG 0
@@ -100,6 +98,16 @@ set MINWINSIZE {100 80}
 
 # width of scrollbars
 set SBW 10
+
+# style for "shadowed" modules (i.e. modules that aren't loaded
+# but we know they are there)
+set SHADOWSTYLE ellipse
+set MODULESTYLE box
+
+#----------------------------------------------------------------------
+# global variables (bweghh!)
+#----------------------------------------------------------------------
+global saveFill fileName printCommand g c statuslist
 
 #counter for window id's
 set windowcnt 1
@@ -170,9 +178,29 @@ proc new-graph { graph } {
 # The proc update-graph is performed afterwards. 
 #---
 proc add-module { mod } { 
-    global g
+    global g MODULESTYLE
     GBin "add-module($mod)"
-    $g addnode [StripId $mod]
+    $g addnode [StripId $mod] shape $MODULESTYLE
+    update-graph
+}
+
+
+#---
+# snd-do(delete-module(Mod))
+#-
+# Adds the named module. 
+# Modules are added only once. 
+# The proc update-graph is performed afterwards. 
+#---
+proc delete-module { mod } { 
+    global g SHADOWSTYLE
+    GBin "delete-module($mod)"
+    set node [$g findnode [StripId $mod]] 
+    $node setattributes shape $SHADOWSTYLE
+
+    foreach edge [$node listoutedges] {
+	$edge delete
+    }
     update-graph
 }
 
@@ -186,7 +214,7 @@ proc add-module { mod } {
 # The proc update-graph is performed afterwards. 
 #---
 proc imports { mod modlist } {
-    global g 
+    global g SHADOWSTYLE
     GBin "imports($mod,$modlist)"
     set i [$g addnode [StripId $mod]]
     foreach j $modlist {
@@ -205,7 +233,7 @@ proc imports { mod modlist } {
 # Modules and edges are added only once.
 #---
 proc add-imports { implist } {
-    global g 
+    global g SHADOWSTYLE
     GBin "add-imports($implist)"
     foreach rel $implist {
 	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]]	\
@@ -424,11 +452,17 @@ proc mouse_anyleave {c} {
 }
 
 proc mouse_b3_press {c x y} {
+    global g SHADOWSTYLE
+
     set obj [GetObject $c]   
     if {$obj != {}} {
 	set type [string range $obj 0 3]
 	if {$type == "node"} {
-          tk_popup .module-popup $x $y
+  	  if {[$obj queryattributes shape] == $SHADOWSTYLE} {
+            tk_popup .shadowmodule-popup $x $y
+	  } else {
+            tk_popup .module-popup $x $y
+          }
 	} else {
           tk_popup .canvas-popup $x $y
         } 
@@ -571,15 +605,20 @@ proc RevertModules { modlist } {
 #--
 # DeleteModules(ML)
 #-
-# generates the toolbus event to delete modules ML and deletes them in 
-# the graph. The proc update-graph is performed afterwards. 
+# generates the toolbus event to delete modules ML.
 #--
 proc DeleteModules { modlist graph } {
     foreach mod $modlist {
         GBpost [format "delete-module(%s)" [ToId $mod]]
-        [$graph findnode $mod] delete
+#
+# don't delete the modules this is done using delete-node
+#
+#        [$graph findnode $mod] delete
     }
-    update-graph
+#
+# update isn't neccessary anymore
+#
+#    update-graph
 }
 
 
@@ -601,8 +640,18 @@ proc CompileModules { modlist } {
 # generates the toolbus event to request addition of a module 
 # and destroys the widget $w.
 #--
-proc AddModule {w} {
-    GBevent [format "add-module(%s)" [ToId [$w.addModule get]]]
+proc AddModule { mod } {
+    GBevent [format "add-module(%s)" [ToId $mod]]
+}
+
+
+#--
+# AddModuleHelper(w)
+#-
+# calls AddModule for requested module and destroys the widget $w.
+#--
+proc AddModuleHelper {w} {
+    AddModule [$w.addModule get]
     destroy $w
 }
 
@@ -703,9 +752,9 @@ proc AddModuleWidget {} {
     wm iconname $w "Add module"
     label $w.message -text "Add module:"
     entry $w.addModule
-    bind $w.addModule <Return> "AddModule $w"
+    bind $w.addModule <Return> "AddModuleHelper $w"
     frame $w.buttons
-    button $w.buttons.confirm -text OK -command "AddModule $w"
+    button $w.buttons.confirm -text OK -command "AddModuleHelper $w"
     button $w.buttons.cancel -text Cancel -command "destroy $w"
     pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
     pack $w.message $w.addModule -side top -anchor w
@@ -906,6 +955,7 @@ proc define-menu-bar {} {
     $m add separator
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add command -label "Revert All" -underline 0 -command {RevertAll}
+
 # Adapted by Mark
 #    $m add separator
 #    $m add command -label "Compile All" -underline 0 -command {CompileAll}
@@ -1052,6 +1102,13 @@ proc define-module-popup {} {
         -command {CompileModules [GetObjectName $c]}
 }
 
+proc define-shadowmodule-popup {} {
+    set m .shadowmodule-popup
+    menu $m -tearoff 0
+    $m add command -label "Add this module" \
+        -command {AddModule [GetObjectName $c]}
+}
+
 proc define-modlist-popup {} {
     set m .modlist-popup
     menu $m -tearoff 0
@@ -1074,8 +1131,9 @@ proc define-canvas-popup {} {
 }
 
 proc make-and-init-new-graph {} {
+  global SHADOWSTYLE
   set g [dotnew digraph]
-  $g setnodeattribute shape box
+  $g setnodeattributes shape $SHADOWSTYLE
   return $g
 }
 
@@ -1110,6 +1168,7 @@ grid columnconfig . 0 -weight 1 -minsize 0
 grid columnconfig . 1 -weight 0
 
 define-module-popup
+define-shadowmodule-popup
 define-modlist-popup
 define-canvas-popup
 

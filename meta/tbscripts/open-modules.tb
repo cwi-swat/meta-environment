@@ -29,6 +29,8 @@ in
           rec-value(Tdb,result(notexists(Name?))). ( 
             snd-msg(Id, open-file(Name)). ( 
               rec-msg(Id, opened-file(asfix,Name,T?,Fn?)).
+             /* Tell UI we added module Name */
+              snd-msg(ui,add-module(Name)).
              /* Tell mdb we add module Name containing term T */
               snd-eval(Tdb,add-module(T)).
              /* mdb returns the imports section of Name as well as the

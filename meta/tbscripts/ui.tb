@@ -25,13 +25,13 @@ in
   Id := process-id.
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
-  ( /* Add a new module */
-    ( ( rec-event(UI, add-module(Str?))
-/*        +
-        rec-msg(ui,add-module(Str?))*/
-      ).
+  ( 
+    /* Add a new module by a user via the user-interface */
+    ( rec-event(UI, add-module(Str?)).
       snd-msg(open-modules([Str])).
-      ( rec-msg(ui,imports(Name?,Str1?)).
+      ( rec-msg(ui,add-module(Str1?)).
+        snd-do(UI,add-module(Str1))
+      + rec-msg(ui,imports(Name?,Str1?)).
         snd-do(UI,imports(Name,Str1))
       + rec-msg(ui,irels(Pairs?)).
         snd-do(UI,add-imports(Pairs))
@@ -43,7 +43,8 @@ in
     ) +
     ( rec-event(UI,delete-module(Str?)).
       snd-msg(close-module(Str)).
-      rec-msg(closed-module(Str1?)).
+      rec-msg(closed-module(Str)).
+      snd-do(UI,delete-module(Str)) .
       snd-ack-event(UI, delete-module(Str))
     ) +
     ( rec-event(UI,edit-module(Str?)).
