@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(asf-support, 1.0)
+AM_INIT_AUTOMAKE(asf-support, 1.1beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
