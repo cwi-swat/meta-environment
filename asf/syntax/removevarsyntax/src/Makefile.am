@@ -21,6 +21,8 @@
 
 include ${top_srcdir}/make_rules
 
+INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+
 bin_PROGRAMS = removevarsyntax
 man_MANS     = removevarsyntax.1
 
