@@ -10,7 +10,7 @@
    ATermList add_module(ATerm asfix)
    void delete_module(ATerm name)
 */
-
+ 
 #include "module-db.h"
 
 ATermTable modules_db;
@@ -64,18 +64,24 @@ ATerm get_equations(int cid, ATerm mods)
 
 ATerm get_new_equations(int cid, ATerm mods)
 {
-  ATerm mod, amod;
+  ATerm mod, entry, eqsterm;
   ATermList eqs;
   ATermList equations = ATempty;
 
   equations = ATempty;
   while(!ATisEmpty((ATermList) mods)) {
     mod = ATgetFirst((ATermList) mods);
-    amod = GetValue(new_modules_db,mod);
-    eqs = (ATermList)AFgetModuleEqs(amod);
-    equations = ATconcat(equations, eqs);
+    entry = GetValue(new_modules_db,mod);
+    eqsterm = ATelementAt((ATermList)entry, eqs_loc);
+    if(!ATisEqual(eqsterm,ATparse("unavailable")) &
+       !ATisEqual(eqsterm,ATparse("error")) &
+       !ATisEqual(eqsterm,ATparse("no-equations"))) { 
+      eqs = AFTgetEqs(eqsterm); 
+      equations = ATconcat(equations, eqs);
+    }
     mods = (ATerm) ATgetNext((ATermList) mods);
   };
+ATfprintf(stderr,"Retrieved equations are %t\n", eqs);
   return ATmake("snd-value(equations([<list>]))",equations);
 }
 
@@ -159,6 +165,12 @@ ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
   ATerm entry;
 
   entry = GetValue(new_modules_db, modname);
+/*
+  if(!ATisEqual(eqs,ATparse("error")) &
+     !ATisEqual(eqs,ATparse("no-equations"))) {
+    eqs = AFaddPosInfoToModule(eqs);
+  }
+*/
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
   return ATmake("snd-value(done)");

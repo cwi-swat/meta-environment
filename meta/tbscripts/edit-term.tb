@@ -47,10 +47,8 @@ in
        snd-note(ui-status(endstat(Id))).
        if equal(I,0) then
         snd-msg(Id,a2toa1(T1)).
-        rec-msg(Id,converted(T2?))
-/*
-    snd-msg(rewrite(Mod,T))
-*/
+        rec-msg(Id,converted(T2?)).
+        snd-msg(rewrite(Mod,T))
        else
         printf("Parse of %t returned %d ambiguities",Mod,I).
         printf("Term is: %t\n",T1)

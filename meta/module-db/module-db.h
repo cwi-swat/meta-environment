@@ -1,6 +1,7 @@
 #include <atb-tool.h>
 #include <string.h>
 #include <AsFix.h>
+#include "AsFix-access.h"
 #include "aterm2.h"
 #include "deprecated.h"
 #include <stdlib.h>
