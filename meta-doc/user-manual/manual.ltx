@@ -676,7 +676,7 @@ There are two additions to the standard user-interface of \xemacs:
 
 \begin{itemize}
 \item The {\tt Meta-Environment} pull-down menu
-(Figure~ref{FIG:meta-env-menu}) for applying the \asfsdf\ parser ({\tt
+(Figure~\ref{FIG:meta-env-menu}) for applying the \asfsdf\ parser ({\tt
 Parse}) or evaluator ({\tt Reduce}) on the text in the editor.
 
 \item The {\tt Move} pull-down menu (Figure~\ref{FIG:move-menu}) for
@@ -1599,7 +1599,7 @@ implemented using a single parsing technique.
 
 Technically, there exist only \emph{syntax} sections. Both lexical
 syntax sections and context-free syntax sections are transformed into
-such syntax sections after appropriate insertion of option layout
+such syntax sections after appropriate insertion of optional layout
 between the elements of context-free functions. In rare cases,
 the specification writer may want to control this process explicitly
 and write syntax sections directly. This will not be discussed
@@ -1615,7 +1615,8 @@ of attributes. The regular expression associated with $L$ consists of the
 All sort names appearing in left-hand sides of declarations are replaced by
 the regular expression associated with them. Circular dependencies between
 declarations in the lexical syntax are forbidden.  See Figure
-\ref{CODE:simplelex} for an example of a simple lexical function definition.
+\ref{CODE:simplelex} for an example of a very simple lexical 
+function definition.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1663,7 +1664,7 @@ restrictions should apply:
 \item $c_1$ and $c_2$ are both digits and the numeric value of $c_2$ is
   greater than that of $c_1$, or 
 \item $c_1$ and $c_2$ are both escaped non-printable characters and the 
-character code of $c_1$ is larger than that of $c_2$.
+character code of $c_2$ is larger than that of $c_1$.
 \end{itemize}
 
 
@@ -1710,9 +1711,10 @@ The following operators are available for character classes
 \item {\tt  /\verb+\+}: intersection of two character classes. Accepts all
   characters that are accepted by both character classes.
 \item {\tt  \verb+\+/}: union of two character classes. Accepts all characters
-  that are accpted by either character class.
+  that are accepted by either character class.
 \end{itemize}
-The three binary operators are left-associative.
+The first operator is a unary operator, whereas the other three are
+left-associative binary operators.
 See Figure \ref{CODE:charclasses} of lexical definitions
 using character classes. This definition of characters contains
 all possible characters, either by means of the ordinary representation
@@ -1961,14 +1963,11 @@ are separated by an invisible non-terminal {\tt LAYOUT?}
 (optional {\tt LAYOUT}).
 So, that between these members layout may be recognized. 
 This optional layout non-terminal is automatically inserted by the
-parser generator\footnote{\sdf2 offers the possibility to write
-down syntax rules in which the optional layout non-terminal
-is {\em not} automatically inserted. These rules should
-be written in the {\tt syntax}-section.}.
-The automatic insertion of this optional layout non-terminal
-gives rise to the ``safe'' layout definition presented
-in Figure \ref{CODE:safe-layout}. A member may recognize the empty string
-and thus causing ambiguity.
+parser generator.
+%%\footnote{\sdf2 offers the possibility to write
+%%down syntax rules in which the optional layout non-terminal
+%%is {\em not} automatically inserted. These rules should
+%%be written in the {\tt syntax}-section.}.
 
 \subsubsection{Context-free Functions}
 
@@ -2040,7 +2039,7 @@ primitives for this:
 
 \end{itemize} 
 
-\item Lists with separators
+\item Lists with separators:
 
 \begin{itemize}
 
@@ -2057,8 +2056,7 @@ sort $S$ separated by the literal $sep$.
 Lists may be used in the left-hand side of a context-free function and in the
 right-hand side of a variable declaration, see Section \ref{Variables}. They
 may {\em not} be used as result sort in the right-hand side of a context-free
-function\footnote{This restriction is \sdf1 specific \sdf2 does no longer
-impose this restriction}.
+function.
 This imposes no real restriction since a new sort can be introduced
 representing a list. This new sort may then be used in the left-hand side of
 other context-free rules.
@@ -2102,9 +2100,9 @@ numbers in reals. Such a \emph{chain function} has one of the following forms:
 \begin{itemize}
 
 \item {\tt $SMALL$ -> $BIG$} 
-\item {\tt \{$SMALL$ "$sep$"\}* -> $BIG$} 
+\item {\tt \{$SMALL$ $sep$\}* -> $BIG$} 
 \item {\tt $SMALL$* -> $BIG$} 
-\item {\tt \{$SMALL$ "$sep$"\}+ -> $BIG$} 
+\item {\tt \{$SMALL$ $sep$\}+ -> $BIG$} 
 \item {\tt $SMALL$+ -> $BIG$}
 
 \end{itemize}
@@ -2130,8 +2128,9 @@ The following attributes exist:
 kinds of brackets that are mostly used for overruling the priorities
 of operators in expressions (Section~\ref{BracketFunctions}).
 
-\item {\tt left}, {\tt right}, {\tt non-assoc}, {\tt assoc}
-are used for defining the associativity of functions (Section~\ref{Priorities}).
+\item {\tt left}, {\tt right}, {\tt non-assoc}, and {\tt assoc}
+are used for defining the associativity of functions 
+(Section~\ref{Priorities}).
 
 \item {\tt prefer} and {\tt avoid} are used to define that a function should
 be preferred or only be used as last resort in certain cases of
@@ -2139,12 +2138,12 @@ syntactic ambiguity (Section~\ref{XXX}).
 
 \item {\tt reject} can be used to explicitly forbid certain syntactic constructs (Section~\ref{XXX}).
 
-\item {\tt delay} is used to influence the evaluation order of the
-arguments of a function (Section~\ref{Delay}).
-
 \item {\tt memo} declares a function to be a \emph{memo function} for
 which all calls and results will be cached during evaluation
 (Section~\ref{MemoFunctions}).
+
+\item {\tt delay} is used to influence the evaluation order of the
+arguments of a function (Section~\ref{Delay}).
 
 \end{itemize}
 
@@ -2195,7 +2194,7 @@ included in the abstract syntax. Figure \ref{CODE:bracket-expr} shows the
 definition of a bracket function for the sort {\tt EXPR}.
 
 Since brackets are necessary for overruling the priority and associativity of
-functions (see Section \ref{Priorities}),  it is required that bracket 
+functions,  it is required that bracket 
 functions are declared for the argument and result sorts of
 
 \begin{itemize}
@@ -2440,6 +2439,10 @@ if a such a member recognizes the empty string, this gives rise to
 a lexical ambiguity, see Section \ref{lex-ambiguity}. 
 So, the safe way of defining {\tt LAYOUT} is
 presented in Figure \ref{CODE:safe-layout}.
+The automatic insertion of this optional layout non-terminal
+gives rise to the ``safe'' layout definition presented
+in Figure \ref{CODE:safe-layout}. A member may recognize the empty string
+and thus causing ambiguity.
 
 \begin{figure}[tb]
 \begin{IncCode}
