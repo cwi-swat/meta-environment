@@ -23,12 +23,22 @@ hiddens
   context-free syntax
     check-priorities(Module, Messages, ModuleId, ProductionsSet)               -> Messages {traversal(accu, break, top-down)}
     check-priorities(Priority, Messages, ModuleId, ProductionsSet)             -> Messages {traversal(accu, break, top-down)}
-    check-priorities(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, break, top-down)}
-    check-priorities({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, break, top-down)}
-    check-priorities(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, break, top-down)}
+
+  context-free syntax
+    check-priorities-given-symbol(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, break, top-down)}
+    check-priorities-given-symbol({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, break, top-down)}
+    check-priorities-given-symbol(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, break, top-down)}
+
+  context-free syntax
     get-rhs-production(Group, SymbolsSet)                                      -> SymbolsSet {traversal(accu, break, top-down)}
     get-rhs-production(Production, SymbolsSet)                                 -> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
     is-injection-production(Symbol, Symbol, ProductionsSet)                    -> Boolean
+
+  context-free syntax
+    check-right-hand-sides(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
+    check-right-hand-sides(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
 
 
 hiddens

@@ -18,6 +18,7 @@ exports
     double-used-label(ModuleId, Literal, Production)                 -> Message
     constructor-has-already-been-used(ModuleId, Literal, Production) -> Message
     unknown-constructor-used-in-priorities(ModuleId, Production)     -> Message
+    literal-in-right-hand-side-not-allowed(ModuleId, Production)     -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages
