@@ -1,0 +1,27 @@
+package 
+identification
+   name=meta-query
+   version=0.1
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/asf
+   description='This package contains the implementation of the rewriting
+                language ASF. ASF rewrites terms in user-defined syntax. It
+                can be used to define the semantics of (domain-specific) 
+                programming languages. It can also be used to implement 
+                source-to-source transformations in a very concise manner. '
+
+   keywords=meta-environment, asf, compiler, interpreter, term rewriting, source code transformation, program transformation, list matching, traversal functions, compiler generation
+
+configuration interface
+
+requires
+  asc-support	1.6
+  asf-support	1.0
+  sdf-support	1.1beta
+  pt-support    0.12beta
+  sglr		3.10beta		
+  pgen		1.7beta
+  asf		1.7beta
+  aterm         2.0.2
+  toolbus       0.26beta
+  toolbuslib    0.4

@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Jun 27 11:18:09 CEST 2003 <jurgenv@cwi.nl>
+ * Added package definition file
+
 2003-06-20 <markvdb@cwi.nl>
  * Error message text is no longer an argument of displayquery action.
 

@@ -102,7 +102,7 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
    [  --with-pgen=DIR         pgen is in DIR])
 AC_SUBST(PGEN)
 
-dnl Require pgen package
+dnl Require asf package
 AC_PACKAGE_REQUIRE(asf, asfc,
    [  --with-asf=DIR          Asf is in DIR])
 AC_SUBST(ASF)
