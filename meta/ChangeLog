@@ -1,5 +1,11 @@
 # $Id$
 
+2003/01/10 (markvdb@cwi.nl)
+ * Fixed a bug with renamings. If an imported module has
+   a parameter which is also a parameter of the surrounding
+   module, the renaming has to be renamed in a consistent
+   way.
+
 2003/01/08 (markvdb@cs.vu.nl)
  * Return full imports when asking for the equations when dealing
    with renamings.
