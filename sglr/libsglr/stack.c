@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -395,9 +396,9 @@ st_link *SG_AddLink(stack *frm, stack *to, tree t)
   return link;
 }
 
-  st_links *SG_AddLinks(st_link *l, st_links *ls)
-  {
-    st_links *lks;
+st_links *SG_AddLinks(st_link *l, st_links *ls)
+{
+  st_links *lks;
 
   if((lks = SG_MallocLinks())) {
     lks->head = l;

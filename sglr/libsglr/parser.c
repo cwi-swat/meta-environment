@@ -89,6 +89,9 @@ stacks      *active_stacks;
 stacks      *for_actor;
 stacks      *for_actor_delayed;
 
+#define GC_CYCLE 200
+stacks      *old_active_stacks[GC_CYCLE];
+
 /* Prototypes for the auxiliary functions  */
 
 void      SG_ParseToken(void);
@@ -831,8 +834,12 @@ void SG_Shifter(void)
 #ifdef  MEMSTATS
     IF_STATISTICS(SG_MaxAllocStats());
 #endif
-    if(SG_GC)
-      SG_CollectOldStacks(active_stacks, new_active_stacks, accepting_stack);
+    if(SG_GC) {
+      old_active_stacks[sg_tokens_read % GC_CYCLE] = active_stacks;
+      if ((sg_tokens_read % GC_CYCLE) == (GC_CYCLE-1)) {
+	SG_CollectOldStacks(old_active_stacks, GC_CYCLE, new_active_stacks, accepting_stack);
+      }
+    }
 #endif
 
   active_stacks = new_active_stacks;

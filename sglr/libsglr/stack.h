@@ -100,15 +100,15 @@ stacks   *SG_AddStack(stack *st, stacks *sts);
 st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
 st_links *SG_AddLinks(st_link *l, st_links *ls);
 
-stacks   *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept);
+stacks   *SG_CollectOldStacks(stacks **old, int nr_old, stacks *new, stack *accept);
 
 void      SG_DeleteStacks(stacks *sts);
 void      SG_DeleteStack(stack *st);
 void      SG_DeleteLinks(st_links *lks);
 void      SG_DeleteLink(st_link *lk);
 
-void      SG_SweepStack(stack *accept, ATbool delete);
-#define   SG_ClearStack(st)  SG_SweepStack(st, ATtrue)
+void      SG_SweepStack(stack *accept);
+#define   SG_ClearStack(st)  SG_SweepStack(st)
 
 stack    *SG_FindStack(state, stacks *);
 st_link  *SG_FindDirectLink(stack *, stack *);

@@ -393,7 +393,11 @@ tree SG_YieldTree(parse_table *pt, tree t)
       }
     
       newarg = (tree) SG_YieldTree(pt, arg);
-      newargs = ATinsert(newargs, (ATerm)newarg); 
+      if (ATisEqual(newarg, arg) && ATisEqual(newargs, tail)) {
+	newargs = args;
+      } else {
+        newargs = ATinsert(newargs, (ATerm)newarg); 
+      }
     }
     else {
       newargs = ATempty;

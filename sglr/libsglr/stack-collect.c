@@ -22,6 +22,8 @@
  * $Id$
  */
 
+#include <assert.h>
+
 #include "mem-alloc.h"
 #include "stack.h"
 
@@ -50,20 +52,22 @@
 void SG_MarkStack(stack *st)
 {
   if(st) {
-    SG_ST_INCCOUNT(st);
-    if(SG_ST_COUNT(st) == 1) {
+    if (SG_ST_COUNT(st) == 0) {
       register st_links *lks;
+      SG_ST_INCCOUNT(st);
 
-      for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks))
+      for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks)) {
         SG_MarkStack(SG_LK_STACK(SG_HEAD(lks)));
+      }
     }
   }
 }
 
 void SG_MarkStacks(stacks *sts)
 {
-  for(; sts; sts = SG_TAIL(sts))
+  for(; sts; sts = SG_TAIL(sts)) {
     SG_MarkStack(SG_HEAD(sts));
+  }
 }
 
 /*
@@ -71,45 +75,68 @@ void SG_MarkStacks(stacks *sts)
  *               free a node when in delete mode, and the counter hits 0
  */
 
-void SG_SweepStack(stack *st, ATbool delete)
+void SG_SweepStack(stack *st)
 {
   if(st) {
-    SG_ST_DECCOUNT(st);
-    if(SG_ST_COUNT(st) <= 0) {
+    if(SG_ST_COUNT(st) == 0) {
       register st_links *lks, *lks2;
 
+      SG_ST_DECCOUNT(st);
       for(lks = SG_ST_LINKS(st); lks;) {
         st_link  *lk = SG_HEAD(lks);
 
         lks2 = lks;
         lks = SG_TAIL(lks);
-        SG_SweepStack(SG_LK_STACK(lk), delete);
-        if(delete) {
-          SG_DeleteLink(lk);
-          SG_DeleteLinks(lks2);
-        }
+        SG_SweepStack(SG_LK_STACK(lk));
+	SG_DeleteLink(lk);
+	SG_DeleteLinks(lks2);
       }
-      if(delete)
-        SG_DeleteStack(st);
+      SG_DeleteStack(st);
     }
   }
 }
 
-void SG_SweepStacks(stacks *sts, ATbool delete)
+void SG_SweepStacks(stacks *sts)
 {
   while(sts) {
     stacks *osts;
 
-    SG_SweepStack(SG_HEAD(sts), delete);
+    SG_SweepStack(SG_HEAD(sts));
     osts = sts;
     sts = SG_TAIL(sts);
-    if(delete)
-      SG_DeleteStacks(osts);
+    SG_DeleteStacks(osts);
   }
 }
 
-stacks *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept)
+void SG_UnmarkStack(stack *st)
 {
+  if(st) {
+    if (SG_ST_COUNT(st) == 1) {
+      register st_links *lks;
+
+      SG_ST_DECCOUNT(st);
+      for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks)) {
+        SG_UnmarkStack(SG_LK_STACK(SG_HEAD(lks)));
+      }
+    } else {
+      assert(SG_ST_COUNT(st) == 0);
+    }
+  }
+}
+
+
+void SG_UnmarkStacks(stacks *sts)
+{
+  while(sts) {
+    SG_UnmarkStack(SG_HEAD(sts));
+    sts = SG_TAIL(sts);
+  }
+}
+
+stacks *SG_CollectOldStacks(stacks **old, int nr_old, stacks *new, stack *accept)
+{
+  int i;
+
 #ifdef MEMSTATS
   if(SG_DEBUG) {
     fprintf(SG_log(), "[Before GC] ");
@@ -122,14 +149,19 @@ stacks *SG_CollectOldStacks(stacks *old, stacks *new, stack *accept)
     SG_MarkStack(accept);
   if(new)
     SG_MarkStacks(new);
-  SG_MarkStacks(old);
 
   /*  Remove unreferenced items: sweep... */
-  SG_SweepStacks(old, ATtrue);
-  if(accept)
-    SG_SweepStack(accept, ATfalse);
-  if(new)
-    SG_SweepStacks(new, ATfalse);
+  for (i=0; i<nr_old; i++) {
+    SG_SweepStacks(old[i]);
+  }
+
+  if (accept) {
+    SG_UnmarkStack(accept);
+  }
+
+  if (new) {
+    SG_UnmarkStacks(new);
+  }
 
 #ifdef MEMSTATS
   if(SG_DEBUG) {
