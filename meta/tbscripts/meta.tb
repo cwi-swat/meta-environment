@@ -27,5 +27,6 @@
 #include "module-db.idef"
 #include "process-eqs.tb"
 #include "save-module.tb" 
+#include "help.tb" 
 
 toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module) 

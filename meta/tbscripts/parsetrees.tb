@@ -21,6 +21,7 @@ let
   Com   :   compiler,
   Eval  :   evaluator,
   Pgen  :   pgen,
+  Help  :   gen,
   Addsyn: add-eqs-syntax,
   Id    :    term,
   Tid   :    int,
@@ -39,6 +40,7 @@ in
   create(Evaluator(Eval), Tid?).
   create(Compiler(), Tid?).
   create(PGen(), Tid?).
+  create(Help(), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
   create(Clear-all(Eval), Tid?).
   create(Close-modules(Eval), Tid?)

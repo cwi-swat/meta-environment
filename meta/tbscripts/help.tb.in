@@ -1,0 +1,29 @@
+tool gen is {
+  command = "gen-adapter"
+}
+
+process BROWSER(Id : gen, Cmd : str, Inp : str) is
+let
+  Out : str
+in
+   snd-eval(Id,cmd(Cmd, input(Inp)))
+   +
+   rec-value(Id, output(Out?))
+endlet
+
+process Help is
+let
+  HELP : gen,
+  Id   : int
+in
+  (
+    Id := process-id.
+    rec-msg(online-help-wanted).
+    execute(gen,HELP?).
+    BROWSER(HELP,
+            "netscape @prefix@/new-meta/doc/html/meta.html", 
+            "").
+    snd-msg(done)
+  )*
+  delta
+endlet

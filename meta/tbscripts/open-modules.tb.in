@@ -111,9 +111,9 @@ in
               +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(Id, error-opening(Str?)).
+              snd-msg(cannot-open-module(Str)).
               snd-msg(add-empty-module-to-db(id(Str))).
-              rec-msg(done).
-              snd-msg(ui,cannot-open-module(Str)).
+              rec-msg(done). 
               snd-note(ui-status(endstat(Id)))
             )
           )
