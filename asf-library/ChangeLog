@@ -1,3 +1,8 @@
+2003/10/09 ({jurgenv,markvdb}@cwi.nl)
+  * Reorganized the literal syntax.
+  * Added constructor information to Parsetree specification.
+  * Reintroduced the strategy symbol, removed by accident.
+
 2003/10/07 (markvdb@cwi.nl)
   * Added new syntax rule for tuples <A,B>, the old syntax is
     still supported for some time.
