@@ -18,10 +18,12 @@ JAVAROOT	= ${top_builddir}/adapters/java-adapter/
 TESTCLASSES	= TestingTif.java TestingTool.java TestingBridge.java 
 EXAMPLECLASSES	= ExampleTif.java ExampleTool.java ExampleBridge.java 
 
-noinst_SCRIPTS	= ${TESTCLASSES} ${EXAMPLECLASSES}
+noinst_SCRIPTS = ${TESTCLASSES} ${EXAMPLECLASSES}
 
-bin_SCRIPTS	= tifstojava
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${JAVA_ATERM}:${SHARED_OBJECTS}
+bin_SCRIPTS = tifstojava
+
+CLASSPATH_ENV = \
+	CLASSPATH=${JAVAROOT}:${JAVA_ATERM}:${SHARED_OBJECTS}:${JJTRAVELER}
 
 JAVATIFCLASSES = \
 	Tool.class \
