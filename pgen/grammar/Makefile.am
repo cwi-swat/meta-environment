@@ -8,6 +8,7 @@ pkgdata_DATA = Sdf2.baf
 	
 %.asfix: %.sdf2
 	${SGLR}/bin/sglr \
+		-m \
 		-p $(srcdir)/Sdf2-bootstrap.tbl \
 		-i $(srcdir)/Sdf2.sdf2 \
 		-o $@

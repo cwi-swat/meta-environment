@@ -1,5 +1,9 @@
 $Id$
 
+2001/08/22 (mdejonge@cwi.nl)
+ * grammar/Makefile.am: added -m switch to sglr to explicitly instruct sglr
+   to produce asfix2me as output.
+
 2001/08/22 (jong@cwi.nl)
  * Upgraded assertion that char-ranges fall within Latin-1 set to proper
    error message.
