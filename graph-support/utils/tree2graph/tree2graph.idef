@@ -5,13 +5,14 @@
 process Tree2Graph is
 let
   TG   : tree2graph,
+  Name : str,
   Tree : term,
   Graph : term
 in
   (
-    rec-msg(tree2graph(Tree?)).
+    rec-msg(tree2graph(Name?, Tree?)).
     execute(tree2graph, TG?).
-    snd-eval(TG, tree2graph(Tree)).
+    snd-eval(TG, tree2graph(Name, Tree)).
     rec-value(TG, graph(Graph?)).
     snd-terminate(TG, "done") .
     snd-msg(graph(Graph))

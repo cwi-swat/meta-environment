@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/03 (markvdb@cwi.nl)
+ * tree2graph takes a (module) name as argument and uses this in
+   the "ShowSource" message.
+
 2003/07/02 (jurgenv@cwi.nl)
  * Release 0.1
 

@@ -2,7 +2,7 @@
 
 SUBDIRS = lib utils
 
-EXTRA_DIST=$(wildcard *.pkg)
+EXTRA_DIST=make_rules $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

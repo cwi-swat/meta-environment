@@ -1,5 +1,7 @@
 # $Id$
 
+include ${top_srcdir}/make_rules
+
 EXTRA_DIST = tree2graph.idef
 
 bin_PROGRAMS = tree2graph
@@ -21,15 +23,3 @@ tree2graph_LDADD = \
    -L${TOOLBUSLIB}/lib -lATB \
    -L${ATERM}/lib -lATerm \
    ${SOCKLIBS}
-
-IDEF=${TOOLBUS}/bin/idef2tif
-TIFS=${TOOLBUS}/bin/tifstoc
-
-tif:
-	for i in `ls *.idef`; do \
-	  ${IDEF} $$i; \
-	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
-	done
-
-tif-clean:
-	rm -f *.tifs *.tif.[ch]

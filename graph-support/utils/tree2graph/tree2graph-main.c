@@ -64,12 +64,12 @@ void rec_terminate(int cid, ATerm t)
 }
  
 /*}}}  */
-/*{{{  ATerm tree2graph(int cid, ATerm tree) */
+/*{{{  ATerm tree2graph(int cid, char *name, ATerm tree) */
 
-ATerm tree2graph(int cid, ATerm tree)
+ATerm tree2graph(int cid, char *name, ATerm tree)
 {
-  Graph graph = PT_printAnyToGraph(tree, ATfalse, ATtrue,
-			       ATfalse, ATtrue);
+  Graph graph = PT_printAnyToGraph(name, tree, ATfalse, ATtrue,
+			           ATfalse, ATtrue);
 
   return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
 }
@@ -139,7 +139,8 @@ int main (int argc, char *argv[])
 	      myname, input_file_name);
     }
 
-    graph = PT_printAnyToGraph(tree, characters, productions,
+    graph = PT_printAnyToGraph("",
+                               tree, characters, productions,
 			       layout, literals);
 
     if (!strcmp(output_file_name,"-")) {

@@ -42,7 +42,8 @@ static long makeNodeId(PT_Tree tree)
 
 /*{{{  static Graph printNode(Graph graph, int parent, int node, char *contents) */
 
-static Graph printNode(Graph graph, 
+static Graph printNode(char *name,
+                       Graph graph, 
 		       Shape shape,
                        int parentNr, 
                        int nodeNr, 
@@ -75,8 +76,8 @@ static Graph printNode(Graph graph,
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
   if (posInfo) {
-    ATerm messageInfo = ATmake("element-selected([<str>],<term>)", 
-                               "ShowSource", posInfo);
+    ATerm messageInfo = ATmake("element-selected([<str>],<str>,<term>)", 
+                               "ShowSource", name, posInfo);
     messageAttr = makeAttributeInfo("message", messageInfo);
     attrList = makeAttributeListMulti(messageAttr, attrList);
   }
@@ -152,7 +153,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 
 /*{{{  static Graph treeToGraph(Graph graph, PT_Tree tree, int parent) */
 
-static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
+static Graph treeToGraph(char *name, Graph graph, PT_Tree tree, int parent)
 {
   long key = makeNodeId(tree);
   ATerm posInfoArea = PT_getTreePosInfoArea(tree);
@@ -164,7 +165,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      graph = printNode(graph, makeShapeEllipse(), parent,key,ch,"character", posInfoArea);
+      graph = printNode(name, graph, makeShapeEllipse(), parent,key,ch,"character", posInfoArea);
     }
 
     /*}}}  */
@@ -173,7 +174,8 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     /*{{{  handle literal */
 
     if (literals_on) {
-      graph = printNode(graph,makeShapeEllipse(),parent,key,PT_getTreeString(tree),"literal", posInfoArea);
+      graph = printNode(name, graph,makeShapeEllipse(),parent,key,
+                        PT_getTreeString(tree),"literal", posInfoArea);
     }
 
     /*}}}  */
@@ -190,14 +192,14 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
                                               makeShapeEllipse();
 
     if (!layout && (literals_on || !literal)) {
-      graph = printNode(graph, shape, parent,key,productions_on ?
+      graph = printNode(name, graph, shape, parent,key,productions_on ?
 				PT_yieldProduction(PT_getTreeProd(tree)) :
 				PT_yieldSymbol(rhs),
 				productions_on ? "" :
 				PT_yieldProduction(PT_getTreeProd(tree)), posInfoArea);
     } 
     else if (layout_on && layout) {
-      graph = printNode(graph,shape,parent,key, "LAYOUT?","layout", posInfoArea);
+      graph = printNode(name, graph,shape,parent,key, "LAYOUT?","layout", posInfoArea);
     }
 
     if (!characters_on && PT_isLexicalInjectionProd(prod)) {
@@ -207,7 +209,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     if ((layout_on || !layout) && (literals_on || !literal)) {
       for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
 	  PT_Tree arg = PT_getArgsHead(args);
-	  graph = treeToGraph(graph,arg,key);
+	  graph = treeToGraph(name, graph,arg,key);
       }
     }
 
@@ -225,7 +227,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
 
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
-      graph = treeToGraph(graph,arg,key);
+      graph = treeToGraph(name, graph,arg,key);
     }
 
     /*}}}  */
@@ -242,7 +244,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
 
 /*{{{  Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,  */
 
-Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters, 
+Graph PT_printTreeToGraph(char *name, PT_Tree tree, ATbool characters, 
 			  ATbool productions, 
 			  ATbool layout, ATbool literals)
 {
@@ -258,7 +260,7 @@ Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,
   size = INITIAL_SIZE;
   
 
-  graph = treeToGraph(graph, tree, 0);
+  graph = treeToGraph(name, graph, tree, 0);
 
   /* Reverse edgelist to keep the original order */
   nodes = getGraphNodes(graph);
@@ -271,25 +273,25 @@ Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,
 /*}}}  */
 /*{{{  Graph PT_printParseTreeToGraph(PT_ParseTree parsetree,  */
 
-Graph PT_printParseTreeToGraph(PT_ParseTree parsetree, 
-			     ATbool characters, 
-			     ATbool productions, ATbool layout, 
-			     ATbool literals)
+Graph PT_printParseTreeToGraph(char *name, PT_ParseTree parsetree, 
+			      ATbool characters, 
+			      ATbool productions, ATbool layout, 
+			      ATbool literals)
 {
-  return PT_printTreeToGraph(PT_getParseTreeTop(parsetree),characters,
-			   productions, layout, literals);
+  return PT_printTreeToGraph(name, PT_getParseTreeTop(parsetree),characters,
+			     productions, layout, literals);
 }
 
 /*}}}  */
 
-/*{{{  Graph PT_printAnyToGraph(ATerm term, ATbool characters,  */
+/*{{{  Graph PT_printAnyToGraph(char *name, ATerm term, ATbool characters,  */
 
-Graph PT_printAnyToGraph(ATerm term, ATbool characters, 
+Graph PT_printAnyToGraph(char *name, ATerm term, ATbool characters, 
   		         ATbool productions, 
 		         ATbool layout, ATbool literals)
 {
   if (ATmatchTerm(term, PT_patternParseTreeTop, NULL, NULL)){
-    return PT_printParseTreeToGraph((PT_ParseTree) term, characters, 
+    return PT_printParseTreeToGraph(name, (PT_ParseTree) term, characters, 
 				    productions, layout,
 				    literals);
   }
@@ -297,11 +299,11 @@ Graph PT_printAnyToGraph(ATerm term, ATbool characters,
     PT_Production prod = PT_makeProductionList(PT_makeSymbolLit("*dummy*"));
     PT_Tree dummy = PT_makeTreeAppl(prod, (PT_Args) term);
 
-    return PT_printTreeToGraph(dummy, characters, 
+    return PT_printTreeToGraph(name, dummy, characters, 
 			       productions, layout, literals);
   }
 
-  return PT_printTreeToGraph((PT_Tree) term, characters, 
+  return PT_printTreeToGraph(name, (PT_Tree) term, characters, 
 			     productions, layout, literals);
 }
 

@@ -1,4 +1,6 @@
 
+include ${top_srcdir}/make_rules
+
 bin_PROGRAMS = layoutgraph graph2dot
 pkgdata_DATA = layoutgraph.idef 
 
@@ -34,15 +36,3 @@ y.tab.c y.tab.h: dot.y
 
 lex.yy.c : dot.l y.tab.h
 	$(LEX) $(AM_LFLAGS) $(LFLAGS) $<
-
-IDEF=idef2tif
-TIFS=tifstoc
-
-tif:
-	for i in `ls *.idef`; do \
-          ${IDEF} $$i; \
-          ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
-        done
-
-tif-clean:
-	rm -f *.tifs *.tif.[ch]
