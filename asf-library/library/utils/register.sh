@@ -27,7 +27,7 @@ unregister ()
 register ()
 {
    unregister
-   if test "a${value}" = "a"; then
+   if test "a${values}" != "a"; then
      for value in ${values} ; do
        echo "${tag}:${value}" >> ${registry}
      done
