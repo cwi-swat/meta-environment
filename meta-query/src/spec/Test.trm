@@ -26,3 +26,4 @@ exports
     "(" Import ")"               -> Import {bracket}   
 
     "id" "(" ModuleName ")"      -> Attribute 
+    aap(ModuleName)     -> Attribute 
