@@ -1,5 +1,9 @@
 # $Id$
 
+2003/09/03 <kooiker@cwi.nl>
+ * in meta-studio/metastudio/MetaStudio.java:
+   - removed hard coded connection parameters
+
 2003/08/28 <kooiker@cwi.nl>
  * updated generated code in meta-studio/metastudio/graph to match
    aterm-1.5beta
