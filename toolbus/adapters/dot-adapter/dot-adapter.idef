@@ -7,8 +7,10 @@ in
   execute(dot-adapter, D?) .
   (
     rec-msg(layout-graph(Graph?)) .
+        /*printf("unlayouted graph: %t\n", Graph) .*/
     snd-eval(D, layout-graph(Graph)) .
     rec-value(D, graph-layouted(Graph?)) .
+        /*printf("layouted graph: %t\n", Graph) .*/
     snd-msg(graph-layouted(Graph))
   ) * delta
 endlet

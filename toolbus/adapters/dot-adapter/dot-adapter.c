@@ -18,6 +18,7 @@
 /*}}}  */
 
 static ATermList termStore = NULL;
+static ATermList nodeList;
 static ATermTable nodeTable;
 static ATermTable edgeTable;
 
@@ -28,6 +29,7 @@ static char myversion[] = "1.0";
 static void initTermStore()
 {
   termStore = ATempty;
+  nodeList = ATempty;
 }
 
 /*}}}  */
@@ -132,8 +134,8 @@ static void printNodes(NodeList nodes, FILE *file)
 
 static void printEdge(Edge edge, FILE *file)
 {
-  ATfprintf(file, "%t -> %t ", getEdgeFrom(edge), getEdgeTo(edge));
-  ATwarning("edge: %t\n", edge);
+  // Edges are reversed to get the graph in the Meta-Environt to look 'right'
+  ATfprintf(file, "%t -> %t ", getEdgeTo(edge), getEdgeFrom(edge));
   printAttributes(getEdgeAttributes(edge), file);
   ATfprintf(file, "\n");
 }
@@ -253,6 +255,7 @@ void layoutGraph(Graph graph)
 
 static void storeNodes(NodeList nodes)
 {
+  nodeList = (ATermList)NodeListToTerm(nodes);
   nodeTable = ATtableCreate(1024, 75);
   while (!isNodeListEmpty(nodes)) {
     Node node = getNodeListHead(nodes);
@@ -356,7 +359,8 @@ void mergeNodeAttributes(NodeId nodeId, AttributeList attrs)
 
 void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs)
 {
-  ATerm key = (ATerm)ATmakeList2(NodeIdToTerm(from), NodeIdToTerm(to));
+  // Edges are reversed to get the graph in the Meta-Environt to look 'right'
+  ATerm key = (ATerm)ATmakeList2(NodeIdToTerm(to), NodeIdToTerm(from));
   Edge edge = EdgeFromTerm(ATtableGet(edgeTable, key));
 
   edge = setEdgeAttributes(edge, mergeAttributes(getEdgeAttributes(edge), attrs));
@@ -369,10 +373,22 @@ void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs)
 
 static Graph buildGraph()
 {
-  NodeList nodes = NodeListFromTerm((ATerm)ATtableValues(nodeTable));
-  EdgeList edges = EdgeListFromTerm((ATerm)ATtableValues(edgeTable));
+  /* We want to make sure the list of outgoing nodes is in the same
+   * order as the list of incoming nodes */
+  ATermList list, nodes = ATempty;
+  EdgeList edges;
+ 
+  for (list=nodeList; !ATisEmpty(list); list=ATgetNext(list)) {
+    Node node = NodeFromTerm(ATgetFirst(list));
+    NodeId id = getNodeId(node);
+    ATerm newNode = ATtableGet(nodeTable, NodeIdToTerm(id));
+    nodes = ATinsert(nodes, newNode);
+  }
+  nodes = ATreverse(nodes);
 
-  return makeGraphDefault(nodes, edges);
+  edges = EdgeListFromTerm((ATerm)ATtableValues(edgeTable));
+
+  return makeGraphDefault(NodeListFromTerm((ATerm)nodes), edges);
 }
 
 /*}}}  */
@@ -398,10 +414,9 @@ ATerm layout_graph(int conn, ATerm g)
 
   layoutGraph(graph);
 
-  initTermStore();
-
   graph = buildGraph();
 
+  initTermStore();
   ATtableReset(nodeTable);
   ATtableReset(edgeTable);
 
