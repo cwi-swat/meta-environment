@@ -1657,12 +1657,13 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
 
       }
       else { /* reduction occurred, we need postprocessing */
-
-        if (traversal->type == ANALYZER) {
-          /* We update the traversal with the rhs */
+        if (traversal->type == ACCUMULATOR) {
           *traversal = updateAccumulator(*traversal, rewtrm);
-          /* We just return the input to construct a well-formed term */
           rewtrm = trm;
+        }
+        else if (traversal->type == COMBINATION) {
+          *traversal = updateAccumulator(*traversal, getTupleSecond(rewtrm));
+          rewtrm = getTupleFirst(rewtrm); 
         }
       }
     }

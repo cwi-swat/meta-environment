@@ -119,8 +119,9 @@ createTraversalPattern(PT_Tree term)
   PT_Production prod;
   PT_Args args;
   PT_Symbols symbols;
-  PT_Symbol symbol;
+  PT_Symbol symbol, cleanSymbol;
   PT_Symbol traversed;
+  PT_Symbol accumulated;
   PositionSymbolTuple symbolVisitorData;
   Traversal traversal;
 
@@ -129,6 +130,7 @@ createTraversalPattern(PT_Tree term)
 
   symbols = PT_getProductionLhs(prod);
   symbol = PT_getProductionRhs(prod);
+  cleanSymbol = PT_getSymbolSymbol(symbol);
 
   /* get the symbol of the traversed arg */
   symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
@@ -137,9 +139,38 @@ createTraversalPattern(PT_Tree term)
                          (PT_SymbolVisitorData) &symbolVisitorData); 
   traversed = symbolVisitorData.symbol;
   assert(traversed != NULL);
- 
-  traversal.type = PT_isEqualSymbol(traversed, symbol) ? TRANSFORMER : ANALYZER;
+
+  /* get the symbol of the accumulated arg */
+  symbolVisitorData.pos = ACCUMULATED_SYMBOL_POS;
+  symbolVisitorData.symbol = NULL;
+  PT_foreachSymbolInSymbols(symbols, getSymbol, 
+                         (PT_SymbolVisitorData) &symbolVisitorData); 
+  accumulated = PT_getSymbolSymbol(symbolVisitorData.symbol);
+  
+  if (PT_isEqualSymbol(traversed, symbol)) {
+    traversal.type = TRANSFORMER;
+  } 
+  else if(PT_isEqualSymbol(accumulated, symbol)) {
+    traversal.type = ACCUMULATOR;
+  }
+  else if(PT_isSymbolPair(cleanSymbol)) {
+    PT_Symbol lhs = PT_getSymbolLhs(cleanSymbol);
+    PT_Symbol rhs = PT_getSymbolRhs(cleanSymbol);
+    
+    if (PT_isEqualSymbol(PT_getSymbolSymbol(traversed),lhs) &&
+        PT_isEqualSymbol(accumulated,rhs)) {
+      traversal.type = COMBINATION;
+    }
+    else {
+      traversal.type = UNDEFINED;
+    }
+  } 
+  else {
+    traversal.type = UNDEFINED;
+  }
+  
   traversal.prod = prod;
+  traversal.accumulated = accumulated;
   traversal.args = args;
   traversal.symbols = symbols;
 
@@ -181,8 +212,20 @@ makeTraversalAppl(PT_Tree appl, Traversal traversal)
   args = PT_foreachTreeInArgs(traversal.args, replaceTree, 
                               (PT_TreeVisitorData) &treeVisitorData); 
 
-  if (traversal.type == TRANSFORMER) {
+  switch(traversal.type) {
+  case TRANSFORMER:
     prod = PT_setProductionRhs(prod, symbol);
+    break;
+  case COMBINATION:
+    prod = PT_setProductionRhs(prod, 
+                               PT_makeSymbolCf(
+                                 PT_makeSymbolPair(PT_getSymbolSymbol(symbol), 
+                                                   traversal.accumulated)));
+    break;
+  case ACCUMULATOR:
+  case UNDEFINED:
+  default:
+    /* do nothing */
   }
 
   newappl = PT_setTreeProd(appl, prod);
@@ -203,12 +246,82 @@ updateAccumulator(Traversal traversal, PT_Tree newarg)
   data.pos = ACCUMULATED_ARG_POS;
   data.tree = newarg;
 
-  assert(traversal.type == ANALYZER);
+  assert(traversal.type == ACCUMULATOR || traversal.type == COMBINATION);
 
   traversal.args = PT_foreachTreeInArgs(traversal.args, replaceTree,
                                      (PT_TreeVisitorData) &data);
 
   return traversal;
+}
+
+PT_Tree getTupleFirst(PT_Tree tuple)
+{
+   PT_Args args = PT_getTreeArgs(tuple);
+
+   return PT_getArgsArgumentAt(args, TUPLE_FIRST_POS);
+}
+
+PT_Tree getTupleSecond(PT_Tree tuple)
+{
+   PT_Args args = PT_getTreeArgs(tuple);
+
+   return PT_getArgsArgumentAt(args, TUPLE_SECOND_POS);
+}
+
+static PT_Tree
+makeTuple(PT_Tree tree, PT_Tree accu)
+{
+   PT_Symbol treeSymbol = PT_getProductionRhs(PT_getTreeProd(tree));
+   PT_Symbol accuSymbol = PT_getProductionRhs(PT_getTreeProd(accu));
+   PT_Symbol layoutSymbol  = PT_makeSymbolCf(
+                            PT_makeSymbolOpt(PT_makeSymbolLayout()));
+
+   PT_Symbols lhs = PT_makeSymbolsList(
+                      PT_makeSymbolLit("<"),
+                    PT_makeSymbolsList(
+                      layoutSymbol, 
+                    PT_makeSymbolsList(
+                      treeSymbol,
+                    PT_makeSymbolsList(
+                      layoutSymbol,
+                    PT_makeSymbolsList(
+                      PT_makeSymbolLit(","),
+                    PT_makeSymbolsList(
+                      layoutSymbol,
+                    PT_makeSymbolsList(
+                      accuSymbol,
+                    PT_makeSymbolsList(
+                      layoutSymbol,
+                    PT_makeSymbolsList(
+                      PT_makeSymbolLit(">"),
+                    PT_makeSymbolsEmpty())))))))));
+                       
+   PT_Symbol rhs = PT_makeSymbolPair(treeSymbol, accuSymbol);
+   PT_Attributes attrs = PT_makeAttributesNoAttrs();
+   PT_Production prod = PT_makeProductionDefault(lhs,rhs,attrs);
+                     
+   PT_Tree layoutTree = PT_makeTreeLayoutEmpty();
+   PT_Args args = PT_makeArgsList(
+                    PT_makeTreeLit("<"),
+		  PT_makeArgsList(
+		    layoutTree, 
+		  PT_makeArgsList(
+		    tree,
+		  PT_makeArgsList(
+		    layoutTree,
+		  PT_makeArgsList(
+		    PT_makeTreeLit(","),
+		  PT_makeArgsList(
+		    layoutTree,
+		  PT_makeArgsList(
+		    accu,
+		  PT_makeArgsList(
+		    layoutTree,
+		  PT_makeArgsList(
+		    PT_makeTreeLit(">"),
+		  PT_makeArgsEmpty())))))))));
+
+   return PT_makeTreeAppl(prod,args);
 }
 
 /* chooseNormalform
@@ -223,12 +336,16 @@ chooseNormalform(PT_Tree term, Traversal traversal)
   case TRANSFORMER:
     /* we just return the term */
     break;
-  case ANALYZER:
+  case ACCUMULATOR:
     /* we only return the accumulated value */
     term = selectAccumulatedArg(traversal.args);
     break;
+  case COMBINATION:
+    term = makeTuple(term, selectAccumulatedArg(traversal.args));
+    break;
+  case UNDEFINED:
   default:
-    ATerror("Unknown traversal type");
+    ATerror("Unknown traversal type: %d", traversal.type);
     break;
   }
 

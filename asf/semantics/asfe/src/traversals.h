@@ -29,17 +29,24 @@
 
 extern ATbool traversals_on;
 
-typedef enum { UNDEFINED = 0, TRANSFORMER = 1, ANALYZER = 2 } TraversalType;
+typedef enum { UNDEFINED = 0, TRANSFORMER = 1, ACCUMULATOR = 2,
+               COMBINATION = 3 } TraversalType;
+
 typedef struct Traversal_tag {
 	TraversalType  type;
 	PT_Production  prod;
 	PT_Symbols     symbols;
+        PT_Symbol      accumulated;
 	PT_Args        args;
 } Traversal;
 
-#define ACCUMULATED_ARG_POS  8
-#define TRAVERSED_ARG_POS    4 
-#define TRAVERSED_SYMBOL_POS 4
+/* these are argument numbers is asfix appls */
+#define ACCUMULATED_ARG_POS    8
+#define ACCUMULATED_SYMBOL_POS 8
+#define TRAVERSED_ARG_POS      4 
+#define TRAVERSED_SYMBOL_POS   4
+#define TUPLE_FIRST_POS        2
+#define TUPLE_SECOND_POS       6
 
 #define NO_TRAVERSAL NULL
 
@@ -53,4 +60,6 @@ PT_Tree   makeTraversalAppl(PT_Tree trm, Traversal traversal);
 PT_Tree   chooseNormalform(PT_Tree term, Traversal trav);
 PT_Tree   selectTree(PT_Args args, int pos);
 
+PT_Tree  getTupleFirst(PT_Tree tuple);
+PT_Tree  getTupleSecond(PT_Tree tuple);
 #endif
