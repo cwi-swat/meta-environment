@@ -87,7 +87,7 @@
 \htmltitle{ASF+SDF Meta-Environment\ User Manual \\ $Revision$}
 \htmldirectory{html} 
 \htmlname{user-manual}
-\htmladdress{M.G.J. van den Brand and P. Klint}
+\htmladdress{M.G.J. van den Brand and P. Klint, \today}
 
 \newcommand{\homepage}{http://www.cwi.nl/\~{}markvdb/}
 
@@ -3528,6 +3528,9 @@ and has to specify disambiguation rules explicitly.
 We will discuss various
 approaches to lexical disambiguation and illustrate them by means of examples.
 
+\W We will discuss:
+\W \htmlmenu{1}
+
 \paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
 the input text that are included in a longer interpretation of the same 
 sort. Given a standard definition of identifiers, the input `{\tt xyz}' 
@@ -3535,15 +3538,9 @@ will thus lead to recognition of the identifier `{\tt xyz}' and not to
 either `{\tt x}' or `{\tt xy}'.
 
 This is achieved by defining a restriction on this lexical sort. This
-can be done in either the 
-\link{lexical restrictions or the context-free restrictions section}[ (see
-Section \ref{Restrictions})]{Restrictions}.
-\begin{iftex}
-Figure \ref{CODE:restrict-id} 
-\end{iftex}
-\begin{ifhtml}
-The specification below
-\end{ifhtml}
+can be done using either lexical or context-free
+\link{restrictions}[ (see Section \Ref)]{Restrictions}.
+The specification \link*{below}[ in Figure \Ref]{CODE:restrict-id} 
 shows how to enforce the longest match for the sort {\tt Id}.
 
 \begin{figure}
@@ -3575,20 +3572,19 @@ general lexical tokens (such as identifier) this causes ambiguities.
 The strategy \emph{Prefer Literals} gives preference to interpretation
 as a literal, over interpretation as a more general lexical token.
 For instance, the keyword {\tt begin} may be recognized as an identifier
-given \link{the lexical definition}[ of Figure
-\ref{CODE:restrict-id}]{CODE:restrict-id}.  There are
-two approaches to implement Prefer Literals.
+given the lexical definition \link*{below}[ in Figure \Ref]{CODE:restrict-id}.
+
+There are two approaches to implement Prefer Literals.
 
 In the first approach, we can explicitly forbid the recognition of
-literals as tokens of a specific sort using 
-\link{the reject mechanism}[ (see
-Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.  
+literals as tokens of a specific sort using the
+\link{reject mechanism}[ (see Section~\Ref)]{PreferAvoidReject}.  
 The idea is to define context-free
 grammar rules for all literals with the undesired lexical sort (e.g.,
-{\tt Id}) in the right-hand side followed by the 
-\link{attribute {\tt reject}}[, Figure \ref{CODE:reject-id} illustrates
-this]{CODE:reject-id}.  The {\tt reject} attribute
-indicates that the recognizition of a keyword as a literal of the sort
+{\tt Id}) in the right-hand side followed by the attribute {\tt reject}.
+This is illustrated \link*{below}[in Figure~\Ref]{CODE:reject-id}.
+The {\tt reject} attribute
+indicates here that the recognition of a keyword as a literal of the sort
 {\tt Id} should be rejected. This approach has the major disadvantage
 that the addition of a literal in any context-free rule also requires
 the addition of a new reject rule for that literal.
@@ -3619,13 +3615,9 @@ The second approach is more attractive. The lexical definition of the general
 notion that interferes with our literals is written in such a way that it is
 only used as a last resort. In other words, it is avoided as much as possible
 and is only used when no alternative exists.  
-\link{The attribute {\tt avoid} defines precisely this behaviour}[ 
-(Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.
-\begin{iftex}Figure \ref{CODE:avoid-id} shows
-\end{iftex}
-\begin{ifhtml}
-The next example shows
-\end{ifhtml}
+The attribute {\tt avoid} defines precisely this behaviour
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
+\link*{The next example}[Figure \Ref]{CODE:avoid-id} shows
 how the lexical definition of {\tt Id} is attributed with {\tt avoid}.
 
 Although the first approach is more tedious, it allows more flexibility
@@ -3658,8 +3650,8 @@ symbol. This is built-in behaviour of \asfsdf.
 variable (as defined in a variables section) over interpretation as a lexical
 token. Thus built-in behaviour of \asfsdf. It is achieved by automatically
 extending each variable declaration with 
-\link{the attribute {\tt prefer}}[
-(Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.
+the attribute {\tt prefer}
+(see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
 
 \subsubsection{Context-free Ambiguities}
 \label{cf-ambiguity}
@@ -3692,10 +3684,9 @@ elimination of trees that contain conflicts:
 
 \end{itemize}
 
-Given the \link{example}[ of Figure
-\ref{CODE:complex-prio}]{CODE:complex-prio} we will give a
-number of example sentences and the interpretation given the
-language definition in this example.
+Reconsidering the example of complex priorities shown \link*{earlier}[in
+Figure~\Ref]{CODE:complex-prio} we will give a number of example sentences and
+the interpretation given to them by that language definition.
 
 \begin{center}
 \begin{tabular}{ll}
@@ -3742,6 +3733,21 @@ Finally, the number of injections in each of the resulting trees
 is calculated, the tree with the smallest number of injections
 is prefered.
 
+
+\paragraph{Examples}
+
+The following examples show how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using {\tt prefer} attribute. 
+
+The \link{first example}[(Figure~\Ref]{CODE:eqn-exprs} concerns expressions
+for describing subscripts and superscripts in the typesetting language EQN.
+The crucial point is that, for typesetting reasons, we want to treat a
+subscript followed by a superscript in a special way. Therefore, the special
+case `{\tt E sub E sup E -> E}' is introduced, which is prefered over a
+combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
+  E}'.
+
 \begin{figure}
 \label{CODE:eqn-exprs}
 \begin{IncCode}
@@ -3764,6 +3770,22 @@ exports
 \caption{Syntax definition of EQN expressions}
 \end{figure}
 
+In the \link{second example}[ (Figure~\Ref)]{CODE:dangling-else}
+the {\tt prefer} attribute is used to
+solve the dangling else problem in a nice way.
+The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
+in two ways: {\tt if 0 then (if 1 then hi) else ho} and
+{\tt if 0 then (if 1 then hi else ho)}.
+We can select the latter derivation by adding the {\tt prefer}
+attribute to the production without the {\tt else} part.
+The parser will still construct an ambiguity node containing both
+deriviations,
+namely, {\tt if 0 then (if 1 then hi \{prefer\}) else ho} and
+{\tt if 0 then (if 1 then hi else ho) \{prefer\}}.
+But given the fact that the \emph{top} node of the latter derivation tree
+has the prefer attribute this derivation is selected and the other
+tree is removed from the ambiguity node.
+
 \begin{figure}
 \label{CODE:dangling-else}
 \begin{IncCode}
@@ -3785,41 +3807,6 @@ exports
 \caption{Syntax definition of conditionals}
 \end{figure}
 
-\paragraph{Example}
-
-The following example shows how the interaction (and resulting ambiguities)
-between general context-free functions and special case functions can be
-described using {\tt prefer} attribute. It concerns expressions for 
-describing subscripts
-and superscripts in the typesetting language EQN. The crucial point is that,
-for typesetting reasons, we want to treat a subscript followed by a
-superscript in a special way. Therefore, the special case `{\tt E sub E sup E
-  -> E}' is introduced, which is prefered over a combination of the two
-functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
-\link{See}[, Figure \ref{CODE:eqn-exprs}]{CODE:eqn-exprs} 
-for the \sdf\ definition.
-
-\begin{iftex}
-In Figure~\ref{CODE:dangling-else}
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{CODE:dangling-else} for an example of how
-\end{ifhtml}
-the {\tt prefer} attribute is used to
-solve the dangling else problem in a nice way.
-The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
-in two ways: {\tt if 0 then (if 1 then hi) else ho} and
-{\tt if 0 then (if 1 then hi else ho)}.
-We can select the latter derivation by adding the {\tt prefer}
-attribute to the production without the {\tt else} part.
-The parser will still construct an ambiguity node containing both
-deriviations,
-namely, {\tt if 0 then (if 1 then hi \{prefer\}) else ho} and
-{\tt if 0 then (if 1 then hi else ho) \{prefer\}}.
-But given the fact that the \emph{top} node of the latter derivation tree
-has the prefer attribute this derivation is selected and the other
-tree is removed from the ambiguity node.
-
 \subsection{Parameterization and Renaming}
 \label{ParametersRenamings}
 
@@ -3839,15 +3826,11 @@ of parameterization, later we will give details on symbol renaming.
 Modules can have formal parameters when defining them. The module name
 is then followed by a list of symbols, representing the formal
 parameters of this module. 
-\begin{iftex}
-Figure~\ref{CODE:generic-pairs} shows 
-\end{iftex}
-\begin{ifhtml}
-The next specification is 
-\end{ifhtml}
-an example of an parameterized module. In this example the
+The specification \link*{below}[in Figure~\Ref]{CODE:generic-pairs} shows 
+an example of a parameterized module. In this example the
 formal parameters are used in the parameterized sorts as well,
-this in order to increase readability.
+in order to increase readability and to avoid name clashes between
+different instances of the same module.
 
 \begin{figure}
 \label{CODE:generic-pairs}
@@ -3876,13 +3859,8 @@ exports
 
 When importing a parameterized module the formal parameters have
 to be replaced by actual parameters. 
-\begin{iftex}
-Figure~\ref{CODE:importing-pairs} shows 
-\end{iftex}
-\begin{ifhtml}
-The specification below contains
-\end{ifhtml}
-an example of a rather complicated importation of an parameterized module. 
+The specification \link*{below}[in Figure~\Ref]{CODE:importing-pairs} shows 
+an example of a rather complicated import of a parameterized module. 
 The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
 actual parameters of the module {\tt Pair[X Y]} in the last import.
 
@@ -3904,14 +3882,12 @@ imports Booleans Pair[Bool Bool]
 \label{Renamings}
 
 Symbol renaming is in fact very similar to parameterization except
-that it is not necessary to give the a module formal parameters.
-\begin{iftex}
-Figure~\ref{CODE:pairs} shows 
-\end{iftex}
-\begin{ifhtml}
-The specification below shows
-\end{ifhtml}
+that it is not necessary to add formal parameters to a module.
+The specification \link*{below}[in Figure~\Ref]{CODE:pairs} shows 
 an example of the {\tt Pair} module without parameters. 
+The idea is to achieve the same effect as parameterization
+by explicitly renaming {\tt X} and {\tt Y} to the desired
+names when {\tt Pair} is imported.
 
 \begin{figure}
 \label{CODE:pairs}
@@ -3938,16 +3914,11 @@ exports
 \caption{Definition of generic pairs}
 \end{figure}
 
-When importing a such module symbols can be renamed via
-symbol renaming.
-\begin{iftex}
-Figure~\ref{CODE:renaming-pairs} shows 
-\end{iftex}
-\begin{ifhtml}
-The following specification is 
-\end{ifhtml}
-an example of a rather complicated importation of the module {\tt Pair}
-using renamings. 
+During import such module symbols can be renamed via symbol renaming.
+The specification \link*{below}[in Figure~\Ref]{CODE:renaming-pairs} shows 
+an example of a rather complicated import of the module {\tt Pair}
+using renamings. Renaming {\tt X} to {\tt Bool} is, for instance,
+written as {\tt X => Bool}.
 
 \begin{figure}
 \label{CODE:renaming-pairs}
@@ -3969,22 +3940,16 @@ imports Booleans Pair[X => Bool Y => Bool]
 \index{variables@variables}
 Variables are declared in the `{\tt variables}' section of a module.  Like all
 other entities in a 
-\link{module---except equations---variables may be exported}[
-(Section \ref{modules})]{modules}. 
+module---except equations---variables may be exported
+(see \link*{Modules}[Section \Ref]{modules}). 
 A variables section consists of a list of variable
 names followed by a symbol. In fact, a variable declaration can define an
 infinite collection of variables by using a \emph{naming scheme} instead of a
 simple variable name.  A naming scheme is a regular expression like the ones
-allowed in the \link{lexical syntax}[ (Section
-\ref{lexical-syntax})]{lexical-syntax} except that sorts
+allowed in the \link{lexical syntax}[ (Section~\Ref)]{lexical-syntax} except that sorts
 are not allowed. A variable may represent any symbol. 
 
-\begin{iftex}
-In Figure \ref{CODE:variables},
-\end{iftex}
-\begin{ifhtml}
-In the next specification,
-\end{ifhtml}
+In the specification \link*{below}[in Figure \Ref]{CODE:variables},
 `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
 are examples of variables declared by the naming schemes in 
 the {\tt variables} section.
@@ -4026,21 +3991,15 @@ allowed to use them in terms.
 
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
 strategy that was discussed in
-\begin{iftex}
-Section~\ref{lex-ambiguity}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Lexical Ambiguities}[]{lex-ambiguity}.
-\end{ifhtml}
+\link*{Lexical Ambiguities}[Section~\Ref]{lex-ambiguity}.
 
 \subsubsection{Set Operator}
 
-\link{The set operator}[ (see Section~\ref{SetOperator})]{SetOperator} 
+The \link{set operator}[ (see Section~\Ref)]{SetOperator} 
 is an abbrevation for
 representing sets. However, to obtain access to the elements of such
-a set an 
-\link{auxilary variable has to be defined}[, see
-Figure~\ref{CODE:set-variable} for an example]{CODE:set-variable}.
+a set an auxilary variable has to be defined
+as shown \link*{below}[in Figure~\Ref]{CODE:set-variable}.
 
 \begin{figure}
 \label{CODE:set-variable}
