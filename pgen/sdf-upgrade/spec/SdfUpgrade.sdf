@@ -10,7 +10,9 @@ exports
 hiddens
   context-free syntax
     literal-upgrade(Module)     -> Module {traversal(trafo, top-down, break)}
+    literal-upgrade(ATerm)     -> ATerm {traversal(trafo, top-down, break)}
     literal-upgrade(Production) -> Production {traversal(trafo, top-down, break)}
+    literal-upgrade(Symbol)     -> Symbol {traversal(trafo, top-down, break)}
     literal-upgrade(Literal)    -> Literal {traversal(trafo, top-down, break)}
 
 hiddens
@@ -34,6 +36,7 @@ hiddens
     "$Char*"[0-9]*      -> CHAR*
 
     "$Attributes"[0-9]* -> Attributes
+    "$ATerm"[0-9]*      -> ATerm
     "$Literal"[0-9]*    -> Literal
     "$Module"[0-9]*     -> Module
     "$Args"[0-9]*       -> {Symbol ","}*

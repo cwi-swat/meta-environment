@@ -6,10 +6,15 @@ equations
            =====>
            sdf-upgrade($Module1) = $Module4
 
+
   [lu-1'1] literal-upgrade($Literal($Args) -> $Symbol $Attributes) =
              $Literal($Args) -> $Symbol $Attributes
 
-  [lu-1'2] literal-upgrade(uqliteral($Char*)) = qliteral(""" $Char* """)
+  [lu-1'2] literal-upgrade($ATerm) = $ATerm
+
+  [lu-1'2] literal-upgrade($Literal:$Symbol) = $Literal:literal-upgrade($Symbol)
+
+  [lu-1'3] literal-upgrade(uqliteral($Char*)) = qliteral(""" $Char* """)
 
   [tu-1'1] is-tuple($Symbol1) == true,
            <$Symbol3, $TupleArgs> := tuple-upgrade($Symbol1),
