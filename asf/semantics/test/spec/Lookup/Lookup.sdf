@@ -1,0 +1,35 @@
+module Lookup
+
+exports
+
+  lexical syntax
+    [\ \t\n]          -> LAYOUT
+    "%%" ~[\n]* "\n" -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
+  sorts PICO-ID
+  lexical syntax
+    [a-z] -> PICO-ID
+
+  sorts TYPE
+  context-free syntax
+    "nil-type"     -> TYPE
+    "natural"     -> TYPE
+    "string"      -> TYPE
+
+  sorts TENV PAIR {PAIR ","}*
+  context-free syntax
+    "(" PICO-ID ":" TYPE ")" -> PAIR
+    "[" {PAIR ","}* "]"            -> TENV
+
+    "lookup" "(" PICO-ID "," TENV ")"           -> TYPE
+
+  variables
+    "Pair" [0-9\']*  -> PAIR
+    "Pair*" [0-9\']* -> {PAIR ","}*
+    "Tenv" [0-9\']*  -> TENV
+    "Type"[0-9]*  -> TYPE
+    "Id" [0-9\']*   -> PICO-ID
+
