@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26
+ * Added an explicit ATBpack for the normal form.
+
 Thu Jun 19 16:15:16 CEST 2003 <jong@cwi.nl>
  * libME/tb/client.c: add explicit ATBunpack
 
