@@ -82,9 +82,9 @@ in
       rec-msg(io-files-equal) 
     +
       rec-msg(io-files-differ) .
-      snd-note(ui-status(errorf(
-      "Multiple occurrences of %s:\n%s and %s\nContinuing with %s",
-                                [Name,Chosen,FileName, Chosen]))) 
+      snd-note(ui-status(messagef(
+      "Multiple occurrences of %s. Continuing with %s",
+                                [Name, Chosen]))) 
     )
   fi
   *
