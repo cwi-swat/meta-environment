@@ -380,8 +380,8 @@ int ATBwriteTerm(int fd, ATerm term)
 
   wirelen = MAX(len, MIN_MSG_SIZE);
   resize_buffer(wirelen+1);               /* Add '\0' character */
+  memset(buffer, 0, wirelen);
   sprintf(buffer, "%-.*d:", LENSPEC-1, len);
-  buffer[LENSPEC] = '\0';
 
   AT_writeToStringBuffer(term, buffer+LENSPEC);
 
