@@ -9,7 +9,7 @@ in
   snd-msg(tree2graph(Tree)) .
   rec-msg(graph(Graph?)) .
   printf("Graph is %t\n", Graph).
-  snd-msg(display-graph(parsetree, Graph))
+  snd-msg(display-graph("parsetree", Graph))
 endlet
 
 process ParseTerm(EditorId: term, ModuleName: str) is
