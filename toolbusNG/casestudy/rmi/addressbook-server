@@ -5,7 +5,7 @@ DESC="AddressBook Service"
 case "$1" in
   'start')
     echo -n "Starting $DESC: "
-    rmiregistry &
+    CLASSPATH=../.. rmiregistry &
     echo -n "rmiregistry "
     ./abd
     echo "abd."
@@ -14,7 +14,7 @@ case "$1" in
   'stop')
     echo -n "Stopping $DESC: "
 
-    pkill rmiregistry
+    pkill rmiregistry 2>&1 >/dev/null
     echo -n "rmiregistry "
 
     PROCS=`/bin/ps x \
