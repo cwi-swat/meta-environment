@@ -42,10 +42,6 @@ in
   subscribe(language-unavailable(<str>)) .
   subscribe(equations-changed(<str>)) .
   (
-    rec-msg(interpret(Mod?,Term?)).
-    snd-eval(Eval,interpret(Mod,Term)).
-    rec-value(Eval,result(NF?))
-  +
     rec-msg(eqs-available(Mod?)).
     snd-eval(Eval,equations-available(Mod)).
     (
