@@ -24,7 +24,7 @@
 # distribution that is controlled by automake, run "reconf" for
 # that package prior to "configure".
 
-aclocal 
+aclocal -I ./config
 autoconf
 autoheader
 automake -a
