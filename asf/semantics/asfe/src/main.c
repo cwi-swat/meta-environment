@@ -38,7 +38,7 @@
 
 static char myarguments[] = "abde:hi:lmo:w:tvV";
 static char myname[] = "asfe";
-static char myversion[] = "0.5";
+static char myversion[] = "0.6";
 
 
 /*}}}  */
