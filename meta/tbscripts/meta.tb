@@ -28,7 +28,7 @@
 #include "evaluator.tb"
 #include "focus.tb"
 #include "edit-term.tb"
-#include "prettyprinter.tb"
+#include "asource.idef"
 #include "in-output.idef"
 #include "parsetrees.tb"
 #include "open-modules.tb"
@@ -54,7 +54,7 @@
 #include "sdf2-language.tb"
 #include "notification.tb"
 
-toolbus(Parser, Parsetrees, Prettyprinter, Io, Ui, Edit-master, ModuleDB, 
+toolbus(Parser, Parsetrees, Unparser, Io, Ui, Edit-master, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
         Notify-about-changed-modules) 

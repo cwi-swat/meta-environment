@@ -82,7 +82,7 @@ BINFILES	=
 LIBFILES	= 
 DATAFILES	= meta.tb editor.tb clear-all.tb \
                   close-modules.tb edit-term.tb focus.tb \
-                  parsetrees.tb prettyprinter.tb file-creator.tb \
+                  parsetrees.tb file-creator.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb compiler.tb pgen.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
@@ -119,7 +119,7 @@ module-test: all
 # example: 'mytest.c: mytest.c.nw'
 
 meta.tifs: $(DATAFILES)
-	$(TOOLBUSBIN)/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/sglr -gentifs meta.tb
+	$(TOOLBUSBIN)/toolbus -I$(top_srcdir)/in-output -I$(top_srcdir)/asource -I$(top_srcdir)/module-db -I$(top_srcdir)/sglr/sglr -gentifs meta.tb
 
 ##########################################################
 ### Everything below this line should remain unchanged ###

@@ -163,5 +163,5 @@ in
   ) *
   ( rec-event(UI,button(quit))
   + rec-disconnect(UI)) .
-  shutdown("Asf+Sdf Meta-Environment exiting")
+  shutdown("Asf+Sdf Meta-Environment exiting\n")
 endlet
