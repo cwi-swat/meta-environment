@@ -269,13 +269,21 @@ in
     . snd-msg(file-extension-hook(asf))
     . rec-msg(file-extension-hook-result(Extension?))
     . BuildPath(Directory, Filename, Extension, DestPath?)
-    . snd-msg(io-copy-file(SrcPath, DestPath))
+    . snd-msg(io-exists-file(DestPath))
     .
     (
-      rec-msg(io-file-copied(SrcPath, DestPath))
+      rec-msg(io-file-exists)
+      . Error("Refusing to overwrite existing file: %s", [DestPath])
     +
-      rec-msg(io-file-copied(SrcPath, DestPath, Error?))
-      . Error("Could not remove file: %s", [Error])
+      rec-msg(io-file-not-exists)
+      . snd-msg(io-copy-file(SrcPath, DestPath))
+      .
+      (
+	rec-msg(io-file-copied(SrcPath, DestPath))
+      +
+	rec-msg(io-file-not-copied(SrcPath, DestPath, Error?))
+	. Error("Unable to copy: %s", [Error])
+      )
     )
   +
     rec-msg(io-file-not-exists)
