@@ -1,10 +1,7 @@
 process ShowImportGraph(ImportRelations: list) is
 let
-  ImportGraph: term,
-  Pid: int
+  ImportGraph: term
 in
-  Pid := process-id.
-  printf("ShowImportGraph called: %t\n\n", Pid).
   snd-msg(ui-display-treelist("import-relations", ImportRelations))
   . snd-msg(sig-import-relation-to-graph(ImportRelations))
   . rec-msg(sig-graph(ImportRelations, ImportGraph?))

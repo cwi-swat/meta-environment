@@ -145,7 +145,6 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 	        graph = orderNodes(graph);
 	        graph = sizeNodes(graph, sizer);
 	        
-	        System.out.println("+- JAVA: Graph rendered: " + getId());
 	        postEvent(getFactory().make("rendered-graph(<str>,<term>)", getId(),
 	                graph.toTerm()));
 	        
