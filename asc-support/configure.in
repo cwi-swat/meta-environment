@@ -88,19 +88,19 @@ AC_CHECK_LIB(dl, dlopen)
 AC_SUBST(SOCKLIBS)
 
 dnl Default values
-CC_GCC=gcc
+AC_PATH_PROG(CC_GCC,gcc,true)
 CFLAGS_GCC="-Wall -O4"
 LFLAGS_GCC=""
 
-CC_CC=cc
+CC_CC=${CC}
 CFLAGS_CC="-O"
 LFLAGS_CC=""
 
-CC_DBG=gcc
+CC_DBG=${CC_GCC}
 CFLAGS_DBG="-Wall -g"
 LFLAGS_DBG="-g"
 
-CC_PROF=gcc
+CC_PROF=${CC_GCC}
 CFLAGS_PROF="-Wall -pg"
 LFLAGS_PROF="-pg"
 

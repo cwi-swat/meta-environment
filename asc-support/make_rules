@@ -26,4 +26,3 @@ PROF_COMPILE   = $(CC_PROF) $(CFLAGS_PROF) $(DEFS_PROF) $(DEFS)
 
 %-prof.o : %.c $(ALLINCLUDES)
 	$(PROF_COMPILE) $(INCLUDES) -c $< -o $@
-
