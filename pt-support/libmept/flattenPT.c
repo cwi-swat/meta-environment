@@ -849,9 +849,16 @@ static PT_Tree flattenVar(PT_Tree tree)
     if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
       PT_Args newVarArg = PT_makeArgsEmpty();
       char *varStr = PT_yieldArgs(argsInner);
+      PT_Symbol newLhsArg = PT_makeSymbolLit(varStr);
+      PT_Tree newArg = PT_makeTreeLit(varStr);
+      PT_Symbols newLhs = PT_makeSymbolsSingle(newLhsArg);
 
-      newVarArg = PT_makeArgsMany(PT_makeTreeLit(varStr), newVarArg);
-      return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
+      prodVarsymInner = PT_setProductionLhs(prodVarsymInner, newLhs);
+
+      newVarArg = PT_makeArgsMany(newArg, newVarArg);
+      return PT_makeTreeAppl(prodVarsymOuter, 
+			     PT_makeArgsSingle(PT_makeTreeAppl(prodVarsymInner,
+							       newVarArg)));
     }
   }
 

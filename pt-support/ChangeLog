@@ -1,5 +1,13 @@
 $Id$
 
+Sun Jun  6 09:20:48 CEST 2004 <jurgenv@cwi.nl>
+ * Changed flattening of variables. The old flattened variables were 
+   inconsistent, the number of arguments of the resulting production did
+   not correspond to the real tree arguments. This made compiled
+   specifications crash when trying to reconstuct an AsFix term from a muASF
+   term, because one of the assumptions of that algorithm is that the
+   production indicates the number of arguments.
+
 Tue May  4 09:16:04 CEST 2004 <kooiker@cwi.nl>
  * utils/Makefile.am: removed trailing backslash 
 

@@ -13,6 +13,6 @@ identification
 configuration interface
 
 requires
-  aterm		2.1
-  error-support 0.1
+  aterm		2.2
+  error-support 0.1.1
   toolbuslib	0.6
