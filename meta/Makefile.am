@@ -24,7 +24,7 @@ include ${top_srcdir}/make_rules
 
 SUBDIRS     = asfix asc-support sglr pgen compiler asfix2c-compiler editor \
               evaluator graph-browser in-output module-db utils toolbus \
-              stred grammars demo doc
+              stred grammars demo doc asf-syntax
 
 EXTRA_DIST  = make_rules meta.sh.src meta.pod
 
