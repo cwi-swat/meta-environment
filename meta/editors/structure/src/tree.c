@@ -223,12 +223,12 @@ PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 
   if (rightLayout != NULL && step < (PT_getArgsLength(oldArgs)-1)) {
     PT_Args layoutString;
-    PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step-1);
+    PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step+1);
     assert(PT_isTreeLayout(layout));
     layoutString = PT_getTreeArgs(layout);
     layoutString = concatRightLayout(layoutString, rightLayout);
     layout = PT_setTreeArgs(layout, layoutString);
-    newArgs = PT_setArgsArgumentAt(newArgs, layout, step-1);
+    newArgs = PT_setArgsArgumentAt(newArgs, layout, step+1);
     rightLayout = NULL;
   } 
 
