@@ -8,15 +8,15 @@ exports
 context-free syntax
 
   read-bytes(file:String)       -> Read 
-    {built-in("read-bytes-from-file")}
+    {built-in("read-bytes-from-file"), side-effect}
 
   write-bytes(file:String,Bytes)       -> Write 
-    {built-in("write-bytes-to-file")}
+    {built-in("write-bytes-to-file"), side-effect}
 
 context-free syntax
 
   read-from-command(command:String) -> Read
-    {built-in("read-from-command")}
+    {built-in("read-from-command"), side-effect}
 
   execute-command(command:String)    -> NatCon 
-    {built-in("execute-command")}
+    {built-in("execute-command"), side-effect}

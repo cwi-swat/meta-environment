@@ -8,14 +8,15 @@ exports
 
 context-free syntax
   parse-bytes(Bytes)      -> Parsetree[[X]] {built-in("parse-bytes")}
-  parse-file(file:String) -> Parsetree[[X]] {built-in("parse-file")}
+  parse-file(file:String) -> Parsetree[[X]] 
+	{built-in("parse-file"), side-effct}
 
 context-free syntax
 
   read-parse-tree(file:String)  -> Parsetree[[X]] 
-    {built-in("read-term-from-file")}
+    {built-in("read-term-from-file"), side-effect}
   write-parse-tree(file:String, X)   -> Write
-    {built-in("write-term-to-file")}
+    {built-in("write-term-to-file"), side-effect}
 
 context-free syntax
   unparse(X)                     -> Bytes
@@ -24,7 +25,7 @@ context-free syntax
   unparse-to-bytes(X)            -> Read
     {built-in("unparse-to-bytes")}
   unparse-to-file(file:String,X) -> Write
-    {built-in("unparse-to-file")}
+    {built-in("unparse-to-file"), side-effect}
 
 hiddens
 imports basic/Whitespace
