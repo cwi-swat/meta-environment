@@ -1,11 +1,5 @@
 equations
 
-[ib0]	is-bag(empty-bag) = true
-[ib1]	is-bag($Bag) = true
-
-[default-ib]	
-	is-bag($Elem) = false
-
 [elt1]	elem-less($Elem1, $Elem2) = less($Elem1, $Elem2)
 
 [ele1]	elem-less-equal($Elem1, $Elem2) = less-equal($Elem1, $Elem2)
@@ -13,5 +7,7 @@ equations
 [egt1]	elem-greater($Elem1, $Elem2) = 	greater($Elem1, $Elem2)
 
 [ege1]	elem-greater-equal($Elem1, $Elem2) = greater-equal($Elem1, $Elem2)
+
+[ee1]	elem-equal($Bag1, $Bag2) = equal($Bag1, $Bag2)
 
 [ee1]	elem-equal($Elem1, $Elem2) = equal($Elem1, $Elem2)

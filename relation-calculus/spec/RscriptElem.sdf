@@ -22,13 +22,11 @@ exports
      Bag[[Elem]]                   	    	-> Elem  
      Tuple					-> Elem
 
-     is-bag(Elem)				-> Boolean
-
      elem-less(Elem, Elem)			-> Boolean
      elem-less-equal(Elem, Elem)		-> Boolean
 
      elem-greater(Elem, Elem)			-> Boolean
-     elem-greater-equal(Elem, Elem)			-> Boolean
+     elem-greater-equal(Elem, Elem)		-> Boolean
 
      elem-equal(Elem, Elem)			-> Boolean
 
