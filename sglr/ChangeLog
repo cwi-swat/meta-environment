@@ -3,6 +3,9 @@ $Id$
 2003/11/21 (jurgenv@cwi.nl)
  * Brought up-to-date with pt-support, libconversion and libasfix2 
    are now part of libmept.
+ * Refactored sglr-interface and sglr-main such that ATBpack is not used
+   in sglr-interface anymore
+
 
 2003/10/08 (markvdb@cwi.nl)
  * Reverse the list of ambiguities, fixed bug #55.
