@@ -18,6 +18,7 @@
 \newcommand{\asdf}{{\sc Asf+Sdf}}
 \newcommand{\asf}{{\sc Asf}}
 \newcommand{\sdf}{{\sc Sdf}}
+\newcommand{\Tscript}{{\sc Tscript}}
 
 \newcommand{\spec}[1]{\texttt{#1}}
 
@@ -51,7 +52,7 @@ domain, that relevant aspects of that language are formally defined
 and that desired tools are generated on the basis of this language
 definition. This generative approach is illustrated in
 Figure~\ref{Fig:generator}. Using a definition for some language $L$
-as starting point, a generator can a produce a range of tools for
+as starting point, a generator can produce a range of tools for
 editing, manipulating, checking or executing $L$ programs.
 
 Language aspects have to be defined, analyzed, and used to generate
@@ -76,18 +77,18 @@ new and has to be designed from scratch.
 
 \subsection{One realization: the \asdf\ Meta-Environment}
 
-The \asdf\ Meta-Environment~\cite{XXX} is an incarnation of the
+The \asdf\ Meta-Environment~\cite{Klint93,BDHJJKKMOSVVV01} is an incarnation of the
 approach just described and covers both the interactive development of
 language definitions and the generation of tools based on these
 language definitions.
 
-In this paper we are primarily interested in the \emph{software engineering
-aspects} of building such a system. Starting point is the \asdf\
-Meta-Environment as we had completed it in the beginning of the
+In this paper we are primarily interested in the \emph{software
+engineering aspects} of building such a system. Starting point is the
+\asdf\ Meta-Environment as we had completed it in the beginning of the
 1990's.  This was a monolithic 200 KLOC Lisp program that was hard to
 maintain.  It had all the traits of a legacy system and was the
 primary motivation to enter the area of system and software
-renovation. 
+renovation.
 
 \subsection{Towards a component-based architecture}
 
@@ -95,19 +96,19 @@ We give a brief time line of our efforts to transform the old,
 monolithic, implementation of the Meta-Environment into a
 well-structured, component-based, implementation.
 
-In 1992, first, unsuccessful, experiments to decompose the system
-into separate parts~\cite{BakkerKoorn93}.  The idea was to separate
-the user-interface and the text editor from the rest of the system.
-The user-interface was completely re-implemented as a separate
-component and as text editor we re-used Emacs. In hindsight, we were
-unaware of the fact that we made the transition from a completely
-sequential system to a system with several concurrent
-components. Unavoidably, we encountered hard to explain deadlocks and
-race conditions..
+In 1992, first, unsuccessful, experiments were carried out to
+decompose the system into separate parts~\cite{BakkerKoorn93}.  The
+idea was to separate the user-interface and the text editor from the
+rest of the system.  The user-interface was completely re-implemented
+as a separate component and as text editor we re-used Emacs. In
+hindsight, we were unaware of the fact that we made the transition
+from a completely sequential system to a system with several
+concurrent components. Unavoidably, we encountered hard to explain
+deadlocks and race conditions.
 
 In 1993, a next step was to write a formal specification of the
 desired system behavior~\cite{P9415} using PSF, a specification language based on
-process algebra and algebraic specifications (** cite **).  Simulation
+process algebra and algebraic specifications~\cite{MauwVeltink90}.  Simulation
 of this specification unveiled other, not yet observed, deadlocks.
 Although, this was clearly an improvement over the then existing situation,
 this specification approach also had its limitations and drawbacks:
@@ -118,18 +119,18 @@ this specification approach also had its limitations and drawbacks:
 been a major change to add the description of a new component.
 
 \item The effort to write the PSF specification was significant and there was no
-way to derive an actual implementation from this specification.
+way to derive an actual implementation from it.
 
 \end{itemize}
 
 In 1994, the first version of the \TB\ was
 completed~\cite{BergstraKlint94,TB-COORD96}.  The key idea was to
 organize a system along the lines of a software bus and to make this
-bus programmable by way of a scripting language (T-script) that was
-based on ACP (Algebra of Communicating Processes, \cite{XXX}).
+bus programmable by way of a scripting language (\Tscript) that was
+based on ACP (Algebra of Communicating Processes, \cite{BergstraKlop86}).
 Another idea was to use a uniform data format (called \TB\ terms) to
 exchange data between \TB\ and tools.  At the implementation level,
-T-scripts were executed by an interpreter and communication between
+\Tscript{}s were executed by an interpreter and communication between
 tools and \TB\ took place using TCP/IP sockets. In this way,
 multi-language, distributed, applications could be built with
 significantly less effort than using plain C and sockets.
@@ -275,7 +276,7 @@ languages running on different machines.  This is achieved by means of
 a programmable software bus as illustrated in
 Figure~\ref{Fig:toolbus-architecture}.  The \TB\ coordinates the
 cooperation of a number of tools.  This cooperation is described by a
-T-script that runs inside the \TB. The result is a set of concurrent
+\Tscript\ that runs inside the \TB. The result is a set of concurrent
 processes inside the \TB\ that can communicate with each other and
 with the tools. Tools can be written in any language and can run on
 different machines. They exchange data by way of ATerms.
@@ -293,10 +294,10 @@ button only leads to an event that is handled by some process in the
 \TB. This process routes the event to the database tool (likely via
 some intermediary process) and gets the answer back via the inverse
 route. This implies that the configuration knowledge is now
-completely localized in the the Tscript and that UI and DB do not
+completely localized in the the \Tscript\ and that UI and DB do not
 even know about each others existence.
 
-The primitives that can be used in Tscripts are listed in
+The primitives that can be used in \Tscript{}s are listed in
 Table~\ref{Tab:Tscript-features}. 
 
 \section{An example}
@@ -532,7 +533,7 @@ ASF+SDF         & 12	 & 170 (C) & \\
 C 	        & 80$^{\dagger\dagger}$  & & \\
 Java, Tcl/Tk    &  5  & &\\
 Makefiles, etc	&  5  & &\\
-Tscrips   	&  5  & &\\ \hline
+\Tscript   	&  5  & &\\ \hline
 Total LOC:	& 107 & 170 & 277 \\\hline
 
 ToolBus script &  4.6\% &  & 1.8\%\\ \hline
@@ -569,7 +570,7 @@ tool definitions                     & 27\\
 \texttt{create}                      & 58 \\ \hline
 \end{tabular}
 \end{center}
-\caption{\label{Tab:Tscript-stats}Facts concerning Tscript primitives}
+\caption{\label{Tab:Tscript-stats}Facts concerning \Tscript\ primitives}
 \end{table}
 
 
@@ -579,12 +580,12 @@ the various implementation languages used in the Meta-Environment.  In
 the column \emph{language} the various language are listed.  In column
 \emph{KLOC} the size (in Kilo Lines Of Code) is given for each
 language. The result is 107 KLOC for the whole system of which 4.6\%
-are Tscripts.  If we consider the fact that \asdf\ specification are
+are \Tscript{}s.  If we consider the fact that \asdf\ specification are
 compiled to C code, another view is possible as well: 12 KLOC of \asdf
 generates 170 KLOC of C code (!). Taking this generated code into
 account, the total size of the whole system amounts to 277 KLOC of
-which 1.8\% are Tscripts. This is compatible with the expectation that
-Tscripts are relatively small and form high-level ``glue'' to connect
+which 1.8\% are \Tscript{}s. This is compatible with the expectation that
+\Tscript{}s are relatively small and form high-level ``glue'' to connect
 much larger components.
 
 \textbf{Part of the C code is generated by ApiGen; it might be
@@ -592,13 +593,13 @@ much larger components.
 
 Another conclusion from these facts is that low-level information for
 building the software (makefiles and configuration scripts) are of the
-same size as the high level Tscripts. This points into the direction
+same size as the high level \Tscript{}s. This points into the direction
 that the level of these build scripts should be raised. This
 conclusion will, however, not be further explored in this paper.
 
 
 Another view is given in Table~\ref{Tab:Tscript-stats} where the
-frequency of occurrence of Tscript primitives is shown.  Clearly,
+frequency of occurrence of \Tscript\ primitives is shown.  Clearly,
 sequential composition (\spec{.}) is the dominant operator and
 sending/receiving (\spec{snd-msg}, \spec{rec-msg}) messages is the
 dominant communication mechanism, followed by communication with tools
@@ -621,7 +622,7 @@ posed by our users and ourselves are:
   See \S\ref{Sec:message-patterns}.
 
 \item If a tool crashes, what is the best way to describe the recovery
-  in the Tscript?
+  in the \Tscript?
   See \S\ref{Sec:exceptions}.
 
 \item I have huge data values that are exchanged between tools and the
@@ -690,7 +691,7 @@ this is an answer.
 
 The call/reply regime is thus implicitly encoded in messages.  This
 makes error handling harder (which reply did not come?)  and makes the
-Tscripts harder to understand. This is particularly so, since
+\Tscript{}s harder to understand. This is particularly so, since
 unstructured combinations of \spec{snd-msg}/\spec{rec-msg} and
 sequential composition, choice, iteration and parallel composition are
 allowed.
@@ -758,7 +759,9 @@ may require recovery in several processes.
 \subsubsection{Local Exception Handling}
 
 We start with the simpler case of local error handling and introduce
-the \emph{disrupt operator} (\spec{>>}) proposed in LOTOS~\cite{XXX}.
+the \emph{disrupt operator} (\spec{>>}) proposed in
+LOTOS~\cite{Brinksma88}.  A process algebra variant of this operator
+is described in~\cite{Diertens94}.
 It has the form \spec{P >> E}, where \spec{P} describes the normal
 processing and \spec{E} the exceptional processing. It adds the
 execption \spec{E} as alternative to each atomic action in \spec{P}.
@@ -769,6 +772,19 @@ If the action prefix form of \spec{P} is  $a_1 . P_1 + ... + a_n . P_n$, then
 \end{quote}
 
 \subsubsection{Global Exception Handling}
+
+Global exception handling in distributed systems is a very
+well-studied subject from the perspective of crash recovery and
+transaction management in distributed databases.
+
+An overview of rollback-recovery protocols in message-passing systems
+is given in~\cite{568525}.
+
+Coordinated Atomic Actions~\cite{ZorzoEtAl97}.
+\cite{Randell75},
+
+\cite{Klint85},
+\cite{BergstraPonseVanWamel93}
 
 
 \subsection{Call-by-value versus Call-by-reference}
