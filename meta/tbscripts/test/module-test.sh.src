@@ -44,15 +44,15 @@ call_toolbus () {
 }
 
 # Test 1. Attempt to create a non-existing module.
-rm -f NonExistingModule.sdf2
+rm -f NonExistingModule.sdf
 call_toolbus new-module-test-1.tb
-rm -f NonExistingModule.sdf2
+rm -f NonExistingModule.sdf
 
 # Test 2. Attempt to create a module that would overwrite an existing file.
-rm -f ./ExistingModule.sdf2
-echo "module ExistingModule" > ./ExistingModule.sdf2
+rm -f ./ExistingModule.sdf
+echo "module ExistingModule" > ./ExistingModule.sdf
 call_toolbus new-module-test-2.tb
-rm -f ./ExistingModule.sdf2
+rm -f ./ExistingModule.sdf
 
 # Test 3. Attempt to create a module that already exists in the module-db.
 call_toolbus new-module-test-3.tb
