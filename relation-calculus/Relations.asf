@@ -8,6 +8,13 @@ equations
 	=============================================================
 	<$Elem1, $Elem2, $Elem+1> = <$Elem1, <$Elem2, $Elem', $Elem+2>>
 
+%% ---- is-rel
+
+[ir1]	is-rel(bag($C, $Bag1, <$Elem1, $Elem2>, $Bag2)) = true
+
+[default-ir]
+	is-rel($Bag) = false
+
 %% ----	compose
 
 [comp-0] compose($Bag1, $Bag2) = compose(mk-iterator($Bag1), $Bag2)
