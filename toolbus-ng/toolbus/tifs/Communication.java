@@ -10,6 +10,7 @@ abstract public class Communication {
   
   public Communication(ATerm t) {
     setRepresentation(t);
+    initArgumentList();
   }
 
   private void setRepresentation(ATerm t) {
@@ -26,9 +27,6 @@ abstract public class Communication {
   }
 
   public Iterator fetchArgumentIterator() {
-    if (argumentList == null) {
-      initArgumentList();
-    }
     return argumentList.iterator();
   }
 

@@ -10,6 +10,7 @@ public class Process {
 
   public Process(ATerm t) {
     setRepresentation(t);
+    initCommunicationList();
   }
 
   private void setRepresentation(ATerm t) {
@@ -48,10 +49,6 @@ public class Process {
   }
 
   public Iterator fetchCommunicationIterator() {
-    if (communicationList == null) {
-      initCommunicationList();
-    }
-
     return communicationList.iterator();
   }
 
