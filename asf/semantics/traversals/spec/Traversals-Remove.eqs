@@ -29,7 +29,7 @@ equations
 [default-rig] remove_in_grammar(Grammar) = Grammar 
 
 [rips] remove_in_productions(	Production*1 
-															Symbols -> Symbol {Attribute*1, traverse, Attribute*2} 
+															$Symbols -> $Symbol {Attribute*1, traverse, Attribute*2} 
 														 	Production*2 ) = remove_in_productions(Production*1 Production*2)
 
 [default-rips] remove_in_productions(Production*) = Production*

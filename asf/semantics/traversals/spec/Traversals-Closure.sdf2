@@ -11,7 +11,7 @@ exports
 		"[" Symbol* "]" -> SymbolSet
 
 	variables
-		"SymbolSet" [0-9]* -> SymbolSet
+		"$SymbolSet" [0-9]* -> SymbolSet
 
 exports
 	context-free syntax	

@@ -68,8 +68,8 @@ equations
 
 [tips-1] traversals_in_productions() = 
 
-[tip-0] traversals_in_production(Symbols -> Symbol {Attribute*1, traverse, Attribute*2}) = 
-					Symbols -> Symbol {Attribute*1, traverse, Attribute*2}
+[tip-0] traversals_in_production($Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}) = 
+					$Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}
 
 [default-tip] traversals_in_production(Production) =  
 

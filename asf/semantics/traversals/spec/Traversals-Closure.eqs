@@ -7,70 +7,70 @@ equations
 %% This is a fixed point calculation, the set of reachable sorts is 
 %% recalculated while the set is growing. 
 
-[c-0] close_sorts(Productions, SymbolSet1, SymbolSet1) = SymbolSet2,
-			SymbolSet2 = SymbolSet1  
+[c-0] close_sorts(Productions, $SymbolSet1, $SymbolSet1) = $SymbolSet2,
+			$SymbolSet2 = $SymbolSet1  
 			==============================================
-			close_sorts_set(Productions, SymbolSet1) = SymbolSet1
+			close_sorts_set(Productions, $SymbolSet1) = $SymbolSet1
 
-[c-1] close_sorts(Productions, SymbolSet1, SymbolSet1) = SymbolSet2,
-			SymbolSet2  !=  SymbolSet1,
-			close_sorts_set(Productions, SymbolSet2) = SymbolSet3
+[c-1] close_sorts(Productions, $SymbolSet1, $SymbolSet1) = $SymbolSet2,
+			$SymbolSet2  !=  $SymbolSet1,
+			close_sorts_set(Productions, $SymbolSet2) = $SymbolSet3
 			=================================================
-			close_sorts_set(Productions, SymbolSet1) = SymbolSet3
+			close_sorts_set(Productions, $SymbolSet1) = $SymbolSet3
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% hiddens part of reachability closure calculation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[css-0]	close_sorts(Productions, [], SymbolSet) = SymbolSet
+[css-0]	close_sorts(Productions, [], $SymbolSet) = $SymbolSet
 
-[css-1]	close_sort(Productions, Symbol, SymbolSet) = SymbolSet2,
-				close_sorts(Productions, [ Symbol* ], SymbolSet2) = SymbolSet3
+[css-1]	close_sort(Productions, $Symbol, $SymbolSet) = $SymbolSet2,
+				close_sorts(Productions, [ *Symbol ], $SymbolSet2) = $SymbolSet3
 				========================================================
-				close_sorts(Productions, [ Symbol Symbol* ], SymbolSet) = SymbolSet3
+				close_sorts(Productions, [ $Symbol *Symbol ], $SymbolSet) = $SymbolSet3
 
 
-[cs-0] close_sort(Productions, Symbol, SymbolSet) =
-				close_sort_prods(Productions, Symbol, SymbolSet)
+[cs-0] close_sort(Productions, $Symbol, $SymbolSet) =
+				close_sort_prods(Productions, $Symbol, $SymbolSet)
 
-[csps-0]	close_sort_prods(,Symbol,SymbolSet) = SymbolSet
+[csps-0]	close_sort_prods(,$Symbol,$SymbolSet) = $SymbolSet
 
-[csps-1]	close_sort_prod(Production, Symbol, SymbolSet) = SymbolSet2,
-					close_sort_prods(Production*, Symbol, SymbolSet2) = SymbolSet3
+[csps-1]	close_sort_prod(Production, $Symbol, $SymbolSet) = $SymbolSet2,
+					close_sort_prods(Production*, $Symbol, $SymbolSet2) = $SymbolSet3
 					========================================================
-					close_sort_prods(Production Production*, Symbol, SymbolSet) = SymbolSet3
+					close_sort_prods(Production Production*, $Symbol, $SymbolSet) = $SymbolSet3
 
-[csp-0]	close_sort_prod(Symbol* -> Symbol Attributes, Symbol, SymbolSet) =
-					add sorts in Symbol* to SymbolSet
+[csp-0]	close_sort_prod(*Symbol -> $Symbol Attributes, $Symbol, $SymbolSet) =
+					add sorts in *Symbol to $SymbolSet
 
-[default-csp]	close_sort_prod(Production, Symbol, SymbolSet) = SymbolSet 
+[default-csp]	close_sort_prod(Production, $Symbol, $SymbolSet) = $SymbolSet 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Utility functions on SymbolSets
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[at-0] add Symbol to [ Symbol*1 Symbol Symbol*2 ] = [ Symbol*1 Symbol Symbol*2 ]
+[at-0] add $Symbol to [ *Symbol1 $Symbol *Symbol2 ] = [ *Symbol1 $Symbol *Symbol2 ]
 
-[default-at] add Symbol to [ Symbol* ] = [ Symbol Symbol* ]
+[default-at] add $Symbol to [ *Symbol ] = [ $Symbol *Symbol ]
 
-[ats-0] add [] to SymbolSet = SymbolSet
+[ats-0] add [] to $SymbolSet = $SymbolSet
 
-[ats-1] add Symbol to SymbolSet = SymbolSet2,
-				add [ Symbol* ] to SymbolSet2 = SymbolSet3
+[ats-1] add $Symbol to $SymbolSet = $SymbolSet2,
+				add [ *Symbol ] to $SymbolSet2 = $SymbolSet3
 				====================================
-				add [ Symbol Symbol* ] to SymbolSet = SymbolSet3
+				add [ $Symbol *Symbol ] to $SymbolSet = $SymbolSet3
 
-[si-1] sorts in Symbol* Sort Symbol*2 = add Sort to sorts in Symbol*2
+[si-1] sorts in *Symbol $Sort *Symbol2 = add $Sort to sorts in *Symbol2
 
-[si-2] sorts in Symbol* Sort * Symbol*2 = add [ Sort Sort * ] to sorts in Symbol* Symbol*2
+[si-2] sorts in *Symbol $Sort * *Symbol2 = add [ $Sort $Sort * ] to sorts in *Symbol *Symbol2
 
-[si-3] sorts in Symbol* Sort + Symbol*2 = add [ Sort Sort + ] to sorts in Symbol* Symbol*2
+[si-3] sorts in *Symbol $Sort + *Symbol2 = add [ $Sort $Sort + ] to sorts in *Symbol *Symbol2
 
-[si-4] sorts in Symbol* {Sort Symbol}* Symbol*2 = 
-				add [Sort {Sort Symbol}*] to sorts in Symbol* Symbol*2
+[si-4] sorts in *Symbol {$Sort $Symbol}* *Symbol2 = 
+				add [$Sort {$Sort $Symbol}*] to sorts in *Symbol *Symbol2
 
-[si-5] sorts in Symbol* {Sort Symbol}+ Symbol*2 = 
-				add [Sort {Sort Symbol}+] to sorts in Symbol* Symbol*2
+[si-5] sorts in *Symbol {$Sort $Symbol}+ *Symbol2 = 
+				add [$Sort {$Sort $Symbol}+] to sorts in *Symbol *Symbol2
 
-[default-si] sorts in Symbol* = [ ]
+[default-si] sorts in *Symbol = [ ]
 

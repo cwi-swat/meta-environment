@@ -4,10 +4,10 @@ equations
 				prefer_sorts(Production*2) = Production*22
 				===========================================
 	      prefer_sorts(Production*1 
-                     Literal "(" Sort "," Symbol* ")" -> Symbol {Attribute*} 
+                     Literal "(" $Sort "," *Symbol ")" -> $Symbol {Attribute*} 
                      Production*2) =
                      Production*12
-        	           Literal "(" Sort "," Symbol* ")" -> Symbol {Attribute*, prefer} 
+        	           Literal "(" $Sort "," *Symbol ")" -> $Symbol {Attribute*, prefer} 
                      Production*22      
 
 [default-pe] prefer_sorts(Productions) = Productions
