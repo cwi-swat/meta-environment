@@ -70,6 +70,7 @@ SDF_Import SDF_removeImportAnnotations(SDF_Import i);
 SDF_ImportList SDF_removeImportListAnnotations(SDF_ImportList l);
 
 SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l);
+SDF_RenamingList SDF_concatRenamingList(SDF_RenamingList l1,SDF_RenamingList l2);
 SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l);
 
 SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l);

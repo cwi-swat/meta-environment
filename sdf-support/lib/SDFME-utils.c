@@ -382,6 +382,30 @@ SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l)
 }
 
 /*}}}  */
+/*{{{  SDF_RenamingList SDF_concatRenamingList(SDF_RenamingList l1, SDF_RenamingList l2) */
+
+SDF_RenamingList SDF_concatRenamingList(SDF_RenamingList l1, SDF_RenamingList l2)
+{
+  SDF_RenamingList reversed = SDF_reverseRenamingList(l1);
+  SDF_RenamingList result = l2;
+
+  while (!SDF_isRenamingListEmpty(reversed)) {
+    SDF_Renaming renaming = SDF_getRenamingListHead(reversed);
+
+    result = SDF_insertRenaming(renaming, result);
+
+    if (SDF_hasRenamingListTail(reversed)) {
+      reversed = SDF_getRenamingListTail(reversed);
+    }
+    else {
+      break;
+    }
+  }
+
+  return result;
+}
+
+/*}}}  */
 
 /*{{{  SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l)  */
 
