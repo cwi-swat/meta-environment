@@ -1,0 +1,9 @@
+Makefile.in
+Makefile
+.deps
+parsetablegen.tif.h
+parsetablegen.tif.c
+parsetablegen
+sdf2table
+gen-table
+sdf2table.1
