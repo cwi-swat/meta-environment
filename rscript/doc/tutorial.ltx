@@ -2924,10 +2924,17 @@ in Figure~\ref{FIG:slicing}(b).
 \caption{\label{FIG:extract-workflow}Workflow for fact extraction}
 \end{figure}
 
+
 In this tutorial we have, so far, concentrated on querying and enriching facts
 that have been extracted from source code. As we have seen from the examples,
 once these facts are available, a concise \rscript suffices to do the required
-processing. But how is fact extraction achieved and how difficult is it?
+processing. But how is fact extraction achieved and how difficult is it? To
+answer these questions we first describe the workflow of the fact extraction
+process (Section~\ref{SEC:extraction-wortkflow}) and then we give a more
+detailed account of fact extraction using ASF+SDF
+(Section~\ref{SEC:ASF+SDF-extraction}).
+
+\section{Workflow for Fact Extraction} \label{SEC:extraction-wortkflow}
 
 Figure~\ref{FIG:extract-workflow} shows a typical workflow for fact extraction
 for a \emph{System Under Investigation} (SUI). It assumes that the SUI uses
@@ -2991,7 +2998,368 @@ In many cases there is no canned grammar available that can be used to parse
   that answers inspire new queries that lead to new answers, and so on.
 
 
+\section{Fact Extraction using ASF+SDF} \label{SEC:ASF+SDF-extraction}
 
+\begin{figure}[tb]
+%%\hrulefill
+\begin{center}
+%%\vspace*{-1cm}
+\epsfig{figure=figs/extract-meta.eps,width=10cm}
+\vspace*{-5cm}
+\end{center}
+\hrulefill
+\caption{\label{FIG:extract-meta}The \emph{Separation-of-Concerns\/} strategy
+  for  fact extraction}
+\end{figure}
+
+\subsection{Strategies for Fact Extraction}
+The following global scenario's are available when writing a fact extractor in ASF+SDF:
+\begin{itemize}
+\item \emph{Dump-and-Merge\/:} Parse each source file, extract the relevant facts, and
+  return the resulting (partial) Rstore. In a separate phase, merge all the
+  partial Rstores into a complete Rstore for the whole SUI. The tool {\tt
+  merge-rstores} is available for this.
+\item \emph{Extract-and-Update\/}: Parse each source file, extract the
+  relevant facts, and add these directly to the partial Rstore that has been
+  constructed for previous source files.
+\end{itemize}
+The experience is that the \emph{Extract-and-Update} is more efficient.
+
+A second consideration is the scenario used for the fact extraction per
+file. Here there are again two possibilities:
+\begin{itemize}
+\item \emph{All-in-One\/}: Write one function that extracts all facts in one
+  traversal of the source file. Typically, this function has an Rstore as
+  argument and returns an Rstore as well. During the visit of specific
+  language constructs additions are made to named sets or relations in the
+  Rstore.
+\item \emph{Separation-of-Concerns\/}: Write a separate function for each fact
+  you want to extract. Typically, each function takes a set or relation as
+  argument and returns an updated version of it. At the top level all these
+  functions are called and their results are put into an Rstore.
+  This strategy is illustrated in Figure~\ref{FIG:extract-meta}
+\end{itemize}
+The experience here is that everybody starts with the \emph{All-in-One}
+strategy but that the complexities of the interactions between the various
+fact extraction concerns soon start to hurt. The advice is therefore to use
+the \emph{Separation-of-Concerns\/} strategy even if it may be seem to be less
+efficient since it requires a traversal of the source program for each
+extracted set or relation.
+
+\subsection{Extracting Facts for Pico}
+
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+module PicoFactExtraction
+imports Pico-syntax
+imports basic/Integers
+imports Rstore
+imports utilities/PosInfo[PROGRAM] utilities/PosInfo[STATEMENT]
+        utilities/PosInfo[EXP] utilities/PosInfo[PICO-ID]
+exports
+  context-free syntax
+    cflow({ STATEMENT ";"}*)     -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
+
+    uses(PROGRAM, Rel[[Elem]])   -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+    uses(EXP, Rel[[Elem]])       -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+
+    defs(PROGRAM, Rel[[Elem]])   -> Rel[[Elem]] {traversal(accu,top-down,break)}
+    defs(STATEMENT, Rel[[Elem]]) -> Rel[[Elem]] {traversal(accu,top-down,break)}
+
+    id2str(PICO-ID)              -> String
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoFactExtraction.sdf}Syntax of functions for Pico fact extraction}
+\end{figure}
+
+After all these mental preparations, we are now ready to delve into the details
+of a Pico fact extractor. Figure~\ref{FIG:PicoFactExtraction.sdf} shows the
+syntax of the functions that we will need for Pico fact extraction. There are
+some things to observe:
+\begin{itemize}
+\item Module {\tt Pico-syntax} is imported to make available the Pico
+  grammar.
+\item Module {\tt Rstore} is imported to get acces to all functions on
+  Rstores.
+\item The module {\tt PosInfo} is imported with various sort names as
+  parameter. For all these sorts, the function {\tt get-location} will be
+  defined that extracts the source text location from a given language
+  construct.
+\item The function {\tt cflow} will extract the control flow from Pico
+  programs.
+\item The functions {\tt uses} and {\tt defs} extracts the uses and
+  definitions of variables from the source text.
+\item {\tt id2str} is an auxiliary function that converts Pico identifiers to
+  strings that can be included in an Rstore.
+\item We have omitted all declarations for ASF+SDF variables to be used in the
+  specification. The convention is that such variables all start with a dollar
+  sign ({\tt \$}).
+\end{itemize}
+
+\begin{figure}[tb]
+{\small 
+\begin{verbatim}
+%% ---- control flow of statement lists
+[cf1] <$Entry1, $Rel1, $Exit1> := cflow($Stat),
+      <$Entry2, $Rel2, $Exit2> := cflow($Stat+)
+       ==========================================================
+       cflow($Stat ; $Stat+) =
+       < $Entry1,
+         $Rel1 union $Rel2 union ($Exit1 x $Entry2),
+         $Exit2
+       >
+[cf2] cflow() = <{}, {}, {}>
+
+%% ---- control flow of individual statements
+[cf3]  <$Entry, $Rel, $Exit> := cflow($Stat*),
+       $Control := get-location($Exp)
+       =========================================================
+       cflow(while $Exp do $Stat* od) =
+       < {$Control},
+         ({$Control} x $Entry) union $Rel union ($Exit x {$Control}),
+         {$Control}
+       >
+
+[cf4]  <$Entry1, $Rel1, $Exit1> := cflow($Stat*1),
+       <$Entry2, $Rel2, $Exit2> := cflow($Stat*2),
+       $Control := get-location($Exp)
+       =========================================================
+       cflow(if $Exp then $Stat*1 else $Stat*2 fi) =
+       < {$Control},
+         ({$Control} x $Entry1) union ({$Control} x $Entry2) 
+                                union  $Rel1 union $Rel2,
+         $Exit1 union $Exit2
+       >
+[default-cf]
+        $Loc := get-location($Stat)
+       =========================================================
+        cflow($Stat) = < {$Loc}, {}, {$Loc} >
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoFactExtraction-cflow}Equations for {\tt cflow}: computing control flow}
+\end{figure}
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+
+%% ---- Variable definitions: <expression-location, var-name>
+
+[vd1]  $Id := $Exp := $Stat
+       ==========================================================
+       defs($Stat, $Rel) = $Rel union {<get-location($Stat), id2str($Id)>}
+
+%% ---- Variable uses <var-location, var-name>
+
+[vu1]  $Id := $Exp
+       ==========================================================
+       uses($Exp, $Rel) = $Rel union  {<get-location($Id), id2str($Id)>}
+
+%% ----- utilities
+
+[i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
+
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoFactExtraction-defs-uses}Equations for {\tt defs}, {\tt uses} and
+  {\tt id2str}}
+\end{figure}
+
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+module PicoQuery
+imports RscriptCalculator
+imports PicoFactExtraction
+imports basic/Errors
+
+exports
+  start-symbols Summary
+  context-free syntax
+     extractRelations(PROGRAM)                   -> RSTORE
+     pico-query(RSCRIPT, RSTORE, StrCon, StrCon) -> Summary
+     uninit(PROGRAM)                             -> Summary
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoQuery.sdf}Syntax of function for two styles of querying}
+\end{figure}
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+%% ---- extractRelations
+
+[er-1] begin $Decls $Stat+ end := $Program,
+       $Start := get-location($Program),
+       <$Entry, $Rel, $Exit> := cflow($Stat+),
+
+       $Loc :=  get-location($Program),
+       $Rstore1 := assign(ROOT, expr, $Loc, rstore()),
+       $Rstore2 := assign(PRED, rel[expr,expr],
+                                $Rel union ({$Start} x $Entry), $Rstore1),
+       $Rstore3 := assign(DEFS, rel[expr,varname], defs($Program, {}), $Rstore2),
+       $Rstore4 := assign(USES, rel[var,varname], uses($Program, {}), $Rstore3)
+       ==========================================================================
+       extractRelations($Program) = $Rstore4
+
+%% ---- pico-query
+
+[pq1]  pico-query($Script, $Rstore, $StrCon1, $StrCon2) =
+       convert2summary(
+          $StrCon2,
+          eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon1)
+       )
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoFactExtraction-extractRelations}Build an Rstore with
+  {\tt extractRelations} and apply it using {\tt pico-query}}
+\end{figure}
+
+\begin{figure}[tb]
+{\small
+\begin{verbatim}
+[ui-1] begin $Decls $Stat+ end := $Program,
+       $Start := get-location($Program),
+       <$Entry, $Rel, $Exit> := cflow($Stat+),
+       $Rel1 := $Rel union ({$Start} x $Entry),
+       $Rval := [| type expr = loc
+                   type var  = loc
+                   type varname = str
+
+                   expr ROOT = $Start
+
+                   rel[expr,expr] PRED = $Rel1
+                   rel[expr,varname] DEFS  = defs($Program, {})
+                   rel[var,varname] USES  = uses($Program, {})
+                   set[varname] VARNAMES  = range(DEFS) union range(USES)
+
+                   rel[var, varname] UNINIT =
+                   { <V, VN>| var-name VN : VARNAMES,
+                              var V : USES[-,VN],
+                              expr E : reachX({ROOT}, DEFS[-,VN], PRED),
+                              V <= E
+                   }
+
+                |] yield UNINIT
+       ===================================================================
+       uninit($Program) = convert2summary("Uninitialized variable", $Rval)            
+\end{verbatim}
+}
+\hrulefill
+\caption{\label{FIG:PicoFactExtraction-uninit}Combined fact extraction and
+  query processing}
+\end{figure}
+
+\paragraph{Extracting control flow}
+The function {\tt cflow} extracts the control flow from Pico programs. It
+takes a list of statements as input and returns a triple as output:
+\begin{itemize}
+\item A set of program elements that may enter a construct.
+\item A relation between the entries and exits of a construct.
+\item A set of program elements that form the exits from the construct.
+\end{itemize}
+For instance, the test in an if-then-else statement forms the entry of the
+statement, it is connected to the entry of the first statement of the then and
+the else branch. The exits of the if-then-else statement are the exits of the
+last statement in the then and the else branch. The purpose of {\tt cflow} is
+to determine this information for individual statements and to combine this
+information for compound statements. Its definition is shown in
+Figure~\ref{FIG:PicoFactExtraction-cflow}.
+
+\paragraph{Extracting uses and defs}
+The functions {\tt defs} and {\tt uses} are shown in
+Figure~\ref{FIG:PicoFactExtraction-defs-uses}.  They extract the definition,
+respectively, the use of variables from the source code. Both functions are
+defined by means of an ASF+SDF \emph{traversal function} which silently visits
+all constructs in a tree, and only performs an action for the constructs for
+which the specification contains an equation. In the case of {\tt defs},
+equation {\tt [vd1]} operations on assignment statements and extracts a pair
+that relates the location of the complete statement to the name of the
+variable on the left-hand side. For the function {\tt uses}, equation {\tt
+[vu1]} acts on all uses of variables. For compleness sake, the figure also
+show the definition of utility function {\tt id2str}.
+
+\paragraph{Queries}
+Figure~\ref{FIG:PicoQuery.sdf} shows the syntax of the functions we will use
+for querying. In fact, we will demonstrate two styles of definition.  In the
+first style, the function {\tt extractRelation} extracts facts from a Pico
+program and yields an Rstore. This can be used by {\tt pico-query} to run an
+arbitrary \rscript on that Rstore. In the second style, fact extraction and
+running an \rscript are done in a single function.
+
+Figure~\ref{FIG:PicoFactExtraction-extractRelations} shows the first
+definition style. In equation {\tt [er1]}, we see a step-by-step construction
+of an Rstore that contains all the information gathered by the extraction
+functions. An Rstore that contains all this information is returned as result
+of {\tt extractRelations}. The function {\tt pico-query} can then be used to
+run an \rscript for a given Rstore.
+
+The second definition style is shown in
+Figure~\ref{FIG:PicoFactExtraction-uninit}.  In this case, we see that all
+work is done in a single (indeed large) equation. The construct {\tt [| ... |]
+yield UNINIT} is particularly noteworthy since it allows the embedding of a
+complete \rscript in an ASF+SDF equation. Also pay attention to the following:
+
+\begin{itemize}
+
+\item The \rscript is first simplified as much as possible according to
+  ordinary ASF+SDF simplication rules. This implies that variables like {\tt
+  \$Start}, {\tt \$Rel1}, and {\tt \$Program} are replaced by their respective
+  values. This is also the case for the functions {\tt defs} and {\tt uses}
+  that occur in the \rscript.
+
+\item The  effect of the {\tt [| ... |] yield UNINIT} construct is that the
+  \rscript is evaluated and that the value of {\tt UNINIT} is returned as
+  result.
+
+\item The definition of the function {\tt convert2summary} is not shown: it
+  performs a straightforward conversion of {\tt UNINIT}'s value to the message
+  format ({\tt Summary}) that is used by the Meta-Environment.
+
+\end{itemize}
+
+\section{Concluding Remarks}
+As can already be seen from the very simple Pico example, over 100 lines of
+ASF+SDF specification (including variable declarations and auxiliary functions
+we did not show) are needed to extract facts, while only 10 lines of \rscript
+are sufficient for the further processing of these facts. What can we learn
+from this observation?
+
+First, that even in the simple case of Pico fact extraction is more
+complicated than the processing of these facts. This may be due to the following:
+\begin{itemize}
+\item The facts we are interested in may be scattered over different language
+  constructs.  This implies that the fact extractor has to cover all these
+  cases.
+\item The extracted facts are completely optimized for relational processing
+  but places a burden on the fact extractor to perform this optimization.
+
+\end{itemize}
+
+Second, that several research question remain unanswered:
+
+\begin{itemize}
+
+\item Is it possible to solve (parts of) the fact extraction in a
+  language-parametric way. In other words, is it possible to define generic
+  extraction methods that apply to multiple languages?
+
+\item Is a further integration of fact extraction with relational processing
+  desirable? We have already shown some form of integration in
+  Figure~\ref{FIG:PicoFactExtraction-uninit} where an embedded \rscript occurs
+  in an ASF+SDF specification. Is it, for instance, useful to bring some of
+  the syntactic program domains like expressions and statements to the
+  relational domain?
+
+\end{itemize}
 
 
 \chapter{Installing and Running \rscript} \label{SEC:running-rscript}
