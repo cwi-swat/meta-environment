@@ -29,9 +29,10 @@ HDRS         =
 
 parse_client_SOURCES = $(SRCS) $(HDRS)
 
-LDADD        = -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
-               -L$(ATERM)/lib -lATerm \
-               -lATB $(SOCKLIBS)
+LDADD        = -L$(PT_SUPPORT)/libconversion -lconversion \
+               -L$(PT_SUPPORT)/libmept -lmept \
+               -L$(PT_SUPPORT)/libasfix2 -lasfix2 \
+               -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 # make sure generates files are removed during "make clean"
 CLEANFILES   = parse-client.tifs

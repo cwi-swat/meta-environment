@@ -30,7 +30,6 @@
 #include <assert.h>
 
 #include <aterm2.h>
-#include <a2toa1.h>
 
 #include "multisets.h"
 #include "bitmap.h"
@@ -494,6 +493,7 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
   ATerm     amb_with_pos;
   ATermList prods;
   int c;
+  char *prodText;
 
   treetype = ATgetType(t);
   allambs = ATempty;
@@ -541,8 +541,10 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
         } 
 
         /* here we handle THIS ambiguity */
-        prods = ATinsert(prods, 
-                         AF2ProdToText(ATgetArgument((ATermAppl) amb, 0))); 
+        prodText = PT_yieldProduction(
+                     PT_makeProductionFromTerm(
+                       ATgetArgument((ATermAppl) amb, 0)));
+        prods = ATinsert(prods, ATmake("<str>", prodText));
       }
   
       /* construct the error message for this cluster */ 

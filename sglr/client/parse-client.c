@@ -28,8 +28,7 @@
 
 #include <unistd.h>
 
-#include <aterm1.h>
-#include <AsFix.h>
+#include <aterm2.h>
 
 #include "parse-client.tif.c"
 

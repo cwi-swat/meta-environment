@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <AsFix.h>
+/*#include <AsFix.h>*/
+#include <MEPT-utils.h>
+#include <asfix2.h>
+#include <conversion.h>
 #include <tree-to-dot.h>
 
 #ifndef WIN32  /*  Limited platform  */
@@ -64,9 +67,8 @@ int     debugflag         = ATfalse;
 int     statisticsflag    = ATfalse;
 int     supplexflag       = ATfalse;
 int     printprodsflag    = ATfalse;
-#ifndef NO_A2TOA1
-int   asfix1flag        = ATfalse;
-#endif
+int     asfix1flag        = ATfalse;
+int     asfix2meflag      = ATfalse;
 #if !defined(HAVE_BOEHMGC)
 int     gcflag          = ATtrue;
 #endif
@@ -135,25 +137,19 @@ void term_to_file(ATerm t, char *FN)
 
 void SG_Usage(FILE *stream, ATbool long_message)
 {
-  const char usage[] = "Usage:\n\t%s\t-p file [-"
-#ifndef NO_A2TOA1
-  "12"
-#endif
-  "?bcdf"
+  const char usage[] = "Usage:\n\t%s\t-p file [-12?bcdf"
 #if !defined(HAVE_BOEHMGC)
   "g"
 #endif
-  "hlnPtvV] [-i file] [-o file] \\"
+  "hlmnPtvV] [-i file] [-o file] \\"
   "\n\t\t[-s sort]\n";
 
   ATfprintf(stream, usage, program_name);
   if(long_message) {
     ATfprintf(stream,
               "Parameters:\n"
-#if !defined(NO_A2TOA1)
               "\t-1       : use AsFix1 output format             [%s]\n"
               "\t-2       : use AsFix2 output format             [%s]\n"
-#endif
               "\t-b       : output AsFix in binary format (BAF)  [%s]\n"
               "\t-c       : toggle cycle detection               [%s]\n"
               "\t-d       : toggle debug mode                    [%s]\n"
@@ -164,6 +160,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-h, -?   : display usage information\n"
               "\t-i file  : input from |file|                    [%s]\n"
               "\t-l       : toggle statistics logging            [%s]\n"
+              "\t-m       : use AsFix2ME output format           [%s]\n"
               "\t-n       : do not create parse tree             [%s]\n"
               "\t-o file  : output to |file|                     [%s]\n"
               "\t-p file  : use parse table |file| (required)    [%s]\n"
@@ -172,10 +169,8 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-t       : output AsFix in textual format       [%s]\n"
               "\t-v       : toggle verbose mode                  [%s]\n"
               "\t-V       : reveal program version (i.e. %s)\n",
-#if !defined(NO_A2TOA1)
-              DEFAULTMODE(asfix1flag), 
+              DEFAULTMODE(asfix1flag),
               DEFAULTMODE(!asfix1flag),
-#endif
               DEFAULTMODE(!outputflag), 
               DEFAULTMODE(binaryflag), 
               DEFAULTMODE(cycleflag),
@@ -186,6 +181,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
 #endif
               input_file_name, 
               DEFAULTMODE(statisticsflag),
+              DEFAULTMODE(asfix2meflag),
               output_file_name,
               parse_table_name?parse_table_name:"unspecified",
               DEFAULTMODE(posinfoflag),
@@ -209,10 +205,8 @@ void SG_Usage(FILE *stream, ATbool long_message)
 struct option longopts[] =
 {
   {"binary-output", no_argument,       &binaryflag,        ATtrue},
-#ifndef NO_A2TOA1
   {"asfix1",        no_argument,       &asfix1flag,        ATtrue},
   {"asfix2",        no_argument,       &asfix1flag,        ATfalse},
-#endif
   {"debug",         no_argument,       &debugflag,         ATtrue},
   {"no-filter",     no_argument,       &filterflag,        ATfalse},
   {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
@@ -228,6 +222,7 @@ struct option longopts[] =
   {"position-info", no_argument,       &posinfoflag,       'P'},
   {"start-symbol",  required_argument, NULL,               's'},
   {"statistics",    no_argument,       &statisticsflag,    ATfalse},
+  {"asfix2me",      no_argument,       &asfix2meflag,      ATfalse},
   {"text-output",   no_argument,       &binaryflag,        ATfalse},
   {"verbose",       no_argument,       &verboseflag,       ATtrue},
   {"version",       no_argument,       NULL,               'V'},
@@ -248,22 +243,17 @@ void handle_options (int argc, char **argv)
   ATbool show_help = ATfalse, show_version = ATfalse;
 
   while ((c = getopt_long(argc, argv,
-#ifndef NO_A2TOA1
-                          "12"
-#endif
-                          "?bcdf"
+                          "12?bcdf"
 #if !defined(HAVE_BOEHMGC)
                           "g"
 #endif
-                          "hi:lno:p:Ps:S:tvV",
+                          "hi:lmno:p:Ps:S:tvV",
                           longopts, NULL))
          != EOF) {
     switch (c) {
       case 0:   break;
-#ifndef NO_A2TOA1
       case '1':   asfix1flag       = ATtrue;              break;
       case '2':   asfix1flag       = ATfalse;             break;
-#endif
       case '?':   show_help        = ATtrue;              break;
       case 'b':   binaryflag       = ATtrue;              break;
       case 'c':   cycleflag        = !cycleflag;          break;
@@ -275,6 +265,7 @@ void handle_options (int argc, char **argv)
       case 'h':   show_help        = ATtrue;              break;
       case 'i':   input_file_name  = optarg;              break;
       case 'l':   statisticsflag   = !statisticsflag;     break;
+      case 'm':   asfix2meflag     = ATtrue;              break;
       case 'n':   outputflag       = !outputflag;         break;  
       case 'o':   output_file_name = optarg;              break;
       case 'p':   parse_table_name = optarg;              break;
@@ -305,9 +296,8 @@ ATbool set_global_options(void)
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();
   if(outputflag)     SG_OUTPUT_ON();
-#ifndef NO_A2TOA1
   if(asfix1flag)     SG_ASFIX1_ON();
-#endif
+  if(asfix2meflag)   SG_ASFIX2ME_ON();
   if(binaryflag)     SG_BINARY_ON();
 #if !defined(HAVE_BOEHMGC)
   if(gcflag)         SG_GC_ON();
@@ -377,33 +367,39 @@ int SG_Batch (int argc, char **argv)
     col  = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 2), 0));
     err  = ATgetAFun(errcode);
 
-    if(err == SG_EOF_Error_AFun) {
+    if (err == SG_EOF_Error_AFun) {
       ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
                 program_name, input_file_name, line, col);
-    } else if(err == SG_Plain_Error_AFun) {
-      if(isprint(c)) {
+    }
+    else if (err == SG_Plain_Error_AFun) {
+      if (isprint(c)) {
         ATwarning("%s: error in %s, line %d, col %d: character `%c' (\\x%2.2x)"
                   " unexpected\n",
                   program_name, input_file_name, line, col, c, c);
-      } else {
+      }
+      else {
         ATwarning("%s: error in %s, line %d, col %d: character \\x%2.2x"
                   " unexpected\n",
                   program_name, input_file_name, line, col, c);
       }
-    } else if(err == SG_Cycle_Error_AFun) {
+    } 
+    else if (err == SG_Cycle_Error_AFun) {
       ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
                 program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
-    } else if(err == SG_Amb_Error_AFun) {
+    }
+    else if (err == SG_Amb_Error_AFun) {
 			int ambiescount = ATgetInt((ATermInt) ATgetArgument(errcode,0));
       ATwarning("%s: error in %s, line %d, col %d: cannot represent %d ambiguit%s\n",
                 program_name, input_file_name, line, col, ambiescount,
 								(ambiescount > 1) ? "ies" : "y" );
-    } else {
+    }
+    else {
       ATwarning("%s: error in %s, line %d, col %d: unknown error",
                 program_name, input_file_name, line, col);
     }
     return 1;
-  } else if(!SGisParseTree(parse_tree)) {
+  }
+  else if(!SGisParseTree(parse_tree)) {
     ATwarning("%s: error: neither parse tree nor parse error for %s\n",
               program_name, input_file_name);
     return 1;
@@ -452,6 +448,8 @@ int main (int argc, char **argv)
     SG_TOOLBUS_ON();
 
     ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+    PT_initMEPTApi();
+    PT_initAsFix2Api(); 
     IF_STATISTICS(
                   fprintf(SG_log(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
                   if(maxrss) {
@@ -470,7 +468,12 @@ int main (int argc, char **argv)
     };
     ATbool have_complete_config;
 
-    AFinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
+    ATinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
+    PT_initMEPTApi();
+    PT_initAsFix2Api(); 
+/*
+    AFinit(6, ATlibArgv, &bottomOfStack);
+*/
     handle_options(argc, argv);
     have_complete_config = set_global_options();
     SG_TOOLBUS_OFF();

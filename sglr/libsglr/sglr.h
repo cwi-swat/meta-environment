@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
@@ -34,9 +34,11 @@ void SG_Dump_ATtable(ATermTable t, char *s);
 #endif
 
 
-#include <AsFix.h>
 #include <aterm1.h>
 #include <aterm2.h>
+#include <MEPT.h>
+#include <conversion.h>
+/*#include <AsFix.h>*/
 
 
 /*  Data structures: states, actions, character ranges and parse tables  */
@@ -140,7 +142,7 @@ extern int  _SG_Mode;
 enum SGmodeFlags {
   SG_TOOLBUSFLAG, SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG,
   SG_SHOWSTATFLAG, SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
-  SG_SHOWSTACKFLAG, SG_FILTERFLAG,
+  SG_SHOWSTACKFLAG, SG_FILTERFLAG, SG_ASFIX2MEFLAG,
   SG_STARTSYMBOLFLAG, SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
 };
 
@@ -168,7 +170,10 @@ enum SGmodeFlags {
 #define SG_ASFIX1            (_SG_Mode  &  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_ON()       (_SG_Mode |=  SG_BIT(SG_ASFIX1FLAG))
 #define SG_ASFIX1_OFF()      (_SG_Mode &= ~SG_BIT(SG_ASFIX1FLAG))
-#define SG_ASFIX2            !(SG_ASFIX1)
+#define SG_ASFIX2ME          (_SG_Mode  &  SG_BIT(SG_ASFIX2MEFLAG))
+#define SG_ASFIX2ME_ON()     (_SG_Mode |=  SG_BIT(SG_ASFIX2MEFLAG))
+#define SG_ASFIX2ME_OFF()    (_SG_Mode &= ~SG_BIT(SG_ASFIX2MEFLAG))
+#define SG_ASFIX2            !(SG_ASFIX1 || SG_ASFIX2ME)
 #define SG_ASFIX2_ON()       SG_ASFIX1_OFF()
 #define SG_ASFIX2_OFF()      SG_ASFIX1_ON()
 

@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
                         The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
@@ -30,9 +30,11 @@
 
 #include <aterm1.h>
 #include <atb-tool.h>
+/*
 #include <AsFix.h>
-
 #include <a2toa1.h>
+*/
+
 #include <tree-to-dot.h>
 
 #include "sglr.h"
@@ -90,6 +92,7 @@ void SGshowMode()
   ATfprintf(stderr, "DEBUG:       %s\n", SG_DEBUG?"y":"n");
   ATfprintf(stderr, "SHOWSTAT:    %s\n", SG_SHOWSTAT?"y":"n");
   ATfprintf(stderr, "ASFIX1:      %s\n", SG_ASFIX1?"y":"n");
+  ATfprintf(stderr, "ASFIX2ME:    %s\n", SG_ASFIX2ME?"y":"n");
   ATfprintf(stderr, "BINARY:      %s\n", SG_BINARY?"y":"n");
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
   ATfprintf(stderr, "FILTER:      %s\n", SG_FILTER?"y":"n");
@@ -268,6 +271,7 @@ ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
   ATerm amb;
   
   SG_ASFIX1_OFF();
+  SG_ASFIX2ME_OFF();
 
   t = SGparseString(L, G, S);
 
@@ -300,6 +304,30 @@ ATerm SGparseStringAsAsFix1(language L, char *G, char *S)
     }
     else {
       t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, t);
+    }
+  }
+
+  return SG_TermToToolbus(t);
+}
+
+ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
+{
+  ATerm t;
+  ATerm tree;
+  ATerm amb;
+
+  SG_ASFIX2ME_ON();
+
+  t = SGparseString(L, G, S);
+
+  if (!SGisParseError(t)) {
+    tree = ATgetArgument(t, 0);
+    amb  = ATgetArgument(t, 1); 
+    if (SG_TOOLBUS) {
+      t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, ATBpack(tree), amb);
+    }
+    else {
+      t = (ATerm) ATmakeAppl1(SG_ParseTree_AFun, t);
     }
   }
 
@@ -411,11 +439,12 @@ ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
 
 ATbool SGisParseTree(ATerm t)
 {
-  if(SG_ASFIX1)
+  if (SG_ASFIX1) {
     return ATgetAFun(t) == SG_Term_AFun;
-  else
+  }
+  else {
     return ATgetAFun(t) == SG_ParseTree_AFun;
-
+  }
 }
 
 ATbool SGisParseError(ATerm t)

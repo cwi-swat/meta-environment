@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
                         The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
@@ -35,9 +35,6 @@
 
 #include <aterm2.h>
 
-#ifndef NO_A2TOA1
-#include <a2toa1.h>
-#endif
 #include <tree-to-dot.h>
 #include <sg_growbuf.h>
 
@@ -1107,6 +1104,18 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
   return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
 }
 
+tree SG_ConvertA2ToA2ME(tree t)
+{
+  IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix2ME\n"));
+
+  IF_STATISTICS(SG_Timer());
+  t = (tree)PT_makeTermFromTree(
+              flattenTree(PT_makeTreeFromTerm((ATerm)t)));
+  IF_STATISTICS(fprintf(SG_log(),
+                        "AsFix2ME conversion took %.6fs\n", SG_Timer()));
+  return t;
+}    
+
 tree SG_ConvertA2ToA1(tree t)
 {
   int nr_ambs = SGnrAmb(SG_NR_ASK);
@@ -1124,7 +1133,7 @@ tree SG_ConvertA2ToA1(tree t)
   IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
 
   IF_STATISTICS(SG_Timer());
-  t = (tree) a2toa1((ATerm) t, ATfalse);
+  t = (tree)tree2a1(flattenTree(PT_makeTreeFromTerm((ATerm)t)));
   IF_STATISTICS(fprintf(SG_log(),
                         "AsFix1 conversion took %.6fs\n", SG_Timer()));
   return t;
@@ -1194,13 +1203,17 @@ tree SG_ParseResult(char *sort)
       SGsort(SG_SET, t);     
 
       /*  Convert the forest in-line to AsFix1 upon request  */
-      if(SG_ASFIX1) {
+      if (SG_ASFIX1) {
         return SG_ConvertA2ToA1(t);
       }
 
       /* If you'd want return ambiguity tracks instead of ambiguous
        * AsFix2, that could be taken care of here...
        */
+      if (SG_ASFIX2ME) {
+        t = SG_ConvertA2ToA2ME(t);
+      }
+
       if(SG_TOOLBUS) {
         ATerm ambtrak = SG_AmbTracker(t);
 

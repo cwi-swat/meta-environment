@@ -35,7 +35,6 @@
 #endif /*  MS-DOS  */
 
 #include <aterm1.h>
-#include <AsFix.h>
 
 #include <sglr.h>
 
