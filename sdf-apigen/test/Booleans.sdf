@@ -4,6 +4,7 @@ module Booleans
 
 exports
   sorts Bool BoolList
+  context-free start-symbols Bool BoolList
 
   lexical syntax
     [\ \t\n]			-> LAYOUT
