@@ -6,13 +6,12 @@ let
   Feedback   : term,
   Syntax     : term,
   ASC        : asfsdfchecker,
-  ModuleName : str,
-  Type       : term
+  ModuleName : str
 in
   (
-    rec-msg(check-asfsdf(Syntax?, ModuleName?, Type?)) .
+    rec-msg(check-asfsdf(Syntax?, ModuleName?)) .
     execute(asfsdfchecker, ASC?) .
-    snd-eval(ASC, check-asfsdf(Syntax, ModuleName, Type)) .
+    snd-eval(ASC, check-asfsdf(Syntax, ModuleName)) .
     rec-value(ASC, feedback(Feedback?)) .
     snd-msg(feedback(Feedback)) .
     Syntax := none .
