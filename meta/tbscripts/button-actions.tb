@@ -271,6 +271,12 @@ in
     snd-msg(se-move-focus(EditorId,"Down")) .
     ReturnSuccess(EditorId,Stack)
     +
+    rec-msg(convert-feedback, Stack?, EditorId?) .
+    StackPopTerm(Stack, Stack?, Feedback?) .
+    snd-msg(convert-feedback(Feedback)) .
+    rec-msg(converted-feedback(Feedback?)) .
+    ReturnSuccess(EditorId, Stack)
+    +
     rec-msg(parse-action, Stack?, EditorId?) .
     StackPopString(Stack,Stack?,ModuleName?) .
     ParseTerm(EditorId, ModuleName) .
