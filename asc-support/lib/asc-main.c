@@ -142,11 +142,11 @@ static PT_ParseTree parsetreeFromATermFile(const char *filename)
     
   term = ATreadFromNamedFile(filename);
 
-  if (term != NULL) {
+  if (term != NULL && ATmatch(term, "parsetree(<term>,<int>)", NULL, NULL)) {
     return PT_ParseTreeFromTerm(term);
   }
 
-  ATerror("asc-main: can not read aterm from file %s\n", filename);
+  ATerror("asc-main: can not read parse tree from file %s\n", filename);
   return NULL;
 }
 
