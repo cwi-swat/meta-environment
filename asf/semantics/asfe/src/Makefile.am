@@ -53,6 +53,7 @@ asfe_LDADD = \
 INCLUDES = \
 	${TIDEINC} \
 	-I$(PT_SUPPORT)/include \
+	-I$(SGLR)/include \
 	-I$(ATERM)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
