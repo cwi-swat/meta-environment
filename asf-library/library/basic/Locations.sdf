@@ -15,9 +15,7 @@ context-free syntax
 "area" "(" begin-line:NatCon    "," 
            begin-column:NatCon  ","
            end-line:NatCon      ","
-           end-column:NatCon    ","
-           begin-offset:NatCon  "," 
-           end-offset:NatCon
+           end-column:NatCon    
        ")" -> Area {cons("area")}
 
 "no-area" -> Area {cons("no-area")}
