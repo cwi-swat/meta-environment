@@ -24,15 +24,6 @@ AC_ARG_WITH(cflags,
 AC_SUBST(CFLAGS)
 
 dnl }}}
-dnl {{{  Handle --with-traversals
-
-AC_ARG_WITH(traversals,
-   [  --with-traversals       evaluator implements traveral functions],
-   TRAVERSALSDEF=-DTRAVERSALS
-)
-AC_SUBST(TRAVERSALSDEF)
-
-dnl }}}
 dnl {{{  Handle --with-tide
 
 AC_ARG_WITH(tide,
