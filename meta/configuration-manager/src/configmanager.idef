@@ -8,6 +8,9 @@
 #ifndef BUTTON_FILE
 #define BUTTON_FILE "meta.buttons"
 #endif
+#ifndef ASF_LIBRARY_PATH
+#define ASF_LIBRARY_PATH "."
+#endif
 
 process ConfigManager is
 let
@@ -36,6 +39,7 @@ in
     snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
   ) .
   rec-value(CMNG, search-paths(Paths?)) .
+  Paths := join(ASF_LIBRARY_PATH, Paths) .
   snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
   rec-msg(search-paths-processed(CONFIG_FILE)) .
   snd-msg(get-button-file(BUTTON_FILE)) .
