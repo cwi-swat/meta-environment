@@ -27,7 +27,7 @@ data_DATA         = se.idef
 
 EXTRA_DIST        = se.idef \
 				  Editor.h Editor_dict.h \
-                  area.h editor.h focus.h path.h se.h sort.h tree.h \
+                  area.h editor.h focus.h path.h sort.h tree.h \
 				  length.h
 
 CLEANFILES        = se.tifs se.tif.c se.tif.h
