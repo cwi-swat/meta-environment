@@ -6,7 +6,7 @@ EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
                           apply-function.idef
 
 bin_PROGRAMS		= flattenPT unparsePT unparseProd \
-                          addPosInfo ambtracker tree2dot apply-function \
+                          addPosInfo ambtracker apply-function \
                           parsePT
 
 INCLUDES		= -I${top_srcdir}/libmept \
