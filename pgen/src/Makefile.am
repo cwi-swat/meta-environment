@@ -24,9 +24,10 @@ SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		predicted.c priorities.c statistics.c \
 		Sdf2-Normalization.c intset.c item.c itemset.c pgen-symbol.c
 
-HDRS         = atsets.h ksdf2table.h statistics.h flatten.h predicted.h goto.h \
-		follow.h intset.h characters.h item.h first.h priorities.h \
-		itemset.h pgen-symbol.h
+HDRS         = parsetablegen.tif.h atsets.h ksdf2table.h statistics.h \
+		flatten.h predicted.h goto.h follow.h intset.h \
+		characters.h item.h first.h priorities.h itemset.h
+		pgen-symbol.h
 
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
 test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
