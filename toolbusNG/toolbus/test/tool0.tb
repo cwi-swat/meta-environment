@@ -1,0 +1,25 @@
+process P1 is 				// toolbus.tool.Example
+let R : int, Name : str
+in
+    eval msg("hello") .
+    value count(R?) .
+    print R .
+    event button(Name?)
+    print Name
+    ack-event Name
+endlet
+
+process P2 is
+let N : int
+in
+   N := 0 .
+   ( if less(N, 15)
+     then
+	print N . N := add(N, 1)
+     else
+     fi
+  ) *
+  if equal(N, 15) then shutdown("end-of-test") fi
+endlet
+
+toolbus(P1, P2)
