@@ -1,0 +1,4 @@
+equations
+
+[] tb-snd-note(ATerm) = toolbus-term-event("tb-snd-note", ATerm)
+[] tb-snd-msg(ATerm)  = toolbus-term-event("tb-snd-msg", ATerm)

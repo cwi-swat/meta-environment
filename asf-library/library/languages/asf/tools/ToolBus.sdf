@@ -1,5 +1,8 @@
 module asf/tools/ToolBus[X]
 
+imports aterm/ATerms
+imports basic/Strings
+
 exports
 
 context-free syntax
@@ -7,3 +10,15 @@ context-free syntax
 toolbus-event(name:String, argument:X) -> X {built-in("toolbus-event")}
 toolbus-term-event(name:String, argument:ATerm) -> ATerm {built-in("toolbus-term-event")}
 
+context-free syntax
+
+tb-snd-note(ATerm) -> ATerm
+tb-snd-msg(ATerm)  -> ATerm
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+
+"ATerm" -> ATerm
