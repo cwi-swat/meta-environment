@@ -3,7 +3,7 @@ equations
 [m2m-1'1]
 find-constructors(Module1,Nametable) = (Module2, Nametable2),
 add-list-cons(Module2) = Module3,
-optimize-muasf(Module3,Nametable2) = (Module4, Nametable3),
+optimize-muasf(Module3,Nametable2) = <Module4, Nametable3>,
 make-matching-conds(Module4) = Module5,
 make-left-linear(Module5) = Module6,
 remove-list-matching(Module6) = Module7,
