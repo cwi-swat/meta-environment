@@ -64,7 +64,6 @@ let
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
-  subscribe(finished-opening-initial-module) .
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
 
@@ -77,6 +76,8 @@ in
 
   snd-do(UI, initialize-ui(EnvironmentName, LibraryPath, SyntaxExt, 
                            SemanticsExt, TermExt)).
+  Mods := [] .
+  Pairs := [] .
   ( 
     /* Create a completely new module by a user */
     (

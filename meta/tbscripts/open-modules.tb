@@ -103,17 +103,12 @@ in
   snd-note(ui-status(endstat(Id)))
 endlet
 
-process Add-Empty-Module(Module : str) is
-  snd-msg(add-empty-module-to-db(Module)).
-  rec-msg(empty-module-added)
-
 process Error(Message : str, MessageArgs : list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
   
 process Handle-Open-Module-Errors(Module : str, Status : term) is
   if not-equal(Status, success) then
     Error("Opening module %s failed: %s", [Module, Status])
-//    Add-Empty-Module(Module)
   else
     tau
   fi
@@ -146,7 +141,7 @@ in
     ).
     Parse-Syntax(Text, Status?, Tree?)
   +
-    rec-msg(error-opening(Module)).
+    rec-msg(error-opening(Path)).
     Status := no-such-file
   ).
   if equal(Status,success) then

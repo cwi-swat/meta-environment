@@ -1,5 +1,8 @@
 # $Id$
 
+2002/11/20 (vandenbr@loria.fr)
+ * Fixed a bug in opening a non-existing module.
+
 2002/11/15 (vandenbr@loria.fr)
  * Created a separate file with parse-utilities, because the new processes
    are needed both by meta as well as eqs-dump.
