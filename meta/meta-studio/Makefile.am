@@ -17,4 +17,4 @@ JARFILES	= ${srcdir}/META-INF/MANIFEST.MF \
 
 meta-studio.jar: ${JARFILES}
 	FILES="${JARFILES}"; \
-	${JAVA}/bin/jar cf meta-studio.jar $$FILES
+	jar cf meta-studio.jar $$FILES
