@@ -26,6 +26,7 @@ char  *hostname         = NULL;
 char  *port             = NULL;
 char  *tool             = program_name;
 ATbool asfix1_mode      = ATfalse;
+ATbool debug_mode       = ATfalse;
 
 
 size_t  FileSize(char *fnam)
@@ -86,41 +87,36 @@ void WriteFile(char *fnam, ATerm tree)
 }
 
 void rec_ack_event(int cid, ATerm t) {
-  ATerm tree, message;
+  ATerm     tree, errtype;
+  ATermList errlist;
   char *buf;
   size_t size;
 
   if(ATmatch(t,"open-language(<str>,<str>)",NULL,NULL)) {
+    if(debug_mode) ATwarning("parse-client: received open-language\n");
     if(!(buf = ReadFile(input_file_name,&size)))
       exit(1);
 
-    if(asfix1_mode) {
-      ATBwriteTerm(cid,
-                   ATmake("snd-event(parsetext-asfix1(<str>,<str>,<str>))",
-                          parse_table_name,
-			  start_symbol?start_symbol:"",
-			  buf));
-    } else {
-      ATBwriteTerm(cid,
-                   ATmake("snd-event(parsetext(<str>,<str>,<str>))",
-                          parse_table_name,
-			  start_symbol?start_symbol:"",
-			  buf));
-    }
+    if(debug_mode) ATwarning("parse-client: sending parsetext\n");
+    ATBwriteTerm(cid,
+                 ATmake("snd-event(parsetext(<int>, <str>,<str>,<str>))",
+                        asfix1_mode?1:0, parse_table_name,
+			start_symbol?start_symbol:"",
+			buf));
     free(buf);
-  } else if(ATmatch(t,
-                  "parsetext(<str>,<str>,<str>,parse-error(<term>))",
-                  NULL,NULL,NULL,&message)) {
-    WriteFile(output_file_name,ATmake("parse-error(<term>)",message));
+  } else if(ATmatch(t, "parse-error([<list>],<term>)", &errlist, &errtype)) {
+    if(debug_mode) ATwarning("parse-client: received parse-error\n");
+    WriteFile(output_file_name, ATmake("parse-error(<list>)", errlist));
     ATBwriteTerm(cid, ATmake("snd-disconnect"));
     exit(1);
-  } else if(ATmatch(t,
-                  "parsetext(<str>,<str>,<str>,<term>)",
-                  NULL,NULL,NULL,&tree)) {
+  } else if(ATmatch(t, "parsetext(<int>,<str>,<str>,<str>,<term>)",
+                    NULL,NULL,NULL,NULL,&tree)) {
+    if(debug_mode) ATwarning("parse-client: received parsetext\n");
     WriteFile(output_file_name,tree);
     ATBwriteTerm(cid, ATmake("snd-disconnect"));
     exit(0);
-  }
+  } else
+    if(debug_mode) ATwarning("parse-client: unknown %t\n", t);
 }
 
 void rec_terminate(int cid, ATerm t) {
@@ -130,7 +126,7 @@ void rec_terminate(int cid, ATerm t) {
 void Usage(FILE *stream, ATbool long_message)
 {
   const char usage[] =
-    "Usage: %s -T toolname -i input-file -p parse-table [-o file]  \\\n"
+    "Usage: %s -T toolname [-dh] -i input-file -p parse-table [-o file]  \\\n"
     "       [-H hostname] [-P port] [-s sort]\n%s";
   const char long_usage[] =
     "\n"
@@ -152,10 +148,11 @@ void handle_options (int argc, char **argv)
 {
   int c; /* option character */
 
-  while ((c = getopt(argc, argv, "12hi:o:p:s:H:P:T:")) != EOF)
+  while ((c = getopt(argc, argv, "12dhi:o:p:s:H:P:T:")) != EOF)
     switch (c) {
       case '1':   asfix1_mode = ATtrue;       break;
       case '2':   asfix1_mode = ATfalse;      break;
+      case 'd':   debug_mode  = ATtrue;       break;
       case 'h':   Usage(stdout, ATtrue);      exit(0);
       case 'i':   input_file_name  = optarg;  break;
       case 'o':   output_file_name = optarg;  break;

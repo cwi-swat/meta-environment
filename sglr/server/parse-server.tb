@@ -10,23 +10,36 @@ process Parser is
     S  : str,
     Id : term,
     FN : str,
-    T  : term
+    Err: list,
+    T  : term,
+    I  : int
   in
     execute(sglr, P?) .
     (
       rec-msg(Id?, parse-string(L?, G?, S?)) .
+      printf("parser: received msg parse-string\n") .
       snd-eval(P, parse-string(L, G, S)) .
-      rec-value(P, T?) .
-      snd-msg(Id, parse-result(T))
+      (
+        rec-value(P, parsetree(T?,I?)) .
+        printf("parser: received val parsetree\n") .
+        snd-msg(Id, parse-result(parsetree(T,I)))
+      +
+        rec-value(P, parse-error(Err?,T?)) .
+        printf("parser: received val parse-error/2\n") .
+        snd-msg(Id, parse-error(Err,T))
+      )
     +
       rec-msg(Id?, parse-string-as-asfix1(L?, G?, S?)) .
+      printf("parser: received msg parse-string-as-asfix1\n") .
       snd-eval(P, parse-string-as-asfix1(L, G, S)) .
       (
         rec-value(P, asfix1-parsetree(T?)) .
-        snd-msg(parse-result-asfix1(Id, parse-tree(T)))
+        printf("parser: received val asfix1-parsetree\n") .
+        snd-msg(Id, parse-result(parsetree(T)))
       +
         rec-value(P, parse-error(Err?,T?)) .
-        snd-msg(parse-result-asfix1(Id, parse-error(Err,T)))
+        printf("parser: received val parse-error/1\n") .
+        snd-msg(Id, parse-error(Err,T))
       )
     +
       rec-msg(parse-file(L?, G?, FN?, Id?)) .
@@ -56,10 +69,11 @@ let
   LN   : str,
   LT   : str,
   L    : str,
+  Err  : list,
   T    : term,
   T1   : term,
   T2   : term,
-  Tf   : term,
+  AF1  : bool,
   I    : int,
   Ch   : int,
   Li   : int,
@@ -71,24 +85,30 @@ in
   rec-msg(R,language-available(L?)) .
   snd-ack-event(R, open-language(LN,LT)) .
   (
-    rec-event(R, parsetext(LN?,TS?,S?)) .
+    rec-event(R, parsetext(0,LN?,TS?,S?)) .
+    printf("parse-server: received parsetext/2\n") .
     snd-msg(R, parse-string(LN,TS,S)) .
     (
-      rec-msg(R, parse-result(parse-error(T?))) .
-      snd-ack-event(R, parsetext(LN, TS, S, parse-error(T)))
+      rec-msg(R, parse-error(Err?,T?)) .
+      printf("parse-server: received parse-error/2\n") .
+      snd-ack-event(R, parsetext(0, LN, TS, S, parse-error(Err,T)))
     +
       rec-msg(R, parse-result(parsetree(T?,I?))) .
-      snd-ack-event(R, parsetext(LN, TS, S, Tf))
+      printf("parse-server: received parsetree (asfix2)\n") .
+      snd-ack-event(R, parsetext(0, LN, TS, S, T))
     )
   +
-    rec-event(R, parsetext-asfix1(LN?,TS?,S?)) .
-    snd-msg(R, parse-string-as-asfix1(LN,TS,S)) .
+    rec-event(R, parsetext(1,LN?,TS?,S?)) .
+    printf("parse-server: received parsetext/1\n") .
+    snd-msg(R, parse-string-as-asfix1(LN, TS, S)) .
     (
-      rec-msg(R, parse-result(parse-error(T?))) .
-      snd-ack-event(R, parsetext(LN, TS, S, parse-error(T)))
+      rec-msg(R, parse-error(Err?,T?)) .
+      printf("parse-server: received parse-error/1\n") .
+      snd-ack-event(R, parsetext(1, LN, TS, S, parse-error(Err,T)))
     +
-      rec-msg(R, parse-result(parsetree(T?,I?))) .
-      snd-ack-event(R, parsetex-asfix1t(LN, TS, S, Tf))
+      rec-msg(R, parse-result(parsetree(T?))) .
+      printf("parse-server: received parsetree (asfix1)\n") .
+      snd-ack-event(R, parsetext(1, LN, TS, S, T))
     )
   ) * rec-disconnect(R)
 endlet
@@ -103,4 +123,4 @@ in
   ) * delta
 endlet
 
-toolbus(Parser, AsFix2toAsFix1, Connect-ParseFile)
+toolbus(Parser, Connect-ParseFile)
