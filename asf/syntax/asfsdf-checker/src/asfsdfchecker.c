@@ -21,7 +21,7 @@ static char *name;
 ATbool run_verbose;
 
 static char myname[] = "asfsdfchecker";
-static char myversion[] = "0.0";
+static char myversion[] = "1.0";
 
 /*
  * The argument vector: list of option letters, colons denote option
