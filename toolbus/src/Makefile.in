@@ -114,8 +114,8 @@ interpreter.o: 	toolbus.h terms.h env.h procs.h match.h utils.h interpreter.h in
 sockets.o:	toolbus.h terms.h utils.h sockets.h sockets.c
 server.o: 	toolbus.h terms.h utils.h server.c
 monitor.o: toolbus.h terms.h env.h procs.h tools.h match.h utils.h interpreter.h monitor.h monitor.c
-	${COMPILE} -DVIEWER_TCL=\"$(libdir)/viewer.tcl\" \
-		-DLOGGER_TCL=\"$(libdir)/logger.tcl\" monitor.c
+	${COMPILE} -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
+		-DLOGGER_TCL=\"$(datadir)/logger.tcl\" monitor.c
 client.o: 	toolbus.h terms.h utils.h client.c
 utils.o: 	toolbus.h terms.h utils.h utils.c
 tools.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h tools.h tools.c
