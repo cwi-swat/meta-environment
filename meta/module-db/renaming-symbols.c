@@ -189,8 +189,8 @@ ASF_CondEquationList replaceParametersInEquations(ASF_CondEquationList asfTree,
     if (SDF_hasSymbolListHead(actualParamList)) {
       actualParam = SDF_getSymbolListHead(actualParamList);
       asfTree = replaceParameterInEquations(asfTree, 
-                  SDFsymbol2PtSymbol(formalParam),
-                  SDFsymbol2PtSymbol(actualParam));
+                  SDFSymbolToPtSymbol(formalParam),
+                  SDFSymbolToPtSymbol(actualParam));
     }
     else {
       return asfTree;
@@ -249,8 +249,8 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
       toSymbol = SDF_getRenamingTo(renaming);
 
       asfTree = replaceParameterInEquations(asfTree, 
-                  SDFsymbol2PtSymbol(fromSymbol),
-                  SDFsymbol2PtSymbol(toSymbol));
+                  SDFSymbolToPtSymbol(fromSymbol),
+                  SDFSymbolToPtSymbol(toSymbol));
     }
     else {
       ATwarning("Production renaming not yet supported!\n");
