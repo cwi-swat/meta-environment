@@ -47,7 +47,8 @@ public class MatchResult {
 /**
  * A DeltaEnvironment stores the environment changes as a result of a match
  * (i.e. assignments to result variables).
- * The original environment can later be updated with these changes.
+ * The original environment can later be updated with these changes
+ * (used by MatchResult.updateEnvs)
  */
 
 class DeltaEnvironment {

@@ -8,7 +8,7 @@ import java.util.Vector;
 import aterm.*;
 
 /**
- * Environments to maintain a relation between variables and their values.
+ * Environments maintain a relation between variables and their values.
  * The lifecyle of an environment consists of two phases: compile time and execution time.
  * 
  * During compile time (i.e. during compilation of a process definition) a vector (declVec) is maintained
@@ -145,7 +145,7 @@ public class Environment {
   }
   
   /**
-   * getVarType: ookup declared type for given variable
+   * getVarType: lookup declared type for given variable
    */
 
   public ATerm getVarType(ATerm var) {
