@@ -19,5 +19,4 @@ java_JAVA = \
 	MetaStudio.java \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
-	UserInterfaceTool.java \
-	ValueChangedListener.java
+	UserInterfaceTool.java

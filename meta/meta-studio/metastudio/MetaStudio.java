@@ -3,6 +3,8 @@ package metastudio;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -30,9 +32,6 @@ import metastudio.components.toolbar.ToolBar;
 import metastudio.components.treebrowser.TreeBrowser;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
-import tide.tool.support.DebugAdapter;
-import tide.tool.support.DebugTool;
-import tide.tool.support.DebugToolListener;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
@@ -52,6 +51,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     public static final void main(String[] args) throws IOException {
         new MetaStudio(args);
     }
+    
 
     public MetaStudio(String[] args) throws IOException {
         factory = new PureFactory();
@@ -167,36 +167,33 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         });
     }
 
+    private void activateTab(final JTabbedPane tabs, final JComponent component) {
+    	component.addComponentListener(new ComponentAdapter() {
+			public void componentShown(ComponentEvent e) {
+				tabs.setSelectedComponent(component);
+			}
+		});
+    }
+    
     private JTabbedPane createMainTabs(String[] args) {
     	tabs = new JTabbedPane();
     	ModuleBrowser moduleBrowser = new ModuleBrowser(factory, graphFactory, args);
     	spawn(moduleBrowser, "module-browser");
     	addTab(tabs, MODULES, moduleBrowser);
     	
-    	TreeBrowser parseTreeBrowser = new TreeBrowser(graphFactory, args);
+    	final TreeBrowser parseTreeBrowser = new TreeBrowser(graphFactory, args);
     	
     	spawn(parseTreeBrowser, "tree-browser");
     	addTab(tabs, PARSE_TREE, parseTreeBrowser);
+    	activateTab(tabs, parseTreeBrowser);
     	
-    	try {
-    		TideControl tide = new TideControl(factory, args);
-    		addTab(tabs, DEBUGGING, tide);
-    		
-    		tide.addDebugToolListener(new DebugToolListener() {
-    			public void adapterConnected(DebugTool tool, DebugAdapter adapter) {
-    				tabs.setSelectedIndex(tabs.indexOfTab(DEBUGGING));
-    			}
-
-    			public void adapterDisconnected(
-    					DebugTool tool,
-						DebugAdapter adapter) {
-    				tabs.setSelectedIndex(tabs.indexOfTab(MODULES));
-    			}
-    		});
-    	} catch (IOException e) {
-    		// TODO: 
-    		System.err.println("TODO: deal with this error properly");
-    	}
+		try {
+			TideControl tide = new TideControl(factory, args);
+			addTab(tabs, DEBUGGING, tide);
+			activateTab(tabs, tide);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+		}
     	
     	return tabs;
     }
@@ -208,6 +205,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	spawn(historyPanel, "history-list");
     	
     	ErrorList errorList = new ErrorList(factory, args);
+    	activateTab(messageTabs, errorList);
     	spawn(errorList, "error-list");
     	
     	InfoList systemInfo = new InfoList(factory, args);
@@ -216,6 +214,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	messageTabs.insertTab("Errors", null, errorList, "Errors and warnings", 0);
     	messageTabs.insertTab("Info",null, systemInfo,"System information", 1);
     	messageTabs.insertTab("Log", null, historyPanel, "Status log", 2);
+    	
     	
     	return messageTabs;
     }

@@ -11,19 +11,25 @@ public class TideControl extends tide.TideControl implements Runnable {
 		super(factory, args);
 	}
 
-	protected void connectTideControl(String[] args)
-		throws UnknownHostException, IOException {
-		getBridge().init(args);
-		getBridge().setLockObject(this);
-		getBridge().connect("tide-control", null, -1);
+	protected void connectTideControl(String[] args) {
+			try {
+				getBridge().init(args);
+				getBridge().setLockObject(this);
+				getBridge().connect("tide-control", null, -1);
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			}
+			
 	}
 
 	public void run() {
 		getBridge().run();
 	}
-	
+
 	public void recTerminate(ATerm arg) {
 		stopChildThreads();
 	}
-	
+
 }
