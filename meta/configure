@@ -1730,7 +1730,7 @@ trap 'rm -fr `echo "Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	editor/Makefile editor/editor \
-	evaluator/Makefile \
+	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
 	graph-browser/Makefile graph-browser/graph-browser \
 	in-output/Makefile in-output/test/Makefile \
 	module-db/Makefile \
@@ -1847,7 +1847,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	editor/Makefile editor/editor \
-	evaluator/Makefile \
+	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
 	graph-browser/Makefile graph-browser/graph-browser \
 	in-output/Makefile in-output/test/Makefile \
 	module-db/Makefile \
