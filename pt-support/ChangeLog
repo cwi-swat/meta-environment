@@ -1,5 +1,10 @@
 $Id$
 
+Wed Feb  2 16:59:50 CET 2005 <jurgenv@cwi.nl>
+ * When renaming literals (the actual parameter, or the goal of the
+   symbol renaming being a literal), we now have to construct a full literal
+   tree.
+
 Thu Jan 27 09:25:45 CET 2005 <jurgenv@cwi.nl>
  * Bumped to 2.0
 
