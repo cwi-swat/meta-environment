@@ -893,8 +893,8 @@ in
 	   to do this, but for now I will have to add this action...
          */
         rec-msg(asfsdfapigen, Stack?, EditorId?) .
-	StackPopString(Stack, Stack?, ModuleName?) .
 	StackPopString(Stack, Stack?, Path?) .
+	StackPopString(Stack, Stack?, ModuleName?) .
 	snd-msg(asfsdfapigen(ModuleName, Path)) .
 	rec-msg(asfsdfapigen-done) .
 	ReturnSuccess(EditorId, Stack)
