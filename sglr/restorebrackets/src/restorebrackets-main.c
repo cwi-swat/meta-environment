@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
       ATwarning("restoring brackets for %s\n", input);
     }
  
-    tree = PT_makeParseTreeFromTerm(ATreadFromFile(iofile));
+    tree = PT_ParseTreeFromTerm(ATreadFromFile(iofile));
     assert(tree);
     
     lang_name = ATmake("<str>", parse_table_file);

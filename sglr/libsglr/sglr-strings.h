@@ -24,7 +24,7 @@
 #define SG_PARSETREE_AFUN    "parsetree"
 #define SG_TERM_AFUN         "term"
 #define SG_AMBIGUOUS_TREE_AFUN "ambiguous-tree"
-#define SG_PARSEERROR_AFUN   "feedback" /* This was "parse-error" */
+#define SG_PARSEERROR_AFUN   "summary"
 #define SG_EOF_AFUN          "eof"
 #define SG_CYCLE_AFUN        "cycle"
 #define SG_AMBIGUITY_AFUN    "ambiguity"

@@ -9,7 +9,7 @@
 
 #include <aterm1.h>
 #include <atb-tool.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 #include "sglr.h"
 #include "sglr-strings.h"

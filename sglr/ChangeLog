@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar 10 09:47:15 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API
+
 2004/02/17 (markvdb@cwi.nl)
  * Fixed the regression tests.
 

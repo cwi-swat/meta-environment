@@ -1,11 +1,13 @@
 /*  $Id$  */
 
+/*{{{  includes */
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <MEPT-utils.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 #ifndef WIN32
 #include <atb-tool.h>
@@ -17,7 +19,13 @@
 #include "sglr.h"
 #include "rsrc-usage.h"
 
+/*}}}  */
+/*{{{  defines */
+
 #define program_name "sglr"
+
+/*}}}  */
+/*{{{  globals */
 
 int     outputflag                       = ATtrue;
 int     binaryflag                       = ATtrue;
@@ -43,9 +51,9 @@ char   *start_symbol      = NULL;
 char   *parse_table_name  = NULL;
 
 
-/*
- *  ToolBus stubs
- */
+/*}}}  */
+
+/*{{{  ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *path) */
 
 ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *path)
 {
@@ -62,16 +70,25 @@ ATerm parse_string(int conn, ATerm L, const char *G, const char *S, const char *
   return result;
 }
 
+/*}}}  */
+
+/*{{{  ATerm open_language(int conn, ATerm L, ATerm tbl) */
+
 ATerm open_language(int conn, ATerm L, ATerm tbl)
 {
   return SGopenLanguageFromTerm(program_name, L, ATBunpack(tbl));
 }
+
+/*}}}  */
+
+/*{{{  void term_to_file(ATerm t, char *FN) */
 
 void term_to_file(ATerm t, char *FN)
 {
   SGtermToFile(program_name, t, FN);
 }
 
+/*}}}  */
 
 /*
  The function |SG_Usage| writes a short summary of the usage of the program.
@@ -331,7 +348,7 @@ int SG_Batch (int argc, char **argv)
 
   if (SGisParseError(parse_tree)) {
     ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
-    ERR_displayFeedback(summary);
+    ERR_displaySummary(summary);
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {
@@ -365,25 +382,26 @@ int SG_Batch (int argc, char **argv)
  command line.
  */
 
-int main (int argc, char **argv)
+int main(int argc, char *argv[])
 {
-  int    i, cid, retval = 0;
-  ATerm  bottomOfStack;
+  int i, cid, retval = 0;
+  ATerm bottomOfStack;
   ATbool use_toolbus = ATfalse;
   long maxrss = 0L;
 
   maxrss = SG_ResidentSetSize();
 
-  for(i=1; !use_toolbus && i<argc; i++)
+  for (i=1; !use_toolbus && i<argc; i++) {
     use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
+  }
 
-  if(use_toolbus) {
-#ifndef WIN32  /*  Sufficient functionality?  */
+  if (use_toolbus) {
+#ifndef WIN32
     set_global_options();
     SG_TOOLBUS_ON();
 
-    ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
-    ERR_initErrorApi();
+    ATBinit(argc, argv, &bottomOfStack);
+    initErrorApi();
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
     IF_STATISTICS(
@@ -404,10 +422,10 @@ int main (int argc, char **argv)
     };
     ATbool have_complete_config;
 
-    ATinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
-    ERR_initErrorApi();
+    ATinit(6, ATlibArgv, &bottomOfStack);
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
+    initErrorApi();
 
     handle_options(argc, argv);
     have_complete_config = set_global_options();

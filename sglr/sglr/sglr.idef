@@ -31,10 +31,10 @@ in
         rec-value(SGLR, parsetree(Tree?, NrOfAmbs?)) .
         snd-msg(parse-result-asfix2me(Id, parsetree(Tree, NrOfAmbs), no-errors))
       +
-        rec-value(SGLR, feedback(ToolId?, ErrorId?, Error?)) .
+        rec-value(SGLR, summary(ToolId?, ErrorId?, Error?)) .
         snd-msg(parse-result-asfix2me(Id, 
                                       error-tree, 
-                                      feedback(ToolId, ErrorId, Error)))
+                                      summary(ToolId, ErrorId, Error)))
       +
         rec-value(SGLR, ambiguous-tree(Tree?, FeedBack?)) .
         snd-msg(parse-result-asfix2me(Id, Tree, FeedBack))
