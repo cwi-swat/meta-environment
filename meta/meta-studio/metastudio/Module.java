@@ -13,6 +13,13 @@ import javax.swing.*;
 public class Module
   implements Comparable
 {
+  //{{{ Possible module states
+
+  public static final int STATE_NORMAL = 0;
+  public static final int STATE_NEW = 1;
+
+  //}}}
+
   //{{{ attributes
 
   private String _name;
@@ -22,6 +29,8 @@ public class Module
   private List _child;
   private ListListModel childListModel;
   private ListListModel parentListModel;
+
+  private int State = STATE_NORMAL;
 
   //}}}
 
@@ -139,6 +148,22 @@ public class Module
   public String toString()
   {
     return _name;
+  }
+
+  //}}}
+  //{{{  public int getState()
+
+
+  public int getState() {
+    return State;
+  }
+
+  //}}}
+  //{{{  public int setState()
+
+
+  public void setState(int State) {
+    this.State = State;
   }
 
   //}}}

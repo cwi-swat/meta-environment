@@ -959,6 +959,7 @@ public class MetaStudio
       Module moduleFrom = moduleManager.getModule(from);
       if (moduleFrom == null) {
 	moduleFrom = addModule(from);
+	moduleFrom.setState(Module.STATE_NEW);
       }
 
       ATermAppl toTerm = (ATermAppl)edge.elementAt(1);
@@ -966,6 +967,7 @@ public class MetaStudio
       Module moduleTo = moduleManager.getModule(to);
       if (moduleTo == null) {
 	moduleTo = addModule(to);
+	moduleTo.setState(Module.STATE_NEW);
       }
 
       moduleFrom.addChild(to);
@@ -1040,7 +1042,7 @@ public class MetaStudio
 
   public void moduleSelected(Module module)
   {
-    if (module == null) {
+    if (module == null || module.getState() == Module.STATE_NEW) {
       moduleList.clearSelection();
     } else {
       moduleList.setSelectedValue(module.getName(), true);
