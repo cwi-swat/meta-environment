@@ -79,10 +79,13 @@ static ATermList getDependingModules(ATerm id)
 
   for( ;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     ATerm module = ATgetFirst(modules);
-    ATermList imports = getTransitiveImports(module);
 
-    if (isElem(id, imports)) {
-      result = ATinsert(result, module);
+    if (!ATisEqual(id, module)) {
+      ATermList imports = getTransitiveImports(module);
+
+      if (isElem(id, imports)) {
+        result = ATinsert(result, module);
+      }
     }
   }
 
