@@ -7035,7 +7035,7 @@ FUNC_EXIT ( make_nf1 ( lf_26sym , arg0 ) ) ;
 }
 ATerm lf_209 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_209sym , ATmakeAppl ( lf_209sym , arg0 ) ) ;
-FUNC_EXIT ( lf_8 ( lf_26 ( lf_222 ( lf_226 ( lf_112 ( arg0 ) ) ) ) , lf_114 ( arg0 ) ) ) ;
+FUNC_EXIT ( lf_8 ( lf_26 ( lf_226 ( lf_112 ( arg0 ) ) ) , lf_114 ( arg0 ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_209sym , arg0 ) ) ;
 }
 ATerm lf_226 ( ATerm arg0 ) {

@@ -6,6 +6,7 @@ $Id$
    [a-z]    -> Id
    [a-zA-Z] -> Id
    yields ambiguities.
+ * Deactivated this bug fix, left the code in the specification.
 
 2001/11/13 (jong@cwi.nl)
  * released version 1.2

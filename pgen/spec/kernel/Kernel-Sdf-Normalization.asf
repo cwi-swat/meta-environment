@@ -14,8 +14,8 @@ equations
 %% function \fun{merge}.
 
   [k4]
-        k[[ _G ]] = syntax lexical-merge(merge(P(_G))) ~P(_G)
-%%        k[[ _G ]] = syntax merge(P(_G)) ~P(_G)
+        %%k[[ _G ]] = syntax lexical-merge(merge(P(_G))) ~P(_G)
+        k[[ _G ]] = syntax merge(P(_G)) ~P(_G)
 
   [rmd1]
         merge(p*) = new-merge(,p*)
@@ -59,7 +59,7 @@ equations
 
   [lm-2'1] lex-merge(p*,) = p*
 
-  [lm-2'2] p1 = cc1 'a -> <_A-LEX>!,
+  [lm-2'2] p1 = cc 'a -> <_A-LEX>!,
            lex-lhs-merge(p1, p*2) = (p2,p*3)
            =================================
            lex-merge(p*1, p1 p*2) = lex-merge(p2 p*1, p*3)
@@ -69,10 +69,10 @@ equations
   [llm-1'1] lex-lhs-merge(p,) = (p,)
 
   [ac-2'2] p1 = cc1 'a -> <_A-LEX>!1,
-           p2 = cc2 'a -> <_A-LEX>!2, 
+           p2 = cc2 'a -> <_A-LEX>!2,
            !1 ++ !2 = !3, 
            p3 = cc1 \/ cc2 'a -> <_A-LEX>!3
-           =============================
+           ================================
            lex-lhs-merge(p1,p2 p*) = lex-lhs-merge(p3,p*)
 
   [default-ac-2'2] lex-lhs-merge(p1,p*1) = (p3,p*2)
