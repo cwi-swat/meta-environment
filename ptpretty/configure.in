@@ -1,0 +1,47 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(ptpretty, 0.1alfa)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Which compiler to use?
+AC_REQUIRE([AC_PROG_CC])
+AC_PROG_CC
+
+dnl Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl Check for required packages and perform version check when needed.
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl Require PT package (for AsFix)
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   ParseTree distribution is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+dnl Require sdf-support package
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config, 
+   [  --with-sdf-support=DIR  sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+dnl Which files need updating?
+AC_OUTPUT(
+   Makefile
+   src/Makefile 
+)

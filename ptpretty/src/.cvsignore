@@ -1,5 +1,4 @@
 ptpretty
-Makefile.in
 Makefile
+Makefile.in
 .deps
-config.h.in
