@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/toolbus
    info=http://www.cwi.nl/projects/MetaEnv/toolbus
    description='The ToolBus is a software architecture intended for
                 the flexible development of cooperating, distributed
