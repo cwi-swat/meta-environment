@@ -1,5 +1,8 @@
 $Id$
 
+2003/03/24 ({markvdb,iversen}@cwi.nl)
+ * Added the function PT_setTreeAnnotations.
+
 Tue Mar  4 10:05:50 CET 2003 <{markvdb,jong}@cwi.nl>
  * rename isVarDefault to isProductionVariable
 
