@@ -694,7 +694,6 @@ public class MetaStudio
     String postfix = format;
     while ((index = postfix.indexOf("%s")) != -1) {
       prefix += postfix.substring(0, index);
-      postfix = postfix.substring(index+2);
       switch (postfix.charAt(index+1)) {
 	case 'd':
 	  prefix += args.getFirst().toString();
@@ -703,6 +702,7 @@ public class MetaStudio
 	  prefix += ((ATermAppl)args.getFirst()).getName();
 	  break;
       }
+      postfix = postfix.substring(index+2);
       args = args.getNext();
     }
     return prefix + postfix;
