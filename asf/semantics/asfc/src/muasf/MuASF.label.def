@@ -1,172 +1,134 @@
-definition
-%%
-%%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
-%%%% $Id$
-module Basic-Integers
+  definition
+  
+  module Basic-Integers
 
-imports IntCon
-exports
-  sorts Int
-  context-free syntax
-    IntCon                 -> Int    {cons("con")}
-    con(int-arg:Int)               -> IntCon {cons("con")}
-    abs(int-arg:Int)               -> NatCon {cons("abs")}
-    lhs:Int "+" rhs:Int            -> Int {left, cons("plus")}
+  imports IntCon
+  exports
+    sorts Int
+    context-free syntax
+      IntCon                 -> Int    {cons("con")}
+      con(int-arg:Int)       -> IntCon {cons("con")}
+      abs(int-arg:Int)       -> NatCon {cons("abs")}
+      lhs:Int "+" rhs:Int    -> Int {left, cons("plus")}
 
-module IntCon
+  module IntCon
 
-imports Layout
-exports
-  sorts NatCon IntCon
-  lexical syntax
-    [0-9]+ -> NatCon
-  context-free syntax
-    NatCon     -> IntCon {cons("nat")}
-    "+" nat-arg:NatCon -> IntCon {cons("pos")}
-    "-" nat-arg:NatCon -> IntCon {cons("neg")}
- 
-module Layout
+  imports Layout
+  exports
+    sorts NatCon IntCon
+    lexical syntax
+      [0-9]+             -> NatCon
+    context-free syntax
+      NatCon             -> IntCon {cons("nat")}
+      "+" nat-arg:NatCon -> IntCon {cons("pos")}
+      "-" nat-arg:NatCon -> IntCon {cons("neg")}
+   
+  module Layout
 
-exports
-  lexical syntax
-    [\ \t\n]         -> LAYOUT
-    "%%" ~[\n]* "\n" -> LAYOUT
-    "%" ~[\%\n]+ "%" -> LAYOUT
+  exports
+    lexical syntax
+      [\ \t\n]         -> LAYOUT
+      "%%" ~[\n]* "\n" -> LAYOUT
+      "%" ~[\%\n]+ "%" -> LAYOUT
 
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n\%]
+    context-free restrictions
+      LAYOUT? -/- [\ \t\n\%]
 
-module MuASF
+  module MuASF
 
-imports MuLiterals Basic-Integers
+  imports MuLiterals Basic-Integers
 
-exports
+  exports
+    sorts Var Term TermList
+    context-free syntax
+      VarId                           -> Var  {cons("normal")}
+      Var                             -> Term {cons("var")}
+      FunId                           -> Term {cons("constant")}
+      Int                             -> Term {cons("int")}
+      FunId "(" args:{Term ","}+ ")"  -> Term {cons("func")}
 
-  sorts Var Term TermList
-  context-free syntax
-    VarId                     -> Var  {cons("normal")}
-    Var                       -> Term {cons("var")}
-    FunId                     -> Term {cons("constant")}
-    Int                       -> Term {cons("int")}
-    FunId "(" args:{Term ","}+ ")" -> Term {cons("func")}
+      elems:{Term ","}*               -> TermList 
 
-    terms:{Term ","}*               -> TermList 
+    sorts Annotations FuncDef FuncDefList SigArg SigArgList
+    context-free syntax
+      "_"                               -> SigArg {cons("normal")}
 
-  sorts Annotations FuncDef FuncDefList SigArg SigArgList
-  context-free syntax
-    "_" -> SigArg {cons("normal")}
+      FunId                             -> FuncDef {cons("constant-no-annos")}
+      FunId annos:Annotations           -> FuncDef {cons("constant-with-annos")}
+      FunId "(" elems:{SigArg ","}+ ")" -> FuncDef {cons("func-no-annos")}
+      FunId "(" elems:{SigArg ","}+ ")" annos:Annotations 
+                                        -> FuncDef {cons("func-with-annos")}
 
-    FunId                                   -> FuncDef {cons("constant-no-annos")}
-    FunId annos:Annotations                       -> FuncDef {cons("constant-with-annos")}
-    FunId "(" args:{SigArg ","}+ ")"             -> FuncDef {cons("func-no-annos")}
-    FunId "(" args:{SigArg ","}+ ")" annos:Annotations -> FuncDef {cons("func-with-annos")}
+      "{" terms:{Term ","}+ "}"         -> Annotations
 
-    "{" terms:{Term ","}+ "}" -> Annotations
+      elems:{SigArg ","}+  -> SigArgList 
+      elems:{FuncDef ";"}* -> FuncDefList
 
-    sigargs:{SigArg ","}+  -> SigArgList 
-    funcdefs:{FuncDef ";"}* -> FuncDefList
+    sorts Rule RuleList Cond CondList
+    context-free syntax
+      lhs:Term "=" rhs:Term -> Rule {cons("no-conds")}
 
-  sorts Rule RuleList Cond CondList
-  context-free syntax
-    lhs:Term "=" rhs:Term -> Rule {cons("no-conds")}
+      elems:{Rule ";"}*     -> RuleList
 
-    rules:{Rule ";"}*   -> RuleList
+  exports
+    context-free syntax
+      "default:" lhs:Term "=" rhs:Term   -> Rule {cons("default-no-conds")}
+      "default:" conds:CondList implies:"==>" lhs:Term "=" rhs:Term 
+                                         -> Rule {cons("default-with-conds")}
+  exports
+    context-free syntax
+      "_" "*" -> SigArg {cons("star")}
+      "_" "+" -> SigArg {cons("plus")}
 
-exports
-  context-free syntax
-    "default:" lhs:Term "=" rhs:Term                -> Rule {cons("default-no-conds")}
-    "default:" conds:CondList implies:"==>" lhs:Term "=" rhs:Term -> Rule {cons("default-with-conds")}
+    context-free syntax
+      "*" VarId -> Var {cons("star")}
+      "+" VarId -> Var {cons("plus")}
 
-exports
-  context-free syntax
-    "_" "*" -> SigArg {cons("star")}
-    "_" "+" -> SigArg {cons("plus")}
+  exports
+    context-free syntax
+      conds:CondList implies:"==>" lhs:Term "=" rhs:Term -> Rule {cons("with-conds")}
+      elems:{Cond "&"}*              -> CondList
 
-  context-free syntax
-    "*" VarId -> Var {cons("star")}
-    "+" VarId -> Var {cons("plus")}
+  exports
+    context-free syntax
+      lhs:Term assign:"=:" rhs:Term  -> Cond {cons("assign")}
 
-exports
-  context-free syntax
-    conds:CondList implies:"==>" lhs:Term "=" rhs:Term -> Rule {cons("with-conds")}
-    conds:{Cond "&"}*                  -> CondList
+  exports
+    context-free syntax
+      lhs:Term equal:"==" rhs:Term   -> Cond {cons("equal")}
+      lhs:Term unequal:"!=" rhs:Term -> Cond {cons("unequal")}
 
-exports
-  context-free syntax
-    lhs:Term assign:"=:" rhs:Term -> Cond {cons("assign")}
+    sorts Module RulesOpt SignatureOpt
+    context-free syntax
+			               -> SignatureOpt {cons("absent")}
+      "signature" funcdefs:FuncDefList -> SignatureOpt {cons("present")}
+				       -> RulesOpt     {cons("absent")}
+      "rules" rules:RuleList           -> RulesOpt     {cons("present")}
 
-exports
-  context-free syntax
-    lhs:Term equal:"==" rhs:Term -> Cond {cons("equal")}
-    lhs:Term unequal:"!=" rhs:Term -> Cond {cons("unequal")}
-
-  sorts Module RulesOpt SignatureOpt
-  context-free syntax
-                                                 -> SignatureOpt {cons("absent")}
-    "signature" funcdefs:FuncDefList                      -> SignatureOpt {cons("present")}
-                                                 -> RulesOpt     {cons("absent")}
-    "rules" rules:RuleList                             -> RulesOpt     {cons("present")}
-
-    "module" id:ModId signature:SignatureOpt rules:RulesOpt         -> Module       {cons("module")}
+      "module" id:ModId signature:SignatureOpt rules:RulesOpt -> Module {cons("module")}
 
 
-module MuLiterals
+  module MuLiterals
 
-imports Layout
+  imports Layout
 
-exports
-  sorts FunId ModId VarId PropId
-  lexical syntax
-    "\\" ~ []             -> EscChar
-    "\\" [01] [0-7] [0-7] -> EscChar
+  exports
+    sorts FunId ModId VarId PropId
+    lexical syntax
+    "\\" ~[]              -> EscChar {cons("default")} 
+    "\\" [01] [0-7] [0-7] -> EscChar {cons("oct0_177")}
 
-    ~ [\000-\037\"\\]     -> QChar
-    EscChar               -> QChar
+    ~ [\000-\037\"\\]       -> QChar   {cons("printable")}
+    char:EscChar            -> QChar   {cons("escaped")}
 
-    [a-z][\-\_A-Za-z0-9\']* -> FunId {avoid} %% identifiers start with lowercase
-    "\"" QChar* "\""        -> FunId %% quoted strings are identifiers
-    [\'][\!\\-\~]           -> FunId %% all printable characters
-    [\\][0-2][0-9][0-9]     -> FunId %% all characters; decimally coded
+    [a-z][\-\_A-Za-z0-9\']* -> FunId {cons("unquoted")} %% avoid
+    "\"" chars:QChar* "\""  -> FunId {cons("quoted")}
+    [\'][\!\\-\~]           -> FunId {cons("single-quote")}
+    [\\][0-2][0-9][0-9]     -> FunId {cons("decimal")}
 
-    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId {avoid}
+    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId {avoid, cons("default")}
 
-    [A-Z][a-zA-Z0-9\.\-]*  -> ModId {avoid}
+    [A-Z][a-zA-Z0-9\.\-]*   -> ModId {avoid, cons("default")}
 
-    [a-z][a-z\-]*         -> PropId {avoid}
-
-
-
-
-
-module NameTable
-
-imports  MuASF
-
-exports
-  sorts NameTable NamePair IdTablePair
-  context-free syntax
-    "(" prod:FunId "," func:FunId "," attributes:{Term ","}* ")" -> NamePair
-    "(" table:{NamePair ","}* "," id:FunId "," last:IntCon "," prev:IntCon ")" -> NameTable
-exports
-sorts MN-struct
-  context-free syntax
-    "(" mod:Module "," nametable:NameTable ")" -> MN-struct
-
-
+   [a-z][a-z\-]*           -> PropId {avoid, cons("default")}
 
