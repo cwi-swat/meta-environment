@@ -86,13 +86,14 @@ in
   subscribe(syntax-changed(ModuleName)) . 
   snd-msg(initialize-structure-editor(EditorId, Text)) .
   rec-msg(initial-focus(Focus?)) .
+  snd-msg(invalidate-tree(EditorId)) .
   snd-msg(set-focus(EditorId, Focus)) .
   (
     rec-note(syntax-changed(ModuleName)) .
     snd-msg(invalidate-tree(EditorId))
   +
     rec-msg(parse-focus(EditorId)) .
-    ParseTerm(EditorId, ModuleName)
+    ParseTerm(EditorId, ModuleName) 
   +
     rec-msg(parse-buffer(EditorId)) .
     snd-msg(invalidate-tree(EditorId)) .
@@ -102,8 +103,10 @@ in
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) .
     if equal(DirtyFoci, []) then
+      printf("Reducing without parsing...\n").
       ReduceTerm(EditorId, ModuleName)
     else
+      printf("First parsing, then reducing...\n").
       ParseTerm(EditorId, ModuleName) .
       snd-msg(get-dirty-focuses(EditorId)) .
       rec-msg(dirty-focuses(DirtyFoci?)) . 
