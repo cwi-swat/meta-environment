@@ -1,6 +1,8 @@
 # $Id$
 
-SUBDIRS     = doc libsglr sglr dump restorebrackets test
+SUBDIRS = doc libsglr sglr dump restorebrackets test
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 

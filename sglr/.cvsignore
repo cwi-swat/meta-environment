@@ -1,9 +1,11 @@
+*.pkg
+*.tar.gz
 Makefile
-diff.out
-configure
-aclocal.m4
-config.h.in
 Makefile.in
-config.log
+aclocal.m4
+autom4*
 config.cache
+config.h.in
+config.log
 config.status
+configure
