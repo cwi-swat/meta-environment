@@ -1,7 +1,0 @@
-module languages/asf/syntax/Ambiguities[X]
-
-exports
-
-context-free syntax
-
-  amb(ambs:{X ","}*) -> X {cons("ambiguity-constructor")}

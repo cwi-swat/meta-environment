@@ -1,0 +1,12 @@
+module languages/asf/syntax/Module
+
+imports languages/asf/syntax/Equations languages/asf/syntax/Tests languages/asf/syntax/Characters languages/asf/syntax/Constructors
+exports
+  sorts ASF-Module ASF-Section
+
+context-free syntax
+
+  sections:ASF-Section* -> ASF-Module {cons("default")}
+
+  "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
+  "tests" list:ASF-TestEquation*            -> ASF-Section {cons("tests")}

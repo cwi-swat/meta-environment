@@ -1,26 +1,22 @@
 module languages/asf/syntax/Equations
+imports languages/asf/syntax/Conditions
+imports languages/asf/syntax/Tags
+exports
+  sorts ASF-Implies ASF-Equation ASF-ConditionalEquation
 
 exports
-  sorts ASF-Tag ASF-TagId ASF-CondEquation ASF-Equation ASF-Implies ASF-Condition ASF-Equations
-
   lexical syntax
-    "===" [\=]* [\>]? -> ASF-Implies {cons("default")}
-    [A-Za-z0-9\']  -> ASF-TagId {avoid, cons("one-char")}
-    [A-Za-z0-9\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\'] -> ASF-TagId {avoid, cons("many-chars")}
-
+    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
   lexical restrictions
     ASF-Implies -/- [\=]
 
   context-free syntax
-    list:{ASF-Condition ","}+          -> ASF-Conditions {cons("list")}
-                          
-                                   -> ASF-Equations {cons("absent")}
-    "equations" list:CondEquation* -> ASF-Equations {cons("present")}
 
-    ASF-Tag ASF-Equation                    -> ASF-CondEquation {cons("simple")}
-    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-CondEquation {cons("implies")}
-    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-CondEquation {cons("when")}
+    ASF-Tag ASF-Equation -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions  -> ASF-ConditionalEquation {cons("when")}
 
-    "[" "]"       -> ASF-Tag {cons("empty")}
-    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
+  context-free syntax
+
+    lhs:Tree "=" rhs:Tree -> ASF-Equation
 
