@@ -61,7 +61,7 @@ ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
 all: AsFix2C libasfix2c.a
 
 AsFix2C : $(MODS)
-        $(CC) -o AsFix2C $(MODS) $(LIBS)
+	$(CC) -o AsFix2C $(MODS) $(LIBS)
 
 libasfix2c.a: $(MODS)
 	$(AR) cr libasfix2c.a $(MODS)
