@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb 27 15:37:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * library/basic:
+   refactor LocationOperations out of Locations.sdf
+
 Tue Feb 17 11:47:52 CET 2004 <kooiker@cwi.nl>
  * library/languages/box/syntax/Contexts.sdf:
    - removed unused variable
