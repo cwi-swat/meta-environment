@@ -548,27 +548,11 @@ PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int numbe
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols) */
-
-PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols)
-{
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun34, (ATerm)symbols);
-}
-
-/*}}}  */
-/*{{{  PT_Symbol PT_makeSymbolSet(PT_Symbol symbol) */
-
-PT_Symbol PT_makeSymbolSet(PT_Symbol symbol)
-{
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun35, (ATerm)symbol);
-}
-
-/*}}}  */
 /*{{{  PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol) */
 
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun36, (ATerm)symbols, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun34, (ATerm)symbols, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -576,15 +560,7 @@ PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolParameterizedSort(char * sort, PT_Symbols parameters)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun37, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)parameters);
-}
-
-/*}}}  */
-/*{{{  PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs) */
-
-PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
-{
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun38, (ATerm)lhs, (ATerm)rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun35, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)parameters);
 }
 
 /*}}}  */
@@ -592,7 +568,7 @@ PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun39, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun36, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -600,7 +576,7 @@ PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLayout()
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun40);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun37);
 }
 
 /*}}}  */
@@ -608,7 +584,7 @@ PT_Symbol PT_makeSymbolLayout()
 
 PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun41, (ATerm)ranges);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun38, (ATerm)ranges);
 }
 
 /*}}}  */
@@ -640,7 +616,7 @@ PT_CharRange PT_makeCharRangeCharacter(int integer)
 
 PT_CharRange PT_makeCharRangeRange(int start, int end)
 {
-  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun42, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
+  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun39, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
 }
 
 /*}}}  */
@@ -850,14 +826,21 @@ inline ATbool PT_isTreeAppl(PT_Tree arg)
   if (ATgetType((ATerm)arg) != AT_APPL) {
     return ATfalse;
   }
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternTreeAppl)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeAppl, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternTreeAppl, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -883,14 +866,21 @@ inline ATbool PT_isTreeLit(PT_Tree arg)
   if (ATgetType((ATerm)arg) != AT_APPL) {
     return ATfalse;
   }
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternTreeLit)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeLit, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternTreeLit, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -901,14 +891,21 @@ inline ATbool PT_isTreeFlatLayout(PT_Tree arg)
   if (ATgetType((ATerm)arg) != AT_APPL) {
     return ATfalse;
   }
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternTreeFlatLayout)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeFlatLayout, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternTreeFlatLayout, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -919,14 +916,21 @@ inline ATbool PT_isTreeAmb(PT_Tree arg)
   if (ATgetType((ATerm)arg) != AT_APPL) {
     return ATfalse;
   }
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternTreeAmb)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeAmb, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternTreeAmb, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1102,14 +1106,21 @@ ATbool PT_isValidProduction(PT_Production arg)
 
 inline ATbool PT_isProductionDefault(PT_Production arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternProductionDefault)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternProductionDefault, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternProductionDefault, NULL, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1117,14 +1128,21 @@ inline ATbool PT_isProductionDefault(PT_Production arg)
 
 inline ATbool PT_isProductionList(PT_Production arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternProductionList)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternProductionList, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternProductionList, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1258,14 +1276,21 @@ ATbool PT_isValidAttributes(PT_Attributes arg)
 
 inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttributesNoAttrs)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttributesNoAttrs));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1273,14 +1298,21 @@ inline ATbool PT_isAttributesNoAttrs(PT_Attributes arg)
 
 inline ATbool PT_isAttributesAttrs(PT_Attributes arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttributesAttrs)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttributesAttrs, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttributesAttrs, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1497,14 +1529,21 @@ ATbool PT_isValidAttr(PT_Attr arg)
 
 inline ATbool PT_isAttrAssoc(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrAssoc)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrAssoc, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrAssoc, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1512,14 +1551,21 @@ inline ATbool PT_isAttrAssoc(PT_Attr arg)
 
 inline ATbool PT_isAttrTerm(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrTerm)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrTerm, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrTerm, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1527,14 +1573,21 @@ inline ATbool PT_isAttrTerm(PT_Attr arg)
 
 inline ATbool PT_isAttrId(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrId)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrId, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrId, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1542,14 +1595,21 @@ inline ATbool PT_isAttrId(PT_Attr arg)
 
 inline ATbool PT_isAttrBracket(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrBracket)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrBracket);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrBracket));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1557,14 +1617,21 @@ inline ATbool PT_isAttrBracket(PT_Attr arg)
 
 inline ATbool PT_isAttrReject(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrReject)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrReject);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrReject));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1572,14 +1639,21 @@ inline ATbool PT_isAttrReject(PT_Attr arg)
 
 inline ATbool PT_isAttrPrefer(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrPrefer)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrPrefer);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrPrefer));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1587,14 +1661,21 @@ inline ATbool PT_isAttrPrefer(PT_Attr arg)
 
 inline ATbool PT_isAttrAvoid(PT_Attr arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAttrAvoid)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrAvoid);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAttrAvoid));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1725,14 +1806,21 @@ ATbool PT_isValidAssociativity(PT_Associativity arg)
 
 inline ATbool PT_isAssociativityLeft(PT_Associativity arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAssociativityLeft)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityLeft);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAssociativityLeft));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1740,14 +1828,21 @@ inline ATbool PT_isAssociativityLeft(PT_Associativity arg)
 
 inline ATbool PT_isAssociativityRight(PT_Associativity arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAssociativityRight)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityRight);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAssociativityRight));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1755,14 +1850,21 @@ inline ATbool PT_isAssociativityRight(PT_Associativity arg)
 
 inline ATbool PT_isAssociativityAssoc(PT_Associativity arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAssociativityAssoc)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityAssoc);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAssociativityAssoc));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1770,14 +1872,21 @@ inline ATbool PT_isAssociativityAssoc(PT_Associativity arg)
 
 inline ATbool PT_isAssociativityNonAssoc(PT_Associativity arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternAssociativityNonAssoc)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAssociativityNonAssoc);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternAssociativityNonAssoc));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1948,19 +2057,10 @@ ATbool PT_isValidSymbol(PT_Symbol arg)
   else if (PT_isSymbolIterSepN(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolPerm(arg)) {
-    return ATtrue;
-  }
-  else if (PT_isSymbolSet(arg)) {
-    return ATtrue;
-  }
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
   else if (PT_isSymbolParameterizedSort(arg)) {
-    return ATtrue;
-  }
-  else if (PT_isSymbolStrategy(arg)) {
     return ATtrue;
   }
   else if (PT_isSymbolVarSym(arg)) {
@@ -1980,14 +2080,21 @@ ATbool PT_isValidSymbol(PT_Symbol arg)
 
 inline ATbool PT_isSymbolLit(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolLit)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLit, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolLit, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -1995,14 +2102,21 @@ inline ATbool PT_isSymbolLit(PT_Symbol arg)
 
 inline ATbool PT_isSymbolCf(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolCf)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolCf, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolCf, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2010,14 +2124,21 @@ inline ATbool PT_isSymbolCf(PT_Symbol arg)
 
 inline ATbool PT_isSymbolLex(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolLex)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLex, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolLex, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2025,14 +2146,21 @@ inline ATbool PT_isSymbolLex(PT_Symbol arg)
 
 inline ATbool PT_isSymbolEmpty(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolEmpty)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolEmpty);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolEmpty));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2040,14 +2168,21 @@ inline ATbool PT_isSymbolEmpty(PT_Symbol arg)
 
 inline ATbool PT_isSymbolSeq(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolSeq)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolSeq, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolSeq, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2055,14 +2190,21 @@ inline ATbool PT_isSymbolSeq(PT_Symbol arg)
 
 inline ATbool PT_isSymbolOpt(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolOpt)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolOpt, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolOpt, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2070,14 +2212,21 @@ inline ATbool PT_isSymbolOpt(PT_Symbol arg)
 
 inline ATbool PT_isSymbolAlt(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolAlt)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolAlt, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolAlt, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2085,14 +2234,21 @@ inline ATbool PT_isSymbolAlt(PT_Symbol arg)
 
 inline ATbool PT_isSymbolPair(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolPair)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolPair, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolPair, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2100,14 +2256,21 @@ inline ATbool PT_isSymbolPair(PT_Symbol arg)
 
 inline ATbool PT_isSymbolSort(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolSort)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolSort, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolSort, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2115,14 +2278,21 @@ inline ATbool PT_isSymbolSort(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterPlus(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterPlus)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlus, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlus, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2130,14 +2300,21 @@ inline ATbool PT_isSymbolIterPlus(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterStar(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterStar)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterStar, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterStar, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2145,14 +2322,21 @@ inline ATbool PT_isSymbolIterStar(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterPlusSep(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterPlusSep)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlusSep, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterPlusSep, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2160,14 +2344,21 @@ inline ATbool PT_isSymbolIterPlusSep(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterStarSep(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterStarSep)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterStarSep, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterStarSep, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2175,14 +2366,21 @@ inline ATbool PT_isSymbolIterStarSep(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterN(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterN)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterN, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterN, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2190,44 +2388,21 @@ inline ATbool PT_isSymbolIterN(PT_Symbol arg)
 
 inline ATbool PT_isSymbolIterSepN(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolIterSepN)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolIterSepN, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolIterSepN, NULL, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isSymbolPerm(PT_Symbol arg) */
-
-inline ATbool PT_isSymbolPerm(PT_Symbol arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolPerm)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolPerm, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isSymbolSet(PT_Symbol arg) */
-
-inline ATbool PT_isSymbolSet(PT_Symbol arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolSet)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolSet, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2235,14 +2410,21 @@ inline ATbool PT_isSymbolSet(PT_Symbol arg)
 
 inline ATbool PT_isSymbolFunc(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolFunc)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolFunc, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolFunc, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2250,29 +2432,21 @@ inline ATbool PT_isSymbolFunc(PT_Symbol arg)
 
 inline ATbool PT_isSymbolParameterizedSort(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolParameterizedSort)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolParameterizedSort, NULL, NULL));
-#endif
-  return ATtrue;
-}
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
 
-/*}}}  */
-/*{{{  inline ATbool PT_isSymbolStrategy(PT_Symbol arg) */
+    assert(arg != NULL);
 
-inline ATbool PT_isSymbolStrategy(PT_Symbol arg)
-{
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolStrategy)) {
-    return ATfalse;
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolParameterizedSort, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolStrategy, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2280,14 +2454,21 @@ inline ATbool PT_isSymbolStrategy(PT_Symbol arg)
 
 inline ATbool PT_isSymbolVarSym(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolVarSym)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolVarSym, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolVarSym, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2295,14 +2476,21 @@ inline ATbool PT_isSymbolVarSym(PT_Symbol arg)
 
 inline ATbool PT_isSymbolLayout(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolLayout)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolLayout);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolLayout));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2310,14 +2498,21 @@ inline ATbool PT_isSymbolLayout(PT_Symbol arg)
 
 inline ATbool PT_isSymbolCharClass(PT_Symbol arg)
 {
-  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolCharClass)) {
-    return ATfalse;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolCharClass, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
   }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolCharClass, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -2394,9 +2589,6 @@ ATbool PT_hasSymbolSymbol(PT_Symbol arg)
   else if (PT_isSymbolIterSepN(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolSet(arg)) {
-    return ATtrue;
-  }
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
@@ -2438,9 +2630,6 @@ PT_Symbol PT_getSymbolSymbol(PT_Symbol arg)
   else if (PT_isSymbolIterSepN(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
-  else if (PT_isSymbolSet(arg)) {
-    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
-  }
   else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
@@ -2480,9 +2669,6 @@ PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol)
   else if (PT_isSymbolIterSepN(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
-  else if (PT_isSymbolSet(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
-  }
   else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 1);
   }
@@ -2502,9 +2688,6 @@ ATbool PT_hasSymbolSymbols(PT_Symbol arg)
   if (PT_isSymbolSeq(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolPerm(arg)) {
-    return ATtrue;
-  }
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
@@ -2519,9 +2702,6 @@ PT_Symbols PT_getSymbolSymbols(PT_Symbol arg)
   if (PT_isSymbolSeq(arg)) {
     return (PT_Symbols)ATgetArgument((ATermAppl)arg, 0);
   }
-  else if (PT_isSymbolPerm(arg)) {
-    return (PT_Symbols)ATgetArgument((ATermAppl)arg, 0);
-  }
   else 
     return (PT_Symbols)ATgetArgument((ATermAppl)arg, 0);
 }
@@ -2532,9 +2712,6 @@ PT_Symbols PT_getSymbolSymbols(PT_Symbol arg)
 PT_Symbol PT_setSymbolSymbols(PT_Symbol arg, PT_Symbols symbols)
 {
   if (PT_isSymbolSeq(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbols, 0);
-  }
-  else if (PT_isSymbolPerm(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbols, 0);
   }
   else if (PT_isSymbolFunc(arg)) {
@@ -2556,9 +2733,6 @@ ATbool PT_hasSymbolLhs(PT_Symbol arg)
   else if (PT_isSymbolPair(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolStrategy(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -2568,9 +2742,6 @@ ATbool PT_hasSymbolLhs(PT_Symbol arg)
 PT_Symbol PT_getSymbolLhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
-    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
-  }
-  else if (PT_isSymbolPair(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
   else 
@@ -2586,9 +2757,6 @@ PT_Symbol PT_setSymbolLhs(PT_Symbol arg, PT_Symbol lhs)
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
   }
   else if (PT_isSymbolPair(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
-  }
-  else if (PT_isSymbolStrategy(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
   }
 
@@ -2607,9 +2775,6 @@ ATbool PT_hasSymbolRhs(PT_Symbol arg)
   else if (PT_isSymbolPair(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolStrategy(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -2619,9 +2784,6 @@ ATbool PT_hasSymbolRhs(PT_Symbol arg)
 PT_Symbol PT_getSymbolRhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
-    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
-  }
-  else if (PT_isSymbolPair(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
   else 
@@ -2637,9 +2799,6 @@ PT_Symbol PT_setSymbolRhs(PT_Symbol arg, PT_Symbol rhs)
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
   }
   else if (PT_isSymbolPair(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
-  }
-  else if (PT_isSymbolStrategy(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
   }
 
@@ -3457,14 +3616,6 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_Symbo
         PT_visitSymbol(PT_getSymbolSeparator(arg), acceptString, acceptSymbols, acceptNumber, acceptSort, acceptParameters, acceptRanges),
         acceptNumber ? acceptNumber(PT_getSymbolNumber(arg)) : PT_getSymbolNumber(arg));
   }
-  if (PT_isSymbolPerm(arg)) {
-    return PT_makeSymbolPerm(
-        acceptSymbols ? acceptSymbols(PT_getSymbolSymbols(arg)) : PT_getSymbolSymbols(arg));
-  }
-  if (PT_isSymbolSet(arg)) {
-    return PT_makeSymbolSet(
-        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptString, acceptSymbols, acceptNumber, acceptSort, acceptParameters, acceptRanges));
-  }
   if (PT_isSymbolFunc(arg)) {
     return PT_makeSymbolFunc(
         acceptSymbols ? acceptSymbols(PT_getSymbolSymbols(arg)) : PT_getSymbolSymbols(arg),
@@ -3474,11 +3625,6 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_Symbo
     return PT_makeSymbolParameterizedSort(
         acceptSort ? acceptSort(PT_getSymbolSort(arg)) : PT_getSymbolSort(arg),
         acceptParameters ? acceptParameters(PT_getSymbolParameters(arg)) : PT_getSymbolParameters(arg));
-  }
-  if (PT_isSymbolStrategy(arg)) {
-    return PT_makeSymbolStrategy(
-        PT_visitSymbol(PT_getSymbolLhs(arg), acceptString, acceptSymbols, acceptNumber, acceptSort, acceptParameters, acceptRanges),
-        PT_visitSymbol(PT_getSymbolRhs(arg), acceptString, acceptSymbols, acceptNumber, acceptSort, acceptParameters, acceptRanges));
   }
   if (PT_isSymbolVarSym(arg)) {
     return PT_makeSymbolVarSym(

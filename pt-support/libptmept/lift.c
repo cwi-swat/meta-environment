@@ -347,14 +347,6 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     PTPT_NatCon num = PTPT_liftNatCon(PT_getSymbolNumber(symbol));
     result = PTPT_makeSymbolIterSepN(e,e,sym,e,e,sep,e,e,num,e);
   }
-  else if (PT_isSymbolPerm(symbol)) {
-    PTPT_Symbols syms = PTPT_liftSymbols(PT_getSymbolSymbols(symbol));
-    result = PTPT_makeSymbolPerm(e,e,syms,e);
-  }
-  else if (PT_isSymbolSet(symbol)) {
-    PTPT_Symbol sym = PTPT_liftSymbol(PT_getSymbolSymbol(symbol));
-    result = PTPT_makeSymbolSet(e,e,sym,e);
-  }
   else if (PT_isSymbolFunc(symbol)) {
     PTPT_Symbols syms = PTPT_liftSymbols(PT_getSymbolSymbols(symbol));
     PTPT_Symbol sym = PTPT_liftSymbol(PT_getSymbolSymbol(symbol));
@@ -364,11 +356,6 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     PTPT_Literal lit = PTPT_liftLiteral(PT_getSymbolSort(symbol), ATtrue);
     PTPT_Symbols syms = PTPT_liftSymbols(PT_getSymbolParameters(symbol));
     result = PTPT_makeSymbolParametrizedSort(e,e,lit,e,e,syms,e);
-  }
-  else if (PT_isSymbolStrategy(symbol)) {
-    PTPT_Symbol lhs = PTPT_liftSymbol(PT_getSymbolLhs(symbol));
-    PTPT_Symbol rhs = PTPT_liftSymbol(PT_getSymbolRhs(symbol));
-    result = PTPT_makeSymbolStrategy(e,e,lhs,e,e,rhs,e);
   }
   else if (PT_isSymbolVarSym(symbol)) {
     PTPT_Symbol new = PTPT_liftSymbol(PT_getSymbolSymbol(symbol));

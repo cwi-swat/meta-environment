@@ -127,23 +127,10 @@ lengthOfSymbol(PT_Symbol symbol)
     return lengthOfSymbol(newSymbol) + lengthOfInteger(number) +
            lengthOfSymbol(separator) + 4;
   }
-  if (PT_isSymbolPerm(symbol)) {
-    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
-    return lengthOfSymbols(newSymbols) + 4;
-  }
-  if (PT_isSymbolSet(symbol)) {
-    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    return lengthOfSymbol(newSymbol) + 5;
-  }
   if (PT_isSymbolParameterizedSort(symbol)) {
     char *str = PT_getSymbolSort(symbol);
     PT_Symbols newSymbols = PT_getSymbolParameters(symbol);
     return lengthOfSymbols(newSymbols) + strlen(str) + 4;
-  }
-  if (PT_isSymbolStrategy(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
-    return lengthOfSymbol(leftSymbol) + lengthOfSymbol(rightSymbol) + 6;
   }
   if (PT_isSymbolFunc(symbol)) {
     PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
@@ -473,25 +460,6 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
     return idx;      
   }
-  if (PT_isSymbolPerm(symbol)) {
-    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
-    buf[idx++] = '<';
-    buf[idx++] = '<';
-    idx = yieldSymbols(newSymbols, idx, buf, bufSize);
-    buf[idx++] = '>';
-    buf[idx++] = '>';
-    return idx;
-  }
-  if (PT_isSymbolSet(symbol)) {
-    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    buf[idx++] = 'S';
-    buf[idx++] = 'e';
-    buf[idx++] = 't';
-    buf[idx++] = '[';
-    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
-    buf[idx++] = ']';
-    return idx;
-  }
   if (PT_isSymbolParameterizedSort(symbol)) {
     char *str = PT_getSymbolSort(symbol);
     PT_Symbols newSymbols = PT_getSymbolParameters(symbol);
@@ -506,21 +474,6 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     idx = yieldSymbolParameters(newSymbols, idx, buf, bufSize);
     buf[idx++] = ']';
     buf[idx++] = ']';
-    return idx;
-  }
-  if (PT_isSymbolStrategy(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
-
-    buf[idx++] = '(';
-    idx = yieldSymbol(leftSymbol, idx, buf, bufSize);
-    buf[idx++] = ' ';
-    buf[idx++] = '-';
-    buf[idx++] = '>';
-    buf[idx++] = ' ';
-    idx = yieldSymbol(rightSymbol, idx, buf, bufSize);
-    buf[idx++] = ')';
-
     return idx;
   }
   if (PT_isSymbolFunc(symbol)) {

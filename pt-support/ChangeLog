@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/03 (markvdb@cwi.nl)
+ * Removed perm, set, strategy symbol.
+
 2003/09/25 (markvdb@cwi.nl)
  * Added a function to check for constructor attributes.
 

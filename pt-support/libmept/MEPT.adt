@@ -69,16 +69,10 @@
   [Symbol, iter-sep-n, iter-sep-n(<symbol(Symbol)>,<separator(Symbol)>,
                                   <number(int)>)],
 
-  [Symbol, perm, perm(<symbols(Symbols)>)],
-
-  [Symbol, set, set(<symbol(Symbol)>)],
-
   [Symbol, func, func(<symbols(Symbols)>,<symbol(Symbol)>)],
 
   [Symbol, parameterized-sort, parameterized-sort(<sort(str)>,
                                                   <parameters(Symbols)>)],
-
-  [Symbol, strategy, strategy(<lhs(Symbol)>,<rhs(Symbol)>)], 
 
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
