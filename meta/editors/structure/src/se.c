@@ -323,7 +323,7 @@ ATerm get_parse_tree(int cid, ATerm editorId)
   parse_tree = SE_getEditorParseTree(editor);
 
   return ATmake("snd-value(parse-tree(<term>))",
-		PT_makeTermFromParseTree(parse_tree));
+		ATBpack(PT_makeTermFromParseTree(parse_tree)));
 }
 
 /*}}}  */
