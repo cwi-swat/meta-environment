@@ -45,7 +45,10 @@ static ASF_ASFEquation ASF_lowerEquation(ASF_ASFEquation equation)
   ATerm type = 
       PT_SymbolToTerm(PT_getProductionRhs(PT_getTreeProd((PT_Tree) lhs)));
 
-  assert(ATisEqual(type, PT_getProductionRhs(PT_getTreeProd((PT_Tree) rhs))));
+  if(!ATisEqual(type, PT_getProductionRhs(PT_getTreeProd((PT_Tree) rhs)))) {
+    ATwarning("lower: equation not type-preserving\n");
+    return equation;
+  }
 
   equation = ASF_makeASFEquationDefault(type,type,lhs,space,space,rhs);
 
@@ -65,7 +68,10 @@ static ASF_ASFCondition ASF_lowerCondition(ASF_ASFCondition condition)
   ATerm type = 
     PT_SymbolToTerm(PT_getProductionRhs(PT_getTreeProd((PT_Tree) lhs)));
 
-  assert(ATisEqual(type, PT_getProductionRhs(PT_getTreeProd((PT_Tree) rhs))));
+  if(!ATisEqual(type, PT_getProductionRhs(PT_getTreeProd((PT_Tree) rhs)))) {
+    ATwarning("lower: condition not type correct\n");
+    return condition;
+  }
 
   /* using the setters, we can abstract from the type of condition */
   condition = ASF_setASFConditionTypeOfLhs(condition, type);
@@ -187,8 +193,8 @@ static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section)
     return ASF_setASFSectionTestList(section, list);
   }
 
-  assert(0 && "unexpected ASF section\n");
-  return NULL;
+  ATwarning("unexpected ASF section\n");
+  return section;
 }
 
 /*}}}  */
