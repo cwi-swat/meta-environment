@@ -2,7 +2,7 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
-#include "ParsedLocationAPI.h"
+#include "ParsedLocation.h"
 
 /*{{{  conversion functions */
 
@@ -55,11 +55,11 @@ typedef struct ATerm _PLOC_OptLayout;
 
 /*}}}  */
 
-/*{{{  void PLOC_initParsedLocationAPIApi(void) */
+/*{{{  void PLOC_initParsedLocationApi(void) */
 
-void PLOC_initParsedLocationAPIApi(void)
+void PLOC_initParsedLocationApi(void)
 {
-  init_ParsedLocationAPI_dict();
+  init_ParsedLocation_dict();
 }
 
 /*}}}  */

@@ -1,5 +1,5 @@
-#ifndef __ParsedLocationAPI_dict_H
-#define __ParsedLocationAPI_dict_H
+#ifndef __ParsedLocation_dict_H
+#define __ParsedLocation_dict_H
 
 #include <aterm2.h>
 
@@ -53,6 +53,6 @@ extern ATerm PLOC_patternEscapedOctal;
 extern ATerm PLOC_patternEscapedSpecialCharacter;
 extern ATerm PLOC_patternNormalDefault;
 
-extern void init_ParsedLocationAPI_dict();
+extern void init_ParsedLocation_dict();
 
-#endif /* __ParsedLocationAPI_dict_H */
+#endif /* __ParsedLocation_dict_H */

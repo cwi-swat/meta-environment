@@ -1,5 +1,5 @@
-#ifndef __LocationAPI_dict_H
-#define __LocationAPI_dict_H
+#ifndef __Location_dict_H
+#define __Location_dict_H
 
 #include <aterm2.h>
 
@@ -17,6 +17,6 @@ extern ATerm LOC_patternStrConStrCon;
 extern ATerm LOC_patternEscapedEscaped;
 extern ATerm LOC_patternNormalNormal;
 
-extern void init_LocationAPI_dict();
+extern void init_Location_dict();
 
-#endif /* __LocationAPI_dict_H */
+#endif /* __Location_dict_H */

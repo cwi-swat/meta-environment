@@ -1,5 +1,9 @@
 $Id$
 
+Mon Mar  8 10:56:43 CET 2004 <{jong,kooiker}@cwi.nl>
+ * generate "location-api" instead of "location-api-api" for various
+   .[ch] files
+
 Wed Mar  3 10:17:29 CET 2004 <jurgenv@cwi.nl>
  * Readded jar files to the repository in order to prevent some
    circular dependencies (with sdf-apigen, asf-library, asf, ...)

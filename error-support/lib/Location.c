@@ -2,7 +2,7 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
-#include "LocationAPI.h"
+#include "Location.h"
 
 /*{{{  conversion functions */
 
@@ -53,11 +53,11 @@ typedef struct ATerm _LOC_Area;
 
 /*}}}  */
 
-/*{{{  void LOC_initLocationAPIApi(void) */
+/*{{{  void LOC_initLocationApi(void) */
 
-void LOC_initLocationAPIApi(void)
+void LOC_initLocationApi(void)
 {
-  init_LocationAPI_dict();
+  init_Location_dict();
 }
 
 /*}}}  */

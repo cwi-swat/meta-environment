@@ -1,4 +1,4 @@
-#include "ParsedLocationAPI_dict.h"
+#include "ParsedLocation_dict.h"
 
 AFun PLOC_afun17;
 AFun PLOC_afun22;
@@ -103,11 +103,11 @@ ATerm PLOC_patternNormalDefault = NULL;
  *
  */
 
-static ATerm _ParsedLocationAPI_dict = NULL;
+static ATerm _ParsedLocation_dict = NULL;
 
-#define _ParsedLocationAPI_dict_LEN 931
+#define _ParsedLocation_dict_LEN 931
 
-static char _ParsedLocationAPI_dict_baf[_ParsedLocationAPI_dict_LEN] = {
+static char _ParsedLocation_dict_baf[_ParsedLocation_dict_LEN] = {
 0x00,0x8B,0xAF,0x83,0x00,0x27,0x81,0x0C,0x05,0x3C,0x69,0x6E,0x74,0x3E,0x00,0x00,
 0x02,0x03,0x3C,0x5F,0x3E,0x01,0x00,0x03,0x03,0x04,0x06,0x05,0x05,0x5B,0x5F,0x2C,
 0x5F,0x5D,0x02,0x00,0x80,0x91,0x21,0x02,0x01,0x07,0x08,0x0A,0x0B,0x0C,0x0D,0x0E,
@@ -169,15 +169,15 @@ static char _ParsedLocationAPI_dict_baf[_ParsedLocationAPI_dict_LEN] = {
 0x52,0xF5,0x00
 };
 
-void init_ParsedLocationAPI_dict()
+void init_ParsedLocation_dict()
 {
   ATermList afuns, terms;
 
-  _ParsedLocationAPI_dict = ATreadFromBinaryString(_ParsedLocationAPI_dict_baf, _ParsedLocationAPI_dict_LEN);
+  _ParsedLocation_dict = ATreadFromBinaryString(_ParsedLocation_dict_baf, _ParsedLocation_dict_LEN);
 
-  ATprotect(&_ParsedLocationAPI_dict);
+  ATprotect(&_ParsedLocation_dict);
 
-  afuns = (ATermList)ATelementAt((ATermList)_ParsedLocationAPI_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_ParsedLocation_dict, 0);
 
   PLOC_afun17 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -242,7 +242,7 @@ void init_ParsedLocationAPI_dict()
   PLOC_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt((ATermList)_ParsedLocationAPI_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_ParsedLocation_dict, 1);
 
   PLOC_patternOptLayoutPresent = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -1,4 +1,4 @@
-#include "LocationAPI_dict.h"
+#include "Location_dict.h"
 
 AFun LOC_afun0;
 AFun LOC_afun2;
@@ -31,11 +31,11 @@ ATerm LOC_patternNormalNormal = NULL;
  *
  */
 
-static ATerm _LocationAPI_dict = NULL;
+static ATerm _Location_dict = NULL;
 
-#define _LocationAPI_dict_LEN 165
+#define _Location_dict_LEN 165
 
-static char _LocationAPI_dict_baf[_LocationAPI_dict_LEN] = {
+static char _Location_dict_baf[_Location_dict_LEN] = {
 0x00,0x8B,0xAF,0x83,0x00,0x0B,0x1C,0x03,0x3C,0x5F,0x3E,0x01,0x00,0x03,0x03,0x05,
 0x04,0x03,0x05,0x5B,0x5F,0x2C,0x5F,0x5D,0x02,0x00,0x0E,0x06,0x01,0x00,0x07,0x08,
 0x09,0x0A,0x02,0x01,0x02,0x02,0x5B,0x5D,0x00,0x00,0x01,0x03,0x69,0x6E,0x74,0x00,
@@ -49,15 +49,15 @@ static char _LocationAPI_dict_baf[_LocationAPI_dict_LEN] = {
 0x43,0x48,0xA9,0x05,0x2A
 };
 
-void init_LocationAPI_dict()
+void init_Location_dict()
 {
   ATermList afuns, terms;
 
-  _LocationAPI_dict = ATreadFromBinaryString(_LocationAPI_dict_baf, _LocationAPI_dict_LEN);
+  _Location_dict = ATreadFromBinaryString(_Location_dict_baf, _Location_dict_LEN);
 
-  ATprotect(&_LocationAPI_dict);
+  ATprotect(&_Location_dict);
 
-  afuns = (ATermList)ATelementAt((ATermList)_LocationAPI_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_Location_dict, 0);
 
   LOC_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -68,7 +68,7 @@ void init_LocationAPI_dict()
   LOC_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt((ATermList)_LocationAPI_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_Location_dict, 1);
 
   LOC_patternAreaNoArea = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -7,10 +7,10 @@ EXTRA_DIST = errorapi-${VERSION}.jar locationapi-${VERSION}.jar
 lib_LIBRARIES = libErrorAPI.a libLocationAPI.a
 
 include_HEADERS = \
-	LocationAPI.h \
-	LocationAPI_dict.h \
-	ParsedLocationAPI.h \
-	ParsedLocationAPI_dict.h \
+	Location.h \
+	Location_dict.h \
+	ParsedLocation.h \
+	ParsedLocation_dict.h \
 	ErrorAPI.h \
 	ErrorAPI_dict.h \
 	ParsedErrorAPI.h \
@@ -28,10 +28,10 @@ libErrorAPI_a_SOURCES = \
 	lower.c
 
 libLocationAPI_a_SOURCES = \
-	LocationAPI.c \
-	LocationAPI_dict.c \
-	ParsedLocationAPI.c \
-	ParsedLocationAPI_dict.c
+	Location.c \
+	Location_dict.c \
+	ParsedLocation.c \
+	ParsedLocation_dict.c
 
 #CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 INCLUDES = -I${ATERM}/include
@@ -79,17 +79,17 @@ Location.def: Makefile
 location-api: parsed-location-api imploded-location-api java-location-api
 
 parsed-location-api: Location.def Makefile
-	sdf2-to-c --input $< --prefix PLOC_ --output ParsedLocationAPI
-	indent ParsedLocationAPI.h
+	sdf2-to-c --input $< --prefix PLOC_ --output ParsedLocation
+	indent ParsedLocation.h
 
 imploded-location-api: Location.def Makefile
-	sdf2-to-c --imploded --input $< --prefix LOC_ --output LocationAPI
-	indent LocationAPI.h
+	sdf2-to-c --imploded --input $< --prefix LOC_ --output Location
+	indent Location.h
 
 java-location-api: Location.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
-		--name locationapi \
+		--name location \
 		--output . \
 		--version ${VERSION}
