@@ -21,7 +21,7 @@ void usage(void)
         "Tool that lifts the user-defined terms in a parsed ASF spec.\n"
 	"This tool is used for debugging and bootstrapping the ASF compiler."
 	"\n\n"
-        "Usage: lift-asf -h <file-1> ... <file-n> -o <output> -V"
+        "Usage: lift-asf -h -l -i <input> -o <output> -V"
         "Options:\n"
         "\t-h              display help information (usage)\n"
 	"\t-l              lower instead of lift\n"
@@ -55,7 +55,8 @@ int main (int argc, char **argv)
       input = strdup(optarg);    
       break;
     case 'l':
-
+      lower = ATtrue;
+      break;
     case 'o':  
       output = strdup(optarg);    
       break;
@@ -77,8 +78,7 @@ int main (int argc, char **argv)
   in = ATreadFromNamedFile(input);
 
   if (ATgetType(in) == AT_APPL) {
-    ASF_Start start = ASF_StartFromTerm(in);
-    ASF_ASFModule module = ASF_getStartTopASFModule(start);
+    ASF_ASFModule module = ASF_ASFModuleFromTerm((ATerm) PT_getParseTreeTree((PT_ParseTree) in));
 
     if (lower) {
       module = ASF_lowerModule(module);
@@ -87,9 +87,7 @@ int main (int argc, char **argv)
       module = ASF_liftModule(module);
     }
 
-    start = ASF_setStartTopASFModule(start, module);
-
-    out = ASF_StartToTerm(start);
+    out = (ATerm) PT_setParseTreeTree((PT_ParseTree) in, (PT_Tree) module);
   }
   else if (ATgetType(in) == AT_LIST) {
     ASF_ASFConditionalEquationList list = ASF_ASFConditionalEquationListFromTerm(in);
