@@ -1,3 +1,8 @@
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions:
+   - Re-generated Add-Eqs-Syntax.c
+   - Re-generated Remove-Var-Syntax.c
+
 2001/11/02 (jurgenv@cwi.nl)
  * Added support for accumulators to the compiler.
 
