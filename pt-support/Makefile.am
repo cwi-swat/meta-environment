@@ -22,4 +22,4 @@
 
 SUBDIRS		= libasfix-old libasfix1
 
-EXTRA_DIST	= make_rules reconf
+EXTRA_DIST	= make_rules
