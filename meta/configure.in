@@ -175,4 +175,7 @@ AC_OUTPUT(
    demo/user-manual-examples/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
+   sdf-checker/Makefile
+   sdf-checker/spec/Makefile
+   sdf-checker/src/Makefile
 )

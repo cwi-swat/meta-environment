@@ -5,37 +5,47 @@
 /* Rewrite-Errors parses a list of errors coming from the Evaluator,
  * uses the unparser and displays them.
  */
-process Rewrite-Errors is
+process DisplayErrors is
 let
-	Error : list,
+  Error : list,
   Message : str,
   Subject : term,
   SubjectText : str,
   Errors : list,
-	ErrorsText : str,
-	Tag : term,
-	TagText : str
+  ErrorsText : str,
+  Tag : term,
+  TagText : str
 in
-	(
-		rec-msg(display-rewrite-errors(Errors?)).
-		if not-equal(Errors,[]) then
-			Error := first(Errors).
-			Errors := next(Errors).
-			Message := first(Error).
-			Error := next(Error).
-			Tag := first(Error).
-			snd-msg(unparse(Tag)).
-			rec-msg(unparsed-text(TagText?)).
-			Error := next(Error).
-			Subject := first(Error).
-			snd-msg(unparse(Subject)).
-			rec-msg(unparsed-text(SubjectText?)).
-			snd-note(ui-status(errorf("%s (%s, %s)",[Message,TagText,SubjectText])))
-		fi *
-		if equal(Errors,[]) then
-			tau
-		fi
-	) * 
-	delta
+  (
+    rec-msg(display-rewrite-errors(Errors?)).
+    if not-equal(Errors,[]) then
+      Error := first(Errors).
+      Errors := next(Errors).
+      Message := first(Error).
+      Error := next(Error).
+      Tag := first(Error).
+      snd-msg(unparse(Tag)).
+      rec-msg(unparsed-text(TagText?)).
+      Error := next(Error).
+      Subject := first(Error).
+      snd-msg(unparse(Subject)).
+      rec-msg(unparsed-text(SubjectText?)).
+      snd-note(ui-status(errorf("%s (%s, %s)",[Message,TagText,SubjectText])))
+    fi *
+    if equal(Errors,[]) then
+      tau
+    fi
+  +
+    rec-msg(display-sdf-errors(Errors?)).
+    if not-equal(Errors,[]) then
+      Message := first(Errors).
+      Errors := next(Errors).
+      snd-note(ui-status(errorf("%s",[Message])))
+    fi *
+    if equal(Errors,[]) then
+      tau
+    fi
+  ) * 
+  delta
 endlet
 

@@ -6,7 +6,7 @@ begin
     repnr: natural,
     rep: natural;
 
-  input := 12;
+  input := 14;
   output := 1;
   while input - 1 do
     rep := output;

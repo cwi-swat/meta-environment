@@ -1,5 +1,8 @@
 # $Id$
 
+2001/01/15 (vandenbr@loria.fr)
+ * Finalized the Sdf-Checker, thanks to Paul.
+
 2001/01/08 (vandenbr@loria.fr)
  * Adapted the edit-term script and moved functionality to the
    rewriter.

@@ -13,7 +13,8 @@ let
   Syntax     : term,
   Path       : str,
   ErrorMsg   : str,
-  Id         : int
+  Id         : int,
+  Msgs       : list
 in
 Id := process-id.
 ( 
@@ -28,6 +29,10 @@ Id := process-id.
     snd-msg(get-all-sdf2-definitions(ModuleId)).
     (
       rec-msg(syntax(Syntax?)).
+
+      snd-msg(check-sdf(Syntax)) .
+      rec-msg(messages(Msgs?)) .
+      snd-msg(display-sdf-errors(Msgs)) .
 
       snd-msg(make-asf-syntax(ModuleId, Syntax)).
       rec-msg(asf-syntax(Syntax?)).
@@ -53,7 +58,7 @@ Id := process-id.
 delta
 endlet
 
-/* add asf syntax and generate a parse table */
+/* add asf syntax and generate a parse table 
 process MakeTable(ModuleId : term) is
 let
   Syntax    : term,
@@ -84,3 +89,4 @@ in
     snd-msg(parsetable-not-set(ModuleId))
   )
 endlet
+*/
