@@ -1,12 +1,3 @@
-process Editors is
-let
-  Pid : int
-in
-  create(EditorManager,Pid?) .
-  create(EditorCreator,Pid?) .
-  create(StructureEditor, Pid?)
-endlet
-
 process EditorCreator is
 let
   EditorId   : term,

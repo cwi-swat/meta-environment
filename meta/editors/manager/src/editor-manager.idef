@@ -1,5 +1,9 @@
 /* $Id$ */
 
+tool editor-manager is {
+  command = "editor-manager"
+}
+
 process EditorManager is
 let
   EM : editor-manager,
@@ -51,6 +55,4 @@ in
   ) * delta
 endlet
 
-tool editor-manager is {
-  command = "editor-manager"
-}
+toolbus(EditorManager)

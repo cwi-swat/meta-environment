@@ -4,6 +4,8 @@ Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
  * configure.in:
    - banish PERL :-)
    - remove INSTLIBDIR substitution
+ * configurationmanager/src:
+   - rename configmanager.idef -> configuration-manager.idef
  * tbscripts:
    - move "gen.tb" to ToolBus pkg, adapters/gen-adapter/generic-adapter.idef
      it is the interface definition of the generic-adapter.

@@ -132,3 +132,5 @@ in
   ) *
   delta
 endlet
+
+toolbus(StructureEditor)

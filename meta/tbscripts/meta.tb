@@ -28,7 +28,7 @@
 /* Tool interfaces */
 #include "addPosInfo.idef"
 #include "apply-function.idef"
-#include "configmanager.idef"
+#include "configuration-manager.idef"
 #include "editor-hive.idef"
 #include "editor-manager.idef"
 #include "generic-adapter.idef" 
@@ -79,10 +79,9 @@ in
   . create(ButtonActionExecutor, Pid?)
   . create(ButtonActionReceiver, Pid?)
   . create(Compile-module, Pid?)
-  . create(ConfigManager, Pid?)
   . create(DumpEquations, Pid?)
   . create(DumpParseTable, Pid?)
-  . create(Editors, Pid?)
+  . create(EditorCreator, Pid?)
   . create(File-creator, Pid?)
   . create(GetEquations, Pid?)
   . create(GetParseTable, Pid?)

@@ -1,5 +1,9 @@
 /* $Id$ */        
 
+tool configmanager is {
+  command = "configmanager"
+}
+
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
@@ -32,7 +36,7 @@ in
   snd-do(CMNG, add-predefined-actions(Contents))
 endlet
   
-process ConfigManager is
+process ConfigurationManager is
 let
   CMNG : configmanager,
   ButtonActions : list,
@@ -91,4 +95,4 @@ in
   ) * delta
 endlet
 
-tool configmanager is { command = "configmanager" }
+toolbus(ConfigurationManager)
