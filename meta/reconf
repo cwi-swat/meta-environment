@@ -6,7 +6,7 @@
 # distribution that is controlled by automake, run "reconf" for
 # that package prior to "configure".
 
-PACKAGES=sglr
+PACKAGES=asc-support pgen sglr
 
 for pkg in ${PACKAGES}
 do

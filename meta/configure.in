@@ -164,7 +164,7 @@ AC_CHECK_HEADER(getopt.h)
 AC_SUBST(SOCKLIBS)
 
 dnl Handle subpackages...
-AC_CONFIG_SUBDIRS(asc-support sglr)
+AC_CONFIG_SUBDIRS(asc-support sglr pgen)
 
 dnl Which files need updating?
 AC_OUTPUT(
