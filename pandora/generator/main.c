@@ -6,6 +6,7 @@
 
 #include <MEPT-utils.h>
 #include <asc-support2-me.h>
+#include <Error.h>
 
 #include "pandora.h"
 #include "pandora.tif.h"

@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Mar 23 11:05:55 CET 2004 <{kooiker,jong}@cwi.nl>
+ * generator/main.c: #include <Error.h>
+
 Thu Mar 11 08:35:20 CET 2004 <kooiker@cwi.nl>
  * Use new Error API.
 
