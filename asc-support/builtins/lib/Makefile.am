@@ -1,13 +1,18 @@
-BUILTIN_NAMES=\
-              set-anno get-anno\
-              get-term-anno \
-	      asf-normalize \
-	      read-term-from-file write-term-to-file\
-	      shell \
-	      strategy-some strategy-all strategy-one \
-	      term-compare\
-	      lift-to-tree lift-to-term \
-	      unparse
+BUILTIN_NAMES_ARITY=\
+        set-anno_3\
+	get-anno_2\
+	get-term-anno_2 \
+	asf-normalize_1 \
+	read-term-from-file_1 \
+	write-term-to-file_2\
+	shell_1 \
+	strategy-some_2 \
+	strategy-all_2\
+	strategy-one_2\
+	term-compare_2\
+	lift-to-tree_1 \
+	lift-to-term_1 \
+	unparse_1
 
 BUILTIN_SOURCES=common.c \
                 annos.c \
@@ -61,13 +66,13 @@ GENLNKTST=${UTILS}/gen-link-test.sh
 CLEANFILES+=forward.c asf-builtins.h link-test.c
 
 forward.c: asf-builtins.h ${BUILTIN_SOURCES} Makefile
-	${GENFWD} "${BUILTIN_NAMES}" > $@
+	${GENFWD} "${BUILTIN_NAMES_ARITY}" > $@
 
 asf-builtins.h: ${BUILTIN_SOURCES} Makefile
-	${GENPRTS} "${BUILTIN_NAMES}" > $@
+	${GENPRTS} "${BUILTIN_NAMES_ARITY}" > $@
 
 link-test.c: asf-builtins.h ${BUILTIN_SOURCES} Makefile 
-	${GENLNKTST} "${BUILTIN_NAMES}" > $@
+	${GENLNKTST} "${BUILTIN_NAMES_ARITY}" > $@
 
 # Developers only:
 api: Library.def
