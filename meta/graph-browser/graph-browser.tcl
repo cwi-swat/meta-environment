@@ -3,6 +3,35 @@
 #               (and viewer for ASF+SDF import graphs)
 #
 
+
+
+# Opmerking m.b.t. het tekenen van module-blokken
+# -----------------------------------------------
+#
+# Er wordt nu aangenomen dat als er een import relatie bestaat tussen
+# twee modules dat die modules ook bestaan (en de blokken voor de
+# modules worden dus ook getekend op grond van deze info).
+#
+# Dit gaat fout als je een module toevoegt die verder niets
+# importeert (bijv. Layout).
+#
+# In de toekomst moet het TB script zo aangepast worden dat ook
+# 'add-module(M)' en 'delete-module(M)' acties gegenereerd worden.
+#
+# Op grond van de importrelatie worden module-blokken dan gestippeld
+# toegevoegd ("er zou zo'n module moeten zijn"), op grond van de
+# 'add-module' actie krijgen ze een 'solid line' ("er is zo'n module")
+# en op grond van een 'delete-module' actie worden ze weer
+# gestippeld... 
+#
+# Deze aanpassing zal pas gedaan worden na het gereedkomen v/d editor
+# omdat dan (naar verwachting) veel van het TB-script herschreven zal
+# worden.
+#
+# -- Leon
+
+
+
 #----------------------------------------------------------------------
 # help texts
 #----------------------------------------------------------------------
