@@ -8,7 +8,7 @@ CLEANFILES=*.la *.lo *.slo
 INCLUDES=\
 	`$(APACHE)/bin/apr-config --includes` \
 	-I$(ATERM)/include \
-	-I$(TOOLBUS)/include 
+	-I$(TOOLBUSLIB)/include 
 
 TB_LIBS=\
 	-L$(TOOLBUSLIB)/lib -lATB \
