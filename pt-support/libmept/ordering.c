@@ -11,8 +11,6 @@ static int PT_compareArgs(PT_Args args1, PT_Args args2)
   PT_Tree arg2;
   int result = 0;
 
-  assert(PT_getArgsLength(args1) == PT_getArgsLength(args2));
-
   while (result == 0 && !PT_isArgsEmpty(args1)) {
     arg1 = PT_getArgsHead(args1);
     arg2 = PT_getArgsHead(args2);
@@ -24,6 +22,18 @@ static int PT_compareArgs(PT_Args args1, PT_Args args2)
 
     args1 = PT_getArgsTail(args1);
     args2 = PT_getArgsTail(args2);
+  }
+
+  if (result == 0) {
+    if (PT_isEqualArgs(args1, args2)) {
+      return 0;
+    }
+    if (!PT_isArgsEmpty(args1)) {
+      return 1;
+    }
+    if (!PT_isArgsEmpty(args2)) {
+      return -1;
+    }
   }
 
   return result;
