@@ -68,7 +68,7 @@ FILE  *SGopenLog(char *prg, char *fnam)
 {
   if (fnam == NULL || strcmp(fnam, "") == 0)
     fnam = ".parse-log";
-  if ((SG_Log = fopen(fnam, "w")) == NULL) 
+  if ((SG_Log = fopen(fnam, "w")) == NULL)
     ATerror("%s%sCannot create logfile %s\n", prg?prg:"", prg?": ":"", fnam);
   if(SG_VERBOSE) ATfprintf(stderr, "Logging to %s\n", fnam);
   return SG_Log;
@@ -228,7 +228,7 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
       ATwriteToBinaryFile(t, output_file);
     else
       ATwriteToTextFile(t, output_file);
-    
+
     if(output_file != stdout) fclose(output_file);
     else {
       if(! SG_BINARY) putc('\n', output_file);    /* For convenience */

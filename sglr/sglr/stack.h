@@ -73,6 +73,7 @@ typedef struct stack {
   struct stack  *kid;
   st_links      *links;
   ATbool        rejected;
+  ATbool        protected;
 } stack;
 
 typedef struct stacks {
@@ -90,18 +91,30 @@ typedef struct stacks {
 #define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
 
 #define SG_LK_REJECTED(x)       (x)->rejected
+#define SG_LK_PROTECTED(x)      (x)->protected
 
 
 stack    *SG_NewStack(state s, stack *st);
-#define   SG_NewStacks(s)	SG_AddStacks(s, NULL)
+#define   SG_NewStacks(s)	SG_AddStack(s, NULL)
+stacks   *SG_AddStack(stack *st, stacks *sts);
+st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
+st_links *SG_AddLinks(st_link *l, st_links *ls);
+
+stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept);
+void    SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept);
+void    SG_UnprotectUnusedStack(stack *st, stacks *new, stack *accept);
+void    SG_DisposeUnusedStacks(stacks *sts);
+void    SG_DisposeUnusedStack(stack *st);
+
+/*
 stacks   *SG_DeleteOldStacks(stacks *old, stacks *new);
+void      SG_DeleteOldStack(stack *st, stacks *new);
+*/
 stacks   *SG_DeleteStacks(stacks *sts);
 void      SG_DeleteStack(stack *st);
 st_links *SG_DeleteLinks(st_links *lks);
 void      SG_DeleteLink(st_link *lk);
 
-stacks   *SG_AddStacks(stack *st, stacks *sts);
-st_link  *SG_AddLink(stack *st0, stack *st1,  tree t);
 
 stack *   SG_FindStack(state , stacks *);
 st_link  *SG_FindDirectLink(stack *, stack *);
@@ -110,4 +123,5 @@ void     SG_MarkStackRejected(stack *, st_link *);
 void     SG_MarkLinkRejected(stack *, st_link *);
 void     SG_MarkLinkRejected2(stack *, st_link *);
 ATbool   SG_Rejected(stack *);
-ATbool   SG_InStacks(stack *, stacks *);
+ATbool   SG_InStacks(stack *, stacks *, ATbool);
+ATbool   SG_SubStack(stack *, stack *);

@@ -229,15 +229,15 @@ ATerm SG_Result(void);
 void  SG_ParserPreparation(void)
 {
   accepting_stack = NULL;
+  SGnrAmb(SG_NRAMB_ZERO);
   active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL));
-
 }
-
 
 void  SG_ParserCleanup(void)
 {
-//    active_stacks = SG_AddStacks(accepting_stack, active_stacks);
-    active_stacks = SG_DeleteStacks(active_stacks);
+//    active_stacks = SG_AddStack(accepting_stack, active_stacks);
+  SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
+  active_stacks = SG_PurgeOldStacks(active_stacks, NULL, accepting_stack);
 }
 
 /*
@@ -303,15 +303,18 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
 ATerm SG_Result(void)
 {
   if (accepting_stack != NULL) {
-    ATerm t;
+    ATerm unyielded, yielded;
 
-    t = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
+    unyielded = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
+    SG_DeleteStack(accepting_stack);
+    accepting_stack = NULL;
+    yielded = SG_YieldPT(unyielded);
 
 #ifdef HAVE_A2TOA1
-    if(SG_ASFIX1) return a2toa1(t);
+    if(SG_ASFIX1) return a2toa1(yielded);
     else
 #endif
-      return ATmake("parsetree(<term>,<int>)", t, SGnrAmb(SG_NRAMB_ASK));
+      return ATmake("parsetree(<term>,<int>)", yielded, SGnrAmb(SG_NRAMB_ASK));
   } else
     return ATmake("parse-error([character(<int>), line(<int>),"
                   "col(<int>), char(<int>)])",
@@ -483,8 +486,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       while(shift(st2, sts)) {
         actions as;
         action a;
-        if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor)
-           && !SG_InStacks(st2, for_actor_delayed)) {
+        if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor, ATfalse)
+           && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
           as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
           for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
             a = ATgetFirst(as);
@@ -499,8 +502,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     nl = SG_AddLink(st1, st0, t);
     SG_AddStackHist(stpt, st1);
 //    SG_AddStackHist(stpt, st1);
-    active_stacks = SG_AddStacks(st1, active_stacks);
-    for_actor_delayed = SG_AddStacks(st1, for_actor_delayed);
+    active_stacks = SG_AddStack(st1, active_stacks);
+    for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     if (reject) {
       if(SG_DEBUG)  ATfprintf(SGlog(), "Rejected [new]\n");
       SG_MarkStackRejected(st1, nl);
@@ -546,12 +549,8 @@ void SG_Shifter(void)
   state s;
   st_link *l;
 
-//  SG_DeleteStacks(active_stacks);
-//  active_stacks = NULL;
-
   t = SG_LookupProduction(table, current_token);
 
-//  if(for_shifter == NULL) return;
   for(shift_pair = for_shifter; shift_pair != NULL;
       shift_pair = SG_SP_NEXT(shift_pair)) {
     s = SG_SP_STATE(shift_pair);
@@ -559,7 +558,7 @@ void SG_Shifter(void)
     if(!SG_Rejected(st0)) {
       if((st1 = SG_FindStack(s, new_active_stacks)) == NULL) {
         st1 = SG_NewStack(s, NULL);
-        new_active_stacks = SG_AddStacks(st1, new_active_stacks);
+        new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
       l = SG_AddLink(st1, st0, t);
       if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
@@ -567,10 +566,10 @@ void SG_Shifter(void)
 //  else ATfprintf(stderr,"Shifter: rejected stack %d\n", STATE(st0));
   }
 
-// ATfprintf(stderr, "Before:\n"); SG_ShowActiveStackLinks();
-// active_stacks = SG_DeleteOldStacks(active_stacks, new_active_stacks);
-// ATfprintf(stderr, "After:\n"); SG_ShowActiveStackLinks();
-  active_stacks = new_active_stacks;
+  active_stacks = SG_PurgeOldStacks(active_stacks,
+                                    new_active_stacks,
+                                    accepting_stack);
+//  active_stacks = new_active_stacks;
 } /* shifter */
 
 
@@ -609,10 +608,34 @@ void SG_PropagateReject(stack *st)
  *  A few diagnostic routines (for debugging purposes)
  */
 
+void SG_ShowStacks(stacks *sts)
+{
+  if(sts == NULL) return;
+  while(sts != NULL) {
+    SG_ShowStack(head(sts),0);
+    sts = tail(sts);
+  }
+}
+
+void SG_ShowStack(stack *st, int depth)
+{
+  if (st == NULL) return;
+  fprintf(stderr, "%*.*s%xd %d\n", 2*depth, 2*depth, "", (int)st, SG_ST_STATE(st));
+  SG_ShowLinks(SG_ST_LINKS(st), depth+1);
+}
+
+void SG_ShowLinks(st_links *lks, int depth)
+{
+  for (; lks != NULL; lks = tail(lks)) {
+    fprintf(stderr, "%*.*s--%xd-->\n", 2*depth, 2*depth, "", (int)head(lks));
+    SG_ShowStack(SG_LK_STACK(head(lks)), depth+1);
+  }
+}
+
 void SG_ShowStackOffspring(stack *st)
 {
   while(st != NULL && st->kid != NULL) {
-    ATfprintf(stderr, "%d%s created %d%s\n",
+    ATfprintf(stderr, "%xd%s created %xd%s\n",
                      SG_ST_STATE(st), SG_Rejected(st)?"r":"",
                      SG_ST_STATE(st->kid), SG_Rejected(st->kid)?"r":"");
     st = st->kid;
@@ -636,11 +659,11 @@ void SG_ShowActiveStackStates(signed int c)
   static int level = 0;
 
   level = (level>1)?(level+c):0;
-  ATfprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
+  fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
   while(astks != NULL) {
     stk   =  astks->head;
     astks =  astks->tail;
-    ATfprintf(stderr, "%d%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
+    ATfprintf(stderr, "%xd%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
   }
   ATfprintf(stderr, "\n");
 }
@@ -654,22 +677,37 @@ void SG_ShowStackRejects(stack *st, int depth)
 
   for (; ls != NULL; ls = tail(ls)) {
     l = head(ls);
-    fprintf(stderr, "%*.*s%s state %d ==> state %d\n", 2*depth, 2*depth, "",
-            SG_LK_REJECTED(l)?"+":"-", SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
+    fprintf(stderr, "%*.*s%s %xd: state %d ==> state %d\n", 2*depth, 2*depth, "",
+            SG_LK_REJECTED(l)?"+":"-", (int) l, SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
     SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
   }
 }
 
 
-void SG_ShowActiveStackLinks()
+void SG_ShowActiveStackLinks(stacks *astks)
 {
-  stacks *astks = active_stacks;
   stack  *stk;
 
   while(astks != NULL) {
     stk   =  astks->head;
     astks =  astks->tail;
     SG_ShowStackRejects(stk,2);
+  }
+}
+
+void SG_ShowShiftPairs()
+{
+  shift_pair *sp;
+  stack *st;
+
+  ATfprintf(stderr, "Shifters:\n");
+  for(sp = for_shifter; sp != NULL;
+      sp = SG_SP_NEXT(sp)) {
+//    s = SG_SP_STATE(sp);
+    ATfprintf(stderr, "%d: ", SG_SP_STATE(sp));
+    st = SG_SP_STACK(sp);
+    SG_ShowStackAncestors(st);
+    SG_ShowStackOffspring(st);
   }
 }
 

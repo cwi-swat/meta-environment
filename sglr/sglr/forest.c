@@ -53,50 +53,60 @@ int SG_ApplID(int Action)
   }
 }
 
-/*
-  The functions |apply| and |cons| are defined directly in terms
-  of ATerm functions.
-  Note: the appl is annotated with a (unique) id, for ambiguity chain
-  forming
-*/
-ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
+ATerm SG_ApplLabel(void)
 {
-/* Abbreviated:
-  t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
- */
-  return ATmake("appl(<term>,<term>,<int>)", SG_LookupProduction(pt,l), ts, SG_ApplID(SG_APPLID_INC));
+  static ATerm label = NULL;
+
+  if(label == NULL) {
+    label = ATmake("<str>", "#");
+    ATprotect(&label);
+  }
+  return label;
 }
 
 
 /* The next bit will have to do while waiting for this to be implemented */
-#define AFun  Symbol
+#define AFun                Symbol
 #define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f)
 #define ATprotectAFun(t)    ATprotectSymbol(t)
 #define ATgetAFun(t)        ATgetSymbol(t)
 
-AFun  SG_Amb2Afun(void)
+AFun  SG_ApplAfun(void)
 {
-  static ATbool inited = ATfalse;
-  static AFun fun;
+  static AFun fun = (AFun) NULL;
 
-  if(!inited) {
+  if(fun == (AFun) NULL) {
     fun = ATmakeAFun("appl", 2, ATfalse);
     ATprotectAFun(fun);
   }
   return fun;
 }
 
-AFun  SG_Amb3Afun(void)
-{
-  static ATbool inited = ATfalse;
-  static AFun fun;
+/*
+  The functions |apply| and |cons| are defined directly in terms
+  of ATerm functions.
+  Note: the appl is annotated with a (unique) id, for ambiguity chain
+  forming
+*/
 
-  if(!inited) {
-    fun = ATmakeAFun("appl", 3, ATfalse);
-    ATprotectAFun(fun);
-  }
-  return fun;
+ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
+{
+/* Abbreviated:
+  t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
+ */
+
+/*
+  return ATmake("appl(<term>,<term>,<int>)",
+                SG_LookupProduction(pt,l), ts, SG_ApplID(SG_APPLID_INC));
+*/
+
+  return ATsetAnnotation((ATerm) ATmakeAppl2(SG_ApplAfun(),
+                                            SG_LookupProduction(pt,l),
+                                            (ATerm) ts),
+                         SG_ApplLabel(),
+                        (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
+
 
 ATerm SG_YieldPT(ATerm t)
 {
@@ -106,21 +116,23 @@ ATerm SG_YieldPT(ATerm t)
 
   switch(ATgetType(t)) {
     case AT_APPL:
-      fun = ATgetAFun(t);
+      fun  = ATgetAFun(t);
       args = ATgetArguments((ATermAppl) t);
-      if(fun == SG_Amb3Afun()) {
+      if(fun == SG_ApplAfun()) {
         ATermList ambs;
+        ATermInt  idx = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
 
-        /* Are we indeed encountering an ambiguity cluster? */
-        ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ATgetLast(args), NULL);
-        if(ATisEmpty(ambs))
-          ret = (ATerm)ATmakeAppl2(SG_Amb2Afun(),
-                                 SG_YieldPT(ATgetFirst(args)),
-                                 SG_YieldPT(ATelementAt(args, 1)));
+//if (!idx) ATfprintf(stderr, "Not annotated: %t\n", t);
+
+        /*  Are we indeed encountering an ambiguity cluster?  */
+        if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))
+          ret = (ATerm)ATmakeAppl2(SG_ApplAfun(),
+                                   SG_YieldPT(ATgetFirst(args)),
+                                   SG_YieldPT(ATelementAt(args, 1)));
         else {
           ambs = (ATermList) ATgetFirst((ATermList)ambs);
-          ret = (ATerm)ATmake("amb(<list>)",
-                              (ATermList)SG_YieldPT((ATerm) ambs));
+          ret  = (ATerm)ATmake("amb(<list>)",
+                               (ATermList)SG_YieldPT((ATerm) ambs));
         }
       } else {
         ret = (ATerm) ATmakeApplList(fun,
@@ -195,6 +207,43 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
   this |amb| node. If |t1| is already an ambiguous node the new
   term |t2| is simply added to the list of its arguments.
 */
+
+void SG_Amb(ATerm existing, ATerm new) {
+  ATermList   ambs, newtrms, newidxs, lst;
+  ATerm       ex_annot, nw_annot;
+  ATerm       ex_cln, nw_cln;
+  ATermInt    index;
+
+  ex_annot = ATgetAnnotation(existing, SG_ApplLabel());
+  nw_annot = ATgetAnnotation(new,      SG_ApplLabel());
+
+  ambs   = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ex_annot, NULL);
+  nw_cln = ATremoveAnnotation(new, SG_ApplLabel());
+  if(ATisEmpty(ambs)) {
+    /* New ambiguity */
+    ex_cln = ATremoveAnnotation(existing, SG_ApplLabel());
+    newtrms = ATmakeList2(ex_cln, nw_cln);
+    newidxs = ATmakeList2(ex_annot, nw_annot);
+  } else {
+    /* Expand existing ambiguity */
+//      ATfprintf(stderr, "Existing amb; args (%t,%t), found %t\n", existing,new,ambs);
+    newtrms = ATinsert((ATermList) ATgetFirst(ambs), nw_cln);
+    newidxs = ATinsert((ATermList)  ATgetLast(ambs), nw_annot);
+  }
+  ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);
+
+  /* Now update ambiguity list for all affected nodes */
+  for(lst = newidxs; !ATisEmpty(lst); lst = ATgetNext(lst)) {
+    index = (ATermInt) ATgetFirst(lst);
+//    ATfprintf(stderr, "AMB: setting index %t to %t\n",index, ambs);
+    SG_AmbTable(SG_AMBTBL_ADD, index, ambs);
+  }
+
+  SGnrAmb(SG_NRAMB_INC);
+  return;
+}
+
+#ifdef PREV
 void SG_Amb(ATerm existing, ATerm new) {
   ATermList newidxs, newtrms, ambs, lst;
   ATerm     e0, e1, n0, n1, exist2, new2;
@@ -206,10 +255,10 @@ void SG_Amb(ATerm existing, ATerm new) {
     /* Create/update ambiguity node. */
     ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, e2, NULL);
     /* Add ambterms sans index, to prevent circular lookup when yielding */
-    new2   = (ATerm) ATmakeAppl2(SG_Amb2Afun(), n0, n1);
+    new2   = (ATerm) ATmakeAppl2(SG_ApplAfun(), n0, n1);
     if(ATisEmpty(ambs)) {
       /* New ambiguity */
-      exist2 = (ATerm) ATmakeAppl2(SG_Amb2Afun(), e0, e1);
+      exist2 = (ATerm) ATmakeAppl2(SG_ApplAfun(), e0, e1);
       newtrms = ATmakeList2(exist2, new2);
       newidxs = ATmakeList2((ATerm) e2, (ATerm) n2);
     } else {
@@ -232,6 +281,7 @@ void SG_Amb(ATerm existing, ATerm new) {
   SGnrAmb(SG_NRAMB_INC);
   return;
 }
+#endif /* PREV */
 
 ATerm SG_TreeType(ATerm t)
 {
