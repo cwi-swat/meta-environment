@@ -17,6 +17,7 @@ typedef struct _NodeId *NodeId;
 typedef struct _AttributeList *AttributeList;
 typedef struct _Attribute *Attribute;
 typedef struct _Shape *Shape;
+typedef struct _Direction *Direction;
 typedef struct _EdgeList *EdgeList;
 typedef struct _Edge *Edge;
 typedef struct _Polygon *Polygon;
@@ -42,6 +43,8 @@ Attribute AttributeFromTerm(ATerm t);
 ATerm AttributeToTerm(Attribute arg);
 Shape ShapeFromTerm(ATerm t);
 ATerm ShapeToTerm(Shape arg);
+Direction DirectionFromTerm(ATerm t);
+ATerm DirectionToTerm(Direction arg);
 EdgeList EdgeListFromTerm(ATerm t);
 ATerm EdgeListToTerm(EdgeList arg);
 Edge EdgeFromTerm(ATerm t);
@@ -66,6 +69,7 @@ Attribute makeAttributeShape(Shape shape);
 Attribute makeAttributeLocation(int x, int y);
 Attribute makeAttributeSize(int width, int height);
 Attribute makeAttributeCurvePoints(Polygon points);
+Attribute makeAttributeDirection(Direction direction);
 Shape makeShapePlaintext();
 Shape makeShapeEllipse();
 Shape makeShapeCircle();
@@ -78,6 +82,10 @@ Shape makeShapeParallelogram();
 Shape makeShapeHouse();
 Shape makeShapeHexagon();
 Shape makeShapeOctagon();
+Direction makeDirectionForward();
+Direction makeDirectionBack();
+Direction makeDirectionBoth();
+Direction makeDirectionNone();
 EdgeList makeEdgeListEmpty();
 EdgeList makeEdgeListMulti(Edge head, EdgeList tail);
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes);
@@ -95,6 +103,7 @@ ATbool isEqualNodeId(NodeId arg0, NodeId arg1);
 ATbool isEqualAttributeList(AttributeList arg0, AttributeList arg1);
 ATbool isEqualAttribute(Attribute arg0, Attribute arg1);
 ATbool isEqualShape(Shape arg0, Shape arg1);
+ATbool isEqualDirection(Direction arg0, Direction arg1);
 ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1);
 ATbool isEqualEdge(Edge arg0, Edge arg1);
 ATbool isEqualPolygon(Polygon arg0, Polygon arg1);
@@ -168,6 +177,7 @@ inline ATbool isAttributeShape(Attribute arg);
 inline ATbool isAttributeLocation(Attribute arg);
 inline ATbool isAttributeSize(Attribute arg);
 inline ATbool isAttributeCurvePoints(Attribute arg);
+inline ATbool isAttributeDirection(Attribute arg);
 ATbool hasAttributeLabel(Attribute arg);
 char* getAttributeLabel(Attribute arg);
 Attribute setAttributeLabel(Attribute arg, char* label);
@@ -189,6 +199,9 @@ Attribute setAttributeHeight(Attribute arg, int height);
 ATbool hasAttributePoints(Attribute arg);
 Polygon getAttributePoints(Attribute arg);
 Attribute setAttributePoints(Attribute arg, Polygon points);
+ATbool hasAttributeDirection(Attribute arg);
+Direction getAttributeDirection(Attribute arg);
+Attribute setAttributeDirection(Attribute arg, Direction direction);
 
 /*}}}  */
 /*{{{  Shape accessors */
@@ -206,6 +219,15 @@ inline ATbool isShapeParallelogram(Shape arg);
 inline ATbool isShapeHouse(Shape arg);
 inline ATbool isShapeHexagon(Shape arg);
 inline ATbool isShapeOctagon(Shape arg);
+
+/*}}}  */
+/*{{{  Direction accessors */
+
+ATbool isValidDirection(Direction arg);
+inline ATbool isDirectionForward(Direction arg);
+inline ATbool isDirectionBack(Direction arg);
+inline ATbool isDirectionBoth(Direction arg);
+inline ATbool isDirectionNone(Direction arg);
 
 /*}}}  */
 /*{{{  EdgeList accessors */
@@ -268,8 +290,9 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
 Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon));
+Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction));
 Shape visitShape(Shape arg);
+Direction visitDirection(Direction arg);
 EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge));
 Edge visitEdge(Edge arg, NodeId (*acceptFrom)(NodeId), NodeId (*acceptTo)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point));

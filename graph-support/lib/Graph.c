@@ -13,6 +13,7 @@ typedef struct ATerm _NodeId;
 typedef struct ATerm _AttributeList;
 typedef struct ATerm _Attribute;
 typedef struct ATerm _Shape;
+typedef struct ATerm _Direction;
 typedef struct ATerm _EdgeList;
 typedef struct ATerm _Edge;
 typedef struct ATerm _Polygon;
@@ -138,6 +139,22 @@ Shape ShapeFromTerm(ATerm t)
 /*{{{  ATerm ShapeToTerm(Shape arg) */
 
 ATerm ShapeToTerm(Shape arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  Direction DirectionFromTerm(ATerm t) */
+
+Direction DirectionFromTerm(ATerm t)
+{
+  return (Direction)t;
+}
+
+/*}}}  */
+/*{{{  ATerm DirectionToTerm(Direction arg) */
+
+ATerm DirectionToTerm(Direction arg)
 {
   return (ATerm)arg;
 }
@@ -307,11 +324,19 @@ Attribute makeAttributeCurvePoints(Polygon points)
 }
 
 /*}}}  */
+/*{{{  Attribute makeAttributeDirection(Direction direction) */
+
+Attribute makeAttributeDirection(Direction direction)
+{
+  return (Attribute)(ATerm)ATmakeAppl1(afun7, (ATerm)direction);
+}
+
+/*}}}  */
 /*{{{  Shape makeShapePlaintext() */
 
 Shape makeShapePlaintext()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun7);
+  return (Shape)(ATerm)ATmakeAppl0(afun8);
 }
 
 /*}}}  */
@@ -319,7 +344,7 @@ Shape makeShapePlaintext()
 
 Shape makeShapeEllipse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun8);
+  return (Shape)(ATerm)ATmakeAppl0(afun9);
 }
 
 /*}}}  */
@@ -327,7 +352,7 @@ Shape makeShapeEllipse()
 
 Shape makeShapeCircle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun9);
+  return (Shape)(ATerm)ATmakeAppl0(afun10);
 }
 
 /*}}}  */
@@ -335,7 +360,7 @@ Shape makeShapeCircle()
 
 Shape makeShapeEgg()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun10);
+  return (Shape)(ATerm)ATmakeAppl0(afun11);
 }
 
 /*}}}  */
@@ -343,7 +368,7 @@ Shape makeShapeEgg()
 
 Shape makeShapeTriangle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun11);
+  return (Shape)(ATerm)ATmakeAppl0(afun12);
 }
 
 /*}}}  */
@@ -351,7 +376,7 @@ Shape makeShapeTriangle()
 
 Shape makeShapeBox()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun12);
+  return (Shape)(ATerm)ATmakeAppl0(afun13);
 }
 
 /*}}}  */
@@ -359,7 +384,7 @@ Shape makeShapeBox()
 
 Shape makeShapeDiamond()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun13);
+  return (Shape)(ATerm)ATmakeAppl0(afun14);
 }
 
 /*}}}  */
@@ -367,7 +392,7 @@ Shape makeShapeDiamond()
 
 Shape makeShapeTrapezium()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun14);
+  return (Shape)(ATerm)ATmakeAppl0(afun15);
 }
 
 /*}}}  */
@@ -375,7 +400,7 @@ Shape makeShapeTrapezium()
 
 Shape makeShapeParallelogram()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun15);
+  return (Shape)(ATerm)ATmakeAppl0(afun16);
 }
 
 /*}}}  */
@@ -383,7 +408,7 @@ Shape makeShapeParallelogram()
 
 Shape makeShapeHouse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun16);
+  return (Shape)(ATerm)ATmakeAppl0(afun17);
 }
 
 /*}}}  */
@@ -391,7 +416,7 @@ Shape makeShapeHouse()
 
 Shape makeShapeHexagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun17);
+  return (Shape)(ATerm)ATmakeAppl0(afun18);
 }
 
 /*}}}  */
@@ -399,7 +424,39 @@ Shape makeShapeHexagon()
 
 Shape makeShapeOctagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun18);
+  return (Shape)(ATerm)ATmakeAppl0(afun19);
+}
+
+/*}}}  */
+/*{{{  Direction makeDirectionForward() */
+
+Direction makeDirectionForward()
+{
+  return (Direction)(ATerm)ATmakeAppl0(afun20);
+}
+
+/*}}}  */
+/*{{{  Direction makeDirectionBack() */
+
+Direction makeDirectionBack()
+{
+  return (Direction)(ATerm)ATmakeAppl0(afun21);
+}
+
+/*}}}  */
+/*{{{  Direction makeDirectionBoth() */
+
+Direction makeDirectionBoth()
+{
+  return (Direction)(ATerm)ATmakeAppl0(afun22);
+}
+
+/*}}}  */
+/*{{{  Direction makeDirectionNone() */
+
+Direction makeDirectionNone()
+{
+  return (Direction)(ATerm)ATmakeAppl0(afun23);
 }
 
 /*}}}  */
@@ -423,7 +480,7 @@ EdgeList makeEdgeListMulti(Edge head, EdgeList tail)
 
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes)
 {
-  return (Edge)(ATerm)ATmakeAppl3(afun19, (ATerm)from, (ATerm)to, (ATerm)attributes);
+  return (Edge)(ATerm)ATmakeAppl3(afun24, (ATerm)from, (ATerm)to, (ATerm)attributes);
 }
 
 /*}}}  */
@@ -447,7 +504,7 @@ Polygon makePolygonMulti(Point head, Polygon tail)
 
 Point makePointDefault(int x, int y)
 {
-  return (Point)(ATerm)ATmakeAppl2(afun20, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun25, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
 }
 
 /*}}}  */
@@ -486,6 +543,11 @@ ATbool isEqualAttribute(Attribute arg0, Attribute arg1)
 }
 
 ATbool isEqualShape(Shape arg0, Shape arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool isEqualDirection(Direction arg0, Direction arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1006,6 +1068,9 @@ ATbool isValidAttribute(Attribute arg)
   else if (isAttributeCurvePoints(arg)) {
     return ATtrue;
   }
+  else if (isAttributeDirection(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1112,6 +1177,28 @@ inline ATbool isAttributeCurvePoints(Attribute arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, patternAttributeCurvePoints, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool isAttributeDirection(Attribute arg) */
+
+inline ATbool isAttributeDirection(Attribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternAttributeDirection, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1347,6 +1434,39 @@ Attribute setAttributePoints(Attribute arg, Polygon points)
   }
 
   ATabort("Attribute has no Points: %t\n", arg);
+  return (Attribute)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool hasAttributeDirection(Attribute arg) */
+
+ATbool hasAttributeDirection(Attribute arg)
+{
+  if (isAttributeDirection(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  Direction getAttributeDirection(Attribute arg) */
+
+Direction getAttributeDirection(Attribute arg)
+{
+  
+    return (Direction)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  Attribute setAttributeDirection(Attribute arg, Direction direction) */
+
+Attribute setAttributeDirection(Attribute arg, Direction direction)
+{
+  if (isAttributeDirection(arg)) {
+    return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)direction, 0);
+  }
+
+  ATabort("Attribute has no Direction: %t\n", arg);
   return (Attribute)NULL;
 }
 
@@ -1655,6 +1775,118 @@ inline ATbool isShapeOctagon(Shape arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, patternShapeOctagon);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  Direction accessors */
+
+/*{{{  ATbool isValidDirection(Direction arg) */
+
+ATbool isValidDirection(Direction arg)
+{
+  if (isDirectionForward(arg)) {
+    return ATtrue;
+  }
+  else if (isDirectionBack(arg)) {
+    return ATtrue;
+  }
+  else if (isDirectionBoth(arg)) {
+    return ATtrue;
+  }
+  else if (isDirectionNone(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isDirectionForward(Direction arg) */
+
+inline ATbool isDirectionForward(Direction arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternDirectionForward);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool isDirectionBack(Direction arg) */
+
+inline ATbool isDirectionBack(Direction arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternDirectionBack);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool isDirectionBoth(Direction arg) */
+
+inline ATbool isDirectionBoth(Direction arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternDirectionBoth);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool isDirectionNone(Direction arg) */
+
+inline ATbool isDirectionNone(Direction arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternDirectionNone);
       last_gc = ATgetGCCount();
     }
 
@@ -2189,9 +2421,9 @@ AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attr
 }
 
 /*}}}  */
-/*{{{  Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon)) */
+/*{{{  Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction)) */
 
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon))
+Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction))
 {
   if (isAttributeLabel(arg)) {
     return makeAttributeLabel(
@@ -2214,6 +2446,10 @@ Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acc
   if (isAttributeCurvePoints(arg)) {
     return makeAttributeCurvePoints(
         acceptPoints ? acceptPoints(getAttributePoints(arg)) : getAttributePoints(arg));
+  }
+  if (isAttributeDirection(arg)) {
+    return makeAttributeDirection(
+        acceptDirection ? acceptDirection(getAttributeDirection(arg)) : getAttributeDirection(arg));
   }
   ATabort("not a Attribute: %t\n", arg);
   return (Attribute)NULL;
@@ -2262,6 +2498,27 @@ Shape visitShape(Shape arg)
   }
   ATabort("not a Shape: %t\n", arg);
   return (Shape)NULL;
+}
+
+/*}}}  */
+/*{{{  Direction visitDirection(Direction arg) */
+
+Direction visitDirection(Direction arg)
+{
+  if (isDirectionForward(arg)) {
+    return makeDirectionForward();
+  }
+  if (isDirectionBack(arg)) {
+    return makeDirectionBack();
+  }
+  if (isDirectionBoth(arg)) {
+    return makeDirectionBoth();
+  }
+  if (isDirectionNone(arg)) {
+    return makeDirectionNone();
+  }
+  ATabort("not a Direction: %t\n", arg);
+  return (Direction)NULL;
 }
 
 /*}}}  */

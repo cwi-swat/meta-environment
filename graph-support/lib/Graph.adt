@@ -16,6 +16,7 @@
 [Attribute, location, location(<x(int)>,<y(int)>)],
 [Attribute, size, size(<width(int)>,<height(int)>)],
 [Attribute, curve-points, curve-points(<points(Polygon)>)],
+[Attribute, direction, direction(<direction(Direction)>)],
 
 [Shape, plaintext, plaintext],
 [Shape, ellipse, ellipse],
@@ -30,6 +31,10 @@
 [Shape, hexagon, hexagon],
 [Shape, octagon, octagon],
 
+[Direction, forward, forward],
+[Direction, back, back],
+[Direction, both, both],
+[Direction, none, none],
 
 [EdgeList, empty, []],
 [EdgeList, multi, [<head(Edge)>,<[tail(EdgeList)]>]],

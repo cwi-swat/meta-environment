@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Mar 28 16:15:51 2003
+ * Generated at Mon Mar 31 18:45:05 2003
  */
 
 #ifndef __Graph_dict_H
@@ -7,6 +7,11 @@
 
 #include <aterm2.h>
 
+extern AFun afun24;
+extern AFun afun25;
+extern AFun afun10;
+extern AFun afun11;
+extern AFun afun12;
 extern AFun afun13;
 extern AFun afun14;
 extern AFun afun15;
@@ -25,9 +30,9 @@ extern AFun afun7;
 extern AFun afun8;
 extern AFun afun9;
 extern AFun afun20;
-extern AFun afun10;
-extern AFun afun11;
-extern AFun afun12;
+extern AFun afun21;
+extern AFun afun22;
+extern AFun afun23;
 
 extern ATerm patternPointDefault;
 extern ATerm patternPolygonMulti;
@@ -35,6 +40,10 @@ extern ATerm patternPolygonEmpty;
 extern ATerm patternEdgeDefault;
 extern ATerm patternEdgeListMulti;
 extern ATerm patternEdgeListEmpty;
+extern ATerm patternDirectionNone;
+extern ATerm patternDirectionBoth;
+extern ATerm patternDirectionBack;
+extern ATerm patternDirectionForward;
 extern ATerm patternShapeOctagon;
 extern ATerm patternShapeHexagon;
 extern ATerm patternShapeHouse;
@@ -47,6 +56,7 @@ extern ATerm patternShapeEgg;
 extern ATerm patternShapeCircle;
 extern ATerm patternShapeEllipse;
 extern ATerm patternShapePlaintext;
+extern ATerm patternAttributeDirection;
 extern ATerm patternAttributeCurvePoints;
 extern ATerm patternAttributeSize;
 extern ATerm patternAttributeLocation;
