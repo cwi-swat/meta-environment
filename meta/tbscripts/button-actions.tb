@@ -43,9 +43,13 @@ in
       if equal(FunName, "if-equal") then
         IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
       else
+/*printf("ButtunAction = %t\n", ButtonAction).*/
         snd-msg(ButtonAction, Stack, EditorId) .
         (
           rec-msg(stack(Stack?), EditorId)
+        +
+          rec-msg(empty-stack, EditorId) .
+          ButtonActions := []
         +
           rec-msg(error-stack, EditorId) .
           ButtonActions := [].
@@ -93,6 +97,9 @@ process ReturnSuccess(EditorId : term, Stack : list) is
 
 process ReturnFailed(EditorId : term, Stack : list) is
   snd-msg(error-stack, EditorId)
+
+process ReturnAbort(EditorId : term, Stack : list) is
+  snd-msg(empty-stack, EditorId)
 
 process ButtonActionExecutor is
 let
@@ -253,7 +260,7 @@ in
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
         else
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         fi
       +
         rec-msg(reduce, Stack?, EditorId?) .
@@ -286,7 +293,7 @@ in
             rec-msg(non-existing-editor(FilePath?)).
             snd-note(ui-status(errorf("editor for %s not active", 
                                       [FilePath]))) .
-            ReturnFailed(EditorId,Stack)
+            ReturnAbort(EditorId,Stack)
           )
         else
           ReturnFailed(EditorId,Stack)
@@ -316,7 +323,7 @@ in
         snd-msg(tree-send(STree)) .
         snd-msg(stack(Stack), EditorId?)
       +
-        rec-msg(recieve, Stack?, EditorId?) .
+        rec-msg(receive, Stack?, EditorId?) .
         rec-msg(tree-send(RTree?)) .
         StackPushTerm(Stack,Stack?,RTree) .
         ReturnSuccess(EditorId,Stack)
@@ -342,7 +349,7 @@ in
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
         else
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         fi
       +
         rec-msg(get-argument(NrOfArgs?), Stack?, EditorId?) .
@@ -366,7 +373,7 @@ in
           rec-msg(file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         )
       +
         rec-msg(locate(FileName?), Stack?, EditorId?) .
@@ -379,7 +386,7 @@ in
           rec-msg(file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         )
       +
         rec-msg(push-modulename, Stack?, EditorId?) .
@@ -444,7 +451,7 @@ in
           ReturnSuccess(EditorId,Stack)
         +
           rec-msg(error-opening(Path?)).
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack) /* This could be ReturnFailed as well */
         )
   ) * delta
 endlet
@@ -683,8 +690,10 @@ in
     rec-msg(tree(TotalTree?)) .
     snd-msg(unparse(TotalTree)) .
     rec-msg(unparsed-text(Text?)) .
+/*printf("text = %s\n", Text).*/
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
+/*printf("filename = %s\n", FileName).*/
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
     snd-note(reload-file(EditorId, FileName)) .
@@ -727,7 +736,8 @@ in
     rec-msg(all-equations(Equations?)) .
     snd-note(ui-status(endstat(Id))).
     snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
-    rec-msg(interpret-term-hook-result(NormalForm?))
+    rec-msg(interpret-term-hook-result(NormalForm?)) /*.
+printf("normal form %t\n", NormalForm)*/
   +
     rec-msg(equations-incomplete) .
     NormalForm := error-tree .
