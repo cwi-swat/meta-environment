@@ -20,18 +20,18 @@ sorts
 
 context-free syntax
 
-  action-type-and(ActionType, ActionType, Environment)	
+  action-type-and(ActionType, ActionType, Subject, Environment)	
 					  -> <ActionType, Environment>
 
-  infallible(ActionType, ActionType, Environment)	-> Environment
+  infallible(ActionType, ActionType, Subject, Environment)	-> Environment
 
-  closed(ActionType, ActionType, Environment)		-> Environment
+  closed(ActionType, ActionType, Subject, Environment)		-> Environment
 
-  not-in(SingleActionType, ActionType, Environment)	-> Environment
+  not-in(SingleActionType, ActionType, Subject, Environment)	-> Environment
 
-  at-and(ActionType, ActionType, ActionType)		-> VariableMap
+  at-and(ActionType, ActionType, ActionType, Subject)		-> VariableMap
 
-  at-has-property(ActionType, SingleActionType)		-> VariableMap
+  at-has-property(ActionType, SingleActionType, Subject)	-> VariableMap
 
   at-contains(SingleActionType, ActionType)		-> Answer
 
@@ -43,13 +43,7 @@ context-free syntax
 
   norm(ActionType)					-> ActionType
 
-  at-st(ActionType, ActionType, Environment)		-> VariableMap
-
-  help-at-st(ActionType, ActionType, Environment)	-> VariableMap
-
-  st-data(Type, Type, Environment)			-> VariableMap
-
-  st-empty(Type, Type, Environment)			-> VariableMap
+  at-st(ActionType, ActionType, Subject, Environment)	-> VariableMap
 
 hiddens variables
 
@@ -66,3 +60,4 @@ hiddens variables
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
   "$M"[0-9]?		-> VariableMap
   "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
+  "$SU"[0-9]?		-> Subject

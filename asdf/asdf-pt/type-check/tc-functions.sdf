@@ -24,6 +24,12 @@ context-free syntax
 
   gen-summary(Answers)	-> Summary
 
+  get-subjects(List[[Constraint]], {Subject ","}*)	
+			-> {Subject ","}* {traversal(accu, top-down, break)}
+  get-subjects(Subject, {Subject ","}*)	
+			-> {Subject ","}* {traversal(accu, top-down, break)}
+
+
   {AS-FunctionDef ","}* 	-> SortWithPosition
 
 
@@ -63,6 +69,8 @@ variables
   "$ER"[1-9]?"+"	-> Error+
   "$AC"[1-9]?	-> Action
   "$SC"[0-9]?	-> StrCon
+  "$SU"[0-9]?	-> Subject
+  "$SU"[0-9]?"*"	-> {Subject ","}*
 
   "$SUM"	-> Summary
 
@@ -70,7 +78,7 @@ variables
 
   "$M"[0-9]?	-> VariableMap		
   "$LC"[0-9]?	-> List[[Constraint]]
-  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
 
 
 sorts

@@ -3,27 +3,27 @@ equations
 [action-type-and-1] 
 
    <$ATV, $EN2> := new-action-type-var($EN1),
-   $EN3 := add-constraint(action-type-and-con($AT1, $AT2, $ATV), $EN2)
+   $EN3 := add-constraint(action-type-and-con($AT1, $AT2, $ATV, $SU), $EN2)
    ===================================================================
-   action-type-and($AT1, $AT2, $EN1) = <$ATV, $EN3>
+   action-type-and($AT1, $AT2, $SU, $EN1) = <$ATV, $EN3>
 
 [infallible-1] 
 
-   $EN2 := add-constraint(infallible-con($AT1, $AT2), $EN1)
+   $EN2 := add-constraint(infallible-con($AT1, $AT2, $SU), $EN1)
    ========================================================
-   infallible($AT1, $AT2, $EN1) = $EN2
+   infallible($AT1, $AT2, $SU, $EN1) = $EN2
 
 [closed-1] 
 
-   $EN2 := add-constraint(closed-con($AT1, $AT2), $EN1)
+   $EN2 := add-constraint(closed-con($AT1, $AT2, $SU), $EN1)
    ====================================================
-   closed($AT1, $AT2, $EN1) = $EN2
+   closed($AT1, $AT2, $SU, $EN1) = $EN2
 
 [not-in-1]
 
-   $EN2 := add-constraint(not-in-con($SAT, $AT), $EN1)
+   $EN2 := add-constraint(not-in-con($SAT, $AT, $SU), $EN1)
    ===================================================
-   not-in($SAT, $AT, $EN1) = $EN2
+   not-in($SAT, $AT, $SU, $EN1) = $EN2
 
 [at-and-1] 
 
@@ -32,11 +32,11 @@ equations
    no == at-has-variable($AT3),
    Action == norm(at-diff($AT3, $AT2)),
    $AT4 := norm(at-diff($AT3, $AT1)),
-   $M := insert(single(($AT4), ($ATV)), single(($ATV), ($AT4))),
+   $M := insert(single(($AT4), ($ATV), $SU), single(($ATV), ($AT4), $SU)),
    norm(at-diff($AT2, $AT3)) == 
 		      norm(at-diff(at-diff($AT2, $AT3), at-diff($AT1, $AT3)))
    ========================================================================
-   at-and($AT1, $AT2, $AT3) = $M
+   at-and($AT1, $AT2, $AT3, $SU) = $M
 
 [at-and-2] 
 
@@ -45,11 +45,11 @@ equations
    no == at-has-variable($AT3),
    Action == norm(at-diff($AT3, $AT1)),
    $AT4 := norm(at-diff($AT3, $AT2)),
-   $M := insert(single(($AT4), ($ATV)), single(($ATV), ($AT4))),
+   $M := insert(single(($AT4), ($ATV), $SU), single(($ATV), ($AT4), $SU)),
    norm(at-diff($AT1, $AT3)) == 
 		      norm(at-diff(at-diff($AT1, $AT3), at-diff($AT2, $AT3)))
    ========================================================================
-   at-and($AT1, $AT2, $AT3) = $M
+   at-and($AT1, $AT2, $AT3, $SU) = $M
 
 [at-and-3] 
 
@@ -60,9 +60,9 @@ equations
    $ATV == norm(at-diff($AT3, $AT2)),
    $AT4 := norm(at-diff($AT1, at-diff($AT1, $AT2))),
    $AT5 := norm(at-diff($AT4, $AT3)),
-   $M := insert(single(($AT5), ($ATV)), single(($ATV), ($AT5)))
+   $M := insert(single(($AT5), ($ATV), $SU), single(($ATV), ($AT5), $SU))
    ===========================================
-   at-and($AT1, $AT2, $AT3) = $M
+   at-and($AT1, $AT2, $AT3, $SU) = $M
 
 [at-and-4] 
 
@@ -74,15 +74,16 @@ equations
    norm(at-diff($AT1, $AT3)) == 
 		      norm(at-diff(at-diff($AT1, $AT3), at-diff($AT2, $AT3)))
    ==========================================================================
-   at-and($AT1, $AT2, $AT3) = empty-map
+   at-and($AT1, $AT2, $AT3, $SU) = empty-map
 
 [at-has-propety-1]
 
-   at-has-property($SAT1* & $SAT & $SAT2*, $SAT) = empty-map
+   at-has-property($SAT1* & $SAT & $SAT2*, $SAT, $SU) = empty-map
 
 [default-at-has-propety-1] 
 
-   at-has-property($SAT1* & $ATV & $SAT2*, $SAT) = single(($ATV), ($SAT))
+   at-has-property($SAT1* & $ATV & $SAT2*, $SAT, $SU) = 
+					   single(($ATV), ($SAT), $SU)
 
 [at-contains-1] at-contains($SAT, $SAT1* & $SAT & $SAT2*) = yes
 
@@ -115,51 +116,35 @@ equations
 
 [default-norm-2] norm($AT) = $AT
 
-[at-st-2] at-st($AT, Action, $EN) = empty-map
+[at-st-2] at-st($AT, Action, $SU, $EN) = empty-map
 
-[at-st-3] at-st($ATV1, $AT2, $EN) = single(($ATV1), ($AT2))
+[at-st-3] at-st($ATV1, $AT2, $SU, $EN) = single(($ATV1), ($AT2), $SU)
 
-[at-st-4] at-st($AT1, $ATV2, $EN) = single(($AT1), ($ATV2))
+[at-st-4] at-st($AT1, $ATV2, $SU, $EN) = single(($AT1), ($ATV2), $SU)
 
-[at-st-5] at-st($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $EN) =
+[at-st-5] at-st($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $SU, $EN) =
 
-	     at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $EN)
+	     at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN)
 
 [at-st-6] at-st($SAT1* & using $TY1 & $SAT2*, 
-		$SAT3* & using $TY2 & $SAT4*, $EN) = 
-            insert(st((using $TY1), (using $TY2), $EN), 
-		   at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $EN))
+		$SAT3* & using $TY2 & $SAT4*, $SU, $EN) = 
+            insert(st((using $TY1), (using $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
 
 [at-st-7] at-st($SAT1* & giving $TY1 & $SAT2*, 
-		$SAT3* & giving $TY2 & $SAT4*, $EN) = 
-            insert(st((giving $TY1), (giving $TY2), $EN), 
-		   at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $EN))
+		$SAT3* & giving $TY2 & $SAT4*, $SU, $EN) = 
+            insert(st((giving $TY1), (giving $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
 
 [at-st-8] at-st($SAT1* & raising $TY1 & $SAT2*, 
-		$SAT3* & raising $TY2 & $SAT4*, $EN) = 
-            insert(st((raising $TY1), (raising $TY2), $EN), 
-		   at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $EN))
+		$SAT3* & raising $TY2 & $SAT4*, $SU, $EN) = 
+            insert(st((raising $TY1), (raising $TY2), $SU, $EN), 
+		 at-st(norm($SAT1* & $SAT2*), norm($SAT3* & $SAT4*), $SU, $EN))
 
 [default-at-st-1] at-st($SAT1* & $ATV1 & $SAT2*, 
-		        $SAT3* & $ATV2 & $SAT4*, $EN) = 
-		insert(single(($ATV1), ($SAT3* & $ATV2 & $SAT4*)),
-		       single(($SAT1* & $SAT2*), ($ATV2)))
-
-
-[help-at-st-1] 
-
-       $TY1 := get-using($AT1),
-       $TY2 := get-giving($AT1),
-       $TY3 := get-raising($AT1),
-       $TY4 := get-using($AT2),
-       $TY5 := get-giving($AT2),
-       $TY6 := get-raising($AT2),
-       $M1 := st((using $TY1), (using $TY2), $EN), 
-       $M2 := st((giving $TY2), (giving $TY5), $EN), 
-       $M3 := st((raising $TY3), (raising $TY6), $EN),
-       vmap($VT*) := insert($M1, insert($M2, $M3))
-       ============================================
-       help-at-st($AT1, $AT2, $EN) = vmap($VT*)
+		        $SAT3* & $ATV2 & $SAT4*, $SU, $EN) = 
+		insert(single(($ATV1), ($SAT3* & $ATV2 & $SAT4*), $SU),
+		       single(($SAT1* & $SAT2*), ($ATV2), $SU))
 
 [diff-1] $SAT1* & $SAT & $SAT2* \ $SAT = $SAT1* & $SAT2* \ $SAT
 

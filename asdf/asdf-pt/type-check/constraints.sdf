@@ -12,15 +12,16 @@ sorts
 
 context-free syntax
 
-  subtype-con(Type, Type)			-> Constraint
-  action-type-and-con(ActionType, ActionType, ActionType)	-> Constraint
-  concat-con(Type, Type, Type)			-> Constraint
-  infallible-con(ActionType, ActionType)	-> Constraint
-  closed-con(ActionType, ActionType)		-> Constraint
-  not-in-con(ActionType, ActionType)		-> Constraint
-  not-equal-con(Type, Type)			-> Constraint
-  lub-con(Type, Type, Type)			-> Constraint
-  glb-con(Type, Type, Type)			-> Constraint
+  subtype-con(Type, Type, Subject)		-> Constraint
+  action-type-and-con(ActionType, ActionType, ActionType, Subject)
+					      	-> Constraint
+  concat-con(Type, Type, Type, Subject)		-> Constraint
+  infallible-con(ActionType, ActionType, Subject)	-> Constraint
+  closed-con(ActionType, ActionType, Subject)		-> Constraint
+  not-in-con(ActionType, ActionType, Subject)		-> Constraint
+  not-equal-con(Type, Type, Subject)			-> Constraint
+  lub-con(Type, Type, Type, Subject)			-> Constraint
+  glb-con(Type, Type, Type, Subject)			-> Constraint
 
 variables
 

@@ -4,7 +4,8 @@ imports
 
   type-check/tc-actions
   type-check/signatures
-  type-check/data/all
+%%  type-check/data/all
+  asdf/an
   asdf/an-supplement
   type-check/an-to-kernel
   type-check/environment
@@ -34,7 +35,7 @@ variables
   "$IA"		-> InfixAction
   "$D+"		-> {Data ","}+
   "$D"[0-9]?	-> Data
-  "$N"		-> Number
+  "$N"		-> Integer
   "$B"		-> Boolean
   "$TK"[0-9]?	-> Token
   "$END"[0-9]?	-> Answer

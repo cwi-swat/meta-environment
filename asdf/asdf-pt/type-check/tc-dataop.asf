@@ -86,14 +86,6 @@ equations
 				      <using data & giving data & 
 					     raising empty & std-at, $EN>
 
-[default-tcdo] 
-
-      # index($CH+) := $DO,
-      $SC := "Wrong number of arguments for #" || strcon(""" $CH+ """)
-      ================================================================
-      typecheck-dataop($DO, $EN) = <error("Type error", 
-				     [localized($SC, get-location($DO))]), $EN>
-
 [tcdo-the-sort-1] 
 
       <$TV, $EN2> := new-type-var($EN1)
@@ -101,13 +93,6 @@ equations
       typecheck-dataop(the $TY, $EN1) = <using $TV & giving $TY & 
 					      raising () & std-at, $EN2>
 	 	
-[default-tcdo] 
-
-      the $TY := $DO
-      ====================================================================
-      typecheck-dataop($DO, $EN) = <error("Type error", 
-   [localized("Can't project to this sort", get-location($DO))]), $EN>
-
 [tcdo-it-1] 
 
      <$TV, $EN2> := new-type-var($EN1)

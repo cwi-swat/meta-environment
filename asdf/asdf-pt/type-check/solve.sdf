@@ -37,16 +37,17 @@ context-free syntax
 
 hiddens variables
 
-  "$LC"[0-9]?	-> List[[Constraint]]
-  "$N"[0-9]?	-> Integer
-  "$AT"[0-9]?	-> ActionType
-  "$ATV"[0-9]?	-> ActionTypeVariable
-  "$SAT"[0-9]?	-> SingleActionType
+  "$LC"[0-9]?		-> List[[Constraint]]
+  "$N"[0-9]?		-> Integer
+  "$AT"[0-9]?		-> ActionType
+  "$ATV"[0-9]?		-> ActionTypeVariable
+  "$SAT"[0-9]?		-> SingleActionType
   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
   "$M"[0-9]?		-> VariableMap
   "$EM"[0-9]?		-> ErrorMap
   "$EN"[0-9]?		-> Environment
-  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
   "$TY"[0-9]?		-> Type
   "$TV"[0-9]?		-> TypeVariable
   "$VR"[0-9]?		-> (TypeVariable | "(" ActionTypeVariable ")")
+  "$SU"[0-9]?		-> Subject

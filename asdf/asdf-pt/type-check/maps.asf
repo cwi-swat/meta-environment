@@ -2,7 +2,7 @@ equations
 
 [empty-map-1] empty-map = vmap()
 
-[single-1] single($TY1, $TY2) = vmap(<$TY1, $TY2>)
+[single-1] single($TY1, $TY2, $SU) = vmap(<$TY1, $TY2, $SU>)
 
 [insert-1] insert(vmap(), $M) = $M
 
@@ -15,20 +15,20 @@ equations
 [insert-5] contains(<$TY1, $TY2>, vmap($VT2*)) == no,
 	   vmap($VT3*) := insert(vmap($VT1*), vmap($VT2*))
 	   ===================================================================
-	   insert(vmap(<$TY1, $TY2>, $VT1*), vmap($VT2*)) = 
-					     vmap(<$TY1, $TY2>, $VT3*)
+	   insert(vmap(<$TY1, $TY2, $SU>, $VT1*), vmap($VT2*)) = 
+					     vmap(<$TY1, $TY2, $SU>, $VT3*)
 
 [insert-6] contains(<$TY1, $TY2>, vmap($VT2*)) == yes,
 	   vmap($VT3*) := insert(vmap($VT1*), vmap($VT2*))
 	   ===================================================================
-	   insert(vmap(<$TY1, $TY2>, $VT1*), vmap($VT2*)) = vmap($VT3*)
+	   insert(vmap(<$TY1, $TY2, $SU>, $VT1*), vmap($VT2*)) = vmap($VT3*)
 
-[contains-1] contains(<$TY1, $TY2>, vmap($VT1*, <$TY1, $TY2>, $VT2*)) = yes
+[contains-1] contains(<$TY1, $TY2>, vmap($VT1*, <$TY1, $TY2,$SU>, $VT2*)) = yes
 
 [default-contains-1] contains(<$TY1, $TY2>, $M) = no
 
-[length-1] length(vmap()) = 0
+[length-1] length(vmap()) = -1+1
 
-[length-2] length(vmap(<$TY1, $TY2>, $VT1*)) = 1 + length(vmap($VT1*))
+[length-2] length(vmap(<$TY1, $TY2, $SU>, $VT1*)) = 1 + length(vmap($VT1*))
 
 [length-3] length($EM) = -1

@@ -12,11 +12,11 @@ sorts
 
 context-free syntax
 
-  vmap({<Type, Type> ","}*)		-> VariableMap
+  vmap({<Type, Type, Subject> ","}*)		-> VariableMap
 
   "empty-map"			-> VariableMap {prefer}
 
-  single(Type, Type)		-> VariableMap
+  single(Type, Type, Subject)		-> VariableMap
 
   insert(VariableMap, VariableMap)	-> VariableMap
 
@@ -26,7 +26,7 @@ context-free syntax
 
   ErrorMap				-> VariableMap
 
-  error(Type, Type)		-> ErrorMap
+  error(Type, Type, Subject)		-> ErrorMap
 
 hiddens variables
 
@@ -36,6 +36,7 @@ hiddens variables
   "$TY"[0-9]?	-> Type
   "$ATV"[0-9]?	-> ActionTypeVariable
   "$TV"[0-9]?	-> TypeVariable
-  "$VT"[0-9]?"*" -> {<Type, Type> ","}*
+  "$VT"[0-9]?"*" -> {<Type, Type, Subject> ","}*
   "$EN"[0-9]?	-> Environment
   "$N"[0-9]?	-> Integer
+  "$SU"[0-9]?	-> Subject

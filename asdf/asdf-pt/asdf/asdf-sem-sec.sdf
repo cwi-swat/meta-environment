@@ -30,11 +30,11 @@ exports
     Literal			   -> Constructor {cons("cons-lit")}
     "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
 
-    "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
+    "[" TagText? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
 
   lexical syntax
 
-    [a-zA-Z0-9\-]+		-> Token 
+    [a-zA-Z0-9\-]+		-> TagText 
 
     [A-Z]+[0-9\']*[\+\*]?	-> VarLex
 

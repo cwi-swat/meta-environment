@@ -14,26 +14,26 @@ context-free syntax
 
 %% Type operators
 
-  subtype-of(Type, Type, Environment)	-> Environment
+  subtype-of(Type, Type, Subject, Environment)	-> Environment
 
 
-  lub(Type, Type, Environment)		-> <Type, Environment>
+  lub(Type, Type, Subject, Environment)		-> <Type, Environment>
 
-  glb(Type, Type, Environment)		-> <Type, Environment>
+  glb(Type, Type, Subject, Environment)		-> <Type, Environment>
 
-  concat(Type, Type, Environment)	-> <Type, Environment>
+  concat(Type, Type, Subject, Environment)	-> <Type, Environment>
 
-  st(Type, Type, Environment)		-> VariableMap
+  st(Type, Type, Subject, Environment)		-> VariableMap
 
   highest-type(Type, Type, Environment)	-> Type
   lowest-type(Type, Type, Environment)	-> Type
 
-  highest-type-map(Type, Type, Environment)	-> <Type, VariableMap>
-  lowest-type-map(Type, Type, Environment)	-> <Type, VariableMap>
+  highest-type-map(Type, Type, Subject, Environment)	-> <Type, VariableMap>
+  lowest-type-map(Type, Type, Subject, Environment)	-> <Type, VariableMap>
 
   Type "+" Type				-> Type
 
-  not-equal(Type, Type, Environment)	-> Environment
+  not-equal(Type, Type, Subject, Environment)	-> Environment
   
   has-variable(Type, Answer)
 		-> Answer {traversal(top-down,accu,break)}
@@ -57,4 +57,5 @@ hiddens variables
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
   "$M"[0-9]?		-> VariableMap
   "$AN"[0-9]?		-> Answer
-  "$VT"[0-9]?"*"	-> {<Type, Type> ","}*
+  "$VT"[0-9]?"*"	-> {<Type, Type, Subject> ","}*
+  "$SU"[0-9]?		-> Subject

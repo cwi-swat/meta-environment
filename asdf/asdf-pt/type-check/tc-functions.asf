@@ -39,13 +39,13 @@ equations
       sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
       $LT : $SO -> $AT1 := $AFS1,
       <$AT2, $EN2> := typecheck-action($AC, $EN),
-      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      $SU1 := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), ($AT1), $SU1) : get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       $M2 := solve($M1, $EN2),
-      error($TY1, $TY2) := $M2
+      error($TY1, $TY2, $SU2) := $M2
       ===================================================
-      typecheck-definitions(defs($FD), $EN) = error("Type error", 
-	     [localized("Error in function definitions", get-location($FD))])
+      typecheck-definitions(defs($FD), $EN) = error("Type error", [$SU2])
 
 [tcd-4] 	
 
@@ -53,14 +53,15 @@ equations
       sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($EN),
       $LT : $SO -> $AT1 := $AFS1,
       <$AT2, $EN2> := typecheck-action($AC, $EN),
-      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      $SU := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), ($AT1), $SU) : get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       vmap($VT*) := solve($M1, $EN2),
       $LC3 := check-last-constraints($LC2, vmap($VT*)),
       [] != $LC3
       ===================================================
-      typecheck-definitions(defs($FD), $EN) = error("Type error", 
-	     [localized("Unsolved constraints", get-location($FD))])
+      typecheck-definitions(defs($FD), $EN) = 
+		error("Type error", [get-subjects($LC3,)])
 
 [tcd-5] 	
 
@@ -69,7 +70,8 @@ equations
       $LT : $SO -> $AT1 := $AFS1,
       <$AT2, $EN2> := typecheck-action($AC, $EN),
       $ER !:= $AT2,
-      $LC1 := subtype-con(($AT2), ($AT1)) : get-constraints($EN2),
+      $SU := localized("Problem with type of whole eqn", get-location($FD)),
+      $LC1 := subtype-con(($AT2), ($AT1), $SU) : get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       vmap($VT*) := solve($M1, $EN2),
       $LC3 := check-last-constraints($LC2, vmap($VT*)),
@@ -111,4 +113,7 @@ equations
 
 [default-summary-3] 
 
-            gen-summary(yes) = summary("","",[info("Type check OK", [localized("", file(""))])])
+            gen-summary(yes) = summary("","",[info("Type check OK", 
+						[localized("", file(""))])])
+
+[get-subjects-1] get-subjects($SU, $SU*) = $SU, $SU*

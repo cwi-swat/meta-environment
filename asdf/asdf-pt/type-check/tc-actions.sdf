@@ -31,7 +31,8 @@ variables
   "$DO"[0-9]?		-> DataOp
   "$ER"[0-9]?"+"	-> Error+
   "$CH+"[0-9]?		-> CHAR+
-  "$SC"[0-9]?		-> StrCon		
+  "$SC"[0-9]?		-> StrCon
+  "$SU"[0-9]?		-> Subject		
 
 
 sorts
