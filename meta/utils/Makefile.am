@@ -16,12 +16,12 @@ noinst_LIBRARIES   = libutils.a
 EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src test-help test-version \
-                     lang.types perform-test.sh.src \
+                     lang.types \
                      parse-sdf2.pod change-sdf2-ext \
                      sdf2stats.sh.src change-eqs-ext imports.c
 
 CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
-                     insert-license perform-test parse-sdf2.1 \
+                     insert-license parse-sdf2.1 \
                      sdf2stats
 
 meta_paths_SOURCES = meta-paths.c
