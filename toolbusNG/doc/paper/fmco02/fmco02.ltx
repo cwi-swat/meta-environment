@@ -351,10 +351,10 @@ form the \TB\ script describing our Address Book Service.
 \paragraph{The \texttt{ADDRESSBOOK} process} tells the \TB\ that an
 instance of our \texttt{address-book} tool is to be executed, followed
 by a loop which invokes \emph{one of} the processes \texttt{CREATE},
-\texttt{UPDATE} or \texttt{DELETE} in each iteration. This construction,
-using the \texttt{+} operator ensures that at this level, the
-sub-processes can be regarded atomically. This means that for example
-no \texttt{DELETE} will happen during an \texttt{UPDATE}.
+\texttt{DELETE}, \texttt{SEARCH} or \texttt{UPDATE} in each
+iteration. This construction, using the \texttt{+} operator ensures that
+at this level, the sub-processes can be regarded atomically. This means
+that for example no \texttt{DELETE} will happen during an \texttt{UPDATE}.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -631,7 +631,7 @@ mechanism, followed by communication with tools (\spec{snd-do},
 (\spec{||}) is used so infrequently. However, one should be aware that
 at the top level all \TB\ processes run concurrently and that \spec{||}
 is only used for explicit concurrency inside a process. The level of
-concurrence is therefore approximately 100 ($104$ process definitions
+concurrency is therefore approximately 100 ($104$ process definitions
 and $3$ explicit \spec{||} operators).
 
 Empirical evidence shows that:
@@ -669,7 +669,7 @@ posed by our users and ourselves are:
   See Sect.~\ref{Sec:value-ref}.
 
 \item The \TB\ and tools are running as separate tasks of the operating
-  systems. Would it not be more efficient to run \TB\ and tools in
+  systems. Would it not be more efficient to run \TB\ and tools in a
   single task? See Sect.~\ref{Sec:status}.
 
 \end{itemize}
@@ -752,7 +752,7 @@ We replace thus
 \texttt{rec-msg(ans(A?))}
 \end{quote}
 
-\noindent by
+\noindent by the syntactic construct
 
 \begin{quote}
 \texttt{snd-msg(req(E)) \{} \textit{arbitrary process expression}
