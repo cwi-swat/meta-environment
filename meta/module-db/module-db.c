@@ -446,7 +446,7 @@ update_syntax_status_of_modules(ATermList mods)
 /* Update an existing Sdf2 definition in the database.
  */
 
-ATerm update_sdf2_module(int cid, ATerm newSdfTree)
+ATerm update_sdf2_module(int cid, char *moduleName, ATerm newSdfTree)
 {
   ATerm          curSdfTree, import_graph;
   MDB_Entry      entry;
@@ -456,6 +456,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
   SDF_Module     sdfModule;
   ATerm          modName;
   SDF_ImportList fullImports;
+  char *newModuleName = NULL;
 
   newSdfTree = ATremoveAllAnnotations(newSdfTree);
   parseTree = PT_makeParseTreeFromTerm(newSdfTree);
@@ -466,7 +467,13 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 
   tree      = PT_getParseTreeTree(parseTree);
   sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
-  modName   = ATmake("<str>", SDFgetModuleName(sdfModule));
+  newModuleName = SDFgetModuleName(sdfModule);
+
+  if (strcmp(moduleName, newModuleName)) {
+    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+  }
+
+  modName   = ATmake("<str>", newModuleName);
   entry     = MDB_EntryFromTerm(GetValue(modules_db, modName));
 
   if (MDB_isValidEntry(entry)) {

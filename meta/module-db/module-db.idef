@@ -89,9 +89,9 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(update-module-in-db(AsFixModule?,Language?)).
+  rec-msg(update-module-in-db(Name?, AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
-    snd-eval(Mdb,update-sdf2-module(AsFixModule)) .
+    snd-eval(Mdb,update-sdf2-module(Name, AsFixModule)) .
     (
       rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
                             import-graph(ActualMods?, Pairs?))).
