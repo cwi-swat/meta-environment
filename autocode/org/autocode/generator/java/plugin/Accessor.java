@@ -84,7 +84,7 @@ public class Accessor
 
     String attrName = generator.attributeName(fieldName);
 
-    String paramName = generator.javaParameterName(fieldName);
+    String paramName = generator.parameterName(fieldName);
     FormalParameter param = new FormalParameter(paramName, attrType);
     param.setDescription(fieldContext.getString("description"));
 

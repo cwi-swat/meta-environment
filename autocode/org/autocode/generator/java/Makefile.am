@@ -7,4 +7,6 @@ JAVAROOT = ${top_builddir}
 EXTRA_DIST = JavaGenerator.aco
 
 java_JAVA = \
-	JavaGenerator.java
+	JavaGenerator.java \
+	JavaReservedWords.java
+	

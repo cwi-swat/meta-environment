@@ -445,6 +445,10 @@ public class JavaGenerator
 
   public String parameterName(String name)
   {
+    if (JavaReservedWords.isReservedWord(name)) {
+      name = "arg-" + name;
+    }
+
     return AutocodeGenerator.javaParameterName(name);
   }
 
