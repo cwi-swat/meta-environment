@@ -137,6 +137,7 @@ We define some constants, which make it easy to change some defaults.
    "-script Name          use Name as Tcl script for wish\n" \
    "-script-args A1 ...   use A1 ... as arguments for the wish execution\n"
 
+#define DEBUG_ON
 #ifdef DEBUG_ON
 #define CHAR2WISH(c)			fputc(c, to_wish); \
 					fputc(c, stderr)
@@ -235,17 +236,34 @@ static void error( const char* msg )
 @
 
 %}}}
-%{{{ static void print_backslashes(FILE *f, int n)
+%{{{ static void print_backslashes(FILE *f, int level)
+
+To correctly escape all special characters, we need to print A LOT
+of backslashes. How many is calculated by {\tt slash\_mania}.
 
 <<print_backslashes>>=
-static void print_backslashes(int n)
+int slash_mania(int level)
 {
-  while(n > 16) {
-    PRINT2WISH0(backslashes);
-    n -= 16;
+  return (1<<(level+1))-1;
+
+/* Does the same thing as the old:
+  if(level == 0)
+    return 1;
+  return slash_mania(level-1)*2+1;
+*/
+}
+
+static void print_backslashes(int level)
+{
+  if(level >= 0) {
+    int n = slash_mania(level);
+    while(n > 16) {
+      PRINT2WISH0(backslashes);
+      n -= 16;
+    }
+    if(n > 0)
+      PRINT2WISH0(&backslashes[16-n]);
   }
-  if(n > 0)
-    PRINT2WISH0(&backslashes[16-n]);
 }
 @
 
@@ -260,14 +278,14 @@ their octal values are written.
 <<print_string>>=
 static void print_string(char* s, int n, int depth)
 {
-  print_backslashes(depth*2-1);
+  print_backslashes(depth);
   CHAR2WISH('"');
   while(n--)
   {
     if(isprint(*s)) {
       switch (*s) {
 	case '\\':
-	case '"':	print_backslashes(depth*2+1);
+	case '"':	print_backslashes(depth+1);
 			CHAR2WISH(*s);
 			break;
 	case '{':
@@ -275,7 +293,9 @@ static void print_string(char* s, int n, int depth)
 	case '[':
 	case ']':
 	case ' ':
-	case '$':	CHAR2WISH('\\');
+	case ';':
+	case '$':	print_backslashes(depth+1);
+			/*CHAR2WISH('\\')*/
 	default:	CHAR2WISH(*s);
       }
     } else {
@@ -283,7 +303,7 @@ static void print_string(char* s, int n, int depth)
     }
     s++;
   }
-  print_backslashes(depth*2-1);
+  print_backslashes(depth);
   CHAR2WISH('"');
 }
 @
@@ -317,7 +337,7 @@ static void print_env(env* e, int depth)
    TBbool first = TBtrue;
    char* txt;
    
-   print_backslashes(depth*2);
+   print_backslashes(depth);
    CHAR2WISH('"');
    while(e != NULL)
    {
@@ -332,7 +352,7 @@ static void print_env(env* e, int depth)
       print_term(env_val(e), depth+1);
       e = env_next(e);
    }
-   print_backslashes(depth*2);
+   print_backslashes(depth);
    CHAR2WISH('"');
 }
 @
@@ -381,10 +401,10 @@ static void print_term(term* t, int depth)
             print_list(fun_args(t), "(", ",", ")", depth+1);
          break;
       case t_list:
-	 print_backslashes(depth*2-1);
+	 print_backslashes(depth);
 	 CHAR2WISH('"');
          print_list(t, "", " ", "", depth+1);	
-	 print_backslashes(depth*2-1);
+	 print_backslashes(depth);
 	 CHAR2WISH('"');
          break;
       case t_env:
@@ -422,13 +442,15 @@ Print a list of arguments.
 <<print_args>>=
 static void print_args(term_list *args, int depth)
 {
-  while(args) {
-/*    PRINT2WISH0(" \"");*/
+  print_list(args, "", " ", "", depth);
+/*  while(args) {
+    PRINT2WISH0(" \"");
     print_term(list_first(args), depth);
     CHAR2WISH(' ');
-/*    PRINT2WISH0("\"");*/
+    PRINT2WISH0("\"");
     args = list_next(args);
   }
+*/
 }
 @
 
@@ -735,7 +757,7 @@ static TBbool rec_do(term* e, term** out)
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
    if(fargs)
-     print_args(fargs, 0);
+     print_args(fargs, -1);
      /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0(" } msg] {TBerror $msg}\n");
    fflush(to_wish);
@@ -761,8 +783,8 @@ static TBbool rec_eval( term* e, term** out )
      return TBfalse;
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
-   if(list_length(fargs))
-     print_args(fargs, 0);
+   if(fargs)
+     print_args(fargs, -1);
      /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0("} msg] {TBerror $msg}\n");
    fflush(to_wish);
@@ -786,7 +808,7 @@ static TBbool rec_ack_event(term* e, term** out)
    if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
       return TBfalse;
    PRINT2WISH0("if [catch {rec-ack-event ");
-   print_term(farg, 0);
+   print_term(farg, -1);
    PRINT2WISH0("} msg] {TBerror $msg}\n" );
    fflush(to_wish);
    return TBtrue;
@@ -811,7 +833,7 @@ static TBbool rec_terminate( term* e, term** out )
    if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
       return TBfalse;
    PRINT2WISH0("if [catch {rec-terminate ");
-   print_term(farg, 0);
+   print_term(farg, -1);
    PRINT2WISH0("} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
