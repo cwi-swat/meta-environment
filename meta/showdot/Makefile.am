@@ -22,6 +22,8 @@
 
 include ${top_srcdir}/make_rules
 
+EXTRA_DIST=showdot.tcl.src showdot.src
+
 data_DATA   = showdot.tcl
 bin_SCRIPTS = showdot
 
