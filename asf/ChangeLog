@@ -1,5 +1,10 @@
 # $Id$
 
+2003/09/19 ({paulk,jurgenv}@cwi.nl)
+ * Added very unsafe term comparison builtin to ASF. It's unsafe because
+   it does not take LAYOUT and annotations into account. Obviously,
+   we have a TODO.
+
 2003/09/16 (jurgenv@cwi.nl)
  * Moved ASF+SDF library to new asf-library package
 
