@@ -20,7 +20,7 @@
 
 include $(top_srcdir)/make_rules
 
-INCLUDES += -I $(SGLR)/libsglr
+INCLUDES += -I $(top_srcdir)/libsglr
 
 bin_PROGRAMS             = dump-actions dump-gotos dump-priorities \
                            dump-productions
@@ -34,8 +34,8 @@ dump_priorities_SOURCES  = dump-priorities.c dump-skel.c dump-skel.h
 dump_productions_SOURCES = dump-productions.c dump-skel.c dump-skel.h
 
 
-LDADD     = -L$(SGLR)/libsglr -lsglr \
-            -L$(SGLR)/libtree2dot -ltree2dot \
+LDADD     = -L$(top_srcdir)/libsglr -lsglr \
+            -L$(top_srcdir)/libtree2dot -ltree2dot \
             -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix\
             -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 

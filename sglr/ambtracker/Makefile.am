@@ -27,9 +27,9 @@ HDRS             =
 
 ambtracker_SOURCES = $(SRCS) $(HDRS)
 
-LDADD            =  -L${SGLR}/libsglr -lsglr \
-                    -L${SGLR}/libtree2dot -ltree2dot \
+LDADD            =  -L${top_srcdir}/libsglr -lsglr \
+                    -L${top_srcdir}/libtree2dot -ltree2dot \
                     -L${PT_SUPPORT}/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-ambtracker.o: ${SGLR}/libsglr/libsglr.a
+ambtracker.o: ${top_srcdir}/libsglr/libsglr.a

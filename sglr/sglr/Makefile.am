@@ -20,7 +20,7 @@
 
 include $(top_srcdir)/make_rules
 
-INCLUDES += -I$(SGLR)/libsglr -I$(SGLR)/libtree2dot
+INCLUDES += -I$(top_srcdir)/libsglr -I$(top_srcdir)/libtree2dot
 
 bin_PROGRAMS      = sglr #sglr_prof
 data_DATA         = sglr.idef
@@ -31,8 +31,8 @@ SRCS              = sglr-main.c  getopt.c getopt1.c
 HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)
-sglr_LDADD        = -L$(SGLR)/libsglr -lsglr \
-                    -L$(SGLR)/libtree2dot -ltree2dot \
+sglr_LDADD        = -L$(top_srcdir)/libsglr -lsglr \
+                    -L$(top_srcdir)/libtree2dot -ltree2dot \
                     -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
@@ -40,5 +40,5 @@ sglr_LDADD        = -L$(SGLR)/libsglr -lsglr \
 CLEANFILES = sglr.tifs
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(SGLR)/libsglr/libsglr.a \
-              $(SGLR)/libtree2dot/libtree2dot.a
+sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/libsglr/libsglr.a \
+              $(top_srcdir)/libtree2dot/libtree2dot.a

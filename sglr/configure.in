@@ -31,12 +31,6 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Required for generated Makefile.am's to work until genamakefile patched:
-ATERMINC=${ATERM}/include
-ATERMLIB=${ATERM}/lib
-AC_SUBST(ATERMINC)
-AC_SUBST(ATERMLIB)
-
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
@@ -46,20 +40,6 @@ dnl Require PT package (for AsFix)
 AC_PACKAGE_REQUIRE(pt-support, asource,
    [  --with-pt-support=DIR   ParseTree distribution is in DIR])
 AC_SUBST(PT_SUPPORT)
-
-ASC_SUPPORT='${prefix}'
-dnl Handle --with-asc-support=... argument to configure
-AC_ARG_WITH(asc-support,
-   [  --with-asc-support=DIR  asc-support is in DIR],
-   ASC_SUPPORT=${withval},)
-
-AC_SUBST(ASC_SUPPORT)
-
-dnl Again for Asc (fix for generated Makefile.am's)
-ASCINC=${ASC_SUPPORT}/include
-ASCLIB=${ASC_SUPPORT}/lib
-AC_SUBST(ASCINC)
-AC_SUBST(ASCLIB)
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
@@ -109,33 +89,20 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
-   lib/Makefile
+   doc/Makefile
+   dump/Makefile
+   libsglr/Makefile
+   ambtracker/Makefile
    sglr/Makefile
-   sglr/doc/Makefile
-   sglr/dump/Makefile
-   sglr/libsglr/Makefile
-   sglr/ambtracker/Makefile
-   sglr/sglr/Makefile
-   sglr/libtree2dot/Makefile
-   sglr/tree2dot/Makefile
-   sglr/client/Makefile
-   sglr/sdf1tosdf2/Makefile
-   sglr/sdf1tosdf2/sdf1tosdf2
-   sglr/test/Makefile
-   sglr/test/erroneous/Makefile
-   sglr/test/first/Makefile
-   sglr/test/tables/Makefile
-   sglr/test/terms/Makefile
-   pgen/Makefile 
-   pgen/c-lib/Makefile 
-   pgen/c-source/Makefile 
-   pgen/src/Makefile 
-   pgen/grammar/Makefile 
-   pgen/sdf2stats/Makefile 
-   pgen/normalizer/Makefile
-   pgen/test/Makefile
-   pgen/test/first/Makefile
-   pgen/test/grammars/Makefile
-   pgen/test/tables/Makefile 
-  , chmod +x sglr/test/regress-terms pgen/test/regress-lang
+   libtree2dot/Makefile
+   tree2dot/Makefile
+   client/Makefile
+   sdf1tosdf2/Makefile
+   sdf1tosdf2/sdf1tosdf2
+   test/Makefile
+   test/erroneous/Makefile
+   test/first/Makefile
+   test/tables/Makefile
+   test/terms/Makefile
+  , chmod +x test/regress-terms
 )
