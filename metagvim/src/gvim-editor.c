@@ -166,14 +166,6 @@ void tb_set_focus(int conn, char *fid, char *s, int start, int len)
 }
 
 /*}}}  */
-/*{{{  void tb_set_focus_unchanged(int conn, char *fid, char *s, int start, int len) */
-
-void tb_set_focus_unchanged(int conn, char *fid, char *s, int start, int len)
-{
-  ATwarning("tb_set_focus_unchanged not yet implemented in gvim-adapter!\n");
-}
-
-/*}}}  */
 /*{{{  ATerm tb_get_focus_text(int conn, char *fid, int start, int len) */
 
 ATerm tb_get_focus_text(int conn, char *fid, int start, int len)

@@ -12,9 +12,6 @@ Fri Jan 17 11:12:35 CET 2003 <jong@cwi.nl>
    When parsing (e.g.) empty equations, it is more useful to just report
    that the file is empty, rather than ATerror() with the complaint that
    gvim was "unable to get focus text". Wing it by sending "" as contents.
- * add "not-yet-implemented" version of "tb-set-focus-unchanged" interface:
-   This appears to be needed only in the emacs-implementation of the
-   text-editor interface?
 
 Fri Jun  7 14:09:11 CEST 2002 <jong@cwi.nl>
  * version 0.3
