@@ -3,7 +3,7 @@
 
 /*{{{  ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject) */
 
-ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
+ERR_Feedback makeMessage(char *msg, ATerm subject)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
   ERR_Subject sub;
@@ -18,13 +18,30 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 }
 
 /*}}}  */
+/*{{{  ERR_Feedback makeWarning(char *msg, ATerm subject) */
+
+ERR_Feedback makeWarning(char *msg, ATerm subject)
+{
+  ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
+  ERR_Subject sub;
+  ERR_Location location = PT_getTreeLocation((PT_Tree) subject);
+
+  if (location != NULL) {
+    sub = ERR_makeSubjectSubject(PT_yieldTree((PT_Tree) subject), location);
+    subjects = ERR_makeSubjectListSingle(sub);
+  }
+  
+  return ERR_makeFeedbackWarning(msg, subjects);
+}
+
+/*}}}  */
 
 /*{{{  ERR_FeedbackList makeAmbiguityMessage(void *subject) */
 
 ERR_FeedbackList makeAmbiguityMessage(void *subject)
 {
   return ERR_makeFeedbackListSingle(makeMessage("equations contain ambiguities",
-						NULL, (ATerm) subject));
+						(ATerm) subject));
 }
 
 /*}}}  */
@@ -62,7 +79,7 @@ static ERR_FeedbackList checkTreeGivenVariables(ASF_ASFTag tag,
   }
   if (PT_isTreeVar(tree)) {
     if (!lookupVariable(tree, variables)) {
-      message = makeMessage("uninstantiated variable occurrence", tag, 
+      message = makeMessage("uninstantiated variable occurrence",  
 			    PT_TreeToTerm(tree));
       return ERR_makeFeedbackListSingle(message);
     }
@@ -198,7 +215,6 @@ static ERR_FeedbackList checkNegativeCondition(ASF_ASFTag tag, ASF_ASFCondition 
       !noNewVariables((PT_Tree)rhsCond, *variables)) {
     return ERR_makeFeedbackListSingle(makeMessage(
 					     "negative condition introduces variable(s)", 
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
   else {
@@ -215,7 +231,7 @@ static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition 
   ERR_FeedbackList messages = ERR_makeFeedbackListEmpty();
 
   messages = ERR_makeFeedbackListSingle(
-				   makeMessage("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)", tag, ASF_makeTermFromASFCondition(condition)));
+				   makeWarning("Deprecated condition syntax \"=\". Please use either \"==\" for equality, or \":=\" for matching (Hint: see the Upgrade menu)", ASF_makeTermFromASFCondition(condition)));
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
@@ -229,7 +245,6 @@ static ERR_FeedbackList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition 
     return ERR_makeFeedbackListMany(
 				    makeMessage(
 						"uninstantiated variables in both sides of condition",
-						tag,
 						ASF_makeTermFromASFCondition(condition)), messages);
   }
 
@@ -246,7 +261,6 @@ static ERR_FeedbackList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition 
     return ERR_makeFeedbackListSingle(
 				 makeMessage(
 					     "uninstantiated variables in equality condition",
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
@@ -262,7 +276,6 @@ static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition con
     return ERR_makeFeedbackListSingle(
 				 makeMessage(
 					     "matching condition does not introduce new variables",
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
   else {
@@ -273,7 +286,6 @@ static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition con
     return ERR_makeFeedbackListSingle(
 				 makeMessage(
 					     "right-hand side of matching condition introduces variables",
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
@@ -289,7 +301,6 @@ static ERR_FeedbackList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition c
     return ERR_makeFeedbackListSingle(
 				 makeMessage(
 					     "matching condition does not use new variables",
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
@@ -297,7 +308,6 @@ static ERR_FeedbackList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition c
     return ERR_makeFeedbackListSingle(
 				 makeMessage(
 					     "right-hand side of matching condition introduces variables",
-					     tag,
 					     ASF_makeTermFromASFCondition(condition)));
   }
 
@@ -343,7 +353,6 @@ static ERR_FeedbackList checkCondition(ASF_ASFTag tag, ASF_ASFCondition conditio
       return ERR_makeFeedbackListSingle(
 				   makeMessage(
 					       "strange condition encountered", 
-					       tag,
 					       ASF_makeTermFromASFCondition(condition)));
     }
   }
@@ -393,7 +402,7 @@ static ERR_FeedbackList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
   }
   else {
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
-      ERR_Feedback message = makeMessage("constructor not allowed as outermost function symbol of left hand side", tag, PT_TreeToTerm(ptTree));
+      ERR_Feedback message = makeWarning("constructor not expected as outermost function symbol of left hand side", PT_TreeToTerm(ptTree));
       return ERR_makeFeedbackListSingle(message);
     }
     else {
@@ -472,7 +481,7 @@ static ERR_FeedbackList checkTest(ASF_ASFTestEquation testEquation)
 					   PT_makeArgsEmpty());
 
       if (!PT_isArgsEmpty(variables)) {
-	message = makeMessage("no variables may be introduced in left hand side of test", tag, ASF_TreeToTerm(lhsCond));
+	message = makeMessage("no variables may be introduced in left hand side of test", ASF_TreeToTerm(lhsCond));
 	messages = ERR_makeFeedbackListMany(message, messages);
 	variables = PT_makeArgsEmpty();
       }
