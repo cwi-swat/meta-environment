@@ -885,6 +885,7 @@ public class MetaStudio
   public void initializeUi(String libloc, String syn_ext, String sem_ext,
 			    String trm_ext)
   {
+    Preferences.setString("library.dir", libloc);
     Preferences.setString("module.extension",syn_ext);
     Preferences.setString("term.extension",trm_ext);
   }
