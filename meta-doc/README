@@ -30,6 +30,11 @@ mv picture.gif html
 
 Beware to 'setenv HYPERLATEX_DIR <path-to-hyperlatex>'
 
+Installing on the webserver:
+ssh build-www 
+cd /cwi/www/sites/www.cwi.nl/projects/MetaEnv/meta/doc
+
+cp manual.ps.gz /usr/local/www.cwi.nl/projects/MetaEnv/meta/doc/.
 
 
 

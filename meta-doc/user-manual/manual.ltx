@@ -44,6 +44,8 @@
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 \newcommand{\xemacs}{{\tt XEmacs}}
+\newcommand{\lexyacc}{Lex+Yacc}
+\newcommand{\ebnf}{(E)BNF}
 
 \newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
 \newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
@@ -120,7 +122,7 @@ documents.
 \end{ifhtml}
 
 \begin{abstract}
-This is a preliminary user manual for the \ASmetaenv\ Release 1.
+This is a preliminary user manual for the \ASmetaenv\ Release 1.5.
 This is work under construction.
 
 \end{abstract}
@@ -140,7 +142,13 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 \section*{Update with respect to previous version}
 
 \begin{itemize}
-\item Introduced the new user interface.
+\item Adapted to version 1.5 of the \ASmetaenv.
+\item Added a description of the unit tests in \asf.
+\item Added a detailed description of the \link{error
+messages}[ (see Section~\Ref)]{SEC:SDF-checker}.
+\item Described the \link{{\tt context-free start-symbols}}[ (see
+Section~\Ref)]{SEC:ContextFreeStartSymbols}.
+\item Rewritten the section on stand-alone tools.
 \end{itemize}
 
 \section{Overview}
@@ -187,6 +195,7 @@ problems. \asfsdf\ provides you with:
   \item Integrated definition of lexical, context-free, and abstract syntax. 
 
   \item User-defined syntax, allowing you to write specifications using your own notation. 
+\index{user-defined syntax@user-defined syntax}
 
   \item Complete integration of the definition of syntax and
   semantics.
@@ -235,28 +244,29 @@ for the syntax part and the equations part of a module.
 All editing in the Meta-Environment is done by creating
 instances of a \emph{generic syntax-directed editor}.
 
-After each editing operation on a module, its \emph{implementation} is updated
-immediately. It consists of a parser, a pretty
-printer, and a term rewriting system which are all derived from the
-module automatically.
+After each editing operation on a module, its \emph{implementation} is 
+updated immediately. It consists of a parser, a pretty printer, and a 
+term rewriting system which are all derived from the module automatically.
 
-A module can be tested by invoking a \emph{term editor} to create and evaluate
-terms defined by the module. Term editors use the syntax of the module for
-parsing the textual representation of terms and for converting them to
-internal format (syntax trees). The equations of the module are then used to
-reduce the terms into normal form. This result is, in its turn, converted back
-to textual form by pretty printing it.
+A module can be tested by invoking a \emph{term editor} to create and 
+evaluate terms defined by the module. Term editors use the syntax of 
+the module for parsing the textual representation of terms and for 
+converting them to internal format (syntax trees). The equations of 
+the module are then used to reduce the terms into normal form. 
+This result is, in its turn, converted back to textual form by 
+pretty printing it.
 
 \subsection{About this Manual}
 
 This manual is intended for those users that want to write \asfsdf\
-specifications.
-This manual is still under development and we welcome all feed back and comments.
+specifications.  This manual is still under development and we welcome 
+all feed back and comments.
 
 The focus of this manual will be on how to write \asfsdf\ specifications,
 the \asfsdf\ language features are explained as well as some methodology
 in using \asfsdf\ when defining a (programming) language. In the last
 part of the manual we will address the following technical problems.
+
 \begin{itemize}
 \item How to compile a specification.
 \item How to parse a term outside the \ASmetaenv.
@@ -286,7 +296,8 @@ You can download the \ASmetaenv\ from the following location:
    http://www.cwi.nl/projects/MetaEnv/
 \end{verbatim}
 
-\noindent It provides links to the software as well as to related documents.
+\noindent It provides links to the software as well as to related 
+documents. Furthermore, via this link bugs can be submitted.
 
 \subsection{Further Reading}
 
@@ -294,8 +305,7 @@ There are many publications about the \ASmetaenv\ itself, about the
 implementation techniques used, and about applications.
 Also see the overview of
 \link{architecture and implementation techniques}[ (Section~\Ref)]{SEC:TechnologyandArchitecture}. 
-We give here a brief
-overview of selected publications:
+We give here a brief overview of selected publications:
 
 \begin{description}
 
@@ -339,13 +349,13 @@ Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
 \label{ASF+SDF}
 
 \asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
-Specification Formalism) and \sdf\ (Syntax Definition Formalism).  \asf\ is
-based on the notion of a module consisting of a signature defining the
-abstract syntax of functions and a set of conditional equations defining their
-semantics. Modules can be imported in other modules. 
-\sdf\ allows the simultaneous definition of concrete
-(i.e., lexical and context-free) and abstract syntax and implicitly defines a
-translation from text strings to abstract syntax trees.
+Specification Formalism) and \sdf\ (Syntax Definition Formalism).  
+\asf\ is based on the notion of a module consisting of a signature 
+defining the abstract syntax of functions and a set of conditional 
+equations defining their semantics. Modules can be imported in other 
+modules.  \sdf\ allows the simultaneous definition of concrete
+(i.e., lexical and context-free) and abstract syntax and implicitly 
+defines a translation from text strings to abstract syntax trees.
 
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
@@ -355,18 +365,78 @@ association of semantics with (the tree representation of) text and
 introduces user-defined notation in specifications.
 
 \asfsdf\ is therefore a modular specification formalism for the integrated
-definition of syntax and semantics.
+definition of syntax and semantics of a (programming) language. 
+Other views on \asfsdf\ are:
+\begin{itemize}
+\item a first-order functional programming language. 
+\item an algebraic specification formalism.
+\end{itemize}
+Whatever viewpoint is taken, \asfsdf\ is a powerful formalism for
+the declarative description of programming languages.
 
+\subsection{\ebnf\ and \exyacc\ versus \sdf}
+
+\ebnf-like and \lexyacc-like grammar formalisms are well-known. 
+Although \lexyacc\ is more a domain specific language than a
+grammar formalism, the grammar of a lot of programming languages 
+are presented as \lexyacc\ definition. There a number of differences
+between both \ebnf-like and \lexyacc-like formalisms and \sdf.
+
+We assume that the reader of this manual has some experience
+with formalisms like \ebnf\ and \lexyacc.
+
+\sdf\ allows a modular definition of your syntax
+formalism. This allows re-use of parts of other grammar definitions.
+This is only possible given the fact that the underlying parsing
+technology is based on Generalized LR parsing, see \cite{R92} and 
+\cite{Vis97} for more details.
+
+\sdf\ imposes no restrictions on the grammar. In contrast
+to \lexyacc, restricted to the class of LALR(1)-grammars, we
+do not impose these restrictions. The fact that we do not impose
+these restrictions enables us to have this modular grammar definition
+formalism. Restricted classes, such as LALR(1), are not closed
+under union. Two grammars, both LALR(1) for instance, need not
+result in a LALR(1) grammar if they are combined.
+
+The most striking difference between \sdf\ and \ebnf-like and
+\lexyacc-like formalisms is the way the production rules are written
+in \sdf. 
+In \ebnf\ and \lexyacc\ one writes production rules as
+
+\begin{verbatim}
+  P ::= 'b' D S 'e'
+\end{verbatim}
+
+whereas in \sdf\ this is written as
+
+\begin{verbatim}
+  "b" D S "e" -> P
+\end{verbatim}
+So, the left- and right-hand side of the production rules are swapped.
+
+\sdf\ provides an integrated definition of lexical and
+context-free syntax. \ebnf\ does not provide, or only very restrictive,
+support for defining lexical syntax rules. In \lexyacc\ the
+lexical syntax is more or less defined in a separate formalism.
+
+\sdf\ also allows an integrated way of defining 
+\link{associativity and priorities between production rules}[, see
+Section~\Ref]{Priorities}.
+
+Finally, \sdf\ provides an automatic way of constructing syntax trees.
+In \lexyacc\ the specification writer has to program how syntax trees
+are constructed.
 \subsection{Modules and Modular Structure}
 \label{modules}
 
-An \asfsdf\ specification consists of a sequence of module declarations. Each
-module may define syntax rules as well as semantic rules and the notation used
-in the semantic rules depends on the definition of syntax rules. The entities
-declared in a module may be visible or invisible to other modules. A module
-can use another module from the specification by importing it. As a result,
-all visible names of the imported module become available in the importing
-module.
+An \asfsdf\ specification consists of a sequence of module declarations. 
+Each module may define syntax rules as well as semantic rules and the 
+notation used in the semantic rules depends on the definition of syntax 
+rules. The entities declared in a module may be visible or invisible 
+to other modules. A module can use another module from the specification 
+by importing it. As a result, all visible names of the imported module 
+become available in the importing module.
 
 The overall structure of a module is:
 
@@ -382,8 +452,8 @@ equations
 \end{verbatim}
 
 A module consists of a module header, followed by a list of zero or more
-import sections, followed by zero or more hidden or export
-sections and an optional equations section that defines conditional equations.
+import sections, followed by zero or more hidden or export sections and 
+an optional equations section that defines conditional equations.
 \link*{Later}[In Section~\Ref]{ParametersRenamings}
 we will see that modules can alse be \emph{parameterized} and
 that they can be \emph{renamed on import}.
@@ -391,19 +461,25 @@ that they can be \emph{renamed on import}.
 Conceptually, a module is a single unit but for technical reasons the
 syntax sections and the equations section are stored in physically
 separate files.  For each module $M$ in a specification two files
-exist: `{\tt $M$.sdf}' contains the syntax sections of $M$ and `{\tt
-$M$.asf}' contains the equations section of $M$.
+exist: `{\tt $M$.sdf}' contains the syntax sections of $M$ and 
+`{\tt $M$.asf}' contains the equations section of $M$.
 
-A {\tt <ModuleName>} is either a simple {\tt <ModuleId>} or a {\tt
-<ModuleId>} followed by zero or more parameter symbols, e.g., 
+\index{compound module name@compound module name}
+A {\tt <ModuleName>} is either a simple {\tt <ModuleId>} or a 
+{\tt <ModuleId>} followed by zero or more parameter symbols, e.g., 
 {\tt <Module>[<Symbol>*]}, the symbols will be explained in 
-\link*{Symbols}[Section~\Ref]{Symbols}.
+\link*{Symbols}[Section~\Ref]{Symbols}. The {\tt <ModuleId>} may be
+compount module name, the {\tt ModuleId} reflects the directory 
+structure. For example {\tt basic/Booleans} means that the module
+{\tt Booleans} is found in the subdirectory {\tt basic}.
 
-An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
-\emph{hidden section}. The former starts with the keyword {\tt exports} and
-makes all entities in the section visible to other modules.  The latter starts
-with the keyword {\tt hiddens} and makes all entities in the section local to
-the module.
+\index{exports section@{\tt exports} section}
+\index{hiddens section@{\tt hiddens} section}
+An {\tt <ExportOrHiddenSection>} is either an \emph{export section} 
+or a \emph{hidden section}. The former starts with the keyword 
+{\tt exports} and makes all entities in the section visible to 
+other modules. The latter starts with the keyword {\tt hiddens} 
+and makes all entities in the section local to the module.
 
 An {\tt <ExportOrHiddenSection>} has thus one of the two forms:
 
@@ -417,12 +493,12 @@ hiddens
   <Grammar>+
 \end{verbatim}
   
-\noindent A {\tt <Grammar>} 
-can be a definition of one of the following: 
+\noindent A {\tt <Grammar>} can be a definition of one of the following: 
 \begin{itemize}
 \item \link{Imports}[ (Section~\Ref)]{Imports}.
 \item \link{Aliases}[ (Section~\Ref)]{Aliases}.
 \item \link{Sorts}[ (Section~\Ref)]{Sorts}.
+\item \link{Start-symbols}[ (Section~\Ref)]{SEC:ContextFreeStartSymbols}.
 \item \link{Lexical syntax}[ (Section~\Ref)]{LexicalSyntax}.
 \item \link{Context-free syntax}[ (Section~\Ref)]{ContexFreeSyntax}.
 %\item lexical variables;
@@ -451,6 +527,7 @@ of the grammars:
 \item \link{Parameterization and Renamings}[
 (Section~\Ref)]{ParametersRenamings}.
 
+\item \link{Libraries}[(Section~\Ref)]{SEC:Libraries}.
 \item \link{Equations}[ (Section~\Ref)]{Equations}.
 \end{itemize}
 
@@ -471,15 +548,20 @@ An example of the use of comments is given
 \begin{Label}{CODE:sdfcomment}
 \begin{IncCode}
 \begin{verbatim}
-module Layout
+module basic/Comments
+
+imports basic/Whitespace
 
 %% In this module we define the 
 %% comment convention for Sdf.
 
 exports
   lexical syntax
-    "%%" ~[\n]* [\n]   -> LAYOUT
-    "%" ~[\n\%]+ "%"   -> LAYOUT
+    "%%" ~[\n]* "\n" -> LAYOUT
+    "%" ~[\n\%]+ "%" -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\%]
 \end{verbatim}
 \end{IncCode}
 \caption{\sdf\ comment}
@@ -505,20 +587,26 @@ imports
 \end{verbatim}
 
 \noindent Modules can be combined by importing one module in another. 
-Imports can occur as {\tt <ImportSection>} at the topmost level of a module
-or they can occur within an exports or hiddens section.
+Imports can occur as {\tt <ImportSection>} at the topmost level of 
+a module or they can occur within an exports or hiddens section.
 
-When importing modules at the topmost level of a module or when the import
-section occurs within the scope of an exports keyword, all exported entities
-of the imported module (and of all modules that are imported indirectly by it)
-become available in the importing module. In addition, they are also exported
-by the importing module.  However, if the import section occurs within the
-scope of a hiddens keyword, the exported entities are only visible in the
-importing module but they are not exported by the importing module.
+When importing modules at the topmost level of a module or when 
+the import section occurs within the scope of an exports keyword, 
+all exported entities of the imported module (and of all modules 
+that are imported indirectly by it) become available in the importing 
+module. In addition, they are also exported by the importing module.  
+However, if the import section occurs within the scope of a hiddens 
+keyword, the exported entities are only visible in the importing 
+module but they are not exported by the importing module.
 
-An imported module can be parameterized or decorated with renamings, see
-\link*{ParametersRenamings}[Section~\Ref]{ParametersRenamings}
+An imported module can be parameterized or decorated with renamings, 
+see \link*{ParametersRenamings}[Section~\Ref]{ParametersRenamings}
 for more details.
+
+The name of the imported module can also be a compound module name.
+In \link*{the definition of the \sdf\ comments}[Figure~\Ref]{CODE:sdfcomment}
+the imported module {\tt basic/Whitespace} is an example of such a
+compound module name.
 
 \subsection{Symbols}
 \label{Symbols}
@@ -528,15 +616,14 @@ comparable to terminals and non-terminals in other grammar definition
 formalisms. The elementary symbols are:
 
 \begin{itemize}
-\item \emph{sort}: corresponds to a non-terminal, e.g., {\tt Bool}.  Sort
-  names always start with a capital letter and may be followed by letters
-  and/or digits.  Hyphens (``{\tt -}'') may be embedded in a sort name.
+\item \emph{sort}: corresponds to a non-terminal, e.g., {\tt Bool}.  
+Sort names always start with a capital letter and may be followed 
+by letters and/or digits.  Hyphens (``{\tt -}'') may be embedded 
+in a sort name.
 
-\item \emph{literal}: corresponds to a terminal, e.g., {\tt true} or 
-{\tt "\&"}. It is advisable to quote always your terminals, also
-the terminals consisting of only letters. \emph{This is certainly needed
-in case of terminals starting with a capital letter, otherwise these
-literals are interpreted as sorts.}
+\item \emph{literal}: corresponds to a terminal, e.g., {\tt "true"} or 
+{\tt "\&"}. Terminals must always be quoted, also the terminals 
+consisting of only letters. 
   
 \item \emph{character class}: corresponds to a set of characters, 
 e.g., {\tt [a-z]}.
@@ -545,8 +632,8 @@ Character classes will be explained in
 they are mainly used when describing the lexical syntax of a language.
 \end{itemize}
 
-Starting with the elementary symbols, more complex symbols can be constructed
-by way of the following operators.
+Starting with the elementary symbols, more complex symbols can 
+be constructed by way of the following operators.
 
 \htmlmenu{1}
 
@@ -559,19 +646,20 @@ Examples of the use of the various operators will be given in
 
 \index{option operator@option operator}
 \index{{\tt ?}@{\tt ?}}
-The postfix option operator {\tt ?} describes an optional part in a syntax
-rule. For instance, {\tt ElsePart?}  defines zero or exactly one occurrence of
-{\tt ElsePart}.
+The postfix option operator {\tt ?} describes an optional part in 
+a syntax rule. For instance, {\tt ElsePart?}  defines zero or 
+exactly one occurrence of {\tt ElsePart}.
 
 \subsubsection{Sequence}
 \label{SequenceOperator}
 
 \index{sequence operator@sequence operator}
 \index{{\tt (...)}@{\tt (...)}}
-The sequence operator {\tt (...)} describes the grouping of two or more
-symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly used to group symbols
-together to form a more complex symbol using one of the available operators,
-e.g., {\tt (Bool "\&")*}.  It has no effect to construct a sequence consisting
+The sequence operator {\tt (...)} describes the grouping of two 
+or more symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly 
+used to group symbols together to form a more complex symbol 
+using one of the available operators, e.g., {\tt (Bool "\&")*}.  
+It has no effect to construct a sequence consisting
 of a single symbol.  The empty sequence is represented as {\tt ()}.
 
 \subsubsection{Repetition}
@@ -581,22 +669,22 @@ of a single symbol.  The empty sequence is represented as {\tt ()}.
 \index{list@list}
 \index{{\tt *}@{\tt *}}
 \index{{\tt +}@{\tt +}}
-Repetition operators express that a symbol should occur several times.  In
-this way it is possible to construct flat lists and therefore we usually refer
-to repetitions as \emph{lists}.
+Repetition operators express that a symbol should occur several times.  
+In this way it is possible to construct flat lists and therefore we 
+usually refer to repetitions as \emph{lists}.
 
 Repetition operators come in two flavors, with and without separators.
-Furthermore, it is possible to express the minimal number of repetitions of
-the symbol: at least zero times ({\tt *}), at least one time ({\tt +}), or at
-least $n$ times ({\tt n+}). Examples are:
+Furthermore, it is possible to express the minimal number of 
+repetitions of the symbol: at least zero times ({\tt *}) or at least 
+one time ({\tt +}).
+Examples are:
 
 \begin{itemize}
 
 \item {\tt Bool*} (a list of zero or more {\tt Bool}s).
 
-\item {\tt \{Bool ","\}+} (a list of one or more {\tt Bool}s separated by comma's).
-
-\item {\tt Bool3+} (a list of at least 3 {\tt Bool}s).
+\item {\tt \{Bool ","\}+} (a list of one or more {\tt Bool}s 
+separated by comma's).
 
 \end{itemize}
 
@@ -604,10 +692,10 @@ In case of a separated list the element can be an arbitrary symbol, but
 the separator can only be a plain literal.  It is possible to write,
 for instance {\tt \{Int Bool\}*} or {\tt \{Int (","|";")\}*},
 but the \link{{\tt asfsdf-checker}}[, see Section~\Ref]{SEC:SDF-checker}, 
-will produce a warning indicating
-that this type of symbol is not supported. 
-Both the \link{interpreter}[, see Section~\Ref]{SEC:interpretationgofterms} 
-and the \link{compiler}[, see Section~\Ref]{SEC:reducingofterms} do
+will produce a warning indicating that this type of symbol is not 
+supported. 
+Both the \link{interpreter}[, see Section~\Ref,]{SEC:interpretationgofterms} 
+and the \link{compiler}[, see Section~\Ref,]{SEC:reducingofterms} do
 not support this type of separated lists.
 
 \subsubsection{Alternative}
@@ -616,54 +704,25 @@ not support this type of separated lists.
 \index{alternative operator@alternative operator}
 \index{{\tt |}@{\tt |}}
 The alternative operator {\tt |} expresses the choice between two symbols,
-e.g., {\tt true | false} represents that either a {\tt true} symbol or a {\tt
-  false} symbol may occur here.  The alternative operator is right associative
-and binds stronger than any other operator on symbols. This is important
-because {\tt Bool "," | Bool ";"} expresses {\tt Bool ("," | Bool) ";"}
-instead of {\tt (Bool ",") | (Bool ";")}. So, in case of doubt use the
-sequence operator in combination with the alternative operator.
+e.g., {\tt true | false} represents that either a {\tt true} symbol 
+or a {\tt false} symbol may occur here.  The alternative operator is 
+right associative and binds stronger than any other operator on symbols. 
+This is important because {\tt Bool "," | Bool ";"} expresses 
+{\tt Bool ("," | Bool) ";"} instead of {\tt (Bool ",") | (Bool ";")}. 
+So, in case of doubt use the sequence operator in combination with 
+the alternative operator.
 
 \subsubsection{Tuple}
 \label{TupleOperator}
 
 \index{tuple operator@tuple operator}
-\index{{\tt \#}@{\tt \#}}
-The tuple operator {\tt \#} describes the grouping of a sequence of symbols of
-a fixed length into a tuple. The notation for tuples is {\tt < , , >}, i.e., a
-comma-separated list of elements enclosed in angle brackets.  For example,
-{\tt Bool \# Int \# Id} describes a tuple with three elements consisting of a
-{\tt Bool}, an {\tt Int} and an {\tt Id} (in that order).  For instance, {\tt
-  <true, 3, x>} is a valid example of such a tuple.  The tuple operator is
-right associative and binds weaker than the alternative operator.
-
-\subsubsection{Permutation (deprecated)}
-\label{PermutationOperator}
-
-\index{permutation operator@permutation operator}
-\index{{\tt <<...>>}@{\tt <<...>>}}
-The permutation operator {\tt <<...>>} describes an arbitrary permutation of
-a given sequence of symbols.  For example, {\tt <<Bool Int Id>>} represents a
-permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.  Valid
-instantiations are, for instance, {\tt true 3 x} and {\tt x 3 true}.  There
-are six valid instantiations for this permutation.
-
-\subsubsection{Set (deprecated)}
-\label{SetOperator}
-\index{set operator@set operator}
-\index{{\tt Set[...]}@{\tt Set[...]}}
-
-This operator is deprecated and will disappear from \asfsdf\ specification 
-formalism in the near future. It is advisable not to use this operator
-any more.
-
-The set operator {\tt Set[...]} is an abbreviation for defining a set of
-elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
-definition {\tt "\{" \{Int ","\}* "\}"}. As a consequence, {\tt \{1, 2, 3\}} is
-a valid instantiation for the given definition.
-
-This operator is deprecated and will disappear from \asfsdf\ specification 
-formalism in the near future. It is advisable not to use this operator
-any more.
+The tuple operator describes the grouping of a sequence of symbols of
+a fixed length into a tuple. 
+The notation for tuples is {\tt < , , >}, i.e., a comma-separated list 
+of elements enclosed in angle brackets.  For example,
+{\tt <Bool, Int, Id>} describes a tuple with three elements consisting 
+of a {\tt Bool}, an {\tt Int} and an {\tt Id} (in that order).  
+For instance, {\tt <true, 3, x>} is a valid example of such a tuple.  
 
 \subsubsection{Function}
 \label{FunctionOperator}
@@ -672,9 +731,9 @@ any more.
 \index{{\tt (...=>...)}@{\tt (...=>...)}}
 The function operator {\tt (...=>...)} allows the definition of function
 types. Left of {\tt =>} zero or more symbols may occur, right of {\tt =>}
-exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} represents
-a function with two argument (of types {\tt Bool} and {\tt Int}, respectively)
-and a result type {\tt Int}.
+exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} 
+represents a function with two argument (of types {\tt Bool} and 
+{\tt Int}, respectively) and a result type {\tt Int}.
 
 \subsubsection{Parameterized Sorts}
 \label{ParameterizedSorts}
@@ -699,32 +758,32 @@ The context-free syntax rule describing parameterized sorts is:
 \label{Aliases}
 
 In ordinary programming it is good practice to use named constants to
-represent literals or constant values.  In \sdf\ it is good practice to give a
-name (``alias'') to complicated symbols that occur repeatedly in the
-specification.  An alias is thus a named abbreviation for a complicated
-symbol.  For example,
+represent literals or constant values.  In \sdf\ it is good practice 
+to give a name (``alias'') to complicated symbols that occur 
+repeatedly in the specification.  An alias is thus a named 
+abbreviation for a complicated symbol.  For example,
 
 \begin{verbatim}
 aliases
-  Bool # Int # Id -> Tuple3
+  <Bool, Int, Id> -> Tuple3
 \end{verbatim}
-introduces the alias {\tt Tuple3} for the symbol {\tt Bool \# Int \# Id} and
-instead of using {\tt Bool \# Int \# Id} one can use the alias {\tt Tuple3}.
-During parse table generation the alias is replaced by the actual symbol.  It
-is not allowed to give an alias for an alias or to redefine aliases.
+introduces the alias {\tt Tuple3} for the symbol {\tt <Bool, Int, Id>} and
+instead of using {\tt <Bool, Int, Id>} one can use the alias {\tt Tuple3}.
+During parse table generation the alias is replaced by the actual symbol.  
+It is not allowed to give an alias for an alias or to redefine aliases.
 For example, the following definitions are illegal:
 
 \begin{verbatim}
 aliases
   Tuple3          -> SuperTuple
-  Bool # Int # Id -> Tuple3
+  <Bool, Int, Id> -> Tuple3
 \end{verbatim}
 (An alias is defined for the alias {\tt Tuple3}.)
 
 \begin{verbatim}
 aliases
-  Bool # Int # Id -> Tuple3
-  Bool # Int      -> Tuple3
+  <Bool, Int, Id> -> Tuple3
+  <Bool, Int>     -> Tuple3
 \end{verbatim}
 (The alias {\tt Tuple3} is redefined.)
 
@@ -742,30 +801,48 @@ sorts
   <Symbol>*
 \end{verbatim}
 
-The keyword {\tt sorts} is in fact misleading, since not only plain {\tt Sort}s
-can be declared, but more complex {\tt Symbol}s can be declare in the 
-sorts section as well.
-
-The definition of symbols in the sorts section is two-fold. 
-First of all, it is required that all sorts that occur in some symbol 
+Only plain {\tt Sort}s and parameterized {\tt Sort}s can be declared
+in the {\tt sorts} section, but more complex {\tt Symbol}s will be
+syntactically recognized, 
+but the \link{{\tt asfsdf-checker}}[, see Section~\Ref]{SEC:SDF-checker}, 
+will generate a warning.
+It is required that all sorts that occur in some symbol 
 in the specification are declared. 
-Secondly, symbols declared in the sorts section act as start symbol
-for the underlying grammar.
-This has the effect that input sentences corresponding to
-these symbols can be parsed. 
-
-Sorts sections can either be hidden or exported. The effect of defined
-symbols as start symbols for the grammar may lead to an explosion
-of start states for the parser and thus lead to performance loss.
-To prevent this it can be advisable to hide sort sections. The
-symbols defined are only visible in the module containing this
-hidden sorts section, but not in modules importing this module.
 
 \noindent Recall that a sort name should start with a capital letter and 
 may be followed by letters and/or digits. 
 Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
 \link{Lexical Syntax}[ Section~\Ref]{LexicalSyntax}.
+
+It is not allowed (or necessary) to define the sorts 
+{\tt LAYOUT} and {\tt CHAR}. These two sorts are always available.
+
+\subsection{Context-free start-symbols}
+\label{SEC:ContextFreeStartSymbols}
+
+Via the context-free start symbols section the symbols are 
+explicitly defined which will serve as start symbols when 
+parsing terms. If no start symbols are defined it is not possible 
+to recognize terms. This has the effect that input sentences 
+corresponding to these symbols can be parsed. 
+So, if we want to recognize booleans terms we have to define 
+explicitly the sort {\tt Boolean} as a start symbol in the 
+module {\tt Booleans}. Any symbol, also lists, tuples, etc., can
+serve as a start-symbol.
+
+\begin{verbatim}
+context-free start-symbols
+  <Symbol>*
+\end{verbatim}
+
+Context-free start-symbol sections can either be hidden or exported. 
+The effect of defined symbols as start symbols for the grammar may lead 
+to an explosion of start states for the parser and thus lead to 
+performance loss. To prevent this it can be advisable to hide 
+start-symbol sections. The symbols defined are only visible in the 
+module containing this hidden start-symbols section, but not in 
+modules importing this module.
 
 \subsection{Lexical Syntax}
 \label{LexicalSyntax}
@@ -840,7 +917,7 @@ education) recognizes the single string {\tt aapnootmies}.
 \begin{verbatim}
 module LeesPlank
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Aap Noot Mies
@@ -901,7 +978,7 @@ digits ({\tt Digit}) are shown in
 \begin{verbatim}
 module LettersDigits1
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts LCLetter UCLetter Letter Digit
@@ -927,7 +1004,7 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts LetterOrDigit
@@ -1023,7 +1100,7 @@ or via their decimal representation.
 \begin{verbatim}
 module Characters
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
@@ -1065,7 +1142,7 @@ followed by zero or more letters or digits.
 \begin{verbatim}
 module Identifiers-repetition
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Letter DigitLetter
@@ -1100,7 +1177,7 @@ digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\t
 \begin{verbatim}
 module Identifiers-optional
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Letter Digit
@@ -1149,7 +1226,7 @@ followed by one of the following:
 \begin{verbatim}
 module Identifiers-alternative1
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts UCLetter Digit
@@ -1197,7 +1274,7 @@ explicit.
 \begin{verbatim}
 module Identifiers-alternative2
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts UCLetter LCLetterDigit
@@ -1239,7 +1316,7 @@ UnsignedReal}.
 \begin{verbatim}
 module Numbers
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts UnsignedInt SignedInt UnsignedReal Number 
@@ -1281,7 +1358,7 @@ double quotes.
 \begin{verbatim}
 module Strings
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts String StringChar
@@ -1329,7 +1406,7 @@ language of coordinates and drawing commands presented
 \begin{verbatim}
 module DrawingCommands
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT COORD CMND 
@@ -1405,7 +1482,7 @@ in a Pascal-like language).
 \begin{verbatim}
 module Decls
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts ID DECL TYPE 
@@ -1460,7 +1537,7 @@ the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
 \begin{verbatim}
 module Exp
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT VAR EXP
@@ -1502,7 +1579,7 @@ by commas.
 \begin{verbatim}
 module Lists
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT LIST1 LIST2
@@ -1539,7 +1616,7 @@ for more details on priority definitions.
 \begin{verbatim}
 module Bool
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Bool1 Bool2
@@ -1575,7 +1652,7 @@ for an example of such a specification.
 \begin{verbatim}   
 module Cycle
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts A P T
@@ -1588,7 +1665,39 @@ exports
 \end{IncCode}
 \caption{Dangerous combination of lists and optionals}
 \end{Label}
-\end{figure}                                                                              
+\end{figure}
+
+Sometimes commenting out parts of a production rule may lead to cycles,
+because a non-terminal becomes an empty producing non-terminal.
+This in combination with lists may then produce unexpected cycles.
+
+\subsection{Labels in the left-hand side of Functions}
+It is possible to decorate the members in the left-hand side of a
+production rule with labels. These labels have no effect when
+parsing input terms. However, when an SDF module is used as input
+for generating APIs these labels will be used.
+See \link*{below}[ Figure~\Ref]{CODE:labels}
+for an example of an SDF specification containing labels.
+
+\begin{figure}
+\begin{Label}{CODE:labels}
+\begin{IncCode}
+\begin{verbatim}   
+module Booleans
+
+imports basic/Whitespace
+
+exports
+  sorts Boolean
+
+  context-free syntax
+    lhs:Boolean "|" rhs:Boolean -> Boolean
+    lhs:Boolean "&" rhs:Boolean -> Boolean
+\end{verbatim}
+\end{IncCode}
+\caption{The module {\tt basic/Booleans} decorated with labels}
+\end{Label}
+\end{figure}
 
 \subsection{Attributes of Lexical and Context-free Functions}
 \label{Attributes}
@@ -1708,7 +1817,7 @@ is given
 \begin{verbatim}
 module BracketExpr
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts EXPR
@@ -1800,7 +1909,7 @@ associativities.
 \begin{verbatim}
 module SimpleExpr
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts E 
@@ -1849,7 +1958,7 @@ an example of the use of grouped associativity.
 \begin{verbatim}
 module ComplexExpr
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts E 
@@ -1943,7 +2052,7 @@ the letters, e.g. {\tt a b} is a legal recognizable string.
 \begin{verbatim}
 module Functional
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Var Term
@@ -1996,7 +2105,7 @@ it simply forbids that optional layout is followed by layout characters.
 \begin{Label}{CODE:safe-layout}
 \begin{IncCode}
 \begin{verbatim}
-module Layout
+module basic/Whitespace
 
 exports
   lexical syntax
@@ -2015,7 +2124,7 @@ illustrates the
 use of restrictions to extend the previous layout definition with C-style
 comments. For readability we give here \emph{two} restrictions whereas the
 first one is already imported from 
-\link{module {\tt Layout}}[(Figure~\Ref)]{CODE:safe-layout}.  
+\link{module {\tt basic/Whitespace}}[(Figure~\Ref)]{CODE:safe-layout}.  
 The repetition of this first restriction is
 redundant and could be eliminated.
 
@@ -2025,7 +2134,7 @@ redundant and could be eliminated.
 \begin{verbatim}
 module Comment
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts ComWord Comment
@@ -2072,7 +2181,7 @@ a lexical restriction.
 \begin{verbatim}
 module RestrictedExpressions
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Expr
@@ -2165,7 +2274,7 @@ shows how to enforce the longest match for the sort {\tt Id}.
 \begin{verbatim}
 module Identifiers-restrict
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Id
@@ -2213,7 +2322,7 @@ the addition of a new reject rule for that literal.
 \begin{verbatim}
 module Identifiers-reject
 
-imports Layout
+imports basic/Whitespace
 
 exports
   lexical syntax
@@ -2248,7 +2357,7 @@ than the second one.
 \begin{verbatim}
 module Identifiers-avoid
 
-imports Layout
+imports basic/Whitespace
 
 exports
   lexical syntax
@@ -2374,7 +2483,7 @@ combination of the two functions `{\tt E sub E -> E}' and `{\tt E sup E ->
 \begin{verbatim}
 module Eqn
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts E 
@@ -2413,7 +2522,7 @@ tree is removed from the ambiguity node.
 \begin{verbatim}
 module DanglingElse
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts E S
@@ -2597,7 +2706,7 @@ should {\em always} be quoted.
 \begin{verbatim}
 module VarDecls
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts ID DECL TYPE 
@@ -2628,42 +2737,6 @@ allowed to use them in terms.
 Ambiguities due to variables are resolved by the {\em Prefer Variables}
 strategy that was discussed in
 \link*{Lexical Ambiguities}[Section~\Ref]{lex-ambiguity}.
-
-\subsubsection{Set Operator}
-
-The \link{set operator}[ (see Section~\Ref)]{SetOperator} 
-is an abbrevation for
-representing sets. However, to obtain access to the elements of such
-a set an auxilary variable has to be defined
-as shown \link*{below}[in Figure~\Ref]{CODE:set-variable}.
-
-\begin{figure}
-\begin{Label}{CODE:set-variable}
-\begin{IncCode}
-\begin{verbatim}
-module Set
-
-imports Layout
-
-exports
-  sorts Id IdSet
-
-  lexical syntax
-    [a-z]+ -> Id
- 
-  context-free syntax
-    Set[ID] -> IdSet 
-
-hiddens
-  variables
-    "Id"[0-9]*     -> Id
-    "Id*"[0-9]*    -> {Id ","}* 
-    "IdSet"[0-9]*  -> IdSet
-\end{verbatim}
-\end{IncCode}
-\caption{Variable declarations for Set}
-\end{Label}
-\end{figure}         
 
 \subsection{Equations}
 \label{Equations}
@@ -2736,27 +2809,38 @@ different, but semantically equivalent) ways:
 
 
 \noindent where ${\tt C}_1$, ${\tt C}_2$, ...  are conditions which may be 
-either matching (and have the form`{\tt $S$ := $T$}'),
+either matching (and have the form `{\tt $S$ := $T$}'),
+negative matching (and have the form `{\tt $S$ :!= $T$}'),
 positive (and have  the form `{\tt $S$ == $T$}'), 
 or negative (and have the form `{\tt $S$ != $T$}').
 
 The conditions of an equation are evaluated from left to right. Let,
-initially, $V$ be the set of variables occurring in the left-hand side $L$ of the
-conclusion of the equation. For the evaluation of each positive condition we
+initially, $V$ be the set of variables occurring in the left-hand 
+side $L$ of the conclusion of the equation. 
+For the evaluation of matching conditions we have the following case:
+\begin{itemize}
+
+\item Left-hand side of a matching condition must contain at least one
+  new or fresh variable not in $V$.
+  Reduce the right-hand side of the matching condition to a normal form 
+  and the matching condition succeeds if this normal form and the 
+  left-hand side side of the condition match. 
+  The new variables resulting from this match are added
+  to $V$. This kind of condition is called a \emph{match} condition.
+  The variables occurring in both $V$ and the left-hand side must
+  represent the syntactically the same subterm.
+
+\end{itemize}
+For the evaluation of each positive condition we
 distinguish the following cases:
 
 \begin{itemize}
   
 \item The condition contains only variables in $V$. Reduce both sides of the
-  condition to normal form and the condition succeeds if both normal forms are
-  identical. Technically, this is called a \emph{join} condition.
+  condition to normal form and the condition succeeds if both normal 
+  forms are identical. 
+  Technically, this is called a \emph{join} condition.
   
-\item One of the sides of the condition contains new variables not in $V$.
-  Reduce the side that does not contain new variables to normal form and the
-  condition succeeds if this normal form and the other (unnormalized) side of
-  the condition match. The new variables resulting from this match are added
-  to $V$. This kind of condition is called a \emph{match} condition.
-
 \end{itemize}
   
 The evaluation of negative conditions is described by replacing in the above
@@ -2858,7 +2942,7 @@ variable and the repeated evaluation of following conditions.
 \begin{verbatim}
 module Sets
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Elem Set
@@ -2968,7 +3052,7 @@ number containing the letter {\tt a} is constructed.
 \begin{verbatim}
 module Nats
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT-CON
@@ -2994,7 +3078,7 @@ equations
 \begin{verbatim}
 module Nats
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT-CON
@@ -3097,7 +3181,7 @@ is decorated with the memo attribute to improve its efficiency.
 \begin{verbatim}
 module Fib
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Int
@@ -3420,7 +3504,7 @@ be exchanged, will lead to an infinite rewriting loop.
 \begin{verbatim}
 module ItemSet
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Item Set 
@@ -3468,6 +3552,7 @@ uninstantiated variables.
 \end{itemize}
 
 
+\subsection{Tests}
 
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
@@ -3502,7 +3587,7 @@ compute constant expressions.
 \begin{verbatim}
 module Diff 
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts NAT VAR EXP
@@ -3565,7 +3650,7 @@ order.
 \begin{verbatim}
 module Flag
 
-imports Layout
+imports basic/Whitespace
 
 exports
   sorts Color Flag 
@@ -4060,31 +4145,164 @@ into a parse table. The checks are performed on two levels: the first
 level are \sdf\ specific check, the second level are the \asfsdf\ specific
 check.
 
-\subsection{\sdf\ specific well-formedness checks}
+There are various categories of messages in the \ASmetaenv.
+\begin{enumerate}
+\item Parse errors.
+\item SDF type check warnings.
+\item SDF type check errors.
+\item ASF type check errors.
+\end{enumerate}
+We will briefly discuss each of the error messages and indicate what is
+exactly wrong in the specification. Furthermore we will hint at how the
+error can be fixed.
 
-\paragraph{Undeclared sorts} If a sort is used in some lexical or
-context-free syntax rule and it is not defined in some visible 
-sorts section this will be reported. This is in fact no error,
-but may be caused due to a typo.
+\subsection{Parse Errors}
+There are three different types of parse errors:
+\begin{enumerate}
+\item A syntax error, which is reported by pinpointing the exact
+location in the file and the message {\tt Parse error near cursor} in case
+of an editor or in the message pane an error message similar to
+{\tt Parse error: character '<c>' unexpected}.
+This means that the parser detected a syntax error in the text to be parsed
+and can not proceed its parsing process.
+Clicking on the error in the {\tt Errors}-pane moves the cursor to the
+exact error location and launches if needed the editor.
+A variant of the syntax error message is: {\tt Parse error: eof
+unexpected}.
 
-\paragraph{Double declared symbols} If a symbol occur in more than
-one visible sorts section this will be reported. This is again not
-an error.
+\item A cycle, in case of an editor the cursor is positioned at the
+position where the first cycle is detected in the input and the message
+is {\tt Cycle: <list\_of\_production\_rules>} is printed.
+A cycle is reported whenever
+the parser detects a non terminating chain of reductions.
+All production rules on the cycle are shown as {\tt
+<list\_of\_production\_rules>}.
 
-\paragraph{Defined symbols without corresponding productions} If a sort
-is defined but no corresponding production with this symbol as right
-hand side is can be found. Such a symbol can not be used as a start
-symbol by the parser, because it produces in fact empty.
+\item An ambiguity, again in case of an editor the cursor is
+positioned at the position where the first ambiguity is detected in the
+input and the message {\tt Ambiguity: <list\_of\_production\_rules>}
+is printed. An ambiguity is reported whenever the parser was able to
+recognized a (part of) the input sentence in different ways.
+The {\tt <list\_of\_production\_rules>} shows all production rules
+that are involved in the ambiguity.
 
-\paragraph{Redefinition of aliased symbols} This is a real error, because
-a redefinition of an aliased symbol, means that this symbol can be
-replaced in two different ways.
+\end{enumerate}
 
-\paragraph{Illegal attributes} Certain attributes are only useful in
-combination with production rules of a specific form.
+\subsection{Type check warnings for plain SDF}
+\label{SEC:plainSDFwarnings}
+The warnings and error for SDF are separated into 4 sections. First we will
+discuss the type check warnings and \link{errors}[ (see
+Section~\Ref)]{SEC:plainSDFerrors} for plain SDF. This variant of SDF is
+independent of ASF. Later we will discuss the \link{warnings}[ (see
+Section~\Ref)]{SEC:ASFSDFwarnings} and \link{errors}[ (see
+Section~\Ref)]{SEC:ASFSDFerrors} for SDF used in combination with ASF.
+In this case we need to be more strict and every SDF construct is supported
+by ASF.
 
+Warnings do not break the specification, but it is advisable to fix
+them anyway. Often they point out some not well-formed part in the
+specification.
 
-\subsection{\asfsdf\ specific well-formedness checks}
+\begin{itemize}
+\item {\tt undeclared sorts} This warning indicates that a sort is used
+which is not explicitly declared, or it is declared but in a hidden
+section.
+\item {\tt double declared sort} This warning points out that the sort is
+already declared somewhere in this module, or in one of the imported
+modules.
+\item {\tt double declared start-symbol}
+This warning indicates that
+the start-symbol is previously defined as start-symbol as well. This can
+be in the current module or in one of the imported modules.
+\item {\tt illegal attribute: \{bracket, left, right, assoc, non-assoc\}}
+This warning is generated because the syntactic form the production rule
+and the attribute do not match. Given this mismatch the intended behaviour
+will not be effective.
+\item {\tt used in priorities but undefined}
+This warning is generated whenever a production rule is used in a priority
+section which is not defined in this module or in one of the imported
+modules. It is possible that this production rule will be defined in
+one of the modules which imports this module. Normally, this indicates
+some typo.
+\item {\tt inconsistent rhs in priorities}
+This warning is caused by a production rule which has not the same
+right-hand side as the other production rules in the priority relation.
+Whenever this occurs the effect of the expressed priority relation will
+be ignored.  This check is performed modulo injections.
+\item {\tt unknown constructor used in priorities}
+This warning indicates the use of a constructor which is not used in
+the corresponding set of production rules with the same right-hand side.
+This is a very weak check on consistent use of constructor information.
+\item {\tt sort CHAR used in production rule}
+\item {\tt deprecated tuple notation}
+\item {\tt deprecated unquoted symbol notation}
+\item {\tt deprecated non-plain sort definition}
+\item {\tt aliased symbol already declared}
+\end{itemize}
+
+\subsection{Type check errors for plain \sdf}
+\label{SEC:plainSDFerrors}
+\begin{itemize}
+\item {\tt module not available}
+\item {\tt start-symbols in <ModuleName> not defined in any right-hand}
+\item {\tt literal in right-hand-side not allowed}
+\item {\tt only sort allowed in right-hand-side of lexical-function}
+\item {\tt double used label}
+\item {\tt constructor has already been used}
+The combination of right-hand symbol and the constructor information should
+be unique. This warning points this out. It is advisable not to ignore
+this warning. In fact, for the parser these double constructors are no
+problem, but there are tools based on SDF for which this is problematic.
+\end{itemize}
+
+\subsection{Type check warnings for \asfsdf}
+\label{SEC:ASFSDFwarnings}
+\begin{itemize}
+\item {\tt exported variables section}
+\item {\tt kernel syntax construction}
+\item {\tt production renamings not supported}
+\item {\tt not supported symbol}
+\end{itemize}
+
+\subsection{Type check errors for \asfsdf}
+\label{SEC:ASFSDFerrors}
+\begin{itemize}
+\item {\tt traversal attributes in non-prefix function}
+\item {\tt illegal traversal attribute}
+\item {\tt missing bottom-up or top-down attribute}
+\item {\tt missing break or continue attribute}
+\item {\tt missing trafo and/or accu attribute}
+\item {\tt accu should return accumulated type}
+\item {\tt trafo should return traversed type}
+\item {\tt accutrafo should return tuple of correct types}
+\item {\tt inconsistent arguments of traversal productions}
+\item {\tt inconsistent traversal attributes}
+\item {\tt asf equation sort must not be used}
+\item {\tt charclasses not allowed in context-free syntax}
+\end{itemize}
+
+\subsection{Type check warnings for \asf}
+\begin{itemize}
+\item {\tt Lexical probably intended to be a variable}
+\item {\tt Deprecated condition syntax "="}
+\item {\tt constructor not expected as outermost function symbol of left
+hand side}
+\end{itemize}
+
+\subsection{Type check errors for \asf}
+\begin{itemize}
+\item {\tt equations contain ambiguities}
+\item {\tt uninstantiated variable occurrence}
+\item {\tt negative condition introduces variable(s)}
+\item {\tt uninstantiated variables in both sides of condition}
+\item {\tt uninstantiated variables in equality condition}
+\item {\tt right-hand side of matching condition introduces variables}
+\item {\tt matching condition does not introduce new variables}
+\item {\tt strange condition encountered}
+\item {\tt Left hand side is contained in a list}
+\item {\tt no variables may be introduced in left hand side of test}
+\end{itemize}
+
 
 \section{Selected Components of the \ASmetaenv}
 \label{SEC:Components}
@@ -4373,75 +4591,6 @@ steps are as follows:
 
 \end{itemize}
 
-
-\section{Future Developments}
-The \ASmetaenv\ is a system that is continuously evolving.  In this
-section, we give a brief sketch of the developments that we expect in
-the near future. Don't hesitate to give us feedback on these plans!
-
-\subsection{Near Future (within 6 months)}
-
-\begin{itemize}
-
-\item Conversion of all tools to work with the new internal format AsFixMe.
-      This will simplify several components since only support for a single
-      format is needed.
-
-\item Face lift of the toplevel user-interface. The current interface is written
-      in Tcl/Tk. The new interface will be written in Java/Swing.
-      Probably, we will detach the import graph viewer from the toplevel interface,
-      but add it as an optional, separate view on the specification.
-
-\item Integration of the TIDE debugging framework.  This will provide
-      very sophisticated support for the debugging of, amongst others,
-      \asfsdf\ specifications.
-
-\item Integration of the pretty printer generator.
-
-\item Overall optimizations.
-
-\end{itemize}
-
-\subsection{Medium Term (within 1.5 years)}
-
-\begin{itemize}
-
-\item Support for traversal functions in the compiler.
-
-\item Support for origin tracking in evaluator and compiler.
-
-\item New lexical primitives in \asfsdf\ that allow the detailed
-      control of the output of transformations.
-
-\item User-interface tailoring: make it possible to add button definitions to editors
-      that can activate either specified functions or external tools.
-
-\item Generation of stand-alone environments.
-
-\item Support for representing and manipulating graphs.
-
-\item Introduction of generic services like error messaging and online help.
-
-\end{itemize}
-
-\subsection{Long Term (more than 1.5 years)}
-
-The long term ambition is to build a very flexible tool kit that can
-be used to build many kinds of interactive systems for program
-analysis and program transformation.  We currently target
-domain-specific languages and software renovation as our main
-application areas. Emphasis will be on:
-
-\begin{itemize}
-
-\item Enhancing the functionality, efficiency and reuasability of components.
-
-\item Gradually defining a framework in which all these applications can be fit.
-     
-\item Carrying out case studies with as many different languages as possible
-      to get feedback on the emerging framework.
-
-\end{itemize}
 
 \bibliographystyle{plain}
 \bibliography{manual}

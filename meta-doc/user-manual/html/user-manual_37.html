@@ -1,35 +1,54 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
-<!-- XML file produced from file: manual.ltx --
- -- using Hyperlatex v 2.5 (c) Otfried Cheong--
- -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- XML file produced from file: manual.ltx
+     using Hyperlatex v 2.7 (c) Otfried Cheong
+     on Emacs 21.3.1, Wed May 26 11:12:45 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 7.1 Parse Table Generation</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 6.1 Parse Errors</title>
 
-</head><body bgcolor= "#ffffe6">
+<style type="text/css">
+.maketitle { align : center }
+div.abstract { margin-left: 20%; margin-right: 10%; }
+h3.abstract  { align : center }
+div.verse, div.quote, div.quotation {
+  margin-left : 10%; 
+  margin-right : 10%;
+}
+</style>
+
+
+</head>
+<body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.1 Parse Table Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
-<h2>7.1 Parse Table Generation</h2>
-<p>Before you can parse terms over a module <tt>M</tt> outside the
-ASF+SDF Meta-Environment&#32;you have to obtain a parse table for this module.  There
-are currently three ways to achieve this:
-<ul><li>Interactively using the ASF+SDF Meta-Environment&#10;by selecting module <tt>M</tt> and pushing the <tt>Dump Parse Table...</tt> button in 
-the pop-up menu.
-<li>From the command line using the command <tt>pt-dump</tt>.
-In the background the same actions are performed as in the interactive
-setting, only no user interface is activated.
-For further information use <tt>pt-dump -h</tt>.
-<li>From the command line using the command <tt>sdf2table</tt>.  You should
-be aware that <tt>sdf2table</tt> needs as input the <em>complete</em> grammar
-of <tt>M</tt>. This means in particular that all imports of <tt>M</tt> should
-be expanded before <tt>sdf2table</tt> can be used. Command line tools are
-available to do this, but we will not describe them here.
-<p>For further information use <tt>sdf2table -h</tt>.
-</ul>
-<p>Before a parse table is generated the SDF&#32;definition is checked with
-respect to well-formedness. When using the <tt>sdf2table</tt> only the 
-checks on SDF&#32;are performed, in the other two cases the checks
-on SDF&#32;and on ASF+SDF&#32;specific features are performed as well.
-<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+    <td bgcolor="#99ccff"><a href="user-manual_38.html"><img border="0" alt="6.2 Type check warnings for plain SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>6.1 Parse Errors</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
+<h2>6.1 Parse Errors</h2>
+There are three different types of parse errors:
+<ol><li>A syntax error, which is reported by pinpointing the exact
+location in the file and the message <tt>Parse error near cursor</tt> in case
+of an editor or in the message pane an error message similar to
+<tt>Parse error: character '&lt;c&gt;' unexpected</tt>.
+This means that the parser detected a syntax error in the text to be parsed
+and can not proceed its parsing process.
+Clicking on the error in the <tt>Errors</tt>-pane moves the cursor to the
+exact error location and launches if needed the editor.
+A variant of the syntax error message is: <tt>Parse error: eof
+unexpected</tt>.
+<li>A cycle, in case of an editor the cursor is positioned at the
+position where the first cycle is detected in the input and the message
+is <tt>Cycle: &lt;list&#95;of&#95;production&#95;rules&gt;</tt> is printed.
+A cycle is reported whenever
+the parser detects a non terminating chain of reductions.
+All production rules on the cycle are shown as <tt>&lt;list&#95;of&#95;production&#95;rules&gt;</tt>.
+<li>An ambiguity, again in case of an editor the cursor is
+positioned at the position where the first ambiguity is detected in the
+input and the message <tt>Ambiguity: &lt;list&#95;of&#95;production&#95;rules&gt;</tt>
+is printed. An ambiguity is reported whenever the parser was able to
+recognized a (part of) the input sentence in different ways.
+The <tt>&lt;list&#95;of&#95;production&#95;rules&gt;</tt> shows all production rules
+that are involved in the ambiguity.
+</ol>
+<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.1 Parse Table Generation</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_38.html"><img border="0" alt="6.2 Type check warnings for plain SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>6.1 Parse Errors</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>

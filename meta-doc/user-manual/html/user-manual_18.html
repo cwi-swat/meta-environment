@@ -1,64 +1,324 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
-<!-- XML file produced from file: manual.ltx --
- -- using Hyperlatex v 2.5 (c) Otfried Cheong--
- -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- XML file produced from file: manual.ltx
+     using Hyperlatex v 2.7 (c) Otfried Cheong
+     on Emacs 21.3.1, Wed May 26 11:12:44 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 2.9 Attributes of Lexical and Context-free Functions</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.9 Context-free Syntax</title>
 
-</head><body bgcolor= "#ffffe6">
+<style type="text/css">
+.maketitle { align : center }
+div.abstract { margin-left: 20%; margin-right: 10%; }
+h3.abstract  { align : center }
+div.verse, div.quote, div.quotation {
+  margin-left : 10%; 
+  margin-right : 10%;
+}
+</style>
+
+
+</head>
+<body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10 Priorities" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8.6 Lists in combination with optionals or empty producing
-sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Attributes of Lexical and Context-free Functions</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
-<h2>2.9 Attributes of Lexical and Context-free Functions</h2>
+    <td bgcolor="#99ccff"><a href="user-manual_19.html"><img border="0" alt="2.10 Labels in the left-hand side of Functions" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_17.html"><img border="0" alt="Defining Strings" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Context-free Syntax</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
+<h2>2.9 Context-free Syntax</h2>
 
-<p>The definition of a lexical or context-free functions may be followed by
-<em>attributes</em> that define additional (syntactic or semantic) properties of
-that function.  The following syntax-related attributes exist:
-<ul><p><A NAME="1">&nbsp;</A>
-<li><tt>bracket</tt> allows the definitions of parenthesis and other
-kinds of brackets that are mostly used for overruling the priorities
-of operators in expressions
-(see <a HREF="user-manual_19.html#BracketFunctions">Bracket Functions</a>).
-<p><A NAME="2">&nbsp;</A>
+<p>The context-free syntax describes the concrete and abstract syntactic
+structure of sentences in a language. A context-free syntax contains a set of
+declarations for <em>context-free functions</em>, each consisting of zero or
+more symbols followed by `<i> -&gt; </i>' and a result symbol.  They may be
+followed by attributes that control how parentheses and brackets affect the
+abstract syntax, by attributes that define the associativity of a rule, or by
+<a href="user-manual_20.html">attributes</a> which influence the rewriting
+process.  All functions with the same result sort together define the
+alternatives for that symbol.
+<p>Elements of the left-hand side of a context-free function
+are separated by an invisible non-terminal <tt>LAYOUT?</tt> 
+(optional <tt>LAYOUT</tt>) in order to permit layout between these members.
+This optional layout non-terminal is automatically inserted.
+
+<h3><a name="id1">2.9.1 Context-free Functions</a></h3>
+<p>In their simplest form, declarations of context-free functions consist of a
+sequence of zero or more symbols followed by `<i> -&gt; </i>'
+and a result symbol. All literal strings appearing in a context-free
+function declaration are implicitly added to the lexical syntax. Consider the
+language of coordinates and drawing commands presented
+<a href="#id2">below</a>.
+<p><p><a name="id2">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module DrawingCommands
+
+imports basic/Whitespace
+
+exports
+  sorts NAT COORD CMND 
+
+  lexical syntax
+    [0-9]+ -&gt; NAT 
+
+  context-free syntax
+    "(" NAT "," NAT ")" -&gt; COORD
+    "line" "to" COORD   -&gt; CMND 
+    "move" "to" COORD   -&gt; CMND
+</pre>
+</font></font> 
+   <hr />
 
 
+<div align="center">Simple context-free syntax definition</div>
+</a>
+<p>   
+<p>An equivalent conventional BNF grammar (and not considering lexical syntax) 
+of the <a href="#id2">above grammar</a> is
+<a href="#id3">as follows</a>.
+<p><p><a name="id3">
 
-<li><tt>left</tt>, <tt>right</tt>, <tt>non-assoc</tt>, and <tt>assoc</tt>
-are used to define the associativity of functions 
-(see <a HREF="user-manual_19.html">Priorities</a>).
-<p><A NAME="3">&nbsp;</A>
-<li><tt>prefer</tt> is used to indicate that the attributed function should
-always be preferred over other functions (without this attribute)
-in certain cases of syntactic ambiguity
-(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
-<p><A NAME="4">&nbsp;</A>
-<li><tt>avoid</tt> is used to indicate that a function should
-only be used as a last resort in certain cases of
-syntactic ambiguity
-(see <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
-<p><A NAME="5">&nbsp;</A>
-<li><tt>reject</tt> can be used to explicitly forbid certain syntactic
-  constructs
-  (see  <a HREF="user-manual_19.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+   <hr />
+
+<font size="-1">
+<pre>
+&lt;COORD&gt; ::= "(" &lt;NAT&gt; "," &lt;NAT&gt; ")" 
+&lt;CMND&gt;  ::= "line" "to" &lt;COORD&gt; | "move" "to" &lt;COORD&gt;
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">BNF definition of simple grammar</div>
+</a>
+<p>   
+<p>When a literal in a context-free function consists only of lower-case letters
+and digits and is not a keyword of ASF+SDF, it need not be surrounded by
+quotes. You may therefore write `<tt>move to COORD -&gt; CMND</tt>' instead of the
+<a href="#id2">previous definition</a>. But is 
+better to always write the quotes.
+
+<h3><a name="PrefixFunctions">2.9.2 Prefix Functions</a></h3>
+
+<p>Prefix functions are a special kind of context-free functions. They have
+a "fix" syntax. They can be considered as an abbreviation mechanism for
+functions written as expected. For instance the function <tt>f(X,Y) -&gt; Z</tt>
+is a prefix function. This function can also be defined as an ordinary
+context-free function <tt>"f" "(" X "," Y ")" -&gt; Z</tt>. The prefix functions
+are often used in combination with ASF&#32;equations.
+
+<h3><a name="id5">2.9.3 Lists</a></h3>
+<p>Context-free syntax often requires the description of
+the repetition of a syntactic notion or of list structures (with or without
+separators) containing a syntactic notion. The 
+<a href="user-manual_13.html#RepetitionOperator">repetition operator</a>
+can be used for this purpose.
+<p>Lists may be used in both the left-hand side and right-hand side of a
+context-free function as well as in the right-hand side of a 
+<a href="user-manual_24.html">variable declaration</a>.
+<p><a href="#id6">Below</a> an example is given of
+how lists can be used to define 
+the syntax of a list of identifiers (occurring in a declaration
+in a Pascal-like language).
+<p><p><a name="id6">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module Decls
+
+imports basic/Whitespace
+
+exports
+  sorts ID DECL TYPE 
+
+  lexical syntax
+    [a-z]+ -&gt; ID 
+
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -&gt; DECL
+    "integer"                 -&gt; TYPE 
+    "real"                    -&gt; TYPE
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Definition of a list of identifiers</div>
+</a>
+
+<h3><a name="id7">2.9.4 Chain Functions</a></h3>
+<p>A context-free syntax may contain functions that do not add syntax, but serve
+the sole purpose of including a smaller syntactic notion into a larger one. 
+This notion is also known as <em>injections</em>. 
+Injections are functions "without a name" and with one argument sort
+like <tt>ID -&gt; DATA</tt>.
+A typical example is the inclusion of identifiers in expressions or of natural
+numbers in reals. Such a <em>chain function</em> has one of the following forms:
+<ul><li><tt>SMALL -&gt; BIG</tt> 
+<li><tt>&#123;SMALL SEP&#125;* -&gt; BIG</tt> 
+<li><tt>SMALL* -&gt; BIG</tt> 
+<li><tt>&#123;SMALL SEP&#125;+ -&gt; BIG</tt> 
+<li><tt>SMALL+ -&gt; BIG</tt>
+<li><tt>&#123;SMALL SEP&#125;n+ -&gt; BIG</tt> 
+<li><tt>SMALLn+ -&gt; BIG</tt>
 </ul>
-<p>The remaining attributes define semantic properties of a function:
-<ul><p><A NAME="6">&nbsp;</A>
-<li><tt>constructor</tt> declares a function to be a <em>constructor
-function</em>, this means that for this function <em>no</em> equations
-may be defined with this function as outermost function symbol
-in the left hand side.
-<p><A NAME="7">&nbsp;</A>
-<li><tt>memo</tt> declares a function to be a <em>memo function</em> for
-which all calls and results will be cached during evaluation
-(see <a HREF="user-manual_23.html#MemoFunctions">Memo Functions</a>).
-<p><A NAME="8">&nbsp;</A>
-<li><tt>traversal</tt> is used to declare so-called traversal functions
-that greatly simply the specification of functions that have to visit
-(parts of) a term 
-(see <a HREF="user-manual_23.html#Traversal">Traversal Functions</a>).
-</ul>
-<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<p>Chain functions do not appear in the abstract syntax but correspond to a
+<em>subsort relation</em> between <tt>SMALL</tt> and <tt>BIG</tt>.
+If <tt>SORT-A</tt> is a subsort of <tt>SORT-B</tt> then in the abstract syntax
+tree a tree of sort <tt>SORT-A</tt> can be put wherever a tree of
+sort <tt>SORT-B</tt> is required.
+In the example <a href="#id8">below</a>
+the symbols <tt>NAT</tt> and <tt>VAR</tt> are injected in <tt>EXP</tt>.
+<p><p><a name="id8">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module Exp
+
+imports basic/Whitespace
+
+exports
+  sorts NAT VAR EXP
+
+  lexical syntax
+    [0-9]+   -&gt; NAT
+    [XYZ]    -&gt; VAR
+
+  context-free syntax
+    NAT                 -&gt; EXP
+    VAR                 -&gt; EXP
+    EXP "+" EXP         -&gt; EXP
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Definition of expressions that uses injections</div>
+</a>
+
+<h3><a name="id9">2.9.5 Miscellaneous Operators</a></h3>
+<p>In <a href="user-manual_13.html">Symbols</a>
+a number of sophisticated operators, like
+alternative, option, set, function, sequence, tuple, and permutation
+are discussed. These operators allow a concise manner of defining
+grammars. There are, however, a number of issues to be taken into consideration
+when using this operators. 
+
+<h4><a name="id10">Definition of lists</a></h4>
+<p>In the example <a href="#id11">below</a>,
+two different lists are defined, 
+<tt>LIST1</tt> represents a list of naturals separated
+by commas whereas <tt>LIST2</tt> represents a list of naturals terminated
+by commas.
+<p><p><a name="id11">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module Lists
+
+imports basic/Whitespace
+
+exports
+  sorts NAT LIST1 LIST2
+
+  lexical syntax
+    [0-9]+   -&gt; NAT
+
+  context-free syntax
+    {NAT ","}+ -&gt; LIST1
+    (NAT ",")+ -&gt; LIST2
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Definition of two list variants</div>
+</a>
+
+<h4><a name="id12">Alternative alternatives</a></h4>
+The choice between two symbols can be defined in two different ways: by two
+separate syntax rules or by a single syntax rule using an alternative
+operator. 
+Both styles are shown
+<a href="#id13">below</a>.
+<p>The definition of the binary operators <tt>"|"</tt> and <tt>"&#38;"</tt> can
+be made more concise as shown by <tt>Bool2</tt>, however, it is now
+impossible to express that <tt>"&#38;"</tt> has a higher priority
+than <tt>"|"</tt>, see 
+<a href="user-manual_21.html">Priorities</a>
+for more details on priority definitions.
+<p><p><a name="id13">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module Bool
+
+imports basic/Whitespace
+
+exports
+  sorts Bool1 Bool2
+
+  context-free syntax
+    true                    -&gt; Bool1
+    false                   -&gt; Bool1
+    Bool1 "|" Bool1         -&gt; Bool1 {left}
+    Bool1 "&amp;" Bool1         -&gt; Bool1 {left}
+
+    true | false            -&gt; Bool2
+    Bool2 ("|" | "&amp;") Bool2 -&gt; Bool2 {left}
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Two ways of defining <tt>|</tt> and <tt>&#38;</tt></div>
+</a>
+
+<h3><a name="id14">2.9.6 Lists in combination with optionals or empty producing
+sorts</a></h3>
+<p>The combination of lists and optionals or empty producing sorts leads to
+cycles in the parse tree. Cycles are considered parse errors.
+The parser will be produce an error message whenever during parsing
+a cycle is detected. No parse tree is constructed in such a case.
+Cycles will not lead to non-termination during parsing.
+See <a href="#CODE:listcycle">below</a>
+for an example of such a specification.
+<p><p><a name="CODE:listcycle">
+
+   <hr />
+
+<font size="-1">
+<pre>   
+module Cycle
+
+imports basic/Whitespace
+
+exports
+  sorts A P T
+
+  context-free syntax
+    "a"        -&gt; A
+    A?         -&gt; P
+    "[" P+ "]" -&gt; T
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Dangerous combination of lists and optionals</div>
+</a>
+<p><p>Sometimes commenting out parts of a production rule may lead to cycles,
+because a non-terminal becomes an empty producing non-terminal.
+This in combination with lists may then produce unexpected cycles.
+<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_19.html"><img alt="2.10 Priorities" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_9.html"><img alt="2 An Introduction to ASF+SDF" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_17.html"><img alt="2.8.6 Lists in combination with optionals or empty producing
-sorts" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Attributes of Lexical and Context-free Functions</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_19.html"><img border="0" alt="2.10 Labels in the left-hand side of Functions" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_17.html"><img border="0" alt="Defining Strings" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.9 Context-free Syntax</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>

@@ -1,29 +1,41 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<html>
-<!-- XML file produced from file: manual.ltx --
- -- using Hyperlatex v 2.5 (c) Otfried Cheong--
- -- on Emacs 21.2.1, Thu Sep 18 17:55:09 2003 -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- XML file produced from file: manual.ltx
+     using Hyperlatex v 2.7 (c) Otfried Cheong
+     on Emacs 21.3.1, Wed May 26 11:12:45 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br>$Revision$ -- 7.3 Obtaining Equations</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 6.3 Type check errors for plain SDF</title>
 
-</head><body bgcolor= "#ffffe6">
+<style type="text/css">
+.maketitle { align : center }
+div.abstract { margin-left: 20%; margin-right: 10%; }
+h3.abstract  { align : center }
+div.verse, div.quote, div.quotation {
+  margin-left : 10%; 
+  margin-right : 10%;
+}
+</style>
+
+
+</head>
+<body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_40.html"><img alt="7.4 Rewriting a Term using the Evaluator" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.3 Obtaining Equations</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table>
-<h2>7.3 Obtaining Equations</h2>
+    <td bgcolor="#99ccff"><a href="user-manual_40.html"><img border="0" alt="6.4 Type check warnings for ASF+SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_38.html"><img border="0" alt="6.2 Type check warnings for plain SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>6.3 Type check errors for plain SDF</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
+<h2>6.3 Type check errors for plain SDF</h2>
 
-<p>In order to <a HREF="user-manual_40.html">rewrite a term</a>, 
-or <a HREF="user-manual_41.html">compile a specification</a> it is necessary
-to obtain the equations.
-The generation of equations given an ASF+SDF&#32;specification can be
-performed in two different ways:
-<ul><li>Interactively using the ASF+SDF Meta-Environment&#10;by selecting module <tt>M</tt> and pushing the <tt>Dump Equations...</tt> button in 
-the pop-up menu.
-<li>From the command line using the command <tt>eqs-dump</tt>.
-In the background the same actions are performed as in the interactive
-setting, only no user interface is activated.
-For further information use <tt>eqs-dump -h</tt>.
+<ul><li><tt>module not available</tt>
+<li><tt>start-symbols in &lt;ModuleName&gt; not defined in any right-hand</tt>
+<li><tt>literal in right-hand-side not allowed</tt>
+<li><tt>only sort allowed in right-hand-side of lexical-function</tt>
+<li><tt>double used label</tt>
+<li><tt>constructor has already been used</tt>
+The combination of right-hand symbol and the constructor information should
+be unique. This warning points this out. It is advisable not to ignore
+this warning. In fact, for the parser these double constructors are no
+problem, but there are tools based on SDF for which this is problematic.
 </ul>
-The result is a file named <tt>M.eqs</tt>.
-<HR ><address>M.G.J. van den Brand and P. Klint, September 18, 2003</address><br>
+<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-  <td bgcolor="#99ccff"><a HREF="user-manual_40.html"><img alt="7.4 Rewriting a Term using the Evaluator" border=0 src="next.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_36.html"><img alt="7 Selected Components of the ASF+SDF Meta-Environment" border=0 src="up.gif"></a></td><td bgcolor="#99ccff"><a HREF="user-manual_38.html"><img alt="7.2 Parsing" border=0 src="previous.gif"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.3 Obtaining Equations</b></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_54.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a HREF="user-manual_53.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_40.html"><img border="0" alt="6.4 Type check warnings for ASF+SDF" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_36.html"><img border="0" alt="6 Well-formedness checks on SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_38.html"><img border="0" alt="6.2 Type check warnings for plain SDF" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>6.3 Type check errors for plain SDF</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>
