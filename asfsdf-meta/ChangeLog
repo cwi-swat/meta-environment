@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Mar 24 14:05:33 CET 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - simplified move-{up,down,left,right} actions
+
 Wed Mar 17 17:22:06 CET 2004 <markvdb@cwi.nl>
  * Moved sdf specific buttons to the asfsdf-meta package.
 
