@@ -26,6 +26,8 @@ ATerm SDF_getImportModuleNamePlain(SDF_Import import);
 ATermList      SDF_getImports(SDF_Module module);
 SDF_ImportList SDF_getModuleImportsList(SDF_Module module);
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1, SDF_ImportList l2);
+ATbool SDF_containsImportListImport(SDF_ImportList list, 
+                                    SDF_Import  import);
 SDF_Module SDF_addModuleImport(SDF_Module mod, SDF_Import import);
 
 SDF_SymbolList  SDF_getModuleSorts(SDF_Module module);

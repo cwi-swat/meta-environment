@@ -33,6 +33,13 @@ SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
   return l1;
 }
 
+ATbool SDF_containsImportListImport(SDF_ImportList list, 
+                                    SDF_Import  import)
+{
+  return (ATindexOf((ATermList) SDF_ImportListToTerm(list), 
+                    SDF_ImportToTerm(import), 0) < 0);
+}
+
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1,
                                             SDF_ProductionList l2)
 {
