@@ -578,6 +578,14 @@ PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols)
 }
 
 /*}}}  */
+/*{{{  PT_Symbol PT_makeSymbolSet(PT_Symbol symbol) */
+
+PT_Symbol PT_makeSymbolSet(PT_Symbol symbol)
+{
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolSet, symbol);
+}
+
+/*}}}  */
 /*{{{  PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol) */
 
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
@@ -1957,6 +1965,9 @@ ATbool PT_isValidSymbol(PT_Symbol arg)
   else if (PT_isSymbolPerm(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolSet(arg)) {
+    return ATtrue;
+  }
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
@@ -2101,6 +2112,14 @@ ATbool PT_isSymbolPerm(PT_Symbol arg)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isSymbolSet(PT_Symbol arg) */
+
+ATbool PT_isSymbolSet(PT_Symbol arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolSet, NULL);
+}
+
+/*}}}  */
 /*{{{  ATbool PT_isSymbolFunc(PT_Symbol arg) */
 
 ATbool PT_isSymbolFunc(PT_Symbol arg)
@@ -2210,6 +2229,9 @@ ATbool PT_hasSymbolSymbol(PT_Symbol arg)
   else if (PT_isSymbolIterSepN(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolSet(arg)) {
+    return ATtrue;
+  }
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
@@ -2249,6 +2271,9 @@ PT_Symbol PT_getSymbolSymbol(PT_Symbol arg)
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
   else if (PT_isSymbolIterSepN(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else if (PT_isSymbolSet(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
   else if (PT_isSymbolFunc(arg)) {
@@ -2292,6 +2317,9 @@ PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol)
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
   else if (PT_isSymbolIterSepN(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
+  }
+  else if (PT_isSymbolSet(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
   else if (PT_isSymbolFunc(arg)) {
@@ -3209,6 +3237,10 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_Symbo
   if (PT_isSymbolPerm(arg)) {
     return PT_makeSymbolPerm(
         acceptSymbols ? acceptSymbols(PT_getSymbolSymbols(arg)) : PT_getSymbolSymbols(arg));
+  }
+  if (PT_isSymbolSet(arg)) {
+    return PT_makeSymbolSet(
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptString, acceptSymbols, acceptNumber, acceptRanges));
   }
   if (PT_isSymbolFunc(arg)) {
     return PT_makeSymbolFunc(
