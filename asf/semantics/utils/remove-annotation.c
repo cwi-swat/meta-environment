@@ -1,7 +1,8 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                         The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,25 +32,21 @@
 static char myname[]    = "remove-annotation";
 static char myversion[] = "1.1";
 static char myarguments[] = "a:bhi:o:tV";
- 
+
+#define arity(appl) (ATgetArity(ATgetAFun((ATermAppl) appl)))
 
 ATerm RemoveAnnotation(ATerm tree, ATerm anno_label)
 {
   switch(ATgetType(tree)) {
   case AT_APPL:
     {
-      AFun fun = ATgetAFun((ATermAppl) tree);
-      ATerm annos = AT_getAnnotations(tree);
+      ATerm arg;
       int i;
 
-      for(i = 0; i < ATgetArity(fun); i++) {
-        ATerm arg = ATgetArgument((ATermAppl) tree, i);
-        arg = RemoveAnnotation(arg, anno_label);
+      for(i = 0; i < arity(tree); i++) {
+        arg  = ATgetArgument((ATermAppl) tree, i);
+        arg  = RemoveAnnotation(arg, anno_label);
         tree = (ATerm) ATsetArgument((ATermAppl) tree, arg, i);
-      }
-
-      if(annos) {
-        tree = AT_setAnnotations(tree, annos);
       }
 
       tree = ATremoveAnnotation(tree, anno_label);
