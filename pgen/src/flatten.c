@@ -166,6 +166,7 @@ static ATerm SDFflattenAttr(ATerm attr)
   else if(AFTisBracketAssoc(attr) ||
           AFTisConstructorAssoc(attr) ||
           AFTisMemoAssoc(attr) ||
+          AFTisTraverseAssoc(attr) ||
           AFTisRejectAttr(attr) ||
           AFTisPreferAttr(attr) ||
           AFTisUneagerAttr(attr)) {
@@ -191,9 +192,6 @@ static ATerm SDFflattenAttr(ATerm attr)
     at = AFTgetConsArg(attr);
     newat = SDFflattenATerm(at);
     newattr = ATmake("cons(<term>)",newat);
-  }
-  else if(AFTisTraverseAttr(attr)) {
-    newattr = ATmake("traverse");
   }
   else
     ATerror("expected attribute, got %t\n", attr);
