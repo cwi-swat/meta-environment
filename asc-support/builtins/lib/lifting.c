@@ -37,7 +37,7 @@ PT_Tree ASFE_lift_to_term(PT_Tree input)
 PT_Tree ASC_lift_to_term(ATerm input)
 {
   PT_Tree tree = muASFToTree(input);
-
+ATwarning("%t\n", tree);
   return (PT_Tree) PTPT_liftATerm((ATerm) tree);
 }
 

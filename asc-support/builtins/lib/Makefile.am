@@ -6,9 +6,6 @@ BUILTIN_NAMES_ARITY=\
 	read-term-from-file_1 \
 	write-term-to-file_2\
 	shell_1 \
-	strategy-some_2 \
-	strategy-all_2\
-	strategy-one_2\
 	term-compare_2\
 	lift-to-tree_1 \
 	lift-to-term_1 \
@@ -19,7 +16,6 @@ BUILTIN_SOURCES=common.c \
 		fileio.c \
 		normalize.c \
 		shell.c \
-		traversal.c \
 		term-compare.c \
 		lifting.c\
 		unparse.c
