@@ -225,7 +225,7 @@ static ATbool isNonTerminal(PT_Tree tree)
 
 static BOX_Box terminalToBox(PT_Tree tree)
 {
-  char *yield = PT_yieldTree(tree);
+  char *yield = PT_yieldTreeToString(tree, ATfalse);
   char *escaped = escapeQuotes(yield);
   char *quoted = quoteString(escaped);
   BOX_StrCon strcon = BOX_makeStrConDefault(quoted);
@@ -238,7 +238,7 @@ static BOX_Box terminalToBox(PT_Tree tree)
 static BOX_Box layoutToBox(PT_Tree tree)
 {
   BOX_BoxList boxList = BOX_makeBoxListEmpty();
-  char *yield = PT_yieldTree(tree);
+  char *yield = PT_yieldTreeToString(tree, ATfalse);
 
   if (!isLayout(yield)) {
     char *comment = stripLayout(yield);
@@ -379,7 +379,7 @@ static BOX_Box argsManyToBox(PT_Tree tree)
   for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) 
   {
     PT_Tree head = PT_getArgsHead(args);
-    if(!isLayout(PT_yieldTree(head)))  
+    if(!isLayout(PT_yieldTreeToString(head, ATfalse)))  
     {
       BOX_Box prettyHead = treeToBox(head);
 

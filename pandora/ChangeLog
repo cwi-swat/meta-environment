@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Aug 27 14:57:12 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
 Wed Aug 25 15:12:43 CEST 2004 <kooiker@cwi.nl>
  * generator/main.c:
    - Initialize aterm term table on 21, decreases number of rehashes 
