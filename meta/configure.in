@@ -16,7 +16,7 @@ AC_PREFIX_DEFAULT(`echo $PWD`/..)
 dnl Default locations of other components
 EPIC='$(prefix)'
 GEL='$(prefix)'
-TOOLBUS=$prefix
+TOOLBUS='$(prefix)'
 ATERM='$(prefix)'
 
 dnl Installation scripts 
@@ -156,6 +156,7 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	stred/nl/cwi/gipe/stred/Makefile \
 	asource/Makefile \
 	a2toa1/Makefile \
+	sglr/src/Makefile \
 , chmod +x meta install-prog-sh install-data-sh; \
   chmod +x graph-browser/graph-browser editor/editor \
 )

@@ -534,7 +534,7 @@ VERSION=0.02
 
 EPIC='$(prefix)'
 GEL='$(prefix)'
-TOOLBUS=$prefix
+TOOLBUS='$(prefix)'
 ATERM='$(prefix)'
 
 INSTALL='$(top_srcdir)/install-sh'
@@ -1353,6 +1353,7 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	stred/nl/cwi/gipe/stred/Makefile \
 	asource/Makefile \
 	a2toa1/Makefile \
+	sglr/src/Makefile \
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1428,6 +1429,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	stred/nl/cwi/gipe/stred/Makefile \
 	asource/Makefile \
 	a2toa1/Makefile \
+	sglr/src/Makefile \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
