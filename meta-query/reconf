@@ -1,0 +1,8 @@
+#! /bin/sh
+
+# $Id$
+
+aclocal -I ./config
+autoconf
+autoheader
+automake -a
