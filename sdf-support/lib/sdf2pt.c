@@ -258,6 +258,10 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
     result = PT_makeSymbolStrategy(ptLeft, ptRight);
   }
+  else if (SDF_isSymbolLabel(sdfSymbol)) {
+    SDF_Symbol arg = SDF_getSymbolSymbol(sdfSymbol);
+    result = SDFSymbolToPtSymbol(arg);
+  }
   else {
     ATerror("SDFSymbolToPtSymbol: unable to convert symbol %t: %s\n", 
 	    sdfSymbol, PT_yieldTree((PT_Tree) sdfSymbol));
