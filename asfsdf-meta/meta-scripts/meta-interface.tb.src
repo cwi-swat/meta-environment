@@ -11,10 +11,12 @@
 #include "error-display.tb"
 #include "error-support.idef"
 #include "asfsdfapigen.tb"
+#include "asdf-modules.tb"
 
 process Create-Asf-Processes is
 let Pid : int 
 in
+printf("Creating Create-Asf-Processes process\n").
   create(Asfe, Pid?).
   create(AsfSdfChecker, Pid?).
   create(AsfChecker, Pid?).
@@ -29,7 +31,8 @@ in
   create(Postprocess-semantics, Pid?) .
   create(Compile-semantics, Pid?) .
   create(Postprocess-collected-semantics, Pid?) .
-  create(TestAsfSpecification, Pid?)
+  create(TestAsfSpecification, Pid?).
+  create(ASDF, Pid?)
 endlet
  
 process TestAsfSpecification is
@@ -219,7 +222,7 @@ process GetActions(Actions : str?) is
 let
   ErrorMessage : str
 in
-  snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.buttons")) .
+  snd-msg(io-read-file("__ASDF__/standard.asdf.buttons")) .
   (
     rec-msg(io-file-contents(Actions?))
   +
@@ -233,7 +236,10 @@ let
   Id : int,
   Module : str,
   Actions : str,
-  ModuleNames : list
+  ModuleNames : list,
+  Modules : list,
+  Table : term,
+  Checking : term
 in
   Id := process-id.
   Create-Asf-Processes.
@@ -243,7 +249,7 @@ in
     snd-msg(actions-hook-result(Actions))
   +
     rec-msg(environment-name-hook).
-    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
+    snd-msg(environment-name-hook-result("Action Environment"))
   +
     rec-msg(library-location-hook).
     snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
@@ -285,7 +291,7 @@ in
     snd-msg(other-tables-invalidated-hook)
   +
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")) 
+    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
   +
     rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
     snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree"))) 
@@ -295,21 +301,26 @@ in
   +
     rec-msg(add-initial-syntax-modules-hook(Modules?, sdf)) .
     snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, eqs)) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, trm)) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(clear-module-db-hook) .
-    snd-msg(module-db-hook-done) 
-  +
-    rec-msg(add-initial-eqs-module-names-hook(ModuleNames?)) .
-    snd-msg(initial-eqs-module-names-added(ModuleNames)) 
-  +
-    rec-msg(post-initialization-hook) .
-    snd-msg(post-initialization-hook-finished) 
+  + 
+    rec-msg(obtain-parse-table-hook(trm, Module?, Checking?)) .
+    snd-msg(get-parsetable(Module, trm, Checking)) .
+    (
+      rec-msg(parse-table(Table?))
+    +
+      rec-msg(no-parse-table(ModuleName)) .
+      Table := no-table
+    )
+    snd-msg(obtain-parse-table-hook-result(Table)) 
+  + 
+    rec-msg(obtain-parse-table-hook(eqs, Module?, Checking?)) .
+    snd-msg(get-parsetable(Module, eqs, Checking)) .
+    (
+      rec-msg(parse-table(Table?))
+    +
+      rec-msg(no-parse-table(ModuleName)) .
+      Table := no-table
+    )
+    snd-msg(obtain-parse-table-hook-result(Table)) 
   ) * delta
 endlet
 
