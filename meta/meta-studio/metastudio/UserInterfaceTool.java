@@ -1,12 +1,11 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 18, 2003 10:59:31 AM
+// generation time: Feb 25, 2003 12:36:17 PM
 
 package metastudio;
 
 import aterm.*;
 import toolbus.*;
-import java.net.*;
 import java.util.*;
 
 abstract public class UserInterfaceTool
