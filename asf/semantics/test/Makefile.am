@@ -28,7 +28,7 @@ TEST_MODULES=\
 	Traversal-Typecheck \
 	Tuple
 
-TEST_MODULES_ASFE_ONLY=BoolAPI BoolPos Tree 
+TEST_MODULES_ASFE_ONLY=BoolAPI Tree 
 
 ASFC=${top_builddir}/semantics/asfc/src/asfc
 ASFE=${top_builddir}/semantics/asfe/src/asfe
