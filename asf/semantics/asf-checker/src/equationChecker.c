@@ -18,7 +18,8 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
   while (!PT_isArgsEmpty(variables)) {
     PT_Tree variable = PT_getArgsHead(variables);
 
-    if (PT_isEqualTree(tree, variable)) {
+    if (PT_isEqualTree(PT_removeTreeAnnotations(tree), 
+		       PT_removeTreeAnnotations(variable))) {
       return ATtrue;
     }
 
