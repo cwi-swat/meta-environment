@@ -45,6 +45,12 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require ToolBus
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus is in DIR])
+AC_SUBST(TOOLBUS)
+
+
 dnl Require sglr package
 AC_PACKAGE_REQUIRE(sglr, sglr,
    [  --with-sglr=DIR         SGLR distribution is in DIR])
