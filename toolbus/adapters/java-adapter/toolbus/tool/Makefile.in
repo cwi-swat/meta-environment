@@ -45,7 +45,7 @@ all:	${CLASSES}
 	toolbus -gentifs $<
 
 Testing.java: test.tifs
-	javatif -tool testing -tifs test.tifs -package toolbus.tool
+	java -classpath $$CLASSPATH:../.. toolbus.tool.JavaTif -tool testing -tifs test.tifs -package toolbus.tool
 
 clean:
 	${CLEAN} ${CLASSES}

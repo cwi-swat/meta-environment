@@ -8,12 +8,13 @@ public class ParseError extends Exception
   private char last;
   private String error;
 
-  public ParseError(InputChannel c, char lst, String err) {
+/*  public ParseError(InputChannel c, char lst, String err) {
     super(explanation(c, lst, err));
     channel = c;
     last = lst;
     error = err;
   }
+*/
   public ParseError(ATermChannel c, int lst, String err) {
     super(explanation(c, (char)lst, err));
     channel = c;
