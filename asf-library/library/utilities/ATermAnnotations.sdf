@@ -1,6 +1,6 @@
 module utilities/ATermAnnotations[X]
 
-imports languages/aterm/ATerms
+imports languages/aterm/syntax/ATerms
 imports basic/Strings
 
 exports

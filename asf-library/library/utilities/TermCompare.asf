@@ -1,7 +1,7 @@
 equations
 
 [less-0] less(X1, X2) = true when compare(X1, X2) = less
-[default-less] less(X1, X2) = false
+[default-0] less(X1, X2) = false
 
 [less-0] greater(X1, X2) = true when compare(X1, X2) = greater
 [default-greater] greater(X1, X2) = false
