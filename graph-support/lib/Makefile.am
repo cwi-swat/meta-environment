@@ -5,7 +5,7 @@ noinst_HEADERS = Graph.h Graph_dict.h
 pkgdata_DATA = Graph.adt
 data_DATA = ${JARFILE}
 
-EXTRA_DIST = Graph.adt
+EXTRA_DIST = Graph.adt graph-${VERSION}.jar
 
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 

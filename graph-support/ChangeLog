@@ -1,5 +1,9 @@
 $Id$
 
+Wed Dec  8 09:30:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/Makefile.am:
+   - Add graph-${VERSION}.jar to EXTRA_DIST 
+
 Mon Nov 29 10:33:03 CET 2004 <{jurgenv,jong,kooiker}@cwi.nl>
  * Execute 'dot -y' now, to flip coordinate system such that Swing
    can deal with it better.
