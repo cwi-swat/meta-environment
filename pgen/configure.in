@@ -135,5 +135,4 @@ AC_OUTPUT(
    test/first/Makefile
    test/grammars/Makefile
    test/tables/Makefile 
-  , chmod +x test/regress-lang
 )
