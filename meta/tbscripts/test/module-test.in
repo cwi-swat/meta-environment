@@ -88,8 +88,8 @@ done
 
 # Now let's do something
 
-toolbus=/ufs/jong/Research/bin/toolbus
-datadir=/ufs/jong/Research/share
+toolbus=__bindir__/toolbus
+datadir=__datadir__
 
 # Test 1. Attempt to create a non-existing module.
 ${toolbus} -I${datadir} new-module-test-1.tb

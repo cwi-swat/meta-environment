@@ -1,0 +1,21 @@
+# $Id$
+
+@SET_MAKE@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+datadir		= @datadir@
+
+# CLEANFILES are removed by 'make clean'
+CLEANFILES	= module-test
+
+test: module-test
+	./module-test
+
+clean:
+	rm -f *.o *~ $(CLEANFILES)
+
+module-test: module-test.in
+	sed 's#__bindir__#${bindir}#g;s#__datadir__#${datadir}#g' <$< >$@
+	chmod +x $@
