@@ -172,6 +172,9 @@ in
     rec-msg(file-extensions-hook).
     snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
   +
+    rec-msg(syntax-top-sort-hook(sdf)).
+    snd-msg(syntax-top-sort-hook-result(sort("Module")))
+  +
     rec-msg(semantics-top-sort-hook).
     snd-msg(semantics-top-sort-hook-result(sort("Equations")))
   ) * delta
