@@ -616,9 +616,11 @@ specifications as well as for quitting the \ASmetaenv.
 and a number of links to web pages with more detailed information
 on the Meta-Environment.
 {\tt Open Library Module} is used for opening a predefined 
-\asfsdf\ module. A \link{dialog window}[, see
+\asfsdf\ module. A \link{dialog window}[ (see
 Figure~\Ref)]{FIG:open-library} appears.
-%%, see \link{\asfsdf\ library modules}[ Section~\Ref]{SEC:library-modules}.
+\link{\asfsdf\ library modules}[, see Section~\Ref,]{SEC:library-modules}
+are very convenient when developing a specification. It provides a number
+of predefined basic data structures and grammars.
 
 \begin{figure}
 \begin{center}
@@ -1455,6 +1457,33 @@ hand side}
 \item {\tt Left hand side is contained in a list}
 \item {\tt no variables may be introduced in left hand side of test}
 \end{itemize}
+
+\section{Libraries}
+\label{SEC:library-modules}
+
+The \asfsdf\ library modules are very convenient when developing 
+a specification. It provides a number of predefined basic data 
+structures and grammars. There are 4 different library categories:
+\begin{itemize}
+\item basic
+\item containers
+\item langauges
+\item utilities
+\end{itemize}
+
+The basic library provides basic data structures such as Booleans, Bytes,
+Comments, Integers, and Strings. Furthermore, it provides modules to access
+information stored in the underlying parse trees, such as position
+information.
+
+The containers library gives a number of parameterized data structures,
+such as balanced trees, lists, sets, and tables. 
+
+The languages library allows the reuse of a number of grammars. This part
+of the library will be extended in the near future.
+
+The utilies library provides functionality which can be very helpful when
+developing sophisticated \asfsdf\ specifications.
 
 %}}}
 %{{{ Guided Tour
