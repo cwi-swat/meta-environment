@@ -337,9 +337,9 @@ void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
 
   prev_char_parent = NULL;
 
-  ATfprintf(SG_StackDotFP, "digraph ParseStack { \n"
-            "rankdir = LR; \n"
-            "edge [dir = back]; \n"
+  ATfprintf(SG_StackDotFP, "digraph ParseStack {\n"
+            "rankdir = LR;\n"
+            "edge [dir = back];\n"
            );
   SG_StacksToDot(SG_StackDotFP, sts);
   ATfprintf(SG_StackDotFP, "}\n");
