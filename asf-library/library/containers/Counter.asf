@@ -1,0 +1,14 @@
+equations
+
+[] get-counter(Id) = lookup(containersCounterTable, Id)
+
+[] set-counter(Id,Int) = Int 
+     when store(containersCounterTable, Id, Int) = containersCounterTable
+
+[] create-counter(Id) = set-counter(Id, 0)
+
+[] incr-counter(Id) = set-counter(Id, get-counter(Id) + 1)
+
+[] decr-counter(Id) = set-counter(Id, get-counter(Id) - 1)
+
+[] reset-counter(Id) = set-counter(Id, 0)
