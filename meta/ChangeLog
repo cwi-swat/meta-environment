@@ -1,5 +1,9 @@
 # $Id$
 
+2001/08/20 (jong@cwi.nl)
+ * Version 0.7beta started
+ * switched aterm and toolbus configuration options
+
 2001/07/30 (jurgenv@cwi.nl)
  * Bumped to 0.6
 
