@@ -39,7 +39,7 @@ in
   ).
   create(Editor("Sdf2",Src,Path,"Sdf2","sdf"), Tid?). 
   snd-msg(open-language("Sdf2", 
-                        "@datadir@/Sdf2.baf")).
+                        "__datadir__/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet
 

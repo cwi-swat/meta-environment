@@ -23,7 +23,7 @@ in
   (
     rec-msg(online-help-wanted).
     BROWSER(HELP,
-            "netscape -remote openUrl(@prefix@/new-meta/doc/html/meta.html)", 
+            "netscape -remote openUrl(__prefix__/new-meta/doc/html/meta.html)", 
             "").
     Started := true.
     snd-msg(done)
@@ -36,7 +36,7 @@ in
     (
       if Started then
         BROWSER(HELP,
-                "netscape -remote openUrl(@prefix@/new-meta/doc/html/open-module.html)",
+                "netscape -remote openUrl(__prefix__/new-meta/doc/html/open-module.html)",
                 "")
       fi
     +

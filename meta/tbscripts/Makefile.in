@@ -136,3 +136,6 @@ distclean: clean
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
 	$(MAKEDEPEND) $(INCLUDES) $(CSRC) > .depend
+
+%.tb : %.tb.in
+	sed 's#__prefix__#${prefix}#g;s#__datadir__#${datadir}#g' <$< >$@
