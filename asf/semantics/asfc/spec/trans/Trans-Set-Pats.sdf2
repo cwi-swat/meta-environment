@@ -1,0 +1,25 @@
+%% The module {\tt Trans-Lookup-Pats} takes care of transforming
+%% rewrite rules with lookup-like list matching patterns into
+%% rewrite rules which traverse recursively through the lists.
+module Trans-Set-Pats
+
+imports Check-List-Pats
+
+exports
+  context-free syntax
+    transform-special-rule(Rule,IntCon) -> FuncRuleTuple
+
+hiddens
+  context-free syntax
+    transform-set-rule(FunId,{Cond "&"}+,Term,IntCon) -> FuncRuleTuple
+
+%%%hiddens
+%%%  context-free syntax
+%%%    get-list-type(Term)              -> FunId
+%%%    find-list-type(TermList)         -> FunId
+%%%    get-first-var-in-lhs(Term)       -> Term
+%%%    find-first-var-in-lhs(TermList)  -> Term
+%%%    get-second-var-in-lhs(Term)      -> Term
+%%%    find-second-var-in-lhs(TermList) -> Term
+%%%    get-var-in-rhs(Term)             -> Term
+%%%    find-var-in-rhs(TermList)        -> Term

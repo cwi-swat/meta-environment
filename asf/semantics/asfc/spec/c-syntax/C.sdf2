@@ -1,0 +1,49 @@
+%% module C
+module C
+
+%% adds \#include lines to C and defines a CProgram as
+%% INCLUDES followd by Translation-unit (cf. C)
+
+imports Pure-C Layout %%%ANumerals
+
+exports
+  sorts CDir CDirs CFilename CProgram INCLUDE INCLUDES
+
+  lexical syntax
+    "\"" CDirs [a-zA-Z0-9\_\-\.]+ "\""    -> CFilename
+    "\"" [a-zA-Z0-9\_\-\.]+ "\""          -> CFilename
+    "/" CDir*                           -> CDirs
+    "./" CDir*                          -> CDirs
+    CDir+                               -> CDirs
+    [a-zA-Z0-9\_\-]+ "/"                 -> CDir
+    "../"                               -> CDir
+
+  context-free syntax
+    INCLUDES Declaration-list-opt -> CProgram
+
+    "#include" CFilename    -> INCLUDE
+
+    INCLUDE -> INCLUDES
+    INCLUDES INCLUDE -> INCLUDES
+
+  variables
+    "FormalArg"[0-9\']*   -> Parameter-declaration
+    "FormalArgs"[0-9\']*  -> Parameter-list
+    "Arg"[0-9\']*         -> Expression
+    "ActualArgs"[0-9\']*  -> Argument-expression-list
+    "ActualArgs+"[0-9\']* -> { Expression "," }+
+    "ActualArgs*"[0-9\']* -> { Expression "," }*
+    "ActualArg"[0-9\']*   -> Expression
+    "Stat"[0-9\']*        -> Statement
+    "Stat*"[0-9\']*       -> Statement-list-opt
+    "Stat+"[0-9\']*       -> Statement+
+    "Stats"[0-9\']*       -> Statement+
+    "Test"[0-9\']*        -> Expression
+    "Ltest"[0-9\']*       -> Expression
+    "Itest"[0-9\']*       -> Expression
+    "CConstant"[0-9\']*   -> Identifier
+    "Declarator"[0-9\']*  -> Declarator
+    "csort"[\']+          -> Identifier
+    "Post"[\']*           -> Primary-expression
+    "Expr"[0-9\']*        -> Expression
+    "Char*"[0-9]*         -> CHAR*

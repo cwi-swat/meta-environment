@@ -1,0 +1,35 @@
+%% The module {\tt Make-Left-Linear} takes care of the
+%% removal of non-left-linear rules.
+module Make-Left-Linear
+
+imports MuASF-Basics %%%MuASF-SingleSorted MuASF-ManySorted
+
+exports
+  context-free syntax
+    make-left-linear(Module) -> Module
+
+hiddens
+  context-free syntax
+    make-l-l-ruleopt(RulesOpt)         -> RuleList
+    make-l-l-rules({Rule ";"}*,VarEnv) -> RuleList
+    make-l-l-rule(Rule,VarEnv)         -> Rule
+%% The second argument of the next four functions
+%% contains the variables defined in the specification.
+%% The third argument contains the variables used
+%% in this rule.
+  context-free syntax
+    make-l-l-lhs(Term,VarEnv,IntVarEnv)          -> Term-CList-VarEnv
+    make-l-l-terms({Term ","}+,VarEnv,IntVarEnv) -> Term-CList-VarEnv
+    make-l-l-term(Term,VarEnv,IntVarEnv)         -> Term-CList-VarEnv
+    make-l-l-conds({Cond "&"}+,VarEnv,IntVarEnv) -> CList-VarEnv
+    make-l-l-cond(Cond,VarEnv,IntVarEnv)         -> CList-VarEnv
+
+  context-free syntax
+    make-eq-cond(Term,Term) -> Cond
+
+hiddens
+  variables
+    "SpecVarenv"[0-9]* -> VarEnv
+    "RuleVarenv"[0-9]* -> IntVarEnv
+    "Char*"[0-9]*      -> CHAR*
+    "Char+"[0-9]*      -> CHAR+

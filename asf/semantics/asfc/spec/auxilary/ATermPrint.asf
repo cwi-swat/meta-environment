@@ -1,0 +1,9 @@
+equations
+
+  [print-3] print-trms(T)         = print(T)
+  [print-3] print-trms(T, Ts)     = print(T) ++ "," ++ print-trms(Ts)
+  [print-2] print( [Ts] )         = "[" ++ print-trms(Ts) ++ "]"
+  [print-2] print( [] )           = "[]"
+  [print-1] print( L )            = quote(L)
+  [print-1] print( natcon(c+) )   = literal(""" c+ """)
+  [print-2] print( AFun(Ts) )     = print(AFun) ++ "(" ++ print-trms(Ts) ++ ")"

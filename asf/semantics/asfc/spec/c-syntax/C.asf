@@ -1,0 +1,30 @@
+%%%equations
+
+%%%  [c-1'1] while(not_empty_list(Arg)) {
+%%%            if(not_empty_list(Arg)) {
+%%%              Stat+1
+%%%            }
+%%%            Stat1 Stat2 Stat3
+%%%          } = while(not_empty_list(Arg)) { Stat+1 Stat1 Stat2 Stat3 }
+
+%%%  [c-1'2] Stat+0
+%%%          while(not_empty_list(Arg)) {
+%%%            if(not_empty_list(Arg)) {
+%%%              Stat+1
+%%%            }
+%%%            Stat1 Stat2 Stat3
+%%%          } =
+%%%            Stat+0
+%%%            while(not_empty_list(Arg)) { Stat+1 Stat1 Stat2 Stat3 }
+
+%%% [c-2'1] make_list ( make_char ( Arg ) ) = make_list_char ( Arg )
+
+%%% [c-3'1] (ATerm) ATmakeList (2, char_table[Arg1], char_table[Arg2] ) = Expr
+%%%         ==================================================================
+%%%           cons( make_list_char ( Arg1 ), make_list_char ( Arg2 ) ) = Expr
+
+%%% [c-3'2] succ(aint(Char*1)) = aint(Char*2),
+%%%         (ATerm) ATmakeList (integer-constant(Char*2), char_table[Arg1], ActualArgs+ ) = Expr
+%%%         ====================================================================================
+%%%         cons(make_list_char(Arg1),
+%%%              (ATerm) ATmakeList(integer-constant(Char*1), ActualArgs+)) = Expr

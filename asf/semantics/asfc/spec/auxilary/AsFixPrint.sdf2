@@ -1,0 +1,8 @@
+%%  AsFixPrint
+module AsFixPrint
+
+imports ATermPrint AsFixParseTrees RemAsFixWspace
+
+exports
+  context-free syntax
+    nws-print(ATerm) -> Literal

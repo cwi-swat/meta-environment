@@ -1,0 +1,26 @@
+%%  Remove-Lists-Aux
+module Remove-Lists-Aux
+
+imports MuASF-Basics
+
+exports
+  context-free syntax
+    get-last-element(Term) -> Term
+    get-prefix-list(Term)  -> Term
+  context-free syntax
+    is-list-cons(Term) -> Bool
+    is-plus-var(Term)  -> Bool
+    is-star-var(Term)  -> Bool
+
+  context-free syntax
+    make-new-cond(Term,Term) -> Cond
+
+  context-free syntax
+    remove-list-cons-from-rule(Rule)              -> Rule
+
+hiddens
+  context-free syntax
+    remove-list-cons-from-cond(Cond)              -> Cond
+    remove-list-cons-from-conds({Cond "&"}+)      -> CondList
+    remove-list-cons-from-term(Bool,Term)         -> Term
+    remove-list-cons-from-terms(Bool,{Term ","}+) -> TermList

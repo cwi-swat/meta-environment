@@ -1,0 +1,11 @@
+module ANumerals
+
+imports Integers
+
+exports
+  context-free syntax
+    succ(IntCon) -> IntCon
+    gtr(IntCon,IntCon) -> IntCon
+
+  variables
+    "Aint"[0-9]* -> IntCon

@@ -1,0 +1,16 @@
+%%  RemAsFixWspace
+module RemAsFixWspace
+
+imports ParseTrees Pos-Constructors
+
+exports
+  context-free syntax
+    remove-all-ws(ATerm) -> ATerm
+    change-all-ws(ATerm) -> ATerm
+
+hiddens
+  context-free syntax
+    remove-ws(ATerm)          -> ATermList
+    remove-ws-trms(ATermList) -> ATermList
+    change-ws(ATerm)          -> ATermList
+    change-ws-trms(ATermList) -> ATermList
