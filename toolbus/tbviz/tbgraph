@@ -4,7 +4,8 @@
 
 #Files and stuff needed:
 TBVIZURL="http://www.cwi.nl/~kuipers/tbviz/tbviz.html"
-version="0.1"
+version="0.1.2"
+tmpfile=/tmp/tbviz.$$
 
 Notify()
 {
@@ -63,11 +64,6 @@ do
     shift
 done
 
-if [ ${OUTPUT}x = x ]
-then
-    Usage
-fi
-
 # Now we have one argument left. It is either a filename or -v.
 case $1
 in
@@ -76,6 +72,11 @@ in
 	exit 0
     ;;
     *)
+	# Test if an output format has been selected.
+	if [ ${OUTPUT}x = x ]
+	then
+	    Usage
+	fi
 	# Test if it is a file
 	if [ -r $1 ]
 	then
@@ -86,10 +87,11 @@ in
 	    then
 		informer ${TBVIZURL} fileformat=${OUTPUT}\&tscript=${ppscript} 
 	    else 
-		cat <<EOF > /tmp/tbviztmp.$$
+		cat <<EOF > ${tmpfile}
 clversion=${version}\&fileformat=${OUTPUT}\&tscript=${ppscript}
 EOF
-		informer -f /tmp/tbviztmp.$$ ${TBVIZURL} 
+		informer -f ${tmpfile} ${TBVIZURL} 
+		rm ${tmpfile}
 	    fi
 	else
 	    Notify "Can't open $1"
