@@ -399,6 +399,7 @@ static PT_Tree flattenLexical(PT_Tree tree)
       }
       args = PT_getArgsTail(args);
     }
+
     return PT_makeTreeAppl(flattenProd(outerProd), PT_reverseArgs(newArgs));
   }
   else { 
@@ -429,6 +430,9 @@ static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
       chars = PT_insertArgs(chars, PT_makeTreeChar(lit[i]));
     }
   }
+  else if (PT_isTreeAmb(tree)) {
+    return NULL;
+  }
 
   return chars;
 }
@@ -457,16 +461,18 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
     PT_Production outerProd = PT_getTreeProd(tree);
     PT_Tree newTree = flattenLexical(tree);
     PT_Args charList = flattenLexicalRecursive(newTree, PT_makeArgsEmpty());
-    PT_Args newArgs = PT_makeArgsList(
-                        PT_makeTreeAppl(
-                          PT_makeProductionList(makeSymbolAllChars()),
-                          PT_reverseArgs(charList)),
-                        PT_makeArgsEmpty());
-    return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
+
+    if (charList != NULL) {
+      PT_Args newArgs = PT_makeArgsList(
+                          PT_makeTreeAppl(
+                            PT_makeProductionList(makeSymbolAllChars()),
+                            PT_reverseArgs(charList)),
+                          PT_makeArgsEmpty());
+      return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
+    }
   }
-  else { 
-    return tree;
-  }
+  
+  return tree;
 }
 
 /*}}}  */
@@ -545,7 +551,10 @@ static PT_Tree flattenVar(PT_Tree tree)
 
   PT_Tree outerArg = PT_getArgsHead(argsOuter);
 
-  if (PT_isTreeAppl(outerArg)) {
+  if (PT_isTreeAmb(outerArg)) {
+    return tree;
+  }
+  else if (PT_isTreeAppl(outerArg)) {
     PT_Production prodVarsymInner = PT_getTreeProd(outerArg);
     PT_Args       argsInner       = PT_getTreeArgs(outerArg);
 
@@ -553,27 +562,12 @@ static PT_Tree flattenVar(PT_Tree tree)
       PT_Args newVarArg = PT_makeArgsEmpty();
       char *varStr = PT_yieldArgs(argsInner);
 
-/*
-      PT_Args newVarArg = PT_makeArgsEmpty();
-      PT_Args newVarArgs = PT_makeArgsEmpty();
-
-      while (PT_hasArgsHead(argsInner)) {
-        PT_Tree arg = PT_getArgsHead(argsInner);
-        PT_Tree newArg = flattenTerm(arg, ATfalse);
-        if (newArg) {
-          newVarArgs = PT_insertArgs(newVarArgs, newArg);
-        }
-        argsInner = PT_getArgsTail(argsInner);
-      }
-      newVarArg = PT_makeArgsList(PT_makeTreeAppl(flattenProd(prodVarsymInner),
-                                                  PT_reverseArgs(newVarArgs)),
-                                  newVarArg);
-*/
-
       newVarArg = PT_makeArgsList(PT_makeTreeLit(varStr), newVarArg);
       return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }
   }
+
+  ATabort("flattenVar failed on %t\n", tree);
   return (PT_Tree)NULL;
 }
 
@@ -591,6 +585,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
   }
 
   if (PT_isTreeAmb(tree)) {
+    ATwarning("hier komt ie niet\n");
     args = PT_getTreeArgs(tree);
     return PT_makeTreeAmb(flattenArgs(args));
   }
@@ -611,11 +606,6 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
     return flattenLayout(tree);
   }
 
-/*
-  if (PT_isLexicalProd(prod)) {
-    return flattenLexical(tree);
-  }
-*/
   if (PT_isLexicalInjectionProd(prod)) {
     return flattenLexicalTotally(tree);
   }
