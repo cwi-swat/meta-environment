@@ -67,3 +67,5 @@ init.o: init.c
 
 init.c:
 	../mk-init.sh >> $@
+
+install:
