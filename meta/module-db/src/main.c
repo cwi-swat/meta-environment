@@ -34,6 +34,7 @@ void set_file_extensions(int cid, char *syntaxExt, char *eqsExt, char *termExt)
   ES_addExtension("syntax", syntaxExt);
   ES_addExtension("equations", eqsExt);
   ES_addExtension("term", termExt);
+  ES_addExtension("table", ".tbl");
 }
 
 ATerm exists(int cid, char *moduleName)
@@ -203,8 +204,54 @@ ATerm get_eqs_text(int cid, char *moduleName)
 
 ATerm get_parse_table(int cid, ATerm moduleId)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  char *moduleName;
+  ATerm table, contents, result, atModuleName;
+  char pathExt[9];
+  int lenType;   
+
+
+  if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
+    strcpy(pathExt, ES_getExtension("equations"));
+    lenType = strlen(ES_getExtension("equations"));
+    strcpy(pathExt+lenType, ES_getExtension("table"));
+  }
+  else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
+    strcpy(pathExt, ES_getExtension("term"));
+    lenType = strlen(ES_getExtension("term"));
+    strcpy(pathExt+lenType, ES_getExtension("table"));
+  }
+  else {
+    ATwarning("Illegal moduleId: %t\n", moduleId);
+    return ATmake("snd-value(no-table)");
+  }
+
+  atModuleName = makeString(moduleName);
+
+  if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
+    table = MS_getAsfParseTable(atModuleName);
+  }
+  else {
+    table = MS_getTermParseTable(atModuleName);
+  }
+  if (table) {
+    ATermAppl dummy = (ATermAppl)ATBpack(ATmake("dummy"));
+    char *path = MS_getSdfTextPath(atModuleName);
+    int strLen = strlen(path);
+    int lenExtension = strlen(pathExt);
+
+    char *newPath = malloc(strLen+lenExtension+1);
+    strncpy(newPath, path, strLen-lenType);
+    strcpy(newPath+strLen-lenType, pathExt);
+
+    contents = (ATerm)ATgetArgument((ATermAppl)table, 0);
+    contents = (ATerm)ATmakeAppl1(ATgetAFun(dummy), contents);
+    result = ATmake("snd-value(table(<term>,<str>))", 
+                    contents, newPath);
+    free(newPath);
+    return result;
+  }
+
+  return ATmake("snd-value(no-table)");
 }
 
 ATerm add_parse_table(int cid, ATerm moduleId, ATerm table, int timestamp)

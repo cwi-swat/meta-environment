@@ -96,3 +96,75 @@ ATerm MDB_retrieveImportGraph()
                 activeModules,
                 result);
 }
+
+static ATbool MDB_completeSdfSpecification(ATerm moduleName, 
+                                           ATermList processed)
+{
+  if (ATindexOf(processed, moduleName, 0) < 0) {
+    if (MS_existsModule(moduleName) && 
+        MS_getSdfTree(moduleName) != NULL) {
+      ATermList imports = MDB_getImportIds(moduleName);
+      ATbool complete = ATtrue;
+
+      processed = ATinsert(processed, moduleName);
+      while (!ATisEmpty(imports) && complete) {
+        ATerm importedModule = ATgetFirst(imports);
+        complete = MDB_completeSdfSpecification(importedModule, 
+                                                processed);
+        imports = ATgetNext(imports);     
+      }
+      return complete;
+    }
+    else {
+      return ATfalse;
+    }
+  }
+  else {
+    return ATtrue;
+  }     
+}
+
+static SDF_SDF getSyntaxDefinition(ATermList modules)
+{
+  SDF_ModuleList sdfModules = SDF_makeModuleListEmpty();
+  SDF_Definition sdfDefinition;  
+
+  if (ATisEmpty(modules)) {
+    sdfModules = SDF_makeModuleListEmpty();
+  }
+  else {
+    while (!ATisEmpty(modules)) {
+      ATerm moduleName = SDF_getModuleNamePlain(
+                           SDF_getImportModuleName(
+                             SDF_makeImportFromTerm(
+                               ATgetFirst(modules))));
+      ATerm module = MS_getSdfTree(moduleName);
+      SDF_Module sdfModule = SDF_getStartTopModule(
+                               SDF_StartFromTerm(module));
+
+      if (SDF_isModuleListEmpty(sdfModules)) {
+        sdfModules = SDF_makeModuleListSingle(sdfModule);
+      }
+      else {
+         sdfModules = SDF_makeModuleListMany(sdfModule,
+                                             SDF_makeLayoutEmpty(),
+                                             sdfModules);
+      }
+      modules = ATgetNext(modules);
+    }
+  }
+  sdfDefinition = SDF_makeDefinitionDefault(sdfModules);
+  return SDF_makeSDFDefinition(SDF_makeLayoutEmpty(), 
+                               sdfDefinition);
+}
+
+MDB_getSdfDefinition(ATerm moduleName)
+{
+  ATermList imports;
+
+  if (MDB_completeSdfSpecification(moduleName, ATempty)) {
+    ATermList imports = SO_getTransitiveImports(
+                          SDF_makeImportListSingle(
+                           SDFmakeImport(moduleName)));
+  }
+}

@@ -112,3 +112,18 @@ void MS_putTermParseTable(ATerm moduleName, ATerm table,
   TS_putValue("term-parse-table", moduleName,
               makeParseTableValue(table,timeStamp)); 
 }
+
+ATerm MS_getAsfParseTable(ATerm moduleName)
+{
+  return getParseTableValueTable(
+           TS_getValue("asf-parse-table", moduleName));
+}
+
+ATerm MS_getTermParseTable(ATerm moduleName)
+{
+  ATermList value = TS_getValue("term-parse-table", moduleName);
+  if (value) {
+    return getParseTableValueTable(value);
+  }
+  return (ATerm)value;
+}
