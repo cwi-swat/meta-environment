@@ -33,7 +33,7 @@ process ConnectBidder(Mid : master, Bid : bidder?) is
      rec-connect(Bid?) .            %% receive connection request from new bidder
      create(Bidder(Bid), Pid?) .    %% create a new Bidder process
      snd-eval(Bid, get-name) .      %% ask bidder for its name, and send it
-     rec-value(Bid, Name?) .        %% to the master tool
+     rec-value(Bid, name(Name?)) .        %% to the master tool
      snd-do(Mid, new-bidder(Bid, Name))
   endlet
 

@@ -35,7 +35,7 @@ option add *Entry.Foreground black
 
 proc get-name {} {
     global me
-    TBsend "snd-value([TBstring $me])"
+    TBsend "snd-value(name([TBstring $me]))"
   }
 
 proc accept {a} {
