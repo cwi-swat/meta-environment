@@ -75,7 +75,7 @@ AC_SUBST(EVALUATOR)
 
 dnl Require asf package
 AC_PACKAGE_REQUIRE(asf, addeqssyntax,
-   [ --with-asf=DIR           asf is in DIR])
+   [  --with-asf=DIR          asf is in DIR])
 AC_SUBST(ASF)
 
 ASC_SUPPORT='${prefix}'
