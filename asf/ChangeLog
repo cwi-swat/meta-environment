@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Sep 16 15:19:19 CEST 2003 <jong@cwi.nl>
+ * asf/library/sandbox/toolbus:
+   - add extraction rules to find tool definitions
+   - refine query to find unmatched sends 
+
 Tue Sep  2 11:22:39 CEST 2003 <{jong,kooiker}@cwi.nl>
  * configure.in: bump to 1.7.2
  * semantics/asfc/src/asfc.c:
