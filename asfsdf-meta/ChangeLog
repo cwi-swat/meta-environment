@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/11/06 (jurgenv@cwi.nl)
+ * Removed addapisyntax functionality
+
 2003/10/15 (jurgenv@cwi.nl)
  * Added functionality for running ASF tests in the Meta-Environment
 

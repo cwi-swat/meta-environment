@@ -7,7 +7,6 @@
 #include "asfsdfchecker.idef"
 #include "asfe.idef"
 #include "addeqssyntax.idef"
-#include "addapisyntax.idef"
 #include "removevarsyntax.idef"
 #include "error-display.tb"
 
@@ -19,7 +18,6 @@ in
   create(AsfChecker, Pid?).
   create(AsfOperations, Pid?).
   create(AddEqSyn, Pid?).
-  /*create(AddAPISyn, Pid?).*/
   create(RemoveVars, Pid?).
   create(Asfc, Pid?).
   create(DisplayErrors, Pid?) .
@@ -92,7 +90,6 @@ in
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
     snd-msg(display-sdf-errors(Msgs)) .
-    /*snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)). */
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
@@ -105,7 +102,6 @@ in
     snd-msg(display-sdf-errors(Msgs)) .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
-    /*snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).*/
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
