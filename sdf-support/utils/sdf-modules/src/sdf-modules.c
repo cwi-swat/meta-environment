@@ -250,16 +250,22 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
 
 ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName)
 {
+  int j;
+/*
   int i,j;
   int pathlen = strlen(path);
+*/
   int namelen = strlen(moduleName);
   ATerm no = ATmake("snd-value(result(no))");
   ATerm yes = ATmake("snd-value(result(yes))");
  
+/*
   for(i=pathlen - 1, j=namelen - 1; i >= 0 && j >= 0; i--, j--) {
     if (moduleName[j] != path[i]) {
       return no;
     }
+*/
+  for(j=namelen - 1; j >= 0; j--) {
     if (!isalnum((int)moduleName[j])
         && moduleName[j] != '-'
         && moduleName[j] != '_'
