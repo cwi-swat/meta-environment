@@ -1,8 +1,11 @@
 #!/bin/sh
 # $Id$
 
-VERBOSE=1
-ERROR=0
+###
+#  Some global variables, that might require occasional modification
+###
+
+verbose=0
 
 cd `dirname $0`;
 mydir=`pwd`
@@ -19,13 +22,79 @@ errterms=$mydir/erroneous
 
 extensions=`egrep -v '^#' $languages |cut -f1`
 
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion="$Revision$"
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="hvV"
+
+if [ $myarguments ] ; then
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -h              display help information (usage)
+    -v              verbose mode
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage; shift;;
+        -v)
+            verbose=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+###
+#  Get to the real work now...
+###
+
+
 Notify () {
-	if [ $VERBOSE -gt 0 ]
+	if [ $verbose -gt 0 ]
 	then
 		echo $*                                   >&2
 	fi
 }
 
+error=0
 for ext in $extensions
 do
 	files=`ls $first/*.$ext $terms/*.$ext 2>/dev/null`
@@ -50,11 +119,11 @@ do
 		                ${RM} -f $out
 			else
 				Notify "Regression test for valid term $base failed"
-				ERROR=1
+				error=1
 	                fi
 		else
 			echo "Error parsing $file"	>&2
-			ERROR=1
+			error=1
 		fi
 	done
 
@@ -70,9 +139,9 @@ do
 		        ${RM} -f $out
 	        else
 			Notify "Regression test for error term $base failed"
-			ERROR=1
+			error=1
 	        fi
 	done
 done
 
-exit $ERROR
+exit $error
