@@ -235,6 +235,12 @@ in
       snd-msg(equations-incomplete)
     fi
   +
+    rec-msg(get-modules(ModuleNames?)) .
+    snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
+    rec-msg(ts-values(Modules?)) .
+    snd-msg(modules(Modules)) .
+    Modules := []
+  +
     rec-msg(get-all-sdf2-definitions(Name?)) .
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
     snd-msg(pre-get-all-sdf2-hook(ModuleNames)) .

@@ -53,13 +53,13 @@ in
   fi 
 endlet
 
-process GetImportsForRenaming(ModuleName : str, Imports : term?) is
+process GetImportsForRenaming(ModuleName : str, ModuleNames : list, 
+                              Imports : term?) is
 let 
   Modules : list
 in
-  printf("DEBUG:all sdf-modules not needed!(%f,%d)\n", __FILE__, __LINE__) .
-  snd-msg(get-all-modules) .
-  rec-msg(all-modules(Modules?)) .
+  snd-msg(get-modules(ModuleNames)) .
+  rec-msg(modules(Modules?)) .
   snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
   Modules := [] .
   rec-msg(sm-all-needed-imports(Imports?))  
@@ -92,7 +92,7 @@ in
       NewEquations   := [] .
       snd-msg(get-all-imported-module-names(ModuleName)) .
       rec-msg(all-imported-module-names(ModuleNames?)) .
-      GetImportsForRenaming(ModuleName, Imports?) .
+      GetImportsForRenaming(ModuleName, ModuleNames, Imports?) .
       if not-equal(ModuleNames, []) then
         Module  := first(ModuleNames) .
         ModuleNames := next(ModuleNames) .
