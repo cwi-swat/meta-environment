@@ -111,6 +111,10 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
   FILE *fp = NULL;
   char *saveName = NULL;
 
+  if (ASF_isCondEquationListEmpty(equations)) {
+    return NULL;
+  }
+
   saveName = dashesToUnderscores(name);
 
   VERBOSE("transforming ASF to MuASF");
