@@ -340,7 +340,7 @@ ATerm add_eqs_module(int cid, char *modulename, char* path, ATerm eqs,
   if(!ATisEqual(eqs,ATparse("error")) &&
      !ATisEqual(eqs,ATparse("no-equations"))) {
 
-    eqs = AFaddPosInfoToModule(path, modulename, eqs);
+    eqs = AFaddPosInfoToModule(path, eqs);
 
   }
   entry = (ATerm)ATreplace((ATermList)entry,
