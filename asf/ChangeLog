@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/01 (jurgenv@cwi.nl)
+ * Set version to 1.8
+
 2003/12/23 (jurgenv@cwi.nl)
  * added dependency on error-support
 
