@@ -56,7 +56,6 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   }
 
   if (memo_table == NULL) { 
-ATwarning("memo_table created\n");
     memo_table = MemoTableCreate();
   }
 
