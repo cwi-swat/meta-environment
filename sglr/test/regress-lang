@@ -69,7 +69,7 @@ Usage: $myname$myargsexplained . . .
 Options:
     -h              display help information (usage)
     -v              verbose mode
-    -v              update outdated originals
+    -U              update outdated originals
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
 }
@@ -146,14 +146,16 @@ RegressGenTable () {
 	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
 	        then
 		        Notify "Regress test for $1 succeeded"
-		        if [ $update -eq 0 ] ; then
-				${RM} -f $ptbl
-			else
-				${MV} $ptbl $reference/$ptbl
-			fi
 	        else
 		        Error "Regress test for $1 failed"
 	        fi
+	        if [ $update -eq 0 ] ; then
+			if [ $error -eq 0 ] ; then
+				${RM} -f $ptbl
+			fi
+		else
+			${MV} $ptbl $reference/$ptbl
+		fi
 	else
 		Abort "Failed to generate parse table for $1"
 	fi

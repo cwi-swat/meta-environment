@@ -174,14 +174,16 @@ do
 	                if $COMPARE $VERBOSE $out $org	> /dev/null
 	                then
 				Notify "Regression test for valid term $base succeeded"
-				if [ $update -eq 0 ] ; then
-		                	${RM} -f $out
-				else
-					${MV} $out $org
-				fi
 			else
 				Error "Regression test for valid term $base failed"
 	                fi
+			if [ $update -eq 0 ] ; then
+				if [ $error -eq 0 ] ; then
+	                		${RM} -f $out
+				fi
+			else
+				${MV} $out $org
+			fi
 		else
 			echo "Error parsing $file"	>&2
 			error=1
