@@ -1803,7 +1803,7 @@ ATbool PERR_hasFeedbackList(PERR_Feedback arg)
 PERR_SubjectList PERR_getFeedbackList(PERR_Feedback arg)
 {
   if (PERR_isFeedbackInfo(arg)) {
-    return (PERR_SubjectList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 10), 1);
+return (PERR_SubjectList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 10), 1);
   }
   else if (PERR_isFeedbackWarning(arg)) {
     return (PERR_SubjectList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 10), 1);

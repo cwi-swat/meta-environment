@@ -18,9 +18,10 @@ libErrorAPI_a_SOURCES = \
 	ParsedErrorAPI.c \
 	ParsedErrorAPI_dict.c \
 	init.c\
-	lift.c
+	lift.c\
+	lower.c
 
-CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
 
 SOURCE_MODULES=basic/Feedback basic/Locations
