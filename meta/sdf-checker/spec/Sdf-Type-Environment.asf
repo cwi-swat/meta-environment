@@ -1,0 +1,44 @@
+equations
+
+  [cimt-1'1] create-info-msg-tuple() = [{},{}]
+
+  [gmi-1'1] get-module-info([ModuleInfoTable, Messages]) = ModuleInfoTable
+
+  [gm-1'1] get-messages([ModuleInfoTable, Messages]) = Messages
+
+  [pmi-1'1] put-module-info(ModuleInfoTable1,
+                            [ModuleInfoTable2, Messages]) = 
+              [ModuleInfoTable1, Messages]
+
+  [pm-1'1] put-messages(Messages1, [ModuleInfoTable, Messages2]) = 
+             [ModuleInfoTable, Messages1]
+
+  [mic-1'1] module-is-checked(ModuleName,
+                              {ModuleInfoEntry*1
+                               [ModuleName, Bool, SymbolInfo]
+                               ModuleInfoEntry*2}) = Bool
+
+  [default-mic-1'2] module-is-checked(ModuleName,
+                                      {ModuleInfoEntry*}) = false
+
+  [psi-1'1] put-symbol-info(ModuleName, 
+                            SymbolsSet1,
+                            SymbolsSet2,
+                            {ModuleInfoEntry*}) =
+              {[ModuleName, true, [SymbolsSet1, SymbolsSet2]] 
+               ModuleInfoEntry*}
+
+  [gds-1'1] get-declared-symbols(ModuleName,
+                              {ModuleInfoEntry*1
+                               [ModuleName, Bool, [SymbolsSet1, SymbolsSet2]]
+                               ModuleInfoEntry*2}) = SymbolsSet1
+
+  [gds-1'1] get-declared-symbols(imports(), ModuleInfoTable) = symbols()
+
+  [gds-1'2] get-declared-symbols(ModuleName, ModuleInfoTable) = 
+               symbols(Symbol*1),
+            get-declared-symbols(imports(Import*), ModuleInfoTable) =
+               symbols(Symbol*2)
+            =========================================================
+            get-declared-symbols(imports(ModuleName Import*), 
+                                 ModuleInfoTable) = symbols(Symbol*1 Symbol*2)
