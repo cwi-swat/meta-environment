@@ -323,8 +323,8 @@ in
         ParseTerm(EditorId, NewModName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(get-root(NewModName?), Stack?, EditorId) .
-        GetTree(EditorId, NewModName, RTree?) .
+        rec-msg(get-root, Stack?, EditorId) .
+        GetTree(EditorId, ModuleName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))
