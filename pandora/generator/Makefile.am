@@ -11,7 +11,8 @@ INCLUDES = \
 
 EXTRA_DIST = \
 	Box_dict.c \
-	Box_dict.h
+	Box_dict.h \
+	pandora.idef
 
 bin_PROGRAMS = pandora 
 
