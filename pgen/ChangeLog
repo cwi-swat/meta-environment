@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/24 (markvdb@cwi.nl)
+ * Added a warning when literals are detected in the right hand side
+   of productions rules.
+
 2003/07/02 (markvdb@cs.vu.nl)
  * The type (trm/eqs) is now made explicit.
  * Removed extension completely.
