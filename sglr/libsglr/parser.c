@@ -945,32 +945,35 @@ void SG_Shifter(void)
  error in the middle of the file.
  */
 
-char *SG_ProdSort(production t)
+char *SG_ProdSort(production p)
 {
-  char          *sort = NULL;
+  PT_Production prod = (PT_Production) p;
 
-  PT_Symbol symbol = PT_getProductionRhs((PT_Production) t);
-  
-  if (!PT_isOptLayoutSymbol(symbol)) {
-    if (PT_isSymbolCf(symbol)) {
-      symbol = PT_getSymbolSymbol(symbol);
-      sort = PT_yieldSymbol(symbol);
-    }
-  }
-
-  return SG_SAFE_STRING(sort);
+  return SG_SAFE_STRING(PT_yieldSymbol(PT_getProductionRhs(prod)));
 }
 
 char *SG_ApplSort(tree t)
 {
-  production prod;
+  PT_Tree tree = (PT_Tree) t;
 
-  if(ATmatch((ATerm) t, "appl(<term>,<list>)", &prod, NULL)) {
-    return SG_ProdSort(prod);
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Symbol sym = PT_getProductionRhs(prod);
+    PT_Symbol sym2;
+
+    /* try to match of a generated start production */
+    if (ATmatch((ATerm) prod,
+		"prod([cf(opt(layout)),cf(<term>),cf(opt(layout))],"
+		"sort(\"<START>\"),no-attrs)",&sym2)) {
+      sym = sym2;
+    }
+    
+    return SG_SAFE_STRING(PT_yieldSymbol(sym));
+
   }
-
-  if(ATisEqual(ATgetAFun((ATermAppl) t), SG_Amb_AFun))
+  else if (PT_isTreeAmb(tree)) {
     return("[multiple sorts]");
+  }
 
   return "[unknown sort]";
 }
