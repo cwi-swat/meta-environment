@@ -179,17 +179,6 @@ PT_Tree PT_renameInTree(PT_Tree tree,
 
     return newTree;
   }
-  else if (PT_isTreeLit(tree)) {
-    if (PT_isSymbolLit(formalParam)) {
-      char *localStr = PT_getTreeString(tree);
-      char *formalStr = PT_getSymbolString(formalParam);
-
-      if (strcmp(localStr, formalStr) == 0) {
-        return PT_setTreeString(tree, PT_getSymbolString(actualParam));
-      }
-    }
-    return tree;
-  }
   else {
     return tree;
   }

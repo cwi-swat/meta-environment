@@ -355,7 +355,7 @@ static ATerm implodeTerm(PT_Tree tree)
     args = PT_getTreeArgs(tree);
     result = ATmake("amb(<list>)", implodeArgs(args));
   }
-  else if (PT_isTreeLexical(tree)) {
+  else if (PT_isTreeLexicalInjection(tree)) {
     result = implodeLexical(tree);
   }
   else if (PT_isTreeLit(tree)) { 

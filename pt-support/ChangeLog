@@ -1,5 +1,39 @@
 $Id$
 
+Mon Dec 27 16:13:04 CET 2004 <jurgenv@cwi.nl>
+ * Having "structured lexicals" result in many changes:
+	- flattening reimplemented; only lists are flattened. One routine
+ 	  implements flattening for all kinds of lists.
+	- NB: literals are not flattened anymore, LAYOUT is not flattened
+	  anymore either.
+	- Changed flattening of functions that return lists. They are
+	  treated as SUBLISTS; so, if the function is a sibling of other
+   	  elements in the list they will both be child of a single list
+ 	  node. If the function is alone in a list, it will also be 
+	  a child of a list node. No exceptions. The same holds for
+	  list variables, but that was already the case before this change.
+	- removed 'lit(Symbol)' from MEPT.adt, and regenerated the API
+	- implemented PT_isTreeLit manually, and went by all calls to
+	  PT_isTreeLit in the environment to check correctness of the code.
+	- removed PT_isTreeFlatLexical function and related functions.
+	- Fixed functions that deal with variable tree to also work
+          with lexical variables
+	- addPosinfo and reportAmbs simplified because literal trees 
+	  dissappeared.
+	- Deescaping functionality dissappeared.
+	- PT_yieldAny fixed, the order of if-then-else excluded some cases.
+	- Regenerated PTPT API's.
+	- Reimplemented lifting and lowering of parse trees. Added
+	  caching possibility between lifting and lowering of trees, 
+	  because they are each others inverse operation.
+	- Regenerated implodePT tests (after checking them manually),
+	  they changed because the representation of a literal changed
+          from lit(<>) to appl(prod([...],lit(<>),no-attrs),[...]).
+	- TODO: check PT_makeTreeLit for completeness of escaping and
+	  deescaping functionality.
+	- TODO: check symbol-renaming.c because literals dissappeared!
+	
+
 Wed Sep  8 16:50:12 CEST 2004 <jurgenv@cwi.nl>
  * Redefined Attrs in MEPT.adt using the list() construction instead
    of the manual single and many patterns.

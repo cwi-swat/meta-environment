@@ -8,15 +8,15 @@
 
 #include <MEPT-utils.h>
 
-ATbool char_to_string = ATfalse;
- 
-static PT_Tree flattenTerm(PT_Tree t, ATbool inList);
-static PT_Tree flattenLayout(PT_Tree t);
-
 /*{{{  patterns for matching SDF2 regular syntax in AsFix2 trees */
 
 /* Pattern for literal */
 static ATerm asfix2_literal = NULL;
+
+/* Pattern for layout cons */
+static ATerm asfix2_layout_layout_to_layout = NULL;
+static ATerm asfix2_lex_layout_to_cf_layout = NULL;
+static ATerm asfix3_lex_iter_layout_to_cf_layout = NULL;
 
 /* Patterns to deal with unflattened lists for lexicals */
 static ATerm asfix2_empty_to_star_lex_sort = NULL;
@@ -134,6 +134,18 @@ static void init_asfix_patterns()
             "lex(iter-star(char-class(<term>)))]," \
             "lex(iter(char-class(<term>))),<term>)");   
 
+  ATprotect(&asfix2_layout_layout_to_layout);
+  asfix2_layout_layout_to_layout = 
+    ATparse("prod([cf(layout),cf(layout)],cf(layout),attrs([assoc(left)]))");
+
+  ATprotect(&asfix2_lex_layout_to_cf_layout);
+  asfix2_lex_layout_to_cf_layout = 
+    ATparse("prod([lex(layout)],cf(layout),no-attrs)");
+
+  ATprotect(&asfix3_lex_iter_layout_to_cf_layout);
+  asfix3_lex_iter_layout_to_cf_layout =
+    ATparse("prod([lex(iter(layout))],cf(layout),no-attrs)");
+
   ATprotect(&asfix2_empty_to_star);
   asfix2_empty_to_star  =
     ATparse("prod([],cf(iter-star(<term>)),no-attrs)"); 
@@ -176,31 +188,30 @@ static void init_asfix_patterns()
 
   ATprotect(&asfix2_plus_sep_to_star_sep);
   asfix2_plus_sep_to_star_sep =
-    ATparse("prod([cf(iter-sep(<list>))],cf(iter-star-sep(<list>)),no-attrs)"); 
+    ATparse("prod([cf(iter-sep(<term>,<term>))],cf(iter-star-sep(<term>,<term>)),no-attrs)"); 
 
   ATprotect(&asfix2_plus_sep_plus_sep_to_plus_sep);
   asfix2_plus_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)");
+    ATparse("prod([cf(iter-sep(<term>,<term>)),cf(opt(layout)),<term>," \
+            "cf(opt(layout)),cf(iter-sep(<term>,<term>))],"
+	    "cf(iter-sep(<term>,<term>)),<term>)");
 
   ATprotect(&asfix2_star_sep_star_sep_to_star_sep);
   asfix2_star_sep_star_sep_to_star_sep =
-    ATparse("prod([cf(iter-star-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<list>))]," \
-            "cf(iter-star-sep(<list>)),<term>)");    
+    ATparse("prod([cf(iter-star-sep(<term>,<term>)),cf(opt(layout)),<term>," \
+            "cf(opt(layout)),cf(iter-star-sep(<term>,<term>))]," \
+            "cf(iter-star-sep(<term>,<term>)),<term>)");    
 
   ATprotect(&asfix2_star_sep_plus_sep_to_plus_sep);
   asfix2_star_sep_plus_sep_to_plus_sep =
-    ATparse("prod([cf(iter-star-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)");                             
-
+    ATparse("prod([cf(iter-star-sep(<term>,<term>)),cf(opt(layout)),<term>," \
+            "cf(opt(layout)),cf(iter-sep(<term>,<term>))],"
+	    "cf(iter-sep(<term>,<term>)),<term>)");                             
   ATprotect(&asfix2_plus_sep_star_sep_to_plus_sep);
   asfix2_plus_sep_star_sep_to_plus_sep =
-    ATparse("prod([cf(iter-sep(<list>)),cf(opt(layout)),<term>," \
-            "cf(opt(layout)),cf(iter-star-sep(<list>))],cf(iter-sep(<list>))," \
-            "<term>)"); 
+    ATparse("prod([cf(iter-sep(<term>,<term>)),cf(opt(layout)),<term>," \
+            "cf(opt(layout)),cf(iter-star-sep(<term>,<term>))],"
+	    "cf(iter-sep(<term>,<term>)),<term>)"); 
 
 }
 
@@ -221,116 +232,26 @@ static void init_patterns(void)
 
 /*}}}  */
 
-/*{{{  static PT_Args collectCharsRec(PT_Tree tree, PT_Args tail) */
-
-static PT_Args collectCharsRec(PT_Tree tree, PT_Args tail)
-{
-  if (PT_isTreeChar(tree)) {
-    return PT_makeArgsMany(tree, tail);
-  }
-  else if (PT_isTreeAmb(tree)) {
-    return collectCharsRec(PT_getArgsHead(PT_getTreeArgs(tree)), tail);
-  }
-  else if (PT_isTreeAppl(tree)) {
-    PT_Args args = PT_getTreeArgs(tree);
-
-    for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
-      PT_Tree head = PT_getArgsHead(args);
-      tail = collectCharsRec(head, tail);
-    }
-
-    return tail;
-  }
-
-  ATerror("collectCharsRec: this function only supports AsFix2 trees");
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  static PT_Args collectChars(PT_Tree tree) */
-
-static PT_Args collectChars(PT_Tree tree)
-{
-  return PT_reverseArgs(collectCharsRec(tree, PT_makeArgsEmpty()));
-}
-
-/*}}}  */
-
-/*{{{  ATbool isLexicalListProd(PT_Production prod) */
-
-ATbool isLexicalListProd(PT_Production prod)
-{
-  ATerm sort1, sort2, sort3;
-
-  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_sort, NULL)) {
-    return ATtrue;
-  }
-
-  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_sort, &sort1, &sort2)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_sort, &sort1, &sort2)) {
-    return ATisEqual(sort1, sort2);
-  } 
-
-  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_sort,
-                  &sort1, &sort2, &sort3, NULL)) {
-    return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
-
-/*{{{  ATbool isCharClassListProd(PT_Production prod) */
-
-ATbool isCharClassListProd(PT_Production prod)
-{
-  ATerm cc1, cc2, cc3;
-
-  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_charclass, NULL)) {
-    return ATtrue;
-  }
-
-  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_charclass, &cc1, &cc2)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_charclass, &cc1, &cc2)) {
-    return ATisEqual(cc1, cc2);
-  }
-
-  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)
-      ||
-      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_charclass,
-                  &cc1, &cc2, &cc3, NULL)) {
-    return ATisEqual(cc1, cc2) && ATisEqual(cc1, cc3);
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
-
 /*{{{  ATbool isListProd(PT_Production prod) */
 
 ATbool isListProd(PT_Production prod)
 {
   ATerm sort1, sort2, sort3;
+  ATerm sep1, sep2, sep3, sep4;
+  ATerm cc1, cc2, cc3;
+
+  /* TODO: implement some kind of caching here, that would improve
+   * efficiency a lot, since productions are shared plenty in an
+   * average AsFix tree
+   */
+
+  if (ATmatchTerm((ATerm)prod, asfix2_layout_layout_to_layout )) {
+    return ATtrue;
+  }
+
+  if (ATmatchTerm((ATerm)prod, asfix2_lex_layout_to_cf_layout)) {
+    return ATtrue;
+  }
 
   if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star, NULL)) {
     return ATtrue;
@@ -356,58 +277,140 @@ ATbool isListProd(PT_Production prod)
     return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
   }
 
-  return ATfalse;
-}
+  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_sort, NULL)) {
+    return ATtrue;
+  }
 
-/*}}}  */
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_sort, &sort1, &sort2)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_sort, &sort1, &sort2)) {
+    return ATisEqual(sort1, sort2);
+  } 
 
-/*{{{  ATbool isSepListProd(PT_Production prod) */
-
-ATbool isSepListProd(PT_Production prod)
-{
-  ATerm sep1, sep2;
-  ATerm sort1, sort2;
-  ATermList sortSep1, sortSep2, sortSep3;
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_sort,
+                  &sort1, &sort2, &sort3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_sort,
+                  &sort1, &sort2, &sort3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_sort,
+                  &sort1, &sort2, &sort3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_sort,
+                  &sort1, &sort2, &sort3, NULL)) {
+    return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
+  }
 
   if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_sep, NULL, NULL)) {
     return ATtrue;
   }
 
   if (ATmatchTerm((ATerm)prod, 
-		  asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
+                  asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
     return ATisEqual(sort1, sort2);
   }
 
   if (ATmatchTerm((ATerm)prod, 
-		  asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
-    return ATisEqual(sortSep1, sortSep2);
+                  asfix2_plus_sep_to_star_sep, &sort1, &sep1, &sort2, &sep2, NULL)) {
+    return ATisEqual(sort1, sort2) && ATisEqual(sep1, sep2);
   }
 
   if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_plus_sep_to_plus_sep,
-                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
+                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_star_sep_to_star_sep,
-                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
+                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_star_sep_plus_sep_to_plus_sep,
-                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)
+                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)
       ||
       ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep,
-                  &sortSep1, &sep1, &sortSep2, &sortSep3, NULL)) {
-    if (ATmatchTerm(sep1, asfix2_literal, NULL)) {
-      sep2 = ATgetLast(sortSep1);
-      return ATisEqual(sortSep1, sortSep2) && 
-             ATisEqual(sortSep1, sortSep3) &&
-             ATisEqual(sep1, sep2);
-    }
-    else {
-      return ATisEqual(sortSep1, sortSep2) && 
-             ATisEqual(sortSep1, sortSep3);
-    }
+                  &sort1, &sep1, &sep4, &sort2, &sep2, &sort3, &sep3, NULL)) {
+    return ATisEqual(sort1, sort2) && ATisEqual(sort2, sort3) &&
+      ATisEqual(sep1, sep2) && ATisEqual(sep2, sep3) && ATisEqual(sep3, sep4);
   }
 
+ if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_charclass, NULL)) {
+    return ATtrue;
+  }
+
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_charclass, &cc1, &cc2)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_charclass, &cc1, &cc2)) {
+    return ATisEqual(cc1, cc2);
+  }
+
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_charclass,
+                  &cc1, &cc2, &cc3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_charclass,
+                  &cc1, &cc2, &cc3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_charclass,
+                  &cc1, &cc2, &cc3, NULL)
+      ||
+      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_charclass,
+                  &cc1, &cc2, &cc3, NULL)) {
+    return ATisEqual(cc1, cc2) && ATisEqual(cc1, cc3);
+  }
+
+
   return ATfalse;
-} 
+}
+
+/*}}}  */
+/*{{{  void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star) */
+
+void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star)
+{
+  /* This function takes any list symbol, and produces both the plus
+   * and the star variant of it in two return variables.
+   * It should leave non-list symbols alone and copy them to *plus and *star.
+   */
+
+  if (PT_isSymbolCf(symbol) || PT_isSymbolLex(symbol)) {
+    *plus = PT_getSymbolSymbol(symbol);
+    *star = PT_getSymbolSymbol(symbol);
+  }
+  else {
+    *plus = symbol;
+    *star = symbol;
+  }
+
+  if (PT_isSymbolIterPlusSep(*plus)) {
+    PT_Symbol elem = PT_getSymbolSymbol(*plus);
+    PT_Symbol sep = PT_getSymbolSeparator(*plus);
+
+    *star = PT_makeSymbolIterStarSep(elem, sep);
+  }
+  else if (PT_isSymbolIterPlus(*plus)) {
+    PT_Symbol elem = PT_getSymbolSymbol(*plus);
+
+    *star = PT_makeSymbolIterStar(elem);
+  }
+  else if (PT_isSymbolIterStarSep(*plus)) {
+    PT_Symbol elem = PT_getSymbolSymbol(*plus);
+    PT_Symbol sep = PT_getSymbolSeparator(*plus);
+    
+    *star = *plus;
+    *plus = PT_makeSymbolIterPlusSep(elem, sep);
+  }
+  else if (PT_isSymbolIterStar(*plus)) {
+    PT_Symbol elem = PT_getSymbolSymbol(*plus);
+
+    *star = *plus;
+    *plus = PT_makeSymbolIterPlus(elem);
+  }
+    
+  if (PT_isSymbolCf(symbol)) {
+    *star = PT_makeSymbolCf(*star);
+    *plus = PT_makeSymbolCf(*plus);
+  }
+  else if (PT_isSymbolLex(symbol)) {
+    *star = PT_makeSymbolLex(*star);
+    *plus = PT_makeSymbolLex(*plus);
+  }
+}
 
 /*}}}  */
 
@@ -420,385 +423,111 @@ void PT_initAsFix2Api()
 
 /*}}}  */
 
-/*{{{  static ATbool sameListSymbol(PT_Symbol sym1, PT_Symbol sym2) */
-
-static ATbool sameListSymbol(PT_Symbol sym1, PT_Symbol sym2)
-{
-  PT_Symbol elem1, elem2;
-  PT_Symbol sep1, sep2;
-
-  if ((PT_isSymbolCf(sym1) && PT_isSymbolCf(sym2)) ||
-      (PT_isSymbolLex(sym1) && PT_isSymbolLex(sym2))) {
-    sym1 = PT_getSymbolSymbol(sym1);
-    sym2 = PT_getSymbolSymbol(sym2);
-  }
-  else if (PT_isSymbolCf(sym1) || PT_isSymbolCf(sym2) ||
-	   PT_isSymbolLex(sym1) || PT_isSymbolLex(sym2)) {
-    return ATfalse;
-  }
-
-  elem1 = PT_getSymbolSymbol(sym1);
-  elem2 = PT_getSymbolSymbol(sym1);
-
-  if (!PT_isEqualSymbol(elem1, elem2)) {
-    return ATfalse;
-  }
-
-  if (PT_hasSymbolSeparator(sym1) && PT_hasSymbolSeparator(sym2)) {
-    sep1 = PT_getSymbolSeparator(sym1);
-    sep2 = PT_getSymbolSeparator(sym2);
-
-    if (PT_isEqualSymbol(sep1, sep2)) {
-      return ATtrue;
-    }
-    else {
-      return ATfalse;
-    }
-  }
-  else if (PT_hasSymbolSeparator(sym1) ||
-	   PT_hasSymbolSeparator(sym2)) {
-    return ATfalse;
-  }
-
-  return ATtrue;
-}
-
-/*}}}  */
-
 /*{{{  static PT_Args flattenArgs(PT_Args tl) */
 
-static PT_Args flattenArgs(PT_Args tl)
+static PT_Args flattenArgs(PT_Args args)
 {
-  PT_Tree newTerm;
+  /* this algorithm uses the C stack to reverse the args list */
+  PT_Tree arg;
 
-  if (PT_isArgsEmpty(tl)) {
-    return tl;
+  if (PT_isArgsEmpty(args)) {
+    return args;
   }
 
-  newTerm = flattenTerm(PT_getArgsHead(tl), ATfalse);
-  if (newTerm) {
-    return PT_makeArgsMany(newTerm, flattenArgs(PT_getArgsTail(tl)));
+  arg = flattenTree(PT_getArgsHead(args));
+
+  return PT_makeArgsMany(arg, flattenArgs(PT_getArgsTail(args)));
+}
+
+/*}}}  */
+/*{{{  static void flattenListRec(PT_Symbol plus, PT_Symbol star, PT_Tree tree,  */
+
+static void flattenListRec(PT_Tree tree, 
+			   PT_Symbol plus, PT_Symbol star, 
+			   PT_Args *tail)
+{
+  PT_Tree cache[5]; /* 5 is the max arity of a list production */
+  PT_Production prod;
+  PT_Symbol rhs;
+  PT_Args args;
+  int i;
+
+  /* characters and ambiguities are not flattened into the list */
+  if (!PT_hasTreeProd(tree)) {
+    *tail = PT_makeArgsMany(flattenTree(tree), *tail);
+    return;
+  }
+
+  prod = PT_getTreeProd(tree);
+  rhs = PT_getProductionRhs(prod);
+
+
+  /* if the type of the list changes, we do not flatten */
+  if (!PT_isEqualSymbol(plus,rhs) && !PT_isEqualSymbol(star,rhs)) {
+    *tail = PT_makeArgsMany(flattenTree(tree), *tail);
+    return;
+  }
+  /* if the production is not generated by the normalizer (a variable,
+   * or a function returning a list), we recurse and remove one level
+   * of nesting afterwards.
+   */
+  else if (!isListProd(prod)) {
+    PT_Tree list;
+    PT_Tree arg;
+
+    list = flattenTree(tree);
+    arg = PT_getArgsHead(PT_getTreeArgs(list));
+
+    *tail = PT_makeArgsMany(arg, *tail);
+    return;
+  }
+
+  assert(PT_hasTreeArgs(tree));
+
+  args = PT_getTreeArgs(tree);
+
+  /* We cache the arguments to be able to walk backwards */
+  for (i = 0; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    cache[i++] = PT_getArgsHead(args);
+  }
+
+  /* The elements of the children are inserted in the tail */
+  for (i--; i >= 0; i--) {
+    flattenListRec(cache[i], plus, star, tail);
+  }
+
+  return;
+}
+
+/*}}}  */
+/*{{{  static PT_Tree flattenList(PT_Tree tree) */
+
+static PT_Tree flattenList(PT_Tree tree)
+{
+  PT_Production prod, list;
+  PT_Symbol symbol, star = NULL, plus = NULL;
+  PT_Args tail;
+
+  prod = PT_getTreeProd(tree);
+  symbol = PT_getProductionRhs(prod);
+
+
+  if (isListProd(prod)) {
+    prepareListSymbols(symbol, &plus, &star);
+
+    tail = PT_makeArgsEmpty();
+    flattenListRec(tree, plus, star, &tail);
   }
   else {
-    return flattenArgs(PT_getArgsTail(tl));
+    PT_Args args = PT_getTreeArgs(tree);
+    args = flattenArgs(args);
+    tree = PT_setTreeArgs(tree, args);
+    tail = PT_makeArgsSingle(tree);
   }
-}
 
-/*}}}  */
-
-/*{{{  static PT_Tree makeCharFromInt(PT_Tree i) */
-
-static PT_Tree makeCharFromInt(PT_Tree i)
-{
-  if (char_to_string) {
-    char strbuf[2];  
-    
-    strbuf[0] = (char)ATgetInt((ATermInt)i);
-    strbuf[1] = '\0';
-    return (PT_Tree)ATmake("<str>", strbuf);
-  }
-  else {
-    return i;
-  }
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail) */
-
-static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail)
-{
-  PT_Production prod;
-  PT_Args       args;
-  PT_Tree       leftBranch, rightBranch;
-
-  if (!PT_isTreeAppl(t)) {
-    ATerror("flattenLexicalList: not an application: %t\n", t);
-  } 
+  list = PT_makeProductionList(symbol);
   
-  prod = PT_getTreeProd(t);
-  args = PT_getTreeArgs(t);
-
-  if (!isLexicalListProd(prod)) {
-    PT_Tree newTerm = flattenTerm(t, ATtrue);
-    if (newTerm) {
-      return PT_makeArgsMany(newTerm, tail);
-    }
-    else {
-      return tail;
-    }
-  }  
-
-  if (PT_isArgsEmpty(args)) {
-    return tail;
-  }
-
-  leftBranch = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
-
-  if (PT_isArgsEmpty(args)) {
-    return flattenLexicalList(leftBranch, tail);
-  }
-  
-  rightBranch = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
-
-  if (PT_isArgsEmpty(args)) {
-    tail = flattenLexicalList(rightBranch, tail);
-    tail = flattenLexicalList(leftBranch, tail);
-
-    return tail;
-  }
-  
-  ATerror("flattenLexicalList: illegal list: %t\n", t);
-  return PT_makeArgsEmpty();
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail) */
-
-static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
-{
-  PT_Production prod;
-  PT_Args       args;
-  PT_Tree       leftBranch, rightBranch;
-
-  if (PT_isTreeAppl(tree)) { 
-    prod = PT_getTreeProd(tree);
-    args = PT_getTreeArgs(tree);
-
-    if (!isCharClassListProd(prod)) {
-      PT_Tree newTerm = flattenTerm(tree, ATtrue);
-      if (newTerm) {
-        return PT_makeArgsMany(newTerm, tail);
-      }
-      else {
-        return tail;
-      }
-    }
-  
-    if (PT_isArgsEmpty(args)) {
-      return tail;
-    }
-  
-    leftBranch = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_isArgsEmpty(args)) {
-      return flattenCharClassList(leftBranch, tail);
-    }
-  
-    rightBranch = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_isArgsEmpty(args)) {
-      tail = flattenCharClassList(rightBranch, tail);
-      tail = flattenCharClassList(leftBranch, tail);
-
-      return tail;
-    }                 
-
-    ATerror("flattenCharClassList: illegal list: %t\n", tree);
-    return PT_makeArgsEmpty();
-  }
-  else /*if (ATgetType(t) == AT_INT)*/ {
-    return PT_makeArgsMany(makeCharFromInt(tree), tail);
-  }
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail) */
-
-static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
-{
-  PT_Production prod;
-  PT_Args       args;
-  PT_Tree       leftBranch, layoutAfterLeft, rightBranch;
-  PT_Symbol     sym;
-
-  if (PT_isTreeAmb(tree)) {
-    PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsMany(amb, tail);
-  }
-
-  if (PT_isTreeAppl(tree)) {
-    prod = PT_getTreeProd(tree);
-    sym = PT_getProductionRhs(prod);
-    args = PT_getTreeArgs(tree);
-
-    if (!isListProd(prod)) {
-      PT_Tree newTerm;
-      newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
-			                         listSymbol));
-      if (newTerm) {
-	return PT_makeArgsMany(newTerm, tail);
-      }
-      else {
-	return tail;
-      }
-    }
-
-    sym = PT_getProductionRhs(prod);
-
-    if (!sameListSymbol(sym, listSymbol)) {
-      PT_Tree newTerm;
-      newTerm = flattenTerm(tree, ATfalse);
-      if (newTerm) {
-	return PT_makeArgsMany(newTerm, tail);
-      } 
-      else {
-	return tail;
-      } 
-    }
-    
-    if (PT_isArgsEmpty(args)) {  
-      return tail;
-    }
-
-    leftBranch = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_isArgsEmpty(args)) {
-      return flattenList(leftBranch, listSymbol, tail);
-    }                                    
-    
-    layoutAfterLeft = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_hasArgsHead(args)) {
-      rightBranch = PT_getArgsHead(args);
-      args = PT_getArgsTail(args);
-
-      if (PT_isArgsEmpty(args)) {
-	tail = flattenList(rightBranch, listSymbol, tail);
-	tail = PT_makeArgsMany(flattenLayout(layoutAfterLeft), tail);
-	tail = flattenList(leftBranch, listSymbol, tail);
-    
-	return tail;
-      }
-    }
-  }
-  
-  ATerror("flattenList: illegal list: %t\n", tree);
-  return PT_makeArgsEmpty();
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail) */
-
-static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
-{
-  PT_Production prod;
-  PT_Args       args;
-  PT_Tree       leftBranch, layoutAfterLeft, 
-                separator, layoutAfterSep, rightBranch;
-  PT_Symbol     sym;
-
-  if (PT_isTreeAmb(tree)) {
-    PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsMany(amb, tail);
-  }
-  
-  if (PT_isTreeAppl(tree)) {
-    prod = PT_getTreeProd(tree);
-    args = PT_getTreeArgs(tree);
-
-    if (!isSepListProd(prod)) {
-      PT_Tree newTerm;
-      newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
-			                         listSymbol));
-      if (newTerm) {
-	return PT_makeArgsMany(newTerm, tail);
-      }
-      else {
-	return tail;
-      }
-    }
-
-    sym = PT_getProductionRhs(prod);
-
-    if (!sameListSymbol(sym, listSymbol)) {
-      PT_Tree newTerm;
-      newTerm = flattenTerm(tree, ATfalse);
-      if (newTerm) {
-	return PT_makeArgsMany(newTerm, tail);
-      } 
-      else {
-	return tail;
-      } 
-    }
-
-    if (PT_isArgsEmpty(args)) {  
-      return tail;
-    }
-
-    leftBranch = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_isArgsEmpty(args)) {
-      return flattenSepList(leftBranch, listSymbol, tail);
-    }                                    
-
-    layoutAfterLeft = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
-
-    if (PT_hasArgsHead(args)) {
-      separator = PT_getArgsHead(args);
-      args = PT_getArgsTail(args);
-
-      if (PT_hasArgsHead(args)) {
-	layoutAfterSep = PT_getArgsHead(args);
-	args = PT_getArgsTail(args);
-
-	if (PT_hasArgsHead(args)) {
-	  rightBranch = PT_getArgsHead(args);
-	  args = PT_getArgsTail(args);
-
-	  if (PT_isArgsEmpty(args)) {
-	    tail = flattenSepList(rightBranch, listSymbol, tail);
-	    tail = PT_makeArgsMany(flattenLayout(layoutAfterSep), tail);
-	    tail = PT_makeArgsMany(flattenTerm(separator, ATfalse), tail);
-	    tail = PT_makeArgsMany(flattenLayout(layoutAfterLeft), tail);
-	    tail = flattenSepList(leftBranch, listSymbol, tail);
-
-	    return tail;
-	  }
-	}
-      }
-    }
-  }
-
-  ATerror("flattenSepList: illegal list: %t\n", tree);
-  return PT_makeArgsEmpty();
-}
-
-/*}}}  */
-/*{{{  static PT_Production flattenProd(PT_Production prod) */
-
-static PT_Production flattenProd(PT_Production prod)
-{
-  if (!PT_isProductionDefault(prod)) {
-    ATerror("flattenProd: not a production: %t\n", prod);
-  }
-  return prod;
-}
-
-/*}}}  */
-
-/*{{{  static PT_Tree flattenLexicalTotally(PT_Tree tree) */
-
-static PT_Tree flattenLexicalTotally(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production outerProd = PT_getTreeProd(tree);
-    PT_Args charList = collectChars(tree);
-
-    if (charList != NULL) {
-      PT_Args newArgs = PT_makeArgsSingle(PT_makeTreeFlatLexical(charList));
-      return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
-    }
-  }
-  
-  return tree;
+  return PT_makeTreeAppl(list, tail);
 }
 
 /*}}}  */
@@ -806,132 +535,61 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
 
 static PT_Tree flattenLayout(PT_Tree tree)
 {
-  PT_Production prod = PT_getTreeProd(tree);
+  PT_Tree flat;
+  PT_Production prod;
+  PT_Production lexIterToCf;
+  PT_Symbol symbol;
 
-  if (PT_isOptLayoutProd(prod)) {
-    PT_Args newArgs    = collectChars(tree);
+  /* We first reuse flattenList, and then reconstruct the layout structure
+   * we want.
+   */
+  flat = flattenList(tree);
 
-    return PT_makeTreeAppl(prod, newArgs);
-  }
+  prod = PT_getTreeProd(flat);
+  symbol = PT_getProductionRhs(prod);
 
-  ATerror("flattenLayout: not layout: %t\n", tree);
-  return (PT_Tree)NULL;
+  assert(PT_isSymbolCf(symbol));
+
+  /* replace cf(layout) by lex(iter(layout)) */
+  symbol = PT_makeSymbolLex(PT_makeSymbolIterPlus(PT_getSymbolSymbol(symbol)));
+  prod = PT_setProductionRhs(prod, symbol);
+  flat = PT_setTreeProd(flat, prod);
+
+  lexIterToCf = (PT_Production) asfix3_lex_iter_layout_to_cf_layout;
+
+  return PT_makeTreeAppl(lexIterToCf, PT_makeArgsSingle(flat));
 }
 
 /*}}}  */
-/*{{{  static PT_Tree flattenLiteral(PT_Production prod) */
+/*{{{  PT_Tree flattenTree(PT_Tree tree) */
 
-static PT_Tree flattenLiteral(PT_Production prod)
-{
-  PT_Symbol  rhs = PT_getProductionRhs(prod);
-  char      *lit = PT_getSymbolString(rhs);
-
-  return PT_makeTreeLit(lit);
-}
-
-/*}}}  */
-/*{{{  static PT_Tree flattenVar(PT_Tree tree) */
-
-static PT_Tree flattenVar(PT_Tree tree)
-{
-  PT_Production prodVarsymOuter = PT_getTreeProd(tree);
-  PT_Args argsOuter = PT_getTreeArgs(tree);
-
-  PT_Tree outerArg = PT_getArgsHead(argsOuter);
-
-  if (PT_isTreeAmb(outerArg)) {
-    return tree;
-  }
-  else if (PT_isTreeAppl(outerArg)) {
-    PT_Production prodVarsymInner = PT_getTreeProd(outerArg);
-    PT_Args argsInner = PT_getTreeArgs(outerArg);
-
-    if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
-      PT_Args newVarArg = PT_makeArgsEmpty();
-      char *varStr = PT_yieldArgsToString(argsInner, ATfalse);
-      PT_Symbol newLhsArg = PT_makeSymbolLit(varStr);
-      PT_Tree newArg = PT_makeTreeLit(varStr);
-      PT_Symbols newLhs = PT_makeSymbolsSingle(newLhsArg);
-
-      prodVarsymInner = PT_setProductionLhs(prodVarsymInner, newLhs);
-
-      newVarArg = PT_makeArgsMany(newArg, newVarArg);
-      return PT_makeTreeAppl(prodVarsymOuter, 
-			     PT_makeArgsSingle(PT_makeTreeAppl(prodVarsymInner,
-							       newVarArg)));
-    }
-  }
-
-  ATabort("flattenVar failed on %t\n", tree);
-  return (PT_Tree)NULL;
-}
-
-/*}}}  */
-/*{{{  static PT_Tree flattenTerm(PT_Tree tree, ATbool inList) */
-
-static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
+PT_Tree flattenTree(PT_Tree tree)
 {
   PT_Production prod;
-  PT_Args args, newArgs;
-  PT_Symbol listSymbol;
+  PT_Args args;
 
   if (PT_isTreeChar(tree)) {
-    return makeCharFromInt(tree);
+    return tree;
   }
-
-  if (PT_isTreeAmb(tree)) {
+  else if (PT_isTreeAmb(tree)) {
     args = PT_getTreeArgs(tree);
     return PT_makeTreeAmb(flattenArgs(args));
   }
 
-  if (!PT_isTreeAppl(tree)) {
-    ATerror("flattenTerm: not an appl pattern: %t\n", tree);
-    return (PT_Tree)NULL;
-  }
+  assert(PT_isTreeAppl(tree) && "unsupported tree format");
 
   prod = PT_getTreeProd(tree);
   args = PT_getTreeArgs(tree);
 
-  if (PT_prodHasLitAsRhs(prod)) {
-    return flattenLiteral(prod);
-  }
-
-  if (PT_isOptLayoutProd(prod)) {
+  if ((PT_prodHasIterSepAsRhs(prod) || PT_prodHasIterAsRhs(prod))) {
+    return flattenList(tree);
+  } 
+  else if (PT_prodHasCfLayoutAsRhs(prod)) { 
     return flattenLayout(tree);
   }
-
-  if (PT_isLexicalInjectionProd(prod)) {
-    return flattenLexicalTotally(tree);
+  else {
+    return PT_makeTreeAppl(prod, flattenArgs(args));
   }
-
-  if ((PT_prodHasIterSepAsRhs(prod) ||
-       PT_prodHasIterAsRhs(prod)) &&
-       !inList) {
-    listSymbol = PT_getProductionRhs(prod);
-  
-    if (PT_isProductionVariable(prod)) {
-      newArgs = PT_makeArgsSingle(flattenVar(tree));
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
-    }
-    if (isSepListProd(prod)) {
-      newArgs = flattenSepList(tree, listSymbol, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
-    }
-    if (isListProd(prod)) {
-      newArgs = flattenList(tree, listSymbol, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
-    }
-
-    return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
-
-  } 
-
-  if (PT_isProductionVariable(prod)) {
-    return flattenVar(tree);
-  }
-
-  /* Default: application */
-  return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 }
 
 /*}}}  */
@@ -943,19 +601,11 @@ PT_ParseTree flattenPT(PT_ParseTree tree)
   if (PT_isParseTreeTop(tree)) {
     PT_Tree newTree = PT_getParseTreeTop(tree);
 
-    return PT_setParseTreeTop(tree, flattenTerm(newTree, ATfalse));
+    return PT_setParseTreeTop(tree, flattenTree(newTree));
   }
 
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);
   return NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Tree flattenTree(PT_Tree tree) */
-
-PT_Tree flattenTree(PT_Tree tree)
-{
-  return flattenTerm(tree, ATfalse);
 }
 
 /*}}}  */

@@ -19,6 +19,11 @@ ATerm PT_stringToChars(const char *str)
   return (ATerm) result;
 }
 
+ATerm PT_byteToChar(char ch)
+{
+    return (ATerm) ATmakeInt(ch);
+}
+
 char *PT_charsToString(ATerm arg)
 {
   ATermList list = (ATermList) arg;
@@ -37,6 +42,11 @@ char *PT_charsToString(ATerm arg)
   str[i] = '\0';
 
   return str;
+}
+
+char PT_charToByte(ATerm arg)
+{
+    return (char) ATgetInt((ATermInt) arg);
 }
 
 
@@ -502,19 +512,11 @@ PT_Tree PT_makeTreeChar(int character)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeLit(const char* string) */
-
-PT_Tree PT_makeTreeLit(const char* string)
-{
-  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
-}
-
-/*}}}  */
 /*{{{  PT_Tree PT_makeTreeAmb(PT_Args args) */
 
 PT_Tree PT_makeTreeAmb(PT_Args args)
 {
-  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun3, (ATerm) args);
+  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun2, (ATerm) args);
 }
 
 /*}}}  */
@@ -546,7 +548,7 @@ PT_Args PT_makeArgsMany(PT_Tree head, PT_Args tail)
 
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
 {
-  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun4, (ATerm) lhs, (ATerm) rhs, (ATerm) attributes);
+  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun3, (ATerm) lhs, (ATerm) rhs, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -554,7 +556,7 @@ PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attribu
 
 PT_Production PT_makeProductionList(PT_Symbol rhs)
 {
-  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun5, (ATerm) rhs);
+  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun4, (ATerm) rhs);
 }
 
 /*}}}  */
@@ -562,7 +564,7 @@ PT_Production PT_makeProductionList(PT_Symbol rhs)
 
 PT_Attributes PT_makeAttributesNoAttrs(void)
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun6);
+  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun5);
 }
 
 /*}}}  */
@@ -570,7 +572,7 @@ PT_Attributes PT_makeAttributesNoAttrs(void)
 
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs)
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun7, (ATerm) attrs);
+  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun6, (ATerm) attrs);
 }
 
 /*}}}  */
@@ -602,7 +604,7 @@ PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail)
 
 PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun8, (ATerm) assoc);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun7, (ATerm) assoc);
 }
 
 /*}}}  */
@@ -610,7 +612,7 @@ PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 
 PT_Attr PT_makeAttrTerm(ATerm term)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) term);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun8, (ATerm) term);
 }
 
 /*}}}  */
@@ -618,7 +620,7 @@ PT_Attr PT_makeAttrTerm(ATerm term)
 
 PT_Attr PT_makeAttrId(const char* moduleName)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun10, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleName, 0, ATtrue)));
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleName, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -626,7 +628,7 @@ PT_Attr PT_makeAttrId(const char* moduleName)
 
 PT_Attr PT_makeAttrBracket(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun11);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun10);
 }
 
 /*}}}  */
@@ -634,7 +636,7 @@ PT_Attr PT_makeAttrBracket(void)
 
 PT_Attr PT_makeAttrReject(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun12);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun11);
 }
 
 /*}}}  */
@@ -642,7 +644,7 @@ PT_Attr PT_makeAttrReject(void)
 
 PT_Attr PT_makeAttrPrefer(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun13);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun12);
 }
 
 /*}}}  */
@@ -650,7 +652,7 @@ PT_Attr PT_makeAttrPrefer(void)
 
 PT_Attr PT_makeAttrAvoid(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun14);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun13);
 }
 
 /*}}}  */
@@ -658,7 +660,7 @@ PT_Attr PT_makeAttrAvoid(void)
 
 PT_Associativity PT_makeAssociativityLeft(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun15);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun14);
 }
 
 /*}}}  */
@@ -666,7 +668,7 @@ PT_Associativity PT_makeAssociativityLeft(void)
 
 PT_Associativity PT_makeAssociativityRight(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun16);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun15);
 }
 
 /*}}}  */
@@ -674,7 +676,7 @@ PT_Associativity PT_makeAssociativityRight(void)
 
 PT_Associativity PT_makeAssociativityAssoc(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun17);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun16);
 }
 
 /*}}}  */
@@ -682,7 +684,7 @@ PT_Associativity PT_makeAssociativityAssoc(void)
 
 PT_Associativity PT_makeAssociativityNonAssoc(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun18);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun17);
 }
 
 /*}}}  */
@@ -690,7 +692,7 @@ PT_Associativity PT_makeAssociativityNonAssoc(void)
 
 PT_Symbol PT_makeSymbolLit(const char* string)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun18, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -1088,9 +1090,6 @@ ATbool PT_isValidTree(PT_Tree arg)
   else if (PT_isTreeChar(arg)) {
     return ATtrue;
   }
-  else if (PT_isTreeLit(arg)) {
-    return ATtrue;
-  }
   else if (PT_isTreeAmb(arg)) {
     return ATtrue;
   }
@@ -1135,31 +1134,6 @@ inline ATbool PT_isTreeChar(PT_Tree arg)
   assert(ATmatchTerm((ATerm)arg, PT_patternTreeChar, NULL));
 #endif
   return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isTreeLit(PT_Tree arg) */
-
-inline ATbool PT_isTreeLit(PT_Tree arg)
-{
-  if (ATgetType((ATerm)arg) != AT_APPL) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeLit, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
 }
 
 /*}}}  */
@@ -1224,17 +1198,6 @@ ATbool PT_hasTreeCharacter(PT_Tree arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasTreeString(PT_Tree arg) */
-
-ATbool PT_hasTreeString(PT_Tree arg)
-{
-  if (PT_isTreeLit(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  PT_Production PT_getTreeProd(PT_Tree arg) */
 
 PT_Production PT_getTreeProd(PT_Tree arg)
@@ -1262,15 +1225,6 @@ int PT_getTreeCharacter(PT_Tree arg)
 {
   
     return (int)ATgetInt((ATermInt) arg);
-}
-
-/*}}}  */
-/*{{{  char* PT_getTreeString(PT_Tree arg) */
-
-char* PT_getTreeString(PT_Tree arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
@@ -1312,19 +1266,6 @@ PT_Tree PT_setTreeCharacter(PT_Tree arg, int character)
   }
 
   ATabort("Tree has no Character: %t\n", arg);
-  return (PT_Tree)NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_setTreeString(PT_Tree arg, const char* string) */
-
-PT_Tree PT_setTreeString(PT_Tree arg, const char* string)
-{
-  if (PT_isTreeLit(arg)) {
-    return (PT_Tree)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue))), 0);
-  }
-
-  ATabort("Tree has no String: %t\n", arg);
   return (PT_Tree)NULL;
 }
 
@@ -3887,9 +3828,9 @@ PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTop)(PT_Tree), 
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char* (*acceptString)(char*)) */
+/*{{{  PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int)) */
 
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char* (*acceptString)(char*))
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int))
 {
   if (PT_isTreeAppl(arg)) {
     return PT_makeTreeAppl(
@@ -3899,10 +3840,6 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
   if (PT_isTreeChar(arg)) {
     return PT_makeTreeChar(
         acceptCharacter ? acceptCharacter(PT_getTreeCharacter(arg)) : PT_getTreeCharacter(arg));
-  }
-  if (PT_isTreeLit(arg)) {
-    return PT_makeTreeLit(
-        acceptString ? acceptString(PT_getTreeString(arg)) : PT_getTreeString(arg));
   }
   if (PT_isTreeAmb(arg)) {
     return PT_makeTreeAmb(

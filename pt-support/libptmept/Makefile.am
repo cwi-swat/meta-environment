@@ -19,6 +19,17 @@ INCLUDES = \
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 # Developers only:
+LIBRARY=../../asf-library/library
+
+AsFix.def:
+	(echo "definition"; \
+	echo ""; \
+	cat ${LIBRARY}/languages/asfix/syntax/*.sdf ; \
+	cat ${LIBRARY}/languages/aterm/syntax/*.sdf ; \
+	cat ${LIBRARY}/basic/StrCon.sdf ; \
+	cat ${LIBRARY}/basic/IdentifierCon.sdf ; \
+	cat ${LIBRARY}/basic/Whitespace.sdf) > $@
+
 api: AsFix.def
 	sdf2-to-c -i $< -P PTPT_ -o PTMEPT
 

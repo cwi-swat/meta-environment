@@ -3,7 +3,6 @@ constructor(ParseTree, top, parsetree(<top(Tree)>, <amb-cnt(int)>)),
 
 constructor(Tree, appl, appl(<prod(Production)>, <args(Args)>)), 
 constructor(Tree, char, <character(int)>), 
-constructor(Tree, Lit, lit(<string(str)>)), 
 constructor(Tree, Amb, amb(<args(Args)>)), 
 list(Args, Tree), 
 

@@ -95,7 +95,6 @@ extern ATerm PT_patternArgsMany;
 extern ATerm PT_patternArgsSingle;
 extern ATerm PT_patternArgsEmpty;
 extern ATerm PT_patternTreeAmb;
-extern ATerm PT_patternTreeLit;
 extern ATerm PT_patternTreeChar;
 extern ATerm PT_patternTreeAppl;
 extern ATerm PT_patternParseTreeTop;

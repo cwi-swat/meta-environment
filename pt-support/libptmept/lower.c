@@ -10,14 +10,48 @@
 
 /*}}}  */
 
+static ATermTable lowerCache = NULL;
+
+/*{{{  static PTPT_Tree lookupTree(PT_Tree tree) */
+
+static PT_Tree lookupTree(PTPT_Tree tree)
+{
+  if (lowerCache) {
+    return PT_TreeFromTerm(ATtableGet(lowerCache, PTPT_TreeToTerm(tree)));
+  }
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  static PTPT_Symbol lookupSymbol(PT_Symbol symbol) */
+
+static PT_Symbol lookupSymbol(PTPT_Symbol symbol)
+{
+  if (lowerCache) {
+    return PT_SymbolFromTerm(ATtableGet(lowerCache, PTPT_SymbolToTerm(symbol)));
+  }
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  static PTPT_ATerm lookupATerm(PT_ATerm symbol) */
+
+static ATerm lookupATerm(PTPT_ATerm trm)
+{
+  if (lowerCache) {
+    return ATtableGet(lowerCache, PTPT_ATermToTerm(trm));
+  }
+  return NULL;
+}
+
+/*}}}  */
+
 /*{{{  static int PTPT_lowerNatCon(PTPT_NatCon val) */
 
 static int PTPT_lowerNatCon(PTPT_NatCon val)
 {
-  char *valStr = PTPT_getNatConString(val);
+  char *valStr = PT_yieldTree((PT_Tree) val);
   int result = atoi(valStr);
-
-  free(valStr);
 
   return result;
 }
@@ -42,32 +76,28 @@ static double PTPT_lowerRealCon(PTPT_RealCon val)
 }
 
 /*}}}  */
-/*{{{  static char *PTPT_lowerQLiteral(PTPT_QLiteral string) */
+/*{{{  static AFun PTPT_lowerStrCon(PTPT_StrCon string) */
 
-static char *PTPT_lowerQLiteral(PTPT_QLiteral string)
+static AFun PTPT_lowerStrCon(PTPT_StrCon string)
 {
-  char *str = PTPT_getQLiteralString(string);
-  char *lowered;
-  int todo;
+  char *str = PT_yieldTree((PT_Tree) string);
+  ATerm appl;
+  AFun fun;
 
-  todo = strlen(str) - 2;	/* skip leading and trailing quote */
-  lowered = (char *) malloc((todo + 1) * sizeof(char));
-  if (lowered != NULL) {
-    strncpy(lowered, str + 1, todo);
-    lowered[todo] = '\0';
-  }
+  appl = ATparse(str);
+  fun = ATgetAFun((ATermAppl) appl);
 
-  free(str);
-
-  return lowered;
+  return fun;
 }
 
 /*}}}  */
-/*{{{  static char *PTPT_lowerUQLiteral(PTPT_UQLiteral string) */
+/*{{{  static AFun PTPT_lowerIdCon(PTPT_IdCon string) */
 
-static char *PTPT_lowerUQLiteral(PTPT_UQLiteral string)
+static AFun PTPT_lowerIdCon(PTPT_IdCon string)
 {
-  return PTPT_getUQLiteralString(string);
+  ATerm appl = ATparse(PT_yieldTree((PT_Tree) string));
+
+  return ATgetAFun((ATermAppl) appl);
 }
 
 /*}}}  */
@@ -75,31 +105,31 @@ static char *PTPT_lowerUQLiteral(PTPT_UQLiteral string)
 
 static AFun PTPT_lowerAFun(PTPT_AFun fun, int arity)
 {
-  PTPT_Literal lit = PTPT_getAFunLiteral(fun);
   AFun result = 0;
 
-  if (PTPT_isLiteralUqlit(lit)) {
-    result = ATmakeAFun(PTPT_lowerUQLiteral(PTPT_getLiteralUQLiteral(lit)),
-			arity, ATfalse);
+  if (PTPT_isAFunQuoted(fun)) {
+    result = PTPT_lowerStrCon(PTPT_getAFunStrCon(fun));
   }
-  else if (PTPT_isLiteralQlit(lit)) {
-    result = ATmakeAFun(PTPT_lowerQLiteral(PTPT_getLiteralQLiteral(lit)),
-			arity, ATtrue);
+  else if (PTPT_isAFunUnquoted(fun)) {
+    result = PTPT_lowerIdCon(PTPT_getAFunIdCon(fun));
   }
+
+  /* put the proper arity in the result */
+  result = ATmakeAFun(ATgetName(result), arity, ATisQuoted(result));
 
   return result;
 }
 
 /*}}}  */
 
-/*{{{  static ATermList PTPT_lowerATermList(PTPT_ATermList listelems) */
-
 ATerm PTPT_lowerATerm(PTPT_ATerm term);
 
-static ATermList PTPT_lowerATermList(PTPT_ATermList listelems)
+/*{{{  static ATermList PTPT_lowerATermList(PTPT_ATerm listelems) */
+
+static ATermList PTPT_lowerATermList(PTPT_ATerm listelems)
 {
   ATermList list = ATempty;
-  PTPT_ATermElems elems = PTPT_getATermListElems(listelems);
+  PTPT_ATermElems elems = PTPT_getATermElems(listelems);
 
   for (; !PTPT_isATermElemsEmpty(elems);
        elems = PTPT_getATermElemsTail(elems)) {
@@ -121,9 +151,7 @@ static ATermList PTPT_lowerATermList(PTPT_ATermList listelems)
 static ATermList PTPT_lowerAnnotations(PTPT_ATermAnnos annos)
 {
   PTPT_OptLayout e = PTPT_makeOptLayoutAbsent();
-  PTPT_ATermList list = PTPT_makeATermListNotEmpty(e,
-						   (PTPT_ATermElems) annos,
-						   e);
+  PTPT_ATerm list = PTPT_makeATermList(e, (PTPT_ATermElems) annos, e);
 
   return PTPT_lowerATermList(list);
 }
@@ -131,9 +159,9 @@ static ATermList PTPT_lowerAnnotations(PTPT_ATermAnnos annos)
 /*}}}  */
 /*{{{  static ATermList PTPT_lowerAnn(PTPT_Ann ann) */
 
-static ATermList PTPT_lowerAnn(PTPT_Ann ann)
+static ATermList PTPT_lowerAnn(PTPT_Annotation ann)
 {
-  return PTPT_lowerAnnotations(PTPT_getAnnAnnos(ann));
+  return PTPT_lowerAnnotations(PTPT_getAnnotationAnnos(ann));
 }
 
 /*}}}  */
@@ -146,12 +174,13 @@ static ATerm PTPT_lowerATermAppl(PTPT_ATerm appl)
   PTPT_OptLayout e = PTPT_makeOptLayoutAbsent();
 
   /* hack alert, PT_ATermArgs is the same as an ATermList by coincidence */
-  PTPT_ATermList list = PTPT_makeATermListNotEmpty(e, (PTPT_ATermElems)
-						   PTPT_getATermArgs(appl),
-						   e);
+  PTPT_ATerm list = PTPT_makeATermList(e, (PTPT_ATermElems)
+				       PTPT_getATermArgs(appl),
+				       e);
 
   args = (ATermList) PTPT_lowerATermList(list);
   fun = PTPT_lowerAFun(PTPT_getATermFun(appl), ATgetLength(args));
+
 
   return (ATerm) ATmakeApplList(fun, args);
 }
@@ -162,43 +191,44 @@ static ATerm PTPT_lowerATermAppl(PTPT_ATerm appl)
 
 ATerm PTPT_lowerATerm(PTPT_ATerm term)
 {
-  ATerm result = NULL;
+  ATerm result = lookupATerm(term);
   ATermList ann = NULL;
 
-  if (PTPT_hasATermAnn(term)) {
-    ann = PTPT_lowerAnn(PTPT_getATermAnn(term));
+  if (result != NULL) {
+    return result;
+  }
+
+  if (PTPT_hasATermAnnotation(term)) {
+    ann = PTPT_lowerAnn(PTPT_getATermAnnotation(term));
   }
 
   if (PTPT_isATermList(term)) {
-    result = (ATerm) PTPT_lowerATermList(PTPT_getATermList(term));
+    result = (ATerm) PTPT_lowerATermList(term);
   }
   else if (PTPT_isATermAppl(term)) {
     result = PTPT_lowerATermAppl(term);
   }
   else if (PTPT_isATermFun(term)) {
+    {
     AFun afun = PTPT_lowerAFun(PTPT_getATermFun(term), 0);
 
     result = (ATerm) ATmakeAppl0(afun);
-  }
-  else if (PTPT_isATermConstant(term)) {
-    PTPT_ACon con = PTPT_getATermACon(term);
 
-    if (PTPT_isAConInt(con)) {
-      PTPT_IntCon intc = PTPT_getAConIntCon(con);
+    }
+  }
+  else if (PTPT_isATermInt(term)) {
+      PTPT_IntCon intc = PTPT_getATermIntCon(term);
 
       result = (ATerm) ATmakeInt(PTPT_lowerIntCon(intc));
-    }
-    else if (PTPT_isAConReal(con)) {
-      PTPT_RealCon real = PTPT_getAConRealCon(con);
+  }
+  else if (PTPT_isATermReal(term)) {
+    PTPT_RealCon real = PTPT_getATermRealCon(term);
 
-      result = (ATerm) ATmakeReal(PTPT_lowerRealCon(real));
-    }
-    else {
-      ATwarning("lower: unsupported ATerm constant %t\n", term);
-    }
+    result = (ATerm) ATmakeReal(PTPT_lowerRealCon(real));
   }
   else {
     ATwarning("lower: unsupported ATerm %t\n", term);
+    assert(ATfalse);
   }
 
   return result;
@@ -286,12 +316,16 @@ static PT_Attrs PTPT_lowerAttrs(PTPT_Attrs attrs)
 
 static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
 {
-  PT_Symbol result = NULL;
+  PT_Symbol result =  lookupSymbol(symbol);
+
+  if (result != NULL) {
+    return result;
+  }
 
   if (PTPT_isSymbolLit(symbol)) {
-    char *lit = PTPT_lowerQLiteral(PTPT_getSymbolString(symbol));
+    AFun lit = PTPT_lowerStrCon(PTPT_getSymbolString(symbol));
 
-    result = PT_makeSymbolLit(lit);
+    result = PT_makeSymbolLit(ATgetName(lit));
   }
   else if (PTPT_isSymbolCf(symbol)) {
     PT_Symbol new = PTPT_lowerSymbol(PTPT_getSymbolSymbol(symbol));
@@ -332,9 +366,9 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
     result = PT_makeSymbolTuple(head, rest);
   }
   else if (PTPT_isSymbolSort(symbol)) {
-    char *lit = PTPT_lowerQLiteral(PTPT_getSymbolString(symbol));
+    AFun lit = PTPT_lowerStrCon(PTPT_getSymbolString(symbol));
 
-    result = PT_makeSymbolSort(lit);
+    result = PT_makeSymbolSort(ATgetName(lit));
   }
   else if (PTPT_isSymbolIter(symbol)) {
     PT_Symbol new = PTPT_lowerSymbol(PTPT_getSymbolSymbol(symbol));
@@ -377,11 +411,11 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
 
     result = PT_makeSymbolFunc(syms, sym);
   }
-  else if (PTPT_isSymbolParametrizedSort(symbol)) {
-    char *lit = PTPT_lowerQLiteral(PTPT_getSymbolSort(symbol));
+  else if (PTPT_isSymbolParameterizedSort(symbol)) {
+    AFun lit = PTPT_lowerStrCon(PTPT_getSymbolSort(symbol));
     PT_Symbols syms = PTPT_lowerSymbols(PTPT_getSymbolParameters(symbol));
 
-    result = PT_makeSymbolParameterizedSort(lit, syms);
+    result = PT_makeSymbolParameterizedSort(ATgetName(lit), syms);
   }
   else if (PTPT_isSymbolVarsym(symbol)) {
     PT_Symbol new = PTPT_lowerSymbol(PTPT_getSymbolSymbol(symbol));
@@ -398,6 +432,7 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
   }
   else {
     ATwarning("lower: unknown symbol %t\n", symbol);
+    assert(ATfalse);
   }
 
   return result;
@@ -423,6 +458,7 @@ static PT_CharRange PTPT_lowerCharRange(PTPT_CharRange range)
   }
   else {
     ATwarning("lower: unknown charrange %t\n", range);
+    assert(ATfalse);
   }
 
   return result;
@@ -449,6 +485,7 @@ static PT_Associativity PTPT_lowerAssociativity(PTPT_Associativity assoc)
   }
   else {
     ATwarning("lower: unknown associativity %t\n", assoc);
+    assert(ATfalse);
   }
 
   return result;
@@ -472,9 +509,9 @@ static PT_Attr PTPT_lowerAttr(PTPT_Attr attr)
     result = PT_makeAttrTerm(term);
   }
   else if (PTPT_isAttrId(attr)) {
-    char *id = PTPT_lowerQLiteral(PTPT_getAttrModuleName(attr));
+    AFun id = PTPT_lowerStrCon(PTPT_getAttrModuleName(attr));
 
-    result = PT_makeAttrId(id);
+    result = PT_makeAttrId(ATgetName(id));
   }
   else if (PTPT_isAttrBracket(attr)) {
     result = PT_makeAttrBracket();
@@ -490,6 +527,7 @@ static PT_Attr PTPT_lowerAttr(PTPT_Attr attr)
   }
   else {
     ATwarning("lower: unknown attr %t\n", attr);
+    assert(ATfalse);
   }
 
   return result;
@@ -513,6 +551,7 @@ static PT_Attributes PTPT_lowerAttributes(PTPT_Attributes attributes)
   }
   else {
     ATwarning("lower: unknown attributes: %t\n", attributes);
+    assert(ATfalse);
   }
 
   return result;
@@ -543,6 +582,7 @@ static PT_Production PTPT_lowerProd(PTPT_Production prod)
   }
   else {
     ATwarning("lower: unknown production %t\n", prod);
+    assert(ATfalse);
   }
 
   return result;
@@ -574,15 +614,35 @@ static PT_Args PTPT_lowerArgs(PTPT_Args args)
 
 /*}}}  */
 
-/*{{{  PTPT_Tree PTPT_lowerTree(PTPT_Tree pt) */
+/*{{{  PT_Tree PTPT_lowerTreeCache(PTPT_Tree pt, ATermTable myLowerCache) */
+
+PT_Tree PTPT_lowerTreeCache(PTPT_Tree pt, ATermTable myLowerCache)
+{
+  PT_Tree result = NULL;
+  lowerCache = myLowerCache;
+
+  result = PTPT_lowerTree(pt);
+
+  lowerCache = NULL;
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PTPT_lowerTree(PTPT_Tree pt) */
 
 PT_Tree PTPT_lowerTree(PTPT_Tree pt)
 {
-  PT_Tree result = NULL;
-  PTPT_Ann annos = NULL;
+  PT_Tree result = lookupTree(pt);
+  PTPT_Annotation annos = NULL;
+
+  if (result != NULL) {
+    return result;
+  }
 
   if (PTPT_isTreeAnnotated(pt)) {
-    annos = PTPT_getTreeAnn(pt);
+    annos = PTPT_getTreeAnnotation(pt);
     pt = PTPT_getTreeTree(pt);
   }
 
@@ -600,11 +660,6 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
 
     result = PT_makeTreeAppl(prod, args);
   }
-  else if (PTPT_isTreeLit(pt)) {
-    char *lit = PTPT_lowerQLiteral(PTPT_getTreeString(pt));
-
-    result = PT_makeTreeLit(lit);
-  }
   else if (PTPT_isTreeChar(pt)) {
     PTPT_NatCon val = PTPT_getTreeCharacter(pt);
 
@@ -612,6 +667,11 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
   }
   else {
     ATwarning("lower: unknown term %t\n", pt);
+    /* In this case we leave the term as-is, which is important
+     * for bootstrapping purposes. When bootstrapping the ASF-Normalizer,
+     * we try to lower meta-level variables, which should be left alone.
+     */
+    result = (PT_Tree) pt;
   }
 
   if (annos != NULL) {
@@ -624,7 +684,7 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
 }
 
 /*}}}  */
-/*{{{  PTPT_ParseTree PTPT_lowerParseTree(PTPT_ParseTree pt)  */
+/*{{{  PT_ParseTree PTPT_lowerParseTree(PTPT_ParseTree pt) */
 
 PT_ParseTree PTPT_lowerParseTree(PTPT_ParseTree pt)
 {

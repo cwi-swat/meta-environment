@@ -53,52 +53,12 @@ static struct _TreeYielder treeToString = { yieldCharToString, NULL };
 
 /*}}}  */
 
-/*{{{  static char descape(const char **p) */
-
-static char descape(const char **p)
-{
-  char c;
-
-  if (**p == '\\') {
-    (*p)++;
-    switch (**p) {
-      case 'n':
-	c = '\n';
-	break;
-      case 't':
-	c = '\t';
-	break;
-      case ' ':
-      case '`':
-	c = **p;
-	break;
-      default:
-	c = '\\';
-	break;
-    }
-  }
-  else {
-    c = **p;
-  }
-
-  return c;
-}
-
-/*}}}  */
 /*{{{  static void visitTree(PT_Tree tree, TreeYielder yielder) */
 
 static void visitTree(PT_Tree tree, TreeYielder yielder)
 {
   if (PT_isTreeChar(tree)) {
     yielder->yieldChar(PT_getTreeCharacter(tree));
-  }
-  else if (PT_isTreeLit(tree)) {
-    const char *s = PT_getTreeString(tree);
-    while (*s) {
-      char c = descape(&s);
-      yielder->yieldChar(c);
-      s++;
-    }
   }
   else if (PT_isTreeAppl(tree)) {
     visitArgs(PT_getTreeArgs(tree), yielder);
@@ -206,18 +166,16 @@ void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguitie
 
 void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities)
 {
-  if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
-    PT_yieldParseTreeToFile(PT_ParseTreeFromTerm(t), f, yieldAllAmbiguities);
-  }
-  else if (PT_isTreeAmb(PT_TreeFromTerm(t))) {
-    PT_Args args = PT_getTreeArgs(PT_TreeFromTerm(t));
-    PT_yieldArgsToFile(args, f, yieldAllAmbiguities);
-  }
-  else if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
+  if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
         || ATmatch(t,"amb(<term>)", NULL)
-        || ATmatch(t,"<int>", NULL)
-        || ATmatch(t,"lit(<term>)", NULL)) {
+        || ATmatch(t,"<int>", NULL)) {
     PT_yieldTreeToFile(PT_TreeFromTerm(t), f, yieldAllAmbiguities);
+  }
+  else if (ATgetType(t) == AT_LIST) {
+    PT_yieldArgsToFile(PT_ArgsFromTerm(t), f, yieldAllAmbiguities);
+  }
+  else if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
+    PT_yieldParseTreeToFile(PT_ParseTreeFromTerm(t), f, yieldAllAmbiguities);
   }
   else {
     ATabort("PT_yieldAnyToFile: Unknown term: %t\n", t);
@@ -251,6 +209,14 @@ static void yieldCharToString(char c)
   assert(stringCur - stringStart <= stringCapacity);
 
   *stringCur++ = c;
+}
+
+/*}}}  */
+/*{{{  char *PT_yieldTree(PT_Tree tree) */
+
+char *PT_yieldTree(PT_Tree tree)
+{
+  return PT_yieldTreeToString(tree, ATfalse);
 }
 
 /*}}}  */
@@ -301,24 +267,25 @@ char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities)
 
 char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities)
 {
-  if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
-    return PT_yieldParseTreeToString(PT_ParseTreeFromTerm(t),
-				     yieldAllAmbiguities);
-  }
-  else if (PT_isTreeAmb(PT_TreeFromTerm(t))) {
-    PT_Args args = PT_getTreeArgs(PT_TreeFromTerm(t));
-    return PT_yieldArgsToString(args, yieldAllAmbiguities);
-  }
-  else if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
+  if (ATmatch(t,"appl(<term>,<term>)", NULL, NULL) 
         || ATmatch(t,"amb(<term>)", NULL)
-        || ATmatch(t,"<int>", NULL)
-        || ATmatch(t,"lit(<term>)", NULL)) {
-    return PT_yieldTreeToString(PT_TreeFromTerm(t), yieldAllAmbiguities);
+        || ATmatch(t,"<int>", NULL)) {
+    return PT_yieldTreeToString(PT_TreeFromTerm(t), 
+				yieldAllAmbiguities);
+  }
+  else if (ATgetType(t) == AT_LIST) {
+    return PT_yieldArgsToString(PT_ArgsFromTerm(t), 
+				yieldAllAmbiguities);
+  }
+  else if (PT_isParseTreeTop(PT_ParseTreeFromTerm(t))) {
+    return PT_yieldParseTreeToString(PT_ParseTreeFromTerm(t), 
+				     yieldAllAmbiguities);
   }
   else {
     ATabort("PT_yieldAnyToString: Unknown term: %t\n", t);
-    return NULL;
   }
+
+  return NULL;
 }
 
 /*}}}  */

@@ -42,26 +42,6 @@ static ERR_SubjectList getAmbiguities(const char *path,
 
   /*}}}  */
   }
-  else if (PT_isTreeLit(tree)) {
-  /*{{{  handle literal string */
-
-    char *str = PT_getTreeString(tree);
-    int len = strlen(str);
-    
-    while(--len >= 0) {
-      if (str[len] == '\n') {
-        current->col = 0;
-        current->line++;
-        current->offset++;
-      } 
-      else {
-        current->col++;
-        current->offset++;
-      }
-    }
-
-  /*}}}  */
-  }
   else if (PT_isTreeAppl(tree)) {
   /*{{{  handle normal application */
 

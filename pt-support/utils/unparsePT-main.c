@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
     PT_initMEPTApi();
   }
 
+
   if (proceed) {
     ATerm term;
 

@@ -130,7 +130,6 @@ PT_CharRanges PT_makeCharRanges6(PT_CharRange elem1, PT_CharRange elem2, PT_Char
 PT_ParseTree PT_makeParseTreeTop(PT_Tree top, int ambCnt);
 PT_Tree PT_makeTreeAppl(PT_Production prod, PT_Args args);
 PT_Tree PT_makeTreeChar(int character);
-PT_Tree PT_makeTreeLit(const char* string);
 PT_Tree PT_makeTreeAmb(PT_Args args);
 PT_Args PT_makeArgsEmpty(void);
 PT_Args PT_makeArgsSingle(PT_Tree head);
@@ -217,20 +216,16 @@ PT_ParseTree PT_setParseTreeAmbCnt(PT_ParseTree arg, int ambCnt);
 ATbool PT_isValidTree(PT_Tree arg);
 inline ATbool PT_isTreeAppl(PT_Tree arg);
 inline ATbool PT_isTreeChar(PT_Tree arg);
-inline ATbool PT_isTreeLit(PT_Tree arg);
 inline ATbool PT_isTreeAmb(PT_Tree arg);
 ATbool PT_hasTreeProd(PT_Tree arg);
 ATbool PT_hasTreeArgs(PT_Tree arg);
 ATbool PT_hasTreeCharacter(PT_Tree arg);
-ATbool PT_hasTreeString(PT_Tree arg);
 PT_Production PT_getTreeProd(PT_Tree arg);
 PT_Args PT_getTreeArgs(PT_Tree arg);
 int PT_getTreeCharacter(PT_Tree arg);
-char* PT_getTreeString(PT_Tree arg);
 PT_Tree PT_setTreeProd(PT_Tree arg, PT_Production prod);
 PT_Tree PT_setTreeArgs(PT_Tree arg, PT_Args args);
 PT_Tree PT_setTreeCharacter(PT_Tree arg, int character);
-PT_Tree PT_setTreeString(PT_Tree arg, const char* string);
 
 /*}}}  */
 /*{{{  PT_Args accessors */
@@ -426,7 +421,7 @@ PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail);
 /*{{{  sort visitors */
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTop)(PT_Tree), int (*acceptAmbCnt)(int));
-PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char* (*acceptString)(char*));
+PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int));
 PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
 PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));

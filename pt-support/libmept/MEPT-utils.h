@@ -44,6 +44,7 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod);
 
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isTreeAlt(PT_Tree tree);
+ATbool PT_isTreeLit(PT_Tree tree);
 ATbool PT_isTreeSeq(PT_Tree tree);
 ATbool PT_isTreeOpt(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);
@@ -55,6 +56,8 @@ PT_Symbol PT_makeOptLayoutSymbol();
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
 PT_Args PT_makeArgsSingle(PT_Tree arg);
+
+PT_Args PT_removeArgsLiterals(PT_Args args);
 
 char *PT_yieldProduction(PT_Production prod);
 char *PT_yieldSymbol(PT_Symbol symbol);
@@ -125,6 +128,7 @@ PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length);
 PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length);
 
 ATbool PT_isTreeLexical(PT_Tree tree);
+ATbool PT_isTreeLexicalInjection(PT_Tree tree);
 
 PT_Tree PT_makeTreeLayoutEmpty();
 ATbool PT_isTreeLayout(PT_Tree tree);
@@ -132,6 +136,7 @@ PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args);
 PT_Tree PT_makeTreeLayoutFromString(const char *str);
 
 PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree);
+PT_Tree PT_makeTreeLit(const char* string);
 
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 
@@ -180,6 +185,7 @@ LOC_Location PT_getTreeOrigin(PT_Tree tree);
 
 unsigned long PT_getTreeLength(PT_Tree tree);
 
+char *PT_yieldTree(PT_Tree tree);
 char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities);
 char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities);
 char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities);
@@ -190,4 +196,6 @@ void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities);
 void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities);
 void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities);
 
+PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout);
+PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout);
 #endif /* _ME_PT_H */

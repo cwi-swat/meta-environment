@@ -141,19 +141,6 @@ static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
       args = PT_getArgsTail(args);
     }
   }
-  else if (PT_isTreeLit(tree)) {
-    char *str = PT_getTreeString(tree);
-    while(*str != '\0') {
-      if (*str == '\n') {
-        *cols = 0;
-        (*lines)++;
-      } 
-      else {
-        (*cols)++;
-      }
-      str++;
-    }
-  }
 }
 
 /*}}}  */
@@ -164,7 +151,6 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   int start_line = current->line;
   int start_col  = current->col;
   int start_offset  = current->offset;
-  int len;
 
   /*ATwarning("adding pos-info at depth %d to %t\n", current->curDepth, tree);*/
 
@@ -223,24 +209,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 
     tree = PT_makeTreeAmb(PT_reverseArgs(new));
   }
-  else if (PT_isTreeLit(tree)) {
-    char *str = PT_getTreeString(tree);
-    len = strlen(str);
-    while(--len >= 0) {
-      current->offset++;
-      if (str[len] == '\n') {
-        current->col = 0;
-        current->line++;
-      } 
-      else {
-        current->col++;
-      }
-    }
-
-    if (!label_literals) {
-      return tree;
-    }
-  } else {
+  else {
     ATwarning("unhandled tree: %s (%t)\n",
 	      PT_yieldTreeToString(tree, ATfalse),
 	      tree);
@@ -384,7 +353,7 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
     args = PT_getTreeArgs(tree);
     while (!PT_isArgsEmpty(args)) {
       PT_Tree child = PT_findTreeAtOffset(PT_getArgsHead(args), offset);
-      if (child != NULL && !PT_isTreeFlatLexical(child)) {
+      if (child != NULL) {
 	return child;
       }
       args = PT_getArgsTail(args);

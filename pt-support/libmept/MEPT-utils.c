@@ -139,17 +139,23 @@ ATbool PT_prodHasVarSymAsRhs(PT_Production prod)
 
 ATbool PT_isProductionVariable(PT_Production prod)
 {
-  /* This implements: "prod([varsym(<term>)],cf(<term>),<term>)" */
+  /* This implements: "prod([varsym(<term>)],<term>,<term>)" */
+
   if (PT_isProductionDefault(prod)) {
     PT_Symbols lhs = PT_getProductionLhs(prod);
-    PT_Symbol rhs = PT_getProductionRhs(prod);
 
-    if ((PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) && PT_hasSymbolsHead(lhs)) {
+    if (PT_hasSymbolsHead(lhs)) {
       PT_Symbol lhssym = PT_getSymbolsHead(lhs);
       PT_Symbols tail = PT_getSymbolsTail(lhs);
-      return PT_isSymbolsEmpty(tail) && PT_isSymbolVarSym(lhssym);
+
+      if (PT_isSymbolsEmpty(tail)) {
+	if (PT_isSymbolCf(lhssym) || PT_isSymbolLex(lhssym)) {
+	  lhssym = PT_getSymbolSymbol(lhssym);
+	}
+
+	return PT_isSymbolVarSym(lhssym);
+      }
     }
-    return ATfalse;
   }
 
   return ATfalse;
@@ -436,6 +442,19 @@ ATbool PT_isTreeApplList(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isTreeLit(PT_Tree tree) */
+
+ATbool PT_isTreeLit(PT_Tree tree)
+{
+  if (PT_hasTreeProd(tree)) {
+    return PT_isSymbolLit(PT_getProductionRhs(PT_getTreeProd(tree)));
+  }
+  else {
+    return ATfalse;
+  }
+}
+
+/*}}}  */
 
 /*{{{  ATbool PT_isTreeVar(PT_Tree tree)  */
 
@@ -443,7 +462,9 @@ ATbool PT_isTreeVar(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_isProductionVariable(prod);
+    if (PT_isProductionVariable(prod)) {
+      return ATtrue;
+    }
   }
   return ATfalse;
 }
@@ -480,8 +501,10 @@ ATbool PT_isTreeVarListStar(PT_Tree tree)
       PT_Symbol rhssym = PT_getProductionRhs(prod);
       if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
         PT_Symbol sym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterStar(sym)
-               || PT_isSymbolIterStarSep(sym);
+
+	if (PT_isSymbolIterStar(sym) || PT_isSymbolIterStarSep(sym)) {
+	  return ATtrue;
+	}
       }
     }
   }
@@ -531,47 +554,6 @@ PT_Tree PT_getTreeBracketTree(PT_Tree tree)
     return PT_getArgsArgumentAt(PT_getTreeArgs(tree),2);
   }
   return NULL;
-}
-
-/*}}}  */
-
-/*{{{  PT_Tree PT_makeTreeFlatLexical(PT_Args charList) */
-
-PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
-{
-  return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
-			 charList);
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_makeTreeFlatLexicalFromString(const char *str) */
-
-PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
-{
-  PT_Args args = PT_makeArgsEmpty();
-  int i;
-
-  for (i = strlen(str) - 1; i >= 0; i--) {
-    args = PT_makeArgsMany(PT_makeTreeChar((int) str[i]), args);
-  }
-
-  return PT_makeTreeFlatLexical(args);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
-
-ATbool PT_isTreeFlatLexical(PT_Tree tree)
-{
-  static PT_Symbol allCharsSymbol;
-  allCharsSymbol = makeSymbolAllChars();
-
-  if (PT_isTreeAppl(tree)) {
-    PT_Production listProd = PT_getTreeProd(tree);
-    PT_Symbol listSymbol = PT_getProductionRhs(listProd);
-    return PT_isEqualSymbol(listSymbol, allCharsSymbol);
-  }
-  return ATfalse;
 }
 
 /*}}}  */
@@ -642,6 +624,39 @@ PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
   }
 
   return NULL;
+}
+
+/*}}}  */
+
+/* This function does not support the full SDF literal notation */
+/*{{{  PT_Tree PT_makeTreeLit(const char* string) */
+
+PT_Tree PT_makeTreeLit(const char* string)
+{
+  int len = strlen(string);
+  int i;
+  PT_Args args = PT_makeArgsEmpty();
+  PT_Symbols symbols = PT_makeSymbolsEmpty();
+  PT_Symbol symbol = PT_makeSymbolLit(string);
+  PT_Attributes attrs = PT_makeAttributesNoAttrs();
+  PT_Production prod;
+
+  for (i = len - 1; i >= 0; i--) {
+    PT_Tree arg;
+    PT_Symbol symbol;
+
+    arg = PT_makeTreeChar(string[i]);
+    args = PT_makeArgsMany(arg, args);
+
+    symbol = PT_makeSymbolCharClass(
+	      PT_makeCharRangesSingle(
+	        PT_makeCharRangeCharacter(string[i])));
+    symbols = PT_makeSymbolsMany(symbol, symbols);
+  }
+
+  prod = PT_makeProductionDefault(symbols, symbol, attrs);
+
+  return PT_makeTreeAppl(prod, args);
 }
 
 /*}}}  */
@@ -774,9 +789,46 @@ ATbool PT_isTreeLexical(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_isLexicalInjectionProd(prod);
+    PT_Symbol rhs = PT_getProductionRhs(prod);
+
+    return PT_isSymbolLex(rhs);
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeLexicalInjection(PT_Tree tree) */
+
+ATbool PT_isTreeLexicalInjection(PT_Tree tree)
+{
+  if (PT_hasTreeProd(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+
+    return PT_isLexicalInjectionProd(prod);
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  PT_Args PT_removeArgsLiterals(PT_Args args) */
+
+PT_Args PT_removeArgsLiterals(PT_Args args)
+{
+  /* This function removes any elements that are literal trees
+   */
+  PT_Args new = PT_makeArgsEmpty();
+
+  for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+
+    if (!PT_isTreeLit(arg)) {
+      new = PT_makeArgsMany(arg, new);
+    }
+  }
+
+  return PT_reverseArgs(new);
 }
 
 /*}}}  */
@@ -921,12 +973,7 @@ static PT_Args annotateArgsWithLength(PT_Args args, int *length)
 
 static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length)
 {
-  if (PT_hasTreeString(tree)) {
-    *length = strlen(PT_getTreeString(tree));
-    tree = PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
-                                ATmake("<int>", *length));
-  }
-  else if (PT_isTreeChar(tree)) {
+  if (PT_isTreeChar(tree)) {
     *length = 1;
   }
   else if (PT_isTreeAmb(tree)) {
@@ -1290,6 +1337,62 @@ PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree parsetree, PT_Tree tree
   top = PT_setTreeArgs(top, args);
 
   return PT_setParseTreeTop(parsetree, top);
+}
+
+/*}}}  */
+
+/* replace all layout algorithm */
+
+/*{{{  PT_Args PT_replaceArgsLayout(PT_Args args, PT_Tree layout) */
+
+PT_Args PT_replaceArgsLayout(PT_Args args, PT_Tree layout)
+{
+  PT_Args result = PT_makeArgsEmpty();
+
+  for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+    PT_Tree head = PT_getArgsHead(args);
+
+    if (PT_isTreeLayout(head)) {
+      head = layout;
+    }
+    else {
+      head = PT_replaceTreeLayout(head, layout);
+    }
+
+
+
+    result = PT_makeArgsMany(head, result);
+  }
+
+  return PT_reverseArgs(result);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout) */
+
+PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout)
+{
+  if (PT_hasTreeArgs(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+
+    args = PT_replaceArgsLayout(args, layout);
+
+    tree = PT_setTreeArgs(tree, args);
+  }
+
+  return tree;
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout) */
+
+PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout)
+{
+  PT_Tree top = PT_getParseTreeTop(tree);
+
+  top = PT_replaceTreeLayout(top, layout);
+
+  return PT_setParseTreeTop(tree, top);
 }
 
 /*}}}  */

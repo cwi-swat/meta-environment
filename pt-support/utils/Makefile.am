@@ -68,8 +68,8 @@ flattenPT_LDADD	= \
 liftPT_SOURCES	= liftPT-main.c
 
 liftPT_LDADD = \
-	-L../libmept -lmept \
 	-L../libptmept -lPTMEPT \
+	-L../libmept -lmept \
 	-L${ATERM}/lib -lATerm
 
 unparsePT_SOURCES = \
