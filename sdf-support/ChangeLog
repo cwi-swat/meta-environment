@@ -1,3 +1,9 @@
+2002/10/08 (jurgenv@cwi.nl)
+ * Added functionality to compute a list of renamings from a list
+   of formal parameters and a list of actual parameters of an SDF2 module
+   import: SDF_makeRenamingsFromModuleNames(...) and
+   SDF_makeRenamingsFromParameters(...)
+
 2002/10/07 (jurgenv@cwi.nl)
  * Regenerated library to get improved start constructors
 

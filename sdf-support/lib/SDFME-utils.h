@@ -60,4 +60,8 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction);
 PT_Symbol SDFSymbolToPtSymbol(SDF_Symbol symbol);
 PT_Symbol SDFCharClassToPtSymbol(SDF_CharClass sdfCharClass);
 
+SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
+					      SDF_Symbols actuals);
+SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
+					       SDF_ModuleName actual);
 #endif /* _SDF_UTILS_H */
