@@ -7,7 +7,7 @@ let
   Id   : term,
   Tid  : int,
   NF   : term,
-  Mod  : term,
+  Mod  : str,
   Term : term 
 in
   Id := process-id. 

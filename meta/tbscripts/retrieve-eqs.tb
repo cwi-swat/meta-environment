@@ -5,7 +5,7 @@
 process Retrieve-eqs(Eval: evaluator) is
 let
   Id   : term,
-  Mod  : term,
+  Mod  : str,
   Tmod : term,
   Eqs  : list
 in

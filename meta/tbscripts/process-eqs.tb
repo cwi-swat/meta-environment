@@ -4,7 +4,7 @@
 process ProcessEqs is
 let
   Id      : term,
-  Mod     : term,
+  Mod     : str,
   Module  : term,
   Modules : list,
   Mname   : str,

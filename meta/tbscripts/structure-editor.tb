@@ -106,7 +106,7 @@ in
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
       rec-value(SE,T1?).
-      snd-msg(rewrite(id(Language),T1)).
+      snd-msg(rewrite(Language,T1)).
       rec-msg(result(T2?)).
       snd-msg(pp(T2)).
       rec-msg(source(Src?)).
