@@ -6,4 +6,5 @@ bin_SCRIPTS = meta pt-dump eqs-dump
 
 % : %.sh.src Makefile
 	sed 's@__ASF__@${ASF}@g;\
-	     s@__META__@${META}@' < $< > $@ && chmod +x $@
+	     s@__META__@${META}@g;\
+	     s@__PREFIX__@${prefix}@' < $< > $@ && chmod +x $@
