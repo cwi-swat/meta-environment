@@ -60,9 +60,6 @@ buttons([
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
-          push-string("\"ALL_MESSAGES\""),
-          parse("basic/Strings", "String"),
-
           push-filename("extracted-relations.trm"),
           read-tree,
           check-sort("RSTORE"),

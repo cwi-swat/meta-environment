@@ -54,7 +54,7 @@ rel[str,<area,str>] UNMATCHED_SENDS = {
 rel[str,<area,str>] UNMATCHED_RECEIVES
  = {<"Unmatched receive ",<N,V>> | <N,V> : RECEIVEMESSAGES, V notin range(SENDMESSAGES)}
 
-rel[str,<area,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS1 union UNMATCHED_RECEIVES
+rel[str,<area,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
 
 rel[str,<area,str>] TOOL_DEFINITIONS
  = {<"Tool definition ", <N,V>> | <N,V> : TOOLS}

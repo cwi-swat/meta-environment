@@ -6,7 +6,7 @@ endlet
 
 process Q is
 let
-  T: str
+  S: str
 in
   rec-msg(S)
 endlet
