@@ -15,13 +15,20 @@ char *SDFgetModuleName(SDF_Module sdfModule)
 }
 
 /*}}}  */
+/*{{{  SDF_ModuleId SDFmakeModuleId(char *moduleName) */
+
+SDF_ModuleId SDFmakeModuleId(char *moduleStr)   
+{
+  return SDF_makeModuleIdLexToCf(
+             (SDF_Lexical)PT_makeTreeFlatLexicalFromString(moduleStr));
+}
+/*}}}  */
 /*{{{  SDF_Module SDFmakeModuleName(char *moduleName) */
 
 SDF_ModuleName SDFmakeModuleName(char *moduleStr)   
 {
   return SDF_makeModuleNameUnparameterized(
-           SDF_makeModuleIdLexToCf(
-             (SDF_Lexical)PT_makeTreeFlatLexicalFromString(moduleStr)));
+           SDFmakeModuleId(moduleStr));
 }
 /*}}}  */
 /*{{{  SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *moduleName) */
@@ -29,12 +36,10 @@ SDF_ModuleName SDFmakeModuleName(char *moduleStr)
 SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *newName)
 {
   SDF_ModuleName oldModuleName, newModuleName;
-  SDF_ModuleId   moduleId;
+  SDF_ModuleId   moduleId = SDFmakeModuleId(newName);
 
   oldModuleName = SDF_getModuleModuleName(sdfModule);
 
-  moduleId   = SDF_makeModuleIdLexToCf(
-                 (SDF_Lexical)PT_makeTreeFlatLexicalFromString(newName));
   newModuleName = SDF_setModuleNameModuleId(oldModuleName, moduleId);
 
   return SDF_setModuleModuleName(sdfModule, newModuleName);

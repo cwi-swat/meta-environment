@@ -5,6 +5,7 @@
 
 char      *SDFgetModuleName (SDF_Module sdfModule);
 SDF_Module SDFsetModuleName (SDF_Module sdfModule, char *name);
+SDF_ModuleId SDFmakeModuleId(char *moduleStr);
 SDF_ModuleName SDFmakeModuleName(char *moduleStr);
 
 ATermList  SDFgetGrammars              (SDF_Module module);

@@ -1,3 +1,6 @@
+2001/11/09 (markvdb@cwi.nl)
+ * added SDF_getModuleName support
+
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions: 
    - regenerated the library.
