@@ -1,0 +1,36 @@
+equations
+
+[ib0]	is-bag(empty-bag) = true
+[ib1]	is-bag($Bag) = true
+[default-ib]	
+	is-bag($Elem) = false
+
+[ec1]	equal($Bag1, $Bag2) = true
+	====================================================
+	elem-compare($Bag1, $Bag2) = equal
+
+[default-ec]
+	elem-compare($Elem1, $Elem2) = compare($Elem1, $Elem2)
+
+[ee1]	elem-compare($Elem1, $Elem2) = equal
+	===================================================
+	elem-equal($Elem1, $Elem2) = true
+
+[default-ee]
+	elem-equal($Elem1, $Elem2) = false
+
+[elt1]	elem-compare($Elem1, $Elem2) = less
+	===================================================
+	elem-less($Elem1, $Elem2) = true
+[default-elt]
+	elem-less($Elem1, $Elem2) = false	
+
+[ele1]	elem-less-equal($Elem1, $Elem2) = elem-equal($Elem1, $Elem2) | elem-less($Elem1, $Elem2)
+
+[egt1]	elem-compare($Elem1, $Elem2) = greater
+	===================================================
+	elem-greater($Elem1, $Elem2) = true
+[default-gt]
+	elem-greater($Elem1, $Elem2) = false
+
+[ege1]	elem-greater-equal($Elem1, $Elem2) = elem-equal($Elem1, $Elem2) | elem-greater($Elem1, $Elem2)
