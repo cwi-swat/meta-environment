@@ -617,7 +617,7 @@ ATbool valid_parse_tables(ATermList visited, ATerm module)
         entry = (ATerm)ATreplace((ATermList)entry,
                                  ATparse("unavailable"),
                                  table_loc);
-        PutValue(new_modules_db, module, entry);
+        PutValue(new_modules_db, first, entry);
         result = ATfalse;
       }
       else {
@@ -997,12 +997,12 @@ ATerm get_syntax(ATerm name, ATermList modules)
 
   nameterm = make_name_term(name);
   while(!ATisEmpty(modules)) {
-    elem = ATgetFirst(modules);
+    elem = ATgetFirst(modules); 
     entry = GetValue(new_modules_db,elem);
     module = ATelementAt((ATermList)entry, syn_loc);
     if(ATmatchTerm(module,pattern_asfix_term,
                    &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                   &appl, &t[6], &t[7])) {
+                   &appl, &t[6], &t[7])) { 
       if(ATisEmpty(syntaxes))
         syntaxes = ATinsert(syntaxes,appl);
       else {
