@@ -24,14 +24,11 @@ Installation instructions:
          the location, you'll need it later.
          (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
     -- xemacs (A text editor for X-windows systems, available from
-         <http://www.xemacs.org/>). Make sure you get version 20.4 or newer,
-         and make sure your installation includes an executable named
-         "gnuclient". Then add the line
-           (gnuserv-start)
-         to your ~/.emacs file.
+         <http://www.xemacs.org/>). Make sure you get version 20.4 or newer.
          The Meta-Environment is untested with other versions of xemacs, but
          may very well work. (Or may not...)
-    -- a full set of UNIX development utilities.
+    -- the common development utilities typically existent in a basic
+         UNIXish environment.
 
 
   * Optional items

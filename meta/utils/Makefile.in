@@ -35,10 +35,6 @@ AR              = @AR@
 ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
-NOWEB           = @NOWEB@
-NOWEAVE         = @NOWEAVE@
-NOTANGLE        = @NOTANGLE@
-
 # Implicit rules
 include ${top_srcdir}/implicit-rules
 

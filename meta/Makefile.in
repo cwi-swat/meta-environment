@@ -31,7 +31,7 @@ SUBDIRS		= toolbus editor evaluator graph-browser \
 
 .SILENT:
 
-all doc clean:
+all doc clean:	configure
 	@for DIR in $(SUBDIRS);	\
 	do \
 		echo Make $@ in $$DIR; \
@@ -39,6 +39,10 @@ all doc clean:
 		$(MAKE) -${MAKEFLAGS} $@; \
 		cd ..; \
 	done
+
+configure:	configure.in
+	@echo "Warning: configure script is out of date."
+	@echo "Please (re)run autoconf and configure."
 
 uninstall:
 	$(UNINSTALL) $(bindir) meta

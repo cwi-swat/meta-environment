@@ -10,13 +10,9 @@ VERSION=0.02
 AC_SUBST(PRODUCT)
 AC_SUBST(VERSION)
 
-dnl Default location of this component
-AC_PREFIX_DEFAULT(`echo $PWD`/..)
-
 dnl Default locations of other components
-TOOLBUS='\$(prefix)'
-ATERM='\$(prefix)'
-NEWATERM='\$(prefix)'
+TOOLBUS='${prefix}'
+ATERM='${prefix}'
 
 dnl Installation scripts
 INSTALL='$(top_srcdir)/install-sh'
@@ -37,17 +33,11 @@ AC_PROG_CC
 AC_AIX
 
 dnl Where to locate a bourne-compatible shell?
-SHELL=""
-AC_PATH_PROG(SHELL,sh,/bin/sh)
+SHELL='/bin/sh'
+AC_SUBST(SHELL)
 
-dnl where is perl5?
+dnl Where is perl5?
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
-
-dnl Check for noweb components.
-dnl Use 'true' if 'noweb', 'noweave', or 'notangle' do not exist.
-AC_CHECK_PROG(NOWEB,noweb,noweb,true)
-AC_CHECK_PROG(NOWEAVE,noweave,noweave,)
-AC_CHECK_PROG(NOTANGLE,notangle,notangle,)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
@@ -66,12 +56,6 @@ AC_ARG_WITH(aterm,
 ATERM=${withval},)
 AC_SUBST(ATERM)
 
-dnl Handle --with-new-aterm=... argument to configure
-AC_ARG_WITH(new-aterm,
-[  --with-new-aterm		which new-aterm-library to use],
-NEWATERM=${withval},)
-AC_SUBST(NEWATERM)
-
 dnl Handle --with-toolbus=... argument to configure
 AC_ARG_WITH(toolbus,
 [  --with-toolbus	which ToolBus distribution to use],
@@ -87,9 +71,9 @@ AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tc
 AC_SUBST(TCLDOT)
 
 dnl Of course, the latest version of wish is not always called "wish". :-(
-dnl If we can't find something called wish8.0, we'll assume that "wish"
-dnl is at version 8 or higher (as it is in a _normal_ setup)
-AC_PATH_PROGS(WISH, wish8.1 wish8.0 wish, /usr/bin/wish)
+dnl If we can't find something called wish8.1 or wish8.0, we'll assume
+dnl that "wish" is at version 8 or higher (as it is in a _normal_ setup)
+AC_PATH_PROGS(WISH,wish8.1 wish8.0 wish, /usr/bin/wish)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
@@ -119,9 +103,12 @@ AC_CHECK_HEADER(getopt.h)
 
 AC_SUBST(SOCKLIBS)
 
+dnl Handle subpackages...
+AC_CONFIG_SUBDIRS(sglr)
+
 dnl Which files need updating?
 AC_OUTPUT(
-	Makefile Makefile.skel install-prog-sh install-data-sh meta \
+	Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	compiler/support/Makefile compiler/support-muasf/Makefile \
@@ -132,13 +119,6 @@ AC_OUTPUT(
 	module-db/Makefile module-db/genmakefile.sh \
 	pgen/c-source/Makefile pgen/c-files/Makefile \
 	pgen/addeqs/c-source/Makefile \
-	sglr/a2toa1/Makefile \
-	sglr/client/Makefile \
-	sglr/dump/Makefile \
-	sglr/parser/Makefile \
-	sglr/sdf1tosdf2/Makefile \
-	sglr/sdf1tosdf2/sdf1tosdf2 \
-	sglr/tree2dot/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/edit-module.tb \
 	toolbus/open-modules.tb toolbus/revert-module.tb \

@@ -1,11 +1,11 @@
-#!/bin/sh
-PROG="$1 -c -m 644"
+#! /bin/sh
+PROG="$1 -c"
 DIR=$2
 while test x$3 != x
 do
 	echo "installing $3 in $DIR"
 	cp $3 $DIR
-	chmod 0644 $DIR/$3
+	chmod 0755 $DIR/$3
 	shift
 done
 
