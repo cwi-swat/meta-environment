@@ -122,10 +122,10 @@ ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName
     if (strcmp(buttonName, "Parse") == 0) {
       ATerm action = NULL;
 
-      if (strcmp(type,"Equations") == 0) {
+      if (strcmp(type,"equations") == 0) {
 	action = ATmake("parse-equations-action(<str>)", moduleName);
       }
-      else if (strcmp(type,"Syntax") == 0) {
+      else if (strcmp(type,"syntax") == 0) {
 	action = ATmake("parse-syntax-action(<str>)", moduleName);
       }
       else {
