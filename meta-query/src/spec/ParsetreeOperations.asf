@@ -1,5 +1,21 @@
 equations
 
+  [] $Tree = appl($Production1,
+                  [$Tree2, 
+                   appl($Production2, [$Tree*]),
+                   $Tree3])
+     ===>
+     getTopProduction(parsetree($Tree,$NatCon)) =
+       $Production2
+
+  [] $Tree = appl($Production1,
+                  [$Tree2, 
+                   appl($Production2, [$Tree*]) $Ann,
+                   $Tree3])
+     ===>
+     getTopProduction(parsetree($Tree,$NatCon)) =
+       $Production2
+
   [] ptProduction2String(prod([$Symbol*],$Symbol,$Attributes)) =
       ptSymbols2String([$Symbol*])
       || strcon(""" "-"">" """)

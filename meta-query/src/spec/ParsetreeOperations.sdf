@@ -5,13 +5,20 @@ imports asfix/syntax/Parsetree
 
 exports
   context-free syntax
+    getTopProduction(ParseTree) -> Production
+  context-free syntax
     ptProduction2String(Production) -> String
     ptSymbols2String(Symbols)       -> String
     ptSymbol2String(Symbol)         -> String
 
 hiddens
   variables
-    "$Char*"[0-9]* -> CHAR*
+    "$Char*"[0-9]*	-> CHAR*
     "$Attributes"[0-9]* -> Attributes 
-    "$Symbol"[0-9]* -> Symbol
-    "$Symbol*"[0-9]* -> {Symbol ","}*
+    "$Symbol"[0-9]*	-> Symbol
+    "$Symbol*"[0-9]*	-> {Symbol ","}*
+    "$Tree"[0-9]*	-> Tree
+    "$Tree*"[0-9]*	-> {Tree ","}*
+    "$NatCon"[0-9]*	-> NatCon
+    "$Production"[0-9]*	-> Production
+    "$Ann"[0-9]*	-> Ann

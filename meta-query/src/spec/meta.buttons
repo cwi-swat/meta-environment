@@ -57,7 +57,19 @@ buttons([
          ["Sdf", "Test"],
          [push-active-module,
           get-focus,
-          push-filename("focus.trm"),
-          save-tree
+          push-filename("focus.tree"),
+          save-tree,
+          execute-action("baf2trm -i focus.tree -o focus.text"),
+          push-filename("focus.text"),
+          parse("asfix/syntax/Parsetree", "ParseTree"),
+          apply("getTopProduction", "Production", 1),
+          push-modulename("ParsetreeOperations"),
+          reduce,
+          apply("ptProduction2String", "String", 1),
+          push-modulename("ParsetreeOperations"),
+          reduce,
+          push-filename("focus.str"),
+          push-modulename("ParsetreeOperations"),
+           activate-editor
          ])
 ])
