@@ -169,10 +169,6 @@ equations
        ==============================================================================
        is-constructor(FunId, Nametable) = true
 
-[ic-1] is-list-funid(FunId) = true
-       ======================================
-       is-constructor(FunId, Nametable) = true
-
 [default-ic] is-constructor(FunId, Nametable) = false
 
 %% Here we check if all rules for FunId use the same embedding in the left-hand-side,

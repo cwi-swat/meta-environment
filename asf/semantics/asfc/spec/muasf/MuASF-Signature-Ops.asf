@@ -177,3 +177,15 @@ remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
   [ie-1'1] is-external({Term*1, external, Term*2}) = true
 
   [default-ie-1'1] is-external(Annos) = false
+
+[gf-0]
+get-funcdef-funid(Funid) = Funid
+
+[gf-1]
+get-funcdef-funid(Funid(Sigarg+)) = Funid
+
+[gf-2]
+get-funcdef-funid(Funid {Term+}) = Funid
+
+[gf-3]
+get-funcdef-funid(Funid(Sigarg+) {Term+}) = Funid 

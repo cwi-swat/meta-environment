@@ -62,7 +62,7 @@ if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 117 ) ) ) {
 ( tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 101 ) ) ) {
-FUNC_EXIT ( lf_list_3 ( cons ( make_list ( lf_2 ( lf_list_1 ( ( ATerm ) ATmakeList ( 4 , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 101 ] ) ) ) ) , remove_list ( lf_4_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_3 ( cons ( make_list ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 4 , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 101 ] ) ) ) ) , remove_list ( lf_4_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -73,7 +73,7 @@ FUNC_EXIT ( lf_list_3 ( cons ( make_list ( lf_2 ( lf_list_1 ( ( ATerm ) ATmakeLi
 }
 }
 }
-if ( ! term_equal ( tmp [ 0 ] , lf_2 ( lf_list_1 ( cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 117 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) {
+if ( ! term_equal ( tmp [ 0 ] , make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 117 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( lf_4_recursive ( make_list ( tmp [ 1 ] ) ) ) ;
 }
 }
@@ -116,7 +116,7 @@ if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 117 ) ) ) {
 ( tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 101 ) ) ) {
-FUNC_EXIT ( lf_list_3 ( cons ( make_list ( lf_2 ( lf_list_1 ( ( ATerm ) ATmakeList ( 4 , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 101 ] ) ) ) ) , remove_list ( lf_4_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( lf_list_3 ( cons ( make_list ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , ( ATerm ) ATmakeList ( 4 , char_table [ 116 ] , char_table [ 114 ] , char_table [ 117 ] , char_table [ 101 ] ) ) ) ) , remove_list ( lf_4_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -127,7 +127,7 @@ FUNC_EXIT ( lf_list_3 ( cons ( make_list ( lf_2 ( lf_list_1 ( ( ATerm ) ATmakeLi
 }
 }
 }
-if ( ! term_equal ( tmp [ 0 ] , lf_2 ( lf_list_1 ( cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 117 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) {
+if ( ! term_equal ( tmp [ 0 ] , make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 117 ) ) , make_list ( make_char ( 101 ) ) ) ) ) ) ) ) ) {
 ( arg0 = make_list ( tmp [ 1 ] ) ) ;
 goto lbl_lf_4_recursive ;
 }

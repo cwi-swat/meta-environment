@@ -44,55 +44,31 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_or_3 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_or_3sym , ATmakeAppl ( lf_or_3sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_con_2sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_false_4sym ) ) {
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_false_4sym ) ) ) ) ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_true_1sym ) ) {
-FUNC_EXIT ( arg0 ) ;
-}
-}
-}
+if ( term_equal ( arg0 , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_true_1sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_con_2sym , make_nf0 ( lf_true_1sym ) ) ) ;
 }
 FUNC_EXIT ( make_nf2 ( lf_or_3sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_and_5 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_and_5sym , ATmakeAppl ( lf_and_5sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_con_2sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_false_4sym ) ) {
-FUNC_EXIT ( arg0 ) ;
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_false_4sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_con_2sym , make_nf0 ( lf_false_4sym ) ) ) ;
 }
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_true_1sym ) ) {
+if ( term_equal ( arg0 , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_true_1sym ) ) ) ) ) ) {
 FUNC_EXIT ( arg1 ) ;
-}
-}
-}
 }
 FUNC_EXIT ( make_nf2 ( lf_and_5sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_not_6 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_not_6sym , ATmakeAppl ( lf_not_6sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_con_2sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_true_1sym ) ) {
-FUNC_EXIT_CONST ( constant0 , lf_con_2 ( lf_false_4 ( ) ) ) ;
+if ( term_equal ( arg0 , ( constant1 ? constant1 : ( constant1 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_true_1sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( lf_con_2sym , make_nf0 ( lf_false_4sym ) ) ) ;
 }
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf_false_4sym ) ) {
-FUNC_EXIT_CONST ( constant1 , lf_con_2 ( lf_true_1 ( ) ) ) ;
-}
-}
-}
+if ( term_equal ( arg0 , ( constant0 ? constant0 : ( constant0 = make_nf1 ( lf_con_2sym , make_nf0 ( lf_false_4sym ) ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , make_nf1 ( lf_con_2sym , make_nf0 ( lf_true_1sym ) ) ) ;
 }
 FUNC_EXIT ( make_nf1 ( lf_not_6sym , arg0 ) ) ;
 }

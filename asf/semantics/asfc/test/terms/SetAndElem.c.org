@@ -67,7 +67,7 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp1010 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( arg0 , atmp1010 ) ) {
-FUNC_EXIT_CONST ( constant0 , lf_true_3 ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_true_3sym ) ) ;
 }
 ( atmp100 [ 1 ] = list_tail ( atmp100 [ 1 ] ) ) ;
 ( tmp [ 0 ] = atmp100 [ 1 ] ) ;
@@ -77,7 +77,7 @@ FUNC_EXIT_CONST ( constant0 , lf_true_3 ( ) ) ;
 if ( check_sym ( arg1 , lf_list_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT_CONST ( constant1 , lf_false_4 ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , make_nf0 ( lf_false_4sym ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_elem_2sym , arg0 , arg1 ) ) ;
@@ -105,7 +105,7 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-( tmp [ 1 ] = lf_set_5 ( lf_list_1 ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ) ;
+( tmp [ 1 ] = lf_set_5 ( make_nf1 ( lf_list_1sym , cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf_set_5sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf_list_1sym ) ) {
@@ -113,7 +113,7 @@ if ( check_sym ( tmp [ 2 ] , lf_list_1sym ) ) {
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 ( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
 ( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_set_5 ( lf_list_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ) ;
+( tmp [ 5 ] = lf_set_5 ( make_nf1 ( lf_list_1sym , cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ) ;
 FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }
@@ -145,7 +145,7 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp1010 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( arg0 , atmp1010 ) ) {
-FUNC_EXIT_CONST ( constant0 , lf_true_3 ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , make_nf0 ( lf_true_3sym ) ) ;
 }
 ( atmp100 [ 1 ] = list_tail ( atmp100 [ 1 ] ) ) ;
 ( tmp [ 0 ] = atmp100 [ 1 ] ) ;
@@ -155,7 +155,7 @@ FUNC_EXIT_CONST ( constant0 , lf_true_3 ( ) ) ;
 if ( check_sym ( arg1 , lf_list_6sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT_CONST ( constant1 , lf_false_4 ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , make_nf0 ( lf_false_4sym ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_sepelem_7sym , arg0 , arg1 ) ) ;
@@ -183,7 +183,7 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp001110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( term_equal ( atmp0010 , atmp001110 ) ) {
-( tmp [ 1 ] = lf_sepset_8 ( lf_list_6 ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ) ;
+( tmp [ 1 ] = lf_sepset_8 ( make_nf1 ( lf_list_6sym , cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , lf_sepset_8sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 2 ] , lf_list_6sym ) ) {
@@ -191,7 +191,7 @@ if ( check_sym ( tmp [ 2 ] , lf_list_6sym ) ) {
 if ( not_empty_list ( tmp [ 3 ] ) ) {
 ( tmp [ 4 ] = list_head ( tmp [ 3 ] ) ) ;
 ( tmp [ 3 ] = list_tail ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = lf_sepset_8 ( lf_list_6 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ) ;
+( tmp [ 5 ] = lf_sepset_8 ( make_nf1 ( lf_list_6sym , cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 3 ] ) ) ) ) ) ) ;
 FUNC_EXIT ( tmp [ 5 ] ) ;
 }
 }

@@ -24,10 +24,12 @@ exports
     make-funcdef(FunId,TermList)            -> FuncDef
     make-external-funcdef(FunId,TermList)   -> FuncDef
     is-external(Annotations)                 -> Bool
+    get-funcdef-funid(FuncDef)                      -> FunId
 
   context-free syntax
     addto-sign(SignatureOpt,{FuncDef ";"}*) -> SignatureOpt
 
+    add-attr(Term, Annotations) -> Annotations
 hiddens
   variables
     "Char"[0-9]*    -> CHAR

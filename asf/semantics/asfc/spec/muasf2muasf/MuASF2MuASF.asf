@@ -1,11 +1,12 @@
 equations
 
 [m2m-1'1]
-add-list-cons(Module1) = Module2,
-optimize-muasf(Module2,Nametable) = (Module3, Nametable2),
-make-matching-conds(Module3) = Module4,
-make-left-linear(Module4) = Module5,
-remove-list-matching(Module5) = Module6,
-normalize-conditions(Module6) = Module7
+find-constructors(Module1,Nametable) = (Module2, Nametable2),
+add-list-cons(Module2) = Module3,
+optimize-muasf(Module3,Nametable2) = (Module4, Nametable3),
+make-matching-conds(Module4) = Module5,
+make-left-linear(Module5) = Module6,
+remove-list-matching(Module6) = Module7,
+normalize-conditions(Module7) = Module8
 ===>
-muasf2muasf(Module1, Nametable) =  (Module7, Nametable2)
+muasf2muasf(Module1, Nametable) =  (Module8, Nametable3)
