@@ -1267,6 +1267,7 @@ static TBbool simple_atomic_step(atom *Atom)
 	assert(is_appl(first(args)));
 	arg = first(args);
 	/* add_free_list(args); */
+	
 	return create_tool(arg) ? TBtrue : TBfalse;
       }
     case a_snd_terminate:

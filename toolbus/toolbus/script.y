@@ -227,7 +227,7 @@ void old_scope(void)
 /* process applications in toolbus configuration
  * (used by create_toolbus)
  */
-proc *initial_toolbus_proc;
+proc *initial_toolbus_proc = NULL;
 
 term *assign_var(char *str, int lino)
 { term_list *tl;
@@ -732,6 +732,7 @@ def_list:
        /* empty */            { empty_range($$); }
      | proc_def def_list      { range($$, $1, $2); }
      | tool_def def_list      { range($$, $1, $2); }
+     | toolbus_def def_list   { range($$, $1, $2); }
      ;
 
 proc_call_in_tb :
@@ -756,9 +757,19 @@ toolbus:
          { $$.u.proc = $3.u.proc; range($$,$1,$4); }            
      ;
 
+toolbus_def : toolbus { 
+  if (initial_toolbus_proc != NULL) {
+   initial_toolbus_proc = mk_dot(initial_toolbus_proc, $1.u.proc);
+  }
+  else {
+    initial_toolbus_proc = $1.u.proc;
+  }
+  range($$,$1,$1);
+  }
+              ;
+
 script:
-       def_list toolbus
-         { initial_toolbus_proc = $2.u.proc; range($$,$1,$2); }
+       def_list { range($$,$1,$1); }
      ;
 %%
 
