@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/meta
    info=http://www.cwi.nl/projects/MetaEnv/meta
    description='The ASF+SDF Meta-Environment is an interactive tool suite
                 for building language-oriented tools for program
