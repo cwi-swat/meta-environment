@@ -86,7 +86,7 @@ class SourceBrowser
     try {
       int line = loc.getLocationStartLine();
       int col  = loc.getLocationStartColumn();
-      int pos  = getLineStartOffset(loc.getLocationStartLine()-1);
+      int pos  = getLineStartOffset(line-1);
       pos += col;
       Rectangle rect1 = modelToView(pos);
       Rectangle rect2 = modelToView(pos+1);
@@ -109,7 +109,6 @@ class SourceBrowser
 
     if (selectedPosition >= 0) {
       try {
-	FontMetrics metrics = getFontMetrics(getFont());
 	Rectangle rect = modelToView(selectedPosition);
 	Rectangle rect_end = modelToView(selectedPosition+1);
 

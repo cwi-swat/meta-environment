@@ -2,18 +2,18 @@ package tide.tool.srcviewer;
 
 //{{{ imports
 
-import java.util.*;
-import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
 
 import tide.*;
-import tide.tool.*;
+import tide.tool.ToolManager;
 import tide.tool.support.*;
-import tide.tool.ruleinspector.*;
 
 //}}}
 

@@ -1,17 +1,15 @@
 package tide.tool;
 
-import java.util.*;
-import java.util.List;
-import java.io.*;
-import java.beans.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.util.*;
+
 import javax.swing.*;
 
-import tide.*;
-import tide.tool.support.*;
-
+import tide.PreferenceSet;
 import tide.tool.ruleinspector.*;
+import tide.tool.support.*;
 
 public class ToolManager
 {
@@ -19,12 +17,12 @@ public class ToolManager
 
   private Map tideTools;
 
-  private List processToolList;
-  private List processActionList;
+  private java.util.List processToolList;
+  private java.util.List processActionList;
   private Map processTools;
 
-  private List adapterToolList;
-  private List adapterActionList;
+  private java.util.List adapterToolList;
+  private java.util.List adapterActionList;
   private Map adapterTools;
 
   private Map toolInstances;

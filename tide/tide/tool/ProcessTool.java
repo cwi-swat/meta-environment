@@ -1,8 +1,6 @@
 package tide.tool;
 
-import javax.swing.*;
-
-import tide.tool.support.*;
+import tide.tool.support.DebugProcess;
 
 abstract public class ProcessTool
   extends TideTool

@@ -3,7 +3,6 @@ package tide.tool.prefeditor;
 import javax.swing.Icon;
 
 import tide.tool.*;
-import tide.tool.support.*;
 
 public class PreferencesEditorFactory
   implements TideToolFactory

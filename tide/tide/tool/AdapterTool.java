@@ -1,8 +1,6 @@
 package tide.tool;
 
-import javax.swing.*;
-
-import tide.tool.support.*;
+import tide.tool.support.DebugAdapter;
 
 abstract public class AdapterTool
   extends TideTool

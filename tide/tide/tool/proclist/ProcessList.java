@@ -1,12 +1,11 @@
 package tide.tool.proclist;
 
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.util.*;
 
-import aterm.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import tide.tool.*;
 import tide.tool.support.*;

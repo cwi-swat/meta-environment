@@ -1,13 +1,12 @@
 package tide.tool.prefeditor;
 
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
+
 import javax.swing.*;
-import javax.swing.event.*;
 
 import tide.*;
-import tide.tool.*;
 
 public class FontPreferenceEditor
   extends JPanel
@@ -49,7 +48,7 @@ public class FontPreferenceEditor
       if (fontName == null) {
 	fontName = key;
       }
-      String fontSpec = preferences.getPreference("font.spec." + key);
+      //String fontSpec = preferences.getPreference("font.spec." + key);
       fontPanels[fontCount] = new FontPanel(this, preferences, key);
       fontPanel.add(fontPanels[fontCount]);
       fontCount++;

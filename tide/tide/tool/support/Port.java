@@ -2,7 +2,6 @@ package tide.tool.support;
 
 //{{{ imports
 
-import java.util.*;
 import aterm.*;
 
 //}}}

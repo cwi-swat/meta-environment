@@ -46,7 +46,7 @@ public class TideControl
 
     Port.initialize(factory);
     Expr.initialize(factory);
-    TideControl control = new TideControl(factory, args);
+    new TideControl(factory, args);
   }
 
   //}}}

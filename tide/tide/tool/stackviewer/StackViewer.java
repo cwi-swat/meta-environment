@@ -2,20 +2,13 @@ package tide.tool.stackviewer;
 
 //{{{ imports
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.util.*;
+
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.text.*;
-import javax.swing.plaf.TextUI;
 
-import aterm.*;
-
-import tide.*;
 import tide.tool.*;
 import tide.tool.support.*;
 

@@ -1,7 +1,6 @@
 package tide.tool;
 
 import javax.swing.Icon;
-import tide.tool.support.*;
 
 public interface TideToolFactory
 {

@@ -1,8 +1,6 @@
 package tide.tool.support;
 
-import java.util.*;
 
-import aterm.*;
 
 public class VarFormat
   implements ExprFormat
