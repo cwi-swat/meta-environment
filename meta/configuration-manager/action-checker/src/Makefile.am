@@ -6,6 +6,7 @@ INCLUDES	= -I$(ASC_SUPPORT)/include \
 		-I$(PT_SUPPORT)/include \
 		-I$(ASF_SUPPORT)/include \
 		-I$(ERROR_SUPPORT)/include \
+		-I$(TOOLBUSLIB)/include \
 		-I$(ATERM)/include
 
 AM_CFLAGS = -DASF_MAIN
@@ -37,3 +38,9 @@ pkgdata_DATA = ActionScriptChecker.trm.tbl \
 	     s@__PTPRETTY__@$(PTPRETTY)@g;\
 	     s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
+
+asfc: ActionScriptChecker.eqs
+	asfc -i ActionScriptChecker.eqs -o ActionScriptChecker.c -v
+
+ActionScriptChecker.eqs:
+	cd ../spec ; eqs-dump -m ActionScriptChecker -o ../src/ActionScriptChecker.eqs
