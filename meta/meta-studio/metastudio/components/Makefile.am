@@ -3,6 +3,7 @@ include ${top_srcdir}/make_rules
 SUBDIRS = \
 	graphs \
 	statusbar \
+	menubar \
 	statushistory \
 	errorlist \
 	infolist \
@@ -18,7 +19,6 @@ EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
 	MainTabs.java \
-	MenuBar.java \
 	MessageTabs.java \
 	ModuleBrowser.java \
 	ModuleInfoPanel.java \

@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import metastudio.components.MainTabs;
-import metastudio.components.MenuBar;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.ToolBar;
 import metastudio.components.dialogtool.DialogTool;
+import metastudio.components.menubar.MenuBar;
 import metastudio.components.statusbar.StatusBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;

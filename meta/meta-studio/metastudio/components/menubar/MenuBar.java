@@ -1,4 +1,4 @@
-package metastudio.components;
+package metastudio.components.menubar;
 
 import java.awt.event.ActionEvent;
 import java.util.HashMap;

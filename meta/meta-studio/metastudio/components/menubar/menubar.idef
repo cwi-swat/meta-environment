@@ -1,0 +1,26 @@
+tool menu-bar is {  }
+
+process MenuBar is
+let
+  T : menu-bar,
+  Type : term,
+  EventList : list,
+  Event : term
+in
+  rec-connect(T?)
+  .
+  (
+      rec-event(T, get-events(Type?))
+      . snd-msg(cm-get-events(Type))
+      . rec-msg(cm-events(EventList?))
+      . snd-do(T, add-events(Type, EventList))
+      . snd-ack-event(T, get-events(Type))
+    +
+      rec-event(T, button-selected(Type?, Event?))
+      . snd-msg(ui-button-selected(Type, Event))
+      . snd-ack-event(T, button-selected(Type, Event))
+    )
+    * rec-event(T, quit)
+endlet
+
+toolbus(MenuBar)
