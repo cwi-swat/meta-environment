@@ -1,5 +1,8 @@
 # $Id$
 
+2002/12/09 (jurgenv@cwi.nl)
+ * Changed version of aterm-java and shared-objects jarfiles
+
 2002/11/25 (vandenbr@loria.fr)
  * Fixed a bug in the structure editors wrt "unparsed"-ness of
    trees.
