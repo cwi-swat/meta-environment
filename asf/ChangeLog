@@ -1,3 +1,6 @@
+2002/03/04 (vandenbr@loria.fr)
+ * Introduced parameterized sorts.
+
 2002/02/27 (jurgenv@cwi.nl)
  * Fixed a bug in the is-<cons> builtin. If it returned false it would
    match correclty in the conditions.
