@@ -190,6 +190,33 @@ Conventions:
 - Each datatype D should define a conditional:
        if Boolean then D else D fi -> D
 
+
+Avoid Duplications:
+
+In the current library various overlaps exists:
+
+Definition of Literals/Strings in:
+	asfix/syntax/Literals
+	aterm/Literals
+	basic/Strings
+(Al deze definities zijn anders)
+
+Definition of Layout/Comment 
+	aterm/Layout
+	asf/syntax/Comments
+(Beide definieren een iets ander %% commentaar)
+(NB via aterm/Layout krijgt SDF zijn layout conventie)
+
+
+Definition Naturals/Integers:
+	aterm/IntCon
+	basic/Integers
+(NatCon wordt in beide gedefinieerd; IntCon alleen in aterm/IntCon)
+
+Definition of Reals:
+	aterm/RealCon
+(pm. integreren met toekostige reals)
+
 languages
 	asf	syntax	Ambiguities
 			Comments
@@ -309,10 +336,10 @@ formats
 		tools	?
 
 	aterm	syntax	Aterms
-			IntCon
+			IntCon	<-- reuse basic/IntCon
 			Layout
-			Literals
-			RealCon
+			Literals <-- reuse basic/String
+			RealCon	 <-- reuse basic/RealCon
 		tools	?
 
 *new	box	syntax
@@ -323,11 +350,23 @@ basic	Booleans	"true"  -> BoolCon
 			Boolean "|" Boolean 	-> Boolean {left}
 			Boolean "&" Boolean 	-> Boolean {left}
 			"not" "(" Boolean ")" 	-> Boolean
-	Integers	Natural "-/" Natural	-> Natural {left}
+
+*new	NatCon
+
+*new 	Naturals	NatCon			-> Natural
+			Natural "-/" Natural	-> Natural {left}
 			"(" Natural ")"       	-> Natural {bracket}
-			Natural               	-> Integer
-			"+" Natural           	-> Integer
-			"-" Natural           	-> Integer
+*new			"if" Boolean "then" Natural "else" Natural "fi" -> Natural
+
+*new	IntCon		"+" NatCon          	-> IntCon
+			"-" NatCon           	-> IntCon
+
+	Integers	
+			IntCon			-> Integer
+			Natural               	-> Integer    ? do we want this???
+			"+" Integer		-> Integer    ?????
+			"-" Integer		-> Integer    ?????
+                        
 			Integer "+" Integer     -> Integer {left}
 			Integer "-" Integer     -> Integer {left}
 			Integer "*" Integer     -> Integer {left}
@@ -339,13 +378,19 @@ basic	Booleans	"true"  -> BoolCon
 
 *new			"if" Boolean "then" Integer "else" Integer "fi" -> Integer
 
+*new	RealCon
+
 *new	Reals
 
-	Strings		String "||" String      -> String {left}
+
+	Strings
+
+*pm merge with other literals
+			String "||" String      -> String {left}
 *new			size(String)            -> Natural
 *new			"if" Boolean "then" String "else" String "fi" -> String
 *new			substring(String, Natural, Natural) -> String
-*substring serach?
+*substring search?
 *relational operators?
 *other?
 			remove-continuations(String) -> String
