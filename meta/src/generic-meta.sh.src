@@ -12,7 +12,6 @@ pgen=__PGEN__
 toolbus=__TOOLBUS__
 xemacs=__XEMACS__
 prefix=__PREFIX__
-metastudio_def=__METASTUDIO_DEF__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${PATH}"; 
@@ -170,7 +169,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} ${time_out_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x
