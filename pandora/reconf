@@ -1,5 +1,5 @@
 #!/bin/sh
 
 aclocal -I .
-autoconf --verbose
+autoconf --verbose --warnings=all
 automake -a --verbose
