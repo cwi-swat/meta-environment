@@ -1,4 +1,4 @@
-module PPSeparatedList["ListName" X ";"]
+module languages/box/utilities/PPSeparatedList["ListName" X ";"]
 
 imports languages/box/syntax/Box
 

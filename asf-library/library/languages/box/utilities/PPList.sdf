@@ -1,4 +1,4 @@
-module PPList["ListName" X]
+module languages/box/utilities/PPList["ListName" X]
 
 imports languages/box/syntax/Box
 
