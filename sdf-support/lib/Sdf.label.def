@@ -402,6 +402,8 @@ exports
     ShortChar -> Character {cons("short")}
     "\\TOP"   -> Character {cons("top")}
     "\\EOF"   -> Character {cons("eof")}
+    "\\BOT"   -> Character {cons("bot")}
+    "\\LABEL_START" -> Character {cons("label_start")}
 
 module RealCon
 imports IntCon
