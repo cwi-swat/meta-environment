@@ -3,10 +3,8 @@
 # {{{ variables
 
      prefix=__PREFIX__
-exec_prefix=${prefix}/libexec
      bindir=${prefix}/bin
-    datadir=${prefix}/share
-    PKGDATA=${datadir}/sdf-apigen
+    PKGDATA=__PKGDATA__
         PRG=`basename $0`
      APIGEN=__APIGEN__
 

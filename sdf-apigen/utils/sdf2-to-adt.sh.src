@@ -3,14 +3,12 @@
 # {{{ variables
 
      prefix=__PREFIX__
-exec_prefix=${prefix}/libexec
      bindir=${prefix}/bin
-    datadir=${prefix}/share
     SGLRBIN=__SGLR__/bin
      ASFBIN=__ASF__/bin
    ATERMBIN=__ATERM__/bin
       PTBIN=__PT_SUPPORT__/bin
-    PKGDATA=${datadir}/sdf-apigen
+    PKGDATA=__PKGDATA__
         PRG=`basename $0`
 
 # }}}

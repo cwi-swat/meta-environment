@@ -18,7 +18,10 @@ pkgdata_DATA= CHARLIST_StringImpl.java.template \
 	      CHARLIST.h.template
 
 
-bin_SCRIPTS		= sdf2-to-adt sdf2-to-java sdf2-to-c
+bin_SCRIPTS = sdf2-to-adt sdf2-to-java sdf2-to-c 
+
+noinst_SCRIPTS = sdf2-to-adt.test sdf2-to-java.test sdf2-to-c.test
+	      
 
 % : %.sh.src Makefile
 	sed 's@__APIGEN__@${APIGEN}@g;\
@@ -26,4 +29,14 @@ bin_SCRIPTS		= sdf2-to-adt sdf2-to-java sdf2-to-c
 	     s@__PT_SUPPORT__@${PT_SUPPORT}@g;\
 	     s@__SGLR__@${SGLR}@g;\
 	     s@__ASF__@${ASF}@g;\
+	     s@__PKGDATA__@${pkgdatadir}@g;\
 	     s@__PREFIX__@${prefix}@g' < $< > $@ && chmod +x $@
+
+%.test : %.sh.src Makefile
+	sed 's@__APIGEN__@${APIGEN}@g;\
+	     s@__ATERM__@${ATERM}@g;\
+	     s@__PT_SUPPORT__@${PT_SUPPORT}@g;\
+	     s@__SGLR__@${SGLR}@g;\
+	     s@__ASF__@${ASF}@g;\
+	     s@__PKGDATA__@${top_builddir}/utils@g;\
+	     s@__PREFIX__@${top_builddir}/utils@g' < $< > $@ && chmod +x $@
