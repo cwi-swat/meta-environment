@@ -12,10 +12,10 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class ListChoicePopup extends ToolComponent {
+public class ChoiceDialog extends ToolComponent {
     private JComponent parent;
 
-    public ListChoicePopup(ATermFactory factory, MultiBridge bridge, JComponent parent) {
+    public ChoiceDialog(ATermFactory factory, MultiBridge bridge, JComponent parent) {
         super(factory, bridge);
         this.parent = parent;
     }

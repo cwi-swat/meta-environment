@@ -24,5 +24,5 @@ ModulePopupMenu.java\
 ModuleTree.java\
 ModuleBrowser.java\
 ParseTreeBrowser.java\
-ListChoicePopup.java
+ChoiceDialog.java
 
