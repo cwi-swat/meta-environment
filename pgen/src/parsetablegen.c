@@ -166,7 +166,7 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 /* 
   FILE *f;
     
-  f = fopen("definition.baf", "w");
+  f = fopen("definition.baf", "wb");
   assert(f);
   ATwriteToBinaryFile(sdf, f);
   fclose(f);
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
 	  iofile = stdin;
 	}
 	else {
-	  if (!(iofile = fopen(input[i], "r"))) {
+	  if (!(iofile = fopen(input[i], "rb"))) {
 	    ATerror("%s: cannot open %s\n", myname, input[i]);
 	  }
 	}
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 	if (nr_inputs > 1) {
 	  char buf[BUFSIZ];
 	  sprintf(buf, "%s.tbl", input[i]);
-	  iofile = fopen(buf, "w");
+	  iofile = fopen(buf, "wb");
 	  if (iofile == NULL) {
 	    ATerror("%s: cannot open %s\n", myname, buf);
 	  }

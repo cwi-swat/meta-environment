@@ -36,7 +36,7 @@ FILE  *PT_OpenLog(char *prg, char *fnam)
   if (!fnam || !strcmp(fnam, "")) {
     fnam = "pgen-stats.txt";
   }
-  if (!(PT_Log = fopen(fnam, "w"))) {
+  if (!(PT_Log = fopen(fnam, "wb"))) {
     ATerror("%s%sCannot create logfile %s\n",  PT_COND_STRING(prg), prg?": ":"", fnam);
   }
   return PT_Log;
