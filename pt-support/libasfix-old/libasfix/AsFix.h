@@ -206,6 +206,7 @@ extern Symbol symbol_ceq_equ;
 extern Symbol symbol_ceq_when;
 extern Symbol symbol_ceq_impl;
 extern Symbol symbol_asfix_appl;
+extern Symbol symbol_asfix_term;
 extern Symbol symbol_prod;
 extern Symbol symbol_appl;
 extern Symbol symbol_term;
@@ -280,12 +281,14 @@ application.}
 
 #define asfix_is_appl(t)	(ATgetSymbol((ATermAppl) t) == symbol_asfix_appl)
 
+#define asfix_is_term(t)	(ATgetSymbol((ATermAppl) t) == symbol_term)
 /*
 \Macro{asfix\_is\_lex}{ATbool }{ATerm }{Check if an AsFix term is 
 a lexical.}
 */
 
 #define asfix_is_lex(t)		(ATgetSymbol((ATermAppl) t) == symbol_lex)
+
 
 /*
 \Macro{asfix\_is\_list}{ATbool }{ATerm }{Check if an AsFix term is a list.}
@@ -358,6 +361,8 @@ a list separator.}
 */
 
 #define asfix_is_list_sep(t)	(ATgetSymbol((ATermAppl) t) == symbol_sep)
+
+#define asfix_is_sep(t)		(ATgetSymbol((ATermAppl) t) == symbol_sep)
 
 /*
 \Macro{asfix\_is\_ceq\_equ}{ATbool }{ATerm }{Check if an AsFix term
