@@ -276,17 +276,15 @@ system.  Topics that will be addressed include:
 
 \begin{itemize}
 \item The formalism \asfsdf. 
-We only give a \link{quick introduction to \asfsdf}
-[ (Section~\ref{ASF+SDF})]{ASF+SDF}.
+We only give a \link{quick introduction to \asfsdf}[ (Section~\Ref)]{ASF+SDF}.
 
 \item The architectural and implementational aspects of the system.
 We only give a brief sketch of the underlying 
 \link{technology and architecture of the \ASmetaenv}
-[ (Section~\ref{SEC:TechnologyandArchitecture})]{SEC:TechnologyandArchitecture}.
+[ (Section~\Ref)]{SEC:TechnologyandArchitecture}.
 
 \item The stand-alone usage of various parts of the system.
-We only describe the \link{usage of the most important components}[
-(Section~\ref{SEC:Components})]{SEC:Components}.
+We only describe the \link{usage of the most important components}[(Section~\Ref)]{SEC:Components}.
 \end{itemize}
 
 \subsection{Downloading the \ASmetaenv}
@@ -304,8 +302,7 @@ You can download the \ASmetaenv\ from the following location:
 There are many publications about the \ASmetaenv\ itself, about the
 implementation techniques used, and about applications.
 Also see the overview of
-\link{architecture and implementation techniques}
-[ (Section~\ref{SEC:TechnologyandArchitecture})]{SEC:TechnologyandArchitecture}. 
+\link{architecture and implementation techniques}[ (Section~\Ref)]{SEC:TechnologyandArchitecture}. 
 We give here a brief
 overview of selected publications:
 
@@ -352,8 +349,7 @@ overview of selected publications:
 \index{Asf+Sdf Meta-Environment@\ASmetaenv}
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
 result, 
-\link{the \ASmetaenv\ main window pops up.}[ This is shown in
-Figure~\ref{FIG:meta-start}.]{FIG:meta-start}
+\link{the \ASmetaenv\ main window pops up.}[ This is shown in Figure~\Ref.]{FIG:meta-start}
 
 \begin{figure}[t]
 \begin{center}
@@ -369,7 +365,7 @@ Figure~\ref{FIG:meta-start}.]{FIG:meta-start}
 The {\tt meta} command has the following options, which may come in handy
 later on. As a novice user, you may want to skip the remainder of this section
 and continue with the description of the 
-\link{Main Window}[ (Section~\ref{MainWindow})]{MainWindow}.
+\link{Main Window}[ (Section~\Ref)]{MainWindow}.
 
 \begin{itemize}
 
@@ -379,8 +375,7 @@ in the default case the configuration file {\tt meta.conf} is used.
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
 an interactive viewer will be started that 
 allows the study of the internal behaviour of the system,
-the so-called \link{``ToolBus viewer''}[. This viewer is shown in
-Figure~\ref{FIG:viewer}]{FIG:viewer}.
+the so-called \link{``ToolBus viewer''}[. This viewer is shown in Figure~\Ref]{FIG:viewer}.
 
 \item {\tt -h } shows help information for the {\tt meta} command.
 
@@ -403,7 +398,7 @@ the directory from which the {\tt meta} command is initiated.  This
 file may contain a list of absolute and/or relative path names (each
 on a separate line) that will be searched when opening modules.  For
 instance, in the {\tt pico} directory (see 
-the \link{Guided Tour}[, Section~\ref{GuidedTour}]{GuidedTour})
+the \link{Guided Tour}[, Section~\Ref]{GuidedTour})
 you will find an example {\tt meta.conf} file which only contains the
 path `{\tt .}', i.e., only the current directory will be searched.
 
@@ -453,16 +448,16 @@ The main window consists of the following parts:
   \end{itemize}
   
 \item The \emph{import pane}: A graphical canvas (either \link{empty}[ in
-  Figure~\ref{FIG:meta-start}]{FIG:meta-start}, or containing \link{rectangles
-    and arrows}[ in Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the left
+  Figure~\Ref]{FIG:meta-start}, or containing \link{rectangles
+    and arrows}[ in Figure~\Ref]{FIG:meta-pico}) at the left
   hand side of the window shows the import graph of the specification you are
   editing.  The import pane is described in 
   \link*{Import Pane}[Section~\Ref]{ImportPane}.
   
 \item The \emph{module pane}: a vertical list (either \link{empty}[ in
-  Figure~\ref{FIG:meta-start}]{FIG:meta-start}, or containing names like
-  \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[ in
-  Figure~\ref{FIG:meta-pico}]{FIG:meta-pico}) at the right/middle part of the
+  Figure~\Ref]{FIG:meta-start}, or containing names like
+  \link{{\tt Layout}, {\tt Pico-Booleans}, ... }[ in  Figure~\Ref]{FIG:meta-pico}) 
+  at the right/middle part of the
   window that shows the names of all modules in the current specification.
   The module pane is described in 
   \link*{Module Pane}[Section~\Ref]{ModulePane}.
@@ -515,7 +510,7 @@ specifications as well as for quitting the \ASmetaenv.
 {\tt New} and {\tt Open} are used for creating
 a new module and opening an existing one, respectively.
 In both cases a dialog window appears as shown 
-\link{dialog window}[ (Figure~\ref{FIG:open-file})]{FIG:open-file} appears.
+\link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
 
 \begin{figure}
 \begin{center}
@@ -563,7 +558,7 @@ Figure~\ref{FIG:printer-setup}.
 
 
 
-The \link{{\tt Edit} menu}[(Figure~\ref{FIG:edit-menu})]{FIG:edit-menu} is used for setting the preferences of a user.
+The \link{{\tt Edit} menu}[(Figure~\Ref)]{FIG:edit-menu} is used for setting the preferences of a user.
 At this moment this functionality is not yet implemented and
 this menu is disabled.
 
@@ -580,7 +575,7 @@ this menu is disabled.
 \subsection{The Graph Menu}
 \label{GraphMenu}
 
-The \link{{\tt Graph} menu}[ (Figure~\ref{FIG:graph-menu})]{FIG:graph-menu} is used for 
+The \link{{\tt Graph} menu}[ (Figure~\Ref)]{FIG:graph-menu} is used for 
 setting options for the display of the graph in the import pane.  
 
 
@@ -615,7 +610,7 @@ will only be shown when the loading of the specification is complete.
 \subsection{The Debug Menu}
 \label{DebugMenu}
 
-The \link{{\tt Debug} menu}[ is shown in Figure~\ref{FIG:debug-menu} and ]{FIG:debug-menu} 
+The \link{{\tt Debug} menu}[ is shown in Figure~Ref and ]{FIG:debug-menu} 
 contains the
 single check box {\tt Diagnostic messages}.  When enabled, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
@@ -635,8 +630,7 @@ messages will be displayed.  Otherwise the systems runs silently.
 \subsection{The Help Menu}
 \label{HelpMenu}
 
-The \link{{\tt Help} menu}[ is shown in
-Figure~\ref{FIG:help-menu} and]{FIG:help-menu}
+The \link{{\tt Help} menu}[ is shown in Figure~\Ref and]{FIG:help-menu}
 provides various (still experimental) help features.
 
 \begin{figure}
@@ -704,10 +698,9 @@ The import pane has the following interaction facilities:
 module, the import graph can be dragged across the import pane.
 
 \item Clicking \emph{on} a module yields 
-a \link{pop up menu}[ as shown in Figure~\ref{FIG:module-menu}]{FIG:module-menu}. 
+a \link{pop up menu}[ as shown in Figure~\Ref]{FIG:module-menu}. 
 It contains the same entries as the
-\link{button pane of the main window}[ (see 
-Section \ref{ButtonPane})]{ButtonPane}.
+\link{button pane of the main window}[ (see Section~\Ref)]{ButtonPane}.
 
 \begin{figure}
 \begin{center}
@@ -722,10 +715,10 @@ Section \ref{ButtonPane})]{ButtonPane}.
 \end{figure}
 
 \item Clicking \emph{outside} any module yields a \link{another pop-up menu}[ as shown
-in Figure~\ref{FIG:new-open}]{FIG:new-open}.  It contains the entries {\tt New} and
+in Figure~\Ref]{FIG:new-open}.  It contains the entries {\tt New} and
 {\tt Open} for creating a new and opening an existing module, respectively. 
 These two operations are also available from the 
-\link{{\tt File} menu}[ (see Section~\ref{FileMenu})]{FileMenu}.
+\link{{\tt File} menu}[ (see Section~\Ref)]{FileMenu}.
 
 \begin{figure}
 \begin{center}
@@ -753,7 +746,7 @@ the specification.
 
 The main purpose of the module pane is to select one or more modules from
 the specification on which an operation from the 
-\link{button pane}[ (Section~\ref{ButtonPane})]{ButtonPane}
+\link{button pane}[ (Section~\Ref)]{ButtonPane}
 is to be performed.  One module is selected
 by clicking on the corresponding module name in the module pane.  More
 than one module can be selected by clicking on a module name, keeping
@@ -769,10 +762,10 @@ the syntax of all the selected modules.
 \label{ButtonPane}
 
 The entries in the button pane at the right-hand side of the main
-window (see \link{Main Window }[ in Figure~\ref{FIG:meta-start}]{FIG:meta-start}) and
+window (see \link{Main Window }[ in Figure~\Ref]{FIG:meta-start}) and
 in the module pop-up menu (see \link{screenshot}[ in
-Figure~\ref{FIG:module-menu}]{FIG:module-menu} and the description of the \link{Import
-Pane}[ in Section\ref{ImportPane}]{ImportPane}) are mostly identical in function,
+Figure~\Ref]{FIG:module-menu} and the description of the \link{Import
+Pane}[ in Section~\Ref]{ImportPane}) are mostly identical in function,
 except that the latter may operate on more than one module while the
 former operate on a single module only.
 
@@ -806,14 +799,12 @@ gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump Equations...} dumps the equation of the selected
 module and all its imports. This feature is needed in order to 
-\link{run the evaluator in a stand-alone way}[, see Section
-\ref{SEC:interpretationgofterms}]{SEC:interpretationgofterms}.
+\link{run the evaluator in a stand-alone way}[, see Section~\Ref]{SEC:interpretationgofterms}.
 
 {\tt Dump Parse Table...} dumps the parse table of the selected module and
 all its imports in order to parse terms. This functionality is needed in
 order to 
-\link{use the parser in a stand-alone way}[, see Section
-\ref{SEC:parsingofterms}]{SEC:parsingofterms}.
+\link{use the parser in a stand-alone way}[, see Section~\Ref]{SEC:parsingofterms}.
 
 {\tt Rename Module...} renames a module, not only in the
 Meta-En\-vir\-on\-ment but also physically on the file system.
@@ -835,8 +826,7 @@ added to the standard user-interface of \xemacs:
 
 \begin{itemize}
 \item While editing syntax or equations, the {\tt Meta-Environment}
-menu contains a \link{single button}[
-(Figure~\ref{FIG:meta-env-menu1})]{FIG:meta-env-menu1} {\tt Parse} for applying the
+menu contains a \link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} {\tt Parse} for applying the
 \asfsdf\ parser to the complete text buffer..
 
 \begin{figure}
@@ -852,7 +842,7 @@ menu contains a \link{single button}[
 \end{figure}
 
 For term editors the {\tt Meta-Environment} menu contains \link{two
-buttons}[ (Figure~\ref{FIG:meta-env-menu2})]{FIG:meta-env-menu2}: {\tt
+buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: {\tt
 Parse} and {\tt Reduce}. {\tt Parse} parses the term in the editor and
 {\tt Reduce} that applies the evaluator to the text in the editor.
 
@@ -869,7 +859,7 @@ Parse} and {\tt Reduce}. {\tt Parse} parses the term in the editor and
 \end{figure}
 
 \item The {\tt Move} pull-down menu
-contains \link{four buttons}[ (Figure~\ref{FIG:move-menu})]{FIG:move-menu}
+contains \link{four buttons}[ (Figure~\Ref)]{FIG:move-menu}
 for structured traversal of the syntax tree of the text in the editor.
 Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
@@ -894,8 +884,8 @@ Editing is now described in more detail.
 
 An editor for editing the syntax part of a module can be activated by
 pressing the {\tt Edit Syntax} button
-\link{Button Pane}[ (Section~\ref{ButtonPane})]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\ref{ImportPane})]{ImportPane}.
+\link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
 An example is shown \link*{here}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 
 Initially the entire text is
@@ -921,8 +911,8 @@ and changes the bottom line message.
 
 An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}
-in the \link{Button Pane}[ (Section~\ref{ButtonPane})]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\ref{ImportPane})]{ImportPane}.
+in the \link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
 An example is shown  \link*{here}[ in Figure \Ref]{FIG:Bool-example.asf}.
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
@@ -936,9 +926,9 @@ message {\tt Generating Parse Table}.
 
 An editor for editing a term over a module is activated via the button
 {\tt Edit Term}
-in the \link{Button Pane}[ (Section~\ref{ButtonPane})]{ButtonPane} of the main window
-or the pop-menu in the \link{Import Pane}[ (Section~\ref{ImportPane})]{ImportPane}.
-An example is shown  \link{here}[ in Figure \Ref]{FIG:Bool-example.trm}.
+in the \link{Button Pane}[ (Section~\Ref)]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane}.
+An example is shown  \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
 activate the parser for this
@@ -961,7 +951,7 @@ Some (but not all!) \asfsdf\ specifications can be executed by interpreting
 each equation as a (conditional) rewrite rule from left to right.
 
 When you have created a term (using a \link{term editor}[, see
-Section~\ref{EditingTerms}]{EditingTerms}), 
+Section~\Ref]{EditingTerms}), 
 you can reduce it (by selecting the {\tt Reduce} entry from 
 the {\tt Meta-Environment} menu of the term
 editor).  As a result, rewrite rules will be applied until a normal
@@ -1055,8 +1045,7 @@ appear as shown in Figure~\ref{FIG:meta-start}.
   
 \item Verify that module {\tt Bool-example} appears as a rectangle in
 the import pane as well as in the module pane of the 
-\link{main window}[ as shown in
-Figure~\ref{FIG:meta-Bool-example}]{FIG:meta-Bool-example}.
+\link{main window}[ as shown in Figure~\Ref]{FIG:meta-Bool-example}.
 
 \end{itemize}
 
@@ -1265,7 +1254,7 @@ will be selected and becomes the focus.
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
   in the {\tt Meta-Environment} menu of the editor.  The result will appear in
-  a new \link{term editor window}[ (Figure~\ref{FIG:reduct.out})]{FIG:reduct.out}.
+  a new \link{term editor window}[ (Figure~\Ref)]{FIG:reduct.out}.
 
 \begin{figure}
 \begin{center}
@@ -1455,8 +1444,7 @@ Pico specification. Pico is a toy language used demonstration purposes.
 
 
 
-\item Open an editor for the \link{syntax}[
-(Figure~\ref{FIG:Pico-Booleans-sdf})]{FIG:Pico-Booleans-sdf}
+\item Open an editor for the \link{syntax}[ (Figure~\Ref)]{FIG:Pico-Booleans-sdf}
       of {\tt Pico-Booleans}.
 
 \begin{figure}[t]
@@ -1471,8 +1459,7 @@ Pico specification. Pico is a toy language used demonstration purposes.
 \end{center}
 \end{figure}
 
-\item Open an editor for the \link{equations}[
-(Figure~\ref{FIG:Pico-Booleans-eqs})]{FIG:Pico-Booleans-eqs}.
+\item Open an editor for the \link{equations}[ (Figure~\Ref)]{FIG:Pico-Booleans-eqs}.
 
 \begin{figure}
 \begin{center}
@@ -1496,18 +1483,16 @@ Now we turn our attention to the complete Pico specification.
 \begin{itemize}
   
 \item Leave the \ASmetaenv.  This is done by
-selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section
-~\ref{FileMenu})]{FileMenu}.
+selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
 
-\item Go to {\tt pico}, and type \link{{\tt meta}}[
-(Section~\ref{StartingMeta})]{StartingMeta} at the command line.
+\item Go to {\tt pico}, and type \link{{\tt meta}}[ (Section~\Ref)]{StartingMeta} at the command line.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
   selecting the {\tt Open...} button.  In the dialog window that appears, click
   on {\tt Pico-syntax.sdf} and push the {\tt Open} button.
   
 \item As you can see in both \link{the import pane and the module pane}[
-(see Figure~\ref{FIG:Pico-syntax})]{FIG:Pico-syntax}, not only
+(see Figure~\Ref)]{FIG:Pico-syntax}, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
   transitively imported by {\tt Pico-syntax}.
 
@@ -1847,36 +1832,34 @@ hiddens
 \noindent A {\tt <Grammar>} 
 can be a definition of one of the following: 
 \begin{itemize}
-\item \link{Imports}[ (Section~\ref{Imports})]{Imports}.
-\item \link{Aliases}[ (Section~\ref{Aliases})]{Aliases}.
-\item \link{Sorts}[ (Section~\ref{Sorts})]{Sorts}.
-\item \link{Lexical syntax}[ (Section~\ref{LexicalSyntax})]{LexicalSyntax}.
-\item \link{Context-free syntax}[
-(Section~\ref{ContexFreeSyntax})]{ContexFreeSyntax}.
+\item \link{Imports}[ (Section~\Ref)]{Imports}.
+\item \link{Aliases}[ (Section~\Ref)]{Aliases}.
+\item \link{Sorts}[ (Section~\Ref)]{Sorts}.
+\item \link{Lexical syntax}[ (Section~\Ref)]{LexicalSyntax}.
+\item \link{Context-free syntax}[ (Section~\Ref)]{ContexFreeSyntax}.
 %\item lexical variables;
 %\item lexical priorities;
-\item \link{Priorities}[ (Section~\ref{Priorities})]{Priorities}.
-\item \link{Variables}[ (Section~\ref{Variables})]{Variables}.
+\item \link{Priorities}[ (Section~\Ref)]{Priorities}.
+\item \link{Variables}[ (Section~\Ref)]{Variables}.
 \end{itemize}
 
 There are a number of related properties which have an effect across the
 various grammar items, these items are intermixed with the discussion
 of the grammars:
 \begin{itemize}
-\item \link{\sdf\ comment convention}[
-(Section~\ref{SdfComment})]{SdfComment}.
+\item \link{\sdf\ comment convention}[ (Section~\Ref)]{SdfComment}.
 
-\item \link{Symbols}[ (Section~\ref{Symbols})]{Symbols}.
+\item \link{Symbols}[ (Section~\Ref)]{Symbols}.
 
 \item \link{Attributes of Lexical and Context-free Functions}[
-(Section~\ref{Attributes})]{Attributes}.
+(Section~\Ref)]{Attributes}.
 
-\item \link{Disambiguation}[ (Section~\ref{Disambiguation})]{Disambiguation}.
+\item \link{Disambiguation}[ (Section~\Ref)]{Disambiguation}.
 
 \item \link{Parameterization and Renamings}[
-(Section~\ref{ParametersRenamings})]{ParametersRenamings}.
+(Section~\Ref)]{ParametersRenamings}.
 
-\item \link{Equations}[ (Section~\ref{Equations})]{Equations}.
+\item \link{Equations}[ (Section~\Ref)]{Equations}.
 \end{itemize}
 
 \noindent Each of these entities and properties
@@ -2186,7 +2169,7 @@ The sort name {\tt LAYOUT} is predefined and may not be redeclared.
 {\tt LAYOUT} defines which parts of the text are \emph{layout symbols} (also
 known as \emph{white space}) between lexical tokens and are to be skipped
 during lexical analysis. It may only be used as result sort of
-\link{lexical functions}[ (Section~\ref{LexicalFunctions})]{LexicalFunctions}.
+\link{lexical functions}[ (Section~\Ref)]{LexicalFunctions}.
 When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation as
 layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
@@ -2388,7 +2371,7 @@ The example \link*{below}[ in Figure~\Ref ]{CODE:LettersDigits3} gives
 the definion of a single letter or digit
 using the alternative operator {\tt  \verb+\+/}.
 This definition is equivalent to the one given 
-\link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
+\link{earlier}[ in Figure~\Ref]{CODE:LettersDigits2}.
 
 \begin{figure}
 \begin{Label}{CODE:LettersDigits3}
@@ -2581,7 +2564,7 @@ uppercase letters or digits. According to this definition {\tt MiES}, {\tt
   B49a} and {\tt 007} would, for instance, be acceptable.
 
 \noindent A slightly more readable definition that is equivalent to the 
-\link{previous one}[ in Figure~\ref{CODE:alternative1}]{CODE:alternative1}
+\link{previous one}[ in Figure~\Ref]{CODE:alternative1}
 is shown \link*{below}[in Figure~\Ref]{CODE:alternative2}.
 In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
@@ -2744,7 +2727,7 @@ exports
 
 
 An equivalent conventional BNF grammar (and not considering lexical syntax) 
-of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
+of the \link{above grammar}[ of Figure~\Ref]{CODE:simple-cf} is
 \T presented in Figure \ref{CODE:simple-bnf}.
 \W \link{as follows}[]{CODE:simple-bnf}.
 
@@ -2763,20 +2746,19 @@ of the \link{above grammar}[ of Figure~\ref{CODE:simple-cf}]{CODE:simple-cf} is
 When a literal in a context-free function consists only of lower-case letters
 and digits and is not a keyword of \asfsdf, it need not be surrounded by
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-\link{previous definition}[ given in Figure \ref{CODE:simple-cf}]{CODE:simple-cf}.
+\link{previous definition}[ given in Figure~\Ref]{CODE:simple-cf}.
 
 \subsubsection{Lists}
 
 Context-free syntax often requires the description of
 the repetition of a syntactic notion or of list structures (with or without
 separators) containing a syntactic notion. The 
-\link{repetition operator}[
-described in Section~\ref{RepetitionOperator}]{RepetitionOperator}
+\link{repetition operator}[ described in Section~\Ref]{RepetitionOperator}
 can be used for this purpose.
 
 Lists may be used in both the left-hand side and right-hand side of a
 context-free function as well as in the right-hand side of a 
-\link{variable declaration}[ (see Section~\ref{Variables})]{Variables}.
+\link{variable declaration}[ (see Section~\Ref)]{Variables}.
 
 \T Figure \ref{CODE:pascal-ids} shows 
 \W \link{Below}[]{CODE:pascal-ids} an example is given of
@@ -3363,15 +3345,15 @@ context-free syntax
 
 The next example illustrates the use of restrictions to define a
 `safe' way of layout.  
-\link{Recall}[ from Section~\ref{LexicalSyntax}]{LexicalSyntax}
+\link{Recall}[ from Section~\Ref]{LexicalSyntax}
 that optional layout, represented by the symbol {\tt LAYOUT?},
 may be recognized between the 
 members of the left-hand side of a context-free syntax rule.
 
 However, if a such a member recognizes the empty string, this gives rise to a
-\link{lexical ambiguity}[(Section \Ref)]{lex-ambiguity}. 
+\link{lexical ambiguity}[ (Section~\Ref)]{lex-ambiguity}. 
 This problem is avoided by the definition 
-given \link*{below}[in Figure \Ref]{CODE:safe-layout}:
+given \link*{below}[in Figure~\Ref]{CODE:safe-layout}:
 it simply forbids that optional layout is followed by layout characters.
 
 \begin{figure}
@@ -3493,7 +3475,7 @@ removed from the set of ambiguities.
 
 If a function $F$ is attributed with {\tt reject}, then independently of the
 number of ambiguities, the parse using $F$ will be removed.  While
-\link{restrictions}[ (Section~\ref{Restrictions})]{Restrictions}
+\link{restrictions}[ (Section~\Ref)]{Restrictions}
 only impose limitations on the
 immediate lookahead that follows a symbol, the reject mechanism can be used
 to eliminate complicated syntactic structures.
@@ -3530,8 +3512,8 @@ either `{\tt x}' or `{\tt xy}'.
 
 This is achieved by defining a restriction on this lexical sort. This
 can be done using either lexical or context-free
-\link{restrictions}[ (see Section \Ref)]{Restrictions}.
-The specification \link*{below}[ in Figure \Ref]{CODE:restrict-id} 
+\link{restrictions}[ (see Section~\Ref)]{Restrictions}.
+The specification \link*{below}[ in Figure~\Ref]{CODE:restrict-id} 
 shows how to enforce the longest match for the sort {\tt Id}.
 
 \begin{figure}
@@ -3565,7 +3547,7 @@ general lexical tokens (such as identifier) this causes ambiguities.
 The strategy \emph{Prefer Literals} gives preference to interpretation
 as a literal, over interpretation as a more general lexical token.
 For instance, the keyword {\tt begin} may be recognized as an identifier
-given the lexical definition \link*{below}[ in Figure \Ref]{CODE:restrict-id}.
+given the lexical definition \link*{below}[ in Figure~\Ref]{CODE:restrict-id}.
 
 There are two approaches to implement Prefer Literals.
 
@@ -3611,7 +3593,7 @@ only used as a last resort. In other words, it is avoided as much as possible
 and is only used when no alternative exists.  
 The attribute {\tt avoid} defines precisely this behaviour
 (see \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
-\link*{The next example}[Figure \Ref]{CODE:avoid-id} shows
+\link*{The next example}[Figure~\Ref]{CODE:avoid-id} shows
 how the lexical definition of {\tt Id} is attributed with {\tt avoid}.
 
 Although the first approach is more tedious, it allows more flexibility
@@ -3951,7 +3933,7 @@ imports Booleans Pair[X => Bool Y => Bool]
 Variables are declared in the `{\tt variables}' section of a module.  Like all
 other entities in a 
 module---except equations---variables may be exported
-(see \link*{Modules}[Section \Ref]{modules}). 
+(see \link*{Modules}[Section~\Ref]{modules}). 
 A variables section consists of a list of variable
 names followed by a symbol. In fact, a variable declaration can define an
 infinite collection of variables by using a \emph{naming scheme} instead of a
@@ -3959,7 +3941,7 @@ simple variable name.  A naming scheme is a regular expression like the ones
 allowed in the \link{lexical syntax}[ (Section~\Ref)]{lexical-syntax} except that sorts
 are not allowed. A variable may represent any symbol. 
 
-In the specification \link*{below}[in Figure \Ref]{CODE:variables},
+In the specification \link*{below}[in Figure~\Ref]{CODE:variables},
 `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
 are examples of variables declared by the naming schemes in 
 the {\tt variables} section.
@@ -4200,7 +4182,7 @@ further reductions are possible and a normal form is reached (if any).
 List matching, also known as \emph{associative matching}, is a powerful
 mechanism to describe complex functionality in a compact way.  
 
-The example \link*{below}[in Figure \Ref]{CODE:sets}
+The example \link*{below}[in Figure~\Ref]{CODE:sets}
 shows a compact specification to remove double elements from a set.
 
 Unlike the matching of ordinary (non-list) variables, the matching of a list
@@ -4256,7 +4238,7 @@ equations
 \end{figure}   
 
 Another example of list matching in combination with the evaluation
-of conditions is shown \link*{below}[ in Figure \Ref]{CODE:split}.
+of conditions is shown \link*{below}[ in Figure~\Ref]{CODE:split}.
 A list of elements is split into two parts of equal length, if the list
 has an even number of elements. In case of a list of uneven length
 the middle element is ignored. The first part of the list is returned
@@ -4318,7 +4300,7 @@ Characters can be directly addressed by the representation or via
 variables which may be of the sorts {\tt CHAR}, {\tt CHAR*}, or
 {\tt CHAR+}.
 The latter two represent lists of characters.
-In the example \link*{below}[in Figure \Ref]{CODE:lcfs} 
+In the example \link*{below}[in Figure~\Ref]{CODE:lcfs} 
 the lexical constructor function {\tt nat-con} is used to remove the leading
 zeros from a number.
 
@@ -4368,7 +4350,7 @@ if all other rules fail}''.  A kind of default behaviour is needed. \asf\
 offers functionality in order to obtain this behaviour. If the $TagId$
 of an equation starts with {\tt default-} this equation is considered to
 be a special equation which will only be applied if no other rule matches.
-The specification \link*{below}[in Figure \Ref]{CODE:types} shows
+The specification \link*{below}[in Figure~\Ref]{CODE:types} shows
 an example of the use of a default equation.
 
 \begin{figure}
@@ -4626,7 +4608,7 @@ type of traversal:
 
 We give two simple examples of traversal functions that are both
 based on the \link{tree language}[ defined in
-Figure~\ref{FIG:tree-language}]{FIG:tree-language}
+Figure~\Ref]{FIG:tree-language}
 that describes binary prefix expressions with natural numbers as leaves.
 Examples are {\tt f(0,1)} and {\tt f(g(1,2), h(3,4))}.
 
@@ -4650,7 +4632,7 @@ exports
 \end{figure}     
 
 
-Our \link{first example}[ (Figure~\ref{FIG:inc})]{FIG:inc} 
+Our \link{first example}[ (Figure~\Ref)]{FIG:inc} 
 transforms a given tree into a new tree in which
 all numbers have been incremented. 
 
@@ -4671,7 +4653,7 @@ equations
 \end{Label}
 \end{figure}   
 
-Our \link{second example}[ (Figure~\ref{FIG:sum})]{FIG:sum}
+Our \link{second example}[ (Figure~\Ref)]{FIG:sum}
 computes the sum of all numbers in a tree.
 For many more examples and a detailed description of traversal functions
 see~\cite{BKV01}.
@@ -4703,7 +4685,7 @@ They are explicitly defined by the specification writer
 
 Which \asfsdf\ specifications can be executed? 
 The \link{specification of sets}[ in
-Figure~\ref{CODE:itemsets}]{CODE:itemsets} 
+Figure~\Ref]{CODE:itemsets} 
 illustrates a non-executable specification,
 since equation {\tt [2]}, which expresses that two elements in a set may
 be exchanged, will lead to an infinite rewriting loop.
@@ -4940,7 +4922,7 @@ label xxx
 \W \htmlmenu{1}
 
 \paragraph{Basic notions}
-The specification \link*{below}[in Figure \Ref]{CODE:basicnotions} defines the 
+The specification \link*{below}[in Figure~\Ref]{CODE:basicnotions} defines the 
 sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
 
 \begin{figure}
@@ -4960,9 +4942,8 @@ exports
 \end{figure}
 
 \paragraph{Expressions and Statements}
-Given these basic notions the \link{expressions}[, see Figure
-\ref{CODE:expressions}]{CODE:expressions}, and 
-\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
+Given these basic notions the \link{expressions}[, see Figure~\Ref]{CODE:expressions}, and 
+\link{statements}[, see Figure~\Ref,]{CODE:statements}
 of our little source language are defined.
 
 \begin{figure}
@@ -5315,17 +5296,16 @@ use of memory during normalization of terms.
 \subsection{Architecture}
 
 \begin{figure}
-\begin{Label}{FIG:architecture}
 \begin{center}
-\begin{iftex}
-\psfig{file=newarch.eps,width=12cm}
-\end{iftex}
-\end{center}
+\begin{Label}{FIG:architecture}
+\T \psfig{file=newarch.eps,width=12cm}
+\W \htmlimage{newarch.gif}
 \caption{Architecture of the \ASmetaenv}
 \end{Label}
+\end{center}
 \end{figure}
 
-The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
+The architecture of the \ASmetaenv\ is shown \link*{above}[in Figure~\Ref]{FIG:architecture}.
 It consists of a ToolBus that interconnects the following components:
 
 \begin{itemize}
@@ -5424,9 +5404,9 @@ parse tree format that is becoming the standard inside the \ASmetaenv.
 \subsection{Obtaining Equations}
 \label{SEC:obtainingequations}
 
-In order to \link{rewrite a term}[, see Section
-\Ref,]{SEC:interpretationgofterms}, or \link{compile a specification}[,
-see Section \Ref,]{SEC:compilingaspecification} it is necessary
+In order to \link{rewrite a term}[, see Section~\Ref,]{SEC:interpretationgofterms}, 
+or \link{compile a specification}[,
+see Section~\Ref,]{SEC:compilingaspecification} it is necessary
 to obtain the equations.
 
 \subsection{Rewriting a Term using the Evaluator}
@@ -5491,7 +5471,7 @@ or when compiled specifications have to be combined with hand-written C code.
 
 After 
 \link{parsing the term}[ (as explained in
-Section \ref{SEC:parsingofterms})]{SEC:parsingofterms}
+Section~\Ref)]{SEC:parsingofterms}
 that has to be reduced, this term can
 be reduced via the compiled code as follows:
 
