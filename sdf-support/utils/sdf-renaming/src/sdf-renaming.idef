@@ -13,8 +13,8 @@ in
   (
     rec-msg(sr-rename-module(Imports?, ModuleName?, ToBeRenamed?)) .
     snd-eval(SR, rename-module(Imports, ModuleName, ToBeRenamed)) .
-    rec-value(SR, renamed(Renamed?)) .
-    snd-msg(sr-renamed(Renamed))
+    rec-value(SR, renamed-module(Renamed?)) .
+    snd-msg(sr-renamed-module(Renamed))
   )
   *delta
 endlet

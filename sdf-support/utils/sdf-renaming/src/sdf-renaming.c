@@ -147,7 +147,7 @@ ATerm rename_module(int cid, ATerm atImports, char *moduleName, ATerm term)
   ATermList newModules = applyImports(relevant, 
 				      PT_ParseTreeFromTerm(term));
   
-  return ATmake("snd-value(renamed(<term>))", newModules);
+  return ATmake("snd-value(renamed-module(<term>))", newModules);
 }
 
 /*}}}  */

@@ -23,7 +23,7 @@ in
     rec-msg(sm-get-module-id(Module?)) .
     snd-eval(SM, get-module-id(Module)) .
     rec-value(SM, module-id(ModuleId?)) .
-    snd-msg(module-id(ModuleId))
+    snd-msg(sm-module-id(ModuleId))
   +
     rec-msg(sm-get-all-needed-module-names(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-needed-module-names(Modules, ModuleId)) .
@@ -38,17 +38,13 @@ in
     rec-msg(sm-get-all-needed-imports(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-needed-imports(Modules, ModuleId)) .
     rec-value(SM, all-needed-imports(Imports?)) .
-    snd-msg(sm-needed-imports(Imports))
+    snd-msg(sm-all-needed-imports(Imports))
   +
     rec-msg(sm-get-imported-module-names(Module)) .
     snd-eval(SM, get-imported-module-names(Module)) .
     rec-value(SM, imported-module-names(ModuleNames?)) .
     snd-msg(sm-imported-module-names(ModuleNames))
   +
-    rec-msg(sm-get-renamings(Module)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(sm-renamings([]))
-  +  
     rec-msg(sm-make-sdf-definition(Modules?)) .
     snd-eval(SM, make-sdf-definition(Modules)) .
     rec-value(SM, sdf-definition(Definition?)) .
@@ -85,5 +81,5 @@ in
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-added-import(Module))
   )
-  *delta
+  * delta
 endlet
