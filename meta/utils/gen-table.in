@@ -133,7 +133,7 @@ else
 	PGEN="$PGEN -b"
 fi
 
-case $FASTGEN in
+case $fastgen in
 	0)
 		# Slow generation
 		TABLEGEN="${PGEN} -s" ;;
