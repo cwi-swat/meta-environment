@@ -378,10 +378,6 @@ void SG_DeleteLink(st_link *lk)
   lk->stack = (struct stack *)free_links;
   free_links = lk;
 
-  /*
-  ATunprotect((ATerm *)&SG_LK_TREE(lk));
-  SG_FreeLink(lk);
-   */
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_link--);
 #endif
