@@ -4,11 +4,20 @@
 The file tcltk-adapter.c implements the Tcl/Tk adapter, and consists
 of the following sections:
 \nwfilename{tcltk-adapter.c.nw}\nwbegincode{1}\sublabel{NWtclI-tclG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\moddef{tcltk-adapter.c*~{\nwtagstyle{}\subpageref{NWtclI-tclG-1}}}\endmoddef\let\nwnotused=\nwoutput{}
+
+#ifdef USE_TIDE
+/* Note that we must disable the old tide support in this file,
+   even when using tide. The new tide support is located in the
+   file tcltk-tide.c */
+#undef USE_TIDE
+#endif
+
 \LA{}includes~{\nwtagstyle{}\subpageref{NWtclI-inc8-1}}\RA{}
 \LA{}variables~{\nwtagstyle{}\subpageref{NWtclI-var9-1}}\RA{}
 \LA{}functions~{\nwtagstyle{}\subpageref{NWtclI-fun9-1}}\RA{}
 \LA{}term printing~{\nwtagstyle{}\subpageref{NWtclI-terD-1}}\RA{}
 \LA{}TclString2Term~{\nwtagstyle{}\subpageref{NWtclI-TclE-1}}\RA{}
+
 
 #ifdef USE_TIDE
 \LA{}Tide support~{\nwtagstyle{}\subpageref{NWtclI-TidC-1}}\RA{}
@@ -64,7 +73,7 @@ int offset;
 
 TBbool use_toolbus = TBfalse;
 int cid;
-Tcl_File toolbus_file;
+/*Tcl_File toolbus_file;*/
 \nwused{\\{NWtclI-tclG-1}}\nwendcode{}\nwbegindocs{6}\nwdocspar
 
 %}}}
@@ -621,8 +630,8 @@ int TB_Init(Tcl_Interp *interp)
 
   if(use_toolbus) \{
     TB_connect(cid);
-    toolbus_file = Tcl_GetFile((ClientData)TB_getSocket(cid), TCL_UNIX_FD);
-    Tcl_CreateFileHandler(toolbus_file, TCL_READABLE, tcl_toolbus_handler, NULL);
+    /*toolbus_file = Tcl_GetFile((ClientData)TB_getSocket(cid), TCL_UNIX_FD);*/
+    Tcl_CreateFileHandler(cid, TCL_READABLE, tcl_toolbus_handler, NULL);
   \}
 
   if(Tcl_EvalFile(interp, LIBDIR "/tcltk.tcl") != TCL_OK) \{

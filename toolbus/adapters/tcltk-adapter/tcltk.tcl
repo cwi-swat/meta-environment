@@ -69,4 +69,8 @@ proc TBrequire {tool name nargs} {
   }
 }
 
+proc signature {sigsin sigsout} {
+  puts stderr "SIGNATURE: $sigsin $sigsout"
+}
+
 # --------------------------------------------------------------------

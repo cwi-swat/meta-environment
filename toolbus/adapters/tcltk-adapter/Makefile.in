@@ -18,28 +18,28 @@ x_includes	= @x_includes@
 x_libraries	= @x_libraries@
 
 TIDEDEF		= @TIDEDEF@
-TIDELIB		= @TIDELIB@
+TIDE		= @TIDE@
+ATERM		= @ATERM@
 
 SHELL		= /bin/sh
 
 CC		= @CC@
-CFLAGS		=
-INCLUDES	= @INCLUDES@ -I$(top_srcdir)/src -I$(top_srcdir)/tide \
-		$(EXTRA_INCLUDES)
+CFLAGS		= -Wall
+INCLUDES	= @INCLUDES@ -I$(TIDE)/include \
+		-I${ATERM}/include $(EXTRA_INCLUDES)
 DEFS		= @DEFS@ $(EXTRA_DEFS) $(TIDEDEF)
 
 INSTALL		= @INSTALL@
 
 CLEAN		= @CLEAN@
 GELOBJECTS	= @GELOBJECTS@ bgelio bgelo
-LIBS		= $(EXTRA_LIBS) $(TIDELIB) \
-		$(top_srcdir)/src/libtb.a @LIBS@
+LIBS		= ${ATERM}/lib/debug-adapter.tif.o @LIBS@ $(EXTRA_LIBS)
 
 NOWEB		= @NOWEB@
 
 COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
-DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
+DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(LIBFILES)
 
 TCLTK		= @TCLTKTOP@
 
@@ -47,27 +47,25 @@ TCLTK		= @TCLTKTOP@
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = tcltk-adapter
 PROGRAMS        = tcltk-adapter
-SOURCE          = tcltk-adapter.c.nw tide.tcl.nw
+SOURCE          = tcltk-adapter.c tide.tcl.nw tcltk-tide.c
 LIBFILES        = tcltk.tcl tide.tcl
 DOC             = tcltk-adapter.guide.tex adapters.ps adapters.fig
-SRCDOC          = tcltk-adapter.c.tex
-GENSRC          = tcltk-adapter.c
 
 EXTRA_INCLUDES	= -I$(TCLTK)/include
 EXTRA_DEFS	= -DLIBDIR=\"$(libdir)\"
-EXTRA_LIBS	= -L$(TCLTK)/lib -R$(TCLTK)/lib -ltk4.1 -ltcl7.5 \
-			-L$(x_libraries) -R$(x_libraries) -lX11 -ldl
+EXTRA_LIBS	= -L$(TCLTK)/lib -R$(TCLTK)/lib -ltk8.0 -ltcl8.0 \
+			-L$(x_libraries) -R$(x_libraries) -lX11 -ldl \
+			-L${ATERM}/lib -lATB-dbg -lATerm-dbg 
 
 # Here you can add the rules that actually build your adapter:
 
 all:	${PROGRAMS} $(LIBFILES) $(SRCDOC) ${DOC} 
 
-tcltk-adapter.c tcltk-adapter.c.tex: tcltk-adapter.c.nw
-	$(NOWEB) tcltk-adapter.c.nw
-	touch tcltk-adapter.c tcltk-adapter.c.tex
+tcltk-adapter: tcltk-adapter.c tcltk-tide.o
+	$(COMPILE) tcltk-adapter.c tcltk-tide.o -o tcltk-adapter ${LIBS}
 
-tcltk-adapter: tcltk-adapter.c
-	$(COMPILE) tcltk-adapter.c -o tcltk-adapter ${LIBS}
+tcltk-tide.o: tcltk-tide.c
+	${COMPILE} -c tcltk-tide.c 
 
 tide.tcl tide.tcl.tex: tide.tcl.nw
 	$(NOWEB) tide.tcl.nw
