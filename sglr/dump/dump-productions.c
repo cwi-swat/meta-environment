@@ -2,7 +2,7 @@
  $Id$
  */
 
-#include "dump-skel.c"
+#include "dump-skel.h"
 
 void DumpOneProduction(FILE *out, parse_table *pt, int l)
 {

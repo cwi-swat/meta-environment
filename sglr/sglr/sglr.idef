@@ -1,0 +1,100 @@
+/* $Id$ */
+
+process Parser is
+  let
+    P   : sglr,
+    L   : str,
+    G   : str,
+    S   : str,
+    Id  : term,
+    FN  : str,
+    T   : term,
+    Err : list,
+    Amb : int
+  in
+    execute(sglr, P?) .
+    (
+      rec-msg(Id?, parse-string(L?, G?, S?)) .
+      snd-eval(P, parse-string(L, G, S)) .
+      (
+        rec-value(P, parsetree(T?, Amb?)) .
+        snd-msg(parse-result(Id, parsetree(T, Amb)))
+      +
+        rec-value(P, parse-error(Err?,plain)) .
+        snd-msg(parse-result(Id, parse-error(Err,plain)))
+      +
+        rec-value(P, parse-error(Err?,eof)) .
+        snd-msg(parse-result(Id, parse-error(Err,eof)))
+      +
+        rec-value(P, parse-error(Err?,ambiguities(T?))) .
+        snd-msg(parse-result(Id, parse-error(Err,ambiguities(T?))))
+      +
+        rec-value(P, parse-error(Err?,cycle(T?))) .
+        snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
+      )
+    +
+      rec-msg(Id?, parse-string-as-asfix1(L?, G?, S?)) .
+      snd-eval(P, parse-string-as-asfix1(L, G, S)) .
+      (
+        rec-value(P, asfix1-parsetree(T?)) .
+        snd-msg(parse-result-asfix1(Id, parse-tree(T)))
+      +
+        rec-value(P, parse-error(Err?,plain)) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,plain)))
+      +
+        rec-value(P, parse-error(Err?,eof)) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,eof)))
+      +
+        rec-value(P, parse-error(Err?,ambiguities(T?))) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,ambiguities(T?))))
+      +
+        rec-value(P, parse-error(Err?,cycle(T?))) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,cycle(T?))))
+      )
+    +
+      rec-msg(parse-file(L?, G?, FN?, Id?)) .
+      snd-eval(P, parse-file(L, G, FN)) .
+      (
+        rec-value(P, parsetree(T?, Amb?)) .
+        snd-msg(parse-result(Id, parsetree(T, Amb)))
+      +
+        rec-value(P, parse-error(Err?,plain)) .
+        snd-msg(parse-result(Id, parse-error(Err,plain)))
+      +
+        rec-value(P, parse-error(Err?,eof)) .
+        snd-msg(parse-result(Id, parse-error(Err,eof)))
+      +
+        rec-value(P, parse-error(Err?,ambiguities(T?))) .
+        snd-msg(parse-result(Id, parse-error(Err,ambiguities(T?))))
+      +
+        rec-value(P, parse-error(Err?,cycle(T?))) .
+        snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
+      )
+    +
+      (
+        rec-msg(open-language(L?, FN?)) .
+        snd-eval(P, open-language(L, FN))
+      +
+        rec-msg(reopen-language(L?, FN?)) .
+        snd-eval(P, reopen-language(L, FN))
+      ) .
+      (
+	rec-value(P, language-opened(L?, FN)) .
+	snd-note(language-available(L))
+      +
+	rec-value(P, open-language-failed(L?, FN))
+      )
+    +
+      rec-msg(close-language(L?)) .
+      snd-eval(P, close-language(L)) .
+      (
+	rec-value(P, language-closed(L?)) .
+	snd-note(language-unavailable(L))
+      +
+	rec-value(P, language-not-open(L?))
+      )
+    )
+    * rec-disconnect(P)
+  endlet
+
+tool sglr is {command="sglr"}

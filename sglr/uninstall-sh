@@ -1,9 +1,0 @@
-#!/bin/sh
-DIR=$1
-while test x$2 != x
-do
-	echo "removing $2 from $DIR"
-	rm $DIR/$2
-	shift
-done
-

@@ -1,0 +1,4 @@
+$Id$
+
+version 2.28
+   sglr configuration/building using autoconf/automake
