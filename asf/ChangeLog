@@ -1,3 +1,6 @@
+2003/01/22 ({jong,jurgenv}@cwi.nl)
+ * ToolBus support /required/ not /optional/ !!
+
 2003/01/22 (markvdb@cwi.nl)
  * Release 1.6
  * LGPL license
