@@ -16,8 +16,9 @@ libdir		= @libdir@
 includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
-SHELL		= @SHELL@
 MAKEDEPEND	= @MAKEDEPEND@
+RANLIB		= @RANLIB@
+SHELL		= @SHELL@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
@@ -56,6 +57,8 @@ XLIBS		=
 # CSRC/CHDR are used to calculate dependencies.
 CSRC		= support.c rewriter.c rewriter.tif.c
 CHDR		= rewriter.tif.h
+LIBS		= libsupport-muasf-cc.a libsupport-muasf-gcc.a \
+		  libsupport-muasf-prof.a libsupport-muasf-dbg.a
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
@@ -71,59 +74,60 @@ OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
 OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= rewriter.tif.c rewriter.tif.h \
-		libsupport-muasf-cc.a libsupport-muasf-gcc.a \
-		libsupport-muasf-prof.a libsupport-muasf-dbg.a
+CLEANFILES	= rewriter.tif.c rewriter.tif.h $(LIBS)
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= 
 
 .SILENT:	depend
 
 # The all target must be defined:
-all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend libs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+
+libs: $(LIBS)
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-rewriter.tif.c: rewriter.tifs
-	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
+%.tif.c %.tif.h: %.tifs
+	$(ATERMBIN)/tifstoc -tool $* $<
 
-rewriter.tif.h: rewriter.tifs
-	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
-
-rewriter.tifs: rewriter.tb
-	$(TOOLBUSBIN)/toolbus -gentifs rewriter.tb
+%.tifs: %.tb
+	$(TOOLBUSBIN)/toolbus -gentifs $<
 
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
 
 %-gcc.o: %.c
-	gcc -Wall -pedantic -O4 $(INCLUDES) -c -o $@ $<
+	gcc -Wall -O4 $(INCLUDES) -c -o $@ $<
 
 %-dbg.o: %.c
-	gcc -Wall -pedantic -g $(INCLUDES) -c -o $@ $<
+	gcc -Wall -g $(INCLUDES) -c -o $@ $<
 
 %-prof.o: %.c
-	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
+	gcc -Wall -pg $(INCLUDES) -c -o $@ $<
 
 libsupport-muasf-cc.a: $(OBJ_CC)
 	$(AR) cr $@ $(OBJ_CC)
+	$(RANLIB) $@
 
 libsupport-muasf-gcc.a: $(OBJ_GCC)
 	$(AR) cr $@ $(OBJ_GCC)
+	$(RANLIB) $@
 
 libsupport-muasf-dbg.a: $(OBJ_DBG)
 	$(AR) cr $@ $(OBJ_DBG)
+	$(RANLIB) $@
 
 libsupport-muasf-prof.a: $(OBJ_PROF)
 	$(AR) cr $@ $(OBJ_PROF)
+	$(RANLIB) $@
 
 depend: ${CSRC}
 	${MAKEDEPEND} $(INCLUDES) $(CSRC)	> .gendep
-	cat .gendep | sed "s/.o:/-cc.o:/"	>  .depend
-	cat .gendep | sed "s/.o:/-gcc.o:/"	>> .depend
-	cat .gendep | sed "s/.o:/-dbg.o:/"	>> .depend
-	cat .gendep | sed "s/.o:/-prof.o:/"	>> .depend
+	cat .gendep | sed "s/.o:/-cc.o:/"	>  depend
+	cat .gendep | sed "s/.o:/-gcc.o:/"	>> depend
+	cat .gendep | sed "s/.o:/-dbg.o:/"	>> depend
+	cat .gendep | sed "s/.o:/-prof.o:/"	>> depend
 	rm -f .gendep
 
 ##########################################################
@@ -158,6 +162,6 @@ distclean: clean
 # distclean target
 
 # Included dependencies
-include .depend
+-include depend
 
 .depend: depend

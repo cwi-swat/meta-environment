@@ -16,6 +16,7 @@ libdir		= @libdir@
 includedir  = $(prefix)/include
 docdir      = $(top_srcdir)/docs
 
+RANLIB      = @RANLIB@
 SHELL       = @SHELL@
 CC          = @CC@
 CFLAGS      = @CFLAGS@ ${XCFLAGS}
@@ -66,6 +67,8 @@ AsFix2C : $(MODS)
 
 libasfix2c.a: $(MODS)
 	$(AR) cr libasfix2c.a $(MODS)
+	$(RANLIB) $@
+
 %.o: %.c
 	$(CC) $(CFLAGS) -c $<
 

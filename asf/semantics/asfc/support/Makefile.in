@@ -16,8 +16,9 @@ libdir		= @libdir@
 includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
-SHELL		= @SHELL@
 MAKEDEPEND	= @MAKEDEPEND@
+RANLIB		= @RANLIB@
+SHELL		= @SHELL@
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
@@ -60,7 +61,7 @@ CHDR		= rewriter.tif.h
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	= libsupport-cc.a libsupport-gcc.a \
-		libsupport-prof.a libsupport-dbg.a
+		  libsupport-prof.a libsupport-dbg.a
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	= support.h libsupport.h
 # All files in DOCFILES are copied to $(docdir)
@@ -73,7 +74,7 @@ OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
 CLEANFILES	= rewriter.tif.c rewriter.tif.h \
-		libsupport-cc.a libsupport-gcc.a \
+		  libsupport-cc.a libsupport-gcc.a \
 		libsupport-prof.a libsupport-dbg.a
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= 
@@ -106,15 +107,19 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 libsupport-cc.a: $(OBJ_CC)
 	$(AR) cr $@ $(OBJ_CC)
+	$(RANLIB) $@
 
 libsupport-gcc.a: $(OBJ_GCC)
 	$(AR) cr $@ $(OBJ_GCC)
+	$(RANLIB) $@
 
 libsupport-dbg.a: $(OBJ_DBG)
 	$(AR) cr $@ $(OBJ_DBG)
+	$(RANLIB) $@
 
 libsupport-prof.a: $(OBJ_PROF)
 	$(AR) cr $@ $(OBJ_PROF)
+	$(RANLIB) $@
 
 depend: ${CSRC}
 	${MAKEDEPEND} $(INCLUDES) $(CSRC)	> .gendep
@@ -133,6 +138,7 @@ install: all
 	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@( cd ${libdir}; ${RANLIB} ${LIBFILES} )
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
 # uninstall target (remove all files installed by 'install' target)
