@@ -18,13 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import metastudio.components.ChoiceDialog;
-import metastudio.components.FileDialog;
 import metastudio.components.MainTabs;
 import metastudio.components.MenuBar;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.QuestionDialog;
 import metastudio.components.ToolBar;
+import metastudio.components.filedialog.FileDialog;
 import metastudio.components.statusbar.StatusBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
@@ -51,7 +51,7 @@ public class MetaStudio extends JFrame {
         handleCloseRequests();
 
         createContentPane(args);
-        createPopupHandlers();
+        createPopupHandlers(args);
 
         makeStudioVisible();
         
@@ -74,9 +74,14 @@ public class MetaStudio extends JFrame {
         }
     }
     
-    private void createPopupHandlers() {
+    private void createPopupHandlers(String []args) {
         new QuestionDialog(factory, getBridge(), this.getRootPane());
-        new FileDialog(factory, getBridge());
+        
+        FileDialog fileDialog = new FileDialog(this.getRootPane(), factory, args);
+        Thread fdThread = new Thread(fileDialog);
+        fdThread.setName("file-dialog");
+        fdThread.start();
+        
         new ModulePopupMenu(factory, getBridge());
         new ChoiceDialog(factory, getBridge(), this.getRootPane());
     }

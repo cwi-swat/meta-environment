@@ -94,22 +94,6 @@ public class MultiBridge extends UserInterfaceTool {
 		throw new UnsupportedOperationException("not implemented");
 	}
 
-	public ATerm showFileDialog(String label, String loc, String extension) {
-		ATerm result = null;
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			result = tif.showFileDialog(label, loc, extension);
-
-			if (result != null) {
-				return factory.make("snd-value(<term>)", result);
-			}
-		}
-
-		throw new UnsupportedOperationException("not implemented");
-	}
-
 	public void showListChoice(String s0, String s1, ATerm t1) {
 		Iterator iter = getToolComponents().iterator();
 

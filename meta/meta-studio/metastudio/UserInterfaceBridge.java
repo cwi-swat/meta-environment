@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 11:14:27 AM
+// generation time: Nov 25, 2004 12:03:25 PM
 
 package metastudio;
 
@@ -134,19 +134,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `showQuestionDialog' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public ATerm showFileDialog(String s0, String s1, String s2)
-
-  public ATerm showFileDialog(String s0, String s1, String s2)
-  {
-    if (tool != null) {
-      return tool.showFileDialog(s0, s1, s2);
-    }
-    else {
-      throw new UnsupportedOperationException("method `showFileDialog' not supported.");
     }
   }
 

@@ -1,18 +1,32 @@
-package metastudio.components;
+package metastudio.components.filedialog;
 
 import java.io.File;
+import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
-import metastudio.*;
-import metastudio.MultiBridge;
 import metastudio.utils.ExtensionFilter;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class FileDialog extends UserInterfacePanel {
-    public FileDialog(ATermFactory factory, MultiBridge bridge) {
-        super(factory, bridge);
+public class FileDialog implements FileDialogTif, Runnable {
+	private FileDialogBridge bridge;
+	private ATermFactory factory;
+	private JComponent parent;
+	
+    public FileDialog(JComponent parent, ATermFactory factory, String [] args) {
+    	this.parent = parent;
+    	this.factory = factory;
+    	
+    	try {
+    		bridge = new FileDialogBridge(factory, this);
+    		bridge.init(args);
+    		bridge.setLockObject(this);
+    		bridge.connect("file-dialog", null, -1);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
     }
 
     public ATerm showFileDialog(String label, String loc, String extension) {
@@ -31,7 +45,7 @@ public class FileDialog extends UserInterfacePanel {
             result = file.getAbsolutePath();
         }
 
-        return getFactory().make("file-name(<str>)", result);
+        return factory.make("file-name(<str>)", result);
     }
 
     private File showFileBrowser(
@@ -44,13 +58,29 @@ public class FileDialog extends UserInterfacePanel {
         ExtensionFilter filter = new ExtensionFilter(exts, desc);
         chooser.setFileFilter(filter);
 
-        int option = chooser.showDialog(this, label);
+        int option = chooser.showDialog(parent, label);
         if (option == JFileChooser.APPROVE_OPTION) {
             return chooser.getSelectedFile();
         }
 
         return null;
     }
+
+	/* (non-Javadoc)
+	 * @see metastudio.components.filedialog.FileDialogTif#recTerminate(aterm.ATerm)
+	 */
+	public void recTerminate(ATerm t0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
+		bridge.run();
+		
+	}
     
 }
 

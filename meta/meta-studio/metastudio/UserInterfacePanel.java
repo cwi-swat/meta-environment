@@ -60,23 +60,11 @@ public abstract class UserInterfacePanel extends JPanel
 		return bridge;
 	}
 
-	public void messagef(String s0, ATerm t1) {
-		// intentionally left empty
-	}
-
 	public void updateList(String s0, String s1) {
 		// intentionally left empty
 	}
 
 	public void initializeUi(String s0) {
-		// intentionally left empty
-	}
-
-	public void warningf(String s0, ATerm t1) {
-		// intentionally left empty
-	}
-
-	public void message(String s0) {
 		// intentionally left empty
 	}
 
@@ -96,18 +84,6 @@ public abstract class UserInterfacePanel extends JPanel
 		// intentionally left empty
 	}
 
-	public void errorf(String s0, ATerm t1) {
-		// intentionally left empty
-	}
-
-	public void warning(String s0) {
-		// intentionally left empty
-	}
-
-	public void error(String s0) {
-		// intentionally left empty
-	}
-
 	public void addEvents(ATerm t0, ATerm t1) {
 		// intentionally left empty
 	}
@@ -121,11 +97,6 @@ public abstract class UserInterfacePanel extends JPanel
 	}
 
 	public ATerm showQuestionDialog(String s0) {
-		// intentionally left empty
-		return null;
-	}
-
-	public ATerm showFileDialog(String s0, String s1, String s2) {
 		// intentionally left empty
 		return null;
 	}

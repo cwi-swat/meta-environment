@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 11:14:27 AM
+// generation time: Nov 25, 2004 12:03:25 PM
 
 package metastudio;
 
@@ -26,7 +26,6 @@ abstract public class UserInterfaceTool
   private ATerm PclearHistory0;
   private ATerm PdisplayTreelist0;
   private ATerm PshowQuestionDialog0;
-  private ATerm PshowFileDialog0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -55,7 +54,6 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,render-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<user-interface>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,show-list-choice(<str>,<str>,<list>))"), new Boolean(true));
@@ -78,7 +76,6 @@ abstract public class UserInterfaceTool
     PclearHistory0 = factory.parse("rec-do(clear-history)");
     PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
-    PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -135,10 +132,6 @@ abstract public class UserInterfaceTool
     result = term.match(PshowQuestionDialog0);
     if (result != null) {
       return showQuestionDialog((String)result.get(0));
-    }
-    result = term.match(PshowFileDialog0);
-    if (result != null) {
-      return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));
     }
     result = term.match(PrecAckEvent0);
     if (result != null) {

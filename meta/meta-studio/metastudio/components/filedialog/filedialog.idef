@@ -1,0 +1,24 @@
+tool file-dialog is {  }
+
+process FileDialog is
+let
+  Extension: str,
+  FileName: str,
+  Path: str,
+  Title: str,
+  T: file-dialog
+in
+  rec-connect(T?)
+  .
+  (
+      rec-msg(ask-for-file(Title?, Path?, Extension?))
+      . printf("asked for file!\n")
+      . snd-eval(T, show-file-dialog(Title, Path, Extension))
+      . rec-value(T, file-name(FileName?))
+      . snd-msg(ask-for-file-result(FileName))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+toolbus(FileDialog)

@@ -52,9 +52,7 @@ public class ToolBar extends UserInterfacePanel {
         String name = ((ATermAppl) action.getArgument(1)).getName();
         String path = "/images/" + name; 
         URL url = path.getClass().getResource(path);
-        if (url == null) {
-            error("Unable to get icon: " + path);
-        } else {
+        if (url != null) {
             Icon icon = new ImageIcon(url);
             Action it = new AbstractAction(label, icon) {
                 public void actionPerformed(ActionEvent actionEvent) {

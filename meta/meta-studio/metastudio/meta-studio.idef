@@ -26,8 +26,7 @@ let
   Type: term,
   UI: user-interface
 in
-  subscribe(ui-status(<term>))
-  . Id := process-id
+  Id := process-id
   . execute(user-interface, UI?)
   . snd-msg(environment-name-hook)
   . rec-msg(environment-name-hook-result(EnvironmentName?))
@@ -81,11 +80,6 @@ in
       rec-event(UI, button-selected(Type?, ModuleId?, Event?))
       . snd-msg(ui-button-selected(Type, Event, ModuleId))
       . snd-ack-event(UI, button-selected(Type, ModuleId, Event))
-    +
-      rec-msg(ask-for-file(Title?, Path?, Extension?))
-      . snd-eval(UI, show-file-dialog(Title, Path, Extension))
-      . rec-value(UI, file-name(FileName?))
-      . snd-msg(ask-for-file-result(FileName))
     +
       rec-msg(ask-question(Title?))
       . snd-eval(UI, show-question-dialog(Title))

@@ -1,6 +1,6 @@
 // Java tool interface UserInterfaceTif
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 11:14:27 AM
+// generation time: Nov 25, 2004 12:03:25 PM
 
 package metastudio;
 
@@ -17,7 +17,6 @@ public interface UserInterfaceTif
   public void clearHistory();
   public void displayTreelist(String s0, ATerm t1);
   public ATerm showQuestionDialog(String s0);
-  public ATerm showFileDialog(String s0, String s1, String s2);
   public void recAckEvent(ATerm t0);
   public void recTerminate(ATerm t0);
 }
