@@ -65,7 +65,7 @@ INCLUDES = -I$(ATERM)/include -I$(top_srcdir)/libasfix-old/libasfix
 	$(NS_COMPILE) -c $< -o $@
 
 %.tif.c %.tif.h: %.tifs
-	@PATH=$(ATERMBIN):$(PATH) tifstoc -tool $* $<
+	@PATH=$(ATERM)/bin:$(PATH) tifstoc -tool $* $<
 
 # The output of idef2tif and toolbus is moved to $@ to make sure the
 # generated .tifs file exists in the current directory. The ToolBus and
