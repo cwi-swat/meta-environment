@@ -1055,7 +1055,7 @@ proc define-modules-frame {} {
 	-command {RevertModules [SelectedModules]}
     button .modules.buttons.deletemod -text "Delete" \
 	-command {DeleteModules [SelectedModules]}
-    button .modules.buttons.compile -text "Compile" \
+    button .modules.buttons.compile -text "Compile..." \
 	-command {CompileModules [SelectedModules]}
     button .modules.buttons.modinfo -text "Info" \
 	-command {GetModuleInfo [SelectedModules]}
@@ -1148,7 +1148,7 @@ proc define-module-popup {} {
     $m add command -label "Delete module" \
         -command {DeleteModules [GetObjectName $c]}
     $m add separator
-    $m add command -label "Compile module" \
+    $m add command -label "Compile module..." \
         -command {CompileModules [GetObjectName $c]}
     $m add separator
     $m add command -label "Module info" \
