@@ -32,7 +32,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -51,6 +50,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import metastudio.components.FeedbackList;
+import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
 import metastudio.components.MessageList;
 import metastudio.components.ModuleSelectionListener;
@@ -178,11 +178,12 @@ public class MetaStudio
 
         createToolBusBridge(args);
         handleCloseRequests();
-
+ 
         moduleManager.addModuleSelectionListener(this);
         createContentPane();
 
-        getToolComponents().add(new QuestionDialog(factory, bridge, this.getRootPane()));
+        addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
+        addToolComponent(new FileDialog(factory, bridge));
         
         makeStudioVisible();
         
@@ -880,23 +881,7 @@ public class MetaStudio
         }
     }
 
-    private File showFileBrowser(
-        String label,
-        String location,
-        String extension,
-        String desc) {
-        JFileChooser chooser = new JFileChooser(location);
-        String[] exts = { extension };
-        ExtensionFilter filter = new ExtensionFilter(exts, desc);
-        chooser.setFileFilter(filter);
-
-        int option = chooser.showDialog(this, label);
-        if (option == JFileChooser.APPROVE_OPTION) {
-            return chooser.getSelectedFile();
-        }
-
-        return null;
-    }
+    
 
     public ATerm deconsFilename(String filename, String extension) {
         if (filename.endsWith(extension)) {
@@ -920,23 +905,7 @@ public class MetaStudio
             extension);
     }
 
-    public ATerm showFileDialog(String label, String loc, String extension) {
-
-        String location;
-
-        if (!loc.equals("")) {
-            location = loc;
-        } else {
-            location = System.getProperty("user.dir");
-        }
-
-        File file = showFileBrowser(label, location, extension, "*" + extension);
-        if (file != null) {
-            return factory.make("snd-value(file-name(<str>))", file.getAbsolutePath());
-        } else {
-            return factory.make("snd-value(file-name(<str>))", "");
-        }
-    }
+    
 
     String getCurrentModule() {
         TreePath path = moduleTree.getSelectionPath();
@@ -1065,6 +1034,18 @@ public class MetaStudio
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             result = tif.showQuestionDialog(question);
+        }
+        
+        return factory.make("snd-value(<term>)",result);
+    }
+    
+    public ATerm showFileDialog(String label, String loc, String extension) {
+        ATerm result = null;
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            result = tif.showFileDialog(label, loc, extension);
         }
         
         return factory.make("snd-value(<term>)",result);
