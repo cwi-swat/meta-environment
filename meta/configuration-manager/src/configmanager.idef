@@ -12,35 +12,6 @@
 #define ASF_LIBRARY_PATH "."
 #endif
 
-process IfEqual(ButtonAction : term,
-                Stack : list,
-		ButtonActions : list,
-                RStack : list?,
-		RButtonActions : list?) is
-let
-  Tree1       : term,
-  Tree2       : term,
-  ThenActions : list,
-  ElseActions : list,
-  IStack      : list
-in
-  Tree1 := first(Stack) .
-  IStack := next(Stack) .
-  Tree2 := first(IStack) .
-  IStack := next(IStack) .
-  snd-msg(equal-trees(Tree1, Tree2)) .
-  (
-    rec-msg(true) .
-    ThenActions := first(args(ButtonAction)) .
-    RButtonActions := join(ThenActions, ButtonActions)
-  +
-    rec-msg(false) .
-    ElseActions := first(next(args(ButtonAction))) .
-    RButtonActions := join(ElseActions, ButtonActions)
-  ) .
-  RStack := IStack
-endlet
-
 process ProcessButtons(CMNG : configmanager) is
 let
   Term          : term
@@ -57,37 +28,6 @@ in
   snd-note(search-paths-processed)
 endlet
   
-process PerformButtonActions(EditorId : term, Actions : list) is
-let
-  ButtonActions : list,
-  ButtonAction  : term,
-  FunName       : str,
-  Stack         : list
-in
-  Stack := [] .
-  ButtonActions := quote(Actions) .
-  (
-    if not-equal(ButtonActions, []) then
-      ButtonAction := first(ButtonActions) .
-      ButtonActions := next(ButtonActions) .
-      FunName := fun(ButtonAction) .
-      if equal(FunName, "if-equal") then
-        IfEqual(ButtonAction, Stack, ButtonActions, Stack?, ButtonActions?)
-      else
-        snd-msg(ButtonAction, Stack, EditorId) .
-        (
-          rec-msg(stack(Stack?), EditorId)
-        +
-          rec-msg(error-stack, EditorId) .
-          ButtonActions := []
-        )
-      fi
-    fi
-  )*
-  if equal(ButtonActions, []) then
-    tau
-  fi
-endlet
 
 process ConfigManager is
 let
@@ -133,11 +73,11 @@ in
     rec-value(CMNG, button-names(ButtonNames?)) .
     snd-msg(button-list(ModuleName, ButtonNames))
   +
-    rec-msg(extra-button-action(ButtonName?, EditorType?, ModuleName?, EditorId?)) .
+    rec-msg(get-button-actions(ButtonName?, EditorType?, ModuleName?)) .
     snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
     printf("button actions for <%t,%t,%t,%t> are %t\n",ButtonName,EditorType,ModuleName,EditorId,ButtonActions).
-    create(PerformButtonActions(EditorId, ButtonActions), Pid?)
+    snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
   ) * delta
 endlet
 
