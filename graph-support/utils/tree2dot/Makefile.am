@@ -2,7 +2,7 @@
 
 bin_PROGRAMS		= tree2dot
 
-INCLUDES		= -I${PT_SUPPORT}/libmept \
+INCLUDES		= -I${PT_SUPPORT}/include \
 			-I${ATERM}/include 
 
 noinst_HEADERS		= PT2dot.h
