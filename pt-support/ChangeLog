@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr 19 11:08:21 CEST 2004 <>
+ * libmept/posInfo.c: PT_containsAreaOffset count start upto and including end
+
 Fri Apr 16 15:40:14 CEST 2004 <kooiker@cwi.nl>
  * libmept/posInfo.c: PT_findTreeAtOffset checks child is not FlatLexical
 

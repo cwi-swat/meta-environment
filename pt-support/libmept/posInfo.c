@@ -354,7 +354,7 @@ static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle)
   int start = LOC_getAreaOffset(haystack);
   int end = start + LOC_getAreaLength(haystack);
 
-  return (start < needle) && (needle < end);
+  return (start < needle) && (needle <= end);
 }
 
 /*}}}  */
