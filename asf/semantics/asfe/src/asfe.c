@@ -1483,7 +1483,11 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
     if (PT_isTreeVarList(elem)) {
       Slice tuple;
       tuple = getListVariableValue(env, elem);
-      assert(tuple);
+      if (tuple == NULL) {
+        RWsetError("Uninitialized list variable", (ATerm) elem);
+	return newelems;
+      }
+      
       if (isSliceEmpty(tuple)) {
 	newelems = concatElems(listProd, newelems, PT_makeArgsEmpty());
       }
