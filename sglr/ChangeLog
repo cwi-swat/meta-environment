@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/24 (jurgenv@cwi.nl)
+ * ambtracker functionality and tool moved to pt-support package
+
 2001/07/20 ({jong,markvdb,olivierp}@cwi.nl)
  * Adapted for new parsetable format (marginally more compact)
  * Regenerated parsetables accordingly

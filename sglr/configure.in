@@ -83,7 +83,6 @@ AC_OUTPUT(
    doc/Makefile
    dump/Makefile
    libsglr/Makefile
-   ambtracker/Makefile
    sglr/Makefile
    libtree2dot/Makefile
    tree2dot/Makefile
