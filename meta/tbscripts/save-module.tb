@@ -73,21 +73,25 @@ in
     rec-msg(save-sdf-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
-    rec-msg(path(Path?)).
-    snd-msg(io-get-filename(Path, Module, ".sdf")) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(get-sdf2-asfix(Module)).
     (
-      rec-msg(syntax(Syntax?)) .
-      snd-msg(unparse(Syntax)) .
-      rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-file(FileName, [Text])) .
+      rec-msg(path(Path?)).
+      snd-msg(io-get-filename(Path, Module, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(get-sdf2-asfix(Module)).
       (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-	snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+        rec-msg(syntax(Syntax?)) .
+        snd-msg(unparse(Syntax)) .
+        rec-msg(unparsed-text(Text?)) .
+        snd-msg(io-write-text-file(FileName, [Text])) .
+        (
+          rec-msg(io-file-written)
+        +
+          rec-msg(io-file-not-written(ErrorMessage?)) .
+	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+        )
       )
+    +
+      rec-msg(no-path)
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-sdf-module(Module))
@@ -95,37 +99,41 @@ in
     rec-msg(save-asfsdf-module(Module?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
-    rec-msg(path(Path?)).
-    snd-msg(io-get-filename(Path, Module, ".sdf")) .
-    rec-msg(io-filename(FileName?)) .
-    snd-msg(get-sdf2-asfix(Module)).
     (
-      rec-msg(syntax(Syntax?)) .
-      snd-msg(unparse(Syntax)) .
-      rec-msg(unparsed-text(Text?)) .
-      snd-msg(io-write-text-file(FileName, [Text])) .
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-	snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
-      )
-    ) .
-    snd-msg(get-eqs-text(Module)).
-    (
-      rec-msg(eqs-text(Module, Text?)) .
-      snd-msg(io-get-filename(Path, Module, ".asf")) .
+      rec-msg(path(Path?)).
+      snd-msg(io-get-filename(Path, Module, ".sdf")) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(io-write-text-file(FileName, [Text])) .
+      snd-msg(get-sdf2-asfix(Module)).
       (
-        rec-msg(io-file-written)
+        rec-msg(syntax(Syntax?)) .
+        snd-msg(unparse(Syntax)) .
+        rec-msg(unparsed-text(Text?)) .
+        snd-msg(io-write-text-file(FileName, [Text])) .
+        (
+          rec-msg(io-file-written)
+        +
+          rec-msg(io-file-not-written(ErrorMessage?)) .
+	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+        )
+      ) .
+      snd-msg(get-eqs-text(Module)).
+      (
+        rec-msg(eqs-text(Module, Text?)) .
+        snd-msg(io-get-filename(Path, Module, ".asf")) .
+        rec-msg(io-filename(FileName?)) .
+        snd-msg(io-write-text-file(FileName, [Text])) .
+        (
+          rec-msg(io-file-written)
+        +
+          rec-msg(io-file-not-written(ErrorMessage?)) .
+          snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+        )
       +
-        rec-msg(io-file-not-written(ErrorMessage?)) .
-        snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+        rec-msg(no-eqs-text(Module))
       )
     +
-      rec-msg(no-eqs-text(Module))
-    ).
+      rec-msg(no-path)
+    ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-asfsdf-module(Module))
     

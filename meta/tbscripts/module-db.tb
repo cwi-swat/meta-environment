@@ -42,8 +42,8 @@ in
   +
     rec-msg(delete-module-from-db(Name?)).
     MDB-GetAllDependingModules(Name, DependingModules?) .
-    snd-msg(ts-remove-value-from-all-tables(Name)) .
     MDB-RemoveImportFromModules(Name, DependingModules) .
+    snd-msg(ts-remove-value-from-all-tables(Name)) .
     snd-msg(changed-modules(DependingModules))
   +
     rec-msg(close-module-in-db(Name?)) .
@@ -176,8 +176,13 @@ in
   +
     rec-msg(get-path-from-db(Name?)).
     snd-msg(ts-get-str-value("module-paths", Name)) .
-    rec-msg(ts-value(Path?)) .
-    snd-msg(path(Path))
+    ( 
+      rec-msg(ts-value(Path?)) .
+      snd-msg(path(Path))
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(no-path)
+    )
   +
     (
       rec-msg(get-table-from-db(eqs(Name?))) .
@@ -400,19 +405,23 @@ in
     Module := first(Modules) .
     Modules := next(Modules) .
     snd-msg(ts-get-term-value("sdf-tree", Module)) .
-    rec-msg(ts-value(Syntax?)) .
-    snd-msg(sm-get-imported-module-names(Syntax)) .
-    rec-msg(sm-imported-module-names(Imports?)) .
-    MDB-ContainedIn(Name, Imports, Status?) .
-    if equal(Status, success) then
-      snd-msg(sm-remove-import-from-module(Syntax, Name)) .
-      Syntax := no-tree .
-      rec-msg(sm-import-removed-from-module(Syntax?)) .
-      MDB-StoreModuleTree(Module, Syntax) .
-      Syntax := no-tree
-    else
-      tau
-    fi
+    (
+      rec-msg(ts-value(Syntax?)) .
+      snd-msg(sm-get-imported-module-names(Syntax)) .
+      rec-msg(sm-imported-module-names(Imports?)) .
+      MDB-ContainedIn(Name, Imports, Status?) .
+      if equal(Status, success) then
+        snd-msg(sm-remove-import-from-module(Syntax, Name)) .
+        Syntax := no-tree .
+        rec-msg(sm-import-removed-from-module(Syntax?)) .
+        MDB-StoreModuleTree(Module, Syntax) .
+        Syntax := no-tree
+      else
+        tau
+      fi
+    +
+      rec-msg(ts-no-value)
+    )
   fi
   *
   if equal(Modules,[]) then

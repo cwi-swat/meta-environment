@@ -137,9 +137,15 @@ process DoRevertModule(ModuleName : str) is
 
 process DoDeleteModule(ModuleName : str) is
 let
-  Changed : list
+  Directories : list,
+  Changed : list,
+  Path : str
 in
-    RemoveModuleFromDisk("", ModuleName).
+    snd-msg(get-search-paths) . 
+    rec-msg(search-paths(Directories?)) .
+    snd-msg(io-find-file(Directories, ModuleName, ".sdf")) . 
+    rec-msg(io-file-found([Path?])) .
+    RemoveModuleFromDisk(Path, ModuleName).
     DeleteEditors(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
