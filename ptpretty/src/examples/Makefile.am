@@ -19,7 +19,7 @@ ATDIFF=${ATERM}/bin/atdiff
 %.check.sh: Makefile
 	@(echo '#!/bin/sh'  ; \
          echo 'set -e'  ; \
-         echo 'for i in ${INDIR}/`basename $* .def`.*.trm.pt; do' ; \
+         echo "for i in ${INDIR}/`basename $* .def`.*.trm.pt; do" ; \
          echo '  ${PTPRETTY} -s ${RULESDIR}/$*.rules -i $$i -o $$i.out' ; \
          echo '  ${ATDIFF} $$i.ref $$i.out' ; \
          echo 'done' ) > $@ && chmod +x $@
