@@ -11,18 +11,10 @@
 
 static char myname[] = "implodePT";
 static char myversion[] = "1.1";
-
-/*
- The argument vector: list of option letters, colons denote option
- arguments.  See Usage function, immediately below, for option
- explanation.
- */
-
 static char myarguments[] = "aAbchi:lOo:pPtvILVqX";
 
-/*
- Usage: displays helpful usage information
- */
+/*{{{  void usage(void) */
+
 void usage(void)
 {
   fprintf(stderr,
@@ -53,11 +45,17 @@ void usage(void)
           myname, myarguments, myversion);
 }
 
+/*}}}  */
+/*{{{  void version(void) */
+
 void version(void)
 {
   fprintf(stderr, "%s v%s\n", myname, myversion);
 }
 
+/*}}}  */
+
+/*{{{  int main(int argc, char **argv) */
 
 int main(int argc, char **argv)
 {
@@ -155,7 +153,7 @@ int main(int argc, char **argv)
 					 interpret_opt ,
 					 interpret_layout_place_holder);
 
-      if(!implodedTree) {
+      if(implodedTree == NULL) {
 	ATerror("%s implosion conversion failed.", myname);
       }
       if(bafmode) {
@@ -172,3 +170,5 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+/*}}}  */

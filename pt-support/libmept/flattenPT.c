@@ -221,6 +221,41 @@ static void init_patterns(void)
 
 /*}}}  */
 
+/*{{{  static PT_Args collectCharsRec(PT_Tree tree, PT_Args tail) */
+
+static PT_Args collectCharsRec(PT_Tree tree, PT_Args tail)
+{
+  if (PT_isTreeChar(tree)) {
+    return PT_makeArgsMany(tree, tail);
+  }
+  else if (PT_isTreeAmb(tree)) {
+    return collectCharsRec(PT_getArgsHead(PT_getTreeArgs(tree)), tail);
+  }
+  else if (PT_isTreeAppl(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+
+    for ( ; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      PT_Tree head = PT_getArgsHead(args);
+      tail = collectCharsRec(head, tail);
+    }
+
+    return tail;
+  }
+
+  ATerror("collectCharsRec: this function only supports AsFix2 trees");
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  static PT_Args collectChars(PT_Tree tree) */
+
+static PT_Args collectChars(PT_Tree tree)
+{
+  return PT_reverseArgs(collectCharsRec(tree, PT_makeArgsEmpty()));
+}
+
+/*}}}  */
+
 /*{{{  ATbool isLexicalListProd(PT_Production prod) */
 
 ATbool isLexicalListProd(PT_Production prod)
@@ -749,137 +784,21 @@ static PT_Production flattenProd(PT_Production prod)
 
 /*}}}  */
 
-/* This function does not work for separated lists in 
- * a lexical syntax section! */
-/*{{{  static PT_Tree flattenLexical(PT_Tree tree) */
-
-static PT_Tree flattenLexical(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production outerProd = PT_getTreeProd(tree);
-    PT_Args       args      = PT_getTreeArgs(tree);
-    PT_Args       newArgs   = PT_makeArgsEmpty();
-
-    while (PT_hasArgsHead(args)) {
-      PT_Tree arg = PT_getArgsHead(args);
-      PT_Tree newTerm = flattenTerm(arg, ATfalse);
-
-      if (newTerm) {
-        newArgs = PT_makeArgsMany(newTerm, newArgs);
-      }
-      args = PT_getArgsTail(args);
-    }
-
-    return PT_makeTreeAppl(flattenProd(outerProd), PT_reverseArgs(newArgs));
-  }
-  else { 
-    return tree;
-  }
-}
-
-/*}}}  */
-
-static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars);
-/*{{{  static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars) */
-
-static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
-{
-  if (PT_isTreeChar(tree)) {
-    chars = PT_makeArgsMany(tree, chars);
-  }
-  else if (PT_isTreeAppl(tree)) {
-    PT_Args treeArgs = PT_getTreeArgs(tree);
-    chars = flattenArgsRecursive(treeArgs, chars);
-  }
-  else if (PT_isTreeLit(tree)) { 
-    int i, len;
-    char *lit = PT_getTreeString(tree);
-    len = strlen(lit);
-
-    for (i = 0; i < len; i++) { 
-      chars = PT_makeArgsMany(PT_makeTreeChar(lit[i]), chars);
-    }
-  }
-  else if (PT_isTreeAmb(tree)) {
-    return NULL;
-  }
-
-  return chars;
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars) */
-
-static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars)
-{
-  while (PT_hasArgsHead(treeArgs)) {
-    PT_Tree tree = PT_getArgsHead(treeArgs);
-    treeArgs = PT_getArgsTail(treeArgs);
-
-    chars = flattenLexicalRecursive(tree, chars);
-  }
-
-  return chars;
-}
-
-/*}}}  */
 /*{{{  static PT_Tree flattenLexicalTotally(PT_Tree tree) */
 
 static PT_Tree flattenLexicalTotally(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production outerProd = PT_getTreeProd(tree);
-    PT_Tree newTree = flattenLexical(tree);
-    PT_Args charList = flattenLexicalRecursive(newTree, PT_makeArgsEmpty());
+    PT_Args charList = collectChars(tree);
 
     if (charList != NULL) {
-      PT_Args newArgs = PT_makeArgsMany(
-                          PT_makeTreeAppl(
-                            PT_makeProductionList(makeSymbolAllChars()),
-                            PT_reverseArgs(charList)),
-                          PT_makeArgsEmpty());
+      PT_Args newArgs = PT_makeArgsSingle(PT_makeTreeFlatLexical(charList));
       return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
     }
   }
   
   return tree;
-}
-
-/*}}}  */
-/*{{{  static PT_Args flattenLayoutList(PT_Args args, PT_Args tail) */
-
-static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
-{
-  while (PT_hasArgsHead(args)) {
-    PT_Tree arg = PT_getArgsHead(args);
-
-    if (PT_isTreeAppl(arg)) {
-      PT_Production prod = PT_getTreeProd(arg);
-      PT_Args       list = PT_getTreeArgs(arg);
-  
-      if (PT_prodHasLexLayoutAsRhs(prod)
-          ||
-          PT_prodHasCfLayoutAsRhs(prod)) {
-        tail = flattenLayoutList(PT_reverseArgs(list), tail);
-      }
-
-      else if (isCharClassListProd(prod)) {
-        tail = flattenCharClassList(arg, tail);
-      }
-
-      else {
-        PT_Tree newArg = flattenTerm(arg, ATfalse);
-        if (newArg) {
-          tail = PT_makeArgsMany(newArg, tail);
-        }
-      }
-    }
-    else /* if (PT_isTreeChar(arg)) */ {
-      tail = PT_makeArgsMany(makeCharFromInt(arg), tail);
-    }
-    args = PT_getArgsTail(args);
-  }
-  return tail;
 }
 
 /*}}}  */
@@ -890,8 +809,7 @@ static PT_Tree flattenLayout(PT_Tree tree)
   PT_Production prod = PT_getTreeProd(tree);
 
   if (PT_isOptLayoutProd(prod)) {
-    PT_Args args       = PT_getTreeArgs(tree);
-    PT_Args newArgs    = flattenLayoutList(args, PT_makeArgsEmpty());
+    PT_Args newArgs    = collectChars(tree);
 
     return PT_makeTreeAppl(prod, newArgs);
   }
@@ -994,14 +912,6 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
     }
     if (isListProd(prod)) {
       newArgs = flattenList(tree, listSymbol, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
-    }
-    if (isLexicalListProd(prod)) {
-      newArgs = flattenLexicalList(tree, PT_makeArgsEmpty());
-      return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
-    }
-    if (isCharClassListProd(prod)) {
-      newArgs = flattenCharClassList(tree, PT_makeArgsEmpty());
       return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
 

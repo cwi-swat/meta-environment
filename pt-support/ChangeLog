@@ -1,5 +1,14 @@
 $Id$
 
+Fri Apr 16 14:09:54 CEST 2004 <jurgenv@cwi.nl>
+ * Reimplemented flattening of LAYOUT and lexicals. New algorithm generically
+   collects all characters and puts them in a PT_Args. This reduces the
+   amount of patterns to be recognized and fixes the bugs that depend on 
+   missing patterns.
+
+Wed Apr 14 13:00:50 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed core dump for optional literals in implodePT
+
 Fri Apr 16 13:43:14 CEST 2004 <{jong,kooiker}@cwi.nl>
  * libmept: add origin.c
  * libmept/origin.c: add PT_promotePosInfoToOrigin so we can have
