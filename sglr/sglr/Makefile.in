@@ -36,7 +36,9 @@ MAKE		= gmake
 DEFS		= @DEFS@ ${XDEFS} # -DHAVE_BOEHMGC
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBS		= @LIBS@ ${SOCKLIBS} ${XLIBS}
+LIBSGC		= @LIBS@ ${SOCKLIBS} ${XGCLIBS}
 LIBSPROF	= @LIBS@ ${SOCKLIBS} ${XLIBSPROF}
+LIBSGCPROF	= @LIBS@ ${SOCKLIBS} ${XGCLIBSPROF}
 SOCKLIBS	= @SOCKLIBS@
 
 INSTALL		= @INSTALL@
@@ -49,16 +51,20 @@ TOOLBUS         = @TOOLBUS@
 
 # The eXtra parts of some variables
 XCFLAGS		= ${DEFS}
-# BOEHMGC         = -lgc
+XGCCFLAGS	= ${XCFLAGS} -DHAVE_BOEHMGC
+XCGLIB		= -lgc
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
 XLIBSALL	= -L. -L${libdir} -lsglr -la2toa1 ${BOEHMGC}
-XLIBS		= ${XLIBSALL} -lATerm-${CC} -lAsFix-${CC} -lATB-${CC}
+ATVERS		= dbg # ${CC}
+XLIBS		= ${XLIBSALL} -lATerm-${ATVERS} -lAsFix-${ATVERS} -lATB-${ATVERS}
+XGCLIBS		= ${XLIBS} ${XCGLIB}
 XLIBSPROF	= ${XLIBSALL} -lATerm-prof  -lAsFix-prof  -lATB-prof
+XGCLIBSPROF	= ${XLIBSPROF} ${XCGLIB}
 
 SGLRLIB         = libsglr.a
 SGLRLIBPROF     = libsglr-prof.a
-SGLRLIBS        = ${SGLRLIB} ${SGLRLIBPROF}
+SGLRLIBS        = ${SGLRLIB}
 SGLRINC         = sglr.h
 LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
 LIBOBJ          = $(patsubst %.c,%.o,$(LIBSRC))
@@ -124,11 +130,17 @@ libsglr-prof.a:  ${LIBOBJPROF}
 sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
 	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} $(LIBSPROF) -o $@
 
+sglr-prof-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
+	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} $(LIBSGCPROF) -o $@
+
 libsglr.a:  ${LIBOBJ}
 	$(AR) $(AR_FLAGS) $@ $(LIBOBJ)
 
 sglr: ${GETOPTOBJ} ${OBJ} ${SGLRLIBS}
 	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBS) -o $@
+
+sglr-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBS}
+	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBSGC) -o $@
 
 sglr-main.o:	sglr.tif.c
 
