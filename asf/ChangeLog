@@ -1,3 +1,8 @@
+2002/04/18 (vandenbr@loria.fr)
+ * AsfSdfChecker checks whether production renamings are used,
+   if so an error message is generated:
+   "production-renamings-not-supported".
+
 2002/17/04 (jurgenv@cwi.nl)
  * Fixed a bug in traversal functions with more than 7 arguments.
 

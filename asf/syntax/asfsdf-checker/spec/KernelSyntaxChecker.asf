@@ -1,15 +1,26 @@
 equations
 
-  [cs-1'1] check-for-kernel-syntax(Definition) = 
-             check-syntax(Definition, {})
+  [cks-1'1] check-syntax(Definition, {}) = Msgs1,
+           check-renamings(Definition, Msgs1) = Msgs2
+           ==========================================
+           check-for-kernel-syntax(Definition) = Msgs2
 
-  [cs-1'2] get-module-name(Module) = $ModuleId
+  [cs-1'1] get-module-name(Module) = $ModuleId
            ===================================
            check-syntax(Module, Msgs) = 
              check-syntax(Module, Msgs, $ModuleId)
 
-  [cs-1'3] check-syntax(syntax Prod*, Msgs, $ModuleId) =
+  [cs-1'2] check-syntax(syntax Prod*, Msgs, $ModuleId) =
              Msgs + kernel-syntax-construction($ModuleId, "syntax")
 
   [cs-1'3] check-syntax(priorities Prios, Msgs, $ModuleId) =
              Msgs + kernel-syntax-construction($ModuleId, "priorities")
+
+  [cr-1'1] get-module-name(Module) = $ModuleId
+           ===================================
+           check-renamings(Module, Msgs) = 
+             check-renamings(Module, Msgs, $ModuleId)
+
+  [cr-1'2] check-renamings(Prod1 => Prod2, Msgs, $ModuleId) =
+             Msgs + 
+production-renamings-not-supported($ModuleId, Prod1 => Prod2)

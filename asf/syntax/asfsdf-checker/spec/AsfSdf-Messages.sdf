@@ -8,4 +8,5 @@ exports
     not-supported-symbol(ModuleId, Symbol)                           -> Message
     illegal-traversal-attribute(ModuleId, Attribute)                 -> Message
     charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol) -> Message
+    production-renamings-not-supported(ModuleId, Renaming)           -> Message
 
