@@ -1,8 +1,12 @@
 # $Id$
 
+Wed Oct 15 19:00:11 CEST 2003 <jurgenv@cwi.nl>
+ * Adapted process-eqs.tb to accomodate some reuse for making the test
+   runner working
+
 2003/10/13 <markvdb@cwi.nl>
-  * Added an error message when starting the meta-environment with a non-existing
-    term store, this fixes bug #70.
+  * Added an error message when starting the meta-environment with
+    a non-existing term store, this fixes bug #70.
 
 Thu Oct  9 14:11:48 CEST 2003 <jong@cwi.nl>
  * editors/text/gvim:
