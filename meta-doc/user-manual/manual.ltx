@@ -4008,64 +4008,247 @@ differs from the stored one. If so, new C code is generated, but
 if they are equal {\em no} new C code will be generated.
 
 \newpage
-\section{Miscellaneous}
+\section{Technology and Architecture of the \ASmetaenv}
 
-\subsection{Parsing a term outside the \ASmetaenv}
-\label{SEC:parsingofterms}
+So far, we have explained the functionality of the \ASmetaenv\ as an
+interactive development environment for \asfsdf\ specifications.
+There are, however, good reasons to have a look under the hood and
+understand the architecture and technologies that have been used:
 
-Before we can parse terms over a module {\tt M}
-outside the \ASmetaenv\ we have to obtain a parse table for this module
-{\tt M}.
-Currently the only way to obtain this parse table is by 
-opening a term editor for module {\tt M}, parse the contents
-of the editor by pressing the button {\tt Parse Buffer},
-if it is necessary a parse table will be generated.
-However, this parse table is only internally available,
-in order to get this parse table in a directory, select
-the {\tt Save} button on the file menu \ref{FIG:file-menu} of
-module {\tt M}. The parse table is now saved in the same directory
-as where {\tt M.sdf} exists. The name of the parse table is
-{\tt M.trm.tbl}.
+\begin{itemize}
 
-A term can now be parsed using this parse table in the following
-way:
-{\tt sglr -p M.trm.tbl -i term.txt -o term.tree -1}, or
-via {\tt sglr -p M.trm.tbl < term.txt > term.tree -1}.
-To get a detail overview of all option of {\tt sglr}, enter
-{\tt sglr -h}.
-The option {\tt -1} is essentail if this term is to be rewritten
+\item Both architecture and technologies are very innovative
+and it is worthwhile to learn about them.
+
+\item The \ASmetaenv\ has been constructed as a collection of
+cooperating components. All of these components have merits of their
+own and can be used independently of the \ASmetaenv.
+
+\end{itemize}
+
+If you want to reuse components of the \ASmetaenv\ or want to build
+variants of it, then the following information is for you.
+
+\subsection{Technological Background}
+
+\paragraph{ToolBus}
+
+A hallmark of legacy systems in general and the old \ASmetaenv\ in particular is the 
+entangling of control flow and actual computation.  To separate coordination from 
+computation we use the
+ToolBus coordination architecture~\cite{BK98}, a programmable software bus based
+on process algebra.  Coordination is expressed by a formal description of the
+cooperation protocol between components while computation is expressed in
+components that may be written in any language. We thus obtain 
+interoperability of heterogeneous components in a (possibly) distributed
+system.
+
+\paragraph{ATerms}
+
+Coordination protocol and components have to share data. We use
+ATerms~\cite{BJKO00} for this purpose. These are trees with optional annotations on
+each node.  The annotations are used to store tool-specific information
+like text coordinates or color attributes. The implementation of ATerms
+has two essential properties: terms are stored using maximal subterm
+sharing (reducing memory requirements and making deep equality tests
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over $1,000,000$ nodes)
+can be processed.
+
+\paragraph{SGLR}
+
+In our language-centric approach the parser is an essential tool.  We
+use scannerless, generalized-LR parsing~\cite{Vis97}.  In this way we
+can parse arbitrary context-free grammars, an essential property when
+combining and parsing large grammars for (dialects of) real-world
+languages.
+
+\paragraph{Term rewriting}
+
+\asfsdf\ specifications are executed as (conditional) rewrite rules. Both interpretation
+and compilation (using the ASF2C compiler~\cite{BKO99}) of these
+rewrite rules are supported. The compiler generates very efficient C
+code that implements pattern matching and term traversal. The generated
+code uses ATerms as its main data representation, and ensures a minimal
+use of memory during normalization of terms.
+
+
+
+\subsection{Architecture}
+
+\begin{figure}[tb]
+\centerline{\psfig{file=ETAPS01/newarch.eps,width=8cm}}
+\caption{\label{FIG:architecture}Architecture of the \ASmetaenv}
+\vspace{-1.0\baselineskip}                  
+\end{figure}
+
+The architecture of the \ASmetaenv\ is shown in Figure~\ref{FIG:architecture}.
+It consists of a ToolBus that interconnects the following components:
+
+\begin{itemize}
+\item {\bf User interface}: the top level user-interface of the system.
+      It consists primarily of a graph browser for the import graph
+      of the current specification.
+
+\item {\bf Text Editor}: a customized version of \xemacs\ for text editing.
+\item {\bf Structure Editor}: a syntax-directed editor that closely cooperates
+with the Text Editor.
+
+\item {\bf Parser}:  scannerless, generalized-LR parser (SGLR) that is parametrized 
+with a parse table.
+\item {\bf Parsetable generator}: takes an SDF syntax definition as input and 
+generates a parse table for SGLR.
+\item {\bf Tree Repository}: stores all terms corresponding to specification 
+modules, parse tables, user-defined terms, etc.
+\item {\bf Compiler}: the ASF2C compiler.
+\item {\bf Interpreter}: executes specifiations by direct interpretation.
+\item {\bf Unparser generator}: generates prettyprinters.
+\end{itemize}
+
+\newpage
+\section{Selected Components of the \ASmetaenv}
+
+Now we will describe a selection of components that are usefull for
+building stand-alone tools. \emph{Be aware that the information in the
+following pages is still very much in a state of flux.}
+
+Note that all components mentioned have a Unix-style manual page,
+e.g., {\tt man sglr} gives the manual page for the command {\tt sglr}.
+All components also have a {\tt -h} options that gives an overview of
+their command line options.
+
+\subsection{Parse table generation}
+
+Before you can parse terms over a module {\tt M} outside the
+\ASmetaenv\ you have to obtain a parse table for this module.  There
+are currently two ways to achieve this:
+
+\begin{itemize}
+
+\item Interactively using the \ASmetaenv:
+
+\begin{itemize}
+
+\item Open a term editor for module {\tt M}.
+
+\item Parse the contents of the editor by pressing the button {\tt
+Parse Buffer}. If necessary this will generate the parse table.  Note
+that all modules imported by {\tt M} are also used for generating the
+parse table.
+
+\item Press the {\tt Save} button on the file menu (see Figure~\ref{FIG:file-menu})
+of module {\tt M}. The parse table is now saved as {\tt M.trm.tbl} in
+the same directory as {\tt M.sdf}.
+
+\end{itemize}
+
+\item From the command line using the command {\tt sdf2table}.  You
+should be aware that {\tt sdf2table} needs as input the
+\emph{complete} grammar of {\tt M}. This means in particular that all
+imports of {\tt M} should be expanded before {\tt sdf2table} can be
+used. Command line tools are available to do this, but we will not
+describe them here.
+
+For further information see the manual page for{\tt  sdf2table}.
+
+\end{itemize}
+
+
+\subsection{Parsing} \label{SEC:parsingofterms}
+
+Given a parse table {\tt M.trm.tbl} for module {\tt M},
+terms can be parsed by using the command {\tt sglr}:
+
+\begin{verbatim}
+   sglr -p M.trm.tbl -i term.txt -o term.tree
+\end{verbatim}
+or, alternatively, via
+
+\begin{verbatim}
+   sglr -p M.trm.tbl < term.txt > term.tree
+\end{verbatim}
+
+The output of {\tt sglr} is either an error message (if the input
+contains a syntax error) or a parse tree in a format called AsFixMe.
+For further information see the manual page for {\tt sglr}.
+
+{\bf Temporary Note}: Add the extra option {\tt -1} if this term is to be rewritten
 using compiled specification, see Section \ref{SEC:reducingofterms}.
 
 \subsection{Rewriting a term using the evaluator}
-\label{SEC:interpretationgofterms}   
+\label{SEC:interpretationgofterms}
+
+In order to rewrite a term {\tt term.txt} using the \asfsdf\ evaluator {\tt asfe}
+two inputs are required:
+
+\begin{itemize}
+
+\item The parse tree of {\tt term.txt}. See the previous paragraph how to do
+this. The result is {\tt term.tree}.
+
+\item The equations to be used for rewriting.  Select the desired
+module and use {\tt Dump Equations...} (see Section~\ref{ButtonPane})
+to dump the equations of the selected module and all its imports.  (**
+file name: M.eqs **).
+
+\end{itemize}
+
+\begin{verbatim}
+   asfe -e M.eqs <term.tree >reduct.tree 
+\end{verbatim}  
+
+Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
+converted to a textual representation.
 
 \subsection{Rewriting a term using a compiled specification}
 \label{SEC:reducingofterms}
 
-After having generated the C code, it must be compiled using
-a standard C compiler. So, go to the directory where the \asfsdf2C compiler
-has `written' the C code. Check whether the is a {\tt Makefile}, if not
-or whether you expected it to be invalid, generated a new one as
-follows: {\tt genmakefile -m ModuleName > Makefile}, where {\tt ModuleName}
-corresponds to the name of the top module for which the C code 
-was generated, there should exist a file {\tt ModuleName.module-list} 
-in the directory with generated C code. This {\tt Makefile} can now
-be used to compile this C code, the result is library {\tt libModuleName.a}
-and an executable {\tt ModuleName}. This library can be used in order to
-combine various compiled specifications in an efficient way
-or to combine compiled specifications with `hand-written' C code.
+In Section~\ref{compiling-specs} we explained how a given module {\tt M}
+can be compiled into C code. Here we describe howto compile and
+use this generated C code. The steps are as follows:
 
-Having parsed the term that has to be reduced,
-see Section \ref{SEC:parsingofterms}, this term can
-be reduced via the compiled code as follows.
+\begin{itemize}
 
-{\tt COMPILER\_OUTPUT/ModuleName < term.tree > reduct.tree}
+\item Go to the directory where the \asfsdf2C compiler has generated
+the C code.
 
-\subsection{Unparsing a (parsed/normalized) term}
+\item Check whether there is a {\tt Makefile}. If this is not the case
+or you expect it to be invalid, generate a new one as follows:
+\begin{verbatim}
+   genmakefile -m M > Makefile
+\end{verbatim}
+where {\tt M} is the name of the top module for which the C code was
+generated.  There should also exist a file {\tt
+ModuleName.module-list} in the directory with generated C code.
+
+
+\item Use {\tt make} to compile the generated C code.
+The result is both a library {\tt libM.a}
+and an executable {\tt M}. This library can be used 
+when several compiled specifications have to be combined into a single executable
+or when compiled specifications have to be combined with with hand-written C code.
+
+\item
+
+After parsing the term that has to be reduced (a sexplianed in
+Section \ref{SEC:parsingofterms}), this term can
+be reduced via the compiled code as follows:
+
+\begin{verbatim}
+COMPILER_OUTPUT/ModuleName < term.tree > reduct.tree
+\end{verbatim}
+
+Section~\ref{SEC:unparsing} explains how {\tt reduct.tree} can be
+converted to a textual representation.
+\end{itemize}
+
+\subsection{Unparsing a (parsed/normalized) term} \label{SEC:unparsing}
 
 The unparsing of parsed/normalized terms is currently quite primitive.
 
-{\tt asource < reduct.tree > reduct.txt}
+\begin{verbatim}
+   asource < reduct.tree > reduct.txt
+\end{verbatim}
 
 \bibliographystyle{plain}
 \bibliography{manual} 
