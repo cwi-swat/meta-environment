@@ -14,9 +14,9 @@ then
   BASE=__BUILDDIR__
   CLASSPATH="$BASE:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
   export CLASSPATH
-  __JAVA__/bin/java ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
+  __JAVA__ ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 else
   CLASSPATH="__JARDIR__/meta-studio.jar:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
   export CLASSPATH
-  __JAVA__/bin/java ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
+  __JAVA__ ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 fi
