@@ -21,7 +21,7 @@
 
 pkgdata_DATA = Sdf2.baf
 
-EXTRA_DIST = Sdf2.sdf2 Sdf2.asfix
+EXTRA_DIST = Sdf2.sdf2
 CLEANFILES = Sdf2.baf
 
 TABLEGEN=../src/parsetablegen
