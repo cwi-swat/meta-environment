@@ -26,10 +26,8 @@ endlet
 
 process ProcessParseErrors(Errors: term) is
 let
-  Id        : term,
   ErrArgs   : list
 in
-  Id := process-id .
   if not-equal(Errors, no-errors) then
     ErrArgs := args(Errors)
   fi
@@ -69,7 +67,7 @@ in
   )  
 endlet
 
-process ParseFile(FileName: str, ModuleName: str, Tree: term?) is
+process ParseFile(FileName: str, ModuleName: str, Nonterminal: str, Tree: term?) is
 let
   Id        : term,
   Name      : str,
@@ -98,7 +96,7 @@ in
     snd-msg(open-file(FileName)).
     (
       rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?)).
-      snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), "", Text)) . 
+      snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), Nonterminal, Text)) . 
       snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
       (
         rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?)))
@@ -139,10 +137,8 @@ endlet
 
 process GetTree(EditorId: term, ModuleName: str, Tree: term?) is
 let
-  DirtyFoci  : term,
-  Id         : int
+  DirtyFoci  : term
 in
-  Id := process-id .
   snd-msg(get-dirty-focuses(EditorId)) .
   rec-msg(dirty-focuses(DirtyFoci?)) .
   if equal(DirtyFoci, []) then
@@ -164,12 +160,10 @@ endlet
 
 process ReplaceRoot(EditorId: term, Tree: term) is
 let
-  Id          : int,
   TotalTree   : term,
   Text        : str,
   Focus       : term
 in
-  Id := process-id .
   snd-msg(move-focus-to-root(EditorId)) .
   rec-msg(focus(Focus?)) .
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
@@ -184,10 +178,6 @@ endlet
 
 
 process GetFocus(EditorId: term, Tree: term?) is
-let
-  Id          : int
-in
-  Id := process-id .
   snd-msg(get-focussed-tree(EditorId)) .
   (
     rec-msg(tree(Tree?))
@@ -195,16 +185,13 @@ in
     rec-msg(no-tree) .
     Tree := error-tree
   )
-endlet
 
 process ReplaceFocus(EditorId: term, Tree: term) is
 let
-  Id          : int,
   TotalTree   : term,
   Text        : str,
   Focus       : term
 in
-  Id := process-id .
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
   snd-msg(get-tree(EditorId)) .
@@ -217,10 +204,8 @@ endlet
 
 process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
 let 
-  Id       : int,
   TreeSort : str 
 in
-  Id := process-id .
   snd-msg(check-tree-sort(Sort, Tree)) .
   ( 
     rec-msg(wrong-sort(TreeSort?)) .
@@ -270,13 +255,11 @@ endlet
 
 process ActivateEditor(Tree: term, ModuleName: str, FileName: str) is
 let
-  Id          : int,
   Text        : str,
   Path        : str,
   Name        : str,
   TimeStamp   : term
 in
-  Id := process-id .
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
@@ -289,27 +272,29 @@ endlet
 
 process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
 let
-  NormalForm : term,
-  Focus      : term,
-  DirtyFoci  : term,
-  ErrList    : list,
-  ArgList    : list,
-  Stack      : list,
-  Killed     : term,
-  ActionTree : term,
-  EditorId2  : term,
-  STree      : term,
-  RTree      : term,
-  Trees      : list,
-  ButtonName : str,
-  SortName   : str,
-  FilePath   : str,
-  NewModName : str,
-  FileName   : str,
-  EditorName : str,
-  FuncName   : str,
-  FunSym     : str,
-  NrOfArgs   : int
+  NormalForm  : term,
+  Focus       : term,
+  DirtyFoci   : term,
+  ErrList     : list,
+  ArgList     : list,
+  Stack       : list,
+  Killed      : term,
+  ActionTree  : term,
+  EditorId2   : term,
+  STree       : term,
+  RTree       : term,
+  Trees       : list,
+  ButtonName  : str,
+  SortName    : str,
+  FilePath    : str,
+  NewModName  : str,
+  FileName    : str,
+  EditorName  : str,
+  FuncName    : str,
+  FunSym      : str,
+  Nonterminal : str,
+  Message     : str,
+  NrOfArgs    : int
 in
   subscribe(syntax-changed(ModuleName)) . 
   if equal(quote(Tree), none) then 
@@ -441,8 +426,8 @@ in
         ActivateEditor(STree, NewModName, EditorName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(parse(FilePath?, NewModName?), Stack?, EditorId) .
-        ParseFile(FilePath, NewModName, RTree?) .
+        rec-msg(parse(FilePath?, NewModName?, Nonterminal?), Stack?, EditorId) .
+        ParseFile(FilePath, NewModName, Nonterminal, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))
@@ -486,6 +471,10 @@ in
                                     [FileName]))) .
           snd-msg(error-stack)
 	)
+      +
+        rec-msg(message(Message?), Stack?, EditorId) .
+	snd-note(ui-status(errorf("%s", [Message]))) .
+        snd-msg(stack(Stack))
       ) *
       if equal(Killed, true) then
         tau
