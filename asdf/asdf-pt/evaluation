@@ -1,4 +1,4 @@
-ASBIN=/users/fagidiot/asenv1.5/install/bin
-ASSHARE=/users/fagidiot/asenv1.5/install/share/asdf/asdf-pt
+ASBIN=/users/jive/PROGRAMS/action_env/install/bin
+ASSHARE=/users/jive/PROGRAMS/action_env/install/share/asdf/asdf-pt
 $ASBIN/apply-function -f execute -i .module -i .info -s Effect | $ASBIN/asfe -e $ASSHARE/asdf/Eval.eqs | $ASBIN/unparsePT
 
