@@ -19,22 +19,21 @@
 
    $Id$
 */
-#include <in-output.idef>
-#include <module-db.idef>
-#include <file-creator.tb>
+#include <sglr.idef>
 
 process Test is
-  snd-msg(process-search-paths("meta.conf", ["."])) .
-  rec-msg(search-paths-processed("meta.conf")) .
-  snd-msg(create-new-module("ExistingModule")) .
+  /* This assumes there is an erroneous table "ErroneousTable.tbl"
+   * in the current directory.
+   */
+  snd-msg(open-language("ErroneousTable", "__SRCDIR__/ErroneousTable.tbl")) .
   (
-    rec-msg(module-created) .
-    printf("new-module-test-2 FAILED!\n")
+    rec-msg(language-opened("ErroneousTable")) .
+    printf("open-table-test-2 FAILED!")
   +
-    rec-msg(module-not-created("Module already exists in text or baf"))
+    rec-msg(language-not-opened("ErroneousTable"))
   +
-    shutdown("new-module-test-2 FAILED! (timeout)\n") delay(sec(5))
+    shutdown("open-table-test-2 FAILED! (timeout)\n") delay(sec(5))
   ) .
   shutdown("") delay(sec(2))
 
-toolbus(Test, Io, ModuleDB, File-creator)
+toolbus(Test, Parser)

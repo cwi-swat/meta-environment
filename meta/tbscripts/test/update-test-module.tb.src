@@ -10,7 +10,7 @@ let
   Modules: list
 in
   /* Setup a module in the module database */
-  snd-msg(process-search-paths("meta.conf", ["."])) .
+  snd-msg(process-search-paths("meta.conf", ["__SRCDIR__"])) .
   rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(is-module-in-db("Pico-Booleans")).
   rec-msg(not-exists-in-module-db("Pico-Booleans")).
