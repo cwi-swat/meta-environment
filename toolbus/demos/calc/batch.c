@@ -28,6 +28,8 @@ void main(int argc, char *argv[])
 {
   TBinit("batch", argc, argv, batch_handler, batch_check_in_sign);
   bout = fopen("batch.out", "w");
+  if(!bout)
+    bout = stdout;
   TBeventloop();
 }
 
