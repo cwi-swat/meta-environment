@@ -4,8 +4,9 @@ let
 in
   snd-msg(get-area-offset(Area))
   . rec-msg(area-offset(Offset?))
-  . snd-msg(te-display-message(Sid, Description))
+  . snd-msg(te-set-cursor-at-offset(Sid, Offset))
   . snd-msg(te-set-focus(Sid, Area))
+  . snd-msg(te-display-message(Sid, Description))
 endlet
 
 process ShowLocation(Sid: term, Location: term, Description: str) is

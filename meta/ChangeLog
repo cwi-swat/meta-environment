@@ -8,6 +8,9 @@ Fri Nov 12 09:56:51 CET 2004 <{jong,kooiker}@cwi.nl>
  * meta-studio/metastudio/data/Module.java:
    - fix String.compareTo(Object) does not exist in java 1.5,
      use String.compareTo(String)
+ * tbscripts/feedback.tb:
+   - fix editor not jumping to location of error
+   - fix display message needs to be performed last (vim specific)
 
 Wed Nov 10 10:57:58 CET 2004 <kooiker@cwi.nl>
  * term-store/term-store.idef:
