@@ -1,4 +1,5 @@
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(toolbuslib, 0.6)
 
 ACLOCAL="${ACLOCAL} -I ."
@@ -23,7 +24,7 @@ AC_SUBST(AR)
 
 AC_AIX
 
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
@@ -33,12 +34,12 @@ AC_SUBST(ATERM)
 dnl Which additional adapters to build?
 
 
-AC_HEADER_CHECK(arpa/inet.h,:, AC_MSG_ERROR("*** no arpa/inet.h"))
-AC_HEADER_CHECK(assert.h,:, AC_MSG_ERROR("*** no assert.h"))
-AC_HEADER_CHECK(ctype.h,:, AC_MSG_ERROR("*** no ctype.h"))
-AC_HEADER_CHECK(errno.h,:, AC_MSG_ERROR("*** no errno.h"))
-AC_HEADER_CHECK(netdb.h,:, AC_MSG_ERROR("*** no netdb.h"))
-AC_HEADER_CHECK(netinet/in.h,:, AC_MSG_ERROR("*** no netinet/in.h"))
+AC_CHECK_HEADER([arpa/inet.h],[:],[AC_MSG_ERROR("*** no arpa/inet.h")])
+AC_CHECK_HEADER([assert.h],[:],[AC_MSG_ERROR("*** no assert.h")])
+AC_CHECK_HEADER([ctype.h],[:],[AC_MSG_ERROR("*** no ctype.h")])
+AC_CHECK_HEADER([errno.h],[:],[AC_MSG_ERROR("*** no errno.h")])
+AC_CHECK_HEADER([netdb.h],[:],[AC_MSG_ERROR("*** no netdb.h")])
+AC_CHECK_HEADER([netinet/in.h],[:],[AC_MSG_ERROR("*** no netinet/in.h")])
 
 dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
 dnl you need to include standards.h aswell.
@@ -50,24 +51,24 @@ AC_TRY_CPP(
 #include <netinet/tcp.h>
 ],AC_MSG_RESULT("yes"), AC_MSG_ERROR("*** no netinet/tcp.h"))
 
-AC_HEADER_CHECK(stdarg.h,:, AC_MSG_ERROR("*** no stdarg.h"))
-AC_HEADER_CHECK(stdio.h,:, AC_MSG_ERROR("*** no stdio.h"))
-AC_HEADER_CHECK(stdlib.h,:, AC_MSG_ERROR("*** no stdlib.h"))
-AC_HEADER_CHECK(string.h,:, AC_MSG_ERROR("*** no string.h"))
+AC_CHECK_HEADER([stdarg.h],[:],[AC_MSG_ERROR("*** no stdarg.h")])
+AC_CHECK_HEADER([stdio.h],[:],[AC_MSG_ERROR("*** no stdio.h")])
+AC_CHECK_HEADER([stdlib.h],[:],[AC_MSG_ERROR("*** no stdlib.h")])
+AC_CHECK_HEADER([string.h],[:],[AC_MSG_ERROR("*** no string.h")])
 
-AC_HEADER_CHECK(fcntl.h,:, AC_MSG_ERROR("*** no fcntl.h"))
-AC_HEADER_CHECK(sys/ioctl.h,:, AC_MSG_ERROR("*** no sys/ioctl.h"))
-AC_HEADER_CHECK(sys/param.h,:, AC_MSG_ERROR("*** no sys/param.h"))
-AC_HEADER_CHECK(sys/socket.h,:, AC_MSG_ERROR("*** no sys/socket.h"))
-AC_HEADER_CHECK(sys/stat.h,:, AC_MSG_ERROR("*** no sys/stat.h"))
-AC_HEADER_CHECK(sys/time.h,:, AC_MSG_ERROR("*** no sys/time.h"))
-AC_HEADER_CHECK(sys/types.h,:, AC_MSG_ERROR("*** no sys/types.h"))
-AC_HEADER_CHECK(sys/un.h,:, AC_MSG_ERROR("*** no sys/un.h"))
-AC_HEADER_CHECK(unistd.h,:, AC_MSG_ERROR("*** no unistd.h"))
-AC_HEADER_CHECK(math.h,:, AC_MSG_ERROR("*** no math.h"))
+AC_CHECK_HEADER([fcntl.h],[:],[AC_MSG_ERROR("*** no fcntl.h")])
+AC_CHECK_HEADER([sys/ioctl.h],[:],[AC_MSG_ERROR("*** no sys/ioctl.h")])
+AC_CHECK_HEADER([sys/param.h],[:],[AC_MSG_ERROR("*** no sys/param.h")])
+AC_CHECK_HEADER([sys/socket.h],[:],[AC_MSG_ERROR("*** no sys/socket.h")])
+AC_CHECK_HEADER([sys/stat.h],[:],[AC_MSG_ERROR("*** no sys/stat.h")])
+AC_CHECK_HEADER([sys/time.h],[:],[AC_MSG_ERROR("*** no sys/time.h")])
+AC_CHECK_HEADER([sys/types.h],[:],[AC_MSG_ERROR("*** no sys/types.h")])
+AC_CHECK_HEADER([sys/un.h],[:],[AC_MSG_ERROR("*** no sys/un.h")])
+AC_CHECK_HEADER([unistd.h],[:],[AC_MSG_ERROR("*** no unistd.h")])
+AC_CHECK_HEADER([math.h],[:],[AC_MSG_ERROR("*** no math.h")])
 
-AC_HAVE_FUNCS(strerror)
-AC_HAVE_FUNCS(strdup)
+AC_CHECK_FUNCS([strerror])
+AC_CHECK_FUNCS([strdup])
 
 dnl Find out which libraries we need
 
@@ -93,8 +94,8 @@ fi
 AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
-AC_OUTPUT(
-  Makefile
+AC_CONFIG_FILES([Makefile
   libtb/Makefile
   aterm/Makefile
-) 
+])
+AC_OUTPUT 
