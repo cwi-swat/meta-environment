@@ -4,8 +4,8 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
-import metastudio.ExtensionFilter;
 import metastudio.UserInterfaceBridge;
+import metastudio.utils.ExtensionFilter;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
@@ -50,4 +50,6 @@ public class FileDialog extends ToolComponent {
 
         return null;
     }
+    
 }
+

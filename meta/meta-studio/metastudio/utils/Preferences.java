@@ -1,4 +1,4 @@
-package metastudio;
+package metastudio.utils;
 
 import java.awt.Color;
 import java.awt.Font;

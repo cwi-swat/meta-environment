@@ -1,16 +1,16 @@
-package metastudio;
+package metastudio.data;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class TreeNode {
+public class ModuleTreeNode {
 	String name;
 	String prefix;
 	ArrayList children;
 	boolean leaf;
 
-	public TreeNode(String name, String prefix, boolean leaf) {
+	public ModuleTreeNode(String name, String prefix, boolean leaf) {
 		this.name = name;
 		this.prefix = prefix;
 		this.leaf = leaf;
@@ -25,9 +25,9 @@ public class TreeNode {
 		return prefix + getName();
 	}
 
-	public TreeNode addChild(String p, StringTokenizer tokens) {
+	public ModuleTreeNode addChild(String p, StringTokenizer tokens) {
 		String childName = tokens.nextToken();
-		TreeNode childNode = null;
+		ModuleTreeNode childNode = null;
 		if (tokens.hasMoreTokens()) {
 		    int childIndex = getNodeChild(childName);
 
@@ -35,13 +35,13 @@ public class TreeNode {
 			childNode = getChild(childIndex);
 		    }
 		    if (childNode == null) {
-			childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
+			childNode = new ModuleTreeNode(childName, p, !tokens.hasMoreTokens());
 			children.add(getInsertIndex(childName), childNode);
 		    }
 		    return childNode.addChild(p + childName + "/", tokens);
 		} else {
 		    //			if (childNode == null) {
-				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
+				childNode = new ModuleTreeNode(childName, p, !tokens.hasMoreTokens());
 				children.add(getInsertIndex(childName), childNode);
 
 				return childNode;
@@ -53,7 +53,7 @@ public class TreeNode {
 	public void removeChild(StringTokenizer tokens) {
 		String childName = tokens.nextToken();
 		int childIndex = getChild(childName);
-		TreeNode childNode = getChild(childIndex);
+		ModuleTreeNode childNode = getChild(childIndex);
 
 		if (childNode != null) {
 			if (tokens.hasMoreTokens()) {
@@ -69,17 +69,17 @@ public class TreeNode {
 		children.clear();
 	}
 
-	public TreeNode getChild(int index) {
+	public ModuleTreeNode getChild(int index) {
 		if ((index < 0) || (index >= children.size())) {
 			return null;
 		}
 
-		return (TreeNode) children.get(index);
+		return (ModuleTreeNode) children.get(index);
 	}
 
 	public int getChild(String n) {
 		for (int i = 0; i < children.size(); i++) {
-			TreeNode curNode = (TreeNode) children.get(i);
+			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
 			if (curNode.getName().equals(n)) {
 				return i;
@@ -91,7 +91,7 @@ public class TreeNode {
 
 	public int getLeafChild(String n) {
 		for (int i = 0; i < children.size(); i++) {
-			TreeNode curNode = (TreeNode) children.get(i);
+			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
 			if (curNode.getName().equals(n) && curNode.isLeaf()) {
 				return i;
@@ -103,7 +103,7 @@ public class TreeNode {
 
 	public int getNodeChild(String n) {
 		for (int i = 0; i < children.size(); i++) {
-			TreeNode curNode = (TreeNode) children.get(i);
+			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
 			if (curNode.getName().equals(n) && !curNode.isLeaf()) {
 				return i;
@@ -115,7 +115,7 @@ public class TreeNode {
 
 	public int getInsertIndex(String n) {
 		for (int i = 0; i < children.size(); i++) {
-			TreeNode curNode = (TreeNode) children.get(i);
+			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
 			if (curNode.getName().compareTo(n)>0) {
 				return i;
@@ -133,7 +133,7 @@ public class TreeNode {
 		return leaf;
 	}
 
-	public int getIndexOfChild(TreeNode child) {
+	public int getIndexOfChild(ModuleTreeNode child) {
 		if (child == null)
 			return -1;
 
@@ -153,7 +153,7 @@ public class TreeNode {
 		}
 
 		String childName = tokens.nextToken();
-		TreeNode childNode;
+		ModuleTreeNode childNode;
 		if (tokens.hasMoreTokens()) {
 		    childNode = getChild(getNodeChild(childName));
 		}

@@ -13,9 +13,9 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
-import metastudio.Preferences;
-import metastudio.StringFormatter;
 import metastudio.UserInterfaceBridge;
+import metastudio.utils.Preferences;
+import metastudio.utils.StringFormatter;
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.ATermList;

@@ -1,4 +1,4 @@
-package metastudio;
+package metastudio.utils;
 
 import aterm.ATermAppl;
 import aterm.ATermList;

@@ -13,19 +13,17 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import metastudio.TreeModelSupport;
-import metastudio.TreeNode;
 import metastudio.components.ModuleSelectionListener;
 
-public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Serializable {
-	private TreeNode root;
+public class ModuleTreeModel extends AbstractModuleTreeModel implements TreeModel, Serializable {
+	private ModuleTreeNode root;
 	private List moduleSelectionListeners;
 	private Map moduleTable;
 
 	public ModuleTreeModel() {
 		moduleTable = new HashMap();
 		moduleSelectionListeners = new LinkedList();
-		root = new TreeNode("", "", false);
+		root = new ModuleTreeNode("", "", false);
 	}
 
 	public Object getRoot() {
@@ -33,23 +31,23 @@ public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Seri
 	}
 
 	public Object getChild(Object parent, int index) {
-		return ((TreeNode) parent).getChild(index);
+		return ((ModuleTreeNode) parent).getChild(index);
 	}
 
 	public int getChildCount(Object parent) {
-		return ((TreeNode) parent).getChildCount();
+		return ((ModuleTreeNode) parent).getChildCount();
 	}
 
 	public boolean isLeaf(Object node) {
-		return ((TreeNode) node).isLeaf();
+		return ((ModuleTreeNode) node).isLeaf();
 	}
 
 	public void valueForPathChanged(TreePath path, Object newValue) {
 	}
 
 	public int getIndexOfChild(Object par, Object ch) {
-		TreeNode parent = (TreeNode) par;
-		TreeNode child = (TreeNode) ch;
+		ModuleTreeNode parent = (ModuleTreeNode) par;
+		ModuleTreeNode child = (ModuleTreeNode) ch;
 
 		if (parent == null)
 			return -1;

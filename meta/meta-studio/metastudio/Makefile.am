@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS = data components .
+SUBDIRS = utils data components .
 
 pkgdata_DATA = meta-studio.idef
 EXTRA_DIST = meta-studio.idef
@@ -16,12 +16,7 @@ jtif:
 		-package metastudio -swing
 
 java_JAVA = \
-	ExtensionFilter.java \
 	MetaStudio.java \
-	Preferences.java \
-	StringFormatter.java \
-	TreeModelSupport.java \
-	TreeNode.java \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java

@@ -21,7 +21,6 @@ import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
-import metastudio.Preferences;
 import metastudio.data.graph.Attribute;
 import metastudio.data.graph.Edge;
 import metastudio.data.graph.EdgeList;
@@ -31,6 +30,7 @@ import metastudio.data.graph.NodeList;
 import metastudio.data.graph.Point;
 import metastudio.data.graph.Polygon;
 import metastudio.data.graph.Shape;
+import metastudio.utils.Preferences;
 
 public class GraphPanel extends JComponent implements Scrollable {
     private static final int ARROWHEAD_LENGTH = 15;

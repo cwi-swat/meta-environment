@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
-import metastudio.TreeNode;
 
 public class ModuleSelectionModel extends DefaultTreeSelectionModel {
 	public void addSelectionPaths(TreePath[] p) {
@@ -45,6 +44,6 @@ public class ModuleSelectionModel extends DefaultTreeSelectionModel {
 	}
 
 	private boolean isSelectable(TreePath p) {
-		return ((TreeNode) p.getLastPathComponent()).isLeaf();
+		return ((ModuleTreeNode) p.getLastPathComponent()).isLeaf();
 	}
 }

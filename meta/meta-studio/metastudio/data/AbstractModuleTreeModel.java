@@ -1,4 +1,4 @@
-package metastudio;
+package metastudio.data;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -6,7 +6,7 @@ import java.util.Vector;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
-public class TreeModelSupport {
+public abstract class AbstractModuleTreeModel {
 	private Vector vector = new Vector();
 
 	public void addTreeModelListener(TreeModelListener listener) {

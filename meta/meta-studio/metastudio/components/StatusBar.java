@@ -10,9 +10,9 @@ import java.util.ListIterator;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import metastudio.Preferences;
-import metastudio.StringFormatter;
 import metastudio.UserInterfaceBridge;
+import metastudio.utils.Preferences;
+import metastudio.utils.StringFormatter;
 
 import aterm.ATerm;
 import aterm.ATermFactory;

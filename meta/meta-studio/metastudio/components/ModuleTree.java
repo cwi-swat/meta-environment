@@ -11,11 +11,11 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import metastudio.TreeNode;
 import metastudio.UserInterfaceBridge;
 import metastudio.data.Module;
 import metastudio.data.ModuleSelectionModel;
 import metastudio.data.ModuleTreeModel;
+import metastudio.data.ModuleTreeNode;
 import aterm.ATermFactory;
 
 public class ModuleTree extends ToolComponent {
@@ -78,7 +78,7 @@ public class ModuleTree extends ToolComponent {
         TreePath path = tree.getSelectionPath();
 
         if (path != null) {
-            TreeNode selectedModule = (TreeNode) path.getLastPathComponent();
+            ModuleTreeNode selectedModule = (ModuleTreeNode) path.getLastPathComponent();
             return selectedModule.getFullName();
         }
 

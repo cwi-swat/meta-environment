@@ -1,4 +1,4 @@
-package metastudio;
+package metastudio.utils;
 
 import java.io.File;
 import javax.swing.filechooser.*;
