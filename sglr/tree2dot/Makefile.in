@@ -29,8 +29,6 @@ CPPFLAGS	= @CPP@ ${XCPPFLAGS}
 LDFLAGS         = -g
 LDFLAGSPROF     = ${LDFLAGS} -pg
 
-MAKE		= gmake
-
 DEFS		= @DEFS@
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBSALL		= -L. -L${PARSERDIR} -L${A2TOA1DIR} -L${libdir} @LIBS@ ${SOCKLIBS}
@@ -75,6 +73,7 @@ libs:	${LIBFILES}
 
 # install target (install binaries, include files, and libraries)
 install: all
+	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
