@@ -1,3 +1,8 @@
+2002/10/03 (jurgenv@cwi.nl)
+ * Changed Sdf.label.def to hide all non start sorts
+ * Regenerated SDFME library to get new start constructors
+ * Bumped to 1.0beta
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 0.9
 
