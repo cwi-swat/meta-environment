@@ -8,7 +8,7 @@ include ${top_srcdir}/make_rules
 
 SGLR			= ${SGLRBIN}/sglr
 SDF2TABLE		= ${PGENBIN}/sdf2table
-ADT_TO_C		= ${top_builddir}/utils/adt-to-c
+ADT_TO_C		= ${APIGEN}/bin/adt-to-c
 SDF2_TO_ADT		= ${top_builddir}/utils/sdf2-to-adt
 GENERATOR		= ${top_builddir}/spec/Sdf2-to-ADT
 PARSETABLE		= ${top_srcdir}/spec/Sdf2-to-ADT.trm.tbl 
