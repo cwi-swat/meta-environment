@@ -18,6 +18,16 @@
 #
 # $Id$
 
+
+
+# The SDF2 parser generator contains an SDF2 grammar and parse table. To
+# prevent possible conflicts with other grammars, the parser generator
+# installs the SDF2 grammar and parse table in <prefix>/share/pgen. We
+# install both also in <prefix>/share because the grammar is used as
+# standard SDF2 grammar within the ASF+SDF Meta-Environment.
+
+
+
 # Configure variable substitutions
 PRODUCT		= @PRODUCT@
 VERSION		= @VERSION@
@@ -61,9 +71,6 @@ TOOLBUSBIN	= @TOOLBUSBIN@
 TOOLBUSLIB	= @TOOLBUSLIB@
 TOOLBUSINC	= @TOOLBUSINC@
 
-SGLR=../../sglr/sglr/sglr
-TABLEGEN=../../pgen/pgen/pgen/parsetablegen
-
 # Implicit rules
 include ${top_srcdir}/implicit-rules
 
@@ -75,26 +82,18 @@ XLIBS           =
 
 BINFILES	= 
 LIBFILES	= 
-DATAFILES	= Sdf2.baf
+DATAFILES	= Sdf2.baf Sdf2.sdf2
 INCLUDEFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES      = Sdf2.baf Sdf2.tbl.asfix
+CLEANFILES      = Sdf2.baf Sdf2.sdf2
 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
 
+
+
 all:	${BINFILES} ${LIBFILES} ${DATAFILES}
-
-# Unit test target
-test:	all
-	./test-grammar
-
-%.baf : %.tbl.asfix
-	$(TABLEGEN) < $< > $@
-	
-Sdf2.tbl.asfix : Sdf2-bootstrap.tbl Sdf2.sdf2
-	$(SGLR) -p Sdf2-bootstrap.tbl -1 -i Sdf2.sdf2 -o $@
 
 uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
@@ -106,6 +105,12 @@ install:	all
 	mkdir -p $(datadir)
 	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
+Sdf2.baf : ../../pgen/pgen/grammar/Sdf2.baf
+	cp $< $@
+
+Sdf2.sdf2 : ../../pgen/pgen/grammar/Sdf2.sdf2
+	cp $< $@
+
 # clean target (remove all easily build components and temporary files)
 clean:
 	rm -f *.o *~ $(CLEANFILES)
@@ -116,5 +121,4 @@ distclean:
 depend:
 
 
-test-grammar:
-	test-grammar	
+test:
