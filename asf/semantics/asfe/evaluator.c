@@ -873,7 +873,6 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
     conds = ATgetNext(conds);
 		lhs = AFTgetCondLHS(cond);
 		rhs = AFTgetCondRHS(cond);
-		ATwarning("cond: %t\n",cond);
     if(AFTisEqualityCond(cond)) {
 			/* <PO:opt> couldn't we determine this statically? */
       if(no_new_vars(lhs,newenv)) {
@@ -903,7 +902,6 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
     else {
       if(!no_new_vars(lhs,newenv) || !no_new_vars(rhs,newenv)) {
         rewrite_error("Negative condition introduces new variables.",cond);
-	ATwarning("debug: %t AND %t IN %t\n",asource(lhs),asource(rhs),asource(newenv));
         newenv = fail_env;
       }
       else {

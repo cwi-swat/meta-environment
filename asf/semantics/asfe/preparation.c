@@ -423,15 +423,16 @@ ATerm prepare_cond(ATerm cond)
     lhs  = AFTgetCondLHS(cond);
     newlhs = prepare_term(lhs, ATfalse);
     w[0] = AFTgetCondWS0(cond);
-    lit  = AFTgetCondLit(cond);
+    lit  = AT_removeAnnotations(AFTgetCondLit(cond));
     w[1] = AFTgetCondWS1(cond);
     rhs  = AFTgetCondRHS(cond);
     newrhs = prepare_term(rhs, ATfalse);
 
     newcond = AFTbuildCond(prod, newlhs, w[0], lit, w[1], newrhs);
     
-    if(annos)
+    if(annos) {
       newcond = AT_setAnnotations(newcond, annos);
+		}
 
     return newcond;
   }
