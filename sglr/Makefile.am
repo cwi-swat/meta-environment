@@ -2,6 +2,8 @@
 
 SUBDIRS     = doc libsglr sglr dump restorebrackets test
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST  = make_rules reconf program-check.m4 $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
