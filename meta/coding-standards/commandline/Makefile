@@ -9,18 +9,18 @@ files=meta-skel ${target}.7 ${target}.txt ${target}.html ${target}.bok
 all:	${files}
 
 %.7:	%.pod
-	pod2man --center=${CENTER} --release=${RELEASE} --section=7 $< > $@
+	-pod2man --center=${CENTER} --release=${RELEASE} --section=7 $< > $@
 		
 %.txt: %.pod
-	pod2text $< > $@
+	-pod2text $< > $@
 
 %.html: %.pod
-	pod2html $< > $@
-	rm -f pod2html-*
+	-pod2html $< > $@
+	-rm -f pod2html-*
 
 
 %.bok: %.pod
-	pod2docbook $< > $@
+	-pod2docbook $< > $@
 
 clean:
-	rm -f ${files}
+	-rm -f ${files}

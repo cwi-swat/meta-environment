@@ -9,12 +9,16 @@ myversion="1.0"
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bhi:o:tvV"
+myarguments="bhi:co:tvV"
+
+if [ $myarguments ] ; then
+    myargsexplained=" -`echo $myarguments|sed -e 's/\(.:\)/ -\1 /g' -e 's/ \([^-:]\)/ -\1/g' -e's/:/ file/g'`"
+fi
 
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
-Usage: $myname -$myarguments . . .
+Usage: $myname$myargsexplained . . .
 Options:
     -b              output terms in BAF format (default)
     -h              display help information (usage)

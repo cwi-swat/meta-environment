@@ -22,8 +22,36 @@ static char myarguments[] = "bhi:o:tvV";
  */
 void usage(void)
 {
+    static char *myargumentsexplained = NULL;
+
+    /*  Represent the argument string in a slightly friendlier manner  */
+    if(!myargumentsexplained && *myarguments) {
+        int  i, hyphen = 0;
+        char *ptr0, *ptr1;
+
+        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
+            if(*ptr0 == ':')
+                i++;
+        ptr1 = myargumentsexplained =
+            (char *) malloc(strlen(myarguments) + 8*i + 2);
+        for(ptr0 = myarguments; *ptr0; ptr0++)
+            if(!*(ptr0+1) || *(ptr0+1) != ':') {
+                if(!hyphen++) {
+                    *ptr1++ = ' ';
+                    *ptr1++ = '-';
+                }
+                *ptr1++ = *ptr0;
+            } else {
+                hyphen = 0;
+                if(*(ptr1-1) != ' ')
+                    *ptr1++ = ' ';
+                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
+                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
+            }
+    }
+
     fprintf(stderr,
-        "Usage: %s -%s . . .\n"
+        "Usage: %s%s . . .\n"
         "Options:\n"
         "\t-b              output terms in BAF format (default)\n"
         "\t-h              display help information (usage)\n"
@@ -32,7 +60,7 @@ void usage(void)
         "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
-        myname, myarguments, myversion);
+        myname, myargumentsexplained, myversion);
 }
 
 void version(void)
