@@ -20,7 +20,9 @@
 
 \T\usepackage{epsfig}
 
+%\begin{ifhtml}
 \makeindex
+%\end{ifhtml}
 
 \xmlattributes{body}{bgcolor= "#ffffe6"}
 \xmlattributes{TABLE}{BORDER}
@@ -64,7 +66,7 @@
         {\crule \begin{center} \begin{small}}
         {\end{small} \end{center} \crule}
 
-\newcommand{\warning}[]{
+\newcommand{\warning}{
 	\htmlonly{\htmlimage{warning.gif}}
 	\texonly{\noindent {\bf Warning}:}
 }
@@ -1154,7 +1156,7 @@ The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 \begin{center}
 \begin{Label}{FIG:Bool-example.sdf}
 %\T \epsfig{file=Bool-example.sdf2.ps,width=12cm}
-\T \includegraphics[width=12cm]{Bool-example.sdf2.pdf}
+\T \includegraphics[width=12cm]{Bool-example-sdf2.pdf}
 \W \htmlimage{Bool-example.sdf2.gif}
 \caption{Editor for the syntax of {\tt Bool-example}}
 
@@ -5686,8 +5688,10 @@ application areas. Emphasis will be on:
 \bibliographystyle{plain}
 \bibliography{manual}
  
+%\begin{ifhtml}
 \printindex
 
 \tableofcontents
+%\end{ifhtml}
 
 \end{document}
