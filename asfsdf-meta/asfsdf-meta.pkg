@@ -15,5 +15,5 @@ identification
 configuration interface
 
 requires
-   meta		0.12beta
-   asf          1.7beta
+   meta		0.2
+   asf          1.7
