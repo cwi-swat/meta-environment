@@ -32,21 +32,17 @@ in
     snd-eval(TE, edit-file(FileName))
   ) .
   rec-value(TE, file-id(Fid?)) .
-  if not-equal(EditorType, "term") then
-    snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse"))
-  else
-    snd-msg(get-auxilary-buttons(EditorType, ModuleName)) .
-    rec-msg(button-list(ModuleName, ButtonList?)) .
-    (
-      if not-equal(ButtonList, []) then
-        ButtonName := first(ButtonList) .
-        snd-do(TE, tb-add-menu-item("Term-Actions", ButtonName)) .
-        ButtonList := next(ButtonList)
-      fi
-    )*
-    if equal(ButtonList, []) then
-      tau
+  snd-msg(get-auxilary-buttons(EditorType, ModuleName)) .
+  rec-msg(button-list(ModuleName, ButtonList?)) .
+  (
+    if not-equal(ButtonList, []) then
+      ButtonName := first(ButtonList) .
+      snd-do(TE, tb-add-menu-item("Term-Actions", ButtonName)) .
+      ButtonList := next(ButtonList)
     fi
+  )*
+  if equal(ButtonList, []) then
+    tau
   fi .
   snd-msg(get-query-actions) .
   rec-msg(action-list(QueryList?)) .
@@ -123,20 +119,19 @@ in
   +
     rec-msg(delete-text-editor(EditorId)) .
     snd-terminate(TE, "You have been zapped!")
-  ) .
-  (
-    (
-      rec-msg(set-focus(EditorId, Focus?))
-    +
-      rec-msg(clear-focus(EditorId))
-    +
-      rec-msg(get-focus-text(EditorId, Focus?)) .
-      snd-msg(focus-text(EditorId, ""))
-    +
-      rec-msg(move-editor-to-front(EditorId))
-    +
-      rec-msg(display-error(EditorId, StartPos?))
-    ) * delta
   )
+  .
+  (
+    rec-msg(set-focus(EditorId, Focus?))
+  +
+    rec-msg(clear-focus(EditorId))
+  +
+    rec-msg(get-focus-text(EditorId, Focus?)) .
+    snd-msg(focus-text(EditorId, ""))
+  +
+    rec-msg(move-editor-to-front(EditorId))
+  +
+    rec-msg(display-error(EditorId, StartPos?))
+  )* delta
 )
 endlet

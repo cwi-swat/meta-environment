@@ -90,6 +90,11 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Reduce"));
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
   }
+  if (strcmp(editortype, "equations") == 0 ||
+      strcmp(editortype, "syntax") == 0) {
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "ViewTree")); 
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
+  }
 
   return ATmake("snd-value(button-names(<term>))", buttonNames);
 }
@@ -113,11 +118,16 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
     localButtons = ATgetNext(localButtons);
   }
   if (ATisEmpty(buttonActions)) {
-    if (strcmp(buttonName, "Parse") == 0) {
+    if (strcmp(buttonName, "Parse") == 0 &&
+        (strcmp(moduleName, "Equations") == 0 ||
+         strcmp(moduleName, "Syntax"))) {
+      buttonActions = ATinsert(buttonActions, ATmake("parse-buffer"));
+    }
+    else if (strcmp(buttonName, "Parse") == 0) {
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("parse-action(<str>)", moduleName));
     }
-    if (strcmp(buttonName, "Reduce") == 0) {
+    else if (strcmp(buttonName, "Reduce") == 0) {
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("edit-given-filename(<str>)",
 				      moduleName));
@@ -128,7 +138,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("get-root"));
     }
-    if (strcmp(buttonName, "ViewTree") == 0) {
+    else if (strcmp(buttonName, "ViewTree") == 0) {
       buttonActions = ATinsert(buttonActions,
 			       ATmake("show-tree"));
       buttonActions = ATinsert(buttonActions, 

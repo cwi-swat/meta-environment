@@ -1,5 +1,8 @@
 # $Id$
 
+2003/04/24 (markvdb@cwi.nl)
+ * ViewTree added and Meta-Environment renamed to Term-Actions.
+
 2003/04/16 (markvdb@cwi.nl)
  * Reintroduced the save and print entries in the module menu.
 

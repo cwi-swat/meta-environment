@@ -109,7 +109,7 @@ in
     snd-msg(edit-term-file(ModuleName, EditorId))
   +
     rec-msg(text-editor-disconnected(EditorId?)) .
-    DeleteAndKillEditor(EditorId)
+    DeleteAndKillEditor(EditorId) 
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
     DeleteEditorsForModule(ModuleName)

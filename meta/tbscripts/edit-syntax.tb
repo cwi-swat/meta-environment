@@ -6,14 +6,18 @@ process EditSyntax(EditorId: term, ModuleName: str) is
 let
   Path      : str,
   Focus     : term,
-  Tree      : term,
+  Tree      : term, 
+  RTree          : term,
+  STree          : term,
   Time      : term,
   Modules   : term,
   ErrorFoci : term,
   Text      : str,
   DirtyFoci : list,
   ModifiedStatus : term,
-  Killed    : term
+  Killed    : term,
+  ButtonName     : str,
+  Stack          : list
 in
   Text := "" .
   snd-msg(get-sdf2-asfix(ModuleName)).
@@ -35,8 +39,26 @@ in
   snd-msg(initialization-done(EditorId)) .
   Killed := false .
   (
-    (  
-      rec-msg(parse-buffer(EditorId)) .
+    (   
+      rec-msg(extra-button-action(EditorId, ButtonName?)) .
+      snd-msg(extra-button-action(ButtonName, "Equations", EditorId))
+    +
+      rec-msg(get-focus, Stack?, EditorId) .
+      GetFocus(EditorId, RTree?) .
+      if not-equal(RTree, error-tree) then
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack), EditorId)
+      else
+        snd-msg(error-stack, EditorId)
+      fi
+    +
+      rec-msg(show-tree, Stack?, EditorId) .
+      STree := first(Stack) .
+      Stack := next(Stack) .
+      ShowTree(STree) .
+      snd-msg(stack(Stack), EditorId)
+    +
+      rec-msg(parse-buffer, Stack?, EditorId) .
       snd-msg(invalidate-tree(EditorId)).
       snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
       (
@@ -59,7 +81,8 @@ in
       +
         rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
         snd-msg(invalidate-sdf-in-db(ModuleName))
-      )
+      ) .
+      snd-msg(stack(Stack), EditorId)
     ) *
     if equal(Killed, true) then
       tau
