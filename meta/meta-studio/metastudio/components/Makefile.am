@@ -15,5 +15,6 @@ ToolComponent.java \
 MessageList.java \
 ModuleSelectionListener.java \
 ModuleStatusPanel.java \
-StatusBar.java
+StatusBar.java\
+QuestionDialog.java
 

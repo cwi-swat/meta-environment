@@ -7,6 +7,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -17,6 +18,7 @@ import metastudio.data.graph.Graph;
 import metastudio.data.graph.Node;
 import aterm.ATermFactory;
 
+// TODO: extract functionality from the GraphPanel that should be here.
 public class ZoomableGraphPanel extends ToolComponent {
     private static final int SLIDER_STEP_SIZE = 5;
     private GraphPanel graphPanel;
@@ -26,20 +28,22 @@ public class ZoomableGraphPanel extends ToolComponent {
         super(factory, bridge);
         
         graphPanel = new GraphPanel(id);
+        
         slider = createSlider();
         setSliderToolTip();
-        
-        JScrollPane scrolledPane = new JScrollPane(graphPanel);
-        scrolledPane.getViewport().setBackground(Color.white);
-        
-        add(scrolledPane, BorderLayout.CENTER);
-        add(slider,BorderLayout.WEST);
-        
         MouseWheelListener wheel = new MouseWheelListener() {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 slider.setValue(slider.getValue() - e.getUnitsToScroll());
             }
-        };
+        };      
+
+        JScrollPane scrolledPane = new JScrollPane(graphPanel);
+        JViewport view = scrolledPane.getViewport();
+        view.setBackground(Color.white);
+        view.addMouseWheelListener(wheel);
+        
+        add(scrolledPane, BorderLayout.CENTER);
+        add(slider,BorderLayout.WEST);
         
         scrolledPane.getViewport().addMouseWheelListener(wheel);
     }

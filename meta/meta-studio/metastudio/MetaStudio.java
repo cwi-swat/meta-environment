@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -32,13 +31,11 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -58,6 +55,7 @@ import metastudio.components.HistoryPanel;
 import metastudio.components.MessageList;
 import metastudio.components.ModuleSelectionListener;
 import metastudio.components.ModuleStatusPanel;
+import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.graphs.GraphPanel;
 import metastudio.components.graphs.ImportGraphPanel;
@@ -77,6 +75,8 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
+
+//TODO: extract ToolBar, MenuBar and Trees from the monolith
 
 public class MetaStudio
     extends JFrame
@@ -115,22 +115,22 @@ public class MetaStudio
 
     private ModuleStatusPanel moduleStatus;
 
-    private JCheckBox tideBox;
-
-    private Frame topFrame;
+    private HistoryPanel historyPanel;
+    private MessageList messageList;
 
     private String currentModule;
     private ModuleTreeModel moduleManager;
 
-    private LinkedList panels;
-    private HistoryPanel historyPanel;
-    private MessageList messageList;
-
+    private LinkedList toolComponents;
+    
+    
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
         studio.bridge.run();
     }
 
+   
+    
     private JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         bridge.postEvent(factory.make("get-buttons(<term>,<str>)", ACTION_MENUBAR, "*"));
@@ -164,18 +164,17 @@ public class MetaStudio
     }
 
     public MetaStudio(String[] args) throws IOException {
-        topFrame = this;
         graphPanels = new HashMap();
 
         factory = new PureFactory();
 
-        panels = new LinkedList();
+        toolComponents = new LinkedList();
 
         metaGraphFactory = new MetaGraphFactory(factory);
         moduleManager = new ModuleTreeModel();
 
         initializeProperties();
-        initializeATermPatterns(); // TODO: apification
+        initializeATermPatterns(); 
 
         createToolBusBridge(args);
         handleCloseRequests();
@@ -183,7 +182,10 @@ public class MetaStudio
         moduleManager.addModuleSelectionListener(this);
         createContentPane();
 
+        getToolComponents().add(new QuestionDialog(factory, bridge, this.getRootPane()));
+        
         makeStudioVisible();
+        
     }
 
     private void initializeATermPatterns() {
@@ -233,11 +235,11 @@ public class MetaStudio
 
         if (historyPanel == null) {
             historyPanel = new HistoryPanel(factory, bridge);
-            panels.add(historyPanel);
+            addToolComponent(historyPanel);
         }
 
         StatusBar bar = new StatusBar(factory, bridge, historyPanel);
-        panels.add(bar);
+        addToolComponent(bar);
         container.add(bar, BorderLayout.SOUTH);
 
         return container;
@@ -300,16 +302,16 @@ public class MetaStudio
 
         if (historyPanel == null) {
             historyPanel = new HistoryPanel(factory, bridge);
-            panels.add(historyPanel);
+            addToolComponent(historyPanel);
         }
         messageTabs.insertTab("history", null, historyPanel, "Execution history", 0);
 
         messageList = new MessageList(factory, bridge);
-        panels.add(messageList);
+        getToolComponents().add(messageList);
         messageTabs.insertTab("messages", null, messageList, "Message list", 1);
 
         feedbackList = new FeedbackList(factory, bridge);
-        panels.add(feedbackList);
+        getToolComponents().add(feedbackList);
         messageTabs.insertTab("errors", null, feedbackList, "Clickable messages", 2);
 
         return messageTabs;
@@ -578,7 +580,6 @@ public class MetaStudio
                 component = moduleTree;
                 currentModule = getCurrentModule();
             } else if (e.getSource() == importGraphPanel.getGraphPanel()) {
-                // TODO refactor
                 component = importGraphPanel;
                 Node node = importGraphPanel.getNodeAt(mouseX, mouseY);
 
@@ -937,24 +938,6 @@ public class MetaStudio
         }
     }
 
-    public ATerm showQuestionDialog(String question) {
-        int choice = JOptionPane.showConfirmDialog(topFrame, question);
-
-        if (choice == JOptionPane.YES_OPTION) {
-            return factory.make("snd-value(answer(yes))");
-        }
-        if (choice == JOptionPane.NO_OPTION) {
-            return factory.make("snd-value(answer(no))");
-        }
-
-        return factory.make("snd-value(answer(cancel))");
-    }
-
-    void toggleTide() {
-        bridge.postEvent(
-            factory.make("debugging(<id>)", tideBox.isSelected() ? "on" : "off"));
-    }
-
     String getCurrentModule() {
         TreePath path = moduleTree.getSelectionPath();
 
@@ -968,7 +951,7 @@ public class MetaStudio
     }
 
     public void addStatus(ATerm id, String message) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -977,7 +960,7 @@ public class MetaStudio
     }
 
     public void addStatusf(ATerm id, String format, ATerm args) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -986,7 +969,7 @@ public class MetaStudio
     }
 
     public void endStatus(ATerm id) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -995,7 +978,7 @@ public class MetaStudio
     }
 
     public void displayFeedbackSummary(ATerm t0) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1004,7 +987,7 @@ public class MetaStudio
     }
 
     public void updateList(String moduleName, String actions) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1013,7 +996,7 @@ public class MetaStudio
     }
 
     public void errorf(String format, ATerm args) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1022,7 +1005,7 @@ public class MetaStudio
     }
 
     public void error(String message) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1031,7 +1014,7 @@ public class MetaStudio
     }
 
     public void messagef(String format, ATerm args) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1040,7 +1023,7 @@ public class MetaStudio
     }
 
     public void message(String message) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1049,7 +1032,7 @@ public class MetaStudio
     }
 
     public void warningf(String format, ATerm args) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1058,7 +1041,7 @@ public class MetaStudio
     }
 
     public void warning(String message) {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1067,7 +1050,7 @@ public class MetaStudio
     }
 
     public void clearHistory() {
-        Iterator iter = panels.iterator();
+        Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
@@ -1075,10 +1058,30 @@ public class MetaStudio
         }
     }
 
+    public ATerm showQuestionDialog(String question) {
+        ATerm result = null;
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            result = tif.showQuestionDialog(question);
+        }
+        
+        return factory.make("snd-value(<term>)",result);
+    }
+    
     public void recAckEvent(ATerm event) {
     }
 
     public void recTerminate(ATerm t0) {
         System.exit(0);
+    }
+
+    private LinkedList getToolComponents() {
+        return toolComponents;
+    }
+    
+    private void addToolComponent(UserInterfaceTif tool) {
+        getToolComponents().add(new UserInterfaceBridge(factory, tool)); 
     }
 }
