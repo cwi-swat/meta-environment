@@ -452,15 +452,19 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
       String name = pair.getFirst().toString();
 
-      String value;
-      ATerm valueTerm = pair.getNext().getFirst();
-      if (valueTerm.getType() == ATerm.APPL) {
-	value = ((ATermAppl) valueTerm).getName();
-      } else {
-	value = valueTerm.toString();
+      // The rest of the information is ignored for the moment.
+      if (name.equals("path")) {
+
+        String value;
+        ATerm valueTerm = pair.getNext().getFirst();
+        if (valueTerm.getType() == ATerm.APPL) {
+	  value = ((ATermAppl) valueTerm).getName();
+        } else {
+	  value = valueTerm.toString();
+        }
+        String[] entry = { name, value };
+        entries.add(entry);
       }
-      String[] entry = { name, value };
-      entries.add(entry);
 
       pairs = pairs.getNext();
     }
