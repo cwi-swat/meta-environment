@@ -1301,10 +1301,8 @@ proc define-module-popup {} {
 proc define-shadowmodule-popup {} {
     set m .shadowmodule-popup
     menu $m -tearoff 0
-    $m add command -label "Open Module" \
-        -command {OpenModule [GetObjectName $c]}
-    $m add command -label "Edit Module" \
-        -command {EditModules [GetObjectName $c]}
+    $m add command -label "Create this module" \
+        -command {NewModule [GetObjectName $c]}
 }
 
 proc define-modlist-popup {} {
