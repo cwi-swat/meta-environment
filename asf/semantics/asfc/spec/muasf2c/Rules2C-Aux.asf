@@ -1,22 +1,53 @@
 equations
 
-[wek-0] wrap-extra-kids(ActualArgs,1) = ATempty
-[wek-1] wrap-extra-kids(ActualArg, ActualArg*,2) = ATmakeList1(ActualArg*)
-[wek-2] wrap-extra-kids(ActualArg, ActualArg*,3) = ATmakeList2(ActualArg*)
-[wek-3] wrap-extra-kids(ActualArg, ActualArg*,4) = ATmakeList3(ActualArg*)
-[wek-4] wrap-extra-kids(ActualArg, ActualArg*,5) = ATmakeList4(ActualArg*)
-[wek-5] wrap-extra-kids(ActualArg, ActualArg*,6) = ATmakeList5(ActualArg*)
-[wek-6] wrap-extra-kids(ActualArg, ActualArg*,7) = ATmakeList6(ActualArg*)
+[wek-0] wrap-extra-kids(trafo,ActualArgs,1) = ATempty
+[wek-1] wrap-extra-kids(trafo,ActualArg, ActualArg*,2) = ATmakeList1(ActualArg*)
+[wek-2] wrap-extra-kids(trafo,ActualArg, ActualArg*,3) = ATmakeList2(ActualArg*)
+[wek-3] wrap-extra-kids(trafo,ActualArg, ActualArg*,4) = ATmakeList3(ActualArg*)
+[wek-4] wrap-extra-kids(trafo,ActualArg, ActualArg*,5) = ATmakeList4(ActualArg*)
+[wek-5] wrap-extra-kids(trafo,ActualArg, ActualArg*,6) = ATmakeList5(ActualArg*)
+[wek-6] wrap-extra-kids(trafo,ActualArg, ActualArg*,7) = ATmakeList6(ActualArg*)
 %% WARNING: HIER MOET NOG 1 AFGETROKKEN WORDEN VAN Int
-[default-wek] wrap-extra-kids(ActualArg, ActualArg*,Int) = ATmakeList(Int,ActualArg*)
+[default-wek] wrap-extra-kids(trafo,ActualArg, ActualArg*,Int) = ATmakeList(Int,ActualArg*)
 
-[mts-0] get-traversal-strategy(funid(Char*)) = bottom-up,
-        wrap-extra-kids(ActualArg*,Aint) = Expression,
-        Stat = (arg0 = call_kids(identifier(Char*),arg0,Expression));
-        ======================
-       make-traversal-stats(funid(Char*),ActualArg*,Aint) = Stat
+[wek-1] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,2) = ATempty
+[wek-2] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,3)= ATmakeList1(ActualArg*)
+[wek-3] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,4)= ATmakeList2(ActualArg*)
+[wek-4] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,5)= ATmakeList3(ActualArg*)
+[wek-5] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,6)= ATmakeList4(ActualArg*)
+[wek-6] wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,7)= ATmakeList5(ActualArg*)
+[default-wek] 
+        wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,Int)=
+          ATmakeList(Int,ActualArg*)
+
+[mts-0] get-traversal-strategy(Funid) = bottom-up,
+        make-traversal-expression(Funid,ActualArg*,Aint) = Expression,
+        traversal-result-argument(Funid) = Expression2,
+        Stat = (Expression2 = Expression);
+        ===>
+        make-traversal-stats(Funid,ActualArg*,Aint) = Stat
 
 [default-mts] make-traversal-stats(Funid,ActualArg*,Aint) =
+
+[mte-0] get-traversal-type(funid(Char*)) = trafo,
+        wrap-extra-kids(trafo, ActualArg*,Aint) = Expression
+        ====>
+        make-traversal-expression(funid(Char*),ActualArg*,Aint) =
+         call_kids_trafo(identifier(Char*),arg0,Expression)
+
+[mte-1] get-traversal-type(funid(Char*)) = accu,
+        wrap-extra-kids(accu, ActualArg*,Aint) = Expression
+        ====>
+        make-traversal-expression(funid(Char*),ActualArg*,Aint) =
+         call_kids_accu(identifier(Char*),arg0,arg1,Expression)
+
+[gra] get-traversal-type(Funid) = trafo
+      ====>
+      traversal-result-argument(Funid) = arg0
+
+[gra] get-traversal-type(Funid) = accu
+      ====>
+      traversal-result-argument(Funid) = arg1
 
   [mcr-1'1] make-c-rules() =
 

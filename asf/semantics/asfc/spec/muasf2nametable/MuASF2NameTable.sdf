@@ -41,6 +41,12 @@ hiddens
     normal-prod(FunId) -> FunId
 
 hiddens
+  context-free syntax
+   strategy-id(TermList) -> FunId
+   type-id(TermList)     -> FunId
+   cons-id(TermList)     -> FunId
+
+hiddens
 
 variables
 

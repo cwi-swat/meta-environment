@@ -418,7 +418,8 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
 
   [fa2cs-1'3] is-traversal-funid(Funid) = true,
               get-traversal-strategy(Funid) = bottom-up,
-              FUNC_EXIT(arg0); = Stat*2
+              traversal-result-argument(Funid) = Expression,
+              FUNC_EXIT(Expression); = Stat*2
               =========================================================================
               funargs2cstats(Funid,ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
                 (Stat*2,0)
@@ -426,8 +427,9 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
  [fa2cs-1'2]  is-traversal-funid(funid(Char*1)) = true,
               get-traversal-strategy(funid(Char*1)) = top-down,
               restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*) = ActualArgs',
-              wrap-extra-kids(ActualArgs',natcon(Char*2)) = Expression,
-              FUNC_EXIT(call_kids(identifier(Char*1),arg0,Expression)); = Stat*2
+              make-traversal-expression(funid(Char*1),ActualArgs',natcon(Char*2)) = 
+                 Expression,
+              FUNC_EXIT(Expression); = Stat*2
               =========================================================================
               funargs2cstats(funid(Char*1),ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
                 (Stat*2,0)

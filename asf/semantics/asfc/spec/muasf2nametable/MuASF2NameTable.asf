@@ -219,19 +219,24 @@ funid(""""[" "l""f""_" Char+ "]"""")
 %%funid(""""[""l""f""_" Char+2 "_" Char+ "]"""")
 
 [cf-5]
+strategy-id(Term+) = funid(Char*1),
+type-id(Term+)  = funid(Char*2)
+====>
 construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
-               Term*1,traversal(Term*2,bottom-up,Term*4),Term*3) =
-funid("l""f""_""t""r""a""f""o""_""b""u""_" Char+)
-
-[cf-6]
-construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
-               Term*1,traversal(Term*2,top-down,Term*4),Term*3) =
-funid("l""f""_""t""r""a""f""o""_""t""d""_" Char+)
-
+                Term*1,traversal(Term+),Term*2) =
+  funid("l""f""_" Char*2 "_" Char*1 "_" Char+)
 
 [default-cf-2]
 construct-funid(Funid,Aint0, Term+) = 
 construct-funid(Funid,Aint0)
+
+[si] strategy-id(Term*1,top-down,Term*2) = td
+[default-si] strategy-id(Term*) = bu
+
+[ti] type-id(Term*1,trafo,Term*2,accu,Term*3) = accutrafo
+[ti] type-id(Term*1,accu,Term*2,trafo,Term*3) = accutrafo
+[default-ti] type-id(Term*1,trafo,Term*2) = trafo
+[default-ti] type-id(Term*1,accu,Term*2)  = accu
 
 [np-0] 
 normal-prod(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")"""")) =

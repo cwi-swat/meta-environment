@@ -158,11 +158,10 @@ PT_Tree transformTraversalFunction(PT_Tree tree)
   if (type == TRANSFORMER) {
     prod = PT_setProductionRhs(prod, PT_makeSymbolSort(GEN_TRAVERSED_SORT));
   }
-  else {
-    ATerror("Only trafo supported for now\n");
-    return NULL;
-  }
 
+  if (type == COMBINATION) {
+    ATerror("Combination not supported yet\n");
+  }
   return PT_setTreeProd(tree, prod);
 }
 

@@ -1,6 +1,11 @@
+2001/11/02 (jurgenv@cwi.nl)
+ * Added support for accumulators to the compiler.
+
 2001/11/01 (jurgenv@cwi.nl)
- * Added support for traversal functions (transformers only).
+ * Added support for traversal functions to the compiler (transformers only).
    Bottom-up or top-down with optionally extra variables.
+ * RESTRICTION: just a variable as the first argument of a traversal
+   function in the left-hand side of a defining equation are NOT allowed.
 
 2001/10/25 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Optimized evaluator. Lexical constructor functions are now imploded

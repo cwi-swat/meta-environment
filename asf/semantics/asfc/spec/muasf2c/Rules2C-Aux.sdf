@@ -77,8 +77,10 @@ exports
 
 exports
   context-free syntax
-    wrap-extra-kids(Argument-expression-list,Int) -> Expression
+    wrap-extra-kids(TraversalType, Argument-expression-list,Int) -> Expression
     make-traversal-stats(FunId,Argument-expression-list, IntCon) -> Statement-list-opt
+    make-traversal-expression(FunId,Argument-expression-list,IntCon) -> Expression
+    traversal-result-argument(FunId) -> Expression
 
 hiddens
   context-free syntax

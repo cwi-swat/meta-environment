@@ -18,6 +18,10 @@ exports
     create-new-rulesopt({Rule ";"}*)               -> RulesOpt
     addto-rulesopt(RulesOpt,{Rule ";"}*)           -> RulesOpt
 
+  aliases
+    "bottom-up" | "top-down"        -> TraversalStrategy
+     "trafo" | "accu" | "accutrafo" -> TraversalType
+
   context-free syntax
     get-funid(Term)                   -> FunId
     get-funid(Rule)                   -> FunId
@@ -25,8 +29,8 @@ exports
     get-funargs(Term)                 -> TermList
     get-funargs(Rule)                 -> TermList
     is-traversal-funid(FunId)         -> Bool
-    get-traversal-strategy(FunId)     -> "bottom-up" | "top-down"
-    get-traversal-type(FunId)         -> "trafo" | "accu" | "accutrafo"
+    get-traversal-strategy(FunId)     -> TraversalStrategy
+    get-traversal-type(FunId)         -> TraversalType
     is-list-funid(FunId)              -> Bool
     is-trans-list-funid(FunId)        -> Bool
     is-returns-list-funid(FunId)      -> Bool {prefer}
@@ -73,3 +77,8 @@ hiddens
     "Char"[0-9]*    -> CHAR
     "Char*"[0-9]*   -> CHAR*
     "Char+"[0-9]*   -> CHAR+
+
+exports
+variables
+    "Strategy"[0-9]* -> TraversalStrategy
+    "Type"[0-9]*     -> TraversalType
