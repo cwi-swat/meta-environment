@@ -19,6 +19,19 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
+dnl Determine which libraries to use for programs using sockets
+NOSOCKLIBS=$LIBS
+dnl first, the socket functions
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  if test ${SOCKET_FOUND} = no; then
+    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
+  fi
+fi
+
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
@@ -29,10 +42,44 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl Require sdf-support package
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+   [  --with-sdf-support=DIR  sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
+dnl Require sglr package
+AC_PACKAGE_REQUIRE(sglr, sglr,
+   [  --with-sglr=DIR         sglr is in DIR])
+AC_SUBST(SGLR)
+
+dnl Require pgen package
+AC_PACKAGE_REQUIRE(pgen, sdf2table,
+   [  --with-pgen=DIR         pgen is in DIR])
+AC_SUBST(PGEN)
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
 dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
 
 AC_OUTPUT(
   Makefile
   src/Makefile
+  src/c/Makefile
+  src/c/terms/Makefile
+  src/spec/Makefile
 )
