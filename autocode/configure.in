@@ -8,5 +8,9 @@ org/Makefile
 org/autocode/Makefile
 org/autocode/property/Makefile
 org/autocode/property/parser/Makefile
+org/autocode/bootstrap/Makefile
+org/autocode/bootstrap/generator/Makefile
+org/autocode/bootstrap/generator/repository/Makefile
+org/autocode/generator/Makefile
 test/Makefile
 )

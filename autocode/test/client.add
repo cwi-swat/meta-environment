@@ -1,0 +1,86 @@
+package company.clients;
+
+//{{{ Possible basic and compound types
+
+/*
+  Basic types:
+    boolean,
+    integer,
+    real,
+    string,
+    enumeration { element, ... },
+    date
+
+  Compound types:
+    list { Type },
+    map  { KeyType, ValueType },
+    set  { Type }
+*/
+
+//}}}
+    
+//{{{ Aliases
+
+enum Article { pen, pencil, note-book }
+
+//}}}
+//{{{ type Client
+
+type Client
+{
+  name: string
+  peer: Client
+  order: list<Order>
+}
+
+//}}}
+//{{{ type Order
+
+type Order
+{
+  id: integer
+  article: Article
+  amount: integer
+}
+
+//}}}
+
+// Properties
+//{{{ Explanation
+
+/*
+Section types:
+[application]
+reserved words: language, generator
+
+[application.type]
+
+[application.type.field]
+reserved words: operations
+
+Properties supported by all modules:
+operations
+*/
+
+//}}}
+ 
+//{{{ properties specific to application: server
+
+[server]
+generator = java
+folding = true
+
+[server.*]
+access = private
+
+[server.Client]
+access = public
+operations = { constructors }
+implements = { Serializable, Runnable }
+throws = { java.io.IOException }
+
+[server.Client.name]
+access = public
+static = true
+
+//}}}

@@ -1,6 +1,4 @@
-*.class
-*.sh
-*.sh.log
 Makefile
 Makefile.in
+*.class
 classjava.stamp

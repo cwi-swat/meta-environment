@@ -1,0 +1,47 @@
+// Pitfall state specification
+package gamesquare.games.pitfall;
+
+array Player[] PlayerArray
+
+type State
+{
+  player : PlayerArray
+  board : Board 
+
+  starting-player : Player
+  current-player : Player
+}
+
+type Player
+{
+  cid : ClientID
+  score : integer
+  dynamite-supply : integer
+}
+
+array Sector[][] SectorArray
+
+type Board
+{
+  width : integer
+  height : integer
+  sector : SectorArray
+}
+
+enum Special { shovel, dynamite, boulder, pitfall }
+
+type Sector
+{
+  special : Special
+  pawn    : Player
+} 
+
+[server]
+language = C
+
+[client]
+language = Java
+
+[*.*.*]
+operations = { get, set }
+
