@@ -20,7 +20,8 @@ EVALUATOR=${bindir}/RscriptCalculator
 RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
 RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
 THE_RSCRIPT=
-OUTPUT=./result.rstore
+OUTPUT_AS_TREE=
+OUTPUT=
 RSTORE=
 TYPE_CHECKER="asfe -e ${datadir}/RscriptChecker.eqs"
 OUTPUT_TYPE_CHECKER=./.checker.feedback
@@ -36,23 +37,34 @@ cat << ENDCAT >&2
 Usage: $PRG [options] [filename]
 
 Options:
-  -i (--input)        filename	input from file (default: stdin)
-  -o (--output)       filename	output to file (default: result.rstore)
-  -s (--store)        filename  initial Rstore (default: empty)
-  -c (--check-only)             only check the Rscript, do not evaluate it
-  -v (--verbose)                verbose output (default:none)
+  -i (--input)              filename  input from file (default: stdin)
+  -o (--output-parse-tree)  filename  output as parse-tree to filename
+  -s (--store)              filename  initial Rstore (default: empty)
+  -c (--check-only)                   only check the Rscript, do not evaluate it
+  -v (--verbose)                      verbose output (default:none)
 
 Advanced options:
-  -e (--evaluator)    filename  alternative Rscript evaluator
-  -p (--parse-table)  filename  alternative parse table
-  -t (--type-checker) filename  alternative type checker
+  -e (--evaluator)          filename  alternative Rscript evaluator
+  -p (--parse-table)        filename  alternative parse table
+  -t (--type-checker)       filename  alternative type checker
 
-Example:
-  $PROG -i query.rscript
+Examples:
+  $PRG query.rscript
+  $PRG -i query.rscript -s previous.rstore -op result.rstore.pt
 
 ENDCAT
 }
 
+# }}}
+# {{{
+set_output_style(){
+  if test -z "$OUTPUT_AS_TREE"
+  then
+      OUTPUT="unparsePT"
+  else
+      OUTPUT="eval cat >"$OUTPUT_AS_TREE
+  fi
+}
 # }}}
 # {{{  add_tmp_file
 
@@ -106,12 +118,12 @@ evaluate() {
   then
       $EVALUATOR $VERBOSE -s -f "eval-rscript" \
 	  -i $THE_RSCRIPT.pt -r RSTORE \
-	  | unparsePT > $OUTPUT
+	  | $OUTPUT
   else
       parse_rstore
       $EVALUATOR $VERBOSE -s -f "eval-rscript-with-rstore" \
 	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE -r RSTORE \
-	  | unparsePT > $OUTPUT
+	  | $OUTPUT
   fi
 }
 
@@ -127,8 +139,8 @@ do
   case "$1" in
     -e | --evaluator)
       shift; EVALUATOR=$1 ;;
-    -o | --output)
-      shift; OUTPUT=$1 ;;
+    -o | --output-parse-tree)
+      shift; OUTPUT_AS_TREE=$1 ;;
     -p | --rscript-parse-table)
       shift; RSCRIPT_PARSE_TABLE=$1 ;;
     -i | --input)
@@ -149,6 +161,7 @@ do
   shift
 done
 
+set_output_style
 parse_rscript
 check
 
