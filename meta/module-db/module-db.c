@@ -763,7 +763,6 @@ ATerm update_eqs_for_modules(int cid, char *modulename)
 
   name = ATmake("<str>",modulename);
   if(GetValue(new_modules_db, name)) {
-      /*ATfprintf(stderr,"update_eqs_for_modules entered with %t\n",name); */
     modules = get_imported_modules(name);
 
     while (!ATisEmpty(modules)) {
@@ -774,7 +773,6 @@ ATerm update_eqs_for_modules(int cid, char *modulename)
         result = ATinsert(result,module);
       modules = ATgetNext(modules);
     }
-ATfprintf(stderr,"update_eqs_for_modules left with %t\n",result);
   }
   return ATmake("snd-value(modules([<list>]))",result);
 }
