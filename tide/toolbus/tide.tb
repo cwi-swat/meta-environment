@@ -3,9 +3,9 @@ tool debug-adapter is { /* All kinds of adapters */ }
 tool debug-tool    is { /* All kinds of tools */    }
 tool tide-control  is { 
 #if DEVELOP
-    command="java-adapter -class tide.TideControl -jvm-arg -Dtide.develop=true"
+    command="java-adapter -class tide.TideMainFrame -jvm-arg -Dtide.develop=true"
 #else
-    command="java-adapter -class tide.TideControl"
+    command="java-adapter -class tide.TideMainFrame"
 #endif
 }
 

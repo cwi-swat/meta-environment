@@ -6,7 +6,7 @@ javadir		= ${prefix}/classes/tide
 JAVAROOT	= ${top_builddir}
 
 java_JAVA	= ${GENJAVA} \
-		TideControl.java PreferenceSet.java PreferenceListener.java
+		TideMainFrame.java TideControl.java PreferenceSet.java PreferenceListener.java
 
 GENJAVA		= TideConfig.java ${CONTROL_GEN}
 

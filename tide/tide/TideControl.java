@@ -1,29 +1,39 @@
 package tide;
 
-import aterm.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.UnknownHostException;
+import java.util.Properties;
 
-import java.util.*;
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
-import tide.tool.*;
-import tide.tool.support.*;
-import tide.tool.proclist.*;
-import tide.tool.ruleinspector.*;
-import tide.tool.srcviewer.*;
-import tide.tool.prefeditor.*;
-import tide.tool.stackviewer.*;
+import tide.tool.ToolManager;
+import tide.tool.prefeditor.PreferencesEditorFactory;
+import tide.tool.proclist.ProcessList;
+import tide.tool.ruleinspector.RuleInspectorFactory;
+import tide.tool.srcviewer.SourceViewerFactory;
+import tide.tool.stackviewer.StackViewerFactory;
+import tide.tool.support.DebugTool;
+import tide.tool.support.Expr;
+import tide.tool.support.Port;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class TideControl
-	extends JFrame
-	implements TideControlTif, ActionListener {
-	private static final String ITEM_EDIT_PREFERENCES = "Edit Preferences";
-	private static final String ITEM_SAVE_PREFERENCES = "Save Preferences";
-	private static final String ITEM_LOAD_PREFERENCES = "Load Preferences";
-	private static final String ITEM_QUIT = "Quit";
-
+	extends JPanel
+	implements TideControlTif  {
+	
 	public static ATermFactory factory;
 
 	private TideControlBridge bridge;
@@ -34,18 +44,9 @@ public class TideControl
 
 	private ToolManager manager;
 
-	private JMenu fileMenu;
-
-	public final static void main(String[] args) throws IOException {
-		ATermFactory factory = new aterm.pure.PureFactory();
-
-		new TideControl(factory, args);
-	}
-
 	public TideControl(ATermFactory factory, String[] args)
 		throws IOException {
-		super("Tide - ToolBus Integrated Debug Environment");
-
+		
 		Port.initialize(factory);
 		Expr.initialize(factory);
 
@@ -56,69 +57,20 @@ public class TideControl
 		bridge = new TideControlBridge(factory, this);
 		tool = new DebugTool(factory);
 
-		Container content = getContentPane();
-
 		desktop = new JDesktopPane();
 		desktop.setPreferredSize(new Dimension(1000, 700));
 
-		String resource = "META-INF/tide-defaults.properties";
-		InputStream stream =
-			getClass().getClassLoader().getResourceAsStream(resource);
+		Properties defaults = loadProperties();
 
-		Properties defaults = new Properties();
-		defaults.load(stream);
+		createTools(defaults);
+		createProcessList();
 
-		manager = new ToolManager(desktop, defaults);
+		setLayout(new BorderLayout());
+		add("Center", desktop);
+		add("West", new JScrollPane(processList));
 
-		manager.registerProcessTool(new RuleInspectorFactory(manager));
-		manager.registerProcessTool(new SourceViewerFactory(manager));
-		manager.registerProcessTool(new StackViewerFactory(manager));
-		manager.registerTool(new PreferencesEditorFactory(manager));
-
-		fileMenu = new JMenu("File");
-		fileMenu.setMnemonic('F');
-		JMenuItem item;
-
-		item = new JMenuItem(ITEM_EDIT_PREFERENCES, 'P');
-		item.addActionListener(this);
-		fileMenu.add(item);
-
-		item = new JMenuItem(ITEM_SAVE_PREFERENCES, 'S');
-		item.addActionListener(this);
-		fileMenu.add(item);
-
-		item = new JMenuItem(ITEM_LOAD_PREFERENCES, 'L');
-		item.addActionListener(this);
-		fileMenu.add(item);
-
-		fileMenu.addSeparator();
-
-		item = new JMenuItem(ITEM_QUIT, 'Q');
-		item.addActionListener(this);
-		fileMenu.add(item);
-
-		JMenuBar bar = new JMenuBar();
-		bar.add(fileMenu);
-		setJMenuBar(bar);
-
-		processList = new ProcessList(manager);
-		tool.addDebugToolListener(processList);
-
-		content.setLayout(new BorderLayout());
-		content.add("Center", desktop);
-		content.add("West", new JScrollPane(processList));
-
-		pack();
-		setLocation(100, 100);
-		setVisible(true);
-
-		bridge.init(args);
-		bridge.setLockObject(this);
-		bridge.connect();
-
-		tool.init(args);
-		tool.setLockObject(this);
-		tool.connect("debug-tool", null, -1);
+		connectTideControl(args);
+		connectDebugTool(args);
 
 		Thread thread = new Thread(tool);
 		thread.start();
@@ -127,21 +79,50 @@ public class TideControl
 		thread.start();
 	}
 
+	private void createProcessList() {
+		processList = new ProcessList(manager);
+		tool.addDebugToolListener(processList);
+	}
+
+	private Properties loadProperties() throws IOException {
+		String resource = "META-INF/tide-defaults.properties";
+		InputStream stream =
+			getClass().getClassLoader().getResourceAsStream(resource);
+
+		Properties defaults = new Properties();
+		defaults.load(stream);
+		return defaults;
+	}
+
+	private void createTools(Properties defaults) {
+		manager = new ToolManager(desktop, defaults);
+
+		manager.registerProcessTool(new RuleInspectorFactory(manager));
+		manager.registerProcessTool(new SourceViewerFactory(manager));
+		manager.registerProcessTool(new StackViewerFactory(manager));
+		
+		manager.registerTool(new PreferencesEditorFactory(manager));
+	}
+
+	
+
+	protected void connectDebugTool(String[] args) throws UnknownHostException, IOException {
+		tool.init(args);
+		tool.setLockObject(this);
+		tool.connect("debug-tool", null, -1);
+	}
+
+	protected void connectTideControl(String[] args) throws UnknownHostException, IOException {
+		bridge.init(args);
+		bridge.setLockObject(this);
+		bridge.connect();
+	}
+
 	public void recTerminate(ATerm arg) {
 		System.exit(0);
 	}
 
-	public void actionPerformed(ActionEvent event) {
-		if (event.getActionCommand().equals(ITEM_EDIT_PREFERENCES)) {
-			manager.launchTool("PreferencesEditor");
-		} else if (event.getActionCommand().equals(ITEM_LOAD_PREFERENCES)) {
-			loadPreferences();
-		} else if (event.getActionCommand().equals(ITEM_SAVE_PREFERENCES)) {
-			savePreferences();
-		} else if (event.getActionCommand().equals(ITEM_QUIT)) {
-			tool.postEvent(factory.make("quit-tide"));
-		}
-	}
+
 
 	public void loadPreferences() {
 		JFileChooser chooser = new JFileChooser();
@@ -187,5 +168,17 @@ public class TideControl
 
 	public static ATermFactory getFactory() {
 		return factory;
+	}
+	
+	public TideControlBridge getBridge() {
+		return bridge;
+	}
+	
+	public ToolManager getManager() {
+		return manager;
+	}
+	
+	public void postEvent(ATerm term) {
+		getBridge().postEvent(term);
 	}
 }
