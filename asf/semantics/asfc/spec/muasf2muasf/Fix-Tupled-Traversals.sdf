@@ -1,0 +1,22 @@
+module Fix-Tupled-Traversals
+
+imports MuASF-Equations-Ops
+
+exports
+
+context-free syntax
+
+fix-tupled-traversals(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+ftt(Module) -> Module {traversal(trafo,top-down)}
+ftt(Rule)   -> Rule {traversal(trafo,top-down)}
+ftt(Term)   -> Term {traversal(trafo,top-down)}
+ftt(CondList) -> CondList {traversal(trafo,top-down)}
+
+variables
+
+"Condlist"[0-9]* -> CondList

@@ -1,0 +1,38 @@
+equations
+
+%% This function wraps calls to accu,trafo traversals in order to be able
+%% to reconstruct the correct tuple production at runtime after a call to 
+%% such a function.
+
+%% This function also removes the type annotations from the terms!
+
+%% The preprocessor postfixes applications of traversal functions with their
+%% result type (like "Term : Type")
+
+[main-ftt] fix-tupled-traversals(Module) = ftt(Module)
+
+%% prevent the left-hand-sides of rules to be transformed (but do remove type annos)
+
+[ftt-rule-0] 
+  ftt(Term1 : Term3 = Term2) = 
+  Term1 = ftt(Term2)
+
+[ftt-rule-1] 
+  ftt(default: Term1 : Term3 = Term2) = 
+  default: Term1 = ftt(Term2)
+
+[ftt-rule-2] 
+  ftt(Condlist ==> Term1 : Term3 = Term2) =            
+  ftt(Condlist) ==> Term1 = ftt(Term2)
+
+[ftt-rule-2] 
+  ftt(default: Condlist ==> Term1 : Term3 = Term2) = 
+  default: ftt(Condlist) ==> Term1 = ftt(Term2)
+
+[ftt-term] 
+  get-traversal-type(Funid) = accutrafo
+  ===>
+  ftt(Funid(Term+) : Term2) = correct_tuple(Funid(Term+),parse_sort(Term2))
+
+[default-ftt]
+  ftt(Term1 : Term2) = ftt(Term1)
