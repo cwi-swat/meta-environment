@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Feb 24 10:49:43 CET 2005 <jurgenv@cwi.nl>
+ * Speed up of syntax highlighting by applying ATBpack to the slices
+   that the structure editor computes.
+
 Fri Jan 28 13:22:29 CET 2005 <kooiker@cwi.nl>
  * action-interpreter/action-interpreter.c:
    - process_result sets ready ATfalse if result is a failure
