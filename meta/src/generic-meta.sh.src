@@ -32,7 +32,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:I:deghm:o:p:sS:t:T:vV"
+myarguments="C:I:deghi:m:o:p:sS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -45,8 +45,9 @@ Options:
     -e              use xemacs editor [default]
     -g              use gvim editor   (experimental)
     -h              display help information (usage)
+    -i <file>       input file works only for the term-editor
     -m modulename   specifies the name of the top module to start with
-    -o <file>       output file (only works with -P and -E)
+    -o <file>       output file works only when dumping parse table or equations
     -p <path>       add <path> to PATH of Meta-Environment
     -s              save intermediate files to disk (only works with -P and -E)
     -S              execute the given tb-script
@@ -90,7 +91,8 @@ extra_scripts="-I${prefix}/share/meta"
 meta_script=${prefix}/share/meta/meta.tb
 time_out_def=""
 saving="false"
-filename=""
+outputfilename=""
+inputfilename=""
 
 while [ $#  -gt 0 ]
 do
@@ -100,10 +102,6 @@ do
                 shift
                 configfile=$1
                 ;;    
-        -I)     
-		shift
-	        extra_scripts="${extra_scripts} -I$1"
-		;;
         -d)
 		xargs="${xargs} -viewer" 
 		;;
@@ -116,13 +114,21 @@ do
         -h)
 		Usage ; exit 0 
 		;;
+	-i)     
+		shift
+	        inputfilename=$1
+		;;
+        -I)     
+		shift
+	        extra_scripts="${extra_scripts} -I$1"
+		;;
 	-m)
 		shift
 		modulename=$1
 		;;
 	-o)     
 		shift
-	        filename=$1
+	        outputfilename=$1
 		;;
 	-p)    
 	        shift;
@@ -163,7 +169,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DFILENAME=\\\"${filename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} ${time_out_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} ${time_out_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x

@@ -1,5 +1,9 @@
 # $Id$
 
+2003/03/13 (vandenbr@loria.fr)
+ * Introduced standalone editors for syntax, equations, and terms.
+ * Introduced the notion of "application-status".
+
 Tue Mar  4 09:51:15 CET 2003 <{markvdb,jong}@cwi.nl>
  * add new queries:
    - find Sdf definition of production used in Asf equation
