@@ -10,7 +10,6 @@ let
   Mname  : str,
   TE     : text-edit,
   Path   : str,
-  Path2  : str,
   Syntax : term,
   Time   : term,
   Src    : str
@@ -34,7 +33,7 @@ in
     (
       rec-msg(Id, opened-file(raw,Mname?,Src?,Path?,Time?))
     +
-      rec-msg(Id, error-opening(Path2?)).
+      rec-msg(Id, error-opening(Path?)).
       Src := ""
     )
   ).
@@ -52,7 +51,6 @@ let
   Fn     : str,
   TE     : text-edit,
   Path   : str,
-  Path2  : str,
   Eqs    : term,
   Time   : term,
   Mname  : str,
@@ -82,7 +80,7 @@ in
     (
       rec-msg(Id, opened-file(raw,Mname?,Src?,Path?,Time?))
     +
-      rec-msg(Id, error-opening(Path2?)).
+      rec-msg(Id, error-opening(Path?)).
       Src := ""
     )
   ).
