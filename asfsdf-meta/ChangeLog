@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/10/15 (jurgenv@cwi.nl)
+ * Added functionality for running ASF tests in the Meta-Environment
+
 2003/10/07 (jurgenv@cwi.nl)
  * Format button renamed to Pretty Print
  * Added new menu entries in syntax and equation editors: Edit Term
