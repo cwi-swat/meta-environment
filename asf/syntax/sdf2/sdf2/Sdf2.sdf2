@@ -73,7 +73,7 @@ exports
     "memo"              -> ModuleName {reject}
     "traverse"          -> ModuleName {reject}
 
-    UQLiteral "(" {Symbol ","}* ")" -> Symbols {reject}
+    Literal "(" {Symbol ","}* ")" -> Symbols {reject}
   restrictions
     <Sort -CF>
     <UQLiteral -CF>
