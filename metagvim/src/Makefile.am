@@ -6,7 +6,7 @@ data_DATA = meta.vim
 
 gvim_editor_SOURCES = gvim-editor.c text-editor.tif.c
 gvim_editor_LDADD = \
-	-L$(TOOLBUSLIB)/lib -ltb -lATB \
+	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
