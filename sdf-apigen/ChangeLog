@@ -1,5 +1,11 @@
 # $Id$
 
+2003/11/20 (jurgenv@cwi.nl)
+* added support for parameterized modules. If a module is parameterized
+  and the parameterized sort is used in the left-hand side of a production
+  the sort name becomes a field of type <str> and the tree becomes a field
+  of type <term>
+
 2003/11/09 (jurgenv@cwi.nl)
  * Made CHARLIST_String.java compatible with newest apigen code
  * Made mapping to imploded adt up-to-date with ADT-2.0 format
