@@ -5,7 +5,7 @@ rel[str,str] INHERIT
 
 rel[str,str] USE = CALL union CONTAIN union INHERIT
 
-bag[str] ClassesInCycle = {C1 | <C1, C2> :USE+, C1 == C2}
+bag[str] ClassesInCycle = {C1 | <C1, C2> : USE+, C1 == C2}
 
 int size = # ClassesInCycle
 

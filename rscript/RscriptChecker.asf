@@ -294,8 +294,14 @@ $Error]>
 [compat-cmp1]
 	compat-cmp($Exp, bag[$Etype], bag[$Etype], $Tenv) = $Tenv
 [compat-cmp2]
-	compat-cmp($Exp, int, int, $Tenv) = $Tenv
+	compat-cmp($Exp, rel[$Etype1, $Etype2],  rel[$Etype1, $Etype2], $Tenv) = $Tenv
 [compat-cmp3]
+	compat-cmp($Exp, rel[$Etype1, $Etype2],  bag[<$Etype1, $Etype2>], $Tenv) = $Tenv
+[compat-cmp4]
+	compat-cmp($Exp, bag[<$Etype1, $Etype2>],  rel[$Etype1, $Etype2], $Tenv) = $Tenv
+[compat-cmp5]
+	compat-cmp($Exp, int, int, $Tenv) = $Tenv
+[compat-cmp6]
 	compat-cmp($Exp, $Etype1, $Etype2, $Tenv) = 
 	$Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp
 
