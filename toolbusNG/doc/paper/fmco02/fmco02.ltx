@@ -156,12 +156,12 @@ experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},
 in 1995 a new version of the \TB\ was designed and implemented: the
 Discrete Time ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.
 Its main innovations were primitives for expressing timing considerations
-(delay, timeout) and for operating on a limited set of built-in datatypes
+(delay, timeout) and for operating on a limited set of built-in data-types
 (booleans, integers, reals, lists).  The Discrete Time \TB\ has been
 used for the restructuring of the \asdf\ Meta-Environment~\cite{BHK97}. A
 first version was released in 2001~\cite{BDHJJKKMOSVVV01}.
 
-In the meantime, the exchange format has also evolved from the toolbus
+In the meantime, the exchange format has also evolved from the \TB\
 terms mentioned above to \aterms~\cite{BJKO00}: a term format that
 supports maximal subterm sharing and a very concise, sharing preserving,
 binary exchange format. \aterms\ decrease memory usage thanks to sharing
@@ -1094,11 +1094,11 @@ both pass-by-value and pass-by-reference, depending on whether the
 relevant data is serializable (it is a primitive type, or it implements
 \texttt{Serializable}) or is a remote object. In Java IDL the components
 abide by IDL prescribed interfaces. Determination of whether a parameter
-is to be passed by-value or by-reference is made by examination of the
-parameter's formal type (in the IDL definition of the method signature).
-If it is a CORBA \emph{value type}, it is passed by-value. If it is an
-ordinary CORBA \emph{interface type} (the ``normal'' case for all CORBA
-objects), it is passed by-reference.
+is to be passed by-value or by-reference is made by examination of
+the parameter's formal type (i.e. in the IDL signature of the method
+it is being passed to) If it is a CORBA \emph{value type}, it is passed
+by-value. If it is an ordinary CORBA \emph{interface type} (the ``normal''
+case for all CORBA objects), it is passed by-reference.
 
 \item The \TB\ allows components in any language for which a \TB\
 adapter exists. Programming languages such as C and Java are supported,
