@@ -1468,7 +1468,7 @@ Specification Formalism) and \sdf\ (Syntax Definition Formalism).  \asf\ is
 based on the notion of a module consisting of a signature defining the
 abstract syntax of functions and a set of conditional equations defining their
 semantics. Modules can be imported in other modules. 
-\sdf allows the simultaneous definition of concrete
+\sdf\ allows the simultaneous definition of concrete
 (i.e., lexical and context-free) and abstract syntax and implicitly defines a
 translation from text strings to abstract syntax trees.
 
@@ -1582,107 +1582,134 @@ importing module but they are not exported by the importing module.
 
 \subsection{Symbols} \label{Symbols}
 
-The definition of syntax rules is based performed by means of basic
-symbols combination of symbol operators.
-Sorts, literals, and character classes are the basic symbols, e.g.,
-{\tt Bool}, {\tt true}, {\tt [a-z]}, or {\tt "\&"} are examples of 
-basic symbols. The notion of character classes will be explained
-in Section~\ref{CharacterClasses}, they are mainly used when describing
-the lexical syntax of a language.
+The elementary building block of\sdf\ syntax rules is the ``symbol''.  It is
+comparable to terminals and non-terminals in other grammar definition
+formalisms. The elementary symbols are:
 
-\subsubsection{Option Operator}
-If zero or exactly one occurrence of a symbol is desired the postfix
-operator {\tt ?} is available. It indicates that there should be zero
-or one occurrence of a symbol.
+\begin{itemize}
+\item \emph{sort}: corresponds to a non-terminal, e.g., {\tt Bool}.  Sort
+  names always start with a capital letter and may be followed by letters
+  and/or digits.  Hyphens (``{\tt -}'') may be embedded in a sort name.
 
-\subsubsection{Sequence Operator}
-By means of the sequence operator two or more symbols can be considered
-as one. The sequence of symbols is marked by brackets, e.g.,
-{\tt (Bool "\&")}. It is no use to put a sequence operator around a
-single symbol, because in that case the brackets will have not effect.
-It is also possible to represent the empty sequence {\tt ()}.
+\item \emph{literal}: corresponds to a terminal, e.g.,  {\tt true} or  {\tt
+    "\&"}.
+  
+\item \emph{character class}: corresponds to a set of characters, e.g., {\tt
+    [a-z]}.Character classes will be explained in
+  Section~\ref{CharacterClasses}, they are mainly used when describing the
+  lexical syntax of a language.
+\end{itemize}
 
-\subsubsection{Repetition Operators}
-In order to express that a symbol should occur several times
-it is possible to use repetition operators. In this way it is possible
-to construct flat lists. The repetition operators
-come in two disguises, with and without separators. Furthermore,
-it is possible to express that it should be zero or more occurrences and
-one or more occurrences even with a lower bound.
-Examples are {\tt Bool*}, {\tt \{Bool ","\}+}, and {\tt Bool3+}.
-Both the element as well as the separator can be an arbitrary
-symbol, although it is advisable that the element and the separator
-do not represent the same symbol, e.g., {\tt \{Bool Bool\}*}.
+Starting with the elementary symbols, more complex symbols can be constructed
+by way of operators that we will discuss now.
 
-\subsubsection{Alternative Operator}
-The alternative operator {\tt |} can be used to denote the choice between
-two symbols, e.g., {\tt true | false} represents that either a
-{\tt true} symbol or a {\tt false} symbol may occur here. The alternative
-operator is right associative and binds stronger than any other operator
-on symbols. This latter is important because {\tt Bool "," | Bool ";"}
-expresses {\tt Bool ("," | Bool) ";"} instead of
-{\tt (Bool ",") | (Bool ";")}. So, in case of doubt use the sequence
-operator in combination with the alternative operator.
+\subsubsection{Option}
+The postfix option operator {\tt ?} describes an optional part in a syntax
+rule. For instance, {\tt ElsePart?}  defines zero or exactly one occurrence of
+{\tt ElsePart}.
 
+\subsubsection{Sequence}
+The sequence operator {\tt ( ... )} describes the grouping of two or more
+symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly used to group symbols
+together to form a more complex symbol using one of the available operators,
+e.g., {\tt (Bool "\&")*}.  It has no effect to construct a sequence consisting
+of a single symbol.  The empty sequence is represented as {\tt ()}.
 
-\subsubsection{Tuple Operator}
-The next four symbol operators have a different notation when defining
-and using.
+\subsubsection{Repetition}
 
-The tuple operator {\tt \#} allows the grouping of symbols in the form of
-tuples. For example, {\tt Bool \# Int \# Id} represents a tuple with three
-elements, e.g., {\tt <true, 3, x>} is a valid instantiation of this
-tuple. The tuple operator is right associative and binds less stronger
-than the alternative operator.
+Repetition operators express that a symbol should occur several times.  In
+this way it is possible to construct flat lists and therefore we usually refer
+to repetitions as \emph{lists}.
 
-\subsubsection{Permutation Operator}
-The permutation operator expresses that the defined symbols 
-may occur in any permuation. For example, {\tt <<Bool Int Id>>} represents
-a permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.
-Valid instantiations are {\tt true 3 x}, {\tt x 3 true}, etc. There are
-six valid instantiations for this tuple.
+Repetition operators come in two flavors, with and without separators.
+Furthermore, it is possible to express the minimal number of repetitions of
+the symbol: at least zero times ({\tt *}), at least one time ({\tt +}), or at
+least $n$ times ({\tt n+}). Examples are:
 
-\subsubsection{Set Operator}
-The set operator is an abbreviation for defining a set elements
-of a given symbol.
-For example, {\tt Set[Int]} abbreviates the definition {\tt "\{" \{Int
-","\}* "\}"}. So, {\tt \{1, 2, 3\}} is an valid instantiation for the
-given definition.
+\begin{itemize}
 
-\subsubsection{Function Operator}
-The function operator, {\tt "(" Symbol* "=>" Symbol ")"}
-allows the definition of types of functions.
-For example, {\tt (Bool Int) => Int} represents a function which
-two arguments and maps it to an integer.
+\item {\tt Bool*} (a list of zero or more {\tt Bool}s).
+
+\item {\tt \{Bool ","\}+} (a list of one or more {\tt Bool}s separated by comma's).
+
+\item {\tt Bool3+} (a list of at least 3 {\tt Bool}s).
+
+\end{itemize}
+
+Both the element and the separator can be an arbitrary symbol.  To avoid
+confusion it is, however, advisable that the element and the separator are not
+the same symbol, e.g., {\tt \{Bool Bool\}*}.
+
+\subsubsection{Alternative}
+The alternative operator {\tt |} expresses the choice between two symbols,
+e.g., {\tt true | false} represents that either a {\tt true} symbol or a {\tt
+  false} symbol may occur here.  The alternative operator is right associative
+and binds stronger than any other operator on symbols. This is important
+because {\tt Bool "," | Bool ";"} expresses {\tt Bool ("," | Bool) ";"}
+instead of {\tt (Bool ",") | (Bool ";")}. So, in case of doubt use the
+sequence operator in combination with the alternative operator.
+
+\subsubsection{Tuple}
+
+The tuple operator {\tt \#} describes the grouping of a sequence of symbols of
+a fixed length into a tuple. The notation for tuples is {\tt < , , >}, i.e., a
+comma-separated list of elements enclosed in angle brackets.  For example,
+{\tt Bool \# Int \# Id} describes a tuple with three elements consisting of a
+{\tt Bool}, an {\tt Int} and an {\tt Id} (in that order).  For instance, {\tt
+  <true, 3, x>} is a valid example of such a tuple.  The tuple operator is
+right associative and binds less strong than the alternative operator.
+
+\subsubsection{Permutation}
+The permutation operator {\tt << ... >>} describes an arbitrary permutation of
+a given sequence of symbols.  For example, {\tt <<Bool Int Id>>} represents a
+permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.  Valid
+instantiations are, for instance, {\tt true 3 x} and {\tt x 3 true}.  There
+are six valid instantiations for this permutation.
+
+\subsubsection{Set}
+The set operator {\tt Set[...]} is an abbreviation for defining a set of
+elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
+definition {\tt "\{" \{Int ","\}* "\}"}. As a consequnce, {\tt \{1, 2, 3\}} is
+a valid instantiation for the given definition.
+
+\subsubsection{Function}
+The function operator {\tt ( ... => ... )} allows the definition of function
+types. Left of {\tt =>} zero or more symbols may occur, right of {\tt =>}
+exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} represents
+a function with two argument (of types {\tt Bool} and {\tt Int}, respectively)
+and a result type {\tt Int}.
 
 \subsection{Aliases} \label{Aliases}
 
-The aliases allow the definition of abbreviations for complicated symbol 
-definitions.
-For example,
+In ordinary programming it is good practice to use named constants to
+represent literals or constant values.  In \sdf\ it is good practice to give a
+name (`alias'') to complicated symbols that occur repeatedly in the
+specification.  An alias is thus a named abbreviation for a complicated
+symbol.  For example,
 
 \begin{verbatim}
 aliases
   Bool # Int # Id -> Tuple3
 \end{verbatim}
-Instead of using the symbol {\tt Bool \# Int \# Id} the alias {\tt Tuple3}
-can be used. During parse table generation the alias is replaced
-by the actual symbol.
-It is not allowed to redefine aliases, for example, the next aliases
-definition is illegal:
+introduces the alias {\tt Tuple3} for the symbol {\tt Bool \# Int \# Id} and
+instead of using {\tt Bool \# Int \# Id} one can use the alias {\tt Tuple3}.
+During parse table generation the alias is replaced by the actual symbol.  It
+is not allowed to give an alias for an alias or to redefine aliases.
+For example, the following definitions are illegal:
 
 \begin{verbatim}
 aliases
   Tuple3          -> SuperTuple
   Bool # Int # Id -> Tuple3
-\end{verbatim} 
-as well as:
+\end{verbatim}
+(An alias is defined for the alias {\tt Tuple3}.)
 
 \begin{verbatim}
 aliases
   Bool # Int # Id -> Tuple3
   Bool # Int      -> Tuple3
-\end{verbatim} 
+\end{verbatim}
+(The alias {\tt Tuple3} is redefined.)
 
 \subsection{Sorts} \label{Sorts}
 
@@ -1693,20 +1720,25 @@ sorts
   <SortName>*
 \end{verbatim}
 
-\noindent A sort name should start with a capital letter and may be followed by 
+\noindent Recall that a sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
 Section~\ref{LexicalSyntax}.
 
-In fact, sort declarations are more liberal:
+In fact, sort declarations have a more liberal form and may contain
+arbitrary symbols rather than just sort names:
 
 \begin{verbatim}
 sorts
   <Symbol>*
 \end{verbatim} 
-So, in principle any symbol can be declared here. The symbol declarations
-are used during parsing. These symbols are used as "starting" points
-when parsing input sentences.
+
+It is required that all sorts that occur in some symbol in the specification
+are declared. This has also the effect that input sentences corresponding to
+these sorts can be parsed. Technically speaking each sort can act as start
+symbol for the underlying grammar. This is not true for arbitrary symbols.
+However, declaring an arbitrary symbol has the effect that that symbol can
+also act as start symbol.
 
 \subsection{Lexical Syntax} \label{LexicalSyntax}
 \label{lexical-syntax}
@@ -1761,7 +1793,7 @@ logical \emph{or} of all left-hand sides of lexical functions with result sort
 $L$.  All sort names appearing in left-hand sides of declarations are replaced
 by the regular expression associated with them. 
 %%Circular dependencies between declarations in the lexical syntax are 
-$$forbidden.\footnote{Does this limitation still apply?}  
+%%forbidden.\footnote{Does this limitation still apply?}  
 Figure \ref{CODE:simplelex} shows an example of a
 simple lexical function definition for defining the first three words that
 Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
@@ -1978,7 +2010,7 @@ exports
 \caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
 \end{figure}   
 
-\subsubsection{Repetition Operators}
+\subsubsection{Repetition}
 
 Lexical tokens are often described by patterns that
 exhibit a certain repetition. Two postfix operators are available for this
@@ -1992,6 +2024,9 @@ purpose:
 \item {\tt +}: indicates one or more repetitions of the sort, literal or
   character class preceding the {\tt +}.
 
+\item {\tt $n$+}: indicates $n$ or more repetitions of the sort, literal or
+  character class preceding the {\tt +}.
+
 \end{itemize}
 
 \noindent Figure \ref{CODE:repetition} shows the use of the repetition
@@ -1999,7 +2034,7 @@ operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
 
 
-\subsubsection{The Option Operator}
+\subsubsection{Option}
 
 If zero or exactly one occurrence of a lexical token is desired the
 postfix operator {\tt ?} is available. It indicates that there
@@ -2031,7 +2066,7 @@ exports
 \caption{Defining a letter followed by an optional number using the option operator {\tt ?} }\label{CODE:option}
 \end{figure}   
 
-\subsubsection{The Alternative Operator}
+\subsubsection{Alternative}
 
 Functions with the same result sort together define the lexical syntax of
 tokens of that sort. The left-hand sides of these function definitions form
@@ -2261,7 +2296,7 @@ of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
 %quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
 %definition given above.
 
-\subsubsection{List Structures}
+\subsubsection{Lists}
 
 Context-free syntax often requires the description of
 the repetition of a syntactic notion or of list structures (with or without
@@ -2278,6 +2313,8 @@ primitives for this:
 
 \item[{\tt $S$+}] defines one or more repetitions of sort $S$.
 
+\item[{\tt $Sn$+}] defines $n$ or more repetitions of sort $S$.
+
 \end{description} 
 
 \item Lists with separators:
@@ -2290,17 +2327,18 @@ sort $S$ separated by the literal $sep$.
 \item[{\tt \{$S$ $sep$\}+}] defines one or more repetitions of 
 sort $S$ separated by the literal $sep$.
 
+\item[{\tt \{$S$ $sep$\}$n$+}] defines $n$ or more repetitions of 
+sort $S$ separated by the literal $sep$.
+
 \end{description}
 
 \end{itemize}
 
-Lists may be used in the left-hand side of a context-free function and in the
-right-hand side of a variable declaration, see Section \ref{Variables}. They
-may {\em not} be used as result sort in the right-hand side of a context-free
-function.
-This imposes no real restriction since a new sort can be introduced
-representing a list. This new sort may then be used in the right-hand side of
-other context-free rules.
+In many cases, $sep$
+
+Lists may be used in both the left-hand side and right-hand side of a
+context-free function as well as in the right-hand side of a variable
+declaration (see Section \ref{Variables}).
 
 Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
 the syntax of a list of identifiers (occurring in a declaration
@@ -2397,12 +2435,9 @@ which all calls and results will be cached during evaluation
 \item {\tt delay} is used to influence the evaluation order of the
 arguments of a function (Section~\ref{Delay}).
 
+\item (*** attributes for traversal functions ***)
+
 \end{itemize}
-
-
-%\subsection{Tupling Operator}
-
-%\subsection{Tupling Operator}
 
 \subsection{Priorities} \label{Priorities}
 
