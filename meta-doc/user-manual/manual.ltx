@@ -746,7 +746,7 @@ and changes the bottom line message.
 
 An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}.  An example is shown in Figure
-\ref{FIG:Bool-example.eqs}.  
+\ref{FIG:Bool-example.asf}.  
 
 The entries {\tt Parse Buffer} and {\tt Parse Focus} in the {\tt
 Meta-Environment} menu of the editor activate the parser for the
@@ -820,7 +820,7 @@ copy of the directory.
 
 For each module in a specification two files exist: `{\tt
   $module$.sdf2}' contains the syntax of $module$ and `{\tt
-  $module$.eqs}' contains the equations (semantics) of $module$. The
+  $module$.asf}' contains the equations (semantics) of $module$. The
   directory {\tt pico} contains:
 
 \begin{itemize}
@@ -916,8 +916,8 @@ refer to Section~\ref{ASF+SDF}.
 \end{figure}
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=Bool-example.eqs.ps,width=12cm}}
-  \caption{\label{FIG:Bool-example.eqs}Editor for the equations of {\tt Bool-example}}
+  \centerline{\epsfig{file=Bool-example.asf.ps,width=12cm}}
+  \caption{\label{FIG:Bool-example.asf}Editor for the equations of {\tt Bool-example}}
 \end{figure}
 
 \subsubsection{The Module Editor for {\tt Bool-example}}
@@ -942,7 +942,7 @@ refer to Section~\ref{ASF+SDF}.
   Note that the syntax of the equations is determined by the syntax defined in
   the \sdf\ section. Use the {\tt Buffers} menu of Emacs to see which buffers
   are open and to switch between buffers.
-The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
+The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 
 \end{itemize}
 
@@ -1096,7 +1096,7 @@ syntax-directed like the editing of terms in a term editor.
 \paragraph{Modifying the Equations}
 
 The equations section of a module begins with the keyword {\tt equations}
-and is saved in files ending on `{\tt .eqs}'.
+and is saved in files ending on `{\tt .asf}'.
 
 \begin{itemize}
 
@@ -1168,7 +1168,7 @@ definitions define at least spaces and newlines to be {\tt LAYOUT}.
 \end{itemize}
 
 If you save the changes the files `{\tt Bool-example.sdf2}' and `{\tt
-  Bool-example.eqs}' will be modified.
+  Bool-example.asf}' will be modified.
 
 
 \begin{itemize}
@@ -1206,7 +1206,7 @@ Pico specification.
 
 \begin{figure}[t]
 
-  \centerline{\epsfig{file=Pico-Booleans.eqs.ps,width=12cm}}
+  \centerline{\epsfig{file=Pico-Booleans.asf.ps,width=12cm}}
   \caption{\label{FIG:Pico-Booleans-eqs}Editor for equations of {\tt Pico-Booleans}}
 
 \end{figure}
@@ -1538,7 +1538,7 @@ Conceptually, a module is a single unit but for technical reasons the
 syntax sections and the equations section are stored in physically
 separate files.  For each module $M$ in a specification two files
 exist: `{\tt $M$.sdf2}' contains the syntax sections of $M$ and `{\tt
-$M$.eqs}' contains the equations section of $M$.
+$M$.asf}' contains the equations section of $M$.
 
 An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
 \emph{hidden section}. The former starts with the keyword {\tt exports} and
