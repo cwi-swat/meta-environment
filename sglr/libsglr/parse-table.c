@@ -203,22 +203,24 @@ ATbool SG_ReduceAction(action a)
 
 /*  Hash function for the Action and Goto Table  */
 
-hashkey SG_ComputeActionHashKey(parse_table *pt, state s, label l)
+static hashkey
+SG_ComputeActionHashKey(parse_table *pt, state s, label l)
 {
   hashkey the_key;
 
   the_key =  (l * pt->numstates) + s;
   the_key *= HASH_PRIME;
-  return the_key % pt->actions.size;
+  return the_key & (pt->actions.size - 1);
 }
 
-hashkey SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
+static hashkey
+SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
 {
   hashkey the_key;
 
   the_key =  (l * pt->numstates) + s;
   the_key *= HASH_PRIME;
-  return the_key % pt->gotos.size;
+  return the_key & (pt->gotos.size - 1);
 }
 
 /*  Parse Table Lookup  */
