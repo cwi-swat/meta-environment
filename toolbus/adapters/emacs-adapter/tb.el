@@ -15,7 +15,7 @@
   "The variable that holds partial messages from the ToolBus, while waiting
 for the rest of the msg"
   )
-(defvar debug ()
+(defvar debug t
   "If set to t (debug-out string) produces debug output. If set to () not"
   )
 
@@ -126,7 +126,7 @@ is the adapter process, STRING is the string to be processed"
 
 (defun TBstring (str)
   "Escape strings following ToolBus conventions"
-  (concat "\"" (replace-in-string (replace-in-string (replace-in-string str "\n" "\\\\n") "\t" "\\\\t") "\"" "\\\\\"") "\"")
+  (concat "\"" (replace-in-string (replace-in-string (replace-in-string (replace-in-string str "\\\\" "\\\\\\\\") "\n" "\\\\n") "\t" "\\\\t") "\"" "\\\\\"") "\"")
   ;; We escape \n \t " and \
 )
   
