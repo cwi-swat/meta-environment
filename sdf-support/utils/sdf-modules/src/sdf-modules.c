@@ -130,7 +130,7 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
 
 ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
 {
-  ATermList list = (ATermList) atModules;
+  ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
 
   return ATmake("snd-value(all-depending-module-names(<term>))",
