@@ -1,2 +1,3 @@
-YYYY-MM-DD Name <em@il>
-         * Remarks
+2001/07/25 (joost.visser@cwi.nl)
+  * Started to create an ASF library.
+  * Started a test framework for ASF specifications.
