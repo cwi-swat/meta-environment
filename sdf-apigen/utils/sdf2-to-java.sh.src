@@ -92,7 +92,6 @@ NAME=""
 SDF2TOADT=${SDF2ADT}
 ADTTOJAVA=${APIGEN}/bin/adt-to-java
 CONCATADT=${APIGEN}/bin/concat-adt
-UPGRADEADT=${APIGEN}/bin/upgrade-adt
 
 # }}}
 
@@ -188,12 +187,9 @@ ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
 info "Adding string support (?)"
 ${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
 
-info "Upgrading ADT"
-${UPGRADEADT} -i ${BASE}.adt -o ${BASE}-upgraded.adt
-
 info "Generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
-             -i ${BASE}-upgraded.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
+             -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
 fi
 
 if [ ${GENBOTTOMSORT} -gt 0 ]; then

@@ -1,17 +1,17 @@
 
 
 PeanoAPI0=\
-Nat.java NatImpl.java \
+Nat.java NatImpl.java\
 Nat_ZeroImpl.java Nat_Zero.java\
 Nat_SucImpl.java Nat_Suc.java\
-Start.java StartImpl.java \
+Start.java StartImpl.java\
 Start_NatImpl.java Start_Nat.java\
-OptLayout.java OptLayoutImpl.java \
+OptLayout.java OptLayoutImpl.java\
 OptLayout_AbsentImpl.java OptLayout_Absent.java\
 OptLayout_PresentImpl.java OptLayout_Present.java\
-CHARLIST.java CHARLISTImpl.java \
+CHARLIST.java CHARLISTImpl.java\
 CHARLIST_StringImpl.java CHARLIST_String.java
 
 PeanoAPI=\
-PeanoFactory.java PeanoConstructor.java \
+PeanoFactory.java PeanoConstructor.java\
 ${PeanoAPI0} 

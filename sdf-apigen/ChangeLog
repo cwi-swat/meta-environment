@@ -1,5 +1,9 @@
 # $Id$
 
+2003/11/07 (jurgenv@cwi.nl)
+ * Made generation of ADT file compatible with apigen-1.7 (ADT format 2.0)
+ * NOTE: imploded format is not yet adapted to the ADT-2.0 format!
+
 Tue Sep  2 10:33:54 CEST 2003 <{jong,kooiker}@cwi.nl>
  * utils/sdf2-to-java.sh.src:
    - cleaned up some prints and added 'upgrade-adt' invocation
