@@ -1,0 +1,33 @@
+equations
+
+[] abe(Funcdef*) = Rule*2
+   ===>
+   add-builtin-equations(module Modid signature Funcdef* rules Rule*) =
+     module Modid signature Funcdef* rules Rule*; Rule*2
+
+
+[] abe(Funid { Term*1, built-in(funid("""Char*""")), Term*2 }) =
+     Funid = innermost(remove-dashes(funid("A""S""C""_"Char*)))
+
+[] make-arg-list(Sigarg+,0) = Term+
+   ===>
+   abe(Funid ( Sigarg+ ) { Term*1, built-in(funid(""" Char* """)), Term*2}) =
+     Funid ( Term+ ) = innermost (remove-dashes(funid("A""S""C""_"Char*)) ( Term+ ))
+
+[] abe(Funcdef) = Rule*1,
+   abe(Funcdef+) = Rule*2
+   ===>
+   abe(Funcdef; Funcdef+) = Rule*1; Rule*2
+
+[default-abe]
+   abe(Funcdef*) =
+
+[remove-dashes-0]
+remove-dashes(funid(Char*1 "-" Char*2)) = 
+remove-dashes(funid(Char*1 "_" Char*2))
+
+[default-remove-dashed]
+remove-dashes(Funid) = Funid
+
+
+

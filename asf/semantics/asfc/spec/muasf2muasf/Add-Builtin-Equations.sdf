@@ -1,0 +1,21 @@
+module muasf2muasf/Add-Builtin-Equations
+imports muasf/MuASF-Equations-Ops
+
+exports
+
+context-free syntax 
+
+  add-builtin-equations(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+abe(FuncDefList) -> RuleList
+remove-dashes(FunId) -> FunId
+
+hiddens
+  variables
+    "Char"[0-9]*    -> CHAR
+    "Char*"[0-9]*   -> CHAR*
+    "Char+"[0-9]*   -> CHAR+
