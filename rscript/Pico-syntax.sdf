@@ -1,0 +1,33 @@
+module Pico-syntax
+imports Pico-Identifiers basic/Integers basic/Strings Types
+exports
+  sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
+  context-free syntax
+    "begin" DECLS {STATEMENT ";"}* "end"                          -> PROGRAM
+    "declare" {ID-TYPE  ","}* ";"                                 -> DECLS
+    PICO-ID ":" TYPE                                              -> ID-TYPE
+    PICO-ID ":=" EXP                                              -> STATEMENT
+    "if" EXP "then" {STATEMENT ";"}* "else" {STATEMENT ";"}* "fi" -> STATEMENT
+    "while" EXP "do" {STATEMENT ";"}* "od"                        -> STATEMENT
+    PICO-ID                                                       -> EXP
+    NatCon                                                        -> EXP
+    StrCon                                                        -> EXP
+    EXP "+" EXP                                                   -> EXP {left}
+    EXP "-" EXP                                                   -> EXP {left}
+    EXP "||" EXP                                                  -> EXP {left}
+    "(" EXP ")"                                                   -> EXP {bracket}
+
+  context-free priorities
+    EXP "||" EXP -> EXP >
+    EXP "-" EXP -> EXP >
+    EXP "+" EXP -> EXP
+
+  variables
+    "Decls" [0-9\']*        -> DECLS
+    "Id-type*"[0-9]*     -> { ID-TYPE "," }*
+    "Series" [0-9\']*       -> {STATEMENT ";"}+
+    "Stat" [0-9\']*         -> STATEMENT
+    "Stat*"[0-9\']*       -> {STATEMENT ";"}*
+    "Stat+"[0-9\']*       -> {STATEMENT ";"}+
+    "Exp" [0-9\']*          -> EXP
+    "Program" [0-9\']*      -> PROGRAM
