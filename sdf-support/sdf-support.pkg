@@ -1,7 +1,7 @@
 package 
 identification
-   name=sdf-support
-   version=1.1beta
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/sdf-support
    description='The SDF support library.'
