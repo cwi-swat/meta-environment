@@ -26,6 +26,16 @@
 
 /*{{{  includes */
 
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <unistd.h>
+#include <time.h>
+#include <ctype.h>
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"
@@ -38,20 +48,19 @@
 #include "utils.h"
 #include "monitor.h"
 #include "typecheck.h"
-#include <sys/socket.h>
 #include "sockets.h"
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <unistd.h>
-#include <time.h>
+/*}}}  */
+/*{{{  defines */
+
+#define MAX_DBG_PROCS 64
+#define MAX_PROCNAME_LENGTH 128
+
 
 /*}}}  */
-
 /*{{{  externs :( */
+
+extern term_list *AllProcesses;
 
 extern tool_inst_list *Tools;
 extern TBbool local_ports;
@@ -97,6 +106,55 @@ void interrupt_handler(int sig)
 }
 
 /*}}}  */
+
+/*{{{  static void debug_handler(int sig) */
+
+static void debug_handler(int sig)
+{
+  FILE *f;
+  char processes[MAX_DBG_PROCS][MAX_PROCNAME_LENGTH];
+  char buf[BUFSIZ];
+  int nr_dbg_procs = 0, i;
+  proc_inst *ProcInst;
+  term_list *Processes;
+
+  fprintf(stderr, "atomic_step_count: %d\n", atomic_step_count);
+
+  f = fopen(".toolbus", "r");
+  if (f != NULL) {
+    while (fgets(buf, BUFSIZ, f) != NULL) {
+      int length = strlen(buf);
+      while (isspace(buf[length-1])) {
+	buf[--length] = '\0';
+      }
+      strncpy(processes[nr_dbg_procs], buf, MAX_PROCNAME_LENGTH-1);
+      processes[nr_dbg_procs][MAX_PROCNAME_LENGTH-1] = '\0';
+      nr_dbg_procs++;
+    }
+    fclose(f);
+  }
+
+  for(Processes = AllProcesses; Processes; Processes = next(Processes)){
+    ProcInst = first(Processes);
+    if (nr_dbg_procs > 0) {
+      char *name = str_val(pi_name(ProcInst));
+      TBbool found = TBfalse;
+      for (i=0; i<nr_dbg_procs; i++) {
+	if (strcmp(name, processes[i]) == 0) {
+	  found = TBtrue;
+	  break;
+	}
+      }
+      if (!found) {
+	continue;
+      }
+    }
+    print_process(ProcInst);
+  }
+}
+
+/*}}}  */
+
 /*{{{  void usage(char *prg, int is_err) */
 
 void usage(char *prg, int is_err)
@@ -161,6 +219,7 @@ int main(int argc, char *argv[])
   term *monitor;
   struct sigaction act;
   struct sigaction act_ignore;
+  struct sigaction act_debug;
 
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
@@ -173,9 +232,13 @@ int main(int argc, char *argv[])
   sigaction(SIGINT,  &act, NULL);
   sigaction(SIGTERM, &act, NULL);
   sigaction(SIGHUP,  &act, NULL);
-  sigaction(SIGQUIT, &act, NULL);
   act.sa_handler = chld_handler;
   sigaction(SIGCHLD, &act, NULL);
+
+  sigemptyset(&act_debug.sa_mask);
+  act_debug.sa_flags = SA_RESTART;
+  act_debug.sa_handler = debug_handler;
+  sigaction(SIGQUIT, &act_debug, NULL);
 
   act_ignore.sa_handler = SIG_IGN;
   act_ignore.sa_flags = SA_RESTART;

@@ -1,5 +1,9 @@
 $Id$
 
+2002/07/03 ({jong,olivierp}@cwi.nl)
+ * Fixed bug in handling 'endlet' atoms that could cause toolbus hangs
+ * Added debug support (just hit ctrl-\ for a process alternative dump)
+
 2002/05/15 (vandenbr@loria.fr)
  * Added an alternative to deal with input which are terms:
    cmd(Cmd, input-term(Inp))

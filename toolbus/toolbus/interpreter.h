@@ -22,6 +22,8 @@
 #ifndef __INTERPETER_H__
 #define __INTERPETER_H__
 
+extern int atomic_step_count;
+
 void add_proc_def(char *,term_list *, term_list *,proc *, term *, int);
 proc_def  *definition(sym_idx);
 

@@ -31,7 +31,8 @@
 #include "env.h"
 #include "match.h"
 #include "procs.h"
-
+#include "tools.h"
+#include "utils.h"
 
 /*}}}  */
 
@@ -39,6 +40,38 @@
 
 proc *Delta;           /* PROTECTED */
 proc *Tau;             /* PROTECTED */
+
+/*}}}  */
+
+/*{{{  void print_process(term *proc) */
+
+void print_process(term *proc)
+{
+  TBprintf(stderr, "printing process %t:\n", pi_name(proc));
+  print_alternatives(pi_alts(proc));
+}
+
+/*}}}  */
+/*{{{  void print_alternatives(term_list *alts) */
+
+void print_alternatives(term_list *alts)
+{
+  for (; alts; alts=next(alts)) {
+    print_alternative(first(alts));
+  }
+}
+
+/*}}}  */
+/*{{{  void print_alternative(term *t) */
+
+void print_alternative(term *t)
+{
+  char *fun = get_txt(fun_sym(t));
+  term *atom = first(fun_args(t));
+  char *atom_fun = get_txt(fun_sym(atom));
+  term_list *args = first(fun_args(atom));
+  TBprintf(stderr, "  %s(%s(%l))\n", fun, atom_fun, args);
+}
 
 /*}}}  */
 
