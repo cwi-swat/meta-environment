@@ -173,6 +173,9 @@ ATerm SGparseString(language L, char *G, char *S)
   ATerm t;
   parse_table *pt;
 
+  /* make really really sure that something is initialized */
+  SG_InitPTGlobals();
+
   if(!(pt = SG_LookupParseTable(L))) {
     return NULL;
   }
@@ -242,7 +245,7 @@ ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
 ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
 {
   forest ret;
-  size_t ntok;
+  size_t ntok = 0;
   parse_table *pt;
 
   SG_Validate("SGparseFile");
@@ -258,6 +261,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
 
   /* make sure the string is terminated */
   SG_textEnd = ntok;
+  SG_textIndex = 0;
   SG_theText[SG_textEnd] = '\0';
 
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
