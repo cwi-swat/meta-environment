@@ -58,17 +58,17 @@ public class BoxTree extends ToolComponent {
         if (root != null) {
             rootPanel.add(buildHierarchy(graph, root));
         }
-        
+
         repaint();
     }
 
+    // TODO: remove recursion here, it gets too deep!
     private JComponent buildHierarchy(Graph graph, Node node) {
         List children = Graph.getChildren(graph, node);
 
         if (children.size() == 0) {
             return new JLabel(" " + node.getLabel() + " ");
-        }
-        else if (children.size() == 1) {
+        } else if (children.size() == 1) {
             return buildHierarchy(graph, (Node) children.get(0));
         } else {
             NodeBox box = new NodeBox(getBridge(), node);
@@ -81,5 +81,4 @@ public class BoxTree extends ToolComponent {
             return box;
         }
     }
-
 }

@@ -44,13 +44,13 @@ public class NodeBox extends JPanel {
         line = new LineBorder(color, thickness);
         CompoundBorder border =
             new CompoundBorder(
+                line,
                 new EmptyBorder(
                     new Insets(
                         BOX_BORDER_THICKNESS,
                         BOX_BORDER_THICKNESS,
                         BOX_BORDER_THICKNESS,
-                        BOX_BORDER_THICKNESS)),
-                line);
+                        BOX_BORDER_THICKNESS)));
         setBorder(border);
         setToolTipText(node.getLabel());
         setBackground(Color.white);
