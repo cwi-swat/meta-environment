@@ -150,6 +150,8 @@ Installation instructions:
     installed.  Once you have added the path to the directory
     /some/prefix/bin to your PATH (see above), you are all set up.
 
+    If you use gcc, meta is built with "gcc -Wall -g -O2". If you prefer
+    different options use --with-cflags="<options>" when you run configure.
 
 The Meta-Environment development team wishes you happy environmentaling;
 and may all your grammars be context free.
