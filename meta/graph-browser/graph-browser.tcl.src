@@ -597,8 +597,12 @@ proc PrintModules { modlist } {
 # generates the toolbus event to delete modules ML.
 #--
 proc DeleteModules { modlist } {
-    foreach mod $modlist {
-        GBpost [format "delete-module(%s)" [ToId $mod]]
+  set confirm [tkMessageBox -message "Are you sure you want to delete this module (fromdisk)?" -type yesno -title "Confirmation"]
+
+    if {$confirm == "yes"} {
+      foreach mod $modlist {
+          GBpost [format "delete-module(%s)" [ToId $mod]]
+      }
     }
 }
 
