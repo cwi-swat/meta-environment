@@ -1,6 +1,0 @@
-equations
-
-[default] map(f, []) = []
-
-[] map(f, LF) = cons(f(head(LF)),map(f,tail(LF)))
-     when LF != []
