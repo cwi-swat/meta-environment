@@ -3,6 +3,8 @@
 2002/09/26 (markvdb@cs.vu.nl)
  * First step in refactoring the code of the module-database with
    respect to renaming and parameterization.
+ * Moved the renaming and parameterization functionality for equations
+   to the asf directory.
 
 2002/09/25 (markvdb@cs.vu.nl)
  * Fixed a bug in the parameter handling.
