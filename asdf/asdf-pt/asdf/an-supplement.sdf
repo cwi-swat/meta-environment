@@ -1,0 +1,27 @@
+module asdf/an-supplement
+
+exports
+
+sorts
+
+  Action Sort
+
+context-free syntax
+
+  Literal Constructor		-> Action {avoid}
+
+lexical syntax
+
+  [a-z]+	-> Sort {avoid}
+  
+  [a-z]+	-> PrefixDataOp {avoid}
+
+  [a-z]+	-> Data {avoid}
+
+  "throw"	-> UQLiteral {reject}
+
+context-free priorities
+
+  { Action Yielder	-> Action }
+  >
+  {Literal Constructor	-> Action }
