@@ -99,12 +99,23 @@ ATerm SG_RejectLabel(void)
 #define ATprotectAFun(t)    ATprotectSymbol(t)
 #define ATgetAFun(t)        ATgetSymbol(t)
 
-AFun  SG_ApplAfun(void)
+AFun  SG_ApplAFun(void)
 {
   static AFun fun = (AFun) NULL;
 
   if(fun == (AFun) NULL) {
     fun = ATmakeAFun("appl", 2, ATfalse);
+    ATprotectAFun(fun);
+  }
+  return fun;
+}
+
+AFun  SG_AmbAFun(void)
+{
+  static AFun fun = (AFun) NULL;
+
+  if(fun == (AFun) NULL) {
+    fun = ATmakeAFun("amb", 1, ATfalse);
     ATprotectAFun(fun);
   }
   return fun;
@@ -123,7 +134,7 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
   if(SG_ABBREV)
     t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
   else
-    t = (ATerm) ATmakeAppl2(SG_ApplAfun(), SG_LookupProduction(pt,l),
+    t = (ATerm) ATmakeAppl2(SG_ApplAFun(), SG_LookupProduction(pt,l),
                             (ATerm) ts);
 #if 0
   if(reject)
@@ -140,7 +151,7 @@ ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
   AFun      fun  = ATgetAFun(t);
   ATermList args = ATgetArguments((ATermAppl) t);
 
-  if(fun != SG_ApplAfun())
+  if(fun != SG_ApplAFun())
     return (ATerm) ATmakeApplList(fun, (ATermList) SG_YieldPT((ATerm)args));
 
   idx  = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
@@ -148,7 +159,7 @@ ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
   if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
     /*  No ambiguity  */
     if(recurse)
-      return (ATerm)ATmakeAppl2(SG_ApplAfun(),
+      return (ATerm)ATmakeAppl2(SG_ApplAFun(),
                                 SG_YieldPT(ATgetFirst(args)),
                                 SG_YieldPT(ATelementAt(args, 1)));
     return t;
@@ -291,18 +302,18 @@ ATerm SG_TreeType(ATerm t)
   ATerm     type;
   ATermList args;
 
+  if (ATgetType(t) == AT_INT)
+    return t;
   if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>,<int>)",
               NULL, &type, NULL,NULL,NULL))
     return type;
   if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>)",
               NULL, &type, NULL,NULL))
     return type;
-  else if (ATmatch(t, "amb([<list>])", &args))
+  if (ATmatch(t, "amb([<list>])", &args))
     return SG_TreeType(ATgetFirst(args));
-  else if (ATgetType(t) == AT_INT)
-    return t;
-  else
-    ATerror("SG_TreeType: tree not well-formed\n%t\n", t);
+ 
+  ATerror("SG_TreeType: tree not well-formed\n%t\n", t);
   return NULL;   /* Silence the compiler */
 }
 
@@ -346,23 +357,23 @@ char *SG_TYAuxBuf(int Mode, char c) {
 
 void SG_TYAux(ATerm t)
 {
-  ATermList args;
-
   if (ATisEmpty((ATermList) t))
     return;
 
-  if (ATgetType(t) == AT_INT) {
-   SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
-  }
-  else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args) ||
-           ATmatch(t, "appl(<term>,[<list>],<int>)", NULL, &args, NULL)) {
-    SG_TYAux((ATerm) args);
-  } else if (ATmatch(t, "[<list>]", &args)) {
-      SG_TYAux(ATgetFirst(args));
-      SG_TYAux((ATerm) ATgetNext(args));
-  }
-  else {
-     ATerror("SG_TYAux: strange term: %t\n", t);
+  switch(ATgetType(t)) {
+    case AT_INT:
+      SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
+      break;
+    case AT_APPL:
+      SG_TYAux((ATerm) ATgetArguments((ATermAppl) t));
+      break;
+    case AT_LIST:
+      SG_TYAux(ATgetFirst((ATermList) t));
+      SG_TYAux((ATerm) ATgetNext((ATermList) t));
+      break;
+    default:
+      ATerror("SG_TYAux: strange term: %t\n", t);
+      break;
   }
 }
 
@@ -376,46 +387,57 @@ ATerm SG_TermYield(ATerm t)
 
 void SG_DotTermYieldAux(ATerm t)
 {
+  AFun      fun;
   ATermList args;
   int c;
 
-  /* ATfprintf(stderr, "yield_aux(%t)\n", t); */
-
   if (ATisEmpty((ATermList) t))
     return;
-  else if (ATgetType(t) == AT_INT) {
-    switch(c = ATgetInt((ATermInt) t)) {
-      case '\n':
-        SG_TYAuxBuf(TYA_ADD, '\\');
-        SG_TYAuxBuf(TYA_ADD, '\\');
-        SG_TYAuxBuf(TYA_ADD, 'n');
-        break;
-      default:
-        SG_TYAuxBuf(TYA_ADD, c);
-        break;
-    }
-  } else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args) ||
-             ATmatch(t, "appl(<term>,[<list>],<int>)", NULL, &args, NULL)) {
-    if(ATgetLength(args) > 1) {
-      SG_TYAuxBuf(TYA_ADD, '[');
-      SG_TYAux((ATerm) args);
-      SG_TYAuxBuf(TYA_ADD, ']');
-    } else {
-      SG_TYAux((ATerm) args);
-    }
-  } else if (ATmatch(t, "[<list>]", &args)) {
-      SG_TYAux(ATgetFirst(args));
-      SG_TYAux((ATerm) ATgetNext(args));
-  } else if (ATmatch(t, "amb([<list>])", &args)) {
-    while(!ATisEmpty(args)) {
-      SG_DotTermYieldAux(ATgetFirst(args));
-      args = ATgetNext(args);
-      if(!ATisEmpty(args)) {
-        SG_TYAuxBuf(TYA_ADD, '|');
+
+  switch(ATgetType(t)) {
+    case AT_INT:
+      switch(c = ATgetInt((ATermInt) t)) {
+        case '\n':
+          SG_TYAuxBuf(TYA_ADD, '\\');
+          SG_TYAuxBuf(TYA_ADD, '\\');
+          SG_TYAuxBuf(TYA_ADD, 'n');
+          break;
+        default:
+          SG_TYAuxBuf(TYA_ADD, c);
+          break;
       }
-    }
-  } else
-     ATerror("SG_DotTermYieldAux: strange term: %t\n", t);
+      break;
+    case AT_APPL:
+      fun  = ATgetAFun((ATermAppl) t);
+      args = ATgetArguments((ATermAppl) t);
+      if(fun == SG_ApplAFun()) {
+        if(ATgetLength(args) > 1) {
+          SG_TYAuxBuf(TYA_ADD, '[');
+          SG_TYAux((ATerm) args);
+          SG_TYAuxBuf(TYA_ADD, ']');
+        } else {
+          SG_TYAux((ATerm) args);
+        }
+      } else if(fun == SG_AmbAFun()) {
+        while(!ATisEmpty(args)) {
+          SG_DotTermYieldAux(ATgetFirst(args));
+          args = ATgetNext(args);
+          if(!ATisEmpty(args)) {
+            SG_TYAuxBuf(TYA_ADD, '|');
+          }
+        }
+      } else {
+        ATerror("SG_DotTermYieldAux: strange appl: %t\n", t);
+      }
+      break;
+    case AT_LIST:
+      SG_TYAux(ATgetFirst((ATermList) t));
+      SG_TYAux((ATerm) ATgetNext((ATermList) t));
+      break;
+    default:
+      ATerror("SG_DotTermYieldAux: strange term: %t\n", t);
+      break;
+  }
 }
 
 ATerm SG_DotTermYield(ATerm t)

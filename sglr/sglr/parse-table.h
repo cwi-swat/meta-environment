@@ -3,8 +3,8 @@
 
 */
 
-#ifndef _PARSE_TABLE
-#define _PARSE_TABLE  1
+#ifndef _PARSE_TABLE_
+#define _PARSE_TABLE_  1
 
 #include <aterm2.h>
 
@@ -63,4 +63,4 @@ struct _parse_table  {
   ATermTable productions;
 };
 
-#endif
+#endif	/*  _PARSE_TABLE_  */

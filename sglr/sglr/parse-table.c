@@ -34,14 +34,15 @@ int     SG_ActionKind(action a)
   if(!a) {
     ATfprintf(stderr, "SG_ActionKind error!\n");ATerror(NULL);
     return ERROR;
-  } else if (ATmatch(a, "shift(<int>)", NULL))
+  }
+  if (ATmatch(a, "shift(<int>)", NULL))
     return SHIFT;
-  else if (ATmatch(a, "reduce(<int>,<int>,<int>)", NULL, NULL, NULL))
+  if (ATmatch(a, "reduce(<int>,<int>,<int>)", NULL, NULL, NULL))
     return REDUCE;
-  else if (ATmatch(a, "accept"))
+  if (ATmatch(a, "accept"))
     return ACCEPT;
-  else
-    return ERROR;
+
+  return ERROR;
 }
 
 #ifdef SG_A_FUNCS
@@ -205,8 +206,9 @@ void SG_AddClassesToTable(ATermTable tbl, state s, ATermList classes, ATermList 
         if (ATmatch(firstTerm, "range(<int>,<int>)", &first, &last))
           for(; first <= last; first++) {
             SG_AddToTable(tbl, s, first, as, make_list);
-        }else
+        } else {
           ATerror("SG_AddClassesToTable: bad character class\n%t\n", firstTerm);
+        }
       }
     }
   }
@@ -220,9 +222,9 @@ void SG_AddPTActions(ATermList acts, parse_table *pt, state s)
   for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
     action = ATgetFirst(acts);
     if (ATmatch(action, "action(char-class(<list>),<term>)",
-                &classes, &actions)) {
-        SG_AddClassesToTable(pt->action_table, s, classes, actions, ATtrue);
-    } else
+                &classes, &actions))
+      SG_AddClassesToTable(pt->action_table, s, classes, actions, ATtrue);
+    else
       ATerror("SG_AddPTActions: cannot match action %t\n", action);
   }
 }
@@ -236,9 +238,9 @@ void SG_AddPTGotos(ATermList goto_table, parse_table *pt, state s)
   for (; !ATisEmpty(goto_table); goto_table = ATgetNext(goto_table)) {
     curTerm = ATgetFirst(goto_table);
     if (ATmatch(curTerm, "goto(char-class(<list>),<int>)",
-                &classes, &s2)) {
+                &classes, &s2))
       SG_AddClassesToTable(pt->goto_table, s, classes, (ATermList)ATmakeInt(s2), ATfalse);
-    } else
+    else
       ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", curTerm);
   }
 }
@@ -271,10 +273,6 @@ void SG_AddPTStates(ATermList states, parse_table *pt)
 
 production SG_LookupProduction(parse_table *pt, int token)
 {
-/*
-  return(ATgetFirst((ATermList) ATtableGet(pt->productions,
-                                           (ATerm) ATmakeInt(token))));
-*/
   return(ATtableGet(pt->productions, (ATerm) ATmakeInt(token)));
 }
 
@@ -283,20 +281,12 @@ void SG_AddProduction(ATermTable tbl, int pr_num, production prod)
   ATerm key, prev;
 
   key = (ATerm) ATmakeInt(pr_num);
-  if((prev = ATtableGet(tbl, key))) {
+
+  if((prev = ATtableGet(tbl, key)))
     ATerror("SG_AddProduction: production %d (%t) already present, previous: %t\n",
             pr_num, prod, prev);
-  } else {
-    ATtablePut(tbl, (ATerm) ATmakeInt(pr_num), prod);
-  }
-/*
-  key = (ATerm) ATmakeInt(pr_num);
-  if(ATtableGet(tbl, key)) {
-    ATtablePut(tbl, key, (ATerm) ATinsert(prev, prod));
-  } else {
-    ATtablePut(tbl, key, (ATerm) ATmakeList1(prod));
-  }
-*/
+
+  ATtablePut(tbl, (ATerm) ATmakeInt(pr_num), prod);
 }
 
 /*
@@ -387,13 +377,11 @@ void SG_SaveParseTable(char *L, parse_table *pt)
 
   if (i == last_table)
     last_table++;
-  else
-    ; /* free tables[i].table */
+
   tables[i].name = strdup(L);
   tables[i].table = pt;
   if (SG_DEBUG)
     ATfprintf(SGlog(), "Language %s has index %d\n", L, i);
-  return;
 }
 
 parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
