@@ -48,6 +48,7 @@ ASF.adt: ASF.raw subst-eqs
 	subst-eqs ASF.raw > ASF.adt
 
 ASF.c: ASF.adt
-	adt-to-c ASF -prologue ASF.pro -prefix ASF_
+	adt-to-c -i ASF.adt --prologue ASF.pro --prefix ASF_ -o ASF
+
 
 %INTERMEDIATE: ASF.raw
