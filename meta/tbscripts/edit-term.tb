@@ -311,6 +311,7 @@ in
         rec-msg(reduce(NewModName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
+	printf("%t\n", STree) .
         ReduceTerm(STree, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
@@ -459,7 +460,24 @@ in
         Stack := next(Stack) .
         ShowTree(STree) .
         snd-msg(stack(Stack), EditorId)
+      +
+        rec-msg(add-pos-info, Stack?, EditorId) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        snd-msg(get-editor-name(EditorId)) .
+        rec-msg(editor-name(FileName?)) .
+	snd-msg(addPosInfo(FileName, STree)) .	
+	rec-msg(tree-with-pos-info(STree?)) .
+        Stack := join(STree, Stack) .	
+        snd-msg(stack(Stack), EditorId)		
       ) *
       rec-msg(kill-editor(EditorId)).
       snd-msg(kill-editor-done(EditorId))
 endlet
+
+
+
+
+
+
+
