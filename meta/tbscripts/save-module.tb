@@ -33,6 +33,7 @@ let
 in
   Id := process-id. 
   ( rec-msg(save-module(Module?)).
+    snd-note(ui-status(stat(Id, "Saving ..."))) .
     snd-msg(get-sdf2-path-from-db(Module)).
     rec-msg(path(Path?)).
     snd-msg(get-sdf2-asfix(Module)).
@@ -56,9 +57,11 @@ in
     +
       rec-msg(unavailable)
     ).
+    snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-module(Module))
     +
     rec-msg(save-all).
+    snd-note(ui-status(stat(Id, "Saving ..."))) .
     snd-msg(get-all-modules).
     rec-msg(all-modules(Modules?)).
     ( if not-equal(Modules, []) then
@@ -90,6 +93,7 @@ in
       fi
     )*
     if equal(Modules,[]) then
+     snd-note(ui-status(endstat(Id))) .
      snd-msg(saved)
     fi
   )*
