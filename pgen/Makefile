@@ -4,7 +4,7 @@
 
 SUBDIRS		= c-files c-source fastgen addeqs
 
-all doc clean install uninstall distclean:
+all doc clean install uninstall distclean test:
 	@for DIR in ${SUBDIRS};	\
 	do \
 		echo Make $@ in $$DIR; \

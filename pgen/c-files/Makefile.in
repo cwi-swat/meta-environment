@@ -77,6 +77,10 @@ DISTCLEANFILES	=
 # The all target must be defined:
 all: $(INCLUDEFILES) $(BINFILES) $(LIBFILES)
 
+# Unit test target
+test:	all
+	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
