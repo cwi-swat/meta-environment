@@ -38,7 +38,7 @@ DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = python-adapter
 PROGRAMS        = python-adapter
-SOURCE          = TBmodule.c.nw
+SOURCE          = TBmodule.c.nw python-adapter
 LIBFILES        =
 DOC             = python-adapter.guide.tex
 SRCDOC          = TBmodule.c.tex
