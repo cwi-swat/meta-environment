@@ -110,7 +110,7 @@ in
   +
     rec-event(TE, menu-event("Queries", ActionName?, Fid)) .
     snd-msg(execute-query(EditorId, ActionName)) .
-    snd-ack-event(TE, menu-event("Queries", Direction, Fid))
+    snd-ack-event(TE, menu-event("Queries", ActionName, Fid))
  
   +
     rec-event(TE, menu-event("Term-Actions", ButtonName?, Fid)) .
