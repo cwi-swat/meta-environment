@@ -42,7 +42,7 @@ Id := process-id.
     ReopenLanguage(ModuleId, Table)
   +
     rec-msg(no-table) .
-    snd-note(ui-status(stat(Id, "Generating parsetable..."))).
+    snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleId]))).
     MakeTable(ModuleId).
     snd-note(ui-status(endstat(Id)))
   )

@@ -60,10 +60,9 @@ in
          snd-msg(set-parsetable(eqs(Module))).
          (
 	   rec-msg(parsetable-set(eqs(Module))).
-           snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
+           snd-note(ui-status(statf(Id,"Parsing equations of %s",[Module]))).
            snd-msg(Id,parse-string-as-asfix1(eqs(Module), "Equations", EqsText)).
            ( rec-msg(parse-result-asfix1(Id?, parse-tree(EqsTree?))).
-             snd-note(ui-status(endstat(Id))). 
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 

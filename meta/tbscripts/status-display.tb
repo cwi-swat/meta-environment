@@ -31,6 +31,9 @@ in
   ( rec-note(ui-status(stat(Id?,Str?))).
     snd-do(UI,add-status(Id, Str))
     +
+    rec-note(ui-status(statf(Id?,Str?,Lst?))).
+    snd-do(UI,add-statusf(Id,Str,Lst))
+    +
     rec-note(ui-status(endstat(Id?))).
     snd-do(UI,end-status(Id))
     +

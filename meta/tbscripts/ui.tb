@@ -140,7 +140,7 @@ in
       snd-ack-event(UI,clear-all)
    ) +
    ( rec-event(UI, compile-module(Str?, OutputDir?)).
-     snd-note(ui-status(stat(Id, "Compiling ..."))).
+     snd-note(ui-status(statf(Id, "Compiling %s to directory %s",[Str, OutputDir]))).
      snd-msg(compile-module(Str, OutputDir)).
      rec-msg(compile-done).
      snd-note(ui-status(endstat(Id))).
