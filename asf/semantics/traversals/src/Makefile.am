@@ -32,7 +32,7 @@ EXTRA_DIST   = traversals.idef traversals.tif.c traversals.tif.h \
 
 traversals_SOURCES = traversals.c
 traversals_LDADD   = traversals.tif.o \
-                       -L$(top_builddir)/traversals/c-source -lTraversals \
+                       -L$(top_builddir)/asf-syntax/traversals/c-source -lTraversals \
                        -L$(ASCLIB) -lasc-support \
                        -L$(ASFIXLIB) -lAsFix \
                        -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
