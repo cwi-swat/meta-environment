@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <SDFME-utils.h>
-#include <MEPT.h>
+#include <MEPT-utils.h>
 
 #define TEST_GRAMMAR_FILE SRC_DIR "/Layout.pt"
 

@@ -1,3 +1,6 @@
+2002/10/04 (jurgenv@cwi.nl)
+ * Include MEPT-utils.h in grammars.c because a function has been moved
+
 2002/10/03 (jurgenv@cwi.nl)
  * Changed Sdf.label.def to hide all non start sorts
  * Regenerated SDFME library to get new start constructors
