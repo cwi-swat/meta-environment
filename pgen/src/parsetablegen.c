@@ -163,6 +163,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
 {
   ATerm pt, packed;
+  ATerm unpackSdf;
 /*
   FILE *f;
     
@@ -172,12 +173,15 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
   fclose(f);
 */
 
-  pt = normalize_and_generate_table(name, PT_makeParseTreeFromTerm(sdf));
+  unpackSdf = ATBunpack(sdf);
+
+  pt = normalize_and_generate_table(name, 
+         PT_makeParseTreeFromTerm(unpackSdf));
 
   if (pt != NULL) {
     packed = ATBpack(pt);
-    packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
-    return ATmake("snd-value(generation-finished(<term>))", packed);
+    return ATmake("snd-value(generation-finished(<term>))", 
+		  packed);
   }
   else {
     return ATmake("snd-value(generation-failed)");

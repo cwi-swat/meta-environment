@@ -108,7 +108,7 @@ static void displayMessages(ATerm term)
 
 ATerm check_sdf(int cid, ATerm term)
 {
-  ATerm  output = checkSdf(term);
+  ATerm  output = checkSdf(ATBunpack(term));
   ATermList errorList = processMessages(output);
 
   return ATmake("snd-value(messages(<term>))", errorList);
