@@ -1,3 +1,8 @@
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions: 
+   - regenerated the library.
+   - regenerated the test input terms.
+
 2001/09/27 (jurgenv@cwi.nl)
  * Made some important changes in the Sdf grammar:
      - added:   ATerm                      -> Attribute {cons("term")}

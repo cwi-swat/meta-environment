@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Oct  1 13:17:26 2001
+ * Generated at Mon Nov  5 12:12:45 2001
  */
 
 #ifndef __SDFME_dict_H
@@ -142,25 +142,6 @@ extern AFun SDF_afun131;
 extern AFun SDF_afun132;
 extern AFun SDF_afun133;
 extern AFun SDF_afun134;
-extern AFun SDF_afun135;
-extern AFun SDF_afun136;
-extern AFun SDF_afun137;
-extern AFun SDF_afun138;
-extern AFun SDF_afun139;
-extern AFun SDF_afun140;
-extern AFun SDF_afun141;
-extern AFun SDF_afun142;
-extern AFun SDF_afun143;
-extern AFun SDF_afun144;
-extern AFun SDF_afun145;
-extern AFun SDF_afun146;
-extern AFun SDF_afun147;
-extern AFun SDF_afun148;
-extern AFun SDF_afun149;
-extern AFun SDF_afun150;
-extern AFun SDF_afun151;
-extern AFun SDF_afun152;
-extern AFun SDF_afun153;
 
 extern ATerm SDF_patternRealConRealCon;
 extern ATerm SDF_patternOptExpAbsent;
