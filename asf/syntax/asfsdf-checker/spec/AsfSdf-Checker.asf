@@ -5,8 +5,21 @@ equations
         Msgs2 := check-asf-attributes(Definition2),
         Msgs3 := check-symbols(Definition2),
         Msgs4 := check-for-asf-sorts(Definition2),
-        Msgs5 := check-for-kernel-syntax(Definition2)
+        Msgs5 := check-for-kernel-syntax(Definition2),
+        Msgs6 := check-for-exported-variables(Definition2)
         ============================================
         check-asfsdf(definition Definition1) =
           feedback("AsfSdfChecker", "Unknown", 
-                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5])
+                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
+
+  [cd1] Msgs1 := check-sdf(Definition1),
+        Definition2 := remove-labels(Definition1),
+        Msgs2 := check-asf-attributes(Definition2),
+        Msgs3 := check-symbols(Definition2),
+        Msgs4 := check-for-asf-sorts(Definition2),
+        Msgs5 := check-for-kernel-syntax(Definition2),
+        Msgs6 := check-for-exported-variables(Definition2)
+        ============================================
+        check-asfsdf(definition Definition1, $String) =
+          feedback("AsfSdfChecker", $String, 
+                   [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])

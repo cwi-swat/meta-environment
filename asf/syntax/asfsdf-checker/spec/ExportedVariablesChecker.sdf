@@ -1,0 +1,11 @@
+module ExportedVariablesChecker 
+
+imports SdfCheckerFeedback
+
+exports
+  context-free syntax
+    check-for-exported-variables(Definition) -> {Feedback ","}*
+
+hiddens
+  variables
+    "Definition"[0-9]* -> Definition

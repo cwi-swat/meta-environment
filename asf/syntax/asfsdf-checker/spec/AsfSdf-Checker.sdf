@@ -1,5 +1,6 @@
 module AsfSdf-Checker
 
+imports ExportedVariablesChecker
 imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker 
         SymbolChecker RemoveLabels AsfSortChecker
 
@@ -7,10 +8,13 @@ exports
   context-free start-symbols Summary
 
   context-free syntax
-    check-asfsdf(SDF) -> Summary
+    check-asfsdf(SDF)         -> Summary
+    check-asfsdf(SDF, StrCon) -> Summary
 
 hiddens
   variables
     "Definition"[0-9]* -> Definition
 
     "Msgs"[0-9]*       -> {Feedback ","}*
+
+    "$String"[0-9]*    -> StrCon

@@ -18,11 +18,11 @@ equations
            is-prefix-function(Production) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "traversal-attributes-in-non-prefix-function in " || $String1
+           $String3 := "traversal attributes in non-prefix-function in " || $String1
            =====>
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = 
-<Msgs, make-warning($String3, $String2), Production*>
+<Msgs, make-error($String3, $String2), Production*>
 
   [ca-2'3] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
@@ -55,10 +55,10 @@ equations
            contains-only-traversal-attributes(Aterm+) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "illegal-traversal-attribute in " || $String1
+           $String3 := "illegal traversal attribute in " || $String1
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
   [ca-3'2] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == false,
@@ -66,10 +66,10 @@ equations
            contains-top-down-or-bottom-up(Aterm+) == true,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "missing-trafo-and-or-accu-attribute in " || $String1
+           $String3 := "missing trafo and/or accu attribute in " || $String1
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
   [ca-3'3] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
@@ -88,10 +88,10 @@ equations
            contains-top-down-or-bottom-up(Aterm+) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "missing-bottom-up-or-top-down-attribute in " || $String1
+           $String3 := "missing bottom-up or top-down attribute in " || $String1
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
   [default-ca-2'5] check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
@@ -101,10 +101,10 @@ equations
            is-accu-definition(Production) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "accu-should-return-accumulated-type in " || $String1
+           $String3 := "accu should return accumulated type in " || $String1
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
   [cf-1'2] Aterm+ := get-traversal-arguments(Production),
            contains-trafo(Aterm+) == true,
@@ -112,10 +112,10 @@ equations
            is-trafo-definition(Production) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "trafo-should-return-traversed-type in " || $String1
+           $String3 := "trafo should return traversed type in " || $String1
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
 
   [cf-1'3] Aterm+ := get-traversal-arguments(Production),
@@ -124,10 +124,10 @@ equations
            is-accu-trafo-definition(Production) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "accutrafo-should-return-tuple-of-correct-types in " || $String1
+           $String3 := "accutrafo should return tuple of correct types in " || $String1
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2)
+             Msgs, make-error($String3, $String2)
 
   [default-cf-1'4] check-form-production(Production, Msgs, $ModuleId) = Msgs
 
@@ -209,9 +209,9 @@ equations
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1),
            $String3 := production2str($Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
-           $String4 := "inconsistent-arguments-of-traversal-productions in " || $String1,
+           $String4 := "inconsistent arguments of traversal productions in " || $String1,
            $String5 := $String2 || " vs. " || $String3,
-           Msg := make-warning($String4, $String5)
+           Msg := make-error($String4, $String5)
            ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
@@ -222,9 +222,9 @@ equations
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1),
            $String3 := production2str($Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
-           $String4 := "inconsistent-traversal-attributes in " || $String1,
+           $String4 := "inconsistent traversal attributes in " || $String1,
            $String5 := $String2 || " vs. " || $String3,
-           Msg := make-warning($String4, $String5)
+           Msg := make-error($String4, $String5)
            ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
