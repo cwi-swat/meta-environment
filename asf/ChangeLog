@@ -13,6 +13,21 @@ Tue Apr 27 14:42:13 CEST 2004 <jurgenv@cwi.nl>
    - TODO: refactor asc_support_main to have an extra argument.
      This is not doable for release 1.5
 
+Mon May  3 16:28:32 CEST 2004 <markvdb@cwi.nl>
+* All clickable warnings and error messages have become
+  clickable.
+* Fixed the bugs reported by Paul and Jurgen.
+
+Tue Apr 27 16:45:27 CEST 2004 <markvdb@cwi.nl>
+* Fixed the erroneous error messages generated in case of circular
+  imports, see bug 219.
+
+Fri Apr 23 09:59:17 CEST 2004 <markvdb@cwi.nl>
+ * Fixed the bug related to the specificity of empty lists
+   and list variables. Added a related test.
+ * Added context-free start symbol ASF-Module to generated
+   equations syntax.
+
 Mon Apr 19 16:18:50 CEST 2004 <jurgenv@cwi.nl>
  * compiler uses output file name instead of specification name
    to compute the binary name and the .idef and .tifs file names.

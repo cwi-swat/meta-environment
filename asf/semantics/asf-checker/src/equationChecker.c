@@ -217,7 +217,7 @@ static ATbool isSingleton(PT_Tree tree)
 
     if (PT_isProductionList(prod)) {
       if (PT_getArgsLength(args) == 1) {
-	return ATtrue;
+	return !PT_isTreeVar(PT_getArgsHead(args));
       }
     }
     else {
