@@ -76,10 +76,10 @@ clean:
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
 %.tif.c: %.tifs
-	ctif -tifs $< -tool $*
+	$(TOOLBUS)/bin/ctif -tifs $< -tool $*
 
 %.tifs: %.tb
-	toolbus -gentifs $<
+	$(TOOLBUS)/bin/toolbus -gentifs $<
 
 
 # Specific dependencies
