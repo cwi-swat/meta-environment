@@ -1629,7 +1629,7 @@ operator in combination with the alternative operator.
 The next four symbol operators have a different notation when defining
 and using.
 
-The tuple operator {\tt #} allows the grouping of symbols in the form of
+The tuple operator {\tt \#} allows the grouping of symbols in the form of
 tuples. For example, {\tt Bool \# Int \# Id} represents a tuple with three
 elements, e.g., {\tt <true, 3, x>} is a valid instantiation of this
 tuple. The tuple operator is right associative and binds less stronger
@@ -1657,7 +1657,32 @@ two arguments and maps it to an integer.
 
 \subsection{Aliases} \label{Aliases}
 
-The aliases allow the abbreviation of complicated symbol definitions.
+The aliases allow the definition of abbreviations for complicated symbol 
+definitions.
+For example,
+
+\begin{verbatim}
+aliases
+  Bool # Int # Id -> Tuple3
+\end{verbatim}
+Instead of using the symbol {\tt Bool \# Int \# Id} the alias {\tt Tuple3}
+can be used. During parse table generation the alias is replaced
+by the actual symbol.
+It is not allowed to redefine aliases, for example, the next aliases
+definition is illegal:
+
+\begin{verbatim}
+aliases
+  Tuple3          -> SuperTuple
+  Bool # Int # Id -> Tuple3
+\end{verbatim} 
+as well as:
+
+\begin{verbatim}
+aliases
+  Bool # Int # Id -> Tuple3
+  Bool # Int      -> Tuple3
+\end{verbatim} 
 
 \subsection{Sorts} \label{Sorts}
 
@@ -1665,13 +1690,23 @@ Sorts are declared by listing their name in a sorts section of the form:
 
 \begin{verbatim}
 sorts
-  <SortName>+
+  <SortName>*
 \end{verbatim}
 
 \noindent A sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
 Section~\ref{LexicalSyntax}.
+
+In fact, sort declarations are more liberal:
+
+\begin{verbatim}
+sorts
+  <Symbol>*
+\end{verbatim} 
+So, in principle any symbol can be declared here. The symbol declarations
+are used during parsing. These symbols are used as "starting" points
+when parsing input sentences.
 
 \subsection{Lexical Syntax} \label{LexicalSyntax}
 \label{lexical-syntax}
@@ -1685,13 +1720,12 @@ layout symbols or comments and are to be skipped.
 A lexical syntax contains a set of declarations for \emph{lexical functions},
 each consisting of a regular expression and a result sort. All functions with
 the same result sort together define the lexical syntax of tokens of that
-sort. Regular expressions may contain strings, sort names, character classes,
-optional operators, alternative operators, and repetition operators.  These
-notions will be explained in the next subsections.  Spaces are only
-significant inside strings and character classes.
+sort. Regular expressions may contain any basic symbol and any symbol
+operator as described in Section~\ref{Symbols}. 
+Spaces are only significant inside strings and character classes.
 
-The sort name {\tt LAYOUT} is predefined and may not be redeclared.  {\tt
-  LAYOUT} defines which parts of the text are \emph{layout symbols} (also
+The sort name {\tt LAYOUT} is predefined and may not be redeclared.  
+{\tt LAYOUT} defines which parts of the text are \emph{layout symbols} (also
 known as \emph{white space}) between lexical tokens and are to be skipped
 during lexical analysis. It may only be used as result sort of lexical
 functions (Section~\ref{LexicalFunctions}). When a string is matched by both a
@@ -1720,14 +1754,15 @@ in this manual, but further details can be found in \cite{Vis97}.
 \subsubsection{Lexical Functions} \label{LexicalFunctions}
 
 In their simplest form, declarations of lexical functions consist of a
-sequence of zero or more strings or sort names followed by `{\tt ->}' and the
-name of a result sort, say $L$.  A lexical function may be followed by a list
+sequence of zero or more symbols followed by `{\tt ->}' and a
+result symbol, say $L$.  A lexical function may be followed by a list
 of attributes. The regular expression associated with $L$ consists of the
 logical \emph{or} of all left-hand sides of lexical functions with result sort
 $L$.  All sort names appearing in left-hand sides of declarations are replaced
-by the regular expression associated with them. Circular dependencies between
-declarations in the lexical syntax are forbidden.\footnote{Does this
-  limitation still apply?}  Figure \ref{CODE:simplelex} shows an example of a
+by the regular expression associated with them. 
+%%Circular dependencies between declarations in the lexical syntax are 
+$$forbidden.\footnote{Does this limitation still apply?}  
+Figure \ref{CODE:simplelex} shows an example of a
 simple lexical function definition for defining the first three words that
 Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
   Mies}, each recognize, respectively, the strings {\tt aap}, {\tt noot} and
