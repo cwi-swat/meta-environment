@@ -20,12 +20,13 @@ exports
     "assert" X "=" X String	-> TestResult
     "assert" X "!=" X String	-> TestResult
 
+  context-free start-symbols
+    TestSuite
+
 hiddens
   imports
     containers/List[TestResult]
     basic/Comments
-  context-free start-symbols
-    TestSuite
 
   context-free syntax
     summarize(TestResult*) -> TestSummary "PASS"					-> TestSummary

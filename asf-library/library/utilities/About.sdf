@@ -1,0 +1,18 @@
+module utilities/About
+
+hiddens
+
+sorts Version Homepage Support Feedback Bugs Authors
+
+context-free syntax
+
+"Meta-Environment version 1.5"            -> Version
+"http://www.cwi.nl/projects/MetaEnv"      -> Homepage
+"mailto:meta-support@cwi.nl"              -> Support
+"mailto:meta-feedback@cwi.nl"             -> Feedback
+"http://www.cwi.nl/projects/MetaEnv/bugs" -> Bugs
+
+variables
+
+"Authors" -> Authors
+
