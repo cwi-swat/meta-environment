@@ -43,20 +43,18 @@ in
     printf("Recursive closing is not yet implemented, sorry!\n")
   fi.
   Status := success.
-  CloseModuleInDB(ModuleName, Status?).
-  CloseModuleInUI(ModuleName)
+  SoftCloseModuleInDB(ModuleName, Status?).
+  if equal(Status,success) then
+    CloseModuleInUI(ModuleName)
+  else tau fi
 endlet
 
 
 process DoRevertModule(ModuleName : str) is
-let
-  Status : term
-in
-  CloseModuleInDB(ModuleName, Status?).
+  HardCloseModuleInDB(ModuleName).
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules).
   snd-msg(module-reverted(ModuleName))
-endlet
 
 process DoDeleteModule(ModuleName : str) is
 let
@@ -195,16 +193,32 @@ process RemoveModuleFromDisk(Module : str) is
   snd-msg(remove-module(Module)) .
   rec-msg(removed-module)
 
-process CloseModuleInDB(ModuleName : str, Status : term?) is
+process SoftCloseModuleInDB(ModuleName : str, Status : term?) is
 let 
+  Depending : list,
+  Changed : list
+in
+  snd-msg(get-all-depending-modules(ModuleName)).
+  rec-msg(all-depending-modules(Depending?)).
+  if is-empty(Depending) then
+    HardCloseModuleInDB(ModuleName).
+    Status := success
+  else
+    Status := modules-depend-on-this-module
+  fi
+endlet
+
+process HardCloseModuleInDB(ModuleName : str) is
+let
   Changed : list
 in
   snd-msg(delete-module-from-db(ModuleName)).
   rec-msg(changed-modules(Changed?)).
   snd-msg(notify-about-changed-modules(Changed, "sdf")) .
-  rec-msg(notify-about-changed-modules-done) 
+  rec-msg(notify-about-changed-modules-done)
 endlet
 
+  
 process CloseModuleInUI(ModuleName : str) is
   snd-msg(ui-delete-module(ModuleName))
 
