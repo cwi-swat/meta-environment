@@ -43,9 +43,8 @@ Operate in verbose mode.
 Show program version.
 
 =back
-=head1 USAGE
 
-=head1 SEE ALSO
+=head1 USAGE
 
 =head1 EXAMPLES
 
