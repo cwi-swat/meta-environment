@@ -1,0 +1,8 @@
+dnl $Id$
+
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(tbdoc, 1.0)
+
+AC_SET_MAKE
+
+AC_OUTPUT(Makefile)
