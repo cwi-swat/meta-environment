@@ -1,0 +1,436 @@
+
+definition
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module Layout
+  exports
+      lexical syntax
+         [\ ]          -> LAYOUT
+	 [\#]~[\n]* -> LAYOUT
+  %% context-free restrictions
+  %%  LAYOUT? -/- [\ \t\n]
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+module Identifiers
+
+exports 
+
+sorts Lowercase Uppercase Letter Digit Identifier
+
+lexical syntax
+	[a-z] -> Lowercase
+	[A-Z] -> Uppercase
+	[0-9] -> Digit
+	[A-Za-z\_] -> Start-char
+
+context-free syntax
+	Lowercase 		-> Letter
+	Uppercase 		-> Letter
+	Start-char 		-> Rest-char
+	Digit 			-> Rest-char
+	Start-char Rest-char* 	-> Identifier
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Strings
+
+exports
+
+sorts Stringliteral ShortString LongString
+
+lexical syntax
+	%% Dit is onnauwkeurig. Quotes bijhouden!
+	~[\'\"\\\n] -> Shortstringchar
+	~[\\] -> Longstringchar
+
+	%% Weet niet of dit correct is. Hoe alle ascii characters te matchen?
+	%% \ mag namelijk wel (als explicit line-continuation).
+	[\\]~[\n] -> Escapeseq
+
+context-free syntax
+	Shortstringchar -> Shortstringitem
+	Escapeseq 	-> Shortstringitem
+	Longstringchar 	-> LongstringItem
+	Escapeseq 	-> Longstringitem
+	"'" Shortstringitem* "'" 		-> Shortstring
+	"\"" Shortstringitem* "\"" 		-> Shortstring
+	"'''" Longstringitem* "'''"		-> Longstring
+	"\"\"\"" Longstringitem* "\"\"\"" 	-> Longstring
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Integers
+
+exports
+
+sorts Longinteger Integer Decimalinteger Octinteger Hexinteger Nonzerodigit Digit
+
+lexical syntax
+	[1-9] -> Nonzerodigit
+	[0-7] -> Octdigit
+	[0-9] -> Digit
+	[0-9a-fA-F] -> Hexdigit
+	[0][xX] -> Hexprefix
+	[lL] -> Longsuffix
+
+context-free syntax
+	Hexprefix Hexdigit+ 	-> Hexinteger
+	"0" Octdigit+ 		-> Octinteger
+	Nonzerodigit Digit* 	-> Decimalinteger
+	"0" 			-> Decimalinteger
+	Decimalinteger 		-> Integer
+	Hexinteger 		-> Integer
+	Octinteger 		-> Integer
+	Integer Longsuffix 	-> Longinteger
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Floats
+
+imports Integers
+
+exports
+
+sorts Floatnumber Intpart
+
+lexical syntax
+	[eE][\+\-] -> Exponentprefix
+
+context-free syntax
+	Exponentprefix Digit+ 	-> Exponent
+	"." Digit+ 		-> Fraction
+	Nonzerodigit digit* 	-> Intpart 
+	"0" 			-> Intpart
+	Intpart Fraction 	-> Pointfloat
+	Fraction		-> Pointfloat
+	Intpart "." 		-> Pointfloat
+	Intpart Exponent 	-> ExponentFloat
+	Pointfloat Exponent 	-> Exponentfloat
+	Pointfloat 		-> Floatnumber
+	Exponentfloat 		-> Floatnumber
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+module Imaginaries
+
+imports Floats Integers
+
+exports
+
+sorts Imagnumber
+
+lexical syntax
+	[jJ] -> Imagsuffix
+
+context-free syntax
+	Floatnumber Imagsuffix 	-> Imagnumber
+	Intpart Imagsuffix 	-> Imagnumber
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Atoms
+
+imports Identifiers Strings Integers Floats Imaginaries Expressions
+
+exports
+
+sorts Atom Literal
+
+context-free syntax
+	"(" Expression-list ")" 	-> Parenth-form
+	"(" ")" 			-> Parenth-form
+	"[" Expression-list "]" 	-> List-display
+	"[" "]" 			-> List-display
+	Expression ":" Expression 	-> Key-datum
+	{Key-datum ","}+ 		-> Key-datum-list
+	{Key-datum ","}+ ","? 		-> Key-datum-list
+	"`" Expression-list "`" 	-> String-conversion	
+	Parenth-form 		-> Enclosure
+	List-display 		-> Enclosure
+	Dict-display 		-> Enclosure
+	String-conversion 	-> Enclosure
+
+	%% Reduncancy in Python docs: Integer sort includes Longinteger...
+	Stringliteral	-> Literal
+	Integer 	-> Literal
+	Longinteger	-> Literal
+	Floatnumber	-> Literal
+	Imagnumber	-> Literal 
+
+	Identifier 	-> Atom
+	Literal		-> Atom
+	Enclosure 	-> Atom
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Primaries
+
+imports Expressions Atoms Identifiers Calls
+
+exports
+
+sorts Primary Slicing Attributeref Subscription
+
+context-free syntax
+	Atom 		-> Primary
+	Attributeref 	-> Primary
+	Subscription 	-> Primary
+	Slicing 	-> Primary
+	Call 		-> Primary
+
+	Primary "." Identifier 		-> Attributeref
+	Primary "[" Expression-list "]" -> Subscription
+	Simple-slicing 			-> Slicing
+	Extended-slicing 		-> Slicing
+	Primary "[" Short-slice "]" 	-> Simple-slicing
+	Primary "[" Slice-list "]" 	-> Extended-slicing
+	{Slice-item ","}+ 		-> Slice-list
+	{Slice-item ","}+ "," 		-> Slice-list
+	Expression 			-> Slice-item
+	Proper-slice 			-> Slice-item
+	Ellipsis 			-> Slice-item
+	Short-slice 			-> Proper-slice
+	Long-slice 			-> Proper-slice
+	Lower-bound ":" Upper-bound 	-> Short-slice
+	Lower-bound ":" 		-> Short-slice
+	":" Upper-bound  		-> Short-slice
+	":" 				-> Short-slice
+	Short-slice ":" Stride 		-> Long-slice
+	Short-slice ":" 		-> Long-slice
+	Expression 			-> Lower-bound
+	Expression 			-> Upper-bound
+	Expression 			-> Stride
+	"..." 				-> Ellipsis
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Calls
+
+imports Primaries Identifiers Expressions
+
+exports
+
+sorts Call Argument-list
+
+context-free syntax
+	Primary "(" {Argument-list ","}* ")" 		-> Call
+	Positional-arguments "," Keyword-arguments 	-> Argument-list
+	Positional-arguments 				-> Argument-list
+	Keyword-arguments 				-> Argument-list
+	{Expression ","}+ 				-> Positional-arguments
+	{Keyword-item ","}+ 				-> Keyword-arguments
+	Identifier "=" Expression 			-> Keyword-item
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Expressions
+
+imports Primaries Calls Atoms
+
+exports
+
+sorts Expression Expression-list
+
+context-free syntax
+	%% No priorities needed here.
+	Primary "**" U-expr 	-> Power
+	Atom 			-> U-expr
+	Power 			-> U-expr
+	"-" U-expr 		-> U-expr
+	"+" U-expr 		-> U-expr
+	"~" U-expr 		-> U-expr
+	U-expr 			-> M-expr
+	M-expr "*" U-expr 	-> M-expr
+	M-expr "%" U-expr 	-> M-expr
+	M-expr 			-> A-expr
+	A-expr "+" M-Expr 	-> A-expr
+	A-expr "-" M-Expr 	-> A-expr
+	A-expr 			-> Shift-expr
+	Shift-expr "<<" A-expr 	-> Shift-expr
+	Shift-expr ">>" A-expr 	-> Shift-expr
+	Shift-expr 		-> And-expr
+	And-expr "&" Shift-expr -> And-expr
+	And-expr 		-> Xor-expr
+	Xor-expr "^" And-expr 	-> Xor-expr
+	Xor-expr 		-> Or-expr
+	Or-expr "|" Xor-expr 	-> Or-expr
+
+	"<" 		-> Comp-operator
+	">" 		-> Comp-operator
+	"==" 		-> Comp-operator
+	">=" 		-> Comp-operator
+	"<=" 		-> Comp-operator
+	"<>" 		-> Comp-operator
+	"!=" 		-> Comp-operator
+	"is" "not"? 	-> Comp-operator
+	"not"? "in" 	-> Comp-operator
+
+	Comp-operator Or-expr 		-> Comparison-tail
+	Or-expr Comparison-tail*	-> Comparison
+	
+	Or-test		-> Expression
+	Lambda-form 	-> Expression
+	
+	And-test 		-> Or-test
+	Or-test "or" And-test 	-> Or-test
+	Not-test 		-> And-test
+	And-test "and" Not-test -> And-test
+	Comparison 		-> Not-test  
+	"not" Not-test 		-> Not-test  
+
+	%% Argument-list comes from module Calls
+	"lambda" Argument-list? ":" Expression 	-> Lambda-form
+	{Expression ","}+ ","? 			-> Expression-list
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Statements
+
+imports Expressions Identifiers Definitions
+
+exports
+
+sorts Simple-stmt Compound-stmt Statement Suite NEWLINE Stmt-list
+
+lexical syntax
+	[\n] -> NEWLINE
+	[\t]+ -> INDENT
+	%% Hiermee is deze grammatica minder restrictive dan Python
+	%% Eigenlijk moet bijgehouden worden hoeveel er geindenteerd is.
+	%% Dat is dan voor het ASF gedeelte...
+	[\t]* -> DEDENT
+
+context-free syntax
+	Expression-list 			-> Expression-stmt
+	"assert" {Expression ","}+ 		-> Assert-stmt
+	{Target-list "="}+ "=" Expression-list 	-> Assignment-stmt
+	{Target ","}+ ","? 			-> Target-list
+	Identifier 				-> Target
+	"(" Target-list ")" 			-> Target
+	"[" Target-list "]" 			-> Target
+	Attributeref 				-> Target
+	Subscription 				-> Target
+	Slicing 				-> Target
+	"pass" 					-> Pass-stmt
+	"del" Target-list 			-> Del-stmt
+	"print" {Expression ","}+ ","? 		-> Print-stmt
+	"print" 				-> Print-stmt
+	"return" Expression-list? 		-> Return-stmt
+	Expression-stmt 	-> Simple-stmt
+	Assert-stmt 		-> Simple-stmt
+	Assignment-stmt 	-> Simple-stmt
+	Pass-stmt	 	-> Simple-stmt
+	Del-stmt 		-> Simple-stmt
+	Print-stmt 		-> Simple-stmt
+	Return-stmt 		-> Simple-stmt
+	Raise-stmt 		-> Simple-stmt
+	Break-stmt 		-> Simple-stmt
+	Continue-stmt 		-> Simple-stmt
+	Import-stmt		-> Simple-stmt
+	Global-stmt 		-> Simple-stmt
+	Exec-stmt 		-> Simple-stmt
+
+	"raise" Expression 				-> Raise-stmt
+	"raise" Expression "," Expression 		-> Raise-stmt
+	"raise" Expresion "," Expression "," Expression -> Raise-stmt
+	"break" 					-> Break-stmt
+	"continue" 					-> Continue-stmt
+	"import" {Module ","}+ 				-> Import-stmt
+	"from" Module "import" {Identifier ","}+ 	-> Import-stmt
+	"from" Module "import" "*" 			-> Import-stmt
+
+	%%  Source = module: (identifier ".")* identifier
+	{Identifier "."}+ 				-> Module
+	"global" {Identifier ","}+ 			-> Global-stmt
+
+	"exec" Expression "in" Expression "," Expression -> Exec-stmt
+	"exec" Expression "in" Expression		 -> Exec-stmt
+	"exec" Expression 				 -> Exec-stmt
+	
+	If-stmt						-> Compound-stmt
+	While-stmt					-> Compound-stmt
+	For-stmt 					-> Compound-stmt
+	Try-stmt 					-> Compound-stmt
+	Funcdef 					-> Compound-stmt
+	Classdef 					-> Compound-stmt
+	Stmt-list NEWLINE 				-> Suite
+	NEWLINE INDENT Statement+ DEDENT 		-> Suite
+	Stmt-list NEWLINE 				-> Statement
+	{Simple-stmt ";"}+ ";"? 			-> Stmt-list
+	Compound-stmt 					-> Statement
+
+	"elif" Expression ":" Suite 			-> Elif-part
+	"else" ":" Suite 				-> Else-part
+	"if" Expression ":" Suite Elif-part* Else? 	-> If-stmt
+
+	"while" Expression ":" Suite Else-part? 	-> While-stmt
+	"for" Target-list "in" Expression-list ":" Suite Else-part? -> For-stmt
+
+	Try-exc-stmt 					-> Try-stmt
+	Try-fin-stmt 					-> Try-stmt
+	"except" Expression "," Target ":" Suite 	-> Except-part
+	"except" Expression ":" Suite  			-> Except-part
+	"except" ":" Suite 				-> Except-part
+	"try" ":" Suite Except-part+ Else-part? 	-> Try-exc-stmt
+	"try" ":" Suite "finally" ":" Suite 		-> Try-fin-stmt
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Definitions
+
+imports Identifiers Expressions Statements
+
+exports
+
+sorts Funcdef Classdef
+
+lexical syntax
+
+context-free syntax
+	"def" Funcname "(" Parameter-list? ")" ":" Suite 	-> Funcdef
+	Defparameter Comma 					-> Parameter-item
+	"**" Identifier 					-> Double-starred-identifier
+	"*" Identifier Double-starred-identifier? 		-> Remaining-part
+	Double-starred-identifier 				-> Remaining-part
+	Defparameter ","? 					-> Remaining-part
+	Parameter-item* Remaining-part 				-> Parameter-list
+	"=" Expression 						-> Default-value
+	Parameter Default-value? 				-> Defparameter
+	{Parameter ","}+ ","? 					-> Sublist
+	Identifier 						-> Parameter
+	"(" Sublist ")" 					-> Parameter
+	Identifier 						-> Funcname
+
+	"class" Classname Inheritance? ":" Suite 		-> Classdef
+	"(" Expression-list? ")" 				-> Inheritance
+	Identifier 						-> Classname
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+module Main
+
+imports Statements Expressions Layout
+
+exports
+
+sorts File-input Interactive-input Eval-input Input-input
+
+context-free syntax
+	Statement 	-> Input-part
+	NEWLINE 	-> Input-part
+	Input-part* 	-> File-input
+
+	Stmt-list? NEWLINE 	-> Interactive-input
+	Compound-stmt NEWLINE 	-> Interactive-input
+	
+	Expression-list NEWLINE* 	-> Eval-input
+	Expression-list NEWLINE 	-> Input-input
+
+
+

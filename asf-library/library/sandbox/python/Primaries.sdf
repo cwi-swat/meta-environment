@@ -1,0 +1,41 @@
+module Py-Primaries
+
+imports Py-Expressions
+
+exports
+
+sorts Primary Slicing Attributeref Subscription
+
+context-free syntax
+	Atom 		-> Primary
+	Attributeref 	-> Primary
+	Subscription 	-> Primary
+	Slicing 	-> Primary
+	Call 		-> Primary
+
+	Primary "." Identifier 		-> Attributeref
+	Primary "[" Expression-list "]" -> Subscription
+	Simple-slicing 			-> Slicing
+	Extended-slicing 		-> Slicing
+	Primary "[" Short-slice "]" 	-> Simple-slicing
+	Primary "[" Slice-list "]" 	-> Extended-slicing
+	{Slice-item ","}+ 		-> Slice-list
+	{Slice-item ","}+ "," 		-> Slice-list
+	Expression 			-> Slice-item
+	Proper-slice 			-> Slice-item
+	Ellipsis 			-> Slice-item
+	Short-slice 			-> Proper-slice
+	Long-slice 			-> Proper-slice
+	Lower-bound ":" Upper-bound 	-> Short-slice
+	Lower-bound ":" 		-> Short-slice
+	":" Upper-bound  		-> Short-slice
+	":" 				-> Short-slice
+	Short-slice ":" Stride 		-> Long-slice
+	Short-slice ":" 		-> Long-slice
+	Expression 			-> Lower-bound
+	Expression 			-> Upper-bound
+	Expression 			-> Stride
+	"..." 				-> Ellipsis
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

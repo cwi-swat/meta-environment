@@ -1,0 +1,26 @@
+module Py-Floats
+
+imports Py-Integers
+
+exports
+
+sorts Floatnumber Intpart
+
+lexical syntax
+	[eE][\+\-] -> Exponentprefix
+
+context-free syntax
+	Exponentprefix Digit+ 	-> Exponent
+	"." Digit+ 		-> Fraction
+	Nonzerodigit digit* 	-> Intpart 
+	"0" 			-> Intpart
+	Intpart Fraction 	-> Pointfloat
+	Fraction		-> Pointfloat
+	Intpart "." 		-> Pointfloat
+	Intpart Exponent 	-> ExponentFloat
+	Pointfloat Exponent 	-> Exponentfloat
+	Pointfloat 		-> Floatnumber
+	Exponentfloat 		-> Floatnumber
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	

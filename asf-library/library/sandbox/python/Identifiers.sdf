@@ -1,0 +1,26 @@
+module Py-Identifiers
+
+imports Py-Layout
+
+exports 
+
+sorts Lowercase Uppercase Letter Digit Identifier
+
+lexical syntax
+	[a-z] -> Lowercase
+	[A-Z] -> Uppercase
+	[0-9] -> Digit
+	[A-Za-z\_] -> Start-char
+
+context-free syntax
+	Lowercase 		-> Letter
+	Uppercase 		-> Letter
+	Start-char 		-> Rest-char
+	Digit 			-> Rest-char
+	Start-char Rest-char* 	-> Identifier
+
+context-free restrictions
+	Identifier -/- [a-zA-Z\_]
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

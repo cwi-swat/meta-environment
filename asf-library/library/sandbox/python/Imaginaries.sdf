@@ -1,0 +1,18 @@
+module Py-Imaginaries
+
+imports Py-Floats
+
+exports
+
+sorts Imagnumber
+
+lexical syntax
+	[jJ] -> Imagsuffix
+
+context-free syntax
+	Floatnumber Imagsuffix 	-> Imagnumber
+	Intpart Imagsuffix 	-> Imagnumber
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

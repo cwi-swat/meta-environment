@@ -1,0 +1,28 @@
+module Py-Strings
+
+exports
+
+sorts Stringliteral ShortString LongString
+
+lexical syntax
+	%% Dit is onnauwkeurig. Quotes bijhouden!
+	~[\'\"\\\n] -> Shortstringchar
+	~[\\] -> Longstringchar
+
+	%% Weet niet of dit correct is. Hoe alle ascii characters te matchen?
+	%% \ mag namelijk wel (als explicit line-continuation).
+	[\\]~[\n] -> Escapeseq
+
+context-free syntax
+	Shortstringchar -> Shortstringitem
+	Escapeseq 	-> Shortstringitem
+	Longstringchar 	-> LongstringItem
+	Escapeseq 	-> Longstringitem
+	"'" Shortstringitem* "'" 		-> Shortstring
+	"\"" Shortstringitem* "\"" 		-> Shortstring
+	"'''" Longstringitem* "'''"		-> Longstring
+	"\"\"\"" Longstringitem* "\"\"\"" 	-> Longstring
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
