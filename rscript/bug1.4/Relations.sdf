@@ -12,7 +12,7 @@ imports Bags[Elem]
 
      Bag[[Elem # Elem]]                        ->  Rel[[Elem]]
 
-     equal(Rel[[Elem]], Rel[[Elem]])           -> Boolean
+     equalr(Rel[[Elem]], Rel[[Elem]])           -> Boolean
 
 
 hiddens
