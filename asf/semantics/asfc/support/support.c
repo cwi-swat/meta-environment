@@ -48,6 +48,8 @@ static int table_size = 0;
 static bucket **prod_table = NULL;
 static bucket **sym_table = NULL;
 
+static char conversionbuf[1024];
+
 ATerm c_true = NULL;
 ATerm c_false = NULL;
 ATerm char_table[256] = {NULL};
@@ -609,6 +611,28 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
 }
 
 /*}}}  */
+void deslash(char *str, char *buf)
+{
+  while(*str) {
+    switch(*str) {
+      case '\\':
+        str++;
+        switch(*str) {
+          case '\\':
+            break;
+          default:
+            *buf++ = '\\';
+          }
+        *buf++ = *str;
+        break;
+      default:
+        *buf++ = *str;
+    }
+    str++;
+  }
+  *buf++ = '\0';
+}
+
 /*{{{  static ATermList terms_to_asfix( ATermList args, ATermAppl appl, sort) */
 
 /**
@@ -620,6 +644,7 @@ static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort)
   ATermList result = ATempty;
 	int arity = ATgetArity(ATgetSymbol(appl));
   int i, j = arity-1, len = ATgetLength(args);
+  ATerm tmp2;
   char *str;
 
   for(i=len-1; i>=0; i--) {
@@ -628,7 +653,8 @@ static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort)
       result = ATinsert(result, tmp);
     } 
     else if(ATmatchTerm(tmp,pattern_asfix_ql,&str)) {
-      ATerm tmp2 = ATmakeTerm(pattern_asfix_l,str);
+      deslash(str,conversionbuf);
+      tmp2 = ATmakeTerm(pattern_asfix_l,conversionbuf);
       result = ATinsert(result, tmp2);
     }
     else if(ATmatchTerm(tmp, pattern_asfix_l, &str)) {
