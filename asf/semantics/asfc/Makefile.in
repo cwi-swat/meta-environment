@@ -19,6 +19,7 @@ docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
 CC		= @CC@
+MAKE		= gmake
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
 CPPFLAGS	= @CPP@ ${XCPPFLAGS}
