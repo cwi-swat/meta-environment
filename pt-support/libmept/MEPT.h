@@ -87,6 +87,18 @@ PT_Args PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3);
 PT_Args PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4);
 PT_Args PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5);
 PT_Args PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6);
+int PT_getAttrsLength (PT_Attrs arg);
+PT_Attrs PT_reverseAttrs(PT_Attrs arg);
+PT_Attrs PT_appendAttrs(PT_Attrs arg, PT_Attr elem);
+PT_Attrs PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1);
+PT_Attrs PT_sliceAttrs(PT_Attrs arg, int start, int end);
+PT_Attr PT_getAttrsAttrAt(PT_Attrs arg, int index);
+PT_Attrs PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index);
+PT_Attrs PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2);
+PT_Attrs PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3);
+PT_Attrs PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4);
+PT_Attrs PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5);
+PT_Attrs PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5, PT_Attr elem6);
 int PT_getSymbolsLength (PT_Symbols arg);
 PT_Symbols PT_reverseSymbols(PT_Symbols arg);
 PT_Symbols PT_appendSymbols(PT_Symbols arg, PT_Symbol elem);
@@ -127,6 +139,7 @@ PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attribu
 PT_Production PT_makeProductionList(PT_Symbol rhs);
 PT_Attributes PT_makeAttributesNoAttrs(void);
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
+PT_Attrs PT_makeAttrsEmpty(void);
 PT_Attrs PT_makeAttrsSingle(PT_Attr head);
 PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
 PT_Attr PT_makeAttrAssoc(PT_Associativity assoc);
@@ -263,6 +276,7 @@ PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs);
 /*{{{  PT_Attrs accessors */
 
 ATbool PT_isValidAttrs(PT_Attrs arg);
+inline ATbool PT_isAttrsEmpty(PT_Attrs arg);
 inline ATbool PT_isAttrsSingle(PT_Attrs arg);
 inline ATbool PT_isAttrsMany(PT_Attrs arg);
 ATbool PT_hasAttrsHead(PT_Attrs arg);

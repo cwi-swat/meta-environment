@@ -13,8 +13,7 @@ constructor(Production, List, list(<rhs(Symbol)>)),
 constructor(Attributes, no-attrs, no-attrs), 
 constructor(Attributes, attrs, attrs(<attrs(Attrs)>)),
 
-constructor(Attrs, single, [<head(Attr)>]), 
-constructor(Attrs, many, [<head(Attr)>,<[tail(Attrs)]>]),
+list(Attrs, Attr),
 
 constructor(Attr, assoc, assoc(<assoc(Associativity)>)), 
 constructor(Attr, term, term(<term(term)>)), 

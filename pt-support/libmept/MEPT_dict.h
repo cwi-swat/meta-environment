@@ -86,6 +86,7 @@ extern ATerm PT_patternAttrTerm;
 extern ATerm PT_patternAttrAssoc;
 extern ATerm PT_patternAttrsMany;
 extern ATerm PT_patternAttrsSingle;
+extern ATerm PT_patternAttrsEmpty;
 extern ATerm PT_patternAttributesAttrs;
 extern ATerm PT_patternAttributesNoAttrs;
 extern ATerm PT_patternProductionList;

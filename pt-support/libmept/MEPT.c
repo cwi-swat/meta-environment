@@ -366,6 +366,42 @@ PT_Args PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4,
 PT_Args PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6) {
   return (PT_Args) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
+int PT_getAttrsLength (PT_Attrs arg) {
+  return ATgetLength((ATermList) arg);
+}
+PT_Attrs PT_reverseAttrs(PT_Attrs arg) {
+  return (PT_Attrs) ATreverse((ATermList) arg);
+}
+PT_Attrs PT_appendAttrs(PT_Attrs arg, PT_Attr elem) {
+  return (PT_Attrs) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+PT_Attrs PT_concatAttrs(PT_Attrs arg0, PT_Attrs arg1) {
+  return (PT_Attrs) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PT_Attrs PT_sliceAttrs(PT_Attrs arg, int start, int end) {
+  return (PT_Attrs) ATgetSlice((ATermList) arg, start, end);
+}
+PT_Attr PT_getAttrsAttrAt(PT_Attrs arg, int index) {
+ return (PT_Attr)ATelementAt((ATermList) arg,index);
+}
+PT_Attrs PT_replaceAttrsAttrAt(PT_Attrs arg, PT_Attr elem, int index) {
+ return (PT_Attrs) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+PT_Attrs PT_makeAttrs2(PT_Attr elem1, PT_Attr elem2) {
+  return (PT_Attrs) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+PT_Attrs PT_makeAttrs3(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3) {
+  return (PT_Attrs) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+PT_Attrs PT_makeAttrs4(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4) {
+  return (PT_Attrs) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+PT_Attrs PT_makeAttrs5(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5) {
+  return (PT_Attrs) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+PT_Attrs PT_makeAttrs6(PT_Attr elem1, PT_Attr elem2, PT_Attr elem3, PT_Attr elem4, PT_Attr elem5, PT_Attr elem6) {
+  return (PT_Attrs) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
 int PT_getSymbolsLength (PT_Symbols arg) {
   return ATgetLength((ATermList) arg);
 }
@@ -535,6 +571,14 @@ PT_Attributes PT_makeAttributesNoAttrs(void)
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs)
 {
   return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun7, (ATerm) attrs);
+}
+
+/*}}}  */
+/*{{{  PT_Attrs PT_makeAttrsEmpty(void) */
+
+PT_Attrs PT_makeAttrsEmpty(void)
+{
+  return (PT_Attrs)(ATerm)ATempty;
 }
 
 /*}}}  */
@@ -1719,13 +1763,31 @@ PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs)
 
 ATbool PT_isValidAttrs(PT_Attrs arg)
 {
-  if (PT_isAttrsSingle(arg)) {
+  if (PT_isAttrsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrsSingle(arg)) {
     return ATtrue;
   }
   else if (PT_isAttrsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isAttrsEmpty(PT_Attrs arg) */
+
+inline ATbool PT_isAttrsEmpty(PT_Attrs arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternAttrsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -3911,6 +3973,9 @@ PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_A
 
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 {
+  if (PT_isAttrsEmpty(arg)) {
+    return PT_makeAttrsEmpty();
+  }
   if (PT_isAttrsSingle(arg)) {
     return PT_makeAttrsSingle(
         acceptHead ? acceptHead(PT_getAttrsHead(arg)) : PT_getAttrsHead(arg));
