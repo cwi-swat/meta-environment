@@ -40,12 +40,12 @@ libeval_a_LIBADD  = evaluator.tif.o
 evaluator_SOURCES = main.c
 evaluator_LDADD   = libeval.a \
                    -L$(ASC)/lib -lasc-support \
-                   -L$(SDF)/lib -lAsFix \
+                   -L$(PT_SUPPORT)/lib -lAsFix \
                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES          = ${TIDE} \
                     -I$(ASC)/include \
-                    -I$(SDF)/include -I$(ATERM)/include \
+                    -I$(PT_SUPPORT)/include -I$(ATERM)/include \
                     ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 
 evaluator.o : evaluator.tif.h

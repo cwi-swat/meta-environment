@@ -33,9 +33,9 @@ compiler_SOURCES = compiler.c
 compiler_LDADD   = compiler.tif.o \
                    -L../c-source  -lAsFix2C \
                    -L$(ASC_SUPPORT)/lib -lasc-support \
-                   -L$(SDF)/lib -lAsFix \
+                   -L$(PT_SUPPORT)/lib -lAsFix \
                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES         = -I$(ASC_SUPPORT)/include -I$(SDF)/include -I$(ATERM)/include
+INCLUDES         = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
 compiler.o : compiler.tif.h ../c-source/libAsFix2C.a
