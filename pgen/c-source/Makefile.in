@@ -1,6 +1,6 @@
 #
 # Makefile.in for target "ParseTable-Generator" 
-# generated automagically on Tue Feb 22 14:58:03 MET 2000
+# generated automagically on Thu Mar  2 15:40:15 GMT 2000
 #
 #
 # $Id$
@@ -175,11 +175,10 @@ init.c: $(SPEC_SRCS)
 	for file in $$SPEC_SRCS; do \
 		echo "  init_$$file();" ;\
 	done ;\
-	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > $@
+	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;s/\.\///g;' > $@
 
 clean:
 	$(RM) *.asfix *.o init.c ${STD-LIB} ${DEBUG-LIB} ${PROFILE-LIB} ${TARGET} ${DEBUG_TARGET} ${PROFILE_TARGET}
-
 
 realclean spotless distclean:	clean
 	$(RM) Makefile
