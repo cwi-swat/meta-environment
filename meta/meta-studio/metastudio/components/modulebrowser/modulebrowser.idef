@@ -1,0 +1,48 @@
+tool module-browser is { }
+
+process ModuleBrowser is
+let
+  EventList: list,
+  Event: term,
+  Graph: term,
+  ModuleId: str,
+  Type: term,
+  T: module-browser,
+  Str : str,
+  List : list
+in
+  rec-connect(T?)
+  .
+    (
+      rec-msg(ui-display-graph("import-graph", Graph?))
+      . snd-do(T, display-graph("import-graph", Graph))
+    +
+      rec-msg(ui-display-treelist(Str?, List?))
+      . snd-do(T, display-treelist(Str, List))
+    +
+      rec-event(T,clear-all)
+      . snd-msg(clear-all)
+      . rec-msg(cleared-all)
+      . snd-ack-event(T,clear-all)
+    +
+      rec-event(T, get-events(Type?, ModuleId?))
+      . snd-msg(cm-get-module-events(Type, ModuleId))
+      . rec-msg(cm-module-events(EventList?))
+      . snd-do(T, add-events(Type, ModuleId, EventList))
+      . snd-ack-event(T, get-events(Type, ModuleId))
+    +
+      rec-event(T, button-selected(Type?, Event?))
+      . snd-msg(ui-button-selected(Type, Event))
+      . snd-ack-event(T, button-selected(Type, Event))
+    +
+      rec-event(T, button-selected(Type?, ModuleId?, Event?))
+      . snd-msg(ui-button-selected(Type, Event, ModuleId))
+      . snd-ack-event(T, button-selected(Type, ModuleId, Event))
+    )
+    *
+      rec-disconnect(T)
+endlet
+
+toolbus(ModuleBrowser)
+
+

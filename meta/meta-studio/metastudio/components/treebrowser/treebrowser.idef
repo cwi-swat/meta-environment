@@ -1,0 +1,25 @@
+tool tree-browser is {  }
+
+process TreeBrowser is
+let
+  T : tree-browser,
+  GraphId : str,
+  Graph : term,
+  Node : term
+in
+  GraphId := "parsetree" 
+  . rec-connect(T?)
+  .
+    (
+      rec-msg(ui-display-graph(GraphId, Graph?))
+      . snd-do(T, display-tree(Graph))
+    +
+      rec-event(T, node-selected(GraphId, Node?))
+      . snd-msg(ui-node-selected(GraphId, Node))
+      . snd-ack-event(T, node-selected(GraphId, Node))
+    )
+    *
+    rec-disconnect(T)
+endlet
+
+toolbus(TreeBrowser)
