@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
   char *syntax = "";
   ATbool useToolbus = ATfalse;
   int c;
+  int i;
 
   ATerm at_sdf;
   ATerm at_tree;
@@ -89,8 +90,6 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack); 
   PT_initMEPTApi(); 
   SDF_initSDFMEApi(); 
-
-  int i;
 
   for (i=1; !useToolbus && i < argc; i++) {
     useToolbus = !strcmp(argv[i], "-TB_TOOL_NAME");

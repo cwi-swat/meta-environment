@@ -6,6 +6,7 @@ INCLUDES = \
 	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \
 	-I$(SDF_SUPPORT)/include \
+	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
 bin_PROGRAMS = ptpretty 
