@@ -23,6 +23,8 @@
   $Id$
  */
 
+/*tool logger is { command = "tblog -logfile meta.log" }*/
+
 #include "sglr.idef"
 #include "text-editor.idef"
 #include "editor-creator.tb"
