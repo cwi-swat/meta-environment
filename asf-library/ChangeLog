@@ -1,5 +1,23 @@
 # $Id$
 
+2004/01/23 ({jurgenv,jong,kooiker}@cwi.nl)
+  * separated out the syntax definitions of StrCon from Strings and
+    NatCon from Integers. This allows other languages to use the syntax
+    and non-terminals of the library without depending on the implementation
+    of the functionality on Strings and NatCons.
+  * Some SIGNIFICANT changes in the Box language intended to simplify
+    apigeneration and separate syntax from semantics:
+      - StrCon -> Box instead of String -> Box
+        (now Box does not depend on the implementation of Strings anymore
+        including the basic/Integers imported by the Strings module)
+      - SpaceSymbol "=" NatCon  -> SOption
+        (now Box does not depend on the implementation of Integers anymore,
+        only on the basic NatCon lexical definition)
+      - added cons attributes where necessary in the Box language.
+      - removed operators like "++" and ":" from the Box syntax definition.
+        I'm sorry if this broke some specifications, but they are very easy
+        to reproduce in a new Box-Operations module.
+
 Tue Jan 20 14:46:47 CET 2004 <{jong,jurgenv}@cwi.nl>
  * basic/Locations.{asf,sdf}:
    - added convenience getters for Location and Area data structures
