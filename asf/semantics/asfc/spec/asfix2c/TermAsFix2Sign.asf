@@ -308,7 +308,7 @@ equations
                "prod(id(\"GEN-LexConsFuncs\"),w(\"\")," ++
                "[ql(\"" ++ literal2id(Lexical2) ++ "\"),w(\"\")," ++
                "ql(\"(\"),w(\"\")," ++
-               "iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\")," ++
+               "iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\")," ++
                "ql(\")\")],w(\"\")," ++
                "l(\"->\"),w(\"\")," ++
                "sort(\"" ++ literal2id(Lexical1) ++ "\"),w(\"\"),no-attrs)"

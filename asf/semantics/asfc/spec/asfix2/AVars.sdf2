@@ -6,7 +6,7 @@ exports
   sorts
     AName AVar
   lexical syntax
-    [A-Z][A-Za-z0-9\-]* -> AName {uneager}
+    [A-Z][A-Za-z0-9\-]* -> AName {avoid}
   context-free syntax
     AName                       -> AVar           %% Simple variable
     AName ":" ATerm             -> AVar           %% Typed variable

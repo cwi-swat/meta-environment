@@ -5,7 +5,7 @@ exports
   sorts Integer-constant Identifier String
   lexical syntax
     [0-9]+                   -> Integer-constant
-    [a-zA-Z\_][a-zA-Z\_0-9]* -> Identifier {uneager}
+    [a-zA-Z\_][a-zA-Z\_0-9]* -> Identifier {avoid}
     "\"" ~[\n\"]* "\""       -> String
 
   lexical restrictions
