@@ -200,15 +200,6 @@ remarks (\S\ref{Sec:conclusion}).
 
 \section{The \TB\ Architecture}\label{Sec:toolbus-architecture}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/component-architecture.eps,height=12cm}
-\end{center}
-\vspace*{-7.5cm}
-\caption{\label{Fig:component-architecture}Separating coordination
-  from computation}
-\end{figure}
-
 In~\cite{GelernterCarriero92} is was advocated that the overall
  architecture of a software system can be improved by separating
  \emph{coordination} from \emph{computation}. In addition to this, we
@@ -234,6 +225,14 @@ This subdivision is sketched in Figure~\ref{Fig:component-architecture}.
 Our \TB\ approach follows this paradigm and is illustrated in
 Figure~\ref{Fig:toolbus-architecture}
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/component-architecture.eps,height=12cm}
+\end{center}
+\vspace*{-7.5cm}
+\caption{\label{Fig:component-architecture}Separating coordination
+  from computation}
+\end{figure}
 
 \begin{figure}[tb]
 \begin{center}
@@ -243,16 +242,6 @@ Figure~\ref{Fig:toolbus-architecture}
 \caption{\label{Fig:toolbus-architecture}The \TB\ architecture}
 \end{figure}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/toolbus-scenario.eps,height=14cm}
-\end{center}
-\vspace*{-8cm}
-\caption{\label{Fig:toolbus-scenario}A typical cooperation scenario}
-\end{figure}
-
-
-
 The goal of the \TB\ is to integrate tools written in different
 languages running on different machines. This is achieved by means of
 a programmable software bus. The \TB\ coordinates the cooperation of a
@@ -261,6 +250,14 @@ runs inside the \TB. The result is a set of concurrent processes
 inside the \TB\ that can communicate with each other and with the
 tools. Tools can be written in any language and can run on different
 machines. They exchange data by way of \aterms.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus-scenario.eps,height=14cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{Fig:toolbus-scenario}A typical cooperation scenario}
+\end{figure}
 
 A typical cooperation scenario is illustrated in
 Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
@@ -282,6 +279,7 @@ The primitives that can be used in \Tscript{}s are listed in
 Table~\ref{Tab:Tscript-features}. 
 
 \begin{table}
+\caption{\label{Tab:Tscript-features}Overview of \TB\ primitives}
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline Primitive		& Description	\\ \hline \hline
@@ -324,7 +322,6 @@ Table~\ref{Tab:Tscript-features}.
 \spec{detach-monitor}		& detach a monitoring tool from a process \\ \hline
 \end{tabular}
 \end{center}
-\caption{\label{Tab:Tscript-features}Overview of \TB\ primitives}
 
 \end{table}
 
@@ -528,6 +525,12 @@ endlet
 
 \section{Application to the \asdf\ Meta-Environment}\label{Sec:application}
 
+As already sketched in \S\ref{SEC:ME-history}, the \TB\ has been used to restructure the
+\asdf\ Meta-Environment. It consists of a cooperation of 27 tools
+ranging from a user-interface, graph browser, various editors,
+compiler and interpreter, to a parser generator and a repository for
+parse trees.  A simplified view is shown in Figure~\ref{Fig:meta-env}.
+
 \begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/meta-env.eps,height=12cm}
@@ -536,13 +539,8 @@ endlet
 \caption{\label{Fig:meta-env}Architecture of the \asdf\ Meta-Environment.}
 \end{figure}
 
-As already sketched in \S\ref{SEC:ME-history}, the \TB\ has been used to restructure the
-\asdf\ Meta-Environment. It consists of a cooperation of 27 tools
-ranging from a user-interface, graph browser, various editors,
-compiler and interpreter, to a parser generator and a repository for
-parse trees.  A simplified view is shown in Figure~\ref{Fig:meta-env}.
-
 \begin{table}[tb]
+\caption{\label{Tab:language-stats}Facts concerning implementation languages}
 \begin{center}
 \begin{tabular}{|l|r|r|r|} \hline
 Language        & KLOC$^\dagger$ & Generated KLOC & Total KLOC\\ \hline \hline
@@ -562,11 +560,10 @@ such as emacs, dot, and the like.
 $^{\dagger\dagger}$ This includes 10 KLOC (C code) for the \TB\
 implementation itself.
 \end{center}
-
-\caption{\label{Tab:language-stats}Facts concerning implementation languages}
 \end{table}
 
 \begin{table}[tb]
+\caption{\label{Tab:Tscript-stats}Facts concerning \Tscript\ primitives}
 \begin{center}
 \begin{tabular}{|l|r|}\hline
 Primitive                            & Number of occurrences \\ \hline \hline
@@ -587,7 +584,6 @@ tool definitions                     & 27\\
 \texttt{create}                      & 58 \\ \hline
 \end{tabular}
 \end{center}
-\caption{\label{Tab:Tscript-stats}Facts concerning \Tscript\ primitives}
 \end{table}
 
 
@@ -672,6 +668,12 @@ posed by our users and ourselves are:
 \subsection{Undisciplined Message Patterns}
   \label{Sec:message-patterns}
 
+The classical pattern of a remote procedure call is shown in
+Figure~\ref{Fig:rpc}: a caller performs a call to a callee. During the
+call the caller suspends execution and the callee executes until it
+has computed a reply. At that point in time, the caller continues its
+execution.
+
 \begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/rpc.eps,height=12cm}
@@ -680,20 +682,6 @@ posed by our users and ourselves are:
 \caption{\label{Fig:rpc}Communication pattern for remote procedure call}
 \end{figure}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/msg.eps,height=12cm}
-\end{center}
-\vspace*{-7.5cm}
-\caption{\label{Fig:message}Communication pattern for general messages}
-\end{figure}
-
-The classical pattern of a remote procedure call is shown in
-Figure~\ref{Fig:rpc}: a caller performs a call to a callee. During the
-call the caller suspends execution and the callee executes until it
-has computed a reply. At that point in time, the caller continues its
-execution.
-
 Compare this simple situation with general message communication as shown
 in Figure~\ref{Fig:message}: the caller continues execution after sending
 a message \emph{msg1} to \emph{Callee1} and may even send a message
@@ -701,6 +689,14 @@ a message \emph{msg1} to \emph{Callee1} and may even send a message
 may send message \emph{msg3} back to \emph{Caller}. In this case, the
 three parties involved continue their execution while messages are being
 exchanged and there is no obvious pairing of calls and replies.
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/msg.eps,height=12cm}
+\end{center}
+\vspace*{-7.5cm}
+\caption{\label{Fig:message}Communication pattern for general messages}
+\end{figure}
 
 In the \TB\ case, a \spec{snd-msg} and a \spec{rec-msg} can interact
 with each other if their arguments match. A typical sequence is:
@@ -848,22 +844,6 @@ the last few operations carried out by a tool.
 
 \paragraph{Background}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/refs.eps,height=12cm}
-\end{center}
-\vspace*{-10.5cm}
-\caption{\label{Fig:reference}Call-by-reference in a distributed application}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/values.eps,height=12cm}
-\end{center}
-\vspace*{-11cm}
-\caption{\label{Fig:value}Call-by-value in a (Java-based) distributed application}
-\end{figure}
-
 The concepts of call-by-reference and call-by-value are well-known
 in programming languages. They describe how an actual parameter
 value is transmitted from a procedure call to the body of the called
@@ -884,6 +864,14 @@ It is the prevalent mechanism in, for instance, CORBA~\cite{corba}.
 However, uncontrolled modifications by different parties can lead to
 disaster.
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/refs.eps,height=12cm}
+\end{center}
+\vspace*{-10.5cm}
+\caption{\label{Fig:reference}Call-by-reference in a distributed application}
+\end{figure}
+
 Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values and
 any sharing between calls is lost. To us, this is of particular interest,
 because we need to preserve sharing in huge parse trees.  In the case of
@@ -891,8 +879,23 @@ Java RMI~\cite{java-rmi}, value transmission is achieved via serialization
 and works only for communication with other Java components. Using
 IIOP~\cite{iiop} communication with non-Java components is possible.
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/values.eps,height=12cm}
+\end{center}
+\vspace*{-11cm}
+\caption{\label{Fig:value}Call-by-value in a (Java-based) distributed application}
+\end{figure}
+
 
 \paragraph{Current \TB\ approach}
+
+Currently, the \TB\ provides a transport mechanism based on
+call-by-value as shown in Figure~\ref{Fig:toolbus-values}(a). It is
+transparent since the transmitted values are \aterms\ (see
+\S\ref{SEC:ME-history}) that can be exchanged with components written
+in any language. Since pure values are exchanged, there is no need for
+distributed garbage collection.
 
 \begin{figure}[tb]
 \begin{center}
@@ -902,13 +905,6 @@ IIOP~\cite{iiop} communication with non-Java components is possible.
 \caption{\label{Fig:toolbus-values}Value-based (a) versus channel-based
 (b) transmission in the \TB}
 \end{figure}
-
-Currently, the \TB\ provides a transport mechanism based on
-call-by-value as shown in Figure~\ref{Fig:toolbus-values}(a). It is
-transparent since the transmitted values are \aterms\ (see
-\S\ref{SEC:ME-history}) that can be exchanged with components written
-in any language. Since pure values are exchanged, there is no need for
-distributed garbage collection.
 
 Note that the call-by-reference model can easily be mimicked in the
 \TB. For instance, one tool can maintain a shared database and can
@@ -1217,6 +1213,6 @@ We thank Pieter Olivier for his contribution and input to the many
 interesting and fruitful discussions we have had about \TB\ related
 issues, and his efforts to get \url{www.gamesquare.nl} \TB\ enabled.
 
-\bibliographystyle{plain} 
+\bibliographystyle{splncs} 
 \bibliography{fmco02} 
 \end{document}
