@@ -12,7 +12,7 @@ identification
 configuration interface
 
 requires
-  aterm		1.6.7
-  toolbuslib	0.2
-  toolbus	0.23
+  aterm		2.0.2
+  toolbuslib	0.5
+  toolbus	0.3
 
