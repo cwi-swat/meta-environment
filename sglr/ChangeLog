@@ -1,5 +1,18 @@
 $Id$
 
+2001/08/09 (markvdb@cwi.nl, jurgenv@cwi.nl)
+ * Renamed MultiSetCounting to PreferCounting.
+ * Reshuffled some code.
+ * Wrote alternative InjectionCounting code, not yet activated.
+ * Improved the DirectEagerPrefer code (looks through injections).
+ * Improved the FilterReject code, rejects are inspected before
+   the actual filtering kicks in.
+ * Added a new test case.
+ * Adapted a number of grammars in order to be prepared for
+   a new injection count strategy.
+ * Fixed some bugs in the regression test grammars.
+ 
+
 2001/08/01 (jurgenv@cwi.nl)
  * Bugfix; topsymbols were always reports as [undefined].
 

@@ -1,0 +1,20 @@
+definition
+
+module Main
+
+imports Reject
+
+module Reject
+imports Layout
+
+exports 
+  sorts R
+  context-free syntax
+    "r" -> R {reject}
+
+module Layout
+exports
+  lexical syntax
+    [\ \n] -> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \n]

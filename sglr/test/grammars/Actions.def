@@ -24,8 +24,8 @@ context-free syntax
 
   	"it"			-> DataOp
 
-  	Action			-> Yielder
-	DataOp			-> Yielder
+  	Action			-> Yielder {avoid}
+	DataOp			-> Yielder {avoid}
 	Yielder "then" Yielder	-> Yielder {left}
 
 module Layout

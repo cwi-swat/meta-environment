@@ -1,0 +1,1 @@
+parse-error([character(10),line(2),col(0),char(2)],plain)

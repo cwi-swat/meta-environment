@@ -148,7 +148,7 @@ exports
 
   context-free syntax
     Data-name                -> L-factor
-    A-exp Rel Lit-exp        -> L-factor
+    A-exp Rel Lit-exp        -> L-factor {prefer}
     A-exp Rel-exp            -> L-factor
     A-exp Pred-exp           -> L-factor
 

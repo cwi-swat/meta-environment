@@ -4,13 +4,6 @@ imports ZCasl-Top ZCasl-Arch-disamb
 
 module ZCasl-Top
 imports ZCasl-Arch
-exports
-  sorts
-    Specs-Defn
-  context-free syntax
-    Arch-Spec-Defn -> Specs-Defn
-    Unit-Spec-Defn -> Specs-Defn
-    Spec-Defn      -> Specs-Defn
 
 module ZCasl-Arch
 

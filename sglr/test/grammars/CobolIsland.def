@@ -16,11 +16,11 @@ exports
 
 
   context-free syntax
-    Water+                   -> Token
+    Water                    -> Token
     Open                     -> Water {reject}
-    "OPEN" "INPUT" Id        -> Open   {cons("open"),prefer}
+    "OPEN" "INPUT" Id        -> Open  {cons("open"),prefer}
     Open                     -> Token
-    Token*                   -> Program  {cons("program")}
+    Token*                   -> Program {cons("program")}
 
 module Layout
 exports
