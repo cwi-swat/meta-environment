@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jun 18 10:27:56 CEST 2004 <jurgenv@cwi.nl>
+ * Added dependency on graph-support in .pkg file
+
 Wed Jun 16 18:02:14 CEST 2004 <jurgenv@cwi.nl>
  * Removed dependency on TOOLBUS in generation of ToolBus interface.
    Developers are supposed to have toolbus and tifs2java in their PATH.
