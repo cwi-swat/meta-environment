@@ -45,7 +45,7 @@ UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
 SUBDIRS		= asfix toolbus editor evaluator graph-browser \
-		  in-output module-db asc-support compiler stred asource \
+		  in-output module-db asc-support compiler stred \
 		  sglr pgen utils grammars
 
 BINFILES        = meta
