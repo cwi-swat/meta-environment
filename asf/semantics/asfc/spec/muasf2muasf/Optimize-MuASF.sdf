@@ -5,7 +5,7 @@ imports muasf2muasf/Optimize-Recursive-List-Functions
 
 exports
   context-free syntax
-    optimize-muasf(Module, NameTable) -> Module # NameTable
+    optimize-muasf(Module, NameTable) -> <Module , NameTable>
 
 hiddens
   sorts RFN
@@ -15,7 +15,7 @@ hiddens
 
   aliases
 
-    RuleList # FuncDefList # NameTable -> RFN
+    <RuleList , FuncDefList , NameTable> -> RFN
 
   variables
     "RFN" -> RFN

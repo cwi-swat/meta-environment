@@ -14,7 +14,7 @@ context-free syntax
   %% recursive calls.
 
   optimize-recursive-list-function(RuleList,FuncDefList, NameTable) -> 
-        RuleList # FuncDefList # NameTable
+        <RuleList , FuncDefList , NameTable>
 
   %% a lot of helper functions for the recursive-list optimization,
   %% also some structures are needed for keeping intermediate results

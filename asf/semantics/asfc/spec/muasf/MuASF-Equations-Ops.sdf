@@ -8,7 +8,7 @@ exports
   sorts FuncRuleTuple FuncRulePair
         RuleListPair FuncTermTableTuple 
         FuncRuleTableTuple FuncCondTableTuple
-        TraversalType TraversalStrategy TermList
+        TraversalType TraversalStrategy 
   context-free syntax
     "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"    -> FuncRuleTuple
     "(" {FuncDef ";"}* "," {Rule ";"}* ")"               -> FuncRulePair

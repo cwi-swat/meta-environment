@@ -12,10 +12,9 @@ hiddens
 
 context-free syntax
 
-fc-funcdeflist(FuncDefList,RuleList,NameTable) -> FuncDefList # NameTable
-fc-funcdef(FuncDef,RuleList,NameTable)         -> FuncDef # NameTable
+fc-funcdeflist(FuncDefList,RuleList,NameTable) -> <FuncDefList , NameTable>
+fc-funcdef(FuncDef,RuleList,NameTable)         -> <FuncDef , NameTable>
 
 has-rule(FuncDef,RuleList)            -> Bool
-is-builtin(FuncDef) -> Bool
 add-attr(FuncDef,Term)                -> FuncDef
 add-attr(FunId,NameTable,Term)        -> NameTable
