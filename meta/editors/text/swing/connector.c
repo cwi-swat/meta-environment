@@ -107,6 +107,22 @@ static void clearFocus(int write_to_editor_fd)
 }
 
 /*}}}  */
+/*{{{  static void registerTextCategories(int write_to_editor_fd, TE_Action action) */
+
+static void registerTextCategories(int write_to_editor_fd, TE_Action action)
+{
+  /* no implementation */
+}
+
+/*}}}  */
+/*{{{  static void highlightSlices(int write_to_editor_fd, TE_Action action) */
+
+static void highlightSlices(int write_to_editor_fd, TE_Action action)
+{
+  /* no implementation */
+}
+
+/*}}}  */
 /*{{{  static void moveToFront(int write_to_editor_fd) */
 
 static void moveToFront(int write_to_editor_fd)
@@ -332,6 +348,8 @@ int main(int argc, char *argv[])
 			       displayMessage,
 			       addActions,
 			       setFocus,
+			       registerTextCategories,
+			       highlightSlices,
 			       setCursorAtOffset,
 			       isModified);
 

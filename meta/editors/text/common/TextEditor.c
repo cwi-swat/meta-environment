@@ -376,11 +376,27 @@ TE_Action TE_makeActionAddActions(TE_ActionList actions)
 }
 
 /*}}}  */
+/*{{{  TE_Action TE_makeActionRegisterTextCategories(ATerm categories) */
+
+TE_Action TE_makeActionRegisterTextCategories(ATerm categories)
+{
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun11, (ATerm) categories));
+}
+
+/*}}}  */
+/*{{{  TE_Action TE_makeActionHighlightSlices(ATerm slices) */
+
+TE_Action TE_makeActionHighlightSlices(ATerm slices)
+{
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun12, (ATerm) slices));
+}
+
+/*}}}  */
 /*{{{  TE_Menu TE_makeMenuDefault(TE_Items items) */
 
 TE_Menu TE_makeMenuDefault(TE_Items items)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm) items);
+  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) items);
 }
 
 /*}}}  */
@@ -388,7 +404,7 @@ TE_Menu TE_makeMenuDefault(TE_Items items)
 
 TE_Menu TE_makeMenuShortcut(TE_Items items, const char* shortcut)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun14, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -444,7 +460,7 @@ TE_Items TE_makeItemsMany(const char* head, TE_Items tail)
 
 TE_Event TE_makeEventMenu(TE_Menu menu)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) menu);
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun15, (ATerm) menu);
 }
 
 /*}}}  */
@@ -452,7 +468,7 @@ TE_Event TE_makeEventMenu(TE_Menu menu)
 
 TE_Event TE_makeEventMouse(int location)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeInt(location));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun16, (ATerm) (ATerm) ATmakeInt(location));
 }
 
 /*}}}  */
@@ -460,7 +476,7 @@ TE_Event TE_makeEventMouse(int location)
 
 TE_Event TE_makeEventContentsWritten(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun15);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun17);
 }
 
 /*}}}  */
@@ -468,7 +484,7 @@ TE_Event TE_makeEventContentsWritten(void)
 
 TE_Event TE_makeEventModified(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun16);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun18);
 }
 
 /*}}}  */
@@ -476,7 +492,7 @@ TE_Event TE_makeEventModified(void)
 
 TE_Event TE_makeEventIsModified(int modified)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun17, (ATerm) (ATerm) ATmakeInt(modified));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun19, (ATerm) (ATerm) ATmakeInt(modified));
 }
 
 /*}}}  */
@@ -484,7 +500,7 @@ TE_Event TE_makeEventIsModified(int modified)
 
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 {
-  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun18, (ATerm) toChild, (ATerm) fromChild);
+  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun20, (ATerm) toChild, (ATerm) fromChild);
 }
 
 /*}}}  */
@@ -492,7 +508,7 @@ TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 
 TE_Pipe TE_makePipeDefault(int read, int write)
 {
-  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun19, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
+  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun21, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
 }
 
 /*}}}  */
@@ -570,6 +586,12 @@ ATbool TE_isValidAction(TE_Action arg)
     return ATtrue;
   }
   else if (TE_isActionAddActions(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isActionRegisterTextCategories(arg)) {
+    return ATtrue;
+  }
+  else if (TE_isActionHighlightSlices(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -796,6 +818,50 @@ inline ATbool TE_isActionAddActions(TE_Action arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool TE_isActionRegisterTextCategories(TE_Action arg) */
+
+inline ATbool TE_isActionRegisterTextCategories(TE_Action arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionRegisterTextCategories, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionHighlightSlices(TE_Action arg) */
+
+inline ATbool TE_isActionHighlightSlices(TE_Action arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionHighlightSlices, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool TE_hasActionMessage(TE_Action arg) */
 
 ATbool TE_hasActionMessage(TE_Action arg)
@@ -840,6 +906,28 @@ ATbool TE_hasActionActions(TE_Action arg)
 }
 
 /*}}}  */
+/*{{{  ATbool TE_hasActionCategories(TE_Action arg) */
+
+ATbool TE_hasActionCategories(TE_Action arg)
+{
+  if (TE_isActionRegisterTextCategories(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool TE_hasActionSlices(TE_Action arg) */
+
+ATbool TE_hasActionSlices(TE_Action arg)
+{
+  if (TE_isActionHighlightSlices(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* TE_getActionMessage(TE_Action arg) */
 
 char* TE_getActionMessage(TE_Action arg)
@@ -873,6 +961,24 @@ TE_ActionList TE_getActionActions(TE_Action arg)
 {
   
     return (TE_ActionList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
+}
+
+/*}}}  */
+/*{{{  ATerm TE_getActionCategories(TE_Action arg) */
+
+ATerm TE_getActionCategories(TE_Action arg)
+{
+  
+    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
+}
+
+/*}}}  */
+/*{{{  ATerm TE_getActionSlices(TE_Action arg) */
+
+ATerm TE_getActionSlices(TE_Action arg)
+{
+  
+    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
 }
 
 /*}}}  */
@@ -924,6 +1030,32 @@ TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions)
   }
 
   ATabort("Action has no Actions: %t\n", arg);
+  return (TE_Action)NULL;
+}
+
+/*}}}  */
+/*{{{  TE_Action TE_setActionCategories(TE_Action arg, ATerm categories) */
+
+TE_Action TE_setActionCategories(TE_Action arg, ATerm categories)
+{
+  if (TE_isActionRegisterTextCategories(arg)) {
+    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) categories), 0), 0);
+  }
+
+  ATabort("Action has no Categories: %t\n", arg);
+  return (TE_Action)NULL;
+}
+
+/*}}}  */
+/*{{{  TE_Action TE_setActionSlices(TE_Action arg, ATerm slices) */
+
+TE_Action TE_setActionSlices(TE_Action arg, ATerm slices)
+{
+  if (TE_isActionHighlightSlices(arg)) {
+    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) slices), 0), 0);
+  }
+
+  ATabort("Action has no Slices: %t\n", arg);
   return (TE_Action)NULL;
 }
 
@@ -1813,9 +1945,9 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
+/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList), ATerm (*acceptCategories)(ATerm), ATerm (*acceptSlices)(ATerm)) */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList), ATerm (*acceptCategories)(ATerm), ATerm (*acceptSlices)(ATerm))
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
@@ -1850,6 +1982,14 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
   if (TE_isActionAddActions(arg)) {
     return TE_makeActionAddActions(
         acceptActions ? acceptActions(TE_getActionActions(arg)) : TE_getActionActions(arg));
+  }
+  if (TE_isActionRegisterTextCategories(arg)) {
+    return TE_makeActionRegisterTextCategories(
+        acceptCategories ? acceptCategories(TE_getActionCategories(arg)) : TE_getActionCategories(arg));
+  }
+  if (TE_isActionHighlightSlices(arg)) {
+    return TE_makeActionHighlightSlices(
+        acceptSlices ? acceptSlices(TE_getActionSlices(arg)) : TE_getActionSlices(arg));
   }
   ATabort("not a Action: %t\n", arg);
   return (TE_Action)NULL;

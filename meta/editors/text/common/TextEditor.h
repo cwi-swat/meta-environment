@@ -93,6 +93,8 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset);
 TE_Action TE_makeActionSetFocus(ATerm focus);
 TE_Action TE_makeActionClearFocus(void);
 TE_Action TE_makeActionAddActions(TE_ActionList actions);
+TE_Action TE_makeActionRegisterTextCategories(ATerm categories);
+TE_Action TE_makeActionHighlightSlices(ATerm slices);
 TE_Menu TE_makeMenuDefault(TE_Items items);
 TE_Menu TE_makeMenuShortcut(TE_Items items, const char* shortcut);
 TE_ActionList TE_makeActionListEmpty(void);
@@ -134,18 +136,26 @@ inline ATbool TE_isActionSetCursorAtOffset(TE_Action arg);
 inline ATbool TE_isActionSetFocus(TE_Action arg);
 inline ATbool TE_isActionClearFocus(TE_Action arg);
 inline ATbool TE_isActionAddActions(TE_Action arg);
+inline ATbool TE_isActionRegisterTextCategories(TE_Action arg);
+inline ATbool TE_isActionHighlightSlices(TE_Action arg);
 ATbool TE_hasActionMessage(TE_Action arg);
 ATbool TE_hasActionOffset(TE_Action arg);
 ATbool TE_hasActionFocus(TE_Action arg);
 ATbool TE_hasActionActions(TE_Action arg);
+ATbool TE_hasActionCategories(TE_Action arg);
+ATbool TE_hasActionSlices(TE_Action arg);
 char* TE_getActionMessage(TE_Action arg);
 int TE_getActionOffset(TE_Action arg);
 ATerm TE_getActionFocus(TE_Action arg);
 TE_ActionList TE_getActionActions(TE_Action arg);
+ATerm TE_getActionCategories(TE_Action arg);
+ATerm TE_getActionSlices(TE_Action arg);
 TE_Action TE_setActionMessage(TE_Action arg, const char* message);
 TE_Action TE_setActionOffset(TE_Action arg, int offset);
 TE_Action TE_setActionFocus(TE_Action arg, ATerm focus);
 TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions);
+TE_Action TE_setActionCategories(TE_Action arg, ATerm categories);
+TE_Action TE_setActionSlices(TE_Action arg, ATerm slices);
 
 /*}}}  */
 /*{{{  TE_Menu accessors */
@@ -234,7 +244,7 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write);
 /*}}}  */
 /*{{{  sort visitors */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList), ATerm (*acceptCategories)(ATerm), ATerm (*acceptSlices)(ATerm));
 TE_Menu TE_visitMenu(TE_Menu arg, TE_Items (*acceptItems)(TE_Items), char* (*acceptShortcut)(char*));
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu));
 TE_Items TE_visitItems(TE_Items arg, char* (*acceptHead)(char*));

@@ -9,11 +9,13 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-void set_focus(int conn, ATerm, ATerm);
-void is_modified(int conn, ATerm);
 void set_cursor_at_offset(int conn, ATerm, int);
-void reread_contents(int conn, ATerm);
+void set_focus(int conn, ATerm, ATerm);
 void clear_focus(int conn, ATerm);
+void is_modified(int conn, ATerm);
+void register_text_categories(int conn, ATerm, ATerm);
+void reread_contents(int conn, ATerm);
+void highlight_slices(int conn, ATerm, ATerm);
 void write_contents(int conn, ATerm);
 void display_message(int conn, ATerm, const char *);
 void add_actions(int conn, ATerm, ATerm);

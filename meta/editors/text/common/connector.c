@@ -42,6 +42,8 @@ struct _TextEditor
   display_message_t displayMessage;
   add_actions_t addActions;
   set_focus_t setFocus;
+  register_text_categories_t registerTextCategories;
+  highlight_slices_t highlightSlices;
   set_cursor_at_offset_t setCursorAtOffset;
   is_modified_t isModified;
 };
@@ -189,6 +191,12 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetFocus(action)) {
     editor->setFocus(write_to_editor_fd, action);
   }
+  else if (TE_isActionRegisterTextCategories(action)) {
+    editor->registerTextCategories(write_to_editor_fd, action);
+  }
+  else if (TE_isActionHighlightSlices(action)) {
+    editor->highlightSlices(write_to_editor_fd, action);
+  }
   else if (TE_isActionSetCursorAtOffset(action)) {
     editor->setCursorAtOffset(write_to_editor_fd, action);
   }
@@ -209,6 +217,8 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  display_message_t displayMessage,
 			  add_actions_t addActions,
 			  set_focus_t setFocus,
+			  register_text_categories_t registerTextCategories,
+			  highlight_slices_t highlightSlices,
 			  set_cursor_at_offset_t setCursorAtOffset,
 			  is_modified_t isModified)
 {

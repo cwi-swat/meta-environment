@@ -4,6 +4,7 @@
 #include <aterm2.h>
 
 extern AFun TE_afun8;
+extern AFun TE_afun21;
 extern AFun TE_afun17;
 extern AFun TE_afun0;
 extern AFun TE_afun11;
@@ -23,6 +24,7 @@ extern AFun TE_afun15;
 extern AFun TE_afun18;
 extern AFun TE_afun6;
 extern AFun TE_afun1;
+extern AFun TE_afun20;
 
 extern ATerm TE_patternPipeDefault;
 extern ATerm TE_patternProcessDefault;
@@ -39,6 +41,8 @@ extern ATerm TE_patternActionListSingle;
 extern ATerm TE_patternActionListEmpty;
 extern ATerm TE_patternMenuShortcut;
 extern ATerm TE_patternMenuDefault;
+extern ATerm TE_patternActionHighlightSlices;
+extern ATerm TE_patternActionRegisterTextCategories;
 extern ATerm TE_patternActionAddActions;
 extern ATerm TE_patternActionClearFocus;
 extern ATerm TE_patternActionSetFocus;

@@ -221,6 +221,31 @@ void set_focus(int c, ATerm editorId, ATerm focus)
 }
 
 /*}}}  */
+/*{{{  void register_text_categories(int c, ATerm editorId, ATerm categories) */
+
+void register_text_categories(int c, ATerm editorId, ATerm categories)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionRegisterTextCategories(categories));
+  }
+}
+
+/*}}}  */
+/*{{{  void highlight_slices(int c, ATerm editorId, ATerm slices) */
+
+void highlight_slices(int c, ATerm editorId, ATerm slices)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionHighlightSlices(slices));
+  }
+}
+
+/*}}}  */
+
 /*{{{  void display_message(int c, ATerm editorId, char *message) */
 
 void display_message(int c, ATerm editorId, const char *message)

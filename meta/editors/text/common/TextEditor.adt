@@ -10,6 +10,8 @@
   constructor(Action, set-focus, action(set-focus(<focus(term)>))),
   constructor(Action, clear-focus, action(clear-focus)),
   constructor(Action, add-actions, action(add-actions(<actions(ActionList)>))),
+  constructor(Action, register-text-categories, action(register-text-categories(<categories(term)>))),
+  constructor(Action, highlight-slices, action(highlight-slices(<slices(term)>))),
 
   constructor(Menu, default, menu(<items(Items)>)),
   constructor(Menu, shortcut, menu(<items(Items)>, <shortcut(str)>)),
