@@ -9,7 +9,7 @@ exports
   context-free start-symbols DiGraph
 
   lexical syntax
-    [a-zA-Z] [a-zA-Z0-9\_\-]* -> DiGraphId
+    [a-z] [a-z0-9\_\-]* -> DiGraphId
     [a-zA-Z] [a-zA-Z0-9\_\-]* -> GraphLabel
     [a-zA-Z] [a-zA-Z0-9\_\-]* -> GraphNode
 

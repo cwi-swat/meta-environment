@@ -6,7 +6,7 @@ equations
   $Rvalue2 := value(CONTROL_FLOW, $Rstore),
   $EdgeSection := convert2edge($Rvalue2, )
   ===>
-  convert2digraph($Rstore) = digraph DiGraph { $LabelSection $EdgeSection }
+  convert2digraph($Rstore) = digraph dg { $LabelSection $EdgeSection }
 
 
 [convert-to-edge-0]
@@ -25,8 +25,8 @@ equations
   $GraphEdge := $GraphNode1 -> $GraphNode2,
   $EdgeSection := $GraphEdge $GraphEdge*
   ===> 
-  convert2edge({ $Elem , $Elem* }, $GraphEdge*) = 
-    convert2edge({ $Elem* }, $EdgeSection)
+  convert2edge({ $Elem , $Elem+ }, $GraphEdge*) = 
+    convert2edge({ $Elem+ }, $EdgeSection)
 
 
 [convert-to-label-0]
@@ -43,8 +43,8 @@ equations
   $GraphLabel := $GraphNode [ label = $Name ],
   $LabelSection := $GraphLabel $GraphLabel*
   ===>
-  convert2label({ $Elem , $Elem* }, $GraphLabel*) = 
-    convert2label({ $Elem* }, $LabelSection) 
+  convert2label({ $Elem , $Elem+ }, $GraphLabel*) = 
+    convert2label({ $Elem+ }, $LabelSection) 
 
 
 [construct-graphnode-0]

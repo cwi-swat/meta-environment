@@ -23,6 +23,7 @@ hiddens
     "$Area"[0-9]* -> Area
     "$Elem" -> Elem
     "$Elem*" -> {Elem ","}*
+    "$Elem+" -> {Elem ","}+
     "$EdgeSection" -> EdgeSection
     "$GraphEdge" -> GraphEdge
     "$GraphEdge*" -> GraphEdge*
