@@ -404,17 +404,6 @@ prodToAsFix1(PT_Production prod)
 	/* the ModuleName identifier */
 	id = attr;
       }
-      else if (ATmatchTerm(attr, ATparse("traverse"))) {
-	if (!res_attr) {	/* first attr */
-	  res_attr = (ATerm) ATmakeList1(ATmake("l(\"traverse\")"));
-	}
-	else {
-	  res_attr =
-	    (ATerm) ATconcat((ATermList) res_attr,
-			     (ATermList) ATmake("[w(\"\"),sep(\",\"),w(\"\"),"
-						"l(\"traverse\")]", lit));
-	}
-      }
       else {
 	/* unrecognized ATerm */
 	ATerror("prodToAsFix1: strange attribute %t\n", attr);
