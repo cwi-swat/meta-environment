@@ -1,11 +1,12 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(asf, 1.8)
 
 ACLOCAL="${ACLOCAL} -I ."
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl {{{  Which compiler to use?
 AC_PROG_CC
@@ -147,8 +148,7 @@ dnl }}}
 
 dnl {{{  List output files
 
-AC_OUTPUT(
-   Makefile
+AC_CONFIG_FILES([Makefile
    syntax/Makefile
    syntax/addeqssyntax/Makefile
    syntax/addeqssyntax/spec/Makefile
@@ -177,6 +177,7 @@ AC_OUTPUT(
    semantics/test/input/Makefile
    semantics/test/output/Makefile
    semantics/test/c-code/Makefile
-)
+])
+AC_OUTPUT
 
 dnl }}}

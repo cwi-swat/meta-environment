@@ -1,5 +1,22 @@
 # $Id$
 
+Mon Feb  9 11:39:22 CET 2004 <jurgenv@cwi.nl>
+ * Added a prototype compiler from muASF to TOM+Java currently supporting
+   only the following ASF features:
+     - simple rewrite equations
+     - default equations
+ * Finished the asf-api specification; a generator for getters and setters
+   and identification predicates in ASF+SDF. The input of the specification
+   is an SDF-module, the output is a shadow SDF module with the same 
+   parameters that implements getters and setters for all productions that
+   have cons and label attributes.
+
+2003/07/01 (jurgenv@cwi.nl)
+ * In the compiler, the asf2muasf phase now adds the result type of every 
+   function as an attribute to the funcdef in the signature. 
+ * The compiler provides the types of the result of a builtin to
+   every call to a builtin and so does the interpreter.
+
 Mon Feb  2 16:43:59 CET 2004 <{jong,kooiker}@cwi.nl>
  * fix Makefile.am to get "distcheck" working
 
