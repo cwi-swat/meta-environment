@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{llncs}
 
 \usepackage{latexsym}
 \usepackage{a4}
@@ -8,19 +8,18 @@
 \usepackage{psfig}
 
 \title{Compilation and Memory Management for ASF+SDF}
-\author{Mark van den Brand$^{^1}$,
-        Paul Klint$^{^{1,2}}$,
-        Pieter Olivier$^{^2}$\\
-        \vspace{.1cm}\\
-        {\small\sl $^1$CWI,
-        Department of Software Engineering\vspace{-.2cm}}\\
-        {\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}
-        \vspace{.1cm}\\
-        {\small\sl $^2$University of Amsterdam,
-        Programming Research Group\vspace{-.2cm}}\\
-        {\small\sl Kruislaan 403, 1098 SJ Amsterdam, The Netherlands}
-        \vspace{.1cm}\\
-        {\small \sl\tt Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
+\author{Mark van den Brand\inst{1} and 
+        Paul Klint\inst{1,2} and
+        Pieter Olivier\inst{2}}
+ 
+\institute{CWI,
+           Department of Software Engineering,
+           Kruislaan 413, NL-1098 SJ Amsterdam, The Netherlands
+           \and
+           University of Amsterdam,
+           Programming Research Group,
+           Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands
+           \email{Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
 }
 
 \newcommand{\muasf}{$\mu\mbox{\sc Asf}$}
@@ -125,7 +124,7 @@ part corresponds to signatures in ordinary algebraic specification
 formalisms. However, syntax is not restricted to plain prefix notation
 since arbitrary context-free grammars can be defined.  The syntax
 defined in the \sdf-part of a module can be used immediately when
-defining equations, the syntax in equations is thus\emph{user-defined}.
+defining equations, the syntax in equations is thus \emph{user-defined}.
 
 \begin{figure}
 \centerline{\fbox{
@@ -241,6 +240,10 @@ Figure \ref{setexmpl2} shows the \muasf\ specification of sets given
 earlier in Figure~\ref{setexmpl}. Note that this specification is not
 left-linear since the variable \texttt{Id} appears twice on the
 left-hand side of the equation.
+The \texttt{\{list\}} function is used to mark that a term is a list.
+This extra function is needed to distinguish bewteen a single element list
+and an ordinary term, e.g., \texttt{\{list\}(a)} vs.\ \texttt{a}
+or \texttt{\{list\}(V)} vs.\ \texttt{V}.
 An example of a transformation on \muasf\ specifications is shown in
 Figure~\ref{setexmpl3}, where the non-left-linearity 
 has been removed from  the specification in Figure \ref{setexmpl2}
@@ -281,8 +284,8 @@ by introducing new variables and an auxiliary condition.
 \>{\tt set(\_);}\\
 \>{\tt cons(\_,\_);}\\
 {\tt rules}\\
-\>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}
+\>{\tt se}\={\tt t(\{list\}(cons(*Id0,cons(Id,cons(*Id1,cons(Id,*Id2)))))) =}\\
+\>\>{\tt set(\{list\}(cons(*Id0,cons(Id,cons(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -304,8 +307,8 @@ by introducing new variables and an auxiliary condition.
 {\tt rules}\\
 \>{\tt term-equal(Id1,Id2) == t} \\
 \>{\tt ==>}\\
-\>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}
+\>{\tt se}\={\tt t(\{list\}(cons(*Id0,cons(Id1,cons(*Id1,cons(Id2,*Id2)))))) =}\\
+\>\>{\tt set(\{list\}(cons(*Id0,cons(Id1,cons(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -330,7 +333,7 @@ simplify code generation.
 
 In the last phase of the compilation process C code is generated which
 implements the rewrite rules in the specification using adaptations of
-known techniques~\cite{Kap87a,Dik89}.  Care is taken in constructing
+known techniques~\cite{Kap87a,Dik:89}.  Care is taken in constructing
 the most efficient matching automaton, identifying common and reusable
 (sub)expressions, and efficiently implementing list matching.  For
 each \muasf\ function (even the constructors) a separate C function is
@@ -413,7 +416,7 @@ checks the equality of two terms.
 \>\>\>\>{\tt ATerm }$\mbox{\tt tmp}_{\mbox{\tt 4}}$\ {\tt = list\_head(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt );}\\
 \>\>\>\>{\tt if}\={\tt (term\_equal(}$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}$\mbox{\tt tmp}_{\mbox{\tt 4}}${\tt )) \{}\\
-\>\>\>\>\>{\tt set(list(cons(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
+\>\>\>\>\>{\tt return set(list(cons(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
 \>\>\>\>\>\>{\tt cons(}\={\tt }$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}\\
 \>\>\>\>\>\>\>{\tt cons(slice(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
 \>\>\>\>{\tt \}}\\
@@ -440,7 +443,7 @@ The first issue concerns the identification and linking of names
 appearing in separately compiled modules. Essentially, this amounts to
 the question how to translate the \asdf\ names into C names.  This
 problem arises since a direct translation would generate names that
-are too long for C compilers en linkage editors.  We have opted for a
+are too long for C compilers and linkage editors.  We have opted for a
 solution in which each generated C file contains a ``register''
 function which stores at run-time for each locally defined function a
 mapping between the derived C name and the original \asdf\ name. In
@@ -624,8 +627,22 @@ exploits the fact that we are managing ATerms.
 
 \section{\label{Benchmarks}Benchmarks}
 
-{\bf Note that this is still work in progress, more systems (SML)
-as well as more benchmarks will appear in the final paper.}
+ 
+To give an impression of the actual performance of the \asfc\ compiler 
+the sizes and the compilation times of a number of non-trivial \asdf\
+specifications are given in Table \ref{ASF2Ctable}.
+
+\begin{table}
+\begin{tabular}{|l|l|l|l|l|l|} \hline
+Specification      & Nr of  & Lines of & Lines of & \asdf    & C \\
+                 & eqs    & \asdf  & C code   & compiler   & compiler \\ \hline \hline
+Compiler         & 1748   & 7972     & 75578    & 186 s  & 263 s \\ \hline
+Parser generator & 1365   & 4586     & 49649    & 203 s  & 168 s \\ \hline
+COBOL formatter  & 1857   & 8387     & 76788    & 371 s  & 339 s \\ \hline
+%%Risla flattener  & 1258   & 16453    & 76664    & 324 s  & 759 s \\ \hline
+\end{tabular}
+\caption{\label{ASF2Ctable}Measurements of the \asfc\ compiler.}
+\end{table}
 
 Does maximal sharing of subterms lead to reductions in memory usage?
 How does it affect execution speed?  Does the combination of techniques
@@ -757,6 +774,11 @@ requirements.  We believe that our setting of maximally shared
 subterms will provide a new perspective on the implementation of
 memo-functions. Finally, our ongoing concern is to achieve an even
 further scale-up of prototyping based on term rewriting.
+
+{\bf PM}: The maximal sharing prevents a cheap clean up of local variables
+when exiting a function. This is an observation made by Appel (according
+to Jan Heering). He does not share the local variables, but this prevents
+a cheap implementation of the \texttt{term-equal}.
 
 \section*{Acknowledgments}
 The discussions with Jan Heering on \asdf\ compilation are much
