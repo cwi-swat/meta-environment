@@ -41,10 +41,10 @@
   DEBUG_LD_FLAGS=
 PROFILE_CC_FLAGS=-pg
 PROFILE_LD_FLAGS=-pg
-    STD_CC_FLAGS=-O
+    STD_CC_FLAGS=
     STD_LD_FLAGS=
 
-        FLAGS_cc=
+        FLAGS_cc="-O"
        FLAGS_gcc="-Wall -O4"
 
 ## No changes below
