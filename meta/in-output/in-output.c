@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <limits.h>
 #include <tb-tool.h>
@@ -6,6 +5,46 @@
 
 #define PATH_LEN _POSIX_PATH_MAX
 #define MAX_PATHS 256
+
+/* This is a hack, due to JS */
+#include <sys/stat.h>
+size_t  FileSize(char *fnam)
+{
+        struct stat     statbuf;
+
+        if(stat(fnam, &statbuf) < 0) {
+                fprintf(stderr, "could not stat() %s\n", fnam);
+                return(-1);
+        }
+        return(statbuf.st_size);
+}
+/* This too :-) */
+char *SlurpFile(char *fnam, size_t *size)
+{
+        char *buf;
+        FILE *fd;
+
+        *size = FileSize(fnam);
+        if((fd = fopen(fnam, "r")) == NULL) {
+                fprintf(stderr, "could not fopen() %s\n", fnam);
+                *size = 0;
+                return(NULL);
+        }
+        if((buf = (char *)malloc(*size)) == NULL ) {
+                fprintf(stderr, "could not allocate %i bytes for %s\n", *size, fnam);
+                fclose(fd);
+                *size = 0;
+                return(buf);
+        }
+        if(fread(buf, 1, *size, fd) != *size) {
+                fprintf(stderr, "could not fread() %i bytes %s\n", *size, fnam);
+                free(buf);
+                *size = 0;
+                buf = NULL;
+        }
+        fclose(fd);
+        return(buf);
+}
 
 arena *ar;
 
@@ -20,6 +59,8 @@ aterm *open_file(int cid, char *name)
   char full[PATH_LEN];
   FILE *f;
   aterm *t;
+  char *buf;
+  size_t size;
 
   for(i=0; i<nr_paths; i++) {
     strcpy(full, paths[i]);
@@ -30,20 +71,40 @@ aterm *open_file(int cid, char *name)
     strcat(full, "/");
     strcat(full, name);
     strcat(full, ".asfix");
-    fprintf(stderr, "trying file %s\n", full);
+    fprintf(stderr, "trying pre-parsed file %s\n", full);
     f = fopen(full, "r");
     if(f) {
       if(TreadTermFile(f, ar, &t) < 0) {
-        fprintf(stderr, "error reading file %s\n", full);
+        fprintf(stderr, "error reading pre-parsed file %s\n", full);
         fclose(f);
-      }
-      else {
+      }else {
         fprintf(stderr, "ok!\n");
         fclose(f);
         return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "asfix",name, t,full);
       }
     }
   }
+  /* JS  Try raw format if no pre-parsed version was found */
+  for(i=0; i<nr_paths; i++) {
+    strcpy(full, paths[i]);
+    if(strlen(full) + strlen(name) > PATH_LEN) {
+      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
+      continue;
+    }
+    strcat(full, "/");
+    strcat(full, name);
+    fprintf(stderr, "trying file %s\n", full);
+    buf = SlurpFile(full, &size);
+    if (buf != NULL) {
+      fprintf(stderr, "ok!\n");
+      t = Tmake(ar,"<str>", buf);
+      fprintf(stderr,"Making string term succeeded\n");
+      free(buf);
+      fprintf(stderr,"Freed buffer\n");
+      return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "raw",name, t,full);
+    }
+  }
+  fprintf(stderr,"We kunnen de file helaas niet vinden\n");
   return Tmake(ar, "snd-value(error-opening(<str>))", name);
 }
 
