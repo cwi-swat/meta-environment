@@ -20,4 +20,6 @@ int ASF_getCHARListLength(ASF_CHARList list);
 
 ASF_Layout ASF_makeLayoutEmpty();
 
+ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree constructor);
+
 #endif

@@ -1,3 +1,7 @@
+2001/10/01 (jurgenv@cwi.nl)
+ * Regenerated library for changes in parse tree format. (See apigen and
+   pt-support ChangeLogs)
+
 2001/08/08 (jurgenv@cwi.nl)
  * Added new library function: ASF_getConditionListLength
 

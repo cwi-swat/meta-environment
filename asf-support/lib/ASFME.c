@@ -876,15 +876,20 @@ ATbool ASF_isValidConditionList(ASF_ConditionList arg)
 
 inline ATbool ASF_isConditionListSingle(ASF_ConditionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternConditionListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -896,15 +901,20 @@ inline ATbool ASF_isConditionListSingle(ASF_ConditionList arg)
 
 inline ATbool ASF_isConditionListMany(ASF_ConditionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternConditionListMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1108,7 +1118,21 @@ ATbool ASF_isValidEquations(ASF_Equations arg)
 
 inline ATbool ASF_isEquationsAbsent(ASF_Equations arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternEquationsAbsent);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternEquationsAbsent);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1116,7 +1140,21 @@ inline ATbool ASF_isEquationsAbsent(ASF_Equations arg)
 
 inline ATbool ASF_isEquationsPresent(ASF_Equations arg)
 {
-  return !(ATmatchTerm((ATerm)arg, ASF_patternEquationsAbsent));
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ASF_patternEquationsPresent, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1211,7 +1249,14 @@ ATbool ASF_isValidCondEquationList(ASF_CondEquationList arg)
 
 inline ATbool ASF_isCondEquationListEmpty(ASF_CondEquationList arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternCondEquationListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternCondEquationListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1219,15 +1264,20 @@ inline ATbool ASF_isCondEquationListEmpty(ASF_CondEquationList arg)
 
 inline ATbool ASF_isCondEquationListSingle(ASF_CondEquationList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCondEquationListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1239,15 +1289,20 @@ inline ATbool ASF_isCondEquationListSingle(ASF_CondEquationList arg)
 
 inline ATbool ASF_isCondEquationListMany(ASF_CondEquationList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCondEquationListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1390,13 +1445,15 @@ inline ATbool ASF_isCondEquationSimple(ASF_CondEquation arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCondEquationSimple, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1410,13 +1467,15 @@ inline ATbool ASF_isCondEquationImplies(ASF_CondEquation arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCondEquationImplies, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1430,13 +1489,15 @@ inline ATbool ASF_isCondEquationWhen(ASF_CondEquation arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCondEquationWhen, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1828,13 +1889,15 @@ inline ATbool ASF_isTagEmpty(ASF_Tag arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTagEmpty, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1848,13 +1911,15 @@ inline ATbool ASF_isTagNotEmpty(ASF_Tag arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTagNotEmpty, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -1994,13 +2059,15 @@ inline ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTreeLexicalConstructor, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -2014,13 +2081,15 @@ inline ATbool ASF_isTreeAmbConstructor(ASF_Tree arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTreeAmbConstructor, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -2467,7 +2536,14 @@ ATbool ASF_isValidCHARList(ASF_CHARList arg)
 
 inline ATbool ASF_isCHARListEmpty(ASF_CHARList arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternCHARListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternCHARListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2475,15 +2551,20 @@ inline ATbool ASF_isCHARListEmpty(ASF_CHARList arg)
 
 inline ATbool ASF_isCHARListSingle(ASF_CHARList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCHARListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -2495,15 +2576,20 @@ inline ATbool ASF_isCHARListSingle(ASF_CHARList arg)
 
 inline ATbool ASF_isCHARListMany(ASF_CHARList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternCHARListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -2868,13 +2954,15 @@ inline ATbool ASF_isConditionPositive(ASF_Condition arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternConditionPositive, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -2888,13 +2976,15 @@ inline ATbool ASF_isConditionNegative(ASF_Condition arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternConditionNegative, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3203,7 +3293,14 @@ ATbool ASF_isValidTreeAmbs(ASF_TreeAmbs arg)
 
 inline ATbool ASF_isTreeAmbsEmpty(ASF_TreeAmbs arg)
 {
-  return ATmatchTerm((ATerm)arg, ASF_patternTreeAmbsEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ASF_patternTreeAmbsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -3211,15 +3308,20 @@ inline ATbool ASF_isTreeAmbsEmpty(ASF_TreeAmbs arg)
 
 inline ATbool ASF_isTreeAmbsSingle(ASF_TreeAmbs arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTreeAmbsSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3231,15 +3333,20 @@ inline ATbool ASF_isTreeAmbsSingle(ASF_TreeAmbs arg)
 
 inline ATbool ASF_isTreeAmbsMany(ASF_TreeAmbs arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ASF_patternTreeAmbsMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
