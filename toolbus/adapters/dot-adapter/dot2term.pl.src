@@ -13,19 +13,23 @@ undef $/;
 
 $_ = <STDIN>;
 
+open OUTPUT,">/tmp/dot/dot-$$.out";
+print OUTPUT $_;
+close OUTPUT;
+
 /^digraph\s\w+\s{/m || die("not a valid graph");
 $_ = $';
 print "graph([\n";
 
 do {
   # Not at end of file yet
-  if (/^\s*graph\s\[bb="(\d+),(\d+),(\d+),(\d+)"\];/m) {
+  if (/^\s*graph\s*\[bb=\s*"(\d+),(\d+),(\d+),(\d+)"\];/m) {
     # Ignore bounding box info
     $_ = $';
   } elsif (/^\s*node\s[^;]+;/m) {
     # Ignore node info
     $_ = $';
-  } elsif (/^\s*("[^"]+")\s\[([^\]]*)\];/m) {
+  } elsif (/^\s*"!([^"]+)"\s\[([^\]]*)\];/m) {
     # Node
     $_ = $';
     if ($first_node) {
@@ -33,15 +37,16 @@ do {
     } else {
       print ",\n";
     }
-    print "node($1,";
+    print "node(\"$1\",";
     my @elems = split /,\s/,$2;
     my $first_elem = 1;
+    $shape = "box";
     foreach my $elem (@elems) {
       @pair = split /=/,$elem;
       if ($pair[0] eq "pos") {
 	$pair[1] =~ /^"(\d+),(\d+)"$/ or die "not a pos spec: $pair[1]";
 	$x = $1;
-	$y = $1;
+	$y = $2;
       } elsif ($pair[0] =~ /^(width|height)$/) {
 	$type = $1;
 	$pair[1] =~ /^"(\d+.\d+)"$/ or die "not a $type spec: $pair[1]";
@@ -51,10 +56,12 @@ do {
 	} else {
 	  $height = $value;
 	}
+      } elsif ($pair[0] eq "shape") {
+        $shape = $pair[1];
       }
     }
-    print "$x,$y,$width,$height)";
-  } elsif (/^\s*("[^"]+")\s->\s("[^"]+")\s\[pos="([^"]*)"\];/m) {
+    print "$shape,$x,$y,$width,$height)";
+  } elsif (/^\s*"!([^"]+)"\s->\s"!([^"]+)"\s\[pos="([^"]*)"\];/m) {
     # Edge
     $_ = $';
     my $from = $1;
@@ -76,9 +83,15 @@ do {
     } else {
       print ",\n";
     }
-    print "edge($from,$to,[$points])";
+    print "edge(\"$from\",\"$to\",[$points])";
   } else {
     die "strange construction: $_\n";
   }
 } until (/^\s*}\s*$/);
+
+if ($first_edge) {
+  print "],[";
+  $first_edge = 0;
+}
+
 print "])\n";

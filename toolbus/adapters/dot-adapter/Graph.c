@@ -9,6 +9,7 @@
 typedef struct ATerm _Graph;
 typedef struct ATerm _NodeList;
 typedef struct ATerm _Node;
+typedef struct ATerm _Shape;
 typedef struct ATerm _EdgeList;
 typedef struct ATerm _Edge;
 typedef struct ATerm _Polygon;
@@ -70,6 +71,22 @@ Node NodeFromTerm(ATerm t)
 /*{{{  ATerm NodeToTerm(Node arg) */
 
 ATerm NodeToTerm(Node arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  Shape ShapeFromTerm(ATerm t) */
+
+Shape ShapeFromTerm(ATerm t)
+{
+  return (Shape)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ShapeToTerm(Shape arg) */
+
+ATerm ShapeToTerm(Shape arg)
 {
   return (ATerm)arg;
 }
@@ -167,19 +184,123 @@ NodeList makeNodeListMulti(Node head, NodeList tail)
 }
 
 /*}}}  */
-/*{{{  Node makeNodeUnpositioned(char * name, int width, int height) */
+/*{{{  Node makeNodeUnsized(char * name, Shape shape) */
 
-Node makeNodeUnpositioned(char * name, int width, int height)
+Node makeNodeUnsized(char * name, Shape shape)
 {
-  return (Node)(ATerm)ATmakeAppl3(afun1, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
+  return (Node)(ATerm)ATmakeAppl2(afun1, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)shape);
 }
 
 /*}}}  */
-/*{{{  Node makeNodePositioned(char * name, int x, int y, int width, int height) */
+/*{{{  Node makeNodeUnpositioned(char * name, Shape shape, int width, int height) */
 
-Node makeNodePositioned(char * name, int x, int y, int width, int height)
+Node makeNodeUnpositioned(char * name, Shape shape, int width, int height)
 {
-  return (Node)(ATerm)ATmakeAppl5(afun2, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y), (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
+  return (Node)(ATerm)ATmakeAppl4(afun2, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)shape, (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
+}
+
+/*}}}  */
+/*{{{  Node makeNodePositioned(char * name, Shape shape, int x, int y, int width, int height) */
+
+Node makeNodePositioned(char * name, Shape shape, int x, int y, int width, int height)
+{
+  return (Node)(ATerm)ATmakeAppl6(afun3, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)shape, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y), (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
+}
+
+/*}}}  */
+/*{{{  Shape makeShapePlaintext() */
+
+Shape makeShapePlaintext()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun4);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeEllipse() */
+
+Shape makeShapeEllipse()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun5);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeCircle() */
+
+Shape makeShapeCircle()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun6);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeEgg() */
+
+Shape makeShapeEgg()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun7);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeTriangle() */
+
+Shape makeShapeTriangle()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun8);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeBox() */
+
+Shape makeShapeBox()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun9);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeDiamond() */
+
+Shape makeShapeDiamond()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun10);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeTrapezium() */
+
+Shape makeShapeTrapezium()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun11);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeParallelogram() */
+
+Shape makeShapeParallelogram()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun12);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeHouse() */
+
+Shape makeShapeHouse()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun13);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeHexagon() */
+
+Shape makeShapeHexagon()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun14);
+}
+
+/*}}}  */
+/*{{{  Shape makeShapeOctagon() */
+
+Shape makeShapeOctagon()
+{
+  return (Shape)(ATerm)ATmakeAppl0(afun15);
 }
 
 /*}}}  */
@@ -203,7 +324,7 @@ EdgeList makeEdgeListMulti(Edge head, EdgeList tail)
 
 Edge makeEdgeUnpositioned(char * from, char * to)
 {
-  return (Edge)(ATerm)ATmakeAppl2(afun3, (ATerm)ATmakeAppl0(ATmakeAFun(from, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(to, 0, ATtrue)));
+  return (Edge)(ATerm)ATmakeAppl2(afun16, (ATerm)ATmakeAppl0(ATmakeAFun(from, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(to, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -211,7 +332,7 @@ Edge makeEdgeUnpositioned(char * from, char * to)
 
 Edge makeEdgePositioned(char * from, char * to, Polygon polygon)
 {
-  return (Edge)(ATerm)ATmakeAppl3(afun4, (ATerm)ATmakeAppl0(ATmakeAFun(from, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(to, 0, ATtrue)), (ATerm)polygon);
+  return (Edge)(ATerm)ATmakeAppl3(afun17, (ATerm)ATmakeAppl0(ATmakeAFun(from, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(to, 0, ATtrue)), (ATerm)polygon);
 }
 
 /*}}}  */
@@ -235,7 +356,7 @@ Polygon makePolygonMulti(Point head, Polygon tail)
 
 Point makePointDefault(int x, int y)
 {
-  return (Point)(ATerm)ATmakeAppl2(afun5, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun18, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
 }
 
 /*}}}  */
@@ -254,6 +375,11 @@ ATbool isEqualNodeList(NodeList arg0, NodeList arg1)
 }
 
 ATbool isEqualNode(Node arg0, Node arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool isEqualShape(Shape arg0, Shape arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -492,13 +618,31 @@ NodeList setNodeListTail(NodeList arg, NodeList tail)
 
 ATbool isValidNode(Node arg)
 {
-  if (isNodeUnpositioned(arg)) {
+  if (isNodeUnsized(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeUnpositioned(arg)) {
     return ATtrue;
   }
   else if (isNodePositioned(arg)) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isNodeUnsized(Node arg) */
+
+inline ATbool isNodeUnsized(Node arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternNodeUnsized)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternNodeUnsized, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -511,7 +655,7 @@ inline ATbool isNodeUnpositioned(Node arg)
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternNodeUnpositioned, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, patternNodeUnpositioned, NULL, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -526,7 +670,7 @@ inline ATbool isNodePositioned(Node arg)
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternNodePositioned, NULL, NULL, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, patternNodePositioned, NULL, NULL, NULL, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -536,7 +680,10 @@ inline ATbool isNodePositioned(Node arg)
 
 ATbool hasNodeName(Node arg)
 {
-  if (isNodeUnpositioned(arg)) {
+  if (isNodeUnsized(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeUnpositioned(arg)) {
     return ATtrue;
   }
   else if (isNodePositioned(arg)) {
@@ -550,7 +697,10 @@ ATbool hasNodeName(Node arg)
 
 char * getNodeName(Node arg)
 {
-  if (isNodeUnpositioned(arg)) {
+  if (isNodeUnsized(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (isNodeUnpositioned(arg)) {
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
   }
   else 
@@ -562,7 +712,10 @@ char * getNodeName(Node arg)
 
 Node setNodeName(Node arg, char * name)
 {
-  if (isNodeUnpositioned(arg)) {
+  if (isNodeUnsized(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), 0);
+  }
+  else if (isNodeUnpositioned(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), 0);
   }
   else if (isNodePositioned(arg)) {
@@ -570,6 +723,57 @@ Node setNodeName(Node arg, char * name)
   }
 
   ATabort("Node has no Name: %t\n", arg);
+  return (Node)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool hasNodeShape(Node arg) */
+
+ATbool hasNodeShape(Node arg)
+{
+  if (isNodeUnsized(arg)) {
+    return ATtrue;
+  }
+  else if (isNodeUnpositioned(arg)) {
+    return ATtrue;
+  }
+  else if (isNodePositioned(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  Shape getNodeShape(Node arg) */
+
+Shape getNodeShape(Node arg)
+{
+  if (isNodeUnsized(arg)) {
+    return (Shape)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else if (isNodeUnpositioned(arg)) {
+    return (Shape)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else 
+    return (Shape)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  Node setNodeShape(Node arg, Shape shape) */
+
+Node setNodeShape(Node arg, Shape shape)
+{
+  if (isNodeUnsized(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)shape, 1);
+  }
+  else if (isNodeUnpositioned(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)shape, 1);
+  }
+  else if (isNodePositioned(arg)) {
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)shape, 1);
+  }
+
+  ATabort("Node has no Shape: %t\n", arg);
   return (Node)NULL;
 }
 
@@ -593,10 +797,10 @@ ATbool hasNodeWidth(Node arg)
 int getNodeWidth(Node arg)
 {
   if (isNodeUnpositioned(arg)) {
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
   }
   else 
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 4));
 }
 
 /*}}}  */
@@ -605,10 +809,10 @@ int getNodeWidth(Node arg)
 Node setNodeWidth(Node arg, int width)
 {
   if (isNodeUnpositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(width), 1);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(width), 2);
   }
   else if (isNodePositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(width), 3);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(width), 4);
   }
 
   ATabort("Node has no Width: %t\n", arg);
@@ -635,10 +839,10 @@ ATbool hasNodeHeight(Node arg)
 int getNodeHeight(Node arg)
 {
   if (isNodeUnpositioned(arg)) {
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
   }
   else 
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 4));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 5));
 }
 
 /*}}}  */
@@ -647,10 +851,10 @@ int getNodeHeight(Node arg)
 Node setNodeHeight(Node arg, int height)
 {
   if (isNodeUnpositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(height), 2);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(height), 3);
   }
   else if (isNodePositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(height), 4);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(height), 5);
   }
 
   ATabort("Node has no Height: %t\n", arg);
@@ -674,7 +878,7 @@ ATbool hasNodeX(Node arg)
 int getNodeX(Node arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
 }
 
 /*}}}  */
@@ -683,7 +887,7 @@ int getNodeX(Node arg)
 Node setNodeX(Node arg, int x)
 {
   if (isNodePositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(x), 1);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(x), 2);
   }
 
   ATabort("Node has no X: %t\n", arg);
@@ -707,7 +911,7 @@ ATbool hasNodeY(Node arg)
 int getNodeY(Node arg)
 {
   
-    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 2));
+    return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
 }
 
 /*}}}  */
@@ -716,11 +920,239 @@ int getNodeY(Node arg)
 Node setNodeY(Node arg, int y)
 {
   if (isNodePositioned(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(y), 2);
+    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(y), 3);
   }
 
   ATabort("Node has no Y: %t\n", arg);
   return (Node)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  Shape accessors */
+
+/*{{{  ATbool isValidShape(Shape arg) */
+
+ATbool isValidShape(Shape arg)
+{
+  if (isShapePlaintext(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeEllipse(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeCircle(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeEgg(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeTriangle(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeBox(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeDiamond(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeTrapezium(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeParallelogram(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeHouse(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeHexagon(arg)) {
+    return ATtrue;
+  }
+  else if (isShapeOctagon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapePlaintext(Shape arg) */
+
+inline ATbool isShapePlaintext(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapePlaintext)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapePlaintext));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeEllipse(Shape arg) */
+
+inline ATbool isShapeEllipse(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeEllipse)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeEllipse));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeCircle(Shape arg) */
+
+inline ATbool isShapeCircle(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeCircle)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeCircle));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeEgg(Shape arg) */
+
+inline ATbool isShapeEgg(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeEgg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeEgg));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeTriangle(Shape arg) */
+
+inline ATbool isShapeTriangle(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeTriangle)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeTriangle));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeBox(Shape arg) */
+
+inline ATbool isShapeBox(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeBox)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeBox));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeDiamond(Shape arg) */
+
+inline ATbool isShapeDiamond(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeDiamond)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeDiamond));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeTrapezium(Shape arg) */
+
+inline ATbool isShapeTrapezium(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeTrapezium)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeTrapezium));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeParallelogram(Shape arg) */
+
+inline ATbool isShapeParallelogram(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeParallelogram)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeParallelogram));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeHouse(Shape arg) */
+
+inline ATbool isShapeHouse(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeHouse)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeHouse));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeHexagon(Shape arg) */
+
+inline ATbool isShapeHexagon(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeHexagon)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeHexagon));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool isShapeOctagon(Shape arg) */
+
+inline ATbool isShapeOctagon(Shape arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(patternShapeOctagon)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternShapeOctagon));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1245,19 +1677,26 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node))
 }
 
 /*}}}  */
-/*{{{  Node visitNode(Node arg, char * (*acceptName)(char *), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int)) */
+/*{{{  Node visitNode(Node arg, char * (*acceptName)(char *), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int)) */
 
-Node visitNode(Node arg, char * (*acceptName)(char *), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int))
+Node visitNode(Node arg, char * (*acceptName)(char *), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int))
 {
+  if (isNodeUnsized(arg)) {
+    return makeNodeUnsized(
+        acceptName ? acceptName(getNodeName(arg)) : getNodeName(arg),
+        acceptShape ? acceptShape(getNodeShape(arg)) : getNodeShape(arg));
+  }
   if (isNodeUnpositioned(arg)) {
     return makeNodeUnpositioned(
         acceptName ? acceptName(getNodeName(arg)) : getNodeName(arg),
+        acceptShape ? acceptShape(getNodeShape(arg)) : getNodeShape(arg),
         acceptWidth ? acceptWidth(getNodeWidth(arg)) : getNodeWidth(arg),
         acceptHeight ? acceptHeight(getNodeHeight(arg)) : getNodeHeight(arg));
   }
   if (isNodePositioned(arg)) {
     return makeNodePositioned(
         acceptName ? acceptName(getNodeName(arg)) : getNodeName(arg),
+        acceptShape ? acceptShape(getNodeShape(arg)) : getNodeShape(arg),
         acceptX ? acceptX(getNodeX(arg)) : getNodeX(arg),
         acceptY ? acceptY(getNodeY(arg)) : getNodeY(arg),
         acceptWidth ? acceptWidth(getNodeWidth(arg)) : getNodeWidth(arg),
@@ -1265,6 +1704,51 @@ Node visitNode(Node arg, char * (*acceptName)(char *), int (*acceptWidth)(int), 
   }
   ATabort("not a Node: %t\n", arg);
   return (Node)NULL;
+}
+
+/*}}}  */
+/*{{{  Shape visitShape(Shape arg) */
+
+Shape visitShape(Shape arg)
+{
+  if (isShapePlaintext(arg)) {
+    return makeShapePlaintext();
+  }
+  if (isShapeEllipse(arg)) {
+    return makeShapeEllipse();
+  }
+  if (isShapeCircle(arg)) {
+    return makeShapeCircle();
+  }
+  if (isShapeEgg(arg)) {
+    return makeShapeEgg();
+  }
+  if (isShapeTriangle(arg)) {
+    return makeShapeTriangle();
+  }
+  if (isShapeBox(arg)) {
+    return makeShapeBox();
+  }
+  if (isShapeDiamond(arg)) {
+    return makeShapeDiamond();
+  }
+  if (isShapeTrapezium(arg)) {
+    return makeShapeTrapezium();
+  }
+  if (isShapeParallelogram(arg)) {
+    return makeShapeParallelogram();
+  }
+  if (isShapeHouse(arg)) {
+    return makeShapeHouse();
+  }
+  if (isShapeHexagon(arg)) {
+    return makeShapeHexagon();
+  }
+  if (isShapeOctagon(arg)) {
+    return makeShapeOctagon();
+  }
+  ATabort("not a Shape: %t\n", arg);
+  return (Shape)NULL;
 }
 
 /*}}}  */

@@ -13,6 +13,7 @@
 typedef struct _Graph *Graph;
 typedef struct _NodeList *NodeList;
 typedef struct _Node *Node;
+typedef struct _Shape *Shape;
 typedef struct _EdgeList *EdgeList;
 typedef struct _Edge *Edge;
 typedef struct _Polygon *Polygon;
@@ -30,6 +31,8 @@ NodeList NodeListFromTerm(ATerm t);
 ATerm NodeListToTerm(NodeList arg);
 Node NodeFromTerm(ATerm t);
 ATerm NodeToTerm(Node arg);
+Shape ShapeFromTerm(ATerm t);
+ATerm ShapeToTerm(Shape arg);
 EdgeList EdgeListFromTerm(ATerm t);
 ATerm EdgeListToTerm(EdgeList arg);
 Edge EdgeFromTerm(ATerm t);
@@ -45,8 +48,21 @@ ATerm PointToTerm(Point arg);
 Graph makeGraphDefault(NodeList nodes, EdgeList edges);
 NodeList makeNodeListEmpty();
 NodeList makeNodeListMulti(Node head, NodeList tail);
-Node makeNodeUnpositioned(char * name, int width, int height);
-Node makeNodePositioned(char * name, int x, int y, int width, int height);
+Node makeNodeUnsized(char * name, Shape shape);
+Node makeNodeUnpositioned(char * name, Shape shape, int width, int height);
+Node makeNodePositioned(char * name, Shape shape, int x, int y, int width, int height);
+Shape makeShapePlaintext();
+Shape makeShapeEllipse();
+Shape makeShapeCircle();
+Shape makeShapeEgg();
+Shape makeShapeTriangle();
+Shape makeShapeBox();
+Shape makeShapeDiamond();
+Shape makeShapeTrapezium();
+Shape makeShapeParallelogram();
+Shape makeShapeHouse();
+Shape makeShapeHexagon();
+Shape makeShapeOctagon();
 EdgeList makeEdgeListEmpty();
 EdgeList makeEdgeListMulti(Edge head, EdgeList tail);
 Edge makeEdgeUnpositioned(char * from, char * to);
@@ -61,6 +77,7 @@ Point makePointDefault(int x, int y);
 ATbool isEqualGraph(Graph arg0, Graph arg1);
 ATbool isEqualNodeList(NodeList arg0, NodeList arg1);
 ATbool isEqualNode(Node arg0, Node arg1);
+ATbool isEqualShape(Shape arg0, Shape arg1);
 ATbool isEqualEdgeList(EdgeList arg0, EdgeList arg1);
 ATbool isEqualEdge(Edge arg0, Edge arg1);
 ATbool isEqualPolygon(Polygon arg0, Polygon arg1);
@@ -95,11 +112,15 @@ NodeList setNodeListTail(NodeList arg, NodeList tail);
 /*{{{  Node accessors */
 
 ATbool isValidNode(Node arg);
+inline ATbool isNodeUnsized(Node arg);
 inline ATbool isNodeUnpositioned(Node arg);
 inline ATbool isNodePositioned(Node arg);
 ATbool hasNodeName(Node arg);
 char * getNodeName(Node arg);
 Node setNodeName(Node arg, char * name);
+ATbool hasNodeShape(Node arg);
+Shape getNodeShape(Node arg);
+Node setNodeShape(Node arg, Shape shape);
 ATbool hasNodeWidth(Node arg);
 int getNodeWidth(Node arg);
 Node setNodeWidth(Node arg, int width);
@@ -112,6 +133,23 @@ Node setNodeX(Node arg, int x);
 ATbool hasNodeY(Node arg);
 int getNodeY(Node arg);
 Node setNodeY(Node arg, int y);
+
+/*}}}  */
+/*{{{  Shape accessors */
+
+ATbool isValidShape(Shape arg);
+inline ATbool isShapePlaintext(Shape arg);
+inline ATbool isShapeEllipse(Shape arg);
+inline ATbool isShapeCircle(Shape arg);
+inline ATbool isShapeEgg(Shape arg);
+inline ATbool isShapeTriangle(Shape arg);
+inline ATbool isShapeBox(Shape arg);
+inline ATbool isShapeDiamond(Shape arg);
+inline ATbool isShapeTrapezium(Shape arg);
+inline ATbool isShapeParallelogram(Shape arg);
+inline ATbool isShapeHouse(Shape arg);
+inline ATbool isShapeHexagon(Shape arg);
+inline ATbool isShapeOctagon(Shape arg);
 
 /*}}}  */
 /*{{{  EdgeList accessors */
@@ -172,7 +210,8 @@ Point setPointY(Point arg, int y);
 
 Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList));
 NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
-Node visitNode(Node arg, char * (*acceptName)(char *), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int));
+Node visitNode(Node arg, char * (*acceptName)(char *), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), int (*acceptX)(int), int (*acceptY)(int));
+Shape visitShape(Shape arg);
 EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge));
 Edge visitEdge(Edge arg, char * (*acceptFrom)(char *), char * (*acceptTo)(char *), Polygon (*acceptPolygon)(Polygon));
 Polygon visitPolygon(Polygon arg, Point (*acceptHead)(Point));

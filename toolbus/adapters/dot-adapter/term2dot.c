@@ -33,6 +33,7 @@ static void add_graph_to_write_buf(Graph graph)
   EdgeList edges;
   Node node;
   Edge edge;
+  Shape shape;
   char buf[BUFSIZ];
   float width, height;
 
@@ -43,10 +44,13 @@ static void add_graph_to_write_buf(Graph graph)
     node = getNodeListHead(nodes);
     nodes = getNodeListTail(nodes);
     /*ATfprintf(stderr, "node = %t\n", node);*/
+    shape = getNodeShape(node);
     width = ((float)getNodeWidth(node))/72.0;
     height = ((float)getNodeHeight(node))/72.0;
-    sprintf(buf, "\"%s\" [width=\"%2.2f\", height=\"%2.2f\"];\n",
-	    getNodeName(node), width, height);
+    sprintf(buf, "\"!%s\" [shape=%s, width=\"%2.2f\", height=\"%2.2f\", fontsize=\"0\"];\n",
+	    getNodeName(node),
+	    ATwriteToString(ShapeToTerm(getNodeShape(node))),
+	    width, height);
     add_string_to_write_buf(buf);
   }
 
@@ -54,7 +58,7 @@ static void add_graph_to_write_buf(Graph graph)
   while (!isEdgeListEmpty(edges)) {
     edge = getEdgeListHead(edges);
     edges = getEdgeListTail(edges);
-    sprintf(buf, "\"%s\" -> \"%s\";\n", getEdgeFrom(edge), getEdgeTo(edge));
+    sprintf(buf, "\"!%s\" -> \"!%s\";\n", getEdgeTo(edge), getEdgeFrom(edge));
     add_string_to_write_buf(buf);
   }
 

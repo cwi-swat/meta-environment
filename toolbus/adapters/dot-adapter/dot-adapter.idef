@@ -1,5 +1,5 @@
 
-process DOTADAPTER is
+process DOT-ADAPTER is
 let
   D : dot-adapter,
   Graph : term

@@ -15,13 +15,16 @@ let
   G : term,
   Result : term
 in
-  G := quote(graph([node("Node-1",200,30),node("Node-2",200,30)],
+  G := quote(graph([node("Node-1",box,200,30),node("Node-2",ellipse,200,30)],
              [edge("Node-1", "Node-2")])) .
   LAYOUT(G) .
-  G := quote(graph([node("Node-1",250,30),node("Node-2",250,30)],
+  G := quote(graph([node("Node-1",box,250,30),node("Node-2",triangle,250,30)],
              [edge("Node-1", "Node-2")])) .
+  LAYOUT(G) .
+  G := quote(graph([node("Value",triangle,250,30),node("Layout",diamond,250,30)],
+             [edge("Value", "Layout")])) .
   LAYOUT(G) .
   shutdown("done")
 endlet
 
-toolbus(DOTADAPTER, TEST)
+toolbus(DOT-ADAPTER, TEST)
