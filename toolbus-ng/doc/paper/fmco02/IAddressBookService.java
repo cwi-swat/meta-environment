@@ -5,4 +5,5 @@ public interface IAddressBookService extends Remote {
   public void deleteEntry(int id) throws RemoteException;
   public void setName(int id, String name) throws RemoteException;
   public void setAddress(int id, String address) throws RemoteException;
+  public int findByName(String name) throws RemoteException;
 }

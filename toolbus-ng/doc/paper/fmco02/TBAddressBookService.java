@@ -10,33 +10,46 @@ public class TBAddressBookService implements AddressBookTif
 
   private static ATermFactory factory = new PureFactory();
 
-  private Map addressMap;
+  private Map addressById;
+  private Map addressByName;
 
   public TBAddressBookService() {
-    addressMap = new HashMap();
+    addressById = new HashMap();
+    addressByName = new HashMap();
   }
 
   private AddressBookEntry getEntry(int id) {
-    return (AddressBookEntry) addressMap.get(new Integer(id));
+    return (AddressBookEntry) addressById.get(new Integer(id));
   }
 
   public void deleteEntry(int id) {
-    addressMap.remove(new Integer(id));
+    addressById.remove(new Integer(id));
   }
 
   public void setName(int id, String name) {
-    getEntry(id).setName(name);
+    AddressBookEntry entry = getEntry(id);
+    addressByName.remove(name);
+    addressByName.put(name, new Integer(id));
+    entry.setName(name);
   }
 
   public void setAddress(int id, String address) {
-    System.out.println("setAddress: id=" + id + ", address=" + address);
     getEntry(id).setAddress(address);
+  }
+
+  public ATerm findByName(String name) {
+    Integer id = (Integer) addressByName.get(name);
+    if (id == null) {
+      return factory.make("snd-value(not-found)");
+    } else {
+      return factory.make("snd-value(found(<int>))", id);
+    }
   }
 
   public ATerm createEntry() {
     Integer id = new Integer(createUniqueID());
     AddressBookEntry entry = new AddressBookEntry();
-    addressMap.put(id, entry);
+    addressById.put(id, entry);
     return factory.make("snd-value(new-entry(<int>))", id);
   }
 
