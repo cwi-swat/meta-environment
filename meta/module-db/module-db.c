@@ -357,7 +357,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 			       ATparse("unavailable"), TRM_TABLE_LOC);
       entry = (ATerm)ATreplace((ATermList)entry, 
                                ATparse("unavailable"), EQS_TREE_LOC); 
-      entry = ATreplace(entry, Mtrue, EQS_UPDATED_LOC);
+      entry = (ATerm)ATreplace((ATermList)entry, Mtrue, EQS_UPDATED_LOC);
       PutValue(modules_db, modName, entry);
 
       chg_mods = modules_depend_on(modName, ATempty);
