@@ -1,4 +1,5 @@
-%%  TermAsFix2Sign
+%% The module TermAsFix2Sign takes care of translating the term variant of AsFix to
+%% a MuASF signature.
 
 imports TermAsFixAccess VarEnv
 
