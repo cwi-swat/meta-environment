@@ -113,5 +113,4 @@ AC_OUTPUT(
    test/first/Makefile
    test/tables/Makefile
    test/terms/Makefile
-  , chmod +x test/regress-terms
 )
