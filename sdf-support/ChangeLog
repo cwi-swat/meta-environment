@@ -1,3 +1,6 @@
+2001/06/28 (markvdb@cwi.nl)
+ * Added function to replace the module name in a module.
+
 2001/06/27 ({jong,jurgenv}@cwi.nl)
  * Bumped into version 0.3.1
  * added --with-pt-support option, making a dependency explicit.

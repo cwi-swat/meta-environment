@@ -4,6 +4,7 @@
 #include "SDFME.h"
 
 char      *SDFgetModuleName (SDF_Module sdfModule);
+SDF_Module SDFsetModuleName (SDF_Module sdfModule, char *name);
 
 ATermList  SDFgetGrammars              (SDF_Module module);
 typedef    void (*SDFGrammarFunc)      (SDF_Grammar, ATerm *);

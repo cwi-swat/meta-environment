@@ -15,3 +15,18 @@ char *SDFgetModuleName(SDF_Module sdfModule)
 }
 
 /*}}}  */
+/*{{{  SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *moduleName) */
+
+SDF_Module SDFsetModuleName(SDF_Module sdfModule, char *newName)
+{
+  SDF_ModuleName oldModuleName, newModuleName;
+  SDF_ModuleId   oldModuleId, newModuleId;
+
+  oldModuleName = SDF_getModuleModuleName(sdfModule);
+  oldModuleId   = SDF_getModuleNameModuleId(oldModuleName);
+
+  newModuleId   = SDF_setModuleIdLex(oldModuleId, (SDF_Lexical)newName);
+  newModuleName = SDF_setModuleNameModuleId(oldModuleName, newModuleId);
+
+  return SDF_setModuleModuleName(sdfModule, newModuleName);
+}
