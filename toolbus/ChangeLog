@@ -1,13 +1,5 @@
 $Id$
 
-2002/03/26 (vandenbr@loria.fr)
- * n toolbus/toolbus/script.y, changed line #91, 
-   which read "TBtmpname(namec, ".c");", 
-   to "TBtmpname(namec, ".x");". 
-   Mac OS X' preprocessing is a bit smarter
-   than most Unices, and the fancy stuff it does to ".c"
-   files won't go all that well with ToolBus files. 
-
 Tue Mar  5 15:47:40 CET 2002 <jong@cwi.nl>
  * Several adapters 'omgeSPECt' from 8 to 12 bytes
 
