@@ -1,32 +1,29 @@
 #include "support.h"
-static asymbol * lf_AUX_Numerals1_1sym;
-static aterm * lf_AUX_Numerals1_1( aterm * arg1);
-static asymbol * ef1sym;
+static Symbol lf_AUX_Numerals1_1sym;
+static ATerm lf_AUX_Numerals1_1( ATerm arg1);
+static Symbol ef1sym;
 static funcptr ef1;
-static asymbol * ef2sym;
+static Symbol ef2sym;
 static funcptr ef2;
 void register_AUX_Numerals1( ) {
-arena local;
-TinitArena( NULL , & local);
-lf_AUX_Numerals1_1sym= TmkSymbol( "prod(id(\"Numerals\"),w(\"\"),[l(\"decr\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"
- , SYM_STRING);
-register_prod( TmakeSimple( & local , "prod(id(\"Numerals\"),w(\"\"),[l(\"decr\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)") , lf_AUX_Numerals1_1 , lf_AUX_Numerals1_1sym);
+lf_AUX_Numerals1_1sym= ATmakeSymbol( "prod(id(\"Numerals\"),w(\"\"),[l(\"decr\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_Numerals1_1sym);
+register_prod( ATparse( "prod(id(\"Numerals\"),w(\"\"),[l(\"decr\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)") , lf_AUX_Numerals1_1 , lf_AUX_Numerals1_1sym);
 }
 void resolve_AUX_Numerals1( ) {
-arena local;
-TinitArena( NULL , & local);
-ef1= lookup_func( TmakeSimple( & local , "prod(id(\"Numerals\"),w(\"\"),[l(\"s\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Numerals\"),w(\"\"),[l(\"s\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( TmakeSimple( & local , "prod(id(\"Numerals\"),w(\"\"),[l(\"zero\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Numerals\"),w(\"\"),[l(\"zero\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"Numerals\"),w(\"\"),[l(\"s\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Numerals\"),w(\"\"),[l(\"s\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Num\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Numerals\"),w(\"\"),[l(\"zero\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Numerals\"),w(\"\"),[l(\"zero\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Num\"),w(\"\"),no-attrs)"));
 }
-aterm * lf_AUX_Numerals1_1( aterm * arg0) {
+void init_AUX_Numerals1( ) {
+}
+ATerm lf_AUX_Numerals1_1( ATerm arg0) {
 PROF( prof_lf_AUX_Numerals1_1);
 if( check_sym( arg0 , ef1sym)) {
 {
-aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-t_unprotect( arg0);
+ATerm atmp00= arg_0( arg0);
 return atmp00;
 }
 }

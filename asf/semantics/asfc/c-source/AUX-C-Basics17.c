@@ -1,86 +1,58 @@
 #include "support.h"
-static asymbol * lf_AUX_C_Basics17_2sym;
-static aterm * lf_AUX_C_Basics17_2( aterm * arg1 , aterm * arg2);
-static asymbol * ef3sym;
-static funcptr ef3;
-static asymbol * ef4sym;
-static funcptr ef4;
-static asymbol * ef5sym;
-static funcptr ef5;
-static asymbol * lf_AUX_C_Basics17_1sym;
-static aterm * lf_AUX_C_Basics17_1( aterm * arg1);
-static asymbol * ef1sym;
+static Symbol lf_AUX_C_Basics17_1sym;
+static ATerm lf_AUX_C_Basics17_1( ATerm arg1);
+static Symbol ef1sym;
 static funcptr ef1;
-static asymbol * ef2sym;
+static Symbol lf2sym;
+static ATerm lf2( ATerm arg1);
+static Symbol ef2sym;
 static funcptr ef2;
-static asymbol * ef6sym;
-static funcptr ef6;
+static Symbol ef3sym;
+static funcptr ef3;
 void register_AUX_C_Basics17( ) {
-arena local;
-TinitArena( NULL , & local);
-lf_AUX_C_Basics17_2sym= TmkSymbol( "prod(id(\"C-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
- , SYM_STRING);
-lf_AUX_C_Basics17_1sym= TmkSymbol( "listtype(sort(\"NamePair\"),ql(\",\"))" , SYM_STRING);
-register_prod( TmakeSimple( & local , "listtype(sort(\"NamePair\"),ql(\",\"))") , lf_AUX_C_Basics17_1 , lf_AUX_C_Basics17_1sym);
-register_prod( TmakeSimple( & local , "prod(id(\"C-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics17_2 , lf_AUX_C_Basics17_2sym);
+lf_AUX_C_Basics17_1sym= ATmakeSymbol( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-false\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_C_Basics17_1sym);
+lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
+ATprotectSymbol( lf2sym);
+register_prod( ATparse( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-false\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics17_1 , lf_AUX_C_Basics17_1sym);
+register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_C_Basics17( ) {
-arena local;
-TinitArena( NULL , & local);
-ef1= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-trans-list-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-trans-list-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef4= lookup_func( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"remove-trans-from-list-id\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef4sym= lookup_sym( TmakeSimple( & local , "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"remove-trans-from-list-id\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef5= lookup_func( TmakeSimple( & local , "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef5sym= lookup_sym( TmakeSimple( & local , "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef6= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef6sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 }
-aterm * lf_AUX_C_Basics17_2( aterm * arg0 , aterm * arg1) {
-{
-aterm * tmp[4];
-PROF( prof_lf_AUX_C_Basics17_2);
-if( check_sym( arg1 , lf_AUX_C_Basics17_1sym)) {
-{
-aterm * atmp10= arg_0( arg1);
-t_protect( arg0);
-tmp[ 0]= ( * ef1)( arg0);
-t_protect( tmp[ 0]);
-tmp[ 1]= ( * ef2)( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( term_equal( tmp[ 1] , ( * ef3)( ))) {
-t_protect( tmp[ 0]);
-tmp[ 2]= ( * ef4)( tmp[ 0]);
-t_protect( tmp[ 2]);
-t_protect( atmp10);
-tmp[ 3]= ( * ef5)( tmp[ 2] , lf_AUX_C_Basics17_1( make_list( atmp10)));
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 1]);
-t_unprotect( tmp[ 2]);
-return tmp[ 3];
+static ATerm constant0= NULL;
+static ATerm constant1= NULL;
+void init_AUX_C_Basics17( ) {
+ATprotect( & constant0);
+ATprotect( & constant1);
 }
-t_protect( tmp[ 1]);
-if( term_equal( tmp[ 1] , ( * ef6)( ))) {
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( tmp[ 1]);
-return tmp[ 0];
-}
-t_unprotect( tmp[ 1]);
-t_unprotect( tmp[ 0]);
-}
-}
-return make_nf2( lf_AUX_C_Basics17_2sym , arg0 , arg1);
-}
-}
-aterm * lf_AUX_C_Basics17_1( aterm * arg0) {
+ATerm lf_AUX_C_Basics17_1( ATerm arg0) {
 PROF( prof_lf_AUX_C_Basics17_1);
-return make_nf1( lf_AUX_C_Basics17_1sym , arg0);
+if( check_sym( arg0 , ef1sym)) {
+{
+ATerm atmp00= arg_0( arg0);
+if( check_sym( atmp00 , lf2sym)) {
+{
+ATerm atmp000= arg_0( atmp00);
+if( is_single_element( atmp000)) {
+if( term_equal( list_head( atmp000) , make_char( 102))) {
+return ( constant0? constant0: ( constant0= ( * ef2)( )));
+}
+}
+}
+}
+}
+}
+return ( constant1? constant1: ( constant1= ( * ef3)( )));
+}
+ATerm lf2( ATerm arg0) {
+PROF( prof_lf2);
+return make_nf1( lf2sym , arg0);
 }
 

@@ -1,70 +1,60 @@
 #include "support.h"
-static asymbol * lf_AUX_AsFix_Basics8_1sym;
-static aterm * lf_AUX_AsFix_Basics8_1( aterm * arg1 , aterm * arg2);
-static asymbol * ef2sym;
+static Symbol lf_AUX_AsFix_Basics8_1sym;
+static ATerm lf_AUX_AsFix_Basics8_1( ATerm arg1 , ATerm arg2);
+static Symbol ef2sym;
 static funcptr ef2;
-static asymbol * ef3sym;
+static Symbol ef3sym;
 static funcptr ef3;
-static asymbol * ef1sym;
+static Symbol ef1sym;
 static funcptr ef1;
-static asymbol * ef4sym;
+static Symbol ef4sym;
 static funcptr ef4;
-static asymbol * ef5sym;
+static Symbol ef5sym;
 static funcptr ef5;
 void register_AUX_AsFix_Basics8( ) {
-arena local;
-TinitArena( NULL , & local);
-lf_AUX_AsFix_Basics8_1sym= TmkSymbol( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"is-attribute\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
- , SYM_STRING);
-register_prod( TmakeSimple( & local , "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"is-attribute\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_AsFix_Basics8_1 , lf_AUX_AsFix_Basics8_1sym);
+lf_AUX_AsFix_Basics8_1sym= ATmakeSymbol( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"is-attribute\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 2 , ATtrue);
+ATprotectSymbol( lf_AUX_AsFix_Basics8_1sym);
+register_prod( ATparse( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"is-attribute\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_AsFix_Basics8_1 , lf_AUX_AsFix_Basics8_1sym);
 }
 void resolve_AUX_AsFix_Basics8( ) {
-arena local;
-TinitArena( NULL , & local);
-ef1= lookup_func( TmakeSimple( & local , "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef4= lookup_func( TmakeSimple( & local , "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef4sym= lookup_sym( TmakeSimple( & local , "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef5= lookup_func( TmakeSimple( & local , "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"get-itersep-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
-ef5sym= lookup_sym( TmakeSimple( & local , "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"get-itersep-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef4= lookup_func( ATreadFromString( "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
+ef4sym= lookup_sym( ATreadFromString( "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
+ef5= lookup_func( ATreadFromString( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"get-itersep-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef5sym= lookup_sym( ATreadFromString( "prod(id(\"AsFix-Basics\"),w(\"\"),[l(\"get-itersep-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
 }
-aterm * lf_AUX_AsFix_Basics8_1( aterm * arg0 , aterm * arg1) {
+static ATerm constant0= NULL;
+static ATerm constant1= NULL;
+static ATerm constant2= NULL;
+void init_AUX_AsFix_Basics8( ) {
+ATprotect( & constant0);
+ATprotect( & constant1);
+ATprotect( & constant2);
+}
+ATerm lf_AUX_AsFix_Basics8_1( ATerm arg0 , ATerm arg1) {
 {
-aterm * tmp[3];
+ATerm tmp[3];
 PROF( prof_lf_AUX_AsFix_Basics8_1);
 if( check_sym( arg0 , ef1sym)) {
-t_unprotect( arg0);
-t_unprotect( arg1);
-return ( * ef2)( );
+return ( constant0? constant0: ( constant0= ( * ef2)( )));
 }
-tmp[ 0]= ( * ef1)( );
-t_protect( arg0);
-t_protect( tmp[ 0]);
+tmp[ 0]= ( constant1? constant1: ( constant1= ( * ef1)( )));
 if( ! term_equal( arg0 , tmp[ 0])) {
-t_protect( arg0);
 tmp[ 1]= ( * ef4)( arg0);
-if( m_term_equal( tmp[ 1] , arg1)) {
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 1]);
-return ( * ef3)( );
+if( term_equal( tmp[ 1] , arg1)) {
+return ( constant2? constant2: ( constant2= ( * ef3)( )));
 }
 else {
-t_protect( arg0);
 tmp[ 2]= ( * ef5)( arg0);
-t_unprotect( arg0);
-t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 1]);
 return lf_AUX_AsFix_Basics8_1( tmp[ 2] , arg1);
 }
-t_unprotect( tmp[ 1]);
 }
-t_unprotect( tmp[ 0]);
 return make_nf2( lf_AUX_AsFix_Basics8_1sym , arg0 , arg1);
 }
 }

@@ -1,39 +1,40 @@
 #include "support.h"
-static asymbol * lf_AUX_AVars1_1sym;
-static aterm * lf_AUX_AVars1_1( aterm * arg1);
-static asymbol * ef1sym;
+static Symbol lf_AUX_AVars1_1sym;
+static ATerm lf_AUX_AVars1_1( ATerm arg1);
+static Symbol ef1sym;
 static funcptr ef1;
-static asymbol * ef2sym;
+static Symbol ef2sym;
 static funcptr ef2;
-static asymbol * ef3sym;
+static Symbol ef3sym;
 static funcptr ef3;
 void register_AUX_AVars1( ) {
-arena local;
-TinitArena( NULL , & local);
-lf_AUX_AVars1_1sym= TmkSymbol( "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
- , SYM_STRING);
-register_prod( TmakeSimple( & local , "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_AVars1_1 , lf_AUX_AVars1_1sym);
+lf_AUX_AVars1_1sym= ATmakeSymbol( "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_AVars1_1sym);
+register_prod( ATparse( "prod(id(\"AVars\"),w(\"\"),[l(\"is-avar\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_AVars1_1 , lf_AUX_AVars1_1sym);
 }
 void resolve_AUX_AVars1( ) {
-arena local;
-TinitArena( NULL , & local);
-ef1= lookup_func( TmakeSimple( & local , "prod(id(\"ATerms\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"ATerms\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3= lookup_func( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef3sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 }
-aterm * lf_AUX_AVars1_1( aterm * arg0) {
+static ATerm constant0= NULL;
+static ATerm constant1= NULL;
+void init_AUX_AVars1( ) {
+ATprotect( & constant0);
+ATprotect( & constant1);
+}
+ATerm lf_AUX_AVars1_1( ATerm arg0) {
 PROF( prof_lf_AUX_AVars1_1);
 if( check_sym( arg0 , ef1sym)) {
 {
-aterm * atmp00= arg_0( arg0);
-t_unprotect( arg0);
-return ( * ef2)( );
+ATerm atmp00= arg_0( arg0);
+return ( constant0? constant0: ( constant0= ( * ef2)( )));
 }
 }
-t_unprotect( arg0);
-return ( * ef3)( );
+return ( constant1? constant1: ( constant1= ( * ef3)( )));
 }
 

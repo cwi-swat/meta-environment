@@ -1,65 +1,46 @@
-# $Id$
 # Directory: compiler/c-source
 
 # Configure variable substitutions
-PRODUCT     = @PRODUCT@
-VERSION     = @VERSION@
+PRODUCT     = new-meta
+VERSION     = 0.02
 
-@SET_MAKE@
-
-srcdir      = @srcdir@
-VPATH       = @srcdir@
-top_srcdir  = @top_srcdir@
-prefix      = @prefix@
-exec_prefix = @exec_prefix@
+srcdir      = .
+top_srcdir  = ../..
+prefix      = /home/markvdb/NEW-META/
+exec_prefix = ${prefix}
 bindir      = $(exec_prefix)/bin
 libdir      = $(exec_prefix)/lib
 includedir  = $(prefix)/include
 docdir      = $(top_srcdir)/docs
 
-SHELL       = @SHELL@
-CC          = @CC@
+SHELL       = /bin/sh
+CC          = cc
 MAKE        = gmake
-CFLAGS      = @CFLAGS@ ${XCFLAGS}
-CPP         = @CPP@
-CPPFLAGS    = @CPP@ ${XCPPFLAGS}
-DEFS        = @DEFS@ ${XDEFS}
-INCLUDES    = @INCLUDES@ ${XINCLUDES}
-LIBS        = @LIBS@ ${XLIBS}
-SOCKLIBS    = @SOCKLIBS@
-GELLIBS     = @GELLIBS@
+CFLAGS      = -O ${XCFLAGS}
+DEFS        =  -DHAVE_LIBDL=1  ${XDEFS}
+INCLUDES    =  ${XINCLUDES}
+LIBS        = -ldl  ${XLIBS}
+SOCKLIBS    = -lsocket -lnsl
 
-INSTALL     = @INSTALL@
-INSTALL_DATA= @INSTALL_DATA@
-INSTALL_PROG= @INSTALL_PROG@
-UNINSTALL   = @UNINSTALL@
+INSTALL     = $(top_srcdir)/install-sh
+INSTALL_DATA= $(top_srcdir)/install-data-sh
+INSTALL_PROG= $(top_srcdir)/install-prog-sh
+UNINSTALL   = $(top_srcdir)/uninstall-sh
 
-AR          = @AR@
+AR          = ar
 
-GEL         = @GEL@
-EPIC        = @EPIC@
-ATERM       = @ATERM@
-TOOLBUS     = @TOOLBUS@
-
-NOWEB       = @NOWEB@
-NOWEAVE     = @NOWEAVE@
-NOTANGLE    = @NOTANGLE@
+ATERM       = /home/markvdb/NEW-META/aterm
 
 include Make.modules
 
-#ATERM	= /home/markvdb/NEW-META/new-meta/..
-#CC	= gcc
 CC	= cc
-INCLUDE = -I$(ATERM)/include -I../support
-#CFLAGS	= -g -Wall -pedantic $(INCLUDE)
+INCLUDE = -I$(ATERM)/aterm -I$(ATERM)/asfix -I$(ATERM)/toolbus \
+          -I/home/markvdb/NEW-META/new-meta/compiler/support
 CFLAGS	= -O $(INCLUDE)
-#CFLAGS	= -pg $(INCLUDE)
-#LIBS	= -L$(ATERM)/lib -laterm-dbg -lasfix-dbg -ltoolbus -lgel -lsocket -lnsl
-LIBS	= -L$(ATERM)/lib -laterm-cc -lasfix-cc -ltoolbus-cc -lgel -lsocket -lnsl
-#LIBS	= -L$(ATERM)/lib -laterm-prof -lasfix-prof -ltoolbus -lgel -lsocket -lnsl -ldl
-#LFLAGS	= -g 
+LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
+        -lATerm-cc -lAsFix-cc -lATB-cc -L../support -lsupport-cc \
+	-lsocket -lnsl 
 LFLAGS	=  
-#LFLAGS	= -pg
 AR	= ar
 
 BASE	= ..
@@ -75,11 +56,7 @@ EREGALL	:= $(patsubst %,extern void register_%,$(INIT))
 RESALL	:= $(patsubst %,resolve_%,$(INIT))
 ERESALL := $(patsubst %,extern void resolve_%,$(INIT))
 
-all: asfix2c libasfix2c.a
-
-
-asfix2c: $(MODS) ../support/support.o ../support/rewriter.o
-	$(CC) $(LFLAGS) -o asfix2c ../support/support.o ../support/rewriter.o $(MODS) $(LIBS)
+all: libasfix2c.a
 
 libasfix2c.a: $(MODS)
 	$(AR) cr libasfix2c.a $(MODS)
@@ -89,26 +66,4 @@ libasfix2c.a: $(MODS)
 init.o: init.c
 
 init.c:
-	for file in $(NAMES); do \
-	  echo "extern void register_$$file();" | sed "s/\-/_/g" >> $@ ; \
-	  echo "extern void resolve_$$file();"  | sed "s/\-/_/g" >> $@ ; \
-	done
-	echo "void register_all() {" >> $@
-	for file in $(NAMES); do \
-	  echo "  register_$$file();" | sed "s/\-/_/g" >> $@ ; \
-	done
-	echo "}" >> $@
-	echo "void resolve_all() {" >> $@
-	for file in $(NAMES); do \
-	  echo "  resolve_$$file();" | sed "s/\-/_/g" >> $@ ; \
-	done
-	echo "}" >> $@
-
-
-
-
-
-
-
-
-
+	../mk-init.sh >> $@
