@@ -250,41 +250,45 @@ abstract public class ATerm implements Cloneable, Serializable
   }
 
   //}
-    
-    /** Sets a particular annotation on this ATerm.
-	@param label The label of the annotation
-	@param anno The actual annotation
-    */
-    public void setAnnotation(String label, ATerm anno) {
-	//	throw new Exception("Not implemented: Aux.setAnnotation");
-	ATerm l = null;
-	try {
-	    l = ATerm.the_world.makeSimple(label);
-	}
-	catch (ParseError e) {
-	    System.err.println(e);
-	    System.exit(2);
-	}
-	ATerms annos = (ATerms) this.getAnno();
-	if (annos == null) annos = new ATerms(world);
-	this.setAnno(annos.dictPut(l,anno));
-    }	
-    
-    /** Get the annotation with a particular label
-	@param label The label which identifies the annotation
-	@return The annotation associated with the label
-    */
-    public ATerm getAnnotation(String label) {
-	//	throw new Exception("Not implemented: Aux.getAnnotation");
-	ATerm l = null;
-	try {
-	    l = ATerm.the_world.makeSimple(label);
-	}
-	catch (ParseError e) {
-	    System.err.println(e);
-	    System.exit(2);
-	}	ATerms annos = (ATerms) this.getAnno();
-	return (annos == null ) ? null : annos.dictGet(l);
-    }
+	//{ public void setAnnotation(String label, ATerm anno) 
 
+    /** Sets a particular annotation on this ATerm.
+				@param label The label of the annotation
+				@param anno The actual annotation
+    */
+	public void setAnnotation(String label, ATerm anno) 
+	{
+		//	throw new Exception("Not implemented: Aux.setAnnotation");
+		ATerm l = null;
+		try {
+	    l = ATerm.the_world.makeSimple(label);
+		}
+		catch (ParseError e) {
+	    System.err.println(e);
+	    System.exit(2);
+		}
+		ATerms annos = (ATerms) this.getAnno();
+		if (annos == null) annos = new ATerms(world);
+		this.setAnno(annos.dictPut(l,anno));
+	}	
+	
+	/** Get the annotation with a particular label
+			@param label The label which identifies the annotation
+			@return The annotation associated with the label
+	*/
+	public ATerm getAnnotation(String label) {
+		//	throw new Exception("Not implemented: Aux.getAnnotation");
+		ATerm l = null;
+		try {
+	    l = ATerm.the_world.makeSimple(label);
+		}
+		catch (ParseError e) {
+	    System.err.println(e);
+	    System.exit(2);
+		}	ATerms annos = (ATerms) this.getAnno();
+		return (annos == null ) ? null : annos.dictGet(l);
+	}
+
+	//}	
 }
+

@@ -340,23 +340,23 @@ public class World implements Serializable
 
     switch(channel.last()) {
       case '[':	
-	//{ Read a list
+				//{ Read a list
 
-	if(channel.readNext() == ']') {
-	  channel.readNext();
-	  result = makeList(empty);
-	} else {
-	  terms = parseATerms(channel);
-	  if(channel.last() != ']')
-	    throw new ParseError(channel, channel.last(), "']' expected");
-	  channel.readNext();
-	  result = makeList(terms);
-	}
-
-	//}
-	break;
+				if(channel.readNext() == ']') {
+					channel.readNext();
+					result = makeList(empty);
+				} else {
+					terms = parseATerms(channel);
+					if(channel.last() != ']')
+						throw new ParseError(channel, channel.last(), "']' expected");
+					channel.readNext();
+					result = makeList(terms);
+				}
+				
+				//}
+			break;
       case '<':
-	//{ Read a placeholder
+				//{ Read a placeholder
 
 	channel.readNext();
 	type = parseATerm(channel);
@@ -366,9 +366,9 @@ public class World implements Serializable
 	channel.readNext();
 
 	//}
-	break;
+				break;
       case '"':
-	//{ Read a quoted function
+				//{ Read a quoted function
 
 	fun = parseQuotedId(channel);
 	if(channel.last() == '(') {
@@ -382,33 +382,53 @@ public class World implements Serializable
 	  result = makeAppl(fun, empty, null, true);
 
 	//}
-	break;
+				break;
       case '-':
       case '0':	case '1':	case '2': 	case '3': 	case '4':
       case '5':	case '6':	case '7':	case '8':	case '9':
-	result = parseNumber(channel);
-	break;
+				result = parseNumber(channel);
+				break;
       default:
-	if(Character.isLetter((char)channel.last()) ||
-	   //{ Parse an unquoted function
-
-	   channel.last() == '_') {
-	  fun = parseId(channel);
-	  if(channel.last() == '(') {
-	    channel.readNext();
-	    terms = parseATerms(channel);
-	    if(channel.last() != ')')
-	      throw new ParseError(channel, channel.last(), "')' expected");
-	    result = makeAppl(fun, terms, null, false);
-	    channel.readNext();
-
-	  } else
-	    result = makeAppl(fun, empty, null, false);
-	  //}
-	} else {
-	  throw new ParseError(channel, channel.last(), "illegal character");
-	}
+				if(Character.isLetter((char)channel.last()) ||
+					 channel.last() == '_') {
+					//{ Parse an unquoted function
+					
+					fun = parseId(channel);
+					if(channel.last() == '(') {
+						channel.readNext();
+						terms = parseATerms(channel);
+						if(channel.last() != ')')
+							throw new ParseError(channel, channel.last(), "')' expected");
+						result = makeAppl(fun, terms, null, false);
+						channel.readNext();
+						
+					} else
+						result = makeAppl(fun, empty, null, false);
+					//}
+				} else {
+					throw new ParseError(channel, channel.last(), "illegal character");
+				}
     }
+
+		if(channel.last() == '{') {
+			//{ Read an annotation
+			
+			ATerm annos;
+			if(channel.readNext() == '}') {
+				channel.readNext();
+				annos = makeList(empty);
+			} else {
+				terms = parseATerms(channel);
+				if(channel.last() != '}')
+					throw new ParseError(channel, channel.last(), "'}' expected");
+				channel.readNext();
+				annos = makeList(terms);
+			}
+			result.setAnno(annos);
+				
+			//}
+		}
+
     return result;
   }
 

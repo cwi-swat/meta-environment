@@ -134,7 +134,8 @@ abstract class ATermImpl
   {
     if(anno == null)
       return 0; 
-    return anno.printSize()+2; // annotation + '{' and '}'
+		ATermListImpl annos = (ATermListImpl)anno;
+		return annos.getATermsImpl().printSize() + 2;// annotation + '{' and '}'
   }
 
   //}
@@ -218,7 +219,8 @@ abstract class ATermImpl
   { 
     if(anno != null) { 
       w.print('{'); 
-      anno.print(w);
+			ATermListImpl annos = (ATermListImpl)anno;
+      annos.getATermsImpl().print(w);
       w.print('}'); 
     }
   }
@@ -228,8 +230,10 @@ abstract class ATermImpl
 
   public void write(OutputStream o) throws java.io.IOException {
     if(anno != null) {
-      o.write(':');
-      anno.write(o);
+      o.write('{');
+			ATermListImpl annos = (ATermListImpl)anno;
+      annos.getATermsImpl().write(o);
+			o.write('}');
     }
   }
 
