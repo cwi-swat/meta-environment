@@ -22,46 +22,22 @@ in
   create(AddAPISyn, Pid?).
   create(RemoveVars, Pid?).
   create(Asfc, Pid?).
-  create(DisplayErrors, Pid?)
+  create(DisplayErrors, Pid?) .
+  create(Preprocess-syntax, Pid?) .
+  create(Interpret-term, Pid?) .
+  create(Postprocess-semantics, Pid?) .
+  create(Compile-semantics, Pid?) .
+  create(Rename-semantics, Pid?) .
+  create(Postprocess-collected-semantics, Pid?)
 endlet
 
-process Meta-Interface is
+process Preprocess-syntax is
 let
-  Id : int,
-  Syntax : term, 
-  Semantics  : term,
+  Syntax     : term, 
   ModuleName : str,
-  Msgs : list,
-  Tree : term,
-  NormalForm : term,
-  Errors: list,
-  Text : str,
-  Progress : str,
-  Renamings : term,
-  Modules : list
+  Msgs       : list
 in
-  Id := process-id.
-  subscribe(asfc-progress(<term>)).
-  Create-Asf-Processes.
   (
-    rec-msg(environment-name-hook).
-    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
-  +
-    rec-msg(library-location-hook).
-    snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
-  +
-    rec-msg(file-extensions-hook).
-    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
-  +
-    rec-msg(semantics-top-sort-hook).
-    snd-msg(semantics-top-sort-hook-result(sort("Equations")))
-  +
-    rec-msg(postprocess-semantics-hook(Semantics?)).
-    snd-msg(check-asf(Semantics)).
-    rec-msg(messages(Msgs?)).
-    snd-msg(display-asf-errors(Msgs)).
-    snd-msg(postprocess-semantics-hook-result(Semantics))
-  +
     rec-msg(preprocess-syntax-hook(eqs(ModuleName?), Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
@@ -81,7 +57,21 @@ in
     snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).
     snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
-  +
+  )*delta
+endlet
+
+process Interpret-term is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Tree       : term,
+  NormalForm : term,
+  Errors     : list,
+  Text       : str
+in
+  Id := process-id.
+  (
     rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
     snd-note(ui-status(stat(Id, "Rewriting"))) .
     snd-msg(rewrite(ModuleName, Semantics, Tree)).
@@ -99,7 +89,33 @@ in
     ).
     snd-note(ui-status(endstat(Id))).
     snd-msg(interpret-term-hook-result(NormalForm))
-  +
+  )*delta
+endlet
+
+process Postprocess-semantics is
+let
+  Semantics : term,
+  Msgs      : list
+in
+  (
+    rec-msg(postprocess-semantics-hook(Semantics?)).
+    snd-msg(check-asf(Semantics)).
+    rec-msg(messages(Msgs?)).
+    snd-msg(display-asf-errors(Msgs)).
+    snd-msg(postprocess-semantics-hook-result(Semantics))
+  )*delta
+endlet
+
+process Compile-semantics is
+let
+  Id         : int,
+  Semantics  : term,
+  ModuleName : str,
+  Progress   : str
+in
+  Id := process-id .
+  subscribe(asfc-progress(<term>)) .
+  (
     rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
     snd-msg(compile-module(ModuleName, Semantics)) .
     (
@@ -111,17 +127,53 @@ in
     rec-msg(compilation-done(ModuleName)).
     snd-note(ui-status(endstat(Id))).
     snd-msg(compile-semantics-hook-done(ModuleName))
-  + 
+  )*delta
+endlet
+
+process Rename-semantics is
+let
+  Semantics : term,
+  Renamings : term
+in
+  (
     rec-msg(rename-semantics-hook(Renamings?, Semantics?)).
     snd-msg(rename(Renamings, Semantics)).
     rec-msg(equations(Semantics?)).
     snd-msg(rename-semantics-hook-result(Semantics))
-  +
+  )*delta
+endlet
+
+process Postprocess-collected-semantics is
+let
+  Semantics : term,
+  Modules   : list
+in 
+  (
     rec-msg(postprocess-collected-semantics-hook(Modules?)).
     snd-msg(extract-equations(Modules)).
     rec-msg(extract-equations-result(Semantics?)).
     snd-msg(postprocess-collected-semantics-hook-result(Semantics))
+  )*delta
+endlet
 
+process Meta-Interface is
+let
+  Id : int
+in
+  Id := process-id.
+  Create-Asf-Processes.
+  (
+    rec-msg(environment-name-hook).
+    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
+  +
+    rec-msg(library-location-hook).
+    snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
+  +
+    rec-msg(file-extensions-hook).
+    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+  +
+    rec-msg(semantics-top-sort-hook).
+    snd-msg(semantics-top-sort-hook-result(sort("Equations")))
   ) * delta
 endlet
 
