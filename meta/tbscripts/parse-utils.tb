@@ -98,27 +98,21 @@ let
   Cycle        : term,
   ErrorList    : list,
   ErrorContent : term,
-  FunSym       : str,
-  Separator    : str
+  FunSym       : str
 in
   FunSym := fun(ParseError) .
   if not-equal(FunSym, "no-errors") then
-    if not-equal(Type, "") then
-      Separator := "."
-    else
-      Separator := ""
-    fi .
     ErrorList := first(args(ParseError)) .
     ErrorContent := first(next(args(ParseError))) .
     FunSym := fun(ErrorContent) .
     if equal(FunSym, "ambiguities") then
       I := first(args(ErrorContent)) .
       if greater(I, 1) then
-        snd-note(ui-status(errorf("Parse of %s%s%s returned %d ambiguities",
-                                  [ModuleName,Separator,Type,I])))
+        snd-note(ui-status(errorf("Parse of %s%s returned %d ambiguities",
+                                  [ModuleName,Type,I])))
       else 
-        snd-note(ui-status(errorf("Parse of %s%s%s returned 1 ambiguity",
-                                  [ModuleName,Separator,Type])))
+        snd-note(ui-status(errorf("Parse of %s%s returned 1 ambiguity",
+                                  [ModuleName,Type])))
       fi
     else
       tau
@@ -131,8 +125,8 @@ in
       tau
     fi .
       if equal(FunSym, "eof") then
-      snd-note(ui-status(errorf("EOF unexpected while parsing %s%s%s\n",
-                                [ModuleName,Separator,Type])))
+      snd-note(ui-status(errorf("EOF unexpected while parsing %s%s\n",
+                                [ModuleName,Type])))
     else
       tau
     fi .
@@ -141,8 +135,8 @@ in
       Li := first(args(first(next(ErrorList)))) .
       Co := first(args(first(next(next(ErrorList))))) .
       snd-note(ui-status(errorf(
-               "Character %d unexpected in %s%s%s, line %d, column %d\n",
-               [Ch, ModuleName, Separator, Type, Li, Co])))
+               "Character %d unexpected in %s%s, line %d, column %d\n",
+               [Ch, ModuleName, Type, Li, Co])))
     else
       tau
     fi
