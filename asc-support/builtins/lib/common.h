@@ -6,6 +6,8 @@
 #include <string.h>
 #include <MEPT.h>
 #include <MEPT-utils.h>
+#include <asc-support-me.h>
+
 
 /* Sneaky global access to interpreter functionality */
 extern PT_Tree rewrite(PT_Tree term);

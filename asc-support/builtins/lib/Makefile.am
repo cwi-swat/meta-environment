@@ -5,7 +5,6 @@ BUILTIN_NAMES=\
 	      read-term-from-file write-term-to-file\
 	      shell \
 	      strategy-some strategy-all strategy-one \
-              toolbus-event toolbus-term-event \
 	      term-compare\
 	      lift-to-tree lift-to-term \
 	      unparse
@@ -16,7 +15,6 @@ BUILTIN_SOURCES=common.c \
 		normalize.c \
 		shell.c \
 		traversal.c \
-                toolbus.c \
 		term-compare.c \
 		lifting.c\
 		unparse.c
@@ -46,13 +44,14 @@ noinst_PROGRAMS=link-test
 link_test_SOURCES=link-test.c
 link_test_LDADD=\
 	-L. -lasf-builtins\
+	-L${top_builddir}/lib -lasc-support-me\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}
 
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include -I$(TOOLBUSLIB)/include \
-	 -I$(srcdir)/booleans
+	 -I$(srcdir)/booleans -I${top_srcdir}/lib
 
 UTILS=${top_srcdir}/builtins/utils
 GENFWD=${UTILS}/gen-forward.sh

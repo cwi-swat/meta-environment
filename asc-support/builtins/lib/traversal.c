@@ -26,16 +26,11 @@ static void initPatterns(void)
 
 /*}}}  */
 
-/*{{{  PT_Tree strategy_all(PT_Tree input) */
+/*{{{  static PT_Tree strategy_all(PT_Tree input) */
 
-PT_Tree strategy_all(PT_Tree input)
+static PT_Tree strategy_all(PT_Tree strategy, PT_Tree term)
 {
-  PT_Tree strategy;
-  PT_Tree term;
-
   initPatterns();
-  strategy = CO_getFunctionArgument(input, 0);
-  term = CO_getFunctionArgument(input, 1);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -84,17 +79,40 @@ PT_Tree strategy_all(PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree strategy_some(PT_Tree input) */
+/*{{{  PT_Tree ASFE_strategy_all(PT_Tree input) */
 
-PT_Tree strategy_some(PT_Tree input)
+PT_Tree ASFE_strategy_all(PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
 
-  initPatterns();
-
   strategy = CO_getFunctionArgument(input, 0);
   term = CO_getFunctionArgument(input, 1);
+
+  return strategy_all(strategy, term);
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_strategy_all(PT_Tree input) */
+
+PT_Tree ASC_strategy_all(ATerm astrategy, ATerm aterm)
+{
+  PT_Tree strategy;
+  PT_Tree term;
+
+  strategy = muASFToTree(astrategy);
+  term = muASFToTree(aterm);
+
+  return strategy_all(strategy, term);
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree strategy_some(PT_Tree strategy, PT_Tree term) */
+
+static PT_Tree strategy_some(PT_Tree strategy, PT_Tree term)
+{
+  initPatterns();
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -142,17 +160,40 @@ PT_Tree strategy_some(PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree strategy_one(PT_Tree input) */
+/*{{{  PT_Tree ASFE_strategy_some(PT_Tree input) */
 
-PT_Tree strategy_one(PT_Tree input)
+PT_Tree ASFE_strategy_some(PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
 
-  initPatterns();
-
   strategy = CO_getFunctionArgument(input, 0);
   term = CO_getFunctionArgument(input, 1);
+
+  return strategy_some(strategy, term);
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_strategy_some(ATerm astrategy, ATerm aterm) */
+
+PT_Tree ASC_strategy_some(ATerm astrategy, ATerm aterm)
+{
+  PT_Tree strategy;
+  PT_Tree term;
+
+  strategy = muASFToTree(astrategy);
+  term = muASFToTree(aterm);
+
+  return strategy_some(strategy, term);
+}
+
+/*}}}  */
+
+/*{{{  static PT_Tree strategy_one(PT_Tree strategy, PT_Tree term) */
+
+static PT_Tree strategy_one(PT_Tree strategy, PT_Tree term)
+{
+  initPatterns();
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -194,6 +235,34 @@ PT_Tree strategy_one(PT_Tree input)
   }
 
   return term; 
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASFE_strategy_one(PT_Tree input) */
+
+PT_Tree ASFE_strategy_one(PT_Tree input)
+{
+  PT_Tree strategy;
+  PT_Tree term;
+
+  strategy = CO_getFunctionArgument(input, 0);
+  term = CO_getFunctionArgument(input, 1);
+
+  return strategy_some(strategy, term);
+}
+
+/*}}}  */
+/*{{{  PT_Tree ASC_strategy_one(ATerm astrategy, ATerm aterm) */
+
+PT_Tree ASC_strategy_one(ATerm astrategy, ATerm aterm)
+{
+  PT_Tree strategy;
+  PT_Tree term;
+
+  strategy = muASFToTree(astrategy);
+  term = muASFToTree(aterm);
+
+  return strategy_one(strategy, term);
 }
 
 /*}}}  */
