@@ -169,18 +169,14 @@ static ATerm matchMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs
   }
 
   TIDE_STEP(lhs, env, depth);
+  TIDE_STEP(getConditionSign(cond), env, depth);
+
   env = matchArgument(env, lhs, rhstrm, conds, 
 		      PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
 		      NULL, depth);
 
-  TIDE_STEP(getConditionSign(cond), env, depth);
 
-  if (!is_fail_env(env)) {
-    return matchConditions(conds, env, depth);
-  }
-  else {
-    return fail_env;
-  }
+  return env;
 }
 
 /*}}}  */
@@ -202,7 +198,7 @@ static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree r
   }
 
   TIDE_STEP(lhs, env, depth);
-  result = matchArgument(env, lhs, rhstrm, conds, 
+  result = matchArgument(env, lhs, rhstrm, NULL, 
 			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
 			 NULL, depth);
 
