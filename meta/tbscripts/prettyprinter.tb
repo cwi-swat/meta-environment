@@ -11,10 +11,10 @@ let
   Src: term 
 in
   execute(asource,PP?).
-  ( rec-msg(pp-module(T?)).
+  ( rec-msg(pp(T?)).
     snd-eval(PP,conssource(T)).
     rec-value(PP,source(Src?)).
-    snd-msg(module-source(Src)) 
+    snd-msg(source(Src)) 
   ) *
   delta
 endlet
