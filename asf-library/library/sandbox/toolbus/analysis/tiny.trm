@@ -13,6 +13,7 @@ endlet
 
 process Editor2 is
 let
+  Aap : term,
   Editor : str,
   Pid : int
 in

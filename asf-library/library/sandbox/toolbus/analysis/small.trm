@@ -1,0 +1,90 @@
+process Editors is
+let
+  Pid : int
+in
+  create(EditorManager,Pid?) .
+  create(EditorCreator,Pid?) .
+  create(SE, Pid?)
+endlet
+
+process EditorCreator is
+let
+  EditorId : term,
+  ModuleName : str,
+  FileName : str,
+  Tree : term
+in
+  (
+    rec-msg(edit-syntax(ModuleName?)) .
+    SyntaxEditorCreator(ModuleName)
+  +
+    rec-msg(edit-equations(ModuleName?)) .
+    EquationsEditorCreator(ModuleName)
+  +
+    rec-msg(edit-term-file(ModuleName?, FileName?)).
+    TermEditorCreator(ModuleName,FileName,none)
+  +
+    rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) .
+    TermEditorCreator(ModuleName,FileName,Tree)
+  +
+    rec-msg(delete-editors-for-module(ModuleName?)) .
+    KillEditorsForModule(ModuleName)
+  )
+  * delta
+endlet
+
+process SyntaxEditorCreator (ModuleName : str) is
+let
+  Tree : term,
+  Text : str,
+  FileName : str,
+  Path : str,
+  Time : term
+in
+  Tree := none.
+  Text := "".
+  snd-msg(get-sdf2-path-from-db(ModuleName)) .
+  rec-msg(path(FileName?)) .
+  snd-msg(get-sdf2-asfix(ModuleName)).
+  (
+    rec-msg(syntax(Tree?))
+  +
+    rec-msg(unavailable).
+    snd-msg(open-syntax-file(ModuleName)) .
+    (
+      rec-msg(opened-file(ModuleName, text(Text?), Path?, Time?))
+    +
+      rec-msg(error-opening(ModuleName))
+    )
+  ) .
+  CreateEditor(ModuleName,"syntax",FileName,Text,Tree)
+endlet
+
+
+process META-START is
+let
+  Id : term,
+  ModuleName : str
+in
+  Id := process-id .
+  subscribe(search-paths-processed) .
+  rec-note(search-paths-processed) .
+
+  if not-equal("","") then
+    snd-msg(open-modules([""])) .
+    (
+      rec-msg(cannot-open-module(ModuleName?)).
+      snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
+    )*
+    rec-msg(finished-opening-modules)
+  else
+    tau
+  fi
+endlet
+
+tool user-interface is {
+  command = "meta-studio"
+}
+
+
+toolbus(META)

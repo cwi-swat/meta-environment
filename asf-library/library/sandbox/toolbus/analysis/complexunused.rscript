@@ -1,0 +1,9 @@
+rel[<node,str>,node] DECL_OCCURS
+rel[<node,str>,node] USE_OCCURS
+rel[<node,str>,node] DEF_OCCURS
+rel[node,str] DECLS
+rel[node,str] USES
+rel[node,str] DEFS
+rel[node,str] USED_VARS = USES union DEFS
+rel[node,str] UNUSED_VARS_PER_PROCESS = {<N,V> | <N,V> in DECLS, not(V elem range(domR(USED_VARS,{N})))}
+rel[node,str] UNUSED_VARS = {<N2,sec(N1)> | <N1,N2> in DECL_OCCURS, N1 elem UNUSED_VARS_PER_PROCESS}

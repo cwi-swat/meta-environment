@@ -32,3 +32,13 @@ equations
     $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2)
     ===>
     findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3
+
+  [extractRelations-genvar-q]
+    $VarId = get-area($Var),
+    $Tuple = <$ProcessDefId, var2str($Var)>,
+    $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
+    $Tuple2 = <$Tuple, $VarId>,
+    $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2),
+    $Rstore4 = findVarInProcess($Term, $Rstore3, $ProcessDefId)
+    ===>
+    findVarInProcess($Var := $Term, $Rstore1, $ProcessDefId) = $Rstore4

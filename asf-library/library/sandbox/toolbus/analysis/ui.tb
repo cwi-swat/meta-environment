@@ -1,0 +1,339 @@
+process ConfigManager is
+let
+  CMNG : configmanager,
+  Text : str,
+  Fid : str,
+  SearchPaths : list,
+  ButtonName : list,
+  ButtonNames : list,
+  ButtonActions : list,
+  ModuleName : str,
+  EditorType : str,
+  Tree : term,
+  Term : term,
+  Pid : int,
+  LibraryPath : str,
+  Directories : list,
+  ErrorMessage : str
+in
+  execute(configmanager, CMNG?) .
+  snd-msg(io-read-file("meta.conf")) .
+  (
+    rec-msg(io-file-contents(Text?))
+  +
+    rec-msg(io-error-reading(ErrorMessage?)) .
+    Text := "."
+  ) .
+  snd-eval(CMNG, parse-config-file(Text)) .
+  rec-value(CMNG, directories(Directories?)) .
+  snd-msg(io-relative-to-absolute(Directories)) .
+  rec-msg(io-absolute-directories(Directories?)) .
+  snd-do(CMNG, register-user-directories(Directories)) .
+
+  snd-msg(library-location-hook).
+  rec-msg(library-location-hook-result(LibraryPath?)).
+  snd-do(CMNG, register-library(LibraryPath)) .
+  ProcessButtons(CMNG) .
+  (
+    rec-msg(refresh-buttons) .
+    ProcessButtons(CMNG) .
+    snd-msg(buttons-refreshed)
+  +
+    rec-msg(get-auxilary-buttons(EditorType?, ModuleName?)) .
+    snd-eval(CMNG, get-button-names(EditorType, ModuleName)) .
+    rec-value(CMNG, button-names(ButtonNames?)) .
+    snd-msg(button-list(ModuleName, ButtonNames))
+  +
+    rec-msg(get-button-actions(ButtonName?, EditorType?, ModuleName?)) .
+    snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
+    rec-value(CMNG, button-actions(ButtonActions?)) .
+    snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
+  +
+    rec-msg(get-search-paths) .
+    snd-eval(CMNG, get-search-paths) .
+    rec-value(CMNG, search-paths(SearchPaths?)) .
+    snd-msg(search-paths(SearchPaths))
+  ) * delta
+endlet
+
+
+
+process EditorManager is
+let
+  EM : editor-manager,
+  Name : str,
+  ModuleName: str,
+  Editors: list,
+  EditorId : term,
+  Path : str,
+  FileName : str
+in
+  execute(editor-manager, EM?) .
+  subscribe(delete-editor(<term>)) .
+  (
+    rec-msg(get-editor-id(FileName?, ModuleName?)) .
+    snd-eval(EM, get-editor-id(FileName, ModuleName)) .
+    (
+      rec-value(EM, new-editor(EditorId?)) .
+      snd-msg(new-editor(EditorId))
+    +
+      rec-value(EM, existing-editor(EditorId?)) .
+      snd-msg(existing-editor(EditorId))
+    )
+  +
+    rec-msg(check-editor-id(Name?, ModuleName?)) .
+    snd-eval(EM, check-editor-id(Name, ModuleName)) .
+    (
+      rec-value(EM, existing-editor(EditorId?)) .
+      snd-msg(existing-editor(EditorId))
+    +
+      rec-value(EM, non-existing-editor) .
+      snd-msg(non-existing-editor(Name))
+    )
+  +
+    rec-msg(get-editor-name(EditorId?)) .
+    snd-eval(EM, get-editor-name(EditorId)).
+    rec-value(EM, editor-name(Name?)).
+    snd-msg(editor-name(Name))
+  +
+    rec-msg(get-editors-by-module(Name?)) .
+    snd-eval(EM, get-editors-by-module(Name)) .
+    rec-value(EM, editors-by-module(Editors?)) .
+    snd-msg(editors-by-module(Editors))
+  +
+    rec-note(delete-editor(EditorId?)) .
+    snd-do(EM, delete-editor(EditorId))
+  ) * delta
+endlet
+
+tool editor-manager is {
+  command = "editor-manager"
+}
+
+
+process ApplyFunc is
+let
+  AF : apply-function,
+  FuncName : str,
+  SortName : str,
+  TreeList : list,
+  ArgNr : int,
+  Tree : term,
+  Tree2 : term,
+  Result : term,
+  ArgTree : term,
+  Aap : str
+in
+  (
+    rec-msg(apply-function(FuncName?, SortName?, TreeList?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, apply-function-to-args(FuncName, SortName, TreeList)).
+    rec-value(AF, tree(Tree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(Tree))
+  +
+    rec-msg(get-argument-given-number(Tree?, ArgNr?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, get-argument-given-nr(Tree, ArgNr)).
+    rec-value(AF, tree(ArgTree?)).
+    snd-terminate(AF, "done") .
+    snd-msg(tree(ArgTree))
+  +
+    rec-msg(equal-trees(Tree?, Tree2?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, equal-trees(Tree, Tree2)).
+    rec-value(AF, result(Result?)).
+    snd-terminate(AF, "done") .
+    snd-msg(Result)
+  ) *
+  delta
+endlet
+
+tool apply-function is { command = "apply-function" }
+
+toolbus(ApplyFunc)
+
+
+process Status-display(UI: user-interface) is
+let
+  Lst : list,
+  Str : str,
+  Id : term
+in
+  subscribe(ui-status(<term>)) .
+  ( rec-note(ui-status(stat(Id?, Str?))) .
+    snd-do(UI, add-status(Id, Str))
+    +
+    rec-note(ui-status(statf(Id?, Str?, Lst?))) .
+    snd-do(UI, add-statusf(Id, Str, Lst))
+    +
+    rec-note(ui-status(endstat(Id?))) .
+    snd-do(UI, end-status(Id))
+    +
+    rec-note(ui-status(error(Str?))) .
+    snd-do(UI, error(Str))
+    +
+    rec-note(ui-status(errorf(Str?, Lst?))) .
+    snd-do(UI, errorf(Str, Lst))
+  ) *
+  delta
+endlet
+
+process Ui is
+let
+  SD : int,
+  UI : user-interface,
+  Id : term,
+  Name : term,
+  Str : term,
+  Str1 : term,
+  Mod : term,
+  Pairs : list,
+  Mods : list,
+  ModName : str,
+  FileName : str,
+  Path : str,
+  Extension : str,
+  ErrMsg : str,
+  On : term,
+  Graph : term,
+  Info : list,
+  LayoutedGraph : term,
+  ModuleName : str,
+  LibraryPath : str,
+  SyntaxExt : str,
+  SemanticsExt : str,
+  TermExt : str,
+  EnvironmentName : str,
+  Recursive : term,
+  EditorId : term,
+  GraphId : str,
+  ButtonName : list,
+  Tree : term,
+  Lst : list,
+  ButtonList : list,
+  Title : str,
+  Answer : term,
+  T : str
+in
+  subscribe(display-import-graph(<list>)) .
+  Id := process-id.
+  execute(user-interface,UI?).
+  create(Status-display(UI),SD?).
+
+  snd-msg(library-location-hook).
+  rec-msg(library-location-hook-result(LibraryPath?)).
+  snd-msg(file-extensions-hook).
+  rec-msg(file-extensions-hook-result(SyntaxExt?,SemanticsExt?,TermExt?)).
+  snd-msg(environment-name-hook).
+  rec-msg(environment-name-hook-result(EnvironmentName?)).
+
+  snd-do(UI, initialize-ui(EnvironmentName, LibraryPath, SyntaxExt,
+                           SemanticsExt, TermExt)).
+  Mods := [] .
+  Pairs := [] .
+  (
+    rec-msg(display-graph(GraphId?, Graph?)) .
+    snd-do(UI, display-graph(GraphId, Graph))
+  +
+    rec-msg(ui-delete-modules(Mods?)).
+    snd-do(UI, delete-modules(Mods))
+  +
+    rec-event(UI,get-module-info(ModName?)).
+    snd-msg(get-module-info(ModName)) .
+    rec-msg(module-info(ModName, Info?)) .
+    snd-do(UI,module-info(ModName,Info)) .
+    snd-ack-event(UI,get-module-info(ModName))
+  +
+    rec-event(UI,clear-all).
+    snd-msg(clear-all).
+    rec-msg(cleared-all).
+    snd-ack-event(UI,clear-all)
+  +
+   ( rec-event(UI,debugging(On?)) .
+     snd-msg(debugging(On)) .
+     snd-ack-event(UI,debugging(On))
+   ) +
+   ( rec-note(display-import-graph(Pairs?)).
+     snd-do(UI,new-graph(Pairs)) .
+     Pairs := []
+   )
+   +
+   ( rec-event(UI, layout-graph(GraphId?, Graph?)) .
+     snd-msg(layout-graph(Graph)) .
+     rec-msg(graph-layouted(LayoutedGraph?)) .
+     snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
+     snd-ack-event(UI, layout-graph(GraphId, Graph))
+   )
+   +
+   ( rec-event(UI, get-buttons(T?, ModuleName?)) .
+     snd-msg(get-auxilary-buttons(T, ModuleName)) .
+     rec-msg(button-list(ModuleName,ButtonList?)).
+     snd-do(UI, buttons-found(T, ModuleName, ButtonList)) .
+     snd-ack-event(UI, get-buttons(T, ModuleName))
+   )
+   +
+   ( rec-event(UI, button-selected(T?, ModuleName?, ButtonName?)) .
+     snd-msg(extra-button-action(ButtonName, str(ModuleName), T, ModuleName, ui-id)) .
+     snd-ack-event(UI, button-selected(T, ModuleName, ButtonName))
+   )
+   +
+   ( rec-event(UI, button-selected(T?, ButtonName?)) .
+     snd-msg(extra-button-action(ButtonName, T, "*", ui-id)) .
+     snd-ack-event(UI, button-selected(T, ButtonName))
+   )
+   +
+   ( rec-msg(ask-for-file(Title?, Path?, Extension?)) .
+     snd-eval(UI, show-file-dialog(Title, Path, Extension)) .
+     rec-value(UI, file-name(FileName?)) .
+     snd-msg(ask-for-file-result(FileName))
+   )
+   +
+   ( rec-msg(ask-question(Title?)) .
+     snd-eval(UI, show-question-dialog(Title)) .
+     rec-value(UI, answer(Answer?)) .
+     snd-msg(ask-question-result(Answer))
+   )
+   +
+   ( rec-msg(decons-file-name(FileName?, Extension?)) .
+     snd-eval(UI, decons-filename(FileName, Extension)) .
+     rec-value(UI, file-name(Path?, FileName?, Extension?)) .
+     snd-msg(decons-file-name-result(Path, FileName, Extension))
+   )
+   +
+   ( rec-msg(clear-history) .
+     snd-do(UI, clear-history)
+   )
+   +
+   (
+     rec-event(UI, element-selected(ButtonName?, Tree?)).
+     snd-msg(extra-button-action(ButtonName, Tree, "message-list", "*", message-id)).
+     snd-ack-event(UI, element-selected(ButtonName, Tree))
+   )
+   +
+   (
+     rec-msg(update-list-view(Lst?)).
+     snd-do(UI, update-list(Lst))
+   )
+  ) *
+  ( rec-event(UI,quit)
+  + rec-disconnect(UI)) .
+  shutdown("MetaStudio exiting\n")
+endlet
+
+process MetaGUI is
+let
+  ModuleName : str,
+  Pid : int
+in
+  create(Ui, Pid?) .
+  create(MetaCreator, Pid?) .
+  if not-equal("","") then
+    snd-msg(open-modules([""])) .
+    rec-msg(finished-opening-modules)
+  else
+    tau
+  fi
+endlet
+
+toolbus(MetaGUI)

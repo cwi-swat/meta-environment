@@ -21,7 +21,13 @@ hiddens
     findVarInProcess(ProcessDef, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
+    findVarInProcess(Term, RSTORE, Area)
+	-> RSTORE {traversal(accu, top-down, break)}
+
     findVarInProcess(VarDecl, RSTORE, Area)
+	-> RSTORE {traversal(accu, top-down, break)}
+
+    findVarInProcess(Atom, RSTORE, Area)
 	-> RSTORE {traversal(accu, top-down, break)}
 
     findVarInProcess(GenVar, RSTORE, Area)
