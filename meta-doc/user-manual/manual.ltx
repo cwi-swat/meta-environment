@@ -18,8 +18,6 @@
 \W\usepackage{sequential}
 \T\usepackage{epsfig}
 
-\html{user-manual}
-
 \makeindex
 
 \xmlattributes{body}{bgcolor= "#ffffe6"}
@@ -3363,7 +3361,6 @@ context-free syntax
   "[[" {Lookahead ","}* "]]"   -> Lookaheads 
 \end{verbatim}
 
-
 The next example illustrates the use of restrictions to define a
 `safe' way of layout.  
 \link{Recall}[ from Section~\ref{LexicalSyntax}]{LexicalSyntax}
@@ -3817,11 +3814,17 @@ used in the first version of the \ASmetaenv~\cite{Kli93}.
 Based on the work described in \cite{Vis97}, \asfsdf\ is extended
 with parameterization and symbol renaming\footnote{In \cite{Vis97} the
 notion of production renaming is also introduced, but this
-is not yet supported.}. We will first explain the notion
+will not be supported.}. We will first explain the notion
 of parameterization, later we will give details on symbol renaming.
 
 \subsubsection{Parameterization}
 \label{Parameters}
+
+Module parameterization allows the definition of generic modules
+for lists, pairs, sets, etc. The operations defined in these
+modules are independent of a specific type. When importing a
+parameterized module and instantiating the formal by actual
+parameters the operations become "sort" specific.
 
 Modules can have formal parameters when defining them. The module name
 is then followed by a list of symbols, representing the formal
@@ -3883,6 +3886,9 @@ imports Booleans Pair[Bool Bool]
 
 Symbol renaming is in fact very similar to parameterization except
 that it is not necessary to add formal parameters to a module.
+The mechanism of symbol renaming allows the overriding of one
+symbol or a set of symbols by another symbol or symbols, respectively. 
+It allows a flexible and concise way of adapting specifications.
 The specification \link*{below}[in Figure~\Ref]{CODE:pairs} shows 
 an example of the {\tt Pair} module without parameters. 
 The idea is to achieve the same effect as parameterization
@@ -5304,6 +5310,8 @@ modules, parse tables, user-defined terms, etc.
 \item {\bf Unparser generator}: generates prettyprinters.
 \end{itemize}
 
+\section{Well-formedness checks on \sdf}
+
 \section{Selected Components of the \ASmetaenv}
 \label{SEC:Components}
 
@@ -5340,8 +5348,6 @@ of {\tt M}. This means in particular that all imports of {\tt M} should
 be expanded before {\tt sdf2table} can be used. Command line tools are
 available to do this, but we will not describe them here.
 
-For further information see the manual page for {\tt sdf2table}.
-
 \end{itemize}
 
 
@@ -5371,12 +5377,10 @@ by some tools outside the \ASmetaenv.  AsFix2 is very verbose: even
 lexical tokens and layout are represented as trees.  For efficiency
 reasons, the \ASmetaenv\ uses the more concise format AsFixMe.
 
-\item Use the flag {\tt -m} to generate AsFixMe: this is the preferred
+\item Use the flag {\tt -m} to generate AsFix2ME: this is the preferred
 parse tree format that is becoming the standard inside the \ASmetaenv.
 
 \end{itemize}
-
-For further information see the manual page for {\tt sglr}.
 
 \subsection{Rewriting a Term using the Evaluator}
 \label{SEC:interpretationgofterms}
