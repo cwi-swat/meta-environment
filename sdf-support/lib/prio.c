@@ -1,5 +1,7 @@
 #include "SDFME-utils.h"
 
+/*{{{  collect_prios(SDF_Grammar grammar, SDF_PriorityList *prios) */
+
 static void
 collect_prios(SDF_Grammar grammar, SDF_PriorityList *prios)
 {

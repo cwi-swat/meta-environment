@@ -1,11 +1,16 @@
 #include "SDFME-utils.h"
 
-SDF_Import SDFmakeImport(char *moduleName)
+/*{{{  SDF_Import SDF_makeImport(char *moduleName) */
+
+SDF_Import SDF_makeImport(char *moduleName)
 {
   return SDF_makeImportModule(
            SDF_makeModuleNameUnparameterized(
 	     SDF_makeModuleIdWord(SDF_makeCHARLISTString(moduleName))));
 }
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_concatImportList(SDF_ImportList l1, */
 
 SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
                                     SDF_ImportList l2)
@@ -33,12 +38,47 @@ SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
   return l1;
 }
 
+/*}}}  */
+/*{{{  ATbool SDF_containsImportListImport(SDF_ImportList list,  */
+
 ATbool SDF_containsImportListImport(SDF_ImportList list, 
                                     SDF_Import  import)
 {
   return (ATindexOf((ATermList) SDF_ImportListToTerm(list), 
                     SDF_ImportToTerm(import), 0) != -1);
 }
+
+/*}}}  */
+/*{{{  ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName) */
+
+ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
+{
+  SDF_ModuleId   modid   = SDF_getModuleNameModuleId(moduleName);
+  char          *lex     = SDF_getCHARLISTString(SDF_getModuleIdChars(modid));
+  return ATmake("<str>", lex);
+}
+
+/*}}}  */
+/*{{{  SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import) */
+
+SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
+{
+  SDF_OptLayout s = SDF_makeLayoutSpace();
+  SDF_OptLayout nl = SDF_makeLayoutNewline();
+
+  SDF_ImpSectionList list = SDF_getModuleList(module);
+  SDF_ImportList ilist = SDF_makeImportListSingle(import);
+  SDF_Imports imports = SDF_makeImportsDefault(ilist);
+  SDF_ImpSection section = SDF_makeImpSectionImports(s, imports);
+  
+  list = SDF_makeImpSectionListMany(section, nl, list);
+
+  return SDF_setModuleList(module, list);
+}
+
+/*}}}  */
+
+/*{{{  SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1, */
 
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1,
                                             SDF_ProductionList l2)
@@ -65,6 +105,9 @@ SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1,
 
   return l1;
 }
+
+/*}}}  */
+/*{{{  SDF_PriorityList SDF_concatPriorityList(SDF_PriorityList l1, */
 
 SDF_PriorityList SDF_concatPriorityList(SDF_PriorityList l1,
                                             SDF_PriorityList l2)
@@ -96,6 +139,9 @@ SDF_PriorityList SDF_concatPriorityList(SDF_PriorityList l1,
   return l1;
 }
 
+/*}}}  */
+/*{{{  SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList l1, */
+
 SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList l1,
                                             SDF_RestrictionList l2)
 {
@@ -121,11 +167,18 @@ SDF_RestrictionList SDF_concatRestrictionList(SDF_RestrictionList l1,
   return l1;
 }
 
+/*}}}  */
+
+/*{{{  SDF_Production SDF_removeAttributes(SDF_Production prod) */
+
 SDF_Production SDF_removeAttributes(SDF_Production prod)
 {
   SDF_Attributes emptyAttrs = SDF_makeAttributesNoAttrs();
   return SDF_setProductionAttributes(prod, emptyAttrs);
 }
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRejectAttribute(SDF_Production prod) */
 
 ATbool SDF_hasRejectAttribute(SDF_Production prod)
 {
@@ -151,6 +204,9 @@ ATbool SDF_hasRejectAttribute(SDF_Production prod)
   return found;
 }
 
+/*}}}  */
+/*{{{  ATbool SDF_hasPreferAttribute(SDF_Production prod) */
+
 ATbool SDF_hasPreferAttribute(SDF_Production prod)
 {
   ATbool found = ATfalse;
@@ -174,6 +230,9 @@ ATbool SDF_hasPreferAttribute(SDF_Production prod)
   }
   return found;
 }
+
+/*}}}  */
+/*{{{  ATbool SDF_hasAvoidAttribute(SDF_Production prod) */
 
 ATbool SDF_hasAvoidAttribute(SDF_Production prod)
 {
@@ -199,44 +258,38 @@ ATbool SDF_hasAvoidAttribute(SDF_Production prod)
   return found;
 }
 
+/*}}}  */
+
+/*{{{  SDF_OptLayout SDF_makeLayoutEmpty() */
+
 SDF_OptLayout SDF_makeLayoutEmpty()
 {
   return SDF_makeOptLayoutAbsent();
 }
+
+/*}}}  */
+/*{{{  SDF_OptLayout SDF_makeLayoutSpace() */
 
 SDF_OptLayout SDF_makeLayoutSpace()
 {
   return SDF_makeOptLayoutPresent(SDF_makeCHARLISTString(" "));
 }
 
+/*}}}  */
+/*{{{  SDF_OptLayout SDF_makeLayoutNewline() */
+
 SDF_OptLayout SDF_makeLayoutNewline()
 {
   return SDF_makeOptLayoutPresent(SDF_makeCHARLISTString("\n"));
 }
 
-ATerm SDF_getModuleNamePlain(SDF_ModuleName moduleName)
-{
-  SDF_ModuleId   modid   = SDF_getModuleNameModuleId(moduleName);
-  char          *lex     = SDF_getCHARLISTString(SDF_getModuleIdChars(modid));
-  return ATmake("<str>", lex);
-}
+/*}}}  */
 
-SDF_Module SDF_addModuleImport(SDF_Module module, SDF_Import import)
-{
-  SDF_OptLayout s = SDF_makeLayoutSpace();
-  SDF_OptLayout nl = SDF_makeLayoutNewline();
-
-  SDF_ImpSectionList list = SDF_getModuleList(module);
-  SDF_ImportList ilist = SDF_makeImportListSingle(import);
-  SDF_Imports imports = SDF_makeImportsDefault(ilist);
-  SDF_ImpSection section = SDF_makeImpSectionImports(s, imports);
-  
-  list = SDF_makeImpSectionListMany(section, nl, list);
-
-  return SDF_setModuleList(module, list);
-}
+/*{{{  SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s) */
 
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s)
 {
   return SDF_SymbolFromTerm(ATremoveAllAnnotations(SDF_SymbolToTerm(s)));
 }
+
+/*}}}  */
