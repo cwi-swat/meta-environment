@@ -11,6 +11,8 @@ Installation instructions:
    To compile this distribution you will need the following items:
 
     -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
+    -- gnu autoconf <http://www.gnu.org/software/autoconf>)
+    -- gnu automake <http://www.gnu.org/software/automake>)
     -- jdk (The Java Development Kit, from
          <http://www.javasoft.com/products/jdk/>). Make sure you get version
          1.1 or higher.
@@ -119,27 +121,19 @@ Installation instructions:
 
       % setenv PATH /path/to/meta/bin:${PATH}
 
-    If there are no configure files in the sub-directories: toolbus,
-    aterm, and new-meta, please run autoconf to generate the configure
-    file in each of these sub-directories.
-
-    Then proceed as follows:
-
       $ cd /path/to/meta
       $ cd toolbus
       $ ./configure --prefix=/path/to/meta --with-java
       $ make install
       $ cd ../aterm
-      $ autoconf
+      $ ./reconf
       $ ./configure --prefix=/path/to/meta
       $ make install
       $ cd ../new-meta
-      $ autoconf
+      $ ./reconf
       $ ./configure --prefix=/path/to/meta \
                     --with-toolbus=/path/to/meta \
                     --with-aterm=/path/to/meta \
-                    --libdir=/path/to/meta/lib \
-                    --datadir=/path/to/meta/share \
                     --with-tcldot=/path/to/Tcldot            # see above
       $ make install
 
