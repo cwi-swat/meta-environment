@@ -29,7 +29,6 @@ java_JAVA = \
 	${GENSOURCES} \
 	ExtensionFilter.java \
 	GraphPanel.java \
-	GraphWrapper.java \
 	ImportGraphPanel.java \
 	ListListModel.java \
 	MetaStudio.java \
