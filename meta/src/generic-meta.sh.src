@@ -32,26 +32,25 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="EC:deghM:m:o:p:PSI:T:vV"
+myarguments="C:I:deghm:o:p:sS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
-    -I dir          location of extra toolbus scripts
     -C file         specifies the configuration file to be processed
+    -I dir          location of extra toolbus scripts
     -d              run in debug mode (with viewer)
     -e              use xemacs editor [default]
-    -E              dump only .eqs file for <modulename>
     -g              use gvim editor   (experimental)
     -h              display help information (usage)
-    -M <int>        MetaEnvironment will abort after <int> seconds
     -m modulename   specifies the name of the top module to start with
     -o <file>       output file (only works with -P and -E)
     -p <path>       add <path> to PATH of Meta-Environment
-    -P              dump only .trm.tbl file for <modulename>
-    -S              save intermediate files to disk (only works with -P and -E)
+    -s              save intermediate files to disk (only works with -P and -E)
+    -S              execute the given tb-script
+    -t <int>        MetaEnvironment will abort after <int> seconds
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)
     -V              reveal program version (i.e. $myversion)
@@ -97,50 +96,61 @@ while [ $#  -gt 0 ]
 do
     case "$1"
     in
-        -I)     shift
-	        extra_scripts="${extra_scripts} -I$1"
-		;;
         -C)
                 shift
                 configfile=$1
                 ;;    
-        -d)
-		xargs="${xargs} -viewer" ;;
-	-E)     meta_script=${prefix}/share/meta/eqs-dumper.tb ;;
-	-p)    
-	        shift;
-	        PATH="$1:${PATH}"
-		export PATH
+        -I)     
+		shift
+	        extra_scripts="${extra_scripts} -I$1"
 		;;
-
-	-P)     meta_script=${prefix}/share/meta/pt-dumper.tb ;;
+        -d)
+		xargs="${xargs} -viewer" 
+		;;
 	-e)
-		editor="emacs-editor" ;;
+		editor="emacs-editor" 
+		;;
 	-g)
-		editor="gvim-editor" ;;
+		editor="gvim-editor" 
+		;;
         -h)
-		Usage ; exit 0 ;;
-	-M)     
-	        shift
-		time_out_def="-DTIMEOUT=$1"
+		Usage ; exit 0 
 		;;
 	-m)
 		shift
 		modulename=$1
 		;;
-	-o)     shift
+	-o)     
+		shift
 	        filename=$1
 		;;
-        -t)
+	-p)    
+	        shift;
+	        PATH="$1:${PATH}"
+		export PATH
 		;;
-	-S)     saving="true";;
+	-s)     
+		saving="true"
+		;;
+	-S)     
+		shift
+		meta_script="$1"
+		;;
+	-t)     
+	        shift
+		time_out_def="-DTIMEOUT=$1"
+		;;
         -T)
-		shift; xargs="${xargs} -TB_PORT $1" ;;
+		shift; 
+		xargs="${xargs} -TB_PORT $1" 
+		;;
         -v)
 		xargs="${xargs} -logger"
-		verbose=1 ;;
+		verbose=1 
+		;;
 	-V)
-		Version ; exit 0 ;;
+		Version ; exit 0 
+		;;
 	--)
 		;;
 	*)
