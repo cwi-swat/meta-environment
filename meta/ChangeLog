@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/05 ({markvdb,jong}@cwi.nl)
+ * List of editortypes in button descriptions introduced.
+
 2003/06/04 (markvdb@cs.vu.nl)
  * Introduce the refactor "remove import".
 
