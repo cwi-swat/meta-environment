@@ -9,7 +9,7 @@ INCLUDES = \
 	-I$(top_srcdir)/editors/structure/src \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include \
-	-I$(PT_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-DSTARTUP_SCRIPT="\"$(datadir)/meta/$(SCRIPT)\""
 
 COMMONLIB = $(top_builddir)/editors/text/common/libTextEditor.a

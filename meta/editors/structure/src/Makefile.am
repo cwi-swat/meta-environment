@@ -41,6 +41,7 @@ se_LDADD = \
 
 INCLUDES = \
 	-I$(PT_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include
 
