@@ -75,7 +75,7 @@ static ATermList importsToModuleList(SDF_ImportList imports)
 
 ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name) 
 {
-  ATermList list = (ATermList) atModules;
+  ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
@@ -90,10 +90,9 @@ ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)
 
 ATerm get_all_needed_modules(int cid, ATerm atModules, char* name) 
 {
+  ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList result = SDF_getTransitiveImportedModules((ATermList) atModules, 
-						      id);
- 
+  ATermList result = SDF_getTransitiveImportedModules(list, id);
 
   return ATmake("snd-value(all-needed-modules(<term>))", result);
 }
@@ -103,7 +102,7 @@ ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)
 
 ATerm get_all_needed_imports(int cid, ATerm atModules, char* name) 
 {
-  ATermList list = (ATermList) atModules;
+  ATermList list = (ATermList) ATBunpack(atModules);
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   SDF_ImportList imports;
  
@@ -139,24 +138,6 @@ ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
 
 /*}}}  */
 
-/*{{{  ATerm get_import_renamings(int cid, ATerm atImport) */
-
-ATerm get_import_renamings(int cid, ATerm atImport)
-{
-  SDF_Import import = SDF_ImportFromTerm(atImport);
-  SDF_Renamings renamings = SDF_makeRenamingsRenamings(SDF_makeLayoutSpace(),
-			       SDF_makeRenamingListEmpty(),
-			       SDF_makeLayoutSpace());
-
-  if (SDF_hasImportRenamings(import)) {
-    renamings = SDF_getImportRenamings(import);
-  }
-    
-
-  return ATmake("snd-value(renamings(<term>))", renamings);
-}
-
-/*}}}  */
 /*{{{  ATerm get_module_id(int cid, ATerm atModule) */
 
 ATerm get_module_id(int cid, ATerm atModule)
@@ -221,7 +202,8 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 {
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   ATermList list = 
-    SDF_getTransitiveImportedModules((ATermList) atModules, id);
+    SDF_getTransitiveImportedModules((ATermList) ATBunpack(atModules), 
+				     id);
   SDF_ModuleList modules = SDF_makeModuleListEmpty();
   SDF_OptLayout space = SDF_makeLayoutSpace();
   SDF_SDF sdf;
@@ -250,7 +232,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
 
 ATerm get_import_graph(int cid, ATerm atModules)
 {
-  ATermList list = (ATermList) atModules;
+  ATermList list = (ATermList) ATBunpack(atModules);
   ATermList nodes = ATempty;
   ATermList edges = ATempty;
 
