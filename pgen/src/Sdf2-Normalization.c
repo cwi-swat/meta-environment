@@ -11026,6 +11026,15 @@ FUNC_EXIT ( make_nf2 ( lf_180sym , lf_93 ( make_nf1 ( lf_15sym , make_nf1 ( lf_l
 }
 }
 }
+if ( check_sym ( arg0 , lf_182sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+{
+ATerm atmp01 = arg_1 ( arg0 ) ;
+FUNC_EXIT ( make_nf2 ( lf_182sym , lf_88 ( atmp00 , arg1 ) , lf_88 ( atmp01 , arg1 ) ) ) ;
+}
+}
+}
 if ( check_sym ( arg0 , lf_179sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -11130,17 +11139,17 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 FUNC_EXIT ( lf_119 ( lf_88 ( atmp00 , arg1 ) ) ) ;
 }
 }
-if ( term_equal ( arg0 , ( constant15 ? constant15 : ( constant15 = make_nf0 ( lf_169sym ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant15 , make_nf0 ( lf_169sym ) ) ;
-}
-if ( term_equal ( arg0 , ( constant227 ? constant227 : ( constant227 = make_nf0 ( lf_112sym ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant227 , make_nf0 ( lf_112sym ) ) ;
+if ( term_equal ( arg0 , ( constant17 ? constant17 : ( constant17 = make_nf0 ( lf_281sym ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant17 , make_nf0 ( lf_281sym ) ) ;
 }
 if ( term_equal ( arg0 , ( constant18 ? constant18 : ( constant18 = make_nf0 ( lf_280sym ) ) ) ) ) {
 FUNC_EXIT_CONST ( constant18 , make_nf0 ( lf_280sym ) ) ;
 }
-if ( term_equal ( arg0 , ( constant17 ? constant17 : ( constant17 = make_nf0 ( lf_281sym ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant17 , make_nf0 ( lf_281sym ) ) ;
+if ( term_equal ( arg0 , ( constant227 ? constant227 : ( constant227 = make_nf0 ( lf_112sym ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant227 , make_nf0 ( lf_112sym ) ) ;
+}
+if ( term_equal ( arg0 , ( constant15 ? constant15 : ( constant15 = make_nf0 ( lf_169sym ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant15 , make_nf0 ( lf_169sym ) ) ;
 }
 FUNC_EXIT ( make_nf2 ( lf_90sym , arg0 , arg1 ) ) ;
 }
