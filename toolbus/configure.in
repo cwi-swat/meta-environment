@@ -285,6 +285,7 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \
 	adapters/emacs-adapter/Makefile \
+	adapters/emacs-adapter/start-emacs \
 	adapters/tcltk-adapter/Makefile \
 	adapters/perl-adapter/Makefile \
 	adapters/python-adapter/Makefile \
