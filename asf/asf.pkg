@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/asf
    info=http://www.cwi.nl/projects/MetaEnv/asf
    description='This package contains the implementation of the rewriting
                 language ASF. ASF rewrites terms in user-defined syntax. It
