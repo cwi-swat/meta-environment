@@ -321,7 +321,7 @@ static int create_socket (const char *host, int port)
     return TB_ERROR;
   }
 
-  listen(sock,5);
+  listen(sock,50);
 
   return sock;
 }
