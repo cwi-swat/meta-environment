@@ -14,6 +14,11 @@ let
 in
   execute(asfoperations, AO?) .
   (
+    rec-msg(get-equation-list(Equations1?)) .
+    snd-eval(AO, get-equation-list(Equations1)) .
+    rec-value(AO, equations(Equations2?)) .
+    snd-msg(equations(Equations2))
+  +
     rec-msg(rename(Renamings?, Equations?)) .
     snd-eval(AO, rename-in-equations(Renamings, Equations)) .
     rec-value(AO, equations(Equations?)) .
