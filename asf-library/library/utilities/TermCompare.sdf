@@ -6,4 +6,8 @@ exports
 
 context-free syntax
 
+  %% Compares two terms modulo LAYOUT and annotations
+  %% The ordering is complete, but dynamic. It may change
+  %% between runs of the interpreter because it is based
+  %% on memory layout.
   less(X,X) -> Boolean {built-in("term-compare-less")}
