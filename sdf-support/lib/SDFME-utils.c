@@ -218,7 +218,7 @@ SDF_LexStrCon SDF_makeLexStrCon(const char* str)
 	ch = SDF_makeLexStrCharBackslash();
 	break;
       default:
-	if (isprint(str[i])) {
+	if (isprint((int) str[i])) {
 	  ch = SDF_makeLexStrCharNormal(str[i]);
 	}
 	else {
