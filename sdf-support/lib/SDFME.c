@@ -2350,11 +2350,11 @@ SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF
 }
 
 /*}}}  */
-/*{{{  SDF_Renaming SDF_makeRenamingProduction(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to) */
+/*{{{  SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_Layout wsAfterFromProd, SDF_Layout wsAfterEqualsGreaterThan, SDF_Production toProd) */
 
-SDF_Renaming SDF_makeRenamingProduction(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to)
+SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_Layout wsAfterFromProd, SDF_Layout wsAfterEqualsGreaterThan, SDF_Production toProd)
 {
-  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun81)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeAppl0(SDF_afun13)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl0(SDF_afun37))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeAppl0(SDF_afun13)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun81)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun122))), (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl0(SDF_afun123))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)to), (ATerm)wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl0(SDF_afun37))), (ATerm)wsAfterFrom), (ATerm)from));
+  return (SDF_Renaming)(ATerm)ATmakeAppl2(SDF_afun0, (ATerm)ATmakeAppl3(SDF_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun81)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeAppl0(SDF_afun13)))), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl0(SDF_afun37))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun12, (ATerm)ATmakeAppl0(SDF_afun13)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun81)))), (ATerm)ATmakeAppl1(SDF_afun4, (ATerm)ATmakeAppl1(SDF_afun5, (ATerm)ATmakeAppl0(SDF_afun122))), (ATerm)ATmakeAppl1(SDF_afun7, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(SDF_afun8, (ATerm)ATmakeAppl0(SDF_afun123))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)toProd), (ATerm)wsAfterEqualsGreaterThan), (ATerm)ATmakeAppl1(SDF_afun2, (ATerm)ATmakeAppl0(SDF_afun37))), (ATerm)wsAfterFromProd), (ATerm)fromProd));
 }
 
 /*}}}  */
@@ -14308,9 +14308,6 @@ ATbool SDF_hasRenamingFrom(SDF_Renaming arg)
   if (SDF_isRenamingSymbol(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRenamingProduction(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -14319,10 +14316,7 @@ ATbool SDF_hasRenamingFrom(SDF_Renaming arg)
 
 SDF_Symbol SDF_getRenamingFrom(SDF_Renaming arg)
 {
-  if (SDF_isRenamingSymbol(arg)) {
-    return (SDF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
-  }
-  else 
+  
     return (SDF_Symbol)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
 }
 
@@ -14332,9 +14326,6 @@ SDF_Symbol SDF_getRenamingFrom(SDF_Renaming arg)
 SDF_Renaming SDF_setRenamingFrom(SDF_Renaming arg, SDF_Symbol from)
 {
   if (SDF_isRenamingSymbol(arg)) {
-    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)from, 0), 1);
-  }
-  else if (SDF_isRenamingProduction(arg)) {
     return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)from, 0), 1);
   }
 
@@ -14350,9 +14341,6 @@ ATbool SDF_hasRenamingWsAfterFrom(SDF_Renaming arg)
   if (SDF_isRenamingSymbol(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRenamingProduction(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -14361,10 +14349,7 @@ ATbool SDF_hasRenamingWsAfterFrom(SDF_Renaming arg)
 
 SDF_Layout SDF_getRenamingWsAfterFrom(SDF_Renaming arg)
 {
-  if (SDF_isRenamingSymbol(arg)) {
-    return (SDF_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-  }
-  else 
+  
     return (SDF_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
@@ -14374,9 +14359,6 @@ SDF_Layout SDF_getRenamingWsAfterFrom(SDF_Renaming arg)
 SDF_Renaming SDF_setRenamingWsAfterFrom(SDF_Renaming arg, SDF_Layout wsAfterFrom)
 {
   if (SDF_isRenamingSymbol(arg)) {
-    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterFrom, 1), 1);
-  }
-  else if (SDF_isRenamingProduction(arg)) {
     return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterFrom, 1), 1);
   }
 
@@ -14434,9 +14416,6 @@ ATbool SDF_hasRenamingTo(SDF_Renaming arg)
   if (SDF_isRenamingSymbol(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRenamingProduction(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -14445,10 +14424,7 @@ ATbool SDF_hasRenamingTo(SDF_Renaming arg)
 
 SDF_Symbol SDF_getRenamingTo(SDF_Renaming arg)
 {
-  if (SDF_isRenamingSymbol(arg)) {
-    return (SDF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-  }
-  else 
+  
     return (SDF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
 
@@ -14460,11 +14436,107 @@ SDF_Renaming SDF_setRenamingTo(SDF_Renaming arg, SDF_Symbol to)
   if (SDF_isRenamingSymbol(arg)) {
     return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)to, 4), 1);
   }
-  else if (SDF_isRenamingProduction(arg)) {
-    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)to, 4), 1);
-  }
 
   ATabort("Renaming has no To: %t\n", arg);
+  return (SDF_Renaming)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRenamingFromProd(SDF_Renaming arg) */
+
+ATbool SDF_hasRenamingFromProd(SDF_Renaming arg)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Production SDF_getRenamingFromProd(SDF_Renaming arg) */
+
+SDF_Production SDF_getRenamingFromProd(SDF_Renaming arg)
+{
+  
+    return (SDF_Production)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  SDF_Renaming SDF_setRenamingFromProd(SDF_Renaming arg, SDF_Production fromProd) */
+
+SDF_Renaming SDF_setRenamingFromProd(SDF_Renaming arg, SDF_Production fromProd)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)fromProd, 0), 1);
+  }
+
+  ATabort("Renaming has no FromProd: %t\n", arg);
+  return (SDF_Renaming)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRenamingWsAfterFromProd(SDF_Renaming arg) */
+
+ATbool SDF_hasRenamingWsAfterFromProd(SDF_Renaming arg)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getRenamingWsAfterFromProd(SDF_Renaming arg) */
+
+SDF_Layout SDF_getRenamingWsAfterFromProd(SDF_Renaming arg)
+{
+  
+    return (SDF_Layout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  SDF_Renaming SDF_setRenamingWsAfterFromProd(SDF_Renaming arg, SDF_Layout wsAfterFromProd) */
+
+SDF_Renaming SDF_setRenamingWsAfterFromProd(SDF_Renaming arg, SDF_Layout wsAfterFromProd)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)wsAfterFromProd, 1), 1);
+  }
+
+  ATabort("Renaming has no WsAfterFromProd: %t\n", arg);
+  return (SDF_Renaming)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRenamingToProd(SDF_Renaming arg) */
+
+ATbool SDF_hasRenamingToProd(SDF_Renaming arg)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Production SDF_getRenamingToProd(SDF_Renaming arg) */
+
+SDF_Production SDF_getRenamingToProd(SDF_Renaming arg)
+{
+  
+    return (SDF_Production)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  SDF_Renaming SDF_setRenamingToProd(SDF_Renaming arg, SDF_Production toProd) */
+
+SDF_Renaming SDF_setRenamingToProd(SDF_Renaming arg, SDF_Production toProd)
+{
+  if (SDF_isRenamingProduction(arg)) {
+    return (SDF_Renaming)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)toProd, 4), 1);
+  }
+
+  ATabort("Renaming has no ToProd: %t\n", arg);
   return (SDF_Renaming)NULL;
 }
 
@@ -19395,9 +19467,9 @@ SDF_RenamingList SDF_visitRenamingList(SDF_RenamingList arg, SDF_Renaming (*acce
 }
 
 /*}}}  */
-/*{{{  SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol)) */
+/*{{{  SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol), SDF_Production (*acceptFromProd)(SDF_Production), SDF_Layout (*acceptWsAfterFromProd)(SDF_Layout), SDF_Production (*acceptToProd)(SDF_Production)) */
 
-SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol))
+SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol), SDF_Production (*acceptFromProd)(SDF_Production), SDF_Layout (*acceptWsAfterFromProd)(SDF_Layout), SDF_Production (*acceptToProd)(SDF_Production))
 {
   if (SDF_isRenamingSymbol(arg)) {
     return SDF_makeRenamingSymbol(
@@ -19408,10 +19480,10 @@ SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Sy
   }
   if (SDF_isRenamingProduction(arg)) {
     return SDF_makeRenamingProduction(
-        acceptFrom ? acceptFrom(SDF_getRenamingFrom(arg)) : SDF_getRenamingFrom(arg),
-        acceptWsAfterFrom ? acceptWsAfterFrom(SDF_getRenamingWsAfterFrom(arg)) : SDF_getRenamingWsAfterFrom(arg),
+        acceptFromProd ? acceptFromProd(SDF_getRenamingFromProd(arg)) : SDF_getRenamingFromProd(arg),
+        acceptWsAfterFromProd ? acceptWsAfterFromProd(SDF_getRenamingWsAfterFromProd(arg)) : SDF_getRenamingWsAfterFromProd(arg),
         acceptWsAfterEqualsGreaterThan ? acceptWsAfterEqualsGreaterThan(SDF_getRenamingWsAfterEqualsGreaterThan(arg)) : SDF_getRenamingWsAfterEqualsGreaterThan(arg),
-        acceptTo ? acceptTo(SDF_getRenamingTo(arg)) : SDF_getRenamingTo(arg));
+        acceptToProd ? acceptToProd(SDF_getRenamingToProd(arg)) : SDF_getRenamingToProd(arg));
   }
   ATabort("not a Renaming: %t\n", arg);
   return (SDF_Renaming)NULL;

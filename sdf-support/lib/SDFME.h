@@ -521,7 +521,7 @@ SDF_RenamingList SDF_makeRenamingListEmpty();
 SDF_RenamingList SDF_makeRenamingListSingle(SDF_Renaming head);
 SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingList tail);
 SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
-SDF_Renaming SDF_makeRenamingProduction(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
+SDF_Renaming SDF_makeRenamingProduction(SDF_Production fromProd, SDF_Layout wsAfterFromProd, SDF_Layout wsAfterEqualsGreaterThan, SDF_Production toProd);
 SDF_NatCon SDF_makeNatConLexToCf(SDF_Lexical lex);
 SDF_IntCon SDF_makeIntConNatural(SDF_NatCon NatCon);
 SDF_IntCon SDF_makeIntConPositive(SDF_Layout wsAfterPos, SDF_NatCon NatCon);
@@ -1681,6 +1681,15 @@ SDF_Renaming SDF_setRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg, SDF_Layou
 ATbool SDF_hasRenamingTo(SDF_Renaming arg);
 SDF_Symbol SDF_getRenamingTo(SDF_Renaming arg);
 SDF_Renaming SDF_setRenamingTo(SDF_Renaming arg, SDF_Symbol to);
+ATbool SDF_hasRenamingFromProd(SDF_Renaming arg);
+SDF_Production SDF_getRenamingFromProd(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingFromProd(SDF_Renaming arg, SDF_Production fromProd);
+ATbool SDF_hasRenamingWsAfterFromProd(SDF_Renaming arg);
+SDF_Layout SDF_getRenamingWsAfterFromProd(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingWsAfterFromProd(SDF_Renaming arg, SDF_Layout wsAfterFromProd);
+ATbool SDF_hasRenamingToProd(SDF_Renaming arg);
+SDF_Production SDF_getRenamingToProd(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingToProd(SDF_Renaming arg, SDF_Production toProd);
 
 /*}}}  */
 /*{{{  SDF_NatCon accessors */
@@ -2106,7 +2115,7 @@ SDF_Symbols SDF_visitSymbols(SDF_Symbols arg, SDF_SymbolList (*acceptList)(SDF_S
 SDF_SymbolList SDF_visitSymbolList(SDF_SymbolList arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_Layout (*acceptWsAfterFirst)(SDF_Layout));
 SDF_Renamings SDF_visitRenamings(SDF_Renamings arg, SDF_Layout (*acceptWsAfterBracketOpen)(SDF_Layout), SDF_RenamingList (*acceptList)(SDF_RenamingList), SDF_Layout (*acceptWsAfterList)(SDF_Layout));
 SDF_RenamingList SDF_visitRenamingList(SDF_RenamingList arg, SDF_Renaming (*acceptHead)(SDF_Renaming), SDF_Layout (*acceptWsAfterFirst)(SDF_Layout));
-SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol));
+SDF_Renaming SDF_visitRenaming(SDF_Renaming arg, SDF_Symbol (*acceptFrom)(SDF_Symbol), SDF_Layout (*acceptWsAfterFrom)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Symbol (*acceptTo)(SDF_Symbol), SDF_Production (*acceptFromProd)(SDF_Production), SDF_Layout (*acceptWsAfterFromProd)(SDF_Layout), SDF_Production (*acceptToProd)(SDF_Production));
 SDF_NatCon SDF_visitNatCon(SDF_NatCon arg, SDF_Lexical (*acceptLex)(SDF_Lexical));
 SDF_IntCon SDF_visitIntCon(SDF_IntCon arg, SDF_NatCon (*acceptNatCon)(SDF_NatCon), SDF_Layout (*acceptWsAfterPos)(SDF_Layout), SDF_Layout (*acceptWsAfterNeg)(SDF_Layout));
 SDF_CharRange SDF_visitCharRange(SDF_CharRange arg, SDF_Character (*acceptCharacter)(SDF_Character), SDF_Character (*acceptStart)(SDF_Character), SDF_Layout (*acceptWsAfterStart)(SDF_Layout), SDF_Layout (*acceptWsAfter)(SDF_Layout), SDF_Character (*acceptEnd)(SDF_Character));

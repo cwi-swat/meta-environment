@@ -302,7 +302,7 @@ exports
   context-free syntax
     "[" list:Renaming* "]"              -> Renamings  {cons("renamings")}
     from:Symbol     "=>" to:Symbol      -> Renaming   {cons("symbol")}
-    from:Production "=>" to:Production  -> Renaming   {cons("production")}
+    from-prod:Production "=>" to-prod:Production  -> Renaming {cons("production")}
 
 module IntCon
 imports Layout

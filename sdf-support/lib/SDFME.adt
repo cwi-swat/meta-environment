@@ -1298,11 +1298,11 @@
 , cf ( sort ( "Production" ) ) ]
 , cf ( sort ( "Renaming" ) )
 , attrs ( [ id ( "Renaming-Sdf-Syntax" ) ] ) )
-, [ < from ( Production ) >
-, < ws-after-from ( Layout ) >
+, [ < from-prod ( Production ) >
+, < ws-after-from-prod ( Layout ) >
 , lit ( "=>" )
 , < "ws-after-=>" ( Layout ) >
-, < to ( Production ) > ] ) ]
+, < to-prod ( Production ) > ] ) ]
 , [ NatCon
 , lex-to-cf
 , appl ( prod ( [ lex ( sort ( "NatCon" ) ) ]
