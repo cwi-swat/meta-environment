@@ -63,7 +63,7 @@ PROFILE-LD-FLAGS:= ${PROFILE_LD_FLAGS}
 # STD-LIBS: normal libraries
 # STD-CC-FLAGS: normal compiler flags
 # STD-LD-FLAGS: optional flags
-STD-LIBS	 = $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-LIBS	 = $(LOCALLIBS) $(LIBS)
 STD-CC-FLAGS	:= ${STD_CC_FLAGS}
 STD-LD-FLAG	:= ${STD_LD_FLAGS}
 
@@ -94,7 +94,7 @@ LIBS		:= @LIBS@ $(XLIBS)
 SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/${TARGET}.module-list)
 SRCS		:= $(SPEC_SRCS) init.c
 
-STD-OBJS	:= $(SRCS:.c=-$(CC).o)
+STD-OBJS	:= $(SRCS:.c=.o)
 DEBUG-OBJS	:= $(SRCS:.c=-${DEBUG_EXT}.o)
 PROFILE-OBJS	:= $(SRCS:.c=-${PROFILE_EXT}.o)
 
@@ -115,14 +115,14 @@ libs:	${LIBFILES}
 install:	${BINFILES}
 	$(foreach tool, $^, cp $(tool) $(bindir); chmod 755 $(bindir)/$(tool);)
 
-%-$(CC).o:	%.c
-	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
-
 %-${DEBUG_EXT}.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(DEBUG-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
 %-${PROFILE_EXT}.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
+
+%.o:	%.c
+	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
 $(STD-LIB):	$(STD-OBJS)
 	$(AR) $(AR_FLAGS) $@ $^
