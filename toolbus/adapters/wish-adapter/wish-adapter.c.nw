@@ -324,9 +324,6 @@ Print a term to the {\tt to\_wish} channel.
 <<print_term>>=
 static void print_term( term* t )
 {
-   if( t == NULL )
-      return;
-   
    switch( tkind( t ) )
    {
       case t_str:
@@ -362,7 +359,7 @@ static void print_term( term* t )
             print_list(fun_args(t), "(", ",", ")");
          break;
       case t_list:
-         print_list(t, "", " ", "");
+         print_list(t, " { ", " ", " } ");
          break;
       case t_env:
          print_env(t);
@@ -400,9 +397,11 @@ Print a list of arguments.
 static void print_args(term_list *args)
 {
   while(args) {
-    CHAR2WISH('{');
+    if(tkind(first(args)) != t_list)
+      PRINT2WISH0("   { ");
     print_term(first(args));
-    PRINT2WISH0("} ");
+    if(tkind(first(args)) != t_list)
+      PRINT2WISH0("   } ");
     args = next(args);
   }
 }
