@@ -1,3 +1,10 @@
+2003/11/20 (jurgenv@cwi.nl)
+  * unified interface of parsing, unparsing and file reading and writing
+  * added parse-file and parse-bytes builtins that produce a structure
+    containing the lifted left and right layout and the parse tree itself.
+  * read-term-from-file now produces the same structure as parse-file
+  * added write-bytes-to-file and read-bytes-from-file builtins
+
 2003/11/10 (jurgenv@cwi.nl)
   * Upgraded SDF2 normalizer specification in languages/sdf2. One ambiguity
     occurred over a condition with lists of priorities separated by comma's.
