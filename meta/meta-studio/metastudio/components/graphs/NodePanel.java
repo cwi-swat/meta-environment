@@ -19,6 +19,7 @@ import aterm.ATerm;
 
 public class NodePanel extends JPanel {
     private final Node node;
+    private LineBorder line;
     private static final int BOX_BORDER_THICKNESS = 8;
 
     public NodePanel(final MultiBridge bridge, Node node) {
@@ -40,6 +41,7 @@ public class NodePanel extends JPanel {
         BoxLayout layoutManager = new BoxLayout(this, orientation);
         setLayout(layoutManager);
 
+        line = new LineBorder(color, thickness);
         CompoundBorder border =
             new CompoundBorder(
                 new EmptyBorder(
@@ -48,7 +50,7 @@ public class NodePanel extends JPanel {
                         BOX_BORDER_THICKNESS,
                         BOX_BORDER_THICKNESS,
                         BOX_BORDER_THICKNESS)),
-                new LineBorder(color, thickness));
+                line);
         setBorder(border);
         setToolTipText(node.getLabel());
         setBackground(Color.white);
