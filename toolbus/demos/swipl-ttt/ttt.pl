@@ -10,6 +10,8 @@ won([_,_,X3,_,_,X6,_,_,X9],[3,6,9]) :- match(X3, X6, X9).
 won([X1,_,_,_,X5,_,_,_,X9],[1,5,9]) :- match(X1, X5, X9).
 won([_,_,X3,_,X5,_,X7,_,_],[3,5,7]) :- match(X3, X5, X7).
 
+won(Result, _, A, B) :- won(A,B), Result = won(A,B).
+
 toolbus :- tb_tool(Tool), tb_host(Host), tb_port(Port), tb_tid(Tid),
            tb_new_connection(Tool, Host, Port, Tid, Cid),
            tb_connect(Cid), tb_eventloop.
