@@ -228,11 +228,11 @@ ATerm PointToTerm(Point arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  Graph makeGraphDefault(NodeList nodes, EdgeList edges) */
+/*{{{  Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes) */
 
-Graph makeGraphDefault(NodeList nodes, EdgeList edges)
+Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes)
 {
-  return (Graph)(ATerm)ATmakeAppl2(afun0, (ATerm)nodes, (ATerm)edges);
+  return (Graph)(ATerm)ATmakeAppl3(afun0, (ATerm)nodes, (ATerm)edges, (ATerm)attributes);
 }
 
 /*}}}  */
@@ -324,11 +324,19 @@ Attribute makeAttributeCurvePoints(Polygon points)
 }
 
 /*}}}  */
+/*{{{  Attribute makeAttributeBoundingBox(Point first, Point second) */
+
+Attribute makeAttributeBoundingBox(Point first, Point second)
+{
+  return (Attribute)(ATerm)ATmakeAppl2(afun7, (ATerm)first, (ATerm)second);
+}
+
+/*}}}  */
 /*{{{  Attribute makeAttributeDirection(Direction direction) */
 
 Attribute makeAttributeDirection(Direction direction)
 {
-  return (Attribute)(ATerm)ATmakeAppl1(afun7, (ATerm)direction);
+  return (Attribute)(ATerm)ATmakeAppl1(afun8, (ATerm)direction);
 }
 
 /*}}}  */
@@ -336,7 +344,7 @@ Attribute makeAttributeDirection(Direction direction)
 
 Attribute makeAttributeInfo(char* key, ATerm value)
 {
-  return (Attribute)(ATerm)ATmakeAppl2(afun8, (ATerm)ATmakeAppl0(ATmakeAFun(key, 0, ATtrue)), (ATerm)value);
+  return (Attribute)(ATerm)ATmakeAppl2(afun9, (ATerm)ATmakeAppl0(ATmakeAFun(key, 0, ATtrue)), (ATerm)value);
 }
 
 /*}}}  */
@@ -344,7 +352,7 @@ Attribute makeAttributeInfo(char* key, ATerm value)
 
 Shape makeShapePlaintext()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun9);
+  return (Shape)(ATerm)ATmakeAppl0(afun10);
 }
 
 /*}}}  */
@@ -352,7 +360,7 @@ Shape makeShapePlaintext()
 
 Shape makeShapeEllipse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun10);
+  return (Shape)(ATerm)ATmakeAppl0(afun11);
 }
 
 /*}}}  */
@@ -360,7 +368,7 @@ Shape makeShapeEllipse()
 
 Shape makeShapeCircle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun11);
+  return (Shape)(ATerm)ATmakeAppl0(afun12);
 }
 
 /*}}}  */
@@ -368,7 +376,7 @@ Shape makeShapeCircle()
 
 Shape makeShapeEgg()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun12);
+  return (Shape)(ATerm)ATmakeAppl0(afun13);
 }
 
 /*}}}  */
@@ -376,7 +384,7 @@ Shape makeShapeEgg()
 
 Shape makeShapeTriangle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun13);
+  return (Shape)(ATerm)ATmakeAppl0(afun14);
 }
 
 /*}}}  */
@@ -384,7 +392,7 @@ Shape makeShapeTriangle()
 
 Shape makeShapeBox()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun14);
+  return (Shape)(ATerm)ATmakeAppl0(afun15);
 }
 
 /*}}}  */
@@ -392,7 +400,7 @@ Shape makeShapeBox()
 
 Shape makeShapeDiamond()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun15);
+  return (Shape)(ATerm)ATmakeAppl0(afun16);
 }
 
 /*}}}  */
@@ -400,7 +408,7 @@ Shape makeShapeDiamond()
 
 Shape makeShapeTrapezium()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun16);
+  return (Shape)(ATerm)ATmakeAppl0(afun17);
 }
 
 /*}}}  */
@@ -408,7 +416,7 @@ Shape makeShapeTrapezium()
 
 Shape makeShapeParallelogram()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun17);
+  return (Shape)(ATerm)ATmakeAppl0(afun18);
 }
 
 /*}}}  */
@@ -416,7 +424,7 @@ Shape makeShapeParallelogram()
 
 Shape makeShapeHouse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun18);
+  return (Shape)(ATerm)ATmakeAppl0(afun19);
 }
 
 /*}}}  */
@@ -424,7 +432,7 @@ Shape makeShapeHouse()
 
 Shape makeShapeHexagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun19);
+  return (Shape)(ATerm)ATmakeAppl0(afun20);
 }
 
 /*}}}  */
@@ -432,7 +440,7 @@ Shape makeShapeHexagon()
 
 Shape makeShapeOctagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun20);
+  return (Shape)(ATerm)ATmakeAppl0(afun21);
 }
 
 /*}}}  */
@@ -440,7 +448,7 @@ Shape makeShapeOctagon()
 
 Direction makeDirectionForward()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun21);
+  return (Direction)(ATerm)ATmakeAppl0(afun22);
 }
 
 /*}}}  */
@@ -448,7 +456,7 @@ Direction makeDirectionForward()
 
 Direction makeDirectionBack()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun22);
+  return (Direction)(ATerm)ATmakeAppl0(afun23);
 }
 
 /*}}}  */
@@ -456,7 +464,7 @@ Direction makeDirectionBack()
 
 Direction makeDirectionBoth()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun23);
+  return (Direction)(ATerm)ATmakeAppl0(afun24);
 }
 
 /*}}}  */
@@ -464,7 +472,7 @@ Direction makeDirectionBoth()
 
 Direction makeDirectionNone()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun24);
+  return (Direction)(ATerm)ATmakeAppl0(afun25);
 }
 
 /*}}}  */
@@ -488,7 +496,7 @@ EdgeList makeEdgeListMulti(Edge head, EdgeList tail)
 
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes)
 {
-  return (Edge)(ATerm)ATmakeAppl3(afun25, (ATerm)from, (ATerm)to, (ATerm)attributes);
+  return (Edge)(ATerm)ATmakeAppl3(afun26, (ATerm)from, (ATerm)to, (ATerm)attributes);
 }
 
 /*}}}  */
@@ -512,7 +520,7 @@ Polygon makePolygonMulti(Point head, Polygon tail)
 
 Point makePointDefault(int x, int y)
 {
-  return (Point)(ATerm)ATmakeAppl2(afun26, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun27, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
 }
 
 /*}}}  */
@@ -600,7 +608,7 @@ inline ATbool isGraphDefault(Graph arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, patternGraphDefault, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, patternGraphDefault, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -668,6 +676,39 @@ Graph setGraphEdges(Graph arg, EdgeList edges)
   }
 
   ATabort("Graph has no Edges: %t\n", arg);
+  return (Graph)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool hasGraphAttributes(Graph arg) */
+
+ATbool hasGraphAttributes(Graph arg)
+{
+  if (isGraphDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  AttributeList getGraphAttributes(Graph arg) */
+
+AttributeList getGraphAttributes(Graph arg)
+{
+  
+    return (AttributeList)ATgetArgument((ATermAppl)arg, 2);
+}
+
+/*}}}  */
+/*{{{  Graph setGraphAttributes(Graph arg, AttributeList attributes) */
+
+Graph setGraphAttributes(Graph arg, AttributeList attributes)
+{
+  if (isGraphDefault(arg)) {
+    return (Graph)ATsetArgument((ATermAppl)arg, (ATerm)attributes, 2);
+  }
+
+  ATabort("Graph has no Attributes: %t\n", arg);
   return (Graph)NULL;
 }
 
@@ -1076,6 +1117,9 @@ ATbool isValidAttribute(Attribute arg)
   else if (isAttributeCurvePoints(arg)) {
     return ATtrue;
   }
+  else if (isAttributeBoundingBox(arg)) {
+    return ATtrue;
+  }
   else if (isAttributeDirection(arg)) {
     return ATtrue;
   }
@@ -1188,6 +1232,28 @@ inline ATbool isAttributeCurvePoints(Attribute arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, patternAttributeCurvePoints, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool isAttributeBoundingBox(Attribute arg) */
+
+inline ATbool isAttributeBoundingBox(Attribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternAttributeBoundingBox, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1467,6 +1533,72 @@ Attribute setAttributePoints(Attribute arg, Polygon points)
   }
 
   ATabort("Attribute has no Points: %t\n", arg);
+  return (Attribute)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool hasAttributeFirst(Attribute arg) */
+
+ATbool hasAttributeFirst(Attribute arg)
+{
+  if (isAttributeBoundingBox(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  Point getAttributeFirst(Attribute arg) */
+
+Point getAttributeFirst(Attribute arg)
+{
+  
+    return (Point)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  Attribute setAttributeFirst(Attribute arg, Point first) */
+
+Attribute setAttributeFirst(Attribute arg, Point first)
+{
+  if (isAttributeBoundingBox(arg)) {
+    return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)first, 0);
+  }
+
+  ATabort("Attribute has no First: %t\n", arg);
+  return (Attribute)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool hasAttributeSecond(Attribute arg) */
+
+ATbool hasAttributeSecond(Attribute arg)
+{
+  if (isAttributeBoundingBox(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  Point getAttributeSecond(Attribute arg) */
+
+Point getAttributeSecond(Attribute arg)
+{
+  
+    return (Point)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  Attribute setAttributeSecond(Attribute arg, Point second) */
+
+Attribute setAttributeSecond(Attribute arg, Point second)
+{
+  if (isAttributeBoundingBox(arg)) {
+    return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)second, 1);
+  }
+
+  ATabort("Attribute has no Second: %t\n", arg);
   return (Attribute)NULL;
 }
 
@@ -2445,14 +2577,15 @@ Point setPointY(Point arg, int y)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList)) */
+/*{{{  Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList)) */
 
-Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList))
+Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList))
 {
   if (isGraphDefault(arg)) {
     return makeGraphDefault(
         acceptNodes ? acceptNodes(getGraphNodes(arg)) : getGraphNodes(arg),
-        acceptEdges ? acceptEdges(getGraphEdges(arg)) : getGraphEdges(arg));
+        acceptEdges ? acceptEdges(getGraphEdges(arg)) : getGraphEdges(arg),
+        acceptAttributes ? acceptAttributes(getGraphAttributes(arg)) : getGraphAttributes(arg));
   }
   ATabort("not a Graph: %t\n", arg);
   return (Graph)NULL;
@@ -2520,9 +2653,9 @@ AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attr
 }
 
 /*}}}  */
-/*{{{  Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm)) */
+/*{{{  Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm)) */
 
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm))
+Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm))
 {
   if (isAttributeLabel(arg)) {
     return makeAttributeLabel(
@@ -2545,6 +2678,11 @@ Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acc
   if (isAttributeCurvePoints(arg)) {
     return makeAttributeCurvePoints(
         acceptPoints ? acceptPoints(getAttributePoints(arg)) : getAttributePoints(arg));
+  }
+  if (isAttributeBoundingBox(arg)) {
+    return makeAttributeBoundingBox(
+        acceptFirst ? acceptFirst(getAttributeFirst(arg)) : getAttributeFirst(arg),
+        acceptSecond ? acceptSecond(getAttributeSecond(arg)) : getAttributeSecond(arg));
   }
   if (isAttributeDirection(arg)) {
     return makeAttributeDirection(

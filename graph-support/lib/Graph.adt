@@ -1,5 +1,6 @@
 [
-[Graph, default, graph(<nodes(NodeList)>,<edges(EdgeList)>)],
+[Graph, default, graph(<nodes(NodeList)>,<edges(EdgeList)>,
+                       <attributes(AttributeList)>)],
 
 [NodeList, empty, []],
 [NodeList, multi, [<head(Node)>,<[tail(NodeList)]>]],
@@ -16,6 +17,7 @@
 [Attribute, location, location(<x(int)>,<y(int)>)],
 [Attribute, size, size(<width(int)>,<height(int)>)],
 [Attribute, curve-points, curve-points(<points(Polygon)>)],
+[Attribute, bounding-box, bounding-box(<first(Point)>,<second(Point)>)],
 [Attribute, direction, direction(<direction(Direction)>)],
 [Attribute, info, info(<key(str)>,<value(term)>)],
 

@@ -67,8 +67,10 @@ stmt:
 	;
 
 attr_stmt:
-	graph_or_node_or_edge attr_list { }
-	;
+  GRAPH attr_list  { mergeGraphAttributes(buildAttributeList(GRAPH,
+                                                             $2.attributes)); }
+  | NODE attr_list { }
+  | EDGE attr_list { };
 
 graph_or_node_or_edge:
 	GRAPH { }
@@ -188,7 +190,7 @@ static Point parsePoint(char *s)
 	return makePointDefault(x, y);
 }
 
-static Attribute parseCoordinateList(char *coords, ATbool appendFirstToEnd)
+static Polygon parseCoordinateList(char *coords, ATbool appendFirstToEnd)
 {
   char *token;
 	Polygon poly = makePolygonEmpty();
@@ -209,9 +211,36 @@ static Attribute parseCoordinateList(char *coords, ATbool appendFirstToEnd)
 	  poly = makePolygonMulti(last, poly);
   }
 
-	poly = PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
+	return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
+}
 
-  return makeAttributeCurvePoints(poly);
+static Attribute parseBoundaries(char *coords)
+{
+  char *token;
+  Point p1, p2;
+  int x,y;
+
+	token = strtok(coords, ",");
+  assert(token);
+  x = atoi(token);
+
+	token = strtok(NULL, ",");
+  assert(token);
+  y = atoi(token);
+
+  p1 = makePointDefault(x,y);
+
+	token = strtok(NULL, ",");
+  assert(token);
+  x = atoi(token);
+
+	token = strtok(NULL, ",");
+  assert(token);
+  y = atoi(token);
+
+  p2 = makePointDefault(x,y);
+
+  return makeAttributeBoundingBox(p1,p2);
 }
 
 static AttributeList buildAttributeList(int type, ATermList dotAttributes)
@@ -219,7 +248,7 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
   AttributeList list = makeAttributeListEmpty();
 	int width = -1, height = -1;
 
-	/* ATwarning("dotAttributes=%t\n", dotAttributes); */
+	/*ATwarning("dotAttributes=%t\n", dotAttributes); */
   while (!ATisEmpty(dotAttributes)) {
     ATermList pair = (ATermList)ATgetFirst(dotAttributes);
 		ATerm key = ATgetFirst(pair);
@@ -227,7 +256,11 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 		char *sval = ATgetName(ATgetAFun((ATermAppl)value));
 		/* ATwarning("key=%t, value=%s\n", key, sval);  */
 
-		if (ATisEqual(key, ATparse("\"width\""))) {
+    if (ATisEqual(key, ATparse("\"bb\""))) {
+       Attribute attr = parseBoundaries(sval);
+			 list = makeAttributeListMulti(attr, list);
+    }
+		else if (ATisEqual(key, ATparse("\"width\""))) {
       width = inchToPixel(atof(sval));
 		} else if (ATisEqual(key, ATparse("\"height\""))) {
       height = inchToPixel(atof(sval));
@@ -241,11 +274,13 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 		} else if (ATisEqual(key, ATparse("\"pos\""))) {
       if (sval[0] == 'e') {
         /* List of coordinates, last element first but the rest in order */
-        Attribute attr = parseCoordinateList(sval+2, ATtrue);
+        Attribute attr = makeAttributeCurvePoints(
+                           parseCoordinateList(sval+2, ATtrue));
 				list = makeAttributeListMulti(attr, list);
 			} else if (sval[0] == 's') {
         /* List of coordinates, all in order */
-        Attribute attr = parseCoordinateList(sval+2, ATfalse);
+        Attribute attr = makeAttributeCurvePoints(
+                           parseCoordinateList(sval+2, ATfalse));
 				list = makeAttributeListMulti(attr, list);
 			} else {
         if (type == NODE) {
@@ -261,7 +296,8 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 					list = makeAttributeListMulti(makeAttributeLocation(x, y), list);
 				}
         else {
-          Attribute attr = parseCoordinateList(sval, ATfalse);
+          Attribute attr = makeAttributeCurvePoints(
+                             parseCoordinateList(sval, ATfalse));
 				  list = makeAttributeListMulti(attr, list);
         }
 

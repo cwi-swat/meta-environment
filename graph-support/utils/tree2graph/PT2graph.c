@@ -309,7 +309,8 @@ Graph PT_printTreeToGraph(char *name, PT_Tree tree, ATbool characters,
 			  ATbool layout, ATbool literals)
 {
   NodeList nodes;
-  Graph graph = makeGraphDefault(makeNodeListEmpty(), makeEdgeListEmpty());
+  Graph graph = makeGraphDefault(makeNodeListEmpty(), makeEdgeListEmpty(),
+				 makeAttributeListEmpty());
 
   characters_on = characters;
   productions_on = productions;

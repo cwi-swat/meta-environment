@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/14 ({jurgenv,markvdb}@cwi.nl)
+ * Added graph attributes to the graph format
+ * Added reading of bounding box information from dot format
+
 2003/07/09 (markvdb@cwi.nl)
  * Removed explicit ShowSource information.
 

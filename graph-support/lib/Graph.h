@@ -57,7 +57,7 @@ ATerm PointToTerm(Point arg);
 /*}}}  */
 /*{{{  constructors */
 
-Graph makeGraphDefault(NodeList nodes, EdgeList edges);
+Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes);
 NodeList makeNodeListEmpty();
 NodeList makeNodeListMulti(Node head, NodeList tail);
 Node makeNodeDefault(NodeId id, AttributeList attributes);
@@ -69,6 +69,7 @@ Attribute makeAttributeShape(Shape shape);
 Attribute makeAttributeLocation(int x, int y);
 Attribute makeAttributeSize(int width, int height);
 Attribute makeAttributeCurvePoints(Polygon points);
+Attribute makeAttributeBoundingBox(Point first, Point second);
 Attribute makeAttributeDirection(Direction direction);
 Attribute makeAttributeInfo(char* key, ATerm value);
 Shape makeShapePlaintext();
@@ -121,6 +122,9 @@ Graph setGraphNodes(Graph arg, NodeList nodes);
 ATbool hasGraphEdges(Graph arg);
 EdgeList getGraphEdges(Graph arg);
 Graph setGraphEdges(Graph arg, EdgeList edges);
+ATbool hasGraphAttributes(Graph arg);
+AttributeList getGraphAttributes(Graph arg);
+Graph setGraphAttributes(Graph arg, AttributeList attributes);
 
 /*}}}  */
 /*{{{  NodeList accessors */
@@ -178,6 +182,7 @@ inline ATbool isAttributeShape(Attribute arg);
 inline ATbool isAttributeLocation(Attribute arg);
 inline ATbool isAttributeSize(Attribute arg);
 inline ATbool isAttributeCurvePoints(Attribute arg);
+inline ATbool isAttributeBoundingBox(Attribute arg);
 inline ATbool isAttributeDirection(Attribute arg);
 inline ATbool isAttributeInfo(Attribute arg);
 ATbool hasAttributeLabel(Attribute arg);
@@ -201,6 +206,12 @@ Attribute setAttributeHeight(Attribute arg, int height);
 ATbool hasAttributePoints(Attribute arg);
 Polygon getAttributePoints(Attribute arg);
 Attribute setAttributePoints(Attribute arg, Polygon points);
+ATbool hasAttributeFirst(Attribute arg);
+Point getAttributeFirst(Attribute arg);
+Attribute setAttributeFirst(Attribute arg, Point first);
+ATbool hasAttributeSecond(Attribute arg);
+Point getAttributeSecond(Attribute arg);
+Attribute setAttributeSecond(Attribute arg, Point second);
 ATbool hasAttributeDirection(Attribute arg);
 Direction getAttributeDirection(Attribute arg);
 Attribute setAttributeDirection(Attribute arg, Direction direction);
@@ -293,12 +304,12 @@ Point setPointY(Point arg, int y);
 /*}}}  */
 /*{{{  sort visitors */
 
-Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList));
+Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList));
 NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
 Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
-Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm));
+Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm));
 Shape visitShape(Shape arg);
 Direction visitDirection(Direction arg);
 EdgeList visitEdgeList(EdgeList arg, Edge (*acceptHead)(Edge));

@@ -17,6 +17,7 @@
 
 static ATermList termStore = NULL;
 static ATermList nodeList;
+static AttributeList graphAttributeList;
 static ATermTable nodeTable;
 static ATermTable edgeTable;
 
@@ -27,6 +28,7 @@ static void initTermStore()
 {
   termStore = ATempty;
   nodeList = ATempty;
+  graphAttributeList = makeAttributeListEmpty();
 }
 
 /*}}}  */
@@ -103,7 +105,8 @@ static Graph buildGraph()
 
   edges = EdgeListFromTerm((ATerm)ATtableValues(edgeTable));
 
-  return makeGraphDefault(NodeListFromTerm((ATerm)nodes), edges);
+  return makeGraphDefault(NodeListFromTerm((ATerm)nodes), edges, 
+			  graphAttributeList);
 }
 
 /*}}}  */
@@ -177,6 +180,16 @@ void mergeEdgeAttributes(NodeId from, NodeId to, AttributeList attrs)
 
   edge = setEdgeAttributes(edge, mergeAttributes(getEdgeAttributes(edge), attrs));
   ATtablePut(edgeTable, key, EdgeToTerm(edge));
+}
+
+/*}}}  */
+/*{{{  void mergeGraphAttributes(AttributeList attrs) */
+
+void mergeGraphAttributes(AttributeList attrs)
+{
+  graphAttributeList = AttributeListFromTerm((ATerm) ATconcat(
+                       (ATermList) AttributeListToTerm(attrs),
+		       (ATermList) AttributeListToTerm(graphAttributeList)));
 }
 
 /*}}}  */
