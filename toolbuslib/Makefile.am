@@ -4,7 +4,7 @@ ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST = program-check.m4 reconf \
              toolbuslib-config.sh.src \
-	     $(wildcard *.pkg)
+	     package
 
 bin_SCRIPTS = toolbuslib-config
 
@@ -16,6 +16,6 @@ CLEANFILES = toolbuslib-config ${PACKAGE}-${VERSION}.pkg
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
-${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
-	sed 's#__VERSION__#${VERSION}#g;\
-             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
+${PACKAGE}-${VERSION}.pkg: package Makefile
+	cp $ < $@
+
