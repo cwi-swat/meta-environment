@@ -972,6 +972,13 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
 /*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
 
 
+static PT_Args addElemsToArgs(PT_Production listProd,
+                              PT_Args elems, PT_Args args) 
+{
+  PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
+  return PT_makeArgsList(listArg, args);
+}
+
 static ATerm
 nextListElementMatching(ATerm env, PT_Tree elem1, 
                         PT_Production listProd, 
@@ -1024,16 +1031,10 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
 
         pedantic_assert(isValidList(elems2));
       
-	newenv = argMatching(env, elem1, elem2, NULL,
-			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
-			     NULL, depth);
-	if (newenv == fail_env) {
-	  return fail_env;
-	}
-
-	return listMatching(newenv, listProd, elems1, elems2, conds,
-			    args1, args2, lhs_posinfo, depth);
-
+	newenv = argMatching(env, elem1, elem2, conds,
+                             addElemsToArgs(listProd, elems1, args1),
+                             addElemsToArgs(listProd, elems2, args2),
+			     lhs_posinfo, depth);
       }
       else {
         elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
@@ -1062,15 +1063,10 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
                               lhs_posinfo, depth);
       }
       else {
-	newenv = argMatching(env, elem1, elem2, NULL,
-			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
-			     NULL, depth);
-	if (newenv == fail_env) {
-	  return fail_env;
-	}
-
-	return listMatching(newenv, listProd, elems1, elems2, conds,
-			    args1, args2, lhs_posinfo, depth);
+	newenv=  argMatching(env, elem1, elem2, conds,
+                             addElemsToArgs(listProd, elems1, args1),
+                             addElemsToArgs(listProd, elems2, args2),
+			     lhs_posinfo, depth);
       }
     }
     else {
