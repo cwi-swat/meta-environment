@@ -92,11 +92,13 @@ in
   if equal(DirtyFoci, []) then
     tau    
   else
-		snd-note(ui-status(errorf("Syntax of %s is dirty. Please reopen the module.",
-      [ModuleName]))).
+	  snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
+       [ModuleName]))).
     snd-msg(close-module(ModuleName)).
     rec-msg(module-closed(ModuleName)).
-    snd-msg(delete-module(ModuleName))
+    snd-msg(delete-module(ModuleName)).
+    snd-msg(open-modules([ModuleName])).
+    rec-msg(finished-opening-modules)
   fi
   
 endlet
