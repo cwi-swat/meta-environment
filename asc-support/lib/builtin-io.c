@@ -20,7 +20,7 @@ static PT_Tree unparse_to_bytes(PT_Tree tree);
 
 static char* getFilename(PT_Tree str) 
 {
-  ATerm aterm = ATparse(PT_yieldTree(str));
+  ATerm aterm = ATparse(PT_yieldTreeToString(str, ATfalse));
   return ATgetName(ATgetAFun((ATermAppl) aterm));
 }
 
@@ -29,7 +29,7 @@ static char* getFilename(PT_Tree str)
 
 static char* getCommand(PT_Tree str) 
 {
-  ATerm aterm = ATparse(PT_yieldTree(str));
+  ATerm aterm = ATparse(PT_yieldTreeToString(str, ATfalse));
   return ATgetName(ATgetAFun((ATermAppl) aterm));
 }
 
@@ -259,7 +259,7 @@ static PT_Tree parse_bytes(PT_Symbol type, PT_Tree bytes)
   initParser(language, NULL);
   parseTable = getParseTable();
   if (parseTable != NULL) {
-    ATerm result = SGparseString(PT_yieldTree(bytes), 
+    ATerm result = SGparseString(PT_yieldTreeToString(bytes, ATfalse), 
 				 (SGLR_ParseTable) parseTable, 
 				 sort, NULL); 
     return parse_result(toolname, "anonymous", result);
@@ -294,7 +294,7 @@ PT_Tree ASC_parse_bytes(ATerm type, ATerm aterm)
 
 static PT_Tree unparse_to_bytes(PT_Tree tree)
 {
-  return (PT_Tree) make_bytes(PT_yieldTree(tree));
+  return (PT_Tree) make_bytes(PT_yieldTreeToString(tree, ATfalse));
 }
 
 /*}}}  */
@@ -526,7 +526,7 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
   fp = fopen(filename, "wb");
 
   if (fp != NULL) {
-    fputs(PT_yieldTree(bytes), fp);
+    fputs(PT_yieldTreeToString(bytes, ATfalse), fp);
     fclose(fp);
   }
   else {

@@ -1,5 +1,8 @@
 $Id$
 
+Fri Aug 27 14:42:20 CEST 2004 <jong@cwi.nl>
+ * refactor to use new PT_yield functions in MEPT API
+
 Fri Jul 16 09:25:51 CEST 2004 <markvdb@cwi.nl>
  * Adapted to the new SGLR requirements.
 

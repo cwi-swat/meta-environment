@@ -108,14 +108,14 @@ PT_Tree ASC_get_anno(ATerm type, ATerm aterm, ATerm akey)
 
 /*}}}  */
 
-/*{{{  PT_Tree get_term_anno(PT_Tree input)  */
+/*{{{  static PT_Tree get_term_anno(PT_Tree term, PT_Tree key) */
 
 static PT_Tree get_term_anno(PT_Tree term, PT_Tree key)
 {
   ATerm label;
   ATerm anno;
 
-  label = unquoteAppl(ATparse(PT_yieldTree(key)));
+  label = unquoteAppl(ATparse(PT_yieldTreeToString(key, ATfalse)));
 
   if (label == NULL) {
     return NULL;
@@ -173,7 +173,7 @@ static PT_Tree set_term_anno(PT_Tree term, PT_Tree key, PT_Tree anno)
   ATerm label;
   ATerm loweredAnno = NULL;
 
-  label = unquoteAppl(ATparse(PT_yieldTree(key)));
+  label = unquoteAppl(ATparse(PT_yieldTreeToString(key, ATfalse)));
 
   if (label == NULL) {
     return NULL;
