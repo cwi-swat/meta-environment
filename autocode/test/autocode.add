@@ -1,11 +1,4 @@
-application MyApp {
-
-type Player
-{
-}
-
-type Type
-{
+type Type {
   name : list<string>
 
   name->type := string
@@ -15,47 +8,8 @@ type Type
       element-type := string
     }
     type string { }
-    operation set { }
+    operation += set
   }
 
-  operation name {
-  }
-
-  name.string->length 3 { }
-}
-
-*.name->operation += { get, init }
-Type.name->operation += clone2
-Type->field name { operation += clone }
-
-Client.id.string->length := 3
-Server.name->type string { length := 3 }
-
-type Type {
-  field * {
-    color := red
-  }
-}
-
-type * {
-  field name {
-    color := green
-  }
-}
-
-type Type
-{
-  field name {
-    type string {
-      nullable false { }
-      length := 3
-      default := "nobody"
-    }
-  }
-
-  operations += { get, set }
-
-  operations get {}
-  operations set {}
-}
+  name.string->length := 3
 }

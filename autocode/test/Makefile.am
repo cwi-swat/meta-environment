@@ -1,4 +1,4 @@
-MODULES = #autocode
+MODULES = autocode
 #JAVAMODULES = Test
 
 #java_JAVA = $(foreach f, ${JAVAMODULES}, $f.java)
