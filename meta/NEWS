@@ -20,6 +20,24 @@
 #
 # $Id$
 
+Version 0.3.3
+  * user-manual.ps and exercises.ps are now included in the distribution. 
+  * Bug fix: equations of module of which the syntax was changed were not
+    made unavailable.
+
+Version 0.3.2
+  * relaxed the version checking of wish. If the script is unable to
+    check the version of wish, it generates a warning banner. After that
+    it assumes the right version is available in the environment.
+  * changed the .eqs extension to .asf. The following extensions change:
+      .eqs     -> .asf
+      .asf.baf -> .eqs
+      .eqs.baf -> .asf.baf
+      .eqs.tbl -> .asf.tbl
+  * added change-eqs-ext tool that does the above renamings for all files
+    in a directory.
+  * bugfix in config-manager: searchpaths were delivered in reverse order
+
 Version 0.2
   * Release to consolidate changes
 
