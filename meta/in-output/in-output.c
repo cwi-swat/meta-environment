@@ -39,7 +39,7 @@
 #define	CURRENT_DIR "."
 #define	DEFAULT_CONFIG_FILE "meta.conf"
 
-#define PATH_LEN _POSIX_PATH_MAX
+#define PATH_LEN (_POSIX_PATH_MAX + 1) /* to be safe extra room for \0 */
 #define MAX_PATHS 256
 
 /* Macro's for sdf2 file extensions */
@@ -506,7 +506,12 @@ char *expand_path(const char *relative_path)
     }
 
     /* get absolute path of relative dir */
-    absolute_path = getcwd(NULL, 0);
+    absolute_path = (char*) malloc(PATH_LEN * sizeof(char));
+    if(absolute_path == NULL) {
+       return NULL;
+    }
+
+    absolute_path = getcwd(absolute_path, PATH_LEN);
     if (absolute_path == NULL) {
 	return NULL;
     }
@@ -528,12 +533,21 @@ void read_conf(char *config_filename)
 
     fd = fopen(config_filename, "r");
     if (fd == NULL) {
+	char *absolute_current_dir;
 	if (run_verbose) {
 	    ATwarning("warning: no %s, using default config\n",
 		      config_filename);
 	}
-	add_path(expand_path(CURRENT_DIR));
-	return;
+       
+        absolute_current_dir = expand_path(CURRENT_DIR);
+        if(absolute_current_dir != NULL) {
+           add_path(absolute_current_dir);
+           return;
+        } else {
+           ATwarning("%s, line %d: %s\n", config_filename,
+                     line_number, strerror(errno));
+           return;
+        }
     }
 
     /* Read file line by line */
