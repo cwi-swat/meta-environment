@@ -60,11 +60,11 @@ lexical syntax
 
 context-free syntax
 	
-	PrefixAction Action		-> Action	
+  PrefixAction Action		-> Action	
 
-	Action InfixAction Action	-> Action {left}
+  Action InfixAction Action	-> Action {left}
 	
-	Action	-> Data {avoid}
+  Action	-> Data {avoid}
 
 context-free priorities
 
@@ -81,6 +81,10 @@ context-free priorities
   { PrefixAction Action 	-> Action }
   >
   { Action InfixAction Action	-> Action }
+  >
+  {PrefixDataOp Yielder		-> Yielder}
+  >
+  {Yielder InfixDataOp Yielder	-> Yielder} 
 
 %%%%%%%%%%%%%
 %% Full AN %%
@@ -96,7 +100,6 @@ context-free syntax
   "closure" Yielder	-> Yielder
 
   "it"			-> DataOp
-  "defined"		-> DataOp
 
   "the" Sort		-> PrefixDataOp
 
@@ -120,13 +123,6 @@ context-free syntax
 
   "(" Action ")"		-> Action 
 	
-
-context-free priorities
-
-  {PrefixDataOp Yielder		-> Yielder}
-  >
-  {Yielder InfixDataOp Yielder	-> Yielder}
-
 context-free priorities
 
   {"check" Yielder     -> Action

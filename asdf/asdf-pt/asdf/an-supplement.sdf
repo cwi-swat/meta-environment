@@ -21,6 +21,8 @@ lexical syntax
 
   [A-Z][a-z]*	-> Variable
 
+  "n"		-> Sort {reject}
+
 context-free priorities
 
   { Action Yielder	-> Action }
@@ -30,3 +32,119 @@ context-free priorities
 context-free restrictions
 
   Data -/- [a-z\-]
+  PrefixDataOp -/- [a-z\-]
+
+
+%%%%%%%%%%
+% Reject %
+%%%%%%%%%%
+
+lexical syntax
+
+  "copy"		-> Data {reject}
+  "skip"		-> Data {reject}
+  "then"		-> Data {reject}
+  "and-then"		-> Data {reject}
+  "and"			-> Data {reject}
+  "indivisibly"		-> Data {reject}
+  "unfold"		-> Data {reject}
+  "unfolding"		-> Data {reject}
+  "throw"		-> Data {reject}
+  "catch"		-> Data {reject}
+  "err"			-> Data {reject}
+  "and-catch"		-> Data {reject}
+  "fail"		-> Data {reject}
+  "maybe"		-> Data {reject}
+  "else"		-> Data {reject}
+  "choose-nat"		-> Data {reject}
+
+  "copy-bindings"	-> Data {reject}
+  "scope"		-> Data {reject}
+
+
+  "create"		-> Data {reject}
+  "inspect"		-> Data {reject}
+  "update"		-> Data {reject}
+
+  "enact"		-> Data {reject}
+  "close"		-> Data {reject}
+  "recursively"		-> Data {reject}
+
+  "give" Yielder	-> Data {reject}
+  "check" Yielder	-> Data {reject}
+  "bind"		-> Data {reject}
+  "furthermore"		-> Data {reject}
+  "before"		-> Data {reject}
+  "apply"		-> Data {reject}
+
+  "copy"		-> PrefixDataOp {reject}
+  "skip"		-> PrefixDataOp {reject}
+  "then"		-> PrefixDataOp {reject}
+  "and-then"		-> PrefixDataOp {reject}
+  "and"			-> PrefixDataOp {reject}
+  "indivisibly"		-> PrefixDataOp {reject}
+  "unfold"		-> PrefixDataOp {reject}
+  "unfolding"		-> PrefixDataOp {reject}
+  "throw"		-> PrefixDataOp {reject}
+  "catch"		-> PrefixDataOp {reject}
+  "err"			-> PrefixDataOp {reject}
+  "and-catch"		-> PrefixDataOp {reject}
+  "fail"		-> PrefixDataOp {reject}
+  "maybe"		-> PrefixDataOp {reject}
+  "else"		-> PrefixDataOp {reject}
+  "choose-nat"		-> PrefixDataOp {reject}
+
+  "copy-bindings"	-> PrefixDataOp {reject}
+  "scope"		-> PrefixDataOp {reject}
+
+
+  "create"		-> PrefixDataOp {reject}
+  "inspect"		-> PrefixDataOp {reject}
+  "update"		-> PrefixDataOp {reject}
+
+  "enact"		-> PrefixDataOp {reject}
+  "close"		-> PrefixDataOp {reject}
+  "recursively"		-> PrefixDataOp {reject}
+
+  "give" Yielder	-> PrefixDataOp {reject}
+  "check" Yielder	-> PrefixDataOp {reject}
+  "bind"		-> PrefixDataOp {reject}
+  "furthermore"		-> PrefixDataOp {reject}
+  "before"		-> PrefixDataOp {reject}
+  "apply"		-> PrefixDataOp {reject}
+
+  "copy"		-> Sort {reject}
+  "skip"		-> Sort {reject}
+  "then"		-> Sort {reject}
+  "and-then"		-> Sort {reject}
+  "and"			-> Sort {reject}
+  "indivisibly"		-> Sort {reject}
+  "unfold"		-> Sort {reject}
+  "unfolding"		-> Sort {reject}
+  "throw"		-> Sort {reject}
+  "catch"		-> Sort {reject}
+  "err"			-> Sort {reject}
+  "and-catch"		-> Sort {reject}
+  "fail"		-> Sort {reject}
+  "maybe"		-> Sort {reject}
+  "else"		-> Sort {reject}
+  "choose-nat"		-> Sort {reject}
+
+  "copy-bindings"	-> Sort {reject}
+  "scope"		-> Sort {reject}
+
+
+  "create"		-> Sort {reject}
+  "inspect"		-> Sort {reject}
+  "update"		-> Sort {reject}
+
+  "enact"		-> Sort {reject}
+  "close"		-> Sort {reject}
+  "recursively"		-> Sort {reject}
+
+  "give" Yielder	-> Sort {reject}
+  "check" Yielder	-> Sort {reject}
+  "bind"		-> Sort {reject}
+  "furthermore"		-> Sort {reject}
+  "before"		-> Sort {reject}
+  "apply"		-> Sort {reject}

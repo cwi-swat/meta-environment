@@ -25,6 +25,7 @@ hiddens
 
 variables
 
+  "AM"[1-9]?	-> AS-Module
   "$F"[1-9]?	-> Function
   "$F+"		-> Functions {prefer}
   "$FS"[1-9]?	-> FunctionSignature

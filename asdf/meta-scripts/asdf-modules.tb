@@ -1,5 +1,6 @@
 /* ActionSdf extension of the ASF+SDF Meta-Environment */
 #include "Asdfsupport.idef"
+#include "Typecheck.idef"
 
 /* copy of Open-initial-module in open-modules.tb */
 process ASDF is
@@ -34,15 +35,15 @@ in
   create(Obtain-ParseTable-hooks, Pid?) .
   create(ASDFButtons, Pid?) .
   rec-msg(post-initialization-hook) .
-  Open-Initial-Module("/home/markvdb/Research/share/asf-library/library","basic/Whitespace") .
+  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asf-library/library","basic/Whitespace") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(Whitespace?)) .
-  Open-Initial-Module("/home/markvdb/Research/share/asdf/asdf-pt/","asdf/an") .
+  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt/","asdf/an") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(ANModules?)) .
-  Open-Initial-Module("/home/markvdb/Research/share/asdf/asdf-pt/","asdf/asdf") .
-  Open-Initial-Module("/home/markvdb/Research/share/asf-library/library","languages/asf/syntax/Equations") .
-/*  Open-Initial-Module("/home/markvdb/Research/share/asf-library/library","languages/asf/syntax/Equation") .*/
+  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt/","asdf/asdf") .
+  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asf-library/library","languages/asf/syntax/Equations") .
+/*  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asf-library/library","languages/asf/syntax/Equation") .*/
 DebugTS("Initial SDF Trees", "sdf-tree") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(InitialModules?)) .
@@ -155,7 +156,7 @@ let
 in
   (
     rec-msg(open-language(asdf)) .
-    snd-msg(io-read-term-file("/home/markvdb/Research/share/asdf/asdf-pt//asdf/all.trm.tbl")) .
+    snd-msg(io-read-term-file("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt//asdf/all.trm.tbl")) .
     (
       rec-msg(io-file-contents(Table?)) .
       snd-msg(parse-table(trm("ASDF"), Table))
@@ -660,7 +661,7 @@ in
     rec-msg(asfsdf-generated) .
     ParseTerm(EditorId, ModuleName) 
   +
-    rec-msg(asfsdf-not-generated(InStr)) .
+    rec-msg(asfsdf-not-generated(InStr?)) .
     snd-note(ui-status(error(InStr)))
   ) .
   ReturnSuccess(EditorId,Stack)
@@ -719,6 +720,11 @@ in
   rec-msg(asfsdf-text-saved) .
   snd-note(ui-status(errorf("Saving ASF+SDF done"))) .        
   ReturnSuccess(EditorId, Stack)			
++
+  rec-msg(type-check-asdf, Stack?, EditorId?) .
+  StackPopString(Stack, Stack?, ModuleName?) .
+  TypeCheckModule(ModuleName).
+  ReturnSuccess(EditorId, Stack)
 ) * delta
 endlet
 
@@ -805,3 +811,57 @@ in
       snd-msg(invalidate-asdf-in-db(ModuleName))
     )
 endlet
+
+process TypeCheckModule(ModuleName : str) is
+let
+   ModuleNames : list,
+   ModuleTrees : list,
+   ModuleTree : term,
+   Signatures : term,
+   AllSignatures : term, 
+   ErrorTree : term,
+   ErrorText : str
+in
+   /* get definition of signatures etc. in imported modules */
+   snd-msg(get-all-imported-module-names(ModuleName)) .
+   rec-msg(all-imported-module-names(ModuleNames?)) .
+   snd-msg(ts-get-values("asdf-tree", ModuleNames)) .
+   (
+     rec-msg(ts-values(ModuleTrees?)) 
+   + 
+     rec-msg(ts-no-values) .
+     ModuleTrees := []    
+   ) .
+   ModuleTree := first(ModuleTrees) .
+   ModuleTrees := next(ModuleTrees) .
+   snd-msg(apply-rewrite("Asdfsupport", "getSignatures", 
+                         "Signatures", [ModuleTree])) .
+   rec-msg(normalform("Asdfsupport", AllSignatures?)) .
+   (
+     if not-equal(ModuleTrees, []) then
+       ModuleTree := first(ModuleTrees) .
+       ModuleTrees := next(ModuleTrees) .
+       snd-msg(apply-rewrite("Asdfsupport", "getSignatures", 
+	 		    "Signatures", [ModuleTree])) .
+       rec-msg(normalform("Asdfsupport", Signatures?)) .
+       snd-msg(apply-rewrite("Asdfsupport", "joinSignatures", 
+	 		    "Signatures", [AllSignatures, Signatures])) .
+       rec-msg(normalform("Asdfsupport", AllSignatures?)) 
+     fi
+   )*
+   if equal(ModuleTrees, []) then
+     tau
+   fi .
+   /* typecheck with signatures */
+   snd-msg(apply-rewrite("Typecheck", "type-check", 
+	 		"Summary", [ModuleTree, AllSignatures])).
+   rec-msg(normalform("Typecheck", ErrorTree?)).
+   snd-msg(unparse(ErrorTree)) .
+   rec-msg(unparsed-text(ErrorText?)) .
+   snd-msg(io-write-text-file("foo", [ErrorText])) .
+   rec-msg(io-file-written) .
+   snd-msg(io-read-packed-term-file("foo")) .
+   rec-msg(io-file-contents(ErrorTree?)) .
+   snd-note(show-feedback-summary(ErrorTree))
+endlet
+

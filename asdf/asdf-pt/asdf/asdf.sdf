@@ -83,6 +83,7 @@ exports
     Literal "(" {VarLex ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
     Literal "(" VarLex* ")"	   -> Constructor {cons("cons-seq")}
     VarLex			   -> Constructor {cons("cons-symbol")}
+    Literal			   -> Constructor {cons("cons-lit")}
     "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
 
     "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}

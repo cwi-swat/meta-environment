@@ -186,7 +186,7 @@ Sort sort("I""n""f""i""x"$CH+) Sort -> sort($CH+)
 Sort1 qliteral(""")Literalqliteral(""") Sort2	-> Sort
 
   [tv-1] $transform-variable(varlexprefix($CH+) : Sort) = 
-sorts Symbol
+sorts Sort
 variables qliteral("""$CH+""")[0-9\']* 		-> Sort
 	  qliteral("""$CH+""")[0-9\']*"+"	-> Sort+
 	  qliteral("""$CH+""")[0-9\']*"*"	-> Sort*
