@@ -16,3 +16,15 @@ equations
       add-tuple(DEF_OCCURS, <<$Area1, var2str(Var)>, $Area2>, $Rstore2)
     ===>
     extractRelations(VarDecl, $Rstore1) = $Rstore3
+
+  [extractRelations-genvar]
+    $Area1 = get-area(Var),
+    $Rstore2 = add-tuple(USES, <$Area1, var2str(Var)>, $Rstore1)
+    ===>
+    extractRelations(Var, $Rstore1) = $Rstore2
+
+  [extractRelations-genvar-q]
+    $Area1 = get-area(Var),
+    $Rstore2 = add-tuple(USES, <$Area1, var2str(Var)>, $Rstore1)
+    ===>
+    extractRelations(Var?, $Rstore1) = $Rstore2

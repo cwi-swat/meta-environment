@@ -13,6 +13,7 @@ hiddens
   context-free syntax
     extractRelations(TscriptDef*, RSTORE) -> RSTORE {traversal(accu,top-down,break)}
     extractRelations(VarDecl, RSTORE)     -> RSTORE {traversal(accu,top-down,break)}
+    extractRelations(GenVar, RSTORE)      -> RSTORE {traversal(accu,top-down,break)}
 
   variables
     "$Area"[0-9]*              -> Area      
