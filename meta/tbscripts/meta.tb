@@ -46,6 +46,7 @@
 #include "configmanager.idef"
 #include "query.tb"
 #include "query-tool.idef"
+#include "tree2graph.idef"
 
 #include <meta-interface.tb>
 
@@ -103,7 +104,7 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
 	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
         DumpParseTable, Module-Utilities,
 	RestoreTermBrackets, RestoreBrackets,
-	Query, QueryTool
+	Query, QueryTool, Tree2Graph
 #ifdef METASTUDIO
 	, DOT-ADAPTER
 #endif

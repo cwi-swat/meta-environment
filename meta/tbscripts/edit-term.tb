@@ -2,6 +2,16 @@
   $Id$
 */
 
+process ShowTree(Tree: term) is
+let
+  Graph : term
+in
+  snd-msg(tree2graph(Tree)) .
+  rec-msg(graph(Graph?)) .
+  printf("Graph is %t\n", Graph).
+  snd-msg(display-graph(parsetree, Graph))
+endlet
+
 process ParseTerm(EditorId: term, ModuleName: str) is
 let
   ErrorFoci  : term
@@ -423,6 +433,12 @@ in
       +
         rec-msg(message(String?), Stack?, EditorId) .
 	snd-note(ui-status(errorf("%s", [String]))) .
+        snd-msg(stack(Stack), EditorId)
+      +
+        rec-msg(show-tree, Stack?, EditorId) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        ShowTree(STree) .
         snd-msg(stack(Stack), EditorId)
       ) *
       rec-msg(kill-editor(EditorId)).
