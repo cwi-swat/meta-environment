@@ -3,7 +3,7 @@
 process PtPretty is
 let
   PPT      : ptpretty,
-  Syntax : tree,
+  Syntax : term,
   Tree     : term,
   Result   : term,
   ErrMsg : str
