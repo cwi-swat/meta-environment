@@ -154,7 +154,7 @@ let
 in
   (
     rec-msg(open-language(asdf)) .
-    snd-msg(io-read-term-file("__PGEN__/asdf.baf")) .
+    snd-msg(io-read-term-file("/home/markvdb/Research/share/asdf/asdf-pt//asdf/all.trm.tbl")) .
     (
       rec-msg(io-file-contents(Table?)) .
       snd-msg(parse-table(trm("ASDF"), Table))
@@ -302,7 +302,7 @@ in
     rec-msg(asdf-get-module-id(Module?)) .
     snd-msg(io-unpack-term(Module)) .
     rec-msg(io-term(Tree?)) .
-    snd-msg(gen-adapter-term-to-string-evaluate(asdf-support-id, "/home/markvdb/Research/share/asdf/asdf-pt//get_module_name", Tree)).
+    snd-msg(gen-adapter-term-to-string-evaluate(asdf-support-id, "/home/markvdb/Research/bin/get_module_name", Tree)).
     rec-msg(gen-adapter-term-to-string-result(asdf-support-id, ModuleName?)).
     if not-equal(ModuleName, error-tree) then
        snd-msg(asdf-module-id(ModuleName)) 
@@ -313,7 +313,7 @@ in
     rec-msg(asdf-get-imported-module-names(Module?)) .
     snd-msg(io-unpack-term(Module)) .
     rec-msg(io-term(Tree?)) .
-    snd-msg(gen-adapter-term-evaluate(asdf-support-id, "/home/markvdb/Research/share/asdf/asdf-pt//get_imports", Tree)).
+    snd-msg(gen-adapter-term-evaluate(asdf-support-id, "/home/markvdb/Research/bin/get_imports", Tree)).
     rec-msg(gen-adapter-term-result(asdf-support-id, ModuleNames?)).
     if not-equal(ModuleNames, error-tree) then
        Imports := ModuleNames .       
@@ -399,7 +399,7 @@ in
         snd-msg(io-unpack-term(ModuleTree)) .
         rec-msg(io-term(ModuleTree?)) .
         if not-equal(Status, parse-error) then 
-          snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "/home/markvdb/Research/share/asdf/asdf-pt//gen_sdf", ModuleTree)).
+          snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "/home/markvdb/Research/bin/gen_sdf", ModuleTree)).
           rec-msg(gen-adapter-term-to-string-result(generate-asfsdf-id, 
 						    GenModuleText?)).
 printf("SDF = %s\n", GenModuleText) .
@@ -407,7 +407,7 @@ printf("SDF = %s\n", GenModuleText) .
      	    snd-msg(ts-put-str-value("sdf-text", Module, GenModuleText)) .
 	    Parse-Syntax(Module, GenModuleText, sdf, Tree?, Status?) .
             snd-msg(ts-put-term-value("sdf-tree", Module, Tree)) .
-            snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "/home/markvdb/Research/share/asdf/asdf-pt//gen_asf", ModuleTree)).
+            snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "/home/markvdb/Research/bin/gen_asf", ModuleTree)).
             rec-msg(gen-adapter-term-to-string-result(generate-asfsdf-id, 
 		     				      GenModuleText?)).
 printf("ASF = %s\n", GenModuleText) .
@@ -452,7 +452,7 @@ in
         snd-msg(io-unpack-term(ModuleTree)) .
         rec-msg(io-term(ModuleTree?)) .
         if not-equal(Status, parse-error) then 
-          snd-msg(gen-adapter-term-to-string-evaluate(generate-asdf-pt-id, "/home/markvdb/Research/share/asdf/asdf-pt//gen_asdf_pt", ModuleTree)).
+          snd-msg(gen-adapter-term-to-string-evaluate(generate-asdf-pt-id, "/home/markvdb/Research/bin/gen_asdf_pt", ModuleTree)).
           rec-msg(gen-adapter-term-to-string-result(generate-asdf-pt-id, 
 						    GenModuleText?)).
           if not-equal(GenModuleText, error-tree) then

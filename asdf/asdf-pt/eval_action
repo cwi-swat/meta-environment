@@ -1,4 +1,4 @@
-METAPATH=__META__/bin
-ASDFPATH=__META__/share/asdf/asdf-pt
+METAPATH=/home/markvdb/Research/bin
+ASDFPATH=/home/markvdb/Research/share/asdf/asdf-pt
 
 ${METAPATH}/sglr -p ${ASDFPATH}/ChangeNotation.trm.tbl | ${METAPATH}/apply-function -f change -s Action | ${METAPATH}/apply-function -f eval -s Configuration | ${METAPATH}/unparsePT | ${METAPATH}/sglr -p ${ASDFPATH}/ChangeNotation.trm.tbl | ${METAPATH}/asfe -e ${ASDFPATH}/ChangeNotation.eqs | ${METAPATH}/unparsePT

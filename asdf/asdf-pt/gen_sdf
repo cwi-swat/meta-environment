@@ -1,5 +1,5 @@
-ASBIN=__META__/bin
-ASSHARE=__META__/share/asdf/asdf-pt
+ASBIN=/home/markvdb/Research/bin
+ASSHARE=/home/markvdb/Research/share/asdf/asdf-pt
 $ASBIN/apply-function -f asdf2sdf -s Module | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT
 
 

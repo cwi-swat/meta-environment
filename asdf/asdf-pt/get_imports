@@ -1,4 +1,4 @@
-ASBIN=/ufs/iversen/asenv/install/bin
-ASSHARE=/ufs/iversen/asenv/install/share/asdf-env
+ASBIN=/home/markvdb/Research/bin
+ASSHARE=/home/markvdb/Research/share/asdf/asdf-pt
 $ASBIN/apply-function -f getImportedModules -s ATermList | $ASBIN/asfe -e $ASSHARE/asdf/all.eqs | $ASBIN/unparsePT
 
