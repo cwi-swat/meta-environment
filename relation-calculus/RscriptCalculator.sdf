@@ -11,7 +11,6 @@ exports
 
 
         Elem                          		-> RVALUE
-%%	Tuple					-> RVALUE
         "*empty*"                     		-> RVALUE
         RVAR # REXP                    		-> RVALUE
         RVAR # RVAR # REXP              	-> RVALUE
@@ -29,20 +28,20 @@ exports
 
 %% The RSTORE itself, maps RVARs to RVALUEs
         
-        "store" "(" { RVAR # RVALUE ","}* ")"         -> RSTORE {prefer}
+        "rstore" "(" { RVAR # RVALUE ","}* ")"         -> RSTORE {prefer}
         assign(RVAR, RVALUE, RSTORE)          -> RSTORE
 	assign-when-undef(RVAR, RVALUE, RSTORE)	-> RSTORE
 	increment(RVAR, RSTORE)			-> RSTORE
         value(RVAR, RSTORE)                   -> RVALUE
 
- %%       rval2rel(RVALUE)	 	      -> Rel[[Elem]]
- %%       rval2bag(RVALUE)		      -> Bag[[Elem]]
+        rval2rel(RVALUE)	 	      -> Bag[[Elem]]	%% external entry
+        rval2bag(RVALUE)		      -> Bag[[Elem]]	%% external entry
 
-	add-elem(RVAR, Elem, RSTORE)		-> RSTORE
+	add-elem(RVAR, Elem, RSTORE)		-> RSTORE	%% external entry
 
-	add-tuple(RVAR, Elem # Elem, RSTORE)  -> RSTORE
+	add-tuple(RVAR, Elem # Elem, RSTORE)  -> RSTORE		%% external entry
 
-	extend-rel(RVAR, Bag[[Elem]], RSTORE) -> RSTORE
+	extend-rel(RVAR, Bag[[Elem]], RSTORE) -> RSTORE		%% external entry
 
 %% Main evaluation functions for Rscripts
 
@@ -142,7 +141,7 @@ hiddens
 %%  imports asf/syntax/Comments
 
    variables
-        "$Store" [0-9\']*              -> RSTORE
+        "$Rstore" [0-9\']*             -> RSTORE
         "$Val" [0-9\']*                -> RVALUE
         "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
 

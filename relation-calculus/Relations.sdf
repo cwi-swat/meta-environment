@@ -6,7 +6,7 @@ exports
 
   sorts Tuple {Elem ","}+
 
- %%aliases
+%%  aliases
 %%	Rel[[Elem]]					-> Bag[[Elem]]
 
   context-free syntax
