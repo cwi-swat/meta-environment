@@ -10,6 +10,21 @@ module languages/c/syntax/ANSI-C
 %% - then added follow restrictions on identifiers and some unary operators
 %% - fixed an ambiguity in the lexical syntax IS*? was produced, changed to IS*
 %% - refactored all right-associative lists using SDF2 list syntax
+%% - renamed all non-terminals from LogicalAndExpression up-to and not
+%%   including UnaryExpression to LogicalOrExpression. This was a single
+%%   injection chain with left recursive binary operators. Each non-terminal
+%%   up the chain introduced a higher priority. The priorities are now expressed
+%%   using context-free priorities to cope with the dissappearance of the
+%%   non-terminals. All trivial productions from LogicalOrExpression to
+%%   LogicalOrExpression that were introduced by the previous actions have been
+%%   removed to fix the obvious circularity.
+%% - added lexical restriction on D+
+%% - removed UnaryOperator non-terminal by inlining the alternative operators
+%% - removed AssignmentOperator non-terminal by inlining the alternatives
+%% - renamed LogicalOrExpression to BasicExpression
+%% - renamed PostfixExpression to PrimaryExpression and removed the 
+%%   trivial injection
+%% - folded empty and non-empty use of ArgumentList in PrimaryExpression
 %%
 %% The grammar is intentionally left ambiguous and it should stay that way!
 %%
@@ -26,14 +41,10 @@ exports
 
 sorts 
 	AbstractDeclarator
-	LogicalOrExpression
-	LogicalOrExpression
 	ArgumentExpressionList
 	AssignmentExpression
-	AssignmentOperator
-	LogicalOrExpression
+	BasicExpression
 	CompoundStatement
-	ConstantExpression
 	Constant
 	ConstantExpression
 	D
@@ -47,8 +58,6 @@ sorts
 	EnumSpecifier
 	Enumerator
 	EnumeratorList
-	LogicalOrExpression
-	LogicalOrExpression
 	Expression
 	ExpressionStatement
 	ExternalDeclaration
@@ -58,7 +67,6 @@ sorts
 	IS
 	Identifier
 	IdentifierList
-	LogicalOrExpression
 	InitDeclarator
 	InitDeclaratorList
 	Initializer
@@ -68,18 +76,12 @@ sorts
 	Keyword
 	L
 	LabeledStatement
-	LogicalOrExpression
-	LogicalOrExpression
-	LogicalOrExpression
 	ParameterDeclaration
 	ParameterList
 	ParameterTypeList
 	Pointer
-	PostfixExpression
 	PrimaryExpression
-	LogicalOrExpression
 	SelectionStatement
-	LogicalOrExpression
 	SpecifierQualifierList
 	Statement
 	StatementList
@@ -97,7 +99,6 @@ sorts
 	TypeQualifierList
 	TypeSpecifier
 	UnaryExpression
-	UnaryOperator
 
 
 lexical syntax
@@ -153,7 +154,8 @@ L ( L | D )*		-> Identifier
 lexical restrictions
 
  Identifier -/- [0-9a-zA-Z\_] %% (L | D)
-
+ D+ -/- [0-9]
+ 
 lexical syntax
 [0] [xX] H+ IS*		-> Constant
 [0] D+ IS*		-> Constant
@@ -176,221 +178,146 @@ LAYOUT? -/- [\ \t\011\n\r\012]
 
 imports languages/cpp/syntax/CommentsAsLayout
 
+
+context-free syntax
+
+{AssignmentExpression ","}* -> ArgumentExpressionList
+
 context-free syntax
 
 Identifier -> PrimaryExpression
 Constant -> PrimaryExpression
 StringLiteral -> PrimaryExpression
 "(" Expression ")" -> PrimaryExpression
+PrimaryExpression ("["|"<:")	Expression ("]"|":>")	 -> PrimaryExpression
+PrimaryExpression "(" ArgumentExpressionList ")" -> PrimaryExpression
+PrimaryExpression "." Identifier -> PrimaryExpression 
+PrimaryExpression "->" Identifier -> PrimaryExpression
+PrimaryExpression "++" -> PrimaryExpression
+PrimaryExpression "--" -> PrimaryExpression
 
 context-free syntax
 
-PrimaryExpression -> PostfixExpression
-PostfixExpression ("["|"<:")	Expression ("]"|":>")	 -> PrimaryExpression
-PostfixExpression "(" ")" -> PrimaryExpression
-PostfixExpression "(" ArgumentExpressionList ")" -> PrimaryExpression
-PostfixExpression "." Identifier -> PrimaryExpression
-PostfixExpression "->" Identifier -> PrimaryExpression
-PostfixExpression "++" -> PrimaryExpression
-PostfixExpression "--" -> PrimaryExpression
+PrimaryExpression -> UnaryExpression
+"++" UnaryExpression -> UnaryExpression
+"--" UnaryExpression -> UnaryExpression
+"&" BasicExpression -> UnaryExpression
+"*" BasicExpression -> UnaryExpression
+"+" BasicExpression -> UnaryExpression
+"-" BasicExpression -> UnaryExpression
+"~" BasicExpression -> UnaryExpression
+"!" BasicExpression -> UnaryExpression
+"sizeof" UnaryExpression -> UnaryExpression
+"sizeof" "(" TypeName ")" -> UnaryExpression
 
 context-free restrictions
-
+"&" -/- [\&]
 "-" -/- [\-]
 "+" -/- [\+]
 
 context-free syntax
 
-{AssignmentExpression ","}+ -> ArgumentExpressionList
+UnaryExpression -> BasicExpression
+"(" TypeName ")" BasicExpression -> BasicExpression
 
 context-free syntax
-PostfixExpression -> UnaryExpression
-"++" UnaryExpression -> UnaryExpression
-"--" UnaryExpression -> UnaryExpression
-UnaryOperator LogicalOrExpression -> UnaryExpression
-"sizeof" UnaryExpression -> UnaryExpression
-"sizeof" "(" TypeName ")" -> UnaryExpression
-
-context-free priorities
+BasicExpression "*" BasicExpression -> BasicExpression {left}
+BasicExpression "/" BasicExpression -> BasicExpression {left}
+BasicExpression "%" BasicExpression -> BasicExpression {left}
 
 context-free syntax
-"&" 
-| "*"
-| "+"
-| "-"
-| "~"
-| "!" 
--> UnaryOperator
-
-context-free restrictions
-"&" -/- [\&]
+BasicExpression "+" BasicExpression -> BasicExpression {left}
+BasicExpression "-" BasicExpression -> BasicExpression {left}
 
 context-free syntax
-UnaryExpression -> LogicalOrExpression
-"(" TypeName ")" LogicalOrExpression -> LogicalOrExpression
+BasicExpression "<<" BasicExpression -> BasicExpression {left}
+BasicExpression ">>" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "<" BasicExpression -> BasicExpression {left}
+BasicExpression ">" BasicExpression -> BasicExpression {left}
+BasicExpression "<=" BasicExpression -> BasicExpression {left}
+BasicExpression ">=" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "==" BasicExpression -> BasicExpression {left}
+BasicExpression "!=" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "&" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "^" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "|" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+BasicExpression "&&" BasicExpression -> BasicExpression {left}
+
+context-free syntax
+
+BasicExpression "||" BasicExpression -> BasicExpression {left}
+BasicExpression -> ConstantExpression
+BasicExpression "?" Expression ":" ConstantExpression -> ConstantExpression {right}
+
+ConstantExpression -> AssignmentExpression
+UnaryExpression "=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "*=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "/=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "%=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "+=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "-=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "<<=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression ">>=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "&=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "^=" AssignmentExpression -> AssignmentExpression {right}
+UnaryExpression "|=" AssignmentExpression -> AssignmentExpression {right}
+
+context-free syntax
+
+AssignmentExpression -> Expression
+Expression "," AssignmentExpression -> Expression {left}
 
 context-free priorities
 {
-UnaryExpression -> LogicalOrExpression
-"(" TypeName ")" LogicalOrExpression -> LogicalOrExpression
+UnaryExpression -> BasicExpression
+"(" TypeName ")" BasicExpression -> BasicExpression
 }
 >
 { left:
-LogicalOrExpression "*" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "/" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "%" LogicalOrExpression -> LogicalOrExpression {left}
-}
-
-context-free syntax
-LogicalOrExpression "*" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "/" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "%" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-{ left:
-LogicalOrExpression "*" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "/" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "%" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "*" BasicExpression -> BasicExpression {left}
+BasicExpression "/" BasicExpression -> BasicExpression {left}
+BasicExpression "%" BasicExpression -> BasicExpression {left}
 }
 >
 { left:
-LogicalOrExpression "+" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "-" LogicalOrExpression -> LogicalOrExpression {left}
-}
-
-
-context-free syntax
-LogicalOrExpression "+" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "-" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-{ left:
-LogicalOrExpression "+" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "-" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "+" BasicExpression -> BasicExpression {left}
+BasicExpression "-" BasicExpression -> BasicExpression {left}
 }
 >
 { left:
-LogicalOrExpression "<<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">>" LogicalOrExpression -> LogicalOrExpression {left}
-}
-
-
-context-free syntax
-LogicalOrExpression "<<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">>" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-{ left:
-LogicalOrExpression "<<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">>" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "<<" BasicExpression -> BasicExpression {left}
+BasicExpression ">>" BasicExpression -> BasicExpression {left}
 }
 >
 { left:
-LogicalOrExpression "<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "<=" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">=" LogicalOrExpression -> LogicalOrExpression {left}
-}
-
-
-context-free syntax
-LogicalOrExpression "<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "<=" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">=" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-{ left:
-LogicalOrExpression "<" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "<=" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression ">=" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "<" BasicExpression -> BasicExpression {left}
+BasicExpression ">" BasicExpression -> BasicExpression {left}
+BasicExpression "<=" BasicExpression -> BasicExpression {left}
+BasicExpression ">=" BasicExpression -> BasicExpression {left}
 }
 >
-{ left:
-LogicalOrExpression "==" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "!=" LogicalOrExpression -> LogicalOrExpression {left}
-}
-
-context-free syntax
-LogicalOrExpression "==" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "!=" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-{ left:
-LogicalOrExpression "==" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression "!=" LogicalOrExpression -> LogicalOrExpression {left}
-}
+BasicExpression "&" BasicExpression -> BasicExpression {left}
 >
-LogicalOrExpression "&" LogicalOrExpression -> LogicalOrExpression {left}
-
-
-
-context-free syntax
-LogicalOrExpression "&" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-LogicalOrExpression "&" LogicalOrExpression -> LogicalOrExpression {left} 
+BasicExpression "^" BasicExpression -> BasicExpression {left}
 >
-LogicalOrExpression "^" LogicalOrExpression -> LogicalOrExpression {left}
-
-
-
-context-free syntax
-LogicalOrExpression "^" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-LogicalOrExpression "^" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "|" BasicExpression -> BasicExpression {left}
 >
-LogicalOrExpression "|" LogicalOrExpression -> LogicalOrExpression {left}
-
-
-
-context-free syntax
-LogicalOrExpression "|" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-LogicalOrExpression "|" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "&&" BasicExpression -> BasicExpression {left}
 >
-LogicalOrExpression "&&" LogicalOrExpression -> LogicalOrExpression {left}
+BasicExpression "||" BasicExpression -> BasicExpression {left}
 
-
-
-context-free syntax
-LogicalOrExpression "&&" LogicalOrExpression -> LogicalOrExpression {left}
-
-context-free priorities
-LogicalOrExpression "&&" LogicalOrExpression -> LogicalOrExpression {left}
->
-LogicalOrExpression "||" LogicalOrExpression -> LogicalOrExpression {left}
-
-
-context-free syntax
-
-LogicalOrExpression "||" LogicalOrExpression -> LogicalOrExpression {left}
-LogicalOrExpression -> ConstantExpression
-LogicalOrExpression "?" Expression ":" ConstantExpression -> ConstantExpression {right}
-
-ConstantExpression -> AssignmentExpression
-UnaryExpression AssignmentOperator AssignmentExpression -> AssignmentExpression {right}
-
-"="
-| "*="
-| "/="
-| "%="
-| "+="
-| "-="
-| "<<="
-| ">>="
-| "&="
-| "^="
-| "|="
--> AssignmentOperator
-
-context-free syntax
-
-	AssignmentExpression -> Expression
-	Expression "," AssignmentExpression -> Expression {left}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 context-free syntax
