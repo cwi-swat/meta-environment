@@ -6,6 +6,8 @@ toolbus="__TOOLBUS__/bin/toolbus -I__TOP_SRCDIR__/in-output"
 datadir=__DATADIR__
 builddir=__TOP_BUILDDIR__/in-output/test
 
+(sleep 30 ; kill $$ > /dev/null 2>&1) & 
+
 PATH=${PATH}:__TOP_BUILDDIR__/in-output
 
 tests=0
@@ -14,7 +16,7 @@ failed=0
 call_toolbus () {
   script=$1
   tests=`expr $tests + 1`
-  result=`${toolbus} ${script} 2>&1`
+  result=`${toolbus} ${script} 2>&1` 
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
@@ -70,3 +72,4 @@ if [ $failed != 0 ]; then
 else
   echo "All" $tests "tests succeeded"
 fi  
+
