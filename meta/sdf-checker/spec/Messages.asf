@@ -11,6 +11,6 @@ $Msg*2}
 $Msg*2}
 
   [msg-3] undeclared-symbols($ModuleId, symbols()) = none
-  [msg-5] symbols-without-production-definitions($ModuleId, symbols()) = none
+  [msg-5] sorts-without-production-definitions($ModuleId, symbols()) = none
 
   [msg-6] used-in-priorities-but-undefined($ModuleId, productions()) = none
