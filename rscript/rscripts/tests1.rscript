@@ -120,12 +120,12 @@ assert "== 31" : not({{}, {}} == {{}, {}, {}})
 
 %% --- !=
 
-area A1 = area("f", 10, 3, 11, 7)
-area A2 = area("f", 10, 2, 11, 8)
-area A30 = area("f", 10, 5, 10, 7)
-area A31 = area("f", 10, 4, 10, 6)
-area A3 = area("f", 10, 4, 10, 7)
-area A4 = area("f", 10, 3, 10, 8)
+loc A1  = location("f", area(10, 3, 11, 7, 0, 0))
+loc A2  = location("f", area(10, 2, 11, 8, 0, 0))
+loc A30 = location("f", area(10, 5, 10, 7, 0, 0))
+loc A31 = location("f", area(10, 4, 10, 6, 0, 0))
+loc A3  = location("f", area(10, 4, 10, 7, 0, 0))
+loc A4  = location("f", area(10, 3, 10, 8, 0, 0))
 
 assert "!= 1" : 1 != 2
 assert "!= 2" : not(1 != 1)

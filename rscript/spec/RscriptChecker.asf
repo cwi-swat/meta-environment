@@ -213,7 +213,7 @@ $Error]>
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
-[t2s-4] t2s(area) 			= "area"
+[t2s-4] t2s(loc) 			= "loc"
 [t2s-5] t2s(undefined) 			= "undefined"
 	
 [t2s-6] $StrCon :=  "<" || tl2sl($Etype+) || ">"
@@ -348,7 +348,7 @@ $Error]>
 [check-const-str]
 	check-const($String, $Tenv) = <type-of($String), $Tenv>
 
-[check-const-area]
+[check-const-loc]
 	check-const($Loc, $Tenv) = <type-of($Loc), $Tenv>
 
 [check-const-tuple1]
@@ -526,7 +526,7 @@ $Error]>
 [compat-cmp6]
 	compat-cmp($Exp, str, str, $Tenv) = $Tenv
 [compat-cmp7]
-	compat-cmp($Exp, area, area, $Tenv) = $Tenv
+	compat-cmp($Exp, loc, loc, $Tenv) = $Tenv
 [compat-cmp8]
 	compat-cmp($Exp, $Etype1, $Etype2, $Tenv) = 
 	$Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp
@@ -1155,12 +1155,12 @@ $Error]>
                 <reachX,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
                 <reachR,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
 
-		<filename,	fun [ area ]				to str >,
-		<beginline,	fun [ area ]				to int >,
-		<begincol,	fun [ area ]				to int >,
+		<filename,	fun [ loc ]				to str >,
+		<beginline,	fun [ loc ]				to int >,
+		<begincol,	fun [ loc ]				to int >,
 
-		<endline,	fun [ area ]				to int >,
-		<endcol,	fun [ area ]				to int >,
+		<endline,	fun [ loc ]				to int >,
+		<endcol,	fun [ loc ]				to int >,
 
 		<sum,		fun [ bag[int] ]			to int >,
 		<average,	fun [ bag[int] ]			to int >,
