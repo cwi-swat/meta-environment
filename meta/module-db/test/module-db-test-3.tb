@@ -20,9 +20,9 @@
 
     $Id$
 */
-#include "../../in-output/in-output.idef"
-#include "../module-db.idef"
-#include "asource.idef"
+#include <in-output.idef>
+#include <module-db.idef>
+#include <asource.idef>
 
 process Test is
 let

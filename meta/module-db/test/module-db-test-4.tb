@@ -20,10 +20,10 @@
 
     $Id$
 */
-#include "../../in-output/in-output.idef"
-#include "../module-db.idef"
-#include "asource.idef"
-#include "../../tbscripts/notification.tb"
+#include <in-output.idef>
+#include <module-db.idef>
+#include <asource.idef>
+#include <notification.tb>
 
 process Test is
 let

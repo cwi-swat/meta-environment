@@ -20,19 +20,22 @@
 
 # $Id$
 
-toolbus=__TOOLBUS__
 datadir=__DATADIR__
 asfix=__PT_SUPPORT__
+toolbus="__TOOLBUS__/bin/toolbus \
+           -I__TOP_SRCDIR__/in-output \
+           -I__TOP_SRCDIR__/module-db \
+           -I__PT_SUPPORT__/share \
+           -I__TOP_SRCDIR__/tbscripts"
 
-PATH=${toolbus}/bin:$PATH; export PATH
-
+set -x
 tests=0
 failed=0
 
 call_toolbus () {
   script=$1
   tests=`expr $tests + 1`
-  result=`toolbus -I${datadir} -I${asfix}/share ${script} 2>&1`
+  result=`${toolbus} ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
