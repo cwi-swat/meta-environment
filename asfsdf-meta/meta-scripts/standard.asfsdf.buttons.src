@@ -150,9 +150,7 @@ configuration([
          [push-active-module,
           get-root,
           unpack-tree,
-          message("Upgrading equations ..."),
           execute-action("__ASF__/bin/asfupgrader"),
-          message("Upgrading equations done"),
           set-root
          ]),
   button("*",
