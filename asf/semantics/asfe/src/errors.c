@@ -19,7 +19,7 @@ void RWclearErrors()
   if (!is_protected) {
     is_protected = ATtrue;
     errors = NULL;
-    ERR_protectFeedbackList(errors);
+    ERR_protectFeedbackList(&errors);
   }
 
   errors = NULL;
