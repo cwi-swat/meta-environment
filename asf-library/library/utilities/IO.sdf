@@ -1,58 +1,27 @@
 module utilities/IO[Sort]
 
 imports basic/Bytes
-imports utilities/ParseResults[Sort]
-imports basic/Results
+imports utilities/IOResults[Sort]
 
 exports
 
 context-free syntax
 
-  parse-file(file:String)           -> ParseResult[[Sort]]
-  unparse-to-file(file:String,Sort) -> Result
+  parse-bytes(Bytes)      -> ParseResult[[Sort]] {built-in("parse-bytes")}
+  unparse-to-bytes(Sort)  -> BytesResult         {built-in("unparse-to-bytes")}
 
-  read-term(file:String)       -> ParseResult[[Sort]]
-  write-term(file:String,Sort) -> Result
+  parse-file(file:String)  -> ParseResult[[Sort]] {built-in("parse-file")}
+  unparse-to-file(file:String,Sort) -> WriteResult {built-in("unparse-to-file")}
 
-  read-bytes(file:String)        -> Value[[Bytes]] 
-  write-bytes(file:String,Bytes) -> Value[[Bytes]] 
+  read-term(file:String) -> ParseResult[[Sort]] {built-in("read-term-from-file")}
+  write-term(file:String,Sort) -> WriteResult {built-in("write-term-to-file")}
 
-  parse-string(String)    -> Value[[ParseResult[[Sort]]]]
-  unparse-to-string(Sort) -> Value[[Sort]]
-
-  parse-bytes(Bytes)      -> Value[[ParseResult[[Sort]]]] {built-in("parse-bytes")}
-  unparse-to-bytes(Sort)  -> Value[[Sort]] {built-in("unparse-to-bytes")}
-
-  read-string(file:String)          -> Value[[String]]
-  write-string(file:String, String) -> Value[[String]]
-
-context-free syntax
-
-  "parse-tree" "(" left-layout:Bytes    c1:"," 
-                   tree:Sort            c2:"," 
-                   right-layout:Bytes   c3:","
-                   amb-cnt:NatCon
-               ")"                   -> ParseResult[[Sort]] {cons("tree")}
-
-  "parse-error" "(" Feedback ")"     -> ParseResult[[Sort]] {cons("error")}
-
-
+  read-bytes(file:String) -> BytesResult {built-in("read-bytes-from-file")}
+  write-bytes(file:String,Bytes) -> WriteResult {built-in("write-bytes-to-file")}
 
 hiddens
 
 imports basic/Whitespace
-
-context-free syntax
-
-  parse-file(file:Bytes)           -> Value[[ParseResult[[Sort]]]] {built-in("parse-file")}
-  unparse-to-file(file:Bytes,Sort) -> Value[[Sort]]       {built-in("unparse-to-file")}
-
-  read-term(file:Bytes)       -> Value[[ParseResult[[Sort]]]] {built-in("read-term-from-file")}
-  write-term(file:Bytes,Sort) -> Value[[Sort]]       {built-in("write-term-to-file")}
-
-  read-bytes(file:Bytes)        -> Value[[Bytes]] {built-in("read-bytes-from-file")}
-  write-bytes(file:Bytes,Bytes) -> Value[[Bytes]] {built-in("write-bytes-from-file")}
-
 variables
 
  "Bytes"[0-9]* -> Bytes
