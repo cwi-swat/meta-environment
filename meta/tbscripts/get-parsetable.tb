@@ -30,7 +30,7 @@ Id := process-id.
       rec-msg(syntax(Syntax?)).
       snd-msg(preprocess-syntax-hook(ModuleName, Type, Syntax)).
       rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?)).
-      snd-msg(generate-parsetable(Syntax, ModuleName, Type)).
+      snd-msg(generate-parsetable(Syntax, ModuleName)).
       Syntax := no-tree .
       (
         rec-msg(parsetable(Table?)).
