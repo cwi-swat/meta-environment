@@ -53,10 +53,6 @@ AUX-Grammar-ATerms3.c
 AUX-Grammar-ATerms2.c
 AUX-Grammar-ATerms1.c
 AUX-Grammar-Tree-Constructors1.c
-AUX-IntCon4.c
-AUX-IntCon3.c
-AUX-IntCon2.c
-AUX-IntCon1.c
 AUX-Character-Normalization1.c
 AUX-Basic-Integers5.c
 AUX-Basic-Integers4.c
@@ -88,7 +84,10 @@ AUX-Earley-Items4.c
 AUX-Earley-Items3.c
 AUX-Earley-Items2.c
 AUX-Earley-Items1.c
-AUX-RealCon1.c
+AUX-IntCon4.c
+AUX-IntCon3.c
+AUX-IntCon2.c
+AUX-IntCon1.c
 AUX-Character-Syntax7.c
 AUX-Character-Syntax6.c
 AUX-Character-Syntax5.c
@@ -187,8 +186,6 @@ AUX-Symbols-Projection4.c
 AUX-Symbols-Projection3.c
 AUX-Symbols-Projection2.c
 AUX-Symbols-Projection1.c
-AUX-ATerms2.c
-AUX-ATerms1.c
 AUX-Basic-Sdf-Normalization13.c
 AUX-Basic-Sdf-Normalization12.c
 AUX-Basic-Sdf-Normalization11.c
@@ -204,6 +201,7 @@ AUX-Basic-Sdf-Normalization2.c
 AUX-Basic-Sdf-Normalization1.c
 AUX-Renaming-Sdf-Renaming2.c
 AUX-Renaming-Sdf-Renaming1.c
+AUX-RealCon1.c
 AUX-Symbols1.c
 AUX-Character-Class-Syntax8.c
 AUX-Character-Class-Syntax7.c
@@ -272,7 +270,6 @@ AUX-Modular-Sdf-Syntax4.c
 AUX-Modular-Sdf-Syntax3.c
 AUX-Modular-Sdf-Syntax2.c
 AUX-Modular-Sdf-Syntax1.c
-AUX-Label-Sdf-Syntax1.c
 AUX-Basic-Sdf-Renaming3.c
 AUX-Basic-Sdf-Renaming2.c
 AUX-Basic-Sdf-Renaming1.c
@@ -292,6 +289,8 @@ AUX-Literals4.c
 AUX-Literals3.c
 AUX-Literals2.c
 AUX-Literals1.c
+AUX-ATerms2.c
+AUX-ATerms1.c
 AUX-Kernel-Sdf-Syntax3.c
 AUX-Kernel-Sdf-Syntax2.c
 AUX-Kernel-Sdf-Syntax1.c
@@ -425,6 +424,7 @@ AUX-Priority-Sdf-Syntax1.c
 AUX-Literals-Sdf-Syntax3.c
 AUX-Literals-Sdf-Syntax2.c
 AUX-Literals-Sdf-Syntax1.c
+AUX-Label-Sdf-Syntax1.c
 AUX-Sorts-Sdf-Syntax2.c
 AUX-Sorts-Sdf-Syntax1.c
 AUX-Restrictions-Sdf-Syntax6.c
@@ -512,6 +512,7 @@ AUX-Literals-Sdf-Normalization4.c
 AUX-Literals-Sdf-Normalization3.c
 AUX-Literals-Sdf-Normalization2.c
 AUX-Literals-Sdf-Normalization1.c
+AUX-Label-Sdf-Normalization1.c
 AUX-Sorts-Sdf-Normalization1.c
 AUX-Restrictions-Sdf-Normalization1.c
 AUX-Alias-Sdf-Normalization4.c
