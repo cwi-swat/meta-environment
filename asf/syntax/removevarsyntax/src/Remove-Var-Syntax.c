@@ -67,7 +67,7 @@ lf_list_2sym = ATmakeSymbol ( "list(iter-star(char-class([range(0,255)])))" , 1 
 ATprotectSymbol ( lf_list_2sym ) ;
 lf_3sym = ATmakeSymbol ( "prod([lex(sort(\"ModuleId\"))],cf(sort(\"ModuleId\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_3sym ) ;
-lf_4sym = ATmakeSymbol ( "prod([cf(sort(\"ModuleId\"))],cf(sort(\"ModuleName\")),no-attrs)" , 1 , ATtrue ) ;
+lf_4sym = ATmakeSymbol ( "prod([cf(sort(\"ModuleId\"))],cf(sort(\"ModuleName\")),attrs([term(cons(\"unparameterized\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_4sym ) ;
 lf_5sym = ATmakeSymbol ( "prod([lit(\"remove-var-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SDF\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SDF\")),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_5sym ) ;
@@ -75,7 +75,7 @@ lf_list_6sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Module\"))))" , 1 , ATtr
 ATprotectSymbol ( lf_list_6sym ) ;
 lf_7sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"Module\")))],cf(sort(\"Definition\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_7sym ) ;
-lf_8sym = ATmakeSymbol ( "prod([lit(\"definition\"),cf(opt(layout)),cf(sort(\"Definition\"))],cf(sort(\"SDF\")),no-attrs)" , 1 , ATtrue ) ;
+lf_8sym = ATmakeSymbol ( "prod([lit(\"definition\"),cf(opt(layout)),cf(sort(\"Definition\"))],cf(sort(\"SDF\")),attrs([term(cons(\"definition\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_8sym ) ;
 lf_9sym = ATmakeSymbol ( "prod([lit(\"remove-variables-from-modules\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Module\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Definition\")),attrs([id(\"Remove-Var-Syntax\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_9sym ) ;
@@ -87,21 +87,21 @@ lf_list_12sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Section\"))))" , 1 , AT
 ATprotectSymbol ( lf_list_12sym ) ;
 lf_13sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"Section\")))],cf(sort(\"Sections\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_13sym ) ;
-lf_14sym = ATmakeSymbol ( "prod([lit(\"module\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),cf(iter-star(sort(\"ImpSection\"))),cf(opt(layout)),cf(sort(\"Sections\"))],cf(sort(\"Module\")),no-attrs)" , 3 , ATtrue ) ;
+lf_14sym = ATmakeSymbol ( "prod([lit(\"module\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),cf(iter-star(sort(\"ImpSection\"))),cf(opt(layout)),cf(sort(\"Sections\"))],cf(sort(\"Module\")),attrs([term(cons(\"module\"))]))" , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_14sym ) ;
 lf_15sym = ATmakeSymbol ( "prod([lit(\"remove-variables-from-sections\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Section\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Sections\")),attrs([id(\"Remove-Var-Syntax\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_15sym ) ;
 lf_16sym = ATmakeSymbol ( "prod([lit(\"remove-variables-from-section\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Section\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Sections\")),attrs([id(\"Remove-Var-Syntax\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_16sym ) ;
-lf_17sym = ATmakeSymbol ( "prod([lit(\"exports\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),no-attrs)" , 1 , ATtrue ) ;
+lf_17sym = ATmakeSymbol ( "prod([lit(\"exports\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),attrs([term(cons(\"exports\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_17sym ) ;
 lf_18sym = ATmakeSymbol ( "prod([lit(\"remove-variables-grammar\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Grammar\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Grammar\")),attrs([id(\"Remove-Var-Syntax\")]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_18sym ) ;
-lf_19sym = ATmakeSymbol ( "prod([lit(\"(/)\")],cf(sort(\"Grammar\")),no-attrs)" , 0 , ATtrue ) ;
+lf_19sym = ATmakeSymbol ( "prod([lit(\"(/)\")],cf(sort(\"Grammar\")),attrs([term(cons(\"empty-grammar\"))]))" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_19sym ) ;
-lf_20sym = ATmakeSymbol ( "prod([lit(\"hiddens\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),no-attrs)" , 1 , ATtrue ) ;
+lf_20sym = ATmakeSymbol ( "prod([lit(\"hiddens\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),attrs([term(cons(\"hiddens\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_20sym ) ;
-lf_21sym = ATmakeSymbol ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([assoc(assoc)]))" , 2 , ATtrue ) ;
+lf_21sym = ATmakeSymbol ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([assoc(assoc),term(cons(\"conc-grammars\"))]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_21sym ) ;
 lf_22sym = ATmakeSymbol ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([id(\"Remove-Var-Syntax\")]))" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_22sym ) ;
@@ -109,35 +109,35 @@ lf_list_23sym = ATmakeSymbol ( "list(cf(iter-star(sort(\"Production\"))))" , 1 ,
 ATprotectSymbol ( lf_list_23sym ) ;
 lf_24sym = ATmakeSymbol ( "prod([cf(iter-star(sort(\"Production\")))],cf(sort(\"Productions\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_24sym ) ;
-lf_25sym = ATmakeSymbol ( "prod([lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" , 1 , ATtrue ) ;
+lf_25sym = ATmakeSymbol ( "prod([lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"variables\"))]))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_25sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-var-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"SDF\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SDF\")),no-attrs)" ) , lf_1 , lf_1sym ) ;
 register_prod ( ATparse ( "list(iter-star(char-class([range(0,255)])))" ) , lf_list_2 , lf_list_2sym ) ;
 register_prod ( ATparse ( "prod([lex(sort(\"ModuleId\"))],cf(sort(\"ModuleId\")),no-attrs)" ) , lf_3 , lf_3sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"ModuleId\"))],cf(sort(\"ModuleName\")),no-attrs)" ) , lf_4 , lf_4sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"ModuleId\"))],cf(sort(\"ModuleName\")),attrs([term(cons(\"unparameterized\"))]))" ) , lf_4 , lf_4sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-var-syntax\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"SDF\")),cf(opt(layout)),lit(\")\")],cf(sort(\"SDF\")),no-attrs)" ) , lf_5 , lf_5sym ) ;
 register_prod ( ATparse ( "list(cf(iter-star(sort(\"Module\"))))" ) , lf_list_6 , lf_list_6sym ) ;
 register_prod ( ATparse ( "prod([cf(iter-star(sort(\"Module\")))],cf(sort(\"Definition\")),no-attrs)" ) , lf_7 , lf_7sym ) ;
-register_prod ( ATparse ( "prod([lit(\"definition\"),cf(opt(layout)),cf(sort(\"Definition\"))],cf(sort(\"SDF\")),no-attrs)" ) , lf_8 , lf_8sym ) ;
+register_prod ( ATparse ( "prod([lit(\"definition\"),cf(opt(layout)),cf(sort(\"Definition\"))],cf(sort(\"SDF\")),attrs([term(cons(\"definition\"))]))" ) , lf_8 , lf_8sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-modules\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Module\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Definition\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_9 , lf_9sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-modules\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Module\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Definition\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_9_recursive , lf_9_recursivesym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-module\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Module\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Module\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_10 , lf_10sym ) ;
 register_prod ( ATparse ( "list(cf(iter-star(sort(\"ImpSection\"))))" ) , lf_list_11 , lf_list_11sym ) ;
 register_prod ( ATparse ( "list(cf(iter-star(sort(\"Section\"))))" ) , lf_list_12 , lf_list_12sym ) ;
 register_prod ( ATparse ( "prod([cf(iter-star(sort(\"Section\")))],cf(sort(\"Sections\")),no-attrs)" ) , lf_13 , lf_13sym ) ;
-register_prod ( ATparse ( "prod([lit(\"module\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),cf(iter-star(sort(\"ImpSection\"))),cf(opt(layout)),cf(sort(\"Sections\"))],cf(sort(\"Module\")),no-attrs)" ) , lf_14 , lf_14sym ) ;
+register_prod ( ATparse ( "prod([lit(\"module\"),cf(opt(layout)),cf(sort(\"ModuleName\")),cf(opt(layout)),cf(iter-star(sort(\"ImpSection\"))),cf(opt(layout)),cf(sort(\"Sections\"))],cf(sort(\"Module\")),attrs([term(cons(\"module\"))]))" ) , lf_14 , lf_14sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-sections\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Section\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Sections\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_15 , lf_15sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-sections\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"Section\"))),cf(opt(layout)),lit(\")\")],cf(sort(\"Sections\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_15_recursive , lf_15_recursivesym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-from-section\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Section\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Sections\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_16 , lf_16sym ) ;
-register_prod ( ATparse ( "prod([lit(\"exports\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),no-attrs)" ) , lf_17 , lf_17sym ) ;
+register_prod ( ATparse ( "prod([lit(\"exports\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),attrs([term(cons(\"exports\"))]))" ) , lf_17 , lf_17sym ) ;
 register_prod ( ATparse ( "prod([lit(\"remove-variables-grammar\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"Grammar\")),cf(opt(layout)),lit(\")\")],cf(sort(\"Grammar\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_18 , lf_18sym ) ;
-register_prod ( ATparse ( "prod([lit(\"(/)\")],cf(sort(\"Grammar\")),no-attrs)" ) , lf_19 , lf_19sym ) ;
-register_prod ( ATparse ( "prod([lit(\"hiddens\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),no-attrs)" ) , lf_20 , lf_20sym ) ;
-register_prod ( ATparse ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([assoc(assoc)]))" ) , lf_21 , lf_21sym ) ;
+register_prod ( ATparse ( "prod([lit(\"(/)\")],cf(sort(\"Grammar\")),attrs([term(cons(\"empty-grammar\"))]))" ) , lf_19 , lf_19sym ) ;
+register_prod ( ATparse ( "prod([lit(\"hiddens\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Section\")),attrs([term(cons(\"hiddens\"))]))" ) , lf_20 , lf_20sym ) ;
+register_prod ( ATparse ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([assoc(assoc),term(cons(\"conc-grammars\"))]))" ) , lf_21 , lf_21sym ) ;
 register_prod ( ATparse ( "prod([cf(sort(\"Grammar\")),cf(opt(layout)),lit(\"++\"),cf(opt(layout)),cf(sort(\"Grammar\"))],cf(sort(\"Grammar\")),attrs([id(\"Remove-Var-Syntax\")]))" ) , lf_22 , lf_22sym ) ;
 register_prod ( ATparse ( "list(cf(iter-star(sort(\"Production\"))))" ) , lf_list_23 , lf_list_23sym ) ;
 register_prod ( ATparse ( "prod([cf(iter-star(sort(\"Production\")))],cf(sort(\"Productions\")),no-attrs)" ) , lf_24 , lf_24sym ) ;
-register_prod ( ATparse ( "prod([lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),no-attrs)" ) , lf_25 , lf_25sym ) ;
+register_prod ( ATparse ( "prod([lit(\"variables\"),cf(opt(layout)),cf(sort(\"Productions\"))],cf(sort(\"Grammar\")),attrs([term(cons(\"variables\"))]))" ) , lf_25 , lf_25sym ) ;
 }
 void resolve_Remove_Var_Syntax ( ) {
 }
@@ -506,13 +506,14 @@ ATerm lf_list_2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_list_2sym , ATmakeAppl ( lf_list_2sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_list_2sym , arg0 ) ) ;
 }
-#ifdef ASF_MAIN                                           
+#ifdef ASF_MAIN
 int main(int argc, char *argv[])                         
 {                                                        
-  return asc_support_main(argc, argv,                    
+  ATerm bottom;
+  return asc_support_main(&bottom, argc, argv,           
                           register_Remove_Var_Syntax,                   
                           resolve_Remove_Var_Syntax,                    
-                          init_Remove_Var_Syntax);                      
-}                                                        
+                          init_Remove_Var_Syntax
+);}                                                        
 #endif                                                   
 
