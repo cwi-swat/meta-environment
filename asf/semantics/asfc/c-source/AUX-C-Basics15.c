@@ -155,6 +155,16 @@ static ATerm constant94 = NULL ;
 static ATerm constant95 = NULL ;
 static ATerm constant96 = NULL ;
 static ATerm constant97 = NULL ;
+static ATerm constant98 = NULL ;
+static ATerm constant99 = NULL ;
+static ATerm constant100 = NULL ;
+static ATerm constant101 = NULL ;
+static ATerm constant102 = NULL ;
+static ATerm constant103 = NULL ;
+static ATerm constant104 = NULL ;
+static ATerm constant105 = NULL ;
+static ATerm constant106 = NULL ;
+static ATerm constant107 = NULL ;
 void init_AUX_C_Basics15 ( ) {
 ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
@@ -254,6 +264,16 @@ ATprotect ( & constant94 ) ;
 ATprotect ( & constant95 ) ;
 ATprotect ( & constant96 ) ;
 ATprotect ( & constant97 ) ;
+ATprotect ( & constant98 ) ;
+ATprotect ( & constant99 ) ;
+ATprotect ( & constant100 ) ;
+ATprotect ( & constant101 ) ;
+ATprotect ( & constant102 ) ;
+ATprotect ( & constant103 ) ;
+ATprotect ( & constant104 ) ;
+ATprotect ( & constant105 ) ;
+ATprotect ( & constant106 ) ;
+ATprotect ( & constant107 ) ;
 }
 ATerm lf_AUX_C_Basics15_1 ( ATerm arg0 ) {
 {
@@ -539,20 +559,50 @@ FUNC_EXIT_CONST ( constant87 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( l
 if ( term_equal ( tmp [ 2 ] , make_char ( 126 ) ) ) {
 FUNC_EXIT_CONST ( constant88 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 50 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
 }
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant89 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 49 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant90 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant91 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant92 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant93 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant94 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant95 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant96 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 56 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant97 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 54 ] , char_table [ 57 ] ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 777 ) ) ) {
+FUNC_EXIT_CONST ( constant98 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 49 ] , char_table [ 55 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+}
 if ( term_equal ( tmp [ 2 ] , make_char ( 32 ) ) ) {
-FUNC_EXIT_CONST ( constant89 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant99 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 2 ] , make_char ( 33 ) ) ) {
-FUNC_EXIT_CONST ( constant90 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant100 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 51 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 2 ] , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant91 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant101 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 52 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 2 ] , make_char ( 35 ) ) ) {
-FUNC_EXIT_CONST ( constant92 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant102 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 53 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 2 ] , make_char ( 36 ) ) ) {
-FUNC_EXIT_CONST ( constant93 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant103 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 51 ] , char_table [ 54 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -564,13 +614,13 @@ if ( term_equal ( tmp [ 0 ] , tmp [ 1 ] ) ) {
 if ( is_single_element ( tmp [ 2 ] ) ) {
 ( tmp [ 3 ] = list_head ( tmp [ 2 ] ) ) ;
 if ( term_equal ( tmp [ 3 ] , make_char ( 110 ) ) ) {
-FUNC_EXIT_CONST ( constant94 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant104 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 49 ] , char_table [ 48 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 92 ) ) ) {
-FUNC_EXIT_CONST ( constant95 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant105 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 57 ] , char_table [ 50 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 3 ] , make_char ( 116 ) ) ) {
-FUNC_EXIT_CONST ( constant96 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant106 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( make_char ( 57 ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -591,7 +641,7 @@ if ( term_equal ( list_head ( atmp000 ) , make_char ( 39 ) ) ) {
 ( tmp [ 0 ] = list_tail ( atmp000 ) ) ;
 if ( is_single_element ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_head ( tmp [ 0 ] ) ) ;
-FUNC_EXIT_CONST ( constant97 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 55 ] , char_table [ 55 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant107 , ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 55 ] , char_table [ 55 ] , char_table [ 55 ] ) ) ) ) ) ) ) ;
 }
 }
 }
