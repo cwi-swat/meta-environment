@@ -94,6 +94,9 @@ AC_SUBST(TIDE)
 AC_SUBST(TIDEDEF)
 AC_SUBST(USE_TIDE)
 
+dnl Where is perl5?
+AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -164,4 +167,5 @@ AC_OUTPUT(
    asfe/test/terms/Makefile
    test/Makefile
    utils/Makefile
+   utils/genmakefile
 )
