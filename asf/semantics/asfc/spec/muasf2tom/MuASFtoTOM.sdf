@@ -16,6 +16,7 @@ translate({Rule ";"}*) -> TomRuleSection*
 
 variables
 
+"default?"[0-9]* -> "default:"?
 "TomRuleSection*"[0-9]* -> TomRuleSection*
 "TomRule*"[0-9]* -> TomRule*
 "FunId"[0-9]* -> FunId
