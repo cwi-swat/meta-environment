@@ -41,11 +41,18 @@
                        w(""),
                        <rhs(Symbol)>,
                        w(""),
-                       <attrs(Attrs)>
+                       <attrs(Attributes)>
                       )
   ],
 
-  [Attrs, no-attrs, no-attrs],
+  [Attributes, no-attrs, no-attrs],
+  [Attributes, attrs, attrs(Attrs)],
+
+  [Attrs, list, [<head(Attr)>,<[tail(Attrs)]>]],
+  [Attrs, empty, []],
+
+  [Attr, cons, cons(<string(str)>)],
+  [Attr, bracket, bracket], 
   
   [Symbol, iter-star, iter(<symbol(Symbol)>,
                     w(""),
