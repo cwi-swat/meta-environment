@@ -6,6 +6,7 @@ Revision='$Revision$'
 
 aterm=__ATERM__
 pt_support=__PT_SUPPORT__
+sdf_support=__SDF_SUPPORT__
 graph_support=__GRAPH_SUPPORT__
 sglr=__SGLR__
 pgen=__PGEN__
@@ -14,7 +15,7 @@ xemacs=__XEMACS__
 prefix=__PREFIX__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${PATH}"; 
+${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${sdf_support}/bin:${PATH}"; 
 export PATH
 
 # use xemacs by default
@@ -180,6 +181,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share/meta \
    -I${aterm}/share \
    -I${pt_support}/share/pt-support \
+   -I${sdf_support}/share/sdf-support \
    -I${graph_support}/share/graph-support \
    -I${sglr}/share/sglr \
    -I${pgen}/share/pgen \

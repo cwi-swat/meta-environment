@@ -13,6 +13,7 @@ CLEANFILES  = generic-meta meta.1
 	     s@__ATERM__@$(ATERM)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
+	     s@__SDF_SUPPORT__@$(SDF_SUPPORT)@g;\
 	     s@__GRAPH_SUPPORT__@$(GRAPH_SUPPORT)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
