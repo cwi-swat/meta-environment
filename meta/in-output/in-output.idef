@@ -41,8 +41,13 @@ let
 in
   execute(in-output,IO?).
   (
-    rec-msg(get-table-timestamp(Name?)).
-    snd-eval(IO,get-timestamp(Name,".tbl")).
+    (
+      rec-msg(get-table-timestamp(eqs(Name?))).
+      snd-eval(IO,get-timestamp(Name,".eqs.tbl"))
+    +
+      rec-msg(get-table-timestamp(trm(Name?))).
+      snd-eval(IO,get-timestamp(Name,".trm.tbl"))
+    ) .
     rec-value(IO, TimeStamp?) .
     snd-msg(table-timestamp(TimeStamp))
     +
