@@ -16,6 +16,6 @@ get_parsetree_LDADD	= libPT.a ${LDFLAGS} ${LDADD}
 EXTRA_DIST		= AsFix.adt
 
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${ATERMINC}
-LDFLAGS			= -L${ATERMLIB}
+INCLUDES		= -I${ATERM}/include
+LDFLAGS			= -L${ATERM}/lib
 LDADD			= -lATerm
