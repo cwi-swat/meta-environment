@@ -47,7 +47,7 @@ ATerm extract_equations(int cid, ATerm modules)
 }
 
 /*}}}  */
-/*{{{  ATerm extract_equations(int cid, ATerm modules) */
+/*{{{  ATerm extract_tests(int cid, ATerm modules) */
 
 ATerm extract_tests(int cid, ATerm modules)
 {
