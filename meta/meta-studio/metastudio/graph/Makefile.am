@@ -11,7 +11,7 @@ java_JAVA = ${MetaGraphAPI}
 
 api:
 	adt-to-java \
-		--input ${TOOLBUS}/share/toolbus/Graph.adt \
+		--input ${GRAPH_SUPPORT}/share/graph-support/Graph.adt \
 		--folding \
 		--package metastudio.graph \
 		--name MetaGraph \
