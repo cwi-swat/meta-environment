@@ -1,3 +1,8 @@
+2003/03/20 (jurgenv@cwi.nl)
+ * Bumped to 1.6beta
+ * Removed dependency on shared-objects, this is taken care of by 
+   aterm-java-config from now on.
+
 2003/01/22 (jurgenv@cwi.nl)
  * Release 1.5
  * Set versions of aterm-java and shared-objects to 1.1
