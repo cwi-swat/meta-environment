@@ -133,8 +133,6 @@ typedef struct path {
   struct path       *next;
 } path;
 
-//#define paths path;
-
 #define SG_P_STACK(x)                  (x)->stack
 #define SG_P_ARGS(x)                   (x)->args
 #define SG_P_NEXT(x)                   (x)->next
@@ -235,9 +233,10 @@ void  SG_ParserPreparation(void)
 
 void  SG_ParserCleanup(void)
 {
-//    active_stacks = SG_AddStack(accepting_stack, active_stacks);
+  active_stacks = SG_AddStack(accepting_stack, active_stacks);
+  accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
-  active_stacks = SG_PurgeOldStacks(active_stacks, NULL, accepting_stack);
+  active_stacks = SG_PurgeOldStacks(active_stacks, NULL, NULL);
 }
 
 /*
@@ -303,12 +302,9 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
 ATerm SG_Result(void)
 {
   if (accepting_stack != NULL) {
-    ATerm unyielded, yielded;
+    ATerm yielded;
 
-    unyielded = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
-    SG_DeleteStack(accepting_stack);
-    accepting_stack = NULL;
-    yielded = SG_YieldPT(unyielded);
+    yielded = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
 
 #ifdef HAVE_A2TOA1
     if(SG_ASFIX1) return a2toa1(yielded);
@@ -336,7 +332,9 @@ void SG_ParseChar(void)
   for_actor_delayed = NULL;
   for_shifter = NULL;
 
-//ATfprintf(stderr, "p_c: %d\n", current_token);
+/*
+  ATfprintf(stderr, "p_c: %d\n", current_token);
+*/
 
   while(for_actor != NULL  || for_actor_delayed != NULL) {
    if(for_actor != NULL)
@@ -371,7 +369,9 @@ void SG_Actor(stack *st)
     return;
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
-//ATfprintf(stderr, "SG_Actor: actions[%d,%d] = %t\n", SG_ST_STATE(st), current_token, as);
+/*
+  ATfprintf(stderr, "SG_Actor: actions[%d,%d] = %t\n", SG_ST_STATE(st), current_token, as);
+*/
   for(; as != NULL && !ATisEmpty(as); as = ATgetNext(as)) {
     a = ATgetFirst(as);
     switch(SG_ActionKind(a)) {
@@ -466,7 +466,6 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
         SG_Amb(SG_LK_TREE(nl), t);
       else {
         SG_PropagateReject(st1);
-//        SG_MarkLinkRejected(st1, nl);
 #ifdef DEBUG
         SG_ShowStackOffspring(st1);
 #endif
@@ -501,7 +500,6 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     st1 = SG_NewStack(s, stpt);
     nl = SG_AddLink(st1, st0, t);
     SG_AddStackHist(stpt, st1);
-//    SG_AddStackHist(stpt, st1);
     active_stacks = SG_AddStack(st1, active_stacks);
     for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     if (reject) {
@@ -563,13 +561,11 @@ void SG_Shifter(void)
       l = SG_AddLink(st1, st0, t);
       if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
     }
-//  else ATfprintf(stderr,"Shifter: rejected stack %d\n", STATE(st0));
   }
 
   active_stacks = SG_PurgeOldStacks(active_stacks,
                                     new_active_stacks,
                                     accepting_stack);
-//  active_stacks = new_active_stacks;
 } /* shifter */
 
 
@@ -703,7 +699,6 @@ void SG_ShowShiftPairs()
   ATfprintf(stderr, "Shifters:\n");
   for(sp = for_shifter; sp != NULL;
       sp = SG_SP_NEXT(sp)) {
-//    s = SG_SP_STATE(sp);
     ATfprintf(stderr, "%d: ", SG_SP_STATE(sp));
     st = SG_SP_STACK(sp);
     SG_ShowStackAncestors(st);

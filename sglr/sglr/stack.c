@@ -119,13 +119,19 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
 
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
 {
-//ATfprintf(stderr,"stack allocs before: %d\n", SG_AllocStats(NOP));
-//ATfprintf(stderr,"GC..");
+/*
+  ATfprintf(stderr,"stack allocs before: %d\n", SG_AllocStats(NOP));
+  ATfprintf(stderr,"GC..");
+*/
   SG_UnprotectUnusedStacks(old, new, accept);
-//ATfprintf(stderr,"..");
+/*
+  ATfprintf(stderr,"..");
+*/
   SG_DisposeUnusedStacks(old);
-//ATfprintf(stderr,"..\n");
-//ATfprintf(stderr,"stack allocs after:  %d\n", SG_AllocStats(NOP));
+/*
+  ATfprintf(stderr,"..\n");
+  ATfprintf(stderr,"stack allocs after:  %d\n", SG_AllocStats(NOP));
+*/
   return new;
 }
 
@@ -184,7 +190,9 @@ void SG_DisposeUnusedStack(stack *st, st_link *unprotector)
 
         SG_DisposeUnusedStack(SG_LK_STACK(lk), lk);
       }
-//      ATfprintf(stderr, "Deleting stack %xd, unprotected by %xd\n", st, unprotector);
+/*
+      ATfprintf(stderr, "Deleting stack %xd, unprotected by %xd\n", st, unprotector);
+*/
       SG_DeleteStack(st);
     }
 }
@@ -215,7 +223,6 @@ st_links *SG_DeleteLinks(st_links *lks)
 
 void SG_DeleteLink(st_link *lk)
 {
-//  ATfprintf(stderr, "  deleting link %xd\n", (int) lk);
   ATunprotect(&(lk->tree));
   SG_free(lk);
 }
@@ -230,7 +237,6 @@ ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
     sts = tail(sts);
     if(st1 == st2) return ATtrue;
     if(deep && SG_SubStack(st1, st2)) {
-//ATfprintf(stderr, "SG_Sub found %xd in %xd\n", st1, st2);
       return ATtrue;
     }
   }
@@ -244,17 +250,13 @@ ATbool SG_SubStack(stack *st1, stack *st0)
 
   if(st0 == NULL || st1 == NULL) return ATfalse;
   if(st1 == st0) {
-//ATfprintf(stderr, "SG_Sub: equal\n");
     return ATtrue;
   }
 
-//ATfprintf(stderr, "stack %xd\n", (int) st0);
   ls = SG_ST_LINKS(st0);
   for (; ls != NULL; ls = tail(ls)) {
     l = head(ls);
-//ATfprintf(stderr, "      %xd\n", (int) SG_LK_STACK(l));
     if (SG_SubStack(st1, SG_LK_STACK(l))) {
-//ATfprintf(stderr, "SG_Sub found %xd in %xd\n", st1, SG_LK_STACK(l));
       return ATtrue;
     }
   }
@@ -329,7 +331,6 @@ ATbool SG_SomeRejected(stack *st)
   for (; ls != NULL; ls = tail(ls)) {
     l = head(ls);
     if(SG_LK_REJECTED(l)) {
-//       ATfprintf(stderr, "A stack link with state %d rejected\n", STATE(st));
        return ATtrue;
     }
     kid = SG_LK_STACK(l);
@@ -351,7 +352,6 @@ ATbool SG_Rejected(stack *st)
   if (!(ls = SG_ST_LINKS(st))) return ATfalse;
   for (; ls != NULL; ls = tail(ls)) {
     if(SG_LK_REJECTED(head(ls))) {
-//      ATfprintf(stderr, "A stack link with state %d unrejected\n", STATE(st));
       return ATtrue;
     }
   }
