@@ -82,13 +82,15 @@ lengthOfSymbol(PT_Symbol symbol)
   }
   if (PT_isSymbolVarSym(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
-    return lengthOfSymbol(newSymbol);
+    return 6 + lengthOfSymbol(newSymbol);
   }
-  if (PT_isSymbolCf(symbol) 
-      ||
-      PT_isSymbolLex(symbol)) {
+  if (PT_isSymbolCf(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     return lengthOfSymbol(newSymbol);
+  }
+  if (PT_isSymbolLex(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    return 6+ lengthOfSymbol(newSymbol);
   }
   if (PT_isSymbolAlt(symbol)) {
     PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
@@ -160,8 +162,7 @@ lengthOfSymbol(PT_Symbol symbol)
   return 0;
 }
 
-static int
-lengthOfSymbols(PT_Symbols symbols)
+static int lengthOfSymbols(PT_Symbols symbols)
 {
   int length = 0;
 
@@ -360,15 +361,28 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
   }
   if (PT_isSymbolVarSym(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    buf[idx++] = '<';
     idx = yieldSymbol(newSymbol, idx, buf, bufSize);
-
+    buf[idx++] = '-';
+    buf[idx++] = 'V';
+    buf[idx++] = 'A';
+    buf[idx++] = 'R';
+    buf[idx++] = '>';
     return idx;
   }
-  if (PT_isSymbolCf(symbol) 
-      ||
-      PT_isSymbolLex(symbol)) {
+  if (PT_isSymbolCf(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+  }
+  if (PT_isSymbolLex(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    buf[idx++] = '<';
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+    buf[idx++] = '-';
+    buf[idx++] = 'L';
+    buf[idx++] = 'E';
+    buf[idx++] = 'X';
+    buf[idx++] = '>';
 
     return idx;
   }
