@@ -51,7 +51,7 @@
 #include "save-module.tb" 
 #include "help.tb" 
 #include "anno.idef"
-#include "se.tb"
+#include "se.idef"
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
 #include "notification.tb"
