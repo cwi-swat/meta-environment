@@ -4,7 +4,8 @@ VERSION=0.1.1
 
 usage() {
    cat <<ENDCAT
-usage: $0 <module>
+usage: $0
+All .sdf2 files in the current directory will be moved to .sdf files.
 ENDCAT
 }
 
