@@ -1,3 +1,6 @@
+2003/11/26 (jurgenv@cwi.nl)
+  * added first version of generic error format
+
 2003/11/20 (jurgenv@cwi.nl)
   * unified interface of parsing, unparsing and file reading and writing
   * added parse-file and parse-bytes builtins that produce a structure
