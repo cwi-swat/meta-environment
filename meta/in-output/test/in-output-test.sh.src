@@ -79,9 +79,6 @@ rm -f TestSdf.sdf
 # Test 9. Attempt to open a non-existing sdf section.
 call_toolbus in-output-test-9.tb
 
-# Test 10. Attempt to open an existing sdf section in baf.
-call_toolbus in-output-test-10.tb
-
 echo ""
 
 if [ $failed != 0 ]; then

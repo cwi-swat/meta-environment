@@ -102,7 +102,7 @@ ATerm insert_chars(int cid, ATerm editorId, int location, char *text)
 {
   SE_Focus focus;
   SE_Editor editor;
- 
+
   editor = getEditor(editorId);
   assert(editor);
   editor = insertChars(editor, location, strlen(text));

@@ -22,12 +22,14 @@
 #include "../in-output.idef"
 
 process Test is
-  snd-msg(exists-sdf2-module("Empty2")) .
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(exists-sdf-module("Empty2")) .
   (
-    rec-msg(sdf2-module-exists("Empty2"))
-  +
-    rec-msg(sdf2-module-not-exists("Empty2")) .
+    rec-msg(sdf-module-exists("Empty2")) .
     printf("in-output-test-3 FAILED!\n")
+  +
+    rec-msg(sdf-module-not-exists("Empty2"))
   +
     shutdown("test-3 FAILED! (timeout)\n") delay(sec(5))
   ) .

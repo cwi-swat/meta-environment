@@ -29,7 +29,7 @@ let
   Time    : term,
   Msg     : str
 in
-  snd-msg(open-eqs-file("TestEqs")) .
+  snd-msg(open-asf-file("TestEqs", "./TestEqs.sdf")) .
   (
     rec-msg(opened-file("TestEqs", text(EqsText?), Path?, Time?))
   +

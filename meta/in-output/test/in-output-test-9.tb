@@ -29,6 +29,8 @@ let
   Time    : term,
   Msg     : str
 in
+  snd-msg(process-search-paths("meta.conf", ["."])) .
+  rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("TestSdf")) .
   (
     rec-msg(error-opening("TestSdf"))

@@ -25,7 +25,7 @@ process Test is
 let
   Msg: str
 in
-  snd-msg(create-empty-sdf2-module("EmptySdf2Module")) .
+  snd-msg(create-empty-sdf-module("EmptySdf2Module")) .
   (
     rec-msg(module-created("EmptySdf2Module"))
   +

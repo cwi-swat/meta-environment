@@ -50,17 +50,12 @@
 #define PATH_LEN (_POSIX_PATH_MAX)
 #define MAX_PATHS 256
 
-/* Macro's for sdf2 file extensions */
-#define SDF2_TXT_EXT	".sdf"
-#define SDF2_BAF_EXT	".sdf.baf"
-
-/* Macro's for equation extensions */
-#define EQS_TXT_EXT	".asf"
-#define EQS_BAF_EXT	".asf.baf"
-
-/* Macro for parse table extension */
-#define EQS_TBL_EXT	".asf.tbl"
-#define TRM_TBL_EXT	".trm.tbl"
+/* Macro's for file extensions */
+#define SDF_EXT	".sdf"
+#define ASF_EXT	".asf"
+#define BAF_EXT	".baf"
+#define TBL_EXT ".tbl"
+#define TRM_EXT ".trm"
 
 /* Macro for extension of dump of all equations for a module */
 #define EQSDUMP_BAF_EXT ".eqs"
@@ -282,9 +277,9 @@ ATerm read_term_from_named_file(char *fn, char *n)
     return open_error(n);
   }
 
-  /* FIXME: I see a magic "4" here? */
-  strncpy(pn,fn,strlen(fn)-4);
-  pn[strlen(fn)-4] = '\0';
+  /* Remove BAF_EXT from filename */
+  strncpy(pn,fn,strlen(fn)-strlen(BAF_EXT));
+  pn[strlen(fn)-strlen(BAF_EXT)] = '\0';
 
   return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
 		"timestamp(<int>)))",
@@ -388,22 +383,15 @@ ATerm read_file(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm exists_sdf2_module(int cid, char *moduleName) */
-/*
- * Checks whether the sdf2 module exists, either in
- * text or baf format.
- *
- */
+/*{{{  ATerm exists_sdf_module(int cid, char *moduleName) */
 
-ATerm exists_sdf2_module(int cid, char *moduleName)
+ATerm exists_sdf_module(int cid, char *moduleName)
 {
   char   txtFileName[PATH_LEN] = {'\0'};
-  char   bafFileName[PATH_LEN] = {'\0'};
 
-  sprintf(txtFileName, "%s%s", moduleName, SDF2_TXT_EXT);
-  sprintf(bafFileName, "%s%s", moduleName, SDF2_BAF_EXT);
+  sprintf(txtFileName, "%s%s", moduleName, SDF_EXT);
 
-  if (fileexists(txtFileName) || fileexists(bafFileName)) {
+  if (find_in_path(txtFileName)) {
     return ATmake("snd-value(exists)");
   } else {
     return ATmake("snd-value(not-exists)");
@@ -411,28 +399,25 @@ ATerm exists_sdf2_module(int cid, char *moduleName)
 }
 
 /*}}}  */
-/*{{{  ATerm create_empty_sdf2_module(int cid, char *moduleName) */
-/*
- * Create a (new) empty sdf2 module.
- */
+/*{{{  ATerm create_empty_sdf_module(int cid, char *moduleName) */
 
-ATerm create_empty_sdf2_module(int cid, char *moduleName)
+ATerm create_empty_sdf_module(int cid, char *moduleName)
 {
   FILE *f;
   char txtFileName[PATH_LEN] = {'\0'};
 
-  /* Build sdf2-text-filename from moduleName */
-  sprintf(txtFileName, "%s%s", moduleName, SDF2_TXT_EXT);
+  /* Build sdf-text-filename from moduleName */
+  sprintf(txtFileName, "%s%s", moduleName, SDF_EXT);
 
   if (!(f = fopen(txtFileName, "w"))) {
     char *errmsg = strerror(errno);
     if (run_verbose) {
-      ATwarning("create_empty_sdf2_module: %s\n", errmsg);
+      ATwarning("create_empty_sdf_module: %s\n", errmsg);
     }
     return ATmake("snd-value(creation-failed(<str>))", errmsg);
   }
 
-  /* Insert proper sdf2 syntax. */
+  /* Insert proper sdf syntax. */
   fprintf(f, "module %s\n", moduleName);
 
   fclose(f);
@@ -441,20 +426,20 @@ ATerm create_empty_sdf2_module(int cid, char *moduleName)
 }
 
 /*}}}  */
-/*{{{  ATerm exists_eqs_section(int cid, char *moduleName) */
-/*
- * Checks whether an equations section exists.
- */
+/*{{{  ATerm exists_asf_section(int cid, char *moduleName) */
 
-ATerm exists_eqs_section(int cid, char *moduleName)
+ATerm exists_asf_section(int cid, char *name, char *sdfPath)
 {
-  char   txtFileName[PATH_LEN] = {'\0'};
-  char   bafFileName[PATH_LEN] = {'\0'};
+  char filename[PATH_LEN] = {'\0'};
+  char  *p;
 
-  sprintf(txtFileName, "%s%s", moduleName, EQS_TXT_EXT);
-  sprintf(bafFileName, "%s%s", moduleName, EQS_BAF_EXT);
+  strcpy(filename, sdfPath);
+  p = strrchr(filename, '.');
+  if (p != NULL) {
+    strcpy(p, ASF_EXT);
+  }
 
-  if (fileexists(txtFileName) || fileexists(bafFileName)) {
+  if (fileexists(filename)) {
     return ATmake("snd-value(exists)");
   } else {
     return ATmake("snd-value(not-exists)");
@@ -462,20 +447,22 @@ ATerm exists_eqs_section(int cid, char *moduleName)
 }
 
 /*}}}  */
-/*{{{  ATerm create_empty_eqs_section(int cid, char *moduleName) */
-/*
- * Create an empty equations section for a given module.
- */
+/*{{{  ATerm create_empty_asf_section(int cid, char *name, char *sdfPath) */
 
-ATerm create_empty_eqs_section(int cid, char *moduleName)
+ATerm create_empty_asf_section(int cid, char *name, char *sdfPath)
 {
-  FILE *f;
-  char txtFileName[PATH_LEN] = {'\0'};
+  FILE *file;
+  char filename[PATH_LEN] = {'\0'};
+  char *p;
 
-  /* Build eqs-text-filename from moduleName */
-  sprintf(txtFileName, "%s%s", moduleName, EQS_TXT_EXT);
+  strcpy(filename, sdfPath);
+  p = strrchr(filename, '.');
+  if (p != NULL) {
+    strcpy(p, ASF_EXT);
+  }
 
-  if (!(f = fopen(txtFileName, "w"))) {
+  file = fopen(filename, "w");
+  if (file == NULL) {
     char *errmsg = strerror(errno);
     if (run_verbose) {
       ATwarning("create_empty_eqs_section: %s\n", errmsg);
@@ -483,15 +470,16 @@ ATerm create_empty_eqs_section(int cid, char *moduleName)
     return ATmake("snd-value(creation-failed(<str>))", errmsg);
   }
 
-  fclose(f);
+  fclose(file);
 
-  return ATmake("snd-value(creation-succeeded(<str>))", txtFileName);
+  return ATmake("snd-value(creation-succeeded(<str>))", filename);
 }
 
 /*}}}  */
-/*{{{  ATerm open_asdf2_file(int cid, char *name, ATerm type) */
 
-ATerm open_asdf2_file(int cid, char *name, ATerm type)
+/*{{{  ATerm open_sdf_file(int cid, char *name) */
+
+ATerm open_sdf_file(int cid, char *name)
 {
   char   *full;
   char   newestbaf[PATH_LEN] = {'\0'};
@@ -499,24 +487,18 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
   ATbool newest_is_binary = ATfalse;
   ATerm  t;
 
-  if (ATmatch(type, "sdf2")) {
-    sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
-    sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
-  }
-  else {
-    sprintf(newestbaf, "%s%s", name, EQS_BAF_EXT);
-    sprintf(newestraw, "%s%s", name, EQS_TXT_EXT);
-  }
-
-  if ((full = find_in_path(newestraw)))
-    strcpy(newestraw, full);
-  if ((full = find_in_path(newestbaf)))
-    strcpy(newestbaf, full);
-  newest_is_binary = newerfile(newestbaf, newestraw);
-
-  if (!newestraw[0] && !newestbaf[0]) {
-    ATwarning("%s(.sdf|.sdf.baf) not found in path\n", name);
+  sprintf(newestraw, "%s%s", name, SDF_EXT);
+  full = find_in_path(newestraw);
+  if (full == NULL) {
+    ATwarning("open_sdf_file: %s not found in path.\n", newestraw);
     return open_error(name);
+  }
+
+  strcpy(newestraw, full);
+  sprintf(newestbaf, "%s%s", newestraw, BAF_EXT);
+  
+  if (fileexists(newestbaf)) {
+    newest_is_binary = newerfile(newestbaf, newestraw);
   }
 
   if (newest_is_binary) {
@@ -529,54 +511,38 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
 }
 
 /*}}}  */
-/*{{{  ATerm open_eqs_text_file(int cid, char *name) */
+/*{{{  ATerm open_asf_file(int cid, char *name, char *sdfPath) */
 
-ATerm open_eqs_text_file(int cid, char *name)
+ATerm open_asf_file(int cid, char *name, char *sdfPath)
 {
-  char  *full, fullname[PATH_LEN];
-  ATerm t;
+  char   newestbaf[PATH_LEN] = {'\0'};
+  char   newestraw[PATH_LEN] = {'\0'};
+  ATbool newest_is_binary = ATfalse;
+  ATerm  t;
+  char  *p;
 
-  sprintf(fullname, "%s%s", name, EQS_TXT_EXT);
-
-  if((full = find_in_path(fullname))) {
-    t = read_raw_from_named_file(full, name);
-  } else {
-    if(run_verbose) {
-      ATwarning("no such file: %s\n", fullname);
-    }
-    t = open_error(name);
+  strcpy(newestraw, sdfPath);
+  p = strrchr(newestraw, '.');
+  if (p != NULL) {
+    strcpy(p, ASF_EXT);
   }
+
+  if (!fileexists(newestraw)) {
+    return open_error(name);
+  }
+
+  sprintf(newestbaf, "%s%s", newestraw, BAF_EXT);
+  if (fileexists(newestraw)) {
+    newest_is_binary = newerfile(newestbaf, newestraw);
+  }
+
+  if (newest_is_binary) {
+    t = read_term_from_named_file(newestbaf, name);
+  } else {
+    t = read_raw_from_named_file(newestraw, name);
+  }
+
   return t;
-}
-
-/*}}}  */
-/*{{{  ATerm read_parse_table(int cid, char *name, ATerm tableType) */
-
-ATerm read_parse_table(int cid, char *name, ATerm tableType)
-{
-  ATerm t, packed;
-  char *full, fullname[PATH_LEN];
-
-  if(ATisEqual(tableType, ATmake("eqs"))) {
-    sprintf(fullname, "%s%s", name, EQS_TBL_EXT);
-  } else {
-    sprintf(fullname, "%s%s", name, TRM_TBL_EXT);
-  }
-
-  if ((full = find_in_path(fullname))) {
-    if (!(t = ATreadFromNamedFile(full))) {
-      if (run_verbose) {
-	ATwarning("error reading %s\n", full);
-      }
-      return open_error(name);
-    }
-
-    packed = ATBpack(t);
-    packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
-    return ATmake("snd-value(table-on-disk(<term>,timestamp(<int>)))",
-		  packed, filetime(full));
-  }
-  return open_error(name);
 }
 
 /*}}}  */
@@ -599,11 +565,44 @@ ATerm open_trm_file(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm save_asfix(int cid, char *name, char *fn, ATerm tree) */
 
-ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
-{ 
-  return write_term_to_named_file(tree, fn, name);
+/*{{{  ATerm open_parse_table(int cid, char *name, ATerm tableType) */
+
+ATerm open_parse_table(int cid, char *name, char *sdfPath, ATerm tableType)
+{
+  ATerm t, packed;
+  char filename[PATH_LEN];
+  char *p;
+
+  strcpy(filename, sdfPath);
+  p = strrchr(filename, '.');
+  assert (p != NULL);
+
+  if (ATisEqual(tableType, ATmake("asf"))) {
+    strcpy(p, ASF_EXT);
+  } else {
+    strcpy(p, TRM_EXT);
+  }
+
+  strcat(filename, TBL_EXT);
+
+  if (fileexists(filename)) {
+    t = ATreadFromNamedFile(filename);
+    if (t == NULL) {
+      if (run_verbose) {
+	ATwarning("error reading %s\n", filename);
+      }
+      return open_error(name);
+    }
+
+    packed = ATBpack(t);
+    packed = ATmake("lazy-unpack(<term>)", ATgetArgument((ATermAppl)packed, 0));
+
+    return ATmake("snd-value(table-on-disk(<term>,timestamp(<int>)))",
+		  packed, filetime(filename));
+  }
+
+  return open_error(name);
 }
 
 /*}}}  */
@@ -625,6 +624,15 @@ ATerm save_parsetable(int cid, char *name, char *fn, ATerm table)
 }
 
 /*}}}  */
+
+/*{{{  ATerm save_asfix(int cid, char *name, char *fn, ATerm tree) */
+
+ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
+{ 
+  return write_term_to_named_file(tree, fn, name);
+}
+
+/*}}}  */
 /*{{{  ATerm save_text_file(int cid, char *filename, char *text) */
 
 ATerm save_text_file(int cid, char *filename, char *text)
@@ -642,6 +650,7 @@ ATerm save_text_file(int cid, char *filename, char *text)
 }
 
 /*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm arg) */
 
 void rec_terminate(int cid, ATerm arg)
@@ -726,14 +735,11 @@ char *expand_path(const char *relative_path)
 
 ATerm process_search_paths(int cid, char *config_filename, ATerm paths)
 {
-  int line_number = 0;
   ATerm path = NULL;
   char *contents;
   char *absolute_path;
 
   while (!ATisEmpty((ATermList) paths)) {
-    line_number++;
-
     path = ATgetFirst((ATermList) paths);
     paths = (ATerm) ATgetNext((ATermList) paths);
 
@@ -742,19 +748,9 @@ ATerm process_search_paths(int cid, char *config_filename, ATerm paths)
       if (absolute_path != NULL) {
 	add_path(absolute_path);
       }
-      else {
-	ATwarning("%s, line %d: \"%s\": %s\n", config_filename,
-		  line_number, contents, strerror(errno));
-      }
     }
   }
 
-
-  /* Assert sanity, we really should have a decent searchpath by now */
-  if (nr_paths <= 0) {
-    ATerror("panic: empty searchpath after parsing \"%s\"!\n",
-	    config_filename);
-  }
   return ATmake("snd-value(search-paths-processed(<str>))", config_filename);
 }
 
