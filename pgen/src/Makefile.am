@@ -48,8 +48,11 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
-CLEANFILES	= sdf2table sdf2table.1 \
-		  sdf2table.test 
+CLEANFILES = \
+	parse-sdf2 \
+	sdf2table \
+	sdf2table.1 \
+	sdf2table.test 
 
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
