@@ -35,10 +35,12 @@ AC_OUTPUT(
 	lib/containers/Makefile 
 	lib/functions/Makefile 
 	lib/strategies/Makefile 
-	lib/traversal/Makefile 
 	lib/aterm/Makefile 
         lib/system/Makefile
 	lib/sdf2/Makefile 
 	lib/sdf2/syntax/Makefile 
+	lib/sdf2/normalization/Makefile 
+	lib/sdf2/projection/Makefile 
+	lib/sdf2/renaming/Makefile 
         src/Makefile
 )
