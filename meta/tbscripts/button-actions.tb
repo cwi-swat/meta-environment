@@ -678,8 +678,12 @@ in
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(clear-all, Stack?, EditorId?) .
-	snd-msg(clear-all) .
-	rec-msg(cleared-all) .
+	CloseAll .
+	ReturnSuccess(EditorId, Stack)		
+      +
+        rec-msg(read-termstore, Stack?, EditorId?) .
+	CloseAll .
+	TermStoreActivation("meta.termstore") .
 	ReturnSuccess(EditorId, Stack)		
       +
         rec-msg(save-termstore, Stack?, EditorId?) .

@@ -4,7 +4,7 @@
 TBSCRIPTS = \
   module-db.tb \
   abort.tb \
-  clear-all.tb \
+  close-all.tb \
   compile-module.tb \
   dump-equations.tb \
   dump-parsetable.tb \

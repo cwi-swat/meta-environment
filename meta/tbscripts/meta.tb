@@ -11,7 +11,7 @@
 #include "module-db.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
-#include "clear-all.tb"
+#include "close-all.tb"
 #include "process-eqs.tb"
 #include "compile-module.tb"
 #include "save-module.tb" 
@@ -78,7 +78,6 @@ in
   create(META, Pid?)
   . create(ButtonActionExecutor, Pid?)
   . create(ButtonActionReceiver, Pid?)
-  . create(ClearAll, Pid?)
   . create(Compile-module, Pid?)
   . create(ConfigManager, Pid?)
   . create(DumpEquations, Pid?)

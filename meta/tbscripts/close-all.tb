@@ -1,16 +1,14 @@
 /*
   $Id$
  */
-process ClearAll is
+process CloseAll is
 let
   Id     : term,
   Module : str,
   Modules: list
 in
   Id := process-id.
-  (
-    rec-msg(clear-all) .
-    snd-note(ui-status(stat(Id,"Clearing"))) .
+    snd-note(ui-status(stat(Id, "Closing"))) .
     snd-msg(get-all-module-names) .
     rec-msg(all-module-names(Modules?)) .
     (
@@ -25,8 +23,5 @@ in
     snd-msg(clear-module-db) .
     rec-msg(module-db-cleared) .
     MDB-DisplayGraph .
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(cleared-all)
-  ) *
-  delta
+    snd-note(ui-status(endstat(Id)))
 endlet
