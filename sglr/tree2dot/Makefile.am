@@ -32,6 +32,7 @@ LDADD            =  -L${top_srcdir}/libtree2dot -ltree2dot \
                     -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-INCLUDES+=-I${top_srcdir}/libsglr
+INCLUDES        += -I${top_srcdir}/libsglr \
+                   -I${top_srcdir}/libtree2dot
 
 tree2dot-main.o: $(top_srcdir)/libtree2dot/libtree2dot.a

@@ -20,16 +20,20 @@
 
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS     = ambtracker
+bin_PROGRAMS       = ambtracker
 
-SRCS             = ambtracker.c
-HDRS             =
+SRCS               = ambtracker.c
+HDRS               =
 
 ambtracker_SOURCES = $(SRCS) $(HDRS)
 
-LDADD            =  -L${top_srcdir}/libsglr -lsglr \
-                    -L${top_srcdir}/libtree2dot -ltree2dot \
-                    -L${PT_SUPPORT}/libasfix-old/libasfix -lAsFix \
-                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
+LDADD              =  -L${top_srcdir}/libsglr -lsglr \
+                      -L${top_srcdir}/libtree2dot -ltree2dot \
+                      -L${PT_SUPPORT}/libasfix-old/libasfix -lAsFix \
+                      -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-ambtracker.o: ${top_srcdir}/libsglr/libsglr.a
+INCLUDES           = -I$(ATERM)/include \
+                     -I${PT_SUPPORT}/include \
+                     -I${top_srcdir}/libsglr
+
+ambtracker.o: ${top_builddir}/libsglr/libsglr.a
