@@ -244,8 +244,6 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
     if(run_verbose) 
       ATwarning("Normalization finished\n");
 
-    ATwarning("Normalization finished\n");
-
     /*print_memo_table_sizes();*/
 
     init_table_gen();
