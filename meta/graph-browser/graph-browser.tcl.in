@@ -32,7 +32,7 @@
 #set toolname "Meta-Environment"
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
-set use_tide "@USE_TIDE@"
+set use_tide "@USE_TIDE@" 
 
 if {[info exists env(COMPILER_OUTPUT)]} {
     set outputdir $env(COMPILER_OUTPUT)
@@ -1059,10 +1059,10 @@ proc define-menu-bar {} {
     menubutton .menu.window -text "Graph" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
     menu $m -tearoff 0
-    $m add command -label "View all" -underline 0 -command {ViewAll}
-    $m add check -label "Autoresize after loading" -underline 0 -variable autoresize
+    $m add command -label "View All" -underline 0 -command {ViewAll}
+    $m add check -label "Autoresize After Loading" -underline 0 -variable autoresize
     $m add separator
-    $m add check -label "Animate while loading" -underline 0 -variable animate
+    $m add check -label "Animate While Loading" -underline 0 -variable animate
 
     menubutton .menu.help -text "Help" -underline 0 -menu .menu.help.menu
     set m .menu.help.menu
@@ -1081,9 +1081,9 @@ proc define-menu-bar {} {
     menubutton .menu.debug -text "Debug" -underline 0 -menu .menu.debug.menu
     set m .menu.debug.menu
     menu $m -tearoff 0
-    $m add check -label "Diagnostic messages"  -variable DIAG
+    $m add check -label "Diagnostic Messages"  -variable DIAG
     if { $use_tide } {
-      $m add check -label "Reduction debugging"  -variable DEBUG
+      $m add check -label "Reduction Debugging"  -variable DEBUG
     }
 
     trace variable DEBUG w toggle-debugging
@@ -1215,43 +1215,43 @@ proc define-module-popup {} {
     $m add command -label "New Term" \
         -command {EditTermWidget [GetObjectName $c] "new"}
     $m add separator
-    $m add command -label "Save module" \
+    $m add command -label "Save Module" \
         -command {SaveModules [GetObjectName $c]}
-    $m add command -label "Revert module" \
+    $m add command -label "Revert Module" \
         -command {RevertModules [GetObjectName $c]}
-    $m add command -label "Delete module" \
+    $m add command -label "Delete Module" \
         -command {DeleteModules [GetObjectName $c]}
     $m add separator
-    $m add command -label "Compile module..." \
+    $m add command -label "Compile Module..." \
         -command {CompileModuleWidget [GetObjectName $c]}
     $m add separator
-    $m add command -label "Module info" \
+    $m add command -label "Module Info" \
         -command {GetModuleInfo [GetObjectName $c]}
 }
 
 proc define-shadowmodule-popup {} {
     set m .shadowmodule-popup
     menu $m -tearoff 0
-    $m add command -label "Open module" \
+    $m add command -label "Open Module" \
         -command {OpenModule [GetObjectName $c]}
-    $m add command -label "Edit module" \
+    $m add command -label "Edit Module" \
         -command {EditModules [GetObjectName $c]}
 }
 
 proc define-modlist-popup {} {
     set m .modlist-popup
     menu $m -tearoff 0
-    $m add command -label "Edit modules" \
+    $m add command -label "Edit Modules" \
         -command {EditModules [SelectedModules]}
     $m add separator
-    $m add command -label "Save modules" \
+    $m add command -label "Save Modules" \
         -command {SaveModules [SelectedModules]}
-    $m add command -label "Revert modules" \
+    $m add command -label "Revert Modules" \
         -command {RevertModules [SelectedModules]}
-    $m add command -label "Delete modules" \
+    $m add command -label "Delete Modules" \
         -command {DeleteModules [SelectedModules]}
     $m add separator
-    $m add command -label "Modules info" \
+    $m add command -label "Modules Info" \
         -command {GetModuleInfo [SelectedModules]}
 }
 
