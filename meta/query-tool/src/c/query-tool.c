@@ -3,6 +3,7 @@
 /*{{{  includes */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
