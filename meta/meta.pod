@@ -4,7 +4,7 @@ META - an interactive environment to develop ASF+SDF specifications
 
 =head1 SYNOPSIS
 
-B<meta> [-B<c> I<directory>] [-B<dh>] [-B<T> I<port>] [-B<vV>]
+B<meta> [-B<c> I<directory>] [-B<C> I<file>] [-B<dh>] [-B<T> I<port>] [-B<vV>]
 
 =head1 DESCRIPTION
 
@@ -23,6 +23,11 @@ A number of options can be supplied; these are as follows:
 This directory is used by the ASF+SDF2C compiler, the generated 
 auxiliary AsFix files and C files are written in this directory
 as well as the Makefiles. 
+
+=item B<-C> I<file>
+This file contains configuration information like search paths.
+If your configuration file is named I<meta.conf> it is not necessary
+to pass it explicitly.
 
 =item -d
 
