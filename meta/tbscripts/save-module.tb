@@ -62,12 +62,12 @@ in
     snd-msg(saved-module(Module))
     +
     rec-msg(save-all).
-    snd-note(ui-status(stat(Id, "Saving"))) .
     snd-msg(get-all-modules).
     rec-msg(all-modules(Modules?)).
     ( if not-equal(Modules, []) then
        Module := first(Modules).
        Modules := next(Modules).
+	     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
        snd-msg(get-sdf2-path-from-db(Module)).
        rec-msg(path(Path?)).
        snd-msg(get-sdf2-asfix(Module)).
@@ -106,11 +106,11 @@ in
          rec-msg(save-done)
        +
          rec-msg(no-table)
-       )
+       ).
+       snd-note(ui-status(endstat(Id)))
       fi
     )*
     if equal(Modules,[]) then
-     snd-note(ui-status(endstat(Id))) .
      snd-msg(saved)
     fi
   )*
