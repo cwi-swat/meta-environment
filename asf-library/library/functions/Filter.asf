@@ -1,0 +1,9 @@
+equations
+
+[] filter(f []) = []
+
+[] filter(f [A,A*]) = cons(A,filter(f [A*]))
+     when f(A) = true
+
+[] filter(f [A,A*]) = filter(f [A*])
+     when f(A) = false

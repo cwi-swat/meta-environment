@@ -1,0 +1,23 @@
+module functions/Filter[A]
+
+imports basic/Booleans containers/List[[A]]
+
+exports
+
+context-free syntax
+
+filter -> ((A => Boolean) List[[A]] => List[[A]])
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A List[[A]]
+
+variables
+
+"f" -> (A => Boolean)
+"A" -> A
+"B" -> Boolean
+"L" -> List[[A]]
+"A*" -> { A "," }*
