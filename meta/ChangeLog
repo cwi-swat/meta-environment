@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2001/02/20 (markvdb@cwi.nl)
+  * Removed from IO-tool unused constants.
+
 2001/02/20 (jong@cwi.nl)
   * bugfix in config-manager: searchpaths were delivered in reverse order
 

@@ -47,9 +47,6 @@
 /*{{{  defines */
 
 
-#define	CURRENT_DIR "."
-#define	DEFAULT_CONFIG_FILE "meta.conf"
-
 #define PATH_LEN (_POSIX_PATH_MAX)
 #define MAX_PATHS 256
 
@@ -305,7 +302,8 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
   sprintf(pn, "%s%s",fn, ".baf");
   if(!(fd = fopen(pn, "w"))) {
     ATwarning("%s: cannot create\n", pn);
-  } else {
+  }
+  else {
     ATwriteToBinaryFile(t,fd);
     fclose(fd);
   }
@@ -615,9 +613,10 @@ ATerm save_parsetable(int cid, char *name, char *fn, ATerm table)
 {
   FILE *fd = NULL;
 
-  if(!(fd = fopen(fn, "w"))) {
+  if (!(fd = fopen(fn, "w"))) {
     ATwarning("%s: cannot create\n", fn);
-  } else {
+  }
+  else {
     ATwriteToBinaryFile(table,fd);
     fclose(fd);
   }
@@ -632,9 +631,10 @@ ATerm save_text_file(int cid, char *filename, char *text)
 {
   FILE *file;
 
-  if(!(file = fopen(filename, "w"))) {
+  if (!(file = fopen(filename, "w"))) {
     ATwarning("%s: cannot create\n", filename);
-  } else {
+  } 
+  else {
     fputs(text, file);
     fclose(file);
   }
