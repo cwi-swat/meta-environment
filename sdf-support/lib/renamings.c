@@ -146,33 +146,6 @@ SDF_Renamings SDF_renameRenamings(SDF_Renamings sources, SDF_Renamings targets)
 
 /*}}}  */
 
-/*{{{  static SDF_Module rename_modulename_in_module(SDF_Module module, */
-
-static SDF_Module rename_modulename_in_module(SDF_Module module,
-                                       SDF_ModuleId oldModuleName,
-                                       SDF_ModuleId newModuleName)
-{
-  SDF_Sections sections = SDF_getModuleSections(module);
-  SDF_ImpSectionList impSections = SDF_getModuleList(module);
-  SDF_ImpSectionList newImpSections =
-    rename_modulename_in_impsections(impSections, oldModuleName, newModuleName);
-
-  module = SDF_setModuleList(module, newImpSections);
-
-  if (SDF_hasSectionsList(sections)) {
-    SDF_SectionList sectionList = SDF_getSectionsList(sections);
-    SDF_SectionList newSectionList =
-      rename_modulename_in_sectionlist(sectionList, 
-                                       oldModuleName, 
-                                       newModuleName);
-    SDF_Sections newSections = SDF_setSectionsList(sections, newSectionList);
-    module = SDF_setModuleSections(module, newSections);
-  }
-
-  return module;
-}
-
-/*}}}  */
 /*{{{  static SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam, */
 
 static SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam,
