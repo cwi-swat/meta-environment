@@ -1,0 +1,70 @@
+equations
+
+  [cp-1'1] count-kernel-prods(Definition, 0) = Int1,
+           count-lex-prods(Definition, 0) = Int2,
+           count-cf-prods(Definition, 0) = Int3,
+           count-reject-prods(Definition, 0) = Int4,
+           count-follow-restricts(Definition, 0) = Int5,
+           count-priorities(Definition, 0) = Int6
+           ======================================
+           count-prods(definition Definition) = 
+kernel functions       Int1
+lexical functions      Int2
+context-free functions Int3
+reject functions       Int4
+follow restrictions    Int5
+priorities             Int6
+
+  [ckp-1'1] count-kernel-prods(lexical syntax Productions, Int) = Int
+
+  [ckp-1'2] count-kernel-prods(context-free syntax Productions, Int) = Int
+
+  [ckp-1'3] count-kernel-prods(variables Productions, Int) = Int
+
+  [ckp-1'4] count-kernel-prods(lexical variables Productions, Int) = Int
+
+  [ckp-1'5] count-kernel-prods(context-free priorities Priorities, Int) = Int
+
+  [ckp-1'6] count-kernel-prods(lexical priorities Priorities, Int) = Int
+
+  [ckp-1'7] count-kernel-prods(priorities Priorities, Int) = Int
+
+  [ckp-1'8] count-kernel-prods(Production, Int) = Int+1
+
+  [ccp-1'1] count-cf-prods(syntax Productions, Int) = Int
+
+  [ccp-1'2] count-cf-prods(lexical syntax Productions, Int) = Int
+
+  [ccp-1'3] count-cf-prods(variables Productions, Int) = Int
+
+  [ccp-1'4] count-cf-prods(lexical variables Productions, Int) = Int
+
+  [ccp-1'5] count-cf-prods(context-free priorities Priorities, Int) = Int
+
+  [ccp-1'6] count-cf-prods(lexical priorities Priorities, Int) = Int
+
+  [ccp-1'7] count-cf-prods(priorities Priorities, Int) = Int
+
+  [ccp-1'8] count-cf-prods(Production, Int) = Int+1
+
+  [clp-1'1] count-lex-prods(syntax Productions, Int) = Int
+
+  [clp-1'2] count-lex-prods(context-free syntax Productions, Int) = Int
+
+  [clp-1'3] count-lex-prods(variables Productions, Int) = Int
+
+  [clp-1'4] count-lex-prods(lexical variables Productions, Int) = Int
+
+  [clp-1'5] count-lex-prods(context-free priorities Priorities, Int) = Int
+
+  [clp-1'6] count-lex-prods(lexical priorities Priorities, Int) = Int
+
+  [clp-1'7] count-lex-prods(priorities Priorities, Int) = Int
+
+  [clp-1'8] count-lex-prods(Production, Int) = Int+1
+
+  [crp-1'1] count-reject-prods(Symbols -> Symbol {reject}, Int) = Int+1
+
+  [cfr-1'1] count-follow-restricts(Symbols -/- Lookaheads, Int) = Int+1
+
+  [cp-1'1] count-priorities(Priority, Int) = Int+1

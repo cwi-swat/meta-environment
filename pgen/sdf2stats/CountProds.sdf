@@ -1,0 +1,45 @@
+module CountProds
+
+imports
+  Sdf2-Syntax Integers
+
+exports
+  sorts IntPair
+  context-free syntax
+    "kernel" "functions"       Int 
+    "lexical" "functions"      Int 
+    "context-free" "functions" Int 
+    "reject" "functions"       Int  
+    "follow" "restrictions"    Int 
+    "priorities"               Int -> IntPair
+
+    "count-prods" "(" SDF ")" -> IntPair
+
+hiddens
+  context-free syntax
+    "count-kernel-prods" (Definition, Int)      -> Int {traverse}
+    "count-kernel-prods" (Grammar, Int)         -> Int {traverse}
+    "count-kernel-prods" (Production, Int)      -> Int {traverse}
+    "count-lex-prods" (Definition, Int)         -> Int {traverse}
+    "count-lex-prods" (Grammar, Int)            -> Int {traverse}
+    "count-lex-prods" (Production, Int)         -> Int {traverse}
+    "count-cf-prods" (Definition, Int)          -> Int {traverse}
+    "count-cf-prods" (Grammar, Int)             -> Int {traverse}
+    "count-cf-prods" (Production, Int)          -> Int {traverse}
+    "count-reject-prods" (Definition, Int)      -> Int {traverse}
+    "count-reject-prods" (Production, Int)      -> Int {traverse}
+    "count-follow-restricts" (Definition, Int)  -> Int {traverse}
+    "count-follow-restricts" (Restriction, Int) -> Int {traverse}
+    "count-priorities" (Definition, Int)        -> Int {traverse}
+    "count-priorities" (Priority, Int)          -> Int {traverse}
+
+  variables
+    "Definition"[0-9]*  -> Definition
+    "Int"[0-9]*         -> Int
+    "Lookaheads"[0-9]*  -> Lookaheads
+    "Productions"[0-9]* -> Productions
+    "Production"[0-9]*  -> Production
+    "Priorities"[0-9]*  -> Priorities
+    "Priority"[0-9]*    -> Priority
+    "Symbol"[0-9]*      -> Symbol
+    "Symbols"[0-9]*     -> Symbols
