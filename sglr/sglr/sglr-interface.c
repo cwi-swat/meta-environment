@@ -224,12 +224,14 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
   if((SG_DEBUG || SG_SHOWSTAT) && sg_numtokens >= 0)
     ATfprintf(SGlog(), "File %s contains %d input tokens\n", FN, sg_numtokens);
   SG_inputFile = SGopenFile(prgname, NULL, FN);
-  if (SG_VERBOSE)
-    if (sg_numtokens != -1)
+  if (SG_VERBOSE) {
+    if (sg_numtokens != -1) {
       ATfprintf(stderr, "%s: parsing file %s (%d tokens)\n",
                 prgname, FN, sg_numtokens);
-    else
+    } else {
       ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
+    }
+  }
   ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G?(*G?G:0):NULL, SG_GetChar);
   SGcloseFile(SG_inputFile);
   return ret ? ret : (ATerm) ATempty;
