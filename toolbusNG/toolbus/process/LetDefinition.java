@@ -3,6 +3,8 @@
  */
 
 package toolbus.process;
+import java.util.*;
+
 import toolbus.*;
 import toolbus.atom.AtomSet;
 
@@ -21,6 +23,10 @@ public class LetDefinition implements ProcessExpression {
   public ProcessExpression copy() {
     return new LetDefinition(formals, PE.copy());
   }
+  
+  public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+    PE.expand(P, calls);
+   }
 
   public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
     Environment env = P.getEnv();

@@ -1,5 +1,7 @@
 package toolbus.process;
 
+import java.util.Stack;
+
 import toolbus.ToolBusException;
 import toolbus.atom.AtomSet;
 
@@ -17,6 +19,11 @@ public class Merge implements ProcessExpression {
     expansion = new Alternative(new LeftMerge(left, right), new LeftMerge(right, left));
   }
 
+ public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+    left.expand(P, calls);
+    right.expand(P, calls);
+   }
+ 
   public void compile(ProcessInstance processInstance, AtomSet followSet) throws ToolBusException {
     expansion.compile(processInstance, followSet);
   }

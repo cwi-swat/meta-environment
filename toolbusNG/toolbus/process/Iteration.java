@@ -3,6 +3,8 @@ package toolbus.process;
  * @author paulk
  */
 
+import java.util.*;
+
 import toolbus.ToolBusException;
 import toolbus.atom.AtomSet;
 
@@ -21,6 +23,11 @@ public class Iteration extends AbstractProcessExpression {
   public String toString() {
     return "Iter(" + left.toString() + ", " + right.toString() + ")";
   }
+  
+  public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+    left.expand(P, calls);
+    right.expand(P, calls);
+   }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     right.compile(P, follow);

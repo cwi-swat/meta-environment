@@ -1,19 +1,12 @@
 package toolbus.process;
 
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
-import aterm.AFun;
-import aterm.ATerm;
-import aterm.ATermList;
-
-import toolbus.Environment;
-import toolbus.TBTerm;
-import toolbus.ToolBus;
-import toolbus.ToolBusException;
-import toolbus.atom.Atom;
-import toolbus.atom.AtomSet;
+import toolbus.*;
+import toolbus.atom.*;
 import toolbus.tool.ToolInstance;
+
+import aterm.*;
 
 /**
  * @author paulk, Jul 23, 2002
@@ -29,29 +22,29 @@ public class ProcessInstance {
   private ToolInstance toolinstance;
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-  	
-  	ProcessDefinition def = TB.getProcessDefinition(name);
-  	
-  	env = new Environment();
-  	ProcessExpression PE = def.compile(this, empty, actuals);
-  	
-    Vector procs = TB.getProcesses();
-    
-    AFun afun = TBTerm.factory.makeAFun(name, 1, false);
-	processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-		
     toolbus = TB;
+    ProcessDefinition def = TB.getProcessDefinition(name);
 
-    atoms = PE.getAtoms();
+    env = new Environment();
+    ProcessExpression call = new ProcessCall(name, actuals);
+    call.expand(this, new Stack());
+    call.compile(this, empty);
+
+    Vector procs = TB.getProcesses();
+
+    AFun afun = TBTerm.factory.makeAFun(name, 1, false);
+    processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
+
+    atoms = call.getAtoms();
     for (int i = 0; i < procs.size(); i++) {
       ((ProcessInstance) procs.elementAt(i)).findPartners(atoms);
     }
-    prefix = PE.getFirst();
+    prefix = call.getFirst();
     env.setExecuting();
-    
+
     toolinstance = def.createToolInstance();
 
-    System.out.println(processId + ": " + PE);
+    System.out.println(processId + ": " + call);
     System.out.println(processId + ": atoms: =" + atoms);
     System.out.println(processId + ": prefix = " + prefix);
     for (Iterator it = atoms.getAtomsAsVector().iterator(); it.hasNext();) {
@@ -71,15 +64,15 @@ public class ProcessInstance {
   public ATerm getProcessId() {
     return processId;
   }
-  
-  public ToolInstance getToolInstance(){
-  	return toolinstance;
+
+  public ToolInstance getToolInstance() {
+    return toolinstance;
   }
-  
-  public void terminate(String msg){
-  	if(toolinstance != null){
-  		toolinstance.terminate(msg);
-  	}
+
+  public void terminate(String msg) {
+    if (toolinstance != null) {
+      toolinstance.terminate(msg);
+    }
   }
 
   public void findPartners(AtomSet a) {
