@@ -76,7 +76,7 @@ in
   if not-equal(Tree, error-tree) then
     snd-msg(get-editor-name(EditorId)) .
     rec-msg(editor-name(FileName?)) .
-    snd-msg(addPosInfo(FileName, Tree)) .
+    snd-msg(add-posinfo(FileName, Tree)) .
     rec-msg(tree-with-pos-info(NewTree?)) .
     snd-msg(replace-focus(EditorId, Focus, NewTree)) .
     snd-msg(parse-ok(ModuleId))

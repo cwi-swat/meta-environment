@@ -70,7 +70,7 @@ in
       rec-msg(sm-module-path(Path?)) .
       snd-msg(io-get-filename(Path, ModuleId, ".sdf")) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(addPosInfo(FileName, SyntaxTree)) .
+      snd-msg(add-posinfo(FileName, SyntaxTree)) .
       rec-msg(tree-with-pos-info(SyntaxTree?)) .
       snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
@@ -143,8 +143,8 @@ in
     rec-msg(ts-value(Path?)) .
     snd-msg(io-get-filename(Path, Name, ".asf")) .
     rec-msg(io-filename(FileName?)) .
-    printf("DEBUG: addPosinfo used to be restricted to a certain depth\n") .
-    snd-msg(addPosInfo(FileName,EqsTree)) .
+    printf("DEBUG: magical value 4 for depth of posinfo!\n") .
+    snd-msg(add-posinfo-to-depth(FileName,EqsTree,4)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
     snd-msg(eqs-updated)
