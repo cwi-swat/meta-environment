@@ -83,7 +83,7 @@ snd-do(Mdb, create-module-db).
   snd-do(Mdb, clear-module-db)
 +
 /* Delete one module from the db */
-  rec-msg(delete-module(Name?)).
+  rec-msg(delete-module-from-db(Name?)).
   snd-eval(Mdb, delete-module(Name)).
   rec-value(Mdb, changed-modules(ChngMods?)).
   snd-msg(changed-modules(ChngMods))
