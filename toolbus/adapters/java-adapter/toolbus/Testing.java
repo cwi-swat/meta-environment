@@ -13,7 +13,7 @@ public class Testing
   public static final void main(String[] args)
     throws IOException
   {
-    Testing testing = new Testing(args);
+    new Testing(args);
   }
 
   public Testing(String[] args)

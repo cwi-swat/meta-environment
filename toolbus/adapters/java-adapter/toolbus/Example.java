@@ -18,7 +18,7 @@ public class Example
   public static final void main(String[] args)
     throws IOException
   {
-    Example example = new Example(args);
+    new Example(args);
   }
 
   public Example(String[] args)
