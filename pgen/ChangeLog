@@ -1,5 +1,8 @@
 $Id$
 
+2002/04/18 (vandenbr@cwi.nl)
+ * sdfchecker is now "Renaming compliant".
+ 
 2002/03/25 (vandenbr@cwi.nl)
  * Added -s switch to sdf2table to call the sdfchecker.
 

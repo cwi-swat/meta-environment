@@ -28,4 +28,14 @@ equations
             get-hidden-imports($Module, $ImportsSet1) = $ImportsSet2
             ========================================================
             get-all-imports($Module) = $ImportsSet2
+
+  [gmn-1'1] get-modulename($ModuleName) = $ModuleName
+
+  [gmn-1'2] get-modulename($ModuleName $Renamings) = $ModuleName
+
+  [hr-1'1] has-renamings($ModuleName) = false
+
+  [hr-1'2] has-renamings($ModuleName $Renamings) = true
+
+  [gr-1'1] get-renamings($ModuleName $Renamings) = $Renamings
               

@@ -68,6 +68,7 @@ hiddens
     "ModuleInfo"[0-9]*       -> Module-Info
     "Symbol*"[0-9]*          -> Symbol*
     "SymbolsSet"[0-9]*       -> SymbolsSet
+    "Import"[0-9]*           -> Import
     "Import*"[0-9]*          -> Import*
     "Production*"[0-9]*      -> Production*
     "ProductionsSet"[0-9]*   -> ProductionsSet

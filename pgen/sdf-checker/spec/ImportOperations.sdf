@@ -1,6 +1,6 @@
 module ImportOperations
 
-imports ModuleOperations
+imports Booleans ModuleOperations
 
 exports
   sorts ImportRelation ImportRelations ImportsSet
@@ -32,10 +32,17 @@ exports
   context-free syntax
     get-all-imports(Module) -> ImportsSet
 
+exports
+  context-free syntax
+    get-modulename(Import) -> ModuleName
+    has-renamings(Import)  -> Bool
+    get-renamings(Import)  -> Renamings
+
 hiddens
   variables
     "$Definition"[0-9]*	     -> Definition
     "$ModuleName"[0-9]*      -> ModuleName
+    "$Renamings"[0-9]*       -> Renamings
     "$ModuleId"[0-9]*        -> ModuleId
     "$Module"[0-9]*          -> Module
 
