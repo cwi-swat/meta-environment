@@ -59,18 +59,37 @@ four steps:
        Address a1 = ab.getAddress("hayco");
      }
    }
-   
-[sharing]
- * Naive sharing approach does not work:
 
-    String shared = new String("Balistraat 130 II");
-    add("hayco", shared);
-    add("loge", shared);
 
-  Result in client:
-    hayco: a1 = Balistraat 130 II
-    loge : a2 = Balistraat 130 II
 
-    a1.equals(a2): true
-    a1 == a2     : false
+DATA TRANSFER
+-------------
+[PASS BY VALUE]
+* By default, local objects are passed by copy, which means that all data members (or fields)
+  of an object are copied, except those marked as static or transient.
+  Thus, in the AddressBook example, if Address is written as a class:
+  
+  public class Address implements Serializable {
+    private String street;
+    private int number;
+    public Address(String street, int number) {this.street = street; this.number = number}
+	public String getStreet() { return street;}
+    public int getNumber() { return number;}
+  }
 
+  then the getAddress() method in AddressBookImpl returns serialized /copies/ of the corresponding
+  Address instance.
+
+[PASS BY REFERENCE]
+* Remote objects are passed by reference. A reference to a remote object is actually a reference
+  to a stub, which is a client-side proxy for the remote object.
+  A class is made into a "remote object" by splitting it into an interface that extends Remote
+  (see the AddressBook interface) and an implementation (as per the AddressBookImpl). Each instance
+  is then required to be registered to the rmi-registry, either because the implementation extends
+  UnicastRemoteObject, or by explicit invocation of UnicastRemoteObject.exportObject();
+  
+  Remote references can thus be obtained in two ways:
+  1. by explicit lookups in the rmi-registry: Naming.lookup("rmi://localhost/AddressBookService");
+  2. by parameter passing/return value: public Address getAddress(String name); will return a reference
+     to a remote instance of the implementation of the Address interface.
+     
