@@ -131,6 +131,7 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	in-output/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
+	compiler/Makefile \
 , chmod +x meta install-prog-sh install-data-sh; \
   chmod +x graph-browser/graph-browser editor/editor \
 )

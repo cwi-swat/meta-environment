@@ -1258,6 +1258,7 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	in-output/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
+	compiler/Makefile \
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1324,6 +1325,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	in-output/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
+	compiler/Makefile \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
