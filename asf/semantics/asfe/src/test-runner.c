@@ -71,10 +71,12 @@ static ATermList testAll(ASF_ASFTestEquationTestList tests)
 /*}}}  */
 /*{{{  ATermList runTests(ASF_ASFConditionalEquationList eqs, */
 
-ATermList runTests(ASF_ASFConditionalEquationList eqs,
-		   ASF_ASFTestEquationTestList tests)
+ATerm runTests(ASF_ASFConditionalEquationList eqs,
+	       ASF_ASFTestEquationTestList tests)
 {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
+   int numberOfTests = ATgetLength((ATermList)tests);
+   ATermList failed = NULL;
 
    if (runVerbose) {
      ATwarning("initializing...\n");
@@ -99,7 +101,11 @@ ATermList runTests(ASF_ASFConditionalEquationList eqs,
      ATwarning("running tests...\n");
    }
 
-   return testAll(tests);
+   failed = testAll(tests);
+
+   return ATmake("test-results(<int>,<int>,<term>)", 
+		 numberOfTests, ATgetLength(failed), failed);
+
 }
 
 /*}}}  */

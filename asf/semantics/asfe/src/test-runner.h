@@ -4,7 +4,7 @@
 #include <aterm2.h>
 #include <ASFME.h>
 
-ATermList runTests(ASF_ASFConditionalEquationList eqs,
-		   ASF_ASFTestEquationTestList tests);
+ATerm runTests(ASF_ASFConditionalEquationList eqs,
+	       ASF_ASFTestEquationTestList tests);
 
 #endif

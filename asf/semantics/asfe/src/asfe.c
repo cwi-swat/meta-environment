@@ -167,7 +167,7 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   result = (ATerm) runTests(eqsList, testList);
 
   if (RWgetError() == NULL) {
-    return ATmake("snd-value(test-results(<term>))", result);
+    return ATmake("snd-value(<term>)", result);
   }
   else {
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());

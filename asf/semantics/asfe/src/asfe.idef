@@ -11,7 +11,10 @@ let
   Id         : term,
   Tide       : term,
   TestResults : term,
-  Tests : term
+  Tests : term,
+  Tags : term,
+  Total : int,
+  Failed : int
 in
   Id := process-id .
   Tide := off .
@@ -37,8 +40,8 @@ in
     execute(asfe, Eval?) .
     snd-eval(Eval, run-tests(ModuleName, Equations, Tests)) .
     (
-      rec-value(Eval, test-results(TestResults?)) .
-      snd-msg(test-results(TestResults))
+      rec-value(Eval, test-results(Total?, Failed?, Tags?)) .
+      snd-msg(test-results(Total, Failed, Tags))
     ) .
     Equations := none .
     Tests := none
