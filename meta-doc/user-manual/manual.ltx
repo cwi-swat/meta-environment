@@ -1944,32 +1944,6 @@ exports
 \caption{Lexical definition of String}\label{CODE:string}
 \end{figure}   
 
-\paragraph{Defining Comments}
-
-It is impossible to give {\em one} lexical definition of
-comments. In Figure \ref{CODE:c-comment} we give an example in which 
-comments may be nested like in C.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Comment
-
-imports Layout
-
-exports
-  sorts ComWord Comment
-  lexical syntax
-    ~[\ \n\t\/]+ -> ComWord
-
-  context-free syntax
-    "/*" ComWord * "*/" -> Comment
-    Comment             -> LAYOUT
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Lexical definition of C comments}\label{CODE:c-comment}
-\end{figure}
-
 \subsection{Context-free Syntax} \label{ContexFreeSyntax}
 
 The context-free syntax describes the concrete and abstract syntactic
@@ -2383,7 +2357,8 @@ exports
 \label{LexicalRestrictions}
 
 One of the disambiguation rules on the lexical level is prefer longest match,
-the disambiguation will be discussed in more detail in \ref{lex-ambiguaty}.
+the disambiguation will be discussed in more detail in 
+Section \ref{lex-ambiguity}.
 The restrictions offer the notion to express this lexical disambiguation
 rule.
 
@@ -2397,26 +2372,27 @@ There are two different restrictions:
 \item context-free restrictions.
 \end{itemize}
 
-The general form of a restriction is 
+\noindent The general form of a restriction is 
 
 \begin{verbatim}
 <Symbol>+ -/- <Lookaheads>
 \end{verbatim}
 
-Where <Symbol> is in case of lexical restrictions either a literal
+\noindent Where {\tt <Symbol>} is in case of lexical restrictions 
+either a literal
 or a sort, and in case of context-free restrictions only sort is
 allowed. The {\tt Lookaheads} are slightly more complex.
 The most compact way is to give the \sdf\ definition of the
 {\tt Lookaheads} and illustrate its use by means of some examples.
 
 \begin{verbatim}
-  context-free syntax
-    CharClass                    -> Lookahead
-    CharClass "." Lookaheads     -> Lookahead
-    Lookahead                    -> Lookaheads
-    Lookaheads "|" Lookaheads    -> Lookaheads {right}
-    "(" Lookaheads ")"           -> Lookaheads {bracket}
-    "[[" {Lookahead ","}* "]]"   -> Lookaheads 
+context-free syntax
+  CharClass                    -> Lookahead
+  CharClass "." Lookaheads     -> Lookahead
+  Lookahead                    -> Lookaheads
+  Lookaheads "|" Lookaheads    -> Lookaheads {right}
+  "(" Lookaheads ")"           -> Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -> Lookaheads 
 \end{verbatim}
 
 The first example is how the lexical restrictions can be used to
@@ -2427,7 +2403,8 @@ The lexical restriction enforces the recognition of for instance {\tt letter}
 as a 6 character long lexical token instead of the keyword {\tt let}
 followed by {\tt ter} which is then recognized as a {\tt Var}.
 The context-free restriction forbids that a variable may be directly
-followed by a letter. This latter context-free restriction ....
+followed by a letter. This latter context-free restriction can also
+be formulated as a lexical restriction.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2455,6 +2432,60 @@ exports
 \caption{Simple functional language}\label{CODE:functional}
 \end{figure}   
 
+The second example illustrates the use of restrictions in order to
+define a `safe' way of layout.
+Between the members in the left-hand side of a
+context-free syntax rule optional layout may be recognized. However,
+if a such a member recognizes the empty string, this gives rise to
+a lexical ambiguity, see Section \ref{lex-ambiguity}. 
+So, the safe way of defining {\tt LAYOUT} is
+presented in Figure \ref{CODE:safe-layout}.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Layout
+
+exports
+  lexical syntax
+    [\ \t\n] -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n]
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
+\end{figure}
+
+The last example illustrates the use of the look aheads to improve
+the layout definition in combination with a definition of comments.
+Although it is impossible to give {\em one} lexical definition of
+comments.
+In Figure \ref{CODE:c-comment} the definition of the C comments
+were presented.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Comment
+
+imports Layout
+
+exports
+  sorts ComWord Comment
+  lexical syntax
+    ~[\ \n\t\/]+ -> ComWord
+
+  context-free syntax
+    "/*" ComWord * "*/" -> Comment
+    Comment             -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\/].[\*]
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Definition of C comments}\label{CODE:c-comment-improved}
+\end{figure}
 
 
 \subsection{Variables} \label{Variables}
@@ -2548,6 +2579,7 @@ module Identifiers-restrict
 imports Layout
 
 exports
+  sorts Id
   lexical syntax
     [a-zA-Z][a-zA-Z0-9]* -> Id
 
@@ -2629,26 +2661,7 @@ exports
 \end{figure}   
 
 \paragraph{Prefer Non-Layout} Eliminate all interpretations of the text 
-as layout symbol. Between the members in the left-hand side of a
-context-free syntax rule optional layout may be recognized. However,
-if a such a member recognizes the empty string, this gives rise to
-a lexical ambiguity. So, the safe way of defining {\tt LAYOUT} is
-presented in Figure \ref{CODE:safe-layout}.
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Layout
-
-exports
-  lexical syntax
-    [\ \t\n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
-\end{figure}
+as layout symbol. 
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
 variable (as defined in a variables section) over interpretation as a 
@@ -3170,6 +3183,52 @@ the equations sections should be error free.
 
 \end{itemize}
 
+If these requirements are fulfilled the C code can be generated.
+This process C code generation is described in \cite{BKO99} in
+detail.
+We shall give a brief description of the main steps performed by the
+\asfsdf2C compiler.
+
+In \asfsdf\ there is {\em no} restriction in which module an equation
+is defined, except that all applied syntax rules should be defined.
+This freedom asks for a `reshuffling' of the equations given the
+set of defined syntax rules. This reshuffling is needed because for
+each syntax rule a separate C function is generated. This C function
+must contain the C code for {\em all} equations with the C function
+as outermost function symbol in the left-hand side.
+By having all equations with the same outermost function
+symbol in the left-hand side together an optimal matching automaton
+can be generated.
+Equations with the same outermost function symbol are moved to the 
+corresponding syntax rule.
+This syntax rule together with the equations is `stored' in an
+intermediate module `$\mbox{\tt AUX-M}_{ij}$' where $\mbox{\tt M}_i$
+is the module which contained the definition of the syntax rule.
+
+XXX Example??? XXX
+
+These intermediate modules are input to the actual \asfsdf2C compiler.
+For each $\mbox{\tt AUX-M}_{ij}$ module a separate C file is generated
+in the {\tt COMPILER\_OUTPUT} directory.
+
+XXX Example??? XXX
+
+Upon completion of the code generation process a {\tt Makefile} is 
+generated.
+When compiling this generated C code, a library is constructed
+as well an executable. This library can be used in order to
+combine various compiled specifications in an efficient way
+or to combine compiled specifications with `hand-written' C code.
+
+The \asfsdf2C compiler has some notion of incremental compilation.
+The intermediate $\mbox{\tt AUX-M}_{ij}$ modules are stored
+in the {\tt COMPILER\_OUTPUT} directory together with the generated
+C files. If when recompiling the specification after modifications
+the compiler first checks whether for each
+new generated intermediate $\mbox{\tt AUX-M}_{ij}$ module
+differs from the stored one. If so, new C code is generated, but
+if they are equal {\em no} new C code will be generated.
+
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
 
@@ -3337,7 +3396,6 @@ assign ;
 goto xx ; 
 label xxx
 \end{verbatim}
-
 
 \noindent Figure \ref{CODE:basicnotions} defines the 
 sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
@@ -3558,6 +3616,16 @@ equations
 \end{IncCode}
 \caption{\asfsdf\ specification for CodeGenerator}\label{CODE:codegenerator}
 \end{figure}
+
+\subsection{Large \asfsdf\ specifications}
+
+There are a number of very large \asfsdf\ specifications:
+\begin{itemize}
+\item the \asfsdf2C compiler.
+\item a part of the parse table generator for \sdf2.
+\item the syntax and type checking of a domain specific language for
+describing financial products. 
+\end{itemize}
 
 \section{Miscellaneous}
 
