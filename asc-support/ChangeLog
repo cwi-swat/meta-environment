@@ -1,5 +1,9 @@
 $Id$
 
+2001/08/27 ({jong,markvdb}@cwi.nl)
+ * Version 1.2beta
+ * Fixed a bug in function listToTree. 
+
 2001/07/27 ({jong,markvdb}@cwi.nl)
  * fixed memory-leak in call_unknown
 

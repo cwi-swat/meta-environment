@@ -77,6 +77,8 @@ static size_t getTermStore(size_t size)
 {
   size_t old_begin;
 
+  assert(size > 0);
+
   if (term_store_size <= size + term_store_end) {
     size_t old_size = term_store_size;
     ATunprotectArray((ATerm*) term_store);
@@ -161,33 +163,35 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     sepTree = PT_makeTreeLit(PT_getSymbolString(sepSym));
   }
 
-  /* get a free part of the term store */
-  index = getTermStore(ATgetLength(elems));
+  if (!ATisEmpty(elems)) {
+    /* get a free part of the term store */
+    index = getTermStore(ATgetLength(elems));
 
-  for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
-    ASSERT_VALID_INDEX(i);
-    TERM_STORE[i++] = termToTree(ATgetFirst(elems));
-  } 
+    for (i = 0; !ATisEmpty(elems); elems = ATgetNext(elems)) {
+      ASSERT_VALID_INDEX(i);
+      TERM_STORE[i++] = termToTree(ATgetFirst(elems));
+    } 
 
-  while(--i >= 0) {
-    args = PT_makeArgsList(TERM_STORE[i], args);
+    while(--i >= 0) {
+      args = PT_makeArgsList(TERM_STORE[i], args);
 
-    if (i != 0) {
-      if (sepTree) {
-	if (contextfree) {
+      if (i != 0) {
+        if (sepTree) {
+	  if (contextfree) {
+	    args = PT_makeArgsList(layout, args);
+	  }
+	  args = PT_makeArgsList(sepTree, args);
+        }
+
+        if (contextfree) {
 	  args = PT_makeArgsList(layout, args);
-	}
-	args = PT_makeArgsList(sepTree, args);
-      }
-
-      if (contextfree) {
-	args = PT_makeArgsList(layout, args);
+        }
       }
     }
-  }
 
-  /* release my part of the term store */
-  resetTermStoreTo(index);
+    /* release my part of the term store */
+    resetTermStoreTo(index);
+  }
 
   return PT_makeTreeAppl(prod, args);
 }
