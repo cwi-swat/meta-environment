@@ -1,3 +1,6 @@
+2002/02/07 (jurgenv@cwi.nl)
+ * Release 0.8
+
 2002/01/29 (vandenbr@loria.fr)
  * Fixed the efficiency bug discovered by Leon Moonen and
    Juergen Stuber. Replaced PT_appendArgs by PT_insertArgs
