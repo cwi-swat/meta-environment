@@ -820,23 +820,23 @@ $Error]>
 	=====================================
 	check(forall($SimpleGen | $Test), $Tenv) = <bool, $Tenv'''>
 
+%% ---- Function applications
+
 %% ---- collect-actuals
 
-[ca1] check($Exp, $Tenv) = <$Etype, $Tenv'>,
-      collect-actuals($Exp*, $Tenv') = < [$Etype*], $Tenv''>
-      ===========================================
-      collect-actuals($Exp, $Exp*, $Tenv) = <[$Etype, $Etype*], $Tenv''>
+[ca1]	check($Exp, $Tenv) = <$Etype, $Tenv'>,
+	collect-actuals($Exp*, $Tenv') = < [$Etype*], $Tenv''>
+	===========================================
+	collect-actuals($Exp, $Exp*, $Tenv) = <[$Etype, $Etype*], $Tenv''>
 
-[ca2] collect-actuals( , $Tenv) = <[], $Tenv>
+[ca2]	collect-actuals( , $Tenv) = <[], $Tenv>
 
-%% --- Check function application
+%% ---- Check function application
 
 [check-appl] 
-      collect-actuals($Exp*, $Tenv) = <$Etype, $Tenv'>
-      ============================================
-      check($Var ( $Exp* ), $Tenv) = find-result-type($Var, $Etype, $Tenv')
-
-
+	collect-actuals($Exp*, $Tenv) = <$Etype, $Tenv'>
+	============================================
+	check($Var ( $Exp* ), $Tenv) = find-result-type($Var, $Etype, $Tenv')
 
 %% ---- add-formals
 
@@ -859,9 +859,9 @@ $Error]>
 
 %% Extract the types from a list of formal parameters
 
-[et1]  extract-types([$DclVar*]) = [$Etype*]
-       ===========================================
-      extract-types([$Etype $Var, $DclVar*]) = [$Etype, $Etype*]
+[et1]	extract-types([$DclVar*]) = [$Etype*]
+	===========================================
+	extract-types([$Etype $Var, $DclVar*]) = [$Etype, $Etype*]
 
 [et2] extract-types([]) = []
 
@@ -882,13 +882,13 @@ $Error]>
 %% ---- Check function declarations
 
 [check-fundef] 
-       check-not-defined($Var, $Tenv) = $Tenv1,
-       add-formals([$DclVar*], $Tenv1) = $Tenv2,
-       require-type($Exp, $Etype, $Tenv2) = $Tenv3,      
-       del-formals([$DclVar*], $Tenv3) = $Tenv4, 
-       store($Tenv4, $Var, fun extract-types([$DclVar*]) to $Etype) = $Tenv5 
-       ===========================================
-       check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
+	check-not-defined($Var, $Tenv) = $Tenv1,
+	add-formals([$DclVar*], $Tenv1) = $Tenv2,
+	require-type($Exp, $Etype, $Tenv2) = $Tenv3,      
+	del-formals([$DclVar*], $Tenv3) = $Tenv4, 
+	store($Tenv4, $Var, fun extract-types([$DclVar*]) to $Etype) = $Tenv5 
+	===========================================
+	check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
 
 %% ---- Check type declarations
 
@@ -945,80 +945,77 @@ $Error]>
 [default-check]
 	check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
 
+%% ---- Find result type of a function, given list of argument types
 
-%% Find result type of a function, given list of argument types
+[frt1]	lookup($Tenv, $Var) = not-in-table
+	==================================
+	find-result-type($Var, [$Etype*], $Tenv) = <undefined, $Tenv + Undeclared $Var>
 
-[xxx] lookup($Tenv, $Var) = not-in-table
-      ==================================
-      find-result-type($Var, [$Etype*], $Tenv) = <undefined, $Tenv + Undeclared $Var>
+[frt2]	lookup($Tenv, $Var) = fun [$Etype*2] to $Etype,
+	match-types([$Etype*2],  [$Etype*1], new-table, $Tenv) = <true, $Table>
+	===========================================
+	find-result-type($Var, [$Etype*1], $Tenv) = substitute($Etype, $Table, $Tenv)
 
-[xxx] lookup($Tenv, $Var) = fun [$Etype*2] to $Etype,
-      match-types([$Etype*2],  [$Etype*1], new-table) = <true, $Table>
-     ===========================================
-      find-result-type($Var, [$Etype*1], $Tenv) = substitute($Etype, $Table, $Tenv)
-
-[default-xxx]
-      find-result-type($Var, [$Etype*1], $Tenv) = <undefined, $Tenv + No definition for $Var with argument [$Etype*1]>
+[default-frt]
+	find-result-type($Var, [$Etype*1], $Tenv) = <undefined, $Tenv + No definition for $Var with argument [$Etype*1]>
 
 %% ---- is-var 
 
-[iv1]	is-var($Var) = true
+[iv1]	is-var(& $Var) = true
 [default-iv] 
 	is-var($Etype) = false
 
 %% ---- match types
 
-[mt1]	is-var($Etype) = false
+[mt1]	equal-type($Etype, $Etype', $Tenv) = true
 	================================================
-	match-types($Etype, $Etype, $Table) = <true, $Table>
+	match-types($Etype, $Etype', $Table, $Tenv) = <true, $Table>
 
 [mt2]	lookup($Table, $Var) = not-in-table
-	==================================
-	match-types($Var, $Etype, $Table) = <true, store($Table, $Var, $Etype)>
+	================================================
+	match-types(& $Var, $Etype, $Table, $Tenv) = <true, store($Table, $Var, $Etype)>
 
-[mt3]	lookup($Table, $Var) = $Etype
-	==================================
-	match-types($Var, $Etype, $Table) = <true, $Table>
+[mt3]	equal-type(lookup($Table, $Var), $Etype, $Tenv) = true
+	================================================
+	match-types(& $Var, $Etype, $Table, $Tenv) = <true, $Table>
 
-[mt4]	match-types($Etype1, $Etype2, $Table) = <true, $Table'>
+[mt4]	match-types($Etype1, $Etype2, $Table, $Tenv) = <true, $Table'>
 	===================================================
-	match-types(bag[$Etype1], bag[$Etype2], $Table) =  <true, $Table'>
+	match-types(bag[$Etype1], bag[$Etype2], $Table, $Tenv) =  <true, $Table'>
 
-[mt5]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+[mt5]	match-types(rel[$Etype+], $Etype, $Table, $Tenv) = match-types(bag[<$Etype+>], $Etype, $Table, $Tenv)
+
+[mt6]	match-types($Etype, rel[$Etype+], $Table, $Tenv) = match-types($Etype, bag[<$Etype+>], $Table, $Tenv)
+
+[mt7]	match-types(<$Etype+>, <$Etype+'>, $Table, $Tenv) = <true, $Table'>
 	===================================================
-	match-types(rel[$Etype1, $Etype2], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
+	match-types(bag[<$Etype+>], bag[<$Etype+'>], $Table, $Tenv) =  <true, $Table'>
 
-[mt6]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+[mt8]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+	match-types(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Table', $Tenv) = <true, $Table''>
+	=========================================================
+	match-types(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Table, $Tenv) = <true, $Table''>
+
+[mt9]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+	match-types($Etype2, $Etype2', $Table', $Tenv) = <true, $Table''>
 	===================================================
-	match-types(rel[$Etype1, $Etype2], bag[<$Etype3, $Etype4>], $Table) =  <true, $Table''>
+	match-types(<$Etype1, $Etype2>, <$Etype1', $Etype2'>, $Table, $Tenv) =  <true, $Table''>
 
-[mt7]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+[mt10]	match-types($Etype1, $Etype1', $Table, $Tenv) = <true, $Table'>,
+	match-types([$Etype*], [$Etype*'], $Table', $Tenv) = <true, $Table''>
 	===================================================
-	match-types(bag[<$Etype1, $Etype2>], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
+	match-types([$Etype1, $Etype*], [$Etype1', $Etype*'], $Table, $Tenv) = <true, $Table''>
 
-[mt8]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
-	===================================================
-	match-types(<$Etype1, $Etype2>, <$Etype3, $Etype4>, $Table) =  <true, $Table''>
-
-[mt9]	match-types($Etype1, $Etype2, $Table) = <true, $Table'>,
-	match-types([$Etype*1], [$Etype*2], $Table') = <true, $Table''>
-	===================================================
-	match-types([$Etype1, $Etype*1], [$Etype2, $Etype*2], $Table) = <true, $Table''>
-
-[mt10]  match-types([], [], $Table) = <true, $Table>
+[mt11]  match-types([], [], $Table, $Tenv) = <true, $Table>
 
 [default-mt]
-	match-types($Etype1, $Etype2, $Table) = <false, $Table>
+	match-types($Etype1, $Etype2, $Table, $Tenv) = <false, $Table>
 
 %% ---- Substitute type
 
 [sb1]	$Etype = lookup($Table, $Var)
 	======================================================
-	substitute($Var, $Table, $Tenv) = 
+	substitute(& $Var, $Table, $Tenv) = 
 	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
 						   else <$Etype, $Tenv> fi
 
@@ -1026,15 +1023,19 @@ $Error]>
 	======================================================
 	substitute(bag[$Etype], $Table, $Tenv) = <bag[$Etype'], $Tenv>
 
-[sb3]	substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
-	substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
+[sb3]	substitute(<$Etype+>, $Table, $Tenv) = <<$Etype+'>, $Tenv'>
 	=======================================================
-	substitute(rel[$Etype1,$Etype2], $Table, $Tenv) = <rel[$Etype1', $Etype2'], $Tenv''>
+	substitute(rel[$Etype+], $Table, $Tenv) = <rel[$Etype+'], $Tenv'>
 
 [sb4]	substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
 	substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
 	=======================================================
 	substitute(<$Etype1,$Etype2>, $Table, $Tenv) = <<$Etype1', $Etype2'>, $Tenv''>
+
+[sb5]	substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
+	substitute(<$Etype2, $Etype+>, $Table, $Tenv') = <<$Etype+'>, $Tenv''>
+	=========================================================
+	substitute(<$Etype1, $Etype2, $Etype+>, $Table, $Tenv) = <<$Etype1', $Etype+'>, $Tenv''>
 
 [default-sb]
 	substitute($Etype, $Table, $Tenv) = <$Etype, $Tenv>
@@ -1042,32 +1043,32 @@ $Error]>
 %% ---- The types of the built-in functions
 
 [bi-1]  built-ins = [
-		<id,      	fun [ bag[T] ] 				to rel[T,T]>,
-      		<domain,  	fun [ rel[T1,T2] ] 			to bag[T1]>,
-     		<range,   	fun [ rel[T1,T2] ] 			to bag[T2]>,
-       		<carrier, 	fun [ rel[T,T] ] 			to bag[T]>,
-		<top,     	fun [ rel[T,T] ] 			to bag[T]>,
-		<bottom,  	fun [ rel[T,T] ] 			to bag[T]>,
-       		<inv,     	fun [ rel[T1,T2] ] 			to rel[T2,T1]>,
-		<compl,   	fun [ rel[T1, T2] ] 			to rel[T1,T2]>,
+		<id,      	fun [ bag[&T] ] 			to rel[&T,&T]>,
+      		<domain,  	fun [ rel[&T1,&T2] ] 			to bag[&T1]>,
+     		<range,   	fun [ rel[&T1,&T2] ] 			to bag[&T2]>,
+       		<carrier, 	fun [ rel[&T,&T] ] 			to bag[&T]>,
+		<top,     	fun [ rel[&T,&T] ] 			to bag[&T]>,
+		<bottom,  	fun [ rel[&T,&T] ] 			to bag[&T]>,
+       		<inv,     	fun [ rel[&T1,&T2] ] 			to rel[&T2,&T1]>,
+		<compl,   	fun [ rel[&T1, &T2] ] 			to rel[&T1,&T2]>,
 
-       		<domainR, 	fun [ rel[T1,T2], bag[T1] ]		to rel[T1,T2]>,
-       		<rangeR,    	fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
-       		<carrierR,    	fun [ rel[T,T], bag[T] ] 		to rel[T,T]>,
+       		<domainR, 	fun [ rel[&T1,&T2], bag[&T1] ]		to rel[&T1,&T2]>,
+       		<rangeR,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierR,    	fun [ rel[&T,&T], bag[&T] ] 		to rel[&T,&T]>,
 
-       		<domainX,    	fun [ rel[T1,T2], bag[T1] ] 		to rel[T1,T2]>,
-       		<rangeX,    	fun [ rel[T1,T2], bag[T2] ] 		to rel[T1,T2]>,
-       		<carrierX,    	fun [	rel[T,T], bag[T] ] 		to rel[T,T]>,
-                <first,     	fun [ <T1,T2>] 				to T1>,
-                <second,     	fun [ <T1,T2> ] 			to T2>,
+       		<domainX,    	fun [ rel[&T1,&T2], bag[&T1] ] 		to rel[&T1,&T2]>,
+       		<rangeX,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,
+       		<carrierX,    	fun [	rel[&T,&T], bag[&T] ] 		to rel[&T,&T]>,
+                <first,     	fun [ <&T1,&T2>] 				to &T1>,
+                <second,     	fun [ <&T1,&T2> ] 			to &T2>,
 
-		<power0,	fun[ bag[T] ]				to bag[bag[T]]>,
-		<power1,	fun[ bag[T] ]				to bag[bag[T]]>,
+		<power0,	fun[ bag[&T] ]				to bag[bag[&T]]>,
+		<power1,	fun[ bag[&T] ]				to bag[bag[&T]]>,
 
-		<all-paths-from,fun[ rel[T,T], bag[T] ]			to bag[rel[T,T]]>,
+		<all-paths-from,fun[ rel[&T,&T], bag[&T] ]		to bag[rel[&T,&T]]>,
 
-                <reachX,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
-                <reachR,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
+                <reachX,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
+                <reachR,  	fun [ bag[&T], bag[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
 
 		<filename,	fun [ area ]				to str >,
 		<beginline,	fun [ area ]				to int >,

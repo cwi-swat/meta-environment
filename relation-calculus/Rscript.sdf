@@ -95,7 +95,8 @@ exports
      "<" {REXPTYPE ","}+">"			-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
      "rel" "[" {REXPTYPE ","}+ "]"		-> REXPTYPE
-     RVAR				     	-> REXPTYPE
+     RVAR				     	-> REXPTYPE	%% user-defined type
+     "&" RVAR					-> REXPTYPE	%% type parameter
 
 %% Declarations and Statements
 
