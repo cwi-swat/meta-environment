@@ -38,11 +38,11 @@ HDRS         = atsets.h ksdf2table.h statistics.h
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = parsetablegen.tif.o \
-                        -L$(top_builddir)/c-source -lSdf2-Normalization \
-                        -L$(top_builddir)/c-lib -lnative \
-                        -L$(ASCLIB) -lasc-support \
-                        -L$(ASFIXLIB) -lAsFix \
-                        -L$(ATERMLIB) -lATB -lATerm \
+                        -L$(top_builddir)/pgen/c-source -lSdf2-Normalization \
+                        -L$(top_builddir)/pgen/c-lib -lnative \
+                        -L$(ASC)/lib -lasc-support \
+                        -L$(ASFIX)/lib -lAsFix \
+                        -L$(ATERM)/lib -lATB -lATerm \
                         $(SOCKLIBS)
 
 # remove built files during "make clean"

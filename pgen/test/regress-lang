@@ -32,7 +32,7 @@ mydir=`pwd`
 #echo $mydir
 MV=mv
 RM=rm
-COMPARE="$mydir/trmdiff"
+COMPARE="atdiff"
 SDF2TABLE=sdf2table
 
 reference=$mydir/tables

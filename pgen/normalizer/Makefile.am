@@ -33,11 +33,11 @@ EXTRA_DIST   = normalize-sdf.sh.src normalize-normalize-check.sh.src \
 CLEANFILES   = normalize-sdf normalize-normalize-check
 
 normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
-normalizer_LDADD   = -L$(top_builddir)/c-source -lSdf2-Normalization \
-                     -L$(top_builddir)/c-lib -lnative \
-                     -L$(ASCLIB) -lasc-support \
-                     -L$(ASFIXLIB) -lAsFix \
-                     -L$(ATERMLIB) -lATB -lATerm \
+normalizer_LDADD   = -L$(top_builddir)/pgen/c-source -lSdf2-Normalization \
+                     -L$(top_builddir)/pgen/c-lib -lnative \
+                     -L$(ASC)/lib -lasc-support \
+                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(ATERM)/lib -lATB -lATerm \
                      $(SOCKLIBS)
 
 % : %.sh.src Makefile
