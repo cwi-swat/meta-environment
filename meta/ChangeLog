@@ -5,6 +5,8 @@
  * libtool is checked only if gvim is enabled.
  * Bumped version to 0.9beta
  * Removed dlopen check from configure
+ * Checking of tcldot and graphviz versions only if --with-graphviz
+   not explicitly given.
  
 2002/02/15 (jurgenv@cwi.nl)
  * Added showdot, a command-line tool that visualizes a dot graph using tcl/tk.

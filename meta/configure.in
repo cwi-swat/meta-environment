@@ -29,10 +29,22 @@ META_WISH_VERSION_CHECK($TK)
 AC_SUBST(WISH)
 
 dnl Check for graphviz package
-AC_PACKAGE_REQUIRE(graphviz, dot,
-                   [  --with-graphviz=DIR     graphviz package is in DIR])
-META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
-META_TCLDOT_CHECK($GRAPHVIZ)
+dnl Only check version if location of graphviz is determined automagically
+AC_ARG_WITH(graphviz,
+   [  --with-graphviz=DIR     graphviz package is in DIR],
+   GRAPHVIZ=${withval},
+   GRAPHVIZ=""
+)
+   
+if test x${GRAPHVIZ} = "x"; then
+  AC_PATH_PROGS(GRAPHVIZ, dot)
+  GRAPHVIZ=`dirname ${GRAPHVIZ}`
+  GRAPHVIZ=`dirname ${GRAPHVIZ}`
+  echo "Hayco says: ${GRAPHVIZ}"
+  META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
+  META_TCLDOT_CHECK($GRAPHVIZ)
+fi
+
 AC_SUBST(GRAPHVIZ)
 
 dnl Try to find xemacs
