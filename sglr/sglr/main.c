@@ -317,7 +317,7 @@ open_language(char *L, char *FN)
 {
   FILE *input_file;
   parse_table *table;
-  if (verboseflag)
+  if (verboseflag && FN != NULL)
     fprintf(stdout, "%s: reading parse table %s\n", program_name, FN);
   input_file = open_file("parse table not specified", FN);
   table = build_parse_table(TBreadTerm(input_file));
