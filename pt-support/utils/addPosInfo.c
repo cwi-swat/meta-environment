@@ -16,6 +16,7 @@ static void usage(const char *myname, const char* myversion)
         "  -i <input>     - Read input from file <input>            (Default: stdin)\n"
         "  -o <output>    - Write output to file <output>           (Default: stout)\n"
         "  -p <path>      - Path of file (obligatory)\n"
+        "  -d <int>       - Maximum tree depth to traverse          (Default: unlimited)\n"
         "  -h             - Display help information (usage)\n"
         "  -v             - Print version information (i.e. %s)\n",
         myname, myversion);
@@ -37,6 +38,8 @@ int main(int argc, char *argv[])
   FILE   *input  = stdin;
   FILE   *output = stdout;
   char   *path = NULL;
+  int depth = -1;
+  PT_ParseTree parseTree;
   int lcv;
 
   ATinit(argc, argv, &bottomOfStack);
@@ -72,6 +75,10 @@ int main(int argc, char *argv[])
         exit(1);
       }
     }
+    else if (streq(argv[lcv], "-d")) {
+      requireArgument(argc, argv, lcv);
+      depth = atoi(argv[++lcv]);
+    }
     else if (streq(argv[lcv], "-h")) {
       usage(argv[0],version);
       exit(0);
@@ -85,9 +92,16 @@ int main(int argc, char *argv[])
   contents = ATreadFromFile(input);
   assert(contents != NULL);
 
-  ATwriteToTextFile(PT_makeTermFromParseTree(
-                    PT_addParseTreePosInfo(path, 
-                    PT_makeParseTreeFromTerm(contents))),output);
+  parseTree =  PT_makeParseTreeFromTerm(contents);
+
+  if (depth == -1) { 
+    parseTree = PT_addParseTreePosInfo(path, parseTree);
+  } 
+  else {
+    parseTree = PT_addParseTreePosInfoToDepth(path, parseTree, depth);
+  }
+
+  ATwriteToTextFile(PT_makeTermFromParseTree(parseTree), output);
 
   return 0;
 }

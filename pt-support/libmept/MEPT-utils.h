@@ -74,6 +74,8 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
                                      PT_SymbolVisitorData data); 
 
 PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree);
+PT_ParseTree PT_addParseTreePosInfoToDepth(char *pathInfo, PT_ParseTree tree,
+                                           int maxDepth);
 
 ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);
