@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/12 ({markvdb, iversen}@cwi.nl)
+ * Fixed the close module functionality.
+
 2003/06/10 (markvdb@cwi.nl)
  * Improved the robustness of various operations.
  * Fixed the delete module functionality.
