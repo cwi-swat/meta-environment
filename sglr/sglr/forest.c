@@ -156,7 +156,7 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
                                               (ATerm) ATmakeInt(l)),
                           (ATerm) ts);
   return ATsetAnnotation(t, SG_ApplLabel(),
-                        (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
+                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
 
@@ -649,6 +649,11 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
   ATermInt   l0, l1;
   ATermTable m0, m1;
   ATermAppl  max = NULL;
+
+  /*  Don't even bother unless filtering is enabled  */
+
+  if(!SG_FILTER)
+    return NULL;
 
   /*  First apply direct priority filtering.  */
 

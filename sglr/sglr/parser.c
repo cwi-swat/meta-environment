@@ -169,19 +169,6 @@ void SG_ClearPath(path *p)
 }
 
 /*
-  The concatenation of two paths
-*/
-path *SG_ConcPaths(path *ps1, path *ps2)
-{
-  path *ps;
-  if (ps1 == NULL) return ps2;
-  if (ps2 == NULL) return ps1;
-  for (ps = ps1; SG_P_NEXT(ps) != NULL; ps = SG_P_NEXT(ps)) ;
-  SG_P_NEXT(ps) = ps2;
-  return ps1;
-}
-
-/*
    \paragraph{Find Paths}
 
    Function |SG_FindPaths| yields all paths from stack |st| with length
@@ -189,11 +176,10 @@ path *SG_ConcPaths(path *ps1, path *ps2)
 
 */
 path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
-                   ATermList sons)
+                   ATermList sons, path *paths)
 {
   st_links  *ls = NULL;
   st_link   *l1 = NULL;
-  path      *paths = NULL;
   ATermList newsons = NULL;
 
 /*
@@ -201,17 +187,18 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
     ATfprintf(SGlog(), "SG_FindPaths(%d, %d, x, %d, %x)\n",
               SG_ST_STATE(st), i, link_seen, (int) sons);
 */
-  if (st == NULL) {
-    paths = NULL;
-  } else if (i == 0 && link_seen) {
-    paths = SG_NewPath(st, sons, NULL);
+  if (st == NULL)
+    return paths;
+
+  /* Yes, we have a stack... */
+  if (i == 0 && link_seen) {
+    paths = SG_NewPath(st, sons, paths);
   } else if (i > 0) {
     for (ls = SG_ST_LINKS(st); ls != NULL; ls = SG_TAIL(ls)) {
       l1 = SG_HEAD(ls);
       newsons = ATinsert(sons?sons:ATempty, SG_LK_TREE(l1));
-      paths = SG_ConcPaths(SG_FindPaths(SG_LK_STACK(l1), i - 1, l0,
-                                        link_seen || (l0 == l1), newsons),
-                           paths);
+      paths = SG_FindPaths(SG_LK_STACK(l1), i - 1, l0,
+                           link_seen || (l0 == l1), newsons, paths);
     }
   }
   return paths;
@@ -565,7 +552,8 @@ void SG_DoReductions(stack *st, action a)
 
   prod = SG_A_PROD(a);
 
-  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty);
+  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue,
+                              ATempty, NULL);
       ps != NULL; ps = SG_P_NEXT(ps)) {
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
@@ -653,7 +641,9 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 /*
       ATfprintf(stderr, "Warning: zombie stack (%d)?\n", SG_ST_STATE(st0));
  */
+/*    BOGOSITY ALERT!
       SG_MarkStackRejected(st0);
+ */
       return;
     }
     /* No reject, and not sharing ambiguity with a reject  */
@@ -681,7 +671,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
         ATfprintf(SGlog(), "Warning: stack %d rejected in presence of "
                            "other links (linked to stack %d)\n",
                   SG_ST_STATE(st0), SG_ST_STATE(st1));
-      SG_MarkStackRejected(st0);
+      SG_MarkStackRejected(st1);
 #ifdef DEBUG
       ATfprintf(stderr, "Stack 0 (%x):\n", st0); SG_ShowStack(st0, 1);
       ATfprintf(stderr, "Stack 1 (%x):\n", st1); SG_ShowStack(st1, 1);
@@ -733,7 +723,8 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 
   prod = SG_A_PROD(a);
 
-  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse, ATempty);
+  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), l, ATfalse,
+                              ATempty, NULL);
       ps != NULL; ps = SG_P_NEXT(ps)) {
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
@@ -821,6 +812,9 @@ void SG_PropagateReject(stack *st)
 
   if(st == NULL)
     return;
+
+  if(SG_TAIL(SG_ST_LINKS(st))!=NULL)
+    ATfprintf(stderr, "PropagateReject: warning -- stack has >1 links\n");
 
   compost = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(st)));
   cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),

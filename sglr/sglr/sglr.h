@@ -45,24 +45,11 @@ char  *SG_StackDotOut(char *);
  */
 
 extern int  SG_Mode;
-/*
-#define SG_VERBOSEFLAG    (                 1   )
-#define SG_DEBUGFLAG      (SG_VERBOSEFLAG   << 1)
-#define SG_SHOWSTATFLAG   (SG_DEBUGFLAG     << 1)
-
-#define SG_OUTPUTFLAG     (SG_SHOWSTATFLAG  << 1)
-#define SG_ASFIX1FLAG     (SG_OUTPUTFLAG    << 1)
-#define SG_BINARYFLAG     (SG_ASFIX1FLAG    << 1)
-
-#define SG_DOTOUTFLAG     (SG_BINARYFLAG    << 1)
-#define SG_NOLEXFLAG      (SG_DOTOUTFLAG    << 1)
-#define SG_SHOWSTACKFLAG  (SG_NOLEXFLAG     << 1)
-*/
 
 enum SGmodeFlags {
   SG_VERBOSEFLAG, SG_ABBREVFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG,
   SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG,
-  SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_GCFLAG
+  SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_FILTERFLAG, SG_GCFLAG
 };
 
 #define SG_BIT(i)          (1 << i)
@@ -99,6 +86,10 @@ enum SGmodeFlags {
 #define SG_SHOWSTACK       (SG_Mode  &  SG_BIT(SG_SHOWSTACKFLAG))
 #define SG_SHOWSTACK_ON()  (SG_Mode |=  SG_BIT(SG_SHOWSTACKFLAG))
 #define SG_SHOWSTACK_OFF() (SG_Mode &= ~SG_BIT(SG_SHOWSTACKFLAG))
+
+#define SG_FILTER          (SG_Mode  &  SG_BIT(SG_FILTERFLAG))
+#define SG_FILTER_ON()     (SG_Mode |=  SG_BIT(SG_FILTERFLAG))
+#define SG_FILTER_OFF()    (SG_Mode &= ~SG_BIT(SG_FILTERFLAG))
 
 #define SG_GC              (SG_Mode  &  SG_BIT(SG_GCFLAG))
 #define SG_GC_ON()         (SG_Mode |=  SG_BIT(SG_GCFLAG))
