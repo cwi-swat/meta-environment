@@ -5,6 +5,8 @@
   * Thu Aug 14 11:36:34 MET DST 1997
   */
 
+/*{{{  includes */
+
 #ifndef WIN32
 	/* These files can not be included in Windows NT*/
 	#include <atb-tool.h>
@@ -24,6 +26,8 @@
 /* #include <gc.h> */
 
 #include "asc-support.h"
+
+/*}}}  */
 
 /*{{{  globals */
 
@@ -64,7 +68,7 @@ ATfprintf(stderr,"reducing finished\n");
 }
 
 /*}}}  */
-
+/*{{{  ATerm reduce_and_asource(int cid, ATerm t, char *name, char *ext) */
 ATerm reduce_and_asource(int cid, ATerm t, char *name, char *ext)
 {
   FILE *file;
@@ -101,6 +105,24 @@ void rec_terminate(int cid, ATerm arg)
 }
 
 /*}}}  */
+/*{{{  void usage(char *prg) */
+
+/**
+ * Print usage information and exit
+ */
+
+void usage(char *prg)
+{
+  fprintf(stderr, "usage: %s [aterm-options] [toolbus-options] [options]",prg);
+  fprintf(stderr, "options:\n");
+  fprintf(stderr, "  -stats/-s:        print statistics.\n");
+  fprintf(stderr, "  -name/-n <name>   set the name of the specifications.\n");
+  fprintf(stderr, "  -verbose/-v       verbose mode.\n");
+  fprintf(stderr, "use %s -at-help to get more aterm/toolbus options.\n", prg);
+  exit(1);
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -113,14 +135,17 @@ int main(int argc, char *argv[])
   name = argv[0];
 
   for(i=1; i<argc; i++) {
-  	if(streq(argv[i], "-stats"))
-  		printstats = ATtrue;
-  	else if(streq(argv[i], "-TB_TOOL_NAME"))
-  		use_toolbus = ATtrue;
-  	else if(streq(argv[i], "-name"))
-  		name = argv[++i];
-  	else if(streq(argv[i], "-v"))
-  		run_verbose = ATtrue;
+    if(streq(argv[i], "-stats") || streq(argv[i], "-s")) {
+      printstats = ATtrue;
+    } else if(streq(argv[i], "-TB_TOOL_NAME")) {
+      use_toolbus = ATtrue;
+    } else if(streq(argv[i], "-name") || streq(argv[i], "-n")) {
+      name = argv[++i];
+    } else if(streq(argv[i], "-v")) {
+      run_verbose = ATtrue;
+    } else if(streq(argv[i], "-h")) {
+      usage(argv[0]);
+    }
   }
  
   if(use_toolbus) {
@@ -168,3 +193,4 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
+
