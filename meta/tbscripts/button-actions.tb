@@ -402,7 +402,9 @@ in
     . PrettyPrintTerm(Modulename, STree, RTree?)
     .
     if not-equal(RTree, error-tree) then
-      StackPushTerm(Stack, Stack?, RTree)
+      GetPath(EditorId, Filename?)
+      . AnnotateTree(RTree, Filename, RTree?)
+      . StackPushTerm(Stack, Stack?, RTree)
       . ReturnSuccess(EditorId, Stack)
     else
       ReturnAbort(EditorId, Stack)

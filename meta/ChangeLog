@@ -3,7 +3,8 @@
 Mon Aug  2 09:19:26 CEST 2004 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
    - Defuse variable error removed in edit equations causing equations editor
-     not always opening.
+     not always being started. 
+   - Add posinfo after prettyprinting 
 
 Fri Jul 30 10:52:28 CEST 2004 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
