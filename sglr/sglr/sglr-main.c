@@ -63,11 +63,6 @@ ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
   return SGparseStringAsAsFix2ME(L, G, S);
 }
 
-ATerm get_top_symbols(int conn, ATerm L)
-{
-  return SGgetTopSymbols(L);
-}
-
 ATerm open_language_from_term(int conn, ATerm L, ATerm tbl)
 {
   return SGopenLanguageFromTerm(program_name, L, tbl);

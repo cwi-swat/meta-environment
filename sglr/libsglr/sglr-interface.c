@@ -78,39 +78,6 @@ void SGshowMode()
 
 /**  The ToolBus API functions  **/
 
-ATerm SGgetTopSymbols(language L)
-{
-  parse_table *pt = NULL;
-  production   pr;
-  int          l;
-  char	    *sort;
-  ATerm      ret = (ATerm) ATempty;
-
-  if(!(pt = SG_LookupParseTable(L))) {
-    return SG_TOOLBUS
-      ? SG_TermToToolbus(ATmake("language-not-available(<term>)", L))
-      : (ATerm) NULL;
-  }
-
-
-  for(l=SG_PROD_START; l < (SG_PROD_START + pt->numprods); l++) {
-    if((pr = SG_LookupProduction(pt, SG_SETLABEL(l)))) {
-      sort = SG_ProdSort(pr);
-      if(strcmp(sort, SG_SAFE_STRING(NULL))) {
-        IF_DEBUG(ATfprintf(SG_log(), "Start symbol: %s\n", sort));
-        ret = (ATerm) ATinsert((ATermList) ret,
-                               ATmake("startsymbol(<str>)", sort));
-      }
-    }
-  }
-  ret = ATmake("startsymbols(<term>,[<list>])", L, ret);
-
-  return SG_TOOLBUS
-    ? SG_TermToToolbus(ret)
-    :                  ret;
-}
-
-
 /*
  The function |SGopenLanguageFromTerm| initializes the parse table for
  language |L| from the term |tbl|.
@@ -132,8 +99,6 @@ ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
     if(pt)
       SG_SaveParseTable(L, pt);
   }
-
-  IF_DEBUG(SGgetTopSymbols(L));
 
   return SG_TOOLBUS
     ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
@@ -166,8 +131,6 @@ ATerm SGopenLanguage(char *prgname, language L, char *FN)
   if(!(pt = SG_LookupParseTable(L))) {
     pt = SG_AddParseTable(prgname, L, FN);
   }
-
-  IF_DEBUG(SGgetTopSymbols(L));
 
   return SG_TOOLBUS
     ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"

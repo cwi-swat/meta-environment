@@ -1,5 +1,9 @@
 $Id$
 
+2002/02/13 (vandenbr@loria.fr)
+ * Bumped to version 3.7beta
+ * Removed the get-top-symbols functionality.
+
 2002/02/07 (jurgenv@cwi.nl)
  * Release 3.6
 

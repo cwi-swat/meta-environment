@@ -86,16 +86,6 @@ process Parser is
       +
 	rec-value(P, language-not-open(Lid?))
       )
-    +
-      rec-msg(get-top-symbols(Lid?)) .
-      snd-eval(P, get-top-symbols(Lid)) .
-      (
-        rec-value(P, startsymbols(Lid, Start?)) .
-	snd-msg(startsymbols(Lid, Start))
-      +
-        rec-value(P, language-not-available(Lid)) .
-	snd-msg(language-not-open(Lid))
-      )
     )
     * rec-disconnect(P)
   endlet

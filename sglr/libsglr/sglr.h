@@ -74,7 +74,6 @@ ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
 ATerm SGopenLanguage(char *prgname, language L, char *FN);
 ATerm SGreOpenLanguage(char *prgname, language L, char *FN);
 ATerm SGcloseLanguage(char *prgname, language L);
-ATerm SGgetTopSymbols(language L);
 
 ATerm SGparseString(language L, char *G, char *S);
 ATerm SGparseStringAsAsFix2(language L, char *G, char *S);
