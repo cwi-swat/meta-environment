@@ -17,6 +17,8 @@
    a list of tests from the new ASF module syntax
  * Regenerated Add-Eqs-Syntax to deal with the new ASF module syntax
  * Updated asfchecker and asfupgrader to deal with the new syntax
+ * Simplified the detection and forwarding of builtin functions in asfe. This
+   was possible because the ASFAPI functionality dissapppeared earlier.
 
 2003/11/06 (jurgenv@cwi.nl)
  * Added "!:=" the condition operator that fails if a match succeeds and
