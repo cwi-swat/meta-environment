@@ -196,20 +196,27 @@ let
   Semantics  : term,
   ModuleName : str,
   Progress   : str,
-  OutputFileName : str
+  OutputFileName : str,
+  Table : term
 in
   Id := process-id .
   subscribe(asfc-progress(<term>)) .
   (
     rec-msg(compile-semantics-hook(ModuleName?, OutputFileName?, Semantics?)).
-    snd-msg(compile-module(ModuleName, OutputFileName, Semantics)) .
+    snd-msg(get-parsetable(ModuleName, trm, no)) .
     (
-      rec-note(asfc-progress(Progress?)).
-      snd-note(ui-status(endstat(Id))).
-      snd-note(ui-status(statf(Id,"Compiling %s - %s",
-                              [ModuleName, Progress])))
-    )*
-    rec-msg(compilation-done(ModuleName)).
+      rec-msg(parse-table(Table?)) .
+      snd-msg(compile-module(ModuleName, OutputFileName, Semantics, Table)) .
+      (
+        rec-note(asfc-progress(Progress?)).
+        snd-note(ui-status(endstat(Id))).
+        snd-note(ui-status(statf(Id,"Compiling %s - %s",
+                                [ModuleName, Progress])))
+      )*
+      rec-msg(compilation-done(ModuleName))
+    +
+      rec-msg(no-parsetable(ModuleName))
+    ) .
     snd-note(ui-status(endstat(Id))).
     snd-msg(compile-semantics-hook-done(ModuleName))
   )*delta
