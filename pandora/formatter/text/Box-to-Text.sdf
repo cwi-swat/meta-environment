@@ -1,4 +1,5 @@
 module Box-to-Text
 
-imports Fonts-to-Text
 imports Basic-to-Text
+imports Comments-to-Text
+imports Fonts-to-Text

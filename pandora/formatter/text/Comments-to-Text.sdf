@@ -1,0 +1,14 @@
+module Comments-to-Text
+
+imports languages/box/syntax/Comments Basic-to-Text
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    String[0-9]*   -> StrCon
+    "Frame"[0-9]*  -> Frame
+    "'C"[0-9]*     -> Context
+    [XY][0-9]*     -> Integer
+    "Struct"[0-9]* -> TextStruct

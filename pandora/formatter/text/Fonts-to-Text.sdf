@@ -2,7 +2,6 @@ module Fonts-to-Text
 
 imports Basic-to-Text
 imports languages/box/syntax/Fonts 
-imports LengthofBoxes
 
 hiddens
   variables
