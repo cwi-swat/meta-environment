@@ -196,7 +196,7 @@ exports
     {Group ">"}+                          -> Priority
     Group Associativity Group             -> Priority
     {Priority  ","}*                      -> Priorities
-%%  "priorities"  Priorities              -> Grammar
+    "priorities"  Priorities              -> Grammar
 
 module CC-Sdf-Syntax
 imports Character-Class-Syntax Kernel-Sdf-Syntax
