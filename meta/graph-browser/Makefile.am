@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST  = graph-browser.sh.src graphbrowser.tcl.src \
+EXTRA_DIST  = graph-browser.sh.src graph-browser.tcl.src \
               graph-browser.pod graph-browser.1
 
 bin_SCRIPTS = graph-browser
