@@ -4,7 +4,7 @@
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
 
 # Default compiler to use
-CC=gcc
+CC=@CC@
 
 top_srcdir	= @top_srcdir@
 
