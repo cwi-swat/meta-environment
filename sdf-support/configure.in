@@ -103,6 +103,11 @@ LIBS=$NOSOCKLIBS
 
 dnl }}}
 
+AC_PATH_PROG(JAVA, java)
+if test "x${JAVA}" = "x"; then
+  AC_MSG_ERROR("java not found")
+fi
+
 dnl This variable holds all external jarfiles
 EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)

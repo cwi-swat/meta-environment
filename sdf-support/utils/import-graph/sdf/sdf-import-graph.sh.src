@@ -1,5 +1,3 @@
 #! /bin/sh
 
-export CLASSPATH=__EXTERNAL_JARS__:__INSTALL_DIR__
-
-java-adapter -class sdf.SdfImportGraph $@
+__JAVA__ -classpath __EXTERNAL_JARS__:__INSTALL_DIR__ sdf.SdfImportGraph $@

@@ -33,5 +33,6 @@ jtif:
 %: %.sh.src Makefile
 	sed -e 's@__EXTERNAL_JARS__@${EXTERNAL_JARS}@g' \
 	    -e 's@__INSTALL_DIR__@${prefix}/classes@g' \
+	    -e 's@__JAVA__@${JAVA}@g' \
 	< $< > $@
 	chmod +x $@
