@@ -55,8 +55,6 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-//TODO: extract ToolBar, MenuBar and Trees from the monolith
-
 public class MetaStudio
     extends JFrame
     implements UserInterfaceTif, Runnable {
@@ -440,12 +438,6 @@ public class MetaStudio
         mainTabs.setSelectedIndex(graphPanel.getIndex());
     }
     
-//    private void showModulePopup(ATerm buttonType) {
-//        bridge.postEvent(
-//            factory.make("get-buttons(<term>,<str>)", buttonType, currentModule));
-//
-//    }
-
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
         Iterator iter = getToolComponents().iterator();
         System.err.println("buttonsFound for " + buttonType);
