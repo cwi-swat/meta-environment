@@ -1,3 +1,6 @@
+2002/07/03 (jurgenv@cwi.nl)
+  * Added asf/Variables. A module that defines variables for a specific sort.
+
 2002/07/01 (vandenbr@loria.fr)
   * Rolled back the modifications performed on 2002/06/14.
 
