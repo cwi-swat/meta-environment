@@ -31,7 +31,7 @@ PT_Tree hashtable_lookup(ATerm builtin, PT_Tree input)
   value = ATtableGet(hashtable,key);
 
   if (value == NULL) {
-    return input;
+    return NULL;
   }
   else {
     return PT_TreeFromTerm(value);
