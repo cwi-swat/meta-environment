@@ -1034,22 +1034,20 @@ ATermList SG_CurrentPosInfo(void)
 
 ATermList SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
 {
-   ATermList ambiguities;
-   ATerm first;
-   ATerm position;
+  ATermList ambiguities;
+  ATerm first;
+  ATerm position;
 
-   assert(ATgetType(ambtrack) == AT_APPL);
-   
-   ambiguities = (ATermList) ATgetArgument((ATermAppl) ambtrack, 1);
-  
-   assert(ATgetType(ambiguities) == AT_LIST);
+  if (ATmatch(ambtrack, "ambiguities(<int>,[<list>])",NULL,&ambiguities)) {
+    first = ATgetFirst(ambiguities);
 
-   first = ATgetFirst(ambiguities);
-   position = ATgetArgument((ATermAppl) first, 0);
-   
-   assert(ATgetType(position) == AT_APPL);
+    if (ATmatch(first, 
+		"ambiguity(<term>,productions([<list>]))",&position,NULL)) {
+      return ATgetArguments((ATermAppl)position); 
+    }
+  } 
 
-   return ATgetArguments((ATermAppl) position); 
+  return NULL;   
 }
 
 forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
@@ -1156,9 +1154,11 @@ tree SG_ParseResult(char *sort)
         SGsort(SG_SET, t);     
 
         if(SG_TOOLBUS) {
-          ATerm ambtrak = SG_AmbTracker(t);
+	  ATerm ambtrak = NULL;
+	  
+          ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);
 
-          if(ambtrak) {
+          if(ambtrak && !ATmatch(ambtrak, "ambiguities(0,[])")) {
             return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
           }
         }
