@@ -1,3 +1,8 @@
+2001/11/06 ({jurgenv,markvdb}@cwi.nl)
+ * Removed module identifiers from productions:
+   - Regenerated the compiler. 
+   - Regenerated the MuASF library. 
+ 
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions:
    - Re-generated Add-Eqs-Syntax.c
