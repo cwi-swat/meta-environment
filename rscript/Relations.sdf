@@ -8,10 +8,10 @@ exports
   sorts Tuple {Elem ","}+
 
   context-free syntax
-     Elem #  Elem					-> Tuple
+%%     Elem #  Elem					-> Tuple
      Tuple						-> Elem
 
-     "<" Elem "," Elem "," {Elem ","}+ ">"		-> Tuple
+     "<"{Elem ","}+ ">"					-> Tuple
 
      compose(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RRR
     
@@ -41,7 +41,7 @@ exports
      limage(Bag[[Elem]], Elem)				-> Bag[[Elem]]	%%REB
      limage(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RBB
 
-     rimage(Elem, Bag[[Elem]])				-> Bag[[Elem]]	%%ERB
+     rimage(Bag[[Elem]], Elem)				-> Bag[[Elem]]	%%ERB
      rimage(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%BRB
 
      reachX(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
@@ -83,8 +83,8 @@ hiddens
      limage(BagIterator[[Elem]], Elem)         		-> Bag[[Elem]]	%%REB
      limage(Bag[[Elem]], BagIterator[[Elem]])   	-> Bag[[Elem]]	%%RBB
 
-     rimage(Elem, BagIterator[[Elem]])         		-> Bag[[Elem]]	%%ERB
-     rimage(BagIterator[[Elem]], Bag[[Elem]])  		-> Bag[[Elem]]	%%BRB
+     rimage(BagIterator[[Elem]], Elem)         		-> Bag[[Elem]]	%%ERB
+     rimage(Bag[[Elem]], BagIterator[[Elem]])  		-> Bag[[Elem]]	%%BRB
 
      inv(BagIterator[[Elem]])          			-> Bag[[Elem]]	%%RR
      id(BagIterator[[Elem]])           			-> Bag[[Elem]]	%%BR

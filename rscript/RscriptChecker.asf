@@ -2,36 +2,16 @@ equations
 
 %%-----------------------------------------------------------------------------------
 
-[xxx] fun [] to $Etype = $Etype
+%% ---- Simplify constant type
 
-%% --- Simplify n-ary tuple types
+[xxx]	fun [] to $Etype = $Etype
 
-[st1]	$Etype+ = $Etype'
-	=============================================================
-	<$Etype1, $Etype2, $Etype+> = <$Etype1, <$Etype2, $Etype'>>
+%% ---- Simplify tuple of 1 element to element itself
 
-[st2]	$Etype+1 = $Etype', $Etype+2
-	=============================================================
-	<$Etype1, $Etype2, $Etype+1> = <$Etype1, <$Etype2, $Etype', $Etype+2>>
-
-%% --- Simplify n-ary relation type
-
-[sr1]	<$Etype1, $Etype2, $Etype+1> = <$Etype1', $Etype2'>
-	============================================================= 
-	rel[$Etype1, $Etype2, $Etype+1] = rel[$Etype1', $Etype2']
-
-%% -- Simplify n-ary tuple expressions
-
-[st1]	$Exps = $Exp'
-	=============================================================
-	<$Exp1, $Exp2, $Exps> = <$Exp1, <$Exp2, $Exp'>>
-
-[st2]	$Exps1 = $Exp', $Exps2
-	=============================================================
-	<$Exp1, $Exp2, $Exps1> = <$Exp1, <$Exp2, $Exp', $Exps2>>
+[xxx]	<$Etype> = $Etype
 
 
-%% --- Type of element
+%% ---- Type of element
 
 [to1]	type-of($Integer) = int 
 [to2]	type-of($BoolCon) = bool
@@ -41,30 +21,30 @@ equations
 %% ---- Element type
 
 [et1]	element-type(bag[$Etype]) = $Etype
-[et2]	element-type(rel[$Etype1, $Etype2]) = <$Etype1, $Etype2>
-[et3]	element-type(<$Etype1, $Etype2>) = <$Etype1, $Etype2>
+[et2]	element-type(rel[$Etype+]) = <$Etype+>
+[et3]	element-type(<$Etype+>) = <$Etype+>
 [default-et]
 	element-type($Etype) = undefined
 
 %% ---- first of type
 
-[ft1]	first(<$Etype1, $Etype2>) = $Etype1
+[ft1]	first(<$Etype1, $Etype+>) = $Etype1
 [default-ft]
 	first($Etype) = $Etype
 
 %% ---- second of type
 
-[st1]	second(<$Etype1, $Etype2>) = $Etype2
+[st1]	second(<$Etype1, $Etype+>) = <$Etype+>
 [default-st]
 	second($Etype) = undefined
 
-%% --- Equality on types: ==
+%% ---- Equality on types: ==
 
 [eqt1]	equal-type($Etype, $Etype, $Tenv) = true
 
-[eqt2]	equal-type(rel[$Etype1,$Etype2], bag[<$Etype1, $Etype2>], $Tenv) = true
+[eqt2]	equal-type(rel[$Etype+], bag[<$Etype+>], $Tenv) = true
 
-[eqt3]	equal-type(bag[<$Etype1,$Etype2>], rel[$Etype1, $Etype2], $Tenv) = true
+[eqt3]	equal-type(bag[<$Etype+>], rel[$Etype+], $Tenv) = true
 
 [eqt4]	equal-type($Var, $Etype, $Tenv) = equal-type(lookup($Tenv, $Var), $Etype, $Tenv)
 
@@ -74,11 +54,11 @@ equations
 
 [eqt7]	equal-type($Etype, <$DclVar+>, $Tenv) = equal-type($Etype, get-tuple-type(<$DclVar+>), $Tenv)
 
-[eqt8]	equal-type(<$Etype1, $Etype2>, <$Etype1', $Etype2'>, $Tenv) =
-	equal-type($Etype1, $Etype1', $Tenv) & equal-type($Etype2, $Etype2', $Tenv)
+[eqt8]	equal-type(<$Etype1, $Etype+>, <$Etype1', $Etype+'>, $Tenv) =
+	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype+>, <$Etype+'>, $Tenv)
 
-[eqt9]	equal-type(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Tenv) =
-	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Tenv)
+%%[eqt9]	equal-type(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Tenv) =
+%%	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Tenv)
 [default-eqt]
 	equal-type($Etype1, $Etype2, $Tenv) = false
 
@@ -90,32 +70,32 @@ equations
 	=========================================================
 	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2, $DclVar+>) = <$Etype1, $Etype2, $Etype+>
 
-%% --- Is tuple
+%% ---- Is tuple
 
-[it1]	is-tuple(<$Elem1, $Elem2>) = true
+[it1]	is-tuple(<$Elem+>) = true
 [default-it]
 	is-tuple($Elem) = false
 
-%% --- If-then-else on type environments
+%% ---- If-then-else on type environments
 
 [ite1]	if true then $Tenv1 else $Tenv2 fi = $Tenv1
 
 [ite2]	if false then $Tenv1 else $Tenv2 fi = $Tenv2
 
-%% --- If-then-else on <Type, TypeEnv>
+%% ---- If-then-else on <Type, TypeEnv>
 
 [ite3]	if true then <$Etype1, $Tenv1> else <$Etype2, $Tenv2> fi = <$Etype1, $Tenv1>
 
 [ite4]	if false then <$Etype1, $Tenv1> else <$Etype2, $Tenv2> fi = <$Etype2, $Tenv2>
 
-%% --- Add error message
+%% ---- Add error message
 
-[te1] <$Table, errors[$Error*]> + $Error = <$Table, errors[$Error*;
+[te1]	<$Table, errors[$Error*]> + $Error = <$Table, errors[$Error*;
 $Error]>
 
-%% --- Errors to ItemList
+%% ---- Errors to ItemList
 
-[i2s] rvar2str(rvar(Char*)) = strcon(""" Char* """)
+[i2s]	rvar2str(rvar(Char*)) = strcon(""" Char* """)
 
 [cve-1] convert-errors(errors[$Error+]) = convert-errors1(errors[$Error+])
 [cve-1] convert-errors(errors[]) =  [listitem("Rscript is type correct!", area("",0,0,0,0))]
@@ -152,21 +132,25 @@ $Error]>
 
 [e2i-15] e2i(No definition for field $Var) =  listitem("No definition for " || rvar2str($Var), get-area($Var))
 [e2i-16] e2i($Var exceeds number of targets of generator) =  listitem("Destination contains too many targets", get-area($Var))
+[e2i-17] e2i(Field name $Var used at different record positions) =
+		   listitem("Field " || rvar2str($Var) || " used at different record positions", get-area($Var))
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
 [t2s-4] t2s(area) 			= "area"
 [t2s-5] t2s(undefined) 			= "undefined"
-[t2s-6] t2s(< $Etype1, $Etype2 >)	= "<" || t2s($Etype1) || "," || t2s($Etype2) || ">"
+[t2s-6] t2s(< $Etype+ >)		= "<" || tl2sl($Etype+) || ">"
 [t2s-7] t2s(bag[$Etype])		= "bag[" || t2s($Etype) || "]"
-[t2s-8] t2s(rel[$Etype1, $Etype2]) 	= "rel[" || t2s($Etype1) || "," || t2s($Etype1) || "]"
+[t2s-8] t2s(rel[$Etype+])		= "rel[" || tl2sl($Etype+) || "]"
 
 [t2s-8] t2s([$Etype*]) 			= "[" || tl2sl($Etype*) || "]"
 [t2s-9] t2s($Var) 			= rvar2str($Var)
 
 [tl2sl-1]
-	tl2sl($Etype, $Etype*)		= t2s($Etype) || " " || tl2sl($Etype*)
+	tl2sl($Etype, $Etype+)		= t2s($Etype) || "," || tl2sl($Etype+)
+[tl2sl-1]
+	tl2sl($Etype)			= t2s($Etype)
 [tl2sl-2]
 	tl2sl()				= ""
 
@@ -176,9 +160,47 @@ $Error]>
 [te3]	store(<$Table, $Errors>, $Var, $Etype) = <store($Table, $Var, $Etype), $Errors>
 [te4]	delete(<$Table, $Errors>, $Var)  = <delete($Table, $Var), $Errors>
 
+%% ---- Check that variable is not yet defined
+
+[cnd]	check-not-defined($Var, $Tenv) = 
+	if equal-type(lookup($Tenv, $Var), not-in-table, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
+
+%% ---- get index of a field (if any)
+
+%%[gfi1]				%% asfe bug?
+%%	values($Table) = [$Etype*1, <$DclVar*1,$Etype $Var, $DclVar*2>, $Etype*2 ]
+%%	=========================================================================
+%%	get-field-index($Var, <$Table, $Errors>) = 1 + length($DclVar*1)
+
+[gfi1]	%%<$DclVar+> = <$DclVar*1, $Etype $Var, $DclVar*2>
+	$Integer = get-field-index1($Var, $DclVar+, 1),
+	$Integer > 0 = true
+	=================================================================
+	get-field-index($Var, [<$DclVar+>, $Etype*]) = $Integer
+
+[default-gfi2]	
+	get-field-index($Var, [$Etype, $Etype*]) = get-field-index($Var,  [$Etype*])
+
+[default-gfi]
+	get-field-index($Var, []) = 0
+
+[ldcl1]	get-field-index1($Var, $Etype $Var, $DclVar*, $Integer) = $Integer
+[default-ldcl1]	
+	get-field-index1($Var, $DclVar, $DclVar*, $Integer) = get-field-index1($Var, $DclVar*, $Integer+1)
+[ldcl2]	get-field-index1($Var, , $Integer) = 0
+
 %% ---- check-duplicate-fields
 
-[cdf1]	check-duplicate-fields($DclVar*, $Tenv) = $Tenv	%% EXTEND!
+[cdf1]	$Tenv = <$Table, $Errors>,
+	$Integer' = get-field-index($Var, values($Table)),
+	$Tenv' = if $Integer' == 0 | $Integer' == $Integer then $Tenv 
+		 else $Tenv + Field name $Var used at different record positions
+		 fi
+	===============================================
+	check-duplicate-fields($Etype $Var, $DclVar*, $Integer, $Tenv) =
+	check-duplicate-fields($DclVar*, $Integer+1, $Tenv')
+
+[cdf2]	check-duplicate-fields(, $Integer, $Tenv) = $Tenv
 
 %% ---- get-field-type
 
@@ -203,37 +225,40 @@ $Error]>
     	============================================
      	check-const-tuple(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
-%% --- Check Elementary values
+[check-const-tuple2] 
+      	check-const($Elem1, $Tenv) = <$Etype1, $Tenv'>, 
+      	check-const-tuple(<$Elem2, $Elem+>, $Tenv') = <<$Etype+>, $Tenv''>
+    	============================================
+     	check-const-tuple(<$Elem1, $Elem2, $Elem+>, $Tenv) = <<$Etype1, $Etype+>, $Tenv''>
+
+%% ---- Check Elementary values
 
 [check-const-bool] 
-      check-const($BoolCon, $Tenv) = <type-of($BoolCon), $Tenv>
+	check-const($BoolCon, $Tenv) = <type-of($BoolCon), $Tenv>
 
 [check-const-int] 
-      check-const($Integer, $Tenv) = <type-of($Integer), $Tenv>
+	check-const($Integer, $Tenv) = <type-of($Integer), $Tenv>
 
 [check-const-str]
-      check-const($String, $Tenv) = <type-of($String), $Tenv>
+	check-const($String, $Tenv) = <type-of($String), $Tenv>
 
 [check-const-area]
-      check-const($Area, $Tenv) = <type-of($Area), $Tenv>
+	check-const($Area, $Tenv) = <type-of($Area), $Tenv>
 
-[check-const-tuple1] 
-      	check-const($Elem1, $Tenv) = <$Etype1, $Tenv'>, 
-      	check-const($Elem2, $Tenv') = <$Etype2, $Tenv''>
-    	============================================
-     	check-const(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
+[check-const-tuple1]
+	check-const(<$Elem+>, $Tenv) = check-const-tuple(<$Elem+>, $Tenv)
 
 [check-const-bag1]
-      check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag),$Tenv)
+	check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag),$Tenv)
 
 
 [check-const-br1]
-      is-tuple($Elem) = false,
-       check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' = bag[$Etype],
-      check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
-       ==========================================
-       check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
+	is-tuple($Elem) = false,
+	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
+	$Etype' = bag[$Etype],
+	check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
+	==========================================
+	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
 
 %%[check-const-br1]
 %%	is-empty-iter($BagIter) = false,
@@ -249,10 +274,10 @@ $Error]>
 
 [check-const-br2] 
 	is-tuple($Elem) = false,
-       check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' =  bag[$Etype]
-       ==========================================
-       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
+	check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
+	$Etype' =  bag[$Etype]
+	==========================================
+	check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
 
 %%[check-const-br2]
 %%	is-empty-iter($BagIter) = false,
@@ -266,11 +291,11 @@ $Error]>
 
 [check-const-br31]
 	is-tuple($Elem) = true,   
-	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
-	$Etype = rel[$Etype1,$Etype2],
-      check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype, $Tenv''>
-      ==========================================
-      check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
+	check-const-tuple($Elem, $Tenv) = <<$Etype+>, $Tenv'>, 
+	$Etype = rel[$Etype+],
+	check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype, $Tenv''>
+	==========================================
+	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype,$Tenv''>
 
 %%[check-const-br31]	
 %%	is-empty-iter($BagIter) = false,
@@ -286,8 +311,8 @@ $Error]>
 
 [check-const-br4]
 	is-tuple($Elem) = true, 
-	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
-	$Etype = rel[$Etype1,$Etype2]
+	check-const-tuple($Elem, $Tenv) = <<$Etype+>, $Tenv'>, 
+	$Etype = rel[$Etype+]
        ==========================================
        check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
 
@@ -304,25 +329,25 @@ $Error]>
 
 %%-----------------------------------------------------------------------------------
 
-%% Check arbitrary expressions
+%% ---- Check arbitrary expressions
 
 [check-const1]
-      check($Elem, $Tenv) = check-const($Elem, $Tenv)
+	check($Elem, $Tenv) = check-const($Elem, $Tenv)
 
 [check-var] 
-      lookup($Tenv, $Var) = $Etype
-      ============================================
-      check($Var, $Tenv) = 
-      if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
+	lookup($Tenv, $Var) = $Etype
+	============================================
+	check($Var, $Tenv) = 
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
 
 [check-tuple-const]
  	check($Tuple, $Tenv) = check-const-tuple($Tuple, $Tenv)	
 
 [check-tuple-exp1] 
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
-      	check(<$Exp2, $Exp+>, $Tenv') = <$Etype2, $Tenv''>
+      	check(<$Exp2, $Exp+>, $Tenv') = <<$Etype+>, $Tenv''>
       	============================================
-      	check(<$Exp1, $Exp2, $Exp+>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
+      	check(<$Exp1, $Exp2, $Exp+>, $Tenv) = <<$Etype1, $Etype+>, $Tenv''>
 
 [check-tuple-exp2] 
      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
@@ -330,24 +355,24 @@ $Error]>
       	============================================
       	check(<$Exp1, $Exp2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
-[ct1]	container-type(<$Etype1, $Etype2>) = rel[$Etype1,$Etype2]
+[ct1]	container-type(<$Etype+>) = rel[$Etype+]
 [default-ct2] 
 	container-type($Etype) = bag[$Etype]
 
-%% --- Check bag/relation  expressions
+%% ---- Check bag/relation  expressions
 
 [check-bag-rel1] 
-       check($Exp, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' =  container-type($Etype),
-       check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
-       ==========================================
-       check({ $Exp, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
+	check($Exp, $Tenv) = <$Etype, $Tenv'>,
+	$Etype' =  container-type($Etype),
+	check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
+	==========================================
+	check({ $Exp, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
 
 [check-bag-rel2] 
-       check($Exp, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' =  container-type($Etype)
-       ==========================================
-       check({ $Exp }, $Tenv) = <$Etype', $Tenv'>
+	check($Exp, $Tenv) = <$Etype, $Tenv'>,
+	$Etype' =  container-type($Etype)
+	==========================================
+	check({ $Exp }, $Tenv) = <$Etype', $Tenv'>
 
 [check-bag-rel3]
 	check( {}, $Tenv) =  <undefined, $Tenv + {} cannot be typed>
@@ -415,11 +440,11 @@ $Error]>
 [compat-cmp1]
 	compat-cmp($Exp, bag[$Etype], bag[$Etype], $Tenv) = $Tenv
 [compat-cmp2]
-	compat-cmp($Exp, rel[$Etype1, $Etype2],  rel[$Etype1, $Etype2], $Tenv) = $Tenv
+	compat-cmp($Exp, rel[$Etype+],  rel[$Etype+], $Tenv) = $Tenv
 [compat-cmp3]
-	compat-cmp($Exp, rel[$Etype1, $Etype2],  bag[<$Etype1, $Etype2>], $Tenv) = $Tenv
+	compat-cmp($Exp, rel[$Etype+],  bag[<$Etype+>], $Tenv) = $Tenv
 [compat-cmp4]
-	compat-cmp($Exp, bag[<$Etype1, $Etype2>],  rel[$Etype1, $Etype2], $Tenv) = $Tenv
+	compat-cmp($Exp, bag[<$Etype+>],  rel[$Etype+], $Tenv) = $Tenv
 [compat-cmp5]
 	compat-cmp($Exp, int, int, $Tenv) = $Tenv
 [compat-cmp6]
@@ -488,13 +513,13 @@ $Error]>
 %% --- Union-like operators
 
 [compat-un1] 
-	compat-un($Exp, bag[$Etype], 		bag[$Etype], $Tenv) 		= <bag[$Etype], $Tenv>
+	compat-un($Exp, bag[$Etype], 		bag[$Etype], $Tenv) 	= <bag[$Etype], $Tenv>
 [compat-un2] 
-	compat-un($Exp, rel[$Etype1,$Etype2],	rel[$Etype1,$Etype2], $Tenv) 	= <rel[$Etype1,$Etype2], $Tenv>
+	compat-un($Exp, rel[$Etype+],		rel[$Etype+], $Tenv) 	= <rel[$Etype+], $Tenv>
 [compat-un3]
-	compat-un($Exp, rel[$Etype1,$Etype2],	bag[<$Etype1,$Etype2>], $Tenv)	= <rel[$Etype1,$Etype2], $Tenv>
+	compat-un($Exp, rel[$Etype+],		bag[<$Etype+>], $Tenv)	= <rel[$Etype+], $Tenv>
 [compat-un4] 
-	compat-un($Exp, bag[<$Etype1,$Etype2>],	rel[$Etype1,$Etype2], $Tenv)    = <rel[$Etype1,$Etype2], $Tenv>
+	compat-un($Exp, bag[<$Etype+>],		rel[$Etype+], $Tenv)    = <rel[$Etype+], $Tenv>
 [default-compat-un]
 	compat-un($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
@@ -558,38 +583,52 @@ $Error]>
 
 %% -- Image
 
-[xxx] compat-im($Exp, rel[$Etype1,$Etype2],	$Etype2, $Tenv)              = <bag[$Etype1], $Tenv>
-[xxx] compat-im($Exp, bag[<$Etype1,$Etype2>],	$Etype2, $Tenv)            = <bag[$Etype1], $Tenv>
-[xxx] compat-im($Exp, rel[$Etype1,$Etype2],	bag[$Etype2], $Tenv)         = <bag[$Etype1], $Tenv>
-[xxx] compat-im($Exp, bag[<$Etype1,$Etype2>],	bag[$Etype2], $Tenv)       = <bag[$Etype1], $Tenv>
-[xxx] compat-im($Exp, $Etype1,			rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
-[xxx] compat-im($Exp, $Etype1,			bag[<$Etype1,$Etype2>], $Tenv) = <bag[$Etype2], $Tenv>
-[xxx] compat-im($Exp, bag[$Etype1],		rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
-[xxx] compat-im($Exp, bag[$Etype1],		bag[<$Etype1,$Etype2>], $Tenv) = <bag[$Etype2], $Tenv>
-[default-compat-im]
-	compat-im($Exp, $Etype1, $Etype2, $Tenv) = 
+[xxx] compat-lim($Exp, rel[$Etype1,$Etype2],	$Etype2, $Tenv)            = <bag[$Etype1], $Tenv>
+[xxx] compat-lim($Exp, bag[<$Etype1,$Etype2>],	$Etype2, $Tenv)            = <bag[$Etype1], $Tenv>
+[xxx] compat-lim($Exp, rel[$Etype1,$Etype2],	bag[$Etype2], $Tenv)       = <bag[$Etype1], $Tenv>
+[xxx] compat-lim($Exp, bag[<$Etype1,$Etype2>],	bag[$Etype2], $Tenv)       = <bag[$Etype1], $Tenv>
+
+[default-compat-lim]
+	compat-lim($Exp, $Etype1, $Etype2, $Tenv) = 
+	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
+
+[xxx] compat-rim($Exp, rel[$Etype1,$Etype2],	$Etype1, $Tenv)            = <bag[$Etype2], $Tenv>
+[xxx] compat-rim($Exp, bag[<$Etype1,$Etype2>],	$Etype1, $Tenv)            = <bag[$Etype2], $Tenv>
+[xxx] compat-rim($Exp, rel[$Etype1,$Etype2],	bag[$Etype1], $Tenv)       = <bag[$Etype2], $Tenv>
+[xxx] compat-rim($Exp, bag[<$Etype1,$Etype2>],	bag[$Etype1], $Tenv)       = <bag[$Etype2], $Tenv>
+
+[default-compat-rim]
+	compat-rim($Exp, $Etype1, $Etype2, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp>  
 
 [check-im1] 	
-	$Exp = $Exp1 . $Exp2,
+	$Exp = $Exp1 [ -, $Exp2],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-im($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-lim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
       	===========================================
       	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
 [check-im2]
+	$Exp = $Exp1 [ $Exp2, - ],
+      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
+      	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
+      	compat-rim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      	===========================================
+	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
+
+[check-im3]
 	$Exp = $Exp1 [ $Exp2 ],
       	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      	compat-im($Exp, $Etype2, $Etype1, $Tenv'') = <$Etype3, $Tenv'''>
+      	compat-rim($Exp, $Etype1, $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
       	===========================================
 	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
 %% ---- field selection
 
 [check-sel]
-	$Exp = $Exp1 @ $Var,
+	$Exp = $Exp1 . $Var,
 	check($Exp1, $Tenv) = <$Etype1, $Tenv'>,
 	get-field-type($Etype1, $Var, $Tenv') = <$Etype2, $Tenv''>
 	===========================================
@@ -624,7 +663,7 @@ $Error]>
 [compat-size1]
 	compat-size($Exp, bag[$Etype], $Tenv) = <int, $Tenv>
 [compat-size2]
-	compat-size($Exp, rel[$Etype1,$Etype2], $Tenv) = <int, $Tenv>
+	compat-size($Exp, rel[$Etype+], $Tenv) = <int, $Tenv>
 [default-compat-size]
 	compat-size($Exp, $Etype, $Tenv) = 
 	<undefined, $Tenv + Incompatible argument types $Etype in $Exp>  
@@ -645,7 +684,7 @@ $Error]>
       	require-type($Exp, $Etype, $Tenv) = 
       	if equal-type($Etype, $Etype', $Tenv') then $Tenv' else $Tenv' + $Exp should have type $Etype fi
 	
-%% ---- Check from clauses and add introduced variables to type environment
+%% ---- Check generators and add introduced variables to type environment
 
 [ag1] 	require-type($Exp, bag[$Etype], $Tenv) = $Tenv',
       	store($Tenv', $Var, $Etype) = $Tenv'',
@@ -653,9 +692,9 @@ $Error]>
       	add-generators($Etype $Var : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag2] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-      	match-targets($Target1, $Target+, element-type($Etype), $Tenv') = $Tenv''	
+      	match-targets($Target+, element-type($Etype), $Tenv') = $Tenv''	
       	==========================================
-      	add-generators(<$Target1, $Target+> : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
+      	add-generators(<$Target+> : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag3] 	require-type($Exp, bool, $Tenv) = $Tenv'
       	==========================================
@@ -667,9 +706,9 @@ $Error]>
       	add-generators($Target <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag5] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
-	match-targets($Target1, $Target+, element-type($Etype), $Tenv') = $Tenv''
+	match-targets($Target+, element-type($Etype), $Tenv') = $Tenv''
       	==========================================
-      	add-generators(<$Target1, $Target+> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
+      	add-generators(<$Target+> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [ag6] 	add-generators( , $Tenv) = $Tenv
 
@@ -780,29 +819,26 @@ $Error]>
       ============================================
       check($Var ( $Exp* ), $Tenv) = find-result-type($Var, $Etype, $Tenv')
 
-%% --- Check that variable is not yet defined
 
-[cnd] check-not-defined($Var, $Tenv) = 
-      if equal-type(lookup($Tenv, $Var), not-in-table, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
 
-%% add-formals
+%% ---- add-formals
 
-[af1] check-not-defined($Var, $Tenv) = $Tenv',
-      store($Tenv', $Var, $Etype) = $Tenv'',
-      add-formals([$DclVar*], $Tenv'') = $Tenv'''
-      ===========================================
-      add-formals([$Etype $Var, $DclVar*], $Tenv) = $Tenv'''
+[af1]	check-not-defined($Var, $Tenv) = $Tenv',
+	store($Tenv', $Var, $Etype) = $Tenv'',
+	add-formals([$DclVar*], $Tenv'') = $Tenv'''
+	===========================================
+	add-formals([$Etype $Var, $DclVar*], $Tenv) = $Tenv'''
 
 [af2] add-formals([], $Tenv) = $Tenv
 
-%% del-formals
+%% ---- del-formals
 
-[df1] delete($Tenv, $Var) = $Tenv',
-      del-formals([$DclVar*], $Tenv') = $Tenv''
-      ===========================================
-      del-formals([$Etype $Var, $DclVar*], $Tenv) = $Tenv''
+[df1]	delete($Tenv, $Var) = $Tenv',
+	del-formals([$DclVar*], $Tenv') = $Tenv''
+	===========================================
+	del-formals([$Etype $Var, $DclVar*], $Tenv) = $Tenv''
 
-[df2] del-formals([], $Tenv) = $Tenv
+[df2]	del-formals([], $Tenv) = $Tenv
 
 %% Extract the types from a list of formal parameters
 
@@ -812,52 +848,59 @@ $Error]>
 
 [et2] extract-types([]) = []
 
-%% --- Check variable declarations
+%% ---- Check variable declarations
 
 [check-vardef1]
-      check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
+	check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
 
 [check-vardef2] 
-      check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
+	check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
 
 [check-vardef3]
-      check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
+	check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
 
 [check-vardef4]
-      check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
+	check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
 
-%% --- Check function declarations
+%% ---- Check function declarations
 
 [check-fundef] 
-      check-not-defined($Var, $Tenv) = $Tenv1,
-      add-formals([$DclVar*], $Tenv1) = $Tenv2,
-      require-type($Exp, $Etype, $Tenv2) = $Tenv3,      
-      del-formals([$DclVar*], $Tenv3) = $Tenv4, 
-      store($Tenv4, $Var, fun extract-types([$DclVar*]) to $Etype) = $Tenv5 
-      ===========================================
-      check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
+       check-not-defined($Var, $Tenv) = $Tenv1,
+       add-formals([$DclVar*], $Tenv1) = $Tenv2,
+       require-type($Exp, $Etype, $Tenv2) = $Tenv3,      
+       del-formals([$DclVar*], $Tenv3) = $Tenv4, 
+       store($Tenv4, $Var, fun extract-types([$DclVar*]) to $Etype) = $Tenv5 
+       ===========================================
+       check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
 
 %% ---- Check type declarations
 
-[check-typedef]
+[check-typedef1]
 	check-not-defined($Var, $Tenv) = $Tenv',
-	check-duplicate-fields($DclVar+, $Tenv') =  $Tenv''
+	check-duplicate-fields($DclVar+, 1, $Tenv') =  $Tenv''
 	=============================================
-	check-stat(type $Var = < $DclVar+ >, $Tenv) = store($Tenv'', $Var, < $DclVar+ >)
+	check-stat(type $Var = < $DclVar+ >, $Tenv) = store($Tenv'', $Var, <$DclVar+ >)
 
-%% --- Check assert statement
+[check-typedef1]
+	check-not-defined($Var, $Tenv) = $Tenv'
+	=============================================
+	check-stat(type $Var = $Etype, $Tenv) = store($Tenv', $Var, $Etype)
+
+
+
+%% ---- Check assert statement
 
 [check-assert]
 	check-stat(assert $String : $Exp, $Tenv) = require-type($Exp, bool, $Tenv)
 
-%% --- Check yield statement
+%% ---- Check yield statement
 
 [check-yield]
 	check($Var, $Tenv) = <$Etype, $Tenv'>
 	===============================================
 	check-stat(yield $Var, $Tenv) =  $Tenv'
 
-%% --- Check set of equations
+%% ---- Check set of equations
 
 [CEQ1]	check-stat(equations (limit $Integer) initial $InitVar+ satisfy  $Eq+ end equations, $Tenv) = 
 	check-eqs($InitVar+, $Eq+, $Tenv)
@@ -880,12 +923,12 @@ $Error]>
 %% ---- Default case for check-stat
 
 [default-check-stat]
-	 check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
+	check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
 
-%% -- Default case for check
+%% ---- Default case for check
 
 [default-check]
-      check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
+	check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
 
 
 %% Find result type of a function, given list of argument types
@@ -922,66 +965,66 @@ $Error]>
 	==================================
 	match-types($Var, $Etype, $Table) = <true, $Table>
 
-[mt4]  match-types($Etype1, $Etype2, $Table) = <true, $Table'>
-       ===================================================
-       match-types(bag[$Etype1], bag[$Etype2], $Table) =  <true, $Table'>
+[mt4]	match-types($Etype1, $Etype2, $Table) = <true, $Table'>
+	===================================================
+	match-types(bag[$Etype1], bag[$Etype2], $Table) =  <true, $Table'>
 
-[mt5]  match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-       match-types($Etype2, $Etype4, $Table') = <true, $Table''>
-       ===================================================
-       match-types(rel[$Etype1, $Etype2], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
+[mt5]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
+	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+	===================================================
+	match-types(rel[$Etype1, $Etype2], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
 
-[mt6]  match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-       match-types($Etype2, $Etype4, $Table') = <true, $Table''>
-       ===================================================
-       match-types(rel[$Etype1, $Etype2], bag[<$Etype3, $Etype4>], $Table) =  <true, $Table''>
+[mt6]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
+	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+	===================================================
+	match-types(rel[$Etype1, $Etype2], bag[<$Etype3, $Etype4>], $Table) =  <true, $Table''>
 
-[mt7]  match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-       match-types($Etype2, $Etype4, $Table') = <true, $Table''>
-       ===================================================
-       match-types(bag[<$Etype1, $Etype2>], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
+[mt7]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
+	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+	===================================================
+	match-types(bag[<$Etype1, $Etype2>], rel[$Etype3, $Etype4], $Table) =  <true, $Table''>
 
-[mt8]  match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
-       match-types($Etype2, $Etype4, $Table') = <true, $Table''>
-       ===================================================
-       match-types(<$Etype1, $Etype2>, <$Etype3, $Etype4>, $Table) =  <true, $Table''>
+[mt8]	match-types($Etype1, $Etype3, $Table) = <true, $Table'>,
+	match-types($Etype2, $Etype4, $Table') = <true, $Table''>
+	===================================================
+	match-types(<$Etype1, $Etype2>, <$Etype3, $Etype4>, $Table) =  <true, $Table''>
 
-[mt9]  match-types($Etype1, $Etype2, $Table) = <true, $Table'>,
-       match-types([$Etype*1], [$Etype*2], $Table') = <true, $Table''>
-       ===================================================
-       match-types([$Etype1, $Etype*1], [$Etype2, $Etype*2], $Table) = <true, $Table''>
+[mt9]	match-types($Etype1, $Etype2, $Table) = <true, $Table'>,
+	match-types([$Etype*1], [$Etype*2], $Table') = <true, $Table''>
+	===================================================
+	match-types([$Etype1, $Etype*1], [$Etype2, $Etype*2], $Table) = <true, $Table''>
 
 [mt10]  match-types([], [], $Table) = <true, $Table>
 
 [default-mt]
 	match-types($Etype1, $Etype2, $Table) = <false, $Table>
 
-%% --- Substitute type
+%% ---- Substitute type
 
-[sb1]  $Etype = lookup($Table, $Var)
-       ======================================================
-       substitute($Var, $Table, $Tenv) = 
-       if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
-                                       else <$Etype, $Tenv> fi
+[sb1]	$Etype = lookup($Table, $Var)
+	======================================================
+	substitute($Var, $Table, $Tenv) = 
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
+						   else <$Etype, $Tenv> fi
 
-[sb2]  substitute($Etype, $Table, $Tenv) = <$Etype', $Tenv'>
-       ======================================================
-       substitute(bag[$Etype], $Table, $Tenv) = <bag[$Etype'], $Tenv>
+[sb2]   substitute($Etype, $Table, $Tenv) = <$Etype', $Tenv'>
+	======================================================
+	substitute(bag[$Etype], $Table, $Tenv) = <bag[$Etype'], $Tenv>
 
-[sb3]  substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
-       substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
-       =======================================================
-       substitute(rel[$Etype1,$Etype2], $Table, $Tenv) = <rel[$Etype1', $Etype2'], $Tenv''>
+[sb3]	substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
+	substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
+	=======================================================
+	substitute(rel[$Etype1,$Etype2], $Table, $Tenv) = <rel[$Etype1', $Etype2'], $Tenv''>
 
-[sb4]  substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
-       substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
-       =======================================================
-       substitute(<$Etype1,$Etype2>, $Table, $Tenv) = <<$Etype1', $Etype2'>, $Tenv''>
+[sb4]	substitute($Etype1, $Table, $Tenv) = <$Etype1', $Tenv'>,
+	substitute($Etype2, $Table, $Tenv) = <$Etype2', $Tenv''>
+	=======================================================
+	substitute(<$Etype1,$Etype2>, $Table, $Tenv) = <<$Etype1', $Etype2'>, $Tenv''>
 
 [default-sb]
-       substitute($Etype, $Table, $Tenv) = <$Etype, $Tenv>
+	substitute($Etype, $Table, $Tenv) = <$Etype, $Tenv>
 
-%% -- The types of the built-in functions
+%% ---- The types of the built-in functions
 
 [bi-1]  built-ins = [
 		<id,      	fun [ bag[T] ] 				to rel[T,T]>,
@@ -1025,7 +1068,7 @@ $Error]>
 
         ]
 
-%% --- Where expressions
+%% ---- Where expressions
 
 [WH1]	$Tenv = <$Table, $Errors>,
 	check-rscript($Stat+, $Tenv) = $Tenv',
@@ -1034,19 +1077,19 @@ $Error]>
 	check($Exp where $Stat+ endwhere, $Tenv) = <$Etype, <$Table, $Errors'>>
 
 
-%% --- Check script
+%% ---- Check script
 
-[crs] $Rscript = $Stat*,
-       check-rscript($Stat*,  <built-ins, errors[]>) = <$Table, $Errors>
-      ===============================================
-      check-rscript($Rscript) = convert-errors($Errors)
-
-
-[crs2] check-rscript($Stat $Stat*, $Tenv) = check-rscript($Stat*, check-stat($Stat, $Tenv))
-[crs3] check-rscript( , $Tenv) = $Tenv
+[crs]	$Rscript = $Stat*,
+	check-rscript($Stat*,  <built-ins, errors[]>) = <$Table, $Errors>
+	===============================================
+	check-rscript($Rscript) = convert-errors($Errors)
 
 
-%% -- Check script with rstore
+[crs2]	check-rscript($Stat $Stat*, $Tenv) = check-rscript($Stat*, check-stat($Stat, $Tenv))
+[crs3]	check-rscript( , $Tenv) = $Tenv
+
+
+%% ---- Check script with rstore
  
 [cwr1]	$Rscript = $Stat*,
        	check-rscript($Stat*,  <built-ins, errors[]>) = $Tenv,

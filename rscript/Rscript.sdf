@@ -19,7 +19,7 @@ exports
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
 %%     REXP # REXP			     	-> REXP {avoid}
-     "<" REXP "," {REXP ","}+ ">"		-> REXP {avoid}
+     "<" {REXP ","}+ ">"			-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
 
 
@@ -48,10 +48,12 @@ exports
      REXP "\\" REXP                          	-> REXP {left}
      REXP "o" REXP                           	-> REXP {left}
      REXP "x" REXP                           	-> REXP {left}
-     REXP "." REXP                           	-> REXP {left}
-     REXP "[" REXP "]"				-> REXP
 
-     REXP "@" RVAR				-> REXP
+     REXP "[" REXP "]"				-> REXP {prefer}
+     REXP "[" REXP "," "-" "]"			-> REXP {prefer}
+     REXP "[" "-" "," REXP "]"			-> REXP {prefer}
+
+     REXP "." REXP				-> REXP {left}
 
      REXP "+"                                	-> REXP
      REXP "*"                                	-> REXP
@@ -65,7 +67,7 @@ exports
      REXP					-> TARGET
 
      TARGET					-> DESTINATION
-     "<" TARGET "," {TARGET ","}+ ">"		-> DESTINATION
+     "<" {TARGET ","}+ ">"			-> DESTINATION
 
      DESTINATION ":" REXP                      	-> SIMPLE-GENERATOR
      SIMPLE-GENERATOR				-> GENERATOR
@@ -90,9 +92,9 @@ exports
 
      "bool" | "int" | "str" | "area"	     	-> ElemType
      ElemType                                	-> REXPTYPE
-     "<" REXPTYPE "," {REXPTYPE ","}+">"       	-> REXPTYPE
+     "<" {REXPTYPE ","}+">"			-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
-     "rel" "[" REXPTYPE "," {REXPTYPE ","}+ "]" -> REXPTYPE
+     "rel" "[" {REXPTYPE ","}+ "]"		-> REXPTYPE
      RVAR				     	-> REXPTYPE
 
 %% Declarations and Statements
@@ -102,6 +104,7 @@ exports
      DCLRVAR				      	-> RSTAT
 
      type RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
+     type RVAR "=" REXPTYPE			-> RSTAT
 
      DCLRVAR "=" REXP                         	-> INITVAR
      DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?
@@ -130,11 +133,15 @@ exports
     {	REXP "+" -> REXP
        	REXP "*" -> REXP
     }					>
-    REXP "[" REXP "]"	-> REXP 	>
+    {	REXP "[" REXP "]" -> REXP
+	REXP "[" REXP "," "-" "]"  -> REXP
+	REXP "[" "-" "," REXP  "]" -> REXP
+    }					>
 
+    REXP "." REXP -> REXP		>
     REXP "o" REXP -> REXP		>
     REXP "x" REXP -> REXP		>
-    REXP "." REXP -> REXP		>
+
     REXP "inter" REXP -> REXP		>
     REXP "union" REXP -> REXP		>
     REXP "\\" REXP -> REXP		>
