@@ -58,7 +58,7 @@ int main (int argc, char *argv[])
 {
   int c; /* option character */
   ATerm bottomOfStack;
-  PT_ParseTree parsetree;
+  ATerm tree;
   char *dot = NULL;
 
   char   *input_file_name  = "-";
@@ -90,16 +90,16 @@ int main (int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
 
-  parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
+  tree = ATreadFromNamedFile(input_file_name);
 
-  if(parsetree == NULL) {
+  if(tree == NULL) {
     ATerror("%s: could not read term from input file %s\n", 
 	    myname, input_file_name);
   }
 
-  dot = PT_printParseTreeToDot(parsetree, sharing, characters,
-			       characters_sharing, productions,
-			       layout,literals);
+  dot = PT_printAnyToDot(tree, sharing, characters,
+			 characters_sharing, productions,
+			 layout,literals);
 
   if (!strcmp(output_file_name,"-")) {
     fprintf(stdout,dot);
