@@ -1,0 +1,13 @@
+ 	node ROOT
+        rel[node,node] PRED
+        rel[<node,str>,node] USE_OCCURS
+        rel[<node,str>,node] DEF_OCCURS
+        rel[node,str] USES
+        rel[node,str] DEFS
+
+        rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
+
+        rel[str,node] UNDEF = 
+        { occurrences(<N,V>) : <N, V> in USES | <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
+        }
+                         
