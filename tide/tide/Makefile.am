@@ -26,8 +26,10 @@ noinst_SCRIPTS  = ${GENJAVA}
             ' < $< > $@
 
 ${CONTROL_GEN}: ${top_builddir}/toolbus/tide.tifs
-	${ATERM}/bin/tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
-		-tool tide-control -package tide
+	${TOOLBUS}/bin/tifstojava \
+		-tifs ${top_builddir}/toolbus/tide.tifs \
+		-tool tide-control \
+		-package tide
 
 %.class: %.java
 	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<
