@@ -1,0 +1,56 @@
+module type-check/signatures
+
+imports
+
+  type-check/typeops
+
+exports
+
+sorts
+
+context-free syntax
+
+  get-fun-name(AS-FunctionSig)	-> Literal
+  get-using(AS-FunctionSig)	-> Type
+  get-giving(AS-FunctionSig)	-> Type
+  get-raising(AS-FunctionSig)	-> Type
+  failing(AS-FunctionSig)	-> Answer
+  terminates(AS-FunctionSig)	-> Answer
+  closed(AS-FunctionSig)	-> Answer
+  stable(AS-FunctionSig)	-> Answer
+  ineffective(AS-FunctionSig)	-> Answer
+  uncreative(AS-FunctionSig)	-> Answer
+  remove-using(ActionType)	-> {SingleActionType "&"}*
+  remove-giving(ActionType)	-> {SingleActionType "&"}*
+  remove-raising(ActionType)	-> {SingleActionType "&"}*
+  remove-infallible(ActionType)	-> {SingleActionType "&"}*
+  remove-terminates(ActionType)	-> {SingleActionType "&"}*
+  remove-closed(ActionType)	-> {SingleActionType "&"}*
+  remove-stable(ActionType)	-> {SingleActionType "&"}*
+  remove-ineffective(ActionType)   -> {SingleActionType "&"}*
+  remove-uncreative(ActionType)	-> {SingleActionType "&"}* 
+  remove-action(ActionType)	-> {SingleActionType "&"}* 
+  remove-dobble-sigs(Signatures, Environment)	-> Signatures
+  join-results(ActionType, ActionType, Environment)	
+				-> {SingleActionType "&"}*
+  remove-dobble-dataops(DataOpSigs, Environment)	-> DataOpSigs
+
+hiddens variables
+
+  "$SIGS"[0-9]?		-> Signatures
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?"*"	-> { SingleActionType "&"}*
+  "$STS"[0-9]?		-> SubTypes
+  "$EN"[0-9]?		-> Environment
+  "$DOS"[0-9]?		-> DataOpSigs
+  "$DF"[0-9]?"*"	-> {<DataOp, ActionType> "," }*
+  "$DO"[0-9]?		-> DataOp
+  "$DCS"[0-9]?		-> DataConstants
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$AT"[0-9]?		-> ActionType
+  "$TY"[0-9]?		-> Type
+  "$FS"[0-9]?		-> AS-FunctionSig
+  "$FS"[0-9]?"*"	-> {AS-FunctionSig ","}*
+  "$N"[0-9]?		-> Integer
+  "$LC"[0-9]?		-> List[[Constraint]]
