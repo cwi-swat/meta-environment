@@ -1,5 +1,8 @@
 $Id$
 
+2001/11/12 (jurgenv@cwi.nl)
+  * moved apply-function functionality to pt-support package
+
 2001/11/07 (jurgenv@cwi.nl)
   * added the muasf_operators parse_sort and get_sort.
 
