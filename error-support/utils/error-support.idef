@@ -137,6 +137,11 @@ in
     . snd-eval(ES, add-filename-in-error(Filename, Error))
     . rec-value(ES, error(Error?))
     . snd-msg(es-filename-in-error(Filename, Error))
+  +
+    rec-msg(es-make-summary(Producer?, Id?, Errors?))
+    . snd-eval(ES, make-summary(Producer, Id, Errors))
+    . rec-value(ES, summary(Summary?))
+    . snd-msg(es-summary(Summary))
   ) * delta
 endlet
 

@@ -263,6 +263,8 @@ void display_summary(int cid, ATerm summary)
 }
 
 /*}}}  */
+/*{{{  ATerm add_filename_in_error(int cid, const char *filename, ATerm t) */
+
 ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
 {
   ERR_Error error = ERR_ErrorFromTerm(t);
@@ -283,6 +285,19 @@ ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
 
   return ATmake("snd-value(error(<term>))", ERR_ErrorToTerm(error));
 }
+
+/*}}}  */
+/*{{{  ATerm make_summary(int conn, const char *producer, const char *id, ATerm error) */
+
+ATerm make_summary(int conn, const char *producer, const char *id, ATerm errors)
+{
+  ERR_ErrorList errorList = ERR_ErrorListFromTerm(errors);
+  ERR_Summary summary = ERR_makeSummarySummary(producer, id, errorList);
+
+  return ATmake("snd-value(summary(<term>))", summary);
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
