@@ -131,7 +131,7 @@ static SDF_Attributes PTAttributesToSDFAttributes(PT_Attributes ptAttributes)
 
 /*{{{  static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol) */
 
-static SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
+SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 {
   SDF_Symbol result;
 

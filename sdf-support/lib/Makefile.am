@@ -2,7 +2,7 @@
 
 lib_LIBRARIES		= libSDFME.a libSDF2PT.a libPT2SDF.a
 
-include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h SDF2PT.h
+include_HEADERS		= SDFME.h SDFME-utils.h SDFME_dict.h SDF2PT.h PT2SDF.h
 
 libSDFME_a_SOURCES	= SDFME.c SDFME_dict.c SDFME_bottom.c ${UTILSRCS}
 
