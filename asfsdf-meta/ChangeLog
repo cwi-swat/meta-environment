@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Wed Jan 26 13:34:34 CET 2005 <jurgenv@cwi.nl>
+ * Reactivated Removevarsyntax
+
 Mon Jan 10 18:05:30 CET 2005 <markvdb@cwi.nl>
  * Added first version of action interpreter
    Modified files:
