@@ -1,3 +1,6 @@
+2002/03/26 (vandenbr@loria.fr)
+ * Fixed a "bug" with respect to the flattening of variable names.
+
 2002/03/04 (vandenbr@loria.fr)
  * Introduced parameterized sorts.
 

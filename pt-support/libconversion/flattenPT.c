@@ -499,6 +499,10 @@ static PT_Tree flattenVar(PT_Tree tree)
 
     if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
       PT_Args newVarArg = PT_makeArgsEmpty();
+      char *varStr = PT_yieldArgs(argsInner);
+
+/*
+      PT_Args newVarArg = PT_makeArgsEmpty();
       PT_Args newVarArgs = PT_makeArgsEmpty();
 
       while (PT_hasArgsHead(argsInner)) {
@@ -512,6 +516,9 @@ static PT_Tree flattenVar(PT_Tree tree)
       newVarArg = PT_makeArgsList(PT_makeTreeAppl(flattenProd(prodVarsymInner),
                                                   PT_reverseArgs(newVarArgs)),
                                   newVarArg);
+*/
+
+      newVarArg = PT_makeArgsList(PT_makeTreeLit(varStr), newVarArg);
       return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }
   }
