@@ -40,8 +40,8 @@ CLEANFILES  = meta meta.1
 	     s@__ASF__@$(ASF)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
+	     s@__ASF__@$(ASF)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
-	     s@__EVALUATOR__@$(EVALUATOR)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)/toolbus@g;\
 	     s@__WISH__@$(WISH)@g;\
 	     s@__XEMACS__@$(XEMACS)@g;\
