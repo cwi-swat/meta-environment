@@ -36,7 +36,7 @@ char *TBtmpname(char *name, char *suf)
   {
     char *tmp = getenv("TMPDIR");
     if(!tmp)
-      tmp = "/usr/tmp";
+      tmp = "/var/tmp";
     sprintf(name, "%s/TB%d%s", tmp, (int) getpid(), suf);
     if(strlen(name) >= ABS_PATH_MAX)
       err_fatal("TBtmpname: name `%s' too long", name);

@@ -32,12 +32,12 @@ env *update(register env *e, register env *u)
   return e;
 }
 
-term *value(var *var, env *e)
+term *value(var *v, env *e)
 {
   register env *e1;
-  register sym_idx sym = var_sym(var);
+  register sym_idx sym = var_sym(v);
 
-  ENVDB(TBmsg("value of %t in %t\n", var, e);)
+  ENVDB(TBmsg("value of %t in %t\n", v, e);)
 
   for(e1 = e; e1; e1 = env_next(e1)){  
     if(sym == env_sym(e1)){
@@ -46,8 +46,8 @@ term *value(var *var, env *e)
       return val;
     }
   }
-  ENVDB(TBmsg("val = %t\n", var));
-  return var;
+  ENVDB(TBmsg("val = %t\n", v));
+  return v;
 }
 
 term *substitute(term *, env *);

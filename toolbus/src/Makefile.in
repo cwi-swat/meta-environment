@@ -166,6 +166,7 @@ install: ${TARGETS}
 	$(INSTALL) -m 644 viewer.tcl $(libdir)
 	for file in libtb.a $(SHARED_TB_LIB); do \
 	  $(INSTALL) $$file $(libdir); \
+	  ${RANLIB} ${libdir}/$$file; \
 	done
 	for file in $(HEADERS); do \
 	   $(INSTALL) -m 644 $$file $(includedir); \

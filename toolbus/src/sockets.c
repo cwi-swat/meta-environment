@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <sys/param.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
@@ -83,7 +84,7 @@ static int connect_unix_socket(int port)
   while(1) {
     int result;
 
-    sprintf (name, "/usr/tmp/%d", port);
+    sprintf (name, "/var/tmp/%d", port);
     if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
 
@@ -203,7 +204,7 @@ static int create_unix_socket(int port)
   int attempts = 0;
   int sock, length;
 
-  sprintf (name, "/usr/tmp/%d", port);
+  sprintf (name, "/var/tmp/%d", port);
   unlink (name);
 
   if((sock=socket(AF_UNIX,SOCK_STREAM,0)) < 0)
@@ -221,7 +222,7 @@ static int create_unix_socket(int port)
     TBmsg("Binding %s\n", name);
 
   while(bind(sock,(struct sockaddr *)&usin,
-    strlen(usin.sun_path)+ sizeof(usin.sun_family)) < 0){
+    strlen(usin.sun_path) +1 + sizeof(usin.sun_family)) < 0){
     if(attempts > 1000)
       err_sys_fatal("cannot connect, giving up");
     attempts++;

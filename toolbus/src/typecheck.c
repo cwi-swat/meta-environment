@@ -91,7 +91,7 @@ TBbool req_nargs(atom *a, int nargs)
 
 TBbool req_arg1_tool_id(atom *a, TBbool var_only)
 {
-  term *tool_id, *tool_type;
+  term *the_tool_id, *the_tool_type;
   coords *c = at_coords(a);
 
   if(list_length(at_args(a)) < 1){  
@@ -100,10 +100,10 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
     nerror++;
     return TBfalse;
   }
-  tool_id = elm1(at_args(a));
+  the_tool_id = elm1(at_args(a));
   if(var_only){
-    if(is_var(tool_id))
-      tool_type = var_type(tool_id);
+    if(is_var(the_tool_id))
+      the_tool_type = var_type(the_tool_id);
     else {
       pr_coords(c);
       TBprintf(stderr, "%s: argument 1 should be a variable\n", get_txt(at_fun(a)));
@@ -111,8 +111,8 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
       return TBfalse;
     }
   } else {
-    if(is_appl(tool_id) &&  (list_length(fun_args(tool_id)) == 0))
-      tool_type = tool_id;
+    if(is_appl(the_tool_id) &&  (list_length(fun_args(the_tool_id)) == 0))
+      the_tool_type = the_tool_id;
     else {
       pr_coords(c);
       TBprintf(stderr, "%s: argument 1 should be a tool name\n", get_txt(at_fun(a)));
@@ -121,10 +121,10 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
     }
   }
 	
-  if(!find_tool_def(fun_sym(tool_type))){
+  if(!find_tool_def(fun_sym(the_tool_type))){
     pr_coords(c);
     TBprintf(stderr, "%s: type of argument 1 (`%t') not declared as tool name\n",
-	     get_txt(at_fun(a)), type_of(tool_type));
+	     get_txt(at_fun(a)), type_of(the_tool_type));
     nerror++;
     return TBfalse;
   }

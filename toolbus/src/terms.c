@@ -1360,14 +1360,14 @@ term_list *list_put(term_list *tl, term *key, term *val)
 
 /* *** CHANGE, since env structure was changes */
 
-term *get_list_as_env(register var *var, term_list *e)
+term *get_list_as_env(register var *v, term_list *e)
 {
   register term_list *e1;
-  register sym_idx sym = var_sym(var);
+  register sym_idx sym = var_sym(v);
   term *entry;
   term *entry_var;
 
-  /* TBmsg("value of %t\n", var); */
+  /* TBmsg("value of %t\n", v); */
 
   for(e1 = e; e1; e1 = next(e1)){
     entry = first(e1);
@@ -1377,13 +1377,13 @@ term *get_list_as_env(register var *var, term_list *e)
       register term *val = elm2(entry);
       /* TBmsg("val = %t\n", val); */
       if(is_var(val)){
-	var = val;
-	sym = var_sym(var);
+	v = val;
+	sym = var_sym(v);
       } else
 	return val;
     }
   }
-  return var;
+  return v;
 }
 
 /*------------------------------------------------------------*/

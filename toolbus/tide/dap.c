@@ -784,7 +784,6 @@ void dap_activate_rules(int pid, term *port)
   int   when  = dap_eventwhen(list_index(port, 2));
   term *tdata = list_next(list_next(port));
 
-
   if(type == PORT_LOCATION) {
     if(TB_match(tdata, "[<str>,<int>,<int>,<int>,<int>]", &p->cpe.module,
 	&p->cpe.start_line, &p->cpe.start_col, &p->cpe.end_line, &p->cpe.end_col))
