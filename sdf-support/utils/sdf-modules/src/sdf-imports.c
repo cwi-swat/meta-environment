@@ -12,7 +12,7 @@ static void initModuleTable(ATermList modules)
 {
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
-    ATerm atModule = ATBunpack(ATgetFirst(modules));
+    ATerm atModule = ATgetFirst(modules);
     SDF_Start smodule = SDF_StartFromTerm(atModule);
     SDF_Module module = SDF_getStartTopModule(smodule);
     SDF_ModuleId id = SDF_removeModuleIdAnnotations(
