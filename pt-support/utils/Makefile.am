@@ -4,7 +4,7 @@
 # $Id$
 #
 
-bin_PROGRAMS		= a2metoa1 flattenPT unparsePT implodePT unparseProd \
+bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
                           addPosInfo
 
 addPosInfo_SOURCES      = addPosInfo.c
@@ -15,11 +15,6 @@ flattenPT_SOURCES	= flattenPT-main.c
 flattenPT_LDADD		= -L../libconversion -lconversion \
                           -L../libmept -lmept \
                           -L../libasfix2 -lasfix2 \
-			  -L${ATERM}/lib -lATerm
-
-a2metoa1_SOURCES	= a2metoa1-main.c
-a2metoa1_LDADD		= -L../libconversion -lconversion \
-                          -L../libmept -lmept \
 			  -L${ATERM}/lib -lATerm
 
 unparsePT_SOURCES	= unparsePT-main.c

@@ -91,11 +91,6 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
-  libasfix-old/Makefile
-  libasfix-old/libasfix/Makefile
-  libasfix-old/asfix-tools/Makefile
-  libasfix-old/test/Makefile
-  libasfix1/Makefile
   libconversion/Makefile
   libmept/Makefile
   libasfix2/Makefile
