@@ -2,23 +2,16 @@ package metastudio.components;
 
 import java.awt.Component;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.border.EmptyBorder;
 
 import metastudio.utils.Preferences;
 import errorapi.types.Feedback;
 import errorapi.types.Location;
 import errorapi.types.SubjectList;
 
-public class FeedbackListCellRenderer extends JTextField implements ListCellRenderer {
-
-    public FeedbackListCellRenderer() {
-        setOpaque(true);
-    }
-    
-    
+public class FeedbackListCellRenderer extends DefaultListCellRenderer {
 
     public Component getListCellRendererComponent(
         JList list,
@@ -26,33 +19,36 @@ public class FeedbackListCellRenderer extends JTextField implements ListCellRend
         int index,
         boolean isSelected,
         boolean cellHasFocus) {
-
+        JLabel cell = (JLabel) super.getListCellRendererComponent(list,value, index, isSelected, cellHasFocus);
         Feedback feedback = (Feedback) value;
 
         if (feedback.isInfo()) {
-            setForeground(Preferences.getColor("feedback.info.foreground"));
-            setBackground(Preferences.getColor("feedback.info.background"));
-            setFont(Preferences.getFont("feedback.info.font"));
+            cell.setForeground(Preferences.getColor("feedback.info.foreground"));
+            cell.setBackground(Preferences.getColor("feedback.info.background"));
+            cell.setFont(Preferences.getFont("feedback.info.font"));
         } else if (feedback.isWarning()) {
-            setForeground(Preferences.getColor("feedback.warning.foreground"));
-            setBackground(Preferences.getColor("feedback.warning.background"));
-            setFont(Preferences.getFont("feedback.warning.font"));
+            cell.setForeground(Preferences.getColor("feedback.warning.foreground"));
+            cell.setBackground(Preferences.getColor("feedback.warning.background"));
+            cell.setFont(Preferences.getFont("feedback.warning.font"));
         } else if (feedback.isError()) {
-            setForeground(Preferences.getColor("feedback.error.foreground"));
-            setBackground(Preferences.getColor("feedback.error.background"));
-            setFont(Preferences.getFont("feedback.error.font"));
+            cell.setForeground(Preferences.getColor("feedback.error.foreground"));
+            cell.setBackground(Preferences.getColor("feedback.error.background"));
+            cell.setFont(Preferences.getFont("feedback.error.font"));
         } else if (feedback.isFatalError()) {
-            setForeground(Preferences.getColor("feedback.fatalerror.foreground"));
-            setBackground(Preferences.getColor("feedback.fatalerror.background"));
-            setFont(Preferences.getFont("feedback.fatalerror.font"));
+            cell.setForeground(Preferences.getColor("feedback.fatalerror.foreground"));
+            cell.setBackground(Preferences.getColor("feedback.fatalerror.background"));
+            cell.setFont(Preferences.getFont("feedback.fatalerror.font"));
         }
 
-        setText(feedback.getDescription());
-        setBorder(new EmptyBorder(0, 0, 0, 0));
-        setEditable(false);
-        setToolTipText(getTooltip(feedback));
+        cell.setText(feedback.getDescription());
+        cell.setToolTipText(getTooltip(feedback));
         
-        return this;
+        if (isSelected) {
+            cell.setBackground(list.getSelectionBackground());
+            cell.setForeground(list.getSelectionForeground());
+        }
+       
+        return cell;
     }
 
     private String getTooltip(Feedback feedback) {
