@@ -1,4 +1,9 @@
 
+2002/10/04 (vinju@loria.fr)
+ * Removed complex parsetree pattern from MEPT.adt. It is now a true
+   signature definition of AsFix. Missing functionality replaced by
+   utility functions in MEPT-utils (with the same name).
+
 2002/10/03 (vandenbr@loria.fr)
  * Removed a very subtle off by one bug in combination with '\\'.
 

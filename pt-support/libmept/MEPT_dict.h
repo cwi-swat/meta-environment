@@ -1,5 +1,5 @@
 /*
- * Generated at Fri May 24 14:07:10 2002
+ * Generated at Fri Oct  4 10:05:42 2002
  */
 
 #ifndef __MEPT_dict_H
@@ -50,7 +50,6 @@ extern AFun PT_afun39;
 extern AFun PT_afun40;
 extern AFun PT_afun41;
 extern AFun PT_afun42;
-extern AFun PT_afun43;
 
 extern ATerm PT_patternCharRangesEmpty;
 extern ATerm PT_patternCharRangesList;
@@ -105,7 +104,7 @@ extern ATerm PT_patternTreeFlatLayout;
 extern ATerm PT_patternTreeLit;
 extern ATerm PT_patternTreeChar;
 extern ATerm PT_patternTreeAppl;
-extern ATerm PT_patternParseTreeTree;
+extern ATerm PT_patternParseTreeTop;
 
 extern void init_MEPT_dict();
 

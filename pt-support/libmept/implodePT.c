@@ -359,7 +359,7 @@ ATerm implodeParseTree(PT_ParseTree tree)
 {
   ATerm atermTree;
 
-  if (PT_isParseTreeTree(tree)) {
+  if (PT_isParseTreeTop(tree)) {
     PT_Tree newTree = PT_getParseTreeTop(tree);
     int     ambs = PT_getParseTreeAmbCnt(tree);
 

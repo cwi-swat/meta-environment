@@ -185,9 +185,9 @@ PT_Tree PT_renameInTree(PT_Tree tree,
 PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree, PT_Symbol formalParam,
                                   PT_Symbol actualParam)
 {
-  PT_Tree tree = PT_getParseTreeTree(parsetree);
+  PT_Tree tree = PT_getParseTreeTop(parsetree);
 
   tree = PT_renameInTree(tree, formalParam, actualParam);
 
-  return PT_setParseTreeTree(parsetree, tree);
+  return PT_setParseTreeTop(parsetree, tree);
 }

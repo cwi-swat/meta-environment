@@ -7,10 +7,12 @@ libmept_a_SOURCES 	= MEPT.c MEPT_dict.c MEPT-utils.c  \
                           posInfo.c reportAmbs.c PT2dot.c apply.c \
                           symbol-renaming.c
                           
-
-#CFLAGS                 += -pg -DDISABLE_DYNAMIC_CHECKING
-#CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
-#CFLAGS                  += -DNO_SHARING -DDISABLE_DYNAMIC_CHECKING
-#CFLAGS                  += -pg -DNO_SHARING -DDISABLE_DYNAMIC_CHECKING
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
+
+api: 
+	adt-to-c --compat-term -i MEPT.adt --prefix PT_ -o MEPT
+
+api-clean:
+	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict
+		~                                                    

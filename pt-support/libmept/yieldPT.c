@@ -285,7 +285,7 @@ char *PT_yieldArgsVisualAmbs(PT_Args args, ATbool visualAmbs)
 
 char *PT_yieldParseTreeVisualAmbs(PT_ParseTree tree, ATbool visualAmbs)
 {
-  if (PT_isParseTreeTree(tree)) {
+  if (PT_isParseTreeTop(tree)) {
     return PT_yieldTreeVisualAmbs(PT_getParseTreeTop(tree), visualAmbs);
   }
 

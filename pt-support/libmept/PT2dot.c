@@ -363,7 +363,7 @@ char* PT_printAnyToDot(ATerm term, ATbool sharing, ATbool characters,
 		       ATbool characters_sharing, ATbool productions, 
 		       ATbool layout, ATbool literals)
 {
-  if (ATmatchTerm(term, PT_patternParseTreeTree, NULL, NULL, NULL, NULL, NULL)){
+  if (ATmatchTerm(term, PT_patternParseTreeTop, NULL, NULL)){
     return PT_printParseTreeToDot((PT_ParseTree) term, sharing, characters, 
 				  characters_sharing, productions, layout,
 				  literals);

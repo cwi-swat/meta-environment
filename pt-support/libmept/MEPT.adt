@@ -1,14 +1,7 @@
 [
-  [ParseTree, Tree, parsetree(appl(prod(<lhs(Symbols)>,
-                                        sort("<START>"),
-                                        no-attrs),
-                                   [<layout-before-tree(Tree)>,
-                                    <tree(Tree)>,
-                                    <layout-after-tree(Tree)>]),
-                              <amb-cnt(int)>)],
+  [ParseTree, top , parsetree(<top(Tree)>,<amb-cnt(int)>)],
 
-  [Tree, appl, appl(<prod(Production)>,
-                    <args(Args)>)],
+  [Tree, appl, appl(<prod(Production)>, <args(Args)>)],
 
   [Tree, char, <character(int)>],
 
@@ -18,11 +11,8 @@
 
   [Tree, Amb, amb(<args(Args)>)],
 
-  [Production, Default, prod(<lhs(Symbols)>,
-                             <rhs(Symbol)>,
-                             <attributes(Attributes)>
-                            )
-  ],
+  [Production, Default, prod(<lhs(Symbols)>,<rhs(Symbol)>,
+                             <attributes(Attributes)>)],
 
   [Production, List, list(<rhs(Symbol)>)],
 
@@ -85,7 +75,8 @@
 
   [Symbol, func, func(<symbols(Symbols)>,<symbol(Symbol)>)],
 
-  [Symbol, parameterized-sort, parameterized-sort(<sort(str)>,<parameters(Symbols)>)],
+  [Symbol, parameterized-sort, parameterized-sort(<sort(str)>,
+                                                  <parameters(Symbols)>)],
 
   [Symbol, strategy, strategy(<lhs(Symbol)>,<rhs(Symbol)>)], 
 

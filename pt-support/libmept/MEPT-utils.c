@@ -1101,29 +1101,6 @@ ATbool PT_isTreeFlatLexical(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree) */
-
-PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
-{
-  ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
-  
-  return PT_TreeFromTerm(ATgetArgument(ATparseTree,0));
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top) */
-
-PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top)
-{
-  ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
-  
-  return PT_ParseTreeFromTerm(
-           (ATerm) ATsetArgument((ATermAppl) ATparseTree,
-              PT_TreeToTerm(top),0));
-}
-
-/*}}}  */
-
 /*{{{  ATbool PT_isTreeBracket(PT_Tree tree) */
 
 ATbool PT_isTreeBracket(PT_Tree tree)
@@ -1196,6 +1173,107 @@ PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
                               PT_makeTreeLayoutEmpty(),
                               origTree,
                               PT_makeTreeLayoutEmpty(), 0);
+}
+
+/*}}}  */
+
+/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,  */
+
+PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore, 
+				  PT_Tree tree, PT_Tree wsAfter, int ambs)
+{
+  PT_Production prod;
+  PT_Symbol rhs;
+  PT_Args args;
+  PT_Tree top;
+
+  rhs = PT_makeSymbolSort("<START>");
+  prod = PT_makeProductionDefault(lhs, rhs, PT_makeAttributesNoAttrs());
+
+  args = PT_makeArgsList(wsBefore, 
+			 PT_makeArgsList(tree,
+					 PT_makeArgsList(wsAfter,
+							 PT_makeArgsEmpty())));
+
+  top = PT_makeTreeAppl(prod, args);
+
+  return PT_makeParseTreeTop(top, ambs);
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PT_getParseTreeTree(PT_ParseTree parsetree) */
+
+PT_Tree PT_getParseTreeTree(PT_ParseTree parsetree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  return PT_getArgsArgumentAt(args, 1);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree parsetree) */
+
+PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree parsetree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  return PT_getArgsArgumentAt(args, 0);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree parsetree) */
+
+PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree parsetree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  return PT_getArgsArgumentAt(args, 2);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeTree(PT_ParseTree parsetree, PT_Tree tree) */
+
+PT_ParseTree PT_setParseTreeTree(PT_ParseTree parsetree, PT_Tree tree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  args = PT_setArgsArgumentAt(args, tree, 1);
+  top = PT_setTreeArgs(top, args);
+
+  return PT_setParseTreeTop(parsetree, top);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree parsetree, PT_Tree tree) */
+
+PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree parsetree, PT_Tree tree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  args = PT_setArgsArgumentAt(args, tree, 0);
+  top = PT_setTreeArgs(top, args);
+
+  return PT_setParseTreeTop(parsetree, top);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree PT_setParseTreeTree(PT_ParseTree parsetree, PT_Tree tree) */
+
+PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree parsetree, PT_Tree tree)
+{
+  PT_Tree top = PT_getParseTreeTop(parsetree);
+  PT_Args args = PT_getTreeArgs(top);
+
+  args = PT_setArgsArgumentAt(args, tree, 2);
+  top = PT_setTreeArgs(top, args);
+
+  return PT_setParseTreeTop(parsetree, top);
 }
 
 /*}}}  */

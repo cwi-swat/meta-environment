@@ -228,11 +228,11 @@ ATerm PT_CharRangesToTerm(PT_CharRanges arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree layoutBeforeTree, PT_Tree tree, PT_Tree layoutAfterTree, int ambCnt) */
+/*{{{  PT_ParseTree PT_makeParseTreeTop(PT_Tree top, int ambCnt) */
 
-PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree layoutBeforeTree, PT_Tree tree, PT_Tree layoutAfterTree, int ambCnt)
+PT_ParseTree PT_makeParseTreeTop(PT_Tree top, int ambCnt)
 {
-  return (PT_ParseTree)(ATerm)ATmakeAppl2(PT_afun0, (ATerm)ATmakeAppl2(PT_afun1, (ATerm)ATmakeAppl3(PT_afun2, (ATerm)lhs, (ATerm)ATmakeAppl1(PT_afun3, (ATerm)ATmakeAppl0(PT_afun4)), (ATerm)ATmakeAppl0(PT_afun5)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)layoutAfterTree), (ATerm)tree), (ATerm)layoutBeforeTree)), (ATerm)ATmakeInt(ambCnt));
+  return (PT_ParseTree)(ATerm)ATmakeAppl2(PT_afun0, (ATerm)top, (ATerm)ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -256,7 +256,7 @@ PT_Tree PT_makeTreeChar(int character)
 
 PT_Tree PT_makeTreeLit(char * string)
 {
-  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun6, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun2, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -264,7 +264,7 @@ PT_Tree PT_makeTreeLit(char * string)
 
 PT_Tree PT_makeTreeFlatLayout(char * string)
 {
-  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun7, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun3, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -272,7 +272,7 @@ PT_Tree PT_makeTreeFlatLayout(char * string)
 
 PT_Tree PT_makeTreeAmb(PT_Args args)
 {
-  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun8, (ATerm)args);
+  return (PT_Tree)(ATerm)ATmakeAppl1(PT_afun4, (ATerm)args);
 }
 
 /*}}}  */
@@ -280,7 +280,7 @@ PT_Tree PT_makeTreeAmb(PT_Args args)
 
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
 {
-  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun2, (ATerm)lhs, (ATerm)rhs, (ATerm)attributes);
+  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun5, (ATerm)lhs, (ATerm)rhs, (ATerm)attributes);
 }
 
 /*}}}  */
@@ -288,7 +288,7 @@ PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attribu
 
 PT_Production PT_makeProductionList(PT_Symbol rhs)
 {
-  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun9, (ATerm)rhs);
+  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun6, (ATerm)rhs);
 }
 
 /*}}}  */
@@ -296,7 +296,7 @@ PT_Production PT_makeProductionList(PT_Symbol rhs)
 
 PT_Attributes PT_makeAttributesNoAttrs()
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun5);
+  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun7);
 }
 
 /*}}}  */
@@ -304,7 +304,7 @@ PT_Attributes PT_makeAttributesNoAttrs()
 
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs)
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun10, (ATerm)attrs);
+  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun8, (ATerm)attrs);
 }
 
 /*}}}  */
@@ -328,7 +328,7 @@ PT_Attrs PT_makeAttrsSingle(PT_Attr head)
 
 PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun11, (ATerm)assoc);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm)assoc);
 }
 
 /*}}}  */
@@ -336,7 +336,7 @@ PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 
 PT_Attr PT_makeAttrTerm(ATerm term)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun12, (ATerm)term);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun10, (ATerm)term);
 }
 
 /*}}}  */
@@ -344,7 +344,7 @@ PT_Attr PT_makeAttrTerm(ATerm term)
 
 PT_Attr PT_makeAttrId(char * moduleName)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun13, (ATerm)ATmakeAppl0(ATmakeAFun(moduleName, 0, ATtrue)));
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun11, (ATerm)ATmakeAppl0(ATmakeAFun(moduleName, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -352,7 +352,7 @@ PT_Attr PT_makeAttrId(char * moduleName)
 
 PT_Attr PT_makeAttrBracket()
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun14);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun12);
 }
 
 /*}}}  */
@@ -360,7 +360,7 @@ PT_Attr PT_makeAttrBracket()
 
 PT_Attr PT_makeAttrReject()
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun15);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun13);
 }
 
 /*}}}  */
@@ -368,7 +368,7 @@ PT_Attr PT_makeAttrReject()
 
 PT_Attr PT_makeAttrPrefer()
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun16);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun14);
 }
 
 /*}}}  */
@@ -376,7 +376,7 @@ PT_Attr PT_makeAttrPrefer()
 
 PT_Attr PT_makeAttrAvoid()
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun17);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun15);
 }
 
 /*}}}  */
@@ -384,7 +384,7 @@ PT_Attr PT_makeAttrAvoid()
 
 PT_Associativity PT_makeAssociativityLeft()
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun18);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun16);
 }
 
 /*}}}  */
@@ -392,7 +392,7 @@ PT_Associativity PT_makeAssociativityLeft()
 
 PT_Associativity PT_makeAssociativityRight()
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun19);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun17);
 }
 
 /*}}}  */
@@ -400,7 +400,7 @@ PT_Associativity PT_makeAssociativityRight()
 
 PT_Associativity PT_makeAssociativityAssoc()
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun20);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun18);
 }
 
 /*}}}  */
@@ -408,7 +408,7 @@ PT_Associativity PT_makeAssociativityAssoc()
 
 PT_Associativity PT_makeAssociativityNonAssoc()
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun21);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun19);
 }
 
 /*}}}  */
@@ -432,7 +432,7 @@ PT_Args PT_makeArgsEmpty()
 
 PT_Symbol PT_makeSymbolLit(char * string)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun6, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun2, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -440,7 +440,7 @@ PT_Symbol PT_makeSymbolLit(char * string)
 
 PT_Symbol PT_makeSymbolCf(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun22, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun20, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -448,7 +448,7 @@ PT_Symbol PT_makeSymbolCf(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLex(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun23, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun21, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -456,7 +456,7 @@ PT_Symbol PT_makeSymbolLex(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolEmpty()
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun24);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun22);
 }
 
 /*}}}  */
@@ -464,7 +464,7 @@ PT_Symbol PT_makeSymbolEmpty()
 
 PT_Symbol PT_makeSymbolSeq(PT_Symbols symbols)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun25, (ATerm)symbols);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun23, (ATerm)symbols);
 }
 
 /*}}}  */
@@ -472,7 +472,7 @@ PT_Symbol PT_makeSymbolSeq(PT_Symbols symbols)
 
 PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun26, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun24, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -480,7 +480,7 @@ PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun27, (ATerm)lhs, (ATerm)rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun25, (ATerm)lhs, (ATerm)rhs);
 }
 
 /*}}}  */
@@ -488,7 +488,7 @@ PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolPair(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun28, (ATerm)lhs, (ATerm)rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun26, (ATerm)lhs, (ATerm)rhs);
 }
 
 /*}}}  */
@@ -496,7 +496,7 @@ PT_Symbol PT_makeSymbolPair(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolSort(char * string)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun3, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun27, (ATerm)ATmakeAppl0(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -504,7 +504,7 @@ PT_Symbol PT_makeSymbolSort(char * string)
 
 PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun29, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun28, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -512,7 +512,7 @@ PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun30, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun29, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -520,7 +520,7 @@ PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun31, (ATerm)symbol, (ATerm)separator);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun30, (ATerm)symbol, (ATerm)separator);
 }
 
 /*}}}  */
@@ -528,7 +528,7 @@ PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator)
 
 PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun32, (ATerm)symbol, (ATerm)separator);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun31, (ATerm)symbol, (ATerm)separator);
 }
 
 /*}}}  */
@@ -536,7 +536,7 @@ PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator)
 
 PT_Symbol PT_makeSymbolIterN(PT_Symbol symbol, int number)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun33, (ATerm)symbol, (ATerm)ATmakeInt(number));
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun32, (ATerm)symbol, (ATerm)ATmakeInt(number));
 }
 
 /*}}}  */
@@ -544,7 +544,7 @@ PT_Symbol PT_makeSymbolIterN(PT_Symbol symbol, int number)
 
 PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int number)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl3(PT_afun34, (ATerm)symbol, (ATerm)separator, (ATerm)ATmakeInt(number));
+  return (PT_Symbol)(ATerm)ATmakeAppl3(PT_afun33, (ATerm)symbol, (ATerm)separator, (ATerm)ATmakeInt(number));
 }
 
 /*}}}  */
@@ -552,7 +552,7 @@ PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int numbe
 
 PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun35, (ATerm)symbols);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun34, (ATerm)symbols);
 }
 
 /*}}}  */
@@ -560,7 +560,7 @@ PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols)
 
 PT_Symbol PT_makeSymbolSet(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun36, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun35, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -568,7 +568,7 @@ PT_Symbol PT_makeSymbolSet(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun37, (ATerm)symbols, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun36, (ATerm)symbols, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -576,7 +576,7 @@ PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolParameterizedSort(char * sort, PT_Symbols parameters)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun38, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)parameters);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun37, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)parameters);
 }
 
 /*}}}  */
@@ -584,7 +584,7 @@ PT_Symbol PT_makeSymbolParameterizedSort(char * sort, PT_Symbols parameters)
 
 PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun39, (ATerm)lhs, (ATerm)rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun38, (ATerm)lhs, (ATerm)rhs);
 }
 
 /*}}}  */
@@ -592,7 +592,7 @@ PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun40, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun39, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -600,7 +600,7 @@ PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLayout()
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun41);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun40);
 }
 
 /*}}}  */
@@ -608,7 +608,7 @@ PT_Symbol PT_makeSymbolLayout()
 
 PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun42, (ATerm)ranges);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun41, (ATerm)ranges);
 }
 
 /*}}}  */
@@ -640,7 +640,7 @@ PT_CharRange PT_makeCharRangeCharacter(int integer)
 
 PT_CharRange PT_makeCharRangeRange(int start, int end)
 {
-  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun43, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
+  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun42, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
 }
 
 /*}}}  */
@@ -731,153 +731,54 @@ ATbool PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1)
 
 ATbool PT_isValidParseTree(PT_ParseTree arg)
 {
-  if (PT_isParseTreeTree(arg)) {
+  if (PT_isParseTreeTop(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool PT_isParseTreeTree(PT_ParseTree arg) */
+/*{{{  inline ATbool PT_isParseTreeTop(PT_ParseTree arg) */
 
-inline ATbool PT_isParseTreeTree(PT_ParseTree arg)
+inline ATbool PT_isParseTreeTop(PT_ParseTree arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternParseTreeTree, NULL, NULL, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, PT_patternParseTreeTop, NULL, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasParseTreeLhs(PT_ParseTree arg) */
+/*{{{  ATbool PT_hasParseTreeTop(PT_ParseTree arg) */
 
-ATbool PT_hasParseTreeLhs(PT_ParseTree arg)
+ATbool PT_hasParseTreeTop(PT_ParseTree arg)
 {
-  if (PT_isParseTreeTree(arg)) {
+  if (PT_isParseTreeTop(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PT_Symbols PT_getParseTreeLhs(PT_ParseTree arg) */
+/*{{{  PT_Tree PT_getParseTreeTop(PT_ParseTree arg) */
 
-PT_Symbols PT_getParseTreeLhs(PT_ParseTree arg)
+PT_Tree PT_getParseTreeTop(PT_ParseTree arg)
 {
   
-    return (PT_Symbols)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), 0);
+    return (PT_Tree)ATgetArgument((ATermAppl)arg, 0);
 }
 
 /*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeLhs(PT_ParseTree arg, PT_Symbols lhs) */
+/*{{{  PT_ParseTree PT_setParseTreeTop(PT_ParseTree arg, PT_Tree top) */
 
-PT_ParseTree PT_setParseTreeLhs(PT_ParseTree arg, PT_Symbols lhs)
+PT_ParseTree PT_setParseTreeTop(PT_ParseTree arg, PT_Tree top)
 {
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0), (ATerm)lhs, 0), 0), 0);
+  if (PT_isParseTreeTop(arg)) {
+    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)top, 0);
   }
 
-  ATabort("ParseTree has no Lhs: %t\n", arg);
-  return (PT_ParseTree)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeLayoutBeforeTree(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg) */
-
-PT_Tree PT_getParseTreeLayoutBeforeTree(PT_ParseTree arg)
-{
-  
-    return (PT_Tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Tree layoutBeforeTree) */
-
-PT_ParseTree PT_setParseTreeLayoutBeforeTree(PT_ParseTree arg, PT_Tree layoutBeforeTree)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)layoutBeforeTree, 0), 1), 0);
-  }
-
-  ATabort("ParseTree has no LayoutBeforeTree: %t\n", arg);
-  return (PT_ParseTree)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeTree(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeTree(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_getParseTreeTree(PT_ParseTree arg) */
-
-PT_Tree PT_getParseTreeTree(PT_ParseTree arg)
-{
-  
-    return (PT_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeTree(PT_ParseTree arg, PT_Tree tree) */
-
-PT_ParseTree PT_setParseTreeTree(PT_ParseTree arg, PT_Tree tree)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)tree, 1), 1), 0);
-  }
-
-  ATabort("ParseTree has no Tree: %t\n", arg);
-  return (PT_ParseTree)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg) */
-
-ATbool PT_hasParseTreeLayoutAfterTree(PT_ParseTree arg)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree arg) */
-
-PT_Tree PT_getParseTreeLayoutAfterTree(PT_ParseTree arg)
-{
-  
-    return (PT_Tree)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-}
-
-/*}}}  */
-/*{{{  PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Tree layoutAfterTree) */
-
-PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Tree layoutAfterTree)
-{
-  if (PT_isParseTreeTree(arg)) {
-    return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)layoutAfterTree, 2), 1), 0);
-  }
-
-  ATabort("ParseTree has no LayoutAfterTree: %t\n", arg);
+  ATabort("ParseTree has no Top: %t\n", arg);
   return (PT_ParseTree)NULL;
 }
 
@@ -886,7 +787,7 @@ PT_ParseTree PT_setParseTreeLayoutAfterTree(PT_ParseTree arg, PT_Tree layoutAfte
 
 ATbool PT_hasParseTreeAmbCnt(PT_ParseTree arg)
 {
-  if (PT_isParseTreeTree(arg)) {
+  if (PT_isParseTreeTop(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -906,7 +807,7 @@ int PT_getParseTreeAmbCnt(PT_ParseTree arg)
 
 PT_ParseTree PT_setParseTreeAmbCnt(PT_ParseTree arg, int ambCnt)
 {
-  if (PT_isParseTreeTree(arg)) {
+  if (PT_isParseTreeTop(arg)) {
     return (PT_ParseTree)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeInt(ambCnt), 1);
   }
 
@@ -3318,16 +3219,13 @@ PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int)) */
+/*{{{  PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTop)(PT_Tree), int (*acceptAmbCnt)(int)) */
 
-PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int))
+PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTop)(PT_Tree), int (*acceptAmbCnt)(int))
 {
-  if (PT_isParseTreeTree(arg)) {
-    return PT_makeParseTreeTree(
-        acceptLhs ? acceptLhs(PT_getParseTreeLhs(arg)) : PT_getParseTreeLhs(arg),
-        acceptLayoutBeforeTree ? acceptLayoutBeforeTree(PT_getParseTreeLayoutBeforeTree(arg)) : PT_getParseTreeLayoutBeforeTree(arg),
-        acceptTree ? acceptTree(PT_getParseTreeTree(arg)) : PT_getParseTreeTree(arg),
-        acceptLayoutAfterTree ? acceptLayoutAfterTree(PT_getParseTreeLayoutAfterTree(arg)) : PT_getParseTreeLayoutAfterTree(arg),
+  if (PT_isParseTreeTop(arg)) {
+    return PT_makeParseTreeTop(
+        acceptTop ? acceptTop(PT_getParseTreeTop(arg)) : PT_getParseTreeTop(arg),
         acceptAmbCnt ? acceptAmbCnt(PT_getParseTreeAmbCnt(arg)) : PT_getParseTreeAmbCnt(arg));
   }
   ATabort("not a ParseTree: %t\n", arg);
