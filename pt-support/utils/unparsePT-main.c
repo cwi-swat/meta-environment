@@ -16,9 +16,9 @@
 /*{{{  variables */
 
 static char myname[] = "unparsePT";
-static char myversion[] = "1.0";
+static char myversion[] = "1.1";
 
-static char myarguments[] = "hi:o:vV";
+static char myarguments[] = "ahi:o:vV";
 
 /*}}}  */
 
@@ -28,6 +28,7 @@ void usage(void)
 {
   ATwarning("Usage: %s [%s]\n"
             "Options:\n"
+	    "\t-a              visualize ambiguity clusters\n"
             "\t-h              display help information (usage)\n"
             "\t-i filename     input from file (default stdin)\n"
             "\t-o filename     output to file (default stdout)\n"
@@ -78,6 +79,7 @@ int main(int argc, char *argv[])
   ATbool use_toolbus = ATfalse;
   ATbool proceed = ATtrue;
   ATbool verbose = ATfalse;
+  ATbool visualAmbs = ATfalse;
   int i, cid;
 
   for (i=1; !use_toolbus && i < argc; i++) {
@@ -96,6 +98,9 @@ int main(int argc, char *argv[])
 
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+	case 'a':
+	  visualAmbs = ATtrue;
+	  break;
 	case 'i':
 	  inputName = optarg;
 	  break;
@@ -137,7 +142,8 @@ int main(int argc, char *argv[])
 	ATerror("%s: parse error in input term.\n", argv[0]);
       }
       else {
-	char *text = PT_yieldParseTree(PT_makeParseTreeFromTerm(term));
+	char *text = PT_yieldParseTreeVisualAmbs(
+		       PT_makeParseTreeFromTerm(term), visualAmbs);
 	fprintf(outputFile, "%s", text);
 	fclose(outputFile);
      }
