@@ -1,4 +1,4 @@
-#include  "asc-support.h"
+#include  "support.h"
 static Symbol lf_AUX_Goto_Computation6_1sym ;
 static ATerm lf_AUX_Goto_Computation6_1 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol ef5sym ;

@@ -1,4 +1,4 @@
-#include  "asc-support.h"
+#include  "support.h"
 static Symbol lf_AUX_Earley_Items2_1sym ;
 static ATerm lf_AUX_Earley_Items2_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef1sym ;

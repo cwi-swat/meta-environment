@@ -1,6 +1,10 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Follow_Earley3_1sym ;
 static ATerm lf_AUX_Follow_Earley3_1 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
 static Symbol ef8sym ;
@@ -15,10 +19,6 @@ static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef9sym ;
 static funcptr ef9 ;
-static Symbol ef5sym ;
-static funcptr ef5 ;
-static Symbol ef6sym ;
-static funcptr ef6 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol lf3sym ;
@@ -134,7 +134,6 @@ FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef1 ) ( ( 
 }
 }
 }
-FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( arg1 ) , arg3 ) ) ) ) ) ;
 FUNC_EXIT_CONST ( constant1 , ( * ef4 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
 FUNC_EXIT ( make_nf4 ( lf_AUX_Follow_Earley3_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }

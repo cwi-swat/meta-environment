@@ -7,10 +7,10 @@ static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
@@ -45,7 +45,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Goto_Earley8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_Earley8_1sym , ATmakeAppl ( lf_AUX_Goto_Earley8_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
@@ -53,33 +53,19 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( ! not_empty_list ( atmp100 ) ) {
+if ( not_empty_list ( atmp100 ) ) {
+tmp [ 0 ] = list_head ( atmp100 ) ;
+tmp [ 1 ] = list_tail ( atmp100 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+FUNC_EXIT ( ( * ef5 ) ( ( * ef4 ) ( arg0 , tmp [ 0 ] ) , lf_AUX_Goto_Earley8_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+}
+}
+else {
 FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 if ( is_single_element ( atmp100 ) ) {
 tmp [ 0 ] = list_head ( atmp100 ) ;
 FUNC_EXIT ( ( * ef4 ) ( arg0 , tmp [ 0 ] ) ) ;
-}
-}
-}
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf2sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp10 ) ;
-{
-ATerm atmp1000 [ 2 ] ;
-atmp1000 [ 0 ] = tmp [ 0 ] ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-atmp1000 [ 1 ] = tmp [ 0 ] ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( ( * ef5 ) ( lf_AUX_Goto_Earley8_1 ( arg0 , ( * ef1 ) ( lf2 ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) ) ) ) , lf_AUX_Goto_Earley8_1 ( arg0 , ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ) ) ) ;
-}
-atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ;
-tmp [ 0 ] = atmp1000 [ 1 ] ;
-}
-}
 }
 }
 }

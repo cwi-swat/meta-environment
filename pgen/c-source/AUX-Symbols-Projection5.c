@@ -1,4 +1,4 @@
-#include  "asc-support.h"
+#include  "support.h"
 static Symbol lf_AUX_Symbols_Projection5_1sym ;
 static ATerm lf_AUX_Symbols_Projection5_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef2sym ;

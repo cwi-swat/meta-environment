@@ -149,29 +149,15 @@ FUNC_EXIT ( ( * ef3 ) ( lf4 ( make_list ( ( * ef7 ) ( ( * ef6 ) ( lf5 ( make_lis
 }
 }
 }
-if ( ! not_empty_list ( atmp100 ) ) {
+if ( not_empty_list ( atmp100 ) ) {
+tmp [ 0 ] = list_head ( atmp100 ) ;
+tmp [ 1 ] = list_tail ( atmp100 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+FUNC_EXIT ( ( * ef4 ) ( lf_AUX_Goto_PCC5_1 ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , ( * ef2 ) ( lf3 ( make_list ( tmp [ 0 ] ) ) ) , arg2 ) , lf_AUX_Goto_PCC5_1 ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , ( * ef2 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) , arg2 ) ) ) ;
+}
+}
+else {
 FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( lf4 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-}
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf3sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp10 ) ;
-{
-ATerm atmp1000 [ 2 ] ;
-atmp1000 [ 0 ] = tmp [ 0 ] ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-atmp1000 [ 1 ] = tmp [ 0 ] ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( ( * ef4 ) ( lf_AUX_Goto_PCC5_1 ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , ( * ef2 ) ( lf3 ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) ) ) , arg2 ) , lf_AUX_Goto_PCC5_1 ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , ( * ef2 ) ( lf3 ( tmp [ 0 ] ) ) , arg2 ) ) ) ;
-}
-atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ;
-tmp [ 0 ] = atmp1000 [ 1 ] ;
-}
-}
 }
 }
 }

@@ -36,7 +36,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Symbol_Sets2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 1 ] ;
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Symbol_Sets2_1sym , ATmakeAppl ( lf_AUX_Symbol_Sets2_1sym , arg0 , arg1 ) ) ;
 {
 ATerm ltmp [ 2 ] ;
@@ -51,36 +51,22 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf2sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-if ( ! not_empty_list ( atmp0000 ) ) {
+if ( not_empty_list ( atmp0000 ) ) {
+tmp [ 0 ] = list_head ( atmp0000 ) ;
+tmp [ 1 ] = list_tail ( atmp0000 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+arg0 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+arg1 = lf_AUX_Symbol_Sets2_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ltmp [ 1 ] ) ;
+goto lbl_lf_AUX_Symbol_Sets2_1 ;
+}
+}
+else {
 FUNC_EXIT ( ltmp [ 1 ] ) ;
 }
 if ( is_single_element ( atmp0000 ) ) {
 tmp [ 0 ] = list_head ( atmp0000 ) ;
 if ( term_equal ( ( * ef3 ) ( tmp [ 0 ] , ltmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
 FUNC_EXIT ( ltmp [ 1 ] ) ;
-}
-}
-}
-}
-{
-ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( check_sym ( atmp000 , lf2sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp000 ) ;
-{
-ATerm atmp00000 [ 2 ] ;
-atmp00000 [ 0 ] = tmp [ 0 ] ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-atmp00000 [ 1 ] = tmp [ 0 ] ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-arg0 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( slice ( atmp00000 [ 0 ] , atmp00000 [ 1 ] ) ) ) ) ;
-arg1 = lf_AUX_Symbol_Sets2_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( tmp [ 0 ] ) ) ) , ltmp [ 1 ] ) ;
-goto lbl_lf_AUX_Symbol_Sets2_1 ;
-}
-atmp00000 [ 1 ] = list_tail ( atmp00000 [ 1 ] ) ;
-tmp [ 0 ] = atmp00000 [ 1 ] ;
-}
 }
 }
 }

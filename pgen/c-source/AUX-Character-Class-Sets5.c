@@ -57,29 +57,15 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , tmp [ 1 ] ) ) 
 }
 }
 }
-if ( ! not_empty_list ( atmp000 ) ) {
+if ( not_empty_list ( atmp000 ) ) {
+tmp [ 0 ] = list_head ( atmp000 ) ;
+tmp [ 1 ] = list_tail ( atmp000 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Character_Class_Sets5_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , arg1 ) , lf_AUX_Character_Class_Sets5_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , arg1 ) ) ) ;
+}
+}
+else {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-}
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf2sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp00 ) ;
-{
-ATerm atmp0000 [ 2 ] ;
-atmp0000 [ 0 ] = tmp [ 0 ] ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-atmp0000 [ 1 ] = tmp [ 0 ] ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Character_Class_Sets5_1 ( ( * ef1 ) ( lf2 ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) ) ) , arg1 ) , lf_AUX_Character_Class_Sets5_1 ( ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) , arg1 ) ) ) ;
-}
-atmp0000 [ 1 ] = list_tail ( atmp0000 [ 1 ] ) ;
-tmp [ 0 ] = atmp0000 [ 1 ] ;
-}
-}
 }
 }
 }
@@ -91,29 +77,15 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( ! not_empty_list ( atmp100 ) ) {
+if ( not_empty_list ( atmp100 ) ) {
+tmp [ 0 ] = list_head ( atmp100 ) ;
+tmp [ 1 ] = list_tail ( atmp100 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Character_Class_Sets5_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) , lf_AUX_Character_Class_Sets5_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+}
+}
+else {
 FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-}
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf2sym ) ) {
-tmp [ 0 ] = arg_0 ( atmp10 ) ;
-{
-ATerm atmp1000 [ 2 ] ;
-atmp1000 [ 0 ] = tmp [ 0 ] ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
-atmp1000 [ 1 ] = tmp [ 0 ] ;
-while ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Character_Class_Sets5_1 ( arg0 , ( * ef1 ) ( lf2 ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) ) ) ) , lf_AUX_Character_Class_Sets5_1 ( arg0 , ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ) ) ) ;
-}
-atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ;
-tmp [ 0 ] = atmp1000 [ 1 ] ;
-}
-}
 }
 }
 }
