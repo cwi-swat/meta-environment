@@ -2,7 +2,7 @@
 #
 # Directory: sglr
 
-SUBDIRS		= a2toa1 client tree2dot parser dump
+SUBDIRS		= a2toa1 client tree2dot parser dump sdf1tosdf2
 
 .SILENT:
 

@@ -1,14 +1,17 @@
 #!/bin/sh
 # $Id$
 
-IMPORTS="@exec_prefix@/imports -lr"
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=@bindir@
+
+IMPORTS="${bindir}/imports -lr"
 
 case $#
 in
 	2)
 		msm=$1
 		module=$2;
-		echo msm: $msm, module $module;
 		;;
 	*)
 		echo "Usage: `basename $0` msm-paths-file module"
@@ -16,6 +19,10 @@ in
 esac
 
 modules=`$IMPORTS $msm $module`;
+
+if [ -z "$modules" ] ; then
+	exit 1;
+fi
 
 echo "definition"
 echo
