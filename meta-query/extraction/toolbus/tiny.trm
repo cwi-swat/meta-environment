@@ -1,4 +1,5 @@
-extractEvents(
+extractToolDeclarations(
+tool aap is { command = "/bin/aap" }
 
 process UI is
 let
@@ -36,5 +37,4 @@ in
 endlet
 
 toolbus(UI, Parser)
-
-, rstore())
+,rstore())

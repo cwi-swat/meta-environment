@@ -1,9 +1,8 @@
 module ExtractToolDeclarations
 
-imports Rstore
-imports Tscript
 imports utilities/Parsing[ToolName]
 imports utilities/PosInfo[ToolName]
+imports ToolBusExtraction
 
 exports
   context-free syntax

@@ -1,11 +1,10 @@
 module ExtractVariableDeclarations
 
-imports Rstore
-imports Tscript
 imports utilities/PosInfo[ProcessName]
 imports utilities/Parsing[Term]
 imports utilities/Parsing[Var]
 imports utilities/PosInfo[Var]
+imports ToolBusExtraction
 
 exports
   context-free syntax

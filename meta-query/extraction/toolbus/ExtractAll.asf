@@ -1,0 +1,14 @@
+equations
+
+[extract-all-0]
+  $Rstore0 := rstore(),
+  $Rstore1 := extractEvents($Tscript, $Rstore0),
+  $Rstore2 := extractProcessCreations($Tscript, $Rstore1),
+  $Rstore3 := extractProcessDeclarations($Tscript, $Rstore2),
+  $Rstore4 := extractProcessInvocations($Tscript, $Rstore3),
+  $Rstore5 := extractToolDeclarations($Tscript, $Rstore4),
+  $Rstore6 := extractVariableDeclarations($Tscript, $Rstore5),
+  $Rstore7 := extractVariableDefinitions($Tscript, $Rstore6),
+  $Rstore8 := extractVariableUses($Tscript, $Rstore7)
+  ===>
+  extractAll($Tscript) = $Rstore8

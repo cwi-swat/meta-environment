@@ -1,0 +1,19 @@
+module ExtractAll
+
+imports ExtractEvents
+imports ExtractProcessCreations
+imports ExtractProcessDeclarations
+imports ExtractProcessInvocations
+imports ExtractToolDeclarations
+imports ExtractVariableDeclarations
+imports ExtractVariableDefinitions
+imports ExtractVariableUses
+
+exports
+  context-free syntax
+    extractAll(Tscript) -> RSTORE
+
+hiddens
+  variables
+    "$Rstore"[0-9]* -> RSTORE
+    "$Tscript" -> Tscript
