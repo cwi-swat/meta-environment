@@ -95,7 +95,7 @@ in
         SyntaxText := "" .
         snd-msg(ts-filter-keys("active-modules", Modules)) .
         rec-msg(ts-keys(Modules?)) .
-        snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
+        snd-msg(adding-succeeded(Name, ModuleId, NewPath, Modules))
       else
         ModuleId := Name .
         snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
