@@ -9,8 +9,10 @@ exports
     "none"					                     -> Message
     module-not-available(ModuleId)                                   -> Message
     undeclared-sorts(ModuleId, SymbolsSet)                           -> Message
+    undeclared-start-symbols(ModuleId, SymbolsSet)                   -> Message
     unused-sort-definitions(SymbolsSet)                              -> Message
     double-declared-sort(ModuleId, Symbol)                           -> Message
+    double-declared-start-symbol(ModuleId, Symbol)                   -> Message
     aliased-symbol-already-declared(ModuleId, Symbol)                -> Message
     illegal-attribute(ModuleId, Production)                          -> Message
     used-in-priorities-but-undefined(ModuleId, ProductionsSet)       -> Message

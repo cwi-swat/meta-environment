@@ -14,6 +14,8 @@ $Msg*2}
 
   [msg-3] undeclared-sorts($ModuleId, symbols()) = none
 
+  [msg-4] undeclared-start-symbols($ModuleId, symbols()) = none
+
   [msg-5] unused-sort-definitions(symbols()) = none
 
   [msg-6] used-in-priorities-but-undefined($ModuleId, productions()) = none

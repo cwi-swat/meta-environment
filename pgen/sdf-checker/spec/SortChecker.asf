@@ -19,6 +19,18 @@ equations
         get-declared-symbol($Symbol, SymbolsMsgs1, $ModuleId) =
           add-symbol($Symbol, SymbolsMsgs2, $ModuleId)
 
+  [gss-1'1] get-start-symbols(context-free start-symbols $Symbol*1, SymbolsMsgs, $ModuleId) =
+      	      get-start-symbol($Symbol*1, SymbolsMsgs, $ModuleId)
+
+  [gss-1'2] get-start-symbols(lexical start-symbols $Symbol*1, SymbolsMsgs, $ModuleId) =
+       	      get-start-symbol($Symbol*1, SymbolsMsgs, $ModuleId)
+
+  [gss-1'3] get-start-symbols(start-symbols $Symbol*1, SymbolsMsgs, $ModuleId) =
+       	      get-start-symbol($Symbol*1, SymbolsMsgs, $ModuleId)
+
+  [gss-2'1] get-start-symbol($Symbol, SymbolsMsgs, $ModuleId) =
+              add-start-symbol($Symbol, SymbolsMsgs, $ModuleId)
+
   [cs-1'1] check-symbol($Sort, SymbolsMsgs, $ModuleId) = SymbolsMsgs
 
   [default-cs-1'2] check-symbol($Symbol, [SymbolPairsSet, $Msgs], $ModuleId) =
@@ -34,6 +46,15 @@ equations
                               [SymbolPairsSet, $Msgs], $ModuleId) =
                      [SymbolPairsSet,
                       $Msgs + double-declared-sort($ModuleId, $Symbol)]
+
+  [ass-1'1] contains($Symbol, symbolpairs(SymbolPair*)) == false
+            ====>
+            add-start-symbol($Symbol, [symbolpairs(SymbolPair*), $Msgs], $ModuleId) =
+                             [symbolpairs(($ModuleId, $Symbol) SymbolPair*), $Msgs]
+
+  [default-ass-1'2] add-start-symbol($Symbol, [SymbolPairsSet, $Msgs], $ModuleId) =
+                                     [SymbolPairsSet,
+                                      $Msgs + double-declared-start-symbol($ModuleId, $Symbol)]
 
   [geas-1'1] get-exported-aliased-symbols(exports $Grammar, SymbolsMsgs, 
                                           $ModuleId, SymbolPairsSet) =
@@ -136,12 +157,14 @@ aliased-symbol-already-declared($ModuleId, $Symbol2)]
           get-hidden-aliased-symbols($Module, [symbolpairs(), {}], $ModuleId, 
                                    symbolpairs(AliasedSymbolPair*2
                                                AliasedSymbolPair*1)),
+        [StartSymbolPairsSet, $Msgs5] := 
+          get-start-symbols($Module, [symbolpairs(), {}], $ModuleId),
 
         symbols($Symbol*3) := get-used-symbols($Module, symbols()),
         symbols($Symbol*4) := get-defined-symbols($Module, symbols()),
 
-        $Msgs5 := get-messages(InfoMsgTuple1),
-        $Msgs6 := $Msgs5 + 
+        $Msgs6 := get-messages(InfoMsgTuple1),
+        $Msgs7 := $Msgs6 + 
 undeclared-sorts($ModuleId, diff(symbols($Symbol*3), 
                                  de-modularize(symbolpairs(ParameterSymbolPair*
                                                            AliasedSymbolPair*3
@@ -149,9 +172,11 @@ undeclared-sorts($ModuleId, diff(symbols($Symbol*3),
                                                            AliasedSymbolPair*2
                                                            DeclaredSymbolPair*2
                                                            AliasedSymbolPair*1
-                                                           DeclaredSymbolPair*1)))),
+                                                           DeclaredSymbolPair*1)))) +
+undeclared-start-symbols($ModuleId, diff(de-modularize(StartSymbolPairsSet),
+                                         symbols($Symbol*4))),
         InfoMsgTuple3 := put-messages($Msgs1 ++ $Msgs2 ++ $Msgs3 ++ 
-                                      $Msgs4 ++ $Msgs6, 
+                                      $Msgs4 ++ $Msgs5 ++ $Msgs7, 
                                       InfoMsgTuple1),
 
         ModuleInfoTable3 := get-module-info(InfoMsgTuple3),
@@ -161,7 +186,7 @@ undeclared-sorts($ModuleId, diff(symbols($Symbol*3),
         ModuleInfoTable5 := put-aliased-symbols-info($ModuleId, 
                                  symbolpairs(AliasedSymbolPair*2 AliasedSymbolPair*1), 
                                  ModuleInfoTable4),
-        ModuleInfoTable6 := put-used-symbols-info($ModuleId, symbols($Symbol*4), ModuleInfoTable5),
+        ModuleInfoTable6 := put-used-symbols-info($ModuleId, symbols($Symbol*3), ModuleInfoTable5),
         InfoMsgTuple4 :=  put-module-info(ModuleInfoTable6, InfoMsgTuple3)
         ====>
         check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4

@@ -46,6 +46,16 @@ hiddens
     get-declared-symbol(Symbol, 
                         Symbols-Msg-Tuple, 
                         ModuleId)       	       -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbols(Module, Symbols-Msg-Tuple, 
+                      ModuleId)   	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbols(Grammar, Symbols-Msg-Tuple, 
+                      ModuleId)      	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbol(Symbol*, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbol(Symbol, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}  
+    add-start-symbol(Symbol, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
     get-exported-aliased-symbols(Module, 
@@ -103,6 +113,8 @@ hiddens
     "ParameterSymbol*"[0-9]*     -> Symbol*
     "DeclaredSymbolPair*"[0-9]* -> SymbolPair*
     "DeclaredSymbol*"[0-9]*     -> Symbol*
+    "StartSymbolPairsSet"[0-9]* -> SymbolPairsSet
+    "StartSymbol*"[0-9]*     -> Symbol*
     "AliasedSymbolPair*"[0-9]*  -> SymbolPair*
     "AliasedSymbol*"[0-9]*  -> Symbol*
     "$Symbol,*"[0-9]*       -> {Symbol ","}*
