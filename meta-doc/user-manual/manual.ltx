@@ -972,15 +972,15 @@ The rewriting process is further described in Section
 \section{Guided Tour}
 \label{GuidedTour}
 
-\begin{figure}
-\begin{Label}{FIG:meta-booleans}
-\begin{center}
-\T \epsfig{file=meta-booleans.ps,width=12cm}
-\W \htmlimage{meta-booleans.gif}
-\caption{Main window after opening {\tt Pico-Booleans}}
-\end{center}
-\end{Label}
-\end{figure}
+%%\begin{figure}
+%%\begin{Label}{FIG:meta-booleans}
+%%\begin{center}
+%%\T \epsfig{file=meta-booleans.ps,width=12cm}
+%%\W \htmlimage{meta-booleans.gif}
+%%\caption{Main window after opening {\tt Pico-Booleans}}
+%%\end{center}
+%%\end{Label}
+%%\end{figure}
 
 To help you get acquainted with the \ASmetaenv\ the system
 contains two example specifications. The first is the one-module specification:
@@ -1109,33 +1109,9 @@ module Bool-example
 \end{verbatim}
 \end{IncCode}
 
-For an explanation of the \asfsdf\ features used in this specification 
-\begin{iftex}
-we refer to Section~\ref{ASF+SDF}.
-\end{iftex}
-\begin{ifhtml}
-\link{click here}[]{ASF+SDF}.
-\end{ifhtml}
-
-\begin{figure}
-\begin{Label}{FIG:Bool-example.sdf}
-\begin{center}
-\T \epsfig{file=Bool-example.sdf2.ps,width=12cm}
-\W \htmlimage{Bool-example.sdf2.gif}
-\caption{Editor for the syntax of {\tt Bool-example}}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:Bool-example.asf}
-\begin{center}
-\T \epsfig{file=Bool-example.asf.ps,width=12cm}
-\W \htmlimage{Bool-example.asf.gif}
-\caption{Editor for the equations of {\tt Bool-example}}
-\end{center}
-\end{Label}
-\end{figure}
+The \asfsdf\ features used in this specification are explained in
+\T Section~\ref{ASF+SDF}.
+\W \link{Introduction to \asfsdf}[]{ASF+SDF}.
 
 \subsubsection{The Module Editor for {\tt Bool-example}}
 
@@ -1149,74 +1125,41 @@ we refer to Section~\ref{ASF+SDF}.
   side of the main window.  An editor will appear containing the syntax part
   of the {\tt Bool-example} specification: the \sdf\ section.  This editor is
   a version of the standard text editor Emacs extended with the menus 
- {\tt Move} and {\tt Meta-Environment}.
-\begin{iftex}  
-The result is shown in Figure~\ref{FIG:Bool-example.sdf}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.sdf} for inspecting the editor window.
-\end{ifhtml}
+ {\tt Meta-Environment} and {\tt Move}.
+The result is shown 
+\T in Figure~\ref{FIG:Bool-example.sdf}.
+\W \link{below}[]{FIG:Bool-example.sdf}.
+
+\begin{figure}
+\begin{Label}{FIG:Bool-example.sdf}
+\begin{center}
+\T \epsfig{file=Bool-example.sdf2.ps,width=12cm}
+\W \htmlimage{Bool-example.sdf2.gif}
+\caption{Editor for the syntax of {\tt Bool-example}}
+\end{center}
+\end{Label}
+\end{figure}
   
 \item Push the button {\tt Edit Equations}.  This will open a new 
   instance of Emacs containing the semantic part
   of the {\tt Bool-example} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
   the \sdf\ section. 
-\begin{iftex}  
-The result is shown in Figure~\ref{FIG:Bool-example.asf}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.asf} for inspecting the editor window.
-\end{ifhtml}
+The result is shown 
+\T in Figure~\ref{FIG:Bool-example.asf}.
+\W \link{below}[]{FIG:Bool-example.asf}.
+
+\begin{figure}
+\begin{Label}{FIG:Bool-example.asf}
+\begin{center}
+\T \epsfig{file=Bool-example.asf.ps,width=12cm}
+\W \htmlimage{Bool-example.asf.gif}
+\caption{Editor for the equations of {\tt Bool-example}}
+\end{center}
+\end{Label}
+\end{figure}
 
 \end{itemize}
-
-
-\begin{figure}
-\begin{Label}{FIG:Bool-example.trm}
-\begin{center}
-\T \epsfig{file=Bool-example.trm.ps,width=12cm}
-\W \htmlimage{Bool-example.trm.gif}
-\caption{Term editor for {\tt Bool-example} after entering `{\tt true \&
-    false}'}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:Bool-example.trm2}
-\begin{center}
-\T \epsfig{file=Bool-example.trm2.ps,width=12cm}
-\W  \htmlimage{Bool-example.trm2.gif}
-\begin{iftex}
-\caption{Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parsing}
-\end{iftex}
-\begin{ifhtml}
-  \caption{Same term editor as \link{above}[]{FIG:Bool-example.trm} after parsing}
-\end{ifhtml}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:Bool-example.trm3}
-\begin{center}
-\T \epsfig{file=Bool-example.trm3.ps,width=12cm}
-\W \htmlimage{Bool-example.trm3.gif}
-\caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:reduct.out}
-\begin{center}
-\T \epsfig{file=reduct.out.ps,width=12cm}
-\W \htmlimage{reduct.out.gif}
-\caption{New term editor with normal form of `{\tt true \& false}'}
-\end{center}
-\end{Label}
-\end{figure}
 
 \subsubsection{A Term Editor for {\tt Bool-example}}
 
@@ -1230,25 +1173,41 @@ Click \link{here}[]{FIG:Bool-example.asf} for inspecting the editor window.
   Type the term `{\tt true \& false}' in this editor. Observe how the text
   that you type gets a different background color.
   This is called a \emph{focus}. 
-\begin{iftex}  
-The result is shown in Figure~\ref{FIG:Bool-example.trm}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.trm} for inspecting the term editor window.
-\end{ifhtml}
+The result is shown
+\T  in Figure~\ref{FIG:Bool-example.trm}.
+\W \link{below}[]{FIG:Bool-example.trm}.
+
+\begin{figure}
+\begin{Label}{FIG:Bool-example.trm}
+\begin{center}
+\T \epsfig{file=Bool-example.trm.ps,width=12cm}
+\W \htmlimage{Bool-example.trm.gif}
+\caption{Term editor for {\tt Bool-example} after entering `{\tt true \&
+    false}'}
+\end{center}
+\end{Label}
+\end{figure}
 
 \item Click in the focus, this will move the cursor (a single character-sized
   rectangle) 
   
-\item From menu {\tt Meta-Environment} click the {\tt Parse Buffer} button.  The text
+\item From menu {\tt Meta-Environment} click the {\tt Parse} button.  The text
   in the focus is now parsed and the different background color has 
-  disappeared.
-\begin{iftex}  
-The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.trm2} for inspecting the term editor window.
-\end{ifhtml}
+  disappeared. 
+The result is shown 
+\T in Figure~\ref{FIG:Bool-example.trm2}.
+\W \link{below}[]{FIG:Bool-example.trm2}.
+
+\begin{figure}
+\begin{Label}{FIG:Bool-example.trm2}
+\begin{center}
+\T \epsfig{file=Bool-example.trm2.ps,width=12cm}
+\W \htmlimage{Bool-example.trm2.gif}
+\T \caption{Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parsing}
+\W \caption{Same term editor as \link{above}[]{FIG:Bool-example.trm} after parsing}
+\end{center}
+\end{Label}
+\end{figure}
 
 \end{itemize}
 
@@ -1261,12 +1220,19 @@ errors.
 \item Click on one of the characters of the word `{\tt false}'.  You
 have selected `{\tt false}' as new focus and the blue background
 reappears. 
-\begin{iftex}  
-This is shown in Figure~\ref{FIG:Bool-example.trm3}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.trm2} for inspecting the effect.
-\end{ifhtml}
+This is shown 
+\T in Figure~\ref{FIG:Bool-example.trm3}.
+\W \link{below}[]{FIG:Bool-example.trm2}.
+
+\begin{figure}
+\begin{Label}{FIG:Bool-example.trm3}
+\begin{center}
+\T \epsfig{file=Bool-example.trm3.ps,width=12cm}
+\W \htmlimage{Bool-example.trm3.gif}
+\caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
+\end{center}
+\end{Label}
+\end{figure}
 
 \item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
   now selected as focus.
@@ -1282,9 +1248,17 @@ will be selected and becomes the focus.
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
   in the {\tt Meta-Environment} menu of the editor.  The result will appear in
-  a new \link{term editor window}[
-(Figure~\ref{FIG:reduct.out})]{FIG:reduct.out}.
+  a new \link{term editor window}[ (Figure~\ref{FIG:reduct.out})]{FIG:reduct.out}.
 
+\begin{figure}
+\begin{Label}{FIG:reduct.out}
+\begin{center}
+\T \epsfig{file=reduct.out.ps,width=12cm}
+\W \htmlimage{reduct.out.gif}
+\caption{New term editor with normal form of `{\tt true \& false}'}
+\end{center}
+\end{Label}
+\end{figure}
 \end{itemize}
 
 \paragraph{Error-messages}
@@ -1447,15 +1421,6 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 
 \end{itemize}
 
-\begin{figure}
-\begin{Label}{FIG:Pico-syntax}
-\begin{center}
-\T \epsfig{file=meta-Pico-syntax.ps,width=12cm}
-\W \htmlimage{meta-Pico-syntax.gif}
-\caption{Main window after opening {\tt Pico-syntax}}
-\end{center}
-\end{Label}
-\end{figure}
 
 \subsection{The Pico Specification}
 
@@ -1472,7 +1437,6 @@ Pico specification.
 \end{center}
 \end{Label}
 \end{figure}
-
 
 \begin{figure}
 \begin{Label}{FIG:Pico-Booleans-eqs}
@@ -1514,6 +1478,17 @@ editor for the equations.
 (see Figure~\ref{FIG:Pico-syntax})]{FIG:Pico-syntax}, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
   transitively imported by {\tt Pico-syntax}.
+
+\begin{figure}
+\begin{Label}{FIG:Pico-syntax}
+\begin{center}
+\T \epsfig{file=meta-Pico-syntax.ps,width=12cm}
+\W \htmlimage{meta-Pico-syntax.gif}
+\caption{Main window after opening {\tt Pico-syntax}}
+\end{center}
+\end{Label}
+\end{figure}
+
 
 \end{itemize}
 
