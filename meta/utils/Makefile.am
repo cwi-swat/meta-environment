@@ -3,20 +3,16 @@
 include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
-bin_SCRIPTS        = parse-sdf2 ps-dot sdf2stats 
-
-man_MANS           = parse-sdf2.1
+bin_SCRIPTS        = ps-dot sdf2stats 
 
 data_DATA          = lang.types
 
 noinst_LIBRARIES   = libutils.a
 
-EXTRA_DIST         = parse-sdf2.sh.src \
-                     ps-dot.sh.src test-help test-version \
-                     lang.types parse-sdf2.pod parse-sdf2.1 \
-                     sdf2stats.sh.src 
+EXTRA_DIST         = ps-dot.sh.src test-help test-version \
+                     lang.types sdf2stats.sh.src 
 
-CLEANFILES         = parse-sdf2 ps-dot parse-sdf2.1 sdf2stats
+CLEANFILES         = ps-dot sdf2stats
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
