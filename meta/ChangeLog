@@ -1,5 +1,9 @@
 # $Id$
 
+2001/12/07 (vandenbr@loria.fr)
+ * Replaced a snd-do by a snd-eval and rec-value in order to
+  synchronize, with respect to storing equation text.
+
 2001/12/04  (vandenbr@loria.fr)
  * Fixed the deadlock in both stand-alone scripts.
 
