@@ -14,7 +14,7 @@ EXTRA_DIST = $(wildcard *.ltx) \
 
 MANUAL	= guided-tour.ltx
 
-PSJES = Bool-example_asf.ps Bool-example_sdf2.ps Bool-example_trm.ps \
+PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example_trm.ps \
 	Bool-example_trm3.ps \
 	pico-syntax-term-actions-menu.ps \
 	open-library.ps open-file.ps file-menu.ps export-menu.ps \

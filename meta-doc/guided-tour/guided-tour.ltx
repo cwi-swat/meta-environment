@@ -482,16 +482,16 @@ The main window consists of the following parts:
       \item closing a specification, 
       \item clearing the message panel (history of error messages), 
       \item refreshing of buttons, and
-      \item leaving the \ASmetaenv.
+      \item exiting the \ASmetaenv.
      \end{itemize}
     The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
     
 
   \end{itemize}
 
-\item Below {\tt File} a list of icons is shown:
+\item Next to {\tt File} a list of icons is shown:
+
   \begin{itemize}
- 
    \item {\tt Open Library Module} (the nicely wrapped box) for opening a
          library module.
    \item {\tt New Module} (the empty page) for creating a new module.
@@ -502,8 +502,7 @@ The main window consists of the following parts:
    \item {\tt Exit} (the open door) for exiting the \ASmetaenv.
    \item {\tt 100\%} for scaling both the import graph and parse tree.
   \end{itemize}
-  These icons are described in 
-  \link*{Button Pane}[Section~\Ref]{ButtonPane}.
+  These icons are described in \link*{File Menu}[Section~\Ref]{FileMenu}.
   
 \item The pane \emph{import}: A graphical canvas (either \link{empty}[ in
   Figure~\Ref]{FIG:meta-start}, or containing \link{rectangles
@@ -970,25 +969,8 @@ in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}.
 \end{center}
 \end{figure}
 
-\subsection{Parse Errors}
-
-\section{Button Scripts}
-\label{SEC:button-scripts}
-
 \section{Guided Tour}
 \label{GuidedTour}
-
-%%\begin{figure}
-%%\begin{center}
-%%\begin{Label}{FIG:meta-booleans}
-
-%%\T \includegraphics[width=12cm]{meta-booleans}
-%%\W \htmlimage{meta-booleans.gif}
-%%\caption{Main window after opening {\tt Pico-Booleans}}
-
-%%\end{Label}
-%%\end{center}
-%%\end{figure}
 
 To help you get acquainted with the \ASmetaenv\ the system
 contains two example specifications. The first one is a very simple specification:
@@ -1012,13 +994,12 @@ copy of the directory. Furthermore, all the examples given in this
 manual can be found in$\\$
 {\tt <path>/asfsdf-meta/share/demo/user-manual-examples}.
 
-For each module in a specification two files exist: {\tt $module$.sdf}
-contains the syntax of $module$ and {\tt $module$.asf} contains the 
+For each module in a specification there exists a file {\tt $module$.sdf}
+which contains the syntax of $module$ and there may be a file {\tt
+$module$.asf} which contains the 
 equations (semantics) of $module$. The directory {\tt pico} contains:
 
 \begin{itemize}
-
-\item Two files for the module {\tt Booleans}.
 
 \item Files for the Pico-specification.
 
@@ -1084,7 +1065,7 @@ The specification is \link*{as follows}[shown in Figure~\Ref]{CODE:Bool-example}
 \begin{Label}{CODE:Bool-example}
 \begin{IncCode}
 \begin{verbatim}
-module Bool-example
+module Booleans
 
 imports basic/Whitespace
 exports
@@ -1104,7 +1085,7 @@ exports
 
 hiddens
   variables
-    "Bool"[0-9\']* -> Bool
+    "Bool"[0-9]* -> Bool
 
 equations
 
@@ -1122,8 +1103,8 @@ equations
 \end{Label}
 \end{figure}
 
-The \asfsdf\ features used in this specification are explained in
-\link*{Introduction to \asfsdf}[Section~\Ref]{ASF+SDF}.
+%%The \asfsdf\ features used in this specification are explained in
+%%\link*{Introduction to \asfsdf}[Section~\Ref]{ASF+SDF}.
 
 \subsubsection{The Module Editor for {\tt Booleans}}
 
@@ -1144,8 +1125,8 @@ The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 \begin{center}
 \begin{Label}{FIG:Bool-example.sdf}
 
-\T \includegraphics[width=12cm]{Bool-example_sdf2}
-\W \htmlimage{Bool-example.sdf2.gif}
+\T \includegraphics[width=12cm]{Bool-example-sdf}
+\W \htmlimage{Bool-example-sdf.gif}
 \caption{Editor for the syntax of {\tt Booleans}}
 
 \end{Label}
@@ -1163,8 +1144,8 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 \begin{center}
 \begin{Label}{FIG:Bool-example.asf}
 
-\T \includegraphics[width=12cm]{Bool-example_asf}
-\W \htmlimage{Bool-example.asf.gif}
+\T \includegraphics[width=12cm]{Bool-example-asf}
+\W \htmlimage{Bool-example-asf.gif}
 \caption{Editor for the equations of {\tt Booleans}}
 
 \end{Label}
