@@ -140,6 +140,11 @@ AC_SUBST(ASF)
 
 dnl }}}
 
+dnl Of course, the latest version of wish is not always called "wish". :-(
+dnl If we can't find something called wish 8.3, wish8.2 or wish8.1, we'll
+dnl assume that "wish" is at version 8 or higher.
+
+AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
 
 dnl {{{  Which files need updating?
 AC_OUTPUT(
@@ -148,7 +153,7 @@ dnl  doc/Makefile
   spec/Makefile
   util/Makefile
   rscripts/Makefile
-dnl  vis/Makefile
+  rviz/Makefile
   demo/Makefile
   demo/pico/Makefile
   demo/java/Makefile

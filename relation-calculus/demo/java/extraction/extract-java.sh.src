@@ -10,8 +10,7 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 
 PRG=`basename $0`
-EVALUATOR=${bindir}/RscriptCalculator
-JAVA_PARSE_TABLE=${datadir}/java.trm.tbl
+JAVA_PARSE_TABLE=${datadir}/Java.trm.tbl
 JAVA_ANALYSIS=${datadir}/JavaAnalysis.eqs
 
 # }}}
@@ -32,7 +31,10 @@ ENDCAT
 
 # }}}
 
-find . -name "*.java" -a -exec "extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -t $JAVA_PARSE_TABLE {}"
+SOURCE_DIR=$1
+
+find $SOURCE_DIR -name "*.java" -a -exec extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -p $JAVA_PARSE_TABLE \{\} \;
+
 
 
 #for d in $SUBDIRS

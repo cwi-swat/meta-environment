@@ -2,7 +2,7 @@
 
 # ---- Generate term parse table from SDF module
 
-%.trm.tbl:: %.sdf Makefile
+%.trm.tbl:: %.sdf
 	pt-dump -m $(*F) -o $@
 
 # ---- Convert from .asf to .eqs
