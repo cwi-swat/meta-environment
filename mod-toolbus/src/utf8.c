@@ -1,4 +1,4 @@
-/** 
+/*
  *	utf8.c
  *
  *	Erik Post
@@ -14,40 +14,62 @@
 #include "utf8.h"
 
 
-typedef struct
-{
-	char utf8[3];
-	char ascii[2];
-} transl_tbl_t;
-
-
-transl_tbl_t utf8_to_ascii_tbl[] =
-{
-	{"22", "\""},
-	{"28", "("},
-	{"29", ")"},
-	{"2D", "-"}
-};
-#define UTF8_TBL_SIZE 3
 #define UTF8_START_CHAR '%'
 #define UTF8_WIDTH 3
 
 
+/*
+ *	returns integer value of hexdigit, or -1 if hexdigit was not a valid
+ *	hex digit
+ */
+int hexdigit2int( char hexdigit )
+{
+	char d;
+	 
+	d = tolower(hexdigit);
+	if( !isxdigit(d) ) 
+	{
+		return -1;
+	}
+	else if( isdigit(hexdigit) )
+	{
+		return (int) hexdigit - (int) '0';
+	}
+	else	/* d must be a character [a-f] */
+	{
+		return 10 + (int) hexdigit - (int) 'a';
+	}
+}
 
 
 /*
- *	This function could be easily generalized to perform other translation
- *	tasks with a bit of twiddling, since most all of it uses macros instead
- *	of hardcoded constants, so a search and replace would get us a long way.
+ *	pre		s contains at least num_chars hex digits
+ *	post	the integer value of the hexadecimal number with num_chars
+ *			digits is returned
  */
-void utf8_to_ascii_backend( char* dest, char* src, transl_tbl_t tt[] )
+int hex2int( char* s, int num_chars )
 {
-	char aux[3];
-	char aux_ascii;
+	int i;
+	char c;
+	int digit_weight;
+	int rv;
+	
+	rv = 0;
+	digit_weight = 1;
+	for( i=0; i<num_chars; i++ )
+	{
+		c = s[num_chars-i-1];
+		rv += hexdigit2int(c) * digit_weight;
+		digit_weight *= 16;
+	}
+	return rv;
+}
+
+
+void utf8_to_ascii( char* dest, char* src )
+{
 	int i_src = 0;
 	int i_dest = 0;
-	int i_utf8;
-	int is_match;
 	int len_src;
 	
 	/*
@@ -73,29 +95,8 @@ void utf8_to_ascii_backend( char* dest, char* src, transl_tbl_t tt[] )
 			&& (i_src < len_src-(UTF8_WIDTH-1)))
 		{
 			i_src++;				/* skip UTF8_START_CHAR character */
-			/*
-			 *	search through table of UTF-8 chars
-			 */
-			is_match = 0;
-			for( i_utf8=0; 
-				(i_utf8<UTF8_TBL_SIZE) && (!is_match); 
-				i_utf8++ )
-			{	
-				#ifdef DEBUG
-					printf( "\tcomparing to %s\n", tt[i_utf8].utf8 );
-					printf( "\tis_match: %d\n", is_match );
-				#endif
-				if( strncmp( &src[i_src], tt[i_utf8].utf8, (UTF8_WIDTH-1))==0 )
-				{
-					aux_ascii = *(tt[i_utf8].ascii);
-					dest[i_dest] = aux_ascii;
-					i_dest++;				
-					#ifdef DEBUG
-						printf( "\tmatch: %c\n", aux_ascii );
-					#endif
-					is_match = 1;
-				}
-			}
+			dest[i_dest] = (char) hex2int(&src[i_src], UTF8_WIDTH-1 );
+			i_dest++;				
 			i_src+=(UTF8_WIDTH-2);	/* last hex digit of UTF-8 sequence */
 		}
 		else /* we're not scanning an UTF8-char right now */
@@ -108,23 +109,18 @@ void utf8_to_ascii_backend( char* dest, char* src, transl_tbl_t tt[] )
 }
 
 
+#if 0
 
-void utf8_to_ascii( char* dest, char* src )
-{
-	utf8_to_ascii_backend( dest, src, utf8_to_ascii_tbl );
-}
-
-
-/*
+/* 
+ *	example and test
+ */
 int main( int argc, char* argv[] )
 {
 	char* s = "Er %28 staat %9 een paard in de gang";
 	char t[100];
-	
-	utf8_to_ascii( t, s, utf8_to_ascii_tbl ); 
-	printf( "src: %s\ndest: %s\n", s,t  );
-		
+	utf8_to_ascii( t, s );
+	printf( "string: %s\ndecoded: %s\n", s, t );	
+	/* printf( "3f =  %d\n", hex2int("3f") ); */
 	return 0;
 }
-*/
-
+#endif
