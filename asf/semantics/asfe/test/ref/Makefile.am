@@ -20,8 +20,7 @@
 #
 # $Id$
 
-EXTRA_DIST = Pico-Booleans.1.ref.afme \
-             Pico-Integers.1.ref.afme \
+EXTRA_DIST = Pico-Integers.1.ref.afme \
              Pico-Integers.2.ref.afme \
              Pico-Integers.3.ref.afme \
              Pico-typecheck.1.ref.afme \
