@@ -1,5 +1,5 @@
 # $Id$
 
-SUBDIRS    = add-pt-func pgen addeqs
+SUBDIRS    = pgen addeqs
 
 EXTRA_DIST = make_rules DEVELOPERS-INFO
