@@ -5,7 +5,7 @@ exports
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
 	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR
 
-  imports RscriptElem
+  imports RscriptElem basic/Comments
 
   lexical syntax
      [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}

@@ -34,7 +34,6 @@ button("Rscript",
            		parse("RscriptChecker", "List"),
            		if-equal([	push-active-module,
                      			get-root,
-		     			check-sort("RSCRIPT"),
 		     			apply("eval-rscript", "RSTORE", 1),
 		     			exists("RscriptCalculator"),
 		     			unpack-tree,
@@ -61,75 +60,91 @@ button("Rscript",
           [description(term-editor, menu(["Rscript","Run with Rstore"]))],
           [push-active-module,
            get-root,
-           check-sort("RSCRIPT"),
-	   push-filename("RSTORE.rstore"),
-	   dup,
-	   push-string(""),
-	   if-equal([	message("Rstore does not exist")
-                    ],
-		    [
-			message("Using fixed Rstore file RSTORE.rstore"),
-			parse("Rstore", "RSTORE"),
-			apply("check-rscript-with-rstore", "List", 2),
-			push-modulename("RscriptChecker"),
-			reduce,
+           push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			push-filename("RSTORE.rstore"),
 			dup,
-			push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
-			parse("RscriptChecker", "List"),
-			if-equal([		
-					push-active-module,
-					get-root, 
-					push-filename("RSTORE.rstore"),
-					parse("RscriptCalculator", "RSTORE"),
-					apply("eval-rscript-with-rstore", "RSTORE", 2),
-					exists("RscriptCalculator"),
-					unpack-tree,
-					message("Executing Rscript ..."),
-					execute-action("RscriptCalculator -t"),
-					message("Execution of Rscript completed"),
-					push-filename("RscriptCalculator.results"),
-					push-modulename("Rstore"),
-					close-editor,
-					push-filename("RscriptCalculator.results"),
-					push-modulename("Rstore"),
-					activate-editor
+			push-string(""),
+			if-equal([	message("Rstore does not exist")
+				 ],
+				 [
+					message("Using fixed Rstore file RSTORE.rstore"),
+					parse("Rstore", "RSTORE"),
+					apply("check-rscript-with-rstore", "List", 2),
+					push-modulename("RscriptChecker"),
+					reduce,
+					dup,
+					push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
+					parse("RscriptChecker", "List"),
+					if-equal([		
+							push-active-module,
+							get-root, 
+							push-filename("RSTORE.rstore"),
+							parse("RscriptCalculator", "RSTORE"),
+							apply("eval-rscript-with-rstore", "RSTORE", 2),
+							exists("RscriptCalculator"),
+							unpack-tree,
+							message("Executing Rscript ..."),
+							execute-action("RscriptCalculator -t"),
+							message("Execution of Rscript completed"),
+							push-filename("RscriptCalculator.results"),
+							push-modulename("Rstore"),
+							close-editor,
+							push-filename("RscriptCalculator.results"),
+							push-modulename("Rstore"),
+							activate-editor
 
-				],
-				[	message("Rscript contains type error(s)"),
-					unparse,
-					push-active-module,
-					show-list
-				])
-		    ]
-           )
-	   ]
-       ),
+							],
+						  [	message("Rscript contains type error(s)"),
+							unparse,
+							push-active-module,
+							show-list
+						  ])
+				  ])
+		    ],
+		    [ message("Not an Rscript")
+		    ])
+          ]),
 
  button("Rscript",
 	  [description(term-editor, menu(["Rscript", "Run interpreted"]))],
           [push-active-module,
            get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript", "RSTORE", 1),
-           push-modulename("RscriptCalculator"),
-           reduce,
-           push-filename("RscriptCalculator.results"),
-           push-active-module,
-           activate-editor
-           ]),
+           push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			apply("eval-rscript", "RSTORE", 1),
+			push-modulename("RscriptCalculator"),
+			reduce,
+			push-filename("RscriptCalculator.results"),
+			push-active-module,
+			activate-editor
+		    ],
+		    [	message("Not an Rscript")
+		    ]
+	   )]),
 
  button("Rscript",
 	  [description(term-editor, menu(["Rscript", "TestSuite interpreted"]))],
           [push-active-module,
            get-root,
-           check-sort("RSCRIPT"),
-           apply("eval-rscript-testsuite", "TESTREPORT", 1),
-           push-modulename("RscriptTestsuites"),
-           reduce,
-           push-filename("RscriptCalculator.results"),
-           push-active-module,
-           activate-editor
-           ]),
+	   push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			apply("eval-rscript-testsuite", "TESTREPORT", 1),
+			push-modulename("RscriptTestsuites"),
+			reduce,
+			push-filename("RscriptCalculator.results"),
+			push-active-module,
+			activate-editor
+		    ],
+		    [	message("Not an Rscript")
+		    ]
+          )]),
 
  button("Rstore",
   	  [description(term-editor, menu(["Rstore", "Dummy"]))],
@@ -141,16 +156,56 @@ button("Rscript",
   	  [description(term-editor, menu(["Rstore", "View"]))],
           [push-active-module,
            get-focus,
-	   check-sort("Elem"),
-	   apply("export-graph", "Graph", 1),
-	   push-modulename("ExportGraph"),
-	   reduce,
-	   unparse,
-	   push-filename("Graph.graph"),
-	   save-text
-	   ])
-
-
-
+	   push-string("BoolCon"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+			 apply("export-graph-bool", "Graph", 1),
+			 push-modulename("ExportGraph"),
+			 reduce,
+			 unparse,
+			 push-filename("Graph.graph"),
+			 save-text
+		    ],
+		    [	push-string("NatCon"),
+			check-sort,
+			push-term(true),
+			if-equal([
+					apply("export-graph-int", "Graph", 1),
+					push-modulename("ExportGraph"),
+					reduce,
+					unparse,
+					push-filename("Graph.graph"),
+					save-text
+				],
+				[ 	push-string("StrCon"),
+					check-sort,
+					push-term(true),
+					if-equal([
+							apply("export-graph-str", "Graph", 1),
+							push-modulename("ExportGraph"),
+							reduce,
+							unparse,
+							push-filename("Graph.graph"),
+							save-text
+						 ],
+						 [	push-string("Bag[[Elem]]"),
+							check-sort,
+							push-term(true),
+							if-equal([
+									apply("export-graph-bag", "Graph", 1),
+									push-modulename("ExportGraph"),
+									reduce,
+									unparse,
+									push-filename("Graph.graph"),
+									save-text
+								 ],
+								 [
+									message("Cannot view selected focus")
+								])
+						])
+				])
+			])			 
+		    ])
 
 ])
