@@ -14,7 +14,6 @@ bindir 		= $(exec_prefix)/bin
 SUBDIRS         = sh spec
 
 all clean distclean install uninstall:
-	dflkgh;dasfkjgskd;fj
 	@SUBDIRS="${SUBDIRS}";\
 	for SUBDIR in $$SUBDIRS; \
 	do \
