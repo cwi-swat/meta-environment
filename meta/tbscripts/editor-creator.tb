@@ -27,6 +27,7 @@ let
   Id         : int,
   Path       : term,
   Time       : term,
+  Tree       : term,
   Text       : str,
   EditorId   : str,
   ModuleName : str,
@@ -62,11 +63,11 @@ in
       create(EditTerm(EditorId, ModuleName, ""), Id?)
     )
   +
-    rec-msg(edit-term-text(ModuleName?, Text?)) .
+    rec-msg(edit-term(ModuleName?, Tree?, Text?)) .
     create(TextEditor("term"), Id?) .
     snd-msg(set-text(Id, Text)) .
     rec-msg(text-editor-id(Id, EditorId?)) .
-    create(EditTerm(EditorId, ModuleName, Text), Id?)
+    create(EditTermTree(EditorId, ModuleName, Tree), Id?)
   +
     rec-msg(text-editor-disconnected(EditorId?)).
     snd-msg(remove-tree(EditorId))

@@ -33,8 +33,7 @@ in
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?)) .
-    snd-msg(unparse(Tree)) .
-    rec-msg(unparsed-text(Text?))
+    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree))
   +
     rec-msg(unavailable) .
     snd-msg(get-eqs-text(ModuleName)) .
@@ -52,9 +51,9 @@ in
 	snd-note(ui-status(errorf(
 	  "Could not create empty equations: %s", [ErrMsg])))
       )
-    )
+    ) .
+    snd-msg(initialize-structure-editor(EditorId, Text))
   ) .
-  snd-msg(initialize-structure-editor(EditorId, Text)) .
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
   (
