@@ -192,7 +192,7 @@ print_string(char *s, int n)
 {
   wputc('"');
   while (n--) {
-    if (isprint(*s)) {
+    if (isprint((int)*s)) {
       switch (*s) {
       case '\\':
       case '"':
