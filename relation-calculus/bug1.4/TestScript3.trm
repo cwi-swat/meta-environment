@@ -1,0 +1,43 @@
+rel INSTANCE = {<m1, module>, <c1, class>, <a1, attribute>, <mt1, method>}
+
+rel NAME = {} %%[ID, String]
+
+rel TYPE = {} %%[ID, String]
+
+rel INCLUDES = {} %% [Module, Module]
+
+rel ISCLASSOF = {} %%[Class, Module]
+
+rel ISSUBCLASSOF = {} %%[Class,Class]
+
+rel ISMETHODOF = {} %%[Method,Module]
+
+%%rel IsMethodOf[Method,Class]
+
+rel ISATTRIBUTEOF = {} %%[Attribute, Class]
+
+%%1a. 
+bag Tst = INSTANCE.{module}
+
+%% 1b.
+ 
+rel TST1 = {<$id, $name> in NAME | {$id}.INSTANCE == {module} }
+
+%%2a  
+
+rel TST = ISSUBCLASSOF
+
+%%2b  
+rel TST = {<$sub, $sup> in ISSUBCLASSOF | true | {$sub}.NAME x {$sup}.NAME }
+%%rel TST = inv(NAME) o ISSUBCLASSOF o NAME
+
+3   {$h in ran Includes | #(Includes . $h) == 2 |  $h . Name }
+
+4.  classes = INSTANCE.class
+    #(isMethodOf . classes) / #classes
+
+
+
+
+
+

@@ -1,0 +1,115 @@
+module RelationCalculator[Elem]
+
+imports RScripts[Elem]
+imports Relations[Elem]
+
+exports
+   sorts VALUE RSTORE GEN GENS OP
+
+   context-free syntax
+
+        "*empty*"                    -> VALUE
+        Boolean                      -> VALUE
+        Elem                         -> VALUE
+        Bag[[Elem]]                  -> VALUE
+        Rel[[Elem]]                  -> VALUE
+        Elem # Elem                  -> VALUE
+        VAR # REXP                    -> VALUE
+        VAR # VAR # REXP              -> VALUE
+        VAR # VAR # VAR # REXP        -> VALUE
+        
+        "[" { VAR # VALUE ","}* "]"   -> RSTORE
+        assign(VAR, VALUE, RSTORE)    -> RSTORE
+        value(VAR, RSTORE)            -> VALUE
+        rel-value(VAR, RSTORE)        -> Rel[[Elem]]
+
+        add(VAR, Elem, RSTORE)        -> RSTORE
+
+	add(VAR, Elem # Elem, RSTORE) -> RSTORE
+
+	add(VAR, Rel[[Elem]], RSTORE) -> RSTORE
+ 
+        evalp(REXP, RSTORE)            -> Boolean
+        evale(REXP, RSTORE)            -> Elem
+        evalb(REXP, RSTORE)            -> Bag[[Elem]]
+        evalr(REXP, RSTORE)            -> Rel[[Elem]]
+
+        evalx(REXP, RSTORE)            -> VALUE
+        apply "(" VALUE OP VALUE ")"  -> VALUE
+
+        "dominators"                  -> VAR {prefer}
+
+        "=="                         -> OP
+        "<="                         -> OP
+        "<"                          -> OP
+        ">="                         -> OP
+        ">"                          -> OP
+        "union"                      -> OP
+        "inter"                      -> OP
+        "\\"                         -> OP
+        "o"                          -> OP
+        "x"                          -> OP
+        "."                          -> OP
+
+        eval-rscript(SCRIPT)         -> RSTORE
+        eval-rscript(STAT, RSTORE)   -> RSTORE
+        eval-rscript(STAT*, RSTORE)  -> RSTORE
+
+        equal(Elem, Elem)            -> Boolean
+
+        gen(VAR, Bag[[Elem]], Bag[[Elem]], Boolean)       -> GEN
+        gen(VAR, VAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
+
+        "[" {GEN ","}* "]"                                -> GENS
+        "get_from" "(" {FROM ","}* "," RSTORE ")"         -> GENS
+        "has_more" "(" GENS ")"                           -> Boolean
+        "get_next" "(" GENS ")"                           -> GENS
+        "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
+
+        valformer(GENS, VALUE, REXP, RSTORE, REXP)          -> VALUE
+        "if" Boolean "then" VALUE "else" VALUE "fi"       -> VALUE
+
+hiddens
+  imports asf/syntax/Comments
+
+   variables
+        "Store" [0-9\']*              -> RSTORE
+        "Val" [0-9\']*                -> VALUE
+        "VPair*" [0-9\']*             -> { VAR # VALUE ","}*
+
+        "Var" [0-9\']*                -> VAR
+        "Exp"  [0-9\']*               -> REXP
+        "Exp*"  [0-9\']*              -> { REXP ","}*
+        "Exp+"  [0-9\']*              -> { REXP ","}+
+
+        "Rel" [0-9\']*                -> Rel[[Elem]]
+        "Bag" [0-9\']*                -> Bag[[Elem]]
+        "E"   [0-9\']*                -> Elem
+        "E*"  [0-9\']*                -> {Elem ","}*
+        "E+"  [0-9\']*                -> {Elem ","}+
+
+        "Texp" [0-9\']*               -> REXP # REXP
+        "Texp*" [0-9\']*              -> { TEXP  ","}*
+        "Texp+" [0-9\']*              -> { TEXP  ","}+
+
+        "Tuple" [0-9\']*              -> Elem # Elem
+        "Tuple*" [0-9\']*             -> { Elem # Elem ","}*
+        "Tuple+" [0-9\']*             -> { Elem # Elem ","}+
+
+        "From*" [0-9\']*              -> {FROM ","}*
+        "From+" [0-9\']*              -> {FROM ","}+
+
+        "Gen*" [0-9\']*               -> { GEN ","}*
+        "Gen+" [0-9\']*               -> { GEN ","}+
+        "Gens" [0-9\']*               -> GENS
+
+        "Script" [0-9\']*             -> SCRIPT
+
+        "Stat" [0-9\']*               -> STAT
+        "Stat*" [0-9\']*              -> STAT*
+
+        "Bool" [0-9\']*               -> Boolean
+
+     
+
+

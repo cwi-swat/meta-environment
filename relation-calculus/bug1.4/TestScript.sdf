@@ -1,0 +1,4 @@
+module TestScript
+
+imports Pico-syntax
+imports RelationCalculator[PICO-ID]
