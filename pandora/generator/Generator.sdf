@@ -1,31 +1,49 @@
 module Generator
 
+imports utilities/IO[Symbol]
 imports languages/sdf2/syntax/Sdf2
 
 exports
   context-free syntax
-    "PPgenerator"(Module) -> Module
+    ppSDFGenerator(Module) -> Module 
 
 hiddens
   context-free syntax
-    generateProductions(Module, Productions)
+    getProductions(Module, Productions) 
       -> Productions {traversal(accu, top-down, break)}
 
-    generateProductions(Grammar, Productions)
+    getProductions(Grammar, Productions) 
       -> Productions {traversal(accu, top-down, break)}    
 
-    generateProd(Productions, Productions)
+    generateProductions(Productions, Productions) 
       -> Productions {traversal(accu, top-down, break)}
 
-    generateProd(Production, Productions)
+    generateProductions(Production, Productions) 
       -> Productions {traversal(accu, top-down, break)}
+
+  context-free syntax
+    makePPSymbol(Symbol) -> Symbol 
+
+  context-free syntax
+    removeWhitespace(Bytes) -> Bytes
+    isWhitespace(Bytes) -> Boolean
 
 hiddens
   variables
-    "Grammar"[0-9]* -> Grammar
-    "ImpSection"[0-9]* -> ImpSection
-    "Module"[0-9]* -> Module
-    "Production"[0-9]* -> Production
-    "Productions"[0-9]* -> Productions
-    "Production*"[0-9]* -> Production*
-    "Section"[0-9]* -> Section
+    "$Attributes"[0-9]* -> Attributes
+    "$Bytes"[0-9]* -> Bytes
+    "$Char"[0-9]* -> CHAR
+    "$Char+"[0-9]* -> CHAR+
+    "$Char*"[0-9]* -> CHAR*
+    "$Grammar"[0-9]* -> Grammar
+    "$ImpSection"[0-9]* -> ImpSection
+    "$Literal"[0-9]* -> Literal
+    "$Module"[0-9]* -> Module
+    "$Production"[0-9]* -> Production
+    "$Productions"[0-9]* -> Productions
+    "$Production*"[0-9]* -> Production*
+    "$Section"[0-9]* -> Section
+    "$Sort"[0-9]* -> Sort
+    "$Symbol"[0-9]* -> Symbol
+    "$Symbols"[0-9]* -> Symbols
+    "$Symbol*"[0-9]* -> {Symbol ","}*

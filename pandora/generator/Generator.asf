@@ -1,24 +1,56 @@
 equations
 
-[generatePP-start]
-  ImpSection := imports languages/box/syntax/box,
-  Grammar := syntax generateProductions(Module0, ),
-  Section := exports Grammar,
-  Module1 := module test ImpSection Section
+[ppSDFGenerator-start]
+  $ImpSection := imports languages/box/syntax/box,
+  $Grammar := context-free syntax getProductions($Module0, ),
+  $Section := exports $Grammar,
+  $Module1 := module test $ImpSection $Section
   ===>
-  PPgenerator(Module0) = Module1
+  ppSDFGenerator($Module0) = $Module1
+
+[getProductions-0]
+  context-free syntax $Productions := $Grammar
+  ===>
+  getProductions($Grammar, $Production*) 
+    = generateProductions($Productions, $Production*)
+
+[getProductions-1]
+  lexical syntax $Productions := $Grammar
+  ===>
+  getProductions($Grammar, $Production*) 
+    = generateProductions($Productions, $Production*)
 
 [generateProductions-0]
-  context-free syntax Productions := Grammar
+  $Symbols -> $Symbol1 $Attributes := $Production0,
+  $Symbol2 := makePPSymbol($Symbol1),
+  $Production1 := $Symbol2 -> $Symbol1
   ===>
-  generateProductions(Grammar, Production*) 
-    = generateProd(Productions, Production*)
+  generateProductions($Production0, $Production*) = $Production1 $Production*
 
 [generateProductions-1]
-  lexical syntax Productions := Grammar
+  $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production0,
+  $Symbol2 := makePPSymbol($Symbol1),
+  $Production1 := $Symbol2 -> $Symbol1
   ===>
-  generateProductions(Grammar, Production*) 
-    = generateProd(Productions, Production*)
+  generateProductions($Production0, $Production*) = $Production1 $Production*
 
-[generateProductions-2]
-  generateProd(Production, Production*) = Production Production*
+[makePPSymbol-0]
+  bytes(bytes($Char+)) := unparse-to-bytes($Symbol),
+  bytes($Char*) := removeWhitespace(bytes($Char+))
+  ===>
+  makePPSymbol($Symbol) = uqliteral("p" "p" $Char*)
+
+[default-removeWhitespace]
+  removeWhitespace($Bytes) = $Bytes
+
+[removeWhitespace-1]
+  isWhitespace(bytes($Char)) == true
+  ===>
+  removeWhitespace(bytes($Char*1 $Char $Char*2)) 
+    = removeWhitespace(bytes($Char*1 $Char*2))
+
+[default-isWhitespace]
+  isWhitespace($Bytes) = false 
+
+[isWhitespace-0]
+  isWhitespace(bytes(" ")) = true 
