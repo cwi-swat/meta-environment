@@ -3,6 +3,9 @@
  */
 
 package toolbus;
+import java.io.*;
+import java.io.StringWriter;
+
 import toolbus.atom.*;
 import toolbus.process.*;
 
@@ -626,11 +629,10 @@ static void producerTest(){
   }
   
   static void ParseTest(){
- 
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/parser/S.tb");
+      T.parse("toolbus/parser/S0.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

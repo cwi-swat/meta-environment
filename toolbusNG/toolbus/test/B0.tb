@@ -1,0 +1,2 @@
+process P is delta
+toolbus(P)

@@ -1,4 +1,6 @@
-package toolbus;
+package toolbus.test;
+import toolbus.*;
+
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 

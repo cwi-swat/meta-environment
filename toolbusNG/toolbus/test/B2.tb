@@ -1,0 +1,2 @@
+process P(X : int) is print X
+toolbus(P(123))
