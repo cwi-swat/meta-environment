@@ -24,12 +24,18 @@ bin_SCRIPTS	= tifstojava
 
 CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes
 
-${EXAMPLECLASSES}: example.tifs JavaTif.class
+JAVATIFCLASSES = \
+	AbstractTool.class \
+	JavaTif.class \
+	SpecOrderVector.class \
+	Tool.class
+
+${EXAMPLECLASSES}: example.tifs $(JAVATIFCLASSES)
 	$(CLASSPATH_ENV) \
 	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
 	-tifs example.tifs -tool example -package toolbus
 
-${TESTCLASSES}: test.tifs JavaTif.class
+${TESTCLASSES}: test.tifs $(JAVATIFCLASSES)
 	$(CLASSPATH_ENV) \
 	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
 	-tifs test.tifs -tool testing -package toolbus
