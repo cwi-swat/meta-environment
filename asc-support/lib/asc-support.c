@@ -867,9 +867,9 @@ void ASC_initRunTime(int tableSize)
 
 PT_ParseTree toasfix(ATerm term)
 {
-  PT_Tree tree = yieldTree(term);
+  PT_Tree tree;
 
-  tree = yieldTree(term);  
+  tree = muASFToTree(term);  
 
   return PT_makeValidParseTreeFromTree(tree);
 }

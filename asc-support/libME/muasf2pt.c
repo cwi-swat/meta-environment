@@ -292,7 +292,7 @@ static PT_Tree termToTree(ATerm tree)
 
 /*{{{  PT_Tree yieldTree(ATerm tree) */
 
-PT_Tree yieldTree(ATerm tree)
+PT_Tree muASFToTree(ATerm tree)
 {
   PT_Tree result;
 

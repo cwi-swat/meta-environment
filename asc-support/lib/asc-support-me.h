@@ -297,4 +297,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 
 /*}}}  */
 
+#include <MEPT.h>
+ATerm innermost(PT_Tree tree);
+PT_Tree muASFToTree(ATerm term);
 #endif  /* ASC_SUPPORT_H */

@@ -5,6 +5,6 @@
 
 #include <MEPT.h>
 
-PT_Tree yieldTree(ATerm tree);
+PT_Tree muASFToTree(ATerm tree);
 
 #endif
