@@ -79,6 +79,7 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Unit test target
 test:	all
 	${top_srcdir}/utils/test-help ./graph-browser
+	${top_srcdir}/utils/test-version ./graph-browser
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'

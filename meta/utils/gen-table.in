@@ -24,7 +24,10 @@ verbose=0;
 ###
 
 myname=`basename $0`
-myversion=`echo $Revision| cut -d' ' -f2`
+
+# removed by HDJ .. appears to be broken?
+# myversion=`echo $Revision| cut -d' ' -f2`
+myversion="0.1"
 
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option

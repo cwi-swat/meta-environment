@@ -81,6 +81,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Unit test target
 test:	all
 	${top_srcdir}/utils/test-help ./module-db
+	${top_srcdir}/utils/test-version ./module-db
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'

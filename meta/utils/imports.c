@@ -62,11 +62,14 @@ extern char* optarg;
    "         -l  print full paths names of modules\n"\
    "         -r  construct a list of modules recursively\n"\
    "         -s  stop when a module cannot be found\n"\
+   "         -V  show version\n"\
    "\n"
 
 /* Command line options used by imports */
-static char* opt_string = "ghlrs";
+static char* opt_string = "ghlrsV";
 
+/* Version */
+static char myversion[] = "0.1";
 
 extern ATbool silent;
 
@@ -81,8 +84,8 @@ extern ATbool silent;
 
 static void usage()
 {
-   fprintf( stderr, USAGE_MSG );
-	 exit(1);
+  ATwarning(USAGE_MSG);
+  exit(1);
 }
 
 static char* basename( const char* s )
@@ -99,6 +102,12 @@ static char* basename( const char* s )
    if( ptr != NULL )
       *ptr = '\0';
    return buffer;
+}
+
+static void version(const char *prg)
+{
+    ATwarning("%s v%s\n", prg, myversion);
+    exit(1);
 }
 
 int main( int argc, char* argv[] )
@@ -137,6 +146,9 @@ int main( int argc, char* argv[] )
          case 's':
             options |= FailWhenNotFound;
             break;
+         case 'V':
+	    version(argv[0]);
+	    break;
          default:
             usage();
             exit( 1 );

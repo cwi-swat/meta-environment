@@ -81,8 +81,8 @@ all:	${BINFILES} ${LIBFILES} ${DATAFILES}
 # Unit test target
 test:	all
 	@for f in $(BINFILES); do \
-		echo $$f; \
 		./test-help ./$$f; \
+		./test-version ./$$f; \
 	done
 	
 %-cc.o: %.c

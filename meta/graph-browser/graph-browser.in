@@ -7,9 +7,19 @@ usage () {
   exit 1
 }
 
+version () {
+  echo "graph-browser v0.1"
+  exit 1
+}
+
 if [ $1 = "-h" ]
 then
   usage $0
+fi
+
+if [ $1 = "-V" -o $1 = "--version" ]
+then
+  version $0
 fi
 
 prefix=@prefix@

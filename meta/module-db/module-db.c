@@ -37,6 +37,8 @@ Manipulation of modules in database:
 
 #include "module-db.h"
 
+static char myversion[] = "0.1";
+
 ATermTable modules_db;
 ATermTable new_modules_db;
 ATermTable import_db;
@@ -1214,25 +1216,37 @@ void reshuffle_modules_from(int cid, char *modulename)
 
 void usage(char *prg)
 {
-  fprintf(stderr, "usage: %s [aterm-options] [toolbus-options]\n", prg);
-  fprintf(stderr, "use '%s -at-help' to get more options.\n", prg);
-  fprintf(stderr, "This program can only be used as a ToolBus tool!\n");
-  exit(1);
+    ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
+    ATwarning("use '%s -at-help' to get more options.\n", prg);
+    ATwarning("This program can only be used as a ToolBus tool!\n");
+    exit(1);
+}
+
+void version(const char *msg)
+{
+    ATwarning("%s v%s\n", msg, myversion);
+    exit(1);
 }
 
 
 /* Main program */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-  int cid;
+  int i, cid;
   ATerm bottomOfStack;
 
-  if(strcmp(argv[1], "-h") == 0) {
-    usage(argv[0]);
+  for (i=1; i<argc; i++) {
+      if (strcmp(argv[i], "-h") == 0) {
+	  usage(argv[0]);
+      } else if (strcmp(argv[i], "-V") == 0) {
+	  version(argv[0]);
+      }
   }
 
   ATBinit(argc, argv,&bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
+
+
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);
 
   ATprotect((ATerm *)&modules_to_process);

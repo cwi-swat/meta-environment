@@ -37,26 +37,36 @@
 
 #define DB {fprintf(stderr,"%s-%d\n", __FILE__, __LINE__);}
 
+static char myversion[] = "0.1";
+
 static void usage()
 {
-   fprintf( stderr, USAGE_MSG );
-	 exit(1);
+  fprintf(stderr, USAGE_MSG);
+  exit(1);
 }
 
-int main( int argc, char*argv[])
+static void version(const char *prg)
 {
+    fprintf(stderr, "%s v%s\n", prg, myversion);
+    exit(1);
+}
+
+int main(int argc, char* argv[])
+{
+   int i;
    char* p;
    char* meta_paths_file;
    char* file;
    meta_paths mp;
 
-   /* Check command line arguments */
-   if( argc == 2 &&
-       (strcmp( argv[1], "-h" ) == 0 ||
-        strcmp( argv[1], "-help" ) == 0 ) )
-   {
-      usage();
-      return 0;
+   for (i=1; i<argc; i++) {
+       if (strcmp(argv[i], "-h") == 0 ||
+	   strcmp(argv[i], "--help") == 0) {
+	   usage();
+       } else if (strcmp(argv[i], "-V") == 0 ||
+	   strcmp(argv[i], "--version") == 0) {
+	   version(argv[0]);
+       }
    }
 
    if( argc != 3 )

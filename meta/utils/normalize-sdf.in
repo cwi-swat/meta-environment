@@ -19,22 +19,28 @@ EXTENSIONS=".sdf .sdf2"
 VERBOSE=0;
 
 Notify () {
-        if [ $VERBOSE -gt 0 ]
-        then
-                echo $*                                   >&2
-        fi
+  if [ $VERBOSE -gt 0 ]
+  then
+    echo $* >&2
+  fi
 }
 
+version() {
+  echo "normalize-sdf v0.1"
+  exit 1
+}
 
 while [ $# -gt 0 ]	# Handle command line options
 do
 	case $1
 	in
-	  -h*)
-			echo "Usage: $0 [-v] file(s) ..."
+	  -h | --help)
+			echo "Usage: $0 [-hvV] file(s) ..."
 			exit 1;;
-		-v*)
+		-v | --verbose)
 			VERBOSE=1 ;;
+    -V | --version)
+		  version ;;
 		-*)
 			echo Unknown option ignored: $1 ;;
 		*)

@@ -65,6 +65,12 @@ ENDCAT
 	exit 1
 }
 
+version()
+{
+  echo "genmakefile.sh v0.1"
+  exit 1
+}
+
 if [ ! -s ${PROTO} ] ; then
     echo `basename $0`: could not open ${PROTO}
     exit 1
@@ -74,10 +80,11 @@ fi
 if [ "a$1" != "a" ]
 then
    case $1 in
-      -h | -help ) usage ; exit 0 ;;
-      -i         ) MAKETARGET="Makefile.in" ; shift ;;
-      -m         ) MAKETARGET="Makefile" ; shift ;;
-      -*         ) usage; exit 1
+      -h | --help    ) usage ; exit 0 ;;
+      -i             ) MAKETARGET="Makefile.in" ; shift ;;
+      -m             ) MAKETARGET="Makefile" ; shift ;;
+      -V | --version ) version ;;
+      -*             ) usage; exit 1
    esac
 fi
 
