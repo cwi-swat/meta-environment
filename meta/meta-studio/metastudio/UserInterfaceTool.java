@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 1:32:06 PM
+// generation time: Nov 25, 2004 3:45:05 PM
 
 package metastudio;
 
@@ -22,7 +22,6 @@ abstract public class UserInterfaceTool
   private ATerm PaddEvents1;
   private ATerm PrenderGraph0;
   private ATerm PinitializeUi0;
-  private ATerm PclearHistory0;
   private ATerm PdisplayTreelist0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -52,7 +51,6 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,render-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,clear-history)"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
@@ -68,7 +66,6 @@ abstract public class UserInterfaceTool
     PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
     PrenderGraph0 = factory.parse("rec-do(render-graph(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
-    PclearHistory0 = factory.parse("rec-do(clear-history)");
     PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -106,11 +103,6 @@ abstract public class UserInterfaceTool
     result = term.match(PinitializeUi0);
     if (result != null) {
       initializeUi((String)result.get(0));
-      return null;
-    }
-    result = term.match(PclearHistory0);
-    if (result != null) {
-      clearHistory();
       return null;
     }
     result = term.match(PdisplayTreelist0);

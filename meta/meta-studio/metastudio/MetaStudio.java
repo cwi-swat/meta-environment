@@ -1,5 +1,7 @@
 package metastudio;
 
+import images.CVS.MainTabs;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -17,8 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import metastudio.components.MainTabs;
-import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.dialogtool.DialogTool;
 import metastudio.components.menubar.MenuBar;

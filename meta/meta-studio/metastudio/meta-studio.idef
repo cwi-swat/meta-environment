@@ -77,13 +77,9 @@ in
       . snd-msg(ui-button-selected(Type, Event, ModuleId))
       . snd-ack-event(UI, button-selected(Type, ModuleId, Event))
     +
-      rec-msg(clear-history)
-      . snd-do(UI, clear-history)
-    +
       rec-event(UI, node-selected(GraphId?, Node?))
       . snd-msg(ui-node-selected(GraphId, Node))
       . snd-ack-event(UI, node-selected(GraphId, Node))
-   
     )
     *
     (

@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 1:32:06 PM
+// generation time: Nov 25, 2004 3:45:05 PM
 
 package metastudio;
 
@@ -82,19 +82,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `initializeUi' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void clearHistory()
-
-  public void clearHistory()
-  {
-    if (tool != null) {
-      tool.clearHistory();
-    }
-    else {
-      throw new UnsupportedOperationException("method `clearHistory' not supported.");
     }
   }
 

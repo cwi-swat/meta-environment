@@ -8,7 +8,6 @@ import metastudio.MultiBridge;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 import aterm.pure.PureFactory;
-import aterm.ATerm;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
     private static final String PARSETREE = "parsetree";

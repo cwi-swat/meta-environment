@@ -19,8 +19,6 @@ javadir = ${prefix}/classes/metastudio
 EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
-	MainTabs.java \
-	MessageTabs.java \
 	ModuleBrowser.java \
 	ModuleInfoPanel.java \
 	ModulePopupMenu.java \

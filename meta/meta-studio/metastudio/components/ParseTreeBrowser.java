@@ -3,7 +3,6 @@ package metastudio.components;
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
 import metastudio.ValueChangedListener;
-import metastudio.components.graphs.BoxTree;
 import metastudio.components.graphs.ParseTreePanel;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;

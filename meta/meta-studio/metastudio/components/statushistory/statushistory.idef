@@ -20,6 +20,9 @@ in
     +
       rec-note(ui-status(endstat(Id?)))
       . snd-do(T, log-end-status(Id))
+    +
+      rec-msg(clear-history)
+      . snd-do(T, clear-history)
     )
     *
     rec-disconnect(T)

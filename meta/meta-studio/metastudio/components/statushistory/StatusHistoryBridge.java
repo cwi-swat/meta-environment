@@ -1,6 +1,6 @@
 // Java tool bridge StatusHistoryBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 1:47:58 PM
+// generation time: Nov 25, 2004 3:52:29 PM
 
 package metastudio.components.statushistory;
 
@@ -56,6 +56,19 @@ public class StatusHistoryBridge
     }
     else {
       throw new UnsupportedOperationException("method `logStatusf' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void clearHistory()
+
+  public void clearHistory()
+  {
+    if (tool != null) {
+      tool.clearHistory();
+    }
+    else {
+      throw new UnsupportedOperationException("method `clearHistory' not supported.");
     }
   }
 

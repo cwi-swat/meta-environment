@@ -76,10 +76,6 @@ public abstract class UserInterfacePanel extends JPanel
 		// intentionally left empty
 	}
 
-	public void clearHistory() {
-		// intentionally left empty
-	}
-
 	public void renderGraph(String s0, ATerm t1) {
 		// intentionally left empty
 	}

@@ -1,34 +1,34 @@
-// Java tool interface class StatusHistoryTool
+// Java tool interface class DialogToolTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 3:52:29 PM
+// generation time: Nov 25, 2004 1:31:23 PM
 
-package metastudio.components.statushistory;
+package metastudio.components.dialogtool;
 
 import aterm.*;
 import toolbus.*;
 import java.util.*;
 
-abstract public class StatusHistoryTool
+abstract public class DialogToolTool
   extends SwingTool
-  implements StatusHistoryTif
+  implements DialogToolTif
 {
   // This table will hold the complete input signature
   private Map sigTable = new HashMap();
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PlogStatus0;
-  private ATerm PlogEndStatus0;
-  private ATerm PlogStatusf0;
-  private ATerm PclearHistory0;
+  private ATerm PshowListChoice0;
+  private ATerm PshowQuestionDialog0;
+  private ATerm PshowFileDialog0;
+  private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   //}}}
 
-  //{{{  protected StatusHistoryTool(ATermFactory factory)
+  //{{{  protected DialogToolTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
-  protected StatusHistoryTool(ATermFactory factory)
+  protected DialogToolTool(ATermFactory factory)
   {
     super(factory);
     initSigTable();
@@ -42,11 +42,11 @@ abstract public class StatusHistoryTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<status-history>,log-status(<term>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<status-history>,log-statusf(<term>,<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<status-history>,log-end-status(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<status-history>,clear-history)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<status-history>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<dialog-tool>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<dialog-tool>,show-question-dialog(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog-tool>,show-list-choice(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<dialog-tool>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-terminate(<dialog-tool>,<term>)"), new Boolean(true));
   }
 
   //}}}
@@ -55,10 +55,10 @@ abstract public class StatusHistoryTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PlogStatus0 = factory.parse("rec-do(log-status(<term>,<str>))");
-    PlogEndStatus0 = factory.parse("rec-do(log-end-status(<term>))");
-    PlogStatusf0 = factory.parse("rec-do(log-statusf(<term>,<str>,<term>))");
-    PclearHistory0 = factory.parse("rec-do(clear-history)");
+    PshowListChoice0 = factory.parse("rec-do(show-list-choice(<str>,<str>,<term>))");
+    PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
+    PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
+    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -71,24 +71,22 @@ abstract public class StatusHistoryTool
   {
     List result;
 
-    result = term.match(PlogStatus0);
+    result = term.match(PshowListChoice0);
     if (result != null) {
-      logStatus((ATerm)result.get(0), (String)result.get(1));
+      showListChoice((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
-    result = term.match(PlogEndStatus0);
+    result = term.match(PshowQuestionDialog0);
     if (result != null) {
-      logEndStatus((ATerm)result.get(0));
-      return null;
+      return showQuestionDialog((String)result.get(0));
     }
-    result = term.match(PlogStatusf0);
+    result = term.match(PshowFileDialog0);
     if (result != null) {
-      logStatusf((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
-      return null;
+      return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));
     }
-    result = term.match(PclearHistory0);
+    result = term.match(PrecAckEvent0);
     if (result != null) {
-      clearHistory();
+      recAckEvent((ATerm)result.get(0));
       return null;
     }
     result = term.match(PrecTerminate0);
