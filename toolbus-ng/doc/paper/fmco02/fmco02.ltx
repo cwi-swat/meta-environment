@@ -391,8 +391,8 @@ process in that it does not need a return value:
 \begin{verbatim}
 ...
   rec-msg(delete-address(AID?) .
-  snd-do(AB, delete-entry(AID) .
-  snd-msg(address-deleted(AID)
+  snd-do(AB, delete-entry(AID)) .
+  snd-msg(address-deleted(AID))
 ...
 \end{verbatim}
 \end{footnotesize}
