@@ -334,6 +334,10 @@ int main(int argc, char *argv[]) {
     } else if(streq(argv[i], "-TB_TOOL_NAME")) {
       i++;
       name = argv[i];
+    } else if(streq(argv[i], "-h")) {
+      fprintf(stderr, "usage: %s [-initfile <file>] [toolbus-options]\n", 
+	      argv[0]);
+      exit(0);
     }
     i++;
   } 
