@@ -58,6 +58,8 @@ Manipulation of modules in database:
    void reshuffle_modules_from(char *modulename)
 */
 
+#include <stdlib.h>
+
 #include "module-db.h"
 
 static char myversion[] = "0.1";
@@ -74,9 +76,41 @@ ATbool reshuffling = ATfalse;
 ATerm top_module;
 ATermTable compile_db;
 
+static char *outputDirName = NULL;
+
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
+}
+
+void
+set_output_dir(int cid, char *dirName)
+{
+  int len = strlen(dirName) + 1;
+
+  outputDirName = (char *) realloc(outputDirName, len);
+
+  if (outputDirName == NULL) {
+    ATerror("module-db: unable to allocate %d bytes\n", len);
+  } else {
+    strcpy(outputDirName, dirName);
+  }
+}
+
+/*
+ * The same construct is used in compiler.c
+ * This obviously needs to be moved away altogether from the module-db.
+ */
+char *
+get_output_dir(void)
+{
+    if (outputDirName != NULL) {
+	return outputDirName;
+    } else if (getenv("COMPILER_OUTPUT") != NULL) {
+	return getenv("COMPILER_OUTPUT");
+    } else {
+	return ".";
+    }
 }
 
 ATerm exists(int cid, char *modulename)
@@ -1181,21 +1215,6 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
   }
 }
 
-/* Basic reshuffling functionality */
-char *output_path = ".";
-
-void initialize_output_path(ATerm name)
-{
-  top_module = name;
-  if( getenv( "COMPILER_OUTPUT" ) != NULL )
-     output_path = getenv( "COMPILER_OUTPUT" );
-  else {
-    if( getenv( "TMPDIR" ) != NULL )
-       output_path = getenv( "TMPDIR" );
-    ATfprintf(stderr,"COMPILER_OUTPUT not set, using %s\n", output_path);
-  }
-}
-
 ATerm unique_new_name(ATerm name)
 {
   char *text, *newtext;
@@ -1223,14 +1242,15 @@ ATerm unique_new_name(ATerm name)
 void gen_makefile(ATerm name)
 {
   char *text, *mtext;
+  char *path;
   char buf[1024];
   FILE *output;
   ATerm module;
   ATermList modules = ATtableKeys(compile_db);
 
   if(ATmatch(name,"<str>",&text)) {
-
-    sprintf(buf, "%s/%s.module-list", output_path, text);
+      path = get_output_dir();
+    sprintf(buf, "%s/%s.module-list", path, text);
     output = fopen(buf,"w");
     if(!output)
       ATfprintf(stderr,"Cannot open file %s\n",buf);
@@ -1245,9 +1265,8 @@ void gen_makefile(ATerm name)
       }
       fclose( output );
 
-      sprintf(buf, "cd %s; %s/genmakefile.sh %s", output_path, BINDIR, text );
-      ATfprintf(stderr,"Executing: %s\n", buf );
-      system(buf );
+      sprintf(buf, "cd %s; %s/genmakefile.sh %s", path, BINDIR, text);
+      system(buf);
     }
   }
   else
@@ -1268,7 +1287,7 @@ void process_next_module(int cid)
     compiling = ATfalse;
     if(!reshuffling) {
       gen_makefile(top_module);
-      ATfprintf(stderr,"Compilation completed\n");
+      ATwarning("Compilation completed\n");
       ATBwriteTerm(cid,ATmake("snd-event(done)"));
     }
   }
@@ -1301,7 +1320,7 @@ void reshuffle_modules_from(int cid, char *modulename)
   if(GetValue(new_modules_db, mod)) {
     /* We are working with the term asfix representation. */
     if(complete_asf_sdf2_specification(mod)) {
-      initialize_output_path(mod);
+      top_module = mod;
       modules_to_process = ATempty;
       imports = get_imported_modules(mod);
       AFTreshuffleModules(cid,imports);
@@ -1314,7 +1333,7 @@ void reshuffle_modules_from(int cid, char *modulename)
   else if(GetValue(modules_db, mod)) {
     /* We are working with the module asfix representation. */
     if(complete_specification(ATempty,mod)) {
-      initialize_output_path(mod);
+      top_module = mod;
       modules_to_process = ATempty;
       imports = get_imported_modules(mod);
       AFreshuffleModules(cid,imports);

@@ -30,9 +30,11 @@ extern ATermList modules_to_process;
 extern ATbool compiling;
 extern ATbool reshuffling;
 extern ATerm top_module;
-extern char *output_path;
 
 extern ATerm AFTmakeId(ATerm id);
+
+/* From module-db.c */
+extern char *get_output_dir();
 
 int equal_term(ATerm term1,ATerm term2)
 {
@@ -230,6 +232,7 @@ void AFaddEquations(ATerm module, ATermList eqs)
 void AFwriteAsfixFile(int cid,ATerm modname)
 {
   char *text, *fname;
+  char *path;
   int len;
   FILE *output, *input;
   ATerm oldmod, element;
@@ -238,12 +241,13 @@ void AFwriteAsfixFile(int cid,ATerm modname)
   ATerm amod = GetValue(compile_db,modname);
 
   if(ATmatch(modname,"<str>",&text)) {
+      path = get_output_dir();
     /* Check whether the C file exists. */
-    len = strlen(output_path) + 1 + strlen(text) + strlen(".c");
+    len = strlen(path) + 1 + strlen(text) + strlen(".c");
     fname = malloc(len + 1);
     if(!fname) 
       ATerror("Not enough memory\n");
-    sprintf(fname, "%s/%s.c", output_path, text);
+    sprintf(fname, "%s/%s.c", path, text);
     input = fopen(fname,"r");
     if(!input) {
       write = ATtrue;
@@ -256,11 +260,11 @@ void AFwriteAsfixFile(int cid,ATerm modname)
     }
     free(fname);
 
-    len = strlen(output_path) + 1 + strlen(text) + strlen(".asfix");
+    len = strlen(path) + 1 + strlen(text) + strlen(".asfix");
     fname = malloc(len + 1);
     if(!fname) 
       ATerror("Not enough memory\n");
-    sprintf(fname, "%s/%s.asfix", output_path, text);
+    sprintf(fname, "%s/%s.asfix", path, text);
     /* Check whether it is necessary to generate new C code
      * because of a modified AsFix file. */
     input = fopen(fname,"r");
@@ -282,7 +286,6 @@ void AFwriteAsfixFile(int cid,ATerm modname)
         fclose(output);
       }
       /* write full path name instead of only module name */
-      ATwarning("Writing: %s\n", fname);
       element = ATmake("snd-event(new-aux-module(<str>,<term>))", text, amod);
       if(!compiling) {
         compiling = ATtrue;

@@ -40,7 +40,8 @@ let
   ActualMods: list,
   Status    : str,
   Language  : str,
-  ErrorMsg  : str
+  ErrorMsg  : str,
+  OutputDir : str
 in
 
 /* First, execute the module db */
@@ -58,7 +59,8 @@ snd-do(Mdb, create-module-db).
    *   3. Use the results of steps 1 and 2 to create several new
    *      modules, called "AUX-<Name>-<i>". (i is generated)
    */
-  rec-msg(reshuffle-module(Name?)).
+  rec-msg(reshuffle-module(Name?, OutputDir?)) .
+  snd-do(Mdb, set-output-dir(OutputDir)) .
   snd-do(Mdb, reshuffle-modules-from(Name)).
   (
     /* Everytime a new AUX-module is created, we receive an event
