@@ -29,7 +29,11 @@
 
 #define head(l)    ((l)->head)
 #define tail(l)    ((l)->tail)
-#define shift(h,l) ((l) ? (h)=head(l), (l)=tail(l), ATtrue : ATfalse)
+
+/*
+  #define shift(h,l) ((l) ? (h)=head(l), (l)=tail(l), ATtrue : ATfalse)
+*/
+
 
 /*
   The macro |pop(hd, lst)| indicates whether an AtermList |lst| is empty. If
@@ -75,6 +79,7 @@ typedef struct stack {
   ATbool        rejected;
   ATbool        protected;
   st_link       *unprotector;
+  ATbool        freed;
 } stack;
 
 typedef struct stacks {

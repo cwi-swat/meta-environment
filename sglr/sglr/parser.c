@@ -339,10 +339,13 @@ void SG_ParseChar(void)
 */
 
   while(for_actor != NULL  || for_actor_delayed != NULL) {
-   if(for_actor != NULL)
-      shift(st, for_actor);
-    else
-      shift(st, for_actor_delayed);
+    if(for_actor != NULL) {
+      st = head(for_actor);
+      for_actor = tail(for_actor);
+    } else {
+      st = head(for_actor_delayed);
+      for_actor_delayed = tail(for_actor_delayed);
+    }
     SG_Actor(st);
     if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st);
   }
@@ -484,9 +487,12 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
         SG_MarkLinkRejected2(st1, nl);
       }
       sts = active_stacks;
-      while(shift(st2, sts)) {
+        while(sts != NULL) {
         actions as;
         action a;
+
+        st2 = head(sts);
+        sts = tail(sts);
         if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor, ATfalse)
            && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
           as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
