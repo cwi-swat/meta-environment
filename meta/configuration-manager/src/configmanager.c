@@ -451,7 +451,7 @@ ATerm get_module_paths(int cid)
 ATerm get_text_categories(int cid)
 {
   ATermList all = ATconcat(systemTextCategories, userTextCategories);
-  return ATmake("snd-value(text-properties(<term>))", all);
+  return ATmake("snd-value(text-categories(<term>))", all);
 }
 
 /*}}}  */
