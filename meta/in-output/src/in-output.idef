@@ -47,7 +47,6 @@ in
     )
   +
     rec-msg(io-write-text-file(FileName?, ContentList?)) .
-    printf("writing %t\n", ContentList) .
     snd-eval(IO, write-text-file(FileName, ContentList)) .
     (
       rec-value(IO, success) .
