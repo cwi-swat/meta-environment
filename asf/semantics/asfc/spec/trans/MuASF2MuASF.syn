@@ -1,6 +1,6 @@
 %%  MuASF2MuASF
 
-imports Remove-Lists-C Make-Left-Linear Make-Assign-Conds-C
+imports Remove-Lists Make-Left-Linear Make-Assign-Conds
 
 exports
   context-free syntax

@@ -12,7 +12,7 @@
 %% \begin{itemize}
 %% \item set-like transformations.
 %% \end{itemize}
-module Remove-Lists-C
+module Remove-Lists
 
 imports RenameVars Normalize-Conds Trans-Set-Pats
 

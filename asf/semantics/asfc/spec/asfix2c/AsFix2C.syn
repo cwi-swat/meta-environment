@@ -7,7 +7,7 @@
 %% the derivation
 %% of the C code.
 
-imports AsFix2muASF-C MuASF2C MuASF2MuASF
+imports AsFix2muASF MuASF2C MuASF2MuASF
 
 exports
   context-free syntax

@@ -1,6 +1,6 @@
 %%  TermAsFix2muASF
 
-imports AsFix2Sign-C
+imports AsFix2Sign
 
 exports
   context-free syntax

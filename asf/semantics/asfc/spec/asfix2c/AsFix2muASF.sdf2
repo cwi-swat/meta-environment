@@ -3,7 +3,7 @@
 %% There are no sophisticated issues involved.
 %% The only the default equations are translated
 %% into explicit default rules in \muasf.
-module AsFix2muASF-C
+module AsFix2muASF
 
 imports TermAsFix2muASF 
 

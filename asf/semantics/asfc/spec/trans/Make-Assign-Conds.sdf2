@@ -9,7 +9,7 @@
 %% can only be performed when the specification is flattened.
 %% Or, when translating \asfix\ to one of \msasf\ formalisms.
 %% \end{enumerate}
-module Make-Assign-Conds-C
+module Make-Assign-Conds
 
 imports MuASF-Equations-Ops
 
