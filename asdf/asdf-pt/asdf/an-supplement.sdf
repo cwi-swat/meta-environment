@@ -4,7 +4,7 @@ exports
 
 sorts
 
-  Action Sort
+  Action Sort PrefixDataOp Yielder Data Variable
 
 context-free syntax
 

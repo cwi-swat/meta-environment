@@ -6,7 +6,7 @@ exports
 
 sorts
 
-   Module Symbol* Import* Section* Grammar Production*
+   Module Symbol Import Section Grammar Production
 
 context-free syntax
 

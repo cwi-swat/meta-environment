@@ -126,8 +126,8 @@ Grammar2
 	  $transform-semantics(AS-Semantics AS-Semantics+) = Grammar1 
 Grammar2
 
-  [tsm-2] $transform-semantics(Literal : Sort1 -> Sort2) = context-free syntax
-  Literal Sort1 -> Sort2
+  [tsm-2] $transform-semantics(Literal : Sort1 -> FNR) = context-free syntax
+  Literal Sort1 -> sort("A""c""t""i""o""n")
 
   [tsm-3] $transform-semantics(AS-Eqs-Tag AS-Eqs-Lhs = A) = 
 context-free syntax
@@ -138,7 +138,7 @@ context-free syntax
 	  $get-equations(AS-Semantics AS-Semantics+) = eqlist(ASFequation*1
 ASFequation*2)
 
-  [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Symbol1 -> Symbol2 := AS-Semantics
+  [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Sort1 -> FNR := AS-Semantics
 
   [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = A)
 
@@ -194,10 +194,6 @@ variables qliteral("""$CH+""")[0-9\']* 		-> Sort
   [tc-1] $transform-constant(Literal : Symbol) = 
 context-free syntax
   Literal -> Symbol
-
-  [tf-1] $transform-function(Literal : Symbol1 -> Symbol2) = 
-context-free syntax
-  Literal -> sort("P""r""e""f""i""x")
 
   [ei-1] $extract-imports(sort($CH+),Import*) = 
          $add-to(moduleid($CH+), Import*)

@@ -6,7 +6,7 @@ exports
 
 sorts
 
-	Signatures AS-FunctionDef*
+	Signatures AS-FunctionDef
 
 context-free syntax
 
@@ -17,8 +17,6 @@ context-free syntax
   getSignatures(AS-Module)	-> Signatures
 
   joinSignatures(Signatures, Signatures)  -> Signatures
-
-  sigs({AS-FunctionSig ","}*)		-> Signatures
 
   getFunctions(AS-Module, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
   getFunctions(AS-Section*, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}

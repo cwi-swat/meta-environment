@@ -1,0 +1,37 @@
+module asdf/asdf-sem-sec
+
+imports
+
+  asdf/asdf
+
+exports
+
+  sorts
+
+    VarLex
+
+  context-free syntax
+
+    "semantics" AS-Semantics* 	-> AS-Section {cons("semantics-sec")}
+    
+    AS-Function 	-> AS-Semantics {cons("semantics")}
+
+    AS-FunctionDef | AS-FunctionSig 	   -> AS-Function {cons("function")}
+    AS-Eqs-Tag AS-Eqs-Lhs "=" Action	   -> AS-FunctionDef {cons("fundef")}
+
+    sigs({AS-FunctionSig ","}*)		   -> Signatures
+
+    Literal Constructor 	   -> AS-Eqs-Lhs {cons("eqs-lhs")} 
+    Literal "(" {VarLex ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}
+    Literal "(" VarLex* ")"	   -> Constructor {cons("cons-seq")}
+    VarLex			   -> Constructor {cons("cons-symbol")}
+    Literal			   -> Constructor {cons("cons-lit")}
+    "(" Symbol ")"		   -> Symbol {reject, cons("symbol-par")}
+
+    "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
+
+  lexical syntax
+
+    [a-zA-Z0-9\-]+		-> Token 
+
+    [A-Z]+[0-9\']*[\+\*]?	-> VarLex

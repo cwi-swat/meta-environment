@@ -2,7 +2,7 @@ module asdf/asdf2sdf
 
 imports 
 	
-  asdf/asdf
+  asdf/asdf-sem-sec
   asdf/an-supplement
   languages/sdf2/syntax/Sdf2 
   basic/Booleans
@@ -132,3 +132,4 @@ exports
     "AS-Eqs-Lhs"[0-9]?	   -> AS-Eqs-Lhs
     "AS-Eqs-Tag"[0-9]?	   -> AS-Eqs-Tag
     "A"[0-9]?		   -> Action
+    "FNR"[0-9]?		   -> FunResult

@@ -6,7 +6,7 @@ imports
 
 sorts
   
-   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction 
+   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction Cons IdConst
    InfixDataOp ConsIdConst StrConst IntConst Data Datum Index Sort
 
 
