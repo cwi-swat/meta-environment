@@ -558,7 +558,7 @@ SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
 GEL_DEMOS="spec"
 EPIC_DEMOS=""
-SUBDIRS="src test \${XTRADIRS} adapters demos doc www tbviz"
+SUBDIRS="src scripts test \${XTRADIRS} adapters demos doc www tbviz"
 XTRADIRS=""
 
 
