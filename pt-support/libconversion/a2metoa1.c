@@ -35,6 +35,8 @@
 /* Function prototypes (only the badly needed ones) */
 
 static ATerm termToAsFix1(PT_Tree, ATbool inList);
+static ATerm iterToAsFix1(PT_Symbol sym, PT_Args args);
+static ATerm iterSepToAsFix1(PT_Symbol sym, PT_Args args);
 
 /*  patterns  */
 
@@ -128,14 +130,34 @@ init_asfix_patterns()
 }
 
 static ATermList
-argsToAsFix1(PT_Args args)
+argsToAsFix1(PT_Symbols symbols, PT_Args args)
 {
   if (PT_isArgsEmpty(args)) {
     return ATempty;
   }
   else {
-    return ATinsert(argsToAsFix1(PT_getArgsTail(args)),
-		    termToAsFix1(PT_getArgsHead(args), ATfalse));
+    PT_Symbol symbol = PT_getSymbolsHead(symbols);
+    PT_Tree   arg    = PT_getArgsHead(args);
+
+    if (PT_isIterSymbol(symbol) &&
+        PT_isTreeList(arg)) {
+      return ATinsert(argsToAsFix1(PT_getSymbolsTail(symbols),
+                                   PT_getArgsTail(args)),
+                      iterToAsFix1(PT_getSymbolSymbol(symbol), 
+                                   PT_getTreeArgs(arg)));
+    }
+    else if (PT_isIterSepSymbol(symbol) &&
+             PT_isTreeList(arg)) {
+      return ATinsert(argsToAsFix1(PT_getSymbolsTail(symbols),
+                                   PT_getArgsTail(args)),
+                      iterSepToAsFix1(PT_getSymbolSymbol(symbol),
+                                      PT_getTreeArgs(arg)));
+    }
+    else {
+      return ATinsert(argsToAsFix1(PT_getSymbolsTail(symbols),
+                                   PT_getArgsTail(args)),
+		      termToAsFix1(arg, ATfalse));
+    }
   }
 }
 
@@ -148,36 +170,26 @@ separatorToAsFix1(PT_Tree t)
 }
 
 static ATermList
-listToAsFix1(PT_Args list)
+listToAsFix1(PT_Args argList)
 {
   ATerm newTerm;
   ATermList newList = ATempty;
 
-  if (PT_hasArgsHead(list)) {
-    PT_Tree argHead = PT_getArgsHead(list);
+  while (PT_hasArgsHead(argList)) {
+    PT_Tree elem = PT_getArgsHead(argList);
 
-    if (PT_isTreeList(argHead)) {
-      PT_Args argList = PT_getTreeArgs(argHead);
-
-      while (PT_hasArgsHead(argList)) {
-	PT_Tree elem = PT_getArgsHead(argList);
-
-	if (PT_isTreeLit(elem)) {
-	  newTerm = separatorToAsFix1(elem);
-	}
-	else {
-	  newTerm = termToAsFix1(elem, ATtrue);
-	}
-	newList = ATappend(newList, newTerm);
-
-	argList = PT_getArgsTail(argList);
-      }
-      return newList;
+    if (PT_isTreeLit(elem)) {
+      newTerm = separatorToAsFix1(elem);
     }
-  }
+    else {
+      newTerm = termToAsFix1(elem, ATtrue);
+    }
+    newList = ATappend(newList, newTerm);
 
-  ATerror("listToAsFix1: illegal argument list: %t\n", list);
-  return ATempty;
+    argList = PT_getArgsTail(argList);
+  }
+  return newList;
+
 }
 
 static PT_Symbol
@@ -465,31 +477,18 @@ static ATerm
 parseTreeToAsFix1(PT_ParseTree pt)
 {
   PT_Tree layoutBeforeTree, applTree, layoutAfterTree;
-  PT_Args args;
 
   /* Parse tree */
   if (PT_isParseTreeTree(pt)) {
-    PT_Tree tree = PT_getParseTreeTree(pt);
+    layoutBeforeTree = PT_getParseTreeLayoutBeforeTree(pt);
+    applTree         = PT_getParseTreeTree(pt);
+    layoutAfterTree  = PT_getParseTreeLayoutAfterTree(pt);
 
-    if (PT_isTreeAppl(tree)) {
-      PT_Production prod = PT_getTreeProd(tree);
-      if (PT_prodHasSTARTAsRhs(prod)) {
-        args = PT_getTreeArgs(tree);
-
-        layoutBeforeTree = PT_getArgsHead(args);
-        args = PT_getArgsTail(args);
-        applTree = PT_getArgsHead(args);
-        args = PT_getArgsTail(args);
-        layoutAfterTree = PT_getArgsHead(args);
-
-        return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
-		      "<term>,<term>,<term>,no-abbreviations)",
-		      layoutToAsFix1(layoutBeforeTree),
-		      termToAsFix1(applTree, ATfalse),
-                      layoutToAsFix1(layoutAfterTree));
-      }
-    }
-    return termToAsFix1(tree, ATfalse);
+    return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
+		  "<term>,<term>,<term>,no-abbreviations)",
+		  layoutToAsFix1(layoutBeforeTree),
+		  termToAsFix1(applTree, ATfalse),
+                  layoutToAsFix1(layoutAfterTree));
   }
   else {
     ATerror("parseTreeToAsFix1: expected parse tree, got %t\n", pt);
@@ -599,10 +598,8 @@ varSymbolToAsFix1(PT_Tree tree, ATbool inList)
 }
 
 static ATerm
-iterSepToAsFix1(PT_Production prod, PT_Args args)
+iterSepToAsFix1(PT_Symbol iter, PT_Args args)
 {
-  PT_Symbol iter = PT_getSymbolSymbol(PT_getProductionRhs(prod));
-
   PT_Symbol sort = PT_getSymbolSymbol(iter);
   char *sep = PT_getSymbolString(PT_getSymbolSeparator(iter));
 
@@ -614,9 +611,8 @@ iterSepToAsFix1(PT_Production prod, PT_Args args)
 }
 
 static ATerm
-iterToAsFix1(PT_Production prod, PT_Args args)
+iterToAsFix1(PT_Symbol iter, PT_Args args)
 {
-  PT_Symbol iter = PT_getSymbolSymbol(PT_getProductionRhs(prod));
   PT_Symbol sort = PT_getSymbolSymbol(iter);
 
   ATerm newIter = ATmakeTerm(asfix1_iter_star_pattern,
@@ -646,17 +642,10 @@ applicationToAsFix1(PT_Tree tree, ATbool inList)
     return varSymbolToAsFix1(tree, inList);
   }
 
-  if (PT_prodHasIterSepAsRhs(prod)) {
-    return iterSepToAsFix1(prod, args);
-  }
-
-  if (PT_prodHasIterAsRhs(prod)) {
-    return iterToAsFix1(prod, args);
-  }
-
   return ATmakeTerm(pattern_asfix_appl,
 		    prodToAsFix1(prod),
-		    pattern_asfix_ews, argsToAsFix1(args));
+		    pattern_asfix_ews, argsToAsFix1(PT_getProductionLhs(prod),
+                                                    args));
 }
 
 static ATerm
@@ -683,27 +672,6 @@ termToAsFix1(PT_Tree tree, ATbool inList)
 static ATerm
 treeToAsFix1(PT_Tree tree)
 {
-  PT_Tree layoutBeforeTree, applTree, layoutAfterTree;
-  PT_Args args;
-
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_prodHasSTARTAsRhs(prod)) {
-      args = PT_getTreeArgs(tree);
-
-      layoutBeforeTree = PT_getArgsHead(args);
-      args = PT_getArgsTail(args);
-      applTree = PT_getArgsHead(args);
-      args = PT_getArgsTail(args);
-      layoutAfterTree = PT_getArgsHead(args);
-
-      return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
-                    "<term>,<term>,<term>,no-abbreviations)",
-                    layoutToAsFix1(layoutBeforeTree),
-                    termToAsFix1(applTree, ATfalse), 
-                    layoutToAsFix1(layoutAfterTree));
-    }
-  }
   return termToAsFix1(tree, ATfalse);
 }
 

@@ -443,19 +443,25 @@ static PT_Tree flattenTerm(PT_Tree tree)
 
   /* Lists */
   if (isSepListProd(prod)) {
+/*
     PT_Args newArgs = PT_makeArgsList(
                         PT_makeTreeList(flattenSepList(tree,
                                                        PT_makeArgsEmpty())),
                         PT_makeArgsEmpty());
     return PT_makeTreeAppl(flattenProd(prod), newArgs);
+*/
+    return PT_makeTreeList(flattenSepList(tree, PT_makeArgsEmpty()));
   }
 
   if (isListProd(prod)) {
+/*
     PT_Args newArgs = PT_makeArgsList(
                         PT_makeTreeList(flattenList(tree,
                                                     PT_makeArgsEmpty())),
                         PT_makeArgsEmpty());
     return PT_makeTreeAppl(flattenProd(prod), newArgs);
+*/
+    return PT_makeTreeList(flattenList(tree, PT_makeArgsEmpty()));
   }
 
   if (isLexicalListProd(prod)) {
