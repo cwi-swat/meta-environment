@@ -141,6 +141,8 @@ ATerm af_prod_charclass_symbol = NULL;
 ATerm af_prod_var_symbol = NULL;
 ATerm af_prod_opt_symbol = NULL;
 ATerm af_prod_alt_symbol = NULL;
+ATerm af_prod_tuple_symbol = NULL;
+ATerm af_prod_set_symbol = NULL;
 ATerm af_prod_nonemptyseq_symbol = NULL;
 ATerm af_prod_LAYOUT_symbol = NULL;
 ATerm af_prod_START_symbol = NULL;
@@ -400,6 +402,8 @@ void AFinitAsFixPatterns()
     ATprotect(&af_prod_var_symbol); 
     ATprotect(&af_prod_opt_symbol); 
     ATprotect(&af_prod_alt_symbol); 
+    ATprotect(&af_prod_tuple_symbol); 
+    ATprotect(&af_prod_set_symbol); 
     ATprotect(&af_prod_nonemptyseq_symbol); 
     ATprotect(&af_prod_LAYOUT_symbol); 
     ATprotect(&af_prod_START_symbol); 
@@ -631,6 +635,17 @@ void AFinitAsFixPatterns()
               "w(\"\"),ql(\"|\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),"
               "w(\"\"),sort(\"Symbol\"),w(\"\"),attrs(l(\"{\"),"
               "w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))");
+
+    af_prod_tuple_symbol =
+      ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),"
+              "w(\"\"),ql(\"#\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),"
+              "w(\"\"),sort(\"Symbol\"),w(\"\"),attrs(l(\"{\"),"
+              "w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))");
+
+    af_prod_set_symbol =
+      ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"Set\"),w(\"\"),"
+              "ql(\"[\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"]\")],w(\"\"),"
+              "l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)");
 
     af_prod_nonemptyseq_symbol =
       ATparse("prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"(\"),w(\"\"),"

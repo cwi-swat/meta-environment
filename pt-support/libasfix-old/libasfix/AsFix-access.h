@@ -92,6 +92,10 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
                                         af_prod_opt_symbol))
 #define AFTisRegularAltSymbol(grammar) (AFTcheckAppl(grammar, \
                                         af_prod_alt_symbol))
+#define AFTisRegularTupleSymbol(grammar) (AFTcheckAppl(grammar, \
+                                          af_prod_tuple_symbol))
+#define AFTisRegularSetSymbol(grammar) (AFTcheckAppl(grammar, \
+                                        af_prod_set_symbol))
 #define AFTisRegularNonEmptySeqSymbol(grammar) (AFTcheckAppl(grammar, \
                                         af_prod_nonemptyseq_symbol))
 #define AFTisBasicLAYOUTSymbol(grammar) (AFTcheckAppl(grammar, \
@@ -373,6 +377,20 @@ extern ATerm AFTgetEquLhs(ATerm equ);
 #define AFTgetRegularAltWS1(p)     (AFTarg((p), 3))
 #define AFTgetRegularAltSymbol1(p) (AFTarg((p), 4))
 
+#define AFTgetRegularTupleSymbol0(p) (AFTarg((p), 0))
+#define AFTgetRegularTupleWS0(p)     (AFTarg((p), 1))
+#define AFTgetRegularTupleLit(p)     (AFTarg((p), 2))
+#define AFTgetRegularTupleWS1(p)     (AFTarg((p), 3))
+#define AFTgetRegularTupleSymbol1(p) (AFTarg((p), 4))
+
+#define AFTgetRegularSetLit0(p)   (AFTarg((p), 0))
+#define AFTgetRegularSetWS0(p)    (AFTarg((p), 1))
+#define AFTgetRegularSetLit1(p)   (AFTarg((p), 2))
+#define AFTgetRegularSetWS1(p)    (AFTarg((p), 3))
+#define AFTgetRegularSetSymbol(p) (AFTarg((p), 4))
+#define AFTgetRegularSetWS2(p)    (AFTarg((p), 5))
+#define AFTgetRegularSetLit2(p)   (AFTarg((p), 6))
+
 #define AFTgetRegularNonEmptySeqLit0(p) (AFTarg((p), 0))
 #define AFTgetRegularNonEmptySeqWS0(p) (AFTarg((p), 1))
 #define AFTgetRegularNonEmptySeqSymbol0(p) (AFTarg((p), 2))
@@ -514,6 +532,8 @@ extern ATerm af_prod_charclass_symbol;
 extern ATerm af_prod_var_symbol;
 extern ATerm af_prod_opt_symbol;
 extern ATerm af_prod_alt_symbol;
+extern ATerm af_prod_tuple_symbol;
+extern ATerm af_prod_set_symbol;
 extern ATerm af_prod_nonemptyseq_symbol;
 extern ATerm af_prod_LAYOUT_symbol;
 extern ATerm af_prod_START_symbol;
