@@ -26,6 +26,16 @@ CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			booltest.pt libBooleans.a \
  			Peano.adt apigen.env ${TESTS} *.class *.pro *.jar
 
+BUILT_SOURCES = \
+	Booleans.c \
+	Booleans.h \
+	Booleans_dict.c \
+	Booleans_dict.h \
+	Booleans.trm.tbl \
+	Booleans.dict 
+
+distclean: clean
+
 clean:
 	rm -rf peano
 
@@ -38,7 +48,6 @@ Booleans.c Booleans.h: Booleans.sdf
 	${SDF2C} \
 		--input $< \
 		--prefix SDF \
-		--term-compatibility \
 		--verbose
 
 booltest.pt: Booleans.trm.tbl booltest.trm 
@@ -49,12 +58,14 @@ booltest.pt: Booleans.trm.tbl booltest.trm
 
 %.java.test: %.sdf Makefile 
 	${SDF2JAVA} --input $< \
-                    --output ${top_srcdir} \
+                    --output ${top_builddir} \
                     --name $* \
+		    --version 0.0 \
 		    --package test 
-	${JAVAC} -classpath ${top_srcdir}:${JAVA_ATERM} \
-		${top_srcdir}/test/$($*_Main).java
+	${JAVAC} -classpath ${top_builddir}:${top_srcdir}:${JAVA_ATERM} \
+		${top_srcdir}/test/$($*_Main).java \
+		-d ${top_builddir}
 	@(echo "#! /bin/sh";\
-          echo "CLASSPATH=.:${top_srcdir}:${EXTERNAL_JARS}";\
+          echo "CLASSPATH=.:${top_builddir}:${EXTERNAL_JARS}";\
           echo "export CLASSPATH";\
           echo "java test.$($*_Main) ${top_srcdir}/test") > $@ && chmod +x $@

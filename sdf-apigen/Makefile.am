@@ -2,6 +2,8 @@ SUBDIRS		= spec utils test
 
 EXTRA_DIST	= make_rules $(wildcard *.pkg)
 
+CLEANFILES = ${PACKAGE}-*.pkg
+
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
