@@ -343,20 +343,6 @@ prodArgsToAsFix1(PT_Symbols symbols)
 }
 
 static ATerm
-cons_str(char *str)
-{
-  char *buf1, *buf2;
-  ATerm cons;
-
-  buf1 = escape_str(str);
-  buf2 = malloc(strlen(buf1) + strlen("cons()") + 1);
-  sprintf(buf2, "cons(%s)", buf1);
-  cons = ATmakeTerm(pattern_asfix_ql, buf2);
-  free(buf2);
-  return cons;
-}
-
-static ATerm
 prodToAsFix1(PT_Production prod)
 {
   ATerm attr, result, id = NULL, res_attr = NULL;
@@ -390,7 +376,7 @@ prodToAsFix1(PT_Production prod)
 
       if (ATmatchTerm(attr, asfix2_cons_pattern, &lit)
 	  || ATmatchTerm(attr, asfix2_aterm_cons_pattern, &lit)) {
-	ATerm cons = cons_str(lit);
+	ATerm cons = ATmake("cons(<str>)",lit);
 
 	if (!res_attr) {
 	  res_attr = (ATerm) ATmakeList1(cons);
