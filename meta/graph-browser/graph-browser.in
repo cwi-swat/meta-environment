@@ -1,6 +1,17 @@
 #! @SHELL@
 # $Id$
 
+function usage {
+  echo "usage: $1 [toolbus-options]"
+  echo "note that this program can ONLY be used as a ToolBus tool!"
+  exit 1
+}
+
+if [ $1 = "-h" ]
+then
+  usage $0
+fi
+
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
