@@ -1,8 +1,4 @@
-#
-# vim:ts=8:sw=8:sts=0
-#
 # $Id$
-#
 
 lib_LIBRARIES           = libmept.a
 include_HEADERS         = MEPT.h MEPT_dict.h MEPT-utils.h
@@ -12,5 +8,5 @@ libmept_a_SOURCES 	= MEPT.c MEPT_dict.c MEPT-utils.c  \
                           
 
 #CFLAGS                  = -pg -Wall -O2 -DDISABLE_DYNAMIC_CHECKING
-CFLAGS                  = -g -Wall -O2 -DDISABLE_DYNAMIC_CHECKING
+CFLAGS                  = -g -Wall -Werror -O2 -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include

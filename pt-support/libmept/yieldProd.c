@@ -11,13 +11,10 @@
 
 static int lengthOfInteger(int ch)
 {
-  if (isalnum((char) ch)) {
+  if (isalnum(ch)) {
     return 1;
   }
-  else if (isgraph((char) ch) ||
-           ch == '\n' ||
-           ch == '\t' ||
-           ch == ' ') {
+  else if (isgraph(ch) || ch == '\n' || ch == '\t' || ch == ' ') {
     return 2;
   }
   
