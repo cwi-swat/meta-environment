@@ -5,9 +5,6 @@ process AsfOperations is
 let
   Equations  : term,
   Renamings  : term,
-  Equations1 : term,
-  Equations2 : term,
-  Equations3 : term, 
   AO         : asfoperations
 in
   execute(asfoperations, AO?) .
@@ -17,10 +14,10 @@ in
     rec-value(AO, equations(Equations?)) .
     snd-msg(equations(Equations))
   +
-    rec-msg(union-equations(Equations1?, Equations2?)) .
-    snd-eval(AO, union-equations(Equations1, Equations2)) .
-    rec-value(AO, equations(Equations3?)) .
-    snd-msg(equations(Equations3))
+    rec-msg(flatten-equations(Equations?)).
+    snd-eval(AO, flatten-equations(Equations)).
+    rec-value(AO, flatten-equations-result(Equations?)).
+    snd-msg(flatten-equations-result(Equations))
   )*
   delta
 endlet

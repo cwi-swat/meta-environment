@@ -48,21 +48,28 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
 }
  
 /*}}}  */ 
-/*{{{  ATerm union_equations(int cid, ATerm eqsList1, eqsList2) */
- 
-ATerm union_equations(int cid, ATerm eqsList1, ATerm eqs2)
+/*{{{  ATerm flatten_equations(int cid, ATerm modules) */
+
+ATerm flatten_equations(int cid, ATerm modules)
 {
-  ASF_CondEquationList asfEqsList1 = ASF_makeCondEquationListFromTerm(eqsList1);
-  ASF_CondEquationList asfEqsList2 = ASF_getEquationsList(
-				       ASF_getStartTopEquations(
-					ASF_StartFromTerm(eqs2)));
-  ASF_CondEquationList newAsfEqsList = ASF_unionCondEquationList(asfEqsList1, asfEqsList2);
- 
-  return ATmake("snd-value(equations(<term>))",
-                ATBpack(ASF_makeTermFromCondEquationList(newAsfEqsList)));
+  ATermList list = (ATermList) modules;
+  ASF_CondEquationList eqsList;
+
+  eqsList = ASF_makeCondEquationListEmpty();
+
+  for(;!ATisEmpty(list); list = ATgetNext(list)) {
+    ATerm head = ATgetFirst(list);
+    ASF_Equations eqs = ASF_getStartTopEquations(ASF_StartFromTerm(head));
+    
+    eqsList = ASF_unionCondEquationList(ASF_getEquationsList(eqs), eqsList);
+  }
+
+  return ATmake("snd-value(flatten-equations-result(<term>))",
+		ATBpack(ASF_CondEquationListToTerm(eqsList)));
 }
- 
+
 /*}}}  */
+
 /*{{{  void rec_terminate(int cid, ATerm arg) */
 
 void rec_terminate(int cid, ATerm arg)
