@@ -243,19 +243,11 @@ ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head, ERR_SubjectList tail)
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_makeSubjectLocatable(char* id, ERR_Location Location) */
+/*{{{  ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location) */
 
-ERR_Subject ERR_makeSubjectLocatable(char* id, ERR_Location Location)
+ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location)
 {
   return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) Location);
-}
-
-/*}}}  */
-/*{{{  ERR_Subject ERR_makeSubjectUnlocatable(char* id) */
-
-ERR_Subject ERR_makeSubjectUnlocatable(char* id)
-{
-  return (ERR_Subject)(ATerm)ATmakeAppl1(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -263,7 +255,7 @@ ERR_Subject ERR_makeSubjectUnlocatable(char* id)
 
 ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
 {
-  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
+  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
 }
 
 /*}}}  */
@@ -271,7 +263,7 @@ ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
 
 ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine, int endColumn, int startOffset, int endOffset)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun7, (ATerm) (ATerm) ATmakeInt(startLine), (ATerm) (ATerm) ATmakeInt(startColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(startOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
+  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun6, (ATerm) (ATerm) ATmakeInt(startLine), (ATerm) (ATerm) ATmakeInt(startColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(startOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
 }
 
 /*}}}  */
@@ -279,7 +271,7 @@ ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine, int endCo
 
 ERR_Area ERR_makeAreaNoArea()
 {
-  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun8);
+  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun7);
 }
 
 /*}}}  */
@@ -892,57 +884,22 @@ ERR_SubjectList ERR_setSubjectListTail(ERR_SubjectList arg, ERR_SubjectList tail
 
 ATbool ERR_isValidSubject(ERR_Subject arg)
 {
-  if (ERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isSubjectUnlocatable(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isSubjectLocatable(ERR_Subject arg) */
+/*{{{  inline ATbool ERR_isSubjectSubject(ERR_Subject arg) */
 
-inline ATbool ERR_isSubjectLocatable(ERR_Subject arg)
+inline ATbool ERR_isSubjectSubject(ERR_Subject arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternSubjectLocatable, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isSubjectUnlocatable(ERR_Subject arg) */
-
-inline ATbool ERR_isSubjectUnlocatable(ERR_Subject arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternSubjectUnlocatable, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternSubjectSubject, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -950,10 +907,7 @@ inline ATbool ERR_isSubjectUnlocatable(ERR_Subject arg)
 
 ATbool ERR_hasSubjectId(ERR_Subject arg)
 {
-  if (ERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isSubjectUnlocatable(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -964,10 +918,7 @@ ATbool ERR_hasSubjectId(ERR_Subject arg)
 
 char* ERR_getSubjectId(ERR_Subject arg)
 {
-  if (ERR_isSubjectLocatable(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else 
+  
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
@@ -976,10 +927,7 @@ char* ERR_getSubjectId(ERR_Subject arg)
 
 ERR_Subject ERR_setSubjectId(ERR_Subject arg, char* id)
 {
-  if (ERR_isSubjectLocatable(arg)) {
-    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
-  }
-  else if (ERR_isSubjectUnlocatable(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
   }
 
@@ -992,7 +940,7 @@ ERR_Subject ERR_setSubjectId(ERR_Subject arg, char* id)
 
 ATbool ERR_hasSubjectLocation(ERR_Subject arg)
 {
-  if (ERR_isSubjectLocatable(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1012,7 +960,7 @@ ERR_Location ERR_getSubjectLocation(ERR_Subject arg)
 
 ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location)
 {
-  if (ERR_isSubjectLocatable(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Location), 1);
   }
 
@@ -1444,14 +1392,10 @@ ERR_SubjectList ERR_visitSubjectList(ERR_SubjectList arg, ERR_Subject (*acceptHe
 
 ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptId)(char*), ERR_Location (*acceptLocation)(ERR_Location))
 {
-  if (ERR_isSubjectLocatable(arg)) {
-    return ERR_makeSubjectLocatable(
+  if (ERR_isSubjectSubject(arg)) {
+    return ERR_makeSubjectSubject(
         acceptId ? acceptId(ERR_getSubjectId(arg)) : ERR_getSubjectId(arg),
         acceptLocation ? acceptLocation(ERR_getSubjectLocation(arg)) : ERR_getSubjectLocation(arg));
-  }
-  if (ERR_isSubjectUnlocatable(arg)) {
-    return ERR_makeSubjectUnlocatable(
-        acceptId ? acceptId(ERR_getSubjectId(arg)) : ERR_getSubjectId(arg));
   }
   ATabort("not a Subject: %t\n", arg);
   return (ERR_Subject)NULL;

@@ -83,8 +83,7 @@ ERR_SubjectList ERR_makeSubjectListEmpty();
 ERR_SubjectList ERR_makeSubjectListSingle(ERR_Subject head);
 ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head,
 					ERR_SubjectList tail);
-ERR_Subject ERR_makeSubjectLocatable(char *id, ERR_Location Location);
-ERR_Subject ERR_makeSubjectUnlocatable(char *id);
+ERR_Subject ERR_makeSubjectSubject(char *id, ERR_Location Location);
 ERR_Location ERR_makeLocationLocation(char *filename, ERR_Area Area);
 ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine,
 			  int endColumn, int startOffset, int endOffset);
@@ -143,8 +142,7 @@ ERR_SubjectList ERR_setSubjectListTail(ERR_SubjectList arg,
 /*{{{  ERR_Subject accessors */
 
 ATbool ERR_isValidSubject(ERR_Subject arg);
-inline ATbool ERR_isSubjectLocatable(ERR_Subject arg);
-inline ATbool ERR_isSubjectUnlocatable(ERR_Subject arg);
+inline ATbool ERR_isSubjectSubject(ERR_Subject arg);
 ATbool ERR_hasSubjectId(ERR_Subject arg);
 char *ERR_getSubjectId(ERR_Subject arg);
 ERR_Subject ERR_setSubjectId(ERR_Subject arg, char *id);

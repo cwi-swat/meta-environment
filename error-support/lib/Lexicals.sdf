@@ -7,4 +7,4 @@ context-free syntax
 
 lexical syntax
   "dummy" -> NatCon {cons("string")}
-  "dummy" -> String {cons("string")}
+  "dummy" -> StrCon {cons("string")}

@@ -1,12 +1,12 @@
 #include "ErrorAPI.h"
 #include "ParsedErrorAPI.h"
 
-/*{{{  static PERR_String ERR_liftString(const char *str) */
+/*{{{  static PERR_StrCon ERR_liftStrCon(const char *str) */
 
-static PERR_String ERR_liftString(const char *str)
+static PERR_StrCon ERR_liftStrCon(const char *str)
 {
   ATerm quotedAppl = (ATerm) ATmakeAppl0(ATmakeAFun(str, 0, ATtrue));
-  return PERR_makeStringString(ATwriteToString(quotedAppl));
+  return PERR_makeStrConString(ATwriteToString(quotedAppl));
 }
 
 /*}}}  */
@@ -80,17 +80,17 @@ PERR_Location ERR_liftLocation(ERR_Location location)
 {
   char *filename;
   ERR_Area area;
-  PERR_String pFilename;
+  PERR_StrCon pFilename;
   PERR_Area pArea;
   PERR_OptLayout e;
 
   filename = ERR_getLocationFilename(location);
   area = ERR_getLocationArea(location);
 
-  pFilename = ERR_liftString(filename);
+  pFilename = ERR_liftStrCon(filename);
   pArea = ERR_liftArea(area);
   e = PERR_makeOptLayoutAbsent();
-
+ATwarning("lifting location: %t\n", location);
   return PERR_makeLocationLocation(e,e,
 				  pFilename,
 				  e,e,
@@ -106,27 +106,21 @@ PERR_Subject ERR_liftSubject(ERR_Subject subject)
 {
   char *id;
   ERR_Location location;
-  PERR_String pId;
+  PERR_StrCon pId;
   PERR_Location pLocation;
   PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
   id = ERR_getSubjectId(subject);
-  pId = ERR_liftString(id);
-
-  if (ERR_hasSubjectLocation(subject)) {
-    location = ERR_getSubjectLocation(subject);
-    pLocation = ERR_liftLocation(location);
-    return PERR_makeSubjectLocatable(e,e,
-				    pId,
-				    e,e,
-				    pLocation,
-				    e);
-  }
-  else {
-    return PERR_makeSubjectUnlocatable(e,e,
-				      pId,
-				      e);
-  }
+  location = ERR_getSubjectLocation(subject);
+  
+  pId = ERR_liftStrCon(id);
+  pLocation = ERR_liftLocation(location);
+  
+  return PERR_makeSubjectSubject(e,e,
+				 pId,
+				 e,e,
+				 pLocation,
+				 e);
 }
 
 /*}}}  */
@@ -157,10 +151,10 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   char *producerType;
   char *description;
   ERR_SubjectList subjects;
-  PERR_String pId;
-  PERR_String pProducerId;
-  PERR_String pProducerType;
-  PERR_String pDescription;
+  PERR_StrCon pId;
+  PERR_StrCon pProducerId;
+  PERR_StrCon pProducerType;
+  PERR_StrCon pDescription;
   PERR_SubjectList pSubjects;
   PERR_OptLayout e;
 
@@ -170,10 +164,10 @@ PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
   description = ERR_getFeedbackDescription(feedback);
   subjects = ERR_getFeedbackList(feedback);
 
-  pId = ERR_liftString(id);
-  pProducerId = ERR_liftString(producerId);
-  pProducerType = ERR_liftString(producerType);
-  pDescription = ERR_liftString(description);
+  pId = ERR_liftStrCon(id);
+  pProducerId = ERR_liftStrCon(producerId);
+  pProducerType = ERR_liftStrCon(producerType);
+  pDescription = ERR_liftStrCon(description);
   pSubjects = ERR_liftSubjects(subjects);
   e = PERR_makeOptLayoutAbsent();
 

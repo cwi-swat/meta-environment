@@ -3,7 +3,6 @@
 
 #include <aterm2.h>
 
-extern AFun ERR_afun8;
 extern AFun ERR_afun4;
 extern AFun ERR_afun0;
 extern AFun ERR_afun2;
@@ -16,8 +15,7 @@ extern AFun ERR_afun6;
 extern ATerm ERR_patternAreaNoArea;
 extern ATerm ERR_patternAreaArea;
 extern ATerm ERR_patternLocationLocation;
-extern ATerm ERR_patternSubjectUnlocatable;
-extern ATerm ERR_patternSubjectLocatable;
+extern ATerm ERR_patternSubjectSubject;
 extern ATerm ERR_patternSubjectListMany;
 extern ATerm ERR_patternSubjectListSingle;
 extern ATerm ERR_patternSubjectListEmpty;

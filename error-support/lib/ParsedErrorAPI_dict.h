@@ -3,7 +3,6 @@
 
 #include <aterm2.h>
 
-extern AFun PERR_afun39;
 extern AFun PERR_afun17;
 extern AFun PERR_afun22;
 extern AFun PERR_afun3;
@@ -28,7 +27,6 @@ extern AFun PERR_afun11;
 extern AFun PERR_afun5;
 extern AFun PERR_afun27;
 extern AFun PERR_afun33;
-extern AFun PERR_afun38;
 extern AFun PERR_afun16;
 extern AFun PERR_afun10;
 extern AFun PERR_afun13;
@@ -50,13 +48,12 @@ extern ATerm PERR_patternStartLocation;
 extern ATerm PERR_patternStartArea;
 extern ATerm PERR_patternOptLayoutPresent;
 extern ATerm PERR_patternOptLayoutAbsent;
-extern ATerm PERR_patternStringString;
+extern ATerm PERR_patternStrConString;
 extern ATerm PERR_patternNatConString;
 extern ATerm PERR_patternAreaNoArea;
 extern ATerm PERR_patternAreaArea;
 extern ATerm PERR_patternLocationLocation;
-extern ATerm PERR_patternSubjectUnlocatable;
-extern ATerm PERR_patternSubjectLocatable;
+extern ATerm PERR_patternSubjectSubject;
 extern ATerm PERR_patternSubjectListMany;
 extern ATerm PERR_patternSubjectListSingle;
 extern ATerm PERR_patternSubjectListEmpty;

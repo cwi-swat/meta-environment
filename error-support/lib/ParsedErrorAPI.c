@@ -50,7 +50,7 @@ typedef struct ATerm _PERR_Subject;
 typedef struct ATerm _PERR_Location;
 typedef struct ATerm _PERR_Area;
 typedef struct ATerm _PERR_NatCon;
-typedef struct ATerm _PERR_String;
+typedef struct ATerm _PERR_StrCon;
 typedef struct ATerm _PERR_OptLayout;
 typedef struct ATerm _PERR_Start;
 
@@ -163,17 +163,17 @@ ATerm PERR_NatConToTerm(PERR_NatCon arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_StringFromTerm(ATerm t) */
+/*{{{  PERR_StrCon PERR_StrConFromTerm(ATerm t) */
 
-PERR_String PERR_StringFromTerm(ATerm t)
+PERR_StrCon PERR_StrConFromTerm(ATerm t)
 {
-  return (PERR_String)t;
+  return (PERR_StrCon)t;
 }
 
 /*}}}  */
-/*{{{  ATerm PERR_StringToTerm(PERR_String arg) */
+/*{{{  ATerm PERR_StrConToTerm(PERR_StrCon arg) */
 
-ATerm PERR_StringToTerm(PERR_String arg)
+ATerm PERR_StrConToTerm(PERR_StrCon arg)
 {
   return (ATerm)arg;
 }
@@ -302,33 +302,33 @@ PERR_SubjectList PERR_makeSubjectList6(PERR_OptLayout wsAfterHead, PERR_OptLayou
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
+/*{{{  PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
 
-PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
+PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
 {
   return (PERR_Feedback)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun15))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun15)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterBracketClose), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterDescription), (ATerm) description), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerType), (ATerm) producerType), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerId), (ATerm) producerId), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterInfo), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun15))));
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
+/*{{{  PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
 
-PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
+PERR_Feedback PERR_makeFeedbackWarning(PERR_OptLayout wsAfterWarning, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
 {
   return (PERR_Feedback)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun21))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun21)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterBracketClose), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterDescription), (ATerm) description), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerType), (ATerm) producerType), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerId), (ATerm) producerId), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterWarning), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun21))));
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
+/*{{{  PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
 
-PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
+PERR_Feedback PERR_makeFeedbackError(PERR_OptLayout wsAfterError, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
 {
   return (PERR_Feedback)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun22))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun22)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterBracketClose), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterDescription), (ATerm) description), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerType), (ATerm) producerType), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerId), (ATerm) producerId), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterError), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun22))));
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
+/*{{{  PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose) */
 
-PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_String producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_String producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_String description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
+PERR_Feedback PERR_makeFeedbackFatalError(PERR_OptLayout wsAfterFatalError, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_StrCon producerId, PERR_OptLayout wsAfterProducerId, PERR_OptLayout wsAfterComma1, PERR_StrCon producerType, PERR_OptLayout wsAfterProducerType, PERR_OptLayout wsAfterComma2, PERR_StrCon description, PERR_OptLayout wsAfterDescription, PERR_OptLayout wsAfterComma3, PERR_OptLayout wsAfterBracketOpen, PERR_SubjectList list, PERR_OptLayout wsAfterList, PERR_OptLayout wsAfterBracketClose)
 {
   return (PERR_Feedback)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun23))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun23)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterBracketClose), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun7))), (ATerm) wsAfterList), (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl2(PERR_afun8, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))))), (ATerm) list)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun12))), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterDescription), (ATerm) description), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerType), (ATerm) producerType), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterProducerId), (ATerm) producerId), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterFatalError), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun23))));
 }
@@ -361,27 +361,19 @@ PERR_SubjectList PERR_makeSubjectListMany(PERR_Subject head, PERR_OptLayout wsAf
 }
 
 /*}}}  */
-/*{{{  PERR_Subject PERR_makeSubjectLocatable(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_Location Location, PERR_OptLayout wsAfterLocation) */
+/*{{{  PERR_Subject PERR_makeSubjectSubject(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_Location Location, PERR_OptLayout wsAfterLocation) */
 
-PERR_Subject PERR_makeSubjectLocatable(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_Location Location, PERR_OptLayout wsAfterLocation)
+PERR_Subject PERR_makeSubjectSubject(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_StrCon id, PERR_OptLayout wsAfterId, PERR_OptLayout wsAfterComma, PERR_Location Location, PERR_OptLayout wsAfterLocation)
 {
-  return (PERR_Subject)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun26)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterLocation), (ATerm) Location), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterSubject), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))));
+  return (PERR_Subject)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun25)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterLocation), (ATerm) Location), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterSubject), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))));
 }
 
 /*}}}  */
-/*{{{  PERR_Subject PERR_makeSubjectUnlocatable(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId) */
+/*{{{  PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation, PERR_OptLayout wsAfterParenOpen, PERR_StrCon filename, PERR_OptLayout wsAfterFilename, PERR_OptLayout wsAfterComma, PERR_Area Area, PERR_OptLayout wsAfterArea) */
 
-PERR_Subject PERR_makeSubjectUnlocatable(PERR_OptLayout wsAfterSubject, PERR_OptLayout wsAfterParenOpen, PERR_String id, PERR_OptLayout wsAfterId)
+PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation, PERR_OptLayout wsAfterParenOpen, PERR_StrCon filename, PERR_OptLayout wsAfterFilename, PERR_OptLayout wsAfterComma, PERR_Area Area, PERR_OptLayout wsAfterArea)
 {
-  return (PERR_Subject)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun27)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterSubject), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun25))));
-}
-
-/*}}}  */
-/*{{{  PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation, PERR_OptLayout wsAfterParenOpen, PERR_String filename, PERR_OptLayout wsAfterFilename, PERR_OptLayout wsAfterComma, PERR_Area Area, PERR_OptLayout wsAfterArea) */
-
-PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation, PERR_OptLayout wsAfterParenOpen, PERR_String filename, PERR_OptLayout wsAfterFilename, PERR_OptLayout wsAfterComma, PERR_Area Area, PERR_OptLayout wsAfterArea)
-{
-  return (PERR_Location)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun29))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun29)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterFilename), (ATerm) filename), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterLocation), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun29))));
+  return (PERR_Location)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun26)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun27))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun27)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterFilename), (ATerm) filename), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterLocation), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun27))));
 }
 
 /*}}}  */
@@ -389,7 +381,7 @@ PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation, PERR_Opt
 
 PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea, PERR_OptLayout wsAfterParenOpen, PERR_NatCon startLine, PERR_OptLayout wsAfterStartLine, PERR_OptLayout wsAfterComma, PERR_NatCon startColumn, PERR_OptLayout wsAfterStartColumn, PERR_OptLayout wsAfterComma1, PERR_NatCon endLine, PERR_OptLayout wsAfterEndLine, PERR_OptLayout wsAfterComma2, PERR_NatCon endColumn, PERR_OptLayout wsAfterEndColumn, PERR_OptLayout wsAfterComma3, PERR_NatCon startOffset, PERR_OptLayout wsAfterStartOffset, PERR_OptLayout wsAfterComma4, PERR_NatCon endOffset, PERR_OptLayout wsAfterEndOffset)
 {
-  return (PERR_Area)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun31))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun31)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterEndOffset), (ATerm) endOffset), (ATerm) wsAfterComma4), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartOffset), (ATerm) startOffset), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterEndColumn), (ATerm) endColumn), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterEndLine), (ATerm) endLine), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartColumn), (ATerm) startColumn), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartLine), (ATerm) startLine), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun31))));
+  return (PERR_Area)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun29))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun26))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun29)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun3))), (ATerm) wsAfterEndOffset), (ATerm) endOffset), (ATerm) wsAfterComma4), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartOffset), (ATerm) startOffset), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterEndColumn), (ATerm) endColumn), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterEndLine), (ATerm) endLine), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartColumn), (ATerm) startColumn), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun11))), (ATerm) wsAfterStartLine), (ATerm) startLine), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun14))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun29))));
 }
 
 /*}}}  */
@@ -397,7 +389,7 @@ PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea, PERR_OptLayout wsAfterPa
 
 PERR_Area PERR_makeAreaNoArea()
 {
-  return (PERR_Area)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun32))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun32)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun32))));
+  return (PERR_Area)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun30))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun26))), (ATerm)ATmakeAppl1(PERR_afun17, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun18, (ATerm)ATmakeAppl1(PERR_afun19, (ATerm)ATmakeAppl0(PERR_afun30)))))), (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun2, (ATerm)ATmakeAppl0(PERR_afun30))));
 }
 
 /*}}}  */
@@ -405,15 +397,15 @@ PERR_Area PERR_makeAreaNoArea()
 
 PERR_NatCon PERR_makeNatConString(char* string)
 {
-  return (PERR_NatCon)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun33, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun30))), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun35, (ATerm)ATmakeAppl1(PERR_afun36, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun37, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(255)))))), (ATerm) ((ATerm) PERR_stringToChars(string)))));
+  return (PERR_NatCon)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun31, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28))), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun33, (ATerm)ATmakeAppl1(PERR_afun34, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun35, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(255)))))), (ATerm) ((ATerm) PERR_stringToChars(string)))));
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_makeStringString(char* string) */
+/*{{{  PERR_StrCon PERR_makeStrConString(char* string) */
 
-PERR_String PERR_makeStringString(char* string)
+PERR_StrCon PERR_makeStrConString(char* string)
 {
-  return (PERR_String)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun33, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13))), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun35, (ATerm)ATmakeAppl1(PERR_afun36, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun37, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(255)))))), (ATerm) ((ATerm) PERR_stringToChars(string)))));
+  return (PERR_StrCon)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun31, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun13))), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl1(PERR_afun20, (ATerm)ATmakeAppl1(PERR_afun33, (ATerm)ATmakeAppl1(PERR_afun34, (ATerm)ATmakeList1((ATerm)ATmakeAppl2(PERR_afun35, (ATerm)ATmakeInt(0), (ATerm)ATmakeInt(255)))))), (ATerm) ((ATerm) PERR_stringToChars(string)))));
 }
 
 /*}}}  */
@@ -421,7 +413,7 @@ PERR_String PERR_makeStringString(char* string)
 
 PERR_OptLayout PERR_makeOptLayoutAbsent()
 {
-  return (PERR_OptLayout)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATempty);
+  return (PERR_OptLayout)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATempty);
 }
 
 /*}}}  */
@@ -429,7 +421,7 @@ PERR_OptLayout PERR_makeOptLayoutAbsent()
 
 PERR_OptLayout PERR_makeOptLayoutPresent(char* string)
 {
-  return (PERR_OptLayout)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm) ((ATerm) PERR_stringToChars(string)));
+  return (PERR_OptLayout)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6))), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm) ((ATerm) PERR_stringToChars(string)));
 }
 
 /*}}}  */
@@ -437,7 +429,7 @@ PERR_OptLayout PERR_makeOptLayoutPresent(char* string)
 
 PERR_Start PERR_makeStartArea(PERR_OptLayout wsBefore, PERR_Area topArea, PERR_OptLayout wsAfter, int ambCnt)
 {
-  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun38, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun28)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun39)), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topArea), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun36, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun26)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun37)), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topArea), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -445,7 +437,7 @@ PERR_Start PERR_makeStartArea(PERR_OptLayout wsBefore, PERR_Area topArea, PERR_O
 
 PERR_Start PERR_makeStartLocation(PERR_OptLayout wsBefore, PERR_Location topLocation, PERR_OptLayout wsAfter, int ambCnt)
 {
-  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun38, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun39)), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topLocation), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun36, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun24)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun37)), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topLocation), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -453,7 +445,7 @@ PERR_Start PERR_makeStartLocation(PERR_OptLayout wsBefore, PERR_Location topLoca
 
 PERR_Start PERR_makeStartSubject(PERR_OptLayout wsBefore, PERR_Subject topSubject, PERR_OptLayout wsAfter, int ambCnt)
 {
-  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun38, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun39)), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSubject), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun36, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun10)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun37)), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSubject), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -461,7 +453,7 @@ PERR_Start PERR_makeStartSubject(PERR_OptLayout wsBefore, PERR_Subject topSubjec
 
 PERR_Start PERR_makeStartFeedback(PERR_OptLayout wsBefore, PERR_Feedback topFeedback, PERR_OptLayout wsAfter, int ambCnt)
 {
-  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun38, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun39)), (ATerm)ATmakeAppl0(PERR_afun34)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topFeedback), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PERR_Start)(ATerm)ATmakeAppl2(PERR_afun36, (ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun16)))), (ATerm)ATmakeAppl1(PERR_afun4, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl0(PERR_afun6)))), (ATerm)ATmakeAppl1(PERR_afun9, (ATerm)ATmakeAppl0(PERR_afun37)), (ATerm)ATmakeAppl0(PERR_afun32)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topFeedback), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -499,7 +491,7 @@ ATbool PERR_isEqualNatCon(PERR_NatCon arg0, PERR_NatCon arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PERR_isEqualString(PERR_String arg0, PERR_String arg1)
+ATbool PERR_isEqualStrCon(PERR_StrCon arg0, PERR_StrCon arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -738,27 +730,27 @@ ATbool PERR_hasFeedbackId(PERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getFeedbackId(PERR_Feedback arg) */
+/*{{{  PERR_StrCon PERR_getFeedbackId(PERR_Feedback arg) */
 
-PERR_String PERR_getFeedbackId(PERR_Feedback arg)
+PERR_StrCon PERR_getFeedbackId(PERR_Feedback arg)
 {
   if (PERR_isFeedbackInfo(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
   }
   else if (PERR_isFeedbackWarning(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
   }
   else if (PERR_isFeedbackError(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
   }
   else 
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_setFeedbackId(PERR_Feedback arg, PERR_String id) */
+/*{{{  PERR_Feedback PERR_setFeedbackId(PERR_Feedback arg, PERR_StrCon id) */
 
-PERR_Feedback PERR_setFeedbackId(PERR_Feedback arg, PERR_String id)
+PERR_Feedback PERR_setFeedbackId(PERR_Feedback arg, PERR_StrCon id)
 {
   if (PERR_isFeedbackInfo(arg)) {
     return (PERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) id), 4), 1);
@@ -918,27 +910,27 @@ ATbool PERR_hasFeedbackProducerId(PERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getFeedbackProducerId(PERR_Feedback arg) */
+/*{{{  PERR_StrCon PERR_getFeedbackProducerId(PERR_Feedback arg) */
 
-PERR_String PERR_getFeedbackProducerId(PERR_Feedback arg)
+PERR_StrCon PERR_getFeedbackProducerId(PERR_Feedback arg)
 {
   if (PERR_isFeedbackInfo(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
   }
   else if (PERR_isFeedbackWarning(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
   }
   else if (PERR_isFeedbackError(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
   }
   else 
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_setFeedbackProducerId(PERR_Feedback arg, PERR_String producerId) */
+/*{{{  PERR_Feedback PERR_setFeedbackProducerId(PERR_Feedback arg, PERR_StrCon producerId) */
 
-PERR_Feedback PERR_setFeedbackProducerId(PERR_Feedback arg, PERR_String producerId)
+PERR_Feedback PERR_setFeedbackProducerId(PERR_Feedback arg, PERR_StrCon producerId)
 {
   if (PERR_isFeedbackInfo(arg)) {
     return (PERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) producerId), 8), 1);
@@ -1098,27 +1090,27 @@ ATbool PERR_hasFeedbackProducerType(PERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getFeedbackProducerType(PERR_Feedback arg) */
+/*{{{  PERR_StrCon PERR_getFeedbackProducerType(PERR_Feedback arg) */
 
-PERR_String PERR_getFeedbackProducerType(PERR_Feedback arg)
+PERR_StrCon PERR_getFeedbackProducerType(PERR_Feedback arg)
 {
   if (PERR_isFeedbackInfo(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
   }
   else if (PERR_isFeedbackWarning(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
   }
   else if (PERR_isFeedbackError(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
   }
   else 
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_setFeedbackProducerType(PERR_Feedback arg, PERR_String producerType) */
+/*{{{  PERR_Feedback PERR_setFeedbackProducerType(PERR_Feedback arg, PERR_StrCon producerType) */
 
-PERR_Feedback PERR_setFeedbackProducerType(PERR_Feedback arg, PERR_String producerType)
+PERR_Feedback PERR_setFeedbackProducerType(PERR_Feedback arg, PERR_StrCon producerType)
 {
   if (PERR_isFeedbackInfo(arg)) {
     return (PERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) producerType), 12), 1);
@@ -1278,27 +1270,27 @@ ATbool PERR_hasFeedbackDescription(PERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getFeedbackDescription(PERR_Feedback arg) */
+/*{{{  PERR_StrCon PERR_getFeedbackDescription(PERR_Feedback arg) */
 
-PERR_String PERR_getFeedbackDescription(PERR_Feedback arg)
+PERR_StrCon PERR_getFeedbackDescription(PERR_Feedback arg)
 {
   if (PERR_isFeedbackInfo(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
   }
   else if (PERR_isFeedbackWarning(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
   }
   else if (PERR_isFeedbackError(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
   }
   else 
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg, PERR_String description) */
+/*{{{  PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg, PERR_StrCon description) */
 
-PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg, PERR_String description)
+PERR_Feedback PERR_setFeedbackDescription(PERR_Feedback arg, PERR_StrCon description)
 {
   if (PERR_isFeedbackInfo(arg)) {
     return (PERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) description), 16), 1);
@@ -2012,57 +2004,22 @@ PERR_SubjectList PERR_setSubjectListTail(PERR_SubjectList arg, PERR_SubjectList 
 
 ATbool PERR_isValidSubject(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool PERR_isSubjectLocatable(PERR_Subject arg) */
+/*{{{  inline ATbool PERR_isSubjectSubject(PERR_Subject arg) */
 
-inline ATbool PERR_isSubjectLocatable(PERR_Subject arg)
+inline ATbool PERR_isSubjectSubject(PERR_Subject arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PERR_patternSubjectLocatable, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool PERR_isSubjectUnlocatable(PERR_Subject arg) */
-
-inline ATbool PERR_isSubjectUnlocatable(PERR_Subject arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PERR_patternSubjectUnlocatable, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PERR_patternSubjectSubject, NULL, NULL, NULL, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2070,10 +2027,7 @@ inline ATbool PERR_isSubjectUnlocatable(PERR_Subject arg)
 
 ATbool PERR_hasSubjectWsAfterSubject(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2084,10 +2038,7 @@ ATbool PERR_hasSubjectWsAfterSubject(PERR_Subject arg)
 
 PERR_OptLayout PERR_getSubjectWsAfterSubject(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-  }
-  else 
+  
     return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
 }
 
@@ -2096,10 +2047,7 @@ PERR_OptLayout PERR_getSubjectWsAfterSubject(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectWsAfterSubject(PERR_Subject arg, PERR_OptLayout wsAfterSubject)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterSubject), 1), 1);
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterSubject), 1), 1);
   }
 
@@ -2112,10 +2060,7 @@ PERR_Subject PERR_setSubjectWsAfterSubject(PERR_Subject arg, PERR_OptLayout wsAf
 
 ATbool PERR_hasSubjectWsAfterParenOpen(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2126,10 +2071,7 @@ ATbool PERR_hasSubjectWsAfterParenOpen(PERR_Subject arg)
 
 PERR_OptLayout PERR_getSubjectWsAfterParenOpen(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
-  }
-  else 
+  
     return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
 }
 
@@ -2138,10 +2080,7 @@ PERR_OptLayout PERR_getSubjectWsAfterParenOpen(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectWsAfterParenOpen(PERR_Subject arg, PERR_OptLayout wsAfterParenOpen)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterParenOpen), 3), 1);
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterParenOpen), 3), 1);
   }
 
@@ -2154,36 +2093,27 @@ PERR_Subject PERR_setSubjectWsAfterParenOpen(PERR_Subject arg, PERR_OptLayout ws
 
 ATbool PERR_hasSubjectId(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getSubjectId(PERR_Subject arg) */
+/*{{{  PERR_StrCon PERR_getSubjectId(PERR_Subject arg) */
 
-PERR_String PERR_getSubjectId(PERR_Subject arg)
+PERR_StrCon PERR_getSubjectId(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-  }
-  else 
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
 
 /*}}}  */
-/*{{{  PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_String id) */
+/*{{{  PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_StrCon id) */
 
-PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_String id)
+PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_StrCon id)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) id), 4), 1);
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) id), 4), 1);
   }
 
@@ -2196,10 +2126,7 @@ PERR_Subject PERR_setSubjectId(PERR_Subject arg, PERR_String id)
 
 ATbool PERR_hasSubjectWsAfterId(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return ATtrue;
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2210,10 +2137,7 @@ ATbool PERR_hasSubjectWsAfterId(PERR_Subject arg)
 
 PERR_OptLayout PERR_getSubjectWsAfterId(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-  }
-  else 
+  
     return (PERR_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
 }
 
@@ -2222,10 +2146,7 @@ PERR_OptLayout PERR_getSubjectWsAfterId(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectWsAfterId(PERR_Subject arg, PERR_OptLayout wsAfterId)
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterId), 5), 1);
-  }
-  else if (PERR_isSubjectUnlocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterId), 5), 1);
   }
 
@@ -2238,7 +2159,7 @@ PERR_Subject PERR_setSubjectWsAfterId(PERR_Subject arg, PERR_OptLayout wsAfterId
 
 ATbool PERR_hasSubjectWsAfterComma(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2258,7 +2179,7 @@ PERR_OptLayout PERR_getSubjectWsAfterComma(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectWsAfterComma(PERR_Subject arg, PERR_OptLayout wsAfterComma)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterComma), 7), 1);
   }
 
@@ -2271,7 +2192,7 @@ PERR_Subject PERR_setSubjectWsAfterComma(PERR_Subject arg, PERR_OptLayout wsAfte
 
 ATbool PERR_hasSubjectLocation(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2291,7 +2212,7 @@ PERR_Location PERR_getSubjectLocation(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectLocation(PERR_Subject arg, PERR_Location Location)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Location), 8), 1);
   }
 
@@ -2304,7 +2225,7 @@ PERR_Subject PERR_setSubjectLocation(PERR_Subject arg, PERR_Location Location)
 
 ATbool PERR_hasSubjectWsAfterLocation(PERR_Subject arg)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -2324,7 +2245,7 @@ PERR_OptLayout PERR_getSubjectWsAfterLocation(PERR_Subject arg)
 
 PERR_Subject PERR_setSubjectWsAfterLocation(PERR_Subject arg, PERR_OptLayout wsAfterLocation)
 {
-  if (PERR_isSubjectLocatable(arg)) {
+  if (PERR_isSubjectSubject(arg)) {
     return (PERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterLocation), 9), 1);
   }
 
@@ -2437,18 +2358,18 @@ ATbool PERR_hasLocationFilename(PERR_Location arg)
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_getLocationFilename(PERR_Location arg) */
+/*{{{  PERR_StrCon PERR_getLocationFilename(PERR_Location arg) */
 
-PERR_String PERR_getLocationFilename(PERR_Location arg)
+PERR_StrCon PERR_getLocationFilename(PERR_Location arg)
 {
   
-    return (PERR_String)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+    return (PERR_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
 
 /*}}}  */
-/*{{{  PERR_Location PERR_setLocationFilename(PERR_Location arg, PERR_String filename) */
+/*{{{  PERR_Location PERR_setLocationFilename(PERR_Location arg, PERR_StrCon filename) */
 
-PERR_Location PERR_setLocationFilename(PERR_Location arg, PERR_String filename)
+PERR_Location PERR_setLocationFilename(PERR_Location arg, PERR_StrCon filename)
 {
   if (PERR_isLocationLocation(arg)) {
     return (PERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) filename), 4), 1);
@@ -3342,61 +3263,61 @@ PERR_NatCon PERR_setNatConString(PERR_NatCon arg, char* string)
 /*}}}  */
 
 /*}}}  */
-/*{{{  PERR_String accessors */
+/*{{{  PERR_StrCon accessors */
 
-/*{{{  ATbool PERR_isValidString(PERR_String arg) */
+/*{{{  ATbool PERR_isValidStrCon(PERR_StrCon arg) */
 
-ATbool PERR_isValidString(PERR_String arg)
+ATbool PERR_isValidStrCon(PERR_StrCon arg)
 {
-  if (PERR_isStringString(arg)) {
+  if (PERR_isStrConString(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool PERR_isStringString(PERR_String arg) */
+/*{{{  inline ATbool PERR_isStrConString(PERR_StrCon arg) */
 
-inline ATbool PERR_isStringString(PERR_String arg)
+inline ATbool PERR_isStrConString(PERR_StrCon arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PERR_patternStringString, NULL));
+  assert(ATmatchTerm((ATerm)arg, PERR_patternStrConString, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool PERR_hasStringString(PERR_String arg) */
+/*{{{  ATbool PERR_hasStrConString(PERR_StrCon arg) */
 
-ATbool PERR_hasStringString(PERR_String arg)
+ATbool PERR_hasStrConString(PERR_StrCon arg)
 {
-  if (PERR_isStringString(arg)) {
+  if (PERR_isStrConString(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* PERR_getStringString(PERR_String arg) */
+/*{{{  char* PERR_getStrConString(PERR_StrCon arg) */
 
-char* PERR_getStringString(PERR_String arg)
+char* PERR_getStrConString(PERR_StrCon arg)
 {
   
     return (char*)PERR_charsToString((ATerm)ATgetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), 1));
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_setStringString(PERR_String arg, char* string) */
+/*{{{  PERR_StrCon PERR_setStrConString(PERR_StrCon arg, char* string) */
 
-PERR_String PERR_setStringString(PERR_String arg, char* string)
+PERR_StrCon PERR_setStrConString(PERR_StrCon arg, char* string)
 {
-  if (PERR_isStringString(arg)) {
-    return (PERR_String)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), (ATerm)((ATerm) ((ATerm) PERR_stringToChars(string))), 1), 0), 1);
+  if (PERR_isStrConString(arg)) {
+    return (PERR_StrCon)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATgetFirst((ATermList)ATgetArgument((ATermAppl)arg, 1)), (ATerm)((ATerm) ((ATerm) PERR_stringToChars(string))), 1), 0), 1);
   }
 
-  ATabort("String has no String: %t\n", arg);
-  return (PERR_String)NULL;
+  ATabort("StrCon has no String: %t\n", arg);
+  return (PERR_StrCon)NULL;
 }
 
 /*}}}  */
@@ -3923,9 +3844,9 @@ PERR_Start PERR_setStartTopFeedback(PERR_Start arg, PERR_Feedback topFeedback)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  PERR_Feedback PERR_visitFeedback(PERR_Feedback arg, PERR_OptLayout (*acceptWsAfterInfo)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptId)(PERR_String), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_String (*acceptProducerId)(PERR_String), PERR_OptLayout (*acceptWsAfterProducerId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma1)(PERR_OptLayout), PERR_String (*acceptProducerType)(PERR_String), PERR_OptLayout (*acceptWsAfterProducerType)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma2)(PERR_OptLayout), PERR_String (*acceptDescription)(PERR_String), PERR_OptLayout (*acceptWsAfterDescription)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma3)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketOpen)(PERR_OptLayout), PERR_SubjectList (*acceptList)(PERR_SubjectList), PERR_OptLayout (*acceptWsAfterList)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketClose)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterWarning)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterError)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterFatalError)(PERR_OptLayout)) */
+/*{{{  PERR_Feedback PERR_visitFeedback(PERR_Feedback arg, PERR_OptLayout (*acceptWsAfterInfo)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_StrCon (*acceptProducerId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterProducerId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma1)(PERR_OptLayout), PERR_StrCon (*acceptProducerType)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterProducerType)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma2)(PERR_OptLayout), PERR_StrCon (*acceptDescription)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterDescription)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma3)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketOpen)(PERR_OptLayout), PERR_SubjectList (*acceptList)(PERR_SubjectList), PERR_OptLayout (*acceptWsAfterList)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketClose)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterWarning)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterError)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterFatalError)(PERR_OptLayout)) */
 
-PERR_Feedback PERR_visitFeedback(PERR_Feedback arg, PERR_OptLayout (*acceptWsAfterInfo)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptId)(PERR_String), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_String (*acceptProducerId)(PERR_String), PERR_OptLayout (*acceptWsAfterProducerId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma1)(PERR_OptLayout), PERR_String (*acceptProducerType)(PERR_String), PERR_OptLayout (*acceptWsAfterProducerType)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma2)(PERR_OptLayout), PERR_String (*acceptDescription)(PERR_String), PERR_OptLayout (*acceptWsAfterDescription)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma3)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketOpen)(PERR_OptLayout), PERR_SubjectList (*acceptList)(PERR_SubjectList), PERR_OptLayout (*acceptWsAfterList)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketClose)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterWarning)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterError)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterFatalError)(PERR_OptLayout))
+PERR_Feedback PERR_visitFeedback(PERR_Feedback arg, PERR_OptLayout (*acceptWsAfterInfo)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_StrCon (*acceptProducerId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterProducerId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma1)(PERR_OptLayout), PERR_StrCon (*acceptProducerType)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterProducerType)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma2)(PERR_OptLayout), PERR_StrCon (*acceptDescription)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterDescription)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma3)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketOpen)(PERR_OptLayout), PERR_SubjectList (*acceptList)(PERR_SubjectList), PERR_OptLayout (*acceptWsAfterList)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterBracketClose)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterWarning)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterError)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterFatalError)(PERR_OptLayout))
 {
   if (PERR_isFeedbackInfo(arg)) {
     return PERR_makeFeedbackInfo(
@@ -4039,12 +3960,12 @@ PERR_SubjectList PERR_visitSubjectList(PERR_SubjectList arg, PERR_Subject (*acce
 }
 
 /*}}}  */
-/*{{{  PERR_Subject PERR_visitSubject(PERR_Subject arg, PERR_OptLayout (*acceptWsAfterSubject)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptId)(PERR_String), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Location (*acceptLocation)(PERR_Location), PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout)) */
+/*{{{  PERR_Subject PERR_visitSubject(PERR_Subject arg, PERR_OptLayout (*acceptWsAfterSubject)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Location (*acceptLocation)(PERR_Location), PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout)) */
 
-PERR_Subject PERR_visitSubject(PERR_Subject arg, PERR_OptLayout (*acceptWsAfterSubject)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptId)(PERR_String), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Location (*acceptLocation)(PERR_Location), PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout))
+PERR_Subject PERR_visitSubject(PERR_Subject arg, PERR_OptLayout (*acceptWsAfterSubject)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptId)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterId)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Location (*acceptLocation)(PERR_Location), PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout))
 {
-  if (PERR_isSubjectLocatable(arg)) {
-    return PERR_makeSubjectLocatable(
+  if (PERR_isSubjectSubject(arg)) {
+    return PERR_makeSubjectSubject(
         acceptWsAfterSubject ? acceptWsAfterSubject(PERR_getSubjectWsAfterSubject(arg)) : PERR_getSubjectWsAfterSubject(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PERR_getSubjectWsAfterParenOpen(arg)) : PERR_getSubjectWsAfterParenOpen(arg),
         acceptId ? acceptId(PERR_getSubjectId(arg)) : PERR_getSubjectId(arg),
@@ -4053,21 +3974,14 @@ PERR_Subject PERR_visitSubject(PERR_Subject arg, PERR_OptLayout (*acceptWsAfterS
         acceptLocation ? acceptLocation(PERR_getSubjectLocation(arg)) : PERR_getSubjectLocation(arg),
         acceptWsAfterLocation ? acceptWsAfterLocation(PERR_getSubjectWsAfterLocation(arg)) : PERR_getSubjectWsAfterLocation(arg));
   }
-  if (PERR_isSubjectUnlocatable(arg)) {
-    return PERR_makeSubjectUnlocatable(
-        acceptWsAfterSubject ? acceptWsAfterSubject(PERR_getSubjectWsAfterSubject(arg)) : PERR_getSubjectWsAfterSubject(arg),
-        acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PERR_getSubjectWsAfterParenOpen(arg)) : PERR_getSubjectWsAfterParenOpen(arg),
-        acceptId ? acceptId(PERR_getSubjectId(arg)) : PERR_getSubjectId(arg),
-        acceptWsAfterId ? acceptWsAfterId(PERR_getSubjectWsAfterId(arg)) : PERR_getSubjectWsAfterId(arg));
-  }
   ATabort("not a Subject: %t\n", arg);
   return (PERR_Subject)NULL;
 }
 
 /*}}}  */
-/*{{{  PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptFilename)(PERR_String), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout)) */
+/*{{{  PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout)) */
 
-PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_String (*acceptFilename)(PERR_String), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout))
+PERR_Location PERR_visitLocation(PERR_Location arg, PERR_OptLayout (*acceptWsAfterLocation)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterParenOpen)(PERR_OptLayout), PERR_StrCon (*acceptFilename)(PERR_StrCon), PERR_OptLayout (*acceptWsAfterFilename)(PERR_OptLayout), PERR_OptLayout (*acceptWsAfterComma)(PERR_OptLayout), PERR_Area (*acceptArea)(PERR_Area), PERR_OptLayout (*acceptWsAfterArea)(PERR_OptLayout))
 {
   if (PERR_isLocationLocation(arg)) {
     return PERR_makeLocationLocation(
@@ -4131,16 +4045,16 @@ PERR_NatCon PERR_visitNatCon(PERR_NatCon arg, char* (*acceptString)(char*))
 }
 
 /*}}}  */
-/*{{{  PERR_String PERR_visitString(PERR_String arg, char* (*acceptString)(char*)) */
+/*{{{  PERR_StrCon PERR_visitStrCon(PERR_StrCon arg, char* (*acceptString)(char*)) */
 
-PERR_String PERR_visitString(PERR_String arg, char* (*acceptString)(char*))
+PERR_StrCon PERR_visitStrCon(PERR_StrCon arg, char* (*acceptString)(char*))
 {
-  if (PERR_isStringString(arg)) {
-    return PERR_makeStringString(
-        acceptString ? acceptString(PERR_getStringString(arg)) : PERR_getStringString(arg));
+  if (PERR_isStrConString(arg)) {
+    return PERR_makeStrConString(
+        acceptString ? acceptString(PERR_getStrConString(arg)) : PERR_getStrConString(arg));
   }
-  ATabort("not a String: %t\n", arg);
-  return (PERR_String)NULL;
+  ATabort("not a StrCon: %t\n", arg);
+  return (PERR_StrCon)NULL;
 }
 
 /*}}}  */
