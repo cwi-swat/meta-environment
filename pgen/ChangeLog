@@ -2,6 +2,7 @@ $Id$
 
 2003/07/02 (markvdb@cs.vu.nl)
  * The type (trm/eqs) is now made explicit.
+ * Removed extension completely.
 
 2003/07/02 (jurgenv@cwi.nl)
  * Release 1.7
