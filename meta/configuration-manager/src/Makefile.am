@@ -7,7 +7,7 @@ bin_PROGRAMS      = configmanager
 
 pkgdata_DATA         = configmanager.idef standard.buttons
 
-EXTRA_DIST        = configmanager.idef standard.buttons
+EXTRA_DIST        = configmanager.idef standard.buttons standard.buttons.src
 
 CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
 
@@ -26,4 +26,7 @@ INCLUDES		= -I$(ATERM)/include \
                         -DSTANDARD_BUTTONS=\"$(pkgdatadir)/standard.buttons\"
 api:
 	adt-to-c -i buttons.adt --prefix MB_ -o MetaButtons
+
+standard.buttons:	standard.buttons.src Makefile
+			sed 's@__ASF_LIBRARY__@${prefix}/share/asf/library/@g' < $< > $@
 

@@ -178,7 +178,7 @@ buttons([
    button("*",
 	  "studio-menubar",
 	  ["Open Library Module"],
-	  [prompt-for-file("Open LibraryModule", "/export/scratch1/iversen/asmeta/install/share/asf/library/", ".sdf"),
+	  [prompt-for-file("Open LibraryModule", "__ASF_LIBRARY__", ".sdf"),
 	   dup,
 	   push-string(""),
 	   if-equal([],
