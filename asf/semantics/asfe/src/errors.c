@@ -71,7 +71,7 @@ void printErrors(void)
   subject = ATgetFirst(ATgetNext(ATgetNext(error)));
 
   if (tag) {
-    tagText = ASF_getCHARLISTString(ASF_getTagIdChars(ASF_TagIdFromTerm(tag)));
+    tagText = ASF_getCHARLISTString(ASF_getTagIdChars(ASF_getTagTagId(ASF_TagFromTerm(tag))));
   }
   else {
     tagText = strdup("");
