@@ -13,8 +13,9 @@ in
 execute(a2toa1, A2toa1?).
 ( rec-msg(Id?,a2toa1(T?)).
   snd-eval(A2toa1,trans(T)).
-  rec-value(A2toa1,term(T1?,T2?,T3?,T4?,T5?,T6?,T7?,T8?,T9?)).
-  snd-msg(Id,converted(T7))
+  rec-value(A2toa1,T1?).
+/*  printf("%t\n%t\n%t\n",T5,T6,T8).*/
+  snd-msg(Id,converted(T1))
 ) * delta
 endlet
 
