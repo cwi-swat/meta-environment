@@ -58,7 +58,7 @@ CSRC            = meta-paths.c meta-utils.c imports.c module-utils.c
 CHDR            = meta-utils.h module-utils.h libutil.h
 #All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= genmakefile.sh gen-table mk-meta-dist \
+BINFILES	= genmakefile.sh gen-table \
 		  parse-file parse-sdf2 ps-dot \
                   sdf2table meta-paths normalize-sdf imports
 LIBFILES	= 
@@ -139,6 +139,3 @@ doc:
 distclean:
 
 depend:
-
-
-
