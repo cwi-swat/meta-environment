@@ -12,6 +12,7 @@ exports
 
 	testsuite-report(Integer, Integer, RVALUE) 		-> TESTREPORT
 	eval-rscript-testsuite(RSCRIPT)				-> TESTREPORT
+	eval-rscript-testsuite-with-rstore(RSCRIPT, RSTORE)	-> TESTREPORT
 	increment(RVAR, RSTORE)					-> RSTORE
 
 hiddens
