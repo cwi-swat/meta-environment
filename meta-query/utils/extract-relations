@@ -1,0 +1,108 @@
+#! /bin/sh
+
+set -e
+
+# {{{  variables
+
+PRG=`basename $0`
+INPUT_FILES=
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options] <input-files>
+
+Parameters:
+
+  -e | --equations <file> specify extraction equations         [unspecified]
+  -t | --table     <file> specify parse table for input files  [unspecified]
+
+Example:
+  $PRG -t ToolBus.trm.tbl -e TBExtraction.eqs tbscripts/*.tb
+
+ENDCAT
+}
+
+# }}}
+# {{{  add_input_file
+
+add_input_file() {
+ INPUT_FILES="$INPUT_FILES $1"
+}
+
+# }}}
+# {{{  parse
+
+parse() {
+  echo -n "Parsing $1 .."
+  sglr -p ${TABLE} -i $1 -o $1.pt -s Tscript
+  echo " done."
+}
+
+# }}}
+# {{{  addposinfo
+
+addposinfo() {
+  echo -n "AddPosInfo $1 .."
+  addPosInfo -i $1.pt -o $1.pos -p $1
+  echo " done."
+}
+
+# }}}
+# {{{  extract
+
+extract() {
+  echo -n "Rewriting $1 .."
+  apply-function -f "extractRelations" -s "RSTORE" -i $1.pos \
+    | asfe -e ${EQS} -o rstore/`basename $1`.rstore
+  echo " done."
+}
+
+# }}}
+# {{{  cleanup
+
+cleanup() {
+  rm -f $1.{c,pt,pos}
+}
+
+# }}}
+# {{{  scan
+
+scan() {
+  preprocess $1
+  parse $1
+  addposinfo $1
+  extract $1
+  cleanup $1
+}
+
+# }}}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -h | --help)
+      usage; exit 0
+    -t | --table)
+      shift; TABLE=$1 ;;
+    -e | --equations)
+      shift; EQS=$1 ;;
+    *)
+      add_input_file $1 ;;
+  esac
+  shift
+done
+
+mkdir -p rstore
+
+for f in $INPUT_FILES; do
+  scan $f
+done

@@ -1,12 +1,12 @@
 EXTRA_DIST = \
 	merge-rstores \
 	meta-query-config.src \
-	tbscan
+	extract-relations
 
 bin_SCRIPTS = \
 	merge-rstores \
 	meta-query-config \
-	tbscan
+	extract-relations
 
 CLEANFILES = meta-query-config
 
