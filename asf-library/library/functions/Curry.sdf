@@ -1,0 +1,23 @@
+module functions/Curry[A B C]
+
+exports
+
+context-free syntax
+
+curry -> ( (A # B => C) A B => C )
+
+uncurry -> ( (A B => C ) A # B => C)
+
+hiddens
+
+imports basic/Whitespace
+
+sorts A B C
+variables
+
+"A" -> A
+"B" -> B
+"C" -> C
+"f" -> (A B => C)
+"f" -> (A # B => C)
+"A#B" -> A # B

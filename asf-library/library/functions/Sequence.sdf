@@ -1,0 +1,21 @@
+module functions/Sequence[A B C]
+
+exports
+
+context-free syntax
+
+  (B => C) ";" (A => B) -> (A => C) {left}
+
+hiddens
+
+ imports basic/Whitespace
+
+ sorts A B C (B => C) (A => B) (A => C)
+
+variables
+
+"f" -> (B => C)
+"g" -> (A => B)
+"A" -> A
+"B" -> B
+"C" -> C

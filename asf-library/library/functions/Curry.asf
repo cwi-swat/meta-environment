@@ -1,0 +1,5 @@
+equations
+
+[] curry(f A B) = f (<A,B>)
+
+[] uncurry(f <A,B>) = f ( A B )

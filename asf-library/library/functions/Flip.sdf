@@ -1,0 +1,19 @@
+module functions/Flip[A B C]
+
+exports
+
+context-free syntax
+
+flip((A B => C)) -> (B A => C)
+
+hiddens
+
+imports basic/Whitespace
+
+sorts C (B A => C)
+variables
+
+"f" -> (A B => C)
+"A" -> A
+"B" -> B
+

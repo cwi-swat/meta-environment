@@ -1,0 +1,26 @@
+module functions/Map[From To]
+
+imports containers/List[From] 
+imports containers/List[To]
+
+exports
+
+context-free syntax
+
+map -> ((From => To) List[[From]] => List[[To]])
+
+hiddens
+
+imports
+  basic/Whitespace
+
+hiddens sorts From To List[[From]] List[[To]]
+variables
+
+"f" -> (From => To)
+"F" -> From
+"T"   -> To
+"LF"   -> List[[From]]
+"LT"   -> List[[To]] 
+
+
