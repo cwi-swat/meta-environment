@@ -98,7 +98,7 @@ set statuslist {}
 proc new-graph { graph } { 
     global g
 
-    MVin "new-graph($graph)"
+    GBin "new-graph($graph)"
 
     foreach graphnode [$g listnodes] {
 	$graphnode delete
@@ -142,7 +142,7 @@ proc new-graph { graph } {
 #---
 proc add-module { mod } { 
     global g
-    MVin "add-module($mod)"
+    GBin "add-module($mod)"
     $g addnode [StripId $mod]
     update-graph
 }
@@ -158,7 +158,7 @@ proc add-module { mod } {
 #---
 proc imports { mod modlist } {
     global g 
-    MVin "imports($mod,$modlist)"
+    GBin "imports($mod,$modlist)"
     set i [$g addnode [StripId $mod]]
     foreach j $modlist {
 	AddUniqueEdge $g $i [$g addnode [StripId $j]]
@@ -177,7 +177,7 @@ proc imports { mod modlist } {
 #---
 proc add-imports { implist } {
     global g 
-    MVin "add-imports($implist)"
+    GBin "add-imports($implist)"
     foreach rel $implist {
 	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]]	\
 		[$g addnode [StripId [lindex $rel 1]]]
@@ -271,7 +271,7 @@ proc end-status { id } {
 #---
 proc module-info { mod infolist } {
     global windowcnt SBW toolname
-    MVin "module-info($mod,$infolist)"
+    GBin "module-info($mod,$infolist)"
     set mod [StripId $mod]
     set w ".info$windowcnt"
     set windowcnt [expr $windowcnt + 1]
@@ -350,7 +350,7 @@ proc error {msg} {
 #---
 proc rec-ack-event { arg } {
     global g
-    MVin "rec-ack-event($arg)"
+    GBin "rec-ack-event($arg)"
 
     TBack $arg
 }
@@ -362,7 +362,7 @@ proc rec-ack-event { arg } {
 # prints diagnostics, the termination message and exits
 #---
 proc rec-terminate { arg } {
-    MVin "rec-ack-event($arg)"
+    GBin "rec-ack-event($arg)"
     puts stderr $arg
     exit
 }
@@ -414,60 +414,56 @@ proc mouse_b3_press {c x y} {
 
 
 #--
-# MVevent(event)
+# GBevent(event)
 #-
-# sends 'snd-event(event)' to the TB (and prints diagnostics on stderr)
+# sends 'snd-event(event)' to the TB
 #--
-proc MVevent { event } {
-    global DIAG
+proc GBevent { event } {
     TBsend "snd-event($event)"
-    if {$DIAG} {puts stderr "MV outgoing event: $event"}
+    GBmsg "outgoing event: $event"
 }
 
 
 #--
-# MVpost(event)
+# GBpost(event)
 #-
-# posts 'snd-event(event)' to the TB (and prints diagnostics on stderr)
+# posts 'snd-event(event)' to the TB
 #--
-proc MVpost { event } {
-    global DIAG
+proc GBpost { event } {
     TBpost $event
-    if {$DIAG} {puts stderr "MV posting event: $event"}
+    GBmsg "posting event: $event"
 }
 
 
 #--
-# MVvalue(value)
+# GBvalue(value)
 #-
-# sends 'snd-value(value)' to the TB (and prints diagnostics on stderr)
+# sends 'snd-value(value)' to the TB
 #--
-proc MVvalue { value } {
-    global DIAG
+proc GBvalue { value } {
     TBsend "snd-value($value)"
-    if {$DIAG} {puts stderr "MV outgoing value: $value"}
+    GBmsg "outgoing value: $value"
 }
 
 
 #--
-# MVmsg(msg)
+# GBmsg(msg)
 #-
 # prints diagnostics on stderr
 #--
-proc MVmsg { msg } {
+proc GBmsg { msg } {
     global DIAG
-    if {$DIAG} {puts stderr "MV message: $msg"}
+    if {$DIAG} {puts stderr "GB: $msg"}
 }
 
 
 #--
-# MVin(s)
+# GBin(s)
 #-
 # prints diagnostics on stderr
 #--
-proc MVin { s } {
-    global DIAG
-    if {$DIAG} {puts stderr "MV incoming: $s"}
+proc GBin { s } {
+    GBmsg "incoming: $s"
 }
 
 
@@ -514,7 +510,7 @@ proc SelectedModules {} {
 #--
 proc EditModules { modlist } {
     foreach mod $modlist {
-	MVpost [format "edit-module(%s)" [ToId $mod]] 
+	GBpost [format "edit-module(%s)" [ToId $mod]] 
     }
 }
 
@@ -526,7 +522,7 @@ proc EditModules { modlist } {
 # and destroys the widget $w.
 #--
 proc EditTerm {mod w} {
-    MVevent [format "edit-term(%s,%s)" [ToId $mod] [ToId [$w.editTerm get]]]
+    GBevent [format "edit-term(%s,%s)" [ToId $mod] [ToId [$w.editTerm get]]]
     destroy $w
 }
 
@@ -538,7 +534,7 @@ proc EditTerm {mod w} {
 #--
 proc RevertModules { modlist } {
     foreach mod $modlist {
-        MVpost [format "revert-module(%s)" [ToId $mod]]
+        GBpost [format "revert-module(%s)" [ToId $mod]]
     }
 }
 
@@ -551,10 +547,22 @@ proc RevertModules { modlist } {
 #--
 proc DeleteModules { modlist graph } {
     foreach mod $modlist {
-        MVpost [format "delete-module(%s)" [ToId $mod]]
+        GBpost [format "delete-module(%s)" [ToId $mod]]
         [$graph findnode $mod] delete
     }
     update-graph
+}
+
+
+#--
+# CompileModules(ML)
+#-
+# generates the toolbus event to request compilation of modules ML
+#--
+proc CompileModules { modlist } {
+    foreach mod $modlist {
+	GBpost [format "compile-module(%s)" [ToId $mod]] 
+    }
 }
 
 
@@ -565,7 +573,7 @@ proc DeleteModules { modlist graph } {
 # and destroys the widget $w.
 #--
 proc AddModule {w} {
-    MVevent [format "add-module(%s)" [ToId [$w.addModule get]]]
+    GBevent [format "add-module(%s)" [ToId [$w.addModule get]]]
     destroy $w
 }
 
@@ -576,7 +584,7 @@ proc AddModule {w} {
 # generates the toolbus event to request clearing of all modules
 #--
 proc ClearAll {c g} {
-    MVevent "clear-all"
+    GBevent "clear-all"
     $g delete
     set g [make-and-init-new-graph]
     $c delete all
@@ -590,7 +598,7 @@ proc ClearAll {c g} {
 # generates the toolbus event to request reverting of all modules
 #--
 proc RevertAll {} {
-    MVevent "revert-all"
+    GBevent "revert-all"
 }
 
 
@@ -600,7 +608,7 @@ proc RevertAll {} {
 # generates the toolbus event to request compilation of all modules
 #--
 proc CompileAll {} {
-    MVevent "compile-all"
+    GBevent "compile-all"
 }
 
 
@@ -611,7 +619,7 @@ proc CompileAll {} {
 #--
 proc GetModuleInfo { modlist } {
     foreach mod $modlist {
-        MVpost [format "get-module-info(%s)" [ToId $mod]]
+        GBpost [format "get-module-info(%s)" [ToId $mod]]
     }
 }
 
@@ -859,7 +867,7 @@ proc define-menu-bar {} {
     $m add command -label "Print Setup ..." -underline 0 -command {printSetup}
     $m add command -label "Print" -underline 0 -command {Print}
     $m add separator
-    $m add command -label "Exit" -underline 0 -command {MVevent button(quit)}
+    $m add command -label "Exit" -underline 0 -command {GBevent button(quit)}
     
     menubutton .menu.specification -text "Specification" -underline 0 \
 	-menu .menu.specification.menu 
@@ -918,12 +926,15 @@ proc define-modules-frame {} {
 	-command {DeleteModules [SelectedModules] $g}
     button .modules.buttons.modinfo -text "Info" \
 	-command {GetModuleInfo [SelectedModules]}
+    button .modules.buttons.compile -text "Compile" \
+	-command {CompileModules [SelectedModules]}
 
     pack append .modules.buttons \
         .modules.buttons.editmod {top fillx} \
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
-        .modules.buttons.modinfo {top fillx}
+        .modules.buttons.modinfo {top fillx} \
+        .modules.buttons.compile {top fillx}
 
     grid .modules.list    -row 0 -column 0 -rowspan 1 \
         -columnspan 1 -sticky news
@@ -1001,6 +1012,9 @@ proc define-module-popup {} {
     $m add separator
     $m add command -label "Module info" \
         -command {GetModuleInfo [GetObjectName $c]}
+    $m add separator
+    $m add command -label "Compile module" \
+        -command {CompileModules [GetObjectName $c]}
 }
 
 proc define-modlist-popup {} {
