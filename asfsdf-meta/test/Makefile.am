@@ -6,8 +6,9 @@ TESTS=$(foreach s, ${TEST_SPECS}, $s.dump.sh)
 
 GENMETA=${META}/bin/generic-meta -I ${ASF}/share/asf -p ${ASF}/bin \
 	-I ${top_builddir}/meta-scripts -I ${top_srcdir}/meta-scripts
-EQSDUMP=${GENMETA} -E
-PTDUMP=${GENMETA} -P
+TIMEOUT=-M 300
+EQSDUMP=${GENMETA} ${TIMEOUT} -E
+PTDUMP=${GENMETA} ${TIMEOUT} -P
 
 %.dump.sh: Makefile meta.conf
 	@(echo '#! /bin/sh';\
