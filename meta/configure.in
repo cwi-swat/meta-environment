@@ -199,7 +199,9 @@ AC_OUTPUT(
    demo/pico/Makefile
    demo/user-manual-examples/Makefile
    doc/Makefile
+   doc/exercises/Makefile
    doc/html/Makefile
+   doc/user-manual/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
 )
