@@ -9,7 +9,7 @@ import aterm.*;
 abstract public class AbstractTool
   implements Tool, Runnable
 {
-  private final static int LENSPEC	 =   8;
+  private final static int LENSPEC	 =  12;
   private final static int MAX_HANDSHAKE = 512;
   private final static int MIN_MSG_SIZE  = 128;
 
@@ -263,7 +263,7 @@ abstract public class AbstractTool
       synchronized (getLockObject()) {
 	String unparsedTerm = term.toString();
 	int size = unparsedTerm.length();
-	String lenspec = "00000000" + (size+LENSPEC) + ":";
+	String lenspec = "000000000000" + (size+LENSPEC) + ":";
 	int len = lenspec.length();
 	byte[] ls = new byte[LENSPEC];
 

@@ -1,5 +1,8 @@
 $Id$
 
+Tue Mar  5 15:47:40 CET 2002 <jong@cwi.nl>
+ * Several adapters 'omgeSPECt' from 8 to 12 bytes
+
 Thu Feb 14 13:23:50 CET 2002 <olivierp>
  * Added dot-adapter
 

@@ -53,14 +53,14 @@ proc TBerror {txt} {
 }
 
 # The following function depends on
-# LENSPEC = 8
+# LENSPEC = 12
 # MIN_MSG_SIZE = 128
 # (see utils.[ch])
 # THIS SHOULD BE PARAMETERIZED !!!
 
 proc TBsend {txt} {
-  set len [expr [string length $txt] + 8]
-  set msg "[format "%-.7d:" $len]$txt"
+  set len [expr [string length $txt] + 12]
+  set msg "[format "%-.11d:" $len]$txt"
   puts -nonewline stdout [format "%-128s" $msg]
   flush stdout
 }

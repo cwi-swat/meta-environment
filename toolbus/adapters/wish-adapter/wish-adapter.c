@@ -78,6 +78,8 @@
 
 #define MAX_ARG 50
 
+#define LENSPEC	12
+
 /* #define DEBUG_ON */
 
 #define USAGE_MSG \
@@ -373,7 +375,7 @@ bytes_in_term(term * t)
 {
   int length;
 
-  length = 8;			/* LENSPEC */
+  length = LENSPEC;
   length += strlen(TBsprintf("%t", t));
   return length;
 }
