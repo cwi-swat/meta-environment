@@ -145,9 +145,9 @@ PTPT_StrCon PTPT_makeStrCon(const char *str)
 
 static PTPT_Tree PTPT_liftTreeRec(PT_Tree tree);
 
-/*{{{  static PTPT_NatCon   PTPT_liftNatCon(int val) */
+/*{{{  PTPT_NatCon   PTPT_liftNatCon(int val) */
 
-static PTPT_NatCon   PTPT_liftNatCon(int val)
+PTPT_NatCon   PTPT_liftNatCon(int val)
 {
   static char string[1024];
   sprintf(string, "%d", val);

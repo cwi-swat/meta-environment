@@ -19,4 +19,6 @@ ATerm PTPT_lowerATerm(PTPT_ATerm trm);
 PT_Tree PTPT_lowerTreeCache(PTPT_Tree pt, ATermTable lowerCache);
 
 PTPT_LexStrCon PTPT_makeLexStrCon(const char* str);
+PTPT_NatCon PTPT_liftNatCon(int val);
+
 #endif
