@@ -11,8 +11,7 @@ SUBDIRS = \
 	meta-studio \
 	src \
 	in-output \
-        term-store \
-	utils \
+	term-store \
 	tbscripts \
 	configuration-manager
 
