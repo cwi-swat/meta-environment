@@ -109,7 +109,7 @@ if test "x${JAVA}" = "x"; then
 fi
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/graph-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Our own version of libdir whose value is set dynamically
