@@ -49,6 +49,11 @@
 #define DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS 4
 #define DEPTH_OF_EQUATION_SIDES_IN_EQUATION    2
 
+/* New layout is marked by a layout tree that exists, but is empty.
+ * This can never be the result of parsing, but it is still valid AsFix.
+ */
+#define PRETTY_PRINT_MARKER ""
+
 /*}}}  */
 /*{{{  variables */
 
@@ -58,7 +63,8 @@ static equation_table *tables = NULL;
 equation_table *equations = NULL;
 
 extern ATbool runVerbose;
-
+static ATbool mark_new_layout;
+static ATbool in_equations;
 
 /*}}}  */
 /*{{{  local function declarations */
@@ -164,7 +170,8 @@ ASF_CondEquation add_equ_pos_info(ASF_CondEquation equ)
   if (!PT_getTreePosInfo(tree, &path, &start_line,
 			 &start_col, &end_line, &end_col)) {
     ATwarning("No pos. info, cannot debug equation %s tree=%t\n",
-	      PT_yieldTree(PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), tree);
+      PT_yieldTree(
+        PT_TreeFromTerm(ASF_TagToTerm(ASF_getCondEquationTag(equ)))), tree);
     return equ;
   }
   /*
@@ -658,6 +665,10 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   else if (PT_isTreeBracket(tree)) {
     result = prepareTerm(PT_getTreeBracketTree(tree), data);
   }
+  else if (mark_new_layout && in_equations && PT_isTreeLayout(tree)) {
+    ATwarning("layout\n");
+    result = PT_makeTreeLayoutFromString(PRETTY_PRINT_MARKER);
+  }
   else if (PT_isTreeAppl(tree)) {
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
@@ -700,9 +711,15 @@ Prepare a list of equations for rewriting.
 */
 
 
-ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList)
+ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList, 
+					ATbool mark_layout)
 {
-  return ASF_visitCondEquationList(eqsList, prepareEquation, NULL);
+  ASF_CondEquationList new;
+  mark_new_layout = mark_layout;
+  in_equations = ATtrue;
+  new = ASF_visitCondEquationList(eqsList, prepareEquation, NULL);
+  in_equations = ATfalse;
+  return new;
 }
 
 /*}}}  */

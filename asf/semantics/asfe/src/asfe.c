@@ -163,7 +163,8 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
   parseTree = PT_makeParseTreeFromTerm(trm);
 
-  result = evaluator(modname, parseTree, eqsList, tide, ATfalse, ATfalse);
+  result = evaluator(modname, parseTree, eqsList, tide, ATfalse,
+		     ATfalse, ATfalse);
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
@@ -218,12 +219,13 @@ ATerm RWgetError()
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
-                ATerm debug, ATbool remove_layout, ATbool allow_ambs)
+                ATerm debug, ATbool remove_layout, ATbool mark_new_layout,
+		ATbool allow_ambs)
 {
   PT_Tree result;
   PT_Tree tree;
 
-  eqs = RWprepareEquations(eqs);
+  eqs = RWprepareEquations(eqs, mark_new_layout);
   enter_equations(name, eqs);
   select_equations(name);
 

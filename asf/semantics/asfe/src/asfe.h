@@ -8,7 +8,8 @@
 #define MAX_DEPTH 2000
 
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs, 
-		ATerm debug, ATbool remove_layout, ATbool allow_ambs);
+		ATerm debug, ATbool remove_layout, ATbool mark_new_layout,
+		ATbool allow_ambs);
 
 /* toolbus interface */
 ATerm interpret(int cid, char *modname, ATerm trm, ATerm eqs, ATerm debug);

@@ -36,9 +36,9 @@
 /*}}}  */
 /*{{{  variables */
 
-static char myarguments[] = "abde:hi:lo:w:tvV";
+static char myarguments[] = "abde:hi:lmo:w:tvV";
 static char myname[] = "asfe";
-static char myversion[] = "0.4";
+static char myversion[] = "0.5";
 
 
 /*}}}  */
@@ -61,8 +61,9 @@ void usage(char *prg, ATbool is_err)
 	    "\t-h              display help information (usage)\n"
 	    "\t-e file         use the equations |file|\n"
 	    "\t-i filename     input from file (default stdin)\n"
-	    "\t-o filename     output to file (default stdout)\n"
 	    "\t-l              replace all layout by a single space\n"
+	    "\t-m              mark new layout for pretty printing\n"
+	    "\t-o filename     output to file (default stdout)\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
 	    prg, 
@@ -108,6 +109,7 @@ int main(int argc, char *argv[])
   int bafmode = 1;
   ATbool use_tide = ATfalse;
   ATbool remove_layout = ATfalse;
+  ATbool mark_new_layout = ATfalse;
   ATbool allow_ambs = ATfalse;
   char *name = "Standalone";
   int returncode = 0;
@@ -165,6 +167,7 @@ int main(int argc, char *argv[])
 	case 'e': eqsfile = optarg;                break;
 	case 'i': input = optarg;                  break;
         case 'l': remove_layout=ATtrue;            break;		  
+        case 'm': mark_new_layout=ATtrue;          break;		  
 	case 'o': output = optarg;                 break;
 	case 'd': use_tide = ATtrue;		   break;
 	case 'V': version(argv[0]);                break;
@@ -206,7 +209,7 @@ int main(int argc, char *argv[])
     /* Rewrite the term */
     result = evaluator(name, parseTree, eqsList,
 		       use_tide ? ATparse("on") : ATparse("off"), 
-		       remove_layout, allow_ambs);
+		       remove_layout, mark_new_layout, allow_ambs);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;

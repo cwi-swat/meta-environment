@@ -58,7 +58,8 @@ typedef struct equation_table
 #define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
 
 PT_Tree RWprepareTerm(PT_Tree t, ATbool allow_ambs);
-ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList);
+ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList,
+					ATbool mark_new_layout);
 PT_Tree RWrestoreTerm(PT_Tree t, ATbool remove_layout);
 PT_Args RWrestoreArgs(PT_Args args, ATbool remove_layout);
 void RWflushEquations();
