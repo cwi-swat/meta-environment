@@ -21,10 +21,11 @@
 #
 include ../make_rules
 
-bin_PROGRAMS     = afexpand asource
-data_DATA        = asource.idef
+bin_PROGRAMS     = afexpand asource a2toa1
+data_DATA        = asource.idef a2toa1.idef
 
-EXTRA_DIST       = asource.idef asource.tif.c asource.tif.h
+EXTRA_DIST       = asource.idef asource.tif.c asource.tif.h \
+                   a2toa1.idef a2toa1.tif.c a2toa1.tif.h
 
 afexpand_SOURCES = afexpand.c
 afexpand_LDADD   = -L../libasfix -lAsFix \
@@ -35,6 +36,15 @@ asource_LDADD    = asource.tif.o \
                    -L../libasfix -lAsFix \
                    -L$(ATERMLIB) -lATB -lATerm
 
+a2toa1_SOURCES   = a2toa1-main.c
+
+a2toa1_LDADD     = a2toa1.tif.o \
+                   -L../libasfix -lAsFix \
+                   -L$(ATERMLIB) -lATB -lATerm
+
+
 INCLUDES         = -I../libasfix -I$(ATERMINC)
 
 asource.o : asource.tif.h
+
+a2toa1-main.o : a2toa1.tif.h

@@ -20,6 +20,9 @@
 # $Id$
 #
 
+2000-04-18 <mdejonge@cwi.nl>
+   * asfix-tools/a2toa1 tool added
+
 2000-04-05 <mdejonge@cwi.nl>
    * liba2toa1 and libasfix are now combined in the single library libasfix
 

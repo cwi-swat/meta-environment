@@ -1,0 +1,40 @@
+/*
+
+    SGLR - the Scannerless Generalized LR parser.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+*/
+process AsFix2toAsFix1 is
+let
+Id : term,
+T1 : term,
+T2 : term,
+InterpretCons: bool,
+A2TOA1 : a2toa1
+in
+execute(a2toa1, A2TOA1?).
+(
+  InterpretCons := true                      .
+  rec-msg(Id?,a2toa1(T1?))                   .
+  snd-eval(A2TOA1,trans(T1, InterpretCons))  .
+  rec-value(A2TOA1,T2?)                      .
+  snd-msg(Id,converted(T2))
+) * delta
+endlet
+
+
+tool a2toa1 is { command = "a2toa1" }
