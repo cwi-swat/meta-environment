@@ -18,7 +18,9 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 SUBDIRS		= gen-adapter toolbus-adapter @EMACS_ADAPTER@ @PERL_ADAPTER@ \
-		@JAVA_ADAPTER@ @PYTHON_ADAPTER@ @TCLTK_ADAPTER@ @WISH_ADAPTER@
+		@JAVA_ADAPTER@ @PYTHON_ADAPTER@ @TCLTK_ADAPTER@ @WISH_ADAPTER@\
+		@DOT_ADAPTER@
 
 DIST_SUBDIRS	= gen-adapter toolbus-adapter emacs-adapter perl-adapter \
-		java-adapter python-adapter tcltk-adapter wish-adapter
+		java-adapter python-adapter tcltk-adapter wish-adapter \
+		dot-adapter

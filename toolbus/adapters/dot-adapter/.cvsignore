@@ -1,0 +1,7 @@
+Makefile.in
+Makefile
+*.o
+term2dot2term
+term2dot
+dot2term.pl
+.deps

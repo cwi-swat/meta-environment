@@ -1,0 +1,22 @@
+[
+[Graph, default, graph(<nodes(NodeList)>,<edges(EdgeList)>)],
+
+[NodeList, empty, []],
+[NodeList, multi, [<head(Node)>,<[tail(NodeList)]>]],
+
+[Node, unpositioned, node(<name(str)>,<width(int)>,<height(int)>)],
+[Node, positioned,   node(<name(str)>,<x(int)>,<y(int)>,
+                         <width(int)>,<height(int)>)],
+
+[EdgeList, empty, []],
+[EdgeList, multi, [<head(Edge)>,<[tail(EdgeList)]>]],
+
+[Edge, unpositioned, edge(<from(str)>,<to(str)>)],
+[Edge, positioned,   edge(<from(str)>,<to(str)>,<polygon(Polygon)>)],
+
+[Polygon, empty, []],
+[Polygon, multi, [<head(Point)>,<[tail(Polygon)]>]],
+
+[Point, default, point(<x(int)>,<y(int)>)]
+]
+

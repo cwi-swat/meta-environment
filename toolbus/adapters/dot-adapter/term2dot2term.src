@@ -1,0 +1,4 @@
+#!/bin/sh
+BINDIR=__BINDIR__
+DOT=__DOT__
+${BINDIR}/term2dot | ${DOT}/bin/dot | ${BINDIR}/dot2term.pl

@@ -1,0 +1,27 @@
+
+#include "dot-adapter.idef"
+
+process LAYOUT(G : term) is
+let
+  Result : term
+in
+  snd-msg(layout-graph(G)) .
+  rec-msg(graph-layouted(Result?)) .
+  printf("layouted graph is: %t\n", Result)
+endlet
+
+process TEST is
+let
+  G : term,
+  Result : term
+in
+  G := quote(graph([node("Node-1",200,30),node("Node-2",200,30)],
+             [edge("Node-1", "Node-2")])) .
+  LAYOUT(G) .
+  G := quote(graph([node("Node-1",250,30),node("Node-2",250,30)],
+             [edge("Node-1", "Node-2")])) .
+  LAYOUT(G) .
+  shutdown("done")
+endlet
+
+toolbus(DOTADAPTER, TEST)

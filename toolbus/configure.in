@@ -108,10 +108,20 @@ AC_ARG_WITH(wish,
    fi)
 AC_SUBST(WISH_ADAPTER)
 
+AC_ARG_WITH(graphviz,
+  [  --with-graphviz=DIR           include dot support (same as --with-dot)],
+  DOT=${withval}
+  DOT_ADAPTER=dot-adapter
+)
+AC_ARG_WITH(dot,
+  [  --with-dot=DIR           add dot support (dot-adapter, graph layouting)],
+  DOT=${withval}
+  DOT_ADAPTER=dot-adapter
+)
+AC_SUBST(DOT)
+AC_SUBST(DOT_ADAPTER)
 
-
-
-dnl No longer support swi prolog in standard tolbsu distribution
+dnl No longer support swi prolog in standard toolbus distribution
 dnl TBSWIPL=true
 dnl AC_ARG_WITH(swipl,
 dnl    [  --with-swipl		   include swi-prolog support (swipl-adapter)],
@@ -215,6 +225,7 @@ AC_OUTPUT(
   adapters/toolbus-adapter/Makefile
   adapters/emacs-adapter/Makefile
   adapters/python-adapter/Makefile
+  adapters/dot-adapter/Makefile
   tbviz/Makefile
   doc/Makefile
   doc/src/Makefile

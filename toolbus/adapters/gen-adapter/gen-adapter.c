@@ -174,6 +174,11 @@ term *handle_input_from_toolbus(term *e)
     the_cmd = def_cmd;
     len = strlen(txt);
     goto exec_cmd;
+  } else if(TBmatch(e, "rec-eval(input-term(%t))", &arg)) {
+    the_cmd = def_cmd;
+    txt = TBsprintf("%t", arg);
+    len = strlen(txt);
+    goto exec_cmd;
   } else if(TBmatch(e, "rec-eval(input(%b))", &txt, &len)){
     the_cmd = def_cmd;
 exec_cmd:
