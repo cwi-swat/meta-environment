@@ -226,9 +226,6 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
 
 ATermList Cycle = NULL;
 
-/* During cycle detection we assume that *NO* new terms are
- * created!!!
- */
 ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, 
               Bitmap visited);
 
