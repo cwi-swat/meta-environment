@@ -128,9 +128,12 @@ in
     ).
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-asfsdf-module(Module))
-    /*
+    
   +
     rec-msg(save-all) .
+    snd-note(ui-status(errorf("Saving not yet implemented!",[])))
+
+    /*
     snd-msg(get-all-module-names).
     rec-msg(all-module-names(Modules?)).
     ( if not-equal(Modules, []) then
