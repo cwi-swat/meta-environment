@@ -1,5 +1,9 @@
 $Id$
 
+2003-06-27 <kooiker@cwi.nl>
+ * toolbus/trans:
+   - Both sides of the adapter are generic now
+
 2003-06-27 <{jong,kooiker}@cwi.nl>
  * toolbus/trans:
    - Added first version of transparent toolbus-to-toolbus adapter

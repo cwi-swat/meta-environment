@@ -19,21 +19,7 @@ abstract public class Tb1Tool extends AbstractTool implements Tb1Tif {
 		return null;		
 	}
 
-	//}}}
-	//{{{  public void checkInputSignature(ATermList sigs)
-
 	// Check the input signature
 	public void checkInputSignature(ATermList sigs) {
 	}
-
-	//}}}
-	//{{{  void notInInputSignature(ATerm t)
-
-	// This function is called when an input term
-	// was not in the input signature.
-	void notInInputSignature(ATerm t) {
-		throw new RuntimeException("term not in input signature: " + t);
-	}
-
-	//}}}
 }

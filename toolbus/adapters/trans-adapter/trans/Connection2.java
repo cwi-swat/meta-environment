@@ -47,17 +47,35 @@ public class Connection2 implements Tb2Tif {
 	}
 	
 	public void postEvent(ATerm term) {
-		ATerm eval = factory.parse("rec-eval(<term>)");
-		List result = term.match(eval);
-		bridge2.postEvent((ATerm)result.get(0));
+		ATerm fun;
+		List result;
+		
+		fun = factory.parse("rec-eval(<term>)");
+		result = term.match(fun);
+		
+		if (result == null) {
+			fun = factory.parse("rec-do(<term>)");
+			result = term.match(fun);
+		}
+		
+		if (result != null) {
+			bridge2.postEvent((ATerm)result.get(0));
+		} else {
+			throw new RuntimeException("term not in input signature: " + term);
+		}
 	}
 	
-	public void count2(int i0) {
-		con1.sendTerm(factory.make("snd-value(count2tb1(<int>))", new Integer(i0)));
-	}
-
-	public void count1(int i0) {
-		con1.sendTerm(factory.make("snd-value(count1tb1(<int>))", new Integer(i0)));
+	public void postEventCon1(ATerm term) {
+		System.out.println(term);
+		ATerm fun;
+		List result;
+		
+		fun = factory.parse("rec-do(<term>)");
+		result = term.match(fun);
+		
+		if (result != null) {
+			con1.sendTerm(factory.make("snd-value(" + (ATerm)result.get(0) + ")"));
+		}
 	}
 
 	public void recAckEvent(ATerm t0) {

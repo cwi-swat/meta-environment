@@ -1,0 +1,31 @@
+tool tb2 is {}
+
+process TB2 is
+let
+  T : tb2,
+  Count : int,
+  Count2 : int,
+  Name  : str
+in
+  rec-connect(T?) .
+  (
+    (
+      rec-event(T, count1tb1(Count?)) .
+      snd-ack-event(T, count1tb1(Count)) .
+      Count := add(Count, 1) .
+      snd-do(T, count1tb1(Count)) .
+      printf("TB2 number 1: %d\n", Count)
+    ) * delta 
+    ||
+    (
+      rec-event(T, count2tb1(Count2?)) .
+      snd-ack-event(T, count2tb1(Count2)) .
+      Count2 := add(Count2, 1) .
+      snd-do(T, count2tb1(Count2)) .  
+      printf("TB2 number 2: %d\n", Count2)
+    ) * delta
+  )
+endlet
+
+toolbus(TB2)
+

@@ -1,0 +1,29 @@
+tool tb1 is {}
+
+process TB1 is
+let
+  T : tb1,
+  Count : int,
+  Count2 : int,
+  Name  : str
+in
+  rec-connect(T?) .
+  Count := 0 .
+  Count2 := 0 .
+  (
+    (
+      snd-eval(T, count1tb1(Count)) .
+      rec-value(T, count1tb1(Count?)) .
+      printf("TB1 number 1: %d\n", Count)
+    ) * delta 
+    ||
+    (
+      snd-eval(T, count2tb1(Count2)) .
+      rec-value(T, count2tb1(Count2?)) .
+      printf("TB1 number 2: %d\n", Count2)
+    ) * delta
+  )
+endlet
+
+toolbus(TB1)
+

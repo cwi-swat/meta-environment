@@ -18,6 +18,7 @@ public class Adapter {
 	private ATermFactory factory;
 
 	public static void main(String[] args) throws Exception {
+		// Parse arguments: TB_PORT1 & 2, TB_HOST1 & 2, TB_TOOL_NAME1 & 2
 		Adapter a = new Adapter();
 	}
 	
