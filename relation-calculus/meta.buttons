@@ -1,13 +1,13 @@
 buttons([
 
-  button("RScripts",
+  button("Rscript",
           ["term"],
           ["Actions", "Check Rscript"],
           [push-active-module,
 	   get-root,
            check-sort("RSCRIPT"),
            apply("check-rscript", "List", 1),
-           push-modulename("RelationChecker"),
+           push-modulename("RscriptChecker"),
            reduce,
 	   execute-action("unparsePT"),
 	   show-list
@@ -23,19 +23,19 @@ buttons([
     button("*",
           ["message-list"],
           ["ShowSource"],
-          [show-area("RScripts")]),
+          [show-area("Rscript")]),
 
 
-  button("RScripts",
+  button("Rscript",
           ["term"],
           ["Actions", "Exec Rscript"],
           [push-active-module,
 	   get-root,
            check-sort("RSCRIPT"),
            apply("eval-rscript", "RSTORE", 1),
-           push-modulename("RelationCalculator"),
+           push-modulename("RscriptCalculator"),
            reduce,
-	   push-filename("RelationCalculator.results"),
+	   push-filename("RscriptCalculator.results"),
 	   push-active-module,
 	   activate-editor
            ]),
@@ -61,7 +61,7 @@ buttons([
             push-filename("extracted-relations.trm"),
             parse("PicoExtraction", "RSTORE"),
             push-filename("extracted-relations.trm"),
-	    push-modulename("RelationCalculator"),
+	    push-modulename("RscriptCalculator"),
             activate-editor
           ]),
 
@@ -74,12 +74,12 @@ buttons([
            check-sort("PROGRAM"),
 
 	   push-filename("uninit.rscript"),
-           parse("RScript", "SCRIPT"),
+           parse("Rscript", "RSCRIPT"),
 
 	   push-string("UNDEF"),
 
 	   push-filename("extracted-relations.trm"),
-           parse("RelationCalculator", "RSTORE"),
+           parse("RscriptCalculator", "RSTORE"),
 
            apply("pico-query", "List", 4),
            push-modulename("PicoQuery"),

@@ -8,8 +8,8 @@ imports MyPosInfo[PICO-ID]
 imports ListItems
 
 exports
- imports RelationCalculator
- imports RelationChecker
+ imports RscriptCalculator
+ imports RscriptChecker
 
  context-free syntax
 
