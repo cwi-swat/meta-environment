@@ -66,6 +66,7 @@ FILE    *SG_Log = NULL;
 
 FILE  *SGopenLog(char *prg, char *fnam)
 {
+  if (SG_Log != NULL) return SG_Log;
   if (fnam == NULL || strcmp(fnam, "") == 0)
     fnam = ".parse-log";
   if ((SG_Log = fopen(fnam, "w")) == NULL)

@@ -84,6 +84,17 @@ ATerm SG_ApplLabel(void)
   return label;
 }
 
+ATerm SG_RejectLabel(void)
+{
+  static ATerm label = NULL;
+
+  if(label == NULL) {
+    label = ATmake("<str>", SG_REJECTLABEL);
+    ATprotect(&label);
+  }
+  return label;
+}
+
 
 /* The next bit will have to do while waiting for this to be implemented */
 #define AFun                Symbol
@@ -109,21 +120,18 @@ AFun  SG_ApplAfun(void)
   forming
 */
 
-ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
+ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
 {
-/* Abbreviated:
-  t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
- */
+  ATerm t;
+  if(SG_ABBREV)
+    t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
+  else
+    t = (ATerm) ATmakeAppl2(SG_ApplAfun(), SG_LookupProduction(pt,l),
+                            (ATerm) ts);
 
-/*
-  return ATmake("appl(<term>,<term>,<int>)",
-                SG_LookupProduction(pt,l), ts, SG_ApplID(SG_APPLID_INC));
-*/
-
-  return ATsetAnnotation((ATerm) ATmakeAppl2(SG_ApplAfun(),
-                                            SG_LookupProduction(pt,l),
-                                            (ATerm) ts),
-                         SG_ApplLabel(),
+  if(reject)
+    t = ATsetAnnotation(t, SG_RejectLabel(), (ATerm) ATmakeInt(1));
+  return ATsetAnnotation(t, SG_ApplLabel(),
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 

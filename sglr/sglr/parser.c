@@ -528,7 +528,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
   if(SG_Rejected(stpt)) return;
 
-  t = SG_Apply(table, prodl, kids);
+  t = SG_Apply(table, prodl, kids, reject);
 
   if(SG_DEBUG) ATfprintf(SGlog(), "Reducing %t\n", SG_DotTermYield(t));
 

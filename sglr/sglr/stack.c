@@ -50,9 +50,9 @@ SG_AllocStats(INC);
 #ifdef DEBUG
     res->parent = ancestor;
 #endif
-    res->kid    = NULL;
-    res->links  = NULL;
-    res->protected   = ATtrue;
+    res->kid       = NULL;
+    res->links     = NULL;
+    res->protected = ATtrue;
   }
   return res;
 }

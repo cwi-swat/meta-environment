@@ -55,41 +55,46 @@ extern int  SG_Mode;
 */
 
 enum SGmodeFlags {
-  SG_VERBOSEFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG, SG_OUTPUTFLAG,
-  SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG, SG_NOLEXFLAG,
-  SG_SHOWSTACKFLAG, SG_GCFLAG
+  SG_VERBOSEFLAG, SG_ABBREVFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG,
+  SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG,
+  SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_GCFLAG
 };
 
-#define SG_VERBOSE         (SG_Mode  &   (1 << SG_VERBOSEFLAG))
-#define SG_VERBOSE_ON()    (SG_Mode |=   (1 << SG_VERBOSEFLAG))
-#define SG_VERBOSE_OFF()   (SG_Mode &=  ~(1 << SG_VERBOSEFLAG))
-#define SG_DEBUG           (SG_Mode  &   (1 << SG_DEBUGFLAG))
-#define SG_DEBUG_ON()      (SG_Mode |=   (1 << SG_DEBUGFLAG))
-#define SG_DEBUG_OFF()     (SG_Mode &=  ~(1 << SG_DEBUGFLAG))
-#define SG_SHOWSTAT        (SG_Mode  &   (1 << SG_SHOWSTATFLAG))
-#define SG_SHOWSTAT_ON()   (SG_Mode |=   (1 << SG_SHOWSTATFLAG))
-#define SG_SHOWSTAT_OFF()  (SG_Mode &=  ~(1 << SG_SHOWSTATFLAG))
+#define SG_BIT(i)          (1 << i)
 
-#define SG_OUTPUT          (SG_Mode  &   (1 << SG_OUTPUTFLAG))
-#define SG_OUTPUT_ON()     (SG_Mode |=   (1 << SG_OUTPUTFLAG))
-#define SG_OUTPUT_OFF()    (SG_Mode &=  ~(1 << SG_OUTPUTFLAG))
-#define SG_ASFIX1          (SG_Mode  &   (1 << SG_ASFIX1FLAG))
-#define SG_ASFIX1_ON()     (SG_Mode |=   (1 << SG_ASFIX1FLAG))
-#define SG_ASFIX1_OFF()    (SG_Mode &=  ~(1 << SG_ASFIX1FLAG))
-#define SG_BINARY          (SG_Mode  &   (1 << SG_BINARYFLAG))
-#define SG_BINARY_ON()     (SG_Mode |=   (1 << SG_BINARYFLAG))
-#define SG_BINARY_OFF()    (SG_Mode &=  ~(1 << SG_BINARYFLAG))
+#define SG_VERBOSE         (SG_Mode  &  SG_BIT(SG_VERBOSEFLAG))
+#define SG_VERBOSE_ON()    (SG_Mode |=  SG_BIT(SG_VERBOSEFLAG))
+#define SG_VERBOSE_OFF()   (SG_Mode &= ~SG_BIT(SG_VERBOSEFLAG))
+#define SG_ABBREV          (SG_Mode  &  SG_BIT(SG_ABBREVFLAG))
+#define SG_ABBREV_ON()     (SG_Mode |=  SG_BIT(SG_ABBREVFLAG))
+#define SG_ABBREV_OFF()    (SG_Mode &= ~SG_BIT(SG_ABBREVFLAG))
+#define SG_DEBUG           (SG_Mode  &  SG_BIT(SG_DEBUGFLAG))
+#define SG_DEBUG_ON()      (SG_Mode |=  SG_BIT(SG_DEBUGFLAG))
+#define SG_DEBUG_OFF()     (SG_Mode &= ~SG_BIT(SG_DEBUGFLAG))
+#define SG_SHOWSTAT        (SG_Mode  &  SG_BIT(SG_SHOWSTATFLAG))
+#define SG_SHOWSTAT_ON()   (SG_Mode |=  SG_BIT(SG_SHOWSTATFLAG))
+#define SG_SHOWSTAT_OFF()  (SG_Mode &= ~SG_BIT(SG_SHOWSTATFLAG))
 
-#define SG_DOTOUT          (SG_Mode  &   (1 << SG_DOTOUTFLAG))
-#define SG_DOTOUT_ON()     (SG_Mode |=   (1 << SG_DOTOUTFLAG))
-#define SG_DOTOUT_OFF()    (SG_Mode &=  ~(1 << SG_DOTOUTFLAG))
-#define SG_NOLEX           (SG_Mode  &   (1 << SG_NOLEXFLAG))
-#define SG_NOLEX_ON()      (SG_Mode |=   (1 << SG_NOLEXFLAG))
-#define SG_NOLEX_OFF()     (SG_Mode &=  ~(1 << SG_NOLEXFLAG))
-#define SG_SHOWSTACK       (SG_Mode  &   (1 << SG_SHOWSTACKFLAG))
-#define SG_SHOWSTACK_ON()  (SG_Mode |=   (1 << SG_SHOWSTACKFLAG))
-#define SG_SHOWSTACK_OFF() (SG_Mode &=  ~(1 << SG_SHOWSTACKFLAG))
+#define SG_OUTPUT          (SG_Mode  &  SG_BIT(SG_OUTPUTFLAG))
+#define SG_OUTPUT_ON()     (SG_Mode |=  SG_BIT(SG_OUTPUTFLAG))
+#define SG_OUTPUT_OFF()    (SG_Mode &= ~SG_BIT(SG_OUTPUTFLAG))
+#define SG_ASFIX1          (SG_Mode  &  SG_BIT(SG_ASFIX1FLAG))
+#define SG_ASFIX1_ON()     (SG_Mode |=  SG_BIT(SG_ASFIX1FLAG))
+#define SG_ASFIX1_OFF()    (SG_Mode &= ~SG_BIT(SG_ASFIX1FLAG))
+#define SG_BINARY          (SG_Mode  &  SG_BIT(SG_BINARYFLAG))
+#define SG_BINARY_ON()     (SG_Mode |=  SG_BIT(SG_BINARYFLAG))
+#define SG_BINARY_OFF()    (SG_Mode &= ~SG_BIT(SG_BINARYFLAG))
 
-#define SG_GC              (SG_Mode  &   (1 << SG_GCFLAG))
-#define SG_GC_ON()         (SG_Mode |=   (1 << SG_GCFLAG))
-#define SG_GC_OFF()        (SG_Mode &=  ~(1 << SG_GCFLAG))
+#define SG_DOTOUT          (SG_Mode  &  SG_BIT(SG_DOTOUTFLAG))
+#define SG_DOTOUT_ON()     (SG_Mode |=  SG_BIT(SG_DOTOUTFLAG))
+#define SG_DOTOUT_OFF()    (SG_Mode &= ~SG_BIT(SG_DOTOUTFLAG))
+#define SG_NOLEX           (SG_Mode  &  SG_BIT(SG_NOLEXFLAG))
+#define SG_NOLEX_ON()      (SG_Mode |=  SG_BIT(SG_NOLEXFLAG))
+#define SG_NOLEX_OFF()     (SG_Mode &= ~SG_BIT(SG_NOLEXFLAG))
+#define SG_SHOWSTACK       (SG_Mode  &  SG_BIT(SG_SHOWSTACKFLAG))
+#define SG_SHOWSTACK_ON()  (SG_Mode |=  SG_BIT(SG_SHOWSTACKFLAG))
+#define SG_SHOWSTACK_OFF() (SG_Mode &= ~SG_BIT(SG_SHOWSTACKFLAG))
+
+#define SG_GC              (SG_Mode  &  SG_BIT(SG_GCFLAG))
+#define SG_GC_ON()         (SG_Mode |=  SG_BIT(SG_GCFLAG))
+#define SG_GC_OFF()        (SG_Mode &= ~SG_BIT(SG_GCFLAG))

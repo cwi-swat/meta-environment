@@ -17,7 +17,8 @@
 
 */
 
-#define SG_APPLLABEL  "#"
+#define SG_APPLLABEL    "#"
+#define SG_REJECTLABEL  "X"
 
 enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_ADD,
                      SG_AMBTBL_REMOVE, SG_AMBTBL_LOOKUP, SG_AMBTBL_DUMP};
@@ -30,7 +31,7 @@ void  SG_Amb(ATerm, ATerm);
 ATerm SG_ExpandApplNode(ATerm t);
 ATerm SG_YieldPT(ATerm t);
 int   SG_ApplID(int Action);
-ATerm SG_Apply(parse_table *, label, ATermList);
+ATerm SG_Apply(parse_table *, label, ATermList, ATbool);
 ATerm SG_TreeType(ATerm);
 
 ATerm SG_TermYield(ATerm);
