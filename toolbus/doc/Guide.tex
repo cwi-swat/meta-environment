@@ -876,8 +876,8 @@ will set the first element of the list {\tt tl} to the value of {\tt t}.
 \begin{center}
 \begin{tabular}{|l|p{5cm}|}
 \hline Function		& Description				\\ \hline \hline
-{\tt term **list\_first(term\_list *$L$)}					& Address of first element of $L$\\
-{\tt term **list\_next(term\_list *$L$)}					& Address of remainder of $L$\\ \hline
+{\tt term *list\_first(term\_list *$L$)}					& Address of first element of $L$\\
+{\tt term *list\_next(term\_list *$L$)}					& Address of remainder of $L$\\ \hline
 {\tt TBbool     list\_equal(term\_list *$L_1$, term\_list *$L_2$);}	& $L_1 = L_2$\\
 {\tt term\_list *list\_copy(term\_list *$L$);}					& Toplevel (shallow) copy of $L$\\
 {\tt term\_list *list\_reverse(term\_list *$L^{\dag}$);}			& Reverses the elements of $L$\\
