@@ -1,11 +1,25 @@
 equations
 
+%% ---- Evaluate test suite
+
 [ETS1]	$Rstore := eval-rstats($Stat*, rstore(<NPASSED,int,0>,<NFAILED,int,0>,<FAILED,bag[str],empty-bag>)),
 	$NatCon1 := value(NPASSED, $Rstore),
 	$NatCon2 := value(NFAILED, $Rstore),
 	$Val := value(FAILED, $Rstore)
 	==========================================================
 	eval-rscript-testsuite($Stat*) = testsuite-report($NatCon1, $NatCon2, $Val)
+
+%% ---- Evaluate test suite with given Rstore
+
+[ETS1]	$Rstore' := assign(NPASSED, int, 0, $Rstore),
+	$Rstore'' := assign(NFAILED, int, 0, $Rstore'),
+	$Rstore''' := assign(FAILED, bag[str], empty-bag, $Rstore''),
+	$Rstore'''' := eval-rstats($Stat*, $Rstore'''),
+	$NatCon1 := value(NPASSED, $Rstore''''),
+	$NatCon2 := value(NFAILED, $Rstore''''),
+	$Val := value(FAILED, $Rstore'''')
+	==========================================================
+	eval-rscript-testsuite-with-rstore($Stat*, $Rstore) = testsuite-report($NatCon1, $NatCon2, $Val)
 
 [TSR1] testsuite-report($NatCon, 0, $Val) = All $NatCon tests passed
 

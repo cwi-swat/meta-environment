@@ -8,9 +8,10 @@ exports
 
 %% Main evaluation functions for Rscripts
 
-        eval-rscript(RSCRIPT)                 			-> RSTORE
-	eval-rscript-with-rstore(RSCRIPT,RSTORE)		-> RSTORE
-        eval-rscript-with-rstore(RSCRIPT, String, RSTORE)   	-> Elem
+        eval-rscript(RSCRIPT)                 				-> RSTORE
+        eval-rscript-and-yield(RSCRIPT, String)             		-> Elem
+	eval-rscript-with-rstore(RSCRIPT,RSTORE)			-> RSTORE
+        eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, String)   	-> Elem
 
 %% should be hidden
 

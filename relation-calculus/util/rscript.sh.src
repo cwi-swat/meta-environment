@@ -16,12 +16,20 @@ datadir=__DATADIR__
 PRG=`basename $0`
 VERBOSE=
 CHECK_ONLY=
+
+RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
+RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
+
 EVALUATOR=${bindir}/RscriptCalculator
+EVALUATOR_RESULT=RSTORE
+
+THE_EVALUATOR=$EVALUATOR
+EVALUATOR_FUN=eval-rscript
+
 TESTSUITES=${bindir}/RscriptTestsuites
 USE_TESTSUITES=no
 YIELD=
-RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
-RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
+
 THE_RSCRIPT=
 OUTPUT_AS_TREE=
 OUTPUT=
@@ -44,12 +52,15 @@ Options:
   -o (--output-parse-tree)  filename  output as parse-tree to filename (default: text to stdout)
   -s (--store)              filename  initial Rstore (default: none)
   -c (--check-only)                   only check the Rscript, do not evaluate it
-  -t (--testsuite)                    execute as test suite
+  -t (--testsuite)                    execute as test suite (excludes -y option)
   -v (--verbose)                      verbose output (default:not verbose)
+  -y (--yield)              name      yield the value of variable "name" (default: the complete Rstore)
 
 Examples:
   $PRG query.rscript
   $PRG -i query.rscript -s previous.rstore -o result.rstore.pt
+  $PRG -y nCalls calls.rscript
+  $PRG -t tests1.rscript
 
 ENDCAT
 }
@@ -112,36 +123,51 @@ check() {
 
 # {{{ evaluate
 
-evaluate() {
-  if [ -z $RSTORE ]
-  then
-      if [ $USE_TESTSUITES = no ]
-      then 
-          $EVALUATOR $VERBOSE -f "eval-rscript" \
-	  -i $THE_RSCRIPT.pt -r RSTORE \
-	  | $OUTPUT
-      else  
-	  $TESTSUITES $VERBOSE -f "eval-rscript-testsuite" \
-	  -i $THE_RSCRIPT.pt -r TESTREPORT \
-	  | $OUTPUT
-      fi
-  else
-      parse_rstore
-      $EVALUATOR $VERBOSE -f "eval-rscript-with-rstore" \
-	  -i $THE_RSCRIPT.pt $YIELD -i $PARSED_RSTORE -r RSTORE \
-	  | $OUTPUT
-  fi
-  echo ""
-}
+# evaluate() {
+#  if [ -z $RSTORE ]
+#  then
+#      if [ $USE_TESTSUITES = no ]
+#      then 
+#          $THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
+#	  -i $THE_RSCRIPT.pt $YIELD -r $EVALUATOR_RESULT \
+#	  | $OUTPUT
+#      else  
+#	  $TESTSUITES $VERBOSE -f $EVALUATOR_FUN \
+#	  -i $THE_RSCRIPT.pt -r TESTREPORT \
+#	  | $OUTPUT
+#      fi
+#  else
+#      parse_rstore
+#      $EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
+#	  -i $THE_RSCRIPT.pt $YIELD -i $PARSED_RSTORE -r $EVALUATOR_RESULT \
+#	  | $OUTPUT
+#  fi
+#  echo ""
+# }
 
+evaluate() {
+    if test -n "$RSTORE" 
+    then
+	parse_rstore 
+	$THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN  \
+	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE $YIELD -r $EVALUATOR_RESULT \
+	  | $OUTPUT
+    else
+	$THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
+	  -i $THE_RSCRIPT.pt $YIELD -r $EVALUATOR_RESULT \
+	  | $OUTPUT
+    fi
+}
+   
 # }}}
 
-if [ $# -eq 0 ]; then
+if test $# -eq 0
+then
   usage
   exit 1
 fi
 
-while [ $# -gt 0 ]
+while test $# -gt 0
 do
   case "$1" in
     -o | --output-parse-tree)
@@ -149,13 +175,13 @@ do
     -i | --input)
       shift; THE_RSCRIPT=$1 ;;
     -s | --store)
-      shift; RSTORE=$1 ;;
+      shift; RSTORE=$1; WITH_RSTORE=-with-rstore;;
     -t | --testsuite)
-      USE_TESTSUITES=yes ;;
+      USE_TESTSUITES=yes; THE_EVALUATOR=$TESTSUITES; EVALUATOR_FUN=eval-rscript-testsuite; EVALUATOR_RESULT=TESTREPORT;;
      -c | --check-only)
       CHECK_ONLY=yes ;;
      -y | --yield)
-      shift; YIELD="-s $1"  ;;
+      shift; YIELD="-s $1"; EVALUATOR_RESULT="Elem" ; AND_YIELD=-and-yield;;
     -v | --verbose)
       VERBOSE=-v ;;
     *.rscript)
@@ -166,12 +192,22 @@ do
   shift
 done
 
+if test -n "$YIELD" -a  "(" $USE_TESTSUITES == "yes" ")"
+then
+    echo "$PRG: -y and -t cannot be combined"
+    usage
+    exit 1
+else
+    EVALUATOR_FUN=${EVALUATOR_FUN}${WITH_RSTORE}${AND_YIELD}
+fi
+
+
 set_output_style
 parse_rscript
 check
 
 
-if [ "$CHECK_ONLY" == "yes" ]
+if test "$CHECK_ONLY" == "yes"
 then
     if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
     then 
