@@ -158,3 +158,4 @@ distclean: clean
 # Included dependencies
 include .depend
 
+.depend: depend
