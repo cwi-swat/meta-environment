@@ -105,9 +105,6 @@ configuration([
           debug-reduce,
           push-filename("reduct.out"),
           push-active-module,
-          push-filename("reduct.out"),
-          push-active-module,
-          close-editor,
           activate-editor
          ]),
   action([description(module-popup, menu(["Check", "Debug Unit Tests"]))],

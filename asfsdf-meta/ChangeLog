@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Nov 29 13:58:32 CET 2004 <{jong,kooiker}@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - fixed debug-reduce reducing twice 
+
 Fri Nov 19 17:46:06 CET 2004 <jurgenv@cwi.nl>
  * Added debug menu to button definitions
 
