@@ -1,0 +1,65 @@
+#! /bin/sh
+#
+# $Id$
+#
+# insert-license inserts a (licence) file at the top of another file
+# and uses the right syntax for comments.
+#
+
+USAGE=
+
+if [ $# != 2 ] 
+then
+    cat <<EOF 
+Usage:  insert-license <directory-with-headers> <package> <files-to-add-to>
+
+<package> can be any of "meta", "sglr", "pgen" or "asc".
+
+The authors would like you to know that insert-license COMES WITHOUT ANY WARRANTY; 
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.
+EOF
+
+   exit 1
+fi
+
+PATH=__BINDIR__:$PATH
+
+findext () {
+  case $1 in
+  *.c|*.tb|*.c.in|*.tb.in|*.h|*.h.in)		ext=c-style;
+ 						break;;
+  *.sdf|*.sdf2|*.syn|*.eqs|*.tex|*.ltx|*.sty|*.ps|*.eps)
+						ext=tex-style;
+						break;;
+  *.html)					ext=html
+						break;;
+  configure.in)					ext=autoconf
+						break;;
+  *.pod|*.sh|*.pl|*.pl.src|*.sh.src|Makefile.in|Makefile.am)
+						ext=sh-style;
+						break;;
+  [A-Z][A-Z]*)					ext=base;
+						break;;	
+  *)						ext=sh-style;
+  esac
+
+  case "`file $1`" in
+  *"shell script"*|"perl commands text")	script="-s";
+						break;;
+  *)						script="";
+						break;;
+  esac
+}
+
+
+headerdir=$1
+shift
+pkgname=$1
+shift
+
+for f in $*
+do
+  findext $f
+  insert-header $script -i $headerdir/$pkgname-header.$ext $f
+done

@@ -18,6 +18,7 @@ datadir		= @datadir@
 
 RANLIB		= @RANLIB@
 SHELL		= @SHELL@
+PERL		= @PERL@
 CC              = @CC@
 CFLAGS          = @CFLAGS@ ${XCFLAGS}
 CPP             = @CPP@
@@ -60,7 +61,8 @@ CHDR            = meta-utils.h module-utils.h libutil.h
 # Ordering is important here: the toolbus dir. should come first
 BINFILES	= genmakefile.sh gen-table \
 		  parse-file parse-sdf2 ps-dot \
-                  sdf2table meta-paths normalize-sdf imports
+                  sdf2table meta-paths normalize-sdf imports \
+                  insert-license insert-header
 LIBFILES	= 
 DATAFILES	= genmakefile.proto lang.types
 INCLUDEFILES	=
@@ -71,7 +73,7 @@ OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
 OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES      = libutils.a
+CLEANFILES      = libutils.a insert-license insert-header
 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES  =
@@ -84,7 +86,13 @@ test:	all
 		./test-help ./$$f; \
 		./test-version ./$$f; \
 	done
-	
+
+%: %.sh.src Makefile
+	sed 's#__BINDIR__#$(bindir)#g' < $< >$@
+
+%: %.pl.src Makefile
+	sed 's#__PERL__#$(PERL)#g' < $< >$@
+
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
 
