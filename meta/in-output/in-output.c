@@ -14,7 +14,7 @@ char paths[MAX_PATHS][PATH_LEN];
 
 FATAL_ERROR
 
-aterm *open_file(int cid, char *type, char *name)
+aterm *open_file(int cid, char *name)
 {
   int i;
   char full[PATH_LEN];
@@ -40,7 +40,7 @@ aterm *open_file(int cid, char *type, char *name)
       else {
         fprintf(stderr, "ok!\n");
         fclose(f);
-        return Tmake(ar, "snd-value(opened-file(<str>,<term>))", name, t);
+        return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "asfix",name, t,full);
       }
     }
   }
