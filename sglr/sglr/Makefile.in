@@ -48,7 +48,7 @@ ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
 # The eXtra parts of some variables
-XCFLAGS		= # -DDONT_USE_BOEHMGC
+XCFLAGS		= -DHAVE_BOEHMGC
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
 XLIBS		= -L${libdir} -L. -lsglr -la2toa1 -lgc		\
