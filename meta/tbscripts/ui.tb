@@ -56,9 +56,9 @@ in
       rec-msg(saved-module(Str)).
       snd-ack-event(UI,save-module(Str))
     ) +
-    ( rec-event(UI,edit-module(Str?)).
-      create(Edit-module(Str),EM?).
-      snd-ack-event(UI,edit-module(Str))
+    ( rec-event(UI,edit-module(id(ModName?))).
+      create(Edit-module(ModName),EM?).
+      snd-ack-event(UI,edit-module(id(ModName)))
     ) +
     ( rec-event(UI,revert-module(id(ModName?))).            /* Not yet implemented */ 
       snd-note(ui-status(errorf("TB: not implemented: revert-module(%s)",[ModName]))).
@@ -102,9 +102,9 @@ in
      rec-msg(eqs-processed(Str1?)).
      snd-ack-event(UI,parse-equations(Str))
    ) +
-   ( rec-event(UI,edit-term(Mod?,Str?)).
-     create(Edit-term(Mod,Str),ET?).
-     snd-ack-event(UI,edit-term(Mod,Str))
+   ( rec-event(UI,edit-term(id(ModName?),Str?)).
+     create(Edit-term(ModName,Str),ET?).
+     snd-ack-event(UI,edit-term(id(ModName),Str))
    ) 
   ) *
   rec-event(UI,button(quit)).
