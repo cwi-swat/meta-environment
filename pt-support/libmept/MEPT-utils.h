@@ -49,6 +49,7 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,              
 
 PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol);
 int PT_getSymbolsLength(PT_Symbols symbols);
+PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index);
 
 typedef void* PT_SymbolVisitorData;
 typedef PT_Symbol (*PT_SymbolVisitor)(PT_Symbol symbol,
