@@ -8,7 +8,7 @@
 #include <sglr.h>
 #include <atb-tool.h>
 #include "restorebrackets.tif.h"
-#include "MEPT.h"
+#include <MEPT-utils.h>
 
 static char myname[] = "restorebrackets";
 static char myversion[] = "0.0";
