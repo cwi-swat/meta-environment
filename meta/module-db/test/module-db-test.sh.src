@@ -22,7 +22,7 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
-asfix=__ASFIX__
+asfix=__PT_SUPPORT__
 
 PATH=${toolbus}/bin:$PATH; export PATH
 

@@ -22,7 +22,7 @@
 Revision='$Revision$'
 
 aterm=__ATERM__
-asfix=__ASFIX__
+pt_support=__PT_SUPPORT__
 sdf=__SDF__
 asf=__ASF__
 evaluator=__EVALUATOR__
@@ -33,7 +33,7 @@ prefix=__PREFIX__
 
 wish=__WISH__
 
-PATH="${prefix}/bin:${aterm}/bin:${asfix}/bin:${sdf}/bin:\
+PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sdf}/bin:\
       ${asf}/bin:${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${PATH}"; 
 export PATH
 
@@ -158,7 +158,7 @@ if [ $verbose -gt 0 ] ; then
 fi
 
 toolbus $xargs ${toolbusdefs} \
-   -I${prefix}/share -I${aterm}/share -I${asfix}/share \
+   -I${prefix}/share -I${aterm}/share -I${pt_support}/share \
    -I${sdf}/share \
    -I${evaluator}/share \
    -I${asf}/share \

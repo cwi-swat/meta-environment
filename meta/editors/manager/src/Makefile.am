@@ -33,7 +33,6 @@ editor_manager_SOURCES = editor-manager.c
 editor_manager_LDADD   = editor-manager.tif.o \
                     -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(SDF)/include -I$(ATERM)/include \
-                    -DBINDIR=\"$(bindir)\"
+INCLUDES          = -I$(ATERM)/include -DBINDIR=\"$(bindir)\"
 
 editor-manager.o: editor-manager.tif.h

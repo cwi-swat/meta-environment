@@ -66,6 +66,11 @@ AC_PACKAGE_REQUIRE(asf, addeqssyntax,
    [  --with-asf=DIR          asf is in DIR])
 AC_SUBST(ASF)
 
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, asource,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,

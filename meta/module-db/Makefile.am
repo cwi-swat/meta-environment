@@ -33,10 +33,10 @@ CLEANFILES        = module-db.tifs module-db.tif.c module-db.tif.h
 
 module_db_SOURCES = module-db.c module-db.h aft-reshuffle.c
 module_db_LDADD   = module-db.tif.o \
-                    -L$(SDF)/lib -lAsFix \
+                    -L$(PT_SUPPORT)/lib -lAsFix \
                     -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include \
+INCLUDES          = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include \
                     -DBINDIR=\"$(bindir)\"
 
 module-db.o : module-db.tif.h
