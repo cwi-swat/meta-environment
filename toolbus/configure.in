@@ -124,6 +124,7 @@ AC_ARG_WITH(tide,
 TIDE='$(top_srcdir)/tide'
 TIDEDEF=-DUSE_TIDE
 TIDELIB=$TIDE/libtide.a
+JTIDE="toolbus/tide"
 XTRADIRS="${XTRADIRS} tide",
 DISTDIRS="${DISTDIRS} tide"
 )
@@ -131,6 +132,7 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDE)
 AC_SUBST(TIDELIB)
 AC_SUBST(DISTDIRS)
+AC_SUBST(JTIDE)
 
 dnl Which adapters?
 
