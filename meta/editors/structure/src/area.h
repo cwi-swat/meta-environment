@@ -3,7 +3,7 @@
 
 #include <MEPT.h>
 
-#include "Editor.h"
+#include "EditorData.h"
 
 SE_Area createArea(PT_ParseTree parse_tree, SE_Path path);
 ATbool inArea(SE_Area area, int loc);

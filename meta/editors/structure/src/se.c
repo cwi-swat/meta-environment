@@ -1,4 +1,3 @@
-
 /*{{{   includes */
 
 #include <stdlib.h>
@@ -8,7 +7,7 @@
 #include <MEPT-utils.h>
 
 #include "se.tif.h"
-#include "Editor.h"
+#include "EditorData.h"
 #include "editor.h"
 #include "focus.h"
 
@@ -406,7 +405,7 @@ main(int argc, char *argv[])
   ATsetChecking(ATtrue);
 
   PT_initMEPTApi();
-  SE_initEditorApi();
+  SE_initEditorDataApi();
 
 
   editorTable = ATtableCreate(100, 75);

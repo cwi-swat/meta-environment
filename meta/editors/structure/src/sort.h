@@ -1,7 +1,7 @@
 #ifndef SORT_H
 #define SORT_H
 
-#include "Editor.h"
+#include "EditorData.h"
 
 ATbool isStartSymbol(char *sort, SE_SymbolList symbols);
 

@@ -1,8 +1,7 @@
-
 #ifndef TREE_H
 #define TREE_H
 
-#include "Editor.h"
+#include "EditorData.h"
 
 PT_Symbol getParseTreeSort(PT_ParseTree tree);
 PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path);

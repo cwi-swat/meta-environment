@@ -3,7 +3,7 @@
 
 #include <MEPT.h>
 
-#include "Editor.h"
+#include "EditorData.h"
 
 PT_ParseTree updateParseTreeLengthInfo(PT_ParseTree parse_tree, SE_Path path,
 				       int delta_length);

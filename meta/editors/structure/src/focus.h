@@ -1,10 +1,9 @@
-
 #ifndef FOCUS_H
 #define FOCUS_H
 
 #include <MEPT.h>
 
-#include "Editor.h"
+#include "EditorData.h"
 
 #define FOCUS_PARSED 0
 #define FOCUS_UNPARSED 1

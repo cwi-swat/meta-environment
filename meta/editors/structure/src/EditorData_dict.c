@@ -1,0 +1,174 @@
+/*
+ * Generated at Fri Mar  8 15:06:41 2002
+ */
+
+#include "EditorData_dict.h"
+
+AFun SE_afun0;
+AFun SE_afun1;
+AFun SE_afun2;
+AFun SE_afun3;
+AFun SE_afun4;
+AFun SE_afun5;
+AFun SE_afun6;
+AFun SE_afun7;
+AFun SE_afun8;
+AFun SE_afun9;
+AFun SE_afun10;
+AFun SE_afun11;
+
+ATerm SE_patternMoveDown = NULL;
+ATerm SE_patternMoveUp = NULL;
+ATerm SE_patternMoveRight = NULL;
+ATerm SE_patternMoveLeft = NULL;
+ATerm SE_patternStepsMulti = NULL;
+ATerm SE_patternStepsEmpty = NULL;
+ATerm SE_patternPathRightLayout = NULL;
+ATerm SE_patternPathTerm = NULL;
+ATerm SE_patternPathLeftLayout = NULL;
+ATerm SE_patternPathRoot = NULL;
+ATerm SE_patternSymbolListMulti = NULL;
+ATerm SE_patternSymbolListEmpty = NULL;
+ATerm SE_patternFocusListMulti = NULL;
+ATerm SE_patternFocusListEmpty = NULL;
+ATerm SE_patternAreaDefault = NULL;
+ATerm SE_patternFocusNotEmpty = NULL;
+ATerm SE_patternFocusEmpty = NULL;
+ATerm SE_patternEditorDefault = NULL;
+
+/*
+ * SE_afun0 = editor(x,x,x,x,x)
+ * SE_afun1 = empty-focus
+ * SE_afun2 = focus(x,x,x,x)
+ * SE_afun3 = area(x,x)
+ * SE_afun4 = root
+ * SE_afun5 = left-layout
+ * SE_afun6 = term(x)
+ * SE_afun7 = right-layout
+ * SE_afun8 = "Left"
+ * SE_afun9 = "Right"
+ * SE_afun10 = "Up"
+ * SE_afun11 = "Down"
+ *
+ * SE_patternMoveDown = "Down"
+ * SE_patternMoveUp = "Up"
+ * SE_patternMoveRight = "Right"
+ * SE_patternMoveLeft = "Left"
+ * SE_patternStepsMulti = [<int>,<list>]
+ * SE_patternStepsEmpty = []
+ * SE_patternPathRightLayout = right-layout
+ * SE_patternPathTerm = term(<term>)
+ * SE_patternPathLeftLayout = left-layout
+ * SE_patternPathRoot = root
+ * SE_patternSymbolListMulti = [<str>,<list>]
+ * SE_patternSymbolListEmpty = []
+ * SE_patternFocusListMulti = [<term>,<list>]
+ * SE_patternFocusListEmpty = []
+ * SE_patternAreaDefault = area(<int>,<int>)
+ * SE_patternFocusNotEmpty = focus(<term>,<str>,<term>,<int>)
+ * SE_patternFocusEmpty = empty-focus
+ * SE_patternEditorDefault = editor(<term>,<term>,<term>,<int>,<term>)
+ *
+ */
+
+static ATermList _EditorData_dict = NULL;
+
+#define _EditorData_dict_LEN 316
+
+static char _EditorData_dict_baf[_EditorData_dict_LEN] = {
+0x00,0x8B,0xAF,0x83,0x00,0x14,0x3E,0x03,0x3C,0x5F,0x3E,0x01,0x00,0x04,0x04,0x04,
+0x06,0x05,0x03,0x05,0x5B,0x5F,0x2C,0x5F,0x5D,0x02,0x00,0x24,0x0F,0x01,0x02,0x00,
+0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x11,0x12,0x13,0x02,0x01,0x02,0x02,
+0x5B,0x5D,0x00,0x00,0x01,0x03,0x69,0x6E,0x74,0x00,0x00,0x01,0x03,0x73,0x74,0x72,
+0x00,0x00,0x01,0x04,0x6C,0x69,0x73,0x74,0x00,0x00,0x01,0x04,0x74,0x65,0x72,0x6D,
+0x00,0x00,0x01,0x01,0x78,0x00,0x00,0x01,0x06,0x65,0x64,0x69,0x74,0x6F,0x72,0x05,
+0x00,0x02,0x02,0x00,0x07,0x02,0x00,0x07,0x02,0x00,0x07,0x02,0x00,0x07,0x02,0x00,
+0x07,0x0B,0x65,0x6D,0x70,0x74,0x79,0x2D,0x66,0x6F,0x63,0x75,0x73,0x00,0x00,0x01,
+0x05,0x66,0x6F,0x63,0x75,0x73,0x04,0x00,0x02,0x02,0x00,0x07,0x02,0x00,0x07,0x02,
+0x00,0x07,0x02,0x00,0x07,0x04,0x61,0x72,0x65,0x61,0x02,0x00,0x02,0x02,0x00,0x07,
+0x02,0x00,0x07,0x04,0x72,0x6F,0x6F,0x74,0x00,0x00,0x01,0x0B,0x6C,0x65,0x66,0x74,
+0x2D,0x6C,0x61,0x79,0x6F,0x75,0x74,0x00,0x00,0x01,0x04,0x74,0x65,0x72,0x6D,0x01,
+0x00,0x02,0x02,0x00,0x07,0x0C,0x72,0x69,0x67,0x68,0x74,0x2D,0x6C,0x61,0x79,0x6F,
+0x75,0x74,0x00,0x00,0x01,0x04,0x4C,0x65,0x66,0x74,0x00,0x01,0x01,0x05,0x52,0x69,
+0x67,0x68,0x74,0x00,0x01,0x01,0x02,0x55,0x70,0x00,0x01,0x01,0x04,0x44,0x6F,0x77,
+0x6E,0x00,0x01,0x01,0x01,0x0D,0x30,0xAA,0x85,0x08,0x92,0x8A,0xA0,0x46,0x28,0xE3,
+0x86,0x04,0xA2,0x48,0x21,0x4C,0x34,0x40,0xC8,0x2C,0x01,0xE1,0x10,0x85,0xC0,0x6C,
+0xF8,0xC7,0xB4,0xB8,0x2C,0x41,0x83,0x12,0x28,0x3A,0x0D,0x94,0x5A,0x61,0x42,0x61,
+0x06,0xE3,0xA0,0x71,0x30,0x0C,0x1A,0x82,0xA0,0xF1,0x10,0x60,0x54,0x19,0x34,0x00,
+0x09,0x54,0x23,0x08,0x04,0x44,0x05,0x90,0x84,0x20,0x0A,0x80
+};
+
+void init_EditorData_dict()
+{
+  ATermList afuns, terms;
+
+  _EditorData_dict = (ATermList)ATreadFromBinaryString(_EditorData_dict_baf, _EditorData_dict_LEN);
+
+  ATprotect((ATerm *)&_EditorData_dict);
+
+  afuns = (ATermList)ATelementAt(_EditorData_dict, 0);
+
+  SE_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun9 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun10 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+  SE_afun11 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  afuns = ATgetNext(afuns);
+
+  terms = (ATermList)ATelementAt(_EditorData_dict, 1);
+
+  SE_patternMoveDown = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternMoveUp = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternMoveRight = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternMoveLeft = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternStepsMulti = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternStepsEmpty = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternPathRightLayout = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternPathTerm = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternPathLeftLayout = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternPathRoot = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternSymbolListMulti = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternSymbolListEmpty = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternFocusListMulti = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternFocusListEmpty = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternAreaDefault = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternFocusNotEmpty = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternFocusEmpty = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+  SE_patternEditorDefault = ATgetFirst(terms);
+  terms = ATgetNext(terms);
+}

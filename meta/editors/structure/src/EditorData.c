@@ -1,6 +1,8 @@
+#include <assert.h>
+
 #include <aterm2.h>
 #include <deprecated.h>
-#include "Editor.h"
+#include "EditorData.h"
 
 /*{{{  typedefs */
 
@@ -15,140 +17,140 @@ typedef struct ATerm _SE_Move;
 
 /*}}}  */
 
-/*{{{  void SE_initEditorApi(void) */
+/*{{{  void SE_initEditorDataApi(void) */
 
-void SE_initEditorApi(void)
+void SE_initEditorDataApi(void)
 {
-  init_Editor_dict();
+  init_EditorData_dict();
 }
 
 /*}}}  */
 
 /*{{{  term conversion functions */
 
-/*{{{  SE_Editor SE_makeEditorFromTerm(ATerm t) */
+/*{{{  SE_Editor SE_EditorFromTerm(ATerm t) */
 
-SE_Editor SE_makeEditorFromTerm(ATerm t)
+SE_Editor SE_EditorFromTerm(ATerm t)
 {
   return (SE_Editor)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromEditor(SE_Editor arg) */
+/*{{{  ATerm SE_EditorToTerm(SE_Editor arg) */
 
-ATerm SE_makeTermFromEditor(SE_Editor arg)
+ATerm SE_EditorToTerm(SE_Editor arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_Focus SE_makeFocusFromTerm(ATerm t) */
+/*{{{  SE_Focus SE_FocusFromTerm(ATerm t) */
 
-SE_Focus SE_makeFocusFromTerm(ATerm t)
+SE_Focus SE_FocusFromTerm(ATerm t)
 {
   return (SE_Focus)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromFocus(SE_Focus arg) */
+/*{{{  ATerm SE_FocusToTerm(SE_Focus arg) */
 
-ATerm SE_makeTermFromFocus(SE_Focus arg)
+ATerm SE_FocusToTerm(SE_Focus arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_Area SE_makeAreaFromTerm(ATerm t) */
+/*{{{  SE_Area SE_AreaFromTerm(ATerm t) */
 
-SE_Area SE_makeAreaFromTerm(ATerm t)
+SE_Area SE_AreaFromTerm(ATerm t)
 {
   return (SE_Area)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromArea(SE_Area arg) */
+/*{{{  ATerm SE_AreaToTerm(SE_Area arg) */
 
-ATerm SE_makeTermFromArea(SE_Area arg)
+ATerm SE_AreaToTerm(SE_Area arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_FocusList SE_makeFocusListFromTerm(ATerm t) */
+/*{{{  SE_FocusList SE_FocusListFromTerm(ATerm t) */
 
-SE_FocusList SE_makeFocusListFromTerm(ATerm t)
+SE_FocusList SE_FocusListFromTerm(ATerm t)
 {
   return (SE_FocusList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromFocusList(SE_FocusList arg) */
+/*{{{  ATerm SE_FocusListToTerm(SE_FocusList arg) */
 
-ATerm SE_makeTermFromFocusList(SE_FocusList arg)
+ATerm SE_FocusListToTerm(SE_FocusList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_SymbolList SE_makeSymbolListFromTerm(ATerm t) */
+/*{{{  SE_SymbolList SE_SymbolListFromTerm(ATerm t) */
 
-SE_SymbolList SE_makeSymbolListFromTerm(ATerm t)
+SE_SymbolList SE_SymbolListFromTerm(ATerm t)
 {
   return (SE_SymbolList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromSymbolList(SE_SymbolList arg) */
+/*{{{  ATerm SE_SymbolListToTerm(SE_SymbolList arg) */
 
-ATerm SE_makeTermFromSymbolList(SE_SymbolList arg)
+ATerm SE_SymbolListToTerm(SE_SymbolList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_Path SE_makePathFromTerm(ATerm t) */
+/*{{{  SE_Path SE_PathFromTerm(ATerm t) */
 
-SE_Path SE_makePathFromTerm(ATerm t)
+SE_Path SE_PathFromTerm(ATerm t)
 {
   return (SE_Path)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromPath(SE_Path arg) */
+/*{{{  ATerm SE_PathToTerm(SE_Path arg) */
 
-ATerm SE_makeTermFromPath(SE_Path arg)
+ATerm SE_PathToTerm(SE_Path arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_Steps SE_makeStepsFromTerm(ATerm t) */
+/*{{{  SE_Steps SE_StepsFromTerm(ATerm t) */
 
-SE_Steps SE_makeStepsFromTerm(ATerm t)
+SE_Steps SE_StepsFromTerm(ATerm t)
 {
   return (SE_Steps)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromSteps(SE_Steps arg) */
+/*{{{  ATerm SE_StepsToTerm(SE_Steps arg) */
 
-ATerm SE_makeTermFromSteps(SE_Steps arg)
+ATerm SE_StepsToTerm(SE_Steps arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  SE_Move SE_makeMoveFromTerm(ATerm t) */
+/*{{{  SE_Move SE_MoveFromTerm(ATerm t) */
 
-SE_Move SE_makeMoveFromTerm(ATerm t)
+SE_Move SE_MoveFromTerm(ATerm t)
 {
   return (SE_Move)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SE_makeTermFromMove(SE_Move arg) */
+/*{{{  ATerm SE_MoveToTerm(SE_Move arg) */
 
-ATerm SE_makeTermFromMove(SE_Move arg)
+ATerm SE_MoveToTerm(SE_Move arg)
 {
   return (ATerm)arg;
 }
@@ -162,7 +164,7 @@ ATerm SE_makeTermFromMove(SE_Move arg)
 
 SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusList unparsedFoci, int modified, SE_SymbolList startSymbols)
 {
-  return (SE_Editor)ATmakeTerm(SE_patternEditorDefault, parseTree, focus, unparsedFoci, modified, startSymbols);
+  return (SE_Editor)(ATerm)ATmakeAppl5(SE_afun0, (ATerm)parseTree, (ATerm)focus, (ATerm)unparsedFoci, (ATerm)ATmakeInt(modified), (ATerm)startSymbols);
 }
 
 /*}}}  */
@@ -170,7 +172,7 @@ SE_Editor SE_makeEditorDefault(SE_ParseTree parseTree, SE_Focus focus, SE_FocusL
 
 SE_Focus SE_makeFocusEmpty()
 {
-  return (SE_Focus)ATmakeTerm(SE_patternFocusEmpty);
+  return (SE_Focus)(ATerm)ATmakeAppl0(SE_afun1);
 }
 
 /*}}}  */
@@ -178,7 +180,7 @@ SE_Focus SE_makeFocusEmpty()
 
 SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unparsed)
 {
-  return (SE_Focus)ATmakeTerm(SE_patternFocusNotEmpty, path, sort, area, unparsed);
+  return (SE_Focus)(ATerm)ATmakeAppl4(SE_afun2, (ATerm)path, (ATerm)ATmakeAppl0(ATmakeAFun(sort, 0, ATtrue)), (ATerm)area, (ATerm)ATmakeInt(unparsed));
 }
 
 /*}}}  */
@@ -186,7 +188,7 @@ SE_Focus SE_makeFocusNotEmpty(SE_Path path, char * sort, SE_Area area, int unpar
 
 SE_Area SE_makeAreaDefault(int start, int length)
 {
-  return (SE_Area)ATmakeTerm(SE_patternAreaDefault, start, length);
+  return (SE_Area)(ATerm)ATmakeAppl2(SE_afun3, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(length));
 }
 
 /*}}}  */
@@ -194,7 +196,7 @@ SE_Area SE_makeAreaDefault(int start, int length)
 
 SE_FocusList SE_makeFocusListEmpty()
 {
-  return (SE_FocusList)ATmakeTerm(SE_patternFocusListEmpty);
+  return (SE_FocusList)(ATerm)ATempty;
 }
 
 /*}}}  */
@@ -202,7 +204,7 @@ SE_FocusList SE_makeFocusListEmpty()
 
 SE_FocusList SE_makeFocusListMulti(SE_Focus head, SE_FocusList tail)
 {
-  return (SE_FocusList)ATmakeTerm(SE_patternFocusListMulti, head, tail);
+  return (SE_FocusList)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
 }
 
 /*}}}  */
@@ -210,7 +212,7 @@ SE_FocusList SE_makeFocusListMulti(SE_Focus head, SE_FocusList tail)
 
 SE_SymbolList SE_makeSymbolListEmpty()
 {
-  return (SE_SymbolList)ATmakeTerm(SE_patternSymbolListEmpty);
+  return (SE_SymbolList)(ATerm)ATempty;
 }
 
 /*}}}  */
@@ -218,7 +220,7 @@ SE_SymbolList SE_makeSymbolListEmpty()
 
 SE_SymbolList SE_makeSymbolListMulti(char * head, SE_SymbolList tail)
 {
-  return (SE_SymbolList)ATmakeTerm(SE_patternSymbolListMulti, head, tail);
+  return (SE_SymbolList)(ATerm)ATinsert((ATermList)tail, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -226,7 +228,7 @@ SE_SymbolList SE_makeSymbolListMulti(char * head, SE_SymbolList tail)
 
 SE_Path SE_makePathRoot()
 {
-  return (SE_Path)ATmakeTerm(SE_patternPathRoot);
+  return (SE_Path)(ATerm)ATmakeAppl0(SE_afun4);
 }
 
 /*}}}  */
@@ -234,7 +236,7 @@ SE_Path SE_makePathRoot()
 
 SE_Path SE_makePathLeftLayout()
 {
-  return (SE_Path)ATmakeTerm(SE_patternPathLeftLayout);
+  return (SE_Path)(ATerm)ATmakeAppl0(SE_afun5);
 }
 
 /*}}}  */
@@ -242,7 +244,7 @@ SE_Path SE_makePathLeftLayout()
 
 SE_Path SE_makePathTerm(SE_Steps steps)
 {
-  return (SE_Path)ATmakeTerm(SE_patternPathTerm, steps);
+  return (SE_Path)(ATerm)ATmakeAppl1(SE_afun6, (ATerm)steps);
 }
 
 /*}}}  */
@@ -250,7 +252,7 @@ SE_Path SE_makePathTerm(SE_Steps steps)
 
 SE_Path SE_makePathRightLayout()
 {
-  return (SE_Path)ATmakeTerm(SE_patternPathRightLayout);
+  return (SE_Path)(ATerm)ATmakeAppl0(SE_afun7);
 }
 
 /*}}}  */
@@ -258,7 +260,7 @@ SE_Path SE_makePathRightLayout()
 
 SE_Steps SE_makeStepsEmpty()
 {
-  return (SE_Steps)ATmakeTerm(SE_patternStepsEmpty);
+  return (SE_Steps)(ATerm)ATempty;
 }
 
 /*}}}  */
@@ -266,7 +268,7 @@ SE_Steps SE_makeStepsEmpty()
 
 SE_Steps SE_makeStepsMulti(int head, SE_Steps tail)
 {
-  return (SE_Steps)ATmakeTerm(SE_patternStepsMulti, head, tail);
+  return (SE_Steps)(ATerm)ATinsert((ATermList)tail, (ATerm)ATmakeInt(head));
 }
 
 /*}}}  */
@@ -274,7 +276,7 @@ SE_Steps SE_makeStepsMulti(int head, SE_Steps tail)
 
 SE_Move SE_makeMoveLeft()
 {
-  return (SE_Move)ATmakeTerm(SE_patternMoveLeft);
+  return (SE_Move)(ATerm)ATmakeAppl0(SE_afun8);
 }
 
 /*}}}  */
@@ -282,7 +284,7 @@ SE_Move SE_makeMoveLeft()
 
 SE_Move SE_makeMoveRight()
 {
-  return (SE_Move)ATmakeTerm(SE_patternMoveRight);
+  return (SE_Move)(ATerm)ATmakeAppl0(SE_afun9);
 }
 
 /*}}}  */
@@ -290,7 +292,7 @@ SE_Move SE_makeMoveRight()
 
 SE_Move SE_makeMoveUp()
 {
-  return (SE_Move)ATmakeTerm(SE_patternMoveUp);
+  return (SE_Move)(ATerm)ATmakeAppl0(SE_afun10);
 }
 
 /*}}}  */
@@ -298,7 +300,7 @@ SE_Move SE_makeMoveUp()
 
 SE_Move SE_makeMoveDown()
 {
-  return (SE_Move)ATmakeTerm(SE_patternMoveDown);
+  return (SE_Move)(ATerm)ATmakeAppl0(SE_afun11);
 }
 
 /*}}}  */
@@ -360,11 +362,15 @@ ATbool SE_isValidEditor(SE_Editor arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isEditorDefault(SE_Editor arg) */
+/*{{{  inline ATbool SE_isEditorDefault(SE_Editor arg) */
 
-ATbool SE_isEditorDefault(SE_Editor arg)
+inline ATbool SE_isEditorDefault(SE_Editor arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternEditorDefault, NULL, NULL, NULL, NULL, NULL);
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternEditorDefault, NULL, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -383,12 +389,8 @@ ATbool SE_hasEditorParseTree(SE_Editor arg)
 
 SE_ParseTree SE_getEditorParseTree(SE_Editor arg)
 {
-  if (SE_isEditorDefault(arg)) {
+  
     return (SE_ParseTree)ATgetArgument((ATermAppl)arg, 0);
-  }
-
-  ATabort("Editor has no ParseTree: %t\n", arg);
-  return (SE_ParseTree)NULL;
 }
 
 /*}}}  */
@@ -420,12 +422,8 @@ ATbool SE_hasEditorFocus(SE_Editor arg)
 
 SE_Focus SE_getEditorFocus(SE_Editor arg)
 {
-  if (SE_isEditorDefault(arg)) {
+  
     return (SE_Focus)ATgetArgument((ATermAppl)arg, 1);
-  }
-
-  ATabort("Editor has no Focus: %t\n", arg);
-  return (SE_Focus)NULL;
 }
 
 /*}}}  */
@@ -457,12 +455,8 @@ ATbool SE_hasEditorUnparsedFoci(SE_Editor arg)
 
 SE_FocusList SE_getEditorUnparsedFoci(SE_Editor arg)
 {
-  if (SE_isEditorDefault(arg)) {
+  
     return (SE_FocusList)ATgetArgument((ATermAppl)arg, 2);
-  }
-
-  ATabort("Editor has no UnparsedFoci: %t\n", arg);
-  return (SE_FocusList)NULL;
 }
 
 /*}}}  */
@@ -494,12 +488,8 @@ ATbool SE_hasEditorModified(SE_Editor arg)
 
 int SE_getEditorModified(SE_Editor arg)
 {
-  if (SE_isEditorDefault(arg)) {
+  
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
-  }
-
-  ATabort("Editor has no Modified: %t\n", arg);
-  return (int)NULL;
 }
 
 /*}}}  */
@@ -531,12 +521,8 @@ ATbool SE_hasEditorStartSymbols(SE_Editor arg)
 
 SE_SymbolList SE_getEditorStartSymbols(SE_Editor arg)
 {
-  if (SE_isEditorDefault(arg)) {
+  
     return (SE_SymbolList)ATgetArgument((ATermAppl)arg, 4);
-  }
-
-  ATabort("Editor has no StartSymbols: %t\n", arg);
-  return (SE_SymbolList)NULL;
 }
 
 /*}}}  */
@@ -571,19 +557,33 @@ ATbool SE_isValidFocus(SE_Focus arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isFocusEmpty(SE_Focus arg) */
+/*{{{  inline ATbool SE_isFocusEmpty(SE_Focus arg) */
 
-ATbool SE_isFocusEmpty(SE_Focus arg)
+inline ATbool SE_isFocusEmpty(SE_Focus arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternFocusEmpty);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternFocusEmpty)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternFocusEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isFocusNotEmpty(SE_Focus arg) */
+/*{{{  inline ATbool SE_isFocusNotEmpty(SE_Focus arg) */
 
-ATbool SE_isFocusNotEmpty(SE_Focus arg)
+inline ATbool SE_isFocusNotEmpty(SE_Focus arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternFocusNotEmpty, NULL, NULL, NULL, NULL);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternFocusNotEmpty)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternFocusNotEmpty, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -602,12 +602,8 @@ ATbool SE_hasFocusPath(SE_Focus arg)
 
 SE_Path SE_getFocusPath(SE_Focus arg)
 {
-  if (SE_isFocusNotEmpty(arg)) {
+  
     return (SE_Path)ATgetArgument((ATermAppl)arg, 0);
-  }
-
-  ATabort("Focus has no Path: %t\n", arg);
-  return (SE_Path)NULL;
 }
 
 /*}}}  */
@@ -639,12 +635,8 @@ ATbool SE_hasFocusSort(SE_Focus arg)
 
 char * SE_getFocusSort(SE_Focus arg)
 {
-  if (SE_isFocusNotEmpty(arg)) {
+  
     return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
-  }
-
-  ATabort("Focus has no Sort: %t\n", arg);
-  return (char *)NULL;
 }
 
 /*}}}  */
@@ -676,12 +668,8 @@ ATbool SE_hasFocusArea(SE_Focus arg)
 
 SE_Area SE_getFocusArea(SE_Focus arg)
 {
-  if (SE_isFocusNotEmpty(arg)) {
+  
     return (SE_Area)ATgetArgument((ATermAppl)arg, 2);
-  }
-
-  ATabort("Focus has no Area: %t\n", arg);
-  return (SE_Area)NULL;
 }
 
 /*}}}  */
@@ -713,12 +701,8 @@ ATbool SE_hasFocusUnparsed(SE_Focus arg)
 
 int SE_getFocusUnparsed(SE_Focus arg)
 {
-  if (SE_isFocusNotEmpty(arg)) {
+  
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 3));
-  }
-
-  ATabort("Focus has no Unparsed: %t\n", arg);
-  return (int)NULL;
 }
 
 /*}}}  */
@@ -750,11 +734,15 @@ ATbool SE_isValidArea(SE_Area arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isAreaDefault(SE_Area arg) */
+/*{{{  inline ATbool SE_isAreaDefault(SE_Area arg) */
 
-ATbool SE_isAreaDefault(SE_Area arg)
+inline ATbool SE_isAreaDefault(SE_Area arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternAreaDefault, NULL, NULL);
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternAreaDefault, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -773,12 +761,8 @@ ATbool SE_hasAreaStart(SE_Area arg)
 
 int SE_getAreaStart(SE_Area arg)
 {
-  if (SE_isAreaDefault(arg)) {
+  
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 0));
-  }
-
-  ATabort("Area has no Start: %t\n", arg);
-  return (int)NULL;
 }
 
 /*}}}  */
@@ -810,12 +794,8 @@ ATbool SE_hasAreaLength(SE_Area arg)
 
 int SE_getAreaLength(SE_Area arg)
 {
-  if (SE_isAreaDefault(arg)) {
+  
     return (int)ATgetInt((ATermInt)ATgetArgument((ATermAppl)arg, 1));
-  }
-
-  ATabort("Area has no Length: %t\n", arg);
-  return (int)NULL;
 }
 
 /*}}}  */
@@ -850,19 +830,33 @@ ATbool SE_isValidFocusList(SE_FocusList arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isFocusListEmpty(SE_FocusList arg) */
+/*{{{  inline ATbool SE_isFocusListEmpty(SE_FocusList arg) */
 
-ATbool SE_isFocusListEmpty(SE_FocusList arg)
+inline ATbool SE_isFocusListEmpty(SE_FocusList arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternFocusListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternFocusListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isFocusListMulti(SE_FocusList arg) */
+/*{{{  inline ATbool SE_isFocusListMulti(SE_FocusList arg) */
 
-ATbool SE_isFocusListMulti(SE_FocusList arg)
+inline ATbool SE_isFocusListMulti(SE_FocusList arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternFocusListMulti, NULL, NULL);
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternFocusListMulti, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -881,12 +875,8 @@ ATbool SE_hasFocusListHead(SE_FocusList arg)
 
 SE_Focus SE_getFocusListHead(SE_FocusList arg)
 {
-  if (SE_isFocusListMulti(arg)) {
-    return (SE_Focus)ATelementAt((ATermList)arg, 0);
-  }
-
-  ATabort("FocusList has no Head: %t\n", arg);
-  return (SE_Focus)NULL;
+  
+    return (SE_Focus)ATgetFirst((ATermList)arg);
 }
 
 /*}}}  */
@@ -918,12 +908,8 @@ ATbool SE_hasFocusListTail(SE_FocusList arg)
 
 SE_FocusList SE_getFocusListTail(SE_FocusList arg)
 {
-  if (SE_isFocusListMulti(arg)) {
-    return (SE_FocusList)ATgetTail((ATermList)arg, 1);
-  }
-
-  ATabort("FocusList has no Tail: %t\n", arg);
-  return (SE_FocusList)NULL;
+  
+    return (SE_FocusList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -958,19 +944,33 @@ ATbool SE_isValidSymbolList(SE_SymbolList arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isSymbolListEmpty(SE_SymbolList arg) */
+/*{{{  inline ATbool SE_isSymbolListEmpty(SE_SymbolList arg) */
 
-ATbool SE_isSymbolListEmpty(SE_SymbolList arg)
+inline ATbool SE_isSymbolListEmpty(SE_SymbolList arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternSymbolListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternSymbolListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isSymbolListMulti(SE_SymbolList arg) */
+/*{{{  inline ATbool SE_isSymbolListMulti(SE_SymbolList arg) */
 
-ATbool SE_isSymbolListMulti(SE_SymbolList arg)
+inline ATbool SE_isSymbolListMulti(SE_SymbolList arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternSymbolListMulti, NULL, NULL);
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternSymbolListMulti, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -989,12 +989,8 @@ ATbool SE_hasSymbolListHead(SE_SymbolList arg)
 
 char * SE_getSymbolListHead(SE_SymbolList arg)
 {
-  if (SE_isSymbolListMulti(arg)) {
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATelementAt((ATermList)arg, 0)));
-  }
-
-  ATabort("SymbolList has no Head: %t\n", arg);
-  return (char *)NULL;
+  
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
 }
 
 /*}}}  */
@@ -1026,12 +1022,8 @@ ATbool SE_hasSymbolListTail(SE_SymbolList arg)
 
 SE_SymbolList SE_getSymbolListTail(SE_SymbolList arg)
 {
-  if (SE_isSymbolListMulti(arg)) {
-    return (SE_SymbolList)ATgetTail((ATermList)arg, 1);
-  }
-
-  ATabort("SymbolList has no Tail: %t\n", arg);
-  return (SE_SymbolList)NULL;
+  
+    return (SE_SymbolList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1072,35 +1064,63 @@ ATbool SE_isValidPath(SE_Path arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isPathRoot(SE_Path arg) */
+/*{{{  inline ATbool SE_isPathRoot(SE_Path arg) */
 
-ATbool SE_isPathRoot(SE_Path arg)
+inline ATbool SE_isPathRoot(SE_Path arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternPathRoot);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathRoot)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternPathRoot));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isPathLeftLayout(SE_Path arg) */
+/*{{{  inline ATbool SE_isPathLeftLayout(SE_Path arg) */
 
-ATbool SE_isPathLeftLayout(SE_Path arg)
+inline ATbool SE_isPathLeftLayout(SE_Path arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternPathLeftLayout);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathLeftLayout)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternPathLeftLayout));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isPathTerm(SE_Path arg) */
+/*{{{  inline ATbool SE_isPathTerm(SE_Path arg) */
 
-ATbool SE_isPathTerm(SE_Path arg)
+inline ATbool SE_isPathTerm(SE_Path arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternPathTerm, NULL);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathTerm)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternPathTerm, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isPathRightLayout(SE_Path arg) */
+/*{{{  inline ATbool SE_isPathRightLayout(SE_Path arg) */
 
-ATbool SE_isPathRightLayout(SE_Path arg)
+inline ATbool SE_isPathRightLayout(SE_Path arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternPathRightLayout);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternPathRightLayout)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternPathRightLayout));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1119,12 +1139,8 @@ ATbool SE_hasPathSteps(SE_Path arg)
 
 SE_Steps SE_getPathSteps(SE_Path arg)
 {
-  if (SE_isPathTerm(arg)) {
+  
     return (SE_Steps)ATgetArgument((ATermAppl)arg, 0);
-  }
-
-  ATabort("Path has no Steps: %t\n", arg);
-  return (SE_Steps)NULL;
 }
 
 /*}}}  */
@@ -1159,19 +1175,33 @@ ATbool SE_isValidSteps(SE_Steps arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isStepsEmpty(SE_Steps arg) */
+/*{{{  inline ATbool SE_isStepsEmpty(SE_Steps arg) */
 
-ATbool SE_isStepsEmpty(SE_Steps arg)
+inline ATbool SE_isStepsEmpty(SE_Steps arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternStepsEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternStepsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isStepsMulti(SE_Steps arg) */
+/*{{{  inline ATbool SE_isStepsMulti(SE_Steps arg) */
 
-ATbool SE_isStepsMulti(SE_Steps arg)
+inline ATbool SE_isStepsMulti(SE_Steps arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternStepsMulti, NULL, NULL);
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternStepsMulti, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1190,12 +1220,8 @@ ATbool SE_hasStepsHead(SE_Steps arg)
 
 int SE_getStepsHead(SE_Steps arg)
 {
-  if (SE_isStepsMulti(arg)) {
-    return (int)ATgetInt((ATermInt)ATelementAt((ATermList)arg, 0));
-  }
-
-  ATabort("Steps has no Head: %t\n", arg);
-  return (int)NULL;
+  
+    return (int)ATgetInt((ATermInt)ATgetFirst((ATermList)arg));
 }
 
 /*}}}  */
@@ -1227,12 +1253,8 @@ ATbool SE_hasStepsTail(SE_Steps arg)
 
 SE_Steps SE_getStepsTail(SE_Steps arg)
 {
-  if (SE_isStepsMulti(arg)) {
-    return (SE_Steps)ATgetTail((ATermList)arg, 1);
-  }
-
-  ATabort("Steps has no Tail: %t\n", arg);
-  return (SE_Steps)NULL;
+  
+    return (SE_Steps)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1273,35 +1295,63 @@ ATbool SE_isValidMove(SE_Move arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isMoveLeft(SE_Move arg) */
+/*{{{  inline ATbool SE_isMoveLeft(SE_Move arg) */
 
-ATbool SE_isMoveLeft(SE_Move arg)
+inline ATbool SE_isMoveLeft(SE_Move arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternMoveLeft);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveLeft)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternMoveLeft));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isMoveRight(SE_Move arg) */
+/*{{{  inline ATbool SE_isMoveRight(SE_Move arg) */
 
-ATbool SE_isMoveRight(SE_Move arg)
+inline ATbool SE_isMoveRight(SE_Move arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternMoveRight);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveRight)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternMoveRight));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isMoveUp(SE_Move arg) */
+/*{{{  inline ATbool SE_isMoveUp(SE_Move arg) */
 
-ATbool SE_isMoveUp(SE_Move arg)
+inline ATbool SE_isMoveUp(SE_Move arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternMoveUp);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveUp)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternMoveUp));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool SE_isMoveDown(SE_Move arg) */
+/*{{{  inline ATbool SE_isMoveDown(SE_Move arg) */
 
-ATbool SE_isMoveDown(SE_Move arg)
+inline ATbool SE_isMoveDown(SE_Move arg)
 {
-  return ATmatchTerm((ATerm)arg, SE_patternMoveDown);
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(SE_patternMoveDown)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SE_patternMoveDown));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */

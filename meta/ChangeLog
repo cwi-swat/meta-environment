@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Mar  8 15:07:32 CET 2002 <jong@cwi.nl>
+ * in editors/structure, renamed Editor.[ch] to EditorData.[ch] to
+   avoid conflicts on filename-case-insensitive platforms.
+
 Tue Mar  5 23:27:25 CET 2002 <jong@cwi.nl>
  * Refactored gvim-support. That is, I removed it alltogether from
    the meta package, and put it in its own package. This should

@@ -3,7 +3,7 @@
 
 #include <MEPT.h>
 
-#include "Editor.h"
+#include "EditorData.h"
 
 SE_Steps stepUp(SE_Steps steps);
 SE_Path pathUp(SE_Path path);

@@ -1,12 +1,24 @@
 /*
- * Generated at Tue Mar 13 12:39:10 2001
+ * Generated at Fri Mar  8 15:06:41 2002
  */
 
-#ifndef __Editor_dict_H
-#define __Editor_dict_H
+#ifndef __EditorData_dict_H
+#define __EditorData_dict_H
 
 #include <aterm2.h>
 
+extern AFun SE_afun0;
+extern AFun SE_afun1;
+extern AFun SE_afun2;
+extern AFun SE_afun3;
+extern AFun SE_afun4;
+extern AFun SE_afun5;
+extern AFun SE_afun6;
+extern AFun SE_afun7;
+extern AFun SE_afun8;
+extern AFun SE_afun9;
+extern AFun SE_afun10;
+extern AFun SE_afun11;
 
 extern ATerm SE_patternMoveDown;
 extern ATerm SE_patternMoveUp;
@@ -27,6 +39,6 @@ extern ATerm SE_patternFocusNotEmpty;
 extern ATerm SE_patternFocusEmpty;
 extern ATerm SE_patternEditorDefault;
 
-extern void init_Editor_dict();
+extern void init_EditorData_dict();
 
-#endif /* __Editor_dict_H */
+#endif /* __EditorData_dict_H */
