@@ -1,0 +1,7 @@
+
+
+2001/07/31 (jurgenv@cwi.nl)
+  * Put the user-manual of the ASF+SDF Meta-Environment in a separate
+    package.
+  * Initial version is 0.1beta
+  * make dist creates a tarball containing only manual.ps
