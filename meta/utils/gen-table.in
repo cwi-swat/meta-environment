@@ -39,7 +39,7 @@ Usage() {
 cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
-    -b              write output in Binary AsFix (BAF) format
+    -b              write output in Binary ATerm Format (BAF)
     -f              use handcrafted normalizer ('fast')
     -h              display help information (usage)
     -i _file_       input from _file_ (default: all file arguments)
@@ -49,7 +49,6 @@ Options:
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
-	exit 1
 }
 
 Version() {
