@@ -184,7 +184,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     //}}}
     //{{{ Create actions
-
+/* These are only needed for the icons, so I commented them out for now
     actionNewModule =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_NEW_MODULE + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_NEW_MODULE + ".icon"),
@@ -239,7 +239,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 			 (ATermList)factory.make("[\"Exit\"]"),
 			 moduleTree, bridge, factory);
 
-
+*/
     //}}}
     //{{{ Create module menu
 
