@@ -97,15 +97,22 @@ equations
 [id-1]   id({E, E*}) = union({<E, E>}, id({E*}))
 [id-2]   id({}) ={}
 
-[cl-1]   compose(Rel2, Rel) = {}
-         =========================================
-    	 closure(Rel, Rel1, Rel2) = union(Rel1, Rel2)
+%%[cl-1]   compose(Rel2, Rel) = {}
+%%         =========================================
+%%    	 closure(Rel, Rel1, Rel2) = union(Rel1, Rel2)
 
-[cl-2]   compose(Rel2, Rel) = Rel', Rel' != {}
-         =========================================
-	 closure(Rel, Rel1, Rel2) = closure(Rel, union(Rel1, Rel2), Rel')
+%%[cl-2]   compose(Rel2, Rel) = Rel', Rel' != {}
+ %%        =========================================
+%%	 closure(Rel, Rel1, Rel2) = closure(Rel, union(Rel1, Rel2), Rel')
 
-[tcl-1]  Rel+ = closure(Rel, {}, Rel)
+
+[cl-1] closure(Rel, Rel1, Rel1) = Rel1
+
+[cl-2] Rel1 != Rel2
+       =========================================
+       closure(Rel, Rel1, Rel2) = closure(Rel, Rel2, union(Rel2, compose(Rel2, Rel)))
+
+[tcl-1]  Rel + = closure(Rel, {}, Rel)
 
 [rtcl-1] Rel* = union(Rel+, id(carrier(Rel)))
 
