@@ -1,5 +1,8 @@
 # $Id$
 
+2002/10/08 (vinju@loria.fr)
+ * Refactored functionality to get a list of equations from the moduledb.
+
 2002/10/03 (vandenbr@loria.fr)
  * Renamed the fixed button "FocusToDot" to "ViewTree".
 
