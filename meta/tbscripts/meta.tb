@@ -8,6 +8,7 @@
 #include <dot-adapter.idef>
 #endif
 
+#include "abort.tb"
 #include "sglr.idef"
 #include "text-editor.idef"
 #include "editor-creator.tb"
@@ -88,6 +89,7 @@ in
   fi
 endlet
 
+
 toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui, 
         EditorCreator, ModuleDB, ProcessEqs, GetEquations, Save-modules, 
 	PrintModule, File-creator, SE,
@@ -99,8 +101,10 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
         DumpParseTable, Module-Utilities,
 	RestoreTermBrackets, RestoreBrackets
 #ifdef METASTUDIO
-	, DOT-ADAPTER)
-#else
-        )
+	, DOT-ADAPTER
 #endif
+#ifdef TIMEOUT
+        , AbortMetaEnvironment
+#endif
+        )
 

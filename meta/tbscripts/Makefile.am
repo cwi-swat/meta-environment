@@ -12,7 +12,7 @@ TBSCRIPTS     = clear-all.tb editor-creator.tb \
                 pt-dumper.tb standalone-pt-dumper.tb \
                 eqs-dumper.tb standalone-eqs-dumper.tb \
                 standalone-status-display.tb gen.tb \
-		restore-term-brackets.tb
+		restore-term-brackets.tb abort.tb
 
 GEN_TBSCRIPTS = sdf2-language.tb help.tb
 
