@@ -25,6 +25,7 @@ import errorapi.types.Feedback;
 import errorapi.types.Summary;
 
 public class FeedbackList extends UserInterfacePanel {
+    private static final String ANONYMOUS_ORIGIN = "anonymous";
     private JList list;
     private ListModel data;
     private Factory factory;
@@ -63,8 +64,7 @@ public class FeedbackList extends UserInterfacePanel {
     }
 
     public void clearHistory() {
-        data.setList(new LinkedList());
-        repaint();
+        removeFeedbackSummary(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN);
     }
 
     public void displayFeedbackSummary(ATerm t0) {
@@ -85,8 +85,8 @@ public class FeedbackList extends UserInterfacePanel {
 
     private FeedbackItem makeAnonymousError(String msg) {
         return new FeedbackItem(
-            "meta",
-            "anonymous",
+            ANONYMOUS_ORIGIN,
+            ANONYMOUS_ORIGIN,
             getErrorFactory().makeFeedback_Error(
                 msg,
                 getErrorFactory().makeSubjectList()));
