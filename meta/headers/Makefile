@@ -3,7 +3,7 @@
 #
 
 KINDS = meta-header sglr-header pgen-header asc-header
-EXTS = .c-style .sh-style .autoconf .tex-style .html
+EXTS = .c-style .sh-style .autoconf .tex-style .html .lisp-style
 
 ALLHEADERS = $(foreach ext, $(EXTS), $(addsuffix $(ext), $(KINDS)))
 
@@ -42,6 +42,9 @@ asc-header.base: header.base
 # for asf+sdf spec and tex files
 %.tex-style: %.base
 	sed 's/^/%%/g' < $< > $@
+
+%.lisp-style: %.base
+	sed 's/^/; /g' < $< > $@
 
 %.html: %.base
 	( echo '<!--'; \
