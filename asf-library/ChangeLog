@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jun  7 13:56:45 CEST 2004 <kooiker@cwi.nl>
+ * library/languages/sdf2/syntax:
+   - Added prettyprint rules
+
 Wed Jun  2 11:03:57 CEST 2004 <kooiker@cwi.nl>
  * library/languages/box/utilities:
    - Added generic prettyprinting of lists 
