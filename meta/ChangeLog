@@ -20,6 +20,19 @@
 #
 # $Id$
 
+2001/02/14 (jong@cwi.nl)
+  * version 0.2
+  * frozen release after internal CWI-repository move
+  * this release is much smaller than previous releases because several
+    components are now distributed separately:
+    - sglr
+    - pgen
+    - asfix (is now split into pt-support, sdf-support, asf-support)
+    - evaluator
+    - compiler
+  * Basically only meta-environment specific tools (module-db, editors)
+    and ToolBus scripts are packed in this version.
+
 2001/02/02 (mdejonge@cwi.nl)
    * Fixed wish version checking
    * aclocal now _always_ reads macros from ./config directory
