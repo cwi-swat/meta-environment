@@ -59,9 +59,12 @@ decimal:DecimalEscChar      -> EscChar   {cons("decimal")}
 EscChar                     -> L-Char    {cons("escaped")}
 "\"" chars:L-Char* "\""     -> Literal    {cons("quoted")}
 
-[A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal {cons("unquoted")}
-[A-Za-z]   -> Literal                                {cons("single")}
+[a-z][A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9] -> UQLiteral {cons("many")}
+[a-z]                                        -> UQLiteral {cons("single")}
 
+context-free syntax
+  UQLiteral -> Literal {cons("unquoted")}
+  
 module asfix/syntax/Parsetree
  
 imports asfix/syntax/Attributes

@@ -56,10 +56,11 @@ static PTPT_Literal PTPT_explodeLiteral(char *string, ATbool quoted)
   if (quoted) {
     char quoted[1024];
     sprintf(quoted, "\"%s\"", string);
-    return PTPT_makeLiteralUnquoted(PTPT_makeCHARLISTString(quoted));
+    return PTPT_makeLiteralQuoted(PTPT_makeCHARLISTString(quoted));
   }
 
-  return PTPT_makeLiteralUnquoted(PTPT_makeCHARLISTString(string));
+  return PTPT_makeLiteralUnquoted(PTPT_makeUQLiteralMany(
+			       PTPT_makeCHARLISTString(string)));
 }
 
 /*}}}  */
