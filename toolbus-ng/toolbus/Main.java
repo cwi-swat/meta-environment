@@ -3,35 +3,11 @@
  */
 
 package toolbus;
-import toolbus.atom.Assign;
-import toolbus.atom.Atom;
-import toolbus.atom.AtomSet;
-import toolbus.atom.Create;
-import toolbus.atom.Delta;
-import toolbus.atom.Execute;
-import toolbus.atom.Print;
-import toolbus.atom.RecEvent;
-import toolbus.atom.RecMsg;
-import toolbus.atom.RecVal;
-import toolbus.atom.ShutDown;
-import toolbus.atom.SndAckEvent;
-import toolbus.atom.SndEval;
-import toolbus.atom.SndMsg;
-import toolbus.atom.Tau;
-import toolbus.process.Alternative;
-import toolbus.process.IfElse;
-import toolbus.process.IfThen;
-import toolbus.process.Iteration;
-import toolbus.process.LetDefinition;
-import toolbus.process.Merge;
-import toolbus.process.ProcessCall;
-import toolbus.process.ProcessDefinition;
-import toolbus.process.ProcessExpression;
-import toolbus.process.Sequence;
+import toolbus.atom.*;
+import toolbus.process.*;
 import toolbus.tool.ToolDefinition;
 
-import aterm.ATerm;
-import aterm.ATermList;
+import aterm.*;
 import aterm.pure.PureFactory;
 
 public class Main {
