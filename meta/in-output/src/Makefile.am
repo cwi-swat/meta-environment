@@ -10,8 +10,9 @@ EXTRA_DIST = in-output.idef
 noinst_HEADERS = in-output.tif.h 
 
 INCLUDES = \
-	-I$(ATERM)/include \
-	-I$(TOOLBUSLIB)/include
+	-I$(ERROR_SUPPORT)/include \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ATERM)/include
 
 in_output_SOURCES = \
 	in-output.tif.c \
