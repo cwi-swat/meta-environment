@@ -29,7 +29,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(
 .SUFFIXES:
 .SUFFIXES: .c .o
 .SUFFIXES: .tb .tb.tex .c.tex .tcl .tcl.tex .perl .perl.tex .py .py.tex
-.SUFFIXES: .pl .pl.tex
+.SUFFIXES: .pl .pl.tex .java .java.tex
 
 .tb.tb.tex:
 	${bindir}/script2latex <$*.tb >$*.tb.tex
@@ -43,12 +43,15 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(TBLIB) $(
 	${bindir}/verbatim <$*.py >$*.py.tex
 .pl.pl.tex:
 	${bindir}/verbatim <$*.py >$*.py.tex
+.java.java.tex:
+	${bindir}/verbatim <$*.java >$*.java.tex
  
 
 PROGRAMS	= hellopl hello printer hello-gen hello1.tb.tex hello2.tb.tex \
 		hello.c.tex hello-gen.c.tex hello.tif.c.tex hello.tcl.tex \
 		hello3.tb.tex hello.perl.tex pipe.tb.tex hello.py.tex \
-		hello2py.tb.tex hello.pl.tex hello.pl.tb.tex
+		hello2py.tb.tex hello.pl.tex hello.pl.tb.tex \
+		Hello.class HelloTool.class Hello.java.tex HelloTool.java.tex
 
 # Note: we distribute also all *generated* files to avoid calling programs
 # (i.e., verbatim, script2latex, ctif, toolbus) before they are properly installed.
@@ -65,7 +68,8 @@ DISTFILES	= Makefile.in hello1.tb hello1.tb.tex \
 		  printer.c \
 		  PC.tb producer.c store.c \
 		  hello.py hello.py.tex hello2py.tb \
-		  hello.pl hello.pl.tex hello.pl.tb hello.pl.tb.tex no-pl.sh
+		  hello.pl hello.pl.tex hello.pl.tb hello.pl.tb.tex no-pl.sh \
+		  hello2java.tb Hello.java HelloTool.java
 
 all:    ${PROGRAMS}
 
@@ -97,9 +101,14 @@ printer: printer.c
 store:	store.c
 	${COMPILE}
 
-producer:	producer.c
+producer: producer.c
 	${COMPILE}
 
+Hello.class: Hello.java
+	javac -classpath $(top_srcdir)/adapters/java-adapter:$$CLASSPATH Hello.java
+
+HelloTool.class: HelloTool.java
+	javac -classpath $(top_srcdir)/adapters/java-adapter:$$CLASSPATH HelloTool.java
  
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
