@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports remove-pos-info
+bin_PROGRAMS       = meta-paths imports remove-annotation
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
                      insert-header genamakefile change-sdf2-ext
 
@@ -53,8 +53,8 @@ imports_LDADD      = libutils.a \
                      -L$(ASFIXLIB) -lAsFix \
                      -L$(ATERMLIB) -lATerm
 
-remove_pos_info_SOURCES = remove-pos-info.c
-remove_pos_info_LDADD = -L$(ATERMLIB) -lATerm
+remove_annotation_SOURCES = remove-annotation.c
+remove_annotation_LDADD = -L$(ATERMLIB) -lATerm
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
