@@ -47,6 +47,7 @@ DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
           -DERROR_SUPPORT=\"$(ERROR_SUPPORT)\"   \
           -DATERM=\"$(ATERM)\" \
           -DTOOLBUSLIB=\"$(TOOLBUSLIB)\" \
+          -DSOCKLIBS=\"$(SOCKLIBS)\" \
           -DIDEF2TIF=\"$(TOOLBUS)/bin/idef2tif\" \
           -DTIFSTOC=\"$(TOOLBUS)/bin/tifstoc\" \
           -DCOMPILER=\"$(CC)\" \

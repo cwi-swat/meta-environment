@@ -4,6 +4,8 @@ pkgdata_DATA = $(wildcard *.idef)
 
 EXTRA_DIST = $(wildcard *.idef)
 
+noinst_HEADERS = toolASFSDFApigen.tif.h
+
 bin_PROGRAMS=ASFSDFApigen
 
 ASFSDFApigen_SOURCES = \

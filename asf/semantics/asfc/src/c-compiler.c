@@ -36,6 +36,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -L" ERROR_SUPPORT "/lib" " -lErrorAPI \\\n"
 	 "  -L" ATERM "/lib" " -lATerm \\\n"
 	 "  -L" TOOLBUSLIB "/lib -lATB \\\n"
+	 "  " SOCKLIBS "\\\n"
 	 "  -DASF_MAIN\n",
 	 run_verbose ? "" : "-Wno-unused",
 	 binary, 
