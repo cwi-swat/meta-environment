@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include <MEPT-utils.h>
+#include <PTMEPT.h>
 #include <asc-support2-me.h>
 #include <Error.h>
 
@@ -155,6 +156,7 @@ int main(int argc, char *argv[])
   ATinit(3, ATlibArgv, &bottomOfStack); 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initMEPTApi(); 
+  PTPT_initPTMEPTApi();
   BOX_initBoxApi();
 
   register_Box_to_Text();

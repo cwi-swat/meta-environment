@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <MEPT-utils.h>
+#include <PTMEPT-utils.h>
 
 #include "pandora.h"
 
@@ -11,55 +12,12 @@
 static BOX_Box treeToBox(PT_Tree tree);
 /*}}}  */
 
-/*{{{  static char *escapeQuotes(const char *input) */
+/*{{{  BOX_LexStrCon makeLexStrCon(const char *str) */
 
-static char *escapeQuotes(const char *input)
+BOX_LexStrCon BOX_makeLexStrCon(const char *str)
 {
-  static char *buf = NULL;
-  const char *p;
-  int len;
-  char *s;
-
-  len = strlen(input);
-  buf = realloc(buf, len*3 + 1);
-
-  p = input;
-  s = buf;
-  while (p && *p) {
-    if (*p == '"' || *p == '\\') {
-      *s++ = '\\';
-      *s++ = '\\';
-    }
-    *s++ = *p++;
-  }
-  *s++ = '\0';
-
-  return buf;
-}
-
-/*}}}  */
-/*{{{  static char *quoteString(const char *input)  */
-
-static char *quoteString(char *input) 
-{
-  static char *buf = NULL;
-  char *s = NULL;
-  const char *p = NULL;
-  int len;
-  
-  len = strlen(input) + 3;
-  buf = realloc(buf, len);
-  
-  p = input;
-  s = buf;
-  *s++ = '"';
-  while (p && *p) {
-    *s++ = *p++;
-  }
-  *s++ = '"';
-  *s++ = '\0';
-
-  return buf;
+  /* notice the hack */
+  return (BOX_LexStrCon) PTPT_makeLexStrCon(str);
 }
 
 /*}}}  */
