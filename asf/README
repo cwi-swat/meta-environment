@@ -2,7 +2,8 @@ $Id$
 
 ASF rewriting engines
 
-This package contains the implementation of the rewriting language ASF. ASF rewrites terms in user-defined syntax. 
+This package contains the implementation of the rewriting language ASF. ASF
+rewrites terms in user-defined syntax.
 
 The following tools are provided: 
 
@@ -16,7 +17,8 @@ genmakefile     - a tool that generates Makefiles or Makefile.in's for compiled
 genamakefile    - a tool that generates Makefile.am's for compiled 
                   specifications. 
 
-These tools have a standalone interface that read and writes from files, but addeqssyntax, removevarsyntax, asfe and asfc also have a ToolBus interface. 
+These tools have a standalone interface that read and writes from files, but
+addeqssyntax, removevarsyntax, asfe and asfc also have a ToolBus interface.
 	    
 Installation Instructions
 =========================
