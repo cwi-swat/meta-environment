@@ -4696,7 +4696,7 @@ endlet
 
 
 tool text-editor is {
-  command = ""
+  command = gvim-editor
 }
 
 process TextEditor(EditorId: term, FileName : str, ButtonList : list) is
@@ -5035,8 +5035,8 @@ in
   subscribe(search-paths-processed) .
   rec-note(search-paths-processed) .
 
-  if not-equal(MODULENAME,"") then
-    snd-msg(open-modules([MODULENAME])) .
+  if not-equal("","") then
+    snd-msg(open-modules([""])) .
     (
       rec-msg(cannot-open-module(ModuleName?)).
       snd-note(ui-status(errorf("cannot open module %s",[ModuleName])))
