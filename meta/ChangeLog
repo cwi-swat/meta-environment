@@ -1,5 +1,10 @@
 # $Id$
 
+2003/03/19 ({iversen, jurgenv}@cwi.nl)
+ * added command add-pos-info to button-language.
+
+   add-pos-info: Annotate parse-tree on stack with position info.
+
 2003/03/18 ({iversen,markvdb}@cwi.nl
  * Added 2 new button actions.
 
