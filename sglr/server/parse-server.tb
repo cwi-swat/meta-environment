@@ -21,7 +21,7 @@ process Parser is
       rec-msg(parse-file(L?, G?, FN?, Id?)) .
       snd-eval(P, parse-file(L, G, FN)) .
       rec-value(P, T?) .
-      snd-msg(Id, parse-result(T)) 
+      snd-msg(Id, parse-result(T))
     +
       rec-msg(Id?,open-language(L?, FN?)) .
       snd-eval(P, open-language(L, FN)) .
@@ -47,7 +47,7 @@ in
   execute(a2toa1, A2toa1?).
   ( rec-msg(Id?,a2toa1(T?)).
     snd-eval(A2toa1,trans(T)).
-    rec-value(A2toa1,T1?). 
+    rec-value(A2toa1,T1?).
     snd-msg(Id,converted(T1))
   ) * delta
 endlet
@@ -63,15 +63,15 @@ let
   LT   : str,
   L    : str,
   T    : term,
-  T1   : term,  
-  T2   : term, 
-  Tf   : term, 
-  I    : int, 
-  Ch   : int, 
-  Li   : int, 
+  T1   : term,
+  T2   : term,
+  Tf   : term,
+  I    : int,
+  Ch   : int,
+  Li   : int,
   Co   : int,
   Char : term
-in 
+in
   rec-event(R, open-language(LN?,LT?)) .
   snd-msg(R,open-language(LN,LT)) .
   rec-msg(R,language-available(L?)) .
@@ -83,27 +83,27 @@ in
         if equal(I,0) then
           snd-msg(R,a2toa1(T)) .
           rec-msg(R,converted(Tf?)) .
-          snd-ack-event(R, parsetext(LN, TS, S, Tf))   
-        else 
+          snd-ack-event(R, parsetext(LN, TS, S, Tf))
+        else
           snd-ack-event(R, parsetext(LN, TS, S, parse-error(ambiguities(I))))
-        fi 
+        fi
       )
       +
-      ( rec-msg(R, parse-result(eof-error)) . 
+      ( rec-msg(R, parse-result(eof-error)) .
         snd-ack-event(R, parsetext(LN, TS, S, parse-error(eof-error)))
       )
       +
-      ( rec-msg(R, 
+      ( rec-msg(R,
                 parse-result(parse-error([character(Ch?),
                                           line(Li?),
                                           col(Co?),
-                                          char(Char?)]))) . 
-        snd-ack-event(R, parsetext(LN, TS, S, 
+                                          char(Char?)]))) .
+        snd-ack-event(R, parsetext(LN, TS, S,
                          parse-error([character(Ch),line(Li),
                                       col(Co),char(Char)])))
       )
-    )  
-  ) * rec-disconnect(R) 
+    )
+  ) * rec-disconnect(R)
 endlet
 
 process Connect-ParseFile is
@@ -111,7 +111,7 @@ let
   R : parse-client,
   P : int
 in
-  ( rec-connect(R?) . 
+  ( rec-connect(R?) .
     create(FileParse(R), P?)
   ) * delta
 endlet
