@@ -501,16 +501,22 @@ ATerm get_filename(int cid, char *directory, char *name, char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm decons_filename(int conn, char *, char *) */
+/*{{{  ATerm decons_filename(int conn, char *filename, char *extension) */
 
 ATerm decons_filename(int conn, char *filename, char *extension)
 {
+  ATerm result;
+  char *buf, *save;
   int filenameLength = strlen(filename);
   int extensionLength = strlen(extension);
   char *path;
   char *p;
+
+  buf = strdup(filename);
+  assert(buf != NULL);
+  save = buf;
   
-  p = filename + filenameLength - extensionLength;
+  p = buf + filenameLength - extensionLength;
   if (strncmp(p, extension, extensionLength) == 0) {
     *p = '\0';
   }
@@ -518,18 +524,22 @@ ATerm decons_filename(int conn, char *filename, char *extension)
     extension = "";
   }
 
-  p = strrchr(filename, '/'); /* TODO: separator is hardcoded */
+  p = strrchr(buf, '/'); /* TODO: separator is hardcoded */
   if (p != NULL) {
-    path = filename;
+    path = buf;
     *p++ = '\0';
-    filename = p;
+    buf = p;
   }
   else {
     path = "";
   }
 
-  return ATmake("snd-value(file-name(<str>,<str>,<str>))",
-		path, filename, extension);
+  result = ATmake("snd-value(file-name(<str>,<str>,<str>))",
+		path, buf, extension);
+
+  free(save);
+
+  return result;
 }
 
 /*}}}  */
