@@ -57,8 +57,10 @@ XLIBS		= -L$(ATERMLIB) -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
 # Other variables
 # CSRC/CHDR are used to calculate dependencies
 SRC		= in-output.c
-CSRC		= in-output.tif.c ${SRC}
-CHDR		= in-output.tif.h
+GENCSRC		= in-output.tif.c
+CSRC		= ${GENCSRC} ${SRC}
+GENCHDR		= in-output.tif.h
+CHDR		= ${GENCHDR}
 OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= in-output
@@ -73,7 +75,7 @@ LOCALINCLUDES   = in-output.tif.h
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= ${BINFILES} *.o *~ 
+CLEANFILES	= ${BINFILES} ${GENCSRC} ${GENCHDR} *.o *~ 
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= depend Makefile in-output.tif.c in-output.tif.h
 
@@ -132,9 +134,7 @@ distclean: clean
 # distclean target
 
 # Updating of included dependencies (CC needs to be gcc!)
-depend: $(SRC)
+depend: $(CSRC)
 	-@${MAKEDEPEND} ${INCLUDES} $(CSRC) > $@
 
 -include depend
-
-
