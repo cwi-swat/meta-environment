@@ -28,10 +28,9 @@ LIBRARY_MODULES=basic/Booleans
 
 EXTRA_DIST = Library.def
 
-noinst_HEADERS = Library.h Library_dict.h 
-
 noinst_LIBRARIES=libasf-builtins.a
-noinst_HEADERS=asf-builtins.h common.h
+noinst_HEADERS=asf-builtins.h common.h Library.h Library_dict.h
+
 libasf_builtins_a_SOURCES=\
 	forward.c\
 	Library.c\

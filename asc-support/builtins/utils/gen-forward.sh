@@ -13,6 +13,7 @@ cat  << END_OF_FILE
 #include <MEPT-utils.h>
 #include <aterm2.h>
 #include "asf-builtins.h"
+#include "Library.h"
 
 /* DO NOT EDIT: This file is generated */
 
@@ -20,6 +21,7 @@ static ATbool initialized = ATfalse;
 
 void initBuiltins(void)
 {
+  CO_initLibraryApi();
   initialized = ATtrue;
 
   return;
