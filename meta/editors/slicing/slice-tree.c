@@ -154,7 +154,7 @@ S_Slices TreeToSyntaxSlices(PT_Tree tree)
 
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
-    const char* cat = ATwriteToString(key);
+    const char* cat = ATgetName(ATgetAFun((ATermAppl) key));
     S_Areas areas;
     S_Slice slice; 
 
