@@ -102,12 +102,17 @@ static PT_ParseTree compile(char *name, ASF_CondEquationList equations,
   muasf = asfToMuASF(saveName, equations);
 
   if (output_muasf) {
-      return PT_makeParseTreeTree(
+    PT_ParseTree pt =
+      PT_makeParseTreeTree(
         PT_makeSymbolsList(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()),
         PT_makeTreeLayoutEmpty(),
         (PT_Tree) muasf,
         PT_makeTreeLayoutEmpty(),
         0);
+
+    ATwriteToNamedTextFile((ATerm) pt, output);
+
+    return pt;
   }
   else {
     if (run_verbose) {
