@@ -1,3 +1,7 @@
+2001/12/19 (jurgenv@cwi.nl)
+ * Changed implosion of layout in implodePT. If there is no layout
+   the following node is generated: layout([]) (used to be layout([""])).
+
 2001/12/18 (jurgenv@cwi.nl)
  * Fixed several bugs in MEPT-utils. These bugs affected implodePT.
  * Fixed a bug in implodePT. Layout is not interpreted as an optional

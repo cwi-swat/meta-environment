@@ -127,7 +127,14 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
 static ATerm implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
-    return ATmake("layout([<str>])>", PT_yieldTree(tree));
+    char *str = PT_yieldTree(tree);
+
+    if (strlen(str) > 0) {
+      return ATmake("layout([<str>])>", str);
+    }
+    else {
+      return ATmake("layout([])");
+    }
   }
   else {
     return NULL;
