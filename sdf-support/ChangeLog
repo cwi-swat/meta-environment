@@ -1,3 +1,6 @@
+2001/07/16 (jong@cwi.nl)
+ * documented change to version 0.4
+
 2001/07/06 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Removed AsFix1 depending functionality.
  * Fixed some problems in sdf2pt.c and added sdf2pt.c
