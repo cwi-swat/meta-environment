@@ -49,7 +49,7 @@ ATerm get_name(int cid)
 
 static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
 {
-  SDF_ModuleName sdfModuleName = SDFmakeModuleName(name);
+  SDF_ModuleName sdfModuleName = SDF_makeModuleName(name);
   PT_Tree ptModuleName = PT_makeTreeFromTerm(
 			   SDF_makeTermFromModuleName(sdfModuleName));
   PT_Tree newTree = NULL;
