@@ -23,7 +23,7 @@
 
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
-sglr=__SGLR__
+sglr=__SDF__
 
 PATH=${toolbus}/bin:${PATH}; export PATH
 

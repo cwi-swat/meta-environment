@@ -33,10 +33,10 @@ CLEANFILES        = configmanager.tif.c configmanager.tif.h configmanager.tifs
 
 configmanager_SOURCES = configmanager.c configmanager.h
 configmanager_LDADD   = configmanager.tif.o \
-			-L$(ASFIX)/lib -lAsFix \
+			-L$(SDF)/lib -lAsFix \
 			-L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include \
+INCLUDES          = -I$(ASC_SUPPORT)/include -I$(SDF)/include -I$(ATERM)/include \
 			-DBINDIR=\"$(bindir)\"
 
 configmanager.o : configmanager.tif.h

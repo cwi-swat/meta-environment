@@ -24,7 +24,7 @@ Revision='$Revision$'
 
 bindir=__BINDIR__
 datadir=__DATADIR__
-pgen=__PGEN__
+pgen=__SDF__
 
 PATH="$bindir:$PATH"
 

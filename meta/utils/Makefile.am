@@ -47,29 +47,29 @@ CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
-                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(SDF)/lib -lAsFix \
                      -L$(ATERM)/lib -lATerm
 
 imports_SOURCES    = imports.c
 imports_LDADD      = libutils.a \
-                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(SDF)/lib -lAsFix \
                      -L$(ATERM)/lib -lATerm
 
 remove_annotation_SOURCES = remove-annotation.c
 remove_annotation_LDADD = -L$(ATERM)/lib -lATerm
 
 apply_function_SOURCES = apply-function.c
-apply_function_LDADD = -L$(ATERM)/lib -lATerm -L$(ASFIX)/lib -lAsFix
+apply_function_LDADD = -L$(ATERM)/lib -lATerm -L$(SDF)/lib -lAsFix
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
 
-INCLUDES           = -I$(ASFIX)/include -I$(ATERM)/include
+INCLUDES           = -I$(SDF)/include -I$(ATERM)/include
 
 % : %.sh.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
-	     s@__PGEN__@$(PGEN)@;\
+	     s@__SDF__@$(SDF)@g;\
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \
@@ -78,7 +78,3 @@ INCLUDES           = -I$(ASFIX)/include -I$(ATERM)/include
 %: %.pl.src Makefile
 	sed 's@__PERL__@$(PERL)@g' < $< > $@ && \
 	chmod +x $@
-
-
-
-	

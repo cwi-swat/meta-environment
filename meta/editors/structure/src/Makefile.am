@@ -33,7 +33,7 @@ se_SOURCES = area.c editor.c focus.c path.c posinfo.c se.c sort.c tree.c \
 	     area.h editor.h focus.h path.h posinfo.h se.h sort.h tree.h
 se_LDADD   = se.tif.o \
                     -L$(ASC_SUPPORT)/lib -lasc-support \
-                    -L$(ASFIX)/lib -lAsFix \
+                    -L$(SDF)/lib -lAsFix \
                     -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES          = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include \

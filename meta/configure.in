@@ -56,14 +56,9 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Require AsFix library
-AC_PACKAGE_REQUIRE(asfix, asource,
-   [  --with-asfix=DIR        AsFix-library is in DIR])
-AC_SUBST(ASFIX)
-
 dnl Require sdf package
 AC_PACKAGE_REQUIRE(sdf, sglr,
-   [  --with-sdf=DIR         sdf is in DIR])
+   [  --with-sdf=DIR          sdf is in DIR])
 AC_SUBST(SDF)
 
 dnl Require asf package
