@@ -12,8 +12,7 @@ imports MyPosInfo[Bag[[Elem]]]
 
 
 exports
-    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]]
-%%	ITERTYPE
+    sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLRVARS  Boolean #  Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
 
     context-free syntax
 
@@ -24,9 +23,8 @@ exports
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
 
         is-var(REXPTYPE)                        		-> Boolean
-	is-simple-type-or-tuple(REXPTYPE)			-> Boolean
-	is-compound-type(REXPTYPE)				-> Boolean
-	is-tuple-exp(REXP)					-> Boolean
+	is-simple-type(REXPTYPE)				-> Boolean
+	is-tuple(Elem)						-> Boolean
 
 	REXPTYPE "==" REXPTYPE					-> Boolean
 
@@ -34,7 +32,6 @@ exports
 	REXP cannot be typed 					-> ERROR
 	FROM cannot be typed					-> ERROR
 	Bag[[Elem]] cannot be typed 				-> ERROR
-%%	Rel[[Elem]] cannot be typed 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
         "Incompatible" argument types REXPTYPE in REXP        	-> ERROR
@@ -43,7 +40,7 @@ exports
         REXP should be of type rel         			-> ERROR
         "No" "definition" for RVAR with argument REXPTYPE       -> ERROR
 
-        "[" {ERROR ";"} * "]"                			-> ERRORS
+        "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
 	t2s(REXPTYPE)						-> String
 	tl2sl({REXPTYPE ","}*)					-> String
@@ -63,6 +60,9 @@ exports
 	store(TENV, RVAR, REXPTYPE)				-> TENV
 	delete(TENV, RVAR)					-> TENV
 
+	store-nvar({RVAR ","}*, REXPTYPE, TENV)			-> TENV
+	delete-nvar({RVAR ","}*, TENV)				-> TENV
+
 	built-ins						-> Table[[RVAR,REXPTYPE]]
 
 	check-rscript(RSCRIPT)					-> List
@@ -73,7 +73,6 @@ exports
 	check-const(Elem, TENV) 					-> REXPTYPE # TENV
 	check-const-tuple(Elem, TENV)				-> REXPTYPE # TENV
 	check-const-bag-or-rel(Bag[[Elem]], TENV) 		-> REXPTYPE # TENV
-%%	check-const-rel(Bag[[Elem]], TENV) 			-> REXPTYPE # TENV
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -81,11 +80,10 @@ exports
         require-type(REXP, REXPTYPE, TENV) 			-> TENV
 	require-bag-type(REXP, RVAR, REXPTYPE, TENV) 		-> TENV
 	require-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
-%%	require-itertype(REXP, ITERTYPE, REXPTYPE, TENV)	-> TENV
-%%	"bag"							-> ITERTYPE
-%%	"rel"							-> ITERTYPE
+	require-nrel-type(REXP, {RVAR ","}+, REXPTYPE, TENV) 	-> TENV
 
         container-type(REXPTYPE)				-> REXPTYPE
+        container-iter-type(REXPTYPE)				-> REXPTYPE
         
         "[" { DCLRVAR ","}* "]"					-> DCLRVARS
 
@@ -96,7 +94,7 @@ exports
         add-formals(DCLRVARS, TENV)             		-> TENV
         del-formals(DCLRVARS, TENV)				-> TENV
 
- 	ext-types(DCLRVARS )                     		-> REXPTYPE
+ 	extract-types(DCLRVARS )                     		-> REXPTYPE
         collect-actuals({REXP ","}*, TENV)        		-> REXPTYPE # TENV
 
         find-result-type(RVAR, REXPTYPE, TENV)   		-> REXPTYPE # TENV
@@ -104,11 +102,10 @@ exports
         match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]])	-> Boolean #  Table[[RVAR,REXPTYPE]]
         substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
 
-	tst(Elem)			-> Integer
-
 
         "and"                          				-> OP
         "or"                           				-> OP
+	"implies"						-> OP
         "not"                          				-> OP
         "in"			      				-> OP
         "notin"			      				-> OP
@@ -133,6 +130,8 @@ exports
         compat "(" REXP "," REXPTYPE OP "," TENV ")" 		-> REXPTYPE #TENV
         compat "(" REXP "," OP REXPTYPE  "," TENV ")" 		-> REXPTYPE #TENV
 
+	compat1(REXP, REXPTYPE, REXPTYPE, TENV)			-> REXPTYPE # TENV
+
 hiddens
 %%    imports asf/syntax/Comments
     variables
@@ -147,10 +146,12 @@ hiddens
      "$Test" [0-9\']*    	-> REXP
      "$Exp*" [0-9\']*    	-> {REXP ","}*
      "$Exp+" [0-9\']*    	-> {REXP ","}+
+     "$Exps" [0-9\']*    	-> {REXP ","}+
 
      "$Op"               	-> OP
      "$Etype" [0-9\']*    	-> REXPTYPE
      "$Etype*" [0-9\']*    	-> {REXPTYPE ","}*
+     "$Etype+" [0-9\']*    	-> {REXPTYPE ","}+
 
 
      "$Elem" [0-9\']*     	-> Elem
@@ -171,6 +172,8 @@ hiddens
      "$String" [0-9\']*    	-> String
 
      "$Var" [0-9\']*       	-> RVAR
+     "$Var*" [0-9\']*       	-> {RVAR ","}*
+     "$Var+" [0-9\']*       	-> {RVAR ","}+
 
       "$DclVar" [0-9\']*	-> DCLRVAR
 
@@ -188,6 +191,4 @@ hiddens
      "$From+" [0-9\']*   	-> {FROM ","}+
 
       "$ListItem*" [0-9\']*	-> {ListItem ","}*
-
-%%      "$IterType"  [0-9\']*	-> ITERTYPE
 	

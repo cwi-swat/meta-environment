@@ -1,5 +1,15 @@
  equations
 
+%% --- Simplify n-ary tuples
+
+[st1]	$Exps = $Exp'
+	=============================================================
+	<$Exp1, $Exp2, $Exps> = <$Exp1, <$Exp2, $Exp'>>
+
+[st2]	$Exps1 = $Exp', $Exps2
+	=============================================================
+	<$Exp1, $Exp2, $Exps1> = <$Exp1, <$Exp2, $Exp', $Exps2>>
+
 %%---- Store
 
 %% Get value of a variable
@@ -91,6 +101,10 @@
 [it-1]	is-tuple(<$Elem1, $Elem2>) = true
 [default-it]
 	is-tuple($Val) = false
+
+[ir1]	is-rel({<$Elem1,$Elem2>, $Elem*}) = true
+[default-ir]
+	is-rel($Val) = false
 
 %%---- Specialized versions of evalx that return value of required type
 
@@ -244,24 +258,16 @@
 	===================================================
 	evalx({$Exp}, $Store) = {$Elem}
 
-%%%% ---- Eval relations
-
-%%[ER2]	$Tuple = evalt($Exp, $Store),
-%%	evalr({$Exp+}, $Store) = {$Tuple+}
-%%	====================================================
-%%	evalx({$Exp, $Exp+}, $Store) = {$Tuple, $Tuple+}
-
-%%[ER2]	$Tuple = evalt($Exp, $Store)
-%%	====================================================
-%%	evalx({$Exp}, $Store) = {$Tuple}
-
-%%%% ---- Eval binary infix operators
+%% ---- Eval binary infix operators
 
 [AND1]	evalx($Exp1 and $Exp2, $Store) 	= apply(evalx($Exp1, $Store), and, evalx($Exp2, $Store))
 [AND2]	apply($Bool1, and, $Bool2) 	= $Bool1 & $Bool2
 
 [OR1]	evalx($Exp1 or $Exp2, $Store) 	= apply(evalx($Exp1, $Store), or, evalx($Exp2, $Store))
-[OR2]	apply($Bool1, or, $Bool2)	= $Bool1 | $Bool2	
+[OR2]	apply($Bool1, or, $Bool2)	= $Bool1 | $Bool2
+
+[IMP1]	evalx($Exp1 implies $Exp2, $Store) 	= apply(evalx($Exp1, $Store), implies, evalx($Exp2, $Store))
+[IMP2]	apply($Bool1, implies, $Bool2)		= not($Bool1 & not($Bool2))	
 
 [IN1]	evalx($Exp1 in $Exp2, $Store) 	= apply(evalx($Exp1, $Store), in, evalx($Exp2, $Store))
 [IN2]	apply($Tuple, in, $Rel)		= in($Tuple, $Rel)
@@ -306,6 +312,7 @@
 [UN6]	apply($Bag1, union, $Bag2)	= union($Bag1, $Bag2)
 [UN7]	apply($Elem, union, $Bag) 	= union({$Elem}, $Bag)
 [UN8]	apply($Bag, union, $Elem) 	= union($Bag, {$Elem})
+[UN9]	apply($Elem1, union, $Elem2)	= union({$Elem1}, {$Elem2})
 
 [IN1]	evalx($Exp1 inter $Exp2, $Store)= apply(evalx($Exp1, $Store), inter, evalx($Exp2, $Store))
 
@@ -316,6 +323,7 @@
 [IN6]	apply($Bag1, inter, $Bag2) 	= inter($Bag1, $Bag2)
 [IN7]	apply($Elem, inter, $Bag) 	= inter({$Elem}, $Bag)
 [IN8]	apply($Bag, inter, $Elem)	= inter($Bag, {$Elem})
+[IN9]	apply($Elem1, inter, $Elem2)	= inter({$Elem1}, {$Elem2})
 
 %% -- difference
 
@@ -328,6 +336,7 @@
 [DF6]	apply($Bag1, \, $Bag2) 		= diff($Bag1, $Bag2)
 [DF7]	apply($Elem, \, $Bag) 		= diff({$Elem}, $Bag)
 [DF8]	apply($Bag, \, $Elem) 		= diff($Bag, {$Elem})
+[DF9]	apply($Elem1, \, $Elem2)	= diff({$Elem1}, {$Elem2})
 
 %% -- composition
 
@@ -349,14 +358,14 @@
 
 [IM1]	evalx($Exp1 . $Exp2, $Store)	= apply(evalx($Exp1, $Store), ., evalx($Exp2, $Store))
  
-[IM2]	apply($Rel, ., $Elem)		= $Rel . $Elem
-[IM3]	apply($Elem, ., $Rel)		= $Elem. $Rel
+[IM2]	apply($Rel, ., $Elem)		= limage($Rel, $Elem) when is-rel($Rel) = true
+[IM3]	apply($Elem, ., $Rel)		= rimage($Elem, $Rel) when is-rel($Rel) = true
 
-[IM4]	apply($Bag, ., $Rel)		= $Bag . $Rel
-[IM5]	apply($Rel, ., $Bag)		= $Rel . $Bag
+[IM4]	apply($Bag, ., $Rel)		= rimage($Bag,  $Rel) when is-rel($Rel) = true
+[IM5]	apply($Rel, ., $Bag)		= limage($Rel,  $Bag) when is-rel($Rel) = true
 
-%%[default-IM11]
-%%	apply($Val1, ., $Val2)		= *empty*
+[default-IM11]
+	apply($Val1, ., $Val2)		= {}
 
 %% -- [ ]
 [IM1]	evalx($Exp1 [ $Exp2 ], $Store)	= evalx($Exp2 . $Exp1, $Store)
@@ -380,59 +389,81 @@
 
 %% ---- Eval bag and relation formers
 
-%% --- Determine resulttype and Simplify multiple Froms
+%% --- Simplify multiple froms
 
 [RF2]	{$Exp | $From+}  =  {$From+ :: $Exp}
 
 [XX] 	{$From, $From+ :: $Exp } = { $From :: {$From+ :: $Exp}}
 
+%% --- test
+
 [et-1a]	$Bool =  evalp($Test, $Store)
 	======================================================================
 	evalx({$Test :: $Exp} , $Store) = if $Bool then evalx($Exp, $Store) else *empty* fi
+
+%% --- assignment, single variable
 
 [ea-1a]	$Val = evalx($Exp1, $Store),
 	$Store' =  assign($Var, $Val, $Store)
 	======================================================================
 	evalx({ $Var <- $Exp1 :: $Exp2 }, $Store) = evalx($Exp2, $Store')
 
-[eat-1a]	
-	<$Elem1, $Elem2> = evalx($Exp1, $Store),
-	$Store' =  assign($Var1, $Elem1, $Store),
-	$Store'' =  assign($Var2, $Elem2, $Store')
-	======================================================================
-	evalx({ <$Var1,$Var2> <- $Exp1 :: $Exp2 }, $Store) = evalx($Exp2, $Store'')
+%% --- assignment, two variables
 
-%% --- Iterate over Bags
+[eat-1a]	
+	$Val = evalx($Exp1, $Store),
+	$Store' =  store-var($Var1, $Var2, $Val, $Store)
+	======================================================================
+	evalx({ <$Var1,$Var2> <- $Exp1 :: $Exp2 }, $Store) = evalx($Exp2, $Store')
+
+%% --- assignment, N variables
+
+[eat-1a]	
+	$Val = evalx($Exp1, $Store),
+	$Store' =  store-var($Var1, $Var2, $Var+, $Val, $Store)
+	======================================================================
+	evalx({ <$Var1,$Var2, $Var+> <- $Exp1 :: $Exp2 }, $Store) = evalx($Exp2, $Store')
+
+%% --- Extract one value 
 
 [ei-1]	$Val = evalx($Exp1, $Store)
 	=======================================
-	evalx({ $Var : $Exp1 :: $Exp2 }, $Store) = eval-iter($Var, $Val, {}, $Exp2, $Store)
+	evalx({ $Var : $Exp1 :: $Exp2 }, $Store) = eval-itern($Var, $Val, {}, $Exp2, $Store)
 
-[ei-2]	$Store' = assign($Var, $Elem, $Store),
-	$Val' = evalx($Exp, $Store'),
-	eval-iter($Var, {$Elem*}, append($Val, $Val'), $Exp, $Store') = $Val''
-	======================================================
-	eval-iter($Var, {$Elem, $Elem*}, $Val, $Exp, $Store) =  $Val''
-
-[ei-3]	eval-iter($Var, {}, $Val, $Exp2, $Store) = $Val
-
-%% --- Iterate over Relations
+%% --- Extract two values
 
 [ei2-1]	$Val = evalx($Exp1, $Store)
 	=======================================
 	evalx({ <$Var1, $Var2> : $Exp1 :: $Exp2 }, $Store) = 
-	eval-iter2($Var1, $Var2, $Val, {}, $Exp2, $Store)
+	eval-itern($Var1, $Var2, $Val, {}, $Exp2, $Store)
 
-[ei2-2]	$Store' = assign($Var1, $Elem1, $Store),
-	$Store'' = assign($Var2, $Elem2, $Store'),
-	$Val' = evalx($Exp, $Store''),
-	eval-iter2($Var1, $Var2, {$Elem*}, append($Val, $Val'), $Exp, $Store'') = $Val''
+%% --- Extract N values
+
+[ei2-1]	$Val = evalx($Exp1, $Store)
+	=======================================
+	evalx({ <$Var1, $Var2, $Var+> : $Exp1 :: $Exp2 }, $Store) = 
+	eval-itern($Var1, $Var2, $Var+, $Val, {}, $Exp2, $Store)
+
+%% --- eval-itern: the workhorse for bag/rel formers
+
+[ei2-2]	$Store' = store-var($Var+, $Elem, $Store),
+	$Val' = evalx($Exp, $Store'),
+	eval-itern($Var+, {$Elem*}, append($Val, $Val'), $Exp, $Store') = $Val''
 	======================================================
-	eval-iter2($Var1, $Var2, {<$Elem1, $Elem2>, $Elem*}, $Val, $Exp, $Store) = $Val''
+	eval-itern($Var+, {$Elem, $Elem*}, $Val, $Exp, $Store) = $Val''
 
-[ei2-3]	eval-iter2($Var1, $Var2, {}, $Val, $Exp2, $Store) = $Val
+[ei2-3]	eval-itern($Var+, {}, $Val, $Exp2, $Store) = $Val
 
+%% -- Assign to list of variables
 
+[sv1]	$Store' = assign($Var, $Elem1, $Store)
+	=====================================================
+	store-var($Var, $Var+, <$Elem1, $Elem2>, $Store) =
+	store-var($Var+, $Elem2, $Store')
+
+[sv2]	$Store' = assign($Var, $Elem, $Store)
+	=====================================================
+	store-var($Var, $Elem, $Store) = $Store'
 
 %% ---- Auxiliary functions for bag and relation formers
 
@@ -440,8 +471,6 @@
 
 [AP1]	append($Bag, $Elem) = union2($Bag, $Elem)
 [AP2]	append($Bag1, $Bag2) = union($Bag1, $Bag2)
-%%[AP3]	append($Rel, $Tuple) = union2($Rel, $Tuple)
-%%[AP4]	append($Rel1, $Rel2) = union($Rel1, $Rel2)
 
 %%%% --- Exists in bag
 %%
@@ -483,6 +512,20 @@
 %%	evalx(forall(<$Var1, $Var2> in $Exp | $Test), $Store) = not($Bool)
 
 %% ------------------------------
+
+%% --- Auxiliary functions for powerset
+
+[ae1]	add-element($Elem, {{$Elem*1}, $Elem*2}) =
+	union({{$Elem, $Elem*1}}, add-element($Elem, {$Elem*2}))
+
+[ae2]	add-element($Elem, {}) = {}
+
+[pw1]	power({$Elem*}) = $Bag1,
+	add-element($Elem, $Bag1) = $Bag2
+	====================================================
+	power({$Elem, $Elem*}) = union($Bag1, $Bag2)
+
+[pw2]	power({}) = {{}}
 
 %%  ---- FUN ( EXP ) -> EXP
 
@@ -532,6 +575,12 @@
 [Fsec]	evalx($Exp, $Store) = <$Elem1, $Elem2>
 	===================================================
 	evalx(second($Exp), $Store) = $Elem2
+
+[Fpower]	
+	$Bag  = evalb($Exp, $Store)
+	====================================================
+	evalx(power($Exp), $Store) = power($Bag)
+	
 
 %% ---- FUN ( EXP , EXP )  -> EXP
 
