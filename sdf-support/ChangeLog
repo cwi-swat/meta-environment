@@ -1,3 +1,7 @@
+2002/11/04 (vinju@loria.fr)
+ * Regenerated library with new sdf-apigen features
+ * Removed dependency on pt-support where possible
+
 2002/10/10 (jurgenv@cwi.nl)
  * Added functionality to add an import to a module
 

@@ -2,6 +2,7 @@
 #define _SDFME_UTILS_H
 
 #include "SDFME.h"
+#include "MEPT.h"
 
 char      *SDFgetModuleName (SDF_Module sdfModule);
 SDF_Module SDFsetModuleName (SDF_Module sdfModule, char *name);
@@ -53,11 +54,10 @@ ATbool SDF_hasRejectAttribute(SDF_Production prod);
 ATbool SDF_hasPreferAttribute(SDF_Production prod);
 ATbool SDF_hasAvoidAttribute(SDF_Production prod);
 
-SDF_Layout SDF_makeLayoutEmpty();
+SDF_OptLayout SDF_makeLayoutEmpty();
 
 SDF_Import SDFmakeImport(char *moduleName);
 SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
-
 
 PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction);
 PT_Symbol SDFSymbolToPtSymbol(SDF_Symbol symbol);

@@ -10,11 +10,9 @@ noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${top_srcdir}/libME \
 			-I$(ATERM)/include \
-			-I$(PT_SUPPORT)/include \
 			-DSRC_DIR=\"${srcdir}\"
 
 LDLIBS			= -L../libME -lSDFME \
-                          -L$(PT_SUPPORT)/lib -lmept \
                           -L$(ATERM)/lib -lATerm
 
 grammars_SOURCES	= grammars.c

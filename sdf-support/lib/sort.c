@@ -5,10 +5,10 @@
 static void
 collect_sorts(SDF_Grammar grammar, SDF_SymbolList *sorts)
 {
+  
   if (SDF_isGrammarSorts(grammar)) {
     SDF_Symbols symbols = SDF_getGrammarSymbols(grammar);
     SDF_SymbolList symbolList = SDF_getSymbolsList(symbols);
-
     while (!SDF_isSymbolListEmpty(symbolList)) {
       SDF_Symbol symbol = SDF_getSymbolListHead(symbolList);
 
@@ -29,6 +29,7 @@ collect_sorts(SDF_Grammar grammar, SDF_SymbolList *sorts)
       symbolList = SDF_getSymbolListTail(symbolList);
     }
   }
+
 }
 
 /*}}}  */

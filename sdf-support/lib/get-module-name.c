@@ -11,7 +11,7 @@ char *SDFgetModuleName(SDF_Module sdfModule)
   moduleName = SDF_getModuleModuleName(sdfModule);
   moduleId   = SDF_getModuleNameModuleId(moduleName);
 
-  return PT_yieldTree(SDF_getModuleIdLex(moduleId));
+  return SDF_getCHARLISTString(SDF_getModuleIdChars(moduleId));
 }
 
 /*}}}  */
@@ -19,8 +19,7 @@ char *SDFgetModuleName(SDF_Module sdfModule)
 
 SDF_ModuleId SDFmakeModuleId(char *moduleStr)   
 {
-  return SDF_makeModuleIdLexToCf(
-             (SDF_Lexical)PT_makeTreeFlatLexicalFromString(moduleStr));
+  return SDF_makeModuleIdWord(SDF_makeCHARLISTString(moduleStr));
 }
 /*}}}  */
 /*{{{  SDF_Module SDFmakeModuleName(char *moduleName) */
