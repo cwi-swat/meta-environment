@@ -11,8 +11,13 @@ let
 in
   (
     rec-msg(open-initial-module(Path?, Module?, Extension?)) .
-    snd-msg(extension-to-type-hook(Extension)) .
-    rec-msg(extension-to-type-hook-result(Type?)) .
+printf("Ex = %s\n", Extension).
+    if equal(Extension, "") then
+      Type := quote(sdf)
+    else 
+      snd-msg(extension-to-type-hook(Extension)) .
+      rec-msg(extension-to-type-hook-result(Type?))
+    fi .
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
