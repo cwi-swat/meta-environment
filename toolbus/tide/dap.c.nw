@@ -408,7 +408,7 @@ TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
 
 %}}}
 
-%{{{ void   dap_init(int cid, function_table ftable, action_table atable)
+%{{{ void   dap_init(int cid, char **itable, function_table ftable, action_table atable)
 
 Initialize some variables and the event queues.
 

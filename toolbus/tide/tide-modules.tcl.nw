@@ -59,12 +59,12 @@ Load and initialize a number of tide modules.
 
 <<tide-init-modules>>=
 proc tide-init-modules { modules } {
-    global Tide
+    global Tide TB_LIBDIR
 
     foreach mod $modules {
       # puts stderr "loading module $mod"
       if { [lsearch $Tide(modules) $mod] == -1 } {
-        if { [catch "uplevel #0 \"source tide-$mod.tcl\"" err] } {
+        if { [catch "uplevel #0 \"source $TB_LIBDIR/tide/tide-$mod.tcl\"" err] } {
           puts stderr "Error while loading file tide-$mod.tcl: $err"
         } else {
           lappend Tide(modules) $mod
@@ -1193,20 +1193,21 @@ proc tide-change-current-port { dap pids port } {
 
 # Global variables
 
-set ES(unknown)		bitmaps/unknown.xbm
-set ES(stop)		bitmaps/stop.xbm
-set ES(run)		bitmaps/run.xbm
-set ES(single-step)	bitmaps/single-step.xbm
-set ES(step-over)	bitmaps/step-over.xbm
+set bitmaps $TB_LIBDIR/bitmaps
+set ES(unknown)		$bitmaps/unknown.xbm
+set ES(stop)		$bitmaps/stop.xbm
+set ES(run)		$bitmaps/run.xbm
+set ES(single-step)	$bitmaps/single-step.xbm
+set ES(step-over)	$bitmaps/step-over.xbm
 
-set IMG(unknown)	[image create bitmap -file bitmaps/unknown.xbm]
-set IMG(stop)		[image create bitmap -file bitmaps/stop.xbm]
-set IMG(run)		[image create bitmap -file bitmaps/run.xbm]
-set IMG(single-step)	[image create bitmap -file bitmaps/single-step.xbm]
-set IMG(step-over)	[image create bitmap -file bitmaps/step-over.xbm]
+set IMG(unknown)	[image create bitmap -file $bitmaps/unknown.xbm]
+set IMG(stop)		[image create bitmap -file $bitmaps/stop.xbm]
+set IMG(run)		[image create bitmap -file $bitmaps/run.xbm]
+set IMG(single-step)	[image create bitmap -file $bitmaps/single-step.xbm]
+set IMG(step-over)	[image create bitmap -file $bitmaps/step-over.xbm]
 
-set IMG(selected,1)	[image create bitmap -file bitmaps/selected.xbm]
-set IMG(selected,0)	[image create bitmap -file bitmaps/unselected.xbm]
+set IMG(selected,1)	[image create bitmap -file $bitmaps/selected.xbm]
+set IMG(selected,0)	[image create bitmap -file $bitmaps/unselected.xbm]
 @
 
 %{{{ proc tide-init-ui-process-list { }

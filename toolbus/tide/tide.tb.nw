@@ -222,7 +222,7 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
-  snd-note(new-tool("Source viewer", S, view-source)) .
+  snd-note(new-tool("View source", S, view-source)) .
   ( rec-msg(S, view-source, D?) .
     snd-do(S, view-source(D))
     +
@@ -290,7 +290,7 @@ in
   subscribe(event(<term>,watchpoint(<int>,[[exec-state,<term>]]))) .
   subscribe(event(<term>,watchpoint(<int>,[[process-name,<term>]]))) .
   subscribe(event(<term>,current-port(<term>))) .
-  snd-note(new-tool("Rule viewer", R, view-rules)) .
+  snd-note(new-tool("View rules", R, view-rules)) .
   ( rec-msg(R, view-rules, D?) .
     snd-do(R, view-rules(D))
     +
