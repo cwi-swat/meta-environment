@@ -2,6 +2,9 @@
 
 2003/07/24 (markvdb@cwi.nl)
  * Repaired the printing of the text of a module.
+ * Introduced the notions of "warning(f)" and "message(f)" which
+   have a different appearance in the error message display of the
+   UI.
 
 2003/07/22 ({markvdb,jurgenv}@cwi.nl)
  * Repaired a number of bugs concerning erroneous modules in conjunction
