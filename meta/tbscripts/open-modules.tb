@@ -192,11 +192,11 @@ in
       )
     +
       rec-msg(no-parse-table(Type, Error?))
-      . Error("No parse table: %t\n", [Error])
+      . Error("TODO fix the error No parse table: %t\n", [Error])
     )
   +
     rec-msg(io-error-reading(Error?))
-    . Error("io-error-reading: %t\n", [Error])
+    . Error("TODO fix this error io-error-reading: %t\n", [Error])
   )
   . snd-note(ui-status(endstat(Id)))
 endlet

@@ -401,29 +401,37 @@ in
   (
     rec-msg(io-file-exists)
     . snd-msg(io-read-file(FileName))
-    . rec-msg(io-file-contents(FileText?))
-    . snd-msg(update-module-text-in-db(ModuleName, FileText, no-tree, Type))
     .
     (
-      rec-msg(no-updating-needed)
-    +
-      rec-msg(updating-succeeded(DependingModules?))
-      . printf("this bites\n")
+      rec-msg(io-file-contents(FileText?))
+      . snd-msg(update-module-text-in-db(ModuleName, FileText, no-tree, Type))
       .
-      if equal(Error, no-errors) then
-        snd-msg(update-module-in-db(ModuleName, Tree, Type))
-        .
-        (
-          rec-msg(updating-succeeded(Imports?))
-          . OpenModules(Imports, Type)
-        +
-          rec-msg(error-opening(ModuleName, name-inconsistent))
-          . Error("Check consistency: module name %s contains an error",
-                  [ModuleName])
-        )
-      else
-        printf("CheckSyntaxConsistency: error ignored: %t\n", Error)
-      fi
+      (
+	rec-msg(no-updating-needed)
+      +
+	rec-msg(updating-succeeded(DependingModules?))
+	. printf("this bites\n")
+	.
+	if equal(Error, no-errors) then
+	  snd-msg(update-module-in-db(ModuleName, Tree, Type))
+	  .
+	  (
+	    rec-msg(updating-succeeded(Imports?))
+	    . OpenModules(Imports, Type)
+	  +
+	    rec-msg(error-opening(ModuleName, name-inconsistent))
+	    . Error("Check consistency: module name %s contains an error",
+		    [ModuleName])
+	  )
+	else
+	  printf("CheckSyntaxConsistency: error ignored: %t\n", Error)
+	fi
+      )
+    +
+      rec-msg(io-error-reading(Error?))
+      . printf("TODO: fix this error message %t\n", Error)
+      . snd-msg(close-module-in-db(ModuleName))
+      . rec-msg(module-closed(ModuleName))
     )
   +
     rec-msg(io-file-not-exists)
@@ -437,7 +445,8 @@ let
   FileName: str,
   FileText: str,
   RepositoryText: str,
-  Extension: str
+  Extension: str,
+  Error : term
 in
   snd-msg(file-extension-hook(asf))
   . rec-msg(file-extension-hook-result(Extension?))
@@ -448,9 +457,15 @@ in
   (
     rec-msg(io-file-exists)
     . snd-msg(io-read-file(FileName))
-    . rec-msg(io-file-contents(FileText?))
-    . snd-msg(update-eqs-text-in-db(ModuleName, FileText))
-    . rec-msg(eqs-text-updated(ModuleName))
+    .
+    (
+      rec-msg(io-file-contents(FileText?))
+      . snd-msg(update-eqs-text-in-db(ModuleName, FileText))
+      . rec-msg(eqs-text-updated(ModuleName))
+    +
+      rec-msg(io-error-reading(Error?))
+      . printf("TODO: fix this error %t\n", Error)
+    )
   +
     rec-msg(io-file-not-exists)
     . snd-msg(get-eqs-text(ModuleName))
@@ -550,6 +565,7 @@ in
       fi
     +
       rec-msg(io-error-reading(Error?))
+      . printf("TODO: fix this error %t\n", Error)
     )
     . snd-note(ui-status(endstat(Id)))
   +
