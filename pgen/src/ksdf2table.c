@@ -380,7 +380,6 @@ ATerm process_priorities(ATermList prios)
       }
     }
   }
-  ATtableDestroy(prod_nr_pairs);
 
   if(run_verbose) ATwarning("Processed %d priorities\n", cnt);
   return ATmake("[<list>]",prioentries);
