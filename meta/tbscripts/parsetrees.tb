@@ -2,9 +2,6 @@
   $Id$
  */
 
-tool evaluator is {
-  command = "evaluator"
-}
 tool compiler is {
   command = "compiler -print-gc-info -termtable 20"
 }
@@ -26,18 +23,13 @@ let
   Tmp    : term
 in
   /* Start up tools and initialize */
-  execute(evaluator, Eval?).
-  snd-do(Eval, create-equations-db).
   execute(addeqssyntax,Addsyn?).
   /* Start all controlling processes */
-  create(Retrieve-eqs(Eval), Tid?).
   create(Open-modules, Tid?).
-  create(Rewrite(Eval), Tid?).
-  create(Evaluator(Eval), Tid?).
   create(Compiler(), Tid?).
   create(PGen(), Tid?).
   create(Help(), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
-  create(Clear-all(Eval), Tid?).
-  create(Close-modules(Eval), Tid?)
+  create(Clear-all(), Tid?).
+  create(Close-modules(), Tid?)
 endlet

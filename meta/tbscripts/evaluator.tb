@@ -1,12 +1,25 @@
-/*
-  $Id$
- */
-process Evaluator(Eval: evaluator) is
+
+#include "retrieve-eqs.tb"
+#include "rewrite.tb"
+
+tool evaluator is {
+  command = "evaluator"
+}
+
+process Evaluator is
 let
+  Eval : evaluator,
+  Tid  : int,
   NF   : term,
   Mod  : str,
   Term : term
 in
+  execute(evaluator, Eval?) .
+  snd-do(Eval, create-equations-db).
+  create(Retrieve-eqs(Eval), Tid?).
+  create(Rewrite(Eval), Tid?).
+
+  subscribe(language-unavailable(<str>)) .
   (
     rec-msg(interpret(Mod?,Term?)).
     snd-eval(Eval,interpret(Mod,Term)).
@@ -21,6 +34,10 @@ in
       rec-value(Eval,eqs-not-available(Mod?)).
       snd-msg(eqs-not-available)
     )
-  ) * 
+  +
+    rec-note(language-unavailable(Mod?)) .
+    printf("Evaluator received language-unavailable(%s)\n", Mod) .
+    snd-do(Eval, remove-equations(Mod))
+  ) *
   delta
 endlet

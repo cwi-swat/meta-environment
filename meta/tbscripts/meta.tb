@@ -5,18 +5,16 @@
 #include "sglr.idef"
 #include "editor.tb"
 #include "structure-editor.tb"
+#include "evaluator.tb"
 #include "focus.tb"
 #include "edit-term.tb"
 #include "prettyprinter.tb"
-#include "rewrite.tb"
-#include "evaluator.tb"
 #include "in-output.idef"
 #include "parsetrees.tb"
 #include "open-modules.tb"
 #include "file-creator.tb"
 #include "close-modules.tb"
 #include "revert-module.tb"
-#include "retrieve-eqs.tb"
 #include "ui.tb"
 #include "status-display.tb"
 #include "edit-module.tb"
@@ -37,4 +35,4 @@
 
 toolbus(Parser, Parsetrees, Prettyprinter, Io, Ui, Edit-master, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
-	Set-parsetable, Open-Sdf2-Language) 
+	Set-parsetable, Open-Sdf2-Language, Evaluator) 
