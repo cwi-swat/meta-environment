@@ -105,10 +105,11 @@ proc monitor_atom {pid atfun src blino bpos elino epos} {
      act_proc $c $pid
      recordAtom $pid $src $blino $bpos $elino $epos
      
-     set line_break "$src $blino"
-     
-     if { [lsearch $tracer_state(line_breaks) $line_break] == 0 } {
-       do_stop
+     set line_break [concat $src,$blino]
+
+#    hack to be able to stop at line breakpoints
+     if { [lsearch $tracer_state(line_breaks) $line_break] >= 0 } {
+        do_stop
      }
 
      if { [string compare $tracer_state(mode) step_mode] == 0|| \
@@ -283,8 +284,8 @@ proc addBreak {w} {
      set lp [$w index insert]
      regexp {([0-9]+)\.([0-9]+)} $lp clp l p;
      set breaks $tracer_state(line_breaks)
-     set line_break "$current_src $l"
-     set i [lsearch $breaks $line_break]
+     set line_break [concat $current_src,$l]
+     set i [lsearch $breaks $l]
      if { $i < 0 } {     
         lappend tracer_state(line_breaks) $line_break
         $w tag add break $l.0 [expr $l + 1].0
