@@ -4,6 +4,7 @@
  * Added package dependency on asf-library package
  * The location of the installed asf-library is added to the search path
    implicitly.
+ * Added Open Library buttons to the graphbrowser and metastudio
 
 2002/05/14 (vandenbr@loria.fr)
  * Fixed a bug in the renaming of hiddens ImportSections.
