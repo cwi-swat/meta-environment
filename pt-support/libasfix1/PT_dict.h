@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Feb 16 13:24:27 2001
+ * Generated at Fri Feb 16 14:11:21 2001
  */
 
 #ifndef __PT_dict_H
@@ -12,11 +12,6 @@ extern ATerm PT_patternSymbolsEmpty;
 extern ATerm PT_patternSymbolsList;
 extern ATerm PT_patternArgsEmpty;
 extern ATerm PT_patternArgsList;
-extern ATerm PT_patternLayoutDefault;
-extern ATerm PT_patternSeparatorDefault;
-extern ATerm PT_patternLexicalDefault;
-extern ATerm PT_patternQLiteralDefault;
-extern ATerm PT_patternLiteralDefault;
 extern ATerm PT_patternSymbolQuotedLiteral;
 extern ATerm PT_patternSymbolUnquotedLiteral;
 extern ATerm PT_patternSymbolSort;
@@ -34,15 +29,14 @@ extern ATerm PT_patternAttrsMany;
 extern ATerm PT_patternAttributesAttrs;
 extern ATerm PT_patternAttributesNoAttrs;
 extern ATerm PT_patternProductionDefault;
-extern ATerm PT_patternVarDefault;
+extern ATerm PT_patternTreeVar;
+extern ATerm PT_patternTreeLayout;
 extern ATerm PT_patternTreeSeparator;
 extern ATerm PT_patternTreeQuotedLiteral;
 extern ATerm PT_patternTreeUnquotedLiteral;
 extern ATerm PT_patternTreeLexical;
 extern ATerm PT_patternTreeList;
 extern ATerm PT_patternTreeAppl;
-extern ATerm PT_patternTreeVar;
-extern ATerm PT_patternTreeLayout;
 extern ATerm PT_patternModuleNameDefault;
 extern ATerm PT_patternParseTreeTree;
 

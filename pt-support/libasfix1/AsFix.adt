@@ -4,17 +4,15 @@
 					l("X"),
 					w(""),
 					id("X"),
-					<layout-before-tree(Layout)>,
+					w(<layout-before-tree(str)>),
 					<tree(Tree)>,
-					<layout-after-tree(Layout)>,
+					w(<layout-after-tree(str)>),
 					no-abbreviations) 
   ],
   
 
-  [ModuleName, default, id(<id(String)>)],
+  [ModuleName, default, id(<id(str)>)],
 
-  [Tree, layout, <layout(Layout)>],
-  [Tree, var, <var(Var)>], 
   [Tree, appl, appl(<prod(Production)>,
                     w(""),
                     <args(Args)>
@@ -25,15 +23,14 @@
                     <args(Args)>
                    )
   ],
-  [Tree, lexical, <lexical(Lexical)>],
-  [Tree, unquoted-literal, <literal(Literal)>],
-  [Tree, quoted-literal, <qliteral(QLiteral)>],
-  [Tree, separator, <separator(Separator)>],
+  [Tree, lexical, lex(<string(str)>,<symbol(Symbol)>)],
+  [Tree, unquoted-literal, l(<string(str)>)],
+  [Tree, quoted-literal, ql(<string(str)>)],
+  [Tree, separator, sep(<string(str)>)],
+  [Tree, layout, w(<string(str)>)],
+  [Tree, var, var(<name(str)>,<symbol(Symbol)>)], 
 
-  [Var, default, var(<name(String)>,<symbol(Symbol)>)],
-
-
-  [Production, default, prod(id(<module-name(String)>),
+  [Production, default, prod(id(<module-name(str)>),
                        w(""),
                        <lhs(Symbols)>,
                        w(""),
@@ -70,7 +67,7 @@
                            w(""),
                            <symbol(Symbol)>,
                            w(""),
-                           <separator(Separator)>,
+                           ql(<separator(str)>),
                            w(""),
                            l("}"),
                            w(""),
@@ -80,7 +77,7 @@
                            w(""),
                            <symbol(Symbol)>,
                            w(""),
-                           <separator(Literal)>,
+                           ql(<separator(str)>),
                            w(""),
                            l("}"),
                            w(""),
@@ -89,15 +86,9 @@
 
   [Symbol, empty-layout, w("")],
 
-  [Symbol, sort, sort(<string(String)>)],
-  [Symbol, unquoted-literal, <literal(Literal)>],
-  [Symbol, quoted-literal, <qliteral(QLiteral)>],
-
-  [Literal, default, l(<string(String)>)],
-  [QLiteral, default, ql(<string(String)>)],
-  [Lexical, default, lex(<string(String)>,<symbol(Symbol)>)],  
-  [Separator, default, sep(<string(String)>)],
-  [Layout, default, w(<string(String)>)], 
+  [Symbol, sort, sort(<string(str)>)],
+  [Symbol, unquoted-literal, l(<string(str)>)],
+  [Symbol, quoted-literal, ql(<string(str)>)],
 
   [Args, list, [<head(Tree)>,<[tail(Args)]>]],
   [Args, empty, [ ]],
