@@ -25,6 +25,7 @@ char  *parse_table_name = NULL;
 char  *hostname         = NULL;
 char  *port             = NULL;
 char  *tool             = program_name;
+ATbool text_mode        = ATfalse;
 ATbool asfix1_mode      = ATfalse;
 ATbool debug_mode       = ATfalse;
 
@@ -68,12 +69,22 @@ char *ReadFile(char *fnam, size_t *size)
   return(buf);
 }
 
+void WriteTerm(FILE *fd, ATerm t)
+{
+  if(text_mode)
+    ATwriteToTextFile(t, fd);
+    if(fd == stdout || fd == stderr)
+      ATfprintf(fd, "\n");
+  else
+    ATwriteToBinaryFile(t, fd);
+}
+
 void WriteFile(char *fnam, ATerm tree)
 {
   FILE *fd;
 
   if(!strcmp("-", fnam)) {
-    ATwriteToBinaryFile(tree,stdout);
+    WriteTerm(stdout, tree);
     return;
   }
 
@@ -81,7 +92,7 @@ void WriteFile(char *fnam, ATerm tree)
     fprintf(stderr, "could not fopen() %s\n", fnam);
   }
   else {
-    ATwriteToBinaryFile(tree,fd);
+    WriteTerm(fd, tree);
     fclose(fd);
   }
 }
@@ -129,10 +140,11 @@ void rec_terminate(int cid, ATerm t) {
 void Usage(FILE *stream, ATbool long_message)
 {
   const char usage[] =
-    "Usage: %s -T toolname [-dh] -i input-file -p parse-table [-o file]  \\\n"
+    "Usage: %s -T toolname [-btdh] -i input-file -p parse-table [-o file]\\\n"
     "       [-H hostname] [-P port] [-s sort]\n%s";
   const char long_usage[] =
     "\n"
+    "\t-t   file : output binary AsFix             (default)\n"
     "\t-h        : usage information\n"
     "\t-i   file : input from |file|               (*)\n"
     "\t-p   file : use parse table |file|          (*)\n"
@@ -141,6 +153,7 @@ void Usage(FILE *stream, ATbool long_message)
     "\t-P   port : parse server runs on |port|     (default: 8999)\n"
     "\t-T   tool : parse server toolname is |tool| (default: `"program_name"')\n"
     "\t-o   file : output to |file|                (default: stdout)\n"
+    "\t-t   file : output plaintext AsFix          (default: binary)\n"
     "\n"
     "\tItems marked with (*) are mandatory; all others are optional.\n";
 
@@ -151,16 +164,18 @@ void handle_options (int argc, char **argv)
 {
   int c; /* option character */
 
-  while ((c = getopt(argc, argv, "12dhi:o:p:s:H:P:T:")) != EOF)
+  while ((c = getopt(argc, argv, "12bdhi:o:p:s:tH:P:T:")) != EOF)
     switch (c) {
       case '1':   asfix1_mode = ATtrue;       break;
       case '2':   asfix1_mode = ATfalse;      break;
+      case 'b':   text_mode   = ATfalse;      break;
       case 'd':   debug_mode  = ATtrue;       break;
       case 'h':   Usage(stdout, ATtrue);      exit(0);
       case 'i':   input_file_name  = optarg;  break;
       case 'o':   output_file_name = optarg;  break;
       case 'p':   parse_table_name = optarg;  break;
       case 's':   start_symbol     = optarg;  break;
+      case 't':   text_mode        = ATtrue;  break;
       case 'H':   hostname         = optarg;  break;
       case 'P':   port             = optarg;  break;
       case 'T':   tool             = optarg;  break;
