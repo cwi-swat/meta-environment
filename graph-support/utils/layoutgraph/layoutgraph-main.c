@@ -8,7 +8,7 @@
 
 static char myname[] = "layoutgraph";
 static char myversion[] = "1.0";
-static char myarguments[] = "hi:o:V";
+static char myarguments[] = "hi:o:tV";
 
 
 /*{{{  void rec_terminate(int conn, ATerm arg) */
