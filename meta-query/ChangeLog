@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Sep 18 13:44:49 CEST 2003 <jong@cwi.nl>
+ * generalize 'tbscan' (which did TB specific extraction)
+   to 'extract-relations', which has parse-table and equations as
+   parameters.
+
 Mon Jul 14 11:00:22 CEST 2003 <jong@cwi.nl>
  * use configured locations for asfc, idef2tif and tifstoc
 
