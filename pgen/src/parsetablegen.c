@@ -75,7 +75,7 @@ void rec_terminate(int cid, ATerm t) {
 
 static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
-  SDF_ModuleName sdfModuleName = SDFmakeModuleName(str);
+  SDF_ModuleName sdfModuleName = SDF_makeModuleName(str);
   PT_Tree ptModuleName = PT_makeTreeFromTerm(
                            SDF_makeTermFromModuleName(sdfModuleName));
   PT_Tree newTree = NULL;
