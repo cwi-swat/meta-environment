@@ -11,22 +11,10 @@ myversion="1.0"
 # explanation.
 myarguments="bhi:o:tvV"
 
-if [ $myarguments ] ; then
-    myargsexplained=$myarguments
-    # Add ' -' before, and add ' ' after, all options that have an argument
-    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
-    # Add '-' where necessary
-    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
-    # Replace argument position indicator ':' by ' arg'
-    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
-
-    myargsexplained=" -$myargsexplained"
-fi
-
 # Usage: displays helpful usage information
 Usage() {
 cat << E_O_USAGE >&2
-Usage: $myname$myargsexplained . . .
+Usage: $myname [options]
 Options:
     -b              output terms in BAF format (default)
     -h              display help information (usage)
