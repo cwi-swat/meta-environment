@@ -21,7 +21,8 @@ asfe_SOURCES = asfe.c evaluator.c equations.c debug.c traversalfunctions.c \
 asfe_LDADD		= asfe.tif.o \
                         -L$(PT_SUPPORT)/lib -lmept \
 			-L$(ASF_SUPPORT)/lib -lASFME \
-			-L$(ASF_LIBRARY)/lib -lasf-builtins \
+			-L$(top_builddir)/semantics/builtins/lib \
+			-lasf-builtins \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
                         -L./api -lASFAPI \
@@ -33,6 +34,6 @@ INCLUDES		= ${TIDEINC} \
 			-I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ASF_SUPPORT)/include \
-			-I$(ASF_LIBRARY)/include \
+			-I$(top_builddir)/semantics/builtins/lib \
                         -I$(srcdir)/api \
 			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
