@@ -19,13 +19,14 @@ public class Main {
     //PETest();
     //LetTest();
     //CallTest();
+     //CallTest2();
     //IfTest(); 
     //CreateTest();
     //NestedIterTest();
-	// MergeTest();
-    //SieveTest();
+    // MergeTest();
+    SieveTest();
     //producerTest();
-    ToolTest();
+    //ToolTest();
   }
   
   static void atomTest(){
@@ -149,6 +150,21 @@ public class Main {
     }
     catch (ToolBusException e) { System.out.println(e.getMessage()); }
   }
+  
+  static void CallTest2(){
+    ProcessDefinition P =
+    new ProcessDefinition("P", (ATermList) aterms.make("[var(-1,int,x)]"),
+      new Print((ATermList) aterms.make("[var(-1,int,x)]"))
+      );
+      
+      try {
+          ToolBus T = new ToolBus();
+          T.addProcessDefinition(P);
+          T.addProcess("P", (ATermList) aterms.make("[3]"));
+          T.execute();
+      } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
+  }
+  
 
   static void IfTest(){
 

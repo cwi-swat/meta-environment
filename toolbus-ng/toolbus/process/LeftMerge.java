@@ -16,6 +16,12 @@ public class LeftMerge extends AbstractProcessExpression {
     this.right = right;
   }
 
+
+ public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+    left.expand(P, calls);
+    right.expand(P, calls);
+   }
+ 
   public void compile(ProcessInstance PI, AtomSet followSet) throws ToolBusException {
 
     right.compile(PI, followSet);

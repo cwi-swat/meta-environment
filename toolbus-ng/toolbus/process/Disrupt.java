@@ -1,5 +1,6 @@
 package toolbus.process;
 
+import java.util.*;
 import java.util.Vector;
 
 import toolbus.ToolBusException;
@@ -24,6 +25,10 @@ public class Disrupt extends AbstractProcessExpression {
       addToFollow(f);
     }
   }
+   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+    left.expand(P, calls);
+    right.expand(P, calls);
+   }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     left.compile(P, follow);
