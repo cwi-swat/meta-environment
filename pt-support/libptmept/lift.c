@@ -280,9 +280,11 @@ PTPT_ATerm PTPT_liftATerm(ATerm term)
 
   initGlobals(NULL);
 
-  result = lookupATerm(term);
-  if (result) {
-    return result;
+  if (ATgetType(term) != AT_INT) {
+    result = lookupATerm(term);
+    if (result) {
+      return result;
+    }
   }
 
   if (annos != NULL) {
@@ -303,6 +305,10 @@ PTPT_ATerm PTPT_liftATerm(ATerm term)
     double real = ATgetInt((ATermInt) term);
     result = PTPT_makeATermReal(PTPT_liftRealCon(real));
   }
+  else if (ATgetType(term) == AT_PLACEHOLDER) {
+    PTPT_ATerm ph = PTPT_liftATerm(ATgetPlaceholder((ATermPlaceholder) term));
+    result = PTPT_makeATermPlaceholder(e, ph, e);
+  }
   else {
     ATwarning("lift: unsupported ATerm %t\n", term);
     assert(ATfalse);
@@ -312,7 +318,10 @@ PTPT_ATerm PTPT_liftATerm(ATerm term)
     result = PTPT_makeATermAnnotated(result, e, ann);
   }
 
-  storeATerm(term, result);
+  /* otherwise we map AsFix characters onto ATerm ints and vice versa */
+  if (ATgetType(term) != AT_INT) {
+    storeATerm(term, result);
+  }
 
   return result;
 }

@@ -226,6 +226,10 @@ ATerm PTPT_lowerATerm(PTPT_ATerm term)
 
     result = (ATerm) ATmakeReal(PTPT_lowerRealCon(real));
   }
+  else if (PTPT_isATermPlaceholder(term)) {
+    ATerm type = PTPT_lowerATerm(PTPT_getATermType(term));
+    result = (ATerm) ATmakePlaceholder(type);
+  }
   else {
     ATwarning("lower: unsupported ATerm %t\n", term);
     assert(ATfalse);
