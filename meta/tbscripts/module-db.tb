@@ -373,7 +373,7 @@ in
       rec-msg(ts-value(Path?)) .
       MDB-GetImportedModules(Name, Modules?) .
       MDB-GetDependingModules(Name, DependingModules?) .
-      snd-msg(module-info(Name, [[path, Path], [imports, Modules], [importedby, DependingModules]]))
+      snd-msg(module-info(Name, [[path, Path], [importedby, Modules], [imports, DependingModules]]))
     +
       rec-msg(ts-no-value) .
       snd-msg(module-info(Name, [[path,"not-available"]]))

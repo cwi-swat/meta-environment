@@ -119,6 +119,13 @@ in
       rec-msg(finished-opening-modules) .
       snd-ack-event(UI, eclipse-open-modules(ModuleList, Type))
     +
+      rec-event(UI, eclipse-open-initial-module(FileName?)) .
+      snd-msg(decons-file-name(FileName, ".sdf")) .
+      rec-msg(decons-file-name-result(Path?, ModuleName?, Extension?)) .
+      snd-msg(open-modules([ModuleName], sdf)) .
+      rec-msg(finished-opening-modules) .
+      snd-ack-event(UI, eclipse-open-initial-module(FileName))
+    +
 #endif
       rec-event(UI, button-selected(Type?, ActionEvent?)) .
       snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
