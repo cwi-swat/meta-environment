@@ -54,7 +54,7 @@ let
   Graph   : term,
   Info	  : list,
   LayoutedGraph : term,
-   ModuleName : str,
+  ModuleName : str,
   RealModuleName : str,
   LibraryPath : str,
   SyntaxExt : str,
@@ -68,9 +68,9 @@ let
   Tree : term,
   Lst : list
 in
+  subscribe(display-import-graph(<list>,<list>)) .
   Id := process-id.
   execute(user-interface,UI?).
-  subscribe(display-import-graph(<list>,<list>)) .
   create(Status-display(UI),SD?).
 
   snd-msg(library-location-hook).
