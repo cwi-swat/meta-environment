@@ -74,4 +74,5 @@ init.c:
 
 clean: 
 	rm -f *.o *~ $(CLEANFILES)
+
 install:

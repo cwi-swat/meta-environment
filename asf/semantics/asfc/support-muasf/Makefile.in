@@ -129,6 +129,7 @@ depend: ${CSRC}
 
 # install target (install binaries, include files, and libraries)
 install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
