@@ -25,4 +25,5 @@ EXTRA_DIST = Pico-Booleans.eqs.asfix1 Pico-Integers.eqs.asfix1 \
              Set.eqs.asfix1 Set.trm.asfix1 Set2.trm.asfix1 Set3.trm.asfix1 \
              Type-environment.eqs.asfix1 Type-environment.trm.asfix1 \
              bool.trm.asfix1 bool_no_comments.trm.asfix1 fac.trm.asfix1 \
-             fac_no_comments.trm.asfix1 facev.trm.asfix1 factc.trm.asfix1
+             fac_no_comments.trm.asfix1 facev.trm.asfix1 factc.trm.asfix1 \
+             Pico-Integers.trm2.asfix1
