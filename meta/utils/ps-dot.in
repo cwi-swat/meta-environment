@@ -20,6 +20,9 @@ case $# in
 		"-s")
 			EXTRAS="$EXTRAS -Gsize=8,11.8"
 			shift ;;
+                "-l")   
+                        EXTRAS="$EXTRAS -Gsize=11,8 -Grotate=90"
+                        shift ;;
 		esac
 esac
 
