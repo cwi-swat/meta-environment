@@ -413,8 +413,17 @@ endlet
 \end{footnotesize}
 
 The \texttt{UPDATE} process is somewhat more interesting. It shows
-that each access on an address entry is \emph{guarded} by a pair of
-\texttt{update-address}, \texttt{update-address-done} messages. 
+that each update of an address entry is \emph{guarded}. A process
+wanting to update an entry first has to announce this fact by sending
+an \texttt{update-address} message, before it can do one or more
+updates to the entry. It then finishes the update by sending an
+\texttt{update-address-done} message. This message pair thus acts
+as a very primitive locking scheme. More elaborate schemes are very
+well possible, but are not discussed in this paper. Summarizing, the
+\texttt{UPDATE} process shows that \emph{outside} the implementation
+of the addressbook service, we can enforce the order in which certain
+parts of the service are invoked, as well as mutual exclusion of some
+of its sections.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -435,6 +444,7 @@ in
 endlet
 \end{verbatim}
 \end{footnotesize}
+
 
 
 \section{Application to the \asdf\ Meta-Environment}
