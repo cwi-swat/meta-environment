@@ -1,0 +1,162 @@
+#! /bin/sh
+#    Meta-Environment - An environment for language prototyping.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#                        Amsterdam, The Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or (at
+#    your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#    USA
+#
+
+# $Id$
+
+# Author: Merijn de Jonge (mdejonge@cwi.nl)
+
+# Script to generate a Makefile.am by inspecting <target>.module-list
+#
+# usage genamekfile.sh <module>
+
+VERSION=__VERSION__
+
+usage() {
+   cat <<ENDCAT
+usage: $0 <module>
+ENDCAT
+}
+
+version() {
+   cat <<ENDCAT
+$0 version $VERSION
+ENDCAT
+}
+
+
+while getopts hV c
+do
+   case $c in
+      h) usage; exit 0 ;;
+      V) version; exit 0 ;;
+      *) usage ; exit 1;;
+   esac
+done
+
+if [ "$#" -ne 1 ]
+then
+   usage
+   exit 1
+fi
+
+
+MOD=`echo $1 | sed 's/-/_/g'`
+
+cat <<ENDCAT
+#    Meta-Environment - An environment for language prototyping.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#                        Amsterdam, The Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or (at
+#    your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful, but
+#    WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+#    USA
+
+INCLUDES         = -I$(ASCINC) \
+                   -I$(ASFIXINC) \
+                   -I$(ATERMINC)
+
+noinst_LIBRARIES = lib$1.a
+
+BUILT_SOURCES    = init.c
+
+lib${MOD}_a_SOURCES  = $(SPEC_SRCS)
+
+lib${MOD}_a_LIBADD   = init.o
+
+# Old versions of automake put all dependencies on a single line which
+# causes several tools to crash (sed for instance) because of line length
+# limitations. We therefore split all dependencies and define them among
+# several SPEC_SRCSx variables. These are all combined in SPEC_SRCS which
+# forms the concatenation of all sub varibales ( SPEC_SRCS = $(SPEC_SRCS1)
+# ... $(SPEC_SRCSn)
+#
+`(cat $1.module-list |\
+  grep -v '^\#' |\
+  fmt ) |\
+  sed 's/^/   /g' |\
+  awk '
+BEGIN{
+   lines=0;
+   maxlines=30;
+   nr=1;
+   spec_srcs="";
+}
+{
+   if ( lines )
+   {
+      if ( lines % maxlines )
+         print "\\\"
+      else
+         print"\n";
+   }
+
+   if ( !(lines % maxlines) ) {
+      print "SPEC_SRCS"  nr "=\\\\";
+      spec_srcs=spec_srcs " \$(SPEC_SRCS"nr ")";
+      nr++;
+      lines=0;
+   }
+   {
+      printf $0 ;
+      lines++;
+   }
+}
+END{
+   print;print
+   print "SPEC_SRCS =" spec_srcs
+}'`
+
+init.c: $(SPEC_SRCS)
+	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\
+	SPEC_SRCS="$(SPEC_SRCS)" ;\\
+	for file in \$\$SPEC_SRCS; do \\
+		echo "extern void register_\$\$file();" ;\\
+		echo "extern void resolve_\$\$file();" ;\\
+		echo "extern void init_\$\$file();" ;\\
+	done ;\\
+	echo "void register_all() {" ;\\
+	for file in \$\$SPEC_SRCS; do \\
+		echo "  register_\$\$file();" ;\\
+	done ;\\
+	echo "}" ;\\
+	echo "void resolve_all() {" ;\\
+	for file in \$\$SPEC_SRCS; do \\
+		echo "  resolve_\$\$file();" ;\\
+	done ;\\
+	echo "}" ;\\
+	echo "void init_all() {" ;\\
+	for file in \$\$SPEC_SRCS; do \\
+		echo "  init_\$\$file();" ;\\
+	done ;\\
+	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > \$@
+ENDCAT
+
