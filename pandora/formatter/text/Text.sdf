@@ -9,6 +9,6 @@ imports basic/Comments
 exports
   sorts Text
   context-free syntax
-    String* -> Text {constructor} 
+    String -> Text {constructor} 
 
 %%%

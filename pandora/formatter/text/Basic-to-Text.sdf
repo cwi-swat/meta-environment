@@ -18,7 +18,7 @@ context-free start-symbols TextStruct
 
 hiddens
   variables
-    "Text"[0-9]*    -> String+
+    "Text"[0-9]*    -> String
     "Struct"[0-9]*  -> TextStruct
 
 
