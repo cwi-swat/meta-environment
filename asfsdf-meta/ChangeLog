@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Thu Jul 31 13:08:04 CEST 2003 <jong@cwi.nl>
+ * now depending on meta 1.1
+
 2003/07/24 (markvdb@cwi.nl)
  * Introduced the notions of "warning(f)" and "message(f)" which
    have a different appearance in the error message display of the
