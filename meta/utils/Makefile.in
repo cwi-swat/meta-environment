@@ -22,15 +22,21 @@ INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
-UTILS		= gen-table parse-sdf2 sdf2table
+BINFILES	= gen-table parse-sdf2 sdf2table
+LIBFILES	= Sdf2.baf
+INCLUDEFILES	=
 
-all doc clean:	${UTILS}
+all doc clean:	${BINFILES} ${LIBFILES}
 
 uninstall:
-	$(UNINSTALL) $(bindir) ${UTILS}
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 install:	all
-	$(INSTALL_PROG) $(INSTALL) $(bindir) ${UTILS}
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
 distclean:
 
