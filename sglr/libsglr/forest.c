@@ -457,11 +457,17 @@ tree SG_YieldTree(parse_table *pt, tree t)
     assert(fun != SG_Reject_AFun);
 
     if(fun == SG_Amb_AFun) {
-       SGnrAmb(SG_NR_INC);
        ambs = (ATermList) ATgetArgument((ATerm) t, 0); /* get the ambs */
-       ambs = (ATermList) SG_YieldTree(pt, (tree) ambs);
-       res  = ATsetArgument((ATermAppl) t, (ATerm) ambs, 0);
-    } else {
+       if (ATgetLength(ambs) > 1) {
+         SGnrAmb(SG_NR_INC);
+         ambs = (ATermList) SG_YieldTree(pt, (tree) ambs);
+         res  = ATsetArgument((ATermAppl) t, (ATerm) ambs, 0);
+       }
+       else {
+         res = SG_YieldTree(pt, (tree)ATgetFirst(ambs));
+       }
+    }
+    else {
       pos_info = SG_GetPosInfoLabel(t);
       prod = ATgetArgument((ATerm) t, 0); /* get the prod */
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the args */
@@ -523,43 +529,45 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
     fun = ATgetAFun((ATermAppl) t);
     if(fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
-      ambpos = *currpos;
+      if (ATgetLength(ambs) > 1) {
+        ambpos = *currpos;
 
-      prods = ATempty; /* the productions of the topnodes in this cluster */
+        prods = ATempty; /* the productions of the topnodes in this cluster */
 
-      for(; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-        *currpos = ambpos;
-        amb = (tree) ATgetFirst(ambs);
+        for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+          *currpos = ambpos;
+          amb = (tree) ATgetFirst(ambs);
  
-        /* first we collect all nested ambiguities */
-        kidambs = SG_AmbTrackerRecursive(amb, currpos);
-        if(kidambs) {
-         allambs = ATconcat(allambs, kidambs);
-        } 
+          /* first we collect all nested ambiguities */
+          kidambs = SG_AmbTrackerRecursive(amb, currpos);
+          if (kidambs) {
+            allambs = ATconcat(allambs, kidambs);
+          } 
 
-        /* here we handle THIS ambiguity */
-        prodText = PT_yieldProduction(
-                     PT_makeProductionFromTerm(
-                       ATgetArgument((ATermAppl) amb, 0)));
-        prods = ATinsert(prods, ATmake("<str>", prodText));
-      }
+          /* here we handle THIS ambiguity */
+          prodText = PT_yieldProduction(
+                       PT_makeProductionFromTerm(
+                         ATgetArgument((ATermAppl) amb, 0)));
+          prods = ATinsert(prods, ATmake("<str>", prodText));
+        }
   
-      /* construct the error message for this cluster */ 
-      amb_with_pos = 
-        (ATerm) ATmakeAppl2(SG_Amb_Node_AFun,
-                            (ATerm) ATmakeAppl4(SG_Position_AFun,
-                            (ATerm) ATmakeAppl1(SG_Character_AFun,
-                                                (ATerm) ATmakeInt(ambpos.ch)),
-			    (ATerm) ATmakeAppl1(SG_Line_AFun, 
-						(ATerm) ATmakeInt(ambpos.line)),
-			    (ATerm) ATmakeAppl1(SG_Col_AFun,
-						(ATerm) ATmakeInt(ambpos.col)),
-			    (ATerm) ATmakeAppl1(SG_Offset_AFun,
-                                                (ATerm) ATmakeInt(ambpos.pos))),
-                            (ATerm) ATmakeAppl1(SG_Productions_AFun,
+        /* construct the error message for this cluster */ 
+        amb_with_pos = 
+          (ATerm)ATmakeAppl2(SG_Amb_Node_AFun,
+                             (ATerm)ATmakeAppl4(SG_Position_AFun,
+                             (ATerm)ATmakeAppl1(SG_Character_AFun,
+                                                 (ATerm) ATmakeInt(ambpos.ch)),
+		             (ATerm)ATmakeAppl1(SG_Line_AFun, 
+			    		        (ATerm)ATmakeInt(ambpos.line)),
+			     (ATerm)ATmakeAppl1(SG_Col_AFun,
+						(ATerm)ATmakeInt(ambpos.col)),
+			     (ATerm)ATmakeAppl1(SG_Offset_AFun,
+                                                (ATerm)ATmakeInt(ambpos.pos))),
+                             (ATerm)ATmakeAppl1(SG_Productions_AFun,
                                                 (ATerm) ATreverse(prods)));  
  
-      allambs = ATinsert(allambs, amb_with_pos);
+        allambs = ATinsert(allambs, amb_with_pos);
+      }
     }
     else {
       args = (ATermList) ATgetArgument((ATermAppl) t, 1);
@@ -698,13 +706,13 @@ label SG_GetRejectProdLabel(tree appl)
  SG_GtrPriority(l0, l1) returns true iff priority(l0) > priority(l0)
  */
 
-ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
+static ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
 {
-  ATermList prios;
+  ATermList prios = SG_LookupGtrPriority(pt, ATgetInt(lt0));
 
-  if((prios = SG_LookupGtrPriority(pt, ATgetInt(lt0)))
-     && (ATindexOf(prios, (ATerm) lt1, 0) != -1))
+  if (prios && ATindexOf(prios, (ATerm) lt1, 0) != -1) {
     return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -793,7 +801,7 @@ static ATbool SG_ContainsReject(tree t)
       if (fun == SG_Reject_AFun) {
         result = ATtrue;
       }
-      else if(fun == SG_Amb_AFun) {
+      else if (fun == SG_Amb_AFun) {
         ATermList ambs = (ATermList) ATgetArgument((ATerm) t, 0);
         for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
           result = result ||
@@ -876,8 +884,6 @@ static MultiSet SG_CreateMultiSetRecursive(parse_table *pt, MultiSetTable mst,
                                            MultiSet ms, tree t)
 {
   label    l;
-  AFun     fun;
-
   MultiSet mstree = MultiSetTableGet(mst, (ATerm) t);
 
   if (mstree != NULL) {
@@ -887,11 +893,17 @@ static MultiSet SG_CreateMultiSetRecursive(parse_table *pt, MultiSetTable mst,
 
   switch (ATgetType(t)) {
     case AT_APPL:
-      fun = ATgetAFun(t);
-
-      if (fun == SG_Amb_AFun) {
-         return NULL;
-      } else {
+      if (ATgetAFun(t) == SG_Amb_AFun) {
+        ATermList ambs = (ATermList) ATgetArgument((ATerm) t, 0);
+        if (ATgetLength(ambs) > 1) {
+          return NULL;
+        }
+        else {
+          ms = SG_CreateMultiSetRecursive(pt, mst, ms,
+                                          (tree)ATgetFirst(ambs));
+        }
+      }
+      else {
         l = SG_GetApplProdLabel(t); 
         MultiSetIncrease(ms, SG_PROD_TO_NR(l));
         ms = SG_CreateMultiSetRecursive(pt, mst, ms,
@@ -936,9 +948,12 @@ MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst,
   return ms;
 }
 
-ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2);
+static ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
+{
+  return MultiSetEqual(ms1, ms2);
+}
 
-int SG_GetNrOfPrefers(parse_table *pt, MultiSet ms)
+static int SG_GetNrOfPrefers(parse_table *pt, MultiSet ms)
 {
   ATermInt ly;
   int y, My;
@@ -959,7 +974,7 @@ int SG_GetNrOfPrefers(parse_table *pt, MultiSet ms)
   return prefercount;
 }
 
-int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
+static int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
 {
   ATermInt ly;
   int y, My;
@@ -992,7 +1007,9 @@ int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
  *  #prefers in t1 >= #prefers in t2 && #avoids in t1 <= #avoids in t2)      
  */
 
-ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
+static ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, 
+                                        MultiSet msM, 
+                                        MultiSet msN)
 {                                                            
   int pM, pN, aM, aN;
 
@@ -1015,191 +1032,6 @@ ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
   }
 }
 
-/* NOTE: We temporarily maintain two versions of MultiSetGtr.
- *
- * The first was developed by fixing the existing implementation of v2.40
- *
- * The second was developed from scratch by
- * implementing the multiset formula on p108 of Eelco Visser's dissertation.
- *
- * These implementations are expected to be equal.
- */
-#define MULTISETGTR_ORIGINAL
-#ifdef MULTISETGTR_ORIGINAL
-
-/* MultiSetGtr is the core of the multiset algorithm. See page XXX
- * of Eelco Visser's dissertation.
- *
- * We use Visser's notation msM and msN for easy reference, instead
- * of our standard ms0 and ms1.
- */
-ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
-{
-  ATermInt lx, ly;
-  int x, y;
-  int My, Ny, Mx, Nx;
-  ATbool result, foundone, totalresult;
-  int size = MultiSetGetSize(msM); /* equal to the other one */
-
-  IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
-
-  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
-    return ATfalse;
-  }
-
-  /*  For all y in M such that M(y) > N(y) ...  */
-
-/*
-ATwarning("msM: ");
-MultiSetPrint(stderr, msM);
-ATwarning("\nmsN: ");
-MultiSetPrint(stderr, msN);
-ATwarning("\n");
-*/
-
-  totalresult = ATfalse;
-  for (y = 0; y < size; y++) {
-
-    My = MultiSetGetCount(msM, y);
-    if (My > 0) {
-      Ny = MultiSetGetCount(msN, y);
-
-      ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
-
-      if (My > Ny) {
-
-        /*  ... there exists an x in N such that ( y >> x and M(x) < N(x) )  */
-        result = ATfalse;
-        foundone = ATfalse;
-        for (x = 0; !result && (x < size); x++) {
-          Nx = MultiSetGetCount(msN, x);
-          if (Nx > 0) {
-            Mx = MultiSetGetCount(msM, x);
-
-            lx = SG_NR_TO_PROD(SG_GetATint(x, 0));
-
-            if (SG_GtrPriority(pt, ly, lx) ||
-                SG_EagerPriority(pt, ly, lx)) {
-              result = (Mx < Nx);
-/*
-ATwarning("ly = %t lx = %t yields %d\n", ly,lx, result);
-*/
-              foundone = ATtrue;
-            }
-          }
-        }
-        if (foundone && !result) {
-          return ATfalse;
-        }
-        else {
-          totalresult = totalresult || result;
-        }
-      }
-    }
-  }
-  /*
-   For all candidates,  a suitable "witness" has been found if we get
-   here.  However, there may have been no candidates in the first
-   place: we trivially arrive here, without having found a single
-   witness for the multiset priority relation.  This constitutes
-   a false positive, if we don't prevent it: we also require that
-   there was something to check in the first place.  If not, there's
-   no relation.
-   */
-  return totalresult;
-}
-
-#else /* MULTISETGTR translated from formula  */
-
-/* MultiSetGtr is the core of the multiset algorithm. See page 108
- * of Eelco Visser's dissertation.
- *
- * We use Visser's notation msM and msN for easy reference, instead
- * of our standard ms0 and ms1.
- *
- * There is a difference between our
- * implementation and the formula in the dissertation! We implement
- * the formula in a straightforward manner, but by keeping two extra
- * variables: 'atleastoneresulti' and 'onegreater' we allow for SOME
- * productions to have no relation at all (!onegreater), but if ALL
- * productions have no relation at all (atleastoneresult) we cannot
- * conclude a relation off course.
- */
-
-
-ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
-{
-  ATermInt ly, lx;
-  int y, x;
-  int My, Ny, Mx, Nx;
-  ATbool oneresult, forallresult, onegreater, atleastoneresult;
-  int size = MultiSetGetSize(msM);
-
-  IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
-
-  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
-    return ATfalse;
-  }
-
-  /* and */
-
-  /* for all y in M */
-  atleastoneresult = ATfalse;
-  forallresult    = ATtrue;
-
-  for (y = 0; y < size && forallresult; y++) {
-    My = MultiSetGetCount(msM, y);
-
-    if (My != 0) { /* if key */
-       ATbool forallbody = ATfalse;
-       Ny = MultiSetGetCount(msN, y);
-
-       ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
-
-       if (!(My > Ny)) { /* M(y) > N(y)  */
-         forallbody = ATtrue;
-       }
-       if (!forallbody) { /* ===> (implies) */
-
-         /* for any x in N */
-         onegreater = ATfalse;
-         oneresult  = ATfalse;
-         for(x = 0; x < size && !oneresult; x++) {
-           Nx = MultiSetGetCount(msN, x);
-           Mx = MultiSetGetCount(msM, x);
-
-           if(Nx != 0) { /* if key */
-             ATbool onebody, greater;
-             lx = SG_NR_TO_PROD(SG_GetATint(x, 0));
-
-             /* y > x && M(x) < N(x) */
-             greater = (SG_GtrPriority(pt, ly, lx) ||
-                        SG_EagerPriority(pt, ly, lx));
-             onebody = greater && (Mx < Nx);
-
-            /* update inner and outer loop values */
-            onegreater = onegreater || greater;
-            oneresult = oneresult || onebody;
-            atleastoneresult = atleastoneresult || oneresult;
-           }
-         }
-         forallbody = oneresult || !onegreater;
-       }
-
-      /* update outer loop value */
-      forallresult = forallresult && forallbody;
-    }
-  }
-
-  return forallresult && atleastoneresult;
-}
-#endif
-
-ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
-{
-  return MultiSetEqual(ms1, ms2);
-}
-
 /* SG_CountInjectionsInTree counts injections using
  * a parse tree, instead of using the multiset directly.
  *
@@ -1207,7 +1039,7 @@ ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
  * on ambiguity clusters, but injection count is.
  */
 
-size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
+static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
 {
   label l;
   ATermList ambs;
@@ -1259,6 +1091,7 @@ size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
 
 /* Below we define the filters that compare two trees */
 
+/*
 static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
 {
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
@@ -1275,6 +1108,7 @@ static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
 
   return NULL;
 }
+*/
 
 static tree SG_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
@@ -1341,28 +1175,6 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
       }
     }
   }
-  
-/*
-  if (!max) {
-    if (SG_MultiSetGtr(pt, ms0, ms1)) {
-      IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
-      max = t0;
-    } 
-
-    if (SG_MultiSetGtr(pt, ms1, ms0)) {
-      if (max) {
-        IF_DEBUG(ATfprintf(SG_log(),
-                           "Symmetric multiset priority relation %t %t\n", 
-                           l0, l1))
-        max = NULL;
-      }
-      else { 
-        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
-        max = t1;
-      }
-    }
-  }
-*/
   
   if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
@@ -1453,10 +1265,12 @@ tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
   if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
 
     /*  Always apply direct priority filtering first  */
+/*
     max = SG_Priority_Filter(pt, t0, t1);
     if (max) {
       return max;
     }
+*/
 
     /*  Next, inspect eager/avoid status  */
     max = SG_Eagerness_Filter(pt, t0, t1);
@@ -1519,78 +1333,180 @@ ATermList SG_FilterList(parse_table *pt, MultiSetTable mst, ATermList ambs,
   return new;
 }
 
-static ATermList SG_Associativity_Filter(parse_table *pt, ATermList ambs)
+static tree SG_Left_Associativity_Filter(tree t, label prodl) 
 {
-  /* the rightmost child cluster of a left associative prod should
-   * never be the same left associative prod, so we check for this
-   *
-   * Note that this can only happen in an amb cluster due to the filtering
-   * algorithm because otherwise it would have been an error in the parsetable.
-   *
-   */
-  label prodl;
-  ATermList kids, newambs = ATempty;
-  tree amb, lastkid, firstkid;
-
-  for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-    amb = (tree) ATgetFirst(ambs);
-    prodl = SG_GetApplProdLabel(amb);
-
-    if (SG_IsLeftAssociative(pt, prodl)) {
-      kids = (ATermList) ATgetArgument((ATermAppl) amb, 1);
-      lastkid = (tree) ATgetLast(kids);
-
-      if (prodl != SG_GetApplProdLabel(lastkid)) {
+  ATermList newambs = ATempty;
+  ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
+  tree lastson      = (tree)ATgetLast(sons);
+  
+  if (ATgetType(lastson) == AT_APPL &&
+      ATgetAFun(lastson) == SG_Amb_AFun) {
+    ATermList restSons = ATgetPrefix(sons);
+    ATermList ambs = (ATermList)ATgetArgument((ATerm)lastson, 0);
+        
+    for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+      tree amb = (tree) ATgetFirst(ambs);
+      if (prodl != SG_GetApplProdLabel(amb)) {
         newambs = ATinsert(newambs, (ATerm) amb);
-      } else {
-        IF_DEBUG(ATfprintf(SG_log(),"Right associative node %d removed.\n",
-                                    prodl)) 
+      }
+      else {
+        IF_DEBUG(ATfprintf(SG_log(),
+                           "Left associative node %d removed.\n",
+                           prodl));
       }
     }
-    else if (SG_IsRightAssociative(pt, prodl)) {
-      kids = (ATermList) ATgetArgument((ATermAppl) amb, 1);
-      firstkid = (tree) ATgetFirst(kids);
-
-      if (prodl != SG_GetApplProdLabel(firstkid)) {
-        newambs = ATinsert(newambs, (ATerm) amb);
-      } else {
-        IF_DEBUG(ATfprintf(SG_log(),"Left associative node %d removed.\n",
-                                    prodl)) 
+    if (!ATisEmpty(newambs)) {
+      if (ATgetLength(newambs) > 1) {
+        lastson = ATsetArgument((ATermAppl)lastson, (ATerm)newambs, 0);
       }
+      else {
+        lastson = (tree)ATgetFirst(newambs);
+      }
+      sons = ATappend(restSons, (ATerm)lastson);
+      t = ATsetArgument((ATermAppl)t, (ATerm)sons, 1);
     }
     else {
-      newambs = ATinsert(newambs, (ATerm) amb);
+      return NULL;
+    }
+  }
+  return t;
+}
+
+static tree SG_Right_Associativity_Filter(tree t, label prodl) 
+{
+  ATermList newambs = ATempty;
+  ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
+  tree firstson     = (tree) ATgetFirst(sons);
+
+  if (ATgetType(firstson) == AT_APPL &&
+      ATgetAFun(firstson) == SG_Amb_AFun) {
+    ATermList restSons = ATgetNext(sons);
+    ATermList ambs = (ATermList)ATgetArgument((ATerm)firstson, 0);
+    
+    for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+      tree amb = (tree) ATgetFirst(ambs);
+      if (prodl != SG_GetApplProdLabel(amb)) {
+        newambs = ATinsert(newambs, (ATerm) amb);
+      }
+      else {
+        IF_DEBUG(ATfprintf(SG_log(),
+                           "Right associative node %d removed.\n",
+                           prodl));
+      }
+    }
+    if (!ATisEmpty(newambs)) {
+      if (ATgetLength(newambs) > 1) {
+        firstson = ATsetArgument((ATermAppl) firstson, (ATerm)newambs, 0);
+      }
+      else {
+        firstson = (tree) ATgetFirst(newambs);
+      }
+      sons = ATinsert(restSons, (ATerm)firstson);
+      t = ATsetArgument((ATermAppl)t, (ATerm)sons, 1);
+    }
+    else {
+      return NULL;
+    }
+  }
+  return t;
+}
+
+static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
+{
+  ATermList newambs = ATempty;
+  ATermList sons    = (ATermList)ATgetArgument((ATerm) t, 1);
+  ATermList newSons = ATempty;
+  ATermInt l0       = SG_GetATint(prodl, 0);
+
+  for (;!ATisEmpty(sons); sons = ATgetNext(sons)) {
+    tree son = (tree)ATgetFirst(sons);
+    if (ATgetType(son) == AT_APPL &&
+        ATgetAFun(son) == SG_Amb_AFun) {
+      ATermList ambs = (ATermList)ATgetArgument((ATerm)son, 0);
+
+      newambs = ATempty;
+      for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+        tree amb = (tree) ATgetFirst(ambs);
+        label proda = SG_GetApplProdLabel(amb);
+        ATermInt l1 = SG_GetATint(proda, 0);
+
+        if (!SG_GtrPriority(pt, l0, l1)) {
+          newambs = ATinsert(newambs, (ATerm) amb);
+        }
+        else {
+          IF_DEBUG(ATfprintf(SG_log(),
+                             "Higher priority node %d removed.\n",
+                             prodl));
+        }
+      }
+      if (!ATisEmpty(newambs)) {
+        if (ATgetLength(newambs) > 1) {
+          son = ATsetArgument((ATermAppl)son, (ATerm)newambs, 0);
+        }
+        else {
+          son = (tree)ATgetFirst(newambs);
+        }
+      }
+      else {
+        return NULL;
+      }
+    }
+    newSons = ATinsert(newSons, (ATerm)son);
+  }
+  return ATsetArgument((ATermAppl)t, (ATerm)ATreverse(newSons), 1);
+}
+
+static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
+{
+  /* If the tree has an associativity prod and it has an
+   * ambiguity cluster as son, it is checked whether there
+   * is an unresolved conflict!
+   */
+
+  if (ATgetType(t) == AT_APPL && ATgetAFun(t) != SG_Amb_AFun) {
+    label     prodl   = SG_GetApplProdLabel(t);
+
+    if (SG_IsLeftAssociative(pt, prodl)) {
+      t = SG_Left_Associativity_Filter(t, prodl);
+    }
+    else if (SG_IsRightAssociative(pt, prodl)) {
+      t = SG_Right_Associativity_Filter(t, prodl);
+    }
+    if (t) {
+      /* How about priority relations between parent and kids? */
+      ATermInt l0 = SG_GetATint(prodl, 0);
+      if (SG_LookupGtrPriority(pt, ATgetInt(l0))) {
+        return SG_Priority_Filter(pt, t, prodl);
+      }
     }
   }  
-  return newambs;
-}         
+  return t;
+}
 
-tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
+static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
                             tree t, ATbool inAmbs);
 
-tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
+static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
 {
-  tree t;
   ATermList newambs;
-  tree amb;
+  tree amb, newamb;
 
 
   /* first we do the children */
   newambs = ATempty;
-  for(;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
+  for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
     amb = (tree) ATgetFirst(ambs);
-    newambs = ATinsert(newambs, 
-                       (ATerm) SG_FilterTreeRecursive(pt, mst, amb, ATtrue));
+    newamb = SG_FilterTreeRecursive(pt, mst, amb, ATtrue);
+    if (newamb) {
+      newambs = ATinsert(newambs, (ATerm)newamb);
+    }
   }
   ambs = newambs;
 
-  if(SG_FILTER) {
+  if (SG_FILTER) {
     IF_DEBUG(ATfprintf(SG_log(), "Ambiguity cluster: %d nodes originally.\n", 
                        ATgetLength(ambs)))
    
-    /* Remove all trees which have internal associativity conflicts. */
-    ambs = SG_Associativity_Filter(pt, newambs); 
-
     /* now we handle this ambiguity cluster */
     if (ATgetLength(ambs) > 1) {
       ATermList ambscopy = ambs;
@@ -1599,10 +1515,10 @@ tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
       /* for every node, compare it to all the others. If the node
        * has been filtered out already, we can skip it.
        */
-      for(;!ATisEmpty(ambscopy); ambscopy = ATgetNext(ambscopy)) {
+      for (;!ATisEmpty(ambscopy); ambscopy = ATgetNext(ambscopy)) {
         amb = (tree) ATgetFirst(ambscopy);
         ambschanged = ATremoveElement(ambs, (ATerm) amb);
-        if(!ATisEqual(ambs, ambschanged)) {
+        if (!ATisEqual(ambs, ambschanged)) {
           ambs = SG_FilterList(pt, mst, ambschanged, amb);
         }
       }
@@ -1612,21 +1528,15 @@ tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
   assert(ATgetLength(ambs) > 0);
 
   /* if there are ambiguities left, create an amb node */
-  if(ATgetLength(ambs) > 1) {
-    t = (tree) ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
-    IF_DEBUG(ATfprintf(SG_log(), "Ambiguity cluster: %d equivalent nodes.\n", 
-                                 ATgetLength(ambs)))
-  } else {
-    t = (tree) ATgetFirst(ambs);
-    IF_DEBUG(ATfprintf(SG_log(), "Ambiguity cluster: resolved to %d.\n",
-                       SG_GetApplProdLabel(t)))
-  }
+  IF_DEBUG(ATfprintf(SG_log(), 
+                     "Ambiguity cluster: %d equivalent node(s).\n", 
+                     ATgetLength(ambs)))
 
-  return t;
+  return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
 }
 
-tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
-                            tree t, ATbool inAmbs)
+static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
+                                   tree t, ATbool inAmbs)
 {
   int type = ATgetType(t);
   ATermList args, ambs;
@@ -1639,8 +1549,8 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
     if (!inAmbs && !ATisEmpty(ambs)) {
   
       IF_VERBOSE(
-        SG_PrintStatusBar( "sglr: filtering", 
-			 SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
+        SG_PrintStatusBar("sglr: filtering", 
+			  SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
       )
 
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
@@ -1649,12 +1559,17 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
         ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
       }
       t = newt;
-    } else {
+    }
+    else {
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
-      newargs = (ATermList) SG_FilterTreeRecursive(pt, mst, 
-                                                   (tree) args, ATfalse);
-
-      t = (tree) ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
+      newargs = (ATermList)SG_FilterTreeRecursive(pt, mst, 
+                                                  (tree) args, ATfalse);
+      if (newargs) {
+        t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
+      }
+      else {
+        t = (tree)NULL;
+      }
     }
   break;
   case AT_LIST:
@@ -1666,14 +1581,21 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
 
       if (ATisEmpty(tail)) {
         newtail = ATempty;
-      } else {
+      } 
+      else {
         newtail = (ATermList)SG_FilterTreeRecursive(pt, mst, 
                                                     (tree)tail, ATfalse);
+        if (!newtail) {
+          newtail = ATempty;
+        }
       }
     
       newarg = (tree) SG_FilterTreeRecursive(pt, mst, arg, ATfalse);
-      if (!ATisEqual((ATerm)newarg, (ATerm)arg) || !ATisEqual(newtail, tail)) {
-         t = (tree)ATinsert(newtail, (ATerm)newarg); 
+      if (newarg) {
+        if (!ATisEqual((ATerm)newarg, (ATerm)arg) || 
+            !ATisEqual(newtail, tail)) {
+          t = (tree)ATinsert(newtail, (ATerm)newarg); 
+        }
       }
     }
   break;
@@ -1681,6 +1603,7 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
   break;
   }
 
+  t = SG_Associativity_Priority_Filter(pt, t);
   return t;
 }
 

@@ -19,6 +19,31 @@
 
 $Id$
 
+2001/03/22 (markvdb@cwi.nl)
+  * Fixed a serious bug in filtering of assocativity. 
+    Revealed by the following grammar (by Peter D. Mosses):
+
+    module AN-Full
+
+    imports Layout
+
+    exports
+      sorts Action Yielder DataOp
+
+    context-free syntax
+      Action Yielder          -> Action
+
+      "give" Yielder          -> Action
+      "give" DataOp           -> Action
+      "skip"                 -> Action
+      Action "then" Action    -> Action {left}
+
+      "it"                    -> DataOp
+
+      Action                  -> Yielder
+      DataOp                  -> Yielder
+      Yielder "then" Yielder  -> Yielder {left}       
+
 2001/03/15 (markvdb@cwi.nl)
   * Fixed a bug concerning the filtering of trees containing "rejects"
     - New filter introduced which compares two trees and selects
