@@ -8,7 +8,7 @@ SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
 GEL_DEMOS="spec"
 EPIC_DEMOS=""
-SUBDIRS="src test adapters demos doc www"
+SUBDIRS="src test \${XTRADIRS} adapters demos doc www"
 XTRADIRS=""
 
 AC_SUBST(PRODUCT)
@@ -123,11 +123,13 @@ AC_ARG_WITH(tide,
 [  --with-tide		compile TIDE support (debugger prototype)],
 TIDE='$(top_srcdir)/tide'
 TIDEDEF=-DUSE_TIDE
+TIDELIB=$TIDE/libtide.a
 XTRADIRS="${XTRADIRS} tide",
 DISTDIRS="${DISTDIRS} tide"
 )
 AC_SUBST(TIDEDEF)
 AC_SUBST(TIDE)
+AC_SUBST(TIDELIB)
 AC_SUBST(DISTDIRS)
 
 dnl Which adapters?
@@ -242,7 +244,7 @@ fi
 AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
-AC_OUTPUT(Makefile src/Makefile tide/Makefile doc/Makefile \
+AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	test/Makefile \
 	demos/Makefile \
         demos/auction/Makefile \

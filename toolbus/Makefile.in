@@ -12,6 +12,8 @@ prefix 		= @prefix@
 exec_prefix 	= @exec_prefix@
 bindir 		= $(exec_prefix)/bin
 libdir		= $(exec_prefix)/lib
+bitmapdir	= $(libdir)/bitmaps
+tidedir		= $(libdir)/tide
 includedir	= $(prefix)/include
 
 CLEAN		= @CLEAN@
@@ -23,12 +25,12 @@ DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
 all clean distclean install uninstall:
-	@SUBDIRS="${SUBDIRS} ${XTRADIRS}";\
+	@SUBDIRS="${SUBDIRS}";\
 	case $@ in \
 	  clean) ${CLEAN} ;;\
 	  distclean) ${CLEAN};rm -f Makefile config.status config.log config.cache; rm -f lib/* include/* bin/* ;;\
-	  install) SUBDIRS="src test adapters ${XTRADIRS}";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(includedir) ;;\
-	  all) SUBDIRS="src test adapters ${XTRADIRS}";;\
+	  install) SUBDIRS="src test ${XTRADIRS} adapters";$(srcdir)/mkinstalldirs $(bindir) $(libdir) $(tidedir) $(bitmapdir) $(includedir) ;;\
+	  all) SUBDIRS="src test ${XTRADIRS} adapters";;\
 	esac; \
 	for SUBDIR in $$SUBDIRS; \
 	do \
@@ -39,6 +41,7 @@ all clean distclean install uninstall:
 	done
 
 doc::
+	@mkdir doc/adapters || true
 	(cd adapters; ${MAKE} $@)
 	(cd doc; ${MAKE})
 
@@ -56,7 +59,7 @@ dist: $(DISTFILES)
 	  ln $(srcdir)/$$file ../$(PRODUCT)-$(VERSION) 2> /dev/null \
 	  || cp $(srcdir)/$$file ../$(PRODUCT)-$(VERSION); \
 	done
-	@for subdir in $(SUBDIRS) $(XTRADIRS); do \
+	@for subdir in $(SUBDIRS); do \
 	  echo Making $@ in $$subdir; \
 	  mkdir ../$(PRODUCT)-$(VERSION)/$$subdir; \
 	  chmod 777 ../$(PRODUCT)-$(VERSION)/$$subdir; \
