@@ -1,5 +1,9 @@
 # $Id$
 
+Sun Oct 24 12:07:55 CEST 2004 <jong@cwi.nl>
+ * editors/text/gvim/Makefile.am
+   - add configuration-manager path to INCLUDES
+
 Thu Oct 21 16:08:43 CEST 2004 <jong@cwi.nl>
  * editors/text/gvim:
    - add syntax highlighting based on slices and categories

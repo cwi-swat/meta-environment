@@ -2,6 +2,7 @@
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
+	-I$(top_srcdir)/configuration-manager/src \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(PT_SUPPORT)/include \
