@@ -418,13 +418,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         }
 
         Graphics2D g2d = (Graphics2D) g;
-        if (edge.connectedTo(hoveredNode)) {
-            g2d.setColor(nodeBorderHovered);
-        } else if (edge.connectedTo(selectedNode)) {
-            g2d.setColor(nodeBorderSelected);
-        } else {
-            g2d.setColor(nodeBorder);
-        }
+	g2d.setColor(nodeBorder);
 
         g2d.draw(gp);
         // arrowHead(from, to, g2d);
