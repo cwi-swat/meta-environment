@@ -13,7 +13,7 @@ CC		= @CC@
 CFLAGS		= @CFLAGS@
 CPP		= @CPP@
 CPPFLAGS 	= @CPPFLAGS@
-DEFS 		= @DEFS@
+DEFS 		= @DEFS@ -DVERSION="\"$(VERSION)\""
 LIBS		= @LIBS@
 MODULES		= @MODULES@
 
@@ -49,23 +49,24 @@ LINK = $(CC) $(LDFLAGS) -o $@
 
 INCLUDES 	= -I$(srcdir)
 
-HEADERS		= env.h interpreter.h match.h procs.h terms.h tools.h toolbus.h \
-		  sockets.h tool.h monitor.h typecheck.h utils.h TB.h \
-		symbol.h
+HEADERS		= env.h interpreter.h match.h procs.h terms.h tools.h tool2.h\
+		  toolbus.h sockets.h tool.h monitor.h typecheck.h utils.h\
+		  TB.h symbol.h
 
 SOURCES_C	= client.c \
 		  env.c  interpreter.c  match.c procs.c terms.c tools.c\
-		  server.c sockets.c tool.c monitor.c typecheck.c utils.c\
-		  txt_dbg.c main.c ctif.c script2latex.c verbatim.c symbol.c calls.c
+		  server.c sockets.c tool.c tool2.c monitor.c typecheck.c\
+		  utils.c txt_dbg.c main.c ctif.c script2latex.c verbatim.c\
+		  symbol.c calls.c
 
 OBJECTS		= y.tab.o  client.o \
 		  env.o interpreter.o match.o  procs.o terms.o tools.o  \
-		  server.o sockets.o tool.o monitor.o  typecheck.o utils.o \
-		  main.o symbol.o calls.o $(MODULES)
+		  server.o sockets.o tool.o tool2.o monitor.o  typecheck.o\
+		  utils.o main.o symbol.o calls.o $(MODULES)
 
 SOURCES_Y	= script.l script.y
 
-LIB_OBJECTS	= client.o sockets.o terms.o tool.o utils.o symbol.o
+LIB_OBJECTS	= client.o sockets.o terms.o tool.o tool2.o utils.o symbol.o
 
 DISTFILES	= Makefile.in $(HEADERS) $(SOURCES_C) $(SOURCES_Y) logger.tcl \
 		viewer.tcl
@@ -116,6 +117,7 @@ main.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h tools.h main.c
 
 typecheck.o: 	toolbus.h terms.h env.h procs.h utils.h interpreter.h typecheck.h typecheck.c
 tool.o:		toolbus.h terms.h utils.h tool.h tool.c
+tool2.o:	toolbus.h terms.h utils.h tool2.h tool2.c
 modtest.o:	modtest.c
 y.tab.o: y.tab.c
 	${COMPILE} -DCPP='"$(CPP)"' y.tab.c

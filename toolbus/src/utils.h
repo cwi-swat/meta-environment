@@ -32,6 +32,7 @@ extern char single_prompt[];
 
 typedef term *(*TBcallbackTerm)(term *);
 typedef term *(*TBcallbackChar)(int);
+typedef term *(*TBsigchk)(term *);
 
 term *read_term(tool_id **);
 int   read_from_stdin(void);

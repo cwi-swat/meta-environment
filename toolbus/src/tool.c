@@ -97,8 +97,8 @@ Generic tool options are:\n\
 \n\n";
 
   fprintf(stderr, str);
-}   
-                    
+}
+
 int TBinit(char *tname, int argc, char *argv[],
        TBcallbackTerm fun, term * (check_in_sign)(term *))
 {

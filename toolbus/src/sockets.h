@@ -1,6 +1,8 @@
 #ifndef __SOCKETS_H__
 #define __SOCKETS_H__
 
+#include <sys/socket.h>
+
 void TBdestroyPort(int);
 int  putInt(int, const char *, int);
 int  getInt(int, const char *);

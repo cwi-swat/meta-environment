@@ -50,7 +50,12 @@ void interrupt_handler(int sig){
 
 void usage(void)
 {
- err_fatal("Usage: toolbus [-help|-verbose] [-logger|-viewer|-controller] [-gentifs] [-fixed-seed] Script.tb");
+ err_fatal("Usage: toolbus [-help|-version|-verbose] [-logger|-viewer|-controller] [-gentifs] [-fixed-seed] Script.tb");
+}
+
+void version(void)
+{
+  printf("version: ToolBus-%s\n", VERSION);
 }
 
 void help(void)
@@ -64,7 +69,8 @@ Interconnect software tools as described in a ``T script''.\n\
 Synopsis: toolbus [options] script.tb\n\
 \n\
 Options are:\n\
--help                 print this message\n\
+-help                 print this message and exit\n\
+-version              print the version number and exit\n\
 -verbose              print internal steps\n\
 -logger               attach a logger tool\n\
 -viewer               attach a viewer tool\n\
@@ -116,6 +122,8 @@ int main(int argc, char *argv[])
       verbose = TBtrue;
     } else if(streq(argv[i], "-help")){
       help(); exit(0);
+    } else if(streq(argv[i], "-version")){
+      version(); exit(0);
     } else if(streq(argv[i], "-logger")){
       set_monitoring(logger);
     } else if(streq(argv[i], "-viewer")){

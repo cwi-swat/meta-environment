@@ -100,6 +100,46 @@ int n_tool_inst = 0;    /* tool inst counter */
 
 tool_inst_list *Tools;  /* PROTECTED */
 
+/* Check if a certain event is present in a list of event types.
+   The event matches an event type when teh event type is a prefix
+   of the event. For instance:
+   foo(bar) matches foo, but not foo(boo).
+   foo(1,2,3) matches foo(1,2), but not foo(1,3) etc.
+*/
+
+TBbool has_prefix(term *t, term *p)
+{
+  term_list *argt, *argp;
+
+  if(is_appl(t)) {
+    if(!is_appl(p) || fun_sym(t) != fun_sym(p))
+      return TBfalse;
+    argt = fun_args(t);
+    argp = fun_args(p);
+    while(argp) {
+      if(!argt || !term_equal(first(argt), first(argp)))
+        return TBfalse;
+      argt = next(argt);
+      argp = next(argp);
+    }  
+    return TBtrue;
+  }
+  return term_equal(t,p);
+}
+
+TBbool event_present(term *ev, term *l)
+{
+  term *et;
+
+  while(l) {
+    et = first(l);
+    l = next(l);
+    if(has_prefix(ev, et))
+      return TBtrue;
+  }
+  return TBfalse;
+}
+
 /*
  * Transition function for Tool Control Protocol.
  * Note that the protocol is defined from the
@@ -161,7 +201,7 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
     case a_rec_ack_event:
       pending = ti_pending(ti);
       t = first(fun_args(event));
-      if(list_elem(t, pending)){
+      if(event_present(t, pending)){
 	if(update)
 	  ti_pending(ti) = list_delete(pending, t);
 	  return_phase(PHASE2);
