@@ -21,6 +21,7 @@ SHELL		= /bin/sh
 INSTALL		= @INSTALL@
 CLEAN		= @CLEAN@
 NOWEB		= @NOWEB@
+MKINSTALLDIR    = $(top_srcdir)/mkinstalldirs
 
 DISTFILES	= Makefile.in $(SOURCE)
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
@@ -55,7 +56,7 @@ dist: $(DISTFILES)
 	done
 
 install: $(CLASSES)
-	-mkdir $(classdir)/$(COMPONENT)
+	-$(MKINSTALLDIR) $(classdir)/$(COMPONENT)
 	for file in $(CLASSES); do\
 	  $(INSTALL) $$file $(classdir)/$(COMPONENT); \
 	done
