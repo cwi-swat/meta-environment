@@ -1,7 +1,9 @@
 # $Id$
 
 2003/07/11 (jurgenv@cwi.nl)
- * A lot of method extraction in MetaStudio.java
+ * A lot of method extraction refactorings in MetaStudio.java
+ * Set-focus in Xemacs now also jumps to the focus if its is not in visual 
+   range.
  
 2003/07/11 (markvdb@cwi.nl)
  * Added a button to read the term store from disk.
