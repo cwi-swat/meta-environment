@@ -14,6 +14,7 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
 includedir	= @includedir@
+datadir		= @datadir@
 docdir		= ${top_srcdir}/docs
 
 AR              = @AR@
@@ -72,6 +73,7 @@ OBJ		= ${patsubst %.c,%.o,${MAIN}}
 BINFILES	= ${PROG}
 INCLUDEFILES	=
 LIBFILES	= libtree2dot.a
+DATAFILES	=
 
 all:	${BINFILES}
 
@@ -86,6 +88,7 @@ install: all
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@( cd ${libdir}; ${RANLIB} ${LIBFILES} )
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:

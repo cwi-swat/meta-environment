@@ -13,6 +13,7 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
 includedir	= @includedir@
+datadir		= @datadir@
 docdir		= ${top_srcdir}/docs
 
 SHELL		= @SHELL@
@@ -66,6 +67,7 @@ SRC		= ${addsuffix .c,${PROG}}
 BINFILES	= ${PROG}
 INCLUDEFILES	=
 LIBFILES	=
+DATAFILES	=
 
 all:	${BINFILES}
 
@@ -79,6 +81,7 @@ install: all
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:

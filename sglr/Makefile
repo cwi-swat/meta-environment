@@ -16,7 +16,7 @@ all libs doc clean install uninstall distclean:
 		if [ -d $$DIR ]; then \
 			echo Make $@ in $$DIR; \
 			cd $$DIR; \
-			$(MAKE) -${MAKEFLAGS} $@; \
+			$(MAKE) $@; \
 			cd ..; \
 		fi \
 	done
