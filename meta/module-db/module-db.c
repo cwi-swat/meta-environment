@@ -413,7 +413,7 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   fullImports = SDF_getModuleImportsList(sdfModule);
   unknowns = add_imports(modName, imports, fullImports);
   import_graph = calc_import_graph();
-ATwarning("ig: %t\n", import_graph);
+
   return ATmake("snd-value(module(<term>,imports(need-modules([<list>]),<term>)))", 
 		modName, unknowns, import_graph);
 }
