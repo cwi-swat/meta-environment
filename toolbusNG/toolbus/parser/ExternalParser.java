@@ -4,6 +4,8 @@ import aterm.*;
 import aterm.pure.*;
 import java.io.*;
 
+import toolbus.TBTerm;
+
 /**
  * Provide access to an external parser. Used to call sglr and implode-asfix.
  * Code borrowed from JJForester and adapted/extended
@@ -61,7 +63,7 @@ public class ExternalParser {
     execute(parseCommand, sourceFileName, asfixFileName, "parse");
     InputStream in = execute(implodeCommand, asfixFileName, "implode");
     try {
-      result = (new PureFactory()).readFromTextFile(in);
+      result = TBTerm.factory.readFromTextFile(in);
     } catch (IOException e) {
       throw new ExternalProcessException(e.getMessage(), "read ATerm from file");
     }

@@ -1,0 +1,6 @@
+process P (X : int) is
+  let Y : int
+  in
+	Y := X . print X . print Y
+  endlet
+toolbus(P(123))

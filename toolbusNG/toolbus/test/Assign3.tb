@@ -1,0 +1,6 @@
+process P is
+  let X : bool
+  in
+	X := true . print X
+  endlet
+toolbus(P)

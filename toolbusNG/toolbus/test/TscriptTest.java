@@ -5,7 +5,6 @@ import java.io.*;
 import toolbus.*;
 
 import aterm.ATermFactory;
-import aterm.pure.PureFactory;
 
 import junit.framework.TestCase;
 
@@ -14,8 +13,8 @@ public class TscriptTest extends TestCase {
 
   public TscriptTest(String name) {
     super(name);
-    factory = new PureFactory();
-    TBTerm.init(factory);
+    TBTerm.init();
+    factory = TBTerm.factory;
   }
 
   private boolean equalOutput(String currentOutput, String prevOutputFile) {
@@ -41,8 +40,7 @@ public class TscriptTest extends TestCase {
           ;
         }
     }
-     System.out.println('"' + currentOutput + '"');
-    System.out.println('"' + sbuf.toString() + '"');
+
     return sbuf.toString().equals(currentOutput);
 
   }
@@ -62,6 +60,7 @@ public class TscriptTest extends TestCase {
       sout.close();
     } catch (IOException e) {
     }
+    //System.err.println('"' + sout.toString() + '"');
     return equalOutput(sout.toString(), dir + name + ".out");
   }
 
@@ -75,6 +74,10 @@ public class TscriptTest extends TestCase {
   public void testAssign(){
     assertTrue(runTest("Assign0"));
     assertTrue(runTest("Assign1"));
+    assertTrue(runTest("Assign2"));
+    assertTrue(runTest("Assign3"));
+    assertTrue(runTest("Assign4"));
+    
   }
 
 }

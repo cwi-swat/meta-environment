@@ -55,7 +55,6 @@ public class ToolBus {
     File f;
     String fname;
     fname = user + "-" + stdName;
-    System.out.println(fname);
 
     f = new File(fname);
     if (f.exists()) {

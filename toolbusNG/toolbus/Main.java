@@ -8,10 +8,9 @@ import toolbus.atom.*;
 import toolbus.process.*;
 
 import aterm.*;
-import aterm.pure.PureFactory;
 
 public class Main {
-  private static ATermFactory aterms = new PureFactory();
+  private static ATermFactory aterms;
 
   public static void main(String[] args) {
     TBTerm.init();
@@ -631,7 +630,7 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/parser/S0.tb");
+      T.parse("toolbus/test/Assign3.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
