@@ -19,7 +19,10 @@ let
   TimeStamp : term,
   TableType : term,
   Table     : term,
-  Paths     : list
+  Paths     : list,
+  SyntaxExt : str,
+  RulesExt  : str,
+  TermExt   : str
 in
   execute(in-output,IO?).
   (
@@ -36,7 +39,10 @@ in
     rec-msg(process-search-paths(Name?, Paths?)) .
     snd-eval(IO, process-search-paths(Name, Paths)) .
     rec-value(IO, search-paths-processed(Name)) .
-    snd-msg(search-paths-processed(Name))
+    snd-msg(search-paths-processed(Name)) .
+    snd-msg(get-file-extensions) .
+    rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
+    snd-do(IO, set-file-extensions(SyntaxExt, RulesExt, TermExt))
     +
     rec-msg(open-parse-table(Name?, Path?, TableType?)) .
     snd-eval(IO, open-parse-table(Name, Path, TableType)) .
@@ -57,9 +63,9 @@ in
       snd-msg(error-opening(Name))
     )
   +
-    %% Check if a sdf module exists.
+    %% Check if a syntax module exists.
     rec-msg(exists-sdf-module(Name?)) .
-    snd-eval(IO, exists-sdf-module(Name)) .
+    snd-eval(IO, exists-syntax-module(Name)) .
     (
       rec-value(IO, exists) .
       snd-msg(sdf-module-exists(Name))
@@ -68,9 +74,9 @@ in
       snd-msg(sdf-module-not-exists(Name))
     )
   +
-    %% Create a (new) empty sdf module
+    %% Create a (new) empty syntax module
     rec-msg(create-empty-sdf-module(Path?, Name?)) .
-    snd-eval(IO, create-empty-sdf-module(Path, Name)) .
+    snd-eval(IO, create-empty-syntax-module(Path, Name)) .
     (
       rec-value(IO, creation-succeeded) .
       snd-msg(module-created(Name))
@@ -81,7 +87,7 @@ in
   +
     %% Check if an equations section exists.
     rec-msg(exists-asf-section(Name?, Path?)) .
-    snd-eval(IO, exists-asf-section(Name, Path)) .
+    snd-eval(IO, exists-rules-section(Name, Path)) .
     (
       rec-value(IO, exists) .
       snd-msg(asf-section-exists(Name))
@@ -92,7 +98,7 @@ in
   +
     %% Create a (new) equations section for a given module
     rec-msg(create-empty-equations(Name?, Path?)) .
-    snd-eval(IO, create-empty-asf-section(Name, Path)) .
+    snd-eval(IO, create-empty-rules-section(Name, Path)) .
     (
       rec-value(IO, creation-succeeded(FileName?)) .
       snd-msg(empty-equations-created(FileName))
@@ -103,7 +109,7 @@ in
   +
     %% Name represents the module-name (without extension)
     rec-msg(open-sdf-file(Name?)).
-    snd-eval(IO,open-sdf-file(Name)).
+    snd-eval(IO,open-syntax-file(Name)).
     (
       rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
       snd-msg(opened-file(Name,Contents,Path,TimeStamp))
@@ -123,7 +129,7 @@ in
     )
   +
     rec-msg(open-asf-file(Name?, SdfPath?)).
-    snd-eval(IO, open-asf-file(Name, SdfPath)).
+    snd-eval(IO, open-rules-file(Name, SdfPath)).
     (
       rec-value(IO, opened-file(Name, Contents?, Path?, TimeStamp?)) .
       snd-msg(opened-file(Name, Contents, Path, TimeStamp)) 
@@ -133,7 +139,7 @@ in
     )
   +
     rec-msg(save-asfix(Name?, Path?, Asfix?)) .
-    snd-eval(IO, save-asfix(Name, Path, Asfix)) .
+    snd-eval(IO, save-tree(Name, Path, Asfix)) .
     rec-value(IO, save-done(Name?)) .
     snd-msg(save-done)
   +

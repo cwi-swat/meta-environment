@@ -22,11 +22,8 @@
 #define MAX_PATHS 256
 
 /* Macro's for file extensions */
-#define SDF_EXT	".sdf"
-#define ASF_EXT	".asf"
 #define BAF_EXT	".baf"
 #define TBL_EXT ".tbl"
-#define TRM_EXT ".trm"
 #define TXT_EXT ".txt"
 
 /* Macro for extension of dump of all equations for a module */
@@ -34,7 +31,6 @@
 
 /*}}}  */
 /*{{{  variables */
-
 
 ATbool run_verbose = ATfalse;
 
@@ -50,6 +46,9 @@ static char myarguments[] = "hvV";
 
 static int  nr_paths = 0;
 static char *paths[MAX_PATHS];
+static char *syntax_ext;
+static char *rules_ext;
+static char *term_ext;
 
 /*}}}  */
 
@@ -73,7 +72,7 @@ void usage(char *prg, ATbool is_err)
 int fileexists(const char *fname)
 {
   struct stat st;
-  return stat(fname,&st)!=EOF;
+  return stat(fname,&st) != EOF;
 }
 
 /*}}}  */
@@ -283,7 +282,7 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
   static char pn[PATH_LEN];
   FILE   *fd;
 
-  sprintf(pn, "%s%s",fn, ".baf");
+  sprintf(pn, "%s%s",fn, BAF_EXT);
   if(!(fd = fopen(pn, "w"))) {
     ATwarning("%s: cannot create\n", pn);
   }
@@ -378,13 +377,13 @@ ATerm read_file(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm exists_sdf_module(int cid, char *moduleName) */
+/*{{{  ATerm exists_syntax_module(int cid, char *moduleName) */
 
-ATerm exists_sdf_module(int cid, char *moduleName)
+ATerm exists_syntax_module(int cid, char *moduleName)
 {
   char   txtFileName[PATH_LEN] = {'\0'};
 
-  sprintf(txtFileName, "%s%s", moduleName, SDF_EXT);
+  sprintf(txtFileName, "%s%s", moduleName, syntax_ext);
 
   if (fileexists(txtFileName)) {
     return ATmake("snd-value(exists)");
@@ -395,25 +394,25 @@ ATerm exists_sdf_module(int cid, char *moduleName)
 }
 
 /*}}}  */
-/*{{{  ATerm create_empty_sdf_module(int cid, char *moduleName) */
+/*{{{  ATerm create_empty_syntax_module(int cid, char *moduleName) */
 
-ATerm create_empty_sdf_module(int cid, char *path, char *moduleName)
+ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
 {
   FILE *f;
   char txtFileName[PATH_LEN] = {'\0'};
 
-  /* Build sdf-text-filename from moduleName */
-  sprintf(txtFileName, "%s%s", path, SDF_EXT);
+  /* Build syntax-text-filename from moduleName */
+  sprintf(txtFileName, "%s%s", path, syntax_ext);
 
   if (!(f = fopen(txtFileName, "w"))) {
     char *errmsg = strerror(errno);
     if (run_verbose) {
-      ATwarning("create_empty_sdf_module: %s\n", errmsg);
+      ATwarning("create_empty_syntax_module: %s\n", errmsg);
     }
     return ATmake("snd-value(creation-failed(<str>))", errmsg);
   }
 
-  /* Insert proper sdf syntax. */
+  /* Insert proper syntax syntax. */
   fprintf(f, "module %s\n", moduleName);
 
   fclose(f);
@@ -422,17 +421,17 @@ ATerm create_empty_sdf_module(int cid, char *path, char *moduleName)
 }
 
 /*}}}  */
-/*{{{  ATerm exists_asf_section(int cid, char *moduleName) */
+/*{{{  ATerm exists_rules_section(int cid, char *moduleName) */
 
-ATerm exists_asf_section(int cid, char *name, char *sdfPath)
+ATerm exists_rules_section(int cid, char *name, char *syntaxPath)
 {
   char filename[PATH_LEN] = {'\0'};
   char  *p;
 
-  strcpy(filename, sdfPath);
+  strcpy(filename, syntaxPath);
   p = strrchr(filename, '.');
   if (p != NULL) {
-    strcpy(p, ASF_EXT);
+    strcpy(p, rules_ext);
   }
 
   if (fileexists(filename)) {
@@ -443,18 +442,18 @@ ATerm exists_asf_section(int cid, char *name, char *sdfPath)
 }
 
 /*}}}  */
-/*{{{  ATerm create_empty_asf_section(int cid, char *name, char *sdfPath) */
+/*{{{  ATerm create_empty_rules_section(int cid, char *name, char *syntaxPath) */
 
-ATerm create_empty_asf_section(int cid, char *name, char *sdfPath)
+ATerm create_empty_rules_section(int cid, char *name, char *syntaxPath)
 {
   FILE *file;
   char filename[PATH_LEN] = {'\0'};
   char *p;
 
-  strcpy(filename, sdfPath);
+  strcpy(filename, syntaxPath);
   p = strrchr(filename, '.');
   if (p != NULL) {
-    strcpy(p, ASF_EXT);
+    strcpy(p, rules_ext);
   }
 
   file = fopen(filename, "w");
@@ -504,37 +503,37 @@ ATerm open_file(int cid, char *path)
 ATerm remove_module(int cid, char *name)
 {
   char   *full;
-  char   bafsdffile[PATH_LEN] = {'\0'};
-  char   textsdffile[PATH_LEN] = {'\0'};
-  char   bafasffile[PATH_LEN] = {'\0'};
-  char   textasffile[PATH_LEN] = {'\0'};
+  char   bafsyntaxfile[PATH_LEN] = {'\0'};
+  char   textsyntaxfile[PATH_LEN] = {'\0'};
+  char   bafrulesfile[PATH_LEN] = {'\0'};
+  char   textrulesfile[PATH_LEN] = {'\0'};
   char   *p;
 
-  sprintf(textsdffile, "%s%s", name, SDF_EXT);
-  full = find_in_path(textsdffile);
+  sprintf(textsyntaxfile, "%s%s", name, syntax_ext);
+  full = find_in_path(textsyntaxfile);
   if (full != NULL) {
     remove(full);
 
-    strcpy(textsdffile, full);
-    sprintf(bafsdffile, "%s%s", textsdffile, BAF_EXT);
+    strcpy(textsyntaxfile, full);
+    sprintf(bafsyntaxfile, "%s%s", textsyntaxfile, BAF_EXT);
   
-    if (fileexists(bafsdffile)) {
-      remove(bafsdffile);
+    if (fileexists(bafsyntaxfile)) {
+      remove(bafsyntaxfile);
     }
 
-    strcpy(textasffile, textsdffile);
-    p = strrchr(textasffile, '.');
+    strcpy(textrulesfile, textsyntaxfile);
+    p = strrchr(textrulesfile, '.');
     if (p != NULL) {
-      strcpy(p, ASF_EXT);
+      strcpy(p, rules_ext);
     }
 
-    if (fileexists(textasffile)) {
-      remove(textasffile);
+    if (fileexists(textrulesfile)) {
+      remove(textrulesfile);
 
-      sprintf(bafasffile, "%s%s", textasffile, BAF_EXT);
+      sprintf(bafrulesfile, "%s%s", textrulesfile, BAF_EXT);
 
-      if (fileexists(bafasffile)) {
-        remove(bafasffile);
+      if (fileexists(bafrulesfile)) {
+        remove(bafrulesfile);
       }
     }
   }
@@ -542,9 +541,9 @@ ATerm remove_module(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm open_sdf_file(int cid, char *name) */
+/*{{{  ATerm open_syntax_file(int cid, char *name) */
 
-ATerm open_sdf_file(int cid, char *name)
+ATerm open_syntax_file(int cid, char *name)
 {
   char   *full;
   char   newestbaf[PATH_LEN] = {'\0'};
@@ -552,10 +551,10 @@ ATerm open_sdf_file(int cid, char *name)
   ATbool newest_is_binary = ATfalse;
   ATerm  t;
 
-  sprintf(newestraw, "%s%s", name, SDF_EXT);
+  sprintf(newestraw, "%s%s", name, syntax_ext);
   full = find_in_path(newestraw);
   if (full == NULL) {
-    ATwarning("open_sdf_file: %s not found in path.\n", newestraw);
+    ATwarning("open_syntax_file: %s not found in path.\n", newestraw);
     return open_error(name);
   }
 
@@ -576,9 +575,9 @@ ATerm open_sdf_file(int cid, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm open_asf_file(int cid, char *name, char *sdfPath) */
+/*{{{  ATerm open_rules_file(int cid, char *name, char *syntaxPath) */
 
-ATerm open_asf_file(int cid, char *name, char *sdfPath)
+ATerm open_rules_file(int cid, char *name, char *syntaxPath)
 {
   char   newestbaf[PATH_LEN] = {'\0'};
   char   newestraw[PATH_LEN] = {'\0'};
@@ -586,10 +585,10 @@ ATerm open_asf_file(int cid, char *name, char *sdfPath)
   ATerm  t;
   char  *p;
 
-  strcpy(newestraw, sdfPath);
+  strcpy(newestraw, syntaxPath);
   p = strrchr(newestraw, '.');
   if (p != NULL) {
-    strcpy(p, ASF_EXT);
+    strcpy(p, rules_ext);
   }
 
   if (!fileexists(newestraw)) {
@@ -622,20 +621,20 @@ ATerm open_trm_file(int cid, char *name)
 
 /*{{{  ATerm open_parse_table(int cid, char *name, ATerm tableType) */
 
-ATerm open_parse_table(int cid, char *name, char *sdfPath, ATerm tableType)
+ATerm open_parse_table(int cid, char *name, char *syntaxPath, ATerm tableType)
 {
   ATerm t, packed;
   char filename[PATH_LEN];
   char *p;
 
-  strcpy(filename, sdfPath);
+  strcpy(filename, syntaxPath);
   p = strrchr(filename, '.');
   assert (p != NULL);
 
   if (ATisEqual(tableType, ATmake("asf"))) {
-    strcpy(p, ASF_EXT);
+    strcpy(p, rules_ext);
   } else {
-    strcpy(p, TRM_EXT);
+    strcpy(p, term_ext);
   }
 
   strcat(filename, TBL_EXT);
@@ -679,9 +678,9 @@ ATerm save_parsetable(int cid, char *name, char *fn, ATerm table)
 
 /*}}}  */
 
-/*{{{  ATerm save_asfix(int cid, char *name, char *fn, ATerm tree) */
+/*{{{  ATerm save_tree(int cid, char *name, char *fn, ATerm tree) */
 
-ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
+ATerm save_tree(int cid, char *name, char *fn, ATerm tree)
 { 
   return write_term_to_named_file(tree, fn, name);
 }
@@ -704,17 +703,17 @@ ATerm save_text_file(int cid, char *filename, char *text)
 }
 
 /*}}}  */
-/*{{{  ATerm print_module_text(int cid, char *modname, char *filename, char *sdftext, char *asftext) */
+/*{{{  ATerm print_module_text(int cid, char *modname, char *filename, char *syntaxtext, char *rulestext) */
 
-ATerm print_module_text(int cid, char *modname, char *sdfPath, 
-                        char *sdftext, char *asftext)
+ATerm print_module_text(int cid, char *modname, char *syntaxPath, 
+                        char *syntaxtext, char *rulestext)
 {
   FILE *file;
 
   char filename[PATH_LEN] = {'\0'};
   char  *p;
 
-  strcpy(filename, sdfPath);
+  strcpy(filename, syntaxPath);
   p = strrchr(filename, '.');
   if (p != NULL) {
     strcpy(p, TXT_EXT);
@@ -724,10 +723,10 @@ ATerm print_module_text(int cid, char *modname, char *sdfPath,
     ATwarning("%s: cannot create\n", filename);
   } 
   else {
-    fputs(sdftext, file);
-    if (strlen(asftext) > 0) {
+    fputs(syntaxtext, file);
+    if (strlen(rulestext) > 0) {
       fputc('\n', file);
-      fputs(asftext, file);
+      fputs(rulestext, file);
     }
     fclose(file);
   }
@@ -851,6 +850,16 @@ ATerm process_search_paths(int cid, char *config_filename, ATerm paths)
   }
 
   return ATmake("snd-value(search-paths-processed(<str>))", config_filename);
+}
+
+/*}}}  */
+/*{{{  void set_file_extensions(int cid, char *syntaxExt, char *ruleExt, char *termExt) */
+
+void set_file_extensions(int cid, char *syntaxExt, char *rulesExt, char *termExt)
+{
+  syntax_ext = syntaxExt; 
+  rules_ext = rulesExt; 
+  term_ext = termExt; 
 }
 
 /*}}}  */
