@@ -654,7 +654,7 @@ proc CopyModule { mod newmod newpath} {
 #-
 # generates the toolbus event to request importing of a module M
 #--
-proc CopyModule { mod newmod newpath} {
+proc ImportModule { mod newmod newpath} {
     GBevent "import-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
 }
 
@@ -1343,6 +1343,8 @@ proc define-module-popup {} {
         -command {RenameModuleWidget [GetObjectName $c]}
     $m add command -label "Copy Module" \
         -command {CopyModuleWidget [GetObjectName $c]}
+    $m add command -label "Import Module" \
+        -command {ImportModuleWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [GetObjectName $c]}
@@ -1387,6 +1389,8 @@ proc define-modlist-popup {} {
         -command {RenameModuleWidget [SelectedModules]}
     $m add command -label "Copy Module..." \
         -command {CopyModuleWidget [SelectedModules]}
+    $m add command -label "Import Module..." \
+        -command {ImportModuleWidget [SelectedModules]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [SelectedModules]}
