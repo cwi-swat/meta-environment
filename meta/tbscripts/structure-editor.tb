@@ -102,7 +102,7 @@ in
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
-    if equal(FF,[]) then
+    if equal(Fl,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
       rec-value(SE,T1?).
@@ -112,6 +112,8 @@ in
       rec-msg(source(Src?)).
       printf("\nNormal form is:\n%s\n", Src).
       snd-note(ui-status(endstat(Id)))
+    else
+      snd-note(ui-status(error("Please parse term before reducing")))
     fi.
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
     +
@@ -126,6 +128,11 @@ in
     rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
     printf("Tree display not yet implemented\n").
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
+    +
+    rec-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid)).
+    snd-msg(set-parsetable(Language)).
+    rec-msg(parsetable-set(Language)).
+    snd-ack-event(TE,menu-event("Meta-Environment","Generate ParseTable", Fid))
     +
     rec-event(TE,menu-event("Move",Str?,Fid)).
     snd-eval(SE,moveFocus(Fid,Str)).
