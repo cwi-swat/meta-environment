@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 
 #include <aterm1.h>
+#include <atb-tool.h>
 #include <AsFix.h>
 
 #include <a2toa1.h>
@@ -276,7 +277,7 @@ ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)
   SG_ASFIX1_ON();
 
   if(!SGisParseError(t = SGparseString(L, G, S)))
-    t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, t);
+    t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, ATBpack(t));
 
   return SG_TermToToolbus(t);
 }
