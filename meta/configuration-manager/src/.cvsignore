@@ -6,5 +6,7 @@ Makefile
 Makefile.in
 configmanager
 kernel-configuration.tb
+metaconfig-config
+metaconfig-config.local
 standard.buttons
 user-configuration.tb
