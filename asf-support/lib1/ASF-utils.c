@@ -1,11 +1,12 @@
 
 #include <string.h>
-#include <ASF.h>
+#include "ASF-utils.h"
 
 #define DEFAULT_TAG_PREFIX "default-"
 #define DEFAULT_TAG "default"
 
-ATbool ASF_isTagDefault(ASF_Tag tag)
+ATbool 
+ASF_isTagDefault(ASF_Tag tag)
 {
   char *str;
 
@@ -24,8 +25,40 @@ ATbool ASF_isTagDefault(ASF_Tag tag)
   return ATfalse;
 }
 
-int ASF_getCondEquationListLength(ASF_CondEquationList eqs)
+int 
+ASF_getCondEquationListLength(ASF_CondEquationList eqs)
 {
    return (ATgetLength((ATermList)ASF_makeTermFromCondEquationList(eqs))/2)+1;
 }
 
+ASF_ConditionList 
+foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor, 
+                       ASF_ConditionVisitorData user_data) 
+{
+  ATermList store;
+  ASF_ConditionList newList;
+  ASF_Separator sep = ASF_getConditionListSep(list);
+  ASF_Layout layout = ASF_getConditionListWsAfterFirst(list);
+ 
+  /* apply func to each element */
+  for (store = ATempty; 
+      ASF_hasConditionListHead(list); 
+      list = ASF_getConditionListTail(list)) {
+    store = ATinsert(store, 
+                     ASF_makeTermFromCondition(
+                     visitor(ASF_getConditionListHead(list), user_data)));
+  } 
+
+  /* rebuild the plus list */
+  if (!ATisEmpty(store)) {
+    newList = ASF_makeConditionListSingle(
+              ASF_makeConditionFromTerm(ATgetFirst(store)));
+  }
+ 
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    ASF_Condition newCond = ASF_makeConditionFromTerm(ATgetFirst(store));
+    newList = ASF_makeConditionListMany(newCond, layout, sep, layout, newList); 
+  } 
+
+  return newList;
+}
