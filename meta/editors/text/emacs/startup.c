@@ -11,8 +11,7 @@
 
 /*{{{  defines */
 
-#define EDITOR "/users/jive/PROGRAMS/emacs-21.2/bin/emacs" 
-/* Changed by Jørgen Iversen after download */
+#define EDITOR "emacs" 
 
 /*}}}  */
 
