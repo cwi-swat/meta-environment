@@ -75,7 +75,7 @@ equations
 
 %% ---- Convert RVAR to String
 
-[rv2s] 	rvar2strcon(rvar($Char*)) = strcon(""" $Char* """)
+[rv2s] 	rvar2str(rvar($Char*)) = strcon(""" $Char* """)
 
 %% --- filter RSTORE
 

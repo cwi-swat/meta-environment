@@ -5,7 +5,6 @@
 set -e
 
 # {{{  variables
-prefix=__PREFIX__
 bindir=__BINDIR__
 PRG=`basename $0`
 VERBOSE=

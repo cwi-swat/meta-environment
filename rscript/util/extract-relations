@@ -65,7 +65,7 @@ addposinfo() {
 extract() {
   echo -n "Rewriting $1 .."
   apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
-    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore
+    | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
   echo " done."
 }
 

@@ -2,10 +2,10 @@ module PicoExtraction
 
 imports Pico-syntax
 imports basic/Integers
-imports MyPosInfo[STATEMENT]
-imports MyPosInfo[PICO-ID]
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[PICO-ID]
 
-imports ListItems
+imports basic/feedback
 
 exports
    imports Rstore

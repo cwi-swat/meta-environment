@@ -1,4 +1,6 @@
-buttons([
+configuration([
+
+extension("Pico-syntax", ".pico"),
 
 button("Pico-syntax",
 	  [description(term-editor, menu(["Pico", "Extract Relations"]))],
