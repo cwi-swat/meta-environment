@@ -5,7 +5,7 @@
    a bottom sort CHARLIST, which is instantiated by a template
  * Added a script sdf2-to-java that wraps sdf2-to-adt and adt-to-java and
    the generation of a special class (the bottom-sort CHARLIST).
- * Bumped to 1.4beta
+ * Release 1.4
 
 2002/10/07 (vinju@loria.fr)
  * Changed the name of the field that gets the tree out of the start pattern.
