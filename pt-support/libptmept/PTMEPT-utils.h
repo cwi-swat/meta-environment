@@ -5,6 +5,13 @@
 #include <PTMEPT.h>
 #include <MEPT.h>
 
+
+PTPT_TreeList PTPT_reverseTreeList(PTPT_TreeList args);
+PTPT_SymbolList PTPT_reverseSymbolList(PTPT_SymbolList args);
+PTPT_AttrList PTPT_reverseAttrList(PTPT_AttrList args);
+PTPT_CharRangeList PTPT_reverseCharRangeList(PTPT_CharRangeList args);
+PTPT_ATermElems PTPT_reverseATermElems(PTPT_ATermElems args);
+
 PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt);
 PTPT_Tree      PTPT_explodeTree(PT_Tree pt);
 PTPT_ATerm     PTPT_explodeATerm(ATerm trm);

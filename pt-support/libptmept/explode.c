@@ -6,46 +6,6 @@
 static PTPT_OptLayout e = NULL;
 ATermTable store = NULL;
 
-/*{{{  static PTPT_TreeList PTPT_reverseTreeList(PTPT_TreeList args) */
-
-static PTPT_TreeList PTPT_reverseTreeList(PTPT_TreeList args)
-{
-  return (PTPT_TreeList) ATreverse((ATermList) args);
-}
-
-/*}}}  */
-/*{{{  static PTPT_SymbolList PTPT_reverseSymbolList(PTPT_SymbolList args) */
-
-static PTPT_SymbolList PTPT_reverseSymbolList(PTPT_SymbolList args)
-{
-  return (PTPT_SymbolList) ATreverse((ATermList) args);
-}
-
-/*}}}  */
-/*{{{  static PTPT_AttrList PTPT_reverseAttrList(PTPT_AttrList args) */
-
-static PTPT_AttrList PTPT_reverseAttrList(PTPT_AttrList args)
-{
-  return (PTPT_AttrList) ATreverse((ATermList) args);
-}
-
-/*}}}  */
-/*{{{  static PTPT_CharRangeList PTPT_reverseCharRangeList(PTPT_CharRangeList args) */
-
-static PTPT_CharRangeList PTPT_reverseCharRangeList(PTPT_CharRangeList args)
-{
-  return (PTPT_CharRangeList) ATreverse((ATermList) args);
-}
-
-/*}}}  */
-/*{{{  static PTPT_ATermElems PTPT_reverseATermElems(PTPT_ATermElems args) */
-
-static PTPT_ATermElems PTPT_reverseATermElems(PTPT_ATermElems args)
-{
-  return (PTPT_ATermElems) ATreverse((ATermList) args);
-}
-
-/*}}}  */
 /*{{{  static PTPT_NatCon   PTPT_explodeNatCon(int val) */
 
 static PTPT_NatCon   PTPT_explodeNatCon(int val)
