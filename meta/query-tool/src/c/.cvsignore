@@ -1,9 +1,0 @@
-*.o
-*.tifs
-.*.swp
-.deps
-Makefile
-Makefile.in
-query-tool
-testProduction
-testSortDefinition

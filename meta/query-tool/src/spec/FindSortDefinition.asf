@@ -1,7 +1,0 @@
-equations
-
-[find-main] find-sort-definition(Module, Sort) = contains-sort-definition(Module, false, Sort)
-
-[csd-mixfix] contains-sort-definition(Symbols -> Sort Attributes, Boolean, Sort) = true
-
-[csd-prefix] contains-sort-definition(Literal(Symbol*) -> Sort Attributes, Boolean, Sort) = true
