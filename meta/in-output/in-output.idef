@@ -12,14 +12,14 @@ in
   execute(in-output,IO?).
   ( rec-msg(Id?,open-file(id(Name?))).
     snd-eval(IO, open-old-asfix-file(Name)).
-    ( rec-value(IO,opened-file(Name,T?,Path?)).
+    ( rec-value(IO,opened-file(asfix,Name?,T?,Path?)).
       snd-msg(Id,opened-file(asfix,id(Name),T,Path))
     + rec-value(IO,error-opening(Name?)).
       snd-eval(IO,open-sdf2-file(Name)).
-      ( rec-value(IO,opened-file(Name,Text?,Path?)).
+      ( rec-value(IO,opened-file("raw",Name?,Text?,Path?)).
         snd-msg(Id,opened-file(raw,id(Name),Text,Path))
         + 
-        rec-value(IO,opened-asfix-file(Name,T?,Path?)).
+        rec-value(IO,opened-file("baf",Name?,T?,Path?)).
         snd-msg(Id,opened-file(baf,id(Name),T,Path))
         +
         rec-value(IO,error-opening(Name?)).
@@ -29,7 +29,7 @@ in
   +
     rec-msg(Id?,open-eqs2-asfix-file(id(Name?))).
     snd-eval(IO,open-eqs2-asfix-file(Name)).
-    ( rec-value(IO,opened-asfix-file(Name,T?,Path?)).
+    ( rec-value(IO,opened-file("baf",Name?,T?,Path?)).
       snd-msg(Id,opened-file(baf,id(Name),T,Path))
       +
       rec-value(IO,error-opening(Name?)).
@@ -38,7 +38,7 @@ in
   +
     rec-msg(Id?,open-eqs2-text-file(id(Name?))).
     snd-eval(IO,open-eqs2-text-file(Name)).
-    ( rec-value(IO,opened-file(Name,Text?,Path?)).
+    ( rec-value(IO,opened-file("raw",Name?,Text?,Path?)).
       snd-msg(Id,opened-file(raw,id(Name),Text,Path)) 
       +
       rec-value(IO,error-opening(Name?)).
@@ -57,11 +57,11 @@ in
   +
     rec-msg(Id?,open-trm-file(id(Name?))).
     snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file(Name,Text?,Dir?,Path?)).
-      snd-msg(Id,opened-file(raw,id(Name),Text,Dir,Path))
+    ( rec-value(IO,opened-file("raw",Name,Text?,Path?)).
+      snd-msg(Id,opened-file(raw,id(Name),Text,Path))
       +
-      rec-value(IO,error-opening(Name?,Path?)).
-      snd-msg(Id, error-opening(Name,Path))
+      rec-value(IO,error-opening(Name?)).
+      snd-msg(Id, error-opening(Name))
     )
   +
     rec-msg(save-sdf2-asfix(id(Name?),Path?,Asfix?)).

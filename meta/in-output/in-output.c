@@ -101,7 +101,8 @@ int  asfix_status = 0;
 char *find_newest_in_path(char *name)
 {
   int    i;
-  char   thisname[PATH_LEN], *newestname = NULL;
+  static char   thisname[PATH_LEN];
+  char   *newestname = NULL;
   time_t newesttime = 0L, thistime;
 
   for(i=0; i<nr_paths; i++) {
@@ -113,6 +114,7 @@ char *find_newest_in_path(char *name)
       newestname = thisname;
     }
   }
+ATfprintf(stderr,"(%s) found %s\n", name, newestname?newestname:"NULL");
   return newestname;
 }
 
@@ -172,7 +174,6 @@ ATerm open_old_asfix_file(int cid, char *name)
   char  *fullname,namext[PATH_LEN];
 
   if (asfix_status == 2) {
-    ATfprintf(stderr,"cannot mix asfix modes\n");
     return open_error(name);
   }
 
@@ -234,7 +235,7 @@ ATerm open_eqs2_asfix_file(int cid, char *name)
   sprintf(fullname, "%s%s", name, ".eqs2.baf");
   ATfprintf(stderr, "pre-parsed file %s\n", fullname);
 
-  if((full = find_newest_in_path(name))) {
+  if((full = find_newest_in_path(fullname))) {
     t = read_term_from_named_file(full, name, ATfalse);
   } else {
     t = open_error(name);
@@ -244,10 +245,13 @@ ATerm open_eqs2_asfix_file(int cid, char *name)
 
 ATerm open_eqs2_text_file(int cid, char *name)
 {
-  char  *full;
+  char  *full, fullname[PATH_LEN];
   ATerm t;
 
-  if((full = find_newest_in_path(name))) {
+  sprintf(fullname, "%s%s", name, ".eqs2");
+  ATfprintf(stderr, "pre-parsed file %s\n", fullname);
+
+  if((full = find_newest_in_path(fullname))) {
     t = read_raw_from_named_file(full, name);
   } else {
     ATfprintf(stderr,"file %s could not be found\n", name);
@@ -262,7 +266,7 @@ ATerm read_parse_table(int cid, char *name)
 
   sprintf(fullname, "%s%s", name, ".tbl");
 
-  if((full = find_newest_in_path(fullname)) && fileisreadable(full))
+  if((full = find_newest_in_path(fullname)))
      return ATmake("snd-value(table-on-disk(<str>))", full);
 
   return open_error(name);
