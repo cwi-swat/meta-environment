@@ -14,6 +14,7 @@
 #include <AsFix-init-patterns.h>
 #include <atb-tool.h>
 #include <deprecated.h>
+#include <gc.h>
 
 #include "support.h"
 #include "rewriter.tif.h"
@@ -108,6 +109,15 @@ int main(int argc, char *argv[])
 ATfprintf(stderr,"Reducing ...\n");
       reduct = innermost(trm);
 ATfprintf(stderr,"Reducing finished.\n");
+/*
+{
+  FILE *f = fopen("/tmp/pgen.out", "w");
+  assert(f);
+  AT_collect(2);
+  AT_printAllAFunCounts(f);
+  fclose(f);
+}
+*/
       asfix = toasfix(reduct, file, modname);
       ATwriteToBinaryFile(asfix,stdout);
       /*ATwriteToTextFile(asfix,stdout);*/
