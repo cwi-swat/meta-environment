@@ -53,8 +53,7 @@ all:	$(PROGS)
 install:	all
 	@for PROG in $(PROGS);	\
 	do \
-		echo $@ $$PROG in $(bindir); \
-		$(INSTALL_PROG) $$PROG $(bindir); \
+		$(INSTALL_PROG) $(INSTALL) $(bindir) $$PROG; \
 	done
 
 uninstall:
