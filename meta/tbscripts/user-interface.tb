@@ -51,16 +51,25 @@ in
 endlet
 
 /*}}}  */
-/*{{{ process NodeSelected(Modulename: str, Tree: term) */
+/*{{{ process NodeSelected(GraphId: str, Node: term) */
 
-process NodeSelected(Modulename: str, Tree: term) is
+process NodeSelected(GraphId: str, Node: term) is
 let
-  Actions: list
+  Actions: list,
+  Location: term
 in
-  snd-msg(get-actions(click, tree-panel, Modulename))
-  . rec-msg(actions(click, tree-panel, Modulename, Actions?))
-  . snd-msg(perform-actions(tree-panel, Actions, [Tree, str(Modulename)]))
-  . rec-msg(actions-performed(tree-panel, Actions))
+  snd-msg(gc-get-node-origin(Node))
+  .
+  (
+    rec-msg(gc-origin(Location?))
+    . snd-msg(cm-get-actions(tree-panel, click))
+    /*. snd-msg(cm-get-actions(GraphId, node-selected))*/
+    . rec-msg(cm-actions(Actions?))
+    . snd-msg(perform-actions(tree-panel, Actions, [Location]))
+    . rec-msg(actions-performed(tree-panel, Actions))
+  +
+    rec-msg(gc-no-origin)
+  )
 endlet
 
 /*}}}  */
@@ -70,7 +79,9 @@ process UserInterfaceHandler is
 let
   Error: term,
   Event: term,
+  GraphId: str,
   Modulename: str,
+  Node: term,
   Pid: int,
   Tree: term,
   Type: term
@@ -87,8 +98,8 @@ in
     rec-msg(ui-error-selected(Error?))
     . create(ErrorSelected(Error), Pid?)
   +
-    rec-msg(ui-node-selected(Modulename?, Tree?))
-    . create(NodeSelected(Modulename, Tree), Pid?)
+    rec-msg(ui-node-selected(GraphId?, Node?))
+    . create(NodeSelected(GraphId, Node), Pid?)
   +
     rec-msg(ui-message-selected(Modulename?, Tree?))
     . create(MessageSelected(Modulename, Tree), Pid?)

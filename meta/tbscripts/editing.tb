@@ -3,22 +3,17 @@ let
   Extension: str,
   Basedir: str
 in
-  printf("ModuleId: %s, Type: %t\n", ModuleId, Type)
-  . snd-msg(get-path-from-db(ModuleId))
+  snd-msg(get-path-from-db(ModuleId))
   .
   (
     rec-msg(path(Basedir?))
-    . printf("Basedir (cached): %s\n", Basedir)
     . snd-msg(file-extension-hook(Type))
     . rec-msg(file-extension-hook-result(Extension?))
-    . printf("Extension: %t\n", Extension)
     . BuildPath(Basedir, ModuleId, Extension, Path?)
   +
     rec-msg(no-path)
     . LocateFile(ModuleId, Type, Path?)
-    . printf("Basedir (located): %s\n", Path)
   )
-  . printf("Path: %s\n", Path)
 endlet
 
 process GetPath(Sid: term, Path: str?) is
@@ -73,21 +68,19 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
     . Registered := false
   )
 
-process EditText(Sid: term, Type: term) is
+process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Events: list,
   Path: str,
-  ModuleId: str,
-  Registered: bool
+  ModuleId: str
 in
-  IsTextEditorRegistered(Sid, Registered?)
+  IsTextEditorRegistered(Sid, AlreadyExists?)
   .
-  if equal(Registered, true) then
+  if equal(AlreadyExists, true) then
     snd-msg(te-editor-to-front(Sid))
   else
     snd-msg(em-register-editor(Sid, text))
     . GetPath(Sid, Path?)
-    /*. printf("EditText: filename = %s\n", Path)*/
     . snd-msg(te-edit-text(Sid, EDITOR, Path))
     . snd-msg(cm-get-events(Type))
     . rec-msg(cm-events(Events?))
@@ -266,6 +259,7 @@ process GetSyntaxTree(ModuleId: str, Tree: term?, Available: bool?) is
 
 process EditSyntax(Path: str) is
 let
+  AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   HasText: bool,
@@ -277,43 +271,48 @@ let
 in
   EditorType := syntax-editor
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType)
+  . EditText(Sid, EditorType, AlreadyExists?)
   . snd-msg(syntax-editor-started(Path, Sid))
-  . snd-msg(ts-get-str-value("path-modulename", Path))
   .
-  (
-    rec-msg(ts-value(ModuleId?))
-    . snd-msg(em-bind-session(Sid, ModuleId))
-    . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetSyntaxTree(ModuleId, Tree?, Available?)
+  if equal(AlreadyExists, false) then
+    snd-msg(ts-get-str-value("path-modulename", Path))
     .
-    if equal(Available, true) then
-      EditStructure(Sid, Tree)
+    (
+      rec-msg(ts-value(ModuleId?))
+      . snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetSyntaxTree(ModuleId, Tree?, Available?)
+      .
+      if equal(Available, true) then
+	EditStructure(Sid, Tree)
+      else
+	tau
+      fi
+    +
+      rec-msg(ts-no-value)
+    )
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      MouseClicked(Sid)
+    +
+      TextChanged(Sid)
+    )
+    *
+    EditorDisconnected(Sid)
+    . IsTextEditorRegistered(Sid, HasText?)
+    . IsStructureEditorRegistered(Sid, HasStructure?)
+    .
+    if and(HasText, not(HasStructure)) then
+      ParseSyntax(Sid, sdf, ParseSucceeded?)
     else
       tau
     fi
-  +
-    rec-msg(ts-no-value)
-  )
-  .
-  (
-    MenuSelected(Sid, EditorType)
-  +
-    MouseClicked(Sid)
-  +
-    TextChanged(Sid)
-  )
-  *
-  EditorDisconnected(Sid)
-  . IsTextEditorRegistered(Sid, HasText?)
-  . IsStructureEditorRegistered(Sid, HasStructure?)
-  .
-  if and(HasText, not(HasStructure)) then
-    ParseSyntax(Sid, sdf, ParseSucceeded?)
+    . DeleteSession(Sid)
   else
     tau
   fi
-  . DeleteSession(Sid)
 endlet
 
 process GetEquationsTree(ModuleId: str, Tree: term?, Available: bool?) is
@@ -329,6 +328,7 @@ process GetEquationsTree(ModuleId: str, Tree: term?, Available: bool?) is
 
 process EditEquations(Path: str) is
 let
+  AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   ModuleId: str,
@@ -337,35 +337,40 @@ let
 in
   EditorType := equations-editor
   . Edit(Path, Sid?)
-  . EditText(Sid, EditorType)
+  . EditText(Sid, EditorType, AlreadyExists?)
   . snd-msg(equations-editor-started(Path, Sid))
-  . snd-msg(ts-get-str-value("path-modulename", Path))
   .
-  (
-    rec-msg(ts-value(ModuleId?))
-    . snd-msg(em-bind-session(Sid, ModuleId))
-    . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetEquationsTree(ModuleId, Tree?, Available?)
+  if equal(AlreadyExists, false) then
+    snd-msg(ts-get-str-value("path-modulename", Path))
     .
-    if equal(Available, true) then
-      EditStructure(Sid, Tree)
-    else
-      tau
-    fi
-  +
-    rec-msg(ts-no-value)
-  )
-  .
-  (
-    MenuSelected(Sid, EditorType)
-  +
-    MouseClicked(Sid)
-  +
-    TextChanged(Sid)
-  )
-  *
-  EditorDisconnected(Sid)
-  . DeleteSession(Sid)
+    (
+      rec-msg(ts-value(ModuleId?))
+      . snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetEquationsTree(ModuleId, Tree?, Available?)
+      .
+      if equal(Available, true) then
+	EditStructure(Sid, Tree)
+      else
+	tau
+      fi
+    +
+      rec-msg(ts-no-value)
+    )
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      MouseClicked(Sid)
+    +
+      TextChanged(Sid)
+    )
+    *
+    EditorDisconnected(Sid)
+    . DeleteSession(Sid)
+  else
+    tau
+  fi
 endlet
 
 process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
@@ -400,6 +405,7 @@ endlet
 process EditTerm(Path: str, ModuleId: str) is
 let
   Actions: list,
+  AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   Error: str,
@@ -412,28 +418,34 @@ in
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
-    . EditText(Sid, EditorType)
+    . EditText(Sid, EditorType, AlreadyExists?)
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
-    . snd-msg(em-bind-session(Sid, ModuleId))
-    . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetTermTree(Path, Tree?, Available?)
     .
-    if equal(Available, true) then
-      EditStructure(Sid, Tree)
+    if equal(AlreadyExists, false)
+    then
+      snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetTermTree(Path, Tree?, Available?)
+      .
+      if equal(Available, true) then
+	EditStructure(Sid, Tree)
+      else
+	tau
+      fi
+      .
+      (
+	MenuSelected(Sid, EditorType)
+      +
+	MouseClicked(Sid)
+      +
+	TextChanged(Sid)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
     else
       tau
     fi
-    .
-    (
-      MenuSelected(Sid, EditorType)
-    +
-      MouseClicked(Sid)
-    +
-      TextChanged(Sid)
-    )
-    *
-    EditorDisconnected(Sid)
-    . DeleteSession(Sid)
   else
     Error := "Term is already being edited over a different module."
     . snd-msg(term-editor-not-started(Path, ModuleId, Error))
@@ -492,14 +504,12 @@ in
                                 [Path])))
     fi
   else
-    GetModuleForPath(Path, ModuleId?)
-    .
     if equal(EditorType, syntax-editor) then
-      create(EditSyntax(ModuleId), Pid?)
-      . rec-msg(syntax-editor-started(ModuleId, Sid?))
+      create(EditSyntax(Path), Pid?)
+      . rec-msg(syntax-editor-started(Path, Sid?))
     else
-      create(EditEquations(ModuleId), Pid?)
-      . rec-msg(equations-editor-started(ModuleId, Sid?))
+      create(EditEquations(Path), Pid?)
+      . rec-msg(equations-editor-started(Path, Sid?))
     fi
   fi
 endlet

@@ -23,6 +23,7 @@ let
   Mods: list,
   ModuleList: term,
   ModuleId: str,
+  Node: term,
   On: term,
   Producer: str,
   Pairs: list,
@@ -143,9 +144,15 @@ in
       rec-msg(clear-history)
       . snd-do(UI, clear-history)
     +
+      rec-event(UI, node-selected(GraphId?, Node?))
+      . snd-msg(ui-node-selected(GraphId, Node))
+      . snd-ack-event(UI, node-selected(GraphId, Node))
+    /*
+    +
       rec-event(UI, node-info(ModuleId?, Tree?))
       . snd-msg(ui-node-selected(ModuleId, Tree))
       . snd-ack-event(UI, node-info(ModuleId, Tree))
+      */
     +
       rec-event(UI, error-selected(Error?))
       . snd-msg(ui-error-selected(Error))

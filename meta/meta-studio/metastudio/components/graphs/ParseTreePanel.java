@@ -8,30 +8,25 @@ import metastudio.MultiBridge;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 import aterm.pure.PureFactory;
+import aterm.ATerm;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
-    private static final String MESSAGE = "message";
-	private static final String PARSETREE = "parsetree";
-	private GraphPanel panel;
+    private static final String PARSETREE = "parsetree";
+    private GraphPanel panel;
     
-    public ParseTreePanel(PureFactory factory, final MultiBridge bridge) {
+    public ParseTreePanel(final PureFactory factory, final MultiBridge bridge) {
         super(new MetaGraphFactory(factory), bridge, PARSETREE);
         this.panel = getGraphPanel();
         
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
-		System.err.println("ParseTreePanel:node: " + node);
-                if (node != panel.getSelectedNode()) {
-                    if (node != null) {
-                        if (node.hasInfo(MESSAGE)) {
-                            bridge.postEvent(node.getInfo(MESSAGE));
-                        }
-                        panel.setSelectedNode(node);
-                    }
-                }
-            }
-        };
+		if (node != null) {
+		    bridge.postEvent(factory.make("node-selected(<str>,<term>)", getId(), node.toTerm()));
+		    panel.setSelectedNode(node);
+		}
+	    }
+	};
         panel.addMouseListener(listener);
     }
 }

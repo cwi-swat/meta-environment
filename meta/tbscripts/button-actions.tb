@@ -1366,20 +1366,20 @@ endlet
 process EditLocation(Pid: int, Location: term) is
 let
   EditorType: term,
-  Filename: str,
+  Path: str,
   Sid: term
 in
   snd-msg(get-location-filename(Location))
-  . rec-msg(location-filename(Filename?))
-  . GetEditorType(Filename, EditorType?)
-  . StartEditor(Filename, EditorType)
-  . snd-msg(em-get-session-by-filename(Filename))
+  . rec-msg(location-filename(Path?))
+  . GetEditorType(Path, EditorType?)
+  . StartEditor(Path, EditorType)
+  . snd-msg(em-get-session-by-path(Path))
   .
   (
-    rec-msg(em-session(Filename, Sid?))
+    rec-msg(em-session(Path, Sid?))
     . snd-msg(session(Pid, Sid))
   +
-    rec-msg(em-no-such-session(Filename))
+    rec-msg(em-no-such-session(Path))
     . snd-msg(no-such-session(Pid))
   )
 endlet
