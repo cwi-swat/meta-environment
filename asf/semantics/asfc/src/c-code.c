@@ -51,7 +51,7 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
   }
   else {
     ATfprintf(file,
-	      ", NULL");
+	      ", NULL, -1");
   }
 
   if (make_toolbus_tool) {
