@@ -4,7 +4,6 @@ process Asfc is
 let
   COM           : asfc,
   ModuleName    : str,
-  Syntax        : term,
   Equations     : term,
   Progress       : str 
 in
@@ -20,7 +19,6 @@ in
     rec-value(COM, compilation-done) .
     snd-msg(compilation-done(ModuleName)).
     snd-terminate(COM,"done").
-    Syntax := none.
     Equations := none
   ) *
   delta
