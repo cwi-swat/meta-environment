@@ -122,14 +122,13 @@ int asc_support_main(int argc, char *argv[],
 	exit(1);
       }
 
-      free(inputs[nInputs]);
       args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
     }
 
     pt = PT_applyFunctionToArgsParseTree(function, result, args);
   } 
   else {
-    if (nInputs != 1 && (!streq(inputs[0],"-"))) {
+    if (nInputs != 1 && (!streq(inputs[0], "-"))) {
       ATerror("Can only process one argument if no -f and -r option "
 	      "are supplied.\n");
       return 1;

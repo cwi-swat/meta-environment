@@ -1,13 +1,16 @@
 $Id$
 
+2001/11/14 (jong@cwi.nl)
+ * fixed free-bug in asc-support
+
 2001/11/12 (jurgenv@cwi.nl)
-  * moved apply-function functionality to pt-support package
+ * moved apply-function functionality to pt-support package
 
 2001/11/07 (jurgenv@cwi.nl)
-  * added the muasf_operators parse_sort and get_sort.
+ * added the muasf_operators parse_sort and get_sort.
 
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
-  * Removed module identifiers from productions:
+ * Removed module identifiers from productions:
    - apply function adapted.
 
 2001/11/02 (jurgenv@cwi.nl)
