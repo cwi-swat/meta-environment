@@ -12,7 +12,7 @@ button("Pico-syntax",
 	   if-equal([	apply("extractRelations", "RSTORE", 1),
 			push-modulename("PicoExtraction"),
 			reduce,
-			push-filename("extracted-relations.trm"),
+			push-filename("extracted-relations.rstore"),
 			push-active-module,
 			activate-editor],
 		    [
@@ -26,7 +26,7 @@ button("Pico-syntax",
           [ 
             push-filename("extracted-relations.trm"),
             parse("PicoExtraction", "RSTORE"),
-            push-filename("extracted-relations.trm"),
+            push-filename("extracted-relations.rstore"),
 	    push-modulename("RscriptCalculator"),
             activate-editor
           ]),
@@ -43,11 +43,11 @@ button("Pico-syntax",
 			 push-filename("uninit.rscript"),
 			 parse("Rscript", "RSCRIPT"),
 
+			 push-filename("extracted-relations.rstore"),
+			 parse("RscriptCalculator", "RSTORE"),
+
 			 push-string("\"UNINIT-OCC\""),
 			 parse("basic/Strings", "String"),
-
-			 push-filename("extracted-relations.trm"),
-			 parse("RscriptCalculator", "RSTORE"),
 
 			 apply("pico-query", "Summary", 3),
 			 push-modulename("PicoQuery"),
