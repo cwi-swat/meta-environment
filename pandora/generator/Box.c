@@ -336,7 +336,7 @@ int BOX_getSOptionListLength (BOX_SOptionList arg) {
   }
   return (ATgetLength((ATermList) arg) / 2) + 1;
 }
-BOX_SOptionList reverseSOptionList(BOX_SOptionList arg) {
+BOX_SOptionList BOX_reverseSOptionList(BOX_SOptionList arg) {
   ATermList list = (ATermList) arg;
   ATerm head;
   ATerm sep0;
@@ -407,7 +407,7 @@ int BOX_getBoxListLength (BOX_BoxList arg) {
   }
   return (ATgetLength((ATermList) arg) / 2) + 1;
 }
-BOX_BoxList reverseBoxList(BOX_BoxList arg) {
+BOX_BoxList BOX_reverseBoxList(BOX_BoxList arg) {
   ATermList list = (ATermList) arg;
   ATerm head;
   ATerm sep0;

@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Feb  3 18:16:41 CET 2004 <kooiker@cwi.nl>
+ * Reverse boxlist before returning it 
+
 Fri Jan 30 08:17:07 CET 2004 <kooiker@cwi.nl>
  * Removed debug statement 
 

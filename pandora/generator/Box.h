@@ -81,7 +81,7 @@ ATerm BOX_OptLayoutToTerm(BOX_OptLayout arg);
 /*{{{  list functions */
 
 int BOX_getSOptionListLength (BOX_SOptionList arg);
-BOX_SOptionList reverseSOptionList(BOX_SOptionList arg);
+BOX_SOptionList BOX_reverseSOptionList(BOX_SOptionList arg);
 BOX_SOptionList BOX_appendSOptionList(BOX_SOptionList arg0, BOX_OptLayout wsAfterHead, BOX_SOption arg1);
 BOX_SOptionList BOX_concatSOptionList(BOX_SOptionList arg0, BOX_OptLayout wsAfterHead, BOX_SOptionList arg1);
 BOX_SOptionList BOX_sliceSOptionList(BOX_SOptionList arg, int start, int end);
@@ -93,7 +93,7 @@ BOX_SOptionList BOX_makeSOptionList4(BOX_OptLayout wsAfterHead, BOX_SOption elem
 BOX_SOptionList BOX_makeSOptionList5(BOX_OptLayout wsAfterHead, BOX_SOption elem1, BOX_SOption elem2, BOX_SOption elem3, BOX_SOption elem4, BOX_SOption elem5);
 BOX_SOptionList BOX_makeSOptionList6(BOX_OptLayout wsAfterHead, BOX_SOption elem1, BOX_SOption elem2, BOX_SOption elem3, BOX_SOption elem4, BOX_SOption elem5, BOX_SOption elem6);
 int BOX_getBoxListLength (BOX_BoxList arg);
-BOX_BoxList reverseBoxList(BOX_BoxList arg);
+BOX_BoxList BOX_reverseBoxList(BOX_BoxList arg);
 BOX_BoxList BOX_appendBoxList(BOX_BoxList arg0, BOX_OptLayout wsAfterHead, BOX_Box arg1);
 BOX_BoxList BOX_concatBoxList(BOX_BoxList arg0, BOX_OptLayout wsAfterHead, BOX_BoxList arg1);
 BOX_BoxList BOX_sliceBoxList(BOX_BoxList arg, int start, int end);

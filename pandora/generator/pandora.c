@@ -96,7 +96,7 @@ BOX_Box treeToBox(PT_Tree tree)
     
     for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree head = PT_getArgsHead(args);
-      boxlist = BOX_makeBoxListMany(treeToBox(head), optLayout, boxlist); 
+      boxlist = BOX_reverseBoxList(BOX_makeBoxListMany(treeToBox(head), optLayout, boxlist)); 
     }
 
     if (isIndentedType(PT_getTreeProd(tree))) {
