@@ -37,7 +37,7 @@ static int nfree;                   /* number of free terms */
 #define NROOT 100                   /* max. # of roots */
 static int nroot = 0;               /* number of roots in use */
 static term **mark_roots[NROOT];    /* array of roots */
-#define NMARK 512                   /* max. size of mark stack */
+#define NMARK 4096                   /* max. size of mark stack */
 static term **mark_sp;              /* stack pointer into mark stack */
 static term *mark_stack[NMARK];
 

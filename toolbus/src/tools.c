@@ -309,7 +309,7 @@ TBbool write_to_tool(sym_idx af, term_list *args)
   term *e;
   
   if(TBverbose) TBmsg("write_to_tool(%s,%t)\n", get_txt(af), args);
-  
+
   if(!(is_appl(first(args)) && (list_length(fun_args(first(args))) == 1) &&
 	 is_int(first(fun_args(first(args)))))){
     err_warn("illegal tool identifier in: %f(%l)", get_txt(af), args);
@@ -336,7 +336,6 @@ TBbool write_to_tool(sym_idx af, term_list *args)
           return TBfalse;
       if(TCP_transition(ti, e, TBtrue) >= 0){
 	void destroy_ports_for_tool(tool_inst *);
-
 	TBwrite(out,e);
 	if(af == a_snd_terminate){
 	  destroy_ports_for_tool(ti);

@@ -740,9 +740,24 @@ int mread(int fd, char *buf, int len)
     if((n = read(fd, &buf[cnt], len - cnt)) <= 0) {
       if(errno != EINTR)
         return n;
-    }
-    cnt += n;
+    } else
+      cnt += n;
     /* TBmsg("mread: cnt := %d\n", cnt); */
+  }
+  assert(cnt == len);
+  return cnt;
+}
+
+int mwrite(int fd, char *buf, int len)
+{
+  int cnt = 0, n;
+
+  while(cnt < len) {
+    if((n = write(fd, &buf[cnt], len-cnt)) <= 0) {
+      if(errno != EINTR)
+        return n;
+    } else
+      cnt += n;
   }
   assert(cnt == len);
   return cnt;
@@ -778,7 +793,7 @@ void TBwrite(int out, term *t)
     buffer[LENSPEC-1] = ':';
     len = (len < MIN_MSG_SIZE) ? MIN_MSG_SIZE : len;
     /* TBmsg("TBwrite: %d -- %s\n", len, buffer); */
-    if(write(out, buffer, len) < 0)
+    if(mwrite(out, buffer, len) < 0)
       err_sys_warn("TBwrite: write failed");
   }
 }
