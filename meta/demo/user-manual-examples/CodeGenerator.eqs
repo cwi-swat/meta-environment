@@ -1,0 +1,43 @@
+equations 
+
+[1] tr(Stat-list, x) = <Instr-list, Label>
+    ======================================
+    tr(Stat-list) = Instr-list
+
+[2] tr(Stat, Label) = <Instr-list1, Label'>, 
+    tr(Stat-list, Label') = <Instr-list2, Label''>
+    ================================================================== 
+    tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
+
+[3] tr(Exp) = Instr-list
+    ============================================================= 
+    tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
+
+[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label') 
+    ================================================================ 
+    tr(if Exp then Stat-list fi, Label) =
+    <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
+
+[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
+    ================================================================ 
+    tr(while Exp do Stat-list od, Label) =
+    <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''>
+
+[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat 
+
+[10] tr(Id) = rvalue Id

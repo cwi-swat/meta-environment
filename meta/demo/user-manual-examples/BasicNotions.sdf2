@@ -1,0 +1,13 @@
+module BasicNotions
+
+imports Layout
+
+exports
+  sorts Nat Id 
+  lexical syntax
+    [0-9]+         -> Nat 
+    [a-z][a-z0-9]* -> Id
+
+variables
+  "Nat"[0-9\']* -> Nat
+  "Id"[0-9\']*  -> Id

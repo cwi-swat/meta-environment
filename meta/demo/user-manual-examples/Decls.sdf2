@@ -1,0 +1,14 @@
+module Decls
+
+imports Layout
+
+exports
+  sorts ID DECL TYPE 
+
+  lexical syntax
+    [a-z]+ -> ID 
+ 
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -> DECL
+    "integer"                 -> TYPE 
+    "real"                    -> TYPE
