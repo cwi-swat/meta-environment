@@ -18,19 +18,19 @@
 
 $Id$
 
-* Tue Mar 28 14:04:09 MET DST 2000 (mdejonge @cwi.nl)
-  - No longer distribute DEVELOPERS-INFO
+2000/3/31 (mdejonge @cwi.nl)
+   * The toolbus is no longer required during the build process of sglr
 
-* Thu Mar  2 20:44:51 MET 2000 (mdejong@cwi.nl)
+2000/3/28 (mdejonge @cwi.nl)
+   * No longer distribute DEVELOPERS-INFO
 
-  - sglr build/configuration now using automake
+2000/3/2 (mdejong@cwi.nl)
+   * sglr build/configuration now using automake
 
-* Mon Aug 30 11:31:00 BST 1999
+1999/8/30
+   * New metric: number of rejects encountered.
 
-  - New metric: number of rejects encountered.
-
-* Sun Aug 15 23:56:17 BST 1999 (EV)
-
-  - Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
-    ambiguities, number of lines, characters per second
-  - Characters per second is the main metric we want to improve
+1999/8/15 (EV)
+   * Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
+     ambiguities, number of lines, characters per second
+   * Characters per second is the main metric we want to improve

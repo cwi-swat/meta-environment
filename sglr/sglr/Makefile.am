@@ -21,8 +21,9 @@
 include ../make_rules
 
 bin_PROGRAMS      = sglr
-data_DATA      = sglr.idef
-# noinst_PROGRAMS   = sglr-prof
+data_DATA         = sglr.idef
+
+EXTRA_DIST        = sglr.idef sglr.tif.c sglr.tif.h
 
 SRCS              = sglr-main.c  getopt.c getopt1.c 
 HDRS              = getopt.h
@@ -42,10 +43,9 @@ sglr_LDADD        = -L${top_builddir}/libsglr -lsglr \
 #                     -L$(ATERMLIB) -lATerm-prof -lAsFix-prof -lATB-prof \
 #                     $(SOCKLIBS)
 
-EXTRA_DIST = sglr.idef
 
 # remove built files during "make clean"
-CLEANFILES = sglr.tif.c sglr.tif.h
+CLEANFILES = sglr.tifs
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
 sglr-main.o : sglr.tif.c sglr.tif.h
