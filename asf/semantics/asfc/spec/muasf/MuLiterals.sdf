@@ -11,16 +11,16 @@ exports
     ~ [\000-\037\"\\]     -> QChar
     EscChar               -> QChar
 
-    [a-z][\-\_A-Za-z0-9\']* -> FunId {avoid} %% identifiers start with lowercase
+    [a-z][\-\_A-Za-z0-9\']* -> FunId  {avoid} %% identifiers start with lowercase
     "\"" QChar* "\""        -> FunId %% quoted strings are identifiers
     [\'][\!\\-\~]           -> FunId %% all printable characters
     [\\][0-2][0-9][0-9]     -> FunId %% all characters; decimally coded
 
-    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId {avoid}
+    [A-Z][a-zA-Z0-9\'\_\-]* -> VarId  {avoid}
 
-    [A-Z][a-zA-Z0-9\.\-]*  -> ModId {avoid}
+    [A-Z][a-zA-Z0-9\.\-]*  -> ModId  {avoid}
 
-    [a-z][a-z\-]*         -> PropId {avoid}
+    [a-z][a-z\-]*         -> PropId  {avoid}
 
 exports
   context-free syntax
