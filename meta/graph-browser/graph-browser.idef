@@ -183,6 +183,10 @@ in
      snd-msg(import-module(Str, Str1, Path)) .
      snd-ack-event(UI, import-module(Str, Str1, Path))
    ) +
+   ( rec-event(UI, unimport-module(Str?, Str1?,Path?)) .
+     snd-msg(unimport-module(Str, Str1,Path)) .
+     snd-ack-event(UI, unimport-module(Str, Str1,Path))
+   ) +
    ( rec-event(UI, copy-module(Str?, Str1?, Path?)) .
      snd-msg(copy-module(Str, Str1, Path)) .
      snd-ack-event(UI, copy-module(Str, Str1, Path))

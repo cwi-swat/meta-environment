@@ -659,6 +659,14 @@ proc ImportModule { mod newmod newpath} {
 }
 
 #--
+# UnimportModule(M)
+#-
+# generates the toolbus event to request importing of a module M
+#--
+proc UnimportModule { mod newmod newpath} {
+    GBevent "unimport-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
+}
+#--
 # RenameModuleWidget(M)
 #-
 # generates a widget to enter the new name for the selected module.
@@ -727,6 +735,28 @@ proc ImportModuleWidget {module} {
   }
 }
 
+#--
+# UnimportModuleWidget(M)
+#-
+# generates a widget to enter the new name for the selected module.
+#--
+proc UnimportModuleWidget {module} {
+  global syntax_ext
+
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
+
+  set file [tk_getSaveFile -initialfile [lindex [split $module "/"] end]  \
+            -filetypes $types -title "Unimport Module..."]
+
+  if [ expr [ string length $file ] > 0 ] {
+    set newmodule [lindex [split $file "/"] end]
+    UnimportModule $module $newmodule $file 
+  }
+}
 #--
 # NewModule(M)
 #-
@@ -1345,6 +1375,8 @@ proc define-module-popup {} {
         -command {CopyModuleWidget [GetObjectName $c]}
     $m add command -label "Import Module" \
         -command {ImportModuleWidget [GetObjectName $c]}
+    $m add command -label "Unimport Module" \
+        -command {UnimportModuleWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [GetObjectName $c]}
@@ -1391,6 +1423,8 @@ proc define-modlist-popup {} {
         -command {CopyModuleWidget [SelectedModules]}
     $m add command -label "Import Module..." \
         -command {ImportModuleWidget [SelectedModules]}
+    $m add command -label "Unimport Module..." \
+        -command {UnimportModuleWidget [SelectedModules]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [SelectedModules]}
