@@ -2,12 +2,12 @@ module languages/asf/syntax/Lexicals[X]
 
 exports
 
-sorts CHAR
+sorts ASF-CHAR
 
 lexical syntax
 
-"\"" ~[\257] "\""     -> CHAR
+"\"" ~[\257] "\""     -> ASF-CHAR
 
 context-free syntax
 
-`X` "(" chars:CHAR* ")" -> X {cons("lexical-constructor")}
+`X` "(" chars:ASF-CHAR* ")" -> X {cons("lexical-constructor")}
