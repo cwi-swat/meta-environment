@@ -93,8 +93,8 @@ The situation with general messages is that we can have five cases:
    |-----abort--------->|  
      
 
-Now try to extend the login example with error recovery for these cases
------------------------------------------------------------------------
+Now try #1 to extend the login example with error recovery for these cases
+--------------------------------------------------------------------------
 
 For better understanding, all @ primitives are expanded.
 The cases (d) and (e) are not yet handled.
@@ -134,5 +134,68 @@ tool Authentication is
    snd-msg authentication-aborted		// inform client about abort
    Authentication() . 					// restart it (perhaps add max retry counter?)
  
+ 
+ 
+Try #2 to extend the login example with error recovery
+------------------------------------------------------
+
+Experiment with a new transaction construct:
+	begin-transaction
+		// the normal handling of thing
+	transaction-complete:
+	    // What to do when normal handling is complete
+	abort-transaction:
+	   	// What to do in case of abort
+	end-transaction
+	
+In addition, there is an atom called "abort-transaction"
+
+Optionally, the whole transaction block can return true/false
+so that we can test whether it succeeded.
+	
+Properties:
+
+(a) When a transaction aborts all processes that are "involved in it"
+    (i.e. are connected with it via a snd/rec-msg) are aborted as well.
+
+(b) Conceptually the local state of a process is saved before a transaction
+    starts. In case of an abort, the local state is restored.
+
+tool CLIENT is
+...
+(
+  begin-transaction
+    rec-event login(Name?, Password?) . snd-msg (Name, Password) {
+     } 
+     ( rec-msg login-succeeded . 			// Now Authentication becomes part of the transaction
+       LOGGED-IN
+     +
+       rec-msg login-failed
+     ) >>
+     rec-disconnect . abort-transaction
+ 
+   transaction-complete:
+   		snd-ack-event login
+   	
+   transaction-abort:
+    // clean up   
+     
+  end-transaction
+ 
+
+) * delta
+ 
+tool Authentication is
+
+   rec-msg login(Name?, Password?) . 
+   ( snd-eval (Name, Pasword) .
+     (  rec-value login-succeeded . snd-msg login-succeeded
+     + 
+        rec-value login-failed . snd-msg login-failed
+     )   
+   ) >>   
+   rec-disconnect .						// the authentication tool disconnects
+   abort-transaction .
+   Authentication() . 					// restart it (perhaps add max retry counter?)
      
    
