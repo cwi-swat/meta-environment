@@ -15,6 +15,6 @@ equations
 [add-tool-declaration]
   $ToolNameId = get-area($ToolName),
   $Tuple1 = <$ToolNameId, toolname2str($ToolName)>,
-  add-tuple(PROCESS_CREATION, $Tuple1, $Rstore1) = $Rstore2
+  add-tuple(TOOL_DECLARATION, $Tuple1, $Rstore1) = $Rstore2
   ===>
   addToolDeclaration($Rstore1, $ToolName) = $Rstore2
