@@ -8,12 +8,14 @@ exports
     id2str(Identifier) -> String
     ids2str({Identifier "."}*) -> String
     name2str(Name) -> String
+    type2str(Type) -> String
 
 hiddens
   variables
+    "#ArrayType"[0-9]* -> ArrayType
     "#Chars" -> CHAR*
-    "#Name" -> Name
-    "#String"[0-9]* -> String
     "#Identifier"[0-9]* -> Identifier
     "#Identifiers"[0-9]* -> {Identifier "."}*
     "#Identifiersp"[0-9]* -> {Identifier "."}+
+    "#Name" -> Name
+    "#String"[0-9]* -> String

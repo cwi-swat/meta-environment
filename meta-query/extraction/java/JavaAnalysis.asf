@@ -2,8 +2,6 @@ equations
 
 [extractRelations-start]
   &Rstore0 = rstore(),
-  &Rstore1 = extractPackage(&CompilationUnit, &Rstore0),
-  &Rstore2 = extractInterface(&CompilationUnit, &Rstore1),
-  &Rstore3 = extractCompilationUnit(&CompilationUnit, &Rstore2)
+  &Rstore1 = extractMethodCalls(&CompilationUnit, &Rstore0)
   ===>
-  extractRelations(&CompilationUnit) = &Rstore3
+  extractRelations(&CompilationUnit) = &Rstore1

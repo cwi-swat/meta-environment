@@ -19,3 +19,15 @@ equations
   #String = ids2str(#Identifiersp)
   ===>
   name2str(#Identifiersp) = #String
+
+[type2string-0]
+  type2str(#Name) = name2str(#Name)
+
+[type2string-1]
+  #ArrayType1 = #ArrayType2 [ ],
+  #String = type2str(#ArrayType2)
+  ===>
+  type2str(#ArrayType1) = #String || "[]"
+
+[type2string-2]
+  type2str(#Name [ ]) = name2str(#Name) || "[]"

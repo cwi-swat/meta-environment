@@ -1,0 +1,78 @@
+module ExtractMethodCalls
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[ClassDeclaration]
+imports MyPosInfo[ClassType]
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[ExplicitConstructorInvocation]
+imports MyPosInfo[Identifier]
+
+exports
+  context-free syntax
+    extractMethodCalls(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractMethodCalls(CompilationUnit, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractMethodCalls(ClassDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethodCalls(ClassBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractMethodCalls(MethodDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethodCalls(MethodBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractMethodCalls(MethodInvocation, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethodCalls(ExplicitConstructorInvocation, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addMethodCall(Identifier, {Identifier "."}+, Area, RSTORE) -> RSTORE
+
+    addSuperCall(Area, Area, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&ClassBody" -> ClassBody
+    "&ClassDeclaration" -> ClassDeclaration
+    "&ClassId" -> Area
+    "&CompilationUnit" -> CompilationUnit
+    "&Expressions" -> {Expression ","}*
+    "&ExplicitConstructorInvocation" -> ExplicitConstructorInvocation
+    "&ExplicitConstructorInvocationId" -> Area
+    "&FormalParameters" -> {FormalParameter ","}*
+    "&Identifier" -> Identifier
+    "&Interfaces" -> Interfaces?
+    "&MethodBody" -> MethodBody
+    "&MethodCall" -> {Identifier "."}+
+    "&MethodDeclaration" -> MethodDeclaration
+    "&MethodDeclarator" -> MethodDeclarator
+    "&MethodHeader" -> MethodHeader
+    "&MethodId" -> Area
+    "&MethodInvocation" -> MethodInvocation
+    "&MethodRes" -> MethodRes
+    "&Modifiers" -> Modifier*
+    "&Name" -> Name
+    "&Rstore"[0-9]* -> RSTORE
+    "&Super" -> Super?
+    "&Throws" -> Throws?
+    "&Tuple"[0-9]* -> Elem # Elem
+    "&Var" -> Identifier
+    "&VarId" -> Area
