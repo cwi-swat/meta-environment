@@ -31,13 +31,19 @@ let
   RealName  : str,
   EqsList1  : term,
   EqsList2  : term,
-  EqsList3  : term
+  EqsList3  : term,
+  SyntaxExt : str,
+  RulesExt  : str,
+  TermExt   : str
 in
 
 /* First, execute the module db */
 execute(module-db, Mdb?).
 /* And initialize it */
-snd-do(Mdb, create-module-db).
+snd-do(Mdb, create-module-db) .
+snd-msg(get-file-extensions) .
+rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
+snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
 (
 
 /* If we get the request to empty the db, we'll do it. */

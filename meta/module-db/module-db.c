@@ -21,6 +21,12 @@ static ATermTable trans_db;
 
 static ATerm MDB_NONE;
 
+static char *syntax_ext;
+static char *rules_ext;
+static char *term_ext;
+
+#define TBL_EXT ".tbl"
+
 /* adding position info can stop at the condition level */
 #define DEPTH_OF_EQUATIONS   4
 
@@ -43,6 +49,28 @@ static ATbool checkModuleName(const char *moduleName);
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
+}
+
+/*}}}  */
+/*{{{  void set_file_extensions(int cid, char *syntaxExt, char *ruleExt, char *termExt) */
+
+void set_file_extensions(int cid, char *syntaxExt, char *rulesExt, char *termExt)
+{
+  syntax_ext = (char *) malloc(strlen(syntaxExt) + 1);
+  if (syntax_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(syntax_ext, syntaxExt);
+  rules_ext = (char *) malloc(strlen(rulesExt) + 1);
+  if (rules_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(rules_ext, rulesExt);
+  term_ext = (char *) malloc(strlen(termExt) + 1);
+  if (term_ext == NULL) {
+    ATerror("set_file_extensions: out of memory.\n");
+  }
+  strcpy(term_ext, termExt);
 }
 
 /*}}}  */
@@ -78,9 +106,9 @@ makeAsfPath(const char *path)
   int len;
 
   if (pathAvailable(path)) {
-    len = strlen(path) - strlen(".sdf");
+    len = strlen(path) - strlen(syntax_ext);
     strncpy(newPath, path, len);
-    strcpy(newPath+len, ".asf");
+    strcpy(newPath+len, rules_ext);
   }
   else {
     strcpy(newPath, path);
@@ -405,7 +433,7 @@ ATerm add_empty_module(int cid, char *moduleName)
   char  fileName[1024] = {'\0'};
 
   atModuleName = ATmake("<str>",  moduleName);
-  sprintf(fileName,"%s%s", moduleName, ".sdf");
+  sprintf(fileName,"%s%s", moduleName, syntax_ext);
   entry = MDB_makeEntryDefault(fileName,
                                MDB_NONE,
                                0,
@@ -747,10 +775,12 @@ ATerm get_parse_table(int cid, ATerm moduleId)
   int       strLen;
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
-    strcpy(pathExt, ".asf.tbl");
+    strcpy(pathExt, rules_ext);
+    strcpy(pathExt, TBL_EXT);
   } 
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
-    strcpy(pathExt, ".trm.tbl");
+    strcpy(pathExt, term_ext);
+    strcpy(pathExt, TBL_EXT);
   }
   else {
     ATwarning("Illegal moduleId: %t\n", moduleId);
@@ -917,10 +947,10 @@ changeSdfPath(char *path, char *oldModuleName, char *newModuleName)
   static char newPath[BUFSIZ];  
   int len;
 
-  len = strlen(path) - strlen(oldModuleName) - strlen(".sdf");
+  len = strlen(path) - strlen(oldModuleName) - strlen(syntax_ext);
   strncpy(newPath, path, len);
   strcpy(newPath+len, newModuleName);
-  strcpy(newPath+len+strlen(newModuleName), ".sdf");
+  strcpy(newPath+len+strlen(newModuleName), syntax_ext);
 
   return newPath;
 }
