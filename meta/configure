@@ -1739,6 +1739,8 @@ trap 'rm -fr `echo "Makefile Makefile.skel meta \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
         utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
+        grammars/Makefile \
+	grammars/sdf2/Makefile \
   " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1854,6 +1856,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
         utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
+        grammars/Makefile \
+	grammars/sdf2/Makefile \
   "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

@@ -181,6 +181,8 @@ AC_OUTPUT(
         utils/Makefile utils/genmakefile.sh utils/gen-table \
         utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
+        grammars/Makefile \
+	grammars/sdf2/Makefile \
   , chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
     chmod +x utils/gen-table utils/normalize-sdf \
