@@ -165,6 +165,32 @@ ATerm get_module_id(int cid, ATerm atModule)
 }
 
 /*}}}  */
+/*{{{  ATerm get_module_id(int cid, ATerm atModule) */
+
+ATerm get_module_path(int cid, char *path, char *id)
+{
+  ATbool consistent = ATtrue;
+  int p = strlen(path);
+  int i = strlen(id);
+
+  for(; p >= 0 && i >= 0; p--, i--) {
+    if (path[p] != id[i]) {
+      consistent = ATfalse;
+      break;
+    }
+  }
+
+  path[i] = '\0';
+
+  if (consistent && p > 0) {
+    return ATmake("snd-value(module-path(<str>))", path);
+  }
+  else {
+    return ATmake("snd-value(module-path-inconsistent)");
+  }
+}
+
+/*}}}  */
 
 /*{{{  ATerm make_sdf_definition(int cid, ATerm atModules) */
 
