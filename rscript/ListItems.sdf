@@ -2,9 +2,9 @@ module ListItems
 
 imports basic/Strings MyArea
 
- exports
-     sorts List ListItem
-  context-free syntax
+exports
+  sorts List ListItem
 
-    "list" "(" "[" { ListItem "," }* "]" ")" -> List
-    "listitem" "(" String "," Area ")"       -> ListItem
+  context-free syntax
+    "[" { ListItem "," }* "]"          -> List
+    "listitem" "(" String "," Area ")" -> ListItem
