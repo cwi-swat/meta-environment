@@ -61,8 +61,6 @@ static ATerm matchArgument(ATerm env,
 
 /*}}}  */
 
-/*{{{  static ATerm getConditionSign(ASF_Condition cond) */
-
 /* Retrieve the sign (= or !=) part of a condition as a term.
  * Note that this function uses MEPT specific knowledge because
  * apigen is not good enough (yet) to generate getters for literals!
@@ -71,7 +69,9 @@ static ATerm matchArgument(ATerm env,
  * position information of the sign for debugging using tide!
  */
 
-static ATerm getConditionSign(ASF_Condition cond)
+/*{{{  ATerm getConditionSign(ASF_Condition cond) */
+
+ATerm getConditionSign(ASF_Condition cond)
 {
   PT_Tree tree = PT_TreeFromTerm(ASF_ConditionToTerm(cond));
 
@@ -81,8 +81,8 @@ static ATerm getConditionSign(ASF_Condition cond)
   return PT_TreeToTerm(sign);
 }
 
-
 /*}}}  */
+
 /*{{{  static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,  */
 
 static ATerm matchNegativeCondition(ASF_Condition cond,
