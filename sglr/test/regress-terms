@@ -12,7 +12,7 @@ cd `dirname $0`;
 mydir=`pwd`
 
 RM=rm
-SGLR="sglr"
+SGLR="../sglr/sglr"
 COMPARE="$mydir/trmdiff"
 
 languages=$mydir/lang-types
