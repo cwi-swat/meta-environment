@@ -36,6 +36,8 @@
 #include "preparation.h"
 #include "evaluator.tif.h"
 #include "traversals.h"
+#include "evaluator.h"
+
 
 extern ATbool run_verbose;
 extern ATerm equations_db;
@@ -196,7 +198,7 @@ int main(int argc, char *argv[])
    
 #ifdef PROFILING 
     times(&start);
-    newterm = rewrite(realterm,(ATerm) ATempty);
+    newterm = rewrite(realterm,(ATerm) ATempty, 0);
     times(&rewriting);
 
     user = rewriting.tms_utime - start.tms_utime;
@@ -204,7 +206,7 @@ int main(int argc, char *argv[])
    
     ATwarning("rewriting: %f user, %f system\n", TICK2SEC(user), TICK2SEC(system)); 
 #else
-    newterm = (ATerm) rewrite(realterm, (ATerm) ATempty);
+    newterm = (ATerm) rewrite(realterm, (ATerm) ATempty, 0);
 #endif
 
 
