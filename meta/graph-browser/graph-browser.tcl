@@ -679,18 +679,6 @@ proc CompileModules { modlist } {
 
 
 #--
-# ParseEquations(ML)
-#-
-# generates the toolbus event to request compilation of modules ML
-#--
-proc ParseEquations { modlist } {
-    foreach mod $modlist {
-       GBpost [format "parse-equations(%s)" [ToId $mod]]
-    }
-}
-
-
-#--
 # NewModule(M)
 #-
 # generates the toolbus event to request addition of a new module
@@ -1187,8 +1175,6 @@ proc define-modules-frame {} {
 	-command {GetModuleInfo [SelectedModules]}
     button .modules.buttons.compile -text "Compile" \
 	-command {CompileModules [SelectedModules]}
-    button .modules.buttons.parseeqs -text "ParseEqs" \
-       -command {ParseEquations [SelectedModules]}
 
     pack append .modules.buttons \
         .modules.buttons.editsdfmod {top fillx} \
@@ -1284,8 +1270,6 @@ proc define-module-popup {} {
     $m add separator
     $m add command -label "Compile module" \
         -command {CompileModules [GetObjectName $c]}
-    $m add command -label "Parse equations" \
-        -command {ParseEquations [GetObjectName $c]}
 }
 
 proc define-shadowmodule-popup {} {
