@@ -1,4 +1,5 @@
 /* ActionSdf extension of the ASF+SDF Meta-Environment */
+#include "Asdfsupport.idef"
 
 /* copy of Open-initial-module in open-modules.tb */
 process ASDF is
@@ -300,28 +301,23 @@ let
 in
   (
     rec-msg(asdf-get-module-id(Module?)) .
-    snd-msg(io-unpack-term(Module)) .
-    rec-msg(io-term(Tree?)) .
-    snd-msg(gen-adapter-term-to-string-evaluate(asdf-support-id, "__ASDF_BIN__/get_module_name", Tree)).
-    rec-msg(gen-adapter-term-to-string-result(asdf-support-id, ModuleName?)).
-    if not-equal(ModuleName, error-tree) then
-       snd-msg(asdf-module-id(ModuleName)) 
-    else
-      tau  /* IMPLEMENT */
-    fi
+    snd-msg(apply-rewrite("Asdfsupport", "getModuleName", "ModuleName", [Module])).
+    rec-msg(normalform("Asdfsupport", Tree?)).
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(ModuleName?)) .
+    snd-msg(asdf-module-id(ModuleName)) 
   +
     rec-msg(asdf-get-imported-module-names(Module?)) .
-    snd-msg(io-unpack-term(Module)) .
-    rec-msg(io-term(Tree?)) .
-    snd-msg(gen-adapter-term-evaluate(asdf-support-id, "__ASDF_BIN__/get_imports", Tree)).
-    rec-msg(gen-adapter-term-result(asdf-support-id, ModuleNames?)).
-    if not-equal(ModuleNames, error-tree) then
-       Imports := ModuleNames .       
-       snd-msg(asdf-imported-module-names(Imports))
-    else
-      tau  /* IMPLEMENT */
-    fi
-
+    snd-msg(apply-rewrite("Asdfsupport", "getImportedModules", "ATermList", [Module])).
+    rec-msg(normalform("Asdfsupport", Tree?)).
+    snd-msg(unparse(Tree)) .
+    rec-msg(unparsed-text(ModuleName?)) .
+    snd-msg(io-write-text-file("foo", [ModuleName])) .
+    rec-msg(io-file-written) .
+    snd-msg(io-read-packed-term-file("foo")) .
+    rec-msg(io-file-contents(ModuleNames?)) .
+    Imports := ModuleNames .
+    snd-msg(asdf-imported-module-names(Imports))
   ) * delta
 endlet
 
@@ -381,9 +377,8 @@ process GenerateASFSDF(Module : str, Result : term?) is
 let
    ModuleText : str,
    GenModuleText : str,
-   ModuleTree : term,
-   Tree : term,
-   Status : term
+   GenModuleTree : term,
+   ModuleTree : term
 in
   snd-msg(ts-get-str-value("sdf-text", Module)) .
   (  /* ASF+SDF already generated, don't regenerate */
@@ -391,42 +386,25 @@ in
      Result := success 
    +
      rec-msg(ts-no-value) .
-     snd-msg(ts-get-str-value("asdf-text", Module)) .
+     snd-msg(ts-get-term-value("asdf-tree", Module)) .
      (
-        rec-msg(ts-value(ModuleText?)) .
-        Parse-Syntax(Module, ModuleText, asdf, ModuleTree?, Status?).
-/* Module should be Filename instead */
-        snd-msg(io-unpack-term(ModuleTree)) .
-        rec-msg(io-term(ModuleTree?)) .
-        if not-equal(Status, parse-error) then 
-          snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "__ASDF_BIN__/gen_sdf", ModuleTree)).
-          rec-msg(gen-adapter-term-to-string-result(generate-asfsdf-id, 
-						    GenModuleText?)).
-printf("SDF = %s\n", GenModuleText) .
-          if not-equal(GenModuleText, error-tree) then
-     	    snd-msg(ts-put-str-value("sdf-text", Module, GenModuleText)) .
-	    Parse-Syntax(Module, GenModuleText, sdf, Tree?, Status?) .
-            snd-msg(ts-put-term-value("sdf-tree", Module, Tree)) .
-            snd-msg(gen-adapter-term-to-string-evaluate(generate-asfsdf-id, "__ASDF_BIN__/gen_asf", ModuleTree)).
-            rec-msg(gen-adapter-term-to-string-result(generate-asfsdf-id, 
-		     				      GenModuleText?)).
-printf("ASF = %s\n", GenModuleText) .
-            if not-equal(GenModuleText, error-tree) then
-	      snd-msg(ts-put-str-value("asf-text", Module, GenModuleText)) .
-	      /* ParseAllEquations(Module)*/
-              Result := success
-            else
-              Result := quote(failed("Can't generate ASF"))
-            fi
-          else
-            Result := quote(failed("Can't generate SDF"))
-          fi 
-        else
-          Result := quote(failed("Can't parse ActionSDF"))
-        fi
+        rec-msg(ts-value(ModuleTree?)) .
+        snd-msg(apply-rewrite("Asdfsupport", "asdf2sdf", "Module", [ModuleTree])).
+        rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+        snd-msg(ts-put-term-value("sdf-tree", Module, GenModuleTree)) .
+        snd-msg(unparse(GenModuleTree)) .
+        rec-msg(unparsed-text(GenModuleText?)) .
+     	snd-msg(ts-put-str-value("sdf-text", Module, GenModuleText)) .
+        snd-msg(apply-rewrite("Asdfsupport", "asdf2asf", "ASFEquations", [ModuleTree])).
+        rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+        snd-msg(unparse(GenModuleTree)) .
+        rec-msg(unparsed-text(GenModuleText?)) .
+printf("ModuleName = %s gives ASF = %s\n", Module, GenModuleText) .
+        snd-msg(ts-put-str-value("asf-text", Module, GenModuleText)) .
+        Result := success
      +
-       rec-msg(ts-no-value) .
-       Result := quote(failed("No ActionSDF text"))
+        rec-msg(ts-no-value) .
+        Result := quote(failed("No ASDF tree"))
      )
   )
 endlet
@@ -435,9 +413,8 @@ process GenerateASDF-PT(Module : str, Result : term?) is
 let
    ModuleText : str,
    GenModuleText : str,
-   ModuleTree : term,
-   Tree : term,
-   Status : term
+   GenModuleTree : term,
+   ModuleTree : term
 in
   snd-msg(ts-get-str-value("asdf-pt-text", Module)) .
   (  /* ASDF parsetable already generated, don't regenerate */
@@ -445,30 +422,19 @@ in
      Result := success 
    +
      rec-msg(ts-no-value) .
-     snd-msg(ts-get-str-value("asdf-text", Module)) .
+     snd-msg(ts-get-term-value("asdf-tree", Module)) .
      (
-        rec-msg(ts-value(ModuleText?)) .
-        Parse-Syntax(Module, ModuleText, asdf, ModuleTree?, Status?).
-        snd-msg(io-unpack-term(ModuleTree)) .
-        rec-msg(io-term(ModuleTree?)) .
-        if not-equal(Status, parse-error) then 
-          snd-msg(gen-adapter-term-to-string-evaluate(generate-asdf-pt-id, "__ASDF_BIN__/gen_asdf_pt", ModuleTree)).
-          rec-msg(gen-adapter-term-to-string-result(generate-asdf-pt-id, 
-						    GenModuleText?)).
-          if not-equal(GenModuleText, error-tree) then
-     	    snd-msg(ts-put-str-value("asdf-pt-text", Module, GenModuleText)) .
-	    Parse-Syntax(Module, GenModuleText, sdf, Tree?, Status?) .
-            snd-msg(ts-put-term-value("asdf-pt-tree", Module, Tree)) .
-	    Result := success
-          else
-            Result := quote(failed("Can't generate SDF"))
-          fi 
-        else
-          Result := quote(failed("Can't parse ActionSDF"))
-        fi
+       rec-msg(ts-value(ModuleTree?)) .
+       snd-msg(apply-rewrite("Asdfsupport", "$asdf2asdf-pt", "Module", [ModuleTree])).
+       rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+       snd-msg(ts-put-term-value("asdf-pt-tree", Module, GenModuleTree)) .
+       snd-msg(unparse(GenModuleTree)) .
+       rec-msg(unparsed-text(GenModuleText?)) .
+       snd-msg(ts-put-str-value("asdf-pt-text", Module, GenModuleText)) .
+       Result := success
      +
        rec-msg(ts-no-value) .
-       Result := quote(failed("No ActionSDF text"))
+       Result := quote(failed("No ActionSDF tree"))
      )
   )
 endlet

@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Thu Mar 18 18:29:50 CET 2004 (markvdb@cwi.nl,jive@brick.dk)
+* Reformulated the calls to the gen-adapter. 
+* Introduced a compiled specification to achieve the mapping
+  from ASDF to SDF and ASF.
+
 2004/03/17 jive@brics.dk
 
 * Package created

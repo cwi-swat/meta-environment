@@ -15,7 +15,6 @@
 process Create-Asf-Processes is
 let Pid : int 
 in
-printf("Creating Create-Asf-Processes process\n").
   create(Asfe, Pid?).
   create(AsfSdfChecker, Pid?).
   create(AsfChecker, Pid?).

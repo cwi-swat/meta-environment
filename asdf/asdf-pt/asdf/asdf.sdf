@@ -87,16 +87,19 @@ exports
 
     AS-Eqs-Symbols+ 		-> AS-Eqs-Rhs {cons("eqs-rhs")}
     "(" AS-Eqs-Rhs ")"  	-> AS-Eqs-Symbols {cons("eqs-sym-par")}
-    Word | Special | NatCon 	-> AS-Eqs-Symbols {cons("eqs-sym")}
+    Word | VarWord| Special | NatCon 	-> AS-Eqs-Symbols {cons("eqs-sym")}
     "[" Token? "]"		-> AS-Eqs-Tag {cons("eqs-tag")}
 
   lexical syntax
 
     [\#\_\,\=\-\*\+\\\/]	-> Special 
     [a-zA-Z0-9\-]+		-> Token 
-    [a-zA-Z]+			-> Word 
+    [a-zA-Z]+			-> Word  
+    [A-Z][A-Za-z0-9\-\'\+\*]*   -> VarWord
 
   lexical restrictions
 
     Token -/- [a-zA-Z0-9\-]
     Word -/- [a-zA-Z]
+    VarWord -/- [A-Za-z0-9\-\'\+\*]
+
