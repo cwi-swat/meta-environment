@@ -20,6 +20,9 @@
 # $Id$
 #
 
+2000-07-27 <mdejonge@cwi.nl>
+   * Increased version number  to 0.2
+
 2000-04-25 <mdejonge@cwi.nl>
    * Added pod documentation for a2toa1 tool (moved from sglr distribution)
 
