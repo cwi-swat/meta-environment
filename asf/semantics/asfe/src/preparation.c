@@ -697,12 +697,33 @@ ATerm RWprepareTerm(ATerm t)
  */
 ATerm RWgetEqsList(ATerm t)
 {
-  /* If the input is already a list, we assume it is a list
-	 * of equations and return it immediately. This is for backward
-	 * compatibility.
-	 */
-	if(ATgetType(t) == AT_LIST) {
-		return t;
+  /* if the input is a list and the first element is not an AsFix term,
+   * then we assume that we already have a list of equations. This is for
+   * backward compatibility
+   */
+  if(ATgetType(t) == AT_LIST) {
+   if(!ATmatchTerm(ATgetFirst((ATermList)t), pattern_asfix_term,
+                                  NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)) {
+      return t;
+   } 
+  }
+
+  /* If the input is  a list of parsed modules (terms), 
+   * then we retrieve the list of equations for each of them
+   */
+        if(ATgetType(t) == AT_LIST) {
+          ATermList old = (ATermList) t;
+          ATermList new;
+
+          for(new = ATempty; !ATisEmpty(old); old = ATgetNext(old)) {
+                ATerm first = ATgetFirst(old);
+                if(ATmatchTerm(first, pattern_asfix_term,
+                                  NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)) {
+                   new = ATconcat(new, AFTgetEqs(first));
+                }
+          }
+
+          return (ATerm) new;
 	}
 
 	/* Otherwise we assume the input is the asfix representation of
