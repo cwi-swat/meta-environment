@@ -18,7 +18,7 @@ static char myversion[] = "1.0";
  explanation.
  */
 
-static char myarguments[] = "bchi:lo:ptvILVX";
+static char myarguments[] = "abchi:lo:ptvILVX";
 
 /*
  Usage: displays helpful usage information
@@ -27,6 +27,7 @@ void usage(void)
 {
   ATwarning("Usage: %s [%s]\n"
             "Options:\n"
+	    "\t-a              keep annotations (default yes)\n"
             "\t-b              output terms in BAF format (default)\n"
             "\t-c              interpret `cons' attributes\n"
             "\t-h              display help information (usage)\n"
@@ -66,6 +67,7 @@ int main(int argc, char **argv)
   extern ATbool remove_injections;
   extern ATbool remove_parsetree;
   extern ATbool implode_lexicals;
+  extern ATbool keep_annotations;
 
   extern char *optarg;
   extern int   optind;
@@ -74,6 +76,7 @@ int main(int argc, char **argv)
 
   while ((c = getopt(argc, argv, myarguments)) != -1) {
     switch (c) {
+      case 'a':  keep_annotations = ATfalse;             break;
       case 'b':  bafmode = ATtrue;                       break;
       case 'c':  interpret_cons = ATtrue;                break;
       case 'i':  input=optarg;                           break;
