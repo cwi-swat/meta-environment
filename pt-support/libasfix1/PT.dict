@@ -1,1 +1,1 @@
-[afuns([]),terms([[patternAsFixTree,term(l("term"),w(" "),<term>,w(" "),<term>,<term>,<term>,<term>,no-abbreviations)]])]
+[afuns([]),terms([[patternLayoutSpace,w(" ")],[patternLayoutNewline,w("\n")],[patternLayoutEmpty,w("")],[patternModuleNameDefault,id(<term>)],[patternAsFixTree,term(l("term"),w(" "),l("X"),w(" "),<term>,<term>,<term>,<term>,no-abbreviations)]])]

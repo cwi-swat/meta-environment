@@ -10,15 +10,15 @@
 
 /*{{{  prologue */
 
-typedef ATerm Layout;
-typedef ATerm ModuleName;
-typedef ATerm PathName;
+typedef ATerm String;
 typedef ATerm Tree;
 
 /*}}}  */
 /*{{{  typedefs */
 
 typedef struct _AsFix *AsFix;
+typedef struct _ModuleName *ModuleName;
+typedef struct _Layout *Layout;
 
 /*}}}  */
 
@@ -26,8 +26,16 @@ void initPTApi(void);
 
 AsFix makeAsFixFromTerm(ATerm t);
 ATerm makeTermFromAsFix(AsFix arg);
+ModuleName makeModuleNameFromTerm(ATerm t);
+ATerm makeTermFromModuleName(ModuleName arg);
+Layout makeLayoutFromTerm(ATerm t);
+ATerm makeTermFromLayout(Layout arg);
 
-AsFix makeAsFixTree(PathName path, ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree);
+AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree);
+ModuleName makeModuleNameDefault(String id);
+Layout makeLayoutEmpty();
+Layout makeLayoutNewline();
+Layout makeLayoutSpace();
 
 /*{{{  AsFix accessor prototypes */
 
@@ -42,12 +50,26 @@ AsFix setAsFixWsBeforeTree(AsFix arg, Layout wsBeforeTree);
 ATbool hasAsFixModuleName(AsFix arg);
 ModuleName getAsFixModuleName(AsFix arg);
 AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName);
-ATbool hasAsFixPath(AsFix arg);
-PathName getAsFixPath(AsFix arg);
-AsFix setAsFixPath(AsFix arg, PathName path);
 ATbool hasAsFixTree(AsFix arg);
 Tree getAsFixTree(AsFix arg);
 AsFix setAsFixTree(AsFix arg, Tree tree);
+
+/*}}}  */
+/*{{{  ModuleName accessor prototypes */
+
+ATbool isValidModuleName(ModuleName arg);
+ATbool isModuleNameDefault(ModuleName arg);
+ATbool hasModuleNameId(ModuleName arg);
+String getModuleNameId(ModuleName arg);
+ModuleName setModuleNameId(ModuleName arg, String id);
+
+/*}}}  */
+/*{{{  Layout accessor prototypes */
+
+ATbool isValidLayout(Layout arg);
+ATbool isLayoutEmpty(Layout arg);
+ATbool isLayoutNewline(Layout arg);
+ATbool isLayoutSpace(Layout arg);
 
 /*}}}  */
 

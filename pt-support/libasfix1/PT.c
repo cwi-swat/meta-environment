@@ -5,6 +5,8 @@
 /*{{{  typedefs */
 
 typedef struct ATerm _AsFix;
+typedef struct ATerm _ModuleName;
+typedef struct ATerm _Layout;
 
 /*}}}  */
 
@@ -33,12 +35,76 @@ ATerm makeTermFromAsFix(AsFix arg)
 }
 
 /*}}}  */
+/*{{{  ModuleName makeModuleNameFromTerm(ATerm t) */
 
-/*{{{  AsFix makeAsFixTree(PathName path, ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree) */
-
-AsFix makeAsFixTree(PathName path, ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree)
+ModuleName makeModuleNameFromTerm(ATerm t)
 {
-  return (AsFix)ATmakeTerm(patternAsFixTree, path, moduleName, wsBeforeTree, tree, wsAfterTree);
+  return (ModuleName)t;
+}
+
+/*}}}  */
+/*{{{  ATerm makeTermFromModuleName(ModuleName arg) */
+
+ATerm makeTermFromModuleName(ModuleName arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  Layout makeLayoutFromTerm(ATerm t) */
+
+Layout makeLayoutFromTerm(ATerm t)
+{
+  return (Layout)t;
+}
+
+/*}}}  */
+/*{{{  ATerm makeTermFromLayout(Layout arg) */
+
+ATerm makeTermFromLayout(Layout arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+
+/*{{{  AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree) */
+
+AsFix makeAsFixTree(ModuleName moduleName, Layout wsBeforeTree, Tree tree, Layout wsAfterTree)
+{
+  return (AsFix)ATmakeTerm(patternAsFixTree, moduleName, wsBeforeTree, tree, wsAfterTree);
+}
+
+/*}}}  */
+/*{{{  ModuleName makeModuleNameDefault(String id) */
+
+ModuleName makeModuleNameDefault(String id)
+{
+  return (ModuleName)ATmakeTerm(patternModuleNameDefault, id);
+}
+
+/*}}}  */
+/*{{{  Layout makeLayoutEmpty() */
+
+Layout makeLayoutEmpty()
+{
+  return (Layout)ATmakeTerm(patternLayoutEmpty);
+}
+
+/*}}}  */
+/*{{{  Layout makeLayoutNewline() */
+
+Layout makeLayoutNewline()
+{
+  return (Layout)ATmakeTerm(patternLayoutNewline);
+}
+
+/*}}}  */
+/*{{{  Layout makeLayoutSpace() */
+
+Layout makeLayoutSpace()
+{
+  return (Layout)ATmakeTerm(patternLayoutSpace);
 }
 
 /*}}}  */
@@ -60,7 +126,7 @@ ATbool isValidAsFix(AsFix arg)
 
 ATbool isAsFixTree(AsFix arg)
 {
-  return ATmatchTerm((ATerm)arg, patternAsFixTree, NULL, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, patternAsFixTree, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -175,43 +241,6 @@ AsFix setAsFixModuleName(AsFix arg, ModuleName moduleName)
 }
 
 /*}}}  */
-/*{{{  ATbool hasAsFixPath(AsFix arg) */
-
-ATbool hasAsFixPath(AsFix arg)
-{
-  if (isAsFixTree(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PathName getAsFixPath(AsFix arg) */
-
-PathName getAsFixPath(AsFix arg)
-{
-  if (isAsFixTree(arg)) {
-    return (PathName)ATgetArgument((ATermAppl)arg, 2);
-  }
-
-  ATabort("AsFix has no Path: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  AsFix setAsFixPath(AsFix arg, PathName path) */
-
-AsFix setAsFixPath(AsFix arg, PathName path)
-{
-  if (isAsFixTree(arg)) {
-    return (AsFix)ATsetArgument((ATermAppl)arg, (ATerm)path, 2);
-  }
-
-  ATabort("AsFix has no Path: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool hasAsFixTree(AsFix arg) */
 
 ATbool hasAsFixTree(AsFix arg)
@@ -246,6 +275,111 @@ AsFix setAsFixTree(AsFix arg, Tree tree)
 
   ATabort("AsFix has no Tree: %t\n", arg);
   return NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ModuleName accessor implementations */
+
+/*{{{  ATbool isValidModuleName(ModuleName arg) */
+
+ATbool isValidModuleName(ModuleName arg)
+{
+  if (isModuleNameDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool isModuleNameDefault(ModuleName arg) */
+
+ATbool isModuleNameDefault(ModuleName arg)
+{
+  return ATmatchTerm((ATerm)arg, patternModuleNameDefault, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool hasModuleNameId(ModuleName arg) */
+
+ATbool hasModuleNameId(ModuleName arg)
+{
+  if (isModuleNameDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  String getModuleNameId(ModuleName arg) */
+
+String getModuleNameId(ModuleName arg)
+{
+  if (isModuleNameDefault(arg)) {
+    return (String)ATgetArgument((ATermAppl)arg, 0);
+  }
+
+  ATabort("ModuleName has no Id: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  ModuleName setModuleNameId(ModuleName arg, String id) */
+
+ModuleName setModuleNameId(ModuleName arg, String id)
+{
+  if (isModuleNameDefault(arg)) {
+    return (ModuleName)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
+  }
+
+  ATabort("ModuleName has no Id: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  Layout accessor implementations */
+
+/*{{{  ATbool isValidLayout(Layout arg) */
+
+ATbool isValidLayout(Layout arg)
+{
+  if (isLayoutEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (isLayoutNewline(arg)) {
+    return ATtrue;
+  }
+  else if (isLayoutSpace(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool isLayoutEmpty(Layout arg) */
+
+ATbool isLayoutEmpty(Layout arg)
+{
+  return ATmatchTerm((ATerm)arg, patternLayoutEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool isLayoutNewline(Layout arg) */
+
+ATbool isLayoutNewline(Layout arg)
+{
+  return ATmatchTerm((ATerm)arg, patternLayoutNewline);
+}
+
+/*}}}  */
+/*{{{  ATbool isLayoutSpace(Layout arg) */
+
+ATbool isLayoutSpace(Layout arg)
+{
+  return ATmatchTerm((ATerm)arg, patternLayoutSpace);
 }
 
 /*}}}  */
