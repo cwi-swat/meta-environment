@@ -28,6 +28,9 @@ exports
     {left: Integer "+" Integer -> Integer
            Integer "-" Integer -> Integer}
 
+  lexical restrictions
+    NatCon -/- [0-9]
+
 hiddens
   imports asf/syntax/Comments
    

@@ -1,6 +1,7 @@
 2003/09/17 (jurgenv@cwi.nl)
   * Removed remaining unnecessary chmod calls in install and uninstall 
     targets.
+  * Added longest match on NatCon
 
 2003/09/16 (jurgenv@cwi.nl)
   * Extracted asf-library from the asf package. The ChangeLog in the
