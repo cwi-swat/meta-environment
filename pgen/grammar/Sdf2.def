@@ -1,4 +1,4 @@
- definition 
+definition 
 
 module Main
 
@@ -55,12 +55,7 @@ imports languages/sdf2/syntax/Kernel
 imports languages/aterm/syntax/Literals
 
 exports
-  sorts UQLiteral
-  lexical syntax
-    [a-z]                          -> UQLiteral {cons("one-char")}
-    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
   context-free syntax
-    UQLiteral                                            -> Literal     {cons("uqlit")}
     Literal                                              -> Symbol      {cons("lit")}
     function-symbol: Literal "(" arguments:{Symbol ","}* ")"
       "->" result:Symbol Attributes                      -> Production  {avoid, cons("prod-fun")} module languages/sdf2/syntax/Sorts
@@ -151,23 +146,27 @@ exports
 context-free syntax
 
 left-quote:"`" Symbol right-quote:"`" -> Symbol {cons("lifting")} module languages/sdf2/syntax/Regular
+
 imports languages/sdf2/syntax/Kernel 
 imports languages/aterm/syntax/IntCon
+
 exports
   context-free syntax
-    "(" ")"                          -> Symbol                  {cons("empty")}
-    "(" head:Symbol tail:Symbol+ ")" -> Symbol                  {cons("seq")}
-    Symbol "?"                       -> Symbol                  {cons("opt")}
-    Symbol "+"                       -> Symbol                  {cons("iter")}
-    Symbol "*"                       -> Symbol                  {cons("iter-star")}
-    "{" Symbol sep:Symbol "}" "+"    -> Symbol                  {cons("iter-sep")}
-    "{" Symbol sep:Symbol "}" "*"    -> Symbol                  {cons("iter-star-sep")}
-    Symbol  n:NatCon "+"             -> Symbol                  {cons("iter-n")}
-    "{" Symbol sep:Symbol "}" n:NatCon "+" -> Symbol            {cons("iter-sep-n")}
-    "<" head:Symbol "," rest:{Symbol ","}+ ">" -> Symbol        {cons("tuple")}
-    "left":Symbol "#" "right":Symbol -> Symbol                  {right,cons("pair")}
-    "(" arguments:Symbols "=>" results:Symbol ")"  -> Symbol    {cons("func")}
-    "left":Symbol "|" "right":Symbol -> Symbol                  {right,cons("alt")}
+    "(" ")"                                       -> Symbol {cons("empty")}
+    "(" head:Symbol tail:Symbol+ ")"              -> Symbol {cons("seq")}
+    Symbol "?"                                    -> Symbol {cons("opt")}
+    Symbol "+"                                    -> Symbol {cons("iter")}
+    Symbol "*"                                    -> Symbol {cons("iter-star")}
+    "{" Symbol sep:Symbol "}" "+"                 -> Symbol {cons("iter-sep")}
+    "{" Symbol sep:Symbol "}" "*"                 -> Symbol {cons("iter-star-sep")}
+    Symbol  n:NatCon "+"                          -> Symbol {cons("iter-n")}
+    "{" Symbol sep:Symbol "}" n:NatCon "+"        -> Symbol {cons("iter-sep-n")}
+    "<" head:Symbol "," rest:{Symbol ","}+ ">"    -> Symbol {cons("tuple")}
+    "left":Symbol "#" "right":Symbol              -> Symbol {right,cons("pair")}
+    "(" arguments:Symbols "=>" results:Symbol ")" -> Symbol {cons("func")}
+    "left":Symbol "|" "right":Symbol              -> Symbol {right,cons("alt")}
+    "(" "left":Symbol "->" "right":Symbol ")"     -> Symbol {cons("strategy")}
+
   context-free priorities
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol
@@ -288,7 +287,7 @@ hiddens
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
 
 exports
-  sorts Literal
+  sorts QLiteral
   lexical syntax
     "\\" ~[012]                    -> AlphaNumericalEscChar {cons("default")}
 
@@ -302,7 +301,17 @@ exports
     ~[\000-\031\"\\] \/ [\t\n\r] -> L-Char {cons("normal")}
     EscChar                      -> L-Char {cons("escaped")}
 
-    "\"" chars:L-Char* "\""              -> Literal {cons("quoted")} module languages/aterm/syntax/ATerms
+    "\"" chars:L-Char* "\""        -> QLiteral {cons("quoted")}
+
+  sorts UQLiteral
+  lexical syntax
+    [a-z]                          -> UQLiteral {cons("one-char")}
+    [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
+
+  sorts Literal
+  context-free syntax
+    QLiteral  -> Literal {cons("qlit")}
+    UQLiteral -> Literal {cons("uqlit")} module languages/aterm/syntax/ATerms
 imports languages/aterm/syntax/Literals 
         languages/aterm/syntax/IntCon 
         languages/aterm/syntax/RealCon

@@ -1,11 +1,11 @@
 equations
 
-  [cs-1'1] check-for-depricated-symbols(Definition) = 
-             check-for-depricated-symbols(Definition, {})
+  [cs-1'1] check-for-deprecated-symbols(Definition) = 
+             check-for-deprecated-symbols(Definition, {})
 
-  [cs-1'2] check-for-depricated-symbols(Module, Msgs) = 
-             check-for-depricated-symbols2(Module, Msgs, 
+  [cs-1'2] check-for-deprecated-symbols(Module, Msgs) = 
+             check-for-deprecated-symbols2(Module, Msgs, 
                                            get-module-name(Module))
 
-  [cl-2'1] check-for-depricated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
-             Msgs + depricated-symbol($ModuleId, $Symbol1 # $Symbol2)
+  [cl-2'1] check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
+             Msgs + deprecated-symbol($ModuleId, $Symbol1 # $Symbol2)
