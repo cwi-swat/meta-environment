@@ -149,49 +149,54 @@ static PT_Args flattenList(PT_Tree tree, PT_Args tail)
   PT_Args       args;
   PT_Tree       leftBranch, layoutAfterLeft, rightBranch;
 
-  if (!PT_isTreeAppl(tree)) {
-    ATerror("flattenList: not an application: %t\n", tree);
+  if (PT_isTreeAmb(tree)) {
+    PT_Tree amb = flattenTree(tree);
+    return PT_makeArgsList(amb, PT_makeArgsEmpty());
   }
 
-  prod = PT_getTreeProd(tree);
-  args = PT_getTreeArgs(tree);
+  if (PT_isTreeAppl(tree)) {
+    prod = PT_getTreeProd(tree);
+    args = PT_getTreeArgs(tree);
 
-  if (!isListProd(prod)) {
-    PT_Tree newTerm = flattenTerm(tree, ATtrue);
-    if (newTerm) {
-      return PT_makeArgsList(newTerm, tail);
+    if (!isListProd(prod)) {
+      PT_Tree newTerm = flattenTerm(tree, ATtrue);
+      if (newTerm) {
+	return PT_makeArgsList(newTerm, tail);
+      }
+      else {
+	return tail;
+      }
     }
-    else {
+     
+    if (PT_isArgsEmpty(args)) {  
       return tail;
     }
-  }
-   
-  if (PT_isArgsEmpty(args)) {  
-    return tail;
-  }
 
-  leftBranch = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
-
-  if (PT_isArgsEmpty(args)) {
-    return flattenList(leftBranch, tail);
-  }                                    
-  
-  layoutAfterLeft = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
-
-  if (PT_hasArgsHead(args)) {
-    rightBranch = PT_getArgsHead(args);
+    leftBranch = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
 
     if (PT_isArgsEmpty(args)) {
-      tail = flattenList(rightBranch, tail);
-      tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
-      tail = flattenList(leftBranch, tail);
-  
-      return tail;
+      return flattenList(leftBranch, tail);
+    }                                    
+    
+    layoutAfterLeft = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+
+    if (PT_hasArgsHead(args)) {
+      rightBranch = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+
+      if (PT_isArgsEmpty(args)) {
+	tail = flattenList(rightBranch, tail);
+	tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+	tail = flattenList(leftBranch, tail);
+    
+	return tail;
+      }
     }
   }
+
+  
 
   ATerror("flattenList: illegal list: %t\n", tree);
   return PT_makeArgsEmpty();
