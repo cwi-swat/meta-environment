@@ -39,4 +39,4 @@ in
   delta
 endlet
 
-tool traversals is {command = "traversals"}
+tool traversals is {command = "traversals -at-check"}
