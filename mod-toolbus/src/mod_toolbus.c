@@ -1,6 +1,6 @@
 /**
- *  mod_toolbus.c
- *
+ *  $Id$
+ *  
  *  Apache 2 module for interfacing with the CWI Discrete Time Toolbus
  *
  *  Erik Post
@@ -80,7 +80,7 @@ void mod_toolbus_fatal( char* errormessage );
 int read_HTTP_GET_arg( char* args, char* key, char *value );
 
 
-/**
+/*
  *  This function is registered as a handler for HTTP methods and will
  *  therefore be invoked for all GET requests (and others).
  *  In this type of request handler, stderr is redirected to a httpd log file
@@ -281,7 +281,7 @@ ATerm toolbus_handler( int tb_conn, ATerm input )
 }
 
 
-/**
+/*
  *  send some info on the HTTP request back to the browser
  */
 int dump_http_req_fields( request_rec *http_req )
@@ -290,22 +290,35 @@ int dump_http_req_fields( request_rec *http_req )
   char ascii_uri[1000];
   
   utf8_to_ascii( ascii_uri, http_req->unparsed_uri );
-  status = ap_rputs( "<h2>mod_toolbus</h2>\n", http_req );
   
-  status = ap_rprintf( http_req, "(undef VERBOSE to suppress this info)\n" );
-  status = ap_rprintf( http_req, "<table>\n" );
+  status = ap_rprintf( http_req, "<table bgcolor=\"yellow\">\n" );
+  
+  status = ap_rputs( "<tr><td><h2>mod_toolbus</h2></td>\n", http_req ); 
+  status = ap_rprintf( http_req, "<td>verbose mode</td></tr>\n" );
+  
+  status = ap_rprintf( http_req, "<tr><td><b>remark:</b></td>\n" );
+  status = ap_rprintf( http_req, 
+    "<td>undefine VERBOSE in %s to suppress this info</td></tr>\n", __FILE__ );
+
   status = ap_rprintf( http_req, "<tr><td><b>uri:</b></td>\n" );
   status = ap_rprintf( http_req, "<td>%s</td></tr>\n", http_req->uri );
+
   status = ap_rprintf( http_req, "<tr><td><b>plaintext uri:</b></td>\n" );
   status = ap_rprintf( http_req, "</td><td>%s</td></tr>\n", ascii_uri );
+
   status = ap_rprintf( http_req, "<tr><td><b>unparsed_uri:</b></td>\n" );
-  status = ap_rprintf( http_req, "<td>%s</td></tr>\n", http_req->unparsed_uri );
+  status = ap_rprintf( http_req, "<td>%s</td></tr>\n", 
+    http_req->unparsed_uri );
+
   status = ap_rprintf( http_req, "<tr><td><b>filename:</b></td>\n" );
   status = ap_rprintf( http_req, "<td>%s</td></tr>\n", http_req->filename );
+
   status = ap_rprintf( http_req, "<tr><td><b>path_info:</b></td>\n" );
   status = ap_rprintf( http_req, "<td>%s</td></tr>\n", http_req->path_info );
+
   status = ap_rprintf( http_req, "<tr><td><b>args:</b></td>\n" );
   status = ap_rprintf( http_req, "<td>%s</td></tr>\n", http_req->args );
+
   status = ap_rprintf( http_req, "</table>\n" );
   
   return 0;
