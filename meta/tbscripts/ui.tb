@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+    The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +42,7 @@ let
   Pairs   : list,
   Mods    : list,
   ModName : str,
+  OutputDir : str,
   T       : str,
   FT      : str,
   Path    : str,
@@ -131,12 +133,12 @@ in
       rec-msg(cleared-all).
       snd-ack-event(UI,clear-all)
    ) +
-   ( rec-event(UI, compile-module(Str?)).
+   ( rec-event(UI, compile-module(Str?, OutputDir?)).
      snd-note(ui-status(stat(Id, "Compiling ..."))).
-     snd-msg(compile-module(Str)).
+     snd-msg(compile-module(Str, OutputDir)).
      rec-msg(compile-done).
      snd-note(ui-status(endstat(Id))).
-     snd-ack-event(UI, compile-module(Str))
+     snd-ack-event(UI, compile-module(Str, OutputDir))
    ) +
    ( rec-event(UI,parse-equations(Str?)).
      snd-msg(process-eqs(Str)).

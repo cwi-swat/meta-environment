@@ -27,6 +27,7 @@ process Compiler is
 let
   COM           : compiler,
   ModuleName    : str,
+  OutputDir     : str,
   AuxModuleName : str,
   AuxModuleTree : term
 in
@@ -34,10 +35,11 @@ in
   execute(compiler, COM?) .
   (
     /* Handle a request to compile a module */
-    rec-msg(compile-module(ModuleName?)) .
+    rec-msg(compile-module(ModuleName?, OutputDir?)) .
+    snd-do(COM, set-output-dir(OutputDir)) .
     snd-msg(process-eqs(ModuleName)) .
     rec-msg(eqs-processed(ModuleName)) .
-    snd-msg(reshuffle-module(ModuleName)) .
+    snd-msg(reshuffle-module(ModuleName, OutputDir)) .
     (
       /* During reshuffling, new sub-modules are created.
        * Each time such a module is created, we get a message
