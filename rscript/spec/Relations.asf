@@ -389,12 +389,12 @@ equations
 [rX-3]	$Rel' := carrierX($Rel, $Bag2),
 	$Rel'':= domainR($Rel', $Bag1)
 	=========================================
-	reachX($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
+	reachX($Bag1, $Bag2, $Rel) = range(closure($Rel', empty-bag, $Rel''))
 
 %% ---- reachR
 
 [rX-3]	$Rel' := carrierR($Rel, $Bag2),
 	$Rel'':= domainR($Rel', $Bag1)
 	=========================================
-	reachR($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
+	reachR($Bag1, $Bag2, $Rel) = range(closure($Rel', empty-bag, $Rel''))
 

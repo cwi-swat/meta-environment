@@ -1700,34 +1700,32 @@ the same.
 \functiona{Reachability with Restriction}{reachR}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel) =
-   domainR(Rel, Start) o carrierR(Rel, Restr)+
+set[&T] reachR( set[&T] Start, set[&T] Restr, rel[&T,&T] Rel) =
+   range(domainR(Rel, Start) o carrierR(Rel, Restr)+)
 \end{verbatim}
 \end{exam}
-{ Yields the relation that describes
-which elements can be reached from  set {\tt Start} using the relation {\tt Rel}, such that only elements in
-set {\tt Restr} are used.
+{ Yields the elements that can be reached from set {\tt Start} using the
+  relation {\tt Rel}, such that only elements in set {\tt Restr} are used.
 }
 {Example:
 \begin{itemize}
-\item  \verb@reachR({1}, {1, 2, 3}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields \verb@{<1,2>, <1, 3>}@.
+\item  \verb@reachR({1}, {1, 2, 3}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields \verb@{2, 3}@.
 \end{itemize}
 }
 %%---
 \functiona{Reachability with Exclusion}{reachX}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel) =
-   domainR(Rel, Start) o carrierX(Rel, Excl)+
+set[&T] reachX( set[&T] Start, set[&T] Excl, rel[&T,&T] Rel) =
+   range(domainR(Rel, Start) o carrierX(Rel, Excl)+)
 \end{verbatim}
 \end{exam}
-{ Yields the relation that describes
-which elements can be reached from  set {\tt Start} using the relation {\tt Rel}, such that no elements in
-set {\tt Excl} are used.
+{ Yields the elements that can be reached from  set {\tt Start} using the
+  relation {\tt Rel}, such that no elements in set {\tt Excl} are used.
 }
 {Example:
 \begin{itemize}
-\item  \verb@reachX({1}, {2}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields  \verb@{<1,3>, <1, 4>}@.
+\item  \verb@reachX({1}, {2}, {<1,2>, <1,3>, <2,4>, <3,4>})@ yields  \verb@{3, 4}@.
 \end{itemize}
 }
 %%---
@@ -2058,9 +2056,13 @@ JHotDraw application (version 5.2) as shown in Figure~\ref{FIG:LocatorHandle}.
 It leads to the addition to the above relations of the following tuples:
 
 \begin{itemize}
-\item {\tt CALL}: {\tt <"LocatorHandle", "AbstractHandle">} and {\tt <"LocatorHandle", "Locator">}.
-\item {\tt INHERITANCE}:     {\tt <"LocatorHandle",  "AbstractHandle">}.
-\item {\tt CONTAINMENT}:     {\tt <"LocatorHandle",  "Locator">}.
+\item To {\tt CALL} the pairs {\tt <"LocatorHandle", "AbstractHandle">} and
+  {\tt <"LocatorHandle", "Locator">} will be added.
+
+\item To {\tt INHERITANCE} the pair      {\tt <"LocatorHandle",
+  "AbstractHandle">} will be added.
+\item To {\tt CONTAINMENT} the pair  {\tt <"LocatorHandle",  "Locator">} will
+  be added.
 \end{itemize}
 
 \paragraph{Classes in Cycles}
@@ -2075,9 +2077,9 @@ set[str] ClassesInCycle =
    {C1 | <class C1, class C2> : USE+, C1 == C2}
 \end{verbatim}
 \end{exam}
-First, we define the {\tt USE} relation as the union of the three avaliable
+First, we define the {\tt USE} relation as the union of the three available
 relations {\tt CALL}, {\tt CONTAINMENT} and {\tt INHERITANCE}. Next, we consider all
-pairs {\tt <C1, C2>} in the transitive closure of the {\tt USE} relation such
+pairs {\tt <C1, C2>} in the transitive closure of the {\tt USE} relation such that
 {\tt C1} and {\tt C2} are equal.  Those are precisely the cases of a class with a cyclic
 dependency on itself.
 
@@ -2155,12 +2157,12 @@ we get the following for the above example:
 
 \begin{exam}
 \begin{verbatim}
-type stat = int
-type var = str
-stat ROOT = 1
-rel[stat,stat] PRED = {<1,3>, <3,4>, <4,5>, <5,6>, <5,8>, <6,10>, <8,10>}
-rel[stat,var] DEFS = {<3,"x">, <4,"p">, <6,"z">, <8,"x">, <10,"y">}
-rel[stat,var] USES = {<5,"q">, <6,"y">, <6,"x">, <10,"z">}
+type expr = int
+type varname = str
+expr ROOT = 1
+rel[expr,expr] PRED = { <1,3>, <3,4>, <4,5>, <5,6>, <5,8>, <6,10>, <8,10> }
+rel[expr,varname] DEFS = {<3,"x">, <4,"p">, <6,"z">, <8,"x">, <10,"y">}
+rel[expr,varname] USES = {<5,"q">, <6,"y">, <6,"x">, <10,"z">}
 \end{verbatim}
 \end{exam}
 
@@ -2176,19 +2178,19 @@ more of these path do \emph{not} contain a definition of \emph{V}, then
 follows:
 \begin{exam}
 \begin{verbatim}
-rel[stat,var] UNINIT = 
-   { <S, V> | <stat S, var V>: USES, 
-              <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
+rel[expr,varname] UNINIT = 
+   { <E, V> | <expr E, varname V>: USES, 
+              E in reachX({ROOT}, DEFS[-,V], PRED)
    }
 \end{verbatim}
 \end{exam}
 
 \noindent We analyze this definition in detail:
 \begin{itemize}
-\item {\tt <stat S, var V> : USES} enumerates all tuples in the {\tt USES} relation.
+\item {\tt <expr E, varname V> : USES} enumerates all tuples in the {\tt USES} relation.
 In other words, we consider the use of each variable in turn.
 
-\item {\tt <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)} is a test that
+\item {\tt E in reachX({ROOT}, DEFS[-,V], PRED)} is a test that
   determines whether statement {\tt S} is reachable from the {\tt ROOT}
   without encountering a definition of variable {\tt V}.
   \begin{itemize}
@@ -2199,11 +2201,11 @@ In other words, we consider the use of each variable in turn.
     {\tt reachX}: no path will be extended beyond an element in this set.
     \item {\tt PRED} is the relation for which the reachability has to be
     determined.
-    \item The result of  {\tt reachX({ROOT}, DEFS[-,V], PRED)} is a relation
-    that contains all pairs of nodes that are reachable from the
-    {\tt ROOT} (as well as all intermediate steps on each path).
-    \item Finally, {\tt <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)} tests
-    whether statement {\tt S} can be reached from the {\tt ROOT}.
+    \item The result of  {\tt reachX({ROOT}, DEFS[-,V], PRED)} is a set
+    that contains all nodes that are reachable from the
+    {\tt ROOT} (as well as all intermediate nodes on each path).
+    \item Finally, {\tt E in reachX({ROOT}, DEFS[-,V], PRED)} tests
+    whether expression {\tt E} can be reached from the {\tt ROOT}.
   \end{itemize}
 \item The net effect is that {\tt UNINIT} will only contain pairs
 that satisfy the test just described.
@@ -2233,10 +2235,23 @@ Taking the range of the relations {\tt DEFS} and {\tt USES} yields the
 variables that are defined, respectively, used in the program. The difference
 of these two sets yields the unused variables, in this case \verb@{"p"}@.
 
-\section{Using Locations to Represent Program Fragments}\label{SEC:UsingLocations}
+\section{Using Locations to Represent Program
+  Fragments}\label{SEC:UsingLocations}
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/meta-pico.eps,width=6cm}
+\hspace*{0.5cm}
+\epsfig{figure=figs/pico-example.eps,width=6cm}
+\end{center}
+\hrulefill
+\caption{\label{FIG:meta-pico}Checking undefined variables in Pico programs
+  using the ASF+SDF Meta-Environment. On the left, main window of Meta-Environment
+  with error messages related to Pico program shown on the right.}
+\end{figure}
 
 One aspect of the example we have just seen is artificial: where do these
-line numbers come from that we used to indicate statements in the program?
+line numbers come from that we used to indicate expressions in the program?
 One solution is to let the extraction phase generate \emph{locations}
 to precisely indicate relevant places in the program text.
 
@@ -2246,53 +2261,71 @@ end position. Also recall that locations can be compared: a location $A_1$ is sm
 than another location $A_2$, if $A_1$ is textually contained in $A_2$.
 By including locations in the final answer of a relational
 expression, external tools will be able to highlight places of interest in the
-source text. The first step, is to define the types {\tt stat} and {\tt var}
-as aliases for {\tt loc} (instead of {\tt int} and {\tt str}):
+source text. 
+
+The first step, is to define the type {\tt expr} as aliases for {\tt loc}
+(instead of {\tt int}):
 
 \begin{exam}\begin{verbatim} 
-type stat = int
-type var = str
+type expr = loc
+type varname = str
 \end{verbatim}
 \end{exam}
 
 Of course, the actual relations are now represented differently.
-For instance,  the {\tt USES} relation may now look like \note{update example}
+For instance,  the {\tt USES} relation may now look like
 \begin{exam}
 \begin{verbatim}
-{ <area-in-file("/home/paulk/example.pico", area(5, 5, 5, 6,106, 1)), "q">, 
-  <area-in-file("/home/paulk/example.pico", area(6, 13, 6, 14, 127, 1)), "y">, 
-  <area-in-file("/home/paulk/example.pico", area(6, 17, 6, 18, 131, 1)), "x">, 
-  <area-in-file("/home/paulk/example.pico", area(10, 7, 10, 8,168, 1)), "z">
+{ <area-in-file("/home/paulk/example.pico", area(5,5,5,6,106,1)), "q">, 
+  <area-in-file("/home/paulk/example.pico", area(6,13,6,14,127,1)), "y">, 
+  <area-in-file("/home/paulk/example.pico", area(6,17,6,18,131,1)), "x">, 
+  <area-in-file("/home/paulk/example.pico", area(10,7,10,8,168,1)), "z">
 } 
 \end{verbatim}
 \end{exam}
 
-The definition of {\tt UNINIT} can be reused as is. The only thing that remains to be done is to
-map the (statement, variable-name) tuple to (variable-name, variable-occurrence) tuples.
+The definition of {\tt UNINIT} can be nearly reused as is. The only thing that
+remains to be changed is to map the (expression, variable-name) tuples to
+(variable-name, variable-occurrence) tuples, for the benefit of the precise
+highlighting of the relevant variables.
 
-We define a new type {\tt var-occ} to represent variable occurrences and a
-relation {\tt OCCURS} that relates variable names to their occurrences.  The
-new relation {\tt OCCURS} will have to generated by the program extraction phase.
+We define a new type {\tt var} to represent variable occurrences and an
+auxiliary set that {\tt VARNAMES} that contains all variable names:
 
 \begin{exam}\begin{verbatim}
-type var-occ = loc
-rel[var,var-occ] OCCURS
+type var = loc
+set[varname] VARNAMES  = range(DEFS) union range(USES)
 \end{verbatim}
 \end{exam}
-Remains the transformation of {\tt UNINIT}. This is done as follows:
-
+Remains the new definition of {\tt UNINIT}:
 \begin{exam}
 \begin{verbatim}
-rel[var, var-occ] UNINIT-OCC =
-   { <V, VO> | <stat S, var V> : UNINIT, 
-               var-occ VO : OCCURS[V], 
-               VO <= S
+rel[var, varname] UNINIT =
+   { <V, VN>| var-name VN : VARNAMES, 
+              var V : USES[-,VN], 
+              expr E : reachX({ROOT}, DEFS[-,VN], PRED),
+	      V <= E
    }
+
 \end{verbatim}
 \end{exam}
-Here we consider all tuples {\tt <S, V>} in {\tt UNINIT} and all occurrences of variable {\tt V}.
-Those variable occurrences that are contained in {\tt S} (using a comparison on locations)
-are included in the result.
+This definition can be understood as follows:
+\begin{itemize}
+\item {\tt var-name VN : VARNAMES} generates all varaible names.
+\item {\tt var V : USES[-,VN]} generates all variable uses {\tt V} for variables
+  with name {\tt VN}.
+\item As before, {\tt expr E : reachX({ROOT}, DEFS[-,VN], PRED)} generates all
+  expressions {\tt E} that can be reached from the start of the program
+  without encountering a definition for variables named {\tt VN}.
+\item {\tt V <= E} tests whether variable use {\tt V} is enclosed in that
+  expression (using a comparison on locations).  If so, we have found an
+  unitialized occurrence of the variable named {\tt VN}.
+\end{itemize}
+
+In Figure~\ref{FIG:meta-pico} it is shown how checking of Pico programs in the
+ASF+SDF Meta-Environment looks like.
+
+
 
 \section{McCabe Cyclomatic Complexity}
 The \emph{cyclomatic complexity} of a program is defined as $e - n + 2$, where

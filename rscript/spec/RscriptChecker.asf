@@ -1225,8 +1225,8 @@ $Error]>
 
 		<all-paths-from,fun[ rel[&T,&T], set[&T] ]		to set[rel[&T,&T]]>,
 
-                <reachX,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
-                <reachR,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to rel[&T,&T] >,
+                <reachX,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to set[&T] >,
+                <reachR,  	fun [ set[&T], set[&T], rel[&T,&T] ] 	to set[&T] >,
 
 		<filename,	fun [ loc ]				to str >,
 		<beginline,	fun [ loc ]				to int >,

@@ -16,8 +16,8 @@ equations
        $Rstore1 := assign(ROOT, expr, $Loc, rstore()),
        $Rstore2 := assign(PRED, rel[expr,expr], 
 				$Rel union ({$Start} x $Entry), $Rstore1),
-       $Rstore3 := assign(DEFS, rel[expr,name], defs($Program, {}), $Rstore2),
-       $Rstore4 := assign(USES, rel[var,name], uses($Program, {}), $Rstore3)
+       $Rstore3 := assign(DEFS, rel[expr,varname], defs($Program, {}), $Rstore2),
+       $Rstore4 := assign(USES, rel[var,varname], uses($Program, {}), $Rstore3)
 	============================================
         extractRelations($Program) = $Rstore4
 
@@ -37,21 +37,20 @@ equations
        $Rel1 := $Rel union ({$Start} x $Entry),
        $Rval := [| type expr = loc
 		   type var  = loc
-		   type name = str
+		   type varname = str
 
 		   expr ROOT = $Start
 		 
-
 		   rel[expr,expr] PRED = $Rel1
-		   rel[expr,name] DEFS = defs($Program, {})
-		   rel[var,name] USES  = uses($Program, {})
-		   bag[name] VARNAMES  = range(USES)
+		   rel[expr,varname] DEFS  = defs($Program, {})
+		   rel[var,varname] USES  = uses($Program, {})
+		   set[varname] VARNAMES  = range(DEFS) union range(USES)
 
-		   rel[name, var] UNINIT =
-		   { <N, V>| name N : VARNAMES, 
-                             var V : USES[-,N], 
-			     <ROOT, expr E> : reachX({ROOT}, DEFS[-,N], PRED),
-			     V <= E
+		   rel[var, varname] UNINIT =
+		   { <V, VN>| var-name VN : VARNAMES, 
+                              var V : USES[-,VN], 
+			      expr E : reachX({ROOT}, DEFS[-,VN], PRED),
+			      V <= E
 	           }
 
                 |] yield UNINIT
@@ -60,10 +59,10 @@ equations
 
 %% ---- Utilities for error handling
 
-[cvt-1] convert2error($StrCon1, <$StrCon2, $Loc>) = error($StrCon1, [localized($StrCon2, $Loc)])
+[cvt-1] convert2error($StrCon1, <$Loc, $StrCon2>) = error($StrCon1, [localized($StrCon2, $Loc)])
 
-[cvt-2] convert2errorlist($StrCon, {<$String, $Loc>, $Elem*}) = 
-	convert2error($StrCon, <$String, $Loc>),  convert2errorlist($StrCon, {$Elem*})
+[cvt-2] convert2errorlist($StrCon1, {<$Loc, $StrCon2>, $Elem*}) = 
+	convert2error($StrCon1, <$Loc, $StrCon2>),  convert2errorlist($StrCon1, {$Elem*})
 
 [cvt-3] convert2errorlist($StrCon, {}) = 
 
