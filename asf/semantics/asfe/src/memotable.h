@@ -33,10 +33,10 @@
 
 typedef ATermTable MemoTable;
 
-MemoTable CreateMemoTable(void);
-MemoTable ClearMemoTable(MemoTable table);
-void DestroyMemoTable(MemoTable table);
-MemoTable AddNormalForm(MemoTable table, ATerm term, ATerm normalform);
-ATerm LookupNormalForm(MemoTable table, ATerm term);
+MemoTable MemoTableCreate(void);
+MemoTable MemoTableClear(MemoTable table);
+void      MemoTableDestroy(MemoTable table);
+MemoTable MemoTableAdd(MemoTable table, ATerm term, ATerm normalform);
+ATerm     MemoTableLookup(MemoTable table, ATerm term);
 
 #endif
