@@ -7,7 +7,7 @@ bin_PROGRAMS	= filtereqssyntax filtereqssyntaxtool
 noinst_HEADERS	= filtereqssyntaxtool.tif.h filtereqssyntax.h
 
 data_DATA	= filtereqssyntaxtool.idef
-EXTRADIST	= $(data_DATA)
+EXTRA_DIST	= $(data_DATA)
 
 INCLUDES	= \
 		-I${ATERM}/include \
