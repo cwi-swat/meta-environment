@@ -18,6 +18,12 @@
 #define singleton(t) (ATerm)(ATmakeList1((t)))
 #define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
 
+/* Macros to access the database */
+#define get_result(db,k) (ATtableGet(db,k))
+#define put_result(db,k,v) (ATtablePut(db,k,v))
+#define get_table(db) (db)
+#define create_table(db,v) (db = ATtableCreate(500,75))
+
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))
 #define tail_3(l) (t_list_next(tail_2(l)))
@@ -93,6 +99,17 @@
 #define make_nf31(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30))
 #define make_nf32(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31))
 
+#define quote0(s) (ATerm)(ATmakeAppl1(sym_quote0, (ATerm) ATmakeInt((int)s)))
+#define quote1(s,t1) (ATerm)(ATmakeAppl2(sym_quote1, (ATerm) ATmakeInt((int)s), t1))
+#define quote2(s,t1,t2) (ATerm)(ATmakeAppl3(sym_quote2, (ATerm) ATmakeInt((int)s), t1, t2))
+#define quote3(s,t1,t2,t3) (ATerm)(ATmakeAppl4(sym_quote3, (ATerm) ATmakeInt((int)s), t1, t2, t3))
+#define quote4(s,t1,t2,t3,t4) (ATerm)(ATmakeAppl5(sym_quote4, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4))
+#define quote5(s,t1,t2,t3,t4,t5) (ATerm)(ATmakeAppl6(sym_quote5, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5))
+#define quote6(s,t1,t2,t3,t4,t5,t6) (ATerm)(ATmakeAppl(sym_quote6, (ATerm) ATmakeInt((int)s), t1, t2, t3, t4, t5, t6))
+
+#define make_tuple1(t0) (ATerm)(t0)
+#define make_tuple2(t0,t1) (ATerm)(ATmakeList2(t0,t1))
+
 #define ok(t) (ATmakeAppl1(oksym,t))
 
 #define term_equal(t1,t2) (ATisEqual(t1,t2))
@@ -101,6 +118,7 @@
 #define null() (ATerm)(ATempty)
 #define list_head(l) (ATgetFirst((ATermList)l))
 #define list_tail(l) (ATerm)(ATgetNext((ATermList)l))
+#define conc(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
 #define cons(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
 #define append(l,t) (ATerm)(ATappend((ATermList)l,t))
 #define list_last(l) (ATgetLast((ATermList)l))
@@ -122,8 +140,18 @@ extern ATerm char_table[];
 
 /*
 extern Symbol oksym;
-extern Symbol nullsym;
 */
+
+extern Symbol sym_quote0;
+extern Symbol sym_quote1;
+extern Symbol sym_quote2;
+extern Symbol sym_quote3;
+extern Symbol sym_quote4;
+extern Symbol sym_quote5;
+extern Symbol sym_quote6;
+extern Symbol make_listsym;
+extern Symbol concsym;
+extern Symbol conssym;
 
 extern void c_rehash(int size);
 extern void register_prod(ATerm prod, funcptr func, Symbol sym);
@@ -133,6 +161,7 @@ extern ATerm lookup_prod(Symbol sym);
 extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
+extern ATerm unquote(ATerm t);
 
 extern void ToC_code(ATerm asfix, FILE *file);
 

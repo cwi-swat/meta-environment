@@ -59,8 +59,18 @@ ATerm char_table[256] = {NULL};
 
 /*
 Symbol oksym;
-Symbol nullsym;
 */
+
+Symbol sym_quote0;
+Symbol sym_quote1;
+Symbol sym_quote2;
+Symbol sym_quote3;
+Symbol sym_quote4;
+Symbol sym_quote5;
+Symbol sym_quote6;
+Symbol make_listsym;
+Symbol concsym;
+Symbol conssym;
 
 static ATerm pattern_asfix_term = NULL;
 static ATerm pattern_asfix_appl = NULL;
@@ -183,6 +193,26 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
   b->sym  = sym;
 }
 /*}}}  */
+/*{{{  funcptr lookup_func_given_sym(Symbol sym)) */
+
+funcptr lookup_func_given_sym(Symbol sym)
+{
+  bucket *b;
+  /* int hnr = prod->hnr % table_size;*/
+  unsigned int hnr = (((int) sym)>>2);
+  hnr %= table_size;
+
+  b = sym_table[hnr];
+
+  while(b) {
+    if(b->sym == sym)
+      return b->func;
+    b = b->next_sym;
+  }
+  ATerror("unknown symbol: %s\n", ATgetName(sym));
+  return NULL; /* silence the compiler, we never get here. */
+}
+/*}}}  */
 /*{{{  funcptr lookup_func(ATerm prod) */
 
 funcptr lookup_func(ATerm prod)
@@ -268,12 +298,12 @@ static ATerm call(ATerm prod, ATermList args)
   ATermList list;
   ATerm arg[33];
 
-	int idx = 0;
+  int idx = 0;
   list = args;
-	while(!ATisEmpty(list)) {
+  while(!ATisEmpty(list)) {
     arg[idx++] = ATgetFirst(list);
-		list = ATgetNext(list);
-	}
+    list = ATgetNext(list);
+  }
 
   switch(ATgetLength(args)) {
     case  0: return (*func)();
@@ -507,6 +537,56 @@ static ATermList innermost_list(ATermList l)
 	}
 }
 /*}}}  */
+/* Code to unqoute delayed reduction of terms, in order to implement
+   the outermost strategy */
+
+ATerm unquote(ATerm t)
+{
+  Symbol s;
+  ATerm a0,a1,a2,a3,a4,a5;
+
+  if (ATmatch(t,"quote(<int>)",&s)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)();
+  }
+  if (ATmatch(t,"quote(<int>,<term>)",&s,&a0)) {
+    if (s == make_listsym)
+      return make_list(unquote(a0));
+    else {
+      funcptr func = lookup_func_given_sym(s);
+      return (*func)(unquote(a0));
+    }
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>)",&s,&a0,&a1)) {
+    if (s == concsym || s == conssym)
+      return (ATerm)ATconcat((ATermList)unquote(a0),(ATermList)unquote(a1));
+    else {
+      funcptr func = lookup_func_given_sym(s);
+      return (*func)(unquote(a0),unquote(a1));
+    }
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>,<term>)",&s,&a0,&a1,&a2)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)(unquote(a0),unquote(a1),unquote(a2));
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>,<term>,<term>)",
+              &s,&a0,&a1,&a2,&a3)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)(unquote(a0),unquote(a1),unquote(a2),unquote(a3));
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>,<term>,<term>,<term>)",
+              &s,&a0,&a1,&a2,&a3,&a4)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)(unquote(a0),unquote(a1),unquote(a2),unquote(a3),unquote(a4));
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>,<term>,<term>,<term>,<term>)",
+              &s,&a0,&a1,&a2,&a3,&a4,&a5)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)(unquote(a0),unquote(a1),unquote(a2),unquote(a3),unquote(a4),unquote(a5));
+  }
+  return t;
+}
+
 /*{{{  static ATerm make_asfix_list( ATermList l, char *sort) */
 
 static ATerm term_to_asfix(ATerm t, ATerm sort);
@@ -822,6 +902,27 @@ void init_patterns()
     ATprotect(&char_table[i]);
     char_table[i] = (ATerm) ATmakeInt(i);
   }
+
+  sym_quote0 = ATmakeSymbol("quote", 1, ATfalse);
+  ATprotectSymbol(sym_quote0);
+  sym_quote1 = ATmakeSymbol("quote", 2, ATfalse);
+  ATprotectSymbol(sym_quote1);
+  sym_quote2 = ATmakeSymbol("quote", 3, ATfalse);
+  ATprotectSymbol(sym_quote2);
+  sym_quote3 = ATmakeSymbol("quote", 4, ATfalse);
+  ATprotectSymbol(sym_quote3);
+  sym_quote4 = ATmakeSymbol("quote", 5, ATfalse);
+  ATprotectSymbol(sym_quote4);
+  sym_quote5 = ATmakeSymbol("quote", 6, ATfalse);
+  ATprotectSymbol(sym_quote5);
+  sym_quote6 = ATmakeSymbol("quote", 7, ATfalse);
+  ATprotectSymbol(sym_quote6);
+  make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
+  ATprotectSymbol(make_listsym);
+  concsym = ATmakeSymbol("conc", 2, ATfalse);
+  ATprotectSymbol(concsym);
+  conssym = ATmakeSymbol("cons", 2, ATfalse);
+  ATprotectSymbol(conssym);
 }
 /*}}}  */
 /*{{{  ATerm slice(ATerm l1, ATerm l2) */
