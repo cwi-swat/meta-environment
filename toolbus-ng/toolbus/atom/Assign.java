@@ -46,7 +46,7 @@ public class Assign extends Atom {
     ATerm newval = FunctionDescriptors.eval(exp.value, p);
     
     //System.err.println(exp.value + "   " + newval);
-    e.putVar(var.value, newval);
+    e.assignVar(var.value, newval);
     return nextState();
   }
 }

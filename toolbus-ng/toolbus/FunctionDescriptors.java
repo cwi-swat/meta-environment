@@ -250,7 +250,7 @@ public class FunctionDescriptors {
 
       case ATerm.APPL :
         if (TBTerm.isVar(t))
-          return env.getVar(t);
+          return env.getValue(t);
         if (TBTerm.isBoolean(t))
           return t;
         String fun = ((ATermAppl) t).getName();

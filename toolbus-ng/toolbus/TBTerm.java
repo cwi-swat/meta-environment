@@ -177,7 +177,7 @@ public class TBTerm {
 
   /**
    * Check that the two sides of an assignment are "compatibele", i.e. they must be equal
-   * or the the type of the lsh may be more general than that of the rhs.
+   * or the type of the lhs may be more general than that of the rhs.
    */
 
   public static boolean assignCompatible(ATerm lhsType, ATerm rhsType) throws ToolBusException {
@@ -320,7 +320,7 @@ public class TBTerm {
         return t;
       case ATerm.APPL :
         if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
-          return env.getVar(t);
+          return env.getValue(t);
         }
         if (TBTerm.isBoolean(t)) {
           return t;
@@ -343,7 +343,6 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
   }
-  
   
   /**
    * Matching of two terms. Both terms use a different environment. There are two flavours of matching:
@@ -384,14 +383,14 @@ public class TBTerm {
   private static boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
     if (TBTerm.isVar(ta))
       if (fullMatch) {
-        ta = enva.getVar(ta);
+        ta = enva.getValue(ta);
       } else {
         return true;
       }
 
     if (TBTerm.isVar(tb))
       if (fullMatch) {
-        tb = envb.getVar(tb);
+        tb = envb.getValue(tb);
       } else {
         return true;
       }
