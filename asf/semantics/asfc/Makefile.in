@@ -77,7 +77,7 @@ CLEANFILES	= ${GENCSRC} ${GENCHDR} *.o *~ ${BINFILES}
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= Makefile compiler.tif.c compiler.tif.h
 
-SUBDIRS		= c-source support-muasf
+SUBDIRS		= c-source 
 
 # The all target must be defined:
 all: depend subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
