@@ -1,7 +1,10 @@
 # $Id$
 
+Thu Jan 29 09:57:17 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Fixed bug due to statement before declaring variables in pandora.c 
+
 2004-01-28	Taeke Kooiker	<kooiker@cwi.nl>
-  * First working version only uses HBoxes
+ * First working version only uses HBoxes
 
 2004-01-26	Taeke Kooiker	<kooiker@cwi.nl>
-  * Initial framework derived from ptpretty package
+ * Initial framework derived from ptpretty package

@@ -25,12 +25,13 @@ BOX_Box treeToBox(PT_Tree tree) {
     return(BOX_makeBoxString(strcon)); 
   }
   else if (PT_isTreeAppl(tree)) {
-    printf("+- TreeAppl\n"); 
     PT_Args args = PT_getTreeArgs(tree);
     BOX_BoxList boxlist = BOX_makeBoxListEmpty();
     
     BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
     BOX_SOptions soptions = BOX_makeSOptionsDefault(BOX_makeSOptionListEmpty()); 
+    printf("+- TreeAppl\n"); 
+    
     for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree head = PT_getArgsHead(args);
       boxlist = BOX_makeBoxListMany(treeToBox(head), optLayout, boxlist); 
