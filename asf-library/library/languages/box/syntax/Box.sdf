@@ -5,8 +5,11 @@ module languages/box/syntax/Box
 %% give several extensions.
 %%\smallskip
 
-imports languages/box/syntax/Box-Strings
-        basic/Integers
+imports basic/Comments
+imports basic/StrCon
+imports basic/NatCon
+
+        
 exports
   sorts SpaceSymbol SOption SOptions
 
@@ -22,19 +25,11 @@ exports
 %%\smallskip
 
   context-free syntax
-    "hs"                    -> SpaceSymbol
-    "vs"                    -> SpaceSymbol
-    "is"                    -> SpaceSymbol
-    SpaceSymbol "=" Integer -> SOption
-    SOption*               -> SOptions
-
-hiddens
-  variables
-    "ss"[0-9]*      -> SpaceSymbol
-    "so"[0-9]*      -> SOption
-    "so""*"[0-9]*   -> SOption*
-    "o"[0-9]*       -> SOption
-    "o""*"[0-9]*    -> SOption*
+    "hs"                    -> SpaceSymbol {cons("hs")}
+    "vs"                    -> SpaceSymbol {cons("vs")}
+    "is"                    -> SpaceSymbol {cons("is")}
+    SpaceSymbol "=" NatCon  -> SOption     
+    SOption*                -> SOptions
 
 %% We distinguish 6 basic operators in the box
 %% language: {\sf H} (horizontal composition),
@@ -60,30 +55,19 @@ hiddens
 exports
   sorts Box BoxList
   context-free syntax
-    BoxString -> Box
-    Box*      -> BoxList
-
-    "H"   SOptions "[" BoxList "]" -> Box
-    "V"   SOptions "[" BoxList "]" -> Box
-    "HV"  SOptions "[" BoxList "]" -> Box
-    "HOV" SOptions "[" BoxList "]" -> Box
-    "I"   SOptions "[" Box "]"     -> Box
-    "WD"            "[" Box "]"    -> Box
-
-hiddens
-  variables
-    [B-E][0-9]*    -> Box
-    [B-E]"+"[0-9]* -> Box+
-    [B-E]"*"[0-9]* -> Box*
-
-%% \smallskip
-
-exports
-  context-free syntax
-    BoxList "++" BoxList -> BoxList {right}
+    Box*    -> BoxList
 
   context-free syntax
-    "I*" SOptions "[" BoxList "]" -> BoxList
-    "LST" "[" BoxList "]"         -> Box
+    StrCon  -> Box {cons("string")}
+    "H"   SOptions "[" BoxList "]" -> Box {cons("H")}
+    "V"   SOptions "[" BoxList "]" -> Box {cons("V")}
+    "HV"  SOptions "[" BoxList "]" -> Box {cons("HV")}
+    "HOV" SOptions "[" BoxList "]" -> Box {cons("HOV")}
+    "I"   SOptions "[" Box "]"     -> Box {cons("I")}
+    "WD"            "[" Box "]"    -> Box {cons("WD")}
 
-%%%
+  context-free syntax
+    "I*" SOptions "[" BoxList "]" -> BoxList {cons("Istar")}
+    "LST" "[" BoxList "]"         -> Box     {cons("LST")}
+
+

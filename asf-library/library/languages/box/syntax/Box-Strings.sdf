@@ -5,13 +5,13 @@ module languages/box/syntax/Box-Strings
 %% string if it is preceded (escaped) by a backslash.
 %%\smallskip
 
+imports basic/StrCon
 imports basic/Comments 
-	basic/Strings
-	basic/Integers
+	
 exports
   sorts BoxString
   context-free syntax
-    String                  -> BoxString
+    StrCon                  -> BoxString
     BoxString ":" BoxString -> BoxString {right}
     BoxString "*" BoxString -> BoxString {right}
     BoxString "." BoxString -> BoxString {right}
