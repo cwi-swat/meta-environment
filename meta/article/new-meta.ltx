@@ -25,14 +25,28 @@
 \def\sdf{{\sc Sdf}}
 \def\asf{{\sc Asf}}
 \def\asdf{{\sc Asf+Sdf}}
-\def\metaenv{{\sc Asf+Sdf}\ Meta-En\-vir\-on\-ment}
+\def\metaenv{{\sc Asf+Sdf} Meta-En\-vir\-on\-ment}
+
 \def\TB{{\sc ToolBus}}
 \def\centaur{{\sc centaur}}
 \def\seal{{\sc seal}}
 \def\epic{{\sc Epic}}
 \def\lelisp{{\sc LeLisp}}
 \def\T{{\bf T}}
-\input{psfig}
+
+\def\tcl{{\sf Tcl}}
+\def\tk{{\sf Tk}}
+\def\dot{{\sf Dot}}
+\def\tcltk{{\sf Tcl/Tk}}
+\def\tcldot{{\sf TclDot}}
+\def\ui{user interface}
+
+\makeatletter
+\def\up@case#1{\expandafter\uppercase{#1}}
+\def\upcase#1{\expandafter\up@case#1}
+\makeatother   
+
+%\input{psfig}
 
 \begin{document}
 
@@ -69,23 +83,22 @@ mainly because most of the coding has been done by
 Ph.D. researchers, and consequently the project has had a 
 large turnover of staff.
 
-These complaints initiated a redesign and reimplementation of the \metaenv.
-Initially we believed that an incremental reimplementation of the
-\metaenv\ was feasible, and therefore a number of people
-started working on the design and implementation of a new user-interface
-and the replacement of the text editing facilities of GSE \cite{Koo94.thesis}
-by Emacs and Epoch in 1992 \cite{KB93}.
-However, it turned out that the resulting implementation was not deadlock
-free.
+These complaints initiated a redesign and reimplementation of the
+\metaenv.  Initially we believed that an incremental reimplementation
+of the \metaenv\ was feasible, and therefore a number of people
+started working on the design and implementation of a new \ui{} and
+the replacement of the text editing facilities of GSE
+\cite{Koo94.thesis} by Emacs and Epoch in 1992 \cite{KB93}.  However,
+it turned out that the resulting implementation was not deadlock free.
 This initiated the development of the \TB, a software interconnection
-architecture \cite{BK96a,BK96b} which takes care of the communication of
-software components.
+architecture \cite{BK96a,BK96b} which takes care of the communication
+of software components.
 
 \begin{table}
 \begin{center}
 \begin{tabular}{|l|} \hline
 Complaints or shortcomings \\ \hline\hline
-The user-interface is old-fashioned and badly organized: \\
+The \ui{} is old-fashioned and badly organized: \\
 reduced terms not in term-editor and long flat lists of  \\
 modules for deleting and editing of modules and terms.   \\ \hline
 An often heard complaint was: ``The editor is too        \\
@@ -100,39 +113,36 @@ The current monolithic system is hard to maintain. New    \\
 research ideas are hard to implement.                     \\ \hline 
 Bugs are not fixed anymore, because the knowledge about \\
 the intrinsics of the system needed to fix these bugs \\
-is no longer present.					\\ \hline \hline
+is no longer present.                                   \\ \hline \hline
 \end{tabular}
 \end{center}
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
 \end{table}
 
-Based on the experiences gained with the Epoch-GSE-UI coupling it was 
-decided to
-design and implement the new \metaenv\ from scratch.
-The problems concerning \lelisp\ makes a ``from scratch'' approach even
-more pressing.
-In this paper we discuss the first prototype of the new \metaenv\ based
-on the \TB. 
-This prototype has a very restricted functionality but offers an extendable
-infrastructure to experiment with various designs.
+Based on the experiences gained with the Epoch-GSE-UI coupling it was
+decided to design and implement the new \metaenv\ from scratch.  The
+problems concerning \lelisp\ makes a ``from scratch'' approach even
+more pressing.  In this paper we discuss the first prototype of the
+new \metaenv\ based on the \TB.  This prototype has a very restricted
+functionality but offers an extendable infrastructure to experiment
+with various designs.
 
 \input{toolbus.ltx}
 
 \subsection{Tree Representation}
 
-In the current version of the \metaenv\ the abstract syntax trees are 
+In the current version of the \metaenv\ the abstract syntax trees are
 represented by means of VTP (Virtual Tree Processing formalism)
-offered by \centaur.
-There are two problems connected to VTP: it is hard to learn programming
-in VTP and VTP does not offer enough facilities to prevent illegal
-access to constructed trees. This latter drawback causes a number of
-the maintenance problems in the \metaenv.
+offered by \centaur.  There are two problems connected to VTP: it is
+hard to learn programming in VTP and VTP does not offer enough
+facilities to prevent illegal access to constructed trees. This latter
+drawback causes a number of the maintenance problems in the \metaenv.
 
 These ``VTP-problems'' led to the development of an alternative
-formalism to represent syntax trees: \asfix.
-This \asfix\ formalism is an instantiation of a generic {\em annotated
-term} format: \aterms~\cite{BKOV97}.
-The \sdf\ definition of \aterms\ is presented in Figure~\ref{at}.
+formalism to represent syntax trees: \asfix.  This \asfix\ formalism
+is an instantiation of a generic {\em annotated term} format:
+\aterms~\cite{BKOV97}.  The \sdf\ definition of \aterms\ is presented
+in Figure~\ref{at}.
 
 \begin{figure}
 \centerline{\fbox{
@@ -241,26 +251,104 @@ Activity            & Specification & Implementation  \\
 \asfix              & \asdf         & C, JAVA         \\ 
 \TB                 & \asdf         & C               \\
 Structure editor    & \asdf         & JAVA            \\
-Text editor         &               & Tcl/Tk          \\
+Text editor         &               & \tcltk{}        \\
 Interpreter         & \asdf         & C               \\
 Tree repository     & \asdf         & C               \\
 Import manager      & \asdf         & C               \\
-user-interface/Dot  &               & Tcl/Tk          \\ \hline
+\upcase{\ui}        &               & \tcltk{}, \tcldot{}     \\ \hline
 \end{tabular}
 \end{center}
 \caption{\label{components} Components of the new \metaenv\ which are finished.}
 \end{table}
 
-Figure \ref{nm} contains a screendump of the user-interface of part of
-the current prototype.
 The various components will be discussed in the next sections.
+
+\section{\upcase{\ui}}
+
+The \ui{} of the new \metaenv\ is built around the visual
+representation of the import graph of the \asdf\ specification which
+is loaded. The major advantage of having a visual representation of
+the import graph as \ui{} is the increased insight in the structure of
+the specification.  Furthermore, effective visualization of this graph
+can reveal interesting characteristics of the specification (e.g.
+repeating patterns and unintended transitive import relations) while
+avoiding distractions and irrelevancy.
 
 \begin{figure}[htb]
 \centerline{\psfig{figure=newmeta.ps,width=\textwidth}}
 \caption{\label{nm} Browsing the import graph in the new \metaenv.}
 \end{figure}
 
-\section{User-interface}
+The user can select one or more modules in this graph and perform
+actions on them. Currently the following actions are supported:
+\begin{itemize}
+\item open the module editor for this module,
+\item open a term editor over this module,
+\item delete the module from the repositories,
+\item request additional information on the module, and
+\item revert the module in the repositories to the last version saved
+  to disk.
+\end{itemize}
+These actions can be selected in of a menu which pops up when the user
+presses the right mouse button over a module in the graph or using the
+module list and buttons on the right side of the screen. In addition
+to the actions described above, the user can:
+\begin{itemize}
+\item add a module to the specification loaded in the repositories,
+\item clear all repositories,
+\item revert all modules loaded in the repositories to the last
+  versions saved to disk, and
+\item save the import graph in various graphics formats.
+\end{itemize}
+Figure \ref{nm} contains a screendump of the user interface of the
+current prototype. From left to right one can clearly distinguish the
+visual representation of the import graph, the list of modules loaded
+and the buttons to perform actions on modules.
+ 
+\subsection{\tcldot}
+
+The user interface is implemented in \tcltk~\cite{Tcl/Tk}, extended
+with \tcldot~\cite{Ellson:1996:TR}. \tcldot{} is part of the
+\emph{graphvis} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a set
+of graph drawing tools for Unix or MS-Windows by AT\&T/Lucent
+Technologies.  It is a dynamically loaded extension for
+\texttt{tcl7.6} that incorporates the directed graph facilities of
+\dot~\cite{Gansner:1993:TDD,Koutsofios:1993:DGT} into \tcl{} and
+provides a set of commands to control those facilities.
+
+\tcldot{} initially adds two commands to \tcl{}, namely
+\texttt{dotnew} to create an empty \dot{} graph and \texttt{dotread}
+to read a \dot{} graph description from file.  These commands return a
+handle for the graph that has just been created and that handle can
+then be used as a command for further actions on the graph.
+
+All other "commands" are of the form: \mbox{\emph{handle} $<$method$>$
+  \emph{parameters}}. \linebreak Many of them return further handles
+of graphs, nodes of edges, which are themselves registered as
+commands.  To give an impression of the functionality provided by
+\tcldot{}, we list the methods that are available:
+\begin{description}
+\item[Graph methods:] addedge, addnode, addsubgraph, countedges,
+  countnodes, layout, listattributes, listedgeattributes,
+  listnodeattributes, listnodes, listsubgraphs, render, rendergd,
+  queryattributes, queryedgeattributes, querynodeattributes,
+  setattributes, setedgeattributes, setnodeattributes, showname,
+  write.
+\item[Node methods:] addedge, listattributes, listedges, listinedges,
+  listoutedges, queryattributes, setattributes, showname.
+\item[Edge methods:] delete, listattributes, listnodes,
+  queryattributes, setattributes, showname.
+\end{description}
+  
+
+\subsection{Future Work}
+
+- zoeken op modules
+
+- incrementele graph layout
+
+- subgraphen collapsen
+
 
 \section{Repositories}
 
@@ -430,42 +518,36 @@ condition, leading to new variable bindings.
 
 \subsection{Discussion}
 
-There are a few open issues with respect to the interpreter.
-First, the performance of the current version is reasonable.
-If there is no list matching involved the interpreter performs
-6000 rewrite steps per second, the interpreter in the
-old \metaenv\ performs 20.000 rewrite steps per second for the
-same specification and term. So, there is at least a factor 3 to be
-gained.
+There are a few open issues with respect to the interpreter.  First,
+the performance of the current version is reasonable.  If there is no
+list matching involved the interpreter performs 6000 rewrite steps per
+second, the interpreter in the old \metaenv\ performs 20.000 rewrite
+steps per second for the same specification and term. So, there is at
+least a factor 3 to be gained.
 
-Second, in the current version no or almost no preprocessing
-of the specification is performed.
-A number of preprocessing steps could improve the performance 
-considerably.
-One obvious preprocessing step is the calculation of which side of
-a positive condition introduces new variables.
-Another very effective preprocessing step is the transformation
-of some forms of list matching into non list matching, e.g.,
-obtaining the head and tail of a list, etc.
-This can be done because we know the internal data structure for
-lists in the interpreter.
-The list transformations are also important when compiling \asdf\
-specifications.
+Second, in the current version no or almost no preprocessing of the
+specification is performed.  A number of preprocessing steps could
+improve the performance considerably.  One obvious preprocessing step
+is the calculation of which side of a positive condition introduces
+new variables.  Another very effective preprocessing step is the
+transformation of some forms of list matching into non list matching,
+e.g., obtaining the head and tail of a list, etc.  This can be done
+because we know the internal data structure for lists in the
+interpreter.  The list transformations are also important when
+compiling \asdf\ specifications.
 
 \section{Future Work}
 
-There is a huge bulk of future work to be done.
-First of all, the parser and parser generator \cite{Vis97.SGLRP} has to be
-integrated in the new \metaenv.
-Second, the unparser and unparser generator \cite{BV96} has to be
-integrated as well as the To\LaTeX\ facilities \cite{Vis95.tolatex}. This should be done
-on top of the {\sc Box} language.
-Third, the \metaenv\ should provided facilities to compile specifications
-in order to generate stand-alone environments.
-Fourth, a debugging facility for debugging specifications should be provided
-as well.
-Finally, the new \metaenv\ should provide sophisticated help facilities
-and demonstration modes based on internet facilities.
+There is a huge bulk of future work to be done.  First of all, the
+parser and parser generator \cite{Vis97.SGLRP} has to be integrated in
+the new \metaenv.  Second, the unparser and unparser generator
+\cite{BV96} has to be integrated as well as the To\LaTeX\ facilities
+\cite{Vis95.tolatex}. This should be done on top of the {\sc Box}
+language.  Third, the \metaenv\ should provided facilities to compile
+specifications in order to generate stand-alone environments.  Fourth,
+a debugging facility for debugging specifications should be provided
+as well.  Finally, the new \metaenv\ should provide sophisticated help
+facilities and demonstration modes based on internet facilities.
 
 The tree-repository should provided a sophisticated querying mechanism
 as described in \cite{BKV96b}.
