@@ -51,8 +51,8 @@ ATbool conflicts(Item item, ATerm label)
   int iptr = IT_getDotPosition(item);
   int len = ATgetLength((ATermList)ATgetArgument((ATermAppl)IT_getProd(item), 0));
 
-  if(iptr == 0) {
-    if(len > 1) {
+  if (iptr == 0) {
+    if (len > 1) {
       priorel = (ATerm)ATmakeAppl2(afun_right_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
@@ -63,12 +63,21 @@ ATbool conflicts(Item item, ATerm label)
           result = ATtrue;
         }
         else {
-          priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
+          priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                       prodnr, 
+                                       (ATerm)ATmakeInt(iptr),
+                                       label);
 	  if (PRIORITY_EXISTS(priorel)) {
             result = ATtrue;
           }
           else {
-            result = ATfalse;
+            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
+	    if (PRIORITY_EXISTS(priorel)) {
+              result = ATtrue;
+            }
+            else {
+              result = ATfalse;
+            }
           }
         }
       }
@@ -79,7 +88,16 @@ ATbool conflicts(Item item, ATerm label)
         result = ATtrue;
       }
       else {
-        result = ATfalse;
+        priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                     prodnr, 
+                                     (ATerm)ATmakeInt(iptr),
+                                     label);
+	if (PRIORITY_EXISTS(priorel)) {
+          result = ATtrue;
+        }
+        else {
+          result = ATfalse;
+        }
       }
     }
   }
@@ -95,18 +113,27 @@ ATbool conflicts(Item item, ATerm label)
           result = ATtrue;
 	}
         else {
-          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prodnr, label);
+          priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                       prodnr, 
+                                       (ATerm)ATmakeInt(iptr),
+                                       label);
 	  if (PRIORITY_EXISTS(priorel)) {
             result = ATtrue;
-	  }
+          }
           else {
-            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
+            priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prodnr, label);
 	    if (PRIORITY_EXISTS(priorel)) {
               result = ATtrue;
 	    }
             else {
-              result = ATfalse;
-	    }
+              priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
+	      if (PRIORITY_EXISTS(priorel)) {
+                result = ATtrue;
+	      }
+              else {
+                result = ATfalse;
+	      }
+            }
           }
         }
       }
@@ -117,7 +144,16 @@ ATbool conflicts(Item item, ATerm label)
         result = ATtrue;
       }
       else {
-        result = ATfalse;
+        priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                     prodnr, 
+                                     (ATerm)ATmakeInt(iptr),
+                                     label);
+	if (PRIORITY_EXISTS(priorel)) {
+          result = ATtrue;
+        }
+        else {
+          result = ATfalse;
+        }
       }
     }
   }
