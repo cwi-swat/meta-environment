@@ -19,7 +19,7 @@ public class AsFix {
   @see toolbus.aterm.AFun#init to find out which named elements are
   defined.  */
 
-  public static ATerm acc(ATermAppl t, AFun af2) throws Exception {
+  public static ATerm acc(ATermAppl t, AFun af2) throws ParseError {
     AFun af1 = new AFun(ATerm.the_world, t.getFun());
     ATermAppl at = af1.init();
     return namedElem(af2,new ATermList(ATerm.the_world, at.getArgs()),
@@ -33,7 +33,7 @@ public class AsFix {
   @see toolbus.aterm.AFun#init to find out which
   named elements are defined.*/
 
-  public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws Exception {
+  public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws ParseError {
     AFun af1 = new AFun(ATerm.the_world, t1.getFun());
     ATermAppl at = af1.init();
     t1.setArgs(replace(new ATermList(ATerm.the_world, t1.getArgs()), 

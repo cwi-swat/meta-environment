@@ -17,17 +17,22 @@ So far the following AFuns are defined:
 <ul> <li> prod <li> appl <li> list </ul>
 */
 
-  public ATermAppl init() throws Exception {
+  public ATermAppl init() throws ParseError {
     String af = this.getFun();
+    ATermAppl result = null;
     if (af.equals("prod")) {
-      return (ATermAppl) world.makeSimple("prod(module-name,w(\"\"),syms,w(\"\"),l(\"->\"),w(\"\"),sym,w(\"\"),attrs)");
+      result = (ATermAppl) world.makeSimple("prod(module-name,w(\"\"),syms,w(\"\"),l(\"->\"),w(\"\"),sym,w(\"\"),attrs)");
     } else if (af.equals("appl")) {
-      return (ATermAppl) world.makeSimple("appl(prod,w(\"\"),args)");
+      result = (ATermAppl) world.makeSimple("appl(prod,w(\"\"),args)");
     } else if (af.equals("list")) {
-      return (ATermAppl) world.makeSimple("list(sym,w(\"\"),elems)");
+      result = (ATermAppl) world.makeSimple("list(sym,w(\"\"),elems)");
+      //    } else {
+      //      throw new Exception("Undefined AFun being initialized: "+af);
     } else {
-      throw new Exception("Undefined AFun being initialized: "+af);
+	System.err.println("AFun.init: Tried to init undefined afun");
+	System.exit(1);
     }
+    return result;
   }
       
 }	
