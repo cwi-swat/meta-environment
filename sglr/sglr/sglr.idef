@@ -19,79 +19,39 @@ let
   Amb  : int,
   Ambs : list
 in
-  execute(sglr, P?) .
   (
-    (rec-msg(Id?, parse-string(Lid?, G?, S?)) .
-     snd-eval(P, parse-string(Lid, G, S))
-    +
-     rec-msg(parse-file(Lid?, G?, FN?, Id?)) .
-     snd-eval(P, parse-file(Lid, G, FN))
-    ).
+    rec-msg(Id?, parse-string-given-table(Lid?, Tbl?, G?, S?)) .
+    execute(sglr, P?) .
+    snd-eval(P, open-language-from-term(Lid, Tbl)) .
     (
-      rec-value(P, parsetree(T?, Amb?)) .
-      snd-msg(parse-result(Id, parsetree(T, Amb)))
+      rec-value(P, language-opened(Lid)) .
+      snd-eval(P, parse-string-as-asfix2me(Lid, G, S)) .
+      (
+        rec-value(P, parsetree(T?, Amb?)) .
+        snd-msg(parse-result-asfix2me(Id, parse-tree(parsetree(T, Amb))))
+      +
+        rec-value(P, parse-error(Err?,plain)) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,plain)))
+      +
+        rec-value(P, parse-error(Err?,eof)) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,eof)))
+      +
+        rec-value(P, ambiguous-tree(T?, Err?, ambiguities(Amb?, Ambs?))) .
+        snd-msg(parse-result-asfix2me(Id, ambiguous-tree(parsetree(T, Amb), Err,ambiguities(Amb, Ambs))))
+      +
+        rec-value(P, parse-error(Err?,ambiguities(Amb?, Ambs?))) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,ambiguities(Amb, Ambs))))
+      +
+        rec-value(P, parse-error(Err?,cycle(T?))) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,cycle(T))))
+      )
     +
-      rec-value(P, parse-error(Err?,plain)) .
-      snd-msg(parse-result(Id, parse-error(Err,plain)))
-    +
-      rec-value(P, parse-error(Err?,eof)) .
-      snd-msg(parse-result(Id, parse-error(Err,eof)))
-    +
-      rec-value(P, parse-error(Err?,ambiguities(Amb?, Ambs?))) .
-      snd-msg(parse-result(Id, parse-error(Err,ambiguities(Amb, Ambs))))
-    +
-      rec-value(P, parse-error(Err?,cycle(T?))) .
-      snd-msg(parse-result(Id, parse-error(Err,cycle(T))))
-    )
-  +
-    rec-msg(Id?, parse-string-as-asfix2me(Lid?, G?, S?)) .
-    snd-eval(P, parse-string-as-asfix2me(Lid, G, S)) .
-    (
-      rec-value(P, parsetree(T?, Amb?)) .
-      snd-msg(parse-result-asfix2me(Id, parse-tree(parsetree(T, Amb))))
-    +
-      rec-value(P, parse-error(Err?,plain)) .
-      snd-msg(parse-result-asfix2me(Id, parse-error(Err,plain)))
-    +
-      rec-value(P, parse-error(Err?,eof)) .
-      snd-msg(parse-result-asfix2me(Id, parse-error(Err,eof)))
-    +
-      rec-value(P, ambiguous-tree(T?, Err?, ambiguities(Amb?, Ambs?))) .
-      snd-msg(parse-result-asfix2me(Id, ambiguous-tree(parsetree(T, Amb), Err,ambiguities(Amb, Ambs))))
-    +
-      rec-value(P, parse-error(Err?,ambiguities(Amb?, Ambs?))) .
-      snd-msg(parse-result-asfix2me(Id, parse-error(Err,ambiguities(Amb, Ambs))))
-    +
-      rec-value(P, parse-error(Err?,cycle(T?))) .
-      snd-msg(parse-result-asfix2me(Id, parse-error(Err,cycle(T))))
-    )
-  +
-    (
-      rec-msg(open-language-from-term(Lid?, Tbl?)) .
-      snd-eval(P, open-language-from-term(Lid, Tbl))
-    +
-      rec-msg(open-language(Lid?, FN?)) .
-      snd-eval(P, open-language(Lid, FN))
+      rec-value(P, language-not-opened(Lid)) .
+      snd-msg(parse-result-asfix2me(Id, open-language-failed))
     ) .
-    (
-	rec-value(P, language-opened(Lid)) .
-	snd-msg(language-opened(Lid)) .
-	snd-note(language-available(Lid))
-    +
-	rec-value(P, language-not-opened(Lid)) .
-	snd-msg(language-not-opened(Lid))
-    )
-  +
-    rec-msg(close-language(Lid?)) .
-    snd-eval(P, close-language(Lid)) .
-    (
-	rec-value(P, language-closed(Lid?)) .
-	snd-note(language-unavailable(Lid))
-    +
-	rec-value(P, language-not-open(Lid?))
-    )
+    snd-terminate(P, "done")
   )
-  * rec-disconnect(P)
+  * delta
 endlet
 
 toolbus(SGLR)
