@@ -83,6 +83,23 @@ equations
 
   [mr-2'4] make-rule(false,,Term1,Term2) = Term1 = Term2
 
+%% A function to check whether we are dealing with a transformer
+[itfi-1] is-traversal-funid(funid("l""f""_""t""r""a""f""o""_" Char+ )) = true
+[itfi-2] is-traversal-funid(funid("l""f""_""a""c""c""u""_" Char+ )) = true
+[itfi-3] is-traversal-funid(
+           funid("l""f""_""a""c""c""u""t""r""a""f""o""_" Char+ )) = true
+[default-itfi] is-traversal-funid(Funid) = false
+
+[gtt-1] get-traversal-type(funid(Char+1 "_""t""r""a""f""o""_" Char+2)) = trafo
+[gtt-2] get-traversal-type(funid(Char+1 "_""a""c""c""u""_" Char+2)) = accu
+[gtt-3] get-traversal-type(funid(Char+1 "_""a""c""c""u""t""r""a""f""o""_" Char+2)) = 
+          accutrafo
+
+[gts-2] get-traversal-strategy(funid(Char+1 "_""t""d""_" Char+2)) = top-down
+[default-gts] is-traversal-funid(Funid) = true
+              ===>
+              get-traversal-strategy(Funid) = bottom-up
+
 %% A function to check whether we are dealing with a list.
   [ilfi-1'1] is-list-funid(funid(""" "{" Char+ "}" """)) = true
 

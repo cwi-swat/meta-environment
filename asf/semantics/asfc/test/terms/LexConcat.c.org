@@ -5,26 +5,26 @@ static Symbol lf_list_1sym ;
 static ATerm lf_list_1 ( ATerm arg1 ) ;
 static Symbol lf_2sym ;
 static ATerm lf_2 ( ATerm arg1 ) ;
-static Symbol lf_concat_3sym ;
-static ATerm lf_concat_3 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_3sym ;
+static ATerm lf_3 ( ATerm arg1 , ATerm arg2 ) ;
 void register_LexConcat ( ) {
 lf_list_1sym = ATmakeSymbol ( "list(iter-star(char-class([range(0,255)])))"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_list_1sym ) ;
 lf_2sym = ATmakeSymbol ( "prod([lex(sort(\"ID\"))],cf(sort(\"ID\")),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_2sym ) ;
-lf_concat_3sym = ATmakeSymbol ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_concat_3sym ) ;
+lf_3sym = ATmakeSymbol ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_3sym ) ;
 register_prod ( ATparse ( "list(iter-star(char-class([range(0,255)])))" ) , lf_list_1 , lf_list_1sym ) ;
 register_prod ( ATparse ( "prod([lex(sort(\"ID\"))],cf(sort(\"ID\")),no-attrs)" ) , lf_2 , lf_2sym ) ;
-register_prod ( ATparse ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" ) , lf_concat_3 , lf_concat_3sym ) ;
+register_prod ( ATparse ( "prod([lit(\"concat\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\",\"),cf(opt(layout)),cf(sort(\"ID\")),cf(opt(layout)),lit(\")\")],cf(sort(\"ID\")),attrs([cons(\"concat\"),id(\"Lexicals\")]))" ) , lf_3 , lf_3sym ) ;
 }
 void resolve_LexConcat ( ) {
 }
 void init_LexConcat ( ) {
 }
-ATerm lf_concat_3 ( ATerm arg0 , ATerm arg1 ) {
-FUNC_ENTRY ( lf_concat_3sym , ATmakeAppl ( lf_concat_3sym , arg0 , arg1 ) ) ;
+ATerm lf_3 ( ATerm arg0 , ATerm arg1 ) {
+FUNC_ENTRY ( lf_3sym , ATmakeAppl ( lf_3sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , lf_2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -50,7 +50,7 @@ FUNC_EXIT ( make_nf1 ( lf_2sym , make_nf1 ( lf_list_1sym , cons ( make_list ( at
 }
 }
 }
-FUNC_EXIT ( make_nf2 ( lf_concat_3sym , arg0 , arg1 ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_3sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_2sym , ATmakeAppl ( lf_2sym , arg0 ) ) ;

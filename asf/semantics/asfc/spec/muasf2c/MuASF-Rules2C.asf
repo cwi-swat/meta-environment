@@ -58,13 +58,14 @@ equations
               Stat*4 ++r Stat*3 = Stat*5,
               identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
               remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
+              make-traversal-stats(Funid,ActualArgs,Aint0) = Stat*8,
               FUNC_ENTRY(identifier(Char* "s""y""m"),
-                         ATmakeAppl(ActualArgs2)); ++ Stat*7 = Stat*8,
-              Decl* ++d Stat*8 = Stat*9
+                         ATmakeAppl(ActualArgs2)); ++ Stat*8 ++ Stat*7 = Stat*9,
+              Decl* ++d Stat*9 = Stat*10
               =========================
               asfrules2cfunc(Rule;Rule*1,Namepair*) =
                 ATerm identifier(Char*)(FormalArgs)
-                { Stat*9 }
+                { Stat*10 }
 
   [ar2cf-3'1] get-funid(Rule) = funid(""""{"Char*"}""""),
               is-memo(funid(""""{"Char*"}""""),Namepair*) = false,
@@ -85,7 +86,6 @@ equations
               Stat*4 ++r Stat*3 = Stat*5,
               identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
               remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
-%% Stat*5 = Stat*7,
               FUNC_ENTRY(identifier(Char* "s""y""m"),
                          ATmakeAppl(ActualArgs2)); ++ Stat*7 = Stat*8,
               Decl* ++d Stat*8 = Stat*9
@@ -115,6 +115,8 @@ equations
               remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
               identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
               Decl* ++d Stat*7 = Stat*8,
+              make-traversal-stats(Funid,ActualArgs,Aint0) = Stat*9,
+              Stat*9 ++ Stat*8 = Stat*10,
               Aint0 = natcon(Char*2)
               =========================
               asfrules2cfunc(Rule;Rule*1,Namepair*) =
@@ -126,7 +128,7 @@ equations
                   if(result)
                     return result;
                   else {
-                    Stat*8
+                    Stat*10
                   }
                 }
 
@@ -175,15 +177,6 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               ======================================================
               asfrules2cstats(Rule+,Namepair*) =
                 asfrules2cstats(C-rule*1,C-rule*2,Namepair*,0,make-select-stat)
-
-%%[ar2cs-1'1]  Rule+ = Rule; Rule*,
-%%              get-funid(Rule) = Funid,
-%%              is-list-funid(Funid) = true,
-%%             make-c-rules(Rule+) = C-rule+
-%%             
-%%              ======================================================
-%%              asfrules2cstats(Rule+,Namepair*) =
-%%                list2cstats(C-rule+,Namepair*,0)
 
   [ar2cs-1'2] asfrules2cstats(,Namepair*) = (,0)
 
@@ -347,11 +340,12 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
               asfrules2cstats(C-rule+1,C-rule+2,Namepair*,Aint1,MakeSelectStat) =
                 (Decl* ++d Stat*3,Aint4)
 
-  [ar2cs-3'1] asfrules2cstats1([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
+[ar2cs-3'1] asfrules2cstats1([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
                 conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
 
-  [ar2cs-3'2] asfrules2cstats1([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint) =
-                conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
+[ar2cs-3'2] asfrules2cstats1([(Term1,Aint+)|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,
+              Namepair*,Aint) =
+            conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*1,Namepair*,Aint)
 
  %% If this funid is ignored, it's argument should not generate select statements,
  %% so we call a different asfrules2cstats in that case
@@ -414,9 +408,26 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
   [fa2cs-1'1] funargs2cstats(funid(Char*1),,,Namepair*,0) =
                 (FUNC_EXIT(make_nf0(identifier(Char*1 "s""y""m")));,0)
 
-  [fa2cs-1'2] restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*) = ActualArgs',
+  [fa2cs-1'2] is-traversal-funid(funid(Char*1)) = false,
+              restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*) = ActualArgs',
               identifier(Char*1 "s""y""m") ++ ActualArgs' = ActualArgs'',
               FUNC_EXIT(identifier("m""a""k""e""_""n""f"Char*2)(ActualArgs'')); = Stat*2
+              =========================================================================
+              funargs2cstats(funid(Char*1),ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
+                (Stat*2,0)
+
+  [fa2cs-1'3] is-traversal-funid(Funid) = true,
+              get-traversal-strategy(Funid) = bottom-up,
+              FUNC_EXIT(arg0); = Stat*2
+              =========================================================================
+              funargs2cstats(Funid,ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
+                (Stat*2,0)
+
+ [fa2cs-1'2]  is-traversal-funid(funid(Char*1)) = true,
+              get-traversal-strategy(funid(Char*1)) = top-down,
+              restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*) = ActualArgs',
+              wrap-extra-kids(ActualArgs',natcon(Char*2)) = Expression,
+              FUNC_EXIT(call_kids(identifier(Char*1),arg0,Expression)); = Stat*2
               =========================================================================
               funargs2cstats(funid(Char*1),ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
                 (Stat*2,0)

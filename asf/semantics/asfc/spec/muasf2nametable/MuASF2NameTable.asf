@@ -201,20 +201,33 @@ funid(""""{" "l""f""_""l""i""s""t""_" Char+ "}"""")
 construct-funid(funid(""""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) = 
 funid("l""f""_" Char+)
 
-[cf-2]
-construct-funid(funid(""""p""r""o""d""(" Char+3 ")""""),
-                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
-funid("l""f""_" Char+2 "_" Char+)
+%% Overlaps with traversal functions, FIX ME
+%%[cf-2]
+%%construct-funid(funid(""""p""r""o""d""(" Char+3 ")""""),
+%%                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
+%%funid("l""f""_" Char+2 "_" Char+)
 
 %% Function that return lists are prefixed with LIST by the frontend
 [cf-3]
 construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+)) =
 funid(""""[" "l""f""_" Char+ "]"""")
 
-[cf-4]
-construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")""""),
-                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
-funid(""""[""l""f""_" Char+2 "_" Char+ "]"""")
+%% Overlaps with traversal functions, FIX ME
+%%[cf-4]
+%%construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")""""),
+%%                natcon(Char+), Term*1, cons(funid(Char+2)), Term*2) = 
+%%funid(""""[""l""f""_" Char+2 "_" Char+ "]"""")
+
+[cf-5]
+construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
+               Term*1,traversal(Term*2,bottom-up,Term*4),Term*3) =
+funid("l""f""_""t""r""a""f""o""_""b""u""_" Char+)
+
+[cf-6]
+construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
+               Term*1,traversal(Term*2,top-down,Term*4),Term*3) =
+funid("l""f""_""t""r""a""f""o""_""t""d""_" Char+)
+
 
 [default-cf-2]
 construct-funid(Funid,Aint0, Term+) = 

@@ -1,3 +1,7 @@
+2001/11/01 (jurgenv@cwi.nl)
+ * Added support for traversal functions (transformers only).
+   Bottom-up or top-down with optionally extra variables.
+
 2001/10/25 (jurgenv@cwi.nl, markvdb@cwi.nl)
  * Optimized evaluator. Lexical constructor functions are now imploded
    to real lexical trees.

@@ -24,6 +24,9 @@ exports
     get-funid(Term,{NamePair ","}*)   -> FunId
     get-funargs(Term)                 -> TermList
     get-funargs(Rule)                 -> TermList
+    is-traversal-funid(FunId)         -> Bool
+    get-traversal-strategy(FunId)     -> "bottom-up" | "top-down"
+    get-traversal-type(FunId)         -> "trafo" | "accu" | "accutrafo"
     is-list-funid(FunId)              -> Bool
     is-trans-list-funid(FunId)        -> Bool
     is-returns-list-funid(FunId)      -> Bool {prefer}
