@@ -1201,6 +1201,15 @@ ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod)
 }
 
 /*}}}  */       
+/*{{{  ATbool PT_hasProductionConstructorAttr(PT_Production prod) */
+
+ATbool PT_hasProductionConstructorAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, 
+				     PT_makeAttrTerm(ATparse("constructor")));
+}
+
+/*}}}  */       
 /*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
 
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs)

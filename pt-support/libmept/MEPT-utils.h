@@ -168,6 +168,7 @@ ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr);
 ATbool PT_hasProductionBracketAttr(PT_Production prod);
 ATbool PT_hasProductionMemoAttr(PT_Production prod);
 ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod); 
+ATbool PT_hasProductionConstructorAttr(PT_Production prod); 
 ATbool PT_hasProductionTraversalAttribute(PT_Production prod); 
 
 PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
