@@ -59,6 +59,11 @@ ATerm ApplyFunction(ATerm term, char *function, char *module, char *sort,
    ATerm new_sort;
    ATerm new_appl;
 
+   if(!quoted) {
+      ATerror("Non quoted prefix functions not yet supported.\n");
+      return term;
+   }
+
    /* destructing the input term */
    real = asfix_get_term(term);
    real_prod = asfix_get_appl_prod(real);
@@ -105,7 +110,7 @@ void usage(void)
 	"\nApply-function encapsulates AsFix1 terms with a quoted or unquoted prefix function.\n\n"
         "Usage: apply-function -qdbh -f <name> -s <sort> -i <file> -o <file> -tV . . .\n"
         "Options:\n"
-        "\t-q              quoted prefix notation\n"
+        "\t-q              unquoted prefix notation\n"
         "\t-b              binary output mode (default)\n"
         "\t-h              display help information (usage)\n"
 	"\t-f name         name of prefix function\n"
@@ -131,7 +136,7 @@ int main (int argc, char **argv)
   char *function = "";
   char *sort = "";
   char *module = "";
-  ATbool quoted = ATfalse;
+  ATbool quoted = ATtrue;
  
   if(argc == 1) { /* no arguments */
     usage();
@@ -140,7 +145,7 @@ int main (int argc, char **argv)
 
   while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
-    case 'q':  quoted = ATtrue;              break;    
+    case 'q':  quoted = ATfalse;              break;    
     case 'h':  usage();                      exit(0);
     case 'i':  input_file_name  = optarg;    break;
     case 'o':  output_file_name = optarg;    break;
