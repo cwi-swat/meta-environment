@@ -1,5 +1,11 @@
 # $Id$
 
+2002/10/12 (vinju@loria.fr)
+ * Added Close Module to the Meta-Environment interface. You can close
+   modules that are not imported by other modules. It also asks if you
+   want to close imported modules recursively. Only the modules that are
+   not used by other modules will be closed in that case.
+
 2002/10/11 (vinju@loria.fr)
  * Added functionality for non-existing modules in MetaStudio. If you click
    on them you can create them by choosing the option from the menu.
