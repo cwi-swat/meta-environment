@@ -42,14 +42,18 @@ in
       Errors := next(Errors).
       Message := first(Error).
       Error := next(Error).
-      Tag := first(Error).
-      snd-msg(unparse(Tag)).
-      rec-msg(unparsed-text(TagText?)).
-      Error := next(Error).
-      Subject := first(Error).
-      snd-msg(unparse(Subject)).
-      rec-msg(unparsed-text(SubjectText?)).
-      snd-note(ui-status(errorf("Equation %s %s: %s)",[TagText, Message, SubjectText])))
+      if not-equal(Error,[]) then
+        Tag := first(Error).
+        snd-msg(unparse(Tag)).
+        rec-msg(unparsed-text(TagText?)).
+        Error := next(Error).
+        Subject := first(Error).
+        snd-msg(unparse(Subject)).
+        rec-msg(unparsed-text(SubjectText?)).
+        snd-note(ui-status(errorf("Equation %s %s: %s)",[TagText, Message, SubjectText])))
+      else
+	snd-note(ui-status(errorf("%s",[Message])))
+      fi
     fi *
     if equal(Errors,[]) then
       tau
