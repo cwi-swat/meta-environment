@@ -4,6 +4,8 @@
  * Released version 0.3.3
  * Updated NEWS file
  * Increased version to 0.3.4
+ * examples are now installed in
+      ${prefix}/share/meta/demo/{pico.user-manual-examples}
 
 2001/05/22 (jong@cwi.nl)
  * version 0.3.3
