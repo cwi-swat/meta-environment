@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
 	asfix1 = ATreadFromFile(file1);
 	asfix2 = ATreadFromFile(file2);
 
+	fclose(file1);
+	fclose(file2);
+
 	term1 = asfix_get_term(asfix1);
 	term2 = asfix_get_term(asfix2);
 

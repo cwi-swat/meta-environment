@@ -65,16 +65,16 @@ int main(int argc, char *argv[])
 	result[0] = reduce_test(eqs,term, ATfalse);
 
 	/* re-init db */
-	ATunprotect(&equations_db);
 	equations_db = ATdictCreate();
-	ATprotect(&equations_db);
 
 	/* then we reduce with whitespace */
 	result[1] = reduce_test(eqs, term,ATtrue);
 	
-	if(!isEqualModuloWhitespace(result[0],result[1]))
-		ATerror("isEqualModuloWhitespace returns false instead of true.\n");
-
+	if(!isEqualModuloWhitespace(result[0],result[1]))		{
+		ATerror("Terms %t AND %t are different modulo whitespace.\n",
+						result[0],result[1]);
+	}
+	
 	return 0;
 }
 
@@ -103,7 +103,6 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
 	
 	term = rewrite(term,(ATerm) ATempty);
 	term = RWrestoreTerm(term);
-	term = asfix_put_term(oldterm,term);
 	
 	if(!ATisEmpty(rewrite_errors))
 		ATerror("errors during rewriting: %l", rewrite_errors);

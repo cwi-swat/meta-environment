@@ -22,5 +22,5 @@ exec_prefix=@exec_prefix@
 toolbus=@bindir@/toolbus
 datadir=@datadir@
 
-
-./whitespace terms/Pico-typecheck.eqs.asfix1 terms/factc.trm.asfix1
+./whitespace terms/Set.eqs.asfix1 terms/Set.trm.asfix1
+printf ".\n"
