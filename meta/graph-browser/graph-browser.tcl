@@ -906,8 +906,9 @@ proc define-menu-bar {} {
     $m add separator
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
     $m add command -label "Revert All" -underline 0 -command {RevertAll}
-    $m add separator
-    $m add command -label "Compile All" -underline 0 -command {CompileAll}
+# Adapted by Mark
+#    $m add separator
+#    $m add command -label "Compile All" -underline 0 -command {CompileAll}
     
     menubutton .menu.window -text "Window" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
