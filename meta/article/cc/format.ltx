@@ -1,26 +1,45 @@
-\documentclass{llncs}
+\documentclass{article}
+
+%%\setlength{\topmargin}{0cm}
+%%\setlength{\textheight}{24.5cm}
 
 \usepackage{latexsym}
 \usepackage{a4}
+\usepackage{times}
 \usepackage{ASF+SDF}
 \usepackage{ASF+SDF-options}
 %\usepackage{epsfig}
 \usepackage{psfig}
 
+
+\setlength{\oddsidemargin}{0.235cm}
+\setlength{\evensidemargin}{0.235cm}
+\setlength{\textwidth}{16cm}
+\setlength{\topmargin}{-1.0cm}
+\setlength{\textheight}{23.5cm}
+
 \title{Compilation and Memory Management for ASF+SDF}
-\author{Mark van den Brand\inst{1} and 
-        Paul Klint\inst{1,2} and
-        Pieter Olivier\inst{2}}
- 
-\institute{CWI,
-           Department of Software Engineering,
-           Kruislaan 413, NL-1098 SJ Amsterdam, The Netherlands
-           \and
-           University of Amsterdam,
-           Programming Research Group,
-           Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands
-%%           \email{Mark.van.den.Brand@cwi.nl,Paul.Klint@cwi.nl,olivierp@wins.uva.nl}
+\author{
+Mark van den Brand \\
+\em CWI\\
+\em P.O. Box 94079, NL-1090 GB Amsterdam, The Netherlands\\
+Mark.van.den.Brand@cwi.nl
+\and
+Paul Klint \\
+\em CWI\\
+{\em P.O. Box 94079, NL-1090 GB Amsterdam, The Netherlands},\\
+and\\
+\em Programming Research Group, University of Amsterdam\\
+\em Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands\\
+Paul Klint@cwi.nl
+\and
+Pieter Olivier \\
+\em Programming Research Group, University of Amsterdam\\
+\em Kruislaan 403, NL-1098 SJ Amsterdam, The Netherlands\\
+olivierp@wins.uva.nl
 }
+
+\date{}
 
 \newcommand{\muasf}{$\mu\mbox{\sc Asf}$}
 \newcommand{\asdf}{{\sc Asf+Sdf}}
@@ -34,6 +53,15 @@
 
 \begin{document}
 \maketitle
+
+\renewenvironment{abstract}{%
+\subsection*{\sc{abstract}}
+}
+
+\newcommand{\cwinote}[2]{%
+\medskip\par\noindent\textit{#1}: #2
+}
+
 
 \begin{abstract}
 Can formal specification techniques be scaled-up to industrial
@@ -52,6 +80,15 @@ effectiveness in several benchmarks. It turns out that execution speed
 of compiled \asdf\ specifications is at least as good as that of
 comparable systems, while memory usage is in many cases an order
 of magnitude smaller.
+
+\cwinote{1991 Computing Reviews Classification System}{
+D.2.1, D.3.4, E.2, F.4.2.}
+
+\cwinote{Keywords and Phrases}{Code Generation, Hashing, Languages, Performance, Subterm Sharing, Term Rewriting.}
+
+\cwinote{Note}{To appear in {\em Proceedings of Compiler Construction (CC'99)}, 1999}
+
+\cwinote{Note}{Work carried out under project SEN-1.4, ASF+SDF}
 
 \end{abstract}
 
@@ -92,7 +129,7 @@ Experimental, comparative, studies are scarce, one notable exception
 is \cite{Har96} where measurements are collected for various
 declarative programs solving a single real-world problem.  In other
 studies it is no exception that the units of measurement (rewrite
-steps/second, or logical inferences/second) are ill-defined and that
+steps/sec\-ond, or logical inferences/sec\-ond) are ill-defined and that
 memory requirements are not considered due to the small size of the
 input problems.
 
@@ -104,7 +141,7 @@ this paper is to bring the performance of executable specifications
 based on term rewriting into the realm of industrial applications.
 
 In the following two subsections we will now first give a quick
-introduction to \asdf\ (the input language of the compiler to be
+introduction to {\sc Asf}{\sc +} {\sc Sdf} (the input language of the compiler to be
 described) and to \muasf\ (the abstract intermediate representation
 used internally by the compiler).  Next, we describe the generation of
 C code (Section~\ref{Codegeneration}) as well as memory management
@@ -129,7 +166,7 @@ defining equations, the syntax in equations is thus \emph{user-defined}.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[tb]{\textwidth}
+\begin{minipage}[tb]{10cm}
 {\NOAUTOHEADER  \input{./Booleans.mtx}}
 \vspace{-1.7\baselineskip}
 \end{minipage}
@@ -180,7 +217,7 @@ reduces to {\tt true} when applying the equations of Figure
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[tb]{\textwidth}
+\begin{minipage}[tb]{10cm}
 {\NOAUTOHEADER  \input{./Sets.mtx}}
 \vspace{-1.7\baselineskip}
 \end{minipage}
@@ -296,7 +333,8 @@ by introducing new variables and an auxiliary condition.
 \>{\tt set(\_);}\\
 \>{\tt conc(\_,\_);}\\
 {\tt rules}\\
-\>{\tt se}\={\tt t(\{list\}(conc(*Id0,conc(Id,conc(*Id1,conc(Id,*Id2)))))) =}\\
+\>{\tt se}\={\tt t(\{list\}(conc(*Id0,conc(Id,conc(}\={\tt *Id1,}\\
+\>\>\>{\tt conc(Id,*Id2)))))) =}\\
 \>\>{\tt set(\{list\}(conc(*Id0,conc(Id,conc(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
@@ -319,7 +357,9 @@ by introducing new variables and an auxiliary condition.
 {\tt rules}\\
 \>{\tt term-equal(Id1,Id2) == t} \\
 \>{\tt ==>}\\
-\>{\tt se}\={\tt t(\{list\}(conc(*Id0,conc(Id1,conc(*Id1,conc(Id2,*Id2)))))) =}\\
+\>{\tt se}\={\tt t(\{list\}(conc(}\={\tt *Id0,}\\
+\>\>\>{\tt conc(Id1,conc(}\={\tt *Id1,}\\
+\>\>\>\>{\tt conc(Id2,*Id2)))))) =}\\
 \>\>{\tt set(\{list\}(conc(*Id0,conc(Id1,conc(*Id1,*Id2)))));}
 \end{tabbing}
 \end{minipage}
@@ -421,7 +461,7 @@ representation of lists \emph{without adapting the generated C code}, by just
 replacing the library functions.  The function {\tt term\_equal}
 checks the equality of two terms.
 
-\begin{figure}[tb]
+\begin{figure}[h!]
 \centerline{\fbox{
 \begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
@@ -443,7 +483,9 @@ checks the equality of two terms.
 \>\>\>\>{\tt if}\={\tt (term\_equal(}$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}$\mbox{\tt tmp}_{\mbox{\tt 4}}${\tt )) \{}\\
 \>\>\>\>\>{\tt return set(list(conc(}\={\tt slice(}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 1}}${\tt [1]),}\\
 \>\>\>\>\>\>{\tt conc(}\={\tt }$\mbox{\tt tmp}_{\mbox{\tt 3}}${\tt ,}\\
-\>\>\>\>\>\>\>{\tt conc(slice(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
+\>\>\>\>\>\>\>{\tt conc(}\={\tt slice(}\=$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [0],}\\
+\>\>\>\>\>\>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]),}\\
+\>\>\>\>\>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt )))));}\\
 \>\>\>\>{\tt \}}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1] = list\_tail(}$\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1]);}\\
 \>\>\>\>$\mbox{\tt tmp}_{\mbox{\tt 0}}${\tt  =}\ $\mbox{\tt tmp}_{\mbox{\tt 2}}${\tt [1];}\\
@@ -677,8 +719,8 @@ results to guide the rewriting process. This means that terms that are
 no longer used have to be reclaimed in some way.
 
 After experimentation with various alternatives (reference counting,
-mark-and-compact garbage collection) we have finally opted for a
-mark--and-sweep garbage collection algorithm to reclaim unused terms.
+mark-and-com\-pact garbage collection) we have finally opted for a
+mark-and-sweep garbage collection algorithm to reclaim unused terms.
 Mark-and-sweep collection is more efficient,
 both in time and space than reference counting \cite{JL96}.
 The typical space overhead for a mark-sweep garbage collection algorithm is
@@ -716,10 +758,9 @@ $17 \leq n \leq 23$.  A nice aspect of these expressions is that there
 are many ways to calculate their value, giving ample opportunity to
 validate the programs in the benchmark.  The actual source of the
 benchmarks can be obtained at
-\begin{quote}
-{\tt
-http://adam.wins.uva.nl/$\sim$olivierp/benchmark/index.html}.
-\end{quote}
+\begin{center}
+{\tt http://adam.wins.uva.nl/$\sim$olivierp/benchmark/index.html}.
+\end{center}
 
 Note that these benchmarks were primarily designed to evaluate
 \emph{specific} implementation aspects such as the effect of sharing,
@@ -856,14 +897,17 @@ can be achieved with compiled \asdf{} specifications.
 The compilation times in the last column are produced
 by a native C compiler (SUN's \texttt{cc}) with maximal optimizations.
 
-\begin{table}[tb]
+\begin{table}[h!]
 \begin{center}
 \begin{tabular}{|l|c|c|c|c|c|} \hline
-Specification & \asdf\      & \asdf    & Generated C  	& \asdf\	& C compiler\\
-	      & (equations) & (lines)  & code (lines) 	& compiler (sec)& (sec)\\ \hline \hline
-\asdf{} compiler & 1876     & 8699     & 85185    	& 216  		& 323 \\ \hline
+Specification & \asdf\      & \asdf    & Generated   	& \asdf\	& C \\
+	      & (equations) & (lines)  & C code  	& compiler      & compiler \\
+              &             &          & (lines)        & (sec)         & (sec) \\ \hline \hline
+\asdf{}          & 1876     & 8699     & 85185    	& 216  		& 323 \\ 
+compiler         &          &          &                &               & \\ \hline
 Parser generator & 1388     & 4722     & 47662    	& 106  		& 192 \\ \hline
-COBOL formatter  & 2037     & 9205     & 85976    	& 208  		& 374 \\ \hline
+COBOL  & 2037     & 9205     & 85976    	& 208  		& 374 \\ 
+formatter       &          &          &                &               & \\ \hline
 Risla expander   & 1082     & 7169     & 46787    	& 168  		& 531 \\ \hline
 \end{tabular}
 \vspace{\baselineskip}
