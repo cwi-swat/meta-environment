@@ -14,13 +14,8 @@ in
       Table := no-table
     )
   else
-    snd-msg(get-parsetable(ModuleName, Type, Checking)) .
-    (
-      rec-msg(parse-table(Table?))
-    +
-      rec-msg(no-parse-table(ModuleName)) .
-      Table := no-table
-    )
+    snd-msg(obtain-parse-table-hook(Type, ModuleName, Checking)) .
+    rec-msg(obtain-parse-table-hook-result(Table?)) 
   fi
 endlet
 
