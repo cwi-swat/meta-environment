@@ -94,6 +94,7 @@ in
       if not-equal(ModuleNames, []) then
         Module  := first(ModuleNames) .
         ModuleNames := next(ModuleNames) .
+	printf("name = %s\n", Module) .
         snd-msg(get-equations-for-module(Module)) .
         (
            rec-msg(equations(Equations?)) .

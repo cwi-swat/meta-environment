@@ -28,7 +28,7 @@ in
   +
     rec-msg(ts-put-term-value(TableName?,Key?,TermValue?)).
     snd-do(TS,put-term-value(TableName,Key,TermValue)) .
-    TermValue := no-tree
+    TermValue := []
   +
     rec-msg(ts-put-str-value(TableName?,Key?,StrValue?)).
     snd-do(TS,put-str-value(TableName,Key,StrValue)) .

@@ -72,7 +72,7 @@ in
       rec-msg(sm-module-path(Path?)) .
       snd-msg(io-get-filename(Path, ModuleId, ".sdf")) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(add-posinfo(FileName, SyntaxTree)) .
+      snd-msg(add-posinfo-packed(FileName, SyntaxTree)) .
       rec-msg(tree-with-pos-info(SyntaxTree?)) .
       snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
@@ -247,12 +247,12 @@ in
       snd-msg(unavailable)
     )
   +
-    rec-msg(get-equations-for-module(Name?)).
+    rec-msg(get-equations-for-module(Name?)).   
     snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
       rec-msg(ts-value(EqsTree?)) .
-      snd-msg(equations(EqsTree))
-    + 
+      snd-msg(equations(EqsTree))  
+    +
       rec-msg(ts-no-value) .
       snd-msg(no-equations)
     )
