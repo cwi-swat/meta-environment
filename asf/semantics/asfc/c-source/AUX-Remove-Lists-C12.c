@@ -84,8 +84,7 @@ aterm * atmp01= arg_1( arg0);
 if( check_sym( atmp01 , lf2sym)) {
 {
 aterm * atmp010= arg_0( atmp01);
-t_protect( atmp010);
-if( not_empty_list( atmp010)) {
+if( m_not_empty_list( atmp010)) {
 t_protect( atmp00);
 tmp[ 0]= ( * ef3)( atmp00);
 t_protect( tmp[ 0]);
@@ -101,8 +100,7 @@ if( check_sym( tmp[ 2] , lf2sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
 if( check_sym( tmp[ 3] , lf3sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( atmp00);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 6]);
@@ -131,8 +129,7 @@ if( check_sym( tmp[ 2] , lf2sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
 if( check_sym( tmp[ 3] , lf3sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( tmp[ 5]);
 tmp[ 7]= ( * ef8)( lf2( make_list( tmp[ 5])));
 t_protect( atmp00);

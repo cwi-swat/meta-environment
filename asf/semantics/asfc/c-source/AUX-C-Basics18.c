@@ -54,12 +54,10 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
+if( m_not_empty_list( atmp000)) {
 t_protect( atmp000);
 if( term_equal( list_head( atmp000) , make_char( 101))) {
-t_protect( atmp000);
-tmp[ 0]= list_tail( atmp000);
+tmp[ 0]= m_list_tail( atmp000);
 t_protect( tmp[ 0]);
 tmp[ 1]= ( * ef7)( ( * ef1)( lf2( cons( make_list( make_char( 101)) , make_list( tmp[ 0])))));
 t_unprotect( arg0);

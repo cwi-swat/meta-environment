@@ -63,6 +63,7 @@ t_protect( atmp10);
 t_protect( atmp00);
 t_unprotect( arg0);
 t_unprotect( arg1);
+t_unprotect( tmp[ 0]);
 return ( * ef5)( ( * ef2)( atmp10 , atmp00));
 }
 t_unprotect( tmp[ 0]);

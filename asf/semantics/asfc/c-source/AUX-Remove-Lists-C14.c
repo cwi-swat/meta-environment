@@ -60,10 +60,8 @@ if( check_sym( tmp[ 1] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf2sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 4]);
-if( is_single_element( tmp[ 4])) {
-t_protect( tmp[ 4]);
-tmp[ 6]= list_head( tmp[ 4]);
+if( m_is_single_element( tmp[ 4])) {
+tmp[ 6]= m_list_head( tmp[ 4]);
 t_protect( atmp01);
 t_protect( tmp[ 3]);
 tmp[ 7]= ( * ef5)( atmp01 , tmp[ 3]);
@@ -75,10 +73,8 @@ if( check_sym( tmp[ 8] , lf3sym)) {
 tmp[ 11]= arg_0( tmp[ 8]);
 if( check_sym( tmp[ 9] , lf2sym)) {
 tmp[ 12]= arg_0( tmp[ 9]);
-t_protect( tmp[ 11]);
-if( is_single_element( tmp[ 11])) {
-t_protect( tmp[ 11]);
-tmp[ 13]= list_head( tmp[ 11]);
+if( m_is_single_element( tmp[ 11])) {
+tmp[ 13]= m_list_head( tmp[ 11]);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 12]);
 t_protect( tmp[ 10]);

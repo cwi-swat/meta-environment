@@ -45,26 +45,19 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , lf2sym)) {
 {
 aterm * atmp0000= arg_0( atmp000);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp0000);
 if( term_equal( list_head( atmp0000) , make_char( 99))) {
-t_protect( atmp0000);
-tmp[ 0]= list_tail( atmp0000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp0000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 if( term_equal( list_head( tmp[ 0]) , make_char( 111))) {
-t_protect( tmp[ 0]);
-tmp[ 1]= list_tail( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+tmp[ 1]= m_list_tail( tmp[ 0]);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 1]);
 if( term_equal( list_head( tmp[ 1]) , make_char( 110))) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_tail( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( is_single_element( tmp[ 2])) {
+tmp[ 2]= m_list_tail( tmp[ 1]);
+if( m_is_single_element( tmp[ 2])) {
 t_protect( tmp[ 2]);
 if( term_equal( list_head( tmp[ 2]) , make_char( 115))) {
 t_unprotect( arg0);

@@ -69,9 +69,7 @@ tmp[ 0]= ( * ef8)( atmp00);
 if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 tmp[ 2]= arg_1( tmp[ 0]);
-t_protect( atmp00);
-t_protect( tmp[ 1]);
-if( term_equal( atmp00 , tmp[ 1])) {
+if( m_term_equal( atmp00 , tmp[ 1])) {
 t_protect( atmp01);
 t_protect( tmp[ 2]);
 t_unprotect( arg0);

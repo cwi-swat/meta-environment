@@ -57,10 +57,8 @@ if( check_sym( tmp[ 1] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf2sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 4]);
-if( is_single_element( tmp[ 4])) {
-t_protect( tmp[ 4]);
-tmp[ 6]= list_head( tmp[ 4]);
+if( m_is_single_element( tmp[ 4])) {
+tmp[ 6]= m_list_head( tmp[ 4]);
 t_protect( atmp00);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 3]);

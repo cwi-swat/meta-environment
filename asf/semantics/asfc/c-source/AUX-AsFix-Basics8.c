@@ -47,9 +47,7 @@ t_protect( tmp[ 0]);
 if( ! term_equal( arg0 , tmp[ 0])) {
 t_protect( arg0);
 tmp[ 1]= ( * ef4)( arg0);
-t_protect( tmp[ 1]);
-t_protect( arg1);
-if( term_equal( tmp[ 1] , arg1)) {
+if( m_term_equal( tmp[ 1] , arg1)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
@@ -61,6 +59,7 @@ t_protect( arg0);
 tmp[ 2]= ( * ef5)( arg0);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
+t_unprotect( tmp[ 1]);
 return lf_AUX_AsFix_Basics8_1( tmp[ 2] , arg1);
 }
 t_unprotect( tmp[ 1]);

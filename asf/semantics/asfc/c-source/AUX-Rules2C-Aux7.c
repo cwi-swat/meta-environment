@@ -31,13 +31,10 @@ PROF( prof_lf_AUX_Rules2C_Aux7_2);
 if( check_sym( arg1 , lf_AUX_Rules2C_Aux7_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
+if( m_not_empty_list( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
 {
-t_protect( atmp10);
-tmp[ 1]= list_tail( atmp10);
+tmp[ 1]= m_list_tail( atmp10);
 {
 t_protect( tmp[ 0]);
 tmp[ 2]= ( * ef2)( tmp[ 0]);

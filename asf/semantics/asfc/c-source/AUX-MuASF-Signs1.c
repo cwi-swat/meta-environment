@@ -64,13 +64,10 @@ aterm * atmp10= arg_0( arg1);
 if( check_sym( atmp10 , lf2sym)) {
 {
 aterm * atmp100= arg_0( atmp10);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+if( m_not_empty_list( atmp000)) {
+tmp[ 0]= m_list_head( atmp000);
 {
-t_protect( atmp000);
-tmp[ 1]= list_tail( atmp000);
+tmp[ 1]= m_list_tail( atmp000);
 t_protect( tmp[ 0]);
 tmp[ 2]= ( * ef2)( tmp[ 0]);
 t_protect( tmp[ 2]);
@@ -89,9 +86,7 @@ t_unprotect( tmp[ 3]);
 return lf_AUX_MuASF_Signs1_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef1)( lf2( make_list( atmp100))));
 }
 tmp[ 4]= ( * ef6)( );
-t_protect( tmp[ 3]);
-t_protect( tmp[ 4]);
-if( term_equal( tmp[ 3] , tmp[ 4])) {
+if( m_term_equal( tmp[ 3] , tmp[ 4])) {
 t_protect( tmp[ 0]);
 tmp[ 5]= ( * ef7)( tmp[ 0]);
 t_protect( tmp[ 5]);
@@ -163,9 +158,7 @@ t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 3]);
 }
 tmp[ 3]= ( * ef3)( );
-t_protect( tmp[ 2]);
-t_protect( tmp[ 3]);
-if( term_equal( tmp[ 2] , tmp[ 3])) {
+if( m_term_equal( tmp[ 2] , tmp[ 3])) {
 t_protect( tmp[ 0]);
 tmp[ 4]= ( * ef4)( tmp[ 0]);
 t_protect( tmp[ 4]);

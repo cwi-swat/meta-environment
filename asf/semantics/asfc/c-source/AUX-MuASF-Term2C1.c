@@ -103,10 +103,8 @@ PROF( prof_lf_AUX_MuASF_Term2C1_2);
 if( check_sym( arg0 , lf_AUX_MuASF_Term2C1_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 if( check_sym( arg4 , ef14sym)) {
 tmp[ 1]= arg_0( arg4);
 if( check_sym( tmp[ 1] , lf3sym)) {
@@ -127,14 +125,10 @@ return ( * ef1)( ( * ef2)( ( * ef3)( ( * ef4)( ( * ef5)( tmp[ 3] , ( * ef6)( ( *
 }
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 if( check_sym( arg4 , ef14sym)) {
 tmp[ 2]= arg_0( arg4);
 if( check_sym( tmp[ 2] , lf3sym)) {

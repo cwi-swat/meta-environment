@@ -31,21 +31,15 @@ PROF( prof_lf_AUX_Remove_Lists_C15_2);
 if( check_sym( arg0 , lf_AUX_Remove_Lists_C15_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_unprotect( arg0);
 return ( * ef1)( tmp[ 0] , arg1);
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 0]);
 t_protect( arg1);
 tmp[ 2]= ( * ef1)( tmp[ 0] , arg1);
@@ -54,8 +48,7 @@ tmp[ 3]= arg_0( tmp[ 2]);
 tmp[ 4]= arg_1( tmp[ 2]);
 if( check_sym( tmp[ 3] , lf_AUX_Remove_Lists_C15_1sym)) {
 tmp[ 5]= arg_0( tmp[ 3]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( tmp[ 1]);
 t_protect( tmp[ 4]);
 tmp[ 6]= lf_AUX_Remove_Lists_C15_2( lf_AUX_Remove_Lists_C15_1( make_list( tmp[ 1])) , tmp[ 4]);
@@ -64,8 +57,7 @@ tmp[ 7]= arg_0( tmp[ 6]);
 tmp[ 8]= arg_1( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf_AUX_Remove_Lists_C15_1sym)) {
 tmp[ 9]= arg_0( tmp[ 7]);
-t_protect( tmp[ 9]);
-if( not_empty_list( tmp[ 9])) {
+if( m_not_empty_list( tmp[ 9])) {
 t_protect( tmp[ 5]);
 t_protect( tmp[ 9]);
 t_protect( tmp[ 8]);

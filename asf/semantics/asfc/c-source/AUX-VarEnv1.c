@@ -40,8 +40,7 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
+if( m_not_empty_list( atmp000)) {
 t_protect( atmp000);
 t_unprotect( arg0);
 return ( * ef2)( ( * ef3)( ( * ef4)( lf2( cons( make_list( make_char( 86)) , make_list( atmp000))))));

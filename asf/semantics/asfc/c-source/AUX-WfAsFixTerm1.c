@@ -316,9 +316,7 @@ return lf_AUX_WfAsFixTerm1_1( arg0 , ( * ef7)( ( * ef11)( ) , ( * ef9)( ( * ef3)
 }
 }
 }
-t_protect( arg0);
-t_protect( arg1);
-if( term_equal( arg0 , arg1)) {
+if( m_term_equal( arg0 , arg1)) {
 t_unprotect( arg1);
 return ( * ef1)( ( * ef2)( arg0 , ( * ef3)( ( * ef4)( ))) , ( * ef5)( ) , ( * ef6)( ));
 }

@@ -46,8 +46,7 @@ aterm * atmp0000= arg_0( atmp000);
 if( check_sym( atmp0000 , lf2sym)) {
 {
 aterm * atmp00000= arg_0( atmp0000);
-t_protect( atmp00000);
-if( not_empty_list( atmp00000)) {
+if( m_not_empty_list( atmp00000)) {
 t_protect( atmp00000);
 t_unprotect( arg0);
 return ( * ef3)( lf2( cons( make_list( atmp00000) , cons( make_list( make_char( 108)) , cons( make_list( make_char( 105)) , cons( make_list( make_char( 115)) , make_list( make_char( 116))))))));
@@ -69,8 +68,7 @@ aterm * atmp0000= arg_0( atmp000);
 if( check_sym( atmp0000 , lf2sym)) {
 {
 aterm * atmp00000= arg_0( atmp0000);
-t_protect( atmp00000);
-if( not_empty_list( atmp00000)) {
+if( m_not_empty_list( atmp00000)) {
 t_protect( atmp00000);
 t_unprotect( arg0);
 return ( * ef3)( lf2( cons( make_list( atmp00000) , cons( make_list( make_char( 108)) , cons( make_list( make_char( 105)) , cons( make_list( make_char( 115)) , make_list( make_char( 116))))))));

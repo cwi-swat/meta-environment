@@ -69,10 +69,8 @@ aterm * atmp10= arg_0( arg1);
 if( check_sym( atmp10 , lf3sym)) {
 {
 aterm * atmp100= arg_0( atmp10);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_protect( atmp100);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -82,14 +80,10 @@ return ( * ef2)( lf4( make_list( ( * ef3)( tmp[ 0] , ( * ef4)( ( * ef5)( ( * ef6
 }
 }
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 if( check_sym( arg1 , ef1sym)) {
 tmp[ 2]= arg_0( arg1);
 if( check_sym( tmp[ 2] , lf3sym)) {

@@ -54,14 +54,10 @@ aterm * atmp100= arg_0( atmp10);
 if( check_sym( atmp100 , lf2sym)) {
 {
 aterm * atmp1000= arg_0( atmp100);
-t_protect( atmp0000);
-if( is_single_element( atmp0000)) {
-t_protect( atmp0000);
-tmp[ 0]= list_head( atmp0000);
-t_protect( atmp1000);
-if( is_single_element( atmp1000)) {
-t_protect( atmp1000);
-tmp[ 1]= list_head( atmp1000);
+if( m_is_single_element( atmp0000)) {
+tmp[ 0]= m_list_head( atmp0000);
+if( m_is_single_element( atmp1000)) {
+tmp[ 1]= m_list_head( atmp1000);
 t_protect( tmp[ 0]);
 t_protect( tmp[ 1]);
 tmp[ 2]= ( * ef4)( ( * ef1)( ( * ef2)( lf2( make_list( tmp[ 0])))) , ( * ef1)( ( * ef2)( lf2( make_list( tmp[ 1])))));
@@ -71,10 +67,8 @@ if( check_sym( tmp[ 3] , ef2sym)) {
 tmp[ 4]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 4] , lf2sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( tmp[ 5]);
-if( is_single_element( tmp[ 5])) {
-t_protect( tmp[ 5]);
-tmp[ 6]= list_head( tmp[ 5]);
+if( m_is_single_element( tmp[ 5])) {
+tmp[ 6]= m_list_head( tmp[ 5]);
 t_protect( tmp[ 6]);
 if( ! term_equal( ( * ef2)( lf2( make_list( tmp[ 6]))) , ( * ef2)( lf2( make_list( make_char( 48)))))) {
 t_unprotect( arg0);
@@ -95,20 +89,20 @@ t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+{
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp0000);
 tmp[ 0]= list_prefix( atmp0000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+{
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( atmp0000);
 tmp[ 1]= list_last( atmp0000);
-t_protect( atmp1000);
-if( not_empty_list( atmp1000)) {
+{
+if( m_not_empty_list( atmp1000)) {
 t_protect( atmp1000);
 tmp[ 2]= list_prefix( atmp1000);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+{
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( atmp1000);
 tmp[ 3]= list_last( atmp1000);
 t_protect( tmp[ 0]);
@@ -122,9 +116,7 @@ t_unprotect( tmp[ 2]);
 t_unprotect( tmp[ 3]);
 return ( * ef3)( );
 }
-t_protect( tmp[ 0]);
-t_protect( tmp[ 2]);
-if( term_equal( tmp[ 0] , tmp[ 2])) {
+if( m_term_equal( tmp[ 0] , tmp[ 2])) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
@@ -133,12 +125,11 @@ return lf_AUX_Integers12_1( ( * ef1)( ( * ef2)( lf2( make_list( tmp[ 1])))) , ( 
 }
 t_unprotect( tmp[ 3]);
 }
+}
 t_unprotect( tmp[ 2]);
 }
-t_protect( atmp1000);
-if( is_single_element( atmp1000)) {
-t_protect( atmp1000);
-tmp[ 2]= list_head( atmp1000);
+if( m_is_single_element( atmp1000)) {
+tmp[ 2]= m_list_head( atmp1000);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
@@ -146,9 +137,12 @@ t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 2]);
 return ( * ef3)( );
 }
+}
 t_unprotect( tmp[ 1]);
 }
+}
 t_unprotect( tmp[ 0]);
+}
 }
 }
 }

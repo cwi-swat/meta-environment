@@ -56,27 +56,26 @@ t_unprotect( arg0);
 return ( * ef1)( lf2( make_list( null( ))));
 }
 else {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+tmp[ 0]= m_list_head( atmp000);
+tmp[ 1]= m_list_tail( atmp000);
 if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-tmp[ 3]= arg_2( tmp[ 0]);
-if( check_sym( tmp[ 1] , ef3sym)) {
-tmp[ 4]= arg_0( tmp[ 1]);
-if( check_sym( tmp[ 4] , lf3sym)) {
-tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( atmp000);
-tmp[ 6]= list_tail( atmp000);
-t_protect( tmp[ 5]);
-t_protect( tmp[ 2]);
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+tmp[ 4]= arg_2( tmp[ 0]);
+if( check_sym( tmp[ 2] , ef3sym)) {
+tmp[ 5]= arg_0( tmp[ 2]);
+if( check_sym( tmp[ 5] , lf3sym)) {
+tmp[ 6]= arg_0( tmp[ 5]);
+t_protect( tmp[ 6]);
 t_protect( tmp[ 3]);
+t_protect( tmp[ 4]);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-return ( * ef4)( ( * ef1)( lf2( make_list( ( * ef2)( ( * ef5)( ( * ef3)( lf3( make_list( tmp[ 5])))) , tmp[ 2] , tmp[ 3])))) , lf_AUX_Grammars4_1( ( * ef1)( lf2( make_list( tmp[ 6])))));
+return ( * ef4)( ( * ef1)( lf2( make_list( ( * ef2)( ( * ef5)( ( * ef3)( lf3( make_list( tmp[ 6])))) , tmp[ 3] , tmp[ 4])))) , lf_AUX_Grammars4_1( ( * ef1)( lf2( make_list( tmp[ 1])))));
 }
 }
 }
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
 }
 }

@@ -55,6 +55,7 @@ return ( * ef2)( );
 else {
 t_unprotect( arg0);
 t_unprotect( arg1);
+t_unprotect( tmp[ 0]);
 return ( * ef4)( );
 }
 t_unprotect( tmp[ 0]);

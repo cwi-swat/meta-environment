@@ -131,8 +131,7 @@ aterm * atmp0000= arg_0( atmp000);
 aterm * atmp01= arg_1( arg0);
 {
 aterm * atmp02= arg_2( arg0);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp01);
 t_protect( arg1);
 tmp[ 0]= ( * ef2)( atmp01 , arg1);
@@ -147,8 +146,7 @@ tmp[ 4]= arg_0( tmp[ 3]);
 tmp[ 5]= arg_1( tmp[ 3]);
 if( check_sym( tmp[ 4] , lf2sym)) {
 tmp[ 6]= arg_0( tmp[ 4]);
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
+if( m_not_empty_list( tmp[ 6])) {
 t_protect( atmp02);
 t_protect( tmp[ 5]);
 tmp[ 7]= ( * ef2)( atmp02 , tmp[ 5]);
@@ -194,8 +192,7 @@ aterm * atmp0000= arg_0( atmp000);
 aterm * atmp01= arg_1( arg0);
 {
 aterm * atmp02= arg_2( arg0);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp01);
 t_protect( arg1);
 tmp[ 0]= ( * ef2)( atmp01 , arg1);
@@ -210,8 +207,7 @@ tmp[ 4]= arg_0( tmp[ 3]);
 tmp[ 5]= arg_1( tmp[ 3]);
 if( check_sym( tmp[ 4] , lf2sym)) {
 tmp[ 6]= arg_0( tmp[ 4]);
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
+if( m_not_empty_list( tmp[ 6])) {
 t_protect( atmp02);
 t_protect( tmp[ 5]);
 tmp[ 7]= ( * ef2)( atmp02 , tmp[ 5]);

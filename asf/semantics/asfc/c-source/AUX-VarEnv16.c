@@ -57,33 +57,32 @@ return ( * ef1)( lf3( cons( make_list( make_char( 34)) , cons( make_list( atmp00
 if( check_sym( arg1 , lf_AUX_VarEnv16_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
-if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
+if( m_not_empty_list( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
 {
-t_protect( atmp10);
-tmp[ 3]= list_tail( atmp10);
+tmp[ 1]= m_list_tail( atmp10);
+{
+if( check_sym( tmp[ 0] , ef2sym)) {
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
 t_protect( arg0);
-t_protect( tmp[ 2]);
-if( ! term_equal( arg0 , tmp[ 2])) {
+t_protect( tmp[ 3]);
+if( ! term_equal( arg0 , tmp[ 3])) {
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return lf_AUX_VarEnv16_2( arg0 , lf_AUX_VarEnv16_1( make_list( tmp[ 3])));
+return lf_AUX_VarEnv16_2( arg0 , lf_AUX_VarEnv16_1( make_list( tmp[ 1])));
 }
 else {
-t_protect( tmp[ 1]);
+t_protect( tmp[ 2]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
-return tmp[ 1];
+t_unprotect( tmp[ 1]);
+return tmp[ 2];
 }
-t_unprotect( tmp[ 3]);
 }
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

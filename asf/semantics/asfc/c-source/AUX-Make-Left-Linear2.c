@@ -55,8 +55,7 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , lf2sym)) {
 {
 aterm * atmp0000= arg_0( atmp000);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp0000);
 t_unprotect( arg0);
 return ( * ef4)( lf2( make_list( atmp0000)) , ( * ef5)( lf3( make_list( null( )))));

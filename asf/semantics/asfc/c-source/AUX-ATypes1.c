@@ -105,9 +105,7 @@ return ( * ef2)( ( * ef5)( ));
 }
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-t_unprotect( arg0);
-return ( * ef2)( atmp00);
+return arg0;
 }
 }
 }

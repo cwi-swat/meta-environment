@@ -87,10 +87,8 @@ if( check_sym( tmp[ 1] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf4sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 4]);
-if( is_single_element( tmp[ 4])) {
-t_protect( tmp[ 4]);
-tmp[ 6]= list_head( tmp[ 4]);
+if( m_is_single_element( tmp[ 4])) {
+tmp[ 6]= m_list_head( tmp[ 4]);
 t_protect( atmp01);
 t_protect( tmp[ 3]);
 tmp[ 7]= ( * ef6)( atmp01 , tmp[ 3]);
@@ -102,10 +100,8 @@ if( check_sym( tmp[ 8] , lf3sym)) {
 tmp[ 11]= arg_0( tmp[ 8]);
 if( check_sym( tmp[ 9] , lf4sym)) {
 tmp[ 12]= arg_0( tmp[ 9]);
-t_protect( tmp[ 11]);
-if( is_single_element( tmp[ 11])) {
-t_protect( tmp[ 11]);
-tmp[ 13]= list_head( tmp[ 11]);
+if( m_is_single_element( tmp[ 11])) {
+tmp[ 13]= m_list_head( tmp[ 11]);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 12]);
 t_protect( tmp[ 6]);
@@ -144,8 +140,7 @@ aterm * atmp0000= arg_0( atmp000);
 aterm * atmp01= arg_1( arg0);
 {
 aterm * atmp02= arg_2( arg0);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp01);
 tmp[ 0]= ( * ef2)( atmp01 , ( * ef3)( ( * ef4)( lf2( make_list( make_char( 49)))) , lf3( make_list( null( )))));
 if( check_sym( tmp[ 0] , ef5sym)) {
@@ -156,10 +151,8 @@ if( check_sym( tmp[ 1] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf4sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 4]);
-if( is_single_element( tmp[ 4])) {
-t_protect( tmp[ 4]);
-tmp[ 6]= list_head( tmp[ 4]);
+if( m_is_single_element( tmp[ 4])) {
+tmp[ 6]= m_list_head( tmp[ 4]);
 t_protect( atmp0000);
 t_protect( tmp[ 3]);
 tmp[ 7]= ( * ef10)( lf4( make_list( atmp0000)) , tmp[ 3]);
@@ -179,10 +172,8 @@ if( check_sym( tmp[ 12] , lf3sym)) {
 tmp[ 15]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 13] , lf4sym)) {
 tmp[ 16]= arg_0( tmp[ 13]);
-t_protect( tmp[ 15]);
-if( is_single_element( tmp[ 15])) {
-t_protect( tmp[ 15]);
-tmp[ 17]= list_head( tmp[ 15]);
+if( m_is_single_element( tmp[ 15])) {
+tmp[ 17]= m_list_head( tmp[ 15]);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 10]);
 t_protect( tmp[ 16]);

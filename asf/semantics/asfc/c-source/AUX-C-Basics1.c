@@ -39,89 +39,80 @@ PROF( prof_lf_AUX_C_Basics1_2);
 if( check_sym( arg1 , lf_AUX_C_Basics1_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
-if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
+if( m_not_empty_list( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
 {
-t_protect( atmp10);
-tmp[ 2]= list_tail( atmp10);
-t_protect( arg0);
-t_protect( tmp[ 1]);
-if( term_equal( arg0 , tmp[ 1])) {
+tmp[ 1]= m_list_tail( atmp10);
+if( check_sym( tmp[ 0] , ef2sym)) {
+tmp[ 2]= arg_0( tmp[ 0]);
+if( m_term_equal( arg0 , tmp[ 2])) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef1)( lf_AUX_C_Basics1_1( make_list( tmp[ 2])));
+return ( * ef1)( lf_AUX_C_Basics1_1( make_list( tmp[ 1])));
 }
 else {
 t_protect( arg0);
-t_protect( tmp[ 2]);
-tmp[ 3]= lf_AUX_C_Basics1_2( arg0 , lf_AUX_C_Basics1_1( make_list( tmp[ 2])));
+t_protect( tmp[ 1]);
+tmp[ 3]= lf_AUX_C_Basics1_2( arg0 , lf_AUX_C_Basics1_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 3] , ef1sym)) {
 tmp[ 4]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 4] , lf_AUX_C_Basics1_1sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( tmp[ 1]);
+t_protect( tmp[ 2]);
 t_protect( tmp[ 5]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 2]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 3]);
-return ( * ef1)( lf_AUX_C_Basics1_1( cons( make_list( ( * ef2)( tmp[ 1])) , make_list( tmp[ 5]))));
+return ( * ef1)( lf_AUX_C_Basics1_1( cons( make_list( ( * ef2)( tmp[ 2])) , make_list( tmp[ 5]))));
 }
 }
 t_unprotect( tmp[ 3]);
-}
-t_unprotect( tmp[ 2]);
 }
 }
 if( check_sym( tmp[ 0] , ef3sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
 {
-if( check_sym( tmp[ 2] , lf3sym)) {
-tmp[ 3]= arg_0( tmp[ 2]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
-t_protect( atmp10);
-tmp[ 4]= list_tail( atmp10);
-t_protect( arg0);
-t_protect( tmp[ 1]);
-if( term_equal( arg0 , tmp[ 1])) {
+if( check_sym( tmp[ 3] , lf3sym)) {
+tmp[ 4]= arg_0( tmp[ 3]);
+{
+if( m_not_empty_list( tmp[ 4])) {
+if( m_term_equal( arg0 , tmp[ 2])) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef1)( lf_AUX_C_Basics1_1( make_list( tmp[ 4])));
+return ( * ef1)( lf_AUX_C_Basics1_1( make_list( tmp[ 1])));
 }
 else {
 t_protect( arg0);
-t_protect( tmp[ 4]);
-tmp[ 5]= lf_AUX_C_Basics1_2( arg0 , lf_AUX_C_Basics1_1( make_list( tmp[ 4])));
+t_protect( tmp[ 1]);
+tmp[ 5]= lf_AUX_C_Basics1_2( arg0 , lf_AUX_C_Basics1_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 5] , ef1sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf_AUX_C_Basics1_1sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
-t_protect( tmp[ 1]);
-t_protect( tmp[ 3]);
+t_protect( tmp[ 2]);
+t_protect( tmp[ 4]);
 t_protect( tmp[ 7]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 4]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 5]);
-return ( * ef1)( lf_AUX_C_Basics1_1( cons( make_list( ( * ef3)( tmp[ 1] , lf3( make_list( tmp[ 3])))) , make_list( tmp[ 7]))));
+return ( * ef1)( lf_AUX_C_Basics1_1( cons( make_list( ( * ef3)( tmp[ 2] , lf3( make_list( tmp[ 4])))) , make_list( tmp[ 7]))));
 }
 }
 t_unprotect( tmp[ 5]);
 }
-t_unprotect( tmp[ 4]);
 }
 }
 }
+}
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

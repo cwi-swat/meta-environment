@@ -34,16 +34,13 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+if( m_not_empty_list( atmp000)) {
+tmp[ 0]= m_list_head( atmp000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 34))) {
-t_protect( atmp000);
-tmp[ 1]= list_tail( atmp000);
-t_protect( tmp[ 1]);
-if( is_single_element( tmp[ 1])) {
+tmp[ 1]= m_list_tail( atmp000);
+{
+if( m_is_single_element( tmp[ 1])) {
 t_protect( tmp[ 1]);
 if( term_equal( list_head( tmp[ 1]) , make_char( 34))) {
 t_unprotect( arg0);
@@ -52,16 +49,13 @@ t_unprotect( tmp[ 1]);
 return ( * ef1)( lf2( cons( make_list( make_char( 34)) , make_list( make_char( 34)))));
 }
 }
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_head( tmp[ 1]);
+{
+if( m_not_empty_list( tmp[ 1])) {
+tmp[ 2]= m_list_head( tmp[ 1]);
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , make_char( 34))) {
-t_protect( tmp[ 1]);
-tmp[ 3]= list_tail( tmp[ 1]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
+tmp[ 3]= m_list_tail( tmp[ 1]);
+if( m_not_empty_list( tmp[ 3])) {
 t_protect( tmp[ 3]);
 tmp[ 4]= list_prefix( tmp[ 3]);
 t_protect( tmp[ 3]);
@@ -79,10 +73,8 @@ t_unprotect( tmp[ 3]);
 }
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , make_char( 92))) {
-t_protect( tmp[ 1]);
-tmp[ 3]= list_tail( tmp[ 1]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
+tmp[ 3]= m_list_tail( tmp[ 1]);
+if( m_not_empty_list( tmp[ 3])) {
 t_protect( tmp[ 3]);
 tmp[ 4]= list_prefix( tmp[ 3]);
 t_protect( tmp[ 3]);
@@ -100,6 +92,8 @@ t_unprotect( tmp[ 3]);
 }
 t_unprotect( tmp[ 2]);
 }
+}
+}
 t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
@@ -114,20 +108,14 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
+if( m_not_empty_list( atmp000)) {
 t_protect( atmp000);
 if( term_equal( list_head( atmp000) , make_char( 34))) {
-t_protect( atmp000);
-tmp[ 0]= list_tail( atmp000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
-t_protect( tmp[ 0]);
-tmp[ 1]= list_head( tmp[ 0]);
-t_protect( tmp[ 0]);
-tmp[ 2]= list_tail( tmp[ 0]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+tmp[ 0]= m_list_tail( atmp000);
+if( m_not_empty_list( tmp[ 0])) {
+tmp[ 1]= m_list_head( tmp[ 0]);
+tmp[ 2]= m_list_tail( tmp[ 0]);
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= list_prefix( tmp[ 2]);
 t_protect( tmp[ 2]);

@@ -58,47 +58,35 @@ aterm * atmp01= arg_1( arg0);
 if( check_sym( atmp01 , lf3sym)) {
 {
 aterm * atmp010= arg_0( atmp01);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
-t_protect( atmp0000);
-tmp[ 0]= list_head( atmp0000);
+if( m_not_empty_list( atmp0000)) {
+tmp[ 0]= m_list_head( atmp0000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 99))) {
-t_protect( atmp0000);
-tmp[ 1]= list_tail( atmp0000);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_head( tmp[ 1]);
+tmp[ 1]= m_list_tail( atmp0000);
+{
+if( m_not_empty_list( tmp[ 1])) {
+tmp[ 2]= m_list_head( tmp[ 1]);
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , make_char( 111))) {
-t_protect( tmp[ 1]);
-tmp[ 3]= list_tail( tmp[ 1]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
-t_protect( tmp[ 3]);
-tmp[ 4]= list_head( tmp[ 3]);
+tmp[ 3]= m_list_tail( tmp[ 1]);
+{
+if( m_not_empty_list( tmp[ 3])) {
+tmp[ 4]= m_list_head( tmp[ 3]);
 t_protect( tmp[ 4]);
 if( term_equal( tmp[ 4] , make_char( 110))) {
-t_protect( tmp[ 3]);
-tmp[ 5]= list_tail( tmp[ 3]);
-t_protect( tmp[ 5]);
-if( is_single_element( tmp[ 5])) {
-t_protect( tmp[ 5]);
-tmp[ 6]= list_head( tmp[ 5]);
+tmp[ 5]= m_list_tail( tmp[ 3]);
+{
+if( m_is_single_element( tmp[ 5])) {
+tmp[ 6]= m_list_head( tmp[ 5]);
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , make_char( 115))) {
-t_protect( atmp010);
-if( not_empty_list( atmp010)) {
-t_protect( atmp010);
-tmp[ 7]= list_head( atmp010);
+if( m_not_empty_list( atmp010)) {
+tmp[ 7]= m_list_head( atmp010);
 {
-t_protect( atmp010);
-tmp[ 8]= list_tail( atmp010);
-t_protect( tmp[ 8]);
-if( is_single_element( tmp[ 8])) {
-t_protect( tmp[ 8]);
-tmp[ 9]= list_head( tmp[ 8]);
+tmp[ 8]= m_list_tail( atmp010);
+{
+if( m_is_single_element( tmp[ 8])) {
+tmp[ 9]= m_list_head( tmp[ 8]);
 t_protect( tmp[ 9]);
 tmp[ 10]= ( * ef3)( tmp[ 9]);
 t_protect( tmp[ 10]);
@@ -134,6 +122,7 @@ return lf_AUX_Remove_Lists_Aux1_1( tmp[ 9]);
 t_unprotect( tmp[ 10]);
 t_unprotect( tmp[ 9]);
 }
+}
 t_unprotect( tmp[ 8]);
 }
 t_unprotect( tmp[ 7]);
@@ -141,13 +130,16 @@ t_unprotect( tmp[ 7]);
 }
 t_unprotect( tmp[ 6]);
 }
+}
 t_unprotect( tmp[ 5]);
 }
 t_unprotect( tmp[ 4]);
 }
+}
 t_unprotect( tmp[ 3]);
 }
 t_unprotect( tmp[ 2]);
+}
 }
 t_unprotect( tmp[ 1]);
 }

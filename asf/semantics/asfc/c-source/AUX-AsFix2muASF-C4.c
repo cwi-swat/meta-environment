@@ -133,10 +133,8 @@ if( check_sym( tmp[ 3] , ef8sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 6] , lf4sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
-t_protect( tmp[ 7]);
-if( is_single_element( tmp[ 7])) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_head( tmp[ 7]);
+if( m_is_single_element( tmp[ 7])) {
+tmp[ 8]= m_list_head( tmp[ 7]);
 t_protect( arg1);
 tmp[ 9]= ( * ef3)( arg1 , ( * ef9)( ));
 t_protect( tmp[ 9]);
@@ -153,10 +151,8 @@ if( check_sym( tmp[ 12] , ef8sym)) {
 tmp[ 15]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 15] , lf4sym)) {
 tmp[ 16]= arg_0( tmp[ 15]);
-t_protect( tmp[ 16]);
-if( is_single_element( tmp[ 16])) {
-t_protect( tmp[ 16]);
-tmp[ 17]= list_head( tmp[ 16]);
+if( m_is_single_element( tmp[ 16])) {
+tmp[ 17]= m_list_head( tmp[ 16]);
 t_protect( tmp[ 5]);
 t_protect( tmp[ 14]);
 tmp[ 18]= ( * ef10)( ( * ef11)( lf2( make_list( tmp[ 5]))) , ( * ef11)( lf2( make_list( tmp[ 14]))));
@@ -218,10 +214,8 @@ if( check_sym( tmp[ 3] , ef8sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 6] , lf4sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
-t_protect( tmp[ 7]);
-if( is_single_element( tmp[ 7])) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_head( tmp[ 7]);
+if( m_is_single_element( tmp[ 7])) {
+tmp[ 8]= m_list_head( tmp[ 7]);
 t_protect( arg1);
 tmp[ 9]= ( * ef3)( arg1 , ( * ef9)( ));
 t_protect( tmp[ 9]);
@@ -238,10 +232,8 @@ if( check_sym( tmp[ 12] , ef8sym)) {
 tmp[ 15]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 15] , lf4sym)) {
 tmp[ 16]= arg_0( tmp[ 15]);
-t_protect( tmp[ 16]);
-if( is_single_element( tmp[ 16])) {
-t_protect( tmp[ 16]);
-tmp[ 17]= list_head( tmp[ 16]);
+if( m_is_single_element( tmp[ 16])) {
+tmp[ 17]= m_list_head( tmp[ 16]);
 t_protect( arg1);
 tmp[ 18]= ( * ef3)( arg1 , ( * ef16)( ));
 if( check_sym( tmp[ 18] , ef17sym)) {
@@ -257,8 +249,7 @@ if( check_sym( tmp[ 21] , lf2sym)) {
 tmp[ 24]= arg_0( tmp[ 21]);
 if( check_sym( tmp[ 22] , lf5sym)) {
 tmp[ 25]= arg_0( tmp[ 22]);
-t_protect( tmp[ 25]);
-if( not_empty_list( tmp[ 25])) {
+if( m_not_empty_list( tmp[ 25])) {
 t_protect( tmp[ 5]);
 t_protect( tmp[ 14]);
 t_protect( tmp[ 24]);
@@ -331,10 +322,8 @@ if( check_sym( tmp[ 3] , ef8sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 6] , lf4sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
-t_protect( tmp[ 7]);
-if( is_single_element( tmp[ 7])) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_head( tmp[ 7]);
+if( m_is_single_element( tmp[ 7])) {
+tmp[ 8]= m_list_head( tmp[ 7]);
 t_protect( arg1);
 tmp[ 9]= ( * ef3)( arg1 , ( * ef9)( ));
 t_protect( tmp[ 9]);
@@ -351,10 +340,8 @@ if( check_sym( tmp[ 12] , ef8sym)) {
 tmp[ 15]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 15] , lf4sym)) {
 tmp[ 16]= arg_0( tmp[ 15]);
-t_protect( tmp[ 16]);
-if( is_single_element( tmp[ 16])) {
-t_protect( tmp[ 16]);
-tmp[ 17]= list_head( tmp[ 16]);
+if( m_is_single_element( tmp[ 16])) {
+tmp[ 17]= m_list_head( tmp[ 16]);
 t_protect( arg1);
 tmp[ 18]= ( * ef3)( arg1 , ( * ef16)( ));
 if( check_sym( tmp[ 18] , ef17sym)) {
@@ -370,8 +357,7 @@ if( check_sym( tmp[ 21] , lf2sym)) {
 tmp[ 24]= arg_0( tmp[ 21]);
 if( check_sym( tmp[ 22] , lf5sym)) {
 tmp[ 25]= arg_0( tmp[ 22]);
-t_protect( tmp[ 25]);
-if( not_empty_list( tmp[ 25])) {
+if( m_not_empty_list( tmp[ 25])) {
 t_protect( tmp[ 5]);
 t_protect( tmp[ 14]);
 t_protect( tmp[ 24]);

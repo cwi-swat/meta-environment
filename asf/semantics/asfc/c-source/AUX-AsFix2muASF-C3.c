@@ -78,10 +78,8 @@ if( check_sym( tmp[ 3] , lf2sym)) {
 tmp[ 6]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 4] , lf3sym)) {
 tmp[ 7]= arg_0( tmp[ 4]);
-t_protect( tmp[ 7]);
-if( is_single_element( tmp[ 7])) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_head( tmp[ 7]);
+if( m_is_single_element( tmp[ 7])) {
+tmp[ 8]= m_list_head( tmp[ 7]);
 t_protect( tmp[ 0]);
 t_protect( tmp[ 5]);
 tmp[ 9]= lf_AUX_AsFix2muASF_C3_1( tmp[ 0] , tmp[ 5]);

@@ -214,9 +214,7 @@ if( check_sym( arg1 , ef11sym)) {
 aterm * atmp10= arg_0( arg1);
 {
 aterm * atmp11= arg_1( arg1);
-t_protect( atmp00);
-t_protect( atmp10);
-if( term_equal( atmp00 , atmp10)) {
+if( m_term_equal( atmp00 , atmp10)) {
 t_protect( atmp01);
 t_protect( atmp11);
 t_unprotect( arg0);

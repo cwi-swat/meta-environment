@@ -75,10 +75,8 @@ if( check_sym( tmp[ 1] , ef7sym)) {
 tmp[ 4]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 4] , lf4sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( tmp[ 5]);
-if( is_single_element( tmp[ 5])) {
-t_protect( tmp[ 5]);
-tmp[ 6]= list_head( tmp[ 5]);
+if( m_is_single_element( tmp[ 5])) {
+tmp[ 6]= m_list_head( tmp[ 5]);
 t_protect( tmp[ 2]);
 t_protect( tmp[ 3]);
 t_unprotect( arg0);

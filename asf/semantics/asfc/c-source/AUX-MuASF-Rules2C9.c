@@ -167,55 +167,109 @@ if( check_sym( arg3 , lf_AUX_MuASF_Rules2C9_2sym)) {
 aterm * atmp30= arg_0( arg3);
 t_protect( atmp00);
 if( ! not_empty_list( atmp00)) {
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
+if( m_not_empty_list( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
+{
+tmp[ 1]= m_list_tail( atmp10);
+{
 if( check_sym( tmp[ 0] , ef8sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-tmp[ 3]= arg_2( tmp[ 0]);
-tmp[ 4]= arg_3( tmp[ 0]);
-tmp[ 5]= arg_4( tmp[ 0]);
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+tmp[ 4]= arg_2( tmp[ 0]);
+tmp[ 5]= arg_3( tmp[ 0]);
+tmp[ 6]= arg_4( tmp[ 0]);
 {
-if( check_sym( tmp[ 1] , lf5sym)) {
-tmp[ 6]= arg_0( tmp[ 1]);
-{
-if( check_sym( tmp[ 2] , lf6sym)) {
+if( check_sym( tmp[ 2] , lf5sym)) {
 tmp[ 7]= arg_0( tmp[ 2]);
 {
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
-t_protect( tmp[ 6]);
-tmp[ 8]= list_head( tmp[ 6]);
-if( check_sym( tmp[ 8] , ef10sym)) {
-tmp[ 9]= arg_0( tmp[ 8]);
-tmp[ 10]= arg_1( tmp[ 8]);
-if( check_sym( tmp[ 10] , lf7sym)) {
-tmp[ 11]= arg_0( tmp[ 10]);
-t_protect( tmp[ 6]);
-tmp[ 12]= list_tail( tmp[ 6]);
+if( check_sym( tmp[ 3] , lf6sym)) {
+tmp[ 8]= arg_0( tmp[ 3]);
+{
+if( m_is_single_element( tmp[ 7])) {
+tmp[ 9]= m_list_head( tmp[ 7]);
+if( check_sym( tmp[ 9] , ef10sym)) {
+tmp[ 10]= arg_0( tmp[ 9]);
+tmp[ 11]= arg_1( tmp[ 9]);
+if( check_sym( tmp[ 11] , lf7sym)) {
+tmp[ 12]= arg_0( tmp[ 11]);
+t_protect( tmp[ 10]);
+if( term_equal( ( * ef12)( tmp[ 10]) , ( * ef13)( ))) {
 t_protect( tmp[ 12]);
-if( not_empty_list( tmp[ 12])) {
-t_protect( atmp10);
-tmp[ 13]= list_tail( atmp10);
-t_protect( tmp[ 9]);
-if( term_equal( ( * ef12)( tmp[ 9]) , ( * ef13)( ))) {
-t_protect( tmp[ 13]);
-tmp[ 14]= ( * ef15)( lf_AUX_MuASF_Rules2C9_1( make_list( tmp[ 13])));
+tmp[ 13]= ( * ef14)( lf7( make_list( tmp[ 12])));
+t_protect( tmp[ 10]);
+t_protect( tmp[ 12]);
+t_protect( tmp[ 8]);
+t_protect( tmp[ 4]);
+t_protect( tmp[ 5]);
+t_protect( tmp[ 6]);
+t_protect( tmp[ 1]);
+t_protect( arg2);
+t_protect( atmp30);
+t_protect( arg4);
+tmp[ 14]= ( * ef9)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( ( * ef10)( tmp[ 10] , lf7( make_list( tmp[ 12]))))) , lf6( make_list( tmp[ 8])) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 1]))) , arg2 , lf_AUX_MuASF_Rules2C9_2( make_list( atmp30)) , arg4);
+if( check_sym( tmp[ 14] , ef1sym)) {
+tmp[ 15]= arg_0( tmp[ 14]);
+tmp[ 16]= arg_1( tmp[ 14]);
+t_protect( tmp[ 15]);
+t_protect( tmp[ 16]);
+t_unprotect( arg0);
+t_unprotect( arg1);
+t_unprotect( arg2);
+t_unprotect( arg3);
+t_unprotect( arg4);
+t_unprotect( tmp[ 0]);
+t_unprotect( tmp[ 1]);
+t_unprotect( tmp[ 9]);
+t_unprotect( tmp[ 14]);
+return ( * ef1)( ( * ef11)( tmp[ 13] , tmp[ 15]) , tmp[ 16]);
+}
+t_unprotect( tmp[ 14]);
+t_unprotect( tmp[ 13]);
+}
+}
+}
+t_unprotect( tmp[ 9]);
+}
+{
+t_protect( tmp[ 7]);
+if( ! not_empty_list( tmp[ 7])) {
+t_protect( tmp[ 8]);
+t_protect( tmp[ 4]);
+t_protect( tmp[ 5]);
+t_protect( tmp[ 6]);
+t_protect( atmp30);
+t_unprotect( arg0);
+t_unprotect( arg1);
+t_unprotect( arg3);
+t_unprotect( tmp[ 0]);
+return ( * ef9)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( null( ))) , lf6( make_list( tmp[ 8])) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 1]))) , arg2 , lf_AUX_MuASF_Rules2C9_2( make_list( atmp30)) , arg4);
+}
+else {
+tmp[ 9]= m_list_head( tmp[ 7]);
+tmp[ 10]= m_list_tail( tmp[ 7]);
+if( m_not_empty_list( tmp[ 10])) {
+if( check_sym( tmp[ 9] , ef10sym)) {
+tmp[ 11]= arg_0( tmp[ 9]);
+tmp[ 12]= arg_1( tmp[ 9]);
+if( check_sym( tmp[ 12] , lf7sym)) {
+tmp[ 13]= arg_0( tmp[ 12]);
+t_protect( tmp[ 11]);
+if( term_equal( ( * ef12)( tmp[ 11]) , ( * ef13)( ))) {
+t_protect( tmp[ 1]);
+tmp[ 14]= ( * ef15)( lf_AUX_MuASF_Rules2C9_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 14] , ef16sym)) {
 tmp[ 15]= arg_0( tmp[ 14]);
 if( check_sym( tmp[ 15] , lf_AUX_MuASF_Rules2C9_1sym)) {
 tmp[ 16]= arg_0( tmp[ 15]);
-t_protect( tmp[ 11]);
-tmp[ 17]= ( * ef14)( lf7( make_list( tmp[ 11])));
-t_protect( tmp[ 12]);
-t_protect( tmp[ 7]);
-t_protect( tmp[ 3]);
+t_protect( tmp[ 13]);
+tmp[ 17]= ( * ef14)( lf7( make_list( tmp[ 13])));
+t_protect( tmp[ 10]);
+t_protect( tmp[ 8]);
 t_protect( tmp[ 4]);
 t_protect( tmp[ 5]);
+t_protect( tmp[ 6]);
 t_protect( tmp[ 16]);
-tmp[ 18]= ( * ef17)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( tmp[ 12])) , lf6( make_list( tmp[ 7])) , tmp[ 3] , tmp[ 4] , tmp[ 5])) , make_list( tmp[ 16]))));
+tmp[ 18]= ( * ef17)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( tmp[ 10])) , lf6( make_list( tmp[ 8])) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 16]))));
 if( check_sym( tmp[ 18] , ef18sym)) {
 tmp[ 19]= arg_0( tmp[ 18]);
 tmp[ 20]= arg_1( tmp[ 18]);
@@ -240,9 +294,9 @@ t_unprotect( arg2);
 t_unprotect( arg3);
 t_unprotect( arg4);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 8]);
-t_unprotect( tmp[ 12]);
-t_unprotect( tmp[ 13]);
+t_unprotect( tmp[ 1]);
+t_unprotect( tmp[ 9]);
+t_unprotect( tmp[ 10]);
 t_unprotect( tmp[ 14]);
 t_unprotect( tmp[ 18]);
 t_unprotect( tmp[ 23]);
@@ -258,82 +312,21 @@ t_unprotect( tmp[ 17]);
 }
 t_unprotect( tmp[ 14]);
 }
-t_unprotect( tmp[ 13]);
-}
-t_unprotect( tmp[ 12]);
 }
 }
-t_unprotect( tmp[ 8]);
 }
-else {
-t_protect( atmp10);
-tmp[ 8]= list_tail( atmp10);
-t_protect( tmp[ 7]);
-t_protect( tmp[ 3]);
-t_protect( tmp[ 4]);
-t_protect( tmp[ 5]);
-t_protect( atmp30);
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( arg3);
-t_unprotect( tmp[ 0]);
-return ( * ef9)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( null( ))) , lf6( make_list( tmp[ 7])) , tmp[ 3] , tmp[ 4] , tmp[ 5])) , make_list( tmp[ 8]))) , arg2 , lf_AUX_MuASF_Rules2C9_2( make_list( atmp30)) , arg4);
-}
-t_protect( tmp[ 6]);
-if( is_single_element( tmp[ 6])) {
-t_protect( tmp[ 6]);
-tmp[ 8]= list_head( tmp[ 6]);
-if( check_sym( tmp[ 8] , ef10sym)) {
-tmp[ 9]= arg_0( tmp[ 8]);
-tmp[ 10]= arg_1( tmp[ 8]);
-if( check_sym( tmp[ 10] , lf7sym)) {
-tmp[ 11]= arg_0( tmp[ 10]);
-t_protect( atmp10);
-tmp[ 12]= list_tail( atmp10);
-t_protect( tmp[ 9]);
-if( term_equal( ( * ef12)( tmp[ 9]) , ( * ef13)( ))) {
-t_protect( tmp[ 11]);
-tmp[ 13]= ( * ef14)( lf7( make_list( tmp[ 11])));
-t_protect( tmp[ 9]);
-t_protect( tmp[ 11]);
-t_protect( tmp[ 7]);
-t_protect( tmp[ 3]);
-t_protect( tmp[ 4]);
-t_protect( tmp[ 5]);
-t_protect( tmp[ 12]);
-t_protect( arg2);
-t_protect( atmp30);
-t_protect( arg4);
-tmp[ 14]= ( * ef9)( lf_AUX_MuASF_Rules2C9_1( cons( make_list( ( * ef8)( lf5( make_list( ( * ef10)( tmp[ 9] , lf7( make_list( tmp[ 11]))))) , lf6( make_list( tmp[ 7])) , tmp[ 3] , tmp[ 4] , tmp[ 5])) , make_list( tmp[ 12]))) , arg2 , lf_AUX_MuASF_Rules2C9_2( make_list( atmp30)) , arg4);
-if( check_sym( tmp[ 14] , ef1sym)) {
-tmp[ 15]= arg_0( tmp[ 14]);
-tmp[ 16]= arg_1( tmp[ 14]);
-t_protect( tmp[ 15]);
-t_protect( tmp[ 16]);
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( arg2);
-t_unprotect( arg3);
-t_unprotect( arg4);
-t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 8]);
-t_unprotect( tmp[ 12]);
-t_unprotect( tmp[ 14]);
-return ( * ef1)( ( * ef11)( tmp[ 13] , tmp[ 15]) , tmp[ 16]);
-}
-t_unprotect( tmp[ 14]);
-t_unprotect( tmp[ 13]);
-}
-t_unprotect( tmp[ 12]);
-}
-}
-t_unprotect( tmp[ 8]);
+t_unprotect( tmp[ 10]);
+t_unprotect( tmp[ 9]);
 }
 }
 }
 }
 }
 }
+}
+}
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

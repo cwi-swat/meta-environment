@@ -184,9 +184,7 @@ return ( * ef1)( ( * ef3)( ));
 }
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-t_unprotect( arg0);
-return ( * ef1)( atmp00);
+return arg0;
 }
 }
 }
@@ -194,8 +192,7 @@ if( check_sym( arg0 , ef4sym)) {
 {
 aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef5sym)) {
-t_unprotect( arg0);
-return ( * ef4)( ( * ef5)( ));
+return arg0;
 }
 {
 aterm * atmp00= arg_0( arg0);
@@ -341,9 +338,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef35)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -366,9 +361,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef36)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -391,9 +384,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef37)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -416,9 +407,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef28)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -441,9 +430,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef38)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -466,9 +453,7 @@ aterm * atmp0100= arg_0( atmp010);
 if( check_sym( atmp0100 , ef2sym)) {
 {
 aterm * atmp01000= arg_0( atmp0100);
-t_protect( atmp01000);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef39)( ) , ( * ef7)( ( * ef1)( ( * ef2)( atmp01000))));
+return arg0;
 }
 }
 }
@@ -482,9 +467,7 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef29sym)) {
 {
 aterm * atmp01= arg_1( arg0);
-t_protect( atmp01);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef29)( ) , atmp01);
+return arg0;
 }
 }
 {
@@ -492,9 +475,7 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef25sym)) {
 {
 aterm * atmp01= arg_1( arg0);
-t_protect( atmp01);
-t_unprotect( arg0);
-return ( * ef11)( ( * ef25)( ) , atmp01);
+return arg0;
 }
 }
 }

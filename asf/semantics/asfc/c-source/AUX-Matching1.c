@@ -101,14 +101,10 @@ aterm * atmp10= arg_0( arg1);
 if( check_sym( arg2 , ef2sym)) {
 {
 aterm * atmp20= arg_0( arg2);
-t_protect( atmp00);
-t_protect( atmp10);
-if( term_equal( atmp00 , atmp10)) {
-t_protect( atmp20);
+if( m_term_equal( atmp00 , atmp10)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -131,14 +127,10 @@ aterm * atmp100= arg_0( atmp10);
 if( check_sym( arg2 , ef2sym)) {
 {
 aterm * atmp20= arg_0( arg2);
-t_protect( atmp000);
-t_protect( atmp100);
-if( term_equal( atmp000 , atmp100)) {
-t_protect( atmp20);
+if( m_term_equal( atmp000 , atmp100)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -173,11 +165,9 @@ t_protect( atmp00);
 t_protect( atmp20);
 t_protect( arg1);
 if( term_equal( ( * ef11)( atmp00 , atmp20) , arg1)) {
-t_protect( atmp20);
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -196,9 +186,7 @@ aterm * atmp11= arg_1( arg1);
 if( check_sym( arg2 , ef2sym)) {
 {
 aterm * atmp20= arg_0( arg2);
-t_protect( atmp00);
-t_protect( atmp10);
-if( term_equal( atmp00 , atmp10)) {
+if( m_term_equal( atmp00 , atmp10)) {
 t_protect( atmp01);
 t_protect( atmp11);
 t_unprotect( arg0);
@@ -224,11 +212,9 @@ if( check_sym( atmp10 , ef15sym)) {
 if( check_sym( arg2 , ef2sym)) {
 {
 aterm * atmp20= arg_0( arg2);
-t_protect( atmp20);
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -285,11 +271,9 @@ aterm * atmp20= arg_0( arg2);
 t_protect( atmp00);
 t_protect( arg1);
 if( term_equal( ( * ef9)( atmp00 , arg1) , ( * ef8)( ))) {
-t_protect( atmp20);
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -318,11 +302,9 @@ t_protect( atmp10);
 t_protect( atmp20);
 t_protect( arg0);
 if( term_equal( ( * ef11)( atmp10 , atmp20) , arg0)) {
-t_protect( atmp20);
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -337,11 +319,9 @@ aterm * atmp20= arg_0( arg2);
 t_protect( atmp10);
 t_protect( arg0);
 if( term_equal( ( * ef9)( atmp10 , arg0) , ( * ef8)( ))) {
-t_protect( atmp20);
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }
@@ -350,14 +330,10 @@ return ( * ef2)( atmp20);
 if( check_sym( arg2 , ef2sym)) {
 {
 aterm * atmp20= arg_0( arg2);
-t_protect( arg0);
-t_protect( arg1);
-if( term_equal( arg0 , arg1)) {
-t_protect( atmp20);
+if( m_term_equal( arg0 , arg1)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
-t_unprotect( arg2);
-return ( * ef2)( atmp20);
+return arg2;
 }
 }
 }

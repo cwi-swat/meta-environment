@@ -69,8 +69,7 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , lf3sym)) {
 {
 aterm * atmp0000= arg_0( atmp000);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp0000);
 tmp[ 0]= ( * ef5)( lf3( make_list( atmp0000)) , ( * ef6)( lf4( make_list( make_char( 49)))));
 if( check_sym( tmp[ 0] , ef7sym)) {

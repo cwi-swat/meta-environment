@@ -107,8 +107,7 @@ if( check_sym( tmp[ 0] , ef4sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf4sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= ( * ef5)( lf4( make_list( tmp[ 2])) , lf5( make_list( ( * ef6)( lf6( make_list( make_char( 48)))))));
 if( check_sym( tmp[ 3] , ef7sym)) {
@@ -163,8 +162,7 @@ if( check_sym( tmp[ 0] , ef4sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf4sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= ( * ef5)( lf4( make_list( tmp[ 2])) , lf5( make_list( ( * ef6)( lf6( make_list( make_char( 48)))))));
 if( check_sym( tmp[ 3] , ef7sym)) {
@@ -218,8 +216,7 @@ if( check_sym( tmp[ 0] , ef4sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf4sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= ( * ef5)( lf4( make_list( tmp[ 2])) , lf5( make_list( ( * ef6)( lf6( make_list( make_char( 48)))))));
 if( check_sym( tmp[ 3] , ef7sym)) {
@@ -274,8 +271,7 @@ if( check_sym( tmp[ 0] , ef4sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf4sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= ( * ef5)( lf4( make_list( tmp[ 2])) , lf5( make_list( ( * ef6)( lf6( make_list( make_char( 48)))))));
 if( check_sym( tmp[ 3] , ef7sym)) {

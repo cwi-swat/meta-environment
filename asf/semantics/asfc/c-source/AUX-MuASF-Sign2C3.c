@@ -46,23 +46,17 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( arg1 , lf_AUX_MuASF_Sign2C3_2sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_protect( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
 return ( * ef1)( tmp[ 0] , lf_AUX_MuASF_Sign2C3_2( make_list( atmp10)));
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 0]);
 t_protect( atmp10);
 tmp[ 2]= ( * ef1)( tmp[ 0] , lf_AUX_MuASF_Sign2C3_2( make_list( atmp10)));

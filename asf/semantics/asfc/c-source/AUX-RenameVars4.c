@@ -35,10 +35,8 @@ PROF( prof_lf_AUX_RenameVars4_2);
 if( check_sym( arg0 , lf_AUX_RenameVars4_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_protect( tmp[ 0]);
 t_protect( arg1);
 tmp[ 1]= ( * ef2)( tmp[ 0] , arg1);
@@ -56,14 +54,10 @@ return ( * ef1)( lf_AUX_RenameVars4_1( make_list( tmp[ 2])) , tmp[ 3]);
 t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 0]);
 t_protect( arg1);
 tmp[ 2]= ( * ef2)( tmp[ 0] , arg1);
@@ -78,8 +72,7 @@ tmp[ 6]= arg_0( tmp[ 5]);
 tmp[ 7]= arg_1( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf_AUX_RenameVars4_1sym)) {
 tmp[ 8]= arg_0( tmp[ 6]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( tmp[ 3]);
 t_protect( tmp[ 8]);
 t_protect( tmp[ 7]);

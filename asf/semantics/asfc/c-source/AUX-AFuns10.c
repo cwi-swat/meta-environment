@@ -44,8 +44,7 @@ aterm * lf_AUX_AFuns10_1( aterm * arg0 , aterm * arg1) {
 PROF( prof_lf_AUX_AFuns10_1);
 if( check_sym( arg1 , ef1sym)) {
 t_unprotect( arg0);
-t_unprotect( arg1);
-return ( * ef1)( );
+return arg1;
 }
 if( check_sym( arg1 , ef2sym)) {
 {

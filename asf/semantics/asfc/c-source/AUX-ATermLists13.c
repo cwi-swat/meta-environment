@@ -47,9 +47,7 @@ t_protect( tmp[ 0]);
 if( ! term_equal( arg1 , tmp[ 0])) {
 t_protect( arg1);
 tmp[ 1]= ( * ef4)( arg1);
-t_protect( tmp[ 1]);
-t_protect( arg0);
-if( term_equal( tmp[ 1] , arg0)) {
+if( m_term_equal( tmp[ 1] , arg0)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
@@ -58,6 +56,7 @@ return ( * ef3)( );
 }
 else {
 t_unprotect( tmp[ 0]);
+t_unprotect( tmp[ 1]);
 return lf_AUX_ATermLists13_1( arg0 , ( * ef5)( arg1));
 }
 t_unprotect( tmp[ 1]);

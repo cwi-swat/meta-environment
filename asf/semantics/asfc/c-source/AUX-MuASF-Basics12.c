@@ -45,10 +45,8 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , lf2sym)) {
 {
 aterm * atmp0000= arg_0( atmp000);
-t_protect( atmp0000);
-if( is_single_element( atmp0000)) {
-t_protect( atmp0000);
-tmp[ 0]= list_head( atmp0000);
+if( m_is_single_element( atmp0000)) {
+tmp[ 0]= m_list_head( atmp0000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 116))) {
 t_unprotect( arg0);

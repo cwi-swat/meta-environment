@@ -234,8 +234,7 @@ aterm * atmp21= arg_1( arg2);
 aterm * atmp22= arg_2( arg2);
 {
 aterm * atmp23= arg_3( arg2);
-t_protect( atmp1000);
-if( not_empty_list( atmp1000)) {
+if( m_not_empty_list( atmp1000)) {
 t_protect( arg0);
 tmp[ 0]= ( * ef27)( arg0);
 t_protect( arg0);

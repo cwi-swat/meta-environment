@@ -1,387 +1,493 @@
 #include "support.h"
-static asymbol * lf_AUX_Pure_C1_2sym;
-static aterm * lf_AUX_Pure_C1_2( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_3sym;
-static aterm * lf_AUX_Pure_C1_3( aterm * arg1);
 static asymbol * lf_AUX_Pure_C1_1sym;
-static aterm * lf_AUX_Pure_C1_1( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_4sym;
-static aterm * lf_AUX_Pure_C1_4( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_5sym;
-static aterm * lf_AUX_Pure_C1_5( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_6sym;
-static aterm * lf_AUX_Pure_C1_6( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_7sym;
-static aterm * lf_AUX_Pure_C1_7( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_8sym;
-static aterm * lf_AUX_Pure_C1_8( aterm * arg1 , aterm * arg2 , aterm * arg3);
-static asymbol * lf_AUX_Pure_C1_9sym;
-static aterm * lf_AUX_Pure_C1_9( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_10sym;
-static aterm * lf_AUX_Pure_C1_10( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_11sym;
-static aterm * lf_AUX_Pure_C1_11( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_12sym;
-static aterm * lf_AUX_Pure_C1_12( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_13sym;
-static aterm * lf_AUX_Pure_C1_13( );
-static asymbol * lf_AUX_Pure_C1_14sym;
-static aterm * lf_AUX_Pure_C1_14( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_15sym;
-static aterm * lf_AUX_Pure_C1_15( aterm * arg1 , aterm * arg2 , aterm * arg3);
-static asymbol * lf_AUX_Pure_C1_16sym;
-static aterm * lf_AUX_Pure_C1_16( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_17sym;
-static aterm * lf_AUX_Pure_C1_17( aterm * arg1 , aterm * arg2 , aterm * arg3);
-static asymbol * lf_AUX_Pure_C1_18sym;
-static aterm * lf_AUX_Pure_C1_18( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_19sym;
-static aterm * lf_AUX_Pure_C1_19( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_20sym;
-static aterm * lf_AUX_Pure_C1_20( );
-static asymbol * lf_AUX_Pure_C1_21sym;
-static aterm * lf_AUX_Pure_C1_21( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_23sym;
-static aterm * lf_AUX_Pure_C1_23( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_22sym;
-static aterm * lf_AUX_Pure_C1_22( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_24sym;
-static aterm * lf_AUX_Pure_C1_24( );
-static asymbol * lf_AUX_Pure_C1_25sym;
-static aterm * lf_AUX_Pure_C1_25( );
-static asymbol * lf_AUX_Pure_C1_26sym;
-static aterm * lf_AUX_Pure_C1_26( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_27sym;
-static aterm * lf_AUX_Pure_C1_27( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_28sym;
-static aterm * lf_AUX_Pure_C1_28( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_29sym;
-static aterm * lf_AUX_Pure_C1_29( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_30sym;
-static aterm * lf_AUX_Pure_C1_30( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_32sym;
-static aterm * lf_AUX_Pure_C1_32( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_31sym;
-static aterm * lf_AUX_Pure_C1_31( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_33sym;
-static aterm * lf_AUX_Pure_C1_33( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_34sym;
-static aterm * lf_AUX_Pure_C1_34( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_35sym;
-static aterm * lf_AUX_Pure_C1_35( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_36sym;
-static aterm * lf_AUX_Pure_C1_36( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_37sym;
-static aterm * lf_AUX_Pure_C1_37( );
-static asymbol * lf_AUX_Pure_C1_38sym;
-static aterm * lf_AUX_Pure_C1_38( );
-static asymbol * lf_AUX_Pure_C1_39sym;
-static aterm * lf_AUX_Pure_C1_39( );
-static asymbol * lf_AUX_Pure_C1_40sym;
-static aterm * lf_AUX_Pure_C1_40( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_41sym;
-static aterm * lf_AUX_Pure_C1_41( aterm * arg1 , aterm * arg2);
-static asymbol * lf_AUX_Pure_C1_42sym;
-static aterm * lf_AUX_Pure_C1_42( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_43sym;
-static aterm * lf_AUX_Pure_C1_43( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_44sym;
-static aterm * lf_AUX_Pure_C1_44( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_45sym;
-static aterm * lf_AUX_Pure_C1_45( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_47sym;
-static aterm * lf_AUX_Pure_C1_47( aterm * arg1);
-static asymbol * lf_AUX_Pure_C1_46sym;
-static aterm * lf_AUX_Pure_C1_46( aterm * arg1);
+static aterm * lf_AUX_Pure_C1_1( aterm * arg1 , aterm * arg2);
+static asymbol * ef10sym;
+static funcptr ef10;
+static asymbol * ef11sym;
+static funcptr ef11;
+static asymbol * ef1sym;
+static funcptr ef1;
+static asymbol * ef2sym;
+static funcptr ef2;
+static asymbol * ef3sym;
+static funcptr ef3;
+static asymbol * lf2sym;
+static aterm * lf2( aterm * arg1);
+static asymbol * ef4sym;
+static funcptr ef4;
+static asymbol * ef5sym;
+static funcptr ef5;
+static asymbol * lf3sym;
+static aterm * lf3( aterm * arg1);
+static asymbol * ef6sym;
+static funcptr ef6;
+static asymbol * ef7sym;
+static funcptr ef7;
+static asymbol * ef8sym;
+static funcptr ef8;
+static asymbol * ef9sym;
+static funcptr ef9;
 void register_AUX_Pure_C1( ) {
 arena local;
 TinitArena( NULL , & local);
-lf_AUX_Pure_C1_2sym= TmkSymbol( "prod(id(\"caller\"),w(\"\"),[l(\"integer-constant\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),no-attrs)"
+lf_AUX_Pure_C1_1sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"while\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)"
  , SYM_STRING);
-lf_AUX_Pure_C1_3sym= TmkSymbol( "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_1sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
-lf_AUX_Pure_C1_4sym= TmkSymbol( "prod(id(\"caller\"),w(\"\"),[l(\"string\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"String\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_5sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_6sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_7sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_8sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_9sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"while\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_10sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"return\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_11sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_12sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_13sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_14sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_15sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_16sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_17sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_18sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_19sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\"),w(\"\"),sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_20sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_21sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_23sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Type-specifier\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-specifiers\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_22sym= TmkSymbol( "listtype(sort(\"Type-specifier\"))" , SYM_STRING);
-lf_AUX_Pure_C1_24sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"static\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_25sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[l(\"void\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_26sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_27sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"*\"),w(\"\"),sort(\"Declarator\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_28sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_29sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_30sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_32sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_31sym= TmkSymbol( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" , SYM_STRING);
-lf_AUX_Pure_C1_33sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_34sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_35sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_36sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Unary-operator\"),w(\"\"),sort(\"Expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_37sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"&\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_38sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_39sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"!\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_40sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_41sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_42sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_43sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Integer-constant\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_44sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"String\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_45sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_47sym= TmkSymbol( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)" , SYM_STRING);
-lf_AUX_Pure_C1_46sym= TmkSymbol( "listtype(sort(\"Expression\"),ql(\",\"))" , SYM_STRING);
-register_prod( TmakeSimple( & local , "listtype(sort(\"CHAR\"))") , lf_AUX_Pure_C1_1 , lf_AUX_Pure_C1_1sym);
-register_prod( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"integer-constant\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_2 , lf_AUX_Pure_C1_2sym);
-register_prod( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_3 , lf_AUX_Pure_C1_3sym);
-register_prod( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"string\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"String\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_4 , lf_AUX_Pure_C1_4sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_5 , lf_AUX_Pure_C1_5sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_6 , lf_AUX_Pure_C1_6sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_7 , lf_AUX_Pure_C1_7sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_8 , lf_AUX_Pure_C1_8sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"while\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_9 , lf_AUX_Pure_C1_9sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"return\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_10 , lf_AUX_Pure_C1_10sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_11 , lf_AUX_Pure_C1_11sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_12 , lf_AUX_Pure_C1_12sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_13 , lf_AUX_Pure_C1_13sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_14 , lf_AUX_Pure_C1_14sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_15 , lf_AUX_Pure_C1_15sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_16 , lf_AUX_Pure_C1_16sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_17 , lf_AUX_Pure_C1_17sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_18 , lf_AUX_Pure_C1_18sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\"),w(\"\"),sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_19 , lf_AUX_Pure_C1_19sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_20 , lf_AUX_Pure_C1_20sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_21 , lf_AUX_Pure_C1_21sym);
-register_prod( TmakeSimple( & local , "listtype(sort(\"Type-specifier\"))") , lf_AUX_Pure_C1_22 , lf_AUX_Pure_C1_22sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Type-specifier\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-specifiers\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_23 , lf_AUX_Pure_C1_23sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"static\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_24 , lf_AUX_Pure_C1_24sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"void\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_25 , lf_AUX_Pure_C1_25sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Type-specifier\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_26 , lf_AUX_Pure_C1_26sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"*\"),w(\"\"),sort(\"Declarator\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_27 , lf_AUX_Pure_C1_27sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_28 , lf_AUX_Pure_C1_28sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_29 , lf_AUX_Pure_C1_29sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declarator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_30 , lf_AUX_Pure_C1_30sym);
-register_prod( TmakeSimple( & local , "listtype(sort(\"Parameter-declaration\"),ql(\",\"))") , lf_AUX_Pure_C1_31 , lf_AUX_Pure_C1_31sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_32 , lf_AUX_Pure_C1_32sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_33 , lf_AUX_Pure_C1_33sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_34 , lf_AUX_Pure_C1_34sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_35 , lf_AUX_Pure_C1_35sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Unary-operator\"),w(\"\"),sort(\"Expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_36 , lf_AUX_Pure_C1_36sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"&\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_37 , lf_AUX_Pure_C1_37sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_38 , lf_AUX_Pure_C1_38sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"!\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_39 , lf_AUX_Pure_C1_39sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_40 , lf_AUX_Pure_C1_40sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_41 , lf_AUX_Pure_C1_41sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_42 , lf_AUX_Pure_C1_42sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Integer-constant\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_43 , lf_AUX_Pure_C1_43sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"String\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_44 , lf_AUX_Pure_C1_44sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_45 , lf_AUX_Pure_C1_45sym);
-register_prod( TmakeSimple( & local , "listtype(sort(\"Expression\"),ql(\",\"))") , lf_AUX_Pure_C1_46 , lf_AUX_Pure_C1_46sym);
-register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_47 , lf_AUX_Pure_C1_47sym);
+lf2sym= TmkSymbol( "listtype(sort(\"CHAR\"))" , SYM_STRING);
+lf3sym= TmkSymbol( "listtype(sort(\"Expression\"),ql(\",\"))" , SYM_STRING);
+register_prod( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"while\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)") , lf_AUX_Pure_C1_1 , lf_AUX_Pure_C1_1sym);
+register_prod( TmakeSimple( & local , "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
+register_prod( TmakeSimple( & local , "listtype(sort(\"Expression\"),ql(\",\"))") , lf3 , lf3sym);
 }
 void resolve_AUX_Pure_C1( ) {
 arena local;
 TinitArena( NULL , & local);
+ef1= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
+ef3= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
+ef3sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Identifier\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
+ef4= lookup_func( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)"));
+ef4sym= lookup_sym( TmakeSimple( & local , "prod(id(\"caller\"),w(\"\"),[l(\"identifier\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)"));
+ef5= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)"));
+ef5sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)"));
+ef6= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)"));
+ef6sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)"));
+ef7= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)"));
+ef7sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)"));
+ef8= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
+ef8sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
+ef9= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)"));
+ef9sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)"));
+ef10= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)"));
+ef10sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)"));
+ef11= lookup_func( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)"));
+ef11sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)"));
 }
-aterm * lf_AUX_Pure_C1_46( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_46);
-return make_nf1( lf_AUX_Pure_C1_46sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_47( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_47);
-return make_nf1( lf_AUX_Pure_C1_47sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_45( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_45);
-return make_nf1( lf_AUX_Pure_C1_45sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_44( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_44);
-return make_nf1( lf_AUX_Pure_C1_44sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_43( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_43);
-return make_nf1( lf_AUX_Pure_C1_43sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_42( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_42);
-return make_nf1( lf_AUX_Pure_C1_42sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_41( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_41);
-return make_nf2( lf_AUX_Pure_C1_41sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_40( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_40);
-return make_nf2( lf_AUX_Pure_C1_40sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_39( ) {
-PROF( prof_lf_AUX_Pure_C1_39);
-return make_nf0( lf_AUX_Pure_C1_39sym);
-}
-aterm * lf_AUX_Pure_C1_38( ) {
-PROF( prof_lf_AUX_Pure_C1_38);
-return make_nf0( lf_AUX_Pure_C1_38sym);
-}
-aterm * lf_AUX_Pure_C1_37( ) {
-PROF( prof_lf_AUX_Pure_C1_37);
-return make_nf0( lf_AUX_Pure_C1_37sym);
-}
-aterm * lf_AUX_Pure_C1_36( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_36);
-return make_nf2( lf_AUX_Pure_C1_36sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_35( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_35);
-return make_nf1( lf_AUX_Pure_C1_35sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_34( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_34);
-return make_nf2( lf_AUX_Pure_C1_34sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_33( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_33);
-return make_nf2( lf_AUX_Pure_C1_33sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_31( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_31);
-return make_nf1( lf_AUX_Pure_C1_31sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_32( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_32);
-return make_nf1( lf_AUX_Pure_C1_32sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_30( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_30);
-return make_nf2( lf_AUX_Pure_C1_30sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_29( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_29);
-return make_nf2( lf_AUX_Pure_C1_29sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_28( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_28);
-return make_nf1( lf_AUX_Pure_C1_28sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_27( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_27);
-return make_nf1( lf_AUX_Pure_C1_27sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_26( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_26);
-return make_nf1( lf_AUX_Pure_C1_26sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_25( ) {
-PROF( prof_lf_AUX_Pure_C1_25);
-return make_nf0( lf_AUX_Pure_C1_25sym);
-}
-aterm * lf_AUX_Pure_C1_24( ) {
-PROF( prof_lf_AUX_Pure_C1_24);
-return make_nf0( lf_AUX_Pure_C1_24sym);
-}
-aterm * lf_AUX_Pure_C1_22( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_22);
-return make_nf1( lf_AUX_Pure_C1_22sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_23( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_23);
-return make_nf1( lf_AUX_Pure_C1_23sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_21( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_21);
-return make_nf1( lf_AUX_Pure_C1_21sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_20( ) {
-PROF( prof_lf_AUX_Pure_C1_20);
-return make_nf0( lf_AUX_Pure_C1_20sym);
-}
-aterm * lf_AUX_Pure_C1_19( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_19);
-return make_nf2( lf_AUX_Pure_C1_19sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_18( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_18);
-return make_nf1( lf_AUX_Pure_C1_18sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_17( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-PROF( prof_lf_AUX_Pure_C1_17);
-return make_nf3( lf_AUX_Pure_C1_17sym , arg0 , arg1 , arg2);
-}
-aterm * lf_AUX_Pure_C1_16( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_16);
-return make_nf2( lf_AUX_Pure_C1_16sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_15( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-PROF( prof_lf_AUX_Pure_C1_15);
-return make_nf3( lf_AUX_Pure_C1_15sym , arg0 , arg1 , arg2);
-}
-aterm * lf_AUX_Pure_C1_14( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_14);
-return make_nf1( lf_AUX_Pure_C1_14sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_13( ) {
-PROF( prof_lf_AUX_Pure_C1_13);
-return make_nf0( lf_AUX_Pure_C1_13sym);
-}
-aterm * lf_AUX_Pure_C1_12( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_12);
-return make_nf2( lf_AUX_Pure_C1_12sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_11( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_11);
-return make_nf1( lf_AUX_Pure_C1_11sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_10( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_10);
-return make_nf1( lf_AUX_Pure_C1_10sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_9( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_9);
-return make_nf2( lf_AUX_Pure_C1_9sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_8( aterm * arg0 , aterm * arg1 , aterm * arg2) {
-PROF( prof_lf_AUX_Pure_C1_8);
-return make_nf3( lf_AUX_Pure_C1_8sym , arg0 , arg1 , arg2);
-}
-aterm * lf_AUX_Pure_C1_7( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_7);
-return make_nf2( lf_AUX_Pure_C1_7sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_6( aterm * arg0 , aterm * arg1) {
-PROF( prof_lf_AUX_Pure_C1_6);
-return make_nf2( lf_AUX_Pure_C1_6sym , arg0 , arg1);
-}
-aterm * lf_AUX_Pure_C1_5( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_5);
-return make_nf1( lf_AUX_Pure_C1_5sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_4( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_4);
-return make_nf1( lf_AUX_Pure_C1_4sym , arg0);
-}
-aterm * lf_AUX_Pure_C1_1( aterm * arg0) {
+aterm * lf_AUX_Pure_C1_1( aterm * arg0 , aterm * arg1) {
+{
+aterm * tmp[32];
 PROF( prof_lf_AUX_Pure_C1_1);
-return make_nf1( lf_AUX_Pure_C1_1sym , arg0);
+if( check_sym( arg0 , ef1sym)) {
+{
+aterm * atmp00= arg_0( arg0);
+if( check_sym( atmp00 , ef2sym)) {
+{
+aterm * atmp000= arg_0( atmp00);
+if( check_sym( atmp000 , ef3sym)) {
+{
+aterm * atmp0000= arg_0( atmp000);
+if( check_sym( atmp0000 , ef4sym)) {
+{
+aterm * atmp00000= arg_0( atmp0000);
+if( check_sym( atmp00000 , lf2sym)) {
+{
+aterm * atmp000000= arg_0( atmp00000);
+{
+aterm * atmp001= arg_1( atmp00);
+if( check_sym( atmp001 , ef5sym)) {
+{
+aterm * atmp0010= arg_0( atmp001);
+if( check_sym( atmp0010 , lf3sym)) {
+{
+aterm * atmp00100= arg_0( atmp0010);
+if( check_sym( arg1 , ef6sym)) {
+{
+aterm * atmp10= arg_0( arg1);
+if( check_sym( atmp10 , ef7sym)) {
+{
+aterm * atmp11= arg_1( arg1);
+if( check_sym( atmp11 , ef8sym)) {
+{
+aterm * atmp110= arg_0( atmp11);
+if( check_sym( atmp110 , ef9sym)) {
+{
+aterm * atmp1100= arg_0( atmp110);
+if( check_sym( atmp1100 , ef9sym)) {
+{
+aterm * atmp11000= arg_0( atmp1100);
+if( check_sym( atmp11000 , ef9sym)) {
+{
+aterm * atmp110000= arg_0( atmp11000);
+if( check_sym( atmp110000 , ef10sym)) {
+{
+aterm * atmp1100000= arg_0( atmp110000);
+if( check_sym( atmp1100000 , ef11sym)) {
+{
+aterm * atmp11000000= arg_0( atmp1100000);
+if( check_sym( atmp11000000 , ef1sym)) {
+{
+aterm * atmp110000000= arg_0( atmp11000000);
+if( check_sym( atmp110000000 , ef2sym)) {
+{
+aterm * atmp1100000000= arg_0( atmp110000000);
+if( check_sym( atmp1100000000 , ef3sym)) {
+{
+aterm * atmp11000000000= arg_0( atmp1100000000);
+if( check_sym( atmp11000000000 , ef4sym)) {
+{
+aterm * atmp110000000000= arg_0( atmp11000000000);
+if( check_sym( atmp110000000000 , lf2sym)) {
+{
+aterm * atmp1100000000000= arg_0( atmp110000000000);
+{
+aterm * atmp1100000001= arg_1( atmp110000000);
+if( check_sym( atmp1100000001 , ef5sym)) {
+{
+aterm * atmp11000000010= arg_0( atmp1100000001);
+if( check_sym( atmp11000000010 , lf3sym)) {
+{
+aterm * atmp110000000100= arg_0( atmp11000000010);
+{
+aterm * atmp11000001= arg_1( atmp1100000);
+if( check_sym( atmp11000001 , ef6sym)) {
+{
+aterm * atmp110000010= arg_0( atmp11000001);
+if( check_sym( atmp110000010 , ef7sym)) {
+{
+aterm * atmp110000011= arg_1( atmp11000001);
+if( check_sym( atmp110000011 , ef8sym)) {
+{
+aterm * atmp1100000110= arg_0( atmp110000011);
+{
+aterm * atmp110001= arg_1( atmp11000);
+{
+aterm * atmp11001= arg_1( atmp1100);
+{
+aterm * atmp1101= arg_1( atmp110);
+if( m_not_empty_list( atmp000000)) {
+t_protect( atmp000000);
+if( term_equal( list_head( atmp000000) , make_char( 109))) {
+tmp[ 0]= m_list_tail( atmp000000);
+if( m_not_empty_list( tmp[ 0])) {
+t_protect( tmp[ 0]);
+if( term_equal( list_head( tmp[ 0]) , make_char( 95))) {
+tmp[ 1]= m_list_tail( tmp[ 0]);
+if( m_not_empty_list( tmp[ 1])) {
+t_protect( tmp[ 1]);
+if( term_equal( list_head( tmp[ 1]) , make_char( 110))) {
+tmp[ 2]= m_list_tail( tmp[ 1]);
+if( m_not_empty_list( tmp[ 2])) {
+t_protect( tmp[ 2]);
+if( term_equal( list_head( tmp[ 2]) , make_char( 111))) {
+tmp[ 3]= m_list_tail( tmp[ 2]);
+if( m_not_empty_list( tmp[ 3])) {
+t_protect( tmp[ 3]);
+if( term_equal( list_head( tmp[ 3]) , make_char( 116))) {
+tmp[ 4]= m_list_tail( tmp[ 3]);
+if( m_not_empty_list( tmp[ 4])) {
+t_protect( tmp[ 4]);
+if( term_equal( list_head( tmp[ 4]) , make_char( 95))) {
+tmp[ 5]= m_list_tail( tmp[ 4]);
+if( m_not_empty_list( tmp[ 5])) {
+t_protect( tmp[ 5]);
+if( term_equal( list_head( tmp[ 5]) , make_char( 101))) {
+tmp[ 6]= m_list_tail( tmp[ 5]);
+if( m_not_empty_list( tmp[ 6])) {
+t_protect( tmp[ 6]);
+if( term_equal( list_head( tmp[ 6]) , make_char( 109))) {
+tmp[ 7]= m_list_tail( tmp[ 6]);
+if( m_not_empty_list( tmp[ 7])) {
+t_protect( tmp[ 7]);
+if( term_equal( list_head( tmp[ 7]) , make_char( 112))) {
+tmp[ 8]= m_list_tail( tmp[ 7]);
+if( m_not_empty_list( tmp[ 8])) {
+t_protect( tmp[ 8]);
+if( term_equal( list_head( tmp[ 8]) , make_char( 116))) {
+tmp[ 9]= m_list_tail( tmp[ 8]);
+if( m_not_empty_list( tmp[ 9])) {
+t_protect( tmp[ 9]);
+if( term_equal( list_head( tmp[ 9]) , make_char( 121))) {
+tmp[ 10]= m_list_tail( tmp[ 9]);
+if( m_not_empty_list( tmp[ 10])) {
+t_protect( tmp[ 10]);
+if( term_equal( list_head( tmp[ 10]) , make_char( 95))) {
+tmp[ 11]= m_list_tail( tmp[ 10]);
+if( m_not_empty_list( tmp[ 11])) {
+t_protect( tmp[ 11]);
+if( term_equal( list_head( tmp[ 11]) , make_char( 108))) {
+tmp[ 12]= m_list_tail( tmp[ 11]);
+if( m_not_empty_list( tmp[ 12])) {
+t_protect( tmp[ 12]);
+if( term_equal( list_head( tmp[ 12]) , make_char( 105))) {
+tmp[ 13]= m_list_tail( tmp[ 12]);
+if( m_not_empty_list( tmp[ 13])) {
+t_protect( tmp[ 13]);
+if( term_equal( list_head( tmp[ 13]) , make_char( 115))) {
+tmp[ 14]= m_list_tail( tmp[ 13]);
+if( m_is_single_element( tmp[ 14])) {
+t_protect( tmp[ 14]);
+if( term_equal( list_head( tmp[ 14]) , make_char( 116))) {
+if( m_is_single_element( atmp00100)) {
+tmp[ 15]= m_list_head( atmp00100);
+if( m_not_empty_list( atmp1100000000000)) {
+t_protect( atmp1100000000000);
+if( term_equal( list_head( atmp1100000000000) , make_char( 109))) {
+tmp[ 16]= m_list_tail( atmp1100000000000);
+if( m_not_empty_list( tmp[ 16])) {
+t_protect( tmp[ 16]);
+if( term_equal( list_head( tmp[ 16]) , make_char( 95))) {
+tmp[ 17]= m_list_tail( tmp[ 16]);
+if( m_not_empty_list( tmp[ 17])) {
+t_protect( tmp[ 17]);
+if( term_equal( list_head( tmp[ 17]) , make_char( 110))) {
+tmp[ 18]= m_list_tail( tmp[ 17]);
+if( m_not_empty_list( tmp[ 18])) {
+t_protect( tmp[ 18]);
+if( term_equal( list_head( tmp[ 18]) , make_char( 111))) {
+tmp[ 19]= m_list_tail( tmp[ 18]);
+if( m_not_empty_list( tmp[ 19])) {
+t_protect( tmp[ 19]);
+if( term_equal( list_head( tmp[ 19]) , make_char( 116))) {
+tmp[ 20]= m_list_tail( tmp[ 19]);
+if( m_not_empty_list( tmp[ 20])) {
+t_protect( tmp[ 20]);
+if( term_equal( list_head( tmp[ 20]) , make_char( 95))) {
+tmp[ 21]= m_list_tail( tmp[ 20]);
+if( m_not_empty_list( tmp[ 21])) {
+t_protect( tmp[ 21]);
+if( term_equal( list_head( tmp[ 21]) , make_char( 101))) {
+tmp[ 22]= m_list_tail( tmp[ 21]);
+if( m_not_empty_list( tmp[ 22])) {
+t_protect( tmp[ 22]);
+if( term_equal( list_head( tmp[ 22]) , make_char( 109))) {
+tmp[ 23]= m_list_tail( tmp[ 22]);
+if( m_not_empty_list( tmp[ 23])) {
+t_protect( tmp[ 23]);
+if( term_equal( list_head( tmp[ 23]) , make_char( 112))) {
+tmp[ 24]= m_list_tail( tmp[ 23]);
+if( m_not_empty_list( tmp[ 24])) {
+t_protect( tmp[ 24]);
+if( term_equal( list_head( tmp[ 24]) , make_char( 116))) {
+tmp[ 25]= m_list_tail( tmp[ 24]);
+if( m_not_empty_list( tmp[ 25])) {
+t_protect( tmp[ 25]);
+if( term_equal( list_head( tmp[ 25]) , make_char( 121))) {
+tmp[ 26]= m_list_tail( tmp[ 25]);
+if( m_not_empty_list( tmp[ 26])) {
+t_protect( tmp[ 26]);
+if( term_equal( list_head( tmp[ 26]) , make_char( 95))) {
+tmp[ 27]= m_list_tail( tmp[ 26]);
+if( m_not_empty_list( tmp[ 27])) {
+t_protect( tmp[ 27]);
+if( term_equal( list_head( tmp[ 27]) , make_char( 108))) {
+tmp[ 28]= m_list_tail( tmp[ 27]);
+if( m_not_empty_list( tmp[ 28])) {
+t_protect( tmp[ 28]);
+if( term_equal( list_head( tmp[ 28]) , make_char( 105))) {
+tmp[ 29]= m_list_tail( tmp[ 28]);
+if( m_not_empty_list( tmp[ 29])) {
+t_protect( tmp[ 29]);
+if( term_equal( list_head( tmp[ 29]) , make_char( 115))) {
+tmp[ 30]= m_list_tail( tmp[ 29]);
+if( m_is_single_element( tmp[ 30])) {
+t_protect( tmp[ 30]);
+if( term_equal( list_head( tmp[ 30]) , make_char( 116))) {
+if( m_is_single_element( atmp110000000100)) {
+tmp[ 31]= m_list_head( atmp110000000100);
+if( m_term_equal( tmp[ 15] , tmp[ 31])) {
+t_protect( atmp1100000110);
+t_protect( atmp110001);
+t_protect( atmp11001);
+t_protect( atmp1101);
+t_unprotect( arg0);
+t_unprotect( arg1);
+t_unprotect( tmp[ 0]);
+t_unprotect( tmp[ 1]);
+t_unprotect( tmp[ 2]);
+t_unprotect( tmp[ 3]);
+t_unprotect( tmp[ 4]);
+t_unprotect( tmp[ 5]);
+t_unprotect( tmp[ 6]);
+t_unprotect( tmp[ 7]);
+t_unprotect( tmp[ 8]);
+t_unprotect( tmp[ 9]);
+t_unprotect( tmp[ 10]);
+t_unprotect( tmp[ 11]);
+t_unprotect( tmp[ 12]);
+t_unprotect( tmp[ 13]);
+t_unprotect( tmp[ 14]);
+t_unprotect( tmp[ 16]);
+t_unprotect( tmp[ 17]);
+t_unprotect( tmp[ 18]);
+t_unprotect( tmp[ 19]);
+t_unprotect( tmp[ 20]);
+t_unprotect( tmp[ 21]);
+t_unprotect( tmp[ 22]);
+t_unprotect( tmp[ 23]);
+t_unprotect( tmp[ 24]);
+t_unprotect( tmp[ 25]);
+t_unprotect( tmp[ 26]);
+t_unprotect( tmp[ 27]);
+t_unprotect( tmp[ 28]);
+t_unprotect( tmp[ 29]);
+t_unprotect( tmp[ 30]);
+t_unprotect( tmp[ 31]);
+return lf_AUX_Pure_C1_1( ( * ef1)( ( * ef2)( ( * ef3)( ( * ef4)( lf2( cons( make_list( make_char( 109)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 110)) , cons( make_list( make_char( 111)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 101)) , cons( make_list( make_char( 109)) , cons( make_list( make_char( 112)) , cons( make_list( make_char( 116)) , cons( make_list( make_char( 121)) , cons( make_list( make_char( 95)) , cons( make_list( make_char( 108)) , cons( make_list( make_char( 105)) , cons( make_list( make_char( 115)) , make_list( make_char( 116)))))))))))))))))))) , ( * ef5)( lf3( make_list( tmp[ 15]))))) , ( * ef6)( ( * ef7)( ) , ( * ef8)( ( * ef9)( ( * ef9)( ( * ef9)( atmp1100000110 , atmp110001) , atmp11001) , atmp1101))));
 }
-aterm * lf_AUX_Pure_C1_3( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_3);
-return make_nf1( lf_AUX_Pure_C1_3sym , arg0);
+t_unprotect( tmp[ 31]);
 }
-aterm * lf_AUX_Pure_C1_2( aterm * arg0) {
-PROF( prof_lf_AUX_Pure_C1_2);
-return make_nf1( lf_AUX_Pure_C1_2sym , arg0);
+}
+}
+t_unprotect( tmp[ 30]);
+}
+}
+t_unprotect( tmp[ 29]);
+}
+}
+t_unprotect( tmp[ 28]);
+}
+}
+t_unprotect( tmp[ 27]);
+}
+}
+t_unprotect( tmp[ 26]);
+}
+}
+t_unprotect( tmp[ 25]);
+}
+}
+t_unprotect( tmp[ 24]);
+}
+}
+t_unprotect( tmp[ 23]);
+}
+}
+t_unprotect( tmp[ 22]);
+}
+}
+t_unprotect( tmp[ 21]);
+}
+}
+t_unprotect( tmp[ 20]);
+}
+}
+t_unprotect( tmp[ 19]);
+}
+}
+t_unprotect( tmp[ 18]);
+}
+}
+t_unprotect( tmp[ 17]);
+}
+}
+t_unprotect( tmp[ 16]);
+}
+}
+t_unprotect( tmp[ 15]);
+}
+}
+}
+t_unprotect( tmp[ 14]);
+}
+}
+t_unprotect( tmp[ 13]);
+}
+}
+t_unprotect( tmp[ 12]);
+}
+}
+t_unprotect( tmp[ 11]);
+}
+}
+t_unprotect( tmp[ 10]);
+}
+}
+t_unprotect( tmp[ 9]);
+}
+}
+t_unprotect( tmp[ 8]);
+}
+}
+t_unprotect( tmp[ 7]);
+}
+}
+t_unprotect( tmp[ 6]);
+}
+}
+t_unprotect( tmp[ 5]);
+}
+}
+t_unprotect( tmp[ 4]);
+}
+}
+t_unprotect( tmp[ 3]);
+}
+}
+t_unprotect( tmp[ 2]);
+}
+}
+t_unprotect( tmp[ 1]);
+}
+}
+t_unprotect( tmp[ 0]);
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+return make_nf2( lf_AUX_Pure_C1_1sym , arg0 , arg1);
+}
+}
+aterm * lf3( aterm * arg0) {
+PROF( prof_lf3);
+return make_nf1( lf3sym , arg0);
+}
+aterm * lf2( aterm * arg0) {
+PROF( prof_lf2);
+return make_nf1( lf2sym , arg0);
 }
 

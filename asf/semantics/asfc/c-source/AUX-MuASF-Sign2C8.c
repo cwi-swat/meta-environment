@@ -35,12 +35,10 @@ PROF( prof_lf_AUX_MuASF_Sign2C8_2);
 if( check_sym( arg0 , lf_AUX_MuASF_Sign2C8_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
+if( m_not_empty_list( atmp00)) {
 t_protect( atmp00);
 tmp[ 0]= list_prefix( atmp00);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( atmp00);
 tmp[ 1]= list_last( atmp00);
 t_unprotect( arg0);
@@ -52,10 +50,8 @@ else {
 t_unprotect( arg0);
 return ( * ef1)( );
 }
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_unprotect( arg0);
 return ( * ef2)( tmp[ 0]);
 }

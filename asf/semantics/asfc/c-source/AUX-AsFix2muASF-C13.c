@@ -38,98 +38,80 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( arg1 , lf_AUX_AsFix2muASF_C13_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-if( check_sym( tmp[ 0] , ef1sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-if( check_sym( tmp[ 1] , ef2sym)) {
-tmp[ 3]= arg_0( tmp[ 1]);
-if( check_sym( tmp[ 3] , lf3sym)) {
-tmp[ 4]= arg_0( tmp[ 3]);
-if( check_sym( tmp[ 2] , lf_AUX_AsFix2muASF_C13_1sym)) {
-tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 4]);
-if( not_empty_list( tmp[ 4])) {
-t_protect( tmp[ 4]);
-if( term_equal( list_head( tmp[ 4]) , make_char( 99))) {
-t_protect( tmp[ 4]);
-tmp[ 6]= list_tail( tmp[ 4]);
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
-t_protect( tmp[ 6]);
-if( term_equal( list_head( tmp[ 6]) , make_char( 111))) {
-t_protect( tmp[ 6]);
-tmp[ 7]= list_tail( tmp[ 6]);
-t_protect( tmp[ 7]);
-if( not_empty_list( tmp[ 7])) {
-t_protect( tmp[ 7]);
-if( term_equal( list_head( tmp[ 7]) , make_char( 110))) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_tail( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( is_single_element( tmp[ 8])) {
-t_protect( tmp[ 8]);
-if( term_equal( list_head( tmp[ 8]) , make_char( 115))) {
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
-t_protect( tmp[ 5]);
-tmp[ 9]= list_head( tmp[ 5]);
-t_protect( tmp[ 5]);
-tmp[ 10]= list_tail( tmp[ 5]);
-t_protect( tmp[ 10]);
-if( is_single_element( tmp[ 10])) {
-t_protect( tmp[ 10]);
-tmp[ 11]= list_head( tmp[ 10]);
-t_protect( atmp10);
-if( is_single_element( atmp10)) {
-t_protect( atmp10);
-tmp[ 12]= list_head( atmp10);
-t_unprotect( arg0);
-t_unprotect( arg1);
-t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 6]);
-t_unprotect( tmp[ 7]);
-t_unprotect( tmp[ 8]);
-t_unprotect( tmp[ 10]);
-return lf_AUX_AsFix2muASF_C13_2( lf_AUX_AsFix2muASF_C13_1( make_list( tmp[ 9])) , lf_AUX_AsFix2muASF_C13_1( make_list( ( * ef1)( ( * ef2)( lf3( cons( make_list( make_char( 99)) , cons( make_list( make_char( 111)) , cons( make_list( make_char( 110)) , make_list( make_char( 115))))))) , lf_AUX_AsFix2muASF_C13_1( cons( make_list( tmp[ 11]) , make_list( tmp[ 12])))))));
-}
-t_unprotect( tmp[ 11]);
-}
-t_unprotect( tmp[ 10]);
-t_unprotect( tmp[ 9]);
-}
-}
-}
-t_unprotect( tmp[ 8]);
-}
-}
-t_unprotect( tmp[ 7]);
-}
-}
-t_unprotect( tmp[ 6]);
-}
-}
-}
-}
-}
-}
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_protect( atmp10);
 if( ! not_empty_list( atmp10)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 return tmp[ 0];
 }
+if( m_is_single_element( atmp10)) {
+tmp[ 1]= m_list_head( atmp10);
+if( check_sym( tmp[ 0] , ef1sym)) {
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+if( check_sym( tmp[ 2] , ef2sym)) {
+tmp[ 4]= arg_0( tmp[ 2]);
+if( check_sym( tmp[ 4] , lf3sym)) {
+tmp[ 5]= arg_0( tmp[ 4]);
+if( check_sym( tmp[ 3] , lf_AUX_AsFix2muASF_C13_1sym)) {
+tmp[ 6]= arg_0( tmp[ 3]);
+if( m_not_empty_list( tmp[ 5])) {
+t_protect( tmp[ 5]);
+if( term_equal( list_head( tmp[ 5]) , make_char( 99))) {
+tmp[ 7]= m_list_tail( tmp[ 5]);
+if( m_not_empty_list( tmp[ 7])) {
+t_protect( tmp[ 7]);
+if( term_equal( list_head( tmp[ 7]) , make_char( 111))) {
+tmp[ 8]= m_list_tail( tmp[ 7]);
+if( m_not_empty_list( tmp[ 8])) {
+t_protect( tmp[ 8]);
+if( term_equal( list_head( tmp[ 8]) , make_char( 110))) {
+tmp[ 9]= m_list_tail( tmp[ 8]);
+if( m_is_single_element( tmp[ 9])) {
+t_protect( tmp[ 9]);
+if( term_equal( list_head( tmp[ 9]) , make_char( 115))) {
+if( m_not_empty_list( tmp[ 6])) {
+tmp[ 10]= m_list_head( tmp[ 6]);
+tmp[ 11]= m_list_tail( tmp[ 6]);
+if( m_is_single_element( tmp[ 11])) {
+tmp[ 12]= m_list_head( tmp[ 11]);
+t_unprotect( arg0);
+t_unprotect( arg1);
+t_unprotect( tmp[ 0]);
+t_unprotect( tmp[ 7]);
+t_unprotect( tmp[ 8]);
+t_unprotect( tmp[ 9]);
+t_unprotect( tmp[ 11]);
+return lf_AUX_AsFix2muASF_C13_2( lf_AUX_AsFix2muASF_C13_1( make_list( tmp[ 10])) , lf_AUX_AsFix2muASF_C13_1( make_list( ( * ef1)( ( * ef2)( lf3( cons( make_list( make_char( 99)) , cons( make_list( make_char( 111)) , cons( make_list( make_char( 110)) , make_list( make_char( 115))))))) , lf_AUX_AsFix2muASF_C13_1( cons( make_list( tmp[ 12]) , make_list( tmp[ 1])))))));
+}
+t_unprotect( tmp[ 11]);
+t_unprotect( tmp[ 10]);
+}
+}
+}
+t_unprotect( tmp[ 9]);
+}
+}
+t_unprotect( tmp[ 8]);
+}
+}
+t_unprotect( tmp[ 7]);
+}
+}
+}
+}
+}
+}
+t_unprotect( tmp[ 1]);
+}
 t_unprotect( tmp[ 0]);
 }
 t_protect( atmp00);
 if( ! not_empty_list( atmp00)) {
-t_protect( atmp10);
-if( is_single_element( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
+if( m_is_single_element( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
 return tmp[ 0];
@@ -145,14 +127,10 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( arg1 , lf_AUX_AsFix2muASF_C13_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp10);
-if( is_single_element( atmp10)) {
-t_protect( atmp10);
-tmp[ 1]= list_head( atmp10);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+if( m_is_single_element( atmp10)) {
+tmp[ 1]= m_list_head( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
 return ( * ef1)( ( * ef2)( lf3( cons( make_list( make_char( 99)) , cons( make_list( make_char( 111)) , cons( make_list( make_char( 110)) , make_list( make_char( 115))))))) , lf_AUX_AsFix2muASF_C13_1( cons( make_list( tmp[ 0]) , make_list( tmp[ 1]))));

@@ -40,17 +40,15 @@ if( check_sym( arg0 , ef1sym)) {
 if( check_sym( arg1 , lf_AUX_MuASF_Signs13_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
 return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Signs13_1( make_list( atmp10))));
 }
 else {
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef1)( );
+return arg0;
 }
 }
 }
@@ -69,8 +67,7 @@ if( check_sym( arg1 , lf_AUX_MuASF_Signs13_1sym)) {
 aterm * atmp10= arg_0( arg1);
 t_protect( atmp0000);
 if( ! not_empty_list( atmp0000)) {
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -83,8 +80,7 @@ return ( * ef1)( );
 }
 }
 else {
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp0000);
 t_protect( atmp10);
 tmp[ 0]= ( * ef4)( ( * ef3)( lf_AUX_MuASF_Signs13_1( make_list( atmp0000))) , ( * ef3)( lf_AUX_MuASF_Signs13_1( make_list( atmp10))));
@@ -92,8 +88,7 @@ if( check_sym( tmp[ 0] , ef3sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf_AUX_MuASF_Signs13_1sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 t_unprotect( arg0);
 t_unprotect( arg1);

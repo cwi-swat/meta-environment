@@ -102,10 +102,8 @@ if( check_sym( arg0 , ef1sym)) {
 if( check_sym( arg1 , ef2sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
 t_unprotect( arg0);
-t_unprotect( arg1);
-return ( * ef2)( atmp10);
+return arg1;
 }
 }
 }

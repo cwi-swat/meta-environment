@@ -72,18 +72,15 @@ aterm * atmp20= arg_0( arg2);
 if( check_sym( arg3 , lf_AUX_MuASF_Rules2C5_3sym)) {
 {
 aterm * atmp30= arg_0( arg3);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp20);
-if( not_empty_list( atmp20)) {
+if( m_not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp20)) {
 t_protect( atmp10);
 tmp[ 0]= ( * ef4)( lf_AUX_MuASF_Rules2C5_2( make_list( atmp10)));
 if( check_sym( tmp[ 0] , ef5sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf_AUX_MuASF_Rules2C5_2sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 t_protect( atmp30);
 tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , lf_AUX_MuASF_Rules2C5_3( make_list( atmp30)));
@@ -121,8 +118,7 @@ if( check_sym( tmp[ 0] , ef5sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf_AUX_MuASF_Rules2C5_2sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 t_protect( atmp30);
 tmp[ 3]= ( * ef6)( lf_AUX_MuASF_Rules2C5_2( make_list( tmp[ 2])) , lf_AUX_MuASF_Rules2C5_3( make_list( atmp30)));

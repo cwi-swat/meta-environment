@@ -62,10 +62,8 @@ aterm * atmp1000= arg_0( atmp100);
 if( check_sym( atmp1000 , lf2sym)) {
 {
 aterm * atmp10000= arg_0( atmp1000);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
-t_protect( atmp10000);
-if( not_empty_list( atmp10000)) {
+if( m_not_empty_list( atmp000)) {
+if( m_not_empty_list( atmp10000)) {
 t_protect( atmp10000);
 t_protect( atmp000);
 t_unprotect( arg0);

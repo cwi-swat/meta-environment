@@ -103,36 +103,28 @@ PROF( prof_lf_AUX_Remove_Lists_C21_2);
 if( check_sym( arg0 , lf_AUX_Remove_Lists_C21_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+{
 if( check_sym( tmp[ 0] , ef1sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , ef2sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf3sym)) {
 tmp[ 3]= arg_0( tmp[ 2]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
+if( m_not_empty_list( tmp[ 3])) {
 t_protect( tmp[ 3]);
 if( term_equal( list_head( tmp[ 3]) , make_char( 110))) {
-t_protect( tmp[ 3]);
-tmp[ 4]= list_tail( tmp[ 3]);
-t_protect( tmp[ 4]);
-if( not_empty_list( tmp[ 4])) {
+tmp[ 4]= m_list_tail( tmp[ 3]);
+if( m_not_empty_list( tmp[ 4])) {
 t_protect( tmp[ 4]);
 if( term_equal( list_head( tmp[ 4]) , make_char( 117))) {
-t_protect( tmp[ 4]);
-tmp[ 5]= list_tail( tmp[ 4]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+tmp[ 5]= m_list_tail( tmp[ 4]);
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( tmp[ 5]);
 if( term_equal( list_head( tmp[ 5]) , make_char( 108))) {
-t_protect( tmp[ 5]);
-tmp[ 6]= list_tail( tmp[ 5]);
-t_protect( tmp[ 6]);
-if( is_single_element( tmp[ 6])) {
+tmp[ 6]= m_list_tail( tmp[ 5]);
+if( m_is_single_element( tmp[ 6])) {
 t_protect( tmp[ 6]);
 if( term_equal( list_head( tmp[ 6]) , make_char( 108))) {
 t_protect( arg1);
@@ -188,10 +180,8 @@ if( check_sym( tmp[ 5] , lf_AUX_Remove_Lists_C21_1sym)) {
 tmp[ 8]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf4sym)) {
 tmp[ 9]= arg_0( tmp[ 6]);
-t_protect( tmp[ 8]);
-if( is_single_element( tmp[ 8])) {
-t_protect( tmp[ 8]);
-tmp[ 10]= list_head( tmp[ 8]);
+if( m_is_single_element( tmp[ 8])) {
+tmp[ 10]= m_list_head( tmp[ 8]);
 t_protect( tmp[ 7]);
 tmp[ 11]= ( * ef8)( tmp[ 7]);
 t_protect( tmp[ 11]);
@@ -247,6 +237,7 @@ t_unprotect( tmp[ 1]);
 return ( * ef18)( tmp[ 0] , arg1);
 }
 t_unprotect( tmp[ 1]);
+}
 t_unprotect( tmp[ 0]);
 }
 }

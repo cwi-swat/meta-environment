@@ -51,24 +51,21 @@ PROF( prof_lf_AUX_Rules2C_Aux8_2);
 if( check_sym( arg0 , lf_AUX_Rules2C_Aux8_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+{
+tmp[ 1]= m_list_tail( atmp00);
 if( check_sym( tmp[ 0] , ef4sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-tmp[ 3]= arg_2( tmp[ 0]);
-if( check_sym( tmp[ 1] , ef5sym)) {
-tmp[ 4]= arg_0( tmp[ 1]);
-if( check_sym( tmp[ 4] , lf3sym)) {
-tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
-t_protect( atmp00);
-tmp[ 6]= list_tail( atmp00);
-t_protect( tmp[ 6]);
-tmp[ 7]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 6])));
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+tmp[ 4]= arg_2( tmp[ 0]);
+if( check_sym( tmp[ 2] , ef5sym)) {
+tmp[ 5]= arg_0( tmp[ 2]);
+if( check_sym( tmp[ 5] , lf3sym)) {
+tmp[ 6]= arg_0( tmp[ 5]);
+if( m_not_empty_list( tmp[ 6])) {
+t_protect( tmp[ 1]);
+tmp[ 7]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 7] , ef1sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
 tmp[ 9]= arg_1( tmp[ 7]);
@@ -77,38 +74,34 @@ tmp[ 10]= arg_0( tmp[ 8]);
 if( check_sym( tmp[ 9] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 11]= arg_0( tmp[ 9]);
 t_protect( tmp[ 10]);
-t_protect( tmp[ 5]);
-t_protect( tmp[ 2]);
+t_protect( tmp[ 6]);
 t_protect( tmp[ 3]);
+t_protect( tmp[ 4]);
 t_protect( tmp[ 11]);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 6]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 7]);
-return ( * ef1)( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 10])) , lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef4)( ( * ef5)( lf3( make_list( tmp[ 5]))) , tmp[ 2] , tmp[ 3])) , make_list( tmp[ 11]))));
+return ( * ef1)( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 10])) , lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef4)( ( * ef5)( lf3( make_list( tmp[ 6]))) , tmp[ 3] , tmp[ 4])) , make_list( tmp[ 11]))));
 }
 }
 }
 t_unprotect( tmp[ 7]);
-t_unprotect( tmp[ 6]);
 }
 }
 }
 }
 if( check_sym( tmp[ 0] , ef6sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-tmp[ 3]= arg_2( tmp[ 0]);
-if( check_sym( tmp[ 1] , ef5sym)) {
-tmp[ 4]= arg_0( tmp[ 1]);
-if( check_sym( tmp[ 4] , lf3sym)) {
-tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
-t_protect( atmp00);
-tmp[ 6]= list_tail( atmp00);
-t_protect( tmp[ 6]);
-tmp[ 7]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 6])));
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+tmp[ 4]= arg_2( tmp[ 0]);
+if( check_sym( tmp[ 2] , ef5sym)) {
+tmp[ 5]= arg_0( tmp[ 2]);
+if( check_sym( tmp[ 5] , lf3sym)) {
+tmp[ 6]= arg_0( tmp[ 5]);
+if( m_not_empty_list( tmp[ 6])) {
+t_protect( tmp[ 1]);
+tmp[ 7]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 7] , ef1sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
 tmp[ 9]= arg_1( tmp[ 7]);
@@ -116,32 +109,29 @@ if( check_sym( tmp[ 8] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 10]= arg_0( tmp[ 8]);
 if( check_sym( tmp[ 9] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 11]= arg_0( tmp[ 9]);
-t_protect( tmp[ 5]);
-t_protect( tmp[ 2]);
+t_protect( tmp[ 6]);
 t_protect( tmp[ 3]);
+t_protect( tmp[ 4]);
 t_protect( tmp[ 10]);
 t_protect( tmp[ 11]);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 6]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 7]);
-return ( * ef1)( lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef6)( ( * ef5)( lf3( make_list( tmp[ 5]))) , tmp[ 2] , tmp[ 3])) , make_list( tmp[ 10]))) , lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 11])));
+return ( * ef1)( lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef6)( ( * ef5)( lf3( make_list( tmp[ 6]))) , tmp[ 3] , tmp[ 4])) , make_list( tmp[ 10]))) , lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 11])));
 }
 }
 }
 t_unprotect( tmp[ 7]);
-t_unprotect( tmp[ 6]);
 }
 }
 }
 }
 if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-t_protect( atmp00);
-tmp[ 3]= list_tail( atmp00);
-t_protect( tmp[ 3]);
-tmp[ 4]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 3])));
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+t_protect( tmp[ 1]);
+tmp[ 4]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 4] , ef1sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 tmp[ 6]= arg_1( tmp[ 4]);
@@ -150,27 +140,24 @@ tmp[ 7]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 8]= arg_0( tmp[ 6]);
 t_protect( tmp[ 7]);
-t_protect( tmp[ 1]);
 t_protect( tmp[ 2]);
+t_protect( tmp[ 3]);
 t_protect( tmp[ 8]);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 4]);
-return ( * ef1)( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 7])) , lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef2)( tmp[ 1] , tmp[ 2])) , make_list( tmp[ 8]))));
+return ( * ef1)( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 7])) , lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef2)( tmp[ 2] , tmp[ 3])) , make_list( tmp[ 8]))));
 }
 }
 }
 t_unprotect( tmp[ 4]);
-t_unprotect( tmp[ 3]);
 }
 if( check_sym( tmp[ 0] , ef3sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-t_protect( atmp00);
-tmp[ 3]= list_tail( atmp00);
-t_protect( tmp[ 3]);
-tmp[ 4]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 3])));
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+t_protect( tmp[ 1]);
+tmp[ 4]= lf_AUX_Rules2C_Aux8_2( lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 4] , ef1sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 tmp[ 6]= arg_1( tmp[ 4]);
@@ -178,20 +165,21 @@ if( check_sym( tmp[ 5] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 7]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf_AUX_Rules2C_Aux8_1sym)) {
 tmp[ 8]= arg_0( tmp[ 6]);
-t_protect( tmp[ 1]);
 t_protect( tmp[ 2]);
+t_protect( tmp[ 3]);
 t_protect( tmp[ 7]);
 t_protect( tmp[ 8]);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 4]);
-return ( * ef1)( lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef3)( tmp[ 1] , tmp[ 2])) , make_list( tmp[ 7]))) , lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 8])));
+return ( * ef1)( lf_AUX_Rules2C_Aux8_1( cons( make_list( ( * ef3)( tmp[ 2] , tmp[ 3])) , make_list( tmp[ 7]))) , lf_AUX_Rules2C_Aux8_1( make_list( tmp[ 8])));
 }
 }
 }
 t_unprotect( tmp[ 4]);
-t_unprotect( tmp[ 3]);
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

@@ -77,14 +77,11 @@ aterm * atmp010000= arg_0( atmp01000);
 if( check_sym( atmp010000 , lf2sym)) {
 {
 aterm * atmp0100000= arg_0( atmp010000);
-t_protect( atmp0100000);
-if( not_empty_list( atmp0100000)) {
+if( m_not_empty_list( atmp0100000)) {
 t_protect( atmp0100000);
 if( term_equal( list_head( atmp0100000) , make_char( 34))) {
-t_protect( atmp0100000);
-tmp[ 0]= list_tail( atmp0100000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp0100000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 tmp[ 1]= list_prefix( tmp[ 0]);
 t_protect( tmp[ 0]);

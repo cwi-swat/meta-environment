@@ -27,21 +27,15 @@ PROF( prof_lf_AUX_Make_Assign_Conds_C6_2);
 if( check_sym( arg0 , lf_AUX_Make_Assign_Conds_C6_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_unprotect( arg0);
 return ( * ef1)( tmp[ 0] , arg1);
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 0]);
 t_protect( arg1);
 tmp[ 2]= lf_AUX_Make_Assign_Conds_C6_2( lf_AUX_Make_Assign_Conds_C6_1( make_list( tmp[ 0])) , arg1);

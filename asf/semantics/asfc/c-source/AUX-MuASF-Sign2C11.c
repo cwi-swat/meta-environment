@@ -101,14 +101,11 @@ aterm * atmp010= arg_0( atmp01);
 if( check_sym( atmp010 , lf2sym)) {
 {
 aterm * atmp0100= arg_0( atmp010);
-t_protect( atmp0100);
-if( not_empty_list( atmp0100)) {
-t_protect( atmp0100);
-tmp[ 0]= list_head( atmp0100);
+if( m_not_empty_list( atmp0100)) {
+tmp[ 0]= m_list_head( atmp0100);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 101))) {
-t_protect( atmp0100);
-tmp[ 1]= list_tail( atmp0100);
+tmp[ 1]= m_list_tail( atmp0100);
 t_protect( tmp[ 1]);
 t_protect( atmp0000);
 t_protect( atmp0000);
@@ -118,8 +115,7 @@ return ( * ef3)( ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( ( * ef9)( ( *
 }
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 108))) {
-t_protect( atmp0100);
-tmp[ 1]= list_tail( atmp0100);
+tmp[ 1]= m_list_tail( atmp0100);
 t_unprotect( arg0);
 t_unprotect( tmp[ 0]);
 t_unprotect( tmp[ 1]);

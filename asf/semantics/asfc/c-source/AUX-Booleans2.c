@@ -27,9 +27,8 @@ t_unprotect( arg0);
 return arg1;
 }
 if( check_sym( arg0 , ef2sym)) {
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( );
+return arg0;
 }
 return make_nf2( lf_AUX_Booleans2_1sym , arg0 , arg1);
 }

@@ -41,10 +41,8 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( arg1 , lf_AUX_MuASF_Sign2C5_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( is_single_element( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
+if( m_is_single_element( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
 t_protect( atmp000);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -60,14 +58,10 @@ return ( * ef2)( lf3( cons( make_list( make_char( 34)) , cons( make_list( atmp00
 if( check_sym( arg1 , lf_AUX_MuASF_Sign2C5_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
-t_protect( atmp10);
-tmp[ 0]= list_head( atmp10);
-t_protect( atmp10);
-tmp[ 1]= list_tail( atmp10);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp10)) {
+tmp[ 0]= m_list_head( atmp10);
+tmp[ 1]= m_list_tail( atmp10);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( arg0);
 t_protect( tmp[ 1]);
 tmp[ 2]= lf_AUX_MuASF_Sign2C5_2( arg0 , lf_AUX_MuASF_Sign2C5_1( make_list( tmp[ 1])));
@@ -75,22 +69,18 @@ if( check_sym( tmp[ 2] , ef2sym)) {
 tmp[ 3]= arg_0( tmp[ 2]);
 if( check_sym( tmp[ 3] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 3]);
-t_protect( tmp[ 4]);
-if( not_empty_list( tmp[ 4])) {
+if( m_not_empty_list( tmp[ 4])) {
 t_protect( tmp[ 4]);
 if( term_equal( list_head( tmp[ 4]) , make_char( 34))) {
-t_protect( tmp[ 4]);
-tmp[ 5]= list_tail( tmp[ 4]);
+tmp[ 5]= m_list_tail( tmp[ 4]);
 t_protect( tmp[ 5]);
 tmp[ 6]= list_prefix( tmp[ 5]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( tmp[ 5]);
 if( term_equal( list_last( tmp[ 5]) , make_char( 34))) {
 t_protect( tmp[ 6]);
 tmp[ 7]= list_prefix( tmp[ 6]);
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
+if( m_not_empty_list( tmp[ 6])) {
 t_protect( tmp[ 6]);
 if( term_equal( list_last( tmp[ 6]) , make_char( 41))) {
 t_unprotect( arg0);

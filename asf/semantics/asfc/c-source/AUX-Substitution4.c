@@ -90,9 +90,8 @@ if( check_sym( arg0 , ef5sym)) {
 {
 aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef7sym)) {
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef5)( ( * ef7)( ));
+return arg0;
 }
 {
 aterm * atmp00= arg_0( arg0);

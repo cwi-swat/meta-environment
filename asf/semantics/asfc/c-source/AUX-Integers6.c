@@ -76,14 +76,11 @@ aterm * atmp1000= arg_0( atmp100);
 if( check_sym( atmp1000 , lf2sym)) {
 {
 aterm * atmp10000= arg_0( atmp1000);
-t_protect( atmp00000);
-if( not_empty_list( atmp00000)) {
-t_protect( atmp10000);
-if( not_empty_list( atmp10000)) {
+if( m_not_empty_list( atmp00000)) {
+if( m_not_empty_list( atmp10000)) {
 t_protect( atmp10000);
 tmp[ 0]= list_prefix( atmp10000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( atmp10000);
 tmp[ 1]= list_last( atmp10000);
 t_protect( atmp00000);
@@ -97,8 +94,7 @@ if( check_sym( tmp[ 4] , ef3sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 if( check_sym( tmp[ 5] , lf2sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
-t_protect( tmp[ 6]);
-if( not_empty_list( tmp[ 6])) {
+if( m_not_empty_list( tmp[ 6])) {
 t_protect( tmp[ 6]);
 t_protect( atmp00000);
 t_unprotect( arg0);
@@ -145,10 +141,8 @@ aterm * atmp1000= arg_0( atmp100);
 if( check_sym( atmp1000 , lf2sym)) {
 {
 aterm * atmp10000= arg_0( atmp1000);
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 0]= list_head( atmp10000);
+if( m_is_single_element( atmp10000)) {
+tmp[ 0]= m_list_head( atmp10000);
 t_protect( tmp[ 0]);
 if( term_equal( ( * ef6)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 0])))) , ( * ef2)( ( * ef3)( lf2( make_list( make_char( 49)))))) , ( * ef7)( ))) {
 t_protect( arg0);
@@ -156,8 +150,7 @@ t_unprotect( arg1);
 return ( * ef4)( arg0 , lf_AUX_Integers6_1( arg0 , ( * ef5)( ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( tmp[ 0]))))) , ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( make_char( 49)))))))));
 }
 t_unprotect( tmp[ 0]);
-t_protect( atmp10000);
-tmp[ 0]= list_head( atmp10000);
+tmp[ 0]= m_list_head( atmp10000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 48))) {
 t_unprotect( arg0);
@@ -167,11 +160,9 @@ return ( * ef1)( ( * ef2)( ( * ef3)( lf2( make_list( make_char( 48))))));
 }
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 49))) {
-t_protect( atmp00);
-t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef1)( atmp00);
+return arg0;
 }
 t_unprotect( tmp[ 0]);
 }

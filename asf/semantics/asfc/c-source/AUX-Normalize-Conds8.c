@@ -35,21 +35,15 @@ PROF( prof_lf_AUX_Normalize_Conds8_2);
 if( check_sym( arg0 , lf_AUX_Normalize_Conds8_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 t_unprotect( arg0);
 return ( * ef1)( tmp[ 0] , arg1);
 }
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
+tmp[ 1]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 0]);
 t_protect( arg1);
 tmp[ 2]= ( * ef1)( tmp[ 0] , arg1);
@@ -63,8 +57,7 @@ if( check_sym( tmp[ 4] , lf_AUX_Normalize_Conds8_1sym)) {
 tmp[ 7]= arg_0( tmp[ 4]);
 t_protect( tmp[ 6]);
 if( ! not_empty_list( tmp[ 6])) {
-t_protect( tmp[ 7]);
-if( not_empty_list( tmp[ 7])) {
+if( m_not_empty_list( tmp[ 7])) {
 t_protect( tmp[ 1]);
 t_protect( tmp[ 5]);
 tmp[ 8]= lf_AUX_Normalize_Conds8_2( lf_AUX_Normalize_Conds8_1( make_list( tmp[ 1])) , tmp[ 5]);
@@ -78,8 +71,7 @@ if( check_sym( tmp[ 10] , lf_AUX_Normalize_Conds8_1sym)) {
 tmp[ 13]= arg_0( tmp[ 10]);
 t_protect( tmp[ 12]);
 if( ! not_empty_list( tmp[ 12])) {
-t_protect( tmp[ 13]);
-if( not_empty_list( tmp[ 13])) {
+if( m_not_empty_list( tmp[ 13])) {
 t_protect( tmp[ 7]);
 t_protect( tmp[ 13]);
 t_protect( tmp[ 11]);

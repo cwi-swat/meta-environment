@@ -64,16 +64,12 @@ aterm * atmp1000= arg_0( atmp100);
 if( check_sym( atmp1000 , lf2sym)) {
 {
 aterm * atmp10000= arg_0( atmp1000);
-t_protect( atmp00000);
-if( is_single_element( atmp00000)) {
-t_protect( atmp00000);
-tmp[ 0]= list_head( atmp00000);
+if( m_is_single_element( atmp00000)) {
+tmp[ 0]= m_list_head( atmp00000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 49))) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 1]= list_head( atmp10000);
+if( m_is_single_element( atmp10000)) {
+tmp[ 1]= m_list_head( atmp10000);
 t_protect( tmp[ 1]);
 if( term_equal( tmp[ 1] , make_char( 54))) {
 t_unprotect( arg0);
@@ -150,13 +146,9 @@ t_unprotect( tmp[ 1]);
 }
 }
 tmp[ 1]= make_char( 50);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( term_equal( tmp[ 0] , tmp[ 1])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 2]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 1])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 2]= m_list_head( atmp10000);
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , make_char( 52))) {
 t_unprotect( arg0);
@@ -242,13 +234,9 @@ t_unprotect( tmp[ 2]);
 }
 }
 tmp[ 2]= make_char( 51);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 2]);
-if( term_equal( tmp[ 0] , tmp[ 2])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 3]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 2])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 3]= m_list_head( atmp10000);
 t_protect( tmp[ 3]);
 if( term_equal( tmp[ 3] , make_char( 52))) {
 t_unprotect( arg0);
@@ -343,13 +331,9 @@ t_unprotect( tmp[ 3]);
 }
 }
 tmp[ 3]= make_char( 52);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 3]);
-if( term_equal( tmp[ 0] , tmp[ 3])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 4]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 3])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 4]= m_list_head( atmp10000);
 t_protect( tmp[ 4]);
 if( term_equal( tmp[ 4] , make_char( 52))) {
 t_unprotect( arg0);
@@ -453,13 +437,9 @@ t_unprotect( tmp[ 4]);
 }
 }
 tmp[ 4]= make_char( 53);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 4]);
-if( term_equal( tmp[ 0] , tmp[ 4])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 5]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 4])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 5]= m_list_head( atmp10000);
 t_protect( tmp[ 5]);
 if( term_equal( tmp[ 5] , make_char( 52))) {
 t_unprotect( arg0);
@@ -572,13 +552,9 @@ t_unprotect( tmp[ 5]);
 }
 }
 tmp[ 5]= make_char( 54);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 5]);
-if( term_equal( tmp[ 0] , tmp[ 5])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 6]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 5])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 6]= m_list_head( atmp10000);
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , make_char( 52))) {
 t_unprotect( arg0);
@@ -700,13 +676,9 @@ t_unprotect( tmp[ 6]);
 }
 }
 tmp[ 6]= make_char( 55);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 6]);
-if( term_equal( tmp[ 0] , tmp[ 6])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 7]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 6])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 7]= m_list_head( atmp10000);
 t_protect( tmp[ 7]);
 if( term_equal( tmp[ 7] , make_char( 52))) {
 t_unprotect( arg0);
@@ -837,13 +809,9 @@ t_unprotect( tmp[ 7]);
 }
 }
 tmp[ 7]= make_char( 56);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 7]);
-if( term_equal( tmp[ 0] , tmp[ 7])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 8]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 7])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 8]= m_list_head( atmp10000);
 t_protect( tmp[ 8]);
 if( term_equal( tmp[ 8] , make_char( 52))) {
 t_unprotect( arg0);
@@ -983,13 +951,9 @@ t_unprotect( tmp[ 8]);
 }
 }
 tmp[ 8]= make_char( 57);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 8]);
-if( term_equal( tmp[ 0] , tmp[ 8])) {
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
-t_protect( atmp10000);
-tmp[ 9]= list_head( atmp10000);
+if( m_term_equal( tmp[ 0] , tmp[ 8])) {
+if( m_is_single_element( atmp10000)) {
+tmp[ 9]= m_list_head( atmp10000);
 t_protect( tmp[ 9]);
 if( term_equal( tmp[ 9] , make_char( 52))) {
 t_unprotect( arg0);
@@ -1147,19 +1111,17 @@ t_unprotect( tmp[ 2]);
 t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp00000);
-if( not_empty_list( atmp00000)) {
+{
+if( m_not_empty_list( atmp00000)) {
 t_protect( atmp00000);
 tmp[ 0]= list_prefix( atmp00000);
 {
 t_protect( atmp00000);
 tmp[ 1]= list_last( atmp00000);
-t_protect( atmp10000);
-if( not_empty_list( atmp10000)) {
+if( m_not_empty_list( atmp10000)) {
 t_protect( atmp10000);
 tmp[ 2]= list_prefix( atmp10000);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( atmp10000);
 tmp[ 3]= list_last( atmp10000);
 t_protect( tmp[ 1]);
@@ -1173,8 +1135,7 @@ if( check_sym( tmp[ 6] , ef3sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf2sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( tmp[ 8]);
 tmp[ 9]= list_prefix( tmp[ 8]);
 t_protect( tmp[ 8]);
@@ -1191,8 +1152,7 @@ if( check_sym( tmp[ 13] , ef3sym)) {
 tmp[ 14]= arg_0( tmp[ 13]);
 if( check_sym( tmp[ 14] , lf2sym)) {
 tmp[ 15]= arg_0( tmp[ 14]);
-t_protect( tmp[ 15]);
-if( not_empty_list( tmp[ 15])) {
+if( m_not_empty_list( tmp[ 15])) {
 t_protect( tmp[ 15]);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -1223,12 +1183,12 @@ t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 2]);
 }
 t_unprotect( tmp[ 1]);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+{
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( atmp00000);
 tmp[ 1]= list_last( atmp00000);
-t_protect( atmp10000);
-if( not_empty_list( atmp10000)) {
+{
+if( m_not_empty_list( atmp10000)) {
 t_protect( atmp10000);
 tmp[ 2]= list_prefix( atmp10000);
 {
@@ -1245,8 +1205,7 @@ if( check_sym( tmp[ 6] , ef3sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf2sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( tmp[ 8]);
 tmp[ 9]= list_prefix( tmp[ 8]);
 t_protect( tmp[ 8]);
@@ -1263,8 +1222,7 @@ if( check_sym( tmp[ 13] , ef3sym)) {
 tmp[ 14]= arg_0( tmp[ 13]);
 if( check_sym( tmp[ 14] , lf2sym)) {
 tmp[ 15]= arg_0( tmp[ 14]);
-t_protect( tmp[ 15]);
-if( not_empty_list( tmp[ 15])) {
+if( m_not_empty_list( tmp[ 15])) {
 t_protect( tmp[ 15]);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -1291,8 +1249,7 @@ t_unprotect( tmp[ 9]);
 }
 t_unprotect( tmp[ 4]);
 t_unprotect( tmp[ 3]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( atmp10000);
 tmp[ 3]= list_last( atmp10000);
 t_protect( tmp[ 1]);
@@ -1306,8 +1263,7 @@ if( check_sym( tmp[ 6] , ef3sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf2sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( tmp[ 8]);
 tmp[ 9]= list_prefix( tmp[ 8]);
 t_protect( tmp[ 8]);
@@ -1324,8 +1280,7 @@ if( check_sym( tmp[ 13] , ef3sym)) {
 tmp[ 14]= arg_0( tmp[ 13]);
 if( check_sym( tmp[ 14] , lf2sym)) {
 tmp[ 15]= arg_0( tmp[ 14]);
-t_protect( tmp[ 15]);
-if( not_empty_list( tmp[ 15])) {
+if( m_not_empty_list( tmp[ 15])) {
 t_protect( tmp[ 15]);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -1356,7 +1311,9 @@ t_unprotect( tmp[ 3]);
 }
 t_unprotect( tmp[ 2]);
 }
+}
 t_unprotect( tmp[ 1]);
+}
 }
 }
 t_unprotect( tmp[ 0]);
@@ -1367,16 +1324,14 @@ t_unprotect( tmp[ 0]);
 }
 }
 }
+}
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp00000);
-if( is_single_element( atmp00000)) {
+if( m_is_single_element( atmp00000)) {
 t_protect( atmp00000);
 if( term_equal( list_head( atmp00000) , make_char( 48))) {
-t_protect( atmp10);
 t_unprotect( arg0);
-t_unprotect( arg1);
-return ( * ef1)( atmp10);
+return arg1;
 }
 }
 }
@@ -1410,14 +1365,11 @@ aterm * atmp1000= arg_0( atmp100);
 if( check_sym( atmp1000 , lf2sym)) {
 {
 aterm * atmp10000= arg_0( atmp1000);
-t_protect( atmp10000);
-if( is_single_element( atmp10000)) {
+if( m_is_single_element( atmp10000)) {
 t_protect( atmp10000);
 if( term_equal( list_head( atmp10000) , make_char( 48))) {
-t_protect( atmp00);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef1)( atmp00);
+return arg0;
 }
 }
 }

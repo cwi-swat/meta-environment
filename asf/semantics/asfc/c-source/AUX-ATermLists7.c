@@ -31,8 +31,7 @@ ef4sym= lookup_sym( TmakeSimple( & local , "prod(id(\"ATerms\"),w(\"\"),[sort(\"
 aterm * lf_AUX_ATermLists7_1( aterm * arg0) {
 PROF( prof_lf_AUX_ATermLists7_1);
 if( check_sym( arg0 , ef1sym)) {
-t_unprotect( arg0);
-return ( * ef1)( );
+return arg0;
 }
 if( check_sym( arg0 , ef2sym)) {
 {

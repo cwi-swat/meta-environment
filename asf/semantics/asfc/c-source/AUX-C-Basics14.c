@@ -38,33 +38,30 @@ aterm * atmp10= arg_0( arg1);
 if( check_sym( atmp10 , lf2sym)) {
 {
 aterm * atmp100= arg_0( atmp10);
-t_protect( atmp100);
-if( not_empty_list( atmp100)) {
-t_protect( atmp100);
-tmp[ 0]= list_head( atmp100);
-if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
+if( m_not_empty_list( atmp100)) {
+tmp[ 0]= m_list_head( atmp100);
 {
-t_protect( atmp100);
-tmp[ 3]= list_tail( atmp100);
-t_protect( arg0);
-t_protect( tmp[ 1]);
-if( term_equal( arg0 , tmp[ 1])) {
-t_protect( tmp[ 2]);
+tmp[ 1]= m_list_tail( atmp100);
+{
+if( check_sym( tmp[ 0] , ef2sym)) {
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+if( m_term_equal( arg0 , tmp[ 2])) {
+t_protect( tmp[ 3]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
-return ( * ef3)( tmp[ 2]);
+t_unprotect( tmp[ 1]);
+return ( * ef3)( tmp[ 3]);
 }
 else {
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return lf_AUX_C_Basics14_1( arg0 , ( * ef1)( lf2( make_list( tmp[ 3]))));
+return lf_AUX_C_Basics14_1( arg0 , ( * ef1)( lf2( make_list( tmp[ 1]))));
 }
-t_unprotect( tmp[ 3]);
 }
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

@@ -59,10 +59,8 @@ aterm * atmp000= arg_0( atmp00);
 if( check_sym( atmp000 , ef4sym)) {
 {
 aterm * atmp0000= arg_0( atmp000);
-t_protect( atmp0000);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef3)( ( * ef4)( atmp0000)));
+return arg0;
 }
 }
 {
@@ -82,10 +80,8 @@ aterm * atmp000100= arg_0( atmp00010);
 if( check_sym( atmp000100 , ef4sym)) {
 {
 aterm * atmp0001000= arg_0( atmp000100);
-t_protect( atmp0001000);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef3)( ( * ef6)( ( * ef7)( ) , ( * ef2)( ( * ef3)( ( * ef4)( atmp0001000))))));
+return arg0;
 }
 }
 }
@@ -100,11 +96,8 @@ aterm * atmp000101= arg_1( atmp00010);
 if( check_sym( atmp000101 , ef4sym)) {
 {
 aterm * atmp0001010= arg_0( atmp000101);
-t_protect( atmp000100);
-t_protect( atmp0001010);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef3)( ( * ef6)( ( * ef7)( ) , ( * ef2)( ( * ef5)( atmp000100 , ( * ef4)( atmp0001010))))));
+return arg0;
 }
 }
 }
@@ -130,11 +123,8 @@ aterm * atmp001= arg_1( atmp00);
 if( check_sym( atmp001 , ef4sym)) {
 {
 aterm * atmp0010= arg_0( atmp001);
-t_protect( atmp000);
-t_protect( atmp0010);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef5)( atmp000 , ( * ef4)( atmp0010)));
+return arg0;
 }
 }
 {
@@ -154,11 +144,8 @@ aterm * atmp001100= arg_0( atmp00110);
 if( check_sym( atmp001100 , ef4sym)) {
 {
 aterm * atmp0011000= arg_0( atmp001100);
-t_protect( atmp000);
-t_protect( atmp0011000);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef5)( atmp000 , ( * ef6)( ( * ef7)( ) , ( * ef2)( ( * ef3)( ( * ef4)( atmp0011000))))));
+return arg0;
 }
 }
 }
@@ -173,12 +160,8 @@ aterm * atmp001101= arg_1( atmp00110);
 if( check_sym( atmp001101 , ef4sym)) {
 {
 aterm * atmp0011010= arg_0( atmp001101);
-t_protect( atmp000);
-t_protect( atmp001100);
-t_protect( atmp0011010);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( ( * ef5)( atmp000 , ( * ef6)( ( * ef7)( ) , ( * ef2)( ( * ef5)( atmp001100 , ( * ef4)( atmp0011010))))));
+return arg0;
 }
 }
 }

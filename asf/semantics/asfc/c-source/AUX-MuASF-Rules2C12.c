@@ -58,10 +58,8 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( is_single_element( atmp000)) {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+if( m_is_single_element( atmp000)) {
+tmp[ 0]= m_list_head( atmp000);
 if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 tmp[ 2]= arg_1( tmp[ 0]);
@@ -72,42 +70,38 @@ return ( * ef3)( ( * ef4)( lf3( make_list( tmp[ 1]))) , ( * ef5)( ) , ( * ef6)( 
 }
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+if( m_not_empty_list( atmp000)) {
+tmp[ 0]= m_list_head( atmp000);
+tmp[ 1]= m_list_tail( atmp000);
+if( m_not_empty_list( tmp[ 1])) {
 if( check_sym( tmp[ 0] , ef2sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
-t_protect( atmp000);
-tmp[ 3]= list_tail( atmp000);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
-t_protect( tmp[ 3]);
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+t_protect( tmp[ 1]);
 t_protect( arg1);
-tmp[ 4]= lf_AUX_MuASF_Rules2C12_1( ( * ef1)( lf2( make_list( tmp[ 3]))) , ( * ef6)( arg1));
+tmp[ 4]= lf_AUX_MuASF_Rules2C12_1( ( * ef1)( lf2( make_list( tmp[ 1]))) , ( * ef6)( arg1));
 if( check_sym( tmp[ 4] , ef3sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 tmp[ 6]= arg_1( tmp[ 4]);
 tmp[ 7]= arg_2( tmp[ 4]);
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , ( * ef5)( ))) {
-t_protect( tmp[ 1]);
+t_protect( tmp[ 2]);
 t_protect( tmp[ 5]);
-tmp[ 8]= ( * ef7)( ( * ef4)( lf3( make_list( tmp[ 1]))) , tmp[ 5]);
+tmp[ 8]= ( * ef7)( ( * ef4)( lf3( make_list( tmp[ 2]))) , tmp[ 5]);
 t_protect( tmp[ 7]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 4]);
 return ( * ef3)( tmp[ 8] , ( * ef5)( ) , tmp[ 7]);
 }
 }
 t_unprotect( tmp[ 4]);
 }
-t_unprotect( tmp[ 3]);
 }
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
 }
 }

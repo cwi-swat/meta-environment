@@ -96,25 +96,23 @@ aterm * atmp11= arg_1( arg1);
 aterm * atmp12= arg_2( arg1);
 {
 aterm * atmp13= arg_3( arg1);
-t_protect( atmp100);
-if( not_empty_list( atmp100)) {
-t_protect( atmp100);
-tmp[ 0]= list_head( atmp100);
-if( check_sym( tmp[ 0] , ef4sym)) {
-tmp[ 1]= arg_0( tmp[ 0]);
-tmp[ 2]= arg_1( tmp[ 0]);
+if( m_not_empty_list( atmp100)) {
+tmp[ 0]= m_list_head( atmp100);
 {
-t_protect( atmp100);
-tmp[ 3]= list_tail( atmp100);
+tmp[ 1]= m_list_tail( atmp100);
+{
+if( check_sym( tmp[ 0] , ef4sym)) {
+tmp[ 2]= arg_0( tmp[ 0]);
+tmp[ 3]= arg_1( tmp[ 0]);
+t_protect( arg0);
+t_protect( tmp[ 2]);
+if( ! term_equal( arg0 , tmp[ 2])) {
 t_protect( arg0);
 t_protect( tmp[ 1]);
-if( ! term_equal( arg0 , tmp[ 1])) {
-t_protect( arg0);
-t_protect( tmp[ 3]);
 t_protect( atmp11);
 t_protect( atmp12);
 t_protect( atmp13);
-tmp[ 4]= lf_AUX_VarEnv14_1( arg0 , ( * ef1)( lf2( make_list( tmp[ 3])) , atmp11 , atmp12 , atmp13));
+tmp[ 4]= lf_AUX_VarEnv14_1( arg0 , ( * ef1)( lf2( make_list( tmp[ 1])) , atmp11 , atmp12 , atmp13));
 if( check_sym( tmp[ 4] , ef3sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 tmp[ 6]= arg_1( tmp[ 4]);
@@ -126,8 +124,8 @@ tmp[ 10]= arg_3( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf2sym)) {
 tmp[ 11]= arg_0( tmp[ 7]);
 t_protect( tmp[ 5]);
-t_protect( tmp[ 1]);
 t_protect( tmp[ 2]);
+t_protect( tmp[ 3]);
 t_protect( tmp[ 11]);
 t_protect( tmp[ 8]);
 t_protect( tmp[ 9]);
@@ -135,26 +133,27 @@ t_protect( tmp[ 10]);
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-t_unprotect( tmp[ 3]);
+t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 4]);
-return ( * ef3)( tmp[ 5] , ( * ef1)( lf2( cons( make_list( ( * ef4)( tmp[ 1] , tmp[ 2])) , make_list( tmp[ 11]))) , tmp[ 8] , tmp[ 9] , tmp[ 10]));
+return ( * ef3)( tmp[ 5] , ( * ef1)( lf2( cons( make_list( ( * ef4)( tmp[ 2] , tmp[ 3])) , make_list( tmp[ 11]))) , tmp[ 8] , tmp[ 9] , tmp[ 10]));
 }
 }
 }
 t_unprotect( tmp[ 4]);
 }
 else {
-t_protect( tmp[ 2]);
-t_protect( tmp[ 2]);
+t_protect( tmp[ 3]);
+t_protect( tmp[ 3]);
 t_protect( atmp11);
 t_protect( atmp12);
 t_protect( atmp13);
 t_unprotect( arg1);
 t_unprotect( tmp[ 0]);
-return ( * ef3)( tmp[ 2] , ( * ef1)( lf2( cons( make_list( ( * ef4)( arg0 , tmp[ 2])) , make_list( tmp[ 3]))) , atmp11 , atmp12 , atmp13));
+return ( * ef3)( tmp[ 3] , ( * ef1)( lf2( cons( make_list( ( * ef4)( arg0 , tmp[ 3])) , make_list( tmp[ 1]))) , atmp11 , atmp12 , atmp13));
 }
-t_unprotect( tmp[ 3]);
 }
+}
+t_unprotect( tmp[ 1]);
 }
 t_unprotect( tmp[ 0]);
 }

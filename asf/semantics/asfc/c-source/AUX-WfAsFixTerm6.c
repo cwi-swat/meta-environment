@@ -106,20 +106,15 @@ if( check_sym( atmp110000 , lf2sym)) {
 {
 aterm * atmp1100000= arg_0( atmp110000);
 if( check_sym( arg2 , ef7sym)) {
-t_protect( atmp1100000);
-if( not_empty_list( atmp1100000)) {
+if( m_not_empty_list( atmp1100000)) {
 t_protect( atmp1100000);
 if( term_equal( list_head( atmp1100000) , make_char( 34))) {
-t_protect( atmp1100000);
-tmp[ 0]= list_tail( atmp1100000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp1100000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 if( term_equal( list_head( tmp[ 0]) , make_char( 42))) {
-t_protect( tmp[ 0]);
-tmp[ 1]= list_tail( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( is_single_element( tmp[ 1])) {
+tmp[ 1]= m_list_tail( tmp[ 0]);
+if( m_is_single_element( tmp[ 1])) {
 t_protect( tmp[ 1]);
 if( term_equal( list_head( tmp[ 1]) , make_char( 34))) {
 t_unprotect( arg0);

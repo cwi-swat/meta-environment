@@ -61,9 +61,7 @@ if( check_sym( arg1 , ef1sym)) {
 aterm * atmp10= arg_0( arg1);
 {
 aterm * atmp11= arg_1( arg1);
-t_protect( arg0);
-t_protect( atmp10);
-if( term_equal( arg0 , atmp10)) {
+if( m_term_equal( arg0 , atmp10)) {
 t_protect( atmp11);
 t_unprotect( arg1);
 return ( * ef1)( arg2 , ( * ef2)( ( * ef1)( arg0 , atmp11)));
@@ -96,9 +94,8 @@ if( check_sym( arg1 , ef3sym)) {
 aterm * atmp10= arg_0( arg1);
 if( check_sym( atmp10 , ef5sym)) {
 t_unprotect( arg0);
-t_unprotect( arg1);
 t_unprotect( arg2);
-return ( * ef3)( ( * ef5)( ));
+return arg1;
 }
 {
 aterm * atmp10= arg_0( arg1);

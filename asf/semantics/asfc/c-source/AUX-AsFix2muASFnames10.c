@@ -92,14 +92,11 @@ aterm * atmp0000= arg_0( atmp000);
 if( check_sym( atmp0000 , lf2sym)) {
 {
 aterm * atmp00000= arg_0( atmp0000);
-t_protect( atmp00000);
-if( not_empty_list( atmp00000)) {
+if( m_not_empty_list( atmp00000)) {
 t_protect( atmp00000);
 if( term_equal( list_head( atmp00000) , make_char( 34))) {
-t_protect( atmp00000);
-tmp[ 0]= list_tail( atmp00000);
-t_protect( tmp[ 0]);
-if( is_single_element( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp00000);
+if( m_is_single_element( tmp[ 0])) {
 t_protect( tmp[ 0]);
 if( term_equal( list_head( tmp[ 0]) , make_char( 34))) {
 t_unprotect( arg0);

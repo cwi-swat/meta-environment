@@ -31,8 +31,7 @@ return atmp00;
 }
 }
 if( check_sym( arg0 , ef2sym)) {
-t_unprotect( arg0);
-return ( * ef2)( );
+return arg0;
 }
 return make_nf1( lf_AUX_Numerals1_1sym , arg0);
 }

@@ -34,15 +34,13 @@ aterm * atmp00= arg_0( arg0);
 if( check_sym( atmp00 , lf2sym)) {
 {
 aterm * atmp000= arg_0( atmp00);
-t_protect( atmp000);
-if( is_single_element( atmp000)) {
+if( m_is_single_element( atmp000)) {
 t_protect( atmp000);
 if( term_equal( list_head( atmp000) , make_char( 45))) {
 t_unprotect( arg0);
 return ( * ef2)( lf2( make_list( make_char( 95))));
 }
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
+tmp[ 0]= m_list_head( atmp000);
 t_protect( tmp[ 0]);
 if( ! term_equal( ( * ef1)( lf2( make_list( tmp[ 0]))) , ( * ef1)( lf2( make_list( make_char( 45)))))) {
 t_unprotect( arg0);
@@ -50,12 +48,11 @@ return ( * ef2)( lf2( make_list( tmp[ 0])));
 }
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
+{
+if( m_not_empty_list( atmp000)) {
 t_protect( atmp000);
 if( term_equal( list_head( atmp000) , make_char( 45))) {
-t_protect( atmp000);
-tmp[ 0]= list_tail( atmp000);
+tmp[ 0]= m_list_tail( atmp000);
 t_protect( tmp[ 0]);
 tmp[ 1]= lf_AUX_C_Basics19_1( ( * ef1)( lf2( make_list( tmp[ 0]))));
 if( check_sym( tmp[ 1] , ef2sym)) {
@@ -72,10 +69,8 @@ return ( * ef2)( lf2( cons( make_list( make_char( 95)) , make_list( tmp[ 3]))));
 t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
 }
-t_protect( atmp000);
-tmp[ 0]= list_head( atmp000);
-t_protect( atmp000);
-tmp[ 1]= list_tail( atmp000);
+tmp[ 0]= m_list_head( atmp000);
+tmp[ 1]= m_list_tail( atmp000);
 t_protect( tmp[ 0]);
 if( ! term_equal( ( * ef1)( lf2( make_list( tmp[ 0]))) , ( * ef1)( lf2( make_list( make_char( 45)))))) {
 t_protect( tmp[ 1]);
@@ -95,6 +90,7 @@ t_unprotect( tmp[ 2]);
 }
 t_unprotect( tmp[ 1]);
 t_unprotect( tmp[ 0]);
+}
 }
 }
 }

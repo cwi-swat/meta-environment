@@ -119,9 +119,7 @@ return ( * ef17)( tmp[ 3]);
 t_unprotect( tmp[ 2]);
 }
 tmp[ 2]= ( * ef10)( );
-t_protect( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( term_equal( tmp[ 1] , tmp[ 2])) {
+if( m_term_equal( tmp[ 1] , tmp[ 2])) {
 t_protect( tmp[ 0]);
 tmp[ 3]= ( * ef2)( tmp[ 0] , ( * ef10)( ));
 t_protect( tmp[ 3]);

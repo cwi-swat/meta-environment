@@ -23,9 +23,8 @@ ef2sym= lookup_sym( TmakeSimple( & local , "prod(id(\"Booleans\"),w(\"\"),[l(\"f
 aterm * lf_AUX_Booleans1_1( aterm * arg0 , aterm * arg1) {
 PROF( prof_lf_AUX_Booleans1_1);
 if( check_sym( arg0 , ef1sym)) {
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef1)( );
+return arg0;
 }
 if( check_sym( arg0 , ef2sym)) {
 t_unprotect( arg0);

@@ -174,9 +174,7 @@ t_protect( tmp[ 0]);
 if( ! term_equal( arg5 , tmp[ 0])) {
 t_protect( arg1);
 tmp[ 1]= ( * ef10)( arg1);
-t_protect( tmp[ 1]);
-t_protect( arg0);
-if( term_equal( tmp[ 1] , arg0)) {
+if( m_term_equal( tmp[ 1] , arg0)) {
 t_protect( arg1);
 tmp[ 2]= ( * ef18)( arg1);
 t_protect( tmp[ 2]);
@@ -204,9 +202,7 @@ return ( * ef4)( ( * ef5)( lf4( make_list( ( * ef1)( ( * ef17)( ( * ef2)( ( * ef
 }
 t_unprotect( tmp[ 3]);
 }
-t_protect( tmp[ 2]);
-t_protect( arg0);
-if( term_equal( tmp[ 2] , arg0)) {
+if( m_term_equal( tmp[ 2] , arg0)) {
 t_protect( arg1);
 t_protect( arg2);
 tmp[ 3]= ( * ef12)( arg1 , arg2);
@@ -233,16 +229,12 @@ t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 2]);
 }
 tmp[ 2]= ( * ef19)( );
-t_protect( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( term_equal( tmp[ 1] , tmp[ 2])) {
+if( m_term_equal( tmp[ 1] , tmp[ 2])) {
 t_protect( arg1);
 tmp[ 3]= ( * ef25)( arg1);
 t_protect( tmp[ 3]);
 tmp[ 4]= ( * ef31)( ( * ef32)( tmp[ 3]));
-t_protect( tmp[ 4]);
-t_protect( arg0);
-if( term_equal( tmp[ 4] , arg0)) {
+if( m_term_equal( tmp[ 4] , arg0)) {
 t_protect( tmp[ 3]);
 tmp[ 5]= ( * ef23)( tmp[ 3]);
 t_protect( arg1);
@@ -251,8 +243,7 @@ if( check_sym( tmp[ 6] , ef22sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf5sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( arg0);
 t_protect( tmp[ 8]);
 t_protect( arg2);
@@ -354,57 +345,43 @@ aterm * atmp50000= arg_0( atmp5000);
 if( check_sym( arg7 , lf_AUX_MuASF_Term2C5_1sym)) {
 {
 aterm * atmp70= arg_0( arg7);
-t_protect( atmp50000);
-if( not_empty_list( atmp50000)) {
-t_protect( atmp50000);
-tmp[ 0]= list_head( atmp50000);
+if( m_not_empty_list( atmp50000)) {
+tmp[ 0]= m_list_head( atmp50000);
 t_protect( tmp[ 0]);
 if( term_equal( tmp[ 0] , make_char( 114))) {
-t_protect( atmp50000);
-tmp[ 1]= list_tail( atmp50000);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_head( tmp[ 1]);
+tmp[ 1]= m_list_tail( atmp50000);
+{
+if( m_not_empty_list( tmp[ 1])) {
+tmp[ 2]= m_list_head( tmp[ 1]);
 t_protect( tmp[ 2]);
 if( term_equal( tmp[ 2] , make_char( 101))) {
-t_protect( tmp[ 1]);
-tmp[ 3]= list_tail( tmp[ 1]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
-t_protect( tmp[ 3]);
-tmp[ 4]= list_head( tmp[ 3]);
+tmp[ 3]= m_list_tail( tmp[ 1]);
+{
+if( m_not_empty_list( tmp[ 3])) {
+tmp[ 4]= m_list_head( tmp[ 3]);
 t_protect( tmp[ 4]);
 if( term_equal( tmp[ 4] , make_char( 115))) {
-t_protect( tmp[ 3]);
-tmp[ 5]= list_tail( tmp[ 3]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
-t_protect( tmp[ 5]);
-tmp[ 6]= list_head( tmp[ 5]);
+tmp[ 5]= m_list_tail( tmp[ 3]);
+{
+if( m_not_empty_list( tmp[ 5])) {
+tmp[ 6]= m_list_head( tmp[ 5]);
 t_protect( tmp[ 6]);
 if( term_equal( tmp[ 6] , make_char( 117))) {
-t_protect( tmp[ 5]);
-tmp[ 7]= list_tail( tmp[ 5]);
-t_protect( tmp[ 7]);
-if( not_empty_list( tmp[ 7])) {
-t_protect( tmp[ 7]);
-tmp[ 8]= list_head( tmp[ 7]);
+tmp[ 7]= m_list_tail( tmp[ 5]);
+{
+if( m_not_empty_list( tmp[ 7])) {
+tmp[ 8]= m_list_head( tmp[ 7]);
 t_protect( tmp[ 8]);
 if( term_equal( tmp[ 8] , make_char( 108))) {
-t_protect( tmp[ 7]);
-tmp[ 9]= list_tail( tmp[ 7]);
-t_protect( tmp[ 9]);
-if( is_single_element( tmp[ 9])) {
-t_protect( tmp[ 9]);
-tmp[ 10]= list_head( tmp[ 9]);
+tmp[ 9]= m_list_tail( tmp[ 7]);
+{
+if( m_is_single_element( tmp[ 9])) {
+tmp[ 10]= m_list_head( tmp[ 9]);
 t_protect( tmp[ 10]);
 if( term_equal( tmp[ 10] , make_char( 116))) {
 t_protect( arg1);
 tmp[ 11]= ( * ef10)( arg1);
-t_protect( tmp[ 11]);
-t_protect( arg0);
-if( term_equal( tmp[ 11] , arg0)) {
+if( m_term_equal( tmp[ 11] , arg0)) {
 t_protect( arg1);
 t_protect( atmp70);
 tmp[ 12]= ( * ef20)( arg1 , lf_AUX_MuASF_Term2C5_1( make_list( atmp70)));
@@ -417,8 +394,7 @@ if( check_sym( tmp[ 14] , ef22sym)) {
 tmp[ 15]= arg_0( tmp[ 14]);
 if( check_sym( tmp[ 15] , lf5sym)) {
 tmp[ 16]= arg_0( tmp[ 15]);
-t_protect( tmp[ 16]);
-if( not_empty_list( tmp[ 16])) {
+if( m_not_empty_list( tmp[ 16])) {
 t_protect( arg4);
 tmp[ 17]= ( * ef1)( ( * ef28)( arg4));
 t_protect( arg1);
@@ -443,8 +419,7 @@ if( check_sym( tmp[ 21] , ef5sym)) {
 tmp[ 24]= arg_0( tmp[ 21]);
 if( check_sym( tmp[ 24] , lf4sym)) {
 tmp[ 25]= arg_0( tmp[ 24]);
-t_protect( tmp[ 25]);
-if( not_empty_list( tmp[ 25])) {
+if( m_not_empty_list( tmp[ 25])) {
 t_protect( arg6);
 tmp[ 26]= ( * ef15)( arg6);
 t_protect( tmp[ 22]);
@@ -528,21 +503,26 @@ t_unprotect( tmp[ 11]);
 }
 t_unprotect( tmp[ 10]);
 }
+}
 t_unprotect( tmp[ 9]);
 }
 t_unprotect( tmp[ 8]);
+}
 }
 t_unprotect( tmp[ 7]);
 }
 t_unprotect( tmp[ 6]);
 }
+}
 t_unprotect( tmp[ 5]);
 }
 t_unprotect( tmp[ 4]);
 }
+}
 t_unprotect( tmp[ 3]);
 }
 t_unprotect( tmp[ 2]);
+}
 }
 t_unprotect( tmp[ 1]);
 }
@@ -567,9 +547,7 @@ t_protect( tmp[ 0]);
 if( ! term_equal( arg5 , tmp[ 0])) {
 t_protect( arg1);
 tmp[ 1]= ( * ef10)( arg1);
-t_protect( tmp[ 1]);
-t_protect( arg0);
-if( term_equal( tmp[ 1] , arg0)) {
+if( m_term_equal( tmp[ 1] , arg0)) {
 t_protect( arg1);
 tmp[ 2]= ( * ef21)( arg1);
 t_protect( tmp[ 2]);
@@ -630,8 +608,7 @@ if( check_sym( tmp[ 6] , ef22sym)) {
 tmp[ 7]= arg_0( tmp[ 6]);
 if( check_sym( tmp[ 7] , lf5sym)) {
 tmp[ 8]= arg_0( tmp[ 7]);
-t_protect( tmp[ 8]);
-if( not_empty_list( tmp[ 8])) {
+if( m_not_empty_list( tmp[ 8])) {
 t_protect( tmp[ 3]);
 t_protect( tmp[ 3]);
 tmp[ 9]= ( * ef29)( ( * ef30)( tmp[ 3]) , ( * ef31)( ( * ef32)( tmp[ 3])));
@@ -725,38 +702,27 @@ aterm * atmp50000= arg_0( atmp5000);
 if( check_sym( arg7 , lf_AUX_MuASF_Term2C5_1sym)) {
 {
 aterm * atmp70= arg_0( arg7);
-t_protect( atmp50000);
-if( not_empty_list( atmp50000)) {
+if( m_not_empty_list( atmp50000)) {
 t_protect( atmp50000);
 if( term_equal( list_head( atmp50000) , make_char( 114))) {
-t_protect( atmp50000);
-tmp[ 0]= list_tail( atmp50000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp50000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 if( term_equal( list_head( tmp[ 0]) , make_char( 101))) {
-t_protect( tmp[ 0]);
-tmp[ 1]= list_tail( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( not_empty_list( tmp[ 1])) {
+tmp[ 1]= m_list_tail( tmp[ 0]);
+if( m_not_empty_list( tmp[ 1])) {
 t_protect( tmp[ 1]);
 if( term_equal( list_head( tmp[ 1]) , make_char( 115))) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_tail( tmp[ 1]);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+tmp[ 2]= m_list_tail( tmp[ 1]);
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 if( term_equal( list_head( tmp[ 2]) , make_char( 117))) {
-t_protect( tmp[ 2]);
-tmp[ 3]= list_tail( tmp[ 2]);
-t_protect( tmp[ 3]);
-if( not_empty_list( tmp[ 3])) {
+tmp[ 3]= m_list_tail( tmp[ 2]);
+if( m_not_empty_list( tmp[ 3])) {
 t_protect( tmp[ 3]);
 if( term_equal( list_head( tmp[ 3]) , make_char( 108))) {
-t_protect( tmp[ 3]);
-tmp[ 4]= list_tail( tmp[ 3]);
-t_protect( tmp[ 4]);
-if( is_single_element( tmp[ 4])) {
+tmp[ 4]= m_list_tail( tmp[ 3]);
+if( m_is_single_element( tmp[ 4])) {
 t_protect( tmp[ 4]);
 if( term_equal( list_head( tmp[ 4]) , make_char( 116))) {
 t_protect( arg1);

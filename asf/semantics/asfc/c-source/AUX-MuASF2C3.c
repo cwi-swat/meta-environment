@@ -147,10 +147,8 @@ PROF( prof_lf_AUX_MuASF2C3_2);
 if( check_sym( arg0 , lf_AUX_MuASF2C3_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( is_single_element( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_is_single_element( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 if( check_sym( tmp[ 0] , ef24sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 tmp[ 2]= arg_1( tmp[ 0]);
@@ -160,8 +158,7 @@ if( check_sym( tmp[ 3] , lf3sym)) {
 tmp[ 4]= arg_0( tmp[ 3]);
 if( check_sym( tmp[ 2] , lf6sym)) {
 tmp[ 5]= arg_0( tmp[ 2]);
-t_protect( tmp[ 5]);
-if( not_empty_list( tmp[ 5])) {
+if( m_not_empty_list( tmp[ 5])) {
 t_protect( tmp[ 5]);
 tmp[ 6]= ( * ef25)( lf6( make_list( tmp[ 5])) , ( * ef26)( lf3( make_list( make_char( 48)))));
 t_protect( tmp[ 4]);

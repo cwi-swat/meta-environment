@@ -36,26 +36,20 @@ aterm * atmp10= arg_0( arg1);
 if( check_sym( atmp10 , lf2sym)) {
 {
 aterm * atmp100= arg_0( atmp10);
-t_protect( atmp000);
-if( not_empty_list( atmp000)) {
+if( m_not_empty_list( atmp000)) {
 t_protect( atmp000);
 if( term_equal( list_head( atmp000) , make_char( 34))) {
-t_protect( atmp000);
-tmp[ 0]= list_tail( atmp000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 tmp[ 1]= list_prefix( tmp[ 0]);
 t_protect( tmp[ 0]);
 if( term_equal( list_last( tmp[ 0]) , make_char( 34))) {
-t_protect( atmp100);
-if( not_empty_list( atmp100)) {
+if( m_not_empty_list( atmp100)) {
 t_protect( atmp100);
 if( term_equal( list_head( atmp100) , make_char( 34))) {
-t_protect( atmp100);
-tmp[ 2]= list_tail( atmp100);
-t_protect( tmp[ 2]);
-if( not_empty_list( tmp[ 2])) {
+tmp[ 2]= m_list_tail( atmp100);
+if( m_not_empty_list( tmp[ 2])) {
 t_protect( tmp[ 2]);
 tmp[ 3]= list_prefix( tmp[ 2]);
 t_protect( tmp[ 2]);

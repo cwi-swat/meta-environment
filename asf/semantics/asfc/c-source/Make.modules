@@ -142,7 +142,18 @@ AUX-Check-List-Pats14.asfix\
 AUX-Check-List-Pats15.asfix\
 AUX-Check-List-Pats16.asfix\
 AUX-Check-List-Pats17.asfix\
+AUX-Check-List-Pats18.asfix\
+AUX-Check-List-Pats19.asfix\
 AUX-Check-List-Pats2.asfix\
+AUX-Check-List-Pats20.asfix\
+AUX-Check-List-Pats21.asfix\
+AUX-Check-List-Pats22.asfix\
+AUX-Check-List-Pats23.asfix\
+AUX-Check-List-Pats24.asfix\
+AUX-Check-List-Pats25.asfix\
+AUX-Check-List-Pats26.asfix\
+AUX-Check-List-Pats27.asfix\
+AUX-Check-List-Pats28.asfix\
 AUX-Check-List-Pats3.asfix\
 AUX-Check-List-Pats4.asfix\
 AUX-Check-List-Pats5.asfix\
@@ -220,7 +231,10 @@ AUX-MuASF-Basics25.asfix\
 AUX-MuASF-Basics26.asfix\
 AUX-MuASF-Basics27.asfix\
 AUX-MuASF-Basics28.asfix\
+AUX-MuASF-Basics29.asfix\
 AUX-MuASF-Basics3.asfix\
+AUX-MuASF-Basics30.asfix\
+AUX-MuASF-Basics31.asfix\
 AUX-MuASF-Basics4.asfix\
 AUX-MuASF-Basics5.asfix\
 AUX-MuASF-Basics6.asfix\
@@ -228,6 +242,7 @@ AUX-MuASF-Basics7.asfix\
 AUX-MuASF-Basics8.asfix\
 AUX-MuASF-Basics9.asfix\
 AUX-MuASF-Conds2C1.asfix\
+AUX-MuASF-Conds2C10.asfix\
 AUX-MuASF-Conds2C2.asfix\
 AUX-MuASF-Conds2C3.asfix\
 AUX-MuASF-Conds2C4.asfix\
@@ -332,6 +347,8 @@ AUX-ParseTrees7.asfix\
 AUX-ParseTrees8.asfix\
 AUX-ParseTrees9.asfix\
 AUX-Pure-C1.asfix\
+AUX-Pure-C2.asfix\
+AUX-Pure-C3.asfix\
 AUX-RemAsFixWspace1.asfix\
 AUX-RemAsFixWspace2.asfix\
 AUX-RemAsFixWspace3.asfix\
@@ -340,6 +357,10 @@ AUX-RemAsFixWspace5.asfix\
 AUX-RemAsFixWspace6.asfix\
 AUX-RemAsFixWspace7.asfix\
 AUX-Remove-Lists-Aux1.asfix\
+AUX-Remove-Lists-Aux10.asfix\
+AUX-Remove-Lists-Aux11.asfix\
+AUX-Remove-Lists-Aux12.asfix\
+AUX-Remove-Lists-Aux13.asfix\
 AUX-Remove-Lists-Aux2.asfix\
 AUX-Remove-Lists-Aux3.asfix\
 AUX-Remove-Lists-Aux4.asfix\
@@ -347,6 +368,7 @@ AUX-Remove-Lists-Aux5.asfix\
 AUX-Remove-Lists-Aux6.asfix\
 AUX-Remove-Lists-Aux7.asfix\
 AUX-Remove-Lists-Aux8.asfix\
+AUX-Remove-Lists-Aux9.asfix\
 AUX-Remove-Lists-C1.asfix\
 AUX-Remove-Lists-C10.asfix\
 AUX-Remove-Lists-C11.asfix\
@@ -414,6 +436,9 @@ AUX-Rules2C-Aux39.asfix\
 AUX-Rules2C-Aux4.asfix\
 AUX-Rules2C-Aux40.asfix\
 AUX-Rules2C-Aux41.asfix\
+AUX-Rules2C-Aux42.asfix\
+AUX-Rules2C-Aux43.asfix\
+AUX-Rules2C-Aux44.asfix\
 AUX-Rules2C-Aux5.asfix\
 AUX-Rules2C-Aux6.asfix\
 AUX-Rules2C-Aux7.asfix\
@@ -424,6 +449,9 @@ AUX-Substitution2.asfix\
 AUX-Substitution3.asfix\
 AUX-Substitution4.asfix\
 AUX-Substitution5.asfix\
+AUX-Trans-Set-Pats1.asfix\
+AUX-Trans-Set-Pats2.asfix\
+AUX-Trans-Set-Pats3.asfix\
 AUX-VarEnv1.asfix\
 AUX-VarEnv10.asfix\
 AUX-VarEnv11.asfix\

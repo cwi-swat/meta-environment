@@ -37,8 +37,7 @@ PROF( prof_lf_AUX_MuASF_Basics20_2);
 if( check_sym( arg1 , lf_AUX_MuASF_Basics20_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp10);
 t_unprotect( arg1);
 return ( * ef1)( arg0 , lf_AUX_MuASF_Basics20_1( make_list( atmp10)));

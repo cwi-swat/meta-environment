@@ -51,6 +51,7 @@ return ( * ef1)( arg0 , arg1);
 else {
 t_unprotect( arg0);
 t_unprotect( arg1);
+t_unprotect( tmp[ 0]);
 return ( * ef4)( ( * ef5)( lf2( make_list( make_char( 48)))));
 }
 t_unprotect( tmp[ 0]);

@@ -99,17 +99,13 @@ PROF( prof_lf_AUX_Remove_Lists_C22_2);
 if( check_sym( arg0 , lf_AUX_Remove_Lists_C22_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
-t_protect( atmp00);
-tmp[ 0]= list_head( atmp00);
+if( m_not_empty_list( atmp00)) {
+tmp[ 0]= m_list_head( atmp00);
 {
-t_protect( atmp00);
-tmp[ 1]= list_tail( atmp00);
-t_protect( tmp[ 1]);
-if( is_single_element( tmp[ 1])) {
-t_protect( tmp[ 1]);
-tmp[ 2]= list_head( tmp[ 1]);
+tmp[ 1]= m_list_tail( atmp00);
+{
+if( m_is_single_element( tmp[ 1])) {
+tmp[ 2]= m_list_head( tmp[ 1]);
 t_protect( tmp[ 0]);
 tmp[ 3]= ( * ef9)( tmp[ 0]);
 t_protect( tmp[ 3]);
@@ -127,10 +123,9 @@ tmp[ 8]= arg_0( tmp[ 5]);
 {
 if( check_sym( tmp[ 6] , lf3sym)) {
 tmp[ 9]= arg_0( tmp[ 6]);
-t_protect( tmp[ 8]);
-if( is_single_element( tmp[ 8])) {
-t_protect( tmp[ 8]);
-tmp[ 10]= list_head( tmp[ 8]);
+{
+if( m_is_single_element( tmp[ 8])) {
+tmp[ 10]= m_list_head( tmp[ 8]);
 t_protect( tmp[ 2]);
 tmp[ 11]= ( * ef9)( tmp[ 2]);
 t_protect( tmp[ 11]);
@@ -146,10 +141,8 @@ if( check_sym( tmp[ 13] , lf_AUX_Remove_Lists_C22_1sym)) {
 tmp[ 16]= arg_0( tmp[ 13]);
 if( check_sym( tmp[ 14] , lf3sym)) {
 tmp[ 17]= arg_0( tmp[ 14]);
-t_protect( tmp[ 16]);
-if( is_single_element( tmp[ 16])) {
-t_protect( tmp[ 16]);
-tmp[ 18]= list_head( tmp[ 16]);
+if( m_is_single_element( tmp[ 16])) {
+tmp[ 18]= m_list_head( tmp[ 16]);
 t_protect( tmp[ 15]);
 tmp[ 19]= ( * ef12)( tmp[ 15]);
 t_protect( tmp[ 19]);
@@ -196,10 +189,8 @@ if( check_sym( tmp[ 13] , lf_AUX_Remove_Lists_C22_1sym)) {
 tmp[ 16]= arg_0( tmp[ 13]);
 if( check_sym( tmp[ 14] , lf3sym)) {
 tmp[ 17]= arg_0( tmp[ 14]);
-t_protect( tmp[ 16]);
-if( is_single_element( tmp[ 16])) {
-t_protect( tmp[ 16]);
-tmp[ 18]= list_head( tmp[ 16]);
+if( m_is_single_element( tmp[ 16])) {
+tmp[ 18]= m_list_head( tmp[ 16]);
 t_protect( tmp[ 15]);
 tmp[ 19]= ( * ef12)( tmp[ 15]);
 t_protect( tmp[ 19]);
@@ -237,6 +228,7 @@ t_unprotect( tmp[ 10]);
 }
 }
 }
+}
 t_unprotect( tmp[ 4]);
 }
 t_protect( tmp[ 3]);
@@ -252,10 +244,8 @@ if( check_sym( tmp[ 5] , lf_AUX_Remove_Lists_C22_1sym)) {
 tmp[ 8]= arg_0( tmp[ 5]);
 if( check_sym( tmp[ 6] , lf3sym)) {
 tmp[ 9]= arg_0( tmp[ 6]);
-t_protect( tmp[ 8]);
-if( is_single_element( tmp[ 8])) {
-t_protect( tmp[ 8]);
-tmp[ 10]= list_head( tmp[ 8]);
+if( m_is_single_element( tmp[ 8])) {
+tmp[ 10]= m_list_head( tmp[ 8]);
 t_protect( tmp[ 2]);
 if( term_equal( ( * ef9)( tmp[ 2]) , ( * ef10)( ))) {
 t_protect( tmp[ 2]);
@@ -269,10 +259,8 @@ if( check_sym( tmp[ 12] , lf_AUX_Remove_Lists_C22_1sym)) {
 tmp[ 15]= arg_0( tmp[ 12]);
 if( check_sym( tmp[ 13] , lf3sym)) {
 tmp[ 16]= arg_0( tmp[ 13]);
-t_protect( tmp[ 15]);
-if( is_single_element( tmp[ 15])) {
-t_protect( tmp[ 15]);
-tmp[ 17]= list_head( tmp[ 15]);
+if( m_is_single_element( tmp[ 15])) {
+tmp[ 17]= m_list_head( tmp[ 15]);
 t_protect( tmp[ 14]);
 tmp[ 18]= ( * ef12)( tmp[ 14]);
 t_protect( tmp[ 18]);
@@ -310,6 +298,7 @@ t_unprotect( tmp[ 4]);
 }
 t_unprotect( tmp[ 3]);
 t_unprotect( tmp[ 2]);
+}
 }
 t_unprotect( tmp[ 1]);
 }

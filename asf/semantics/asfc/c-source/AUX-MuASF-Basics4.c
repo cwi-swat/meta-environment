@@ -66,8 +66,7 @@ aterm * atmp0000= arg_0( atmp000);
 aterm * atmp01= arg_1( arg0);
 {
 aterm * atmp02= arg_2( arg0);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp01);
 t_unprotect( arg0);
 return ( * ef2)( atmp01);
@@ -104,8 +103,7 @@ aterm * atmp0000= arg_0( atmp000);
 aterm * atmp01= arg_1( arg0);
 {
 aterm * atmp02= arg_2( arg0);
-t_protect( atmp0000);
-if( not_empty_list( atmp0000)) {
+if( m_not_empty_list( atmp0000)) {
 t_protect( atmp01);
 t_unprotect( arg0);
 return ( * ef2)( atmp01);

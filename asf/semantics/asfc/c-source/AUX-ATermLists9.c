@@ -59,9 +59,7 @@ tmp[ 3]= arg_0( tmp[ 2]);
 tmp[ 4]= arg_1( tmp[ 2]);
 if( check_sym( tmp[ 4] , ef6sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
-t_protect( arg0);
-t_protect( tmp[ 3]);
-if( term_equal( arg0 , tmp[ 3])) {
+if( m_term_equal( arg0 , tmp[ 3])) {
 t_protect( tmp[ 5]);
 t_unprotect( arg0);
 t_unprotect( arg1);

@@ -68,9 +68,7 @@ aterm * atmp01= arg_1( arg0);
 t_protect( atmp00);
 t_protect( arg1);
 tmp[ 0]= ( * ef4)( atmp00 , arg1);
-t_protect( arg1);
-t_protect( tmp[ 0]);
-if( term_equal( arg1 , tmp[ 0])) {
+if( m_term_equal( arg1 , tmp[ 0])) {
 t_protect( atmp01);
 t_protect( tmp[ 0]);
 tmp[ 1]= ( * ef4)( atmp01 , tmp[ 0]);
@@ -98,9 +96,7 @@ else {
 t_protect( atmp01);
 t_protect( tmp[ 0]);
 tmp[ 1]= ( * ef4)( atmp01 , tmp[ 0]);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( term_equal( tmp[ 0] , tmp[ 1])) {
+if( m_term_equal( tmp[ 0] , tmp[ 1])) {
 t_protect( atmp01);
 t_protect( atmp00);
 t_unprotect( arg0);
@@ -122,15 +118,11 @@ aterm * atmp01= arg_1( arg0);
 t_protect( atmp00);
 t_protect( arg1);
 tmp[ 0]= ( * ef4)( atmp00 , arg1);
-t_protect( arg1);
-t_protect( tmp[ 0]);
-if( term_equal( arg1 , tmp[ 0])) {
+if( m_term_equal( arg1 , tmp[ 0])) {
 t_protect( atmp01);
 t_protect( tmp[ 0]);
 tmp[ 1]= ( * ef4)( atmp01 , tmp[ 0]);
-t_protect( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( term_equal( tmp[ 0] , tmp[ 1])) {
+if( m_term_equal( tmp[ 0] , tmp[ 1])) {
 t_protect( atmp00);
 t_protect( atmp01);
 t_unprotect( arg0);
@@ -152,11 +144,8 @@ aterm * atmp01= arg_1( arg0);
 t_protect( atmp01);
 t_protect( arg1);
 tmp[ 0]= ( * ef4)( atmp01 , arg1);
-t_protect( atmp01);
-t_protect( atmp00);
-t_unprotect( arg0);
 t_unprotect( arg1);
-return ( * ef2)( lf2( make_list( ( * ef3)( atmp01 , atmp00))) , tmp[ 0]);
+return ( * ef2)( lf2( make_list( arg0)) , tmp[ 0]);
 }
 }
 }

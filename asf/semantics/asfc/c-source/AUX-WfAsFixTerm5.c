@@ -122,20 +122,15 @@ if( check_sym( atmp210000 , lf2sym)) {
 {
 aterm * atmp2100000= arg_0( atmp210000);
 if( check_sym( arg3 , ef7sym)) {
-t_protect( atmp2100000);
-if( not_empty_list( atmp2100000)) {
+if( m_not_empty_list( atmp2100000)) {
 t_protect( atmp2100000);
 if( term_equal( list_head( atmp2100000) , make_char( 34))) {
-t_protect( atmp2100000);
-tmp[ 0]= list_tail( atmp2100000);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp2100000);
+if( m_not_empty_list( tmp[ 0])) {
 t_protect( tmp[ 0]);
 if( term_equal( list_head( tmp[ 0]) , make_char( 42))) {
-t_protect( tmp[ 0]);
-tmp[ 1]= list_tail( tmp[ 0]);
-t_protect( tmp[ 1]);
-if( is_single_element( tmp[ 1])) {
+tmp[ 1]= m_list_tail( tmp[ 0]);
+if( m_is_single_element( tmp[ 1])) {
 t_protect( tmp[ 1]);
 if( term_equal( list_head( tmp[ 1]) , make_char( 34))) {
 t_unprotect( arg0);
@@ -301,9 +296,7 @@ return ( * ef13)( ( * ef13)( ( * ef14)( arg1 , ( * ef1)( ( * ef2)( ) , ( * ef3)(
 }
 }
 }
-t_protect( arg0);
-t_protect( arg3);
-if( term_equal( arg0 , arg3)) {
+if( m_term_equal( arg0 , arg3)) {
 t_unprotect( arg0);
 t_unprotect( arg1);
 t_unprotect( arg2);

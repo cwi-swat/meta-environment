@@ -42,8 +42,7 @@ if( check_sym( arg0 , ef1sym)) {
 if( check_sym( arg1 , lf_AUX_AsFix2muASF_C12_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);
@@ -56,8 +55,7 @@ if( check_sym( arg0 , ef4sym)) {
 if( check_sym( arg1 , lf_AUX_AsFix2muASF_C12_1sym)) {
 {
 aterm * atmp10= arg_0( arg1);
-t_protect( atmp10);
-if( not_empty_list( atmp10)) {
+if( m_not_empty_list( atmp10)) {
 t_protect( atmp10);
 t_unprotect( arg0);
 t_unprotect( arg1);

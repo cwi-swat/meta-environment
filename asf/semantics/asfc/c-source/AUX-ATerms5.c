@@ -87,14 +87,11 @@ PROF( prof_lf_AUX_ATerms5_2);
 if( check_sym( arg0 , lf_AUX_ATerms5_1sym)) {
 {
 aterm * atmp00= arg_0( arg0);
-t_protect( atmp00);
-if( not_empty_list( atmp00)) {
+if( m_not_empty_list( atmp00)) {
 t_protect( atmp00);
 if( term_equal( list_head( atmp00) , make_char( 48))) {
-t_protect( atmp00);
-tmp[ 0]= list_tail( atmp00);
-t_protect( tmp[ 0]);
-if( not_empty_list( tmp[ 0])) {
+tmp[ 0]= m_list_tail( atmp00);
+if( m_not_empty_list( tmp[ 0])) {
 t_unprotect( arg0);
 return lf_AUX_ATerms5_2( lf_AUX_ATerms5_1( make_list( tmp[ 0])));
 }
