@@ -135,12 +135,20 @@ equations
                             H hs=1 ["." processexpr2box(ProcessExpr2)]])
 
 [processexpr2box-seq-bracket]
-  ( ProcessExpr3 ) := ProcessExpr2
+  box2processexpr(V vs=1 ["(" Box* ")"]) := ProcessExpr2
   ===>
   ProcessExpr1 . ProcessExpr2 =
     box2processexpr(V vs=1 [processexpr2box(ProcessExpr1)
                             "."
-                            processexpr2box(ProcessExpr2)])
+                            V vs=1 ["(" Box* ")"]])
+
+[processexpr2box-seq-bracket]
+  box2processexpr(V vs=1 [H hs=1 ["if" Box*1 ] Box*2]) := ProcessExpr2
+  ===>
+  ProcessExpr1 . ProcessExpr2 =
+    box2processexpr(V vs=1 [processexpr2box(ProcessExpr1)
+                            "."
+                            V vs=1 [H hs=1 ["if" Box*1 ] Box*2]]) 
 
 [processexpr2box-choice]
   ProcessExpr1 + ProcessExpr2 = 
@@ -201,6 +209,14 @@ equations
   processinvocations2box(ProcessInvocation, ProcessInvocation+) =
     H hs=1 [H hs=0 [processinvocation2box(ProcessInvocation) ","] Box*]
 
+[bracket-context-choice]
+  ( box2processexpr(V vs=1 [Box*1 "+" Box*2]) ) =
+  box2processexpr(V vs=1 ["(" V vs=1 [ Box*1 "+" Box*2 ] ")" ])
+
+[default-bracket]
+  ( ProcessExpr ) = 
+   box2processexpr(V vs=1 ["(" I [ processexpr2box(ProcessExpr)] ")"])
+  
 [flatten]
   H[Box*5] := H[Box*1 Box*3],
   H[Box*6] := H[Box*4 Box*2]
@@ -208,5 +224,5 @@ equations
   V vs=1 [Box*1 I [V vs=1 [Box*3 I [Box1] "+" I [Box2] Box*4]] Box*2]
     = V vs=1 [Box*5 I [Box1] "+" I [Box2] Box*6]
 
-[simplify] 
+[simplify]
   processexpr2box(box2processexpr(Box)) = Box
