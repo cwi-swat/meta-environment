@@ -17,9 +17,16 @@
 
 #include <stdio.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
-  int c;
+  int i, c;
+
+  for(i=1; i<argc; i++) {
+    if(strcmp(argv[i], "-h") == 0) {
+      fprintf(stderr, "usage: %s < input > output\n", argv[0]);
+      exit(0);
+    }
+  }
 
   fprintf(stdout, "\\begin{verbatim}\n");
   while((c = fgetc(stdin)) != EOF){

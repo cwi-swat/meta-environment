@@ -53,9 +53,13 @@ void interrupt_handler(int sig){
   bus_shutdown(mk_str("ToolBus interrupted"));
 }
 
-void usage(void)
+void usage(char *prg, int is_err)
 {
- err_fatal("Usage: toolbus [-help|-version|-verbose] [-logger|-viewer|-controller] [-gentifs] [-fixed-seed] Script.tb");
+ fprintf(stderr, "Usage: %s [-help|-version|-verbose] "
+	 "[-logger|-viewer|-controller] [-gentifs] "
+	 "[-fixed-seed] Script.tb", prg);
+
+ exit(is_err);
 }
 
 void version(void)
@@ -135,7 +139,7 @@ int main(int argc, char *argv[])
   for(i = 1; i < argc; i++){
     if(streq(argv[i], "-verbose")){
       TBverbose = TBtrue;
-    } else if(streq(argv[i], "-help")){
+    } else if(streq(argv[i], "-help") || streq(argv[i], "-h")) {
       help(); exit(0);
     } else if(streq(argv[i], "-version")){
       version(); exit(0);
@@ -178,10 +182,11 @@ int main(int argc, char *argv[])
   system_init_module(); 
 
   /* Initialize other modules */
-  INIT_MODULES
+  INIT_MODULES;
  
-  if(argc < 2)
-    usage();
+  if(argc < 2) {
+    usage(argv[0], 1);
+  }
 
   if(parse_script(sname, argc, argv)){
     if (TBverbose) TBmsg("parsing completed\n");

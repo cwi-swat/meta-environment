@@ -10,7 +10,7 @@
 void usage(void)
 {
   fprintf(stderr, "Usage: script2latex [-strip]\n");
-  exit(1);
+  exit(0);
 }
 
 char *text_size = "\\normalsize\n";
@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
     if(strcmp(*argv, "-strip") == 0){
       argv++;
       strip = 1;
+    } else if(strcmp(*argv, "-h") == 0) {
+      usage();
     } else
       usage();
   }
