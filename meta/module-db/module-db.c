@@ -554,7 +554,7 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   enum { sdf2, eqs } module_type = sdf2; /* to keep compiler happy */
   int location = 0, updated_location = 0; /* To keep compiler happy*/
 
-  if (ATmatch(type,"sdf")) {
+  if (ATmatch(type,"sdf2")) {
       updated_location = SYN_UPDATED_LOC;
       location = SYN_LOC;
       module_type = sdf2;
