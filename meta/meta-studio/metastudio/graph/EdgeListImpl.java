@@ -6,33 +6,15 @@ import java.io.IOException;
 
 abstract public class EdgeListImpl extends MetaGraphConstructor
 {
-  static EdgeList fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static EdgeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  EdgeListImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(EdgeList peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static EdgeList fromTerm(aterm.ATerm trm)
-  {
-    EdgeList tmp;
-    if ((tmp = EdgeList_Empty.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = EdgeList_Multi.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a EdgeList: " + trm);
+  public boolean isSortEdgeList()  {
+    return true;
   }
 
   public boolean isEmpty()
@@ -74,7 +56,6 @@ abstract public class EdgeListImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This EdgeList has no Tail");
   }
-
 
 }
 

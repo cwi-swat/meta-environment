@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class Direction
+public abstract class Direction
 extends DirectionImpl
 {
+  Direction(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

@@ -6,33 +6,15 @@ import java.io.IOException;
 
 abstract public class PolygonImpl extends MetaGraphConstructor
 {
-  static Polygon fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Polygon fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  PolygonImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Polygon peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Polygon fromTerm(aterm.ATerm trm)
-  {
-    Polygon tmp;
-    if ((tmp = Polygon_Empty.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Polygon_Multi.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Polygon: " + trm);
+  public boolean isSortPolygon()  {
+    return true;
   }
 
   public boolean isEmpty()
@@ -74,7 +56,6 @@ abstract public class PolygonImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This Polygon has no Tail");
   }
-
 
 }
 

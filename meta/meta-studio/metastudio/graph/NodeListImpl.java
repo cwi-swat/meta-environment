@@ -6,33 +6,15 @@ import java.io.IOException;
 
 abstract public class NodeListImpl extends MetaGraphConstructor
 {
-  static NodeList fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static NodeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  NodeListImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(NodeList peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static NodeList fromTerm(aterm.ATerm trm)
-  {
-    NodeList tmp;
-    if ((tmp = NodeList_Empty.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = NodeList_Multi.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a NodeList: " + trm);
+  public boolean isSortNodeList()  {
+    return true;
   }
 
   public boolean isEmpty()
@@ -74,7 +56,6 @@ abstract public class NodeListImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This NodeList has no Tail");
   }
-
 
 }
 

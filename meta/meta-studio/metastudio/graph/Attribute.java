@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class Attribute
+public abstract class Attribute
 extends AttributeImpl
 {
+  Attribute(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

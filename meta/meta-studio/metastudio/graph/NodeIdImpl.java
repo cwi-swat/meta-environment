@@ -6,29 +6,15 @@ import java.io.IOException;
 
 abstract public class NodeIdImpl extends MetaGraphConstructor
 {
-  static NodeId fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static NodeId fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  NodeIdImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(NodeId peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static NodeId fromTerm(aterm.ATerm trm)
-  {
-    NodeId tmp;
-    if ((tmp = NodeId_Default.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a NodeId: " + trm);
+  public boolean isSortNodeId()  {
+    return true;
   }
 
   public boolean isDefault()
@@ -50,7 +36,6 @@ abstract public class NodeIdImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This NodeId has no Id");
   }
-
 
 }
 

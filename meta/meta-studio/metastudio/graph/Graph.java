@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class Graph
+public abstract class Graph
 extends GraphImpl
 {
-    
+  Graph(MetaGraphFactory factory) {
+    super(factory);
+  }
+
 }

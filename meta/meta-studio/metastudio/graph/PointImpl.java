@@ -6,29 +6,15 @@ import java.io.IOException;
 
 abstract public class PointImpl extends MetaGraphConstructor
 {
-  static Point fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Point fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  PointImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Point peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Point fromTerm(aterm.ATerm trm)
-  {
-    Point tmp;
-    if ((tmp = Point_Default.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Point: " + trm);
+  public boolean isSortPoint()  {
+    return true;
   }
 
   public boolean isDefault()
@@ -65,7 +51,6 @@ abstract public class PointImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This Point has no Y");
   }
-
 
 }
 

@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class EdgeList
+public abstract class EdgeList
 extends EdgeListImpl
 {
+  EdgeList(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

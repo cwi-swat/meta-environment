@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class Polygon
+public abstract class Polygon
 extends PolygonImpl
 {
+  Polygon(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

@@ -3,38 +3,31 @@ package metastudio.graph;
 abstract public class Shape_ParallelogramImpl
 extends Shape
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Shape_ParallelogramImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   public shared.SharedObject duplicate() {
-    Shape_Parallelogram clone = new Shape_Parallelogram();
+    Shape_Parallelogram clone = new Shape_Parallelogram(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Shape_Parallelogram) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeShape_Parallelogram(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("parallelogram");
+  public aterm.ATerm toTerm() {
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
+    }
+    return term;
   }
 
-  static public Shape fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Shape tmp = getStaticMetaGraphFactory().makeShape_Parallelogram();
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public boolean isParallelogram()
   {
     return true;
@@ -46,7 +39,7 @@ extends Shape
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;
-    int b = 0x9e3779b9;
+    int b = (getAFun().hashCode()<<8);
 
     a -= b; a -= c; a ^= (c >> 13);
     b -= c; b -= a; b ^= (a << 8);

@@ -12,8 +12,9 @@ CLASSPATH_ENV=CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 java_JAVA = ${MetaGraphAPI}
 
 api:
+	convert-old-adt -i ${GRAPH_SUPPORT}/share/graph-support/Graph.adt -o Graph.adt
 	adt-to-java \
-		--input ${GRAPH_SUPPORT}/share/graph-support/Graph.adt \
+		--input Graph.adt \
 		--folding \
 		--package metastudio.graph \
 		--name MetaGraph \

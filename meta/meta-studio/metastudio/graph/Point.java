@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class Point
+public abstract class Point
 extends PointImpl
 {
+  Point(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

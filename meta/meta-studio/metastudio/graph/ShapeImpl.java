@@ -6,73 +6,15 @@ import java.io.IOException;
 
 abstract public class ShapeImpl extends MetaGraphConstructor
 {
-  static Shape fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Shape fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  ShapeImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Shape peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Shape fromTerm(aterm.ATerm trm)
-  {
-    Shape tmp;
-    if ((tmp = Shape_Plaintext.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Ellipse.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Circle.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Egg.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Triangle.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Box.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Diamond.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Trapezium.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Parallelogram.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_House.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Hexagon.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Shape_Octagon.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Shape: " + trm);
+  public boolean isSortShape()  {
+    return true;
   }
 
   public boolean isPlaintext()
@@ -134,7 +76,6 @@ abstract public class ShapeImpl extends MetaGraphConstructor
   {
     return false;
   }
-
 
 }
 

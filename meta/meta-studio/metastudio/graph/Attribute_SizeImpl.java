@@ -3,46 +3,29 @@ package metastudio.graph;
 abstract public class Attribute_SizeImpl
 extends Attribute
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Attribute_SizeImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   private static int index_width = 0;
   private static int index_height = 1;
   public shared.SharedObject duplicate() {
-    Attribute_Size clone = new Attribute_Size();
+    Attribute_Size clone = new Attribute_Size(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Attribute_Size) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeAttribute_Size(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("size(<int>,<int>)");
-  }
-
-  static public Attribute fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Attribute tmp = getStaticMetaGraphFactory().makeAttribute_Size((Integer) children.get(0), (Integer) children.get(1));
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public aterm.ATerm toTerm() {
-    if(term == null) {
-      java.util.List args = new java.util.LinkedList();
-      args.add(new Integer(((aterm.ATermInt) getArgument(0)).getInt()));
-      args.add(new Integer(((aterm.ATermInt) getArgument(1)).getInt()));
-      setTerm(getFactory().make(getPattern(), args));
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
     }
     return term;
   }

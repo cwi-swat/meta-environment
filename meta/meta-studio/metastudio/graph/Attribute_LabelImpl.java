@@ -3,44 +3,28 @@ package metastudio.graph;
 abstract public class Attribute_LabelImpl
 extends Attribute
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Attribute_LabelImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   private static int index_label = 0;
   public shared.SharedObject duplicate() {
-    Attribute_Label clone = new Attribute_Label();
+    Attribute_Label clone = new Attribute_Label(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Attribute_Label) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeAttribute_Label(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("label(<str>)");
-  }
-
-  static public Attribute fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Attribute tmp = getStaticMetaGraphFactory().makeAttribute_Label((String) children.get(0));
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public aterm.ATerm toTerm() {
-    if(term == null) {
-      java.util.List args = new java.util.LinkedList();
-      args.add(((aterm.ATermAppl) getArgument(0)).getAFun().getName());
-      setTerm(getFactory().make(getPattern(), args));
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
     }
     return term;
   }

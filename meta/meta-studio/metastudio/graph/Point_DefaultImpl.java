@@ -3,46 +3,29 @@ package metastudio.graph;
 abstract public class Point_DefaultImpl
 extends Point
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Point_DefaultImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   private static int index_x = 0;
   private static int index_y = 1;
   public shared.SharedObject duplicate() {
-    Point_Default clone = new Point_Default();
+    Point_Default clone = new Point_Default(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Point_Default) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makePoint_Default(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("point(<int>,<int>)");
-  }
-
-  static public Point fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Point tmp = getStaticMetaGraphFactory().makePoint_Default((Integer) children.get(0), (Integer) children.get(1));
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public aterm.ATerm toTerm() {
-    if(term == null) {
-      java.util.List args = new java.util.LinkedList();
-      args.add(new Integer(((aterm.ATermInt) getArgument(0)).getInt()));
-      args.add(new Integer(((aterm.ATermInt) getArgument(1)).getInt()));
-      setTerm(getFactory().make(getPattern(), args));
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
     }
     return term;
   }

@@ -6,33 +6,15 @@ import java.io.IOException;
 
 abstract public class AttributeListImpl extends MetaGraphConstructor
 {
-  static AttributeList fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static AttributeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  AttributeListImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(AttributeList peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static AttributeList fromTerm(aterm.ATerm trm)
-  {
-    AttributeList tmp;
-    if ((tmp = AttributeList_Empty.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = AttributeList_Multi.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a AttributeList: " + trm);
+  public boolean isSortAttributeList()  {
+    return true;
   }
 
   public boolean isEmpty()
@@ -74,7 +56,6 @@ abstract public class AttributeListImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This AttributeList has no Tail");
   }
-
 
 }
 

@@ -2,7 +2,11 @@ package metastudio.graph;
 
 abstract public class Edge extends EdgeImpl {
 
-	//{{{ private Attribute_CurvePoints getCurvePointsAttribute()
+	Edge(MetaGraphFactory factory) {
+		super(factory);
+	}
+
+//	{{{ private Attribute_CurvePoints getCurvePointsAttribute()
 
 	private Attribute_CurvePoints getCurvePointsAttribute() {
 		AttributeList attrs = getAttributes();

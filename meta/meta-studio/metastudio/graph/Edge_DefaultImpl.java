@@ -3,41 +3,34 @@ package metastudio.graph;
 abstract public class Edge_DefaultImpl
 extends Edge
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Edge_DefaultImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   private static int index_from = 0;
   private static int index_to = 1;
   private static int index_attributes = 2;
   public shared.SharedObject duplicate() {
-    Edge_Default clone = new Edge_Default();
+    Edge_Default clone = new Edge_Default(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Edge_Default) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeEdge_Default(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("edge(<term>,<term>,<term>)");
+  public aterm.ATerm toTerm() {
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
+    }
+    return term;
   }
 
-  static public Edge fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Edge tmp = getStaticMetaGraphFactory().makeEdge_Default(NodeId.fromTerm( (aterm.ATerm) children.get(0)), NodeId.fromTerm( (aterm.ATerm) children.get(1)), AttributeList.fromTerm( (aterm.ATerm) children.get(2)));
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public boolean isDefault()
   {
     return true;
@@ -112,7 +105,7 @@ extends Edge
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;
-    int b = 0x9e3779b9;
+    int b = (getAFun().hashCode()<<8);
     a += (getArgument(2).hashCode() << 16);
     a += (getArgument(1).hashCode() << 8);
     a += (getArgument(0).hashCode() << 0);

@@ -680,13 +680,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   public void displayGraph(String id, ATerm graphTerm) {
-    GraphWrapper graph = GraphWrapper.fromTerm(graphTerm);
+    GraphWrapper graph = GraphWrapper.fromTerm(factory, graphTerm);
     GraphPanel panel = getGraphPanel(id);
     layoutGraph(panel, graph);
   }
 
   public void graphLayouted(String id, ATerm graphTerm) {
-    GraphWrapper graph = GraphWrapper.fromTerm(graphTerm);
+    GraphWrapper graph = GraphWrapper.fromTerm(factory, graphTerm);
     if (id.equals(importGraphPanel.getId())) {
       this.graph = graph;
     }

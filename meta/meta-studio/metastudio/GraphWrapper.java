@@ -201,8 +201,8 @@ public class GraphWrapper {
 				ATerm toTerm = elems.getFirst();
 				elems = elems.getNext();
 
-				NodeId from = NodeId.fromTerm(fromTerm);
-				NodeId to = NodeId.fromTerm(toTerm);
+				NodeId from = factory.NodeIdFromTerm(fromTerm);
+				NodeId to = factory.NodeIdFromTerm(toTerm);
 
 				if (nodeSet.add(toTerm)) {
 					nodeSequence.add(toTerm);
@@ -219,7 +219,7 @@ public class GraphWrapper {
 		Iterator iter = nodeSequence.iterator();
 		while (iter.hasNext()) {
 			ATerm name = (ATerm) iter.next();
-			NodeId id = NodeId.fromTerm(name);
+			NodeId id = factory.NodeIdFromTerm(name);
 			Shape shape = factory.makeShape_Box();
 			Attribute attr = factory.makeAttribute_Shape(shape);
 			AttributeList attrs = factory.makeAttributeList_Empty();
@@ -231,8 +231,8 @@ public class GraphWrapper {
 		return new GraphWrapper(factory.makeGraph_Default(nodes, edges, factory.makeAttributeList_Empty()));
 	}
 
-	public static GraphWrapper fromTerm(ATerm term) {
-		Graph graph = Graph.fromTerm(term);
+	public static GraphWrapper fromTerm(MetaGraphFactory factory, ATerm term) {
+		Graph graph = factory.GraphFromTerm(term);
 		return new GraphWrapper(graph);
 	}
 

@@ -5,9 +5,11 @@ import aterm.*;
 abstract public class Node
 extends NodeImpl
 {
-  //{{{ private Attribute_Location getLocationAttribute()
+	Node(MetaGraphFactory factory) {
+		super(factory);
+	}
 
-  private Attribute_Location getLocationAttribute()
+	private Attribute_Location getLocationAttribute()
   {
     AttributeList attrs = getAttributes();
     while (!attrs.isEmpty()) {
@@ -21,7 +23,6 @@ extends NodeImpl
     return null;
   }
 
-  //}}}
   //{{{ private Attribute_Label getLabelAttribute()
 
   private Attribute_Label getLabelAttribute()

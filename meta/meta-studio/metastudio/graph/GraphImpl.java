@@ -6,29 +6,15 @@ import java.io.IOException;
 
 abstract public class GraphImpl extends MetaGraphConstructor
 {
-  static Graph fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Graph fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  GraphImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Graph peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Graph fromTerm(aterm.ATerm trm)
-  {
-    Graph tmp;
-    if ((tmp = Graph_Default.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Graph: " + trm);
+  public boolean isSortGraph()  {
+    return true;
   }
 
   public boolean isDefault()
@@ -80,7 +66,6 @@ abstract public class GraphImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This Graph has no Attributes");
   }
-
 
 }
 

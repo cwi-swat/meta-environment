@@ -1,6 +1,10 @@
 package metastudio.graph;
 
-abstract public class NodeList
+public abstract class NodeList
 extends NodeListImpl
 {
+  NodeList(MetaGraphFactory factory) {
+    super(factory);
+  }
+
 }

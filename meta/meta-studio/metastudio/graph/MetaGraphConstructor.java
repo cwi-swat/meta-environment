@@ -6,33 +6,69 @@ implements aterm.ATerm
 {
   protected aterm.ATerm term = null;
 
-  abstract protected aterm.ATerm getPattern();
+  MetaGraphFactory factory = null;
 
-  public aterm.ATerm toTerm() {
-    if(term == null) {
-      java.util.List args = new java.util.LinkedList();
-      for(int i = 0; i<getArity() ; i++) {
-        args.add(((MetaGraphConstructor) getArgument(i)).toTerm());
-      }
-      setTerm(getFactory().make(getPattern(), args));
-    }
-    return term;
+  public MetaGraphConstructor(MetaGraphFactory factory) {
+    super(factory);
+    this.factory = factory;
   }
 
+  abstract public aterm.ATerm toTerm();
   public String toString() {
     return toTerm().toString();
   }
-
   protected void setTerm(aterm.ATerm term) {
    this.term = term;
   }
-
   public MetaGraphFactory getMetaGraphFactory() {
-    return (MetaGraphFactory) getFactory();
+    return factory;
+  }
+  public boolean isSortGraph() {
+    return false;
   }
 
-  static protected MetaGraphFactory getStaticMetaGraphFactory() {
-    return (MetaGraphFactory) getStaticFactory();
+  public boolean isSortNodeList() {
+    return false;
+  }
+
+  public boolean isSortNode() {
+    return false;
+  }
+
+  public boolean isSortNodeId() {
+    return false;
+  }
+
+  public boolean isSortAttributeList() {
+    return false;
+  }
+
+  public boolean isSortAttribute() {
+    return false;
+  }
+
+  public boolean isSortShape() {
+    return false;
+  }
+
+  public boolean isSortDirection() {
+    return false;
+  }
+
+  public boolean isSortEdgeList() {
+    return false;
+  }
+
+  public boolean isSortEdge() {
+    return false;
+  }
+
+  public boolean isSortPolygon() {
+    return false;
+  }
+
+  public boolean isSortPoint() {
+    return false;
   }
 
 }

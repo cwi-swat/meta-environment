@@ -6,29 +6,15 @@ import java.io.IOException;
 
 abstract public class NodeImpl extends MetaGraphConstructor
 {
-  static Node fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Node fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  NodeImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Node peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Node fromTerm(aterm.ATerm trm)
-  {
-    Node tmp;
-    if ((tmp = Node_Default.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Node: " + trm);
+  public boolean isSortNode()  {
+    return true;
   }
 
   public boolean isDefault()
@@ -65,7 +51,6 @@ abstract public class NodeImpl extends MetaGraphConstructor
   {
      throw new RuntimeException("This Node has no Attributes");
   }
-
 
 }
 

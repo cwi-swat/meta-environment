@@ -6,41 +6,15 @@ import java.io.IOException;
 
 abstract public class DirectionImpl extends MetaGraphConstructor
 {
-  static Direction fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Direction fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  DirectionImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Direction peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Direction fromTerm(aterm.ATerm trm)
-  {
-    Direction tmp;
-    if ((tmp = Direction_Forward.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Direction_Back.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Direction_Both.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Direction_None.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Direction: " + trm);
+  public boolean isSortDirection()  {
+    return true;
   }
 
   public boolean isForward()
@@ -62,7 +36,6 @@ abstract public class DirectionImpl extends MetaGraphConstructor
   {
     return false;
   }
-
 
 }
 

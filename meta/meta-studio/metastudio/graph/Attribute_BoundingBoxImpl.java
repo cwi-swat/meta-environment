@@ -3,40 +3,33 @@ package metastudio.graph;
 abstract public class Attribute_BoundingBoxImpl
 extends Attribute
 {
-  static private aterm.ATerm pattern = null;
-
-  protected aterm.ATerm getPattern() {
-    return pattern;
+  Attribute_BoundingBoxImpl(MetaGraphFactory factory) {
+    super(factory);
   }
   private static int index_first = 0;
   private static int index_second = 1;
   public shared.SharedObject duplicate() {
-    Attribute_BoundingBox clone = new Attribute_BoundingBox();
+    Attribute_BoundingBox clone = new Attribute_BoundingBox(factory);
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
     return clone;
   }
 
+  public boolean equivalent(shared.SharedObject peer) {
+    if (peer instanceof Attribute_BoundingBox) {
+      return super.equivalent(peer);
+    }
+    return false;
+  }
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeAttribute_BoundingBox(fun, i_args, annos);
   }
-  static public void initializePattern()
-  {
-    pattern = getStaticFactory().parse("bounding-box(<term>,<term>)");
+  public aterm.ATerm toTerm() {
+    if (term == null) {
+      term = getMetaGraphFactory().toTerm(this);
+    }
+    return term;
   }
 
-  static public Attribute fromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(pattern);
-
-    if (children != null) {
-      Attribute tmp = getStaticMetaGraphFactory().makeAttribute_BoundingBox(Point.fromTerm( (aterm.ATerm) children.get(0)), Point.fromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
   public boolean isBoundingBox()
   {
     return true;
@@ -91,7 +84,7 @@ extends Attribute
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;
-    int b = 0x9e3779b9;
+    int b = (getAFun().hashCode()<<8);
     a += (getArgument(1).hashCode() << 8);
     a += (getArgument(0).hashCode() << 0);
 

@@ -6,57 +6,15 @@ import java.io.IOException;
 
 abstract public class AttributeImpl extends MetaGraphConstructor
 {
-  static Attribute fromString(String str)
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
-    return fromTerm(trm);
-  }
-  static Attribute fromTextFile(InputStream stream) throws aterm.ParseError, IOException
-  {
-    aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
-    return fromTerm(trm);
+  AttributeImpl(MetaGraphFactory factory) {
+     super(factory);
   }
   public boolean isEqual(Attribute peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  public static Attribute fromTerm(aterm.ATerm trm)
-  {
-    Attribute tmp;
-    if ((tmp = Attribute_Label.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_Shape.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_Location.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_Size.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_CurvePoints.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_BoundingBox.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_Direction.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-    if ((tmp = Attribute_Info.fromTerm(trm)) != null) {
-      return tmp;
-    }
-
-
-    throw new RuntimeException("This is not a Attribute: " + trm);
+  public boolean isSortAttribute()  {
+    return true;
   }
 
   public boolean isLabel()
@@ -269,16 +227,15 @@ abstract public class AttributeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Attribute has no Key");
   }
 
-  public ATerm getValue()
+  public aterm.ATerm getValue()
   {
      throw new RuntimeException("This Attribute has no Value");
   }
 
-  public Attribute setValue(ATerm _value)
+  public Attribute setValue(aterm.ATerm _value)
   {
      throw new RuntimeException("This Attribute has no Value");
   }
-
 
 }
 

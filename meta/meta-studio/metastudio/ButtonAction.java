@@ -13,7 +13,7 @@ class ButtonAction extends AbstractAction
   private ATerm type;
   private ATerm action;
   private UserInterfaceBridge bridge;
-  private static MetaGraphFactory factory;    
+  private MetaGraphFactory factory;    
   private JTree moduleTree;
 
   public ButtonAction(String name,

@@ -1,7 +1,10 @@
 package metastudio.graph;
 
-abstract public class NodeId
+public abstract class NodeId
 extends NodeIdImpl
 {
+  NodeId(MetaGraphFactory factory) {
+    super(factory);
+  }
 
 }

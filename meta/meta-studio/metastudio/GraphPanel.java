@@ -31,6 +31,8 @@ import metastudio.graph.Polygon;
 import metastudio.graph.Shape;
 
 public class GraphPanel extends JComponent implements Scrollable {
+	private static final int ARROWHEAD_LENGTH = 15;
+	private static final int ARROWHEAD_SHARPNESS = 15;
 	public static final String PREF_NODE_FONT = "node.font";
 	public static final String PREF_NODE_BG = "node.background";
 	public static final String PREF_NODE_FG = "node.foreground";
@@ -72,8 +74,9 @@ public class GraphPanel extends JComponent implements Scrollable {
 	public GraphPanel(String id) {
 		this.id = id;
 		transform = new AffineTransform();
+   
 		setAutoscrolls(true);
-
+        
 		MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
 			boolean dragging;
 			int lastX;
@@ -166,14 +169,14 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 		Attribute bbox = graph.getBoundingBox();
 		Point max = bbox.getSecond();
-
+    
 		max_x = max.getX().intValue();
 		max_y = max.getY().intValue();
 
 		Point2D point = transform.transform(new Point2D.Float((float) max_x, (float) max_y), null);
 
 		this.max_x = (int) point.getX();
-		this.max_y = (int) point.getY();
+		this.max_y = (int) point.getY();   
 	}
 
 	public void paint(Graphics g) {
@@ -181,8 +184,10 @@ public class GraphPanel extends JComponent implements Scrollable {
 		//System.out.println("size = " + getSize());
 		if (graph != null) {
 			Graphics2D g2d = (Graphics2D) g;
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+                           RenderingHints.VALUE_ANTIALIAS_ON);      
 			g2d.transform(transform);
+            
 
 			// Hack around 32k limit bug:
 			// Originally, this fillrect came before the transform (in screen coordinates),
@@ -240,8 +245,9 @@ public class GraphPanel extends JComponent implements Scrollable {
 			return;
 		}
 
-		int x = node.getX();
-		int y = node.getY();
+    System.err.println(node.getLabel());
+		int x = node.getX(); System.err.println("  x: " + x);
+		int y = node.getY(); System.err.println("  y: " + y);
 		int w = node.getWidth();
 		int h = node.getHeight();
 
@@ -332,6 +338,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 		Polygon poly = edge.getPolygon();
 
 		Point from = poly.getHead();
+		Point to = from;
 		poly = poly.getTail();
 
 		float fromx = (float) from.getX().intValue();
@@ -348,6 +355,9 @@ public class GraphPanel extends JComponent implements Scrollable {
 			Point cur = poly.getHead();
 			poly = poly.getTail();
 
+			from = cp1;
+			to = cur;
+
 			gp.curveTo(
 				(float) cp1.getX().intValue(),
 				(float) cp1.getY().intValue(),
@@ -358,11 +368,12 @@ public class GraphPanel extends JComponent implements Scrollable {
 		}
 
 		if (poly.hasHead()) {
-			Point to = poly.getHead();
+			from = to;
+			to = poly.getHead();
 			poly = poly.getTail();
 			gp.lineTo((float) to.getX().intValue(), (float) to.getY().intValue());
 		}
-        
+
 		Graphics2D g2d = (Graphics2D) g;
 		if (edge.connectedTo(hoveredNode)) {
 			g2d.setColor(nodeBorderHovered);
@@ -373,6 +384,32 @@ public class GraphPanel extends JComponent implements Scrollable {
 		}
 
 		g2d.draw(gp);
+    arrowHead(from, to, g2d);
+	}
+
+	private void arrowHead(Point from, Point to, Graphics2D g) {
+		int x1 = from.getX().intValue();
+		int y1 = from.getY().intValue();
+		int x2 = to.getX().intValue();
+		int y2 = to.getY().intValue();
+
+    
+		// calculate points for arrowhead
+		double angle = Math.atan2(y2 - y1, x2 - x1) + Math.PI;
+		double theta = Math.toRadians(ARROWHEAD_SHARPNESS); 
+		double size = ARROWHEAD_LENGTH;
+
+		int x3 = (int) (x2 + Math.cos(angle - theta) * size);
+		int y3 = (int) (y2 + Math.sin(angle - theta) * size);
+
+		int x4 = (int) (x2 + Math.cos(angle + theta) * size);
+		int y4 = (int) (y2 + Math.sin(angle + theta) * size);
+
+    int[] xs = new int[] {x2, x3, x4, x2};
+    int[] ys = new int[] {y2, y3, y4, y2};
+
+    g.fillPolygon(xs, ys, xs.length);
+    g.drawPolygon(xs, ys, xs.length);
 	}
 
 	public Node getNodeAt(int mouse_x, int mouse_y) {
