@@ -53,7 +53,8 @@ in
       snd-note(ui-status(errorf(
         "Module %s in %s is inconsistent with search paths",
         [ModuleName,Path])))
-    )
+    ) .
+    snd-msg(new-module-created(Path, ModuleName))
     +
     %% Handle request to create a new rules section.
     rec-msg(create-new-equations(ModuleName?)) .

@@ -694,6 +694,7 @@ in
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
         snd-msg(create-new-module(Path, ModuleName, sdf)) .           
+	rec-msg(new-module-created(Path?, ModuleName?)) .
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(create-module, Stack?, EditorId?) .
@@ -701,6 +702,7 @@ in
 	snd-msg(io-relative-to-absolute(["."])) .
 	rec-msg(io-absolute-directories([Path?])) .
         snd-msg(create-new-module(Path, ModuleName, sdf)) .           
+	rec-msg(new-module-created(Path?, ModuleName?)) .
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
@@ -883,6 +885,19 @@ in
         rec-msg(clear-history-list, Stack?, EditorId?) .
 	snd-msg(clear-history) .
 	ReturnSuccess(EditorId, Stack)		
+      +
+        /* NOTE: in fact, all actions like this one are now hard coded
+	   in buttons.tb. We would like to have a separate stack machine
+	   action interpreter, and implement new actions without having
+	   to adapt the interpreter itself. We have some ideas about how
+	   to do this, but for now I will have to add this action...
+         */
+        rec-msg(asfsdfapigen, Stack?, EditorId?) .
+	StackPopString(Stack, Stack?, ModuleName?) .
+	StackPopString(Stack, Stack?, Path?) .
+	snd-msg(asfsdfapigen(ModuleName, Path)) .
+	rec-msg(asfsdfapigen-done) .
+	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(refresh-buttons, Stack?, EditorId?) .
 	snd-msg(refresh-buttons) .
