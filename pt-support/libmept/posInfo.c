@@ -337,42 +337,40 @@ static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle)
 }
 
 /*}}}  */
-/*{{{  static ATbool PT_containsTreeOffset(PT_Tree tree, int offset) */
-
-static ATbool PT_containsTreeOffset(PT_Tree tree, int offset)
-{
-  LOC_Location location = PT_getTreeLocation(tree);
-  LOC_Area area = LOC_getLocationArea(location);
-
-  return PT_containsAreaOffset(area, offset);
-}
-
-/*}}}  */
 /*{{{  LOC_Location PT_cursorAtOffset(PT_tree tree, int offset) */
 
 LOC_Location PT_findLocationAtOffset(PT_Tree tree, int offset)
 {
+  LOC_Area area;
+  LOC_Location location;
   PT_Args args;
 
-  if (!PT_containsTreeOffset(tree, offset)) {
+  assert(tree != NULL);
+
+  location = PT_getTreeLocation(tree);
+  if (location == NULL) {
+    return NULL;
+  }
+
+  area = LOC_getLocationArea(location);
+  if (!PT_containsAreaOffset(area, offset)) {
     return NULL;
   }
 
   if (!PT_hasTreeArgs(tree)) {
-    return PT_getTreeLocation(tree);
+    return location;
   }
 
   args = PT_getTreeArgs(tree);
   while (!PT_isArgsEmpty(args)) {
-    PT_Tree child = PT_getArgsHead(args);
-    LOC_Location location = PT_findLocationAtOffset(child, offset);
-    if (location != NULL) {
-      return location;
+    LOC_Location child = PT_findLocationAtOffset(PT_getArgsHead(args), offset);
+    if (child != NULL) {
+      return child;
     }
     args = PT_getArgsTail(args);
   }
 
-  return NULL;
+  return location;
 }
 
 /*}}}  */
