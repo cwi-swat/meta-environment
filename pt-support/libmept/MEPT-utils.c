@@ -997,3 +997,8 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 
 /*}}}  */
 
+PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
+{
+  return PT_CharRangesFromTerm((ATerm)ATconcat((ATermList) ranges1,
+                                               (ATermList) ranges2));
+}

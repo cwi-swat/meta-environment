@@ -127,5 +127,6 @@ PT_Tree PT_getTreeBracketTree(PT_Tree tree);
 
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
 
+PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2);
 
 #endif /* _ME_PT_H */ 
