@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import tide.*;
 import tide.tool.*;
 
 public class FontPreferenceEditor

@@ -6,9 +6,13 @@ CLASSPATH	:= ${ATERM}/classes:${TOOLBUS}/classes
 javadir		= ${prefix}/classes/tide
 JAVAROOT	= ${top_builddir}
 
-java_JAVA	= ${GENJAVA}
+java_JAVA	= ${GENJAVA} \
+		TideControl.java PreferenceSet.java PreferenceListener.java
 
-GENJAVA		= TideConfig.java
+GENJAVA		= TideConfig.java ${CONTROL_GEN}
+
+CONTROL_GEN     = TideControlTif.java TideControlTool.java \
+		TideControlBridge.java
 
 EXTRADIST	= TideConfig.java.src
 
@@ -21,6 +25,10 @@ noinst_SCRIPTS  = ${GENJAVA}
 %.java : %.java.src Makefile
 	sed 's@__DATADIR__@$(datadir)@g;\
             ' < $< > $@
+
+${CONTROL_GEN}: ${top_builddir}/toolbus/tide.tifs
+	${ATERM}/bin/tifstojava -tifs ${top_builddir}/toolbus/tide.tifs \
+		-tool tide-control -package tide
 
 %.class: %.java
 	$(CLASSPATH_ENV) $(JAVAC) $(JAVACFLAGS) -d $(JAVAROOT) $<

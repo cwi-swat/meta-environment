@@ -12,7 +12,6 @@ public class DebugTool
 
   private Info info;
 
-
   //{{{ public DebugTool(ATermFactory factory)
 
   public DebugTool(ATermFactory factory)

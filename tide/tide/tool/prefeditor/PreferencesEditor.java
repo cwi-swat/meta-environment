@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import tide.*;
 import tide.tool.*;
 import tide.tool.support.*;
 

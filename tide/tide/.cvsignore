@@ -3,3 +3,6 @@ Makefile
 *.class
 classjava.stamp
 TideConfig.java
+TideControlTif.java
+TideControlBridge.java
+TideControlTool.java

@@ -15,6 +15,7 @@ import javax.swing.plaf.TextUI;
 
 import aterm.*;
 
+import tide.*;
 import tide.tool.*;
 import tide.tool.support.*;
 

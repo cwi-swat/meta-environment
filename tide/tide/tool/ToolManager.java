@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import tide.*;
 import tide.tool.support.*;
 
 public class ToolManager

@@ -1,4 +1,4 @@
-package tide.tool;
+package tide;
 
 import aterm.*;
 
@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import tide.TideConfig;
+import tide.tool.*;
 import tide.tool.support.*;
 import tide.tool.proclist.*;
 import tide.tool.ruleinspector.*;

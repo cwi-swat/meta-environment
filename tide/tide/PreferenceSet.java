@@ -1,4 +1,4 @@
-package tide.tool;
+package tide;
 
 import java.util.*;
 import java.io.*;

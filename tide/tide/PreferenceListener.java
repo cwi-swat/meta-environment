@@ -1,4 +1,4 @@
-package tide.tool;
+package tide;
 
 public interface PreferenceListener
 {
