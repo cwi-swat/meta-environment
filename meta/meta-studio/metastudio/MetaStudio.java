@@ -14,6 +14,7 @@ import javax.swing.text.*;
 
 import metastudio.graph.*;
 import aterm.*;
+import aterm.pure.PureFactory;
 
 public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, ModuleSelectionListener {
   // TODO: move preference constants to Preferences class
@@ -26,7 +27,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private static ATerm ACTION_MODULE_POPUP;
   private static ATerm ACTION_NEW_MODULE_POPUP;
 
-  public static MetaGraphFactory factory;
+  public static PureFactory factory;
+  public static MetaGraphFactory metaGraphFactory;
 
   private UserInterfaceBridge bridge;
 
@@ -116,7 +118,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     topFrame = this;
     graphPanels = new HashMap();
 
-    factory = new MetaGraphFactory();
+    factory = new PureFactory();
+    metaGraphFactory = new MetaGraphFactory(factory);
     moduleManager = new ModuleTreeModel();
     statusMessages = new LinkedList();
 
@@ -175,7 +178,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   private void createParsetreePanel() {
-    parseTreePanel = new ParseTreePanel(bridge, factory);
+    parseTreePanel = new ParseTreePanel(bridge, metaGraphFactory);
   }
 
   private JSplitPane createMainPanel() {
@@ -296,11 +299,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private void createModuleGraph() {
     Color color;
 
-	NodeList nodes = factory.makeNodeList_Empty();
-	EdgeList edges = factory.makeEdgeList_Empty();
-	AttributeList attrs = factory.makeAttributeList_Empty();
+	NodeList nodes = metaGraphFactory.makeNodeList_Empty();
+	EdgeList edges = metaGraphFactory.makeEdgeList_Empty();
+	AttributeList attrs = metaGraphFactory.makeAttributeList_Empty();
 
-	graph = factory.makeGraph_Default(nodes, edges, attrs);
+	graph = metaGraphFactory.makeGraph_Default(nodes, edges, attrs);
 
     importGraphPanel = new ImportGraphPanel(moduleManager);
 
@@ -441,11 +444,11 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   private void resetGraph() {
-	NodeList nodes = factory.makeNodeList_Empty();
-	EdgeList edges = factory.makeEdgeList_Empty();
-	AttributeList attrs = factory.makeAttributeList_Empty();
+	NodeList nodes = metaGraphFactory.makeNodeList_Empty();
+	EdgeList edges = metaGraphFactory.makeEdgeList_Empty();
+	AttributeList attrs = metaGraphFactory.makeAttributeList_Empty();
 
-	graph = factory.makeGraph_Default(nodes, edges, attrs);
+	graph = metaGraphFactory.makeGraph_Default(nodes, edges, attrs);
   }
 
   public void run() {
@@ -666,7 +669,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     setModules((ATermList) importRelations);
     setImports((ATermList) importRelations);
 
-    graph = Graph.fromImportList(factory, (ATermList) importRelations);
+    graph = Graph.fromImportList(metaGraphFactory, (ATermList) importRelations);
     layoutGraph(importGraphPanel, graph);
   }
 
@@ -689,13 +692,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   public void displayGraph(String id, ATerm graphTerm) {
-    Graph graph = factory.GraphFromTerm(graphTerm);
+    Graph graph = metaGraphFactory.GraphFromTerm(graphTerm);
     GraphPanel panel = getGraphPanel(id);
     layoutGraph(panel, graph);
   }
 
   public void graphLayouted(String id, ATerm graphTerm) {
-    Graph graph = factory.GraphFromTerm(graphTerm); 
+    Graph graph = metaGraphFactory.GraphFromTerm(graphTerm); 
     if (id.equals(importGraphPanel.getId())) {
       this.graph = graph;
     }
@@ -907,7 +910,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       ATerm menuItem = menuItems.getFirst();
       String menuName = ((ATermAppl) menuItem).getName();
       JMenu menu = getMenuItem(getMenu(menuName), menuItems.getNext());
-      menu.add(new ButtonAction(getMenuName(menuItems), type, action, moduleTree, bridge, factory));
+      menu.add(new ButtonAction(getMenuName(menuItems), type, action, moduleTree, bridge, metaGraphFactory));
       buttons = buttons.getNext();
     }
   }
@@ -934,7 +937,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       buttons = buttons.getNext();
 
       if (buttonList.getLength() == 1) {
-	menu.add(new ButtonAction(buttonNamePrefix.getName(), buttonType, action, moduleTree, bridge, factory));
+	menu.add(new ButtonAction(buttonNamePrefix.getName(), buttonType, action, moduleTree, bridge, metaGraphFactory));
       } else {
 	ATermList buttonRunner = buttons;
 	JMenu nextLevel = new JMenu(buttonNamePrefix.getName());
@@ -984,7 +987,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       if (buttonList.getLength() == 1) {
 	ATerm apifyMe = factory.make("menu(<term>)", prefixButtonName.concat(buttonList));
 	menu.add(
-		 new ButtonAction(buttonNamePrefix.getName(), buttonType, apifyMe, moduleTree, bridge, factory));
+		 new ButtonAction(buttonNamePrefix.getName(), buttonType, apifyMe, moduleTree, bridge, metaGraphFactory));
       } else {
 	ATermList buttonRunner = buttons;
 	JMenu nextLevel = new JMenu(buttonNamePrefix.getName());

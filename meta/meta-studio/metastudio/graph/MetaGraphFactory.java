@@ -2,8 +2,9 @@ package metastudio.graph;
 
 import aterm.*;
 import aterm.pure.PureFactory;
-public class MetaGraphFactory extends PureFactory
+public class MetaGraphFactory
 {
+  private PureFactory factory;
   private aterm.AFun funGraph_Default;
   private Graph protoGraph_Default;
   private aterm.ATerm patternGraph_Default;
@@ -115,189 +116,188 @@ public class MetaGraphFactory extends PureFactory
   private aterm.AFun funPoint_Default;
   private Point protoPoint_Default;
   private aterm.ATerm patternPoint_Default;
-  public MetaGraphFactory()
+  public MetaGraphFactory(PureFactory factory)
   {
-     super();
+     this.factory = factory;
      initialize();
   }
-  public MetaGraphFactory(int logSize)
+  public PureFactory getPureFactory()
   {
-     super(logSize);
-     initialize();
+    return factory;
   }
   private void initialize()
   {
 
-    patternGraph_Default = parse("graph(<term>,<term>,<term>)");
-    funGraph_Default = makeAFun("_Graph_default", 3, false);
+    patternGraph_Default = factory.parse("graph(<term>,<term>,<term>)");
+    funGraph_Default = factory.makeAFun("_Graph_default", 3, false);
     protoGraph_Default = new Graph_Default(this);
 
 
-    patternNodeList_Empty = parse("[]");
-    funNodeList_Empty = makeAFun("_NodeList_empty", 0, false);
+    patternNodeList_Empty = factory.parse("[]");
+    funNodeList_Empty = factory.makeAFun("_NodeList_empty", 0, false);
     protoNodeList_Empty = new NodeList_Empty(this);
 
-    patternNodeList_Multi = parse("[<term>,<list>]");
-    funNodeList_Multi = makeAFun("_NodeList_multi", 2, false);
+    patternNodeList_Multi = factory.parse("[<term>,<list>]");
+    funNodeList_Multi = factory.makeAFun("_NodeList_multi", 2, false);
     protoNodeList_Multi = new NodeList_Multi(this);
 
 
-    patternNode_Default = parse("node(<term>,<term>)");
-    funNode_Default = makeAFun("_Node_default", 2, false);
+    patternNode_Default = factory.parse("node(<term>,<term>)");
+    funNode_Default = factory.makeAFun("_Node_default", 2, false);
     protoNode_Default = new Node_Default(this);
 
 
-    patternNodeId_Default = parse("<str>");
-    funNodeId_Default = makeAFun("_NodeId_default", 1, false);
+    patternNodeId_Default = factory.parse("<str>");
+    funNodeId_Default = factory.makeAFun("_NodeId_default", 1, false);
     protoNodeId_Default = new NodeId_Default(this);
 
 
-    patternAttributeList_Empty = parse("[]");
-    funAttributeList_Empty = makeAFun("_AttributeList_empty", 0, false);
+    patternAttributeList_Empty = factory.parse("[]");
+    funAttributeList_Empty = factory.makeAFun("_AttributeList_empty", 0, false);
     protoAttributeList_Empty = new AttributeList_Empty(this);
 
-    patternAttributeList_Multi = parse("[<term>,<list>]");
-    funAttributeList_Multi = makeAFun("_AttributeList_multi", 2, false);
+    patternAttributeList_Multi = factory.parse("[<term>,<list>]");
+    funAttributeList_Multi = factory.makeAFun("_AttributeList_multi", 2, false);
     protoAttributeList_Multi = new AttributeList_Multi(this);
 
 
-    patternAttribute_Label = parse("label(<str>)");
-    funAttribute_Label = makeAFun("_Attribute_label", 1, false);
+    patternAttribute_Label = factory.parse("label(<str>)");
+    funAttribute_Label = factory.makeAFun("_Attribute_label", 1, false);
     protoAttribute_Label = new Attribute_Label(this);
 
-    patternAttribute_Shape = parse("shape(<term>)");
-    funAttribute_Shape = makeAFun("_Attribute_shape", 1, false);
+    patternAttribute_Shape = factory.parse("shape(<term>)");
+    funAttribute_Shape = factory.makeAFun("_Attribute_shape", 1, false);
     protoAttribute_Shape = new Attribute_Shape(this);
 
-    patternAttribute_Location = parse("location(<int>,<int>)");
-    funAttribute_Location = makeAFun("_Attribute_location", 2, false);
+    patternAttribute_Location = factory.parse("location(<int>,<int>)");
+    funAttribute_Location = factory.makeAFun("_Attribute_location", 2, false);
     protoAttribute_Location = new Attribute_Location(this);
 
-    patternAttribute_Size = parse("size(<int>,<int>)");
-    funAttribute_Size = makeAFun("_Attribute_size", 2, false);
+    patternAttribute_Size = factory.parse("size(<int>,<int>)");
+    funAttribute_Size = factory.makeAFun("_Attribute_size", 2, false);
     protoAttribute_Size = new Attribute_Size(this);
 
-    patternAttribute_CurvePoints = parse("curve-points(<term>)");
-    funAttribute_CurvePoints = makeAFun("_Attribute_curve-points", 1, false);
+    patternAttribute_CurvePoints = factory.parse("curve-points(<term>)");
+    funAttribute_CurvePoints = factory.makeAFun("_Attribute_curve-points", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints(this);
 
-    patternAttribute_BoundingBox = parse("bounding-box(<term>,<term>)");
-    funAttribute_BoundingBox = makeAFun("_Attribute_bounding-box", 2, false);
+    patternAttribute_BoundingBox = factory.parse("bounding-box(<term>,<term>)");
+    funAttribute_BoundingBox = factory.makeAFun("_Attribute_bounding-box", 2, false);
     protoAttribute_BoundingBox = new Attribute_BoundingBox(this);
 
-    patternAttribute_Direction = parse("direction(<term>)");
-    funAttribute_Direction = makeAFun("_Attribute_direction", 1, false);
+    patternAttribute_Direction = factory.parse("direction(<term>)");
+    funAttribute_Direction = factory.makeAFun("_Attribute_direction", 1, false);
     protoAttribute_Direction = new Attribute_Direction(this);
 
-    patternAttribute_Info = parse("info(<str>,<term>)");
-    funAttribute_Info = makeAFun("_Attribute_info", 2, false);
+    patternAttribute_Info = factory.parse("info(<str>,<term>)");
+    funAttribute_Info = factory.makeAFun("_Attribute_info", 2, false);
     protoAttribute_Info = new Attribute_Info(this);
 
 
-    patternShape_Plaintext = parse("plaintext");
-    funShape_Plaintext = makeAFun("_Shape_plaintext", 0, false);
+    patternShape_Plaintext = factory.parse("plaintext");
+    funShape_Plaintext = factory.makeAFun("_Shape_plaintext", 0, false);
     protoShape_Plaintext = new Shape_Plaintext(this);
 
-    patternShape_Ellipse = parse("ellipse");
-    funShape_Ellipse = makeAFun("_Shape_ellipse", 0, false);
+    patternShape_Ellipse = factory.parse("ellipse");
+    funShape_Ellipse = factory.makeAFun("_Shape_ellipse", 0, false);
     protoShape_Ellipse = new Shape_Ellipse(this);
 
-    patternShape_Circle = parse("circle");
-    funShape_Circle = makeAFun("_Shape_circle", 0, false);
+    patternShape_Circle = factory.parse("circle");
+    funShape_Circle = factory.makeAFun("_Shape_circle", 0, false);
     protoShape_Circle = new Shape_Circle(this);
 
-    patternShape_Egg = parse("egg");
-    funShape_Egg = makeAFun("_Shape_egg", 0, false);
+    patternShape_Egg = factory.parse("egg");
+    funShape_Egg = factory.makeAFun("_Shape_egg", 0, false);
     protoShape_Egg = new Shape_Egg(this);
 
-    patternShape_Triangle = parse("triangle");
-    funShape_Triangle = makeAFun("_Shape_triangle", 0, false);
+    patternShape_Triangle = factory.parse("triangle");
+    funShape_Triangle = factory.makeAFun("_Shape_triangle", 0, false);
     protoShape_Triangle = new Shape_Triangle(this);
 
-    patternShape_Box = parse("box");
-    funShape_Box = makeAFun("_Shape_box", 0, false);
+    patternShape_Box = factory.parse("box");
+    funShape_Box = factory.makeAFun("_Shape_box", 0, false);
     protoShape_Box = new Shape_Box(this);
 
-    patternShape_Diamond = parse("diamond");
-    funShape_Diamond = makeAFun("_Shape_diamond", 0, false);
+    patternShape_Diamond = factory.parse("diamond");
+    funShape_Diamond = factory.makeAFun("_Shape_diamond", 0, false);
     protoShape_Diamond = new Shape_Diamond(this);
 
-    patternShape_Trapezium = parse("trapezium");
-    funShape_Trapezium = makeAFun("_Shape_trapezium", 0, false);
+    patternShape_Trapezium = factory.parse("trapezium");
+    funShape_Trapezium = factory.makeAFun("_Shape_trapezium", 0, false);
     protoShape_Trapezium = new Shape_Trapezium(this);
 
-    patternShape_Parallelogram = parse("parallelogram");
-    funShape_Parallelogram = makeAFun("_Shape_parallelogram", 0, false);
+    patternShape_Parallelogram = factory.parse("parallelogram");
+    funShape_Parallelogram = factory.makeAFun("_Shape_parallelogram", 0, false);
     protoShape_Parallelogram = new Shape_Parallelogram(this);
 
-    patternShape_House = parse("house");
-    funShape_House = makeAFun("_Shape_house", 0, false);
+    patternShape_House = factory.parse("house");
+    funShape_House = factory.makeAFun("_Shape_house", 0, false);
     protoShape_House = new Shape_House(this);
 
-    patternShape_Hexagon = parse("hexagon");
-    funShape_Hexagon = makeAFun("_Shape_hexagon", 0, false);
+    patternShape_Hexagon = factory.parse("hexagon");
+    funShape_Hexagon = factory.makeAFun("_Shape_hexagon", 0, false);
     protoShape_Hexagon = new Shape_Hexagon(this);
 
-    patternShape_Octagon = parse("octagon");
-    funShape_Octagon = makeAFun("_Shape_octagon", 0, false);
+    patternShape_Octagon = factory.parse("octagon");
+    funShape_Octagon = factory.makeAFun("_Shape_octagon", 0, false);
     protoShape_Octagon = new Shape_Octagon(this);
 
 
-    patternDirection_Forward = parse("forward");
-    funDirection_Forward = makeAFun("_Direction_forward", 0, false);
+    patternDirection_Forward = factory.parse("forward");
+    funDirection_Forward = factory.makeAFun("_Direction_forward", 0, false);
     protoDirection_Forward = new Direction_Forward(this);
 
-    patternDirection_Back = parse("back");
-    funDirection_Back = makeAFun("_Direction_back", 0, false);
+    patternDirection_Back = factory.parse("back");
+    funDirection_Back = factory.makeAFun("_Direction_back", 0, false);
     protoDirection_Back = new Direction_Back(this);
 
-    patternDirection_Both = parse("both");
-    funDirection_Both = makeAFun("_Direction_both", 0, false);
+    patternDirection_Both = factory.parse("both");
+    funDirection_Both = factory.makeAFun("_Direction_both", 0, false);
     protoDirection_Both = new Direction_Both(this);
 
-    patternDirection_None = parse("none");
-    funDirection_None = makeAFun("_Direction_none", 0, false);
+    patternDirection_None = factory.parse("none");
+    funDirection_None = factory.makeAFun("_Direction_none", 0, false);
     protoDirection_None = new Direction_None(this);
 
 
-    patternEdgeList_Empty = parse("[]");
-    funEdgeList_Empty = makeAFun("_EdgeList_empty", 0, false);
+    patternEdgeList_Empty = factory.parse("[]");
+    funEdgeList_Empty = factory.makeAFun("_EdgeList_empty", 0, false);
     protoEdgeList_Empty = new EdgeList_Empty(this);
 
-    patternEdgeList_Multi = parse("[<term>,<list>]");
-    funEdgeList_Multi = makeAFun("_EdgeList_multi", 2, false);
+    patternEdgeList_Multi = factory.parse("[<term>,<list>]");
+    funEdgeList_Multi = factory.makeAFun("_EdgeList_multi", 2, false);
     protoEdgeList_Multi = new EdgeList_Multi(this);
 
 
-    patternEdge_Default = parse("edge(<term>,<term>,<term>)");
-    funEdge_Default = makeAFun("_Edge_default", 3, false);
+    patternEdge_Default = factory.parse("edge(<term>,<term>,<term>)");
+    funEdge_Default = factory.makeAFun("_Edge_default", 3, false);
     protoEdge_Default = new Edge_Default(this);
 
 
-    patternPolygon_Empty = parse("[]");
-    funPolygon_Empty = makeAFun("_Polygon_empty", 0, false);
+    patternPolygon_Empty = factory.parse("[]");
+    funPolygon_Empty = factory.makeAFun("_Polygon_empty", 0, false);
     protoPolygon_Empty = new Polygon_Empty(this);
 
-    patternPolygon_Multi = parse("[<term>,<list>]");
-    funPolygon_Multi = makeAFun("_Polygon_multi", 2, false);
+    patternPolygon_Multi = factory.parse("[<term>,<list>]");
+    funPolygon_Multi = factory.makeAFun("_Polygon_multi", 2, false);
     protoPolygon_Multi = new Polygon_Multi(this);
 
 
-    patternPoint_Default = parse("point(<int>,<int>)");
-    funPoint_Default = makeAFun("_Point_default", 2, false);
+    patternPoint_Default = factory.parse("point(<int>,<int>)");
+    funPoint_Default = factory.makeAFun("_Point_default", 2, false);
     protoPoint_Default = new Point_Default(this);
 
   }
   protected Graph_Default makeGraph_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoGraph_Default) {
       protoGraph_Default.initHashCode(annos,fun,args);
-      return (Graph_Default) build(protoGraph_Default);
+      return (Graph_Default) factory.build(protoGraph_Default);
     }
   }
 
   public Graph_Default makeGraph_Default(NodeList _nodes, EdgeList _edges, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_nodes, _edges, _attributes};
-    return makeGraph_Default(funGraph_Default, args, getEmpty());
+    return makeGraph_Default(funGraph_Default, args, factory.getEmpty());
   }
 
   public Graph Graph_DefaultFromTerm(aterm.ATerm trm)
@@ -314,19 +314,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Graph_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getNodes()).toTerm());    args.add((arg.getEdges()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternGraph_Default, args);
+    args.add((arg.getNodes()).toTerm());    args.add((arg.getEdges()).toTerm());    args.add((arg.getAttributes()).toTerm());    return factory.make(patternGraph_Default, args);
   }
 
   protected NodeList_Empty makeNodeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Empty) {
       protoNodeList_Empty.initHashCode(annos,fun,args);
-      return (NodeList_Empty) build(protoNodeList_Empty);
+      return (NodeList_Empty) factory.build(protoNodeList_Empty);
     }
   }
 
   public NodeList_Empty makeNodeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeNodeList_Empty(funNodeList_Empty, args, getEmpty());
+    return makeNodeList_Empty(funNodeList_Empty, args, factory.getEmpty());
   }
 
   public NodeList NodeList_EmptyFromTerm(aterm.ATerm trm)
@@ -343,19 +343,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(NodeList_EmptyImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternNodeList_Empty, args);
+    return factory.make(patternNodeList_Empty, args);
   }
 
   protected NodeList_Multi makeNodeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Multi) {
       protoNodeList_Multi.initHashCode(annos,fun,args);
-      return (NodeList_Multi) build(protoNodeList_Multi);
+      return (NodeList_Multi) factory.build(protoNodeList_Multi);
     }
   }
 
   public NodeList_Multi makeNodeList_Multi(Node _head, NodeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeNodeList_Multi(funNodeList_Multi, args, getEmpty());
+    return makeNodeList_Multi(funNodeList_Multi, args, factory.getEmpty());
   }
 
   public NodeList NodeList_MultiFromTerm(aterm.ATerm trm)
@@ -372,19 +372,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(NodeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternNodeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return factory.make(patternNodeList_Multi, args);
   }
 
   protected Node_Default makeNode_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNode_Default) {
       protoNode_Default.initHashCode(annos,fun,args);
-      return (Node_Default) build(protoNode_Default);
+      return (Node_Default) factory.build(protoNode_Default);
     }
   }
 
   public Node_Default makeNode_Default(NodeId _id, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_id, _attributes};
-    return makeNode_Default(funNode_Default, args, getEmpty());
+    return makeNode_Default(funNode_Default, args, factory.getEmpty());
   }
 
   public Node Node_DefaultFromTerm(aterm.ATerm trm)
@@ -401,19 +401,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Node_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getId()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternNode_Default, args);
+    args.add((arg.getId()).toTerm());    args.add((arg.getAttributes()).toTerm());    return factory.make(patternNode_Default, args);
   }
 
   protected NodeId_Default makeNodeId_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeId_Default) {
       protoNodeId_Default.initHashCode(annos,fun,args);
-      return (NodeId_Default) build(protoNodeId_Default);
+      return (NodeId_Default) factory.build(protoNodeId_Default);
     }
   }
 
   public NodeId_Default makeNodeId_Default(String _id) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_id, 0, true))};
-    return makeNodeId_Default(funNodeId_Default, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeAppl(factory.makeAFun(_id, 0, true))};
+    return makeNodeId_Default(funNodeId_Default, args, factory.getEmpty());
   }
 
   public NodeId NodeId_DefaultFromTerm(aterm.ATerm trm)
@@ -430,19 +430,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(NodeId_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(arg.getId());    return make(patternNodeId_Default, args);
+    args.add(arg.getId());    return factory.make(patternNodeId_Default, args);
   }
 
   protected AttributeList_Empty makeAttributeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Empty) {
       protoAttributeList_Empty.initHashCode(annos,fun,args);
-      return (AttributeList_Empty) build(protoAttributeList_Empty);
+      return (AttributeList_Empty) factory.build(protoAttributeList_Empty);
     }
   }
 
   public AttributeList_Empty makeAttributeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeAttributeList_Empty(funAttributeList_Empty, args, getEmpty());
+    return makeAttributeList_Empty(funAttributeList_Empty, args, factory.getEmpty());
   }
 
   public AttributeList AttributeList_EmptyFromTerm(aterm.ATerm trm)
@@ -459,19 +459,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(AttributeList_EmptyImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternAttributeList_Empty, args);
+    return factory.make(patternAttributeList_Empty, args);
   }
 
   protected AttributeList_Multi makeAttributeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Multi) {
       protoAttributeList_Multi.initHashCode(annos,fun,args);
-      return (AttributeList_Multi) build(protoAttributeList_Multi);
+      return (AttributeList_Multi) factory.build(protoAttributeList_Multi);
     }
   }
 
   public AttributeList_Multi makeAttributeList_Multi(Attribute _head, AttributeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeAttributeList_Multi(funAttributeList_Multi, args, getEmpty());
+    return makeAttributeList_Multi(funAttributeList_Multi, args, factory.getEmpty());
   }
 
   public AttributeList AttributeList_MultiFromTerm(aterm.ATerm trm)
@@ -488,19 +488,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(AttributeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternAttributeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return factory.make(patternAttributeList_Multi, args);
   }
 
   protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Label) {
       protoAttribute_Label.initHashCode(annos,fun,args);
-      return (Attribute_Label) build(protoAttribute_Label);
+      return (Attribute_Label) factory.build(protoAttribute_Label);
     }
   }
 
   public Attribute_Label makeAttribute_Label(String _label) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_label, 0, true))};
-    return makeAttribute_Label(funAttribute_Label, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeAppl(factory.makeAFun(_label, 0, true))};
+    return makeAttribute_Label(funAttribute_Label, args, factory.getEmpty());
   }
 
   public Attribute Attribute_LabelFromTerm(aterm.ATerm trm)
@@ -517,19 +517,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_LabelImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(arg.getLabel());    return make(patternAttribute_Label, args);
+    args.add(arg.getLabel());    return factory.make(patternAttribute_Label, args);
   }
 
   protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Shape) {
       protoAttribute_Shape.initHashCode(annos,fun,args);
-      return (Attribute_Shape) build(protoAttribute_Shape);
+      return (Attribute_Shape) factory.build(protoAttribute_Shape);
     }
   }
 
   public Attribute_Shape makeAttribute_Shape(Shape _shape) {
     aterm.ATerm[] args = new aterm.ATerm[] {_shape};
-    return makeAttribute_Shape(funAttribute_Shape, args, getEmpty());
+    return makeAttribute_Shape(funAttribute_Shape, args, factory.getEmpty());
   }
 
   public Attribute Attribute_ShapeFromTerm(aterm.ATerm trm)
@@ -546,19 +546,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_ShapeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getShape()).toTerm());    return make(patternAttribute_Shape, args);
+    args.add((arg.getShape()).toTerm());    return factory.make(patternAttribute_Shape, args);
   }
 
   protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Location) {
       protoAttribute_Location.initHashCode(annos,fun,args);
-      return (Attribute_Location) build(protoAttribute_Location);
+      return (Attribute_Location) factory.build(protoAttribute_Location);
     }
   }
 
   public Attribute_Location makeAttribute_Location(int _x, int _y) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
-    return makeAttribute_Location(funAttribute_Location, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_x), factory.makeInt(_y)};
+    return makeAttribute_Location(funAttribute_Location, args, factory.getEmpty());
   }
 
   public Attribute Attribute_LocationFromTerm(aterm.ATerm trm)
@@ -575,19 +575,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_LocationImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return make(patternAttribute_Location, args);
+    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return factory.make(patternAttribute_Location, args);
   }
 
   protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Size) {
       protoAttribute_Size.initHashCode(annos,fun,args);
-      return (Attribute_Size) build(protoAttribute_Size);
+      return (Attribute_Size) factory.build(protoAttribute_Size);
     }
   }
 
   public Attribute_Size makeAttribute_Size(int _width, int _height) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_width), makeInt(_height)};
-    return makeAttribute_Size(funAttribute_Size, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_width), factory.makeInt(_height)};
+    return makeAttribute_Size(funAttribute_Size, args, factory.getEmpty());
   }
 
   public Attribute Attribute_SizeFromTerm(aterm.ATerm trm)
@@ -604,19 +604,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_SizeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(arg.getWidth()));    args.add(new Integer(arg.getHeight()));    return make(patternAttribute_Size, args);
+    args.add(new Integer(arg.getWidth()));    args.add(new Integer(arg.getHeight()));    return factory.make(patternAttribute_Size, args);
   }
 
   protected Attribute_CurvePoints makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_CurvePoints) {
       protoAttribute_CurvePoints.initHashCode(annos,fun,args);
-      return (Attribute_CurvePoints) build(protoAttribute_CurvePoints);
+      return (Attribute_CurvePoints) factory.build(protoAttribute_CurvePoints);
     }
   }
 
   public Attribute_CurvePoints makeAttribute_CurvePoints(Polygon _points) {
     aterm.ATerm[] args = new aterm.ATerm[] {_points};
-    return makeAttribute_CurvePoints(funAttribute_CurvePoints, args, getEmpty());
+    return makeAttribute_CurvePoints(funAttribute_CurvePoints, args, factory.getEmpty());
   }
 
   public Attribute Attribute_CurvePointsFromTerm(aterm.ATerm trm)
@@ -633,19 +633,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_CurvePointsImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getPoints()).toTerm());    return make(patternAttribute_CurvePoints, args);
+    args.add((arg.getPoints()).toTerm());    return factory.make(patternAttribute_CurvePoints, args);
   }
 
   protected Attribute_BoundingBox makeAttribute_BoundingBox(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_BoundingBox) {
       protoAttribute_BoundingBox.initHashCode(annos,fun,args);
-      return (Attribute_BoundingBox) build(protoAttribute_BoundingBox);
+      return (Attribute_BoundingBox) factory.build(protoAttribute_BoundingBox);
     }
   }
 
   public Attribute_BoundingBox makeAttribute_BoundingBox(Point _first, Point _second) {
     aterm.ATerm[] args = new aterm.ATerm[] {_first, _second};
-    return makeAttribute_BoundingBox(funAttribute_BoundingBox, args, getEmpty());
+    return makeAttribute_BoundingBox(funAttribute_BoundingBox, args, factory.getEmpty());
   }
 
   public Attribute Attribute_BoundingBoxFromTerm(aterm.ATerm trm)
@@ -662,19 +662,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_BoundingBoxImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getFirst()).toTerm());    args.add((arg.getSecond()).toTerm());    return make(patternAttribute_BoundingBox, args);
+    args.add((arg.getFirst()).toTerm());    args.add((arg.getSecond()).toTerm());    return factory.make(patternAttribute_BoundingBox, args);
   }
 
   protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Direction) {
       protoAttribute_Direction.initHashCode(annos,fun,args);
-      return (Attribute_Direction) build(protoAttribute_Direction);
+      return (Attribute_Direction) factory.build(protoAttribute_Direction);
     }
   }
 
   public Attribute_Direction makeAttribute_Direction(Direction _direction) {
     aterm.ATerm[] args = new aterm.ATerm[] {_direction};
-    return makeAttribute_Direction(funAttribute_Direction, args, getEmpty());
+    return makeAttribute_Direction(funAttribute_Direction, args, factory.getEmpty());
   }
 
   public Attribute Attribute_DirectionFromTerm(aterm.ATerm trm)
@@ -691,19 +691,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_DirectionImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getDirection()).toTerm());    return make(patternAttribute_Direction, args);
+    args.add((arg.getDirection()).toTerm());    return factory.make(patternAttribute_Direction, args);
   }
 
   protected Attribute_Info makeAttribute_Info(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Info) {
       protoAttribute_Info.initHashCode(annos,fun,args);
-      return (Attribute_Info) build(protoAttribute_Info);
+      return (Attribute_Info) factory.build(protoAttribute_Info);
     }
   }
 
   public Attribute_Info makeAttribute_Info(String _key, aterm.ATerm _value) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_key, 0, true)), _value};
-    return makeAttribute_Info(funAttribute_Info, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeAppl(factory.makeAFun(_key, 0, true)), _value};
+    return makeAttribute_Info(funAttribute_Info, args, factory.getEmpty());
   }
 
   public Attribute Attribute_InfoFromTerm(aterm.ATerm trm)
@@ -720,19 +720,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Attribute_InfoImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(arg.getKey());    args.add((aterm.ATerm)arg.getValue());    return make(patternAttribute_Info, args);
+    args.add(arg.getKey());    args.add((aterm.ATerm)arg.getValue());    return factory.make(patternAttribute_Info, args);
   }
 
   protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Plaintext) {
       protoShape_Plaintext.initHashCode(annos,fun,args);
-      return (Shape_Plaintext) build(protoShape_Plaintext);
+      return (Shape_Plaintext) factory.build(protoShape_Plaintext);
     }
   }
 
   public Shape_Plaintext makeShape_Plaintext() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Plaintext(funShape_Plaintext, args, getEmpty());
+    return makeShape_Plaintext(funShape_Plaintext, args, factory.getEmpty());
   }
 
   public Shape Shape_PlaintextFromTerm(aterm.ATerm trm)
@@ -749,19 +749,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_PlaintextImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Plaintext, args);
+    return factory.make(patternShape_Plaintext, args);
   }
 
   protected Shape_Ellipse makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Ellipse) {
       protoShape_Ellipse.initHashCode(annos,fun,args);
-      return (Shape_Ellipse) build(protoShape_Ellipse);
+      return (Shape_Ellipse) factory.build(protoShape_Ellipse);
     }
   }
 
   public Shape_Ellipse makeShape_Ellipse() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Ellipse(funShape_Ellipse, args, getEmpty());
+    return makeShape_Ellipse(funShape_Ellipse, args, factory.getEmpty());
   }
 
   public Shape Shape_EllipseFromTerm(aterm.ATerm trm)
@@ -778,19 +778,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_EllipseImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Ellipse, args);
+    return factory.make(patternShape_Ellipse, args);
   }
 
   protected Shape_Circle makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Circle) {
       protoShape_Circle.initHashCode(annos,fun,args);
-      return (Shape_Circle) build(protoShape_Circle);
+      return (Shape_Circle) factory.build(protoShape_Circle);
     }
   }
 
   public Shape_Circle makeShape_Circle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Circle(funShape_Circle, args, getEmpty());
+    return makeShape_Circle(funShape_Circle, args, factory.getEmpty());
   }
 
   public Shape Shape_CircleFromTerm(aterm.ATerm trm)
@@ -807,19 +807,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_CircleImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Circle, args);
+    return factory.make(patternShape_Circle, args);
   }
 
   protected Shape_Egg makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Egg) {
       protoShape_Egg.initHashCode(annos,fun,args);
-      return (Shape_Egg) build(protoShape_Egg);
+      return (Shape_Egg) factory.build(protoShape_Egg);
     }
   }
 
   public Shape_Egg makeShape_Egg() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Egg(funShape_Egg, args, getEmpty());
+    return makeShape_Egg(funShape_Egg, args, factory.getEmpty());
   }
 
   public Shape Shape_EggFromTerm(aterm.ATerm trm)
@@ -836,19 +836,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_EggImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Egg, args);
+    return factory.make(patternShape_Egg, args);
   }
 
   protected Shape_Triangle makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Triangle) {
       protoShape_Triangle.initHashCode(annos,fun,args);
-      return (Shape_Triangle) build(protoShape_Triangle);
+      return (Shape_Triangle) factory.build(protoShape_Triangle);
     }
   }
 
   public Shape_Triangle makeShape_Triangle() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Triangle(funShape_Triangle, args, getEmpty());
+    return makeShape_Triangle(funShape_Triangle, args, factory.getEmpty());
   }
 
   public Shape Shape_TriangleFromTerm(aterm.ATerm trm)
@@ -865,19 +865,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_TriangleImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Triangle, args);
+    return factory.make(patternShape_Triangle, args);
   }
 
   protected Shape_Box makeShape_Box(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Box) {
       protoShape_Box.initHashCode(annos,fun,args);
-      return (Shape_Box) build(protoShape_Box);
+      return (Shape_Box) factory.build(protoShape_Box);
     }
   }
 
   public Shape_Box makeShape_Box() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Box(funShape_Box, args, getEmpty());
+    return makeShape_Box(funShape_Box, args, factory.getEmpty());
   }
 
   public Shape Shape_BoxFromTerm(aterm.ATerm trm)
@@ -894,19 +894,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_BoxImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Box, args);
+    return factory.make(patternShape_Box, args);
   }
 
   protected Shape_Diamond makeShape_Diamond(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Diamond) {
       protoShape_Diamond.initHashCode(annos,fun,args);
-      return (Shape_Diamond) build(protoShape_Diamond);
+      return (Shape_Diamond) factory.build(protoShape_Diamond);
     }
   }
 
   public Shape_Diamond makeShape_Diamond() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Diamond(funShape_Diamond, args, getEmpty());
+    return makeShape_Diamond(funShape_Diamond, args, factory.getEmpty());
   }
 
   public Shape Shape_DiamondFromTerm(aterm.ATerm trm)
@@ -923,19 +923,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_DiamondImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Diamond, args);
+    return factory.make(patternShape_Diamond, args);
   }
 
   protected Shape_Trapezium makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Trapezium) {
       protoShape_Trapezium.initHashCode(annos,fun,args);
-      return (Shape_Trapezium) build(protoShape_Trapezium);
+      return (Shape_Trapezium) factory.build(protoShape_Trapezium);
     }
   }
 
   public Shape_Trapezium makeShape_Trapezium() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Trapezium(funShape_Trapezium, args, getEmpty());
+    return makeShape_Trapezium(funShape_Trapezium, args, factory.getEmpty());
   }
 
   public Shape Shape_TrapeziumFromTerm(aterm.ATerm trm)
@@ -952,19 +952,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_TrapeziumImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Trapezium, args);
+    return factory.make(patternShape_Trapezium, args);
   }
 
   protected Shape_Parallelogram makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Parallelogram) {
       protoShape_Parallelogram.initHashCode(annos,fun,args);
-      return (Shape_Parallelogram) build(protoShape_Parallelogram);
+      return (Shape_Parallelogram) factory.build(protoShape_Parallelogram);
     }
   }
 
   public Shape_Parallelogram makeShape_Parallelogram() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Parallelogram(funShape_Parallelogram, args, getEmpty());
+    return makeShape_Parallelogram(funShape_Parallelogram, args, factory.getEmpty());
   }
 
   public Shape Shape_ParallelogramFromTerm(aterm.ATerm trm)
@@ -981,19 +981,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_ParallelogramImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Parallelogram, args);
+    return factory.make(patternShape_Parallelogram, args);
   }
 
   protected Shape_House makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_House) {
       protoShape_House.initHashCode(annos,fun,args);
-      return (Shape_House) build(protoShape_House);
+      return (Shape_House) factory.build(protoShape_House);
     }
   }
 
   public Shape_House makeShape_House() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_House(funShape_House, args, getEmpty());
+    return makeShape_House(funShape_House, args, factory.getEmpty());
   }
 
   public Shape Shape_HouseFromTerm(aterm.ATerm trm)
@@ -1010,19 +1010,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_HouseImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_House, args);
+    return factory.make(patternShape_House, args);
   }
 
   protected Shape_Hexagon makeShape_Hexagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Hexagon) {
       protoShape_Hexagon.initHashCode(annos,fun,args);
-      return (Shape_Hexagon) build(protoShape_Hexagon);
+      return (Shape_Hexagon) factory.build(protoShape_Hexagon);
     }
   }
 
   public Shape_Hexagon makeShape_Hexagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Hexagon(funShape_Hexagon, args, getEmpty());
+    return makeShape_Hexagon(funShape_Hexagon, args, factory.getEmpty());
   }
 
   public Shape Shape_HexagonFromTerm(aterm.ATerm trm)
@@ -1039,19 +1039,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_HexagonImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Hexagon, args);
+    return factory.make(patternShape_Hexagon, args);
   }
 
   protected Shape_Octagon makeShape_Octagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Octagon) {
       protoShape_Octagon.initHashCode(annos,fun,args);
-      return (Shape_Octagon) build(protoShape_Octagon);
+      return (Shape_Octagon) factory.build(protoShape_Octagon);
     }
   }
 
   public Shape_Octagon makeShape_Octagon() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Octagon(funShape_Octagon, args, getEmpty());
+    return makeShape_Octagon(funShape_Octagon, args, factory.getEmpty());
   }
 
   public Shape Shape_OctagonFromTerm(aterm.ATerm trm)
@@ -1068,19 +1068,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Shape_OctagonImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternShape_Octagon, args);
+    return factory.make(patternShape_Octagon, args);
   }
 
   protected Direction_Forward makeDirection_Forward(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Forward) {
       protoDirection_Forward.initHashCode(annos,fun,args);
-      return (Direction_Forward) build(protoDirection_Forward);
+      return (Direction_Forward) factory.build(protoDirection_Forward);
     }
   }
 
   public Direction_Forward makeDirection_Forward() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Forward(funDirection_Forward, args, getEmpty());
+    return makeDirection_Forward(funDirection_Forward, args, factory.getEmpty());
   }
 
   public Direction Direction_ForwardFromTerm(aterm.ATerm trm)
@@ -1097,19 +1097,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Direction_ForwardImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternDirection_Forward, args);
+    return factory.make(patternDirection_Forward, args);
   }
 
   protected Direction_Back makeDirection_Back(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Back) {
       protoDirection_Back.initHashCode(annos,fun,args);
-      return (Direction_Back) build(protoDirection_Back);
+      return (Direction_Back) factory.build(protoDirection_Back);
     }
   }
 
   public Direction_Back makeDirection_Back() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Back(funDirection_Back, args, getEmpty());
+    return makeDirection_Back(funDirection_Back, args, factory.getEmpty());
   }
 
   public Direction Direction_BackFromTerm(aterm.ATerm trm)
@@ -1126,19 +1126,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Direction_BackImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternDirection_Back, args);
+    return factory.make(patternDirection_Back, args);
   }
 
   protected Direction_Both makeDirection_Both(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Both) {
       protoDirection_Both.initHashCode(annos,fun,args);
-      return (Direction_Both) build(protoDirection_Both);
+      return (Direction_Both) factory.build(protoDirection_Both);
     }
   }
 
   public Direction_Both makeDirection_Both() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_Both(funDirection_Both, args, getEmpty());
+    return makeDirection_Both(funDirection_Both, args, factory.getEmpty());
   }
 
   public Direction Direction_BothFromTerm(aterm.ATerm trm)
@@ -1155,19 +1155,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Direction_BothImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternDirection_Both, args);
+    return factory.make(patternDirection_Both, args);
   }
 
   protected Direction_None makeDirection_None(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_None) {
       protoDirection_None.initHashCode(annos,fun,args);
-      return (Direction_None) build(protoDirection_None);
+      return (Direction_None) factory.build(protoDirection_None);
     }
   }
 
   public Direction_None makeDirection_None() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeDirection_None(funDirection_None, args, getEmpty());
+    return makeDirection_None(funDirection_None, args, factory.getEmpty());
   }
 
   public Direction Direction_NoneFromTerm(aterm.ATerm trm)
@@ -1184,19 +1184,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Direction_NoneImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternDirection_None, args);
+    return factory.make(patternDirection_None, args);
   }
 
   protected EdgeList_Empty makeEdgeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdgeList_Empty) {
       protoEdgeList_Empty.initHashCode(annos,fun,args);
-      return (EdgeList_Empty) build(protoEdgeList_Empty);
+      return (EdgeList_Empty) factory.build(protoEdgeList_Empty);
     }
   }
 
   public EdgeList_Empty makeEdgeList_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeEdgeList_Empty(funEdgeList_Empty, args, getEmpty());
+    return makeEdgeList_Empty(funEdgeList_Empty, args, factory.getEmpty());
   }
 
   public EdgeList EdgeList_EmptyFromTerm(aterm.ATerm trm)
@@ -1213,19 +1213,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(EdgeList_EmptyImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternEdgeList_Empty, args);
+    return factory.make(patternEdgeList_Empty, args);
   }
 
   protected EdgeList_Multi makeEdgeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdgeList_Multi) {
       protoEdgeList_Multi.initHashCode(annos,fun,args);
-      return (EdgeList_Multi) build(protoEdgeList_Multi);
+      return (EdgeList_Multi) factory.build(protoEdgeList_Multi);
     }
   }
 
   public EdgeList_Multi makeEdgeList_Multi(Edge _head, EdgeList _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makeEdgeList_Multi(funEdgeList_Multi, args, getEmpty());
+    return makeEdgeList_Multi(funEdgeList_Multi, args, factory.getEmpty());
   }
 
   public EdgeList EdgeList_MultiFromTerm(aterm.ATerm trm)
@@ -1242,19 +1242,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(EdgeList_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternEdgeList_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return factory.make(patternEdgeList_Multi, args);
   }
 
   protected Edge_Default makeEdge_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdge_Default) {
       protoEdge_Default.initHashCode(annos,fun,args);
-      return (Edge_Default) build(protoEdge_Default);
+      return (Edge_Default) factory.build(protoEdge_Default);
     }
   }
 
   public Edge_Default makeEdge_Default(NodeId _from, NodeId _to, AttributeList _attributes) {
     aterm.ATerm[] args = new aterm.ATerm[] {_from, _to, _attributes};
-    return makeEdge_Default(funEdge_Default, args, getEmpty());
+    return makeEdge_Default(funEdge_Default, args, factory.getEmpty());
   }
 
   public Edge Edge_DefaultFromTerm(aterm.ATerm trm)
@@ -1271,19 +1271,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Edge_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getFrom()).toTerm());    args.add((arg.getTo()).toTerm());    args.add((arg.getAttributes()).toTerm());    return make(patternEdge_Default, args);
+    args.add((arg.getFrom()).toTerm());    args.add((arg.getTo()).toTerm());    args.add((arg.getAttributes()).toTerm());    return factory.make(patternEdge_Default, args);
   }
 
   protected Polygon_Empty makePolygon_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Empty) {
       protoPolygon_Empty.initHashCode(annos,fun,args);
-      return (Polygon_Empty) build(protoPolygon_Empty);
+      return (Polygon_Empty) factory.build(protoPolygon_Empty);
     }
   }
 
   public Polygon_Empty makePolygon_Empty() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makePolygon_Empty(funPolygon_Empty, args, getEmpty());
+    return makePolygon_Empty(funPolygon_Empty, args, factory.getEmpty());
   }
 
   public Polygon Polygon_EmptyFromTerm(aterm.ATerm trm)
@@ -1300,19 +1300,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Polygon_EmptyImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return make(patternPolygon_Empty, args);
+    return factory.make(patternPolygon_Empty, args);
   }
 
   protected Polygon_Multi makePolygon_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Multi) {
       protoPolygon_Multi.initHashCode(annos,fun,args);
-      return (Polygon_Multi) build(protoPolygon_Multi);
+      return (Polygon_Multi) factory.build(protoPolygon_Multi);
     }
   }
 
   public Polygon_Multi makePolygon_Multi(Point _head, Polygon _tail) {
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
-    return makePolygon_Multi(funPolygon_Multi, args, getEmpty());
+    return makePolygon_Multi(funPolygon_Multi, args, factory.getEmpty());
   }
 
   public Polygon Polygon_MultiFromTerm(aterm.ATerm trm)
@@ -1329,19 +1329,19 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Polygon_MultiImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return make(patternPolygon_Multi, args);
+    args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return factory.make(patternPolygon_Multi, args);
   }
 
   protected Point_Default makePoint_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPoint_Default) {
       protoPoint_Default.initHashCode(annos,fun,args);
-      return (Point_Default) build(protoPoint_Default);
+      return (Point_Default) factory.build(protoPoint_Default);
     }
   }
 
   public Point_Default makePoint_Default(int _x, int _y) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
-    return makePoint_Default(funPoint_Default, args, getEmpty());
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_x), factory.makeInt(_y)};
+    return makePoint_Default(funPoint_Default, args, factory.getEmpty());
   }
 
   public Point Point_DefaultFromTerm(aterm.ATerm trm)
@@ -1358,7 +1358,7 @@ public class MetaGraphFactory extends PureFactory
   }
   protected aterm.ATerm toTerm(Point_DefaultImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return make(patternPoint_Default, args);
+    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return factory.make(patternPoint_Default, args);
   }
 
   public Graph GraphFromTerm(aterm.ATerm trm)
@@ -1620,98 +1620,98 @@ public class MetaGraphFactory extends PureFactory
   }
   public Graph GraphFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return GraphFromTerm(trm);
   }
   public Graph GraphFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return GraphFromTerm(readFromFile(stream));
+    return GraphFromTerm(factory.readFromFile(stream));
   }
   public NodeList NodeListFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return NodeListFromTerm(trm);
   }
   public NodeList NodeListFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return NodeListFromTerm(readFromFile(stream));
+    return NodeListFromTerm(factory.readFromFile(stream));
   }
   public Node NodeFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return NodeFromTerm(trm);
   }
   public Node NodeFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return NodeFromTerm(readFromFile(stream));
+    return NodeFromTerm(factory.readFromFile(stream));
   }
   public NodeId NodeIdFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return NodeIdFromTerm(trm);
   }
   public NodeId NodeIdFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return NodeIdFromTerm(readFromFile(stream));
+    return NodeIdFromTerm(factory.readFromFile(stream));
   }
   public AttributeList AttributeListFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return AttributeListFromTerm(trm);
   }
   public AttributeList AttributeListFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return AttributeListFromTerm(readFromFile(stream));
+    return AttributeListFromTerm(factory.readFromFile(stream));
   }
   public Attribute AttributeFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return AttributeFromTerm(trm);
   }
   public Attribute AttributeFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return AttributeFromTerm(readFromFile(stream));
+    return AttributeFromTerm(factory.readFromFile(stream));
   }
   public Shape ShapeFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return ShapeFromTerm(trm);
   }
   public Shape ShapeFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return ShapeFromTerm(readFromFile(stream));
+    return ShapeFromTerm(factory.readFromFile(stream));
   }
   public Direction DirectionFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return DirectionFromTerm(trm);
   }
   public Direction DirectionFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return DirectionFromTerm(readFromFile(stream));
+    return DirectionFromTerm(factory.readFromFile(stream));
   }
   public EdgeList EdgeListFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return EdgeListFromTerm(trm);
   }
   public EdgeList EdgeListFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return EdgeListFromTerm(readFromFile(stream));
+    return EdgeListFromTerm(factory.readFromFile(stream));
   }
   public Edge EdgeFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return EdgeFromTerm(trm);
   }
   public Edge EdgeFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return EdgeFromTerm(readFromFile(stream));
+    return EdgeFromTerm(factory.readFromFile(stream));
   }
   public Polygon PolygonFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return PolygonFromTerm(trm);
   }
   public Polygon PolygonFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return PolygonFromTerm(readFromFile(stream));
+    return PolygonFromTerm(factory.readFromFile(stream));
   }
   public Point PointFromString(String str)
   {
-    aterm.ATerm trm = parse(str);
+    aterm.ATerm trm = factory.parse(str);
     return PointFromTerm(trm);
   }
   public Point PointFromFile(java.io.InputStream stream) throws java.io.IOException {
-    return PointFromTerm(readFromFile(stream));
+    return PointFromTerm(factory.readFromFile(stream));
   }
 }

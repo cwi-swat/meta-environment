@@ -1,7 +1,6 @@
 package metastudio;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
 
@@ -51,14 +50,14 @@ class ButtonAction extends AbstractAction
       for (int i = 0; i < values.length; i++) {
 	String fullName
 	  = ((TreeNode)values[i].getLastPathComponent()).getFullName();
-	ATerm event = factory.make("button-selected(<term>, <str>, <term>)",
+	ATerm event = factory.getPureFactory().make("button-selected(<term>, <str>, <term>)",
 				   type, fullName, action);
 	bridge.postEvent(event);
       }
     }
     else {
       ATerm event
-	= factory.make("button-selected(<term>, <term>)", type, action);
+	= factory.getPureFactory().make("button-selected(<term>, <term>)", type, action);
       bridge.postEvent(event);
     }
   }

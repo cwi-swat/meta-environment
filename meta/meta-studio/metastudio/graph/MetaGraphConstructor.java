@@ -9,7 +9,7 @@ implements aterm.ATerm
   MetaGraphFactory factory = null;
 
   public MetaGraphConstructor(MetaGraphFactory factory) {
-    super(factory);
+    super(factory.getPureFactory());
     this.factory = factory;
   }
 
