@@ -21,6 +21,7 @@ import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
+import metastudio.graph.Attribute;
 import metastudio.graph.Edge;
 import metastudio.graph.EdgeList;
 import metastudio.graph.Node;
@@ -163,19 +164,14 @@ public class GraphPanel extends JComponent implements Scrollable {
 		g.setFont(Preferences.getFont(PREF_NODE_FONT));
 		metrics = g.getFontMetrics();
 
-		NodeList nodes = graph.getNodes();
-		while (!nodes.isEmpty()) {
-			Node node = nodes.getHead();
-			nodes = nodes.getTail();
+    Attribute bbox = graph.getBoundingBox();
+    Point max = bbox.getSecond();
+    
+    max_x = max.getX().intValue();
+    max_y = max.getY().intValue();
 
-			int right_x = node.getX() + node.getWidth() / 2;
-			int bottom_y = node.getY() + node.getHeight() / 2;
-
-			max_x = Math.max(right_x, max_x);
-			max_y = Math.max(bottom_y, max_y);
-		}
-
-		Point2D point = transform.transform(new Point2D.Float((float) max_x, (float) max_y), null);
+		Point2D point = transform.transform(new Point2D.Float((float) max_x, 
+                                                          (float) max_y), null);
 
 		this.max_x = (int) point.getX();
 		this.max_y = (int) point.getY();
