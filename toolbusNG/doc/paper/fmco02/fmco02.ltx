@@ -21,6 +21,9 @@
 
 \newcommand{\spec}[1]{\texttt{#1}}
 
+%%\newcommand{\note}[1]{{\bf Note}: {\it #1 }}
+
+
 \title{ToolBus: The Next Generation}
 \author{Hayco de Jong\inst{1} and Paul Klint\inst{1,2}}
 
@@ -78,29 +81,32 @@ approach just described and covers both the interactive development of
 language definitions and the generation of tools based on these
 language definitions.
 
-In this paper we are primarily interested in the \emph{software
+In this paper we are primarily interested in the \emph{software engineering
 aspects} of building such a system. Starting point is the \asdf\
 Meta-Environment as we had completed it in the beginning of the
 1990's.  This was a monolithic 200 KLOC Lisp program that was hard to
 maintain.  It had all the traits of a legacy system and was the
 primary motivation to enter the area of system and software
-renovation. To place this in historic perspective, we give a brief
-timeline of our efforts to transform the old, monolithic, implementation
-of the Meta-Environment into a well-structured, component-based,
-implementation:
+renovation. 
 
-\begin{itemize}
-\item[1992] First, unsuccessfull, experiments to decompose the system
-into separate parts.  The idea was to separate the user-interface and
-the text editor from the rest of the system.  The user-interface was
-completely re-implemented as a separate component and as text editor
-we re-used Emacs. In hindsight, we were unaware of the fact that we
-made the transition from a completely sequential system to a system
-with several concurrent components. Unavoidably, we encountered hard
-to explain deadlocks and race conditions. (** Wilco/Huub **).
+\subsection{Towards a component-based architecture}
 
-\item[1993] A next step was to write a formal specification of the
-desired system behaviour using PSF, a specification language based on
+We give a brief timeline of our efforts to transform the old,
+monolithic, implementation of the Meta-Environment into a
+well-structured, component-based, implementation.
+
+In 1992, first, unsuccessfull, experiments to decompose the system
+into separate parts~\cite{BakkerKoorn93}.  The idea was to separate
+the user-interface and the text editor from the rest of the system.
+The user-interface was completely re-implemented as a separate
+component and as text editor we re-used Emacs. In hindsight, we were
+unaware of the fact that we made the transition from a completely
+sequential system to a system with several concurrent
+components. Unavoidably, we encountered hard to explain deadlocks and
+race conditions..
+
+In 1993, a next step was to write a formal specification of the
+desired system behaviour~\cite{P9415} using PSF, a specification language based on
 proces algebra and algebraic specifications (** cite **).  Simulation
 of this specification unvealed other, not yet observed, deadlocks.
 Although, this was clearly an improvement over the then existing situation,
@@ -116,43 +122,89 @@ way to derive an actual implementation from this specification.
 
 \end{itemize}
 
-\item[1994:] First ToolBus, AMAST96
-\item[1995:] Discrete time ToolBus, SCP98
-\item[2001:] Meta-Environment restructured, CC01
-\item[2002:] preparing for the next generation ...
-\end{itemize}
+In 1994, the first version of the \TB\ was
+completed~\cite{BergstraKlint94,TB-COORD96}.  The key idea was to
+organize a system along the lines of a software bus and to make this
+bus programmable by way of a scripting language (T-script) that was
+based on ACP (Algebra of Communicating Processes, \cite{XXX}).
+Another idea was to use a uniform data format (called \TB\ terms) to
+exchange data between \TB\ and tools.  At the implementation level,
+T-scripts were executed by an interpreter and communication between
+tools and \TB\ took place using TCP/IP sockets. In this way,
+multi-language, distributed, applications could be built with
+significantly less effort than using plain C and sockets.
 
+Based on various experiments~\cite{XXX}, in 1995 a new version of the
+\TB\ was designed and implemented: the Discrete Time
+ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.  Its main
+innovation were primitives for expressing timing considerations
+(delay, timeout) and for operating on a limited set of built-in
+datatypes (booleans, integers, reals, lists).
+The Discrete Time \TB\ has been used for the restructuring of the
+\asdf\ Meta-Environment~\cite{BHK97}. A first version was released
+in 2001~\cite{BDHJJKKMOSVVV01}.
+
+In the meantime, the exchange format has also evolved from the toolbus
+terms mentioned above to ATerms~\cite{BJKO00}: a term format that
+supports maximal subterm sharing and a very concise, sharing
+preserving, binary exchange format. ATerms decrease memory usage
+thanks to sharing and they permit a very fast equality test since
+structural equality can be replaced by pointer equality thanks to the
+maximal subterm sharing.
+
+Today, beginning 2003, it turns out that the original software
+engineering goals that triggered the development of the \TB\ have been
+achieved and that the Meta-Environment can now be even further
+stretched than anticipated~\cite{RTA}. Therefore, it is time for some
+reflection.  What have we learned from this major renovation project
+and what are the implications for the \TB\ design and implementation.
 
 \subsection{Plan of this Paper}
 
 \section{Coordination, Representation and Computation}
 
-\begin{verbatim}
-Coordination: the way in which program and system parts interact (procedure calls, RMI, ...)
-Representation: language and machine neutral data exchanged between components
-Computation: program code that carries out a specialized task
-
-A rigorous separation of coordination
-from computation is the key to 
-flexible and reusable systems
-\end{verbatim}
-
-\begin{verbatim}
-Applicative, prefix terms
-Maximal subterm sharing (=> DAG)
-cheap equality test, efficient rewriting
-Annotations
-Very concise, binary, sharing preserving encoding
-Language & machine independent exchange format
-Software Practice & Experience 2000
-\end{verbatim}
-
-\begin{figure}
+\begin{figure}[tb]
 \epsfig{figure=figs/component-architecture.eps,width=\textwidth}
 \vspace*{-10cm}
-\caption{XXX}
+\caption{\label{Fig:component-architecture}Separating coordination
+  from computation}
 \end{figure}
 
+It has been observed by various authors~\cite{XXX}, that the overall
+architecture of a software system can be improved by separating
+\emph{coordination} from \emph{computation}. We also distinguish
+\emph{representation} and use the following definitions:
+
+\begin{itemize}
+\item Coordination: the way in which program and system parts interact
+  (using procedure calls, remote method invocation, middleware, and others).
+
+\item Representation: language and machine neutral data exchanged
+  between components.
+
+\item Computation: program code that carries out a specialized task.
+
+\end{itemize}
+
+Our assumption is now that \emph{a rigorous separation of coordination
+from computation leads to flexible and reusable systems.} The approach
+is illustrated in Figure~ref{Fig:component-architecture}.
+
+
+
+
+  In the case
+of the \asdf\ Meta-Environment, empirical evidence shows that
+\begin{itemize}
+\item The \TB-based version of the \asdf\ Meta-Environment is more
+flexible as illustrated by the fact that clones of the
+Meta-Environment start to appear for other languages than
+\asdf. Examples are Action Semantics~\cite{XXX} and Elan~\cite{XXX}.
+
+\item Various components of the \asdf\ Meta-Environment are being
+reused in other projects~\cite{XXX}.
+
+\end{itemize}
 
 \section{The \TB\ Architecture}
 
