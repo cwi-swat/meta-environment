@@ -397,7 +397,7 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
   }
 #ifndef NO_EAGERNESS
   /*  Check if there is preference information in this parse table  */
- if(!pt->has_prefers && !pt->has_avoids) {
+ if(!pt->has_prefers || !pt->has_avoids) {
     for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
       act = ATgetFirst(acts);
       if(SG_ActionKind(act) == REDUCE) {

@@ -1030,7 +1030,7 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   /*  Next, inspect eager/avoid status  */
 #ifndef NO_EAGERNESS
   /*  Don't even bother unless there are preferred actions  */
-  if(SG_PT_HAS_PREFERS(pt)) {
+  if(SG_PT_HAS_PREFERENCES(pt)) {
     if(SG_EagerPriority_Tree(t0, t1)) {
       IF_DEBUG(ATfprintf(SGlog(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
       return t0;
