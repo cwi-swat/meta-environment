@@ -32,7 +32,8 @@ let
   Fl             : list, 
   Foc            : term, 
   Loc            : int, 
-  Str            : str, 
+  Str            : str,
+  Count          : int, 
   ErrorFocuses   : list,
   DirtyFocuses   : list,
   I              : int, 
@@ -73,6 +74,10 @@ in
       rec-event(TE,delete(Fid, Loc?)) .
       snd-msg(delete-chars(Fid, Loc)) .
       snd-ack-event(TE,delete(Fid,Loc))
+      +
+      rec-event(TE,delete(Fid, Loc?, Count?)) .
+      snd-msg(delete-chars(Fid, Loc, Count)).
+      snd-ack-event(TE, delete(Fid, Loc, Count))
     ) .
     rec-msg(current-focus(Foc?)) .
     snd-msg(TE,set-focus(Fid, Foc))
