@@ -482,6 +482,66 @@
 
 [ec]	evalx(endcol($Exp), $Rstore) 	= get-endcol(evala($Exp, $Rstore))
 
+%% ---- sum
+
+[sumx1]
+	sumx({$Integer1, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer1 + $Integer2)
+
+[sumx2]	sumx({}, $Integer) = $Integer
+
+[default-sumx]
+	sumx({$Elem, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer2)
+
+[sum1]	$Bag = evalx($Exp, $Rstore)
+	========================================
+	evalx(sum($Exp), $Rstore) = sumx($Bag, 0)
+
+%% ---- max
+
+[max11]
+	max1({$Integer, $Elem*}) = max2({$Elem*}, $Integer)
+[max12]
+	max1({}) = 0
+[default-max1]
+	max1({$Elem, $Elem*}) = max1({$Elem*})
+
+
+[max21]	$Integer1 > $Integer2 = true
+	===========================================================================
+	max2({$Integer1, $Elem*}, $Integer2) = max2({$Elem*}, $Integer1)
+
+[max22]	max2({}, $Integer) = $Integer
+
+[default-max2]
+	max2({$Elem, $Elem*}, $Integer2) = max2({$Elem*}, $Integer2)
+
+[max-1]	$Bag = evalx($Exp, $Rstore)
+	========================================
+	evalx(max($Exp), $Rstore) = max1($Bag)
+
+%% ---- min
+
+[min11]
+	min1({$Integer, $Elem*}) = min2({$Elem*}, $Integer)
+[min12]
+	min1({}) = 0
+[default-min1]
+	min1({$Elem, $Elem*}) = min1({$Elem*})
+
+
+[min21]	$Integer1 < $Integer2 = true
+	===========================================================================
+	min2({$Integer1, $Elem*}, $Integer2) = min2({$Elem*}, $Integer1)
+
+[min22]	min2({}, $Integer) = $Integer
+
+[default-min2]
+	min2({$Elem, $Elem*}, $Integer2) = min2({$Elem*}, $Integer2)
+
+[min-1]	$Bag = evalx($Exp, $Rstore)
+	========================================
+	evalx(min($Exp), $Rstore) = min1($Bag)
+
 
 
 

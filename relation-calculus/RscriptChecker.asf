@@ -894,7 +894,11 @@ $Error]>
 		<begincol,	fun [ area ]				to int >,
 
 		<endline,	fun [ area ]				to int >,
-		<endcol,	fun [ area ]				to int >
+		<endcol,	fun [ area ]				to int >,
+
+		<sum,		fun [ bag[int] ]			to int >,
+		<max,		fun [ bag[int] ]			to int >,
+		<min,		fun [ bag[int] ]			to int >
 
         ]
 

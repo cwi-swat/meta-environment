@@ -15,9 +15,6 @@ exports
 
   get-endline(Area)				-> Integer
   get-endcol(Area)				-> Integer
- 
-
-
 
   context-free syntax
   
