@@ -1,0 +1,20 @@
+module Builtins
+
+imports languages/pico/syntax/Pico-Syntax
+imports utilities/Unparsing[PROGRAM]
+imports utilities/Annotations
+imports utilities/Lifting
+imports basic/Whitespace
+
+exports
+
+sorts String Bytes
+context-free syntax
+
+test-unparsing(PROGRAM) -> String
+test-annotations(PROGRAM) -> ATerm
+test-lifting(PROGRAM) -> Tree
+
+variables
+
+"PROGRAM" -> PROGRAM 
