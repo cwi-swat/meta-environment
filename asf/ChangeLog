@@ -5,6 +5,7 @@
    large package.
  * Incorporated asf-library package in this package. 
  * Moved builtins code from library to semantics.
+ * Asfe accepts ambiguous terms when it is connected to the Meta-Environment
 
 2002/10/09 (vinju@loria.fr)
  * Added dependency on meta package
