@@ -48,13 +48,13 @@ public class TreeNode {
 			}
 			return childNode.addChild(p + childName + "/", tokens);
 		} else {
-			if (childNode == null) {
+		    //			if (childNode == null) {
 				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
 				children.add(i, childNode);
 
 				return childNode;
-			}
-			return null;
+				//			}
+				//			return null;
 		}
 	}
 
@@ -97,6 +97,18 @@ public class TreeNode {
 		return -1;
 	}
 
+	public int getLeafChild(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			TreeNode curNode = (TreeNode) children.get(i);
+
+			if (curNode.getName().equals(n) && curNode.isLeaf()) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	public int getChildCount() {
 		return children.size();
 	}
@@ -132,7 +144,7 @@ public class TreeNode {
 			if (tokens.hasMoreTokens()) {
 				return childNode.makePath(tokens, result);
 			} else {
-				result.add(childNode);
+				result.add(getChild(getLeafChild(childName)));
 			}
 		}
 
