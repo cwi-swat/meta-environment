@@ -77,7 +77,7 @@ int accept_client(void)
     TBmsg("got toolname & host & tool_id: %s, %s, %d\n", 
 	  tname, hname, that_tool_id);
 
-  outmsg = accept_in_interval(WellKnownSocketOut, 0, 0);
+  outmsg = msgsock; /* <PO> accept_in_interval(WellKnownSocketOut, 0, 0); */
   if(outmsg < 0){
     cleanup();
     err_sys_warn("Cannot accept on OutPort of ToolBus");
@@ -113,7 +113,7 @@ int accept_client(void)
   } 
 
   close(msgsock);
-  close(outmsg);
+  /* <P> close(outmsg); */
 
   if((n = getInt(in, tname)) != inport){
     err_warn("accept_client: got %d should be %d", n, inport);

@@ -49,9 +49,9 @@ int mkports (TBbool local_ports, char *tool, char *tb_host, int *tid, int *tin, 
     }
 
     /* connect to well known socket */
-    in =
-      connectWellKnownSocket(local_ports ? NULL : tb_host, 
-			     WellKnownSocketOutPort);
+    in = out;
+      /* <P> connectWellKnownSocket(local_ports ? NULL : tb_host, 
+			     WellKnownSocketOutPort);*/
     if (in < 0) { cleanup (); goto sync; }  
 
     /* 2. get port number and tool id from server */
@@ -60,7 +60,7 @@ int mkports (TBbool local_ports, char *tool, char *tb_host, int *tid, int *tin, 
 
     /* close well known sockets */
     TBdestroyPort (in);  
-    TBdestroyPort (out);
+    /* <P> TBdestroyPort (out);*/
 
     /* sanity check */
     if((portin < 0) || (get_tid < 0)){

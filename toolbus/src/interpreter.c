@@ -1286,6 +1286,7 @@ static void atomic_steps(void)
 		bus_shutdown(NULL);
 	      }
 	    }
+	    work = TBtrue;
 	    goto next_proc;
 	  } 
 	  continue;
