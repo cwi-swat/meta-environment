@@ -242,92 +242,78 @@ ATerm generate_code(int cid, char *modname, ATerm module)
    */
   
   char *path = ".";
-  if( getenv( "COMPILER_OUTPUT" ) != NULL )
+  if (getenv( "COMPILER_OUTPUT" ) != NULL) {
      path = getenv( "COMPILER_OUTPUT" );
+	}
 
-ATwarning("generating code for %s\n", modname);
+	if (run_verbose) {
+			ATwarning("generating code for %s\n", modname);
+	}
   
   len = strlen(path) + 1 + strlen(modname) + strlen(".asfix");
   fname = malloc(len + 1);
-  if(!fname)
+  if (!fname) {
     ATerror("Not enough memory\n");
+	}
   sprintf(fname, "%s/%s.asfix", path, modname);
 
-  expmod = expand_to_asfix(module,fname);
-  assert(ATmatchTerm(expmod, pattern_asfix_term, NULL, NULL,
-                     &file, NULL, &mname, NULL, &trm, NULL, NULL));
+  expmod = expand_to_asfix(module, fname);
+  if (!ATmatchTerm(expmod, pattern_asfix_term, NULL, NULL,
+									 &file, NULL, &mname, NULL, &trm, NULL, NULL)) {
+		ATabort("Unable to extract module from asfix representation.\n");
+	}
        
-ATwarning("Reducing ...\n");
   reduct = innermost(trm);
-ATwarning("Reducing finished.\n");
 
   aname  = ATmake("l(<str>)",fname);
   idname = ATreadFromString("id(\"AsFix2C\")");
   cmod = toasfix(reduct, aname, idname);
   free(fname);
+
   len = strlen(path) + 1 + strlen(modname) + strlen(".c");
   fname = malloc(len + 1);
-  if(!fname)
+  if (!fname) {
     ATerror("Not enough memory\n");
+	}
   sprintf(fname, "%s/%s.c", path, modname );
 
   output = fopen(fname,"w");
-  if(!output) 
-    ATfprintf(stderr,"Cannot open file %s\n", fname);
-  else {
+  if (!output)  {
+    ATwarning("Cannot open file %s\n", fname);
+	} else {
     ToC_code(cmod,output);
     ATfprintf(output, "\n");
     fclose(output);
   }
-  ATwarning("Writing: %s\n", fname);
+
+	if (run_verbose) {
+			ATwarning("Writing: %s\n", fname);
+	}
+
   free(fname);
+
   return ATmake("snd-value(c-code-ready)");
 }
 
 /*}}}  */
-/*{{{  void usage(void)    
- *     Usage: displays helpful usage information
+/*{{{  void usage(void) */
+
+/*
+ * Usage: displays helpful usage information
  */
 
 void usage(void)
 {
-    static char *myargumentsexplained = NULL;
-
-    /*  Represent the argument string in a slightly friendlier manner  */
-    if(!myargumentsexplained && *myarguments) {
-        int  i, hyphen = 0;
-        char *ptr0, *ptr1;
-
-        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
-            if(*ptr0 == ':')
-                i++;
-        ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 8*i + 2);
-        for(ptr0 = myarguments; *ptr0; ptr0++)
-            if(!*(ptr0+1) || *(ptr0+1) != ':') {
-                if(!hyphen++) {
-                    *ptr1++ = ' ';
-                    *ptr1++ = '-';
-                }
-                *ptr1++ = *ptr0;            } else {
-                hyphen = 0;
-                if(*(ptr1-1) != ' ')
-                    *ptr1++ = ' ';
-                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
-            }
-        *ptr1++ = '\0';
-    }
-
-    ATwarning(
-        "Usage: %s%s . . .\n"
-        "Options:\n"
-        "\t-h              display help information (usage)\n"
-        "\t-i filename     input from file (default stdin)\n"
-        "\t-o filename     output to file (default stdout)\n"
-        "\t-v              verbose mode\n"
-        "\t-V              reveal program version (i.e. %s)\n",
-        myname, myargumentsexplained, myversion);
+  ATwarning(
+						"Usage: %s [options]\n"
+						"Options:\n"
+						"\t-h              display help information (usage)\n"
+						"\t-i filename     input from file (default stdin)\n"
+						"\t-o filename     output to file (default stdout)\n"
+						"\t-v              verbose mode\n"
+						"\t-V              reveal program version (i.e. %s)\n",
+						myname, myversion);
+	exit(0);
 }
 
 /*}}}  */
@@ -335,7 +321,8 @@ void usage(void)
 
 void version(void)
 {
-    ATwarning("%s v%s\n", myname, myversion);
+  ATwarning("%s v%s\n", myname, myversion);
+  exit(0);
 }
 
 /*}}}  */
@@ -349,7 +336,6 @@ int main(int argc, char *argv[])
   int c, toolbus_mode = 0;
   char *input = "-";
   char *output = "-";
-  int proceed = 1;
 
   extern char *optarg;
   extern int   optind;
@@ -380,7 +366,7 @@ int main(int argc, char *argv[])
   resolve_all();
   init_all();
 
-  if(toolbus_mode) {
+  if (toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
       ATBinit(argc, argv, &bottomOfStack);  
       cid = ATBconnect(NULL, NULL, -1, compiler_handler);
@@ -388,55 +374,61 @@ int main(int argc, char *argv[])
     #else
       ATwarning("compiler: Toolbus cannot be used in Windows.\n");
     #endif
-  } 
-  else {
+  } else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-        case 'v':  run_verbose = ATtrue;                   break;
-        case 'i':  input=optarg;                           break;
-        case 'o':  output=optarg;                          break;
-        case 'V':  version(); proceed = 0;                 break;
+        case 'v':  run_verbose = ATtrue; break;
+        case 'i':  input=optarg;         break;
+        case 'o':  output=optarg;        break;
+        case 'V':  version();            break;
 
-        case 'h':
-        default:   usage(); proceed = 0;                   break;
-      }
-    }
+        case 'h':  /* drop intended */
+        default:   usage();              break;
+			}
+		}
     argc -= optind;
     argv += optind;
 
-    if(proceed) {
-      if (!strcmp(input, "") || !strcmp(input, "-"))
-        iofile = stdin;
-      else if (!(iofile = fopen(input, "r")))
-        ATerror("%s: cannot open %s\n", myname, input);
+    if (!strcmp(input, "") || !strcmp(input, "-")) {
+      iofile = stdin;
+		} else if (!(iofile = fopen(input, "r"))) {
+      ATerror("%s: cannot open %s\n", myname, input);
+		}
 
-      module = ATreadFromFile(iofile);
+    module = ATreadFromFile(iofile);
 
-      expandedmodule = expand_to_asfix(module, input);
-      assert(ATmatchTerm(expandedmodule, pattern_asfix_term, NULL, NULL,
+    expandedmodule = expand_to_asfix(module, input);
+    assert(ATmatchTerm(expandedmodule, pattern_asfix_term, NULL, NULL,
                          &file, NULL, &mname, NULL, &term, NULL, NULL));
        
-      if(run_verbose) ATwarning("Reducing ...\n");
+    if (run_verbose) {
+				ATwarning("Reducing ...\n");
+		}
 
-      reduct = innermost(term);
+    reduct = innermost(term);
 
-      if(run_verbose) ATwarning("Reducing finished.\n");
+    if (run_verbose) {
+			 	ATwarning("Reducing finished.\n");
+		}
 
-      aname  = ATmake("l(<str>)", input);
-      iname = ATreadFromString("id(\"AsFix2C\")");
-      c_code = toasfix(reduct, aname, iname);
+    aname  = ATmake("l(<str>)", input);
+    iname = ATreadFromString("id(\"AsFix2C\")");
+    c_code = toasfix(reduct, aname, iname);
 
-      if (!strcmp(output, "") || !strcmp(output, "-"))
-        iofile = stdout;
-      else if (!(iofile = fopen(output, "w")))
-        ATerror("%s: cannot open %s\n", myname, output);
+    if (!strcmp(output, "") || !strcmp(output, "-")) {
+			iofile = stdout;
+		} else if (!(iofile = fopen(output, "w"))) {
+			ATerror("%s: cannot open %s\n", myname, output);
+		}
 
-      ToC_code(c_code, iofile);
-      ATfprintf(iofile, "\n");
-      fclose(iofile);
-      if(run_verbose) ATwarning("Writing: %s\n", output);
-    }
+    ToC_code(c_code, iofile);
+    ATfprintf(iofile, "\n");
+    fclose(iofile);
+    if (run_verbose) {
+				ATwarning("Writing: %s\n", output);
+		}
   }
+
   return 0;
 }
 
