@@ -4,14 +4,13 @@ tool text-editor is {
   command = EDITOR
 }
 
-process TextEditor(EditorType: term, EditorId: term, ModuleName: str) is
+process TextEditor(EditorId: term, FileName : str, ButtonList : list) is
 let
   TE         : text-editor,
   Path       : term,
   Sort       : term,
   Dirty      : int,
   Fid        : str,
-  FileName   : str,
   Location   : int,
   SortName   : str,
   Direction  : str,
@@ -19,29 +18,25 @@ let
   Length     : int,
   FocusText  : str,
   Focus      : term,
-  ButtonList : list,
-  ButtonName : str,
   QueryList : list,
   QueryName : str,
-  ActionName : str
+  ActionName : str,
+  ButtonName : term,
+  ButtonWalker : list,
+  FileName2  : str
 in
-(
   execute(text-editor, TE?) .
-  (
-    rec-msg(set-filename(EditorId, FileName?)) .
-    snd-eval(TE, edit-file(FileName))
-  ) .
+  snd-eval(TE, edit-file(FileName)) .
   rec-value(TE, file-id(Fid?)) .
-  snd-msg(get-auxilary-buttons(EditorType, ModuleName)) .
-  rec-msg(button-list(ModuleName, ButtonList?)) .
+  ButtonWalker := ButtonList .
   (
-    if not-equal(ButtonList, []) then
-      ButtonName := first(ButtonList) .
+    if not-equal(ButtonWalker, []) then
+      ButtonName := first(ButtonWalker) .
       snd-do(TE, tb-add-menu-item("Actions", ButtonName)) .
-      ButtonList := next(ButtonList)
+      ButtonWalker := next(ButtonWalker)
     fi
   )*
-  if equal(ButtonList, []) then
+  if equal(ButtonWalker, []) then
     tau
   fi .
   snd-msg(get-query-actions) .
@@ -81,8 +76,8 @@ in
     rec-msg(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
   +
-    rec-msg(reload-file(EditorId, FileName?)) .
-    snd-do(TE, reload-file(FileName))
+    rec-msg(reload-file(EditorId, FileName2?)) .
+    snd-do(TE, reload-file(FileName2))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
@@ -106,24 +101,10 @@ in
   ) *
   (
     rec-disconnect(TE).
-    snd-msg(text-editor-disconnected(EditorId)) .
-    rec-msg(delete-text-editor(EditorId))
+    snd-msg(text-editor-disconnected(EditorId)) 
   +
-    rec-msg(delete-text-editor(EditorId)) .
-    snd-terminate(TE, "You have been zapped!")
+    rec-msg(kill-text-editor(EditorId)) .
+    snd-terminate(TE, "You have been zapped!") .
+    snd-msg(text-editor-killed(EditorId))
   )
-  .
-  (
-    rec-msg(set-focus(EditorId, Focus?))
-  +
-    rec-msg(clear-focus(EditorId))
-  +
-    rec-msg(get-focus-text(EditorId, Focus?)) .
-    snd-msg(focus-text(EditorId, ""))
-  +
-    rec-msg(move-editor-to-front(EditorId))
-  +
-    rec-msg(display-error(EditorId, StartPos?))
-  )* delta
-)
 endlet
