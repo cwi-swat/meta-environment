@@ -339,7 +339,9 @@ let
 in
   (
     rec-msg(EditorId?, close-module(Recursive?, Modulename?))
+    . snd-note(start-modules-batch)
     . CloseModule(Modulename, Recursive)
+    . snd-note(end-modules-batch)
     . snd-msg(EditorId, done)
   )
   *
@@ -556,7 +558,9 @@ in
   (
     rec-msg(EditorId?, open-module(Extension?, Directory?, Modulename?))
     . BuildPath(Directory, Modulename, Extension, Path?)
+    . snd-note(start-modules-batch)
     . OpenModule(Path, sdf, Modulename)
+    . snd-note(end-modules-batch)
     . snd-msg(EditorId, done)
   )
   *

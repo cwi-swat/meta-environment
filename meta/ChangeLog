@@ -1,5 +1,12 @@
 # $Id$
 
+Thu Mar 24 11:25:35 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - Guard open module en close module use cases to prevent updating graph
+   panel (closes #432)
+ * tbscripts/{graph-utils,open-modules}.tb:
+   - More generic name for start-open-modules-batch: start-modules-batch
+
 Wed Mar 23 14:01:41 CET 2005 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
    - Guarded get-subject-location with has-subject-location in

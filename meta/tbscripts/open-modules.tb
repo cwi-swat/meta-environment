@@ -115,7 +115,7 @@ let
   Todo: list
 in
   Todo := Modules
-  . snd-note(start-open-modules-batch)
+  . snd-note(start-modules-batch)
   .
   if not-equal(Todo, []) then
     ModuleId := first(Todo)
@@ -140,7 +140,7 @@ in
   fi
   *
   if equal(Todo, []) then
-    snd-note(end-open-modules-batch)
+    snd-note(end-modules-batch)
   fi
 endlet
 

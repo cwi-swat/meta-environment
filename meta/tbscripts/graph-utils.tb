@@ -30,16 +30,16 @@ endlet
 
 process ImportGraphPainter is
   subscribe(ts-table-updated("import-relations"))
-  . subscribe(start-open-modules-batch)
-  . subscribe(end-open-modules-batch)
+  . subscribe(start-modules-batch)
+  . subscribe(end-modules-batch)
   .
   (
     rec-note(ts-table-updated("import-relations"))
     . DrawImportGraph()
   +
-    rec-note(start-open-modules-batch)
+    rec-note(start-modules-batch)
     . unsubscribe(ts-table-updated("import-relations"))
-    . rec-note(end-open-modules-batch)
+    . rec-note(end-modules-batch)
     . subscribe(ts-table-updated("import-relations"))
     . DrawImportGraph()
   )
