@@ -1,4 +1,4 @@
-module asf/Test[X]
+module asf/TestingFramework[X]
 imports
   basic/Strings
 
@@ -24,7 +24,7 @@ hiddens
     summarize( TestResult* )	-> TestSummary
     "PASS"					-> TestSummary
     "FAIL" Integer "out" "of" Integer "tests" "failed"	-> TestSummary
-    count-failures( TestResult * ) -> Integer
+    count-failures( TestResult * ) -> Integer # Integer
   variables
     "String"[0-9\']*		-> String
     "Integer"[0-9\']*		-> Integer
