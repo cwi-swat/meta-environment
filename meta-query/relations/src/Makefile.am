@@ -1,6 +1,6 @@
 # $Id$
 
-CFLAGS += -Wno-unused-variable -Werror
+CFLAGS += -Wno-unused -Werror
 
 ASFC = $(ASF)/bin/asfc
 IDEF2TIF = $(TOOLBUS)/bin/idef2tif
