@@ -69,7 +69,7 @@ def event(msg):
 def register(mod, fun, args, result):
 	global functions 
 
-        fun = regsub.sub("-", "_", fun)
+        fun = regsub.gsub("-", "_", fun)
 	#print "register: %s,%s,%s - " % (mod, fun, result), args
 
 	if functions.has_key(fun):
@@ -146,11 +146,13 @@ def init(argvec):
 	global TOOL_NAME, TOOL_ID, HOST, INPORT, OUTPORT
 	global LOCAL_HOST, LIB, parser, module, argv
 	global use_tk, in_shutdown, connected, functions
+	global files
 
 	# Fill in some default values
 	use_tk = 0
 	in_shutdown = 0
 	functions = { }
+	files = [ ]
 	connected = 0
 
 	# Determine local host and use this when no -TB_HOST option was present

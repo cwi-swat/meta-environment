@@ -43,7 +43,9 @@ def init():
 	# TB.msg("host = %s, local_host = %s" % (TB.HOST, TB.LOCAL_HOST))
 
         portout = portin+1
-        if not TB.HOST or TB.HOST == TB.LOCAL_HOST:
+	if not TB.HOST:
+		TB.HOST = TB.LOCAL_HOST
+        if TB.HOST == TB.LOCAL_HOST:
                 TB.output = connectsocket("", portin)
                 TB.input = createsocket("", portout)
         else:
@@ -95,6 +97,7 @@ def connect_UNIX_socket(port):
 			# TB.msg("opening AF_UNIX socket: %s" % fname)
 	
 			sock.connect(fname)
+			TB.files.append(fname);
 		except socket.error, msg:
 			# <PO>: socket.error: (2, 'No such file or directory')
 			# print "Retry: ", msg
@@ -120,6 +123,7 @@ def createsocket(host, port):
 	if not host:
 		sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		adr = "/usr/tmp/%d" % port
+		print "createsocket: ", adr
 	else:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		adr = (socket.gethostbyname(host), port)
@@ -192,6 +196,9 @@ def dispatch_term(T):
 				# <PO>: print warning?
 				TB.send("snd-void()")
 			return
+		elif T[1] == 'rec-ack-event':
+			result = dispatch_user(T)
+			return
 		elif T[1] == 'rec-terminate':
 			result = dispatch_user(T)
 			sys.exit(0)
@@ -204,7 +211,7 @@ def dispatch_user(T):
 
 	A = []
 	if T[0] == 'appl':
-		fun = regsub.sub("-", "_", T[1])
+		fun = regsub.gsub("-", "_", T[1])
 		if fun == 'signature':
 			check_signature(T[2][0])
 		else:
@@ -259,6 +266,9 @@ def check_sig(F):
 		elif F[1] == 'rec-eval':
 			TB.register(TB.module, F[2][1][1], F[2][1][2], '<term>')
 			require(TB.module, F[2][1][1], F[2][1][2])
+		elif F[1] == 'rec-ack-event':
+			TB.register(TB.module, 'rec-ack-event', F[2][1], '')
+			require(TB.module, 'rec-ack-event', F[2][1])
 		elif F[1] == 'rec-terminate':
 			TB.register(TB.module, 'rec-terminate', F[2][1], '')
 			require(TB.module, 'rec-terminate', F[2][1])
@@ -266,7 +276,8 @@ def check_sig(F):
 		raise "IllegalSignature", "Malformed signature: %s" % F
 
 def require(mod, name, args):
-	name = regsub.sub("-", "_", name)
+	print "require: %s,%s,%s", mod, name, str(args)
+	name = regsub.gsub("-", "_", name)
 	dict = globals()[mod].__dict__
 	if not(dict.has_key(name) and callable(dict[name])):
 		TB.error("%s: missing function '%s'" % (mod,name))
