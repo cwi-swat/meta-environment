@@ -1,5 +1,6 @@
 equations
 
+
 %% --- add($Elem, $Bag)
 
 [a1]	add($Elem, {$Elem*}) = {$Elem, $Elem*}
@@ -43,8 +44,8 @@ equations
 
 %% --- union1($Elem, Rel)
 
-[un1-1]	in($Elem, {$Elem*}) = true			%% Note does not work with
-	=============================		%% {$Elem*} replaced by var $Bag??
+[un1-1]	in($Elem, {$Elem*}) = true				%% Note does not work with
+	=============================		 	%% {$Elem*} replaced by var $Bag??
 	union1($Elem, {$Elem*}) = {$Elem*}
 
 [default-un1-2]
@@ -61,8 +62,8 @@ equations
 
 %% --- union($Bag1, $Bag2)
 
-[un-1] union({}, {$Elem*}) = {$Elem*}
-[un-2] union({$Elem*}, {}) = {$Elem*}
+[un-1] 	union({}, {$Elem*}) = {$Elem*}
+[un-2] 	union({$Elem*}, {}) = {$Elem*}
 
 [un-3] {$Elem*4} = union({$Elem*1}, {$Elem*2, $Elem*3})
        ==============================
