@@ -51,11 +51,19 @@ static PTPT_IntCon   PTPT_liftRealCon(double val)
 /*}}}  */
 /*{{{  static PTPT_QLiteral PTPT_liftQLiteral(char *string) */
 
-static PTPT_QLiteral PTPT_liftQLiteral(char *string, ATbool quoted)
+static PTPT_QLiteral PTPT_liftQLiteral(char *string)
 {
   char quotedString[1024];
   sprintf(quotedString, "\"%s\"", string);
   return PTPT_makeQLiteralQuoted(PTPT_makeCHARLISTString(quotedString));
+}
+
+/*}}}  */
+/*{{{  static PTPT_UQLiteral PTPT_liftUQLiteral(char *string) */
+
+static PTPT_UQLiteral PTPT_liftUQLiteral(char *string)
+{
+  return PTPT_makeUQLiteralMoreChars(PTPT_makeCHARLISTString(string));
 }
 
 /*}}}  */
@@ -103,10 +111,15 @@ static PTPT_ATerm PTPT_liftATermAppl(ATermAppl appl)
   int arity = ATgetArity(fun);
   ATermList args = ATgetArguments(appl);
   PTPT_ATerm result = NULL;
-  PTPT_AFun pfun = PTPT_makeAFunDefault(
-                     PTPT_makeLiteralQlit(
-                       PTPT_liftQLiteral(name, ATisQuoted(fun))));
+  PTPT_AFun pfun;
   PTPT_Ann ann = NULL;
+
+  if (ATisQuoted(fun)) {
+    pfun = PTPT_makeAFunDefault(PTPT_makeLiteralQlit(PTPT_liftQLiteral(name)));
+  }
+  else {
+    pfun = PTPT_makeAFunDefault(PTPT_makeLiteralUqlit(PTPT_liftUQLiteral(name)));
+  }
 
   if (annos != NULL) {
     ann = PTPT_liftAnnotations((ATermList) annos);
@@ -280,7 +293,7 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
   initEmptyLayout();
 
   if (PT_isSymbolLit(symbol)) {
-    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolString(symbol), ATtrue);
+    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolString(symbol));
     result = PTPT_makeSymbolLit(e,e,lit,e);
   }
   else if (PT_isSymbolCf(symbol)) {
@@ -314,7 +327,7 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     result = PTPT_makeSymbolTuple(e,e,head,e,e,rest,e);
   }
   else if (PT_isSymbolSort(symbol)) {
-    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolString(symbol), ATtrue);
+    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolString(symbol));
     result = PTPT_makeSymbolSort(e,e,lit,e);
   }
   else if (PT_isSymbolIterPlus(symbol)) {
@@ -352,7 +365,7 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     result = PTPT_makeSymbolFunc(e,e,syms,e,e,sym,e);
   }
   else if (PT_isSymbolParameterizedSort(symbol)) {
-    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolSort(symbol), ATtrue);
+    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getSymbolSort(symbol));
     PTPT_Symbols syms = PTPT_liftSymbols(PT_getSymbolParameters(symbol));
     result = PTPT_makeSymbolParametrizedSort(e,e,lit,e,e,syms,e);
   }
@@ -439,7 +452,7 @@ static PTPT_Attr PTPT_liftAttr(PT_Attr attr)
     result = PTPT_makeAttrTerm(e,e,term,e);
   }
   else if (PT_isAttrId(attr)) {
-    PTPT_QLiteral id = PTPT_liftQLiteral(PT_getAttrModuleName(attr), ATtrue);
+    PTPT_QLiteral id = PTPT_liftQLiteral(PT_getAttrModuleName(attr));
     result = PTPT_makeAttrId(e,e,id,e);
   }
   else if (PT_isAttrBracket(attr)) {
@@ -560,7 +573,7 @@ PTPT_Tree PTPT_liftTree(PT_Tree pt)
     result = PTPT_makeTreeAppl(e,e,prod,e,e,args,e);
   }
   else if (PT_isTreeLit(pt)) {
-    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getTreeString(pt), ATtrue);
+    PTPT_QLiteral lit = PTPT_liftQLiteral(PT_getTreeString(pt));
     result = PTPT_makeTreeLit(e,e,lit,e);
   }
   else if (PT_isTreeChar(pt)) {
