@@ -19,7 +19,8 @@ cat << ENDCAT >&2
 Usage: $PRG -i <sdf2-specification> [options]
 
 Parameters:
-  
+ 
+  -b | --bottom           generate bottom sorts only       [off]
   -i | --input  <FILE>    specify input specification      [?]
   -o | --output <STEM>    generate <STEM>.[ch] etc.        [improvised]
   -P | --prefix <STR>     specify API-prefix               [""]
@@ -65,6 +66,7 @@ require() {
 # {{{  default settings
 
 # settings/options
+ONLYBOTTOM=0
 INPUT=""
 OUTPUT=""
 VERBOSE=0
@@ -91,6 +93,9 @@ fi
 while [ $# -gt 0 ]
 do
   case $1 in
+    -b | --bottom)
+      ONLYBOTTOM=1;;
+
     -C | --compat-term)
       COMPATTERMOPT='-C';;
 
@@ -133,10 +138,12 @@ done
 
 # {{{ sanity checks and variable setup
 
-if [ "a${INPUT}" = "a" ]; then
-  error "no input file specified (use -i <file>)"
-else
-  require ${INPUT}
+if [ ${ONLYBOTTOM} -eq 0 ]; then
+  if [ "a${INPUT}" = "a" ]; then
+    error "no input file specified (use -i <file>)"
+  else
+    require ${INPUT}
+  fi
 fi
 
 # }}}
@@ -149,11 +156,12 @@ err() {
 
 # }}}
 # {{{  generate C from SDF
-info "Generating C code in ${OUTPUT}.[ch] from ${INPUT}:"
 
-info " generating ADT "
-${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
+if [ ${ONLYBOTTOM} -eq 0 ]; then
+  info " generating ${OUTPUT}.adt "
+  ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${OUTPUT}.adt || err
+fi
 
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
   info " generating ${OUTPUT}.pro"
@@ -165,8 +173,10 @@ if [ ${GENBOTTOMSORT} -gt 0 ]; then
     ${OUTPUT}_bottom.c
 fi
 
-info " generating C from ADT "
-${ADTTOC} ${COMPATTERMOPT} ${TIMESTAMPOPT} ${VERBOSEOPT} \
-             -i ${OUTPUT}.adt -o ${OUTPUT} -P ${PREFIX} -p ${OUTPUT}.pro 
+if [ ${ONLYBOTTOM} -eq 0 ]; then
+  info " generating C from ADT "
+  ${ADTTOC} ${COMPATTERMOPT} ${TIMESTAMPOPT} ${VERBOSEOPT} \
+               -i ${OUTPUT}.adt -o ${OUTPUT} -P ${PREFIX} -p ${OUTPUT}.pro 
+fi
 
 # }}}

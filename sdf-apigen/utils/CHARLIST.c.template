@@ -25,6 +25,7 @@ static char * __NAME__convertCharsToString(ATermList list)
     tmp[i] = ATgetInt((ATermInt) ATgetFirst(list));
   }
 
+  tmp[i] = '\0';
   return tmp;
 }
 

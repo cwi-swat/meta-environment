@@ -9,7 +9,7 @@
    before?)
  * Added a script sdf2-to-c that wraps sdf2-to-adt and adt-to-c and the
    generation of a prologue file that implements the CHARLIST bottom sort.
- * Bumped to 1.4beta
+ * Release 1.4
 
 2002/10/07 (vinju@loria.fr)
  * Changed the name of the field that gets the tree out of the start pattern.
