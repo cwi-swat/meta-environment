@@ -229,7 +229,4 @@ extern void register_all();
 extern void resolve_all();
 extern void init_all();
 
-/* Hack voor de code generatie */
-#define TmakeSimple(ar,str) (ATreadFromString(str))
-
 #endif

@@ -17,8 +17,9 @@ in
     snd-msg(N, reduct(T))
     +
     rec-msg(N, reduce-and-asource(T?,F?,E?)).
-    snd-do(R, reduce-and-asource(T,F?,E?)).
-    snd-msg(N, reducing-done)
+    snd-eval(R, reduce-and-asource(T,F,E)).
+    rec-value(R, reduction-finished(E?)).
+    snd-msg(N, reducing-done(E))
   ) * rec-disconnect(R) .
   printf("Rewriter disconnected: %s\n", N)
 endlet

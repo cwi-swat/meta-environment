@@ -59,7 +59,7 @@ ATfprintf(stderr,"reducing finished\n");
 
 /*}}}  */
 
-void reduce_and_asource(int cid, ATerm t, char *name, char *ext)
+ATerm reduce_and_asource(int cid, ATerm t, char *name, char *ext)
 {
   FILE *file;
   char full[1024];
@@ -75,7 +75,7 @@ ATfprintf(stderr,"reducing entered\n");
     ATerror("not an asfix term: %t\n", t);
 
 ATfprintf(stderr,"reducing finished\n");
-  strcat(full, name);
+  strcpy(full, name);
   strcat(full, ".");
   strcat(full, ext);
   if (!(file = fopen(full, "w"))) {
@@ -84,6 +84,7 @@ ATfprintf(stderr,"reducing finished\n");
   }
   AFsourceToFile(asfix, file); 
   fclose(file);
+  return ATmake("snd-value(reduction-finished(<str>))",full);
 }
 
 /*}}}  */
