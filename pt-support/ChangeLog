@@ -1,4 +1,11 @@
 
+2002/01/14 (jurgenv@cwi.nl)
+ * Added support for annotations on PT_Trees and all kinds of ATerms 
+   for PTPT_explode functionality. This means that every ATerm annotations
+   is lifted to a parsed version too and is coupled with a PT_Tree using 
+   the production  Tree Ann -> Tree. Similar for an annotated ATerm, see the
+   ATerms syntax.
+  
 2002/01/09 (jurgenv@cwi.nl)
  * Added PTMEPT, a library for parsed parse trees and parsed ATerms
 
