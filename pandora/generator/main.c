@@ -18,7 +18,8 @@
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
-static char* myarguments = "i:o:vVh";
+static char* myarguments = "i:o:tvVh";
+
 static ATbool run_verbose = ATfalse;
 
 /*}}}  */
@@ -144,6 +145,7 @@ int main(int argc, char *argv[])
   char *ATlibArgv[] = {"pandora", "-at-termtable", "21"};
   PT_ParseTree tree, ptText;
   BOX_Start box;
+  ATbool textmode = ATfalse;
   char *input = "-";
   char *output = "-";
   int c;
@@ -175,6 +177,7 @@ int main(int argc, char *argv[])
       switch (c) {
 	case 'i':  input=optarg; break;
 	case 'o':  output=optarg; break;
+	case 't':  textmode=ATtrue; break;
 	case 'v':  run_verbose = ATtrue; break;
 	case 'V':  version(); exit(0);
 	case 'h':  usage(); exit(0);
@@ -185,13 +188,17 @@ int main(int argc, char *argv[])
     at_tree = ATreadFromNamedFile(input);
 
     if (at_tree != NULL) {
-
       tree = PT_ParseTreeFromTerm(at_tree);
       box = pandora(tree);
       ATwriteToNamedBinaryFile(BOX_StartToTerm(box), "box.pt");
       ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
-      ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
 
+      if (textmode) {
+	ATwriteToNamedTextFile(PT_ParseTreeToTerm(ptText), output);
+      }
+      else {
+	ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
+      }
     }
     else {
       ATwarning("No such file: %s\n", input); 

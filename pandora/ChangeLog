@@ -1,4 +1,7 @@
-# $Id$
+
+
+Fri Nov 19 14:29:07 CET 2004 <jurgenv@cwi.nl>
+ * Replaced dependency on Tide to dependency on small package tide-support
 
 Fri Nov 12 13:11:15 CET 2004 <kooiker@cwi.nl>
  * add initial TeX backend 

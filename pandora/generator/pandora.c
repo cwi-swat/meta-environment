@@ -427,6 +427,11 @@ static BOX_Box processTree(PT_Tree tree)
   PT_Args args = PT_getTreeArgs(tree);
   PT_Tree treeTree = NULL;
 
+  /* JURGEN: This does not work with productions like:
+   * "box2" `X` "(" Box ")" -> X   {from-box}
+   * `X` "2box" "(" X   ")" -> Box {to-box}
+   */
+
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
 
