@@ -349,7 +349,7 @@ equations
            transform-call(identifier(Char*1),Funid,Namepair*,ActualArg*1) =
              identifier("m""a""k""e""_""n""f" Char*2)(ActualArg+)
 
-  [mp-1'2] is-constructor(Funid,Namepair*) = true,
+  [mp-1'2] is-constructor(Funid,Namepair*) = true,  
            is-ignored-funid(Funid) = false,
            cnt-args(ActualArg*1) = natcon(Char*2),
            identifier(Char*1 "s""y""m") ++ ActualArg*1 = ActualArg+
@@ -357,7 +357,7 @@ equations
            transform-call(( * identifier(Char*1)),Funid,Namepair*,ActualArg*1) =
              identifier("m""a""k""e""_""n""f" Char*2)(ActualArg+)
 
-  [mp-1'3] is-constructor(Funid,Namepair*) = false,
+  [mp-1'3] is-constructor(Funid,Namepair*) = false,        
            is-ignored-funid(Funid) = false,
            is-delaying(Funid,Namepair*) = false,
            is-string-funid(Funid) = false
