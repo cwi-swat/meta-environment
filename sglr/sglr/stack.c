@@ -37,7 +37,9 @@ st_link *SG_NewLink(tree t, stack *st) {
   st_link *res;
 
   if((res = SG_Malloc(sizeof(st_link))) != NULL) {
+    ATprotect(&t);
     res->tree = t;
+    ATprotect(&t);
     res->stack = st;
     res->rejected = ATfalse;
   }
