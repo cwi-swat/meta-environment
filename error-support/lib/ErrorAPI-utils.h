@@ -4,7 +4,7 @@
 #include <ErrorAPI.h>
 #include <ParsedErrorAPI.h>
 
-void ERR_initFullErrorsApi();
+void ERR_initErrorApi();
 
 PERR_Area ERR_liftArea(ERR_Area area);
 PERR_Location ERR_liftLocation(ERR_Location location);

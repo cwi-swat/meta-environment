@@ -49,6 +49,8 @@ dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
   lib/Makefile
+  utils/Makefile
+  utils/lift-error/Makefile
 )
 
 dnl }}}

@@ -3,6 +3,7 @@ $Id$
 2003/12/16 ({jong,jurgenv}@cwi.nl)
  * Renamed library to libErrorAPI
  * Completed lifting of abstract errors to parsed errors.
+ * Added commandline tool for lifting errors (mainly for testing purposes)
 
 2003/12/15 (jurgenv@cwi.nl)
  * Regenerated both APIs using new apigen. 
