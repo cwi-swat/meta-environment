@@ -56,3 +56,27 @@ equations
   find-facts-in-process( rec-msg(Id(TermList)), CollectedFacts,
                         FormalParams,VarDecls) =     
      add-receive-message(CollectedFacts, recv-atom Id)
+
+[fpf-make-signature]
+  make-signature(TermPlus1, FormalParams, VarDecls) = TermPlus2
+  ===>
+  make-signature(snd-msg(TermPlus1), FormalParams, VarDecls) = send-atom TermPlus2
+
+[fpf-make-signature-term]
+  make-signature-term(Term, FormalParams, VarDecls) = SendFact
+  ===>
+  make-signature(Term, FormalParams, VarDecls) = SendFact
+
+[fpf-make-signature-terms]
+  make-signature-term(Term, FormalParams, VarDecls) = SendFact1,
+  make-signature(TermPlus, FormalParams, VarDecls) = SendFact2
+  ===>
+  make-signature(Term, TermPlus, FormalParams, VarDecls) = SendFact1
+
+[fpf-make-signature-term]
+  make-signature-term(Id, FormalParams, VarDecls) = Id
+
+[fpf-make-signature-term]
+  make-signature(TermPlus, FormalParams, VarDecls) = SendFact2
+  ===>
+  make-signature-term(Id(TermPlus), FormalParams, VarDecls) = Id

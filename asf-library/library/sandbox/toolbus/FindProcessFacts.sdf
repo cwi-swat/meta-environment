@@ -20,14 +20,18 @@ hiddens
 
   context-free syntax
     find-facts-in-process(ProcessBody, ProcessFacts, 
-                          {FormalParam ","}*, {VarDecl ","}*)         -> ProcessFacts {traversal(accu,top-down,continue)}
-    find-facts-in-process( ProcessInvocation, ProcessFacts,  
-                          {FormalParam ","}*, {VarDecl ","}* ) -> ProcessFacts {traversal(accu,top-down,continue)}
-    find-facts-in-process( Atom, ProcessFacts,  
-                          {FormalParam ","}*, {VarDecl ","}* )              -> ProcessFacts {traversal(accu,top-down,continue)}
+                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process(ProcessCreation, ProcessFacts,  
+                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process(ProcessInvocation, ProcessFacts,  
+                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process(Atom, ProcessFacts,  
+                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
 
   context-free syntax
-    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* ) -> Fact
+    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* )        -> Fact
+    make-signature({Term ","}+, {FormalParam ","}*, {VarDecl ","}* ) -> {Term ","}+
+    make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}* )   -> Term
 
   variables
     "TscriptDefs"                               -> TscriptDef*
@@ -48,9 +52,10 @@ hiddens
     "ProcessExpr"                                 -> ProcessExpr
     "GenVar"                                      -> GenVar
     "Id"                                          -> Id
-    "Term"                                        -> Term
-    "Terms"                                       -> {Term ","}*
+    "Term"[0-9]*                                  -> Term
+    "Terms"[0-9]*                                 -> {Term ","}*
+    "TermPlus"[0-9]*                              -> {Term ","}+
     "TermList"                                    -> TermList
     "Table"[0-9\']*                               -> Table[[Var # Term]]
     "Var"                                         -> Var
-    "SendFact"                                    -> SendFact
+    "SendFact"[0-9]*                              -> SendFact

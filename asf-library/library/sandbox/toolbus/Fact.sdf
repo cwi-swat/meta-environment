@@ -9,8 +9,8 @@ exports
     process-declaration process-name:ProcessName  -> DeclarationFact
     process-invocation process-name:ProcessName   -> InvocationFact
     process-creation process-name:ProcessName     -> CreationFact
-    send-atom Term                                -> SendFact
-    recv-atom Term                                -> ReceiveFact
+    send-atom {Term ","}+                         -> SendFact
+    recv-atom {Term ","}+                         -> ReceiveFact
 
   sorts Fact
   context-free syntax

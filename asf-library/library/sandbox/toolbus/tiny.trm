@@ -2,6 +2,7 @@ process Editors is
 let
   Pid : int
 in
+  snd-msg(open(EditorManager,Pid?)) .
   create(EditorManager,Pid?) .
   create(EditorCreator,Pid?) .
   create(SE, Pid?)
