@@ -20,7 +20,7 @@ in
         if equal(Type, "sdf") then
           snd-note(syntax-changed(ChangedMod)).
           snd-msg(close-language(ChangedMod))
-        then
+        else
           tau
         fi
       fi
