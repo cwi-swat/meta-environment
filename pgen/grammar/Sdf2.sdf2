@@ -170,6 +170,7 @@ exports
     "(" Symbols "=>" Symbol ")"      -> Symbol
     Symbol "|" Symbol                -> Symbol {right}
     "<<" Symbols ">>"                -> Symbol
+    "(" Symbol "->" Symbol ")"       -> Symbol
   context-free priorities
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol
