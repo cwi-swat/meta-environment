@@ -66,5 +66,8 @@
 #define SG_PREFER_ATTR		"prefer"
 #define SG_AVOID_ATTR		"avoid"
 
+#define SG_COND_STRING(s)	(s?s:"")
+#define SG_SAFE_STRING(s)	(s?s:"[undefined]")
+
 
 #endif  /*  _SGLR_STRINGS_H_  */

@@ -34,6 +34,7 @@
 #include <tree-to-dot.h>
 
 #include "sglr.h"
+#include "sglr-strings.h"
 #include "mem-alloc.h"
 #include "parser.h"
 #include "forest.h"
@@ -120,9 +121,9 @@ FILE  *SGopenLog(char *prg, char *fnam)
   if (!fnam || !strcmp(fnam, ""))
     fnam = ".sglr-log";
   if (!(SG_Log = fopen(fnam, "w"))) {
-    ATerror("%s%sCannot create logfile %s\n",  prg?prg:"", prg?": ":"", fnam);
+    ATerror("%s%sCannot create logfile %s\n",  SG_COND_STRING(prg), prg?": ":"", fnam);
   }
-  IF_VERBOSE(ATwarning("%s%slogging to %s\n",  prg?prg:"", prg?": ":"", fnam));
+  IF_VERBOSE(ATwarning("%s%slogging to %s\n",  SG_COND_STRING(prg), prg?": ":"", fnam));
   return SG_Log;
 }
 
@@ -232,9 +233,15 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
 {
   parse_table *table;
 
+  if(!L || !FN) {
+    return SG_TermToToolbus(ATmake("language-not-opened(<str>,<str>)", "", ""));
+  }
+
   SG_Validate("SGopenLanguage");
-  IF_VERBOSE(if(FN) ATwarning("%s: opening parse table %s\n", prgname, FN));
-  if(!(table = SG_LookupParseTable(L, ATtrue)))
+  IF_VERBOSE(
+    if(FN) ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
+  );
+  if(!(table = SG_LookupParseTable(L)))
     table = SG_AddParseTable(prgname, L, FN);
 
   return SG_TermToToolbus(ATmake(table ?  "language-opened(<str>,<str>)"
@@ -249,12 +256,12 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
 ATerm SGcloseLanguage(char *prgname, int conn, char *L)
 {
   SG_Validate("SGcloseLanguage");
-  if(SG_LookupParseTable(L, ATtrue)) {
-    IF_VERBOSE(ATwarning("%s: closing language %s\n", prgname, L));
+  if(SG_LookupParseTable(L)) {
+    IF_VERBOSE(ATwarning("%s: closing language %s\n", prgname, SG_SAFE_STRING(L)));
     SG_RemoveParseTable(L);
-    return SG_TermToToolbus(ATmake("language-closed(<str>)", L));
+    return SG_TermToToolbus(ATmake("language-closed(<str>)", SG_SAFE_STRING(L)));
   }
-  return SG_TermToToolbus(ATmake("language-not-open(<str>)", L));
+  return SG_TermToToolbus(ATmake("language-not-open(<str>)", SG_SAFE_STRING(L)));
 }
 
 /*
@@ -265,7 +272,9 @@ ATerm SGcloseLanguage(char *prgname, int conn, char *L)
 ATerm SGreOpenLanguage(char *prgname, int conn, char *L, char *FN)
 {
   SG_Validate("SGreOpenLanguage");
-  IF_VERBOSE(if(FN) ATwarning("%s: (re)opening parse table %s\n", prgname, FN));
+  IF_VERBOSE(
+    if(FN) ATwarning("%s: (re)opening parse table %s\n", prgname, SG_SAFE_STRING(L))
+  );
   SGcloseLanguage(prgname, conn, L);
   return SGopenLanguage(prgname, conn, L, FN);
 }
@@ -321,12 +330,15 @@ int SG_GetCharFromString(void)
 ATerm SGparseString(int conn, char *L, char *G, char *S)
 {
   ATerm t;
+  parse_table *pt;
 
+  if(!(pt = SG_LookupParseTable(L))) {
+    return NULL;
+  }
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  t = (ATerm) SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:NULL):NULL,
-                       SG_GetCharFromString);
+  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetCharFromString);
   free(SG_theText);
   return t;
 }
@@ -414,15 +426,22 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
 {
   forest ret;
   size_t ntok;
+  parse_table *pt;
 
   SG_Validate("SGparseFile");
+  if((pt = SG_LookupParseTable(L)) == NULL) {
+    IF_VERBOSE(ATwarning("no such parse table (%s)\n", SG_SAFE_STRING(L)));
+    return NULL;
+  }
+
   if((the_in_buf_start = SGreadFile(prgname, NULL, FN, &ntok)) == NULL) {
     return NULL;
   }
   the_in_buf_end = the_in_buf_cur = the_in_buf_start;
   the_in_buf_end += ntok;
+  
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
-  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G?(*G?G:0):NULL, SG_GetChar);
+  ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar);
   SG_Free(the_in_buf_start);
   return (ATerm) ret;
 }
@@ -474,7 +493,9 @@ ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
     ATerror("%s: cannot open %s\n", prg, infil);
   }
 
-  SGopenLanguage(prg, 0, ptblfil, ptblfil);
+  if(!SGopenLanguage(prg, 0, ptblfil, ptblfil)) {
+    return NULL;
+  }
   return SGtermToFile(prg, SGparseFile(prg, 0, ptblfil, sort, infil), outfil);
 }
 

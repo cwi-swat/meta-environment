@@ -132,7 +132,7 @@ void          SG_RemoveParseTable(char *L);
 parse_table  *SG_BuildParseTable(ATermAppl t);
 void          SG_SaveParseTable(char *L, parse_table *pt);
 void          SG_ClearParseTable(char *L);
-parse_table  *SG_LookupParseTable(char *L, ATbool may_fail);
+parse_table  *SG_LookupParseTable(char *L);
 
 /*  Constants in parse tables  */
 #define       SG_PT_REGULAR         0

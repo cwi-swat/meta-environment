@@ -874,7 +874,7 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
 
 void SG_RemoveParseTable(char *L)
 {
-  if(SG_LookupParseTable(L, ATtrue))
+  if(SG_LookupParseTable(L))
     SG_ClearParseTable(L);
 }
 
@@ -988,7 +988,7 @@ void SG_SaveParseTable(char *L, parse_table *pt)
       /*  Full?  Ditch oldest table in copybook^h^h^h^h^h^h^h^hdatabase  */
       ATwarning("maximum number (%d) of languages reached\n"
                 "removing table for %s to make room for %s\n",
-                MAX_TABLES, tables[0].name, L);
+                MAX_TABLES, tables[0].name, SG_SAFE_STRING(L));
     }
     SG_ClearParseTable(tables[0].name);
   }
@@ -1038,12 +1038,16 @@ void SG_ClearParseTable(char *L)
   );
 }
 
-parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
+parse_table *SG_LookupParseTable(char *L)
 {
   int i = 0;
 
-  IF_DEBUG(fprintf(SGlog(), "Request for language %s\n", L));
+  IF_DEBUG(fprintf(SGlog(), "Request for language %s\n", L?L:"(undefined)"));
 
+  if(!L) {
+    IF_VERBOSE(ATwarning("can't lookup undefined language\n"));
+    return NULL;
+  }
   for (; L && i < last_table; i++)
     if (!strcmp(L, tables[i].name)) {
       IF_DEBUG(fprintf(SGlog(),
@@ -1053,11 +1057,10 @@ parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
                             L, i, tables[i].name));
 
   IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
-                   L, MAX_TABLES));
-  if(!may_fail) {
-    ATwarning("table for %s not amongst the %d stored\n", L, MAX_TABLES);
-    ATerror("no language %s open\n", L);
-  }
-
+                   SG_SAFE_STRING(L), MAX_TABLES));
+  IF_VERBOSE(
+    ATwarning("table for %s not amongst the %d stored\n", SG_SAFE_STRING(L), MAX_TABLES)
+  );
+  
   return NULL;
 }

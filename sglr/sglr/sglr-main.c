@@ -84,12 +84,9 @@ char   *dotoutput         = NULL;
 char   *stackoutput       = NULL;
 
 
-int     SG_Batch (int argc, char **argv);
-void    handle_options (int argc, char **argv);
-void    set_global_options (void);
-void    term_to_file(ATerm t, char *L);
-FILE    *open_file(char *std_error, char *FN);
-
+/*
+ *  ToolBus stubs
+ */
 
 ATerm parse_file(int conn, char *L, char *G, char *FN)
 {
@@ -133,170 +130,6 @@ FILE *open_file(char *std_error, char *FN)
 
 
 /*
- If the program is called from the ToolBus, the connection with is
- initialized by |ATBinit| and the eventloop subsequently handles
- request from the Bus. The interface functions called by the eventloop
- are defined below. If the program is not called from the ToolBus,
- the function |SG_Batch| handles the parse request specified on the
- command line.
- */
-
-int main (int argc, char **argv)
-{
-  int    i, cid, retval = 0;
-  ATerm  bottomOfStack;
-  ATbool use_toolbus = ATfalse;
-  long maxrss = 0L;
-
-  maxrss = SG_ResidentSetSize();
-
-  for(i=1; !use_toolbus && i<argc; i++)
-    use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
-
-  if(use_toolbus) {
-#ifndef WIN32  /*  Sufficient functionality?  */
-    set_global_options();
-    ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
-    IF_STATISTICS(
-                  fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
-                  if(maxrss) {
-                    fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
-                            maxrss, SG_ResidentSetSize());
-                  }
-                  )
-      cid = ATBconnect(NULL, NULL, -1, sglr_handler);
-    ATBeventloop();
-#else  /*  Limited platform  */
-    /*  intel_inside();  */
-    ATerror("%s: platform lacks ToolBus functionality\n", argv[0]);
-#endif
-  } else {
-    char  *ATlibArgv[] = { program_name,
-      "-at-silent",   /* Choose sensible options here */
-      "-at-symboltable", "32768",
-      "-at-termtable", "18"
-    };
-
-    AFinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
-    handle_options(argc, argv);
-    set_global_options();
-
-    IF_STATISTICS(
-      fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
-      if(maxrss) {
-        fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
-                maxrss, SG_ResidentSetSize());
-      }
-    );
-
-      retval = SG_Batch(argc, argv);
-  }
-
-  IF_STATISTICS(
-    maxrss = SG_ResidentSetSize();
-    if(maxrss)
-    fprintf(SGlog(), "[mem] exiting: %ld\n", maxrss)
-  );
-
-  return retval;
-}
-
-/*
- In batch mode the program reads a parse table from file and uses
- it to parse a text from the input file. The result is written to
- the specified output file. The filenames should be specified as
- command line options, which are parsed by |handle_options|.
- */
-
-int SG_Batch (int argc, char **argv)
-{
-  ATerm      parse_tree;
-
-  parse_tree = SGparseFileUsingTable(program_name, parse_table_name, start_symbol,
-                                     input_file_name, output_file_name);
-  if(!parse_tree) {
-    ATwarning("%s: error in %s: unexpected error\n",
-              program_name, input_file_name);
-    return 2;
-  }
-
-  if(SGisParseError(parse_tree)) {
-    ATermList errlist;
-    ATerm     errcode;
-    AFun      err;
-    int      c, line, col;
-
-    errlist = (ATermList) ATgetArgument((ATermAppl) parse_tree, 0);
-    errcode = ATgetArgument((ATermAppl) parse_tree, 1);
-    c    = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 0), 0));
-    line = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 1), 0));
-    col  = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 2), 0));
-    err  = ATgetAFun(errcode);
-
-    /*
-     if(err == SG_Plain_Error_AFun) {
-       SG_ReportErrLine(line, col);
-     }
-     */
-    if(err == SG_EOF_Error_AFun) {
-      ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
-                program_name, input_file_name, line, col);
-    } else if(err == SG_Plain_Error_AFun) {
-      if(isprint(c)) {
-        ATwarning("%s: error in %s, line %d, col %d: character `%c'"
-                  " (`\\x%2.2x') unexpected\n",
-                  program_name, input_file_name, line, col, c, c);
-      } else {
-        ATwarning("%s: error in %s, line %d, col %d: character `\\x%2.2x' unexpected\n",
-                  program_name, input_file_name, line, col, c);
-      }
-    } else if(err == SG_Cycle_Error_AFun) {
-      ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
-                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
-    } else if(err == SG_Amb_Error_AFun) {
-      ATwarning("%s: error in %s, line %d, col %d: cannot represent %t ambiguit(y|ies)\n",
-                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
-    } else {
-      ATwarning("%s: error in %s, line %d, col %d: unknown error",
-                program_name, input_file_name, line, col);
-    }
-    return 1;
-  } else if(!SGisParseTree(parse_tree)) {
-    ATwarning("%s: error: neither parse tree nor parse error for %s\n",
-              program_name, input_file_name);
-    return 1;
-  }
-
-  if(SG_DOTOUT) {
-    if(SG_ASFIX1) {
-      ATwarning("%s: cannot create dot output from AsFix1 parse tree\n",
-                program_name);
-    } else {
-      SGtreeToDotFile(program_name, dotoutput, parse_tree, SG_NOLEX);
-    }
-  }
-
-  IF_VERBOSE(
-    int  nrambs;
-    char *sort;
-
-    nrambs = SG_OUTPUT||SG_DOTOUT ?
-    SGnrAmb(SG_NR_ASK)
-                                  : SG_MaxNrAmb(SG_NR_ASK);
-    sort   = SGsort(SG_GET, NULL);
-    ATwarning("%s: %s parsed %s as sort %s, %s %d ambiguit%s\n",
-              program_name, parse_table_name, input_file_name,
-              sort ? sort : "[undetermined]",
-              SG_OUTPUT||SG_DOTOUT||!SG_MaxNrAmb(SG_NR_ASK) ?
-              "exactly"
-                                                            : "at most",
-              nrambs, (nrambs==1)?"y":"ies");
-  );
-
-  return 0;
-}
-
-/*
  The function |SG_Usage| writes a short summary of the usage of the program.
  */
 
@@ -336,7 +169,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-l       : toggle statistics logging            [%s]\n"
               "\t-n       : toggle tree output                   [%s]\n"
               "\t-o file  : output to |file|                     [%s]\n"
-              "\t-p file  : use parse table |file|               [%s]\n"
+              "\t-p file  : use parse table |file| (required)    [%s]\n"
               "\t-P       : toggle position information          [%s]\n"
               "\t-s symbol: define start symbol                  [%s]\n"
               "\t-S file  : trace stack history in dot |file|s   [%s]\n"
@@ -363,6 +196,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
     );
   }
 }
+
 
 /*
  To parse the option strings passed to the main program the GNU
@@ -469,7 +303,7 @@ void handle_options (int argc, char **argv)
   }
 }
 
-void set_global_options(void)
+ATbool set_global_options(void)
 {
   if(debugflag)      SG_DEBUG_ON();
   if(verboseflag)    SG_VERBOSE_ON();
@@ -496,6 +330,13 @@ void set_global_options(void)
   }
   if(SG_STATISTICS)
     SGopenLog(program_name, SG_DEBUG?".sglr-log":"sglr-stats.txt");
+
+  /*  Return whether a possibly runnable instantiation has been obtained...  */
+  if(parse_table_name) {
+    return ATtrue;
+  } else {
+    return ATfalse;
+  }
 }
 
 /*
@@ -505,4 +346,175 @@ void set_global_options(void)
 void rec_terminate(int conn, ATerm t)
 {
   exit(0);
+}
+
+/*
+ In batch mode the program reads a parse table from file and uses
+ it to parse a text from the input file. The result is written to
+ the specified output file. The filenames should be specified as
+ command line options, which are parsed by |handle_options|.
+ */
+
+int SG_Batch (int argc, char **argv)
+{
+  ATerm      parse_tree;
+
+  parse_tree = SGparseFileUsingTable(program_name, parse_table_name, start_symbol,
+                                     input_file_name, output_file_name);
+  if(!parse_tree) {
+    ATwarning("%s: error in %s: unexpected error\n",
+              program_name, input_file_name);
+    return 2;
+  }
+
+  if(SGisParseError(parse_tree)) {
+    ATermList errlist;
+    ATerm     errcode;
+    AFun      err;
+    int      c, line, col;
+
+    errlist = (ATermList) ATgetArgument((ATermAppl) parse_tree, 0);
+    errcode = ATgetArgument((ATermAppl) parse_tree, 1);
+    c    = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 0), 0));
+    line = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 1), 0));
+    col  = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 2), 0));
+    err  = ATgetAFun(errcode);
+
+    /*
+     if(err == SG_Plain_Error_AFun) {
+       SG_ReportErrLine(line, col);
+     }
+     */
+    if(err == SG_EOF_Error_AFun) {
+      ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
+                program_name, input_file_name, line, col);
+    } else if(err == SG_Plain_Error_AFun) {
+      if(isprint(c)) {
+        ATwarning("%s: error in %s, line %d, col %d: character `%c'"
+                  " (`\\x%2.2x') unexpected\n",
+                  program_name, input_file_name, line, col, c, c);
+      } else {
+        ATwarning("%s: error in %s, line %d, col %d: character `\\x%2.2x' unexpected\n",
+                  program_name, input_file_name, line, col, c);
+      }
+    } else if(err == SG_Cycle_Error_AFun) {
+      ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
+                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
+    } else if(err == SG_Amb_Error_AFun) {
+      ATwarning("%s: error in %s, line %d, col %d: cannot represent %t ambiguit(y|ies)\n",
+                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
+    } else {
+      ATwarning("%s: error in %s, line %d, col %d: unknown error",
+                program_name, input_file_name, line, col);
+    }
+    return 1;
+  } else if(!SGisParseTree(parse_tree)) {
+    ATwarning("%s: error: neither parse tree nor parse error for %s\n",
+              program_name, input_file_name);
+    return 1;
+  }
+
+  if(SG_DOTOUT) {
+    if(SG_ASFIX1) {
+      ATwarning("%s: cannot create dot output from AsFix1 parse tree\n",
+                program_name);
+    } else {
+      SGtreeToDotFile(program_name, dotoutput, parse_tree, SG_NOLEX);
+    }
+  }
+
+  IF_VERBOSE(
+    int  nrambs;
+    char *sort;
+
+    nrambs = SG_OUTPUT||SG_DOTOUT ?
+    SGnrAmb(SG_NR_ASK)
+                                  : SG_MaxNrAmb(SG_NR_ASK);
+    sort   = SGsort(SG_GET, NULL);
+    ATwarning("%s: %s parsed %s as sort %s, %s %d ambiguit%s\n",
+              program_name, parse_table_name, input_file_name,
+              sort ? sort : "[undetermined]",
+              SG_OUTPUT||SG_DOTOUT||!SG_MaxNrAmb(SG_NR_ASK) ?
+              "exactly"
+                                                            : "at most",
+              nrambs, (nrambs==1)?"y":"ies");
+  );
+
+  return 0;
+}
+
+
+/*
+ If the program is called from the ToolBus, the connection with is
+ initialized by |ATBinit| and the eventloop subsequently handles
+ request from the Bus. The interface functions called by the eventloop
+ are defined below. If the program is not called from the ToolBus,
+ the function |SG_Batch| handles the parse request specified on the
+ command line.
+ */
+
+int main (int argc, char **argv)
+{
+  int    i, cid, retval = 0;
+  ATerm  bottomOfStack;
+  ATbool use_toolbus = ATfalse;
+  long maxrss = 0L;
+
+  maxrss = SG_ResidentSetSize();
+
+  for(i=1; !use_toolbus && i<argc; i++)
+    use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
+
+  if(use_toolbus) {
+#ifndef WIN32  /*  Sufficient functionality?  */
+    set_global_options();
+    ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+    IF_STATISTICS(
+                  fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
+                  if(maxrss) {
+                    fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
+                            maxrss, SG_ResidentSetSize());
+                  }
+                  )
+      cid = ATBconnect(NULL, NULL, -1, sglr_handler);
+    ATBeventloop();
+#else  /*  Limited platform  */
+    /*  intel_inside();  */
+    ATerror("%s: platform lacks ToolBus functionality\n", argv[0]);
+#endif
+  } else {
+    char  *ATlibArgv[] = { program_name,
+      "-at-silent",   /* Choose sensible options here */
+      "-at-symboltable", "32768",
+      "-at-termtable", "18"
+    };
+    ATbool have_complete_config;
+
+    AFinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
+    handle_options(argc, argv);
+    have_complete_config = set_global_options();
+
+    IF_STATISTICS(
+      fprintf(SGlog(), "[mem] initial ATerm memory: %ld\n", SG_Allocated());
+      if(maxrss) {
+        fprintf(SGlog(), "[mem] ATerm init: %ld before, %ld after\n",
+                maxrss, SG_ResidentSetSize());
+      }
+    );
+
+    if(!have_complete_config) {
+      SG_Usage(stderr, SG_VERBOSE);
+      retval = 1;
+    } else {
+      retval = SG_Batch(argc, argv);
+    }
+  }
+
+  IF_STATISTICS(
+    maxrss = SG_ResidentSetSize();
+    if(maxrss)
+    fprintf(SGlog(), "[mem] exiting: %ld\n", maxrss)
+  );
+
+  return retval;
 }

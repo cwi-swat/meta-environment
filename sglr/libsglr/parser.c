@@ -41,6 +41,7 @@
 #include "forest.h"
 #include "mem-alloc.h"
 #include "sglr.h"
+#include "sglr-strings.h"
 #include "rsrc-usage.h"
 
 /*
@@ -837,7 +838,7 @@ char *SG_ProdSort(production t)
       }
     }
   }
-  return sort?sort:"[unknown sort]";
+  return SG_SAFE_STRING(sort);
 }
 
 char *SG_ApplSort(tree t)
@@ -911,7 +912,7 @@ char *SGsort(int Mode, forest t)
       sort = SG_ApplSort((tree) t);
       break;
   }
-  return sort?sort:"[undetermined]";
+  return SG_SAFE_STRING(sort);
 }
 
 ATermList SG_CurrentPosInfo(void)
