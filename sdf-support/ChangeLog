@@ -1,4 +1,5 @@
 2001/06/28 (markvdb@cwi.nl)
+ * Added functionality to extract the imports from a module.
  * Added function to replace the module name in a module.
 
 2001/06/27 ({jong,jurgenv}@cwi.nl)

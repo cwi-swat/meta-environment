@@ -1,6 +1,32 @@
 #include "SDFME-utils.h"
 #include <MEPT-utils.h>
 
+SDF_ImportList SDF_concatImportList(SDF_ImportList l1,
+                                    SDF_ImportList l2)
+{
+  if (!SDF_isImportListEmpty(l2)) {
+    if (SDF_hasImportListHead(l1)) {
+      SDF_Import head = SDF_getImportListHead(l1);
+      if (SDF_hasImportListTail(l1)) {
+        SDF_ImportList tail = SDF_getImportListTail(l1);
+
+        return SDF_makeImportListMany(head, 
+                 SDF_makeLayoutEmpty(),
+                 SDF_concatImportList(tail, l2));
+      }
+      else {
+        return SDF_makeImportListMany(head, 
+                 SDF_makeLayoutEmpty(), l2);
+      }
+    }
+    else {
+      return l2;
+    }
+  }          
+
+  return l1;
+}
+
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1,
                                             SDF_ProductionList l2)
 {
