@@ -4,7 +4,6 @@
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
-	-I$(top_srcdir)/editors/structure/src \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(PT_SUPPORT)/include \
@@ -29,11 +28,9 @@ gvim_connector_DEPENDENCIES = $(COMMONLIB)
 
 gvim_connector_LDADD = \
 	$(COMMONLIB) \
-	-L$(top_builddir)/editors/structure/src \
 	-L$(TOOLBUSLIB)/lib \
         -L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(ATERM)/lib \
-	-lStructure \
 	-lATB \
 	-lATerm \
 	$(SOCKLIBS)

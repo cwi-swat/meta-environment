@@ -192,16 +192,13 @@ let
   Pid : int,
   CurrentModuleName : str
 in
-    /* The 'create' in the following process are essential to 
-     * spawn the actual editors and make the editor creation 
-     * process available to the next request.
-     */
     snd-msg(get-auxiliary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName, ButtonList?)).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(EditorId?)) .
       /*snd-msg(se-initialize-structure-editor(EditorId, Text, Tree)) .*/
+      snd-msg(se-create(EditorId, Tree)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName, Text, Tree), Pid?) .
       snd-msg(te-edit-text(EditorId, EDITOR, FileName, ButtonList))
     +
@@ -243,14 +240,7 @@ let
 in
   subscribe(delete-editor(<term>)) .
   subscribe(syntax-changed(ModuleName)) .
-  if equal(quote(Tree), quote(none))
-  then
-    snd-msg(se-set-text(EditorId, Text)) .
-    EditorsSynchronized := false
-  else
-    snd-msg(se-set-tree(EditorId, Tree)) .
-    EditorsSynchronized := true
-  fi .
+  EditorsSynchronized := true .
   (
     rec-msg(te-menu-event(EditorId, ActionEvent?)) .
     snd-msg(extra-button-action(ActionEvent, [], Type, ModuleName, EditorId)) 
@@ -278,8 +268,10 @@ in
   +
     rec-msg(te-mouse-click-at-offset(EditorId, Offset?)) .
     if EditorsSynchronized then
-      snd-msg(se-set-location(EditorId, Offset)) .
-      rec-msg(se-focus-at-location(EditorId, Focus?)) .
+      snd-msg(se-set-cursor-at-offset(EditorId, Offset)) .
+      snd-msg(se-get-focus-at-cursor(EditorId)) .
+      rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
+      printf("focus at cursor: %t\n", Focus) .
       snd-msg(te-set-focus(EditorId, Focus))
     else
       tau
