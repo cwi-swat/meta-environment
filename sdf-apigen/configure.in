@@ -102,6 +102,11 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 dnl }}}
+dnl {{{ Require ToolBus library
+AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
+   [  --with-tide-support=DIR   Tide support is in DIR])
+AC_SUBST(TIDE_SUPPORT)
+dnl }}}
 dnl {{{ Handle --with-asf-support
 
 AC_PACKAGE_REQUIRE(asf-support, asf-support-config,

@@ -1,5 +1,9 @@
 # $Id$
 
+Sat Dec 11 13:28:56 CET 2004 <jurgenv@cwi.nl>
+ * spec/Makefile.am:
+  - added TIDE_SUPPORT
+
 Tue Jun 29 10:54:13 CEST 2004 <{jong,kooiker}@cwi.nl>
  * spec/Makefile.am:
   - add SGLR to include paths now that asc-support-me.h needs it
