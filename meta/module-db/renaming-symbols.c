@@ -209,12 +209,27 @@ PT_Tree renameInTree(PT_Tree tree,
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
+    PT_Symbol     rhs = PT_getProductionRhs(prod);
     PT_Args       args = PT_getTreeArgs(tree);
+
   
     PT_Production newProd = renameInProduction(prod, formalParam, actualParam);
+    PT_Symbol newRhs  = PT_getProductionRhs(newProd);
     PT_Args       newArgs = renameInArgs(args, formalParam, actualParam);
-  
-    return PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
+    PT_Tree       newTree;
+
+    newTree = PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
+
+    /* Wrap new lists in a proper list production */
+    if (PT_isIterSymbol(newRhs) && !PT_isIterSymbol(rhs)) {
+      PT_Production listProd = PT_makeProductionList(newRhs);
+      PT_Tree listTree = PT_makeTreeAppl(listProd,
+					 PT_makeArgsList(newTree,
+							 PT_makeArgsEmpty()));
+      newTree = listTree;
+    }
+
+    return newTree;
   }
   else if (PT_isTreeLit(tree)) {
     if (PT_isSymbolLit(formalParam)) {
