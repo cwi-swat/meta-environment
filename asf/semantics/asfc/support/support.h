@@ -3,7 +3,7 @@
 #define SUPPORT_H
 
 #include <assert.h>
-#include <aterm2.h>
+#include <aterm2.h> 
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
@@ -60,10 +60,6 @@ extern Symbol record_sym;
 	#include <string.h>
 	#define streq(a,b) (!strcmp((a),(b)))
 #endif
-
-/*
-#define streq(a,b) (!strcmp((a),(b)))
-*/
 
 #define is_char(t,c) (ATgetType(t) == AT_INT && ATgetInt((ATermInt) t) == (c))
 #define make_char(c) (char_table[c])

@@ -94,6 +94,7 @@ static ATerm pattern_listtype   = NULL;
 static ATerm pattern_listtype_sep = NULL;
 static ATerm pattern_char       = NULL;
 static ATerm pattern_lexical_constructor;
+static ATerm pattern_term_lexical_constructor;
 static ATerm pattern_caller_id = NULL;
 static ATerm ws = NULL;
 static ATerm spws = NULL;
@@ -273,9 +274,9 @@ funcptr lookup_func_given_sym(Symbol sym)
   return NULL; /* silence the compiler, we never get here. */
 }
 /*}}}  */
-/*{{{  funcptr lookup_func(ATerm prod) */
+/*{{{  funcptr basic_lookup_func(ATerm prod) */
 
-funcptr lookup_func(ATerm prod)
+funcptr basic_lookup_func(ATerm prod)
 {
   bucket *b;
   /* int hnr = prod->hnr % table_size;*/
@@ -291,9 +292,20 @@ funcptr lookup_func(ATerm prod)
     if(ATisEqual(b->prod, prod))
       return b->func;
     b = b->next_prod;
+  } 
+  return NULL;
+}
+/*}}}  */
+/*{{{  funcptr lookup_func(ATerm prod) */
+
+funcptr lookup_func(ATerm prod)
+{
+  funcptr f = basic_lookup_func(prod);
+  if(!f) {
+    ATerror("unknown function: %t\n", prod);
+    return NULL; /* silence the compiler, we never get here. */
   }
-  ATerror("unknown function: %t\n", prod);
-  return NULL; /* silence the compiler, we never get here. */
+  else return f;
 }
 /*}}}  */
 /*{{{  Symbol lookup_sym(ATerm prod) */
@@ -533,6 +545,7 @@ ATerm innermost(ATerm t)
 {
   ATerm prod, sort, list, result = NULL;
   ATermList newargs, args, l;
+  funcptr f;
   char *lex;
 
 	if(ATgetType(t) == AT_APPL) {
@@ -551,7 +564,14 @@ ATerm innermost(ATerm t)
 			l = string2list(lex);
 			t = ATmake("[\"listtype(sort(\\\"CHAR\\\"))\"([<list>])]", l);
 			prod = make_caller_prod(sort);
-			result = call(prod, (ATermList)t);
+			f = basic_lookup_func(prod);
+                        if(f) {
+			  result = call(prod, (ATermList)t);
+			}
+			else {
+			  prod = make_term_caller_prod(sort);
+                          result = call(prod, (ATermList)t);
+			}
 		} else if(sym == symbol_asfix_list) {
 			list = ATgetArgument(appl, 0);
 			args = (ATermList)ATgetArgument(appl, 2);
@@ -817,7 +837,12 @@ static ATerm term_to_asfix(ATerm t, ATerm sort)
     
     if(ATmatchTerm(prod, pattern_lexical_constructor, NULL, &lexsort)) {
       return term_to_asfix(ATgetArgument((ATermAppl) t,0), lexsort);
-    } else if(sym == symbol_prod) {
+    } 
+    else if(ATmatchTerm(prod, pattern_term_lexical_constructor, 
+                        NULL, &lexsort)) {
+      return term_to_asfix(ATgetArgument((ATermAppl) t,0), lexsort);
+    } 
+    else if(sym == symbol_prod) {
       mod   = ATgetArgument(appl, 0);
       fargs = (ATermList)ATgetArgument(appl, 2);
       sort  = ATgetArgument(appl, 6);
@@ -969,6 +994,7 @@ void init_patterns()
   ATprotect(&pattern_listtype_sep);
   ATprotect(&pattern_char);
   ATprotect(&pattern_lexical_constructor);
+  ATprotect(&pattern_term_lexical_constructor);
   ATprotect(&pattern_caller_id);
 
 /*	symbol_asfix_appl = ATmakeSymbol("appl", 3, ATfalse);
@@ -996,6 +1022,10 @@ void init_patterns()
   pattern_lexical_constructor = ATparse(
      "prod(id(\"caller\"),w(\"\"),[l(<str>),w(\"\"),ql(\"(\"),w(\"\")," \
      "iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
+     "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
+  pattern_term_lexical_constructor = ATparse(
+     "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<str>),w(\"\"),ql(\"(\")," \
+     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
      "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
   pattern_caller_id   = ATparse("id(\"caller\")");
 
