@@ -658,21 +658,24 @@ public class MetaStudio
 
   void addMessage(Style style, String id, String message)
   {
-    try {
-      historyDoc.insertString(historyDoc.getLength(),
-			      message + "\n", style);
-      int start = historyDoc.getLength();
-      Rectangle rect = history.modelToView(start);
-      if (rect != null) {
-        JViewport viewport = historyPane.getViewport();
+    Object lock = history.getTreeLock();
+    synchronized (lock) {
+      try {
+	historyDoc.insertString(historyDoc.getLength(),
+				message + "\n", style);
+	int start = historyDoc.getLength();
+	Rectangle rect = history.modelToView(start);
+	if (rect != null) {
+	  JViewport viewport = historyPane.getViewport();
 
-        // Make rectangle relative to viewport
-        rect.x -= viewport.getViewPosition().x;
-        rect.y -= viewport.getViewPosition().y;
-        viewport.scrollRectToVisible(rect);
+	  // Make rectangle relative to viewport
+	  rect.x -= viewport.getViewPosition().x;
+	  rect.y -= viewport.getViewPosition().y;
+	  viewport.scrollRectToVisible(rect);
+	}
+      } catch (BadLocationException e) {
+	System.out.println("bad location: " + e.getMessage());
       }
-    } catch (BadLocationException e) {
-      System.out.println("bad location: " + e.getMessage());
     }
   }
 
