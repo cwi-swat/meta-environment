@@ -2661,6 +2661,9 @@ variable declaration with an attribute {\tt prefer}.
 Note that variables (as all other entities in a module --- except equations)
 may be exported, see Section \ref{modules}.
 
+\subsection{Disambiguation}
+
+
 \subsection{Equations}
 
 With equations a meaning or semantics may be added to functions declared in
@@ -2843,7 +2846,8 @@ equations
 
 \subsubsection{Delaying}
 
-\section{Executing Specifications} \label{ExecutingSpecifications}
+\section{Executing Specifications} 
+\label{ExecutingSpecifications}
 
 Some (but not all!) \asfsdf\ specifications can be executed by interpreting
 each equation as a (conditional) rewrite rule from left to right.
@@ -2871,7 +2875,7 @@ each subterm encountered an attempt is made to reduce it.
 
 Next, the rules are traversed one after the other.  The textual order of the
 rules is irrelevant.  Instead they are ordered according to their
-\emph{specificity}: more general rules come before more specific rules and
+\emph{specificity}: more specific rules come before more general rules and
 default rules come last.  If the selected subterm and the left-hand side of a
 rule (more precisely: of the left-hand side of its conclusion) match, we say
 that a \emph{redex} has been found and the following happens. The conditions
@@ -2906,16 +2910,19 @@ distinguish the following cases:
 \end{itemize}
   
 The evaluation of negative conditions is described by replacing in the above
-description `identical'' and "``match'' by ``not identical'' and ``do not
-match''. A warning is appropriate here: a negative condition that introduces
-new variables nearly always succeeds (unless the sort has exactly one element)
-and this is almost certainly not what you want.
+description `identical' and `match' by `not identical' and `do not
+match', respectively. 
+However, it is not allow to introduce new variables in a negative condition.
+%%A warning is appropriate here: a negative condition that introduces
+%%new variables nearly always succeeds (unless the sort has exactly one
+%% element) and this is almost certainly not what you want.
 
 After the successful evaluation of the conditions, all variables occurring in
 the right-hand side of the conclusion of the equation should be in $V$.
 
-New variables (see above) should therefore {\bf not} occur on \emph{both} sides of a
-condition or in the right-hand side of the conclusion.
+New variables (see above) should therefore {\bf not} occur on \emph{both} 
+sides of a positive condition, in a negative condition, 
+or in the right-hand side of the conclusion.
 
 \subsection{The Treatment of List Variables}
 
@@ -2925,14 +2932,14 @@ arbitrary length.
 
 As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
 expression containing the two list variables {\tt X} and {\tt Y} indicating
-the division of a list into two sublists) with the list {\tt ab} (a list
+the division of a list into twbo sublists) with the list {\tt ab} (a list
 containing two elements) the following three alternatives have to be
 considered:
 
 \begin{quote}
 {\tt X = (empty), Y = ab, \\
 X = a, Y = b, \\
-X = ab, Y = (empty)}.\\
+X = ab, Y = (empty)}.
 \end{quote}
 
 In the unconditional case, backtracking occurs only during matching. When
@@ -2940,71 +2947,124 @@ conditions are present, the failure of a condition following the match of a
 list variable leads to the trial of the next possible match of the list
 variable and the repeated evaluation of following conditions.
 
-This is exemplified by the following specification of lists without
-duplicates, in which the single equation removes duplicate elements:
+This is exemplified by the Set specification presented in 
+Figure \ref{CODE:sets}.
+Yet another example of list matching in combination with the evaluation
+of conditions is shown in Figure \ref{CODE:split}.
+A list of elements is split into two parts of equal length, if the list
+has an even number of elements. In case of a list of uneven length
+the middle element is ignored. The first part of the list is returned
+as result.
 
-\begin{verbatim}
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Split
 
-module RemoveDuplicates
+imports Integers
 
-  sorts ITEM LIST
-
-  imports Layout 
-
+exports
+  sorts El List
   lexical syntax
-    [a-z]+ -> ITEM 
-
+    [a-z]+ -> El
   context-free syntax
-    "{" { ITEM "," }* "}" -> LIST 
+    {El ","}* -> List
+    "length" "(" List ")"       -> Int
+    "split-in-two" "(" List ")" -> List
 
   variables
-     i [0-9]* -> ITEM 
-     l [0-9]* -> {ITEM "," }* 
+    "El"[0-9]*  -> El
+    "El*"[0-9]* -> {El ","}* 
 
-  equations
+%% Split.eqs
+equations
 
-  [1] {l1, i, l2, i, l3} = {l1, i, l2, l3}
+  [l-1] length() = 0
 
-\end{verbatim}
+  [l-2] length(El, El*) = 1 + length(El*)
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El*2) = El*1
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El, El*2) = El*1 
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Split-in-two specification}\label{CODE:split}
+\end{figure}   
 
 \subsection{Which Specifications are Executable?}
 
-Which ASF+SDF specifications can be executed? The following specification of
+Which \asfsdf\ specifications can be executed? The following specification of
 sets illustrates a non-executable specification, since equation {\tt [2]}, that
 expresses that two elements in a set may be exchanged, will lead to an
 infinite loop during rewriting.
 
-\begin{verbatim}
-module xxx
-  sorts ITEM SET 
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module ItemSet
 
-  imports layout
+imports Layout
+
+exports
+  sorts Item Set 
 
   lexical syntax
-    [a-z]+ -> ITEM 
+    [a-z]+ -> Item 
 
   context-free syntax
-    "{" { ITEM "," }* "}" -> SET
+    "{" { Item "," }* "}" -> Set
 
   variables
-    i [0-9]* -> ITEM 
-    l [0-9]* -> {ITEM "," }* 
+    "i"[0-9]* -> Item
+    "l"[0-9]* -> {Item ","}* 
 
-  equations
+%% ItemSet
+equations
 
   [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
   [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
-\end{verbatim}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Set specification which can not be executed}\label{CODE:itemsets}
+\end{figure}   
 
 \subsection{Common Errors when Executing Specifications}
 
-(** new variable in !=, lacking equation, infinite loops, WARNING when a condition contains both instantiated and uninstantiated variables**)
+Note: new variable in {\tt !=}, lacking equation, infinite loops, 
+WARNING when a condition contains both instantiated and 
+uninstantiated variables.
 
 \subsection{Evaluating Terms}
 \label{eval-term}
 
 \subsection{Compiling a Specification}
 \label{compiling-specs}
+
+By means of the button {\tt Compile ...} in the pop up menu for module
+operations (Figure \ref{FIG:module-menu}) or the button pane the \asfsdf2C
+compiler can be activated. C code is generated for the selected module
+(exactly {\em one} module can be selected for compilation) including
+the imported modules.
+
+There are a number of requirements that have to be fulfilled in order
+to be able to generate this C code:
+\begin{itemize}
+\item There should exist a directory in which the C code can be generated.
+The name of this directory can be communicated via
+\begin{itemize}
+\item The environment variable {\tt COMPILER\_OUTPUT}.
+\item The {\tt -c} option when starting the \ASmetaenv\ via {\tt meta}.
+\item The dialog box presented in Figure \ref{FIG:compiler-dir}.
+\end{itemize}
+
+\item The specification should be complete, no missing modules and
+the equations sections should be error free.
+
+\end{itemize}
 
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
@@ -3157,20 +3217,20 @@ Pop the top value; jump if it is zero.
 \end{quote}
 will now be translated to the following instruction sequence:
 \begin{verbatim}
-
-label xx; 
-rvalue a; 
-gofalse xxx; 
-lvalue a; 
-rvalue a; 
-push 1;
- sub; 
-assign;
-lvalue b; 
-rvalue a; 
-rvalue c; mul; 
-assign; 
-goto xx; 
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
 label xxx
 \end{verbatim}
 
