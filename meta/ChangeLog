@@ -16,6 +16,10 @@ Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
    has to be generated for parsing terms and equations in 
    editors. When dumping equations, the parsetable is only
    generated for the top module.
+- The DeleteEditors has been duplicated and the new process
+  is more subtile wrt closing of editors. This new process
+  is used in reverting modules, adding and removing imports.
+
 
 Fri Feb 13 15:20:49 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Replaced ptpretty by pandora functionality
