@@ -102,7 +102,7 @@ in
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
-    if equal(Fl,[]) then
+    if equal(FF,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
       snd-eval(SE,getTree(Fid)).
       rec-value(SE,T1?).
