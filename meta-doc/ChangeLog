@@ -1,3 +1,7 @@
+2002/05/06 (vandenbr@loria.fr)
+  * Tried to fix the dailybuild of meta-doc.
+  * Based the generation of the manual on pdflatex instead of latex.
+
 2001/08/27 (mdejonge@cwi.nl)
   * All source files are now included in the meta-doc distribution
   * Added --with-build-manual configuration switch to explicitely state that
