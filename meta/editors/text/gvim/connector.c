@@ -395,7 +395,9 @@ static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
   ERR_Area area = ERR_getLocationArea(location);
 
-  gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area)+1);
+  if (ERR_hasAreaOffset(area)) {
+    gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area)+1);
+  }
 }
 
 /*}}}  */
