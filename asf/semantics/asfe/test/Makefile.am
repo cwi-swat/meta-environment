@@ -38,7 +38,7 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(ASFIX)/lib -lAsFix \
+                  -L$(SDF)/lib -lAsFix \
                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 equalModuloWhitespace_SOURCES = \
@@ -46,7 +46,7 @@ equalModuloWhitespace_SOURCES = \
 
 equalModuloWhitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASFIX)/lib -lAsFix \
+                 -L$(SDF)/lib -lAsFix \
                  -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 whitespace_SOURCES = \
@@ -58,10 +58,10 @@ whitespace.o: ../src/libeval.a
 
 whitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASFIX)/lib -lAsFix \
+                 -L$(SDF)/lib -lAsFix \
                  -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(ASFIX)/include \
+INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(SDF)/include \
                  -I$(ATERM)/include
 
 % : %.sh.src Makefile

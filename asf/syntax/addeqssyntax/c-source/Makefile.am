@@ -17,9 +17,9 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES		= -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
+INCLUDES		= -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 
-LDFLAGS			= -L${ASC_SUPPORT}/lib -L${ASFIX}/lib -L${ATERM}/lib
+LDFLAGS			= -L${ASCLIB} -L${ASFIXLIB} -L${ATERMINC}
 LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
 noinst_LIBRARIES	= libAdd-Eqs-Syntax.a

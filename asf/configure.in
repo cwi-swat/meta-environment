@@ -71,18 +71,26 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Required for generated Makefile.am's to work until genamakefile patched:
+ATERMINC=${ATERM}/include
+ATERMLIB=${ATERM}/lib
+AC_SUBST(ATERMINC)
+AC_SUBST(ATERMLIB)
+
+dnl Again for AsFix (which is a part of THIS package now)
+ASFIXINC=${SDF}/include
+ASFIXLIB=${SDF}/include
+AC_SUBST(ASFIXINC)
+AC_SUBST(ASFIXLIB)
+
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
-AC_PACKAGE_REQUIRE(asfix, asource,
-   [  --with-asfix=DIR        AsFix-library is in DIR])
-AC_SUBST(ASFIX)
-
 dnl Require sdf package
 AC_PACKAGE_REQUIRE(sdf, sglr,
-   [  --with-sdf=DIR         sdf is in DIR])
+   [  --with-sdf=DIR          sdf is in DIR])
 AC_SUBST(SDF)
 
 ASC_SUPPORT='${prefix}'
@@ -92,6 +100,12 @@ AC_ARG_WITH(asc-support,
    ASC_SUPPORT=${withval},)
 
 AC_SUBST(ASC_SUPPORT)
+
+dnl Again for Asc (which is a part of THIS package now)
+ASCINC=${ASC_SUPPORT}/include
+ASCLIB=${ASC_SUPPORT}/lib
+AC_SUBST(ASCINC)
+AC_SUBST(ASCLIB)
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,

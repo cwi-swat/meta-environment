@@ -21,7 +21,7 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES         = -I$(ASC_SUPPORT)/include -I$(ASFIX)/include -I$(ATERM)/include
+INCLUDES         = -I$(ASC_SUPPORT)/include -I$(SDF)/include -I$(ATERM)/include
 
 bin_PROGRAMS = removevarsyntax
 man_MANS     = removevarsyntax.1
@@ -36,7 +36,7 @@ removevarsyntax_LDADD   = removevarsyntax.tif.o \
                        -L$(top_builddir)/removevarsyntax/c-source \
                        -lRemove-Var-Syntax \
                        -L$(ASC_SUPPORT)/lib -lasc-support \
-                       -L$(ASFIX)/lib -lAsFix \
+                       -L$(SDF)/lib -lAsFix \
                        -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 

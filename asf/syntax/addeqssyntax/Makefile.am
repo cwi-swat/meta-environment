@@ -1,6 +1,7 @@
 #
 #    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+#                        The Netherlands. 
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
