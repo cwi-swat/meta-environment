@@ -1,33 +1,29 @@
 equations
 
-%%[idem-0]
-%%  $ProcessExpr1 + $ProcessExpr1 = $ProcessExpr1
-
-%%[idem-1]
-%%  $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr2 = $ProcessExpr1 + $ProcessExpr2
-
-%%[idem-2]
-%%  $ProcessExpr1 + $ProcessExpr2 + $ProcessExpr3 + $ProcessExpr2 =
-%%    $ProcessExpr1 + $ProcessExpr3 + $ProcessExpr2
-
-[choice-normalization-0]
-  $ProcessExpr1 . ( $ProcessExpr2 + $ProcessExpr3 ) = 
-    ( $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr1 . $ProcessExpr3 )
-
-[choice-normalization-1]
-  ( $ProcessExpr1 + $ProcessExpr2 ) . $ProcessExpr3 =
-    ( $ProcessExpr1 . $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 )
-
-[choice-normalization-2]
-  $ProcessExpr + $ProcessExpr = $ProcessExpr
-
-[comm-0]
+[A2']
    $ProcessExpr1 + ($ProcessExpr2  + $ProcessExpr3) =
     ($ProcessExpr1 +  $ProcessExpr2) + $ProcessExpr3 
 
-[comm-1]
-   $ProcessExpr1 . ($ProcessExpr2  . $ProcessExpr3) =
-    ($ProcessExpr1 .  $ProcessExpr2) . $ProcessExpr3 
+%%[A3]
+%%  $ProcessExpr + $ProcessExpr = $ProcessExpr
+
+[A4]
+  ( $ProcessExpr1 + $ProcessExpr2 ) . $ProcessExpr3 =
+     ( $ProcessExpr1 . $ProcessExpr3 ) + ( $ProcessExpr2 . $ProcessExpr3 ) 
+
+[A4']
+  $ProcessExpr1 . ( $ProcessExpr2 + $ProcessExpr3 ) = 
+    ( $ProcessExpr1 . $ProcessExpr2 ) + ($ProcessExpr1 . $ProcessExpr3) 
+
+[A5]
+   ( $ProcessExpr1 . $ProcessExpr2 ) . $ProcessExpr3 =
+     $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 )
+
+%%[A6']
+%%  $ProcessExpr + delta = $ProcessExpr
+
+%%[A7]
+%%  delta . $ProcessExpr = delta
 
 [default-star-normalization]
   $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
@@ -35,6 +31,10 @@ equations
 [star-normalization-0]
   ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
     ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
+
+%%[par-normalization-0]
+%%  $ProcessExpr1 || $ProcessExpr2 =
+%%    ( $ProcessExpr1 . $ProcessExpr2 ) + ( $ProcessExpr2 . $ProcessExpr1 )
 
 [if-then-0]
   if $Term then $ProcessExpr1 fi . $ProcessExpr2 =
@@ -51,4 +51,28 @@ equations
 [if-then-else-1]
   $ProcessExpr1 . if $Term then $ProcessExpr2 else $ProcessExpr3 fi . $ProcessExpr4 =
     $ProcessExpr1 . if $Term then $ProcessExpr2 . $ProcessExpr4 else $ProcessExpr3 . $ProcessExpr4 fi
+
+[M1]
+  $ProcessExpr1 || $ProcessExpr2 =
+    ( $ProcessExpr1 ||_ $ProcessExpr2 ) + ( $ProcessExpr2 ||_ $ProcessExpr1 )
+
+[M2]
+  isAtomic($ProcessExpr1) == true
+  ===>
+  $ProcessExpr1 ||_ $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr2
+
+[M3]
+  isAtomic($ProcessExpr1) == true
+  ===>
+  $ProcessExpr1 . $ProcessExpr2 ||_ $ProcessExpr3 = $ProcessExpr1 . ( $ProcessExpr2 || $ProcessExpr3 )
+
+[M4]
+  ( $ProcessExpr1 + $ProcessExpr2 ) ||_ $ProcessExpr3 =
+    $ProcessExpr1 ||_ $ProcessExpr3 + $ProcessExpr2 ||_ $ProcessExpr3
+
+[default-isAtomic]
+  isAtomic($ProcessExpr) = false
+
+[isAtomic-0]
+  isAtomic($Atom) = true
 

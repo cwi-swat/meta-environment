@@ -4,6 +4,21 @@ imports Tscript
 imports utilities/PosInfo[ProcessExpr]
 
 hiddens
+  context-free syntax
+    ProcessExpr "||_" ProcessExpr -> ProcessExpr {non-assoc}
+
+  context-free syntax
+    isAtomic(ProcessExpr) -> Boolean
+
+hiddens
   variables
+    "$Atom"[0-9]* -> Atom
     "$ProcessExpr"[0-9]* -> ProcessExpr
     "$Term" -> Term
+
+hiddens
+  context-free priorities
+    ProcessExpr "||" ProcessExpr -> ProcessExpr >
+    ProcessExpr "||_" ProcessExpr -> ProcessExpr >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr
+

@@ -1,0 +1,48 @@
+equations
+
+[simplify-0]
+  simplify($Tscript) = dup(flatten(map($Tscript)))
+
+[sum-0]
+  map($ProcessExpr1 + $ProcessExpr2) = sum($ProcessExpr1, $ProcessExpr2)
+
+[prod-0]
+  map($ProcessExpr1 . $ProcessExpr2) = prod($ProcessExpr1, $ProcessExpr2)
+
+
+[flatten-sum-0]
+  flatten(sum($ProcessExpr*1, sum($ProcessExpr*2), $ProcessExpr*3)) =
+    flatten(sum($ProcessExpr*1, $ProcessExpr*2, $ProcessExpr*3))
+
+[flatten-sum-0]
+  flatten(sum($ProcessExpr*1, delta, $ProcessExpr*2)) =
+    flatten(sum($ProcessExpr*1, $ProcessExpr*2))
+
+[flatten-prod-0]
+  flatten(prod($ProcessExpr*1, prod($ProcessExpr*2), $ProcessExpr*3)) =
+    flatten(prod($ProcessExpr*1, $ProcessExpr*2, $ProcessExpr*3))
+
+[flatten-prod-1]
+  flatten(prod($ProcessExpr*1, delta, $ProcessExpr+3)) =
+    flatten(prod($ProcessExpr*1, delta))
+
+
+ [dup-sum-0]
+  sum($ProcessExpr*2) := filter($ProcessExpr, dup(sum($ProcessExpr*)))
+  ===>
+  dup(sum($ProcessExpr, $ProcessExpr*)) = sum($ProcessExpr, $ProcessExpr*2)
+
+ [filter-sum-0]
+  filter($ProcessExpr, sum($ProcessExpr, $ProcessExpr*)) =
+  filter($ProcessExpr, sum($ProcessExpr*))
+
+ [filter-sum-0]
+  $ProcessExpr1 != $ProcessExpr2,
+  sum($ProcessExpr*2) := filter($ProcessExpr1, sum($ProcessExpr*))
+  ===>
+  filter($ProcessExpr1, sum($ProcessExpr2, $ProcessExpr*)) = 
+  sum($ProcessExpr2, $ProcessExpr*2)
+  
+
+ [filter-sum-1]
+  filter($ProcessExpr, sum()) = sum()

@@ -1,0 +1,32 @@
+module Flatten
+
+imports Normalization
+
+exports
+  context-free syntax
+    simplify(Tscript) -> Tscript
+
+hiddens
+  context-free syntax
+   
+    map(Tscript) -> Tscript {traversal(trafo, bottom-up, continue)}
+    map(ProcessExpr) -> ProcessExpr {traversal(trafo, bottom-up, continue)}
+
+    flatten(Tscript) -> Tscript {traversal(trafo, top-down, break)}
+    flatten(ProcessExpr) -> ProcessExpr {traversal(trafo, top-down, break)}
+
+    dup(Tscript) -> Tscript {traversal(trafo, top-down, break)}
+    dup(ProcessExpr) -> ProcessExpr {traversal(trafo, top-down, break)}
+    
+    filter(ProcessExpr, ProcessExpr) -> ProcessExpr
+
+  context-free syntax
+    sum({ProcessExpr ","}*) -> ProcessExpr
+    prod({ProcessExpr ","}*) -> ProcessExpr
+
+hiddens
+  variables
+    "$ProcessExpr"[0-9]* -> ProcessExpr
+    "$ProcessExpr+"[0-9]* -> {ProcessExpr ","}+
+    "$ProcessExpr*"[0-9]* -> {ProcessExpr ","}*
+    "$Tscript"[0-9]* -> Tscript
