@@ -37,9 +37,15 @@ in
       snd-msg(io-file-not-found)
     )
   +
-    rec-msg(io-remove-file(Path?, Filename?, Extension?)) .
-    snd-do(IO, remove-file(Path, Filename, Extension)) .
-    snd-msg(io-file-removed)
+    rec-msg(io-remove-file(Path?, FileName?, Extension?)) .
+    snd-eval(IO, remove-file(Path, FileName, Extension)) .
+    (
+      rec-value(IO, success) .
+      snd-msg(io-file-removed(Path, FileName, Extension))
+    +
+      rec-value(IO, failure(ErrorMessage)) .
+      snd-msg(io-file-not-removed(Path, FileName, Extension, ErrorMessage))
+    )
   +
     rec-msg(io-exists-file(Filename?)) .
     snd-eval(IO, exists-file(Filename)) .

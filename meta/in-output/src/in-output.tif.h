@@ -20,7 +20,7 @@ ATerm write_text_file(int conn, const char *, ATerm);
 ATerm compare_files(int conn, const char *, const char *);
 ATerm exists_file(int conn, const char *);
 ATerm get_filename(int conn, const char *, const char *, const char *);
-void remove_file(int conn, const char *, const char *, const char *);
+ATerm remove_file(int conn, const char *, const char *, const char *);
 ATerm get_path_directory(int conn, const char *);
 ATerm find_file(int conn, ATerm, const char *, const char *);
 ATerm get_path_filename(int conn, const char *);

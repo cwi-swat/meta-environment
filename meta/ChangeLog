@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Apr 16 17:24:15 CEST 2004 <jurgenv@cwi.nl>
+ * Delete module takes care of IO errors when unlinking fails
+
 Fri Apr 16 15:04:45 CEST 2004 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb: 
    - create ParseText process iso call to be able to receive result messages

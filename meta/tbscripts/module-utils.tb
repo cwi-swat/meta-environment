@@ -143,7 +143,7 @@ in
     snd-msg(get-path-from-db(ModuleName)) .
     ( 
       rec-msg(path(Path?)) .
-      RemoveModuleFromDisk(Path, ModuleName)
+      RemoveModuleFromDisk(Path, ModuleName, Status?)
     +
       rec-msg(no-path)
     ) .
@@ -176,7 +176,7 @@ in
 	if equal(Status, success) then
 	  SaveAsfSdfModule(RealNew, Status?). 
 	  if equal(Status, success) then
-	    RemoveModuleFromDisk(OldPath, Old)
+	    RemoveModuleFromDisk(OldPath, Old, Status?)
           else 
             RenameModuleInDB(RealNew, Old, RealPath, Changed?) .
             SaveSdfModules(Changed, Status?)
@@ -270,18 +270,31 @@ process SaveAsfSdfModule(Module : str, Status : term?) is
    snd-msg(save-module(Module, asfsdf)) .
    rec-msg(saved-module(Module, Status?))
 
-process RemoveModuleFromDisk(Path : str, Module : str) is
+process RemoveModuleFromDisk(Path : str, Module : str, Status : term?) is
 let
-  Extension : str
+  Extension : str,
+  Error : str
 in
   snd-msg(file-extension-hook(sdf)) .
   rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-remove-file(Path, Module, Extension)) .
-  rec-msg(io-file-removed) .
-  snd-msg(file-extension-hook(asf)) .
-  rec-msg(file-extension-hook-result(Extension?)) .
-  snd-msg(io-remove-file(Path, Module, Extension)) .
-  rec-msg(io-file-removed)
+  (
+    rec-msg(io-file-removed(Path, Module, Extension)) .
+    snd-msg(file-extension-hook(asf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-remove-file(Path, Module, Extension)) .
+    (
+      rec-msg(io-file-removed(Path, Module, Extension)) 
+    +
+      rec-msg(io-file-not-removed(Path, Module, Extension, Error?)) 
+      /* error ignored because there does not have to be a asf file
+       * TODO: do not try to delete a non-existing file */
+    )
+  +
+    rec-msg(io-file-not-removed(Path, Module, Extension, Error?)) .
+    Status := remove-error .
+    snd-note(ui-status(errorf("Could not remove file: %s", [Error])))
+  )
 endlet
 
 process SoftCloseModuleInDB(ModuleName : str, Status : term?) is

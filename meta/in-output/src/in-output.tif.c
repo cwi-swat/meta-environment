@@ -10,7 +10,7 @@
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<in-output>,relative-to-absolute(<list>))",
   "rec-eval(<in-output>,find-file(<list>,<str>,<str>))",
-  "rec-do(<in-output>,remove-file(<str>,<str>,<str>))",
+  "rec-eval(<in-output>,remove-file(<str>,<str>,<str>))",
   "rec-eval(<in-output>,exists-file(<str>))",
   "rec-eval(<in-output>,write-text-file(<str>,<list>))",
   "rec-eval(<in-output>,pack-term(<term>))",
@@ -69,9 +69,8 @@ ATerm in_output_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(get-filename(<str>,<str>,<str>))", &s0, &s1, &s2)) {
     return get_filename(conn, s0, s1, s2);
   }
-  if(ATmatch(term, "rec-do(remove-file(<str>,<str>,<str>))", &s0, &s1, &s2)) {
-    remove_file(conn, s0, s1, s2);
-    return NULL;
+  if(ATmatch(term, "rec-eval(remove-file(<str>,<str>,<str>))", &s0, &s1, &s2)) {
+    return remove_file(conn, s0, s1, s2);
   }
   if(ATmatch(term, "rec-eval(get-path-directory(<str>))", &s0)) {
     return get_path_directory(conn, s0);

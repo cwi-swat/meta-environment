@@ -238,13 +238,18 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 /*}}}  */
 /*{{{  void remove_file(int cid, const char *directory, const char *name, const char *extension) */
 
-void remove_file(int cid, const char *directory, const char *name, const char *extension)
+ATerm remove_file(int cid, const char *directory, const char *name, const char *extension)
 {
   char fileName[PATH_LEN];
 
   sprintf(fileName, "%s%c%s%s", directory, PATH_SEPARATOR, name, extension);
 
-  unlink(fileName);
+  if (unlink(fileName) == 0) {
+    return createSuccessMessage();
+  }
+  else {
+    return createErrorMessage(strerror(errno));
+  }
 }
 
 /*}}}  */
