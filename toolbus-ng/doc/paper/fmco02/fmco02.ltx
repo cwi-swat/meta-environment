@@ -317,7 +317,7 @@ To make the scenario from Figure~\ref{Fig:toolbus-scenario} more concrete,
 we describe the construction of an address book holding (name, address)
 pairs. Typical uses include creating a new address, finding an address
 based on the name, etc. First we consider some aspects of the User
-Interface. An instance of the UI connects to the ToolBus and during the
+Interface. An instance of the UI connects to the \TB\ and during the
 subsequent session, the user can:
 
 \begin{description}
@@ -327,13 +327,13 @@ subsequent session, the user can:
   \item[update] an existing entry in the database.
 \end{description}
 
-Each of these use cases can be described as a ToolBus process which,
+Each of these use cases can be described as a \TB\ process which,
 together with a process that explains how these use cases interact,
-form the ToolBus script describing our Address Book Service.
+form the \TB\ script describing our Address Book Service.
 
-\subsection{ToolBus processes for the Address Book Service}
+\subsection{\TB\ processes for the Address Book Service}
 
-\paragraph{The \texttt{ADDRESSBOOK} process} tells the ToolBus that an
+\paragraph{The \texttt{ADDRESSBOOK} process} tells the \TB\ that an
 instance of our \texttt{address-book} tool is to be executed, followed
 by a loop which invokes \emph{one of} the processes \texttt{CREATE},
 \texttt{UPDATE} or \texttt{DELETE} in each iteration. This construction,
@@ -365,10 +365,10 @@ a separate section (one for each tool if multiple tools are involved):
 \end{verbatim}
 \end{footnotesize}
 
-In this case, the ToolBus is told that our tool is written in Java, and
+In this case, the \TB\ is told that our tool is written in Java, and
 that the main class to be started is called \texttt{AddressBookService}.
 
-\paragraph{The \texttt{CREATE} process} can be described as a ToolBus
+\paragraph{The \texttt{CREATE} process} can be described as a \TB\
 process as follows:
 
 \begin{footnotesize}
@@ -468,10 +468,10 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-\subsection{ToolBus process for the User Interface}
+\subsection{\TB\ process for the User Interface}
 
-Because users can connect at any time to the ToolBus to start a
-session with the Address Book Service, the ToolBus itself does not
+Because users can connect at any time to the \TB\ to start a
+session with the Address Book Service, the \TB\ itself does not
 execute instances of the UI (as it did with the address book tool).
 Instead \texttt{UITool} instances can connect, make zero or more
 requests to the service, and disconnect at their convenience.
@@ -534,7 +534,7 @@ Makefiles, etc	&  5  & &\\
 \Tscript   	&  5  & &\\ \hline
 Total LOC:	& 107 & 170 & 277 \\\hline
 
-ToolBus script &  4.6\% &  & 1.8\%\\ \hline
+\Tscript\ &  4.6\% &  & 1.8\%\\ \hline
 \end{tabular}
 
 $^\dagger$ Kilo Lines of Code  excluding third party code
@@ -603,7 +603,7 @@ composition (\spec{.}) is the dominant operator and sending/receiving
 mechanism, followed by communication with tools (\spec{snd-do},
 \spec{snd-eval}).  It may be surprising that parallel composition
 (\spec{||}) is used so infrequently. However, one should be aware that at
-the top level all ToolBus processes run concurrently and that \spec{||}
+the top level all \TB\ processes run concurrently and that \spec{||}
 is only used for explicit concurrency inside a process. The level of
 concurrence is therefore approximately 100 ($104$ process definitions
 and $3$ explicit \spec{||} operators).
@@ -617,7 +617,7 @@ posed by our users and ourselves are:
 \begin{itemize}
 
 \item I find it difficult to see which messages are requests and
-  which are replies; can you provide support this?
+  which are replies; can you provide support for this?
   See \S\ref{Sec:message-patterns}.
 
 \item If a tool crashes, what is the best way to describe the recovery
@@ -630,7 +630,7 @@ posed by our users and ourselves are:
 
 \item The \TB\ and tools are running as separate tasks of the operating
   systems. Would it not be more efficient to run \TB\ and tools in
-  single task? See \S\ref{Sec-status}.
+  single task? See \S\ref{Sec:status}.
 
 \end{itemize}
 
@@ -656,7 +656,7 @@ posed by our users and ourselves are:
 
 The classical pattern of a remote procedure call is shown in
 Figure~\ref{Fig:rpc}: a caller performs a call to a callee. During the
-call the caller suspends execution and the callee executes until he
+call the caller suspends execution and the callee executes until it
 has computed a reply. At that point in time, the caller continues its
 execution.
 
@@ -746,15 +746,15 @@ constraint can be checked statically.
 \subsection{Exception Handling} \label{Sec:exceptions}
 
 Exception handling is notorious for its complexity and impact on the
-structure of code. The main stream exception handling approach as used
-in, for instance, Java associates one or more exception handlers with
-a specific method call. If the call completes successfully, the
-handlers are ignored. If the call raises an exception, it is checked
-whether this exception can be handled locally by one of the given
-handlers.  If not, the exception is propagated to the caller of the
-current code. This model does, however, not work well in a setting
-where multiple processes are active and the occurrence of an exception
-may require recovery in several processes.
+structure of program code. The mainstream exception handling approach as
+used in, for instance, Java associates one or more exception handlers with
+a specific method call. If the call completes successfully, the handlers
+are ignored. If the call raises an exception, it is checked whether this
+exception can be handled locally by one of the given handlers.  If not,
+the exception is propagated to the caller of the current code. This
+model does, however, not work well in a setting where multiple processes
+are active and the occurrence of an exception may require recovery in
+several processes.
 
 \paragraph{Local Exception Handling}
 
@@ -780,20 +780,19 @@ rollback-recovery protocols in message-passing systems is, for
 instance, given in~\cite{568525}.
 
 In the context of system reliability, the notion of a \emph{recovery
-block} has been introduced by Randell~\cite{Randell75}. It's purpose
-was to provide several, alternative, algorithms for doing the same
-computation.  Upon completion of one algorithm, an acceptance test is
-made. If the test succeeds, the program proceeds normally, but if it
-fails a rollback is made to the system state before the algorithm was
-started and one of the alternative algorithms is tried.  In
-\cite{Klint85} this idea is applied to backtracking in string
-processing languages. It turns out that the preservation of the state
-system state can be done efficiently by only saving updates to the
-state after the last recovery point.
+block} has been introduced by Randell~\cite{Randell75}. Its purpose was
+to provide several alternative algorithms for doing the same computation.
+Upon completion of one algorithm, an acceptance test is made. If the test
+succeeds, the program proceeds normally, but if it fails a rollback is
+made to the system state before the algorithm was started and one of
+the alternative algorithms is tried.  In \cite{Klint85} this idea is
+applied to backtracking in string processing languages. It turns out
+that the preservation of the system state can be done efficiently by
+only saving updates to the state after the last recovery point.
 
 Recovery blocks also form the basis for Coordinated Atomic Actions
 described in~\cite{ZorzoEtAl97}. Recovery blocks are intended for the
-error recovery in a single process they can be generalized to
+error recovery in a single process.  They can be generalized to
 \emph{conversations} between more than one process: several processes
 can enter a conversation at different times but they can only leave it
 simultaneously, when all participating processes satisfy their
@@ -878,14 +877,14 @@ transparent since the transmitted values are ATerms (see
 in any language. Since pure values are exchanged, there is no need for
 distributed garbage collection.
 
-Note that the call-by-reference model can easily be mimicked in
-the \TB. For instance, one tool can maintain a shared database and
-can communicate with other tools using record keys and field names.
-In this way, only the values of record fields have to be exchanged.
-In this way, the access control to the shared database can be spelled
-out in detail and concurrency conflicts can be avoided.  This solves
-one of the major disadvantages of the pure call-by-reference model in
-a distributed environment.
+Note that the call-by-reference model can easily be mimicked in the
+\TB. For instance, one tool can maintain a shared database and can
+communicate with other tools using record keys and field names so that
+only the values of record fields have to be exchanged. In this way the
+access control to the shared database can be spelled out in detail and
+concurrency conflicts can be avoided. This solves one of the major
+disadvantages of the pure call-by-reference model in a distributed
+environment.
 
 The downside is, however, that the \TB\ becomes a data bottleneck when
 huge values really have to be transmitted between tools. Currently, two
@@ -902,7 +901,7 @@ call-by-reference and then we come back to implications for the \TB\ design.
 
 \subsection{Related frameworks: Java RMI, RMI-IIOP and Java IDL}
 
-Given our needs and desires for a next generation ToolBus, it is
+Given our needs and desires for a next generation \TB\, it is
 interesting to see what other solutions are applied in similar projects.
 In this section, we briefly look at three related mechanisms:
 
@@ -921,18 +920,18 @@ RMI, but uses IIOP as the underlying protocol;
 
 \paragraph{Java RMI}
 
-Java Remote Method Invocation is similar to the ToolBus architecture in
+Java Remote Method Invocation is similar to the \TB\ architecture in
 the sense that it connects different tools, possibly running on different
-machines. It differs from the ToolBus setting because it is strictly
+machines. It differs from the \TB\ setting because it is strictly
 Java based: only components written in Java can communicate via RMI.
 
 For components to work together in RMI, first a \emph{remote interface}
 is established. This is a Java interface that has a ``real'' implementation
 in the tool (or \emph{server}) and a ``stub'' implementation on the
 client sides (Figure~\ref{Fig:rmi}). The interface is written by the
-programmer as opposed to the generated interfaces in a ToolBus setting
+programmer as opposed to the generated interfaces in a \TB\ setting
 where they are derived from the communication patterns found in the
-ToolBus script. The stubs in the RMI setting are then generated from
+\TB\ script. The stubs in the RMI setting are then generated from
 this Java interface using \texttt{rmic}: the RMI compiler. Stubs act as
 a client-side proxy, delegating the method call via the RMI system to
 the server object. In RMI, any object that implements a remote interface
@@ -1018,15 +1017,15 @@ CORBA details).
 
 \paragraph{Feature summary}
 Figure~\ref{Fig:feature-overview} shows some of the similarities and
-differences in ToolBus, RMI, RMI-IIOP and Java IDL.
+differences in \TB\, RMI, RMI-IIOP and Java IDL.
 
 \begin{figure}[tb]
 \begin{center}
 \begin{tabular}{|l||l|l|l|l|}\hline
-              & ToolBus & RMI & RMI-IIOP & Java IDL \\ \hline\hline
+              & \TB\ & RMI & RMI-IIOP & Java IDL \\ \hline\hline
 Architecture  & Component    & Client & Client & Client \\
               & coordination  & Server & Client & Server \\ \hline
-Interface     & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
+Interface     & \Tscript & Java Interface & Java Interface & IDL \\ \hline
 GC            & yes & yes & no & no \\ \hline
 parameters /  & by-value & local: by-value & local: by-value & "in" and "out" \\
 return values &          & remote: by-ref & remote: by-ref & params \\ \hline
@@ -1045,24 +1044,24 @@ overview.}
 
 \item RMI, RMI-IIOP and Java IDL make an explicit distinction
 between \emph{client} and \emph{server} sides of a set of cooperating
-components. In the ToolBus setting all components are considered equal
+components. In the \TB\ setting all components are considered equal
 (and none are more equal than others).
 
 \item In RMI and RMI-IIOP, the programmer writes a Java interface which
 describes the component's incoming and outgoing method signature, from
 which stubs and skeletons are generated. In Java IDL a CORBA interface
-is written. In the ToolBus setting, these signatures are generated from
-the ToolBus script which describes much more of the component's behavior
+is written. In the \TB\ setting, these signatures are generated from
+the \TB\ script which describes much more of the component's behavior
 in terms of method call interaction, rather than just method signatures.
 
-\item The ToolBus takes care of garbage collection of the ATerms that
+\item The \TB\ takes care of garbage collection of the ATerms that
 are used to represent data as it is sent from one component to another.
 RMI allows programmers access to Java's Distributed Garbage Collection
 API. In RMI-IIOP and Java IDL however, this is not possible, because
 the underlying CORBA architecture is used, which does not support
 (distributed) GC, but places this burden entirely on the programmers
 
-\item In the ToolBus, all data is sent by-value. RMI and RMI-IIOP
+\item In the \TB\, all data is sent by-value. RMI and RMI-IIOP
 use both pass-by-value and pass-by-reference, depending on whether
 the relevant data is serializable (it is a primitive type, or it
 implements \texttt{Serializable}) or is a remote object. In Java IDL
@@ -1070,15 +1069,15 @@ the components abide by IDL prescribed interfaces which have ``in''
 and ``out'' parameters.  There are no return values, but parameters are
 marked as incoming, outgoing, or both (``in/out'' parameters).
 
-\item The ToolBus allows components in any language for which a
-ToolBus adapter exist. Programming languages such as C and Java are
+\item The \TB\ allows components in any language for which a
+\TB\ adapter exist. Programming languages such as C and Java are
 supported, but adapters also exist for a wide range of applications,
 including e.g. Prolog, MySQL, \asdf. In RMI, only Java components
 can be connected; in RMI-IIOP the service is implemented in Java, its
 functionality (client-side) is available to CORBA clients. The Java IDL
 framework is fully CORBA compliant.
 
-\item Only the ToolBus has coordination support for component interaction.
+\item Only the \TB\ has coordination support for component interaction.
 In the three other cases any undesired sequence of incoming and outgoing
 method calls will have to be prohibited by adding code to the component's
 internals.
@@ -1150,8 +1149,8 @@ experimentation with the features mentioned in this paper.
 \section*{Acknowledgments}
 
 We thank Pieter Olivier for his contribution and input to the many
-interesting and fruitful discussions we have had about ToolBus related
-issues, and his efforts to get \url{www.gamesquare.nl} ToolBus enabled.
+interesting and fruitful discussions we have had about \TB\ related
+issues, and his efforts to get \url{www.gamesquare.nl} \TB\ enabled.
 
 \bibliographystyle{plain} 
 \bibliography{fmco02} 
