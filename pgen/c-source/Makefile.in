@@ -1,6 +1,6 @@
 #
 # Makefile.in for target "ParseTable-Generator" 
-# generated automagically on Thu Nov 11 16:49:36 MET 1999
+# generated automagically on Thu Nov 18 13:20:10 MET 1999
 #
 #
 # $Id$
@@ -39,7 +39,10 @@ top_srcdir	:= @top_srcdir@
 
 # Default compiler to use
 CC=@CC@
-RANLIB=@RANLIB@  
+# Building libraries: ar and ranlib
+AR=@AR@
+AR_FLAGS=cr
+RANLIB=@RANLIB@
 
 # DEBUG-LIBS: libraries containing debugging information
 DEBUG-LIBS	 = $(LOCALLIBS:=-dbg) $(LIBS)
@@ -83,7 +86,6 @@ XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/l
 DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)
 LIBS		:= @LIBS@ $(XLIBS)
-AR		= ar
 
 SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/ParseTable-Generator.module-list)
 SRCS		:= $(SPEC_SRCS) init.c
@@ -98,7 +100,7 @@ INCLUDEFILES	:=
 
 # Make rules
 
-all:	${LIBFILES} ${BINFILES} 
+all:	${BINFILES}
 
 libs:	${LIBFILES}
 
@@ -115,10 +117,10 @@ install:	${BINFILES}
 	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
 libParseTable-Generator-$(CC).a:	$(STD-OBJS)
-	$(AR) cr $@ $(STD-OBJS)
-	$(RANLIB) $@ 
+	$(AR) $(AR_FLAGS) $@ $(STD-OBJS)
+	$(RANLIB) $@
 
-ParseTable-Generator:	$(STD-OBJS)
+ParseTable-Generator:	$(LIBFILES)
 	$(CC) $(STD-LD-FLAGS) -o $@ $(LIBDIR) $(STD-LIBS)
 
 ParseTable-Generator-debug:	$(DEBUG-OBJS)
