@@ -1,6 +1,7 @@
 $Id$
 
-2003/07/24 (markvdb@cwi.nl)
+2003/07/24 ({jurgenv,markvdb}@cwi.nl)
+ * Added lexical restrictions on ModuleWord and ModuleId.
  * Added a warning when literals are detected in the right hand side
    of productions rules.
 
