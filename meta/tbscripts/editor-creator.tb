@@ -47,6 +47,8 @@ endlet
 process EditorCreator is
 let
   Id         : int,
+  Pid1       : int,
+  Pid2       : int,
   Path       : term,
   Time       : term,
   Tree       : term,
@@ -64,9 +66,9 @@ in
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?)) .
-      create(TextEditor("syntax", EditorId), Id?) .
+      create(TextEditor("syntax", EditorId), Pid1?) .
       snd-msg(set-filename(EditorId, FileName)) .
-      create(EditSyntax(EditorId, ModuleName), Id?)
+      create(EditSyntax(EditorId, ModuleName), Pid2?) 
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
       snd-msg(move-editor-to-front(EditorId))
@@ -79,16 +81,20 @@ in
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?)) .
-      create(TextEditor("equations", EditorId), Id?) .
+      create(TextEditor("equations", EditorId), Pid1?) .
       snd-msg(set-filename(EditorId, FileName)) .
-      create(EditEquations(EditorId, ModuleName), Id?)
+      create(EditEquations(EditorId, ModuleName), Pid2?)
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
       snd-msg(move-editor-to-front(EditorId))
     )
   +
     %% Edit a Term from file
-    rec-msg(edit-term-file(ModuleName?, FileName?)) .
+    (rec-msg(edit-term-file(ModuleName?, FileName?)).
+     Tree := none
+     +
+     rec-msg(edit-term-file-with-tree(ModuleName?, FileName?, Tree?)) 
+    ).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?))
@@ -97,16 +103,16 @@ in
       snd-msg(delete-text-editor(EditorId)) .
       snd-msg(delete-structure-editor(EditorId))
     ) .
-    create(TextEditor("term", EditorId), Id?) .
+    create(TextEditor("term", EditorId), Pid1?) .
     snd-msg(open-trm-file(FileName)) .
     (
       rec-msg(opened-file(FileName, text(Text?), Path?, Time?)) .
       snd-msg(set-filename(EditorId, Path)) .
-      create(EditTerm(EditorId, ModuleName, Text), Id?)
+      create(EditTerm(EditorId, ModuleName, Text, Tree), Pid2?)
       +
       rec-msg(error-opening(FileName)) .
       snd-msg(set-filename(EditorId, FileName)) .
-      create(EditTerm(EditorId, ModuleName, ""), Id?)
+      create(EditTerm(EditorId, ModuleName, "", Tree), Pid2?)
     )
   +
     rec-msg(text-editor-disconnected(EditorId?)) .

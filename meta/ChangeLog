@@ -1,5 +1,10 @@
 # $Id$
 
+2001/12/21 (jurgenv@cwi.nl)
+ * The normal form after reducing can now be inspected using the
+   structure editor without parsing first. This is needed for debugging
+   specifications.
+
 2001/12/07 (vandenbr@loria.fr)
  * Activated the restore brackets tool in Meta-Environment after
    reducing a term.

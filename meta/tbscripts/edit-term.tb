@@ -34,7 +34,8 @@ let
   FileName    : term,
   ErrList     : list,
   Equations   : term,
-  Table       : term
+  Table       : term,
+  ReductEditorId : term
 in
   Id := process-id .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
@@ -67,7 +68,7 @@ in
 
       snd-msg(save-text-file(FileName, Text)) .
       rec-msg(save-done(FileName)) .
-      snd-msg(edit-term-file(ModuleName, FileName))
+      snd-msg(edit-term-file-with-tree(ModuleName, FileName, NormalForm))
     +
       rec-msg(rewrite-errors(ErrList?)) .
       snd-msg(display-rewrite-errors(ErrList))
@@ -80,7 +81,7 @@ in
   )
 endlet
 
-process EditTerm(EditorId: term, ModuleName: str, Text: str) is
+process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
 let
   NormalForm : term,
   Focus      : term,
@@ -89,7 +90,11 @@ let
   Killed     : term
 in
   subscribe(syntax-changed(ModuleName)) . 
-  snd-msg(initialize-structure-editor(EditorId, Text)) .
+  if equal(quote(Tree), none) then 
+    snd-msg(initialize-structure-editor(EditorId, Text)) 
+  else 
+    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) 
+  fi  . 
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
   Killed := false .
