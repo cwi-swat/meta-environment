@@ -2,6 +2,6 @@
 <classpath>
     <classpathentry kind="src" path=""/>
     <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
-    <classpathentry kind="lib" path="lib/aterm-1.6.8.jar" rootpath="" sourcepath="/toolbusNG/lib/aterm-1.6.8.jar"/>
+    <classpathentry kind="lib" path="lib/aterm-1.6.8.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
