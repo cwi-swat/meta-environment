@@ -1,16 +1,14 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Kernel_Sdf_ATerms9_1sym ;
 static ATerm lf_AUX_Kernel_Sdf_ATerms9_1 ( ATerm arg1 ) ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
-static Symbol ef9sym ;
-static funcptr ef9 ;
 static Symbol ef10sym ;
 static funcptr ef10 ;
 static Symbol ef11sym ;
 static funcptr ef11 ;
-static Symbol ef7sym ;
-static funcptr ef7 ;
 static Symbol ef12sym ;
 static funcptr ef12 ;
 static Symbol ef13sym ;
@@ -29,6 +27,8 @@ static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
+static Symbol ef9sym ;
+static funcptr ef9 ;
 static Symbol ef14sym ;
 static funcptr ef14 ;
 static Symbol ef15sym ;
@@ -55,22 +55,22 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Lite
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"right\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"right\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"bracket\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"bracket\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef11 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"non-assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"non-assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"constructor\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"constructor\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef14 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"memo\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"memo\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"constructor\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"constructor\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"memo\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"memo\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef11 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"right\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"right\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"bracket\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"bracket\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef14 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"non-assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"non-assoc\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
 ef15 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-ATerms\"),w(\"\"),[l(\"aterm\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Attribute\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 ef15sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-ATerms\"),w(\"\"),[l(\"aterm\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Attribute\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 }
@@ -122,6 +122,87 @@ tmp [ 1 ] = list_tail ( atmp0100000 ) ;
 {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 tmp [ 2 ] = list_head ( tmp [ 1 ] ) ;
+if ( term_equal ( tmp [ 2 ] , make_char ( 99 ) ) ) {
+tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 111 ) ) ) {
+tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
+tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
+if ( not_empty_list ( tmp [ 5 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 115 ) ) ) {
+tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
+if ( not_empty_list ( tmp [ 6 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 116 ) ) ) {
+tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
+if ( not_empty_list ( tmp [ 7 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 114 ) ) ) {
+tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ;
+if ( not_empty_list ( tmp [ 8 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 117 ) ) ) {
+tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
+if ( not_empty_list ( tmp [ 9 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 99 ) ) ) {
+tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ;
+if ( not_empty_list ( tmp [ 10 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 116 ) ) ) {
+tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ;
+if ( not_empty_list ( tmp [ 11 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 111 ) ) ) {
+tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ;
+if ( not_empty_list ( tmp [ 12 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 114 ) ) ) {
+tmp [ 13 ] = list_tail ( tmp [ 12 ] ) ;
+if ( is_single_element ( tmp [ 13 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef7 ) ( ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+if ( term_equal ( tmp [ 2 ] , make_char ( 109 ) ) ) {
+tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
+tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 109 ) ) ) {
+tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
+if ( not_empty_list ( tmp [ 5 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 111 ) ) ) {
+tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
+if ( is_single_element ( tmp [ 6 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT_CONST ( constant1 , ( * ef8 ) ( ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
 if ( term_equal ( tmp [ 2 ] , make_char ( 108 ) ) ) {
 tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
@@ -135,7 +216,7 @@ if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 116 ) ) ) {
 tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef7 ) ( ( * ef8 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant2 , ( * ef9 ) ( ( * ef10 ) ( ) ) ) ;
 }
 }
 }
@@ -161,7 +242,7 @@ if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 116 ) ) ) {
 tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef7 ) ( ( * ef9 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant3 , ( * ef9 ) ( ( * ef11 ) ( ) ) ) ;
 }
 }
 }
@@ -195,7 +276,7 @@ if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 116 ) ) ) {
 tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
 if ( is_single_element ( tmp [ 9 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant2 , ( * ef10 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant4 , ( * ef12 ) ( ) ) ;
 }
 }
 }
@@ -227,7 +308,7 @@ if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 99 ) ) ) {
 tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 7 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant3 , ( * ef7 ) ( ( * ef11 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant5 , ( * ef9 ) ( ( * ef13 ) ( ) ) ) ;
 }
 }
 }
@@ -267,7 +348,7 @@ if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 99 ) ) ) {
 tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ;
 if ( is_single_element ( tmp [ 11 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant4 , ( * ef7 ) ( ( * ef12 ) ( ) ) ) ;
+FUNC_EXIT_CONST ( constant6 , ( * ef9 ) ( ( * ef14 ) ( ) ) ) ;
 }
 }
 }
@@ -278,87 +359,6 @@ FUNC_EXIT_CONST ( constant4 , ( * ef7 ) ( ( * ef12 ) ( ) ) ) ;
 }
 }
 }
-}
-}
-}
-}
-}
-}
-}
-}
-}
-if ( term_equal ( tmp [ 2 ] , make_char ( 99 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 111 ) ) ) {
-tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
-if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
-tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 115 ) ) ) {
-tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
-if ( not_empty_list ( tmp [ 6 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 116 ) ) ) {
-tmp [ 7 ] = list_tail ( tmp [ 6 ] ) ;
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 114 ) ) ) {
-tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ;
-if ( not_empty_list ( tmp [ 8 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 117 ) ) ) {
-tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ;
-if ( not_empty_list ( tmp [ 9 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 99 ) ) ) {
-tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ;
-if ( not_empty_list ( tmp [ 10 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 116 ) ) ) {
-tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ;
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 111 ) ) ) {
-tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ;
-if ( not_empty_list ( tmp [ 12 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 114 ) ) ) {
-tmp [ 13 ] = list_tail ( tmp [ 12 ] ) ;
-if ( is_single_element ( tmp [ 13 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant5 , ( * ef13 ) ( ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-if ( term_equal ( tmp [ 2 ] , make_char ( 109 ) ) ) {
-tmp [ 3 ] = list_tail ( tmp [ 1 ] ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 101 ) ) ) {
-tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ;
-if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 109 ) ) ) {
-tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ;
-if ( not_empty_list ( tmp [ 5 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 111 ) ) ) {
-tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ;
-if ( is_single_element ( tmp [ 6 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT_CONST ( constant6 , ( * ef14 ) ( ) ) ;
 }
 }
 }
