@@ -68,24 +68,24 @@ void SG_PrintToken(FILE *out, token c)
 {
   int i = SG_GETTOKEN(c);
 
-  if(i != SG_EOF && isprint(i)) {
-    fprintf(out, "'%c'", i);
+  if(isgraph(i)) {
+    fprintf(out, "%c", i);
   } else {
     switch(i) {
       case SG_EOF:
         fprintf(out, "EOF");
         break;
       case '\t':
-        fprintf(out, "'\\t'");
+        fprintf(out, "\\t");
         break;
       case '\n':
-        fprintf(out, "'\\n'");
+        fprintf(out, "\\n");
         break;
       case '\r':
-        fprintf(out, "'\\r'");
+        fprintf(out, "\\r");
         break;
       default:
-        fprintf(out, "'\\%d'", i);
+        fprintf(out, "\\%d", i);
         break;
     }
   }
