@@ -38,7 +38,7 @@ EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src test-help test-version \
                      lang.types perform-test.sh.src \
-                     parse-sdf2.pod genamakefile.sh.src change-sdf2-ext \
+                     parse-sdf2.pod change-sdf2-ext \
                      sdf2stats
 
 CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \

@@ -179,7 +179,6 @@ AC_OUTPUT(
    tbscripts/Makefile
    tbscripts/test/Makefile
    utils/Makefile
-   utils/genmakefile
    demo/Makefile
    demo/pico/Makefile
    demo/user-manual-examples/Makefile
