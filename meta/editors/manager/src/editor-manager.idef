@@ -13,6 +13,7 @@ let
   EditorId : term
 in
   execute(editor-manager, EM?) .
+  subscribe(delete-editor(<term>)) .
   (
     rec-msg(get-editor-id(Name?, ModuleName?)) .
     snd-eval(EM, get-editor-id(Name, ModuleName)) .
@@ -44,7 +45,7 @@ in
     rec-value(EM, editors-by-module(Editors?)) .
     snd-msg(editors-by-module(Editors))
   +
-    rec-msg(delete-editor(EditorId?)) .
+    rec-note(delete-editor(EditorId?)) .
     snd-do(EM, delete-editor(EditorId))
   ) * delta
 endlet
