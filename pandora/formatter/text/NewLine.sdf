@@ -1,6 +1,5 @@
 module NewLine
 
-imports basic/Whitespace
 imports basic/Bytes
 
 exports

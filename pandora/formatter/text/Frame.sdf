@@ -1,11 +1,10 @@
 module Frame
 
-imports Strings
+imports 
+  Strings
+  Points
 
-imports Points
-
-  exports
-    context-free start-symbols Frame Defs
+exports
   sorts Frame Defs
     context-free syntax
       Integer "," Integer "," Integer "," Integer "," Integer -> Defs

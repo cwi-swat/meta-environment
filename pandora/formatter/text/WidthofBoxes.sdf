@@ -1,9 +1,8 @@
 module WidthofBoxes
 
 imports Outstrings 
-imports Frame 
-imports languages/box/syntax/Contexts 
 imports LengthofBoxes
+imports Conditionals[Integer]
 
 exports
   context-free syntax

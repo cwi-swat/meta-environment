@@ -1,13 +1,22 @@
 module Integer-Ops
 
-imports basic/Comments
-        basic/Integers
-        Conditionals[Integer]
+imports 
+  basic/Integers
 
 exports
   context-free syntax
-    min(Integer, Integer) -> Integer 
+    Integer "/" Integer -> Integer
+    Integer "==" Integer -> Boolean 
+
+    min(Integer, Integer) -> Integer
+    remainder(Natural, Natural) -> Natural
+    ndiv(Natural, Natural) -> Natural
+
+  context-free priorities
+    Integer "/" Integer -> Integer > Integer "*" Integer -> Integer
 
 hiddens
-  variables
+   variables	
     [ij] -> Integer
+    "Int"[0-9]* -> Integer
+    "Nat"[0-9]* -> Natural 

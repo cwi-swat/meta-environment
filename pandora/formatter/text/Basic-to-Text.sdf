@@ -1,7 +1,10 @@
 module Basic-to-Text
 
-  imports
-    Frame LengthofBoxes Text
+imports
+  Frame 
+  LengthofBoxes 
+  Text
+  Conditionals[Point]
 
   exports
     context-free syntax

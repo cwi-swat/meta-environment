@@ -2,7 +2,6 @@ module Points
 
 imports 
   Integer-Ops
-  Conditionals[X]
 
 exports
   sorts Point

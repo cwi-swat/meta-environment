@@ -1,7 +1,50 @@
 equations
-
-  [min-integer] 
+  [mininum] 
     min(i, j) = i when max(i, j) == j
   
   [default] 
     min(i, j) = j 
+
+equations
+  [equal]
+     Int == Int = true
+ 
+  [default]
+     Int1 == Int2 = false
+
+equations
+  [remainder-0]
+    Nat1 > Nat2 == true
+    ===>
+    remainder(Nat1, Nat2) = remainder(Nat1 -/ Nat2, Nat2)
+
+  [default]
+    remainder(Nat1, Nat2) = Nat1
+
+equations
+  [ndiv1]
+    ndiv(Nat, Nat) = 1
+
+  [ndiv2]
+    Nat1 > Nat2 == true, 
+    Nat :=  1 + ndiv(Nat1 -/ Nat2, Nat2)
+    ===>
+    ndiv(Nat1, Nat2) = Nat
+
+  [ndiv3]
+    Nat1 < Nat2 == true
+    ===>
+    ndiv(Nat1, Nat2) = 0
+
+equations
+  [idiv1]
+    (- Nat1) / Nat2 = - ndiv(Nat1, Nat2)
+
+  [idiv1]
+    Nat1 / (- Nat2) = - ndiv(Nat1, Nat2)
+
+  [idiv1]
+    (- Nat1) / (- Nat2) = ndiv(Nat1, Nat2)
+
+  [idiv]
+    Nat1 / Nat2 = ndiv(Nat1, Nat2)

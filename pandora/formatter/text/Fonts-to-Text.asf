@@ -6,5 +6,3 @@ equations
 
   [FBtT2'1]   place f [B] with Frame and Struct and 'C =
                 place B with Frame and Struct and 'C
-
-
