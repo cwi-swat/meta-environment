@@ -837,7 +837,8 @@ in
       rec-msg(unparsed-text(Text?)) .
       snd-msg(update-module-text-in-db(ModuleName, Text, Type)) .
       (
-	rec-msg(no-updating-needed)
+	rec-msg(no-updating-needed) .
+        snd-note(clear-focus(EditorId))
       +
         rec-msg(updating-succeeded(DependingModules?)).
 	(
