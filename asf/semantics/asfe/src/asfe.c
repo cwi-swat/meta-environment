@@ -45,7 +45,9 @@ ATerm acknowledgement = NULL;
 
 void usage(char *prg, ATbool is_err)
 {
-  ATwarning("Usage: %s [options]\n"
+  ATwarning("Rewrites a parse tree according to a parsed ASF+SDF "
+	    "specification.\n"
+	    "Usage: %s [options]\n"
 	    "Options:\n"
 	    "\t-a              allow ambiguous trees as input (default off)\n"
 	    "\t-b              output terms in BAF format (default)\n"
@@ -209,6 +211,7 @@ int main(int argc, char *argv[])
       }
     }
 
+    ATsetChecking(ATtrue);
     /* Get the equations from file */
     if (!(iofile = fopen(eqsfile, "rb"))) {
       ATerror("%s: cannot open %s\n", myname, eqsfile);
