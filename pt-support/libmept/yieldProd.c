@@ -53,8 +53,8 @@ lengthOfSymbol(PT_Symbol symbol)
     return lengthOfSymbol(newSymbol);
   }
   if (PT_isSymbolAlt(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLeft(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRight(symbol);
+    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
+    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
     return lengthOfSymbol(leftSymbol) + 3 + lengthOfSymbol(rightSymbol);
   }
   if (PT_isSymbolIterPlus(symbol) 
@@ -153,8 +153,8 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     return idx;
   }
   if (PT_isSymbolAlt(symbol)) {
-    PT_Symbol leftSymbol = PT_getSymbolLeft(symbol);
-    PT_Symbol rightSymbol = PT_getSymbolRight(symbol);
+    PT_Symbol leftSymbol = PT_getSymbolLhs(symbol);
+    PT_Symbol rightSymbol = PT_getSymbolRhs(symbol);
 
     idx = yieldSymbol(leftSymbol, idx, buf, bufSize);
     buf[idx++] = ' ';

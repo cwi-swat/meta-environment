@@ -50,7 +50,7 @@
 
   [Symbol, opt, opt(<symbol(Symbol)>)], 
 
-  [Symbol, alt, alt(<left(Symbol)>,<right(Symbol)>)], 
+  [Symbol, alt, alt(<lhs(Symbol)>,<rhs(Symbol)>)], 
 
   [Symbol, sort, sort(<string(str)>)], 
 

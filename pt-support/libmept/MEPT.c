@@ -377,11 +377,11 @@ PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_makeSymbolAlt(PT_Symbol left, PT_Symbol right) */
+/*{{{  PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs) */
 
-PT_Symbol PT_makeSymbolAlt(PT_Symbol left, PT_Symbol right)
+PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)ATmakeTerm(PT_patternSymbolAlt, left, right);
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolAlt, lhs, rhs);
 }
 
 /*}}}  */
@@ -1838,9 +1838,9 @@ PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasSymbolLeft(PT_Symbol arg) */
+/*{{{  ATbool PT_hasSymbolLhs(PT_Symbol arg) */
 
-ATbool PT_hasSymbolLeft(PT_Symbol arg)
+ATbool PT_hasSymbolLhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
     return ATtrue;
@@ -1849,35 +1849,35 @@ ATbool PT_hasSymbolLeft(PT_Symbol arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getSymbolLeft(PT_Symbol arg) */
+/*{{{  PT_Symbol PT_getSymbolLhs(PT_Symbol arg) */
 
-PT_Symbol PT_getSymbolLeft(PT_Symbol arg)
+PT_Symbol PT_getSymbolLhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
 
-  ATabort("Symbol has no Left: %t\n", arg);
+  ATabort("Symbol has no Lhs: %t\n", arg);
   return (PT_Symbol)NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_setSymbolLeft(PT_Symbol arg, PT_Symbol left) */
+/*{{{  PT_Symbol PT_setSymbolLhs(PT_Symbol arg, PT_Symbol lhs) */
 
-PT_Symbol PT_setSymbolLeft(PT_Symbol arg, PT_Symbol left)
+PT_Symbol PT_setSymbolLhs(PT_Symbol arg, PT_Symbol lhs)
 {
   if (PT_isSymbolAlt(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)left, 0);
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
   }
 
-  ATabort("Symbol has no Left: %t\n", arg);
+  ATabort("Symbol has no Lhs: %t\n", arg);
   return (PT_Symbol)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasSymbolRight(PT_Symbol arg) */
+/*{{{  ATbool PT_hasSymbolRhs(PT_Symbol arg) */
 
-ATbool PT_hasSymbolRight(PT_Symbol arg)
+ATbool PT_hasSymbolRhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
     return ATtrue;
@@ -1886,28 +1886,28 @@ ATbool PT_hasSymbolRight(PT_Symbol arg)
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getSymbolRight(PT_Symbol arg) */
+/*{{{  PT_Symbol PT_getSymbolRhs(PT_Symbol arg) */
 
-PT_Symbol PT_getSymbolRight(PT_Symbol arg)
+PT_Symbol PT_getSymbolRhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
 
-  ATabort("Symbol has no Right: %t\n", arg);
+  ATabort("Symbol has no Rhs: %t\n", arg);
   return (PT_Symbol)NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_setSymbolRight(PT_Symbol arg, PT_Symbol right) */
+/*{{{  PT_Symbol PT_setSymbolRhs(PT_Symbol arg, PT_Symbol rhs) */
 
-PT_Symbol PT_setSymbolRight(PT_Symbol arg, PT_Symbol right)
+PT_Symbol PT_setSymbolRhs(PT_Symbol arg, PT_Symbol rhs)
 {
   if (PT_isSymbolAlt(arg)) {
-    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)right, 1);
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
   }
 
-  ATabort("Symbol has no Right: %t\n", arg);
+  ATabort("Symbol has no Rhs: %t\n", arg);
   return (PT_Symbol)NULL;
 }
 
@@ -2519,8 +2519,8 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_CharR
   }
   if (PT_isSymbolAlt(arg)) {
     return PT_makeSymbolAlt(
-        PT_visitSymbol(PT_getSymbolLeft(arg), acceptString, acceptRanges),
-        PT_visitSymbol(PT_getSymbolRight(arg), acceptString, acceptRanges));
+        PT_visitSymbol(PT_getSymbolLhs(arg), acceptString, acceptRanges),
+        PT_visitSymbol(PT_getSymbolRhs(arg), acceptString, acceptRanges));
   }
   if (PT_isSymbolSort(arg)) {
     return PT_makeSymbolSort(
