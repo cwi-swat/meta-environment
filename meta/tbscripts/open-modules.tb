@@ -101,28 +101,6 @@ endlet
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
 
-process HandleOpenModuleErrors(Module: str, Error: term) is
-let
-  FunSym: str
-in
-  FunSym := fun(Error)
-  . printf("HandleOpenModuleErrors: %t\n", Error)
-  .
-  if not-equal(Error, no-errors) then
-    if not-equal(FunSym, "summary") then
-      if equal(Error, name-inconsistent) then
-        Error("Name of module %s inconsistent", [Module])
-      else
-        Error("Opening module %s failed: %s", [Module, Error])
-      fi
-    else
-      snd-note(show-feedback-summary(Error))
-    fi
-  else
-    tau
-  fi
-endlet
-
 process OpenSyntax(Path: str, Type: term, ModuleName: str) is
 let
   Error: term,

@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Jul 14 08:12:08 CEST 2004 <kooiker@cwi.nl>
+ * Removed 10 unused processes 
+
 Tue Jul 13 14:24:42 CEST 2004 <jurgenv@cwi.nl>
  * Made dependency on new package toolbus-java-adapter
  * Bumped to 1.5

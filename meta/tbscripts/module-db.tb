@@ -5,17 +5,6 @@
 
 #define POSINFO_DEPTH 4
 
-
-process FilterActiveModules(ModuleId: str, Inactive: list?) is
-let
-  Modules: term
-in
-  snd-msg(ts-get-term-value("import-relations", ModuleId))
-  . rec-msg(ts-value(Modules?))
-  . snd-msg(ts-filter-keys("module-path", Modules))
-  . rec-msg(ts-keys(Inactive?))
-endlet
-
 process GetModuleImports(ModuleId: str, Imports: list?) is
   snd-msg(ts-get-term-value("import-relations", ModuleId))
   .

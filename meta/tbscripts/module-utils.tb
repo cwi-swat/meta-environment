@@ -291,26 +291,6 @@ in
   . SaveAsfSdfModule(ModuleId, Status?)
 endlet
 
-process GetRealModuleName(Name: str, Path: str, Status: term?, RealName: str?,
-                          RealPath: str?) is
-let
-  Paths: list
-in
-  Status := success
-  . snd-msg(get-module-paths)
-  . rec-msg(module-paths(Paths?))
-  . snd-msg(sm-get-new-module-name(Paths, Path, Name))
-  .
-  (
-    rec-msg(sm-new-module-name(RealPath?, RealName?))
-  +
-    rec-msg(sm-new-module-name-inconsistent)
-    . Status := module-name-inconsistent
-    . RealName := ""
-    . RealPath := ""
-  )
-endlet
-
 process SaveSdfModules(Modules: list, Status: term?) is
 let
   Runner: list,
@@ -355,11 +335,6 @@ in
     rec-msg(io-file-not-exists)
   )
 endlet
-
-process CloseModuleInDBandInvalidateDependingModules(ModuleName: str) is
-  DeleteEditorAndInvalidateDependingModules(ModuleName)
-  . snd-msg(close-module-in-db(ModuleName))
-  . rec-msg(module-closed(ModuleName))
 
 process RenameImports(OldImport: str, NewImport: str) is
 let
@@ -406,77 +381,6 @@ process AddImportInDB(Mod: str, Import: str) is
 process RemoveImportInDB(Mod: str, Import: str) is
   snd-msg(remove-import-in-db(Mod, Import))
   . rec-msg(remove-import-done)
-
-process CheckExistence(Name: str, Path: str, Status: term?) is
-let
-  FileName: str,
-  Extension: str
-in
-  snd-msg(is-module-in-db(Name))
-  .
-  (
-    rec-msg(exists-in-module-db(Name))
-    . Status := module-exists-in-db
-  +
-    rec-msg(not-exists-in-module-db(Name))
-  )
-  . snd-msg(file-extension-hook(sdf))
-  . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Name, Path, Extension))
-  . rec-msg(io-filename(FileName?))
-  . snd-msg(io-exists-file(FileName))
-  .
-  (
-    rec-msg(io-file-exists)
-    . Status := module-exists-on-disk
-  +
-    rec-msg(io-file-not-exists)
-  )
-endlet
-
-process DeleteEditorAndInvalidateDependingModules(Modulename: str) is
-let
-  Depending: list
-in
-  DeleteSessions(Modulename)
-  . GetDependingModules(Modulename, Depending?)
-  . MDB-InvalidateModules(Depending, sdf)
-endlet
-
-process DeleteEditorsForModulename(Modulename: str) is
-let
-  Depending: list,
-  Mod: str
-in
-  DeleteSessions(Modulename)
-  . GetDependingModules(Modulename, Depending?)
-  .
-  if not-equal(Depending, []) then
-    Mod := first(Depending)
-    . DeleteSessions(Mod)
-    . Depending := next(Depending)
-  fi
-  *
-  if equal(Depending, []) then
-    tau
-  fi
-endlet
-
-process HandleRenameModuleErrors(Old: str, New: str, Status: term) is
-  if not-equal(Status, success) then
-    snd-note(ui-status(errorf("Error during renaming of %s to %s: %s\n",
-                              [Old, New, Status])))
-  else
-    tau
-  fi
-
-process HandleCopyModuleErrors(Old: str, New: str, Status: term) is
-  if not-equal(Status, success) then
-    snd-note(ui-status(errorf("Error during copying of %s to %s: %s\n",
-                              [Old, New, Status])))
-  else
-    tau
-  fi
 
 process CheckSyntaxConsistency(ModuleName: str, Path: str) is
 let
