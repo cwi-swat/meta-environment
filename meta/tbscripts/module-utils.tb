@@ -11,25 +11,46 @@ in
   Id := process-id.
   (
     rec-msg(rename-module(ModuleName1?, ModuleName2?, Path?)) .
-    DoRenameModule(ModuleName1, ModuleName2, Path)
+    snd-note(ui-status(statf(Id, 
+             "Renaming %s to %s",[ModuleName1,ModuleName2]))).
+    DoRenameModule(ModuleName1, ModuleName2, Path).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(copy-module(ModuleName1?, ModuleName2?, Path?)).
-    DoCopyModule(ModuleName1, ModuleName2, Path)
+    snd-note(ui-status(statf(Id, 
+             "Copying %s to %s",[ModuleName1,ModuleName2]))).
+    DoCopyModule(ModuleName1, ModuleName2, Path).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(import-module(ModuleName1?, ModuleName2?, Path?)).
-    DoImportModule(ModuleName1, ModuleName2, Path)
+    snd-note(ui-status(statf(Id, 
+             "Adding %s to imports of %s",[ModuleName2,ModuleName1]))).
+    DoImportModule(ModuleName1, ModuleName2, Path).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(delete-module(ModuleName1?)) .
-    DoDeleteModule(ModuleName1)
+    snd-note(ui-status(statf(Id, 
+             "Deleting %s",[ModuleName1]))).
+    DoDeleteModule(ModuleName1).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(unimport-module(ModuleName1?, ModuleName2?, Path?)).
-    DoUnimportModule(ModuleName1, ModuleName2, Path)
+    snd-note(ui-status(statf(Id, 
+             "Removing %s from imports of %s",[ModuleName2,ModuleName1]))).
+    DoUnimportModule(ModuleName1, ModuleName2, Path).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(revert-module(ModuleName1?)).
-    DoRevertModule(ModuleName1)
+    snd-note(ui-status(statf(Id, 
+             "Reverting %s",[ModuleName1]))).
+    DoRevertModule(ModuleName1).
+    snd-note(ui-status(endstat(Id)))
   +
     rec-msg(close-module(ModuleName1?, Option1?)).
-    DoCloseModule(ModuleName1, Option1)
+    snd-note(ui-status(statf(Id, 
+             "Closing %s",[ModuleName1]))).
+    DoCloseModule(ModuleName1, Option1).
+    snd-note(ui-status(endstat(Id)))
   ) *
   delta
 endlet
