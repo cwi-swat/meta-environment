@@ -4,6 +4,7 @@ imports
   basic/Booleans
 
 exports
+  context-free start-symbols NatCon Natural Integer
   sorts NatCon Natural Integer
   lexical syntax
     [0-9]+ -> NatCon

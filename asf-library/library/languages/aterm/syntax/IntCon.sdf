@@ -1,10 +1,9 @@
-%%% $Id$
-                                  
 module languages/aterm/syntax/IntCon
 
 imports basic/Whitespace
 
 exports
+  context-free start-symbols NatCon IntCon
   sorts NatCon IntCon
   lexical syntax   
     [0-9]+ -> NatCon  {cons("digits")}
@@ -12,4 +11,3 @@ exports
     NatCon     -> IntCon {cons("natural")}
     pos:"+" NatCon -> IntCon {cons("positive")}
     neg:"-" NatCon -> IntCon {cons("negative")}
-   

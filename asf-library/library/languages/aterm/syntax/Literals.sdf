@@ -1,12 +1,12 @@
-%%% $Id$
-                                  
 module languages/aterm/syntax/Literals
 imports basic/Whitespace
 
 hiddens
+  context-free start-symbols AlphaNumericalEscChar DecimalEscChar EscChar L-Char
   sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
 
 exports
+  context-free start-symbols QLiteral
   sorts QLiteral
   lexical syntax
     "\\" ~[012]                    -> AlphaNumericalEscChar {cons("default")}
@@ -23,11 +23,13 @@ exports
 
     "\"" chars:L-Char* "\""        -> QLiteral {cons("quoted")}
 
+  context-free start-symbols UQLiteral
   sorts UQLiteral
   lexical syntax
     [a-z]                          -> UQLiteral {cons("one-char")}
     [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
 
+  context-free start-symbols Literal
   sorts Literal
   context-free syntax
     QLiteral  -> Literal {cons("qlit")}
