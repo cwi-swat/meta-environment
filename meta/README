@@ -108,16 +108,16 @@ Installation instructions:
 
       $ cd [the_directory_where_you've_put_the_aforementioned_distributions]
       $ cd toolbus
-      $ ./configure --prefix=.. --with-java
+      $ ./configure --prefix=/path/to/new-meta/.. --with-java
       $ gmake install
       $ cd ..
       $ cd aterm
       $ autoconf
-      $ ./configure --prefix=..
+      $ ./configure --prefix=/path/to/new-meta/..
       $ gmake install
       $ cd ..
       $ cd new-meta
-      $ ./configure --with-aterm=.. --with-toolbus=.. --with-tcldot=/path/to/directory/Tcldot (see above)
+      $ ./configure --with-aterm=/path/to/new-meta/.. --with-toolbus=/path/to/new-meta/.. --with-tcldot=/path/to/directory/Tcldot (see above)
       $ gmake install
       $ cd ..
 
