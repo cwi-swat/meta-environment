@@ -102,7 +102,7 @@ in
        snd-msg(get-table-from-db(eqs(Module))).
        (
          rec-msg(table(Table?)).
-         snd-msg(save-term-table(Module, Table)).
+         snd-msg(save-eqs-table(Module, Table)).
          rec-msg(save-done)
        +
          rec-msg(no-table)
