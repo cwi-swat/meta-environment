@@ -17,6 +17,11 @@
 
 */
 
+#ifndef _FOREST_H_
+#define _FOREST_H_  1
+
+#include  "parser.h"
+
 #define SG_APPLLABEL    "#"
 #define SG_REJECTLABEL  "X"
 
@@ -39,3 +44,4 @@ ATerm SG_TreeType(ATerm);
 ATerm SG_TermYield(ATerm);
 ATerm SG_DotTermYield(ATerm);
 
+#endif  /* _FOREST_H_ */

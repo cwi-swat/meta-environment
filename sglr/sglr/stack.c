@@ -14,11 +14,8 @@
 
 #include <stdlib.h>
 
-#include "parse-table.h"
+#include "mem-alloc.h"
 #include "stack.h"
-#include "parser.h"
-
-#include "mem-alloc.h"  /* Note: BOEHM GC caused weird things at one point */
 
 
 enum STATOP {CLR, DEC, INC, NOP};
@@ -205,7 +202,7 @@ void SG_StackCleanupList(int Mode, stack *st)
         size += SG_GC_CHUNK;
         gcstacks = SG_Malloc(size * sizeof(stack *));
       } else if(count >= size) {
-        size += SG_GC_CHUNK;        
+        size += SG_GC_CHUNK;
         gcstacks = SG_Realloc(gcstacks, size * sizeof(stack *));
       }
 #ifdef DEBUG

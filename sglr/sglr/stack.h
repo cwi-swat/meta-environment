@@ -13,6 +13,11 @@
 
 */
 
+#ifndef _STACK_H_
+#define _STACK_H_ 1
+
+#include "parse-table.h"
+
 /*
  The macro |shift(h, l)| indicates whether a list-type data
  structure (containing head and tail pointers) |l| is empty. If it
@@ -78,7 +83,9 @@ typedef struct stack {
 #endif
   struct stack  *kid;
   st_links      *links;
-//  ATbool        rejected;
+/*
+  ATbool        rejected;
+ */
   ATbool        protected;
 } stack;
 
@@ -98,7 +105,9 @@ typedef struct stacks {
 #define SG_LK_TREE(l)           ((l)->tree)      /* Tree of a link * */
 #define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
 
-//#define SG_LK_REJECTED(x)       (SG_LK_STACK(x)->rejected)
+/*
+#define SG_LK_REJECTED(x)       (SG_LK_STACK(x)->rejected)
+ */
 #define SG_LK_REJECTED(x)       (x)->rejected
 #define SG_LK_PROTECTED(x)      (x)->protected
 
@@ -128,3 +137,5 @@ void     SG_MarkLinkUnrejected(st_link *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
 ATbool   SG_SubStack(stack *, stack *);
+
+#endif  /* _STACK_H_ */

@@ -17,11 +17,8 @@
 
 #include <aterm2.h>
 
-#include "parse-table.h"
-#include "stack.h"
-#include "parser.h"
-#include "forest.h"
 #include "mem-alloc.h"
+#include "forest.h"
 #include "sglr.h"
 
 

@@ -26,8 +26,6 @@
   #include <a2toa1.h>
 #endif
 
-#include "parse-table.h"
-#include "stack.h"
 #include "parser.h"
 #include "forest.h"
 #include "tree-to-dot.h"
@@ -295,9 +293,7 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), text_length);
 
   result = SG_Result(sort);
-  ATprotect(&result);
   SG_ParserCleanup();
-  ATunprotect(&result);
 
   return result;
 }
@@ -537,9 +533,12 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
       /* ambiguity */
       if(SG_DEBUG)
-        ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d\n",
-                            SG_ST_STATE(st0), SG_ST_STATE(st1));
-      if (!reject) {      /* Don't bother to represent rejects prods -- J$ */
+        ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d%s\n",
+                            SG_ST_STATE(st0), SG_ST_STATE(st1),
+                            reject?" {reject}":"");
+      if (reject) {     /* Don't bother to represent rejects prods -- J$ */
+        SG_PropagateReject(st1);
+      } else {
 /*
   The existing stack may already be rejected; in this case, no amb-node
   should be created, and the existing stack must be "unrejected".
@@ -547,13 +546,12 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   production, it may have to remain rejected.
  */
         if(SG_Rejected(st1)) {
+/* DISABLED for now -- experimental!
           SG_PropagateUnreject(st1);
+ */
         } else {
           SG_Amb(SG_LK_TREE(nl), t);
         }
-      } else {
-        SG_PropagateReject(st1);
-
 #ifdef DEBUG
         SG_ShowStackOffspring(st1);
 #endif
@@ -693,13 +691,42 @@ void SG_AddStackHist(stack *parent, stack *kid)
 
 void SG_PropagateReject(stack *st)
 {
-  ATermList l;
-  ATermInt  annot;
+  ATermList l, ambs, idxs, oldambs, oldidxs,
+            newambs = ATempty, newidxs = ATempty, clearidxs = ATempty;
+  ATermInt  idx;
+  ATerm     compost, t, i;
 
   while(st != NULL) {
-    annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(head(SG_ST_LINKS(st))),
-                                       SG_ApplLabel());
-    l = SG_AmbTable(SG_AMBTBL_LOOKUP, annot, NULL);
+    compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
+    idx = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel());
+    l = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL);
+    if(!ATisEmpty(l)) {
+      compost = ATremoveAnnotation(compost, SG_ApplLabel());
+      ambs = oldambs = (ATermList) ATgetFirst(l);
+      idxs = oldidxs = (ATermList) ATelementAt(l, 1);
+      while(ambs && !ATisEmpty(ambs)) {
+        t = ATgetFirst(ambs);
+        i = ATgetFirst(idxs);
+        ambs = ATgetNext(ambs);
+        idxs = ATgetNext(idxs);
+        if(!ATisEqual(compost, t)) {   /* Skip the term creating the ambiguity! */
+          newambs = ATinsert(newambs, t);
+          newidxs = ATinsert(newidxs, i);
+        } else {
+          clearidxs = ATinsert(clearidxs, i);
+        }
+      }
+      if (!ATisEmpty(clearidxs)) {            /*  Amb-table must change    */
+        if(ATgetLength(newidxs) <= 1) {       /*  Ambiguity fully resolved */
+          SG_MaxNrAmb(SG_NRAMB_DEC);
+          clearidxs=oldidxs;
+        }
+        for(; !ATisEmpty(clearidxs); clearidxs=ATgetNext(clearidxs)) {
+          SG_AmbTable(SG_AMBTBL_REMOVE, (ATermInt)ATgetFirst(clearidxs), NULL);
+        }
+      }
+      return;
+    }
     SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
 /*
     SG_MarkStackRejected(st);
@@ -710,7 +737,17 @@ void SG_PropagateReject(stack *st)
 
 void SG_PropagateUnreject(stack *st)
 {
+  ATermList l;
+  ATermInt  annot;
+
+ATfprintf(stderr, "unrejecting %xd\n", st);
   while(st != NULL) {
+    annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(head(SG_ST_LINKS(st))),
+                                       SG_ApplLabel());
+    l = SG_AmbTable(SG_AMBTBL_LOOKUP, annot, NULL);
+    if(!ATisEmpty(l)) {
+ATfprintf(stderr, "unreject: %xd contains an amb link: %t\n", st, l);
+    }
     SG_MarkLinkUnrejected(head(SG_ST_LINKS(st)));
 /*
     SG_MarkStackUnrejected(st);

@@ -19,8 +19,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "parse-table.h"
-#include "mem-alloc.h"
+#include  "mem-alloc.h"
+#include  "parse-table.h"
 #include  "sglr.h"
 
 /*

@@ -180,7 +180,7 @@ love:
 
 
 # The GNU getopt sources ${GETOPTC} might not compile silently
-# when using a high warning level in a really pedantic compiler 
+# when using a high warning level in a really pedantic compiler
 
 getopt.o: getopt.c
 	${CC} -O3 -c $<

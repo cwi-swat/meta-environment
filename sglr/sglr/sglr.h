@@ -4,6 +4,9 @@
  * The interface to the public SGLR functions
  */
 
+#ifndef _SGLR_H_
+#define _SGLR_H_  1
+
 #include  <aterm1.h>
 
 /*
@@ -98,3 +101,5 @@ enum SGmodeFlags {
 #define SG_GC              (SG_Mode  &  SG_BIT(SG_GCFLAG))
 #define SG_GC_ON()         (SG_Mode |=  SG_BIT(SG_GCFLAG))
 #define SG_GC_OFF()        (SG_Mode &= ~SG_BIT(SG_GCFLAG))
+
+#endif  /* _SGLR_H_ */

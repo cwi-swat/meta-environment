@@ -26,8 +26,6 @@
 #include "getopt.h"
 #include "sglr.h"
 
-#include "parse-table.h"
-#include "stack.h"
 #include "parser.h"
 #include "tree-to-dot.h"
 

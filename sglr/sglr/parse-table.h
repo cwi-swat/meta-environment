@@ -4,7 +4,7 @@
 */
 
 #ifndef _PARSE_TABLE
-#define _PARSE_TABLE
+#define _PARSE_TABLE  1
 
 #include <aterm2.h>
 

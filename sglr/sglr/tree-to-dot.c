@@ -12,10 +12,8 @@
 
 #include <aterm2.h>
 
-#include "parse-table.h"
-#include "stack.h"
-#include "parser.h"
 #include "forest.h"
+#include  "tree-to-dot.h"
 
 ATerm prev_char_parent;
 char  prev_char;
@@ -262,7 +260,7 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 
   prev_char_parent = NULL;
 
-  ATfprintf(dot, "strict digraph ParseTree { \n\tordering=out;\n");
+  ATfprintf(dot, "strict digraph ParseTree {\n\tordering=out;\n");
   SG_TreeToDot(dot, t, 0, NULL, suppress);
   ATfprintf(dot, "}\n");
 }

@@ -1,7 +1,7 @@
 /* $Id$ */
 
-#ifndef _MEM_ALLOC
-#define _MEM_ALLOC
+#ifndef _MEM_ALLOC_H_
+#define _MEM_ALLOC_H_ 1
 
 #ifdef HAVE_BOEHMGC
   #include <gc.h>
@@ -22,4 +22,4 @@
   #define SG_free(o)      free(o)
 #endif
 
-#endif
+#endif  /* _MEM_ALLOC_H_ */
