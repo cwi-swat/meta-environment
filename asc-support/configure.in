@@ -109,6 +109,15 @@ AC_ARG_WITH(toolbus-bin,
    TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
 AC_SUBST(TOOLBUSBIN)
 
+dnl Handle --with-debug-c-code to activate c debug info 
+dnl and shut off optimizations
+CFLAGS="-Wall -O2 -DNDEBUG"
+AC_ARG_WITH(debug-c-code,
+   [ --with-debug-c-code      C flags set to -Wall -g],
+   CFLAGS="-Wall -g"
+)
+AC_SUBST(CFLAGS)
+
 if test "a${TOOLBUS}" = "a"; then
  dnl Default locations of used components
  AC_PATH_PROG(TOOLBUS, toolbus, no)
