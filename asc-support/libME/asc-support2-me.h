@@ -5,11 +5,6 @@
 #include "asc-apply-me.h"
 #include <MEPT-utils.h>
 
-int asc_support_main(int argc, char *argv[], 
-		     void (*register_all)(void), 
-		     void (*resolve_all)(void),
-		     void (*init_all)(void));
-
 extern ATerm innermost(PT_Tree tree);
 extern PT_ParseTree toasfix(ATerm tree);
 void ASC_initRunTime(int tableSize);
