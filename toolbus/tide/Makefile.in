@@ -36,9 +36,10 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-tidedir		= $(libdir)/tide
-bitmapdir	= $(libdir)/bitmaps
-includedir      = $(prefix)/include
+datadir		= @datadir@
+tidedir		= $(datadir)/tide
+bitmapdir	= $(datadir)/bitmaps
+includedir      = @includedir@
 
 TOOLBUS		= @top_srcdir@/src/toolbus
 CTIF		= @top_srcdir@/src/ctif

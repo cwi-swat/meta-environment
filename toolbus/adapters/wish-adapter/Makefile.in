@@ -12,8 +12,9 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/doc
-includedir      = $(prefix)/include
+includedir      = @includedir@
 
 SHELL		= /bin/sh
 
@@ -39,13 +40,14 @@ DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 ADAPTER-NAME    = wish-adapter
 PROGRAMS        = wish-adapter
 SOURCE          = wish-adapter.c.nw
-LIBFILES        = tb.tcl
+LIBFILES        = 
+DATAFILES       = tb.tcl
 DOC             = wish-adapter.guide.tex
 SRCDOC          = wish-adapter.c.tex
 GENSRC          = wish-adapter.c
 
 EXTRA_INCLUDES	=
-EXTRA_DEFS	= -DTBTCL=\"$(libdir)/tb.tcl\" -DLIBDIR=\"$(libdir)\"
+EXTRA_DEFS	= -DTBTCL=\"$(datadir)/tb.tcl\" -DLIBDIR=\"$(datadir)\"
 EXTRA_LIBS	=
 
 # Here you can add the rules that actually build your adapter:
@@ -75,11 +77,11 @@ dist: $(DISTFILES)
 	done
 
 install: $(PROGRAMS) $(LIBFILES)
-	for file in $(PROGRAMS); do\
+	for file in $(PROGRAMS); do \
 	  $(INSTALL) $$file $(bindir); \
 	done
-	for file in $(LIBFILES); do\
-	  $(INSTALL) $$file $(libdir); \
+	for file in $(DATAFILES); do \
+	  $(INSTALL) $$file $(datadir); \
 	done
 
 doc:	$(SRCDOC) $(DOC)

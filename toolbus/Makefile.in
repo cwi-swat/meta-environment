@@ -12,9 +12,10 @@ prefix 		= @prefix@
 exec_prefix 	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-bitmapdir	= $(libdir)/bitmaps
-tidedir		= $(libdir)/tide
-includedir	= $(prefix)/include
+datadir		= @datadir@
+bitmapdir	= $(datadir)/bitmaps
+tidedir		= $(datadir)/tide
+includedir	= @includedir@
 
 CLEAN		= @CLEAN@
 

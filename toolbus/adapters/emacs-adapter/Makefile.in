@@ -12,8 +12,9 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/doc
-includedir      = $(prefix)/include
+includedir      = @includedir@
 
 SHELL		= /bin/sh
 
@@ -39,7 +40,8 @@ DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 ADAPTER-NAME    = emacs-adapter
 PROGRAMS        = emacs-adapter start-emacs
 SOURCE          = emacs-adapter.c
-LIBFILES        = tb.el
+LIBFILES        = 
+DATAFILES       = tb.el
 DOC             =  #emacs-adapter.guide.tex
 SRCDOC          = #emacs-adapter.c.tex
 GENSRC          = emacs-adapter.c
@@ -74,8 +76,8 @@ install: $(PROGRAMS) $(LIBFILES)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done
-	for file in $(LIBFILES); do\
-	  $(INSTALL) $$file $(libdir); \
+	for file in $(DATAFILES); do\
+	  $(INSTALL) $$file $(datadir); \
 	done
 
 doc:	$(SRCDOC) $(DOC)

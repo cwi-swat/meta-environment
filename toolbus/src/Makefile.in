@@ -34,7 +34,8 @@ prefix 		= @prefix@
 exec_prefix 	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= $(prefix)/include
+datadir		= @datadir@
+includedir	= @includedir@
 
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS) -o $@
@@ -162,8 +163,8 @@ install: ${TARGETS}
 	$(INSTALL) ctif $(bindir)
 	$(INSTALL) script2latex $(bindir)
 	$(INSTALL) verbatim $(bindir)
-	$(INSTALL) -m 644 logger.tcl $(libdir)
-	$(INSTALL) -m 644 viewer.tcl $(libdir)
+	$(INSTALL) -m 644 logger.tcl $(datadir)
+	$(INSTALL) -m 644 viewer.tcl $(datadir)
 	for file in libtb.a $(SHARED_TB_LIB); do \
 	  $(INSTALL) $$file $(libdir); \
 	  ${RANLIB} ${libdir}/$$file; \

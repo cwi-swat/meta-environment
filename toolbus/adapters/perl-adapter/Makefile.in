@@ -14,8 +14,9 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/doc
-includedir      = $(prefix)/include
+includedir      = @includedir@
 
 SHELL		= /bin/sh
 
@@ -41,7 +42,8 @@ DISTFILES	= Makefile.in $(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 ADAPTER-NAME    = perl-adapter
 PROGRAMS        = perl-adapter
 SOURCE          = perl-adapter.c
-LIBFILES        = tb.perl
+LIBFILES        = 
+DATAFILES       = tb.perl
 DOC             = perl-adapter.guide.tex
 SRCDOC          =
 GENSRC          =
@@ -76,8 +78,8 @@ install: $(PROGRAMS) $(LIBFILES)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done
-	for file in $(LIBFILES); do\
-	  $(INSTALL) $$file $(libdir); \
+	for file in $(DATAFILES); do\
+	  $(INSTALL) $$file $(datadir); \
 	done
 
 doc:	$(SRCDOC) $(DOC)
