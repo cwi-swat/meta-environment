@@ -81,8 +81,10 @@ SUBDIRS		= c-source support-muasf
 all: depend subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # Unit test target
-test:	all
-	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+test:	compilertest
+
+compilertest:
+	@cd regress-test; ./regress-compiler 
 
 subdirs:
 	@for dir in $(SUBDIRS); \
