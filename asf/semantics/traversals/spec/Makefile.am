@@ -20,22 +20,22 @@
 
 
 EXTRA_DIST = Traversals-Add.eqs \
-             Traversals-Add.sdf2 \
+             Traversals-Add.sdf \
              Traversals-Closure.eqs \
-             Traversals-Closure.sdf2 \
+             Traversals-Closure.sdf \
              Traversals-Collect.eqs \
-             Traversals-Collect.sdf2 \
+             Traversals-Collect.sdf \
              Traversals-Imports.eqs \
-             Traversals-Imports.sdf2 \
+             Traversals-Imports.sdf \
              Traversals-Make.eqs \
-             Traversals-Make.sdf2 \
+             Traversals-Make.sdf \
              Traversals-Priorities.eqs \
-             Traversals-Priorities.sdf2 \
+             Traversals-Priorities.sdf \
              Traversals-Remove.eqs \
-             Traversals-Remove.sdf2 \
-             Traversals-Syntax.sdf2 \
+             Traversals-Remove.sdf \
+             Traversals-Syntax.sdf \
              Traversals-Utils.eqs \
-             Traversals-Utils.sdf2 \
+             Traversals-Utils.sdf \
              Traversals.eqs \
-             Traversals.sdf2
+             Traversals.sdf
 

@@ -19,8 +19,8 @@
 # $Id$
 
 
-EXTRA_DIST = Add-Eqs-Conds.eqs Add-TagId-Rejects.eqs Add-Eqs-Conds.sdf2 \
-             Add-TagId-Rejects.sdf2 Add-Eqs-Syntax.eqs \
-             Add-Var-Lex-Priorities.eqs Add-Eqs-Syntax.sdf2 \
-             Add-Var-Lex-Priorities.sdf2 Add-Lex-Syntax.eqs \
-             Add-Lex-Syntax.sdf2 meta.conf
+EXTRA_DIST = Add-Eqs-Conds.eqs Add-TagId-Rejects.eqs Add-Eqs-Conds.sdf \
+             Add-TagId-Rejects.sdf Add-Eqs-Syntax.eqs \
+             Add-Var-Lex-Priorities.eqs Add-Eqs-Syntax.sdf \
+             Add-Var-Lex-Priorities.sdf Add-Lex-Syntax.eqs \
+             Add-Lex-Syntax.sdf meta.conf
