@@ -1,4 +1,6 @@
-SUBDIRS= meta-scripts src demo test
+SUBDIRS = meta-scripts src demo test
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 

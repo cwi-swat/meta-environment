@@ -1,9 +1,11 @@
-aclocal.m4
-config.h.in
-Makefile.in
+*-*.pkg
+*.tar.gz
 Makefile
-configure
-config.status
+Makefile.in
+aclocal.m4
+autom4*
 config.cache
+config.h.in
 config.log
-asfsdf-meta*pkg
+config.status
+configure
