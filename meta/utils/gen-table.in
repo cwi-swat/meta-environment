@@ -16,7 +16,6 @@ TABLEGEN="${bindir}/ksdf2table"
 A2TOA1="${bindir}/a2toa1 -silent"
 ASOURCE="${bindir}/asource -silent"
 ADDPTFUNC="${bindir}/add-pt-func -silent"
-ADDNORMFUNC="${bindir}/add-norm-func -silent"
 TRM2BAF="${bindir}/trm2baf"
 EXTENSIONS=".sdf .sdf2"
 
@@ -50,11 +49,12 @@ done
 
 case $FASTGEN in
 	0)
-		ADDFUNC=$ADDPTFUNC
+		# Slow generation: skip ksdf2table
 		TABLEGEN="cat -u" ;;
 	*)
-		PGEN="cat -u"
-		ADDFUNC="cat -u" ;;
+		# Fast generation: ksdf2table handles *everything*
+		ADDPTFUNC="cat -u"
+		PGEN="cat -u" ;;
 esac
 
 for f in $Files
@@ -100,12 +100,12 @@ do
 		out=$dir/$file.tbl
 	fi
 	err=$dir/$file.pgen.err
-	if $ADDFUNC < $f | $PGEN | $TABLEGEN > $out 2> $err
+	if $ADDPTFUNC < $f | $PGEN | $TABLEGEN > $out 2> $err
 	then
 		rm -f $err
 	else
 		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
-		echo "PT-Gen: error (see $err)"
+		echo "TableGen: error (see $err)"
 		exit 2
 	fi
 
