@@ -6,6 +6,8 @@
    but the script now contains a magical value!
  * Factored out common functionality between all 'main' processes such
    as meta-studio, the standalone dumpers and the standalone editors
+ * Renamed ToolBus files for the standalone tools! See asfsdf-meta/src for 
+   examples on how to use them.
 
 2003/05/27 (markvdb@cwi.nl)
  * Imports are filtered against the contents of the term-store.
