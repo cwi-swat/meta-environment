@@ -8,6 +8,36 @@
 ; used to parse keyboard shortcuts
 (require 'edmacro)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; data-structure (hash-table) for storing font properties:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq categories (make-hash-table :test 'equal))
+
+(defun put-category (type category properties)
+  (puthash (list type category) properties categories)
+)
+
+(defun get-category-properties (type category)
+  (gethash (list type category) categories '(foreground-color . "black"))
+)
+
+(defun get-external-category-properties (category)
+  (get-category-properties 'EXTERNAL category)
+)
+
+(defun register-category (category properties)
+  (put-category 'EXTERNAL category properties)
+)
+
+(defun register-focus (properties)
+  (put-category 'INTERNAL 'FOCUS properties)
+)
+
+(defun get-focus-properties ()
+  (get-category-properties 'INTERNAL 'FOCUS)
+)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun init (args)
   (setq emacs-connector
     (let ((process-connection-type nil))
@@ -65,7 +95,7 @@
   (let ((modified (buffer-modified-p)))
     (clear-overlays 'FOCUS)
     (let ((overlay (make-overlay start end nil nil)))
-      (overlay-put overlay 'face (get-category 'FOCUS))
+      (overlay-put overlay 'face (get-focus-properties))
       (overlay-put overlay 'category 'FOCUS)
       (overlay-put overlay 'priority 2)
     )
@@ -84,25 +114,12 @@
       (setq overlays (cdr overlays)))
     ))
 
-(setq categories (make-hash-table))
-
-(defun register-category (category properties)
-  (puthash category properties categories)
-)
-
-(defun register-focus (properties)
-  (puthash 'FOCUS properties categories)
-)
-
-(defun get-category (category)
-  (gethash category categories '(foreground-color . "black"))
-)
 
 (defun set-highlight (start end category)
   (setq must-send-modified ())
   (let ((modified (buffer-modified-p)))
     (let ((overlay (make-overlay start end nil nil)))
-      (overlay-put overlay 'face (get-category category))
+      (overlay-put overlay 'face (get-external-category-properties category))
       (overlay-put overlay 'category category)
       (overlay-put overlay 'priority 1)
     )
