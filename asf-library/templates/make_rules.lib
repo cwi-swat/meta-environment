@@ -1,13 +1,48 @@
 include ${top_srcdir}/templates/make_rules
-libpackagedir = ${pkgdatadir}$(subst lib,,$(subdir))
 
+# These makefile rules explain how a library should be installed
+# they also explain how builtins should be compiled and registered
+
+# Initially there are no builtin source files, the user should override this
+# variable
+PACKAGE_SRC=
+
+# Determine installation directory
+libpackagedir=${pkgdatadir}$(subst lib,,$(subdir))
+
+# Collect built-in names from SDF2 source files
+BUILTINS=$(shell grep "built-in" *.sdf | \
+                 sed -e 's@.*built-in(\"\(.*\)\").*@\1@g' | \
+                 sed -e 's@-@_@g')
+
+# What gets installed, distributed, cleaned
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
-BUILTIN_SRC=$(wildcard *.c)
+EXTRA_DIST = $(MODULES) $(PREPARED) $(PACKAGE_SRC)
+CLEANFILES+=link-test.c
+
+
+# Build a stub to test if every built-in has an implementation
+noinst_PROGRAMS=link-test
+link_test_SOURCES= $(PACKAGE_SRC) link-test.c
+link_test_LDADD=-L. -lasf-builtins \
+                -L${PT_SUPPORT}/lib -lmept \
+                -L${ATERM}/lib -lATerm
+INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
+
+# Register the source files for the built-in library
+$(PACKAGE_SRC): Makefile
+	echo "${subdir}/$*.o" >> $(top_builddir)/src/objects.lst
+
+# create the stub and at the same time register the built-ins
+link-test.c: $(PACKAGE_SRC) $(MODULES)
+	echo "${BUILTINS}" >> $(top_builddir)/src/builtins.lst
+	${top_srcdir}/utils/gen-link-test.sh "${BUILTINS}" > $@
+
+# Installation hooks take care of modifying access bits and installing
+# the files in the right order (time stamps are important here)
 
 INSTALL_READONLY = ${INSTALL} -m 0444
-
-EXTRA_DIST = $(MODULES) $(PREPARED) $(BUILTIN_SRC)
 
 install-data-hook: make-dir install-modules install-prepared make-read-only
 
