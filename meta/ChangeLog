@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2000/7/28 ({jong,olivierp}@cwi.nl)
+   * Fixed evaluator stack depth checking
+   * Added support for interrupting evaluator using signal USR1
+   * Version is now 0.1.2
+
 2000/7/26 (markvdb@cwi.nl)
    * changed .sdf2 extension standard into .sdf
    * compilation of prefix functions enabled
