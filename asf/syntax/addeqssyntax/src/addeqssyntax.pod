@@ -4,7 +4,7 @@ ADDEQSSYNTAX - Adds the "equation" syntax to an SDF definition
 
 =head1 SYNOPSIS
 
-B<addeqssyntax> [-B<bh>] [-B<i> I<file>] [-B<o> I<file>] [-B<tvV>] file0 ...
+B<addeqssyntax> [-B<bh>] [-B<m> I<module>] [-B<i> I<file>] [-B<o> I<file>] [-B<tvV>] file0 ...
 
 =head1 DESCRIPTION
 
@@ -21,6 +21,10 @@ Write term output in BAF (Binary ATerm) format. This is the default.
 =item -B<h>
 
 Displays concise usage information.
+
+=item -B<m> I<module>
+
+Indicates the topmodule for this specification.
 
 =item -B<i> I<file>
 
