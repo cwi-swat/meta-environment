@@ -55,6 +55,8 @@ typedef struct ATerm _ERR_Summary;
 typedef struct ATerm _ERR_ErrorList;
 typedef struct ATerm _ERR_Location;
 typedef struct ATerm _ERR_Area;
+typedef struct ATerm _ERR_Slice;
+typedef struct ATerm _ERR_AreaAreas;
 
 /*}}}  */
 
@@ -120,6 +122,16 @@ void ERR_protectLocation(ERR_Location *arg)
 }
 
 void ERR_protectArea(ERR_Area *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectSlice(ERR_Slice *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectAreaAreas(ERR_AreaAreas *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -304,6 +316,38 @@ ATerm ERR_AreaToTerm(ERR_Area arg)
 }
 
 /*}}}  */
+/*{{{  ERR_Slice ERR_SliceFromTerm(ATerm t) */
+
+ERR_Slice ERR_SliceFromTerm(ATerm t)
+{
+  return (ERR_Slice)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_SliceToTerm(ERR_Slice arg) */
+
+ATerm ERR_SliceToTerm(ERR_Slice arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_AreaAreasFromTerm(ATerm t) */
+
+ERR_AreaAreas ERR_AreaAreasFromTerm(ATerm t)
+{
+  return (ERR_AreaAreas)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_AreaAreasToTerm(ERR_AreaAreas arg) */
+
+ATerm ERR_AreaAreasToTerm(ERR_AreaAreas arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  list functions */
@@ -379,6 +423,42 @@ ERR_ErrorList ERR_makeErrorList5(ERR_Error elem1, ERR_Error elem2, ERR_Error ele
 }
 ERR_ErrorList ERR_makeErrorList6(ERR_Error elem1, ERR_Error elem2, ERR_Error elem3, ERR_Error elem4, ERR_Error elem5, ERR_Error elem6) {
   return (ERR_ErrorList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+int ERR_getAreaAreasLength (ERR_AreaAreas arg) {
+  return ATgetLength((ATermList) arg);
+}
+ERR_AreaAreas ERR_reverseAreaAreas(ERR_AreaAreas arg) {
+  return (ERR_AreaAreas) ATreverse((ATermList) arg);
+}
+ERR_AreaAreas ERR_appendAreaAreas(ERR_AreaAreas arg, ERR_Area elem) {
+  return (ERR_AreaAreas) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+ERR_AreaAreas ERR_concatAreaAreas(ERR_AreaAreas arg0, ERR_AreaAreas arg1) {
+  return (ERR_AreaAreas) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+ERR_AreaAreas ERR_sliceAreaAreas(ERR_AreaAreas arg, int start, int end) {
+  return (ERR_AreaAreas) ATgetSlice((ATermList) arg, start, end);
+}
+ERR_Area ERR_getAreaAreasAreaAt(ERR_AreaAreas arg, int index) {
+ return (ERR_Area)ATelementAt((ATermList) arg,index);
+}
+ERR_AreaAreas ERR_replaceAreaAreasAreaAt(ERR_AreaAreas arg, ERR_Area elem, int index) {
+ return (ERR_AreaAreas) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+ERR_AreaAreas ERR_makeAreaAreas2(ERR_Area elem1, ERR_Area elem2) {
+  return (ERR_AreaAreas) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+ERR_AreaAreas ERR_makeAreaAreas3(ERR_Area elem1, ERR_Area elem2, ERR_Area elem3) {
+  return (ERR_AreaAreas) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+ERR_AreaAreas ERR_makeAreaAreas4(ERR_Area elem1, ERR_Area elem2, ERR_Area elem3, ERR_Area elem4) {
+  return (ERR_AreaAreas) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+ERR_AreaAreas ERR_makeAreaAreas5(ERR_Area elem1, ERR_Area elem2, ERR_Area elem3, ERR_Area elem4, ERR_Area elem5) {
+  return (ERR_AreaAreas) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+ERR_AreaAreas ERR_makeAreaAreas6(ERR_Area elem1, ERR_Area elem2, ERR_Area elem3, ERR_Area elem4, ERR_Area elem5, ERR_Area elem6) {
+  return (ERR_AreaAreas) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
 /*}}}  */
@@ -552,6 +632,38 @@ ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endCo
 }
 
 /*}}}  */
+/*{{{  ERR_Slice ERR_makeSliceSlice(const char* id, ERR_AreaAreas areas) */
+
+ERR_Slice ERR_makeSliceSlice(const char* id, ERR_AreaAreas areas)
+{
+  return (ERR_Slice)(ATerm)ATmakeAppl2(ERR_afun11, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) areas);
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_makeAreaAreasEmpty(void) */
+
+ERR_AreaAreas ERR_makeAreaAreasEmpty(void)
+{
+  return (ERR_AreaAreas)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_makeAreaAreasSingle(ERR_Area head) */
+
+ERR_AreaAreas ERR_makeAreaAreasSingle(ERR_Area head)
+{
+  return (ERR_AreaAreas)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_makeAreaAreasMany(ERR_Area head, ERR_AreaAreas tail) */
+
+ERR_AreaAreas ERR_makeAreaAreasMany(ERR_Area head, ERR_AreaAreas tail)
+{
+  return (ERR_AreaAreas)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  equality functions */
@@ -607,6 +719,16 @@ ATbool ERR_isEqualLocation(ERR_Location arg0, ERR_Location arg1)
 }
 
 ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualSlice(ERR_Slice arg0, ERR_Slice arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualAreaAreas(ERR_AreaAreas arg0, ERR_AreaAreas arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -926,6 +1048,17 @@ ATbool ERR_hasSubjectDescription(ERR_Subject arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasSubjectLocation(ERR_Subject arg) */
+
+ATbool ERR_hasSubjectLocation(ERR_Subject arg)
+{
+  if (ERR_isSubjectLocalized(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* ERR_getSubjectDescription(ERR_Subject arg) */
 
 char* ERR_getSubjectDescription(ERR_Subject arg)
@@ -935,6 +1068,15 @@ char* ERR_getSubjectDescription(ERR_Subject arg)
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  ERR_Location ERR_getSubjectLocation(ERR_Subject arg) */
+
+ERR_Location ERR_getSubjectLocation(ERR_Subject arg)
+{
+  
+    return (ERR_Location)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -951,26 +1093,6 @@ ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, const char* description)
 
   ATabort("Subject has no Description: %t\n", arg);
   return (ERR_Subject)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSubjectLocation(ERR_Subject arg) */
-
-ATbool ERR_hasSubjectLocation(ERR_Subject arg)
-{
-  if (ERR_isSubjectLocalized(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_Location ERR_getSubjectLocation(ERR_Subject arg) */
-
-ERR_Location ERR_getSubjectLocation(ERR_Subject arg)
-{
-  
-    return (ERR_Location)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1119,6 +1241,26 @@ ATbool ERR_hasErrorDescription(ERR_Error arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasErrorList(ERR_Error arg) */
+
+ATbool ERR_hasErrorList(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorError(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorFatal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* ERR_getErrorDescription(ERR_Error arg) */
 
 char* ERR_getErrorDescription(ERR_Error arg)
@@ -1134,6 +1276,24 @@ char* ERR_getErrorDescription(ERR_Error arg)
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  ERR_SubjectList ERR_getErrorList(ERR_Error arg) */
+
+ERR_SubjectList ERR_getErrorList(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else if (ERR_isErrorError(arg)) {
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else 
+    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1156,44 +1316,6 @@ ERR_Error ERR_setErrorDescription(ERR_Error arg, const char* description)
 
   ATabort("Error has no Description: %t\n", arg);
   return (ERR_Error)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasErrorList(ERR_Error arg) */
-
-ATbool ERR_hasErrorList(ERR_Error arg)
-{
-  if (ERR_isErrorInfo(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isErrorWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isErrorError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isErrorFatal(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_SubjectList ERR_getErrorList(ERR_Error arg) */
-
-ERR_SubjectList ERR_getErrorList(ERR_Error arg)
-{
-  if (ERR_isErrorInfo(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
-  }
-  else if (ERR_isErrorWarning(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
-  }
-  else if (ERR_isErrorError(arg)) {
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
-  }
-  else 
-    return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1319,6 +1441,17 @@ ATbool ERR_hasSubjectListHead(ERR_SubjectList arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasSubjectListTail(ERR_SubjectList arg) */
+
+ATbool ERR_hasSubjectListTail(ERR_SubjectList arg)
+{
+  if (ERR_isSubjectListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  ERR_Subject ERR_getSubjectListHead(ERR_SubjectList arg) */
 
 ERR_Subject ERR_getSubjectListHead(ERR_SubjectList arg)
@@ -1328,6 +1461,15 @@ ERR_Subject ERR_getSubjectListHead(ERR_SubjectList arg)
   }
   else 
     return (ERR_Subject)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_SubjectList ERR_getSubjectListTail(ERR_SubjectList arg) */
+
+ERR_SubjectList ERR_getSubjectListTail(ERR_SubjectList arg)
+{
+  
+    return (ERR_SubjectList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1344,26 +1486,6 @@ ERR_SubjectList ERR_setSubjectListHead(ERR_SubjectList arg, ERR_Subject head)
 
   ATabort("SubjectList has no Head: %t\n", arg);
   return (ERR_SubjectList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSubjectListTail(ERR_SubjectList arg) */
-
-ATbool ERR_hasSubjectListTail(ERR_SubjectList arg)
-{
-  if (ERR_isSubjectListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_SubjectList ERR_getSubjectListTail(ERR_SubjectList arg) */
-
-ERR_SubjectList ERR_getSubjectListTail(ERR_SubjectList arg)
-{
-  
-    return (ERR_SubjectList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1418,12 +1540,52 @@ ATbool ERR_hasSummaryProducer(ERR_Summary arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasSummaryId(ERR_Summary arg) */
+
+ATbool ERR_hasSummaryId(ERR_Summary arg)
+{
+  if (ERR_isSummarySummary(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasSummaryList(ERR_Summary arg) */
+
+ATbool ERR_hasSummaryList(ERR_Summary arg)
+{
+  if (ERR_isSummarySummary(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* ERR_getSummaryProducer(ERR_Summary arg) */
 
 char* ERR_getSummaryProducer(ERR_Summary arg)
 {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  char* ERR_getSummaryId(ERR_Summary arg) */
+
+char* ERR_getSummaryId(ERR_Summary arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_getSummaryList(ERR_Summary arg) */
+
+ERR_ErrorList ERR_getSummaryList(ERR_Summary arg)
+{
+  
+    return (ERR_ErrorList)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -1440,26 +1602,6 @@ ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, const char* producer)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasSummaryId(ERR_Summary arg) */
-
-ATbool ERR_hasSummaryId(ERR_Summary arg)
-{
-  if (ERR_isSummarySummary(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* ERR_getSummaryId(ERR_Summary arg) */
-
-char* ERR_getSummaryId(ERR_Summary arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
 /*{{{  ERR_Summary ERR_setSummaryId(ERR_Summary arg, const char* id) */
 
 ERR_Summary ERR_setSummaryId(ERR_Summary arg, const char* id)
@@ -1470,26 +1612,6 @@ ERR_Summary ERR_setSummaryId(ERR_Summary arg, const char* id)
 
   ATabort("Summary has no Id: %t\n", arg);
   return (ERR_Summary)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSummaryList(ERR_Summary arg) */
-
-ATbool ERR_hasSummaryList(ERR_Summary arg)
-{
-  if (ERR_isSummarySummary(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_ErrorList ERR_getSummaryList(ERR_Summary arg) */
-
-ERR_ErrorList ERR_getSummaryList(ERR_Summary arg)
-{
-  
-    return (ERR_ErrorList)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -1606,6 +1728,17 @@ ATbool ERR_hasErrorListHead(ERR_ErrorList arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasErrorListTail(ERR_ErrorList arg) */
+
+ATbool ERR_hasErrorListTail(ERR_ErrorList arg)
+{
+  if (ERR_isErrorListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  ERR_Error ERR_getErrorListHead(ERR_ErrorList arg) */
 
 ERR_Error ERR_getErrorListHead(ERR_ErrorList arg)
@@ -1615,6 +1748,15 @@ ERR_Error ERR_getErrorListHead(ERR_ErrorList arg)
   }
   else 
     return (ERR_Error)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg) */
+
+ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg)
+{
+  
+    return (ERR_ErrorList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1631,26 +1773,6 @@ ERR_ErrorList ERR_setErrorListHead(ERR_ErrorList arg, ERR_Error head)
 
   ATabort("ErrorList has no Head: %t\n", arg);
   return (ERR_ErrorList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasErrorListTail(ERR_ErrorList arg) */
-
-ATbool ERR_hasErrorListTail(ERR_ErrorList arg)
-{
-  if (ERR_isErrorListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg) */
-
-ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg)
-{
-  
-    return (ERR_ErrorList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -1768,6 +1890,20 @@ ATbool ERR_hasLocationFilename(ERR_Location arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasLocationArea(ERR_Location arg) */
+
+ATbool ERR_hasLocationArea(ERR_Location arg)
+{
+  if (ERR_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  char* ERR_getLocationFilename(ERR_Location arg) */
 
 char* ERR_getLocationFilename(ERR_Location arg)
@@ -1777,6 +1913,18 @@ char* ERR_getLocationFilename(ERR_Location arg)
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  ERR_Area ERR_getLocationArea(ERR_Location arg) */
+
+ERR_Area ERR_getLocationArea(ERR_Location arg)
+{
+  if (ERR_isLocationArea(arg)) {
+    return (ERR_Area)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
+    return (ERR_Area)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1793,32 +1941,6 @@ ERR_Location ERR_setLocationFilename(ERR_Location arg, const char* filename)
 
   ATabort("Location has no Filename: %t\n", arg);
   return (ERR_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasLocationArea(ERR_Location arg) */
-
-ATbool ERR_hasLocationArea(ERR_Location arg)
-{
-  if (ERR_isLocationArea(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_Area ERR_getLocationArea(ERR_Location arg) */
-
-ERR_Area ERR_getLocationArea(ERR_Location arg)
-{
-  if (ERR_isLocationArea(arg)) {
-    return (ERR_Area)ATgetArgument((ATermAppl)arg, 0);
-  }
-  else 
-    return (ERR_Area)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -1876,12 +1998,112 @@ ATbool ERR_hasAreaBeginLine(ERR_Area arg)
 }
 
 /*}}}  */
+/*{{{  ATbool ERR_hasAreaBeginColumn(ERR_Area arg) */
+
+ATbool ERR_hasAreaBeginColumn(ERR_Area arg)
+{
+  if (ERR_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaEndLine(ERR_Area arg) */
+
+ATbool ERR_hasAreaEndLine(ERR_Area arg)
+{
+  if (ERR_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaEndColumn(ERR_Area arg) */
+
+ATbool ERR_hasAreaEndColumn(ERR_Area arg)
+{
+  if (ERR_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaOffset(ERR_Area arg) */
+
+ATbool ERR_hasAreaOffset(ERR_Area arg)
+{
+  if (ERR_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaLength(ERR_Area arg) */
+
+ATbool ERR_hasAreaLength(ERR_Area arg)
+{
+  if (ERR_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  int ERR_getAreaBeginLine(ERR_Area arg) */
 
 int ERR_getAreaBeginLine(ERR_Area arg)
 {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
+}
+
+/*}}}  */
+/*{{{  int ERR_getAreaBeginColumn(ERR_Area arg) */
+
+int ERR_getAreaBeginColumn(ERR_Area arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  int ERR_getAreaEndLine(ERR_Area arg) */
+
+int ERR_getAreaEndLine(ERR_Area arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 2));
+}
+
+/*}}}  */
+/*{{{  int ERR_getAreaEndColumn(ERR_Area arg) */
+
+int ERR_getAreaEndColumn(ERR_Area arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 3));
+}
+
+/*}}}  */
+/*{{{  int ERR_getAreaOffset(ERR_Area arg) */
+
+int ERR_getAreaOffset(ERR_Area arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 4));
+}
+
+/*}}}  */
+/*{{{  int ERR_getAreaLength(ERR_Area arg) */
+
+int ERR_getAreaLength(ERR_Area arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 5));
 }
 
 /*}}}  */
@@ -1898,26 +2120,6 @@ ERR_Area ERR_setAreaBeginLine(ERR_Area arg, int beginLine)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasAreaBeginColumn(ERR_Area arg) */
-
-ATbool ERR_hasAreaBeginColumn(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaBeginColumn(ERR_Area arg) */
-
-int ERR_getAreaBeginColumn(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-}
-
-/*}}}  */
 /*{{{  ERR_Area ERR_setAreaBeginColumn(ERR_Area arg, int beginColumn) */
 
 ERR_Area ERR_setAreaBeginColumn(ERR_Area arg, int beginColumn)
@@ -1928,26 +2130,6 @@ ERR_Area ERR_setAreaBeginColumn(ERR_Area arg, int beginColumn)
 
   ATabort("Area has no BeginColumn: %t\n", arg);
   return (ERR_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasAreaEndLine(ERR_Area arg) */
-
-ATbool ERR_hasAreaEndLine(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaEndLine(ERR_Area arg) */
-
-int ERR_getAreaEndLine(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 2));
 }
 
 /*}}}  */
@@ -1964,26 +2146,6 @@ ERR_Area ERR_setAreaEndLine(ERR_Area arg, int endLine)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasAreaEndColumn(ERR_Area arg) */
-
-ATbool ERR_hasAreaEndColumn(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaEndColumn(ERR_Area arg) */
-
-int ERR_getAreaEndColumn(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 3));
-}
-
-/*}}}  */
 /*{{{  ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn) */
 
 ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn)
@@ -1994,26 +2156,6 @@ ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn)
 
   ATabort("Area has no EndColumn: %t\n", arg);
   return (ERR_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasAreaOffset(ERR_Area arg) */
-
-ATbool ERR_hasAreaOffset(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaOffset(ERR_Area arg) */
-
-int ERR_getAreaOffset(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 4));
 }
 
 /*}}}  */
@@ -2030,26 +2172,6 @@ ERR_Area ERR_setAreaOffset(ERR_Area arg, int offset)
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasAreaLength(ERR_Area arg) */
-
-ATbool ERR_hasAreaLength(ERR_Area arg)
-{
-  if (ERR_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int ERR_getAreaLength(ERR_Area arg) */
-
-int ERR_getAreaLength(ERR_Area arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 5));
-}
-
-/*}}}  */
 /*{{{  ERR_Area ERR_setAreaLength(ERR_Area arg, int length) */
 
 ERR_Area ERR_setAreaLength(ERR_Area arg, int length)
@@ -2060,6 +2182,260 @@ ERR_Area ERR_setAreaLength(ERR_Area arg, int length)
 
   ATabort("Area has no Length: %t\n", arg);
   return (ERR_Area)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_Slice accessors */
+
+/*{{{  ATbool ERR_isValidSlice(ERR_Slice arg) */
+
+ATbool ERR_isValidSlice(ERR_Slice arg)
+{
+  if (ERR_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isSliceSlice(ERR_Slice arg) */
+
+inline ATbool ERR_isSliceSlice(ERR_Slice arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternSliceSlice, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasSliceId(ERR_Slice arg) */
+
+ATbool ERR_hasSliceId(ERR_Slice arg)
+{
+  if (ERR_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasSliceAreas(ERR_Slice arg) */
+
+ATbool ERR_hasSliceAreas(ERR_Slice arg)
+{
+  if (ERR_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getSliceId(ERR_Slice arg) */
+
+char* ERR_getSliceId(ERR_Slice arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_getSliceAreas(ERR_Slice arg) */
+
+ERR_AreaAreas ERR_getSliceAreas(ERR_Slice arg)
+{
+  
+    return (ERR_AreaAreas)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  ERR_Slice ERR_setSliceId(ERR_Slice arg, const char* id) */
+
+ERR_Slice ERR_setSliceId(ERR_Slice arg, const char* id)
+{
+  if (ERR_isSliceSlice(arg)) {
+    return (ERR_Slice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 0);
+  }
+
+  ATabort("Slice has no Id: %t\n", arg);
+  return (ERR_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_Slice ERR_setSliceAreas(ERR_Slice arg, ERR_AreaAreas areas) */
+
+ERR_Slice ERR_setSliceAreas(ERR_Slice arg, ERR_AreaAreas areas)
+{
+  if (ERR_isSliceSlice(arg)) {
+    return (ERR_Slice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) areas), 1);
+  }
+
+  ATabort("Slice has no Areas: %t\n", arg);
+  return (ERR_Slice)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_AreaAreas accessors */
+
+/*{{{  ATbool ERR_isValidAreaAreas(ERR_AreaAreas arg) */
+
+ATbool ERR_isValidAreaAreas(ERR_AreaAreas arg)
+{
+  if (ERR_isAreaAreasEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isAreaAreasSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isAreaAreasEmpty(ERR_AreaAreas arg) */
+
+inline ATbool ERR_isAreaAreasEmpty(ERR_AreaAreas arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternAreaAreasEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isAreaAreasSingle(ERR_AreaAreas arg) */
+
+inline ATbool ERR_isAreaAreasSingle(ERR_AreaAreas arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaAreasSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isAreaAreasMany(ERR_AreaAreas arg) */
+
+inline ATbool ERR_isAreaAreasMany(ERR_AreaAreas arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaAreasMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaAreasHead(ERR_AreaAreas arg) */
+
+ATbool ERR_hasAreaAreasHead(ERR_AreaAreas arg)
+{
+  if (ERR_isAreaAreasSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasAreaAreasTail(ERR_AreaAreas arg) */
+
+ATbool ERR_hasAreaAreasTail(ERR_AreaAreas arg)
+{
+  if (ERR_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_Area ERR_getAreaAreasHead(ERR_AreaAreas arg) */
+
+ERR_Area ERR_getAreaAreasHead(ERR_AreaAreas arg)
+{
+  if (ERR_isAreaAreasSingle(arg)) {
+    return (ERR_Area)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (ERR_Area)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_getAreaAreasTail(ERR_AreaAreas arg) */
+
+ERR_AreaAreas ERR_getAreaAreasTail(ERR_AreaAreas arg)
+{
+  
+    return (ERR_AreaAreas)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_setAreaAreasHead(ERR_AreaAreas arg, ERR_Area head) */
+
+ERR_AreaAreas ERR_setAreaAreasHead(ERR_AreaAreas arg, ERR_Area head)
+{
+  if (ERR_isAreaAreasSingle(arg)) {
+    return (ERR_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (ERR_isAreaAreasMany(arg)) {
+    return (ERR_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("AreaAreas has no Head: %t\n", arg);
+  return (ERR_AreaAreas)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_setAreaAreasTail(ERR_AreaAreas arg, ERR_AreaAreas tail) */
+
+ERR_AreaAreas ERR_setAreaAreasTail(ERR_AreaAreas arg, ERR_AreaAreas tail)
+{
+  if (ERR_isAreaAreasMany(arg)) {
+    return (ERR_AreaAreas)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("AreaAreas has no Tail: %t\n", arg);
+  return (ERR_AreaAreas)NULL;
 }
 
 /*}}}  */
@@ -2260,6 +2636,41 @@ ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBe
   }
   ATabort("not a Area: %t\n", arg);
   return (ERR_Area)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_Slice ERR_visitSlice(ERR_Slice arg, char* (*acceptId)(char*), ERR_AreaAreas (*acceptAreas)(ERR_AreaAreas)) */
+
+ERR_Slice ERR_visitSlice(ERR_Slice arg, char* (*acceptId)(char*), ERR_AreaAreas (*acceptAreas)(ERR_AreaAreas))
+{
+  if (ERR_isSliceSlice(arg)) {
+    return ERR_makeSliceSlice(
+        acceptId ? acceptId(ERR_getSliceId(arg)) : ERR_getSliceId(arg),
+        acceptAreas ? acceptAreas(ERR_getSliceAreas(arg)) : ERR_getSliceAreas(arg));
+  }
+  ATabort("not a Slice: %t\n", arg);
+  return (ERR_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_AreaAreas ERR_visitAreaAreas(ERR_AreaAreas arg, ERR_Area (*acceptHead)(ERR_Area)) */
+
+ERR_AreaAreas ERR_visitAreaAreas(ERR_AreaAreas arg, ERR_Area (*acceptHead)(ERR_Area))
+{
+  if (ERR_isAreaAreasEmpty(arg)) {
+    return ERR_makeAreaAreasEmpty();
+  }
+  if (ERR_isAreaAreasSingle(arg)) {
+    return ERR_makeAreaAreasSingle(
+        acceptHead ? acceptHead(ERR_getAreaAreasHead(arg)) : ERR_getAreaAreasHead(arg));
+  }
+  if (ERR_isAreaAreasMany(arg)) {
+    return ERR_makeAreaAreasMany(
+        acceptHead ? acceptHead(ERR_getAreaAreasHead(arg)) : ERR_getAreaAreasHead(arg),
+        ERR_visitAreaAreas(ERR_getAreaAreasTail(arg), acceptHead));
+  }
+  ATabort("not a AreaAreas: %t\n", arg);
+  return (ERR_AreaAreas)NULL;
 }
 
 /*}}}  */

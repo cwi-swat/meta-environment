@@ -3,11 +3,16 @@
 
 #include <aterm2.h>
 
+extern AFun LOC_afun4;
 extern AFun LOC_afun0;
 extern AFun LOC_afun2;
 extern AFun LOC_afun3;
 extern AFun LOC_afun1;
 
+extern ATerm LOC_patternAreaAreasMany;
+extern ATerm LOC_patternAreaAreasSingle;
+extern ATerm LOC_patternAreaAreasEmpty;
+extern ATerm LOC_patternSliceSlice;
 extern ATerm LOC_patternAreaArea;
 extern ATerm LOC_patternLocationAreaInFile;
 extern ATerm LOC_patternLocationArea;

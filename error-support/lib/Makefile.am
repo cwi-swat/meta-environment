@@ -37,7 +37,7 @@ libLocationAPI_a_SOURCES = \
 INCLUDES = -I${ATERM}/include
 
 BASIC_MODULES = StrCon NatCon
-LOCATION_MODULES = Locations Areas
+LOCATION_MODULES = Locations Areas Slices
 ERROR_MODULES = Errors
 
 api: error-api location-api

@@ -50,6 +50,8 @@ typedef struct ATerm _PLOC_StrCon;
 typedef struct ATerm _PLOC_NatCon;
 typedef struct ATerm _PLOC_Location;
 typedef struct ATerm _PLOC_Area;
+typedef struct ATerm _PLOC_Slice;
+typedef struct ATerm _PLOC_AreaAreas;
 typedef struct ATerm _PLOC_Start;
 typedef struct ATerm _PLOC_OptLayout;
 
@@ -92,6 +94,16 @@ void PLOC_protectLocation(PLOC_Location *arg)
 }
 
 void PLOC_protectArea(PLOC_Area *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void PLOC_protectSlice(PLOC_Slice *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void PLOC_protectAreaAreas(PLOC_AreaAreas *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -206,6 +218,38 @@ ATerm PLOC_AreaToTerm(PLOC_Area arg)
 }
 
 /*}}}  */
+/*{{{  PLOC_Slice PLOC_SliceFromTerm(ATerm t) */
+
+PLOC_Slice PLOC_SliceFromTerm(ATerm t)
+{
+  return (PLOC_Slice)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PLOC_SliceToTerm(PLOC_Slice arg) */
+
+ATerm PLOC_SliceToTerm(PLOC_Slice arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_AreaAreasFromTerm(ATerm t) */
+
+PLOC_AreaAreas PLOC_AreaAreasFromTerm(ATerm t)
+{
+  return (PLOC_AreaAreas)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PLOC_AreaAreasToTerm(PLOC_AreaAreas arg) */
+
+ATerm PLOC_AreaAreasToTerm(PLOC_AreaAreas arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  PLOC_Start PLOC_StartFromTerm(ATerm t) */
 
 PLOC_Start PLOC_StartFromTerm(ATerm t)
@@ -242,6 +286,89 @@ ATerm PLOC_OptLayoutToTerm(PLOC_OptLayout arg)
 /*}}}  */
 /*{{{  list functions */
 
+int PLOC_getAreaAreasLength (PLOC_AreaAreas arg) {
+  if (ATisEmpty((ATermList) arg)) {
+    return 0;
+  }
+  return (ATgetLength((ATermList) arg) / 4) + 1;
+}
+PLOC_AreaAreas PLOC_reverseAreaAreas(PLOC_AreaAreas arg) {
+  ATermList list = (ATermList) arg;
+  ATerm head;
+  ATerm sep0;
+  ATerm sep1;
+  ATerm sep2;
+  ATermList result;
+
+ if (ATisEmpty(list) || ATgetLength(list) == 1) {
+    return arg;
+  }
+
+  result = ATmakeList1(ATgetFirst(list));
+      list = ATgetNext(list);
+  sep0 = ATgetFirst(list);
+  list = ATgetNext(list);
+  sep1 = ATgetFirst(list);
+  list = ATgetNext(list);
+  sep2 = ATgetFirst(list);
+  list = ATgetNext(list);
+
+  while (!ATisEmpty(list)) {
+    result = ATinsert(result, sep2);
+    result = ATinsert(result, sep1);
+    result = ATinsert(result, sep0);
+
+   head = ATgetFirst(list);
+   result = ATinsert(result, head);
+    list = ATgetNext(list);
+
+   if (!ATisEmpty(list)) {
+  sep0 = ATgetFirst(list);
+  list = ATgetNext(list);
+  sep1 = ATgetFirst(list);
+  list = ATgetNext(list);
+  sep2 = ATgetFirst(list);
+  list = ATgetNext(list);
+   }
+  }
+
+  return (PLOC_AreaAreas) result;
+}
+PLOC_AreaAreas PLOC_appendAreaAreas(PLOC_AreaAreas arg0, PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area arg1) {
+  return PLOC_concatAreaAreas(arg0, wsAfterHead, wsAfterSep, PLOC_makeAreaAreasSingle(arg1));
+}
+PLOC_AreaAreas PLOC_concatAreaAreas(PLOC_AreaAreas arg0, PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_AreaAreas arg1) {
+  if (ATisEmpty((ATermList) arg0)) {
+    return arg1;
+  }
+  arg1 = PLOC_makeAreaAreasMany((PLOC_Area)ATgetFirst((ATermList) arg0), wsAfterHead, wsAfterSep,  arg1);
+  arg1 = (PLOC_AreaAreas) ATgetNext((ATermList) arg1);
+  return (PLOC_AreaAreas) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PLOC_AreaAreas PLOC_sliceAreaAreas(PLOC_AreaAreas arg, int start, int end) {
+  return (PLOC_AreaAreas) ATgetSlice((ATermList) arg, start * 4, end * 4);
+}
+PLOC_Area PLOC_getAreaAreasAreaAt(PLOC_AreaAreas arg, int index) {
+ return (PLOC_Area)ATelementAt((ATermList) arg,index * 4);
+}
+PLOC_AreaAreas PLOC_replaceAreaAreasAreaAt(PLOC_AreaAreas arg, PLOC_Area elem, int index) {
+ return (PLOC_AreaAreas) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index * 4);
+}
+PLOC_AreaAreas PLOC_makeAreaAreas2(PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area elem1, PLOC_Area elem2) {
+  return PLOC_makeAreaAreasMany(elem1, wsAfterHead, wsAfterSep, PLOC_makeAreaAreasSingle(elem2));
+}
+PLOC_AreaAreas PLOC_makeAreaAreas3(PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area elem1, PLOC_Area elem2, PLOC_Area elem3) {
+  return PLOC_makeAreaAreasMany(elem1, wsAfterHead, wsAfterSep, PLOC_makeAreaAreas2(wsAfterHead, wsAfterSep, elem2, elem3));
+}
+PLOC_AreaAreas PLOC_makeAreaAreas4(PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area elem1, PLOC_Area elem2, PLOC_Area elem3, PLOC_Area elem4) {
+  return PLOC_makeAreaAreasMany(elem1, wsAfterHead, wsAfterSep, PLOC_makeAreaAreas3(wsAfterHead, wsAfterSep, elem2, elem3, elem4));
+}
+PLOC_AreaAreas PLOC_makeAreaAreas5(PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area elem1, PLOC_Area elem2, PLOC_Area elem3, PLOC_Area elem4, PLOC_Area elem5) {
+  return PLOC_makeAreaAreasMany(elem1, wsAfterHead, wsAfterSep, PLOC_makeAreaAreas4(wsAfterHead, wsAfterSep, elem2, elem3, elem4, elem5));
+}
+PLOC_AreaAreas PLOC_makeAreaAreas6(PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_Area elem1, PLOC_Area elem2, PLOC_Area elem3, PLOC_Area elem4, PLOC_Area elem5, PLOC_Area elem6) {
+  return PLOC_makeAreaAreasMany(elem1, wsAfterHead, wsAfterSep, PLOC_makeAreaAreas5(wsAfterHead, wsAfterSep, elem2, elem3, elem4, elem5, elem6));
+}
 
 /*}}}  */
 /*{{{  constructors */
@@ -318,11 +445,54 @@ PLOC_Area PLOC_makeAreaArea(PLOC_OptLayout wsAfterArea, PLOC_OptLayout wsAfterPa
 }
 
 /*}}}  */
+/*{{{  PLOC_Slice PLOC_makeSliceSlice(PLOC_OptLayout wsAfterSlice, PLOC_OptLayout wsAfterParenOpen, PLOC_StrCon id, PLOC_OptLayout wsAfterId, PLOC_OptLayout wsAfterComma, PLOC_OptLayout wsAfterBracketOpen, PLOC_AreaAreas areas, PLOC_OptLayout wsAfterAreas, PLOC_OptLayout wsAfterBracketClose) */
+
+PLOC_Slice PLOC_makeSliceSlice(PLOC_OptLayout wsAfterSlice, PLOC_OptLayout wsAfterParenOpen, PLOC_StrCon id, PLOC_OptLayout wsAfterId, PLOC_OptLayout wsAfterComma, PLOC_OptLayout wsAfterBracketOpen, PLOC_AreaAreas areas, PLOC_OptLayout wsAfterAreas, PLOC_OptLayout wsAfterBracketClose)
+{
+  return (PLOC_Slice)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun28))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl2(PLOC_afun29, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun30))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun12)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun31))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun32))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun31)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterBracketClose), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun28))), (ATerm) wsAfterAreas), (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl1(PLOC_afun7, (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl2(PLOC_afun29, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))))), (ATerm) areas)), (ATerm) wsAfterBracketOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun30))), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterId), (ATerm) id), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterSlice), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun31))));
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_makeAreaAreasEmpty(void) */
+
+PLOC_AreaAreas PLOC_makeAreaAreasEmpty(void)
+{
+  return (PLOC_AreaAreas)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_makeAreaAreasSingle(PLOC_Area head) */
+
+PLOC_AreaAreas PLOC_makeAreaAreasSingle(PLOC_Area head)
+{
+  return (PLOC_AreaAreas)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_makeAreaAreasMany(PLOC_Area head, PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_AreaAreas tail) */
+
+PLOC_AreaAreas PLOC_makeAreaAreasMany(PLOC_Area head, PLOC_OptLayout wsAfterHead, PLOC_OptLayout wsAfterSep, PLOC_AreaAreas tail)
+{
+  if (PLOC_isAreaAreasEmpty(tail)) {
+    return PLOC_makeAreaAreasSingle(head);
+  }
+  return (PLOC_AreaAreas)(ATerm)ATinsert(ATinsert(ATinsert(ATinsert((ATermList)tail, (ATerm) wsAfterSep), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterHead), (ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PLOC_Start PLOC_makeStartSlice(PLOC_OptLayout wsBefore, PLOC_Slice topSlice, PLOC_OptLayout wsAfter, int ambCnt) */
+
+PLOC_Start PLOC_makeStartSlice(PLOC_OptLayout wsBefore, PLOC_Slice topSlice, PLOC_OptLayout wsAfter, int ambCnt)
+{
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun32)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topSlice), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+}
+
+/*}}}  */
 /*{{{  PLOC_Start PLOC_makeStartArea(PLOC_OptLayout wsBefore, PLOC_Area topArea, PLOC_OptLayout wsAfter, int ambCnt) */
 
 PLOC_Start PLOC_makeStartArea(PLOC_OptLayout wsBefore, PLOC_Area topArea, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topArea), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topArea), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -330,7 +500,7 @@ PLOC_Start PLOC_makeStartArea(PLOC_OptLayout wsBefore, PLOC_Area topArea, PLOC_O
 
 PLOC_Start PLOC_makeStartLocation(PLOC_OptLayout wsBefore, PLOC_Location topLocation, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun20)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topLocation), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun20)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topLocation), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -338,7 +508,7 @@ PLOC_Start PLOC_makeStartLocation(PLOC_OptLayout wsBefore, PLOC_Location topLoca
 
 PLOC_Start PLOC_makeStartNatCon(PLOC_OptLayout wsBefore, PLOC_NatCon topNatCon, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNatCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNatCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -346,7 +516,7 @@ PLOC_Start PLOC_makeStartNatCon(PLOC_OptLayout wsBefore, PLOC_NatCon topNatCon, 
 
 PLOC_Start PLOC_makeStartEscaped(PLOC_OptLayout wsBefore, PLOC_Escaped topEscaped, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun11)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topEscaped), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun11)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topEscaped), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -354,7 +524,7 @@ PLOC_Start PLOC_makeStartEscaped(PLOC_OptLayout wsBefore, PLOC_Escaped topEscape
 
 PLOC_Start PLOC_makeStartNormal(PLOC_OptLayout wsBefore, PLOC_Normal topNormal, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun4)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNormal), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun4)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topNormal), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -362,7 +532,7 @@ PLOC_Start PLOC_makeStartNormal(PLOC_OptLayout wsBefore, PLOC_Normal topNormal, 
 
 PLOC_Start PLOC_makeStartStrCon(PLOC_OptLayout wsBefore, PLOC_StrCon topStrCon, PLOC_OptLayout wsAfter, int ambCnt)
 {
-  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun28, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun12)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun29)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topStrCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
+  return (PLOC_Start)(ATerm)ATmakeAppl2(PLOC_afun33, (ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun12)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun34)), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATinsert(ATinsert(ATmakeList1((ATerm) wsAfter), (ATerm) topStrCon), (ATerm) wsBefore)), (ATerm) (ATerm) ATmakeInt(ambCnt));
 }
 
 /*}}}  */
@@ -412,6 +582,16 @@ ATbool PLOC_isEqualLocation(PLOC_Location arg0, PLOC_Location arg1)
 }
 
 ATbool PLOC_isEqualArea(PLOC_Area arg0, PLOC_Area arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PLOC_isEqualSlice(PLOC_Slice arg0, PLOC_Slice arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PLOC_isEqualAreaAreas(PLOC_AreaAreas arg0, PLOC_AreaAreas arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -807,28 +987,6 @@ ATbool PLOC_hasLocationWsAfterFile(PLOC_Location arg)
 }
 
 /*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterFile(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterFile(PLOC_Location arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/*}}}  */
-/*{{{  PLOC_Location PLOC_setLocationWsAfterFile(PLOC_Location arg, PLOC_OptLayout wsAfterFile) */
-
-PLOC_Location PLOC_setLocationWsAfterFile(PLOC_Location arg, PLOC_OptLayout wsAfterFile)
-{
-  if (PLOC_isLocationFile(arg)) {
-    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterFile), 1), 1);
-  }
-
-  ATabort("Location has no WsAfterFile: %t\n", arg);
-  return (PLOC_Location)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool PLOC_hasLocationWsAfterParenOpen(PLOC_Location arg) */
 
 ATbool PLOC_hasLocationWsAfterParenOpen(PLOC_Location arg)
@@ -846,6 +1004,104 @@ ATbool PLOC_hasLocationWsAfterParenOpen(PLOC_Location arg)
 }
 
 /*}}}  */
+/*{{{  ATbool PLOC_hasLocationFilename(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationFilename(PLOC_Location arg)
+{
+  if (PLOC_isLocationFile(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterFilename(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterFilename(PLOC_Location arg)
+{
+  if (PLOC_isLocationFile(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterA(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterA(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationArea(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg)
+{
+  if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterComma(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterComma(PLOC_Location arg)
+{
+  if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterFile(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterFile(PLOC_Location arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
 /*{{{  PLOC_OptLayout PLOC_getLocationWsAfterParenOpen(PLOC_Location arg) */
 
 PLOC_OptLayout PLOC_getLocationWsAfterParenOpen(PLOC_Location arg)
@@ -858,6 +1114,94 @@ PLOC_OptLayout PLOC_getLocationWsAfterParenOpen(PLOC_Location arg)
   }
   else 
     return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  PLOC_StrCon PLOC_getLocationFilename(PLOC_Location arg) */
+
+PLOC_StrCon PLOC_getLocationFilename(PLOC_Location arg)
+{
+  if (PLOC_isLocationFile(arg)) {
+    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else 
+    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterFilename(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterFilename(PLOC_Location arg)
+{
+  if (PLOC_isLocationFile(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+  }
+  else 
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterA(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterA(PLOC_Location arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_Area PLOC_getLocationArea(PLOC_Location arg) */
+
+PLOC_Area PLOC_getLocationArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else 
+    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+  }
+  else 
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterAreaInFile(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterAreaInFile(PLOC_Location arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterComma(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterComma(PLOC_Location arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
+}
+
+/*}}}  */
+/*{{{  PLOC_Location PLOC_setLocationWsAfterFile(PLOC_Location arg, PLOC_OptLayout wsAfterFile) */
+
+PLOC_Location PLOC_setLocationWsAfterFile(PLOC_Location arg, PLOC_OptLayout wsAfterFile)
+{
+  if (PLOC_isLocationFile(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterFile), 1), 1);
+  }
+
+  ATabort("Location has no WsAfterFile: %t\n", arg);
+  return (PLOC_Location)NULL;
 }
 
 /*}}}  */
@@ -880,32 +1224,6 @@ PLOC_Location PLOC_setLocationWsAfterParenOpen(PLOC_Location arg, PLOC_OptLayout
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasLocationFilename(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationFilename(PLOC_Location arg)
-{
-  if (PLOC_isLocationFile(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_StrCon PLOC_getLocationFilename(PLOC_Location arg) */
-
-PLOC_StrCon PLOC_getLocationFilename(PLOC_Location arg)
-{
-  if (PLOC_isLocationFile(arg)) {
-    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-  }
-  else 
-    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-}
-
-/*}}}  */
 /*{{{  PLOC_Location PLOC_setLocationFilename(PLOC_Location arg, PLOC_StrCon filename) */
 
 PLOC_Location PLOC_setLocationFilename(PLOC_Location arg, PLOC_StrCon filename)
@@ -919,32 +1237,6 @@ PLOC_Location PLOC_setLocationFilename(PLOC_Location arg, PLOC_StrCon filename)
 
   ATabort("Location has no Filename: %t\n", arg);
   return (PLOC_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterFilename(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterFilename(PLOC_Location arg)
-{
-  if (PLOC_isLocationFile(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterFilename(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterFilename(PLOC_Location arg)
-{
-  if (PLOC_isLocationFile(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-  }
-  else 
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
 }
 
 /*}}}  */
@@ -964,26 +1256,6 @@ PLOC_Location PLOC_setLocationWsAfterFilename(PLOC_Location arg, PLOC_OptLayout 
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterA(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterA(PLOC_Location arg)
-{
-  if (PLOC_isLocationArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterA(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterA(PLOC_Location arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/*}}}  */
 /*{{{  PLOC_Location PLOC_setLocationWsAfterA(PLOC_Location arg, PLOC_OptLayout wsAfterA) */
 
 PLOC_Location PLOC_setLocationWsAfterA(PLOC_Location arg, PLOC_OptLayout wsAfterA)
@@ -994,32 +1266,6 @@ PLOC_Location PLOC_setLocationWsAfterA(PLOC_Location arg, PLOC_OptLayout wsAfter
 
   ATabort("Location has no WsAfterA: %t\n", arg);
   return (PLOC_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasLocationArea(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationArea(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_Area PLOC_getLocationArea(PLOC_Location arg) */
-
-PLOC_Area PLOC_getLocationArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationArea(arg)) {
-    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
-  }
-  else 
-    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
 }
 
 /*}}}  */
@@ -1039,32 +1285,6 @@ PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationArea(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationArea(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-  }
-  else 
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
-}
-
-/*}}}  */
 /*{{{  PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea) */
 
 PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea)
@@ -1081,26 +1301,6 @@ PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAf
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterAreaInFile(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterAreaInFile(PLOC_Location arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
-}
-
-/*}}}  */
 /*{{{  PLOC_Location PLOC_setLocationWsAfterAreaInFile(PLOC_Location arg, PLOC_OptLayout wsAfterAreaInFile) */
 
 PLOC_Location PLOC_setLocationWsAfterAreaInFile(PLOC_Location arg, PLOC_OptLayout wsAfterAreaInFile)
@@ -1111,26 +1311,6 @@ PLOC_Location PLOC_setLocationWsAfterAreaInFile(PLOC_Location arg, PLOC_OptLayou
 
   ATabort("Location has no WsAfterAreaInFile: %t\n", arg);
   return (PLOC_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterComma(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterComma(PLOC_Location arg)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterComma(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterComma(PLOC_Location arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
 }
 
 /*}}}  */
@@ -1185,12 +1365,372 @@ ATbool PLOC_hasAreaWsAfterArea(PLOC_Area arg)
 }
 
 /*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterParenOpen(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterParenOpen(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaBeginLine(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaBeginLine(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterBeginLine(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterBeginLine(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterComma(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterComma(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaBeginColumn(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaBeginColumn(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterBeginColumn(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterBeginColumn(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterComma1(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterComma1(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaEndLine(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaEndLine(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterEndLine(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterEndLine(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterComma2(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterComma2(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaEndColumn(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaEndColumn(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterEndColumn(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterEndColumn(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterComma3(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterComma3(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaOffset(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaOffset(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterOffset(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterOffset(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterComma4(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterComma4(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaLength(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaLength(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaWsAfterLength(PLOC_Area arg) */
+
+ATbool PLOC_hasAreaWsAfterLength(PLOC_Area arg)
+{
+  if (PLOC_isAreaArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  PLOC_OptLayout PLOC_getAreaWsAfterArea(PLOC_Area arg) */
 
 PLOC_OptLayout PLOC_getAreaWsAfterArea(PLOC_Area arg)
 {
   
     return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterParenOpen(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterParenOpen(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaBeginLine(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaBeginLine(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterBeginLine(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterBeginLine(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterComma(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaBeginColumn(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaBeginColumn(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterBeginColumn(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterBeginColumn(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma1(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterComma1(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 11);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaEndLine(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaEndLine(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterEndLine(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterEndLine(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 13);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma2(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterComma2(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 15);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaEndColumn(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaEndColumn(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterEndColumn(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterEndColumn(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 17);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma3(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterComma3(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 19);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaOffset(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaOffset(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 20);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterOffset(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterOffset(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 21);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma4(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterComma4(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 23);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getAreaLength(PLOC_Area arg) */
+
+PLOC_NatCon PLOC_getAreaLength(PLOC_Area arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 24);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterLength(PLOC_Area arg) */
+
+PLOC_OptLayout PLOC_getAreaWsAfterLength(PLOC_Area arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 25);
 }
 
 /*}}}  */
@@ -1207,26 +1747,6 @@ PLOC_Area PLOC_setAreaWsAfterArea(PLOC_Area arg, PLOC_OptLayout wsAfterArea)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterParenOpen(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterParenOpen(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterParenOpen(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterParenOpen(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterParenOpen(PLOC_Area arg, PLOC_OptLayout wsAfterParenOpen) */
 
 PLOC_Area PLOC_setAreaWsAfterParenOpen(PLOC_Area arg, PLOC_OptLayout wsAfterParenOpen)
@@ -1237,26 +1757,6 @@ PLOC_Area PLOC_setAreaWsAfterParenOpen(PLOC_Area arg, PLOC_OptLayout wsAfterPare
 
   ATabort("Area has no WsAfterParenOpen: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaBeginLine(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaBeginLine(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaBeginLine(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaBeginLine(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
 }
 
 /*}}}  */
@@ -1273,26 +1773,6 @@ PLOC_Area PLOC_setAreaBeginLine(PLOC_Area arg, PLOC_NatCon beginLine)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterBeginLine(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterBeginLine(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterBeginLine(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterBeginLine(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterBeginLine(PLOC_Area arg, PLOC_OptLayout wsAfterBeginLine) */
 
 PLOC_Area PLOC_setAreaWsAfterBeginLine(PLOC_Area arg, PLOC_OptLayout wsAfterBeginLine)
@@ -1303,26 +1783,6 @@ PLOC_Area PLOC_setAreaWsAfterBeginLine(PLOC_Area arg, PLOC_OptLayout wsAfterBegi
 
   ATabort("Area has no WsAfterBeginLine: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterComma(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterComma(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterComma(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
 }
 
 /*}}}  */
@@ -1339,26 +1799,6 @@ PLOC_Area PLOC_setAreaWsAfterComma(PLOC_Area arg, PLOC_OptLayout wsAfterComma)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaBeginColumn(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaBeginColumn(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaBeginColumn(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaBeginColumn(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaBeginColumn(PLOC_Area arg, PLOC_NatCon beginColumn) */
 
 PLOC_Area PLOC_setAreaBeginColumn(PLOC_Area arg, PLOC_NatCon beginColumn)
@@ -1369,26 +1809,6 @@ PLOC_Area PLOC_setAreaBeginColumn(PLOC_Area arg, PLOC_NatCon beginColumn)
 
   ATabort("Area has no BeginColumn: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterBeginColumn(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterBeginColumn(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterBeginColumn(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterBeginColumn(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
 }
 
 /*}}}  */
@@ -1405,26 +1825,6 @@ PLOC_Area PLOC_setAreaWsAfterBeginColumn(PLOC_Area arg, PLOC_OptLayout wsAfterBe
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterComma1(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterComma1(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma1(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterComma1(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 11);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterComma1(PLOC_Area arg, PLOC_OptLayout wsAfterComma1) */
 
 PLOC_Area PLOC_setAreaWsAfterComma1(PLOC_Area arg, PLOC_OptLayout wsAfterComma1)
@@ -1435,26 +1835,6 @@ PLOC_Area PLOC_setAreaWsAfterComma1(PLOC_Area arg, PLOC_OptLayout wsAfterComma1)
 
   ATabort("Area has no WsAfterComma1: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaEndLine(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaEndLine(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaEndLine(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaEndLine(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 12);
 }
 
 /*}}}  */
@@ -1471,26 +1851,6 @@ PLOC_Area PLOC_setAreaEndLine(PLOC_Area arg, PLOC_NatCon endLine)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterEndLine(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterEndLine(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterEndLine(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterEndLine(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 13);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterEndLine(PLOC_Area arg, PLOC_OptLayout wsAfterEndLine) */
 
 PLOC_Area PLOC_setAreaWsAfterEndLine(PLOC_Area arg, PLOC_OptLayout wsAfterEndLine)
@@ -1501,26 +1861,6 @@ PLOC_Area PLOC_setAreaWsAfterEndLine(PLOC_Area arg, PLOC_OptLayout wsAfterEndLin
 
   ATabort("Area has no WsAfterEndLine: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterComma2(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterComma2(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma2(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterComma2(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 15);
 }
 
 /*}}}  */
@@ -1537,26 +1877,6 @@ PLOC_Area PLOC_setAreaWsAfterComma2(PLOC_Area arg, PLOC_OptLayout wsAfterComma2)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaEndColumn(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaEndColumn(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaEndColumn(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaEndColumn(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 16);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaEndColumn(PLOC_Area arg, PLOC_NatCon endColumn) */
 
 PLOC_Area PLOC_setAreaEndColumn(PLOC_Area arg, PLOC_NatCon endColumn)
@@ -1567,26 +1887,6 @@ PLOC_Area PLOC_setAreaEndColumn(PLOC_Area arg, PLOC_NatCon endColumn)
 
   ATabort("Area has no EndColumn: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterEndColumn(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterEndColumn(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterEndColumn(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterEndColumn(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 17);
 }
 
 /*}}}  */
@@ -1603,26 +1903,6 @@ PLOC_Area PLOC_setAreaWsAfterEndColumn(PLOC_Area arg, PLOC_OptLayout wsAfterEndC
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterComma3(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterComma3(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma3(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterComma3(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 19);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterComma3(PLOC_Area arg, PLOC_OptLayout wsAfterComma3) */
 
 PLOC_Area PLOC_setAreaWsAfterComma3(PLOC_Area arg, PLOC_OptLayout wsAfterComma3)
@@ -1633,26 +1913,6 @@ PLOC_Area PLOC_setAreaWsAfterComma3(PLOC_Area arg, PLOC_OptLayout wsAfterComma3)
 
   ATabort("Area has no WsAfterComma3: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaOffset(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaOffset(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaOffset(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaOffset(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 20);
 }
 
 /*}}}  */
@@ -1669,26 +1929,6 @@ PLOC_Area PLOC_setAreaOffset(PLOC_Area arg, PLOC_NatCon offset)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterOffset(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterOffset(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterOffset(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterOffset(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 21);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaWsAfterOffset(PLOC_Area arg, PLOC_OptLayout wsAfterOffset) */
 
 PLOC_Area PLOC_setAreaWsAfterOffset(PLOC_Area arg, PLOC_OptLayout wsAfterOffset)
@@ -1699,26 +1939,6 @@ PLOC_Area PLOC_setAreaWsAfterOffset(PLOC_Area arg, PLOC_OptLayout wsAfterOffset)
 
   ATabort("Area has no WsAfterOffset: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterComma4(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterComma4(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterComma4(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterComma4(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 23);
 }
 
 /*}}}  */
@@ -1735,26 +1955,6 @@ PLOC_Area PLOC_setAreaWsAfterComma4(PLOC_Area arg, PLOC_OptLayout wsAfterComma4)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasAreaLength(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaLength(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getAreaLength(PLOC_Area arg) */
-
-PLOC_NatCon PLOC_getAreaLength(PLOC_Area arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 24);
-}
-
-/*}}}  */
 /*{{{  PLOC_Area PLOC_setAreaLength(PLOC_Area arg, PLOC_NatCon length) */
 
 PLOC_Area PLOC_setAreaLength(PLOC_Area arg, PLOC_NatCon length)
@@ -1765,26 +1965,6 @@ PLOC_Area PLOC_setAreaLength(PLOC_Area arg, PLOC_NatCon length)
 
   ATabort("Area has no Length: %t\n", arg);
   return (PLOC_Area)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasAreaWsAfterLength(PLOC_Area arg) */
-
-ATbool PLOC_hasAreaWsAfterLength(PLOC_Area arg)
-{
-  if (PLOC_isAreaArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getAreaWsAfterLength(PLOC_Area arg) */
-
-PLOC_OptLayout PLOC_getAreaWsAfterLength(PLOC_Area arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 25);
 }
 
 /*}}}  */
@@ -1803,13 +1983,573 @@ PLOC_Area PLOC_setAreaWsAfterLength(PLOC_Area arg, PLOC_OptLayout wsAfterLength)
 /*}}}  */
 
 /*}}}  */
+/*{{{  PLOC_Slice accessors */
+
+/*{{{  ATbool PLOC_isValidSlice(PLOC_Slice arg) */
+
+ATbool PLOC_isValidSlice(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isSliceSlice(PLOC_Slice arg) */
+
+inline ATbool PLOC_isSliceSlice(PLOC_Slice arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PLOC_patternSliceSlice, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterSlice(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterSlice(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterParenOpen(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterParenOpen(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceId(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceId(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterId(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterId(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterComma(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterComma(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterBracketOpen(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterBracketOpen(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceAreas(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceAreas(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterAreas(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterAreas(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasSliceWsAfterBracketClose(PLOC_Slice arg) */
+
+ATbool PLOC_hasSliceWsAfterBracketClose(PLOC_Slice arg)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterSlice(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterSlice(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterParenOpen(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterParenOpen(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+}
+
+/*}}}  */
+/*{{{  PLOC_StrCon PLOC_getSliceId(PLOC_Slice arg) */
+
+PLOC_StrCon PLOC_getSliceId(PLOC_Slice arg)
+{
+  
+    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterId(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterId(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterComma(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterComma(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 7);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterBracketOpen(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterBracketOpen(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_getSliceAreas(PLOC_Slice arg) */
+
+PLOC_AreaAreas PLOC_getSliceAreas(PLOC_Slice arg)
+{
+  
+    return (PLOC_AreaAreas)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 10), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterAreas(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterAreas(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 11);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getSliceWsAfterBracketClose(PLOC_Slice arg) */
+
+PLOC_OptLayout PLOC_getSliceWsAfterBracketClose(PLOC_Slice arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 13);
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterSlice(PLOC_Slice arg, PLOC_OptLayout wsAfterSlice) */
+
+PLOC_Slice PLOC_setSliceWsAfterSlice(PLOC_Slice arg, PLOC_OptLayout wsAfterSlice)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterSlice), 1), 1);
+  }
+
+  ATabort("Slice has no WsAfterSlice: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterParenOpen(PLOC_Slice arg, PLOC_OptLayout wsAfterParenOpen) */
+
+PLOC_Slice PLOC_setSliceWsAfterParenOpen(PLOC_Slice arg, PLOC_OptLayout wsAfterParenOpen)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterParenOpen), 3), 1);
+  }
+
+  ATabort("Slice has no WsAfterParenOpen: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceId(PLOC_Slice arg, PLOC_StrCon id) */
+
+PLOC_Slice PLOC_setSliceId(PLOC_Slice arg, PLOC_StrCon id)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) id), 4), 1);
+  }
+
+  ATabort("Slice has no Id: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterId(PLOC_Slice arg, PLOC_OptLayout wsAfterId) */
+
+PLOC_Slice PLOC_setSliceWsAfterId(PLOC_Slice arg, PLOC_OptLayout wsAfterId)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterId), 5), 1);
+  }
+
+  ATabort("Slice has no WsAfterId: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterComma(PLOC_Slice arg, PLOC_OptLayout wsAfterComma) */
+
+PLOC_Slice PLOC_setSliceWsAfterComma(PLOC_Slice arg, PLOC_OptLayout wsAfterComma)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterComma), 7), 1);
+  }
+
+  ATabort("Slice has no WsAfterComma: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterBracketOpen(PLOC_Slice arg, PLOC_OptLayout wsAfterBracketOpen) */
+
+PLOC_Slice PLOC_setSliceWsAfterBracketOpen(PLOC_Slice arg, PLOC_OptLayout wsAfterBracketOpen)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBracketOpen), 9), 1);
+  }
+
+  ATabort("Slice has no WsAfterBracketOpen: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceAreas(PLOC_Slice arg, PLOC_AreaAreas areas) */
+
+PLOC_Slice PLOC_setSliceAreas(PLOC_Slice arg, PLOC_AreaAreas areas)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 10), (ATerm)((ATerm) areas), 1), 10), 1);
+  }
+
+  ATabort("Slice has no Areas: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterAreas(PLOC_Slice arg, PLOC_OptLayout wsAfterAreas) */
+
+PLOC_Slice PLOC_setSliceWsAfterAreas(PLOC_Slice arg, PLOC_OptLayout wsAfterAreas)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterAreas), 11), 1);
+  }
+
+  ATabort("Slice has no WsAfterAreas: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Slice PLOC_setSliceWsAfterBracketClose(PLOC_Slice arg, PLOC_OptLayout wsAfterBracketClose) */
+
+PLOC_Slice PLOC_setSliceWsAfterBracketClose(PLOC_Slice arg, PLOC_OptLayout wsAfterBracketClose)
+{
+  if (PLOC_isSliceSlice(arg)) {
+    return (PLOC_Slice)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterBracketClose), 13), 1);
+  }
+
+  ATabort("Slice has no WsAfterBracketClose: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas accessors */
+
+/*{{{  ATbool PLOC_isValidAreaAreas(PLOC_AreaAreas arg) */
+
+ATbool PLOC_isValidAreaAreas(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isAreaAreasSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isAreaAreasEmpty(PLOC_AreaAreas arg) */
+
+inline ATbool PLOC_isAreaAreasEmpty(PLOC_AreaAreas arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PLOC_patternAreaAreasEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isAreaAreasSingle(PLOC_AreaAreas arg) */
+
+inline ATbool PLOC_isAreaAreasSingle(PLOC_AreaAreas arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PLOC_patternAreaAreasSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isAreaAreasMany(PLOC_AreaAreas arg) */
+
+inline ATbool PLOC_isAreaAreasMany(PLOC_AreaAreas arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PLOC_patternAreaAreasMany, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaAreasHead(PLOC_AreaAreas arg) */
+
+ATbool PLOC_hasAreaAreasHead(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaAreasWsAfterHead(PLOC_AreaAreas arg) */
+
+ATbool PLOC_hasAreaAreasWsAfterHead(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaAreasWsAfterSep(PLOC_AreaAreas arg) */
+
+ATbool PLOC_hasAreaAreasWsAfterSep(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasAreaAreasTail(PLOC_AreaAreas arg) */
+
+ATbool PLOC_hasAreaAreasTail(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_getAreaAreasTail(PLOC_AreaAreas arg) */
+
+PLOC_AreaAreas PLOC_getAreaAreasTail(PLOC_AreaAreas arg)
+{
+  assert(!PLOC_isAreaAreasEmpty(arg) && "getTail on an empty list");
+  if (PLOC_isAreaAreasSingle(arg)) {
+    return (PLOC_AreaAreas) PLOC_makeAreaAreasEmpty();
+  }
+  else {
+  
+    return (PLOC_AreaAreas)ATgetTail((ATermList)arg, 4);
+  }
+}
+
+/*}}}  */
+/*{{{  PLOC_Area PLOC_getAreaAreasHead(PLOC_AreaAreas arg) */
+
+PLOC_Area PLOC_getAreaAreasHead(PLOC_AreaAreas arg)
+{
+  if (PLOC_isAreaAreasSingle(arg)) {
+    return (PLOC_Area)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (PLOC_Area)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaAreasWsAfterHead(PLOC_AreaAreas arg) */
+
+PLOC_OptLayout PLOC_getAreaAreasWsAfterHead(PLOC_AreaAreas arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)arg, 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getAreaAreasWsAfterSep(PLOC_AreaAreas arg) */
+
+PLOC_OptLayout PLOC_getAreaAreasWsAfterSep(PLOC_AreaAreas arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)arg, 3);
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_setAreaAreasHead(PLOC_AreaAreas arg, PLOC_Area head) */
+
+PLOC_AreaAreas PLOC_setAreaAreasHead(PLOC_AreaAreas arg, PLOC_Area head)
+{
+  if (PLOC_isAreaAreasSingle(arg)) {
+    return (PLOC_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PLOC_isAreaAreasMany(arg)) {
+    return (PLOC_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("AreaAreas has no Head: %t\n", arg);
+  return (PLOC_AreaAreas)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_setAreaAreasWsAfterHead(PLOC_AreaAreas arg, PLOC_OptLayout wsAfterHead) */
+
+PLOC_AreaAreas PLOC_setAreaAreasWsAfterHead(PLOC_AreaAreas arg, PLOC_OptLayout wsAfterHead)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return (PLOC_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterHead), 1);
+  }
+
+  ATabort("AreaAreas has no WsAfterHead: %t\n", arg);
+  return (PLOC_AreaAreas)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_setAreaAreasWsAfterSep(PLOC_AreaAreas arg, PLOC_OptLayout wsAfterSep) */
+
+PLOC_AreaAreas PLOC_setAreaAreasWsAfterSep(PLOC_AreaAreas arg, PLOC_OptLayout wsAfterSep)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return (PLOC_AreaAreas)ATreplace((ATermList)arg, (ATerm)((ATerm) wsAfterSep), 3);
+  }
+
+  ATabort("AreaAreas has no WsAfterSep: %t\n", arg);
+  return (PLOC_AreaAreas)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_setAreaAreasTail(PLOC_AreaAreas arg, PLOC_AreaAreas tail) */
+
+PLOC_AreaAreas PLOC_setAreaAreasTail(PLOC_AreaAreas arg, PLOC_AreaAreas tail)
+{
+  if (PLOC_isAreaAreasMany(arg)) {
+    return (PLOC_AreaAreas)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 4);
+  }
+
+  ATabort("AreaAreas has no Tail: %t\n", arg);
+  return (PLOC_AreaAreas)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  PLOC_Start accessors */
 
 /*{{{  ATbool PLOC_isValidStart(PLOC_Start arg) */
 
 ATbool PLOC_isValidStart(PLOC_Start arg)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartArea(arg)) {
     return ATtrue;
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -1828,6 +2568,28 @@ ATbool PLOC_isValidStart(PLOC_Start arg)
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isStartSlice(PLOC_Start arg) */
+
+inline ATbool PLOC_isStartSlice(PLOC_Start arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PLOC_patternStartSlice, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1967,7 +2729,10 @@ inline ATbool PLOC_isStartStrCon(PLOC_Start arg)
 
 ATbool PLOC_hasStartWsBefore(PLOC_Start arg)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartArea(arg)) {
     return ATtrue;
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -1989,11 +2754,149 @@ ATbool PLOC_hasStartWsBefore(PLOC_Start arg)
 }
 
 /*}}}  */
+/*{{{  ATbool PLOC_hasStartTopSlice(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopSlice(PLOC_Start arg)
+{
+  if (PLOC_isStartSlice(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartWsAfter(PLOC_Start arg) */
+
+ATbool PLOC_hasStartWsAfter(PLOC_Start arg)
+{
+  if (PLOC_isStartSlice(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartLocation(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartNatCon(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartEscaped(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartNormal(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartStrCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartAmbCnt(PLOC_Start arg) */
+
+ATbool PLOC_hasStartAmbCnt(PLOC_Start arg)
+{
+  if (PLOC_isStartSlice(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartLocation(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartNatCon(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartEscaped(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartNormal(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isStartStrCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopArea(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopArea(PLOC_Start arg)
+{
+  if (PLOC_isStartArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopLocation(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopLocation(PLOC_Start arg)
+{
+  if (PLOC_isStartLocation(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopNatCon(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopNatCon(PLOC_Start arg)
+{
+  if (PLOC_isStartNatCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopEscaped(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopEscaped(PLOC_Start arg)
+{
+  if (PLOC_isStartEscaped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopNormal(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopNormal(PLOC_Start arg)
+{
+  if (PLOC_isStartNormal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasStartTopStrCon(PLOC_Start arg) */
+
+ATbool PLOC_hasStartTopStrCon(PLOC_Start arg)
+{
+  if (PLOC_isStartStrCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  PLOC_OptLayout PLOC_getStartWsBefore(PLOC_Start arg) */
 
 PLOC_OptLayout PLOC_getStartWsBefore(PLOC_Start arg)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
+  }
+  else if (PLOC_isStartArea(arg)) {
     return (PLOC_OptLayout)ATgetFirst((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1));
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -2013,11 +2916,131 @@ PLOC_OptLayout PLOC_getStartWsBefore(PLOC_Start arg)
 }
 
 /*}}}  */
+/*{{{  PLOC_Slice PLOC_getStartTopSlice(PLOC_Start arg) */
+
+PLOC_Slice PLOC_getStartTopSlice(PLOC_Start arg)
+{
+  
+    return (PLOC_Slice)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg) */
+
+PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg)
+{
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (PLOC_isStartArea(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (PLOC_isStartLocation(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (PLOC_isStartNatCon(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (PLOC_isStartEscaped(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else if (PLOC_isStartNormal(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+  }
+  else 
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
+}
+
+/*}}}  */
+/*{{{  int PLOC_getStartAmbCnt(PLOC_Start arg) */
+
+int PLOC_getStartAmbCnt(PLOC_Start arg)
+{
+  if (PLOC_isStartSlice(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (PLOC_isStartArea(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (PLOC_isStartLocation(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (PLOC_isStartNatCon(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (PLOC_isStartEscaped(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else if (PLOC_isStartNormal(arg)) {
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+  }
+  else 
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
+}
+
+/*}}}  */
+/*{{{  PLOC_Area PLOC_getStartTopArea(PLOC_Start arg) */
+
+PLOC_Area PLOC_getStartTopArea(PLOC_Start arg)
+{
+  
+    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_Location PLOC_getStartTopLocation(PLOC_Start arg) */
+
+PLOC_Location PLOC_getStartTopLocation(PLOC_Start arg)
+{
+  
+    return (PLOC_Location)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_NatCon PLOC_getStartTopNatCon(PLOC_Start arg) */
+
+PLOC_NatCon PLOC_getStartTopNatCon(PLOC_Start arg)
+{
+  
+    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_Escaped PLOC_getStartTopEscaped(PLOC_Start arg) */
+
+PLOC_Escaped PLOC_getStartTopEscaped(PLOC_Start arg)
+{
+  
+    return (PLOC_Escaped)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_Normal PLOC_getStartTopNormal(PLOC_Start arg) */
+
+PLOC_Normal PLOC_getStartTopNormal(PLOC_Start arg)
+{
+  
+    return (PLOC_Normal)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_StrCon PLOC_getStartTopStrCon(PLOC_Start arg) */
+
+PLOC_StrCon PLOC_getStartTopStrCon(PLOC_Start arg)
+{
+  
+    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+}
+
+/*}}}  */
 /*{{{  PLOC_Start PLOC_setStartWsBefore(PLOC_Start arg, PLOC_OptLayout wsBefore) */
 
 PLOC_Start PLOC_setStartWsBefore(PLOC_Start arg, PLOC_OptLayout wsBefore)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsBefore), 0), 1), 0);
+  }
+  else if (PLOC_isStartArea(arg)) {
     return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsBefore), 0), 1), 0);
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -2041,86 +3064,16 @@ PLOC_Start PLOC_setStartWsBefore(PLOC_Start arg, PLOC_OptLayout wsBefore)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasStartTopArea(PLOC_Start arg) */
+/*{{{  PLOC_Start PLOC_setStartTopSlice(PLOC_Start arg, PLOC_Slice topSlice) */
 
-ATbool PLOC_hasStartTopArea(PLOC_Start arg)
+PLOC_Start PLOC_setStartTopSlice(PLOC_Start arg, PLOC_Slice topSlice)
 {
-  if (PLOC_isStartArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_Area PLOC_getStartTopArea(PLOC_Start arg) */
-
-PLOC_Area PLOC_getStartTopArea(PLOC_Start arg)
-{
-  
-    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
-}
-
-/*}}}  */
-/*{{{  PLOC_Start PLOC_setStartTopArea(PLOC_Start arg, PLOC_Area topArea) */
-
-PLOC_Start PLOC_setStartTopArea(PLOC_Start arg, PLOC_Area topArea)
-{
-  if (PLOC_isStartArea(arg)) {
-    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) topArea), 1), 1), 0);
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) topSlice), 1), 1), 0);
   }
 
-  ATabort("Start has no TopArea: %t\n", arg);
+  ATabort("Start has no TopSlice: %t\n", arg);
   return (PLOC_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasStartWsAfter(PLOC_Start arg) */
-
-ATbool PLOC_hasStartWsAfter(PLOC_Start arg)
-{
-  if (PLOC_isStartArea(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartLocation(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartNatCon(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartEscaped(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartNormal(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartStrCon(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg) */
-
-PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg)
-{
-  if (PLOC_isStartArea(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else if (PLOC_isStartLocation(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else if (PLOC_isStartNatCon(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else if (PLOC_isStartEscaped(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else if (PLOC_isStartNormal(arg)) {
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
-  }
-  else 
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 2);
 }
 
 /*}}}  */
@@ -2128,7 +3081,10 @@ PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg)
 
 PLOC_Start PLOC_setStartWsAfter(PLOC_Start arg, PLOC_OptLayout wsAfter)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsAfter), 2), 1), 0);
+  }
+  else if (PLOC_isStartArea(arg)) {
     return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) wsAfter), 2), 1), 0);
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -2152,61 +3108,14 @@ PLOC_Start PLOC_setStartWsAfter(PLOC_Start arg, PLOC_OptLayout wsAfter)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasStartAmbCnt(PLOC_Start arg) */
-
-ATbool PLOC_hasStartAmbCnt(PLOC_Start arg)
-{
-  if (PLOC_isStartArea(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartLocation(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartNatCon(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartEscaped(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartNormal(arg)) {
-    return ATtrue;
-  }
-  else if (PLOC_isStartStrCon(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int PLOC_getStartAmbCnt(PLOC_Start arg) */
-
-int PLOC_getStartAmbCnt(PLOC_Start arg)
-{
-  if (PLOC_isStartArea(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
-  else if (PLOC_isStartLocation(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
-  else if (PLOC_isStartNatCon(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
-  else if (PLOC_isStartEscaped(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
-  else if (PLOC_isStartNormal(arg)) {
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-  }
-  else 
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
-}
-
-/*}}}  */
 /*{{{  PLOC_Start PLOC_setStartAmbCnt(PLOC_Start arg, int ambCnt) */
 
 PLOC_Start PLOC_setStartAmbCnt(PLOC_Start arg, int ambCnt)
 {
-  if (PLOC_isStartArea(arg)) {
+  if (PLOC_isStartSlice(arg)) {
+    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(ambCnt)), 1);
+  }
+  else if (PLOC_isStartArea(arg)) {
     return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(ambCnt)), 1);
   }
   else if (PLOC_isStartLocation(arg)) {
@@ -2230,23 +3139,16 @@ PLOC_Start PLOC_setStartAmbCnt(PLOC_Start arg, int ambCnt)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasStartTopLocation(PLOC_Start arg) */
+/*{{{  PLOC_Start PLOC_setStartTopArea(PLOC_Start arg, PLOC_Area topArea) */
 
-ATbool PLOC_hasStartTopLocation(PLOC_Start arg)
+PLOC_Start PLOC_setStartTopArea(PLOC_Start arg, PLOC_Area topArea)
 {
-  if (PLOC_isStartLocation(arg)) {
-    return ATtrue;
+  if (PLOC_isStartArea(arg)) {
+    return (PLOC_Start)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), (ATerm)((ATerm) topArea), 1), 1), 0);
   }
-  return ATfalse;
-}
 
-/*}}}  */
-/*{{{  PLOC_Location PLOC_getStartTopLocation(PLOC_Start arg) */
-
-PLOC_Location PLOC_getStartTopLocation(PLOC_Start arg)
-{
-  
-    return (PLOC_Location)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
+  ATabort("Start has no TopArea: %t\n", arg);
+  return (PLOC_Start)NULL;
 }
 
 /*}}}  */
@@ -2263,26 +3165,6 @@ PLOC_Start PLOC_setStartTopLocation(PLOC_Start arg, PLOC_Location topLocation)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasStartTopNatCon(PLOC_Start arg) */
-
-ATbool PLOC_hasStartTopNatCon(PLOC_Start arg)
-{
-  if (PLOC_isStartNatCon(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_NatCon PLOC_getStartTopNatCon(PLOC_Start arg) */
-
-PLOC_NatCon PLOC_getStartTopNatCon(PLOC_Start arg)
-{
-  
-    return (PLOC_NatCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
-}
-
-/*}}}  */
 /*{{{  PLOC_Start PLOC_setStartTopNatCon(PLOC_Start arg, PLOC_NatCon topNatCon) */
 
 PLOC_Start PLOC_setStartTopNatCon(PLOC_Start arg, PLOC_NatCon topNatCon)
@@ -2293,26 +3175,6 @@ PLOC_Start PLOC_setStartTopNatCon(PLOC_Start arg, PLOC_NatCon topNatCon)
 
   ATabort("Start has no TopNatCon: %t\n", arg);
   return (PLOC_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasStartTopEscaped(PLOC_Start arg) */
-
-ATbool PLOC_hasStartTopEscaped(PLOC_Start arg)
-{
-  if (PLOC_isStartEscaped(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_Escaped PLOC_getStartTopEscaped(PLOC_Start arg) */
-
-PLOC_Escaped PLOC_getStartTopEscaped(PLOC_Start arg)
-{
-  
-    return (PLOC_Escaped)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
 }
 
 /*}}}  */
@@ -2329,26 +3191,6 @@ PLOC_Start PLOC_setStartTopEscaped(PLOC_Start arg, PLOC_Escaped topEscaped)
 }
 
 /*}}}  */
-/*{{{  ATbool PLOC_hasStartTopNormal(PLOC_Start arg) */
-
-ATbool PLOC_hasStartTopNormal(PLOC_Start arg)
-{
-  if (PLOC_isStartNormal(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_Normal PLOC_getStartTopNormal(PLOC_Start arg) */
-
-PLOC_Normal PLOC_getStartTopNormal(PLOC_Start arg)
-{
-  
-    return (PLOC_Normal)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
-}
-
-/*}}}  */
 /*{{{  PLOC_Start PLOC_setStartTopNormal(PLOC_Start arg, PLOC_Normal topNormal) */
 
 PLOC_Start PLOC_setStartTopNormal(PLOC_Start arg, PLOC_Normal topNormal)
@@ -2359,26 +3201,6 @@ PLOC_Start PLOC_setStartTopNormal(PLOC_Start arg, PLOC_Normal topNormal)
 
   ATabort("Start has no TopNormal: %t\n", arg);
   return (PLOC_Start)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasStartTopStrCon(PLOC_Start arg) */
-
-ATbool PLOC_hasStartTopStrCon(PLOC_Start arg)
-{
-  if (PLOC_isStartStrCon(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_StrCon PLOC_getStartTopStrCon(PLOC_Start arg) */
-
-PLOC_StrCon PLOC_getStartTopStrCon(PLOC_Start arg)
-{
-  
-    return (PLOC_StrCon)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1), 1);
 }
 
 /*}}}  */
@@ -2614,10 +3436,61 @@ PLOC_Area PLOC_visitArea(PLOC_Area arg, PLOC_OptLayout (*acceptWsAfterArea)(PLOC
 }
 
 /*}}}  */
-/*{{{  PLOC_Start PLOC_visitStart(PLOC_Start arg, PLOC_OptLayout (*acceptWsBefore)(PLOC_OptLayout), PLOC_Area (*acceptTopArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfter)(PLOC_OptLayout), int (*acceptAmbCnt)(int), PLOC_Location (*acceptTopLocation)(PLOC_Location), PLOC_NatCon (*acceptTopNatCon)(PLOC_NatCon), PLOC_Escaped (*acceptTopEscaped)(PLOC_Escaped), PLOC_Normal (*acceptTopNormal)(PLOC_Normal), PLOC_StrCon (*acceptTopStrCon)(PLOC_StrCon)) */
+/*{{{  PLOC_Slice PLOC_visitSlice(PLOC_Slice arg, PLOC_OptLayout (*acceptWsAfterSlice)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptId)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterId)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterBracketOpen)(PLOC_OptLayout), PLOC_AreaAreas (*acceptAreas)(PLOC_AreaAreas), PLOC_OptLayout (*acceptWsAfterAreas)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterBracketClose)(PLOC_OptLayout)) */
 
-PLOC_Start PLOC_visitStart(PLOC_Start arg, PLOC_OptLayout (*acceptWsBefore)(PLOC_OptLayout), PLOC_Area (*acceptTopArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfter)(PLOC_OptLayout), int (*acceptAmbCnt)(int), PLOC_Location (*acceptTopLocation)(PLOC_Location), PLOC_NatCon (*acceptTopNatCon)(PLOC_NatCon), PLOC_Escaped (*acceptTopEscaped)(PLOC_Escaped), PLOC_Normal (*acceptTopNormal)(PLOC_Normal), PLOC_StrCon (*acceptTopStrCon)(PLOC_StrCon))
+PLOC_Slice PLOC_visitSlice(PLOC_Slice arg, PLOC_OptLayout (*acceptWsAfterSlice)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptId)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterId)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterBracketOpen)(PLOC_OptLayout), PLOC_AreaAreas (*acceptAreas)(PLOC_AreaAreas), PLOC_OptLayout (*acceptWsAfterAreas)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterBracketClose)(PLOC_OptLayout))
 {
+  if (PLOC_isSliceSlice(arg)) {
+    return PLOC_makeSliceSlice(
+        acceptWsAfterSlice ? acceptWsAfterSlice(PLOC_getSliceWsAfterSlice(arg)) : PLOC_getSliceWsAfterSlice(arg),
+        acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PLOC_getSliceWsAfterParenOpen(arg)) : PLOC_getSliceWsAfterParenOpen(arg),
+        acceptId ? acceptId(PLOC_getSliceId(arg)) : PLOC_getSliceId(arg),
+        acceptWsAfterId ? acceptWsAfterId(PLOC_getSliceWsAfterId(arg)) : PLOC_getSliceWsAfterId(arg),
+        acceptWsAfterComma ? acceptWsAfterComma(PLOC_getSliceWsAfterComma(arg)) : PLOC_getSliceWsAfterComma(arg),
+        acceptWsAfterBracketOpen ? acceptWsAfterBracketOpen(PLOC_getSliceWsAfterBracketOpen(arg)) : PLOC_getSliceWsAfterBracketOpen(arg),
+        acceptAreas ? acceptAreas(PLOC_getSliceAreas(arg)) : PLOC_getSliceAreas(arg),
+        acceptWsAfterAreas ? acceptWsAfterAreas(PLOC_getSliceWsAfterAreas(arg)) : PLOC_getSliceWsAfterAreas(arg),
+        acceptWsAfterBracketClose ? acceptWsAfterBracketClose(PLOC_getSliceWsAfterBracketClose(arg)) : PLOC_getSliceWsAfterBracketClose(arg));
+  }
+  ATabort("not a Slice: %t\n", arg);
+  return (PLOC_Slice)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_AreaAreas PLOC_visitAreaAreas(PLOC_AreaAreas arg, PLOC_Area (*acceptHead)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterHead)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterSep)(PLOC_OptLayout)) */
+
+PLOC_AreaAreas PLOC_visitAreaAreas(PLOC_AreaAreas arg, PLOC_Area (*acceptHead)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterHead)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterSep)(PLOC_OptLayout))
+{
+  if (PLOC_isAreaAreasEmpty(arg)) {
+    return PLOC_makeAreaAreasEmpty();
+  }
+  if (PLOC_isAreaAreasSingle(arg)) {
+    return PLOC_makeAreaAreasSingle(
+        acceptHead ? acceptHead(PLOC_getAreaAreasHead(arg)) : PLOC_getAreaAreasHead(arg));
+  }
+  if (PLOC_isAreaAreasMany(arg)) {
+    return PLOC_makeAreaAreasMany(
+        acceptHead ? acceptHead(PLOC_getAreaAreasHead(arg)) : PLOC_getAreaAreasHead(arg),
+        acceptWsAfterHead ? acceptWsAfterHead(PLOC_getAreaAreasWsAfterHead(arg)) : PLOC_getAreaAreasWsAfterHead(arg),
+        acceptWsAfterSep ? acceptWsAfterSep(PLOC_getAreaAreasWsAfterSep(arg)) : PLOC_getAreaAreasWsAfterSep(arg),
+        PLOC_visitAreaAreas(PLOC_getAreaAreasTail(arg), acceptHead, acceptWsAfterHead, acceptWsAfterSep));
+  }
+  ATabort("not a AreaAreas: %t\n", arg);
+  return (PLOC_AreaAreas)NULL;
+}
+
+/*}}}  */
+/*{{{  PLOC_Start PLOC_visitStart(PLOC_Start arg, PLOC_OptLayout (*acceptWsBefore)(PLOC_OptLayout), PLOC_Slice (*acceptTopSlice)(PLOC_Slice), PLOC_OptLayout (*acceptWsAfter)(PLOC_OptLayout), int (*acceptAmbCnt)(int), PLOC_Area (*acceptTopArea)(PLOC_Area), PLOC_Location (*acceptTopLocation)(PLOC_Location), PLOC_NatCon (*acceptTopNatCon)(PLOC_NatCon), PLOC_Escaped (*acceptTopEscaped)(PLOC_Escaped), PLOC_Normal (*acceptTopNormal)(PLOC_Normal), PLOC_StrCon (*acceptTopStrCon)(PLOC_StrCon)) */
+
+PLOC_Start PLOC_visitStart(PLOC_Start arg, PLOC_OptLayout (*acceptWsBefore)(PLOC_OptLayout), PLOC_Slice (*acceptTopSlice)(PLOC_Slice), PLOC_OptLayout (*acceptWsAfter)(PLOC_OptLayout), int (*acceptAmbCnt)(int), PLOC_Area (*acceptTopArea)(PLOC_Area), PLOC_Location (*acceptTopLocation)(PLOC_Location), PLOC_NatCon (*acceptTopNatCon)(PLOC_NatCon), PLOC_Escaped (*acceptTopEscaped)(PLOC_Escaped), PLOC_Normal (*acceptTopNormal)(PLOC_Normal), PLOC_StrCon (*acceptTopStrCon)(PLOC_StrCon))
+{
+  if (PLOC_isStartSlice(arg)) {
+    return PLOC_makeStartSlice(
+        acceptWsBefore ? acceptWsBefore(PLOC_getStartWsBefore(arg)) : PLOC_getStartWsBefore(arg),
+        acceptTopSlice ? acceptTopSlice(PLOC_getStartTopSlice(arg)) : PLOC_getStartTopSlice(arg),
+        acceptWsAfter ? acceptWsAfter(PLOC_getStartWsAfter(arg)) : PLOC_getStartWsAfter(arg),
+        acceptAmbCnt ? acceptAmbCnt(PLOC_getStartAmbCnt(arg)) : PLOC_getStartAmbCnt(arg));
+  }
   if (PLOC_isStartArea(arg)) {
     return PLOC_makeStartArea(
         acceptWsBefore ? acceptWsBefore(PLOC_getStartWsBefore(arg)) : PLOC_getStartWsBefore(arg),
