@@ -1,6 +1,10 @@
 $Id$
 
-2002/01/08 (jurgenv@cwi.nl)
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 1.6
+ * LGPL license
+
+2003/01/08 (jurgenv@cwi.nl)
  * Created libtb-asc-support.a, this can be linked with compiled
    specifications that are connected to the ToolBus.
 
