@@ -18,6 +18,7 @@ let
   Mdb       : module-db,
   Modules   : list,
   ChngMods  : list,
+  Imports   : list,
   Equations : term,
   Renamings : term,
   ModName   : term,
@@ -310,8 +311,8 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     rec-value(Mdb, plain-equations(Equations?)) .
     snd-msg(plain-equations(Equations))
   +
-    rec-value(Mdb, renaming-equations(Renamings?, Equations?)) .
-    snd-msg(renaming-equations(Renamings, Equations))
+    rec-value(Mdb, renaming-equations(Renamings?, Imports?, Equations?)) .
+    snd-msg(renaming-equations(Renamings, Imports, Equations))
   +
     rec-value(Mdb, no-equations) .
     snd-msg(no-equations)

@@ -724,16 +724,17 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
 
     if (!ATisEqual(eqsTerm, MDB_NONE)) {
       SDF_Renamings renamings;
+      SDF_ImportList fullImports;
 
       if (SDF_isImportRenamedModule(import)) {
+	fullImports = SDF_makeImportListEmpty();
         renamings = SDF_getImportRenamings(import);
       } 
       else if (SDF_isModuleNameParameterized(moduleName)) {
         ATerm sdfTerm = MDB_getEntrySdfTree(entry);
-        SDF_ModuleName formalModuleName;
-
-        formalModuleName = SDF_getModuleModuleName(SDF_getStartTopModule(
-	   		     SDF_StartFromTerm(sdfTerm)));
+	SDF_Module module = SDF_getStartTopModule(SDF_StartFromTerm(sdfTerm));
+        SDF_ModuleName formalModuleName = SDF_getModuleModuleName(module);
+        fullImports = SDF_getModuleImportsList(module);
 
 	renamings = SDF_makeRenamingsFromModuleNames(formalModuleName,
 						     moduleName);
@@ -742,8 +743,9 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
 	return ATmake("snd-value(plain-equations(<term>))", ATBpack(eqsTerm));
       }
 
-      return ATmake("snd-value(renaming-equations(<term>,<term>))", 
+      return ATmake("snd-value(renaming-equations(<term>,<term>,<term>))", 
 		    SDF_makeTermFromRenamings(renamings),
+		    SDF_makeTermFromImportList(fullImports),
 		    ATBpack(eqsTerm));
     }
   }
