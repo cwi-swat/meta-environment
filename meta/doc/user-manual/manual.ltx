@@ -117,6 +117,18 @@
 \def\aterm{\mbox{ATerm}}
 \def\asfix{\mbox{\sc AsFix}}
 
+\newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
+\newcommand{\transformerprod}[1]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow S_1}}
+\newcommand{\accumulatorprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_2}}
+\newcommand{\combinationprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_1 \# S_2}}
+\newcommand{\accu}[0]{{\tt accu}}
+\newcommand{\trafo}[0]{{\tt trafo}}
+\newcommand{\accutrafo}[0]{{\tt accu, trafo}}
+\newcommand{\traversal}[0]{{\tt traversal}}
+\newcommand{\innerm}[0]{{\tt bottom-up}}
+\newcommand{\outerm}[0]{{\tt top-down}}
+\newcommand{\suppress}[0]{{\tt suppress-syntax-generation}}
+\newcommand{\generate}[0]{{\tt generate-syntax}}
 %}}}
 %{{{ Title page and table of contents
 
@@ -126,7 +138,7 @@
         {\small\sl Centrum voor Wiskunde en Informatica (CWI),}\\
 {\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
 
-\date{}
+\date{\today}
 \begin{document}
 \maketitle    
 
@@ -324,7 +336,8 @@ overview of selected publications:
 
 \item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
 
-\item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00}.
+\item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00},
+\cite{BKV01}.
 
 \item{ToolBus}: ~\cite{BK98}.
 
@@ -2544,7 +2557,9 @@ which all calls and results will be cached during evaluation
 \item {\tt delay} is used to influence the evaluation order of the
 arguments of a function (Section~\ref{Delay}).
 
-\item (*** attributes for traversal functions ***)
+\item {\tt traversal} is used to declare so-called traversal functions
+that greatly simply the specification of functions that have to visit
+(parts of) a term (Section~\ref{Traversal}).
 
 \end{itemize}
 
@@ -3662,6 +3677,168 @@ Both the compiler and the evaluator are based on innermost rewriting.
 In some cases it is more efficient to overrule this rewriting
 strategy.
 
+\subsubsection{Traversal Functions} \label{Traversal}
+
+Program analysis and program transformation usually take the syntax
+tree of a program as starting point.  One common
+problem that one encounters is how to express the \emph{traversal} of
+the tree: visit all the nodes of the tree and extract information from
+some nodes or make changes to certain other nodes.
+
+The kinds of nodes that may appear in a program's syntax tree are
+determined by the grammar of the language the program is written
+in. Typically, each rule in the grammar corresponds to a node category in
+the syntax tree. Real-life languages are described by grammars
+containing a few hundred up to one thousand grammar rules.
+This immediately reveals a hurdle for writing tree traversals: a naive
+recursive traversal function should consider many
+node categories and the size of its definition will grow accordingly.
+This becomes even more dramatic if we realize that the traversal
+function will only do some real work (apart from traversing) for very
+few node categories.
+
+Traversal functions in \asfsdf~\cite{BKV01} solve this problem
+\footnote{Traversal functions are currently only supported by the evaluator
+and not by the compiler.}.
+We distinguish three kinds of traversal functions, defined as follows.
+
+\begin{description}
+
+\item[Transformer:] a sort-preserving transformation that 
+will traverse its first argument. Possible extra arguments may contain
+additional data that can be used (but not modified) during the traversal.
+A transformer is declared as follows:
+
+\transformerprod{n} \{{\tt \traversal(\trafo)}\}
+
+Because a transformer always returns the same sort, it is type-safe. A
+transformer is used to transform a tree.
+
+\item[Accumulator:] a mapping of all node types to a single type. 
+It will traverse its first argument, while the second
+argument keeps the accumulated value. An accumulator is declared as follows:
+
+\accumulatorprod{n} \{{\tt \traversal(\accu)}\}
+
+After each application of an accumulator, the accumulated argument is updated.
+The next application of the accumulator, possibly somewhere else in the term,
+will use the \emph{new} value of the accumulated argument. In other words,
+the accumulator acts as a global, modifiable, state during the traversal.
+
+An accumulator function never changes the tree, only its accumulated argument.
+Furthermore, the type of the second argument has to be equal to the result
+type. The end-result of an accumulator is the value of the accumulated
+argument. By these restrictions, an accumulator is also type-safe for every
+instantiation.
+
+An accumulator is meant to be used to extract information from a tree.
+
+\item[Accumulating transformer:] a sort preserving transformation
+that accumulates information while traversing its first argument. The
+second argument maintains the accumulated value. The return value of
+an accumulating transformer is a tuple consisting of the transformed
+first argument and accumulated value. An accumulating transformer
+is declared as follows:
+
+\combinationprod{n}  \{{\tt \traversal(\accutrafo)}\}
+
+An accumulating transformer is used to simultaneously extract information from a
+tree and transform it.
+\end{description}
+
+Having these three types of traversals, they must be provided with visiting
+strategies. Visiting strategies determine the order of traversal and the
+``depth'' of the traversal. We provide the following two strategies for each
+type of traversal:
+
+\begin{description}
+\item[Bottom-up:] the traversal visits \emph{all} the subtrees of a node where
+  the visiting function applies in an \emph{bottom-up}\ fashion.  The
+  annotation \innerm\ selects this behavior.  A traversal function without an
+  explicit indication of a visiting strategy also uses the bottom-up strategy.
+  
+\item[Top-down:] the traversal visits the subtrees of a node in an top-down
+  fashion and stops recurring at the first node where the visiting function
+  applies and does not visit the subtrees of that node. The annotation
+  \outerm\ selects this behavior.
+\end{description}
+
+We give two simple examples of traversal functions that are both based on the
+tree language defined in Figure~\ref{FIG:tree-language}.  Our first example
+transforms a given tree into a new tree in which all numbers have been
+incremented (Figure~\ref{FIG:inc}).  Our second example summs all numbers in
+atree (Figure~\ref{FIG:sum}).  For many more examples and a detailed
+description of traversal functions see~\cite{BKV01}.
+
+Implicitly, each traversal function corresponds to a set of functions,
+one for each sort that can be reached during a traversal.
+There are two approaches how to define these functions:
+
+\begin{itemize}
+
+\item They are explicitly defined by the specification writer
+(this is the default).
+
+\item They  are generated automatically. This is achived with
+  the attribute {\tt generate-syntax}.
+
+\end{itemize}
+
+Experience learns that the automatic generation of syntax is nice for smaller
+examples but become a burden for real-life specifications: generation times
+become much longer and the generated function definitions may given undesired
+and hard to resolve syntactic ambiguities.
+
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Tree-syntax
+imports Naturals
+exports
+  sorts TREE
+  contextfreesyntax
+    NAT           -> TREE
+    f(TREE, TREE) -> TREE
+    g(TREE, TREE) -> TREE
+    h(TREE, TREE) -> TREE
+\end{boxedverbatim}
+\end{IncCode}
+\caption{A simple tree language}\label{FIG:tree-language}
+\end{figure}     
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Tree-inc
+imports Tree-syntax
+exports
+  contextfreesyntax
+    inc(TREE) -> TREE {traversal(trafo)}
+equations
+[1] inc(N) = N + 1  
+\end{boxedverbatim}
+\end{IncCode}
+\caption{The transformer {\tt inc} increments all numbers in a tree} \label{FIG:inc}
+\end{figure}  
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Tree-sum
+imports Tree-syntax
+exports
+contextfreesyntax
+   sum(TREE, NAT) -> NAT {traversal(accu)}
+equations
+[1] sum(N1, N2) = N1 + N2
+\end{boxedverbatim}
+\end{IncCode}
+\caption{The accumulator {\tt sum} that sums all numbers in a tree.}\label{FIG:sum} 
+\end{figure}   
+
+
+
 \begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
@@ -3764,9 +3941,8 @@ equations
   [10] 0 * E = 0            [11] E * 0 = 0
 \end{boxedverbatim}
 \end{IncCode}
-\caption{\asfsdf\ specification for differentiating}\label{CODE:diff}
+\caption{\asfsdf\ specification for differentiation}\label{CODE:diff}
 \end{figure}   
-
 
 
 Here are some examples of \asfsdf\ specifications, which are selected to
