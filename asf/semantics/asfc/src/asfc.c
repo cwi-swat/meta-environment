@@ -1,7 +1,8 @@
 /* $Id$ */
 
+/*{{{  standard includes */
+
 #include <assert.h>
-#include <atb-tool.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -12,16 +13,28 @@
 #include <time.h>
 
 
+/*}}}  */
+/*{{{  meta includes */
+
 #include <SDFME-utils.h>  
 #include <ASFME-utils.h>
 #include <MEPT-utils.h>
 #include <MuASF.h>
-
 #include <aterm2.h>
+#include <atb-tool.h>
+
+
+/*}}}  */
+/*{{{  local includes */
 
 #include "asfc.tif.h"
 #include "asf2muasf.h"
 #include "muasf2c.h"
+
+
+/*}}}  */
+
+/*{{{  global variables */
 
 ATbool run_verbose;
 
@@ -30,9 +43,12 @@ char myversion[] = "2.0";
 
 static char myarguments[] = "hi:n:o:vV";
 
-static ATerm compile(char *name, ASF_CondEquationList equations);
 
-void usage(void)
+/*}}}  */
+
+/*{{{  static void usage(void) */
+
+static void usage(void)
 {
   ATwarning(
             "Usage: %s [options]\n"
@@ -47,16 +63,37 @@ void usage(void)
   exit(0);
 }
 
-void version(void)
+/*}}}  */
+/*{{{  static void version(void) */
+
+static void version(void)
 {
   ATwarning("%s v%s\n", myname, myversion);
   exit(0);
 }
 
+/*}}}  */
+
+/*{{{  static ATerm compile(char *name, ASF_CondEquationList equations) */
+
+static ATerm compile(char *name, ASF_CondEquationList equations)
+{
+  MA_Module muasf = asfToMuASF(name, equations);
+
+  return (ATerm) muasf; /* muasfToC(muasf); */
+}
+
+/*}}}  */
+
+/*{{{  void rec_terminate(int cid, ATerm t)  */
+
 void rec_terminate(int cid, ATerm t) 
 {
   exit(0);
 }
+
+/*}}}  */
+/*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations,  */
 
 ATerm compile_module(int cid, char *moduleName, ATerm equations, 
 		     char *output)
@@ -79,13 +116,9 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
   return ATmake("snd-value(compilation-done)");
 }                              
 
-static ATerm compile(char *name, ASF_CondEquationList equations)
-{
-  MA_Module muasf = asfToMuASF(name, equations);
+/*}}}  */
 
-  return (ATerm) muasf; /* muasfToC(muasf); */
-}
-
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
@@ -149,4 +182,6 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+
+/*}}}  */
 

@@ -31,8 +31,7 @@ typedef enum { WITH_LAYOUT, WITHOUT_LAYOUT } LayoutOption;
 
 /*}}}  */
 
-
-/*{{{  abbreviations for arbitrary layout (should be ATprotected) */
+/*{{{  abbreviations for arbitrary layout  */
 
 static MA_Layout sp  = NULL; /* space */
 static MA_Layout nl  = NULL; /* newline */
@@ -72,11 +71,13 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
 					       MA_FuncDefElems *funcdefs);
 static MA_ModId makeModId(const char *str);
+static ATbool checkListProductionCompatibility(PT_Production ptProd);
 
 static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs);
 
 
 /*}}}  */
+
 /*{{{  static MA_Lexical stringToLexical(const char* str) */
 
 static MA_Lexical stringToLexical(const char* str)
@@ -340,6 +341,38 @@ static MA_SigArgElems makeSigArgElems(int arity)
 }
 
 /*}}}  */
+/*{{{  static ATbool checkListProductionCompatibility(PT_Production ptProd) */
+
+static ATbool checkListProductionCompatibility(PT_Production ptProd)
+{
+  ATbool result = ATtrue;
+  PT_Symbol rhs;
+
+  assert(PT_isProductionList(ptProd));
+
+  rhs = PT_getProductionRhs(ptProd);
+
+  if (PT_isSymbolIterPlus(rhs)
+      || PT_isSymbolIterStar(rhs)) {
+    result = ATtrue;
+  }
+  else if (PT_isSymbolIterPlusSep(rhs)
+	   || PT_isSymbolIterStarSep(rhs)) {
+    PT_Symbol sep = PT_getSymbolSeparator(rhs);
+
+    if (PT_isSymbolLit(sep)) {
+      result = ATtrue; /* only allow literal separators */
+    }
+    else {
+      result = ATfalse;
+    }
+  }
+
+  return result;
+}
+
+/*}}}  */
+
 /*{{{  static MA_FuncDef prodToFuncDef(PT_Production ptProd)  */
 
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
@@ -379,7 +412,13 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
     }
   }
   else { /* list production */
-    maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
+    if (checkListProductionCompatibility(ptProd)) {
+      maFuncdef = MA_makeFuncDefConstantNoAnnos(maFunId);
+    }
+    else {
+      ATerror("This list type is not supported yet: %t\n", ptProd);
+      return NULL;
+    } 
   }
 
   return maFuncdef;
@@ -654,10 +693,9 @@ static MA_ModId makeModId(const char *str)
 
 /*}}}  */
 
-/*{{{  asfToMuASF(char *name, ASF_CondEquationList equations) */
+/*{{{  MA_Module asfToMuASF(char *name, ASF_CondEquationList equations) */
 
-MA_Module 
-asfToMuASF(char *name, ASF_CondEquationList equations)
+MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
 {
   MA_SignatureOpt maSignature;
   MA_FuncDefElems funcdefs = MA_makeFuncDefElemsEmpty();
