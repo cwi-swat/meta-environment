@@ -1,0 +1,6 @@
+equations
+
+   [Pnt9'1]   if true  then Point1 else Point2 fi = Point1
+   [Pnt9'2]   if false then Point1 else Point2 fi = Point2
+
+%%%

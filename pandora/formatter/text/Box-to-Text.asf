@@ -1,0 +1,287 @@
+equations
+
+%% The function {\tt text} takes care of the initialisation of the various data structures
+%% and triggers the placement of boxes. The equations \ref{Eq:BtT1'2} and \ref{Eq:BtT1'4}
+%% take care of the case in which the right margin is explicitly given.
+%%\smallskip
+
+  [BtT1'0]   box2text(B) = text(B)
+  [BtT1'0]   box2text(B,Int) = text(B,Int)
+
+  [BtT1'1]   text() = ""
+
+  [BtT1'2]   text(,Int) = ""
+
+  [BtT1'3]   Point1 & Defs := make frame,
+             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             ==================================================================
+             text(B) = Text
+
+  [BtT1'4]   Frame := make frame,
+             Point1 & Defs := set rmargin Int in Frame,
+             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             ==================================================================
+             text(B,Int) = Text
+
+%% The function {\tt place \_ with \_ and \_ and \_} considers all possible elements in the
+%% box language and takes the appropiate actions.
+%% The equations \ref{Eq:BtT2'1} and \ref{Eq:BtT2'2} add the elementary string in the box
+%% expression to the text constructed so far, of course with the necessary layout. If the
+%% last character of the text and the first character of the string to be printed are not
+%% on the same line a number of new lines have to be inserted.
+%%\smallskip
+
+  [BtT2'1]   String2 := deslash(String1),
+             Text2 :=
+               add to last line (Text1,
+                               string of X1 - X2 layoutchars || String2)
+             =======
+             place String1 with (X1,Y) & Defs and Text1 && (X2,Y) and 'C =
+               Text2 && (X1 + length of String2,Y)
+
+  [BtT2'2]   Y1 != Y2
+             ========
+             place String with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
+               place String with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
+
+  [BtT2'3]   Text2 :=
+               add to last line (Text1,
+                               string of X1 - X2 layoutchars || String)
+             =======
+             place String (X,Y) with (X1,Y1) & Defs and Text1 && (X2,Y1) and 'C =
+               Text2 && (X1 + X,Y1)
+
+  [BtT2'4]   Y1 != Y2
+             ========
+             place String Point with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
+               place String Point with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
+
+%% The equations \ref{Eq:BtT2'5} through \ref{Eq:BtT2'7} deal with the box operator {\sf H}.
+%% The space between two boxes is calculated only once. The auxilary
+%% function {\tt hplace \_ h \_ with \_ and \_} takes care of placing a non-empty box list with
+%% at least 2 boxes horizontally.
+%%\smallskip
+
+  [BtT2'5]   place H so* [] with Frame and Struct and 'C = Struct
+
+  [BtT2'6]   place H so* [B] with Frame and Struct and 'C =
+               place B with Frame and Struct and H
+
+  [BtT2'7]   Hs := set hs value given so* and Frame
+             =====================================
+             place H so* [B+ B] with Frame and Struct and 'C =
+               hplace B+ B h Hs with Frame and Struct
+
+%% The equations \ref{Eq:BtT2'8} through \ref{Eq:BtT2'10} deal with the box operator {\sf V}.
+%% The number of new lines to be inserted between two boxes is calculated only once.
+%% The auxilary function {\tt vplace \_ v \_ with \_ and \_} takes care of placing a non-empty
+%% box list with at least 2 boxes vertically. Furthermore it is necessary to fix a new left
+%% margin to make sure that all subboxes start at the correct indentation level.
+%%\smallskip
+
+  [BtT2'8]   place V so* [] with Frame and Struct and 'C = Struct
+
+  [BtT2'9]   place V so* [B] with Frame and Struct and 'C =
+               place B with Frame and Struct and V
+
+  [BtT2'10]  Vs := set vs value given so* and Frame1,
+             Frame2 := set lmargin in Frame1
+             ==============================
+             place V so* [B+ B] with Frame1 and Struct and 'C =
+               vplace B+ B v Vs with Frame2 and Struct
+
+%% The equations \ref{Eq:BtT2'11} through \ref{Eq:BtT2'14} deal with the box operator {\sf HV}.
+%% The space characters, new lines, and indentation to be inserted between two boxes is
+%% calculated only once. In fact we need either the space characters or the new lines and
+%% indentation. The latter is only used if a box does not fit on the remaining space on the line
+%% and has to be placed on the next line.
+%% The auxilary function {\tt hvplace \_ h \_ v \_ i \_ with \_ and \_} takes care of placing a
+%% non-empty box list with at least 2 elements. Furthermore it is necessary to fix a new left
+%% margin to make sure that all subboxes start at the correct indentation level. For this operator
+%% it is necessary that all boxes are extended with their size information.
+%% Therefore \ref{Eq:BtT2'13} starts with the calculation of the length of the box expression,
+%% \ref{Eq:BtT2'14} deals with the case that this calculation has already been done.
+%%\smallskip
+
+  [BtT2'11]  place HV so* [] with Frame and Struct and 'C = Struct
+
+  [BtT2'12]  place HV so* [B] with Frame and Struct and 'C =
+               place B with Frame and Struct and H
+
+  [BtT2'13]  HV so*2 [B+2] Point ## Point :=
+               length of HV so*1 [B+1 B] with Frame1 and H,
+             Hs := set hs value given so*1 and Frame1,
+             Vs := set vs value given so*1 and Frame1,
+             Is := set is value given so*1 and Frame1,
+             Frame2 := set lmargin in Frame1
+             ==============================
+             place HV so*1 [B+1 B] with Frame1 and Struct and 'C =
+               hvplace B+2 h Hs v Vs i Is with Frame2 and Struct
+
+  [BtT2'14]  Hs := set hs value given so* and Frame1,
+             Vs := set vs value given so* and Frame1,
+             Is := set is value given so* and Frame1,
+             Frame2 := set lmargin in Frame1
+             ==============================
+             place HV so* [B+ B] Point with Frame1 and Struct and 'C =
+               hvplace B+ B h Hs v Vs i Is with Frame2 and Struct
+
+%% The equations \ref{Eq:BtT2'15} through \ref{Eq:BtT2'18} deal with the box operator {\sf HOV}.
+%% The auxilary function {\tt hovplace \_ with \_ and \_} takes care of placing a
+%% non-empty box list. For this box operator it is also necessary to calculate its size.
+%% Depending on the size the boxes will be put horizontally or vertically.
+%%\smallskip
+
+  [BtT2'15]  place HOV so* [] with Frame and Struct and 'C = Struct
+
+  [BtT2'16]  place HOV so* [B] with Frame and Struct and 'C =
+               place B with Frame and Struct and H
+
+  [BtT2'17]  B+2 ## Point := length of HOV so* [B+1 B] with Frame and H
+             =========================================================
+             place HOV so* [B+1 B] with Frame and Struct and 'C =
+               place B+2 with Frame and Struct and 'C
+
+  [BtT2'18]  place HOV so* [B+ B] Point with Frame and Struct and 'C =
+               hovplace HOV so* [B+ B] Point with Frame and Struct
+
+%% The equations \ref{Eq:BtT2'19} and \ref{Eq:BtT2'20} deal with the box operator {\sf I}.
+%% The {\sf I} operator always works on exactly {\em one} box, depending on the context
+%% the {\sf I} can be ignored {\sf H}-context, in {\sf V}-context it should be translated
+%% in a number of space characters. The latter is achieved by increasing the x-position of
+%% the point where the next string has to occur.
+%%\smallskip
+
+  [BtT2'19]  Is := set is value given so* and (X1,Y1) & Defs
+             ==============================================
+             place I so* [B] with (X1,Y1) & Defs and Struct and V =
+               place B with (X1+Is,Y1) & Defs and Struct and V
+
+  [BtT2'20]  'C != V
+             =======
+             place I so* [B] with Frame and Struct and 'C =
+               place B with Frame and Struct and 'C
+
+%% The equation \ref{Eq:BtT2'21} deals with the box
+%% operator {\sf WD}. The argument is placed but the resulting text will be
+%% ignored except for the last line. A string of space characters of exactly
+%% the same length is created and added to the orginal text. The concatenation
+%% is done by a call to {\tt place \_ with \_ and \_ and \_} because of the number
+%% of newlines that need to be inserted.
+%%\smallskip
+
+  [BtT2'21]  Text2 && (X3,Y3) := place B with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C,
+             String := string of X3-X1 layoutchars
+             ====================================
+             place WD [B] with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
+              place String with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C
+
+%% The equation \ref{Eq:BtT2'22} deals with the situation a box is not processed
+%% by one of the previous equations. The function {\tt dplace \_ with \_ and \_ and \_} will
+%% decided whether an erroneous box expression is found or whether the box is extended with
+%% length information but the operator was not a {\sf HV} or a {\sf HOV} operator.
+%%\smallskip
+
+  [default-BtT2'22]  place B with Frame and Struct and 'C =
+                       dplace B with Frame and Struct and 'C
+
+%% The equations \ref{Eq:BtT3'1} and \ref{Eq:BtT3'2} take care of a list of
+%% boxes which should all be placed horizontally. The equations \ref{Eq:BtT4'1} and
+%% and \ref{Eq:BtT4'2} have the same functionality except they do it vertically.
+%%\smallskip
+
+  [BtT3'1]   hplace B h Hs with Frame and Struct = place B with Frame and Struct and H
+
+  [BtT3'2]   Text1 && Point1 := hplace B+ h Hs with Frame1 and Struct1,
+             Frame2 := hsep Point1 h Hs with Frame1
+             =====================================
+             hplace B+ B h Hs with Frame1 and Struct1 =
+               place B with Frame2 and Text1 && Point1 and H
+
+  [BtT4'1]   vplace B v Vs with Frame and Struct = place B with Frame and Struct and V
+
+  [BtT4'2]   Text1 && Point1 := vplace B+ v Vs with Frame1 and Struct1,
+             Frame2 := vsep Point1 v Vs with Frame1
+             =====================================
+             vplace B+ B v Vs with Frame1 and Struct1 =
+               place B with Frame2 and Text1 && Point1 and V
+
+%% The equations \ref{Eq:BtT5'1} and \ref{Eq:BtT5'2} take care of a list of
+%% boxes which should all be placed horizontally as long as there is enough room left
+%% on the current line and the next box consists of only one line of text. If there is
+%% not enough room left for the next box or the text of it is spread over more than one line
+%% this box is placed on the next line. starting at the current left margin with a possible
+%% increase of indentation. This decision is made by the function
+%% {\tt reshuffle \_ given \_ and \_ h \_ v \_ i \_}.
+%%\smallskip
+
+  [BtT5'1]   hvplace B h Hs v Vs i Is with Frame1 and Struct =
+               place B with Frame1 and Struct and H
+
+  [BtT5'2]   Text1 && Point1 := hvplace B+ h Hs v Vs i Is with Frame1 and Struct1,
+             Frame2 := hsep Point1 h Hs with Frame1
+             =====================================
+             hvplace B+ B h Hs v Vs i Is with Frame1 and Struct1 =
+               reshuffle B given Frame2 and Text1 && Point1 h Hs v Vs i Is
+
+%% The equation \ref{Eq:BtT6'1} and \ref{Eq:BtT6'2} do more or less the same thing as the previous
+%% two equations except that all argument boxes of the {\sf HOV} operator are reshuffled.
+%% They are either placed horizontally if they fit on the remaining space or they are placed
+%% vertically if they do not fit. The case that an effective {\sf V} has been taken care of
+%% during the length calculation, because in that case the {\sf HOV} operator is transformed
+%% into a {\sf V} operator.
+%%\smallskip
+
+  [BtT6'1]   (X1 + Int1) <= rightm of (X1,Y1) & Defs == true,
+             Hs := set hs value given so* and (X1,Y1) & Defs
+             ==============================================
+             hovplace HOV so* [B+] (Int1,Int2) with (X1,Y1) & Defs and Struct =
+               hplace B+ h Hs with (X1,Y1) & Defs and Struct
+
+  [BtT6'2]   (X1 + Int1) <= rightm of (X1,Y1) & Defs == false,
+             Vs := set vs value given so* and (X1,Y1) & Defs,
+             Frame2 := set lmargin in (X1,Y1) & Defs
+             ======================================
+             hovplace HOV so* [B+] (Int1,Int2) with (X1,Y1) & Defs and Struct  =
+               vplace B+ v Vs with Frame2 and Struct
+
+%% The equations \ref{Eq:BtT7'1} and \ref{Eq:BtT7'2} place the next argument box of
+%% a {\sf HV} operator at the appropiate place. Either at the current line, if the box
+%% fits and consists of only one line of text, or at the next line starting at the current
+%% left margin.
+%%\smallskip
+
+  [BtT7'1]   Point := if X1 + Int <= rightm of (X1,Y1) & Defs
+             then (X1,Y1)
+             else (leftm of (X1,Y1) & Defs+Is,Y1+Vs)
+             fi
+             ==========
+             reshuffle B (Int,0) given (X1,Y1) & Defs and Struct h Hs v Vs i Is =
+               place B (Int,0) with Point & Defs and Struct and H
+
+  [BtT7'2]   Int2 > 0 == true,
+             Point := (leftm of (X1,Y1) & Defs+Is,Y1+Vs)
+             ==========================================
+             reshuffle B (Int1,Int2) given (X1,Y1) & Defs and Struct h Hs v Vs i Is =
+               place B (Int1,Int2) with Point & Defs and Struct and H
+
+%% The equation \ref{Eq:BtT8'1} deals with the situation the box is extended
+%% with length information.
+%%\smallskip
+
+  [BtT8'1]   dplace B1 Point with Frame and Struct and 'C =
+               place B1 with Frame and Struct and 'C
+
+%% The equation \ref{Eq:BtT8'2} deal with the situation a box is not extended
+%% with length information. The only thing we can do with such a box is to consider it
+%% as an erroneous box and print a special message.
+%%\smallskip
+
+%%%  [default-BtT8'2] dplace B with Frame and Struct and 'C =
+%%%                     place "*** unprintable box expression ***" with Frame and Struct and 'C
+
+  [BtT9'1]   String3 := String1 || String2
+             ====>
+             add to last line (String1, String2) = String3
+
+  [BtT9'2]   add to last line (Text String1, String2) = Text String1 || String2

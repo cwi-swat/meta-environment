@@ -1,0 +1,123 @@
+equations
+
+%% The initialization of the frame data structure is performed by
+%% {\tt make frame}. The start point of the first box is {\tt (0,0)},
+%% the initial value of the left margin is {\tt 0} and the initial
+%% value of the right margin is {\tt 79}. The vertical and the horizontal
+%% space values are both  {\tt 1}, the indentation value equals {\tt 2}.
+%%\smallskip
+
+   [Frm1'1]   make frame = (0,0) & 0, 79, 1, 1, 2
+
+%% The equations \ref{Eq:Frm2'1} through \ref{Eq:Frm4'3} are access
+%% routines to retrieve values from the data structure.
+%%\smallskip
+
+   [Frm2'1]   leftm of Point1 & Lm, Rm, Vs, Hs, Is = Lm
+
+   [Frm3'1]   rightm of Point1 & Lm, Rm, Vs, Hs, Is = Rm
+
+   [Frm4'1]   value vs in Point1 & Lm, Rm, Vs, Hs, Is = Vs
+
+   [Frm4'2]   value hs in Point1 & Lm, Rm, Vs, Hs, Is = Hs
+
+   [Frm4'3]   value is in Point1 & Lm, Rm, Vs, Hs, Is = Is
+
+%% The equations \ref{Eq:Frm5'1} through \ref{Eq:Frm5'6} are access
+%% routines as well, however before the frame data structure is
+%% used, the option list associated with each operator is inspected
+%% first. If the option keyword does not occur in this list the
+%% default value in the frame is used instead. The {\tt is}
+%% option is treated as a separate case because we allow a negative
+%% value for {\tt is}. A negative {\tt is} value is interpreted as a
+%% shift to the left margin, see equations \ref{Eq:Frm5'5}
+%% and \ref{Eq:Frm5'6}.
+%%\smallskip
+
+   [Frm5'1]   ss1 != ss2
+              ==========
+              set ss1 value given ss2 = Int so* and Frame =
+                set ss1 value given so* and Frame
+
+   [Frm5'2]   ss != is,
+              Int < 0 == false
+              ===============
+              set ss value given ss = Int so* and Frame = Int
+
+%% If one of the options unequal to {\tt is} has a negative value
+%% this value will be ignored and the inspection of the option list
+%% continues.
+%%\smallskip
+
+   [Frm5'3]   ss != is,
+              Int < 0 == true
+              ==============
+              set ss value given ss = Int so* and Frame =
+                set ss value given so* and Frame
+
+   [Frm5'4]   set ss value given and Frame = value ss in Frame
+
+   [Frm5'5]   Int < 0 == false
+              ===============
+              set is value given is = Int so* and Frame = Int
+
+   [Frm5'6]   Int < 0 == true,
+              Nat := leftm of Frame
+              ====================
+              set is value given is = Int so* and Frame = - Nat
+
+%% The last two real access routines modify the values
+%% of left and right margin stored in the frame data structure.
+%% The left margin is made equal to the current {\tt X} value
+%% in case of an update of the left margin.
+%%\smallskip
+
+   [Frm6'1]   set lmargin in (X,Y) & Lm, Rm, Vs, Hs, Is =
+                (X,Y) & X, Rm, Vs, Hs, Is
+
+   [Frm7'1]   set rmargin Rm2 in Point & Lm, Rm1, Vs, Hs, Is =
+                Point & Lm, Rm2, Vs, Hs, Is
+
+%% The equations \ref{Eq:Frm8'1} through \ref{Eq:Frm9'4} are not pure
+%% access routines because their effect in not only a modification
+%% of the frame data structure but eventually also of the resulting
+%% text.
+%%
+%% If the starting point of the next box is beyond the end point of the
+%% previous box the insertion of layout is suppressed. The starting point
+%% of the next box remains the same.
+%%\smallskip
+
+   [Frm8'1]   hsep (0,0) h Hs with (0,0) & Defs = (0,0) & Defs
+
+   [Frm8'2]   X2 > X1 == true
+              ==============
+              hsep (X1,Y) h Hs with (X2,Y) & Defs = (X2,Y) & Defs
+
+   [Frm8'3]   Y2 > Y1 == true
+              ==============
+              hsep (X1,Y1) h Hs with (X2,Y2) & Defs = (X2,Y2) & Defs
+
+   [default-Frm8'4] hsep (X1,Y1) h Hs with (X2,Y2) & Defs = (X1+Hs,Y1) & Defs
+
+%% If the starting point of the next box and the end point of the
+%% previous box are both {\tt (0,0)} no layout is inserted in the
+%% text. This is a kind of hack to suppress unnecessary new lines
+%% at the beginning of the text.
+%%\smallskip
+
+   [Frm9'1]   vsep (0,0) v Vs with (0,0) & Defs = (0,0) & Defs
+
+   [Frm9'2]   X2 > X1 == true
+              ==============
+              vsep (X1,Y) v Vs with (X2,Y) & Defs = (X2,Y) & Defs
+
+   [Frm9'3]   Y2 > Y1 == true
+              ===============
+              vsep (X1,Y1) v Vs with (X2,Y2) & Defs = (X2,Y2) & Defs
+
+   [default-Frm9'4] X3 := leftm of (X2,Y2) & Defs
+                    ============================
+                    vsep (X1,Y1) v Vs with (X2,Y2) & Defs = (X3,Y1+Vs) & Defs
+
+ %%%

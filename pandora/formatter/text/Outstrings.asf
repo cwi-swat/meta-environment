@@ -1,0 +1,74 @@
+equations
+
+    [l-3'1]  length of "" = 0
+
+    [l-3'2]  length of strcon(""" Char+ """) = 
+               length of quoteless strcon(Char+)
+
+    [default-l-3'3] length of String = length of quoteless String
+
+    [lq-1'1]  length of quoteless strcon(Char) = 1
+
+    [lq-1'2]  length of quoteless strcon(Char Char+) =
+                1 + length of quoteless strcon(Char+)
+
+    [default-lq-1'3]  length of quoteless String = 0
+
+    [Out5'1]  string of Int layoutchars = string of Int " " chars
+
+    [Out6'1]  Int <= 0 == true
+              ===============
+              string of Int strcon(""" Ch """) chars = ""
+    [Out6'2]  string of 1 strcon(""" Ch """) chars = strcon(""" Ch """)
+    [Out6'3]  string of 2 strcon(""" Ch """) chars = strcon(""" Ch Ch """)
+    [Out6'4]  string of 3 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch """)
+    [Out6'5]  string of 4 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch """)
+    [Out6'6]  string of 5 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch """)
+    [Out6'7]  string of 6 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch """)
+    [Out6'8]  string of 7 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch Ch """)
+    [Out6'9]  Int > 7 == true
+              ==============
+              string of Int strcon(""" Ch """) chars =
+                strcon(""" Ch Ch Ch Ch Ch Ch Ch """) || string of Int-7 strcon(""" Ch """) chars
+
+    [Sop7'1]  deslash(strcon(""" """)) =
+                strcon(""" """)
+
+    [Sop7'2]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+              ========================================================
+              deslash(strcon(""" "\"""" Char*2 """)) =
+                strcon(""" """ Char*4 """)
+
+    [Sop7'3]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+              ==================================================================
+              deslash(strcon(""" "\""\" Char*2 """)) =
+                strcon(""" "\" Char*4 """)
+
+    [default-Sop7'4] strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+                     ==================================================================
+                     deslash(strcon(""" Char Char*2 """)) =
+                       strcon(""" Char Char*4 """)
+
+    [Sop8'1]  slash(strcon(""" """)) = strcon(""" """)
+
+    [Sop8'2]  strcon(""" Char*4 """) := slash(strcon(""" Char*2 """))
+              ================================================================
+              slash(strcon(""" "\" Char*2 """)) =
+                strcon(""" "\""\" Char*4 """)
+
+    [Sop8'3]  strcon(""" Char*4 """) := slash(strcon(""" Char*2 """))
+              ========================================================
+              slash(strcon(""" """ Char*2 """)) =
+                strcon(""" "\"""" Char*4 """)
+
+    [default-Sop8'4]  strcon(""" Char*4 """) := slash(strcon(""" Char*2 """))
+                      ========================================================
+                      slash(strcon(""" Char Char*2 """)) =
+                        strcon(""" Char Char*4 """)
+
+    [Sop9'1]  strcon(""" Char*3 """) := noslash(strcon(""" Char*1 """)),
+              strcon(""" Char*4 """) := noslash(strcon(""" Char*2 """))
+              ==========================================================
+              noslash(strcon(Char*1 "\" Char*2)) = strcon(Char*3 Char*4)
+
+    [default-Sop79'2] noslash(String) = String

@@ -1,0 +1,14 @@
+module Text
+%%
+%% A text is simply a list of strings, where each string denotes
+%% a line on a display. We will use \var{T} as variable for texts.
+%%\smallskip
+
+imports basic/Comments
+        basic/Strings
+exports
+  sorts Text
+  context-free syntax
+    String* -> Text {constructor} 
+
+%%%

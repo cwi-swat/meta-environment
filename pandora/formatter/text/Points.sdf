@@ -1,0 +1,14 @@
+module Points
+
+imports Integer-Ops
+exports
+  context-free start-symbols Point
+  sorts Point
+  context-free syntax
+    "(" Integer "," Integer ")" -> Point
+
+    "if"  Boolean "then" Point "else" Point "fi" -> Point
+
+hiddens
+  variables
+    "Point"[0-9]*     -> Point

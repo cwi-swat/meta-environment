@@ -1,0 +1,47 @@
+module LengthofBoxes
+
+imports Outstrings Frame 
+        languages/box/syntax/Contexts
+
+exports
+  context-free start-symbols BoxPoint
+  sorts BoxPoint
+  context-free syntax
+    Box Point                                 -> Box
+    BoxList "##" Point                        -> BoxPoint
+    "length" "of" BoxList "with" Frame "and" Context  -> BoxPoint
+
+hiddens
+  variables
+    "bi"[0-9]*     -> BoxPoint
+%% The function {\tt length of \_ with \_ and \_} is the function visible
+%% to the outside world. The actual job is performed by the following
+%% `hidden' functions.
+hiddens
+  context-free syntax
+    "hlength" "of" BoxList "h" Integer "with" Frame   -> BoxPoint
+    "vlength" "of" BoxList "with" Frame             -> BoxPoint
+    "hvlength" "of" BoxList "h" Integer "with" Frame  -> BoxPoint
+    "hovlength" "of" BoxList "h" Integer "with" Frame -> BoxPoint
+    "dlength" "of" BoxList "with" Frame             -> BoxPoint
+    "h" BoxPoint "and" BoxPoint "h" Integer         -> BoxPoint
+    "v" BoxPoint "and" BoxPoint                   -> BoxPoint
+    "hv" BoxPoint "and" BoxPoint "h" Integer        -> BoxPoint
+    "hov" BoxPoint "and" BoxPoint "h" Integer       -> BoxPoint
+    "select" "operator" BoxPoint "and" SOptions     -> BoxPoint
+
+hiddens
+  variables
+    "String"[0-9]*   -> String
+    [B-E][0-9]*      -> Box
+    [B-E]"+"[0-9]*   -> Box+
+    [B-E]"*"[0-9]*   -> Box*
+    "Int"[0-9]*      -> Integer
+    "'C"[0-9]*       -> Context
+    "so""*"[0-9]*   -> SOption*
+    "Hs"[0-9]*      -> Integer
+    "Is"[0-9]*      -> Integer
+    "Frame"[0-9]*   -> Frame
+    "Point"[0-9]*   -> Point
+    "X"[0-9]*       -> Integer
+    "Y"[0-9]*       -> Integer

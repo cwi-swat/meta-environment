@@ -1,0 +1,40 @@
+module Frame
+
+  imports languages/box/syntax/Box Points
+  exports
+    context-free start-symbols Frame Defs
+  sorts Frame Defs
+    context-free syntax
+      Integer "," Integer "," Integer "," Integer "," Integer -> Defs
+      Point "&" Defs                                          -> Frame
+
+
+    context-free syntax
+      "make" "frame"                                       -> Frame
+      "leftm" "of" Frame                                   -> Integer
+      "rightm" "of" Frame                                  -> Integer
+      "set" "lmargin" "in" Frame                             -> Frame
+      "set" "rmargin" Integer "in" Frame                     -> Frame
+      "value" SpaceSymbol "in" Frame                      -> Integer
+      "set" SpaceSymbol "value" "given" SOptions "and" Frame -> Integer
+
+    context-free syntax
+      "hsep" Point "h" Integer "with" Frame -> Frame
+      "vsep" Point "v" Integer "with" Frame -> Frame
+
+hiddens
+  variables
+    "X"[0-9]*       -> Integer
+    "Y"[0-9]*       -> Integer
+    "Lm"[0-9]*      -> Integer
+    "Rm"[0-9]*      -> Integer
+    "Vs"[0-9]*      -> Integer
+    "Hs"[0-9]*      -> Integer
+    "Is"[0-9]*      -> Integer
+    "Frame"[0-9]*   -> Frame
+    "Defs"[0-9]*    -> Defs
+    "Point"[0-9]*   -> Point
+    "Int"[0-9]*     -> Integer
+    "Nat"[0-9]*     -> Natural
+    "ss"[0-9]*      -> SpaceSymbol
+    "so""*"[0-9]*   -> SOption*

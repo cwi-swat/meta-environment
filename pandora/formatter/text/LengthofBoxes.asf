@@ -1,0 +1,224 @@
+equations
+%% The function {\tt length of \_ with \_ and \_} must be defined
+%% for all box operators in the box language and for the most basic
+%% boxes, the strings. The functionality of this function is in fact
+%% simple. For all argument boxes of an operator the size is calculated
+%% and given this information the size of the surrounding box is
+%% calculated. The size information is connected to the box which makes
+%% it possible to calculate this information only once.
+%%
+%% It is necessary to remove slashes in the strings. We assume
+%% that in elementary strings no new line characters occur.
+%%\smallskip
+
+  [LoB1'1]   String2 := deslash(String1),
+             Int := length of String2
+             =======================
+             length of String1 with Frame and 'C = String2 (Int,0) ## (Int,0)
+
+%% The equations \ref{Eq:LoB1'2} through \ref{Eq:LoB1'16} deal with the
+%% basic operators in the box language. The operators {\sf H}, {\sf V},
+%% {\sf HV}, and {\sf HOV} are processed by several equations depending
+%% on the number of argument boxes. Box operators working on empty
+%% argument lists are removed.
+%%\smallskip
+
+  [LoB1'2]   length of H so* [] with Frame and 'C = ## (0,0)
+
+  [LoB1'4]   Hs := set hs value given so* and Frame,
+             B*2 ## Point := hlength of B+ h Hs with Frame
+             ============================================
+             length of H so* [B+] with Frame and 'C =
+               H so* [B*2] Point ## Point
+
+  [LoB1'5]   length of V so* [] with Frame and 'C = ## (0,0)
+
+  [LoB1'7]   B*2 ## Point := vlength of B+ with Frame
+             =======================================
+             length of V so* [B+] with Frame and 'C =
+               V so* [B*2] Point ## Point
+
+  [LoB1'8]   length of HV so* [] with Frame and 'C = ## (0,0)
+
+  [LoB1'10]  Hs := set hs value given so* and Frame,
+             B*2 ## Point := hvlength of B+ h Hs with Frame
+             =============================================
+             length of HV so* [B+] with Frame and 'C =
+               HV so* [B*2] Point ## Point
+
+  [LoB1'11]  length of HOV so* [] with Frame and 'C = ## (0,0)
+
+%% The processing of the {\sf HOV} operator is different from the other
+%% operators because the occurrence of a {\sf V} operator leads to the
+%% replacement of the {\sf HOV} by a {\sf V} operator. This replacement
+%% depends on the number of new line characters produced by the
+%% argument list of the {\sf HOV} operator. The function
+%% {\tt select operator \_ and \_} takes this decision.
+%%\smallskip
+
+  [LoB1'13]  Hs := set hs value given so* and Frame,
+             B*2 ## Point := hovlength of B+ h Hs with Frame
+             ==============================================
+             length of HOV so* [B+] with Frame and 'C =
+               select operator B*2 ## Point and so*
+
+%% The operators {\sf I} and {\sf WD} have exactly one box as argument.
+%% The effect of the {\sf I} operator is context dependent, if this
+%% operator occurs in a `horizontal' context the operator can be ignored.
+%% If it occurs in a `vertical' context the operator becomes affective.
+%%\smallskip
+
+  [LoB1'14]  Is := set is value given so* and Frame,
+             B* ## (Int1,Int2) := length of B1 with Frame and V
+             =================================================
+             length of I so* [B1] with Frame and V =
+               I so* [H [B*]] (Int1,Int2) ## (Int1 + Is,Int2)
+
+  [LoB1'15]  'C != V,
+             B* ## Point := length of B1 with Frame and 'C
+             ============================================
+             length of I so* [B1] with Frame and 'C =
+               I so* [H [B*]] Point ## Point
+
+%% The {\sf WD} has no textual effect except for a number of space characters
+%% that are to be produced. Only the length of the last line is relevant
+%% for the calculation of the amount of spaces, so the number of new line
+%% characters can be ignored.
+%%\smallskip
+
+  [LoB1'16]  B* ## (X,Y) := length of B1 with Frame and 'C
+             ============================================
+             length of WD [B1] with Frame and 'C =
+               WD [H [B*]] (X,0) ## (X,0)
+
+%% This default equation takes care of the cases which are not `treated'
+%% by the 16 other equations. It deals not only with erroneous box terms
+%% but also with box terms which have already been extended with size
+%% information.
+%%\smallskip
+
+  [default-LoB1'17]  length of B with Frame and 'C =
+                       dlength of B with Frame
+
+%% The equations \ref{Eq:LoB2'1} and \ref{Eq:LoB2'2} process the
+%% argument list of a {\sf H} operator. The length adaptation resulting
+%% from the amount of layout to be inserted between two boxes is calculated
+%% by the function {\tt h \_ and \_ h \_}.
+%% The equations \ref{Eq:LoB3'1} and \ref{Eq:LoB3'2} work in an analoguous
+%% way for the argument list of the {\sf V} operator.
+%% The equations \ref{Eq:LoB4'1} and \ref{Eq:LoB4'2} take care
+%% of the argument list of the {\sf HV} operator.
+%% The equations \ref{Eq:LoB5'1} and \ref{Eq:LoB5'2} process
+%% the argument list of the {\sf HOV} operator.
+%%\smallskip
+
+  [LoB2'1]   hlength of B h Hs with Frame = length of B with Frame and H
+
+  [LoB2'2]   hlength of B+ B h Hs with Frame =
+               h hlength of B+ h Hs with Frame and
+                 length of B with Frame and H h Hs
+
+  [LoB3'1]   vlength of B with Frame = length of B with Frame and V
+
+  [LoB3'2]   vlength of B+ B with Frame =
+               v vlength of B+ with Frame and
+                 length of B with Frame and V
+
+  [LoB4'1]   hvlength of B h Hs with Frame = length of B with Frame and H
+
+  [LoB4'2]   hvlength of B+ B h Hs with Frame =
+               hv hvlength of B+ h Hs with Frame and
+                 length of B with Frame and H h Hs
+
+  [LoB5'1]   hovlength of B h Hs with Frame = length of B with Frame and H
+
+  [LoB5'2]   hovlength of B+1 B1 h Hs with Frame =
+               hov hovlength of B+1 h Hs with Frame and
+                 length of B1 with Frame and H h Hs
+
+%% Equations \ref{Eq:LoB6'1} and \ref{Eq:LoB6'2} deal with box terms which
+%% could not be processed by the equations \ref{Eq:LoB1'1} through
+%% \ref{Eq:LoB1'16}. The box term can either be extended with size
+%% information or it can be an erroneous term which can not be processed
+%% in any way. In that case the error message
+%% {\tt "*** unprintable box expression ***"}
+%% is produced instead.
+%%\smallskip
+
+  [LoB6'1]   dlength of B Point with Frame = B Point ## Point
+
+  [default-LoB6'2] Int := 34
+                   ========
+                   dlength of B with Frame =
+                     "*** unprintable box expression ***" (Int,0) ## (Int,0)
+
+%% The next set of equations deal with the transformation of the
+%% layout inserted between the boxes into size information.
+%% For each basic operator there is a set of equations to deal with
+%% the operator specific layout contrains. In case of the {\sf H} operator
+%% only space can be inserted between the boxes, see equation \ref{Eq:LoB7'3}.
+%%\smallskip
+
+  [LoB7'1]   h B* ## Point1 and ## Point2 h Hs = B* ## Point1
+
+  [LoB7'2]   h ## Point1 and B ## Point2 h Hs = B ## Point2
+
+  [LoB7'3]   h B+ ## (Int1,Int2) and B ## (Int3,Int4) h Hs =
+               B+ B ## (Int1 + Hs + Int3,Int2 + Int4)
+
+%% Between each element in the argument list of a {\sf V} operator a new
+%% line character should be inserted, see equation \ref{Eq:LoB8'3}.
+%%\smallskip
+
+  [LoB8'1]   v B* ## Point1 and ## Point2 = B* ## Point1
+
+  [LoB8'2]   v ## Point1 and B ## Point2 = B ## Point2
+
+  [LoB8'3]   v B+ ## (Int1,Int2) and B ## (Int3,Int4) =
+               B+ B ## (Int3,Int2 + 1 + Int4)
+
+%% If a box in the argument list of the {\sf HV} operator is spread
+%% over several lines, it will not be `concatenated' to the previous
+%% box but it has to start on a new line. This results in increasing
+%% the vertical size, see equation \ref{Eq:LoB9'3}.
+%% If the box does not contain
+%% a new line character the box is `concatenated' to the previous box.
+%%\smallskip
+
+  [LoB9'1]   hv B* ## Point1 and ## Point2 h Hs = B* ## Point1
+
+  [LoB9'2]   hv B* ## (Int1,Int2) and B ## (Int3,0) h Hs =
+               B* B ## (Int1 + Hs + Int3,Int2)
+
+  [LoB9'3]   Int4 > 0 == true
+             ===============
+             hv B* ## (Int1,Int2) and B ## (Int3,Int4) h Hs =
+               B* B ## (Int3,Int2 + 1 + Int4)
+
+%% If in one of the boxes of the argument list of the {\sf HOV} operator
+%% a new line character occurs, the entire argument list will be formatted
+%% vertically instead of horizontally. This decision is made by the
+%% equations \ref{Eq:LoB11'1} and \ref{Eq:LoB11'2}. The presence of a new
+%% line character in one of the argument boxes results in a replacement
+%% of the {\sf HOV} operator by a {\sf V} operator.
+%% But the calculation of the vertical size is done by the equation
+%% \ref{Eq:LoB10'4}.
+%%\smallskip
+
+  [LoB10'1]   hov B* ## Point1 and ## Point2 h Hs = B* ## Point1
+
+  [LoB10'2]   hov ## Point1 and B ## Point2 h Hs = B ## Point2
+
+  [LoB10'3]   hov B+ ## (Int1,0) and B ## (Int2,0) h Hs =
+                B+ B ## (Int1 + Hs + Int2,0)
+
+  [default-LoB10'4] hov B+ ## (Int1,Int2) and B ## (Int3,Int4) h Hs =
+                      B+ B ## (Int3,Int2 + Int4)
+
+  [LoB11'1]  select operator B* ## (Int,0) and so* =
+               HOV so* [B*] (Int,0) ## (Int,0)
+
+  [LoB11'2]  Int2 > 0 == true
+             ===============
+             select operator B* ## (Int1,Int2) and so* =
+               V so* [B*] (Int1,Int2) ## (Int1,Int2)
