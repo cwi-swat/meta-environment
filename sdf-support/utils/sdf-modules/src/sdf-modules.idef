@@ -3,31 +3,37 @@ tool sdf-modules is { command = "sdf-modules" }
 
 process SdfModules is
 let
- SI : sdf-modules,
+ SM : sdf-modules,
  Modules : list,
  ModuleId : str,
  Imports : list,
  Import : term,
  Renamings : term,
  Module : term,
- Id : str
+ Id : str,
+ Depending : list
 in
-  execute(sdf-modules, SI?) .
+  execute(sdf-modules, SM?) .
   (
-    rec-msg(si-get-module-id(Module?)) .
-    snd-eval(SI, get-module-id(Module)) .
-    rec-value(SI, module-id(Id?)) .
+    rec-msg(sm-get-module-id(Module?)) .
+    snd-eval(SM, get-module-id(Module)) .
+    rec-value(SM, module-id(Id?)) .
     snd-msg(module-id(Id))
   +
-    rec-msg(si-get-all-imports(Modules, ModuleId)) .
-    snd-eval(SI, get-all-imports(Modules, ModuleId)) .
-    rec-value(SI, all-imports(Imports?)) .
-    snd-msg(si-all-imports(Imports))
+    rec-msg(sm-get-all-imports(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-imports(Modules, ModuleId)) .
+    rec-value(SM, all-imports(Imports?)) .
+    snd-msg(sm-all-imports(Imports))
   +
-    rec-msg(si-get-import-renamings(Import)) .
-    snd-eval(SI, get-import-renamings(Import)) .
-    rec-value(SI, renamings(Renamings?)) .
-    snd-msg(si-renamings(Renamings))
+    rec-msg(sm-get-all-depending-modules(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-depending-modules(Modules, ModuleId)) .
+    rec-value(SM, depending-modules(Depending?)) .
+    snd-msg(sm-all-depending-modules(Depending))
+  +
+    rec-msg(sm-get-import-renamings(Import?)) .
+    snd-eval(SM, get-import-renamings(Import)) .
+    rec-value(SM, renamings(Renamings?)) .
+    snd-msg(sm-renamings(Renamings))
   )
   *delta
 endlet
