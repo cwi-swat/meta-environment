@@ -1,5 +1,8 @@
 $Id$
 
+2003/07/02 (jurgenv@cwi.nl)
+ * Set version to 0.7 (this should have been done earlies!)
+ 
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
 
