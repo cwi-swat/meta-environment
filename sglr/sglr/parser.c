@@ -402,7 +402,9 @@ ATerm SG_Result(char *sort)
 
     forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-    /*  We _must_ expand at least the top node  */
+// ATfprintf(stderr, "Unexpanded Forest: %t\n", forest);
+
+    /*  We _must_ expand at least the top node to get the top sort  */
     was_abbrev = SG_ABBREV;
     SG_ABBREV_OFF();
     forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest, ATfalse);

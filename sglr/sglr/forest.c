@@ -166,17 +166,18 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
   AFun      fun  = ATgetAFun(t);
   ATermList args = ATgetArguments((ATermAppl) t);
 
-
   if(fun == SG_AprodAFun()) {
     return SG_ABBREV ? t :
           (ATermAppl) SG_LookupProduction(pt, ATgetInt(SG_GetProdLabel(t)));
   }
 
-  if(fun != SG_ApplAFun())
+  if(fun != SG_ApplAFun()) {
     return ATmakeApplList(fun, (ATermList) SG_YieldPT(pt, (ATerm)args));
+  }
 
   idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
-  /*  Are we indeed encountering an ambiguity cluster?  */
+
+  /*  Are we encountering an ambiguity cluster?  */
   if(!(idx && !ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))) {
     if(SG_ABBREV && !recurse)
       return t;
@@ -189,6 +190,7 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
                          SG_YieldPT(pt, ATelementAt(args, 1)));
     return ATmakeAppl2(SG_ApplAFun(), (ATerm) t, ATelementAt(args, 1));
   }
+
   /*  Encountered an ambiguity cluster  */
   SG_MaxNrAmb(SG_NRAMB_DEC);
   trms = (ATermList) ATgetFirst(ambs);
