@@ -8,7 +8,7 @@ public class Do extends Communication {
   public Do(ATerm t) {
     super(t);
   }
-  
+
   public String toString() {
     StringBuffer buf = new StringBuffer();
     buf.append("do(");

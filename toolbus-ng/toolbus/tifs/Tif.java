@@ -1,6 +1,5 @@
 package toolbus.tifs;
 
-import java.io.IOException;
 import java.util.*;
 
 import aterm.*;
@@ -13,7 +12,7 @@ public class Tif {
     setRepresentation(t);
     initProcessList();
   }
-  
+
   private void setRepresentation(ATerm t) {
     representation = (ATermAppl) t;
   }
@@ -45,7 +44,7 @@ public class Tif {
   public Iterator fetchProcessIterator() {
     return processList.iterator();
   }
-  
+
   public String toString() {
     StringBuffer buf = new StringBuffer();
     buf.append("tifs");
@@ -72,7 +71,7 @@ public class Tif {
     buf.append('[');
     Iterator iter = fetchProcessIterator();
     while (iter.hasNext()) {
-      Process process = (Process)iter.next();
+      Process process = (Process) iter.next();
       buf.append(process);
       if (iter.hasNext()) {
         buf.append(',');
@@ -84,17 +83,4 @@ public class Tif {
     return buf.toString();
   }
 
-  public static void main(String[] args) {
-    ATermFactory factory = new aterm.pure.PureFactory();
-    ATerm tifsTerm = null;
-    String fileName = args[0];
-    try {
-      tifsTerm = factory.readFromFile(fileName);
-    } catch (IOException e) {
-      System.err.println("Error reading " + fileName + ": " + e);
-    }
-    Tif tif = new Tif(tifsTerm);
-    System.out.println("tif read: ");
-    System.out.println(tif);
-  }
 }

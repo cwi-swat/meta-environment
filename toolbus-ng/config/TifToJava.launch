@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="toolbus.tifs.TifToJava"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="toolbusNG/toolbus/tifs"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="toolbusNG"/>
+    <stringAttribute key="org.eclipse.debug.ui.target_run_perspective" value="perspective_default"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--tifs clock.tifs --output-dir /tmp"/>
+    <stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.jdt.debug.ui.javaSourceLocator"/>
+    <stringAttribute key="org.eclipse.debug.ui.target_debug_perspective" value="perspective_default"/>
+</launchConfiguration>

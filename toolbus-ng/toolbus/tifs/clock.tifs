@@ -6,10 +6,20 @@ tifs(
     process(
       name("Clock"),
       [
-        eval(timeofday, Time),
+        eval(get-time-of-day, Time)
+      ]
+    ),
+    process(
+      name("Timer"),
+      [
         eval(start-timing, int),
         eval(elapsed(int), Time),
-        eval(stop-timing(int), Time),
+        eval(stop-timing(int), Time)
+      ]
+    ),
+    process(
+      name("Alarm"),
+      [
         do(set-alarm(Time,String)),
         event(alarm(String))
       ]
