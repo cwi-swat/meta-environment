@@ -96,35 +96,34 @@ unsigned int calc_hash(ATerm t)
   unsigned int hnr = 0;
 
   switch(ATgetType(t)) {
-  case AT_APPL:
-    {
-      ATermAppl appl = (ATermAppl)t;
-      AFun sym = ATgetAFun(appl);
-      int i, arity = ATgetArity(sym);
-      hnr = AT_hashSymbol(ATgetName(sym), arity);
+    case AT_APPL:
+      {
+	ATermAppl appl = (ATermAppl)t;
+	AFun sym = ATgetAFun(appl);
+	int i, arity = ATgetArity(sym);
+	hnr = AT_hashSymbol(ATgetName(sym), arity);
 
-      for(i=0; i<arity; i++) {
-				hnr = hnr * MAGIC_HASH_CONST_APPL + 
-					calc_hash(ATgetArgument(appl, i));
+	for(i=0; i<arity; i++) {
+	  hnr = hnr * MAGIC_HASH_CONST_APPL + calc_hash(ATgetArgument(appl, i));
+	}
       }
-    }
-    break;
+      break;
 
-  case AT_INT:
-    hnr = ATgetInt((ATermInt)t);
-    break;
+    case AT_INT:
+      hnr = ATgetInt((ATermInt)t);
+      break;
 
-  case AT_LIST:
-    {
-      ATermList list = (ATermList)t;
-      hnr = 123;
-      while(!ATisEmpty(list)) {
-				hnr = hnr * MAGIC_HASH_CONST_LIST + 
-					calc_hash(ATgetFirst(list));
-				list = ATgetNext(list);
+    case AT_LIST:
+      {
+	ATermList list = (ATermList)t;
+	hnr = 123;
+	while(!ATisEmpty(list)) {
+	  hnr = hnr * MAGIC_HASH_CONST_LIST + 
+	    calc_hash(ATgetFirst(list));
+	  list = ATgetNext(list);
+	}
       }
-    }
-    break;
+      break;
   }
 
   return hnr;
@@ -217,7 +216,7 @@ funcptr basic_lookup_func(ATerm prod)
 #else
   hnr = HASH_PROD(prod, table_size);
 #endif
-  
+
   b = prod_table[hnr];
 
   while(b) {
@@ -256,7 +255,7 @@ Symbol lookup_sym(ATerm prod)
 #else
   hnr = HASH_PROD(prod, table_size);
 #endif
-  
+
   b = prod_table[hnr];
 
   while(b) {

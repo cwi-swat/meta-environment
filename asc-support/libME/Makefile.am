@@ -16,6 +16,10 @@ libasc_support_me_a_SOURCES = asc-apply.c \
                               prod2str.c \
                               main.c
 
+#CFLAGS += -DNO_SHARING
+#CFLAGS += -pg -DNO_SHARING
+#CFLAGS += -pg
+
 # Default include directories
 INCLUDES   = -I$(PT_SUPPORT)/include \
              -I$(ATERM)/include
