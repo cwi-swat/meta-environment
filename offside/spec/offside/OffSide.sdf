@@ -1,6 +1,6 @@
 module OffSide
 
-imports AsFixWithAnnotations Integers
+imports AsFixWithAnnotations basic/Integers
 
 hiddens
 

@@ -1,3 +1,8 @@
+2003/02/24 (jurgenv@cwi.nl)
+ * Added syntax of Sasl and a specification that disambiguates
+   Sasl based on the offside rule and using the newest ASF builtins
+   to retrieve position information from a term.
+
 2003/01/22 (jurgenv@cwi.nl)
  * LGPL license
 

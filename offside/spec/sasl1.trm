@@ -1,0 +1,5 @@
+f 3
+WHERE f x = g y z
+            WHERE y = ( x + 1 ) * ( x - 1 )
+                  z = x ** 2 + 4
+      g y z = y * z

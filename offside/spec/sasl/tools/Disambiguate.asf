@@ -1,0 +1,21 @@
+equations
+
+%% How to disambiguate:
+%%   * Remove all trees that have offside subtrees
+%%   * choose the deepest derivation if ambiguities remain
+
+[] amb(Expr*1, offside!, Expr*2) = amb(Expr*1,Expr*2)
+[] amb(Expr*1, Expr WHERE Defs1 WHERE Defs2, Expr*2) = amb(Expr*1, Expr*2)
+
+[] amb(Expr) = Expr
+
+[] Expr WHERE offside! = offside!
+
+[] NameList = offside! = offside!
+[] offside! WHERE Defs = offside!
+
+[] NameList = Expr = offside! when check(Expr,ok,get-start-column(Expr)) = not-ok
+
+[] check(Expr,ok,NatCon1) = not-ok
+     when get-start-column(Expr) = NatCon2,
+          NatCon1 > NatCon2 = true
