@@ -17,15 +17,22 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES         = -I$(ASCINC)                    -I$(ASFIXINC)                    -I$(ATERMINC)
+INCLUDES		= -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 
-noinst_LIBRARIES = libAdd-Eqs-Syntax.a
+LDFLAGS			= -L${ASCLIB} -L${ASFIXLIB} -L${ATERMLIB}
+LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
-BUILT_SOURCES    = init.c
+noinst_LIBRARIES	= libAdd-Eqs-Syntax.a
 
-libAdd_Eqs_Syntax_a_SOURCES  = $(SPEC_SRCS)
+BUILT_SOURCES		= init.c
 
-libAdd_Eqs_Syntax_a_LIBADD   = init.o
+bin_PROGRAMS		= Add-Eqs-Syntax
+
+Add_Eqs_Syntax_SOURCES		= init.c
+Add_Eqs_Syntax_LDADD		= libAdd-Eqs-Syntax.a ${LDLIBS} ${SOCKLIBS}
+
+libAdd_Eqs_Syntax_a_SOURCES	= $(SPEC_SRCS)
+libAdd_Eqs_Syntax_a_LIBADD	= init.o
 
 # Old versions of automake put all dependencies on a single line which
 # causes several tools to crash (sed for instance) because of line length
@@ -42,23 +49,24 @@ SPEC_SRCS1=\
    AUX-Regular-Sdf-Syntax1.c AUX-Priority-Sdf-Syntax1.c AUX-CC-Sdf-Syntax1.c\
    AUX-Sorts-Sdf-Syntax1.c AUX-Literals-Sdf-Syntax1.c AUX-Label-Sdf-Syntax1.c\
    AUX-Restrictions-Sdf-Syntax1.c AUX-Alias-Sdf-Syntax1.c AUX-Sdf2-Syntax1.c\
-   AUX-Layout1.c AUX-Sdf21.c AUX-ATermBooleans6.c AUX-ATermBooleans5.c\
-   AUX-ATermBooleans4.c AUX-ATermBooleans3.c AUX-ATermBooleans2.c\
-   AUX-ATermBooleans1.c AUX-Add-Eqs-Conds7.c AUX-Add-Eqs-Conds6.c\
-   AUX-Add-Eqs-Conds5.c AUX-Add-Eqs-Conds4.c AUX-Add-Eqs-Conds3.c\
-   AUX-Add-Eqs-Conds2.c AUX-Add-Eqs-Conds1.c AUX-Add-Lex-Syntax9.c\
-   AUX-Add-Lex-Syntax8.c AUX-Add-Lex-Syntax7.c AUX-Add-Lex-Syntax6.c\
-   AUX-Add-Lex-Syntax5.c AUX-Add-Lex-Syntax4.c AUX-Add-Lex-Syntax3.c\
-   AUX-Add-Lex-Syntax2.c AUX-Add-Lex-Syntax1.c AUX-Add-Prefer-Variables8.c\
-   AUX-Add-Prefer-Variables7.c AUX-Add-Prefer-Variables6.c\
-   AUX-Add-Prefer-Variables5.c AUX-Add-Prefer-Variables4.c\
-   AUX-Add-Prefer-Variables3.c AUX-Add-Prefer-Variables2.c\
-   AUX-Add-Prefer-Variables1.c AUX-Add-TagId-Rejects11.c\
-   AUX-Add-TagId-Rejects10.c AUX-Add-TagId-Rejects9.c\
-   AUX-Add-TagId-Rejects8.c AUX-Add-TagId-Rejects7.c AUX-Add-TagId-Rejects6.c\
-   AUX-Add-TagId-Rejects5.c AUX-Add-TagId-Rejects4.c AUX-Add-TagId-Rejects3.c\
-   AUX-Add-TagId-Rejects2.c AUX-Add-TagId-Rejects1.c AUX-Add-Eqs-Syntax4.c\
-   AUX-Add-Eqs-Syntax3.c AUX-Add-Eqs-Syntax2.c AUX-Add-Eqs-Syntax1.c   
+   AUX-Layout1.c AUX-Sdf21.c AUX-Booleans6.c AUX-Booleans5.c AUX-Booleans4.c\
+   AUX-Booleans3.c AUX-Booleans2.c AUX-Booleans1.c AUX-Add-Eqs-Conds7.c\
+   AUX-Add-Eqs-Conds6.c AUX-Add-Eqs-Conds5.c AUX-Add-Eqs-Conds4.c\
+   AUX-Add-Eqs-Conds3.c AUX-Add-Eqs-Conds2.c AUX-Add-Eqs-Conds1.c\
+   AUX-Add-Lex-Syntax9.c AUX-Add-Lex-Syntax8.c AUX-Add-Lex-Syntax7.c\
+   AUX-Add-Lex-Syntax6.c AUX-Add-Lex-Syntax5.c AUX-Add-Lex-Syntax4.c\
+   AUX-Add-Lex-Syntax3.c AUX-Add-Lex-Syntax2.c AUX-Add-Lex-Syntax1.c\
+   AUX-Add-Prefer-Variables8.c AUX-Add-Prefer-Variables7.c\
+   AUX-Add-Prefer-Variables6.c AUX-Add-Prefer-Variables5.c\
+   AUX-Add-Prefer-Variables4.c AUX-Add-Prefer-Variables3.c\
+   AUX-Add-Prefer-Variables2.c AUX-Add-Prefer-Variables1.c\
+   AUX-Add-TagId-Rejects11.c AUX-Add-TagId-Rejects10.c\
+   AUX-Add-TagId-Rejects9.c AUX-Add-TagId-Rejects8.c AUX-Add-TagId-Rejects7.c\
+   AUX-Add-TagId-Rejects6.c AUX-Add-TagId-Rejects5.c AUX-Add-TagId-Rejects4.c\
+   AUX-Add-TagId-Rejects3.c AUX-Add-TagId-Rejects2.c AUX-Add-TagId-Rejects1.c\
+   AUX-Add-Eqs-Syntax4.c AUX-Add-Eqs-Syntax3.c AUX-Add-Eqs-Syntax2.c\
+   AUX-Add-Eqs-Syntax1.c
+
 SPEC_SRCS = $(SPEC_SRCS1)
 
 init.c: $(SPEC_SRCS)
