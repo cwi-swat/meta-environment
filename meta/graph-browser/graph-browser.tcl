@@ -808,11 +808,13 @@ proc OpenModuleWidget {} {
 
   set types {
       {{SDF2}   {.sdf2}        }
+      {{AsFix}  {.asfix}       }
       {{Any}    *              }
   }
-  set mod [GetBasename [tk_getOpenFile -filetypes $types \
-                                       -title "Open SDF Module..."] \
-                        ".sdf2"]
+  set extmod [tk_getOpenFile -filetypes $types \
+                                       -title "Open SDF Module..."]
+  set mod [GetBasename extmod ".sdf2"]
+  set mod [GetBasename extmod ".asfix"]
   if [ expr [ string length $mod ] > 0 ] {
     OpenModule $mod
   }
@@ -825,7 +827,7 @@ proc GetBasename {fnam ext} {
   } else {
     set start [expr $start + 1 ]
   }
-  set end [string last ".sdf2" $fnam]
+  set end [string last $ext $fnam]
   if [expr $end < 0]  {
     set end [string length $fnam]
   } else {
