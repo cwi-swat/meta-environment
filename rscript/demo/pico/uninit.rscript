@@ -1,6 +1,6 @@
-type stat = area
+type stat = location
 type var = str
-type var-occ = area
+type var-occ = location
 
 stat ROOT
  

@@ -170,8 +170,8 @@ $Error]>
 
 [i2s]	rvar2str(rvar(Char*)) = strcon(""" Char* """)
 
-[cve-1] convert-errors(errors[$Error+]) = feedback("RscriptChecker", "1", [convert-errors1(errors[$Error+])])
-[cve-1] convert-errors(errors[]) =  feedback("RscriptChecker", "1", [info("Rscript is type correct!", [])])
+[cve-1] convert-errors(errors[$Error+]) = feedback("RscriptChecker", "Rscript", [convert-errors1(errors[$Error+])])
+[cve-1] convert-errors(errors[]) =  feedback("RscriptChecker", "Rscript", [info("Rscript is type correct!", [])])
 
 
 [cve-1] $Feedback* := convert-errors1(errors[$Error*])

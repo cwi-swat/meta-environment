@@ -5,7 +5,7 @@ imports PicoExtraction %% should be only convertl
 
 exports
   context-free syntax
-	pico-query(PROGRAM, RSCRIPT, String, RSTORE) 	-> List
+	pico-query(PROGRAM, RSCRIPT, String, RSTORE) 	-> Summary
 
 	str2rvar(String)				-> RVAR
 hiddens
@@ -14,5 +14,6 @@ hiddens
 	"$Program" [0-9\']* -> PROGRAM
 	"$Script" [0-9\']*  -> RSCRIPT
 	"$String" [0-9\']*  -> String
+	"$Char*" [0-9\']*    -> CHAR*
 
 
