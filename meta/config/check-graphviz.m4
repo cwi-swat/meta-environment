@@ -48,9 +48,8 @@ AC_DEFUN(META_CHECK_GRAPHVIZ,
 [
    AC_PACKAGE_REQUIRE(graphviz, 
                       dot, 
-                      [  --with-graphviz=DIR     graphviz package is in DIR])
-
-   GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\``
+                      [  --with-graphviz=DIR     graphviz package is in DIR],
+                      GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\`` )
 
    META_GRAPHVIZ_VERSION
 

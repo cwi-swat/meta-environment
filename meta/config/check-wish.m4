@@ -40,6 +40,6 @@ AC_DEFUN(META_CHECK_WISH,
 [
    AC_PACKAGE_REQUIRE(wish, 
                       wish8.1 wish8.0 wish, 
-                      [  --with-wish=DIR         wish program is in DIR])
+                      [  --with-wish=DIR         wish program is in DIR],)
    META_WISH_VERSION
 ])
