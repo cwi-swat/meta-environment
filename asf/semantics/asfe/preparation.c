@@ -3,7 +3,7 @@
 #include <asfix.h>
 #include "preparation.h"
 
-#line 313 "preparation.c.nw"
+#line 318 "preparation.c.nw"
 aterm *lexical_to_list(arena *ar, aterm *lextrm)
 {
   aterm *sort, *newtrm, *newlex, *newname, *newiter;
@@ -37,7 +37,7 @@ aterm *lexical_to_list(arena *ar, aterm *lextrm)
   free(sortstr);
   return newappl;
 }
-#line 355 "preparation.c.nw"
+#line 360 "preparation.c.nw"
 aterm *list_to_lexical(arena *ar, aterm *lexappl)
 {
   aterm *modname, *lit, *sort, *w[4], *prod, *sym, *lexlist;
@@ -153,35 +153,40 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
 #line 136 "preparation.c.nw"
 aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 {
-  aterm_list *args, *elems, *newargs;
+  aterm_list *args, *elems, *newargs, *result;
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
 
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
     if(asfix_is_lex_constructor(t))
-      newargs = prepare_list(ar, args, Ttrue);
+      newargs = prepare_list(&local, args, Ttrue);
     else
-      newargs = prepare_list(ar, args, Tfalse);
-    return asfix_put_appl_args(ar, t, newargs);
-  }
-
-  if(asfix_is_list(t)) {
-    aterm_list *result;
+      newargs = prepare_list(&local, args, Tfalse);
+    result = asfix_put_appl_args(&local, t, newargs);
+  } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
-    result = asfix_put_list_elems(ar, t, prepare_list(ar, elems, lexcons));
-    return result;
+    result = asfix_put_list_elems(&local, t, 
+                        prepare_list(&local, elems, lexcons));
+  } else if(asfix_is_lex(t) && !lexcons)
+    result = lexical_to_list(&local, t);
+  else {
+    TdestroyArena(&local);
+    return t;
   }
 
-  if(asfix_is_lex(t) && !lexcons)
-    return lexical_to_list(ar, t);
+  Tadd2Arena(ar, result);
+  TdestroyArena(&local);
 
-  return t;
+  return result;
 }
-#line 168 "preparation.c.nw"
+#line 173 "preparation.c.nw"
 aterm *RWprepareTerm(arena *ar, aterm *t)
 {
   return prepare_term(ar, t, Tfalse);
 }
-#line 180 "preparation.c.nw"
+#line 185 "preparation.c.nw"
 aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
 {
   aterm *el;
@@ -196,7 +201,7 @@ aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
   }
   return result;
 }
-#line 215 "preparation.c.nw"
+#line 220 "preparation.c.nw"
 aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
 {
   aterm *lit;
@@ -227,7 +232,7 @@ aterm_list *restore_list(arena *ar, aterm *sym, aterm_list *l)
   }
   return newl;
 }
-#line 254 "preparation.c.nw"
+#line 259 "preparation.c.nw"
 aterm_list *restore_args(arena *ar, aterm_list *l)
 {
   aterm *arg, *ws;
@@ -243,7 +248,7 @@ aterm_list *restore_args(arena *ar, aterm_list *l)
   }
   return newl;
 }
-#line 275 "preparation.c.nw"
+#line 280 "preparation.c.nw"
 aterm *RWrestoreTerm(arena *ar, aterm *t)
 {
   aterm_list *args, *elems;

@@ -560,37 +560,90 @@ aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
 {
   aterm *arg,*newarg;
   aterm_list *newargs = t_empty(NULL);
+  int len = TlistSize(args);
 
-  while(!t_is_empty(args)) {
-    arg = t_list_first(args);
-    if(asfix_is_appl(arg) || asfix_is_var(arg) ||
-       asfix_is_list(arg) || asfix_is_lex(arg)) 
-      newarg = rewrite(ar, arg,env);
-    else
-      newarg = arg;
-    newargs = TlistAppend(ar, newargs, newarg);
-    args = t_list_next(args);
-  };
+  if(len > 32) {
+    while(!t_is_empty(args)) {
+      arg = t_list_first(args);
+      if(asfix_is_appl(arg) || asfix_is_var(arg) ||
+         asfix_is_list(arg) || asfix_is_lex(arg)) 
+        newarg = rewrite(ar, arg,env);
+      else
+        newarg = arg;
+      newargs = TlistAppend(ar, newargs, newarg);
+      args = t_list_next(args);
+    }
+  } else {
+    aterm *newarg_table[32];
+    int i = 0;
+    Tprotect(newargs);
+    while(!t_is_empty(args)) {
+      arg = t_list_first(args);
+      if(asfix_is_appl(arg) || asfix_is_var(arg) ||
+         asfix_is_list(arg) || asfix_is_lex(arg)) 
+        newarg_table[i] = rewrite(ar, arg,env);
+      else
+        newarg_table[i] = arg;
+      args = t_list_next(args);
+      ++i;
+    }
+    assert(i==len);
+    for(--i; i > 0; i--) {
+      newarg_table[i] = TbuildList(the_world, newarg_table[i], newargs);
+      Tunprotect(newargs);
+      newargs = newarg_table[i];
+    }
+    newargs = TmkList(ar, newarg_table[0], newargs);
+  }
   return newargs;
 }
-#line 873 "evaluator.c.nw"
+#line 897 "evaluator.c.nw"
 aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *env)
 {
   aterm *elem,*newelem;
   aterm_list *newelems = t_empty(NULL);
-  
-  while(!t_is_empty(elems)) {
-    elem = t_list_first(elems);
-    newelem = rewrite(ar, elem, env);
+  int len = TlistSize(elems);
+
+  if(len >= 0) {
+    while(!t_is_empty(elems)) {
+      elem = t_list_first(elems);
+      newelem = rewrite(ar, elem, env);
+      if(t_is_list(newelem))
+        newelems = TlistConcat(ar, newelems, newelem);
+      else
+        newelems = TlistAppend(ar, newelems, newelem);
+      elems = t_list_next(elems);
+    }
+  } else {
+    aterm *newelem_table[32];
+    int i = 0;
+    Tprotect(newelems);
+    while(!t_is_empty(elems)) {
+      elem = t_list_first(elems);
+      newelem_table[i] = rewrite(ar, elem, env);
+      elems = t_list_next(elems);
+      i++;
+    }
+    for(--i; i>0; i--) {
+      newelem = newelem_table[i];
+      if(t_is_list(newelem)) {
+        newelem = TlistConcat(ar, newelem, newelems);
+        Tprotect(newelem);
+      } else {
+        newelem = TbuildList(the_world, newelem, newelems);
+      }
+      Tunprotect(newelems);
+      newelems = newelem;
+    }
+    newelem = newelem_table[i];
     if(t_is_list(newelem))
-      newelems = TlistConcat(ar, newelems, newelem);
+      newelems = TlistConcat(ar, newelem, newelems);
     else
-      newelems = TlistAppend(ar, newelems, newelem);
-    elems = t_list_next(elems);
-  };
+      newelems = TmkList(ar, newelem, newelems);
+  }
   return newelems;
 }
-#line 903 "evaluator.c.nw"
+#line 956 "evaluator.c.nw"
 aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
 {
   aterm *newtrm,*sym,*rewtrm;
@@ -637,7 +690,7 @@ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
   return rewtrm;
 }
 
-#line 955 "evaluator.c.nw"
+#line 1008 "evaluator.c.nw"
 int main(int argc, char **argv)
 {
   int cid;

@@ -135,28 +135,33 @@ Remove the layout of a term.
 <<prepare_term>>=
 aterm *prepare_term(arena *ar, aterm *t, Tbool lexcons)
 {
-  aterm_list *args, *elems, *newargs;
+  aterm_list *args, *elems, *newargs, *result;
+  arena local;
+
+  TinitArena(t_world(*ar), &local);
 
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
     if(asfix_is_lex_constructor(t))
-      newargs = prepare_list(ar, args, Ttrue);
+      newargs = prepare_list(&local, args, Ttrue);
     else
-      newargs = prepare_list(ar, args, Tfalse);
-    return asfix_put_appl_args(ar, t, newargs);
-  }
-
-  if(asfix_is_list(t)) {
-    aterm_list *result;
+      newargs = prepare_list(&local, args, Tfalse);
+    result = asfix_put_appl_args(&local, t, newargs);
+  } else if(asfix_is_list(t)) {
     elems = asfix_get_list_elems(t);
-    result = asfix_put_list_elems(ar, t, prepare_list(ar, elems, lexcons));
-    return result;
+    result = asfix_put_list_elems(&local, t, 
+			prepare_list(&local, elems, lexcons));
+  } else if(asfix_is_lex(t) && !lexcons)
+    result = lexical_to_list(&local, t);
+  else {
+    TdestroyArena(&local);
+    return t;
   }
 
-  if(asfix_is_lex(t) && !lexcons)
-    return lexical_to_list(ar, t);
+  Tadd2Arena(ar, result);
+  TdestroyArena(&local);
 
-  return t;
+  return result;
 }
 @
 
