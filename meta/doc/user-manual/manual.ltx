@@ -3119,7 +3119,32 @@ equations
 
 \subsubsection{Memo Functions} \label{MemoFunctions}
 
+Rewriting as execution model is not very efficient. Memo functions
+are an experiment to improve the efficiency of a compiled
+\asfsdf\ specification (see Section \ref{compiling-specs}).
+Given a set of argument values for some function the normal
+form can be obtained via rewriting. It is possible that
+some function is called with the same set of arguments
+over and over again. Each time the function is rewritten
+to obtain the same normal again. By means of adding
+an attribute {\tt memo} this behaviour is improved by
+storing the set of argument values and the derived normal form
+in a memo-table.
+For each set of argument values it is checked whether there
+exists a normal form in the memo-table. If so, this normal is returned.
+If not, the function given this set of argument values
+is normalized and stored in a memo-table.
+
+For the moment this memo behaviour is only supported by
+the compiler. Furthermore, there is some overhead involved
+in accessing the memo-table. Therefore, it is not wise
+to add to each function this memo attribute.
+
 \subsubsection{Delaying} \label{Delay}
+
+Both the compiler and the evaluator are based on innermost rewriting.
+In some cases it is more efficient to overrule this rewriting
+strategy.
 
 \section{Executing Specifications} 
 \label{ExecutingSpecifications}
