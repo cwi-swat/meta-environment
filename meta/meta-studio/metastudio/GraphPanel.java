@@ -1,20 +1,36 @@
 package metastudio;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JViewport;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 
+import metastudio.graph.Attribute;
+import metastudio.graph.AttributeList;
 import metastudio.graph.Edge;
 import metastudio.graph.EdgeList;
 import metastudio.graph.Node;
 import metastudio.graph.NodeList;
 import metastudio.graph.Point;
 import metastudio.graph.Polygon;
-import metastudio.graph.AttributeList;
-import metastudio.graph.Attribute;
 import metastudio.graph.Shape;
+import metastudio.graph.Shape_Box;
 
 public class GraphPanel
   extends JComponent
@@ -305,13 +321,11 @@ public class GraphPanel
 
     Color node_bg, node_fg, node_border;
 
-    if (selectedNode != null
-	&& selectedNode.getId().equals(node.getId())) {
+    if (selectedNode != null && selectedNode.getId().equals(node.getId())) {
       node_bg = nodeBGSelected;
       node_fg = nodeFGSelected;
       node_border = nodeBorderSelected;
-    } else if (hoveredNode != null
-	&& hoveredNode.getId().equals(node.getId())) {
+    } else if (hoveredNode != null && hoveredNode.getId().equals(node.getId())) {
       node_bg = nodeBGHovered;
       node_fg = nodeFGHovered;
       node_border = nodeBorderHovered;
@@ -335,6 +349,14 @@ public class GraphPanel
         g.setColor(node_border);
         g.drawOval(x,y,w,h);
     }
+    else if (shape.isDiamond()) {
+        g.setColor(node_bg);
+        int[] xs = new int[] {x, x + w / 2, x + w, x + w / 2};
+        int[] ys = new int[] {y + h / 2, y, y + h /2, y + h};
+        g.fillPolygon(xs,ys,4);
+        g.setColor(node_border);
+        g.drawPolygon(xs,ys,4);
+    }
     else {
         // defautl case, we draw a rectangle
         g.drawRect(x,y,w,h);
@@ -352,7 +374,7 @@ public class GraphPanel
   }
 
   //}}}
-
+  
   //{{{ private void paintEdges(Graphics2D g)
 
   private void paintEdges(Graphics2D g)
