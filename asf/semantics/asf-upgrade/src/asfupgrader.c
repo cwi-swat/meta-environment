@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 
     rules = upgradeAsf(rules);
 
-    ATwriteToNamedBinaryFile(rules, output);
+    ATwriteToNamedTextFile(rules, output);
   }
 
   return 0;

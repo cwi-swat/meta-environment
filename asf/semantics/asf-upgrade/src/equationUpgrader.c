@@ -212,6 +212,11 @@ static ASF_ASFCondition upgradeCondition(ASF_ASFCondition condition, PT_Args *va
     condition =  upgradePositiveCondition(condition, variables);
   }
 
+  *variables = collectVariables((PT_Tree) ASF_getASFConditionLhs(condition),
+				*variables);
+  *variables = collectVariables((PT_Tree) ASF_getASFConditionRhs(condition),
+				*variables);
+
   return condition;
 }
 
