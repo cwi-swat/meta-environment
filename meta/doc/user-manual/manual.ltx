@@ -397,7 +397,7 @@ activity of the system.
 \end{itemize}
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=meta-pico.ps,width=10cm,angle=-90}}
+  \centerline{\epsfig{file=meta-pico.ps,width=12cm}}
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
 
@@ -462,7 +462,6 @@ However, for the moment this menu is not activated.
   \caption{\label{FIG:graph-menu} Graph pull-down menu of \ASmetaenv}
 \end{figure}
 
-
 The {\tt Graph} menu is used for setting options for the display of the graph
 in the import pane.  It is shown in Figure \ref{FIG:graph-menu} and contains
 the entries:
@@ -495,10 +494,10 @@ The {\tt Help} menu is shown in Figure~\ref{FIG:help-menu}
 and contains the following entries:
 
 \begin{itemize}
-\item {\tt About NewMeta}
-\item {\tt Meta-Environment}
-\item {\tt Mouse operations}
-\item {\tt Online help}
+\item {\tt About Meta-Environment}
+\item {\tt About Graph Browser}
+\item {\tt Mouse Operations}
+\item {\tt Online Help}
 \end{itemize}
 
 \section{The Panes of the Main Window}
@@ -525,7 +524,7 @@ The import pane has the following interaction facilities:
 \begin{itemize}
 
 \item Clicking \emph{on} a module yields a pop up menu as shown in
-Figure~ref{FIG:module-menu}.  It contains the same entries as the
+Figure~\ref{FIG:module-menu}.  It contains the same entries as the
 button pane of the main window (see Section \ref{ButtonPane}).
 
 \item Clicking \emph{outside} any module yields a pop up menu as shown
@@ -572,15 +571,24 @@ the syntax of all the selected modules.
 \subsection{The Button Pane of the Main Window} \label{ButtonPane}
 
   \begin{itemize}
-  \item {\tt Edit Sdf2}
-  \item {\tt Edit Eqs}
-  \item {\tt Term}
+  \item {\tt Edit Syntax}
+  \item {\tt Edit Equations}
+  \item {\tt Edit Term}
   \item {\tt Save}
   \item {\tt Revert}
   \item {\tt Delete}
-  \item {\tt Info}
   \item {\tt Compile}
+  \item {\tt Info}
   \end{itemize}
+
+These buttons have effect when one or more modules are selected in the
+module pane. The buttons {\tt Edit Syntax}, {\tt Edit Equations},
+and {\tt Edit Term} activate (structure) editors for
+editing syntax, equations, or terms, respectively, for the selected modules.
+The next four buttons are used for saving, reverting, deleting, compiling of
+modules.
+The last button enables the user to retrieve some information about
+a module, but this functionality is not yet implemented.
 
 \section{Editing Specifications}
 
