@@ -1,0 +1,56 @@
+equations
+
+[extractInheritance-start]
+	&Rstore1 := assign-when-undef(EXTENDS_INTERFACE, rel[Interface, Interface], {}, &Rstore),
+	&Rstore2 := assign-when-undef(EXTENDS_CLASS, rel[Class, Class], {}, &Rstore1),
+	&Rstore3 := assign-when-undef(IMPLEMENTS, rel[Class, Interface], {}, &Rstore2),
+	&Rstore4 := extractInheritance(&CompilationUnit, &Rstore3, "")
+	============================================================================
+	extractInheritance(&CompilationUnit, &Rstore) = &Rstore4
+
+[extractInheritance-0]
+	&Modifiers class &Identifier &SuperOpt &Interfaces &ClassBody := &ClassDeclaration,
+	&ClassId := id2str(&Identifier),
+	&Rstore2 := extractExtendsClass(&SuperOpt, &Rstore1, &ClassId), 
+	&Rstore3 := extractImplements(&Interfaces, &Rstore2, &ClassId), 
+	&Rstore4 := extractInheritance(&ClassBody, &Rstore3, &ClassId)
+	============================================================================
+	extractInheritance(&ClassDeclaration, &Rstore1, &String) = &Rstore4
+
+[extractInheritance-1]
+	&Modifiers interface &Identifier &ExtendsInterfacesOpt &InterfaceBody := &InterfaceDeclaration,
+	&String == id2str(&Identifier),     %% <==== sb :=
+	&Rstore2 := extractExtendsInterface(&ExtendsInterfacesOpt, &Rstore1, &String)
+	============================================================================
+	extractInheritance(&InterfaceDeclaration, &Rstore1, &String) = &Rstore2
+
+[extractExtendsInterface-0]
+	extends &InterfaceTypes := &ExtendsInterfaces,
+	&Rstore2 := extractExtendsInterface(&InterfaceTypes, &Rstore1, &ClassId)
+	============================================================================
+	extractExtendsInterface(&ExtendsInterfaces, &Rstore1, &ClassId) = &Rstore2 
+
+[extractExtendsInterface-1]
+	&Name := &InterfaceType,
+	&InterfaceName := name2str(&Name),
+	&Tuple := <&ClassId, &InterfaceName>,
+	&Rstore2 := add-tuple(EXTENDS_INTERFACE, &Tuple, &Rstore1)
+	============================================================================
+	extractExtendsInterface(&InterfaceType, &Rstore1, &ClassId) = &Rstore2
+
+[extractExtendsClass-0]
+	extends &ClassType := &Super,
+	&Name := &ClassType,
+	&SuperName := name2str(&Name),  
+	&Tuple := <&ClassId, &SuperName>,
+	&Rstore2 := add-tuple(EXTENDS_CLASS, &Tuple, &Rstore1)
+	============================================================================
+	extractExtendsClass(&Super, &Rstore1, &ClassId) = &Rstore2
+
+[extractImplements-0]
+	&Name := &InterfaceType,
+	&InterfaceName := name2str(&Name),
+	&Tuple := <&ClassId, &InterfaceName>,      %%<===== upgrade generates a ==
+	&Rstore2 := add-tuple(IMPLEMENTS, &Tuple, &Rstore1)
+	============================================================================
+	extractImplements(&InterfaceType, &Rstore1, &ClassId) = &Rstore2

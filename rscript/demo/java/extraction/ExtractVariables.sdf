@@ -1,0 +1,91 @@
+module ExtractVariables
+
+imports Rstore
+imports JavaOperations
+imports utilities/PosInfo[CompilationUnit]
+imports utilities/PosInfo[VariableDeclaratorId]
+imports utilities/PosInfo[Identifier]
+
+exports
+  context-free syntax
+    extractVariables(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractVariables(CompilationUnit, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariables(ClassDeclaration, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariables(ClassBody, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariables(MethodDeclaration, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariables(MethodBody, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariables(FieldDeclaration, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariables(LocalVariableDeclaration, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractFields({VariableDeclarator ","}+, RSTORE, Location, Type)
+      -> RSTORE {traversal(accu, top-down, break)}
+    
+    extractFields(VariableDeclarator, RSTORE, Location, Type)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractLocalVariables({VariableDeclarator ","}+, RSTORE, Location, Type)
+      -> RSTORE {traversal(accu, top-down, break)}
+    
+    extractLocalVariables(VariableDeclarator, RSTORE, Location, Type)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addField(VariableDeclaratorId, RSTORE, Location, Type) -> RSTORE
+    
+    addLocalVariable(VariableDeclaratorId, RSTORE, Location, Type) -> RSTORE
+
+hiddens
+  variables
+    "&Loc"			-> Location
+    "&ClassBody"		-> ClassBody
+    "&ClassDeclaration"		-> ClassDeclaration
+    "&ClassId"			-> Location
+    "&CompilationUnit"		-> CompilationUnit
+    "&FieldDeclaration"		-> FieldDeclaration
+    "&FormalParameters"		-> { FormalParameter ","}*
+    "&Identifier"		-> Identifier
+    "&Interfaces"		-> Interfaces?
+    "&LocalVariableDeclaration" -> LocalVariableDeclaration
+    "&MethodBody"		-> MethodBody
+    "&MethodDeclaration"	-> MethodDeclaration
+    "&MethodDeclarator"		-> MethodDeclarator
+    "&MethodHeader"		-> MethodHeader
+    "&MethodId"			-> Location
+    "&MethodRes"		-> MethodRes
+    "&Modifiers"		-> Modifier*
+    "&Name"			-> Name
+    "&Rstore"[0-9]*		-> RSTORE
+    "&Super"			-> Super?
+    "&Throws"			-> Throws?
+    "&Tuple"[0-9]*		-> Tuple
+    "&Type"			-> Type
+    "&VariableDeclarator"	-> VariableDeclarator
+    "&VariableDeclaratorId"	-> VariableDeclaratorId
+    "&VariableDeclaratorIdId"	-> Location
+    "&VariableDeclarators"	-> {VariableDeclarator ","}+
+    "&VariableInitializer"	-> VariableInitializer
