@@ -249,7 +249,7 @@ in
     snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
       rec-msg(ts-value(EqsTree?)) .
-      snd-msg(EqsTree) .
+      snd-msg(tree(EqsTree)) .
       EqsTree := no-tree
     +
       rec-msg(ts-no-value) .
