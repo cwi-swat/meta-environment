@@ -1,29 +1,6 @@
 [
-  constructor(CategoryName, focus, focus),
-  constructor(CategoryName, selection, selection),  
-  constructor(CategoryName, normal, normal),
-  constructor(CategoryName, extern, extern(<name(str)>)),
-
-  constructor(Category, default, category(<name(CategoryName)>,
-                                          <attributes(Attributes)>)),
-
-  list(Attributes, Attribute),
-
-  constructor(Attribute, foreground-color, foreground-color(<color(Color)>)),
-  constructor(Attribute, background-color, background-color(<color(Color)>)),
-  constructor(Attribute, style, style(<style(Style)>)),
-  constructor(Attribute, font, font(<name(str)>)),
-  constructor(Attribute, size, size(<points(int)>)),
-
-  constructor(Color, rgb, rgb(<red(int)>,<green(int)>,<blue(int)>)),
-
-  constructor(Style, bold, bold),
-  constructor(Style, italics, italics),
-  constructor(Style, underlined, underlined),
-
-  constructor(Slice, default, slice(<category(CategoryName)>,<areas(Areas)>)),
-
-  list(Areas, Area),
-  list(Slices, Slice)
+  constructor(Slice, default, slice(<category(str)>,<areas(Areas)>)),
+  list(Slices, Slice),
+  list(Areas, Area)
 ]
 

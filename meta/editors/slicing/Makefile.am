@@ -13,6 +13,7 @@ libslicing_a_SOURCES = \
 
 INCLUDES = \
 	-I${ATERM}/include \
+	-I${PT_SUPPORT}/include \
 	-I${ERROR_SUPPORT}/include
 
 api: Slicing.adt

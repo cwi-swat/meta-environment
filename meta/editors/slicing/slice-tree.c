@@ -61,13 +61,11 @@ static ATbool allAlphaNumeric(const char* str)
 
 static void storeTree(PT_Tree tree, const char *category)
 {
-  S_CategoryName name;
   ATerm key;
   S_Areas slice;
   LOC_Location location;
 
-  name = S_makeCategoryNameExtern(category);
-  key = S_CategoryNameToTerm(name);
+  key = ATmake("<str>",category);
   slice = S_AreasFromTerm(ATtableGet(slices, key));
 
   if (slice == NULL) {
@@ -154,11 +152,10 @@ S_Slices TreeToSyntaxSlices(PT_Tree tree)
 
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
-    S_CategoryName cat;
+    const char* cat = ATwriteToString(key);
     S_Areas areas;
     S_Slice slice; 
 
-    cat = S_CategoryNameFromTerm(ATgetFirst(keys));
     areas = S_AreasFromTerm(ATtableGet(slices, key));
 
     slice = S_makeSliceDefault(cat, areas);
