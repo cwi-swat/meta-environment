@@ -1801,8 +1801,9 @@ other tools, such as ApiGen.
 
 Not all combinations of attributes make sense. If one uses the attribute
 {\tt left} in combination with {\tt bracket}, {\tt right}, {\tt assoc}
-or {\tt non-assoc}, this will result in an error message. Furthermore,
-the combination of the traversal attributes is also very strict.
+or {\tt non-assoc}, this will result in an error message. The combination
+of {\tt avoid} and {\tt prefer} does not make sense either.
+Furthermore, the combination of the traversal attributes is also very strict.
 
 \subsection{Priorities}
 \label{Priorities}
@@ -2574,7 +2575,7 @@ module DanglingElse
 imports basic/Whitespace
 
 exports
-  context-free start-symbols E S
+  context-free start-symbols S
   sorts E S
 
   context-free syntax
@@ -2693,7 +2694,9 @@ imports basic/Booleans
 
 hiddens
   sorts X Y
+
 exports
+  context-free start-symbols Pair[[X,Y]]
   sorts Pair[[X,Y]]
 
   context-free syntax
@@ -3474,7 +3477,7 @@ module Tree-syntax
 imports Naturals
 
 exports
-  context-free start-symbols TreNat
+  context-free start-symbols Tree
   sorts Tree
 
   context-free syntax
@@ -4087,136 +4090,6 @@ describing financial products.
 
 \end{itemize}
 
-\section{Compiling Specifications}
-\label{compiling-specs}
-
-By means of the {\tt Compile ...} button in the
-pop-up menu of the import pane the \asfsdf2C
-compiler can be activated. C code is generated for the selected module
-(exactly {\em one} module can be selected for compilation) including
-the imported modules. The C code is immediately compiled into an
-executable.
-
-\warning{}
-The specification should be complete, i.e., no missing modules are
-allowed, and the equations sections should be error free.
-
-If this requirement is satisfied, C code can be generated.
-This process of C code generation is described in detail in \cite{BKO99}.
-We shall give a brief description of the main steps performed by the
-\asfsdf2C compiler.
-
-In \asfsdf\ there is {\em no} restriction in which module an equation
-is defined, except that all applied syntax rules should be defined.
-This freedom asks for a `reshuffling' of the equations given the set of
-defined syntax rules. This reshuffling is needed because for each syntax
-rule a separate C function is generated. This C function must contain
-the C code for {\em all} equations with the C function as outermost
-function symbol in the left-hand side.  By having all equations with the
-same outermost function symbol in the left-hand side together an optimal
-matching automaton can be generated.  Equations with the same outermost
-function symbol are moved to the corresponding syntax rule.  
-
-\section{Technology and Architecture of the \ASmetaenv}
-\label{SEC:TechnologyandArchitecture}
-
-So far, we have explained the functionality of the \ASmetaenv\ as an
-interactive development environment for \asfsdf\ specifications.
-There are, however, good reasons to have a look under the hood and
-understand the architecture and technologies that have been used:
-
-\begin{itemize}
-
-\item Both architecture and technologies are very innovative
-and it is worthwhile to learn about them.
-
-\item The \ASmetaenv\ has been constructed as a collection of
-cooperating components. All of these components have merits of their
-own and can be used independently of the \ASmetaenv.
-
-\end{itemize}
-
-If you want to reuse components of the \ASmetaenv\ or want to build
-variants of it, then the following information is for you.
-
-\subsection{Technological Background}
-
-\paragraph{ToolBus}
-
-In many large systems control flow and actual computation are complete
-entangled. This leads to poor extensibility and maintenance problems.  To
-separate coordination from computation we use the ToolBus coordination
-architecture~\cite{BK98}, a programmable software bus based on process
-algebra.  Coordination is expressed by a formal description of the cooperation
-protocol between components while computation is expressed in components that
-may be written in any language. We thus obtain interoperability of
-heterogeneous components in a (possibly) distributed system.
-
-\paragraph{ATerms}
-
-Coordination protocol and components have to share data. We use
-ATerms~\cite{BJKO00} for this purpose. These are trees with optional annotations on
-each node.  The annotations are used to store tool-specific information
-like text coordinates or color attributes. The implementation of ATerms
-has two essential properties: terms are stored using maximal subterm
-sharing (reducing memory requirements and making deep equality tests
-very efficient) and they can be exchanged using a very dense binary encoding that
-preserves sharing. As a result very large terms (with over $1,000,000$ nodes)
-can be processed.
-
-\paragraph{SGLR}
-
-In our language-centric approach the parser is an essential tool.  We
-use scannerless, generalized-LR parsing~\cite{Vis97}.  In this way we
-can parse arbitrary context-free grammars, an essential property when
-combining and parsing large grammars for (dialects of) real-world
-languages.
-
-\paragraph{Term rewriting}
-
-\asfsdf\ specifications are executed as (conditional) rewrite rules. Both
-interpretation and compilation (using the ASF2C compiler~\cite{BKO99}) of
-these rewrite rules are supported. The compiler generates very efficient
-C code that implements pattern matching and term traversal. The generated
-code uses ATerms as its main data representation, and ensures a minimal
-use of memory during normalization of terms.
-
-
-
-\subsection{Architecture}
-
-\begin{figure}
-\begin{center}
-\begin{Label}{FIG:architecture}
-\T \includegraphics[width=12cm]{newarch}
-\W \htmlimage{newarch.gif}
-\caption{Architecture of the \ASmetaenv}
-\end{Label}
-\end{center}
-\end{figure}
-
-The architecture of the \ASmetaenv\ is shown \link*{above}[in Figure~\Ref]{FIG:architecture}.
-It consists of a ToolBus that interconnects the following components:
-
-\begin{itemize}
-\item {\bf User interface}: the top level user-interface of the system.
-      It consists primarily of a graph browser for the import graph
-      of the current specification.
-
-\item {\bf Text Editor}: a customized version of \xemacs\ for text editing.
-\item {\bf Structure Editor}: a syntax-directed editor that closely cooperates
-with the Text Editor.
-
-\item {\bf Parser}:  scannerless, generalized-LR parser (SGLR) that is parametrized 
-with a parse table.
-\item {\bf Parsetable generator}: takes an SDF syntax definition as input and 
-generates a parse table for SGLR.
-\item {\bf Tree Repository}: stores all terms corresponding to specification 
-modules, parse tables, user-defined terms, etc.
-\item {\bf Compiler}: the ASF2C compiler.
-\item {\bf Interpreter}: executes specifiations by direct interpretation.
-\item {\bf Unparser generator}: generates prettyprinters.
-\end{itemize}
 
 \section{Well-formedness checks on \sdf}
 \label{SEC:SDF-checker}
@@ -4386,19 +4259,128 @@ hand side}
 \end{itemize}
 
 
-\section{Selected Components of the \ASmetaenv}
-\label{SEC:Components}
+\section{Building stand-alone environments using ASF+SDF 
+Meta-En\-vir\-on\-ment technology}
 
-Now we will describe a selection of components that are useful for
+In this chapter we describe how to build simple and more complex
+stand-alone environments using the various components of the
+ASF+SDF Meta-Environment. It does not include building an
+environment based on the ToolBus.
+
+First we will describe a selection of components that are useful for
 building stand-alone tools. \emph{Be aware that the information in the
 following pages is still very much in a state of flux.}
+Note that all components mentioned have a {\tt -h} options that 
+gives an overview of their command line options.
+Secondly, we will describe how these components can be combined
+into stand-alone environments. We will describes various levels
+of integration. The first level is with UNIX pipes and files
+and the second level is invoking the various components from
+within C programs. The last level, which we will not discuss,
+is by writing ToolBus scripts.
 
-Note that all components mentioned have a Unix-style manual page,
-e.g., {\tt man sglr} gives the manual page for the command {\tt sglr}.
-All components also have a {\tt -h} options that gives an overview of
-their command line options.
+\subsection{Technology and Architecture of the \ASmetaenv}
+\label{SEC:TechnologyandArchitecture}
 
-\subsection{Parse Table Generation}
+So far, we have explained the functionality of the \ASmetaenv\ as an
+interactive development environment for \asfsdf\ specifications.
+There are, however, good reasons to have a look under the hood and
+understand the architecture and technologies that have been used:
+
+\begin{itemize}
+
+\item Both architecture and technologies are very innovative
+and it is worthwhile to learn about them.
+
+\item The \ASmetaenv\ has been constructed as a collection of
+cooperating components. All of these components have merits of their
+own and can be used independently of the \ASmetaenv.
+
+\end{itemize}
+
+If you want to reuse components of the \ASmetaenv\ or want to build
+variants of it, then the following information is for you.
+
+\subsubsection{Technological Background}
+
+\paragraph{ToolBus}
+
+In many large systems control flow and actual computation are complete
+entangled. This leads to poor extensibility and maintenance problems.  To
+separate coordination from computation we use the ToolBus coordination
+architecture~\cite{BK98}, a programmable software bus based on process
+algebra.  Coordination is expressed by a formal description of the cooperation
+protocol between components while computation is expressed in components that
+may be written in any language. We thus obtain interoperability of
+heterogeneous components in a (possibly) distributed system.
+
+\paragraph{ATerms}
+
+Coordination protocol and components have to share data. We use
+ATerms~\cite{BJKO00} for this purpose. These are trees with optional annotations on
+each node.  The annotations are used to store tool-specific information
+like text coordinates or color attributes. The implementation of ATerms
+has two essential properties: terms are stored using maximal subterm
+sharing (reducing memory requirements and making deep equality tests
+very efficient) and they can be exchanged using a very dense binary encoding that
+preserves sharing. As a result very large terms (with over $1,000,000$ nodes)
+can be processed.
+
+\paragraph{SGLR}
+
+In our language-centric approach the parser is an essential tool.  We
+use scannerless, generalized-LR parsing~\cite{Vis97}.  In this way we
+can parse arbitrary context-free grammars, an essential property when
+combining and parsing large grammars for (dialects of) real-world
+languages.
+
+\paragraph{Term rewriting}
+
+\asfsdf\ specifications are executed as (conditional) rewrite rules. Both
+interpretation and compilation (using the ASF2C compiler~\cite{BKO99}) of
+these rewrite rules are supported. The compiler generates very efficient
+C code that implements pattern matching and term traversal. The generated
+code uses ATerms as its main data representation, and ensures a minimal
+use of memory during normalization of terms.
+
+\subsubsection{Architecture}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:architecture}
+\T \includegraphics[width=15cm]{layered-arch}
+\W \htmlimage{layered-arch.gif}
+\caption{Architecture of the \ASmetaenv}
+\end{Label}
+\end{center}
+\end{figure}
+
+The architecture of the \ASmetaenv\ is shown \link*{above}[in Figure~\Ref]{FIG:architecture}.
+It consists of a ToolBus that interconnects the following components:
+
+\begin{itemize}
+\item {\bf User interface (GUI)}: the top level user-interface of the system.
+      It consists primarily of a graph browser for the import graph
+      of the current specification. Furthermore, it offers facilities
+      to visualize parse trees of selected pieces of parsed texts.
+
+\item {\bf Text Editor}: a customized version of \xemacs\ for text editing.
+\item {\bf Structure Editor}: a syntax-directed editor that closely cooperates
+with the Text Editor.
+
+\item {\bf Parser}:  scannerless, generalized-LR parser (SGLR) that is parametrized 
+with a parse table.
+\item {\bf Parsetable generator}: takes an SDF syntax definition as input and 
+generates a parse table for SGLR.
+\item {\bf Term Store}: stores all terms corresponding to specification 
+modules, parse tables, user-defined terms, etc.
+\item {\bf ASF Compiler}: the ASF2C compiler.
+\item {\bf ASF Interpreter}: executes specifiations by direct interpretation.
+\item {\bf Unparser generator}: generates prettyprinters.
+\end{itemize}
+\subsection{Components}
+
+\subsubsection{Parse Table Generation}
 
 Before you can parse terms over a module {\tt M} outside the
 \ASmetaenv\ you have to obtain a parse table for this module.  There
@@ -4517,10 +4499,38 @@ explains how {\tt reduct.tree} can be converted to a textual representation.
 \subsection{Compiling a Specification}
 \label{SEC:compilingaspecification}
 
+By means of the {\tt Compile ...} button in the
+pop-up menu of the import pane the \asfsdf2C
+compiler can be activated. C code is generated for the selected module
+(exactly {\em one} module can be selected for compilation) including
+the imported modules. The C code is immediately compiled into an
+executable.
+
+\warning{}
+The specification should be complete, i.e., no missing modules are
+allowed, and the equations sections should be error free.
+
+If this requirement is satisfied, C code can be generated.
+This process of C code generation is described in detail in \cite{BKO99}.
+We shall give a brief description of the main steps performed by the
+\asfsdf2C compiler.
+
+In \asfsdf\ there is {\em no} restriction in which module an equation
+is defined, except that all applied syntax rules should be defined.
+This freedom asks for a `reshuffling' of the equations given the set of
+defined syntax rules. This reshuffling is needed because for each syntax
+rule a separate C function is generated. This C function must contain
+the C code for {\em all} equations with the C function as outermost
+function symbol in the left-hand side.  By having all equations with the
+same outermost function symbol in the left-hand side together an optimal
+matching automaton can be generated.  Equations with the same outermost
+function symbol are moved to the corresponding syntax rule.  
+
+
 \subsection{Rewriting a Term using a Compiled Specification}
 \label{SEC:reducingofterms}
 
-In \link*{Compiling Specifications}[Section~\Ref]{compiling-specs}
+In \link*{Compiling Specifications}[Section~\Ref]{SEC:compilingaspecification}
 we explained how a given module {\tt M}
 can be compiled into C code. Here we describe how to compile and
 use this generated C code. The steps are as follows:
