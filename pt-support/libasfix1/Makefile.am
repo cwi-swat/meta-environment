@@ -19,6 +19,10 @@ add_posinfo_LDADD       = libPT.a ${LDFLAGS} ${LDADD}
 
 EXTRA_DIST		= AsFix.adt
 
+regen:
+	adt-to-c --compat-term -i AsFix.adt --prologue AsFix.pro \
+		--prefix PT_ -o PT
+
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include
 LDFLAGS			= -L${ATERM}/lib
