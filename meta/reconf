@@ -1,6 +1,7 @@
 #! /bin/sh
 
-export LIBTOOLIZE="libtoolize --ltdl"
+LIBTOOLIZE="libtoolize --ltdl"
+export LIBTOOLIZE
 
 # --warnings=gnu is essential to make distcheck work in ./libltdl
 ${LIBTOOLIZE}
