@@ -1,3 +1,6 @@
+2002/06/05 (vandenbr@loria.fr)
+ * Bug fix wrt. more than one list pattern in a list pattern.
+
 2002/05/31 (jurgenv@cwi.nl)
  * Added the notion of failure to the rewriting process in asfe. 
    Every rewrite step/traversal/built-in can return FAIL instead of a reduct. 
