@@ -7,6 +7,7 @@ noinst_DATA = asf+sdf-user-manual.pdf
 endif
 
 EXTRA_DIST = $(wildcard *.ltx) \
+             $(wildcard *.eps) \
              $(wildcard *.ps) \
              $(wildcard *.pdf) \
              $(wildcard *.sty) \

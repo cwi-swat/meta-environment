@@ -4392,21 +4392,45 @@ Meta-Environment. There are in fact two main scenarios:
 \item Reducing a term
 \end{itemize}
 
+An integrated environment as the \ASmetaenv\ takes
+care of a lot of administrative issues when developing your
+specifications. For syntax editors a fixed parse table will
+be used, namely a parse table derived from the SDF grammar.
+But when you invoke an equation or term editor 
+and hit the parse button, the environment will generate a 
+parse table, if necessary, before parsing the equations or 
+term. In order to do that the underlying syntax definition 
+will be checked on completeness and well-formedness, and if 
+this is the case the parse table will be generated and stored 
+in a repository. This storing of the parse table is just for 
+caching.
+
+If you select the reduce button in a term editor all relevant
+equations have to be parsed, checked and combined into one list
+in order to be used by the interpreter for rewriting the term.
+
+These parse tables and list of equations play an important
+role in the stand-alone setting.
+
 \subsubsection{Parse Table Generation}
 
 Before you can parse terms over a module {\tt M} outside the
-\ASmetaenv\ you have to obtain a parse table for this module.  There
-are currently three ways to achieve this:
+\ASmetaenv\ you have to obtain a parse table for this module.  
+There are currently three ways to achieve this:
 
 \begin{itemize}
 
 \item Interactively using the \ASmetaenv\
-by selecting module {\tt M} and pushing the {\tt Dump Parse Table...} button in 
-the pop-up menu.
+by selecting module {\tt M} and pushing the {\tt Term ParseTable...} button in 
+the menu {\tt Export} for the module pop-up menu. A window pops up in which
+you can select the directory where the parse table will be saved and in
+which you have to give the desired name for the table.
 
 \item From the command line using the command {\tt pt-dump}.
 In the background the same actions are performed as in the interactive
-setting, only no user interface is activated.
+setting, only no user interface is activated. 
+If you want to obtain the parse table for {\tt basic/Booleans} 
+you can do this via {\tt pt-dump -m basic/Booleans -o Booleans.trm.tbl}.
 For further information use {\tt pt-dump -h}.
 
 \item From the command line using the command {\tt sdf2table}.  You should
@@ -4423,6 +4447,28 @@ Before a parse table is generated the \sdf\ definition is checked with
 respect to well-formedness. When using the {\tt sdf2table} only the 
 checks on \sdf\ are performed, in the other two cases the checks
 on \sdf\ and on \asfsdf\ specific features are performed as well.
+
+\subsubsection{Obtaining Equations}
+\label{SEC:obtainingequations}
+
+In order to \link{rewrite a term}[, see Section~\Ref,]{SEC:interpretationgofterms}, 
+or \link{compile a specification}[,
+see Section~\Ref,]{SEC:compilingaspecification} it is necessary
+to obtain the equations.
+The generation of equations given an \asfsdf\ specification can be
+performed in two different ways:
+\begin{itemize}
+\item Interactively using the \ASmetaenv\
+by selecting module {\tt M} and pushing the {\tt Dump Equations...} button in 
+the pop-up menu.
+
+\item From the command line using the command {\tt eqs-dump}.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated.
+For further information use {\tt eqs-dump -h}.
+\end{itemize}
+The result is a file named {\tt M.eqs}.
+
 \subsection{Parsing}
 \label{SEC:parsingofterms}
 
@@ -4453,27 +4499,6 @@ reasons, the \ASmetaenv\ uses the more concise format AsFixMe.
 parse tree format that is becoming the standard inside the \ASmetaenv.
 
 \end{itemize}
-
-\subsection{Obtaining Equations}
-\label{SEC:obtainingequations}
-
-In order to \link{rewrite a term}[, see Section~\Ref,]{SEC:interpretationgofterms}, 
-or \link{compile a specification}[,
-see Section~\Ref,]{SEC:compilingaspecification} it is necessary
-to obtain the equations.
-The generation of equations given an \asfsdf\ specification can be
-performed in two different ways:
-\begin{itemize}
-\item Interactively using the \ASmetaenv\
-by selecting module {\tt M} and pushing the {\tt Dump Equations...} button in 
-the pop-up menu.
-
-\item From the command line using the command {\tt eqs-dump}.
-In the background the same actions are performed as in the interactive
-setting, only no user interface is activated.
-For further information use {\tt eqs-dump -h}.
-\end{itemize}
-The result is a file named {\tt M.eqs}.
 
 \subsection{Rewriting a Term using the Evaluator}
 \label{SEC:interpretationgofterms}
