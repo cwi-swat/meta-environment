@@ -7,11 +7,11 @@ imports Relation[Integer]
 exports
   context-free syntax
 
-      NatCon ":" PICO-ID       -> PICO-ID
+     NatCon ":" PICO-ID       -> PICO-ID
 
-     label(PROGRAM, Integer) -> PROGRAM # Integer {traversal(accu,trafo,top-down)}
+%%     label(PROGRAM, Integer) -> PROGRAM # Integer {traversal(accu,trafo,top-down)}
 
-     label(PICO-ID, Integer)  -> PICO-ID # Integer {traversal(accu,trafo,top-down)}
+%%     label(PICO-ID, Integer)  -> PICO-ID # Integer {traversal(accu,trafo,top-down)}
  
 %%    extract(STATEMENT, RELS) -> RELS {traversal(accu)}
 %%     extract(EXP, RELS)       -> RELS {traversal(accu)}
