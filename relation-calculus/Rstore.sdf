@@ -38,6 +38,8 @@ exports
 
 exports
   context-free syntax
+    zip-rstores(RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE) -> RSTORE
     merge-rstores(RSTORE, RSTORE) -> RSTORE
     merge-rstores(RSTORE, RSTORE, RSTORE) -> RSTORE
     merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE

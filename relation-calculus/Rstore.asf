@@ -104,21 +104,28 @@ equations
 
 %% ----- Merge two Rstores
 
-[merge-rstores-0]
-  merge-rstores(rstore(), $Rstore) = $Rstore
+[zip-rstores-0]
+  zip-rstores(rstore(), $Rstore) = $Rstore
 
-[merge-rstores-1]
-  merge-rstores($Rstore, rstore()) = $Rstore
+[zip-rstores-1]
+  zip-rstores($Rstore, rstore()) = $Rstore
 
-[merge-rstores-2]
-  merge-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
+[zip-rstores-2]
+  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
                 rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
-  = merge-rstores(rstore($VPair*),
+  = zip-rstores(rstore($VPair*),
                   rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
 
-[default-merge-rstores]
-  merge-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))
-    = merge-rstores(rstore($VPair*), rstore(<$Var, $Val>, $VPair*1))
+[default-zip-rstores]
+  zip-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))
+    = zip-rstores(rstore($VPair*), rstore(<$Var, $Val>, $VPair*1))
+
+[merge-1]
+  merge-rstores($Rstore) = $Rstore
+
+[merge-2]
+  merge-rstores($Rstore1, $Rstore2)
+  = zip-rstores($Rstore1, $Rstore2)
 
 [merge-3]
   merge-rstores($Rstore1, $Rstore2, $Rstore3)
