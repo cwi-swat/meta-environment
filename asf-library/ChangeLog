@@ -3,6 +3,7 @@ $Id$
 Thu Mar 10 13:40:29 CET 2005 <{jong,kooiker}@cwi.nl>
  * library/languages/c/syntax/Generic-Preprocessor.sdf:
    - Filename start and ends with either < and > or ", but you cannot mix them
+   - Split IncludeFile into SystemInclude and LocalInclude 
 
 Thu Mar 10 10:52:39 CET 2005 <kooiker@cwi.nl>
  * library/languages/basic/Bytes.asf: fixed byte-to-strchar to output space rather

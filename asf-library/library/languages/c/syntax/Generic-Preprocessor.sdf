@@ -1,50 +1,51 @@
 module languages/c/syntax/Generic-Preprocessor[
-	Identifier
-	Expression
-	String
-	Body
-	Result
+  Identifier
+  Expression
+  String
+  Body
+  Result
 ]
 
 exports
-
-sorts Filename IfPart ElifPart ElsePart
-
-lexical syntax
-
-[\<] ~[\<\>]+ [\>] -> Filename
-[\"] ~[\"]+ [\"] -> Filename
+sorts Filename SystemInclude LocalInclude IncludeFile IfPart ElifPart ElsePart
 
 lexical syntax
-[\\][\n] -> LAYOUT
+  %% What exactly makes up a valid C-Preprocessor filename?
+  [A-Za-z0-9\/\_\.\,]* -> Filename
+  [\<] Filename [\>] -> SystemInclude
+  [\"] Filename [\"] -> LocalInclude
+
+lexical syntax
+  [\\][\n] -> LAYOUT
 
 context-free restrictions
-
-LAYOUT? -/- [\\].[\n]
-
-context-free syntax
-
-String String -> String {left}
-Identifier String -> String 
-String Identifier -> String 
+  LAYOUT? -/- [\\].[\n]
 
 context-free syntax
-
-IfPart Body ElifPart[[Body]]* ElsePart[[Body]]? "#" "endif" -> Result
-
-"#" "if" Expression 	-> IfPart
-"#" "ifdef" Identifier 	-> IfPart
-"#" "ifndef" Identifier -> IfPart
-
-"#" "elif" Expression Body -> ElifPart[[Body]]
-"#" "else" Body		-> ElsePart[[Body]]
+  String String     -> String {left}
+  Identifier String -> String 
+  String Identifier -> String 
 
 context-free syntax
+  IfPart Body ElifPart[[Body]]* ElsePart[[Body]]? "#" "endif" -> Result
+  
+  "#" "if" Expression     -> IfPart
+  "#" "ifdef" Identifier  -> IfPart
+  "#" "ifndef" Identifier -> IfPart
+  
+  "#" "elif" Expression Body -> ElifPart[[Body]]
+  "#" "else" Body            -> ElsePart[[Body]]
+  
+context-free syntax
+  SystemInclude -> IncludeFile
+  LocalInclude  -> IncludeFile
 
-"#" "include" Filename		  			-> Result
-"#" "define" Identifier Expression 			-> Result
-"#" "define" Identifier "(" Expression ")" Expression 	-> Result
-"#" "undef" Expression					-> Result
-"#" "line" Expression Filename? 			-> Result
-"#" "error" Expression?					-> Result
-"#" "pragma" Expression?				-> Result
+  "#" "include" IncludeFile -> Result
+
+context-free syntax
+  "#" "define" Identifier Expression                    -> Result
+  "#" "define" Identifier "(" Expression ")" Expression -> Result
+  "#" "undef" Expression                                -> Result
+  "#" "line" Expression Filename?                       -> Result
+  "#" "error" Expression?                               -> Result
+  "#" "pragma" Expression?                              -> Result
