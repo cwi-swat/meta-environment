@@ -166,7 +166,8 @@ in
   +
     rec-msg(no-extension-modulename(Extension)) .
     snd-note(ui-status(errorf("Extension %s is not registered",
-                       [Extension])))
+                       [Extension]))) .
+    snd-msg(editor-opened("", no-editor))
   )
 endlet
 
