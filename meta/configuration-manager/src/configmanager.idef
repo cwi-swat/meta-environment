@@ -1,10 +1,9 @@
-/*
-    $Id$
-*/        
+/* $Id$ */        
 
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
+
 #ifndef BUTTON_FILE
 #define BUTTON_FILE "meta.buttons"
 #endif
@@ -30,8 +29,7 @@ let
 in
   snd-msg(actions-hook) .
   rec-msg(actions-hook-result(Contents?)) .
-  snd-eval(CMNG, process-standard-actions(Contents)) .
-  rec-value(CMNG, standard-actions-processed)
+  snd-do(CMNG, add-predefined-actions(Contents))
 endlet
   
 process ConfigManager is

@@ -122,17 +122,16 @@ void remove_actions(int cid)
 }
 
 /*}}}  */
-/*{{{  ATerm process_standard_actions(int cid, ATerm contents) */
+/*{{{  void add_predefined_actions(int cid, char *contents) */
 
-ATerm process_standard_actions(int cid, char *contents)
+void add_predefined_actions(int cid, char *contents)
 {
-  ATerm atActions = ATreadFromString(contents);
+  ATerm actions = ATreadFromString(contents);
 
-  if (MB_isValidButtons(MB_ButtonsFromTerm(atActions))) {
-    standardButtons = MB_concatButtonList(MB_getButtonsList(MB_ButtonsFromTerm(atActions)),standardButtons);
+  if (MB_isValidButtons(MB_ButtonsFromTerm(actions))) {
+    MB_ButtonList newActions = MB_getButtonsList(MB_ButtonsFromTerm(actions));
+    standardButtons = MB_concatButtonList(newActions, standardButtons);
   }
-  
-  return ATmake("snd-value(standard-actions-processed)");
 }
 
 /*}}}  */

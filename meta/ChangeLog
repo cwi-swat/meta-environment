@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Aug  1 10:04:35 CEST 2003 <jong@cwi.nl>
+ * configmanager.{c,idef}:
+   - changed process-standard-buttons into add-predefined-actions
+     in accordance with yesterday's changes in the process names..
+
 Thu Jul 31 12:55:42 CEST 2003 <jong@cwi.nl>
  * version bumped into 1.1
  * configmanager.idef:
