@@ -30,6 +30,10 @@ tool addeqssyntax is {
   command = "addeqssyntax"
 }
 
+tool removevarsyntax is {
+  command = "removevarsyntax"
+}
+
 process Parsetrees is 
 let
   Com    : compiler,
@@ -37,6 +41,7 @@ let
   Pgen   : pgen,
   Help   : gen,
   Addsyn : addeqssyntax,
+  Remvar : removevarsyntax,
   Id     : term,
   Tid    : int,
   Mod    : term,
@@ -44,13 +49,14 @@ let
 in
   /* Start up tools and initialize */
   execute(addeqssyntax, Addsyn?).
+  execute(removevarsyntax, Remvar?).
   /* Start all controlling processes */
   create(Open-modules, Tid?).
   create(Compiler(), Tid?).
   create(PGen(), Tid?).
   create(Help(), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
-  create(RemoveVarSyn(), Tid?).
+  create(RemoveVarSyn(Remvar), Tid?).
   create(Clear-all(), Tid?).
   create(Close-modules(), Tid?)
 endlet

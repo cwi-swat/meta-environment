@@ -22,17 +22,20 @@
 /*
   $Id$
  */
-process RemoveVarSyn is
+process RemoveVarSyn(RVS: removevarsyntax) is
 let
   Name      : str,
-  Syntax    : term
+  Syntax    : term,
+  NewSyntax : term
 in  
   (
     rec-msg(remove-var-syntax(Name?)).
     snd-msg(get-all-sdf2-definitions(Name)).
     (
-      rec-msg(syntax(Syntax?)).
-      snd-msg(changed-syntax(Syntax))
+      rec-msg(syntax(Syntax?)) .
+      snd-eval(RVS, remove-var-syntax(Name, Syntax)) .
+      rec-value(RVS, changed-syntax(NewSyntax?)) .
+      snd-msg(changed-syntax(NewSyntax))
     +
       rec-msg(no-syntax).
       snd-msg(no-changed-syntax)
