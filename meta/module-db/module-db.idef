@@ -102,8 +102,9 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(add-empty-module-to-db(Name?)).
   snd-eval(Mdb,add-empty-module(Name)).
-  rec-value(Mdb,done).
-  snd-msg(done)
+  rec-value(Mdb,empty-module-added(import-graph(ActualMods?, Pairs?))) .
+  snd-note(import-graph(ActualMods, Pairs)).
+  snd-msg(empty-module-added)
 +
 /* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
@@ -155,6 +156,11 @@ snd-do(Mdb, create-module-db).
                         timestamp(Time?))) .
   snd-do(Mdb,add-tree-eqs-section(Name, Path, EqsTree, EqsText, Time)) .
   snd-msg(eqs-added)
++
+  /* Add the equations as tree to the database for the given module name */
+  rec-msg(add-empty-eqs-to-db(Name?, Path?)) .
+  snd-do(Mdb,add-empty-eqs-section(Name, Path)) .
+  snd-msg(empty-eqs-added)
 +
   /* Add the equations as text to the database for the given module name */
   rec-msg(add-eqs-to-db(Name?, Path?, text(EqsText?), timestamp(Time?))) .

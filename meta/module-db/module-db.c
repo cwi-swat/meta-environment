@@ -318,9 +318,11 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 
 ATerm add_empty_module(int cid, char *moduleName)
 {
-  ATerm entry;
+  ATerm atModuleName, entry, importGraph;
+  ATermList discardValue;
   char  fileName[1024] = {'\0'};
 
+  atModuleName = ATmake("<str>",  moduleName);
   sprintf(fileName,"%s%s", moduleName, ".sdf2");
   entry = (ATerm)ATmakeList(LOC_CNT,
                             ATmake("<str>", fileName),   /* Path Sdf */
@@ -336,7 +338,11 @@ ATerm add_empty_module(int cid, char *moduleName)
                             ATmakeInt(0)                 /* Time of ParseTable */
                            );
   PutValue(new_modules_db, ATmake("<str>", moduleName), entry);
-  return ATmake("snd-value(done)");
+
+  discardValue = add_imports(atModuleName, ATempty);
+  importGraph = calc_import_graph();
+
+  return ATmake("snd-value(empty-module-added(<term>))", importGraph);
 }
 
 void add_tree_eqs_section(int cid, char *moduleName, char* path,
@@ -389,6 +395,26 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
   entry = (ATerm)ATreplace((ATermList)entry, 
                            (ATerm)ATmakeInt(timestamp),
                            EQS_TIME_LOC);
+  PutValue(new_modules_db, atModuleName, entry);
+}
+
+void add_empty_eqs_section(int cid, char *moduleName, char* path)
+{
+  ATerm entry;
+  ATerm isChanged = Mfalse;
+  ATerm atModuleName, atEqsText;
+
+  atModuleName = ATmake("<str>", moduleName);
+  atEqsText = ATmake("\"\"");
+
+  entry = GetValue(new_modules_db, atModuleName);
+  entry = (ATerm)ATreplace((ATermList)entry,
+                           ATmake("<str>", path),
+                           PATH_EQS_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry,
+                           isChanged,
+                           EQS_UPDATED_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry, atEqsText, EQS_TEXT_LOC);
   PutValue(new_modules_db, atModuleName, entry);
 }
 
