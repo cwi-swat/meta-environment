@@ -78,6 +78,17 @@ This is work under construction.
 
 %---- [ OVERVIEW ]---- 
 
+\section{Update with respect to previous version}
+
+\begin{itemize}
+\item Updated a number of screendumps.
+\item Added a section on comment convention in \sdf\
+(Section~\ref{SdfComment})
+\item Added a section on renaming and adapted the text of imports
+(Section~\ref{Renamings}).
+\item Added a section on lists and optional symbols (Section~ref{??}).
+\end{itemize}
+
 \section{Overview}\label{overview} 
 
 \subsection{When to use the \ASmetaenv?}
@@ -290,10 +301,6 @@ and continue with Section~\ref{MainWindow}.
 
 \begin{itemize}
 
-\item {\tt -c \emph{dir}} instructs the \asfsdf\ compiler to generate
-C files in the directory \emph{dir}. Note that this directory is also
-controlled by the environment variable {\tt COMPILER\_OUTPUT}.
-
 \item {\tt -C \emph{file}} specifies the configuration file to be used,
 in the default case the configuration file {\tt meta.conf} is used.
 
@@ -464,8 +471,6 @@ this menu is disabled.
 
 \subsection{The Graph Menu} \label{GraphMenu}
 
-
-
 The {\tt Graph} menu is used for setting options for the display of the graph
 in the import pane.  It is shown in Figure \ref{FIG:graph-menu}.
 
@@ -635,28 +640,28 @@ the effect is that modifications made to these modules are discarded.
 
 {\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  If no module
 or more than one module has been selected, a warning appears 
-(Figure~\ref{FIG:compiler-warning}).  Otherwise, a dialog window appears 
-(Figure~\ref{FIG:compiler-dir}) containing the current directory path 
-where the output of the compiler
-will be written. It can be modified as well.
-Pushing the {\tt Cancel} button aborts the compilation. 
-Section~\ref{compiling-specs}
-gives more details on the compilation of \asfsdf\ specifications.
+(Figure~\ref{FIG:compiler-warning}).  
+Section~\ref{compiling-specs} gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump} ({\tt Dump Equations...}) dumps the equation of the selected
 module and all its imports. This feature is needed in order to run
 the evaluator in a stand-alone way, see Section \ref{SEC:interpretationgofterms}.
+
+{\tt Dump Parse Table...} dumps the parse table of the selected module and
+all its imports in order to parse terms. This functionality is needed in
+order to use the parser in a stand-alone way, see Section
+\ref{SEC:parsingofterms}.
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
-\begin{figure}
-  \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
-  \caption{\label{FIG:compiler-warning}Warning ({\tt Compile module...})}
-\end{figure}
+%%\begin{figure}
+%%  \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
+%%  \caption{\label{FIG:compiler-warning}Warning ({\tt Compile module...})}
+%%\end{figure}
 
-\begin{figure}
-  \centerline{\epsfig{file=compiler-dir.ps,width=4cm}}
-  \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
-\end{figure}
+%%\begin{figure}
+%%  \centerline{\epsfig{file=compiler-dir.ps,width=4cm}}
+%%  \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
+%%\end{figure}
 
 \newpage
 \section{Editing Specifications}
@@ -971,7 +976,7 @@ The result is shown in Figure~\ref{FIG:Bool-example.asf}.
 
 \end{itemize}
 
-All the text\emph{outside} the focus is (by definition) always syntactically
+All the text \emph{outside} the focus is (by definition) always syntactically
 correct. The text \emph{inside} the focus is fresh text which may contain syntax
 errors.
 
@@ -1511,6 +1516,9 @@ separate files.  For each module $M$ in a specification two files
 exist: `{\tt $M$.sdf}' contains the syntax sections of $M$ and `{\tt
 $M$.asf}' contains the equations section of $M$.
 
+A {\tt <ModuleName>} is either a simple {\tt <ModuleId>} or a {\tt
+<ModuleId>} followed by zero or more parameter symbols, e.g., 
+{\tt <Module>[<Symbol>*]}, the symbols will be explained in Section~\ref{Symbols}.
 An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
 \emph{hidden section}. The former starts with the keyword {\tt exports} and
 makes all entities in the section visible to other modules.  The latter starts
@@ -1542,14 +1550,40 @@ There are a number of related properties which have an effect across the
 various grammar items, these items are intermixed with the discussion
 of the grammars:
 \begin{itemize}
+\item \sdf\ comment convention (Section~\ref{SdfComment}).
 \item Symbols (Section~\ref{Symbols}).
 \item Attributes of Lexical and Context-free Functions (Section~\ref{Attributes}).
+\item Parameterization and Renamings (Section~\ref{Renamings}).
 \item Disambiguation (Section~\ref{Disambiguation}).
 \item Equations (Section~\ref{Equations}).
 \end{itemize}
 
 \noindent Each of these entities and properties
 will now be described and illustrated by examples.
+
+\subsection{\sdf\ comment convention} \label{SdfComment}
+
+The comment convention within an \sdf\ specification is that character
+between {\tt "\%\%"} and the end of line is comment as well as every
+character between two {\tt "\%"} including the newline character.
+See Figure~\ref{CODE:sdfcomment} for an example, more details on
+defining layout can be found in Section~\ref{Restrictions}.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Layout
+
+%% In this module we define the comment convention for Sdf.
+
+exports
+  lexical syntax
+    "%%" ~[\n]* [\n]   -> LAYOUT
+    "%" ~[\n\%]+ "%"   -> LAYOUT
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\sdf\ comment}\label{CODE:sdfcomment}
+\end{figure}   
 
 \subsection{Imports} \label{Imports}
 
@@ -1574,6 +1608,9 @@ become available in the importing module. In addition, they are also exported
 by the importing module.  However, if the import section occurs within the
 scope of a hiddens keyword, the exported entities are only visible in the
 importing module but they are not exported by the importing module.
+
+An imported module can be parameterized or decorated with renamings, see
+Section~\ref{Renamings} for more details.
 
 \subsection{Symbols} \label{Symbols}
 
@@ -2446,6 +2483,33 @@ exports
 \caption{Two ways of defining {\tt |} and {\tt \&}}\label{CODE:alternative-alternatives}
 \end{figure}
 
+\subsubsection{Lists in combination with optionals or empty producing
+sorts}
+
+The combination of lists and optionals or empty producing sorts leads to
+cycles in the parse tree. See Figure \ref{CODE:listcycle} for an example
+of such a specification.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}   
+module Cycle
+
+imports Layout
+
+exports
+  sorts A P T
+
+  context-free syntax
+    "a"        -> A
+    A?         -> P
+    "[" P+ "]" -> T
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Dangerous combination of lists and
+optionals}\label{CODE:listcycle}
+\end{figure}                                                                              
+
 \subsection{Attributes of Lexical and Context-free Functions} \label{Attributes}
 
 The definition of a lexical or context-free functions may be followed by
@@ -3175,6 +3239,8 @@ See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
 
 In Figure~\ref{CODE:dangling-else} the {\tt avoid} attribute is used to
 solve the dangling else problem in a nice way.
+
+\subsection{Parametrization and Renaming} \label{Renamings}
 
 \subsection{Variables} \label{Variables}
 
@@ -4359,17 +4425,7 @@ compiler can be activated. C code is generated for the selected module
 (exactly {\em one} module can be selected for compilation) including
 the imported modules.
 
-There are a number of requirements that have to be fulfilled in order
-to be able to generate this C code:
 \begin{itemize}
-\item There should exist a directory in which the C code can be generated.
-The name of this directory can be communicated via
-\begin{itemize}
-\item The environment variable {\tt COMPILER\_OUTPUT}.
-\item The {\tt -c} option when starting the \ASmetaenv\ via {\tt meta}.
-\item The dialog box presented in Figure \ref{FIG:compiler-dir}.
-\end{itemize}
-
 \item The specification should be complete, i.e., no missing modules are
 allowed, and the equations sections should be error free.
 
