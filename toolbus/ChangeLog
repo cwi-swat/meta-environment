@@ -1,6 +1,10 @@
 $Id$
 
+2002/02/07 (jurgenv@cwi.nl)
+ * Release 0.22
+
 2001/11/25 (mdejonge@cwi.nl)
+ * Bumped to 0.22
  * Libraries libtb, libATB extracted from ToolBus source tree and put in the
    separate package toolbuslib.
 
