@@ -314,9 +314,9 @@ void remove_user_properties(int cid)
 
 /*}}}  */
 
-/*{{{  ATerm get_events(int cid, ATerm type) */
+/*{{{  static ATermList getEvents(ATerm type) */
 
-ATerm get_events(int cid, ATerm actionType)
+static ATermList getEvents(ATerm actionType)
 {
   ATermList result = ATempty;
   MC_ActionType type = MC_ActionTypeFromTerm(actionType);
@@ -331,32 +331,15 @@ ATerm get_events(int cid, ATerm actionType)
     }
   }
 
-  return ATmake("snd-value(events(<term>))", result);
+  return result;
 }
 
 /*}}}  */
-/*{{{  ATerm get_events_for_module(int cid, ATerm type, const char *name) */
+/*{{{  ATerm get_events(int cid, ATerm type) */
 
-ATerm get_events_for_module(int cid, ATerm actionType, const char *name)
+ATerm get_events(int cid, ATerm actionType)
 {
-  char *fun = ATgetName(ATgetAFun((ATermAppl)actionType));
-  ATerm newActionType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
-                                           ATmake("<str>", name));
-  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
-
-  ATermList result = ATempty;
-  MC_ActionType type = MC_ActionTypeFromTerm(newActionType);
-  MC_ActionDescriptionList list = getDescriptions(type);
-
-  if (list != NULL) {
-    while (!MC_isActionDescriptionListEmpty(list)) {
-      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
-      MC_Event event = MC_getActionDescriptionEvent(cur);
-      result = ATinsert(result, MC_EventToTerm(event));
-      list = MC_getActionDescriptionListTail(list);
-    }
-  }
-
+  ATermList result = getEvents(actionType);
   return ATmake("snd-value(events(<term>))", result);
 }
 
@@ -366,17 +349,25 @@ ATerm get_events_for_module(int cid, ATerm actionType, const char *name)
 ATerm get_module_events(int cid, ATerm type, const char *moduleId)
 {
   ATerm boundType;
+  ATermList result1, result2;
 
-  boundType = ATmake("<term>(<str>)", type, moduleId);
+  char *fun = ATgetName(ATgetAFun((ATermAppl)type));
+  boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
+                                           ATmake("<str>", moduleId));
+  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
+ATwarning("type = %t, moduleId = %s, boundType = %t\n", type, moduleId, boundType);
 
-  return get_events(cid, boundType);
+  result1 = getEvents(type);
+  result2 = getEvents(boundType);
+
+  return ATmake("snd-value(events(<term>))", ATconcat(result1, result2));
 }
 
 /*}}}  */
 
-/*{{{  ATerm get_actions(int cid, ATerm type, ATerm event) */
+/*{{{  static ATermList getActions(ATerm type, ATerm event) */
 
-ATerm get_actions(int cid, ATerm type, ATerm event)
+static ATermList getEventActions(ATerm type, ATerm event)
 {
   MC_ActionDescription desc;
   ATermList actions;
@@ -384,6 +375,16 @@ ATerm get_actions(int cid, ATerm type, ATerm event)
   desc = MC_makeActionDescriptionDefault(MC_ActionTypeFromTerm(type),
 					 MC_EventFromTerm(event));
   actions = getActions(desc);
+
+  return actions;
+}
+
+/*}}}  */
+/*{{{  ATerm get_actions(int cid, ATerm type, ATerm event) */
+
+ATerm get_actions(int cid, ATerm type, ATerm event)
+{
+  ATermList actions = getEventActions(type, event);
 
   if (actions == NULL) {
     ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
@@ -398,10 +399,22 @@ ATerm get_actions(int cid, ATerm type, ATerm event)
 ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
 {
   ATerm boundType;
+  ATermList actions;
 
-  boundType = ATmake("<term>(<str>)", type, moduleId);
+  char *fun = ATgetName(ATgetAFun((ATermAppl)type));
+  boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
+                                           ATmake("<str>", moduleId));
+  /*boundType = ATmake("<term>(<str>)", type, moduleId);*/
 
-  return get_actions(cid, boundType, event);
+  actions = getEventActions(boundType, event);
+  if (actions == NULL) {
+    actions = getEventActions(type, event);
+    
+    if (actions == NULL) {
+      ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
+    }
+  }
+  return ATmake("snd-value(actions(<term>))", actions);
 }
 
 /*}}}  */

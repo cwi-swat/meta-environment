@@ -220,6 +220,8 @@ AC_CONFIG_FILES([Makefile
    editors/text/swing/metaedit/util/Makefile
    editors/structure/Makefile
    tbscripts/Makefile
+   action-interpreter/Makefile
+   action-interpreter/src/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
    configuration-manager/action-checker/Makefile

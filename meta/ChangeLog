@@ -1,5 +1,17 @@
 # $Id$
 
+Mon Jan 10 17:58:39 CET 2005 <markvdb@cwi.nl>
+ * First version of action-interpreter in C added.
+   Modified files:
+   - tb-scripts/button-actions.tb
+   - tb-scripts/editing.tb
+   - tb-scripts/meta.tb
+   - tb-scripts/user-interface.tb
+   - configuration-manager/src/configmanager.c
+   - configuration-manager/src/meta-kernel.properties
+   - Makefile.am
+   - configure.ac
+
 Thu Jan  4 10:50:12 CET 2005 <{markvdb,kooiker}@cwi.nl>
  * in-output/src/main.c:
    - Readded normalizeFileName for Cygwin purposes

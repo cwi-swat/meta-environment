@@ -1,0 +1,28 @@
+[
+  constructor(Script, list, <list(Actions)>),
+  list(Actions, Action),
+
+  constructor(Action, dup, dup),
+  constructor(Action, pop, pop),
+  constructor(Action, push-string, push-string(<string(str)>)),
+  constructor(Action, apply, apply(<function-name(str)>,<result-sort(str)>,<arguments-number(int)>)),
+  constructor(Action, push-term, push-term(<term(term)>)),
+  constructor(Action, push-filename, push-filename(<string(str)>)),
+  constructor(Action, push-modulename, push-modulename(<string(str)>)),
+  constructor(Action, condition, if-equal(<then-list(Actions)>,<else-list(Actions)>)),
+  constructor(Action, generic, <name(term)>),
+
+  constructor(Signature, list, <list(Descriptions)>),
+  list(Descriptions, Description),
+
+  constructor(Description, action, action(<name(term)>,<arguments(Args)>)),
+  list(Args, Arg),
+  constructor(Arg, string, string),
+  constructor(Arg, tree, tree),
+
+  constructor(Message, prompt-for-file, new-prompt-for-file(<title(str)>,<path(str)>,<modulename(str)>)),
+  constructor(Message, edit-term, new-edit-term(<filename(str)>,<modulename(str)>)),
+
+  list(Stack, Item),
+  constructor(Item, string, str(<string(str)>))
+]

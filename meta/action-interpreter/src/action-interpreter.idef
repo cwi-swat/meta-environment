@@ -1,0 +1,43 @@
+tool action-interpreter is {
+  command = "actioninterpreter"
+}
+
+process ActionInterpreter is
+let
+  Actions: list,
+  Action: term,
+  Result: term,
+  AI: action-interpreter,
+  Arguments: list,
+  Sid: term
+in
+  execute(action-interpreter, AI?)
+  .
+  (
+    (
+      rec-msg(ai-perform-actions(Sid?, Actions?))
+      . Arguments := []
+    +
+      rec-msg(ai-perform-actions(Sid?, Actions?, Arguments?))
+    )
+    . snd-do(AI, perform-actions(Actions, Arguments))
+    .
+    (
+      rec-event(AI, action(Action?)) 
+      . snd-ack-event(AI, action(Action))
+. printf("A = %t\n", Action)
+      . snd-msg(Sid, Action)
+      . rec-msg(Sid, Result?)
+. printf("R = %t\n", Result)
+      . snd-do(AI, process-result(Result))
+    ) 
+    *
+    rec-event(AI, done)
+    . snd-msg(ai-actions-performed(Sid, Actions))
+    . snd-ack-event(AI, done)
+  )
+  *
+  delta
+endlet
+
+toolbus(ActionInterpreter)
