@@ -31,3 +31,12 @@ equations
 
 [type2string-2]
   type2str(#Name [ ]) = name2str(#Name) || "[]"
+
+[var2string-0]
+  var2str(#Identifier) = id2str(#Identifier)
+
+[var2string-1]
+  var2str(#Identifier [ ]) = id2str(#Identifier) || "[]"
+
+[var2string-2]
+  var2str(#VariableDeclaratorId [ ]) = var2str(#VariableDeclaratorId) || "[]"

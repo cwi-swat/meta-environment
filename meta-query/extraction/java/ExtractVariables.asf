@@ -69,9 +69,8 @@ equations
 
 
 [add-field-0]
-  &VariableDeclaratorId = &Identifier,
   &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
-  &Tuple1 = <&VariableDeclaratorIdId, id2str(&Identifier)>,
+  &Tuple1 = <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
   &Rstore2 = add-tuple(FIELD_DECL_NAME, &Tuple1, &Rstore1),
   &Tuple2 = <&VariableDeclaratorIdId, &Area>,
   &Rstore3 = add-tuple(FIELD_DECL_SCOPE, &Tuple2, &Rstore2),
@@ -81,9 +80,8 @@ equations
   addField(&VariableDeclaratorId, &Rstore1, &Area, &Type) = &Rstore4 
 
 [add-local-varialbe-0]
-  &VariableDeclaratorId = &Identifier,
   &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
-  &Tuple1 = <&VariableDeclaratorIdId, id2str(&Identifier)>,
+  &Tuple1 = <&VariableDeclaratorIdId, var2str(&VariableDeclaratorId)>,
   &Rstore2 = add-tuple(LOCAL_VARIABLE_DECL_NAME, &Tuple1, &Rstore1),
   &Tuple2 = <&VariableDeclaratorIdId, &Area>,
   &Rstore3 = add-tuple(LOCAL_VARIABLE_DECL_SCOPE, &Tuple2, &Rstore2),

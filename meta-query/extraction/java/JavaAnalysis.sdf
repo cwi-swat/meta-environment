@@ -1,6 +1,13 @@
 module JavaAnalysis
 
 imports ExtractMethodCalls
+imports ExtractVariables
+imports ExtCompilationUnit
+imports ExtInheritance
+imports ExtInterface
+imports ExtMethod
+imports ExtPackage
+imports ExtractClasses
 
 exports
   context-free syntax

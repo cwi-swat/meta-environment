@@ -9,6 +9,7 @@ exports
     ids2str({Identifier "."}*) -> String
     name2str(Name) -> String
     type2str(Type) -> String
+    var2str(VariableDeclaratorId) -> String
 
 hiddens
   variables
@@ -19,3 +20,4 @@ hiddens
     "#Identifiersp"[0-9]* -> {Identifier "."}+
     "#Name" -> Name
     "#String"[0-9]* -> String
+    "#VariableDeclaratorId" -> VariableDeclaratorId
