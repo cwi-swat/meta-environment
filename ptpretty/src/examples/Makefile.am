@@ -1,14 +1,10 @@
+DEFINITIONS = \
+	Block.def \
+	Pico.def \
+	Sdf2.def \
+	Simple.def
 
-EXTRA_DIST =\
-	$(wildcard *.def)\
-	$(wildcard *.rules)\
-	$(wildcard *.pt)\
-	$(wildcard *.trm)\
-	$(wildcard *.ref)
-
-DEFINITIONS=$(wildcard *.def)
-
-TESTS=$(foreach i, ${DEFINITIONS} , $i.check.sh)
+TESTS = $(foreach i, ${DEFINITIONS} , $i.check.sh)
 
 INDIR=${srcdir}
 REFDIR=${srcdir}
@@ -33,6 +29,12 @@ regenerate:
             sglr -p $$i.tbl -i $$j -o $$j.pt ;\
           done; \
 	done
-	  
 
 CLEANFILES=*.check.sh *.out
+
+EXTRA_DIST = \
+	${DEFINITIONS} \
+	$(wildcard *.rules)\
+	$(wildcard *.pt)\
+	$(wildcard *.trm)\
+	$(wildcard *.ref)
