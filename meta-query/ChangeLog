@@ -1,5 +1,8 @@
 # $Id$
 
+2003-06-20 <markvdb@cwi.nl>
+ * Error message text is no longer an argument of displayquery action.
+
 Thu Jun 19 11:41:55 CEST 2003 <{jong,markvdb}@cwi.nl>
  * add relations subdir: contains compiled DisplayQuery specification
 
