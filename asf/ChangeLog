@@ -1,3 +1,7 @@
+2003/04/01 (markvdb@cwi.nl)
+ * Set no longer re-use the List module. 
+ * Square brackets are replaced by curly brackets.
+
 2003/03/31 (markvdb@cwi.nl)
  * Specificity ordering on equations introduced in
    asfe.
