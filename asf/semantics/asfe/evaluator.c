@@ -119,7 +119,7 @@ static char myversion[] = "0.1";
 static char myarguments[] = "be:hi:o:tvV";
 
 ATerm fail_env;
-ATerm tmp1, tmp2, tmp3;
+ATerm posinfo;
 
 AFun list_var, plain_var;
 
@@ -469,7 +469,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATerm newenv = env;
 
 /*
-ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);
+ATwarning("arg_matching: %t\n with %t\n\n", arg1, arg2);
 */
 
   if(ATisEqual(arg1,arg2))
@@ -1104,6 +1104,8 @@ void version(char *prg)
 
 int main(int argc, char *argv[])
 {
+  ATerm bottomOfStack;
+
   FILE *iofile;
 
   int cid;
@@ -1113,8 +1115,6 @@ int main(int argc, char *argv[])
   char *eqsfile = "-";
   int bafmode = 1;
   char *name = "Standalone";
-  
-  ATerm bottomOfStack;
 
   ATerm eqs, term, aterm, realterm, newterm, newaterm, result;
   ATermList neweqs;
@@ -1133,9 +1133,13 @@ int main(int argc, char *argv[])
   fail_env = ATparse("[fail]");
   ATprotect(&fail_env);
 
+  posinfo = ATparse("pos-info");
+  ATprotect(&posinfo);
+
   list_var  = ATmakeAFun("*list-var*", 3, ATtrue);
-  plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
   ATprotectAFun(list_var);
+
+  plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
   ATprotectAFun(plain_var);
 
   if(toolbus_mode) {

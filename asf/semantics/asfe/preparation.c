@@ -31,10 +31,12 @@ equation_table *create_equation_table(int size)
   ATprotect(&table->module);
   table->size = size;
   table->table = (equation_entry **)malloc(sizeof(equation_entry *)*size);
-  for(i=0; i<size; i++)
-    table->table[i] = NULL;
-  if(!table->table)
+  if(!table->table) {
     ATerror("out of memory in create_equation_table\n");
+  }
+  for(i=0; i<size; i++) {
+    table->table[i] = NULL;
+  }
 
   return table;
 }
@@ -53,6 +55,12 @@ void flush_equations(equation_table *table)
       old = entry;
       entry = entry->hnext;
       ATunprotect(&old->equation);
+      ATunprotect(&old->top_ofs);
+      ATunprotect(&old->first_ofs);
+      ATunprotect(&old->tag);    
+      ATunprotect(&old->lhs);     
+      ATunprotect(&old->rhs);     
+      ATunprotect((ATerm *) (&old->conds));
       free(old);
     }
     table->table[i] = NULL;
@@ -151,18 +159,28 @@ void enter_equation(equation_table *table, ATerm equation)
   hnr = hash_function(table, top_ofs, first_ofs); 
 
   entry->hashnr = hnr;
+
   entry->top_ofs = top_ofs;
+  ATprotect(&entry->top_ofs);
+
   entry->first_ofs = first_ofs;
+  ATprotect(&entry->first_ofs);
+
   entry->equation = equation;
   ATprotect(&entry->equation); 
+
   entry->tag = tag;
   ATprotect(&entry->tag);    
+
   entry->lhs = lhs;
   ATprotect(&entry->lhs);     
+
   entry->rhs = rhs;
   ATprotect(&entry->rhs);       
+
   entry->conds = conds;
-  ATprotect((ATerm*)&entry->conds);   
+  ATprotect((ATerm *) (&entry->conds));
+
   if(AFTisDefaultTag(tag)) {
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
@@ -241,7 +259,7 @@ void select_equations(char *module)
     cur = cur->next;
 
   if(!cur)
-    ATerror("equations of module %t have not been registered.");
+    ATerror("equations of module %s have not been registered.\n", module);
 
   equations = cur;
 }
@@ -549,6 +567,30 @@ ATerm lexical_to_list(ATerm lextrm)
 }
 
 /*}}}  */
+/*{{{  ATerm prepare_annos(ATerm annos) */
+
+/* Strip all annotations except "pos-info" */
+
+ATerm prepare_annos(ATermList annos)
+{
+  extern ATerm posinfo;
+
+  ATermList anno;
+  ATerm key;
+
+  while (!ATisEmpty(annos)) {
+    anno = (ATermList) ATgetFirst(annos);
+    annos = ATgetNext(annos);
+
+    key = ATgetFirst(anno);
+    if (ATisEqual(key, posinfo)) {
+      return (ATerm) ATmakeList1((ATerm) anno);
+    }
+  }
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATerm prepare_term(ATerm t, ATbool lexcons)*/
 
 /*
@@ -576,8 +618,14 @@ ATerm prepare_term(ATerm t, ATbool lexcons)
   else 
     result = t;
 
-	if(annos)
-		result = AT_setAnnotations(result, annos);
+	if(annos) {
+    ATerm preparedAnnos = prepare_annos((ATermList) annos);
+    if (preparedAnnos) {
+		  result = AT_setAnnotations(result, preparedAnnos);
+    } else {
+      result = AT_removeAnnotations(result);
+    }
+  }
 
   return result;
 }
