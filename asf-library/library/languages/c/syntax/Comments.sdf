@@ -1,4 +1,4 @@
-module Comments
+module languages/c/syntax/Comments
 exports
   sorts Asterisk Comment
   lexical syntax

@@ -1,6 +1,6 @@
-module Program
-imports Declarators
-imports Statements
+module languages/c/syntax/Program
+imports languages/c/syntax/Declarators
+imports languages/c/syntax/Statements
 
 exports
   sorts TranslationUnit FunctionDefinition  ExternalDefinition 

@@ -1,5 +1,5 @@
-module Statements
-imports Expressions
+module languages/c/syntax/Statements
+imports languages/c/syntax/Expressions
 exports
   sorts  JumpStatement IterationStatement Statement SelectionStatement ExpressionStatement CompoundStatement LabeledStatement 
 

@@ -1,4 +1,4 @@
-module Preprocessor
+module languages/c/syntax/Preprocessor
 exports
   lexical syntax
     ~[\ \t\n\/]                           -> TokenChar

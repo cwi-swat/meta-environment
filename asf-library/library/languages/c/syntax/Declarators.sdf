@@ -1,7 +1,7 @@
-module Declarators
+module languages/c/syntax/Declarators
 
-imports Identifiers
-imports Types
+imports languages/c/syntax/Identifiers
+imports languages/c/syntax/Types
 
 exports
  

@@ -1,7 +1,7 @@
-module Types
-imports Identifiers
-imports Declarators
-imports Expressions
+module languages/c/syntax/Types
+imports languages/c/syntax/Identifiers
+imports languages/c/syntax/Declarators
+imports languages/c/syntax/Expressions
 
 exports
   sorts  TypeQualifierList IdentifierList ParameterTypeList TypedefName

@@ -1,3 +1,3 @@
-module PreprocessedC
-imports Preprocessor
-imports C
+module languages/c/syntax/PreprocessedC
+imports languages/c/syntax/Preprocessor
+imports languages/c/syntax/C

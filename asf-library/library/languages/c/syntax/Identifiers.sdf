@@ -1,4 +1,4 @@
-module Identifiers
+module languages/c/syntax/Identifiers
 
 exports
   sorts Identifier

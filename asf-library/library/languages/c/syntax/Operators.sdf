@@ -1,4 +1,4 @@
-module Operators
+module languages/c/syntax/Operators
 exports
   lexical syntax
 

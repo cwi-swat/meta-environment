@@ -1,6 +1,6 @@
-module ReservedKeywords
+module languages/c/syntax/ReservedKeywords
 
-imports Identifiers
+imports languages/c/syntax/Identifiers
 exports
   context-free syntax
     "auto"      |

@@ -1,4 +1,4 @@
-module Constants
+module languages/c/syntax/Constants
 exports
   lexical syntax
     [L]? "\"" StringChar* "\"" -> STRINGliteral

@@ -1,8 +1,8 @@
-module Expressions
+module languages/c/syntax/Expressions
 
-imports Constants
-imports Identifiers
-imports Types
+imports languages/c/syntax/Constants
+imports languages/c/syntax/Identifiers
+imports languages/c/syntax/Types
 
 exports
 sorts Expression CommaExpression CommaExpressionOpt StringLiteralList Constant
