@@ -210,7 +210,6 @@ static SDF_ImpSection delete_modulename_from_impsection(
   SDF_Imports newImports;
 
   if (SDF_isImportListEmpty(newImportsList)) {
-    ATwarning("hier!\n");
     return NULL;
   }
 
