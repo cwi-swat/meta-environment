@@ -46,6 +46,11 @@ public class Atom implements ProcessExpression {
     this();
     this.args = TBTerm.factory.makeList(arg1, TBTerm.factory.makeList(arg2));
   }
+  
+  public Atom(ATerm arg) {
+    this();
+    this.args = TBTerm.factory.makeList(arg);
+  }
 
   public ATermList getArgs() {
     return args;

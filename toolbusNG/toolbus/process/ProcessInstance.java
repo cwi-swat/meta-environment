@@ -17,9 +17,8 @@ public class ProcessInstance {
 	private Environment env;
 	private ToolBus toolbus;
 
-	public ProcessInstance(ToolBus TB, ProcessExpression PE) 
-	throws ToolBusException
-	{
+	public ProcessInstance(ToolBus TB, ProcessExpression PE)
+		throws ToolBusException {
 		Vector procs = TB.getProcesses();
 		processId = processCount++;
 		env = new Environment();
@@ -31,57 +30,61 @@ public class ProcessInstance {
 		}
 		prefix = PE.getFirst();
 		env.setExecuting();
-		
-//		System.out.println(processId + ": " + PE);
-//		System.out.println(processId + ": atoms: =" + atoms );
-//		System.out.println(processId + ": prefix = " + prefix);
-//		for (Iterator it = atoms.getAtoms().iterator(); it.hasNext();) {
-//			Atom a = (Atom) it.next();
-//			System.out.println(processId + ": " + a + " --> " + a.getFollow());
-//		}
+
+		//		System.out.println(processId + ": " + PE);
+		//		System.out.println(processId + ": atoms: =" + atoms );
+		//		System.out.println(processId + ": prefix = " + prefix);
+		//		for (Iterator it = atoms.getAtoms().iterator(); it.hasNext();) {
+		//			Atom a = (Atom) it.next();
+		//			System.out.println(processId + ": " + a + " --> " + a.getFollow());
+		//		}
 	}
-	
-	public Environment getEnv(){
+
+	public Environment getEnv() {
 		return env;
 	}
-	
-	public ToolBus getToolBus(){
+
+	public ToolBus getToolBus() {
 		return toolbus;
 	}
-	
-	public int getProcessId(){
+
+	public int getProcessId() {
 		return processId;
 	}
 
-	public void findPartners(AtomSet a){
+	public void findPartners(AtomSet a) {
 		atoms.findPartners(a);
 	}
-	
-	public AtomSet getPrefix(){
+
+	public AtomSet getPrefix() {
 		return prefix;
 	}
-	
-	public boolean prefixContains(Atom a){
+
+	public boolean prefixContains(Atom a) {
 		return prefix.contains(a);
 	}
-	public void follow(Atom a){
-		if(!prefix.contains(a))
-			System.out.println("*** ProcessInstance.follow: " + a + " not in prefix " + prefix);
+
+	public void follow(Atom a) {
+		if (!prefix.contains(a))
+			System.out.println(
+				"*** ProcessInstance.follow: "
+					+ a
+					+ " not in prefix "
+					+ prefix);
 		prefix = a.getFollow();
 		//System.out.println("proc " + processId + ": follow(" + a + ") -> " + prefix);
 	}
-	public boolean step()
-	throws ToolBusException
-	{
+
+	public boolean step() throws ToolBusException {
 		//System.out.println(this);
 		return prefix.execute();
 	}
-	
-	public boolean isTerminated(){
+
+	public boolean isTerminated() {
 		return (atoms.size() == 0);
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return "proc " + processId + " " + prefix;
 	}
 }

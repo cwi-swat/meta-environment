@@ -1,22 +1,27 @@
 package toolbus.atom;
 
+import toolbus.ToolBusDeathException;
 import toolbus.ToolBusException;
+import aterm.*;
 
 /**
  * @author paulk, Jul 26, 2002
  */
 public class ShutDown extends Atom {
 
-  public ShutDown() {
-    super();
-  }
+	public ShutDown(ATerm trm) {
+		super(trm);
+	}
 
-  public boolean execute() throws ToolBusException {
-    if (super.execute()) {
-      System.exit(0);
-      return true;
-    } else {
-      return false;
-    }
-  }
+	public ShutDown() {
+		super();
+	}
+
+	public boolean execute() throws ToolBusException {
+		if (isEnabled()) {
+			throw new ToolBusDeathException(getArgs().getFirst().toString());
+		} else {
+			return false;
+		}
+	}
 }

@@ -22,12 +22,12 @@ public class Assign extends Atom {
 	{
 		super.compile(P, follow);
 		
-		ATerm var = this.getArgs().getFirst();
+		ATerm var = getArgs().getFirst();
 		if(!TBTerm.isVar(var))
 			throw new ToolBusException("left-hand side of := should be a variable");
 		ATerm vartype = TBTerm.getVarType(var);
 		
-		ATerm exp = this.getArgs().getLast();
+		ATerm exp = getArgs().getLast();
 		ATerm exptype = TBTerm.checkType(exp, this.getEnv());
 		
 		if(vartype != exptype)  // lhs = term!
@@ -40,8 +40,8 @@ public class Assign extends Atom {
 		if(!isEnabled())
 				return false;
 		Environment e = this.getEnv();
-		ATerm var = this.getArgs().getFirst();
-		ATerm exp = this.getArgs().getLast();
+		ATerm var = getArgs().getFirst();
+		ATerm exp = getArgs().getLast();
 		ATerm val = TBTerm.eval(exp, e);
 		e.putVar(var, val);
 		return true;
