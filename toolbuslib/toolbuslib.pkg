@@ -1,0 +1,15 @@
+package 
+identification
+   name=toolbuslib
+   version=0.4
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/toolbuslib
+   description='The toolbuslib is a package that contains libraries to
+                build ToolBus client applications.'
+
+   keywords=meta-environment, toolbus, client, coordination, distributed, applications, library
+
+configuration interface
+
+requires
+   aterm	2.0
