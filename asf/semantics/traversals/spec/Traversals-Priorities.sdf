@@ -1,9 +1,0 @@
-module Traversals-Priorities
-
-imports Traversals-Utils
-
-exports
-
-context-free syntax
-
-"prefer_sorts" "(" Productions ")" -> Productions
