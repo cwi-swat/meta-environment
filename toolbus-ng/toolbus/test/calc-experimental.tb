@@ -1,7 +1,7 @@
 %% Experiment:
 %% - tools worden beschreven door process expressies waarin @snd-msg
 %%   en @rec-msg gebruikt worden (de @'s verdwijnen waarschijnlijk
-     later weer maar staat er nu voor de duidelijkheid)
+     later weer maar staan er nu voor de duidelijkheid)
 %% - @snd-msg { } @rec-msg = event . snd-msg { ..} rec-msg . snd-ack-event
 %% - @rec-msg { } @snd-msg = rec-msg . snd-eval { .. } value . snd-msg
 %% - we voeren een renaming in waardoor het mogelijk wordt om berichten te onderscheppen.
@@ -105,7 +105,7 @@ end
 %% -----------------------------------------------------------------------------
 
 process Supervisor is
-  ( rec-msg logged-computed(E?) {
+  ( rec-msg logged-compute(E?) {
 	  snd-msg compute(E) { } rec-msg V? .
 	  snd-msg log-computation(E, V)
     } snd-msg V
