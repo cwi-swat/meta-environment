@@ -3,12 +3,12 @@ equations
 [ud-1] extractRelations($Program) = $Rstore,
        queries($Rstore) = $Rstore'
        =========================================================
-       undefinedVars($Program) = convertl(val2rel(value(UNDEF, $Rstore')))
+       undefinedVars($Program) = convertl(rval2rel(value(UNDEF, $Rstore')))
 
 [uu-1] extractRelations($Program) = $Rstore,
        queries($Rstore) = $Rstore'
        =========================================================
-       undefinedVars($Program) = convertl(val2rel(value(UNUSED, $Rstore')))
+       undefinedVars($Program) = convertl(rval2rel(value(UNUSED, $Rstore')))
 
 
 [qs-1] queries($Rstore) =

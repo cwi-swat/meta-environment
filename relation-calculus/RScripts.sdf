@@ -4,15 +4,15 @@ imports basic/Booleans basic/Integers basic/Strings
 imports MyArea
 
 exports
-  sorts Elem ElemType SCRIPT STAT VAR DCLVAR FROM REXP REXPTYPE
+  sorts Elem ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE
 
   imports Relations[Elem]
 
   lexical syntax
-     [A-Za-z][A-Za-z0-9\_\-]*             -> VAR {avoid}
+     [A-Za-z][A-Za-z0-9\_\-]*             -> RVAR {avoid}
 
   context-free restrictions
-     VAR -/- [A-Za-z0-9\_\-]
+     RVAR -/- [A-Za-z0-9\_\-]
 
   context-free syntax
 
@@ -29,7 +29,7 @@ exports
      Elem # Elem                            -> Elem
 
      Elem                                    -> REXP {prefer}
-     VAR                                     -> REXP
+     RVAR                                    -> REXP
      REXP # REXP			     -> REXP
      "{" {REXP ","}* "}"                     -> REXP
 
@@ -63,32 +63,32 @@ exports
      "<" REXPTYPE "," REXPTYPE ">"           -> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     -> REXPTYPE
      "rel" "[" REXPTYPE "," REXPTYPE "]"     -> REXPTYPE
-     "@" VAR				     -> REXPTYPE
+     "@" RVAR				     -> REXPTYPE
 
 %% value formers
 
      "{" FROM "|" REXP "}"                    -> REXP
      "{" {FROM ","}+ "|" REXP "|" REXP "}"    -> REXP
 
-     VAR "in" REXP                            -> FROM
-     "<" VAR "," VAR ">" in REXP              -> FROM
+     RVAR "in" REXP                           -> FROM
+     "<" RVAR "," RVAR ">" in REXP            -> FROM
 
 %% functions
 
-     VAR "(" {REXP ","}* ")"                  -> REXP {avoid}
+     RVAR "(" {REXP ","}* ")"                 -> REXP {avoid}
      "(" REXP ")"                             -> REXP {bracket}
 
 %% Statements and script
 
-     REXPTYPE VAR			      -> DCLVAR
+     REXPTYPE RVAR			      -> DCLRVAR
 
-     DCLVAR				      -> STAT
+     DCLRVAR				      -> RSTAT
 
-     DCLVAR "=" REXP                          -> STAT
+     DCLRVAR "=" REXP                         -> RSTAT
 
-     DCLVAR  "(" { DCLVAR ","}* ")" "=" REXP  -> STAT
+     DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP -> RSTAT
  
-     STAT*                                   -> SCRIPT
+     RSTAT*                                     -> RSCRIPT
 
   context-free priorities
 

@@ -21,7 +21,7 @@ rel[str,int]  UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRE
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> in USES | tst(0) }
+rel[str,int]  UN1 = { <V, N> in USES | <ROOT, N> elem carX(PRED, V .  DEFS)+ }
 
 <$T1,$T2> swap(<$T2,$T1> P) = <sec(P), fst(P)>
 
