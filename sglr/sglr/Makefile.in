@@ -40,7 +40,7 @@ TOOLBUS         = @TOOLBUS@
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(TOOLBUS)/include
-XLIBS		= -L$(TOOLBUS)/lib $(SOCKLIBS) -lnsl -ltb
+XLIBS		= -L$(TOOLBUS)/lib $(SOCKLIBS) -ltb
 
 
 PROGS           = sglr
