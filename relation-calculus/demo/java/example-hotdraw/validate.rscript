@@ -1,0 +1,77 @@
+type File = str
+type Interface = str
+type Package = str
+type Method = str
+type Class = str
+type ClassUse = str
+type Var = str
+type Id = str
+type Type = str
+type Field = str
+
+rel[File, loc] FILES 
+rel[Interface,loc] INTERFACES
+rel[Package,loc] PACKAGES 
+rel[Class,loc] CLASSES  
+rel[Method, loc] METHODS 
+rel[ClassUse,loc] CLASS_USES 
+rel[Var, loc, Type] VARIABLE_DECLS
+rel[Field, loc, Type] FIELD_DECLS
+
+rel[Class,Class] EXTENDS_CLASS 
+rel[Class,Interface] IMPLEMENTS 
+rel[Interface,Interface] EXTENDS_INTERFACE
+                                   
+rel[Var, loc, Id] METHOD_CALLS 
+
+int nFiles = # FILES
+yield nFiles
+
+assert "nFiles": nFiles == 160
+
+int nInterfaces = # INTERFACES
+yield nInterfaces
+
+assert "nInterfaces": nInterfaces == 23
+
+int nPackages = # PACKAGES
+yield nPackages
+
+assert "nPackages": nPackages == 160
+
+int nClasses = # CLASSES
+yield nClasses
+
+assert "nClasses": nClasses == 168
+%% NB 148 ordinary classes + 20 inner classes
+
+int nMethods = # METHODS
+yield nMethods
+
+int nExtendsClass = # EXTENDS_CLASS
+yield nExtendsClass
+
+assert "nExtendsClass": nExtendsClass == 124
+
+int nImplements = # IMPLEMENTS
+yield nImplements
+
+assert "nImplements": nImplements == 47
+
+int nExtendsInterface = # EXTENDS_INTERFACE
+yield nExtendsInterface
+
+assert "nExtendsInterface": nExtendsInterface == 25
+
+
+%%int nContainment = # CONTAINMENT
+%%yield nContainment
+
+%%rel[str,str] USE = CONTAINMENT union INHERITANCE
+
+%%bag[str] ClassesInCycle = {C1 | <str C1, str C2> : USE+, C1 == C2}
+
+%%int nCycles = # ClassesInCycle
+%%yield nCycles
+
+
