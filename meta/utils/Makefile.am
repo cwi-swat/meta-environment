@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports
+bin_PROGRAMS       = meta-paths 
 bin_SCRIPTS        = parse-file parse-sdf2 ps-dot insert-license \
                      insert-header change-sdf2-ext sdf2stats \
                      change-eqs-ext
@@ -48,15 +48,10 @@ CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
 
 meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
-                     -L$(PT_SUPPORT)/lib -lAsFix \
+                     -L$(PT_SUPPORT)/lib -lPT \
                      -L$(ATERM)/lib -lATerm
 
-imports_SOURCES    = imports.c
-imports_LDADD      = libutils.a \
-                     -L$(PT_SUPPORT)/lib -lAsFix \
-                     -L$(ATERM)/lib -lATerm
-
-libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
+libutils_a_SOURCES = meta-utils.c meta-utils.h 
 
 INCLUDES           = -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
