@@ -29,7 +29,8 @@ exports
   context-free syntax
     IdentifierDeclarator PostfixingAbstractDeclarator -> IdentifierDeclarator 
     "(" IdentifierDeclarator ")"  -> IdentifierDeclarator {bracket}
-    "(" IdentifierDeclarator ")" PostfixingAbstractDeclarator -> IdentifierDeclarator 
+%%    "(" IdentifierDeclarator ")" PostfixingAbstractDeclarator -> IdentifierDeclarator 
+
 
   context-free syntax
     Identifier -> IdentifierDeclarator
