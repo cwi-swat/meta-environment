@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Mar  8 11:00:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use "location-api" instead of "error-api"
+
 Thu Mar  4 17:55:20 CET 2004 <jurgenv@cwi.nl>
  * Fixed a portability issue with popup menus on MacOSX:
    Popup menus are triggered differently
