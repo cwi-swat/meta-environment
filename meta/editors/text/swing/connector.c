@@ -173,17 +173,29 @@ static void setCursorAtOffset(int write_to_editor_fd, TE_Action action)
 
 /*}}}  */
 
-/*{{{  static int handleEditorInput(int read_from_editor_fd, int write_to_hive_fd) */
+/*{{{  static int handleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive) */
 
-static int handleEditorInput(int read_from_editor_fd, int write_to_hive_fd)
+static int handleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
 {
   ATerm t;
+  ATerm event;
+  int read_from_editor_fd;
+  int write_to_hive_fd;
+  int write_to_editor_fd;
+
+  read_from_editor_fd = TE_getPipeRead(editorToHive);
+  write_to_hive_fd = TE_getPipeWrite(editorToHive);
+  write_to_editor_fd = TE_getPipeWrite(hiveToEditor);
 
   t = ATBreadTerm(read_from_editor_fd);
 
-  ATwarning("handleEditorInput: t = [%t]\n", t);
-
-  ATBwriteTerm(write_to_hive_fd, t);
+  if (ATmatch(t, "snd-event(<term>)", &event)) {
+    ATBwriteTerm(write_to_hive_fd, event);
+    ATBwriteTerm(write_to_editor_fd, ATmake("snd-ack-event(<term>)", event));
+  }
+  else {
+    ATwarning("%s:handleEditorInput: ignored: %t\n", __FILE__, t);
+  }
 
   return 0;
 }

@@ -161,14 +161,18 @@ static void getContents(int write_to_hive_fd)
 }
 
 /*}}}  */
-/*{{{  static int defaultHandleEditorInput(int read_from_editor_fd, int write_to_hive_fd) */
+/*{{{  static int defaultHandleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive) */
 
-static int defaultHandleEditorInput(int read_from_editor_fd,
-				    int write_to_hive_fd)
+static int defaultHandleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
 {
   TE_Event event;
   char buf[BUFSIZ];
   int nr_read;
+  int read_from_editor_fd;
+  int write_to_hive_fd;
+
+  read_from_editor_fd = TE_getPipeRead(editorToHive);
+  write_to_hive_fd = TE_getPipeWrite(editorToHive);
 
   nr_read = read(read_from_editor_fd, buf, BUFSIZ-1);
   if (nr_read <= 0) {
@@ -327,7 +331,7 @@ int eventloop(TextEditor editor, TE_Pipe hiveToEditor, TE_Pipe editorToHive)
 
     if (FD_ISSET(read_from_editor_fd, &set)) {
       int retval;
-      retval = editor->handleEditorInput(read_from_editor_fd, write_to_hive_fd);
+      retval = editor->handleEditorInput(hiveToEditor, editorToHive);
       if (retval == -1) {
 	return 0;
       }
