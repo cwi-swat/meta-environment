@@ -1,5 +1,9 @@
 # $Id$
 
+2003/03/18 (jurgenv@cwi.nl)
+ * Use shared-objects-config and aterm-java-config scripts to obtain last
+   version of their jar files in configure.in
+
 Mon Mar 17 14:18:19 CET 2003 <jong@cwi.nl>
  * more aterm (jjtraveler) dependency issues fixed
 
