@@ -91,6 +91,13 @@ PTBIN=${PT_SUPPORT}/bin
 AC_SUBST(PTBIN)
  
 dnl }}}
+dnl {{{ Handle --with-error-support
+ 
+AC_PACKAGE_REQUIRE(error-support, error-support-config,
+      [  --with-error-support=DIR   error-support is in DIR])
+AC_SUBST(ERROR_SUPPORT)
+ 
+dnl }}}
 dnl {{{ Handle --with-asf-support
 
 AC_PACKAGE_REQUIRE(asf-support, asf-support-config,

@@ -21,7 +21,7 @@ Parameters:
 
   -i | --input  <FILE>    specify input specification      [?]
   -f | --folding          enable folding mode              [off]
-  -n | --name <STR>       name of the api                  [improvised]
+  -n | --name <STR>       name of the api                  [obligatory]
   -o | --output <DIR>     specify basedir for output       [.]
   -p | --package <STR>    specify package                  [""]
   -t | --visitable        visitable enabled                [off]
@@ -81,6 +81,7 @@ IMPLODEDOPT=""
 CONSOPT='-e'
 VISITABLEOPT=""
 VERSION="0.0.0"
+PACKAGEOPT=""
 
 # binaries
 SDF2TOADT=${SDF2ADT}
@@ -116,7 +117,8 @@ do
 
     -p | --package)
       shift;
-      PACKAGE=$1 ;;
+      PACKAGE=$1;
+      PACKAGEOPT="--package ${PACKAGE}" ;;
 
     -t | --visitable)
       VISITABLEOPT='-t' ;;
@@ -129,6 +131,7 @@ do
       VERBOSEOPT='-v';;
 
     -V | --version)
+      shift;
       VERSION=$1;
       VERSIONOPT="--version ${VERSION}";;
 
@@ -144,6 +147,10 @@ done
 # }}}
 # {{{ sanity checks and variable setup
 
+if [ "a${NAME}" = "a" ]; then
+  error "no API name specificied (use -n <name>)"
+fi
+
 if [ "a${INPUT}" = "a" ]; then
   error "no input file specified (use -i <file>)"
 else
@@ -153,10 +160,6 @@ fi
 BASE=`basename ${INPUT} .sdf`
 BASE=`basename ${BASE} .def`
 
-if [ "a${NAME}" = "a" ]; then
-  NAME=${BASE}
-fi
-
 # }}}
 # {{{  generate Java from SDF
 
@@ -164,9 +167,10 @@ info "Generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || bail_out
 
+
 info "Generating java from ADT "
 ${ADTTOJAVA} ${VERBOSEOPT} ${VISITABLEOPT} \
              --input ${BASE}.adt --output ${OUTPUT} \
-	     --package ${PACKAGE} -n ${NAME} ${VERSIONOPT}
+	     ${PACKAGEOPT} --name ${NAME} ${VERSIONOPT}
 
 # }}}
