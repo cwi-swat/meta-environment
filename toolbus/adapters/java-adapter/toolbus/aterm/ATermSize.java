@@ -10,4 +10,4 @@ class ATermSize
     ATerm T = ATerm.the_world.parse(System.in);
     System.out.println("This term has " + T.size() + " nodes.");
   }
-};
+}
