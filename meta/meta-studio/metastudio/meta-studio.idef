@@ -29,7 +29,10 @@ let
   ModuleList : term,
   EditorId : term,
   Feedback : term,
-  FeedbackSummary : term
+  FeedbackSummary : term,
+  Choices : list,
+  Choice : str,
+  Question : str
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
@@ -163,6 +166,17 @@ in
       snd-msg(extra-button-action(click, [Feedback],
                                   feedback-list, "*", feedback-list)) .
       snd-ack-event(UI, feedback-selected(Feedback))
+    +
+      rec-msg(show-list-choice(Title?, Question?, Choices?)) .
+      snd-do(UI, showListChoice(Title, Question, Choices))
+    +
+      rec-event(UI, list-choice(Title, Choice?)) .
+      snd-msg(list-choice(Title, Choice)) .
+      snd-ack-event(UI, list-choice(Title, Choice))
+    +
+      rec-event(UI, cancel-list-choice(Title)) .
+      snd-msg(cancel-list-choice(Title)) .
+      snd-ack-event(UI, cancel-list-choice(Title))
     ) * 
     (
       rec-event(UI, quit)

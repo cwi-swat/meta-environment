@@ -124,6 +124,10 @@ public abstract class ToolComponent extends JPanel implements UserInterfaceTif {
         // intentionally left empty
         return null;
     }
+    
+    public void showListChoice(String s0, String s1, ATerm t1) {
+        // intentionally left empty
+    }
 
     public void recAckEvent(ATerm t0) {
         // intentionally left empty        

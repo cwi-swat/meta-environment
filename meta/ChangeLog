@@ -1,10 +1,12 @@
 # $Id$
 
-
-2004/01/12 (jurgenv@cwi.nl)
+2004/01/13 (jurgenv@cwi.nl)
+ * Add and remove imports choose from a list of available names instead 
+   of a file selector.
+   
+2004/01/12 ({markvdb,jurgenv}@cwi.nl)
  * Reimplemented module status panel to a tree
- * Introduced the new error handling functionality, together
-   of course with Jurgen.
+ * Introduced the new error handling functionality
  
 2004/01/06 (markvdb@cwi.nl)
  * Simplified the TB interface of SGLR. A parse request contains

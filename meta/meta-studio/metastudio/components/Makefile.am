@@ -23,5 +23,6 @@ MenuBar.java\
 ModulePopupMenu.java\
 ModuleTree.java\
 ModuleBrowser.java\
-ParseTreeBrowser.java
+ParseTreeBrowser.java\
+ListChoicePopup.java
 

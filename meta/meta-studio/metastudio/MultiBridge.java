@@ -210,12 +210,23 @@ public class MultiBridge extends UserInterfaceTool {
         throw new UnsupportedOperationException("not implemented");
     }
     
+    public void showListChoice(String s0, String s1, ATerm t1) {
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.showListChoice(s0, s1, t1);
+        }
+    }
+    
     public void recAckEvent(ATerm event) {
     }
 
     public void recTerminate(ATerm t0) {
         System.exit(0);
     }
+
+    
 
    
 

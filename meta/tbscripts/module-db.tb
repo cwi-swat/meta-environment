@@ -179,7 +179,7 @@ in
     MDB-AddImportToModule(OldName, NewName) .
     snd-msg(add-import-done(OldName))
   +
-    rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
+    rec-msg(remove-import-in-db(OldName?, NewName?)).
     MDB-RemoveImportFromModules(NewName, [OldName]) .
     snd-msg(remove-import-done)
   +
