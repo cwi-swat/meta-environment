@@ -87,4 +87,11 @@ Descriptions
     
     Description
 
-      This is the parse table for SDF2.
+      This is the parse table for SDF2.  Except from the fact that it
+      is in in Binary Asfix Format, it should be identical to the
+      Sdf2.tbl file as it is found in the parser's regress test suite.
+
+      Note: this is a binary file.  Due to CVS' design, damage to
+      binary files may occur on platforms with a broken end-of-line
+      convention; if that bites you, use the `trm2baf' tool to
+      regenerate the file from Sdf2.tbl (see above).
