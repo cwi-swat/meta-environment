@@ -19,7 +19,6 @@ exports
     check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
     check-definition(Definition)		          -> Messages
 
-
 hiddens
   variables
     "$Attributes"[0-9]* -> Attributes

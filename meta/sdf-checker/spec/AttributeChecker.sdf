@@ -1,0 +1,41 @@
+module AttributeChecker
+
+imports Messages Booleans ModuleOperations
+
+exports
+  context-free syntax
+    check-attributes(Definition) -> Messages
+
+hiddens
+  context-free syntax
+    check-attributes(Definition, Messages)             -> Messages {traversal(accu)}
+    check-attributes(Module, Messages)                 -> Messages {traversal(accu)}
+    check-attributes(Module, Messages, ModuleName)     -> Messages {traversal(accu)}
+    check-attributes(Production, Messages, ModuleName) -> Messages {traversal(accu)}
+
+  context-free syntax
+    contains-accu({ATerm ","}*)  -> Bool
+    contains-trafo({ATerm ","}*) -> Bool
+
+  context-free syntax
+    is-binary-definition(Production)       -> Bool
+    is-bracket-definition(Production)      -> Bool
+    is-accu-definition(Production)         -> Bool
+    is-trafo-definition(Production)        -> Bool
+    is-accu-trafo-definition(Production)   -> Bool
+
+hiddens
+  variables
+    "Module"[0-9]*          -> Module
+    "Aterm*"[0-9]*               -> {ATerm ","}*
+    "ModuleName"[0-9]*          -> ModuleName
+    "Attributes"[0-9]*          -> Attributes
+    "Attr*"[0-9]*               -> {Attribute ","}*
+    "Definition"[0-9]*		-> Definition
+    "Production"[0-9]*		-> Production
+    "$Sort"  [0-9]*      	-> Sort
+    "$Symbol*"[0-9]*      	-> Symbol*
+    "$Symbol,*"[0-9]*      	-> {Symbol ","}*
+    "$Symbol"[0-9]*      	-> Symbol
+    "Msgs"[0-9]*                -> Messages
+    "$Literal"[0-9]* -> Literal

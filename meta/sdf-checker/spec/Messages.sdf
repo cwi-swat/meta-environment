@@ -10,6 +10,7 @@ exports
     undeclared(ModuleName, SymbolsSet)		   -> Message
     not-implemented(ModuleName, SymbolsSet)	   -> Message
     declared-but-undefined(ModuleName, SymbolsSet) -> Message
+    illegal-attribute(ModuleName, Production)      -> Message
     "{" Message* "}"                               -> Messages
     Messages "+" Message			   -> Messages
 
