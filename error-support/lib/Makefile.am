@@ -6,7 +6,8 @@ include_HEADERS=\
 	Errors.h\
 	Errors_dict.h\
 	ParsedErrors.h\
-	ParsedErrors_dict.h
+	ParsedErrors_dict.h\
+	Errors-utils.h
 
 libErrorAPI_a_SOURCES = \
 	Errors.c \
