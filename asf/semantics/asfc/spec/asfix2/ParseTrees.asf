@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -67,14 +68,14 @@ equations
 %% Define \spec{get-list-tail-with-sep}.
 
 [glt-ws-1]
-          get-list-tail-with-sep([T, w(L1), sep(L2), w(L3), Ts]) = [w(L1), sep(L2), w(L3), Ts]
+          get-list-tail-with-sep([T, w($L1), sep($L2), w($L3), Ts]) = [w($L1), sep($L2), w($L3), Ts]
 [glt-ws-2]
         get-list-tail-with-sep([T]) = []
 
 %% Define \spec{get-list-tail}.
 
 [glt-1]
-       get-list-tail([T, w(L1), Ts]) = [w(L1), Ts]
+       get-list-tail([T, w($L1), Ts]) = [w($L1), Ts]
 
 [glt-2]
        get-cons(first([Ts])) != w
@@ -112,7 +113,7 @@ equations
 [is-6]  is(A*, []) = true
 [is-7]  is(A*, [Ts]) = is(A+, [Ts])
 [is-8]  is(A+, []) = false
-[is-9]  get-list-tail(Tl) = [w(L1), Ts]
+[is-9]  get-list-tail(Tl) = [w($L1), Ts]
         ===============================
         is(A+, Tl) = is(A, first(Tl)) /\ is(A*, [Ts])
 [is-10] get-list-tail(Tl) = []
@@ -122,17 +123,17 @@ equations
 [is-12] is({A B}+, []) = false
 [is-13] is({A B}*, [Ts]) = is({A B}+, [Ts])
 [is-14]
-        get-list-tail-with-sep(Tl) = [w(L1), sep(L'), w(L2), Ts], L = L'
+        get-list-tail-with-sep(Tl) = [w($L1), sep($L'), w($L2), Ts], $L = $L'
         ===============================================================
-        is({A L}+, Tl) = is(A, first(Tl)) /\ is({A L}*, [Ts])
+        is({A $L}+, Tl) = is(A, first(Tl)) /\ is({A $L}*, [Ts])
 
-[is-15] is({A L}+, [T]) = is(A, T)
-[is-16] is(AFun, meta-var(L, AFun)) = true
-[is-17] is(AFun*, meta-var(L1, iter(sort(cons2lit(AFun)), L2,"*"))) = true
-[is-18] is(AFun+, meta-var(L1, iter(sort(cons2lit(AFun)), L2,"+"))) = true
-[is-19] is({AFun L}*, meta-var(L1, iter-sep("{", L2, sort(cons2lit(AFun)), L3, L, L4, "}", L5, "*")))
+[is-15] is({A $L}+, [T]) = is(A, T)
+[is-16] is(AFun, meta-var($L, AFun)) = true
+[is-17] is(AFun*, meta-var($L1, iter(sort(cons2lit(AFun)), $L2,"*"))) = true
+[is-18] is(AFun+, meta-var($L1, iter(sort(cons2lit(AFun)), $L2,"+"))) = true
+[is-19] is({AFun $L}*, meta-var($L1, iter-sep("{", $L2, sort(cons2lit(AFun)), $L3, $L, $L4, "}", $L5, "*")))
         = true
-[is-20] is({AFun L}+, meta-var(L1, iter-sep("{", L2, sort(cons2lit(AFun)), L3, L, L4, "}", L5, "+")))
+[is-20] is({AFun $L}+, meta-var($L1, iter-sep("{", $L2, sort(cons2lit(AFun)), $L3, $L, $L4, "}", $L5, "+")))
         = true
 [default-is-21]
         is(A,T) = false

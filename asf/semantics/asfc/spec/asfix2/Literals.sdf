@@ -29,7 +29,7 @@ exports
     EscChar                    -> L-Char
     "\"" L-Char* "\""          -> Literal
   variables
-    "L" [0-9\']*  -> Literal
+    "$L" [0-9\']*  -> Literal
 
 %% \subsubsection{Operations on Literals}
 %%

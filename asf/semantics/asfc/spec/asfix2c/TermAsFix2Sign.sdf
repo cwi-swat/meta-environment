@@ -83,8 +83,8 @@ hiddens
     "Prod"[0-9\']*         -> ATerm
     "Iter"[0-9\']*         -> ATerm
     "Sort"[0-9\']*         -> ATerm
-    "Literal"[0-9\']*      -> ATerm
-    "Lexical"[0-9\']*      -> Literal
+    "$Literal"[0-9\']*      -> ATerm
+    "$Lexical"[0-9\']*      -> Literal
     "CfElems"[0-9\']*      -> ATermList
     "CfElem*"[0-9\']*      -> ATerms
     "CfElem"[0-9\']*       -> ATerm

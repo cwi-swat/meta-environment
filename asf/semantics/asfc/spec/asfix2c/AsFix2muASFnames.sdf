@@ -51,7 +51,7 @@ hiddens
 
 hiddens
   variables
-    "Literal"[0-9\']*  -> Literal
+    "$Literal"[0-9\']* -> Literal
     "CfFunc"[0-9\']*   -> ATerm
     "CfElems"[0-9\']*  -> ATermList
     "CfElem*"[0-9\']*  -> ATerms
@@ -64,4 +64,4 @@ hiddens
 
     "Char*"[0-9]*      -> CHAR*
     "Char+"[0-9]*      -> CHAR+
-    "Char"[0-9]*       -> CHAR
+    "$Char"[0-9]*       -> CHAR

@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -88,23 +89,23 @@ equations
               (Funcdef*3,Sortlist3,Nametable3)
 
 %% The lexical syntax is translated by a separate function {\tt lexfuncs2sign}.
-  [s2e-2'1] get-cons(Section) = lexical-syntax,
-            Section[productions] = LexFuncs
+  [s2e-2'1] get-cons($Section) = lexical-syntax,
+            $Section[productions] = LexFuncs
             ===============================
-            section2sign(Aname,Section,Sortlist,Nametable) =
+            section2sign(Aname,$Section,Sortlist,Nametable) =
               lexfuncs2sign(LexFuncs,Sortlist,Nametable)
 
 %% The same holds for the context-free syntax.
-  [s2e-2'2] get-cons(Section) = context-free-syntax,
-            Section[productions] = CfFuncs,
+  [s2e-2'2] get-cons($Section) = context-free-syntax,
+            $Section[productions] = CfFuncs,
             cffuncs2sign(Aname,CfFuncs,Nametable1) = (Funcdef*,Nametable2)
             ========================================================
-            section2sign(Aname,Section,Sortlist,Nametable1) =
+            section2sign(Aname,$Section,Sortlist,Nametable1) =
               (Funcdef*,Sortlist,Nametable2)
 
 %% All other sections, like {\tt sorts}, {\tt variable} and {\tt priorities} need not
 %% be translated.
-  [default-s2e-2'4] section2sign(Aname,Section,Sortlist,Nametable) =
+  [default-s2e-2'4] section2sign(Aname,$Section,Sortlist,Nametable) =
                       (,Sortlist,Nametable)
 
 %% The list of lexical functions is processed one by one.
@@ -140,9 +141,9 @@ equations
   [lf2e-2'3] is-term-production(LexFunc) = false,
              LexFunc[sym] = Symbol,
              includes-sortname(Symbol,{Lexsort*}) = false,
-             Symbol = sort(L),
+             Symbol = sort($L),
              sort2id(Symbol) = Funid1,
-             make-caller-func(L) = Funid3,
+             make-caller-func($L) = Funid3,
              nt-lookup("{sort(\"CHAR\")}",Nametable1) =
                (Funid4,Nametable2),
              nt-lookup(Funid3,Nametable2) =
@@ -203,7 +204,7 @@ equations
 %% have to be generated.
   [cf2a-2'1] gen-var(1) = Varid
              ==================
-             cfelem2args(sort(L),Nametable) = (,Varid,Nametable)
+             cfelem2args(sort($L),Nametable) = (,Varid,Nametable)
 
   [cf2a-2'2] get-cons(Symbol) = iter-sep,
              gen-var(1) = Varid,

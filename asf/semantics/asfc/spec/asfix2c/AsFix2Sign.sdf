@@ -57,14 +57,14 @@ hiddens
     "Amodule"[0-9\']*      -> ATerm
     "Mname"[0-9\']*        -> ModId
     "Defrules"[0-9\']*     -> MsFuncRulePair
-    "L"[0-9\']*            -> Literal
-    "Lit"[0-9\']*          -> Literal
+    "$L"[0-9\']*           -> Literal
+    "$Lit"[0-9\']*         -> Literal
     "SynSecs"[0-9\']*      -> ATermList
     "SynSec*"[0-9\']*      -> ATerms
     "SynSec"[0-9\']*       -> ATerm
     "Sections"[0-9\']*     -> ATermList
     "Section*"[0-9\']*     -> ATerms
-    "Section"[0-9\']*      -> ATerm
+    "$Section"[0-9\']*      -> ATerm
     "LexFuncs"[0-9\']*     -> ATermList
     "LexFunc*"[0-9\']*     -> ATerms
     "LexFunc"[0-9\']*      -> ATerm

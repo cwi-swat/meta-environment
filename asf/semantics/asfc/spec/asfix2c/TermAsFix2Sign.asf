@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                          The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -25,9 +26,9 @@ equations
 
   [tlf2e-1'2] term-get-symbol-prod(LexFunc) = Symbol,
               includes-sortname(Symbol,{Lexsort*}) = false,
-              Symbol = sort(L),
+              Symbol = sort($L),
               sort2id(Symbol) = Funid1,
-              make-lex-cons-func(L) = Funid3,
+              make-lex-cons-func($L) = Funid3,
               nt-lookup("{sort(\"CHAR\")}",Nametable1) =
                 (Funid4,Nametable2),
               nt-lookup(Funid3,Nametable2) =
@@ -146,9 +147,9 @@ equations
              argsplus2id(Symbol,Ws1,Sep,Ws2,Symbol+) = Funid1 ++ ",w(\"\"),ql(\",\"),w(\"\")," ++ Funid2
 
   [s2i-1'1] is-literal-symbol-prod(Prod) = true,
-            literal2id(Literal) = Funid
+            literal2id($Literal) = Funid
             ===========================
-            symbol2id(appl(Prod,Ws,[Literal])) = Funid
+            symbol2id(appl(Prod,Ws,[$Literal])) = Funid
 
   [s2i-1'2] is-sort-symbol-prod(Prod) = true,
             term-sort2id(Sort) = Funid
@@ -166,9 +167,9 @@ equations
   [ts2i-1'1] term-sort2id(lex(literal(Char*),sort("Sort"))) = "sort(\"" ++ funid(Char*) ++ "\")"
 
   [l2i-1'1] is-uqliteral-prod(Prod) = true,
-            literal2id(Literal) = Funid
+            literal2id($Literal) = Funid
             ===========================
-            literal2id(appl(Prod,Ws,[Literal])) = Funid
+            literal2id(appl(Prod,Ws,[$Literal])) = Funid
 
   [l2i-1'1] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
             =========================================================
@@ -384,16 +385,16 @@ equations
              ====================================
              term-attr2term(appl(Prod1,Ws1,[Attr1])) = funid("n""o""n""a""s""s""o""c")
 
-  [mcf-1'1]  upper2lower(Lexical1) = Lexical2
+  [mcf-1'1]  upper2lower($Lexical1) = $Lexical2
              ================================
-             make-lex-cons-func(Lexical1) =
+             make-lex-cons-func($Lexical1) =
                "prod(id(\"GEN-LexConsFuncs\"),w(\"\")," ++
-               "[ql(\"" ++ literal2id(Lexical2) ++ "\"),w(\"\")," ++
+               "[ql(\"" ++ literal2id($Lexical2) ++ "\"),w(\"\")," ++
                "ql(\"(\"),w(\"\")," ++
                "iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\")," ++
                "ql(\")\")],w(\"\")," ++
                "l(\"->\"),w(\"\")," ++
-               "sort(\"" ++ literal2id(Lexical1) ++ "\"),w(\"\"),no-attrs)"
+               "sort(\"" ++ literal2id($Lexical1) ++ "\"),w(\"\"),no-attrs)"
 
   [tc-1'1] delaying(Term) ++del Term*1,delaying(Term+2),Term*3 = Term*1,delaying(Term,Term+2),Term*3
 

@@ -29,36 +29,36 @@ equations
 %% while \spec{de-escape} performs the inverse operation.
 
 [esc-1]
-        L = literal(""" "\" """ """) ++ escape(literal(""" c* """))
+        $L = literal(""" "\" """ """) ++ escape(literal(""" c* """))
         ===========================================================
-        escape(literal(""" """ c* """)) = L
+        escape(literal(""" """ c* """)) = $L
 [esc-2]
-        L = literal(""" "\" "\" """) ++ escape(literal(""" c* """))
+        $L = literal(""" "\" "\" """) ++ escape(literal(""" c* """))
         ===========================================================
-        escape(literal(""" "\" c* """)) = L
+        escape(literal(""" "\" c* """)) = $L
 [esc-3]
         escape(literal(""" """)) = literal(""" """)
 [default-esc-4]
-        L = literal(""" c """) ++ escape(literal("""c* """))
+        $L = literal(""" c """) ++ escape(literal("""c* """))
         ====================================================
-        escape(literal(""" c c* """)) = L
+        escape(literal(""" c c* """)) = $L
 
 %% The function \fun{de-escape} undoes one level of escape.
 
 [de-esc-1]
-        L = literal(""" """ """) ++ de-escape(literal(""" c* """))
+        $L = literal(""" """ """) ++ de-escape(literal(""" c* """))
         ==========================================================
-        de-escape(literal(""" "\" """ c* """)) = L
+        de-escape(literal(""" "\" """ c* """)) = $L
 [de-esc-2]
-        L = literal(""" "\" """) ++ de-escape(literal(""" c* """))
+        $L = literal(""" "\" """) ++ de-escape(literal(""" c* """))
         ==========================================================
-        de-escape(literal(""" "\" "\" c* """)) = L
+        de-escape(literal(""" "\" "\" c* """)) = $L
 [de-esc-3]
         de-escape(literal(""" """)) = literal(""" """)
 [default-de-esc-4]
-        L = literal(""" c """) ++ de-escape(literal(""" c* """))
+        $L = literal(""" c """) ++ de-escape(literal(""" c* """))
         ==========================================================
-        de-escape(literal(""" c c* """)) = L
+        de-escape(literal(""" c c* """)) = $L
 
 %% The function \fun{quote} escapes all special characters in a literal including
 %% the outermost quotes.

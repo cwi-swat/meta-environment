@@ -38,8 +38,8 @@ equations
 
 %% And predicates for several special cases of these constructors.
 
-  [is-lit1]          is-lit(L)            = true
-  [is-lit1]          is-lit(L Ann)        = true
+  [is-lit1]          is-lit($L)            = true
+  [is-lit1]          is-lit($L Ann)        = true
   [default-is-lit2]  is-lit(T)            = false
   [is-int1]          is-int(z)            = true
   [is-int1]          is-int(z Ann)        = true
@@ -57,7 +57,7 @@ equations
 
   [aterms-1] aterms([Ts])  = Ts  [aterms-2] aterms([Ts] Ann) = Ts
   [list-1]   atermlist(Tl) = Tl  [list-2]   atermlist(Tl Ann) = Tl
-  [lit-1]    literal(L)    = L   [lit-2]    literal(L Ann) = L
+  [lit-1]    literal($L)    = $L   [lit-2]    literal($L Ann) = $L
 
 %% \COND
 %%
