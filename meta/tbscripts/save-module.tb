@@ -29,7 +29,8 @@ let
   Eqs     : term,
   Module  : term,
   Path    : str,
-  Modules : list
+  Modules : list,
+  Table   : term
 in
   Id := process-id. 
   ( rec-msg(save-module(Module?)).
@@ -89,6 +90,22 @@ in
          rec-msg(no-eqs)
        +
          rec-msg(unavailable)
+       ) .
+       snd-msg(get-table-from-db(trm(Module))).
+       (
+         rec-msg(table(Table?)). 
+         snd-msg(save-term-table(Module, Table)).
+         rec-msg(save-done)
+       +
+         rec-msg(no-table)
+       ).
+       snd-msg(get-table-from-db(eqs(Module))).
+       (
+         rec-msg(table(Table?)).
+         snd-msg(save-term-table(Module, Table)).
+         rec-msg(save-done)
+       +
+         rec-msg(no-table)
        )
       fi
     )*
