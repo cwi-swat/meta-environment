@@ -28,8 +28,11 @@
    If you prefer, you can name the output file yourself
    (e.g. hotdraw.rstore.pt) and set the verbose option to see what is
    going on:
-	 merge-rstores -v -o hotdraw.rstore.pt extracted-rstores/*.pt
+	 merge-rstores -v -o jhotdraw.rstore.pt extracted-rstores/*.pt
 
 3. Convert the merged rstore to visualization data:
-	rstore2rviz -i hotdraw.rstore.pt -o hotdraw.rviz
+	rstore2rviz -i jhotdraw.rstore.pt -o jhotdraw.rviz
 
+
+4. Visualize the resulting data:
+	rviz jhotdraw.rviz
