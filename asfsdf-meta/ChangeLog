@@ -1,5 +1,9 @@
 /* $Id$ */
 
+2003/10/07 (jurgenv@cwi.nl)
+ * Format button renamed to Pretty Print
+ * Added new menu entries in syntax and equation editors: Edit Term
+
 2003/10/03 (markvdb@cwi.nl)
  * Switch of the AddApiSyntax functionality.
 
