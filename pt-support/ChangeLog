@@ -1,4 +1,8 @@
 
+
+2003/01/15 ({jong,markvdb}@cwi.nl)
+ * Fixed bug in MEPT-utils.c: incorrect handling of amb() as parse tree.
+
 2002/01/14 (jurgenv@cwi.nl)
  * Added support for annotations on PT_Trees and all kinds of ATerms 
    for PTPT_explode functionality. This means that every ATerm annotations

@@ -1224,8 +1224,16 @@ PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,
 
 PT_Tree PT_getParseTreeTree(PT_ParseTree parsetree)
 {
-  PT_Tree top = PT_getParseTreeTop(parsetree);
-  PT_Args args = PT_getTreeArgs(top);
+  PT_Tree top;
+  PT_Args args;
+  
+  top = PT_getParseTreeTop(parsetree);
+  
+  if (PT_isTreeAmb(top)) {
+    return top;
+  }
+
+  args = PT_getTreeArgs(top);
 
   return PT_getArgsArgumentAt(args, 1);
 }
