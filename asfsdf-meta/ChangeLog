@@ -1,5 +1,12 @@
 /* $Id$ */
 
+Tue Mar 16  CET 2004 <iversen@cwi.nl>
+
+ * Added and modified several hooks to facilitate implementation of 
+   Action Environment. The hooks are pre-get-all-syntax-hook, 
+   add-initial-syntax-modules-hook, clear-module-db-hook, 
+   other-top-sort-hook.
+	
 2004/02/16 (markvdb@cwi.nl)
  * The asfsdfchecker is now only called in case a parsetable
    has to be generated for parsing terms and equations in
