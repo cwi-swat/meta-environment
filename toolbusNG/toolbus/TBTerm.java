@@ -12,21 +12,21 @@ class FunctionDescriptor {
 	private int index;
 	private int nargs;
 	private ATerm argtypes[];
-	private ATerm rtype;
+	private ATerm resultType;
 	
-	public FunctionDescriptor(String name, int index, ATerm arg0, ATerm rtype){
+	public FunctionDescriptor(String name, int index, ATerm arg0, ATerm resultType){
 		this.name = name;
 		this.index = index;
-		this.rtype = rtype;
+		this.resultType = resultType;
 		nargs = 1;
 	 	argtypes = new ATerm[1];
 	 	argtypes[0] = arg0;
 	}
 	
-	public FunctionDescriptor(String name, int index, ATerm arg0, ATerm arg1, ATerm rtype){
+	public FunctionDescriptor(String name, int index, ATerm arg0, ATerm arg1, ATerm resultType){
 		this.name = name;
 		this.index = index;
-		this.rtype = rtype;
+		this.resultType = resultType;
 		nargs = 2;
 	 	argtypes = new ATerm[2];
 	 	argtypes[0] = arg0;
@@ -37,8 +37,8 @@ class FunctionDescriptor {
 		return index;
 	}
 	
-	public ATerm getReturnType(){
-		return rtype;
+	public ATerm getResultType(){
+		return resultType;
 	}
 	
 	public boolean checkStatic(ATerm actual[])
@@ -225,8 +225,9 @@ public class TBTerm {
 	}
 	
 	public static ATerm changeResVarIntoVar(ATerm t){
-		if(!isResVar(t))
+		if(!isResVar(t)) {
 			throw new ToolBusInternalError("wrong arg in makeVar(" + t + ")");
+        }
 		ATermList args = ((ATermAppl) t).getArguments();
 		AFun afun = t.getFactory().makeAFun("var", args.getLength(), false);
 		return t.getFactory().makeAppl(afun, args);
@@ -297,7 +298,7 @@ public class TBTerm {
 					throw new ToolBusException("unknown function " + fun);
 					
 				if(fd.checkStatic(vargs))
-					return fd.getReturnType();
+					return fd.getResultType();
 
 			case ATerm.LIST :
 				ATermList lst = factory.makeList();
@@ -396,8 +397,9 @@ public class TBTerm {
 	private static ATerm apply(String fun, ATerm args[]) {	
 		FunctionDescriptor fd = (FunctionDescriptor) Funs.get(fun);
 		
-		if(fd == null)
+		if(fd == null) {
 			throw new ToolBusInternalError("apply: unknown function: " + fun);
+        }
 		
 		try {
 			fd.checkRunTime(args);					// redundant after typecheck!

@@ -1,5 +1,22 @@
 Issues for improving toolbusNG prototype
 ----------------------------------------
 
-- Base indentation style on some combination of settings of 'format' tool so we all use the same indentation
+- Coding standards:
+  - Base indentation style on some combination of settings of 'format' tool so we all use the same indentation
+  - Always surround codeblocks with curly braces, even if it consists of exactly one statement:
+    if (a) {
+      b();
+    }
+
 - AtomSet: why implemented using a Vector and not a HashSet? (HashSet is commented out?)
+- var definitions and other term expressions should not be 'inlined': aterms.make("var(-1,int,P)")
+- Atom.copy: only args are copied? What about test, env, etc.
+- TBTerm FunctionDescriptor: how about implementing an 'escape' to Java and implementing all these
+  functions through that escape? We could map 'function symbols' to java methods or classes.
+  At the least: evaluate expressions by calling 'fd.apply' (or fd.eval) instead of case statement
+  for builtins. Note that one FunctionDescriptor class can implement multiple functions, for instance
+  one FunctionDescriptor for all builtins to avoid a class flood.
+- Why use 'this.getEnv()' instead of 'getEnv()'?
+- Shutdown atom: do not call 'System.exit(0)' but throw 'ToolbusDeathException': this gives us
+  the flexibility to use the toolbus in a wider context.
+  
