@@ -38,7 +38,6 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(ASCLIB) -lasc-support \
                   -L$(ASFIXLIB) -lAsFix \
                   -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
@@ -47,7 +46,6 @@ equalModuloWhitespace_SOURCES = \
 
 equalModuloWhitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASCLIB) -lasc-support \
                  -L$(ASFIXLIB) -lAsFix \
                  -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
