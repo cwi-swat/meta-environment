@@ -198,7 +198,6 @@ static SDF_Renamings makeRenamingsFromModuleNames(SDF_ModuleName formal,
     formalParams = SDF_makeSymbolsDefault(SDF_makeSymbolListEmpty());
   }
 
-  
   return makeRenamingsFromParameters(formalParams, actualParams);
 }
 
@@ -451,15 +450,14 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
     if (!SDF_containsImportListImport(result, import)) {
       SDF_Renamings renamings;
       SDF_ImportList imports;
-
       SDF_Module module = getModuleByImport(import);
       SDF_ModuleName formalName = SDF_getModuleModuleName(module);
       SDF_ModuleName actualName = SDF_getImportModuleName(import);
       renamings = makeRenamingsFromModuleNames(formalName, actualName);
 
       imports = SDF_getModuleImportsList(module);
-      todo = SDF_concatImportList(todo, applyRenamingsToImports(renamings,
-								imports));
+      imports = applyRenamingsToImports(renamings, imports);
+      todo = SDF_concatImportList(todo, imports);
 
       import = makeRenamedImport(actualName, renamings);
       result = SDF_concatImportList(result,SDF_makeImportListSingle(import));
@@ -523,7 +521,6 @@ SDF_ImportList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId
 
   MT_destroyModuleTable(moduleTable);
   moduleTable = NULL;
-
   return result;
 }
 
@@ -565,7 +562,7 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
   modules = MT_allModules(moduleTable);
   
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
-    SDF_ModuleId module = SDF_ModuleIdFromTerm(ATgetFirst(modules));
+    SDF_ModuleId module = SDF_ModuleIdFromTerm(ATBunpack(ATgetFirst(modules)));
     SDF_ImportList imports = do_get_transitive_imports(module);
 
     if (imports_contains_id(imports, moduleId)) {
@@ -611,8 +608,11 @@ static ATermList collect_imported_modules(SDF_ImportList imports)
     SDF_Import import = SDF_getImportListHead(imports);
     SDF_ModuleName importName = SDF_getImportModuleName(import);
     SDF_ModuleId importId = SDF_getModuleNameModuleId(importName);
-    SDF_Start module = MT_getModule(moduleTable, importId);
+    SDF_Start module = MT_getModule(moduleTable, 
+				    SDF_removeModuleIdAnnotations(importId));
 
+    assert(module != NULL && "its a precondition to have this module stored"); 
+    
     result = ATinsert(result, SDF_StartToTerm(module));
 
     if (SDF_hasImportListTail(imports)) {
