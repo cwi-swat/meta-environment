@@ -2,6 +2,10 @@ equations
 
   [cimt-1'1] create-info-msg-tuple() = [{},{}]
 
+  [cme-1'1] create-module-entry($ModuleId,{ModuleInfoEntry*}) =
+              {[$ModuleId, true, [symbols(), productions()]] 
+               ModuleInfoEntry*}
+
   [gmi-1'1] get-module-info([ModuleInfoTable, Messages]) = ModuleInfoTable
 
   [gm-1'1] get-messages([ModuleInfoTable, Messages]) = Messages

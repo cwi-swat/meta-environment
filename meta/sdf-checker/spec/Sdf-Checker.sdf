@@ -27,6 +27,7 @@ hiddens
     "$ModuleName"[0-9]*  -> ModuleName
     
     "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
 
     "Import*"[0-9]*         -> Import*
     "ImportsSet"[0-9]*      -> ImportsSet

@@ -11,6 +11,7 @@ exports
 
   context-free syntax
     create-info-msg-tuple()                            -> Info-Msg-Tuple
+    create-module-entry(ModuleId, Module-Info-Table)   -> Module-Info-Table
     get-module-info(Info-Msg-Tuple)                    -> Module-Info-Table
     get-messages(Info-Msg-Tuple)                       -> Messages
     put-module-info(Module-Info-Table, Info-Msg-Tuple) -> Info-Msg-Tuple
