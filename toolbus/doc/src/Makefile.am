@@ -75,7 +75,7 @@ pamflet.dvi: $(noinst_PROGRAMS) \
 	gpic -t $< > $@
 
 %.ps : %.fig
-	fig2dev -Lps $< >$@
+	fig2dev -Leps $< >$@
 
 adapters.tex:
 	@(for adapter in $(ALL_ADAPTERS) ;\

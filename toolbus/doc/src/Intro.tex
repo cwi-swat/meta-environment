@@ -17,7 +17,7 @@
 %%    along with this program; if not, write to the Free Software
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
-\documentclass[a4,twoside,noweb]{article} % -*-latex-*-
+\documentclass[a4paper,twoside]{article} % -*-latex-*-
 \setlength{\oddsidemargin}{0.235cm}
 \setlength{\evensidemargin}{0.235cm}
 \setlength{\textwidth}{16cm}
@@ -25,7 +25,8 @@
 \pagestyle{myheadings}
 
 
-\usepackage{psfig}
+\usepackage{epsfig}
+\usepackage{a4wide}
 
 \begin{document}
 
@@ -119,7 +120,7 @@ toolbus calc.tb
 \end{verbatim}
 
 \begin{figure}[htb]
-\centerline{\psfig{file=calc-ui.eps}}
+\centerline{\epsfig{file=calc-ui.eps}}
 \caption{The calculator user interface}
 \label{calc-ui}
 \end{figure}
@@ -146,7 +147,7 @@ Figure \ref{calc-impl} shows the calculator demo \TB\ configuration.
 The calculator demo consists of four tools:
 
 \begin{figure}[htb]
-\centerline{\psfig{file=calc.ps}}
+\centerline{\epsfig{file=calc.ps}}
 \caption{The calculator \TB\ configuration}
 \label{calc-impl}
 \end{figure}
@@ -190,7 +191,7 @@ toolbus auction.tb
 \end{verbatim}
 
 \begin{figure}[htb]
-\centerline{\psfig{file=auction-master.eps}}
+\centerline{\epsfig{file=auction-master.eps}}
 \caption{The auction master}
 \label{auction-master}
 \end{figure}
@@ -211,7 +212,7 @@ bidder Pieter adam 8999
 \end{verbatim}
 
 \begin{figure}[htb]
-\centerline{\psfig{file=auction-bidder.eps}}
+\centerline{\epsfig{file=auction-bidder.eps}}
 \caption{A bidder}
 \label{auction-bidder}
 \end{figure}
@@ -238,7 +239,7 @@ The demo consists of two different tools:
 \end{itemize}
 
 \begin{figure}[htb]
-\centerline{\psfig{file=auction.ps}}
+\centerline{\epsfig{file=auction.ps}}
 \caption{The auction demo \TB\ configuration}
 \label{auction-impl}
 \end{figure}
