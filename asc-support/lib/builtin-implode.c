@@ -33,7 +33,7 @@ PT_Tree ASFE_implode(PT_Symbol type, PT_Tree tree)
 /*}}}  */
 /*{{{  PT_Tree ASC_implode(ATerm input) */
 
-PT_Tree ASC_implode(ATerm input)
+PT_Tree ASC_implode(ATerm type, ATerm input)
 {
   PT_Tree tree = muASFToTree(input);
 

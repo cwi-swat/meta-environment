@@ -47,7 +47,7 @@ PT_Tree ASFE_set_anno(PT_Symbol type, PT_Tree term, PT_Tree key, PT_Tree value)
 /*}}}  */
 /*{{{  PT_Tree ASC_set_anno(ATerm aterm, ATerm akey, ATerm avalue) */
 
-PT_Tree ASC_set_anno(ATerm aterm, ATerm akey, ATerm avalue)
+PT_Tree ASC_set_anno(ATerm type, ATerm aterm, ATerm akey, ATerm avalue)
 {
   PT_Tree term = muASFToTree(aterm);
   PT_Tree key = muASFToTree(akey);
@@ -84,7 +84,7 @@ PT_Tree ASFE_get_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 /*}}}  */
 /*{{{  PT_Tree ASC_get_anno(PT_Tree aterm, PT_Tree akey) */
 
-PT_Tree ASC_get_anno(ATerm aterm, ATerm akey)
+PT_Tree ASC_get_anno(ATerm type, ATerm aterm, ATerm akey)
 {
   PT_Tree term = muASFToTree(aterm);
   PT_Tree key = muASFToTree(akey);
@@ -139,7 +139,7 @@ PT_Tree ASFE_get_term_anno(PT_Symbol type, PT_Tree term, PT_Tree key)
 /*}}}  */
 /*{{{  PT_Tree get_term_anno(PT_Tree input)  */
 
-PT_Tree ASC_get_term_anno(ATerm aterm, ATerm akey)
+PT_Tree ASC_get_term_anno(ATerm type, ATerm aterm, ATerm akey)
 {
   PT_Tree term = muASFToTree(aterm);
   PT_Tree key = muASFToTree(akey);

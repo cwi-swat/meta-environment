@@ -21,7 +21,7 @@ PT_Tree ASFE_shell(PT_Symbol type, PT_Tree cmd_arg)
 /*}}}  */
 /*{{{  PT_Tree ASC_shell(ATerm input) */
 
-PT_Tree ASC_shell(ATerm input)
+PT_Tree ASC_shell(ATerm type, ATerm input)
 {
   PT_Tree cmd_arg = muASFToTree(input);
 

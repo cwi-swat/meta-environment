@@ -202,9 +202,9 @@ PT_Tree ASFE_parse_file(PT_Symbol type, PT_Tree file)
 }
 
 /*}}}  */
-/*{{{  PT_Tree ASC_parse_file(ATerm aterm, ATerm akey, ATerm avalue) */
+/*{{{  PT_Tree ASC_parse_file(ATerm type, ATerm aterm, ATerm akey, ATerm avalue) */
 
-PT_Tree ASC_parse_file(ATerm aterm)
+PT_Tree ASC_parse_file(ATerm type, ATerm aterm)
 {
   PT_Tree file = muASFToTree(aterm);
 
@@ -242,7 +242,7 @@ PT_Tree ASFE_parse_bytes(PT_Symbol type, PT_Tree bytes)
 /*}}}  */
 /*{{{  PT_Tree ASC_parse_bytes(ATerm aterm) */
 
-PT_Tree ASC_parse_bytes(ATerm aterm)
+PT_Tree ASC_parse_bytes(ATerm type, ATerm aterm)
 {
   PT_Tree bytes = muASFToTree(aterm);
 
@@ -272,7 +272,7 @@ PT_Tree ASFE_unparse_to_bytes(PT_Symbol type, PT_Tree tree)
 /*}}}  */
 /*{{{  PT_Tree ASC_unparse(ATerm input) */
 
-PT_Tree ASC_unparse_to_bytes(ATerm input)
+PT_Tree ASC_unparse_to_bytes(ATerm type, ATerm input)
 {
   PT_Tree tree = muASFToTree(input);
   CO_OptLayout l = CO_makeOptLayoutAbsent();
@@ -302,7 +302,7 @@ PT_Tree ASFE_unparse_to_file(PT_Symbol type, PT_Tree file, PT_Tree tree)
 /*}}}  */
 /*{{{  PT_Tree ASC_unparse_to_file(ATerm afile, ATerm input) */
 
-PT_Tree ASC_unparse_to_file(ATerm afile, ATerm input)
+PT_Tree ASC_unparse_to_file(ATerm type, ATerm afile, ATerm input)
 {
   PT_Tree file = muASFToTree(afile);
   PT_Tree tree = muASFToTree(input);
@@ -338,7 +338,7 @@ PT_Tree ASFE_read_term_from_file(PT_Symbol symbol, PT_Tree file_arg)
 /*}}}  */
 /*{{{  PT_Tree ASC_read_term_from_file(ATerm afile_arg) */
 
-PT_Tree ASC_read_term_from_file(ATerm afile_arg)
+PT_Tree ASC_read_term_from_file(ATerm type, ATerm afile_arg)
 {
   PT_Tree file_arg = muASFToTree(afile_arg);
   PT_Tree result = NULL;
@@ -383,7 +383,7 @@ PT_Tree ASFE_write_term_to_file(PT_Symbol type, PT_Tree file_arg, PT_Tree tree_a
 /*}}}  */
 /*{{{  PT_Tree write_term_to_file(PT_Tree input) */
 
-PT_Tree ASC_write_term_to_file(ATerm afile_arg, ATerm atree_arg)
+PT_Tree ASC_write_term_to_file(ATerm type, ATerm afile_arg, ATerm atree_arg)
 {
   PT_Tree file_arg = muASFToTree(afile_arg);
   PT_Tree tree_arg = muASFToTree(atree_arg);
@@ -467,7 +467,7 @@ PT_Tree ASFE_read_bytes_from_file(PT_Symbol type, PT_Tree file_arg)
 /*}}}  */
 /*{{{  PT_Tree ASC_read_bytes_from_file(ATerm afile_arg) */
 
-PT_Tree ASC_read_bytes_from_file(ATerm afile_arg)
+PT_Tree ASC_read_bytes_from_file(ATerm type, ATerm afile_arg)
 {
   PT_Tree file_arg = muASFToTree(afile_arg);
 
@@ -510,9 +510,9 @@ PT_Tree ASFE_write_bytes_to_file(PT_Symbol type, PT_Tree file_arg, PT_Tree bytes
 }
 
 /*}}}  */
-/*{{{  PT_Tree ASC_write_bytes_to_file(ATerm afile_arg, ATerm abytes_arg) */
+/*{{{  PT_Tree ASC_write_bytes_to_file(ATerm type, ATerm afile_arg, ATerm abytes_arg) */
 
-PT_Tree ASC_write_bytes_to_file(ATerm afile_arg, ATerm abytes_arg)
+PT_Tree ASC_write_bytes_to_file(ATerm type, ATerm afile_arg, ATerm abytes_arg)
 {
   PT_Tree file_arg = muASFToTree(afile_arg);
   PT_Tree bytes_arg = muASFToTree(abytes_arg);

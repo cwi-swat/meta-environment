@@ -31,7 +31,7 @@ PT_Tree ASFE_term_compare(PT_Symbol type, PT_Tree left, PT_Tree right)
 /*}}}  */
 /*{{{  PT_Tree ASC_term_compare(ATerm left, ATerm right) */
 
-PT_Tree ASC_term_compare(ATerm left, ATerm right)
+PT_Tree ASC_term_compare(ATerm type, ATerm left, ATerm right)
 {
   return makeMeasureFromInt(ATcompare(left, right));
 }
