@@ -50,7 +50,7 @@ exports
 
   sorts ActionList
   context-free syntax
-    "[" {Action ","}* "]" -> ActionList {constructor}
+    "[" {Action ","}* "]" -> ActionList
 
   sorts Action
   context-free syntax
