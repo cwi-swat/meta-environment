@@ -34,7 +34,6 @@ java_JAVA = \
 	ListListModel.java \
 	MetaStudio.java \
 	Module.java \
-	ModuleManager.java \
 	ModuleSelectionListener.java \
 	ModuleStatusPanel.java \
 	NodeSizer.java \
