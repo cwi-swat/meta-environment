@@ -1,5 +1,9 @@
 $Id$
 
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
 2001/11/23 (vandenbr@loria.fr)
  * fixed a bug: the character classes for lexical
    definitions with the same rhs symbol where not merged.

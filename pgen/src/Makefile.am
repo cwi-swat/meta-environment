@@ -2,7 +2,7 @@
 TESTS		= test-chars
 
 INCLUDES	= -I${ATERM}/include \
-		-I${TOOLBUS}/include \
+		-I${TOOLBUSLIB}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
 		-I${ASC_SUPPORT}/include
@@ -39,7 +39,7 @@ parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(SDF_SUPPORT)/lib -lSDFME \
                         -L$(PT_SUPPORT)/lib -lmept \
-                        -L$(TOOLBUS)/lib -lATB \
+                        -L$(TOOLBUSLIB)/lib -lATB \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 # -L/ufs/olivierp/lib -ldmalloc \
@@ -49,10 +49,10 @@ CLEANFILES	= parsetablegen.tifs \
 		  sdf2table.test 
 
 %.tif.c %.tif.h: %.tifs
-	${TOOLBUS}/bin/tifstoc -tool $* $<
+	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
 
 %.tifs: %.idef
-	${TOOLBUS}/bin/idef2tif $<
+	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 		mv ${srcdir}/$@ $@ ;\
 	fi

@@ -27,9 +27,17 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Require ToolBus
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus is in DIR])
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR      ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
+
+dnl Optional package ToolBus
+AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
+   [  --with-toolbus=DIR      ToolBusLib is in DIR],
+   [  AC_MSG_WARN([ToolBus package not found. It is required when building \
+                        a distribution from the CVS source tree.])])
 AC_SUBST(TOOLBUS)
 
 dnl Require sglr package
