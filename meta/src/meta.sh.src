@@ -38,7 +38,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:deghT:vV"
+myarguments="C:deghm:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -50,6 +50,7 @@ Options:
     -e              use xemacs editor [default]
     -g              use gvim editor   (experimental)
     -h              display help information (usage)
+    -m modulename   specifies the name of the top module to start with
     -T <port>       specifies TB_PORT for toolbus
     -v              run verbose mode (with logger)
     -V              reveal program version (i.e. $myversion)
@@ -91,6 +92,7 @@ set -- $args
 # Argument interpretation...
 
 configfile="meta.conf"
+modulename=""
 
 while [ $#  -gt 0 ]
 do
@@ -108,6 +110,10 @@ do
 		editor="gvim-editor" ;;
         -h)
 		Usage ; exit 0 ;;
+	-m)
+		shift
+		modulename=$1
+		;;
         -t)
 		;;
         -T)
@@ -130,7 +136,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\""
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${metastudio_def} -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\""
 
 if [ $verbose -gt 0 ] ; then
    set -x
