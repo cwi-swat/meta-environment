@@ -1,0 +1,69 @@
+[
+  [ParseTree, Tree, parsetree(<tree(Tree)>,
+                              <amb-cnt(int)>)],
+
+  [Tree, appl, appl(<prod(Production)>,
+                    <args(Args)>
+                   )
+  ],
+
+  [Tree, list, [<[args(Args)]>]],
+
+  [Tree, char, <character(int)>],
+
+  [Tree, Lit, lit(<string(str)>)],
+
+  [Tree, flat-layout, flatlayout(<string(str)>)],
+
+  [Tree, flat-lexical, flatlexical(<string(str)>)],
+
+  [Tree, Amb, amb(<args(Args)>)],
+
+  [Production, Default, prod(<lhs(Symbols)>,
+                             <rhs(Symbol)>,
+                             <attrs(Attributes)>
+                            )
+  ],
+
+  [Attributes, no-attrs, no-attrs],
+  [Attributes, attrs, <attrs(Attrs)>],
+
+  [Attrs, many, [<head(Attr)>,<[tail(Attrs)]>]],
+  [Attrs, single, [<head(Attr)>]], 
+
+  [Attr, cons, cons(<string(str)>)],
+  [Attr, bracket, bracket],
+
+  [Args, list, [<head(Tree)>,<[tail(Args)]>]],
+  [Args, empty, []],
+
+  [Symbol, lit, lit(<string(str)>)],
+
+  [Symbol, cf, cf(<symbol(Symbol)>)],
+
+  [Symbol, lex, lex(<symbol(Symbol)>)],
+
+  [Symbol, opt, opt(<symbol(Symbol)>)], 
+
+  [Symbol, alt, alt(<left(Symbol)>,<right(Symbol)>)], 
+
+  [Symbol, sort, sort(<string(str)>)], 
+
+  [Symbol, iter-plus, iter(<symbol(Symbol)>)],
+
+  [Symbol, iter-star, iter-star(<symbol(Symbol)>)],
+
+  [Symbol, iter-plus-sep, iter-sep(<symbol(Symbol)>,<separator(Symbol)>)],
+
+  [Symbol, iter-star-sep, iter-star-sep(<symbol(Symbol)>,<separator(Symbol)>)],
+
+  [Symbol, var-sym, varsym(<symbol(Symbol)>)],
+
+  [Symbol, layout, layout],
+
+  [Symbol, start, "<START>"],
+ 
+  [Symbols, list, [<head(Symbol)>,<[tail(Symbols)]>]],
+  [Symbols, empty, []]
+
+]

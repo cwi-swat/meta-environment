@@ -43,11 +43,11 @@ lengthOfTree(PT_Tree tree)
   }
 
   if (PT_isTreeLit(tree)) {
-    char *lit = PT_getTreeString(tree);
-    return strlen(lit);
+    char *str = PT_getTreeString(tree);
+    return strlen(str);
   }
   
-  ATerror("lengthOfLexicals: unknown term %t\n", tree);
+  ATerror("lengthOfTree: unknown term %t\n", tree);
   return 0;
 }
 
@@ -94,7 +94,7 @@ yieldTreeRecursive(PT_Tree tree, int idx, char *buf, int bufSize)
     }
   }
   else {
-    ATerror("lexicalsToStringRecursive: unknown term %t\n", tree);
+    ATerror("yieldTreeRecursive: unknown term %t\n", tree);
   }
 
   return idx;
@@ -113,7 +113,7 @@ yieldArgsRecursive(PT_Args args, int idx, char *buf, int bufSize)
   return idx;
 }
 
-char *yieldTree(PT_Tree tree)
+char *PT_yieldTree(PT_Tree tree)
 {
   static char *buffer = NULL;
   static int   bufferSize = 0;
@@ -135,12 +135,12 @@ char *yieldTree(PT_Tree tree)
   return buffer;
 }
 
-char *yieldParseTree(PT_ParseTree tree)
+char *PT_yieldParseTree(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
-    return yieldTree(PT_getParseTreeTree(tree));
+    return PT_yieldTree(PT_getParseTreeTree(tree));
   }
 
-  ATerror("yieldParseTree: not a parsetree: %t\n", tree);
+  ATerror("PT_yieldParseTree: not a parsetree: %t\n", tree);
   return NULL;
 }

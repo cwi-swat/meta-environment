@@ -107,7 +107,7 @@ static PT_Production implodeProd(PT_Production prod)
 static PT_Tree implodeLexical(PT_Tree tree)
 {
   if (lexical_to_string) {
-    return PT_makeTreeFlatLexical(yieldTree(tree));
+    return PT_makeTreeFlatLexical(PT_yieldTree(tree));
   }
   else { 
     return tree;
@@ -118,7 +118,7 @@ static PT_Tree implodeLayout(PT_Tree tree)
 {
   if (!remove_layout) {
     if (layout_to_string) {
-      return PT_makeTreeFlatLayout(yieldTree(tree));
+      return PT_makeTreeFlatLayout(PT_yieldTree(tree));
     }
     else {
       return tree;
