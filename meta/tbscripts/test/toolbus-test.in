@@ -1,0 +1,45 @@
+#! /bin/sh
+
+# $Id$
+
+toolbus=__bindir__/toolbus
+datadir=__datadir__
+
+tests=0
+failed=0
+
+call_toolbus () {
+  script=$1
+	tests=$(($tests+1))
+  result=`${toolbus} -I${datadir} ${script} 2>&1`
+  if echo $result | grep -iq failed; then
+    echo "Failed: " $script ": " ${result}
+    failed=$(($failed+1))
+  else
+    echo -n .
+  fi
+}
+
+# Test 1. Try to open eqs file that doesn't exist
+rm -f Aap.eqs
+call_toolbus open-eqs-test.tb
+rm -f Aap.eqs
+
+# Test 2. Try to open a eqs file that _does_ exist
+echo "equations" > Aap.eqs
+call_toolbus open-eqs-test.tb
+rm -f Aap.eqs
+
+# Test 3. Try to create a new equations section.
+rm -f Empty.eqs
+call_toolbus new-eqs-test.tb
+rm -f Empty.eqs
+
+echo ""
+
+if [ $failed != 0 ]; then
+	echo "FAILED:" $failed "out of" $tests "tests"
+	exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi
