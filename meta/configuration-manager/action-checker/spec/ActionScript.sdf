@@ -7,23 +7,30 @@ imports basic/Whitespace
 exports
   sorts ActionScript
   context-free syntax
-    "buttons" "(" ActionItemList ")" -> ActionScript {constructor}
+"buttons""("ActionItemList")" -> ActionScript {constructor}
 
   sorts ActionItemList
   context-free syntax
-    "[" {ActionItem ","}* "]" -> ActionItemList {constructor}
+"[" 
+{ActionItem","
+}* 
+"]" -> ActionItemList {constructor}
 
   sorts ActionItem
   context-free syntax
-    "button" "(" String "," DescriptionList "," ActionList ")" -> ActionItem {constructor}
+"button""("String"," 
+DescriptionList"," 
+ActionList")" -> ActionItem {constructor}
 
   sorts DescriptionList
   context-free syntax
-    "[" {Description ","}+ "]" -> DescriptionList {constructor}
+"["{Description ","
+}+"]" -> DescriptionList {constructor}
 
   sorts Description
   context-free syntax
-    "description" "(" UI-Item "," ActionDescription ")" -> Description {constructor}
+"description""("UI-Item"," 
+             ActionDescription")" -> Description {constructor}
 
   sorts UI-Item
   context-free syntax
@@ -38,11 +45,11 @@ exports
   sorts ActionDescription
   context-free syntax
     "click"                     -> ActionDescription {constructor}
-    "menu" "(" MenuItemList ")" -> ActionDescription {constructor}
+    "menu""("MenuItemList")" -> ActionDescription {constructor}
 
   sorts MenuItemList
   context-free syntax
-    "[" {MenuItem ","}+ "]" -> MenuItemList {constructor}
+"["{MenuItem"," }+"]" -> MenuItemList {constructor}
 
   sorts MenuItem
   context-free syntax
@@ -50,7 +57,9 @@ exports
 
   sorts ActionList
   context-free syntax
-    "[" {Action ","}* "]" -> ActionList
+"["
+  {Action","
+}*"]" -> ActionList
 
   sorts Action
   context-free syntax
