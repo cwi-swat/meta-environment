@@ -1,9 +1,8 @@
 package toolbus.process;
 
-import java.util.*;
 import java.util.Stack;
 
-import toolbus.ToolBusException;
+import toolbus.*;
 import toolbus.atom.State;
 
 /**
@@ -11,7 +10,6 @@ import toolbus.atom.State;
  */
 public class Merge implements ProcessExpression, StateElement {
   
-  private static Random rand = new Random();
   private ProcessExpression expansion;
   private ProcessExpression left;
   private ProcessExpression right;
@@ -79,7 +77,7 @@ public class Merge implements ProcessExpression, StateElement {
 
   public boolean execute() throws ToolBusException {
     int l, r;
-    if(rand.nextBoolean()){
+    if(ToolBus.nextBoolean()){
       l = LEFT; r = RIGHT;
     } else {
       l = RIGHT; r = LEFT;

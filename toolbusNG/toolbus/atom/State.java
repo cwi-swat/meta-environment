@@ -5,6 +5,7 @@
 package toolbus.atom;
 import java.util.*;
 
+import toolbus.*;
 import toolbus.ToolBusException;
 import toolbus.process.*;
 import toolbus.process.ProcessInstance;
@@ -13,7 +14,6 @@ import aterm.ATerm;
 
 public class State {
   private Vector elements;
-  private static Random rand = new Random();
 
   public State() {
     elements = new Vector();
@@ -103,7 +103,7 @@ public class State {
     if (size == 0)
       return false;
 
-    for (int index = rand.nextInt(size), nleft = size; nleft > 0; index = (index + 1) % size, nleft--) {
+    for (int index = ToolBus.nextInt(size), nleft = size; nleft > 0; index = (index + 1) % size, nleft--) {
       StateElement a = (StateElement) elements.elementAt(index);
 
       if (a.execute()) {

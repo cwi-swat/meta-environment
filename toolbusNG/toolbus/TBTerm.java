@@ -387,10 +387,12 @@ public class TBTerm {
         return t;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t))
+        if (TBTerm.isVar(t) || TBTerm.isResVar(t)){
           return env.getVar(t);
-        if (TBTerm.isBoolean(t))
+        }
+        if (TBTerm.isBoolean(t)){
           return t;
+        }
         AFun afun = ((ATermAppl) t).getAFun();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
         if (args.length == 0)

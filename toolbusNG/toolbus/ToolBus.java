@@ -3,6 +3,7 @@
  */
 
 package toolbus;
+import java.util.*;
 import java.util.Vector;
 
 import toolbus.process.*;
@@ -10,6 +11,8 @@ import toolbus.process.*;
 import aterm.*;
 
 public class ToolBus {
+  
+  private static Random rand = new Random();
   private ATermFactory factory;
   private Vector processes;
   private Vector procdefs;
@@ -26,6 +29,14 @@ public class ToolBus {
 
   public Vector getProcesses() {
     return processes;
+  }
+  
+  public static int nextInt(int n){
+    return rand.nextInt(n);
+  }
+  
+  public static boolean nextBoolean(){
+    return rand.nextBoolean();
   }
 
   public void addProcessDefinition(ProcessDefinition PD) throws ToolBusException {
