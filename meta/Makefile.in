@@ -68,7 +68,7 @@ install:
 
 distclean:
 	rm -f Makefile Makefile.skel config.cache config.log config.status
-	rm -f install-data-sh install-prog-sh meta
+	rm -f meta
 	@for DIR in $(SUBDIRS);	\
 	do \
 		echo Make $@ in $$DIR; \
