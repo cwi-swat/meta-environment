@@ -1,24 +1,99 @@
 /* $Id$ */
 
-process ProcessEqsTree(Module : str, Tree : term) is
+/*{{{ process ReadEquations(ModuleId: str, Equations: str?) */
+
+process ReadEquations(ModuleId: str, Equations: str?)  is
 let
-  NewTree : term,
-  FileName : str,
-  Path : str
+  Directory: str,
+  ErrorMessage: str,
+  Extension: str,
+  Filename: str
 in
-  if not-equal(Tree, error-tree) then
-    MDB-AddEquationsPosInfo(Module, Tree, NewTree?) .
-    snd-msg(postprocess-semantics-hook(Module, NewTree)) .
-    rec-msg(postprocess-semantics-hook-result(Module, NewTree?)) .
-    snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
-    NewTree := no-tree .
-    rec-msg(eqs-updated)
-  else
-    tau
-  fi
+  snd-msg(ts-get-str-value("module-paths", ModuleId))
+  . rec-msg(ts-value(Directory?))
+  . snd-msg(file-extension-hook(asf))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(io-get-filename(Directory, ModuleId, Extension))
+  . rec-msg(io-filename(Filename?))
+  . snd-msg(io-read-file(Filename))
+  .
+  (
+    rec-msg(io-file-contents(Equations?))
+  +
+    rec-msg(io-error-reading(ErrorMessage?)) 
+    . Equations := ""
+  )
 endlet
 
-process ParseAllEquations(ModName : str) is
+/*}}}  */
+
+process GetEquations(ModuleId: str) is
+let
+  Equations: term,
+  Text: str
+in
+  snd-msg(ts-get-term-value("asf-tree", ModuleId))
+  .
+  (
+    rec-msg(ts-value(Equations?))
+    . snd-msg(equations(ModuleId, Equations))
+  +
+    rec-msg(ts-no-value)
+    . ReadEquations(ModuleId, Text?)
+    . ParseEquationsText(ModuleId, Text)
+    .
+    (
+      rec-msg(parse-equations-ok(ModuleId, Equations?))
+      . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
+      . snd-msg(equations(ModuleId, Equations))
+    +
+      rec-msg(parse-equations-failed(ModuleId))
+      . snd-msg(ts-remove-term-value("asf-tree", ModuleId))
+      . snd-msg(no-equations(ModuleId))
+    )
+  )
+endlet
+
+process ParseEquationsText(ModuleId: str, Text: str) is
+let
+  Nonterminal: term,
+  Pid: int,
+  Table: term
+in
+  GetParseTable(ModuleId, eqs, true, Table?)
+  . snd-msg(get-rules-top-sort)
+  . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
+  . create(ParseEquationsHandler(ModuleId), Pid?)
+  . ParseText(Pid, Text, Table, Nonterminal)
+endlet
+
+process ParseEquationsHandler(ModuleId: str) is
+let
+  Equations: term,
+  ParseError: term,
+  Pid: int,
+  ParseResult: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(parse-tree(Pid, ParseResult?))
+    . MDB-AddEquationsPosInfo(ModuleId, ParseResult, Equations?)
+    . snd-msg(postprocess-semantics-hook(ModuleId, Equations))
+    . rec-msg(postprocess-semantics-hook-result(ModuleId, Equations?))
+    . snd-msg(parse-equations-ok(ModuleId, Equations))
+  +
+    (
+      rec-msg(parse-forest(Pid, ParseResult?, ParseError?))
+    +
+      rec-msg(parse-error(Pid, ParseError?))
+    )
+    . printf("ParseEquationsHandler: %t\n", ParseError)
+    . snd-msg(parse-equations-failed(ModuleId))
+  )
+endlet
+
+process ParseSpecification(ModName : str) is
 let
   ModuleName: str,
   Module: str,
@@ -36,10 +111,12 @@ in
   snd-msg(get-rules-top-sort) .
   rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
   snd-msg(eqs-not-available-for-modules(ModName)) .
-  rec-msg(eqs-needed-for-modules(Modules?)).
+  rec-msg(eqs-needed-for-modules(Modules?))
+  . printf("equations needed for module %s -> %t\n", ModName, Modules)
+  .
   (
    if not-equal(Modules, []) then
-     Module  := first(Modules).
+     Module := first(Modules).
      Modules := next(Modules).
      snd-msg(get-eqs-text(Module)).
      (
@@ -85,85 +162,49 @@ in
   )
 endlet
 
-process GetSpecification is
+process GetSpecification(ModuleId: str) is
 let
-  ModuleName   : str,
-  Equations    : term,
-  AllEquations : term,
-  Modules      : list,
-  NewEquations : list,
-  Imports      : term,
-  Module       : str,
-  Renamings    : term,
-  FormalName   : term,
-  Parameters   : term,
-  ImportTuple  : term,
-  ModuleNames : list,
-  RenamedEquations : list,
-  ImportedModuleName : str,
-  Specification : term
+  CurModule: str,
+  Equations: term,
+  Imports: term,
+  Modules: list,
+  Pid: int,
+  Specification: term
 in
+  ParseSpecification(ModuleId)
+  . snd-msg(all-equations-available(ModuleId))
+  .
   (
-    rec-msg(get-specification(ModuleName?)) .
-    ParseAllEquations(ModuleName) .
-    snd-msg(all-equations-available(ModuleName)) .
-    (
-      rec-msg(equations-available) .
-      NewEquations   := [] .
-      snd-msg(get-all-imported-module-names(ModuleName)) .
-      rec-msg(all-imported-module-names(ModuleNames?)) .
-      snd-msg(add-initial-eqs-module-names-hook(ModuleNames)) .
-      rec-msg(initial-eqs-module-names-added(ModuleNames?)) .
-      GetImportsForRenaming(ModuleName, ModuleNames, Imports?) .
-      if not-equal(ModuleNames, []) then
-        Module  := first(ModuleNames) .
-        ModuleNames := next(ModuleNames) .
-        snd-msg(get-equations-for-module(Module)) .
-        (
-           rec-msg(equations(Equations?)) .
-	   snd-msg(sr-rename-module(Imports, Module, Equations)) .
-	   Equations := no-tree .
-	   rec-msg(sr-renamed-module(RenamedEquations?)) .
-	   NewEquations := join(NewEquations, RenamedEquations) .
-	   RenamedEquations := []
-        +
-	   rec-msg(no-equations)
-        )
-      fi
-      *
-      if equal(ModuleNames,[]) then  
-        Specification := NewEquations .
-	snd-msg(specification(Specification)) .
-	NewEquations := []
-      fi 
-    +
-      rec-msg(equations-incomplete) .
-      snd-msg(specification-incomplete)
-    )
-  )*delta
-endlet
-
-process GetEquations is
-let
-  ModuleName   : str,
-  Equations    : term,
-  AllEquations : term,
-  NewEquations : term
-in
-  (
-    rec-msg(get-all-equations(ModuleName?)) .
-    snd-msg(get-specification(ModuleName)) .
-    (
-      rec-msg(specification(NewEquations?)) .
-      snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
-      NewEquations := [] .
-      rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-      snd-msg(all-equations(AllEquations)) .
-      AllEquations := no-tree
-    +
-      rec-msg(specification-incomplete) .
-      snd-msg(equations-incomplete)
-    )
+    rec-msg(all-equations-available)
+    . snd-msg(get-all-imported-module-names(ModuleId))
+    . rec-msg(all-imported-module-names(Modules?))
+    . snd-msg(add-initial-eqs-module-names-hook(Modules))
+    . rec-msg(initial-eqs-module-names-added(Modules?))
+    . GetImportsForRenaming(ModuleId, Modules, Imports?)
+    . Specification := []
+    .
+    if not-equal(Modules, []) then
+      CurModule := first(Modules)
+      . create(GetEquations(CurModule), Pid?)
+      .
+      (
+	 rec-msg(equations(CurModule, Equations?))
+	 . snd-msg(sr-rename-module(Imports, CurModule, Equations))
+	 . rec-msg(sr-renamed-module(Equations?))
+	 . Specification := join(Specification, Equations)
+      +
+	 rec-msg(no-equations(CurModule))
+      )
+      . Modules := next(Modules)
+    fi
+    *
+    if equal(Modules,[]) then  
+      snd-msg(postprocess-collected-semantics-hook(ModuleId, Specification))
+      . rec-msg(postprocess-collected-semantics-hook-result(ModuleId, Specification?))
+      . snd-msg(specification(Specification))
+    fi 
+  +
+    rec-msg(all-equations-incomplete)
+    . snd-msg(specification-incomplete)
   )
-  * delta
 endlet

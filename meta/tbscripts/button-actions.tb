@@ -993,14 +993,14 @@ in
   . GetParseTable(ModuleName, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
-  . snd-msg(parse-editor(Sid, Table, Nonterminal))
+  . ParseEditor(Sid, Table, Nonterminal)
   .
   (
-    rec-msg(parse-ok(Sid))
+    rec-msg(parse-editor-ok(Sid))
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid, "Mies"))
   +
-    rec-msg(parse-failed(Sid))
+    rec-msg(parse-editor-failed(Sid))
   )
   . snd-note(ui-status(endstat(Id)))
 endlet
@@ -1058,10 +1058,10 @@ in
   . GetParseTable(ModuleId, sdf, true, Table?)
   . snd-msg(syntax-top-sort-hook(sdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
-  . snd-msg(parse-editor(Sid, Table, Nonterminal))
+  . ParseEditor(Sid, Table, Nonterminal)
   .
   (
-    rec-msg(parse-ok(Sid)) .
+    rec-msg(parse-editor-ok(Sid)) .
     snd-msg(se-get-parse-tree(Sid)) .
     rec-msg(se-parse-tree(Sid, Tree?)) .
     snd-msg(unparse(Tree)) .
@@ -1095,7 +1095,7 @@ in
 	errorf("Changing the name of %s is not permitted.",[Modulename])))
     )
   +
-    rec-msg(parse-failed(Sid)) .
+    rec-msg(parse-editor-failed(Sid)) .
     snd-msg(invalidate-sdf-in-db(Modulename))
   )
   . snd-note(ui-status(endstat(Id)))
@@ -1112,15 +1112,13 @@ in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Parsing equations of %s", [ModuleName])))
   . GetText(Sid, Text?)
-  . snd-msg(update-eqs-text-in-db(ModuleName, Text))
-  . rec-msg(eqs-text-updated(ModuleName))
   . GetParseTable(ModuleName, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
-  . snd-msg(parse-editor(Sid, Table, Nonterminal))
+  . ParseEditor(Sid, Table, Nonterminal)
   .
   (
-    rec-msg(parse-ok(Sid))
+    rec-msg(parse-editor-ok(Sid))
     . snd-msg(se-get-parse-tree(Sid))
     . rec-msg(se-parse-tree(Sid, Tree?))
     . snd-msg(postprocess-semantics-hook(ModuleName, Tree))
@@ -1130,7 +1128,7 @@ in
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid, "Parse successful"))
   +
-    rec-msg(parse-failed(Sid))
+    rec-msg(parse-editor-failed(Sid))
   )
   . snd-note(ui-status(endstat(Id)))
 endlet
@@ -1236,22 +1234,25 @@ endlet
 
 process ReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
-  Id          : int,
-  ErrList     : list,
-  Equations   : term
+  Id: int,
+  ErrList: list,
+  Equations: term,
+  Pid: int
 in
   Id := process-id .
   snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  snd-msg(get-all-equations(ModuleName)) .
+  printf("get-all-equations for %s\n", ModuleName) .
+  create(GetSpecification(ModuleName), Pid?)
+  .
   (
-    rec-msg(all-equations(Equations?)) .
+    rec-msg(specification(Equations?)) .
     snd-note(ui-status(endstat(Id))).
     snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
     rec-msg(interpret-term-hook-result(NormalForm?))
   +
-    rec-msg(equations-incomplete) .
+    rec-msg(specification-incomplete) .
     NormalForm := error-tree .
     snd-note(ui-status(endstat(Id))) .
     snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))

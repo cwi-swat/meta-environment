@@ -187,10 +187,6 @@ in
     MDB-DisplayGraph .
     snd-msg(copy-module-done(OldName))
   +
-    rec-msg(eqs-not-available-for-modules(Name?)) .
-    MDB-AllEquationsAvailable(Name, Modulenames?) .
-    snd-msg(eqs-needed-for-modules(Modulenames))
-  +
     rec-msg(get-eqs-text(Name?)).
     snd-msg(ts-get-str-value("asf-text", Name)) .
     (
@@ -287,12 +283,16 @@ in
     rec-msg(ts-all-keys(Modulenames?)) .
     snd-msg(all-module-names(Modulenames))
   + 
+    rec-msg(eqs-not-available-for-modules(Name?)) .
+    MDB-AllEquationsAvailable(Name, Modulenames?) .
+    snd-msg(eqs-needed-for-modules(Modulenames))
+  +
     rec-msg(all-equations-available(Name?)).
     MDB-AllEquationsAvailable(Name, Modulenames?) .
     if equal(Modulenames, []) then
-      snd-msg(equations-available)
+      snd-msg(all-equations-available)
     else
-      snd-msg(equations-incomplete)
+      snd-msg(all-equations-incomplete)
     fi
   +
     rec-msg(get-modules(Modulenames?)) .
@@ -358,10 +358,11 @@ in
     )
   +
     rec-msg(put-term-tree(Filename?, TermTree?))
-    . printf("storing term-tree for: %s\n", Filename)
+    . printf("put-term-tree for: %s\n", Filename)
     . snd-msg(ts-put-term-value("term-tree", Filename, TermTree))
   +
     rec-msg(get-term-tree(Filename?))
+    . printf("get-term-tree for: %s\n", Filename)
     . snd-msg(ts-get-term-value("term-tree", Filename))
     .
     (
@@ -647,13 +648,15 @@ let
   Tree    : term
 in
   MDB-GetAllImportedModulenames(Name, Modulenames?) .
+printf("MDB-GetAllImportedModulenames: %s -> %t\n", Name, Modulenames) .
   Missing := [] .
   if not(equal(Modulenames, [])) then
     Modulename := first(Modulenames) .
     Modulenames := next(Modulenames) .
+printf("MDB-AllEquationsAvailable: %s\n", Modulename) .
     snd-msg(ts-get-str-value("asf-text", Modulename)) . 
     (
-      rec-msg(ts-no-value)
+      rec-msg(ts-no-value) . printf("ts-no-value\n")
     +
       rec-msg(ts-value(Text?)) .
       Text := "" .

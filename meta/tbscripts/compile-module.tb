@@ -1,32 +1,32 @@
-/*
-   $Id$
- */
+/* $Id$ */
 
 process Compile-module is
 let
-  ModuleName    : str,
-  OutputFile    : str,
-  ErrorMsg      : str,
-  Id            : term,
-  Syntax        : term,
-  Equations     : term 
+  Equations: term,
+  ErrorMsg: str,
+  Id: term,
+  ModuleName: str,
+  OutputFile: str,
+  Pid: int,
+  Syntax: term
 in
-    Id := process-id.
+  Id := process-id.
+  (
+    rec-msg(compile-module(ModuleName?)) .
+    snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
+    create(GetSpecification(ModuleName), Pid?)
+    .
     (
-      rec-msg(compile-module(ModuleName?)) .
-      snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
-      snd-msg(get-all-equations(ModuleName)) .
-      (
-        rec-msg(all-equations(Equations?)) .
-	snd-msg(compile-semantics-hook(ModuleName, Equations)).
-	rec-msg(compile-semantics-hook-done(ModuleName))
-      +
-        rec-msg(equations-incomplete) .
-        snd-note(ui-status(statf(Id, "Specification incomplete for %s",
-                                     [ModuleName])))
-      ) .
-      snd-msg(compilation-ready(ModuleName)) .
-      snd-note(ui-status(endstat(Id))) 
-    ) *
-    delta
+      rec-msg(specification(Equations?)) .
+      snd-msg(compile-semantics-hook(ModuleName, Equations)).
+      rec-msg(compile-semantics-hook-done(ModuleName))
+    +
+      rec-msg(specification-incomplete) .
+      snd-note(ui-status(statf(Id, "Specification incomplete for %s",
+				   [ModuleName])))
+    ) .
+    snd-msg(compilation-ready(ModuleName)) .
+    snd-note(ui-status(endstat(Id))) 
+  ) *
+  delta
 endlet

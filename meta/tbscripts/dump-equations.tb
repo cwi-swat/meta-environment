@@ -2,13 +2,14 @@
 
 process DumpEquations is
 let
-  Id : int,
-  ModuleName   : str,
-  Equations    : term,
-  Syntax    : term,
-  Path         : str,
-  FileName : str,
-  ErrorMessage : str
+  Equations: term,
+  ErrorMessage: str,
+  FileName: str,
+  Id: int,
+  ModuleName: str,
+  Path: str,
+  Pid: int,
+  Syntax: term
 in
   Id := process-id .
   (
@@ -21,9 +22,10 @@ in
     snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName]))) .
     snd-msg(pre-preprocess-syntax-hook(ModuleName)) .
     rec-msg(pre-preprocess-syntax-hook-result(ModuleName)) .
-    snd-msg(get-all-equations(ModuleName)) .
+    create(GetSpecification(ModuleName), Pid?)
+    .
     (
-      rec-msg(all-equations(Equations?)) .
+      rec-msg(specification(Equations?)) .
       if equal(FileName, "") then 
         snd-msg(get-path-from-db(ModuleName)) .
         rec-msg(path(Path?)) .
@@ -40,7 +42,7 @@ in
 	snd-note(ui-status(errorf("%s: %s", [FileName, ErrorMessage])))
       )
     +
-      rec-msg(equations-incomplete) .
+      rec-msg(specification-incomplete) .
       snd-note(ui-status(statf(Id, 
                                "Specification incomplete for %s", 
 			       [ModuleName])))

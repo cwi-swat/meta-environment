@@ -287,29 +287,3 @@ in
   . SetModuleImports(ModuleId, Imports)
   . snd-msg(open-syntax-parse-handler-done(Pid))
 endlet
-
-process Open-Equations(ModuleId: str)  is
-let
-  Directory: str,
-  ErrorMessage: str,
-  Extension: str,
-  FileName: str,
-  Text: str,
-  Tree: term
-in
-  snd-msg(ts-get-str-value("module-paths", ModuleId))
-  . rec-msg(ts-value(Directory?))
-  . snd-msg(file-extension-hook(asf))
-  . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Directory, ModuleId, Extension))
-  . rec-msg(io-filename(FileName?))
-  . snd-msg(io-read-file(FileName))
-  .
-  (
-    rec-msg(io-file-contents(Text?))
-    . snd-msg(add-eqs-to-db(ModuleId, text(Text)))
-    . rec-msg(eqs-added)
-  +
-    rec-msg(io-error-reading(ErrorMessage?)) 
-  )
-endlet
