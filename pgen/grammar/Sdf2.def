@@ -1,7 +1,6 @@
-definition 
+ definition 
 
 module Main
-
 imports languages/sdf2/syntax/Sdf2
 
 module languages/sdf2/syntax/Aliases
@@ -58,18 +57,26 @@ exports
   context-free syntax
     Literal                                              -> Symbol      {cons("lit")}
     function-symbol: Literal "(" arguments:{Symbol ","}* ")"
-      "->" result:Symbol Attributes                      -> Production  {avoid, cons("prod-fun")} module languages/sdf2/syntax/Sorts
+      "->" result:Symbol Attributes                      -> Production  {avoid, cons("prod-fun")} module languages/sdf2/syntax/Start-Symbols
+
+imports languages/sdf2/syntax/Kernel
+exports
+  context-free syntax  
+    "start-symbols" Symbols                -> Grammar {cons("kernel-start-symbols")} 
+    "lexical" "start-symbols" Symbols      -> Grammar {cons("lexical-start-symbols")}
+    "context-free" "start-symbols" Symbols -> Grammar {cons("context-free-start-symbols")} module languages/sdf2/syntax/Sorts
 
 imports languages/sdf2/syntax/Kernel
 exports
   sorts Sort
   lexical syntax
     [A-Z]                          -> Sort {cons("one-char")}
-    [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort{cons("more-chars")}
-  context-free syntax  
-    Sort                                    -> Symbol           {cons("sort")}
-    Sort "[[" parameters:{Symbol ","}+ "]]" -> Symbol           {cons("parameterized-sort")}
-    "sorts" Symbols                         -> Grammar          {cons("sorts")} module languages/sdf2/syntax/Character
+    [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort {cons("more-chars")}
+  context-free syntax
+    Sort                                    -> Symbol  {cons("sort")}
+    Sort "[[" parameters:{Symbol ","}+ "]]" -> Symbol  {cons("parameterized-sort")}
+
+    "sorts" Symbols                         -> Grammar {cons("sorts")} module languages/sdf2/syntax/Character
 
 imports basic/Comments
 
@@ -351,10 +358,12 @@ imports languages/sdf2/syntax/Kernel
         languages/sdf2/syntax/Priority
         languages/sdf2/syntax/CC
         languages/sdf2/syntax/Sorts
+        languages/sdf2/syntax/Start-Symbols
         languages/sdf2/syntax/Literals
         languages/sdf2/syntax/Labels
         languages/sdf2/syntax/Restrictions
         languages/sdf2/syntax/Aliases
+
 exports
   sorts SDF
   context-free syntax

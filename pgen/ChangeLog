@@ -1,5 +1,10 @@
 $Id$
 
+2003/12/11 (markvdb@cwi.nl)
+ * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
+ * Adapted the Sdf2-Normalization accordingly.
+ * Both sorts and start-symbols are now used as start symbols.
+
 Mon Dec  8 14:39:46 CET 2003 <jong@cwi.nl>
  * improved "deprecated-symbol" warning for tuple syntax
  * sdf-checker/spec/*.asf: upgraded condition syntax
