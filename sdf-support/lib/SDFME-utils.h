@@ -54,6 +54,8 @@ SDF_Layout SDF_makeLayoutEmpty();
 
 SDF_Import SDFmakeImport(char *moduleName);
 
-PT_Symbol SDFsymbol2PtSymbol(SDF_Symbol sdfSymbol);
+PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction, 
+					  SDF_ModuleName sdfModuleName);
+PT_Symbol SDFSymbolToPtSymbol(SDF_Symbol symbol);
 
 #endif /* _SDF_UTILS_H */
