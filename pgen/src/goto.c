@@ -8,6 +8,7 @@
 #include "goto.h"
 #include "item.h"
 #include "priorities.h"
+#include "follow.h"
 
 #define MAX_GOTOS     32000
 
@@ -24,13 +25,14 @@ extern ATermTable state_gotos_pairs;
 extern ATermTable state_actions_pairs;
 extern ATermTable item_memo_table;
 
+extern ATermTable symbol_lookaheads_table;
+extern ATermTable nr_spec_attr_pairs;
+
 int max_gotos;
 
 extern ATerm initial_state;
 
 extern ATerm update_states(ATermList vertex);
-extern ATermList closure(ATermList items);
-extern void reductions(ATermList vertex);
 
 static ATerm goto_states[MAX_STATES] = { NULL };
 static ATerm goto_classes[MAX_STATES] = { NULL };
@@ -39,25 +41,96 @@ static CC_Class  *action_classes[MAX_STATES] = { NULL };
 static ATermList  action_actions[MAX_STATES] = { NULL };
 static int nr_actions = 0;
 
-/*{{{  ATermList insert_item(ATermList items, Item item) */
+/*{{{  static void restrict(CC_Class *cc, restrictions, len, ATermInt prodnr) */
 
-ATermList insert_item(ATermList items, Item item)
+static void restrict(CC_Class *cc, ATermList restrictions,
+		     ATermInt len, ATermInt prodnr)
 {
-  ATerm it;
+  ATerm reduce, restriction, look_cc, las;
+  ATermList reducelist;
+  ATermInt special_attr;
 
-  assert(IT_isValidItem(item));
-
-  it = IT_ItemToTerm(item);
-
-  if (ATindexOf(items, it, 0) >= 0) {
-    return items;
+  if (ATisEmpty(restrictions)) {
+    special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
+    reduce = ATmake("reduce(<term>,<term>,<term>)", len, prodnr, special_attr);
+    reducelist = ATmakeList1(reduce);
+    action_insert(cc, reducelist);
   }
   else {
-    return ATinsert(items, it);
+    restriction = ATgetFirst(restrictions);
+    restrictions = ATgetNext(restrictions);
+    if(IS_CHARCLASS(restriction)) {
+      CC_Class result_cc, *restrict_cc = CC_ClassFromTerm(restriction);
+      if (CC_difference(cc, restrict_cc, &result_cc)) {
+	restrict(&result_cc, restrictions, len, prodnr);
+      }
+      CC_free(restrict_cc);
+    }
+    else if(ATmatch(restriction, "look(<term>,<term>)", &look_cc, &las)) {
+      if (IS_CHARCLASS(look_cc)) {
+        CC_Class intersection, *restrict_cc = CC_ClassFromTerm(look_cc);
+        special_attr = (ATermInt)ATtableGet(nr_spec_attr_pairs, (ATerm)prodnr);
+        reduce = ATmake("reduce(<term>,<term>,<term>,<term>)",
+                        len, prodnr, special_attr, las);
+        reducelist = ATmakeList1(reduce);
+
+	if (CC_intersection(cc, restrict_cc, &intersection)) {
+	  action_insert(&intersection, reducelist);
+	}
+
+	if (CC_difference(cc, restrict_cc, restrict_cc)) {
+	  restrict(restrict_cc, restrictions, len, prodnr);
+	}
+
+	CC_free(restrict_cc);
+      }
+    }
   }
 }
 
 /*}}}  */
+/*{{{  static void reductions(ItemSet vertex) */
+
+static void reductions(ItemSet vertex)
+{
+  int len, iptr, prodnr;
+  ATerm prod, symbol;
+  ATermList symbols, las;
+  CC_Class *charClass;
+  CC_Set set;
+  ItemSetIterator iter;
+
+  CC_initSet(&set);
+  ITS_iterator(vertex, &iter);
+  while (ITS_hasNext(&iter)) {
+    Item item = ITS_next(&iter);
+
+    assert(IT_isValidItem(item));
+
+    prod = IT_getProd(item);
+    prodnr = IT_getProdNr(item);
+    iptr = IT_getDotPosition(item);
+
+    symbols = GET_LIST_ARG(prod, 0);
+    symbol = GET_ARG(prod, 1);
+    len = ATgetLength(symbols);
+
+    if(iptr == len) {
+      las = (ATermList)ATtableGet(symbol_lookaheads_table, symbol);
+      if(!las) {
+	las = ATempty;
+      }
+
+      charClass = follow_table[prodnr];
+      if (charClass) {
+	restrict(charClass, las, ATmakeInt(len), ATmakeInt(prodnr));
+      }
+    }
+  }
+}
+
+/*}}}  */
+
 /*{{{  void action_insert(CC_Class *cc, ATermList actions)  */
 
 void action_insert(CC_Class *origcc, ATermList actions) 
@@ -129,26 +202,24 @@ ATermList init()
 }
 
 /*}}}  */
-/*{{{  ATermList shift_prod(ATermList itemset,ATerm label) */
+/*{{{  ATermList shift_prod(ItemSet items, ATerm label) */
 
-ATermList shift_prod(Item *items, ATerm *symbols, ATerm label)
+ATermList shift_prod(ItemSet items, ATerm label)
 {
   Item item, newitem;
   ATerm symbol;
-  ATerm *cur;
   ATermList newvertex = ATempty;
+  ItemSetIterator iter;
 
   symbol = GET_ARG(nr_prod_table[ATgetInt((ATermInt)label)], 1);
 
-  for (cur=symbols; *cur; cur++) {
-    if (ATisEqual(symbol, *cur)) {
-      int index = cur-symbols;
-      item = items[index];
-    	
-      newitem = IT_shiftDot(item);
-      if (newitem != NULL && !conflicts(item, label)) {
-	newvertex = insert_item(newvertex,newitem);
-      }
+  ITS_iteratorPerDotSym(items, symbol, &iter);
+  while (ITS_hasNext(&iter)) {
+    item = ITS_next(&iter);
+    assert(ATisEqual(symbol, IT_getDotSymbol(item)));
+    newitem = IT_shiftDot(item);
+    if (newitem != NO_ITEM && !conflicts(item, label)) {
+      newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
     }
   }
 
@@ -156,24 +227,27 @@ ATermList shift_prod(Item *items, ATerm *symbols, ATerm label)
 }
 
 /*}}}  */
-/*{{{  static ATermList shift_charclass(Item *items, ATerm *symbols, CC_Class *cc) */
+/*{{{  static ATermList shift_charclass(ItemSet items, CC_Class *cc) */
 
-static ATermList shift_charclass(Item *items, ATerm *symbols, CC_Class *cc)
+static ATermList shift_charclass(ItemSet items, CC_Class *cc)
 {
-  Item item, newitem;
-  ATerm *cur;
+  Item newitem, item;
+  ATerm symbol;
   ATermList newvertex = ATempty;
   CC_Class *symbol_class;
+  ItemSetIterator iter;
 
-  for (cur=symbols; *cur; cur++) {
-    symbol_class = CC_ClassFromTerm(*cur);
+  ITS_iterator(items, &iter);
+
+  while (ITS_hasNext(&iter)) {
+    item = ITS_next(&iter);
+    symbol = IT_getDotSymbol(item);
+    symbol_class = CC_ClassFromTerm(symbol);
 
     if (CC_isSubset(cc, symbol_class)) {
-      int index = cur-symbols;
-      item = items[index];
       newitem = IT_shiftDot(item);
-      if (newitem != NULL) {
-	newvertex = insert_item(newvertex, newitem);
+      if (newitem != NO_ITEM) {
+	newvertex = ATinsert(newvertex, IT_ItemToTerm(newitem));
       }
     }
     CC_free(symbol_class);
@@ -182,62 +256,26 @@ static ATermList shift_charclass(Item *items, ATerm *symbols, CC_Class *cc)
 }
 
 /*}}}  */
-/*{{{  ATermList gotos(ATermList vertex, ATermList prods, CC_Set *chars) */
+/*{{{  ATermList gotos(ItemSet vertex, ATermList prods, CC_Set *chars) */
 
-ATermList gotos(ATermList vertex, ATermList prods, CC_Set *chars)
+ATermList gotos(ItemSet vertex, ATermList prods, CC_Set *chars)
 {
   ATerm label, newstate, gotoelem; 
-  ATermList newvertex, l, gotoElems;
-  Item item;
-
-/* Build some arrays so that we don't have to loop over vertex every time,
-   but instead walk through these arrays (which is significantly faster) */
-  static Item *items = NULL;
-  static ATerm *symbols = NULL;
-  static int max_items = 0;
-  int i, idx, nr_items;
+  ATermList newvertex, gotoElems;
+  int idx;
 
   gotoElems = ATempty;
-  nr_items = ATgetLength(vertex)+1;
 
-  IF_STATISTICS(nr_of_items += nr_items);
-  IF_STATISTICS(if (nr_items > max_nr_items) {max_nr_items = nr_items;});
+  IF_STATISTICS(nr_of_items += ITS_size(vertex));
+  IF_STATISTICS(if (ITS_size(vertex) > max_nr_items)
+		{max_nr_items = ITS_size(vertex);});
 
-  if (nr_items > max_items) {
-    if (items) {
-      ATunprotectArray((ATerm *)items);
-      ATunprotectArray(symbols);
-    }
-    items = (Item *)realloc(items, sizeof(ATerm)*nr_items);
-    symbols = (ATerm *)realloc(symbols, sizeof(ATerm)*nr_items);
-    if (!items || !symbols) {
-      ATerror("out of memory!\n");
-    }
-    memset(items, 0, sizeof(ATerm)*nr_items);
-    ATprotectArray((ATerm *)items, nr_items);
-    memset(symbols, 0, sizeof(ATerm)*nr_items);
-    ATprotectArray(symbols, nr_items);
-    max_items = nr_items;
-  }
-
-  l = vertex;
-  nr_items--;
-  for(i=0; i<nr_items; i++) {
-    item = IT_ItemFromTerm(ATgetFirst(l));
-    items[i] = item;
-    symbols[i] = IT_getDotSymbol(item);
-    l = ATgetNext(l);
-  }
-  /* Add sentinel, we stop when NULL is reached */
-  items[i] = NULL;
-  symbols[i] = NULL;
-	
   while(!ATisEmpty(prods)) {
     label = ATgetFirst(prods);
     prods = ATgetNext(prods);
 
     assert(ATgetType(label) == AT_INT);
-    newvertex = shift_prod(items, symbols, label);
+    newvertex = shift_prod(vertex, label);
     newstate = update_states(newvertex);
 
     gotoelem = (ATerm)ATmakeAppl2(afun_goto, (ATerm)ATmakeList1(label), newstate);
@@ -248,7 +286,7 @@ ATermList gotos(ATermList vertex, ATermList prods, CC_Set *chars)
   /*ATwarning("traversing set: %t\n", CC_ClassToTerm(chars));*/
   for (idx=CC_getSetSize(chars)-1; idx>=0; idx--) {
     CC_Class *cc = CC_getFromSet(chars, idx);
-    newvertex = shift_charclass(items, symbols, cc);
+    newvertex = shift_charclass(vertex, cc);
     newstate = update_states(newvertex);
     goto_states[idx] = newstate;
     goto_classes[idx] = CC_ClassToTerm(cc);
@@ -282,9 +320,9 @@ static void shifts(CC_Set *chars)
 
 /*}}}  */
 
-/*{{{  void actions(ATermList kernel, ATermList vertex, CC_Set *chars, ATermList gotos)  */
+/*{{{  void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos)  */
 
-void actions(ATermList kernel, ATermList vertex, CC_Set *chars, ATermList gotos) 
+void actions(ATermList kernel, ItemSet vertex, CC_Set *chars, ATermList gotos) 
 {
   ATermList actionset = ATempty;
   int idx;
@@ -317,28 +355,33 @@ void actions(ATermList kernel, ATermList vertex, CC_Set *chars, ATermList gotos)
 
 void vertex(int statenr)
 {
-  ATermList vertex, newvertex, gotoset;
+  ATermList vertex_kernel;
+  ItemSet vertex_closure;
+  ATermList gotoset;
   ATermList prods;
   CC_Set chars;
 
-  vertex = (ATermList)ATtableGet(nr_state_pairs,(ATerm)ATmakeInt(statenr));
-  if (vertex) {
-    newvertex = closure(vertex);
+  vertex_kernel = (ATermList)ATtableGet(nr_state_pairs, (ATerm)ATmakeInt(statenr));
+  if (vertex_kernel) {
+    vertex_closure = ITS_create();
+    closure(vertex_kernel, vertex_closure);
+    /*ATwarning("closure = %t\n", vertex_closure);*/
 
     CC_initSet(&chars);
-    outgoing(newvertex, &prods, &chars);
+    outgoing(vertex_closure, &prods, &chars);
     /*
     fprintf(stderr, "\nchars = ");
     CC_writeSetToFile(stderr, &chars);
     */
     CC_partitionSet(&chars);
 
-    gotoset = gotos(newvertex, prods, &chars);
+    gotoset = gotos(vertex_closure, prods, &chars);
     if (ATgetLength(gotoset) + CC_getSetSize(&chars)> max_gotos) {
       max_gotos = ATgetLength(gotoset) + CC_getSetSize(&chars);
     }
 
-    actions(vertex, newvertex, &chars, gotoset);
+    actions(vertex_kernel, vertex_closure, &chars, gotoset);
+    ITS_destroy(vertex_closure);
   }
 }
 

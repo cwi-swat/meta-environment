@@ -1,6 +1,7 @@
 #include "ksdf2table.h"
 #include "characters.h"
 #include "item.h"
+#include "itemset.h"
 #include "goto.h"
 #include "priorities.h"
 
@@ -8,7 +9,7 @@
 
 /*{{{  static ATermList pred(Item item, ATermList items) */
 
-static ATermList pred(Item item, ATermList items)
+static ATermList predict(Item item, ATermList items)
 {
   ATerm prodnr;
   ATerm dotsymbol;
@@ -36,50 +37,41 @@ static ATermList pred(Item item, ATermList items)
 }
 
 /*}}}  */
-/*{{{  static ATermList closure_pred(ATermList processed, ATermList items) */
+/*{{{  void closure(ATermList items, ItemSet processed) */
 
-static ATermList closure_pred(ATermList processed, ATermList items)
+void closure(ATermList items, ItemSet processed)
 {
-  int idx;
   ATerm it;
+  Item item;
 
   while (!ATisEmpty(items)) {
     it = ATgetFirst(items);
+    item = IT_ItemFromTerm(it);
     items = ATgetNext(items);
-    idx = ATindexOf(processed, it, 0);
-    if (idx < 0) {
-      Item item = IT_ItemFromTerm(it);
-      items = pred(item, items);
-      processed = insert_item(processed, item);
+    if (!ITS_contains(processed, item)) {
+      items = predict(item, items);
+      ITS_add(processed, item);
     }
   }
-  return processed;
 }
 
 /*}}}  */
-/*{{{  ATermList closure() */
+/*{{{  void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars) */
 
-ATermList closure(ATermList items)
-{
-  return closure_pred(ATempty,items);
-}
-
-/*}}}  */
-/*{{{  void outgoing(ATermList itemset, ATermList *predprods, CC_Set *predchars) */
-
-void outgoing(ATermList itemset, ATermList *predprods, CC_Set *predchars)
+void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars)
 {
   Item item;
   ATerm symbol;
+  ItemSetIterator iter;
 
-  /*ATwarning("itemset = %t\n", itemset);*/
   *predprods = ATempty;
-  while (!ATisEmpty(itemset)) {
-    item = IT_ItemFromTerm(ATgetFirst(itemset));
-    itemset = ATgetNext(itemset);
+
+  ITS_iterator(itemset, &iter);
+  while (ITS_hasNext(&iter)) {
+    item = ITS_next(&iter);
  
     if (IT_getDotPosition(item) == 0) {
-      *predprods = ATaddElement(*predprods,(ATerm)ATmakeInt(IT_getProdNr(item)));
+      *predprods = ATaddElement(*predprods, (ATerm)ATmakeInt(IT_getProdNr(item)));
     }
 
     symbol = IT_getDotSymbol(item);

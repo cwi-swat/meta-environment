@@ -63,6 +63,9 @@ extern ATermSOS *state_sos;
 extern ATermIndexedSet priority_table;
 extern ATermTable rhs_prods_pairs;
 extern ATerm *nr_prod_table;
+extern ATerm **symbol_table;
+extern int max_nr_lhs_members;
+extern int MAX_PROD;
 
 /*}}}  */
 ATerm generate_parse_table(PT_ParseTree g);

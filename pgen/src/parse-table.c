@@ -7,8 +7,6 @@ extern ATermTable nr_state_pairs;
 
 extern int nr_of_states;
 
-extern ATermList ATunion(ATermList l1, ATermList l2);
-
 /*{{{  ATerm update_states(ATermList vertex) */
 
 ATerm update_states(ATermList vertex)

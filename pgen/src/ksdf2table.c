@@ -77,6 +77,7 @@ ATermIndexedSet priority_table;
 ATermTable rhs_prods_pairs;
 ATermTable first_table;
 ATerm *nr_prod_table;
+ATerm **symbol_table;
 
 /* Datastructures to store the generated "parse table". 
  * The parse table is generated based on a LR automaton.
@@ -154,6 +155,16 @@ void init_table_gen()
 
 void destroy_table_gen()
 {
+  int i;
+
+  free(nr_prod_table);
+  for (i=0; i<MAX_PROD; i++) {
+    if (symbol_table[i]) {
+      free(symbol_table[i]);
+    }
+  }
+  free(symbol_table);
+
   ATtableDestroy(prod_nr_pairs);
   ATtableDestroy(nr_spec_attr_pairs);
   ATindexedSetDestroy(priority_table);
@@ -200,12 +211,14 @@ ATerm process_productions(SDF_ProductionList prods)
 {
   ATerm flatprod, aint, labelentry;
   ATermList labelentries = ATempty;
-  int ip, cnt, nr_of_members, nr_of_kernel_prods;
+  int cnt, nr_of_members, nr_of_kernel_prods;
   SDF_Production prod, newProd;
   PT_Production ptProd;
   ATbool isnew;
   int idx, max_idx;
   ATermIndexedSet unique_prods;
+  int arg, nr_args;
+  ATermList args;
 
   SDF_ProductionList localProds = prods;
   unique_prods = ATindexedSetCreate(1024, 75);
@@ -232,14 +245,11 @@ ATerm process_productions(SDF_ProductionList prods)
   MAX_PROD = cnt;
   assert(cnt-MIN_PROD == (max_idx+1));
 
-  nr_prod_table = (ATerm *)malloc(sizeof(ATerm)*MAX_PROD);
+  nr_prod_table = (ATerm *)calloc(MAX_PROD, sizeof(ATerm));
+  symbol_table  = (ATerm **)calloc(MAX_PROD, sizeof(ATerm *));
 
-  if (!nr_prod_table) {
+  if (!nr_prod_table || !symbol_table) {
     ATerror("out of memory!\n");
-  }
-
-  for (ip=MIN_PROD; ip<MAX_PROD; ip++) {
-    nr_prod_table[ip] = NULL;
   }
 
   ATprotectArray((ATerm *)nr_prod_table+MIN_PROD, MAX_PROD-MIN_PROD);
@@ -264,6 +274,18 @@ ATerm process_productions(SDF_ProductionList prods)
     aint = (ATerm)ATmakeInt(cnt);
     ATtablePut(prod_nr_pairs, SDF_makeTermFromProduction(newProd), aint);
     nr_prod_table[cnt] = flatprod;
+    args = (ATermList)ATgetArgument((ATermAppl)flatprod, 0);
+    nr_args = ATgetLength(args)+1;
+    symbol_table[cnt] = (ATerm *)malloc(nr_args*sizeof(ATerm));
+    if (symbol_table[cnt] == NULL) {
+      ATerror("cannot allocate symboltable (%d)\n", nr_args);
+    }
+    arg = 0;
+    while (!ATisEmpty(args)) {
+      symbol_table[cnt][arg++] = ATgetFirst(args);
+      args = ATgetNext(args);
+    }
+    symbol_table[cnt][arg++] = empty_set;
 
     if (SDF_hasRejectAttribute(prod)) {
       ATtablePut(nr_spec_attr_pairs, aint, (ATerm)ATmakeInt(1));
