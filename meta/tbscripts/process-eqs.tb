@@ -60,7 +60,6 @@ process GetAsfModule(ModuleId: str) is
 let
   Error: term,
   Equations: term,
-  Filename: str,
   Summary: term,
   Text: str
 in
@@ -89,15 +88,14 @@ in
         . snd-msg(equations(ModuleId, Equations))
       +
         rec-msg(parse-equations-failed(ModuleId, Error?))
-        . ParseErrorToSummary(Error, Filename, Summary?)
+        . ParseErrorToSummary(Error, ModuleId, Summary?)
         . snd-msg(error-in-equations(ModuleId, Summary))
       )
     fi
   )
 endlet
 
-process GetImportsForRenaming(ModuleName: str, ModuleNames: list,
-                              Imports: term?) is
+process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) is
 let
   Modules: list
 in

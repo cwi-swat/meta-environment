@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Oct 8 09:05:27 CEST 2004 <fagidiot@daimi.au.dk>
+ * tbscripts/button-actions.tb:
+   - process GetAsfModule, removed locale variable filename, which was
+   uninitialized, and changed the call to ParseErrorToSummary to use the
+   formal argument ModuleId as parameter.
+	
 Wed Sep 1 14:20:06 CEST 2004 <fagidiot@daimi.au.dk>
  * tbscripts/button-actions.tb:
    - process LocateFile, added
