@@ -7,7 +7,8 @@ pkgdata_DATA    = Rscript.trm.tbl Rstore.trm.tbl
 EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
 		  $(wildcard *.tbl) \
-		  $(wildcard *.eqs)
+		  $(wildcard *.eqs) \
+		  meta.buttons
 
 RscriptCalculator_SOURCES	= RscriptCalculator.c
 

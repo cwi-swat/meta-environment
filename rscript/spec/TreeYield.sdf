@@ -13,12 +13,19 @@ hiddens
 
 context-free syntax
 
-yield(Tree, String)     -> String {traversal(accu,bottom-up,continue)}
-decimal-to-char(NatCon) -> String {memo}
+yield(Tree, Bytes)     -> Bytes {traversal(accu,bottom-up,continue)}
+decimal-to-char(NatCon) -> Bytes {memo}
+reverse(Bytes) -> Bytes {memo}
+do-reverse(Bytes) -> Bytes
+
+context-free start-symbols
+  Bytes
 
 variables
 
 "N"[0-9\']* -> NatCon
 "String"[0-9\']* -> String
 "Char*"[0-9\']* -> CHAR*
+"Char"[0-9\']* -> CHAR
 "Tree"[0-9\']* -> Tree
+"Bytes"[0-9\']* -> Bytes
