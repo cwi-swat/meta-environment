@@ -1275,10 +1275,12 @@ static void atomic_steps(void)
 	    /* Remove current  process if it can only do a delta */
 	    if(Previous){
 	      next(Previous) = next(Processes);
+	      Processes = AllProcesses;
 	    } else {
-	      if(next(AllProcesses))
+	      if(next(AllProcesses)) {
 		AllProcesses = next(AllProcesses);
-	      else {
+		Processes = AllProcesses;
+	      } else {
 		extern void bus_shutdown(term *);
 		/* shutdown when removing the last process */
 		bus_shutdown(NULL);
