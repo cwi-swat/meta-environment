@@ -15,7 +15,7 @@ SE_Area createArea(PT_ParseTree parse_tree, SE_Path path)
 {
   int start, length;
 
-  start = calcParseTreeStart(parse_tree, path) + 1;
+  start = calcParseTreeStart(parse_tree, path);
 
   if (SE_isPathRoot(path)) {
     length = PT_getParseTreeLengthAnno(parse_tree);

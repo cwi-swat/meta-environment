@@ -289,7 +289,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
   ATerm focusTerm = TE_getActionFocus(edAction);
   SE_Focus focus = SE_FocusFromTerm(focusTerm);
   SE_Area area = SE_getFocusArea(focus);
-  int start = SE_getAreaStart(area);
+  int start = SE_getAreaStart(area)+1;
   int length = SE_getAreaLength(area);
   char *s = SE_getFocusSort(focus);
   char buf[BUFSIZ];
@@ -330,7 +330,7 @@ static void setCursorAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
   ERR_Area area = ERR_getLocationArea(location);
 
-  int start = ERR_getAreaOffset(area);
+  int start = ERR_getAreaOffset(area)+1;
   int length = ERR_getAreaLength(area);
   char buf[BUFSIZ];
 
@@ -383,7 +383,7 @@ static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
   SE_Focus focus = SE_FocusFromTerm(focusTerm);
   SE_Area area = SE_getFocusArea(focus);
 
-  gotoCursorAtLocation(write_to_editor_fd, SE_getAreaStart(area));
+  gotoCursorAtLocation(write_to_editor_fd, SE_getAreaStart(area)+1);
 }
 
 /*}}}  */
@@ -395,7 +395,7 @@ static void setFocusAtErrorLocation(int write_to_editor_fd, TE_Action edAction)
   ERR_Location location = ERR_LocationFromTerm(locationTerm);
   ERR_Area area = ERR_getLocationArea(location);
 
-  gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area));
+  gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area)+1);
 }
 
 /*}}}  */
