@@ -156,7 +156,7 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
 {
   SE_Steps steps = SE_makeStepsEmpty();
 
-  if (PT_hasTreeArgs(tree)) {
+  if (PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     int nr_args = PT_getArgsLength(args);
     int step;
