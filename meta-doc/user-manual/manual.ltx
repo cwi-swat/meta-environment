@@ -291,11 +291,56 @@ You can find a brief sketch in Section~\ref{SEC:TechnologyandArchitecture}.
 Section~\ref{SEC:Components} briefly describes the most important components.
 \end{itemize}
 
+\subsection{Dowloading the \ASmetaenv}
+
+You can download the \ASmetaenv\ from the following location:
+\begin{verbatim}
+   http://www.cwi.nl/projects/MetaEnv/
+\end{verbatim}
+
+\noindent It provides links to the software as well as to related documents.
+
 \subsection{Further Reading}
 
-(** to be written **)
+There are many publications about the \ASmetaenv\ itself,
+about the implementation techniques used, and about applications.
+We give here a brief selection.
 
-%%\cite{DHK96}
+\begin{description}
+
+\item{Books:} \cite{BHK89}, \cite{DHK96}.
+
+\item{Overviews:}  \cite{HKKL85}, \cite{Kli93}, \cite{B*01}.
+
+\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90}, \cite{RK91}, \cite{R92}, \cite{Vis97}.
+
+\item{SDF:} \cite{HHKR89}, \cite{Vis97}.
+
+\item{ToolBus}: ~\cite{BK98}.
+
+\item{Implementation:} \cite{B*97}.
+
+\item{Compilation:} \cite{BKO99}, \cite{vdBHK00}.
+
+\item{Rewriting with layout:} \cite{vdBV00}.
+
+\item{ATerms:} \cite{BJKO00}.
+
+\item{Applications:} \cite{BDKKM96},\cite{BS00}, \cite{BR00}.
+
+\item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
+
+\item{Generic debugging}: 
+
+\item {General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
+
+\item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
+\cite{MEmanual}.
+
+\end{description}
+
+
+
 
 \newpage
 \section{Starting the System}
@@ -4284,20 +4329,37 @@ Given a parse table {\tt M.trm.tbl} for module {\tt M},
 terms can be parsed by using the command {\tt sglr}:
 
 \begin{verbatim}
-   sglr -p M.trm.tbl -i term.txt -o term.tree
+   sglr -m -p M.trm.tbl -i term.txt -o term.tree
 \end{verbatim}
 or, alternatively, via
 
 \begin{verbatim}
-   sglr -p M.trm.tbl < term.txt > term.tree
+   sglr -m -p M.trm.tbl < term.txt > term.tree
 \end{verbatim}
 
 The output of {\tt sglr} is either an error message (if the input
-contains a syntax error) or a parse tree in a format called AsFixMe.
-For further information see the manual page for {\tt sglr}.
+contains a syntax error) or a parse tree in a format called AsFixMe.\
+Note that {\tt sglr} can generate parse trees in several formats:
 
-{\bf Temporary Note}: Add the extra option {\tt -1} if this term is to be rewritten
-using compiled specification, see Section \ref{SEC:reducingofterms}.
+\begin{itemize}
+\item Use the flag {\tt -1} to generate AsFix1: this is an old parse
+tree format that is in the process of being replaced.  \emph{Be aware that
+compiled specifications currently still use this format: add the
+option {\tt -1} if the term is to be rewritten using a compiled
+specification (also see Section \ref{SEC:reducingofterms})}.
+
+\item Use the flag {\tt -2} to generate AsFix2: this is the format
+introduced for the latest version of \sdf.  This format is only in use
+by some tools outside the \ASmetaenv.  AsFix2 is very verbose: even
+lexical tokens and layout are represented as trees.  For efficiency
+reasons, the \ASmetaenv\ uses the more concise format AsFixMe.
+
+\item Use the flag {\tt -m} to generate AsFixMe: this is the preferred
+parse tree format that is becoming the standard inside the \ASmetaenv.
+
+\end{itemize}
+
+For further information see the manual page for {\tt sglr}.
 
 \subsection{Rewriting a term using the evaluator}
 \label{SEC:interpretationgofterms}
@@ -4372,7 +4434,7 @@ The unparsing of parsed/normalized terms is currently quite primitive.
 It is achieved as follows:
 
 \begin{verbatim}
-   asource < reduct.tree > reduct.txt
+   unparsePT < reduct.tree > reduct.txt
 \end{verbatim}
 
 \subsection{Applying a Function to a Term}
@@ -4435,13 +4497,12 @@ The result is the parse tree {\tt term.tree}
 
 \item Reduce {\tt term.tree}:
 \begin{verbatim}
-  asfe  asfe -e Pico-Booleans.eqs  <term.tree >reduct.tree   
+  asfe -e Pico-Booleans.eqs  <term.tree >reduct.tree   
 \end{verbatim}
-(** Geeft foutmelding {\tt not a sort: layout} **).
 
 \item Unparse {\tt reduct.tree}:
 \begin{verbatim}
-  asource <reduct.tree >reduct.txt
+  unparsePT <reduct.tree >reduct.txt
 \end{verbatim}
 
 The result (in textual form) of reducing {\tt term.txt} is now {\tt reduct.txt}
