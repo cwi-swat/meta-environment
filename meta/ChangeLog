@@ -1,4 +1,11 @@
 # $Id$
+
+2001/11/14 (jong@cwi.nl)
+ * header weeded from tbscripts/status-display.tb
+
+2001/11/13 (jurgenv@cwi.nl)
+ * Improved gui behaviour of non-existing sdf modules.
+
 2001/11/09 (markvdb@cwi.nl)
  * Activate and improved the module name renaming in graph-browser.
  * Apified module-db code.
