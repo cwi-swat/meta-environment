@@ -135,6 +135,7 @@ set tb_glob(nrow)    1;   # current number of rows
 set tb_glob(ybase) 160;
 set tb_glob(tbase) 230;   # y coordinate of connection line for tool communication
 set tb_glob(ntool)   0;   # current number of tools connected
+set tb_glob(trunc_value) 64; # maximum length of value in display
 
 proc drawBus {c} {
      global tb_glob
@@ -480,7 +481,7 @@ proc addVar {index var} {
         frame $f
         set svar [stripVar $var $proc_names($index)]
         label $f.name -text $svar
-        label $f.val -textvariable proc_vals($index,$var) -relief sunken -anchor w
+        label $f.val -textvariable proc_vals($index,$var) -relief sunken -anchor w 
       }
      pack  $f.name $f.val -side left -anchor w
      pack $f -side top -anchor w
@@ -502,13 +503,23 @@ proc trace_update {index var val} {
   global proc_vars proc_vals
 
   set var [unquestVar $var]
-  set proc_vals($index,$var) $val
+  set proc_vals($index,$var) [limit_size $val]
   if { [info exists proc_vars($index)] } {
      if { [lsearch $proc_vars($index) $var] < 0 } {
         lappend proc_vars($index) $var
         addVar $index $var
      }
    }
+}
+
+proc limit_size {val} {
+  global tb_glob
+
+  if [expr [string length $val] > $tb_glob(trunc_value)] {
+    return "[string map {\n \ } [string range $val 0 $maxlength]]..."
+  }
+
+  return $val
 }
 
 proc mk_tool {c name index} {
