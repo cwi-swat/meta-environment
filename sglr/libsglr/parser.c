@@ -986,33 +986,6 @@ static ERR_Location SG_CurrentPosInfo(char *fileName)
 {
   ERR_Area area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
   return ERR_makeLocationLocation(fileName, area);
-
-/*
-  return
-  ATmakeList4(
-              (ATerm) ATmakeAppl1(SG_Character_AFun,
-                                  (ATerm) SG_GetATint(current_token, 0)),
-              (ATerm) ATmakeAppl1(SG_Line_AFun,
-                                  (ATerm) SG_GetATint(line, 0)),
-              (ATerm) ATmakeAppl1(SG_Col_AFun,
-                                  (ATerm) SG_GetATint(col, 0)),
-              (ATerm) ATmakeAppl1(SG_Offset_AFun,
-                                  (ATerm) SG_GetATint(sg_tokens_read, 0))
-              );
-*/
-}
-
-static ERR_Location SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
-{
-  ERR_Feedback feedback = ERR_FeedbackFromTerm(ambtrack);
-  if (ERR_isFeedbackError(feedback)) {
-    ERR_SubjectList ambiguities = ERR_getFeedbackList(feedback);
-    ERR_Subject first = ERR_getSubjectListHead(ambiguities);
-    
-    return ERR_getSubjectLocation(first);
-  } 
-
-  return ERR_makeLocationNoLocation();   
 }
 
 static int SG_CountAmbiguities(ERR_Feedback feedback)
@@ -1029,38 +1002,58 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
   ERR_Subject subject;
   ERR_Feedback error;
   ERR_Location posinfo;
-  static char description[1024];
+  static char contentDescription[1024];
+  static char errorDescription[1024];
+  int descCnt;
 
   SG_ERROR_ON();
 
   if (!ATisEmpty(cycle)) {
-    sprintf(description, "cycle");
+    descCnt = 0;
+    contentDescription[0] = '\0';
+    while (!ATisEmpty(cycle)) {
+      ATerm first = ATgetFirst(cycle);
+      char *str = PT_yieldProduction(PT_ProductionFromTerm(first));
+
+      if (descCnt + strlen(str) + 1 <= 1024) {
+        if (descCnt > 0) {
+          strcpy(contentDescription + descCnt, ";");
+          descCnt++;
+        }
+        strcpy(contentDescription + descCnt, str);
+        descCnt = descCnt + strlen(str);
+      }
+      
+      cycle = ATgetNext(cycle);
+    }
+ATwarning("contentDescription = %s\n", contentDescription);
+    sprintf(errorDescription, "Cycle");
   }
   else if (excess_ambs) {
-    if (ambtrak) {
-      sprintf(description, "ambiguity");
-    }
-    else {
-      sprintf(description, "too-many-ambiguities");
+    if (!ambtrak) {
+      sprintf(errorDescription, "Ambiguity");
+      sprintf(contentDescription, "too-many-ambiguities");
     }
   }
   else if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
-    sprintf(description, "eof unexpected");
+    sprintf(errorDescription, "Parse error");
+    sprintf(contentDescription, "eof unexpected");
   }
   else {
-    sprintf(description, "character %c unexpected", current_token);
+    sprintf(errorDescription, "Parse error");
+    sprintf(contentDescription, "character %c unexpected", current_token);
   }
 
   if (excess_ambs && ambtrak) {
-    posinfo = SG_GetFirstAmbiguityPosInfo(ambtrak);
+    error = ERR_FeedbackFromTerm(ambtrak);
   }
   else {
     posinfo = SG_CurrentPosInfo(path);
+    subject = ERR_makeSubjectSubject(contentDescription, posinfo);
+    error = ERR_makeFeedbackError(errorDescription, 
+                                  ERR_makeSubjectListSingle(subject));
   }
 
-  subject = ERR_makeSubjectSubject(description, posinfo);
-  error = ERR_makeFeedbackError("Parse error", 
-                                ERR_makeSubjectListSingle(subject));
   return (forest)ERR_SummaryToTerm(
                    ERR_makeSummaryFeedback("sglr", path, 
 					   ERR_makeFeedbackListSingle(error)));

@@ -333,6 +333,7 @@ int SG_Batch (int argc, char **argv)
     ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
     ERR_Feedback feedback = ERR_getFeedbackListHead(
                               ERR_getSummaryList(summary));
+    char *description = ERR_getFeedbackDescription(feedback);
     ERR_Subject subject = ERR_getSubjectListHead(
                             ERR_getFeedbackList(feedback));
     ERR_Location location = ERR_getSubjectLocation(subject);
@@ -341,8 +342,8 @@ int SG_Batch (int argc, char **argv)
     int line = ERR_getAreaBeginLine(area);
     int col = ERR_getAreaBeginColumn(area);
 
-    ATwarning("%s: error in %s, line %d, col %d: %s\n",
-                program_name, input_file_name, line, col, errorType);
+    ATwarning("%s: %s in %s, line %d, col %d: %s\n",
+                program_name, description, input_file_name, line, col, errorType);
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {
