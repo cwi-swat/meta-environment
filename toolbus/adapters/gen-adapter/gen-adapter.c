@@ -259,21 +259,38 @@ exec_cmd:
 void exec_cmd(char *inp, int len)
 {
   int old_stdin, old_stdout, fd_to_cmd;
+  char template[] = "/tmp/gen-XXXXXX";
 
   old_stdin = dup(0);
   old_stdout = dup(1);
 
+  /*
   if((fd_to_cmd = creat(tmp_in, 0777)) < 0)
     err_sys_fatal("Can't create tmp input file");
+    */
+  if((fd_to_cmd = mkstemp(template)) < 0) {
+    err_sys_fatal("Can't create tmp input file");
+  }
+  
   if(write(fd_to_cmd, inp, len) < 0)
     err_sys_fatal("Can't write to tmp input file");
+
+  /*
   if(close(fd_to_cmd) < 0)
     err_sys_fatal("Can't close tmp input file");
+    */
+
 
   close(0); close(1);
 
+  lseek(fd_to_cmd, 0, SEEK_SET);
+  dup2(fd_to_cmd, 0);
+
+  /*
   if(open(tmp_in, O_RDONLY) < 0)
     err_sys_fatal("Can't open tmp input file");
+    */
+
   if(creat(tmp_out, 0777) < 0)
     err_sys_fatal("Can't create tmp output file");
 
@@ -281,7 +298,10 @@ void exec_cmd(char *inp, int len)
     /* adapter: the parent */
     if(cmd_pid < 0)
       err_sys_fatal("Can't fork");
-    close(0); close(1);
+    close(0);
+    close(1);
+    close(fd_to_cmd);
+    unlink(template);
     dup(old_stdin);
     dup(old_stdout);
     close(old_stdin);
@@ -362,7 +382,7 @@ int main(int argc, char *argv[])
   signal(SIGINT, interrupt_handler);
   signal(SIGKILL, interrupt_handler);
   signal(SIGTERM, interrupt_handler);
-  tmp_in = tempnam(NULL, name); 
+  /*tmp_in = tempnam(NULL, name); */
   tmp_out = tempnam(NULL, name);
 
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
