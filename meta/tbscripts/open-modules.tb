@@ -49,6 +49,8 @@ in
   +
     rec-msg(file-found(Directories?)) .
     Path := first(Directories) .
+    snd-msg(get-filename(Path, Name, "")) .
+    rec-msg(filename(Path?)) .
     Directories := next(Directories) .
     if not-equal(Directories, []) then
       snd-msg(get-filename(Path, Name, Extension)) .
