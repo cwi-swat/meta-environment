@@ -9,8 +9,6 @@ context-free syntax
 
 get-term-anno(X,String)  -> ATerm {built-in("get-term-anno")}
 
-%% Example usage: 
-%%
-%% import asf/tools/Annotations[Bool "pos-info" ATerm]
-%% equations
-%% [] test(Bool) = get-term-anno(Bool, pos-info) 
+%% the $ is needed to disambiguate from a normal ATerm application
+
+
