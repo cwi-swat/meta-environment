@@ -366,7 +366,8 @@ private void paintDiamond(Graphics2D g, int x, int y, int w, int h, Color node_b
 	g.setColor(node_bg);
 	int[] xs = new int[] {x, x + w / 2, x + w, x + w / 2};
 	int[] ys = new int[] {y + h / 2, y, y + h /2, y + h};
-	g.fillPolygon(xs,ys,4);
+	/* debug: no filling to see where arrows go */
+    g.fillPolygon(xs,ys,4);
 	g.setColor(node_border);
 	g.drawPolygon(xs,ys,4);
 }
