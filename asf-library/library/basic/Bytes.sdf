@@ -20,11 +20,9 @@ imports basic/Whitespace
 sorts Bytes Byte
 
 lexical syntax
-	~[] -> Byte
+	%% Should never be parsed as such
+	[dummy] -> Byte
 	Byte* -> Bytes
-
-lexical restrictions
-	Bytes -/- ~[]
 
 context-free syntax
 	chars-to-bytes(String) -> Bytes
