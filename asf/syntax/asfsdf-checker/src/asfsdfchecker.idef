@@ -1,0 +1,21 @@
+/*
+  $Id$
+   */
+process AsfSdfChecker is
+let
+  Msgs   : list,
+  Syntax : term,
+  ASC    : asfsdfchecker
+in
+  execute(asfsdfchecker, ASC?) .
+  (
+    rec-msg(check-asfsdf(Syntax?)) .
+    snd-eval(ASC, check-asfsdf(Syntax)) .
+    rec-value(ASC, messages(Msgs?)) .
+    snd-msg(messages(Msgs)) .
+    Syntax := none
+  )*
+  delta
+endlet
+
+tool asfsdfchecker is {command = "asfsdfchecker"}

@@ -1,0 +1,14 @@
+module AsfSdf-Checker
+
+imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker 
+        SymbolChecker RemoveLabels
+
+exports
+  context-free syntax
+    check-asfsdf(SDF) -> Messages
+
+hiddens
+  variables
+    "Definition"[0-9]* -> Definition
+
+    "Msgs"[0-9]*       -> Messages

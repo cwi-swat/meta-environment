@@ -1,3 +1,6 @@
+2002/03/22 (vandenbr@loria.fr)
+ * Restructured the Sdf-Checker, partly moved to asf directory.
+
 2002/13/03 (jurgenv@cwi.nl)
  * Fixed a bug in asfc. The compiler ignored constant arguments of functions
    like: f("t" | "f") -> F in some cases.
