@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include <MEPT-utils.h>
+#include <ErrorAPI-utils.h>
 
 #ifndef WIN32
 #include <atb-tool.h>
@@ -46,17 +47,7 @@ char   *parse_table_name  = NULL;
  *  ToolBus stubs
  */
 
-ATerm parse_file(int conn, ATerm L, char *G, char *FN)
-{
-  return SGparseFile(program_name, L, G?(*G?G:0):NULL, FN);
-}
-
 ATerm parse_string(int conn, ATerm L, char *G, char *S)
-{
-  return SGparseStringAsAsFix2(L, G, S);
-}
-
-ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
 {
   ATerm tree = NULL;
   ATerm amb = NULL;
@@ -71,19 +62,9 @@ ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
   return result;
 }
 
-ATerm open_language_from_term(int conn, ATerm L, ATerm tbl)
+ATerm open_language(int conn, ATerm L, ATerm tbl)
 {
   return SGopenLanguageFromTerm(program_name, L, ATBunpack(tbl));
-}
-
-ATerm open_language(int conn, ATerm L, char *FN)
-{
-  return SGopenLanguage(program_name, L, FN);
-}
-
-ATerm close_language(int conn, ATerm L)
-{
-  return SGcloseLanguage(program_name, L);
 }
 
 void term_to_file(ATerm t, char *FN)
@@ -454,6 +435,7 @@ int main (int argc, char **argv)
     SG_TOOLBUS_ON();
 
     ATBinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+    ERR_initErrorApi();
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
     IF_STATISTICS(
@@ -475,6 +457,7 @@ int main (int argc, char **argv)
     ATbool have_complete_config;
 
     ATinit(6, ATlibArgv, &bottomOfStack);   /* Initialize Aterm library */
+    ERR_initErrorApi();
     PT_initMEPTApi();
     PT_initAsFix2Api(); 
 

@@ -70,9 +70,8 @@ void  SGinitParser(ATbool toolbus_mode);
 void  SG_InitPTGlobals();
 void  SGshowMode(void);
 
-ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
 ATerm SGopenLanguage(char *prgname, language L, char *FN);
-ATerm SGcloseLanguage(char *prgname, language L);
+ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
 
 ATerm SGparseString(language L, char *G, char *S);
 ATerm SGparseStringAsAsFix2(language L, char *G, char *S);

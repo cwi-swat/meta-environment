@@ -82,7 +82,6 @@ void    SG_Reducer(stack *st0, state s, label prodl,
                    int attr);
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-ATermList SG_CurrentPosInfo(void);
 forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
 forest    SG_AmbiguousParse(tree t, ATerm ambtrak);
 tree      SG_ParseResult(char *sort);
@@ -984,8 +983,14 @@ char *SGsort(int Mode, forest t)
   return SG_SAFE_STRING(sort);
 }
 
-ATermList SG_CurrentPosInfo(void)
+static ATerm SG_CurrentPosInfo(char *fileName)
 {
+/*
+  ERR_Area area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
+  ERR_Location location = ERR_makeLocationLocation(fileName, area);
+
+  return ERR_LocationToTerm(location);
+*/
   return
   ATmakeList4(
               (ATerm) ATmakeAppl1(SG_Character_AFun,
@@ -997,7 +1002,6 @@ ATermList SG_CurrentPosInfo(void)
               (ATerm) ATmakeAppl1(SG_Offset_AFun,
                                   (ATerm) SG_GetATint(sg_tokens_read, 0))
               );
-
 }
 
 static ATerm SG_ReverseAmbiguities(ATerm ambtrack)
@@ -1062,7 +1066,7 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
     posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
   }
   else {
-    posinfo = (ATerm) SG_CurrentPosInfo();
+    posinfo = SG_CurrentPosInfo("Unknown");
   }
 
   return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);

@@ -22,10 +22,10 @@ in
   (
     rec-msg(Id?, parse-string-given-table(Lid?, Tbl?, G?, S?)) .
     execute(sglr, P?) .
-    snd-eval(P, open-language-from-term(Lid, Tbl)) .
+    snd-eval(P, open-language(Lid, Tbl)) .
     (
       rec-value(P, language-opened(Lid)) .
-      snd-eval(P, parse-string-as-asfix2me(Lid, G, S)) .
+      snd-eval(P, parse-string(Lid, G, S)) .
       (
         rec-value(P, parsetree(T?, Amb?)) .
         snd-msg(parse-result-asfix2me(Id, parse-tree(parsetree(T, Amb))))

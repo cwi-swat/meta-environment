@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/14 (markvdb@cwi.nl)
+ * Cleanup of interface and first steps towards using error api.
+
 2004/01/12 (jurgenv@cwi.nl)
  * Added dependency on error-support
  * Bumped version to 3.11

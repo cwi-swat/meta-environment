@@ -108,19 +108,12 @@ ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl)
 }
 
 
-/*
- The function |SGopenLanguage| initializes the parse table for language |L|
- from the file |FN|.
- */
-
 ATerm SGopenLanguage(char *prgname, language L, char *FN)
 {
   parse_table *pt;
 
-  if(!L || !FN) {
-    return SG_TOOLBUS
-      ? SG_TermToToolbus(ATmake("language-not-opened(<str>,<str>)", "", ""))
-      : (ATerm) NULL;
+  if (!L || !FN) {
+    return (ATerm) NULL;
   }
 
   SG_Validate("SGopenLanguage");
@@ -132,28 +125,8 @@ ATerm SGopenLanguage(char *prgname, language L, char *FN)
     pt = SG_AddParseTable(prgname, L, FN);
   }
 
-  return SG_TOOLBUS
-    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<term>)"
-                                 :  "language-not-opened(<term>)",
-                               L))
-    : (ATerm) (pt ? ATempty : NULL);
+  return (ATerm) (pt ? ATempty : NULL);
 }
-
-/*
- |SGcloseLanguage| discards the parse table for language |L|
- */
-
-ATerm SGcloseLanguage(char *prgname, language L)
-{
-  SG_Validate("SGcloseLanguage");
-  if(SG_LookupParseTable(L)) {
-    IF_VERBOSE(ATwarning("%s: closing language %t\n", prgname, SG_SAFE_LANGUAGE(L)));
-    SG_RemoveParseTable(L);
-    return SG_TermToToolbus(ATmake("language-closed(<term>)", SG_SAFE_LANGUAGE(L)));
-  }
-  return SG_TermToToolbus(ATmake("language-not-open(<term>)", SG_SAFE_LANGUAGE(L)));
-}
-
 
 /*
  The function |SGparseString| parses the text in string |S| with the
