@@ -823,7 +823,7 @@ the ruler.
 \begin{center}
 \begin{Label}{FIG:ruler}
 
-\T \includegraphics[width=2cm]{ruler}
+\T \includegraphics[width=1.4cm]{ruler}
 \W \htmlimage{ruler.gif}
 \caption{Ruler in the import pane}
 
@@ -891,7 +891,7 @@ a number of export operations.
 \begin{center}
 \begin{Label}{FIG:export-menu}
 
-\T \includegraphics[width=5cm]{export-menu}
+\T \includegraphics[width=4cm]{export-menu}
 \W \htmlimage{export-menu.gif}
 \caption{Export menu}
 
@@ -1300,7 +1300,7 @@ that are involved in the ambiguity.
 
 \end{enumerate}
 
-\subsection{SDF type Check Warnings}
+\subsection{SDF type check warnings}
 \begin{itemize}
 \item {\tt undeclared sorts}
 \item {\tt start-symbols in <ModuleName> not defined in any right-hand}
@@ -1319,7 +1319,7 @@ that are involved in the ambiguity.
 \item {\tt deprecated non-plain sort definition}
 \end{itemize}
 
-Type check errors for plain \sdf.
+\subsection{Type check errors for plain \sdf}
 \begin{itemize}
 \item {\tt module not available}
 \item {\tt literal in right-hand-side not allowed}
@@ -1327,39 +1327,51 @@ Type check errors for plain \sdf.
 \item {\tt double used label}
 \end{itemize}
 
-Type check warnings for \asfsdf.
+\subsection{Type check warnings for \asfsdf}
 \begin{itemize}
-\item {\tt kernel-syntax-construction}
-\item {\tt not-supported-symbol}
-\item {\tt illegal-traversal-attribute}
-\item {\tt traversal-attributes-in-non-prefix-function}
-\item {\tt missing-bottom-up-or-top-down-attribute}
-\item {\tt missing-break-or-continue-attribute}
-\item {\tt missing-trafo-and-or-accu-attribute}
-\item {\tt inconsistent-traversal-attributes}
-\item {\tt trafo-should-return-traversed-type}
-\item {\tt accu-should-return-accumulated-type}
-\item {\tt accutrafo-should-return-tuple-of-correct-types}
-\item {\tt inconsistent-arguments-of-traversal-productions}
-\item {\tt charclasses-not-allowed-in-context-free-syntax}
-\item {\tt production-renamings-not-supported}
+\item {\tt exported variables section}
+\item {\tt kernel syntax construction}
+\item {\tt production renamings not supported}
+\item {\tt not supported symbol}
 \end{itemize}
 
-Type check warning for \asf.
-
+\subsection{Type check errors for \asfsdf}
 \begin{itemize}
+\item {\tt traversal attributes in non-prefix function}
+\item {\tt illegal traversal attribute}
+\item {\tt missing bottom-up or top-down attribute}
+\item {\tt missing break or continue attribute}
+\item {\tt missing trafo and/or accu attribute}
+\item {\tt accu should return accumulated type}
+\item {\tt trafo should return traversed type}
+\item {\tt accutrafo should return tuple of correct types}
+\item {\tt inconsistent arguments of traversal productions}
+\item {\tt inconsistent traversal attributes}
+\item {\tt asf equation sort must not be used}
+\item {\tt charclasses not allowed in context-free syntax}
+\end{itemize}
+
+\subsection{Type check warnings for \asf}
+\begin{itemize}
+\item {\tt Lexical probably intended to be a variable}
+\item {\tt Deprecated condition syntax "="}
+\item {\tt constructor not expected as outermost function symbol of left
+hand side}
+\end{itemize}
+
+\subsection{Type check errors for \asf}
+\begin{itemize}
+\item {\tt equations contain ambiguities}
 \item {\tt uninstantiated variable occurrence}
 \item {\tt negative condition introduces variable(s)}
 \item {\tt uninstantiated variables in both sides of condition}
+\item {\tt uninstantiated variables in equality condition}
+\item {\tt right-hand side of matching condition introduces variables}
+\item {\tt matching condition does not introduce new variables}
 \item {\tt strange condition encountered}
-\item {\tt Equations contain ambiguity/ies}
+\item {\tt Left hand side is contained in a list}
+\item {\tt no variables may be introduced in left hand side of test}
 \end{itemize}
-
-\subsection{General Messages}
-{\tt Equations incomplete for <modulename>}.
-{\tt Unable to open parse table for <modulename>}.
-
-
 
 %}}}
 %{{{ Guided Tour
@@ -1398,8 +1410,8 @@ equations (semantics) of $module$. The directory {\tt pico} contains:
 
 \item Files for the Pico-specification.
 
-\item Three examples of Pico-programs: {\tt big.trm}, {\tt fac.trm},
-  {\tt small.trm}.
+\item Three examples of Pico-programs: {\tt big.pico}, {\tt fac.pico},
+  {\tt small.pico}.
 
 \item Terms for typechecking and evaluating these Pico-programs.
 
@@ -1464,6 +1476,8 @@ module Booleans
 
 imports basic/Whitespace
 exports
+  context-free start-symbols Bool 
+
   sorts Bool 
 
   context-free syntax
@@ -1554,8 +1568,8 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 \begin{itemize}
 \item Open a term-editor over module {\tt Booleans} by first selecting
   module {\tt Booleans} in the module pane, and then pushing the {\tt
-    Edit Term ...} button.  A standard dialog window pops up.
-    Enter any new filename, for instance, `{\tt my-term}'.
+    New Term ...} button.  A standard dialog window pops up.
+    Enter any new filename, for instance, `{\tt term.trm}'.
 
 \item Type the term `{\tt true \& false}' in this editor. 
   The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
@@ -1718,7 +1732,7 @@ and is saved in files ending on `{\tt .asf}'.
 \paragraph{Modifying the Syntax}
 
 The syntax part of a module starts with the keyword {\tt module}
-and  is saved in files ending on `{\tt .sdf}'.
+and is saved in files ending on `{\tt .sdf}'.
 Modifying the syntax causes the generated scanner and parser to be adapted.
 After each edit operation in the \sdf\ section that is followed by a parse of
 the \sdf\ section, the focus in both the equations section and the term editor
@@ -1750,7 +1764,7 @@ Modifying the priorities:
   which indicates that the parse contained 1 ambiguity. Clicking
   in the \link{term editor window}[ (see Figure~\Ref)]{FIG:Bool-example-ambtrm}
   will result in a focussed symbol {\tt <ambiguous>}. Viewing the
-  corresponding parse tree via {\tt ViewTree} in the menu {\tt Actions}
+  corresponding parse tree via {\tt View Full Tree} in the menu {\tt Actions}
   will give the \link{parsetree panel}[ (see
   Figure~\Ref)]{FIG:meta-amb-parsetree}.
 
@@ -1782,31 +1796,31 @@ Modifying the priorities:
 
 \end{itemize}
 
-Modifying layout in the lexical section: 
+The effect of removing the {\tt LAYOUT} definition.
 
 \begin{itemize}
 
-\item Remove the lexical syntax with the {\tt LAYOUT} definitions. 
+\item Remove import of {\tt basic/Whitespace}.
 
 \item Try parsing equations of {\tt Booleans}.
 
 \end{itemize}
 
-\paragraph{Frequently occurring errors} Omitting the {\tt LAYOUT} definition is one of most common
+\paragraph{Frequently occurring errors} Omitting the {\tt LAYOUT} definition is 
+one of most common
 errors made when writing a new specification; always make sure your syntax
-definitions define at least spaces and newlines to be {\tt LAYOUT}.
+definitions define at least spaces and newlines to be {\tt LAYOUT}. In
+fact, if you want to be sure use whenever possible the predefined module
+{\tt Whitespace} from the library. Try to do this for as many modules as
+possible.
+
 
 \begin{itemize}
   
 \item End the editing of your term and the module {\tt Booleans} by
-  selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  
-  If you like, you can save the changes to module {\tt Booleans}.
+  selecting the {\tt Exit Emacs} from the {\tt File} menu of the editor.  
 
 \end{itemize}
-
-If you save the changes the files `{\tt Booleans.sdf}' and `{\tt
-  Booleans.asf}' will be modified.
-
 
 \begin{itemize}
   
@@ -1830,13 +1844,17 @@ selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
 \item Restart the \ASmetaenv\ by entering \link{{\tt meta}}[ (Section~\Ref)]{StartingMeta} at the command line.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
-  selecting the {\tt Open...} button.  In the dialog window that appears, click
-  on {\tt Pico-syntax.sdf} and push the {\tt Open} button.
+  selecting the {\tt Open Library Module...} button.  
+In the dialog window that appears, click on {\tt languages} and push the 
+{\tt Open} button. In the subdirectory, choose {\tt pico} via double
+clicking or selecting and pushing {\tt Open}. Select the single
+subdirectory {\tt syntax} and finally choose the file {\tt
+Pico-Syntax.sdf}.
   
 \item As you can see in both \link{the import pane and the module pane}[
 (see Figure~\Ref)]{FIG:Pico-syntax}, not only
   {\tt Pico-syntax} has been added, but also all modules that are directly or
-  transitively imported by {\tt Pico-syntax}.
+  transitively imported by {\tt Pico-Syntax}.
 
 \begin{figure}
 \begin{center}
@@ -1853,11 +1871,11 @@ selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
 
 \end{itemize}
 
-\subsubsection{The Module Editor for Pico-syntax}
+\subsubsection{The Module Editor for Pico-Syntax}
 
 \begin{itemize}
   
-\item Open an editor for the syntax of {\tt Pico-syntax} (using the {\tt Edit
+\item Open an editor for the syntax of {\tt Pico-Syntax} (using the {\tt Edit
     Syntax} button).
 
 \end{itemize}
@@ -1908,7 +1926,8 @@ This has the following effects:
   
 \item All the equations that are valid for this editor are parsed and compiled
   into a rewrite system.  In this case that means the equations of the
-  imported modules {\tt basic/Booleans}, {\tt basic/Integers}, and {\tt
+  imported modules {\tt basic/Bytes}, {\tt basic/Booleans}, 
+{\tt basic/Integers}, and {\tt
 basic/Strings}. This may take some time.
   
 \item The term in the editor is reduced. As no equation can be applied to
@@ -1926,25 +1945,42 @@ are necessary to arrive at a specification which can be interpreted.
 \item Verify this by pushing the {\tt Reduce} button once more.
 \end{itemize}
 
+Next to the pull-down menu {\tt Move} in the term editor for {\tt fac.pico} 
+you will see a pull-down menu \link{{\tt Pico}}[(see
+Figure~\Ref)]{FIG:Pico-menu}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Pico-menu}
+
+\T \includegraphics[width=3cm]{Pico-menu}
+\W \htmlimage{Pico-menu.gif}
+\caption{Pico specific pull-down menu {\tt Pico}}
+
+\end{Label}
+\end{center}
+\end{figure}
 Push the {\tt TypeCheck} button.  This has the following effects:
 
 \begin{itemize}
 
-\item  The module {\tt Pico-typecheck} is added to the specification. 
+\item  The {\tt Pico-typecheck} specification is loaded in the environment.
   
-\item The term in {\tt smalltc.pico} is identical to the one in 
-  {\tt small.pico}, except that the program has been surrounded by `{\tt tcp(}'
-  and `{\tt )}'.  The function {\tt tcp} (for type check program), applies the
-  typing rules for the Pico language to its single argument: a complete Pico
+\item The term in {\tt fac.pico} is automatically extended with the
+function {\tt tcp}.  The function {\tt tcp} (for type check program), applies the
+typing rules for the Pico language to its single argument: a complete Pico
   program. The result is {\tt true} or {\tt false}, depending on whether
   the Pico program is properly typed.
   
 \item All equations of {\tt Pico-typecheck} and its imported
   modules are being compiled.
   
-\item The term {\tt smalltc.pico} is reduced using the equations of {\tt
-    Pico-typecheck}.
+\item The term {\tt fac.pico} with the function {\tt tcp} is reduced using the 
+equations of {\tt Pico-typecheck}.
 
+\item The same effect can be achieved by opening a term editor over the
+module {\tt Pico-typecheck} and choose for instance the term {\tt fac.ptc},
+and push the {\tt Reduce} button in this launched term editor.
 \end{itemize}
   
 Typechecking a term for the second time is notably faster, the
@@ -1952,22 +1988,21 @@ modules have been added already and the equations have been compiled.
 
 \begin{itemize}
 
-\item Verify this, by pushing {\tt Reduce} once more.
+\item Verify this, by pushing {\tt TypeCheck} button in {\tt fac.pico} once more.
   
-\item Make some modifications to `{\tt smalltc.pico}' in the term-editor.
+\item Make some modifications to `{\tt fac.pico}' in the term-editor.
   Typecheck the modified program.
   
-\item Open term-editors with other pico programs (`{\tt fac.pico}', `{\tt
-    big.pico}') or create your own program. The corresponding applications of
-  the type check function are in `{\tt factc.pico}' and `{\tt bigtc.pico}', 
-  respectively.  Typecheck these programs.
+\item Open term-editors with other pico programs (`{\tt small.pico}', `{\tt
+    big.pico}') or create your own program.  Typecheck these programs.
 
 \end{itemize}
 
-The evaluation of Pico programs is achieved in a similar fashion. 
+The evaluation of Pico programs is achieved in a similar fashion, by
+pushing the {\tt Evaluate} button. 
 The evaluation rules are defined in the module `{\tt
   Pico-eval}'. Applications of the evaluation function `{\tt evp}' can be
-found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
+found in `{\tt small.pev}', `{\tt fac.pev}', and `{\tt big.pev}.
 
 \begin{itemize}
   
@@ -1976,6 +2011,9 @@ found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
 
 \end{itemize}
 
+The same can be done once again for code generation, via the button {\tt
+Compile}.
+
 \subsubsection{More Exercises to Study the Pico Specification}
 
 \begin{itemize}
@@ -1983,7 +2021,7 @@ found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
 \item Study other modules in the specification. The modules {\tt
     Pico-typecheck} and {\tt  Pico-eval} are explained in the next sections.
   
-\item Add a repeat statement `{\tt repeat SERIES until EXP}' to {\tt
+\item Add a repeat statement `{\tt repeat \{STATEMENT ";"\}* until EXP}' to {\tt
     Pico-syntax}, add typecheck equations to {\tt Pico-typecheck}, and
   eval-equations to {\tt Pico-eval}, for this new statement.
 
@@ -2022,11 +2060,11 @@ The equations define how a Pico-program is typechecked. Equation {\tt
 typechecking of the Series in the type-environments, `{\tt tcd(Decls)}', is
 `{\tt true}'.
 
-Equations {\tt [Tc2]} and {\tt [Tc3]} specify how a type-environment is
-constructed, when the declarations are typechecked.
+Equations {\tt [Tc2]}, {\tt [Tc3a]}, {\tt [Tc3b]}, {\tt [Tc4a]}, {\tt [Tc4b]} 
+specify how a type-environment is constructed, when the declarations are typechecked.
 
-Equations {\tt [Tc3a]} and {\tt [Tc3b]} specify the typechecking of a,
-possibly empty, list of statements. Equations {\tt [Tc4a]} through {\tt
+Equations {\tt [Tc5a]} and {\tt [Tc5b]} specify the typechecking of a,
+possibly empty, list of statements. Equations {\tt [Tc6a]} through {\tt
   [default-Tc6]} specify how the three kinds of Statements are typechecked
 using the information from the type-environment.
 
