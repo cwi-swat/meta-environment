@@ -61,7 +61,6 @@ Graph makeGraphDefault(NodeList nodes, EdgeList edges, AttributeList attributes)
 NodeList makeNodeListEmpty();
 NodeList makeNodeListMulti(Node head, NodeList tail);
 Node makeNodeDefault(NodeId id, AttributeList attributes);
-Node makeNodeSubGraph(NodeId id, Graph graph);
 NodeId makeNodeIdDefault(char* id);
 AttributeList makeAttributeListEmpty();
 AttributeList makeAttributeListMulti(Attribute head, AttributeList tail);
@@ -145,16 +144,12 @@ NodeList setNodeListTail(NodeList arg, NodeList tail);
 
 ATbool isValidNode(Node arg);
 inline ATbool isNodeDefault(Node arg);
-inline ATbool isNodeSubGraph(Node arg);
 ATbool hasNodeId(Node arg);
 NodeId getNodeId(Node arg);
 Node setNodeId(Node arg, NodeId id);
 ATbool hasNodeAttributes(Node arg);
 AttributeList getNodeAttributes(Node arg);
 Node setNodeAttributes(Node arg, AttributeList attributes);
-ATbool hasNodeGraph(Node arg);
-Graph getNodeGraph(Node arg);
-Node setNodeGraph(Node arg, Graph graph);
 
 /*}}}  */
 /*{{{  NodeId accessors */
@@ -311,7 +306,7 @@ Point setPointY(Point arg, int y);
 
 Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList));
 NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
-Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList), Graph (*acceptGraph)(Graph));
+Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
 NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
 Attribute visitAttribute(Attribute arg, char* (*acceptLabel)(char*), Shape (*acceptShape)(Shape), int (*acceptX)(int), int (*acceptY)(int), int (*acceptWidth)(int), int (*acceptHeight)(int), Polygon (*acceptPoints)(Polygon), Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm));
