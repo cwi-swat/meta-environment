@@ -115,6 +115,23 @@ int SG_MultiSetGtrCalls(int mode)
   }
 }
 
+int SG_PreferAndAvoidCalls(int mode)
+{
+  static int count = 0;
+
+  switch(mode) {
+    case SG_NR_ZERO:
+      return count = 0;
+    case SG_NR_INC:
+      return count++;
+    case SG_NR_DEC:
+      return count--;
+    case SG_NR_ASK:
+    default:
+      return count;
+  }
+}
+               
 int SG_AmbCalls(int mode)
 {
   static int count = 0;
@@ -807,6 +824,72 @@ MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst,
 
 ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2);
 
+int SG_GetNrOfPrefers(parse_table *pt, MultiSet ms)
+{
+  ATermInt ly;
+  int y, My;
+  int prefercount = 0;
+  int size = MultiSetGetSize(ms); /* equal to the other one */
+  
+  for (y = 0; y < size; y++) {
+
+    My = MultiSetGetCount(ms, y);
+    if (My > 0) {
+      ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
+      
+      if (SG_ProdType_Label(pt, ly) == SG_PT_EAGER) {
+        prefercount = prefercount + My;
+      }
+    }
+  }
+  return prefercount;
+}
+
+int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
+{
+  ATermInt ly;
+  int y, My;
+  int avoidcount = 0;
+  int size = MultiSetGetSize(ms); /* equal to the other one */
+
+  for (y = 0; y < size; y++) {
+
+    My = MultiSetGetCount(ms, y);
+    if (My > 0) {
+      ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
+
+      if (SG_ProdType_Label(pt, ly) == SG_PT_UNEAGER) {
+        avoidcount = avoidcount + My;
+      }
+    }
+  }
+  return avoidcount;
+}
+         
+
+ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
+{                                                            
+  int pM, pN, aM, aN;
+
+  IF_STATISTICS(SG_PreferAndAvoidCalls(SG_NR_INC));
+
+  if (SG_MultiSetEqual(msM, msN)) { /* M != N */
+    return ATfalse;
+  }                         
+
+  pM = SG_GetNrOfPrefers(pt, msM);
+  pN = SG_GetNrOfPrefers(pt, msN);
+  aM = SG_GetNrOfAvoids(pt, msM);
+  aN = SG_GetNrOfAvoids(pt, msN);
+
+  if ((pM < pN) && (aM > aN)) {
+    return ATfalse;
+  }
+  else {
+    return ATtrue;
+  }
+}
+
 /* NOTE: We temporarily maintain two versions of MultiSetGtr.
  *
  * The first was developed by fixing the existing implementation of v2.40
@@ -816,7 +899,7 @@ ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2);
  *
  * These implementations are expected to be equal.
  */
-#define MULTISETGTR_ORIGINAL 
+#define MULTISETGTR_ORIGINAL
 #ifdef MULTISETGTR_ORIGINAL
 
 /* MultiSetGtr is the core of the multiset algorithm. See page XXX
@@ -1114,23 +1197,42 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
     return NULL;
   }
  
-  if (SG_MultiSetGtr(pt, ms0, ms1)) {
-    IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
+  if (SG_FilterOnPreferAndAvoid(pt, ms0, ms1)) {
+    IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t > %t\n", l0, l1))
     max = t0;
-  } 
+  }
 
-  if (SG_MultiSetGtr(pt, ms1, ms0)) {
+  if (SG_FilterOnPreferAndAvoid(pt, ms1, ms0)) {
     if (max) {
       IF_DEBUG(fprintf(SG_log(),
-                       "Symmetric multiset priority relation ignored\n"))
+                       "Symmetric eagerness priority relation ignored\n"))
       max = NULL;
     }
     else { 
-      IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
+      IF_DEBUG(ATfprintf(SG_log(), "Eager Priority: %t < %t\n", l0, l1))
       max = t1;
     }
   }
+  
+  if (!max) {
+    if (SG_MultiSetGtr(pt, ms0, ms1)) {
+      IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
+      max = t0;
+    } 
 
+    if (SG_MultiSetGtr(pt, ms1, ms0)) {
+      if (max) {
+        IF_DEBUG(fprintf(SG_log(),
+                         "Symmetric multiset priority relation ignored\n"))
+        max = NULL;
+      }
+      else { 
+        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
+        max = t1;
+      }
+    }
+  }
+  
   if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
   }
