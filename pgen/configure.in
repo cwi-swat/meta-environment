@@ -32,13 +32,6 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-
-dnl Optional package ToolBus
-AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
-   [  --with-toolbus=DIR      ToolBus is in DIR],
-   [  AC_MSG_WARN([ToolBus package not found. It is required when building from CVS.])])
-AC_SUBST(TOOLBUS)
-
 dnl Require sglr package
 AC_PACKAGE_REQUIRE(sglr, sglr,
    [  --with-sglr=DIR         SGLR distribution is in DIR])
