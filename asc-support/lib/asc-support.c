@@ -244,45 +244,15 @@ static ATerm call_unknown(PT_Production prod, ATermList args)
 
 /*}}}  */
 
-/*{{{  static ATerm call(PT_Production prod, ATermList args) */
+/*{{{  static ATerm call_using_array(funcptr func, ATerm *arg, int arity) */
 
-/* This function is used in innermost to call a c function for
- * a given AsFix production. Note that the arguments are in normal form
- * because of the innermost reduction strategy. Apparently there is
- * an upper limit on the number of arguments of a production (32)!
- *
- * The functionality of this function is to convert the argument list in
- * ATermList form to a c function call and to lookup the actual funcptr.
- */
-
-static ATerm call(PT_Production prod, ATermList args)
+static ATerm call_using_array(funcptr func, ATerm *arg, int arity)
 {
-  ATermList list;
-  ATerm arg[33];
-  int idx = 0;
-  funcptr func = basic_lookup_func(PT_makeTermFromProduction(prod));
-
-  if (func == NULL) {
-    return call_unknown(prod, args); 
-  }
-
-  if (PT_isProductionList(prod)) {
-    return (*func)((ATerm) args);
-  }
-
-  /* otherwise we have a normal function application */
-
-  list = args;
-  while(!ATisEmpty(list)) {
-    arg[idx++] = ATgetFirst(list);
-    list = ATgetNext(list);
-  }
-
   /* We cannot use C's variable argument list support,
      because there is no portable way to build a va_list 
      from an arbitrary list.
    */
-  switch(ATgetLength(args)) {
+  switch(arity) {
   case  0: return (*func)();
   case  1: return (*func)(arg[0]);
   case  2: return (*func)(arg[0],arg[1]);
@@ -393,10 +363,59 @@ static ATerm call(PT_Production prod, ATermList args)
 			  arg[24],arg[25],arg[26],arg[27],arg[28],arg[29],
 			  arg[30],arg[31],arg[32]);
   default:
-    ATabort("too many arguments: %d\n", ATgetLength(args));
+    ATabort("too many arguments: %d\n", arity);
   }
   return NULL;
 }
+
+/*}}}  */
+/*{{{  static ATerm call_using_list(funcptr func, ATermList arg) */
+
+static ATerm call_using_list(funcptr func, ATermList args)
+{
+  ATermList list = args;
+  ATerm arg[33];
+  int idx = 0;
+
+  while(!ATisEmpty(list)) {
+    arg[idx++] = ATgetFirst(list);
+    list = ATgetNext(list);
+  }
+
+  return call_using_array(func, arg, ATgetLength(args));
+}
+
+/*}}}  */
+
+/* This function is used in innermost to call a c function for
+ * a given AsFix production. Note that the arguments are in normal form
+ * because of the innermost reduction strategy. Apparently there is
+ * an upper limit on the number of arguments of a production (32)!
+ *
+ * The functionality of this function is to convert the argument list in
+ * ATermList form to a c function call and to lookup the actual funcptr.
+ */
+
+/*{{{  static ATerm call(PT_Production prod, ATermList args) */
+
+static ATerm call(PT_Production prod, ATermList args)
+{
+  funcptr func = basic_lookup_func(PT_makeTermFromProduction(prod));
+ 
+  if (func == NULL) {
+    return call_unknown(prod, args); 
+  }
+
+  if (PT_isProductionList(prod)) {
+    return (*func)((ATerm) args);
+  }
+
+  /* otherwise we have a normal function application */
+
+  return call_using_list(func, args);
+}
+
+
 
 /*}}}  */
 
@@ -513,6 +532,90 @@ ATerm make_list(ATerm t)
   else {
     return singleton(t);
   }
+}
+
+/*}}}  */
+
+/*{{{  static ATermList trafo_kids_list(funcptr trav, ATermList args) */
+
+static ATermList trafo_kids_list(funcptr trav, ATermList args)
+{
+  ATermList result = ATempty;
+  int length = ATgetLength(args);
+  ATerm el;
+
+  if(length < 16) {
+    while(!ATisEmpty(args)) {
+      el = trav(ATgetFirst(args));
+      if(el)
+        result = ATinsert(result, el);
+      args = ATgetNext(args);
+    }
+    return ATreverse(result);
+  }
+  else {
+    int idx = 0;
+    ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
+    if(!elems) {
+      ATabort("innermost_list: no room for %d elements.\n", length);
+    }
+
+    while(!ATisEmpty(args)) {
+      elems[idx++] = ATgetFirst(args);
+      args = ATgetNext(args);
+    }
+    assert(idx == length);
+
+    for(--idx; idx>=0; idx--) {
+      el = trav(elems[idx]);
+      if(el) {
+        result = ATinsert(result, el);
+      }
+    }
+
+    free(elems);
+    return result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm trafo_kids(funcptr trav, ATerm arg0) */
+
+ATerm trafo_kids(funcptr trav, ATerm arg0)
+{
+  int type = ATgetType(arg0);
+
+  if (type == AT_APPL) {
+    Symbol sym;
+    funcptr func;
+    ATerm arg[33];
+    int idx;
+    ATermList args;
+    ATermList list;
+
+    args = ATgetArguments((ATermAppl) arg0);
+    assert(ATgetLength(args) < 33);
+
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
+      arg[idx++] = trav(ATgetFirst(list));
+    }
+
+    sym = get_sym(arg0);
+    func = lookup_func_given_sym(sym);
+
+    if (func) {
+      arg0 = call_using_array(func, arg, ATgetLength(args));
+    }
+    else {
+      arg0 = (ATerm) ATmakeApplArray(ATgetAFun((ATermAppl) arg0), arg); 
+    }
+  }
+  else if (type == AT_LIST) {
+    arg0 = (ATerm) trafo_kids_list(trav, (ATermList) arg0);
+  }
+
+
+  return arg0;
 }
 
 /*}}}  */

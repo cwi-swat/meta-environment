@@ -70,7 +70,8 @@ extern Symbol record_sym;
 #define make_char(c) (char_table[c])
 #define make_list_char(c) ((ATerm)(ATmakeList1(char_table[c])))
 #define singleton(t) (ATerm)(ATmakeList1((t)))
-#define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
+#define get_sym(t) ATgetSymbol((ATermAppl) t)
+#define check_sym(t,s) (get_sym(t) == (s))
 #define remove_list(t) (ATgetArgument((ATermAppl) t,0))
 
 /*}}}  */
@@ -266,6 +267,7 @@ extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
 extern ATerm unquote(ATerm t);
+extern ATerm trafo_kids(funcptr trav, ATerm arg);
 
 int asc_support_main(int argc, char *argv[],
                      void (*register_all)(void),
