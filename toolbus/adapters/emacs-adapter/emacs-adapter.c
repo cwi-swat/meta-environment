@@ -146,26 +146,63 @@ static char *print_list(term_list *l, char *left, char *sep, char *right) {
   return result;
 }
 
+/**
+  Escape a string, concatenating it to a buffer. 
+  The result buffer should be large enough to contain the QUOTED str
+  after the string that is already in result.
+*/
+static  void add_and_escape_str(char *result, const char *str)
+{
+	int i,j;
+
+	result += strlen(result);
+	
+	result[0] = '"';
+	result++;
+
+	for(i = 0, j = 0; str[i] != '\0'; i++, j++) {
+		switch(str[i]) {
+		case '\n':
+			result[j++] = '\\';
+			result[j] = 'n';
+			break;
+		case '"':
+		case '\\':
+			result[j++] = '\\';
+		default:
+			result[j] = str[i];
+			break;
+		}
+	}
+
+	result[j++] = '"';
+	result[j] = '\0';
+		
+	return;
+}
+
 /** Print any term 
     The result of this function needs to be free'd later
 */
 static char *print_term(term* t) {
   char *result,*tmp;
   
-  /* Allocate the size of the term for the string */
-  result = (char *) malloc(TBsize(t));
+  /* Allocate the size of the term for the string 
+	 * the 2 is for worst case escaping (each char)  */
+  result = (char *) malloc(2*TBsize(t));
+  
+  if(!result) {
+		abort();
+	}
+
   /* make the result empty */
   result[0] = '\0';
   /* Switch to the right type of term */
   switch(tkind(t)) {
     /* It's a string */
   case t_str:
-    /* Start the string with a " */
-    strcat(result,"\"");
-    /* get the actual value, and write it to result, with a " */
-    tmp = str_val(t);
-    strcat(result,tmp);
-    strcat(result,"\"");
+    /* get the actual value, escape it, quote it and concat it to result */
+    add_and_escape_str(result, str_val(t));
     break;
   case t_bstr:
     /* It's a binary string */
