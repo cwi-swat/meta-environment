@@ -1,3 +1,11 @@
+Warning: this is a dump of ideas not a structured presentation.
+
+The problem
+===========
+
+In current ToolBus scripts it is hard to connect related atoms to each other
+(in particular snd-msg with rec-msg and vice versa)
+
 Basic idea
 ==========
 
@@ -111,7 +119,65 @@ Issues:
   but only need button(calc), button(quit), etc.
 
 
-** To be continued ** 
+Further thoughts
+=================
+
+Use the @snd-msg style. (Recall:
+	@snd-msg { ... } @rec-msg = rec-event .snd-msg { ... } rec-msg . snd-ack-event
+	@rec-msg { ... } @snd-msg = rec-msg . snd-eval { ... } rec-value . snd-msg
+	@snd-msg                  = rec-event . snd-msg . snd-ack-event
+	@snd-note                 = rec-event . snd-note . snd-ack-event
+	@rec-msg                  = rec-msg . snd-do
+    @rec-note                 = rec-note . snd-do
+	For the moment we use @'s, later on we may switch to snd-msg/rec-msg)
+
+Using the @snd-msg etc style, the login servers becomes:
+
+	@snd-msg login(Name, Password) { }
+	( @rec-msg login-succeeded . LOGGED-IN
+	+ @rec-msg login-failed(Cause?)
+	)
+	
+Example: Parsing with ambiguities
+---------------------------------
+
+The simple case without ambiguities:
+
+    @rec-msg parse(String?) { } @snd-msg Tree
+    
+With ambiguities:
+
+   @rec-msg parse(String?) {
+   		@snd-msg resolve Trees { } @rec-msg Tree?
+   }* @snd-msg Tree
+
+NB In the above we use the following two variants:
+	open { PE } close
+	open { PE }* close
+
+I believe that we should support the general case where we allow all process operators:
+	open { PE } . close
+	open { PE } + close
+	open { PE } * close
+	open { PE } >>> close
+
+De { and } only mark the beinning and end of the PE that separates open from close:
+
+Example: The progress bar
+-------------------------
+
+    @rec-msg do-something {
+      @snd-note progress(Percentage)
+    } * @snd-msg result
+    
+    
+** to be continued **
+
+
+
+
+
+	
 
 
 
