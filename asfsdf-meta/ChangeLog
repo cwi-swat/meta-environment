@@ -1,3 +1,7 @@
+2003/04/03 (markvdb@cwi.nl)
+ * Moved new-pico to pico and pico to old-pico.
+ * The version based on libraries is now the official Pico language.
+
 2003/03/13 (vandenbr@loria.fr)
  * Introduced scripts for the various standalone editors.
 
