@@ -105,10 +105,10 @@ done
 toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DFILENAME=\\\"${filename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" -DASF_LIBRARY_PATH=\\\"${asf_library_path}\\\""
 
 toolbus $xargs ${toolbusdefs} \
-   -I${prefix}/share \
+   -I${prefix}/share/meta \
    -I${aterm}/share \
-   -I${pt_support}/share \
+   -I${pt_support}/share/pt-support \
    -I${sglr}/share \
    -I${pgen}/share \
-   -I${asf}/share \
-   ${prefix}/share/eqs-dumper.tb
+   -I${asf}/share/asf \
+   ${prefix}/share/meta/eqs-dumper.tb

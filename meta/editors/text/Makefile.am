@@ -14,6 +14,6 @@ EXTRA_DIST = \
 CLEANFILES = emacs-editor
 
 emacs-editor: emacs-editor.src
-	sed 's@__DATADIR__@$(datadir)@g' < $< > $@ \
+	sed 's@__DATADIR__@$(pkgdatadir)@g' < $< > $@ \
 	&& chmod +x $@
 

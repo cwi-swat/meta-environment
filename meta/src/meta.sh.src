@@ -143,5 +143,5 @@ toolbus $xargs ${toolbusdefs} \
    -I${pt_support}/share \
    -I${sglr}/share \
    -I${pgen}/share \
-   -I${asf}/share \
+   -I${asf}/share/asf \
    ${prefix}/share/meta/meta.tb
