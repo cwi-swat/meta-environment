@@ -39,8 +39,12 @@ exports
 exports
   context-free syntax
     merge-rstores(RSTORE, RSTORE) -> RSTORE
-    merge4(RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
-    merge8(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
+    merge-rstores(RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE, RSTORE) -> RSTORE
 
 hiddens
 
