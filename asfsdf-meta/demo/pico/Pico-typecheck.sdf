@@ -1,6 +1,7 @@
 module Pico-typecheck
 
-imports basic/Booleans Pico-syntax Type-environments
+imports basic/Booleans 
+imports languages/pico/syntax/Pico-Syntax 
 
 exports
   context-free syntax

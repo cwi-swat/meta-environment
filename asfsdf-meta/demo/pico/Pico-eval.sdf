@@ -1,6 +1,7 @@
 module Pico-eval
 
-imports Pico-syntax Value-environments
+imports languages/pico/syntax/Pico-Syntax 
+imports Value-environments
 
 exports
   sorts VALUE-ENV

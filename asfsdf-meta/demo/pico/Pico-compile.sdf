@@ -1,6 +1,7 @@
 module Pico-compile
 
-imports Pico-syntax AssemblyLanguage NextLabel 
+imports languages/pico/syntax/Pico-Syntax 
+imports AssemblyLanguage NextLabel 
   
 exports
   context-free syntax
