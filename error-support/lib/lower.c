@@ -6,7 +6,6 @@
 
 static char *PERR_lowerStrCon(PERR_StrCon str)
 {
-  ATwarning("str = %s\n", PERR_getStrConString(str));
   return PERR_getStrConString(str);
 }
 
