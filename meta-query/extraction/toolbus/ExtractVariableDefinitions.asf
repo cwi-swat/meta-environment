@@ -31,6 +31,12 @@ equations
   ===>
   extractVariableDefinitionsInScope($Atom, $Rstore1, $ProcessNameId) = $Rstore2
 
+[extract-variable-definitions-in-scope-2]
+  $FormalParam = $Var : $Term,
+  $Rstore2 = addVariableDefinition($Var, $ProcessNameId, $Rstore1)
+  ===>
+  extractVariableDefinitionsInScope($FormalParam, $Rstore1, $ProcessNameId) = $Rstore2
+
 
 
 [add-variable-definition-0]
