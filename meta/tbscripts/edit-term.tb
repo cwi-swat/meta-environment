@@ -8,6 +8,7 @@ Name  : term,
 T     : term,
 Text:  str,
 Fn    : str,
+Fid: str,
 TE: text-edit,
 Clst: list, Flst: list, Tslst: list,
 Src: str
@@ -38,9 +39,9 @@ printf("%s\n",Src).
       create(Editor(Name,"",Fn,Id),Tid?).
       snd-note(ui-status(endstat(Id)))
     ).
-    rec-msg(Id,editortool(TE?)).
+    rec-msg(Id,editortool(TE?,Fid?)).
 /* Send term specific stuff to text-editor */
-    snd-do(TE,tb-set-button("Reduce",reduce)). (
+/*    snd-do(TE,tb-set-button("Reduce",reduce)). (
       rec-event(TE,reduce).
       snd-msg(TE,bring-up-to-date). (
         rec-msg(TE,parsetree(T?)).
@@ -49,6 +50,7 @@ printf("%s\n",Src).
         rec-msg(TE,cancel-parsing)
       ) 
     ) *
+*/
     rec-disconnect(TE).
     snd-note(disconnected(TE))
   )
