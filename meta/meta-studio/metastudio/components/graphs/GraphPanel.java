@@ -102,7 +102,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
                     if (hoveredNode != null) {
                         if (isToolTipEnabled()) {
-                            setToolTipText(hoveredNode.getId().getId());
+                            setToolTipText(hoveredNode.getLabel());
                         }
                         else {
                             setToolTipText(null);
