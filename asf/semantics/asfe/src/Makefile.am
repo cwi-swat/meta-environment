@@ -20,10 +20,10 @@ asfe_SOURCES = asfe.tif.c asfe.c evaluator.c equations.c debug.c \
                values.c errors.c pre-post.c
 
 asfe_LDADD		= \
-                        -L$(PT_SUPPORT)/lib -lmept \
-			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(top_builddir)/semantics/builtins/lib \
 			-lasf-builtins \
+                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
                         -L./api -lASFAPI \
