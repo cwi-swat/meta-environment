@@ -85,10 +85,6 @@ static ATerm matchNegativeCondition(PT_Tree lhs, PT_Tree rhs,
   }
 
   if (isAsFixEqual(lhstrm, rhstrm)) {
-    if (runVerbose) {
-      ATwarning("*** fail_env on line %d\n", __LINE__);
-    }
-
     return fail_env;
   }
 

@@ -55,6 +55,7 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 /*}}}  */
 
+
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
@@ -62,8 +63,11 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 {
   ATerm env = fail_env;
 
+
   tagCurrentRule = entry->tag;
   currentRule = entry;
+
+  print_short_equation("try", entry);
 
   env = matchEquation(entry, trm, depth);
 
@@ -71,18 +75,13 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   currentRule = entry;
 
   if (!is_fail_env(env)) {
-    if (runVerbose) {
-      ATwarning("Equation %s was successful.\n", 
-		PT_yieldTree((PT_Tree)entry->tag));
-    }
+    print_short_equation("success", entry);
 
     TIDE_STEP(entry->rhs, env, depth);
     rewrite_steps++;
   }
   else {
-    if (runVerbose) {
-      ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
-    }
+    print_short_equation("fail", entry);
   }
 
   return env;
@@ -284,7 +283,9 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
 {
   PT_Tree value = getVariableValue(env, var);
 
-  assert(value != NULL && "uninitialized variable");
+  if (value == NULL) {
+    return var;
+  }
 
   return value;
 }
@@ -361,7 +362,7 @@ static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
     apiresult = tree; 
   }
   
-  result = rewriteNormalAppl(apiresult, env, depth, extra);
+  result = rewriteInnermost(apiresult, env, depth, extra);
 
   if (result == FAIL && apiresult != FAIL) {
     result = apiresult;
@@ -525,6 +526,7 @@ PT_Tree rewrite(PT_Tree trm)
   }
 
   tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+
   rewrite_steps = 0;
   initBuiltins();
   
@@ -574,7 +576,10 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
 
-  if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
+  if (PT_isTreeLayout(trm) || PT_isTreeLexical(trm)) {
+    reduct = trm;
+  }
+  else if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
     reduct = rewriteVariableAppl(trm, env, depth, extra);
   }
   else if (PT_hasTreeArgs(trm)) {

@@ -65,6 +65,17 @@ ATerm posinfo;
 
 /*}}}  */
 
+/*{{{  static void printShortRule(const char *msg, equation_entry *entry) */
+
+void print_short_equation(const char *msg, equation_entry *entry)
+{
+  if (runVerbose) {
+    ATwarning("%s\t: %s ", msg, PT_yieldTree((PT_Tree)entry->tag));
+    ATwarning("%s = ...\n", PT_yieldTree((PT_Tree)entry->lhs));
+  }
+}
+
+/*}}}  */
 /*{{{  equation_table *create_equation_table(int size) */
 
 /* Allocate memory for an equation table.
@@ -271,9 +282,6 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
   lhsargs = PT_getTreeArgs(lhs);
   top_ofs = PT_getTreeProd(lhs);
 
-  if (runVerbose) {
-    ATwarning("enter_equation:  top_ofs = %s\n", PT_yieldProduction(top_ofs));
-  } 
 
   /* find first appl or var argument of the outermost function symbol */ 
   while (PT_hasArgsHead(lhsargs) && 
@@ -293,11 +301,6 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
     }
     else {
       first_ofs = PT_getTreeProd(firstArg);
-
-      if (runVerbose) {
-        ATwarning("...............first_ofs = %s\n", 
-          PT_yieldProduction(first_ofs));
-      } 
     }
   }
 
@@ -352,6 +355,8 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
     entry->hnext = table->table[hnr];
     table->table[hnr] = entry;
   }
+
+  print_short_equation("registered", entry);
 }
 
 /*}}}  */
@@ -360,15 +365,6 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
 equation_entry *find_equation(equation_entry * from, PT_Production top_ofs, 
 			      PT_Production first_ofs)
 {
-  if (runVerbose) {
-    ATwarning("looking for equation with ofs: %s\n",
-	      PT_yieldProduction(top_ofs));
-    if (first_ofs) {
-      ATwarning("................and first ofs: %s\n",
-		PT_yieldProduction(first_ofs));
-    }
-  }
-
   if (equations->size == 0) {
     return NULL;
   }
@@ -477,6 +473,10 @@ void enter_equations(char *modname, ASF_CondEquationList eqsList)
   }
 
   flush_equations(table);
+
+  if (runVerbose) {
+    ATwarning("reading in equations:\n");
+  }
 
   while (ASF_hasCondEquationListHead(eqsList)) {
     enter_equation(table, ASF_getCondEquationListHead(eqsList));

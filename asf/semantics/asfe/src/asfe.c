@@ -227,11 +227,6 @@ int main(int argc, char *argv[])
 #endif
     }
 
-    if (runVerbose) {
-      ATwarning("The verbose option is broken for the moment\n\n");
-      runVerbose = ATfalse;
-    }
-
     /* Rewrite the term */
     result = evaluator(name, parseTree, eqsList, use_tide, 
 		       remove_layout, mark_new_layout, allow_ambs);
