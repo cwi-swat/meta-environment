@@ -45,7 +45,7 @@ in
   Create-Asf-Processes.
   (
     rec-msg(environment-name-hook).
-    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment")
+    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
   +
     rec-msg(library-location-hook).
     snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
