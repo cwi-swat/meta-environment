@@ -208,7 +208,7 @@ ATerm generate_traversals(int cid, char *name, ATerm t)
   } else
     ATerror("not an asfix term: %t\n", t);
 
-  return ATmake("snd-value(changed-syntax(<term>))", asfix);
+  return ATmake("snd-value(changed-syntax(<term>))", ATBpack(asfix));
 }
 
 /*}}}  */
