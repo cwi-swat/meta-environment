@@ -180,22 +180,27 @@ ATermList add_imports(ATerm name, ATermList mods)
   return unknowns;
 }
 
-ATbool complete_specification(ATerm module)
+ATbool complete_specification(ATermList visited, ATerm module)
 {
-  if(GetValue(modules_db, module)) {
-    ATerm first;
-    ATbool result = ATtrue;
-    ATermList imports = (ATermList) GetValue(import_db,module);
+  if(ATindexOf(visited, module, 0) < 0) {
+    if(GetValue(modules_db, module)) {
+      ATerm first;
+      ATbool result = ATtrue;
+      ATermList imports = (ATermList) GetValue(import_db,module);
 
-    while(!ATisEmpty(imports) && result) {
-      first = ATgetFirst(imports);
-      result = complete_specification(first);
-      imports = ATgetNext(imports);
+      visited = ATinsert(visited,module);
+      while(!ATisEmpty(imports) && result) {
+        first = ATgetFirst(imports);
+        result = complete_specification(visited,first);
+        imports = ATgetNext(imports);
+      }
+      return result; 
     }
-    return result; 
-  }
-  else
-    return ATfalse;
+    else
+      return ATfalse;
+  }  
+  else 
+    return ATtrue;
 }
 
 ATermList calc_trans(ATermList todo)

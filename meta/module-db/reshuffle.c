@@ -425,7 +425,7 @@ ATfprintf(stderr,"reshuffle_per_sort finished\n");
 
 
 ATermList get_imported_modules(ATerm name);
-ATbool complete_specification(ATerm module);
+ATbool complete_specification(ATermList visited,ATerm module);
 
 void process_next_module(int cid)
 {
@@ -464,7 +464,7 @@ void compile_module(int cid, ATerm mod)
 {
   ATermList imports;
 
-  if(complete_specification(mod)) {
+  if(complete_specification(ATempty,mod)) {
     ATfprintf(stderr,"Reshuffling ... \n");
     initialize_output_path(mod);
     modules_to_process = ATempty;
