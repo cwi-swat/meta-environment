@@ -53,10 +53,8 @@ public class TBTermTest extends TestCase {
   boolean doMatch(String s1, String s2) {
     Environment e1 = new Environment();
     Environment e2 = new Environment();
-    MatchResult mr;
     try {
-      mr = TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
-      return mr.matches();
+      return TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
     } catch (ToolBusException e) {
       fail(e.getMessage());
     }

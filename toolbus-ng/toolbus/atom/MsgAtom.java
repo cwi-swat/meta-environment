@@ -62,7 +62,7 @@ abstract class MsgAtom extends Atom {
     return partners.size() > 0;
   }
 
-  public MatchResult matchPartner(MsgAtom b) throws ToolBusException {
+  public boolean matchPartner(MsgAtom b) throws ToolBusException {
     return TBTerm.match(matchPattern, getEnv(), b.getMatchPattern(), b.getEnv());
   }
 
@@ -92,14 +92,13 @@ abstract class MsgAtom extends Atom {
         MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
         ProcessInstance pb = b.getProcess();
         if (pb.contains(b) && b.isEnabled()) {
-          MatchResult r = matchPartner(b);
-          if (r.matches()) {
+          if (matchPartner(b)){
             if (ToolBus.isVerbose()) {
               System.err.println(
                 "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
             }
-            r.getLeft().update(pa.getEnv());
-            r.getRight().update(pb.getEnv());
+//            r.getLeft().update(pa.getEnv());
+//            r.getRight().update(pb.getEnv());
 
             this.nextState();
             b.nextState();

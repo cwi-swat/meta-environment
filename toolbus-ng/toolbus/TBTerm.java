@@ -8,14 +8,6 @@ import aterm.*;
 import aterm.pure.PureFactory;
 
 /**
- * @author paulk
- *
- * To change this generated comment edit the template variable "typecomment":
- * Window>Preferences>Java>Templates.
- * To enable and disable the creation of type comments go to
- * Window>Preferences>Java>Code Generation.
- */
-/**
  * TBTerm extends ATerms in several ways. This is achieved by staying with the ATerm representation
  * but giving a special meaning to some symbols. The extensions are:
  * - a number of standard terms and placeholders
@@ -24,6 +16,7 @@ import aterm.pure.PureFactory;
  *    (see FunctionDescriptors)
  * - matching and substitution
  */
+
 public class TBTerm {
 
   public static ATermFactory factory;
@@ -361,22 +354,25 @@ public class TBTerm {
   
   private static Environment enva;
   private static Environment envb;
-  private static MatchEnvironment menva;
-  private static MatchEnvironment menvb;
   private static boolean fullMatch = true;
+  private static MatchResult mr;
   
-  
-  public static MatchResult match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
+  public static boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
+    mr = new MatchResult(enva, envb);
+    
     TBTerm.enva = enva;
     TBTerm.envb = envb;
-    menva = new MatchEnvironment();
-    menvb = new MatchEnvironment();
+ 
     fullMatch = true;
     boolean res = performMatch(ta, tb);
-    return new MatchResult(res, menva, menvb);
+    if(res){
+      mr.updateEnvs();
+      return true;
+    } else
+    return false;
   }
 
-  public static boolean mightMatch(ATerm ta, ATerm tb) { //System.out.println("mightMatch(" + ta +", " + tb + ")");
+  public static boolean mightMatch(ATerm ta, ATerm tb) {
     fullMatch = false;
     try {
       return performMatch(ta, tb);
@@ -402,14 +398,14 @@ public class TBTerm {
 
     if (TBTerm.isResVar(ta)) {
       if (fullMatch) {
-        menva.putResVar(ta, tb);
+        mr.assignLeft(ta, tb);
       }
       return true;
     }
 
     if (TBTerm.isResVar(tb)) {
       if (fullMatch) {
-        menvb.putResVar(tb, ta);
+        mr.assignRight(tb, ta);
       }
       return true;
     }

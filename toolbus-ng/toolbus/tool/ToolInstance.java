@@ -16,8 +16,8 @@ public interface ToolInstance {
 
   public void terminate(String msg);
 
-  public MatchResult getValueFromTool(ATerm trm, Environment env);
+  public boolean getValueFromTool(ATerm trm, Environment env);
 
-  public MatchResult getEventFromTool(ATerm aTerm, Environment environment);
+  public boolean getEventFromTool(ATerm aTerm, Environment environment);
 
 }
