@@ -1,6 +1,6 @@
 /* $Id$ */
 
-Thu Oct 14 08:47:06 CET 2004 (fagidiot@daimi.au.dk)
+Thu Oct 29 18:02:19 CET 2004 (fagidiot@daimi.au.dk)
 * Initial termstore is now being generated on installation.
 * Some stability issues solved.
 * See the file changes.
