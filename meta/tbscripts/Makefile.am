@@ -6,7 +6,8 @@ TBSCRIPTS     = clear-all.tb close-module.tb editor-creator.tb \
                 open-modules.tb process-eqs.tb parse-focusses.tb \
                 revert-module.tb error-display.tb save-module.tb \
                 set-parsetable.tb get-parsetable.tb \
-                ui.tb asf-syntax.tb dump-equations.tb dump-parsetable.tb \
+                ui.tb semantics-interface.tb dump-equations.tb \
+		dump-parsetable.tb \
                 rename-module.tb print-module.tb compile-module.tb \
                 pt-dumper.tb standalone-pt-dumper.tb \
                 eqs-dumper.tb standalone-eqs-dumper.tb \

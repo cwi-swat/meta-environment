@@ -30,12 +30,8 @@ Id := process-id.
     (
       rec-msg(syntax(Syntax?)).
 
-      snd-msg(check-asfsdf(Syntax)) .
-      rec-msg(messages(Msgs?)) .
-      snd-msg(display-sdf-errors(Msgs)) .
-
-      snd-msg(make-asf-syntax(ModuleId, Syntax)).
-      rec-msg(asf-syntax(Syntax?)).
+      snd-msg(preprocess-syntax-hook(ModuleId, Syntax)).
+      rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
 
       snd-msg(generate-parsetable(Syntax, ModuleId)).
       rec-msg(parsetable(Table?)).
@@ -58,35 +54,3 @@ Id := process-id.
 delta
 endlet
 
-/* add asf syntax and generate a parse table 
-process MakeTable(ModuleId : term) is
-let
-  Syntax    : term,
-  Table     : term,
-  Path      : str,
-  ErrorMsg  : str,
-  TimeStamp : term
-in
-  snd-msg(get-all-sdf2-definitions(ModuleId)).
-  (
-    rec-msg(syntax(Syntax?)).
-
-    snd-msg(make-asf-syntax(ModuleId, Syntax)).
-    rec-msg(asf-syntax(Syntax?)).
-
-    snd-msg(generate-parsetable(Syntax, ModuleId)).
-    rec-msg(parsetable(Table?)).
-
-    snd-msg(add-parse-table-to-db(ModuleId, Table, timestamp(0))).
-    rec-msg(parse-table-added).
-
-    snd-msg(get-table-from-db(ModuleId)) .
-    rec-msg(table(Table?, Path?)).
-    snd-msg(table(Table, Path))
-    +
-    rec-msg(no-syntax(ErrorMsg?)).
-    snd-note(ui-status(errorf("%s",[ErrorMsg]))).
-    snd-msg(parsetable-not-set(ModuleId))
-  )
-endlet
-*/

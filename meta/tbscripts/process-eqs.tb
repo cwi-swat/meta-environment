@@ -43,9 +43,8 @@ in
            snd-msg(Id,parse-string-as-asfix2me(eqs(Module), Nonterminal, EqsText)).
            (
              rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
-             snd-msg(check-asf(EqsTree)) .
-             rec-msg(messages(Msgs?)) . 
-             snd-msg(display-asf-errors(Msgs)) .
+	     snd-msg(postprocess-semantics-hook(EqsTree)) .
+	     rec-msg(postprocess-semantics-hook-result(EqsTree?)).
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 
@@ -131,7 +130,7 @@ in
       )*
       if equal(Modules,[]) then  
 	snd-msg(flatten-equations(NewModules)).
-	rec-msg(equations-flattened(AllEquations?)).
+	rec-msg(flatten-equations-result(AllEquations?)).
 	snd-msg(all-equations(AllEquations))
       fi 
     +

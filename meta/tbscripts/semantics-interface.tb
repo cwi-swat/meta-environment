@@ -1,0 +1,59 @@
+/*
+ * $Id$
+ */
+#include "asfc.idef"
+#include "asfoperations.idef"
+#include "asfchecker.idef"
+#include "asfsdfchecker.idef"
+#include "asfe.idef"
+#include "addeqssyntax.idef"
+#include "addapisyntax.idef"
+#include "removevarsyntax.idef"
+#include "compile-module.tb"
+
+process Create-Asf-Processes is
+let Pid : int in
+  create(Asfe, Pid?).
+  create(AsfSdfChecker, Pid?).
+  create(AsfChecker, Pid?).
+  create(AsfOperations, Pid?).
+  create(AddEqSyn, Pid?).
+  create(AddAPISyn, Pid?).
+  create(RemoveVars, Pid?).
+  create(Asfc, Pid?).
+  create(Compile-module, Pid?)
+endlet
+
+process Semantics-Interface is
+let
+  Syntax : term, 
+  Semantics  : term,
+  ModuleName : str,
+  Msgs : list
+in
+  Create-Asf-Processes.
+  (
+    rec-msg(postprocess-semantics-hook(Semantics?)).
+    snd-msg(check-asf(Semantics)).
+    rec-msg(messages(Msgs?)).
+    snd-msg(display-asf-errors(Msgs)).
+    snd-msg(postprocess-semantics-hook-result(Semantics))
+  +
+    rec-msg(preprocess-syntax-hook(eqs(ModuleName?), Syntax?)).
+    snd-msg(check-asfsdf(Syntax)) .
+    rec-msg(messages(Msgs?)) .
+    snd-msg(display-sdf-errors(Msgs)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)). 
+    snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
+    rec-msg(extended-syntax(Syntax?)) .
+    snd-msg(preprocess-syntax-hook-result(eqs(ModuleName), Syntax))  
+  +
+    rec-msg(preprocess-syntax-hook(trm(ModuleName?), Syntax?)).
+    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+    rec-msg(changed-syntax(Syntax?)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)).
+    snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+  ) * delta
+endlet
