@@ -14,7 +14,7 @@ public class Module implements Comparable {
 	private List _parent;
 	private List _child;
 
-    private ListModel childListModel;
+	private ListModel childListModel;
 	private ListModel parentListModel;
 
 	private int State = STATE_NORMAL;
@@ -29,16 +29,17 @@ public class Module implements Comparable {
 	}
 
 	public int compareTo(Object o) {
-		return _name.compareTo(o);
+		Module peer = (Module) o;
+		return _name.compareTo(peer.getName());
 	}
 
 	public String getName() {
 		return _name;
 	}
-    
-    public String getAbbreviation() {
-        return _name.substring(_name.lastIndexOf('/'),-1);
-    }
+	
+	public String getAbbreviation() {
+		return _name.substring(_name.lastIndexOf('/'),-1);
+	}
 
 	private void setName(String name) {
 		_name = name;
@@ -70,15 +71,15 @@ public class Module implements Comparable {
 		_child = new LinkedList();
 		childListModel.setList(_child);
 	}
-    
-    public List getChildren() {
-        return _child;
-    }
+	
+	public List getChildren() {
+		return _child;
+	}
 
-    public List getParents() {
-        return _parent;
-    }
-    
+	public List getParents() {
+		return _parent;
+	}
+	
 	public Iterator fetchChildIterator() {
 		return _child.iterator();
 	}

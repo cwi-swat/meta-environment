@@ -1,5 +1,14 @@
 # $Id$
 
+Fri Nov 12 09:56:51 CET 2004 <{jong,kooiker}@cwi.nl>
+ * configure.ac:
+   - fix EXTERNAL_JARS uses both ToolBus jar and installed classes
+ * meta-studio/metastudio/data/AbstractModuleTreeModel.java:
+   - use Set and Iterator i.s.o. Enumeration and Vector
+ * meta-studio/metastudio/data/Module.java:
+   - fix String.compareTo(Object) does not exist in java 1.5,
+     use String.compareTo(String)
+
 Wed Nov 10 10:57:58 CET 2004 <kooiker@cwi.nl>
  * term-store/term-store.idef:
    - fix assignment of Values to be a list 
