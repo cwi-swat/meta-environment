@@ -298,18 +298,14 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
   }
 }
 
-ATerm add_empty_module(int cid, char *modulename)
+ATerm add_empty_module(int cid, char *moduleName)
 {
-  ATerm entry,modname;
-  char  *text;
-  char  newpath[1024] = {'\0'};
+  ATerm entry;
+  char  fileName[1024] = {'\0'};
 
-  modname = ATmake("<str>",modulename);
-  if(ATmatchTerm(modname,pattern_asfix_id,&text)) {
-    sprintf(newpath,"%s%s", text, ".sdf2");
-  }
+  sprintf(fileName,"%s%s", moduleName, ".sdf2");
   entry = (ATerm)ATmakeList(10,
-                            ATmake("<str>",newpath),
+                            ATmake("<str>",fileName),
                             ATparse("unavailable"),
                             ATmakeInt(0),
                             Mtrue,
@@ -320,7 +316,7 @@ ATerm add_empty_module(int cid, char *modulename)
                             ATparse("unavailable"),
                             ATmakeInt(0)
                            );
-  PutValue(new_modules_db, modname, entry);
+  PutValue(new_modules_db, ATmake("<str>",moduleName), entry);
   return ATmake("snd-value(done)");
 }
 
@@ -344,7 +340,7 @@ ATerm add_eqs_module(int cid, char *modulename, char* path, ATerm eqs,
   }
 
   entry = GetValue(new_modules_db, modname);
-  if(!ATisEqual(eqs,ATparse("error")) &
+  if(!ATisEqual(eqs,ATparse("error")) &&
      !ATisEqual(eqs,ATparse("no-equations"))) {
 
     eqs = AFaddPosInfoToModule(path, modulename, eqs);
@@ -828,7 +824,7 @@ char *get_module_name(ATerm module)
   char *text;
 
   if(ATmatchTerm(module,pattern_asfix_appl,
-                 & t[0], &t[1], &args)) {
+                 &t[0], &t[1], &args)) {
     elem = ATelementAt(args,2);
     if(ATmatchTerm(elem,pattern_asfix_appl,
                    &t[0], &t[1], &args)) {
