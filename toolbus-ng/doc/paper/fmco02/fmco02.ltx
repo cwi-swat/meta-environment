@@ -109,12 +109,13 @@ from a completely sequential system to a system with several
 concurrent components. Unavoidably, we encountered hard to explain
 deadlocks and race conditions.
 
-In 1993, a next step was to write a formal specification of the
-desired system behavior~\cite{P9415} using PSF, a specification language based on
-process algebra and algebraic specifications~\cite{MauwVeltink90}.  Simulation
-of this specification unveiled other, not yet observed, deadlocks.
-Although, this was clearly an improvement over the then existing situation,
-this specification approach also had its limitations and drawbacks:
+In 1993, a next step was to write a formal specification of the desired
+system behavior~\cite{P9415} using PSF, a specification language based
+on process algebra and algebraic specifications~\cite{MauwVeltink90}.
+Simulation of this specification unveiled other, not yet observed,
+deadlocks. Although this was clearly an improvement over the existing
+situation, this specification approach also had its limitations and
+drawbacks:
 
 \begin{itemize}
 
@@ -139,30 +140,28 @@ multi-language, distributed, applications could be built with
 significantly less effort than using plain C and sockets.
 
 Based on various
-experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},  in
-1995 a new version of the \TB\ was designed and implemented: the
+experiments~\cite{P9601,DamsGroote95,LisserVanWamel97,Diertens97},
+in 1995 a new version of the \TB\ was designed and implemented: the
 Discrete Time ToolBus~\cite{BergstraKlint95,TB-AMAST96,TB-SOCP98}.
-Its main innovation were primitives for expressing timing
-considerations (delay, timeout) and for operating on a limited set of
-built-in datatypes (booleans, integers, reals, lists).  The Discrete
-Time \TB\ has been used for the restructuring of the \asdf\
-Meta-Environment~\cite{BHK97}. A first version was released in
-2001~\cite{BDHJJKKMOSVVV01}.
+Its main innovations were primitives for expressing timing considerations
+(delay, timeout) and for operating on a limited set of built-in datatypes
+(booleans, integers, reals, lists).  The Discrete Time \TB\ has been
+used for the restructuring of the \asdf\ Meta-Environment~\cite{BHK97}. A
+first version was released in 2001~\cite{BDHJJKKMOSVVV01}.
 
 In the meantime, the exchange format has also evolved from the toolbus
 terms mentioned above to ATerms~\cite{BJKO00}: a term format that
-supports maximal subterm sharing and a very concise, sharing
-preserving, binary exchange format. ATerms decrease memory usage
-thanks to sharing and they permit a very fast equality test since
-structural equality can be replaced by pointer equality thanks to the
-maximal subterm sharing.
+supports maximal subterm sharing and a very concise, sharing preserving,
+binary exchange format. ATerms decrease memory usage thanks to sharing
+and they permit a very fast equality test since structural equality can
+be replaced by pointer equality thanks to the maximal subterm sharing.
 
-Today, beginning 2003, it turns out that the original software
-engineering goals that triggered the development of the \TB\ have been
-achieved and that the Meta-Environment can now be even further
-stretched than anticipated~\cite{RTA}. Therefore, it is time for some
-reflection.  What have we learned from this major renovation project
-and what are the implications for the \TB\ design and implementation.
+Today, beginning 2003, it turns out that the original software engineering
+goals that triggered the development of the \TB\ have been achieved
+and that the Meta-Environment can now be even further stretched than
+anticipated~\cite{RTA}. Therefore, it is time for some reflection.
+What have we learned from this major renovation project and what are
+the implications for the \TB\ design and implementation?
 
 \subsection{Plan of this Paper}
 
@@ -275,15 +274,14 @@ reused in other projects~\cite{XXX}.
 
 \end{table}
 
-The goals of the\TB\ is to integrate tools written in different
-languages running on different machines.  This is achieved by means of
-a programmable software bus as illustrated in
-Figure~\ref{Fig:toolbus-architecture}.  The \TB\ coordinates the
-cooperation of a number of tools.  This cooperation is described by a
-\Tscript\ that runs inside the \TB. The result is a set of concurrent
-processes inside the \TB\ that can communicate with each other and
-with the tools. Tools can be written in any language and can run on
-different machines. They exchange data by way of ATerms.
+The goal of the \TB\ is to integrate tools written in different languages
+running on different machines. This is achieved by means of a programmable
+software bus as illustrated in Figure~\ref{Fig:toolbus-architecture}. The
+\TB\ coordinates the cooperation of a number of tools.  This cooperation
+is described by a \Tscript\ that runs inside the \TB. The result is a
+set of concurrent processes inside the \TB\ that can communicate with
+each other and with the tools. Tools can be written in any language and
+can run on different machines. They exchange data by way of ATerms.
 
 A typical cooperation scenario is illustrated in
 Figure~\ref{toolbus-scenario}.  A user-interface (UI) and a database
@@ -298,7 +296,7 @@ button only leads to an event that is handled by some process in the
 \TB. This process routes the event to the database tool (likely via
 some intermediary process) and gets the answer back via the inverse
 route. This implies that the configuration knowledge is now
-completely localized in the the \Tscript\ and that UI and DB do not
+completely localized in the \Tscript\ and that UI and DB do not
 even know about each others existence.
 
 The primitives that can be used in \Tscript{}s are listed in
@@ -306,24 +304,15 @@ Table~\ref{Tab:Tscript-features}.
 
 \section{An example}
 
-To demonstrate the use of some of the ToolBus script primitives,
-we describe how a sample application could be implemented using
+To make the scenario from Figure~\ref{Fig:toolbus-architecture} a bit
+more concrete, we demonstrate the use of some of the ToolBus script
+primitives, in a sample application as it could be implemented using
 the ToolBus. For this example, we consider the construction of an
 \emph{Address Book Service}.
 
-Entries in our Address Book contain the following elements:
-
-\begin{description}
-  \item[id] a unique \emph{id} (used for internal reference);
-  \item[name] the \emph{name} of the person living at this address;
-  \item[address] the \emph{address} of the person.
-\end{description}
-
-\begin{footnotesize}
-\verbatiminput{AddressBookService.java}
-\end{footnotesize}
-
-Our Address Book Service will deal with the following use cases:
+First we consider some aspects of the User Interface. An instance
+of the UI connects to the ToolBus and during the subsequent session,
+the user can:
 
 \begin{description}
   \item[create] a new entry in the addressbook database;
@@ -332,13 +321,15 @@ Our Address Book Service will deal with the following use cases:
   \item[update] an existing entry in the database.
 \end{description}
 
+\subsection{ToolBus processes for the Address Book Service}
+
 Each of these use cases can be described as a ToolBus process which,
 together with a process that explains how these use cases interact,
 form the ToolBus script describing our Address Book Service.
 
-\subsection{The \texttt{MAIN} process}
+\subsubsection{The \texttt{ADDRESSBOOK} process}
 
-The \texttt{MAIN} process tells the ToolBus that an instance of our
+The \texttt{ADDRESSBOOK} process tells the ToolBus that an instance of our
 \texttt{address-book} tool is to be executed, followed by a loop
 which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE} or
 \texttt{DELETE} processes each iteration. This construction, using the
@@ -348,7 +339,7 @@ be regarded atomically: e.g. no \texttt{DELETE} will happen during an
 
 \begin{footnotesize}
 \begin{verbatim}
-process MAIN is
+process ADDRESSBOOK is
 let ABTool : address-book
 in
   execute(address-book, ABTool?) .
@@ -373,9 +364,8 @@ a separate section (one for each tool if multiple tools are involved):
 In this case, the ToolBus is told that our tool is written in Java, and
 that the main class to be started is called \texttt{AddressBookService}.
 
-\subsection{The \texttt{CREATE} process}
-The \emph{creation} of a new addressbook entry can be described as
-a ToolBus process as follows:
+\subsubsection{The \texttt{CREATE} process} can be described as a ToolBus
+process as follows:
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -395,36 +385,27 @@ to the tool, so it can update its state. In this case, our tool yields
 a unique id for reference to the new entry, which is returned as the
 result of the creation message.
 
-\subsection{The \texttt{DELETE} process}
-The \texttt{DELETE} process is defined in a similar way, except there is
-no result value, which is demonstrated by the fact that a \texttt{snd-do}
-is used to communicate with the tool, as opposed to the \texttt{snd-eval},
-\texttt{rec-value} construct which is used in the \texttt{CREATE} process.
-
+\subsubsection{The \texttt{DELETE} process} differs only from the CREATE
+process in that it does not need a return value:
 \begin{footnotesize}
 \begin{verbatim}
-process DELETE(AB : address-book) is
-let AID : int
-in
-  rec-msg(delete-address(AID?)) .
-  snd-do(AB, delete-entry(AID)) .
-  snd-msg(address-deleted(AID))
-endlet
+...
+  rec-msg(delete-address(AID?) .
+  snd-do(AB, delete-entry(AID) .
+  snd-msg(address-deleted(AID)
+...
 \end{verbatim}
 \end{footnotesize}
 
-\subsection{The \texttt{SEARCH} process}
-\label{tb:search}
-
-In our example, the \texttt{SEARCH} process implements but a single query:
-finding an addressbook entry by name. It shows how different results from
-a tool-evaluation request can be processed in much the same way that
-different messages are handled. Upon receiving a \texttt{find-by-name}
-message from another process, this request is delegated to the
-tool. Depending on whether or not the entry exists in the database,
-the tool replies with a \texttt{found} or a \texttt{not-found} message,
-respectively. This result is then propagated to the process that sent
-the initial \texttt{find-by-name} message.
+\subsubsection{The \texttt{SEARCH} process} \label{tb:search} in our
+example, implements but a single query: finding an addressbook entry by
+name. It shows how different results from a tool-evaluation request can be
+processed in much the same way that different messages are handled. Upon
+receiving a \texttt{find-by-name} message from another process, this
+request is delegated to the tool. Depending on whether or not the entry
+exists in the database, the tool replies with a \texttt{found} or a
+\texttt{not-found} message, respectively. This result is then propagated
+to the process that sent the initial \texttt{find-by-name} message.
 
 \begin{footnotesize}
 \begin{verbatim}
@@ -446,14 +427,12 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-\subsection{The \texttt{UPDATE} process}
-
-The \texttt{UPDATE} process is even more interesting. It shows
-that each update of an address entry is \emph{guarded}. A process
-wanting to update an entry first has to announce this fact by sending
-an \texttt{update-address} message, before it can do one or more
-updates to the entry. It then finishes the update by sending an
-\texttt{update-address-done} message. This message pair thus acts
+\subsubsection{The \texttt{UPDATE} process} is even more interesting. It
+shows that each update of an address entry is \emph{guarded}. A
+process wanting to update an entry first has to announce this fact
+by sending an \texttt{update-address} message, before it can do one
+or more updates to the entry. It then finishes the update by sending
+an \texttt{update-address-done} message. This message pair thus acts
 as a very primitive locking scheme. More elaborate schemes are very
 well possible, but are not discussed in this paper. Summarizing, the
 \texttt{UPDATE} process shows that \emph{outside} the implementation
@@ -469,17 +448,54 @@ let
   Name : str,
   Address : str
 in
-  rec-msg(update-address(AID?)) .
+  rec-msg(update-entry(AID?)) .
   ( rec-msg(set-name(Name?)) .
     snd-do(AB, set-name(AID, Name))
   + rec-msg(set-address(Address?)) .
     snd-do(AB, set-address(AID, Address))
   ) *
-  rec-msg(update-address-done(AID))
+  rec-msg(update-entry-done(AID))
 endlet
 \end{verbatim}
 \end{footnotesize}
 
+\subsection{ToolBus process for the User Interface}
+
+Because users can connect at any time to the ToolBus to start a
+session with the Address Book Service, the ToolBus itself does not
+execute instances of the UI (as it did with the address book tool).
+Instead \texttt{UITool} instances can connect, make zero or more
+requests to the service, and disconnect at their convenience.
+The following definition of the \texttt{UI} process shows how two
+of the UI requests can be handled, 
+
+\begin{footnotesize}
+\begin{verbatim}
+process UI is
+let
+  UITool : ui,
+  AID : int,
+  Name : str
+in
+  rec-connect(UITool?) .
+  (
+    rec-event(UITool, create-address) .
+    snd-msg(create-address) .
+    rec-msg(address-created) .
+    snd-ack-event(UITool, create-address)
+  +
+    rec-event(UITool, update-name(AID?, Name?)) .
+    snd-msg(update-entry(AID)) .
+    snd-msg(set-name(Name)) .
+    snd-msg(update-entry-done(AID)) .
+    snd-ack-event(UITool, new-name(AID, Name))
+  +
+    ... /* more UI requests */
+  )
+  * rec-disconnect(UITool)
+endlet
+\end{verbatim}
+\end{footnotesize}
 
 \section{Application to the \asdf\ Meta-Environment}
 
@@ -845,24 +861,6 @@ creates an additional inter-tool dependency and assumes that both tools
 have access to the same shared file system.
 
 
-\subsubsection{Envisaged \TB\ Approach}
-
-To overcome the problems of value-based transmission,
-we envisage the introduction of channels as sketched in
-Figure~\ref{Fig:toolbus-values}(b). This model is inspired by the second
-workaround mentioned above and is completely transparent for the user.
-
-The idea is to stick to the strict call-by-value transmission model, but
-to implement the actual value transmission by data communication between
-sending tool and receiving tool thus offloading the \TB\ itself. Via
-the \TB, only an identification of the data value is transmitted between
-sender and receiver. The downside of this model is that it introduces the
-need for distributed garbage collection, since a value may be distributed
-to more than one receiving tool and the sender does not known when all
-receivers have retrieved their copy.  Adding expiration times to values
-or reference counting at the \TB\ level may solve this problem.
-
-
 \subsection{Related frameworks: Java RMI, RMI-IIOP and Java IDL}
 
 Given our needs and desires for a next generation ToolBus, it is
@@ -892,13 +890,14 @@ Java based: only components written in Java can communicate via RMI.
 For components to work together in RMI, first a \emph{remote interface}
 is established. This is a Java interface has a ``real'' implementation
 in the tool (or \emph{server}) and a ``stub'' implementation on the
-client sides. The interface is typed by the programmer as opposed to the
-generated interfaces in a ToolBus setting where they are derived from the
-communication patterns found in the ToolBus script. The stubs in the RMI
-setting are then generated from this Java interface using \texttt{rmic}:
-the RMI compiler. Stubs act as a client-side proxy, delegating the method
-call via the RMI system to the server object. In RMI, any object that
-implements a remote interface is called a \emph{remote object}.
+client sides (Figure~\ref{Fig:rmi}). The interface is written by the
+programmer as opposed to the generated interfaces in a ToolBus setting
+where they are derived from the communication patterns found in the
+ToolBus script. The stubs in the RMI setting are then generated from
+this Java interface using \texttt{rmic}: the RMI compiler. Stubs act as
+a client-side proxy, delegating the method call via the RMI system to
+the server object. In RMI, any object that implements a remote interface
+is called a \emph{remote object}.
 
 \begin{figure}[tb]
 \begin{center}
@@ -1046,6 +1045,23 @@ method calls will have to be prohibited by adding code to the component's
 internals.
 
 \end{itemize}
+
+\subsubsection{Implications for the \TB\ Approach}
+
+To overcome the problems of value-based transmission,
+we envisage the introduction of channels as sketched in
+Figure~\ref{Fig:toolbus-values}(b). This model is inspired by the second
+workaround mentioned above and is completely transparent for the user.
+
+The idea is to stick to the strict call-by-value transmission model, but
+to implement the actual value transmission by data communication between
+sending tool and receiving tool thus offloading the \TB\ itself. Via
+the \TB, only an identification of the data value is transmitted between
+sender and receiver. The downside of this model is that it introduces the
+need for distributed garbage collection, since a value may be distributed
+to more than one receiving tool and the sender does not known when all
+receivers have retrieved their copy.  Adding expiration times to values
+or reference counting at the \TB\ level may solve this problem.
 
 \section{Current Status} \label{Sec:status}
 

@@ -53,6 +53,10 @@ public class TBAddressBookService implements AddressBookTif
     }
   }
 
+  public ATerm findByAddress(String address) {
+    throw new RuntimeException("findByAddress: Not yet implemented!");
+  }
+
   public void recTerminate(ATerm t0) {}
 
   public static final void main(String[] args) throws Exception {
