@@ -48,7 +48,7 @@ static char myversion[] = "1.0";
     explanation.
  */
 
-static char myarguments[] = "bD:hi:o:tvVxp";
+static char myarguments[] = "hi:o:Vxp";
 
 
 /*
@@ -88,13 +88,9 @@ void usage(void)
     fprintf(stderr,
         "Usage: %s%s . . .\n"
         "Options:\n"
-        "\t-b              ignored\n"
-        "\t-D filename     output to file (default stdout)\n"
         "\t-h              display help information (usage)\n"
         "\t-i filename     input from file (default stdin)\n"
         "\t-o filename     output to file (default stdout)\n"
-        "\t-t              ignored\n"
-        "\t-v              ignored\n"
         "\t-V              reveal program version (i.e. %s)\n"
         "\t-x              suppress lexicals               (default: off)\n"
 				"\t-p              print productions as nodes      (default: off)\n",
@@ -118,13 +114,8 @@ int main (int argc, char **argv)
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
       case 'o':
-      case 'D':  output_file_name = optarg;    break;
       case 'x':  suppress_lex = !suppress_lex; break;
   		case 'p':  print_prods = !print_prods;   break;
-
-      case 'b':
-      case 't':
-      case 'v':                                break;
       case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
                                                exit(0);
       default :  usage();                      exit(1);
