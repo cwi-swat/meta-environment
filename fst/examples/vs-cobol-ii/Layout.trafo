@@ -1,0 +1,19 @@
+add
+ module Layout
+
+  exports
+
+   lexical syntax
+    "%" ~[\n]* [\n]    -> LAYOUT
+    [\ \t\n]           -> LAYOUT
+    ", "               -> LAYOUT
+    ",\n"              -> LAYOUT
+
+    "SKIP1"             -> LAYOUT
+    "SKIP2"             -> LAYOUT
+    "SKIP3"             -> LAYOUT
+    "EJECT"             -> LAYOUT
+
+   context-free restrictions
+    LAYOUT? -/- [\,\ \t\n\%]
+

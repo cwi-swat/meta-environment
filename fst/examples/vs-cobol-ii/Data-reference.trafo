@@ -1,0 +1,238 @@
+%%
+%% Some sorts used in the definition of identifier are arithmetic
+%% expressions. We use chain rules to preserve these auxiliary sorts
+%% for readability.
+%%
+
+focus on
+ sort Identifier
+do 
+ (
+  resolve
+   Leftmost-character-position
+  as
+   Arithmetic-expression
+  ;
+  resolve
+   Length
+  as
+   Arithmetic-expression
+ )
+;
+
+%%
+%% There is a real confusion going on regarding condition names.
+%% According to Table 3. in Section 1.3, condition-name is
+%% a user-defined word. Some uses of condition-name are rather
+%% concerned with REFERING to condition names (including qualification/
+%% subscripting). In analogy to data names, we might think of a new sort
+%% condition-name-reference. Actually, we overruled the section header
+%% of Section 1.6.5 to introduce condition-name-reference. We checked the
+%% text for all uses of condition-name. Below, all the relevant uses
+%% are converted to condition-name-reference.
+%%
+
+focus on
+ sort Condition-name-condition
+do
+ generalize
+  Condition-name
+ to
+  Condition-name-reference
+;
+
+focus on
+ sort Switch-status-condition
+do
+ generalize
+  Condition-name
+ to
+  Condition-name-reference
+;
+
+focus on
+ sort Search-statement
+do
+ generalize
+  Condition-name
+ to
+  Condition-name-reference
+;
+
+focus on
+ sort Set-statement
+do
+ generalize
+  Condition-name
+ to
+  Condition-name-reference
+;
+
+%%
+%% The definition of subscripting as a method of data reference
+%% can be used to get a definition for the bottom sort subscript
+%% used, for example, in the definition of Identifier.
+%%
+
+focus on
+ sort Subscripting
+do
+ fold
+  ( Integer
+   | (Data-name  ("+"|"-" Integer)?)
+   | (Index-name ("+"|"-" Integer)?)
+   )+
+ to
+  Subscript-candidate
+;
+
+unify 
+ Subscript
+to
+ Subscript-candidate
+;
+
+rename
+ Subscript-candidate
+to
+ Subscript
+;
+
+eliminate
+ Subscripting;
+
+
+%%
+%% Moving the rules on forms of references to the bottom.
+%%
+
+move sorts
+ Procedure-name	
+ Identifier
+ Condition-name-reference
+ Subscript 
+behind
+ all sorts
+;
+
+%%
+%% There is a recurring problem in the diagrams related to the use of the
+%% data-name. According to the reference, data names are user-defined words
+%% with at least one alphabetic characters (refer to the table on classification
+%% of user-defined words). In many occurrence, however, it is said that certain
+%% data names can be qualified. Thus, we need a new sort qualified-data-name
+%% corresponding to qualified data names and we need to find out what
+%% occurrences of data-name have to be replaced by qualified-data-name.
+%%
+%% We first derive a definition for qualified-data-name.by folding part of
+%% identifier.
+%%
+%% From the reference:
+%%
+%%| In the syntax diagrams, the term identifier refers to a data-name that, if
+%%| not unique in a program, must be followed by a valid combination of 
+%%| qualifiers, subscripts, or reference modifiers necessary for uniqueness of 
+%%| reference.  Rules for identifiers associated with a format can, however, 
+%%| specifically prohibit qualification, subscripting, or 
+%%| reference-modification. 
+%%
+%%| The term data-name refers to a name that must not be qualified, 
+%%| subscripted, or reference modified, unless specifically permitted by the 
+%%| rules for the format. 
+%%
+%% These different entities should be made more explicit.
+%%
+
+focus on
+ sort Identifier
+do
+ fold
+  Data-name ("IN"|"OF" Data-name)* ("IN"|"OF" File-name)?
+ to
+  Qualified-data-name
+;
+
+%%
+%% We checked systematically the occurrences of data-name.
+%% Let us start with an example. From the reference:
+%%
+%%  A data-name subscript can be qualified
+%%  it cannot be subscripted or indexed.
+%%
+%% Thus, we have to substitute data-name by qualified-data-name.
+%%
+
+focus on
+ sort Subscript
+do
+ generalize
+  Data-name
+ to
+  Qualified-data-name
+;
+
+%%
+%% Based on our understanding of COBOL, we believe that data-name has to
+%% be preserved for the following occurrences:
+%%
+%%  - qualified-data-name
+%%  - condition-name-reference
+%%  - data description entry (including REDEFINES clause)
+%%  - using-phrase in PROCEDURE DIVISION
+%%  - ENTRY statement
+%%
+%% The reference, however, rarely provides reliable information in that
+%% respect. We might adopt the assumption that if there is no comment on an
+%% occurrence of data-name saying that the corresponding data name can be
+%% qualified, then indeed a simple data name rather than a qualified data name
+%% is required. The text does not comment on the following occurrences for
+%% which we claim that it is not obvious if data-name or qualified-data-name
+%% is appropriate:
+%%
+%%  - LINAGE clause (including clause 2)
+%%  - DATA RECORDS Clause
+%%  - LABEL RECORDS Clause
+%%  - RECORD clause
+%%
+%% In the sequel, all the other occurrences of data-name are relaxed to
+%% qualified-data-name in accordance to the reference.
+%%
+
+focus on 
+ sorts
+ Padding-character-clause
+ Record-key-clause
+ Alternate-record-key-clause
+ Relative-key-clause
+ File-status-clause
+ Value-of-clause
+ Occurs-clause
+ Renames-clause
+ Merge-statement
+ Read-statement
+ Search-statement
+ Sort-statement
+ Start-statement
+do
+ generalize
+  Data-name
+ to
+  Qualified-data-name
+;
+
+%%
+%% The below methods of data reference are captured by identifier.
+%% The diagram on reference modification is more restrictive than
+%% the actual form captured by identifier.
+%%
+
+eliminate
+ Simple-data-reference
+;
+
+eliminate
+ Reference-modification
+
+%% next: Names
+
+

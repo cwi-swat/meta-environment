@@ -1,0 +1,32 @@
+#! /usr/local/bin/tclsh
+
+#if {[string compare [file tail $argv0] $argv0] == 0} {
+#    set FSTROOT [which $argv0]
+#} else {
+#    set FSTROOT [file dirname [file dirname $argv0]]
+#}
+set FSTROOT [file dirname [file dirname $argv0]]
+
+set f [open temp.tmp w]
+
+puts $f "apply "
+
+foreach trafo $argv {
+    set g [open $trafo r]
+    set Input [read $g]
+    close $g
+
+    puts $f $Input
+
+    puts $f " ; "
+}
+
+puts $f "id at "
+
+set grammar [read stdin]
+puts $f $grammar
+
+close $f
+
+puts stdout [exec sglr -i temp.tmp -p $FSTROOT/src/Framework.eqs.tbl -1 | evaluator -e $FSTROOT/src/Framework.asf.baf | asource]
+

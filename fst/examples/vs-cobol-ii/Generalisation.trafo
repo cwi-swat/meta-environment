@@ -1,0 +1,290 @@
+%%
+%% From the reference:
+%%  data-name
+%%     Must specify an ASCENDING/DESCENDING KEY data item in the identifier-1
+%%     table element and must be subscripted by the first identifier-1
+%%     index-name.  Each data-name can be qualified.
+%% We have seen VS COBOL II code with subscripted data-names in
+%% SEARCH ALL statements.
+%%
+
+focus on
+ sort 
+  Search-statement
+ in module
+  Statements
+do
+ generalize
+  Qualified-data-name
+ to
+  Identifier
+;
+
+
+%%
+%% During compilation, COPY statements should be expanded during
+%% preprocessing. However, sometimes we have to cope with non-expanded
+%% programs. Below we axiomatize some positions, where COPY statements
+%% are likely to occur.
+%%
+
+include
+ Copy-statement
+in
+ Data-description-entry
+;
+
+include
+ Statement-list? Copy-statement
+in
+ Sentence
+;
+
+focus on
+ sort
+  Procedure-division
+ in module
+  ProcedureDivision
+do
+ fold 
+  ("USING" Data-name+)? "."
+ to
+  Using-phrase;
+
+include
+ ("USING" Data-name*)? Copy-statement
+in
+ Using-phrase
+;
+
+%%
+%% In OS/VS COBOL subscripting is done with literals,
+%% whereas VS COBOL II only integers (which are by definition
+%% unsigned) allowed. We want to parse OS/VS COBOL programs!!!
+%%
+%% chhanged override to generalize
+
+%%
+focus on
+ sort
+  Subscript
+ in module
+  DataReference
+do
+ generalize
+  definition of Subscript
+ to
+  ( Integer | Literal
+   | (Qualified-data-name ("+"|"-" Integer)?)
+   | (Index-name ("+"|"-" Integer)?)
+   )+
+;
+ 
+
+%%
+%% Compilers seem to be not very strict about periods in data description
+%% entries.
+%%
+
+focus on
+ sort
+  Data-description-entry
+ in module
+  DataDescriptionEntry
+do
+ generalize
+  "."
+ to
+  "."?
+;
+
+%%
+%% Is this an unintended and/or undocumented feature?
+%% Some compilers seem to accept NOT IS rather than IS NOT
+%% in conditions.
+%%
+
+generalize
+ "IS"? "NOT"? 
+to 
+
+ ("IS"? "NOT"?) | ( "NOT" "IS")
+;
+
+%%
+%% We have some OSVS programs using ZEROES in a sign condition.
+%% We did not find any reference stating the below relaxation.
+%%
+
+focus on
+ sort
+  Sign-condition
+ in module
+  Conditions
+do
+ generalize
+  "POSITIVE" | "NEGATIVE" | "ZERO" 
+ to 
+  "POSITIVE" | "NEGATIVE" | "ZERO" | "ZEROES" | "ZEROS" 
+;
+
+
+%%
+%% It seems that the order of the CONFIGURATION SECTION paragraphs
+%% is immaterial. We have at least some OSVS programs with different
+%% orders.
+%%
+
+focus on
+ sort
+  Configuration-section-paragraphs
+ in module
+  ConfigurationSection
+do
+ generalize
+  definition of
+   Configuration-section-paragraphs
+ to
+  permutation of
+   definition of Configuration-section-paragraphs
+;
+
+
+%%
+%% We need to support the REMARKS-paragraph for OSVS COBOL.
+%%
+
+focus on 
+ sort
+  Identification-division-content
+ in module
+  IdentificationDivision
+do
+ generalize
+  << ("AUTHOR" "."? Comment-entry*)? 
+   ("INSTALLATION" "."? Comment-entry* )?
+   ("DATE-WRITTEN" "."? Comment-entry*)?
+   ("DATE-COMPILED" "."? Comment-entry* )?
+   ("SECURITY" "."? Comment-entry* )? >>
+ to
+  << ("AUTHOR" "."? Comment-entry*)? //
+   ("INSTALLATION" "."? Comment-entry* )? //
+   ("DATE-WRITTEN" "."? Comment-entry*)? //
+   ("DATE-COMPILED" "."? Comment-entry* )? //
+   ("SECURITY" "."? Comment-entry* )? //
+   ("REMARKS" "."? Comment-entry* )? >>
+;
+
+%%
+%% Multiple periods ending a sentence are usually accepted.
+%%
+
+focus on
+ sort
+  Sentence
+ in module
+  ProcedureDivision
+do
+ generalize
+  "."
+ to 
+ "."+
+;
+
+%%
+%%
+%%
+
+focus on
+ sort
+  Condition-value-clause
+ in module
+  DataDescriptionEntry
+do
+ generalize
+  ("VALUE" "IS"?) | ("VALUES" "ARE"?) 
+ to
+  ("VALUE" "IS"?) | ("VALUES" "ARE"?) | ("VALUE" "ARE")
+;
+
+focus on
+ sorts
+  Label-records-clause
+  Data-records-clause
+ in module
+  FileAndSortDescriptionEntry
+do
+ generalize
+  ("RECORD" "IS"?) | ("RECORDS" "ARE"?)
+ to
+  ("RECORD" "IS"?) | ("RECORDS" "ARE"?) | ("RECORDS" "IS") | ("RECORD" "ARE")
+;
+
+focus on
+ sort
+  Sort-statement
+ in module
+  Statements
+do
+ generalize
+  "KEY" 
+ to
+  "KEY" "IS"?
+;
+
+%%
+%% KS184V07.cbl:00902
+%%
+
+focus on
+ sort
+  Relational-operator
+ in module
+  Conditions
+do
+ generalize
+  "THAN"
+ to 
+  "THAN" | "THEN"
+;
+
+%%
+%% VS Cobol II manual, section 2.6.4
+%%
+
+focus on 
+ sort
+  Block-contains-clause
+ in module
+  FileAndSortDescriptionEntry
+do
+ generalize
+  "RECORDS"
+ to 
+  "RECORDS" | "RECORD"
+
+
+%%
+%% Experimental adaptation for testset pris 
+%%
+
+%% Focus On copy-statement
+%% For
+%%  Relax ("OF"|"IN") (library-name|literal) 
+%%  To (("OF"|"IN") (library-name|literal) | "FROM" "DICTIONARY")
+%% ;
+
+%%
+%% VERY STRANGE!!! See pris/CHK_SOFI_REGI */
+%%
+
+%% Extend value-clause By "VALUE"
+
+%% next: DA-data-reference
+
+
+
+
+
+
+

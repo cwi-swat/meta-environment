@@ -1,0 +1,48 @@
+VS-COBOL-II-DA
+
+JK: I will do these things in the fooXX dirs, directly working on
+    the full VS-COBOL-II transformations is too time consuming.
+
+- Call exception phrase without priorities.
+- Merge 3 forms of SELECT (see File-control-entry)
+- SPECIAL-NAMES remove double parentheses in "((Environ ..))*"
+- VALUES clause has list of Literal at the end, this conflicts
+  with level number at the start of next field definition.
++ Remove second CLOSE statement.
++ Remove second OPEN statment.
++ Merge 2 read statement. (using generalise, followed by disambiguate)
+
+
+Subject to some decent development
+- Remove double rules (like CALL statement): create an operator for that
+- Make coverage test (for generalise etc.) insensitive w.r.t. order in OR
+- Coverage stuff (generalize etc.) should work for permutation phrases.
+- Improve coverage for SELECT "A|A" thing.
+
+Get to some conclusion about type information
+- Forms of Read-statement
+- Forms of Set-statement
+- Forms of Write statements are even worse
+- Abbreviated combined relation conditions
+
+Not having permutation phrases (<< ... >>) is the cause of some
+ambiguities, for example:
+- Forms of SELECT
+
+Solutions that mangle, but don't loosen the grammar:
+- Write out (A? B?)|(C? D?) to (A B?|B|C D?|D|epsilon)
+Solutions that mangle and loosen the grammar:
+- Flatten localy (A? B?)|(C? D?) to A? B? C? D?
+- Flatten on statement level:
+   X (A? B?)|(C? D?) -> Y
+  becomes:
+   X -> Y
+   A -> Y
+   B -> Y
+   C -> Y
+   D -> Y
+To prevent this from happen 
+- Type directed parsing.
+- Mangle/demangle.
+
+

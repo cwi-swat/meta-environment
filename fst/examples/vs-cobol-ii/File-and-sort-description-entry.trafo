@@ -1,0 +1,421 @@
+focus on
+ sort Data-division-content
+do
+ unify
+  File-description-entry
+ to
+  File-and-sort-description-entry
+;
+
+%%
+%% We start to fold all the clauses contributing to FD/SD entries.
+%% We begin with EXTERNAL/GLOBAL clauses.
+%%
+%% EXTERNAL/GLOBAL clauses are required in two locations, that is FD
+%% entries and data description entries. The diagrams for FD entries
+%% provide the syntax of these clause, whereas the diagram for data
+%% description entries introduces two bottom sorts external-clause and
+%% global-clause. We assume that these clauses are supposed to be of the
+%% same form as in the context of FD entries. From the text it is clear that
+%% these clause serve a similar purpose in both locations.
+%% 
+%% We make the definition of these clauses explicit by means of folding.
+%%
+
+focus on
+ sort File-and-sort-description-entry
+do
+ fold
+  "IS"? "EXTERNAL" 
+ to
+  External-clause-candidate
+;
+
+unify
+ External-clause
+to
+ External-clause-candidate
+;
+
+rename
+ External-clause-candidate
+to
+ External-clause
+;
+
+focus on
+ sort File-and-sort-description-entry
+do
+ fold
+  "IS"? "GLOBAL"
+ to
+  Global-clause-candidate
+;
+
+unify
+ Global-clause
+to
+ Global-clause-candidate
+;
+
+rename
+ Global-clause-candidate
+to
+ Global-clause
+;
+
+%%
+%% We continue to fold all the clauses contributing to FD/SD entries.
+%%
+%% There are no special problems with the BLOCK CONTAINS and the
+%% RECORD clauses.
+%%
+
+focus on
+ sort File-and-sort-description-entry
+do 
+ (
+ fold
+  "BLOCK" "CONTAINS"? (Integer "TO")? Integer "CHARACTERS" | "RECORDS"
+ to
+  Block-contains-clause
+;
+
+ fold
+  "RECORD" //
+ ("CONTAINS"? Integer "CHARACTERS"?) //
+ | ("CONTAINS"? Integer "TO" Integer "CHARACTERS"?) //
+ | (Record-varying-phrase ("DEPENDING" "ON"? Data-name)?) //
+to
+  Record-clause
+ )
+;
+
+
+%%
+%% We continue to fold the clauses contributing to FD/SD entries.
+%%
+%% In one case the form of the LABEL RECORDS is just a special case of the other
+%% two forms. There is no explanation for that deviation. It might be a semantic
+%% error. So we prefer the more general form. Note also that the order of the
+%% clauses in the diagrams differs for the different forms of FD/SD entries.
+%% This is not a semantic error since order does not matter at all, but it a
+%% stylistic problem.
+%%
+
+focus on
+  sort File-and-sort-description-entry
+do 
+ (
+ fold
+  "LABEL"
+  ("RECORD" "IS"?) | ("RECORDS" "ARE"?)
+  "STANDARD" | "OMITTED" | Data-name+ 
+ to
+  Label-records-clause
+ ;
+
+ fold
+  "LABEL"
+  ("RECORD" "IS"?) | ("RECORDS" "ARE"?)
+  "STANDARD" | "OMITTED"
+ to
+  More-restricted-label-records-clause
+ ;
+
+ generalize
+  More-restricted-label-records-clause
+ to
+  Label-records-clause
+ )
+;
+
+eliminate 
+ More-restricted-label-records-clause
+;
+
+%%
+%% We fold the remaining clauses contributing to FD/SD entries.
+%%
+
+focus on
+ sort File-and-sort-description-entry
+do
+ (
+ fold
+  "VALUE" "OF" (System-name "IS"? Data-name | Literal)+
+ to 
+  Value-of-clause
+ ;
+
+ fold
+  "DATA" ("RECORD" "IS"?) | ("RECORDS" "ARE"?) Data-name+
+ to 
+  Data-records-clause
+ ;
+
+ fold
+  "LINAGE"
+  "IS"? Data-name | Integer
+  "LINES"? Linage-footing-phrase
+ to
+  Linage-clause
+ ;
+
+ fold
+  "RECORDING" "MODE"? "IS"? Mode
+ to
+  Recording-mode-clause
+ ;
+
+ fold
+  "CODE-SET" "IS"? Alphabet-name
+ to
+  Code-set-clause
+
+ )
+;
+
+%%
+%% Define all possible recording modes.
+%% Note that recording modes are not reservered words!
+%%
+
+resolve
+ Mode 
+as
+ "F" | "V" | "U" | "S"
+;
+
+%%
+%% The order of the clauses in the FILE SECTION is not important.
+%% The three different forms are fused in one form to improve
+%% readability. That should not be a major problem because
+%% all the restrictions to the entries are not formalized in the
+%% diagrams anyway.
+%%
+
+focus on
+ sort File-and-sort-description-entry
+do
+ introduce
+  File-and-sort-description-entry-clauses
+ as
+  External-clause?
+  Global-clause?
+  Block-contains-clause?
+  Record-clause?
+  Label-records-clause?
+  Value-of-clause?
+  Data-records-clause?
+  Linage-clause?
+  Recording-mode-clause?
+  Code-set-clause?
+;
+
+focus on
+ sort File-and-sort-description-entry-clauses
+do
+ generalize
+  definition of
+   File-and-sort-description-entry-clauses
+ to
+  permutation of
+   definition of
+    File-and-sort-description-entry-clauses
+;
+
+override
+ File-and-sort-description-entry
+by
+ "FD" |"SD" File-name File-and-sort-description-entry-clauses "."
+;
+
+%%
+%% Enforcing the right order of rules defining the above clauses
+%% for readability.
+%%
+
+move sorts
+ External-clause 
+ Global-clause 
+ Block-contains-clause 
+ Record-clause
+ Label-records-clause
+ Value-of-clause
+ Data-records-clause
+ Linage-clause
+ Recording-mode-clause
+ Code-set-clause
+behind
+ sort File-and-sort-description-entry-clauses
+ ;
+
+move sort
+ Record-varying-phrase
+behind
+ sort Record-clause
+;
+
+move sort
+ Linage-footing-phrase 
+behind
+ sort Linage-clause
+;
+
+%%
+%% The reference enforces integers to be non-zero values.
+%% There is the following IBM extension, however:
+%%
+%% x Under MVS, BLOCK CONTAINS 0 can be specified for QSAM files the block
+%% x size is determined at object time from the DD parameters or the data set
+%% x label.  If the RECORD CONTAINS 0 CHARACTERS clause is specified, and the
+%% x BLOCK CONTAINS 0 CHARACTERS clause is specified (or omitted), the block
+%% x size is determined at object time from the DD parameters or the data set
+%% x label of the file.
+%%
+%% We just relax all integers what might be a bit too liberal.
+%%
+
+focus on
+ sort Block-contains-clause
+do
+ generalize
+  Integer
+ to 
+ Integer | Zero
+;
+
+%%
+%% It is stated in the programming guide, that CHARACTERS is the default
+%% for the BLOCK CONTAINS clause. This is in contrast to the diagram
+%% since CHARACTERS and RECORDS are not optional. Note that this is not an
+%% IBM extension. Thus, it is definitely a semantic error.
+%%
+
+focus on
+ sort Block-contains-clause
+do
+ generalize
+ "CHARACTERS"|"RECORDS"
+ to
+ ("CHARACTERS"|"RECORDS")?
+;
+
+%%
+%% It is an IBM extension to allow: RECORD CONTAINS 0
+%% Although not stated explicitely, zero values are apparently also  allowed
+%% in the format RECORD CONTAINS n TO m ....
+%%
+
+focus on
+ sort Record-clause
+do
+ generalize
+  Integer
+ to
+  Integer | Zero
+;
+
+%%
+%% There are serveral problems with the definition of the VALUE clause for
+%% data description entries.
+%%
+%% 1. The first and the third format define VALUE clauses for data items. The
+%% second format is meant to apply to condition names. Note, however, that
+%% the second format actually repeats the definition of a certain form of a
+%% data description entry as it starts with "88" and a condition name. 
+%%
+%% 2. Furthermore, is probably not sensible to use the same sort value-clause
+%% for both forms of a VALUE clause.
+%%
+%% 3. The first format implies the third one. Note that the third format is an
+%% IBM extension dealing with the figurative constants NULL and NULLS (which
+%% are IBM extensions, too). The third format is covered by the first one
+%% because figurative constants are literals.
+%%
+%% We resolve the second problem by introducing two new sorts
+%% data-value-clause and condition-value-clause. We just reuse the
+%% sensible part of the second format to define condition-value-clause
+%% in the sense of the first problem. We totally reject the third format
+%% to solve the third problem.
+%%
+
+focus on
+ sort Value-clause
+do
+ (
+ fold
+  "VALUE" "IS"? Literal
+ to
+  Data-value-clause
+;
+
+ fold
+  ("VALUE" "IS"?) | ("VALUES" "ARE"?)
+  (Literal ("THROUGH"|"THRU" Literal)?)+
+ to 
+  Condition-value-clause 
+ )
+;
+
+reject
+ Value-clause
+;
+
+%% next two replaces are unifies
+
+focus on
+ sort Data-description-entry-clauses
+do
+ replace
+  Value-clause
+ by
+  Data-value-clause
+;
+
+focus on
+ sort Data-description-entry
+do
+ replace
+  Value-clause
+ by
+  Condition-value-clause
+;
+
+%%
+%% In the definition of RENAMES clause the definition of data description
+%% entry is repeated. We must retrieve the intended definition of the RENAMES
+%% clause by folding and rejecting the inappropriate one.
+%%
+
+%% changed Qualified-data-name -> Data-name
+focus on
+ sort Renames-clause
+do
+ fold
+  "RENAMES" Data-name ("THROUGH"|"THRU" Data-name)?
+ to
+  Fixed-renames-clause
+;
+
+reject
+ Renames-clause
+;
+
+unify
+ Renames-clause
+to
+ Fixed-renames-clause
+;
+
+rename
+ Fixed-renames-clause
+to
+ Renames-clause
+
+%% next: Procedure-division
+
+
+
+

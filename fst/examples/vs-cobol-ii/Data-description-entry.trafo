@@ -1,0 +1,163 @@
+%%
+%% We need to implement the relaxation on the order of the clauses
+%% in a data description entry.
+%%
+%% From the reference:
+%%
+%%  The clauses can be written in any order with two exceptions: 
+%%
+%%       If data-name or FILLER is specified, it must immediately follow the
+%%       level-number. 
+%%
+%%       When the REDEFINES clause is specified, it must immediately follow 
+%%       data-name or FILLER, if either is specified.  If data-name or FILLER 
+%%       is not specified, the REDEFINES clause must immediately follow the 
+%%       level-number.
+%% 
+%% We do not enforce the exceptions.
+%%
+
+focus on
+ sort Data-description-entry
+do
+ fold
+  Redefines-clause?
+  Blank-when-zero-clause?
+  External-clause?
+  Global-clause?
+  Justified-clause?
+  Occurs-clause?
+  Picture-clause?
+  Sign-clause?
+  Synchronized-clause?
+  Usage-clause?
+  Value-clause?
+ to
+  Data-description-entry-clauses 
+;
+
+focus on
+ sort Data-description-entry-clauses
+do
+ generalize
+  definition of
+   Data-description-entry-clauses
+ to
+  permutation of
+   definition of 
+    Data-description-entry-clauses
+;
+
+
+%%
+%% Enforcing the right order of the rules defining the above clauses
+%% for readability
+%%
+
+move sorts
+ Redefines-clause
+ Blank-when-zero-clause
+ Justified-clause
+ Occurs-clause
+ Picture-clause 
+ Sign-clause 
+ Synchronized-clause
+ Usage-clause
+ Value-clause
+behind
+ sort Data-description-entry-clauses
+;
+
+%%
+%% There is a semantic error in the diagram for data description entries.
+%% The period is missing what is in contrast to the following comment from
+%% the reference:
+%%  All data description entries must end with a separator period.
+%%
+
+focus on
+ sort Data-description-entry
+do
+ replace
+  Data-description-entry-clauses
+ by
+  Data-description-entry-clauses "."
+;
+
+%%
+%% The REDEFINES clause is defined in an incorrect way.
+%% Actually, the REDEFINES clause is not defined but rather
+%% the form of a data description entry with a REDEFINES
+%% clause involved. More in detail, the level number and
+%% the data-name or FILLER does not belong to the REDEFINES
+%% clause.
+%%
+
+focus on 
+ sort Redefines-clause
+do
+ fold
+  "REDEFINES" Data-name
+ to
+  Redefines-clause-candidate
+;
+
+reject
+ Redefines-clause
+;
+
+unify
+ Redefines-clause
+to
+ Redefines-clause-candidate
+;
+
+rename 
+ Redefines-clause-candidate
+to
+ Redefines-clause
+;
+
+%%
+%% From the reference (Variable-Length Tables):
+%%
+%% x (1)  Integer-1 is optional as an IBM extension.  If integer-1 is 
+%% x      omitted, a value of 1 is assumed and the keyword TO must also be 
+%% x      omitted.
+%%
+%% We have to relax the definition of occurs-clause accordingly.
+%%
+%% From the reference (Variable-Length Tables):
+%%
+%%  The value of integer-1 must be greater than or equal to zero;
+%%  it must also be less than the value of integer-2.
+%%
+%% The remark on integer-1 is a contradiction to what an integer is
+%% usually supposed to be, that is a non-zero value.
+%%
+
+focus on
+ sort Occurs-clause
+do
+ generalize 
+  Integer "TO" Integer
+ to 
+  (Integer|Zero "TO")? Integer
+;
+
+%%
+%% PICTURE masks are not just character strings but rather very restricted
+%% character strings.
+%%
+
+%% rename in a focus !!
+focus on
+ sort Picture-clause
+do 
+ rename
+  Character-string
+ to
+  Picture-string
+
+%% next: File-and-sort-description-entry
+

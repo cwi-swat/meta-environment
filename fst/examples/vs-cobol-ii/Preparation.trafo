@@ -1,0 +1,94 @@
+%%
+%% Using rename to get more sensible sort names for auxiliary phrases used
+%% in some diagrams.
+%%
+
+rename
+ Cobol-source-program-nested-source-program
+to
+ Nested-cobol-source-program
+;
+
+rename
+ Configuration-section-in-context-paragraphs
+to 
+ Configuration-section-paragraphs
+;
+
+rename
+ Object-computer-paragraph-entry-1
+to
+ Object-computer-paragraph-sequence-phrase
+;
+
+rename
+ Special-names-paragraph-entry-1
+to  
+ Special-names-paragraph-status-phrase
+;
+
+rename
+ Vsam-indexed-file-control-entries-entry-1
+to
+ Alternate-record-key-clause
+;
+ 
+rename
+ Procedure-division-sect
+to
+ Declaratives-section-header
+;
+
+rename
+ Procedure-division-para
+to
+ Optional-paragraphs
+;
+
+rename
+ File-and-sort-description-entry-clause-1
+to
+ Record-varying-phrase
+;
+
+rename
+ File-and-sort-description-entry-clause-2
+to
+ Linage-footing-phrase
+;
+
+rename
+ Inspect-statement-phrase-1
+to
+ Before-after-phrase
+;
+
+rename
+ Perform-statement-phrase-1
+to
+ Perform-until-phrase
+;
+
+rename
+ Perform-statement-varying-phrase
+to
+ Perform-varying-phrase
+;
+
+rename
+ Perform-statement-after-phrase
+to
+ Perform-after-phrase
+;
+
+%%
+%% Sequence of COBOL Source Programs
+%% is not needed because sequences of NESTED programs are actually
+%% needed in the definition of COBOL-source-program.
+%%
+
+eliminate
+ Sequence-of-cobol-source-programs
+
+%% next: Identification-division
+

@@ -1,0 +1,75 @@
+
+add
+ module Lexical-Sorts
+
+  imports Layout
+
+  exports
+
+   sorts
+    Alphabetic-user-defined-word
+    Cobol-word
+    Comment-entry
+    Dbcs
+    Integer
+    Level-number
+    Nonnumeric
+    Numeric
+    Options-list
+    Picture-string
+    Priority-number
+    Quoted-pseudo-text
+    Sequence-number
+    Sequence-number-field
+    System-name
+    User-defined-word
+    Zero
+
+   lexical syntax
+    -> Comment-entry
+    -> Options-list
+    -> Sequence-number
+    -> Sequence-number-field
+    Cobol-word -> System-name
+    Cobol-word -> User-defined-word
+
+    [0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word
+
+    [A-Za-z0-9]+ ([\-]+ [A-Za-z0-9]+)* -> Cobol-word
+
+    [0]* [1-9] [0-9]* -> Integer
+
+    [0]? [1-9]  -> Level-number
+    [1-4] [0-9] -> Level-number
+    "66"        -> Level-number
+    "77"        -> Level-number
+    "88"        -> Level-number
+
+    [\"] (~[\"] | ([\"] [\"]))* [\"] -> Nonnumeric
+    [\'] (~[\'] | ([\'] [\']))* [\'] -> Nonnumeric
+
+    [\+\-]? (([0-9]* [\.\,] [0-9]+) | [0-9]+) -> Numeric
+
+    Currency? (Picchrs Repeat?)+ (Punct (Picchrs Repeat?)+)* -> Picture-string
+    ~[0-9ABCDPRSVXZa-z\*\+\-\/\,\.\;\(\)\=\'\"\ \n] -> Currency
+    ([ABEGPSVXZabegpsvxz90\+\-\*\$] | "CR" | "DB")+ -> Picchrs
+    "(" [0-9]+ ")" -> Repeat
+     [\/\,\.\:] -> Punct
+
+    [0-9] [0-9]? -> Priority-number
+
+    "==" ~[\=]* "==" -> Quoted-pseudo-text
+
+    [0]+ -> Zero
+
+    ". "        -> Dot
+    ".\n"       -> Dot
+
+   lexical restrictions
+    Alphabetic-user-defined-word  -/- [A-Za-z0-9\-]
+    Cobol-word                    -/- [A-Za-z0-9\-]
+    Integer                       -/- [0-9]
+    Numeric                       -/- [0-9]
+    Picchrs                       -/- [ABCDEGPSVXZabegpsvxz90\+\-\*\$]
+    Zero                          -/- [0]
+

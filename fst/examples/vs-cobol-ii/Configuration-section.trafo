@@ -1,0 +1,86 @@
+%%
+%% We did not find a remark relaxing the order of the clauses
+%% in the special-names-paragraph but programs explore different orders.
+%%
+
+focus on 
+ sort Special-names-paragraph
+do
+ fold
+  "DECIMAL-POINT" "IS"? "COMMA"
+ to 
+  Decimal-point-clause
+;
+
+focus on
+ sort Special-names-paragraph
+do
+ fold
+  "CURRENCY" "SIGN"? "IS"? Literal
+ to 
+  Currency-sign-clause
+;
+
+focus on 
+ sort Special-names-paragraph
+do
+ fold
+  "CLASS" Class-name "IS"? (Literal ("THROUGH" | "THRU" Literal)?)+
+ to 
+  Class-clause
+;
+
+focus on 
+ sort Special-names-paragraph
+do
+ fold
+  "SYMBOLIC" "CHARACTERS"? 
+  (Symbolic-character+ "ARE" | "IS" Integer+)+ 
+  ("IN" Alphabet-name)?
+ to 
+  Symbolic-characters-clause
+;
+
+focus on
+ sort Special-names-paragraph
+do
+ fold
+  "ALPHABET" Alphabet-name "IS"? 
+  "STANDARD-1" | 
+  "STANDARD-2" |
+  "NATIVE" |
+  "EBCDIC" |
+  (Literal (("THROUGH" | "THRU" Literal) | ("ALSO" Literal)+)?)+
+ to
+  Alphabet-clause
+;
+
+focus on
+ sort Special-names-paragraph
+do
+ fold
+  Alphabet-clause*
+  Symbolic-characters-clause*
+  Class-clause*
+  Currency-sign-clause?
+  Decimal-point-clause?
+ to
+  Special-names-paragraph-clauses
+;
+
+focus on
+ sort Special-names-paragraph-clauses
+do
+ generalize 
+  definition of
+   Special-names-paragraph-clauses
+ to 
+  permutation of 
+   definition of
+    Special-names-paragraph-clauses
+
+%% next: Input-output-section
+
+
+
+

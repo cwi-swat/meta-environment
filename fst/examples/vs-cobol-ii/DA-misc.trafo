@@ -1,0 +1,156 @@
+focus on 
+ sort
+  Data-division-content
+ in module
+  DataDivision
+do
+(
+
+ unfold
+  Data-item-description-entry
+;
+
+ unfold
+  Record-description-entry
+ ;
+
+ simplify
+  Data-description-entry | Data-description-entry
+ to
+  Data-description-entry
+)
+;
+
+eliminate
+ Data-item-description-entry
+;
+
+eliminate
+ Record-description-entry
+;
+
+focus on 
+ sort
+  I-o-control-paragraph
+ in module
+  InputOutputSection
+do
+
+ fold 
+  Qsam-or-sam-i-o-control-entries | Vsam-i-o-control-entries
+ to
+  Qsam-or-sam-or-vsam-i-o-control-entries
+;
+
+focus on
+ sort
+  Qsam-or-sam-or-vsam-i-o-control-entries
+ in module
+  InputOutputSection
+do
+(
+
+ dealternate
+ ;
+
+ unfold
+  Qsam-or-sam-i-o-control-entries
+ ;
+
+ unfold 
+  Vsam-i-o-control-entries
+ ; 
+
+ disambiguate
+  definition of Vsam-i-o-control-entries
+ in
+  Qsam-or-sam-or-vsam-i-o-control-entries 
+)
+;
+
+eliminate
+ Qsam-or-sam-i-o-control-entries
+;
+
+eliminate
+ Vsam-i-o-control-entries
+;
+
+focus on
+ sort
+  Special-names-paragraph
+ in module
+  ConfigurationSection
+do
+
+ fold
+ (Environment-name "IS"? Mnemonic-name) | 
+ (Environment-name 
+	("IS"? Mnemonic-name Special-names-paragraph-status-phrase?) | 
+	Special-names-paragraph-status-phrase)
+ to
+  Environment-name-clause
+;
+
+focus on
+ sort
+  Environment-name-clause
+ in module
+  ConfigurationSection
+do
+(
+
+ dealternate
+
+ ;
+
+ disambiguate
+  Environment-name "IS"? Mnemonic-name
+ in
+  Environment-name-clause
+)
+;
+
+focus on
+ sort
+  Special-names-paragraph
+ in module
+  ConfigurationSection
+do
+
+ unfold
+  Environment-name-clause
+;
+
+eliminate
+ Environment-name-clause
+;
+
+focus on
+ sort
+  Procedure-division
+ in module
+  ProcedureDivision
+do
+(
+
+ unfold
+  Sections
+ ;
+
+ disambiguate
+  "PROCEDURE" "DIVISION" Using-phrase Paragraphs
+ in
+  Procedure-division
+ ;
+
+ simplify
+  definition of Sections
+ to
+  Sections
+)
+
+ 
+
+
+

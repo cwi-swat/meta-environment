@@ -1,0 +1,63 @@
+%%
+%% In similarity to the IDENTIFICATION DIVISION, we derive a definition
+%% of the content of the DATA DIVISION. Prior to folding we connect
+%% the sort file-description-entry with its definition provided by sort
+%% file-and-sort-description-entry.
+%%
+
+(
+focus on
+ sort Data-division
+do
+ 
+  fold
+  ("FILE" "SECTION" "." (File-description-entry Record-description-entry+)*)? //
+  ("WORKING-STORAGE" "SECTION" "." (Record-description-entry | Data-item-description-entry)*)? //
+  ("LINKAGE" "SECTION" "." (Record-description-entry | Data-item-description-entry)*)?
+  to
+   Data-division-content-candidate
+)
+;
+
+
+unify
+ Data-division-content
+to
+ Data-division-content-candidate
+;
+
+rename 
+ Data-division-content-candidate
+to
+ Data-division-content
+;
+
+eliminate 
+ Data-division
+;
+
+%%
+%% From the reference:
+%%  The single term data description entry is used ... to refer
+%%  to data and record description entries.
+%%
+
+(
+focus on
+ sort Data-division-content
+do
+ ( 
+  resolve Record-description-entry as Data-description-entry;
+  resolve Data-item-description-entry as Data-description-entry
+ )
+)
+
+%% next: Data-description-entry
+
+
+
+
+
+
+
+

@@ -1,0 +1,32 @@
+%%
+%% The actual syntax of arithmetic expressions is not covered by the diagrams.
+%% However, arithmetic operators are listed in Table 6 in Section 2.9.1.
+%% Precedence rules are stated in the complete reference.
+%%
+
+resolve
+ Arithmetic-expression 
+as
+ Times-div ("+" | "-" Times-div)*
+;
+
+resolve
+ Times-div 
+as
+ Power ("*" | "/" Power )*
+;
+
+resolve
+ Power 
+as
+ ( "+" | "-" )? Basis ("**" Basis)*
+;
+
+resolve
+ Basis 
+as
+ Identifier
+ | Literal
+ | ( "(" Arithmetic-expression ")" )
+
+%% next: Conditions

@@ -1,0 +1,37 @@
+%%
+%% We need a definition for the content of the ENVIRONMEMT DIVISION.
+%% There are two related diagrams. The first one defines an incomplete
+%% ENVIRONMENT DIVISION with a CONFIGURATION SECTION only. The second
+%% one defines the INPUT-OUTPUT section in separation. We have to fold
+%% part of these diagrams to get a definition of the content of the
+%% ENVIRONMEMT DIVISION.
+%%
+
+focus on 
+ sort Configuration-section-in-context
+do
+ fold
+  "CONFIGURATION" "SECTION" "." Configuration-section-paragraphs
+ to
+  Configuration-section
+;
+
+eliminate 
+ Configuration-section-in-context
+;
+
+focus on 
+ sort before sort Configuration-section
+do
+ resolve 
+  Environment-division-content
+ as
+  Configuration-section? Input-output-section?
+
+%% next: Configuration-section
+
+
+
+
+
+
