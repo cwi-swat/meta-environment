@@ -25,7 +25,7 @@ Id := process-id.
   +
     rec-msg(no-table) .
     snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleName]))).
-    snd-msg(get-all-sdf2-definitions(ModuleName)).
+    snd-msg(get-all-sdf2-definitions(ModuleName, Type)).
     (
       rec-msg(syntax(Syntax?)).
       snd-msg(preprocess-syntax-hook(ModuleName, Type, Syntax)).

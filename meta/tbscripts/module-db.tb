@@ -277,9 +277,9 @@ in
     snd-msg(modules(Modules)) .
     Modules := []
   +
-    rec-msg(get-all-sdf2-definitions(Name?)) .
+    rec-msg(get-all-sdf2-definitions(Name?, Type?)) .
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
-    snd-msg(pre-get-all-sdf2-hook(ModuleNames)) .
+    snd-msg(pre-get-all-sdf2-hook(ModuleNames, Type)) .
     (
        rec-msg(pre-get-all-sdf2-hook-result(success)) .
        snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
