@@ -4,6 +4,7 @@ imports Rscript RSF Rviz
 
 exports 
   sorts RVALUE RSTORE
+  sorts <Elem, Elem> %% Needed for exported add-tuple production
 
   context-free syntax
 %% The values that a variable in the RSTORE may have
