@@ -168,6 +168,9 @@ binary exchange format. \aterms\ decrease memory usage thanks to sharing
 and they permit a very fast equality test since structural equality can
 be replaced by pointer equality thanks to the maximal subterm sharing.
 
+Another line of development is the \TB\ Integrated Debugging
+Environment ({\sc Tide}) described in~\cite{Olivier00}
+
 Today, beginning 2003, it turns out that the original software engineering
 goals that triggered the development of the \TB\ have been achieved
 and that the Meta-Environment can now be even further stretched than
@@ -201,10 +204,11 @@ remarks (\S\ref{Sec:conclusion}).
   from computation}
 \end{figure}
 
-It has been observed by various authors~\cite{XXX}, that the overall
-architecture of a software system can be improved by separating
-\emph{coordination} from \emph{computation}. We also distinguish
-\emph{representation} and use the following definitions:
+In~\cite{GelernterCarriero92} is was advocated that the overall
+ architecture of a software system can be improved by separating
+ \emph{coordination} from \emph{computation}. In addition to this, we
+ also distinguish \emph{representation} and use the following
+ definitions:
 
 \begin{itemize}
 
@@ -218,24 +222,10 @@ between components.
 
 \end{itemize}
 
-Our assumption is now that \emph{a rigorous separation of coordination
-from computation leads to flexible and reusable systems.} The approach
-is illustrated in Figure~\ref{Fig:component-architecture}.
-
-In the case of the \asdf\ Meta-Environment, empirical evidence shows that
-
-\begin{itemize}
-
-\item The \TB-based version of the \asdf\ Meta-Environment is more
-flexible as illustrated by the fact that clones of the Meta-Environment
-start to appear for other languages than \asdf. Examples are Action
-Semantics~\cite{Mosses02} and Elan~\cite{BR01}.
-
-\item Various components of the \asdf\ Meta-Environment are being reused
-in other projects~\cite{DamsGroote95,mucrl-toolset}.
-
-\end{itemize}
-
+\noindent The assumption is now that \emph{a rigorous separation of
+coordination from computation leads to flexible and reusable systems.}
+Our \TB\ approach follows this paradigm and is illustrated in
+Figure~\ref{Fig:component-architecture}.
 
 \begin{figure}[tb]
 \begin{center}
@@ -252,6 +242,36 @@ in other projects~\cite{DamsGroote95,mucrl-toolset}.
 \vspace*{-8cm}
 \caption{\label{Fig:toolbus-scenario}A typical cooperation scenario}
 \end{figure}
+
+
+
+The goal of the \TB\ is to integrate tools written in different languages
+running on different machines. This is achieved by means of a programmable
+software bus as illustrated in Figure~\ref{Fig:toolbus-architecture}. The
+\TB\ coordinates the cooperation of a number of tools.  This cooperation
+is described by a \Tscript\ that runs inside the \TB. The result is a
+set of concurrent processes inside the \TB\ that can communicate with
+each other and with the tools. Tools can be written in any language and
+can run on different machines. They exchange data by way of \aterms.
+
+A typical cooperation scenario is illustrated in
+Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
+(DB) are combined in an application. Pushing a button in the
+user-interface leads to a database action and the result is displayed
+in the user-interface. In a traditional approach, the database action
+is directly connected to the user-interface button by means of a
+call-back function. This implies that the user-interface needs some
+knowledge about the database tool and \emph{vice versa}.  In the \TB\
+approach the two components are completely decoupled: pushing the
+button only leads to an event that is handled by some process in the
+\TB. This process routes the event to the database tool (likely via
+some intermediary process) and gets the answer back via the inverse
+route. This implies that the configuration knowledge is now
+completely localized in the \Tscript\ and that UI and DB do not
+even know about each others existence.
+
+The primitives that can be used in \Tscript{}s are listed in
+Table~\ref{Tab:Tscript-features}. 
 
 \begin{table}
 \begin{center}
@@ -300,33 +320,7 @@ in other projects~\cite{DamsGroote95,mucrl-toolset}.
 
 \end{table}
 
-The goal of the \TB\ is to integrate tools written in different languages
-running on different machines. This is achieved by means of a programmable
-software bus as illustrated in Figure~\ref{Fig:toolbus-architecture}. The
-\TB\ coordinates the cooperation of a number of tools.  This cooperation
-is described by a \Tscript\ that runs inside the \TB. The result is a
-set of concurrent processes inside the \TB\ that can communicate with
-each other and with the tools. Tools can be written in any language and
-can run on different machines. They exchange data by way of \aterms.
 
-A typical cooperation scenario is illustrated in
-Figure~\ref{Fig:toolbus-scenario}.  A user-interface (UI) and a database
-(DB) are combined in an application. Pushing a button in the
-user-interface leads to a database action and the result is displayed
-in the user-interface. In a traditional approach, the database action
-is directly connected to the user-interface button by means of a
-call-back function. This implies that the user-interface needs some
-knowledge about the database tool and \emph{vice versa}.  In the \TB\
-approach the two components are completely decoupled: pushing the
-button only leads to an event that is handled by some process in the
-\TB. This process routes the event to the database tool (likely via
-some intermediary process) and gets the answer back via the inverse
-route. This implies that the configuration knowledge is now
-completely localized in the \Tscript\ and that UI and DB do not
-even know about each others existence.
-
-The primitives that can be used in \Tscript{}s are listed in
-Table~\ref{Tab:Tscript-features}. 
 
 \section{An example: the Address Book Service}\label{Sec:example}
 
@@ -626,6 +620,20 @@ is only used for explicit concurrency inside a process. The level of
 concurrence is therefore approximately 100 ($104$ process definitions
 and $3$ explicit \spec{||} operators).
 
+Empirical evidence shows that:
+
+\begin{itemize}
+
+\item The \TB-based version of the \asdf\ Meta-Environment is more
+flexible as illustrated by the fact that clones of the Meta-Environment
+start to appear for other languages than \asdf. Examples are Action
+Semantics~\cite{Mosses02} and Elan~\cite{BR01}.
+
+\item Various components of the \asdf\ Meta-Environment are being reused
+in other projects~\cite{DamsGroote95,mucrl-toolset}.
+
+\end{itemize}
+
 \section{Issues in a Next-Generation \TB}\label{Sec:issues-NG} 
 
 The \TB\ has been used in various applications of which the
@@ -897,7 +905,8 @@ distributed garbage collection.
 Note that the call-by-reference model can easily be mimicked in the
 \TB. For instance, one tool can maintain a shared database and can
 communicate with other tools using record keys and field names so that
-only the values of record fields have to be exchanged. In this way the
+only the values of record fields have to be exchanged (as opposed to
+complete records or even the complete database).  In this way the
 access control to the shared database can be spelled out in detail and
 concurrency conflicts can be avoided. This solves one of the major
 disadvantages of the pure call-by-reference model in a distributed
@@ -907,17 +916,17 @@ The downside is, however, that the \TB\ becomes a data bottleneck when
 huge values really have to be transmitted between tools. Currently,
 two workarounds are used.  A first workaround is to get temporary
 relief by sending compressed values rather than the values
-themselves. A second workaround is to store the large value in
-the filesystem and to send a file name rather than the file itself.
-This approach is in fact a form of channel-based transmission as seen in
-Figure~\ref{Fig:toolbus-values}(b). It does scale, but it also creates
-an additional inter-tool dependency and assumes that both tools have
-access to the same shared file system.
+themselves. A second workaround is to store the large value in the
+filesystem and to send a file name rather than the file itself.  It
+does scale, but it also creates an additional inter-tool dependency
+and assumes that both tools have access to the same shared file
+system.
 
 We will now first discuss how related frameworks handle
-call-by-reference and then we come back to implications for the \TB\ design.
-
-
+call-by-reference and then we come back to implications for the \TB\
+design. In particular, we will discuss channel-based transmission as
+already shown in Figure~\ref{Fig:toolbus-values}(b).
+ 
 \subsection{Related frameworks: Java RMI, RMI-IIOP and Java IDL}
 
 Given our needs and desires for a next generation \TB\, it is
@@ -966,7 +975,7 @@ is called a \emph{remote object}.
 
 In RMI, arguments to or return values from remote methods can be
 primitive data (e.g. \texttt{int}), remote objects, or \emph{serializable}
-objects. In java, an object is said to be serializable if it implements
+objects. In Java, an object is said to be serializable if it implements
 the \texttt{java.util.Serializable} interface. Both primitive data
 and serializable objects are passed by value using Java's object
 serialization. Remote objects are essentially passed by reference.
@@ -981,7 +990,7 @@ RMI objects exactly which method calls will result in a \emph{local}
 (i.e. client side) state change, and which will have \emph{global}
 (server side) effect.
 
-As an example of this, consider our address book example. If the
+Consider, again, our address book example. If the
 AddressBookService is implemented as a remote object in RMI, then
 client-side invocations of the \texttt{setAddress} method will cause a
 \emph{global} update. If, on the other hand, the AddressBookEntries are
@@ -1036,7 +1045,7 @@ CORBA details).
 
 \paragraph{Feature summary}
 Figure~\ref{Fig:feature-overview} shows some of the similarities and
-differences in \TB\, RMI, RMI-IIOP and Java IDL.
+differences in \TB, RMI, RMI-IIOP and Java IDL.
 
 \begin{figure}[tb]
 \begin{center}
@@ -1089,9 +1098,9 @@ and ``out'' parameters.  There are no return values, but parameters are
 marked as incoming, outgoing, or both (``in/out'' parameters).
 
 \item The \TB\ allows components in any language for which a \TB\
-adapter exist. Programming languages such as C and Java are supported,
-but adapters also exist for a wide range of applications, including
-e.g. Prolog, MySQL, and \asdf. In RMI, only Java components can
+adapter exists. Programming languages such as C and Java are supported,
+but adapters also exist for a wide range of languages and applications, including
+e.g., Perl, Prolog, MySQL, Tcl and \asdf. In RMI, only Java components can
 be connected; in RMI-IIOP the service is implemented in Java, its
 functionality (client-side) is available to CORBA clients. The Java IDL
 framework is fully CORBA compliant.
@@ -1170,9 +1179,9 @@ experimentation with the features mentioned in this paper.
 
 \section{Concluding Remarks}\label{Sec:conclusion}
 
-In this paper we have reflected on our experiences of the past years
+In this paper we have reflected on our experiences over the past years
 with the use of the \TB\ as a means to refactor a previously monolithic
-system: the \asdf\ Meta Environment. This first real test case of the
+system: the \asdf\ Meta Environment. This real test case of the
 \TB\ has taught us some of its shortcomings: its data bottleneck in case
 very large data items are sent using pass-by-value, and has given rise
 to questions such as how best to deal with crashing tools.
