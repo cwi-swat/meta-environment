@@ -291,8 +291,14 @@ in
     )
   +
     rec-msg(get-equations-for-module(Name?)).
-    printf("DEBUG: get-equations needs to be implemented quite differently\n") .
-    snd-msg(no-equations)
+    snd-msg(ts-get-value("asf-tree", Name)) .
+    (
+      rec-msg(ts-value(tree(EqsTree?))) .
+      snd-msg(plain-equations(EqsTree))
+    + 
+      rec-msg(ts-no-value) .
+      snd-msg(no-equations)
+    )
   +
     rec-msg(get-equations-for-renamed-import(Import?, Renamings?)) .
     printf("DEBUG: this message will dissappear\n") .
