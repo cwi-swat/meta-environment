@@ -37,7 +37,7 @@ in
             snd-msg(Id, open-file(Name)). ( 
               rec-msg(Id, opened-file(asfix,Name,T?,Fn?)).
              /* Tell UI we added module Name */
-              snd-msg(ui,add-module(Name)).
+              snd-msg(ui,open-module(Name)).
              /* Tell mdb we add module Name containing term T */
               snd-msg(add-module-to-db(T)).
              /* mdb returns the imports section of Name as well as the
@@ -47,7 +47,7 @@ in
               Ms := join(Ms,M1s)
               +
               rec-msg(Id, opened-file(raw,Name,FT?,Fn?)).
-              snd-msg(ui,add-module(Name)).
+              snd-msg(ui,open-module(Name)).
               snd-msg(open-language("Sdf2","Sdf2.baf")).
               snd-msg(Id,parse-string("Sdf2","",FT)).
               ((

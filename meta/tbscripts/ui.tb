@@ -32,8 +32,8 @@ in
     /* Add a new module by a user via the user-interface */
     ( rec-event(UI, open-module(Str?)).
       snd-msg(open-modules([Str])).
-      ( rec-msg(ui,add-module(Str1?)).
-        snd-do(UI,add-module(Str1))
+      ( rec-msg(ui,open-module(Str1?)).
+        snd-do(UI,open-module(Str1))
       + rec-msg(ui,imports(Name?,Str1?)).
         snd-do(UI,imports(Name,Str1))
       + rec-note(import-relations(irels(Pairs?))).
