@@ -15,6 +15,8 @@
 \newcommand{\SDF}{{\sc Sdf}}
 \newcommand{\GEL}{{\sc Gel}}
 \newcommand{\iter}{\,^*\,}
+\newcommand{\texttt}[1]{\tt #1}
+\newcommand{\emph}[1]{\em #1}
 
 \input{psfig.tex}
 
@@ -409,8 +411,9 @@ in order to make the tool library available. It provides the following functions
 \item {\tt TBsend}: send a term to the \TB\ (Section~\ref{TBsend}).
 \item {\tt TBmake}: construct a term (Section~\ref{TBmake}).
 \item {\tt TBmatch}: match and decompose a term (Section~\ref{TBmatch}).
-\item {\tt TBwrite}: write a term to a file (Section~\ref{TBread/write}).
-\item {\tt TBread}: read a term from a file (Section~\ref{TBread/write}).
+\item {\tt TBwrite}: write a term (in internal format) to a file (Section~\ref{TBread/write}).
+\item {\tt TBread}: read a term (in internal format) from a file (Section~\ref{TBread/write}).
+\item {\tt TBreadTerm}: read a term from a file (Section~\ref{TBread/write}).
 \item {\tt TBprintf}: formatted output to a file (Section~\ref{TBprintf}).
 \item {\tt TBsprintf}: formatted output to a string (Section~\ref{TBprintf}).
 \item {\tt TBprotect}: protect a term against garbage collection (Section~\ref{Memory}).
@@ -454,8 +457,13 @@ The initialization of a tool is achieved by
 \end{verbatim}
 which initializes the tool with name {\tt ToolName},
 parses the program arguments {\tt argc} and {\tt argv},
+and, if {\tt handler} is not {\tt NULL},
 connects it to the \TB, establish the event handler {\tt handler},
 and checks the input signature using {\tt check\_in\_sign}.
+If {\tt handler} is {\tt NULL}, the tool is executed stand-alone
+and no connection with the \TB\ is made.
+(This can also be achieved with the {\tt TB\_SINGLE} arguments,
+see Section~\ref{Executing}.)
 
 The {\tt ToolName} should be identical to a tool name as appearing in
 a tool declaration in the \T\ script. This is important since the tool name
@@ -773,7 +781,8 @@ The function
       void TBwrite(FILE *File, term *Trm)
 \end{verbatim}
 writes term {\tt Trm} to the file {\tt File}. The representation is
-in an internal format.
+{\em in an internal format}. One should use {\tt TBreadTerm} (see below)
+for reading terms in pure textual format.
 For instance, in the context:
 \begin{verbatim}
       FILE *f = fopen("foo", "w");
@@ -797,6 +806,14 @@ the term could not be read, the value {\tt NULL} is returned.
 \footnote{Since {\tt NULL} is also used as the representation of the empty list
 ``{\tt []}'', this implies that it is not possible to distinguish the
 case that an empty list is read from the error case.}
+
+The function
+\begin{verbatim}
+      term *TBreadTerm(FILE *File)
+\end{verbatim}
+complete reads the text in the given file, parses it as a term, and returns that term.
+As opposed to {\tt TBread}, this functions reads a term in pure textual
+format. When the text cannot be parsed, {\tt NULL} is returned.
 
 \subsubsection{\label{TBprintf}{\tt TBprintf} and {\tt TBsprintf}}
 The function
@@ -1083,6 +1100,8 @@ defined in the \T\ script (added automatically, when a tool is executed
 by the \TB).
 \item {\tt -TB\_TOOL\_ID} {\em Id}: internal tool identifier of this tool execution
 (added automatically, when a tool is executed by the \TB).
+\item {\tt -TB\_SINGLE}: execute the tool stand-alone and do not connect it
+with the \TB.
 \end{itemize}
 
 \noindent The execution of a tool can start in two ways:
