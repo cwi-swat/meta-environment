@@ -71,7 +71,7 @@ ATerm ASF_makeTermFromCHAR(ASF_CHAR arg);
 /*}}}  */
 /*{{{  constructors */
 
-ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol);
+ASF_Production ASF_makeProductionLexicalConstructor(char * formalName, ASF_Symbol symbol);
 ASF_Implies ASF_makeImpliesDefault(char * lex);
 ASF_TagId ASF_makeTagIdOneChar(char * lex);
 ASF_TagId ASF_makeTagIdManyChars(char * lex);
@@ -88,7 +88,7 @@ ASF_CondEquation ASF_makeCondEquationImplies(ASF_Tag Tag, char * wsAfterTag, ASF
 ASF_CondEquation ASF_makeCondEquationWhen(ASF_Tag Tag, char * wsAfterTag, ASF_Equation Equation, char * wsAfterEquation, char * wsAfterWhen, ASF_Conditions Conditions);
 ASF_Tag ASF_makeTagEmpty(char * wsAfterBracketOpen);
 ASF_Tag ASF_makeTagNotEmpty(char * wsAfterBracketOpen, ASF_TagId TagId, char * wsAfterTagId);
-ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList);
+ASF_Tree ASF_makeTreeLexicalConstructor(char * formalName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList);
 ASF_CHARList ASF_makeCHARListEmpty();
 ASF_CHARList ASF_makeCHARListSingle(ASF_CHAR head);
 ASF_CHARList ASF_makeCHARListMany(ASF_CHAR head, char * wsAfterFirst, ASF_CHARList tail);
@@ -120,9 +120,9 @@ ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
 
 ATbool ASF_isValidProduction(ASF_Production arg);
 ATbool ASF_isProductionLexicalConstructor(ASF_Production arg);
-ATbool ASF_hasProductionSymbolName(ASF_Production arg);
-ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg);
-ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName);
+ATbool ASF_hasProductionFormalName(ASF_Production arg);
+char * ASF_getProductionFormalName(ASF_Production arg);
+ASF_Production ASF_setProductionFormalName(ASF_Production arg, char * formalName);
 ATbool ASF_hasProductionSymbol(ASF_Production arg);
 ASF_Symbol ASF_getProductionSymbol(ASF_Production arg);
 ASF_Production ASF_setProductionSymbol(ASF_Production arg, ASF_Symbol symbol);
@@ -263,9 +263,9 @@ ASF_Tag ASF_setTagWsAfterTagId(ASF_Tag arg, char * wsAfterTagId);
 
 ATbool ASF_isValidTree(ASF_Tree arg);
 ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
-ATbool ASF_hasTreeSymbolName(ASF_Tree arg);
-ASF_Symbol ASF_getTreeSymbolName(ASF_Tree arg);
-ASF_Tree ASF_setTreeSymbolName(ASF_Tree arg, ASF_Symbol symbolName);
+ATbool ASF_hasTreeFormalName(ASF_Tree arg);
+char * ASF_getTreeFormalName(ASF_Tree arg);
+ASF_Tree ASF_setTreeFormalName(ASF_Tree arg, char * formalName);
 ATbool ASF_hasTreeSymbol(ASF_Tree arg);
 ASF_Symbol ASF_getTreeSymbol(ASF_Tree arg);
 ASF_Tree ASF_setTreeSymbol(ASF_Tree arg, ASF_Symbol symbol);
@@ -366,7 +366,7 @@ ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, char * lex);
 /*}}}  */
 /*{{{  sort visitors */
 
-ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol));
+ASF_Production ASF_visitProduction(ASF_Production arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol));
 ASF_Implies ASF_visitImplies(ASF_Implies arg, char * (*acceptLex)(char *));
 ASF_TagId ASF_visitTagId(ASF_TagId arg, char * (*acceptLex)(char *));
 ASF_Conditions ASF_visitConditions(ASF_Conditions arg, ASF_ConditionList (*acceptList)(ASF_ConditionList));
@@ -375,7 +375,7 @@ ASF_Equations ASF_visitEquations(ASF_Equations arg, char * (*acceptWsAfterEquati
 ASF_CondEquationList ASF_visitCondEquationList(ASF_CondEquationList arg, ASF_CondEquation (*acceptHead)(ASF_CondEquation), char * (*acceptWsAfterFirst)(char *));
 ASF_CondEquation ASF_visitCondEquation(ASF_CondEquation arg, ASF_Tag (*acceptTag)(ASF_Tag), char * (*acceptWsAfterTag)(char *), ASF_Equation (*acceptEquation)(ASF_Equation), ASF_Conditions (*acceptConditions)(ASF_Conditions), char * (*acceptWsAfterConditions)(char *), ASF_Implies (*acceptImplies)(ASF_Implies), char * (*acceptWsAfterImplies)(char *), char * (*acceptWsAfterEquation)(char *), char * (*acceptWsAfterWhen)(char *));
 ASF_Tag ASF_visitTag(ASF_Tag arg, char * (*acceptWsAfterBracketOpen)(char *), ASF_TagId (*acceptTagId)(ASF_TagId), char * (*acceptWsAfterTagId)(char *));
-ASF_Tree ASF_visitTree(ASF_Tree arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *));
+ASF_Tree ASF_visitTree(ASF_Tree arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *));
 ASF_CHARList ASF_visitCHARList(ASF_CHARList arg, ASF_CHAR (*acceptHead)(ASF_CHAR), char * (*acceptWsAfterFirst)(char *));
 ASF_Equation ASF_visitEquation(ASF_Equation arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), char * (*acceptWsAfterLhs)(char *), char * (*acceptWsAfterEquals)(char *), ASF_Tree (*acceptRhs)(ASF_Tree));
 ASF_Condition ASF_visitCondition(ASF_Condition arg, ASF_Symbol (*acceptLhsSymbol)(ASF_Symbol), ASF_Symbol (*acceptRhsSymbol)(ASF_Symbol), ASF_Tree (*acceptLhs)(ASF_Tree), char * (*acceptWsAfterLhs)(char *), char * (*acceptWsAfterEquals)(char *), ASF_Tree (*acceptRhs)(ASF_Tree), char * (*acceptWsAfterUnequal)(char *));

@@ -260,11 +260,11 @@ ATerm ASF_makeTermFromCHAR(ASF_CHAR arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol) */
+/*{{{  ASF_Production ASF_makeProductionLexicalConstructor(char * formalName, ASF_Symbol symbol) */
 
-ASF_Production ASF_makeProductionLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol)
+ASF_Production ASF_makeProductionLexicalConstructor(char * formalName, ASF_Symbol symbol)
 {
-  return (ASF_Production)ATmakeTerm(ASF_patternProductionLexicalConstructor, symbolName, symbol);
+  return (ASF_Production)ATmakeTerm(ASF_patternProductionLexicalConstructor, formalName, symbol);
 }
 
 /*}}}  */
@@ -396,11 +396,11 @@ ASF_Tag ASF_makeTagNotEmpty(char * wsAfterBracketOpen, ASF_TagId TagId, char * w
 }
 
 /*}}}  */
-/*{{{  ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList) */
+/*{{{  ASF_Tree ASF_makeTreeLexicalConstructor(char * formalName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList) */
 
-ASF_Tree ASF_makeTreeLexicalConstructor(ASF_Symbol symbolName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList)
+ASF_Tree ASF_makeTreeLexicalConstructor(char * formalName, ASF_Symbol symbol, ASF_Tree name, char * wsAfterName, char * wsAfterParenOpen, ASF_CHARList list, char * wsAfterList)
 {
-  return (ASF_Tree)ATmakeTerm(ASF_patternTreeLexicalConstructor, symbolName, symbol, name, wsAfterName, wsAfterParenOpen, list, wsAfterList);
+  return (ASF_Tree)ATmakeTerm(ASF_patternTreeLexicalConstructor, formalName, symbol, name, wsAfterName, wsAfterParenOpen, list, wsAfterList);
 }
 
 /*}}}  */
@@ -556,9 +556,9 @@ ATbool ASF_isProductionLexicalConstructor(ASF_Production arg)
 }
 
 /*}}}  */
-/*{{{  ATbool ASF_hasProductionSymbolName(ASF_Production arg) */
+/*{{{  ATbool ASF_hasProductionFormalName(ASF_Production arg) */
 
-ATbool ASF_hasProductionSymbolName(ASF_Production arg)
+ATbool ASF_hasProductionFormalName(ASF_Production arg)
 {
   if (ASF_isProductionLexicalConstructor(arg)) {
     return ATtrue;
@@ -567,28 +567,28 @@ ATbool ASF_hasProductionSymbolName(ASF_Production arg)
 }
 
 /*}}}  */
-/*{{{  ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg) */
+/*{{{  char * ASF_getProductionFormalName(ASF_Production arg) */
 
-ASF_Symbol ASF_getProductionSymbolName(ASF_Production arg)
+char * ASF_getProductionFormalName(ASF_Production arg)
 {
   if (ASF_isProductionLexicalConstructor(arg)) {
-    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0);
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 0)));
   }
 
-  ATabort("Production has no SymbolName: %t\n", arg);
-  return (ASF_Symbol)NULL;
+  ATabort("Production has no FormalName: %t\n", arg);
+  return (char *)NULL;
 }
 
 /*}}}  */
-/*{{{  ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName) */
+/*{{{  ASF_Production ASF_setProductionFormalName(ASF_Production arg, char * formalName) */
 
-ASF_Production ASF_setProductionSymbolName(ASF_Production arg, ASF_Symbol symbolName)
+ASF_Production ASF_setProductionFormalName(ASF_Production arg, char * formalName)
 {
   if (ASF_isProductionLexicalConstructor(arg)) {
-    return (ASF_Production)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)symbolName, 0), 2);
+    return (ASF_Production)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)ATmakeAppl0(ATmakeAFun(formalName, 0, ATtrue)), 0), 0), 2);
   }
 
-  ATabort("Production has no SymbolName: %t\n", arg);
+  ATabort("Production has no FormalName: %t\n", arg);
   return (ASF_Production)NULL;
 }
 
@@ -1949,9 +1949,9 @@ ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg)
 }
 
 /*}}}  */
-/*{{{  ATbool ASF_hasTreeSymbolName(ASF_Tree arg) */
+/*{{{  ATbool ASF_hasTreeFormalName(ASF_Tree arg) */
 
-ATbool ASF_hasTreeSymbolName(ASF_Tree arg)
+ATbool ASF_hasTreeFormalName(ASF_Tree arg)
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
     return ATtrue;
@@ -1960,28 +1960,28 @@ ATbool ASF_hasTreeSymbolName(ASF_Tree arg)
 }
 
 /*}}}  */
-/*{{{  ASF_Symbol ASF_getTreeSymbolName(ASF_Tree arg) */
+/*{{{  char * ASF_getTreeFormalName(ASF_Tree arg) */
 
-ASF_Symbol ASF_getTreeSymbolName(ASF_Tree arg)
+char * ASF_getTreeFormalName(ASF_Tree arg)
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
-    return (ASF_Symbol)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0);
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0), 0)));
   }
 
-  ATabort("Tree has no SymbolName: %t\n", arg);
-  return (ASF_Symbol)NULL;
+  ATabort("Tree has no FormalName: %t\n", arg);
+  return (char *)NULL;
 }
 
 /*}}}  */
-/*{{{  ASF_Tree ASF_setTreeSymbolName(ASF_Tree arg, ASF_Symbol symbolName) */
+/*{{{  ASF_Tree ASF_setTreeFormalName(ASF_Tree arg, char * formalName) */
 
-ASF_Tree ASF_setTreeSymbolName(ASF_Tree arg, ASF_Symbol symbolName)
+ASF_Tree ASF_setTreeFormalName(ASF_Tree arg, char * formalName)
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
-    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)symbolName, 0), 2), 0);
+    return (ASF_Tree)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 2), 0), (ATerm)ATmakeAppl0(ATmakeAFun(formalName, 0, ATtrue)), 0), 0), 2), 0);
   }
 
-  ATabort("Tree has no SymbolName: %t\n", arg);
+  ATabort("Tree has no FormalName: %t\n", arg);
   return (ASF_Tree)NULL;
 }
 
@@ -3020,13 +3020,13 @@ ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, char * lex)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol)) */
+/*{{{  ASF_Production ASF_visitProduction(ASF_Production arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol)) */
 
-ASF_Production ASF_visitProduction(ASF_Production arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol))
+ASF_Production ASF_visitProduction(ASF_Production arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol))
 {
   if (ASF_isProductionLexicalConstructor(arg)) {
     return ASF_makeProductionLexicalConstructor(
-        acceptSymbolName ? acceptSymbolName(ASF_getProductionSymbolName(arg)) : ASF_getProductionSymbolName(arg),
+        acceptFormalName ? acceptFormalName(ASF_getProductionFormalName(arg)) : ASF_getProductionFormalName(arg),
         acceptSymbol ? acceptSymbol(ASF_getProductionSymbol(arg)) : ASF_getProductionSymbol(arg));
   }
   ATabort("not a Production: %t\n", arg);
@@ -3190,15 +3190,15 @@ ASF_Tag ASF_visitTag(ASF_Tag arg, char * (*acceptWsAfterBracketOpen)(char *), AS
 }
 
 /*}}}  */
-/*{{{  ASF_Tree ASF_visitTree(ASF_Tree arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *)) */
+/*{{{  ASF_Tree ASF_visitTree(ASF_Tree arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *)) */
 
-ASF_Tree ASF_visitTree(ASF_Tree arg, ASF_Symbol (*acceptSymbolName)(ASF_Symbol), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *))
+ASF_Tree ASF_visitTree(ASF_Tree arg, char * (*acceptFormalName)(char *), ASF_Symbol (*acceptSymbol)(ASF_Symbol), char * (*acceptWsAfterName)(char *), char * (*acceptWsAfterParenOpen)(char *), ASF_CHARList (*acceptList)(ASF_CHARList), char * (*acceptWsAfterList)(char *))
 {
   if (ASF_isTreeLexicalConstructor(arg)) {
     return ASF_makeTreeLexicalConstructor(
-        acceptSymbolName ? acceptSymbolName(ASF_getTreeSymbolName(arg)) : ASF_getTreeSymbolName(arg),
+        acceptFormalName ? acceptFormalName(ASF_getTreeFormalName(arg)) : ASF_getTreeFormalName(arg),
         acceptSymbol ? acceptSymbol(ASF_getTreeSymbol(arg)) : ASF_getTreeSymbol(arg),
-        ASF_visitTree(ASF_getTreeName(arg), acceptSymbolName, acceptSymbol, acceptWsAfterName, acceptWsAfterParenOpen, acceptList, acceptWsAfterList),
+        ASF_visitTree(ASF_getTreeName(arg), acceptFormalName, acceptSymbol, acceptWsAfterName, acceptWsAfterParenOpen, acceptList, acceptWsAfterList),
         acceptWsAfterName ? acceptWsAfterName(ASF_getTreeWsAfterName(arg)) : ASF_getTreeWsAfterName(arg),
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(ASF_getTreeWsAfterParenOpen(arg)) : ASF_getTreeWsAfterParenOpen(arg),
         acceptList ? acceptList(ASF_getTreeList(arg)) : ASF_getTreeList(arg),

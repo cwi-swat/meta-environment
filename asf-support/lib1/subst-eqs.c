@@ -151,7 +151,7 @@ main(int argc, char *argv[])
 
   addSubstitution(
     ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[sort(\"Tree\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Tree\"),w(\"\"),no-attrs)"),
-    ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[<symbol-name(Symbol)>,w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),<symbol(Symbol)>,w(\"\"),no-attrs)"));
+    ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<formal-name(str)>),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),<symbol(Symbol)>,w(\"\"),no-attrs)"));
 
   beforeSubst = ADTmakeEntriesFromTerm(contents);
   afterSubst  = ADTsubstitute(beforeSubst, substituteEntry, NULL);
@@ -159,7 +159,7 @@ main(int argc, char *argv[])
   lexicalConsEntry = ADTmakeEntryDefault(
                        (ADTSort)ATparse("Production"),
                        (ADTAlternative)ATparse("lexical-constructor"),
-                       (ADTPattern)ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[<symbol-name(Symbol)>,w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),<symbol(Symbol)>,w(\"\"),no-attrs)"));
+                       (ADTPattern)ATparse("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<formal-name(str)>),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),<symbol(Symbol)>,w(\"\"),no-attrs)"));
 
   afterSubst = ADTmakeEntriesList(lexicalConsEntry, afterSubst);
 
