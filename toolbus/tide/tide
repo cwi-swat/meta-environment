@@ -1,6 +1,0 @@
-#!/bin/sh
-prefix=/home/olivierp/Research/toolbus
-exec_prefix=${prefix}
-libdir=$exec_prefix/lib
-cd $libdir/tide
-toolbus $@ -TB_PORT 9500 tide.tb &
