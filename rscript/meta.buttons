@@ -1,4 +1,7 @@
-buttons([
+configuration([
+
+ extension("Rscript", ".rscript"),
+
  button("Rscript",
         [description(term-editor, menu(["Rscript", "Check"]))],
         [push-active-module,

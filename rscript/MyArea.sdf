@@ -17,10 +17,10 @@ context-free syntax
   greater(Area, Area) 			-> Boolean
   greater-equal(Area, Area) 		-> Boolean	
 
-  less(Location, Location)		-> Bool
-  less-equal(Location, Location)	-> Bool
-  greater(Location, Location)		-> Bool
-  greater-equal(Location, Location)	-> Bool
+  less(Location, Location)		-> Boolean
+  less-equal(Location, Location)	-> Boolean
+  greater(Location, Location)		-> Boolean
+  greater-equal(Location, Location)	-> Boolean
 
   get-begin-line(Location) 		-> NatCon
   get-begin-column(Location) 		-> NatCon
