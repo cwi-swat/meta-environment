@@ -260,6 +260,11 @@ static ATerm implodeOpt(PT_Tree tree)
 
 static ATerm implodeVar(PT_Tree tree)
 {
+
+  if (implode_lexicals) {
+    return ATmake("varsym([<str>])>", PT_yieldTree(tree));
+  }
+
   return PT_makeTermFromTree(tree);
 }
 

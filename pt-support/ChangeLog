@@ -1,3 +1,7 @@
+2001/12/05 (vandenbr@cwi.nl)
+ * Fixed typo in usage info.
+ * Adapted implodeVar.
+
 2001/12/03 (jurgenv@cwi.nl)
  * Added interpretation of sequences, optionals and alternatives to 
    implodePT.

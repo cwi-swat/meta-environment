@@ -36,7 +36,7 @@ void usage(void)
           "\t-i filename     input from file (default stdin)\n"
           "\t-l              remove layout\n"
           "\t-o filename     output to file (default stdout)\n"
-          "\t-o              interpret optionals\n"
+          "\t-O              interpret optionals\n"
           "\t-p              remove parsetree\n"
           "\t-t              output terms in plaintext format\n"
           "\t-v              verbose mode\n"
