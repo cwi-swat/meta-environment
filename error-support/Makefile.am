@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS		= 
+SUBDIRS		= lib
 
 EXTRA_DIST=$(wildcard *.pkg)
 

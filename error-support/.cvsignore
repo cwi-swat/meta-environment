@@ -8,3 +8,4 @@ config.log
 config.cache
 config.status
 *-*.pkg
+autom*.cache

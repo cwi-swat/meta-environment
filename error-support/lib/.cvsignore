@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+.deps
+*.adt
+*.dict
+ParsedErrors.pro

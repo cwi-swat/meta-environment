@@ -6,3 +6,5 @@ $Id$
    The data-structures are to be used as:
      - a general error description mechanism in the Meta-Environment
      - a reusable error description mechanism for ASF+SDF specifications
+ * Started with generated of imploded api and parse-tree api versions of
+   meta-error in lib subdirectory
