@@ -7,27 +7,11 @@ rel[str,str] ALLREL = CALL union CONTAINMENT union INHERITANCE
 
 bag[str] CLASSES = domain(ALLREL)
 
-rel[str,str] IDENT = {<X, Y> | X : CLASSES, Y : CLASSES, X != Y, 
+rel[str,str] IDENT = {<X, Y> | X : CLASSES, Y : CLASSES, X < Y,
                                 CALL[X] == CALL[Y],
 				CONTAINMENT[X] == CONTAINMENT[Y],
 				INHERITANCE[X] == INHERITANCE[Y]
 }
-
-%%yield IDCALL
-%%
-%%bag[str] DOMCONTAINMENT = domain(CONTAINMENT \ inv(CONTAINMENT))
-%%
-%%rel[str,str] IDCONTAINMENT = {<X, Y> | X : DOMCONTAINMENT, Y : DOMCONTAINMENT, X != Y, 
-%%                                CONTAINMENT[X] == CONTAINMENT[Y]}
-%%
-%%yield IDCONTAINMENT
-%%
-%%bag[str] DOMINHERITANCE = domain(INHERITANCE \ inv(INHERITANCE))
-%%
-%%rel[str,str] IDINHERITANCE = {<X, Y> | X : DOMINHERITANCE, Y : DOMINHERITANCE, X != Y, 
-%%                                INHERITANCE[X] == INHERITANCE[Y]}
-%%
-%%rel[str,str] IDENT = IDCALL inter IDCONTAINMENT inter IDINHERITANCE
 
 int size = # IDENT
 

@@ -7,6 +7,9 @@ imports basic/Integers
   sorts Bag[[Elem]] BagIterator[[Elem]]
 
 context-free syntax
+   elem-equal(Elem, Elem)			-> Boolean
+
+context-free syntax
    "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
    "empty-bag"					-> Bag[[Elem]]
 

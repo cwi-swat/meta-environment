@@ -1,0 +1,21 @@
+module ExtendedStrings
+
+imports basic/Strings ExtendedIntegers
+
+exports
+  context-free syntax
+
+	equal(String, String)		-> Boolean
+
+	less(String, String)		-> Boolean
+	less-equal(String, String)	-> Boolean
+
+	greater(String, String)		-> Boolean	
+	greater-equal(String, String)	-> Boolean
+
+hiddens
+  imports basic/Comments
+
+  variables
+    "$Str" [0-9\']*     -> String
+    "$Int" [0-9\']*     -> Integer

@@ -120,7 +120,9 @@ equations
 
 %% --- in($Elem, $Bag)
 
-[in-1]  in($Elem, {$Elem*1, $Elem, $Elem*2}) = true
+[in-1]  elem-equal($Elem1, $Elem2) = true
+	============================================
+	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
 
 [default-in-2]
 	in($Elem, {$Elem*}) = false

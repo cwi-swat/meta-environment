@@ -110,11 +110,11 @@ equations
 [zip-rstores-1]
   zip-rstores($Rstore, rstore()) = $Rstore
 
-%%[zip-rstores-2]
-%%  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
-%%                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
-%%  = zip-rstores(rstore($VPair*),
-%%                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
+[zip-rstores-2]
+  zip-rstores(rstore(<$Var, {$Elem*1}>, $VPair*),
+                rstore($VPair*1, <$Var, {$Elem*2}>, $VPair*2))
+  = zip-rstores(rstore($VPair*),
+                  rstore($VPair*1, <$Var,{$Elem*1,$Elem*2}>, $VPair*2))
 
 [default-zip-rstores]
   zip-rstores(rstore(<$Var, $Val>, $VPair*), rstore($VPair*1))

@@ -1,6 +1,6 @@
 module RscriptCalculator
 
-imports Rstore ExtendedIntegers
+imports Rstore ExtendedIntegers ExtendedStrings
 
 exports
 
@@ -33,6 +33,7 @@ exports
 	eval-lt(RVALUE, RVALUE)					-> Boolean
 	eval-le(RVALUE, RVALUE)					-> Boolean
 	eval-im(RVALUE, RVALUE)					-> Elem
+	evalx-test(Boolean, REXP, RSTORE)			-> RVALUE
 
 	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
 
@@ -60,8 +61,6 @@ exports
 
 	min1(BagIterator[[Elem]])				-> Integer
 	min2(BagIterator[[Elem]], Integer)			-> Integer
-
-	Integer "==" Integer					-> Boolean	%% Should be in Integers!
 
 hiddens
 %%  imports asf/syntax/Comments

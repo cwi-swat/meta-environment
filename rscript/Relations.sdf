@@ -1,7 +1,7 @@
 module Relations[Elem]
 
-imports FastBagsNC[Elem]
-%%imports Bags[Elem]
+%%imports FastBagsNC[Elem]
+imports Bags[Elem]
 
 exports
 

@@ -212,45 +212,15 @@
 
 %% ---- aux functions for evaluating comparison operators
 
-[EQI1]	$Integer == $Integer = true
-[default-EQI]
-	$Integer1 == $Integer2 = false
-
 [LE1]	eval-le($Bag1, $Bag2)			= subset($Bag1, $Bag2)
 [LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
-
-[LE3]	$Integer1 = get-beginline($Area1),
-	$Integer1' = get-beginline($Area2),
-	$Integer2 = get-begincol($Area1),
-	$Integer2' = get-begincol($Area2),
-	$Integer3 = get-endline($Area1),
-	$Integer3' = get-endline($Area2),
-	$Integer4 = get-endcol($Area1),
-	$Integer4' = get-endcol($Area2),
-	$BoolCon = elem-equal(get-filename($Area1), get-filename($Area2)) &
-		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 >= $Integer2'))) &
-		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 <= $Integer4')))
-	====================================================
-	eval-le($Area1, $Area2) = $BoolCon
-
+[LE3]	eval-le($String1, $String2)		= less-equal($String1, $String2)
+[LE4]	eval-le($Area1, $Area2)			= less-equal($Area1, $Area2)
 
 [LT1]	eval-lt($Bag1, $Bag2) 			= strict-subset($Bag1,  $Bag2)
 [LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
-
-[LT3]	$Integer1 = get-beginline($Area1),
-	$Integer1' = get-beginline($Area2),
-	$Integer2 = get-begincol($Area1),
-	$Integer2' = get-begincol($Area2),
-	$Integer3 = get-endline($Area1),
-	$Integer3' = get-endline($Area2),
-	$Integer4 = get-endcol($Area1),
-	$Integer4' = get-endcol($Area2),
-	$BoolCon = elem-equal(get-filename($Area1), get-filename($Area2)) &
-		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 > $Integer2'))) &
-		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 < $Integer4')))
-	====================================================
-	eval-lt($Area1, $Area2) = $BoolCon
-
+[LT3]	eval-lt($String1, $String2)		= less($String1, $String2)
+[LT4]	eval-lt($Area1, $Area2)			= less($Area1, $Area2)
 
 [LE1]	$BoolCon = eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 	====================================================
@@ -260,7 +230,7 @@
 	====================================================
 	evalx($Exp1 < $Exp2, $Rstore) = $BoolCon
 
-[GE1]	$BoolCon = not(eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[GE1]	$BoolCon = not(eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))	   %% Not ok for area's!
 	====================================================
 	evalx($Exp1 >= $Exp2, $Rstore) 	= $BoolCon
 
@@ -316,11 +286,17 @@
 
 [XX] 	{$Gen, $Gen+ :: $Exp } = { $Gen :: {$Gen+ :: $Exp}}
 
+%% ---- evalx-test
+
+[evx1]	evalx-test(true, $Exp, $Rstore) = evalx($Exp, $Rstore)
+
+[evx2]	evalx-test(false, $Exp, $Rstore)  = *undefined*
+
 %% ---- Generator: test
 
 [et-1a]	$Bool =  evalp($Test, $Rstore)
 	======================================================================
-	evalx({$Test :: $Exp} , $Rstore) = if $Bool then evalx($Exp, $Rstore) else *undefined* fi
+	evalx({$Test :: $Exp} , $Rstore) = evalx-test($Bool, $Exp, $Rstore)
 
 %% ---- Generator: assignment,  one variable V <- E
 
@@ -672,7 +648,6 @@
 
 [default-min1]
 	min1($BagIter) = min1(tail($BagIter))	%%XXX
-
 
 [min21]	is-empty-iter($BagIter) = false,
 	$Integer1 = head($BagIter),

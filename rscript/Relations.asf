@@ -10,9 +10,9 @@ equations
 
 %% ---- is-rel
 
-[ir1]	is-rel(bag($C, $Bag1, <$Elem1, $Elem2>, $Bag2)) = true
+%%[ir1]	is-rel(bag($C, $Bag1, <$Elem1, $Elem2>, $Bag2)) = true
 
-%%[ir1]	is-rel({<$Elem1, $Elem2>, $Elem*}) = true
+[ir1]	is-rel({<$Elem1, $Elem2>, $Elem*}) = true
 
 [default-ir]
 	is-rel($Bag) = false
@@ -333,7 +333,7 @@ equations
 %%[default-cl]
 %%	closure($Rel, $Rel1, $Rel2) = $Rel1
 
-[cl-1]	equal($Rel1, $Rel2) = false,
+[cl-1]	$Rel1 != $Rel2,
 	$Rel2' = closure1(mk-iterator($Rel2), $Rel, $Rel2) 
 	==============================================	
 	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, $Rel2')
@@ -360,7 +360,7 @@ equations
 
 [cc-2]	is-empty-iter($BagIter) = false,
 	head($BagIter) = <$Elem2, $Elem2'>,
-	$Elem1' != $Elem2
+	$Elem1' != $Elem2					%% elem-equal?
 	=======================================================
 	closure-comp($BagIter, $Elem1, $Elem1', $Bag) = 
 	closure-comp(tail($BagIter), $Elem1, $Elem1', $Bag)
