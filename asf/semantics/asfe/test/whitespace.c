@@ -97,10 +97,10 @@ int main(int argc, char *argv[])
 
   /* then we reduce with whitespace */
   result[1] = reduce_test(eqs, term,ATtrue);
-	
-  if(!isEqualModuloWhitespace(result[0],result[1]))		{
+
+  if(!isEqualModuloWhitespace(asfix_get_term(result[0]),asfix_get_term(result[1])))		{
     ATerror("Terms %t AND %t are different modulo whitespace.\n",
-	    result[0],result[1]);
+	    result[0],result[1]); 
   }
 	
   return 0;

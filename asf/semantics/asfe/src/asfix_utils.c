@@ -56,10 +56,8 @@ extern ATerm tagCurrentRule;
 
 ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 {
-	if(asfix_is_whitespace(asfix1) && asfix_is_whitespace(asfix2))
-		ATwarning("COMPARING\n%t\nWITH\n%t\n", asfix1,asfix2);
-	 
-
+	/* ATwarning("COMPARING\n%t\nWITH\n%t\n", asfix1,asfix2); */
+	
 	if(!ATisEqual(asfix1, asfix2)) {
 		if(asfix_is_appl(asfix1) && asfix_is_appl(asfix2)) {
 			/* If it is an appl, prods should be ATequal and kids should be
@@ -116,7 +114,6 @@ ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 					return ATtrue;
 				}
 			}
-		
 			return ATfalse;
 		} else if(asfix_is_whitespace(asfix1) && asfix_is_whitespace(asfix2)) {
 			/* here we treat all whitespace equally */
