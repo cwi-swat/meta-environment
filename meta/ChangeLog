@@ -1,5 +1,8 @@
 # $Id$
 
+2003/03/19 (markvdb@cs.vu.nl)
+ * Reduce-button adapted to the new button actions.
+
 2003/03/19 ({iversen, jurgenv}@cwi.nl)
  * added command add-pos-info to button-language.
 
