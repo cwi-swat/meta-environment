@@ -1,0 +1,20 @@
+module FindStartupFacts
+
+imports
+  TscriptOperations 
+  FactsOperations
+
+exports
+  context-free syntax
+    find-startup-facts ( Tscript ) -> StartupFacts
+
+hiddens
+  context-free syntax
+    find-startup-facts({ProcessInvocation ","}+) -> StartupFacts
+
+  variables
+    "TscriptDefs"                                 -> TscriptDef*
+    "ProcessInvocations" -> {ProcessInvocation ","}+
+    "StartupFacts" -> StartupFacts
+    "ProcessName" -> ProcessName
+    

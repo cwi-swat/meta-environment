@@ -3,36 +3,44 @@ module FindFacts
 imports 
   TscriptOperations
   FactsOperations
-  containers/Set[FactsStructure]
+  containers/Set[ProcessFacts]
+  FindStartupFacts
 
 exports
-  sorts FactsStructureSet
+  sorts ProcessFactsSet
   context-free syntax
-    Set[[FactsStructure]] -> FactsStructureSet
+    Set[[ProcessFacts]] -> ProcessFactsSet
+
+  sorts ToolBusFacts
   context-free syntax
-    find-facts( Tscript )                        -> FactsStructureSet
-    get-var-decls ( ProcessDef )                  -> {VarDecl ","}*
-    lookup-var( Var, {VarDecl ","}*)         -> Term
+    StartupFacts # ProcessFactsSet -> ToolBusFacts 
+  context-free syntax
+    find-facts( Tscript )             -> ToolBusFacts
+    get-var-decls ( ProcessDef )      -> {VarDecl ","}*
+    lookup-var( Var, {VarDecl ","}*)  -> Term
 
 hiddens
   context-free syntax
-    find-facts( TscriptDef*, FactsStructureSet )              -> FactsStructureSet {traversal(accu,top-down,break)}
-    find-facts( ProcessDef, FactsStructureSet )               -> FactsStructureSet {traversal(accu,top-down,break)}
+    find-facts( TscriptDef*, ProcessFactsSet )              -> ProcessFactsSet {traversal(accu,top-down,break)}
+    find-facts( ProcessDef, ProcessFactsSet )               -> ProcessFactsSet {traversal(accu,top-down,break)}
+%%    find-facts( {ProcessInvocation ","}+, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,break)}
 
   context-free syntax
-    find-process-facts(ProcessExpr, FactsStructure)           -> FactsStructure {traversal(accu,top-down,continue)}
-    find-process-facts( ProcessInvocation, FactsStructure )   -> FactsStructure {traversal(accu,top-down,continue)}
-%%    find-facts( {ProcessInvocation ","}+, FactsStructureSet ) -> FactsStructureSet {traversal(accu,top-down,continue)}
-    find-process-facts( Term, FactsStructure )                -> FactsStructure {traversal(accu,top-down,continue)}
+    find-process-facts(ProcessExpr, ProcessFacts)           -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-process-facts( ProcessInvocation, ProcessFacts )   -> ProcessFacts {traversal(accu,top-down,continue)}
+%%    find-facts( {ProcessInvocation ","}+, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,continue)}
+    find-process-facts( Term, ProcessFacts )                -> ProcessFacts {traversal(accu,top-down,continue)}
 
     get-var-decls( ProcessExpr )                  -> {VarDecl ","}*
 
   variables
     "TscriptDefs"                                 -> TscriptDef*
     "ProcessInvocations"                          -> {ProcessInvocation ","}+
-    "FactsStructure"[0-9\']*                      -> FactsStructure
-    "CollectedFacts"[0-9\']*                      -> FactsStructure
-    "FactsStructureSet"[0-9\']*                   -> Set[[FactsStructure]]
+    "ProcessCreations"                          -> {ProcessCreation ","}+
+    "ProcessFacts"[0-9\']*                      -> ProcessFacts
+    "StartupFacts"[0-9\']*                      -> StartupFacts
+    "CollectedFacts"[0-9\']*                      -> ProcessFacts
+    "ProcessFactsSet"[0-9\']*                   -> Set[[ProcessFacts]]
     "ProcessSignature"                                 -> ProcessSignature
     "ProcessName"                                 -> ProcessName
     "ProcessNames"                                -> ProcessName*

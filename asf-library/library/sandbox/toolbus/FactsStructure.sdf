@@ -15,11 +15,23 @@ exports
     Set[[SendFact]]       -> SendFacts
     Set[[ReceiveFact]]    -> ReceiveFacts
 
-  sorts FactsStructure
+  sorts ProcessFacts
   context-free syntax
-    "process" "[" declaration: DeclarationFact "," 
-                  creations:   CreationFacts "," 
-                  invocations: InvocationFacts "," 
-                  sends:       SendFacts "," 
-                  receive:     ReceiveFacts "]" -> FactsStructure
+    "process-facts" "[" 
+      declaration: DeclarationFact "," 
+      creations:   CreationFacts "," 
+      invocations: InvocationFacts "," 
+      sends:       SendFacts "," 
+      receive:     ReceiveFacts
+    "]" -> ProcessFacts
+
+  sorts ToolFacts
+  context-free syntax
+    "tool-facts" "[" "]" -> ToolFacts
+
+  sorts StartupFacts
+  context-free syntax
+    "startup-facts" "[" 
+      creations: CreationFacts 
+    "]" -> StartupFacts
    

@@ -1,19 +1,19 @@
 equations
 
 [ff-top]
-  find-facts(TscriptDefs, {}) = FactsStructureSet1%%,
-  %%find-facts(ProcessInvocations, {}) = Facts2
+  find-facts(TscriptDefs, {}) = ProcessFactsSet,
+  find-startup-facts(TscriptDefs toolbus(ProcessInvocations)) = StartupFacts
   ===>
   find-facts(TscriptDefs toolbus(ProcessInvocations)) = 
-    FactsStructureSet1 %%+ Facts2
+    <StartupFacts,ProcessFactsSet>
 
 [ff-basic]
   get-process-name(ProcessSignature) = ProcessName,
   find-process-facts(ProcessExpr, 
-                     make-facts(process-declaration ProcessName,{},{},{},{})) = FactsStructure
+                     make-process-facts(process-declaration ProcessName,{},{},{},{})) = ProcessFacts
   ===>
-  find-facts(process ProcessSignature is ProcessExpr, FactsStructureSet) =
-  FactsStructureSet + { FactsStructure }
+  find-facts(process ProcessSignature is ProcessExpr, ProcessFactsSet) =
+    ProcessFactsSet + { ProcessFacts }
 
 [ff-create-basic]
   find-process-facts(create(ProcessName, GenVar), CollectedFacts) =

@@ -3,16 +3,17 @@ module ProcessExpr
 imports Atom VarDecls TimeExpr
 
 exports
-  sorts ProcessExpr ProcessInvocation
+  sorts ProcessExpr ProcessInvocation ProcessCreation
 
   context-free syntax
     Atom                                                        -> ProcessExpr {cons("atomProcExpr")}
     Atom TimeExpr                                               -> ProcessExpr {cons("atomTimeExpr")}
-    "create" "(" ProcessName "(" {Term ","}* ")" "," GenVar ")" -> ProcessInvocation {cons("createProcArgs")}
-    "create" "(" ProcessName "," GenVar ")"                     -> ProcessInvocation {cons("createProc")}
+    "create" "(" ProcessName "(" {Term ","}* ")" "," GenVar ")" -> ProcessCreation {cons("createProcArgs")}
+    "create" "(" ProcessName "," GenVar ")"                     -> ProcessCreation {cons("createProc")}
     ProcessName                                                 -> ProcessInvocation {cons("procNameInvoc")}
     ProcessName "(" {Term ","}* ")"                             -> ProcessInvocation {cons("procInvoc")}
     ProcessInvocation                                           -> ProcessExpr {cons("procInvoExpr")}
+    ProcessCreation                                             -> ProcessExpr {cons("procCreaExpr")}
     ProcessExpr "." ProcessExpr                                 -> ProcessExpr {left, cons("seqComp")}
     ProcessExpr "+" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
     ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}

@@ -25,7 +25,7 @@ buttons([
           [push-active-module,
            get-root,
            check-sort("Tscript"),
-           apply("find-facts", "FactsStructureSet", 1),
+           apply("find-facts", "ToolBusFacts", 1),
            push-modulename("FindFacts"),
            reduce,
            push-filename("reduct.out"),

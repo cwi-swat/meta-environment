@@ -1,0 +1,15 @@
+equations
+
+  [find-startup-facts-init] 
+    find-startup-facts(TscriptDefs toolbus(ProcessInvocations)) =
+       find-startup-facts(ProcessInvocations)
+
+  [find-startup-facts-single]
+    find-startup-facts(ProcessName) = 
+      make-startup-facts(process-creation ProcessName)
+
+  [find-startup-facts-many]
+    find-startup-facts(ProcessInvocations) = StartupFacts
+    ===>
+    find-startup-facts(ProcessName, ProcessInvocations) = 
+      add-startup-fact(StartupFacts, process-creation ProcessName)

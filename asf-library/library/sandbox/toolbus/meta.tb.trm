@@ -1,3 +1,4 @@
+find-facts(
 process AbortMetaEnvironment is
 let
   TimeOut : int
@@ -4960,3 +4961,4 @@ toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui,
 
 
         )
+)
