@@ -216,16 +216,6 @@ snd-do(Mdb, create-module-db).
     snd-msg(equations-incomplete)
   )
 +
-  rec-msg(get-all-equations-for-compiler(Name?)).
-  snd-eval(Mdb, get-all-equations-for-compiler(Name)).
-  (
-    rec-value(Mdb, equations(Equations?)).
-    snd-msg(all-equations(Equations))
-  +
-    rec-value(Mdb, equations-incomplete) .
-    snd-msg(equations-incomplete)
-  )
-+
 /* Get the syntax for a list of modules */
   (
     rec-msg(get-all-sdf2-definitions(eqs(Name?)))

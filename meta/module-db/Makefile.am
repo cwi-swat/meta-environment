@@ -16,7 +16,7 @@ module_db_SOURCES	= module-db.c module-db.h renaming-symbols.c
 module_db_LDADD		= module-db.tif.o \
 			-L$(SDF_SUPPORT)/lib -lSDFME \
 			-L$(ASF_SUPPORT)/lib -lASFME \
-			-L$(PT_SUPPORT)/lib -lmept -lconversion \
+			-L$(PT_SUPPORT)/lib -lmept \
 			-L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES	        = -I$(PT_SUPPORT)/include -I$(ATERM)/include  \

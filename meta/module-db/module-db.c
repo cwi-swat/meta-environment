@@ -9,8 +9,6 @@
 
 #include <assert.h>
 
-#include <conversion.h>
-
 #include "module-db.h"
 
 /*}}}  */
@@ -243,48 +241,6 @@ ATerm get_all_equations(int cid, char *moduleName)
     mods = get_imported_modules(moduleName);
     result = ASF_makeTermFromCondEquationList(
                getEquations(SDFmakeImport(moduleName)));
-    return ATmake("snd-value(equations(<term>))", ATBpack(result));
-  }
-  else {
-    return ATmake("snd-value(equations-incomplete)");
-  }
-}
-
-/*}}}  */
-
-/*{{{  static ATerm transformEquations(ATermList equations) */
-
-static ATerm transformEquations(ATermList equations)
-{
-  ATermList newEquations = ATempty;
-
-  while (!ATisEmpty(equations)) {
-    PT_Tree equation = PT_makeTreeFromTerm(ATgetFirst(equations));
-    ATerm newEquation = tree2a1(equation);
-    newEquations = ATappend(newEquations, newEquation);
-    equations = ATgetNext(equations);
-  }
-  return (ATerm)newEquations;
-}  
-
-/*}}}  */
-
-/*{{{  ATerm get_all_equations_for_compiler(int cid, char *moduleName) */
-
-ATerm get_all_equations_for_compiler(int cid, char *moduleName)
-{
-  ATerm name;
-  ATermList mods;
-  ATerm result;
-
-/* calculate the transitive closure of the imported modules. */
-  
-  name = ATmake("<str>",moduleName);
-  if (complete_asf_specification(ATempty, name)) {
-    mods = get_imported_modules(moduleName);
-    result = transformEquations(
-               (ATermList)ASF_makeTermFromCondEquationList(
-                            getEquations(SDFmakeImport(moduleName))));
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
   }
   else {
@@ -1407,20 +1363,13 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
     imports = get_imported_modules(moduleName);
     definition = getSyntax(imports);
     sdfTree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(definition));
-    /*
-    parseTree = PT_makeParseTreeTree(emptyString, sdfTree, emptyString);
-    */
     sort = PT_makeSymbolCf(PT_makeSymbolSort("SDF"));
     symbols = PT_makeSymbolsList(sort, PT_makeSymbolsEmpty());
     parseTree = PT_makeParseTreeTree(symbols, 
                                      PT_makeTreeLayoutEmpty(),
                                      sdfTree,
                                      PT_makeTreeLayoutEmpty(), 0);
-/*
     result = PT_makeTermFromParseTree(parseTree);
-ATwarning("syntax = %t\n", result);
-*/
-    result = a2metoa1(parseTree);
     return ATmake("snd-value(syntax(<term>))", ATBpack(result));
   }
   else {
