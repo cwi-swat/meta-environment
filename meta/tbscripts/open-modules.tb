@@ -15,8 +15,8 @@ in
     (
       rec-msg(not-exists-in-module-db(Module)) .
       Status := success.
-      Open-Module(Path, Module, Status?, RealModule?, Imports?).
-      snd-msg(open-modules(Imports)).
+      Open-Module(Path, Module, sdf, Status?, RealModule?, Imports?).
+      snd-msg(open-modules(Imports, sdf)).
       rec-msg(finished-opening-modules)
     +
       rec-msg(exists-in-module-db(Module))
@@ -99,11 +99,13 @@ let
   Status : term,
   Path : str,
   FileName : str,
-  Changed : term
+  Extension : str,
+  Changed : term,
+  Type : term
 in
   Id := process-id.
   (
-    rec-msg(open-modules(Modules?)).
+    rec-msg(open-modules(Modules?, Type?)).
     Changed := true .
     snd-note(ui-status(stat(Id,"Opening Modules"))). 
     RealModules := [].
@@ -116,8 +118,10 @@ in
       +
         rec-msg(not-exists-in-module-db(Module)).
         Status := success.
-        LocateFile(Module, ".sdf", Path?) .
-        Open-Module(Path, Module, Status?, RealModule?, Imports?).
+	snd-msg(file-extension-hook(Type)) .
+	rec-msg(file-extension-hook-result(Extension?)) .
+        LocateFile(Module, Extension, Path?) .
+        Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
         Modules := join(Imports, Modules).
         RealModules := join(RealModules, RealModule)
       )
@@ -135,8 +139,8 @@ in
   delta
 endlet
 
-process Open-Module(Path : str, Module : str, Status : term?, 
-                    RealModule : str?, Imports : list?) 
+process Open-Module(Path : str, Module : str, Type : term,
+                    Status : term?, RealModule : str?, Imports : list?) 
 is
 let
   Id : int,
@@ -146,9 +150,13 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
-    Open-Syntax(Path, Module, Status?, RealModule?, RealPath?, Imports?).
+    Open-Syntax(Path, Module, Type, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then
-      Open-Equations(RealModule, RealPath)
+      if equal(Type, sdf) then 
+        Open-Equations(RealModule, RealPath)
+      else
+        tau
+      fi
     else
       RealModule := Module.
       Handle-Open-Module-Errors(RealModule, Status)
@@ -167,27 +175,30 @@ process Handle-Open-Module-Errors(Module : str, Status : term) is
     tau
   fi
 
-process Open-Syntax(Path : str, Module : str, Status : term?, 
+process Open-Syntax(Path : str, Module : str, Type : term, Status : term?, 
                     RealModule : str?, RealPath : str?, Imports : list?) is
 let
   Tree : term,
   Text : str,
   Message : str,
-  FileName : str
+  FileName : str,
+  Extension : str
 in
-  snd-msg(io-get-filename(Path, Module, ".sdf")) .
+  snd-msg(file-extension-hook(Type)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(io-read-file(FileName)) .
   (
     rec-msg(io-file-contents(Text?)) .
-    Parse-Syntax(Text, Status?, Tree?) 
+    Parse-Syntax(Text, Type, Status?, Tree?) 
   +
     rec-msg(io-error-reading(Message?)) .
     Status := no-such-file
   ) .
   if not-equal(Status, no-such-file) then
     Imports := [].
-    snd-msg(add-sdf-module-to-db(Module, Path, Text, Tree)).
+    snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
     (
       rec-msg(adding-succeeded(Module, RealModule?, RealPath?, Imports?))
     +
@@ -198,22 +209,32 @@ in
   fi
 endlet
 
-process Parse-Syntax (Text : str, Status : term?, Tree : term?) is
+process Parse-Syntax(Text : str, Type : term, Status : term?, Tree : term?) is
 let
   Id : int,
   Errors : list,
-  Error : term
+  Error : term,
+  TermType : term,
+  Sort : str
 in
   Id := process-id.
-  snd-msg(open-sdf2-language).
-  rec-msg(sdf2-language-opened).
-  snd-msg(Id,parse-string-as-asfix2me(trm("Sdf2"),"Module",Text)).
+  snd-msg(open-language(Type)) .
   ( 
-    rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
+    rec-msg(open-language-succeeded(TermType?)) .
+    snd-msg(syntax-top-sort-hook(Type)) .
+    rec-msg(syntax-top-sort-hook-result(sort(Sort?))) .
+    snd-msg(Id, parse-string-as-asfix2me(TermType, Sort, Text)) .
+    ( 
+      rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
+    +
+      rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))) .
+      Tree := no-tree.
+      Status := parse-error 
+    )
   +
-    rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))).
-    Tree := no-tree.
-    Status := parse-error 
+    rec-msg(open-language-failed) .
+    Tree := no-tree .
+    Status := no-parse-table 
   )
 endlet
 

@@ -5,19 +5,20 @@
 process SetParseTable(ModuleId : term, Continue : term?) is
 let
   Type       : str,
-  ModuleName : str
+  ModuleName : str,
+  TermType   : term
 in
   Type := fun(ModuleId) .
   ModuleName := first(args(ModuleId)).
   if and(equal(Type, "trm"), equal(ModuleName, "Sdf2")) then
-    snd-msg(open-sdf2-language) .
+    snd-msg(open-language(sdf)) .
     (
-      rec-msg(sdf2-language-not-opened) .
+      rec-msg(open-language-failed) .
       snd-note(ui-status(errorf(
         "Unable to open parse table for %s", [ModuleName]))) .
       Continue := false
     +
-      rec-msg(sdf2-language-opened) .
+      rec-msg(open-language-succeeded(TermType?)) .
       Continue := true
     )
   else

@@ -213,10 +213,16 @@ endlet
 
 process KillEditor(EditorId : term, Type : str, ModuleName : str) is
   snd-note(delete-editor(EditorId)) .
-  if not(equal(Type, "term")) then
-    KillModuleEditor(EditorId, ModuleName)
-  else
-    tau
+  if or(equal(Type, "syntax"), 
+        equal(Type, "equations")) then
+    KillModuleEditor(EditorId, ModuleName) 
+  else	
+    if not(equal(Type, "term")) then
+      snd-msg(kill-editor-unknown-type-hook(EditorId, Type, ModuleName)) .
+      rec-msg(kill-editor-unknown-type-hook-result)
+    else
+      tau
+    fi
   fi.
   snd-msg(delete-structure-editor(EditorId)) 
 

@@ -11,7 +11,7 @@ in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
   subscribe(delete-editor(<term>)) .
-  snd-msg(open-modules([MODULENAME])) .
+  snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(edit-term-file(MODULENAME,INFILENAME)) .
   rec-msg(edit-term-file(ModuleName?, EditorId?)) .

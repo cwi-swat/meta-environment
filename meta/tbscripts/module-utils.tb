@@ -131,7 +131,7 @@ endlet
 
 process DoRevertModule(ModuleName : str) is
   HardCloseModuleInDB(ModuleName).
-  snd-msg(open-modules([ModuleName])) .
+  snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules).
   snd-msg(module-reverted(ModuleName))
 

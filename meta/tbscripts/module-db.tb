@@ -63,7 +63,7 @@ in
       snd-msg(not-exists-in-module-db(Name))
     )
   +
-    rec-msg(add-sdf-module-to-db(Name?, Path?, SyntaxText?, SyntaxTree?)) .
+    rec-msg(add-module-to-db(Name?, Path?, sdf, SyntaxText?, SyntaxTree?)) .
     if not-equal(SyntaxTree, no-tree) then
       snd-msg(sm-get-module-id(SyntaxTree)) .
       rec-msg(sm-module-id(ModuleId?)) .

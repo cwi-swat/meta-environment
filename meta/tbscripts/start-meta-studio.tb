@@ -9,7 +9,7 @@ in
   create(Ui, Pid?) .
   create(MetaCreator, Pid?) .
   if not-equal(MODULENAME,"") then
-    snd-msg(open-modules([MODULENAME])) .
+    snd-msg(open-modules([MODULENAME], sdf)) .
     rec-msg(finished-opening-modules)
   else
     tau

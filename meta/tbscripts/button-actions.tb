@@ -755,7 +755,7 @@ let
   ModuleId   : term
 in
   Id := process-id . 
-  snd-msg(open-modules([ModuleName])) .
+  snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
   ModuleId := quote(trm(ModuleName)) .
   ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
@@ -783,7 +783,7 @@ in
         rec-msg(updating-succeeded(DependingModules?, NewModules?)).
 	snd-msg(notify-about-changed-modules(DependingModules, "sdf")) .
 	rec-msg(notify-about-changed-modules-done) .
-        snd-msg(open-modules(NewModules)).
+        snd-msg(open-modules(NewModules, sdf)).
         rec-msg(finished-opening-modules) .
         snd-note(clear-focus(EditorId))
       +
@@ -957,7 +957,7 @@ let
   Equations   : term
 in
   Id := process-id .
-  snd-msg(open-modules([ModuleName])) .
+  snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
   snd-msg(get-all-equations(ModuleName)) .

@@ -4,14 +4,13 @@
 
 process Open-Sdf2-Language is
   (
-    rec-msg(open-sdf2-language) .
+    rec-msg(open-language(sdf)) .
     snd-msg(open-language(trm("Sdf2"), "__SDF2TABLE__")) .
     (
       rec-msg(language-opened(trm("Sdf2"))) .
-      snd-msg(sdf2-language-opened)
+      snd-msg(open-language-succeeded(trm("Sdf2")))
     +
       rec-msg(language-not-opened(trm("Sdf2"))) .
-      snd-msg(sdf2-language-not-opened)
+      snd-msg(open-language-failed)
     )
-  ) *
-    delta
+  )*delta

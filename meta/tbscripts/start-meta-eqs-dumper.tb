@@ -8,7 +8,7 @@ let
 in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
-  snd-msg(open-modules([MODULENAME])) .
+  snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(equations-dumped) .
