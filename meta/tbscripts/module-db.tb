@@ -319,8 +319,7 @@ in
     rec-msg(ts-all-values(Modules?)) .
     snd-msg(sm-get-all-depending-module-names(Modules, Name)) .
     Modules := [] .
-    rec-msg(sm-all-depending-module-names(DependingModules?)) .
-    printf("DEBUG: %t depend on %s\n", DependingModules, Name) 
+    rec-msg(sm-all-depending-module-names(DependingModules?)) 
 endlet
 
 process MDB-GetAllImportedModuleNames(Name : str, Imported : list?) is
@@ -429,7 +428,6 @@ in
 endlet
 
 process MDB-InvalidateModule(Module : str) is
-  printf("DEBUG: removing asf parse trees and all tables for: %s\n", Module) .
   snd-msg(ts-remove-value("asf-tree", Module)) .
   snd-msg(ts-remove-value("asf-parse-table", Module)) .
   snd-msg(ts-remove-value("term-parse-table", Module))

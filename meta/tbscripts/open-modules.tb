@@ -17,8 +17,7 @@ in
       Status := success.
       Open-Module(Path, Module, Status?, RealModule?, Imports?).
       snd-msg(open-modules(Imports)).
-      rec-msg(finished-opening-modules).
-      Invalidate-Dirty-ParseTables([RealModule])
+      rec-msg(finished-opening-modules)
     +
       rec-msg(exists-in-module-db(Module))
     )
@@ -127,7 +126,6 @@ in
     fi *
     if equal(Modules, []) then
       if equal(Changed, true) then
-        Invalidate-Dirty-ParseTables(RealModules) .
         DrawImportGraph()
       else
         tau
@@ -137,22 +135,6 @@ in
     fi
   ) *
   delta
-endlet
-
-process Invalidate-Dirty-ParseTables(Modules : list) is
-let
-  Runner : list,
-  Module : str
-in
-  Runner := Modules.
-  if not-equal(Runner, []) then
-    Module := first(Runner).
-    Runner := next(Runner).
-    snd-msg(invalidate-parse-tables(Module))
-  fi *
-  if equal(Runner, []) then
-    tau
-  fi
 endlet
 
 process Open-Module(Path : str, Module : str, Status : term?, 
