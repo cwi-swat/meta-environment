@@ -39,6 +39,8 @@ sglr_LDADD		= -L$(top_srcdir)/libsglr -lsglr \
 			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
 			-L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
+sglr_INCLUDE            = $(INCLUDES)
+
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
 sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/libsglr/libsglr.a \
               $(top_srcdir)/libtree2dot/libtree2dot.a
