@@ -15,6 +15,7 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 sdf_modules_LDADD = \
 	-L$(top_builddir)/lib -lSDFME  \
 	-L$(TOOLBUSLIB)/lib -lATB \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
@@ -30,4 +31,5 @@ INCLUDES = \
 	-I$(ATERM)/include  \
 	-I$(TOOLBUSLIB)/include \
 	-I$(PT_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(SDF_SUPPORT)/include
