@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 17 15:21:17 CET 2004 <kooiker@cwi.nl>
+ * meta-studio/metastudio/components/graph/GraphPanel.java:
+   - getZoomToFitFactor checks graph on null 
+
 Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
  * editors/text/gvim/{connector.c,meta.vim.src}:
    - explicit synchronization with hive during writing of contents
@@ -28,7 +32,6 @@ Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
 - The DeleteEditors has been duplicated and the new process
   is more subtile wrt closing of editors. This new process
   is used in reverting modules, adding and removing imports.
-
 
 Fri Feb 13 15:20:49 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Replaced ptpretty by pandora functionality
