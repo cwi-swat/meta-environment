@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Nov 25 10:45:32 CET 2004 <jurgenv@cwi.nl>
+ * As an example, factored out StatusBar as a separate ToolBus tool
+   from meta-studio.
+
 Fri Nov 19 17:44:53 CET 2004 <jurgenv@cwi.nl>
  * Made tide working in 1.6 branch
  * Added two new ugly primitive actions in buttons.tb that need to
