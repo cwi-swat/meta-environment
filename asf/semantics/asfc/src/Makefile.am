@@ -31,7 +31,8 @@ noinst_HEADERS = asfc.tif.h \
                  idef.h
 
 asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
-               -L$(PT_SUPPORT)/lib -lmept -lPTMEPT -lconversion -lasfix2  \
+               -L$(SGLR)/lib -lsglr \
+               -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
                -L$(TOOLBUSLIB)/lib -lATB \
@@ -39,6 +40,7 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 		$(SOCKLIBS)
 
 DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
+          -DSGLR=\"$(SGLR)\"   \
           -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
           -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
           -DATERM=\"$(ATERM)\" \

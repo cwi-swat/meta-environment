@@ -92,6 +92,18 @@ ASCLIB=${ASC_SUPPORT}/lib
 AC_SUBST(ASCLIB)
 
 dnl }}}
+dnl {{{  Require sglr package
+
+AC_PACKAGE_REQUIRE(sglr, sglr,
+   [  --with-sglr=DIR  sglr is in DIR])
+AC_SUBST(SGLR)
+
+ASCINC=${ASC_SUPPORT}/include
+AC_SUBST(ASCINC)
+ASCLIB=${ASC_SUPPORT}/lib
+AC_SUBST(ASCLIB)
+
+dnl }}}
 
 dnl {{{  Is ranlib needed on this system?
 AC_PROG_RANLIB

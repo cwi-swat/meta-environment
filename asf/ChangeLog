@@ -1,5 +1,8 @@
 # $Id$
 
+2003/11/21 (jurgenv@cwi.nl)
+ * Added dependency on sglr package because a new builtin uses libsglr
+
 2003/11/10 ({markvdb,jurgenv}@cwi.nl)
  * Fixed a subtle bug in the implementation of := and !:= conditions
    in asfe. The interpreter did a lot of extra work for nothing.
