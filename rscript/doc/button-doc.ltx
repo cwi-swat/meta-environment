@@ -34,8 +34,166 @@ has as input the values  $I_1$,...,$I_n$ (with $I_n$ on top of the stack)
 and as output the values $O_1$,...,$O_m$ (with $O_m$ on top of the stack).
 Both the input and the output of an action may be empty.
 
-\begin{itemize}
+\subsection{Internal actions}
 
+In this section we will give the signature of the actions which are
+used within the Meta-Environment. Users are not supposed to use these
+actions in their scripts. Of course it is possible to use the user
+actions also in scripts describing internal functionality.
+
+\begin{itemize}
+\action{}{clear-all}{}
+{Close all modules that are currently open. 
+}
+
+\action{}{clear-history-list}{}
+{Clear the current history list.
+}
+
+\action{$ModName$}{close-module($Mode$)}{}
+{Removes the selected module from the term store, depending on the $Mode$ this
+can be done recursively. However, if another module depends on this one,
+the action fails.
+}
+
+\action{$ModName$}{compile-module}{}
+{Compiles the module $ModName$.
+}
+
+\action{$ModName$, $NewModName$, $Path$, $Extension$}{copy-module}{}
+{Copy module $ModName$ to $NewModName$.
+}
+
+\action{$ModName$}{create-module}{}
+{Create a new module $ModName$ in the current directory. 
+\note{Verschil met {\tt new-module}?}
+}
+
+\action{$ModName$}{delete-module}{}
+{Delete module $ModName$. This action resembles the {\tt close-module} action,
+except that it really removes the module from the disk and adapts the
+import relations from the active modules which import this module.
+}
+
+\action{$ModName$}{dump-module}{}
+{Saves the textual representation of both the sdf and asf part of a module
+to disk.
+}
+
+\action{$ModName$}{dump-equations}{}
+{Dump the equations of module $ModName$. Saves a list containing all the 
+equations of the
+transitive closure of the import graph with $ModName$ as top module.
+The equations are stored in baf format.
+}
+
+\action{$ModName$}{dump-eqs-parse-table}{}
+{Dump a parse table for the equations of module $ModName$.
+The parse table is saved as baf.
+}
+
+\action{$ModName$}{dump-parse-table}{}
+{Dump a parse table for terms over module $ModName$.
+The parse table is saved as baf.
+}
+
+\action{$ModName$}{edit-syntax}{}
+{Open an editor for the syntax section of module $ModName$. 
+}
+
+\action{$ModName$}{edit-equations}{}
+{Open en editor for the equations section of module $ModName$. 
+}
+
+\action{$ModName$, $FileName$}{edit-term}{}
+{Open an editor, using the syntax rules in $ModName$, of the term residing
+in file $FileName$. 
+}
+
+\action{}{exit}{}
+{Shutdown the whole Meta-Environment. 
+}
+
+\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{import-module}{}
+{Add an import relation from module $ModuleName$ to  $ImportedModName$.
+}
+
+\action{}{move-down}{}
+{Move the focus in the current editor down, i.e. to the first child of the
+current focus.
+}
+
+\action{}{move-left}{}
+{Move the focus in the current editor to the left.
+}
+
+\action{}{move-right}{}
+{Move the focus in the current editor to the right.
+}
+
+\action{}{move-up}{}
+{Move the focus in the current editor up.
+}
+
+\action{$ModName$, $Path$, $Extension$}{new-module}{}
+{Create a new module $ModName$, with file name extension $Extension$ in
+  directory $Path$.
+}
+
+\action{$ModName$, $Path$, $Extension$}{open-module}{}
+{Open the module with name $ModName$ and file name extension $Extension$ in
+  directory $Path$.
+}
+
+\action{$ModuleName$}{parse-action}{}
+{Parse the text in the current editor using the syntax defined in $ModuleName$.
+}
+
+\action{$ModuleName$}{parse-syntax-action}{}
+{Parse the syntax section of module $ModuleName$.
+}
+
+\action{$ModuleName$}{parse-equations-action}{}
+{Parse the equations section of module $ModuleName$.
+}
+
+\action{$ModName$}{print-module}{}
+{Print module $ModName$ as text where the syntax part and the equations
+are concatenate in the text.
+}
+
+\action{}{read-term-store}{}
+{Close all currently open modules and read the term store.
+}
+
+\action{}{refresh-buttons}{}
+{Read button definitions from {\tt meta.buttons}.
+}
+
+\action{$ModName$, $NewModName$, $Path$, $Extension$}{rename-module}{}
+{Rename module $ModName$ into $NewModName$.
+}
+
+\action{$ModName$}{revert-module}{}
+{Close the module $ModName$ and rereads it from disk.
+}
+
+\action{}{save-term-store}{}
+{Save the current term store.
+}
+
+\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{unimport-module}{}
+{Delete an import relation from module $ModuleName$ to  $ImportedModName$.
+}
+
+\end{itemize}
+
+\subsection{Actions for the user}
+
+The following actions are developed in order to be used in action scripts.
+
+
+\begin{itemize}
 \action{}{activate($Command$)}{$S?$}{Execute the shell command $Command$. 
 The result of the execution of a command can be nothing or some string value, 
 which is then pushed onto the stack.
@@ -59,103 +217,31 @@ which is then pushed onto the stack.
 }
 
 \action{}{ask-question($String$)}{$T$}
-{Ask a question $String$ to the user with as answer the term $T$.
-\note{Wat voor type is die term?}}
+{Ask a question $String$ to the user with as answer the term $T$. The result
+is one of the terms {\tt yes}, {\tt no}, or {\tt cancel}.
+}
 
 \action{$T$}{check-sort($SortName$)}{$T$}
 {Check that term $T$ is of sort $SortName$. If the top sort of $T$ is
 not the sort $SortName$ the button script is aborted.
 }
 
-\action{}{clear-all}{}
-{Close all modules that are currently open. 
-This is an internal action.
-}
-
-\action{}{clear-history-list}{}
-{Clear the current history list.
-This is an internal action.
-}
-
 \action{$FileName$, $ModName$}{close-editor}{}
 {Close the editor for the term over module $ModName$ that has been saved as $FileName$.
-}
-
-\action{$ModName$}{close-module($Mode$)}{}
-{Removes the selected module from the term store, depending on the $Mode$ this
-can be done recursively. However, if another module depends on this one,
-the action fails.
-This is an internal action.
-}
-
-\action{$ModName$}{compile-module}{}
-{Compiles the module $ModName$.
-This is an internal action.
-}
-
-\action{$ModName$, $NewModName$, $Path$, $Extension$}{copy-module}{}
-{Copy module $ModName$ to $NewModName$.
-This is an internal action.
-}
-
-\action{$ModName$}{create-module}{}
-{Create a new module $ModName$ in the current directory. 
-This is an internal action.
-\note{Verschil met {\tt new-module}?}}
-
-\action{$ModName$}{delete-module}{}
-{Delete module $ModName$. This action resembles the {\tt close-module} action,
-except that it really removes the module from the disk and adapts the
-import relations from the active modules which import this module.
-This is an internal action.
-}
-
-\action{$ModName$}{dump-module}{}
-{
-This is an internal action.
-}
-
-\action{$ModName$}{dump-equations}{}
-{Dump the equations of module $ModName$. \note{formaat}.
-This is an internal action.  
-}
-
-\action{$ModName$}{dump-eqs-parse-table}{}
-{Dump a parse table for the equations of module $ModName$.\note{formaat}.
-This is an internal action.  
-}
-
-\action{$ModName$}{dump-parse-table}{}
-{Dump a parse table for terms over module $ModName$.
-This is an internal action.  
 }
 
 \action{$T$}{dup}{$T$, $T$}
 {Duplicates the top element on the stack.}
 
-\action{$ModName$}{edit-syntax}{}
-{Open an editor for the syntax section of module $ModName$. 
-This is an internal action.
-}
-
-\action{$ModName$}{edit-equations}{}
-{Open en editor for the equations section of module $ModName$. 
-This is an internal action.
-}
-
-\action{$ModName$, $FileName$}{edit-term}{}
-{Open an editor, using the syntax rules in $ModName$, of the term residing
-in file $FileName$. 
-This is an internal action.
-}
-
-\action{$T_{in}$}{execute-action($Executable$)}{$T_{out}$}
+\action{$T_{in}$}{execute-action($Executable \mbox{\tt -t}$)}{$T_{out}$}
 {Execute the compiled specification $Executable$ with input term $T_{in}$ 
-and result $T_{out}$.}
-
-\action{}{exit}{}
-{Shutdown the whole Meta-Environment. 
-This is an internal action.
+and result $T_{out}$. The {\tt -t} is essential because this {\tt execute-action}
+uses the {\tt gen-adapter} of the ToolBus and is not robust against baf
+encoded terms, the {\tt -t} option ensures that the normal form is not
+encoded as baf. Therefore it is also necessary to ensure that the
+input term is also not baf encoded.
+A correct sequences of actions is thus:
+{\tt ..., unpack-tree, execute-action("Pico-typecheck -t"), ...}
 }
 
 \action{}{exists($FileName$)}{}
@@ -163,171 +249,150 @@ This is an internal action.
   absolute path name)
 and abort otherwise.}
 
-\action{$F$($T_1$,...,$T_N$)}{get-argument(NrOfArgs)}{?}
-{
-
+\action{$F$($T_1$,...,$T_N$)}{get-argument($i$)}{$T_i$}
+{Returns the $i$-th argument of a term. \note{Unclear where this
+action is actually used.}
 }
 
 \action{}{get-focus}{$T$}
 {Get the term $T$ that corresponds to the current focus.}
 
-\action{$Path$}{get-other-focus($ModName$)}{?}
+\action{$Path$}{get-other-focus($ModName$)}{$T$}
+{Allows to obtain the focus of another editor. This function can be of
+help when developing a program transformation tool.
+}
 
 \action{$ModuleName$}{get-root}{$T$}
 {Get the whole term $T$ in the current editor as a term over module $ModuleName$.}
 
-if-equal
+\action{$T_1,T_2$}{if-equal}{}
+{This is not a real action, but more a control structure which allows you to
+take 2 different routes in the action script.
+}
 
 \action{}{locate($FileName$)}{}
 {Locate the file $FileName$ using the current search path. Abort if $FileName$
   is not found.}
 
-\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{import-module}{}
-{Add an import relation from module $ModuleName$ to  $ImportedModName$.}
-
 \action{}{message($String$)}{}
 {Display the message $String$ on the status line of the user interface.}
 
-\action{}{move-down}{}
-{Move the focus in the current editor down, i.e. to the first child of the
-  current focus.}
-
-\action{}{move-left}{}
-{Move the focus in the current editor to the left.}
-
-\action{}{move-right}{}
-{Move the focus in the current editor to the right.}
-
-\action{}{move-up}{}
-{Move the focus in the current editor up.}
-
-\action{$ModName$, $Path$, $Extension$}{new-module}{}
-{Create a new module $ModName$, with file name extension $Extension$ in
-  directory $Path$.}
-
-\action{$ModName$, $Path$, $Extension$}{open-module}{}
-{Open the module with name $ModName$ and file name extension $Extension$ in
-  directory $Path$.}
-
 \action{$StringOrPath$}{parse($ModName$,$SortName$)}{$T$}
 {Parse $StringOrPath$ using the grammar in module $ModName$ and expect
-$SortName$ as resulting sort. \note{Explain $StringOrPath$}
+$SortName$ as resulting sort. If the top of the stack is a plain string
+this string is parsed, if the top of the stack is a file ($Path$) the contents
+of this file is parsed.
 }
 
-\action{$ModuleName$}{parse-action}{}
-{Parse the text in the current editor using the syntax defined in $ModuleName$.}
-
-\action{$ModuleName$}{parse-syntax-action}{}
-{Parse the syntax section of module $ModuleName$.}
-
-\action{$ModuleName$}{parse-equations-action}{}
-{Parse the equations section of module $ModuleName$.}
-
 \action{$T$}{pop}{}
-{Removes the top element from the stack.}
-
-\action{$ModName$}{print-module}{}
-{Print module $ModName$.}
+{Removes the top element from the stack.
+}
 
 \action{}{prompt-for-file($String$, $Path$, $Extension$)}{$FileName$}
 {Ask the user for a file name $FileName$ using $String$ as the name of the
-  dialog and $Extension$ as the required file name extension.}
+dialog and $Extension$ as the required file name extension.
+}
 
 \action{}{push-editor-name}{$FileName$}
-{Get the file name $FileName$ corresponding to the current editor.}
+{Get the file name $FileName$ corresponding to the current editor.
+}
 
 \action{$T_{unpacked}$}{pack-tree}{$T_{packed}$}
-{Replace the unpacked tree $T_{unpacked}$ by the packed (i.e. compressed) tree $T_{packed}$.}
+{Replace the unpacked tree $T_{unpacked}$ by the packed (i.e. compressed) tree $T_{packed}$.
+}
 
 \action{}{push-active-module}{$ModName$}
-{Get the module name $ModName$ corresponding associated with the current editor.}
+{Get the module name $ModName$ corresponding associated with the current editor.
+}
 
 \action{}{push-filename($FileName$)}{$FileName$}
-{Push the file name $FileName$ on the stack.}
+{Push the file name $FileName$ on the stack.
+}
 
 \action{}{push-integer($Integer$)}{$Integer$}
-{Push the integer $Integer$ on the stack.}
+{Push the integer $Integer$ on the stack.
+}
 
 \action{}{push-modulename($ModName$)}{$ModName$}
-{Push the module name $ModName$ on the stack.}
+{Push the module name $ModName$ on the stack.
+}
 
 \action{}{push-string($String$)}{$String$}
-{Push the string $String$ on the stack.}
+{Push the string $String$ on the stack.
+}
 
 
 \action{}{push-term($T$)}{$T$}
-{Push the term $T$ on the stack.}
-
-\action{}{query($String$)}{}
-{Evaluate query $String$.}
-
-\action{}{read-term-store}{}
-{Close all currently open modules and read the term store.}
+{Push the term $T$ on the stack.
+}
 
 \action{$FileName$}{read-tree}{$T$}
-{Read term $T$ from file $FileName$.}
+{Read term $T$ from file $FileName$.
+}
 
 \action{}{receive}{$T$}
-{Receive term $T$.}
+{Receive term $T$. Used in combination with {\tt send} in order
+to establish synchronous communication between 2 editors.
+}
 
 \action{$T_{in}$, $ModName$}{reduce}{$T_{out}$}
-{Reduce $T_{in}$ using the equations in module $ModName$ with normal form $T_{out}$.}
-
-\action{}{refresh-buttons}{}
-{Read button definitions from {\tt meta.buttons}.}
-
-\action{$ModName$, $NewModName$, $Path$, $Extension$}{rename-module}{}
-{Rename module $ModName$ into $NewModName$.}
-
-\action{$ModName$}{revert-module}{}
-{?}
+{Reduce $T_{in}$ using the equations in module $ModName$ with normal 
+form $T_{out}$ as result tree.
+}
 
 \action{$T_{in}$}{rewrite($Executable$)}{$T_{out}$}
-{}
-
-\action{}{save-term-store}{}
-{Save the current term store.}
+{Reduce $T_{in}$ via the ToolBus component $Executable$, which
+is in fact a compiled ASF+SDF specification.
+}
 
 \action{$T$}{send}{}
-{Send term $T$.}
+{Send term $T$. Used in combination with {\tt receive} in order
+to establish synchronous communication between 2 editors.
+}
 
 \action{$T$}{set-root}{}
-{Replace the term in the current editor by term $T$.}
+{Replace the term in the current editor by term $T$.
+}
 
 \action{$T$}{set-focus}{}
-{Replace the term corresponding to the current focus by $T$.}
-
-
+{Replace the term corresponding to the current focus by $T$.
+}
 
 \action{$ModName$, $T$}{show-tree}{}
-{???Display a graphical view of term $T$ over module $ModName$.}
+{Gives a graphical view of term $T$ over module $ModName$ in the tree panel
+of the user-interface.
+}
 
-\action{$ModName$,$T$}{show-area}{?}
-{?}
+\action{$ModName$,$T$}{show-area}{}
+{The term $T$ represents position information in some file. The position
+information consists of 5 elements, namely, $FileName$, $StartLine$, $StartColumn$,
+$EndLine$, $EndColumn$. Given the $FileName$ and $ModName$ an editor instance
+is activated and then the focus is set at the given coordinates.
+}
 
 \action{$ModName$,$Text$}{show-list}{}
-{?? Add $Text$ to the current (error) list viewer.}
+{Add $Text$ to the current (error) list viewer.}
 
 
 \action{$String$, $fileName$}{save-text}{}
-{Save string $String$ as file $FileName$.}
+{Save string $String$ as file $FileName$.
+}
 
 \action{$T$, $FileName$}{save-tree}{}
-{Save term $T$ as file $FileName$.}
+{Save term $T$ as file $FileName$.
+}
 
 \action{$FileName$}{split-file-name($Extension$)}{$FileName$, $Path$,
-  $Extension$}
+  $Extension$
+}
 {Split the file name $FileName$ in ...}
-
-\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{unimport-module}{}
-{Delete an import relation from module $ModuleName$ to  $ImportedModName$.}
-
 
 \action{$T_{packed}$}{unpack-tree}{$T_{unpacked}$}
 {Replace the packed tree (i.e. compressed) $T_{packed}$ by the unpacked tree $T_{unpacked}$.}
 
 \action{$T$}{unparse}{$S$}
-{Unparse the term $T$ with as result the string $S$.}
+{Unparse the term $T$ with as result the string $S$.
+}
 
 \end{itemize}
 
