@@ -11,6 +11,7 @@ AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 INCLUDES = \
 	-I$(ATERM)/include \
+        -I${ERROR_SUPPORT}/include
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include
 
