@@ -139,7 +139,6 @@ let
   Path: str,
   Pid: int,
   PosInfo: term,
-  Query: str,
   Recursive: bool,
   RTree: term,
   SdfPath: str,

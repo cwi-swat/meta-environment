@@ -482,7 +482,6 @@ process CheckSyntaxConsistency(ModuleName: str, Path: str) is
 let
   FileName: str,
   FileText: str,
-  RepositoryText: str,
   Tree: term,
   DependingModules: list,
   Imports: list,
