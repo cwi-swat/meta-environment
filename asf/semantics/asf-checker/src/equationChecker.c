@@ -155,6 +155,7 @@ static ATermList checkCondition(ASF_Tag tag,
           return messages;
         }
         else {
+          *variables = collectVariables((PT_Tree)rhsCond, *variables);
           return ATmakeList1(
                    ATmake("[<str>,<term>,<term>]", 
                           "instantiated and uninstantiated variables in right hand side of condition", 
@@ -170,6 +171,7 @@ static ATermList checkCondition(ASF_Tag tag,
           return messages;
         }
         else {
+          *variables = collectVariables((PT_Tree)lhsCond, *variables);
           return ATmakeList1(
                    ATmake("[<str>,<term>,<term>]", 
                           "instantiated and uninstantiated variables in left hand side of condition", 
@@ -252,8 +254,11 @@ ATermList checkCondEquationList(ASF_CondEquationList condEquationList)
 
 ATermList checkEquations(ASF_Equations equations) 
 {
-  ASF_CondEquationList condEquationList = 
-    ASF_getEquationsList(equations);
+  if (ASF_isEquationsPresent(equations)) {
+    ASF_CondEquationList condEquationList = 
+      ASF_getEquationsList(equations);
   
-  return checkCondEquationList(condEquationList);
+    return checkCondEquationList(condEquationList);
+  }
+  return ATempty;
 }

@@ -1,3 +1,6 @@
+2002/06/26 (vandenbr@loria.fr)
+ * Fixed a number of small bugs.
+
 2002/06/24 (vandenbr@loria.fr)
  * Improved the asfsdf-checker with respect to checking the traversal
    attributes.
