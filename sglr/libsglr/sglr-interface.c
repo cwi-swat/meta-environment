@@ -178,10 +178,10 @@ ATerm SGparseStringAsAsFix(const char *input, SGLR_ParseTable parseTable,
  If either no filename or `-' is specified, standard input is used.
  */
 
-static ATerm SGparseFile(const char *prgname, 
-		         language L, 
-		         const char *G, 
-		         const char *FN)
+ATerm SGparseFile(const char *prgname, 
+		  language L, 
+		  const char *G, 
+		  const char *FN)
 {
   forest ret;
   size_t ntok = 0;
