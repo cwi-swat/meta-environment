@@ -112,6 +112,13 @@ Term4 := rename-term(Term2,Nametable)
 rename-cond(Term1 != Term2,Nametable) =
 Term3 != Term4
 
+[rn-18-2]
+Term3 := rename-term(Term1,Nametable),
+Term4 := rename-term(Term2,Nametable)
+===>
+rename-cond(Term1 =:! Term2,Nametable) =
+Term3 =:! Term4
+
 [rn-19]
 rename-term(Funid,Nametable) = rename-funid(Funid,Nametable)
 

@@ -35,15 +35,15 @@ equations
 
  [gfi-2'4] get-funid(default:Cond+ ==> Term1 = Term2) = get-funid(Term1)
 
-  [gfi-1'1] get-funid(Term) = Funid1,
-            is-trans-list-funid(Funid1) = true,
-            remove-trans-from-list-id(Funid1) = Funid2,
-            Funid2 = funid(""""{" Char* "}" """)
+  [gfi-1'1] Funid1 := get-funid(Term),
+            is-trans-list-funid(Funid1) == true,
+            Funid2 := remove-trans-from-list-id(Funid1),
+            funid(""""{" Char* "}" """) := Funid2
             ====================================
             get-funid(Term,Namepair*) = funid(Char*)
 
-  [gfi-1'2] get-funid(Term) = Funid,
-            is-trans-list-funid(Funid) = false
+  [gfi-1'2] Funid := get-funid(Term),
+            is-trans-list-funid(Funid) == false
             ==================================
             get-funid(Term,Namepair*) = Funid
 
@@ -84,9 +84,9 @@ equations
   [mr-2'4] make-rule(false,,Term1,Term2) = Term1 = Term2
 
 %% 
-[isf] is-list-funid(Funid) = false,
-      is-returns-list-funid(Funid) = false,
-      Funid = funid("""Char+""")
+[isf] is-list-funid(Funid) == false,
+      is-returns-list-funid(Funid) == false,
+      funid("""Char+""") := Funid
       ===>
       is-string-funid(Funid) = true
 
@@ -109,7 +109,7 @@ equations
           get-traversal-type(funid(Char+))
 
 [gts-2] get-traversal-strategy(funid(Char+1 "_""t""d""_" Char+2)) = top-down
-[default-gts] is-traversal-funid(Funid) = true
+[default-gts] is-traversal-funid(Funid) == true
               ===>
               get-traversal-strategy(Funid) = bottom-up
 
@@ -149,7 +149,7 @@ remove-returns-list(Funid) = Funid
 
 %% functions to check whether we are dealing with an ignored function as part
 %% of an optimization
-  [mrli-1'1] is-list-funid(funid("""Char+""")) = false
+  [mrli-1'1] is-list-funid(funid("""Char+""")) == false
              ====
              make-ignored-funid(funid(""" Char+ """)) =
                funid(""" Char+ "-""i""g""n""o""r""e""d" """)
@@ -157,7 +157,7 @@ remove-returns-list(Funid) = Funid
   [mrli-1'3] make-ignored-funid(funid(""" "{" Char+ "}" """)) =
                funid(""" "{" Char+ "-""i""g""n""o""r""e""d" "}" """)
 
-  [mrli-1'2] is-quoted-funid(funid(Char+)) = false
+  [mrli-1'2] is-quoted-funid(funid(Char+)) == false
              ====
              make-ignored-funid(funid(Char+)) =
                funid(Char+ "-""i""g""n""o""r""e""d")
@@ -200,13 +200,13 @@ remove-returns-list(Funid) = Funid
 
   [default-ilvt-1'3] is-list-var-term(Term) = false
 
-  [asv-1'1] is-var-term(Term) = true,
-            is-star-var(Term) = true
+  [asv-1'1] is-var-term(Term) == true,
+            is-star-var(Term) == true
             ===>
             are-star-vars(Term) = true
 
-  [asv-1'2] is-var-term(Term) = true,
-            is-star-var(Term) = true
+  [asv-1'2] is-var-term(Term) == true,
+            is-star-var(Term) == true
             ===>
             are-star-vars(Term, Term+) = 
               are-star-vars(Term+)
@@ -239,12 +239,12 @@ remove-returns-list(Funid) = Funid
 
   [default-ivt-1'4] is-var-term(Term) = false
 
-   [cv-1'1] is-var-term(Term) = true
+   [cv-1'1] is-var-term(Term) == true
             ========================
             term-contains-var(Term) = true
 
-   [cv-1'1] is-var-term(Term) = false,
-            get-funargs(Term) = Term*
+   [cv-1'1] is-var-term(Term) == false,
+            Term* := get-funargs(Term)
             =========================
             term-contains-var(Term) = args-contain-var(Term*)
 
@@ -266,16 +266,16 @@ remove-returns-list(Funid) = Funid
 
   [mla-1'1] make-list-args(Term) = Term
 
-  [mla-1'2] make-list-args(Term+) = Term2
+  [mla-1'2] Term2 := make-list-args(Term+)
             =============================
             make-list-args(Term1,Term+) = cons(Term1,Term2)
 
-  [pi-1'1] funid(Char*1 Char*3) = funid(Char*4)
+  [pi-1'1] funid(Char*4) := funid(Char*1 Char*3)
            ====================================
            prefix-id(funid(""" Char*1 """), funid(""" Char*2 """),natcon(Char*3)) =
               funid(""" Char*4 "_" "_" Char*2 """)
 
-  [default-pi-1'2] funid(Char*1 Char*3) = funid(Char*4)
+  [default-pi-1'2] funid(Char*4) := funid(Char*1 Char*3)
                     ====================================
                     prefix-id(funid(""" Char*1 """), funid(Char*2),natcon(Char*3)) =
                      funid(Char*4 "_" "_" Char*2)
@@ -288,7 +288,7 @@ remove-returns-list(Funid) = Funid
 
   [default-iif-1'7] is-internal-funid(funid(Char*)) = false
 
-  [iifn-1'1] natcon(Char*1) = Aint
+  [iifn-1'1] Aint := natcon(Char*1)
              =====================
              is-internal-funid-new(funid(Char*1 "_""_" Char*2)) = true
 
@@ -310,17 +310,17 @@ remove-returns-list(Funid) = Funid
   [soo-1'1] select-on-ofs(Funid,) = (,)
 
 %% If a rule has the same ofs it is added to the first set.
-  [soo-1'2] get-funid(Rule) = Funid,
-            select-on-ofs(Funid,Rule*) = (Rule*1,Rule*2)
+  [soo-1'2] get-funid(Rule) == Funid,
+            (Rule*1,Rule*2) := select-on-ofs(Funid,Rule*)
             ============================================
             select-on-ofs(Funid,Rule; Rule*) =
               (Rule;Rule*1,Rule*2)
 
 %% A rewrite rule with conditions is added to the set of conditional
 %% rewrite rules.
-  [soc-1'3] get-funid(Rule) = Funid2,
+  [soc-1'3] Funid2 := get-funid(Rule),
             Funid1 != Funid2,
-            select-on-ofs(Funid1,Rule*) = (Rule*1,Rule*2)
+            (Rule*1,Rule*2) := select-on-ofs(Funid1,Rule*)
             ============================================
             select-on-ofs(Funid1,Rule; Rule*) =
               (Rule*1,Rule;Rule*2)
@@ -330,24 +330,24 @@ remove-returns-list(Funid) = Funid
 
 %% If a default rule with no conditions is added to the set of
 %% default rules.
-  [sod-1'2] select-on-defaults(Rule*) = (Rule*1,Rule*2)
+  [sod-1'2] (Rule*1,Rule*2) := select-on-defaults(Rule*)
             ===========================================
             select-on-defaults(Term1 = Term2; Rule*) =
               (Rule*1,Term1 = Term2;Rule*2)
 
-  [sod-1'3] select-on-defaults(Rule*) = (Rule*1,Rule*2)
+  [sod-1'3] (Rule*1,Rule*2) := select-on-defaults(Rule*)
             ===========================================
             select-on-defaults(default:Term1 = Term2; Rule*) =
               (default:Term1 = Term2;Rule*1,Rule*2)
 
 %% A default rewrite rule with conditions is added to the set of default
 %% rewrite rules.
-  [sod-1'4] select-on-defaults(Rule*) = (Rule*1,Rule*2)
+  [sod-1'4] (Rule*1,Rule*2) := select-on-defaults(Rule*)
             ===========================================
             select-on-defaults(Cond+ ==> Term1 = Term2; Rule*) =
               (Rule*1,Cond+ ==> Term1 = Term2;Rule*2)
 
-  [sod-1'5] select-on-defaults(Rule*) = (Rule*1,Rule*2)
+  [sod-1'5] (Rule*1,Rule*2) := select-on-defaults(Rule*)
             ===========================================
             select-on-defaults(default:Cond+ ==> Term1 = Term2; Rule*) =
               (default:Cond+ ==> Term1 = Term2;Rule*1,Rule*2)
@@ -358,9 +358,9 @@ remove-returns-list(Funid) = Funid
 make-arg-list(Sigarg, natcon(Char*)) = varid("V" "_" Char*) 
 
 [mal-1]
-Natcon2 = Natcon + 1,
-Natcon3 = Natcon2 + 1,
-make-arg-list(Sigarg, Natcon2) = Term+1,
-make-arg-list(Sigarg, Natcon3) = Term+2
+Natcon2 := Natcon + 1,
+Natcon3 := Natcon2 + 1,
+Term+1 := make-arg-list(Sigarg, Natcon2),
+Term+2 := make-arg-list(Sigarg, Natcon3)
 ===>
 make-arg-list(Sigarg, Sigarg+, Natcon) = Term+1, Term+2 

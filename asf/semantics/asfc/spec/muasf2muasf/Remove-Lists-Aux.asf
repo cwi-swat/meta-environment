@@ -1,20 +1,20 @@
 equations
 
-  [gle-1'1] is-list-cons(Term2) = false
+  [gle-1'1] is-list-cons(Term2) == false
             ===========================
             get-last-element(cons(Term1,Term2)) = Term2
 
-  [gle-1'2] is-list-cons(Term2) = true
+  [gle-1'2] is-list-cons(Term2) == true
             ==========================
             get-last-element(cons(Term1,Term2)) =
               get-last-element(Term2)
 
-  [gpl-1'1] is-list-cons(Term2) = false
+  [gpl-1'1] is-list-cons(Term2) == false
             ===========================
             get-prefix-list(cons(Term1,Term2)) = Term1
 
-  [gpl-1'2] is-list-cons(Term2) = true,
-            get-prefix-list(Term2) = Term3
+  [gpl-1'2] is-list-cons(Term2) == true,
+            Term3 := get-prefix-list(Term2)
             ==============================
             get-prefix-list(cons(Term1,Term2)) = cons(Term1,Term3)
 
@@ -22,70 +22,70 @@ equations
 
   [default-ilc-1'2] is-list-cons(Term2) = false
 
-  [mnc-1'1] term-contains-var(Term2) = true
+  [mnc-1'1] term-contains-var(Term2) == true
             ===============================
             make-new-cond(Term1,Term2) = Term1 =: Term2
 
-  [mnc-1'2] term-contains-var(Term2) = false
+  [mnc-1'2] term-contains-var(Term2) == false
             ================================
             make-new-cond(Term1,Term2) = term_equal(Term1,Term2) =: t
 
 
-  [rlcr-1'1] is-internal-funid(get-funid(Term1)) = Bool,
-             remove-list-cons-from-term(Bool,Term1) = Term3,
-             remove-list-cons-from-term(Bool,Term2) = Term4
+  [rlcr-1'1] Bool := is-internal-funid(get-funid(Term1)),
+             Term3 := remove-list-cons-from-term(Bool,Term1),
+             Term4 := remove-list-cons-from-term(Bool,Term2)
              ===============================================
              remove-list-cons-from-rule(Term1 = Term2) = Term3 = Term4
 
-  [rlcr-1'2] is-internal-funid(get-funid(Term1)) = Bool,
-             remove-list-cons-from-term(Bool,Term1) = Term3,
-             remove-list-cons-from-term(Bool,Term2) = Term4
+  [rlcr-1'2] Bool := is-internal-funid(get-funid(Term1)),
+             Term3 := remove-list-cons-from-term(Bool,Term1),
+             Term4 := remove-list-cons-from-term(Bool,Term2)
              ==============================================
              remove-list-cons-from-rule(default:Term1 = Term2) = default:Term3 = Term4
 
-  [rlcr-1'3] is-internal-funid(get-funid(Term1)) = Bool,
-             remove-list-cons-from-term(Bool,Term1) = Term3,
-             remove-list-cons-from-term(Bool,Term2) = Term4,
-             remove-list-cons-from-conds(Cond+1) = Cond+2
+  [rlcr-1'3] Bool := is-internal-funid(get-funid(Term1)),
+             Term3 := remove-list-cons-from-term(Bool,Term1),
+             Term4 := remove-list-cons-from-term(Bool,Term2),
+             Cond+2 := remove-list-cons-from-conds(Cond+1)
              ============================================
              remove-list-cons-from-rule(Cond+1 ==> Term1 = Term2) =
                Cond+2 ==> Term3 = Term4
 
-  [rlcr-1'4] is-internal-funid(get-funid(Term1)) = Bool,
-             remove-list-cons-from-term(Bool,Term1) = Term3,
-             remove-list-cons-from-term(Bool,Term2) = Term4,
-             remove-list-cons-from-conds(Cond+1) = Cond+2
+  [rlcr-1'4] Bool := is-internal-funid(get-funid(Term1)),
+             Term3 := remove-list-cons-from-term(Bool,Term1),
+             Term4 := remove-list-cons-from-term(Bool,Term2),
+             Cond+2 := remove-list-cons-from-conds(Cond+1)
              ============================================
              remove-list-cons-from-rule(default:Cond+1 ==> Term1 = Term2) =
                default:Cond+2 ==> Term3 = Term4
 
-  [rlcc-1'1] is-internal-funid(get-funid(Term1)) = Bool,
-             remove-list-cons-from-term(Bool,Term1) = Term3,
-             remove-list-cons-from-term(Bool,Term2) = Term4
+  [rlcc-1'1] Bool := is-internal-funid(get-funid(Term1)),
+             Term3 := remove-list-cons-from-term(Bool,Term1),
+             Term4 := remove-list-cons-from-term(Bool,Term2)
              ==============================================
              remove-list-cons-from-cond(Term1 =: Term2) = Term3 =: Term4
 
   [rlccs-1'1] remove-list-cons-from-conds(Cond) =
                 remove-list-cons-from-cond(Cond)
 
-  [rlccs-1'2] remove-list-cons-from-cond(Cond1) = Cond2,
-              remove-list-cons-from-conds(Cond+1) = Cond+2
+  [rlccs-1'2] Cond2 := remove-list-cons-from-cond(Cond1),
+              Cond+2 := remove-list-cons-from-conds(Cond+1)
               ============================================
               remove-list-cons-from-conds(Cond1 & Cond+1) = Cond2 & Cond+2
 
-  [rlct-1'1] is-trans-list-funid(Funid) = true,
-             remove-list-cons-from-terms(false,Term+1) = Term
+  [rlct-1'1] is-trans-list-funid(Funid) == true,
+             Term := remove-list-cons-from-terms(false,Term+1)
              ================================================
              remove-list-cons-from-term(true,Funid(Term+1)) = Term
 
-  [rlct-1'2] is-trans-list-funid(Funid) = false,
-             remove-list-cons-from-terms(true,
-                                         Term+1) = Term+2
+  [rlct-1'2] is-trans-list-funid(Funid) == false,
+             Term+2 := remove-list-cons-from-terms(true,
+                                         Term+1)
              ============================================
              remove-list-cons-from-term(true,Funid(Term+1)) = Funid(Term+2)
 
-  [rlct-1'3] remove-list-cons-from-terms(false,
-                                         Term+1) = Term+2
+  [rlct-1'3] Term+2 := remove-list-cons-from-terms(false,
+                                         Term+1)
              ============================================
              remove-list-cons-from-term(false,Funid(Term+1)) = Funid(Term+2)
 
@@ -94,7 +94,7 @@ equations
   [rlcts-1'1] remove-list-cons-from-terms(Bool,Term) =
                 remove-list-cons-from-term(Bool,Term)
 
-  [rlcts-1'2] remove-list-cons-from-term(Bool,Term1) = Term2,
-              remove-list-cons-from-terms(Bool,Term+1) = Term+2
+  [rlcts-1'2] Term2 := remove-list-cons-from-term(Bool,Term1),
+              Term+2 := remove-list-cons-from-terms(Bool,Term+1)
               =================================================
               remove-list-cons-from-terms(Bool,Term1,Term+1) = Term2,Term+2

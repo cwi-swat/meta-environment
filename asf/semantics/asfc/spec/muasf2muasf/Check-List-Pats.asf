@@ -27,7 +27,7 @@ equations
 
   [tclv-1'3] term-contains-list-vars(cons(Term1,Term2)) = true
 
-  [tclv-1'3] is-list-cons(Funid(Term+)) = false
+  [tclv-1'3] is-list-cons(Funid(Term+)) == false
              ==================================
              term-contains-list-vars(Funid(Term+)) =
                terms-contains-list-vars(Term+)
@@ -71,11 +71,11 @@ equations
 
 %% The funtion {\tt term-contains-lists} checks whether one
 %% of the terms is a list variable.
-  [tcl-1'1] is-list-funid(Funid) = true
+  [tcl-1'1] is-list-funid(Funid) == true
             ===========================
             term-contains-lists(Funid(Term+)) = true
 
-  [tcl-1'2] is-list-funid(Funid) = false
+  [tcl-1'2] is-list-funid(Funid) == false
             ============================
             term-contains-lists(Funid(Term+)) =
                terms-contains-lists(Term+)
@@ -115,26 +115,26 @@ equations
                  contains-zero-or-one-list-vars-in-conds(Cond+) \/
                  contains-zero-or-one-list-vars-in-term(Term1)
 
-  [czolvt-1'1] is-cons(Funid) = false,
-               is-list-funid(Funid) = false
+  [czolvt-1'1] is-cons(Funid) == false,
+               is-list-funid(Funid) == false
                ============================
                contains-zero-or-one-list-vars-in-term(Funid(Term+)) =
                  contains-zero-or-one-list-vars-in-terms(Term+)
 
-  [czolvt-1'2] is-cons(Funid) = false,
-               is-list-funid(Funid) = true
+  [czolvt-1'2] is-cons(Funid) == false,
+               is-list-funid(Funid) == true
                ===========================
                contains-zero-or-one-list-vars-in-term(Funid(Term)) =
                  contains-zero-or-one-list-vars-in-list(Term)
 
   [default-czolvt-1'3] contains-zero-or-one-list-vars-in-term(Term) = false
 
-  [czolvl-1'1] is-list-var-term(Term1) = true
+  [czolvl-1'1] is-list-var-term(Term1) == true
                ==============================
                contains-zero-or-one-list-vars-in-list(cons(Term1,Term2)) =
                  contains-no-list-var(Term2)
 
-  [czolvl-1'2] is-list-var-term(Term1) = false
+  [czolvl-1'2] is-list-var-term(Term1) == false
                ===============================
                contains-zero-or-one-list-vars-in-list(cons(Term1,Term2)) =
                  contains-zero-or-one-list-vars-in-list(Term2)
@@ -158,15 +158,15 @@ equations
   [czolvc-1'1] contains-zero-or-one-list-vars-in-cond(Term1 =: Term2) =
                   contains-zero-or-one-list-vars-in-term(Term2)
 
-  [cnlv-1'1] is-list-cons(Term) = false
+  [cnlv-1'1] is-list-cons(Term) == false
              ==========================
              contains-no-list-var(Term) = ~ is-list-var-term(Term)
 
-  [cnlv-1'2] is-list-var-term(Term1) = true
+  [cnlv-1'2] is-list-var-term(Term1) == true
              ==============================
              contains-no-list-var(cons(Term1,Term2)) = false
 
-  [cnlv-1'3] is-list-var-term(Term1) = false
+  [cnlv-1'3] is-list-var-term(Term1) == false
              ==============================
              contains-no-list-var(cons(Term1,Term2)) =
                 contains-no-list-var(Term2)
@@ -177,53 +177,53 @@ equations
 
 
 
-  [isr-1'2] is-like-rule("set",Rule) = true
+  [isr-1'2] is-like-rule("set",Rule) == true
             ===============================
             is-special-rule(Rule) = true
 
   [default-isr-1'3] is-special-rule(Rule) = false
 
-  [islr-1'1] Cond = term_equal(Term3,Term4) =: t,
-             get-funid(Term1) = Funid2,
-             get-funid(Term2) = Funid2,
-             is-lhs(Funid1,Term1) = true,
-             is-rhs(Funid1,Term2) = true
+  [islr-1'1] term_equal(Term3,Term4) =: t := Cond,
+             Funid2 := get-funid(Term1),
+             get-funid(Term2) == Funid2,
+             is-lhs(Funid1,Term1) == true,
+             is-rhs(Funid1,Term2) == true
              ===========================
              is-like-rule(Funid1,Cond ==> Term1 = Term2) = true
 
   [default-islr-1'4] is-like-rule(Funid,Rule) = false
 
-  [isl-1'1] are-lhs-args(Funid1,Funid3(Term+)) = true
+  [isl-1'1] are-lhs-args(Funid1,Funid3(Term+)) == true
             ==========================================
             is-lhs(Funid1,Funid2(Funid3(Term+))) = true
 
   [default-isl-1'2] is-lhs(Funid,Term) = false
 
-  [isr-1'1] are-rhs-args(Funid1,Term+) = true
+  [isr-1'1] are-rhs-args(Funid1,Term+) == true
             =================================
             is-rhs(Funid1,Funid2(Term+)) = true
 
   [default-isr-1'2] is-rhs(Funid,Term) = false
 
-  [asla-1'1] contains-lhs-pattern(Funid,Term) = true,
-             are-lhs-args(Funid,Term+) = false
+  [asla-1'1] contains-lhs-pattern(Funid,Term) == true,
+             are-lhs-args(Funid,Term+) == false
              =================================
              are-lhs-args(Funid,Term,Term+) = true
 
-  [asla-1'2] contains-lhs-pattern(Funid,Term) = false,
-             are-lhs-args(Funid,Term+) = true
+  [asla-1'2] contains-lhs-pattern(Funid,Term) == false,
+             are-lhs-args(Funid,Term+) == true
              ================================
              are-lhs-args(Funid,Term,Term+) = true
 
   [asla-1'3] are-lhs-args(Funid,Term) = contains-lhs-pattern(Funid,Term)
 
-  [asra-1'1] contains-rhs-pattern(Funid,Term) = true,
-             are-rhs-args(Funid,Term+) = false
+  [asra-1'1] contains-rhs-pattern(Funid,Term) == true,
+             are-rhs-args(Funid,Term+) == false
              =================================
              are-rhs-args(Funid,Term,Term+) = true
 
-  [asra-1'2] contains-rhs-pattern(Funid,Term) = false,
-             are-rhs-args(Funid,Term+) = true
+  [asra-1'2] contains-rhs-pattern(Funid,Term) == false,
+             are-rhs-args(Funid,Term+) == true
              ==============================
              are-rhs-args(Funid,Term,Term+) = true
 
@@ -231,44 +231,44 @@ equations
 
 %% This function checks whether the left-hand side contains
 %% a set pattern.
-  [csp-1'1] is-list-funid(Funid) = true
+  [csp-1'1] is-list-funid(Funid) == true
             ===========================
             contains-lhs-pattern("set",Funid(Term)) =
               is-list-elem-list-elem-list(Term)
 
 
 
-  [csp-1'2] is-list-funid(Funid2) = false
+  [csp-1'2] is-list-funid(Funid2) == false
             =============================
             contains-lhs-pattern(Funid1,Funid2(Term)) =
               contains-lhs-pattern(Funid1,Term)
 
   [default-csp-1'5] contains-lhs-pattern(Funid1,Term) = false
 
-  [csp-1'1] is-list-funid(Funid) = true,
-            is-list-elem-list-list(Term) = true
+  [csp-1'1] is-list-funid(Funid) == true,
+            is-list-elem-list-list(Term) == true
             ===================================
             contains-rhs-pattern("set",Funid(Term)) = true
 
-  [csp-1'1] is-list-funid(Funid) = true,
-            is-list-elem-list-list(Term) = true
+  [csp-1'1] is-list-funid(Funid) == true,
+            is-list-elem-list-list(Term) == true
             ===================================
             contains-rhs-pattern("set",Funid(Term)) = true
 
 
 
-  [csp-1'2] is-list-funid(Funid2) = false
+  [csp-1'2] is-list-funid(Funid2) == false
             =============================
             contains-rhs-pattern(Funid1,Funid2(Term)) =
               contains-rhs-pattern(Funid1,Term)
 
   [default-csp-1'5] contains-rhs-pattern(Funid1,Term) = false
 
-  [ilelel-1'1] is-list-var-term(Term1) = true,
-               is-list-var-term(Term2) = false,
-               is-list-var-term(Term3) = true,
-               is-list-var-term(Term4) = false,
-               is-list-var-term(Term5) = true
+  [ilelel-1'1] is-list-var-term(Term1) == true,
+               is-list-var-term(Term2) == false,
+               is-list-var-term(Term3) == true,
+               is-list-var-term(Term4) == false,
+               is-list-var-term(Term5) == true
                ==============================
                is-list-elem-list-elem-list(cons(Term1,
                                                 cons(Term2,
@@ -277,10 +277,10 @@ equations
 
   [default-ilelel-1'2] is-list-elem-list-elem-list(Term) = false
 
-  [ilell-1'1] is-list-var-term(Term1) = true,
-              is-list-var-term(Term2) = false,
-              is-list-var-term(Term3) = true,
-              is-list-var-term(Term4) = true
+  [ilell-1'1] is-list-var-term(Term1) == true,
+              is-list-var-term(Term2) == false,
+              is-list-var-term(Term3) == true,
+              is-list-var-term(Term4) == true
               ==============================
               is-list-elem-list-list(cons(Term1,
                                           cons(Term2,
@@ -288,10 +288,10 @@ equations
 
   [default-ilell-1'2] is-list-elem-list-list(Term) = false
 
-  [illel-1'1] is-list-var-term(Term1) = true,
-              is-list-var-term(Term2) = true,
-              is-list-var-term(Term3) = false,
-              is-list-var-term(Term4) = true
+  [illel-1'1] is-list-var-term(Term1) == true,
+              is-list-var-term(Term2) == true,
+              is-list-var-term(Term3) == false,
+              is-list-var-term(Term4) == true
               ==============================
               is-list-list-elem-list(cons(Term1,
                                           cons(Term2,

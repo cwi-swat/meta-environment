@@ -113,6 +113,12 @@ Term4 := alc-term(Term2)
 ===>
 alc-cond(Term1 != Term2) = Term3 != Term4
 
+[alc-18]
+Term3 := alc-term(Term1),
+Term4 := alc-term(Term2)
+===>
+alc-cond(Term1 =:! Term2) = Term3 =:! Term4
+
 [l2cl-1]
 Term2 := list-to-conslist(Term+)
 ======>

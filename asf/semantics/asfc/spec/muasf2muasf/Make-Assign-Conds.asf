@@ -1,7 +1,7 @@
 equations
 
-  [mmc-1'1] make-mc-ruleopt(Rulesopt1) = Rule*,
-            create-new-rulesopt(Rule*) = Rulesopt2
+  [mmc-1'1] Rule* := make-mc-ruleopt(Rulesopt1),
+            Rulesopt2 := create-new-rulesopt(Rule*)
             ======================================
             make-matching-conds(module Modid
                                        Signopt
@@ -17,16 +17,16 @@ equations
 
 %% If there are rules all rules are inspected one
 %% by one.
-  [mro-1'3] make-mc-rules(Rule+1) = Rule+2
+  [mro-1'3] Rule+2 := make-mc-rules(Rule+1)
             ==============================
             make-mc-ruleopt(rules Rule+1) = Rule+2
 
-  [mrules-1'1] make-mc-rule(Rule1) = Rule2
+  [mrules-1'1] Rule2 := make-mc-rule(Rule1)
                ===========================
                make-mc-rules(Rule1) = Rule2
 
-  [mrules-1'2] make-mc-rule(Rule1) = Rule2,
-               make-mc-rules(Rule+1) = Rule+2
+  [mrules-1'2] Rule2 := make-mc-rule(Rule1),
+               Rule+2 := make-mc-rules(Rule+1)
                ==============================
                make-mc-rules(Rule1; Rule+1) = Rule2; Rule+2
 
@@ -37,14 +37,14 @@ equations
 
 %% If a rule has conditions, all right-hand sides of the condition
 %% should be checked and changed, as well.
-  [mrule-1'1] inspect-term(Term1,[1,]) = Ivarenv1,
-              make-mc-conds(Cond+1,Ivarenv1) = (Cond+2,Ivarenv2)
+  [mrule-1'1] Ivarenv1 := inspect-term(Term1,[1,]),
+              (Cond+2,Ivarenv2) := make-mc-conds(Cond+1,Ivarenv1)
               ==================================================
               make-mc-rule(Cond+1 ==> Term1 = Term2) =
                 Cond+2 ==> Term1 = Term2
 
-  [mrule-1'2] inspect-term(Term1,[1,]) = Ivarenv1,
-              make-mc-conds(Cond+1,Ivarenv1) = (Cond+2,Ivarenv2)
+  [mrule-1'2] Ivarenv1 := inspect-term(Term1,[1,]),
+              (Cond+2,Ivarenv2) := make-mc-conds(Cond+1,Ivarenv1)
               ==================================================
               make-mc-rule(default:Cond+1 ==> Term1 = Term2) =
                 default:Cond+2 ==> Term1 = Term2
@@ -53,67 +53,74 @@ equations
 
   [iterm-1'1] inspect-term(Funid,Ivarenv) = Ivarenv
 
-  [iterm-1'2] inspect-terms(Term+,Ivarenv1) = Ivarenv2
+  [iterm-1'2] Ivarenv2 := inspect-terms(Term+,Ivarenv1)
               ========================================
               inspect-term(Funid(Term+),Ivarenv1) = Ivarenv2
 
 %% If a term is variable it is first checked whether it is
 %% a fresh one, fresh variables are ok and are inserted
 %% in the list of used variables.
-  [iterm-1'3] includes(Var,Ivarenv1) = false,
-              enter(Var,Ivarenv1) = Ivarenv2
+  [iterm-1'3] includes(Var,Ivarenv1) == false,
+              Ivarenv2 := enter(Var,Ivarenv1)
               ==============================
               inspect-term(Var,Ivarenv1) = Ivarenv2
 
-  [iterm-1'4] includes(Var,Ivarenv) = true
+  [iterm-1'4] includes(Var,Ivarenv) == true
               ============================
               inspect-term(Var,Ivarenv) = Ivarenv
 
   [its-1'1] inspect-terms(Term,Ivarenv) = inspect-term(Term,Ivarenv)
 
-  [its-1'2] inspect-terms(Term,Ivarenv1) = Ivarenv2,
-            inspect-terms(Term+,Ivarenv2) = Ivarenv3
+  [its-1'2] Ivarenv2 := inspect-terms(Term,Ivarenv1),
+            Ivarenv3 := inspect-terms(Term+,Ivarenv2)
             ========================================
             inspect-terms(Term,Term+,Ivarenv1) = Ivarenv3
 
   [mmccs-1'1] make-mc-conds(Cond,Ivarenv) = make-mc-cond(Cond,Ivarenv)
 
-  [mmccs-1'2] make-mc-cond(Cond1,Ivarenv1) = (Cond2,Ivarenv2),
-              make-mc-conds(Cond+1,Ivarenv2) = (Cond+2,Ivarenv3)
+  [mmccs-1'2] (Cond2,Ivarenv2) := make-mc-cond(Cond1,Ivarenv1),
+              (Cond+2,Ivarenv3) := make-mc-conds(Cond+1,Ivarenv2)
               ==================================================
               make-mc-conds(Cond1 & Cond+1,Ivarenv1) =
                 (Cond2 & Cond+2,Ivarenv3)
 
-  [mmcc-1'1] inspect-term(Term1,Ivarenv1) = Ivarenv2,
+  [mmcc-1'1] Ivarenv2 := inspect-term(Term1,Ivarenv1),
              Ivarenv1 != Ivarenv2,
-             inspect-term(Term2,Ivarenv2) = Ivarenv3,
-             Ivarenv2 = Ivarenv3
+             Ivarenv3 := inspect-term(Term2,Ivarenv2),
+             Ivarenv2 == Ivarenv3
              ===================
              make-mc-cond(Term1 == Term2,Ivarenv1) = (Term2 =: Term1,Ivarenv3)
 
-  [mmcc-1'2] inspect-term(Term1,Ivarenv1) = Ivarenv2,
-             Ivarenv1 = Ivarenv2,
-             inspect-term(Term2,Ivarenv2) = Ivarenv3,
+  [mmcc-1'2] Ivarenv2 := inspect-term(Term1,Ivarenv1),
+             Ivarenv1 == Ivarenv2,
+             Ivarenv3 := inspect-term(Term2,Ivarenv2),
              Ivarenv2 != Ivarenv3
              ====================
              make-mc-cond(Term1 == Term2,Ivarenv1) = (Term1 =: Term2,Ivarenv3)
 
-  [mmcc-1'3] inspect-term(Term1,Ivarenv1) = Ivarenv2,
-             Ivarenv1 = Ivarenv2,
-             inspect-term(Term2,Ivarenv2) = Ivarenv3,
-             Ivarenv2 = Ivarenv3
+  [mmcc-1'3] Ivarenv2 := inspect-term(Term1,Ivarenv1),
+             Ivarenv1 == Ivarenv2,
+             Ivarenv3 := inspect-term(Term2,Ivarenv2),
+             Ivarenv2 == Ivarenv3
              ===================
              make-mc-cond(Term1 == Term2,Ivarenv1) =
                (term_equal(Term1,Term2) =: t,Ivarenv3)
 
-  [mmcc-1'4] inspect-term(Term1,Ivarenv1) = Ivarenv2,
-             Ivarenv1 = Ivarenv2,
-             inspect-term(Term2,Ivarenv2) = Ivarenv3,
-             Ivarenv2 = Ivarenv3
+  [mmcc-1'4] Ivarenv2 := inspect-term(Term1,Ivarenv1),
+             Ivarenv1 == Ivarenv2,
+             Ivarenv3 := inspect-term(Term2,Ivarenv2),
+             Ivarenv2 == Ivarenv3
              ===================
              make-mc-cond(Term1 != Term2,Ivarenv1) =
                (term_equal(Term1,Term2) =: f,Ivarenv3)
 
-  [mmcc-1'5] inspect-term(Term2,Ivarenv1) = Ivarenv2
+  [mmcc-1'5] Ivarenv2 := inspect-term(Term2,Ivarenv1)
              =======================================
              make-mc-cond(Term1 =: Term2,Ivarenv1) = (Term1 =: Term2,Ivarenv2)
+
+  %% Negative matches are translated to a call to the match function. 
+  %% The match function will later be replaced by a specific match function
+  %% for this specific match
+  [mmcc-1'6] make-mc-cond(Term1 =:! Term2, [IntCon,Term*]) =
+               (match([Term*], Term1, Term2) == lf_matchfailed, [IntCon, Term*])
+               

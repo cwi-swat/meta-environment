@@ -25,7 +25,7 @@ alc-termlist(TermList) -> TermList
 context-free syntax
 
 list-to-conslist(TermList) -> Term
-list-to-conslist -> FunId {reject}
+"list-to-conslist" -> FunId {reject}
 
 variables
 

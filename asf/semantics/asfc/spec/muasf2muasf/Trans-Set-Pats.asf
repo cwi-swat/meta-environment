@@ -1,8 +1,8 @@
 equations
 
-  [tll-1'1] is-like-rule("set",Cond+ ==> Term1 = Term2) = true,
-            Term1 = Funid1(Term+),
-            prefix-id("new__",Funid1,Aint1) = Funid2
+  [tll-1'1] is-like-rule("set",Cond+ ==> Term1 = Term2) == true,
+            Funid1(Term+) := Term1,
+            Funid2 := prefix-id("new__",Funid1,Aint1)
             ========================================
             transform-special-rule(Cond+ ==> Term1 = Term2,Aint1) =
               transform-set-rule(Funid2,Cond+,Term1,1)
@@ -10,9 +10,9 @@ equations
 %% The function {\tt transform-lhs} transforms a list matching
 %% pattern into a set of recursive functions.
 
-  [tl-1'1] newvar(Aint,New) = Varid1,
-           newvar(Aint,List) = Varid2,
-           newvar(succ(Aint),New) = Varid3
+  [tl-1'1] Varid1 := newvar(Aint,New),
+           Varid2 := newvar(Aint,List),
+           Varid3 := newvar(succ(Aint),New)
            ===============================
            transform-set-rule(Funid1,Cond+,
                               Funid3(Funid4(cons(Term1,

@@ -1,19 +1,19 @@
 equations
 
 %% The next set of rewrite rules is related to tail recursion elimination.
-  [rtr-1'1] Id1 = identifier(Char*),
-            Id2 = identifier("l""b""l""_" Char*),
-            remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+2|Bool>,
-            add-label(Bool,Id2,Stat+2, Aint) = Stat+3
+  [rtr-1'1] identifier(Char*) := Id1,
+            Id2 := identifier("l""b""l""_" Char*),
+            <Stat+2|Bool> := remove-tail-rec-stats(Stat+1, Id1, Id2),
+            Stat+3 := add-label(Bool,Id2,Stat+2, Aint)
             =========================================
             remove-tail-rec(Stat+1, Id1, Aint) = Stat+3
 
   [al-1'1] add-label(true,Id,Stat Stats*, 0) = Id:Stat Stats*
 
   [al-1'1] Aint != 0,
-           make-ltmp-array(Aint) = Decl*,
-           save-args(Aint) = Stat Stats*,
-           transform-arg-in-stats(Stat+1) = Stat+2
+           Decl* := make-ltmp-array(Aint),
+           Stat Stats* := save-args(Aint),
+           Stat+2 := transform-arg-in-stats(Stat+1)
            =======================================
            add-label(true,Id,Stat+1, Aint) = {Decl* Id:Stat Stats* Stat+2}
 
@@ -22,93 +22,93 @@ equations
   [rtrs-1'1] remove-tail-rec-stats(Stat1, Id1, Id2) =
                remove-tail-rec-stat(Stat1, Id1, Id2)
 
-  [rtrs-1'2] remove-tail-rec-stat(Stat1, Id1, Id2) = <Stat*2|Bool1>,
-             remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+2|Bool2>
+  [rtrs-1'2] <Stat*2|Bool1> := remove-tail-rec-stat(Stat1, Id1, Id2),
+             <Stat+2|Bool2> := remove-tail-rec-stats(Stat+1, Id1, Id2)
              ========================================================
              remove-tail-rec-stats(Stat1 Stat+1, Id1, Id2) = <Stat*2 ++ Stat+2|Bool1 \/ Bool2>
 
   [default-rtrs-2'1] remove-tail-rec-stat(Stat1, Id1, Id2) = <Stat1|false>
 
-  [rtrs-2'2] transform-args(Expression*|0) = Stat*
+  [rtrs-2'2] Stat* := transform-args(Expression*|0)
              ====================================
              remove-tail-rec-stat(FUNC_EXIT ( Id1 ( Expression* ) );, Id1, Id2) = <Stat* ++ goto Id2;|true>
 
-  [rtrs-2'3] remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+2|Bool>
+  [rtrs-2'3] <Stat+2|Bool> := remove-tail-rec-stats(Stat+1, Id1, Id2)
              =======================================================
              remove-tail-rec-stat(if(Expression) { Stat+1 }, Id1, Id2) = <if(Expression) { Stat+2 }|Bool>
 
-  [rtrs-2'4] remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+3|Bool1>,
-             remove-tail-rec-stats(Stat+2, Id1, Id2) = <Stat+4|Bool2>
+  [rtrs-2'4] <Stat+3|Bool1> := remove-tail-rec-stats(Stat+1, Id1, Id2),
+             <Stat+4|Bool2> := remove-tail-rec-stats(Stat+2, Id1, Id2)
              ========================================================
              remove-tail-rec-stat(if(Expression) { Stat+1 } else { Stat+2 }, Id1, Id2) =
                <if(Expression) { Stat+3 }  else { Stat+4 }|Bool1 \/ Bool2>
 
-  [rtrs-2'5] remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+2|Bool>
+  [rtrs-2'5] <Stat+2|Bool> := remove-tail-rec-stats(Stat+1, Id1, Id2)
              =======================================================
              remove-tail-rec-stat(while(Expression) { Stat+1 }, Id1, Id2) =
                <while(Expression) { Stat+2 }|Bool>
 
-  [rtrs-2'6] remove-tail-rec-stats(Stat+1, Id1, Id2) = <Stat+2|Bool>
+  [rtrs-2'6] <Stat+2|Bool> := remove-tail-rec-stats(Stat+1, Id1, Id2)
              =======================================================
              remove-tail-rec-stat({Decl* Stat+1}, Id1, Id2) = <{ Decl* Stat+2 }|Bool>
 
-  [rtrs-2'7] remove-tail-rec-stat(Stat1, Id2, Id3) = <Stat2|Bool>
+  [rtrs-2'7] <Stat2|Bool> := remove-tail-rec-stat(Stat1, Id2, Id3)
              ====================================================
              remove-tail-rec-stat(Id : Stat1, Id2, Id3) = <Id : Stat2|Bool>
 
   [tas-1'1] transform-args(Expression|Aint) = transform-arg(Expression|Aint)
 
-  [tas-1'1] transform-arg(Expression|Aint) = Stat*1,
-            transform-args(Expression+|1+Aint) = Stat*2
+  [tas-1'1] Stat*1 := transform-arg(Expression|Aint),
+            Stat*2 := transform-args(Expression+|1+Aint)
             ==========================================
             transform-args(Expression,Expression+|Aint) = Stat*1 ++ Stat*2
 
-  [tas-2'1] Aint = natcon(Char*)
+  [tas-2'1] Aint == natcon(Char*)
             ====================
             transform-arg(identifier("a""r""g" Char*)|Aint) =
 
-  [default-tas-2'2] Aint = natcon(Char*)
+  [default-tas-2'2] natcon(Char*) := Aint
                     ====================
                     transform-arg(Expression|Aint) = identifier("a""r""g" Char*) = Expression;
 
   [tais-1'1] transform-arg-in-stats(Stat1) = transform-arg-in-stat(Stat1)
 
-  [tais-1'2] transform-arg-in-stat(Stat1) = Stat2,
-             transform-arg-in-stats(Stat+1) = Stat+2
+  [tais-1'2] Stat2 := transform-arg-in-stat(Stat1),
+             Stat+2 := transform-arg-in-stats(Stat+1)
              =======================================
              transform-arg-in-stats(Stat1 Stat+1) = Stat2 Stat+2
 
-  [tais-2'1] transform-arg-in-exps(Expression*1) = Expression*2
+  [tais-2'1] Expression*2 := transform-arg-in-exps(Expression*1)
              ==================================================
              transform-arg-in-stat(FUNC_EXIT ( Expression*1 );) = FUNC_EXIT ( Expression*2 );
 
-  [tais-2'2] transform-arg-in-exp(Expression1) = Expression2,
-             transform-arg-in-stats(Stat+1) = Stat+2
+  [tais-2'2] Expression2 := transform-arg-in-exp(Expression1),
+             Stat+2 := transform-arg-in-stats(Stat+1)
              =======================================
              transform-arg-in-stat(if(Expression1) { Stat+1 }) = if(Expression2) { Stat+2 }
 
-  [tais-2'3] transform-arg-in-exp(Expression1) = Expression2,
-             transform-arg-in-stats(Stat+1) = Stat+3,
-             transform-arg-in-stats(Stat+2) = Stat+4
+  [tais-2'3] Expression2 := transform-arg-in-exp(Expression1),
+             Stat+3 := transform-arg-in-stats(Stat+1),
+             Stat+4 := transform-arg-in-stats(Stat+2)
              =======================================
              transform-arg-in-stat(if(Expression1) { Stat+1 } else { Stat+2 }) =
                if(Expression2) { Stat+3 }  else { Stat+4 }
 
-  [tais-2'4] transform-arg-in-exp(Expression1) = Expression2,
-             transform-arg-in-stats(Stat+1) = Stat+2
+  [tais-2'4] Expression2 := transform-arg-in-exp(Expression1),
+             Stat+2 := transform-arg-in-stats(Stat+1)
              =======================================
              transform-arg-in-stat(while(Expression1) { Stat+1 }) =
                while(Expression2) { Stat+2 }
 
-  [tais-2'5] transform-arg-in-stats(Stat+1) = Stat+2
+  [tais-2'5] Stat+2 := transform-arg-in-stats(Stat+1)
              =======================================
              transform-arg-in-stat({Decl* Stat+1}) = { Decl* Stat+2 }
 
-  [tais-2'6] transform-arg-in-stat(Stat1) = Stat2
+  [tais-2'6] Stat2 := transform-arg-in-stat(Stat1)
              ====================================
              transform-arg-in-stat(Id : Stat1) = Id : Stat2
 
-  [tais-2'7] transform-arg-in-exp(Expression2) = Expression3
+  [tais-2'7] Expression3 := transform-arg-in-exp(Expression2)
              ===============================================
              transform-arg-in-stat(Expression1 = Expression2;) = Expression1 = Expression3;
 
@@ -116,8 +116,8 @@ equations
 
   [taie-1'1] transform-arg-in-exps(Expression) = transform-arg-in-exp(Expression)
 
-  [taie-1'1] transform-arg-in-exp(Expression1) = Expression2,
-             transform-arg-in-exps(Expression+1) = Expression+2
+  [taie-1'1] Expression2 := transform-arg-in-exp(Expression1),
+             Expression+2 := transform-arg-in-exps(Expression+1)
              ==================================================
              transform-arg-in-exps(Expression1, Expression+1) = Expression2, Expression+2
 
@@ -125,7 +125,7 @@ equations
 
   [taie-2'2] transform-arg-in-exp(Post()) = Post()
 
-  [taie-2'3] transform-arg-in-exps(Expression+1) = Expression+2
+  [taie-2'3] Expression+2 := transform-arg-in-exps(Expression+1)
              ==================================================
              transform-arg-in-exp(Post(Expression+1)) = Post(Expression+2)
 
@@ -141,8 +141,8 @@ equations
   [sas-1'1] save-args(1) = ltmp[0] = arg0;
 
   [sas-1'1] Aint1 != 1,
-            Aint2 = Aint1 - 1,
-            Aint2 = natcon(Char*),
-            save-args(Aint2) = Stat+
+            Aint2 := Aint1 - 1,
+            natcon(Char*) := Aint2,
+            Stat+ := save-args(Aint2)
             ========================
             save-args(Aint1) = Stat+ ltmp[integer-constant(Char*)] = identifier("a""r""g" Char*);

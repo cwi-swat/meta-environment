@@ -1,0 +1,79 @@
+ equations
+
+%% This module translates calls to a "match" function (generated earlier by translating negative matches to
+%% calls to this function) to some extra rewrite rules that capture the semantics of a successfull or unsuccessfull 
+%% match using a default rule
+
+[main]
+<Rule*2,<Int,Term*>> := collect-and-number(Rule*,<0,>),
+Term* != ,
+Rule*3 := make-rules(Term*),
+Funcdef*2 := make-funcdefs(Term*),
+Funcdef*3 := Funcdef*2; Funcdef*,
+Nametable2 := extend-nametable(Nametable, Term*)
+===========================================================================
+translate-no-match(module Modid signature Funcdef* rules Rule*, Nametable) = 
+(module Modid 
+ signature 
+   lf_matchfailed {constructor}; 
+   lf_matchsucceeded {constructor} ;
+   Funcdef*3
+ rules 
+   Rule*2; 
+   Rule*3, 
+Nametable2)
+
+[default-main]
+translate-no-match(Module,Nametable) = (Module,Nametable)
+
+[can-0]
+natcon(Char*) := Int,
+Funid := funid("l""f""_""m""a""t""c""h""_" Char*)
+==================== 
+collect-and-number(match([Term+],Term1,Term2) == lf_matchfailed, <Int,Term*>) = 
+<term_equal(lf_matchfailed,Funid(Term+)) =: t,<Int+1,Funid([Term+],Term1,Term2), Term*>>
+
+[can-1] 
+natcon(Char*) := Int,
+Funid := funid("l""f""_""m""a""t""c""h""_" Char*)
+==================== 
+collect-and-number(match([],Term1,Term2) == lf_matchfailed, <Int,Term*>) = 
+<term_equal(lf_matchfailed,Funid) =: t,<Int+1,Funid([],Term1,Term2), Term*>>   
+
+
+[mr-0]
+make-rules(Funid([Term+],Term1, Term2), Term*) = 
+Term1 =: Term2 ==> Funid(Term+) = lf_matchsucceeded;
+default: Funid(Term+) = lf_matchfailed;
+make-rules(Term*)
+
+[mr-1]
+make-rules(Funid([],Term1,Term2),Term*) =
+term_equal(Term1,Term2) =: t ==> Funid = lf_matchsucceeded;
+default: Funid = lf_matchfailed;
+make-rules(Term*)
+
+[mr-2]
+make-rules() = 
+
+[mf-0]
+make-funcdefs(Funid([],Term1,Term2),Term*) = Funid; make-funcdefs(Term*)
+
+[mf-1]
+make-funcdefs(Funid([Term+],Term1,Term2),Term*) = make-funcdef(Funid,Term+); make-funcdefs(Term*)
+  
+[mf-2]
+make-funcdefs() =
+
+[en-0]
+extend-nametable(Nametable,) = nt-add("matchfailed",lf_matchfailed,constructor,nt-add("matchsucceeded",lf_matchsucceeded,constructor,Nametable))
+
+[en-1] 
+extend-nametable(Nametable,Funid([Term+],Term1,Term2),Term*) =
+extend-nametable(nt-add(funid("""Char*"""),Funid,Nametable),Term*)
+when funid(Char*) := Funid
+
+[en-2]
+extend-nametable(Nametable,Funid([],Term1,Term2),Term*) =
+extend-nametable(nt-add(funid("""Char*"""),Funid,Nametable),Term*)
+when funid(Char*) := Funid

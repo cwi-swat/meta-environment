@@ -2,46 +2,46 @@ equations
 
   [fdlc-2'1] ++ Funcdef* = Funcdef*
 
-  [fdlc-2'2] is-external-funcdef(Funcdef1) = true,
-             remove-external-funcdef(Funcdef1) = Funcdef2,
-             Funcdef2 in Funcdef*2 = false,
-             Funcdef1 in Funcdef*2 = true
+  [fdlc-2'2] is-external-funcdef(Funcdef1) == true,
+             Funcdef2 := remove-external-funcdef(Funcdef1),
+             Funcdef2 in Funcdef*2 == false,
+             Funcdef1 in Funcdef*2 == true
              ============================
              Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef*1 ++ Funcdef*2
 
-  [fdlc-2'3] is-external-funcdef(Funcdef1) = true,
-             remove-external-funcdef(Funcdef1) = Funcdef2,
-             Funcdef2 in Funcdef*2 = true
+  [fdlc-2'3] is-external-funcdef(Funcdef1) == true,
+             Funcdef2 := remove-external-funcdef(Funcdef1),
+             Funcdef2 in Funcdef*2 == true
              ============================
              Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef*1 ++ Funcdef*2
 
-  [fdlc-2'4] is-external-funcdef(Funcdef) = false,
-             Funcdef in Funcdef*2 = true
+  [fdlc-2'4] is-external-funcdef(Funcdef) == false,
+             Funcdef in Funcdef*2 == true
              ===========================
              Funcdef;Funcdef*1 ++ Funcdef*2 = Funcdef*1 ++ Funcdef*2
 
-  [fdlc-2'5] is-external-funcdef(Funcdef1) = false,
-             Funcdef1 in Funcdef*2 = false,
-             add-external-funcdef(Funcdef1) = Funcdef2,
-             Funcdef2 in Funcdef*2 = true,
-             remove-funcdef(Funcdef2,Funcdef*2) = Funcdef*3,
-             Funcdef*1 ++ Funcdef*3 = Funcdef*4
+  [fdlc-2'5] is-external-funcdef(Funcdef1) == false,
+             Funcdef1 in Funcdef*2 == false,
+             Funcdef2 := add-external-funcdef(Funcdef1),
+             Funcdef2 in Funcdef*2 == true,
+             Funcdef*3 := remove-funcdef(Funcdef2,Funcdef*2),
+             Funcdef*4 := Funcdef*1 ++ Funcdef*3
              ==================================
              Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*4
 
-  [fdlc-2'6] is-external-funcdef(Funcdef1) = true,
-             Funcdef1 in Funcdef*2 = false,
-             remove-external-funcdef(Funcdef1) = Funcdef2,
-             Funcdef2 in Funcdef*2 = false,
-             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+  [fdlc-2'6] is-external-funcdef(Funcdef1) == true,
+             Funcdef1 in Funcdef*2 == false,
+             Funcdef2 := remove-external-funcdef(Funcdef1),
+             Funcdef2 in Funcdef*2 == false,
+             Funcdef*3 := Funcdef*1 ++ Funcdef*2
              ==================================
              Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*3
 
-  [fdlc-3'7] is-external-funcdef(Funcdef1) = false,
-             Funcdef1 in Funcdef*2 = false,
-             add-external-funcdef(Funcdef1) = Funcdef2,
-             Funcdef2 in Funcdef*2 = false,
-             Funcdef*1 ++ Funcdef*2 = Funcdef*3
+  [fdlc-3'7] is-external-funcdef(Funcdef1) == false,
+             Funcdef1 in Funcdef*2 == false,
+             Funcdef2 := add-external-funcdef(Funcdef1),
+             Funcdef2 in Funcdef*2 == false,
+             Funcdef*3 := Funcdef*1 ++ Funcdef*2
              ==================================
              Funcdef1;Funcdef*1 ++ Funcdef*2 = Funcdef1;Funcdef*3
 
@@ -50,7 +50,7 @@ equations
   [rdl-2'2] remove-funcdef(Funcdef,Funcdef;Funcdef*) = Funcdef*
 
   [rdl-2'3] Funcdef1 != Funcdef2,
-            remove-funcdef(Funcdef1,Funcdef*1) = Funcdef*2
+            Funcdef*2 := remove-funcdef(Funcdef1,Funcdef*1)
             ==============================================
             remove-funcdef(Funcdef1,Funcdef2;Funcdef*1) =
               Funcdef2;Funcdef*2
@@ -77,25 +77,25 @@ remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
   [rfd-2'5] remove-funcdef1(Funid,Funid(Sigarg+) Attrs;Funcdef*) = Funcdef*
 
   [rfd-2'6] Funid1 != Funid2,
-            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
+            Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2;Funcdef*1) =
               Funid2;Funcdef*2
 
   [rfd-2'7] Funid1 != Funid2,
-            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
+            Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2 Attrs;Funcdef*1) =
               Funid2 Attrs;Funcdef*2
 
   [rfd-2'8] Funid1 != Funid2,
-            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
+            Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2(Sigarg+);Funcdef*1) =
               Funid2(Sigarg+);Funcdef*2
 
   [rfd-2'9] Funid1 != Funid2,
-            remove-funcdef1(Funid1,Funcdef*1) = Funcdef*2
+            Funcdef*2 := remove-funcdef1(Funid1,Funcdef*1)
             ============================================
             remove-funcdef1(Funid1,Funid2(Sigarg+) Attrs;Funcdef*1) =
               Funid2(Sigarg+) Attrs;Funcdef*2
@@ -136,7 +136,7 @@ remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
 
  [mfd-1'2] make-funcdef(Funid,Term) = Funid(_)
 
- [mfd-1'3] make-funcdef(Funid1,Term+) = Funid2(Sigarg+)
+ [mfd-1'3] Funid2(Sigarg+) := make-funcdef(Funid1,Term+)
            ============================================
            make-funcdef(Funid1,Term,Term+) = Funid2(_,Sigarg+)
 
@@ -146,7 +146,7 @@ remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
  [mefd-1'2] make-external-funcdef(Funid,Term) =
               Funid(_) {external}
 
- [mefd-1'3] make-external-funcdef(Funid1,Term+) = Funid2(Sigarg+) {external}
+ [mefd-1'3] Funid2(Sigarg+) {external} := make-external-funcdef(Funid1,Term+)
             ================================================================
             make-external-funcdef(Funid1,Term,Term+) =
               Funid2(_,Sigarg+) {external}
@@ -169,7 +169,7 @@ remove-funcdef(Funid,Funcdef*) = remove-funcdef1(Funid,Funcdef*)
 
  [ats-1'3] addto-sign(signature Funcdef+,) = signature Funcdef+
 
- [ats-1'4] Funcdef+1 ++ Funcdef+2 = Funcdef+3
+ [ats-1'4] Funcdef+3 := Funcdef+1 ++ Funcdef+2
            ==================================
            addto-sign(signature Funcdef+1,Funcdef+2) =
              signature Funcdef+3

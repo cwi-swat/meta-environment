@@ -105,6 +105,7 @@ Term -> Rule
 exports
   context-free syntax
     Term "=:" Term -> Cond
+    Term "=:!" Term -> Cond
 
 exports
   context-free syntax

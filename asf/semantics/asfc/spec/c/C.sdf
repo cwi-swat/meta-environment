@@ -36,19 +36,19 @@ exports
   Statement-list-opt 
 "}" -> Statement
 
-if "("Expression")" 
+"if" "("Expression")" 
 Statement                 -> Statement
 
-if "("Expression")" 
+"if" "("Expression")" 
 Statement 
-else 
+"else" 
 Statement  -> Statement
 
-while "("Expression")" 
+"while" "("Expression")" 
 Statement              -> Statement
 
-    return Expression ";"                           -> Statement
-    goto Identifier ";"                             -> Statement
+    "return" Expression ";"                           -> Statement
+    "goto" Identifier ";"                             -> Statement
 
   context-free syntax
     Statement
@@ -72,8 +72,8 @@ Statement              -> Statement
   context-free syntax
     Type-specifier + -> Declaration-specifiers
 
-    static     -> Type-specifier
-    void       -> Type-specifier
+    "static"     -> Type-specifier
+    "void"       -> Type-specifier
     Identifier -> Type-specifier
 
     "*" Declarator                      -> Declarator

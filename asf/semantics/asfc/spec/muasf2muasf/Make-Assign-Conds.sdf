@@ -31,4 +31,7 @@ hiddens
     "Rule+"[0-9]*     -> {Rule ";"}+
     "Ivarenv"[0-9]*   -> IntVarEnv
     "Term+"[0-9]*     -> {Term ","}+
+    "Term*"[0-9]*     -> {Term ","}*
     "Term"[0-9]*      -> Term
+    "IntCon"[0-9]*       -> IntCon
+

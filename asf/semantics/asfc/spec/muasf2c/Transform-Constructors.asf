@@ -2,54 +2,54 @@ equations
 
   [mc-1'1] transform-constructor-terms-in-rules(,Namepair*) =
 
-  [mc-1'2] move-cons-terms-in-rule(Rule1,Namepair*) = Rule2,
-           transform-constructor-terms-in-rules(Rule*1,Namepair*) = Rule*2
+  [mc-1'2] Rule2 := move-cons-terms-in-rule(Rule1,Namepair*),
+           Rule*2 := transform-constructor-terms-in-rules(Rule*1,Namepair*)
            ===============================================================
            transform-constructor-terms-in-rules(Rule1;Rule*1,Namepair*) = Rule2;Rule*2
 
-  [mc-2'1] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+  [mc-2'1] [Term+2,Cond*,Aint] := move-cons-terms-in-terms(Term+1,Namepair*,1)
            ==================================================================
            move-cons-terms-in-rule(Funid(Term+1) = Term,Namepair*) =
              make-rule(false,Cond*, Funid(Term+2), Term)
 
-  [mc-2'2] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+  [mc-2'2] [Term+2,Cond*,Aint] := move-cons-terms-in-terms(Term+1,Namepair*,1)
            ==================================================================
            move-cons-terms-in-rule(default:Funid(Term+1) = Term,Namepair*) =
              make-rule(true,Cond*, Funid(Term+2), Term)
 
-  [mc-2'3] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+  [mc-2'3] [Term+2,Cond*,Aint] := move-cons-terms-in-terms(Term+1,Namepair*,1)
            ==================================================================
            move-cons-terms-in-rule(Cond+ ==> Funid(Term+1) = Term,Namepair*) =
              make-rule(false,Cond* & Cond+, Funid(Term+2), Term)
 
-  [mc-2'4] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+  [mc-2'4] [Term+2,Cond*,Aint] := move-cons-terms-in-terms(Term+1,Namepair*,1)
            ==================================================================
            move-cons-terms-in-rule(default:Cond+ ==> Funid(Term+1) = Term,Namepair*) =
              make-rule(true,Cond* & Cond+, Funid(Term+2), Term)
 
   [default-mc-2'5] move-cons-terms-in-rule(Rule,Namepair*) = Rule
 
-  [mc-3'1] move-cons-terms-in-term(Term1,Namepair*,Aint1) = [Term2,Cond*,Aint2]
+  [mc-3'1] [Term2,Cond*,Aint2] := move-cons-terms-in-term(Term1,Namepair*,Aint1)
            ====================================================================
            move-cons-terms-in-terms(Term1,Namepair*,Aint1) = [Term2,Cond*,Aint2]
 
-  [mc-3'2] move-cons-terms-in-term(Term1,Namepair*,Aint1) = [Term2,Cond*1,Aint2],
-           move-cons-terms-in-terms(Term+1,Namepair*,Aint2) = [Term+2,Cond*2,Aint3]
+  [mc-3'2] [Term2,Cond*1,Aint2] := move-cons-terms-in-term(Term1,Namepair*,Aint1),
+           [Term+2,Cond*2,Aint3] := move-cons-terms-in-terms(Term+1,Namepair*,Aint2)
            ========================================================================
            move-cons-terms-in-terms(Term1,Term+1,Namepair*,Aint1) =
              [Term2,Term+2,Cond*1 & Cond*2,Aint3]
 
-  [mc-4'1] is-constructor(Funid,Namepair*) = true,
-           are-constructor-terms(Term+,Namepair*) = true,
-           Aint = natcon(Char+),
-           varid("N""C""V" Char+) = Varid
+  [mc-4'1] is-constructor(Funid,Namepair*) == true,
+           are-constructor-terms(Term+,Namepair*) == true,
+           natcon(Char+) := Aint,
+           Varid := varid("N""C""V" Char+)
            ==============================
            move-cons-terms-in-term(Funid(Term+),Namepair*,Aint) =
              [Varid,term_equal(Varid,Funid(Term+)) =: t,succ(Aint)]
 
-   [mc-4'2] is-constructor(Funid,Namepair*) = true,
-           Aint = natcon(Char+),
-           varid("N""C""V" Char+) = Varid
+   [mc-4'2] is-constructor(Funid,Namepair*) == true,
+           natcon(Char+) := Aint,
+           Varid := varid("N""C""V" Char+)
            ==============================
            move-cons-terms-in-term(Funid,Namepair*,Aint) =
              [Varid,term_equal(Varid,Funid) =: t,succ(Aint)]
@@ -59,17 +59,17 @@ equations
   [mc-4'1] are-constructor-terms(Term1,Namepair*) =
              is-constructor-term(Term1,Namepair*)
 
-  [mc-3'2] is-constructor-term(Term1,Namepair*) = Bool1,
-           are-constructor-terms(Term+1,Namepair*) = Bool2
+  [mc-3'2] Bool1 := is-constructor-term(Term1,Namepair*),
+           Bool2 := are-constructor-terms(Term+1,Namepair*)
            ===============================================
            are-constructor-terms(Term1,Term+1,Namepair*) = Bool1 /\ Bool2
 
-  [mc-4'1] is-constructor(Funid,Namepair*) = true,
-           are-constructor-terms(Term+,Namepair*) = true
+  [mc-4'1] is-constructor(Funid,Namepair*) == true,
+           are-constructor-terms(Term+,Namepair*) == true
            =============================================
            is-constructor-term(Funid(Term+),Namepair*) = true
 
-  [mc-4'2] is-constructor(Funid,Namepair*) = true
+  [mc-4'2] is-constructor(Funid,Namepair*) == true
            ======================================
            is-constructor-term(Funid,Namepair*) = true
 

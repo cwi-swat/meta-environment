@@ -1,4 +1,4 @@
-module Reverse
+compile-muasf(module Reverse
 signature
 "list(cf(iter-star(sort(\"E\"))))"(_);
 "LISTprod([lit(\"reverse\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Reverse\")]))"(_){id(Reverse)}
@@ -10,4 +10,4 @@ default:
 "LISTprod([lit(\"reverse\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Reverse\")]))"("list(cf(iter-star(sort(\"E\"))))"(V_E050, *V_E042)) == "list(cf(iter-star(sort(\"E\"))))"(*V_E042050)
 ==>
 "LISTprod([lit(\"reverse\"),cf(opt(layout)),lit(\"(\"),cf(opt(layout)),cf(iter-star(sort(\"E\"))),cf(opt(layout)),lit(\")\")],cf(iter-star(sort(\"E\"))),attrs([id(\"Reverse\")]))"("list(cf(iter-star(sort(\"E\"))))"(V_E049, V_E050, *V_E042)) =
-"list(cf(iter-star(sort(\"E\"))))"(*V_E042050, V_E049)
+"list(cf(iter-star(sort(\"E\"))))"(*V_E042050, V_E049))

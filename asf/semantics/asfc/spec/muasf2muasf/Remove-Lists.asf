@@ -1,8 +1,8 @@
 equations
 
-  [rlm-1'1] rem-lists-from-ruleopt(Rulesopt1) = (Funcdef*,Rule*),
-            addto-sign(Signopt1,Funcdef*) = Signopt2,
-            create-new-rulesopt(Rule*) = Rulesopt2
+  [rlm-1'1] (Funcdef*,Rule*) := rem-lists-from-ruleopt(Rulesopt1),
+            Signopt2 := addto-sign(Signopt1,Funcdef*),
+            Rulesopt2 := create-new-rulesopt(Rule*)
             ======================================
             remove-list-matching(module Modid
                                         Signopt1
@@ -20,7 +20,7 @@ equations
 %% If it is an instantiation of a specific list pattern,
 %% such as lookup-like, or set-like rules, the entire rule
 %% must be transformed. This is not yet specified.
-  [rlro-1'3] rem-lists-from-rules(Rule+,1) = (Funcdef*,Rule*,Aint)
+  [rlro-1'3] (Funcdef*,Rule*,Aint) := rem-lists-from-rules(Rule+,1)
              =====================================================
              rem-lists-from-ruleopt(rules Rule+) = (Funcdef*,Rule*)
 
@@ -29,9 +29,9 @@ equations
 
 %% If there are still rules left they are transformed
 %% one-by-one.
-  [rlrs-1'3] rem-lists-from-rule(Rule,Aint1) = (Funcdef*1,Rule*2,Aint2),
-             rem-lists-from-rules(Rule*1,Aint2) = (Funcdef*2,Rule*3,Aint3),
-             Funcdef*1 ++ Funcdef*2 =Funcdef*3
+  [rlrs-1'3] (Funcdef*1,Rule*2,Aint2) := rem-lists-from-rule(Rule,Aint1),
+             (Funcdef*2,Rule*3,Aint3) := rem-lists-from-rules(Rule*1,Aint2),
+             Funcdef*3 :=Funcdef*1 ++ Funcdef*2
              =================================
              rem-lists-from-rules(Rule;Rule*1,Aint1) =
               (Funcdef*3,Rule*2;Rule*3,Aint3)
@@ -39,18 +39,18 @@ equations
 %% Before the simple list patterns are removed, it is first checked
 %% whether more complex patterns like ``lookup-patterns'' can be
 %% removed.
-  [rlr-1'1] rule-contains-lists(Rule) = false
+  [rlr-1'1] rule-contains-lists(Rule) == false
             =================================
             rem-lists-from-rule(Rule,Aint) = (,Rule,Aint)
 
-  [rlr-1'2] rule-contains-lists(Rule) = true,
-            is-default-rule(Rule) = true
+  [rlr-1'2] rule-contains-lists(Rule) == true,
+            is-default-rule(Rule) == true
             ============================
             rem-lists-from-rule(Rule,Aint) =
               rem-lists-from-default-rule(Rule,Aint)
 
-  [rlr-1'3] rule-contains-lists(Rule) = true,
-            is-default-rule(Rule) = false
+  [rlr-1'3] rule-contains-lists(Rule) == true,
+            is-default-rule(Rule) == false
             =============================
             rem-lists-from-rule(Rule,Aint) =
               rem-lists-from-simple-rule(false,Rule,Aint)
@@ -60,29 +60,29 @@ equations
 
 %% If there are still rules left they are transformed
 %% one-by-one.
-  [rlvrs-1'2] rem-listvars-from-rule(Rule,Aint1) = (Funcdef*1,Rule*2,Aint2),
-              rem-listvars-from-rules(Rule*1,Aint2) = (Funcdef*2,Rule*3,Aint3),
-              Funcdef*1 ++ Funcdef*2 =Funcdef*3
+  [rlvrs-1'2] (Funcdef*1,Rule*2,Aint2) := rem-listvars-from-rule(Rule,Aint1),
+              (Funcdef*2,Rule*3,Aint3) := rem-listvars-from-rules(Rule*1,Aint2),
+              Funcdef*3 :=Funcdef*1 ++ Funcdef*2
               =================================
               rem-listvars-from-rules(Rule;Rule*1,Aint1) =
                (Funcdef*3,Rule*2;Rule*3,Aint3)
 
-  [rlvr-1'1] rule-contains-list-vars(Rule1) = false,
-             remove-list-cons-from-rule(Rule1) = Rule2
+  [rlvr-1'1] rule-contains-list-vars(Rule1) == false,
+             Rule2 := remove-list-cons-from-rule(Rule1)
              =========================================
              rem-listvars-from-rule(Rule1,Aint) = (,Rule2,Aint)
                                                   %%%(,Rule1,Aint)
 
-  [rlvr-1'2] rule-contains-list-vars(Rule1) = true,
-             is-default-rule(Rule1) = false,
-             rename-in-rules(Rule1) = Rule2
+  [rlvr-1'2] rule-contains-list-vars(Rule1) == true,
+             is-default-rule(Rule1) == false,
+             Rule2 := rename-in-rules(Rule1)
              ==============================
              rem-listvars-from-rule(Rule1,Aint) =
                rem-lists-from-simple-rule(false,Rule2,Aint)
 
-  [rlvr-1'2] rule-contains-list-vars(Rule1) = true,
-             is-default-rule(Rule1) = true,
-             rename-in-rules(Rule1) = Rule2
+  [rlvr-1'2] rule-contains-list-vars(Rule1) == true,
+             is-default-rule(Rule1) == true,
+             Rule2 := rename-in-rules(Rule1)
              ==============================
              rem-listvars-from-rule(Rule1,Aint) =
                rem-lists-from-default-rule(Rule2,Aint)
@@ -91,49 +91,49 @@ equations
 %% contains a lookup or set pattern. It is assumed that
 %% the rule is not a default rule.
 
-  [rlsr-1'1] contains-zero-or-one-list-vars-in-rule(Rule1) = true,
-             remove-simple-lists(Rule1) = Rule2,
-             rem-listvars-from-rule(Rule2,Aint1) = (Funcdef*,Rule*,Aint2)
+  [rlsr-1'1] contains-zero-or-one-list-vars-in-rule(Rule1) == true,
+             Rule2 := remove-simple-lists(Rule1),
+             (Funcdef*,Rule*,Aint2) := rem-listvars-from-rule(Rule2,Aint1)
              ============================================================
              rem-lists-from-simple-rule(Bool,Rule1,Aint1) = (Funcdef*,Rule*,Aint2)
 
-  [rlsr-1'2] is-special-rule(Rule) = true,
-             transform-special-rule(Rule,1) = (Funcdef*1,Rule*1,Aint2),
-             rename-in-rules(Rule*1) = Rule*2,
-             rem-lists-from-rules(Rule*2,Aint1) = (Funcdef*2,Rule*3,Aint3)
+  [rlsr-1'2] is-special-rule(Rule) == true,
+             (Funcdef*1,Rule*1,Aint2) := transform-special-rule(Rule,1),
+             Rule*2 := rename-in-rules(Rule*1),
+             (Funcdef*2,Rule*3,Aint3) := rem-lists-from-rules(Rule*2,Aint1)
              =============================================================
              rem-lists-from-simple-rule(false,Rule,Aint1) =
                (Funcdef*1;Funcdef*2,Rule*3,Aint3)
 
 %% Fixed point computation
-  [rlsr-1'3] is-special-rule(Rule1) = false,
-             normalize-list-in-rule(Rule1) = Rule2,
+  [rlsr-1'3] is-special-rule(Rule1) == false,
+             Rule2 := normalize-list-in-rule(Rule1),
              Rule1 != Rule2,
-             rename-in-rules(Rule2) = Rule3,
-             rem-lists-from-simple-rule(false,Rule3,Aint1) = (Funcdef*,Rule*,Aint2)
+             Rule3 := rename-in-rules(Rule2),
+             (Funcdef*,Rule*,Aint2) := rem-lists-from-simple-rule(false,Rule3,Aint1)
              ======================================================================
              rem-lists-from-simple-rule(false,Rule1,Aint1) = (Funcdef*,Rule*,Aint2)
 
-  [rlsr-1'4] normalize-list-in-rule(Rule1) = Rule2,
+  [rlsr-1'4] Rule2 := normalize-list-in-rule(Rule1),
              Rule1 != Rule2,
-             rename-in-rules(Rule2) = Rule3,
-             rem-lists-from-simple-rule(true,Rule3,Aint1) = (Funcdef*,Rule*,Aint2)
+             Rule3 := rename-in-rules(Rule2),
+             (Funcdef*,Rule*,Aint2) := rem-lists-from-simple-rule(true,Rule3,Aint1)
              =====================================================================
              rem-lists-from-simple-rule(true,Rule1,Aint1) = (Funcdef*,Rule*,Aint2)
 
   [default-rlsr-1'5] rem-lists-from-simple-rule(Bool,Rule,Aint) = (,Rule,Aint)
 
-  [rldr-1'1] rem-lists-from-simple-rule(true,Term1 = Term2,Aint1) =
-               (Funcdef*,Rule2,Aint2),
-             make-default-rule(Rule2) = Rule3
+  [rldr-1'1] (Funcdef*,Rule2,Aint2) :=
+               rem-lists-from-simple-rule(true,Term1 = Term2,Aint1),
+             Rule3 := make-default-rule(Rule2)
              ================================
              rem-lists-from-default-rule(default:Term1 = Term2,Aint1) =
                (Funcdef*,Rule3,Aint1)
 
-  [rldr-1'2] Term1 = Funid1(Term+1),
-             rem-lists-from-simple-rule(true,Cond+ ==> Term1 = Term2,Aint1) =
-               (Funcdef*,Rule2,Aint2),
-             make-default-rule(Rule2) = Rule3
+  [rldr-1'2] Funid1(Term+1) := Term1,
+             (Funcdef*,Rule2,Aint2) :=
+               rem-lists-from-simple-rule(true,Cond+ ==> Term1 = Term2,Aint1),
+             Rule3 := make-default-rule(Rule2)
              ================================
              rem-lists-from-default-rule(default:Cond+ ==> Term1 = Term2,Aint1) =
                (Funcdef*,Rule3,Aint1)
@@ -144,16 +144,16 @@ equations
 %% All list variables are stored in a variable environment, to make
 %% sure that a list is only ``transformed'' once. After the
 %% transformation of the entire rule, a new rule is constructed.
-  [rlr-1'1] rem-lists-from-lhs-term(Term1,[1,]) = (Term3,Cond*1,Ivarenv1),
-            rem-lists-from-rhs-term(Term2,Ivarenv1) = (Term4,Cond*2,Ivarenv2),
-            make-conditional-rule(Cond*1 & Cond*2,Term3 = Term4) = Rule
+  [rlr-1'1] (Term3,Cond*1,Ivarenv1) := rem-lists-from-lhs-term(Term1,[1,]),
+            (Term4,Cond*2,Ivarenv2) := rem-lists-from-rhs-term(Term2,Ivarenv1),
+            Rule := make-conditional-rule(Cond*1 & Cond*2,Term3 = Term4)
             ===========================================================
             remove-simple-lists(Term1 = Term2) = Rule
 
-  [rlr-1'2] rem-lists-from-lhs-term(Term1,[1,]) = (Term3,Cond*1,Ivarenv1),
-            rem-lists-from-conds(Cond+,Ivarenv1) = (Cond*2,Ivarenv2),
-            rem-lists-from-rhs-term(Term2,Ivarenv2) = (Term4,Cond*3,Ivarenv3),
-            make-conditional-rule(Cond*1 & Cond*2 & Cond*3,Term3 = Term4) = Rule
+  [rlr-1'2] (Term3,Cond*1,Ivarenv1) := rem-lists-from-lhs-term(Term1,[1,]),
+            (Cond*2,Ivarenv2) := rem-lists-from-conds(Cond+,Ivarenv1),
+            (Term4,Cond*3,Ivarenv3) := rem-lists-from-rhs-term(Term2,Ivarenv2),
+            Rule := make-conditional-rule(Cond*1 & Cond*2 & Cond*3,Term3 = Term4)
             ====================================================================
             remove-simple-lists(Cond+ ==>
                                 Term1 = Term2) = Rule
@@ -162,25 +162,25 @@ equations
   [rlcs-1'1] rem-lists-from-conds(Cond,Ivarenv1) =
                rem-lists-from-cond(Cond,Ivarenv1)
 
-  [rlcs-1'2] rem-lists-from-cond(Cond1,Ivarenv1) = (Cond+2,Ivarenv2),
-             rem-lists-from-conds(Cond+1,Ivarenv2) = (Cond+3,Ivarenv3)
+  [rlcs-1'2] (Cond+2,Ivarenv2) := rem-lists-from-cond(Cond1,Ivarenv1),
+             (Cond+3,Ivarenv3) := rem-lists-from-conds(Cond+1,Ivarenv2)
              =========================================================
              rem-lists-from-conds(Cond1 & Cond+1,Ivarenv1) = (Cond+2 & Cond+3,Ivarenv3)
 
 %% Note that Term2 represents the matching side.
-  [rlc-1'1] rem-lists-from-rhs-term(Term1,Ivarenv1) =
-              (Term3,Cond*1,Ivarenv2),
-            rem-lists-from-lhs-term(Term2,Ivarenv2) =
-              (Term4,Cond*2,Ivarenv3)
+  [rlc-1'1] (Term3,Cond*1,Ivarenv2) :=
+              rem-lists-from-rhs-term(Term1,Ivarenv1),
+            (Term4,Cond*2,Ivarenv3) :=
+              rem-lists-from-lhs-term(Term2,Ivarenv2)
             =========================
             rem-lists-from-cond(Term1 =: Term2,Ivarenv1) =
               (Term3 =: Term4 & Cond*1 & Cond*2,Ivarenv3)
 
 %% If a term is a function which does not represent list matching,
 %% it arguments are transformed.
-  [rllt-1'1] is-list-funid(Funid) = false,
-             rem-lists-from-lhs-terms(Term+1,Ivarenv1) =
-               (Term+2,Cond*,Ivarenv2)
+  [rllt-1'1] is-list-funid(Funid) == false,
+             (Term+2,Cond*,Ivarenv2) :=
+               rem-lists-from-lhs-terms(Term+1,Ivarenv1)
              =========================
              rem-lists-from-lhs-term(Funid(Term+1),Ivarenv1) =
                (Funid(Term+2),Cond*,Ivarenv2)
@@ -188,11 +188,11 @@ equations
 %% If a term is a list matching function it is checked how many
 %% list variables occur in its argument list. Only the
 %% cases in which at most one list variables occur can be transformed.
-  [rllt-1'2] is-list-funid(Funid) = true,
-             contains-zero-or-one-list-vars-in-list(Term) = true,
-             transform-lhs-list-terms(Term,Ivarenv1) =
-               (Term+2,Cond*,Ivarenv2),
-             make-trans-list-id(Funid) = Funid2
+  [rllt-1'2] is-list-funid(Funid) == true,
+             contains-zero-or-one-list-vars-in-list(Term) == true,
+             (Term+2,Cond*,Ivarenv2) :=
+               transform-lhs-list-terms(Term,Ivarenv1),
+             Funid2 := make-trans-list-id(Funid)
              ==================================
              rem-lists-from-lhs-term(Funid(Term),Ivarenv1) =
                (Funid2(Term+2),Cond*,Ivarenv2)
@@ -203,17 +203,17 @@ equations
 
 %% If a term is a function which does not represent list matching,
 %% it arguments are transformed.
-  [rlrt-1'1] is-list-funid(Funid) = false,
-             rem-lists-from-rhs-terms(Term+1,Ivarenv1) =
-               (Term+2,Cond*,Ivarenv2)
+  [rlrt-1'1] is-list-funid(Funid) == false,
+             (Term+2,Cond*,Ivarenv2) :=
+               rem-lists-from-rhs-terms(Term+1,Ivarenv1)
              =========================
              rem-lists-from-rhs-term(Funid(Term+1),Ivarenv1) =
                (Funid(Term+2),Cond*,Ivarenv2)
 
-  [rlrt-1'2] is-list-funid(Funid) = true,
-             transform-rhs-list-terms(Term+1,Ivarenv1) =
-               (Term+2,Cond*,Ivarenv2),
-             make-list-args(Term+2) = Term3
+  [rlrt-1'2] is-list-funid(Funid) == true,
+             (Term+2,Cond*,Ivarenv2) :=
+               transform-rhs-list-terms(Term+1,Ivarenv1),
+             Term3 := make-list-args(Term+2)
              ==============================
              rem-lists-from-rhs-term(Funid(Term+1),Ivarenv1) =
                (Funid(Term3),Cond*,Ivarenv2)
@@ -221,9 +221,9 @@ equations
 %% If the term is a variable in the right hand side of an equation or
 %% the non matching side of a condition this variable is translated into
 %% a list.
-  [rlrt-1'3] is-list-var-term(Term1) = true,
-             includes(Term1,Ivarenv) = true,
-             newlistvar(Term1) = Varid
+  [rlrt-1'3] is-list-var-term(Term1) == true,
+             includes(Term1,Ivarenv) == true,
+             Varid := newlistvar(Term1)
              =========================
              rem-lists-from-rhs-term(Term1,Ivarenv) = (Varid,,Ivarenv)
 
@@ -235,10 +235,10 @@ equations
   [rllts-1'1] rem-lists-from-lhs-terms(Term1,Ivarenv1) =
                rem-lists-from-lhs-term(Term1,Ivarenv1)
 
-  [rllts-1'2] rem-lists-from-lhs-term(Term1,Ivarenv1) =
-                (Term2,Cond*1,Ivarenv2),
-              rem-lists-from-lhs-terms(Term+1,Ivarenv2) =
-                (Term+2,Cond*2,Ivarenv3)
+  [rllts-1'2] (Term2,Cond*1,Ivarenv2) :=
+                rem-lists-from-lhs-term(Term1,Ivarenv1),
+              (Term+2,Cond*2,Ivarenv3) :=
+                rem-lists-from-lhs-terms(Term+1,Ivarenv2)
               ==========================
               rem-lists-from-lhs-terms(Term1,Term+1,Ivarenv1) =
                 (Term2,Term+2,Cond*1 & Cond*2,Ivarenv3)
@@ -247,20 +247,20 @@ equations
   [rlrts-1'1] rem-lists-from-rhs-terms(Term1,Ivarenv1) =
                 rem-lists-from-rhs-term(Term1,Ivarenv1)
 
-  [rlrts-1'2] rem-lists-from-rhs-term(Term1,Ivarenv1) =
-                (Term2,Cond*1,Ivarenv2),
-              rem-lists-from-rhs-terms(Term+1,Ivarenv2) =
-                (Term+2,Cond*2,Ivarenv3)
+  [rlrts-1'2] (Term2,Cond*1,Ivarenv2) :=
+                rem-lists-from-rhs-term(Term1,Ivarenv1),
+              (Term+2,Cond*2,Ivarenv3) :=
+                rem-lists-from-rhs-terms(Term+1,Ivarenv2)
               ==========================
               rem-lists-from-rhs-terms(Term1,Term+1,Ivarenv1) =
                 (Term2,Term+2,Cond*1 & Cond*2,Ivarenv3)
 
-  [tllt-1'1] is-list-cons(Term2) = false
+  [tllt-1'1] is-list-cons(Term2) == false
              ===========================
              transform-lhs-list-terms(cons(Term1,Term2),Ivarenv) =
                transform-lhs-double-terms(Term1,Term2,Ivarenv)
 
-  [tllt-1'3] is-list-cons(Term2) = true
+  [tllt-1'3] is-list-cons(Term2) == true
              ==========================
              transform-lhs-list-terms(cons(Term1,Term2),Ivarenv) =
                transform-lhs-multiple-terms(cons(Term1,Term2),Ivarenv)
@@ -274,31 +274,31 @@ equations
 %% Thus, a single argument is either a list variable or
 %% not. If it is not a list variable, a test is generated
 %% to check that the argument is a single list element.
-  [tlst-1'1] get-int(Ivarenv1) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv1) = Ivarenv2
+  [tlst-1'1] Aint := get-int(Ivarenv1),
+             Varid := newlistvar(Aint),
+             Ivarenv2 := put-int(succ(Aint),Ivarenv1)
              =======================================
              transform-lhs-single-term(null,Ivarenv1) =
                (Varid,not_empty_list(Varid) =: f,Ivarenv2)
 
   [tlst-1'2] Term1 != null,
-             is-list-var-term(Term1) = false,
-             contains-zero-or-one-list-vars-in-term(Term1) = true,
-             rem-lists-from-lhs-term(Term1,Ivarenv1) = (Term2,Cond*,Ivarenv2),
-             get-int(Ivarenv2) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv2) = Ivarenv3
+             is-list-var-term(Term1) == false,
+             contains-zero-or-one-list-vars-in-term(Term1) == true,
+             (Term2,Cond*,Ivarenv2) := rem-lists-from-lhs-term(Term1,Ivarenv1),
+             Aint := get-int(Ivarenv2),
+             Varid := newlistvar(Aint),
+             Ivarenv3 := put-int(succ(Aint),Ivarenv2)
              =======================================
              transform-lhs-single-term(Term1,Ivarenv1) =
                (Varid,is_single_element(Varid) =: t &
                       make-new-cond(list_head(Varid),Term2) & Cond*,Ivarenv3)
 
   [tlst-1'2] Term1 != null,
-             is-list-var-term(Term1) = false,
-             contains-zero-or-one-list-vars-in-term(Term1) = false,
-             get-int(Ivarenv1) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv1) = Ivarenv2
+             is-list-var-term(Term1) == false,
+             contains-zero-or-one-list-vars-in-term(Term1) == false,
+             Aint := get-int(Ivarenv1),
+             Varid := newlistvar(Aint),
+             Ivarenv2 := put-int(succ(Aint),Ivarenv1)
              =======================================
              transform-lhs-single-term(Term1,Ivarenv1) =
                (Varid,is_single_element(Varid) =: t &
@@ -306,7 +306,7 @@ equations
 
 %% If the single term is a list variable it is transformed via
 %% the function {\tt transform-list-var}.
-  [tlst-1'3] is-list-var-term(Term1) = true
+  [tlst-1'3] is-list-var-term(Term1) == true
              ==============================
              transform-lhs-single-term(Term1,Ivarenv1) =
                transform-lhs-list-var(Term1,Ivarenv1)
@@ -322,14 +322,14 @@ equations
 %% In all three cases a new variable is introduced to represent
 %% the list and via access functions the first or the last element
 %% of the list is obtained.
-  [tldt-1'1] is-list-var-term(Term1) = false,
-             rem-lists-from-lhs-term(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
-             is-list-var-term(Term2) = false,
-             rem-lists-from-lhs-term(Term2,Ivarenv2) = (Term4,Cond*2,Ivarenv3),
-             get-int(Ivarenv3) = Aint,
-             newlistvar(Aint) = Varid1,
-             newlistvar(succ(Aint)) = Varid2,
-             put-int(succ(succ(Aint)),Ivarenv3) = Ivarenv4
+  [tldt-1'1] is-list-var-term(Term1) == false,
+             (Term3,Cond*1,Ivarenv2) := rem-lists-from-lhs-term(Term1,Ivarenv1),
+             is-list-var-term(Term2) == false,
+             (Term4,Cond*2,Ivarenv3) := rem-lists-from-lhs-term(Term2,Ivarenv2),
+             Aint := get-int(Ivarenv3),
+             Varid1 := newlistvar(Aint),
+             Varid2 := newlistvar(succ(Aint)),
+             Ivarenv4 := put-int(succ(succ(Aint)),Ivarenv3)
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
                (Varid1,not_empty_list(Varid1) =: t &
@@ -339,13 +339,13 @@ equations
                        is_single_element(Varid2) =: t &
                        make-new-cond(list_head(Varid2),Term4) & Cond*2 ,Ivarenv4)
 
-  [tldt-1'2] is-list-var-term(Term1) = false,
-             rem-lists-from-lhs-term(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
-             is-list-var-term(Term2) = true,
-             transform-lhs-list-var(Term2,Ivarenv2) = (Term4,Cond*2,Ivarenv3),
-             get-int(Ivarenv3) = Aint,
-             newlistvar(Aint) = Varid2,
-             put-int(succ(Aint),Ivarenv3) = Ivarenv4
+  [tldt-1'2] is-list-var-term(Term1) == false,
+             (Term3,Cond*1,Ivarenv2) := rem-lists-from-lhs-term(Term1,Ivarenv1),
+             is-list-var-term(Term2) == true,
+             (Term4,Cond*2,Ivarenv3) := transform-lhs-list-var(Term2,Ivarenv2),
+             Aint := get-int(Ivarenv3),
+             Varid2 := newlistvar(Aint),
+             Ivarenv4 := put-int(succ(Aint),Ivarenv3)
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
                (Varid2,not_empty_list(Varid2) =: t &
@@ -354,13 +354,13 @@ equations
                        list_tail(Varid2) =: Term4 &
                        Cond*2,Ivarenv4)
 
-  [tldt-1'3] is-list-var-term(Term1) = true,
-             transform-lhs-list-var(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
-             is-list-var-term(Term2) = false,
-             rem-lists-from-lhs-term(Term2,Ivarenv2) = (Term4,Cond*2,Ivarenv3),
-             get-int(Ivarenv3) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv3) = Ivarenv4
+  [tldt-1'3] is-list-var-term(Term1) == true,
+             (Term3,Cond*1,Ivarenv2) := transform-lhs-list-var(Term1,Ivarenv1),
+             is-list-var-term(Term2) == false,
+             (Term4,Cond*2,Ivarenv3) := rem-lists-from-lhs-term(Term2,Ivarenv2),
+             Aint := get-int(Ivarenv3),
+             Varid := newlistvar(Aint),
+             Ivarenv4 := put-int(succ(Aint),Ivarenv3)
              =======================================
              transform-lhs-double-terms(Term1,Term2,Ivarenv1) =
                (Varid,not_empty_list(Varid) =: t &
@@ -377,13 +377,13 @@ equations
 %% obtain the head and the tail of the list are created.
 %% The rest of the list is recursively processed.
 
-  [tlmt-1'1] is-list-var-term(Term1) = false,
-             rem-lists-from-lhs-term(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
-             get-int(Ivarenv2) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv2) = Ivarenv3,
-             transform-lhs-list-terms(Term2,Ivarenv3) =
-               (Varid2,Cond*2,Ivarenv4)
+  [tlmt-1'1] is-list-var-term(Term1) == false,
+             (Term3,Cond*1,Ivarenv2) := rem-lists-from-lhs-term(Term1,Ivarenv1),
+             Aint := get-int(Ivarenv2),
+             Varid := newlistvar(Aint),
+             Ivarenv3 := put-int(succ(Aint),Ivarenv2),
+             (Varid2,Cond*2,Ivarenv4) :=
+               transform-lhs-list-terms(Term2,Ivarenv3)
              ==========================
              transform-lhs-multiple-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,%%%make-new-cond(list-head(Varid),make-element-term(Term3)) &
@@ -395,12 +395,12 @@ equations
 %% If the first element is  list variable we must process the
 %% list with a ``prefix-last'' mechanism. This is performed
 %% via the function {\tt transform-no-list-terms}.
-  [tlmt-1'2] is-list-var-term(Term1) = true,
-             get-int(Ivarenv1) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv1) = Ivarenv2,
-             transform-no-list-terms(cons(Term1,Term2),Ivarenv2) =
-               (Varid2,Cond*,Ivarenv3)
+  [tlmt-1'2] is-list-var-term(Term1) == true,
+             Aint := get-int(Ivarenv1),
+             Varid := newlistvar(Aint),
+             Ivarenv2 := put-int(succ(Aint),Ivarenv1),
+             (Varid2,Cond*,Ivarenv3) :=
+               transform-no-list-terms(cons(Term1,Term2),Ivarenv2)
              =========================
              transform-lhs-multiple-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid2,Cond*,Ivarenv3)
@@ -410,35 +410,35 @@ equations
                (null,,Ivarenv)
 
   [trlt-1'2] Term1 != null,
-             is-list-var-term(Term1) = false
+             is-list-var-term(Term1) == false
              ===============================
              transform-rhs-list-terms(Term1,Ivarenv1) =
                rem-lists-from-rhs-term(Term1,Ivarenv1)
 
 %% If the single term is a list variable it is transformed via
 %% the function {\tt transform-list-var}.
-  [trlt-1'3] is-list-var-term(Term1) = true
+  [trlt-1'3] is-list-var-term(Term1) == true
             ===============================
              transform-rhs-list-terms(Term1,Ivarenv1) =
                transform-rhs-list-var(Term1,Ivarenv1)
 
   [trlt-1'4] Term1 != null,
-             is-list-var-term(Term1) = false,
-             rem-lists-from-rhs-term(Term1,Ivarenv1) =
-               (Term2,Cond*1,Ivarenv2),
-             transform-rhs-list-terms(Term+1,Ivarenv2) =
-               (Term+2,Cond*2,Ivarenv3)
+             is-list-var-term(Term1) == false,
+             (Term2,Cond*1,Ivarenv2) :=
+               rem-lists-from-rhs-term(Term1,Ivarenv1),
+             (Term+2,Cond*2,Ivarenv3) :=
+               transform-rhs-list-terms(Term+1,Ivarenv2)
              ==========================
              transform-rhs-list-terms(Term1,Term+1,Ivarenv1) =
               (Term2,Term+2,Cond*1 & Cond*2,Ivarenv3)
 
 %% If the single term is a list variable it is transformed via
 %% the function {\tt transform-list-var}.
-  [trlt-1'5] is-list-var-term(Term1) = true,
-             transform-rhs-list-var(Term1,Ivarenv1) =
-               (Term2,Cond*1,Ivarenv2),
-             transform-rhs-list-terms(Term+1,Ivarenv2) =
-              (Term+2,Cond*2,Ivarenv3)
+  [trlt-1'5] is-list-var-term(Term1) == true,
+             (Term2,Cond*1,Ivarenv2) :=
+               transform-rhs-list-var(Term1,Ivarenv1),
+             (Term+2,Cond*2,Ivarenv3) :=
+              transform-rhs-list-terms(Term+1,Ivarenv2)
              =========================
              transform-rhs-list-terms(Term1,Term+1,Ivarenv1) =
                (Term2,Term+2,Cond*1 & Cond*2,Ivarenv3)
@@ -448,12 +448,12 @@ equations
 %% construction is generated via conditions and new variables.
 %% If the list consists of only two elements: first is the list variable
 %% the recursion stops.
-  [tnlt-1'1] is-list-cons(Term2) = false,
-             transform-lhs-list-var(Term1,Ivarenv1) = (Term3,Cond*1,Ivarenv2),
-             rem-lists-from-lhs-term(Term2,Ivarenv2) = (Term4,Cond*2,Ivarenv3),
-             get-int(Ivarenv3) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv3) = Ivarenv4
+  [tnlt-1'1] is-list-cons(Term2) == false,
+             (Term3,Cond*1,Ivarenv2) := transform-lhs-list-var(Term1,Ivarenv1),
+             (Term4,Cond*2,Ivarenv3) := rem-lists-from-lhs-term(Term2,Ivarenv2),
+             Aint := get-int(Ivarenv3),
+             Varid := newlistvar(Aint),
+             Ivarenv4 := put-int(succ(Aint),Ivarenv3)
              =======================================
              transform-no-list-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,
@@ -462,15 +462,15 @@ equations
                 make-new-cond(list_last(Varid),Term4) & Cond*2,
                 Ivarenv4)
 
-  [tnlt-1'2] is-list-cons(Term2) = true,
-             get-last-element(Term2) = Term3,
-             rem-lists-from-lhs-term(Term3,Ivarenv1) = (Term4,Cond*1,Ivarenv2),
-             get-int(Ivarenv2) = Aint,
-             newlistvar(Aint) = Varid,
-             put-int(succ(Aint),Ivarenv2) = Ivarenv3,
-             get-prefix-list(Term2) = Term5,
-             transform-no-list-terms(cons(Term1,Term5),Ivarenv3) =
-               (Varid2,Cond*2,Ivarenv4)
+  [tnlt-1'2] is-list-cons(Term2) == true,
+             Term3 := get-last-element(Term2),
+             (Term4,Cond*1,Ivarenv2) := rem-lists-from-lhs-term(Term3,Ivarenv1),
+             Aint := get-int(Ivarenv2),
+             Varid := newlistvar(Aint),
+             Ivarenv3 := put-int(succ(Aint),Ivarenv2),
+             Term5 := get-prefix-list(Term2),
+             (Varid2,Cond*2,Ivarenv4) :=
+               transform-no-list-terms(cons(Term1,Term5),Ivarenv3)
              ==========================
              transform-no-list-terms(cons(Term1,Term2),Ivarenv1) =
                (Varid,
@@ -483,39 +483,39 @@ equations
 %% elements the name is only changed. If a list variable represents one or
 %% elements, the name is changed and a condition is generated to check
 %% for non-emptyness.
-  [trli-1'1] includes(*Varid1,Ivarenv) = true,
-             newlistvar(*Varid1) = Varid2
+  [trli-1'1] includes(*Varid1,Ivarenv) == true,
+             Varid2 := newlistvar(*Varid1)
              ============================
              transform-rhs-list-var(*Varid1,Ivarenv) = (Varid2,,Ivarenv)
 
-  [trli-1'2] includes(+Varid1,Ivarenv) = true,
-             newlistvar(+Varid1) = Varid2
+  [trli-1'2] includes(+Varid1,Ivarenv) == true,
+             Varid2 := newlistvar(+Varid1)
              ============================
              transform-rhs-list-var(+Varid1,Ivarenv) =
                (Varid2,,Ivarenv)
 
   [default-trli-1'3] transform-rhs-list-var(Term,Ivarenv) = (Term,,Ivarenv)
 
-  [tli-1'1] includes(*Varid1,Ivarenv1) = false,
-            enter(*Varid1,Ivarenv1) = Ivarenv2,
-            newlistvar(*Varid1) = Varid2
+  [tli-1'1] includes(*Varid1,Ivarenv1) == false,
+            Ivarenv2 := enter(*Varid1,Ivarenv1),
+            Varid2 := newlistvar(*Varid1)
             ============================
             transform-lhs-list-var(*Varid1,Ivarenv1) = (Varid2,,Ivarenv2)
 
-  [tli-1'2] includes(*Varid1,Ivarenv) = true,
-            newlistvar(*Varid1) = Varid2
+  [tli-1'2] includes(*Varid1,Ivarenv) == true,
+            Varid2 := newlistvar(*Varid1)
             ============================
             transform-lhs-list-var(*Varid1,Ivarenv) = (Varid2,,Ivarenv)
 
-  [tli-1'3] includes(+Varid1,Ivarenv1) = false,
-            enter(+Varid1,Ivarenv1) = Ivarenv2,
-            newlistvar(+Varid1) = Varid2
+  [tli-1'3] includes(+Varid1,Ivarenv1) == false,
+            Ivarenv2 := enter(+Varid1,Ivarenv1),
+            Varid2 := newlistvar(+Varid1)
             ============================
             transform-lhs-list-var(+Varid1,Ivarenv1) =
               (Varid2,not_empty_list(Varid2) =: t,Ivarenv2)
 
-  [tli-1'4] includes(+Varid1,Ivarenv) = true,
-            newlistvar(+Varid1) = Varid2
+  [tli-1'4] includes(+Varid1,Ivarenv) == true,
+            Varid2 := newlistvar(+Varid1)
             ============================
             transform-lhs-list-var(+Varid1,Ivarenv) =
               (Varid2,,Ivarenv)

@@ -1,6 +1,6 @@
 equations
 
-[] abe(Funcdef*) = Rule*2
+[] Rule*2 := abe(Funcdef*)
    ===>
    add-builtin-equations(module Modid signature Funcdef* rules Rule*) =
      module Modid signature Funcdef* rules Rule*; Rule*2
@@ -9,13 +9,13 @@ equations
 [] abe(Funid { Term*1, built-in(funid("""Char*""")), Term*2 }) =
      Funid = innermost(remove-dashes(funid("A""S""C""_"Char*)))
 
-[] make-arg-list(Sigarg+,0) = Term+
+[] Term+ := make-arg-list(Sigarg+,0)
    ===>
    abe(Funid ( Sigarg+ ) { Term*1, built-in(funid(""" Char* """)), Term*2}) =
      Funid ( Term+ ) = innermost (remove-dashes(funid("A""S""C""_"Char*)) ( Term+ ))
 
-[] abe(Funcdef) = Rule*1,
-   abe(Funcdef+) = Rule*2
+[] Rule*1 := abe(Funcdef),
+   Rule*2 := abe(Funcdef+)
    ===>
    abe(Funcdef; Funcdef+) = Rule*1; Rule*2
 

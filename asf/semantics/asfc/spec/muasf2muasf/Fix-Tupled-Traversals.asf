@@ -30,7 +30,7 @@ equations
   default: ftt(Condlist) ==> Term1 = ftt(Term2)
 
 [ftt-term] 
-  get-traversal-type(Funid) = accutrafo
+  get-traversal-type(Funid) == accutrafo
   ===>
   ftt(Funid(Term+) : Term2) = correct_tuple(Funid(Term+),parse_sort(Term2))
 

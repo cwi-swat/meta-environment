@@ -1,0 +1,37 @@
+module muasf2muasf/Translate-No-Match
+
+imports muasf/MuASF-Equations-Ops
+
+%% This module translates conditions of the form:
+%% match([DeclaredVariables,Term1,Term2) == matchfailed 
+%% to a call to a specialized function that implements this match
+
+%% the declared variables are the arguments of the new function.
+%% the new function is then implemented using a new rewrite rule for the 
+%% positive match and a new default rule for the negative match
+
+exports
+
+context-free syntax
+
+translate-no-match(Module,NameTable) -> MN-struct
+
+hiddens
+
+context-free syntax
+
+collect-and-number({Rule";"}*, <Int,{Term","}*>) -> <{Rule";"}*,<Int,{Term","}*>> {traversal(accu,trafo,top-down,break)}
+collect-and-number(Cond, <Int,{Term","}*>) -> <Cond,<Int,{Term","}*>> {traversal(accu,trafo,top-down,break)}
+
+make-rules({Term ","}*) -> {Rule ";"}*
+make-funcdefs({Term ","}*) -> {FuncDef";"}*
+extend-nametable(NameTable, {Term ","}*) -> NameTable
+
+variables
+
+"Term"[0-9]* -> Term
+"VarEnv"[0-9]* -> IntVarEnv
+"Term*"[0-9]* -> {Term ","}*
+"Term+"[0-9]* -> {Term ","}+
+"Char*"[0-9]* -> CHAR*
+"Int"[0-9]*   -> Int

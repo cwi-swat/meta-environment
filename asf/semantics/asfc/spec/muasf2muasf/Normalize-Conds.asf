@@ -1,6 +1,6 @@
 equations
 
-  [nc-1'1] normalize-rulesopt(Rulesopt1) = Rulesopt2
+  [nc-1'1] Rulesopt2 := normalize-rulesopt(Rulesopt1)
            =========================================
            normalize-conditions(module Modid
                                        Signopt
@@ -13,23 +13,23 @@ equations
 
   [nro-1'2] normalize-rulesopt(rules) = rules
 
-  [nro-1'3] normalize-rules(Rule+1) = Rule+2
+  [nro-1'3] Rule+2 := normalize-rules(Rule+1)
             ================================
             normalize-rulesopt(rules Rule+1) = rules Rule+2
 
   [nr-1'1] normalize-rules(Rule) = normalize-rule(Rule)
 
-  [nr-1'2] normalize-rule(Rule1) = Rule2,
-           normalize-rules(Rule+1) = Rule+2
+  [nr-1'2] Rule2 := normalize-rule(Rule1),
+           Rule+2 := normalize-rules(Rule+1)
            ================================
            normalize-rules(Rule1; Rule+1) =  Rule2; Rule+2
 
-  [nr-2'1] normalize-conds(Cond+1,1) = (,Cond+2,Aint)
+  [nr-2'1] (,Cond+2,Aint) := normalize-conds(Cond+1,1)
            ==========================================
            normalize-rule(default:Cond+1 ==> Term1 = Term2) =
              default:Cond+2 ==> Term1 = Term2
 
-  [nr-2'2] normalize-conds(Cond+1,1) = (,Cond+2,Aint)
+  [nr-2'2] (,Cond+2,Aint) := normalize-conds(Cond+1,1)
            ==========================================
            normalize-rule(Cond+1 ==> Term1 = Term2) =
              Cond+2 ==> Term1 = Term2
@@ -38,23 +38,23 @@ equations
 
   [nc-1'1] normalize-conds(Cond,Aint) = normalize-cond(Cond,Aint)
 
-  [nc-1'2] normalize-cond(Cond1,Aint1) = (,Cond+2,Aint2),
-           normalize-conds(Cond+1,Aint2) = (,Cond+3,Aint3)
+  [nc-1'2] (,Cond+2,Aint2) := normalize-cond(Cond1,Aint1),
+           (,Cond+3,Aint3) := normalize-conds(Cond+1,Aint2)
            ===============================================
            normalize-conds(Cond1 & Cond+1,Aint1) =  (,Cond+2 & Cond+3,Aint3)
 
-  [nc-2'2] is-var-term(Term2) = true
+  [nc-2'2] is-var-term(Term2) == true
            =========================
            normalize-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
-  [nc-2'3] is-list-funid(Funid) = false,
-           normalize-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nc-2'3] is-list-funid(Funid) == false,
+           (Term+2,Cond*,Aint2) := normalize-terms(Term+1,Aint1)
            ====================================================
            normalize-cond(Term1 =: Funid(Term+1),Aint1) =
              (,Term1 =: Funid(Term+2) & Cond*,Aint2)
 
-  [nc-2'5] is-list-funid(Funid) = true,
-           normalize-list-args(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nc-2'5] is-list-funid(Funid) == true,
+           (Term+2,Cond*,Aint2) := normalize-list-args(Term+1,Aint1)
            ===================================================
            normalize-cond(Term1 =: Funid(Term+1),Aint1) =
               (,Term1 =: Funid(Term+2) & Cond* ,Aint2)
@@ -63,98 +63,98 @@ equations
 
   [nt-1'1] normalize-terms(Term,Aint) = normalize-term(Term,Aint)
 
-  [nt-1'2] normalize-term(Term1,Aint1) = (Term2,Cond*1,Aint2),
-           normalize-terms(Term+1,Aint2) = (Term+2,Cond*2,Aint3)
+  [nt-1'2] (Term2,Cond*1,Aint2) := normalize-term(Term1,Aint1),
+           (Term+2,Cond*2,Aint3) := normalize-terms(Term+1,Aint2)
            =====================================================
            normalize-terms(Term1, Term+1,Aint1) =  (Term2,Term+2,Cond*1 & Cond*2,Aint3)
 
-  [nt-2'1] is-var-term(Term) = true
+  [nt-2'1] is-var-term(Term) == true
            ========================
            normalize-term(Term,Aint) = (Term,,Aint)
 
-  [nt-2'2] Aint = natcon(Char*),
-           varid("C""V" Char*) = Term2,
-           term_equal(Term2,Funid) =: t = Cond
+  [nt-2'2] natcon(Char*) := Aint,
+           Term2 := varid("C""V" Char*),
+           Cond := term_equal(Term2,Funid) =: t
            ===================================
            normalize-term(Funid,Aint) = (Term2,Cond,succ(Aint))
 
-  [nt-2'3] is-list-funid(Funid) = false,
-           Aint = natcon(Char*),
-           varid("C""V" Char*) = Term2,
-           normalize-terms(Term+1,succ(Aint)) = (Term+2,Cond*,Aint2),
-           Term2 =: Funid(Term+2) = Cond
+  [nt-2'3] is-list-funid(Funid) == false,
+           natcon(Char*) := Aint,
+           Term2 := varid("C""V" Char*),
+           (Term+2,Cond*,Aint2) := normalize-terms(Term+1,succ(Aint)),
+           Cond := Term2 =: Funid(Term+2)
            ===================================
            normalize-term(Funid(Term+1),Aint) = (Term2,Cond & Cond*,Aint2)
 
-  [nt-2'4] is-list-funid(Funid) = true,
-           Aint = natcon(Char*),
-           varid("C""V" Char*) = Term2,
-           Term2 =: Funid(Term+) = Cond
+  [nt-2'4] is-list-funid(Funid) == true,
+           natcon(Char*) := Aint,
+           Term2 := varid("C""V" Char*),
+           Cond := Term2 =: Funid(Term+)
            ============================
            normalize-term(Funid(Term+),Aint) = (Term2,Cond,succ(Aint))
 
-  [nlir-1'1] normalize-list-in-term(Term1,1) = (Term3,Cond*,Aint),
-             make-conditional-rule(Cond*,Term3 = Term2) = Rule1,
-             make-default-rule(Rule1) = Rule2
+  [nlir-1'1] (Term3,Cond*,Aint) := normalize-list-in-term(Term1,1),
+             Rule1 := make-conditional-rule(Cond*,Term3 = Term2),
+             Rule2 := make-default-rule(Rule1)
              ================================
              normalize-list-in-rule(default:Term1 = Term2) = Rule2
 
-  [nlir-1'2] normalize-list-in-term(Term1,1) = (Term3,Cond*,Aint),
-             make-conditional-rule(Cond*,Term3 = Term2) = Rule
+  [nlir-1'2] (Term3,Cond*,Aint) := normalize-list-in-term(Term1,1),
+             Rule := make-conditional-rule(Cond*,Term3 = Term2)
              =================================================
              normalize-list-in-rule(Term1 = Term2) = Rule
 
-  [nlir-1'3] normalize-list-in-term(Term1,1) = (Term3,Cond*,Aint1),
-             normalize-list-in-conds(Cond+1,Aint1) = (,Cond+2,Aint2)
+  [nlir-1'3] (Term3,Cond*,Aint1) := normalize-list-in-term(Term1,1),
+             (,Cond+2,Aint2) := normalize-list-in-conds(Cond+1,Aint1)
              =======================================================
              normalize-list-in-rule(default:Cond+1 ==> Term1 = Term2) =
                default:Cond* & Cond+2 ==> Term3 = Term2
 
-  [nlir-1'4] normalize-list-in-term(Term1,1) = (Term3,Cond*,Aint1),
-             normalize-list-in-conds(Cond+1,Aint1) = (,Cond+2,Aint2)
+  [nlir-1'4] (Term3,Cond*,Aint1) := normalize-list-in-term(Term1,1),
+             (,Cond+2,Aint2) := normalize-list-in-conds(Cond+1,Aint1)
              =======================================================
              normalize-list-in-rule(Cond+1 ==> Term1 = Term2) =
                Cond* & Cond+2 ==> Term3 = Term2
 
   [nlic-1'1] normalize-list-in-conds(Cond,Aint) = normalize-list-in-cond(Cond,Aint)
 
-  [nlic-1'2] normalize-list-in-cond(Cond1,Aint1) = (,Cond+2,Aint2),
-             normalize-list-in-conds(Cond+1,Aint2) = (,Cond+3,Aint3)
+  [nlic-1'2] (,Cond+2,Aint2) := normalize-list-in-cond(Cond1,Aint1),
+             (,Cond+3,Aint3) := normalize-list-in-conds(Cond+1,Aint2)
              =======================================================
              normalize-list-in-conds(Cond1 & Cond+1,Aint1) =  (,Cond+2 & Cond+3,Aint3)
 
-  [nlic-2'1] is-var-term(Term2) = true
+  [nlic-2'1] is-var-term(Term2) == true
              =========================
              normalize-list-in-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
-  [nlic-2'2] is-list-funid(Funid) = false,
-             normalize-list-in-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nlic-2'2] is-list-funid(Funid) == false,
+             (Term+2,Cond*,Aint2) := normalize-list-in-terms(Term+1,Aint1)
              ============================================================
              normalize-list-in-cond(Term1 =: Funid(Term+1),Aint1) =
                (,Term1 =: Funid(Term+2) & Cond*,Aint2)
 
-  [nlic-2'4] is-list-funid(Funid) = true,
-             normalize-list-args(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nlic-2'4] is-list-funid(Funid) == true,
+             (Term+2,Cond*,Aint2) := normalize-list-args(Term+1,Aint1)
              ============================================================
              normalize-list-in-cond(Term1 =: Funid(Term+1),Aint1) =
                (,Term1 =: Funid(Term+2) & Cond*,Aint2)
 
   [default-nlic-2'3] normalize-list-in-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
-  [nlit-1'1] is-list-funid(Funid) = false,
-             normalize-list-in-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nlit-1'1] is-list-funid(Funid) == false,
+             (Term+2,Cond*,Aint2) := normalize-list-in-terms(Term+1,Aint1)
              ============================================================
              normalize-list-in-term(Funid(Term+1),Aint1) = (Funid(Term+2),Cond*,Aint2)
 
-  [nlit-1'2] is-list-funid(Funid) = true,
-             normalize-list-args(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nlit-1'2] is-list-funid(Funid) == true,
+             (Term+2,Cond*,Aint2) := normalize-list-args(Term+1,Aint1)
              ========================================================
              normalize-list-in-term(Funid(Term+1),Aint1) = (Funid(Term+2),Cond*,Aint2)
 
   [default-nlit-1'3] normalize-list-in-term(Term,Aint) = (Term,,Aint)
 
-  [nlits-1'1] normalize-list-in-term(Term1,Aint1) = (Term2,Cond*1,Aint2),
-              normalize-list-in-terms(Term+1,Aint2) = (Term+2,Cond*2,Aint3)
+  [nlits-1'1] (Term2,Cond*1,Aint2) := normalize-list-in-term(Term1,Aint1),
+              (Term+2,Cond*2,Aint3) := normalize-list-in-terms(Term+1,Aint2)
               =============================================================
               normalize-list-in-terms(Term1,Term+1,Aint1) =
                 (Term2,Term+2,Cond*1 & Cond*2,Aint3)
@@ -162,18 +162,18 @@ equations
   [nlits-1'2] normalize-list-in-terms(Term,Aint) =
                  normalize-list-in-term(Term,Aint)
 
-  [nlas-1'1] normalize-list-arg(Term1,Aint1) = (Term3,Cond*1,Aint2),
-             normalize-list-args(Term2,Aint2) = (Term4,Cond*2,Aint3)
+  [nlas-1'1] (Term3,Cond*1,Aint2) := normalize-list-arg(Term1,Aint1),
+             (Term4,Cond*2,Aint3) := normalize-list-args(Term2,Aint2)
              =========================================================
              normalize-list-args(cons(Term1,Term2),Aint1) =
                (cons(Term3,Term4),Cond*1 & Cond*2,Aint3)
 
   [default-nlas-1'2] normalize-list-args(Term,Aint) = normalize-list-arg(Term,Aint)
 
-  [nla-2'1] Aint = natcon(Char*),
-            varid("C""L""V" Char*) = Term2,
-            normalize-list-in-terms(Term+1,succ(Aint)) = (Term+2,Cond*,Aint2),
-            Term2 =: Funid(Term+2) = Cond
+  [nla-2'1] natcon(Char*) := Aint,
+            Term2 := varid("C""L""V" Char*),
+            (Term+2,Cond*,Aint2) := normalize-list-in-terms(Term+1,succ(Aint)),
+            Cond := Term2 =: Funid(Term+2)
             =============================
             normalize-list-arg(Funid(Term+1),Aint) = (Term2,Cond & Cond*,Aint2)
 

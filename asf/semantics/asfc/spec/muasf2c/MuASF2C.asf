@@ -1,10 +1,10 @@
 equations
 
 [mf2c]  
-Modid = Modid2,
-signopt2cfuncs(Modid,Signopt,Nametable) = (Funcdef*1,Decl*1),
-rulesopt2cfuncs(Modid,Funcdef*1,Rulesopt,Nametable) = (Funcdef*2,Decl*2),
-funcdefs2cfuncs(Funcdef*2) = Decl*3
+Modid := Modid2,
+(Funcdef*1,Decl*1) := signopt2cfuncs(Modid,Signopt,Nametable),
+(Funcdef*2,Decl*2) := rulesopt2cfuncs(Modid,Funcdef*1,Rulesopt,Nametable),
+Decl*3 := funcdefs2cfuncs(Funcdef*2)
 ===>
 muasf2c(module Modid2 Signopt Rulesopt, Nametable) =
 #include "asc-support-me.h"
@@ -17,29 +17,29 @@ Decl*3
 funcdefs2cfuncs() =
 
 [fds2cf-1'2] 
-funcdef2cfuncs(Funcdef) = Decl,
-funcdefs2cfuncs(Funcdef*) = Decl*
+Decl := funcdef2cfuncs(Funcdef),
+Decl* := funcdefs2cfuncs(Funcdef*)
 ===>
 funcdefs2cfuncs(Funcdef;Funcdef*) = Decl* ++ Decl
 
-[fd2c-1'1] sigargs2cstats(funid(Char*),) = Stat*
+[fd2c-1'1] Stat* := sigargs2cstats(funid(Char*),)
              =====================================
              funcdef2cfuncs(funid(Char*)) =
                ATerm identifier(Char*)() { Stat* }
 
-[fd2c-1'2] sigargs2cstats(funid(Char*),) = Stat*
+[fd2c-1'2] Stat* := sigargs2cstats(funid(Char*),)
              =====================================
              funcdef2cfuncs(funid(Char*) Attrs) =
                ATerm identifier(Char*)() { Stat* }
 
-[fd2c-1'3] sigargs2cargs(Sigarg+,0) = FormalArgs,
-             sigargs2cstats(funid(Char*),Sigarg+) = Stat*
+[fd2c-1'3] FormalArgs := sigargs2cargs(Sigarg+,0),
+             Stat* := sigargs2cstats(funid(Char*),Sigarg+)
              ============================================
              funcdef2cfuncs(funid(Char*)(Sigarg+)) =
                ATerm identifier(Char*)(FormalArgs) { Stat* }
 
-[fd2c-1'4] sigargs2cargs(Sigarg+,0) = FormalArgs,
-             sigargs2cstats(funid(Char*),Sigarg+) = Stat*
+[fd2c-1'4] FormalArgs := sigargs2cargs(Sigarg+,0),
+             Stat* := sigargs2cstats(funid(Char*),Sigarg+)
              ============================================
              funcdef2cfuncs(funid(Char*)(Sigarg+) Attrs) =
                ATerm identifier(Char*)(FormalArgs) { Stat* }

@@ -13,16 +13,16 @@ hiddens
   context-free syntax
     "<" Statement-list-opt "|" Bool ">" -> SB-tuple
   context-free syntax
-    add-label "(" Bool  "," Identifier "," Statement-list-opt "," Int ")"          -> Statement-list-opt
-    remove-tail-rec-stats "(" Statement-list-opt "," Identifier "," Identifier ")" -> SB-tuple
-    remove-tail-rec-stat "(" Statement "," Identifier "," Identifier ")"           -> SB-tuple
-    transform-args "(" Argument-expression-list "|" Int ")"                        -> Statement-list-opt
-    transform-arg "(" Expression "|" Int ")"                                       -> Statement-list-opt
-    transform-arg-in-stats "(" Statement-list-opt ")"                              -> Statement-list-opt
-    transform-arg-in-stat "(" Statement ")"                                        -> Statement
-    transform-arg-in-exps "(" Argument-expression-list ")"                         -> Argument-expression-list
-    transform-arg-in-exp "(" Expression ")"                                        -> Expression
-    save-args "(" Int ")"                                                          -> Statement-list-opt
+    "add-label" "(" Bool  "," Identifier "," Statement-list-opt "," Int ")"          -> Statement-list-opt
+    "remove-tail-rec-stats" "(" Statement-list-opt "," Identifier "," Identifier ")" -> SB-tuple
+    "remove-tail-rec-stat" "(" Statement "," Identifier "," Identifier ")"           -> SB-tuple
+    "transform-args" "(" Argument-expression-list "|" Int ")"                        -> Statement-list-opt
+    "transform-arg" "(" Expression "|" Int ")"                                       -> Statement-list-opt
+    "transform-arg-in-stats" "(" Statement-list-opt ")"                              -> Statement-list-opt
+    "transform-arg-in-stat" "(" Statement ")"                                        -> Statement
+    "transform-arg-in-exps" "(" Argument-expression-list ")"                         -> Argument-expression-list
+    "transform-arg-in-exp" "(" Expression ")"                                        -> Expression
+    "save-args" "(" Int ")"                                                          -> Statement-list-opt
 
 hiddens
   variables
