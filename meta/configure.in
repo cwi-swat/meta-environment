@@ -61,31 +61,6 @@ AC_SUBST(CFLAGS)
 AC_SUBST(DEFS)
 AC_SUBST(INCLUDES)
 
-dnl Handle --with-gel=... argument to configure
-GELLIBS="-L$(GEL)/gel -lgel"
-AC_ARG_WITH(gel,
-[  --with-gel    	use GeL for interfacing with ASF+SDF system],
-if test ${withval} = "yes"
-then
-   GEL="$(top_srcdir)/../gel"
-else
-   if test ${withval} = "no"
-   then
-     GEL="."
-   else
-     GEL=${withval};
-   fi
-fi,
-)
-AC_SUBST(GEL)
-AC_SUBST(GELLIBS)
-
-dnl Handle --with-epic=... argument to configure
-AC_ARG_WITH(epic,
-[  --with-epic		which epic distribution to use],
-EPIC=${withval},)
-AC_SUBST(EPIC)
-
 dnl Handle --with-aterm=... argument to configure
 AC_ARG_WITH(aterm,
 [  --with-aterm		which aterm-library to use],
