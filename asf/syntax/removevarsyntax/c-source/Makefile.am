@@ -1,5 +1,5 @@
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
+#    Copyright (C) 2001  Stichting Mathematisch Centrum,
 #                        Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -17,15 +17,21 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES		= -I$(ASC_SUPPORT)/include                           -I$(PT_SUPPORT)/include                           -I$(ATERM)/include                           -I$(ASF_SUPPORT)/include
 
-noinst_LIBRARIES = libRemove-Var-Syntax.a
+LDFLAGS			= -L${ASC_SUPPORT}/lib                           -L${PT_SUPPORT}/lib                           -L${ASF_SUPPORT}/lib                           -L${ATERM}/lib
 
-BUILT_SOURCES    = init.c
+LDLIBS          	= -lasc-support -lPT -lASF -lATB -lATerm
 
-libRemove_Var_Syntax_a_SOURCES  = $(SPEC_SRCS)
+noinst_LIBRARIES	= libRemove-Var-Syntax.a
 
-libRemove_Var_Syntax_a_LIBADD   = init.o
+bin_PROGRAMS		= Remove-Var-Syntax
+
+Remove_Var_Syntax_SOURCES		= init.c
+Remove_Var_Syntax_LDADD		= libRemove-Var-Syntax.a ${LDLIBS} ${SOCKLIBS}
+
+libRemove_Var_Syntax_a_SOURCES	= $(SPEC_SRCS)
+libRemove_Var_Syntax_a_LIBADD	= init.o
 
 # Old versions of automake put all dependencies on a single line which
 # causes several tools to crash (sed for instance) because of line length
@@ -49,7 +55,7 @@ SPEC_SRCS1=\
 
 SPEC_SRCS = $(SPEC_SRCS1)
 
-init.c: $(SPEC_SRCS)
+init.c: $(SPEC_SRCS) Makefile
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\
 	SPEC_SRCS="$(SPEC_SRCS)" ;\
 	for file in $$SPEC_SRCS; do \
