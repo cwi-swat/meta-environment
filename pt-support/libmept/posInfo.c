@@ -31,7 +31,11 @@ typedef struct PT_Position_Tag {
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col)
 {
-  ATerm t = PT_TreeToTerm(tree);
+  ATerm t = ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info"));
+
+  if (!t) {
+    return ATfalse;
+  }
 
   return ATmatch(t, "area(<str>,<int>,<int>,<int>,<int>)", path,
 		 start_line, start_col, end_line, end_col);
@@ -73,6 +77,7 @@ void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols)
     else {
       (*cols)++;
     }
+    return;
   }
 
   if (PT_isTreeAppl(tree)) {
@@ -84,14 +89,15 @@ void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols)
   }
   else if (PT_isTreeLit(tree)) {
     char *str = PT_getTreeString(tree);
-    while(*str != 0) {
-      if (*str++ == '\n') {
+    while(*str != '\0') {
+      if (*str == '\n') {
         *cols = 0;
         (*lines)++;
       } 
       else {
         (*cols)++;
       }
+      str++;
     }
   }
 }
@@ -106,6 +112,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   int len;
 
   if (current->maxDepth == current->curDepth) {
+    PT_calcTreePosInfo(tree, &current->line, &current->col);
     return tree;
   }
 
@@ -140,6 +147,8 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
         current->col++;
       }
     }
+  } else {
+    ATwarning("unhandled tree: %s (%t)\n", PT_yieldTree(tree), tree);
   }
 
   return PT_setTreePosInfo(tree, current->path, start_line, start_col,
