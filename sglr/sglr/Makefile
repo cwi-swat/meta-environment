@@ -7,6 +7,11 @@
 # Eelco Visser
 # Programming Research Group, University of Amsterdam
 # email: visser@fwi.uva.nl
+#
+# JS
+# To be placed under autoconf real soon
+# Quick & Dirty hack for now
+#
 
 # ---- PARAMETERS ---------------------------------
 
@@ -72,7 +77,7 @@ tests		= $(GRAMMARS)/smaller/smaller.tst \
 
 # ---- RULES  ------------------------------------
 
-all: $(programs) doc
+all: $(programs)
 
 sglr: $(csources) $(objects)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(objects) $(libraries) -o sglr
@@ -117,7 +122,7 @@ doc: SGLR.ps
 	cp $< ../doc
 
 clean:
-	$(MAKE) texclean
+#	$(MAKE) texclean
 	rm -f core sglr.pic sglr.tex sglr.c \
 	   *~ $(objects) $(tests) $(litcsources) *.o
 
@@ -147,8 +152,3 @@ litc:  litc.p
 	pc $< -o $@
 
 # include /home/visser/tex/LaTeX-Make
-
-nep:
-	echo $(PETR) $(TOOLBUS)
-	echo $(CFLAGS)
-	echo $(LDFLAGS)
