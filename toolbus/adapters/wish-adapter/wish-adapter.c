@@ -49,6 +49,7 @@
 #include <signal.h>
 
 FILE *to_wish;  /* file descriptor connected to std input of wish */
+int pgid;	/* pid group of the wish children */
 
 /* Some utility functions */
 void pr_type_wish(type *tp);
@@ -68,6 +69,19 @@ TBbool lazy_exec = TBfalse;
 char *name = "wish-adapter";
 char *script = NULL;
 char *wish_exec = "wish";
+
+#define PUTC(c,s) putc(c,s);
+
+/* Signal handler */
+static void signal_handler( int sig )
+{
+  if(pgid != -1) {
+    TBsend(TBmake("snd-disconnect"));
+    sleep(1);
+    kill(-pgid, sig);
+  }
+  exit(0);
+}
 
 TBbool is_to_tool_comm(char *s)
 {
@@ -143,30 +157,31 @@ void print_escaped_char(char c)
   
   sprintf(Buf, "\\%o", ((unsigned int)c) & 0xFF);
   for(i=0; i<strlen(Buf); i++)
-    fputc(Buf[i], to_wish);
+    PUTC(Buf[i], to_wish);
 }
 
 void printn_wish(const char *s, int n)
 {
   static TBbool instring = TBfalse;
   static TBbool prev_escaped = TBfalse;
+  static int escaped = TBfalse;
 
   while(n){
     if(*s == '"') {
-      putc('\\', to_wish);
-      if(instring)
-	{
+      PUTC('\\', to_wish);
+      if(!escaped) {
+        if(instring) {
 	  instring = TBfalse;
 	  prev_escaped = TBfalse;
-	}
-      else
-	instring = TBtrue;
+	} else
+	  instring = TBtrue;
+      }
     }
-
+    escaped = TBfalse;
     if(instring)
       {
 	if(*s == '\\' || *s == '[' || *s == ']')
-	  fputc('\\', to_wish);
+	  PUTC('\\', to_wish);
         prev_escaped = TBfalse;
       }
 
@@ -175,8 +190,14 @@ void printn_wish(const char *s, int n)
         /* We don't want an octal digit after an escaped number! */
 	if(prev_escaped && *s >= '0' && *s <= '7')
 	  print_escaped_char(*s++);
-	else
-	  fputc(*s++, to_wish);
+	else {
+          if(*s == '\\' && !instring) {
+	    escaped = TBtrue;
+            PUTC('\\', to_wish);
+          } 
+	  PUTC(*s, to_wish);
+          s++;
+        }
 	prev_escaped = TBfalse;
       }
     else
@@ -264,10 +285,10 @@ void pr_term_wish(term *t)
 
 void pr_string_wish(char *s, int len)
 {
-  fputc('\"', to_wish);
+  PUTC('"', to_wish);
 /*  printn_wish("\"", 1);*/
   printn_wish(s, len);
-  fputc('\"', to_wish);
+  PUTC('"', to_wish);
 /*  printn_wish("\"", 1);*/
 }
 
@@ -320,13 +341,13 @@ print_escaped(term *t)
   int c;
   TBbool instring = TBfalse;
 
-  fputc('{', to_wish);
+  PUTC('{', to_wish);
   while(*s){
     c = *s++;
     switch(c){
     case '{': case '}':
       if(!instring)
-	fputc('\\', to_wish);
+	PUTC('\\', to_wish);
       break;
     case '"':      
       if(instring)
@@ -335,16 +356,18 @@ print_escaped(term *t)
 	instring = TBtrue;
       break;
     case '\\':
-      fputc('\\', to_wish);
-      if(*s)
-	fputc(*s++, to_wish);
+      PUTC('\\', to_wish);
+      if(*s) {
+	PUTC(*s, to_wish);
+        s++;
+      }
       continue;
     default:;
     }
-    fputc(c, to_wish);
+    PUTC(c, to_wish);
   }
-  fputc('}', to_wish);
-  fputc(' ', to_wish);
+  PUTC('}', to_wish);
+  PUTC(' ', to_wish);
 }
 
 
@@ -476,6 +499,8 @@ term *handle_input_from_toolbus(term *e)
       return NULL;
     } else if(TBmatch(e, "rec-terminate(%t)", &farg)){
       TBprintf(to_wish, "if [catch {rec-terminate {%t}} msg] { TBerror $msg };exit\n", farg);
+      sleep(1);
+      kill(-pgid, SIGKILL);   /* the wish child */ 
       exit(0);
     }
     TBmsg("Ignored: %t\n", e);
@@ -494,7 +519,8 @@ term *handle_input_from_wish(term *e)
     return NULL;
   } else if(TBmatch(e,"snd-disconnect")){
     TBsend(e);
-    kill(0, SIGKILL);   /* the wish child */
+    /* <PO>: pid bug fixed! (thanks to Merijn de Jonge) */
+    kill(-pgid, SIGKILL);   /* the wish child */
     sleep(1);  /* make sure any incoming data will be consumed */
     exit(0);
   }
@@ -503,9 +529,9 @@ term *handle_input_from_wish(term *e)
 
 void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
 {
+  int pid;
   int ui2wish[2];
   int wish2ui[2];
-  int pid;
   int old_stdin, old_stdout, from_wish;
   int n_script_args;
   char **p;
@@ -529,6 +555,7 @@ void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
     if(pid < 0){
       TBmsg("Can't fork\n"); exit(1);
     }
+    pgid = pid;
     close(0); close(1);
     dup(old_stdin);
     dup(old_stdout);
@@ -547,6 +574,10 @@ void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
     TBaddTermPort(from_wish, handler);
   } else {
     /* wish: the child */
+    if(setpgid(0,0) == -1) {
+      TBmsg("setpgid failed");
+      exit(1);
+    }
     if(execlp(wish_exec, name, NULL) < 0){
       TBmsg("Can't execute wish\n");
       exit(1);
@@ -593,6 +624,11 @@ void main(int argc, char *argv[])
   }
   TBinit(name, argc, argv, handle_input_from_toolbus, dummy_check_in_sign);
 
+  signal(SIGINT,  signal_handler);
+  signal(SIGTERM, signal_handler);
+  signal(SIGHUP,  signal_handler);
+  signal(SIGQUIT, signal_handler);
+ 
   if(!script)
     err_fatal("Missing -script argument");
 

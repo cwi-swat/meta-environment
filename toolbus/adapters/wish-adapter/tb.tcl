@@ -28,7 +28,7 @@ proc TCLstring {txt} {
 }
 
 proc TBerror {txt} {
-  sendTB wish-error([TBstring $txt])
+  puts stderr wish-error([TBstring $txt])
 }
 
 # The following function depends on

@@ -70,6 +70,8 @@ char *name = "wish-adapter";
 char *script = NULL;
 char *wish_exec = "wish";
 
+#define PUTC(c,s) putc(c,s);
+
 /* Signal handler */
 static void signal_handler( int sig )
 \{
@@ -155,7 +157,7 @@ void print_escaped_char(char c)
   
   sprintf(Buf, "\\\\%o", ((unsigned int)c) & 0xFF);
   for(i=0; i<strlen(Buf); i++)
-    fputc(Buf[i], to_wish);
+    PUTC(Buf[i], to_wish);
 \}
 
 void printn_wish(const char *s, int n)
@@ -166,7 +168,7 @@ void printn_wish(const char *s, int n)
 
   while(n)\{
     if(*s == '"') \{
-      putc('\\\\', to_wish);
+      PUTC('\\\\', to_wish);
       if(!escaped) \{
         if(instring) \{
           instring = TBfalse;
@@ -179,7 +181,7 @@ void printn_wish(const char *s, int n)
     if(instring)
       \{
         if(*s == '\\\\' || *s == '[' || *s == ']')
-          fputc('\\\\', to_wish);
+          PUTC('\\\\', to_wish);
         prev_escaped = TBfalse;
       \}
 
@@ -191,9 +193,10 @@ void printn_wish(const char *s, int n)
         else \{
           if(*s == '\\\\' && !instring) \{
             escaped = TBtrue;
-            fputc('\\\\', to_wish);
+            PUTC('\\\\', to_wish);
           \} 
-          fputc(*s++, to_wish);
+          PUTC(*s, to_wish);
+          s++;
         \}
         prev_escaped = TBfalse;
       \}
@@ -282,10 +285,10 @@ void pr_term_wish(term *t)
 
 void pr_string_wish(char *s, int len)
 \{
-  fputc('\{', to_wish);
+  PUTC('"', to_wish);
 /*  printn_wish("\\"", 1);*/
   printn_wish(s, len);
-  fputc('\}', to_wish);
+  PUTC('"', to_wish);
 /*  printn_wish("\\"", 1);*/
 \}
 
@@ -338,13 +341,13 @@ print_escaped(term *t)
   int c;
   TBbool instring = TBfalse;
 
-  fputc('\{', to_wish);
+  PUTC('\{', to_wish);
   while(*s)\{
     c = *s++;
     switch(c)\{
     case '\{': case '\}':
       if(!instring)
-        fputc('\\\\', to_wish);
+        PUTC('\\\\', to_wish);
       break;
     case '"':      
       if(instring)
@@ -353,16 +356,18 @@ print_escaped(term *t)
         instring = TBtrue;
       break;
     case '\\\\':
-      fputc('\\\\', to_wish);
-      if(*s)
-        fputc(*s++, to_wish);
+      PUTC('\\\\', to_wish);
+      if(*s) \{
+        PUTC(*s, to_wish);
+        s++;
+      \}
       continue;
     default:;
     \}
-    fputc(c, to_wish);
+    PUTC(c, to_wish);
   \}
-  fputc('\}', to_wish);
-  fputc(' ', to_wish);
+  PUTC('\}', to_wish);
+  PUTC(' ', to_wish);
 \}
 
 
@@ -551,7 +556,6 @@ void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
       TBmsg("Can't fork\\n"); exit(1);
     \}
     pgid = pid;
-    setpgid(pid, pgid);
     close(0); close(1);
     dup(old_stdin);
     dup(old_stdout);
@@ -570,6 +574,10 @@ void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
     TBaddTermPort(from_wish, handler);
   \} else \{
     /* wish: the child */
+    if(setpgid(0,0) == -1) \{
+      TBmsg("setpgid failed");
+      exit(1);
+    \}
     if(execlp(wish_exec, name, NULL) < 0)\{
       TBmsg("Can't execute wish\\n");
       exit(1);
