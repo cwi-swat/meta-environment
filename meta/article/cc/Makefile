@@ -32,7 +32,7 @@ test:	all
 	@true
 
 %.eps: %.fig
-	fig2dev -Lps $< $@
+	fig2dev -Leps $< $@
 
 format.ps: format.dvi
 	dvips -o format.ps format.dvi
