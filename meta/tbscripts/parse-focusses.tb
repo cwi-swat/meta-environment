@@ -39,7 +39,8 @@ in
         UpdateTextInModuleDb(Type, ModuleName, Text).
         ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
         PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
-        ProcessTree(ModuleId, EditorId, Focus, Tree)
+        ProcessTree(ModuleId, EditorId, Focus, Tree) .
+	Tree := no-tree
       +
         /* If the editor suddenly dissappears were done */
         rec-note(delete-editor(EditorId)) .

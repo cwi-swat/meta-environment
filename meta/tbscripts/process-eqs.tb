@@ -8,6 +8,7 @@ in
     snd-msg(postprocess-semantics-hook(Tree)) .
     rec-msg(postprocess-semantics-hook-result(NewTree?)) .
     snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
+    NewTree := no-tree .
     rec-msg(eqs-updated)
   else
     tau
@@ -40,7 +41,8 @@ in
       ModuleId := quote(eqs(Module)) .
       ParseString(ModuleId, Nonterminal, EqsText, ParseTree?, Errors?) .
       ProcessParseError(Module, Errors, "asf") .
-      ProcessEqsTree(Module, ParseTree)
+      ProcessEqsTree(Module, ParseTree) .
+      ParseTree := no-tree
     +
       rec-msg(no-eqs-text(Module)) 
     )
@@ -99,8 +101,10 @@ in
         (
            rec-msg(equations(Equations?)) .
 	   snd-msg(sr-rename-module(Imports, Module, Equations)) .
+	   Equations := no-tree .
 	   rec-msg(sr-renamed-module(RenamedEquations?)) .
-	   NewEquations := join(NewEquations, RenamedEquations)
+	   NewEquations := join(NewEquations, RenamedEquations) .
+	   RenamedEquations := []
         +
 	   rec-msg(no-equations)
         )
@@ -108,8 +112,10 @@ in
       *
       if equal(ModuleNames,[]) then  
         snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
+	NewEquations := [] .
 	rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-	snd-msg(all-equations(AllEquations))
+	snd-msg(all-equations(AllEquations)) .
+	AllEquations := no-tree
       fi 
     +
       rec-msg(equations-incomplete) .

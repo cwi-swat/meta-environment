@@ -74,6 +74,7 @@ in
       MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
       snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      SyntaxTree := no-tree .
       rec-msg(sm-imported-module-names(Modules?)) 
     else 
       ModuleId := Name .
@@ -81,6 +82,7 @@ in
     fi .
     snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
     snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
+    SyntaxText := "" .
     snd-msg(ts-filter-keys("active-modules", Modules)) .
     rec-msg(ts-keys(Modules?)) .
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
@@ -96,6 +98,8 @@ in
       snd-msg(ts-put-term-value("sdf-tree", Name, SyntaxTree)) .
       snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
+      SyntaxTree := no-tree .
+      SyntaxText := "" .
       rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
@@ -159,10 +163,12 @@ in
   +
     rec-msg(add-parse-table-to-db(eqs(Name?), Table?)) .
     snd-msg(ts-put-term-value("asf-parse-table", Name, Table)) .
+    Table := no-table .
     snd-msg(parse-table-added)
   +
     rec-msg(add-parse-table-to-db(trm(Name?), Table?)) .
     snd-msg(ts-put-term-value("term-parse-table", Name, Table)) .
+    Table := no-table .
     snd-msg(parse-table-added)
   +
     rec-msg(get-path-from-db(Name?)).
@@ -179,7 +185,8 @@ in
     ).
     (
       rec-msg(ts-value(Table?)) .
-      snd-msg(table(Table))
+      snd-msg(table(Table)) .
+      Table := no-table
     +
       rec-msg(ts-no-value) .
       snd-msg(no-table)
@@ -230,7 +237,8 @@ in
     snd-msg(ts-get-term-value("sdf-tree", Name)) .
     (
       rec-msg(ts-value(Syntax?)) .
-      snd-msg(syntax(Syntax))
+      snd-msg(syntax(Syntax)) .
+      Syntax := no-tree
     +
       rec-msg(ts-no-value) .
       snd-msg(unavailable)
@@ -240,7 +248,8 @@ in
     snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
       rec-msg(ts-value(EqsTree?)) .
-      snd-msg(EqsTree)
+      snd-msg(EqsTree) .
+      EqsTree := no-tree
     +
       rec-msg(ts-no-value) .
       snd-msg(unavailable)
@@ -250,7 +259,8 @@ in
     snd-msg(ts-get-term-value("asf-tree", Name)) .
     (
       rec-msg(ts-value(EqsTree?)) .
-      snd-msg(equations(EqsTree))  
+      snd-msg(equations(EqsTree)) .
+      EqsTree := no-tree
     +
       rec-msg(ts-no-value) .
       snd-msg(no-equations)
@@ -340,6 +350,7 @@ in
     snd-msg(ts-get-term-value("sdf-tree", Name)) .
     rec-msg(ts-value(Syntax?)) .
     snd-msg(sm-all-imports(Syntax)) .
+    Syntax := no-tree .
     rec-msg(sm-all-imports(Imported?))
 endlet
 
@@ -356,8 +367,10 @@ in
       snd-msg(ts-get-term-value("sdf-tree", Module)) .
       rec-msg(ts-value(Syntax?)) .
       snd-msg(sm-remove-import-from-module(Syntax, Name)) .
+      Syntax := no-tree .
       rec-msg(sm-import-removed-from-module(Syntax?)) .
-      snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) 
+      snd-msg(ts-put-term-value("sdf-tree", Module, Syntax)) .
+      Syntax := no-tree
     fi
     *
     if equal(Modules,[]) then

@@ -79,6 +79,7 @@ in
     snd-msg(add-posinfo(FileName, Tree)) .
     rec-msg(tree-with-pos-info(NewTree?)) .
     snd-msg(replace-focus(EditorId, Focus, NewTree)) .
+    NewTree := no-tree .
     snd-msg(parse-ok(ModuleId))
   else
     tau
