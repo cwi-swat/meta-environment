@@ -1,0 +1,15 @@
+module Optimize-MuASF
+
+imports MuASF-Equations-Ops
+
+exports
+
+context-free syntax
+  optimize-muasf(Module) -> Module
+
+hiddens
+
+context-free syntax
+
+  optimize-recursive-list-functions(Module) -> Module
+

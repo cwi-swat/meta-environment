@@ -16,11 +16,10 @@
 %%    along with this program; if not, write to the Free Software
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
-equations
+module  MuASF2MuASF
 
-  [m2m-1'1] make-matching-conds(Module1) = Module2,
-            make-left-linear(Module2) = Module3,
-            remove-list-matching(Module3) = Module4,
-            normalize-conditions(Module4) = Module5
-            =======================================
-            muasf2muasf(Module1) =  Module5
+imports Remove-Lists Make-Left-Linear Make-Assign-Conds Optimize-MuASF
+
+exports
+  context-free syntax
+    muasf2muasf(Module) -> Module
