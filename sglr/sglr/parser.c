@@ -459,10 +459,8 @@ void SG_Actor(stack *st)
   actions as;
   action  a;
 
-/*  This never happens
   if(SG_Rejected(st))
     return;
- */
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 /*
@@ -548,80 +546,13 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   st_link *nl;
   stack *st1;
 
-/*  This never happens
-  if(SG_Rejected(stpt))
-    return;
- */
-
   t = SG_Apply(table, prodl, kids, reject);
 
   if(SG_DEBUG) ATfprintf(SGlog(), "Reducing %t\n", SG_TermYield(t));
 
-  if((st1 = SG_FindStack(s, active_stacks)) != NULL) {
-    if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
-      /* ambiguity */
-      if(SG_DEBUG)
-        ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d%s\n",
-                            SG_ST_STATE(st0), SG_ST_STATE(st1),
-                            reject?" {reject}":"");
-      if (reject) {     /*  J$: Don't bother to represingg reject prods  */
-        if (SG_DEBUG)
-          ATfprintf(SGlog(), "Rejecting %t\n", t);
-        SG_PropagateReject(st1);
-      } else {
-/*
-  The existing stack may already be rejected; in this case, no amb-node
-  should be created (and the existing stack may have to be "unrejected"?).
-  However, if this stack was directly created by a reject
-  production, it has to remain rejected.
- */
-        if(SG_Rejected(st1)) {  /*  J$:  Never seen this happen  */
-          ATfprintf(stderr, "Warning: zombie stack may require reanimation!\n");
-/* DISABLED for now -- experimental!
-          SG_PropagateUnreject(st1);
- */
-        } else {
-          SG_Amb(SG_LK_TREE(nl), t);
-        }
-#ifdef DEBUG
-        SG_ShowStackOffspring(st1);
-#endif
-      }
-    } else {
-      /* add new direct link from |st1| to |st0| and
-         recheck all reductions for |st1|. */
-      stacks *sts = NULL;
-      stack  *st2 = NULL;
-
-      /* First check if one of the children of |st1| was not rejected already */
-      nl = SG_AddLink(st1, st0, t);
-      if (reject) {    /*  J$:  Never seen this happen  */
-        ATfprintf(stderr, "Warning: link state %d ==> state %d rejected in "
-                          "presence of other links\n",
-                  SG_ST_STATE(st1), SG_ST_STATE(st0));
-#if 0
-        SG_MarkLinkRejected(nl);
-#endif
-      }
-      sts = active_stacks;
-        while(sts != NULL) {
-        actions as;
-        action a;
-
-        st2 = head(sts);
-        sts = tail(sts);
-        if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor, ATfalse)
-           && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
-          as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
-          for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
-            a = ATgetFirst(as);
-            if(SG_ActionKind(a) == REDUCE)
-              SG_DoLimitedReductions(st2, a, nl);
-          }
-        }
-      }
-    }
-  } else {  /* new stack */
+  /*  A stack with state s already exists?  */
+  if((st1 = SG_FindStack(s, active_stacks)) == NULL) {
+    /*  No existing stack for state s: new stack  */
     st1 = SG_NewStack(s, stpt);
     nl  = SG_AddLink(st1, st0, t);
     SG_AddStackHist(stpt, st1);
@@ -629,13 +560,83 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     if (reject) {
       if(SG_DEBUG)  ATfprintf(SGlog(), "Rejected [new]\n");
-#if 0
-      SG_MarkLinkRejected(nl);
-#endif
       SG_MarkStackRejected(st1);
     }
+    return;
   }
-} /* reducer */
+
+  /*  A stack with state s already exists.  */
+  /*  Ambiguity?  */
+  if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
+    if(SG_DEBUG)
+      ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d%s\n",
+                          SG_ST_STATE(st0), SG_ST_STATE(st1),
+                          reject?" {reject}":"");
+    /*  Reject?  */
+    if (reject) {     /*  J$: Don't bother represing rejects  */
+      if (SG_DEBUG)
+        ATfprintf(SGlog(), "Rejecting %t\n", t);
+      SG_PropagateReject(st1);
+      return;
+    }
+    /*  No reject.  */
+    /*
+      The existing stack may already be rejected; in this case, no
+      amb-node should be created (and the existing stack may have to
+      be "unrejected"?).  However, if this stack was directly created
+      by a reject production, it has to remain rejected.
+     */
+    /*  No reject, but in an ambiguity cluster with a rejected stack?  */
+    if(SG_Rejected(st1)) {
+/*
+      ATfprintf(stderr, "Warning: zombie stack (%d)?\n", SG_ST_STATE(st0));
+ */
+      SG_MarkStackRejected(st0);
+      return;
+    }
+    /* No reject, and not sharing ambiguity with a reject  */
+    SG_Amb(SG_LK_TREE(nl), t);
+#ifdef DEBUG
+    SG_ShowStackOffspring(st1);
+#endif
+    return;
+  } else {
+    /*  No ambiguity.  */
+    /*  Add new direct link from |st1| to |st0| and
+        recheck all reductions for |st1|. */
+    stacks *sts = active_stacks;
+    stack  *st2 = NULL;
+
+    /* First check if one of the children of |st1| was not rejected already */
+    nl = SG_AddLink(st1, st0, t);
+    /*  Reject?  */
+    if (reject) {
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "Warning: stack %d rejected in presence of "
+                           "other links (linked to stack %d)\n",
+                  SG_ST_STATE(st0), SG_ST_STATE(st1));
+      SG_MarkStackRejected(st0);
+    }
+    while(sts != NULL) {
+      actions as;
+      action a;
+
+      st2 = head(sts);
+      sts = tail(sts);
+      if(!SG_Rejected(st2) && !SG_InStacks(st2, for_actor, ATfalse)
+         && !SG_InStacks(st2, for_actor_delayed, ATfalse)) {
+        as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
+        for(; as && !ATisEmpty(as); as = ATgetNext(as)) {
+          a = ATgetFirst(as);
+          if(SG_ActionKind(a) == REDUCE)
+            SG_DoLimitedReductions(st2, a, nl);
+        }
+      }
+    }
+    return;
+  }
+  ATfprintf(stderr, "Warning: flow error in Reducer\n");
+}   /*  Reducer  */
 
 /*
   \paragraph{Do Limited Reductions}
