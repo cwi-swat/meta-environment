@@ -90,49 +90,49 @@ in
   fi
 endlet
 
-process Meta-Creator is
+process MetaCreator is
 let
   Pid : int
 in
-  create(ButtonActionExecutor, Pid?) .
-  create(ButtonActionReceiver, Pid?) .
-  create(ClearAll, Pid?) .
-  create(Compile-module, Pid?) .
-  create(ConfigManager, Pid?) .
-  create(DumpEquations, Pid?) .
-  create(DumpParseTable, Pid?) .
-  create(Editors, Pid?) .
-  create(File-creator, Pid?) .
-  create(GetEquations, Pid?) .
-  create(GetParseTable, Pid?) .
-  create(Io, Pid?) .
-  create(LAYOUT-GRAPH, Pid?) .
-  create(META, Pid?) .
-  create(META-START, Pid?) .
-  create(Meta-Interface, Pid?) .
-  create(Module-Utilities, Pid?) .
-  create(ModuleDB, Pid?) .
-  create(Notify-about-changed-modules, Pid?) .
-  create(Open-Sdf2-Language, Pid?) .
-  create(Open-initial-module, Pid?) .
-  create(Open-modules, Pid?) .
-  create(PGen, Pid?) .
-  create(ParseFocusses, Pid?) .
-  create(Parser, Pid?) .
-  create(PrintModule, Pid?) .
-#ifdef QUERY
-  create(Query, Pid?) .
-  create(QueryTool, Pid?) .
-#endif
-  create(RestoreBrackets, Pid?) .
-  create(RestoreTermBrackets, Pid?) .
-  create(Save-modules, Pid?) .
-  create(Set-parsetable, Pid?) .
-  create(Tree2Graph, Pid?) .
   create(Ui, Pid?)
+  . create(ButtonActionExecutor, Pid?)
+  . create(ButtonActionReceiver, Pid?)
+  . create(ClearAll, Pid?)
+  . create(Compile-module, Pid?)
+  . create(ConfigManager, Pid?)
+  . create(DumpEquations, Pid?)
+  . create(DumpParseTable, Pid?)
+  . create(Editors, Pid?)
+  . create(File-creator, Pid?)
+  . create(GetEquations, Pid?)
+  . create(GetParseTable, Pid?)
+  . create(Io, Pid?)
+  . create(LAYOUT-GRAPH, Pid?)
+  . create(META, Pid?)
+  . create(META-START, Pid?)
+  . create(Meta-Interface, Pid?)
+  . create(Module-Utilities, Pid?)
+  . create(ModuleDB, Pid?)
+  . create(Notify-about-changed-modules, Pid?)
+  . create(Open-Sdf2-Language, Pid?)
+  . create(Open-initial-module, Pid?)
+  . create(Open-modules, Pid?)
+  . create(PGen, Pid?)
+  . create(ParseFocusses, Pid?)
+  . create(Parser, Pid?)
+  . create(PrintModule, Pid?)
+  . create(RestoreBrackets, Pid?)
+  . create(RestoreTermBrackets, Pid?)
+  . create(Save-modules, Pid?)
+  . create(Set-parsetable, Pid?)
+  . create(Tree2Graph, Pid?)
+#ifdef QUERY
+  . create(Query, Pid?)
+  . create(QueryTool, Pid?)
+#endif
 #ifdef TIMEOUT
-    . create(AbortMetaEnvironment, Pid?)
+  . create(AbortMetaEnvironment, Pid?)
 #endif
 endlet
 
-toolbus(Meta-Creator)
+toolbus(MetaCreator)
