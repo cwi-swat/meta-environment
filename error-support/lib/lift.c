@@ -1,28 +1,28 @@
 #include "ErrorAPI.h"
 #include "ParsedErrorAPI.h"
 
-/*{{{  static PME_String ME_liftString(const char *str) */
+/*{{{  static PERR_String ERR_liftString(const char *str) */
 
-static PME_String ME_liftString(const char *str)
+static PERR_String ERR_liftString(const char *str)
 {
   ATerm quotedAppl = (ATerm) ATmakeAppl0(ATmakeAFun(str, 0, ATtrue));
-  return PME_makeStringString(ATwriteToString(quotedAppl));
+  return PERR_makeStringString(ATwriteToString(quotedAppl));
 }
 
 /*}}}  */
-/*{{{  static PME_NatCon ME_liftNatCon(int natcon) */
+/*{{{  static PERR_NatCon ERR_liftNatCon(int natcon) */
 
-static PME_NatCon ME_liftNatCon(int natcon)
+static PERR_NatCon ERR_liftNatCon(int natcon)
 {
   ATerm atint = (ATerm) ATmakeInt(natcon);
-  return PME_makeNatConString(ATwriteToString(atint));
+  return PERR_makeNatConString(ATwriteToString(atint));
 }
 
 /*}}}  */
 
-/*{{{  PME_Area ME_liftArea(ME_Area area) */
+/*{{{  PERR_Area ERR_liftArea(ERR_Area area) */
 
-PME_Area ME_liftArea(ME_Area area)
+PERR_Area ERR_liftArea(ERR_Area area)
 {
   int startLine;
   int startColumn;
@@ -30,31 +30,31 @@ PME_Area ME_liftArea(ME_Area area)
   int endColumn;
   int startOffset;
   int endOffset;
-  PME_NatCon pStartLine;
-  PME_NatCon pStartColumn;
-  PME_NatCon pEndLine;
-  PME_NatCon pEndColumn;
-  PME_NatCon pStartOffset;
-  PME_NatCon pEndOffset;
-  PME_OptLayout e;
+  PERR_NatCon pStartLine;
+  PERR_NatCon pStartColumn;
+  PERR_NatCon pEndLine;
+  PERR_NatCon pEndColumn;
+  PERR_NatCon pStartOffset;
+  PERR_NatCon pEndOffset;
+  PERR_OptLayout e;
 
-  if (ME_isAreaArea(area)) {
-    startLine = ME_getAreaStartLine(area);
-    startColumn = ME_getAreaStartColumn(area);
-    endLine = ME_getAreaEndLine(area);
-    endColumn = ME_getAreaEndColumn(area);
-    startOffset = ME_getAreaStartOffset(area);
-    endOffset = ME_getAreaEndOffset(area);
+  if (ERR_isAreaArea(area)) {
+    startLine = ERR_getAreaStartLine(area);
+    startColumn = ERR_getAreaStartColumn(area);
+    endLine = ERR_getAreaEndLine(area);
+    endColumn = ERR_getAreaEndColumn(area);
+    startOffset = ERR_getAreaStartOffset(area);
+    endOffset = ERR_getAreaEndOffset(area);
 
-    pStartLine = ME_liftNatCon(startLine);
-    pStartColumn = ME_liftNatCon(startColumn);
-    pEndLine = ME_liftNatCon(endLine);
-    pEndColumn = ME_liftNatCon(endColumn);
-    pStartOffset = ME_liftNatCon(startOffset);
-    pEndOffset = ME_liftNatCon(endOffset);
-    e = PME_makeOptLayoutAbsent();
+    pStartLine = ERR_liftNatCon(startLine);
+    pStartColumn = ERR_liftNatCon(startColumn);
+    pEndLine = ERR_liftNatCon(endLine);
+    pEndColumn = ERR_liftNatCon(endColumn);
+    pStartOffset = ERR_liftNatCon(startOffset);
+    pEndOffset = ERR_liftNatCon(endOffset);
+    e = PERR_makeOptLayoutAbsent();
 
-    return PME_makeAreaArea(e,e,
+    return PERR_makeAreaArea(e,e,
 			    pStartLine,
 			    e,e,
 			    pStartColumn,
@@ -69,29 +69,29 @@ PME_Area ME_liftArea(ME_Area area)
 			    e);
   }
   else {
-    return PME_makeAreaNoArea();
+    return PERR_makeAreaNoArea();
   }
 }
 
 /*}}}  */
-/*{{{  PME_Location ME_liftLocation(ME_Location location) */
+/*{{{  PERR_Location ERR_liftLocation(ERR_Location location) */
 
-PME_Location ME_liftLocation(ME_Location location)
+PERR_Location ERR_liftLocation(ERR_Location location)
 {
   char *filename;
-  ME_Area area;
-  PME_String pFilename;
-  PME_Area pArea;
-  PME_OptLayout e;
+  ERR_Area area;
+  PERR_String pFilename;
+  PERR_Area pArea;
+  PERR_OptLayout e;
 
-  filename = ME_getLocationFilename(location);
-  area = ME_getLocationArea(location);
+  filename = ERR_getLocationFilename(location);
+  area = ERR_getLocationArea(location);
 
-  pFilename = ME_liftString(filename);
-  pArea = ME_liftArea(area);
-  e = PME_makeOptLayoutAbsent();
+  pFilename = ERR_liftString(filename);
+  pArea = ERR_liftArea(area);
+  e = PERR_makeOptLayoutAbsent();
 
-  return PME_makeLocationLocation(e,e,
+  return PERR_makeLocationLocation(e,e,
 				  pFilename,
 				  e,e,
 				  pArea,
@@ -100,85 +100,85 @@ PME_Location ME_liftLocation(ME_Location location)
 }
 
 /*}}}  */
-/*{{{  PME_Subject ME_liftSubject(ME_Subject subject) */
+/*{{{  PERR_Subject ERR_liftSubject(ERR_Subject subject) */
 
-PME_Subject ME_liftSubject(ME_Subject subject)
+PERR_Subject ERR_liftSubject(ERR_Subject subject)
 {
   char *id;
-  ME_Location location;
-  PME_String pId;
-  PME_Location pLocation;
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
+  ERR_Location location;
+  PERR_String pId;
+  PERR_Location pLocation;
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  id = ME_getSubjectId(subject);
-  pId = ME_liftString(id);
+  id = ERR_getSubjectId(subject);
+  pId = ERR_liftString(id);
 
-  if (ME_hasSubjectLocation(subject)) {
-    location = ME_getSubjectLocation(subject);
-    pLocation = ME_liftLocation(location);
-    return PME_makeSubjectLocatable(e,e,
+  if (ERR_hasSubjectLocation(subject)) {
+    location = ERR_getSubjectLocation(subject);
+    pLocation = ERR_liftLocation(location);
+    return PERR_makeSubjectLocatable(e,e,
 				    pId,
 				    e,e,
 				    pLocation,
 				    e);
   }
   else {
-    return PME_makeSubjectUnlocatable(e,e,
+    return PERR_makeSubjectUnlocatable(e,e,
 				      pId,
 				      e);
   }
 }
 
 /*}}}  */
-/*{{{  PME_SubjectList ME_liftSubjects(ME_SubjectList subjects) */
+/*{{{  PERR_SubjectList ERR_liftSubjects(ERR_SubjectList subjects) */
 
-PME_SubjectList ME_liftSubjects(ME_SubjectList subjects)
+PERR_SubjectList ERR_liftSubjects(ERR_SubjectList subjects)
 {
-  PME_SubjectList pSubjects = PME_makeSubjectListEmpty();
-  PME_OptLayout e = PME_makeOptLayoutAbsent();
+  PERR_SubjectList pSubjects = PERR_makeSubjectListEmpty();
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  for ( ; !ME_isSubjectListEmpty(subjects); 
-	subjects = ME_getSubjectListTail(subjects)) {
-    ME_Subject subject = ME_getSubjectListHead(subjects);
-    PME_Subject pSubject = ME_liftSubject(subject);
-    pSubjects = PME_makeSubjectListMany(pSubject,e,e,pSubjects);
+  for ( ; !ERR_isSubjectListEmpty(subjects); 
+	subjects = ERR_getSubjectListTail(subjects)) {
+    ERR_Subject subject = ERR_getSubjectListHead(subjects);
+    PERR_Subject pSubject = ERR_liftSubject(subject);
+    pSubjects = PERR_makeSubjectListMany(pSubject,e,e,pSubjects);
   }
 
   return pSubjects;
 }
 
 /*}}}  */
-/*{{{  PME_Feedback ME_liftFeedback(ME_Feedback feedback) */
+/*{{{  PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback) */
 
-PME_Feedback ME_liftFeedback(ME_Feedback feedback)
+PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
 {
   char *id;
   char *producerId;
   char *producerType;
   char *description;
-  ME_SubjectList subjects;
-  PME_String pId;
-  PME_String pProducerId;
-  PME_String pProducerType;
-  PME_String pDescription;
-  PME_SubjectList pSubjects;
-  PME_OptLayout e;
+  ERR_SubjectList subjects;
+  PERR_String pId;
+  PERR_String pProducerId;
+  PERR_String pProducerType;
+  PERR_String pDescription;
+  PERR_SubjectList pSubjects;
+  PERR_OptLayout e;
 
-  id = ME_getFeedbackId(feedback);
-  producerId = ME_getFeedbackProducerId(feedback);
-  producerType = ME_getFeedbackProducerType(feedback);
-  description = ME_getFeedbackDescription(feedback);
-  subjects = ME_getFeedbackList(feedback);
+  id = ERR_getFeedbackId(feedback);
+  producerId = ERR_getFeedbackProducerId(feedback);
+  producerType = ERR_getFeedbackProducerType(feedback);
+  description = ERR_getFeedbackDescription(feedback);
+  subjects = ERR_getFeedbackList(feedback);
 
-  pId = ME_liftString(id);
-  pProducerId = ME_liftString(producerId);
-  pProducerType = ME_liftString(producerType);
-  pDescription = ME_liftString(description);
-  pSubjects = ME_liftSubjects(subjects);
-  e = PME_makeOptLayoutAbsent();
+  pId = ERR_liftString(id);
+  pProducerId = ERR_liftString(producerId);
+  pProducerType = ERR_liftString(producerType);
+  pDescription = ERR_liftString(description);
+  pSubjects = ERR_liftSubjects(subjects);
+  e = PERR_makeOptLayoutAbsent();
 
-  if (ME_isFeedbackInfo(feedback)) {
-    return PME_makeFeedbackInfo(e,e,
+  if (ERR_isFeedbackInfo(feedback)) {
+    return PERR_makeFeedbackInfo(e,e,
 				pId, 
 				e,e,
 				pProducerId,
@@ -190,8 +190,8 @@ PME_Feedback ME_liftFeedback(ME_Feedback feedback)
 				pSubjects,
 				e,e);
   }
-  else if (ME_isFeedbackWarning(feedback)) {
-    return PME_makeFeedbackWarning(e,e,
+  else if (ERR_isFeedbackWarning(feedback)) {
+    return PERR_makeFeedbackWarning(e,e,
 				   pId, 
 				   e,e,
 				   pProducerId,
@@ -203,8 +203,8 @@ PME_Feedback ME_liftFeedback(ME_Feedback feedback)
 				   pSubjects,
 				   e,e);
   }
-  else if (ME_isFeedbackError(feedback)) {
-    return PME_makeFeedbackError(e,e,
+  else if (ERR_isFeedbackError(feedback)) {
+    return PERR_makeFeedbackError(e,e,
 				 pId, 
 				 e,e,
 				 pProducerId,
@@ -216,8 +216,8 @@ PME_Feedback ME_liftFeedback(ME_Feedback feedback)
 				 pSubjects,
 				 e,e);
   }
-  else if (ME_isFeedbackFatalError(feedback)) {
-    return PME_makeFeedbackFatalError(e,e,
+  else if (ERR_isFeedbackFatalError(feedback)) {
+    return PERR_makeFeedbackFatalError(e,e,
 				      pId, 
 				      e,e,
 				      pProducerId,

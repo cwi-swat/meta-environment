@@ -1,129 +1,129 @@
 #include "ParsedErrorAPI_dict.h"
 
-AFun PME_afun39;
-AFun PME_afun17;
-AFun PME_afun22;
-AFun PME_afun3;
-AFun PME_afun9;
-AFun PME_afun34;
-AFun PME_afun19;
-AFun PME_afun26;
-AFun PME_afun37;
-AFun PME_afun2;
-AFun PME_afun12;
-AFun PME_afun15;
-AFun PME_afun25;
-AFun PME_afun18;
-AFun PME_afun20;
-AFun PME_afun31;
-AFun PME_afun8;
-AFun PME_afun28;
-AFun PME_afun21;
-AFun PME_afun32;
-AFun PME_afun0;
-AFun PME_afun11;
-AFun PME_afun5;
-AFun PME_afun27;
-AFun PME_afun33;
-AFun PME_afun38;
-AFun PME_afun16;
-AFun PME_afun10;
-AFun PME_afun13;
-AFun PME_afun4;
-AFun PME_afun14;
-AFun PME_afun23;
-AFun PME_afun30;
-AFun PME_afun7;
-AFun PME_afun36;
-AFun PME_afun24;
-AFun PME_afun35;
-AFun PME_afun29;
-AFun PME_afun1;
-AFun PME_afun6;
+AFun PERR_afun39;
+AFun PERR_afun17;
+AFun PERR_afun22;
+AFun PERR_afun3;
+AFun PERR_afun9;
+AFun PERR_afun34;
+AFun PERR_afun19;
+AFun PERR_afun26;
+AFun PERR_afun37;
+AFun PERR_afun2;
+AFun PERR_afun12;
+AFun PERR_afun15;
+AFun PERR_afun25;
+AFun PERR_afun18;
+AFun PERR_afun20;
+AFun PERR_afun31;
+AFun PERR_afun8;
+AFun PERR_afun28;
+AFun PERR_afun21;
+AFun PERR_afun32;
+AFun PERR_afun0;
+AFun PERR_afun11;
+AFun PERR_afun5;
+AFun PERR_afun27;
+AFun PERR_afun33;
+AFun PERR_afun38;
+AFun PERR_afun16;
+AFun PERR_afun10;
+AFun PERR_afun13;
+AFun PERR_afun4;
+AFun PERR_afun14;
+AFun PERR_afun23;
+AFun PERR_afun30;
+AFun PERR_afun7;
+AFun PERR_afun36;
+AFun PERR_afun24;
+AFun PERR_afun35;
+AFun PERR_afun29;
+AFun PERR_afun1;
+AFun PERR_afun6;
 
-ATerm PME_patternStartFeedback = NULL;
-ATerm PME_patternStartSubject = NULL;
-ATerm PME_patternStartLocation = NULL;
-ATerm PME_patternStartArea = NULL;
-ATerm PME_patternOptLayoutPresent = NULL;
-ATerm PME_patternOptLayoutAbsent = NULL;
-ATerm PME_patternStringString = NULL;
-ATerm PME_patternNatConString = NULL;
-ATerm PME_patternAreaNoArea = NULL;
-ATerm PME_patternAreaArea = NULL;
-ATerm PME_patternLocationLocation = NULL;
-ATerm PME_patternSubjectUnlocatable = NULL;
-ATerm PME_patternSubjectLocatable = NULL;
-ATerm PME_patternSubjectListMany = NULL;
-ATerm PME_patternSubjectListSingle = NULL;
-ATerm PME_patternSubjectListEmpty = NULL;
-ATerm PME_patternFeedbackFatalError = NULL;
-ATerm PME_patternFeedbackError = NULL;
-ATerm PME_patternFeedbackWarning = NULL;
-ATerm PME_patternFeedbackInfo = NULL;
+ATerm PERR_patternStartFeedback = NULL;
+ATerm PERR_patternStartSubject = NULL;
+ATerm PERR_patternStartLocation = NULL;
+ATerm PERR_patternStartArea = NULL;
+ATerm PERR_patternOptLayoutPresent = NULL;
+ATerm PERR_patternOptLayoutAbsent = NULL;
+ATerm PERR_patternStringString = NULL;
+ATerm PERR_patternNatConString = NULL;
+ATerm PERR_patternAreaNoArea = NULL;
+ATerm PERR_patternAreaArea = NULL;
+ATerm PERR_patternLocationLocation = NULL;
+ATerm PERR_patternSubjectUnlocatable = NULL;
+ATerm PERR_patternSubjectLocatable = NULL;
+ATerm PERR_patternSubjectListMany = NULL;
+ATerm PERR_patternSubjectListSingle = NULL;
+ATerm PERR_patternSubjectListEmpty = NULL;
+ATerm PERR_patternFeedbackFatalError = NULL;
+ATerm PERR_patternFeedbackError = NULL;
+ATerm PERR_patternFeedbackWarning = NULL;
+ATerm PERR_patternFeedbackInfo = NULL;
 
 /*
- * PME_afun39 = "<START>"
- * PME_afun17 = attrs(x)
- * PME_afun22 = "error"
- * PME_afun3 = ")"
- * PME_afun9 = sort(x)
- * PME_afun34 = no-attrs
- * PME_afun19 = cons(x)
- * PME_afun26 = "locatable"
- * PME_afun37 = range(x,x)
- * PME_afun2 = lit(x)
- * PME_afun12 = "["
- * PME_afun15 = "info"
- * PME_afun25 = "subject"
- * PME_afun18 = term(x)
- * PME_afun20 = list(x)
- * PME_afun31 = "area"
- * PME_afun8 = iter-star-sep(x,x)
- * PME_afun28 = "Area"
- * PME_afun21 = "warning"
- * PME_afun32 = "no-area"
- * PME_afun0 = appl(x,x)
- * PME_afun11 = ","
- * PME_afun5 = opt(x)
- * PME_afun27 = "unlocatable"
- * PME_afun33 = lex(x)
- * PME_afun38 = parsetree(x,x)
- * PME_afun16 = "Feedback"
- * PME_afun10 = "Subject"
- * PME_afun13 = "String"
- * PME_afun4 = cf(x)
- * PME_afun14 = "("
- * PME_afun23 = "fatal-error"
- * PME_afun30 = "NatCon"
- * PME_afun7 = "]"
- * PME_afun36 = char-class(x)
- * PME_afun24 = "Location"
- * PME_afun35 = iter-star(x)
- * PME_afun29 = "location"
- * PME_afun1 = prod(x,x,x)
- * PME_afun6 = layout
+ * PERR_afun39 = "<START>"
+ * PERR_afun17 = attrs(x)
+ * PERR_afun22 = "error"
+ * PERR_afun3 = ")"
+ * PERR_afun9 = sort(x)
+ * PERR_afun34 = no-attrs
+ * PERR_afun19 = cons(x)
+ * PERR_afun26 = "locatable"
+ * PERR_afun37 = range(x,x)
+ * PERR_afun2 = lit(x)
+ * PERR_afun12 = "["
+ * PERR_afun15 = "info"
+ * PERR_afun25 = "subject"
+ * PERR_afun18 = term(x)
+ * PERR_afun20 = list(x)
+ * PERR_afun31 = "area"
+ * PERR_afun8 = iter-star-sep(x,x)
+ * PERR_afun28 = "Area"
+ * PERR_afun21 = "warning"
+ * PERR_afun32 = "no-area"
+ * PERR_afun0 = appl(x,x)
+ * PERR_afun11 = ","
+ * PERR_afun5 = opt(x)
+ * PERR_afun27 = "unlocatable"
+ * PERR_afun33 = lex(x)
+ * PERR_afun38 = parsetree(x,x)
+ * PERR_afun16 = "Feedback"
+ * PERR_afun10 = "Subject"
+ * PERR_afun13 = "String"
+ * PERR_afun4 = cf(x)
+ * PERR_afun14 = "("
+ * PERR_afun23 = "fatal-error"
+ * PERR_afun30 = "NatCon"
+ * PERR_afun7 = "]"
+ * PERR_afun36 = char-class(x)
+ * PERR_afun24 = "Location"
+ * PERR_afun35 = iter-star(x)
+ * PERR_afun29 = "location"
+ * PERR_afun1 = prod(x,x,x)
+ * PERR_afun6 = layout
  *
- * PME_patternStartFeedback = parsetree(appl(prod([cf(opt(layout)),cf(sort("Feedback")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
- * PME_patternStartSubject = parsetree(appl(prod([cf(opt(layout)),cf(sort("Subject")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
- * PME_patternStartLocation = parsetree(appl(prod([cf(opt(layout)),cf(sort("Location")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
- * PME_patternStartArea = parsetree(appl(prod([cf(opt(layout)),cf(sort("Area")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
- * PME_patternOptLayoutPresent = appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[<list>])
- * PME_patternOptLayoutAbsent = appl(prod([],cf(opt(layout)),no-attrs),[])
- * PME_patternStringString = appl(prod([lex(sort("String"))],cf(sort("String")),no-attrs),[appl(list(iter-star(char-class([range(0,255)]))),[<list>])])
- * PME_patternNatConString = appl(prod([lex(sort("NatCon"))],cf(sort("NatCon")),no-attrs),[appl(list(iter-star(char-class([range(0,255)]))),[<list>])])
- * PME_patternAreaNoArea = appl(prod([lit("no-area")],cf(sort("Area")),attrs([term(cons("no-area"))])),[lit("no-area")])
- * PME_patternAreaArea = appl(prod([lit("area"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(")")],cf(sort("Area")),attrs([term(cons("area"))])),[lit("area"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
- * PME_patternLocationLocation = appl(prod([lit("location"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("Area")),cf(opt(layout)),lit(")")],cf(sort("Location")),attrs([term(cons("location"))])),[lit("location"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
- * PME_patternSubjectUnlocatable = appl(prod([lit("subject"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(")")],cf(sort("Subject")),attrs([term(cons("unlocatable"))])),[lit("subject"),<term>,lit("("),<term>,<term>,<term>,lit(")")])
- * PME_patternSubjectLocatable = appl(prod([lit("subject"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("Location")),cf(opt(layout)),lit(")")],cf(sort("Subject")),attrs([term(cons("locatable"))])),[lit("subject"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
- * PME_patternSubjectListMany = [<term>,<term>,lit(","),<term>,<list>]
- * PME_patternSubjectListSingle = [<term>]
- * PME_patternSubjectListEmpty = []
- * PME_patternFeedbackFatalError = appl(prod([lit("fatal-error"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("fatal-error"))])),[lit("fatal-error"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
- * PME_patternFeedbackError = appl(prod([lit("error"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("error"))])),[lit("error"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
- * PME_patternFeedbackWarning = appl(prod([lit("warning"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("warning"))])),[lit("warning"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
- * PME_patternFeedbackInfo = appl(prod([lit("info"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("info"))])),[lit("info"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
+ * PERR_patternStartFeedback = parsetree(appl(prod([cf(opt(layout)),cf(sort("Feedback")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
+ * PERR_patternStartSubject = parsetree(appl(prod([cf(opt(layout)),cf(sort("Subject")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
+ * PERR_patternStartLocation = parsetree(appl(prod([cf(opt(layout)),cf(sort("Location")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
+ * PERR_patternStartArea = parsetree(appl(prod([cf(opt(layout)),cf(sort("Area")),cf(opt(layout))],sort("<START>"),no-attrs),[<term>,<term>,<term>]),<int>)
+ * PERR_patternOptLayoutPresent = appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[<list>])
+ * PERR_patternOptLayoutAbsent = appl(prod([],cf(opt(layout)),no-attrs),[])
+ * PERR_patternStringString = appl(prod([lex(sort("String"))],cf(sort("String")),no-attrs),[appl(list(iter-star(char-class([range(0,255)]))),[<list>])])
+ * PERR_patternNatConString = appl(prod([lex(sort("NatCon"))],cf(sort("NatCon")),no-attrs),[appl(list(iter-star(char-class([range(0,255)]))),[<list>])])
+ * PERR_patternAreaNoArea = appl(prod([lit("no-area")],cf(sort("Area")),attrs([term(cons("no-area"))])),[lit("no-area")])
+ * PERR_patternAreaArea = appl(prod([lit("area"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("NatCon")),cf(opt(layout)),lit(")")],cf(sort("Area")),attrs([term(cons("area"))])),[lit("area"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
+ * PERR_patternLocationLocation = appl(prod([lit("location"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("Area")),cf(opt(layout)),lit(")")],cf(sort("Location")),attrs([term(cons("location"))])),[lit("location"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
+ * PERR_patternSubjectUnlocatable = appl(prod([lit("subject"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(")")],cf(sort("Subject")),attrs([term(cons("unlocatable"))])),[lit("subject"),<term>,lit("("),<term>,<term>,<term>,lit(")")])
+ * PERR_patternSubjectLocatable = appl(prod([lit("subject"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("Location")),cf(opt(layout)),lit(")")],cf(sort("Subject")),attrs([term(cons("locatable"))])),[lit("subject"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(")")])
+ * PERR_patternSubjectListMany = [<term>,<term>,lit(","),<term>,<list>]
+ * PERR_patternSubjectListSingle = [<term>]
+ * PERR_patternSubjectListEmpty = []
+ * PERR_patternFeedbackFatalError = appl(prod([lit("fatal-error"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("fatal-error"))])),[lit("fatal-error"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
+ * PERR_patternFeedbackError = appl(prod([lit("error"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("error"))])),[lit("error"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
+ * PERR_patternFeedbackWarning = appl(prod([lit("warning"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("warning"))])),[lit("warning"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
+ * PERR_patternFeedbackInfo = appl(prod([lit("info"),cf(opt(layout)),lit("("),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),cf(sort("String")),cf(opt(layout)),lit(","),cf(opt(layout)),lit("["),cf(opt(layout)),cf(iter-star-sep(sort("Subject"),lit(","))),cf(opt(layout)),lit("]"),cf(opt(layout)),lit(")")],cf(sort("Feedback")),attrs([term(cons("info"))])),[lit("info"),<term>,lit("("),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,<term>,<term>,lit(","),<term>,lit("["),<term>,appl(list(cf(iter-star-sep(sort("Subject"),lit(",")))),<term>),<term>,lit("]"),<term>,lit(")")])
  *
  */
 
@@ -225,127 +225,127 @@ void init_ParsedErrorAPI_dict()
 
   afuns = (ATermList)ATelementAt((ATermList)_ParsedErrorAPI_dict, 0);
 
-  PME_afun39 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun39 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun17 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun17 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun22 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun22 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun9 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun9 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun34 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun34 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun19 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun19 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun26 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun26 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun37 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun37 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun12 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun12 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun15 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun15 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun25 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun25 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun18 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun18 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun20 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun20 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun31 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun31 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun28 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun28 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun21 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun21 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun32 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun32 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun11 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun11 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun27 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun27 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun33 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun33 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun38 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun38 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun16 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun16 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun10 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun10 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun13 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun13 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun14 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun14 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun23 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun23 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun30 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun30 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun36 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun36 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun24 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun24 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun35 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun35 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun29 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun29 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  PERR_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
   terms = (ATermList)ATelementAt((ATermList)_ParsedErrorAPI_dict, 1);
 
-  PME_patternStartFeedback = ATgetFirst(terms);
+  PERR_patternStartFeedback = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternStartSubject = ATgetFirst(terms);
+  PERR_patternStartSubject = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternStartLocation = ATgetFirst(terms);
+  PERR_patternStartLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternStartArea = ATgetFirst(terms);
+  PERR_patternStartArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternOptLayoutPresent = ATgetFirst(terms);
+  PERR_patternOptLayoutPresent = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternOptLayoutAbsent = ATgetFirst(terms);
+  PERR_patternOptLayoutAbsent = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternStringString = ATgetFirst(terms);
+  PERR_patternStringString = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternNatConString = ATgetFirst(terms);
+  PERR_patternNatConString = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternAreaNoArea = ATgetFirst(terms);
+  PERR_patternAreaNoArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternAreaArea = ATgetFirst(terms);
+  PERR_patternAreaArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternLocationLocation = ATgetFirst(terms);
+  PERR_patternLocationLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectUnlocatable = ATgetFirst(terms);
+  PERR_patternSubjectUnlocatable = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectLocatable = ATgetFirst(terms);
+  PERR_patternSubjectLocatable = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectListMany = ATgetFirst(terms);
+  PERR_patternSubjectListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectListSingle = ATgetFirst(terms);
+  PERR_patternSubjectListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectListEmpty = ATgetFirst(terms);
+  PERR_patternSubjectListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackFatalError = ATgetFirst(terms);
+  PERR_patternFeedbackFatalError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackError = ATgetFirst(terms);
+  PERR_patternFeedbackError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackWarning = ATgetFirst(terms);
+  PERR_patternFeedbackWarning = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackInfo = ATgetFirst(terms);
+  PERR_patternFeedbackInfo = ATgetFirst(terms);
   terms = ATgetNext(terms);
 }

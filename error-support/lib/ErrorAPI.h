@@ -12,11 +12,11 @@
 
 /*{{{  typedefs */
 
-typedef struct _ME_Feedback *ME_Feedback;
-typedef struct _ME_SubjectList *ME_SubjectList;
-typedef struct _ME_Subject *ME_Subject;
-typedef struct _ME_Location *ME_Location;
-typedef struct _ME_Area *ME_Area;
+typedef struct _ERR_Feedback *ERR_Feedback;
+typedef struct _ERR_SubjectList *ERR_SubjectList;
+typedef struct _ERR_Subject *ERR_Subject;
+typedef struct _ERR_Location *ERR_Location;
+typedef struct _ERR_Area *ERR_Area;
 
 /*}}}  */
 
@@ -25,186 +25,192 @@ typedef struct _ME_Area *ME_Area;
 
 /*}}}  */
 
-void ME_initErrorAPIApi(void);
+void ERR_initErrorAPIApi(void);
 
 /*{{{  term conversion functions */
 
-ME_Feedback ME_FeedbackFromTerm(ATerm t);
-ATerm ME_FeedbackToTerm(ME_Feedback arg);
-ME_SubjectList ME_SubjectListFromTerm(ATerm t);
-ATerm ME_SubjectListToTerm(ME_SubjectList arg);
-ME_Subject ME_SubjectFromTerm(ATerm t);
-ATerm ME_SubjectToTerm(ME_Subject arg);
-ME_Location ME_LocationFromTerm(ATerm t);
-ATerm ME_LocationToTerm(ME_Location arg);
-ME_Area ME_AreaFromTerm(ATerm t);
-ATerm ME_AreaToTerm(ME_Area arg);
+ERR_Feedback ERR_FeedbackFromTerm(ATerm t);
+ATerm ERR_FeedbackToTerm(ERR_Feedback arg);
+ERR_SubjectList ERR_SubjectListFromTerm(ATerm t);
+ATerm ERR_SubjectListToTerm(ERR_SubjectList arg);
+ERR_Subject ERR_SubjectFromTerm(ATerm t);
+ATerm ERR_SubjectToTerm(ERR_Subject arg);
+ERR_Location ERR_LocationFromTerm(ATerm t);
+ATerm ERR_LocationToTerm(ERR_Location arg);
+ERR_Area ERR_AreaFromTerm(ATerm t);
+ATerm ERR_AreaToTerm(ERR_Area arg);
 
 /*}}}  */
 /*{{{  list functions */
 
-int ME_getSubjectListLength(ME_SubjectList arg);
-ME_SubjectList ME_reverseSubjectList(ME_SubjectList arg);
-ME_SubjectList ME_appendSubjectList(ME_SubjectList arg, ME_Subject elem);
-ME_SubjectList ME_concatSubjectList(ME_SubjectList arg0, ME_SubjectList arg1);
-ME_SubjectList ME_sliceSubjectList(ME_SubjectList arg, int start, int end);
-ME_Subject ME_getSubjectListSubjectAt(ME_SubjectList arg, int index);
-ME_SubjectList ME_replaceSubjectListSubjectAt(ME_SubjectList arg,
-					      ME_Subject elem, int index);
-ME_SubjectList ME_makeSubjectList2(ME_Subject elem1, ME_Subject elem2);
-ME_SubjectList ME_makeSubjectList3(ME_Subject elem1, ME_Subject elem2,
-				   ME_Subject elem3);
-ME_SubjectList ME_makeSubjectList4(ME_Subject elem1, ME_Subject elem2,
-				   ME_Subject elem3, ME_Subject elem4);
-ME_SubjectList ME_makeSubjectList5(ME_Subject elem1, ME_Subject elem2,
-				   ME_Subject elem3, ME_Subject elem4,
-				   ME_Subject elem5);
-ME_SubjectList ME_makeSubjectList6(ME_Subject elem1, ME_Subject elem2,
-				   ME_Subject elem3, ME_Subject elem4,
-				   ME_Subject elem5, ME_Subject elem6);
+int ERR_getSubjectListLength(ERR_SubjectList arg);
+ERR_SubjectList ERR_reverseSubjectList(ERR_SubjectList arg);
+ERR_SubjectList ERR_appendSubjectList(ERR_SubjectList arg, ERR_Subject elem);
+ERR_SubjectList ERR_concatSubjectList(ERR_SubjectList arg0,
+				      ERR_SubjectList arg1);
+ERR_SubjectList ERR_sliceSubjectList(ERR_SubjectList arg, int start, int end);
+ERR_Subject ERR_getSubjectListSubjectAt(ERR_SubjectList arg, int index);
+ERR_SubjectList ERR_replaceSubjectListSubjectAt(ERR_SubjectList arg,
+						ERR_Subject elem, int index);
+ERR_SubjectList ERR_makeSubjectList2(ERR_Subject elem1, ERR_Subject elem2);
+ERR_SubjectList ERR_makeSubjectList3(ERR_Subject elem1, ERR_Subject elem2,
+				     ERR_Subject elem3);
+ERR_SubjectList ERR_makeSubjectList4(ERR_Subject elem1, ERR_Subject elem2,
+				     ERR_Subject elem3, ERR_Subject elem4);
+ERR_SubjectList ERR_makeSubjectList5(ERR_Subject elem1, ERR_Subject elem2,
+				     ERR_Subject elem3, ERR_Subject elem4,
+				     ERR_Subject elem5);
+ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2,
+				     ERR_Subject elem3, ERR_Subject elem4,
+				     ERR_Subject elem5, ERR_Subject elem6);
 
 /*}}}  */
 /*{{{  constructors */
 
-ME_Feedback ME_makeFeedbackInfo(char *id, char *producerId,
-				char *producerType, char *description,
-				ME_SubjectList list);
-ME_Feedback ME_makeFeedbackWarning(char *id, char *producerId,
+ERR_Feedback ERR_makeFeedbackInfo(char *id, char *producerId,
+				  char *producerType, char *description,
+				  ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackWarning(char *id, char *producerId,
+				     char *producerType, char *description,
+				     ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackError(char *id, char *producerId,
 				   char *producerType, char *description,
-				   ME_SubjectList list);
-ME_Feedback ME_makeFeedbackError(char *id, char *producerId,
-				 char *producerType, char *description,
-				 ME_SubjectList list);
-ME_Feedback ME_makeFeedbackFatalError(char *id, char *producerId,
-				      char *producerType, char *description,
-				      ME_SubjectList list);
-ME_SubjectList ME_makeSubjectListEmpty();
-ME_SubjectList ME_makeSubjectListSingle(ME_Subject head);
-ME_SubjectList ME_makeSubjectListMany(ME_Subject head, ME_SubjectList tail);
-ME_Subject ME_makeSubjectLocatable(char *id, ME_Location Location);
-ME_Subject ME_makeSubjectUnlocatable(char *id);
-ME_Location ME_makeLocationLocation(char *filename, ME_Area Area);
-ME_Area ME_makeAreaArea(int startLine, int startColumn, int endLine,
-			int endColumn, int startOffset, int endOffset);
-ME_Area ME_makeAreaNoArea();
+				   ERR_SubjectList list);
+ERR_Feedback ERR_makeFeedbackFatalError(char *id, char *producerId,
+					char *producerType, char *description,
+					ERR_SubjectList list);
+ERR_SubjectList ERR_makeSubjectListEmpty();
+ERR_SubjectList ERR_makeSubjectListSingle(ERR_Subject head);
+ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head,
+					ERR_SubjectList tail);
+ERR_Subject ERR_makeSubjectLocatable(char *id, ERR_Location Location);
+ERR_Subject ERR_makeSubjectUnlocatable(char *id);
+ERR_Location ERR_makeLocationLocation(char *filename, ERR_Area Area);
+ERR_Area ERR_makeAreaArea(int startLine, int startColumn, int endLine,
+			  int endColumn, int startOffset, int endOffset);
+ERR_Area ERR_makeAreaNoArea();
 
 /*}}}  */
 /*{{{  equality functions */
 
-ATbool ME_isEqualFeedback(ME_Feedback arg0, ME_Feedback arg1);
-ATbool ME_isEqualSubjectList(ME_SubjectList arg0, ME_SubjectList arg1);
-ATbool ME_isEqualSubject(ME_Subject arg0, ME_Subject arg1);
-ATbool ME_isEqualLocation(ME_Location arg0, ME_Location arg1);
-ATbool ME_isEqualArea(ME_Area arg0, ME_Area arg1);
+ATbool ERR_isEqualFeedback(ERR_Feedback arg0, ERR_Feedback arg1);
+ATbool ERR_isEqualSubjectList(ERR_SubjectList arg0, ERR_SubjectList arg1);
+ATbool ERR_isEqualSubject(ERR_Subject arg0, ERR_Subject arg1);
+ATbool ERR_isEqualLocation(ERR_Location arg0, ERR_Location arg1);
+ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1);
 
 /*}}}  */
-/*{{{  ME_Feedback accessors */
+/*{{{  ERR_Feedback accessors */
 
-ATbool ME_isValidFeedback(ME_Feedback arg);
-inline ATbool ME_isFeedbackInfo(ME_Feedback arg);
-inline ATbool ME_isFeedbackWarning(ME_Feedback arg);
-inline ATbool ME_isFeedbackError(ME_Feedback arg);
-inline ATbool ME_isFeedbackFatalError(ME_Feedback arg);
-ATbool ME_hasFeedbackId(ME_Feedback arg);
-char *ME_getFeedbackId(ME_Feedback arg);
-ME_Feedback ME_setFeedbackId(ME_Feedback arg, char *id);
-ATbool ME_hasFeedbackProducerId(ME_Feedback arg);
-char *ME_getFeedbackProducerId(ME_Feedback arg);
-ME_Feedback ME_setFeedbackProducerId(ME_Feedback arg, char *producerId);
-ATbool ME_hasFeedbackProducerType(ME_Feedback arg);
-char *ME_getFeedbackProducerType(ME_Feedback arg);
-ME_Feedback ME_setFeedbackProducerType(ME_Feedback arg, char *producerType);
-ATbool ME_hasFeedbackDescription(ME_Feedback arg);
-char *ME_getFeedbackDescription(ME_Feedback arg);
-ME_Feedback ME_setFeedbackDescription(ME_Feedback arg, char *description);
-ATbool ME_hasFeedbackList(ME_Feedback arg);
-ME_SubjectList ME_getFeedbackList(ME_Feedback arg);
-ME_Feedback ME_setFeedbackList(ME_Feedback arg, ME_SubjectList list);
-
-/*}}}  */
-/*{{{  ME_SubjectList accessors */
-
-ATbool ME_isValidSubjectList(ME_SubjectList arg);
-inline ATbool ME_isSubjectListEmpty(ME_SubjectList arg);
-inline ATbool ME_isSubjectListSingle(ME_SubjectList arg);
-inline ATbool ME_isSubjectListMany(ME_SubjectList arg);
-ATbool ME_hasSubjectListHead(ME_SubjectList arg);
-ME_Subject ME_getSubjectListHead(ME_SubjectList arg);
-ME_SubjectList ME_setSubjectListHead(ME_SubjectList arg, ME_Subject head);
-ATbool ME_hasSubjectListTail(ME_SubjectList arg);
-ME_SubjectList ME_getSubjectListTail(ME_SubjectList arg);
-ME_SubjectList ME_setSubjectListTail(ME_SubjectList arg, ME_SubjectList tail);
+ATbool ERR_isValidFeedback(ERR_Feedback arg);
+inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg);
+inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg);
+inline ATbool ERR_isFeedbackError(ERR_Feedback arg);
+inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg);
+ATbool ERR_hasFeedbackId(ERR_Feedback arg);
+char *ERR_getFeedbackId(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackId(ERR_Feedback arg, char *id);
+ATbool ERR_hasFeedbackProducerId(ERR_Feedback arg);
+char *ERR_getFeedbackProducerId(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackProducerId(ERR_Feedback arg, char *producerId);
+ATbool ERR_hasFeedbackProducerType(ERR_Feedback arg);
+char *ERR_getFeedbackProducerType(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackProducerType(ERR_Feedback arg,
+					 char *producerType);
+ATbool ERR_hasFeedbackDescription(ERR_Feedback arg);
+char *ERR_getFeedbackDescription(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char *description);
+ATbool ERR_hasFeedbackList(ERR_Feedback arg);
+ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg);
+ERR_Feedback ERR_setFeedbackList(ERR_Feedback arg, ERR_SubjectList list);
 
 /*}}}  */
-/*{{{  ME_Subject accessors */
+/*{{{  ERR_SubjectList accessors */
 
-ATbool ME_isValidSubject(ME_Subject arg);
-inline ATbool ME_isSubjectLocatable(ME_Subject arg);
-inline ATbool ME_isSubjectUnlocatable(ME_Subject arg);
-ATbool ME_hasSubjectId(ME_Subject arg);
-char *ME_getSubjectId(ME_Subject arg);
-ME_Subject ME_setSubjectId(ME_Subject arg, char *id);
-ATbool ME_hasSubjectLocation(ME_Subject arg);
-ME_Location ME_getSubjectLocation(ME_Subject arg);
-ME_Subject ME_setSubjectLocation(ME_Subject arg, ME_Location Location);
-
-/*}}}  */
-/*{{{  ME_Location accessors */
-
-ATbool ME_isValidLocation(ME_Location arg);
-inline ATbool ME_isLocationLocation(ME_Location arg);
-ATbool ME_hasLocationFilename(ME_Location arg);
-char *ME_getLocationFilename(ME_Location arg);
-ME_Location ME_setLocationFilename(ME_Location arg, char *filename);
-ATbool ME_hasLocationArea(ME_Location arg);
-ME_Area ME_getLocationArea(ME_Location arg);
-ME_Location ME_setLocationArea(ME_Location arg, ME_Area Area);
+ATbool ERR_isValidSubjectList(ERR_SubjectList arg);
+inline ATbool ERR_isSubjectListEmpty(ERR_SubjectList arg);
+inline ATbool ERR_isSubjectListSingle(ERR_SubjectList arg);
+inline ATbool ERR_isSubjectListMany(ERR_SubjectList arg);
+ATbool ERR_hasSubjectListHead(ERR_SubjectList arg);
+ERR_Subject ERR_getSubjectListHead(ERR_SubjectList arg);
+ERR_SubjectList ERR_setSubjectListHead(ERR_SubjectList arg, ERR_Subject head);
+ATbool ERR_hasSubjectListTail(ERR_SubjectList arg);
+ERR_SubjectList ERR_getSubjectListTail(ERR_SubjectList arg);
+ERR_SubjectList ERR_setSubjectListTail(ERR_SubjectList arg,
+				       ERR_SubjectList tail);
 
 /*}}}  */
-/*{{{  ME_Area accessors */
+/*{{{  ERR_Subject accessors */
 
-ATbool ME_isValidArea(ME_Area arg);
-inline ATbool ME_isAreaArea(ME_Area arg);
-inline ATbool ME_isAreaNoArea(ME_Area arg);
-ATbool ME_hasAreaStartLine(ME_Area arg);
-int ME_getAreaStartLine(ME_Area arg);
-ME_Area ME_setAreaStartLine(ME_Area arg, int startLine);
-ATbool ME_hasAreaStartColumn(ME_Area arg);
-int ME_getAreaStartColumn(ME_Area arg);
-ME_Area ME_setAreaStartColumn(ME_Area arg, int startColumn);
-ATbool ME_hasAreaEndLine(ME_Area arg);
-int ME_getAreaEndLine(ME_Area arg);
-ME_Area ME_setAreaEndLine(ME_Area arg, int endLine);
-ATbool ME_hasAreaEndColumn(ME_Area arg);
-int ME_getAreaEndColumn(ME_Area arg);
-ME_Area ME_setAreaEndColumn(ME_Area arg, int endColumn);
-ATbool ME_hasAreaStartOffset(ME_Area arg);
-int ME_getAreaStartOffset(ME_Area arg);
-ME_Area ME_setAreaStartOffset(ME_Area arg, int startOffset);
-ATbool ME_hasAreaEndOffset(ME_Area arg);
-int ME_getAreaEndOffset(ME_Area arg);
-ME_Area ME_setAreaEndOffset(ME_Area arg, int endOffset);
+ATbool ERR_isValidSubject(ERR_Subject arg);
+inline ATbool ERR_isSubjectLocatable(ERR_Subject arg);
+inline ATbool ERR_isSubjectUnlocatable(ERR_Subject arg);
+ATbool ERR_hasSubjectId(ERR_Subject arg);
+char *ERR_getSubjectId(ERR_Subject arg);
+ERR_Subject ERR_setSubjectId(ERR_Subject arg, char *id);
+ATbool ERR_hasSubjectLocation(ERR_Subject arg);
+ERR_Location ERR_getSubjectLocation(ERR_Subject arg);
+ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location);
+
+/*}}}  */
+/*{{{  ERR_Location accessors */
+
+ATbool ERR_isValidLocation(ERR_Location arg);
+inline ATbool ERR_isLocationLocation(ERR_Location arg);
+ATbool ERR_hasLocationFilename(ERR_Location arg);
+char *ERR_getLocationFilename(ERR_Location arg);
+ERR_Location ERR_setLocationFilename(ERR_Location arg, char *filename);
+ATbool ERR_hasLocationArea(ERR_Location arg);
+ERR_Area ERR_getLocationArea(ERR_Location arg);
+ERR_Location ERR_setLocationArea(ERR_Location arg, ERR_Area Area);
+
+/*}}}  */
+/*{{{  ERR_Area accessors */
+
+ATbool ERR_isValidArea(ERR_Area arg);
+inline ATbool ERR_isAreaArea(ERR_Area arg);
+inline ATbool ERR_isAreaNoArea(ERR_Area arg);
+ATbool ERR_hasAreaStartLine(ERR_Area arg);
+int ERR_getAreaStartLine(ERR_Area arg);
+ERR_Area ERR_setAreaStartLine(ERR_Area arg, int startLine);
+ATbool ERR_hasAreaStartColumn(ERR_Area arg);
+int ERR_getAreaStartColumn(ERR_Area arg);
+ERR_Area ERR_setAreaStartColumn(ERR_Area arg, int startColumn);
+ATbool ERR_hasAreaEndLine(ERR_Area arg);
+int ERR_getAreaEndLine(ERR_Area arg);
+ERR_Area ERR_setAreaEndLine(ERR_Area arg, int endLine);
+ATbool ERR_hasAreaEndColumn(ERR_Area arg);
+int ERR_getAreaEndColumn(ERR_Area arg);
+ERR_Area ERR_setAreaEndColumn(ERR_Area arg, int endColumn);
+ATbool ERR_hasAreaStartOffset(ERR_Area arg);
+int ERR_getAreaStartOffset(ERR_Area arg);
+ERR_Area ERR_setAreaStartOffset(ERR_Area arg, int startOffset);
+ATbool ERR_hasAreaEndOffset(ERR_Area arg);
+int ERR_getAreaEndOffset(ERR_Area arg);
+ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset);
 
 /*}}}  */
 /*{{{  sort visitors */
 
-ME_Feedback ME_visitFeedback(ME_Feedback arg, char *(*acceptId) (char *),
-			     char *(*acceptProducerId) (char *),
-			     char *(*acceptProducerType) (char *),
-			     char *(*acceptDescription) (char *),
-			     ME_SubjectList(*acceptList) (ME_SubjectList));
-ME_SubjectList ME_visitSubjectList(ME_SubjectList arg,
-				   ME_Subject(*acceptHead) (ME_Subject));
-ME_Subject ME_visitSubject(ME_Subject arg, char *(*acceptId) (char *),
-			   ME_Location(*acceptLocation) (ME_Location));
-ME_Location ME_visitLocation(ME_Location arg,
-			     char *(*acceptFilename) (char *),
-			     ME_Area(*acceptArea) (ME_Area));
-ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine) (int),
-		     int (*acceptStartColumn) (int),
-		     int (*acceptEndLine) (int), int (*acceptEndColumn) (int),
-		     int (*acceptStartOffset) (int),
-		     int (*acceptEndOffset) (int));
+ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char *(*acceptId) (char *),
+			       char *(*acceptProducerId) (char *),
+			       char *(*acceptProducerType) (char *),
+			       char *(*acceptDescription) (char *),
+			       ERR_SubjectList(*acceptList)
+			       (ERR_SubjectList));
+ERR_SubjectList ERR_visitSubjectList(ERR_SubjectList arg,
+				     ERR_Subject(*acceptHead) (ERR_Subject));
+ERR_Subject ERR_visitSubject(ERR_Subject arg, char *(*acceptId) (char *),
+			     ERR_Location(*acceptLocation) (ERR_Location));
+ERR_Location ERR_visitLocation(ERR_Location arg,
+			       char *(*acceptFilename) (char *),
+			       ERR_Area(*acceptArea) (ERR_Area));
+ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptStartLine) (int),
+		       int (*acceptStartColumn) (int),
+		       int (*acceptEndLine) (int),
+		       int (*acceptEndColumn) (int),
+		       int (*acceptStartOffset) (int),
+		       int (*acceptEndOffset) (int));
 
 /*}}}  */
 

@@ -1,51 +1,51 @@
 #include "ErrorAPI_dict.h"
 
-AFun ME_afun8;
-AFun ME_afun4;
-AFun ME_afun0;
-AFun ME_afun2;
-AFun ME_afun7;
-AFun ME_afun5;
-AFun ME_afun3;
-AFun ME_afun1;
-AFun ME_afun6;
+AFun ERR_afun8;
+AFun ERR_afun4;
+AFun ERR_afun0;
+AFun ERR_afun2;
+AFun ERR_afun7;
+AFun ERR_afun5;
+AFun ERR_afun3;
+AFun ERR_afun1;
+AFun ERR_afun6;
 
-ATerm ME_patternAreaNoArea = NULL;
-ATerm ME_patternAreaArea = NULL;
-ATerm ME_patternLocationLocation = NULL;
-ATerm ME_patternSubjectUnlocatable = NULL;
-ATerm ME_patternSubjectLocatable = NULL;
-ATerm ME_patternSubjectListMany = NULL;
-ATerm ME_patternSubjectListSingle = NULL;
-ATerm ME_patternSubjectListEmpty = NULL;
-ATerm ME_patternFeedbackFatalError = NULL;
-ATerm ME_patternFeedbackError = NULL;
-ATerm ME_patternFeedbackWarning = NULL;
-ATerm ME_patternFeedbackInfo = NULL;
+ATerm ERR_patternAreaNoArea = NULL;
+ATerm ERR_patternAreaArea = NULL;
+ATerm ERR_patternLocationLocation = NULL;
+ATerm ERR_patternSubjectUnlocatable = NULL;
+ATerm ERR_patternSubjectLocatable = NULL;
+ATerm ERR_patternSubjectListMany = NULL;
+ATerm ERR_patternSubjectListSingle = NULL;
+ATerm ERR_patternSubjectListEmpty = NULL;
+ATerm ERR_patternFeedbackFatalError = NULL;
+ATerm ERR_patternFeedbackError = NULL;
+ATerm ERR_patternFeedbackWarning = NULL;
+ATerm ERR_patternFeedbackInfo = NULL;
 
 /*
- * ME_afun8 = no-area
- * ME_afun4 = locatable(x,x)
- * ME_afun0 = info(x,x,x,x,x)
- * ME_afun2 = error(x,x,x,x,x)
- * ME_afun7 = area(x,x,x,x,x,x)
- * ME_afun5 = unlocatable(x)
- * ME_afun3 = fatal-error(x,x,x,x,x)
- * ME_afun1 = warning(x,x,x,x,x)
- * ME_afun6 = location(x,x)
+ * ERR_afun8 = no-area
+ * ERR_afun4 = locatable(x,x)
+ * ERR_afun0 = info(x,x,x,x,x)
+ * ERR_afun2 = error(x,x,x,x,x)
+ * ERR_afun7 = area(x,x,x,x,x,x)
+ * ERR_afun5 = unlocatable(x)
+ * ERR_afun3 = fatal-error(x,x,x,x,x)
+ * ERR_afun1 = warning(x,x,x,x,x)
+ * ERR_afun6 = location(x,x)
  *
- * ME_patternAreaNoArea = no-area
- * ME_patternAreaArea = area(<int>,<int>,<int>,<int>,<int>,<int>)
- * ME_patternLocationLocation = location(<str>,<term>)
- * ME_patternSubjectUnlocatable = unlocatable(<str>)
- * ME_patternSubjectLocatable = locatable(<str>,<term>)
- * ME_patternSubjectListMany = [<term>,<list>]
- * ME_patternSubjectListSingle = [<term>]
- * ME_patternSubjectListEmpty = []
- * ME_patternFeedbackFatalError = fatal-error(<str>,<str>,<str>,<str>,<term>)
- * ME_patternFeedbackError = error(<str>,<str>,<str>,<str>,<term>)
- * ME_patternFeedbackWarning = warning(<str>,<str>,<str>,<str>,<term>)
- * ME_patternFeedbackInfo = info(<str>,<str>,<str>,<str>,<term>)
+ * ERR_patternAreaNoArea = no-area
+ * ERR_patternAreaArea = area(<int>,<int>,<int>,<int>,<int>,<int>)
+ * ERR_patternLocationLocation = location(<str>,<term>)
+ * ERR_patternSubjectUnlocatable = unlocatable(<str>)
+ * ERR_patternSubjectLocatable = locatable(<str>,<term>)
+ * ERR_patternSubjectListMany = [<term>,<list>]
+ * ERR_patternSubjectListSingle = [<term>]
+ * ERR_patternSubjectListEmpty = []
+ * ERR_patternFeedbackFatalError = fatal-error(<str>,<str>,<str>,<str>,<term>)
+ * ERR_patternFeedbackError = error(<str>,<str>,<str>,<str>,<term>)
+ * ERR_patternFeedbackWarning = warning(<str>,<str>,<str>,<str>,<term>)
+ * ERR_patternFeedbackInfo = info(<str>,<str>,<str>,<str>,<term>)
  *
  */
 
@@ -88,49 +88,49 @@ void init_ErrorAPI_dict()
 
   afuns = (ATermList)ATelementAt((ATermList)_ErrorAPI_dict, 0);
 
-  ME_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  ME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ERR_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
   terms = (ATermList)ATelementAt((ATermList)_ErrorAPI_dict, 1);
 
-  ME_patternAreaNoArea = ATgetFirst(terms);
+  ERR_patternAreaNoArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternAreaArea = ATgetFirst(terms);
+  ERR_patternAreaArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternLocationLocation = ATgetFirst(terms);
+  ERR_patternLocationLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternSubjectUnlocatable = ATgetFirst(terms);
+  ERR_patternSubjectUnlocatable = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternSubjectLocatable = ATgetFirst(terms);
+  ERR_patternSubjectLocatable = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternSubjectListMany = ATgetFirst(terms);
+  ERR_patternSubjectListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternSubjectListSingle = ATgetFirst(terms);
+  ERR_patternSubjectListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternSubjectListEmpty = ATgetFirst(terms);
+  ERR_patternSubjectListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternFeedbackFatalError = ATgetFirst(terms);
+  ERR_patternFeedbackFatalError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternFeedbackError = ATgetFirst(terms);
+  ERR_patternFeedbackError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternFeedbackWarning = ATgetFirst(terms);
+  ERR_patternFeedbackWarning = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  ME_patternFeedbackInfo = ATgetFirst(terms);
+  ERR_patternFeedbackInfo = ATgetFirst(terms);
   terms = ATgetNext(terms);
 }

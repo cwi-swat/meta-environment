@@ -34,11 +34,11 @@ MetaErrors.impl.def: Makefile
 api: parsed-api imploded-api 
 
 parsed-api: MetaErrors.def Makefile  
-	sdf2-to-c --input $< --prefix PME_ --output ParsedErrorAPI
+	sdf2-to-c --input $< --prefix PERR_ --output ParsedErrorAPI
 	indent ParsedErrorAPI.h
 
 imploded-api: MetaErrors.impl.def Makefile 
-	sdf2-to-c --imploded --input $< --prefix ME_ --output ErrorAPI
+	sdf2-to-c --imploded --input $< --prefix ERR_ --output ErrorAPI
 	indent ErrorAPI.h
 
 api-clean:

@@ -1,7 +1,7 @@
-#include "Errors-utils.h"
+#include "ErrorAPI-utils.h"
 
-void ME_initFullErrorsApi() 
+void ERR_initErrorApi() 
 {
-  ME_initErrorsApi();
-  PME_initParsedErrorsApi();
+  ERR_initErrorAPIApi();
+  PERR_initParsedErrorAPIApi();
 }

@@ -3,28 +3,28 @@
 
 #include <aterm2.h>
 
-extern AFun ME_afun8;
-extern AFun ME_afun4;
-extern AFun ME_afun0;
-extern AFun ME_afun2;
-extern AFun ME_afun7;
-extern AFun ME_afun5;
-extern AFun ME_afun3;
-extern AFun ME_afun1;
-extern AFun ME_afun6;
+extern AFun ERR_afun8;
+extern AFun ERR_afun4;
+extern AFun ERR_afun0;
+extern AFun ERR_afun2;
+extern AFun ERR_afun7;
+extern AFun ERR_afun5;
+extern AFun ERR_afun3;
+extern AFun ERR_afun1;
+extern AFun ERR_afun6;
 
-extern ATerm ME_patternAreaNoArea;
-extern ATerm ME_patternAreaArea;
-extern ATerm ME_patternLocationLocation;
-extern ATerm ME_patternSubjectUnlocatable;
-extern ATerm ME_patternSubjectLocatable;
-extern ATerm ME_patternSubjectListMany;
-extern ATerm ME_patternSubjectListSingle;
-extern ATerm ME_patternSubjectListEmpty;
-extern ATerm ME_patternFeedbackFatalError;
-extern ATerm ME_patternFeedbackError;
-extern ATerm ME_patternFeedbackWarning;
-extern ATerm ME_patternFeedbackInfo;
+extern ATerm ERR_patternAreaNoArea;
+extern ATerm ERR_patternAreaArea;
+extern ATerm ERR_patternLocationLocation;
+extern ATerm ERR_patternSubjectUnlocatable;
+extern ATerm ERR_patternSubjectLocatable;
+extern ATerm ERR_patternSubjectListMany;
+extern ATerm ERR_patternSubjectListSingle;
+extern ATerm ERR_patternSubjectListEmpty;
+extern ATerm ERR_patternFeedbackFatalError;
+extern ATerm ERR_patternFeedbackError;
+extern ATerm ERR_patternFeedbackWarning;
+extern ATerm ERR_patternFeedbackInfo;
 
 extern void init_ErrorAPI_dict();
 
