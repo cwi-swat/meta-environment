@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%    The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -546,6 +547,10 @@ menu (see Section~\ref{FileMenu}).
   \caption{\label{FIG:new-open}Pop up menu for adding a module}
 \end{figure}
 
+The import pane may contain square nodes and oval nodes. The first one
+represent modules of which the syntax definitions are syntactically
+correct, the second one represent modules with a syntactically erroneous
+syntax definition or this module could not be found within the search space.
 
 \subsection{The Module Pane} \label{ModulePane}
 
@@ -631,7 +636,7 @@ user can select some desired subtree.
   \caption{\label{FIG:move-menu}Pull down menu for {\tt Move}}
 \end{figure}
 
-\subsection{Editing the syntax part of a module}
+\subsection{Editing the Syntax Part of a Module}
 
 An editor for editing the syntax part of a module is activated via
 the button {\tt Edit Syntax}.
@@ -657,7 +662,7 @@ bottom line message.
 The entry {\tt Reduce} of Figure \ref{FIG:meta-env-menu} has no
 effect when editing a syntax definition. 
 
-\subsection{Editing the equations of a module}
+\subsection{Editing the Equations Section of a Module}
 
 An editor for editing the equations section of a module is activated via
 the button {\tt Edit Equations}.
@@ -670,7 +675,7 @@ through the Status message {\tt Generating Parse Table}.
 The entry {\tt Reduce} of Figure \ref{FIG:meta-env-menu} has no
 effect when editing an equations section. 
 
-\subsection{Editing terms}
+\subsection{Editing Terms}
 
 An editor for editing a term over a module is activated via
 the button {\tt Edit Term}.
@@ -689,10 +694,10 @@ details on evaluating terms will be presented in Section \ref{eval-term}.
 
 \section{Executing Specifications}
 
-\subsection{Evaluating terms}
+\subsection{Evaluating Terms}
 \label{eval-term}
 
-\subsection{Compiling a specification}
+\subsection{Compiling a Specification}
 \label{compiling-specs}
 
 
@@ -825,7 +830,7 @@ module Bool-example
   \caption{\label{FIG:Bool-example.eqs}Editor for the equations of {\tt Bool-example}}
 \end{figure}
 
-\subsubsection{The module editor for {\tt Bool-example}}
+\subsubsection{The Module Editor for {\tt Bool-example}}
 
 \begin{itemize}
   
@@ -1378,11 +1383,11 @@ current version of the \ASmetaenv\ supports only the so-called
 \sdf1 features of \sdf2.
 
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
-signature in \asf\ specifications with the abstract syntax defined implicitly by
-an \sdf\ specification, thus yielding a standard mapping from text to abstract
-syntax tree. This gives the possibility to associate semantics with (the tree
-representation of) text and to introduce user-defined notation in
-specifications.
+signature in \asf\ specifications with the abstract syntax defined 
+implicitly by an \sdf\ specification, thus yielding a standard mapping 
+from text to abstract syntax tree. This gives the possibility to 
+associate semantics with (the tree representation of) text and to 
+introduce user-defined notation in specifications.
 
 \asfsdf\ is therefore a modular specification formalism for the integrated
 definition of syntax and semantics.
@@ -1400,25 +1405,22 @@ module.
 The overall structure of a module is:
 
 \begin{verbatim}
+module <ModuleName>
 
-module
-   <Name>
-imports 
-   <Name-of-imported-module>+
+  <ImpSection>*
  
-<Section>*
- 
-priorities
-   <Priority-relation-between-context-free-rules>+
+  <Section>*
 
 equations
-   <Conditional-equation>*
+  <Conditional-equation>*
 \end{verbatim}
 
-A module consists of a module header, an imports clause followed by a list of zero or more
-sections (that define sorts, lexical syntax, context-free syntax and
-variables) followed by a priority declaration and conditional
-equations. All these parts are optional.
+A module consists of a module header, followed by a list of zero or more
+import sections,  followed by a list of zero or more
+sections (that define sorts, lexical syntax, context-free syntax,
+priority relations, and variables) and conditional
+equations. These conditional equations are optional. In fact these
+conditional equations are physically stored in a separate file, see Section ??.
 
 Each \emph{Section} starts with one of the keywords {\tt exports} or {\tt
   hiddens}: {\tt exports} makes all entities in the section visible to other
@@ -1859,7 +1861,7 @@ The context-free syntax defined in an ASF+SDF specification may be ambiguous: th
 
 \end{itemize}
 
-\subsubsection{ Relative Priorities}
+\subsubsection{Relative Priorities}
 
 The relative priority of two functions is defined by including {\tt $F$ > $G$}
 in the `{\tt priorities}' section, where $F$ and $G$ are as written in the
