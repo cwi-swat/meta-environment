@@ -359,12 +359,12 @@ in
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
             ParseText(String, NewModName, SortName, RTree?, Error?) .
-            ProcessParseError(NewModName, Error, "trm")
+            ProcessParseError(FilePath, Error, "")
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
               ParseText(String, NewModName, SortName, RTree?, Error?) .
-              ProcessParseError(NewModName, Error, "trm")
+              ProcessParseError(String, Error, "")
             else
               RTree := error-tree
             fi
