@@ -13,7 +13,7 @@
 /*{{{  meta includes */
 
 #include <aterm2.h>
-#include <MEPT-utils.h>
+#include "MEPT-utils.h"
 #include <ErrorAPI-utils.h>
 
 
@@ -39,37 +39,6 @@ void usage(void)
         "\t-o filename     output to file (default stdout)\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myname, myversion);
-}
-
-/*}}}  */
-
-/*{{{  ATerm deslash(ATerm atstr) */
-
-static char* deslash(ATerm atstr)
-{
-  char *tmp, *str = NULL;
-  int i, length, found;
-
-  if(ATmatch(atstr,"<str>", &tmp)) {
-    str = strdup(tmp);
-    length = strlen(str);
-
-    /* copy string without slashes and quotes, 
-     * including the EOS character
-     */
-    for(found = 0, i = 0; i <= length; i++) {
-      switch(str[i]) {
-	case '\\':
-	  found++;
-	  break;
-	default:
-	    str[i - found] = str[i];
-	 break; 
-      }	  
-    }  
-  }
-
-  return str;
 }
 
 /*}}}  */
