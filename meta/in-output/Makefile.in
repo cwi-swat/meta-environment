@@ -64,27 +64,30 @@ BINFILES	= in-output
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
+# Local includes
+LOCALINCLUDES   = in-output.tif.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= in-output in-output.tif.c in-output.tif.h
+CLEANFILES	= depend in-output in-output.tif.c in-output.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
 # The all target must be defined:
-all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-in-output.tif.h: $(top_srcdir)/toolbus/meta.tifs
-	$(ATERM)/bin/tifstoc -tool in-output $(top_srcdir)/toolbus/meta.tifs
+%.tif.c: %.tifs
+	${prefix}/bin/tifstoc -tool $* $<
 
-in-output.tif.c: in-output.tif.h
+%.tifs: %.tb
+	${prefix}/bin/toolbus -gentifs $<
 
-in-output: $(OBJ)
-	$(CC) -o $@ $(OBJ) $(LIBS) $(LIBS)
+in-output: depend ${OBJ} ${LIBFILES} 
+	$(CC) -o $@ ${OBJ} $(LIBFILES) $(LIBS)
 
 %.o:	%.c	$(INCLUDEFILES)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
@@ -119,11 +122,10 @@ distclean: clean
 
 # distclean target
 
-# Included dependencies
-include .depend
-
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
-	$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > .depend
+	@makedepend ${INCLUDES} $(CSRC) -f - > $@
+
+-include depend
 
 

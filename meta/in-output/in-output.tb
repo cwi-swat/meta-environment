@@ -1,0 +1,31 @@
+process Io is
+let
+IO   : in-output,
+Id   : term,
+Name : str,
+Fn   : str,
+T    : term,
+Text : str
+in
+  execute(in-output,IO?).
+  ( rec-msg(Id?,open-file(id(Name?))).
+    snd-eval(IO, open-file(Name))
+    .
+    ( rec-value(IO,opened-file("asfix",Name,T?,Fn?)).
+      snd-msg(Id,opened-file(asfix,id(Name),T,Fn))
+    + rec-value(IO,opened-file("raw",Name,Text?,Fn?)).
+      snd-msg(Id,opened-file(raw,Name,Text,Fn))
+    + rec-value(IO,error-opening(Name?)).
+      snd-msg(Id, error-opening(Name))
+    )
+  )*
+  delta
+endlet
+
+
+tool in-output is { command = "in-output" }
+
+#ifdef MAIN
+#else
+toolbus(Io)
+#endif
