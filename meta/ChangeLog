@@ -1,5 +1,11 @@
 # $Id$
 
+2003/06/27 ({jurgenv,markvdb}@cwi.nl)
+ * When illegal modulenames are supplied by the '-m' option the 
+   environment deals with it correctly now. Only the error messages
+   are not printed because of parallel computation: the module are opened
+   already while the MetaStudio is starting up.
+
 2003/06/27 (markvdb@cwi.nl)
  * metastudio is able to deal with graphs with extra information.
 
