@@ -1,0 +1,6 @@
+Makefile.in
+Makefile
+*.eqs
+.deps
+link-test
+link-test.c

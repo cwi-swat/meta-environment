@@ -1,4 +1,4 @@
-module asf/Annotations[X Key Value]
+module asf/tools/Annotations[X Key Value]
 
 exports
 

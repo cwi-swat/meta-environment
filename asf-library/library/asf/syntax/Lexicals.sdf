@@ -1,4 +1,4 @@
-module asf/Lexicals[X]
+module asf/syntax/Lexicals[X]
 
 exports
 

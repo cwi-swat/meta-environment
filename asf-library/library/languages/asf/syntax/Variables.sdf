@@ -1,4 +1,4 @@
-module asf/Variables[X]
+module asf/syntax/Variables[X]
 
 exports
 

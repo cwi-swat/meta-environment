@@ -1,4 +1,4 @@
-module asf/Ambiguities[X]
+module asf/syntax/Ambiguities[X]
 
 exports
 
