@@ -290,6 +290,7 @@ Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,
 			  ATbool productions, 
 			  ATbool layout, ATbool literals)
 {
+  NodeList nodes;
   Graph graph = makeGraphDefault(makeNodeListEmpty(), makeEdgeListEmpty());
 
   characters_on = characters;
@@ -302,6 +303,11 @@ Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,
   
 
   graph = treeToGraph(graph, tree, 0);
+
+  /* Reverse edgelist to keep the original order */
+  nodes = getGraphNodes(graph);
+  nodes = NodeListFromTerm((ATerm)ATreverse((ATermList)NodeListToTerm(nodes)));
+  graph = setGraphNodes(graph, nodes);
 
   return graph;
 }
