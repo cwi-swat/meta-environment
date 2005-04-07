@@ -17,7 +17,7 @@ configuration interface
 requires
    aterm 2.3.1
 
-error-support 0.2.1
+error-support 1.1
 
 aterm-java 1.6
 
