@@ -1,5 +1,14 @@
 $Id$
 
+Thu Apr  7 16:04:59 CEST 2005 <{jong,jurgenv,kooiker}@cwi.nl>
+ * configure.ac:
+   - Renamed from configure.in
+   - Added EXTERNAL_JARS
+ * gui:
+   - Initial version of error-viewer
+   - Jar file only build when --enable-maintainer-mode is set
+   - Jar file build by ant
+
 Mon Dec  6 13:32:03 CET 2004 <kooiker@cwi.nl>
  * utils/error-support.c:
    - Fixed declaration after statement in add_filename_in_error 
