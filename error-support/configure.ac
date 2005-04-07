@@ -10,6 +10,7 @@ dnl Do not add any dependencies on other packages here!
 dnl That would exclude such a package from using the ErrorAPI,
 dnl because it would introduce a circular dependency.
 
+AM_MAINTAINER_MODE
 
 AC_PROG_CC
 

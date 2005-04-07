@@ -4,7 +4,6 @@
   <property environment="env"/>
   <path id="project.classpath">
     <pathelement location="."/>
-    <pathelement location="${ErrorViewer.location}/lib/jlfgr-1_0.jar"/>
     <pathelement path="${env.JARS}"/>
   </path>
   <target name="build">
