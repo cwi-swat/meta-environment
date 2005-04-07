@@ -87,7 +87,7 @@ AC_CONFIG_FILES([Makefile
   lib/Makefile
   doc/Makefile
   gui/Makefile
-  gui/lib/Makefile/lib
+  gui/lib/Makefile
   gui/nl/Makefile
   gui/nl/cwi/Makefile
   gui/nl/cwi/sen1/Makefile
