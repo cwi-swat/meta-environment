@@ -4,8 +4,8 @@ pkgdata_DATA = ${JARFILE}
 
 JARFILE = error-viewer.jar
 
-EXTERNAL_JARS = `aterm-java-config`:`error-support-config`
+JARS_ENV = JARS=${EXTERNAL_JARS}:${top_srcdir}/lib/errorapi-${VERSION}.jar:${top_srcdir}/gui/lib/jlfgr-1_0.jar
 
 .PHONY: ${JARFILE}
 ${JARFILE}:
-	ant
+	${JARS_ENV} ant
