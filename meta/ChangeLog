@@ -1,5 +1,16 @@
 # $Id$
 
+Thu Apr  7 11:41:12 CEST 2005 <kooiker@cwi.nl>
+ * src/Makefile.am:
+   - Readded missing sed action for __EXTERNAL_JARS__
+ * configure.ac:
+   - Added jlfgr-1_0.jar to $EXTERNAL_JARS containing the Java look and feel
+     Graphics Repository
+ * meta-studio/metastudio/components/toolbar/ToolBar.java:
+   - Changed ImageIcon path
+ * configuration-manager/src/meta-kernel.properties:
+   - Use Java look and feel Graphics Repository
+
 Wed Apr  6 14:54:18 CEST 2005 <{jong,kooiker}@cwi.nl>
  * tbscripts:
    - Update scripts to generate unique errors for each scenario

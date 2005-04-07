@@ -80,7 +80,7 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
 AC_SUBST(TIDE_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:${prefix}/share/meta/jlfgr-1_0.jar
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package

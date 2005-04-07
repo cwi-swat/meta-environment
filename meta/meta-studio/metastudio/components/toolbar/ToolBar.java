@@ -58,7 +58,7 @@ public class ToolBar extends JPanel implements ToolBarTif, Runnable {
     private void addToolBarAction(final ATermAppl action) {
         String label = ((ATermAppl) action.getArgument(0)).getName();
         String name = ((ATermAppl) action.getArgument(1)).getName();
-        String path = "/images/" + name; 
+        String path = "/toolbarButtonGraphics/general/" + name; 
         URL url = path.getClass().getResource(path);
         if (url != null) {
             Icon icon = new ImageIcon(url);
