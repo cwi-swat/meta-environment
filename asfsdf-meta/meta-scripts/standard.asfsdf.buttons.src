@@ -1,7 +1,7 @@
 configuration([
   module-path("__ASF_LIBRARY__"),
   action([description(studio-menubar, menu(["File", "New Module"])),
-           description(studio-toolbar, icon("New Module", "empty-page.gif"))],
+           description(studio-toolbar, icon("New Module", "New24.gif"))],
           [push-string(".sdf"),
            push-string(""),
            push-string("New Module"),
@@ -14,7 +14,7 @@ configuration([
               new-module]
            )]),
   action([description(studio-menubar, menu(["File", "Open Module"])),
-           description(studio-toolbar, icon("Open Module", "filled-page.gif"))],
+           description(studio-toolbar, icon("Open Module", "Open24.gif"))],
           [push-string(".sdf"),
            push-string(""),
            push-string("Open Module"),
@@ -288,7 +288,7 @@ configuration([
           [delete-module]),
   action([description(studio-menubar, menu(["File", "Open Library Module"])),
           description(studio-toolbar, icon("Open Library Module",
-                                           "present.gif"))],
+                                           "Import24.gif"))],
           [push-string(".sdf"),
            push-string("__ASF_LIBRARY__"),
            push-string("Open LibraryModule"),

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Thu Apr  7 11:44:32 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - Use Java look and feel Graphics Repository
+
 Wed Mar 23 15:23:57 CET 2005 <kooiker@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - Removed unused variable ModuleName from run-tests message
