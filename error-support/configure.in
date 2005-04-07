@@ -86,6 +86,11 @@ dnl {{{  Which files need updating?
 AC_CONFIG_FILES([Makefile
   lib/Makefile
   doc/Makefile
+  gui/Makefile
+  gui/lib/Makefile/lib
+  gui/nl/Makefile
+  gui/nl/cwi/Makefile
+  gui/nl/cwi/sen1/Makefile
   utils/Makefile
   utils/lift-error/Makefile
   utils/lower-error/Makefile
