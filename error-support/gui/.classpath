@@ -12,19 +12,19 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/asf-sdf-meta_1-5/build/aterm-java/aterm-1.6.2.jar">
+	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/JJTraveler/src/jjtraveler-0.4.3.jar">
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/asf-sdf-meta_1-5/build/JJTraveler/src/jjtraveler-0.4.5.jar">
+	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/aterm-java/aterm-1.6.jar">
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/asf-sdf-meta_1-5/build/shared-objects/shared-objects-1.4.2.jar">
+	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/shared-objects/shared-objects-1.4.jar">
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/asf-sdf-meta_1-5/build/error-support/lib/errorapi-1.0.1.jar">
+	<classpathentry kind="lib" path="/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/error-support/lib/errorapi-0.2.1.jar">
 		<attributes>
 		</attributes>
 	</classpathentry>

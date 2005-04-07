@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="build" name="ErrorViewer">
+  <property name="ErrorViewer.location" value="."/>
+  <property environment="env"/>
+  <path id="project.classpath">
+    <pathelement location="."/>
+    <pathelement location="${ErrorViewer.location}/lib/jlfgr-1_0.jar"/>
+    <pathelement path="${env.EXTERNAL_JARS}"/>
+  </path>
+  <target name="build">
+    <javac destdir=".">
+      <src path="."/>
+      <classpath refid="project.classpath"/>
+    </javac>
+    <jar destfile="ErrorViewer.jar" basedir="."/>
+  </target>
+</project>
