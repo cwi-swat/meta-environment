@@ -15,7 +15,7 @@ configuration interface
 requires
    asc-support 2.1
 
-error-support 0.2.1
+error-support 1.1
 
 asf-support 1.4
 
