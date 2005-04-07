@@ -12,6 +12,6 @@
       <src path="."/>
       <classpath refid="project.classpath"/>
     </javac>
-    <jar destfile="ErrorViewer.jar" basedir="."/>
+    <jar destfile="error-viewer.jar" basedir="."/>
   </target>
 </project>

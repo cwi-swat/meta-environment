@@ -1,7 +1,7 @@
 dnl $Id$
 
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
+AC_CONFIG_SRCDIR([configure.ac])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
@@ -11,11 +11,8 @@ dnl That would exclude such a package from using the ErrorAPI,
 dnl because it would introduce a circular dependency.
 
 
-dnl {{{  Which compiler to use?
 AC_PROG_CC
 
-dnl }}}
-dnl {{{  Handle --with-cflags option
 AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
    CFLAGS=${withval},
@@ -25,31 +22,30 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl }}}
-dnl {{{  Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl }}}
-dnl {{{  Require ToolBus library
+dnl Require ATerm Java library
+AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
+   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
+dnl ATERM_JAVA is not allowed in Makefile.am's
+JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
+AC_SUBST(JAVA_ATERM)
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-dnl }}}
+dnl This variable holds all external jarfiles
+EXTERNAL_JARS=${JAVA_ATERM}
+AC_SUBST(EXTERNAL_JARS)
 
-dnl {{{  Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
 
-dnl }}}
-dnl {{{  Require socket/gethostname
-
 NOSOCKLIBS=$LIBS
-dnl {{{  check for socket in -lsun and -lsocket
 SOCKET_FOUND=no
 SOCKLIBS=
 AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
@@ -57,45 +53,27 @@ if test ${SOCKET_FOUND} = no; then
   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
 fi
 
-dnl }}}
-dnl {{{  check for gethostname in -lsun and -lsocket
-
 GHN_FOUND=no
 AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
 if test ${GHN_FOUND} = no; then
   AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
 fi
 
-dnl }}}
 AC_SUBST(SOCKLIBS)
 LIBS=$NOSOCKLIBS
-
-dnl }}}
-dnl {{{  Is ranlib needed on this system?
 
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
-dnl }}}
-dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
 AC_PROG_MAKE_SET([])
 
-dnl }}}
-
-dnl {{{  Which files need updating?
 AC_CONFIG_FILES([Makefile
   lib/Makefile
   doc/Makefile
   gui/Makefile
-  gui/lib/Makefile
-  gui/nl/Makefile
-  gui/nl/cwi/Makefile
-  gui/nl/cwi/sen1/Makefile
   utils/Makefile
   utils/lift-error/Makefile
   utils/lower-error/Makefile
   utils/error-diff/Makefile
 ])
 AC_OUTPUT
-
-dnl }}}
