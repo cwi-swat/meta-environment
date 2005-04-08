@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="build" name="ErrorViewer">
-  <property name="ErrorViewer.location" value="."/>
+<project basedir="." default="build">
   <property environment="env"/>
   <path id="project.classpath">
     <pathelement path="${env.JARS}"/>
@@ -10,6 +9,9 @@
       <src path="."/>
       <classpath refid="project.classpath"/>
     </javac>
-    <jar destfile="error-viewer.jar" basedir="."/>
+    <jar destfile="error-viewer.jar" 
+      basedir="."
+      includes="*.class"
+    />
   </target>
 </project>
