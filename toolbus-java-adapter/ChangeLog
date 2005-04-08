@@ -1,5 +1,10 @@
 $Id$
 
+Fri Apr  8 16:18:54 CEST 2005 <kooiker@cwi.nl>
+ * toolbus/JavaTif.java:
+   - Generate directory structure according to given packagename
+   - Generate java files in created directory
+
 Fri Nov 12 09:53:58 CET 2004 <{jong,kooiker}@cwi.nl>
  * toolbus/AbstractTool.java:
    fix outputStream not flushed during handshake with ToolBus
