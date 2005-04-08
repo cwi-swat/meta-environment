@@ -7,6 +7,7 @@
 \usepackage{alltt}
 \usepackage{supertabular}
 \usepackage{epsfig}
+\usepackage{picinpar}
 \usepackage{moreverb}
 \usepackage{verbatim}
 \usepackage{fancyheadings}
@@ -29,14 +30,14 @@
 
 \title{A Tutorial Introduction to \rscript\\ ---a Relational Approach to
   Software Analysis---\\[2cm]
-\epsfig{figure=figs/windas.ps,width=16cm}
+\epsfig{figure=figs/windas.ps,width=16cm}\label{FIG:windas}
 }
 \author{Paul Klint}
 
 \date{DRAFT: \today}
 
 \begin{document}
-
+%%\initfloatfigs
 \maketitle
 
 \begin{figure}[h]
@@ -50,12 +51,6 @@
 
 \chapter{Introduction}\label{SEC:Introduction}
 
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/balloon.ps,height=10cm}
-\end{center}
-\end{figure}
-
 \begin{figure}[tb]
 \begin{center}
 \vspace*{-1cm}
@@ -66,33 +61,33 @@
 \caption{\label{FIG:paradigm} The extract-enrich-view paradigm}
 \end{figure}
 
+\begin{window}[0,l,\fbox{\epsfig{figure=figs/balloon.ps,height=9.5cm}},{}]
+\label{FIG:balloon}
+\noindent \textbf{Extract-Enrich-View paradigm:}
 \rscript is a small scripting language based on the relational
 calculus.  It is intended for analyzing and querying the source code
 of software systems: from finding uninitialized variables in a single
 program to formulating queries about the architecture of a complete
 software system. \rscript fits well in the extract-enrich-view paradigm
-shown in Figure~\ref{FIG:paradigm}:
-
-\begin{description}
-\item[Extract:] Given the source text, extract relevant information from it in
+shown in Figure~\ref{FIG:paradigm}:\\
+%%\begin{itemize}
+\textbf{Extract:} Given the source text, extract relevant information from it in
 the form of relations. Examples are the CALLS relation that describes direct
 calls between procedures, the USE relation that relates statements with the
 variables that are used in the statements, and the PRED relation that relates
 a statement with its predecessors in the control flow graph.  The extraction
 phase is outside the scope of \rscript but may, for instance, be implemented
-using \asfsdf~\cite{BDHJJKKMOSVVV01} and we will give examples how to do this.
-
-
-\item[Enrich:] Derive additional information from the relations
+using \asfsdf~\cite{BDHJJKKMOSVVV01} and we will give examples how to do this.\\
+\textbf{Enrich:} Derive additional information from the relations
 extracted from the source text. For instance, use CALLS to compute
 procedures that can also call each other indirectly (using transitive
-closure).  Here is where \rscript shines.
-
-\item[View:] The result of the enrichment phase are again bags and relations.
+closure).  Here is where \rscript shines.\\
+\textbf{View:} The result of the enrichment phase are again bags and relations.
 These can be displayed with various tools like, Dot~\cite{Dot96},
-Rigi~\cite{Mueller88} and others. \rscript is not concerned with viewing.
+Rigi~\cite{Mueller88} and others. \rscript is not concerned with viewing but
+we will give some examples anyway.
 
-\end{description}
+\end{window}
 
 \paragraph{Application of Relations to Program Analysis}
 
@@ -219,15 +214,9 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.
 
 \chapter{A Motivating Example} \label{SEC:motivating-example}
 
-\begin{figure}[h]
-\begin{center}
-\vspace*{-1cm}
-\epsfig{figure=figs/pandora.ps,width=8cm}
-\vspace*{0cm}
-\end{center}
-\end{figure}
-
-Suppose a mystery box ends up on your desk. When you open it, it contains a
+\fbox{\epsfig{figure=figs/caruso.eps,width=6cm}}
+\label{FIG:caruso}
+\hspace*{0.5cm}\parbox[b]{8.5cm}{Suppose a mystery box ends up on your desk. When you open it, it contains a
 huge software system with several questions attached to it:
 
 \begin{itemize}
@@ -243,6 +232,12 @@ huge software system with several questions attached to it:
 called but do not make any calls themselves?
 
 \item Which procedures call each other indirectly?
+\end{itemize}
+}
+
+\begin{itemize}
+
+
 
 \item Which procedures are called directly or indirectly from each entry
   point?
@@ -251,10 +246,10 @@ called but do not make any calls themselves?
 
 \end{itemize}
 
-
 \noindent There are now two possibilities. Either you have this superb
 programming environment or tool suite that can immediately answer all these
 questions for you or you can use \rscript.
+
 
 \begin{figure}[tb]
 \begin{center}
@@ -446,14 +441,9 @@ analysis particularly suited for studying large systems.
 
 \chapter{The \rscript Language} \label{SEC:rscript-language}
 
-\begin{figure}[h]
-\begin{center}
-\vspace*{-1cm}
-\epsfig{figure=figs/signalpha-web.ps,width=5cm}
-\vspace*{0cm}
-\end{center}
-\end{figure}
-
+\fbox{\epsfig{figure=figs/signalpha-web.ps,width=6cm}}
+\label{FIG:signalpha}
+\hspace*{0.5cm}\parbox[b]{8cm}{
 \rscript is based on \emph{binary relations} only and has no direct support
 for $n$-ary relations with labeled columns as usual in a general database
 language. However, some syntactic support for $n$-ary relations exists. We
@@ -466,7 +456,7 @@ script is interested in.
 The language has scalar types (Boolean, integer, string, location) and
 composite types (set and relation). Expressions are constructed from
 comprehensions, function invocations and operators. These are all
-described below.
+described below.}
 
 \section{Types and Values}
 
@@ -918,14 +908,8 @@ The resulting value of {\tt T} is as expected:
 
 \chapter{Built-in Operators} \label{SEC:operators}
 
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/microscope.ps,height=10cm}
-\end{center}
-\end{figure}
-
-The built-in operators can be subdivided in several broad categories:
-
+\fbox{\epsfig{figure=figs/microscope.ps,width=6cm}} \label{FIG:microscope}
+\hspace*{0.5cm}\parbox[b]{8cm}{The built-in operators can be subdivided in several broad categories:
 \begin{itemize}
 \item Operations on Booleans (Section~\ref{BO:bool}): logical operators ({\tt
   and}, {\tt or}, {\tt implies} and {\tt  not}).
@@ -940,14 +924,14 @@ comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >
 membership tests ({\tt in}, {\tt notin}),
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt
   >=}), and
-construction operators ({\tt union}, {\tt inter}, \verb@\@).
+construction operators ({\tt union}, {\tt inter}, {\tt diff}).
+
 \item Operations on relations (Section~\ref{BO:relations}):
 composition ({\tt o}), Cartesian product ({\tt x}),
 left and right image operators, and
 transitive closures ({\tt +}, {\tt *}).
 \end{itemize}
-
-\noindent The following sections give detailed descriptions and examples of all built-in operators.
+\noindent The following sections give detailed descriptions and examples of all built-in operators.}
 
 \section{Operations on Booleans} \label{BO:bool}
 
@@ -1327,13 +1311,9 @@ and
 \verb@Rel[{1, 2},-]@.
 
 \chapter{Built-in Functions} \label{SEC:functions}
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/declinatorium.ps,height=10cm}
-\end{center}
-\end{figure}
-
-
+\fbox{\epsfig{figure=figs/declinatorium.ps,width=6cm}}
+\label{FIG:declinatorium}
+\hspace*{0.5cm}\parbox[b]{8cm}{
 The built-in functions can be subdivided in several broad categories:
 
 \begin{itemize}
@@ -1349,6 +1329,12 @@ domain restriction ({\tt domainR}), range restriction ({\tt rangeR}),
 carrier restriction ({\tt carrierR}),
 domain exclusion ({\tt domainX}), range exclusion ({\tt rangeX}), and carrier
 exclusion ({\tt carrierX}).
+
+
+\end{itemize}
+}
+
+\begin{itemize}
 
 \item Functions on tuples (Section~\ref{tuples}):
 first element ({\tt first}),
@@ -1372,8 +1358,7 @@ sum ({\tt sum}), average ({\tt average}), maximum ({\tt max}), and minimum
 ({\tt min}).
 
 \end{itemize}
-
-\noindent The following sections give detailed descriptions and examples of all built-in functions.
+\noindent The following sections give detailed descriptions and examples of all built-in functions.}
 
 \newcommand{\function}[5]{\subsection{#1: {\tt #2}}\label{BI:#2}
 Definition:
@@ -1446,7 +1431,7 @@ interchanged.
 \functiona{Complement of a Relation}{compl}
 \begin{exam}
 \begin{verbatim}
-rel[&T1, &T2] compl(rel[&T1, &T2] R) = (carrier(R) x carrier(R)) \ R}
+rel[&T1, &T2] compl(rel[&T1, &T2] R) = (domain(R) x range(R)) \ R}
 \end{verbatim}
 \end{exam}
 { Yields the relation that is the complement of the
@@ -1925,17 +1910,25 @@ int min(set[int] S) = primitive
 \newpage
 \chapter{Larger Examples} \label{SEC:larger-examples}
 
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/vuurtoren.ps,height=10cm}
-\end{center}
-\end{figure}
-
-\section{Analyzing the Call Structure of an Application}
+\fbox{\epsfig{figure=figs/vuurtoren.ps,height=10cm}} \label{FIG:vuurtoren}
+\hspace*{0.5cm}\parbox[b]{7.5cm}{
+Now we will have a closer look at some larger applications of \rscript.
+We start by analyzing the global structure of a software system. 
 You may now want to reread the example of call graph analysis given earlier in
-Chapter~\ref{SEC:motivating-example}.
+Chapter~\ref{SEC:motivating-example} as a reminder. The component structure of
+an application is analyzed in Section~\ref{SEC:components}  and Java systems
+are analyzed in Section~\ref{SEC:Java-analysis}. Next we move on to the
+detection
+of unitialized variables in Section~\ref{SEC:uninit} and we explain how source
+code locations can be included in a such an analysis
+(Section~\ref{SEC:UsingLocations}).
 
-\section{Analyzing the Component Structure of an Application}
+As an example of computing code metrics, we describe the calculation of
+McCabe's cyclomatic complexity in Section~\ref{SEC:McCabe}. Several examples
+of dataflow analysis follow in Section~\ref{SEC:dataflow}. A description of
+program slicing concludes the chapter (Section~\ref{SEC:slicing}).}
+
+\section{Analyzing the Component Structure of an Application}\label{SEC:components}
 A frequently occurring problem is that we know the call
 relation of a system but that we want to understand it at the component level
 rather than at the procedure level. If it is known to which component each
@@ -2001,7 +1994,7 @@ and has as value:
 \caption{\label{FIG:parts} (a) {\tt Calls2}; (b) {\tt PartOf}; (c) {\tt ComponentCalls}}
 \end{figure}
 
-\section{Analyzing the Structure of Java Systems}
+\section{Analyzing the Structure of Java Systems}\label{SEC:Java-analysis}
 
 \begin{figure}[tb]
 {\small
@@ -2109,7 +2102,7 @@ we consider all classes {\tt C} with a cyclic dependency and add the pair {\tt
 USETRANS[C]} is the right image of the relation {\tt USETRANS} for element
 {\tt C}, i.e., all classes that can be called transitively from class {\tt C}.
 
-\section{Finding Uninitialized and Unused Variables in a Program}
+\section{Finding Uninitialized and Unused Variables in a Program}\label{SEC:uninit}
 
 Consider the following program in the toy language Pico:
 \footnote{This is an extended version of the example presented earlier
@@ -2334,7 +2327,7 @@ ASF+SDF Meta-Environment looks like.
 
 
 
-\section{McCabe Cyclomatic Complexity}
+\section{McCabe Cyclomatic Complexity}\label{SEC:McCabe}
 The \emph{cyclomatic complexity} of a program is defined as $e - n + 2$, where
 $e$ and $n$ are the number of edges and nodes in the control flow graph,
 respectively.  It was proposed by McCabe~\cite{McCabe76} as a measure of
@@ -2362,7 +2355,7 @@ The number of edges $e$ is equal to the number of tuples in {\tt PRED}.
 The number of nodes $n$ is equal to the number of elements in the carrier of
 {\tt PRED}, i.e., all elements that occur in a tuple in {\tt PRED}.
 
-\section{Dataflow Analysis}
+\section{Dataflow Analysis}\label{SEC:dataflow}
 
 \emph{Dataflow analysis} is a program analysis technique that forms the basis
 for many compiler optimizations. It is described in any text book on compiler
@@ -2919,13 +2912,6 @@ Take the domain of this result and we get exactly the statements
 in Figure~\ref{FIG:slicing}(b).
 
 \chapter{Extracting Facts from Source Code}
-
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/spektroskoop.ps,width=15cm}
-\end{center}
-\end{figure}
-
 \begin{figure}[tb]
 %%\hrulefill
 \begin{center}
@@ -2938,6 +2924,8 @@ in Figure~\ref{FIG:slicing}(b).
 \end{figure}
 
 
+\fbox{\epsfig{figure=figs/spektroskoop.ps,width=8cm}} \label{FIG:spektroskoop}
+\hspace*{0.5cm}\parbox[b]{6cm}{
 In this tutorial we have, so far, concentrated on querying and enriching facts
 that have been extracted from source code. As we have seen from the examples,
 once these facts are available, a concise \rscript suffices to do the required
@@ -2945,7 +2933,7 @@ processing. But how is fact extraction achieved and how difficult is it? To
 answer these questions we first describe the workflow of the fact extraction
 process (Section~\ref{SEC:extraction-wortkflow}) and then we give a more
 detailed account of fact extraction using ASF+SDF
-(Section~\ref{SEC:ASF+SDF-extraction}).
+(Section~\ref{SEC:ASF+SDF-extraction}).}
 
 \section{Workflow for Fact Extraction} \label{SEC:extraction-wortkflow}
 
@@ -3001,7 +2989,7 @@ In many cases there is no canned grammar available that can be used to parse
 
   \item Use another tool on the same source and compare results whenever
   possible. A typical example is a comparison of a call relation extracted
-  witj different tools.
+  with different tools.
 
   \end{itemize}
 
@@ -3379,7 +3367,7 @@ Second, that several research question remain unanswered:
 
 \begin{figure}[h]
 \begin{center}
-\epsfig{figure=figs/ruhmkorff.ps,width=15cm}
+\epsfig{figure=figs/ruhmkorff.ps,width=15cm} \label{FIG:ruhmkorff}
 \end{center}
 \end{figure}
 
@@ -3540,9 +3528,13 @@ a file named \texttt{result.rviz}.
 Example:
    \texttt{rstore2rviz -i query.rstore -o query.rviz}
 
+\begin{figure}[h]
+\begin{center}
+\epsfig{figure=figs/camera-obscura.ps,width=8cm} \label{FIG:camera-obscura}
+\end{center}
+\end{figure}
 \subsection{\texttt{rviz}: visualize an rstore}
 \note{To be written}
-
 
 \section{Running \rscript Interactively} \label{SEC:running-interactive}
 \begin{itemize}
@@ -3739,18 +3731,47 @@ and Jurgen Vinju for comments on this tutorial.
 \end{figure}
 
 
-\begin{figure}[h]
-\begin{center}
-\epsfig{figure=figs/camera-obscura.ps,width=15cm}
-\end{center}
-\end{figure}
+
 
 \begin{figure}[h]
 \begin{center}
-\epsfig{figure=figs/teleskoop.ps,width=15cm}
+\epsfig{figure=figs/teleskoop.ps,width=15cm} \label{FIG:teleskoop}
 \end{center}
 \end{figure}
 
-\bibliographystyle{plain}
-\bibliography{iwpc,tutorial}
+\section*{Illustrations}
+
+Most illustrations used in this tutorial concern physical instruments for
+  measurement or observation and are taken from H. van de Stadt, \emph{Beknopt
+  Leerboek der Natuurkunde} (Concise Text-book of Physics) Tjeenk Willink,
+  Zwolle, 1902.
+On the frontpage appears a windlass that amplifies manual power and is used in
+water wells, drilling devices, and wind mills.
+Page~\pageref{FIG:balloon}  shows a hot air balloon combined with a parachute
+(circa 1900).
+On page~\pageref{FIG:microscope} appears a composite microscope as proposed by
+Drebbel (1621).
+On page~\pageref{FIG:declinatorium} appears a \emph{declinatorium} used to
+measure the difference between the magnetic and geographic north pole.
+On page~\pageref{FIG:vuurtoren} the cross section is shown of a lighthouse as used along
+the Dutch cost.
+The spectroscope on page~\pageref{FIG:spektroskoop} is a design using four
+prisms by Steinheil
+and is used for the improved dispersion and analysis of the light emitted by
+natrium vapour.
+On page~\pageref{FIG:ruhmkorff} appears Ruhmkorff's induction-coil (1851) used
+to create high-Voltage electric currents. 
+Page \pageref{FIG:camera-obscura} shows a variation of the \emph{camera obscura} as
+used for producing realistic drawings of a landscape.
+Lassell's telescope (1863) appears on page~\pageref{FIG:teleskoop}.
+
+ The photograph on page~\pageref{FIG:caruso} is the ``Caruso'' loudspeaker and
+  appeared in an advertisement in J. Corver, \emph{Het Draadloos
+  Amateurstation} (The Wireless Amateur (Radio) Station), Veenstra, 's
+  Gravenhage, 1928.
+The sign alphabet on page~\pageref{FIG:signalpha} has been taken from ...
+
+
+\bibliographystyle{plain} \bibliography{iwpc,tutorial}
+
 \end{document}
