@@ -13,6 +13,7 @@ configuration interface
 
 requires
   aterm 2.3.1
-  aterm-java 1.6
+
+aterm-java 1.6
 
 toolbuslib 0.8
