@@ -5,6 +5,8 @@ Mon Apr 11 13:25:33 CEST 2005 <jong@cwi.nl>
    - Removed the chdir(2) part in the temporary file name issue (see below).
      Since we use absolute pathnames anyway, we don't have to "chdir" (which
      broke things like "-I .")
+   - Use the tail of the incoming filename, as it is sometimes "../../file.c",
+     which makes for nasty pathnames: /var/tmp/TBxkdhf/../../file.c"
 
 Mon Apr 11 09:20:13 CEST 2005 <jong@cwi.nl>
  * package:

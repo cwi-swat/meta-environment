@@ -82,6 +82,7 @@ TBbool parse_script(char *name, int argc, char **argv)
   char line[PP_LINE_MAX];
   char curdir[ABS_PATH_MAX];
   char dirname[ABS_PATH_MAX];
+  const char *p;
   FILE *fnamec, *fname;
   int i;
   TBbool in_string = TBfalse;
@@ -98,9 +99,12 @@ TBbool parse_script(char *name, int argc, char **argv)
     err_sys_fatal("parse_script: cannot get current directory");
   }
 
-  /* Create a copy of it */
-  sprintf(namec, "%s/%s.c", dirname, name);
-  sprintf(namei, "%s/%s.i", dirname, name);
+  p = strrchr(name, '/');
+  if (p == NULL) {
+    p = name;
+  }
+  sprintf(namec, "%s/%s.c", dirname, p);
+  sprintf(namei, "%s/%s.i", dirname, p);
   
   if((fnamec = fopen(namec, "wb")) == NULL) {
     err_sys_fatal("cannot create temp file `%s' for preprocessor", namec);
