@@ -39,12 +39,22 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl Require ToolBus Java Adapter
+AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
+   [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
+AC_SUBST(TOOLBUS_JAVA_ADAPTER)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
+
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
 
 NOSOCKLIBS=$LIBS
 SOCKET_FOUND=no

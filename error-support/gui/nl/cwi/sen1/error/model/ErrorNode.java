@@ -2,6 +2,7 @@ package nl.cwi.sen1.error.model;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import errorapi.types.Error;
 import errorapi.types.Summary;
 
 public class ErrorNode extends DefaultMutableTreeNode {
@@ -15,5 +16,9 @@ public class ErrorNode extends DefaultMutableTreeNode {
 	public ErrorNode(Object userObject, boolean allowsChildren, Summary summary) {
 		super(userObject, allowsChildren);
 		this.summary = summary;
+	}
+	
+	public Error getFirstError() {
+		return summary.getList().getHead();
 	}
 }
