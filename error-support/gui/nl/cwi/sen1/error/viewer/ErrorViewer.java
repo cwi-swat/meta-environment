@@ -34,20 +34,19 @@ public class ErrorViewer extends ErrorPanel implements ErrorViewerTif, Runnable 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
-				ErrorNode node = null;
 
 				if (path != null) {
-					node = (ErrorNode) path.getLastPathComponent();
-				}
-
-				if (node != null) {
-					Error error = node.getFirstError();
-					if (!error.getList().isEmpty()) {
-						bridge.postEvent(factory.make("error-selected(<term>)",
-								error.toTerm()));
+					ErrorNode node = (ErrorNode) path.getLastPathComponent();
+					if (node != null) {
+						Error error = node.getFirstError();
+						if (!error.getList().isEmpty()) {
+							bridge.postEvent(factory.make(
+									"error-selected(<term>)", error.toTerm()));
+						}
 					}
 				}
 			}
+
 		});
 	}
 
