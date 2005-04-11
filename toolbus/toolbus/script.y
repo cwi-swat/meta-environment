@@ -20,6 +20,8 @@
 
 */
 %{
+#include <fcntl.h>
+
 #include "toolbus.h"
 #include "terms.h"
 #include "env.h"                
@@ -30,7 +32,6 @@
 #include "typecheck.h"
 #include "interpreter.h"
 #include "script.h"
-#include <fcntl.h>
 
 extern int yyparse(void);
 extern int yylex(void);
@@ -51,20 +52,17 @@ void switch_source(char *name, int n)
     lino = n;
   }
 
-/* Create temporary name with appropriate suffix */
-
-#define ABS_PATH_MAX 1024   /* guess max abs path name */
-
-char *TBtmpname(char *name, char *suf)
-  {
-    char *tmp = getenv("TMPDIR");
-    if(!tmp)
+static void TBtmpdir(char *dirname)
+{
+    const char *tmp = getenv("TMPDIR");
+    if (!tmp) {
       tmp = "/var/tmp";
-    sprintf(name, "%s/TB%d%s", tmp, (int) getpid(), suf);
-    if(strlen(name) >= ABS_PATH_MAX)
-      err_fatal("TBtmpname: name `%s' too long", name);
-    return name;
-  }
+    }
+    sprintf(dirname, "%s/TBXXXXXX", tmp);
+    if (mkdtemp(dirname) == NULL) {
+      err_sys_fatal("TBtmpdir: failed to create temporary directory '%s'", dirname);
+    }
+}
 
 /* First preprocess script from file `name' and then parse it.
    Note: for portability reasons, the C preprocessor should be called with
@@ -74,10 +72,16 @@ char *TBtmpname(char *name, char *suf)
 
 #define CMD_MAX 10240
 #define PP_LINE_MAX 1024
+#define ABS_PATH_MAX _POSIX_PATH_MAX
 
 TBbool parse_script(char *name, int argc, char **argv)
 { int org_stdin, pres;
-  char cmd[CMD_MAX], namec[ABS_PATH_MAX], namei[ABS_PATH_MAX], line[PP_LINE_MAX];
+  char cmd[CMD_MAX];
+  char namec[ABS_PATH_MAX];
+  char namei[ABS_PATH_MAX];
+  char line[PP_LINE_MAX];
+  char curdir[ABS_PATH_MAX];
+  char dirname[ABS_PATH_MAX];
   FILE *fnamec, *fname;
   int i;
   TBbool in_string = TBfalse;
@@ -86,13 +90,26 @@ TBbool parse_script(char *name, int argc, char **argv)
   if((fname = fopen(name, "rb")) == NULL)
     err_sys_fatal("cannot open file `%s'", name);
 
-  /* Create a copy of it */
+  /* Create a temporary directory */
+  TBtmpdir(dirname);
 
-  TBtmpname(namec, ".c");
-  TBtmpname(namei, ".i");
+  /* Save current dir */
+  if (getcwd(curdir, ABS_PATH_MAX) == NULL) {
+    err_sys_fatal("parse_script: cannot get current directory");
+  }
+
+  /* Change into the temporary directory */
+  if (chdir(dirname) == -1) {
+    err_sys_fatal("parse_script: cannot change to directory '%s'", dirname);
+  }
+
+  /* Create a copy of it */
+  sprintf(namec, "%s.c", name);
+  sprintf(namei, "%s.i", name);
   
-  if((fnamec = fopen(namec, "wb")) == NULL)
+  if((fnamec = fopen(namec, "wb")) == NULL) {
     err_sys_fatal("cannot create temp file `%s' for preprocessor", namec);
+  }
 
   fprintf(fnamec, "# 1 \"%s\"\n", name);  /* set original file name */
 
@@ -149,6 +166,7 @@ TBbool parse_script(char *name, int argc, char **argv)
   if(system(cmd) != 0){
     remove(namec);
     remove(namei);
+    remove(dirname);
     err_sys_fatal("errors during execution of C preprocessor");
   }
 
@@ -156,14 +174,27 @@ TBbool parse_script(char *name, int argc, char **argv)
   close (0);
 
   if(open(namei, O_RDONLY) < 0)
-    err_sys_fatal("cannot open intermediate file %s created by C preprocessor");
+    err_sys_fatal("cannot open intermediate file '%s' created by C preprocessor", namei);
   
   lino = 1;
   pos = 0;
   pres = yyparse();  /* at last, the actual parse */
 
-  remove(namec);
-  remove(namei);
+  if (unlink(namec) == -1) {
+    err_sys_warn("parse_script: cannot remove temporary file '%s'", namec);
+  }
+
+  if (unlink(namei) == -1) {
+    err_sys_warn("parse_script: cannot remove temporary file '%s'", namei);
+  }
+
+  if (chdir(curdir) == -1) {
+    err_sys_warn("parse_script: cannot change back to directory '%s'", curdir);
+  }
+
+  if (rmdir(dirname) == -1) {
+    err_sys_warn("parse_script: cannot remove temporary directory '%s'", dirname);
+  }
 
   close(0);
   dup(org_stdin);  /* restore old stdin */
