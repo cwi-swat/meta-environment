@@ -1,10 +1,10 @@
 package nl.cwi.sen1.error.viewer;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.error.model.ErrorNode;
@@ -31,10 +31,14 @@ public class ErrorViewer extends ErrorPanel implements ErrorViewerTif, Runnable 
 			e.printStackTrace();
 		}
 		final JTree tree = getTree();
-		tree.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
-				ErrorNode node = (ErrorNode) path.getLastPathComponent();
+				ErrorNode node = null;
+
+				if (path != null) {
+					node = (ErrorNode) path.getLastPathComponent();
+				}
 
 				if (node != null) {
 					Error error = node.getFirstError();

@@ -1,6 +1,8 @@
 $Id$
 
 Mon Apr 11 15:26:38 CEST 2005 <kooiker@cwi.nl>
+ * gui/nl/cwi/sen1/error/viewer/ErrorViewer.java:
+   - Change mouselistener to treeselectionlistener
  * gui/build.xml:
    - Add debug information to compiled sources
  * gui/Makefile.am:

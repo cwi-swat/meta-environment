@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -60,6 +62,13 @@ public class ErrorPanel extends JPanel {
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 		tree.setRootVisible(false);
 		tree.setShowsRootHandles(true);
+		
+		DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+        Icon personIcon = null;
+        renderer.setLeafIcon(personIcon);
+        renderer.setClosedIcon(personIcon);
+        renderer.setOpenIcon(personIcon);
+        tree.setCellRenderer(renderer);		
 		
 		JScrollPane scrollPane = new JScrollPane(tree);
 		add(toolBar, BorderLayout.WEST);
