@@ -98,14 +98,9 @@ TBbool parse_script(char *name, int argc, char **argv)
     err_sys_fatal("parse_script: cannot get current directory");
   }
 
-  /* Change into the temporary directory */
-  if (chdir(dirname) == -1) {
-    err_sys_fatal("parse_script: cannot change to directory '%s'", dirname);
-  }
-
   /* Create a copy of it */
-  sprintf(namec, "%s.c", name);
-  sprintf(namei, "%s.i", name);
+  sprintf(namec, "%s/%s.c", dirname, name);
+  sprintf(namei, "%s/%s.i", dirname, name);
   
   if((fnamec = fopen(namec, "wb")) == NULL) {
     err_sys_fatal("cannot create temp file `%s' for preprocessor", namec);
@@ -186,10 +181,6 @@ TBbool parse_script(char *name, int argc, char **argv)
 
   if (unlink(namei) == -1) {
     err_sys_warn("parse_script: cannot remove temporary file '%s'", namei);
-  }
-
-  if (chdir(curdir) == -1) {
-    err_sys_warn("parse_script: cannot change back to directory '%s'", curdir);
   }
 
   if (rmdir(dirname) == -1) {

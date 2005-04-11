@@ -1,5 +1,11 @@
 $Id$
 
+Mon Apr 11 13:25:33 CEST 2005 <jong@cwi.nl>
+ * toolbus/script.y:
+   - Removed the chdir(2) part in the temporary file name issue (see below).
+     Since we use absolute pathnames anyway, we don't have to "chdir" (which
+     broke things like "-I .")
+
 Mon Apr 11 09:20:13 CEST 2005 <jong@cwi.nl>
  * package:
    - Bumped version to 1.3.1
