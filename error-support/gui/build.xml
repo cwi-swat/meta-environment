@@ -1,17 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="build">
+<project name="error-viewer" default="build" basedir=".">
+
   <property environment="env"/>
+  <property name="build" location="build"/>
+  <property name="dist" location="dist"/>
+  <property name="package" value="."/>
   <path id="project.classpath">
     <pathelement path="${env.JARS}"/>
   </path>
+
   <target name="build">
-    <javac destdir=".">
-      <src path="."/>
+    <mkdir dir="${build}"/>
+    <javac destdir="${build}">
+      <src path="${package}"/>
       <classpath refid="project.classpath"/>
     </javac>
-    <jar destfile="error-viewer.jar" 
-      basedir="."
-      includes="*.class"
-    />
   </target>
+
+  <target name="dist" depends="build">
+    <mkdir dir="${dist}/src"/>
+    <copy todir="${dist}/src/${package}">
+      <fileset dir="${package}" includes="**/*.java"/>
+    </copy>
+    <jar destfile="error-viewer.jar">
+      <fileset dir="${build}"/>
+      <fileset dir="${dist}"/>
+    </jar>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete file="${env.JAR}"/>
+  </target>
+      
 </project>
