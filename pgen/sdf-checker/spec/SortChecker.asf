@@ -210,7 +210,10 @@ equations
         ModuleInfoTable4 := 
           put-used-symbols-info($ModuleId, UsedSymbolsSet, ModuleInfoTable3),
         ModuleInfoTable5 := 
-          put-defined-symbols-info($ModuleId, DefinedSymbolsSet2, ModuleInfoTable4),
+          put-defined-symbols-info($ModuleId, 
+                                   merge(ParameterSymbolPairSet, 
+                                         DefinedSymbolsSet2), 
+                                   ModuleInfoTable4),
         InfoMsgTuple4 :=  put-module-info(ModuleInfoTable5, InfoMsgTuple3)
         ====>
         check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4

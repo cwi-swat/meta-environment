@@ -1,13 +1,13 @@
 equations
 
-  [cs-1'1] InfoMsgTuple := check-sdf(Definition, $ModuleId),
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, $ModuleId, false),
            Msg* := get-messages(InfoMsgTuple),
            $StrCon := moduleid2str($ModuleId)
            ====>
            check-sdf(definition Definition, $ModuleId) =
              summary("SdfChecker", $StrCon, [Msg*])
 
-  [cs-1'1] InfoMsgTuple := check-sdf(Definition, Unknown),
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, Unknown, false),
            Msg*1 := get-messages(InfoMsgTuple),
            Bool := contains-main(Definition, false),
            Msg*2 := main-message(Bool)
@@ -22,8 +22,17 @@ equations
            Msg*3 := check-sdf-attributes(Definition2),
            Msg*4 := contains-visible-startsymbols(Definition2, $ModuleId)
            ====>
-           check-sdf(Definition1, $ModuleId) = 
+           check-sdf(Definition1, $ModuleId, false) = 
              put-messages(Msg*1, Msg*2, Msg*3, Msg*4, InfoMsgTuple)
+
+  [cs-1'1] Msg*1 := check-labels(Definition1),
+           Definition2 := remove-labels(Definition1),
+           InfoMsgTuple := check-sorts-and-prods(Definition2),
+           Msg*2 := get-messages(InfoMsgTuple),
+           Msg*3 := check-sdf-attributes(Definition2)
+           ====>
+           check-sdf(Definition1, $ModuleId, true) =
+             put-messages(Msg*1, Msg*2, Msg*3, InfoMsgTuple)
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
@@ -154,14 +163,21 @@ make-error("module not available", $StrCon, $Location),
              get-declared-symbols(Import*, get-module-info(InfoMsgTuple1)),
            AliasedSymbolPairSet := 
              get-aliased-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           DefinedSymbolPairSet :=
+             get-defined-symbols(Import*, get-module-info(InfoMsgTuple1)),
+
            SymbolsSet1 := 
              get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
            $Msgs1 := get-messages(InfoMsgTuple1),
-           SymbolsSet4 := diff(merge(DeclaredSymbolPairSet, 
+           SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
                                      AliasedSymbolPairSet),
                                SymbolsSet1),
-           $Msgs2 := make-symbol-warnings(SymbolsSet4, "unused sort definitions"),
-           InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, InfoMsgTuple1)
+           $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort definitions"),
+           SymbolsSet3 := diff(SymbolsSet1,
+                               DefinedSymbolPairSet),
+           $Msgs3 := make-symbol-errors(SymbolsSet3, "used symbols but not defined in any right-hand side"),
+
+           InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, $Msgs3, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2
 

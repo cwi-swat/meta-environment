@@ -11,7 +11,7 @@ exports
   context-free syntax
     check-sdf(SDF)                  -> Summary
     check-sdf(SDF, ModuleId)        -> Summary
-    check-sdf(Definition, ModuleId) -> Info-Msg-Tuple
+    check-sdf(Definition, ModuleId, Boolean) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
@@ -53,6 +53,7 @@ hiddens
 
     "DeclaredSymbolPairSet"[0-9]* -> SymbolsSet
     "AliasedSymbolPairSet"[0-9]*  -> SymbolsSet
+    "DefinedSymbolPairSet"[0-9]*  -> SymbolsSet
 
     "$Msgs"[0-9]*           -> {Error ","}*
   
