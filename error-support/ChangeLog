@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 12 08:27:29 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - Add dependency on toolbus-java-adapter
+
 Mon Apr 11 15:26:38 CEST 2005 <kooiker@cwi.nl>
  * gui/nl/cwi/sen1/error/viewer/ErrorViewer.java:
    - Change mouselistener to treeselectionlistener

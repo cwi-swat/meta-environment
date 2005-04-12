@@ -16,4 +16,6 @@ requires
 
 aterm-java 1.6
 
+toolbus-java-adapter 1.0
+
 toolbuslib 0.8
