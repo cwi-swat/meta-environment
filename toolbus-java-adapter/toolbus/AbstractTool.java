@@ -129,6 +129,14 @@ abstract public class AbstractTool implements Tool, Runnable {
 		return verbose;
 	}
 
+	public int getPort() {
+		return port;
+	}
+
+	public InetAddress getAddress() {
+		return address;
+	}
+
 	private void shakeHands() throws IOException {
 		String host = address.getHostName();
 		info("host = " + host);

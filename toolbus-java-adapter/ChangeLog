@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 12 09:30:40 CEST 2005 <jong@cwi.nl>
+ * toolbus/AbstractTool.java:
+   - add getAddress() and getPort() to expose toolbus connection
+
 Fri Apr  8 16:18:54 CEST 2005 <kooiker@cwi.nl>
  * toolbus/JavaTif.java:
    - Generate directory structure according to given packagename
