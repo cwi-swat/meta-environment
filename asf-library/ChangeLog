@@ -1,5 +1,8 @@
 $Id$
 
+Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
+ * Improved the syntax of prefix functions.
+
 Fri Mar 25 11:28:57 CET 2005 <jurgenv@cwi.nl>
  * Cleaned up C grammar:
     - Onely one expression sort left (by using priorities)
