@@ -14,8 +14,8 @@ equations
   [x] get-imports(imports $Import*1, imports($Import*2)) = 
         imports($Import*1 $Import*2)
 
-  [x] imports($Import*1 $ModuleName $Import*2 $ModuleName $Import*3) =
-        imports($Import*1 $ModuleName $Import*2 $Import*3)
+  [x] imports($Import*1 $Import $Import*2 $Import $Import*3) =
+        imports($Import*1 $Import $Import*2 $Import*3)
 
   [x] get-imports($ModuleId, {$ImportRelation*1, 
                              [$ModuleId : imports($Import*)], 

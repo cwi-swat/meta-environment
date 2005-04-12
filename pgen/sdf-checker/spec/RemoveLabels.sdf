@@ -9,5 +9,5 @@ exports
 
 hiddens
   variables
-    "Symbol"[0-9]*   -> Symbol
-    "$Literal"[0-9]* -> Literal
+    "Symbol"[0-9]* -> Symbol
+    "$Label"[0-9]* -> Label

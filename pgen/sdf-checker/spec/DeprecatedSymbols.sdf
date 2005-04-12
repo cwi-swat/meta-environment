@@ -22,7 +22,7 @@ hiddens
     "Definition"[0-9]* -> Definition 
     "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "$UQLiteral"[0-9]* -> UQLiteral
+    "$UQLiteral"[0-9]* -> IdCon
 
     "$Location"[0-9]* -> Location
 

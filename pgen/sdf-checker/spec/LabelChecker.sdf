@@ -13,12 +13,12 @@ hiddens
   sorts LabelsSet Labels-Msgs-Tuple
 
   context-free syntax
-    labels(Literal*)               -> LabelsSet
+    labels(Label*)                     -> LabelsSet
     "[" LabelsSet "," {Error ","}* "]" -> Labels-Msgs-Tuple
 
   context-free syntax
-    contains(Literal, LabelsSet) -> Boolean
-    Literal "++" LabelsSet       -> LabelsSet
+    contains(Label, LabelsSet) -> Boolean
+    Label "++" LabelsSet       -> LabelsSet
 
   context-free syntax
     check-labels(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
@@ -41,7 +41,9 @@ hiddens
     "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$Literal"[0-9]*   -> Literal
-    "$Literal*"[0-9]*  -> Literal*
+    "$Label"[0-9]*     -> Label
+    "$FuncName"[0-9]*  -> FunctionName
+    "$Label*"[0-9]*    -> Label*
     "Symbol*"[0-9]*    -> Symbol*
     "Symbol,*"[0-9]*   -> {Symbol ","}*
     "Attrs"[0-9]*      -> Attributes

@@ -34,7 +34,7 @@ equations
   [ema-1'1] equals-modulo-attrs(Symbol* -> Symbol Attrs1,
                                 Symbol* -> Symbol Attrs2) = true
 
-  [ema-1'2] equals-modulo-attrs($Literal (Symbol,*) -> Symbol Attrs1, 
-                                $Literal (Symbol,*) -> Symbol Attrs2) = true
+  [ema-1'2] equals-modulo-attrs($FuncName (Symbol,*) -> Symbol Attrs1, 
+                                $FuncName (Symbol,*) -> Symbol Attrs2) = true
 
   [default-ema-1'3] equals-modulo-attrs(Prod1, Prod2) = false

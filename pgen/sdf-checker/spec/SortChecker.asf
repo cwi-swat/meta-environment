@@ -116,7 +116,7 @@ equations
   [tc5] get-defined-symbols($Symbols -> $Symbol $Attributes, 
                             SymbolsSet) = add($Symbol, SymbolsSet)
 
-  [tc6] get-defined-symbols($Literal ( $Symbol,* ) -> $Symbol $Attributes, 
+  [tc6] get-defined-symbols($FuncName ( $Symbol,* ) -> $Symbol $Attributes, 
                             SymbolsSet) = add($Symbol, SymbolsSet)
 
   [grs-1'1] get-renamed-symbols($Symbol1 => $Symbol2, 

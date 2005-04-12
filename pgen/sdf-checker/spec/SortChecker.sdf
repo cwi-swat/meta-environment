@@ -140,7 +140,9 @@ hiddens
     "SymbolPairsSet"[0-9]*  -> SymbolsSet
     "SymbolsSet"[0-9]*      -> SymbolsSet
     "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
-    "$Literal"[0-9]*        -> Literal
+    "$StrCon"[0-9]*         -> StrCon
+    "$IdCon"[0-9]*          -> IdCon
+    "$FuncName"[0-9]*       -> FunctionName
     "$Alias"[0-9]*          -> Alias
 
     "Import*"[0-9]*         -> Import*

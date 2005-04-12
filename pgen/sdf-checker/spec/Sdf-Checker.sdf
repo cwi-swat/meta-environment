@@ -1,7 +1,7 @@
 module  Sdf-Checker
 
 imports Sdf-AttributeChecker LabelChecker SortChecker 
-        ProductionChecker RemoveLabels DeprecatedSymbols StartSymbolChecker
+        ProductionChecker RemoveLabels StartSymbolChecker
 
 imports utilities/PosInfo[Import]
 

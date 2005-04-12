@@ -3,29 +3,29 @@ equations
   [production2str-plain]
     production2str($Symbol* -> $Symbol $Attributes) =
       symbols2str($Symbol*) 
-      || strcon(""" "-"">" """)
-      || symbol2str($Symbol) 
+      || "->"
+      || symbol2str($Symbol)  
 
   [production2str-prefix]
-    production2str($Literal($Symbolstar) -> $Symbol $Attributes) =
-      literal2str($Literal)  
-      || strcon(""" "(" """)
+    production2str($FuncName($Symbolstar) -> $Symbol $Attributes) =
+      functionname2str($FuncName)  
+      || "("
       || symbolssep2str($Symbolstar)  
-      || strcon(""" ")" """)
-      || strcon(""" "-"">" """)
+      || ")"
+      || "->"
       || symbol2str($Symbol)
 
   [productions2str-empty]
-     productions2str() = strcon(""" """)
+     productions2str() = ""
 
   [productions2str-non-empty]
      productions2str($Production $Production*) =
        production2str($Production)
-      || strcon(""" " " """)
+      || " "
        || productions2str($Production*)
 
   [symbols2str-empty]
-    symbols2str() = strcon(""" """) 
+    symbols2str() = "" 
 
   [symbols2str-one]
     symbols2str($Symbol) = symbol2str($Symbol)
@@ -33,11 +33,11 @@ equations
   [symbols2str-many]
     symbols2str($Symbol $Symbol+) = 
       symbol2str($Symbol)
-      || strcon(""" " " """)
+      || " "
       || symbols2str($Symbol+)
 
   [symbolssep2str-empty]
-    symbolssep2str() = strcon(""" """) 
+    symbolssep2str() = "" 
 
   [symbolssep2str-one]
     symbolssep2str($Symbol) = symbol2str($Symbol)
@@ -45,79 +45,96 @@ equations
   [symbolssep2str-many]
     symbolssep2str($Symbol , $Symbolplus) = 
       symbol2str($Symbol)
-      || strcon(""" "," """)
+      || ","
       || symbolssep2str($Symbolplus)
 
   [symbol2str-plainsort]
-    symbol2str(sort($Char*)) = strcon(""" $Char* """)
+    symbol2str($Sort) = sort2strcon($Sort)
 
   [symbol2str-parameterizedsort]
-    symbol2str(sort($Char*)[[$Symbolplus]]) = 
-      strcon(""" $Char* """)
-      || strcon(""" "[""[" """)
+    symbol2str($Sort[[$Symbolplus]]) = 
+      sort2strcon($Sort)
+      || "[["
       || symbolssep2str($Symbolplus)
-      || strcon(""" "]""]" """)
+      || "]]"
 
   [symbol2str-literal]
-    symbol2str($Literal) = literal2str($Literal)
+    symbol2str($StrCon) = $StrCon
 
   [symbol2str-star]
-    symbol2str($Symbol*) = symbol2str($Symbol) || strcon(""" "*" """)
+    symbol2str($Symbol*) = symbol2str($Symbol) || "*"
 
   [symbol2str-plus]
-    symbol2str($Symbol+) = symbol2str($Symbol) || strcon(""" "+" """)
+    symbol2str($Symbol+) = symbol2str($Symbol) || "+"
 
   [symbol2str-option]
-    symbol2str($Symbol?) = symbol2str($Symbol) || strcon(""" "?" """)
+    symbol2str($Symbol?) = symbol2str($Symbol) || "?"
 
   [symbol2str-sepstar]
     symbol2str({$Symbol1 $Symbol2}*) = 
-      strcon(""" "{" """)
+      "{"
       || symbol2str($Symbol1) 
-      || strcon(""" " " """)
+      || " "
       || symbol2str($Symbol2) 
-      || strcon(""" "}" """)  
-      || strcon(""" "*" """) 
+      || "}*"
 
   [symbol2str-sepplus]
     symbol2str({$Symbol1 $Symbol2}+) = 
-      strcon(""" "{" """)
+      "{" 
       || symbol2str($Symbol1) 
-      || strcon(""" " " """)
+      || " "
       || symbol2str($Symbol2) 
-      || strcon(""" "}" """)  
-      || strcon(""" "+" """) 
+      || "}+" 
 
   [symbol2str-tuple]
-    symbol2str($Symbol1 # $Symbol2) = 
-      symbol2str($Symbol1) 
-      || strcon(""" "#" """)
-      || symbol2str($Symbol2) 
-
-  [symbol2str-tuple-new]
     symbol2str(<$Symbol, $Symbolplus>) = 
-      strcon(""" "<" """)
+      "<"
       || symbol2str($Symbol) 
-      || strcon(""" "," """)
+      || ","
       || symbolssep2str($Symbolplus)
-      || strcon(""" ">" """)
+      || ">"
 
-  [symbol2str-tuple]
-    symbol2str($Literal : $Symbol) = 
-      literal2str($Literal) 
-      || strcon(""" ":" """)
+  [symbol2str-label]
+    symbol2str($Label : $Symbol) = 
+      label2str($Label) 
+      || ":"
       || symbol2str($Symbol)  
 
   [default-symbol2str-notimplemented]
-    symbol2str($Symbol) = 
-      strcon(""" "n""o""t""-""i""m""p""l""e""m""e""n""t""e""d" """)
+    symbol2str($Symbol) = "not-implemented"
 
-  [literal2str-uqliteral]
-    literal2str(uqliteral($Char*)) = strcon(""" $Char* """)
+  [label2str-strcon]
+    label2str($StrCon) = $StrCon
 
-  [literal2str-qliteral]
-    literal2str(qliteral(""" $Char* """)) = 
-      strcon(""" "\"""" $Char* "\"""" """)
+  [literal2str-idcon]
+    label2str($IdCon) = idcon2strcon($IdCon)
 
-  [moduleid2string]
-    moduleid2str(moduleid($Char*)) = strcon(""" $Char* """)
+  [sort2str-onechar]
+    sort2strcon(sort(head)) = strcon(\" strchar(head) \")
+
+  [sort2str-morechar]
+    strcon(\" char* \") := middle2strcon(middle(middle))
+    ===>
+    sort2strcon(sort(head middle last)) = 
+      strcon(\" strchar(head) char* strchar(last) \")
+
+  [middle2strcon-empty]
+    middle2strcon(middle()) = ""
+
+  [middle2strcon-nonempty]
+    strcon(\" char* \") := middle2strcon(middle(middle))
+    ===>
+    middle2strcon(middle(middle-char middle)) = 
+      strcon(\" strchar(middle-char) char* \")
+
+  [moduleid2str-leaf]
+    moduleid2str(moduleid(moduleword(letters))) = 
+      moduleword2strcon(moduleword(letters))
+
+  [moduleid2str-root]
+    moduleid2str(moduleid(/ basename)) = 
+      "/" || moduleid2str(basename)
+
+  [moduleid2str-path]
+    moduleid2str(moduleid(moduleword(letters) / basename)) = 
+      moduleword2strcon(moduleword(letters)) || "/" ||  moduleid2str(basename)

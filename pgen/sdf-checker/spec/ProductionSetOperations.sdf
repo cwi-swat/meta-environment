@@ -24,8 +24,8 @@ hiddens
     "Prod*"[0-9]*    -> Production*
     "Prod"[0-9]*     -> Production
     
-    "Attrs"[0-9]* -> Attributes
-    "$Literal"[0-9]* -> Literal
-    "Symbol"[0-9]* -> Symbol
-    "Symbol*"[0-9]* -> Symbol*
-    "Symbol,*"[0-9]* -> {Symbol ","}*
+    "Attrs"[0-9]*     -> Attributes
+    "$FuncName"[0-9]* -> FunctionName
+    "Symbol"[0-9]*    -> Symbol
+    "Symbol*"[0-9]*   -> Symbol*
+    "Symbol,*"[0-9]*  -> {Symbol ","}*

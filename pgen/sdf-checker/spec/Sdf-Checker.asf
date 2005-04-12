@@ -20,11 +20,10 @@ equations
            InfoMsgTuple := check-sorts-and-prods(Definition2),
            Msg*2 := get-messages(InfoMsgTuple),
            Msg*3 := check-sdf-attributes(Definition2),
-           Msg*4 := check-for-deprecated-symbols(Definition2),
-           Msg*5 := contains-visible-startsymbols(Definition2, $ModuleId)
+           Msg*4 := contains-visible-startsymbols(Definition2, $ModuleId)
            ====>
            check-sdf(Definition1, $ModuleId) = 
-             put-messages(Msg*1, Msg*2, Msg*3, Msg*4, Msg*5, InfoMsgTuple)
+             put-messages(Msg*1, Msg*2, Msg*3, Msg*4, InfoMsgTuple)
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
