@@ -23,5 +23,5 @@ hiddens
     "Definition"[0-9]*   -> Definition
     "Msgs"[0-9]*         -> {Error ","}*
     "$ModuleId"[0-9]*    -> ModuleId
-    "$Char*" [0-9]*      -> CHAR*
+    "$StrCon"[0-9]*      -> StrCon
     "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple

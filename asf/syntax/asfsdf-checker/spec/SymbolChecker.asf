@@ -102,7 +102,7 @@ equations
            check-charclass-symbols($Symbol0, Msgs, $ModuleId) =
               Msgs, make-error($String2, $String3, $Location)
 
-  [ils-1'1] is-literal-symbol($Literal) = true
+  [ils-1'1] is-literal-symbol($StrCon) = true
 
   [default-ils-1'2] is-literal-symbol($Symbol) = false
 

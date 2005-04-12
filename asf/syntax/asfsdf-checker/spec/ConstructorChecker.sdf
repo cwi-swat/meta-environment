@@ -68,12 +68,13 @@ hiddens
     "Symbol*"[0-9]*    -> Symbol*
     "Symbol,*"[0-9]*   -> {Symbol ","}*
     "Symbol"[0-9]*     -> Symbol
-    "$Literal"[0-9]*    -> Literal
+    "$FuncName"[0-9]*  -> FunctionName
 
     "ConsMsgTuple"[0-9]*    -> Constructors-Msg-Tuple
     "Prod"[0-9]*            -> Production
 
     "Group+"[0-9]*          -> {Group ">"}+
 
-    "$String"[0-9]* -> StrCon
+    "$String"[0-9]*   -> StrCon
     "$Location"[0-9]* -> Location
+    "$AFun"[0-9]*     -> AFun

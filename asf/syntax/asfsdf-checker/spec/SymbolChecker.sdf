@@ -35,7 +35,7 @@ hiddens
     "Definition"[0-9]* -> Definition
     "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "$Literal"[0-9]*   -> Literal
+    "$StrCon"[0-9]*   -> StrCon
     "NatCon"[0-9]*     -> NatCon
     "Prod*"[0-9]*      -> Production*
     "CC"[0-9]*         -> CharClass

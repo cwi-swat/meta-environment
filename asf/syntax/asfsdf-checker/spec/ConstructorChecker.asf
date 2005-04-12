@@ -48,16 +48,16 @@ equations
                                              $ModuleId, Symbol,
                                              Symbol* -> Symbol Attrs)
 
-  [gcsp-1'4] get-constructor-symbol-pairs($Literal(Symbol,*) -> Symbol Attrs,
+  [gcsp-1'4] get-constructor-symbol-pairs($FuncName(Symbol,*) -> Symbol Attrs,
                                           ConsMsgTuple,
                                           $ModuleId) =
                get-constructor-symbol-pairs2(Attrs, ConsMsgTuple, 
                                              $ModuleId, Symbol,
-                                             $Literal(Symbol,*) -> Symbol Attrs)
+                                             $FuncName(Symbol,*) -> Symbol Attrs)
 
-  [gcsp-2'1] cons( $Literal ) := $Attribute,
+  [gcsp-2'1] cons( $AFun ) := $Attribute,
              $Location := get-location($Attribute),
-             contains(Symbol, $Literal, ConstructorSet) == true,
+             contains(Symbol, $AFun, ConstructorSet) == true,
              $String1 := moduleid2str($ModuleId),
              $String2 := production2str(Prod),
              $String3 := "constructor has already been used in " || $String1
@@ -68,12 +68,12 @@ equations
                [ConstructorSet, 
                 Msgs, make-error($String3, $String2, $Location)]
 
-  [gcsp-2'2] contains(Symbol, $Literal, ConstructorSet) == false
+  [gcsp-2'2] contains(Symbol, $AFun, ConstructorSet) == false
              ==================================================
-             get-constructor-symbol-pairs2(cons( $Literal ), 
+             get-constructor-symbol-pairs2(cons( $AFun ), 
                                            [ConstructorSet, Msgs], 
                                            $ModuleId, Symbol, Prod) =
-               [add(Symbol, $Literal, ConstructorSet), Msgs]
+               [add(Symbol, $AFun, ConstructorSet), Msgs]
 
   [ccip-1'1] check-constructor-in-priorities(Symbol* -> Symbol Attrs,
                                              ConsMsgTuple,
@@ -82,23 +82,23 @@ equations
                                                $ModuleId, Symbol,
                                                Symbol* -> Symbol Attrs)
 
-  [ccip-1'2] check-constructor-in-priorities($Literal(Symbol,*) -> Symbol Attrs,
+  [ccip-1'2] check-constructor-in-priorities($FuncName(Symbol,*) -> Symbol Attrs,
                                              ConsMsgTuple,
                                              $ModuleId) =
                check-constructor-in-priorities2(Attrs, ConsMsgTuple, 
                                                $ModuleId, Symbol,
-                                               $Literal(Symbol,*) -> Symbol Attrs)
+                                               $FuncName(Symbol,*) -> Symbol Attrs)
 
-  [ccip-2'1] contains(Symbol, $Literal, ConstructorSet) == true
+  [ccip-2'1] contains(Symbol, $AFun, ConstructorSet) == true
              ====>
-             check-constructor-in-priorities2(cons( $Literal ), 
+             check-constructor-in-priorities2(cons( $AFun ), 
                                               [ConstructorSet, Msgs], 
                                                $ModuleId, Symbol, Prod) = 
                [ConstructorSet, Msgs]
 
-  [ccip-2'2] cons( $Literal ) := $Attribute,
+  [ccip-2'2] cons( $AFun ) := $Attribute,
              $Location := get-location($Attribute),
-             contains(Symbol, $Literal, ConstructorSet) == false,
+             contains(Symbol, $AFun, ConstructorSet) == false,
              $String1 := moduleid2str($ModuleId),
              $String2 := production2str(Prod),
              $String3 := "unknown constructor used in priorities in " || $String1

@@ -8,10 +8,10 @@ equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, false),
         Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
-        moduleid($Char*) := $ModuleId
+        $StrCon := moduleid2str($ModuleId)
         ====>
         check-asfsdf(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", strcon(""" $Char* """), [Msgs])
+          summary("AsfSdfChecker", $StrCon, [Msgs])
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, true),
         Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
@@ -21,10 +21,10 @@ equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, true),
         Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
-        moduleid($Char*) := $ModuleId
+        $StrCon := moduleid2str($ModuleId)
         ====>
         check-asfsdf-equations(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", strcon(""" $Char* """), [Msgs])
+          summary("AsfSdfChecker", $StrCon, [Msgs])
 
   [cass-1'1] 
         Definition2 := remove-labels(Definition1),

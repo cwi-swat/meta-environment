@@ -29,7 +29,7 @@ equations
            is-prefix-function(Production) == true,
            consistent-defined(Production, Production*, $ModuleId) == <consistent,>,
            Msgs2 := check-form-production(Production, Msgs1, $ModuleId)
-           ===========================================================
+           ====>
            check-attributes-in-module(Production,
                                       <Msgs1, Production*>, $ModuleId) = <Msgs2, Production*>
 
@@ -38,19 +38,17 @@ equations
            consistent-defined(Production, Production*, $ModuleId) == <not-found,>,
            Msgs2 := check-form-production(Production, Msgs1, $ModuleId),
            Msgs3 := check-attributes-in-production(Production, Msgs2, $ModuleId)
-           ====================================================================
+           ====>
            check-attributes-in-module(Production,
                                       <Msgs1, Production*>, $ModuleId) = <Msgs3, Production Production*>
 
   [ca-2'5] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
-           <inconsistent, Msg> := consistent-defined(Production, Production*, $ModuleId),
-           Msg != consistent,
-           Msg != not-found 
-           ================
+           <inconsistent, $Msg> := consistent-defined(Production, Production*, $ModuleId) 
+           ====>
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = 
-<Msgs, Msg, Production*>
+<Msgs, $Msg, Production*>
 
   [ca-3'1] Aterm+ := get-traversal-arguments(Production),
            contains-only-traversal-attributes(Aterm+) == false,
@@ -139,15 +137,15 @@ equations
 
   [default-cf-1'4] check-form-production(Production, Msgs, $ModuleId) = Msgs
 
-  [iad-1'1] is-accu-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2 Attributes) = true
+  [iad-1'1] is-accu-definition($FuncName1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2 Attributes) = true
 
   [default-iad-1'2] is-accu-definition(Production) = false
 
-  [itd-1'1] is-trafo-definition($Literal1 ( $Symbol, $Symbol,*) -> $Symbol Attributes) = true
+  [itd-1'1] is-trafo-definition($FuncName1 ( $Symbol, $Symbol,*) -> $Symbol Attributes) = true
 
   [default-itd-1'2] is-trafo-definition(Production) = false
 
-  [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> <$Symbol1, $Symbol2> Attributes) = true
+  [iatd-1'1] is-accu-trafo-definition($FuncName1 ( $Symbol1, $Symbol2, $Symbol,*) -> <$Symbol1, $Symbol2> Attributes) = true
 
   [default-iatd-1'2] is-accu-trafo-definition(Production) = false
 
@@ -193,13 +191,13 @@ equations
 
   [default-cota-1'8] contains-only-traversal-attributes(Aterm+) = false
 
-  [ipf-1'1] is-prefix-function($Literal($Symbol,*) -> $Symbol Attributes) = true 
+  [ipf-1'1] is-prefix-function($FuncName($Symbol,*) -> $Symbol Attributes) = true 
 
   [default-ipf-1'2] is-prefix-function(Production) = false 
 
-  [gta-1'1] get-traversal-arguments($Literal($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = Aterm+
+  [gta-1'1] get-traversal-arguments($FuncName($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = Aterm+
 
-  [hta-1'1] has-traversal-attribute($Literal($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = true
+  [hta-1'1] has-traversal-attribute($FuncName($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = true
 
   [hta-1'2] has-traversal-attribute($Symbol* -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = true
 
@@ -211,39 +209,39 @@ equations
 
   [cd-1'1] consistent-defined(Production, , $ModuleId) = <not-found, >
 
-  [cd-1'2] consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes,
-                              $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes, 
+  [cd-1'2] consistent-defined($FuncName ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes,
+                              $FuncName ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes, 
                               $ModuleId) = <consistent, >
 
-  [cd-1'3] $Literal ($Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1 := Production,
+  [cd-1'3] $FuncName ($Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1 := Production,
            equal-arguments($Symbol,*1;$Symbol,*2) == false,
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := production2str($Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
+           $String3 := production2str($FuncName ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
            $String4 := "inconsistent arguments of traversal productions in " || $String1,
            $String5 := $String2 || " vs. " || $String3,
-           Msg := make-error($String4, $String5, $Location)
+           $Msg := make-error($String4, $String5, $Location)
            ====>
            consistent-defined(Production,
-                              $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
+                              $FuncName ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) = <inconsistent, Msg>
+                              $ModuleId) = <inconsistent, $Msg>
 
-  [cd-1'3] $Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1 := Production,
+  [cd-1'3] $FuncName ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1 := Production,
            Attributes1 != Attributes2,
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := production2str($Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
+           $String3 := production2str($FuncName ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
            $String4 := "inconsistent traversal attributes in " || $String1,
            $String5 := $String2 || " vs. " || $String3,
-           Msg := make-error($String4, $String5, $Location)
+           $Msg := make-error($String4, $String5, $Location)
            ====>
            consistent-defined(Production,
-                              $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
+                              $FuncName ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) =  <inconsistent, Msg>
+                              $ModuleId) =  <inconsistent, $Msg>
 
   [default-cd-1'4] consistent-defined(Production1, Production2 Production*, $ModuleId) =
                       consistent-defined(Production1, Production*, $ModuleId)
