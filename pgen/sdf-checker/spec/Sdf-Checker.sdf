@@ -58,6 +58,6 @@ hiddens
   
     "Bool"[0-9]* -> Boolean
 
-    "$Char*"[0-9]* -> CHAR*
+    "$StrCon"[0-9]* -> StrCon
 
     "$Location"[0-9]* -> Location

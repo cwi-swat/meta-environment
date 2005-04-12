@@ -2,10 +2,10 @@ equations
 
   [cs-1'1] InfoMsgTuple := check-sdf(Definition, $ModuleId),
            Msg* := get-messages(InfoMsgTuple),
-           moduleid($Char*) := $ModuleId
+           $StrCon := moduleid2str($ModuleId)
            ====>
            check-sdf(definition Definition, $ModuleId) =
-             summary("SdfChecker", strcon(""" $Char* """), [Msg*])
+             summary("SdfChecker", $StrCon, [Msg*])
 
   [cs-1'1] InfoMsgTuple := check-sdf(Definition, Unknown),
            Msg*1 := get-messages(InfoMsgTuple),
@@ -70,14 +70,15 @@ equations
  
   [pci-12] $ModuleName := get-modulename(Import),
            $Location := get-location(Import),
-           moduleid($Char*) := get-module-id($ModuleName),
-           get-module(moduleid($Char*), Definition) == module-not-available,
+           $ModuleId := get-module-id($ModuleName),
+           get-module($ModuleId, Definition) == module-not-available,
            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
-           ModuleInfoTable2 := create-module-entry(moduleid($Char*), ModuleInfoTable1), 
+           ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
            Msgs1 := get-messages(InfoMsgTuple2),
+           $StrCon := moduleid2str($ModuleId),
            Msgs2 := Msgs1,
-make-error("module not available", strcon(""" $Char* """), $Location),
+make-error("module not available", $StrCon, $Location),
            InfoMsgTuple3 := put-messages(Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
