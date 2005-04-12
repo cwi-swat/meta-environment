@@ -1,5 +1,8 @@
 $Id$
 
+Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
+ * Upgraded the Sdf-Checker wrt structured lexicals.
+
 Wed Mar 23 15:15:07 CET 2005 <kooiker@cwi.nl>
  * semantics/asfe/src/test-runner.c:
    - prettyTag adds external location to error message, the location of the
