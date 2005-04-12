@@ -40,7 +40,6 @@ hiddens
     "Definition"[0-9]* -> Definition
     "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "$Literal"[0-9]*   -> Literal
     "$Label"[0-9]*     -> Label
     "$FuncName"[0-9]*  -> FunctionName
     "$Label*"[0-9]*    -> Label*

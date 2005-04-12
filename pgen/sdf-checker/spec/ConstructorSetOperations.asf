@@ -1,11 +1,11 @@
 equations
 
-  [c-1'1] contains(Symbol, $Literal, 
+  [c-1'1] contains(Symbol, $AFun, 
                    constructors(SymbolCons*1 
-                                [Symbol, $Literal]
+                                [Symbol, $AFun]
                                 SymbolCons*2)) = true 
 
-  [default-c-1'1] contains(Symbol, $Literal, ConstructorSet) = false
+  [default-c-1'1] contains(Symbol, $AFun, ConstructorSet) = false
 
-  [a-1'1] add(Symbol, $Literal, constructors(SymbolCons*)) = 
-            constructors([Symbol, $Literal] SymbolCons*)
+  [a-1'1] add(Symbol, $AFun, constructors(SymbolCons*)) = 
+            constructors([Symbol, $AFun] SymbolCons*)
