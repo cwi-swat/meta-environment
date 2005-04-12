@@ -16,6 +16,10 @@ error-viewer-config: Makefile
 		echo "echo ${prefix}/share/${PACKAGE}/error-viewer.jar" \
 	) > $@ && chmod +x $@
 
+CLEANFILES = \
+	      ${bin_SCRIPTS} \
+	      error-viewer.tifs
+
 if MAINTAINER_MODE
 ${JARFILE}:
 	${JARS_ENV} ant dist
