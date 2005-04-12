@@ -1,5 +1,10 @@
 $Id$
 
+Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
+ * Regenerated bootstrap grammar in order to incorporate
+   the new prefix function syntax.
+ * Upgraded the Sdf-Checker wrt structured lexicals.
+
 Mon Feb 28 16:34:22 CET 2005 <{jurgenv,markvdb}@cwi.nl>
  * Added syntax for chain priorities with specific argument selection.
  * Implemented transitive closure for priorities with argument selection.
