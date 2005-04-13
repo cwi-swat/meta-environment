@@ -1,0 +1,9 @@
+#include "meta-studio.idef"
+
+process Test is
+  snd-msg(set-title("A Title"))
+  . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
+  . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
+  . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
+
+toolbus(Test)

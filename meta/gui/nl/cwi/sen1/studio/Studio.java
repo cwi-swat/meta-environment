@@ -9,7 +9,7 @@ public interface Studio {
 
 	public int getPort();
 
-	public void addComponent(JComponent component);
+	public int addComponent(JComponent component);
 
-	public void removeComponent(JComponent component);
+	public void removeComponent(int id);
 }
