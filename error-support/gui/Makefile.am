@@ -20,7 +20,7 @@ CLEANFILES = \
 
 if MAINTAINER_MODE
 ${JARFILE}:
-	${JARS_ENV} ant dist
+	${JARFILE_ENV} ${JARS_ENV} ant dist
 
 jtif:
 	${IDEF} error-viewer.idef

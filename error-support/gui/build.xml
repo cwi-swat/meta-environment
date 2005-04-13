@@ -22,7 +22,7 @@
     <copy todir="${dist}/src/${package}">
       <fileset dir="${package}" includes="**/*.java"/>
     </copy>
-    <jar destfile="error-viewer.jar">
+    <jar destfile="${env.JAR}">
       <fileset dir="${build}"/>
       <fileset dir="${dist}"/>
     </jar>
