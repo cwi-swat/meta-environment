@@ -1,6 +1,4 @@
 # $Id$
-include ${top_srcdir}/make_rules
-
 pkgdata_DATA = ${JARFILE} error-viewer.idef
 EXTRA_DIST = ${JARFILE} error-viewer.idef
 
