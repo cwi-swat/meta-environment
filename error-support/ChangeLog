@@ -1,6 +1,8 @@
 $Id$
 
 Wed Apr 13 08:26:20 CEST 2005 <kooiker@cwi.nl>
+ * gui/nl/cwi/sen1/error/viewer:
+   - Add generated ToolBus bridge
  * package:
    - Add toolbus dependency
 
