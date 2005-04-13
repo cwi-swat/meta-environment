@@ -3,8 +3,6 @@
 # rviz -- Relation Visualizer
 
 # TO DO:
-# - take care of items that are defined outside the application
-#   (annotateItem)
 # - identical file names in different directories
 
 
@@ -22,6 +20,8 @@ set options(textheight) 18        ;# vertical size of text editor
 set options(treeMapHeight) 1000    ;# sizes of treeMap window
 set options(treeMapWidth)  1000
 set options(treeMapBorder)  3
+
+set treemapmode 0		 ;# Are we displaying a file view or a treemap view?
 
 array set annotations {}          ;# array of line annotations indexed by filename
 
@@ -114,7 +114,7 @@ set panes(relations-Index) 0
 set panes(itemtypes-Index) 0
 set panes(items-Index)     0
 
-proc mkFileViewer {} {
+proc mkUserInterface {} {
     global options allFiles fileLength maxLength relations items itemtypes
 
     set w .visualizer
@@ -130,8 +130,14 @@ proc mkFileViewer {} {
 	frame $w.control.$pane
 	label $w.control.$pane.label -text $pane
 	pack  $w.control.$pane.label -side top
+        if { $pane == "items" } {
+	    set ht 32
+        } else {
+	    set ht 10
+        }
 	listbox $w.control.$pane.list -relief raised -borderwidth 2 -selectmode single \
-	    -yscrollcommand "$w.control.$pane.scroll set" -selectforeground blue
+	    -yscrollcommand "$w.control.$pane.scroll set" -selectforeground blue -height $ht
+
 	pack  $w.control.$pane.list -side left -fill y
 	scrollbar $w.control.$pane.scroll -command "$w.control.$pane.list yview"
 	pack  $w.control.$pane.scroll -side right -fill y
@@ -139,8 +145,8 @@ proc mkFileViewer {} {
 
 	bind  $w.control.$pane.list <Button-1> "register $pane  $w.control.$pane.list %y"
     }
-
-    $w.control.items.list configure -height 100
+    button $w.control.viewmode -text "View as Tree Map" -background bisque -width 20 -command switch-viewmode
+    pack $w.control.viewmode -side left -fill both
 
     bind $w.control.items.list <Button-3> "displayItem $w.control.$pane.list %y"
 
@@ -155,8 +161,14 @@ proc mkFileViewer {} {
     canvas $w.canvas -relief raised -width $wd -height $options(maxy)
     pack $w.canvas -side right -expand true -fill both
 
-    set x $options(basex)
+    mkFileViewer $w
+    mkTreeMapViewer [get-root]
+}
 
+proc mkFileViewer { w } {
+    global options allFiles fileLength
+
+    set x $options(basex)
     set y $options(basey)
 
    foreach f $allFiles {
@@ -170,36 +182,86 @@ proc mkFileViewer {} {
     wm geometry $w [format "%dx%d" [expr $x + 250 ] $options(maxy)]
 }
 
-proc register { pane list y} {
-    global panes items
+proc register { pane list y } {
+    global panes items itemtypes
 
     clear-annotations
-
-    $list itemconfigure $panes($pane-Index) -foreground black
-    set cur [$list nearest $y]
-    set panes($pane-Index) $cur
-    $list itemconfigure $cur -foreground blue
-    set panes(current-$pane) [$list get $cur]
-
     if { $pane != "items" } {
 	.visualizer.control.items.list delete 0 end
-	set panes(items-Index) 0
-	set itemtype [.visualizer.control.itemtypes.list get $panes(itemtypes-Index)]
+    }
+
+    if { $pane == "relations" } {
+        $list itemconfigure $panes($pane-Index) -foreground black
+        set cur [$list nearest $y]
+        set panes($pane-Index) $cur
+        set panes(current-$pane) [$list get $cur]
+        $list itemconfigure $cur -foreground blue
+
 	set relation [.visualizer.control.relations.list get $panes(relations-Index)]
-	foreach name [lsort -dictionary [lsort -dictionary [array names items]]] {
-	    if { [has-itemtype $itemtype $items($name)] } {
-		.visualizer.control.items.list insert end $name
-		if { ! [in-carrier $relation $itemtype $name] } {
-		    .visualizer.control.items.list itemconfigure end -foreground DarkGrey
+	set N 0
+	foreach itemtype [lsort $itemtypes] {
+           if { [in-arg-type $itemtype $relation] } {
+	      .visualizer.control.itemtypes.list itemconfigure $N -foreground blue
+	    } else {
+	      .visualizer.control.itemtypes.list itemconfigure $N -foreground DarkGrey
+	     }
+	     incr N
+	 }
+     }
+
+    if { $pane == "itemtypes" } {
+	set relation [.visualizer.control.relations.list get $panes(relations-Index)]
+        set cur [$list nearest $y]
+	set itemtype [.visualizer.control.itemtypes.list get $cur]
+
+        if { [in-arg-type $itemtype $relation] } {
+            .visualizer.control configure -cursor watch
+            set panes($pane-Index) $cur
+            set panes(current-$pane) [$list get $cur]
+            $list itemconfigure $panes($pane-Index) -foreground black
+            $list itemconfigure $cur -foreground blue
+	    set panes(items-Index) 0
+	    foreach name [lsort -dictionary [lsort -dictionary [array names items]]] {
+		if { [has-itemtype $itemtype $items($name)] } {
+		    .visualizer.control.items.list insert end $name
+		    if { ! [in-carrier $relation $itemtype $name] } {
+			.visualizer.control.items.list itemconfigure end -foreground DarkGrey
+		    }
 		}
 	    }
-	}
+        } else {
+	   puts stderr "DO NOTHING"
+       }
     }
 
     if { $pane == "items" } {
+        set cur [$list nearest $y]       
+        set panes($pane-Index) $cur
+        set panes(current-$pane) [$list get $cur]
+        $list itemconfigure $panes($pane-Index) -foreground black
+        $list itemconfigure $cur -foreground blue
+        .visualizer.control configure -cursor watch
 	displayRelation
     }
+
+   .visualizer.control configure -cursor arrow
 }
+
+proc in-arg-type {itemtype rel} {
+     global relations
+   
+     set p [lindex $relations($rel) 0]
+     set typea [tuple-typea $p]
+     set typeb [tuple-typeb $p]
+
+# puts stderr "in-arg-type: $itemtype, $typea, $typeb, $rel"
+
+     if { $itemtype == $typea || $itemtype == $typeb } {
+	return 1
+     } 
+     return 0 
+}
+
 
 proc clear-annotations {} {
     global annotations
@@ -212,6 +274,23 @@ proc clear-annotations {} {
     foreach a [array names annotations] {
 	set annotations($a) {}
     }
+}
+
+proc switch-viewmode {} {
+   global treemapmode
+
+   if { $treemapmode == 0 } {
+      set treemapmode 1
+     .visualizer.control.viewmode configure -text "View as Files"
+     pack forget .visualizer.canvas
+     pack .visualizer.treemap -side right -expand true -fill both
+   } else {
+     set treemapmode 0
+     .visualizer.control.viewmode configure -text "View as Tree Map"
+     pack forget .visualizer.treemap
+     pack .visualizer.canvas -side right -expand true -fill both
+   }
+
 }
 
 proc displayItem { list y} {
@@ -237,8 +316,8 @@ proc displayRelation { } {
     set itemname $panes(current-items)
     set itemtype $panes(current-itemtypes)
 
-    .treeMap.canvas itemconfigure all -fill Green
-    .treeMap.canvas delete treemap-caption
+    .visualizer.treemap itemconfigure all -fill LimeGreen
+    .visualizer.treemap delete treemap-caption
 
     annotateItem $itemtype $itemname blue
 
@@ -265,11 +344,13 @@ proc annotateItem {itemtype name color} {
 
 puts stderr "annotateItem $itemtype $name $color"
 
-# item may not occur in items, e.g. Cloneable
+    # item may not occur in items, e.g. a library class/interface
+    if { [llength [array get items $name ]] == 0 } {
+       return
+    }
 
     .visualizer configure -cursor watch
     foreach item $items($name) {
-# puts stderr "$item // [item-type $item]"
 
 	if { [item-type $item] == $itemtype } {
 	    set filename [item-filename $item]
@@ -278,20 +359,16 @@ puts stderr "annotateItem $itemtype $name $color"
 	    set endline [item-endline $item]
 	    set endcol [item-endcol $item]
 
-# puts stderr "YEP! $filename $beginline -- $endline"
-
 	    lappend annotations($filename) "$beginline $begincol $endline $endcol $color"
-
 	    set i $beginline
 	    while {$i <= $endline} {
-		.visualizer.canvas itemconfigure $filename:$i -fill $color -tags "$filename:$i annotated"
-		incr i
+		  .visualizer.canvas itemconfigure $filename:$i -fill $color -tags "$filename:$i annotated"
+		  incr i
 	    }
 	    .visualizer.canvas itemconfigure $filename:rect -fill DarkGrey -tags "$filename:rect annotated:rect"
-	    .treeMap.canvas itemconfigure $filename:rect -fill $color -tags "$filename:rect annotated:rect"
-	    raiseTreeMapCaption .treeMap.canvas $treeMapName2Rect($filename)
+	    .visualizer.treemap itemconfigure $filename:rect -fill $color -tags "$filename:rect annotated:rect"
+	     raiseTreeMapCaption .visualizer.treemap $treeMapName2Rect($filename)
 	}
-       
     }
     .visualizer configure -cursor arrow
 }
@@ -516,32 +593,10 @@ proc scanFile { name } {
     }
 }
 
-proc scanDir { dir } {
-    global allFiles
-
-#puts stderr "scanDir $dir"
-
-    foreach f [glob $dir/*] {
-	if { ! [ignored $f] } {
-	    if { [file isdirectory $f] } {
-		scanDir $f
-	    } else {
-#		puts stderr $f
-		if { [lsearch -exact $allFiles $f] == -1 } {
-		    lappend allFiles $f
-		}
-	    }
-	}
-    }
-}
-
 proc getFileInfo { } {
     global allFiles annotations
 
-#    scanDir $dir
-    set maxLength 0
     foreach f $allFiles {
-#	puts stderr $f
 	set annotations($f) {}
 	scanFile $f
     }
@@ -558,6 +613,14 @@ proc getDirInfo { } {
 	}	
     }
 
+    foreach d $allDirs {
+	set  superd [file dirname $d]
+#        puts stderr "dir: $d, superdirname: $superd"
+	if { [lsearch -exact $allDirs $superd] == -1 } {
+	    lappend allDirs $superd
+	}	
+    }
+
     # Add the root directory to list of directories
     # Warning: this assumes that there is ONE common directory
 
@@ -569,17 +632,17 @@ proc getDirInfo { } {
 
     set allDirs [lsort -decreasing -dictionary $allDirs]
 
-puts stderr "allDirs = $allDirs"
+#puts stderr "allDirs = $allDirs"
 
     foreach d $allDirs {
 
-puts stderr "--$d--"
+#puts stderr "--$d--"
 	set subs {}
 	set files {}
 	set length 0
 	foreach sd $allDirs {
 	    if { $d == [file dirname $sd] } {
-puts stderr "----$sd----"
+#puts stderr "----$sd----"
 		lappend subs $sd
 		incr length [dir-size $dirInfo($sd)]
 	    } 
@@ -592,6 +655,7 @@ puts stderr "----$sd----"
 	    }
 	}
 	set dirInfo($d) [mk-dir $d $length $subs $files]
+#        puts stderr "$d:\n\tsubdirs: $subs\n\tfiles: $files\n"
     }
 
     foreach dname [array names dirInfo] {
@@ -624,7 +688,6 @@ proc item {itemtype name file beginline begincol endline endcol} {
 
     set name [file tail $name]
     lappend items($name)  "$itemtype $file $beginline $begincol $endline $endcol"
-
 }
 
 proc rel {name typea a typeb b} {
@@ -646,7 +709,6 @@ proc getRelations {filename} {
 	}
 	close $file
     }
-
     set allFiles [lsort -dictionary $allFiles]
 }
 
@@ -700,7 +762,7 @@ puts stderr "treeMap $path $direction"
 
     set isdir [file isdirectory $path]
 
-    if { $isdir } { set color blue } else { set color green }
+    if { $isdir } { set color blue } else { set color LimeGreen }
 
     drawRect $c $path $x1 $y1 $x2 $y2 $color
 
@@ -765,11 +827,9 @@ puts stderr "treeMap $path $direction"
 proc mkTreeMapViewer {dir} {
     global options
 
-    set w .treeMap
-    toplevel $w
-    canvas $w.canvas -relief raised -height $options(treeMapHeight) -width $options(treeMapWidth)
-    pack $w.canvas -side right -expand true -fill both
-    treeMap $w.canvas $dir 0 0 $options(treeMapWidth) $options(treeMapHeight) 0
+     canvas .visualizer.treemap -relief raised -height $options(treeMapHeight) -width $options(treeMapWidth)
+#    pack $w.canvas -side right -expand true -fill both
+    treeMap .visualizer.treemap $dir 0 0 $options(treeMapWidth) $options(treeMapHeight) 0
 }
 
 # ---- mkVisualizer: toplevel construction of the whole visualizer
@@ -779,8 +839,8 @@ proc mkVisualizer { vizData } {
     getRelations $vizData
     getFileInfo
     getDirInfo
-    mkFileViewer
-    mkTreeMapViewer [get-root]
+    mkUserInterface
+
     wm withdraw .
 }
 
