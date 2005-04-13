@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 13 08:26:20 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - Add toolbus dependency
+
 Tue Apr 12 08:27:29 CEST 2005 <kooiker@cwi.nl>
  * package:
    - Add dependency on toolbus-java-adapter
