@@ -12,17 +12,28 @@ identification
 configuration interface
 
 requires
-   aterm        2.0.6
-   aterm-java   1.5
-   shared-objects 1.4
-   sglr         3.11
-   pgen         2.0
-   asf          1.8
-   pt-support   1.1
-   error-support   0.1
-   tide-support   1.1
-   sdf-support  2.0
-   asf-support  1.2
-   asc-support  1.8
-   asfsdf-meta  1.5.3
+   aterm 2.3.1
 
+aterm-java 1.6
+
+shared-objects 1.4
+
+sglr 3.13
+
+pgen 2.2
+
+asf 1.9
+
+pt-support 2.0
+
+error-support 1.1
+
+tide-support 1.1
+
+sdf-support 2.2
+
+asf-support 1.4
+
+asc-support 2.1
+
+asfsdf-meta 1.7
