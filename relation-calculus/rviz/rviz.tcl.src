@@ -20,6 +20,9 @@ set options(textheight) 18        ;# vertical size of text editor
 set options(treeMapHeight) 1000    ;# sizes of treeMap window
 set options(treeMapWidth)  1000
 set options(treeMapBorder)  3
+set options(label-relations) "Relations"
+set options(label-itemtypes) "Element Types"
+set options(label-items)     "Elements"
 
 set treemapmode 0		 ;# Are we displaying a file view or a treemap view?
 
@@ -102,17 +105,37 @@ proc in-carrier {relation itemtype itemname} {
     return 0
 }
 
+# ---- in-arg-type: has some tuple element the type itemtype?
+
+proc in-arg-type {itemtype rel} {
+     global relations
+   
+     set p [lindex $relations($rel) 0]
+     set typea [tuple-typea $p]
+     set typeb [tuple-typeb $p]
+
+     if { $itemtype == $typea || $itemtype == $typeb } {
+	return 1
+     } 
+     return 0 
+}
+
 # ---- The panes of the user interface:
 # ---- relations: shows all available relations
 # ---- itemtypes: shows all available itemtypes
 # ---- items:     shows all items of selected itemtype
-# ----            (items that do not occur in selected relation are grey)
-# ---- The array "panes" holds three variables that maintain the index
-# ---- of the entry last selected in each pane.
 
-set panes(relations-Index) 0
-set panes(itemtypes-Index) 0
-set panes(items-Index)     0
+proc current-relation {} {
+   return [.visualizer.control.relations.list get active]
+}
+
+proc current-itemtype {} {
+   return [.visualizer.control.itemtypes.list get active]
+}
+
+proc current-item {} {
+   return [.visualizer.control.items.list get active]
+}
 
 proc mkUserInterface {} {
     global options allFiles fileLength maxLength relations items itemtypes
@@ -128,7 +151,7 @@ proc mkUserInterface {} {
 
     foreach pane {relations itemtypes items} {
 	frame $w.control.$pane
-	label $w.control.$pane.label -text $pane
+	label $w.control.$pane.label -text $options(label-$pane)
 	pack  $w.control.$pane.label -side top
         if { $pane == "items" } {
 	    set ht 32
@@ -136,7 +159,8 @@ proc mkUserInterface {} {
 	    set ht 10
         }
 	listbox $w.control.$pane.list -relief raised -borderwidth 2 -selectmode single \
-	    -yscrollcommand "$w.control.$pane.scroll set" -selectforeground blue -height $ht
+	    -yscrollcommand "$w.control.$pane.scroll set" -selectforeground \
+	    blue -height $ht
 
 	pack  $w.control.$pane.list -side left -fill y
 	scrollbar $w.control.$pane.scroll -command "$w.control.$pane.list yview"
@@ -148,14 +172,10 @@ proc mkUserInterface {} {
     button $w.control.viewmode -text "View as Tree Map" -background bisque -width 20 -command switch-viewmode
     pack $w.control.viewmode -side left -fill both
 
-    bind $w.control.items.list <Button-3> "displayItem $w.control.$pane.list %y"
+    bind $w.control.items.list <Button-3> "displayItem $w.control.items.list %y"
 
-    foreach r [lsort [array names relations]] {
+   foreach r [lsort [array names relations]] {
 	$w.control.relations.list insert end $r
-    }
-
-    foreach c [lsort $itemtypes] {
-	$w.control.itemtypes.list insert end $c
     }
 
     canvas $w.canvas -relief raised -width $wd -height $options(maxy)
@@ -183,7 +203,7 @@ proc mkFileViewer { w } {
 }
 
 proc register { pane list y } {
-    global panes items itemtypes
+    global items itemtypes
 
     clear-annotations
     if { $pane != "items" } {
@@ -191,42 +211,30 @@ proc register { pane list y } {
     }
 
     if { $pane == "relations" } {
-        $list itemconfigure $panes($pane-Index) -foreground black
-        set cur [$list nearest $y]
-        set panes($pane-Index) $cur
-        set panes(current-$pane) [$list get $cur]
-        $list itemconfigure $cur -foreground blue
-
-	set relation [.visualizer.control.relations.list get $panes(relations-Index)]
-	set N 0
+        $list itemconfigure [$list index active] -foreground black
+        $list activate [$list nearest $y]
+        $list itemconfigure [$list nearest $y] -foreground blue
+	set relation [current-relation]
+	.visualizer.control.itemtypes.list delete 0 end
 	foreach itemtype [lsort $itemtypes] {
            if { [in-arg-type $itemtype $relation] } {
-	      .visualizer.control.itemtypes.list itemconfigure $N -foreground blue
-	    } else {
-	      .visualizer.control.itemtypes.list itemconfigure $N -foreground DarkGrey
-	     }
-	     incr N
+	      .visualizer.control.itemtypes.list insert end $itemtype
+	    }
 	 }
      }
 
     if { $pane == "itemtypes" } {
-	set relation [.visualizer.control.relations.list get $panes(relations-Index)]
-        set cur [$list nearest $y]
-	set itemtype [.visualizer.control.itemtypes.list get $cur]
+	set relation [current-relation]
+        $list activate [$list nearest $y]
+	set itemtype [current-itemtype]
+
+        .visualizer.control.items.label configure -text "$itemtype Elements"
 
         if { [in-arg-type $itemtype $relation] } {
             .visualizer.control configure -cursor watch
-            set panes($pane-Index) $cur
-            set panes(current-$pane) [$list get $cur]
-            $list itemconfigure $panes($pane-Index) -foreground black
-            $list itemconfigure $cur -foreground blue
-	    set panes(items-Index) 0
-	    foreach name [lsort -dictionary [lsort -dictionary [array names items]]] {
-		if { [has-itemtype $itemtype $items($name)] } {
+	    foreach name [lsort -dictionary [array names items]] { 
+		if { [has-itemtype $itemtype $items($name)] && [in-carrier $relation $itemtype $name]} {
 		    .visualizer.control.items.list insert end $name
-		    if { ! [in-carrier $relation $itemtype $name] } {
-			.visualizer.control.items.list itemconfigure end -foreground DarkGrey
-		    }
 		}
 	    }
         } else {
@@ -235,33 +243,15 @@ proc register { pane list y } {
     }
 
     if { $pane == "items" } {
-        set cur [$list nearest $y]       
-        set panes($pane-Index) $cur
-        set panes(current-$pane) [$list get $cur]
-        $list itemconfigure $panes($pane-Index) -foreground black
-        $list itemconfigure $cur -foreground blue
+        $list itemconfigure [$list index active] -foreground black
+        $list activate [$list nearest $y]
+        $list itemconfigure [$list nearest $y] -foreground blue
         .visualizer.control configure -cursor watch
 	displayRelation
     }
 
    .visualizer.control configure -cursor arrow
 }
-
-proc in-arg-type {itemtype rel} {
-     global relations
-   
-     set p [lindex $relations($rel) 0]
-     set typea [tuple-typea $p]
-     set typeb [tuple-typeb $p]
-
-# puts stderr "in-arg-type: $itemtype, $typea, $typeb, $rel"
-
-     if { $itemtype == $typea || $itemtype == $typeb } {
-	return 1
-     } 
-     return 0 
-}
-
 
 proc clear-annotations {} {
     global annotations
@@ -290,31 +280,26 @@ proc switch-viewmode {} {
      pack forget .visualizer.treemap
      pack .visualizer.canvas -side right -expand true -fill both
    }
-
 }
 
 proc displayItem { list y} {
-    global panes items
-
     clear-annotations
 
-    $list itemconfigure $panes(items-Index) -foreground black
-    set cur [$list nearest $y]
-    set panes(items-Index) $cur
-    $list itemconfigure $cur -foreground DeepPink
-    set panes(current-items) [$list get $cur]
+    $list itemconfigure [$list index active] -foreground black
+    $list activate [$list nearest $y]
+    $list itemconfigure [$list nearest $y] -foreground blue
 
-    annotateItem  $panes(current-itemtypes) $panes(current-items) DeepPink
+    annotateItem  [current-itemtype]  [current-item] DeepPink
 }
 
 # ----
 
 proc displayRelation { } {
-    global relations panes
+    global relations
 
-    set rel $panes(current-relations)
-    set itemname $panes(current-items)
-    set itemtype $panes(current-itemtypes)
+    set rel [current-relation]
+    set itemtype [current-itemtype]
+    set itemname [current-item]
 
     .visualizer.treemap itemconfigure all -fill LimeGreen
     .visualizer.treemap delete treemap-caption
@@ -340,7 +325,7 @@ proc displayRelation { } {
 }
  
 proc annotateItem {itemtype name color} {
-    global annotations items  treeMapRect2ShortName treeMapName2Rect
+    global annotations items treeMapName2Rect
 
 puts stderr "annotateItem $itemtype $name $color"
 
@@ -737,7 +722,7 @@ proc raiseTreeMapCaption {c rect} {
 }
 
 proc lowerTreeMapCaption {c rect} {
-    puts stderr "lower"
+#    puts stderr "lower"
     $c delete treemap-caption 
 }
 
@@ -751,8 +736,9 @@ proc drawRect {c name x1 y1 x2 y2 color} {
     set rect [$c create rectangle $x1 $y1 $x2 $y2 -activefill red -fill $color -tags $name:rect]
     set treeMapRect2ShortName($rect)  [file tail $name]
     set treeMapName2Rect($name) $rect
-    $c bind $rect <1>  "raiseTreeMapCaption $c $rect"
-    $c bind $rect <3>  "lowerTreeMapCaption $c $rect"
+    $c bind $rect <1>  "showFileInEditor $c $name 0"
+    $c bind $rect <Enter> "raiseTreeMapCaption $c $rect"
+#    $c bind $rect <Leave>  "lowerTreeMapCaption $c $rect"
 }
 
 proc treeMap {c path x1 y1 x2 y2 direction} {
@@ -827,8 +813,7 @@ puts stderr "treeMap $path $direction"
 proc mkTreeMapViewer {dir} {
     global options
 
-     canvas .visualizer.treemap -relief raised -height $options(treeMapHeight) -width $options(treeMapWidth)
-#    pack $w.canvas -side right -expand true -fill both
+    canvas .visualizer.treemap -relief raised -height $options(treeMapHeight) -width $options(treeMapWidth)
     treeMap .visualizer.treemap $dir 0 0 $options(treeMapWidth) $options(treeMapHeight) 0
 }
 
@@ -840,7 +825,6 @@ proc mkVisualizer { vizData } {
     getFileInfo
     getDirInfo
     mkUserInterface
-
     wm withdraw .
 }
 
