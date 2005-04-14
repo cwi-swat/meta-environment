@@ -5,12 +5,18 @@ SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src .conf .button
 # ---- Generate term parse table from SDF module
 
 %.trm.tbl : %.sdf
-	pt-dump -m $(*F) -o $@
+	pushd . ; \
+	cd $(*D) ; \
+	$(ASFSDF_META)/bin/pt-dump -m $(*F) -o $@ ; \ 
+	popd 
 
 # ---- Convert from .asf to .eqs
 
 .asf.eqs:
-	eqs-dump -m $(*F) -o $@
+	pushd . ; \
+	cd $(*D) ; \
+	$(ASFSDF_META)/bin/eqs-dump -m $(*F) -o $@ ; \
+	popd 
 
 # ---- Convert from .eqs to .c
 
@@ -37,7 +43,7 @@ LDADD 		= \
         	$(SOCKLIBS)
 
 .eqs.c:
-	 asfc -i $< -o $@ -v -a
+	 $(ASF)/bin/asfc -i $< -o $@ -v -a
 
 # ---- Substitute in shell source
 

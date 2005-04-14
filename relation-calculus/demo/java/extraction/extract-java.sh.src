@@ -10,7 +10,7 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 
 PRG=`basename $0`
-JAVA_PARSE_TABLE=${datadir}/demo/java/Java.trm.tbl
+JAVA_PARSE_TABLE=${datadir}/demo/java/grammar/Java.trm.tbl
 JAVA_ANALYSIS=${bindir}/JavaAnalysis
 
 # }}}

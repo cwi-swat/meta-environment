@@ -1,11 +1,17 @@
 include $(top_srcdir)/make_rules
 
-javadir		= $(pkgdatadir)/demo/java
-
-FILES      	= $(wildcard *.sdf) \
+EXTRA_DIST      = $(wildcard *.sdf) \
 	  	  $(wildcard *.asf) \
 		  Java.trm.tbl
 
-SOURCES		= $(FILES)
+javadir		= $(pkgdatadir)/demo/java
 
-java_DATA    	= $(FILES)
+javagrammardir  = $(pkgdatadir)/demo/java/grammar
+
+JAVAGRAMMAR     = $(wildcard *.sdf) \
+	  	  $(wildcard *.asf) \
+		  Java.trm.tbl
+
+javagrammar_DATA = $(JAVAGRAMMAR)
+
+
