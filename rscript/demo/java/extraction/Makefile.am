@@ -6,10 +6,11 @@ bin_SCRIPTS 	= extract-java
 
 bin_PROGRAMS	= JavaAnalysis
 
-pkgdata_DATA    =  $(wildcard *.sdf) \
-		   $(wildcard *.asf) 
+#pkgdata_DATA    =  $(wildcard *.sdf) \
+#		   $(wildcard *.asf) 
 
-EXTRA_DIST	= $(wildcard *.sdf) \
+EXTRA_DIST	= $(wildcard *.sh.src) \
+		  $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
 		  $(wildcard *.tbl) \
 		  $(wildcard *.eqs) \

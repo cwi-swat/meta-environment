@@ -2,9 +2,11 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites
 
-pkgdata_DATA    = Rscript.trm.tbl Rstore.trm.tbl \
-			$(wildcard *.sdf) \
-			$(wildcard *.asf) 
+RscriptCalculator_SOURCES	= RscriptCalculator.c
+
+Rstore_SOURCES	= Rstore.c
+
+RscriptTestsuites_SOURCES = RscriptTestsuites.c
 
 EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
@@ -12,10 +14,10 @@ EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.eqs) \
 		  meta.buttons
 
-RscriptCalculator_SOURCES	= RscriptCalculator.c
+specdir         = $(pkgdatadir)
 
-Rstore_SOURCES	= Rstore.c
-
-RscriptTestsuites_SOURCES = RscriptTestsuites.c
-
+spec_DATA        = Rscript.trm.tbl \
+                  Rstore.trm.tbl \
+		  $(wildcard *.sdf) \
+		  $(wildcard *.asf) 
 

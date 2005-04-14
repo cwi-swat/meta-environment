@@ -104,13 +104,25 @@ dnl }}}
 dnl {{{ Handle --with-pt-support
 
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
-[  --with-pt-support=DIR   ParseTree is in DIR])
+[  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
 
 PTBIN=${PT_SUPPORT}/bin
 AC_SUBST(PTBIN)
 
 dnl }}}
+
+dnl {{{ Handle --with-sdf-support
+
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+[  --with-sdf-support=DIR   sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
+PTBIN=${PT_SUPPORT}/bin
+AC_SUBST(PTBIN)
+
+dnl }}}
+
 dnl {{{ Handle --with-error-support
 
 AC_PACKAGE_REQUIRE(error-support, error-support-config,
@@ -151,6 +163,16 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
 AC_SUBST(TIDE_SUPPORT)
 
 dnl }}}
+
+dnl {{{ Handle --with-asfsdf-meta
+
+AC_PACKAGE_REQUIRE(asfsdf-meta, eqs-dump,
+[  --with-asfsdf-meta=DIR asfsdf-meta is in DIR])
+AC_SUBST(ASFSDF_META)
+
+dnl }}}
+
+
 
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish 8.3, wish8.2 or wish8.1, we'll
