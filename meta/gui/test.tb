@@ -1,9 +1,21 @@
 #include "meta-studio.idef"
+#include "module-browser.idef"
 
 process Test is
+let
+  MenuEvent: term
+in
   snd-msg(set-title("A Title"))
+  . snd-msg(gui-add-menu-events([menu(["File", "Exit"])]))
   . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
-  . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
-  . snd-msg(load-jar("http://www.metamud.org/~jong/module-browser.jar"))
+  .
+  (
+    rec-msg(gui-window-closing)
+  +
+    rec-msg(ui-button-selected(studio-menubar, MenuEvent?))
+    . printf("MenuEvent: %t\n", MenuEvent)
+  )
+  . shutdown("")
+endlet
 
 toolbus(Test)

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="">
-		<attributes>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 		</attributes>
@@ -28,5 +24,29 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="output" path=""/>
+	<classpathentry output="component/module-browser" kind="src" path="component/module-browser">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="data" kind="src" path="data">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="component/graph" kind="src" path="component/graph">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="studio" kind="src" path="studio">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry output="util" kind="src" path="util">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/error-support">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,0 +1,1 @@
+Main-Class: nl.cwi.sen1.gui.component.ModuleBrowser
