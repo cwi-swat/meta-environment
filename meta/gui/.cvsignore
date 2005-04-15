@@ -1,1 +1,5 @@
-meta-studio.idef.tifs
+.classpath
+.project
+Makefile
+Makefile.in
+gui

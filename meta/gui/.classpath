@@ -24,25 +24,16 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry output="component/module-browser" kind="src" path="component/module-browser">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry output="data" kind="src" path="data">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry output="studio" kind="src" path="studio">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry output="util" kind="src" path="util">
-		<attributes>
-		</attributes>
-	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/error-support">
 		<attributes>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="plugin/module-browser/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="data/src"/>
+	<classpathentry kind="src" path="util/src"/>
+	<classpathentry kind="src" path="studio/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
