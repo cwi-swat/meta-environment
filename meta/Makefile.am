@@ -21,6 +21,7 @@ SUBDIRS = \
 	term-store \
 	tbscripts \
 	configuration-manager \
+	libltdl \
 	editors
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
