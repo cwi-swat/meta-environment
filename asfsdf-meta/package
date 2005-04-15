@@ -15,7 +15,7 @@ identification
 configuration interface
 
 requires
-   meta 1.6
+   meta 2.0
 
 asf 1.9
 
