@@ -1,5 +1,6 @@
 package nl.cwi.sen1.gui.component;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -42,18 +43,20 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	private Studio studio;
 
-	private void createModuleGraph() {
-		importGraphPanel = new ZoomableGraphPanel(metaGraphFactory,
+	private ZoomableGraphPanel createModuleGraph() {
+		ZoomableGraphPanel panel = new ZoomableGraphPanel(metaGraphFactory,
 				"import-graph");
-		// Color color = Preferences.getColor("graphpane.background");
-		// importGraphPanel.setBackground(color);
+		Color color = Preferences.getColor("graphpane.background");
+		panel.setName("Import Graph");
+		panel.setBackground(color);
+		return panel;
 	}
 
 	private void createModuleStatusPanel() {
 		moduleStatus = new ModuleInfoPanel(studio.getFactory(), moduleManager);
 	}
 
-	private MouseListener makeMouseListener(final ModuleTreeModel moduleManager) {
+	private MouseListener makeMouseListener(final ModuleTreeModel manager) {
 		MouseListener listener = new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
 				Node node = importGraphPanel.getNodeAt(event.getX(), event
@@ -67,14 +70,14 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 				if (node == null) {
 					module = null;
 				} else {
-					module = moduleManager.getModule(node.getId().getId());
+					module = manager.getModule(node.getId().getId());
 					if (event.isPopupTrigger()
 							|| SwingUtilities.isRightMouseButton(event)) {
 						postModuleMenuRequest(module);
 					}
 
 				}
-				moduleManager.selectModule(module);
+				manager.selectModule(module);
 
 			}
 
@@ -224,34 +227,14 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	private void addModuleBrowserGUI() {
 		moduleManager = new ModuleTreeModel();
-		ModuleTree moduleTree = new ModuleTree(studio.getFactory(), this,
-				moduleManager);
-		moduleTree.setName("Module Hierarchy");
-		studio.addComponent(moduleTree);
-		
-
-		// this.panel = new JPanel();
-		//
-		// moduleManager = new ModuleTreeModel();
-		//
-		// JSplitPane left = createLeftPane();
-		//
-		// // createModuleGraph();
-		//
-		// JSplitPane moduleBrowser = new
-		// JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-		// left, importGraphPanel);
-		// moduleBrowser.setDividerLocation(Preferences
-		// .getDouble("modulebrowser.info.divider.location"));
-		// moduleBrowser.setResizeWeight(Preferences
-		// .getDouble("modulebrowser.info.divider.resize"));
-		// moduleBrowser.setOneTouchExpandable(true);
-		//
-		// panel.add(moduleBrowser);
-		//
 		// moduleManager.addModuleSelectionListener(this);
+		ModuleTree tree = new ModuleTree(studio.getFactory(), this,
+				moduleManager);
+		tree.setName("Module Hierarchy");
+		studio.addComponent(tree);
+
+		importGraphPanel = createModuleGraph();
 		// importGraphPanel.addMouseListener(makeMouseListener(moduleManager));
-		//
-		// studio.addComponent(panel);
+		studio.addComponent(importGraphPanel);
 	}
 }
