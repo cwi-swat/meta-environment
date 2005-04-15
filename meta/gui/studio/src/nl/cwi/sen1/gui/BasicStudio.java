@@ -73,7 +73,6 @@ public class BasicStudio implements Studio, GuiTif {
 
 	public static final void main(String args[]) throws Exception {
 		// UIManager.setLookAndFeel(new MetalLookAndFeel());
-
 		new BasicStudio(args);
 	}
 
@@ -81,7 +80,7 @@ public class BasicStudio implements Studio, GuiTif {
 		currentTheme = new ShapedGradientDockingTheme();
 		components = new HashMap();
 		menuMap = new HashMap();
-		
+
 		initializeProperties();
 
 		// Docking windwos should be run in the Swing thread
@@ -109,10 +108,11 @@ public class BasicStudio implements Studio, GuiTif {
 	}
 
 	private void initializeProperties() throws IOException {
-		InputStream propertyStream = getClass().getResourceAsStream(
-				"/META-INF/default.properties");
+		InputStream propertyStream;
+//		propertyStream = getClass().getResourceAsStream(
+//				"/META-INF/default.properties");
 		Properties properties = new Properties();
-		properties.load(propertyStream);
+//		properties.load(propertyStream);
 		Preferences.initialize("MetaStudio Preferences", properties);
 		try {
 			File file = new File(System.getProperty("user.home"), ".metarc");

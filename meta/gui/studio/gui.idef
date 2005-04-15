@@ -1,0 +1,42 @@
+tool gui is {
+  command = "gui"
+}
+
+process GUI is
+let
+  DirName: str,
+  MenuEvent: term,
+  MenuEventList: list,
+  JarName: str,
+  ClassName: str,
+  Title: str,
+  GUI: gui
+in
+  execute(gui, GUI?)
+  .
+  (
+    rec-msg(set-title(Title?))
+    . snd-do(GUI, set-title(Title))
+  +
+    rec-msg(load-jar(JarName?))
+    . snd-do(GUI, load-jar(JarName))
+  +
+    rec-msg(load-class(DirName?, ClassName?))
+    . snd-do(GUI, load-class(DirName, ClassName))
+  +
+    rec-msg(gui-add-menu-events(MenuEventList?))
+    . snd-do(GUI, add-menu-events(MenuEventList))
+  +
+    rec-event(GUI, menu-event(MenuEvent?))
+    . snd-msg(ui-button-selected(studio-menubar, MenuEvent))
+    . snd-ack-event(GUI, menu-selected(MenuEvent))
+  +
+    rec-event(GUI, window-closing-event)
+    . snd-msg(gui-window-closing)
+    . snd-ack-event(GUI, window-closing-event)
+  )
+  *
+  delta
+endlet
+
+toolbus(GUI)
