@@ -1,6 +1,0 @@
-*.class
-Makefile
-Makefile.in
-MetaGraphMakeRules
-classjava.stamp
-Graph.adt

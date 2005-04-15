@@ -1,5 +1,5 @@
 #include "meta.tb"
-#include "meta-studio.idef"
+#include "gui.idef"
 
 /* sdf-meta */
 #include "graph-utils.tb"
@@ -8,15 +8,30 @@
 /* to be resolved */
 #include "button-actions.tb"
 
+process StartModuleBrowser is
+  snd-msg(load-jar("file://__PKGDATA__/module-browser.jar"))
+
 process MetaGUI is
 let
+  EnvironmentName: str,
+  MenuEventList: list,
   Pid: int
 in
-  create(Ui, Pid?)
-  . create(ButtonActionExecutor, Pid?)
+  create(ButtonActionExecutor, Pid?)
   . create(MetaActions, Pid?)
   . create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
+
+  . snd-msg(environment-name-hook)
+  . rec-msg(environment-name-hook-result(EnvironmentName?))
+  . snd-msg(set-title(EnvironmentName))
+
+  . snd-msg(cm-get-events(studio-menubar))
+  . rec-msg(cm-events(MenuEventList?))
+  . snd-msg(gui-add-menu-events(MenuEventList))
+ 
+  . StartModuleBrowser()
+
   . snd-msg(post-initialization-hook)
   . rec-msg(post-initialization-hook-finished)
   . InitializeTermStore(TERMSTORENAME)

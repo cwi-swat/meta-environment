@@ -14,8 +14,7 @@ CLEANFILES = \
 	libltdl/stamp-h1
 
 SUBDIRS = \
-	libltdl \
-	meta-studio \
+	gui \
 	src \
 	in-output \
 	action-interpreter \

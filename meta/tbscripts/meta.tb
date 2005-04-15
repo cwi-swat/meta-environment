@@ -16,16 +16,7 @@
 
 /* user interface */
 #include "user-interface.tb"
-#include "menubar.idef"
-#include "toolbar.idef"
-#include "statusbar.idef"
-#include "statushistory.idef"
-#include "errorlist.idef"
-#include "infolist.idef"
-#include "dialogtool.idef"
-#include "graphnodesizer.idef"
-#include "treebrowser.idef"
-#include "modulebrowser.idef"
+#include "module-browser.idef"
 
 /* tide support */
 #define TIDE_PASSIVE

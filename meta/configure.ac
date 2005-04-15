@@ -4,6 +4,8 @@ AC_CONFIG_SRCDIR([configure.ac])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
+AM_MAINTAINER_MODE
+
 AC_PROG_CC
 
 dnl libltdl was installed by 'libtoolize --ltdl', now configure it:
@@ -80,7 +82,7 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
 AC_SUBST(TIDE_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:${prefix}/share/meta/jlfgr-1_0.jar
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -181,26 +183,14 @@ dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
    libltdl/Makefile
-   meta-studio/Makefile
-   meta-studio/META-INF/Makefile
-   meta-studio/images/Makefile
-   meta-studio/scripts/Makefile
-   meta-studio/metastudio/Makefile
-   meta-studio/metastudio/components/Makefile
-   meta-studio/metastudio/components/graphs/Makefile
-   meta-studio/metastudio/components/menubar/Makefile
-   meta-studio/metastudio/components/toolbar/Makefile
-   meta-studio/metastudio/components/statusbar/Makefile
-   meta-studio/metastudio/components/statushistory/Makefile
-   meta-studio/metastudio/components/errorlist/Makefile
-   meta-studio/metastudio/components/infolist/Makefile
-   meta-studio/metastudio/components/dialogtool/Makefile
-   meta-studio/metastudio/components/graphnodesizer/Makefile
-   meta-studio/metastudio/components/treebrowser/Makefile
-   meta-studio/metastudio/components/modulebrowser/Makefile
-   meta-studio/metastudio/data/Makefile
-   meta-studio/metastudio/data/graph/Makefile
-   meta-studio/metastudio/utils/Makefile
+   gui/Makefile
+   gui/lib/Makefile
+   gui/data/Makefile
+   gui/util/Makefile
+   gui/plugin/Makefile
+   gui/plugin/module-browser/Makefile
+   gui/studio/Makefile
+   gui/script/Makefile
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile

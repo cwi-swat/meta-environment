@@ -26,7 +26,6 @@ TBSCRIPTS = \
   start-meta-eqs-dumper.tb \
   start-meta-equations-editor.tb \
   start-meta-pt-dumper.tb \
-  start-meta-studio.tb \
   start-meta-syntax-editor.tb \
   start-meta-term-editor.tb \
   status.tb \
@@ -34,7 +33,8 @@ TBSCRIPTS = \
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \
-  sdf2-language.tb
+  sdf2-language.tb \
+  start-meta-studio.tb
 
 EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)
 
@@ -44,4 +44,5 @@ pkgdata_DATA = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS)
 
 %.tb: %.tb.src Makefile
 	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g;\
-	     s@__PKGDATA__@$(pkgdatadir)@g' < $< > $@ 
+	     s@__PKGDATA__@$(pkgdatadir)@g'\
+	     < $< > $@ 
