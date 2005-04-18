@@ -7,7 +7,7 @@ SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src .conf .button
 %.trm.tbl : %.sdf
 	pushd . ; \
 	cd $(*D) ; \
-	$(ASFSDF_META)/bin/pt-dump -m $(*F) -o $@ ; \ 
+	$(ASFSDF_META)/bin/pt-dump -m $(*F) -o $@ ; \
 	popd 
 
 # ---- Convert from .asf to .eqs
