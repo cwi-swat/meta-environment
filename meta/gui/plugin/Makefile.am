@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = module-browser
+SUBDIRS = module-browser dialog

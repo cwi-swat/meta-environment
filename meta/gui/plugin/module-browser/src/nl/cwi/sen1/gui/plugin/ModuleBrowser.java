@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -25,7 +24,7 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
-	private static final String TOOLNAME = "module-browser";
+	private static final String TOOL_NAME = "module-browser";
 
 	private ModuleBrowserBridge bridge;
 
@@ -205,24 +204,17 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	}
 
 	public String getName() {
-		return TOOLNAME;
+		return TOOL_NAME;
 	}
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		addModuleBrowserGUI();
-		connect(studio);
-	}
-
-	private void connect(Studio studio) {
-		bridge = new ModuleBrowserBridge(studio.getFactory(), this);
+		ModuleBrowserBridge bridge = new ModuleBrowserBridge(studio
+				.getFactory(), this);
 		bridge.setLockObject(this);
-		try {
-			bridge.connect(TOOLNAME, studio.getAddress(), studio.getPort());
-			bridge.run();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		studio.connect(getName(), bridge);
+
+		addModuleBrowserGUI();
 	}
 
 	private void addModuleBrowserGUI() {

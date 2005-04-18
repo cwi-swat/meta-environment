@@ -1,6 +1,6 @@
 // Java tool bridge GuiBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 14, 2005 11:17:09 AM
+// generation time: Apr 18, 2005 1:33:20 PM
 
 package nl.cwi.sen1.gui;
 

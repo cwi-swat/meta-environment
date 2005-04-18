@@ -44,6 +44,7 @@ import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
 import nl.cwi.sen1.util.Preferences;
+import toolbus.AbstractTool;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -72,7 +73,6 @@ public class BasicStudio implements Studio, GuiTif {
 	private DockingWindowsTheme currentTheme;
 
 	public static final void main(String args[]) throws Exception {
-		// UIManager.setLookAndFeel(new MetalLookAndFeel());
 		new BasicStudio(args);
 	}
 
@@ -83,24 +83,31 @@ public class BasicStudio implements Studio, GuiTif {
 
 		initializeProperties();
 
-		// Docking windwos should be run in the Swing thread
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				createFrame();
 			}
 		});
+
 		factory = new PureFactory();
 		bridge = new GuiBridge(factory, this);
 		try {
 			bridge.init(args);
 			bridge.connect();
 			bridge.setLockObject(this);
-			bridge.run();
 		} catch (IOException e) {
 			System.err.println("Could not establish connection to ToolBus: "
 					+ e);
 			System.exit(1);
 		}
+
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				bridge.run();
+			}
+		});
+		thread.setName("BasicStudio");
+		thread.start();
 	}
 
 	synchronized private static int nextComponentID() {
@@ -109,10 +116,10 @@ public class BasicStudio implements Studio, GuiTif {
 
 	private void initializeProperties() throws IOException {
 		InputStream propertyStream;
-//		propertyStream = getClass().getResourceAsStream(
-//				"/META-INF/default.properties");
+		// propertyStream = getClass().getResourceAsStream(
+		// "/META-INF/default.properties");
 		Properties properties = new Properties();
-//		properties.load(propertyStream);
+		// properties.load(propertyStream);
 		Preferences.initialize("MetaStudio Preferences", properties);
 		try {
 			File file = new File(System.getProperty("user.home"), ".metarc");
@@ -223,7 +230,7 @@ public class BasicStudio implements Studio, GuiTif {
 				component.initStudioPlugin(BasicStudio.this);
 			}
 		});
-		thread.setName(component.getName());
+		thread.setName(component.getName() + "-starter");
 		thread.start();
 	}
 
@@ -382,7 +389,6 @@ public class BasicStudio implements Studio, GuiTif {
 			menu.add(new AbstractAction(label) {
 				public void actionPerformed(ActionEvent e) {
 					ATerm event = factory.make("menu-event(<term>)", action);
-
 					bridge.postEvent(event);
 				}
 			});
@@ -407,11 +413,24 @@ public class BasicStudio implements Studio, GuiTif {
 	}
 
 	public void recAckEvent(ATerm t0) {
-		// ignore
 	}
 
 	public void recTerminate(ATerm t) {
 		System.exit(0);
 	}
 
+	public void connect(String toolName, final AbstractTool tool) {
+		try {
+			tool.connect(toolName, getAddress(), getPort());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				tool.run();
+			}
+		});
+		thread.setName(toolName + "-runner");
+		thread.start();
+	}
 }

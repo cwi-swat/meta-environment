@@ -32,8 +32,21 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="data/src"/>
-	<classpathentry kind="src" path="util/src"/>
-	<classpathentry kind="src" path="studio/src"/>
+	<classpathentry kind="src" path="plugin/dialog/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="data/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="util/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="studio/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

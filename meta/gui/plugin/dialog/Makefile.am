@@ -3,11 +3,12 @@
 include $(top_srcdir)/java_make_rules
 include $(top_srcdir)/toolbus_make_rules
 
-TOOLNAME = gui
-PACKAGE = nl.cwi.sen1.gui
+TOOLNAME = dialog
+PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
+MAIN_CLASS = $(PACKAGE).Dialog
 
-ANT_ENV += LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.jar:$(top_srcdir)/gui/lib/idw-gpl-1.3.0.jar
+ANT_ENV += LOCAL_JARS=$(top_srcdir)/gui/studio/gui.jar
 
 pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
 

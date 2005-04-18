@@ -3,3 +3,4 @@ Makefile
 Makefile.in
 help.tb
 sdf2-language.tb
+start-meta-studio.tb

@@ -1,5 +1,6 @@
 #include "meta.tb"
 #include "gui.idef"
+#include "dialog.idef"
 
 /* sdf-meta */
 #include "graph-utils.tb"
@@ -10,6 +11,9 @@
 
 process StartModuleBrowser is
   snd-msg(load-jar("file://__PKGDATA__/module-browser.jar"))
+
+process StartDialogTool is
+  snd-msg(load-jar("file://__PKGDATA__/dialog.jar"))
 
 process MetaGUI is
 let
@@ -31,6 +35,7 @@ in
   . snd-msg(gui-add-menu-events(MenuEventList))
  
   . StartModuleBrowser()
+  . StartDialogTool()
 
   . snd-msg(post-initialization-hook)
   . rec-msg(post-initialization-hook-finished)
