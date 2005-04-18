@@ -19,36 +19,75 @@ JAVA_ANALYSIS=${bindir}/JavaAnalysis
 
 usage() {
 cat << ENDCAT >&2
-Usage: $PRG dirname [rstore]
+Usage: $PRG -i dirname [-o rstore]
 
-Options: none
-
+Options:
+  -i (--input)        filename	input from file (default: stdin)
+  -o (--output)       filename	output to file (default: result.rstore.pt)
+  -v (--verbose)                verbose output (default:none)
 Examples:
-  $PRG JHotDraw5.2-sources hotdraw.rstore.pt
+  $PRG -i JHotDraw5.2-sources -o jhotdraw.rstore.pt
 
 ENDCAT
 }
 
+# {{{ check_input
+
+check_input(){
+   if [ ! -d ${SOURCE_DIR} ]
+   then
+      echo "$PRG: ${SOURCE_DIR} is not a directory"
+      usage
+      exit 1
+   fi
+}
+
 # }}}
 
-if [ $# -eq 0 -o $# -gt 2 ]; then
+# {{{ check_output
+
+check_output() {
+  case ${RESULTING_RSTORE} in
+	*.rstore) ;;
+        *.rstore.pt) ;;
+	*)
+	echo "$PRG: $OUTPUT should have file extension .rstore or .rstore.pt"
+	usage
+	exit 1
+  esac
+}
+
+# }}}
+
+
+# }}}
+
+if [ $# -eq 0 -o $# -gt 4 ]; then
   usage
   exit 1
 fi
 
-if [ -d $1 ]
-then
-    SOURCE_DIR=$1; shift
-    if [ $# -eq 1 ]
-    then
-	RESULTING_RSTORE="--output $1"
-    fi
-    extract-relations --executable ${JAVA_ANALYSIS} \
+while [ $# -gt 0 ]
+do
+  case "$1" in
+
+    -i | --input)
+      shift; SOURCE_DIR=$1; check_input ;;
+
+    -o | --output)
+      shift; RESULTING_RSTORE=$1; check_output;;
+
+    -v | --verbose)
+      VERBOSE=-v ;;
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+extract-relations ${VERBOSE} \
+	              --executable ${JAVA_ANALYSIS} \
                       --sort CompilationUnit \
                       --parse-table ${JAVA_PARSE_TABLE} \
                       ${RESULTING_RSTORE} \
                       `find $SOURCE_DIR -name "*.java"`
-else
-    usage
-    exit 1
-fi

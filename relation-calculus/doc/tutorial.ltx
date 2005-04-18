@@ -214,7 +214,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.
 
 \chapter{A Motivating Example} \label{SEC:motivating-example}
 
-%%\fbox{\epsfig{figure=figs/caruso.eps,width=6cm}}
+\fbox{\epsfig{figure=figs/caruso.ps,width=6cm}}
 \label{FIG:caruso}
 \hspace*{0.5cm}\parbox[b]{8.5cm}{Suppose a mystery box ends up on your desk. When you open it, it contains a
 huge software system with several questions attached to it:
@@ -2910,7 +2910,7 @@ will then be
 Take the domain of this result and we get exactly the statements
 in Figure~\ref{FIG:slicing}(b).
 
-\chapter{Extracting Facts from Source Code}
+\chapter{Extracting Facts from Source Code} \label{SEC:ExtractingFacts}
 \begin{figure}[tb]
 %%\hrulefill
 \begin{center}
@@ -3546,18 +3546,29 @@ The subdirectory {\tt demo} contains larger demos.
 \chapter{Visualization of Rstores} \label{SEC:Visualization}
 
 \fbox{\epsfig{figure=figs/camera-obscura.ps,width=8cm}} \label{FIG:camera-obscura}
-\hspace*{0.5cm}\parbox[b]{6cm}{
-The sets and relations constructed for all but the most trivial problems are
-voluminous and their textual representation is hard to graps for the human
-eye. This is where information visualization techniques (**) come to our rescue.
-In this chapter we present some initial experiments to visualize the contents
-of an Rstore. This is a two-stage process. First the Rstore is converted to
-the \texttt{.rviz} format that is more amenable as input for a visualization
-tool. This format is described in Section~\ref{SEC:rvizformat} and
-the conversion from Rstore to this format is discussed in
-Section~\ref{SEC:rstore2rviz}. Next, the \texttt{.rviz} file can be visualized
-and explored. This is the topic of Section~\ref{SEC:rviz}
-}
+\hspace*{0.5cm}\parbox[b]{6cm}{ The sets and relations constructed for all but
+the most trivial problems are voluminous and their textual representation is
+hard to graps for the human eye. This is where information visualization
+techniques (**) come to our rescue.  In this chapter we present some initial
+experiments to visualize the contents of an Rstore. This is a multi--stage
+process that if first described in Section~\ref{SEC:visualize-workflow}.
+First facts are extracted from the source
+(Section~\ref{SEC:ExtractingFactsAgain})
+and are further enriched (Section~\ref{SEC:EnrichingFacts}).
+Next the Rstore is converted to the \texttt{.rviz} format that is more
+amenable as input for a visualization tool. This format is described in
+Section~\ref{SEC:rvizformat} and the conversion from Rstore to this format is
+discussed in Section~\ref{SEC:rstore2rviz}. Next, the \texttt{.rviz} file can
+be visualized and explored. This is the topic of Section~\ref{SEC:rviz} }
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/visualize-workflow.eps,width=10cm}
+\vspace*{-0cm}
+\end{center}
+\hrulefill
+\caption{\label{FIG:visualize-workflow}Workflow for visualization of System Under Investigation}
+\end{figure}
 
 \begin{figure}[tb]
 \begin{center}
@@ -3576,8 +3587,45 @@ and explored. This is the topic of Section~\ref{SEC:rviz}
 \end{figure}
 
 
-\section{The \texttt{.rviz} format} \label{SEC:rvizformat}
+\section{The visualization workflow} \label{SEC:visualize-workflow}
 
+The process of achieving a visualization of a System under Investigation (SUI) is shown in
+Figure~\ref{FIG:visualize-workflow} and consists of the following steps:
+\begin{itemize}
+\item Extract facts from a source code directory \texttt{SUISrcDir} and
+  produce an Rstore \texttt{SUI.rstore.pt}.
+\item \begin{sloppypar} Enrich this Rstore by running an rscript \texttt{enr.rscript} on it,
+  with resulting enriched Rstore \texttt{enr.rstore.pt}. \end{sloppypar}
+\item Convert the enriched Rstore to the the visualization format
+  \texttt{.rviz}.
+\item Run the visualization tool \texttt{rviz} on these data.
+\end{itemize}
+\noindent The details of this process are now further explained.
+
+\section{Extracting Facts} \label{SEC:ExtractingFactsAgain}
+In Chapter~\ref{SEC:ExtractingFacts} we have already seen how fact extraction can
+be organized and implemented. For the current presentation it is sufficient to
+assume that there exists an \texttt{extract} tool that can be used:
+\begin{exam}
+\texttt{extract -i SUISrcDir -o SUI.rstore.pt}
+\end{exam}
+where \texttt{SUISrcDir} is the source directory where the source of the SUI
+can be found. In the distribution a tool \texttt{extract-java} is available with precisely
+this behaviour for Java programs.
+
+\section{Enriching Facts} \label{SEC:EnrichingFacts}
+Given the Rstore  \texttt{SUI.rstore.pt} we enrich it by writing and executing
+an \rscript
+\texttt{enr.rscript} that extends the extracted facts as required by the goal
+we want to achieve:
+\begin{exam}
+\texttt{rscript enr.rscript -s SUI.rstore.pt -o enr.SUI.rstore.pt}
+\end{exam}
+
+\section{The \texttt{.rviz} Format} \label{SEC:rvizformat}
+
+Before explaining the conversion to the rviz format, it is helpfull to
+understand this format first.
 Only two forms of data definitions can currently appear in an rviz file.
 \emph{Elements} are values that can occur in relations and are defined by the
 keyword \texttt{elm}.  \emph{Tuples} are defined by the keyword
@@ -3612,7 +3660,7 @@ An example of a tuple definition is:
 allow the representation of all data that may be present in an Rstore. In particular, sets and
 $n$-ary relations ($n > 2$) are not represented. Clearly, this format will further evolve.
 
-\section{\texttt{rstore2rviz}: convert rstore to visualization format} \label{SEC:rstore2rviz}
+\section{\texttt{rstore2rviz}: Convert Rstore to Visualization Format} \label{SEC:rstore2rviz}
 The command \texttt{rstore2rviz} takes an rstore as input and converts it
 to the \texttt{.rviz} format that is accepted by the visualization tool \texttt{rviz}.
 
@@ -3631,23 +3679,23 @@ a file named \texttt{result.rviz}.
 
 \end{itemize}
 Example:
-   \texttt{rstore2rviz -i jhotdraw.rstore -o jhotdraw.rviz}
+   \texttt{rstore2rviz -i enr.SUI.rstore.pt -o SUI.rviz}
 
-\section{\texttt{rviz}: visualize an rstore} \label{SEC:rviz}
+\section{\texttt{rviz}: Visualize an Rstore} \label{SEC:rviz}
 
 
 Visualization is simply started by the command \texttt{rviz} with the
 given visualization data as input, as in:
 
 \begin{exam}
-\texttt{rviz jhotdraw.rviz}
+\texttt{rviz SUI.rviz}
 \end{exam}
 
 \noindent The result is a window as shown in Figure~\ref{FIG:rviz1} which
 consists of several panes.  On the left-hand side three panes occur. On top is
-the \emph{Relations}pane that lists the relations that are available.  One of
+the \emph{Relations} pane that lists the relations that are available.  One of
 these relations can be selected and its elements will be displayed.  In the
-middle appears an \emph{Eelement Type} pane that shows the element types that
+middle appears an \emph{Element Type} pane that shows the element types that
 are available for the selected relation.  Selecting one of these types lists
 in the the bottom all \emph{Elements} that occur in the selected relation and
 are of the selected type. By selecting one element from the \emph{Elements}
@@ -3655,7 +3703,7 @@ pane, that element (and all elements it is associated with by the selected
 relation) will be highlighted in the large graphical pane on the right.
 
 There are two visualisation methods available that can be selected by the button
-at the bottom left that is alternatively labelled as \texttt{View as Files} or
+at the bottom left that is alternatively labeled as \texttt{View as Files} or
 \texttt{View as TreeMap}. In the former case, files are shown as rectangles
 with a a pattern of horizontal lines inside that reflect their textual
 structure. In the latter case, a tree map is shown of the directory structure
@@ -3663,18 +3711,19 @@ of all files.
 
 Figure Figure~\ref{FIG:rviz1} shows the visualization of facts extracted from
 the JHotDraw application. The relation \texttt{IMPLEMENTS} has been selected,
-and of the two possible element types \texttt{ClassName} has been choosen.
+and of the two possible element types \texttt{ClassName} has been chosen.
 From the list of possible class names, \texttt{AbstractHandle} has been selected.
 The result is that the element itself is shown in the file view (with all lines of its definition displayed in blue),
 and all its ``related'' elements (e.g., the interfaces it implements) shown in red.
 
 Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tree map view.
 
-
 \vspace*{3cm}
-\begin{figure}[h]
+\begin{figure}[b]
 \begin{center}
-\epsfig{figure=figs/teleskoop.ps,width=12cm} \label{FIG:teleskoop}
+\vspace*{-3cm}
+\epsfig{figure=figs/teleskoop.ps,width=8cm} \label{FIG:teleskoop}
+
 \end{center}
 \end{figure}
 
@@ -3751,7 +3800,7 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 \end{center}
 
 \chapter{Tables of Built-in Functions} \label{AP:functions}
-
+\vspace*{-\baselineskip}
 %%\tablecaption{Built-in functions}
 \tablehead{\hline}
 \tabletail{\hline}
@@ -3803,16 +3852,16 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 \end{supertabular}
 \end{center}
 
-\chapter{TO DO}
-\begin{itemize}
-\item {\tt all-path-to}, {\tt sort} not described.
-\item $n$-ary relations
-\item Termination criteria for solving equations
-\item Access functions for $n$-ary tuples.
-\item Describe Rstores
-\item Give Rscript grammar
-\item Give workflows for fact extraction etc.
-\end{itemize}
+%%\chapter{TO DO}
+%%\begin{itemize}
+%%\item {\tt all-path-to}, {\tt sort} not described.
+%%\item $n$-ary relations
+%%\item Termination criteria for solving equations
+%%\item Access functions for $n$-ary tuples.
+%%\item Describe Rstores
+%%\item Give Rscript grammar
+%%\item Give workflows for fact extraction etc.
+%%\end{itemize}
 
 
 
@@ -3835,7 +3884,7 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 
 
 
-\newpage
+%% \newpage
 \section*{Acknowledgments}
 Thanks to Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
 and Jurgen Vinju for comments on this tutorial.

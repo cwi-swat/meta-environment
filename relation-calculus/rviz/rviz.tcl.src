@@ -660,7 +660,7 @@ proc get-root {} {
 
 # ---- getRelations: read the visualization data
 
-proc item {itemtype name file beginline begincol endline endcol} {
+proc elm {itemtype name file beginline begincol endline endcol} {
     global items itemtypes allFiles
 
     if { [lsearch -exact $itemtypes $itemtype] == -1 } {
@@ -675,7 +675,7 @@ proc item {itemtype name file beginline begincol endline endcol} {
     lappend items($name)  "$itemtype $file $beginline $begincol $endline $endcol"
 }
 
-proc rel {name typea a typeb b} {
+proc tup {name typea a typeb b} {
     global relations
     lappend relations($name) "$typea $a $typeb $b"
 }
