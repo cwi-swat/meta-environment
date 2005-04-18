@@ -19,7 +19,7 @@ exports
 
 %%     "*undefined*"				-> Elem 
 
-%% Extend Elem to allow nested bags and relations
+%% Extend Elem to allow nested sets and relations
 
      Set[[Elem]]                   	    	-> Elem  
 %%     Tuple					-> Elem

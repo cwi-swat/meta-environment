@@ -62,10 +62,10 @@ exports
 	power0(SetIterator[[Elem]])				-> Set[[Elem]]
 	power1(SetIterator[[Elem]])				-> Set[[Elem]]
 
-	%% All paths from roots in the second bag.
+	%% All paths from roots in the second set.
 	all-paths-from(Set[[Elem]],Set[[Elem]])			-> Set[[Elem]] 
 
-	chain-bag(Set[[Elem]])					-> Set[[Elem]]
+	chain-set(Set[[Elem]])					-> Set[[Elem]]
 	chain-each(Set[[Elem]])					-> Set[[Elem]]
 	all-nodes-from(Set[[Elem]], Set[[Elem]])		-> Set[[Elem]]
 

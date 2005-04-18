@@ -33,7 +33,7 @@ equations
 [com1p-2]   
 	is-empty-iter($SetIter) == true
 	=============================================
-	compose1($SetIter, $Set) = empty-bag
+	compose1($SetIter, $Set) = empty-set
 
 %% ----	product
 
@@ -49,7 +49,7 @@ equations
 [prode1-2]
 	is-empty-iter($SetIter) == true
 	=============================================
-	product1($Elem, $SetIter) = empty-bag
+	product1($Elem, $SetIter) = empty-set
 
 [prodb-0]
 	product($Set1, $Set2) = product1(mk-iterator($Set1), $Set2)
@@ -63,7 +63,7 @@ equations
 [prodb1-2] 
 	is-empty-iter($SetIter) == true
 	================================================
-	product1($SetIter, $Set) = empty-bag
+	product1($SetIter, $Set) = empty-set
 
 [iprod] $Set1 x $Set2 = product($Set1, $Set2)
 
@@ -78,7 +78,7 @@ equations
 
 [dom1-2] is-empty-iter($SetIter) == true
 	 =================================================
-	 domain1($SetIter) = empty-bag
+	 domain1($SetIter) = empty-set
 
 %% ---- range
 
@@ -91,7 +91,7 @@ equations
 
 [ran1-2]  is-empty-iter($SetIter) == true
 	 =================================================
-	 range1($SetIter) = empty-bag
+	 range1($SetIter) = empty-set
 
 %% ----	 carrier
 
@@ -104,7 +104,7 @@ equations
 
 [car1-2]	is-empty-iter($SetIter) == true
 	================================================
-	carrier1($SetIter) = empty-bag
+	carrier1($SetIter) = empty-set
 
 %% ----	domainR
 
@@ -125,7 +125,7 @@ equations
 
 [domR1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 domainR1($SetIter, $Set) = empty-bag
+	 domainR1($SetIter, $Set) = empty-set
 
 %% ----	 domainX
 
@@ -145,7 +145,7 @@ equations
 
 [domX1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 domainX1($SetIter, $Set) = empty-bag
+	 domainX1($SetIter, $Set) = empty-set
 	
 %% ----	rangeR
 
@@ -165,7 +165,7 @@ equations
 
 [ranR1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 rangeR1($SetIter, $Set) = empty-bag
+	 rangeR1($SetIter, $Set) = empty-set
 
 %% ----	 rangeX
 
@@ -185,7 +185,7 @@ equations
 
 [ranX1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 rangeX1($SetIter, $Set) = empty-bag
+	 rangeX1($SetIter, $Set) = empty-set
 
 %% ----	 carrierR
 
@@ -205,7 +205,7 @@ equations
 
 [carR1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 carrierR1($SetIter, $Set) = empty-bag
+	 carrierR1($SetIter, $Set) = empty-set
 
 %% ----	 carrierX
 
@@ -225,7 +225,7 @@ equations
 
 [carX1-3] is-empty-iter($SetIter) == true
 	 ===================================================
-	 carrierX1($SetIter, $Set) = empty-bag
+	 carrierX1($SetIter, $Set) = empty-set
 
 %% ---- bottom
 
@@ -255,7 +255,7 @@ equations
 
 [rim1-2]	 is-empty-iter($SetIter) == true
 	 ==================================================
-	 rimage1($SetIter, $Elem) = empty-bag
+	 rimage1($SetIter, $Elem) = empty-set
 
 [brim-0] rimage($Set1, $Set2) = rimage1($Set1, mk-iterator($Set2))
 
@@ -266,7 +266,7 @@ equations
 
 [brim1-2] is-empty-iter($SetIter) == true
 	 ====================================================
-	 rimage1($Set, $SetIter) = empty-bag
+	 rimage1($Set, $SetIter) = empty-set
 
 %% ----	 limage
 
@@ -286,7 +286,7 @@ equations
 
 [lim1-2]	 is-empty-iter($SetIter) == true
 	 ==================================================
-	 limage1($SetIter, $Elem) = empty-bag
+	 limage1($SetIter, $Elem) = empty-set
 
 [blim-0] limage($Set1, $Set2) = limage1($Set1, mk-iterator($Set2))
 
@@ -297,7 +297,7 @@ equations
 
 [blim1-2] is-empty-iter($SetIter) == true
 	 ====================================================
-	 limage1($Set, $SetIter) = empty-bag
+	 limage1($Set, $SetIter) = empty-set
 
 %% ----	 inv
 
@@ -310,7 +310,7 @@ equations
 
 [inv1-2] is-empty-iter($SetIter) == true
 	 ===================================================
-	 inv1($SetIter) = empty-bag
+	 inv1($SetIter) = empty-set
 
 %% ----	 compl
 
@@ -329,7 +329,7 @@ equations
 
 [id1-2]	 is-empty-iter($SetIter) == true
 	 ==================================================
-	 id1($SetIter) = empty-bag
+	 id1($SetIter) = empty-set
 
 %% ---- closure
 
@@ -378,7 +378,7 @@ equations
 
 %% ---- trans-closure
 
-[tcl-1]  trans-closure($Rel) = closure($Rel, empty-bag, $Rel)
+[tcl-1]  trans-closure($Rel) = closure($Rel, empty-set, $Rel)
 
 %% ---- rtrans-closure
 
@@ -389,12 +389,12 @@ equations
 [rX-3]	$Rel' := carrierX($Rel, $Set2),
 	$Rel'':= domainR($Rel', $Set1)
 	=========================================
-	reachX($Set1, $Set2, $Rel) = range(closure($Rel', empty-bag, $Rel''))
+	reachX($Set1, $Set2, $Rel) = range(closure($Rel', empty-set, $Rel''))
 
 %% ---- reachR
 
 [rX-3]	$Rel' := carrierR($Rel, $Set2),
 	$Rel'':= domainR($Rel', $Set1)
 	=========================================
-	reachR($Set1, $Set2, $Rel) = range(closure($Rel', empty-bag, $Rel''))
+	reachR($Set1, $Set2, $Rel) = range(closure($Rel', empty-set, $Rel''))
 

@@ -29,7 +29,7 @@ equations
 
 [sort-many]
 	$bottom := bottom($relation),
-	$bottomList := bag-to-list($bottom),
+	$bottomList := set-to-list($bottom),
 	$relation' := ranX($relation, $bottom)
 	===
    	sort($relation) = concat($bottomList, sort($relation'))
@@ -46,24 +46,24 @@ equations
 
 equations
 
-[bag-to-list-top]
-	{$elem*} := $bag,
+[set-to-list-top]
+	{$elem*} := $set,
 	$set := {$elem*},
 	{$elem*'} := $set,
 	$list := [$elem*']
 	===
-        bag-to-list($bag) = $list
+        set-to-list($set) = $list
 
 tests
 
-[bag-to-list-empty]
-	bag-to-list({}) == []
+[set-to-list-empty]
+	set-to-list({}) == []
 
-[bag-to-list-many-unique]
-	bag-to-list({1, 3, 2}) == [1, 3, 2]
+[set-to-list-many-unique]
+	set-to-list({1, 3, 2}) == [1, 3, 2]
 
-[bag-to-list-many-dup]
-	bag-to-list({1, 3, 2, 3}) == [1, 3, 2]
+[set-to-list-many-dup]
+	set-to-list({1, 3, 2, 3}) == [1, 3, 2]
 
 tests 
 

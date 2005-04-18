@@ -8,32 +8,32 @@ imports Relations
 exports
 
 context-free syntax
-	topological-sort(Bag[[Elem]]) -> List[[Elem]]
+	topological-sort(Set[[Elem]]) -> List[[Elem]]
 
 hiddens
 
 imports basic/Whitespace
 
 context-free start-symbols 
-	List[[Elem]] Bag[[Elem]]
+	List[[Elem]] Set[[Elem]]
 
 context-free syntax
-	sort(Bag[[Elem]]) -> List[[Elem]]
-	contains-cycle(Bag[[Elem]]) -> Boolean
-	bag-to-list(Bag[[Elem]]) -> List[[Elem]]
+	sort(Set[[Elem]]) -> List[[Elem]]
+	contains-cycle(Set[[Elem]]) -> Boolean
+	set-to-list(Set[[Elem]]) -> List[[Elem]]
 
 sorts Set[[Elem]]
 
 variables
-	"$relation"[0-9\']* -> Bag[[Elem]]
-	"$bag"[0-9\']* -> Bag[[Elem]]
+	"$relation"[0-9\']* -> Set[[Elem]]
+	"$set"[0-9\']* -> Set[[Elem]]
 	"$list"[0-9\']* -> List[[Elem]]
 	"$elem"[0-9\']* -> Elem
 	"$elem*"[0-9\']* -> {Elem ","}*
 	"$set"[0-9\']* -> Set[[Elem]]
-	"$rootset"[0-9\']* -> Bag[[Elem]]
+	"$rootset"[0-9\']* -> Set[[Elem]]
 	"$root" -> Elem
-	"$bottom" -> Bag[[Elem]]
+	"$bottom" -> Set[[Elem]]
 	"$bottomList" -> List[[Elem]]
 		
 
