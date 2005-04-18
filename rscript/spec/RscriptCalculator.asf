@@ -18,14 +18,14 @@
 
 %% ---- Eval a complete Rscript
 
-[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
+[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
 	$Set := value(YIELD, $Rstore)
 	===============================================================
 	eval-rscript($Stat*) = filter($Rstore, $Set)
 
 %% ---- Eval a complete Rscript and return value of specific variable (as string)
 
-[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
+[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
 	$Var := str2rvar($StrCon),
 	$Elem := value($Var, $Rstore)
 	===============================================================
@@ -34,14 +34,14 @@
 
 %% ---- Eval a complete Rscript and return value of specific variable
 
-[ERS2]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
+[ERS2]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
 	$Elem := value($Var, $Rstore)
 	===============================================================
 	eval-rscript-and-yield($Stat*, $Var) = $Elem
 
 %% ---- Eval a complete Rscript with given Rstore
 
-[ERS3]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+[ERS3]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
 	$Rstore'' := eval-rstats($Stat*, $Rstore'),
 	$Set := value(YIELD, $Rstore'')
 	===============================================================
@@ -49,7 +49,7 @@
 
 %% ---- Eval complete script with given Rstore and yield value of a variable (as string constant
 
-[ERS4]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+[ERS4]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
 	$Var := str2rvar($StrCon),
 	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
 	===================================================
@@ -57,7 +57,7 @@
 
 %% ---- Eval complete script with given Rstore and yield value of a variable
 
-[ERS5]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+[ERS5]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
 	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
 	===================================================
 	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $Var) = $Elem
@@ -96,10 +96,10 @@
 [S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, int, 0, $Rstore)
 [S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, str, "", $Rstore)
 [S4]	eval-rstat(loc $Var, $Rstore)		= assign-when-undef($Var, loc, file(""), $Rstore)
-[S5]	eval-rstat(bag[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, bag[$Etype], empty-bag, $Rstore)
+[S5]	eval-rstat(set[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, set[$Etype], empty-set, $Rstore)
 	
 [S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Rstore) 
-						= assign-when-undef($Var, rel[$Etype1, $Etype2], empty-bag, $Rstore)
+						= assign-when-undef($Var, rel[$Etype1, $Etype2], empty-set, $Rstore)
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
 [S8a]   eval-rstat(yield $Etype $Var = $Exp, $Rstore) = 
@@ -114,8 +114,8 @@ evalx($Exp, $Rstore), $Rstore)
 [S8b]	eval-rstat(rel[$Etype+] $Var += $Exp, $Rstore)  
 						= add-tuples($Var, rel[$Etype+], evalr($Exp, $Rstore), $Rstore)
 
-[S8c]	eval-rstat(bag[$Etype] $Var += $Exp, $Rstore)  
-						= add-tuples($Var, bag[$Etype], evalb($Exp, $Rstore), $Rstore)
+[S8c]	eval-rstat(set[$Etype] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, set[$Etype], evalb($Exp, $Rstore), $Rstore)
 
 [S8d]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
 
@@ -231,9 +231,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 [tup1]	evalx($Tuple, $Rstore) = $Tuple
 
-%%[bag1]	evalx($Set, $Rstore) = sort($Set)
+%%[set1]	evalx($Set, $Rstore) = sort($Set)
 
-[bag1]	evalx($Set, $Rstore) = unique($Set)     %% bags as sets!
+[set1]	evalx($Set, $Rstore) = unique($Set)     %% bags as sets!
 
 [VAR1]	$Elem := value($Var, $Rstore)
 	=================================================
@@ -255,7 +255,7 @@ evalx($Exp, $Rstore), $Rstore)
 	==================================================
 	evalx(<$Exp>, $Rstore) = <$Elem>
 
-%% ---- Eval bags
+%% ---- Eval sets
 
 [EB2]   $Elem := evale($Exp, $Rstore),
 	$Set := evalb({$Exp+}, $Rstore)				%%XXX
@@ -264,9 +264,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 [EB2]   $Elem := evale($Exp, $Rstore)					%%XXX
 	===================================================
-	evalx({$Exp}, $Rstore) = insert($Elem, empty-bag)
+	evalx({$Exp}, $Rstore) = insert($Elem, empty-set)
 
-[EB3]	evalx({}, $Rstore) = empty-bag
+[EB3]	evalx({}, $Rstore) = empty-set
 
 %% ---- Eval binary operators
 
@@ -440,14 +440,14 @@ evalx($Exp, $Rstore), $Rstore)
 [ec-4]	$Set := evalx($Exp1, $Rstore)
 	=================================================================
 	evalc({ $Target : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target, mk-iterator($Set), empty-bag, $Exp2, $Rstore)
+	eval-itern($Target, mk-iterator($Set), empty-set, $Exp2, $Rstore)
 
 %% ---- Simple generator, match and extract N targets <T1, T2, ...> : E
 
 [ec-5]	$Set := evalx($Exp1, $Rstore)
 	=================================================================
 	evalc({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target+, mk-iterator($Set), empty-bag, $Exp2, $Rstore)
+	eval-itern($Target+, mk-iterator($Set), empty-set, $Exp2, $Rstore)
 
 %% ---- Ordinary expression as in { E | ... }
 
@@ -684,7 +684,7 @@ evalx($Exp, $Rstore), $Rstore)
 
 [ae2]	is-empty-iter($SetIter) == true
 	===================================================
-	add-element($Elem, $SetIter) = empty-bag
+	add-element($Elem, $SetIter) = empty-set
 
 [pw01]	is-empty-iter($SetIter) == false,
 	$Elem := head($SetIter),
@@ -695,28 +695,28 @@ evalx($Exp, $Rstore), $Rstore)
 
 [pw02]	is-empty-iter($SetIter) == true
 	====================================================
-	power0($SetIter) = insert(empty-bag, empty-bag)
+	power0($SetIter) = insert(empty-set, empty-set)
 
-[pw11]	power1($SetIter) = diff(power0($SetIter), insert(empty-bag, empty-bag))	
+[pw11]	power1($SetIter) = diff(power0($SetIter), insert(empty-set, empty-set))	
 
 %% ---- all-nodes-from
 
-[chain-bag-1]
-	chain-bag({}) = {}
+[chain-set-1]
+	chain-set({}) = {}
 
-[chain-bag-2]
-	chain-bag({$Elem}) = {}
+[chain-set-2]
+	chain-set({$Elem}) = {}
 
-[chain-bag-3]
-	chain-bag({$Elem1, $Elem2, $Elem*}) =
-		union({<$Elem1, $Elem2>}, chain-bag({$Elem2,$Elem*}))
+[chain-set-3]
+	chain-set({$Elem1, $Elem2, $Elem*}) =
+		union({<$Elem1, $Elem2>}, chain-set({$Elem2,$Elem*}))
 
 [chain-each-nil]
 	chain-each({}) = {}
 
 [chain-each-cons]
 	chain-each({{$Elem*1}, $Elem*2}) = 
-		union({chain-bag({$Elem*1})}, chain-each({$Elem*2}))
+		union({chain-set({$Elem*1})}, chain-each({$Elem*2}))
 [all-nodes-nil]
 	all-nodes-from($Set, {}) = {{}}
 

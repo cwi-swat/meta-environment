@@ -1,6 +1,6 @@
 equations
 
-[empty]	empty-bag = {}
+[empty]	empty-set = {}
 
 %% --- insert($Elem, $Set)
 

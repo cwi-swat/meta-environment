@@ -1,12 +1,12 @@
 module ExportGraph
-   imports Graph RscriptElem
+   imports Graph RscriptElem MyArea
 
 exports
    context-free syntax
 	export-graph-bool(BoolCon)				-> Graph
 	export-graph-int(NatCon)				-> Graph
-	export-graph-str(String)				-> Graph
-	export-graph-bag(Bag[[Elem]])				-> Graph
+	export-graph-str(StrCon)				-> Graph
+	export-graph-set(Set[[Elem]])				-> Graph
 
 hiddens
    imports basic/Comments
@@ -30,26 +30,26 @@ hiddens
 	mkBoolNode(BoolCon, Integer)			-> <Integer, Integer, Instr>
 	mkIntegerNode(Integer, Integer)			-> <Integer, Integer, Instr>
 	mkStringNode(String, Integer)			-> <Integer, Integer, Instr>
-	mkAreaNode(Area, Integer)			-> <Integer, Integer, Instr>
+	mkLocNode(Location, Integer)			-> <Integer, Integer, Instr>
 
 	gen(Elem, Integer)				-> <Integer, Integer, Instr>
-	gen-bag(Bag[[Elem]], Integer)			-> <Integer, Integer, Instr>
-	gen-bag1(Elem, Integer, Integer)		-> <Integer, Integer, Instr>
+	gen-set(Set[[Elem]], Integer)			-> <Integer, Integer, Instr>
+	gen-set1(Elem, Integer, Integer)		-> <Integer, Integer, Instr>
 	
 	gen-rel(Elem, Integer)				-> <Integer, Integer, Instr>
-	gen-rel1(Elem, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr, Bag[[Elem]]>
+	gen-rel1(Elem, Integer, Set[[Elem]])		-> <Integer, Integer, Instr, Set[[Elem]]>
 
-	gen-tuple(Tuple, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr, Bag[[Elem]]>
+	gen-tuple(Tuple, Integer, Set[[Elem]])		-> <Integer, Integer, Instr, Set[[Elem]]>
 
 
-	gen-elem(Elem, Integer, Bag[[Elem]])		-> <Integer, Integer, Instr,Bag[[Elem]]>
+	gen-elem(Elem, Integer, Set[[Elem]])		-> <Integer, Integer, Instr,Set[[Elem]]>
 
 	mkGraph(Instr)					-> Graph
 	
 
    variables
-	"$Bag" [0-9\']*			-> Bag[[Elem]]
-	"$Table" [0-9\']*		-> Bag[[Elem]]
+	"$Set" [0-9\']*			-> Set[[Elem]]
+	"$Table" [0-9\']*		-> Set[[Elem]]
 
 	"$Char*" [0-9\']*		-> CHAR*
        	"$Elem"   [0-9\']*             	-> Elem
@@ -63,9 +63,9 @@ hiddens
 	"$N"  [0-9\']*             	-> Integer
 	"$Integer"  [0-9\']*         	-> Integer
 	"$NatCon"  [0-9\']*             -> NatCon
-        "$String" [0-9\']*             	-> String
+        "$StrCon" [0-9\']*             	-> StrCon
         "$BoolCon" [0-9\']*            	-> BoolCon
-        "$Area" [0-9\']*            	-> Area
+        "$Loc" [0-9\']*            	-> Location
         "$ATerm" [0-9\']*            	-> ATerm
 
 

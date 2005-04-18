@@ -2,7 +2,7 @@ equations
 
 %% ---- Evaluate test suite
 
-[ETS1]	$Rstore := eval-rstats($Stat*, rstore(<NPASSED,int,0>,<NFAILED,int,0>,<FAILED,bag[str],empty-bag>)),
+[ETS1]	$Rstore := eval-rstats($Stat*, rstore(<NPASSED,int,0>,<NFAILED,int,0>,<FAILED,bag[str],empty-set>)),
 	$NatCon1 := value(NPASSED, $Rstore),
 	$NatCon2 := value(NFAILED, $Rstore),
 	$Val := value(FAILED, $Rstore)
@@ -13,7 +13,7 @@ equations
 
 [ETS1]	$Rstore' := assign(NPASSED, int, 0, $Rstore),
 	$Rstore'' := assign(NFAILED, int, 0, $Rstore'),
-	$Rstore''' := assign(FAILED, bag[str], empty-bag, $Rstore''),
+	$Rstore''' := assign(FAILED, bag[str], empty-set, $Rstore''),
 	$Rstore'''' := eval-rstats($Stat*, $Rstore'''),
 	$NatCon1 := value(NPASSED, $Rstore''''),
 	$NatCon2 := value(NFAILED, $Rstore''''),

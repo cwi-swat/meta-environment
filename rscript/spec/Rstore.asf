@@ -43,19 +43,19 @@ equations
 	add-elem($Var, $Elem, $Rstore) = assign($Var, xappend($Val, $Elem), $Rstore)
 
 [default-AE]
-	add-elem($Var, $Elem, $Rstore) = assign($Var, insert($Elem, empty-bag), $Rstore)
+	add-elem($Var, $Elem, $Rstore) = assign($Var, insert($Elem, empty-set), $Rstore)
 
 %% ---- Add tuple to a relation
 
 [AT1]	add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore(<$Var, $Type2, $Val>, $VPair*)) = 
-	rstore(<$Var, $Type2, xunion(insert(<$Elem1, $Elem2>, empty-bag), $Val)>, $VPair*)
+	rstore(<$Var, $Type2, xunion(insert(<$Elem1, $Elem2>, empty-set), $Val)>, $VPair*)
 
 [AT2]	$Var != $Var', 
 	rstore($VPair*') := add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore($VPair*))
 	===============================================================
 	add-tuple($Var, $Type1, <$Elem1, $Elem2>, rstore(<$Var', $Type2, $Val>, $VPair*)) = rstore(<$Var', $Type2, $Val>, $VPair*')
 
-[AT3]	add-tuple($Var, $Type, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, $Type, insert(<$Elem1, $Elem2>, empty-bag) >)
+[AT3]	add-tuple($Var, $Type, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, $Type, insert(<$Elem1, $Elem2>, empty-set) >)
 
 %% ---- Add tuples to a relation
 
@@ -71,9 +71,9 @@ equations
 %%----
 
 [UN2]	xunion($Set1, $Set2)	= union($Set1, $Set2)
-[UN3]	xunion($Elem, $Set) 	= union(insert($Elem, empty-bag), $Set)
-[UN4]	xunion($Set, $Elem) 	= union($Set, insert($Elem, empty-bag))
-[UN5]	xunion($Elem1, $Elem2)	= union(insert($Elem1, empty-bag), insert($Elem2,empty-bag))
+[UN3]	xunion($Elem, $Set) 	= union(insert($Elem, empty-set), $Set)
+[UN4]	xunion($Set, $Elem) 	= union($Set, insert($Elem, empty-set))
+[UN5]	xunion($Elem1, $Elem2)	= union(insert($Elem1, empty-set), insert($Elem2,empty-set))
 
 [AP1]	xappend($Elem, *undefined*) = $Elem
 [AP2]	xappend($Set, $Elem) = union2($Set, $Elem)
@@ -85,7 +85,7 @@ equations
 
 %% --- filter RSTORE
 
-[fr1]	$Set != empty-bag,
+[fr1]	$Set != empty-set,
 	in(rvar2str($Var), $Set) == false
 	=========================================	
 	filter(rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2), $Set) = 
@@ -134,7 +134,7 @@ export-pair($Var1, rel[$Var2,loc], {$Elem*})
 
 
 [expp2]	export-pair($Var1, $Var2, {$String, $Elem*}) = 
-bag $Var1 rvar2str($Var2) $String;
+set $Var1 rvar2str($Var2) $String;
 export-pair($Var1, $Var2, {$Elem*}) 
 
 

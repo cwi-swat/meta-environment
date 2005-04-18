@@ -14,7 +14,7 @@ context-free syntax
 
 context-free syntax
    "{" {Elem ","}* "}"                   	-> Set[[Elem]] {constructor}
-   "empty-bag"					-> Set[[Elem]]
+   "empty-set"					-> Set[[Elem]]
 
    Set[[Elem]]					-> SetIterator[[Elem]]
    mk-iterator(Set[[Elem]])			-> SetIterator[[Elem]]
