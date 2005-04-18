@@ -29,6 +29,7 @@ import nl.cwi.sen1.data.graph.EdgeList;
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.Node;
 import nl.cwi.sen1.data.graph.NodeList;
+import nl.cwi.sen1.data.graph.NodeSizer;
 import nl.cwi.sen1.data.graph.Point;
 import nl.cwi.sen1.data.graph.Polygon;
 import nl.cwi.sen1.data.graph.Shape;

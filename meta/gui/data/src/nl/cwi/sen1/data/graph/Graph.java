@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import nl.cwi.sen1.gui.plugin.NodeSizer;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;

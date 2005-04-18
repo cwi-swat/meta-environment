@@ -1,8 +1,5 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.data.graph;
 
-import nl.cwi.sen1.data.graph.Graph;
-import nl.cwi.sen1.data.graph.Node;
-import nl.cwi.sen1.data.graph.Shape;
 
 public abstract class NodeSizer {
 	public Node sizeNode(Node node) {
