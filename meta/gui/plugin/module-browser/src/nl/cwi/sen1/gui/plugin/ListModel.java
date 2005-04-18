@@ -20,9 +20,8 @@ public class ListModel extends AbstractListModel {
 	public Object getElementAt(int index) {
 		if (index >= 0 && index < list.size()) {
 			return list.get(index);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	public int getSize() {

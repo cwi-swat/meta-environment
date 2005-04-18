@@ -13,8 +13,6 @@ public class Dialog implements StudioPlugin, DialogTif {
 
 	private static final String TOOL_NAME = "dialog";
 
-	private DialogBridge bridge;
-
 	private Studio studio;
 
 	public String getName() {
@@ -40,9 +38,8 @@ public class Dialog implements StudioPlugin, DialogTif {
 			path = chooser.getSelectedFile().getAbsolutePath();
 			return studio.getFactory().make(
 					"snd-value(file-dialog-approve(<str>))", path);
-		} else {
-			return studio.getFactory().make("snd-value(file-dialog-cancel)");
 		}
+		return studio.getFactory().make("snd-value(file-dialog-cancel)");
 	}
 
 	public void recTerminate(ATerm t0) {

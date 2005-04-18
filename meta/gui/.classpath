@@ -32,6 +32,10 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="plugin/graph-painter/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="plugin/dialog/src">
 		<attributes>
 		</attributes>

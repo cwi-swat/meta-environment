@@ -1,6 +1,7 @@
 #include "meta.tb"
 #include "gui.idef"
 #include "dialog.idef"
+#include "graph-painter.idef"
 
 /* sdf-meta */
 #include "graph-utils.tb"
@@ -14,6 +15,9 @@ process StartModuleBrowser is
 
 process StartDialogTool is
   snd-msg(load-jar("file://__PKGDATA__/dialog.jar"))
+
+process StartGraphPanel is
+  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar"))
 
 process MetaGUI is
 let
@@ -36,6 +40,7 @@ in
  
   . StartModuleBrowser()
   . StartDialogTool()
+  . StartGraphPanel()
 
   . snd-msg(post-initialization-hook)
   . rec-msg(post-initialization-hook-finished)

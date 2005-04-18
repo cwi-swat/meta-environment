@@ -124,13 +124,13 @@ public class ModulePopupMenu {
 
 	private boolean addSubMenu(int level, ATerm type, String moduleName,
 			ATerm button, JPopupMenu menu) {
-		MenuElement[] children = (MenuElement[]) menu.getSubElements();
+		MenuElement[] children = menu.getSubElements();
 		return findSubMenu(level, type, moduleName, button, children);
 	}
 
 	private boolean addSubMenu(int level, ATerm type, String moduleName,
 			ATerm button, JMenu menu) {
-		MenuElement[] children = (MenuElement[]) menu.getSubElements();
+		MenuElement[] children = menu.getSubElements();
 		return findSubMenu(level, type, moduleName, button, children);
 	}
 

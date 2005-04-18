@@ -1,0 +1,24 @@
+tool graph-painter is { }
+
+process GraphPainter is
+let
+  T: graph-painter,
+  Graph: term,
+  GraphId: str
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(ui-display-graph("import-graph", Graph?))
+    . snd-do(T, display-graph("import-graph", Graph))
+  +
+    rec-msg(ui-render-graph(GraphId?, Graph?))
+    . snd-eval(T, size-graph(GraphId, Graph))
+    . rec-value(T, sized-graph(Graph?))
+    . snd-msg(ui-rendered-graph(GraphId, Graph))
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+toolbus(GraphPainter)

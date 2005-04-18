@@ -190,6 +190,7 @@ AC_CONFIG_FILES([Makefile
    gui/plugin/Makefile
    gui/plugin/module-browser/Makefile
    gui/plugin/dialog/Makefile
+   gui/plugin/graph-painter/Makefile
    gui/studio/Makefile
    gui/script/Makefile
    in-output/Makefile

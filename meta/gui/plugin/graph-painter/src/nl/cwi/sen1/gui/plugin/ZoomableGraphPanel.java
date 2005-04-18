@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,10 +42,10 @@ public class ZoomableGraphPanel extends JPanel {
 
 	private JLabel zoomToFit;
 
-	public ZoomableGraphPanel(MetaGraphFactory factory, String id) {
+	public ZoomableGraphPanel(MetaGraphFactory factory, String id, Properties properties) {
 		this.factory = factory;
 
-		graphPanel = new GraphPanel(id);
+		graphPanel = new GraphPanel(id, properties);
 
 		setLayout(new BorderLayout());
 

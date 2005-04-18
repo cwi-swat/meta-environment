@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = module-browser dialog
+SUBDIRS = module-browser dialog graph-painter

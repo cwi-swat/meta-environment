@@ -12,12 +12,8 @@ let
   List : list
 in
   rec-connect(T?)
-  . printf("module-browser.idef: %t connected!\n", T)
   .
     (
-      rec-msg(ui-display-graph("import-graph", Graph?))
-      . snd-do(T, display-graph("import-graph", Graph))
-    +
       rec-msg(ui-display-treelist(Str?, List?))
       . snd-do(T, display-treelist(Str, List))
     +
@@ -45,5 +41,3 @@ in
 endlet
 
 toolbus(ModuleBrowser)
-
-

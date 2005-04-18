@@ -5,6 +5,7 @@
   <property name="build" location="build"/>
   <property name="dist" location="dist"/>
   <property name="srcdir" value="src"/>
+  <property name="resources" value="resources"/>
 
   <path id="project.classpath">
     <pathelement path="${env.LOCAL_JARS}"/>
@@ -21,11 +22,14 @@
 
   <target name="dist" depends="build">
     <mkdir dir="${dist}/src"/>
-    <copy todir="${dist}/src">
-      <fileset dir="${srcdir}" includes="**/*.java"/>
+    <copy todir="${dist}/resources" failonerror="false">
+      <fileset dir="${resources}"/>
     </copy>
     <copy todir="${dist}">
       <fileset dir="${build}"/>
+    </copy>
+    <copy todir="${dist}/src">
+      <fileset dir="${srcdir}" includes="**/*.java"/>
     </copy>
     <jar destfile="${env.JAR}">
       <manifest>

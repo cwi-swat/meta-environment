@@ -1,23 +1,9 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
-
 import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleTreeModel;
-import nl.cwi.sen1.data.graph.Graph;
-import nl.cwi.sen1.data.graph.MetaGraphFactory;
-import nl.cwi.sen1.data.graph.Node;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
-import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -28,73 +14,11 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	private ModuleBrowserBridge bridge;
 
-	private ZoomableGraphPanel importGraphPanel;
-
-	private ModuleInfoPanel moduleStatus;
-
 	private ModuleTreeModel moduleManager;
-
-	private MetaGraphFactory metaGraphFactory;
 
 	private ModulePopupMenu popup;
 
-	private JPanel panel;
-
 	private Studio studio;
-
-	private ZoomableGraphPanel createModuleGraph() {
-		ZoomableGraphPanel panel = new ZoomableGraphPanel(metaGraphFactory,
-				"import-graph");
-		Color color = Preferences.getColor("graphpane.background");
-		panel.setName("Import Graph");
-		panel.setBackground(color);
-		return panel;
-	}
-
-	private void createModuleStatusPanel() {
-		moduleStatus = new ModuleInfoPanel(studio.getFactory(), moduleManager);
-	}
-
-	private MouseListener makeMouseListener(final ModuleTreeModel manager) {
-		MouseListener listener = new MouseAdapter() {
-			public void mousePressed(MouseEvent event) {
-				Node node = importGraphPanel.getNodeAt(event.getX(), event
-						.getY());
-				ModulePopupMenu.setPopupLocation(
-						(JComponent) event.getSource(), event.getX(), event
-								.getY());
-
-				Module module;
-
-				if (node == null) {
-					module = null;
-				} else {
-					module = manager.getModule(node.getId().getId());
-					if (event.isPopupTrigger()
-							|| SwingUtilities.isRightMouseButton(event)) {
-						postModuleMenuRequest(module);
-					}
-
-				}
-				manager.selectModule(module);
-
-			}
-
-			public void mouseReleased(MouseEvent e) {
-				mousePressed(e);
-			}
-		};
-		return listener;
-	}
-
-	public void moduleSelected(Module module) {
-		if (module == null) {
-			importGraphPanel.setSelectedNode(null);
-		} else {
-			importGraphPanel.setSelectedNode(importGraphPanel.getNode(module
-					.getName()));
-		}
-	}
 
 	private void setModules(ATermList importList) {
 		moduleManager.clearModules();
@@ -157,29 +81,6 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 		setImports(modules);
 	}
 
-	public void displayGraph(String id, ATerm graphTerm) {
-		Graph graph = metaGraphFactory.GraphFromTerm(graphTerm);
-		importGraphPanel.setGraph(graph);
-		panel.setVisible(true);
-		importGraphPanel.repaint();
-	}
-
-	private JSplitPane createLeftPane() {
-		ModuleTree moduleTree = new ModuleTree(studio.getFactory(), this,
-				moduleManager);
-
-		createModuleStatusPanel();
-
-		JSplitPane leftPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				moduleTree, moduleStatus);
-		leftPanel.setOneTouchExpandable(true);
-		leftPanel.setDividerLocation(Preferences
-				.getDouble("modulebrowser.graph.divider.location"));
-		leftPanel.setResizeWeight(Preferences
-				.getDouble("modulebrowser.graph.divider.resize"));
-		return leftPanel;
-	}
-
 	public void postModuleMenuRequest(Module current) {
 		ATermFactory factory = studio.getFactory();
 		ATerm popup = factory.parse("module-popup");
@@ -225,8 +126,10 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 		tree.setName("Module Hierarchy");
 		studio.addComponent(tree);
 
+		/*
 		importGraphPanel = createModuleGraph();
 		// importGraphPanel.addMouseListener(makeMouseListener(moduleManager));
 		studio.addComponent(importGraphPanel);
+		*/
 	}
 }

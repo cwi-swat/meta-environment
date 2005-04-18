@@ -76,7 +76,7 @@ public class BasicStudio implements Studio, GuiTif {
 		new BasicStudio(args);
 	}
 
-	public BasicStudio(String[] args) throws IOException {
+	public BasicStudio(String[] args) {
 		currentTheme = new ShapedGradientDockingTheme();
 		components = new HashMap();
 		menuMap = new HashMap();
@@ -114,7 +114,7 @@ public class BasicStudio implements Studio, GuiTif {
 		return nextUniqueComponentID++;
 	}
 
-	private void initializeProperties() throws IOException {
+	private void initializeProperties() {
 		InputStream propertyStream;
 		// propertyStream = getClass().getResourceAsStream(
 		// "/META-INF/default.properties");
@@ -209,7 +209,7 @@ public class BasicStudio implements Studio, GuiTif {
 			Class cl = loader.loadClass(name);
 			spawn((StudioPlugin) cl.newInstance());
 		} catch (Exception e) {
-			System.err.println("Failed to create instance: " + e);
+			e.printStackTrace();
 		}
 	}
 
@@ -253,7 +253,7 @@ public class BasicStudio implements Studio, GuiTif {
 
 	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = menuBar.add(createEmptyFileMenu());
+		menuBar.add(createEmptyFileMenu());
 		menuBar.add(createThemesMenu());
 		return menuBar;
 	}
@@ -341,11 +341,10 @@ public class BasicStudio implements Studio, GuiTif {
 		while (!names.isEmpty()) {
 			if (names.getLength() == 1) {
 				break;
-			} else {
-				String name = ((ATermAppl) names.getFirst()).getName();
-				cur = addMenuName(cur, name);
-				names = names.getNext();
 			}
+			String name = ((ATermAppl) names.getFirst()).getName();
+			cur = addMenuName(cur, name);
+			names = names.getNext();
 		}
 
 		return cur;
