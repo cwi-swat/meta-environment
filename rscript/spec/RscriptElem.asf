@@ -10,7 +10,7 @@ equations
 
 [ee1]	elem-equal($Elem, $Elem) = true
 
-[ee2]  	elem-equal($Bag1, $Bag2) = equal($Bag1, $Bag2)
+[ee2]  	elem-equal($Set1, $Set2) = equal($Set1, $Set2)
 
 [ee3]	elem-equal($Elem1, $Elem2) == true
 	================================================

@@ -29,9 +29,9 @@ exports
 
 	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
 	add-tuple(RVAR, REXPTYPE, Tuple, RSTORE)  	-> RSTORE
-	add-tuples(RVAR, REXPTYPE, Bag[[Elem]], RSTORE)	-> RSTORE
+	add-tuples(RVAR, REXPTYPE, Set[[Elem]], RSTORE)	-> RSTORE
 
-	filter(RSTORE, Bag[[Elem]])			-> RSTORE
+	filter(RSTORE, Set[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
 
 %% Import a Rigi RSF file
@@ -91,8 +91,8 @@ hiddens
 	"$Elem"   [0-9\']*             -> Elem
         "$Elem*"  [0-9\']*             -> {Elem ","}*
         "$Elem+"  [0-9\']*             -> {Elem ","}+
-	"$Bag" [0-9\']*		       -> Bag[[Elem]]
-	"$Rel" [0-9\']*		       -> Bag[[Elem]]
+	"$Set" [0-9\']*		       -> Set[[Elem]]
+	"$Rel" [0-9\']*		       -> Set[[Elem]]
 
 	"$Char*" [0-9\']*	       -> CHAR*
 

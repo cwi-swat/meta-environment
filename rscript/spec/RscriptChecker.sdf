@@ -10,7 +10,7 @@ imports utilities/PosInfo[REXP]
 imports utilities/PosInfo[RVAR]
 imports utilities/PosInfo[REXPTYPE]
 imports utilities/PosInfo[GENERATOR]
-imports utilities/PosInfo[Bag[[Elem]]]
+imports utilities/PosInfo[Set[[Elem]]]
 
 imports Rstore
 
@@ -33,7 +33,7 @@ hiddens
 	REXP "cannot be typed" 					-> ERROR
 
 	GENERATOR "cannot be typed"				-> ERROR
-	Bag[[Elem]] "cannot be typed" 				-> ERROR
+	Set[[Elem]] "cannot be typed" 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
 	RVAR "not initialized in Rstore"			-> ERROR
@@ -124,7 +124,7 @@ hiddens
 
 	check-const(Elem, TENV) 				-> <REXPTYPE, TENV>
 	check-const-tuple(Elem, TENV)				-> <REXPTYPE, TENV>
-	check-const-set-or-rel(BagIterator[[Elem]], TENV) 	-> <REXPTYPE, TENV>
+	check-const-set-or-rel(SetIterator[[Elem]], TENV) 	-> <REXPTYPE, TENV>
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -202,8 +202,8 @@ hiddens
      "$Tuple+" [0-9\']*     	-> {Tuple ","}+
 
 
-     "$Set" [0-9\']*        	-> Bag[[Elem]]
-     "$Rel" [0-9\']*        	-> Bag[[Elem]]
+     "$Set" [0-9\']*        	-> Set[[Elem]]
+     "$Rel" [0-9\']*        	-> Set[[Elem]]
 
      "$BoolCon" [0-9\']*    	-> BoolCon
      "$Boolean" [0-9\']*    	-> Boolean

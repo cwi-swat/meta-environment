@@ -6,8 +6,8 @@ exports
    sorts VDATA RVIZ
 
    context-free syntax
-     "item" String String String NatCon NatCon NatCon NatCon ";"     -> VDATA
-     "rel"  RVAR String String String String	";"		     -> VDATA
+     "elm" String String String NatCon NatCon NatCon NatCon ";"     -> VDATA
+     "tup"  RVAR String String String String	";"		     -> VDATA
      "bag" RVAR String String	";"				     -> VDATA
 
      VDATA*							     -> RVIZ

@@ -2,26 +2,26 @@ equations
 
 [empty]	empty-bag = {}
 
-%% --- insert($Elem, $Bag)
+%% --- insert($Elem, $Set)
 
 %%%%[ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
 
 [ins-1]  
-	in($Elem, $Bag) == true					
+	in($Elem, $Set) == true					
 	============================================
-	insert($Elem, $Bag) = $Bag
+	insert($Elem, $Set) = $Set
 
 [default-ins-2]
 	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
 
-%% --- delete($Elem, $Bag)
+%% --- delete($Elem, $Set)
 
 [del1]	elem-equal($Elem1, $Elem2) == true				%% sb elem-equal
 	============================================
 	delete($Elem1, {$Elem*1, $Elem2, $Elem*2}) = {$Elem*1, $Elem*2}
 
 [default-del]
-	delete($Elem, $Bag) = $Bag
+	delete($Elem, $Set) = $Set
 
 %% ----	sort
 
@@ -34,9 +34,9 @@ equations
 	 ================================
 	sort({$Elem+}) = merge(sort({$Elem*1}), sort({$Elem*2}))
 
-[mrg1]	merge({}, $Bag) = $Bag
+[mrg1]	merge({}, $Set) = $Set
 
-[mrg2]	merge($Bag, {}) = $Bag
+[mrg2]	merge($Set, {}) = $Set
 
 [mrg3]	elem-greater($Elem1, $Elem2) == true,
 	{$Elem*} := merge({$Elem1, $Elem*1}, {$Elem*2})
@@ -63,14 +63,14 @@ equations
 	
 %% ---- mk-iterator
 
-[mki]	mk-iterator($Bag) = $Bag
+[mki]	mk-iterator($Set) = $Set
 
 %% ---- is-empty-iter
 
 [is-ei1]
 	is-empty-iter({}) = true
 [default-is-ei]
-	is-empty-iter($Bag) = false
+	is-empty-iter($Set) = false
 
 %% ---- head
 
@@ -84,9 +84,9 @@ equations
 
 %% --- equal(Rel1, Rel2)
 
-%%[eq-1] equal($Bag, $Bag) = true
+%%[eq-1] equal($Set, $Set) = true
 %%[default-eq]	   
-%%       equal($Bag1, $Bag2) = false
+%%       equal($Set1, $Set2) = false
 
 [eq-1]       elem-equal($Elem1, $Elem2) == true
 	     ====================================================
@@ -110,15 +110,15 @@ equations
 
 %% --- ssubset(Rel1, Rel2)
 
-[ssub-1] strict-subset($Bag1, $Bag2) = subset($Bag1, $Bag2) & not(equal($Bag1, $Bag2))
+[ssub-1] strict-subset($Set1, $Set2) = subset($Set1, $Set2) & not(equal($Set1, $Set2))
 
 %% --- superset(Rel1, Rel2)
 
-[sup-1] superset($Bag1, $Bag2) = subset($Bag2, $Bag1)
+[sup-1] superset($Set1, $Set2) = subset($Set2, $Set1)
 
 %% --- strict-superset(Rel1, Rel2)
 
-[ssup-1] strict-superset($Bag1, $Bag2) = strict-subset($Bag2, $Bag1)
+[ssup-1] strict-superset($Set1, $Set2) = strict-subset($Set2, $Set1)
 
 %% --- union1($Elem, Rel)
 
@@ -129,7 +129,7 @@ equations
 [default-un1-2]
 	union1($Elem, {$Elem*}) = insert($Elem, {$Elem*})
 
-%% --- union2($Bag, $Elem)
+%% --- union2($Set, $Elem)
 
 [un2-1]	in($Elem, {$Elem*}) == true
 	=============================
@@ -138,7 +138,7 @@ equations
 [default-un2-2]
 	union2({$Elem*}, $Elem) = insert($Elem, {$Elem*})
 
-%% --- union($Bag1, $Bag2)
+%% --- union($Set1, $Set2)
 
 [un-1] 	union({}, {$Elem*}) = {$Elem*}
 [un-2] 	union({$Elem*}, {}) = {$Elem*}
@@ -152,15 +152,15 @@ equations
        ==============================
        union({$Elem, $Elem*1}, {$Elem*2}) = insert($Elem, {$Elem*3})
 
-[iun-1] $Bag1 union $Bag2 = union($Bag1, $Bag2)
+[iun-1] $Set1 union $Set2 = union($Set1, $Set2)
 
-%% --- diff($Bag1, $Bag2)
+%% --- diff($Set1, $Set2)
 
 [df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
 
 [default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-%% --- $Bag1 inter $Bag2
+%% --- $Set1 inter $Set2
 
 [in-1] elem-equal($Elem1, $Elem2) == true,
        {$Elem*'} := inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
@@ -170,12 +170,12 @@ equations
 [default-in2] 
        inter({$Elem*1}, {$Elem*2}) = {}
 
-%% --- size($Bag)
+%% --- size($Set)
 
 [sz-1] size({}) = 0
 [sz-2] size({$Elem, $Elem*}) = 1 + size({$Elem*})
 
-%% --- in($Elem, $Bag)
+%% --- in($Elem, $Set)
 
 [in-1]  elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal
 	============================================
@@ -191,12 +191,12 @@ equations
 	unique({$Elem*1, $Elem1, $Elem*2, $Elem*3})
 
 [default-unique]
-	unique($Bag) = $Bag
+	unique($Set) = $Set
 
 %% if
 
-[if-1] if true then $Bag1 else $Bag2 fi = $Bag1
-[if-2] if false then $Bag1 else $Bag2 fi = $Bag2
+[if-1] if true then $Set1 else $Set2 fi = $Set1
+[if-2] if false then $Set1 else $Set2 fi = $Set2
 
 
 

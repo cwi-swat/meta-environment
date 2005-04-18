@@ -21,7 +21,7 @@ exports
 
 %% Extend Elem to allow nested bags and relations
 
-     Bag[[Elem]]                   	    	-> Elem  
+     Set[[Elem]]                   	    	-> Elem  
 %%     Tuple					-> Elem
 
      elem-less(Elem, Elem)			-> Boolean
@@ -44,4 +44,4 @@ imports basic/Whitespace
   "$Elem"[0-9]* 	-> Elem
   "$Elem*" [0-9\']*     -> {Elem ","}*
   "$Elem+" [0-9\']*     -> {Elem ","}+
-  "$Bag"[0-9]* 		-> Bag[[Elem]]
+  "$Set"[0-9]* 		-> Set[[Elem]]

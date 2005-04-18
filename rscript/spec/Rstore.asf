@@ -70,14 +70,14 @@ equations
 
 %%----
 
-[UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
-[UN3]	xunion($Elem, $Bag) 	= union(insert($Elem, empty-bag), $Bag)
-[UN4]	xunion($Bag, $Elem) 	= union($Bag, insert($Elem, empty-bag))
+[UN2]	xunion($Set1, $Set2)	= union($Set1, $Set2)
+[UN3]	xunion($Elem, $Set) 	= union(insert($Elem, empty-bag), $Set)
+[UN4]	xunion($Set, $Elem) 	= union($Set, insert($Elem, empty-bag))
 [UN5]	xunion($Elem1, $Elem2)	= union(insert($Elem1, empty-bag), insert($Elem2,empty-bag))
 
 [AP1]	xappend($Elem, *undefined*) = $Elem
-[AP2]	xappend($Bag, $Elem) = union2($Bag, $Elem)
-[AP3]	xappend($Bag1, $Bag2) = union($Bag1, $Bag2)
+[AP2]	xappend($Set, $Elem) = union2($Set, $Elem)
+[AP3]	xappend($Set1, $Set2) = union($Set1, $Set2)
 
 %% ---- Convert RVAR to String
 
@@ -85,13 +85,13 @@ equations
 
 %% --- filter RSTORE
 
-[fr1]	$Bag != empty-bag,
-	in(rvar2str($Var), $Bag) == false
+[fr1]	$Set != empty-bag,
+	in(rvar2str($Var), $Set) == false
 	=========================================	
-	filter(rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2), $Bag) = 
-	filter(rstore($VPair*1, $VPair*2), $Bag)
+	filter(rstore($VPair*1, <$Var, $Type, $Val>, $VPair*2), $Set) = 
+	filter(rstore($VPair*1, $VPair*2), $Set)
 
-[default-fr1]	filter($Rstore, $Bag) = $Rstore
+[default-fr1]	filter($Rstore, $Set) = $Rstore
 
 %% ---- if on RVALUEs
 
@@ -129,7 +129,7 @@ export(rstore($VPair*))
 [expp1]	$Area := get-area($Loc)
 	==============================================================
 	export-pair($Var1, rel[$Var2,loc], {<$String, $Loc>, $Elem*}) = 
-item rvar2str($Var2) $String get-filename($Loc) get-begin-line($Area) get-begin-column($Area) get-end-line($Area) get-end-column($Area);
+elm rvar2str($Var2) $String get-filename($Loc) get-begin-line($Area) get-begin-column($Area) get-end-line($Area) get-end-column($Area);
 export-pair($Var1, rel[$Var2,loc], {$Elem*}) 
 
 
@@ -139,7 +139,7 @@ export-pair($Var1, $Var2, {$Elem*})
 
 
 [expp3]	export-pair($Var1, rel[$Var2,$Var3], {<$String1, $String2>, $Elem*}) = 
-rel $Var1 rvar2str($Var2)  $String1  rvar2str($Var3) $String2;
+tup $Var1 rvar2str($Var2)  $String1  rvar2str($Var3) $String2;
 export-pair($Var1, rel[$Var2, $Var3], {$Elem*}) 
 
 [expp2]	export-pair($Var, $Type, {}) =
