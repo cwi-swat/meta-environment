@@ -23,7 +23,6 @@ import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
-import nl.cwi.sen1.data.NodeSizer;
 import nl.cwi.sen1.data.graph.Attribute;
 import nl.cwi.sen1.data.graph.Edge;
 import nl.cwi.sen1.data.graph.EdgeList;

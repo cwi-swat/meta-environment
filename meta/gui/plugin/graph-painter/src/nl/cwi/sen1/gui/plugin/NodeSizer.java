@@ -1,4 +1,4 @@
-package nl.cwi.sen1.data;
+package nl.cwi.sen1.gui.plugin;
 
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.Node;
@@ -7,8 +7,8 @@ import nl.cwi.sen1.data.graph.Shape;
 public abstract class NodeSizer {
 	public Node sizeNode(Node node) {
 		double factor = shapeFactor(Graph.getNodeShape(node));
-		int width = (int) (((double) getWidth(node)) * factor);
-		int height = (int) (((double) getHeight(node)) * factor);
+		int width = (int) (getWidth(node) * factor);
+		int height = (int) (getHeight(node) * factor);
 
 		return node.setSize(width, height);
 	}
