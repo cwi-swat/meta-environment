@@ -2,7 +2,7 @@
 
 %% ---- Equality on RVALUEs
 
-[er1]	equal-rval($Bag1, $Bag2) = equal($Bag1, $Bag2)
+[er1]	equal-rval($Set1, $Set2) = equal($Set1, $Set2)
 [er2]	equal-rval($Rel1, $Rel2) = equal($Rel1, $Rel2)
 [er3]	equal-rval($Val, $Val)  = true
 [default-er] 
@@ -19,9 +19,9 @@
 %% ---- Eval a complete Rscript
 
 [ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
-	$Bag := value(YIELD, $Rstore)
+	$Set := value(YIELD, $Rstore)
 	===============================================================
-	eval-rscript($Stat*) = filter($Rstore, $Bag)
+	eval-rscript($Stat*) = filter($Rstore, $Set)
 
 %% ---- Eval a complete Rscript and return value of specific variable (as string)
 
@@ -43,9 +43,9 @@
 
 [ERS3]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
 	$Rstore'' := eval-rstats($Stat*, $Rstore'),
-	$Bag := value(YIELD, $Rstore'')
+	$Set := value(YIELD, $Rstore'')
 	===============================================================
-	eval-rscript-with-rstore($Stat*, $Rstore) = filter($Rstore'', $Bag)
+	eval-rscript-with-rstore($Stat*, $Rstore) = filter($Rstore'', $Set)
 
 %% ---- Eval complete script with given Rstore and yield value of a variable (as string constant
 
@@ -211,7 +211,7 @@ evalx($Exp, $Rstore), $Rstore)
 [EVI]	$Integer := evalx($Exp, $Rstore) ===> evali($Exp, $Rstore) = $Integer
 [EVE1]	$Elem    := evalx($Exp, $Rstore) ===> evale($Exp, $Rstore) = $Elem
 [EVE2]	$Tuple   := evalx($Exp, $Rstore) ===> evalt($Exp, $Rstore) = $Tuple
-[EVB1]	$Bag     := evalx($Exp, $Rstore) ===> evalb($Exp, $Rstore) = $Bag
+[EVB1]	$Set     := evalx($Exp, $Rstore) ===> evalb($Exp, $Rstore) = $Set
 [EVR1]	$Rel     := evalx($Exp, $Rstore) ===> evalr($Exp, $Rstore) = $Rel
 [EVA1]	$Loc     := evalx($Exp, $Rstore) ===> evall($Exp, $Rstore) = $Loc
 
@@ -231,9 +231,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 [tup1]	evalx($Tuple, $Rstore) = $Tuple
 
-%%[bag1]	evalx($Bag, $Rstore) = sort($Bag)
+%%[bag1]	evalx($Set, $Rstore) = sort($Set)
 
-[bag1]	evalx($Bag, $Rstore) = unique($Bag)     %% bags as sets!
+[bag1]	evalx($Set, $Rstore) = unique($Set)     %% bags as sets!
 
 [VAR1]	$Elem := value($Var, $Rstore)
 	=================================================
@@ -258,9 +258,9 @@ evalx($Exp, $Rstore), $Rstore)
 %% ---- Eval bags
 
 [EB2]   $Elem := evale($Exp, $Rstore),
-	$Bag := evalb({$Exp+}, $Rstore)				%%XXX
+	$Set := evalb({$Exp+}, $Rstore)				%%XXX
 	===================================================
-	evalx({$Exp, $Exp+}, $Rstore) = union1($Elem, $Bag)
+	evalx({$Exp, $Exp+}, $Rstore) = union1($Elem, $Set)
 
 [EB2]   $Elem := evale($Exp, $Rstore)					%%XXX
 	===================================================
@@ -306,12 +306,12 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- aux functions for evaluating comparison operators
 
-[LE1]	eval-le($Bag1, $Bag2)			= subset($Bag1, $Bag2)
+[LE1]	eval-le($Set1, $Set2)			= subset($Set1, $Set2)
 [LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
 [LE3]	eval-le($String1, $String2)		= less-equal($String1, $String2)
 [LE4]	eval-le($Loc1, $Loc2)			= less-equal($Loc1, $Loc2)
 
-[LT1]	eval-lt($Bag1, $Bag2) 			= strict-subset($Bag1,  $Bag2)
+[LT1]	eval-lt($Set1, $Set2) 			= strict-subset($Set1,  $Set2)
 [LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
 [LT3]	eval-lt($String1, $String2)		= less($String1, $String2)
 [LT4]	eval-lt($Loc1, $Loc2)			= less($Loc1, $Loc2)
@@ -366,10 +366,10 @@ evalx($Exp, $Rstore), $Rstore)
 %% ---- aux functions for evaluating image operator  [ ]
 
 [elim1]	eval-lim($Rel, $Elem)			= limage($Rel, $Elem)%% when is-rel($Rel) = true
-[elim2]	eval-lim($Rel, $Bag)			= limage($Rel,  $Bag)%% when is-rel($Rel) = true
+[elim2]	eval-lim($Rel, $Set)			= limage($Rel,  $Set)%% when is-rel($Rel) = true
 
 [erim1]	eval-rim($Rel, $Elem)			= rimage($Rel, $Elem)%% when is-rel($Rel) = true
-[erim2]	eval-rim($Rel, $Bag)			= rimage($Rel, $Bag) %% when is-rel($Rel) = true
+[erim2]	eval-rim($Rel, $Set)			= rimage($Rel, $Set) %% when is-rel($Rel) = true
 
 [IM1]	evalx($Exp0 [ -, $Exp1], $Rstore)	= eval-lim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
 
@@ -437,17 +437,17 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- Simple generator, match and extract one target  T : E
 
-[ec-4]	$Bag := evalx($Exp1, $Rstore)
+[ec-4]	$Set := evalx($Exp1, $Rstore)
 	=================================================================
 	evalc({ $Target : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
+	eval-itern($Target, mk-iterator($Set), empty-bag, $Exp2, $Rstore)
 
 %% ---- Simple generator, match and extract N targets <T1, T2, ...> : E
 
-[ec-5]	$Bag := evalx($Exp1, $Rstore)
+[ec-5]	$Set := evalx($Exp1, $Rstore)
 	=================================================================
 	evalc({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
-	eval-itern($Target+, mk-iterator($Bag), empty-bag, $Exp2, $Rstore)
+	eval-itern($Target+, mk-iterator($Set), empty-bag, $Exp2, $Rstore)
 
 %% ---- Ordinary expression as in { E | ... }
 
@@ -455,17 +455,17 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- eval-itern: the workhorse for comprehensions
 
-[ei-1]	is-empty-iter($BagIter) == false,
-	$Elem := head($BagIter),
+[ei-1]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
 	$Val := match-rvars($Target+, $Elem, $Exp, $Rstore),
-	$Bag' := append-rval($Bag, $Val)
+	$Set' := append-rval($Set, $Val)
 	======================================================
-	eval-itern($Target+, $BagIter, $Bag, $Exp, $Rstore) =
-	eval-itern($Target+, tail($BagIter), $Bag', $Exp, $Rstore)
+	eval-itern($Target+, $SetIter, $Set, $Exp, $Rstore) =
+	eval-itern($Target+, tail($SetIter), $Set', $Exp, $Rstore)
 
-[ei-2]	is-empty-iter($BagIter) == true
+[ei-2]	is-empty-iter($SetIter) == true
 	======================================================
-	eval-itern($Target+, $BagIter, $Bag, $Exp, $Rstore) = $Bag
+	eval-itern($Target+, $SetIter, $Set, $Exp, $Rstore) = $Set
 
 %% ---- Auxiliary functions for evaluating comprehensions
 
@@ -505,37 +505,37 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% --- Append-rval
 
-[AP0]	append-rval($Bag, *undefined*) = $Bag
+[AP0]	append-rval($Set, *undefined*) = $Set
 
-[AP1]	append-rval($Bag1, {$Elem}) = union2($Bag1, $Elem)
+[AP1]	append-rval($Set1, {$Elem}) = union2($Set1, $Elem)
 
 [default-AP]
-	append-rval($Bag1, $Bag2) = union($Bag1, $Bag2)
+	append-rval($Set1, $Set2) = union($Set1, $Set2)
 
 %% ---- Exists
 
-[EXB1]	$Bag := evalb($Exp, $Rstore),
-	$BoolCon := exists($Target, mk-iterator($Bag), $Test, $Rstore)
+[EXB1]	$Set := evalb($Exp, $Rstore),
+	$BoolCon := exists($Target, mk-iterator($Set), $Test, $Rstore)
 	=========================================
 	evalx(exists($Target : $Exp | $Test), $Rstore) = $BoolCon
 
-[EXB3]	$Bag := evalb($Exp, $Rstore),
-	$BoolCon := exists($Target+, mk-iterator($Bag), $Test, $Rstore)
+[EXB3]	$Set := evalb($Exp, $Rstore),
+	$BoolCon := exists($Target+, mk-iterator($Set), $Test, $Rstore)
 	=========================================
 	evalx(exists(<$Target+> : $Exp | $Test), $Rstore) = $BoolCon
 
-[ex1]	is-empty-iter($BagIter) == false,
-	$Elem := head($BagIter),
+[ex1]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
 	match-rvars($Target+, $Elem, $Test, $Rstore) == true
 	======================================================
-	exists($Target+, $BagIter, $Test, $Rstore) = true
+	exists($Target+, $SetIter, $Test, $Rstore) = true
 
-[ex2]	is-empty-iter($BagIter) == true
+[ex2]	is-empty-iter($SetIter) == true
 	======================================================
-	exists($Target+, $BagIter, $Test, $Rstore) = false
+	exists($Target+, $SetIter, $Test, $Rstore) = false
 
 [default-ex]
-	exists($Target+, $BagIter, $Test, $Rstore) = exists($Target+, tail($BagIter), $Test, $Rstore)
+	exists($Target+, $SetIter, $Test, $Rstore) = exists($Target+, tail($SetIter), $Test, $Rstore)
 
 %% ---- Forall
 
@@ -575,9 +575,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- Special cases for all built-in functions
 
-[Fid]	$Bag  := evalb($Exp, $Rstore)
+[Fid]	$Set  := evalb($Exp, $Rstore)
 	====================================================
-	evalx(id($Exp), $Rstore) = id($Bag)
+	evalx(id($Exp), $Rstore) = id($Set)
 
 [Fdom]	$Rel := evalr($Exp, $Rstore)
 	====================================================
@@ -599,9 +599,9 @@ evalx($Exp, $Rstore), $Rstore)
 	====================================================
 	evalx(bottom($Exp), $Rstore) = bottom($Rel)
 
-[Funq]	$Bag := evalb($Exp, $Rstore)
+[Funq]	$Set := evalb($Exp, $Rstore)
 	====================================================
-	evalx(unique($Exp), $Rstore) = unique($Bag)
+	evalx(unique($Exp), $Rstore) = unique($Set)
 
 [Finv]	$Rel := evalr($Exp, $Rstore)
 	===================================================
@@ -620,84 +620,84 @@ evalx($Exp, $Rstore), $Rstore)
 	evalx(second($Exp), $Rstore) = $Elem2
 
 [Fpower0]	
-	$Bag  := evalb($Exp, $Rstore)
+	$Set  := evalb($Exp, $Rstore)
 	====================================================
-	evalx(power0($Exp), $Rstore) = power0(mk-iterator($Bag))
+	evalx(power0($Exp), $Rstore) = power0(mk-iterator($Set))
 
 [Fpower1]	
-	$Bag  := evalb($Exp, $Rstore)
+	$Set  := evalb($Exp, $Rstore)
 	====================================================
-	evalx(power1($Exp), $Rstore) = power1(mk-iterator($Bag))
+	evalx(power1($Exp), $Rstore) = power1(mk-iterator($Set))
 
 [Fallpaths]
 	$Rel := evalr($Exp1, $Rstore),
-	$Bag := evalb($Exp2, $Rstore)
+	$Set := evalb($Exp2, $Rstore)
 	=============================
 	evalx(all-paths-from($Exp1, $Exp2), $Rstore) = 
-		all-paths-from($Rel, $Bag)
+		all-paths-from($Rel, $Set)
 	
-[RdomR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[RdomR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	===================================================
-	evalx(domainR($Exp1, $Exp2), $Rstore) = domainR($Rel, $Bag)
+	evalx(domainR($Exp1, $Exp2), $Rstore) = domainR($Rel, $Set)
 
-[FranR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[FranR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	===================================================
-	evalx(rangeR($Exp1, $Exp2), $Rstore) = rangeR($Rel, $Bag)
+	evalx(rangeR($Exp1, $Exp2), $Rstore) = rangeR($Rel, $Set)
 
-[FcarR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[FcarR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(carrierR($Exp1, $Exp2), $Rstore) = carrierR($Rel, $Bag)
+	evalx(carrierR($Exp1, $Exp2), $Rstore) = carrierR($Rel, $Set)
 
-[FdomX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[FdomX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(domainX($Exp1, $Exp2), $Rstore) = domainX($Rel, $Bag)
+	evalx(domainX($Exp1, $Exp2), $Rstore) = domainX($Rel, $Set)
 
-[FranX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[FranX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(rangeX($Exp1, $Exp2), $Rstore) = rangeX($Rel, $Bag)
+	evalx(rangeX($Exp1, $Exp2), $Rstore) = rangeX($Rel, $Set)
 
-[FcarX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
+[FcarX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(carrierX($Exp1, $Exp2), $Rstore) = carrierX($Rel, $Bag)
+	evalx(carrierX($Exp1, $Exp2), $Rstore) = carrierX($Rel, $Set)
 
-[FrX]	$Bag1 := evalb($Exp1, $Rstore),
-	$Bag2 := evalb($Exp2, $Rstore),
+[FrX]	$Set1 := evalb($Exp1, $Rstore),
+	$Set2 := evalb($Exp2, $Rstore),
 	$Rel  := evalr($Exp3, $Rstore)
 	================================================= 
 	evalx(reachX($Exp1, $Exp2, $Exp3), $Rstore) =
-	reachX($Bag1, $Bag2, $Rel)	
+	reachX($Set1, $Set2, $Rel)	
 
-[FrR]	$Bag1 := evalb($Exp1, $Rstore),
-        $Bag2 := evalb($Exp2, $Rstore),
+[FrR]	$Set1 := evalb($Exp1, $Rstore),
+        $Set2 := evalb($Exp2, $Rstore),
         $Rel  := evalr($Exp3, $Rstore)
         ================================================= 
         evalx(reachR($Exp1, $Exp2, $Exp3), $Rstore) =
-        reachR($Bag1, $Bag2, $Rel)
+        reachR($Set1, $Set2, $Rel)
 
 %% ---- Auxiliary functions for powerset
 
-[ae1]	is-empty-iter($BagIter) == false,
-	$Bag := head($BagIter),
-	$Bag' := insert($Elem, $Bag)
+[ae1]	is-empty-iter($SetIter) == false,
+	$Set := head($SetIter),
+	$Set' := insert($Elem, $Set)
 	==================================================
-	add-element($Elem, $BagIter) = union1($Bag', add-element($Elem, tail($BagIter)))
+	add-element($Elem, $SetIter) = union1($Set', add-element($Elem, tail($SetIter)))
 
-[ae2]	is-empty-iter($BagIter) == true
+[ae2]	is-empty-iter($SetIter) == true
 	===================================================
-	add-element($Elem, $BagIter) = empty-bag
+	add-element($Elem, $SetIter) = empty-bag
 
-[pw01]	is-empty-iter($BagIter) == false,
-	$Elem := head($BagIter),
-	$Bag1 := power0(tail($BagIter)),
-	$Bag2 := add-element($Elem, mk-iterator($Bag1))
+[pw01]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
+	$Set1 := power0(tail($SetIter)),
+	$Set2 := add-element($Elem, mk-iterator($Set1))
 	====================================================
-	power0($BagIter) = union($Bag1, $Bag2)
+	power0($SetIter) = union($Set1, $Set2)
 
-[pw02]	is-empty-iter($BagIter) == true
+[pw02]	is-empty-iter($SetIter) == true
 	====================================================
-	power0($BagIter) = insert(empty-bag, empty-bag)
+	power0($SetIter) = insert(empty-bag, empty-bag)
 
-[pw11]	power1($BagIter) = diff(power0($BagIter), insert(empty-bag, empty-bag))	
+[pw11]	power1($SetIter) = diff(power0($SetIter), insert(empty-bag, empty-bag))	
 
 %% ---- all-nodes-from
 
@@ -718,18 +718,18 @@ evalx($Exp, $Rstore), $Rstore)
 	chain-each({{$Elem*1}, $Elem*2}) = 
 		union({chain-bag({$Elem*1})}, chain-each({$Elem*2}))
 [all-nodes-nil]
-	all-nodes-from($Bag, {}) = {{}}
+	all-nodes-from($Set, {}) = {{}}
 
 [all-nodes-cons]
-	$Bag0 := domR($Bag, {$Elem}),
-	$Bag1 := range($Bag0),
-	$Bag2 := add-element($Elem, all-nodes-from($Bag, $Bag1))
+	$Set0 := domR($Set, {$Elem}),
+	$Set1 := range($Set0),
+	$Set2 := add-element($Elem, all-nodes-from($Set, $Set1))
 	===	
-	all-nodes-from($Bag, {$Elem, $Elem*}) =
-		union($Bag2, all-nodes-from($Bag, {$Elem*}))
+	all-nodes-from($Set, {$Elem, $Elem*}) =
+		union($Set2, all-nodes-from($Set, {$Elem*}))
 
 [all-paths-top]
-	all-paths-from($Bag1, $Bag2) = chain-each(all-nodes-from($Bag1, $Bag2))
+	all-paths-from($Set1, $Set2) = chain-each(all-nodes-from($Set1, $Set2))
 
 %% ---- Access functions for locations
 
@@ -745,54 +745,54 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- sum
 
-[sumx1] is-empty-iter($BagIter) == false,
-	$Integer1 := head($BagIter)
+[sumx1] is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter)
 	=======================================	
-	sumx($BagIter, $Integer2) = sumx(tail($BagIter), $Integer1 + $Integer2)
+	sumx($SetIter, $Integer2) = sumx(tail($SetIter), $Integer1 + $Integer2)
 
-[sumx2]	is-empty-iter($BagIter) == true
+[sumx2]	is-empty-iter($SetIter) == true
 	======================================
-	sumx($BagIter, $Integer) = $Integer
+	sumx($SetIter, $Integer) = $Integer
 
-[sum1]	$Bag := evalx($Exp, $Rstore)
+[sum1]	$Set := evalx($Exp, $Rstore)
 	========================================
-	evalx(sum($Exp), $Rstore) = sumx(mk-iterator($Bag), 0)
+	evalx(sum($Exp), $Rstore) = sumx(mk-iterator($Set), 0)
 
 %% ---- sum-domain
 
-[sumdx1] is-empty-iter($BagIter) == false,
-	<$Integer1,$Elem> := head($BagIter)
+[sumdx1] is-empty-iter($SetIter) == false,
+	<$Integer1,$Elem> := head($SetIter)
 	=======================================	
-	sum-domainx($BagIter, $Integer2) = sum-domainx(tail($BagIter), $Integer1 + $Integer2)
+	sum-domainx($SetIter, $Integer2) = sum-domainx(tail($SetIter), $Integer1 + $Integer2)
 
-[sumdx2]	is-empty-iter($BagIter) == true
+[sumdx2]	is-empty-iter($SetIter) == true
 	======================================
-	sum-domainx($BagIter, $Integer) = $Integer
+	sum-domainx($SetIter, $Integer) = $Integer
 
-[sumd1]	$Bag := evalx($Exp, $Rstore)
+[sumd1]	$Set := evalx($Exp, $Rstore)
 	========================================
-	evalx(sum-domain($Exp), $Rstore) = sum-domainx(mk-iterator($Bag), 0)
+	evalx(sum-domain($Exp), $Rstore) = sum-domainx(mk-iterator($Set), 0)
 
 %% ---- sum-range
 
-[sumdx1] is-empty-iter($BagIter) == false,
-	<$Elem,$Integer1> := head($BagIter)
+[sumdx1] is-empty-iter($SetIter) == false,
+	<$Elem,$Integer1> := head($SetIter)
 	=======================================	
-	sum-rangex($BagIter, $Integer2) = sum-rangex(tail($BagIter), $Integer1 + $Integer2)
+	sum-rangex($SetIter, $Integer2) = sum-rangex(tail($SetIter), $Integer1 + $Integer2)
 
-[sumdx2]	is-empty-iter($BagIter) == true
+[sumdx2]	is-empty-iter($SetIter) == true
 	======================================
-	sum-rangex($BagIter, $Integer) = $Integer
+	sum-rangex($SetIter, $Integer) = $Integer
 
-[sumd1]	$Bag := evalx($Exp, $Rstore)
+[sumd1]	$Set := evalx($Exp, $Rstore)
 	========================================
-	evalx(sum-range($Exp), $Rstore) = sum-rangex(mk-iterator($Bag), 0)
+	evalx(sum-range($Exp), $Rstore) = sum-rangex(mk-iterator($Set), 0)
 
 %%% --- average
 
-[avg1]	$Bag := evalx($Exp, $Rstore),
-	$Integer1 := sumx(mk-iterator($Bag), 0),
-	$Integer2 := size($Bag),
+[avg1]	$Set := evalx($Exp, $Rstore),
+	$Integer1 := sumx(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
 	$Integer2 > 0 == true
 	========================================
 	evalx(average($Exp), $Rstore) = $Integer1 / $Integer2
@@ -801,9 +801,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 %%% --- average-domain
 
-[avgd1] $Bag := evalx($Exp, $Rstore),
-	$Integer1 := sum-domainx(mk-iterator($Bag), 0),
-	$Integer2 := size($Bag),
+[avgd1] $Set := evalx($Exp, $Rstore),
+	$Integer1 := sum-domainx(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
 	$Integer2 > 0 == true
 	========================================
 	evalx(average-domain($Exp), $Rstore) = $Integer1 / $Integer2
@@ -812,9 +812,9 @@ evalx($Exp, $Rstore), $Rstore)
 
 %%% --- average-range
 
-[avgr1]	$Bag := evalx($Exp, $Rstore),
-	$Integer1 := sum-rangex(mk-iterator($Bag), 0),
-	$Integer2 := size($Bag),
+[avgr1]	$Set := evalx($Exp, $Rstore),
+	$Integer1 := sum-rangex(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
 	$Integer2 > 0 == true
 	========================================
 	evalx(average-range($Exp), $Rstore) = $Integer1 / $Integer2
@@ -823,66 +823,66 @@ evalx($Exp, $Rstore), $Rstore)
 
 %% ---- max
 
-[max11] is-empty-iter($BagIter) == false,
-	$Integer := head($BagIter)
+[max11] is-empty-iter($SetIter) == false,
+	$Integer := head($SetIter)
 	========================================
-	max1($BagIter) = max2(tail($BagIter), $Integer)
+	max1($SetIter) = max2(tail($SetIter), $Integer)
 
-[max12]	is-empty-iter($BagIter) == true
+[max12]	is-empty-iter($SetIter) == true
 	======================================
-	max1($BagIter) = 0
+	max1($SetIter) = 0
 
 [default-max1]
-	max1($BagIter) = max1(tail($BagIter))
+	max1($SetIter) = max1(tail($SetIter))
 
 
-[max21]	is-empty-iter($BagIter) == false,
-	$Integer1 := head($BagIter),
+[max21]	is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter),
 	$Integer1 > $Integer2 == true
 	===========================================================================
-	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer1)
+	max2($SetIter, $Integer2) = max2(tail($SetIter), $Integer1)
 
-[max22]	is-empty-iter($BagIter) == true
+[max22]	is-empty-iter($SetIter) == true
 	======================================
-	max2($BagIter, $Integer) = $Integer
+	max2($SetIter, $Integer) = $Integer
 
 [default-max2]
-	max2($BagIter, $Integer2) = max2(tail($BagIter), $Integer2)
+	max2($SetIter, $Integer2) = max2(tail($SetIter), $Integer2)
 
-[max-1]	$Bag := evalx($Exp, $Rstore)
+[max-1]	$Set := evalx($Exp, $Rstore)
 	========================================
-	evalx(max($Exp), $Rstore) = max1(mk-iterator($Bag))
+	evalx(max($Exp), $Rstore) = max1(mk-iterator($Set))
 
 %% ---- min
 
-[min11]	is-empty-iter($BagIter) == false,
-	$Integer := head($BagIter)
+[min11]	is-empty-iter($SetIter) == false,
+	$Integer := head($SetIter)
 	========================================
-	min1($BagIter) = min2(tail($BagIter), $Integer)
+	min1($SetIter) = min2(tail($SetIter), $Integer)
 
-[min12]	is-empty-iter($BagIter) == true
+[min12]	is-empty-iter($SetIter) == true
 	========================================
-	min1($BagIter) = 0
+	min1($SetIter) = 0
 
 [default-min1]
-	min1($BagIter) = min1(tail($BagIter))
+	min1($SetIter) = min1(tail($SetIter))
 
-[min21]	is-empty-iter($BagIter) == false,
-	$Integer1 := head($BagIter),
+[min21]	is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter),
 	$Integer1 < $Integer2 == true
 	===========================================================================
-	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer1)
+	min2($SetIter, $Integer2) = min2(tail($SetIter), $Integer1)
 
-[min22]	is-empty-iter($BagIter) == true
+[min22]	is-empty-iter($SetIter) == true
 	========================================
-	min2($BagIter, $Integer) = $Integer
+	min2($SetIter, $Integer) = $Integer
 
 [default-min2]
-	min2($BagIter, $Integer2) = min2(tail($BagIter), $Integer2)
+	min2($SetIter, $Integer2) = min2(tail($SetIter), $Integer2)
 
-[min-1]	$Bag := evalx($Exp, $Rstore)
+[min-1]	$Set := evalx($Exp, $Rstore)
 	========================================
-	evalx(min($Exp), $Rstore) = min1(mk-iterator($Bag))
+	evalx(min($Exp), $Rstore) = min1(mk-iterator($Set))
 
 %% Misc
 

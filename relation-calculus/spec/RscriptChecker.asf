@@ -210,7 +210,7 @@ $Error]>
 [e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [localized("expr", get-location($Exp))])
 [e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [localized("stat", get-location($Stat))])
 [e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [localized("generator", get-location($Gen))])
-[e2i-4] e2i($Set cannot be typed) 	= error("Bag cannot be typed", [localized("bag", get-location($Set))])
+[e2i-4] e2i($Set cannot be typed) 	= error("Set cannot be typed", [localized("bag", get-location($Set))])
 [e2i-5] e2i($Rel cannot be typed) 	= error("Relation cannot be typed", [localized("relation", get-location($Rel))])
 [e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [localized(rvar2str($Var), get-location($Var))])
 [e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [localized(rvar2str($Var), get-location($Var))])

@@ -39,8 +39,8 @@ exports
         evali(REXP, RSTORE)            				-> Integer {complete}
 
         evalt(REXP, RSTORE)            				-> Tuple {complete}
-        evalb(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
-        evalr(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
+        evalb(REXP, RSTORE)            				-> Set[[Elem]] {complete}
+        evalr(REXP, RSTORE)            				-> Set[[Elem]] {complete}
         evalx(REXP, RSTORE)            				-> Elem {complete}
 	evall(REXP, RSTORE)					-> Location {complete}
 
@@ -58,16 +58,16 @@ exports
 	eval-fields({DCLRVAR ","}*, RSTORE, Integer)		-> RSTORE
 	select-field(REXP, Integer)				-> Elem
 
-	add-element(Elem, BagIterator[[Elem]])			-> Bag[[Elem]]
-	power0(BagIterator[[Elem]])				-> Bag[[Elem]]
-	power1(BagIterator[[Elem]])				-> Bag[[Elem]]
+	add-element(Elem, SetIterator[[Elem]])			-> Set[[Elem]]
+	power0(SetIterator[[Elem]])				-> Set[[Elem]]
+	power1(SetIterator[[Elem]])				-> Set[[Elem]]
 
 	%% All paths from roots in the second bag.
-	all-paths-from(Bag[[Elem]],Bag[[Elem]])			-> Bag[[Elem]] 
+	all-paths-from(Set[[Elem]],Set[[Elem]])			-> Set[[Elem]] 
 
-	chain-bag(Bag[[Elem]])					-> Bag[[Elem]]
-	chain-each(Bag[[Elem]])					-> Bag[[Elem]]
-	all-nodes-from(Bag[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]
+	chain-bag(Set[[Elem]])					-> Set[[Elem]]
+	chain-each(Set[[Elem]])					-> Set[[Elem]]
+	all-nodes-from(Set[[Elem]], Set[[Elem]])		-> Set[[Elem]]
 
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
@@ -77,24 +77,24 @@ exports
 	simplify(REXP)						-> REXP
 	simplify1(REXP)						-> REXP
 
-	eval-itern({TARGET ","}+,  BagIterator[[Elem]], Bag[[Elem]], REXP, RSTORE)	-> Bag[[Elem]]
+	eval-itern({TARGET ","}+,  SetIterator[[Elem]], Set[[Elem]], REXP, RSTORE)	-> Set[[Elem]]
 
 	match-rvars({TARGET ","}*, RVALUE, REXP, RSTORE)		-> RVALUE
 
-	append-rval(Bag[[Elem]], RVALUE)			-> Bag[[Elem]]
-	exists({TARGET ","}+, BagIterator[[Elem]], REXP, RSTORE)	-> Boolean
+	append-rval(Set[[Elem]], RVALUE)			-> Set[[Elem]]
+	exists({TARGET ","}+, SetIterator[[Elem]], REXP, RSTORE)	-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
 
-	sumx(BagIterator[[Elem]], Integer)			-> Integer
-	sum-domainx(BagIterator[[Elem]], Integer)		-> Integer
-	sum-rangex(BagIterator[[Elem]], Integer)		-> Integer
-	max1(BagIterator[[Elem]])				-> Integer
-	max2(BagIterator[[Elem]], Integer)			-> Integer
+	sumx(SetIterator[[Elem]], Integer)			-> Integer
+	sum-domainx(SetIterator[[Elem]], Integer)		-> Integer
+	sum-rangex(SetIterator[[Elem]], Integer)		-> Integer
+	max1(SetIterator[[Elem]])				-> Integer
+	max2(SetIterator[[Elem]], Integer)			-> Integer
 
-	min1(BagIterator[[Elem]])				-> Integer
-	min2(BagIterator[[Elem]], Integer)			-> Integer
+	min1(SetIterator[[Elem]])				-> Integer
+	min2(SetIterator[[Elem]], Integer)			-> Integer
 
 	str2rvar(String)					-> RVAR
 
@@ -118,9 +118,9 @@ hiddens
         "$Exp+"  [0-9\']*              -> { REXP ","}+
         "$Exps"  [0-9\']*              -> { REXP ","}+
 
-        "$Rel" [0-9\']*                -> Bag[[Elem]] 
-        "$Bag" [0-9\']*                -> Bag[[Elem]]
-        "$BagIter" [0-9\']*            -> BagIterator[[Elem]]
+        "$Rel" [0-9\']*                -> Set[[Elem]] 
+        "$Set" [0-9\']*                -> Set[[Elem]]
+        "$SetIter" [0-9\']*            -> SetIterator[[Elem]]
 
         "$Elem"   [0-9\']*             -> Elem
         "$Elem*"  [0-9\']*             -> {Elem ","}*
