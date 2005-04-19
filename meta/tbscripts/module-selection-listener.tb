@@ -1,0 +1,21 @@
+#include "module-browser.idef"
+#include "graph-painter.idef"
+
+process SynchronizeModuleSelection is
+let
+  Module: str
+in
+  subscribe(mb-module-selected(<str>))
+  . subscribe(gp-node-selected(<str>,<str>))
+  .
+  (
+    rec-note(mb-module-selected(Module?))
+    . snd-msg(gp-select-node("import-graph", Module))
+  +
+    rec-note(gp-node-selected("import-graph", Module?))
+    . snd-msg(mb-select-module(Module))
+  ) 
+  * delta
+endlet
+
+toolbus(SynchronizeModuleSelection)

@@ -15,6 +15,7 @@ TBSCRIPTS = \
   meta.tb \
   module-db.tb \
   module-utils.tb \
+  module-selection-listener.tb \
   open-modules.tb \
   parse-focuses.tb \
   pretty-print.tb \

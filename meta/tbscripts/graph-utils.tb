@@ -1,6 +1,6 @@
 process RenderGraph(GraphPanelId: str, Graph: term?) is
-  snd-msg(ui-render-graph(GraphPanelId, Graph))
-  . rec-msg(ui-rendered-graph(GraphPanelId, Graph?))
+  snd-msg(gp-render-graph(GraphPanelId, Graph))
+  . rec-msg(gp-rendered-graph(GraphPanelId, Graph?))
   . snd-msg(gl-layout-graph(Graph))
   . rec-msg(gl-graph(Graph?))
 
@@ -11,7 +11,7 @@ in
   snd-msg(gc-tree-to-graph(Modulename, Tree, ShowLeafs))
   . rec-msg(gc-graph(Graph?))
   . RenderGraph("parsetree", Graph?)
-  . snd-msg(ui-display-graph("parsetree", Graph))
+  . snd-msg(gp-display-graph("parsetree", Graph))
 endlet
 
 process DrawImportGraph is
@@ -25,7 +25,7 @@ in
   . snd-msg(sig-import-relation-to-graph(ImportRelations))
   . rec-msg(sig-graph(ImportRelations, ImportGraph?))
   . RenderGraph("import-graph", ImportGraph?)
-  . snd-msg(ui-display-graph("import-graph", ImportGraph))
+  . snd-msg(gp-display-graph("import-graph", ImportGraph))
 endlet
 
 process ImportGraphPainter is
