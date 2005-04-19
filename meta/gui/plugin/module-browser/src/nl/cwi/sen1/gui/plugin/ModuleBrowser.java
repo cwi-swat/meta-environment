@@ -4,6 +4,7 @@ import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -12,6 +13,8 @@ import aterm.ATermList;
 public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	private static final String TOOL_NAME = "module-browser";
 
+	private static final String RESOURCE_DIR = "/resources";
+
 	private ModuleBrowserBridge bridge;
 
 	private ModuleTreeModel moduleManager;
@@ -19,6 +22,16 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	private ModulePopupMenu popup;
 
 	private Studio studio;
+
+	// TODO: use preferences
+	private Preferences preferences;
+
+	public ModuleBrowser() {
+		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
+				+ ".properties");
+		this.preferences = new Preferences(getClass().getResourceAsStream(
+				propertyPath));
+	}
 
 	private void setModules(ATermList importList) {
 		moduleManager.clearModules();
@@ -127,9 +140,9 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 		studio.addComponent(tree);
 
 		/*
-		importGraphPanel = createModuleGraph();
-		// importGraphPanel.addMouseListener(makeMouseListener(moduleManager));
-		studio.addComponent(importGraphPanel);
-		*/
+		 * importGraphPanel = createModuleGraph(); //
+		 * importGraphPanel.addMouseListener(makeMouseListener(moduleManager));
+		 * studio.addComponent(importGraphPanel);
+		 */
 	}
 }

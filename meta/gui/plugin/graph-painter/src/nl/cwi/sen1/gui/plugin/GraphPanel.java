@@ -16,7 +16,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.util.Properties;
 
 import javax.swing.JComponent;
 import javax.swing.JViewport;
@@ -33,6 +32,7 @@ import nl.cwi.sen1.data.graph.NodeSizer;
 import nl.cwi.sen1.data.graph.Point;
 import nl.cwi.sen1.data.graph.Polygon;
 import nl.cwi.sen1.data.graph.Shape;
+import nl.cwi.sen1.util.Preferences;
 
 public class GraphPanel extends JComponent implements Scrollable {
 	private static final int ARROWHEAD_LENGTH = 15;
@@ -40,32 +40,6 @@ public class GraphPanel extends JComponent implements Scrollable {
 	private static final int ARROWHEAD_SHARPNESS = 15;
 
 	private static final int DEFAULT_ZOOM_FACTOR = 100;
-
-	public static final String PREF_NODE_FONT = "graph.node.font";
-
-	public static final String PREF_NODE_BG = "graph.node.background";
-
-	public static final String PREF_NODE_FG = "graph.node.foreground";
-
-	public static final String PREF_NODE_BORDER = "graph.node.border";
-
-	public static final String PREF_NODE_HOVERED_BG = "graph.node.hovered.background";
-
-	public static final String PREF_NODE_HOVERED_FG = "graph.node.hovered.foreground";
-
-	public static final String PREF_NODE_HOVERED_BORDER = "graph.node.hovered.border";
-
-	public static final String PREF_NODE_SELECTED_BG = "graph.node.selected.background";
-
-	public static final String PREF_NODE_SELECTED_FG = "graph.node.selected.foreground";
-
-	public static final String PREF_NODE_SELECTED_BORDER = "graph.node.selected.border";
-
-	private static final String PREF_BORDER_WIDTH = "graph.node.border.width";
-
-	private static final String PREF_BORDER_HEIGHT = "graph.node.border.height";
-
-	private Properties properties;
 
 	private String id;
 
@@ -82,6 +56,12 @@ public class GraphPanel extends JComponent implements Scrollable {
 	private FontMetrics metrics;
 
 	private AffineTransform transform;
+
+	private int borderWidth;
+
+	private int borderHeight;
+
+	private Font nodeFont;
 
 	private Node hoveredNode;
 
@@ -107,13 +87,11 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 	private boolean toolTipEnabled = false;
 
-	public GraphPanel(String id, Properties properties) {
+	public GraphPanel(String id, Preferences preferences) {
 		this.id = id;
-		this.properties = properties;
-		transform = new AffineTransform();
-
+		this.transform = new AffineTransform();
+		initPreferences(preferences);
 		setAutoscrolls(true);
-
 		addMouseMotionListener(makeMouseMotionListener());
 	}
 
@@ -249,8 +227,6 @@ public class GraphPanel extends JComponent implements Scrollable {
 			// large number below 32k so the whole background will be filled.
 			g2d.fillRect(0, 0, 32000, 32000);
 
-			setupColors();
-
 			paintEdges(g2d);
 			paintNodes(g2d);
 
@@ -258,24 +234,23 @@ public class GraphPanel extends JComponent implements Scrollable {
 		}
 	}
 
-	public void setupColors() {
-		nodeBG = Color.decode((String) properties.get(PREF_NODE_BG));
-		nodeFG = Color.decode((String) properties.get(PREF_NODE_FG));
-		nodeBorder = Color.decode((String) properties.get(PREF_NODE_BORDER));
+	public void initPreferences(Preferences preferences) {
+		nodeBG = preferences.getColor("graph.node.background");
+		nodeFG = preferences.getColor("graph.node.foreground");
+		nodeBorder = preferences.getColor("graph.node.border");
 
-		nodeBGHovered = Color.decode((String) properties
-				.get(PREF_NODE_HOVERED_BG));
-		nodeFGHovered = Color.decode((String) properties
-				.get(PREF_NODE_HOVERED_FG));
-		nodeBorderHovered = Color.decode((String) properties
-				.get(PREF_NODE_HOVERED_BORDER));
+		nodeBGHovered = preferences.getColor("graph.node.hovered.background");
+		nodeFGHovered = preferences.getColor("graph.node.hovered.foreground");
+		nodeBorderHovered = preferences.getColor("graph.node.hovered.border");
 
-		nodeBGSelected = Color.decode((String) properties
-				.get(PREF_NODE_SELECTED_BG));
-		nodeFGSelected = Color.decode((String) properties
-				.get(PREF_NODE_SELECTED_FG));
-		nodeBorderSelected = Color.decode((String) properties
-				.get(PREF_NODE_SELECTED_BORDER));
+		nodeBGSelected = preferences.getColor("graph.node.selected.background");
+		nodeFGSelected = preferences.getColor("graph.node.selected.foreground");
+		nodeBorderSelected = preferences.getColor("graph.node.selected.border");
+
+		nodeFont = preferences.getFont("graph.node.font");
+
+		borderWidth = preferences.getInt("graph.node.border.width");
+		borderHeight = preferences.getInt("graph.node.border.height");
 	}
 
 	public Dimension getPreferredSize() {
@@ -287,7 +262,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 	}
 
 	private void paintNodes(Graphics2D g) {
-		g.setFont(Font.decode((String) properties.get(PREF_NODE_FONT)));
+		g.setFont(nodeFont);
 		metrics = g.getFontMetrics();
 
 		NodeList nodes = graph.getNodes();
@@ -625,21 +600,16 @@ public class GraphPanel extends JComponent implements Scrollable {
 	}
 
 	public Graph sizeGraph(Graph graph) {
-		final FontMetrics metrics = getFontMetrics(Font
-				.decode((String) properties.get(PREF_NODE_FONT)));
+		final FontMetrics metrics = getFontMetrics(nodeFont);
 
 		if (metrics != null) {
 			NodeSizer sizer = new NodeSizer() {
 				public int getWidth(Node node) {
-					int borderWidth = Integer.parseInt((String) properties
-							.get(PREF_BORDER_WIDTH));
-					return metrics.stringWidth(node.getLabel()) + borderWidth
-							* 2;
+					String label = node.getLabel();
+					return metrics.stringWidth(label) + borderWidth * 2;
 				}
 
 				public int getHeight(Node node) {
-					int borderHeight = Integer.parseInt((String) properties
-							.get(PREF_BORDER_HEIGHT));
 					return metrics.getHeight() + borderHeight * 2;
 				}
 			};

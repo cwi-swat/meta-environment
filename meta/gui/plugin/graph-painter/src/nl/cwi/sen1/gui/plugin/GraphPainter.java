@@ -6,18 +6,14 @@
  */
 package nl.cwi.sen1.gui.plugin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.MetaGraphFactory;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
@@ -31,29 +27,14 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	private MetaGraphFactory graphFactory;
 
 	private Map graphs;
-
-	private Properties properties;
+	
+	private Preferences preferences;
 
 	public GraphPainter() {
-		graphs = new HashMap();
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
 				+ ".properties");
-		InputStream stream = getClass().getResourceAsStream(propertyPath);
-		properties = new Properties();
-		try {
-			properties.load(stream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-        try {
-            File file = new File(System.getProperty("user.home"), ".metarc");
-            stream = new FileInputStream(file);
-            properties.load(stream);
-        } catch (IOException e) {
-            // do nothing
-        }
-
+		this.preferences = new Preferences(getClass().getResourceAsStream(propertyPath));
+		this.graphs = new HashMap();
 	}
 
 	public void initStudioPlugin(Studio studio) {
@@ -78,7 +59,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	public ATerm sizeGraph(String id, ATerm graphTerm) {
 		GraphPanel panel = (GraphPanel) graphs.get(id);
 		if (panel == null) {
-			panel = new GraphPanel(id, properties);
+			panel = new GraphPanel(id, preferences);
 			graphs.put(id, panel);
 			panel.setName(id);
 			studio.addComponent(panel);

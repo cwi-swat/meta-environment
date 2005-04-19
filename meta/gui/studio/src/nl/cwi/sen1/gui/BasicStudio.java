@@ -6,17 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
@@ -43,7 +39,6 @@ import net.infonode.docking.theme.SoftBlueIceDockingTheme;
 import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
-import nl.cwi.sen1.util.Preferences;
 import toolbus.AbstractTool;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -81,8 +76,6 @@ public class BasicStudio implements Studio, GuiTif {
 		components = new HashMap();
 		menuMap = new HashMap();
 
-		initializeProperties();
-
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				createFrame();
@@ -112,22 +105,6 @@ public class BasicStudio implements Studio, GuiTif {
 
 	synchronized private static int nextComponentID() {
 		return nextUniqueComponentID++;
-	}
-
-	private void initializeProperties() {
-		InputStream propertyStream;
-		// propertyStream = getClass().getResourceAsStream(
-		// "/META-INF/default.properties");
-		Properties properties = new Properties();
-		// properties.load(propertyStream);
-		Preferences.initialize("MetaStudio Preferences", properties);
-		try {
-			File file = new File(System.getProperty("user.home"), ".metarc");
-			propertyStream = new FileInputStream(file);
-			Preferences.load(propertyStream);
-		} catch (IOException e) {
-			// do nothing
-		}
 	}
 
 	private void createRootWindow() {

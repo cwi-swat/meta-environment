@@ -17,7 +17,6 @@ import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.util.Preferences;
-import aterm.ATermFactory;
 
 public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
 	private JTree tree;
@@ -29,22 +28,22 @@ public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
 	private DefaultMutableTreeNode importedBy;
 
 	private ModuleTreeModel manager;
-
-	public ModuleInfoPanel(ATermFactory factory, ModuleTreeModel moduleManager) {
+	
+	public ModuleInfoPanel(ModuleTreeModel moduleManager, Preferences preferences) {
 		this.manager = moduleManager;
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setBackground(Preferences.getColor("moduleinfo.background"));
+		setBackground(preferences.getColor("moduleinfo.background"));
 
 		root = new DefaultMutableTreeNode();
-		imports = new DefaultMutableTreeNode(Preferences
+		imports = new DefaultMutableTreeNode(preferences
 				.getString("moduleinfo.imports"));
-		importedBy = new DefaultMutableTreeNode(Preferences
+		importedBy = new DefaultMutableTreeNode(preferences
 				.getString("moduleinfo.importedby"));
 
 		tree = new JTree(root);
 		tree.setRootVisible(false);
-		tree.setBackground(Preferences.getColor("moduleinfo.background"));
+		tree.setBackground(preferences.getColor("moduleinfo.background"));
 
 		add(new JScrollPane(tree));
 		moduleManager.addModuleSelectionListener(this);

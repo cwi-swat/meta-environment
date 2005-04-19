@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +20,7 @@ import javax.swing.event.MouseInputAdapter;
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.MetaGraphFactory;
 import nl.cwi.sen1.data.graph.Node;
+import nl.cwi.sen1.util.Preferences;
 
 // TODO: extract functionality from the GraphPanel that should be here.
 public class ZoomableGraphPanel extends JPanel {
@@ -42,10 +42,10 @@ public class ZoomableGraphPanel extends JPanel {
 
 	private JLabel zoomToFit;
 
-	public ZoomableGraphPanel(MetaGraphFactory factory, String id, Properties properties) {
+	public ZoomableGraphPanel(MetaGraphFactory factory, String id, Preferences preferences) {
 		this.factory = factory;
 
-		graphPanel = new GraphPanel(id, properties);
+		graphPanel = new GraphPanel(id, preferences);
 
 		setLayout(new BorderLayout());
 

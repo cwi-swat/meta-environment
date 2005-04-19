@@ -2,82 +2,94 @@ package nl.cwi.sen1.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.Properties;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.filechooser.FileSystemView;
 
+// consider using java.util.prefs.Preferences as a replacement
 public class Preferences {
-	static private String title;
+	private Properties properties;
 
-	static private Properties properties;
-
-	static public void initialize(String title, Properties defaults) {
-		Preferences.title = title;
-		properties = new Properties(defaults);
+	public Preferences(InputStream propertyStream) {
+		Properties defaultProperties = readDefaultProperties(propertyStream);
+		this.properties = addUserProperties(defaultProperties);
 	}
 
-	static public void load(InputStream stream) throws IOException {
-		properties.load(stream);
+	private Properties readDefaultProperties(InputStream stream) {
+		Properties defaultProperties = new Properties();
+		loadProperties(defaultProperties, stream);
+		return defaultProperties;
 	}
 
-	static public void save(OutputStream stream) throws IOException {
-		properties.store(stream, title);
+	private Properties addUserProperties(Properties defaultProperties) {
+		Properties props = new Properties(defaultProperties);
+
+		File homeDir = FileSystemView.getFileSystemView().getHomeDirectory();
+		File userPropertyFile = new File(homeDir, ".metarc");
+		try {
+			InputStream stream = new FileInputStream(userPropertyFile);
+			loadProperties(props, stream);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			// ignore: it is ok if a user has no properties
+		}
+
+		return props;
 	}
 
-	static public String getString(String key) {
+	private Properties loadProperties(Properties props, InputStream stream) {
+		try {
+			props.load(stream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return props;
+	}
+
+	public String getString(String key) {
 		return properties.getProperty(key);
 	}
 
-	static public void setString(String key, String value) {
+	public void setString(String key, String value) {
 		properties.setProperty(key, value);
 	}
 
-	static public Color getColor(String key) {
+	public Color getColor(String key) {
 		String spec = properties.getProperty(key);
 		return spec == null ? null : Color.decode(spec);
 	}
 
-	static public Font getFont(String key) {
-		String family = getString(key + ".family");
-		int size = getInteger(key + ".size");
-		boolean bold = Preferences.getBoolean(key + ".bold");
-		boolean italic = Preferences.getBoolean(key + ".italic");
-
-		int style = 0;
-		if (bold) {
-			style |= Font.BOLD;
-		}
-		if (italic) {
-			style |= Font.ITALIC;
-		}
-		Font font = new Font(family, style, size);
-		return font;
+	public Font getFont(String key) {
+		return Font.decode(getString(key));
 	}
 
-	static public Icon getIcon(String key) {
+	public Icon getIcon(String key) {
 		String path = properties.getProperty(key);
 		URL url = path.getClass().getResource(path);
 
 		return url == null ? null : new ImageIcon(url);
 	}
 
-	static public int getInteger(String key) {
+	public int getInt(String key) {
 		String spec = properties.getProperty(key);
 
 		return Integer.parseInt(spec);
 	}
 
-	static public double getDouble(String key) {
+	public double getDouble(String key) {
 		String spec = properties.getProperty(key);
 		return Double.parseDouble(spec);
 	}
 
-	static public boolean getBoolean(String key) {
+	public boolean getBoolean(String key) {
 
 		String spec = properties.getProperty(key);
 
