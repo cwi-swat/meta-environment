@@ -3,10 +3,10 @@
 include $(top_srcdir)/java_make_rules
 include $(top_srcdir)/toolbus_make_rules
 
-TOOLNAME = module-browser
+TOOLNAME = navigator
 PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
-MAIN_CLASS = $(PACKAGE).ModuleBrowser
+MAIN_CLASS = $(PACKAGE).Navigator
 
 ANT_ENV += LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.jar:$(top_srcdir)/gui/studio/gui.jar
 

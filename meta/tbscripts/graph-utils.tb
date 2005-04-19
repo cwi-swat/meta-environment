@@ -21,7 +21,7 @@ let
 in
   snd-msg(ts-get-key-value-pairs("import-relations"))
   . rec-msg(ts-pairs(ImportRelations?))
-  . snd-msg(ui-display-treelist("import-relations", ImportRelations))
+  . snd-msg(mb-set-modules(ImportRelations))
   . snd-msg(sig-import-relation-to-graph(ImportRelations))
   . rec-msg(sig-graph(ImportRelations, ImportGraph?))
   . RenderGraph("import-graph", ImportGraph?)

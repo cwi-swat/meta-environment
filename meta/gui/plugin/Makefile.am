@@ -1,3 +1,7 @@
 # $Id$
 
-SUBDIRS = module-browser dialog graph-painter
+SUBDIRS = \
+	navigator \
+	dialog \
+	graph-painter \
+	import-hierarchy

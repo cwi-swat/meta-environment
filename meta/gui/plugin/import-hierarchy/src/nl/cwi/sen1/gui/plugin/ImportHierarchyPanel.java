@@ -14,11 +14,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.data.Module;
-import nl.cwi.sen1.data.ModuleSelectionListener;
-import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.util.Preferences;
 
-public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
+public class ImportHierarchyPanel extends JPanel {
 	private JTree tree;
 
 	private DefaultMutableTreeNode root;
@@ -27,11 +25,7 @@ public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
 
 	private DefaultMutableTreeNode importedBy;
 
-	private ModuleTreeModel manager;
-	
-	public ModuleInfoPanel(ModuleTreeModel moduleManager, Preferences preferences) {
-		this.manager = moduleManager;
-
+	public ImportHierarchyPanel(Preferences preferences) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(preferences.getColor("moduleinfo.background"));
 
@@ -46,7 +40,6 @@ public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
 		tree.setBackground(preferences.getColor("moduleinfo.background"));
 
 		add(new JScrollPane(tree));
-		moduleManager.addModuleSelectionListener(this);
 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
@@ -58,14 +51,14 @@ public class ModuleInfoPanel extends JPanel implements ModuleSelectionListener {
 
 					if (node.isLeaf()) {
 						String module = node.toString();
-						manager.selectModule(module);
+						System.err.println("module selected: " + module);
 					}
 				}
 			}
 		});
 	}
 
-	public void moduleSelected(Module module) {
+	public void setHierarchy(Module module) {
 		root.removeAllChildren();
 
 		if (module != null) {

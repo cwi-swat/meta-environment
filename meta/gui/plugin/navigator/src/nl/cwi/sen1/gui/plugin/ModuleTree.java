@@ -24,9 +24,9 @@ public class ModuleTree extends JPanel {
 
 	private final ModuleTreeModel manager;
 
-	private ModuleBrowser modulebrowser;
+	private Navigator modulebrowser;
 
-	public ModuleTree(ATermFactory factory, ModuleBrowser modulebrowser,
+	public ModuleTree(ATermFactory factory, Navigator modulebrowser,
 			final ModuleTreeModel manager) {
 		this.modulebrowser = modulebrowser;
 		this.manager = manager;

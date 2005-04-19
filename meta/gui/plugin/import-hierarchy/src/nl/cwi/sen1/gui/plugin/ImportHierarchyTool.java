@@ -1,6 +1,6 @@
-// Java tool interface class ModuleBrowserTool
+// Java tool interface class ImportHierarchyTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2005 1:45:46 PM
+// generation time: Apr 19, 2005 3:01:35 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,26 +8,25 @@ import aterm.*;
 import toolbus.*;
 import java.util.*;
 
-abstract public class ModuleBrowserTool
+abstract public class ImportHierarchyTool
   extends SwingTool
-  implements ModuleBrowserTif
+  implements ImportHierarchyTif
 {
   // This table will hold the complete input signature
   private Map sigTable = new HashMap();
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PselectModule0;
-  private ATerm PdisplayTreelist0;
+  private ATerm PsetHierarchy0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   //}}}
 
-  //{{{  protected ModuleBrowserTool(ATermFactory factory)
+  //{{{  protected ImportHierarchyTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
-  protected ModuleBrowserTool(ATermFactory factory)
+  protected ImportHierarchyTool(ATermFactory factory)
   {
     super(factory);
     initSigTable();
@@ -41,10 +40,9 @@ abstract public class ModuleBrowserTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<module-browser>,display-treelist(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-browser>,select-module(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<module-browser>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<module-browser>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<import-hierarchy>,set-hierarchy(<str>,<list>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<import-hierarchy>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-terminate(<import-hierarchy>,<term>)"), new Boolean(true));
   }
 
   //}}}
@@ -53,8 +51,7 @@ abstract public class ModuleBrowserTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PselectModule0 = factory.parse("rec-do(select-module(<str>))");
-    PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
+    PsetHierarchy0 = factory.parse("rec-do(set-hierarchy(<str>,<term>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -68,14 +65,9 @@ abstract public class ModuleBrowserTool
   {
     List result;
 
-    result = term.match(PselectModule0);
+    result = term.match(PsetHierarchy0);
     if (result != null) {
-      selectModule((String)result.get(0));
-      return null;
-    }
-    result = term.match(PdisplayTreelist0);
-    if (result != null) {
-      displayTreelist((String)result.get(0), (ATerm)result.get(1));
+      setHierarchy((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PrecAckEvent0);

@@ -2,6 +2,7 @@
 #include "gui.idef"
 #include "dialog.idef"
 #include "graph-painter.idef"
+#include "import-hierarchy.idef"
 #include "module-selection-listener.tb"
 
 /* sdf-meta */
@@ -11,14 +12,17 @@
 /* to be resolved */
 #include "button-actions.tb"
 
-process StartModuleBrowser is
-  snd-msg(load-jar("file://__PKGDATA__/module-browser.jar"))
+process StartNavigator is
+  snd-msg(load-jar("file://__PKGDATA__/navigator.jar"))
 
 process StartDialogTool is
   snd-msg(load-jar("file://__PKGDATA__/dialog.jar"))
 
 process StartGraphPanel is
   snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar"))
+
+process StartImportHierarchy is
+  snd-msg(load-jar("file://__PKGDATA__/import-hierarchy.jar"))
 
 process MetaGUI is
 let
@@ -39,9 +43,10 @@ in
   . rec-msg(cm-events(MenuEventList?))
   . snd-msg(gui-add-menu-events(MenuEventList))
  
-  . StartModuleBrowser()
+  . StartNavigator()
   . StartDialogTool()
   . StartGraphPanel()
+  . StartImportHierarchy()
 
   . snd-msg(post-initialization-hook)
   . rec-msg(post-initialization-hook-finished)

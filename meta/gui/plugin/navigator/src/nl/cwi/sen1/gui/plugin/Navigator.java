@@ -11,12 +11,12 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
-	private static final String TOOL_NAME = "module-browser";
+public class Navigator implements StudioPlugin, NavigatorTif {
+	private static final String TOOL_NAME = "navigator";
 
 	private static final String RESOURCE_DIR = "/resources";
 
-	private ModuleBrowserBridge bridge;
+	private NavigatorBridge bridge;
 
 	private ModuleTreeModel moduleModel;
 
@@ -29,7 +29,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	private boolean suspendSelectionNotification;
 
-	public ModuleBrowser() {
+	public Navigator() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
 				+ ".properties");
 		this.preferences = new Preferences(getClass().getResourceAsStream(
@@ -91,7 +91,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 		}
 	}
 
-	public void displayTreelist(String id, ATerm termList) {
+	public void setModules(ATerm termList) {
 		ATermList modules = (ATermList) termList;
 		setModules(modules);
 		setImports(modules);
@@ -126,7 +126,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		bridge = new ModuleBrowserBridge(studio.getFactory(), this);
+		bridge = new NavigatorBridge(studio.getFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 
@@ -145,7 +145,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 			}
 		});
 		ModuleTree tree = new ModuleTree(studio.getFactory(), this, moduleModel);
-		tree.setName("Module Hierarchy");
+		tree.setName("Navigator");
 		studio.addComponent(tree);
 	}
 

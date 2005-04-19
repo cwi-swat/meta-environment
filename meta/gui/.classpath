@@ -28,11 +28,11 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="plugin/module-browser/src">
+	<classpathentry kind="src" path="plugin/graph-painter/src">
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="plugin/graph-painter/src">
+	<classpathentry kind="src" path="plugin/navigator/src">
 		<attributes>
 		</attributes>
 	</classpathentry>
@@ -49,6 +49,10 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="studio/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="plugin/import-hierarchy/src">
 		<attributes>
 		</attributes>
 	</classpathentry>

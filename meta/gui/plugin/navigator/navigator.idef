@@ -1,29 +1,24 @@
-#ifndef _GUI_MODULE_BROWSER
-#define _GUI_MODULE_BROWSER
+#ifndef _GUI_NAVIGATOR
+#define _GUI_NAVIGATOR
 
-tool module-browser is { }
+tool navigator is { }
 
-process ModuleBrowser is
+process Navigator is
 let
   EventList: list,
   Event: term,
   Graph: term,
   Module: str,
   Type: term,
-  T: module-browser,
+  T: navigator,
   Str : str,
-  List : list
+  Modules : list
 in
   rec-connect(T?)
   .
     (
-      rec-msg(ui-display-treelist(Str?, List?))
-      . snd-do(T, display-treelist(Str, List))
-    +
-      rec-event(T,clear-all)
-      . snd-msg(clear-all)
-      . rec-msg(cleared-all)
-      . snd-ack-event(T,clear-all)
+      rec-msg(mb-set-modules(Modules?))
+      . snd-do(T, set-modules(Modules))
     +
       rec-msg(mb-select-module(Module?))
       . snd-do(T, select-module(Module))
@@ -33,12 +28,16 @@ in
       . snd-ack-event(T, module-selected(Module))
 /*
     +
+      rec-event(T,clear-all)
+      . snd-msg(clear-all)
+      . rec-msg(cleared-all)
+      . snd-ack-event(T,clear-all)
+    +
       rec-event(T, get-events(Type?, Module?))
       . snd-msg(cm-get-module-events(Type, Module))
       . rec-msg(cm-module-events(EventList?))
       . snd-do(T, add-events(Type, Module, EventList))
       . snd-ack-event(T, get-events(Type, Module))
-*/
     +
       rec-event(T, button-selected(Type?, Event?))
       . snd-msg(ui-button-selected(Type, Event))
@@ -47,11 +46,12 @@ in
       rec-event(T, button-selected(Type?, Module?, Event?))
       . snd-msg(ui-button-selected(Type, Event, Module))
       . snd-ack-event(T, button-selected(Type, Module, Event))
+*/
     )
     *
       rec-disconnect(T)
 endlet
 
-toolbus(ModuleBrowser)
+toolbus(Navigator)
 
 #endif

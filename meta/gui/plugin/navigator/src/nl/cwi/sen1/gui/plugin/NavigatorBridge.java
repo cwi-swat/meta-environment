@@ -1,19 +1,19 @@
-// Java tool bridge ModuleBrowserBridge
+// Java tool bridge NavigatorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2005 1:45:46 PM
+// generation time: Apr 19, 2005 3:57:54 PM
 
 package nl.cwi.sen1.gui.plugin;
 
 import aterm.*;
 
-public class ModuleBrowserBridge
-  extends ModuleBrowserTool
+public class NavigatorBridge
+  extends NavigatorTool
 {
-  private ModuleBrowserTif tool;
+  private NavigatorTif tool;
 
-  //{{{  public ModuleBrowserBridge(ATermFactory factory, ModuleBrowserTif tool)
+  //{{{  public NavigatorBridge(ATermFactory factory, NavigatorTif tool)
 
-  public ModuleBrowserBridge(ATermFactory factory, ModuleBrowserTif tool)
+  public NavigatorBridge(ATermFactory factory, NavigatorTif tool)
   {
     super(factory);
     this.tool = tool;
@@ -34,15 +34,15 @@ public class ModuleBrowserBridge
   }
 
   //}}}
-  //{{{  public void displayTreelist(String s0, ATerm t1)
+  //{{{  public void setModules(ATerm t0)
 
-  public void displayTreelist(String s0, ATerm t1)
+  public void setModules(ATerm t0)
   {
     if (tool != null) {
-      tool.displayTreelist(s0, t1);
+      tool.setModules(t0);
     }
     else {
-      throw new UnsupportedOperationException("method `displayTreelist' not supported.");
+      throw new UnsupportedOperationException("method `setModules' not supported.");
     }
   }
 

@@ -31,11 +31,11 @@ public class ModulePopupMenu {
 
 	private static int _y;
 
-	private ModuleBrowserBridge bridge;
+	private NavigatorBridge bridge;
 
 	private ATermFactory factory;
 
-	public ModulePopupMenu(ATermFactory factory, ModuleBrowserBridge bridge) {
+	public ModulePopupMenu(ATermFactory factory, NavigatorBridge bridge) {
 		this.bridge = bridge;
 		this.factory = factory;
 
