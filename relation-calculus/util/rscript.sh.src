@@ -211,7 +211,7 @@ do
   shift
 done
 
-if test -n "$YIELD" -a  "(" $USE_TESTSUITES == "yes" ")"
+if test -n "$YIELD" -a  "(" $USE_TESTSUITES = "yes" ")"
 then
     echo "$PRG: -y (--yield) and -t (--testsuite) cannot be combined"
     usage
@@ -226,7 +226,7 @@ parse_rscript
 check
 
 
-if test "$CHECK_ONLY" == "yes"
+if test "$CHECK_ONLY" = "yes"
 then
     if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
     then 
