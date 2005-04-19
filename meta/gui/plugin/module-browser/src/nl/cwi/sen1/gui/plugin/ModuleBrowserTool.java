@@ -1,6 +1,6 @@
 // Java tool interface class ModuleBrowserTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 1:46:09 PM
+// generation time: Apr 19, 2005 1:45:46 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -17,7 +17,7 @@ abstract public class ModuleBrowserTool
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PaddEvents0;
+  private ATerm PselectModule0;
   private ATerm PdisplayTreelist0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -42,7 +42,7 @@ abstract public class ModuleBrowserTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-do(<module-browser>,display-treelist(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-browser>,add-events(<term>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-browser>,select-module(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<module-browser>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<module-browser>,<term>)"), new Boolean(true));
   }
@@ -53,7 +53,7 @@ abstract public class ModuleBrowserTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
+    PselectModule0 = factory.parse("rec-do(select-module(<str>))");
     PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -68,9 +68,9 @@ abstract public class ModuleBrowserTool
   {
     List result;
 
-    result = term.match(PaddEvents0);
+    result = term.match(PselectModule0);
     if (result != null) {
-      addEvents((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      selectModule((String)result.get(0));
       return null;
     }
     result = term.match(PdisplayTreelist0);

@@ -1,6 +1,6 @@
 // Java tool bridge ModuleBrowserBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 1:46:09 PM
+// generation time: Apr 19, 2005 1:45:46 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -21,15 +21,15 @@ public class ModuleBrowserBridge
 
   //}}}
 
-  //{{{  public void addEvents(ATerm t0, String s1, ATerm t2)
+  //{{{  public void selectModule(String s0)
 
-  public void addEvents(ATerm t0, String s1, ATerm t2)
+  public void selectModule(String s0)
   {
     if (tool != null) {
-      tool.addEvents(t0, s1, t2);
+      tool.selectModule(s0);
     }
     else {
-      throw new UnsupportedOperationException("method `addEvents' not supported.");
+      throw new UnsupportedOperationException("method `selectModule' not supported.");
     }
   }
 

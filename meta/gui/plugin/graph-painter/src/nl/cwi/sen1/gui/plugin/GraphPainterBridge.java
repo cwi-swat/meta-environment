@@ -1,6 +1,6 @@
 // Java tool bridge GraphPainterBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 2:53:45 PM
+// generation time: Apr 19, 2005 2:11:05 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -34,6 +34,19 @@ public class GraphPainterBridge
   }
 
   //}}}
+  //{{{  public void selectNode(String s0, String s1)
+
+  public void selectNode(String s0, String s1)
+  {
+    if (tool != null) {
+      tool.selectNode(s0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `selectNode' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public ATerm sizeGraph(String s0, ATerm t1)
 
   public ATerm sizeGraph(String s0, ATerm t1)
@@ -43,6 +56,19 @@ public class GraphPainterBridge
     }
     else {
       throw new UnsupportedOperationException("method `sizeGraph' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void recAckEvent(ATerm t0)
+
+  public void recAckEvent(ATerm t0)
+  {
+    if (tool != null) {
+      tool.recAckEvent(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `recAckEvent' not supported.");
     }
   }
 

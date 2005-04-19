@@ -1,24 +1,37 @@
+#ifndef _GUI_GRAPH_PAINTER
+#define _GUI_GRAPH_PAINTER
+
 tool graph-painter is { }
 
 process GraphPainter is
 let
   T: graph-painter,
   Graph: term,
-  GraphId: str
+  GraphId: str,
+  NodeId: str
 in
   rec-connect(T?)
   .
   (
-    rec-msg(ui-display-graph("import-graph", Graph?))
-    . snd-do(T, display-graph("import-graph", Graph))
+    rec-msg(gp-display-graph(GraphId?, Graph?))
+    . snd-do(T, display-graph(GraphId, Graph))
   +
-    rec-msg(ui-render-graph(GraphId?, Graph?))
+    rec-msg(gp-render-graph(GraphId?, Graph?))
     . snd-eval(T, size-graph(GraphId, Graph))
     . rec-value(T, sized-graph(Graph?))
-    . snd-msg(ui-rendered-graph(GraphId, Graph))
+    . snd-msg(gp-rendered-graph(GraphId, Graph))
+  +
+    rec-msg(gp-select-node(GraphId?, NodeId?))
+    . snd-do(T, select-node(GraphId, NodeId))
+  +
+    rec-event(T, node-selected(GraphId?, NodeId?))
+    . snd-note(gp-node-selected(GraphId, NodeId))
+    . snd-ack-event(T, node-selected(GraphId, NodeId))
   )
   *
   rec-disconnect(T)
 endlet
 
 toolbus(GraphPainter)
+
+#endif

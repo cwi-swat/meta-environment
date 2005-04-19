@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
 import nl.cwi.sen1.data.Module;
+import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
@@ -17,7 +18,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	private ModuleBrowserBridge bridge;
 
-	private ModuleTreeModel moduleManager;
+	private ModuleTreeModel moduleModel;
 
 	private ModulePopupMenu popup;
 
@@ -25,6 +26,8 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	// TODO: use preferences
 	private Preferences preferences;
+
+	private boolean suspendSelectionNotification;
 
 	public ModuleBrowser() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
@@ -34,7 +37,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	}
 
 	private void setModules(ATermList importList) {
-		moduleManager.clearModules();
+		moduleModel.clearModules();
 
 		while (!importList.isEmpty()) {
 			ATermList importPair = (ATermList) importList.getFirst();
@@ -46,10 +49,10 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	}
 
 	private Module addModule(String name) {
-		Module module = moduleManager.getModule(name);
+		Module module = moduleModel.getModule(name);
 		if (module == null) {
 			module = new Module(name);
-			moduleManager.addModule(module);
+			moduleModel.addModule(module);
 		}
 
 		return module;
@@ -63,7 +66,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 			ATermAppl fromTerm = (ATermAppl) importPair.getFirst();
 			String from = fromTerm.getName();
-			Module moduleFrom = moduleManager.getModule(from);
+			Module moduleFrom = moduleModel.getModule(from);
 			if (moduleFrom == null) {
 				moduleFrom = addModule(from);
 				moduleFrom.setState(Module.STATE_NEW);
@@ -76,7 +79,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 				imports = imports.getNext();
 
 				String to = toTerm.getName();
-				Module moduleTo = moduleManager.getModule(to);
+				Module moduleTo = moduleModel.getModule(to);
 				if (moduleTo == null) {
 					moduleTo = addModule(to);
 					moduleTo.setState(Module.STATE_NEW);
@@ -123,8 +126,7 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		ModuleBrowserBridge bridge = new ModuleBrowserBridge(studio
-				.getFactory(), this);
+		bridge = new ModuleBrowserBridge(studio.getFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 
@@ -132,17 +134,24 @@ public class ModuleBrowser implements StudioPlugin, ModuleBrowserTif {
 	}
 
 	private void addModuleBrowserGUI() {
-		moduleManager = new ModuleTreeModel();
-		// moduleManager.addModuleSelectionListener(this);
-		ModuleTree tree = new ModuleTree(studio.getFactory(), this,
-				moduleManager);
+		moduleModel = new ModuleTreeModel();
+		moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
+			public void moduleSelected(Module module) {
+				if (!suspendSelectionNotification) {
+					String name = module != null ? module.toString() : "";
+					bridge.postEvent(studio.getFactory().make(
+							"module-selected(<str>)", name));
+				}
+			}
+		});
+		ModuleTree tree = new ModuleTree(studio.getFactory(), this, moduleModel);
 		tree.setName("Module Hierarchy");
 		studio.addComponent(tree);
+	}
 
-		/*
-		 * importGraphPanel = createModuleGraph(); //
-		 * importGraphPanel.addMouseListener(makeMouseListener(moduleManager));
-		 * studio.addComponent(importGraphPanel);
-		 */
+	public void selectModule(String moduleName) {
+		suspendSelectionNotification = true;
+		moduleModel.selectModule(moduleName);
+		suspendSelectionNotification = false;
 	}
 }

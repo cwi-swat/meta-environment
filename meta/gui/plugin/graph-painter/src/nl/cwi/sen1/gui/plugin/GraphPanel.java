@@ -1,7 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -18,7 +17,6 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
-import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
@@ -51,7 +49,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 	private int max_y;
 
-	private boolean dragEnabled = true;
+//	private boolean dragEnabled = true;
 
 	private FontMetrics metrics;
 
@@ -127,41 +125,41 @@ public class GraphPanel extends JComponent implements Scrollable {
 				repaint();
 			}
 
-			public void mouseDragged(MouseEvent e) {
-				if (dragEnabled) {
-					Component parent = getParent();
-					while (parent != null && !(parent instanceof JViewport)) {
-						parent = parent.getParent();
-					}
-					JViewport port = (JViewport) parent;
-					java.awt.Point pos = port.getViewPosition();
-					int absX = e.getX() - (int) pos.getX();
-					int absY = e.getY() - (int) pos.getY();
-					if (!dragging) {
-						dragging = true;
-					} else {
-						int x = (int) pos.getX() + (lastX - absX);
-						int y = (int) pos.getY() + (lastY - absY);
-						Dimension portSize = port.getSize();
-						Dimension size = getSize();
-						if (x + portSize.width > size.width) {
-							x = size.width - portSize.width;
-						}
-						if (y + portSize.height > size.height) {
-							y = size.height - portSize.height;
-						}
-						if (x < 0) {
-							x = 0;
-						}
-						if (y < 0) {
-							y = 0;
-						}
-						port.setViewPosition(new java.awt.Point(x, y));
-					}
-					lastX = absX;
-					lastY = absY;
-				}
-			}
+			// public void mouseDragged(MouseEvent e) {
+			// if (dragEnabled) {
+			// Component parent = getParent();
+			// while (parent != null && !(parent instanceof JViewport)) {
+			// parent = parent.getParent();
+			// }
+			// JViewport port = (JViewport) parent;
+			// java.awt.Point pos = port.getViewPosition();
+			// int absX = e.getX() - (int) pos.getX();
+			// int absY = e.getY() - (int) pos.getY();
+			// if (!dragging) {
+			// dragging = true;
+			// } else {
+			// int x = (int) pos.getX() + (lastX - absX);
+			// int y = (int) pos.getY() + (lastY - absY);
+			// Dimension portSize = port.getSize();
+			// Dimension size = getSize();
+			// if (x + portSize.width > size.width) {
+			// x = size.width - portSize.width;
+			// }
+			// if (y + portSize.height > size.height) {
+			// y = size.height - portSize.height;
+			// }
+			// if (x < 0) {
+			// x = 0;
+			// }
+			// if (y < 0) {
+			// y = 0;
+			// }
+			// port.setViewPosition(new java.awt.Point(x, y));
+			//					}
+			//					lastX = absX;
+			//					lastY = absY;
+			//				}
+			//			}
 		};
 		return mouseMotionListener;
 	}
@@ -172,7 +170,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 	}
 
 	public void setDragEnabled(boolean on) {
-		dragEnabled = on;
+//		dragEnabled = on;
 	}
 
 	private void updateGeometry() {
@@ -494,10 +492,14 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 		if (node != null) {
 			Rectangle rect = getNodeRectangle(node);
-
 			scrollRectToVisible(rect);
 		}
+
 		repaint();
+	}
+
+	public void setSelectedNode(String name) {
+		setSelectedNode(getNode(name));
 	}
 
 	public Rectangle getNodeRectangle(Node node) {
