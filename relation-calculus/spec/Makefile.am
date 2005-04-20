@@ -14,8 +14,8 @@ EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
 		  $(wildcard *.tbl) \
 		  $(wildcard *.eqs) \
-		  rscript.meta.buttons \
-		  rscript.meta.conf
+		  meta.buttons \
+		  meta.conf
 
 CLEANFILES =  rscript.meta.buttons rscript.meta.conf
 
