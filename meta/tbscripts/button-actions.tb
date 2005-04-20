@@ -715,9 +715,13 @@ let
   EditorId : term
 in
   (
-    rec-msg(EditorId?, exit)
-    . shutdown("MetaStudio exiting\n")
-    . snd-msg(EditorId, done)
+    (
+      rec-msg(EditorId?, exit)
+    +
+      rec-msg(gui-window-closing)
+    )
+    . shutdown("")
+    /* snd-msg(EditorId, done) */
   )
   *
   delta
