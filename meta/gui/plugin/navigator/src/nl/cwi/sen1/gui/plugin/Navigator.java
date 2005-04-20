@@ -130,10 +130,12 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 
-		addModuleBrowserGUI();
+		createModel();
+		addNavigatorPanel();
+		addImportHierarchyPanel();
 	}
 
-	private void addModuleBrowserGUI() {
+	private void createModel() {
 		moduleModel = new ModuleTreeModel();
 		moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
 			public void moduleSelected(Module module) {
@@ -144,9 +146,24 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 				}
 			}
 		});
+	}
+
+	private void addNavigatorPanel() {
 		ModuleTree tree = new ModuleTree(studio.getFactory(), this, moduleModel);
 		tree.setName("Navigator");
 		studio.addComponent(tree);
+	}
+
+	private void addImportHierarchyPanel() {
+		final ImportHierarchyPanel panel = new ImportHierarchyPanel(moduleModel,
+				preferences);
+		panel.setName("Import Hierarchy");
+		moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
+			public void moduleSelected(Module module) {
+				panel.setHierarchy(module);
+			}
+		});
+		studio.addComponent(panel);
 	}
 
 	public void selectModule(String moduleName) {
@@ -154,4 +171,5 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		moduleModel.selectModule(moduleName);
 		suspendSelectionNotification = false;
 	}
+
 }

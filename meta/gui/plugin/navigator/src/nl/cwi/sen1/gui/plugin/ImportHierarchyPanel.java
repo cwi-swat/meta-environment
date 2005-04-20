@@ -14,6 +14,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.data.Module;
+import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.util.Preferences;
 
 public class ImportHierarchyPanel extends JPanel {
@@ -25,7 +26,7 @@ public class ImportHierarchyPanel extends JPanel {
 
 	private DefaultMutableTreeNode importedBy;
 
-	public ImportHierarchyPanel(Preferences preferences) {
+	public ImportHierarchyPanel(final ModuleTreeModel model, Preferences preferences) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBackground(preferences.getColor("moduleinfo.background"));
 
@@ -50,8 +51,7 @@ public class ImportHierarchyPanel extends JPanel {
 							.getLastPathComponent();
 
 					if (node.isLeaf()) {
-						String module = node.toString();
-						System.err.println("module selected: " + module);
+						model.selectModule(node.toString());
 					}
 				}
 			}
