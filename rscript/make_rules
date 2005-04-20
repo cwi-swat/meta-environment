@@ -51,8 +51,15 @@ LDADD 		= \
 	sed 's@__PREFIX__@$(prefix)@g;\
 	     s@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(pkgdatadir)@g;\
+	     s@__ASFSDF_META__@$(ASFSDF_META)@g;\
+	     s@__ASF__@$(ASF)@g;\
+	     s@__SGLR__@$(SGLR)@g;\
+	     s@__ASC_SUPPORT__@$(ASC_SUPPORT)@g;\
+	     s@__SDF_SUPPORT__@$(SDF_SUPPORT)@g;\
+	     s@__ATERM__@$(ATERM)@g;\
 	     s@__VERSION__@$(VERSION)@g;' < $< > $@ && \
 	chmod +x $@
+
 
 # ---- Substitute in tcl source
 
