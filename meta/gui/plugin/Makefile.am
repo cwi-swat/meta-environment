@@ -3,5 +3,4 @@
 SUBDIRS = \
 	navigator \
 	dialog \
-	graph-painter \
-	import-hierarchy
+	graph-painter
