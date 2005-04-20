@@ -1,12 +1,14 @@
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites
+bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites RscriptChecker
 
 RscriptCalculator_SOURCES	= RscriptCalculator.c
 
 Rstore_SOURCES	= Rstore.c
 
 RscriptTestsuites_SOURCES = RscriptTestsuites.c
+
+RscriptChecker_SOURCES = RscriptChecker.c
 
 EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
