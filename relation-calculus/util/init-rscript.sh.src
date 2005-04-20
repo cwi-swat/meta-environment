@@ -1,0 +1,25 @@
+#! /bin/sh
+
+# This utility provides the following functionality
+# - create a symlink to __DATADIR__/meta.buttons.installed in .
+# - append __DATADIR__/meta.conf.installed to ./meta.conf
+
+set -e
+
+bindir=__BINDIR__
+datadir=__DATADIR__
+
+buttons=$datadir/meta.buttons.installed
+conf=$datadir/meta.conf.installed
+
+PRG=`basename $0`
+
+echo "Symlinking ./meta.buttons to $buttons" 
+ln -s $buttons ./meta.buttons
+
+echo "Appending $conf to ./meta.conf" 
+cat $conf >> ./meta.conf
+
+echo "Done."
+
+
