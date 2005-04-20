@@ -34,12 +34,12 @@ public class Preferences {
 
 		File homeDir = FileSystemView.getFileSystemView().getHomeDirectory();
 		File userPropertyFile = new File(homeDir, ".metarc");
-		try {
-			InputStream stream = new FileInputStream(userPropertyFile);
-			loadProperties(props, stream);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-			// ignore: it is ok if a user has no properties
+		if (userPropertyFile.canRead()) {
+			try {
+				loadProperties(props, new FileInputStream(userPropertyFile));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return props;
