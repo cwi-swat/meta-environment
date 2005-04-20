@@ -232,7 +232,7 @@ then
     then 
 	echo $THE_RSCRIPT is type correct
     else
-	cat $OUTPUT_TYPE_CHECKER
+	error-support -i $OUTPUT_TYPE_CHECKER
 	echo ""
     fi
     exit
@@ -242,9 +242,8 @@ if grep  -q "$TYPE_CHECKING_OK" "$OUTPUT_TYPE_CHECKER"
 then 
     evaluate
 else 
-    cat $OUTPUT_TYPE_CHECKER
+    error-support -i $OUTPUT_TYPE_CHECKER
     echo ""
     echo "There are type errors in $THE_RSCRIPT; script is not executed"
 fi
 
-cleanup
