@@ -12,6 +12,9 @@ datadir=__DATADIR__
 PRG=`basename $0`
 JAVA_PARSE_TABLE=${datadir}/demo/java/grammar/Java.trm.tbl
 JAVA_ANALYSIS=${bindir}/JavaAnalysis
+EXECUTABLE=${JAVA_ANALYSIS}
+EXTRACTION_FUNCTION=extractRelations
+RESULTING_RSTORE=result.rstore.pt
 
 # }}}
 
@@ -22,11 +25,14 @@ cat << ENDCAT >&2
 Usage: $PRG -i dirname [-o rstore]
 
 Options:
-  -i (--input)        filename	input from file (default: stdin)
-  -o (--output)       filename	output to file (default: result.rstore.pt)
-  -v (--verbose)                verbose output (default:none)
+  -i | --input <file>      input from file (default: stdin)
+  -o | --output <file>	   output to file (default: result.rstore.pt)
+  -e | --executable <file> specify executable for performing extraction extraction (default: JavaAnalysis)
+  -f | --function <name>   specificy the extraction function to be applied (default: extractRelations)
+  -v | --verbose           verbose output (default:none)
 Examples:
   $PRG -i JHotDraw5.2-sources -o jhotdraw.rstore.pt
+  $PRG -i JHotDraw5.2-sources -o jhotdraw.rstore.pt -e MyJavaAnalysis -f myExtraction
 
 ENDCAT
 }
@@ -51,7 +57,7 @@ check_output() {
 	*.rstore) ;;
         *.rstore.pt) ;;
 	*)
-	echo "$PRG: $OUTPUT should have file extension .rstore or .rstore.pt"
+	echo "$PRG: $RESULTING_RSTORE should have file extension .rstore or .rstore.pt"
 	usage
 	exit 1
   esac
@@ -62,20 +68,21 @@ check_output() {
 
 # }}}
 
-if [ $# -eq 0 -o $# -gt 4 ]; then
-  usage
-  exit 1
-fi
-
 while [ $# -gt 0 ]
 do
   case "$1" in
 
     -i | --input)
-      shift; SOURCE_DIR=$1; check_input ;;
+      shift; SOURCE_DIR=$1 ;;
 
     -o | --output)
-      shift; RESULTING_RSTORE=$1; check_output;;
+      shift; RESULTING_RSTORE=$1 ;;
+
+    -e | --executable)
+      shift; EXECUTABLE=$1 ;;
+
+    -f | --function)
+      shift; EXTRACTION_FUNCTION=$1 ;;
 
     -v | --verbose)
       VERBOSE=-v ;;
@@ -85,9 +92,13 @@ do
   shift
 done
 
+check_input
+check_output
+
 extract-relations ${VERBOSE} \
-	              --executable ${JAVA_ANALYSIS} \
+	              --executable ${EXECUTABLE} \
                       --sort CompilationUnit \
+                      --function ${EXTRACTION_FUNCTION} \
                       --parse-table ${JAVA_PARSE_TABLE} \
-                      ${RESULTING_RSTORE} \
+                      --output ${RESULTING_RSTORE} \
                       `find $SOURCE_DIR -name "*.java"`
