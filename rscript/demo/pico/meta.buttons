@@ -32,7 +32,7 @@ button("Pico-syntax",
           ]),
 
   button("Pico-syntax",
- 	  [description(term-editor, menu(["Pico", "Unitialized Vars (Style 1)"]))],
+ 	  [description(term-editor, menu(["Pico", "Uninitialized Vars (Style 1)"]))],
           [
 	    push-active-module,
 	    get-root,
@@ -64,7 +64,7 @@ button("Pico-syntax",
            ]),
 
  button("Pico-syntax",
- 	  [description(term-editor, menu(["Pico", "Unitialized Vars (Style 2)"]))],
+ 	  [description(term-editor, menu(["Pico", "Uninitialized Vars (Style 2)"]))],
           [
 	    push-active-module,
 	    get-root,
