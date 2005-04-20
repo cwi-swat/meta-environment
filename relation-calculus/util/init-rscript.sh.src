@@ -9,16 +9,19 @@ set -e
 bindir=__BINDIR__
 datadir=__DATADIR__
 
-buttons=$datadir/meta.buttons.installed
-conf=$datadir/meta.conf.installed
+rscriptbuttons=$datadir/rscript.meta.buttons
+rscriptconf=$datadir/rscript.meta.conf
+
+localbuttons=./meta.buttons
+localconf=./meta.conf
 
 PRG=`basename $0`
 
-echo "Symlinking ./meta.buttons to $buttons" 
-ln -s $buttons ./meta.buttons
+echo "Symlinking $localbuttons to $rscriptbuttons." 
+ln -i -s $rscriptbuttons $localbuttons
 
-echo "Appending $conf to ./meta.conf" 
-cat $conf >> ./meta.conf
+echo "Appending $rscriptconf to $localconf." 
+cat $rscriptconf >> $localconf
 
 echo "Done."
 
