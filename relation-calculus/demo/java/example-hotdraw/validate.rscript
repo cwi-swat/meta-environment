@@ -21,9 +21,9 @@ rel[ClassName,ClassName] EXTENDS_CLASS
 rel[ClassName,InterfaceName] IMPLEMENTS
 rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE     
 					
-rel[VarName, loc] METHOD_CALL		
+rel[VarName, loc, MethodName] METHOD_CALL		
 
-int nFiles = # FILES
+int nFile = # FILE
 yield nFile
 
 assert "nFile": nFile == 160

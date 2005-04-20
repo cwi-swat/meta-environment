@@ -31,7 +31,7 @@ rel[str,str] INHERITANCE =  EXTENDS_CLASS union EXTENDS_INTERFACE
 %%rel [ loc, str ] CLASS_DECL = inv(CLASS)
 %%yield CLASS_DECL
 
-bag[ClassName] CLASS_OR_INTERFACE_NAME = domain(CLASS) union domain(INTERFACE)
+set[ClassName] CLASS_OR_INTERFACE_NAME = domain(CLASS) union domain(INTERFACE)
 
 rel [str, str] CONTAINMENT = 
     {<C, T> | <FieldName F, loc FL, TypeName T> : FIELD_DECL, 
