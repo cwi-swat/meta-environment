@@ -154,7 +154,7 @@ proc mkUserInterface {} {
 	label $w.control.$pane.label -text $options(label-$pane)
 	pack  $w.control.$pane.label -side top
         if { $pane == "items" } {
-	    set ht 32
+	    set ht 30
         } else {
 	    set ht 10
         }
