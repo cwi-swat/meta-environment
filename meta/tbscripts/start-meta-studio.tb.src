@@ -2,7 +2,6 @@
 #include "gui.idef"
 #include "dialog.idef"
 #include "graph-painter.idef"
-#include "import-hierarchy.idef"
 #include "module-selection-listener.tb"
 
 /* sdf-meta */
@@ -20,9 +19,6 @@ process StartDialogTool is
 
 process StartGraphPanel is
   snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar"))
-
-process StartImportHierarchy is
-  snd-msg(load-jar("file://__PKGDATA__/import-hierarchy.jar"))
 
 process MetaGUI is
 let
@@ -46,7 +42,6 @@ in
   . StartNavigator()
   . StartDialogTool()
   . StartGraphPanel()
-  . StartImportHierarchy()
 
   . snd-msg(post-initialization-hook)
   . rec-msg(post-initialization-hook-finished)

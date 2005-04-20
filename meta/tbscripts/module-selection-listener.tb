@@ -1,6 +1,5 @@
 #include "navigator.idef"
 #include "graph-painter.idef"
-#include "import-hierarchy.idef"
 
 process SynchronizeModuleSelection is
 let
@@ -12,11 +11,9 @@ in
   (
     rec-note(mb-module-selected(Module?))
     . snd-msg(gp-select-node("import-graph", Module))
-    . snd-msg(ih-set-hierarchy(Module, [], []))
   +
     rec-note(gp-node-selected("import-graph", Module?))
     . snd-msg(mb-select-module(Module))
-    . snd-msg(ih-set-hierarchy(Module, [], []))
   ) 
   * delta
 endlet
