@@ -1,0 +1,7 @@
+Here is the scenarion for doing fact extraction and visualization of JHotDraw:
+
+extract-java -i /ufs/paulk/software/source/JHotDraw -o jhotdraw.rstore.pt
+rscript -i ../rscripts/Enrich.rscript -s jhotdraw.rstore.pt -o enr.jhotdraw.rstore.pt
+rscript -i validate.rscript -s enr.jhotdraw.rstore.pt
+rstore2rviz -i enr.jhotdraw.rstore.pt -o jhotdraw.rviz
+rviz jhotdraw.rviz
