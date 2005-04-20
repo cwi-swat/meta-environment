@@ -17,7 +17,10 @@ EXTRA_DIST      = $(wildcard *.sdf) \
 		  meta.buttons \
 		  meta.conf
 
-CLEANFILES =  rscript.meta.buttons rscript.meta.conf
+CLEANFILES =     rscript.meta.buttons \
+		 rscript.meta.conf \
+		 Rscript.trm.tbl \
+		 Rstore.trm.tbl
 
 
 specdir         = $(pkgdatadir)
