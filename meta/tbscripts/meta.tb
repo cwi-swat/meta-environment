@@ -16,7 +16,6 @@
 
 /* user interface */
 #include "user-interface.tb"
-#include "module-browser.idef"
 
 /* tide support */
 #define TIDE_PASSIVE
