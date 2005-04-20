@@ -33,7 +33,7 @@ Usage: $PRG [options] <input-files>
 Parameters:
 
   -o | --output <file>      specify resulting rstore (default: $RESULTING_RSTORE)
-  -e | --executable <file>  specify executable for perforing extraction extraction (default: none)
+  -e | --executable <file>  specify executable for performing extraction (default: none)
   -s | --sort <sort>        specify top sort for parsing input files (default: none)
   -f | --function <name>    specificy the extraction function to be applied (default: extractRelations)
   -p | --parse-table <file> specify parse table for input files (default: none)

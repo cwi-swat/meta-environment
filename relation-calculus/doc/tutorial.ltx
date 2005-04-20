@@ -3476,6 +3476,46 @@ excutes \texttt{tests2.rscript} as test suite and reports which assert
 statements failed (if any).
 \end{itemize}
 
+\subsection{\texttt{extract-relations}: extract relations from source files}
+
+The command \texttt{extract-relations} provides a common framework for
+\asfsdf-based fact extraction. 
+
+\begin{exam}
+\texttt{extract-relations [options] <input-files>}
+\end{exam}
+
+\noindent The following optional arguments are supported:
+
+\begin{itemize}
+
+\item \texttt{-h} or \texttt{--help}; print help information.
+
+\item \texttt{-o} \emph{file} or \texttt{--output} \emph{file}: the name of resulting rstore 
+(default: \texttt{result.rstore.pt}).
+
+\item \texttt{-e} \emph{file} or \texttt{--executable}\emph{file}: the
+executable for performing extraction (default: none). This is most
+likely to be a compiled \asfsdf specification.
+
+\item \texttt{-s} \emph{sort} or \texttt{--sort} \emph{sort}:
+\emph{sort} is the sort used for parsing input files (default:
+none). Example: \texttt{CompilationUnit}.
+
+\item \texttt{-f} \emph{name} or \texttt{--function} \emph{name}: the extraction function to be applied 
+to each source file (default: \texttt{extractRelations}).
+
+\item \texttt{-p} \emph{file} or \texttt{--parse-table} \emph{file}: the parse table \emph{file} used for parsing input files (default: none).
+
+\end{itemize}
+
+\begin{verbatim}
+
+Example:
+  extract-relations -e TBExtraction -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
+
+\end{verbatim}
+
 
 \subsection{\texttt{merge-rstores}: combine several rstores}
 
@@ -3504,11 +3544,12 @@ By default, the output is \texttt{result.rstore.pt}.
 \end{itemize}
 
 \section{Running \rscript Interactively} \label{SEC:running-interactive}
+You can also edit and run Rscripts interactively:
 \begin{itemize}
 \item Change directory to your checked out copy of the directory {\tt relation-calculus/spec}.
 \item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
-\item Open your own term, using the Rscript module.
+\item Open your own term, using the {\tt Rscript} module.
 \item Observe that a new menu with the name {\tt Rscript} appears in the menu bar.
 \item Click the parse button in the {\tt Actions} menu of the editor:
 now we know whether there are syntax errors. If so, correct them.
@@ -3533,12 +3574,59 @@ button in the {\tt Rscript} menu.  The effect is that the script is executed
 and that a summary is printed of {\tt assert} statement that succeeded or
 failed.
 
-\paragraph{Miscellaneous}
-The subdirectory {\tt rscripts} contains several sample scripts.  See {\tt
+\section{Other Tools and Demos}
+
+\subsection{Examples}
+
+The subdirectory {\tt rscripts} contains several sample scripts.  See, for instance, {\tt
 tests1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
 operators and functions.
 
-The subdirectory {\tt demo} contains larger demos.
+\subsection{The Pico Demo}
+
+The subdirectory {\tt demo/pico} contains in a single directory the
+Pico syntax, Pico fact extraction (discussed in
+Section~\ref{SEC:ASF+SDF-extraction}) and the test on uninitialized
+variables presented in Section~\ref{SEC:uninit}.
+
+\begin{itemize}
+
+\item Change directory to \texttt{demo/pico}: \texttt{cd demo/pico}.
+
+\item Start the \asfsdf Meta-Environment: \texttt{meta -m Pico-syntax.sdf}.
+
+\item Open the term \texttt{exam.pico} over module \texttt{Pico-syntax.sdf}.
+
+\item Under the \texttt{Pico} menu two styles of checking are available:
+  \begin{itemize}
+  \item Extract Relations: this extracts relations from the current Pico program.
+  \item Uninitialized Vars (Style 1): uses the extracted facts and
+  executes the \rscript \texttt{uninit.rscript}, see
+  Figure~\ref{FIG:PicoFactExtraction-extractRelations}.
+  \item Uninitialized Vars (Style 2): performs combined facts extraction and 
+   query processing, see Figure~\ref{FIG:PicoFactExtraction-uninit}.
+  \end{itemize}
+  See Figure~\ref{FIG:meta-pico} for a screen dump.
+
+\end{itemize}
+
+\subsection{The Java Demo}
+
+The Java demo consists of the following parts:
+
+\begin{itemize}
+
+\item \texttt{java/grammar}: Contains a SDF grammar for Java.
+
+\item \texttt{java/extraction}: defines \texttt{JavaAnalysis}, that
+performs basic fact extraction from Java source code.
+
+\item \texttt{java/rscripts}:
+
+\item \texttt{java/example-hotdraw}:
+
+\end{itemize}
+
 
 \chapter{Visualization of Rstores} \label{SEC:Visualization}
 
@@ -3547,8 +3635,8 @@ The subdirectory {\tt demo} contains larger demos.
 the most trivial problems are voluminous and their textual representation is
 hard to graps for the human eye. This is where information visualization
 techniques (**) come to our rescue.  In this chapter we present some initial
-experiments to visualize the contents of an Rstore. This is a multi--stage
-process that if first described in Section~\ref{SEC:visualize-workflow}.
+experiments to visualize the contents of an Rstore. This is a multi-stage
+process described in Section~\ref{SEC:visualize-workflow}.
 First facts are extracted from the source
 (Section~\ref{SEC:ExtractingFactsAgain})
 and are further enriched (Section~\ref{SEC:EnrichingFacts}).
