@@ -16,6 +16,8 @@
 \newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
 \newcommand{\rstore}[0]{\textsc{Rstore}\xspace}
 \newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
+\newcommand{\TB}[0]{\textsc{ToolBus}\xspace}
+
 \newcommand{\note}[1]{\paragraph{Note:} \emph{#1}}
 
 \newenvironment{exam}
@@ -3476,10 +3478,10 @@ excutes \texttt{tests2.rscript} as test suite and reports which assert
 statements failed (if any).
 \end{itemize}
 
-\subsection{\texttt{extract-relations}: extract relations from source files}
+\subsection{\texttt{extract-relations}: extract relations from source files} \label{SEC:extract-relations}
 
 The command \texttt{extract-relations} provides a common framework for
-\asfsdf-based fact extraction. 
+\asfsdf-based fact extraction and has the following form:
 
 \begin{exam}
 \texttt{extract-relations [options] <input-files>}
@@ -3491,30 +3493,48 @@ The command \texttt{extract-relations} provides a common framework for
 
 \item \texttt{-h} or \texttt{--help}; print help information.
 
-\item \texttt{-o} \emph{file} or \texttt{--output} \emph{file}: the name of resulting rstore 
+\item \texttt{-o} \emph{file} or \texttt{--output} \emph{file}: the name of
+  the resulting rstore 
 (default: \texttt{result.rstore.pt}).
 
-\item \texttt{-e} \emph{file} or \texttt{--executable}\emph{file}: the
-executable for performing extraction (default: none). This is most
+\item \texttt{-e} \emph{program} or \texttt{--executable} \emph{program}: the
+executable \emph{program} for performing extraction (default: none). This is most
 likely to be a compiled \asfsdf specification.
 
 \item \texttt{-s} \emph{sort} or \texttt{--sort} \emph{sort}:
-\emph{sort} is the sort used for parsing input files (default:
-none). Example: \texttt{CompilationUnit}.
+\emph{sort} is the sort used for parsing each input file (default:
+none). In other words, each input file should conform to the syntax of \emph{sort}.
+Example: \texttt{CompilationUnit}.
 
 \item \texttt{-f} \emph{name} or \texttt{--function} \emph{name}: the extraction function to be applied 
-to each source file (default: \texttt{extractRelations}).
+to each source file (default: \texttt{extractRelations}). The definition of
+this function should conform to:
+\begin{exam}
+\texttt{extractRelations(}\emph{sort}\texttt{) -> RSTORE}
+\end{exam}
+where \emph{sort} is the sort of each input file as defined above.
 
 \item \texttt{-p} \emph{file} or \texttt{--parse-table} \emph{file}: the parse table \emph{file} used for parsing input files (default: none).
 
 \end{itemize}
 
-\begin{verbatim}
+\noindent The following examples illustrate the use of the \texttt{extract-relations} command:
 
-Example:
-  extract-relations -e TBExtraction -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
+\begin{itemize}
 
-\end{verbatim}
+\item \texttt{extract-relations -e JavaAnalysis -s CompilationUnit -o
+  jhotdraw.rstore.pt -p Java.trm.tbl dir/*.java}: extract relations from Java souce
+  code in the files \texttt{dir/*.java}. Use executable \texttt{JavaAnalysis}, each input file is of sort
+  \texttt{CompilationUnit}, use parse table  \texttt{Java.trm.tbl}, and
+  produce as output an rstore \texttt{jhotdraw.rstore.pt}.
+
+\item
+  \texttt{extract-relations -e TBExtr -s Tscript -p Tscript.trm.tbl *.tb}:
+  extract relations from \TB source files. Use executable \texttt{TBExtr}, each input file is of
+  sort \texttt{Tscript}, use parse table \texttt{Tscript.trm.tbl} and extract
+  from the source files \texttt{*.tb}.
+
+\end{itemize}
 
 
 \subsection{\texttt{merge-rstores}: combine several rstores}
@@ -3618,15 +3638,77 @@ The Java demo consists of the following parts:
 
 \item \texttt{java/grammar}: Contains a SDF grammar for Java.
 
-\item \texttt{java/extraction}: defines \texttt{JavaAnalysis}, that
-performs basic fact extraction from Java source code.
+\item 
+\begin{sloppypar}
+\texttt{java/extraction}: defines \texttt{JavaAnalysis}, that
+performs basic fact extraction from Java source code. It also defines the
+command \texttt{extract-java}, a specialized version of
+\texttt{extract-relations} (see Section~\ref{SEC:extract-relations}):
+\end{sloppypar}
 
-\item \texttt{java/rscripts}:
+\item \texttt{java/rscripts}: defines a script \texttt{Enrich.rscript} enrich
+  the facts extracted by JavaAnalysis. It also defines some sample scripts
+that operate on the enriched rstores.
 
-\item \texttt{java/example-hotdraw}:
+\item \texttt{java/example-hotdraw}: gives data for the JhotDraw example.
 
 \end{itemize}
 
+The command \texttt{extract-java} provides a common framework for
+\asfsdf-based fact extraction from Java programs and has the following form:
+
+\begin{exam}
+\texttt{extract-java [options]}
+\end{exam}
+
+\noindent The following optional arguments are supported:
+
+\begin{itemize}
+
+\item \texttt{-h} or \texttt{--help}; print help information.
+
+\item \texttt{-i} \emph{dir} or \texttt{--input} \emph{dir}: the name a
+  directory \emph{dir} that contains the Java source code. All Java source
+  files appearing in (subdirectories of) \emph{dir} will be used as input.
+  (default: current directory).
+
+\item \texttt{-o} \emph{file} or \texttt{--output} \emph{file}: the name of
+  the resulting rstore 
+(default: \texttt{result.rstore.pt}).
+
+\item \texttt{-e} \emph{program} or \texttt{--executable} \emph{program}: the
+executable \emph{program} for performing extraction (default: \texttt{JavaAnalysis}). This is most
+likely to be a compiled \asfsdf specification.
+
+\item \texttt{-f} \emph{name} or \texttt{--function} \emph{name}: the extraction function to be applied 
+to each source file (default: \texttt{extractRelations}). The definition of
+this function should conform to:
+\begin{exam}
+\texttt{extractRelations(CompilationUnit) -> RSTORE}
+\end{exam}
+
+\end{itemize}
+
+\noindent The following examples illustrate the use of the
+\texttt{extract-relations} command:
+\begin{exam}
+\texttt{extract-java -i JHotDraw5.2-sources -o jhotdraw.rstore.pt}
+\end{exam}
+
+Here is a scenario to go all the way from Java source code to the
+visualization of the extracted and enriched facts:
+{\footnotesize
+\begin{verbatim}
+cd example-hotdraw
+extract-java -i /ufs/paulk/software/source/JHotDraw -o jhotdraw.rstore.pt
+rscript -i ../rscripts/Enrich.rscript -s jhotdraw.rstore.pt -o enr.jhotdraw.rstore.pt
+rscript -i validate.rscript -s enr.jhotdraw.rstore.pt
+rstore2rviz -i enr.jhotdraw.rstore.pt -o jhotdraw.rviz
+rviz jhotdraw.rviz
+\end{verbatim}
+}
+
+\noindent In the next chapter, we will further explain this scenario.
 
 \chapter{Visualization of Rstores} \label{SEC:Visualization}
 
@@ -3967,10 +4049,9 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 
 
 
-
-
 %% \newpage
 \section*{Acknowledgments}
+Thanks to Tijs van der Storm for many usefull discussions and experiments.
 Thanks to Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
 and Jurgen Vinju for comments on this tutorial.
 

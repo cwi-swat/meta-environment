@@ -12,6 +12,7 @@ datadir=__DATADIR__
 PRG=`basename $0`
 JAVA_PARSE_TABLE=${datadir}/demo/java/grammar/Java.trm.tbl
 JAVA_ANALYSIS=${bindir}/JavaAnalysis
+SOURCE_DIR=.
 EXECUTABLE=${JAVA_ANALYSIS}
 EXTRACTION_FUNCTION=extractRelations
 RESULTING_RSTORE=result.rstore.pt
@@ -25,7 +26,7 @@ cat << ENDCAT >&2
 Usage: $PRG -i dirname [-o rstore]
 
 Options:
-  -i | --input <file>      input from file (default: stdin)
+  -i | --input <dir>       input Java files from directory <dir> (default: current directory)
   -o | --output <file>	   output to file (default: result.rstore.pt)
   -e | --executable <file> specify executable for performing extraction extraction (default: JavaAnalysis)
   -f | --function <name>   specificy the extraction function to be applied (default: extractRelations)
