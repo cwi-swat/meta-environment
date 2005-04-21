@@ -85,6 +85,10 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 					}
 				}
 			}
+			
+			public void mouseReleased(MouseEvent event) {
+				mousePressed(event);
+			}
 		};
 	}
 
