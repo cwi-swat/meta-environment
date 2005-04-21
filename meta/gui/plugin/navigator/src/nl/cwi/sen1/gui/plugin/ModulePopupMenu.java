@@ -167,8 +167,8 @@ public class ModulePopupMenu {
 		item.setAction(new AbstractAction(label) {
 			public void actionPerformed(ActionEvent e) {
 				ATerm event = factory.make(
-						"button-selected(<term>, <str>,<term>)", type,
-						moduleName, action);
+						"popup-menu-event(<term>, <term>,<str>)", type, action,
+						moduleName);
 
 				bridge.postEvent(event);
 			}

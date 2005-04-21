@@ -101,16 +101,16 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		setImports(modules);
 	}
 
-	public void postModuleMenuRequest(Module current) {
+	public void postPopupRequest(Module module) {
 		ATermFactory factory = studio.getFactory();
 		ATerm popup = factory.parse("module-popup");
 
-		if (current.getState() == Module.STATE_NEW) {
+		if (module.getState() == Module.STATE_NEW) {
 			popup = factory.parse("new-module-popup");
 		}
 
-		bridge.postEvent(factory.make("get-events(<term>,<str>)", popup,
-				current.getName()));
+		bridge.postEvent(factory.make("request-popup-event(<term>,<str>)",
+				popup, module.getName()));
 	}
 
 	public void addEvents(ATerm t0, String s1, ATerm t2) {
@@ -137,6 +137,8 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		createModel();
 		addNavigatorComponent();
 		addImportHierarchyComponent();
+		
+		popup = new ModulePopupMenu(studio.getFactory(), bridge);
 	}
 
 	private void createModel() {
@@ -163,7 +165,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 			public JComponent getViewComponent() {
 				return tree;
 			}
-			
+
 			public JMenu getMenu() {
 				return null;
 			}

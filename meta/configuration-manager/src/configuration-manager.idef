@@ -1,3 +1,6 @@
+#ifndef _CONFIGURATION_MANAGER
+#define _CONFIGURATION_MANAGER
+
 /*
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
@@ -126,3 +129,5 @@ in
 endlet
 
 toolbus(ConfigurationManager)
+
+#endif

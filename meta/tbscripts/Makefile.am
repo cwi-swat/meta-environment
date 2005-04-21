@@ -13,6 +13,7 @@ TBSCRIPTS = \
   graph-utils.tb \
   get-parsetable.tb \
   meta.tb \
+  module-actions.tb \
   module-db.tb \
   module-utils.tb \
   module-selection-listener.tb \

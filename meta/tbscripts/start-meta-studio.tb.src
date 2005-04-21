@@ -3,6 +3,7 @@
 #include "dialog.idef"
 #include "graph-painter.idef"
 #include "module-selection-listener.tb"
+#include "module-actions.tb"
 
 /* sdf-meta */
 #include "graph-utils.tb"

@@ -5,39 +5,44 @@ tool navigator is { }
 
 process Navigator is
 let
-  EventList: list,
-  Event: term,
+  Menu: term,
   Graph: term,
   Module: str,
-  Type: term,
-  T: navigator,
+  Modules : list,
+  PopupMenu: list,
   Str : str,
-  Modules : list
+  T: navigator,
+  Type: term
 in
   rec-connect(T?)
   .
     (
-      rec-msg(mb-set-modules(Modules?))
+      rec-msg(nav-set-modules(Modules?))
       . snd-do(T, set-modules(Modules))
     +
-      rec-msg(mb-select-module(Module?))
+      rec-msg(nav-select-module(Module?))
       . snd-do(T, select-module(Module))
     +
       rec-event(T, module-selected(Module?))
-      . snd-note(mb-module-selected(Module))
+      . snd-note(nav-module-selected(Module))
       . snd-ack-event(T, module-selected(Module))
+    +
+      rec-event(T, request-popup-event(Type?, Module?))
+      . snd-msg(nav-request-popup-event(Type, Module))
+      . snd-ack-event(T, request-popup-event(Type, Module))
+    +
+      rec-msg(nav-show-popup(Type, Module, PopupMenu?))
+      . snd-do(T, add-events(Type, Module, PopupMenu))
+    +
+      rec-event(T, popup-menu-event(Type?, Menu?, Module?))
+      . snd-msg(nav-menu-selected(Type, Menu, Module))
+      . snd-ack-event(T, popup-menu-event(Type, Menu, Module))
 /*
     +
       rec-event(T,clear-all)
       . snd-msg(clear-all)
       . rec-msg(cleared-all)
       . snd-ack-event(T,clear-all)
-    +
-      rec-event(T, get-events(Type?, Module?))
-      . snd-msg(cm-get-module-events(Type, Module))
-      . rec-msg(cm-module-events(EventList?))
-      . snd-do(T, add-events(Type, Module, EventList))
-      . snd-ack-event(T, get-events(Type, Module))
     +
       rec-event(T, button-selected(Type?, Event?))
       . snd-msg(ui-button-selected(Type, Event))

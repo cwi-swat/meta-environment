@@ -1,0 +1,33 @@
+#include "navigator.idef"
+#include "configuration-manager.idef"
+
+process HandleModuleEvent(Type: term, Event: term, Module: str) is
+let
+  Actions: list
+in
+  snd-msg(cm-get-module-actions(Type, Event, Module))
+  . rec-msg(cm-module-actions(Actions?))
+  . snd-msg(ai-perform-actions(ui-id, Actions, [str(Module)]))
+  . rec-msg(ai-actions-performed(ui-id, Actions))
+endlet
+
+process HandleModulePopup is
+let
+  Module: str,
+  Menu: term,
+  PopupMenu: list,
+  Type: term
+in
+  (
+    rec-msg(nav-request-popup-event(Type?, Module?))
+    . snd-msg(cm-get-module-events(Type, Module))
+    . rec-msg(cm-module-events(PopupMenu?))
+    . snd-msg(nav-show-popup(Type, Module, PopupMenu))
+  +
+    rec-msg(nav-menu-selected(Type?, Menu?, Module?))
+    . HandleModuleEvent(Type, Menu, Module)
+  )
+  * delta
+endlet
+
+toolbus(HandleModulePopup)
