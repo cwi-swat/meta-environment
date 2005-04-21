@@ -12,9 +12,13 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.MetaGraphFactory;
 import nl.cwi.sen1.data.graph.Node;
+import nl.cwi.sen1.gui.AbstractStudioComponent;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.Preferences;
@@ -79,16 +83,37 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 		};
 	}
 
-	public ATerm sizeGraph(String id, ATerm graphTerm) {
+	private GraphPanel createPanel(final String id) {
 		GraphPanel panel = getPanel(id);
 		if (panel == null) {
-			panel = new GraphPanel(id, preferences);
-			panel.addMouseListener(makeMouseListener(panel));
-			graphs.put(id, panel);
-			panel.setName(id);
-			studio.addComponent(panel);
-		}
+			final GraphPanel newPanel = new GraphPanel(id, preferences);
+			newPanel.addMouseListener(makeMouseListener(newPanel));
+			graphs.put(id, newPanel);	
+			studio.addComponent(new AbstractStudioComponent() {
+				public String getName() {
+					return id;
+				}
 
+				public JComponent getViewComponent() {
+					return newPanel;
+				}
+
+				public JMenu getMenu() {
+					return null;
+				}
+
+				public String getStatusMessage() {
+					return null;
+				}
+
+			});
+			panel = newPanel;
+		}
+		return panel;
+	}
+	
+	public ATerm sizeGraph(String id, ATerm graphTerm) {
+		GraphPanel panel = createPanel(id);
 		Graph graph = graphFactory.GraphFromTerm(graphTerm);
 
 		graph = panel.sizeGraph(graph);
@@ -100,13 +125,14 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 		return (GraphPanel) graphs.get(id);
 	}
 
-	public void recTerminate(ATerm t0) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public String getName() {
 		return TOOL_NAME;
+	}
+
+	public void recTerminate(ATerm t0) {
+	}
+
+	public void recAckEvent(ATerm t0) {
 	}
 
 	public void selectNode(String graphId, String nodeId) {
@@ -116,10 +142,5 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 			panel.setSelectedNode(nodeId);
 			suspendSelectionNotification = false;
 		}
-	}
-
-	public void recAckEvent(ATerm t0) {
-		// TODO Auto-generated method stub
-
 	}
 }

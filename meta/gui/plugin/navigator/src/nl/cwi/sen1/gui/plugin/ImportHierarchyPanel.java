@@ -1,5 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.data.Module;
@@ -92,5 +94,34 @@ public class ImportHierarchyPanel extends JPanel {
 
 	private void refresh() {
 		((DefaultTreeModel) tree.getModel()).reload();
+		expandAll(tree, true);
 	}
+	
+	public void expandAll(JTree tree, boolean expand) {
+		TreeNode root = (TreeNode) tree.getModel().getRoot();
+
+		// Traverse tree from root
+		expandAll(tree, new TreePath(root), expand);
+	}
+
+	private void expandAll(JTree tree, TreePath parent, boolean expand) {
+		// Traverse children
+		TreeNode node = (TreeNode) parent.getLastPathComponent();
+		if (node.getChildCount() >= 0) {
+			for (Enumeration e = node.children(); e.hasMoreElements();) {
+				TreeNode n = (TreeNode) e.nextElement();
+				TreePath path = parent.pathByAddingChild(n);
+				expandAll(tree, path, expand);
+			}
+		}
+
+		// Expansion or collapse must be done bottom-up
+		if (expand) {
+			tree.expandPath(parent);
+		} else {
+			tree.collapsePath(parent);
+		}
+	}
+
+
 }

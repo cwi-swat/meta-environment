@@ -1,8 +1,12 @@
 package nl.cwi.sen1.gui.plugin;
 
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+
 import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
+import nl.cwi.sen1.gui.AbstractStudioComponent;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.Preferences;
@@ -131,8 +135,8 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		studio.connect(getName(), bridge);
 
 		createModel();
-		addNavigatorPanel();
-		addImportHierarchyPanel();
+		addNavigatorComponent();
+		addImportHierarchyComponent();
 	}
 
 	private void createModel() {
@@ -148,22 +152,55 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		});
 	}
 
-	private void addNavigatorPanel() {
-		ModuleTree tree = new ModuleTree(studio.getFactory(), this, moduleModel);
-		tree.setName("Navigator");
-		studio.addComponent(tree);
+	private void addNavigatorComponent() {
+		final ModuleTree tree = new ModuleTree(studio.getFactory(), this,
+				moduleModel);
+		studio.addComponent(new AbstractStudioComponent() {
+			public String getName() {
+				return "Navigator";
+			}
+
+			public JComponent getViewComponent() {
+				return tree;
+			}
+			
+			public JMenu getMenu() {
+				return null;
+			}
+
+			public String getStatusMessage() {
+				return null;
+			}
+
+		});
 	}
 
-	private void addImportHierarchyPanel() {
-		final ImportHierarchyPanel panel = new ImportHierarchyPanel(moduleModel,
-				preferences);
-		panel.setName("Import Hierarchy");
+	private void addImportHierarchyComponent() {
+		final ImportHierarchyPanel panel = new ImportHierarchyPanel(
+				moduleModel, preferences);
 		moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
 			public void moduleSelected(Module module) {
 				panel.setHierarchy(module);
 			}
 		});
-		studio.addComponent(panel);
+		studio.addComponent(new AbstractStudioComponent() {
+			public String getName() {
+				return "Import Hierarchy";
+			}
+
+			public JComponent getViewComponent() {
+				return panel;
+			}
+
+			public JMenu getMenu() {
+				return null;
+			}
+
+			public String getStatusMessage() {
+				return null;
+			}
+
+		});
 	}
 
 	public void selectModule(String moduleName) {
