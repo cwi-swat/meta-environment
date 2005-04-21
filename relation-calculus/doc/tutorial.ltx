@@ -104,7 +104,7 @@ term rewriting.
 Once you start considering problems from a relational perspective, elegant and
 concise solutions start to appear. Some examples are:
 \begin{itemize}
-\item Analysis of call graphs and the structure og software architectures.
+\item Analysis of call graphs and the structure of software architectures.
 \item Detailed analysis of the control flow or dataflow of programs.
 \item Program slicing.
 \item Type checking.
@@ -131,7 +131,7 @@ establish what is and what is not new in our approach:
   RPA~\cite{FeijsKrikhaarOmmering98} we provide a relational \emph{calculus}
   as opposed to a relational algebra. Although the two have the same
   expressive power, a calculus increases, in our opinion, the readability of
-  relational expressions beacuse they allow the introduction of variables to
+  relational expressions because they allow the introduction of variables to
   express intermediate results.
 
 \item We integrate an equation solver in a relational language. In this way
@@ -168,7 +168,7 @@ relational algebra is described in~\cite{WadlerLists87,Trinder89}. A further
 analysis of this topic is given in~\cite{Buneman94}.
 
 Systems supporting relational programming include RELVIEW~\cite{RELVIEW98}
-(intended for the interactive creation and visualisation of relations
+(intended for the interactive creation and visualization of relations
 and the prototyping of graph algorithms), ...
 
 \paragraph{Relations and Program Analysis}
@@ -209,7 +209,7 @@ The most interesting part of this tutorial is probably
 Chapter~\ref{SEC:larger-examples} where we present a menagerie of larger
 examples ranging from computing the McCabe complexity of code, analyzing the
 component structure of systems, to program slicing.
-Chapter~\ref{SEC:running-rscript} describes howto run an \rscript.
+Chapter~\ref{SEC:running-rscript} describes how to run an \rscript.
 Two appendices complete this tutorial:
 Appendix~\ref{AP:operators} summarizes all built-in operators
 and Appendix~\ref{AP:functions} summarizes all built-in functions.
@@ -218,7 +218,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.
 
 \fbox{\epsfig{figure=figs/caruso.ps,width=6cm}}
 \label{FIG:caruso}
-\hspace*{0.5cm}\parbox[b]{8.5cm}{Suppose a mystery box ends up on your desk. When you open it, it contains a
+\hspace*{0.5cm}\parbox[b]{8cm}{Suppose a mystery box ends up on your desk. When you open it, it contains a
 huge software system with several questions attached to it:
 
 \begin{itemize}
@@ -233,13 +233,13 @@ huge software system with several questions attached to it:
 \item What are the leaves of this application, i.e., procedures that are
 called but do not make any calls themselves?
 
-\item Which procedures call each other indirectly?
+
 \end{itemize}
 }
 
 \begin{itemize}
 
-
+\item Which procedures call each other indirectly?
 
 \item Which procedures are called directly or indirectly from each entry
   point?
@@ -444,7 +444,7 @@ analysis particularly suited for studying large systems.
 \chapter{The \rscript Language} \label{SEC:rscript-language}
 \fbox{\epsfig{figure=figs/signalpha-web.ps,width=6cm}},{}]
 \label{FIG:signalpha}
-\hspace*{0.5cm}\parbox[b]{8cm}{
+\hspace*{0.5cm}\parbox[b]{7.8cm}{
 \rscript is based on \emph{binary relations} only and has no direct support
 for $n$-ary relations with labeled columns as usual in a general database
 language. However, some syntactic support for $n$-ary relations exists. We
@@ -585,6 +585,11 @@ str S = TR.middle
 first introduces the composite type {\tt Triple} and defines the {\tt Triple} variable
 {\tt TR}. Next, the field selection {\tt TR.middle} is used to define the
 string {\tt S}.
+
+\paragraph{Implementation Note.} The current implementation severely restricts the re-use of
+field names in different type declarations.  The only re-use that is
+allowed are fields with the same name and the same type that appear at
+the same position in different type declarations.
 
 \paragraph{Type equivalence}
 An \rscript should be \emph{well-typed}, this means above all that identifiers
@@ -881,7 +886,7 @@ The expressions $E_i$ may refer to any of the variables
 
 \begin{itemize}
 \item 
-Although transitive closure is proivided as a built-in operator, we can use
+Although transitive closure is provided as a built-in operator, we can use
 equations to define the transitive closure of a relation.
 Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R \circ R) \cup ... .\]
 This can be expressed as follows.
@@ -1827,7 +1832,7 @@ int sum-domain(rel[int,&T] R) = primitive
 Be aware that
 \verb@sum(domain({<1,"a">, <2,"b"">, <1, "c">}))@ would be equal to {\tt 3}
 because the function {\tt domain} creates a \emph{set} (as
-opposed to a bag) and its result would thus contain only one occurence of {\tt 1}.
+opposed to a bag) and its result would thus contain only one occurrence of {\tt 1}.
 }
 %%----
 \functiona{Sum of Second Elements of Tuples in a Relation}{sum-range}
@@ -1920,7 +1925,7 @@ Chapter~\ref{SEC:motivating-example} as a reminder. The component structure of
 an application is analyzed in Section~\ref{SEC:components}  and Java systems
 are analyzed in Section~\ref{SEC:Java-analysis}. Next we move on to the
 detection
-of unitialized variables in Section~\ref{SEC:uninit} and we explain how source
+of initialized variables in Section~\ref{SEC:uninit} and we explain how source
 code locations can be included in a such an analysis
 (Section~\ref{SEC:UsingLocations}).
 
@@ -2168,9 +2173,9 @@ rel[expr,varname] USES = {<5,"q">, <6,"y">, <6,"x">, <10,"z">}
 \end{exam}
 
 This concludes the extraction phase. Next, we have to enrich these basic
-facts to obtain the unitialized variables in the program. 
+facts to obtain the initialized variables in the program. 
 
-So, when is a variable \emph{V} in some statement \emph{S} unitialized?  If we
+So, when is a variable \emph{V} in some statement \emph{S} initialized?  If we
 execute the program (starting in {\tt ROOT}), there may be several possible
 execution path that can reach statement \emph{S}.  All is well if \emph{all}
 these execution path contain a definition of \emph{V}.  However, if one or
@@ -2312,7 +2317,7 @@ rel[var, varname] UNINIT =
 \end{exam}
 This definition can be understood as follows:
 \begin{itemize}
-\item {\tt var-name VN : VARNAMES} generates all varaible names.
+\item {\tt var-name VN : VARNAMES} generates all variable names.
 \item {\tt var V : USES[-,VN]} generates all variable uses {\tt V} for variables
   with name {\tt VN}.
 \item As before, {\tt expr E : reachX({ROOT}, DEFS[-,VN], PRED)} generates all
@@ -2320,7 +2325,7 @@ This definition can be understood as follows:
   without encountering a definition for variables named {\tt VN}.
 \item {\tt V <= E} tests whether variable use {\tt V} is enclosed in that
   expression (using a comparison on locations).  If so, we have found an
-  unitialized occurrence of the variable named {\tt VN}.
+  uninitialized occurrence of the variable named {\tt VN}.
 \end{itemize}
 
 In Figure~\ref{FIG:meta-pico} it is shown how checking of Pico programs in the
@@ -2766,7 +2771,7 @@ automatically decomposing programs in parts by analyzing their data
 flow and control flow. Typically, a given statement in a program is
 selected as the \emph{slicing criterion} and the original program is
 reduced to an independent subprogram, called a \emph{slice}, that is
-guaranteed to represent faithfully the behaviour of the original
+guaranteed to represent faithfully the behavior of the original
 program at the slicing criterion.  An example is given in
 Figure~\ref{FIG:slicing}.  The initial program is given in
 Figure~\ref{FIG:slicing}(a).  The slice with statement {\tt [9]} as
@@ -2952,11 +2957,11 @@ three main phases:
 Of course, it may happen that you have a lucky day and that extracted facts
 are readily available or that you can reuse a good quality fact extractor that
 you can apply to the SUI. On ordinary days you have the above workflow as
-fallback.
+fall-back.
 
 It may come as a surprise that there is such a strong emphasis on validation
 in this workflow. The reason is that the SUI is usually a huge system that
-defeats manual inspection. Therefore we must be very carefull that we validate
+defeats manual inspection. Therefore we must be very careful that we validate
 the outcome of each phase.
 
 \paragraph{Grammar}
@@ -3084,7 +3089,7 @@ some things to observe:
 \begin{itemize}
 \item Module {\tt Pico-syntax} is imported to make available the Pico
   grammar.
-\item Module {\tt Rstore} is imported to get acces to all functions on
+\item Module {\tt Rstore} is imported to get access to all functions on
   Rstores.
 \item The module {\tt PosInfo} is imported with various sort names as
   parameter. For all these sorts, the function {\tt get-location} will be
@@ -3286,7 +3291,7 @@ which the specification contains an equation. In the case of {\tt defs},
 equation {\tt [vd1]} operations on assignment statements and extracts a pair
 that relates the location of the complete statement to the name of the
 variable on the left-hand side. For the function {\tt uses}, equation {\tt
-[vu1]} acts on all uses of variables. For compleness sake, the figure also
+[vu1]} acts on all uses of variables. For completeness sake, the figure also
 show the definition of utility function {\tt id2str}.
 
 \paragraph{Queries}
@@ -3313,7 +3318,7 @@ complete \rscript in an ASF+SDF equation. Also pay attention to the following:
 \begin{itemize}
 
 \item The \rscript is first simplified as much as possible according to
-  ordinary ASF+SDF simplication rules. This implies that variables like {\tt
+  ordinary ASF+SDF simplification rules. This implies that variables like {\tt
   \$Start}, {\tt \$Rel1}, and {\tt \$Program} are replaced by their respective
   values. This is also the case for the functions {\tt defs} and {\tt uses}
   that occur in the \rscript.
@@ -3474,7 +3479,7 @@ executes the script \texttt{calls.rscript} and prints the value of the variable 
 in the resulting rstore.
 
 \item \texttt{rscript -t tests1.rscript}:
-excutes \texttt{tests2.rscript} as test suite and reports which assert
+executes \texttt{tests2.rscript} as test suite and reports which assert
 statements failed (if any).
 \end{itemize}
 
@@ -3523,7 +3528,7 @@ where \emph{sort} is the sort of each input file as defined above.
 \begin{itemize}
 
 \item \texttt{extract-relations -e JavaAnalysis -s CompilationUnit -o
-  jhotdraw.rstore.pt -p Java.trm.tbl dir/*.java}: extract relations from Java souce
+  jhotdraw.rstore.pt -p Java.trm.tbl dir/*.java}: extract relations from Java source
   code in the files \texttt{dir/*.java}. Use executable \texttt{JavaAnalysis}, each input file is of sort
   \texttt{CompilationUnit}, use parse table  \texttt{Java.trm.tbl}, and
   produce as output an rstore \texttt{jhotdraw.rstore.pt}.
@@ -3715,7 +3720,7 @@ rviz jhotdraw.rviz
 \fbox{\epsfig{figure=figs/camera-obscura.ps,width=8cm}} \label{FIG:camera-obscura}
 \hspace*{0.5cm}\parbox[b]{6cm}{ The sets and relations constructed for all but
 the most trivial problems are voluminous and their textual representation is
-hard to graps for the human eye. This is where information visualization
+hard to grasp for the human eye. This is where information visualization
 techniques (**) come to our rescue.  In this chapter we present some initial
 experiments to visualize the contents of an Rstore. This is a multi-stage
 process described in Section~\ref{SEC:visualize-workflow}.
@@ -3778,7 +3783,7 @@ assume that there exists an \texttt{extract} tool that can be used:
 \end{exam}
 where \texttt{SUISrcDir} is the source directory where the source of the SUI
 can be found. In the distribution a tool \texttt{extract-java} is available with precisely
-this behaviour for Java programs.
+this behavior for Java programs.
 
 \section{Enriching Facts} \label{SEC:EnrichingFacts}
 Given the Rstore  \texttt{SUI.rstore.pt} we enrich it by writing and executing
@@ -3791,7 +3796,7 @@ we want to achieve:
 
 \section{The \texttt{.rviz} Format} \label{SEC:rvizformat}
 
-Before explaining the conversion to the rviz format, it is helpfull to
+Before explaining the conversion to the rviz format, it is helpful to
 understand this format first.
 Only two forms of data definitions can currently appear in an rviz file.
 \emph{Elements} are values that can occur in relations and are defined by the
@@ -3816,11 +3821,11 @@ The definition of a \emph{tuple} has the following form:
 \texttt{tup} \emph{RelName} \emph{Type1} \emph{Value1} \emph{Type2} \emph{Value2}
 \end{exam}
 \noindent \emph{RelName} is the name of the relation to which the tuple belongs.
-It is followed two type/value pairs that define the two itemts in the tuple.
+It is followed two type/value pairs that define the two items in the tuple.
 An example of a tuple definition is:
 
 \begin{exam}
-\texttt{rel IMPLEMENTS "ClassName" "AbstractHandle" "InterfaceName" "Handle"}
+\texttt{tup IMPLEMENTS "ClassName" "AbstractHandle" "InterfaceName" "Handle"}
 \end{exam}
 
 \paragraph{Discussion} Observe that the current visualization format is very simple and does not 
@@ -3869,7 +3874,7 @@ are of the selected type. By selecting one element from the \emph{Elements}
 pane, that element (and all elements it is associated with by the selected
 relation) will be highlighted in the large graphical pane on the right.
 
-There are two visualisation methods available that can be selected by the button
+There are two visualization methods available that can be selected by the button
 at the bottom left that is alternatively labeled as \texttt{View as Files} or
 \texttt{View as TreeMap}. In the former case, files are shown as rectangles
 with a a pattern of horizontal lines inside that reflect their textual
@@ -4019,16 +4024,6 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 \end{supertabular}
 \end{center}
 
-%%\chapter{TO DO}
-%%\begin{itemize}
-%%\item {\tt all-path-to}, {\tt sort} not described.
-%%\item $n$-ary relations
-%%\item Termination criteria for solving equations
-%%\item Access functions for $n$-ary tuples.
-%%\item Describe Rstores
-%%\item Give Rscript grammar
-%%\item Give workflows for fact extraction etc.
-%%\end{itemize}
 
 
 
@@ -4051,7 +4046,7 @@ Figure Figure~\ref{FIG:rviz2} shows the same selection, but this time in the tre
 
 %% \newpage
 \section*{Acknowledgments}
-Thanks to Tijs van der Storm for many usefull discussions and experiments.
+Thanks to Tijs van der Storm for many useful discussions and experiments.
 Thanks to Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
 and Jurgen Vinju for comments on this tutorial.
 
@@ -4061,7 +4056,7 @@ Most illustrations used in this tutorial concern physical instruments for
   measurement or observation and are taken from H. van de Stadt, \emph{Beknopt
   Leerboek der Natuurkunde} (Concise Text-book of Physics) Tjeenk Willink,
   Zwolle, 1902.
-On the frontpage appears a windlass that amplifies manual power and is used in
+On the front page appears a windlass that amplifies manual power and is used in
 water wells, drilling devices, and wind mills.
 Page~\pageref{FIG:balloon}  shows a hot air balloon combined with a parachute
 (circa 1900).
@@ -4074,7 +4069,7 @@ the Dutch cost.
 The spectroscope on page~\pageref{FIG:spektroskoop} is a design using four
 prisms by Steinheil
 and is used for the improved dispersion and analysis of the light emitted by
-natrium vapour.
+sodium vapor.
 On page~\pageref{FIG:ruhmkorff} appears Ruhmkorff's induction-coil (1851) used
 to create high-Voltage electric currents. 
 Page \pageref{FIG:camera-obscura} shows a variation of the \emph{camera obscura} as
@@ -4085,9 +4080,21 @@ Lassell's telescope (1863) appears on page~\pageref{FIG:teleskoop}.
   appeared in an advertisement in J. Corver, \emph{Het Draadloos
   Amateurstation} (The Wireless Amateur (Radio) Station), Veenstra, 's
   Gravenhage, 1928.
-The sign alphabet on page~\pageref{FIG:signalpha} has been taken from ...
-
-
+The sign alphabet on page~\pageref{FIG:signalpha} has been taken from
+\url{ www.inquiry.net/outdoor/skills/b-p/signaling.htm}
 \bibliographystyle{plain} \bibliography{iwpc,tutorial}
+
+%%\chapter{TO DO}
+%%\begin{itemize}
+%%\item {\tt all-path-to}, {\tt sort} not described.
+%%\item $n$-ary relations
+%%\item Termination criteria for solving equations
+%%\item Access functions for $n$-ary tuples.
+%%\item Describe Rstores
+%%\item Give Rscript grammar
+%%\item Yield
+%%\item Make an index.
+
+%%\end{itemize}
 
 \end{document}
