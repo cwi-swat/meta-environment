@@ -70,13 +70,18 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	private MouseListener makeMouseListener(final GraphPanel panel) {
 		return new MouseAdapter() {
 			public void mousePressed(MouseEvent event) {
-				if (!suspendSelectionNotification) {
-					Node node = panel.getNodeAt(event.getX(), event.getY());
-					if (node != null) {
+				Node node = panel.getNodeAt(event.getX(), event.getY());
+				if (node != null && !suspendSelectionNotification) {
+					String nodeId = node.getId().getId();
+					if (event.isPopupTrigger()) {
+						bridge.postEvent(studio.getFactory().make(
+								"request-popup-event(<str>)", nodeId));
+
+					} else {
 						panel.setSelectedNode(node);
 						bridge.postEvent(studio.getFactory().make(
 								"node-selected(<str>,<str>)", panel.getId(),
-								node.getId().getId()));
+								nodeId));
 					}
 				}
 			}
@@ -88,7 +93,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 		if (panel == null) {
 			final GraphPanel newPanel = new GraphPanel(id, preferences);
 			newPanel.addMouseListener(makeMouseListener(newPanel));
-			graphs.put(id, newPanel);	
+			graphs.put(id, newPanel);
 			studio.addComponent(new AbstractStudioComponent() {
 				public String getName() {
 					return id;
@@ -111,7 +116,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 		}
 		return panel;
 	}
-	
+
 	public ATerm sizeGraph(String id, ATerm graphTerm) {
 		GraphPanel panel = createPanel(id);
 		Graph graph = graphFactory.GraphFromTerm(graphTerm);
@@ -142,5 +147,9 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 			panel.setSelectedNode(nodeId);
 			suspendSelectionNotification = false;
 		}
+	}
+
+	public void showPopup(String nodeId, ATerm t) {
+		// TODO: refactor module popup from navigator
 	}
 }

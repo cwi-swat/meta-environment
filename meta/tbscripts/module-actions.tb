@@ -1,4 +1,5 @@
 #include "navigator.idef"
+#include "graph-painter.idef"
 #include "configuration-manager.idef"
 
 process HandleModuleEvent(Type: term, Event: term, Module: str) is
@@ -14,10 +15,13 @@ endlet
 process HandleModulePopup is
 let
   Module: str,
+  NodeId: str,
   Menu: term,
   PopupMenu: list,
   Type: term
 in
+  GP-AddListener()
+  .
   (
     rec-msg(nav-request-popup-event(Type?, Module?))
     . snd-msg(cm-get-module-events(Type, Module))
@@ -26,6 +30,11 @@ in
   +
     rec-msg(nav-menu-selected(Type?, Menu?, Module?))
     . HandleModuleEvent(Type, Menu, Module)
+  +
+    GP-PopupEvent(NodeId?)
+    . snd-msg(cm-get-module-events(module-popup, NodeId))
+    . rec-msg(cm-module-events(PopupMenu?))
+    . GP-ShowPopup(NodeId, PopupMenu)
   )
   * delta
 endlet

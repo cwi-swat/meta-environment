@@ -44,11 +44,12 @@ public class ModuleTree extends JPanel {
 		});
 		tree.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				JComponent source = (JComponent) e.getSource();
 				int x = e.getX();
 				int y = e.getY();
-				ModulePopupMenu.setPopupLocation((JComponent) e.getSource(),x,y);
+				ModulePopupMenu.setPopupLocation(source, x, y);
 				if (e.isPopupTrigger()) {
-						handlePopupRequest(e.getX(), e.getY());
+					handlePopupRequest(e.getX(), e.getY());
 				}
 			}
 

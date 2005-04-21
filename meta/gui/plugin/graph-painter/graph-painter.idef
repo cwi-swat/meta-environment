@@ -8,6 +8,8 @@ let
   T: graph-painter,
   Graph: term,
   GraphId: str,
+  Menu: str,
+  PopupMenu: list,
   NodeId: str
 in
   rec-connect(T?)
@@ -27,10 +29,30 @@ in
     rec-event(T, node-selected(GraphId?, NodeId?))
     . snd-note(gp-node-selected(GraphId, NodeId))
     . snd-ack-event(T, node-selected(GraphId, NodeId))
+  +
+    rec-event(T, request-popup-event(NodeId?))
+    . snd-note(gp-request-popup-event(NodeId))
+    . snd-ack-event(T, request-popup-event(NodeId))
+  +
+    rec-msg(gp-show-popup(NodeId?, PopupMenu?))
+    . snd-do(T, show-popup(NodeId, PopupMenu))
+  +
+    rec-event(T, popup-menu-event(Menu?, NodeId?))
+    . snd-msg(nav-menu-selected(Menu, NodeId))
+    . snd-ack-event(T, popup-menu-event(Menu, NodeId))
   )
   *
   rec-disconnect(T)
 endlet
+
+process GP-AddListener is
+  subscribe(gp-request-popup-event(<str>))
+
+process GP-PopupEvent(NodeId: str?) is
+  rec-note(gp-request-popup-event(NodeId?))
+
+process GP-ShowPopup(NodeId: str, PopupMenu: list) is
+  snd-msg(gp-show-popup(NodeId, PopupMenu))
 
 toolbus(GraphPainter)
 
