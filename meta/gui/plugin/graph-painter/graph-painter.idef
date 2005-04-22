@@ -8,7 +8,7 @@ let
   T: graph-painter,
   Graph: term,
   GraphId: str,
-  Menu: str,
+  Menu: term,
   PopupMenu: list,
   NodeId: str
 in
@@ -30,29 +30,34 @@ in
     . snd-note(gp-node-selected(GraphId, NodeId))
     . snd-ack-event(T, node-selected(GraphId, NodeId))
   +
-    rec-event(T, request-popup-event(NodeId?))
-    . snd-note(gp-request-popup-event(NodeId))
-    . snd-ack-event(T, request-popup-event(NodeId))
+    rec-event(T, request-popup-event(GraphId?, NodeId?))
+    . snd-msg(gp-request-popup-event(GraphId, NodeId))
+    . snd-ack-event(T, request-popup-event(GraphId, NodeId))
   +
-    rec-msg(gp-show-popup(NodeId?, PopupMenu?))
-    . snd-do(T, show-popup(NodeId, PopupMenu))
+    rec-msg(gp-show-popup(GraphId?, NodeId?, PopupMenu?))
+    . snd-do(T, show-popup(GraphId, NodeId, PopupMenu))
   +
-    rec-event(T, popup-menu-event(Menu?, NodeId?))
-    . snd-msg(nav-menu-selected(Menu, NodeId))
-    . snd-ack-event(T, popup-menu-event(Menu, NodeId))
+    rec-event(T, popup-menu-event(GraphId?, NodeId?, Menu?))
+    . snd-msg(gp-menu-selected(GraphId, NodeId, Menu))
+    . snd-ack-event(T, popup-menu-event(GraphId, NodeId, Menu))
   )
   *
   rec-disconnect(T)
 endlet
 
 process GP-AddListener is
-  subscribe(gp-request-popup-event(<str>))
+  subscribe(gp-node-selected(<str>,<str>))
 
-process GP-PopupEvent(NodeId: str?) is
-  rec-note(gp-request-popup-event(NodeId?))
 
-process GP-ShowPopup(NodeId: str, PopupMenu: list) is
-  snd-msg(gp-show-popup(NodeId, PopupMenu))
+
+process GP-RequestPopup(GraphId: str?, NodeId: str?) is
+  rec-msg(gp-request-popup-event(GraphId?, NodeId?))
+
+process GP-ShowPopup(GraphId: str, NodeId: str, PopupMenu: list) is
+  snd-msg(gp-show-popup(GraphId, NodeId, PopupMenu))
+
+process GP-PopupEvent(GraphId: str?, NodeId: str?, MenuItem: term?) is
+  rec-msg(gp-menu-selected(GraphId?, NodeId?, MenuItem?))
 
 toolbus(GraphPainter)
 

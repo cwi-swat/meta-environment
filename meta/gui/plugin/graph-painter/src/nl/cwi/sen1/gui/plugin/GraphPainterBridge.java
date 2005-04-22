@@ -1,6 +1,6 @@
 // Java tool bridge GraphPainterBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 21, 2005 11:53:35 AM
+// generation time: Apr 22, 2005 1:14:23 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -47,12 +47,12 @@ public class GraphPainterBridge
   }
 
   //}}}
-  //{{{  public void showPopup(String s0, ATerm t1)
+  //{{{  public void showPopup(String s0, String s1, ATerm t2)
 
-  public void showPopup(String s0, ATerm t1)
+  public void showPopup(String s0, String s1, ATerm t2)
   {
     if (tool != null) {
-      tool.showPopup(s0, t1);
+      tool.showPopup(s0, s1, t2);
     }
     else {
       throw new UnsupportedOperationException("method `showPopup' not supported.");

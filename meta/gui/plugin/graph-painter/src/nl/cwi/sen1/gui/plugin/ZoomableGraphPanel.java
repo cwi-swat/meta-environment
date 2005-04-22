@@ -38,8 +38,6 @@ public class ZoomableGraphPanel extends JPanel {
 
 	protected MetaGraphFactory factory;
 
-	private JViewport view;
-
 	private JLabel zoomToFit;
 
 	public ZoomableGraphPanel(MetaGraphFactory factory, String id, Preferences preferences) {
@@ -61,7 +59,7 @@ public class ZoomableGraphPanel extends JPanel {
 		};
 
 		JScrollPane scrolledPane = new JScrollPane(graphPanel);
-		view = scrolledPane.getViewport();
+		final JViewport view = scrolledPane.getViewport();
 
 		Color bgcolor = Color.WHITE;
 		//Preferences.getColor("graph.background");

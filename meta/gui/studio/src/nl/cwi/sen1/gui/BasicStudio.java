@@ -268,6 +268,8 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 			createRootWindow();
 		}
 		DockingUtil.addWindow(view, rootWindow);
+		rootWindow.validate();
+		rootWindow.repaint();
 	}
 
 	private JMenu createThemesMenu() {

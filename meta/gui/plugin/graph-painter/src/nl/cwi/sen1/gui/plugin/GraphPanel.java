@@ -49,7 +49,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
 	private int max_y;
 
-//	private boolean dragEnabled = true;
+	// private boolean dragEnabled = true;
 
 	private FontMetrics metrics;
 
@@ -155,11 +155,11 @@ public class GraphPanel extends JComponent implements Scrollable {
 			// y = 0;
 			// }
 			// port.setViewPosition(new java.awt.Point(x, y));
-			//					}
-			//					lastX = absX;
-			//					lastY = absY;
-			//				}
-			//			}
+			// }
+			// lastX = absX;
+			// lastY = absY;
+			// }
+			// }
 		};
 		return mouseMotionListener;
 	}
@@ -170,7 +170,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 	}
 
 	public void setDragEnabled(boolean on) {
-//		dragEnabled = on;
+		// dragEnabled = on;
 	}
 
 	private void updateGeometry() {
@@ -179,11 +179,8 @@ public class GraphPanel extends JComponent implements Scrollable {
 			max_y = 0;
 		} else {
 			calcBoundingBox();
-			invalidate();
-
-			validate();
 		}
-		repaint();
+		revalidate();
 	}
 
 	private void calcBoundingBox() {

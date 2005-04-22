@@ -15,28 +15,41 @@ endlet
 process HandleModulePopup is
 let
   Module: str,
+  GraphId: str,
   NodeId: str,
   Menu: term,
   PopupMenu: list,
   Type: term
 in
-  GP-AddListener()
-  .
   (
-    rec-msg(nav-request-popup-event(Type?, Module?))
-    . snd-msg(cm-get-module-events(Type, Module))
+    NAV-RequestPopup(Module?)
+    . snd-msg(cm-get-module-events(module-popup, Module))
     . rec-msg(cm-module-events(PopupMenu?))
-    . snd-msg(nav-show-popup(Type, Module, PopupMenu))
+    . NAV-ShowPopup(Module, PopupMenu)
   +
-    rec-msg(nav-menu-selected(Type?, Menu?, Module?))
-    . HandleModuleEvent(Type, Menu, Module)
+    NAV-PopupEvent(Module?, Menu?)
+    . HandleModuleEvent(module-popup, Menu, Module)
   +
-    GP-PopupEvent(NodeId?)
-    . snd-msg(cm-get-module-events(module-popup, NodeId))
-    . rec-msg(cm-module-events(PopupMenu?))
-    . GP-ShowPopup(NodeId, PopupMenu)
+    GP-RequestPopup(GraphId?, NodeId?)
+    .
+    if equal(GraphId, "import-graph") then
+      snd-msg(cm-get-module-events(module-popup, NodeId))
+      . rec-msg(cm-module-events(PopupMenu?))
+      . GP-ShowPopup("import-graph", NodeId, PopupMenu)
+    else
+      tau
+    fi
+  +
+    GP-PopupEvent(GraphId?, NodeId?, Menu?)
+    .
+    if equal(GraphId, "import-graph") then
+      HandleModuleEvent(module-popup, Menu, NodeId)
+    else
+      tau
+    fi
   )
-  * delta
+  *
+  delta
 endlet
 
 toolbus(HandleModulePopup)

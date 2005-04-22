@@ -1,6 +1,6 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 21, 2005 10:36:27 AM
+// generation time: Apr 22, 2005 1:03:35 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -18,8 +18,8 @@ abstract public class NavigatorTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PselectModule0;
-  private ATerm PaddEvents0;
   private ATerm PsetModules0;
+  private ATerm PshowPopup0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -44,7 +44,7 @@ abstract public class NavigatorTool
   {
     sigTable.put(factory.parse("rec-do(<navigator>,set-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<navigator>,select-module(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<navigator>,add-events(<term>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<navigator>,show-popup(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<navigator>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<navigator>,<term>)"), new Boolean(true));
   }
@@ -56,8 +56,8 @@ abstract public class NavigatorTool
   private void initPatterns()
   {
     PselectModule0 = factory.parse("rec-do(select-module(<str>))");
-    PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
     PsetModules0 = factory.parse("rec-do(set-modules(<term>))");
+    PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -76,14 +76,14 @@ abstract public class NavigatorTool
       selectModule((String)result.get(0));
       return null;
     }
-    result = term.match(PaddEvents0);
-    if (result != null) {
-      addEvents((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
-      return null;
-    }
     result = term.match(PsetModules0);
     if (result != null) {
       setModules((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PshowPopup0);
+    if (result != null) {
+      showPopup((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PrecAckEvent0);

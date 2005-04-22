@@ -1,5 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 
@@ -9,6 +11,8 @@ import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.gui.AbstractStudioComponent;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.util.PopupHandler;
+import nl.cwi.sen1.util.PopupMenu;
 import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -24,14 +28,14 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
 	private ModuleTreeModel moduleModel;
 
-	private ModulePopupMenu popup;
-
 	private Studio studio;
 
 	// TODO: use preferences
 	private Preferences preferences;
 
 	private boolean suspendSelectionNotification;
+
+	private MouseEvent popupEvent;
 
 	public Navigator() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
@@ -101,20 +105,24 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		setImports(modules);
 	}
 
-	public void postPopupRequest(Module module) {
+	public void postPopupRequest(MouseEvent e, Module module) {
+		popupEvent = e;
 		ATermFactory factory = studio.getFactory();
-		ATerm popup = factory.parse("module-popup");
-
-		if (module.getState() == Module.STATE_NEW) {
-			popup = factory.parse("new-module-popup");
-		}
-
-		bridge.postEvent(factory.make("request-popup-event(<term>,<str>)",
-				popup, module.getName()));
+		String moduleId = module.getName();
+		bridge.postEvent(factory.make("request-popup-event(<str>)", moduleId));
 	}
 
-	public void addEvents(ATerm t0, String s1, ATerm t2) {
-		popup.addEvents(t0, s1, t2);
+	public void showPopup(final String id, ATerm menu) {
+		PopupMenu popup = new PopupMenu((ATermList) menu);
+		popup.setPopupHandler(new PopupHandler() {
+			public void popupSelected(ATerm action) {
+				bridge.postEvent(studio.getFactory().make(
+						"popup-menu-event(<str>,<term>)", id, action));
+			}
+
+		});
+		popup.show(popupEvent.getComponent(), popupEvent.getX(), popupEvent
+				.getY());
 	}
 
 	public void recAckEvent(ATerm t0) {
@@ -137,8 +145,6 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		createModel();
 		addNavigatorComponent();
 		addImportHierarchyComponent();
-		
-		popup = new ModulePopupMenu(studio.getFactory(), bridge);
 	}
 
 	private void createModel() {

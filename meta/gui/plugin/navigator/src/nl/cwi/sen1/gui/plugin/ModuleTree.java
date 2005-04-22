@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -23,11 +22,11 @@ public class ModuleTree extends JPanel {
 
 	private final ModuleTreeModel manager;
 
-	private Navigator modulebrowser;
+	private Navigator navigator;
 
 	public ModuleTree(ATermFactory factory, Navigator modulebrowser,
 			final ModuleTreeModel manager) {
-		this.modulebrowser = modulebrowser;
+		this.navigator = modulebrowser;
 		this.manager = manager;
 
 		setLayout(new BorderLayout());
@@ -44,12 +43,8 @@ public class ModuleTree extends JPanel {
 		});
 		tree.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				JComponent source = (JComponent) e.getSource();
-				int x = e.getX();
-				int y = e.getY();
-				ModulePopupMenu.setPopupLocation(source, x, y);
 				if (e.isPopupTrigger()) {
-					handlePopupRequest(e.getX(), e.getY());
+					handlePopupRequest(e);
 				}
 			}
 
@@ -73,15 +68,15 @@ public class ModuleTree extends JPanel {
 		});
 	}
 
-	private void handlePopupRequest(int x, int y) {
-		TreePath path = tree.getClosestPathForLocation(x, y);
+	private void handlePopupRequest(MouseEvent e) {
+		TreePath path = tree.getClosestPathForLocation(e.getX(), e.getY());
 		if (path != null) {
 			tree.setSelectionPath(path);
 		}
 
 		Module current = getCurrentModule();
 		if (current != null) {
-			modulebrowser.postPopupRequest(current);
+			navigator.postPopupRequest(e, current);
 		}
 	}
 
