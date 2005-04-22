@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,6 +25,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EtchedBorder;
 
 import net.infonode.docking.DockingWindowAdapter;
 import net.infonode.docking.RootWindow;
@@ -72,6 +75,8 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	private DockingWindowsTheme currentTheme;
 
 	private View activeView;
+
+	private JLabel statusBar;
 
 	public static final void main(String args[]) throws Exception {
 		new BasicStudio(args);
@@ -135,11 +140,21 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		rootWindow.addListener(new DockingWindowAdapter() {
 			public void viewFocusChanged(View oldView, View newView) {
 				updateMenus(newView);
+				updateStatusBar(newView);
 			}
 		});
 
-		frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
+		frame.add(rootWindow, BorderLayout.CENTER);
 		frame.validate();
+	}
+
+	protected void updateStatusBar(View newView) {
+		if (newView != null) {
+			StudioComponent component = (StudioComponent) componentsByView
+					.get(newView);
+			String message = component.getStatusMessage();
+			statusBar.setText(message == null ? " " : message);
+		}
 	}
 
 	public ATermFactory getFactory() {
@@ -148,6 +163,7 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 
 	public void addComponent(final StudioComponent component) {
 		final String name = component.getName();
+		component.addStudioComponentListener(this);
 		int id = nextComponentID();
 		idsByComponent.put(component, new Integer(id));
 		final View view = new View(name, null, component.getViewComponent());
@@ -232,6 +248,7 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	private void createFrame() {
 		frame = new JFrame();
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
+		frame.add(createStatusBar(), BorderLayout.SOUTH);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				bridge.postEvent(factory.make("window-closing-event"));
@@ -241,6 +258,13 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private Component createStatusBar() {
+		this.statusBar = new JLabel(" ");
+		statusBar.setBorder(BorderFactory
+				.createEtchedBorder(EtchedBorder.RAISED));
+		return statusBar;
 	}
 
 	private JMenuBar createMenuBar() {
@@ -268,8 +292,8 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 			createRootWindow();
 		}
 		DockingUtil.addWindow(view, rootWindow);
-		rootWindow.validate();
-		rootWindow.repaint();
+		rootWindow.revalidate();
+		// rootWindow.repaint();
 	}
 
 	private JMenu createThemesMenu() {
@@ -423,9 +447,13 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	public void menuChanged(StudioEvent event) {
 	}
 
-	public void statusMessageChanged(StudioEvent event) {
-		// TODO Auto-generated method stub
-
+	public void statusMessageChanged(StatusMessageEvent event) {
+		StudioComponent activeComponent = (StudioComponent) componentsByView
+				.get(activeView);
+		if (event.getSource() == activeComponent) {
+			String message = event.getNewMessage();
+			statusBar.setText(message == null ? " " : message);
+		}
 	}
 
 	private void updateMenus(View newView) {

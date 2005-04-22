@@ -37,6 +37,8 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
 	private MouseEvent popupEvent;
 
+	private AbstractStudioComponent navigatorComponent;
+
 	public Navigator() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
 				+ ".properties");
@@ -153,6 +155,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 			public void moduleSelected(Module module) {
 				if (!suspendSelectionNotification) {
 					String name = module != null ? module.toString() : "";
+					navigatorComponent.setStatusMessage(name);
 					bridge.postEvent(studio.getFactory().make(
 							"module-selected(<str>)", name));
 				}
@@ -163,7 +166,11 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 	private void addNavigatorComponent() {
 		final ModuleTree tree = new ModuleTree(studio.getFactory(), this,
 				moduleModel);
-		studio.addComponent(new AbstractStudioComponent() {
+		studio.addComponent(createNavigatorComponent(tree));
+	}
+
+	private AbstractStudioComponent createNavigatorComponent(final ModuleTree tree) {
+		navigatorComponent = new AbstractStudioComponent() {
 			public String getName() {
 				return "Navigator";
 			}
@@ -175,12 +182,8 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 			public JMenu getMenu() {
 				return null;
 			}
-
-			public String getStatusMessage() {
-				return null;
-			}
-
-		});
+		};
+		return navigatorComponent;
 	}
 
 	private void addImportHierarchyComponent() {
@@ -205,7 +208,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 			}
 
 			public String getStatusMessage() {
-				return null;
+				return "Import Hierarchy status";
 			}
 
 		});
