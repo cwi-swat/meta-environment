@@ -43,7 +43,7 @@ LDADD 		= \
         	$(SOCKLIBS)
 
 .eqs.c:
-	 $(ASF)/bin/asfc -i $< -o $@ -v -a
+	 $(ASF)/bin/asfc -a -v -i $< -o $@
 
 # ---- Substitute in shell source
 
@@ -54,6 +54,7 @@ LDADD 		= \
 	     s@__ASFSDF_META__@$(ASFSDF_META)@g;\
 	     s@__ASF__@$(ASF)@g;\
 	     s@__SGLR__@$(SGLR)@g;\
+	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__ASC_SUPPORT__@$(ASC_SUPPORT)@g;\
 	     s@__SDF_SUPPORT__@$(SDF_SUPPORT)@g;\
 	     s@__ATERM__@$(ATERM)@g;\
