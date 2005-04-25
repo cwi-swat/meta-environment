@@ -1,5 +1,9 @@
 $Id$
 
+Mon Apr 25 13:58:11 CEST 2005 <kooiker@cwi.nl>
+ * gui:
+   - Use general ant build scheme
+
 Wed Apr 13 08:26:20 CEST 2005 <kooiker@cwi.nl>
  * gui/nl/cwi/sen1/error/viewer:
    - Add generated ToolBus bridge

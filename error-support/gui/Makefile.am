@@ -1,32 +1,19 @@
 # $Id$
-pkgdata_DATA = ${JARFILE} error-viewer.idef
-EXTRA_DIST = ${JARFILE} error-viewer.idef
 
-bin_SCRIPTS = error-viewer-config
+include $(top_srcdir)/java_make_rules
 
-JARFILE = error-viewer.jar
-JARFILE_ENV = JAR=${JARFILE}
+TOOLNAME = error-viewer
+PACKAGE = nl.cwi.sen1.error
+JARFILE = $(TOOLNAME).jar
 
-JARS_ENV = JARS=${EXTERNAL_JARS}:${top_srcdir}/lib/errorapi-${VERSION}.jar:${top_srcdir}/gui/lib/jlfgr-1_0.jar
+ANT_ENV += LOCAL_JARS=$(top_srcdir)/lib/errorapi-$(VERSION).jar:$(top_srcdir)/gui/lib/jlfgr-1_0.jar
 
-error-viewer-config: Makefile
+pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
+bin_SCRIPTS = $(TOOLNAME)-config
+
+EXTRA_DIST = $(JARFILE) $(TOOLNAME).idef
+
+$(TOOLNAME)-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo ${prefix}/share/${PACKAGE}/error-viewer.jar" \
+		echo "echo $(pkgdatadir)/$(JARFILE)" \
 	) > $@ && chmod +x $@
-
-CLEANFILES = \
-	      ${bin_SCRIPTS} \
-	      error-viewer.tifs
-
-if MAINTAINER_MODE
-${JARFILE}:
-	${JARFILE_ENV} ${JARS_ENV} ant dist
-
-jtif:
-	${IDEF} error-viewer.idef
-	${TOOLBUS}/bin/tifstojava -tool error-viewer -tifs error-viewer.tifs \
-		-package nl.cwi.sen1.error.viewer -swing
-
-clean-local:
-	${JARFILE_ENV} ant clean
-endif

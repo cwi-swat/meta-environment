@@ -1,5 +1,7 @@
 .classpath
 .project
-Makefile.in
 Makefile
-error-viewer.jar
+Makefile.in
+build
+dist
+error-viewer-config
