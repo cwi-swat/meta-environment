@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="studio/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/JJTraveler">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/shared-objects">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/toolbus-java-adapter">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/idw-gpl-1.3.0.jar">
+		<attributes>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="util/src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
