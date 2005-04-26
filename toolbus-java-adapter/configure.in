@@ -23,7 +23,7 @@ AC_SUBST(EXTERNAL_JARS)
 
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([Makefile
-  toolbus/Makefile
+  script/Makefile
   src/Makefile
 ])
 AC_OUTPUT 
