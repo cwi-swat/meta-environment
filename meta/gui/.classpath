@@ -28,10 +28,6 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="studio/src">
-		<attributes>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path="plugin/navigator/src">
 		<attributes>
 		</attributes>

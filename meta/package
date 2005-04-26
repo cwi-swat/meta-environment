@@ -17,6 +17,8 @@ configuration interface
 requires
    aterm 2.3.1
 
+meta-studio 1.0
+
 error-support 1.1
 
 aterm-java 1.6
