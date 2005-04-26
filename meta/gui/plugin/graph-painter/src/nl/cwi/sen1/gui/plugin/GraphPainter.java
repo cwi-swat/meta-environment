@@ -12,18 +12,16 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JComponent;
-import javax.swing.JMenu;
 import javax.swing.JScrollPane;
 
 import nl.cwi.sen1.data.graph.Graph;
 import nl.cwi.sen1.data.graph.MetaGraphFactory;
 import nl.cwi.sen1.data.graph.Node;
-import nl.cwi.sen1.gui.AbstractStudioComponent;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.PopupHandler;
-import nl.cwi.sen1.util.PopupMenu;
+import nl.cwi.sen1.util.StudioPopupMenu;
 import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.ATermList;
@@ -58,8 +56,9 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		graphFactory = new MetaGraphFactory((PureFactory) studio.getFactory());
-		bridge = new GraphPainterBridge(studio.getFactory(), this);
+		graphFactory = new MetaGraphFactory((PureFactory) studio
+				.getATermFactory());
+		bridge = new GraphPainterBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 	}
@@ -81,12 +80,12 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 					String nodeId = node.getId().getId();
 					if (event.isPopupTrigger()) {
 						popupEvent = event;
-						bridge.postEvent(studio.getFactory().make(
+						bridge.postEvent(studio.getATermFactory().make(
 								"request-popup-event(<str>,<str>)", graphId,
 								nodeId));
 					} else {
 						panel.setSelectedNode(node);
-						bridge.postEvent(studio.getFactory().make(
+						bridge.postEvent(studio.getATermFactory().make(
 								"node-selected(<str>,<str>)", graphId, nodeId));
 					}
 				}
@@ -105,24 +104,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 			panel.addMouseListener(makeMouseListener(panel));
 			graphs.put(id, panel);
 			final JScrollPane scrollPane = new JScrollPane(panel);
-			studio.addComponent(new AbstractStudioComponent() {
-				public String getName() {
-					return id;
-				}
-
-				public JComponent getViewComponent() {
-					return scrollPane;
-				}
-
-				public JMenu getMenu() {
-					return null;
-				}
-
-				public String getStatusMessage() {
-					return null;
-				}
-
-			});
+			studio.addComponent(new StudioComponentAdapter(id, scrollPane));
 		}
 		return panel;
 	}
@@ -160,10 +142,10 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	}
 
 	public void showPopup(final String graphId, final String nodeId, ATerm menu) {
-		PopupMenu popup = new PopupMenu((ATermList) menu);
+		StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
 		popup.setPopupHandler(new PopupHandler() {
 			public void popupSelected(ATerm action) {
-				bridge.postEvent(studio.getFactory().make(
+				bridge.postEvent(studio.getATermFactory().make(
 						"popup-menu-event(<str>,<str>,<term>)", graphId,
 						nodeId, action));
 			}

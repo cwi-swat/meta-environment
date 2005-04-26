@@ -21,7 +21,7 @@ public class Dialog implements StudioPlugin, DialogTif {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		DialogBridge bridge = new DialogBridge(studio.getFactory(), this);
+		DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 	}
@@ -36,10 +36,10 @@ public class Dialog implements StudioPlugin, DialogTif {
 		JFileChooser chooser = new JFileChooser(dir);
 		if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
 			path = chooser.getSelectedFile().getAbsolutePath();
-			return studio.getFactory().make(
+			return studio.getATermFactory().make(
 					"snd-value(file-dialog-approve(<str>))", path);
 		}
-		return studio.getFactory().make("snd-value(file-dialog-cancel)");
+		return studio.getATermFactory().make("snd-value(file-dialog-cancel)");
 	}
 
 	public void recTerminate(ATerm t0) {

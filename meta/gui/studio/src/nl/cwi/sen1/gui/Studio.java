@@ -4,7 +4,7 @@ import toolbus.AbstractTool;
 import aterm.ATermFactory;
 
 public interface Studio {
-	public ATermFactory getFactory();
+	public ATermFactory getATermFactory();
 
 	public void connect(String toolName, AbstractTool tool);
 

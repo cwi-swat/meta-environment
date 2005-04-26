@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -18,10 +17,11 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
@@ -42,14 +42,14 @@ import net.infonode.docking.theme.SoftBlueIceDockingTheme;
 import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
+import nl.cwi.sen1.util.StudioMenuBar;
 import toolbus.AbstractTool;
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
+public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	private static int nextUniqueComponentID = 0;
 
 	private PureFactory factory;
@@ -64,13 +64,11 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 
 	private RootWindow rootWindow;
 
-	private RootWindowProperties properties = new RootWindowProperties();
+	private RootWindowProperties properties;
 
 	private JFrame frame;
 
-	private Map menuMap;
-
-	private JMenuBar menuBar;
+	private ATermList menuList;
 
 	private DockingWindowsTheme currentTheme;
 
@@ -79,15 +77,17 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	private JLabel statusBar;
 
 	public static final void main(String args[]) throws Exception {
-		new BasicStudio(args);
+		new StudioImpl(args);
 	}
 
-	public BasicStudio(String[] args) {
+	public StudioImpl(String[] args) {
+		properties = new RootWindowProperties();
 		currentTheme = new ShapedGradientDockingTheme();
 		idsByComponent = new HashMap();
 		componentsByView = new HashMap();
 		viewsById = new ViewMap();
-		menuMap = new HashMap();
+		factory = new PureFactory();
+		menuList = factory.getEmpty();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -95,7 +95,6 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 			}
 		});
 
-		factory = new PureFactory();
 		bridge = new GuiBridge(factory, this);
 		try {
 			bridge.init(args);
@@ -120,10 +119,10 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		return nextUniqueComponentID++;
 	}
 
-	private void createRootWindow() {
-		rootWindow = DockingUtil.createRootWindow(viewsById, true);
+	private RootWindow createRootWindow() {
+		RootWindow root = DockingUtil.createRootWindow(viewsById, true);
 
-		rootWindow.setPreferredSize(new Dimension(800, 600));
+		root.setPreferredSize(new Dimension(800, 600));
 
 		// Set gradient theme. The theme properties object is the super object
 		// of our properties object, which
@@ -133,42 +132,55 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		// Our properties object is the super object of the root window
 		// properties object, so all property values of the
 		// theme and in our property object will be used by the root window
-		rootWindow.getRootWindowProperties().addSuperObject(properties);
+		root.getRootWindowProperties().addSuperObject(properties);
 
-		rootWindow.getWindowBar(Direction.DOWN).setEnabled(true);
+		root.getWindowBar(Direction.DOWN).setEnabled(true);
 
-		rootWindow.addListener(new DockingWindowAdapter() {
+		root.addListener(new DockingWindowAdapter() {
 			public void viewFocusChanged(View oldView, View newView) {
-				updateMenus(newView);
-				updateStatusBar(newView);
+				if (newView != null) {
+					activeView = newView;
+					setupMenuBar();
+					updateStatusBar();
+				}
 			}
 		});
 
-		frame.add(rootWindow, BorderLayout.CENTER);
-		frame.validate();
+		return root;
 	}
 
-	protected void updateStatusBar(View newView) {
-		if (newView != null) {
-			StudioComponent component = (StudioComponent) componentsByView
-					.get(newView);
+	protected void updateStatusBar() {
+		if (activeView != null) {
+			StudioComponent component = getComponent(activeView);
 			String message = component.getStatusMessage();
 			statusBar.setText(message == null ? " " : message);
 		}
 	}
 
-	public ATermFactory getFactory() {
+	public ATermFactory getATermFactory() {
 		return factory;
 	}
 
-	public void addComponent(final StudioComponent component) {
-		final String name = component.getName();
+	private View createView(StudioComponent component, int id) {
+		String name = component.getName();
+		Icon icon = component.getIcon();
+		JComponent viewComponent = component.getViewComponent();
+		View view = new View(name, icon, viewComponent);
+		componentsByView.put(view, component);
+		viewsById.addView(id, view);
+		return view;
+	}
+
+	private int registerComponent(StudioComponent component) {
 		component.addStudioComponentListener(this);
 		int id = nextComponentID();
 		idsByComponent.put(component, new Integer(id));
-		final View view = new View(name, null, component.getViewComponent());
-		componentsByView.put(view, component);
-		viewsById.addView(id, view);
+		return id;
+	}
+
+	public void addComponent(StudioComponent component) {
+		int id = registerComponent(component);
+		final View view = createView(component, id);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				showView(view);
@@ -177,14 +189,26 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	public void removeComponent(StudioComponent component) {
-		int id = ((Integer) idsByComponent.get(component)).intValue();
-		final View view = viewsById.getView(id);
-		viewsById.removeView(id);
+		int id = unregisterComponent(component);
+		final View view = deleteView(id);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				view.close();
 			}
 		});
+	}
+
+	private View deleteView(int id) {
+		View view = viewsById.getView(id);
+		viewsById.removeView(id);
+		return view;
+	}
+
+	private int unregisterComponent(StudioComponent component) {
+		component.removeStudioComponentListener(this);
+		int id = ((Integer) idsByComponent.get(component)).intValue();
+		idsByComponent.remove(component);
+		return id;
 	}
 
 	public void loadJar(String jarName) {
@@ -204,13 +228,11 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		} catch (IOException e) {
 			System.err.println("I/O error while loading JAR file:");
 			e.printStackTrace();
-			System.exit(1);
 		}
 		if (name == null) {
 			System.err
 					.println("Specified jar file does not contain a 'Main-Class'"
 							+ " manifest attribute");
-			System.exit(1);
 		}
 
 		try {
@@ -235,16 +257,13 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 	private void spawn(final StudioPlugin component) {
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
-				component.initStudioPlugin(BasicStudio.this);
+				component.initStudioPlugin(StudioImpl.this);
 			}
 		});
 		thread.setName(component.getName() + "-starter");
 		thread.start();
 	}
 
-	/**
-	 * Initializes the frame and shows it.
-	 */
 	private void createFrame() {
 		frame = new JFrame();
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
@@ -254,7 +273,7 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 				bridge.postEvent(factory.make("window-closing-event"));
 			}
 		});
-		frame.setJMenuBar(createMenuBar());
+		setupMenuBar();
 		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
@@ -267,17 +286,39 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		return statusBar;
 	}
 
-	private JMenuBar createMenuBar() {
-		menuBar = new JMenuBar();
+	private StudioMenuBar createMenuBar() {
+		StudioMenuBar menuBar = new StudioMenuBar();
 		menuBar.add(createEmptyFileMenu());
 		menuBar.add(createThemesMenu());
+
+		ATermList menuPaths = menuList;
+		while (!menuPaths.isEmpty()) {
+			final ATerm menuPath = menuPaths.getFirst();
+			menuBar.addMenuPath(menuPath, new AbstractAction(menuPath
+					.toString()) {
+				public void actionPerformed(ActionEvent e) {
+					ATerm event = factory.make("menu-event(<term>)", menuPath);
+					bridge.postEvent(event);
+				}
+			});
+			menuPaths = menuPaths.getNext();
+		}
+
+		if (activeView != null) {
+			StudioComponent component = getComponent(activeView);
+			JMenu[] menus = component.getMenus();
+			if (menus != null) {
+				for (int i = 0; i < menus.length; i++) {
+					menuBar.add(menus[i]);
+				}
+			}
+		}
+
 		return menuBar;
 	}
 
 	private JMenu createEmptyFileMenu() {
-		JMenu menu = new JMenu("File");
-		menuMap.put("File", menu);
-		return menu;
+		return new JMenu("File");
 	}
 
 	private JToolBar createToolBar() {
@@ -289,11 +330,11 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 
 	private void showView(View view) {
 		if (rootWindow == null) {
-			createRootWindow();
+			rootWindow = createRootWindow();
+			frame.add(rootWindow, BorderLayout.CENTER);
 		}
 		DockingUtil.addWindow(view, rootWindow);
 		rootWindow.revalidate();
-		// rootWindow.repaint();
 	}
 
 	private JMenu createThemesMenu() {
@@ -334,92 +375,17 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 
 	}
 
-	private JMenu getMenu(String name) {
-		JMenu menu = (JMenu) menuMap.get(name);
-
-		if (menu == null) {
-			menu = new JMenu(name);
-			menuMap.put(name, menu);
-			menuBar.add(menu);
-		}
-
-		return menu;
+	public void addMenuEvents(ATerm menus) {
+		menuList = menuList.concat((ATermList) menus);
+		setupMenuBar();
 	}
 
-	private JMenu getMenuItem(JMenu menu, ATermList names) {
-		JMenu cur = menu;
-
-		while (!names.isEmpty()) {
-			if (names.getLength() == 1) {
-				break;
-			}
-			String name = ((ATermAppl) names.getFirst()).getName();
-			cur = addMenuName(cur, name);
-			names = names.getNext();
-		}
-
-		return cur;
-	}
-
-	private JMenu findMenuLocation(JMenu[] children, String name) {
-		for (int i = 0; i < children.length; i++) {
-			if (name.equals(children[i].getText())) {
-				return children[i];
-			}
-		}
-		return null;
-	}
-
-	private JMenu addMenuName(JMenu menu, String name) {
-		JMenu[] children = (JMenu[]) menu.getSubElements();
-		JMenu location = findMenuLocation(children, name);
-
-		if (location == null) {
-			JMenu newItem = new JMenu(name);
-			menu.add(newItem);
-			return newItem;
-		}
-
-		return location;
-	}
-
-	private String getMenuLabel(ATermList list) {
-		return ((ATermAppl) list.getFirst()).getName();
-	}
-
-	private void addMenu(ATermList buttons) {
-		while (!buttons.isEmpty()) {
-			final ATerm action = buttons.getFirst();
-			ATermList menuItems = (ATermList) ((ATermAppl) action)
-					.getArgument(0);
-			ATerm menuItem = menuItems.getFirst();
-			final String menuName = ((ATermAppl) menuItem).getName();
-			JMenu menu = getMenuItem(getMenu(menuName), menuItems.getNext());
-			String label = getMenuLabel(menuItems.getNext());
-			menu.add(new AbstractAction(label) {
-				public void actionPerformed(ActionEvent e) {
-					ATerm event = factory.make("menu-event(<term>)", action);
-					bridge.postEvent(event);
-				}
-			});
-			buttons = buttons.getNext();
-		}
-	}
-
-	public InetAddress getAddress() {
-		return bridge.getAddress();
-	}
-
-	public int getPort() {
-		return bridge.getPort();
+	private void setupMenuBar() {
+		frame.setJMenuBar(createMenuBar());
 	}
 
 	public void setTitle(String title) {
 		frame.setTitle(title);
-	}
-
-	public void addMenuEvents(ATerm events) {
-		addMenu((ATermList) events);
 	}
 
 	public void recAckEvent(ATerm t0) {
@@ -431,7 +397,7 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 
 	public void connect(String toolName, final AbstractTool tool) {
 		try {
-			tool.connect(toolName, getAddress(), getPort());
+			tool.connect(toolName, bridge.getAddress(), bridge.getPort());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -453,43 +419,6 @@ public class BasicStudio implements Studio, GuiTif, StudioComponentListener {
 		if (event.getSource() == activeComponent) {
 			String message = event.getNewMessage();
 			statusBar.setText(message == null ? " " : message);
-		}
-	}
-
-	private void updateMenus(View newView) {
-		if (newView != activeView && newView != null) {
-			if (activeView != null) {
-				cleanupMenu();
-			}
-			setupViewMenu(newView);
-			activeView = newView;
-		}
-		frame.validate();
-		frame.repaint();
-	}
-
-	private void setupViewMenu(View view) {
-		StudioComponent component = getComponent(view);
-		JMenu menu = component.getMenu();
-		if (menu != null) {
-			menuBar.add(menu);
-		}
-	}
-
-	private void cleanupMenu() {
-		StudioComponent component = getComponent(activeView);
-		JMenu menu = component.getMenu();
-		if (menu != null) {
-			JMenuBar newBar = new JMenuBar();
-			while (menuBar.getMenuCount() > 0) {
-				JMenu cur = menuBar.getMenu(0);
-				if (cur == menu) {
-					break;
-				}
-				newBar.add(cur);
-			}
-			menuBar = newBar;
-			frame.setJMenuBar(menuBar);
 		}
 	}
 

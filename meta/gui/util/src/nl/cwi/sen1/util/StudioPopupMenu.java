@@ -18,11 +18,11 @@ import aterm.ATermList;
 //      * refactor constant strings...
 //      * try to get rid of the duplication between JMenu and JPopupMenu...
 
-public class PopupMenu extends JPopupMenu {
+public class StudioPopupMenu extends JPopupMenu {
 	
 	private PopupHandler handler;
 	
-	public PopupMenu(ATermList menus) {
+	public StudioPopupMenu(ATermList menus) {
 		while (!menus.isEmpty()) {
 			ATerm action = menus.getFirst();
 			addItem(action);

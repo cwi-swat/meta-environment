@@ -2,17 +2,14 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.event.MouseEvent;
 
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-
 import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
-import nl.cwi.sen1.gui.AbstractStudioComponent;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.PopupHandler;
-import nl.cwi.sen1.util.PopupMenu;
+import nl.cwi.sen1.util.StudioPopupMenu;
 import nl.cwi.sen1.util.Preferences;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -37,7 +34,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
 	private MouseEvent popupEvent;
 
-	private AbstractStudioComponent navigatorComponent;
+	private StudioComponentAdapter navigatorComponent;
 
 	public Navigator() {
 		String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
@@ -109,16 +106,16 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
 	public void postPopupRequest(MouseEvent e, Module module) {
 		popupEvent = e;
-		ATermFactory factory = studio.getFactory();
+		ATermFactory factory = studio.getATermFactory();
 		String moduleId = module.getName();
 		bridge.postEvent(factory.make("request-popup-event(<str>)", moduleId));
 	}
 
 	public void showPopup(final String id, ATerm menu) {
-		PopupMenu popup = new PopupMenu((ATermList) menu);
+		StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
 		popup.setPopupHandler(new PopupHandler() {
 			public void popupSelected(ATerm action) {
-				bridge.postEvent(studio.getFactory().make(
+				bridge.postEvent(studio.getATermFactory().make(
 						"popup-menu-event(<str>,<term>)", id, action));
 			}
 
@@ -140,7 +137,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		bridge = new NavigatorBridge(studio.getFactory(), this);
+		bridge = new NavigatorBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 
@@ -156,7 +153,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 				if (!suspendSelectionNotification) {
 					String name = module != null ? module.toString() : "";
 					navigatorComponent.setStatusMessage(name);
-					bridge.postEvent(studio.getFactory().make(
+					bridge.postEvent(studio.getATermFactory().make(
 							"module-selected(<str>)", name));
 				}
 			}
@@ -164,26 +161,10 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 	}
 
 	private void addNavigatorComponent() {
-		final ModuleTree tree = new ModuleTree(studio.getFactory(), this,
+		final ModuleTree tree = new ModuleTree(studio.getATermFactory(), this,
 				moduleModel);
-		studio.addComponent(createNavigatorComponent(tree));
-	}
-
-	private AbstractStudioComponent createNavigatorComponent(final ModuleTree tree) {
-		navigatorComponent = new AbstractStudioComponent() {
-			public String getName() {
-				return "Navigator";
-			}
-
-			public JComponent getViewComponent() {
-				return tree;
-			}
-
-			public JMenu getMenu() {
-				return null;
-			}
-		};
-		return navigatorComponent;
+		navigatorComponent = new StudioComponentAdapter("Navigator", tree);
+		studio.addComponent(navigatorComponent);
 	}
 
 	private void addImportHierarchyComponent() {
@@ -194,24 +175,8 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 				panel.setHierarchy(module);
 			}
 		});
-		studio.addComponent(new AbstractStudioComponent() {
-			public String getName() {
-				return "Import Hierarchy";
-			}
-
-			public JComponent getViewComponent() {
-				return panel;
-			}
-
-			public JMenu getMenu() {
-				return null;
-			}
-
-			public String getStatusMessage() {
-				return "Import Hierarchy status";
-			}
-
-		});
+		studio.addComponent(new StudioComponentAdapter("Import Hierarchy",
+				panel));
 	}
 
 	public void selectModule(String moduleName) {

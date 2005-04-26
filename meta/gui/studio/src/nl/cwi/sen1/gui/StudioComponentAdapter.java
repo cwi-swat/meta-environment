@@ -1,11 +1,33 @@
 package nl.cwi.sen1.gui;
 
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
 import javax.swing.event.EventListenerList;
 
-abstract public class AbstractStudioComponent implements StudioComponent {
+public class StudioComponentAdapter implements StudioComponent {
+	private Icon icon;
+
 	private String statusMessage;
 
 	private EventListenerList listenerList = new EventListenerList();
+
+	private String name;
+
+	private JComponent viewComponent;
+	
+	public StudioComponentAdapter(String name, JComponent viewComponent) {
+		this.name = name;
+		this.viewComponent = viewComponent;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public JComponent getViewComponent() {
+		return viewComponent;
+	}
 
 	public void addStudioComponentListener(StudioComponentListener l) {
 		listenerList.add(StudioComponentListener.class, l);
@@ -15,6 +37,10 @@ abstract public class AbstractStudioComponent implements StudioComponent {
 		listenerList.remove(StudioComponentListener.class, l);
 	}
 
+	public JMenu[] getMenus() {
+		return null;
+	}
+	
 	// Take from javax.swing.event.EventListenerList example
 	protected void fireMenuChanged() {
 		Object[] listeners = listenerList.getListenerList();
@@ -48,5 +74,13 @@ abstract public class AbstractStudioComponent implements StudioComponent {
 		if (newMessage == null || !newMessage.equals(oldMessage)) {
 			fireStatusMessageChanged(oldMessage, newMessage);
 		}
+	}
+
+	public Icon getIcon() {
+		return icon;
+	}
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
 	}
 }
