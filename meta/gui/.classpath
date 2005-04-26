@@ -28,6 +28,10 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="studio/src">
+		<attributes>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="plugin/navigator/src">
 		<attributes>
 		</attributes>
@@ -44,11 +48,7 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="studio/src">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/idw-gpl-1.3.0.jar">
+	<classpathentry combineaccessrules="false" kind="src" path="/meta-studio">
 		<attributes>
 		</attributes>
 	</classpathentry>
