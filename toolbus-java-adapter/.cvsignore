@@ -1,13 +1,14 @@
+.classpath
+.project
 Makefile
 Makefile.in
 aclocal.m4
 autom4te.cache
+build
 config.log
 config.status
 configure
-toolbus-java-adapter-*.jar
+dist
 toolbus-java-adapter-*.pkg
 toolbus-java-adapter-*.tar.gz
 toolbus-java-adapter-config
-.project
-.classpath

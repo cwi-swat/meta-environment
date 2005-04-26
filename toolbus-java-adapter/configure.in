@@ -7,6 +7,8 @@ dnl Which compiler to use?
 dnl AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
+AM_MAINTAINER_MODE
+
 AC_AIX
 
 AC_PROG_MAKE_SET([])
@@ -24,6 +26,5 @@ AC_SUBST(EXTERNAL_JARS)
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([Makefile
   script/Makefile
-  src/Makefile
 ])
 AC_OUTPUT 

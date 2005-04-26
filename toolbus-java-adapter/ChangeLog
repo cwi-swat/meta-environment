@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 26 09:01:29 CEST 2005 <kooiker@cwi.nl>
+ * Move scripts from src to script directory
+ * Use ant to build toolbus-java-adapter jar
+
 Tue Apr 12 09:30:40 CEST 2005 <jong@cwi.nl>
  * toolbus/AbstractTool.java:
    - add getAddress() and getPort() to expose toolbus connection
