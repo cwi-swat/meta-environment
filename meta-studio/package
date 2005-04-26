@@ -1,0 +1,15 @@
+package 
+identification
+   name=meta-studio
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/meta
+   info=http://www.cwi.nl/projects/MetaEnv/meta
+   description='Meta-studio'
+   keywords='GUI'
+
+configuration interface
+
+requires
+aterm-java 1.6
+
+toolbus-java-adapter 1.0

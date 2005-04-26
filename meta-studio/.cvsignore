@@ -1,1 +1,15 @@
+*.tar.gz
+.classpath
+.project
+INSTALL
+Makefile
+Makefile.in
+aclocal.m4
+autom4te*
 bin
+config.*
+configure
+install-sh
+meta-studio-*.pkg
+missing
+mkinstalldirs
