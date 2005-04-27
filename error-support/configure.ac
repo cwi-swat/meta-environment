@@ -81,7 +81,6 @@ AC_PROG_MAKE_SET([])
 AC_CONFIG_FILES([Makefile
   lib/Makefile
   doc/Makefile
-  gui/Makefile
   utils/Makefile
   utils/lift-error/Makefile
   utils/lower-error/Makefile

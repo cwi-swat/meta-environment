@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = lib utils gui doc
+SUBDIRS = lib utils doc
 
 ACLOCAL_FLAGS = -I .
 
