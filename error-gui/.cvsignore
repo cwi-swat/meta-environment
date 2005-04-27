@@ -12,6 +12,7 @@ config.*
 configure
 dist
 error-viewer-*.pkg
+error-viewer-config
 install-sh
 missing
 mkinstalldirs
