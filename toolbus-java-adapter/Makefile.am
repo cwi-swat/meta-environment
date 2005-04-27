@@ -8,6 +8,8 @@ ACLOCAL_FLAGS = -I .
 
 TOOLNAME = toolbus-java-adapter
 JARFILE = $(TOOLNAME)-$(VERSION).jar
+JAVA_PACKAGE = toolbus
+MAIN_CLASS = $(JAVA_PACKAGE).JavaTif
 
 bin_SCRIPTS = $(TOOLNAME)-config tifstojava
 pkgdata_DATA = $(JARFILE)
@@ -30,4 +32,4 @@ $(TOOLNAME)-config: Makefile
 
 tifstojava: Makefile
 	(echo "#! /bin/sh " ;\
-	 printf "java -classpath $(EXTERNAL_JARS) -jar $(pkgdatadir)/$(JARFILE) \0044\0100\n" ) > $@ && chmod +x $@
+	 printf "java -classpath $(EXTERNAL_JARS):$(pkgdatadir)/$(JARFILE) toolbus.JavaTif \0044\0100\n" ) > $@ && chmod +x $@
