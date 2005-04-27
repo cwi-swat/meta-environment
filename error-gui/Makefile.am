@@ -17,9 +17,9 @@ pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
 bin_SCRIPTS = $(TOOLNAME)-config
 noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
 
-EXTRA_DIST = $(JARFILE) $(TOOLNAME).idef
+EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef
 
-CLEANFILES = $(TOOLNAME)-config
+CLEANFILES = $(TOOLNAME)-config $(TOOLNAME)-$(VERSION).pkg
 
 $(TOOLNAME)-config: Makefile
 	@(	echo "#! /bin/sh";\
