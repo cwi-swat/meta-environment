@@ -5,6 +5,8 @@ ACLOCAL_FLAGS = -I .
 CLEANFILES = \
 	${PACKAGE}-${VERSION}.pkg
 
+EXTRA_DIST = package
+
 SUBDIRS = \
 	lib \
 	util \
