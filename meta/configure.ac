@@ -184,7 +184,6 @@ AC_CONFIG_FILES([Makefile
    src/Makefile
    libltdl/Makefile
    gui/Makefile
-   gui/lib/Makefile
    gui/data/Makefile
    gui/util/Makefile
    gui/plugin/Makefile
