@@ -4,7 +4,7 @@ include $(top_srcdir)/java_make_rules
 include $(top_srcdir)/toolbus_make_rules
 
 TOOLNAME = navigator
-PACKAGE = nl.cwi.sen1.gui.plugin
+JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
 MAIN_CLASS = $(PACKAGE).Navigator
 
