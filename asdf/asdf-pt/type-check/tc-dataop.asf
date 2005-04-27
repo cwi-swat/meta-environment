@@ -1,17 +1,18 @@
 equations
 
 [initial-1] initial-dataop-sigs = 
-     [<binding, using (token, bindable) & giving bindings & std-at>,
-      <bound, using (bindings, token) & giving bindable & std-at>,
-      <overriding, using (bindings, bindings) & giving bindings & std-at>,
-      <disj-union, using (bindings, bindings) & giving bindings & std-at>,
-      <not, using boolean & giving boolean & std-at>,
-      <def, using data & giving boolean & std-at>,
-      <+, using (integer, integer) & giving integer & std-at>,
-      <*, using (integer, integer) & giving integer & std-at>,
-      <-, using (integer, integer) & giving integer & std-at>,
-      <<, using (integer, integer) & giving integer & std-at>,
-      <else, using (action, action) & giving action & std-at>
+    [<binding, using (token, bindable) & giving bindings & std-at>,
+     <bound, using (bindings, token) & giving bindable & std-at>,
+     <overriding, using (bindings, bindings) & giving bindings & std-at>,
+     <disj-union, using (bindings, bindings) & giving bindings & std-at>,
+     <not, using boolean & giving boolean & std-at>,
+     <def, using data & giving boolean & std-at>,
+     <+, using (integer, integer) & giving integer & std-at>,
+     <*, using (integer, integer) & giving integer & std-at>,
+     <-, using (integer, integer) & giving integer & std-at>,
+     <<, using (integer, integer) & giving integer & std-at>,
+     <>, using (integer, integer) & giving integer & std-at>,
+     <else, using (action, action) & giving (using data & giving empty & raising empty & std-at) & std-at>
       ]
 
 [brackets-1] ($TY) = $TY
@@ -22,15 +23,15 @@ equations
 
 [tcd-3] 
 
-   <giving $TY1 & $SAT1*, $EN2> := typecheck-data($D1, $EN1),
-   <giving $TY2 & $SAT2*, $EN3> := typecheck-data($D2, $EN2)
+   <giving $TY1, $EN2> := typecheck-data($D1, $EN1),
+   <giving $TY2, $EN3> := typecheck-data($D2, $EN2)
    ========================================================
    typecheck-data(($D1, $D2), $EN1) = <giving ($TY1, $TY2), $EN3>
 
 [tcd-4] 
 
-   <giving $TY & $SAT1*, $EN2> := typecheck-data($D1, $EN1),
-   <giving ($TY*) & $SAT2*, $EN3> := typecheck-data(($D2, $D+), $EN2)
+   <giving $TY, $EN2> := typecheck-data($D1, $EN1),
+   <giving ($TY*), $EN3> := typecheck-data(($D2, $D+), $EN2)
    ================================================================
    typecheck-data(($D1, $D2, $D+), $EN1) = <giving ($TY, $TY*), $EN3>
 
@@ -50,72 +51,84 @@ equations
 
 [tcd-11] [$DT1*, <$DO, $TY>, $DT2*] := get-data-constants($EN)
 	 ==============================================================
-	 typecheck-dataop($DO, $EN) = <using data & giving $TY & raising empty & 
-					      std-at, $EN>
+	 typecheck-dataop($DO, $EN) = <trans-act-type(using data & giving $TY &
+				     raising empty & std-at), $EN>
 
 [tcdo-1] [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN)
 	 ==============================================================
-	 typecheck-dataop($DO, $EN) = <$FR, $EN>
+	 typecheck-dataop($DO, $EN) = <trans-act-type($FR), $EN>
 
 
 [tcdo-select-1] 
 		
-         <$TV, $EN2> := new-type-var($EN1)
+         $DO == #1,
+         $SU := localized("Problem at #1", get-location($DO)),
+         <$TV1, $EN2> := new-type-var($EN1),
+         <$TV2, $EN3> := new-type-var($EN2),
+	 $EN4 := subtype-of($TV1, datum, $SU, $EN3)
 	 ===================================================================
-	 typecheck-dataop(#1, $EN1) = 
-			     <using ($TV, data) & giving $TV & 
-				    raising empty & std-at, $EN2>
+	 typecheck-dataop($DO, $EN1) = 
+			  <trans-act-type(using datum+$TV2 & giving datum & 
+				    raising empty & std-at), $EN4>
 
 [tcdo-select-2] 
 
-     <$TV, $EN2> := new-type-var($EN1)
+     $DO == #2,
+     $SU := localized("Problem at #2", get-location($DO)),
+     <$TV1, $EN2> := new-type-var($EN1),
+     <$TV2, $EN3> := new-type-var($EN2)
      ===================================================================
-     typecheck-dataop(#2, $EN1) = 
- 		  <using (datum, $TV, data) & giving $TV & 
-			 raising empty & std-at, $EN2>
+     typecheck-dataop($DO, $EN1) = 
+ 		  <trans-act-type(using (datum, datum)+$TV2 & giving datum & 
+			 raising empty & std-at), $EN3>
 
 [tcdo-select-3] 
 
-     <$TV, $EN2> := new-type-var($EN1)
-     =========================================================================
-     typecheck-dataop(#3, $EN1) = 
-	         <using (datum, datum, $TV, data) & giving $TV & 
-			raising empty & std-at, $EN2>
+     $DO == #3,
+     $SU := localized("Problem at #3", get-location($DO)),
+     <$TV1, $EN2> := new-type-var($EN1),
+     <$TV2, $EN3> := new-type-var($EN2)
+     ===================================================================
+     typecheck-dataop($DO, $EN1) = 
+	  <trans-act-type(using (datum, datum, datum)+$TV2 & giving datum &
+			 raising empty & std-at), $EN3>
 
-[tcdo-select-1] typecheck-dataop(#$IN, $EN) = 
-				      <using data & giving data & 
-					     raising empty & std-at, $EN>
+[default-tcdo-select-1] typecheck-dataop(#$IN, $EN) = 
+		<trans-act-type(using data & giving data & 
+					     raising empty & std-at), $EN>
 
 [tcdo-the-sort-1] 
 
       <$TV, $EN2> := new-type-var($EN1)
       ==================================================================
-      typecheck-dataop(the $TY, $EN1) = <using $TV & giving $TY & 
-					      raising () & std-at, $EN2>
+      typecheck-dataop(the $TY, $EN1) = <trans-act-type(using $TV & giving $TY
+				       & raising () & std-at), $EN2>
 	 	
 [tcdo-it-1] 
 
      <$TV, $EN2> := new-type-var($EN1)
      ====================================================================
-     typecheck-dataop(it, $EN1) = <using $TV & giving $TV & 
-				raising empty & std-at, $EN2>
+     typecheck-dataop(it, $EN1) = <trans-act-type(using $TV & giving $TV & 
+				raising empty & std-at), $EN2>
 
 [tcdo-equal] 
 
-     typecheck-dataop(=, $EN) = 
-		    <using (datum, datum) & giving boolean & 
-			   raising empty & std-at, $EN>
+     typecheck-dataop(=, $EN) = <trans-act-type(using (datum, datum) & 
+			 giving boolean & raising empty & std-at), $EN>
 
 [tcdo-def] typecheck-dataop(def, $EN) = 
-			      <using data & giving boolean & 
-				     raising empty & std-at, $EN>
+			      <trans-act-type(using data & giving boolean & 
+				     raising empty & std-at), $EN>
+
+[tcdo-consdata] typecheck-dataop(consdata, $EN) = <trans-act-type(using (token, cell, datum) & giving consdata & 
+				     raising empty & std-at), $EN>
 
 [tcdp-1] <$AT, $EN2> := typecheck-dataop($DO, $EN1),
 	 boolean == get-giving($AT),
 	 $TY := get-using($AT)
 	 ===========================================================
 	 typecheck-datapred($DO, $EN1) = 
-		<using $TY & giving $TY & raising () & std-at, $EN2>
+         <trans-act-type(using $TY & giving $TY & raising () & std-at), $EN2>
 
 [default-tcdo] 
 

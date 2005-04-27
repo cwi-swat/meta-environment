@@ -9,7 +9,7 @@ equations
 
    <$TV, $EN2> := new-type-var($EN1)
    ======================================================================
-   typecheck-action(copy, $EN1) = <transform-action-type(using $TV & 
+   typecheck-action(copy, $EN1) = <trans-act-type(using $TV & 
 				   giving $TV & raising empty & std-at), $EN2>
 
 [tca-then] 
@@ -22,7 +22,7 @@ equations
    $TY2 := get-using($AT2),
    $EN5 := subtype-of($TY1, $TY2, $SU, $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $SU, $EN5),
-   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6),
+   <$AT3, $EN7> := action-type-and($AT1, $AT2, $SU, $EN6),
    $AT4 := set-using(set-giving(set-raising($AT3, $TY3), 
 				get-giving($AT2)), get-using($AT1))
    ===================================================================
@@ -36,13 +36,10 @@ equations
    <$TY1, $EN4> := glb(get-using($AT1), get-using($AT2), $SU, $EN3),
    <$TY2, $EN5> := concat(get-giving($AT1), get-giving($AT2), $SU, $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $SU, $EN5),
-   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6)
+   <$AT3, $EN7> := action-type-and($AT1, $AT2, $SU, $EN6),
+   $AT4 := set-using(set-giving(set-raising($AT3, $TY3), $TY2), $TY1)
    =======================================================================
-   typecheck-action($A1 and-then $A2, $EN1) = <using $TY1 &
-					       giving $TY2 &
-					       raising $TY3 &
-					       $AT3, 
-					       $EN7>
+   typecheck-action($A1 and-then $A2, $EN1) = <$AT4, $EN7>
 
 [tca-and] 
 
@@ -50,9 +47,10 @@ equations
 
 [tca-result] 
 
-   <$AT1, $EN2> := typecheck-data($D, $EN1)
+   <$SAT1, $EN2> := typecheck-data($D, $EN1)
    =========================================================
-   typecheck-action(result $D, $EN1) = <using data & $AT1 & raising empty & std-at, $EN2> 
+   typecheck-action(result $D, $EN1) = 
+     <trans-act-type(using data & $SAT1 & raising empty & std-at), $EN2> 
 
 [default-result] 
 
@@ -75,18 +73,15 @@ equations
 
 [tca-choose-nat]
 
-   typecheck-action(choose-nat, $EN) = <using data & giving integer & std-at, $EN>
+   typecheck-action(choose-nat, $EN) = 
+        <trans-act-type(using data & giving integer & std-at), $EN>
 
 [tca-unfolding] 
 
-   <$TV1, $EN2> := new-type-var($EN1),
-   <$TV2, $EN3> := new-type-var($EN2),
-   <$TV3, $EN4> := new-type-var($EN3),
-   <$ATV, $EN5> := new-action-type-var($EN4),
-   $AT2 := using $TV1 & giving $TV2 & raising $TV3 & $ATV,
-   $EN6 := set-unfold-type($EN5, $AT2)
+   <$AT2, $EN2> := action-of-vars($EN1),
+   $EN3 := set-unfold-type($EN2, $AT2)
    =================================================================
-   typecheck-action(unfolding $A, $EN1) = typecheck-action($A, $EN6)
+   typecheck-action(unfolding $A, $EN1) = typecheck-action($A, $EN3)
 
 [tca-unfold] 
 
@@ -101,8 +96,8 @@ equations
 
    <$TV, $EN2> := new-type-var($EN1)
    ======================================================================
-   typecheck-action(throw, $EN1) = <using $TV & giving empty & 
-			            raising $TV & std-at, $EN2>
+   typecheck-action(throw, $EN1) = <trans-act-type(using $TV & 
+				 giving empty & raising $TV & std-at), $EN2>
 
 [tca-catch] 
 
@@ -114,16 +109,14 @@ equations
    $TY2 := get-using($AT2),
    $EN5 := subtype-of($TY1, $TY2, $SU, $EN4),
    <$TY3, $EN6> := lub(get-giving($AT1), get-giving($AT2), $SU, $EN5),
-   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6)
+   <$AT3, $EN7> := action-type-and($AT1, $AT2, $SU, $EN6),
+   $AT4 := set-using(set-giving(set-raising($AT3, get-raising($AT2)), 
+				$TY3), get-using($AT1))
    ===================================================================
-   typecheck-action($A1 catch $A2, $EN1) = <using get-using($AT1) &
-				            giving $TY3 &
-				            raising get-raising($AT2) & 
-				            $AT3, 
-				            $EN7>
+   typecheck-action($A1 catch $A2, $EN1) = <$AT4, $EN7>
 
-[tca-fail] typecheck-action(fail, $EN) = 
-	<using data & giving empty & raising empty & std-at \ infallible, $EN>
+[tca-fail] typecheck-action(fail, $EN) = <trans-act-type(using data & 
+		     giving empty & raising empty & std-at \ infallible), $EN>
 
 [tca-else] 
 
@@ -134,14 +127,11 @@ equations
    <$TY2, $EN5> := lub(get-giving($AT1), get-giving($AT2), $SU, $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $SU, $EN5),
    $EN7 := not-in(infallible, $AT1, $SU, $EN6),
-   <$AT3, $EN8> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN7),
-   $EN9 := infallible($AT2, $AT3, $SU, $EN8)
+   <$AT3, $EN8> := action-type-and($AT1, $AT2, $SU, $EN7),
+   $AT4 := infallible($AT2, $AT3),
+   $AT5 := set-using(set-giving(set-raising($AT4, $TY3), $TY2), $TY1)
    ===================================================================
-   typecheck-action($A1 else $A2, $EN1) = <using $TY1 &
-				           giving $TY2 &
-			                   raising $TY3 &
-				           $AT3, 
-				           $EN9>
+   typecheck-action($A1 else $A2, $EN1) = <$AT5, $EN8>
 
 [tca-recursively] 
 
@@ -154,7 +144,7 @@ equations
 [tca-copy-bindings] 
 
    typecheck-action(copy-bindings, $EN) = 
-  		     <using data & giving bindings & std-at \ closed, $EN>
+  <trans-act-type(using data & giving bindings & std-at \ closed), $EN>
 
 [tca-scope-1] 
 
@@ -164,30 +154,20 @@ equations
    $EN4 := subtype-of(get-giving($AT1), bindings, $SU, $EN3),
    <$TY1, $EN5> := glb(get-using($AT1), get-using($AT2), $SU, $EN4),
    <$TY2, $EN6> := lub(get-raising($AT1), get-raising($AT2), $SU, $EN5),
-   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $SU, $EN6),
-   $EN8 := closed($AT1, $AT3, $SU, $EN7)
+   <$AT3, $EN7> := action-type-and($AT1, $AT2, $SU, $EN6),
+   $AT4 := closed($AT1, $AT3),
+   $AT5 := set-using(set-giving(set-raising($AT4, $TY2),get-giving($AT2)),$TY1)
    ===================================================================
-   typecheck-action($A1 scope $A2, $EN1) = <using $TY1 &
-				 	       giving get-giving($AT2) &
-					       raising $TY2 & 
-					       $AT3, 
-					       $EN8>
+   typecheck-action($A1 scope $A2, $EN1) = <$AT5, $EN7>
 
 [tca-apply] 	  
 
      $A == apply,
      $SU := localized("Problem at apply", get-location($A)),
-     <$TV1, $EN2> := new-type-var($EN1),
-     <$ATV1, $EN3> := new-action-type-var($EN2),
-     <$ATV2, $EN4> := new-action-type-var($EN3),
-     <$TV2, $EN5> := new-type-var($EN4),
-     <$TV3, $EN6> := new-type-var($EN5),
-     $EN7 := subtype-of(($ATV1 \ terminates), ($ATV2), $SU, $EN6)
+     <$AT1, $EN2> := action-of-vars($EN1),
+     $AT2 := set-using($AT1, (($AT1), get-using($AT1))) \ terminates
      ======================================================================
-     typecheck-action($A, $EN1) = 
-	<using ((using $TV1 & giving $TV2 & raising $TV3 & $ATV1), $TV1) & 
-	 giving $TV2 & raising $TV3 & $ATV2,
-	 $EN7>
+     typecheck-action($A, $EN1) = <$AT2, $EN2>
 
 [default-tca-apply] 	  
 
@@ -198,10 +178,12 @@ equations
 
 [tca-close]
 
-    <$ATV, $EN2> := new-action-type-var($EN1)
+    <$AT1, $EN2> := action-of-vars($EN1),
+    act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9) := $AT1,
+    $AT2 := act($TY1, $TY2, $TY3, $TY4, empty, $TY6, $TY7, $TY8, $TY9)   
     ===================================================================
-    typecheck-action(close, $EN1) = 
-		   <using ($ATV) & giving ($ATV & closed) & raising empty & std-at, $EN2>
+    typecheck-action(close, $EN1) = <trans-act-type(using ($AT1) & 
+			    giving ($AT2) & raising empty & std-at), $EN2>
 
 [default-tca-close]
 	
@@ -213,8 +195,8 @@ equations
 
 [tca-create] 
 
-    typecheck-action(create, $EN) = <using storable & giving cell & 
-				     std-at \ uncreative, $EN>
+    typecheck-action(create, $EN) = <trans-act-type(using storable & 
+				  giving cell & std-at \ uncreative), $EN>
 
 [default-create] 
 
@@ -225,8 +207,9 @@ equations
 
 [tca-update] 
 
-    typecheck-action(update, $EN) = <using (cell, storable) & giving () &
-				     raising () & std-at \ ineffective, $EN>
+    typecheck-action(update, $EN) = 
+        <trans-act-type(using (cell, storable) & giving () &
+				     raising () & std-at \ ineffective), $EN>
 
 [default-update] 
 
@@ -237,8 +220,8 @@ equations
 
 [tca-inspect] 
 
-    typecheck-action(inspect, $EN) = <using cell & giving storable &
-				      raising () & std-at \ stable, $EN>
+    typecheck-action(inspect, $EN) = <trans-act-type(using cell & 
+			  giving storable & raising () & std-at \ stable), $EN>
 
 [default-inspect]
 

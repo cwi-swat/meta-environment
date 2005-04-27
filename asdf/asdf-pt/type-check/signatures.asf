@@ -21,7 +21,7 @@ equations
     $SU := subject(""),
     $TY1 := get-using($AT1),
     $TY2 := get-using($AT2),
-    <(using $TY3), $EN> := lub((using $TY1), (using $TY2), $SU, $EN),
+    <(using $TY3), $EN> := glb((using $TY1), (using $TY2), $SU, $EN),
     $TY4 := get-giving($AT1),
     $TY5 := get-giving($AT2),
     <(giving $TY6), $EN> := lub((giving $TY4), (giving $TY5), $SU, $EN),

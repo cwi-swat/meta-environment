@@ -20,7 +20,7 @@ context-free syntax
 %% User defined
 
   data(Type, Data)		-> Data
-  cdata(Cell, Data)		-> Data
+  cdata(Token, Cell, Data)		-> Data
 
 %%  DataConstant		-> Data
 

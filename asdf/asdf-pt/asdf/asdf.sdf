@@ -36,9 +36,9 @@ exports
 
   context-free syntax
 
-    AS-Variable 		-> AS-Requires {cons("requires")}
-    AS-Requires-Production 	-> AS-Requires {cons("requires")}
-    AS-Constant 		-> AS-Requires {cons("requires")}
+    AS-Variable 		-> AS-Requires {cons("requires-var")}
+    AS-Requires-Production 	-> AS-Requires {cons("requires-prod")}
+    AS-Constant 		-> AS-Requires {cons("requires-cons")}
 
   context-free syntax
 

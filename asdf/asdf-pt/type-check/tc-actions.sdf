@@ -21,7 +21,8 @@ hiddens
 variables
 
   "$TY"[0-9]?		-> Type
-  "$AT"[0-9]?		-> {SingleActionType "&"}*
+  "$AT"[0-9]?		-> ActionType
+  "$SAT"[0-9]?		-> SingleActionType
   "$TV"[0-9]?		-> TypeVariable
   "$ATV"[0-9]?		-> ActionTypeVariable
   "$EN"[0-9]*		-> Environment

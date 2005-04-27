@@ -31,6 +31,8 @@ context-free syntax
 
   check-con(Constraint, VariableMap)	     -> Answer
 
+  map-diff(VariableMap, VariableMap)	     -> VariableMap
+
 hiddens variables
 
   "$LC"[0-9]?		-> List[[Constraint]]

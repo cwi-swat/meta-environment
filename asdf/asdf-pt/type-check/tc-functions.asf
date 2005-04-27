@@ -40,7 +40,7 @@ equations
       $LT : $SO -> $AT1 := $AFS1,
       <$AT2, $EN2> := typecheck-action($AC, $EN),
       $SU1 := localized("Problem with type of whole eqn", get-location($FD)),
-      $LC1 := subtype-con(($AT2), ($AT1), $SU1) : get-constraints($EN2),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU1) : get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       $M2 := solve($M1, $EN2),
       error($TY1, $TY2, $SU2) := $M2
@@ -54,7 +54,8 @@ equations
       $LT : $SO -> $AT1 := $AFS1,
       <$AT2, $EN2> := typecheck-action($AC, $EN),
       $SU := localized("Problem with type of whole eqn", get-location($FD)),
-      $LC1 := subtype-con(($AT2), ($AT1), $SU) : get-constraints($EN2),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU) : 
+							 get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       vmap($VT*) := solve($M1, $EN2),
       $LC3 := check-last-constraints($LC2, vmap($VT*)),
@@ -71,7 +72,8 @@ equations
       <$AT2, $EN2> := typecheck-action($AC, $EN),
       $ER !:= $AT2,
       $SU := localized("Problem with type of whole eqn", get-location($FD)),
-      $LC1 := subtype-con(($AT2), ($AT1), $SU) : get-constraints($EN2),
+      $LC1 := subtype-con(($AT2), (trans-act-type($AT1)), $SU) : 
+							get-constraints($EN2),
       <$M1, $LC2> := solve-constraints($LC1, $EN2),
       vmap($VT*) := solve($M1, $EN2),
       $LC3 := check-last-constraints($LC2, vmap($VT*)),
@@ -85,7 +87,7 @@ equations
 
       sigs($AFS1*, $LT : $SO -> $AT, $AFS2*) := get-signatures($EN)
       ============================================================
-      typecheck-action($LT $CO, $EN) = <$AT, $EN>
+      typecheck-action($LT $CO, $EN) = <trans-act-type($AT), $EN>
 
 [feedback-0] yes $ANS = $ANS
 
@@ -117,3 +119,9 @@ equations
 						[localized("", file(""))])])
 
 [get-subjects-1] get-subjects($SU, $SU*) = $SU, $SU*
+
+[summary-simp-1] 
+
+        summary("", "", [$ER1*, $ER2*]) != summary("","",[])
+        =====================================================
+	summary("", "", [$ER1*, error("Type check report", [subject("Type check OK")]), $ER2*]) = summary("", "", [$ER1*, $ER2*])

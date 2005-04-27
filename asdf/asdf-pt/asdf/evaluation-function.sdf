@@ -47,7 +47,7 @@ context-free syntax
 
   use-to-type(AS-Argument)	  -> AtomicType
 
-  get-eval-prefixdataop({(Literal ":" AS-Argument) ","}*)  -> DataOp
+  get-eval-datasel(AtomicType, Integer, {(Literal ":" AS-Argument) ","}*)  -> EvalDataOpSigs
 
   use-to-char(Literal)	  -> DataOp
 
@@ -84,6 +84,7 @@ hiddens variables
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$DOS"[0-9]?		-> EvalDataOpSigs
   "$EDOS"		-> EvalData
+  "$EDOS"[0-9]?"*"	-> {EvalData ","}*
 %%  "$EDOS"[0-9]?		-> EvalDataOpSigs
   "$DCS"[0-9]?		-> List[[<Data, Type>]]
 
@@ -95,6 +96,6 @@ hiddens variables
 
   "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
   "$ASA"[0-9]?		-> AS-Argument
-
+  "$N"[0-9]?		-> Integer
 
 

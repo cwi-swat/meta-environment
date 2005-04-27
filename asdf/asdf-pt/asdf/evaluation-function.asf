@@ -12,7 +12,7 @@ equations
 	     $DOS>
 
 [get-constants-1] get-constants(uqliteral($CH+) : $SO, $DCS) = 
-		  <data($CH+), sort-to-type($SO)>:$DCS
+		  cons(<data($CH+), sort-to-type($SO)>,$DCS)
 
 [get-eval-info-1]
 
@@ -22,7 +22,22 @@ equations
 	    get-eval-dataop($ASM, [])>
 
 [get-eval-use-1]
-    get-eval-use($LT : $ASA, $LS*) = use-to-type($ASA)
+    
+    ($TY*) := get-eval-use($LS*),
+    ($TY*) != ()
+    ==================================================
+    get-eval-use($LT : $ASA, $LS*) = (use-to-type($ASA), $TY*)
+
+[get-eval-use-1]
+    
+    $ATY := get-eval-use($LS*)
+    ==================================================
+    get-eval-use($LT : $ASA, $LS*) = (use-to-type($ASA), $ATY)
+
+[get-eval-use-2]
+    
+    get-eval-use($LT : $ASA) = use-to-type($ASA)
+
 
 [use-to-type-1] 
 
@@ -36,8 +51,29 @@ equations
    =======================================================================
    use-to-type(Action & $SFR1*) = $ATY
 
-[get-eval-prefixdataop-1]
-    get-eval-prefixdataop($LT : $ASA, $LS*) = use-to-char($LT)
+[get-eval-datasel-1]
+
+    natcon($CH+) := $N,
+    $DOS1 := get-eval-datasel($ATY, $N+1, $LS*),
+    [$EDOS*] := $DOS1,
+    $DOS2 := cons(<use-to-char($LT), datasel($ATY, give (the use-to-type($ASA) #index($CH+)))>,$DOS1)
+    =================================================
+    get-eval-datasel($ATY, $N, $LT : $ASA, $LS*) = $DOS2
+
+[get-eval-datasel-2]
+
+    natcon($CH+) := $N,
+    Data != $ASA,
+    $DOS1 := [<use-to-char($LT), datasel($ATY, give (the use-to-type($ASA) #index($CH+)))>]
+    =================================================
+    get-eval-datasel($ATY, $N, $LT : $ASA) = $DOS1
+
+[get-eval-datasel-2]
+
+    natcon($CH+) := $N,
+    $DOS1 := [<use-to-char($LT), datasel($ATY, give (the data))>]
+    =================================================
+    get-eval-datasel($ATY, $N, $LT : Data) = $DOS1
 
 [use-to-char-1] 
    use-to-char(uqliteral($CH1$CH1*)) = prefixdataop($CH1$CH1*)
@@ -48,10 +84,10 @@ equations
    get-eval-dataop(sort-to-type($SO), $ARR, $DOS)
 
 [get-eval-dataop-2]
-   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(atomictype($CH+),give the get-eval-use($LS*))>], $DOS1)
+   $DOS2 := concat(get-eval-datasel($ATY, 1, $LS*), $DOS1)
    =======================================================================
    get-eval-dataop($ATY, uqliteral($CH+)($LS*), $DOS1) = 
-      <prefixdataop($CH+),datacon(atomictype($CH+),get-eval-use($LS*))>:$DOS2
+      cons(<prefixdataop($CH+),datacon($ATY, get-eval-use($LS*))>,$DOS2)
 
 [get-eval-dataop-3]
    get-eval-dataop($ATY, $ARR1 | $ARR2, $DOS) = 

@@ -14,7 +14,7 @@ exports
 
 context-free syntax 
 
-  typecheck-data(Data, Environment)		-> <ActionType, Environment>
+  typecheck-data(Data, Environment)		-> <SingleActionType, Environment>
   typecheck-dataop(DataOp, Environment)		-> <ActionType, Environment>
   typecheck-datapred(DataOp, Environment)	-> <ActionType, Environment>
   
@@ -49,6 +49,8 @@ variables
   "$DT"[0-9]?"*"   -> {<DataOp, Type> ","}*
 
   "$VR"[0-9]?	   -> Variable
+
+  "$SU"[0-9]?	   -> Subject
 
 sorts
 

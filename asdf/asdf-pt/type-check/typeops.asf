@@ -52,19 +52,19 @@ equations
    ===========================================================
    lub($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
 
-[default-concat-1] 
-
-   <$TV, $EN2> := new-type-var($EN1),
-   $EN3 := add-constraint(concat-con($TY1, $TY2, $TV, $SU), $EN2)
-   ==============================================================
-   concat($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
-
 [concat-1] 
 
    has-variable($TY1, no) == no,
    has-variable($TY2, no) == no
    ==============================================================
    concat($TY1, $TY2, $SU, $EN1) = <$TY1+$TY2, $EN1>
+
+[default-concat-1] 
+
+   <$TV, $EN2> := new-type-var($EN1),
+   $EN3 := add-constraint(concat-con($TY1, $TY2, $TV, $SU), $EN2)
+   ==============================================================
+   concat($TY1, $TY2, $SU, $EN1) = <$TV, $EN3>
 
 [bracket-1] ($TY) = $TY
 
@@ -91,14 +91,16 @@ equations
 
 [st-def-5a] st-def(($AT1), ($AT2), $SU, $EN) = at-st($AT1, $AT2, $SU, $EN)
 
-[st-def-5c] st-def((using $TY1), (using $TY2), $SU, $EN) = 
+[st-def-5b] st-def((using $TY1), (using $TY2), $SU, $EN) = 
                                                st($TY2, $TY1, $SU, $EN)
 
-[st-def-5e] st-def((giving $TY1), (giving $TY2), $SU, $EN) = 
+[st-def-5c] st-def((giving $TY1), (giving $TY2), $SU, $EN) = 
 					       st($TY1, $TY2, $SU, $EN)
 
-[st-def-5g] st-def((raising $TY1), (raising $TY2), $SU, $EN) = 
+[st-def-5d] st-def((raising $TY1), (raising $TY2), $SU, $EN) = 
 					       st($TY1, $TY2, $SU, $EN)
+
+[st-def-5e] st-def(($AT), action, $SU, $EN) = empty-map
 
 [st-def-6] 
 
@@ -169,7 +171,6 @@ equations
 
 [default-st-def-1] st-def($TY1, $TY2, $SU, $EN) = error($TY1, $TY2, $SU)
 
-
 [plus-1] ($TY1*) + ($TY2*) = ($TY1*, $TY2*)
 
 [plus-2] $TV !:= $TY1
@@ -215,13 +216,23 @@ equations
 
 [split-left-tuple-1]
 
-        <($TY3*), ($TY4*)> := split-right-tuple(($TY1*), ($TY2*))
+        <($TY3*), ($TY4*)> := split-left-tuple(($TY1*), ($TY2*))
 	=========================================================
 	split-left-tuple(($TY1, $TY1*), ($TY2, $TY2*)) = 
 					 <($TY1, $TY3*), ($TY4*)>
 
+[split-left-tuple-1]
+
+        <$TY3, ($TY4*)> := split-left-tuple(($TY1*), ($TY2*)),
+	($TY5*) !:= $TY3
+	=========================================================
+	split-left-tuple(($TY1, $TY1*), ($TY2, $TY2*)) = 
+					 <($TY1, $TY3), ($TY4*)>
+
 [split-left-tuple-2]
 
+	($TY3*) !:= $TY2
+	=======================================================
 	split-left-tuple(($TY1, $TY1*), $TY2) = <$TY1, ($TY1*)>
 
 [split-left-tuple-3]

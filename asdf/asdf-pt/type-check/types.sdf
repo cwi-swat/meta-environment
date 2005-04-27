@@ -26,6 +26,10 @@ context-free syntax
 
   act(Type, Type, Type, Type, Type, Type, Type, Type, Type)  -> ActionType
 
+  set-using(ActionType, Type)	      -> ActionType
+  set-giving(ActionType, Type)      -> ActionType
+  set-raising(ActionType, Type)     -> ActionType
+
 %% Type variables
 
   TypeVariable		-> Type
@@ -50,7 +54,7 @@ variables
 
   "$AN"[1-9]?	-> Answer
   "$EN"[0-9]?	-> Environment
-  "$TY"[1-9]?	-> Type
+  "$TY"[0-9]*	-> Type
   "$AT"[0-9]?	-> ActionType
   "$SAT"[0-9]?	-> SingleActionType
   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*

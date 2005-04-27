@@ -16,54 +16,33 @@ equations
 
 [infallible-1] 
 
-   $EN2 := add-constraint(infallible-con($AT1, $AT2, $SU), $EN1)
-   ========================================================
-   infallible($AT1, $AT2, $SU, $EN1) = $EN2
+infallible(act($TY11, $TY12, $TY13, $TY14, $TY15, $TY16, $TY17, $TY18, $TY19),
+    act($TY21, $TY22, $TY23, $TY24, $TY25, $TY26, $TY27, $TY28, $TY29)) =
+    act($TY21, $TY22, $TY23, $TY14, $TY25, $TY26, $TY27, $TY28, $TY29) 
 
 [closed-1] 
 
-   $EN2 := add-constraint(closed-con($AT1, $AT2, $SU), $EN1)
-   ====================================================
-   closed($AT1, $AT2, $SU, $EN1) = $EN2
+closed(act($TY11, $TY12, $TY13, $TY14, $TY15, $TY16, $TY17, $TY18, $TY19),
+    act($TY21, $TY22, $TY23, $TY24, $TY25, $TY26, $TY27, $TY28, $TY29)) =
+    act($TY21, $TY22, $TY23, $TY24, $TY15, $TY26, $TY27, $TY28, $TY29) 
 
 [not-in-1]
 
-   $EN2 := add-constraint(not-in-con($SAT, $AT, $SU), $EN1)
+   $EN2 := subtype-of(data, $TY, $SU, $EN1)
    ===================================================
-   not-in($SAT, $AT, $SU, $EN1) = $EN2
+   not-in(infallible, act($TY1, $TY2, $TY3, $TY, $TY5, $TY6, $TY7, $TY8, $TY9),
+          $SU, $EN1) = $EN2
 
-[at-and-1] 
+[not-in-2]
 
-   at-and($AT1, $AT2, $AT3, $SU) = 
-           insert(single(($AT1), ($AT2), $SU), single(($AT1), ($AT3), $SU))
-
-[at-has-propety-1]
-
-   at-has-property($SAT1* & $SAT & $SAT2*, $SAT, $SU) = empty-map
-
-[default-at-has-propety-1] 
-
-   at-has-property($SAT1* & $ATV & $SAT2*, $SAT, $SU) = 
-					   single(($ATV), ($SAT), $SU)
+   $EN2 := subtype-of(data, $TY, $SU, $EN1)
+   ===================================================
+   not-in(terminates, act($TY1, $TY2, $TY3, $TY4, $TY5, $TY, $TY7, $TY8, $TY9),
+          $SU, $EN1) = $EN2
 
 [at-contains-1] at-contains($SAT, $SAT1* & $SAT & $SAT2*) = yes
 
 [default-at-contains-1] at-contains($SAT, $AT) = no
-
-[at-diff-1] at-diff($SAT1* & $SAT & $SAT2*, $SAT & $SAT3*) = 
-				  at-diff($SAT1* & $SAT2*, $SAT3*)
-
-[default-at-diff-1] at-diff($AT, $SAT & $SAT3*) = 
-				  at-diff($AT, $SAT3*)
-
-[default-at-diff-2] at-diff($AT, ) = $AT
-				  
-
-[get-variable-1] get-variable($SAT1* & $ATV & $SAT2*) = $ATV
-
-[at-has-variable-1] at-has-variable($SAT1* & $ATV & $SAT2*) = yes
-
-[default-at-has-variable-1] at-has-variable($AT) = no
 
 [norm-1] == $AT 
 	 ==================
@@ -79,76 +58,82 @@ equations
 
 [at-st-1] at-st($AT, $AT, $SU, $EN) = empty-map
 
-[at-st-2] $AT != $SAT1 & $SAT2 & $SAT*
-	  =========================================
-	  at-st($AT, $SAT1 & $SAT2 & $SAT*, $SU, $EN) = insert(single((norm($AT)), ($SAT1), $SU), at-st(norm($AT), $SAT2 & $SAT*, $SU, $EN))
-
 [default-at-st-1] at-st($AT1, $AT2, $SU, $EN) = at-st-def($AT1, $AT2, $SU, $EN)
 
-[at-st-2] at-st-def($AT, Action, $SU, $EN) = empty-map
+[at-st-2] at-st-def(
+            act($TY11, $TY12, $TY13, $TY14, $TY15, $TY16, $TY17, $TY18, $TY19),
+            act($TY21, $TY22, $TY23, $TY24, $TY25, $TY26, $TY27, $TY28, $TY29),
+	     $SU, $EN) = 
+	       insert(st($TY21, $TY11, $SU, $EN), 
+                 insert(st($TY12, $TY22, $SU, $EN), 
+	           insert(st($TY13, $TY23, $SU, $EN), 
+                     insert(st($TY14, $TY24, $SU, $EN), 
+		       insert(st($TY15, $TY25, $SU, $EN), 
+                         insert(st($TY16, $TY26, $SU, $EN), 
+                           insert(st($TY17, $TY27, $SU, $EN), 
+                             insert(st($TY18, $TY28, $SU, $EN), 
+                               st($TY19, $TY29, $SU, $EN)))))))))
 
-[at-st-3] at-st-def($ATV1, $AT2, $SU, $EN) = single(($ATV1), ($AT2), $SU)
+[diff-1] $SAT1* & $SAT & $SAT2* \ $SAT = $SAT1* & $SAT2*
 
-[at-st-4] at-st-def($AT1, $ATV2, $SU, $EN) = single(($AT1), ($ATV2), $SU)
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\infallible =
+          act($TY1, $TY2, $TY3, data, $TY5, $TY6, $TY7, $TY8, $TY9)
 
-[at-st-5] at-st-def($SAT1* & $SAT & $SAT2*, $SAT, $SU, $EN) = empty-map
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\closed =
+          act($TY1, $TY2, $TY3, $TY4, data, $TY6, $TY7, $TY8, $TY9)
 
-[at-st-6]  $TY1 := get-using($AT)
-	   ===============================
-	   at-st-def($AT, using $TY2, $SU, $EN) = 
-              st((using $TY1), (using $TY2), $SU, $EN)
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\terminates =
+          act($TY1, $TY2, $TY3, $TY4, $TY5, data, $TY7, $TY8, $TY9)
 
-[at-st-7]  $TY1 := get-giving($AT)
-	   ===============================
-	   at-st-def($AT, giving $TY2, $SU, $EN) = 
-              st((giving $TY1), (giving $TY2), $SU, $EN)
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\uncreative =
+          act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, data, $TY8, $TY9)
 
-[at-st-8]  $TY1 := get-raising($AT)
-	   ===============================
-	   at-st-def($AT, raising $TY2, $SU, $EN) = 
-	      st((raising $TY1), (raising $TY2), $SU, $EN)
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\ineffective=
+          act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, data, $TY9)
 
-[at-st-9] $ATV2 !:= $SAT,
-	  $SAT3* & $SAT & $SAT4* !:= $SAT1* & $SAT2*
-	  =============================================================
-	  at-st-def($SAT1* & $ATV & $SAT2*, $SAT, $SU, $EN) = 
-					    single(($ATV), ($SAT), $SU) 
+[diff-2] act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)\stable =
+          act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, data)
 
-
-[diff-1] $SAT1* & $SAT & $SAT2* \ $SAT = $SAT1* & $SAT2* \ $SAT
-
-[default-diff-1] 
-
-        at-has-variable($SAT1*) == no
-	==========================
-	$SAT1* \ $SAT = $SAT1*
-
-[transform-1] $TY1 := get-using($AT),
+[trans-1]     $TY1 := get-using($AT),
 	      $TY2 := get-giving($AT),
 	      $TY3 := get-raising($AT),
-	      no == at-has-variable($AT),
-	      $TY4 := transform-has($AT, infallible),
-	      $TY5 := transform-has($AT, closed),
-	      $TY6 := transform-has($AT, terminates),
-	      $TY7 := transform-has($AT, uncreative),
-	      $TY8 := transform-has($AT, ineffective),
-	      $TY9 := transform-has($AT, stable)
+	      $TY4 := trans-has($AT, infallible),
+	      $TY5 := trans-has($AT, closed),
+	      $TY6 := trans-has($AT, terminates),
+	      $TY7 := trans-has($AT, uncreative),
+	      $TY8 := trans-has($AT, ineffective),
+	      $TY9 := trans-has($AT, stable)
 	      ===================================
-	      transform-action-type($AT) = 
-			act(transform-type($TY1), transform-type($TY2), 
-			    transform-type($TY3), transform-type($TY4), 
-			    transform-type($TY5), transform-type($TY6), 
-			    transform-type($TY7), transform-type($TY8), 
-			    transform-type($TY9))
+	      trans-act-type($AT) = 
+			act(trans-type($TY1), trans-type($TY2), 
+			    trans-type($TY3), trans-type($TY4), 
+			    trans-type($TY5), trans-type($TY6), 
+			    trans-type($TY7), trans-type($TY8), 
+			    trans-type($TY9))
 
-[transform-2] transform-type(($AT)) = (transform-action-type($AT))
+[trans-2] trans-type(($AT)) = (trans-act-type($AT))
 
-[default-transform-2] transform-type($TY) = $TY
+[default-trans-2] trans-type($TY) = $TY
 
-[transform-3] at-contains($SAT, $AT) == yes
+[trans-3] at-contains($SAT, $AT) == yes
 	      ================================
-	      transform-has($AT, $SAT) = empty 
+	      trans-has($AT, $SAT) = empty 
 
-[transform-3] at-contains($SAT, $AT) == no
+[trans-3] at-contains($SAT, $AT) == no
 	      ================================
-	      transform-has($AT, $SAT) = data
+	      trans-has($AT, $SAT) = data
+
+[action-of-vars-1] 
+
+   <$TV1, $EN2> := new-type-var($EN1),
+   <$TV2, $EN3> := new-type-var($EN2),
+   <$TV3, $EN4> := new-type-var($EN3),
+   <$TV4, $EN5> := new-type-var($EN4),
+   <$TV5, $EN6> := new-type-var($EN5),
+   <$TV6, $EN7> := new-type-var($EN6),
+   <$TV7, $EN8> := new-type-var($EN7),
+   <$TV8, $EN9> := new-type-var($EN8),
+   <$TV9, $EN10> := new-type-var($EN9)
+   =======================
+   action-of-vars($EN1) = 
+          <act($TV1, $TV2, $TV3, $TV4, $TV5, $TV6, $TV7, $TV8, $TV9), $EN10>

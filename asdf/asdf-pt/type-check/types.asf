@@ -8,3 +8,16 @@ equations
 
 [get-raising-2] 
   get-raising(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)) = $TY3
+
+[set-using-2] 
+ set-using(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9), $TY10) = 
+                    act($TY10, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)
+
+[set-giving-2] 
+ set-giving(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9), $TY10) =
+                    act($TY1, $TY10, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)
+
+[set-raising-2] 
+ set-raising(act($TY1, $TY2, $TY3, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9), $TY10)=
+                    act($TY1, $TY2, $TY10, $TY4, $TY5, $TY6, $TY7, $TY8, $TY9)
+

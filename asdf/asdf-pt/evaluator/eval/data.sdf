@@ -60,3 +60,5 @@ hiddens variables
   "E"[0-9]?		-> Environment
   "A"[0-9]?		-> Action
   "C"[0-9]?		-> Cell
+  "TY"[0-9]?		-> Type
+  "TY,"[0-9]?"*"	-> {Type ","}*

@@ -7,11 +7,11 @@ equations
   execute(A,E1) = <R, get-store(E)>
 
 
-[cons-2] eval(the consdata, cdata(C, D), E) = normal cdata(C, D)
+[cons-2] eval(the consdata, cdata(TK, C, D), E) = normal cdata(TK, C, D)
 
-[consdata-1] eval(consdata, (C, D), E) = normal cdata(C, D)
+[consdata-1] eval(consdata, (TK, C, D), E) = normal cdata(TK, C, D)
 
-[invert-1] eval(invert, (C, cdata(C, D)), E) = normal D
+[invert-1] eval(invert, (C, cdata(TK, C, D)), E) = normal D
 
 [general-1] [DO1*, <DO, datasel(TY, A)>, DO2*] := get-dataops(E1),
 	    <normal D2, E2> := eval(A, D1, {}, E1)

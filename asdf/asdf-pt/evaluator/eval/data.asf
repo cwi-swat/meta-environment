@@ -20,7 +20,9 @@ equations
 
 [klaf-1] eval(# 1, (D, D*), E) = normal D
 
-[default-klaf-1] eval(# 1, D, E) = normal D
+[klaf-1] (D2, D*) !:= D
+	 ==========================
+	 eval(# 1, D, E) = normal D
 
 [klaf-2] eval(# 2, (D1, D2, D*), E) = normal D2
 
@@ -45,6 +47,13 @@ equations
 [the-5] eval(the action, A, E) = normal A
 
 [the-6] eval(the cell, C, E) = normal C
+
+[the-7] normal D2 := eval(the TY, D1, E),
+	normal D3 := eval(the (TY,*), (D1*), E)
+	=======================================
+	eval(the (TY, TY,*), (D1, D1*), E) =  normal (D1, D1*)
+
+[the-8] eval(the (), (), E) = normal ()
 
 [plus-1] eval(+, (N1, N2), E) = normal N1+N2
 
@@ -107,3 +116,5 @@ equations
 [bindings-8] no-bindings = {}
 
 [bracket-1] (D) = D
+
+[bracket-2] (TY) = TY

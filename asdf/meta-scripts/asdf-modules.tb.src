@@ -419,6 +419,7 @@ in
     /* Remove generated values for ASDF module from 
        database when module text changes */
     rec-msg(invalidate-asdf-in-db(Name?)).
+printf("invalidate-asdf-in-db(%s)\n", Name) .
     snd-msg(ts-remove-value("asdf-text", Name)) .
     snd-msg(ts-remove-value("sdf-text", Name)) .
     snd-msg(ts-remove-value("asf-text", Name)) .
@@ -1201,13 +1202,16 @@ process RemoveGeneratedValues(Module : str)  is
   snd-msg(ts-contains-key("asdf-text", Module)).
   (
     rec-msg(ts-contains-key) .
+printf("RemoveGeneratedValues\n").
     snd-msg(ts-remove-value("sdf-tree", Module)) .
     snd-msg(ts-remove-value("sdf-text", Module)) .
     snd-msg(ts-remove-value("asf-text", Module)) .
     snd-msg(ts-remove-value("asf-tree", Module)) .
     snd-msg(ts-remove-value("asdf-pt-text", Module)) .
     snd-msg(ts-remove-value("asdf-pt-tree", Module)) .
-    snd-msg(ts-remove-value("asdf-parse-table", Module)) 
+    snd-msg(ts-remove-value("asdf-parse-table", Module)) .
+    snd-msg(ts-remove-value("asdf-eval-info", Module)) .
+    snd-msg(ts-remove-value("asdf-type-info", Module))
   +
     rec-msg(ts-not-contains-key)
   )
@@ -1484,7 +1488,7 @@ in
 
     . snd-msg(io-unpack-term(RTree)) /* This is very important */
     . rec-msg(io-term(RTree?))
-    . EvalutateASDFTerm(RTree, ModuleName, RTree?) 
+    . EvaluateASDFTerm(RTree, ModuleName, RTree?) 
     . StackPushTerm(Stack, Stack?, RTree)
     .
     if not-equal(RTree, error-tree) then
@@ -1505,7 +1509,7 @@ in
   if equal(Registered, true) then
     GetParsetree(EditorId, STree?)
     /* RTree is actually not a tree */
-    . EvalutateASDFTerm(STree, ModuleName, RTree?)
+    . EvaluateASDFTerm(STree, ModuleName, RTree?)
     .
     if not-equal(RTree, error-tree) then
       StackPushTerm(Stack, Stack?, RTree)
@@ -1998,8 +2002,7 @@ in
    Id := process-id
    . ModuleName := first(InfoModuleNames)
    . ModuleNames := next(InfoModuleNames)
-   . snd-msg(ts-get-term-value("module-type", ModuleName))
-   .
+   . snd-msg(ts-get-term-value("module-type", ModuleName)) .
    (  
       rec-msg(ts-value(Type?)) .
       if equal(Type, asdf) then
@@ -2061,7 +2064,7 @@ in
 endlet
 
 
-process EvalutateASDFTerm(STree : term, ModuleName : str, RTree : term?) is
+process EvaluateASDFTerm(STree : term, ModuleName : str, RTree : term?) is
 let
    AllInfo : term, 
    ErrorText : str,

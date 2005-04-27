@@ -6,4 +6,4 @@ equations
    <$M1, $LC> := solve-constraints(get-constraints($EN2), $EN2),
    $M2 := solve($M1, $EN2)
    =======================================================
-   typecheck($A, $EN1) = <$AT1, $M2, $LC, $EN2>
+   typecheck($A, $EN1) = <$AT1, $M2, $M1, $LC, $EN2>

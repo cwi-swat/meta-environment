@@ -15,7 +15,7 @@ context-free syntax
 lexical syntax
 
   [a-z]+	-> UserDefType
-  UserDefType	->Type {avoid}
+  UserDefType	->AtomicType {avoid}
    
 %%  [a-z\-]+	-> UserDefData
 %%  UserDefData	-> Data {avoid}
@@ -102,7 +102,8 @@ lexical syntax
 
   "copy-bindings"	-> PrefixDataOp {reject}
   "scope"		-> PrefixDataOp {reject}
-
+  "-bindings"		-> PrefixDataOp {reject}
+  "closure"		-> PrefixDataOp {reject}
 
   "create"		-> PrefixDataOp {reject}
   "inspect"		-> PrefixDataOp {reject}

@@ -23,23 +23,13 @@ context-free syntax
   action-type-and(ActionType, ActionType, Subject, Environment)	
 					  -> <ActionType, Environment>
 
-  infallible(ActionType, ActionType, Subject, Environment)	-> Environment
+  infallible(ActionType, ActionType)	-> ActionType
 
-  closed(ActionType, ActionType, Subject, Environment)		-> Environment
+  closed(ActionType, ActionType)	-> ActionType
 
   not-in(SingleActionType, ActionType, Subject, Environment)	-> Environment
 
-  at-and(ActionType, ActionType, ActionType, Subject)		-> VariableMap
-
-  at-has-property(ActionType, SingleActionType, Subject)	-> VariableMap
-
   at-contains(SingleActionType, ActionType)		-> Answer
-
-  at-diff(ActionType, ActionType)			-> ActionType
-
-  get-variable(ActionType)				-> ActionType
-
-  at-has-variable(ActionType)				-> Answer
 
   norm(ActionType)					-> ActionType
 
@@ -47,11 +37,13 @@ context-free syntax
 
   at-st-def(ActionType, ActionType, Subject, Environment)	-> VariableMap
 
-  transform-action-type(ActionType)	  -> ActionType
+  trans-act-type(ActionType)	  -> ActionType
 
-  transform-type(Type)			  -> Type
+  trans-type(Type)			  -> Type
 
-  transform-has(ActionType, SingleActionType)	-> Type
+  trans-has(ActionType, SingleActionType)	-> Type
+
+  action-of-vars(Environment)		-> <ActionType, Environment>
 
 hiddens variables
 
@@ -63,7 +55,7 @@ hiddens variables
   "$SAT"[0-9]?		-> SingleActionType
   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
   "$ATV"[0-9]?		-> ActionTypeVariable
-  "$EN"[0-9]?		-> Environment
+  "$EN"[0-9]*		-> Environment
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
   "$M"[0-9]?		-> VariableMap

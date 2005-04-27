@@ -9,7 +9,8 @@ exports
 
 context-free start-symbols
 
-  <ActionType, VariableMap, List[[Constraint]], Environment> <Type, Environment>
+  <ActionType, VariableMap, VariableMap, List[[Constraint]], Environment> <Type, Environment>
+  Type <VariableMap, Boolean>
 
 sorts
 
@@ -18,7 +19,7 @@ sorts
 context-free syntax
 
   typecheck(Action, Environment)  
-       -> <ActionType, VariableMap, List[[Constraint]], Environment>
+       -> <ActionType, VariableMap, VariableMap, List[[Constraint]], Environment>
 
 lexical syntax
 
