@@ -3,6 +3,8 @@ $Id$
 Wed Apr 27 10:07:14 CEST 2005 <kooiker@cwi.nl>
  * gui:
    - Move to error-gui package
+ * configure.ac:
+   - Remove dependency on toolbus-java-adapter
 
 Mon Apr 25 13:58:11 CEST 2005 <kooiker@cwi.nl>
  * gui:
