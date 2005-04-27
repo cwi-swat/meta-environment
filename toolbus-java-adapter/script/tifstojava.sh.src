@@ -1,6 +1,0 @@
-#! /bin/sh
-
-javadir=__PREFIX__/classes
-jars=__EXTERNAL_JARS__
-
-java -classpath ${javadir}:${jars}:${CLASSPATH} toolbus.JavaTif $@
