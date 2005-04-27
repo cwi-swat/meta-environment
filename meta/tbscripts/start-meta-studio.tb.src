@@ -13,13 +13,13 @@
 #include "button-actions.tb"
 
 process StartNavigator is
-  snd-msg(load-jar("file://__PKGDATA__/navigator.jar"))
+  snd-msg(load-jar("file://__PKGDATA__/navigator.jar", ["file://__PKGDATA__/gui-util.jar","file://__PKGDATA__/gui-data.jar"]))
 
 process StartDialogTool is
   snd-msg(load-jar("file://__PKGDATA__/dialog.jar"))
 
 process StartGraphPanel is
-  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar"))
+  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", ["file://__PKGDATA__/gui-util.jar", "file://__PKGDATA__/gui-data.jar"]))
 
 process MetaGUI is
 let

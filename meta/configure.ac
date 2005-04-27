@@ -194,7 +194,6 @@ AC_CONFIG_FILES([Makefile
    gui/plugin/navigator/Makefile
    gui/plugin/dialog/Makefile
    gui/plugin/graph-painter/Makefile
-   gui/script/Makefile
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile

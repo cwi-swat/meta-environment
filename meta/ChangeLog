@@ -4,6 +4,9 @@ Wed Apr 27 10:35:19 CEST 2005 <kooiker@cwi.nl>
  * Create JDK 1.4 compatible jars
  * configure.ac,gui/Makefile.am:
    - Remove subdir lib
+   - Remove subdir gui/script
+ * tbscripts/start-meta-studio.tb.src:
+   - Add classpath to loadjar
 
 Thu Apr  7 11:41:12 CEST 2005 <kooiker@cwi.nl>
  * src/Makefile.am:
