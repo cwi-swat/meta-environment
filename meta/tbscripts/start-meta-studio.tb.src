@@ -1,5 +1,5 @@
 #include "meta.tb"
-#include "gui.idef"
+#include "meta-studio/gui.idef"
 #include "dialog.idef"
 #include "graph-painter.idef"
 #include "module-selection-listener.tb"

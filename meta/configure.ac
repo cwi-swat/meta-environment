@@ -20,7 +20,6 @@ AC_PROG_LIBTOOL
 AC_SUBST(LIBADD_DL)
 AC_CONFIG_SUBDIRS(libltdl)
 
-
 dnl Handle cflags option
 AC_ARG_WITH(cflags,
   [  --with-cflags=CFLAGS    standard options of c compiler],
@@ -71,6 +70,11 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
+dnl Require meta-studio package
+AC_PACKAGE_REQUIRE(meta-studio, gui-config,
+   [  --with-meta-studio=DIR meta-studio is in DIR])
+AC_SUBST(META_STUDIO)
+
 dnl Require Tide package
 AC_PACKAGE_REQUIRE(tide, tide,
    [  --with-tide=DIR      Tide distribution is in DIR])
@@ -82,7 +86,7 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
 AC_SUBST(TIDE_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
