@@ -6,7 +6,7 @@ jtif: $(TOOLNAME).tifs
 	(cd src; $(TOOLBUS_JAVA_ADAPTER)/bin/tifstojava \
 		-tool $(TOOLNAME) \
 		-tifs ../$(TOOLNAME).tifs \
-		-package $(PACKAGE) \
+		-package $(JAVA_PACKAGE) \
 		-swing)
 	rm $(TOOLNAME).tifs
 endif

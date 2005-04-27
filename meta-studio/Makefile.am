@@ -10,7 +10,8 @@ EXTRA_DIST = package
 SUBDIRS = \
 	lib \
 	util \
-	studio
+	studio \
+	script
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

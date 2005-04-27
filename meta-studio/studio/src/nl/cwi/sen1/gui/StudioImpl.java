@@ -45,6 +45,7 @@ import net.infonode.util.Direction;
 import nl.cwi.sen1.util.StudioMenuBar;
 import toolbus.AbstractTool;
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
@@ -212,16 +213,21 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	public void loadJar(String jarName) {
-		System.err.println("loadJar: " + jarName);
-		URL url = null;
-		try {
-			url = new URL(jarName);
-		} catch (MalformedURLException e) {
-			System.err.println("Invalid URL: " + jarName);
-			System.exit(1);
-		}
+		loadJar(jarName, factory.getEmpty());
+	}
+	
+	public void loadJar(String pluginURL, ATerm classPathTerm) {
+		System.err.println("loadJar: " + pluginURL);
+		URL url = createURL(pluginURL);
 
-		JarClassLoader loader = new JarClassLoader(url);
+		ATermList classPathEntries = (ATermList) classPathTerm;
+		URL[] classPath = new URL[(classPathEntries).getLength()];
+		for (int i=0; !classPathEntries.isEmpty(); i++) {
+			String entry = ((ATermAppl)classPathEntries.getFirst()).getName();
+			classPath[i] = createURL(entry);
+			classPathEntries = classPathEntries.getNext();
+		}
+		JarClassLoader loader = new JarClassLoader(url, classPath);
 		String name = null;
 		try {
 			name = loader.getMainClassName();
@@ -241,6 +247,16 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private URL createURL(String jarName) {
+		URL url = null;
+		try {
+			url = new URL(jarName);
+		} catch (MalformedURLException e) {
+			System.err.println("Invalid URL: " + jarName);
+		}
+		return url;
 	}
 
 	public void loadClass(String urlName, String className) {

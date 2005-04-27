@@ -18,14 +18,20 @@ public class JarClassLoader extends URLClassLoader {
 	 * @param url
 	 *            the url of the jar file
 	 */
-	public JarClassLoader(URL url) {
+	public JarClassLoader(URL url, URL[] classPath) {
 		super(new URL[] { url });
 		this.url = url;
+		
+		if (classPath != null) {
+			for (int i = 0; i < classPath.length; i++) {
+				addURL(classPath[i]);
+			}
+		}
 	}
 
 	/**
 	 * Returns the name of the jar file main class, or null if no "Main-Class"
-	 * manifest attributes was defined.
+	 * manifest attribute was defined.
 	 */
 	public String getMainClassName() throws IOException {
 		URL u = new URL("jar", "", url + "!/");

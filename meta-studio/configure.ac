@@ -18,6 +18,11 @@ AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
    [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
 AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
+dnl Require toolbus package
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
+AC_SUBST(TOOLBUS)
+
 dnl This variable holds all external jarfiles
 EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
 AC_SUBST(EXTERNAL_JARS)
@@ -35,6 +40,7 @@ AC_CONFIG_FILES([
   Makefile
   lib/Makefile
   studio/Makefile
+  script/Makefile
   util/Makefile
 ])
 AC_OUTPUT
