@@ -8,6 +8,7 @@
 # - parse and check an Rscript and run it as test suite
 
 set -e
+set -x
 
 # {{{  variables
 prefix=__PREFIX__
@@ -27,7 +28,7 @@ EVALUATOR_RESULT=RSTORE
 ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
 APPLYFUNCTION=__PT_SUPPORT__/bin/apply-function
 SGLR=__SGLR__/bin/sglr
-
+UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
 
 THE_EVALUATOR=$EVALUATOR
 EVALUATOR_FUN=eval-rscript
@@ -107,7 +108,7 @@ check_rstore_file_type(){
 set_output_style(){
   if test -z "$OUTPUT_AS_TREE"
   then
-      OUTPUT="unparsePT"
+      OUTPUT=$UNPARSEPT
   else
       OUTPUT="eval cat >"$OUTPUT_AS_TREE
   fi
@@ -155,7 +156,7 @@ parse_rstore() {
 
 
 check() {
-  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $APPLYFUNCTION -f check-rscript -s Summary | $TYPE_CHECKER | unparsePT > $OUTPUT_TYPE_CHECKER
+  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $APPLYFUNCTION -f check-rscript -s Summary | $TYPE_CHECKER | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
 }
 
 
@@ -174,14 +175,11 @@ evaluate() {
     if test -n "$RSTORE" 
     then
 	parse_rstore 
-	$THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN  \
-	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE $YIELD -r $EVALUATOR_RESULT \
-	  | $OUTPUT
-    else
-	$THE_EVALUATOR $VERBOSE -f $EVALUATOR_FUN \
-	  -i $THE_RSCRIPT.pt $YIELD -r $EVALUATOR_RESULT \
-	  | $OUTPUT
     fi
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT \
+	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE  \
+	  | $THE_EVALUATOR \
+	  | $OUTPUT
     echo ""
 }
    

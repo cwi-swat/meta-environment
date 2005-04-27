@@ -22,6 +22,10 @@ INPUT_FILES=
 EXTRACTION_FUNCTION=extractRelations
 RESULTING_RSTORE=result.rstore.pt
 
+ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
+SGLR=__SGLR__/bin/sglr
+
+
 # }}}
 
 # {{{  usage
@@ -57,14 +61,14 @@ add_input_file() {
 # {{{  parse
 
 parse() {
-  sglr -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
+  $SGLR -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
 }
 
 # }}}
 # {{{  addposinfo
 
 addposinfo() {
-  addPosInfo -i $1.pt -o $1.pos -p $1
+  $ADDPOSINFO -i $1.pt -o $1.pos -p $1
 }
 
 # }}}
