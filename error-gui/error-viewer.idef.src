@@ -8,7 +8,8 @@ let
   SummaryId : str,
   Error : term
 in
-  rec-connect(T?)
+  StartErrorViewer()
+  . rec-connect(T?)
   . 
   (
     rec-msg(ui-show-feedback-summary(Summary?))
@@ -24,5 +25,9 @@ in
   *
   rec-disconnect(T)
 endlet
+
+process StartErrorViewer is
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", 
+          ["file:///export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/error-support/errorapi-1.1.jar"]))
 
 toolbus(ErrorViewer)

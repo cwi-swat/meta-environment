@@ -28,3 +28,11 @@ $(TOOLNAME)-config: Makefile
 
 $(TOOLNAME)-$(VERSION).pkg: package Makefile
 	cp $< $@
+
+%.idef: %.idef.src Makefile
+	sed 's@__PKGDATA__@$(pkgdatadir)@g;\
+	     s@__JARFILE__@$(JARFILE)@g'\
+	     < $< > $@
+				  
+	
+
