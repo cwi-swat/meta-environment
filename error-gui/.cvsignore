@@ -7,9 +7,11 @@ Makefile.in
 aclocal.m4
 autom4te*
 bin
+build
 config.*
 configure
-install-sh
+dist
 error-viewer-*.pkg
+install-sh
 missing
 mkinstalldirs
