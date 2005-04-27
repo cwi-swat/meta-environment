@@ -1,11 +1,14 @@
 package nl.cwi.sen1.error.viewer;
 
+import javax.swing.JPanel;
+
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
 import aterm.ATerm;
 
 public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
-	private static final String TOOL_NAME = "Error Viewer";
+	private static final String TOOL_NAME = "error-viewer";
 
 	private Studio studio;
 
@@ -22,6 +25,7 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 		bridge = new ErrorViewerBridge(studio.getATermFactory(), this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
+		studio.addComponent(new StudioComponentAdapter("Error Viewer", new JPanel()));
 	}
 
 	public ErrorViewer() {
