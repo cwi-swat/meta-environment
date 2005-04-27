@@ -1,4 +1,8 @@
 $Id$
 
+Wed Apr 27 14:27:26 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * studio:
+   - Add classpath support for loadJar
+
 Wed Apr 27 10:29:29 CEST 2005 <kooiker@cwi.nl>
   * Create JDK 1.4 compatible jars

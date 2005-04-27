@@ -1,6 +1,6 @@
 // Java tool interface class GuiTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 1:33:20 PM
+// generation time: Apr 27, 2005 2:14:26 PM
 
 package nl.cwi.sen1.gui;
 
@@ -18,6 +18,7 @@ abstract public class GuiTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PloadJar0;
+  private ATerm PloadJar1;
   private ATerm PloadClass0;
   private ATerm PaddMenuEvents0;
   private ATerm PsetTitle0;
@@ -45,6 +46,7 @@ abstract public class GuiTool
   {
     sigTable.put(factory.parse("rec-do(<gui>,set-title(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-class(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,add-menu-events(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<gui>,<term>)"), new Boolean(true));
@@ -58,6 +60,7 @@ abstract public class GuiTool
   private void initPatterns()
   {
     PloadJar0 = factory.parse("rec-do(load-jar(<str>))");
+    PloadJar1 = factory.parse("rec-do(load-jar(<str>,<term>))");
     PloadClass0 = factory.parse("rec-do(load-class(<str>,<str>))");
     PaddMenuEvents0 = factory.parse("rec-do(add-menu-events(<term>))");
     PsetTitle0 = factory.parse("rec-do(set-title(<str>))");
@@ -77,6 +80,11 @@ abstract public class GuiTool
     result = term.match(PloadJar0);
     if (result != null) {
       loadJar((String)result.get(0));
+      return null;
+    }
+    result = term.match(PloadJar1);
+    if (result != null) {
+      loadJar((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PloadClass0);

@@ -215,15 +215,16 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	public void loadJar(String jarName) {
 		loadJar(jarName, factory.getEmpty());
 	}
-	
+
 	public void loadJar(String pluginURL, ATerm classPathTerm) {
 		System.err.println("loadJar: " + pluginURL);
+		System.err.println("classpath: " + classPathTerm);
 		URL url = createURL(pluginURL);
 
 		ATermList classPathEntries = (ATermList) classPathTerm;
 		URL[] classPath = new URL[(classPathEntries).getLength()];
-		for (int i=0; !classPathEntries.isEmpty(); i++) {
-			String entry = ((ATermAppl)classPathEntries.getFirst()).getName();
+		for (int i = 0; !classPathEntries.isEmpty(); i++) {
+			String entry = ((ATermAppl) classPathEntries.getFirst()).getName();
 			classPath[i] = createURL(entry);
 			classPathEntries = classPathEntries.getNext();
 		}

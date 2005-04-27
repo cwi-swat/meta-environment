@@ -14,6 +14,8 @@ pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
 
 EXTRA_DIST = ${JARFILE} $(TOOLNAME).idef
 
+CLEANFILES = $(TOOLNAME)-config
+
 $(TOOLNAME)-config: Makefile
 	echo "#! /bin/sh" > $@
 	echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/idw-gpl-1.3.0.jar" >> $@
