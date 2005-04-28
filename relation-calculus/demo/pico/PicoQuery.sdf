@@ -27,10 +27,10 @@ hiddens
       "$Script" [0-9\']*	-> RSCRIPT
 
       "$Rstore" [0-9\']*  	-> RSTORE
-      "$Entry" [0-9\']*		-> Bag[[Elem]]
-      "$Exit" [0-9\']*		-> Bag[[Elem]]
+      "$Entry" [0-9\']*		-> Set[[Elem]]
+      "$Exit" [0-9\']*		-> Set[[Elem]]
       
-      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Rel" [0-9\']*     	-> Set[[Elem]]
       "$Loc" [0-9\']*	 	-> Location
       "$Start" [0-9\']*	 	-> Location
       "$Control" [0-9\']* 	-> Location

@@ -1,6 +1,6 @@
 module NewPicoExtraction
 
-imports Pico-syntax
+imports languages/pico/syntax/Pico-Syntax
 imports basic/Integers
 imports utilities/PosInfo[PROGRAM]
 imports utilities/PosInfo[STATEMENT]
@@ -16,13 +16,13 @@ exports
       id2str(PICO-ID)		 	-> String
 
    context-free start-symbols
-	<Bag[[Elem]], Rel[[Elem]], Bag[[Elem]]>
+	<Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
 	Summary
 
 hiddens
   context-free syntax 
 
-      cflow({ STATEMENT ";"}*)	        -> <Bag[[Elem]], Rel[[Elem]], Bag[[Elem]]>
+      cflow({ STATEMENT ";"}*)	        -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
 
       uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
       uses(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
@@ -39,10 +39,10 @@ hiddens
 
   variables
       "$Rstore" [0-9\']*  	-> RSTORE
-      "$Entry" [0-9\']*		-> Bag[[Elem]]
-      "$Exit" [0-9\']*		-> Bag[[Elem]]
+      "$Entry" [0-9\']*		-> Set[[Elem]]
+      "$Exit" [0-9\']*		-> Set[[Elem]]
       
-      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Rel" [0-9\']*     	-> Set[[Elem]]
       "$Loc" [0-9\']*	 	-> Location
       "$Start" [0-9\']*	 	-> Location
       "$Control" [0-9\']* 	-> Location
