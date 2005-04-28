@@ -6,7 +6,7 @@ imports basic/Errors
 
 exports
 
-  start-symbols Summary
+  context-free start-symbols Summary RSTORE
 
   context-free syntax
 
