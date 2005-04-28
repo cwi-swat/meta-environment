@@ -12,6 +12,7 @@ exports
 
   context-free syntax 
 
+      cflow(PROGRAM) -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
       cflow({ STATEMENT ";"}*)	        -> <Set[[Elem]], Rel[[Elem]], Set[[Elem]]>
 
       uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
@@ -25,6 +26,8 @@ exports
  hiddens
 
   variables
+      "$Program"[0-9\']*        -> PROGRAM
+      "$Decls"[0-9\']*          -> DECLS
       "$Entry" [0-9\']*		-> Set[[Elem]]
       "$Exit" [0-9\']*		-> Set[[Elem]]
       
