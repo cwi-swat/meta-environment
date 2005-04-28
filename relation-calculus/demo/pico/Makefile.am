@@ -2,7 +2,7 @@ include $(top_srcdir)/make_rules
 
 picodir		= $(pkgdatadir)/demo/pico
 
-FILES		= $(wildcard *.asf) 
+FILES		= $(wildcard *.asf) \
 		  $(wildcard *.sdf) \
 		  $(wildcard *.pico) \
 		  uninit.rscript \
