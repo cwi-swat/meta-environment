@@ -8,9 +8,8 @@ equations
 
 %% ---- extractRelations
 
-[er-1]  begin $Decls $Stat+ end := $Program,
-        $Start := get-location($Program),
-        <$Entry, $Rel, $Exit> := cflow($Stat+),
+[er-1]  $Start := get-location($Program),
+        <$Entry, $Rel, $Exit> := cflow($Program),
  
        $Loc :=  get-location($Program),
        $Rstore1 := assign(ROOT, expr, $Loc, rstore()),

@@ -1,5 +1,9 @@
 equations
 
+%% --- control flow of programs
+
+[cf0]	cflow(begin $Decls $Stat* end) = cflow($Stat*)
+
 %% --- control flow of statement lists
 
 [cf1] <$Entry1, $Rel1, $Exit1> := cflow($Stat), 
