@@ -8,7 +8,6 @@
 # - parse and check an Rscript and run it as test suite
 
 set -e
-set -x
 
 # {{{  variables
 prefix=__PREFIX__
