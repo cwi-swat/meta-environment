@@ -9,6 +9,8 @@ FILES		= $(wildcard *.asf) \
 		  meta.buttons \
 		  meta.conf
 
+EXTRA_DIST      = $(FILES)
+
 SOURCES		= $(FILES)
 
 pico_DATA	= $(FILES)
