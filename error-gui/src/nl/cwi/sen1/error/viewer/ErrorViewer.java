@@ -1,11 +1,20 @@
 package nl.cwi.sen1.error.viewer;
 
-import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
+import nl.cwi.sen1.error.model.ErrorNode;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
 import aterm.ATerm;
+import aterm.ATermFactory;
+import aterm.pure.PureFactory;
+import errorapi.Factory;
+import errorapi.types.Summary;
+import errorapi.types.Error;
 
 public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	private static final String TOOL_NAME = "error-viewer";
@@ -13,6 +22,8 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	private Studio studio;
 
 	ErrorViewerBridge bridge;
+	
+	errorapi.Factory errorFactory;
 
 	private ErrorPanel panel;
 
@@ -22,34 +33,45 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		bridge = new ErrorViewerBridge(studio.getATermFactory(), this);
+		
+		ATermFactory factory = studio.getATermFactory();
+		errorFactory = new Factory((PureFactory)factory);
+		
+		panel = new ErrorPanel();
+		addListener();
+		
+		bridge = new ErrorViewerBridge(factory, this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
-		studio.addComponent(new StudioComponentAdapter("Error Viewer", new JPanel()));
+		studio.addComponent(new StudioComponentAdapter("Error Viewer", panel));
 	}
 
-	public ErrorViewer() {
-//		final JTree tree = panel.getTree();
-//		tree.addTreeSelectionListener(new TreeSelectionListener() {
-//			public void valueChanged(TreeSelectionEvent e) {
-//				TreePath path = tree.getSelectionPath();
-//
-//				if (path != null) {
-//					ErrorNode node = (ErrorNode) path.getLastPathComponent();
-//					if (node != null) {
-//						Error error = node.getFirstError();
-//						if (!error.getList().isEmpty()) {
-//							bridge.postEvent(studio.getATermFactory().make(
-//									"error-selected(<term>)", error.toTerm()));
-//						}
-//					}
-//				}
-//			}
-//
-//		});
+	public ErrorViewer() {}
+	
+	private void addListener() {
+		final JTree tree = panel.getTree();
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				TreePath path = tree.getSelectionPath();
+
+				if (path != null) {
+					ErrorNode node = (ErrorNode) path.getLastPathComponent();
+					if (node != null) {
+						Error error = node.getFirstError();
+						if (!error.getList().isEmpty()) {
+							bridge.postEvent(studio.getATermFactory().make(
+									"error-selected(<term>)", error.toTerm()));
+						}
+					}
+				}
+			}
+
+		});
 	}
 
-	public void showFeedbackSummary(ATerm t0) {
+	public void showFeedbackSummary(ATerm summaryTerm) {
+		Summary summary = errorFactory.SummaryFromTerm(summaryTerm);
+		panel.addError(summary);
 	}
 
 	public void removeFeedbackSummary(String s0, String s1) {
