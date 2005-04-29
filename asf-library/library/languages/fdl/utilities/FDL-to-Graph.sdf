@@ -1,7 +1,7 @@
 module languages/fdl/utilities/FDL-to-Graph
 
 imports languages/fdl/syntax/Fdl
-	languages/fdl/utilities/Graph
+	languages/graph/syntax/Graph
 	basic/Integers
 	containers/Table[FeatureExpression NodeId][Table[[FeatureExpression,NodeId]] => NodeTable]
 
