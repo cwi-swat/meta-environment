@@ -23,7 +23,9 @@ RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
 RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
 
 EVALUATOR=${bindir}/RscriptCalculator
-EVALUATOR_RESULT=RSTORE
+RSTORE_SORT=RSTORE
+SUMMARY_SORT=Summary
+EVALUATOR_RESULT=$RSTORE_SORT
 
 ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
 APPLYFUNCTION=__PT_SUPPORT__/bin/apply-function
@@ -32,6 +34,8 @@ UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
 
 THE_EVALUATOR=$EVALUATOR
 EVALUATOR_FUN=eval-rscript
+CHECKER_FUN=check-rscript
+
 
 TESTSUITES=${bindir}/RscriptTestsuites
 USE_TESTSUITES=no
@@ -140,7 +144,7 @@ parse_rstore() {
   case $RSTORE in
       *.pt) PARSED_RSTORE=$RSTORE;;
 
-      *) sglr $VERBOSE -p $RSTORE_PARSE_TABLE -s RSTORE -i $RSTORE -o $RSTORE.pt
+      *) $SGLR $VERBOSE -p $RSTORE_PARSE_TABLE -s $RSTORE_SORT -i $RSTORE -o $RSTORE.pt
 	 PARSED_RSTORE=$RSTORE.pt
 	 add_tmp_file  $RSTORE.pt
 	 ;;
@@ -150,22 +154,10 @@ parse_rstore() {
 # }}}
 # {{{  check
 
-#check() {
-#  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $TYPE_CHECKER -f check-rscript -r Summary | unparsePT >$OUTPUT_TYPE_CHECKER
-#}
-
 
 check() {
-  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $APPLYFUNCTION -f check-rscript -s Summary | $TYPE_CHECKER | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
+  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $APPLYFUNCTION -f $CHECKER_FUN -s $SUMMARY_SORT | $TYPE_CHECKER | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
 }
-
-
-# check() {
-#   addPosInfo -p $THE_RSCRIPT -i $THE_RSCRIPT.pt \
-#   | apply-function -f check-rscript -s Summary \
-#   | $TYPE_CHECKER \
-#   | unparsePT >$OUTPUT_TYPE_CHECKER
-# }
 
 # }}}
 
