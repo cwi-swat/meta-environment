@@ -1,6 +1,6 @@
 // Java tool interface class GuiTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 29, 2005 1:49:08 PM
+// generation time: Apr 29, 2005 2:36:44 PM
 
 package nl.cwi.sen1.gui;
 
@@ -17,11 +17,11 @@ abstract public class GuiTool
 
   //{{{  Patterns that are used to match against incoming terms
 
+  private ATerm PloadJarUrls0;
   private ATerm PloadJar0;
-  private ATerm PloadJar1;
-  private ATerm PloadJar2;
   private ATerm PloadClass0;
   private ATerm PaddMenuEvents0;
+  private ATerm PloadJarClasspath0;
   private ATerm PsetTitle0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -47,8 +47,8 @@ abstract public class GuiTool
   {
     sigTable.put(factory.parse("rec-do(<gui>,set-title(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<gui>,load-jar-classpath(<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<gui>,load-jar-urls(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-class(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,add-menu-events(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<gui>,<term>)"), new Boolean(true));
@@ -61,11 +61,11 @@ abstract public class GuiTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
+    PloadJarUrls0 = factory.parse("rec-do(load-jar-urls(<str>,<term>))");
     PloadJar0 = factory.parse("rec-do(load-jar(<str>))");
-    PloadJar1 = factory.parse("rec-do(load-jar(<str>,<term>))");
-    PloadJar2 = factory.parse("rec-do(load-jar(<str>,<str>))");
     PloadClass0 = factory.parse("rec-do(load-class(<str>,<str>))");
     PaddMenuEvents0 = factory.parse("rec-do(add-menu-events(<term>))");
+    PloadJarClasspath0 = factory.parse("rec-do(load-jar-classpath(<str>,<str>))");
     PsetTitle0 = factory.parse("rec-do(set-title(<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -80,19 +80,14 @@ abstract public class GuiTool
   {
     List result;
 
+    result = term.match(PloadJarUrls0);
+    if (result != null) {
+      loadJarUrls((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
     result = term.match(PloadJar0);
     if (result != null) {
       loadJar((String)result.get(0));
-      return null;
-    }
-    result = term.match(PloadJar1);
-    if (result != null) {
-      loadJar((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PloadJar2);
-    if (result != null) {
-      loadJar((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PloadClass0);
@@ -103,6 +98,11 @@ abstract public class GuiTool
     result = term.match(PaddMenuEvents0);
     if (result != null) {
       addMenuEvents((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PloadJarClasspath0);
+    if (result != null) {
+      loadJarClasspath((String)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PsetTitle0);

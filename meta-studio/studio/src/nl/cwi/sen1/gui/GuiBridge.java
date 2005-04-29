@@ -1,6 +1,6 @@
 // Java tool bridge GuiBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 29, 2005 1:49:08 PM
+// generation time: Apr 29, 2005 2:36:44 PM
 
 package nl.cwi.sen1.gui;
 
@@ -21,38 +21,25 @@ public class GuiBridge
 
   //}}}
 
+  //{{{  public void loadJarUrls(String s0, ATerm t1)
+
+  public void loadJarUrls(String s0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.loadJarUrls(s0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `loadJarUrls' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public void loadJar(String s0)
 
   public void loadJar(String s0)
   {
     if (tool != null) {
       tool.loadJar(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `loadJar' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void loadJar(String s0, ATerm t1)
-
-  public void loadJar(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.loadJar(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `loadJar' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void loadJar(String s0, String s1)
-
-  public void loadJar(String s0, String s1)
-  {
-    if (tool != null) {
-      tool.loadJar(s0, s1);
     }
     else {
       throw new UnsupportedOperationException("method `loadJar' not supported.");
@@ -82,6 +69,19 @@ public class GuiBridge
     }
     else {
       throw new UnsupportedOperationException("method `addMenuEvents' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void loadJarClasspath(String s0, String s1)
+
+  public void loadJarClasspath(String s0, String s1)
+  {
+    if (tool != null) {
+      tool.loadJarClasspath(s0, s1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `loadJarClasspath' not supported.");
     }
   }
 

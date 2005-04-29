@@ -220,7 +220,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		loadJar(createURL(jarName), new URL[] {});
 	}
 
-	public void loadJar(String jarName, String classPath) {
+	public void loadJarClasspath(String jarName, String classPath) {
 		List urlList = new LinkedList();
 		StringTokenizer tok = new StringTokenizer(classPath, ":");
 		while (tok.hasMoreTokens()) {
@@ -236,12 +236,13 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		int index = 0;
 		Iterator iter = urlList.iterator();
 		while (iter.hasNext()) {
-			urls[index++] = (URL) urlList.get(index);
+			urls[index++] = (URL) iter.next();
 		}
 		loadJar(createURL(jarName), urls);
 	}
 
-	public void loadJar(String jarName, ATerm classPathTerm) {
+	public void loadJarUrls(String jarName, ATerm classPathTerm) {
+	  System.err.println("loadJar: " + classPathTerm);
 		ATermList classPathEntries = (ATermList) classPathTerm;
 		URL[] classPath = new URL[(classPathEntries).getLength()];
 		for (int i = 0; !classPathEntries.isEmpty(); i++) {
