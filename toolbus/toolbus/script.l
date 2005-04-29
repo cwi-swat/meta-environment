@@ -93,14 +93,14 @@ abs-timeout   { ll_inc_pos(11);return(ABS_TIMEOUT); }
 let           { ll_inc_pos(3);return(LET); }
 in            { ll_inc_pos(2);return(IN); }
 endlet        { ll_inc_pos(6);return(ENDLET); }
-"\""          { char strbuf[512], *ptr = strbuf;
+"\""          { char strbuf[BUFSIZ], *ptr = strbuf;
 		int c, blino = lino, bpos = pos;
 
 		pos++; /* initial quote */
 		while((c = input()) != '"'){
 		  if(c <= 0)
 		    yyerror("String constant not terminated at eof");
-		  if(ptr == &strbuf[512]){
+		  if(ptr == &strbuf[BUFSIZ]){
 		    yyerror("String constant too long");
 		  }
 		  if(c == '\\'){

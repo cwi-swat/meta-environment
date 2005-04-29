@@ -1,5 +1,9 @@
 $Id$
 
+Fri Apr 29 13:45:43 CEST 2005 <jong@cwi.nl>
+ * toolbus/script.l:
+   - increase size of string buffer from 512 to BUFSIZ
+
 Mon Apr 11 13:25:33 CEST 2005 <jong@cwi.nl>
  * toolbus/script.y:
    - Removed the chdir(2) part in the temporary file name issue (see below).
