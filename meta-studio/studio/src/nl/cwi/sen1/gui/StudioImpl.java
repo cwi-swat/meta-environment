@@ -12,7 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -213,14 +217,31 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	public void loadJar(String jarName) {
-		loadJar(jarName, factory.getEmpty());
+		loadJar(createURL(jarName), new URL[] {});
 	}
 
-	public void loadJar(String pluginURL, ATerm classPathTerm) {
-		System.err.println("loadJar: " + pluginURL);
-		System.err.println("classpath: " + classPathTerm);
-		URL url = createURL(pluginURL);
+	public void loadJar(String jarName, String classPath) {
+		List urlList = new LinkedList();
+		StringTokenizer tok = new StringTokenizer(classPath, ":");
+		while (tok.hasMoreTokens()) {
+			String url = tok.nextToken();
+			try {
+				urlList.add(new URL("file:" + url));
+			} catch (MalformedURLException e) {
+				System.err.println("Ignoring malformed url: " + url);
+			}
+		}
+		// use urlList.toArray() in 1.5
+		URL[] urls = new URL[urlList.size()];
+		int index = 0;
+		Iterator iter = urlList.iterator();
+		while (iter.hasNext()) {
+			urls[index++] = (URL) urlList.get(index);
+		}
+		loadJar(createURL(jarName), urls);
+	}
 
+	public void loadJar(String jarName, ATerm classPathTerm) {
 		ATermList classPathEntries = (ATermList) classPathTerm;
 		URL[] classPath = new URL[(classPathEntries).getLength()];
 		for (int i = 0; !classPathEntries.isEmpty(); i++) {
@@ -228,7 +249,15 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 			classPath[i] = createURL(entry);
 			classPathEntries = classPathEntries.getNext();
 		}
-		JarClassLoader loader = new JarClassLoader(url, classPath);
+		loadJar(createURL(jarName), classPath);
+	}
+
+	private void loadJar(URL jarURL, URL[] classPath) {
+		System.err.println("loadJar: " + jarURL);
+		for (int i = 0; i < classPath.length; i++) {
+			System.err.println("\t" + classPath[i]);
+		}
+		JarClassLoader loader = new JarClassLoader(jarURL, classPath);
 		String name = null;
 		try {
 			name = loader.getMainClassName();
@@ -238,10 +267,8 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		}
 		if (name == null) {
 			System.err
-					.println("Specified jar file does not contain a 'Main-Class'"
-							+ " manifest attribute");
+					.println("Specified jar file does not contain a 'Main-Class' manifest attribute");
 		}
-
 		try {
 			Class cl = loader.loadClass(name);
 			spawn((StudioPlugin) cl.newInstance());
