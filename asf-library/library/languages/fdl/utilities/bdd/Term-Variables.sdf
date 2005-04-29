@@ -1,0 +1,11 @@
+module languages/fdl/utilities/bdd/Term-Variables
+
+exports
+
+sorts Term-Var
+
+lexical syntax
+	[a-z][a-zA-Z0-9\-\-]* -> Term-Var
+
+lexical restrictions
+	Term-Var -/- [a-zA-Z0-9\-\-]

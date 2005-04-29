@@ -1,0 +1,89 @@
+module languages/fdl/utilities/FDL-to-Graph
+
+imports languages/fdl/syntax/Fdl
+	languages/fdl/utilities/Graph
+	basic/Integers
+	containers/Table[FeatureExpression NodeId][Table[[FeatureExpression,NodeId]] => NodeTable]
+
+hiddens
+context-free start-symbols Graph
+
+exports
+
+sorts GraphInfo
+
+context-free syntax
+	fdl-to-graph(FeatureDiagram) -> Graph
+
+	fdl-to-table(FeatureDiagram) -> NodeTable
+
+	fdl-to-table(FeatureDiagram, <NodeTable, Integer>) -> <NodeTable, Integer>
+		{traversal(bottom-up, accu, continue)}
+
+	fdl-to-table(FeatureDefinition, <NodeTable, Integer>) -> <NodeTable, Integer>
+		{traversal(bottom-up, accu, continue)}
+
+	fdl-to-table(FeatureExpression, <NodeTable, Integer>) -> <NodeTable, Integer>
+		{traversal(bottom-up, accu, continue)}
+
+	constraints-to-edge-list(FeatureDiagram, EdgeList, NodeTable) -> EdgeList
+		{traversal(bottom-up, accu, continue)}
+
+	constraints-to-edge-list(Constraint, EdgeList, NodeTable) -> EdgeList
+		{traversal(bottom-up, accu, continue)}
+
+
+	table-to-node-list(NodeTable, NodeList) -> NodeList
+		{traversal(bottom-up, accu, continue)}
+	table-to-node-list(<FeatureExpression, NodeId>, NodeList) -> NodeList
+		{traversal(bottom-up, accu, continue)}
+
+	fdl-to-edge-list(FeatureDiagram, EdgeList, NodeTable) -> EdgeList
+		{traversal(bottom-up, accu, continue)}
+
+	fdl-to-edge-list(FeatureDefinition, EdgeList, NodeTable) -> EdgeList
+		{traversal(bottom-up, accu, continue)}
+
+	fdl-to-edge-list(FeatureExpression, EdgeList, NodeTable) -> EdgeList
+		{traversal(bottom-up, accu, continue)}
+
+
+	expr-to-edge-list(FeatureExpression, NodeTable) -> EdgeList
+	args-to-edge-list(NodeId, {FeatureExpression ","}+, NodeTable) -> EdgeList
+	
+	node-id(Integer) -> NodeId
+	node-label(FeatureExpression) -> String
+	node-shape(FeatureExpression) -> Shape
+
+hiddens
+variables
+	"$shape" -> Shape
+	"$string"[0-9\']* -> String
+	"$nodelist"[0-9\']* -> NodeList
+	"$edgelist"[0-9\']* -> EdgeList
+	"$node*"[0-9\']* -> {Node ","}*
+	"$edge*"[0-9\']* -> {Edge ","}*
+	"$node"[0-9\']* -> Node
+	"$nodeid"[0-9\']* -> NodeId
+	"$edge"[0-9\']* -> Edge
+	"$char+"[0-9\']* -> CHAR+
+	"$char*"[0-9\']* -> CHAR*
+	"$char"[0-9\']* -> CHAR
+	"$attributelist"[0-9\']* -> AttributeList
+
+	"$boolcon"[0-9\']* -> BoolCon
+	"$char+"[0-9\']* -> CHAR+
+	"$table"[0-9\']* -> NodeTable
+	"$integer"[0-9\']* -> Integer
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+	"$char+"[0-9\']* -> CHAR+
+	"$featuredefinition+"[0-9\']* -> FeatureDefinition+
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+	"$constraint"[0-9\']* -> Constraint
+	"$featurename"[0-9\']* -> FeatureName
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+

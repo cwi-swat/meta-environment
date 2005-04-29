@@ -1,0 +1,28 @@
+module languages/fdl/utilities/Normalization
+
+imports languages/fdl/syntax/Fdl
+
+exports
+
+context-free syntax
+	normalize-featureexpression(FeatureExpression) -> FeatureExpression
+
+hiddens
+
+context-free syntax
+
+	%% probably these two functions don't lead to ambiguities
+	%% due to injection counting....
+
+	normalize(FeatureExpression) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+	normalize({FeatureExpression ","}+) -> {FeatureExpression ","}+
+		{traversal(bottom-up, trafo, continue)}
+
+variables
+	[a][0-9\']* -> AtomicFeature
+	[f][0-9\']* -> FeatureExpression
+	"f+"[0-9\']* -> {FeatureExpression ","}+
+	"f*"[0-9\']* -> {FeatureExpression ","}*
+

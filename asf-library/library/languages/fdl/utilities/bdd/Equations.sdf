@@ -1,0 +1,11 @@
+module languages/fdl/utilities/bdd/Equations[Term]
+
+imports languages/fdl/utilities/bdd/Layout
+
+exports
+
+sorts Eq
+
+context-free syntax
+	lhs:Term "=" rhs:Term -> Eq {con("equation")}
+

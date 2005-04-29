@@ -1,0 +1,12 @@
+equations
+
+[n1]	phi | psi = not(not(phi) & not(psi))
+
+[n2]	phi -> psi = not(phi & not(psi))
+
+[n3]	phi <- psi = psi -> phi
+
+[n4]	phi <-> psi = (phi -> psi) & (phi <- psi)
+
+[n5]	phi ^ psi = (phi | psi) & not(phi & psi)
+

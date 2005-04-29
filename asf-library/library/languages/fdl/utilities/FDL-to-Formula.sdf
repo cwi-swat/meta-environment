@@ -1,0 +1,46 @@
+module languages/fdl/utilities/FDL-to-Formula
+
+imports languages/fdl/utilities/Flatten-FDL
+	languages/fdl/utilities/bdd/Extended-Formulae
+	languages/fdl/utilities/Normalization
+
+exports
+
+context-free syntax
+	fdl-to-formula(FeatureDiagram) -> Formula
+	fdl-to-formula(FeatureName,FeatureDiagram) -> Formula
+
+	feature-to-formula(FeatureExpression) -> Formula
+
+hiddens
+context-free syntax
+	constraints-to-formula(Constraint*) -> Formula
+	constraint-to-formula(Constraint) -> Formula
+
+	atomic-feature-to-atom(AtomicFeature) -> Logical-Var
+	
+	all-features-to-formula({FeatureExpression ","}*) -> Formula
+	more-of-features-to-formula({FeatureExpression ","}*) -> Formula
+
+	one-of-features-to-formula({FeatureExpression ","}*) -> Formula
+
+	one-of-features-to-formula-rec({FeatureExpression ","}*, "#" ,
+		{FeatureExpression ","}*) -> Formula
+
+	one-of-feature-to-formula-for-head(FeatureExpression, 
+		{FeatureExpression ","}*) -> Formula
+
+hiddens
+variables
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+	"$char+"[0-9\']* -> CHAR+
+	"$featuredefinition+"[0-9\']* -> FeatureDefinition+
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+	"$constraint"[0-9\']* -> Constraint
+	"$featurename"[0-9\']* -> FeatureName
+	"$formula"[0-9\']* -> Formula
+

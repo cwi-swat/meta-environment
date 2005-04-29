@@ -1,0 +1,57 @@
+module languages/fdl/evolution/Evolve-FDL
+
+imports languages/fdl/syntax/Fdl
+	utilities/PosInfo[FeatureExpression]
+	utilities/PosInfo[FeatureDefinition]
+
+
+exports
+
+context-free syntax
+	flatten(FeatureDiagram, FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+	flatten(FeatureExpression, FeatureExpression) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+	add-argument(FeatureDiagram, FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+	add-argument(FeatureExpression, FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+	remove-argument(FeatureDiagram, FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+	remove-argument(FeatureExpression, FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+
+	"more-of" -> Connective
+	"one-of" -> Connective
+	"?" -> Connective
+	"all" -> Connective
+
+	connect(FeatureDiagram, FeatureExpression, Connective) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+	connect(FeatureExpression, FeatureExpression, Connective) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+	reconnect(FeatureDiagram, FeatureExpression, Connective) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+	reconnect(FeatureExpression, FeatureExpression, Connective) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+hiddens
+variables
+        "$featurename"[0-9\']* -> FeatureName
+        "$featurename*"[0-9\']* -> {FeatureName ","}*
+        "$featurediagram"[0-9\']* -> FeatureDiagram
+        "$atomicfeature"[0-9\']* -> AtomicFeature
+        "$featureexpression"[0-9\']* -> FeatureExpression
+        "$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+        "$featuretree"[0-9\']* -> FeatureExpression
+        "$featuredefinition*"[0-9\']* -> FeatureDefinition*
+        "$constraint*"[0-9\']* -> Constraint*
+        "$char+"[0-9\']* -> CHAR+
+	"$list"[0-9\']* -> List[[FeatureName]]
+	"$permutation"[0-9\']* -> List[[FeatureExpression]]
+	"$permutation+"[0-9\']* -> { List[[FeatureExpression]] ","}+

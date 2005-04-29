@@ -1,0 +1,47 @@
+module languages/fdl/pretty/Pretty-Print-FDL
+
+imports languages/fdl/syntax/Fdl
+imports languages/box/syntax/Box
+imports languages/box/utilities/PPSeparatedList["FeatureExpression" FeatureExpression ","]
+imports languages/box/utilities/PPList["FeatureDefinition" FeatureDefinition]
+imports languages/box/utilities/PPList["Constraint" Constraint]
+
+hiddens
+context-free start-symbols Box FeatureDiagram
+
+exports
+
+context-free syntax
+	pretty-print-fdl(FeatureDiagram) -> FeatureDiagram
+
+
+	featuredefinitions2box(FeatureDefinition*) -> Box {to-box}
+	featuredefinition2box(FeatureDefinition) -> Box {to-box}
+	featureexpression2box(FeatureExpression) -> Box {to-box}
+	featureexpressions2box({FeatureExpression ","}*) -> Box {to-box}
+	constraints2box(Constraint*) -> Box {to-box}
+	constraint2box(Constraint) -> Box {to-box}
+
+	box2featurediagram(Box) -> FeatureDiagram {from-box}
+	box2featuredefinitions(Box) -> FeatureDefinition* {from-box}
+	box2featuredefinition(Box) -> FeatureDefinition {from-box}
+	box2featureexpression(Box) -> FeatureExpression {from-box}
+	box2featureexpressions(Box) -> {FeatureExpression ","}+ {from-box}
+	box2constraints(Box) -> Constraint* {from-box}
+	box2constraint(Box) -> Constraint {from-box}
+
+hiddens
+variables
+        "$featurename"[0-9\']* -> FeatureName
+        "$featurename*"[0-9\']* -> {FeatureName ","}*
+        "$featurediagram"[0-9\']* -> FeatureDiagram
+        "$atomicfeature"[0-9\']* -> AtomicFeature
+        "$featureexpression"[0-9\']* -> FeatureExpression
+        "$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+        "$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+        "$featuretree"[0-9\']* -> FeatureExpression
+        "$featuredefinition*"[0-9\']* -> FeatureDefinition*
+        "$featuredefinition"[0-9\']* -> FeatureDefinition
+        "$constraint*"[0-9\']* -> Constraint*
+        "$constraint"[0-9\']* -> Constraint
+        "$char+"[0-9\']* -> CHAR+

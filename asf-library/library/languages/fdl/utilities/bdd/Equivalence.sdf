@@ -1,0 +1,18 @@
+module languages/fdl/utilities/bdd/Equivalence
+
+imports languages/fdl/utilities/bdd/Implication
+
+exports
+ 
+context-free syntax
+        lhs:Formula "<->" rhs:Formula -> Formula {cons("equivalence"),assoc}
+
+context-free priorities
+	{
+        lhs:Formula "^" rhs:Formula -> Formula {cons("exclusive"),assoc}
+        lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc}
+        }
+        > {
+        ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}
+        lhs:Formula "<->" rhs:Formula -> Formula {cons("equivalence"),assoc}
+	}

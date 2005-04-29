@@ -1,0 +1,56 @@
+%% WARNING: DO NOT EDIT, THIS MODULE IS GENERATED
+
+module languages/fdl/check/FDL-Error-API
+imports
+  basic/Booleans
+imports
+  languages/fdl/check/FDL-Errors
+exports
+  context-free syntax
+  "is-not-in-diagram-error" ( FDL-Error ) -> Boolean
+  "make-not-in-diagram-error" ( feature : AtomicFeature ) -> FDL-Error
+  "get-feature" ( FDL-Error ) -> AtomicFeature
+  "set-feature" (
+  FDL-Error,
+  AtomicFeature ) -> FDL-Error
+  "is-multiple-uses-error" ( FDL-Error ) -> Boolean
+  "make-multiple-uses-error" ( feature : FeatureExpression ) -> FDL-Error
+  "get-feature" ( FDL-Error ) -> FeatureExpression
+  "set-feature" (
+  FDL-Error,
+  FeatureExpression ) -> FDL-Error
+  "is-unused-feature-error" ( FDL-Error ) -> Boolean
+  "make-unused-feature-error" ( feature : FeatureName ) -> FDL-Error
+  "get-feature" ( FDL-Error ) -> FeatureName
+  "set-feature" (
+  FDL-Error,
+  FeatureName ) -> FDL-Error
+  "is-undefined-feature-error" ( FDL-Error ) -> Boolean
+  "make-undefined-feature-error" ( feature : FeatureName ) -> FDL-Error
+  "is-multiple-definitions-error" ( FDL-Error ) -> Boolean
+  "make-multiple-definitions-error" ( feature : FeatureName ) -> FDL-Error
+hiddens
+  variables
+    "$"
+    "FDL-Error_"
+    [
+      0 - 9 \'
+    ] * -> FDL-Error
+    "$"
+    "FeatureName_"
+    [
+      0 - 9 \'
+    ] * -> FeatureName
+    "$"
+    "FeatureExpression_"
+    [
+      0 - 9 \'
+    ] * -> FeatureExpression
+    "$"
+    "AtomicFeature_"
+    [
+      0 - 9 \'
+    ] * -> AtomicFeature
+hiddens
+  imports
+    basic/Whitespace

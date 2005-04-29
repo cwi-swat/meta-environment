@@ -1,0 +1,15 @@
+module languages/fdl/check/FDL-Errors
+
+imports languages/fdl/syntax/Fdl
+	containers/List[FDL-Error]
+
+exports
+
+sorts FDL-Error
+
+context-free syntax
+	"Multiple definitions for" feature:FeatureName -> FDL-Error {cons("multiple-definitions-error")}
+	feature:FeatureName "is used but not defined" -> FDL-Error {cons("undefined-feature-error")}
+	feature:FeatureName "is defined but not used" -> FDL-Error {cons("unused-feature-error")}
+	feature:FeatureExpression "used multiple times" -> FDL-Error {cons("multiple-uses-error")}
+	feature:AtomicFeature "used in constraints, but not in diagram" -> FDL-Error {cons("not-in-diagram-error")}

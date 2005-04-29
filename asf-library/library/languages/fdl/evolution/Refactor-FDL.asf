@@ -1,0 +1,151 @@
+equations
+
+[introduce-1]
+	$bag := defined-composite-features($featurediagram),
+	element-of($featurename, $bag) == false
+	===
+	introduce($featurediagram, $featurename) =
+		add-definition($featurediagram, $featurename, ...)
+
+[default-introduce-2]
+	introduce($featurediagram, $featurename) = $featurediagram
+
+
+equations
+
+
+[eliminate-1] 	
+	$bag := used-composite-features($featurediagram),
+	element-of($featurename, $bag) == false
+	===
+	eliminate($featurediagram, $featurename) =
+		remove-definition($featurediagram, $featurename)
+
+[default-eliminate-2]
+	eliminate($featurediagram, $featurename) = $featurediagram
+
+
+equations
+
+[duplicate-1]
+	$bag := defined-composite-features($featurediagram),
+	element-of($featurename2, $bag) == false
+	===	
+	duplicate($featurediagram, $featurename1, $featurename2) =
+		add-definition(
+			$featurediagram,
+			$featurename2,
+			get-definition(
+				$featurediagram,
+				$featurename1
+			)
+		)
+
+equations
+
+[permute-top]
+	permute($featurediagram, $featureexpression, [$featureexpression+]) =
+		permute-trv($featurediagram, $featureexpression, [$featureexpression+])
+
+
+equations
+
+[permute-trv-1]
+	permute-trv(all($featureexpression+), 
+		all($featureexpression+),
+		[$featureexpression+']) =
+		all($featureexpression+')
+
+[permute-trv-2]
+	permute-trv(more-of($featureexpression+), 
+		more-of($featureexpression+),
+		[$featureexpression+']) =
+		more-of($featureexpression+')
+
+[permute-trv-3]
+	permute-trv(one-of($featureexpression+), 
+		one-of($featureexpression+),
+		[$featureexpression+']) =
+		one-of($featureexpression+')
+
+equations
+
+[unfold-top]
+	unfold($featurediagram, $featurename) =
+		  replace-expression(
+		    remove-definition($featurediagram, $featurename),
+		    $featurename, 
+		    get-definition($featurediagram, $featurename)
+		  )
+
+equations
+
+[fold-top]
+	fold($featurediagram, $featureexpression, $featurename) =
+		  add-definition(
+		    replace-expression(
+		      $featurediagram, $featureexpression, $featurename
+		    ),
+		    $featurename, $featureexpression
+		  )
+
+equations
+
+[rename-top]
+	rename($featurediagram, $featurename, $featurename') =
+		rename-trv($featurediagram, $featurename, $featurename')
+
+equations
+
+%% matches on FeatureName
+[rename-trv-top]
+	rename-trv($featurename, $featurename, $featurename') = $featurename'
+
+
+equations
+
+[rename-atomic-top]
+	rename-atomic($featurediagram, $atomicfeature, $atomicfeature') =
+		rename-atomic-trv($featurediagram, $atomicfeature, $atomicfeature')
+
+equations
+
+%% matches on AtomicFeature
+[rename-atomic-trv-top]
+	rename-atomic-trv($atomicfeature, $atomicfeature, $atomicfeature') = $atomicfeature'
+
+
+
+equations
+
+[sort-top]
+	$relation := sorting-relation($featurediagram)
+	===
+	sort($featurediagram) = sort-definitions($featurediagram, $relation)
+
+equations
+
+[sort-definitions-1]
+	smaller-or-equal($featurename2, $featurename1, $relation) == true
+	===
+	sort-definitions(
+		$featuredefinition*1
+		$featurename1: $featureexpression1
+		$featuredefinition*2
+		$featurename2: $featureexpression2
+		$featuredefinition*3
+		$constraint*,
+		$relation
+	) = 
+	sort-definitions(
+		$featuredefinition*1
+		$featurename2: $featureexpression2
+		$featuredefinition*2
+		$featurename1: $featureexpression1
+		$featuredefinition*3
+		$constraint*,
+		$relation
+	)
+
+[default-sort-definitions-2]
+	sort-definitions($featurediagram, $relation) = $featurediagram

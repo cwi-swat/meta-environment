@@ -1,0 +1,136 @@
+equations
+
+[fdl-to-formula-1]
+	fdl-to-formula() = T
+
+[fdl-to-formula-2]
+	fdl-to-formula($featurename: $featureexpression $featuredefinition* $constraint*) = 
+		fdl-to-formula($featurename, $featurename: $featureexpression 
+			$featuredefinition* $constraint*)
+
+[fdf-to-formula-int]	
+	$featureexpression := flatten-fdl($featurename,$featuredefinition*),
+	$featureexpression' := normalize-featureexpression($featureexpression)
+	===
+	fdl-to-formula($featurename, $featuredefinition* $constraint*) = 
+		feature-to-formula($featureexpression') & 
+		constraints-to-formula($constraint*)
+
+%% Due to the normalization of fdl expressions optionals in well-formed
+%% fdl do only occur inside all() constructs or at the absolute toplevel, 
+%% so we can safely rewrite any optional to true.
+[feature-to-formula-1]	
+	feature-to-formula($featureexpression?) = T
+
+[feature-to-formula-2]	
+	feature-to-formula(default = $atomicfeature) = 
+		feature-to-formula($atomicfeature)
+
+[feature-to-formula-3]	
+	feature-to-formula(...) = T
+
+[feature-to-formula-4]	
+	$atomicfeature != ...
+	===
+	feature-to-formula($atomicfeature) = 
+		atomic-feature-to-atom($atomicfeature)
+
+[feature-to-formula-5]	
+	feature-to-formula(all($featureexpression+)) = 
+		all-features-to-formula($featureexpression+)
+
+[feature-to-formula-6]
+	feature-to-formula(more-of($featureexpression+)) = 
+		more-of-features-to-formula($featureexpression+)
+
+[feature-to-formula-7]
+	feature-to-formula(one-of($featureexpression+)) = 
+		one-of-features-to-formula($featureexpression+)
+
+[all-features-to-formula-sing]	
+	all-features-to-formula($featureexpression) = 
+		feature-to-formula($featureexpression)
+
+[all-features-to-formula-mult]
+	all-features-to-formula($featureexpression, $featureexpression+) = 
+		feature-to-formula($featureexpression) & 
+		all-features-to-formula($featureexpression+)
+
+[more-of-features-to-formula-sing]	
+	more-of-features-to-formula($featureexpression) = 
+		feature-to-formula($featureexpression)
+
+[more-of-features-to-formula-mult]
+	more-of-features-to-formula($featureexpression, $featureexpression+) = 
+		feature-to-formula($featureexpression) | 
+		more-of-features-to-formula($featureexpression+)
+
+[one-of-features-to-formula-sing]
+	one-of-features-to-formula($featureexpression) = 
+		feature-to-formula($featureexpression)
+
+[one-of-features-to-formula-mult]
+	one-of-features-to-formula($featureexpression,$featureexpression+) = 
+		one-of-features-to-formula-rec($featureexpression,$featureexpression+, #, 
+						$featureexpression,$featureexpression+)
+
+[one-of-features-to-formula-rec-sing]
+	one-of-features-to-formula-rec($featureexpression, #,
+			$featureexpression*1,$featureexpression,$featureexpression*2) = 
+		one-of-feature-to-formula-for-head($featureexpression, 
+			$featureexpression*1, $featureexpression*2)
+
+[one-of-features-to-formula-rec-mult]
+	one-of-features-to-formula-rec($featureexpression,$featureexpression+, #,  
+			$featureexpression*1,$featureexpression,$featureexpression*2) = 
+		one-of-feature-to-formula-for-head($featureexpression, 
+			$featureexpression*1, $featureexpression*2) | 
+		one-of-features-to-formula-rec($featureexpression+, #, 
+			$featureexpression*1,$featureexpression,$featureexpression*2)
+
+[one-of-feature-to-formula-for-head-top]
+	one-of-feature-to-formula-for-head($featureexpression, $featureexpression+) = 
+		feature-to-formula($featureexpression) & 
+		not(more-of-features-to-formula($featureexpression+))
+
+
+[constraints-to-formula-nil]	
+	constraints-to-formula() = T
+
+[constraints-to-formula-cons]	
+	constraints-to-formula($constraint $constraint*) = 
+		constraint-to-formula($constraint) &
+		constraints-to-formula($constraint*)
+
+[constraint-to-formula-1]	
+	constraint-to-formula($atomicfeature1 requires $atomicfeature2) =
+		atomic-feature-to-atom($atomicfeature1) -> 
+		atomic-feature-to-atom($atomicfeature2)
+
+
+[constraint-to-formula-2]
+	constraint-to-formula($atomicfeature1 excludes $atomicfeature2) =
+		atomic-feature-to-atom($atomicfeature1) -> 
+		not(atomic-feature-to-atom($atomicfeature2))
+
+[constraint-to-formula-3]
+	constraint-to-formula(include $atomicfeature) = 
+		atomic-feature-to-atom($atomicfeature)
+
+[constraint-to-formula-4]
+	constraint-to-formula(exclude $atomicfeature) = 
+		not(atomic-feature-to-atom($atomicfeature))
+
+
+[atomic-feature-to-atom-top]	
+	atomic-feature-to-atom(atomicfeature($char+)) = 
+		logical-var($char+)
+
+
+
+
+
+
+
+
+

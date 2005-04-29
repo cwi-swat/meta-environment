@@ -1,0 +1,31 @@
+module languages/fdl/evolution/Relation[X]
+
+imports languages/fdl/evolution/Bag[Tuple[[X]]][Bag[[Tuple[[X]]]] => Relation[[X]]]
+	languages/fdl/evolution/Bag[X]
+	basic/Booleans
+	containers/List[X]
+
+exports
+context-free syntax
+	<X, X> -> Tuple[[X]]
+
+	product(Bag[[X]], Bag[[X]]) -> Relation[[X]]
+	one-product(X, Bag[[X]]) -> Relation[[X]]
+	smaller-or-equal(X, X, Relation[[X]]) -> Boolean
+
+	topological-sort(Relation[[X]]) -> List[[X]]
+	transitive-closure(Relation[[X]]) -> Relation[[X]]
+	transitive-reflexive-closure(Relation[[X]]) -> Relation[[X]]
+
+hiddens
+
+imports basic/Whitespace
+
+variables
+	"$tuple"[0-9\']* -> Tuple[[X]]
+	"$tuple*"[0-9\']* -> {Tuple[[X]] ","}*
+	"$x"[0-9\']* -> X
+	"$x*"[0-9\']* -> {X ","}*
+	"$bag"[0-9\']* -> Bag[[X]]
+	"$relation"[0-9\']* -> Relation[[X]]
+	

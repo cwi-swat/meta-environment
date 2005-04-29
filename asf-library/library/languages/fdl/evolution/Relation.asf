@@ -1,0 +1,38 @@
+equations
+
+[product-1]	
+	product({}, $bag) = {}
+
+[product-2]	
+	product({$x, $x*}, $bag) = 
+		union(
+			one-product($x, $bag), 
+			product({$x*}, $bag)
+		)
+
+equations
+
+[one-product-nil]	
+	one-product($x, {}) = {}
+
+[one-product-cons]	
+	one-product($x, {$x', $x*}) = 
+		union(
+			{<$x, $x'>}, 
+			one-product($x, {$x*})
+		)
+
+
+equations
+
+[smaller-or-equal-1]	
+	smaller-or-equal($x, $x', {$tuple*1, <$x, $x'> , $tuple*2}) = true
+
+[smaller-or-equal-2]	
+	$x' != $x2,
+	smaller-or-equal($x', $x2, {$tuple*1, <$x1, $x'> , $tuple*2}) == true
+	===
+	smaller-or-equal($x1, $x2, {$tuple*1, <$x1, $x'> , $tuple*2}) = true
+
+[default-smaller-or-equal-3]
+	smaller-or-equal($x1, $x2, $relation) = false

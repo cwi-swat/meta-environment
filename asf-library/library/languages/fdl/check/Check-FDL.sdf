@@ -1,0 +1,80 @@
+module languages/fdl/check/Check-FDL
+
+imports languages/fdl/syntax/Fdl
+	languages/fdl/check/FDL-Error-API
+	basic/Errors
+	basic/Booleans
+	utilities/PosInfo[FeatureName]
+	utilities/PosInfo[AtomicFeature]
+	utilities/PosInfo[FeatureExpression]
+	containers/Set[FeatureExpression]
+	
+hiddens
+
+context-free start-symbols
+	Summary List[[FDL-Error]]
+
+exports
+
+sorts ErrorInfo
+
+context-free syntax
+	check-fdl-summary(FeatureDiagram) -> Summary
+	check-fdl(FeatureDiagram) -> List[[FDL-Error]]
+
+	
+	<Set[[FeatureExpression]], List[[FDL-Error]]> -> ErrorInfo
+
+	check-for-multiple-definitions(FeatureDiagram, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	check-for-multiple-definitions(FeatureDefinition, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+
+	check-for-multiple-uses(FeatureDiagram, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	check-for-multiple-uses(FeatureExpression, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+
+
+	check-for-undefined-features(FeatureDiagram, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	check-for-undefined-features(FeatureExpression, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+
+	check-for-unused-features(FeatureDiagram, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	check-for-unused-features(FeatureDefinition, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+
+	check-constraints(Constraint*, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	check-constraints(AtomicFeature, ErrorInfo) -> ErrorInfo
+		{traversal(top-down, accu, continue)}
+	
+	feature-to-string(FeatureExpression) -> String	
+
+	fdl-error-list-to-summary(List[[FDL-Error]]) -> Summary	
+	fdl-error-list-to-errors(List[[FDL-Error]]) -> {Error ","}*
+	fdl-error-to-error(FDL-Error) -> Error
+
+	is-featurename(FeatureExpression) -> Boolean
+
+hiddens
+variables
+	"$featurename"[0-9\']* -> FeatureName
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+	"$use"[0-9\']* -> Set[[FeatureExpression]]
+	"$def"[0-9\']* -> Set[[FeatureExpression]]
+	"$set"[0-9\']* -> Set[[FeatureExpression]]
+	"$fdl-errorlist"[0-9\']* -> List[[FDL-Error]]
+	"$fdl-error"[0-9\']* -> FDL-Error
+	"$fdl-error*"[0-9\']* -> {FDL-Error ","}*
+	"$error*"[0-9\']* -> {Error ","}*
+	"$error"[0-9\']* -> Error
+	"$char+"[0-9\']* -> CHAR+
+	"$string"[0-9\']* -> String
+	"$strcon"[0-9\']* -> StrCon

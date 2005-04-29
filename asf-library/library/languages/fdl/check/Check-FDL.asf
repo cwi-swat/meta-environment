@@ -1,0 +1,194 @@
+equations
+
+[check-fdl-top]
+	$featurename: $featureexpression $featuredefinition* $constraint* := $featurediagram,
+
+%% This is a hack to avoid the first composite feature being designated "unused"
+%% and to prevent atomicfeatures in constraints being marked as multiple uses.
+
+	$featurediagram1 := $featurename: $featureexpression $featuredefinition*,
+	$featurediagram2 := $featuredefinition*,
+
+	<$def, $fdl-errorlist1> := 
+		check-for-multiple-definitions($featurediagram1, <{}, []>),
+	<$use, $fdl-errorlist2> := 
+		check-for-multiple-uses($featurediagram1, <{}, $fdl-errorlist1>),
+	<$def, $fdl-errorlist3> :=
+		check-for-undefined-features($featurediagram1, <$def, $fdl-errorlist2>),
+	<$use, $fdl-errorlist4> :=
+		check-for-unused-features($featurediagram2, <$use, $fdl-errorlist3>),
+	<$use, $fdl-errorlist5> :=
+		check-constraints($constraint*, <$use, $fdl-errorlist4>)
+	===
+	check-fdl($featurediagram) = $fdl-errorlist5
+
+equations
+
+[check-fdl-summary-top]
+	check-fdl-summary($featurediagram) = 
+		fdl-error-list-to-summary(check-fdl($featurediagram))
+
+equations
+
+%% This also constructs the defined set
+
+[check-for-multiple-definitions-1]	
+	elem($featurename, $def) == true,
+	$fdl-error := make-multiple-definitions-error($featurename)
+	===
+	check-for-multiple-definitions($featurename: $featureexpression, 
+		<$def, $fdl-errorlist>) =
+		<$def, cons($fdl-error, $fdl-errorlist)>
+
+[check-for-multiple-definitions-2]
+	elem($featurename, $def) == false
+	===
+	check-for-multiple-definitions($featurename: $featureexpression, 
+		<$def, $fdl-errorlist>) =
+		<union({$featurename}, $def), $fdl-errorlist>
+
+equations
+
+%% This also constructs the use set
+
+[check-for-multiple-uses-0]
+	elem($featurename, $use) == true,
+	$fdl-error := make-multiple-uses-error($featurename)
+	===
+	check-for-multiple-uses($featurename, <$use, $fdl-errorlist>) =
+		<$use, cons($fdl-error, $fdl-errorlist)>
+
+[check-for-multiple-uses-1]
+	elem($atomicfeature, $use) == true,
+	$fdl-error := make-multiple-uses-error($atomicfeature)
+	===
+	check-for-multiple-uses($atomicfeature, <$use, $fdl-errorlist>) =
+		<$use, cons($fdl-error, $fdl-errorlist)>
+
+[check-for-multiple-uses-2]
+	elem($featurename, $use) == false
+	===
+	check-for-multiple-uses($featurename, <$use, $fdl-errorlist>) =
+		<union({$featurename},$use), $fdl-errorlist>
+
+[check-for-multiple-uses-3]
+	elem($atomicfeature, $use) == false
+	===
+	check-for-multiple-uses($atomicfeature, <$use, $fdl-errorlist>) =
+		<union({$atomicfeature},$use), $fdl-errorlist>
+
+equations
+
+[check-for-undefined-features-top]
+	elem($featurename, $def) == false,
+	$fdl-error := make-undefined-feature-error($featurename)
+	===
+	check-for-undefined-features($featurename, <$def, $fdl-errorlist>) = 
+		<$def, cons($fdl-error, $fdl-errorlist)>
+
+equations
+
+[check-for-unused-features-1]
+	elem($featurename, $use) == false,
+	$fdl-error := make-unused-feature-error($featurename)
+	===
+	check-for-unused-features($featurename: $featureexpression, 
+		<$use, $fdl-errorlist>) = 
+		<$use, cons($fdl-error, $fdl-errorlist)>
+
+equations
+
+[check-constraints-top]
+	elem($atomicfeature, $use) == false,
+	$fdl-error := make-not-in-diagram-error($atomicfeature)
+	===
+	check-constraints($atomicfeature, <$use, $fdl-errorlist>) =
+		<$use, cons($fdl-error, $fdl-errorlist)>
+
+equations
+
+[fdl-error-list-to-summary-nil]
+	fdl-error-list-to-summary([]) = 
+		summary("Check-FDL", 
+			"fdl/Fdl", 
+			[info("Feature Description is well-formed!", [])]
+		)
+
+[default-fdl-error-list-to-summary-cons]
+	fdl-error-list-to-summary($fdl-errorlist) =
+		summary("Check-FDL",
+			"fdl/Fdl",
+			[fdl-error-list-to-errors($fdl-errorlist)]
+		)
+
+equations
+
+[fdl-error-list-to-errors-nil]
+	fdl-error-list-to-errors([]) = 
+
+[fdl-error-list-to-errors-cons]
+	$error := fdl-error-to-error($fdl-error),
+	$error* := fdl-error-list-to-errors([$fdl-error*])
+	===
+	fdl-error-list-to-errors([$fdl-error, $fdl-error*]) = $error, $error*
+
+equations
+
+[fdl-error-to-error-1]
+	is-multiple-definitions-error($fdl-error) == true,
+	$featurename := get-feature($fdl-error),
+	$strcon1 := "Multiple definitions for feature",
+	$strcon2 := feature-to-string($featurename)
+	===
+	fdl-error-to-error($fdl-error) = 
+		error($strcon1, [localized($strcon2, get-location($featurename))])
+
+[fdl-error-to-error-2]
+	is-undefined-feature-error($fdl-error) == true,
+	$featurename := get-feature($fdl-error),
+	$strcon1 :=  "Use of undefined composite feature",
+	$strcon2 := feature-to-string($featurename) 
+	===
+	fdl-error-to-error($fdl-error) = 
+		error($strcon1, [localized($strcon2, get-location($featurename))])
+
+[fdl-error-to-error-3]
+	is-unused-feature-error($fdl-error) == true,
+	$featurename := get-feature($fdl-error),
+	$strcon1 := "Unused composite feature",
+	$strcon2 := feature-to-string($featurename)
+	===
+	fdl-error-to-error($fdl-error) = 
+		warning($strcon1, [localized($strcon2, get-location($featurename))])
+
+[fdl-error-to-error-4]
+	is-multiple-uses-error($fdl-error) == true,
+	$featureexpression := get-feature($fdl-error),
+	$strcon1 := "Feature is used more than once",
+	$strcon2 := feature-to-string($featureexpression)
+	===
+	fdl-error-to-error($fdl-error) = 
+		error($strcon1, [localized($strcon2, get-location($featureexpression))])
+
+[fdl-error-to-error-5]
+	is-not-in-diagram-error($fdl-error) == true,
+	$atomicfeature := get-feature($fdl-error),
+	$strcon1 := "Feature used in constraints, but not in diagram",
+	$strcon2 := feature-to-string($atomicfeature)
+	===
+	fdl-error-to-error($fdl-error) = 
+		error($strcon1, [localized($strcon2, get-location($atomicfeature))])
+
+
+equations
+
+[feature-to-string-1]
+	feature-to-string(atomicfeature($char+)) = strcon("""$char+""")
+
+[feature-to-string-2]
+	feature-to-string(featurename($char+)) = strcon("""$char+""")
+
+[default-feature-to-string]
+	feature-to-string($featureexpression) = "<expression>"
+
+

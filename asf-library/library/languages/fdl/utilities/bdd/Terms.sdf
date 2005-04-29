@@ -1,0 +1,10 @@
+module languages/fdl/utilities/bdd/Terms
+
+imports languages/fdl/utilities/bdd/Term-Variables
+
+exports
+
+sorts Term
+
+context-free syntax
+	Term-Var -> Term {cons("Term-var")}

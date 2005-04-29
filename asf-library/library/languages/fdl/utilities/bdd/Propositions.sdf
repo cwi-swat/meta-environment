@@ -1,0 +1,3 @@
+module languages/fdl/utilities/bdd/Propositions
+
+imports languages/fdl/utilities/bdd/Equivalence

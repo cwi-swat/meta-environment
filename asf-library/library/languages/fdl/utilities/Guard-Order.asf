@@ -1,0 +1,15 @@
+equations
+
+
+[formula-to-guard-order-top]
+	formula-to-guard-order(phi) = formula-to-guard-order(phi, [])
+
+[formula-to-guard-order-trv]
+	formula-to-guard-order(p, go) = append-atom-to-guard-order(p,go)
+
+
+[append-atom-to-guard-order-1]
+	append-atom-to-guard-order(p, [p*1, p, p*2]) = [p*1, p, p*2]
+
+[default-append-atom-to-guard-order-2]
+	append-atom-to-guard-order(p, [p*]) = [p*, p]

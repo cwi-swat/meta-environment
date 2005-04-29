@@ -1,0 +1,49 @@
+%%  BDD Specification -- transform propositions to Binary Decision Diagrams
+%%  Copyright (C) 2003 Tijs van der Storm
+%%
+%%  This library is free software; you can redistribute it and/or
+%%  modify it under the terms of the GNU Lesser General Public
+%%  License as published by the Free Software Foundation; either
+%%  version 2.1 of the License, or (at your option) any later version.
+%%
+%%  This library is distributed in the hope that it will be useful,
+%%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%%  Lesser General Public License for more details.
+%%
+%%  You should have received a copy of the GNU Lesser General Public
+%%  License along with this library; if not, write to the Free Software
+%%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+module languages/fdl/utilities/bdd/Extended-Formulae
+
+imports languages/fdl/utilities/bdd/Formulae
+	languages/fdl/utilities/bdd/Disjunction
+	languages/fdl/utilities/bdd/Exclusive-Or
+
+exports
+
+context-free syntax
+	ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}
+	cons:Formula "<-" ant:Formula -> Formula {cons("rev-implication"),left}
+	lhs:Formula "<->" rhs:Formula -> Formula {cons("equivalence"),assoc}
+
+
+context-free priorities
+
+	lhs:Formula "&" rhs:Formula -> Formula {cons("conjunction"),assoc}
+	> {
+	lhs:Formula "^" rhs:Formula -> Formula {cons("exclusive"),assoc}
+	lhs:Formula "|" rhs:Formula -> Formula {cons("disjunction"),assoc} 
+	}
+	> {
+	ant:Formula "->" cons:Formula -> Formula {cons("implication"),right}
+	lhs:Formula "<->" rhs:Formula -> Formula {cons("equivalence"),assoc}
+	cons:Formula "<-" ant:Formula -> Formula {cons("rev-implication"),left}
+	}
+
+hiddens
+variables
+	[xyz][0-9\']* -> Term-Var
+	"psi" -> Formula
+	"phi" -> Formula

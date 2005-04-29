@@ -1,0 +1,62 @@
+module languages/fdl/evolution/Refactoring-Utils
+
+imports languages/fdl/syntax/Fdl
+	basic/Strings
+	languages/fdl/evolution/Permutations[FeatureExpression]
+	utilities/Parsing[FeatureExpression]
+	containers/List[FeatureName]
+
+exports
+
+
+context-free syntax
+	argument-permutations-string(FeatureExpression) -> String
+
+	argument-permutations(FeatureExpression) -> 
+		List[[List[[FeatureExpression]]]]
+
+	permutations-to-string(List[[List[[FeatureExpression]]]]) -> String
+	permutation-to-string(List[[FeatureExpression]]) -> String
+
+
+	sort-definitions(FeatureDiagram, List[[FeatureName]]) ->
+		FeatureDiagram
+
+	extract-preorder(FeatureDiagram, List[[FeatureName]]) ->
+		List[[FeatureName]] 
+		{traversal(top-down, accu, continue)}
+
+	extract-preorder(FeatureExpression, List[[FeatureName]]) ->
+		List[[FeatureName]] 
+		{traversal(top-down, accu, continue)}
+
+	get-definition(FeatureDiagram, FeatureName) -> FeatureExpression
+	add-definition(FeatureDiagram, FeatureName, FeatureExpression) ->
+		FeatureDiagram
+	
+	remove-definition(FeatureDiagram, FeatureName) -> FeatureDiagram
+
+	replace-expression(FeatureDiagram, FeatureExpression, 
+		FeatureExpression) -> FeatureDiagram
+		{traversal(bottom-up, trafo, continue)}
+
+	replace-expression(FeatureExpression, FeatureExpression, 
+		FeatureExpression) -> FeatureExpression
+		{traversal(bottom-up, trafo, continue)}
+
+
+hiddens
+variables
+        "$featurename"[0-9\']* -> FeatureName
+        "$featurename*"[0-9\']* -> {FeatureName ","}*
+        "$featurediagram"[0-9\']* -> FeatureDiagram
+        "$atomicfeature"[0-9\']* -> AtomicFeature
+        "$featureexpression"[0-9\']* -> FeatureExpression
+        "$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+        "$featuretree"[0-9\']* -> FeatureExpression
+        "$featuredefinition*"[0-9\']* -> FeatureDefinition*
+        "$constraint*"[0-9\']* -> Constraint*
+        "$char+"[0-9\']* -> CHAR+
+	"$list"[0-9\']* -> List[[FeatureName]]
+	"$permutation"[0-9\']* -> List[[FeatureExpression]]
+	"$permutation+"[0-9\']* -> { List[[FeatureExpression]] ","}+

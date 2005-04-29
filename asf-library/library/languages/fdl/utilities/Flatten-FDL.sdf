@@ -1,0 +1,45 @@
+module languages/fdl/utilities/Flatten-FDL
+
+imports languages/fdl/utilities/Normalization
+	languages/fdl/utilities/Annotated-Features
+
+hiddens
+context-free start-symbols FeatureExpression
+
+exports
+
+context-free syntax
+
+	flatten-fdl(FeatureName, FeatureDiagram) -> FeatureExpression
+	flatten-fdl(FeatureDiagram) -> FeatureExpression
+
+hiddens
+context-free syntax
+
+	substitute(FeatureExpression, FeatureDiagram) ->
+		FeatureExpression {traversal(trafo,top-down,continue)}
+
+	%% Alternative version for in the compiler
+	expand-feature-expression(FeatureExpression, FeatureDefinition*) -> FeatureExpression
+	expand-feature-expression-list({FeatureExpression ","}+, FeatureDefinition*) -> 
+			{FeatureExpression ","}+
+
+
+
+hiddens
+variables
+	"$atomicfeature"[0-9\']* -> AtomicFeature
+	"$featuredefinition"[0-9\']* -> FeatureDefinition
+	"$featurename"[0-9\']* -> FeatureName
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+	"$featureexpression"[0-9\']* -> FeatureExpression
+	"$featureexpression+"[0-9\']* -> {FeatureExpression ","}+
+	"$featureexpression*"[0-9\']* -> {FeatureExpression ","}*
+
+	"$featuredefinition+"[0-9\']* -> FeatureDefinition+
+	"$featuredefinition*"[0-9\']* -> FeatureDefinition*
+	"$constraint*"[0-9\']* -> Constraint*
+
+
+
+	

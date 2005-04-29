@@ -1,0 +1,29 @@
+module languages/fdl/evolution/Permutations[X]
+
+imports containers/List[X]
+	containers/List[List[[X]]]
+
+hiddens
+context-free start-symbols List[[List[[X]]]] 
+
+exports
+
+context-free syntax
+	permutations(List[[X]]) -> List[[List[[X]]]]
+	interleave(X, List[[X]]) -> List[[List[[X]]]]
+	interleave-all(X, List[[List[[X]]]]) -> List[[List[[X]]]]
+	prepend-all(X, List[[List[[X]]]]) -> List[[List[[X]]]]
+
+
+hiddens
+
+imports basic/Whitespace
+	basic/Comments
+
+variables
+	"$x"[0-9\']* -> X
+	"$xlist"[0-9\']* -> List[[X]]
+	"$listlist"[0-9\']* -> List[[List[[X]]]]
+	"$xlist*"[0-9\']* -> {List[[X]] ","}*
+	"$x*"[0-9\']* -> {X ","}*
+	"$integer"[0-9\']* -> Integer

@@ -1,0 +1,18 @@
+module languages/fdl/utilities/FDL-to-BDD
+
+
+imports languages/fdl/utilities/FDL-to-Formula
+imports languages/fdl/utilities/Formula-to-BDD
+
+hiddens context-free start-symbols Formula
+
+exports
+
+context-free syntax
+	fdl-to-bdd(FeatureDiagram) -> Formula
+	fdl-to-bdd(FeatureName, FeatureDiagram) -> Formula
+
+hiddens
+variables
+	"$featurediagram"[0-9\']* -> FeatureDiagram
+	"$featurename"[0-9\']* -> FeatureName
