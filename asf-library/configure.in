@@ -53,5 +53,13 @@ AC_CONFIG_FILES([Makefile
    library/languages/casl/tocasfix/Makefile
    library/languages/tex/Makefile
    library/languages/tex/syntax/Makefile
+   library/languages/fdl/Makefile
+   library/languages/fdl/check/Makefile
+   library/languages/fdl/pretty/Makefile
+   library/languages/fdl/syntax/Makefile
+   library/languages/fdl/evolution/Makefile
+   library/languages/fdl/utilities/Makefile
+   library/languages/fdl/utilities/bdd/Makefile
+
 ])
 AC_OUTPUT
