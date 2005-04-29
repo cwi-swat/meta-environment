@@ -2,7 +2,7 @@
 
 # This utility provides the following functionality
 # - create a symlink to __DATADIR__/meta.buttons.installed in .
-# - append __DATADIR__/meta.conf.installed to ./meta.conf
+# - append `cat __DATADIR__/meta.conf.installed` to ./meta.conf
 
 set -e
 
