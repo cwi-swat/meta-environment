@@ -4,7 +4,8 @@ tool gui is {
 
 process GUI is
 let
-  ClassPath: list,
+  ClassPath: str,
+  URLs: list,
   DirName: str,
   MenuEvent: term,
   MenuEventList: list,
@@ -24,6 +25,9 @@ in
   +
     rec-msg(load-jar(JarName?, ClassPath?))
     . snd-do(GUI, load-jar(JarName, ClassPath))
+  +
+    rec-msg(load-jar(JarName?, URLs?))
+    . snd-do(GUI, load-jar(JarName, URLs))
   +
     rec-msg(load-class(DirName?, ClassName?))
     . snd-do(GUI, load-class(DirName, ClassName))
