@@ -27,7 +27,5 @@ in
 endlet
 
 process StartErrorViewer is
-  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", 
-          ["file:///export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/error-support/errorapi-1.1.jar","file:///export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/error-gui/jlfgr-1_0.jar"]))
-
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__LOCAL_JARS__:__EXTERNAL_JARS__"))
 toolbus(ErrorViewer)

@@ -12,7 +12,8 @@ JAVA_PACKAGE = nl.cwi.sen1.error
 JARFILE = $(TOOLNAME)-$(VERSION).jar
 MAIN_CLASS = $(JAVA_PACKAGE).viewer.ErrorViewer
 
-ANT_ENV += LOCAL_JARS=$(top_srcdir)/lib/jlfgr-1_0.jar
+abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
+LOCAL_JARS = $(abstop_srcdir)/lib/jlfgr-1_0.jar
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
 bin_SCRIPTS = $(TOOLNAME)-config
@@ -31,9 +32,8 @@ $(TOOLNAME)-$(VERSION).pkg: package Makefile
 	cp $< $@
 
 %.idef: %.idef.src Makefile
-	sed 's@__PKGDATA__@$(pkgdatadir)@g;\
-	     s@__JARFILE__@$(JARFILE)@g'\
+	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
+	    -e 's@__LOCAL_JARS__@$(LOCAL_JARS)@g'\
+	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
+	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@
-				  
-	
-
