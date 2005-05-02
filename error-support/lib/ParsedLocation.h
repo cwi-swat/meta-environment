@@ -12,16 +12,21 @@
 
 /*{{{  typedefs */
 
-typedef struct _PLOC_Normal *PLOC_Normal;
-typedef struct _PLOC_Escaped *PLOC_Escaped;
+typedef struct _PLOC_OptLayout *PLOC_OptLayout;
+typedef struct _PLOC_Layout *PLOC_Layout;
+typedef struct _PLOC_LexLayoutList *PLOC_LexLayoutList;
+typedef struct _PLOC_LexStrChar *PLOC_LexStrChar;
+typedef struct _PLOC_StrChar *PLOC_StrChar;
+typedef struct _PLOC_LexStrCon *PLOC_LexStrCon;
 typedef struct _PLOC_StrCon *PLOC_StrCon;
+typedef struct _PLOC_LexStrCharChars *PLOC_LexStrCharChars;
+typedef struct _PLOC_LexNatCon *PLOC_LexNatCon;
 typedef struct _PLOC_NatCon *PLOC_NatCon;
+typedef struct _PLOC_LexLayout *PLOC_LexLayout;
 typedef struct _PLOC_Location *PLOC_Location;
 typedef struct _PLOC_Area *PLOC_Area;
 typedef struct _PLOC_Slice *PLOC_Slice;
 typedef struct _PLOC_AreaAreas *PLOC_AreaAreas;
-typedef struct _PLOC_Start *PLOC_Start;
-typedef struct _PLOC_OptLayout *PLOC_OptLayout;
 
 /*}}}  */
 
@@ -29,28 +34,47 @@ void PLOC_initParsedLocationApi(void);
 
 /*{{{  protect functions */
 
-void PLOC_protectNormal(PLOC_Normal * arg);
-void PLOC_protectEscaped(PLOC_Escaped * arg);
+void PLOC_protectOptLayout(PLOC_OptLayout * arg);
+void PLOC_protectLayout(PLOC_Layout * arg);
+void PLOC_protectLexLayoutList(PLOC_LexLayoutList * arg);
+void PLOC_protectLexStrChar(PLOC_LexStrChar * arg);
+void PLOC_protectStrChar(PLOC_StrChar * arg);
+void PLOC_protectLexStrCon(PLOC_LexStrCon * arg);
 void PLOC_protectStrCon(PLOC_StrCon * arg);
+void PLOC_protectLexStrCharChars(PLOC_LexStrCharChars * arg);
+void PLOC_protectLexNatCon(PLOC_LexNatCon * arg);
 void PLOC_protectNatCon(PLOC_NatCon * arg);
+void PLOC_protectLexLayout(PLOC_LexLayout * arg);
 void PLOC_protectLocation(PLOC_Location * arg);
 void PLOC_protectArea(PLOC_Area * arg);
 void PLOC_protectSlice(PLOC_Slice * arg);
 void PLOC_protectAreaAreas(PLOC_AreaAreas * arg);
-void PLOC_protectStart(PLOC_Start * arg);
-void PLOC_protectOptLayout(PLOC_OptLayout * arg);
 
 /*}}}  */
 /*{{{  term conversion functions */
 
-PLOC_Normal PLOC_NormalFromTerm(ATerm t);
-ATerm PLOC_NormalToTerm(PLOC_Normal arg);
-PLOC_Escaped PLOC_EscapedFromTerm(ATerm t);
-ATerm PLOC_EscapedToTerm(PLOC_Escaped arg);
+PLOC_OptLayout PLOC_OptLayoutFromTerm(ATerm t);
+ATerm PLOC_OptLayoutToTerm(PLOC_OptLayout arg);
+PLOC_Layout PLOC_LayoutFromTerm(ATerm t);
+ATerm PLOC_LayoutToTerm(PLOC_Layout arg);
+PLOC_LexLayoutList PLOC_LexLayoutListFromTerm(ATerm t);
+ATerm PLOC_LexLayoutListToTerm(PLOC_LexLayoutList arg);
+PLOC_LexStrChar PLOC_LexStrCharFromTerm(ATerm t);
+ATerm PLOC_LexStrCharToTerm(PLOC_LexStrChar arg);
+PLOC_StrChar PLOC_StrCharFromTerm(ATerm t);
+ATerm PLOC_StrCharToTerm(PLOC_StrChar arg);
+PLOC_LexStrCon PLOC_LexStrConFromTerm(ATerm t);
+ATerm PLOC_LexStrConToTerm(PLOC_LexStrCon arg);
 PLOC_StrCon PLOC_StrConFromTerm(ATerm t);
 ATerm PLOC_StrConToTerm(PLOC_StrCon arg);
+PLOC_LexStrCharChars PLOC_LexStrCharCharsFromTerm(ATerm t);
+ATerm PLOC_LexStrCharCharsToTerm(PLOC_LexStrCharChars arg);
+PLOC_LexNatCon PLOC_LexNatConFromTerm(ATerm t);
+ATerm PLOC_LexNatConToTerm(PLOC_LexNatCon arg);
 PLOC_NatCon PLOC_NatConFromTerm(ATerm t);
 ATerm PLOC_NatConToTerm(PLOC_NatCon arg);
+PLOC_LexLayout PLOC_LexLayoutFromTerm(ATerm t);
+ATerm PLOC_LexLayoutToTerm(PLOC_LexLayout arg);
 PLOC_Location PLOC_LocationFromTerm(ATerm t);
 ATerm PLOC_LocationToTerm(PLOC_Location arg);
 PLOC_Area PLOC_AreaFromTerm(ATerm t);
@@ -59,14 +83,77 @@ PLOC_Slice PLOC_SliceFromTerm(ATerm t);
 ATerm PLOC_SliceToTerm(PLOC_Slice arg);
 PLOC_AreaAreas PLOC_AreaAreasFromTerm(ATerm t);
 ATerm PLOC_AreaAreasToTerm(PLOC_AreaAreas arg);
-PLOC_Start PLOC_StartFromTerm(ATerm t);
-ATerm PLOC_StartToTerm(PLOC_Start arg);
-PLOC_OptLayout PLOC_OptLayoutFromTerm(ATerm t);
-ATerm PLOC_OptLayoutToTerm(PLOC_OptLayout arg);
 
 /*}}}  */
 /*{{{  list functions */
 
+int PLOC_getLexLayoutListLength(PLOC_LexLayoutList arg);
+PLOC_LexLayoutList PLOC_reverseLexLayoutList(PLOC_LexLayoutList arg);
+PLOC_LexLayoutList PLOC_appendLexLayoutList(PLOC_LexLayoutList arg,
+					    PLOC_LexLayout elem);
+PLOC_LexLayoutList PLOC_concatLexLayoutList(PLOC_LexLayoutList arg0,
+					    PLOC_LexLayoutList arg1);
+PLOC_LexLayoutList PLOC_sliceLexLayoutList(PLOC_LexLayoutList arg, int start,
+					   int end);
+PLOC_LexLayout PLOC_getLexLayoutListLexLayoutAt(PLOC_LexLayoutList arg,
+						int index);
+PLOC_LexLayoutList PLOC_replaceLexLayoutListLexLayoutAt(PLOC_LexLayoutList
+							arg,
+							PLOC_LexLayout elem,
+							int index);
+PLOC_LexLayoutList PLOC_makeLexLayoutList2(PLOC_LexLayout elem1,
+					   PLOC_LexLayout elem2);
+PLOC_LexLayoutList PLOC_makeLexLayoutList3(PLOC_LexLayout elem1,
+					   PLOC_LexLayout elem2,
+					   PLOC_LexLayout elem3);
+PLOC_LexLayoutList PLOC_makeLexLayoutList4(PLOC_LexLayout elem1,
+					   PLOC_LexLayout elem2,
+					   PLOC_LexLayout elem3,
+					   PLOC_LexLayout elem4);
+PLOC_LexLayoutList PLOC_makeLexLayoutList5(PLOC_LexLayout elem1,
+					   PLOC_LexLayout elem2,
+					   PLOC_LexLayout elem3,
+					   PLOC_LexLayout elem4,
+					   PLOC_LexLayout elem5);
+PLOC_LexLayoutList PLOC_makeLexLayoutList6(PLOC_LexLayout elem1,
+					   PLOC_LexLayout elem2,
+					   PLOC_LexLayout elem3,
+					   PLOC_LexLayout elem4,
+					   PLOC_LexLayout elem5,
+					   PLOC_LexLayout elem6);
+int PLOC_getLexStrCharCharsLength(PLOC_LexStrCharChars arg);
+PLOC_LexStrCharChars PLOC_reverseLexStrCharChars(PLOC_LexStrCharChars arg);
+PLOC_LexStrCharChars PLOC_appendLexStrCharChars(PLOC_LexStrCharChars arg,
+						PLOC_LexStrChar elem);
+PLOC_LexStrCharChars PLOC_concatLexStrCharChars(PLOC_LexStrCharChars arg0,
+						PLOC_LexStrCharChars arg1);
+PLOC_LexStrCharChars PLOC_sliceLexStrCharChars(PLOC_LexStrCharChars arg,
+					       int start, int end);
+PLOC_LexStrChar PLOC_getLexStrCharCharsLexStrCharAt(PLOC_LexStrCharChars arg,
+						    int index);
+PLOC_LexStrCharChars
+PLOC_replaceLexStrCharCharsLexStrCharAt(PLOC_LexStrCharChars arg,
+					PLOC_LexStrChar elem, int index);
+PLOC_LexStrCharChars PLOC_makeLexStrCharChars2(PLOC_LexStrChar elem1,
+					       PLOC_LexStrChar elem2);
+PLOC_LexStrCharChars PLOC_makeLexStrCharChars3(PLOC_LexStrChar elem1,
+					       PLOC_LexStrChar elem2,
+					       PLOC_LexStrChar elem3);
+PLOC_LexStrCharChars PLOC_makeLexStrCharChars4(PLOC_LexStrChar elem1,
+					       PLOC_LexStrChar elem2,
+					       PLOC_LexStrChar elem3,
+					       PLOC_LexStrChar elem4);
+PLOC_LexStrCharChars PLOC_makeLexStrCharChars5(PLOC_LexStrChar elem1,
+					       PLOC_LexStrChar elem2,
+					       PLOC_LexStrChar elem3,
+					       PLOC_LexStrChar elem4,
+					       PLOC_LexStrChar elem5);
+PLOC_LexStrCharChars PLOC_makeLexStrCharChars6(PLOC_LexStrChar elem1,
+					       PLOC_LexStrChar elem2,
+					       PLOC_LexStrChar elem3,
+					       PLOC_LexStrChar elem4,
+					       PLOC_LexStrChar elem5,
+					       PLOC_LexStrChar elem6);
 int PLOC_getAreaAreasLength(PLOC_AreaAreas arg);
 PLOC_AreaAreas PLOC_reverseAreaAreas(PLOC_AreaAreas arg);
 PLOC_AreaAreas PLOC_appendAreaAreas(PLOC_AreaAreas arg0,
@@ -104,11 +191,29 @@ PLOC_AreaAreas PLOC_makeAreaAreas6(PLOC_OptLayout wsAfterHead,
 /*}}}  */
 /*{{{  constructors */
 
-PLOC_Normal PLOC_makeNormalDefault(const char *string);
-PLOC_Escaped PLOC_makeEscapedSpecialCharacter(const char *string);
-PLOC_Escaped PLOC_makeEscapedOctal(const char *string);
-PLOC_StrCon PLOC_makeStrConDefault(const char *string);
-PLOC_NatCon PLOC_makeNatConDefault(const char *string);
+PLOC_OptLayout PLOC_makeOptLayoutAbsent(void);
+PLOC_OptLayout PLOC_makeOptLayoutPresent(PLOC_Layout layout);
+PLOC_Layout PLOC_makeLayoutLexToCf(PLOC_LexLayoutList list);
+PLOC_LexLayoutList PLOC_makeLexLayoutListEmpty(void);
+PLOC_LexLayoutList PLOC_makeLexLayoutListSingle(PLOC_LexLayout head);
+PLOC_LexLayoutList PLOC_makeLexLayoutListMany(PLOC_LexLayout head,
+					      PLOC_LexLayoutList tail);
+PLOC_LexStrChar PLOC_makeLexStrCharNewline(void);
+PLOC_LexStrChar PLOC_makeLexStrCharTab(void);
+PLOC_LexStrChar PLOC_makeLexStrCharQuote(void);
+PLOC_LexStrChar PLOC_makeLexStrCharBackslash(void);
+PLOC_LexStrChar PLOC_makeLexStrCharDecimal(char a, char b, char c);
+PLOC_LexStrChar PLOC_makeLexStrCharNormal(char ch);
+PLOC_StrChar PLOC_makeStrCharLexToCf(PLOC_LexStrChar StrChar);
+PLOC_LexStrCon PLOC_makeLexStrConDefault(PLOC_LexStrCharChars chars);
+PLOC_StrCon PLOC_makeStrConLexToCf(PLOC_LexStrCon StrCon);
+PLOC_LexStrCharChars PLOC_makeLexStrCharCharsEmpty(void);
+PLOC_LexStrCharChars PLOC_makeLexStrCharCharsSingle(PLOC_LexStrChar head);
+PLOC_LexStrCharChars PLOC_makeLexStrCharCharsMany(PLOC_LexStrChar head,
+						  PLOC_LexStrCharChars tail);
+PLOC_LexNatCon PLOC_makeLexNatConDigits(const char *list);
+PLOC_NatCon PLOC_makeNatConLexToCf(PLOC_LexNatCon NatCon);
+PLOC_LexLayout PLOC_makeLexLayoutWhitespace(char ch);
 PLOC_Location PLOC_makeLocationFile(PLOC_OptLayout wsAfterFile,
 				    PLOC_OptLayout wsAfterParenOpen,
 				    PLOC_StrCon filename,
@@ -154,78 +259,158 @@ PLOC_AreaAreas PLOC_makeAreaAreasMany(PLOC_Area head,
 				      PLOC_OptLayout wsAfterHead,
 				      PLOC_OptLayout wsAfterSep,
 				      PLOC_AreaAreas tail);
-PLOC_Start PLOC_makeStartSlice(PLOC_OptLayout wsBefore, PLOC_Slice topSlice,
-			       PLOC_OptLayout wsAfter, int ambCnt);
-PLOC_Start PLOC_makeStartArea(PLOC_OptLayout wsBefore, PLOC_Area topArea,
-			      PLOC_OptLayout wsAfter, int ambCnt);
-PLOC_Start PLOC_makeStartLocation(PLOC_OptLayout wsBefore,
-				  PLOC_Location topLocation,
-				  PLOC_OptLayout wsAfter, int ambCnt);
-PLOC_Start PLOC_makeStartNatCon(PLOC_OptLayout wsBefore,
-				PLOC_NatCon topNatCon, PLOC_OptLayout wsAfter,
-				int ambCnt);
-PLOC_Start PLOC_makeStartEscaped(PLOC_OptLayout wsBefore,
-				 PLOC_Escaped topEscaped,
-				 PLOC_OptLayout wsAfter, int ambCnt);
-PLOC_Start PLOC_makeStartNormal(PLOC_OptLayout wsBefore,
-				PLOC_Normal topNormal, PLOC_OptLayout wsAfter,
-				int ambCnt);
-PLOC_Start PLOC_makeStartStrCon(PLOC_OptLayout wsBefore,
-				PLOC_StrCon topStrCon, PLOC_OptLayout wsAfter,
-				int ambCnt);
-PLOC_OptLayout PLOC_makeOptLayoutAbsent(void);
-PLOC_OptLayout PLOC_makeOptLayoutPresent(const char *string);
 
 /*}}}  */
 /*{{{  equality functions */
 
-ATbool PLOC_isEqualNormal(PLOC_Normal arg0, PLOC_Normal arg1);
-ATbool PLOC_isEqualEscaped(PLOC_Escaped arg0, PLOC_Escaped arg1);
+ATbool PLOC_isEqualOptLayout(PLOC_OptLayout arg0, PLOC_OptLayout arg1);
+ATbool PLOC_isEqualLayout(PLOC_Layout arg0, PLOC_Layout arg1);
+ATbool PLOC_isEqualLexLayoutList(PLOC_LexLayoutList arg0,
+				 PLOC_LexLayoutList arg1);
+ATbool PLOC_isEqualLexStrChar(PLOC_LexStrChar arg0, PLOC_LexStrChar arg1);
+ATbool PLOC_isEqualStrChar(PLOC_StrChar arg0, PLOC_StrChar arg1);
+ATbool PLOC_isEqualLexStrCon(PLOC_LexStrCon arg0, PLOC_LexStrCon arg1);
 ATbool PLOC_isEqualStrCon(PLOC_StrCon arg0, PLOC_StrCon arg1);
+ATbool PLOC_isEqualLexStrCharChars(PLOC_LexStrCharChars arg0,
+				   PLOC_LexStrCharChars arg1);
+ATbool PLOC_isEqualLexNatCon(PLOC_LexNatCon arg0, PLOC_LexNatCon arg1);
 ATbool PLOC_isEqualNatCon(PLOC_NatCon arg0, PLOC_NatCon arg1);
+ATbool PLOC_isEqualLexLayout(PLOC_LexLayout arg0, PLOC_LexLayout arg1);
 ATbool PLOC_isEqualLocation(PLOC_Location arg0, PLOC_Location arg1);
 ATbool PLOC_isEqualArea(PLOC_Area arg0, PLOC_Area arg1);
 ATbool PLOC_isEqualSlice(PLOC_Slice arg0, PLOC_Slice arg1);
 ATbool PLOC_isEqualAreaAreas(PLOC_AreaAreas arg0, PLOC_AreaAreas arg1);
-ATbool PLOC_isEqualStart(PLOC_Start arg0, PLOC_Start arg1);
-ATbool PLOC_isEqualOptLayout(PLOC_OptLayout arg0, PLOC_OptLayout arg1);
 
 /*}}}  */
-/*{{{  PLOC_Normal accessors */
+/*{{{  PLOC_OptLayout accessors */
 
-ATbool PLOC_isValidNormal(PLOC_Normal arg);
-inline ATbool PLOC_isNormalDefault(PLOC_Normal arg);
-ATbool PLOC_hasNormalString(PLOC_Normal arg);
-char *PLOC_getNormalString(PLOC_Normal arg);
-PLOC_Normal PLOC_setNormalString(PLOC_Normal arg, const char *string);
+ATbool PLOC_isValidOptLayout(PLOC_OptLayout arg);
+inline ATbool PLOC_isOptLayoutAbsent(PLOC_OptLayout arg);
+inline ATbool PLOC_isOptLayoutPresent(PLOC_OptLayout arg);
+ATbool PLOC_hasOptLayoutLayout(PLOC_OptLayout arg);
+PLOC_Layout PLOC_getOptLayoutLayout(PLOC_OptLayout arg);
+PLOC_OptLayout PLOC_setOptLayoutLayout(PLOC_OptLayout arg,
+				       PLOC_Layout layout);
 
 /*}}}  */
-/*{{{  PLOC_Escaped accessors */
+/*{{{  PLOC_Layout accessors */
 
-ATbool PLOC_isValidEscaped(PLOC_Escaped arg);
-inline ATbool PLOC_isEscapedSpecialCharacter(PLOC_Escaped arg);
-inline ATbool PLOC_isEscapedOctal(PLOC_Escaped arg);
-ATbool PLOC_hasEscapedString(PLOC_Escaped arg);
-char *PLOC_getEscapedString(PLOC_Escaped arg);
-PLOC_Escaped PLOC_setEscapedString(PLOC_Escaped arg, const char *string);
+ATbool PLOC_isValidLayout(PLOC_Layout arg);
+inline ATbool PLOC_isLayoutLexToCf(PLOC_Layout arg);
+ATbool PLOC_hasLayoutList(PLOC_Layout arg);
+PLOC_LexLayoutList PLOC_getLayoutList(PLOC_Layout arg);
+PLOC_Layout PLOC_setLayoutList(PLOC_Layout arg, PLOC_LexLayoutList list);
+
+/*}}}  */
+/*{{{  PLOC_LexLayoutList accessors */
+
+ATbool PLOC_isValidLexLayoutList(PLOC_LexLayoutList arg);
+inline ATbool PLOC_isLexLayoutListEmpty(PLOC_LexLayoutList arg);
+inline ATbool PLOC_isLexLayoutListSingle(PLOC_LexLayoutList arg);
+inline ATbool PLOC_isLexLayoutListMany(PLOC_LexLayoutList arg);
+ATbool PLOC_hasLexLayoutListHead(PLOC_LexLayoutList arg);
+ATbool PLOC_hasLexLayoutListTail(PLOC_LexLayoutList arg);
+PLOC_LexLayout PLOC_getLexLayoutListHead(PLOC_LexLayoutList arg);
+PLOC_LexLayoutList PLOC_getLexLayoutListTail(PLOC_LexLayoutList arg);
+PLOC_LexLayoutList PLOC_setLexLayoutListHead(PLOC_LexLayoutList arg,
+					     PLOC_LexLayout head);
+PLOC_LexLayoutList PLOC_setLexLayoutListTail(PLOC_LexLayoutList arg,
+					     PLOC_LexLayoutList tail);
+
+/*}}}  */
+/*{{{  PLOC_LexStrChar accessors */
+
+ATbool PLOC_isValidLexStrChar(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharNewline(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharTab(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharQuote(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharBackslash(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharDecimal(PLOC_LexStrChar arg);
+inline ATbool PLOC_isLexStrCharNormal(PLOC_LexStrChar arg);
+ATbool PLOC_hasLexStrCharA(PLOC_LexStrChar arg);
+ATbool PLOC_hasLexStrCharB(PLOC_LexStrChar arg);
+ATbool PLOC_hasLexStrCharC(PLOC_LexStrChar arg);
+ATbool PLOC_hasLexStrCharCh(PLOC_LexStrChar arg);
+char PLOC_getLexStrCharA(PLOC_LexStrChar arg);
+char PLOC_getLexStrCharB(PLOC_LexStrChar arg);
+char PLOC_getLexStrCharC(PLOC_LexStrChar arg);
+char PLOC_getLexStrCharCh(PLOC_LexStrChar arg);
+PLOC_LexStrChar PLOC_setLexStrCharA(PLOC_LexStrChar arg, char a);
+PLOC_LexStrChar PLOC_setLexStrCharB(PLOC_LexStrChar arg, char b);
+PLOC_LexStrChar PLOC_setLexStrCharC(PLOC_LexStrChar arg, char c);
+PLOC_LexStrChar PLOC_setLexStrCharCh(PLOC_LexStrChar arg, char ch);
+
+/*}}}  */
+/*{{{  PLOC_StrChar accessors */
+
+ATbool PLOC_isValidStrChar(PLOC_StrChar arg);
+inline ATbool PLOC_isStrCharLexToCf(PLOC_StrChar arg);
+ATbool PLOC_hasStrCharStrChar(PLOC_StrChar arg);
+PLOC_LexStrChar PLOC_getStrCharStrChar(PLOC_StrChar arg);
+PLOC_StrChar PLOC_setStrCharStrChar(PLOC_StrChar arg,
+				    PLOC_LexStrChar StrChar);
+
+/*}}}  */
+/*{{{  PLOC_LexStrCon accessors */
+
+ATbool PLOC_isValidLexStrCon(PLOC_LexStrCon arg);
+inline ATbool PLOC_isLexStrConDefault(PLOC_LexStrCon arg);
+ATbool PLOC_hasLexStrConChars(PLOC_LexStrCon arg);
+PLOC_LexStrCharChars PLOC_getLexStrConChars(PLOC_LexStrCon arg);
+PLOC_LexStrCon PLOC_setLexStrConChars(PLOC_LexStrCon arg,
+				      PLOC_LexStrCharChars chars);
 
 /*}}}  */
 /*{{{  PLOC_StrCon accessors */
 
 ATbool PLOC_isValidStrCon(PLOC_StrCon arg);
-inline ATbool PLOC_isStrConDefault(PLOC_StrCon arg);
-ATbool PLOC_hasStrConString(PLOC_StrCon arg);
-char *PLOC_getStrConString(PLOC_StrCon arg);
-PLOC_StrCon PLOC_setStrConString(PLOC_StrCon arg, const char *string);
+inline ATbool PLOC_isStrConLexToCf(PLOC_StrCon arg);
+ATbool PLOC_hasStrConStrCon(PLOC_StrCon arg);
+PLOC_LexStrCon PLOC_getStrConStrCon(PLOC_StrCon arg);
+PLOC_StrCon PLOC_setStrConStrCon(PLOC_StrCon arg, PLOC_LexStrCon StrCon);
+
+/*}}}  */
+/*{{{  PLOC_LexStrCharChars accessors */
+
+ATbool PLOC_isValidLexStrCharChars(PLOC_LexStrCharChars arg);
+inline ATbool PLOC_isLexStrCharCharsEmpty(PLOC_LexStrCharChars arg);
+inline ATbool PLOC_isLexStrCharCharsSingle(PLOC_LexStrCharChars arg);
+inline ATbool PLOC_isLexStrCharCharsMany(PLOC_LexStrCharChars arg);
+ATbool PLOC_hasLexStrCharCharsHead(PLOC_LexStrCharChars arg);
+ATbool PLOC_hasLexStrCharCharsTail(PLOC_LexStrCharChars arg);
+PLOC_LexStrChar PLOC_getLexStrCharCharsHead(PLOC_LexStrCharChars arg);
+PLOC_LexStrCharChars PLOC_getLexStrCharCharsTail(PLOC_LexStrCharChars arg);
+PLOC_LexStrCharChars PLOC_setLexStrCharCharsHead(PLOC_LexStrCharChars arg,
+						 PLOC_LexStrChar head);
+PLOC_LexStrCharChars PLOC_setLexStrCharCharsTail(PLOC_LexStrCharChars arg,
+						 PLOC_LexStrCharChars tail);
+
+/*}}}  */
+/*{{{  PLOC_LexNatCon accessors */
+
+ATbool PLOC_isValidLexNatCon(PLOC_LexNatCon arg);
+inline ATbool PLOC_isLexNatConDigits(PLOC_LexNatCon arg);
+ATbool PLOC_hasLexNatConList(PLOC_LexNatCon arg);
+char *PLOC_getLexNatConList(PLOC_LexNatCon arg);
+PLOC_LexNatCon PLOC_setLexNatConList(PLOC_LexNatCon arg, const char *list);
 
 /*}}}  */
 /*{{{  PLOC_NatCon accessors */
 
 ATbool PLOC_isValidNatCon(PLOC_NatCon arg);
-inline ATbool PLOC_isNatConDefault(PLOC_NatCon arg);
-ATbool PLOC_hasNatConString(PLOC_NatCon arg);
-char *PLOC_getNatConString(PLOC_NatCon arg);
-PLOC_NatCon PLOC_setNatConString(PLOC_NatCon arg, const char *string);
+inline ATbool PLOC_isNatConLexToCf(PLOC_NatCon arg);
+ATbool PLOC_hasNatConNatCon(PLOC_NatCon arg);
+PLOC_LexNatCon PLOC_getNatConNatCon(PLOC_NatCon arg);
+PLOC_NatCon PLOC_setNatConNatCon(PLOC_NatCon arg, PLOC_LexNatCon NatCon);
+
+/*}}}  */
+/*{{{  PLOC_LexLayout accessors */
+
+ATbool PLOC_isValidLexLayout(PLOC_LexLayout arg);
+inline ATbool PLOC_isLexLayoutWhitespace(PLOC_LexLayout arg);
+ATbool PLOC_hasLexLayoutCh(PLOC_LexLayout arg);
+char PLOC_getLexLayoutCh(PLOC_LexLayout arg);
+PLOC_LexLayout PLOC_setLexLayoutCh(PLOC_LexLayout arg, char ch);
 
 /*}}}  */
 /*{{{  PLOC_Location accessors */
@@ -410,67 +595,38 @@ PLOC_AreaAreas PLOC_setAreaAreasWsAfterSep(PLOC_AreaAreas arg,
 PLOC_AreaAreas PLOC_setAreaAreasTail(PLOC_AreaAreas arg, PLOC_AreaAreas tail);
 
 /*}}}  */
-/*{{{  PLOC_Start accessors */
-
-ATbool PLOC_isValidStart(PLOC_Start arg);
-inline ATbool PLOC_isStartSlice(PLOC_Start arg);
-inline ATbool PLOC_isStartArea(PLOC_Start arg);
-inline ATbool PLOC_isStartLocation(PLOC_Start arg);
-inline ATbool PLOC_isStartNatCon(PLOC_Start arg);
-inline ATbool PLOC_isStartEscaped(PLOC_Start arg);
-inline ATbool PLOC_isStartNormal(PLOC_Start arg);
-inline ATbool PLOC_isStartStrCon(PLOC_Start arg);
-ATbool PLOC_hasStartWsBefore(PLOC_Start arg);
-ATbool PLOC_hasStartTopSlice(PLOC_Start arg);
-ATbool PLOC_hasStartWsAfter(PLOC_Start arg);
-ATbool PLOC_hasStartAmbCnt(PLOC_Start arg);
-ATbool PLOC_hasStartTopArea(PLOC_Start arg);
-ATbool PLOC_hasStartTopLocation(PLOC_Start arg);
-ATbool PLOC_hasStartTopNatCon(PLOC_Start arg);
-ATbool PLOC_hasStartTopEscaped(PLOC_Start arg);
-ATbool PLOC_hasStartTopNormal(PLOC_Start arg);
-ATbool PLOC_hasStartTopStrCon(PLOC_Start arg);
-PLOC_OptLayout PLOC_getStartWsBefore(PLOC_Start arg);
-PLOC_Slice PLOC_getStartTopSlice(PLOC_Start arg);
-PLOC_OptLayout PLOC_getStartWsAfter(PLOC_Start arg);
-int PLOC_getStartAmbCnt(PLOC_Start arg);
-PLOC_Area PLOC_getStartTopArea(PLOC_Start arg);
-PLOC_Location PLOC_getStartTopLocation(PLOC_Start arg);
-PLOC_NatCon PLOC_getStartTopNatCon(PLOC_Start arg);
-PLOC_Escaped PLOC_getStartTopEscaped(PLOC_Start arg);
-PLOC_Normal PLOC_getStartTopNormal(PLOC_Start arg);
-PLOC_StrCon PLOC_getStartTopStrCon(PLOC_Start arg);
-PLOC_Start PLOC_setStartWsBefore(PLOC_Start arg, PLOC_OptLayout wsBefore);
-PLOC_Start PLOC_setStartTopSlice(PLOC_Start arg, PLOC_Slice topSlice);
-PLOC_Start PLOC_setStartWsAfter(PLOC_Start arg, PLOC_OptLayout wsAfter);
-PLOC_Start PLOC_setStartAmbCnt(PLOC_Start arg, int ambCnt);
-PLOC_Start PLOC_setStartTopArea(PLOC_Start arg, PLOC_Area topArea);
-PLOC_Start PLOC_setStartTopLocation(PLOC_Start arg,
-				    PLOC_Location topLocation);
-PLOC_Start PLOC_setStartTopNatCon(PLOC_Start arg, PLOC_NatCon topNatCon);
-PLOC_Start PLOC_setStartTopEscaped(PLOC_Start arg, PLOC_Escaped topEscaped);
-PLOC_Start PLOC_setStartTopNormal(PLOC_Start arg, PLOC_Normal topNormal);
-PLOC_Start PLOC_setStartTopStrCon(PLOC_Start arg, PLOC_StrCon topStrCon);
-
-/*}}}  */
-/*{{{  PLOC_OptLayout accessors */
-
-ATbool PLOC_isValidOptLayout(PLOC_OptLayout arg);
-inline ATbool PLOC_isOptLayoutAbsent(PLOC_OptLayout arg);
-inline ATbool PLOC_isOptLayoutPresent(PLOC_OptLayout arg);
-ATbool PLOC_hasOptLayoutString(PLOC_OptLayout arg);
-char *PLOC_getOptLayoutString(PLOC_OptLayout arg);
-PLOC_OptLayout PLOC_setOptLayoutString(PLOC_OptLayout arg,
-				       const char *string);
-
-/*}}}  */
 /*{{{  sort visitors */
 
-PLOC_Normal PLOC_visitNormal(PLOC_Normal arg, char *(*acceptString) (char *));
-PLOC_Escaped PLOC_visitEscaped(PLOC_Escaped arg,
-			       char *(*acceptString) (char *));
-PLOC_StrCon PLOC_visitStrCon(PLOC_StrCon arg, char *(*acceptString) (char *));
-PLOC_NatCon PLOC_visitNatCon(PLOC_NatCon arg, char *(*acceptString) (char *));
+PLOC_OptLayout PLOC_visitOptLayout(PLOC_OptLayout arg,
+				   PLOC_Layout(*acceptLayout) (PLOC_Layout));
+PLOC_Layout PLOC_visitLayout(PLOC_Layout arg,
+			     PLOC_LexLayoutList(*acceptList)
+			     (PLOC_LexLayoutList));
+PLOC_LexLayoutList PLOC_visitLexLayoutList(PLOC_LexLayoutList arg,
+					   PLOC_LexLayout(*acceptHead)
+					   (PLOC_LexLayout));
+PLOC_LexStrChar PLOC_visitLexStrChar(PLOC_LexStrChar arg,
+				     char (*acceptA) (char),
+				     char (*acceptB) (char),
+				     char (*acceptC) (char),
+				     char (*acceptCh) (char));
+PLOC_StrChar PLOC_visitStrChar(PLOC_StrChar arg,
+			       PLOC_LexStrChar(*acceptStrChar)
+			       (PLOC_LexStrChar));
+PLOC_LexStrCon PLOC_visitLexStrCon(PLOC_LexStrCon arg,
+				   PLOC_LexStrCharChars(*acceptChars)
+				   (PLOC_LexStrCharChars));
+PLOC_StrCon PLOC_visitStrCon(PLOC_StrCon arg,
+			     PLOC_LexStrCon(*acceptStrCon) (PLOC_LexStrCon));
+PLOC_LexStrCharChars PLOC_visitLexStrCharChars(PLOC_LexStrCharChars arg,
+					       PLOC_LexStrChar(*acceptHead)
+					       (PLOC_LexStrChar));
+PLOC_LexNatCon PLOC_visitLexNatCon(PLOC_LexNatCon arg,
+				   char *(*acceptList) (char *));
+PLOC_NatCon PLOC_visitNatCon(PLOC_NatCon arg,
+			     PLOC_LexNatCon(*acceptNatCon) (PLOC_LexNatCon));
+PLOC_LexLayout PLOC_visitLexLayout(PLOC_LexLayout arg,
+				   char (*acceptCh) (char));
 PLOC_Location PLOC_visitLocation(PLOC_Location arg,
 				 PLOC_OptLayout(*acceptWsAfterFile)
 				 (PLOC_OptLayout),
@@ -541,19 +697,6 @@ PLOC_AreaAreas PLOC_visitAreaAreas(PLOC_AreaAreas arg,
 				   (PLOC_OptLayout),
 				   PLOC_OptLayout(*acceptWsAfterSep)
 				   (PLOC_OptLayout));
-PLOC_Start PLOC_visitStart(PLOC_Start arg,
-			   PLOC_OptLayout(*acceptWsBefore) (PLOC_OptLayout),
-			   PLOC_Slice(*acceptTopSlice) (PLOC_Slice),
-			   PLOC_OptLayout(*acceptWsAfter) (PLOC_OptLayout),
-			   int (*acceptAmbCnt) (int),
-			   PLOC_Area(*acceptTopArea) (PLOC_Area),
-			   PLOC_Location(*acceptTopLocation) (PLOC_Location),
-			   PLOC_NatCon(*acceptTopNatCon) (PLOC_NatCon),
-			   PLOC_Escaped(*acceptTopEscaped) (PLOC_Escaped),
-			   PLOC_Normal(*acceptTopNormal) (PLOC_Normal),
-			   PLOC_StrCon(*acceptTopStrCon) (PLOC_StrCon));
-PLOC_OptLayout PLOC_visitOptLayout(PLOC_OptLayout arg,
-				   char *(*acceptString) (char *));
 
 /*}}}  */
 
