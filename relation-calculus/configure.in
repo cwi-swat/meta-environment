@@ -138,6 +138,14 @@ AC_SUBST(ASF_SUPPORT)
 
 dnl }}}
 
+dnl {{{ Handle --with-asf-support
+
+AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
+[  --with-asf-library=DIR  asf-support is in DIR])
+AC_SUBST(ASF_LIBRARY)
+
+dnl }}}
+
 dnl {{{ Handle --with-sglr
 
 AC_PACKAGE_REQUIRE(sglr, sglr,
