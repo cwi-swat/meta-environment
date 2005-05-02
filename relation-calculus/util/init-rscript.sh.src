@@ -21,6 +21,7 @@ echo "Symlinking $localbuttons to $rscriptbuttons."
 ln -i -s $rscriptbuttons $localbuttons
 
 echo "Appending $rscriptconf to $localconf." 
+echo "." >> $localconf
 cat $rscriptconf >> $localconf
 
 echo "Done."
