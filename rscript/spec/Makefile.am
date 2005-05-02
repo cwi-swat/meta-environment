@@ -14,11 +14,9 @@ EXTRA_DIST      = $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
 		  $(wildcard *.tbl) \
 		  $(wildcard *.eqs) \
-		  meta.buttons \
-		  meta.conf
+		  meta.buttons
 
 CLEANFILES =     rscript.meta.buttons \
-		 rscript.meta.conf \
 		 Rscript.trm.tbl \
 		 Rstore.trm.tbl
 
@@ -26,17 +24,11 @@ CLEANFILES =     rscript.meta.buttons \
 specdir         = $(pkgdatadir)
 
 spec_DATA        = Rscript.trm.tbl \
-                  Rstore.trm.tbl \
-		  $(wildcard *.sdf) \
-		  $(wildcard *.asf) \
-		  rscript.meta.buttons \
-		  rscript.meta.conf
+                   Rstore.trm.tbl \
+	           $(wildcard *.sdf) \
+		   $(wildcard *.asf) \
+		   rscript.meta.buttons 
 
-
-# This is kinda iffy...
-rscript.meta.conf : meta.conf Makefile
-	sed 's@\.\.@$(pkgdatadir)@g;' < $< \
-		| sed 's@\.@$(pkgdatadir)@g;' > $@
 
 rscript.meta.buttons : meta.buttons Makefile
 	sed 's@\./@$(bindir)/@g;' < $< > $@
