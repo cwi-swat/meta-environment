@@ -14,6 +14,8 @@ configuration interface
 requires
    aterm 2.3.1
 
+asf-library 1.0
+
 aterm-java 1.6
 
 shared-objects 1.4
