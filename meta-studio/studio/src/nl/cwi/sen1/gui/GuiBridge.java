@@ -1,6 +1,6 @@
 // Java tool bridge GuiBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 29, 2005 2:36:44 PM
+// generation time: May 2, 2005 2:24:06 PM
 
 package nl.cwi.sen1.gui;
 
@@ -43,19 +43,6 @@ public class GuiBridge
     }
     else {
       throw new UnsupportedOperationException("method `loadJar' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void loadClass(String s0, String s1)
-
-  public void loadClass(String s0, String s1)
-  {
-    if (tool != null) {
-      tool.loadClass(s0, s1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `loadClass' not supported.");
     }
   }
 

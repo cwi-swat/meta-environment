@@ -6,7 +6,6 @@ process GUI is
 let
   ClassPath: str,
   URLs: list,
-  DirName: str,
   MenuEvent: term,
   MenuEventList: list,
   JarName: str,
@@ -28,9 +27,6 @@ in
   +
     rec-msg(load-jar(JarName?, URLs?))
     . snd-do(GUI, load-jar-urls(JarName, URLs))
-  +
-    rec-msg(load-class(DirName?, ClassName?))
-    . snd-do(GUI, load-class(DirName, ClassName))
   +
     rec-msg(gui-add-menu-events(MenuEventList?))
     . snd-do(GUI, add-menu-events(MenuEventList))

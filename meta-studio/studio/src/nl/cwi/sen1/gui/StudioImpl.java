@@ -8,15 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -49,7 +42,6 @@ import net.infonode.util.Direction;
 import nl.cwi.sen1.util.StudioMenuBar;
 import toolbus.AbstractTool;
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
@@ -125,6 +117,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	private RootWindow createRootWindow() {
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		RootWindow root = DockingUtil.createRootWindow(viewsById, true);
 
 		root.setPreferredSize(new Dimension(800, 600));
@@ -145,7 +138,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 			public void viewFocusChanged(View oldView, View newView) {
 				if (newView != null) {
 					activeView = newView;
-					setupMenuBar();
+					frame.setJMenuBar(createMenuBar());
 					updateStatusBar();
 				}
 			}
@@ -216,99 +209,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		return id;
 	}
 
-	public void loadJar(String jarName) {
-		loadJar(createURL(jarName), new URL[] {});
-	}
-
-	public void loadJarClasspath(String jarName, String classPath) {
-		List urlList = new LinkedList();
-		StringTokenizer tok = new StringTokenizer(classPath, ":");
-		while (tok.hasMoreTokens()) {
-			String url = tok.nextToken();
-			try {
-				urlList.add(new URL("file:" + url));
-			} catch (MalformedURLException e) {
-				System.err.println("Ignoring malformed url: " + url);
-			}
-		}
-		// use urlList.toArray() in 1.5
-		URL[] urls = new URL[urlList.size()];
-		int index = 0;
-		Iterator iter = urlList.iterator();
-		while (iter.hasNext()) {
-			urls[index++] = (URL) iter.next();
-		}
-		loadJar(createURL(jarName), urls);
-	}
-
-	public void loadJarUrls(String jarName, ATerm classPathTerm) {
-	  System.err.println("loadJar: " + classPathTerm);
-		ATermList classPathEntries = (ATermList) classPathTerm;
-		URL[] classPath = new URL[(classPathEntries).getLength()];
-		for (int i = 0; !classPathEntries.isEmpty(); i++) {
-			String entry = ((ATermAppl) classPathEntries.getFirst()).getName();
-			classPath[i] = createURL(entry);
-			classPathEntries = classPathEntries.getNext();
-		}
-		loadJar(createURL(jarName), classPath);
-	}
-
-	private void loadJar(URL jarURL, URL[] classPath) {
-		System.err.println("loadJar: " + jarURL);
-		for (int i = 0; i < classPath.length; i++) {
-			System.err.println("\t" + classPath[i]);
-		}
-		JarClassLoader loader = new JarClassLoader(jarURL, classPath);
-		String name = null;
-		try {
-			name = loader.getMainClassName();
-		} catch (IOException e) {
-			System.err.println("I/O error while loading JAR file:");
-			e.printStackTrace();
-		}
-		if (name == null) {
-			System.err
-					.println("Specified jar file does not contain a 'Main-Class' manifest attribute");
-		}
-		try {
-			Class cl = loader.loadClass(name);
-			spawn((StudioPlugin) cl.newInstance());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private URL createURL(String jarName) {
-		URL url = null;
-		try {
-			url = new URL(jarName);
-		} catch (MalformedURLException e) {
-			System.err.println("Invalid URL: " + jarName);
-		}
-		return url;
-	}
-
-	public void loadClass(String urlName, String className) {
-		try {
-			URLClassLoader loader = new URLClassLoader(new URL[] { new URL(
-					urlName) });
-			Class cl = loader.loadClass(className);
-			spawn((StudioPlugin) cl.newInstance());
-		} catch (Exception e) {
-			System.err.println("Failed to create instance: " + e);
-		}
-	}
-
-	private void spawn(final StudioPlugin component) {
-		Thread thread = new Thread(new Runnable() {
-			public void run() {
-				component.initStudioPlugin(StudioImpl.this);
-			}
-		});
-		thread.setName(component.getName() + "-starter");
-		thread.start();
-	}
-
 	private void createFrame() {
 		frame = new JFrame();
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
@@ -318,7 +218,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 				bridge.postEvent(factory.make("window-closing-event"));
 			}
 		});
-		setupMenuBar();
+		frame.setJMenuBar(createMenuBar());
 		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
@@ -422,10 +322,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 
 	public void addMenuEvents(ATerm menus) {
 		menuList = menuList.concat((ATermList) menus);
-		setupMenuBar();
-	}
-
-	private void setupMenuBar() {
 		frame.setJMenuBar(createMenuBar());
 	}
 
@@ -444,6 +340,8 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		try {
 			tool.connect(toolName, bridge.getAddress(), bridge.getPort());
 		} catch (IOException e) {
+			System.err.println("Failed to connect '" + toolName
+					+ "' to ToolBus");
 			e.printStackTrace();
 		}
 		Thread thread = new Thread(new Runnable() {
@@ -469,5 +367,28 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 
 	private StudioComponent getComponent(View view) {
 		return (StudioComponent) componentsByView.get(view);
+	}
+
+	private void startPlugin(PluginLoader loader) {
+		final StudioPlugin plugin = loader.instantiatePlugin();
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				plugin.initStudioPlugin(StudioImpl.this);
+			}
+		});
+		thread.setName(plugin.getName() + "-starter");
+		thread.start();
+	}
+
+	public void loadJar(String pluginJar) {
+		startPlugin(new PluginLoader(pluginJar));
+	}
+
+	public void loadJarUrls(String pluginJar, ATerm classPath) {
+		startPlugin(new PluginLoader(pluginJar, (ATermList) classPath));
+	}
+
+	public void loadJarClasspath(String pluginJar, String classPath) {
+		startPlugin(new PluginLoader(pluginJar, classPath));
 	}
 }

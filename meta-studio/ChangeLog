@@ -1,9 +1,13 @@
 $Id$
 
+Mon May  2 15:55:20 CEST 2005 <jong@cwi.nl>
+ * studio:
+   - refactor all remaining jar-loading code into PluginLoader
+
 Mon May  2 14:06:30 CEST 2005 <{markvdb,kooiker}@cwi.nl>
  * studio/src/nl/cwi/sen1/gui/StudioImpl.java: 
-   - Change JFrame.add to JFrame.getContentPane().add to be jdk1.4
-     compatible
+   - Change JFrame.add to JFrame.getContentPane().add to be
+     jdk1.4 compliant
 
 Wed Apr 27 14:27:26 CEST 2005 <{jong,kooiker}@cwi.nl>
  * studio:

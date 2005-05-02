@@ -7,7 +7,7 @@ TOOLNAME = gui
 JAVA_PACKAGE = nl.cwi.sen1.gui
 JARFILE = $(TOOLNAME).jar
 
-ANT_ENV += LOCAL_JARS=$(top_srcdir)/util/gui-util.jar:$(top_srcdir)/lib/idw-gpl-1.3.0.jar
+LOCAL_JARS=$(top_srcdir)/util/gui-util.jar:$(top_srcdir)/lib/idw-gpl-1.3.0.jar
 
 bin_SCRIPTS = $(TOOLNAME)-config
 pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
