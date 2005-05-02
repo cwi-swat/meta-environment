@@ -13,7 +13,7 @@
 		   rel[name, var] UNINIT =
 		   { <N, V>| name N : VARNAMES, 
                              var V : USES[-,N],
-			     <ROOT, expr E> : reachX({ROOT}, DEFS[-,N], PRED),
+			     expr E : reachX({ROOT}, DEFS[-,N], PRED),
 			     V <= E
 		}
 
