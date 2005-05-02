@@ -312,7 +312,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	private void createFrame() {
 		frame = new JFrame();
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
-		frame.add(createStatusBar(), BorderLayout.SOUTH);
+		frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				bridge.postEvent(factory.make("window-closing-event"));
@@ -376,7 +376,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	private void showView(View view) {
 		if (rootWindow == null) {
 			rootWindow = createRootWindow();
-			frame.add(rootWindow, BorderLayout.CENTER);
+			frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
 		}
 		DockingUtil.addWindow(view, rootWindow);
 		rootWindow.revalidate();

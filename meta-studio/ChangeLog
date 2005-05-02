@@ -1,5 +1,10 @@
 $Id$
 
+Mon May  2 14:06:30 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * studio/src/nl/cwi/sen1/gui/StudioImpl.java: 
+   - Change JFrame.add to JFrame.getContentPane().add to be jdk1.4
+     compatible
+
 Wed Apr 27 14:27:26 CEST 2005 <{jong,kooiker}@cwi.nl>
  * studio:
    - Add classpath support for loadJar
