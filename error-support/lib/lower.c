@@ -4,9 +4,49 @@
 
 static char *PERR_lowerStrCon(PERR_StrCon pStr)
 {
-  char *str = PERR_getStrConString(pStr);
-  str[strlen(str)-1] = '\0';
-  return str+1;
+  PERR_LexStrCon strcon = PERR_getStrConStrCon(pStr);
+  PERR_LexStrCharChars list = PERR_getLexStrConChars(strcon);
+  int len = PERR_getLexStrCharCharsLength(list);
+  int i;
+  static char result[BUFSIZ];
+
+  if (len >= BUFSIZ - 2) {
+    ATwarning("PERR_lowerStrCon: insufficient memory to allocate string\n");
+    return NULL;
+  }
+
+  for (i = len, result[len] = '\0'; 
+       !PERR_isLexStrCharCharsEmpty(list);
+       list = PERR_getLexStrCharCharsTail(list),
+       i--) {
+
+    PERR_LexStrChar ch = PERR_getLexStrCharCharsHead(list);
+
+
+    if (PERR_isLexStrCharNewline(ch)) {
+      result[i] = '\n';
+    }
+    else if (PERR_isLexStrCharTab(ch)) {
+      result[i] = '\t';
+    }
+    else if (PERR_isLexStrCharQuote(ch)) {
+      result[i] = '\"';
+    }
+    else if (PERR_isLexStrCharBackslash(ch)) {
+      result[i] = '\\';
+    }
+    else if (PERR_isLexStrCharNormal(ch)) {
+      result[i] = PERR_getLexStrCharCh(ch);
+    }
+    else if (PERR_isLexStrCharDecimal(ch)) {
+      int a = PERR_getLexStrCharA(ch);
+      int b = PERR_getLexStrCharB(ch);
+      int c = PERR_getLexStrCharC(ch);
+      result[i] = (char) 100*a + 10*b + c;
+    }
+  }
+
+  return result;
 }
 
 /*}}}  */
@@ -14,7 +54,9 @@ static char *PERR_lowerStrCon(PERR_StrCon pStr)
 
 static int PERR_lowerNatCon(PERR_NatCon pNatcon)
 {
-  return atoi(PERR_getNatConString(pNatcon));
+  PERR_LexNatCon lex = PERR_getNatConNatCon(pNatcon);
+
+  return atoi(PERR_getLexNatConList(lex));
 }
 
 /*}}}  */
