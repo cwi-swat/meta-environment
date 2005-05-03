@@ -68,9 +68,6 @@ public class SourceViewer
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
 
-		setSize(360, 350);
-		setTitle("SourceViewer: " + process.getName());
-		setBackground(Color.white);
 
 		residentViewers = new HashMap();
 
@@ -154,8 +151,7 @@ public class SourceViewer
 		//}}}
 		//{{{ Build UI
 
-		Container content = getContentPane();
-		content.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
 		tools = new JToolBar();
 		tools.add(stepInto).setToolTipText("Step Into");
@@ -173,21 +169,12 @@ public class SourceViewer
 
 		center = new JTabbedPane();
 
-		content.add("North", tools);
-		content.add("Center", center);
-		content.add("South", message);
+		add("North", tools);
+		add("Center", center);
+		add("South", message);
 
 		//}}}
 
-		//{{{ Listen to internalFrameClosed events
-
-		addInternalFrameListener(new InternalFrameAdapter() {
-			public void internalFrameClosed(InternalFrameEvent event) {
-				cleanup();
-			}
-		});
-
-		//}}}
 		//{{{ Listen to process events
 
 		this.process = process;

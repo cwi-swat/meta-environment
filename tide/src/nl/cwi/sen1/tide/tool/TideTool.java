@@ -1,16 +1,15 @@
 package nl.cwi.sen1.tide.tool;
 
-import java.awt.EventQueue;
 import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 
 import nl.cwi.sen1.tide.tool.support.Expr;
 
 public abstract class TideTool
-  extends JInternalFrame
+  extends JPanel
 {
   private static int next_id = 0;
 
@@ -24,7 +23,6 @@ public abstract class TideTool
 
   public TideTool(ToolManager manager)
   {
-    super("", true, true, true, true);
 
     this.manager = manager;
 
@@ -80,9 +78,7 @@ public abstract class TideTool
     this.target = target;
   }
 
-  //}}}
-
-  //{{{ protected Icon loadIcon(String name)
+  
 
   protected Icon loadIcon(String name)
   {
@@ -90,18 +86,14 @@ public abstract class TideTool
     return new ImageIcon(url);
   }
 
-  //}}}
-
-  //{{{ public void displayError(Expr error)
+  
 
   public void displayError(Expr error)
   {
      displayError(error.getErrorMessage(), error.getErrorData());
   }
 
-  //}}}
-  //{{{ public void displayError(String msg, Expr data)
-
+ 
   public void displayError(String msg, Expr data)
   {
     String string = data.toString();
@@ -112,17 +104,12 @@ public abstract class TideTool
     manager.displayError(msg);
   }
 
-  //}}}
-
-  //{{{ public void destroy()
+  
 
   public void destroy()
   {
-    Runnable runnable = new Runnable()
-    {
-      public void run() { dispose(); }
-    };
-    EventQueue.invokeLater(runnable);
+  	// FIXME:
+    System.err.println("FIXME: can not destroy tools at the moment");
   }
 
   //}}}

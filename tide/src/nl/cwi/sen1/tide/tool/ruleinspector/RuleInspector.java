@@ -30,28 +30,17 @@ public class RuleInspector
 
     setSize(360, 350);
 
-    setTitle("RuleInspector: " + process.getName());
-
-    Container cont = getContentPane();
-    cont.setLayout(new GridLayout(0,1));
+    setLayout(new GridLayout(0,1));
 
     selector = new RuleSelector(process);
     editor   = new RuleEditor(process);
     selector.addRuleSelectionListener(editor);
 
-    cont.add(selector);
-    cont.add(editor);
+    add(selector);
+    add(editor);
 
     selector.setBackground(Color.white);
     editor.setBackground(Color.white);
-
-    addInternalFrameListener(new InternalFrameAdapter() 
-      {
-        public void internalFrameClosed(InternalFrameEvent event) {
-	  cleanup();
-	}
-      }
-    );
 
     DebugAdapter adapter = process.getAdapter();
     adapter.addDebugAdapterListener(this);

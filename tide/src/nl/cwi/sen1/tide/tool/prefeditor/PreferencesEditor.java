@@ -2,14 +2,19 @@ package nl.cwi.sen1.tide.tool.prefeditor;
 
 //{{{ imports
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-import nl.cwi.sen1.tide.*;
-import nl.cwi.sen1.tide.tool.*;
+import nl.cwi.sen1.tide.PreferenceListener;
+import nl.cwi.sen1.tide.PreferenceSet;
+import nl.cwi.sen1.tide.tool.TideTool;
+import nl.cwi.sen1.tide.tool.ToolManager;
 
 //}}}
 
@@ -30,32 +35,15 @@ public class PreferencesEditor
   {
     super(manager);
 
-    setSize(500, 350);
-    setTitle("Edit Preferences");
-    setBackground(Color.white);
-
     preferences = manager.getPreferences();
     preferences.addPreferenceListener(this);
-
-    //{{{ Listen to internalFrameClosed events
-
-    addInternalFrameListener(new InternalFrameAdapter() 
-      {
-        public void internalFrameClosed(InternalFrameEvent event) {
-	  cleanup();
-	}
-      }
-    );
-
-    //}}}
 
     JTabbedPane pane = new JTabbedPane();
     fontPrefs = new FontPreferenceEditor(this, preferences);
     pane.addTab("Fonts", null, fontPrefs, "Edit font preferences");
 
-    Container content = getContentPane();
-    content.setLayout(new BorderLayout());
-    content.add("Center", pane);
+    setLayout(new BorderLayout());
+    add("Center", pane);
 
     JPanel buttons = new JPanel();
     buttons.setLayout(new GridLayout(1,5));
@@ -75,11 +63,8 @@ public class PreferencesEditor
     buttons.add(buttonRevert);
     buttons.add(new JPanel());
 
-    content.add("South", buttons);
+    add("South", buttons);
   }
-
-  //}}}
-  //{{{ private void cleanup()
 
   private void cleanup()
   {
@@ -88,17 +73,10 @@ public class PreferencesEditor
     getManager().removeTool(this);
   }
 
-  //}}}
-
-  //{{{ public void preferenceChanged(prefs, name, oldValue, newValue)
-
   public void preferenceChanged(PreferenceSet prefs, String name,
 				String oldValue, String newValue)
   {
   }
-
-  //}}}
-  //{{{ public void preferencesChanged(PreferenceSet prefs)
 
   public void preferencesChanged(PreferenceSet prefs)
   {

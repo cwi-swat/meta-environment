@@ -2,7 +2,6 @@ package nl.cwi.sen1.tide.tool;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -177,13 +176,6 @@ public class ToolManager
       putTool(toolName, this, tool);
 
       studio.addComponent(new StudioComponentAdapter(toolName,tool));
-      tool.show();
-    }
-    try {
-      tool.setIcon(false);
-    } catch (PropertyVetoException e) {
-      System.err.println("Warning: cannot deiconify process tool: " +
-			 toolName);
     }
 
     return tool;
@@ -218,13 +210,6 @@ public class ToolManager
       putTool(toolName, process, tool);
 
       studio.addComponent(new StudioComponentAdapter(toolName, tool));
-      tool.show();
-    }
-    try {
-      tool.setIcon(false);
-    } catch (PropertyVetoException e) {
-      System.err.println("Warning: cannot deiconify process tool: " +
-			 toolName);
     }
 
     return tool;
@@ -241,15 +226,7 @@ public class ToolManager
       tool = factory.createTool(adapter);
       putTool(toolName, adapter, tool);
       studio.addComponent(new StudioComponentAdapter(toolName, tool));
-      tool.show();
     }
-    try {
-      tool.setIcon(false);
-    } catch (PropertyVetoException e) {
-      System.err.println("Warning: cannot deiconify adapter tool: " +
-			 toolName);
-    }
-
     return tool;
   }
 

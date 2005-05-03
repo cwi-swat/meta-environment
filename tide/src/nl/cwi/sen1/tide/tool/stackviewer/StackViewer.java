@@ -58,10 +58,6 @@ public class StackViewer
 	public StackViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
 
-		setSize(480, 250);
-		setTitle("StackViewer: " + process.getName());
-		setBackground(Color.white);
-
 		//{{{ Build tags
 
 		tag_stack_trace = TAG_STACK_TRACE + "-" + getId();
@@ -120,8 +116,7 @@ public class StackViewer
 		//}}}
 		//{{{ Build UI
 
-		Container content = getContentPane();
-		content.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
 		trace = new JList();
 		trace.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -130,7 +125,7 @@ public class StackViewer
 
 		JSplitPane pane =
 			new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, trace, framePanel);
-		content.add("Center", pane);
+		add("Center", pane);
 
 		trace.addListSelectionListener(this);
 
@@ -170,15 +165,6 @@ public class StackViewer
 
 		//}}}
 
-		//{{{ Listen to internalFrameClosed events
-
-		addInternalFrameListener(new InternalFrameAdapter() {
-			public void internalFrameClosed(InternalFrameEvent event) {
-				cleanup();
-			}
-		});
-
-		//}}}
 		//{{{ Listen to process events
 
 		this.process = process;
