@@ -1,5 +1,5 @@
 
-SUBDIRS		= toolbus images scripts .
+SUBDIRS		= toolbus scripts .
 
 include $(top_srcdir)/java_make_rules
 

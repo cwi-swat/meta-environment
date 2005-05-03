@@ -218,6 +218,7 @@ public class ToolManager
       putTool(toolName, process, tool);
 
       studio.addComponent(new StudioComponentAdapter(toolName, tool));
+      tool.show();
     }
     try {
       tool.setIcon(false);
@@ -240,6 +241,7 @@ public class ToolManager
       tool = factory.createTool(adapter);
       putTool(toolName, adapter, tool);
       studio.addComponent(new StudioComponentAdapter(toolName, tool));
+      tool.show();
     }
     try {
       tool.setIcon(false);

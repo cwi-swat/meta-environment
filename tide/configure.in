@@ -57,6 +57,5 @@ AC_CONFIG_FILES([\
 	Makefile \
 	scripts/Makefile \
 	toolbus/Makefile \
-	images/Makefile \
 	])
 AC_OUTPUT

@@ -86,7 +86,7 @@ public abstract class TideTool
 
   protected Icon loadIcon(String name)
   {
-    URL url = getClass().getClassLoader().getResource("images/" + name);
+    URL url = getClass().getResource("/resources/images/" + name);
     return new ImageIcon(url);
   }
 
