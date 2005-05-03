@@ -33,8 +33,8 @@ spec_DATA        = Rscript.trm.tbl \
 		   rscript.meta.conf
 
 rscript.meta.conf : meta.conf Makefile
-	sed 's@\.\./@$(pkgdatadir)/@g;' < $< \
-	| sed 's@\.@$(pkgdatadir)/@g;' > $@
+	sed 's@^\.\./@$(pkgdatadir)/@g;\
+	     s@^\.@$(pkgdatadir)/@g;' < $< > $@
 
 rscript.meta.buttons : meta.buttons Makefile
 	sed 's@\./@$(bindir)/@g;' < $< > $@
