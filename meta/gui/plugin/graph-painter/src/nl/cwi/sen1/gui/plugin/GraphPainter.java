@@ -103,7 +103,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 			panel = new GraphPanel(id, preferences);
 			panel.addMouseListener(makeMouseListener(panel));
 			graphs.put(id, panel);
-			final JScrollPane scrollPane = new JScrollPane(panel);
+			JScrollPane scrollPane = new JScrollPane(panel);
 			studio.addComponent(new StudioComponentAdapter(id, scrollPane));
 		}
 		return panel;

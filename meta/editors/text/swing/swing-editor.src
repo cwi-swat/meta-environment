@@ -1,5 +1,0 @@
-#! /bin/sh
-
-CLASSPATH=__JARS__
-
-java -classpath $CLASSPATH metaedit.Main $* &

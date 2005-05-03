@@ -204,13 +204,6 @@ AC_CONFIG_FILES([Makefile
    editors/text/common/Makefile
    editors/text/gvim/Makefile
    editors/text/emacs/Makefile
-   editors/text/swing/Makefile
-   editors/text/swing/metaedit/Makefile
-   editors/text/swing/metaedit/action/Makefile
-   editors/text/swing/metaedit/images/Makefile
-   editors/text/swing/metaedit/style/Makefile
-   editors/text/swing/metaedit/toolbus/Makefile
-   editors/text/swing/metaedit/util/Makefile
    editors/structure/Makefile
    tbscripts/Makefile
    action-interpreter/Makefile

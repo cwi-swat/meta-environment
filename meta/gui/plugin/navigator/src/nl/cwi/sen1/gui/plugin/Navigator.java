@@ -9,8 +9,8 @@ import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.PopupHandler;
-import nl.cwi.sen1.util.StudioPopupMenu;
 import nl.cwi.sen1.util.Preferences;
+import nl.cwi.sen1.util.StudioPopupMenu;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -151,7 +151,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 		moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
 			public void moduleSelected(Module module) {
 				if (!suspendSelectionNotification) {
-					String name = module != null ? module.toString() : "";
+					String name = module != null ? module.toString() : " ";
 					navigatorComponent.setStatusMessage(name);
 					bridge.postEvent(studio.getATermFactory().make(
 							"module-selected(<str>)", name));
@@ -165,6 +165,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 				moduleModel);
 		navigatorComponent = new StudioComponentAdapter("Navigator", tree);
 		studio.addComponent(navigatorComponent);
+		// studio.addComponentMenu(navigatorComponent, new JMenu("Navigate"));
 	}
 
 	private void addImportHierarchyComponent() {
@@ -175,8 +176,10 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 				panel.setHierarchy(module);
 			}
 		});
-		studio.addComponent(new StudioComponentAdapter("Import Hierarchy",
-				panel));
+		StudioComponentAdapter hierarchyAdapter = new StudioComponentAdapter(
+				"Import Hierarchy", panel);
+		studio.addComponent(hierarchyAdapter);
+		// studio.addComponentMenu(hierarchyAdapter, new JMenu("Hierarchy"));
 	}
 
 	public void selectModule(String moduleName) {

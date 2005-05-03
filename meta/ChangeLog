@@ -1,5 +1,12 @@
 # $Id$
 
+Tue May  3 13:25:06 CEST 2005 <jong@cwi.nl>
+ * editors/text/swing:
+   - deactivated because it didn't configure. Further work should
+     be on a separate branch ?
+ * gui/plugin:
+   - unnecessary 'final' removed
+
 Wed Apr 27 10:35:19 CEST 2005 <kooiker@cwi.nl>
  * Create JDK 1.4 compatible jars
  * configure.ac,gui/Makefile.am:

@@ -1,6 +1,0 @@
-Using the MetaEnvironment under Cygwin involves the following steps:
-
-1. Add -no-undefined to lib_swing_la_LDFLAGS in Makefile.am
-2. Copy .libs/cyg_swing-0.dll to install/bin
-3. Change DYNAMIC_LIBRARY_NAME from "lib_%s" to "%s" in ../editor-hive.c
-4. Start meta -e cyg_swing-0
