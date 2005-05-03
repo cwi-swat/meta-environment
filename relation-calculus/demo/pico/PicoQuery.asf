@@ -12,11 +12,11 @@ equations
         <$Entry, $Rel, $Exit> := cflow($Program),
  
        $Loc :=  get-location($Program),
-       $Rstore1 := assign(ROOT, expr, $Loc, rstore()),
-       $Rstore2 := assign(PRED, rel[expr,expr], 
+       $Rstore1 := assign(ROOT, node, $Loc, rstore()),
+       $Rstore2 := assign(PRED, rel[node,node], 
 				$Rel union ({$Start} x $Entry), $Rstore1),
-       $Rstore3 := assign(DEFS, rel[expr,varname], defs($Program, {}), $Rstore2),
-       $Rstore4 := assign(USES, rel[var,varname], uses($Program, {}), $Rstore3)
+       $Rstore3 := assign(DEFS, rel[assignment,name], defs($Program, {}), $Rstore2),
+       $Rstore4 := assign(USES, rel[reference,name], uses($Program, {}), $Rstore3)
 	============================================
         extractRelations($Program) = $Rstore4
 

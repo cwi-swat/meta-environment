@@ -1,19 +1,20 @@
-		   type expr = loc
-		   type var  = loc
-		   type name = str
+type node = loc
+type assignment = loc
+type reference  = loc
+type name = str
+node ROOT
 
-		   expr ROOT
+rel[node,node] PRED
+rel[assignment,name] DEFS
+rel[reference,name] USES
 
-		   rel[expr,expr] PRED
-		   rel[expr,name] DEFS
-		   rel[var,name] USES
-		   bag[name] VARNAMES  = range(USES)
+set[name] VARNAMES  = range(USES)
 
 
-		   rel[name, var] UNINIT =
+		   rel[name, reference] UNINIT =
 		   { <N, V>| name N : VARNAMES, 
-                             var V : USES[-,N],
-			     expr E : reachX({ROOT}, DEFS[-,N], PRED),
+                             reference V : USES[-,N],
+			     node E : reachX({ROOT}, DEFS[-,N], PRED),
 			     V <= E
 		}
 
