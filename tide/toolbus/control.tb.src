@@ -1,0 +1,14 @@
+#include <gui.idef>
+
+tool tide-control  is { }
+
+process CONTROL is
+let
+  Control : tide-control
+in
+  snd-msg(load-jar("file://__PKGDATA__/tide.jar")) .
+  rec-connect(Control?) .
+  rec-event(Control, quit) .
+  shutdown("Thank you for using tide!\n")
+endlet
+

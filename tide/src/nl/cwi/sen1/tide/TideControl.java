@@ -99,9 +99,9 @@ public class TideControl
 	}
 
 	private Properties loadProperties() throws IOException {
-		String resource = "META-INF/tide-defaults.properties";
+		String resource = "/resources/tide-defaults.properties";
 		InputStream stream =
-			getClass().getClassLoader().getResourceAsStream(resource);
+			getClass().getResourceAsStream(resource);
 
 		Properties defaults = new Properties();
 		defaults.load(stream);

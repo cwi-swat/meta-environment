@@ -1,8 +1,10 @@
 
-pkgdata_DATA	= $(wildcard *.tb) tide.tb tide.tifs
+pkgdata_DATA	= $(wildcard *.tb) control.tb tide.tifs
 noinst_SCRIPTS  = tide.tifs
 
-EXTRA_DIST	= $(wildcard *.tb) tide.tifs
+EXTRA_DIST	= $(wildcard *.tb) control.tb.src tide.tifs
+
+CLEANFILES = control.tb
 
 INCLUDES = \
 	-I. \
@@ -11,3 +13,6 @@ INCLUDES = \
 
 tifs: tide.tb 
 	${TOOLBUS}/bin/toolbus ${INCLUDES} -gentifs $< -output tide.tifs
+
+control.tb: control.tb.src
+	sed 's@__PKGDATA__@${pkgdatadir}@' < $< > $@

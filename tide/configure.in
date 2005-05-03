@@ -3,6 +3,8 @@ AC_CONFIG_SRCDIR([configure.in])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
+AM_MAINTAINER_MODE
+
 ACLOCAL="${ACLOCAL} -I ."
 
 dnl Handle --with-cflags option
@@ -42,23 +44,19 @@ AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
    [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
 AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
+dnl Require Meta Studio
+AC_PACKAGE_REQUIRE(meta-studio, gui-config,
+   [  --with-meta-studio=DIR   Meta Studio is in DIR])
+AC_SUBST(META_STUDIO)
+
 dnl Form CLASSPATH for external jars and classes
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${META_STUDIO}/bin/gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_CONFIG_FILES([\
 	Makefile \
 	scripts/Makefile \
 	toolbus/Makefile \
-	tide/Makefile \
-	tide/tool/Makefile \
-	tide/tool/support/Makefile \
-	tide/tool/proclist/Makefile \
-	tide/tool/ruleinspector/Makefile \
-	tide/tool/srcviewer/Makefile \
-	tide/tool/prefeditor/Makefile \
-	tide/tool/stackviewer/Makefile \
 	images/Makefile \
-	META-INF/Makefile \
 	])
 AC_OUTPUT
