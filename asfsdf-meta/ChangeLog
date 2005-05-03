@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * meta-scripts/meta-interface.tb.src: reactivated the "asfsdf-checker".
+ * meta-scripts/error-display.tb: the errors and warnings are displayed
+   at the appropriate place in the gui.
+
 Thu Apr  7 11:44:32 CEST 2005 <kooiker@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:
    - Use Java look and feel Graphics Repository

@@ -89,11 +89,9 @@ in
   snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
   (
     rec-msg(syntax(Syntax?)) .
-    printf("TODO: SDF checker disabled until it is reimplemented\n") .
-    /*
     snd-msg(check-asfsdf(Syntax, ModuleName)) .
     rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Feedback)) . */
+    snd-msg(display-sdf-errors(Feedback)) .
     Syntax := no-tree
   +
     rec-msg(no-syntax(ErrorMessage?))
