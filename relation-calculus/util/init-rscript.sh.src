@@ -10,6 +10,7 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 
 rscriptbuttons=$datadir/rscript.meta.buttons
+rscriptconf=$datadir/rscript.meta.conf
 
 localbuttons=./meta.buttons
 localdir=./rscript
@@ -20,13 +21,9 @@ PRG=`basename $0`
 echo "Symlinking $localbuttons to $rscriptbuttons." 
 ln -i -s $rscriptbuttons $localbuttons
 
-echo "Symlinking $localdir to $datadir"
-ln -i -s $datadir $localdir
-
-
-echo "Appending $localdir/**  to $localconf." 
+echo "Appending $rscriptconf  to $localconf." 
 echo "." >> $localconf
-find $localdir/ -type d | cat >> $localconf
+cat $rscriptconf >> $localconf
 
 echo "Done."
 
