@@ -257,7 +257,27 @@ button("languages/pico/syntax/Pico-Syntax",
 			message("Not a Pico program")
 		    ]
            )
+           ]),
+
+button("languages/pico/syntax/Pico-Syntax",
+	  [description(term-editor, menu(["Pico", "Extract My Relations"]))],
+          [push-active-module,
+	   get-root,
+	   push-string("PROGRAM"),
+           check-sort,
+	   push-term(true),
+	   if-equal([	apply("extractRelations", "RSTORE", 1),
+			push-modulename("MyPicoFactExtraction"),
+			reduce,
+			push-filename("RSTORE.rstore"),
+			push-active-module,
+			activate-editor],
+		    [
+			message("Not a Pico program")
+		    ]
+           )
            ])
+
 
 
 
