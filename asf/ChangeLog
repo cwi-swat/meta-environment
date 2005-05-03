@@ -1,5 +1,8 @@
 $Id$
 
+Tue May  3 15:29:20 CEST 2005 <markvdb@cwi.nl>
+ * Fixed a problem with respect to converting sorts into strings.
+
 Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
  * Upgraded the Sdf-Checker wrt structured lexicals.
 
