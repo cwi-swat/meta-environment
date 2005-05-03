@@ -1,3 +1,6 @@
+#ifndef __GUI_IDEF
+#define __GUI_IDEF
+
 tool gui is {
   command = "gui"
 }
@@ -44,3 +47,5 @@ in
 endlet
 
 toolbus(GUI)
+
+#endif

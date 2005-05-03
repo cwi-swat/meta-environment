@@ -11,9 +11,6 @@ import java.util.jar.Attributes;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-/**
- * A class loader for loading jar files, both local and remote.
- */
 public class PluginLoader extends URLClassLoader {
 	private static final String CLASSPATH_SEPARATORS = ":";
 

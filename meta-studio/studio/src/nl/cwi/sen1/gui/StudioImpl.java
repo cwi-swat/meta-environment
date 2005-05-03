@@ -9,6 +9,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
@@ -67,24 +70,28 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 
 	private ATermList menuList;
 
+	private Map componentMenus;
+
 	private DockingWindowsTheme currentTheme;
 
 	private View activeView;
 
 	private JLabel statusBar;
 
+	private boolean menuBarUpdatePending;
+
 	public static final void main(String args[]) throws Exception {
 		new StudioImpl(args);
 	}
 
 	public StudioImpl(String[] args) {
+		factory = new PureFactory();
+		menuList = factory.getEmpty();
 		properties = new RootWindowProperties();
 		currentTheme = new ShapedGradientDockingTheme();
 		idsByComponent = new HashMap();
 		componentsByView = new HashMap();
 		viewsById = new ViewMap();
-		factory = new PureFactory();
-		menuList = factory.getEmpty();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -117,7 +124,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	private RootWindow createRootWindow() {
-		JFrame.setDefaultLookAndFeelDecorated(true);
 		RootWindow root = DockingUtil.createRootWindow(viewsById, true);
 
 		root.setPreferredSize(new Dimension(800, 600));
@@ -138,7 +144,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 			public void viewFocusChanged(View oldView, View newView) {
 				if (newView != null) {
 					activeView = newView;
-					frame.setJMenuBar(createMenuBar());
+					updateMenuBar();
 					updateStatusBar();
 				}
 			}
@@ -152,6 +158,23 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 			StudioComponent component = getComponent(activeView);
 			String message = component.getStatusMessage();
 			statusBar.setText(message == null ? " " : message);
+		}
+	}
+	
+	private void updateMenuBar() {
+		if (!menuBarUpdatePending) {
+			menuBarUpdatePending = true;
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					if (frame != null) {
+						frame.setJMenuBar(createMenuBar());
+					}
+					if (rootWindow != null) {
+						rootWindow.revalidate();
+					}
+					menuBarUpdatePending = false;
+				}
+			});
 		}
 	}
 
@@ -210,6 +233,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	private void createFrame() {
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		frame = new JFrame();
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
 		frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
@@ -250,16 +274,25 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		}
 
 		if (activeView != null) {
-			StudioComponent component = getComponent(activeView);
-			JMenu[] menus = component.getMenus();
+			StudioComponent activeComponent = getComponent(activeView);
+			List menus = getComponentMenus(activeComponent);
 			if (menus != null) {
-				for (int i = 0; i < menus.length; i++) {
-					menuBar.add(menus[i]);
+				Iterator iter = menus.iterator();
+				while (iter.hasNext()) {
+					menuBar.add((JMenu) iter.next());
 				}
 			}
 		}
 
 		return menuBar;
+	}
+
+	private List getComponentMenus(StudioComponent component) {
+		if (componentMenus == null) {
+			return null;
+		}
+
+		return (List) componentMenus.get(component);
 	}
 
 	private JMenu createEmptyFileMenu() {
@@ -304,7 +337,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 				public void actionPerformed(ActionEvent e) {
 					// Clear the modified properties values
 					properties.getMap().clear(true);
-
 					setTheme(theme);
 				}
 			});
@@ -322,7 +354,22 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 
 	public void addMenuEvents(ATerm menus) {
 		menuList = menuList.concat((ATermList) menus);
-		frame.setJMenuBar(createMenuBar());
+		updateMenuBar();
+	}
+
+	public void addComponentMenu(StudioComponent component, JMenu menu) {
+		if (componentMenus == null) {
+			componentMenus = new HashMap();
+		}
+
+		List menus = (List) componentMenus.get(component);
+		if (menus == null) {
+			menus = new LinkedList();
+		}
+		menus.add(menu);
+
+		componentMenus.put(component, menus);
+		updateMenuBar();
 	}
 
 	public void setTitle(String title) {
@@ -351,9 +398,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 		});
 		thread.setName(toolName + "-runner");
 		thread.start();
-	}
-
-	public void menuChanged(StudioEvent event) {
 	}
 
 	public void statusMessageChanged(StatusMessageEvent event) {
@@ -391,4 +435,5 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	public void loadJarClasspath(String pluginJar, String classPath) {
 		startPlugin(new PluginLoader(pluginJar, classPath));
 	}
+
 }

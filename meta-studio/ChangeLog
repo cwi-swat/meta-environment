@@ -1,5 +1,12 @@
 $Id$
 
+Tue May  3 13:07:55 CEST 2005 <jong@cwi.nl>
+ * studio/gui.idef:
+   - surround by #ifndef to allow multiple inclusion
+ * studio/*java:
+   - refactor menu support from Component.getMenu into
+     Studio.addComponentMenu
+
 Mon May  2 15:55:20 CEST 2005 <jong@cwi.nl>
  * studio:
    - refactor all remaining jar-loading code into PluginLoader

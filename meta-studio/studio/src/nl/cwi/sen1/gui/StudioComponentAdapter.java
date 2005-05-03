@@ -2,7 +2,6 @@ package nl.cwi.sen1.gui;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
 import javax.swing.event.EventListenerList;
 
 public class StudioComponentAdapter implements StudioComponent {
@@ -37,21 +36,7 @@ public class StudioComponentAdapter implements StudioComponent {
 		listenerList.remove(StudioComponentListener.class, l);
 	}
 
-	public JMenu[] getMenus() {
-		return null;
-	}
-	
 	// Take from javax.swing.event.EventListenerList example
-	protected void fireMenuChanged() {
-		Object[] listeners = listenerList.getListenerList();
-		for (int i = listeners.length - 2; i >= 0; i -= 2) {
-			if (listeners[i] == StudioComponentListener.class) {
-				((StudioComponentListener) listeners[i + 1]).menuChanged(null);
-			}
-		}
-
-	}
-
 	protected void fireStatusMessageChanged(String oldMessage, String newMessage) {
 		StatusMessageEvent event = new StatusMessageEvent(this, oldMessage,
 				newMessage);
