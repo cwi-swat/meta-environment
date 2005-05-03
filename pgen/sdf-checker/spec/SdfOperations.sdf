@@ -33,6 +33,7 @@ hiddens
     "last"[0-9]*  -> [A-Za-z0-9]
     "basename"[0-9]* -> ModuleId
     "letters"[0-9]* -> [A-Za-z0-9\_\-]+
+    "letter"[0-9]* -> [A-Za-z0-9\_\-]
 
   variables
     "$Attributes"[0-9]*         -> Attributes

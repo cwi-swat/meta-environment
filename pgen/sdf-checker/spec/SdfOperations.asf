@@ -138,3 +138,12 @@ equations
   [moduleid2str-path]
     moduleid2str(moduleid(moduleword(letters) / basename)) = 
       moduleword2strcon(moduleword(letters)) || "/" ||  moduleid2str(basename)
+
+  [moduleword2str-letter]
+    moduleword2strcon(moduleword(letter)) = strcon(\" strchar(letter) \")
+
+  [moduleword2str-letters]
+    strcon(\" char* \") := moduleword2strcon(moduleword(letters))
+    ===>
+    moduleword2strcon(moduleword(letter letters)) = 
+      strcon(\" strchar(letter) char* \")
