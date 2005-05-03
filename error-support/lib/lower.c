@@ -15,10 +15,10 @@ static char *PERR_lowerStrCon(PERR_StrCon pStr)
     return NULL;
   }
 
-  for (i = len, result[len] = '\0'; 
+  for (i = 0;
        !PERR_isLexStrCharCharsEmpty(list);
        list = PERR_getLexStrCharCharsTail(list),
-       i--) {
+       i++) {
 
     PERR_LexStrChar ch = PERR_getLexStrCharCharsHead(list);
 
@@ -46,6 +46,7 @@ static char *PERR_lowerStrCon(PERR_StrCon pStr)
     }
   }
 
+  result[len] = '\0'; 
   return result;
 }
 
@@ -93,16 +94,20 @@ ERR_Area PERR_lowerArea(PERR_Area pArea)
 ERR_Location PERR_lowerLocation(PERR_Location pLocation)
 {
   PERR_StrCon pFilename = PERR_getLocationFilename(pLocation);
-  char *filename = PERR_lowerStrCon(pFilename);
+  char *filename = strdup(PERR_lowerStrCon(pFilename));
+  ERR_Location location;
 
   if (PERR_isLocationAreaInFile(pLocation)) {
     PERR_Area pArea = PERR_getLocationArea(pLocation);
     ERR_Area area = PERR_lowerArea(pArea);
 
-    return ERR_makeLocationAreaInFile(filename, area);
+    location = ERR_makeLocationAreaInFile(filename, area);
   }
-
-  return ERR_makeLocationFile(filename);
+  else {
+    location = ERR_makeLocationFile(filename);
+  }
+  free(filename);
+  return location;
 }
 
 /*}}}  */
@@ -111,15 +116,19 @@ ERR_Location PERR_lowerLocation(PERR_Location pLocation)
 ERR_Subject PERR_lowerSubject(PERR_Subject pSubject)
 {
   PERR_StrCon pDescription = PERR_getSubjectDescription(pSubject);
-  char *description = PERR_lowerStrCon(pDescription);
+  char *description = strdup(PERR_lowerStrCon(pDescription));
+  ERR_Subject subject;
 
   if (PERR_isSubjectLocalized(pSubject)) {
     PERR_Location pLocation = PERR_getSubjectLocation(pSubject);
     ERR_Location location = PERR_lowerLocation(pLocation);
-    return ERR_makeSubjectLocalized(description, location);
+    subject = ERR_makeSubjectLocalized(description, location);
   }
-
-  return ERR_makeSubjectSubject(description);
+  else {
+    subject = ERR_makeSubjectSubject(description);
+  }
+  free(description);
+  return subject;
 }
 
 /*}}}  */
@@ -151,24 +160,28 @@ ERR_Error PERR_lowerError(PERR_Error pError)
 {
   PERR_StrCon pDescription = PERR_getErrorDescription(pError);
   PERR_SubjectList pSubjects = PERR_getErrorList(pError);
-  char *description = PERR_lowerStrCon(pDescription);
+  char *description = strdup(PERR_lowerStrCon(pDescription));
   ERR_SubjectList subjects = PERR_lowerSubjects(pSubjects);
+  ERR_Error error;
 
   if (PERR_isErrorInfo(pError)) {
-    return ERR_makeErrorInfo(description, subjects);
+    error = ERR_makeErrorInfo(description, subjects);
   }
   else if (PERR_isErrorWarning(pError)) {
-    return ERR_makeErrorWarning(description, subjects);
+    error = ERR_makeErrorWarning(description, subjects);
   }
   else if (PERR_isErrorError(pError)) {
-    return ERR_makeErrorError(description, subjects);
+    error = ERR_makeErrorError(description, subjects);
   }
   else if (PERR_isErrorFatal(pError)) {
-    return ERR_makeErrorFatal(description, subjects);
+    error = ERR_makeErrorFatal(description, subjects);
   }
-
-  ATerror("unknown error type: %t\n", pError);
-  return NULL;
+  else {
+    ATerror("unknown error type: %t\n", pError);
+    error = NULL;
+  }
+  free(description);
+  return error;
 }
 
 /*}}}  */
@@ -204,12 +217,16 @@ ERR_Summary PERR_lowerSummary(PERR_Summary pSummary)
   char *producer;
   char *id;
   ERR_ErrorList errorList;
+  ERR_Summary summary;
 
-  producer = PERR_lowerStrCon(pProducer);
-  id = PERR_lowerStrCon(pId);
+  producer = strdup(PERR_lowerStrCon(pProducer));
+  id = strdup(PERR_lowerStrCon(pId));
   errorList = PERR_lowerErrors(pErrorList);
 
-  return ERR_makeSummarySummary(producer, id, errorList);
+  summary = ERR_makeSummarySummary(producer, id, errorList);
+  free(producer);
+  free(id);
+  return summary;
 }
 
 /*}}}  */

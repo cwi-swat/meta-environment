@@ -1,5 +1,11 @@
 $Id$
 
+Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * lib/lower.c: fixed the lowering of strings, reversed
+   the order and free the intermediate strings.
+ * utils/error-support.c: added a fix in order to get around
+   an APIGEN problem.
+
 Wed Apr 27 10:07:14 CEST 2005 <kooiker@cwi.nl>
  * gui:
    - Move to error-gui package

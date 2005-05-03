@@ -246,11 +246,13 @@ ATerm lower_summary(int cid, ATerm t)
 {
   PERR_Start startSummary = PERR_StartFromTerm(ATBunpack(t));
 
-  if (PERR_isStartSummary(startSummary)) {
+  /* FIX ME in APIGEN! */
+  /* if (PERR_isStartSummary(startSummary)) { */
     PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);
     t = ERR_SummaryToTerm(PERR_lowerSummary(pSummary));
+  /*
   }
-
+  */
   return ATmake("snd-value(lowered-summary(<term>))", t);
 }
 
