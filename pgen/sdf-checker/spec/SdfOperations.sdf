@@ -13,10 +13,12 @@ exports
     functionname2str(FunctionName) -> String
     label2str(Label)               -> String
     moduleid2str(ModuleId)         -> String
-hiddens
+
   sorts Middle
   lexical syntax
     [A-Za-z0-9\-]* -> Middle
+
+hiddens
   context-free syntax
     sort2strcon(Symbol)    -> StrCon
     middle2strcon(Middle)  -> StrCon
@@ -29,7 +31,8 @@ hiddens
     "char"[0-9]*  -> StrChar
     "head"[0-9]*  -> [A-Z]
     "middle-char"[0-9]* -> [A-Za-z0-9\-]
-    "middle"[0-9]* -> [A-Za-z0-9\-]*
+    "middle-chars"[0-9]* -> [A-Za-z0-9\-]*
+    "middle"[0-9]* -> Middle
     "last"[0-9]*  -> [A-Za-z0-9]
     "basename"[0-9]* -> ModuleId
     "letters"[0-9]* -> [A-Za-z0-9\_\-]+

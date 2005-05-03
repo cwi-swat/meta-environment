@@ -106,25 +106,23 @@ equations
   [label2str-strcon]
     label2str($StrCon) = $StrCon
 
-  [literal2str-idcon]
-    label2str($IdCon) = idcon2strcon($IdCon)
-
   [sort2str-onechar]
     sort2strcon(sort(head)) = strcon(\" strchar(head) \")
 
   [sort2str-morechar]
-    strcon(\" char* \") := middle2strcon(middle(middle))
+    strcon(\" char* \") := middle2strcon(middle(middle-chars))
     ===>
-    sort2strcon(sort(head middle last)) = 
+    sort2strcon(sort(head middle-chars last)) = 
       strcon(\" strchar(head) char* strchar(last) \")
 
+
   [middle2strcon-empty]
-    middle2strcon(middle()) = ""
+    middle2strcon() = strcon(\"\")
 
   [middle2strcon-nonempty]
-    strcon(\" char* \") := middle2strcon(middle(middle))
+    strcon(\" char* \") := middle2strcon(middle(middle-chars))
     ===>
-    middle2strcon(middle(middle-char middle)) = 
+    middle2strcon(middle(middle-char middle-chars)) = 
       strcon(\" strchar(middle-char) char* \")
 
   [moduleid2str-leaf]
