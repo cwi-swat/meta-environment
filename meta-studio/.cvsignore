@@ -13,3 +13,4 @@ install-sh
 meta-studio-*.pkg
 missing
 mkinstalldirs
+COPYING
