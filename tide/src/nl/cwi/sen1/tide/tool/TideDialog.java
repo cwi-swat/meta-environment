@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 abstract public class TideDialog
-  extends JInternalFrame
+  extends JDialog
   implements ActionListener
 {
   public static final int DIALOG_OK	    = 0;
@@ -24,7 +24,7 @@ abstract public class TideDialog
 
   public TideDialog(String title, int type)
   {
-    super(title);
+    super();
     this.type = type;
   }
 
