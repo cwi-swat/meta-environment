@@ -434,6 +434,7 @@ public class SourceViewer
 				currentViewer,
 				file,
 				center.getTabCount());
+			System.err.println("inserted tab\n");
 		}
 		
 		center.setSelectedComponent(currentViewer);

@@ -132,7 +132,7 @@ class ValuePopup
 	//{{{ private loadIcon(String name)
 
 	private Icon loadIcon(String name) {
-		URL url = getClass().getClassLoader().getResource("images/" + name);
+		URL url = getClass().getResource("/resources/images/" + name);
 		return new ImageIcon(url);
 	}
 

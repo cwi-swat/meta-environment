@@ -1,28 +1,24 @@
 package nl.cwi.sen1.tide;
 
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioPlugin;
-import nl.cwi.sen1.tide.tool.ToolManager;
-import aterm.ATermFactory;
 
 public class TideMainFrame 
 implements StudioPlugin {
 	
-	private ToolManager manager;
+//	private ToolManager manager;
 	private TideControl control;
 	
-	private ATermFactory factory;
+//	private ATermFactory factory;
 
 	public void initStudioPlugin(Studio studio) {
-		
-		
-		this.factory = studio.getATermFactory();
-		
+//		this.factory = studio.getATermFactory();
 		
 		TideControl control = new TideControl(studio);
-		studio.addComponent(new StudioComponentAdapter("Control", control));
-		manager = control.getManager();
+//		manager = control.getManager();
+		
+//		Thread controlThread = new Thread(control);
+//		controlThread.run();
 	}
 
 	public String getName() {

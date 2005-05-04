@@ -2,7 +2,6 @@ package nl.cwi.sen1.tide;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.tide.tool.ToolManager;
 import nl.cwi.sen1.tide.tool.prefeditor.PreferencesEditorFactory;
 import nl.cwi.sen1.tide.tool.proclist.ProcessList;
@@ -32,9 +32,9 @@ import aterm.ATermFactory;
 
 public class TideControl
 	extends JPanel
-	implements TideControlTif {
+	implements TideControlTif, Runnable {
 	
-	public static ATermFactory factory;
+	private static ATermFactory factory;
 
 	private TideControlBridge bridge;
 	private DebugTool debugTool;
@@ -60,10 +60,6 @@ public class TideControl
 		bridge = new TideControlBridge(factory, this);
 		debugTool = new DebugTool(factory);
 
-		desktop = new JDesktopPane();
-		desktop.setPreferredSize(new Dimension(750, 500));
-
-		
 		Properties defaults;
 		try {
 			defaults = loadProperties();
@@ -71,27 +67,27 @@ public class TideControl
 			createProcessList();
 
 			setLayout(new BorderLayout());
-			add("Center", desktop);
-			add("West", new JScrollPane(processList));
+			
+			studio.addComponent(new StudioComponentAdapter("Processes", new JScrollPane(processList)));
 
-			connectTideControl(studio);
-			connectDebugTool(studio);
+			studio.connect("tide-control", bridge);
+			studio.connect("debug-tool", debugTool);
 
-			startChildThreads();
+//			startChildThreads();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void startChildThreads() {
-		debugToolThread = new Thread(debugTool);
-		debugToolThread.setName("DebugTool");
-		debugToolThread.start();
-
-		tideControlThread = new Thread(bridge);
-		tideControlThread.setName("TideControlBridge");
-		tideControlThread.start();
-	}
+//	private void startChildThreads() {
+//		debugToolThread = new Thread(debugTool);
+//		debugToolThread.setName("DebugTool");
+//		debugToolThread.run();
+//
+//		tideControlThread = new Thread(bridge);
+//		tideControlThread.setName("TideControlBridge");
+//		tideControlThread.run();
+//	}
 
 	private void createProcessList() {
 		processList = new ProcessList(manager);
@@ -119,14 +115,6 @@ public class TideControl
 	}
 
 	
-
-	protected void connectDebugTool(Studio studio) throws UnknownHostException, IOException {
-		studio.connect("debug-tool", debugTool);
-	}
-
-	protected void connectTideControl(Studio studio) throws UnknownHostException, IOException {
-		studio.connect("tide-control", bridge);
-	}
 
 	public void recTerminate(ATerm arg) {
 		stopChildThreads();
@@ -214,5 +202,9 @@ public class TideControl
 	
 	public void addDebugToolListener(DebugToolListener l) {
 		debugTool.addDebugToolListener(l);
+	}
+
+	public void run() {
+		bridge.run();
 	}	
 }
