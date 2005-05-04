@@ -1,5 +1,10 @@
 $Id$
 
+Wed May  4 17:45:12 CEST 2005 <{jurgenv,jong}@cwi.nl>
+ * StudioImpl.java: added tool.setLockObject(this) to connect()
+    - anybody that uses connect(), does not have to worry about race
+      conditions on ToolBus sockets.
+
 Tue May  3 13:07:55 CEST 2005 <jong@cwi.nl>
  * studio/gui.idef:
    - surround by #ifndef to allow multiple inclusion

@@ -386,6 +386,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	public void connect(String toolName, final AbstractTool tool) {
 		try {
 			tool.connect(toolName, bridge.getAddress(), bridge.getPort());
+			tool.setLockObject(this);
 		} catch (IOException e) {
 			System.err.println("Failed to connect '" + toolName
 					+ "' to ToolBus");
