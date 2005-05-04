@@ -18,7 +18,7 @@
 #include "user-interface.tb"
 
 /* tide support */
-/* #include <tide.tb> */
+#include <tide.tb> 
 
 /* sdf-meta */
 #include "parsetablegen.idef"
