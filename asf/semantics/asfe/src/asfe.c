@@ -294,7 +294,10 @@ int main(int argc, char *argv[])
 
     eqs = ATreadFromFile(iofile);
     eqsList = ASF_ASFConditionalEquationListFromTerm(eqs);
-    fclose(iofile);
+
+    if (fileno(iofile) != fileno(stdin)) {
+      fclose(iofile);
+    }
 
     /* Get the term from file */
     if (!strcmp(input, "") || !strcmp(input, "-")) {
@@ -305,7 +308,11 @@ int main(int argc, char *argv[])
 
     term = ATreadFromFile(iofile);
     parseTree = PT_ParseTreeFromTerm(term);
-    fclose(iofile);
+
+
+    if (fileno(iofile) != fileno(stdin)) {
+      fclose(iofile);
+    }
 
     /* Optionally connect to the tide debugger, but always initialize
      * the ToolBus layer, just in case somebody uses a builtin that
