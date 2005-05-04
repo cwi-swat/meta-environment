@@ -104,6 +104,14 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 }
 
 /*}}}  */
+/*{{{  static ATbool hasProductionCompleteAttribute(PT_Production prod) */
+
+static ATbool hasProductionCompleteAttribute(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrTerm(ATparse("complete")));;
+}
+
+/*}}}  */
 /*{{{  static ATermList reduce(PT_Tree trm, int depth) */
 
 static PT_Tree reduce(PT_Tree trm, int depth)
@@ -147,7 +155,10 @@ static PT_Tree reduce(PT_Tree trm, int depth)
     first_ofs = NULL; /* next loop without the first argument */
   }
 
-  /* this should be 'return FAIL' */
+  if (hasProductionCompleteAttribute(top_ofs)) {
+    RWaddError("complete function not reduced:", PT_yieldProduction(top_ofs));
+    return FAIL;
+  }
   return trm;
 }
 

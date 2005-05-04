@@ -1,5 +1,10 @@
 $Id$
 
+Wed May  4 11:04:14 CEST 2005 <markvdb@cwi.nl>
+ * semantics/asfe/src/reduction.c: 
+   - added functionality to deal with "complete" attributes
+     added to function which should complete be reduced.
+
 Tue May  3 15:29:20 CEST 2005 <markvdb@cwi.nl>
  * Fixed a problem with respect to converting sorts into strings.
 
