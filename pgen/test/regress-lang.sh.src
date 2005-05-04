@@ -125,7 +125,7 @@ RegressGenTable () {
 		Notify "No reference table for $ptbl"
 		continue
 	fi
-	if time ${SDF2TABLE} $VERBOSE -i $1 -o $ptbl ; then
+	if ${SDF2TABLE} $VERBOSE -i $1 -o $ptbl ; then
 	        Notify Comparing $ptbl...
 	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
 	        then
