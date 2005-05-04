@@ -665,11 +665,14 @@ let
   EditorId : term,
   Message : str,
   Pid: int,
-  Location : term
+  Location : term,
+  Subject : term
 in
   (
     rec-msg(EditorId?, show-area(Message?, Location?))
-    . create(ShowAreaHandler(Location, Message), Pid?)
+    . snd-msg(es-make-subject(Message, Location))
+    . rec-msg(es-subject(Subject?))
+    . create(ShowSubjectHandler(Subject), Pid?)
     . EditLocation(Pid, Location)
     . snd-msg(EditorId, done)
   )
@@ -682,28 +685,14 @@ let
   EditorId : term,
   Message : str,
   Pid: int,
-  Error : term,
   Location : term,
   Subject : term,
   Subjects : list
 in
   (
-    rec-msg(EditorId?, show-feedback-location(Error?))
-    . snd-msg(get-error-subjects(Error))
-    . rec-msg(error-subjects(Subjects?))
-    . Subject := first(Subjects)
-    . snd-msg(has-subject-location(Subject))
-    .
-    (
-      rec-msg(subject-has-location(Subject))
-      . snd-msg(get-subject-location(Subject))
-      . rec-msg(subject-location(Location?))
-      . create(ShowErrorHandler(Error), Pid?)
-      . EditLocation(Pid, Location)
-    +
-      rec-msg(subject-has-no-location(Subject))
-      . tau
-    )
+    rec-msg(EditorId?, show-feedback-location(Location?))
+    . create(ShowErrorHandler(Location), Pid?)
+    . EditLocation(Pid, Location)
     . snd-msg(EditorId, done)
   )
   *
@@ -1754,7 +1743,7 @@ in
   )
 endlet
 
-process ShowAreaHandler(Location: term, Message: str) is
+process ShowSubjectHandler(Subject: term) is
 let
   Pid: int,
   Sid: term
@@ -1763,13 +1752,13 @@ in
   .
   (
     rec-msg(session(Pid, Sid?))
-    . ShowLocation(Sid, Location, Message)
+    . ShowSubject(Sid, Subject)
   +
     rec-msg(no-such-session(Pid))
   )
 endlet
 
-process ShowErrorHandler(Error: term) is
+process ShowErrorHandler(Location: term) is
 let
   Pid: int,
   Sid: term
@@ -1778,7 +1767,7 @@ in
   .
   (
     rec-msg(session(Pid, Sid?))
-    . ShowError(Sid, Error)
+    . ShowLocation(Sid, Location)
   +
     rec-msg(no-such-session(Pid))
   )

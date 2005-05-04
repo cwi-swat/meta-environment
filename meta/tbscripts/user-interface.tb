@@ -8,13 +8,13 @@ in
   . rec-msg(ai-actions-performed(ui-id, Actions))
 endlet
 
-process ErrorSelected(Error: term) is
+process LocationSelected(Location: term) is
 let
   Actions: list
 in
   snd-msg(cm-get-actions(feedback-list, click))
   . rec-msg(cm-actions(Actions?))
-  . snd-msg(ai-perform-actions(feedback-list, Actions, [Error]))
+  . snd-msg(ai-perform-actions(feedback-list, Actions, [Location]))
   . rec-msg(ai-actions-performed(feedback-list, Actions))
 endlet
 
@@ -61,8 +61,8 @@ in
     rec-msg(ui-button-selected(Type?, Event?))
     . create(HandleEvent(Type, Event), Pid?)
   +
-    rec-msg(ui-error-selected(Error?))
-    . create(ErrorSelected(Error), Pid?)
+    rec-msg(ui-location-selected(Error?))
+    . create(LocationSelected(Error), Pid?)
   +
     rec-msg(ui-node-selected(GraphId?, Node?))
     . create(NodeSelected(GraphId, Node), Pid?)

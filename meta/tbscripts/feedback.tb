@@ -1,4 +1,4 @@
-process GoToEditorArea(Sid: term, Area: term, Description: str) is
+process GoToEditorArea(Sid: term, Area: term) is
 let
   Offset: int
 in
@@ -6,10 +6,12 @@ in
   . rec-msg(area-offset(Offset?))
   . snd-msg(te-set-cursor-at-offset(Sid, Offset))
   . snd-msg(te-set-focus(Sid, Area))
-  . snd-msg(te-display-message(Sid, Description))
 endlet
 
-process ShowLocation(Sid: term, Location: term, Description: str) is
+process ShowDescription(Sid: term, Description: str) is
+  snd-msg(te-display-message(Sid, Description))
+
+process ShowLocation(Sid: term, Location: term) is
 let
   Area: term
 in
@@ -19,7 +21,7 @@ in
     rec-msg(location-has-area(Location))
     . snd-msg(get-location-area(Location))
     . rec-msg(location-area(Area?))
-    . GoToEditorArea(Sid, Area, Description)
+    . GoToEditorArea(Sid, Area)
   +
     rec-msg(location-has-no-area(Location))
     . tau
@@ -39,7 +41,8 @@ in
     . rec-msg(subject-location(Location?))
     . snd-msg(get-subject-description(Subject))
     . rec-msg(subject-description(Description?))
-    . ShowLocation(Sid, Location, Description)
+    . ShowLocation(Sid, Location)
+    . ShowDescription(Sid, Description)
   +
     rec-msg(subject-has-no-location(Subject))
     . tau

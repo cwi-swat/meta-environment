@@ -1,5 +1,12 @@
 # $Id$
 
+Wed May  4 11:13:57 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - ActionShowArea builds a subject and calls the ShowSubjectHandler
+ * tbscripts/feedback.tb:
+   - ShowSubject calls ShowLocation without description and calls
+   ShowDescription
+
 Tue May  3 13:25:06 CEST 2005 <jong@cwi.nl>
  * editors/text/swing:
    - deactivated because it didn't configure. Further work should
