@@ -1,5 +1,5 @@
 #!/bin/sh
 CLASSPATH=__JARDIR__/tide.jar:__EXTERNALS__:$CLASSPATH
 export CLASSPATH
-toolbus -I__TBDIR__ -I__STUDIO__ -I__SUPPORT__ $@ -TB_PORT 9500 __TBDIR__/tide.tb
+toolbus -DTIDE_STANDALONE -I__TBDIR__ -I__STUDIO__ -I__SUPPORT__ $@ -TB_PORT 9500 __TBDIR__/tide.tb
 

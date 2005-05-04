@@ -1,4 +1,6 @@
+#ifdef TIDE_STANDALONE
 #include <gui.idef>
+#endif
 
 tool tide-control  is { }
 
