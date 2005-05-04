@@ -298,6 +298,17 @@ ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
 }
 
 /*}}}  */
+/*{{{  ATerm make_subject(int conn, const char *description, ATerm loc) */
+
+ATerm make_subject(int conn, const char *description, ATerm loc)
+{
+  ERR_Location location = ERR_LocationFromTerm(loc);
+  ERR_Subject subject = ERR_makeSubjectLocalized(description, location);
+
+  return ATmake("snd-value(subject(<term>))", subject);
+}
+
+/*}}}  */
 /*{{{  ATerm make_summary(int conn, const char *producer, const char *id, ATerm error) */
 
 ATerm make_summary(int conn, const char *producer, const char *id, ATerm errors)

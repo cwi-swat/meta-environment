@@ -1,5 +1,9 @@
 $Id$
 
+Wed May  4 11:11:00 CEST 2005 <kooiker@cwi.nl>
+ * utils/error-support.idef:
+   - support make subject
+
 Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
  * lib/lower.c: fixed the lowering of strings, reversed
    the order and free the intermediate strings.
