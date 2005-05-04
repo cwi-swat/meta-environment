@@ -1,7 +1,5 @@
 package nl.cwi.sen1.tide.tool;
 
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,13 +7,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.tide.PreferenceSet;
 import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspector;
 import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspectorFactory;
@@ -201,8 +195,7 @@ public class ToolManager
       tool = factory.createTool(process);
       putTool(toolName, process, tool);
 
-      studio.addComponent(new StudioComponentAdapter(toolName, tool));
-    }
+      studio.addComponent(tool);    }
 
     return tool;
   }
@@ -217,7 +210,7 @@ public class ToolManager
 	(AdapterToolFactory)adapterTools.get(toolName);
       tool = factory.createTool(adapter);
       putTool(toolName, adapter, tool);
-      studio.addComponent(new StudioComponentAdapter(toolName, tool));
+      studio.addComponent(tool);
     }
     return tool;
   }

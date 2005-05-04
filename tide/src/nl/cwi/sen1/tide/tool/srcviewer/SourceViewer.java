@@ -16,6 +16,8 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,6 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.filechooser.FileSystemView;
 
+import nl.cwi.sen1.gui.StudioComponentListener;
 import nl.cwi.sen1.tide.tool.ProcessTool;
 import nl.cwi.sen1.tide.tool.ToolManager;
 import nl.cwi.sen1.tide.tool.support.DebugAdapter;
@@ -529,6 +532,8 @@ public class SourceViewer
 			switchToFile(selected);
 		}
 	}
+
+	
 }
 
 
