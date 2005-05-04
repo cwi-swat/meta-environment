@@ -4,12 +4,17 @@ import java.net.URL;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.event.EventListenerList;
 
+import nl.cwi.sen1.gui.StatusMessageEvent;
+import nl.cwi.sen1.gui.StudioComponent;
+import nl.cwi.sen1.gui.StudioComponentListener;
 import nl.cwi.sen1.tide.tool.support.Expr;
 
 public abstract class TideTool
-  extends JPanel
+  extends JPanel implements StudioComponent
 {
   private static int next_id = 0;
 
@@ -18,8 +23,10 @@ public abstract class TideTool
 
   private String name;
   private Object target;
-
-  //{{{ public TideTool(ToolManager manager)
+  
+  private String statusMessage;
+  
+  private EventListenerList listenerList = new EventListenerList();
 
   public TideTool(ToolManager manager)
   {
@@ -28,10 +35,6 @@ public abstract class TideTool
 
     id = next_id++;
   }
-
-  //}}}
-
-  //{{{ public ToolManager getManager()
 
   public ToolManager getManager()
   {
@@ -108,9 +111,47 @@ public abstract class TideTool
 
   public void destroy()
   {
-  	// FIXME:
-    System.err.println("FIXME: can not destroy tools at the moment");
+  	manager.removeTool(this);
   }
 
-  //}}}
+	public Icon getIcon() {
+		return null;
+	}
+
+	public JComponent getViewComponent() {
+		return this;
+	}
+
+	public void addStudioComponentListener(StudioComponentListener l) {
+		listenerList.add(StudioComponentListener.class, l);
+	}
+
+	public void removeStudioComponentListener(StudioComponentListener l) {
+		listenerList.remove(StudioComponentListener.class, l);
+	}
+	
+    //	 Take from javax.swing.event.EventListenerList example
+	protected void fireStatusMessageChanged(String oldMessage, String newMessage) {
+		StatusMessageEvent event = new StatusMessageEvent(this, oldMessage,
+				newMessage);
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == StudioComponentListener.class) {
+				((StudioComponentListener) listeners[i + 1])
+						.statusMessageChanged(event);
+			}
+		}
+	}
+
+	public String getStatusMessage() {
+		return statusMessage;
+	}
+
+	public void setStatusMessage(String newMessage) {
+		String oldMessage = statusMessage;
+		statusMessage = newMessage;
+		if (newMessage == null || !newMessage.equals(oldMessage)) {
+			fireStatusMessageChanged(oldMessage, newMessage);
+		}
+	}
 }

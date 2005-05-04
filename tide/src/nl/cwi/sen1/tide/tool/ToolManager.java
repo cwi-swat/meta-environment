@@ -106,6 +106,7 @@ public class ToolManager
   public void removeTool(TideTool tool)
   {
     Map tools = (Map)toolInstances.get(tool.getName());
+    studio.removeComponent(tool);
     tools.remove(tool.getTarget());
   }
 
@@ -176,7 +177,7 @@ public class ToolManager
       tool = factory.createTool();
       putTool(toolName, this, tool);
 
-      studio.addComponent(new StudioComponentAdapter(toolName,tool));
+      studio.addComponent(tool);
     }
 
     return tool;
