@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import nl.cwi.sen1.gui.Studio;
@@ -187,18 +188,8 @@ public class ToolManager
 
   public void displayError(String msg)
   {
-    ErrorWindow error = new ErrorWindow(msg);
-    showDialog(error);
+    JOptionPane.showMessageDialog(null, "Tide error", msg, JOptionPane.ERROR_MESSAGE);
   }
-
-  
-
-  public void showDialog(TideDialog dialog)
-  {
-    dialog.show();
-  }
-
- 
 
   public ProcessTool launchProcessTool(String toolName, DebugProcess process)
   {
@@ -262,32 +253,4 @@ public class ToolManager
   }
 
   
-}
-
-class ErrorWindow
-  extends TideDialog
-{
-  private JButton ok;
-  private JLabel label;
-
-
-  public ErrorWindow(String msg)
-  {
-    super("Tide Error!", DIALOG_OK);
-    label = new JLabel(msg, JLabel.CENTER);
-    init();
-  }
-
-
-  public void addContent(JPanel panel)
-  {
-    panel.setLayout(new GridLayout(3, 1));
-
-    label.setForeground(Color.red);
-
-    panel.add(new JPanel());
-    panel.add(label);
-    panel.add(new JPanel());
-  }
-
 }

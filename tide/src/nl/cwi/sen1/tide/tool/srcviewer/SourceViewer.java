@@ -2,16 +2,39 @@ package nl.cwi.sen1.tide.tool.srcviewer;
 
 //{{{ imports
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.filechooser.FileSystemView;
 
-import nl.cwi.sen1.tide.tool.*;
-import nl.cwi.sen1.tide.tool.support.*;
+import nl.cwi.sen1.tide.tool.ProcessTool;
+import nl.cwi.sen1.tide.tool.ToolManager;
+import nl.cwi.sen1.tide.tool.support.DebugAdapter;
+import nl.cwi.sen1.tide.tool.support.DebugAdapterListener;
+import nl.cwi.sen1.tide.tool.support.DebugProcess;
+import nl.cwi.sen1.tide.tool.support.DebugProcessListener;
+import nl.cwi.sen1.tide.tool.support.Expr;
+import nl.cwi.sen1.tide.tool.support.Port;
+import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
+import nl.cwi.sen1.tide.tool.support.Rule;
+import nl.cwi.sen1.tide.tool.support.VarFormat;
 
 //}}}
 
@@ -484,139 +507,31 @@ public class SourceViewer
 		JFileChooser chooser = new JFileChooser(path);
 		int option = chooser.showOpenDialog(this);
 		if (option == JFileChooser.APPROVE_OPTION) {
-			switchToFile(chooser.getSelectedFile().getPath());
+			switchToFile(chooser.getSelectedFile().getAbsolutePath());
 		}
 	}
-
-	//}}}
-	//{{{ public void addSourceFromList(Iterator iter)
 
 	public void addSourceFromList(Iterator iter) {
-		FileSelector selector = new FileSelector(this, iter);
-		getManager().showDialog(selector);
-	}
-
-	//}}}
-}
-
-class FileOption {
-	private File file;
-
-	//{{{ public FileOption(String path)
-
-	public FileOption(String path) {
-		file = new File(path);
-	}
-
-	//}}}
-	//{{{ public String toString()
-
-	public String toString() {
-		return file.getName();
-	}
-
-	//}}}
-	//{{{ public String getFilename()
-
-	public String getFilename() {
-		return file.getPath();
-	}
-
-	//}}}
-	//{{{ public String getDirectory()
-
-	public String getDirectory() {
-		return file.getParent();
-	}
-
-	//}}}
-}
-
-class FileSelector extends TideDialog {
-	private SourceViewer viewer;
-
-	private Vector files;
-	private JList list;
-	private JLabel path;
-
-	//{{{ public void TideDialog(Iterator iter)
-
-	public FileSelector(SourceViewer viewer, Iterator iter) {
-		super("File Selector", DIALOG_OK_CANCEL);
-
-		this.viewer = viewer;
-
-		files = new Vector();
+		List list = new LinkedList();
 		while (iter.hasNext()) {
-			String file = (String) iter.next();
-			files.addElement(new FileOption(file));
+			list.add((String) iter.next());
 		}
-
-		init();
-
-		setSize(250, 270);
-		invalidate();
-	}
-
-	//}}}
-	//{{{ public void addContent(JPanel panel)
-
-	public void addContent(JPanel panel) {
-		panel.setLayout(new BorderLayout());
-		list = new JList(files);
-		MouseListener mouseListener = new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getSource() == list && e.getClickCount() == 2) {
-					okPressed();
-				}
-			}
-		};
-		list.addMouseListener(mouseListener);
-
-		ListSelectionListener selectionListener = new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getSource() == list) {
-					FileOption selected = (FileOption) list.getSelectedValue();
-					if (selected == null) {
-						path.setText("");
-					} else {
-						path.setText(selected.getDirectory());
-					}
-				}
-			}
-		};
-		list.addListSelectionListener(selectionListener);
-
-		JScrollPane pane = new JScrollPane(list);
-		panel.add("North", new JLabel("Select a file to add", JLabel.CENTER));
-		panel.add("Center", pane);
-		panel.add("West", Box.createHorizontalStrut(20));
-		panel.add("East", Box.createHorizontalStrut(20));
-
-		path = new LongLabel();
-		JPanel pathPanel = new JPanel();
-		pathPanel.setLayout(new GridLayout(2, 1));
-		pathPanel.add(new JLabel("Directory:"));
-		pathPanel.add(path);
-		panel.add("South", pathPanel);
-	}
-
-	//}}}
-	//{{{ public boolean verifyInput()
-
-	public boolean verifyInput() {
-		FileOption option = (FileOption) list.getSelectedValue();
-		if (option == null) {
-			return false;
+		
+		if (list.size() > 0) {
+			String selected = (String) JOptionPane.showInputDialog(this, 
+				null, 
+				"Please pick one of the registered files",
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				list.toArray(), 
+				list.get(0));
+		
+			switchToFile(selected);
 		}
-
-		viewer.switchToFile(option.getFilename());
-
-		return true;
 	}
-
-	//}}}
 }
+
+
 
 class LongLabel extends JLabel {
 	private FontMetrics metrics;
