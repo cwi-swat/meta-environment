@@ -14,7 +14,6 @@ import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 import errorapi.Factory;
 import errorapi.types.Summary;
-import errorapi.types.Error;
 
 public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	private static final String TOOL_NAME = "error-viewer";
@@ -22,7 +21,7 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	private Studio studio;
 
 	ErrorViewerBridge bridge;
-	
+
 	errorapi.Factory errorFactory;
 
 	private ErrorPanel panel;
@@ -33,35 +32,31 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
-		
+
 		ATermFactory factory = studio.getATermFactory();
-		errorFactory = new Factory((PureFactory)factory);
-		
+		errorFactory = new Factory((PureFactory) factory);
+
 		panel = new ErrorPanel();
 		addListener();
-		
+
 		bridge = new ErrorViewerBridge(factory, this);
 		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 		studio.addComponent(new StudioComponentAdapter("Error Viewer", panel));
 	}
 
-	public ErrorViewer() {}
-	
+	public ErrorViewer() {
+	}
+
 	private void addListener() {
 		final JTree tree = panel.getTree();
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
-
 				if (path != null) {
 					ErrorNode node = (ErrorNode) path.getLastPathComponent();
 					if (node != null) {
-						Error error = node.getFirstError();
-						if (!error.getList().isEmpty()) {
-							bridge.postEvent(studio.getATermFactory().make(
-									"error-selected(<term>)", error.toTerm()));
-						}
+						node.selected(studio, bridge);
 					}
 				}
 			}
@@ -75,6 +70,7 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	}
 
 	public void removeFeedbackSummary(String s0, String s1) {
+
 	}
 
 	public void recAckEvent(ATerm t0) {

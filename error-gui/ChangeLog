@@ -1,0 +1,8 @@
+# $Id$
+
+Wed May  4 11:08:21 CEST 2005 <kooiker@cwi.nl>
+  * src/nl.cwi.sen1.error:
+    - Decorate location with LocationNode
+    - Only sent location selected when both area and filename exists
+  * error-viewer.idef.src:
+    - Receive location from gui iso error

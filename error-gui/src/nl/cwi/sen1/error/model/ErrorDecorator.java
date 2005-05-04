@@ -12,7 +12,7 @@ import errorapi.types.Error;
 
 public class ErrorDecorator {
 	public ErrorNode decorateLocation(final Location location, Summary summary) {
-		ErrorNode node = new ErrorNode(location, summary);
+		ErrorNode node = new LocationNode(location, summary);
 		if (location.hasFilename()) {
 			node.add(new ErrorNode(location.getFilename(), false, summary));
 		}
@@ -30,20 +30,36 @@ public class ErrorDecorator {
 		};
 
 		if (subject.hasLocation()) {
-			Location location = subject.getLocation();
-			if (location.hasFilename()) {
-				node.add(new ErrorNode(location.getFilename(), false, summary));
-			}
-			if (location.hasArea()) {
-				final Area area = location.getArea();
-				node.add(new ErrorNode(area, false, summary) {
+			final Location location = subject.getLocation();
+			if (location.isAreaInFile()) {
+				node.add(new LocationNode(location, summary) {
 					public String toString() {
 						StringBuffer buf = new StringBuffer();
-						buf.append("line: ").append(area.getBeginLine());
-						buf.append(", column: ").append(area.getBeginColumn());
+						buf.append("file: ").append(location.getFilename());
+						buf.append(", line: ").append(
+								location.getArea().getBeginLine());
+						buf.append(", column: ").append(
+								location.getArea().getBeginColumn());
 						return buf.toString();
 					}
 				});
+			} else {
+				if (location.hasFilename()) {
+					node.add(new ErrorNode(location.getFilename(), false,
+							summary));
+				}
+				if (location.hasArea()) {
+					final Area area = location.getArea();
+					node.add(new ErrorNode(area, false, summary) {
+						public String toString() {
+							StringBuffer buf = new StringBuffer();
+							buf.append("line: ").append(area.getBeginLine());
+							buf.append(", column: ").append(
+									area.getBeginColumn());
+							return buf.toString();
+						}
+					});
+				}
 			}
 
 			// node.add(decorateLocation(subject.getLocation(), summary));

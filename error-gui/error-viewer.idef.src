@@ -3,10 +3,11 @@ tool error-viewer is {  }
 process ErrorViewer is
 let
   T : error-viewer,
-  Summary : term,
+  Error : term,
+  Location : term,
   Producer : str,
-  SummaryId : str,
-  Error : term
+  Summary : term,
+  SummaryId : str
 in
   StartErrorViewer()
   . rec-connect(T?)
@@ -21,6 +22,10 @@ in
     rec-event(T, error-selected(Error?))
     . snd-msg(ui-error-selected(Error))
     . snd-ack-event(T, error-selected(Error))
+  +
+    rec-event(T, location-selected(Location?))
+    . snd-msg(ui-location-selected(Location))
+    . snd-ack-event(T, location-selected(Location))
   )
   *
   rec-disconnect(T)
