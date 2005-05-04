@@ -1,5 +1,8 @@
 
 
+Wed May  4 16:46:57 CEST 2005 <jurgenv@cwi.nl>
+ * Replaced own code for dialogs by standard Swing components
+
 Mon Dec 13 14:31:39 CET 2004 <kooiker@cwi.nl>
  * tide/tool/stackviewer/StackViewer.java:
    - Update frame content in stackviewer after debug step (closes #379) 
