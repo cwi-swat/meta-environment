@@ -27,24 +27,10 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
-
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
-
-dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}
-AC_SUBST(EXTERNAL_JARS)
-
-AC_SUBST(INSTLIBDIR)
-INSTLIBDIR="$libdir"
 
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,

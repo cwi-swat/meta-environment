@@ -1,5 +1,9 @@
 $Id$
 
+Mon May  9 11:14:10 CEST 2005 <kooiker@cwi.nl>
+ * package,configure.ac:
+   - Remove aterm-java dependency
+
 Wed May  4 11:11:00 CEST 2005 <kooiker@cwi.nl>
  * utils/error-support.idef:
    - support make subject
