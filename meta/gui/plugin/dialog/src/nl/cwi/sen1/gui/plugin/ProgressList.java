@@ -24,6 +24,7 @@ public class ProgressList extends JDialog {
 
 		getContentPane().add(panel, BorderLayout.PAGE_START);
 		getContentPane().add(new JScrollPane(taskOutput), BorderLayout.CENTER);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		pack();
 	}
 	

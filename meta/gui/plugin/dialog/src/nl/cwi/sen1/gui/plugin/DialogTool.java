@@ -1,6 +1,6 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: May 9, 2005 1:31:59 PM
+// generation time: May 9, 2005 3:36:50 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -21,6 +21,7 @@ abstract public class DialogTool
   private ATerm PshowProgressList0;
   private ATerm PshowProgressMessageWithArguments0;
   private ATerm PcloseProgressList0;
+  private ATerm PshowQuestionDialog0;
   private ATerm PshowFileDialog0;
   private ATerm PrecTerminate0;
 
@@ -44,6 +45,7 @@ abstract public class DialogTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"), new Boolean(true));
@@ -61,6 +63,7 @@ abstract public class DialogTool
     PshowProgressList0 = factory.parse("rec-do(show-progress-list(<str>))");
     PshowProgressMessageWithArguments0 = factory.parse("rec-do(show-progress-message-with-arguments(<str>,<term>))");
     PcloseProgressList0 = factory.parse("rec-do(close-progress-list)");
+    PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -93,6 +96,10 @@ abstract public class DialogTool
     if (result != null) {
       closeProgressList();
       return null;
+    }
+    result = term.match(PshowQuestionDialog0);
+    if (result != null) {
+      return showQuestionDialog((String)result.get(0));
     }
     result = term.match(PshowFileDialog0);
     if (result != null) {

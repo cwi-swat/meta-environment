@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileSystemView;
@@ -77,8 +78,21 @@ public class Dialog implements StudioPlugin, DialogTif {
 
 	public void showProgressMessageWithArguments(String format, ATerm args) {
 		String message = StringFormatter.format(format, (ATermList) args);
-        if (progressList != null) {
+		if (progressList != null) {
 			progressList.addMessage(message);
-        }
+		}
+	}
+
+	public ATerm showQuestionDialog(String question) {
+		int choice = JOptionPane.showConfirmDialog(null, question);
+
+		if (choice == JOptionPane.YES_OPTION) {
+			return studio.getATermFactory().make("snd-value(answer(yes))");
+		}
+		if (choice == JOptionPane.NO_OPTION) {
+			return studio.getATermFactory().make("snd-value(answer(no))");
+		}
+
+		return studio.getATermFactory().make("snd-value(answer(cancel))");
 	}
 }

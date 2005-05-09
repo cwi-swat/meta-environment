@@ -8,6 +8,7 @@ let
   T: dialog,
   DialogTitle: str,
   Path: str,
+  Question: str,
   Extension: str
 in
   rec-connect(T?)
@@ -15,6 +16,9 @@ in
   (
     rec-msg(ask-for-file(DialogTitle?, Path?, Extension?))
     . ShowFileDialog(T, DialogTitle, Path, Extension)
+  +
+    rec-msg(ask-question(Question?))
+    . ShowQuestionDialog(T, Question)
   +
     rec-msg(show-progress-list(DialogTitle?))
     . ShowProgressList(T, DialogTitle)
@@ -36,6 +40,15 @@ in
     rec-value(T, file-dialog-cancel)
     . snd-msg(ask-for-file-result(""))
   )
+endlet
+
+process ShowQuestionDialog(T: dialog, Question: str) is
+let
+  Answer: term
+in
+  snd-eval(T, show-question-dialog(Question))
+  . rec-value(T, answer(Answer?))
+  . snd-msg(ask-question-result(Answer))
 endlet
 
 process ShowProgressList(T: dialog, DialogTitle: str) is

@@ -3,6 +3,7 @@
 Mon May  9 14:23:00 CEST 2005 <kooiker@cwi.nl>
  * gui/plugin/dialog:
    - Add progress dialog
+   - Add question dialog
 
 Wed May  4 11:13:57 CEST 2005 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
