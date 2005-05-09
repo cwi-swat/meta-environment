@@ -22,11 +22,11 @@ public class ProgressList extends JDialog {
 
 		JPanel panel = new JPanel();
 
-		add(panel, BorderLayout.PAGE_START);
-		add(new JScrollPane(taskOutput), BorderLayout.CENTER);
+		getContentPane().add(panel, BorderLayout.PAGE_START);
+		getContentPane().add(new JScrollPane(taskOutput), BorderLayout.CENTER);
 		pack();
 	}
-
+	
 	public void addMessage(String message) {
 		taskOutput.append(message + newline);
 		taskOutput.setCaretPosition(taskOutput.getDocument().getLength());
