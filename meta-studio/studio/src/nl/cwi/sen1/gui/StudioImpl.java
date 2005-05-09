@@ -160,7 +160,7 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 			statusBar.setText(message == null ? " " : message);
 		}
 	}
-	
+
 	private void updateMenuBar() {
 		if (!menuBarUpdatePending) {
 			menuBarUpdatePending = true;
@@ -233,8 +233,9 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	}
 
 	private void createFrame() {
-		JFrame.setDefaultLookAndFeelDecorated(true);
+		// JFrame.setDefaultLookAndFeelDecorated(true);
 		frame = new JFrame();
+		frame.setSize(800, 600);
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
 		frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
 		frame.addWindowListener(new WindowAdapter() {
@@ -242,8 +243,6 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 				bridge.postEvent(factory.make("window-closing-event"));
 			}
 		});
-		frame.setJMenuBar(createMenuBar());
-		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setVisible(true);
 	}
@@ -436,5 +435,4 @@ public class StudioImpl implements Studio, GuiTif, StudioComponentListener {
 	public void loadJarClasspath(String pluginJar, String classPath) {
 		startPlugin(new PluginLoader(pluginJar, classPath));
 	}
-
 }
