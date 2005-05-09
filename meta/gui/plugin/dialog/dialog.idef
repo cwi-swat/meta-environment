@@ -6,7 +6,6 @@ tool dialog is { }
 process Dialog is
 let
   T: dialog,
-  Filename: str,
   DialogTitle: str,
   Path: str,
   Extension: str
@@ -15,22 +14,60 @@ in
   .
   (
     rec-msg(ask-for-file(DialogTitle?, Path?, Extension?))
-    . printf("ask-for-file(%s, %s, %s)\n", DialogTitle, Path, Extension)
-    . snd-eval(T, show-file-dialog(DialogTitle, Path, Extension))
-    .
-    (
-      rec-value(T, file-dialog-approve(Filename?))
-      . printf("result: %s\n", Filename)
-      . snd-msg(ask-for-file-result(Filename))
-    +
-      rec-value(T, file-dialog-cancel)
-      . printf("result cancel\n")
-      . snd-msg(ask-for-file-result(""))
-    )
+    . ShowFileDialog(T, DialogTitle, Path, Extension)
+  +
+    rec-msg(show-progress-list(DialogTitle?))
+    . ShowProgressList(T, DialogTitle)
   )
   *
   rec-disconnect(T)
 endlet
+
+process ShowFileDialog(T: dialog, DialogTitle: str, Path: str, Extension: str) is
+let
+  Filename: str
+in
+  snd-eval(T, show-file-dialog(DialogTitle, Path, Extension))
+  .
+  (
+    rec-value(T, file-dialog-approve(Filename?))
+    . snd-msg(ask-for-file-result(Filename))
+  +
+    rec-value(T, file-dialog-cancel)
+    . snd-msg(ask-for-file-result(""))
+  )
+endlet
+
+process ShowProgressList(T: dialog, DialogTitle: str) is
+let
+  Arguments: list,
+  Message: str
+in
+  snd-do(T, show-progress-list(DialogTitle))
+  .
+  (
+    rec-msg(show-progress-message(Message?))
+    . snd-do(T, show-progress-message(Message))
+  +
+    rec-msg(show-progress-message-with-arguments(Message?, Arguments?))
+    . snd-do(T, show-progress-message-with-arguments(Message, Arguments))
+  )
+  *
+  rec-msg(close-progress-list)
+  . snd-do(T, close-progress-list)
+endlet
+
+process ShowProgressDialog(Title: str) is 
+  snd-msg(show-progress-list(Title))
+
+process ShowProgressMessage(Message: str) is
+  snd-msg(show-progress-message(Message))
+
+process ShowProgressMessageWithArguments(Message: str, Arguments: list) is
+  snd-msg(show-progress-message-with-arguments(Message, Arguments))
+
+process CloseProgressDialog is
+  snd-msg(close-progress-list)
 
 toolbus(Dialog)
 

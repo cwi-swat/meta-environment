@@ -18,6 +18,7 @@ in
     +
       rec-msg(dump-equations-given-file(ModuleName?, FileName?))
     )
+    . snd-note(ui-status(start(Id, "Dump Equations")))
     . snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName])))
     . snd-msg(pre-preprocess-syntax-hook(ModuleName))
     . rec-msg(pre-preprocess-syntax-hook-result(ModuleName))
@@ -49,7 +50,7 @@ in
       . snd-note(ui-status(statf(Id, "Specification incomplete for %s",
                                  [ModuleName])))
     )
-    . snd-note(ui-status(endstat(Id)))
+    . snd-note(ui-status(stop(Id)))
     . snd-msg(equations-dumped)
   )
   *

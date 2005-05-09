@@ -31,6 +31,7 @@ TBSCRIPTS = \
   start-meta-syntax-editor.tb \
   start-meta-term-editor.tb \
   status.tb \
+  status-to-progress.tb \
   user-interface.tb
   
 # Alphabetical list of Generated ToolBus scripts

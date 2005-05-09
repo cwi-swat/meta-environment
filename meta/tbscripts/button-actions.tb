@@ -1401,6 +1401,7 @@ let
   Table: term
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Parse Term")))
   . snd-note(ui-status(statf(Id, "Parsing term %s", [Modulename])))
   . GetParseTable(Modulename, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
@@ -1418,7 +1419,7 @@ in
     . ParseErrorToSummary(ParseError, Sid, Summary?)
     . snd-msg(ui-show-feedback-summary(Summary))
   )
-  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 process ParseSyntax(Sid: term, Type: term, ParseSucceeded: bool?) is
@@ -1439,6 +1440,7 @@ let
   Tree: term
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Parse Syntax")))
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
@@ -1494,7 +1496,7 @@ in
     . ParseSucceeded := false
     . snd-msg(invalidate-sdf-in-db(Modulename))
   )
-  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 process ParseEquations(Sid: term, Modulename: str) is
@@ -1509,6 +1511,7 @@ let
   Tree: term
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Parse Equations")))
   . snd-note(ui-status(statf(Id, "Parsing equations of %s", [Modulename])))
   . GetParseTable(Modulename, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
@@ -1532,7 +1535,7 @@ in
     . ParseErrorToSummary(ParseError, Sid, Summary?)
     . snd-msg(ui-show-feedback-summary(Summary))
   )
-  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 process GetTree(Sid: term, Modulename: str, Tree: term?, Available: bool?) is
@@ -1626,6 +1629,7 @@ let
   Specification: term
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Reduce Term")))
   . OpenModules([Modulename], sdf)
   . snd-note(ui-status(stat(Id, "Retrieving equations")))
   . create(GetSpecification(Modulename), Pid?)
@@ -1633,15 +1637,14 @@ in
   (
     rec-msg(specification(Specification?))
     . GetSpecificationEquations(Specification, Equations?)
-    . snd-note(ui-status(endstat(Id)))
     . snd-msg(interpret-term-hook(Modulename, Equations, Tree))
     . rec-msg(interpret-term-hook-result(NormalForm?))
   +
     rec-msg(specification-incomplete(Summary?))
-    . snd-note(ui-status(endstat(Id)))
     . snd-msg(ui-show-feedback-summary(Summary))
     . NormalForm := error-tree
   )
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is

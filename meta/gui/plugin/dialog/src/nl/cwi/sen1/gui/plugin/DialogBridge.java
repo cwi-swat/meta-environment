@@ -1,6 +1,6 @@
 // Java tool bridge DialogBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 10:48:18 AM
+// generation time: May 9, 2005 1:31:59 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -21,6 +21,58 @@ public class DialogBridge
 
   //}}}
 
+  //{{{  public void showProgressMessage(String s0)
+
+  public void showProgressMessage(String s0)
+  {
+    if (tool != null) {
+      tool.showProgressMessage(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showProgressMessage' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void showProgressList(String s0)
+
+  public void showProgressList(String s0)
+  {
+    if (tool != null) {
+      tool.showProgressList(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showProgressList' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void showProgressMessageWithArguments(String s0, ATerm t1)
+
+  public void showProgressMessageWithArguments(String s0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.showProgressMessageWithArguments(s0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `showProgressMessageWithArguments' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void closeProgressList()
+
+  public void closeProgressList()
+  {
+    if (tool != null) {
+      tool.closeProgressList();
+    }
+    else {
+      throw new UnsupportedOperationException("method `closeProgressList' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public ATerm showFileDialog(String s0, String s1, String s2)
 
   public ATerm showFileDialog(String s0, String s1, String s2)

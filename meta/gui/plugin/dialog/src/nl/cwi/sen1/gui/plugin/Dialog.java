@@ -3,17 +3,26 @@ package nl.cwi.sen1.gui.plugin;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.ProgressMonitor;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileSystemView;
 
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.util.StringFormatter;
 import aterm.ATerm;
+import aterm.ATermList;
 
 public class Dialog implements StudioPlugin, DialogTif {
 
 	private static final String TOOL_NAME = "dialog";
 
 	private Studio studio;
+
+	private ProgressList progressList;
+
+	private ProgressMonitor progressMonitor;
 
 	public String getName() {
 		return TOOL_NAME;
@@ -43,5 +52,33 @@ public class Dialog implements StudioPlugin, DialogTif {
 	}
 
 	public void recTerminate(ATerm t0) {
+	}
+
+	public void showProgressMessage(String message) {
+		if (progressList != null) {
+			progressList.addMessage(message);
+		}
+	}
+
+	public void showProgressList(final String title) {
+		progressList = new ProgressList((JFrame) null, title, true);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				progressList.setVisible(true);
+			}
+		});
+	}
+
+	public void closeProgressList() {
+		if (progressList != null) {
+			progressList.dispose();
+		}
+	}
+
+	public void showProgressMessageWithArguments(String format, ATerm args) {
+		String message = StringFormatter.format(format, (ATermList) args);
+        if (progressList != null) {
+			progressList.addMessage(message);
+        }
 	}
 }

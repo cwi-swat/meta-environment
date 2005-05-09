@@ -5,6 +5,7 @@ let
   Modules: list
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Close Modules")))
   . snd-note(ui-status(stat(Id, "Closing")))
   . snd-msg(get-all-module-names)
   . rec-msg(all-module-names(Modules?))
@@ -22,5 +23,5 @@ in
   fi
   . snd-msg(clear-module-db)
   . rec-msg(module-db-cleared)
-  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(stop(Id)))
 endlet

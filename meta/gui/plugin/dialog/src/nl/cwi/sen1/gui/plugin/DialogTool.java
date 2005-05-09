@@ -1,6 +1,6 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 18, 2005 10:48:18 AM
+// generation time: May 9, 2005 1:31:59 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -17,6 +17,10 @@ abstract public class DialogTool
 
   //{{{  Patterns that are used to match against incoming terms
 
+  private ATerm PshowProgressMessage0;
+  private ATerm PshowProgressList0;
+  private ATerm PshowProgressMessageWithArguments0;
+  private ATerm PcloseProgressList0;
   private ATerm PshowFileDialog0;
   private ATerm PrecTerminate0;
 
@@ -40,6 +44,10 @@ abstract public class DialogTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog>,close-progress-list)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<dialog>,<term>)"), new Boolean(true));
   }
 
@@ -49,6 +57,10 @@ abstract public class DialogTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
+    PshowProgressMessage0 = factory.parse("rec-do(show-progress-message(<str>))");
+    PshowProgressList0 = factory.parse("rec-do(show-progress-list(<str>))");
+    PshowProgressMessageWithArguments0 = factory.parse("rec-do(show-progress-message-with-arguments(<str>,<term>))");
+    PcloseProgressList0 = factory.parse("rec-do(close-progress-list)");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -62,6 +74,26 @@ abstract public class DialogTool
   {
     List result;
 
+    result = term.match(PshowProgressMessage0);
+    if (result != null) {
+      showProgressMessage((String)result.get(0));
+      return null;
+    }
+    result = term.match(PshowProgressList0);
+    if (result != null) {
+      showProgressList((String)result.get(0));
+      return null;
+    }
+    result = term.match(PshowProgressMessageWithArguments0);
+    if (result != null) {
+      showProgressMessageWithArguments((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PcloseProgressList0);
+    if (result != null) {
+      closeProgressList();
+      return null;
+    }
     result = term.match(PshowFileDialog0);
     if (result != null) {
       return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));

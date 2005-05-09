@@ -94,7 +94,8 @@ let
   Modulename: str,
   Imports: list
 in
-  snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
+  snd-note(ui-status(start(ModuleId, "Open Module")))
+  . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
   . OpenSyntax(Path, Type)
   . snd-msg(ts-get-str-value("path-modulename", Path))
   .
@@ -105,6 +106,7 @@ in
   +
     rec-msg(ts-no-value)
   )
+  . snd-note(ui-status(stop(ModuleId)))
 endlet
 
 process OpenModules(Modules: list, Type: term) is
@@ -114,7 +116,8 @@ let
   Path: str,
   Todo: list
 in
-  Todo := Modules
+  snd-note(ui-status(start(Modules, "Open Modules")))
+  . Todo := Modules
   . snd-note(start-modules-batch)
   .
   if not-equal(Todo, []) then
@@ -141,6 +144,7 @@ in
   *
   if equal(Todo, []) then
     snd-note(end-modules-batch)
+    . snd-note(ui-status(stop(Modules)))
   fi
 endlet
 
@@ -198,7 +202,6 @@ in
     rec-msg(io-error-reading(Error?))
     . Error("TODO fix this error io-error-reading: %t\n", [Error])
   )
-  . snd-note(ui-status(endstat(Id)))
 endlet
 
 process OpenSyntaxParseHandler(Path: str) is

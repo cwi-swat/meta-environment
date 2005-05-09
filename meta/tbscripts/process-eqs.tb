@@ -128,6 +128,7 @@ let
   Done : int
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Get Specification")))
   . MDB-GetAllImportedModulenames(ModuleId, Modules?)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
   . Count := size(Modules)
@@ -148,11 +149,9 @@ in
       . snd-note(ui-status(statf(Id, "Normalizing %s",[CurModule])))
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
-      . snd-note(ui-status(endstat(Id)))
       . snd-note(ui-status(statf(Id, "Renaming %s",[CurModule])))
       . snd-msg(sr-rename-module(Imports, CurModule, Equations))
       . rec-msg(sr-renamed-module(Equations?))
-      . snd-note(ui-status(endstat(Id)))
       . Specification := join(Specification, Equations)
     +
       rec-msg(error-in-equations(CurModule, Error?))
@@ -171,6 +170,7 @@ in
       snd-msg(specification(Specification)) 
     fi
   )
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 process GetSpecificationEquations(Specification: term, Equations: term?) is

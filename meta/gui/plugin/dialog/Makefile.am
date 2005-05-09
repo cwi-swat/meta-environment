@@ -8,7 +8,7 @@ JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
 MAIN_CLASS = $(JAVA_PACKAGE).Dialog
 
-ANT_ENV += LOCAL_JARS=$(top_srcdir)/gui/studio/gui.jar
+LOCAL_JARS=$(top_srcdir)/gui/studio/gui.jar:$(top_srcdir)/gui/util/gui-util.jar
 
 pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
 

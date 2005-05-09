@@ -12,6 +12,7 @@ in
   .
   (
     rec-msg(compile-module(ModuleName?, OutputFile?))
+    . snd-note(ui-status(start(Id, "Compile Module")))
     . snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName])))
     . create(GetSpecification(ModuleName), Pid?)
     .
@@ -27,7 +28,7 @@ in
                                  [ModuleName])))
     )
     . snd-msg(compilation-ready(ModuleName))
-    . snd-note(ui-status(endstat(Id)))
+    . snd-note(ui-status(stop(Id)))
   )
   *
   delta

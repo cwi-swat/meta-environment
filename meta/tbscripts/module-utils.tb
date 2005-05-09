@@ -519,6 +519,7 @@ let
   Pairs: list
 in
   Id := process-id
+  . snd-note(ui-status(start(Id, "Load TermStore")))
   . snd-msg(get-termstore-name)
   . rec-msg(termstore-name(Name?))
   . snd-msg(io-exists-file(Name))
@@ -559,7 +560,6 @@ in
 	if equal(ModuleNames, []) then
 	  tau
 	fi
-	. snd-note(ui-status(endstat(Id)))
       else
         tau
       fi
@@ -572,6 +572,7 @@ in
     rec-msg(io-file-not-exists)
     . snd-note(ui-status(errorf("Termstore %s does not exist!", [Name])))
   )
+  . snd-note(ui-status(stop(Id)))
 endlet
 
 
