@@ -1,5 +1,9 @@
 
 
+Mon May  9 13:23:41 CEST 2005 <jurgenv@cwi.nl>
+ * Removed complicated thread joining and interrupting stuff for closing
+   down tide. Replaced it by simple AbstractTool.stopRunning() calls.
+
 Wed May  4 16:46:57 CEST 2005 <jurgenv@cwi.nl>
  * Replaced own code for dialogs by standard Swing components
 

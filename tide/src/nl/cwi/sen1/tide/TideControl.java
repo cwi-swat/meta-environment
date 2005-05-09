@@ -116,29 +116,8 @@ public class TideControl
 	
 
 	public void recTerminate(ATerm arg) {
-		stopChildThreads();
-		
-		System.exit(0);
-	}
-
-	protected void stopChildThreads() {
-		debugTool.stopRunning();
-		debugToolThread.interrupt();
-		
 		bridge.stopRunning();
-		tideControlThread.interrupt();
-		
-		try {
-			debugToolThread.join();
-		} catch (InterruptedException e) {
-			System.err.println("Ignoring interrupt during shutdown: debugToolThread");
-		}
-		
-		try {
-			tideControlThread.join();
-		} catch (InterruptedException e1) {
-			System.err.println("Ignoring interrupt during shutdown: tideControlThread");
-		}
+		debugTool.stopRunning();
 	}
 
 	public void loadPreferences() {
