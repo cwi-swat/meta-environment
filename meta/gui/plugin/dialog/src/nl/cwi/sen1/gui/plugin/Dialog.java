@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileSystemView;
 
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioPlugin;
@@ -16,6 +15,8 @@ import aterm.ATerm;
 import aterm.ATermList;
 
 public class Dialog implements StudioPlugin, DialogTif {
+
+	private static final String WORKING_DIRECTORY = "user.dir";
 
 	private static final String TOOL_NAME = "dialog";
 
@@ -39,7 +40,7 @@ public class Dialog implements StudioPlugin, DialogTif {
 	public ATerm showFileDialog(String title, String path, String filter) {
 		File dir;
 		if ("".equals(path)) {
-			dir = FileSystemView.getFileSystemView().getHomeDirectory();
+			dir = new File(System.getProperty(WORKING_DIRECTORY)); 
 		} else {
 			dir = new File(path);
 		}
@@ -100,8 +101,8 @@ public class Dialog implements StudioPlugin, DialogTif {
 		if (progressList != null) {
 			progressList.dispose();
 		}
-		JOptionPane.showMessageDialog(null,
-				errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, errorMessage, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void showErrorDialogWithArguments(String errorMessage, ATerm args) {
@@ -109,7 +110,7 @@ public class Dialog implements StudioPlugin, DialogTif {
 		if (progressList != null) {
 			progressList.dispose();
 		}
-		JOptionPane.showMessageDialog(null,
-				message, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, "Error",
+				JOptionPane.ERROR_MESSAGE);
 	}
 }
