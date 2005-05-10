@@ -1,6 +1,6 @@
 // Java tool interface DialogTif
 // This file is generated automatically, please do not edit!
-// generation time: May 9, 2005 3:36:50 PM
+// generation time: May 9, 2005 4:06:59 PM
 
 package nl.cwi.sen1.gui.plugin;
 
