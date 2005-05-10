@@ -26,6 +26,12 @@ public class Dialog implements StudioPlugin, DialogTif {
 
 	private ProgressMonitor progressMonitor;
 
+	private JFileChooser sharedChooser;
+
+	public Dialog() {
+		sharedChooser = new JFileChooser(System.getProperty(WORKING_DIRECTORY));
+	}
+
 	public String getName() {
 		return TOOL_NAME;
 	}
@@ -33,18 +39,14 @@ public class Dialog implements StudioPlugin, DialogTif {
 	public void initStudioPlugin(Studio studio) {
 		this.studio = studio;
 		DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
-		bridge.setLockObject(this);
 		studio.connect(getName(), bridge);
 	}
 
 	public ATerm showFileDialog(String title, String path, String filter) {
-		File dir;
-		if ("".equals(path)) {
-			dir = new File(System.getProperty(WORKING_DIRECTORY)); 
-		} else {
-			dir = new File(path);
+		JFileChooser chooser = sharedChooser;
+		if (!"".equals(path)) {
+			chooser = new JFileChooser(path);
 		}
-		JFileChooser chooser = new JFileChooser(dir);
 		if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
 			path = chooser.getSelectedFile().getAbsolutePath();
 			return studio.getATermFactory().make(
