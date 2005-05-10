@@ -97,12 +97,18 @@ public class Dialog implements StudioPlugin, DialogTif {
 	}
 
 	public void showErrorDialog(String errorMessage) {
+		if (progressList != null) {
+			progressList.dispose();
+		}
 		JOptionPane.showMessageDialog(null,
 				errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public void showErrorDialogWithArguments(String errorMessage, ATerm args) {
 		String message = StringFormatter.format(errorMessage, (ATermList) args);
+		if (progressList != null) {
+			progressList.dispose();
+		}
 		JOptionPane.showMessageDialog(null,
 				message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
