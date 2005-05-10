@@ -6,7 +6,9 @@ tool dialog is { }
 process Dialog is
 let
   T: dialog,
+  Arguments: list,
   DialogTitle: str,
+  ErrorMessage: str,
   Path: str,
   Question: str,
   Extension: str
@@ -19,6 +21,12 @@ in
   +
     rec-msg(ask-question(Question?))
     . ShowQuestionDialog(T, Question)
+  +
+    rec-msg(show-error-dialog(ErrorMessage?))
+    . snd-do(T, show-error-dialog(ErrorMessage)) 
+  +
+    rec-msg(show-error-dialog-with-arguments(ErrorMessage?, Arguments?))
+    . snd-do(T, show-error-dialog-with-arguments(ErrorMessage, Arguments))
   +
     rec-msg(show-progress-list(DialogTitle?))
     . ShowProgressList(T, DialogTitle)
@@ -81,6 +89,12 @@ process ShowProgressMessageWithArguments(Message: str, Arguments: list) is
 
 process CloseProgressDialog is
   snd-msg(close-progress-list)
+
+process ShowErrorDialog(Message: str) is
+  snd-msg(show-error-dialog(Message))
+
+process ShowErrorDialogWithArguments(Message: str, Arguments: list) is
+  snd-msg(show-error-dialog-with-arguments(Message, Arguments))
 
 toolbus(Dialog)
 

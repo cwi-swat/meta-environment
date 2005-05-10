@@ -95,4 +95,15 @@ public class Dialog implements StudioPlugin, DialogTif {
 
 		return studio.getATermFactory().make("snd-value(answer(cancel))");
 	}
+
+	public void showErrorDialog(String errorMessage) {
+		JOptionPane.showMessageDialog(null,
+				errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void showErrorDialogWithArguments(String errorMessage, ATerm args) {
+		String message = StringFormatter.format(errorMessage, (ATermList) args);
+		JOptionPane.showMessageDialog(null,
+				message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
 }

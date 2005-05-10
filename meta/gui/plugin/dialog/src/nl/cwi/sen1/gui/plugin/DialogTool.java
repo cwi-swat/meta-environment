@@ -1,6 +1,6 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: May 9, 2005 4:06:59 PM
+// generation time: May 10, 2005 8:54:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -18,8 +18,10 @@ abstract public class DialogTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PshowProgressMessage0;
+  private ATerm PshowErrorDialogWithArguments0;
   private ATerm PshowProgressList0;
   private ATerm PshowProgressMessageWithArguments0;
+  private ATerm PshowErrorDialog0;
   private ATerm PcloseProgressList0;
   private ATerm PshowQuestionDialog0;
   private ATerm PshowFileDialog0;
@@ -44,6 +46,8 @@ abstract public class DialogTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
+    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), new Boolean(true));
@@ -60,8 +64,10 @@ abstract public class DialogTool
   private void initPatterns()
   {
     PshowProgressMessage0 = factory.parse("rec-do(show-progress-message(<str>))");
+    PshowErrorDialogWithArguments0 = factory.parse("rec-do(show-error-dialog-with-arguments(<str>,<term>))");
     PshowProgressList0 = factory.parse("rec-do(show-progress-list(<str>))");
     PshowProgressMessageWithArguments0 = factory.parse("rec-do(show-progress-message-with-arguments(<str>,<term>))");
+    PshowErrorDialog0 = factory.parse("rec-do(show-error-dialog(<str>))");
     PcloseProgressList0 = factory.parse("rec-do(close-progress-list)");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
@@ -82,6 +88,11 @@ abstract public class DialogTool
       showProgressMessage((String)result.get(0));
       return null;
     }
+    result = term.match(PshowErrorDialogWithArguments0);
+    if (result != null) {
+      showErrorDialogWithArguments((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
     result = term.match(PshowProgressList0);
     if (result != null) {
       showProgressList((String)result.get(0));
@@ -90,6 +101,11 @@ abstract public class DialogTool
     result = term.match(PshowProgressMessageWithArguments0);
     if (result != null) {
       showProgressMessageWithArguments((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PshowErrorDialog0);
+    if (result != null) {
+      showErrorDialog((String)result.get(0));
       return null;
     }
     result = term.match(PcloseProgressList0);

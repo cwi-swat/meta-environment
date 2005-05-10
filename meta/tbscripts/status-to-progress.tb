@@ -10,19 +10,27 @@ in
   subscribe(ui-status(<term>))
   .
   (
-    rec-note(ui-status(start(ProgressId?, Message?)))
-    . ShowProgressDialog(Message)
-    .
     (
-      rec-note(ui-status(statf(Id?, Message?, Arguments?)))
-      . ShowProgressMessageWithArguments(Message, Arguments)
+      rec-note(ui-status(start(ProgressId?, Message?)))
+      . ShowProgressDialog(Message)
+      .
+      (
+        rec-note(ui-status(statf(Id?, Message?, Arguments?)))
+	. ShowProgressMessageWithArguments(Message, Arguments)
+      +
+	rec-note(ui-status(stat(Id?, Message?)))
+	. ShowProgressMessage(Message)
+      ) 
+      *
+      rec-note(ui-status(stop(ProgressId)))
+      . CloseProgressDialog() 
+    )
     +
-      rec-note(ui-status(stat(Id?, Message?)))
-      . ShowProgressMessage(Message)
-    ) 
-    *
-    rec-note(ui-status(stop(ProgressId)))
-    . CloseProgressDialog() 
+      rec-note(ui-status(errorf(Message?, Arguments?)))
+      . ShowErrorDialogWithArguments(Message, Arguments)
+    +
+      rec-note(ui-status(error(Message)))
+      . ShowErrorDialog(Message)
   ) * delta 
 endlet
 

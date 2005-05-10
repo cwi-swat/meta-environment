@@ -1,5 +1,9 @@
 # $Id$
 
+Tue May 10 08:57:55 CEST 2005 <kooiker@cwi.nl>
+ * gui/plugin/dialog:
+   - Add error dialog
+
 Mon May  9 14:23:00 CEST 2005 <kooiker@cwi.nl>
  * gui/plugin/dialog:
    - Add progress dialog
