@@ -150,7 +150,6 @@ let
 in
   snd-msg(get-module-paths)
   . rec-msg(module-paths(SearchPaths?))
-  . printf("Searchpaths: %t\n", SearchPaths)
   . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
   .
   (
