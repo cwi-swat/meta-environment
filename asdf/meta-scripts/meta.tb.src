@@ -1,12 +1,12 @@
 /* meta-kernel */
-#include "__META__/share/meta/configuration-manager.idef"
-#include "__META__/share/meta/editor-hive.idef"
-#include "__META__/share/meta/editor-manager.idef"
+#include "__META__/share/meta-action-environment/configuration-manager.idef"
+#include "__META__/share/meta-action-environment/editor-hive.idef"
+#include "__META__/share/meta-action-environment/editor-manager.idef"
 
 #include "generic-adapter.idef" 
 #include "graph-converter.idef"
 
-#include "__META__/share/meta/in-output.idef"
+#include "__META__/share/meta-action-environment/in-output.idef"
 
 #include "layout-graph.idef"
 #include "position-annotator.idef"
@@ -14,40 +14,40 @@
 #include "structure-editor.idef"
 #include "unparser.idef"
 
-#include "__META__/share/meta/user-interface.tb"
-#include "__META__/share/meta/kernel-configuration.tb"
-#include "__META__/share/meta/user-configuration.tb"
+#include "__META__/share/meta-action-environment/user-interface.tb"
+#include "__META__/share/meta-action-environment/kernel-configuration.tb"
+#include "__META__/share/meta-action-environment/user-configuration.tb"
 
 /* sdf-meta */
 
 #include "parsetablegen.idef"
 #include "sdf-import-graph.idef"
-#include "__META__/share/meta/graph-utils.tb"
+#include "__META__/share/meta-action-environment/graph-utils.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
 #include "restorebrackets.idef"
 
 /* to be resolved */
-#include "__META__/share/meta/feedback.tb"
-#include "__META__/share/meta/editing.tb"
-#include "__META__/share/meta/restore-term-brackets.tb"
-#include "__META__/share/meta/open-modules.tb"
-#include "__META__/share/meta/module-db.tb"
-#include "__META__/share/meta/module-utils.tb"
-#include "__META__/share/meta/print-module.tb"
-#include "__META__/share/meta/close-all.tb"
-#include "__META__/share/meta/process-eqs.tb"
-#include "__META__/share/meta/compile-module.tb"
-#include "__META__/share/meta/save-module.tb" 
-#include "__META__/share/meta/get-parsetable.tb"
-#include "__META__/share/meta/dump-parsetable.tb"
-#include "__META__/share/meta/sdf2-language.tb"
-#include "__META__/share/meta/parse-focuses.tb"
-#include "__META__/share/meta/button-actions.tb"
-#include "__META__/share/meta/dump-equations.tb"
-#include "__META__/share/meta/dump-sdf-definition.tb"
-#include "__META__/share/meta/pretty-print.tb"
+#include "__META__/share/meta-action-environment/feedback.tb"
+#include "__META__/share/meta-action-environment/editing.tb"
+#include "__META__/share/meta-action-environment/restore-term-brackets.tb"
+#include "__META__/share/meta-action-environment/open-modules.tb"
+#include "__META__/share/meta-action-environment/module-db.tb"
+#include "__META__/share/meta-action-environment/module-utils.tb"
+#include "__META__/share/meta-action-environment/print-module.tb"
+#include "__META__/share/meta-action-environment/close-all.tb"
+#include "__META__/share/meta-action-environment/process-eqs.tb"
+#include "__META__/share/meta-action-environment/compile-module.tb"
+#include "__META__/share/meta-action-environment/save-module.tb" 
+#include "__META__/share/meta-action-environment/get-parsetable.tb"
+#include "__META__/share/meta-action-environment/dump-parsetable.tb"
+#include "__META__/share/meta-action-environment/sdf2-language.tb"
+#include "__META__/share/meta-action-environment/parse-focuses.tb"
+#include "__META__/share/meta-action-environment/button-actions.tb"
+#include "__META__/share/meta-action-environment/dump-equations.tb"
+#include "__META__/share/meta-action-environment/dump-sdf-definition.tb"
+#include "__META__/share/meta-action-environment/pretty-print.tb"
 
 #include "meta-interface.tb"
 

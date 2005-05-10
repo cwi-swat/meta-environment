@@ -1,5 +1,5 @@
-#include "/users/jive/PROGRAMS/action_env/install/share/asdf/meta.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/status.tb"
+#include "/home/jive/programs/act-env/install/share/asdf/meta.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/status.tb"
 
 process StandaloneTermstoreDumper is
 let
@@ -26,7 +26,7 @@ in
   .
   if equal(SAVING, "true") then
     printf("saving termstore\n")
-    . snd-msg(register-termstore-name("/users/jive/PROGRAMS/action_env/install/share/asdf/asdf-pt/asdf/initial.termstore"))
+    . snd-msg(register-termstore-name("/home/jive/programs/act-env/install/share/asdf/asdf-pt/asdf/initial.termstore"))
     . rec-msg(termstore-name-registered)
     . snd-msg(save-termstore)
     .

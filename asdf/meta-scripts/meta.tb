@@ -1,12 +1,12 @@
 /* meta-kernel */
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/configuration-manager.idef"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/editor-hive.idef"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/editor-manager.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/configuration-manager.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editor-hive.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editor-manager.idef"
 
 #include "generic-adapter.idef" 
 #include "graph-converter.idef"
 
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/in-output.idef"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/in-output.idef"
 
 #include "layout-graph.idef"
 #include "position-annotator.idef"
@@ -14,40 +14,40 @@
 #include "structure-editor.idef"
 #include "unparser.idef"
 
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/user-interface.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/kernel-configuration.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/user-configuration.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/user-interface.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/kernel-configuration.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/user-configuration.tb"
 
 /* sdf-meta */
 
 #include "parsetablegen.idef"
 #include "sdf-import-graph.idef"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/graph-utils.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/graph-utils.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
 #include "restorebrackets.idef"
 
 /* to be resolved */
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/feedback.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/editing.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/restore-term-brackets.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/open-modules.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/module-db.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/module-utils.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/print-module.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/close-all.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/process-eqs.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/compile-module.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/save-module.tb" 
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/get-parsetable.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/dump-parsetable.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/sdf2-language.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/parse-focuses.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/button-actions.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/dump-equations.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/dump-sdf-definition.tb"
-#include "/users/jive/PROGRAMS/action_env/install/share/meta/pretty-print.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/feedback.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/editing.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/restore-term-brackets.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/open-modules.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/module-db.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/module-utils.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/print-module.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/close-all.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/process-eqs.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/compile-module.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/save-module.tb" 
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/get-parsetable.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-parsetable.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/sdf2-language.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/parse-focuses.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/button-actions.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-equations.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/dump-sdf-definition.tb"
+#include "/home/jive/programs/act-env/install/share/meta-action-environment/pretty-print.tb"
 
 #include "meta-interface.tb"
 
