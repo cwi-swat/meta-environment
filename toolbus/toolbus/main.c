@@ -160,7 +160,7 @@ void usage(char *prg, int is_err)
 {
  fprintf(stderr, "Usage: %s [-help|-version|-verbose] "
 	 "[-logger|-viewer|-controller] [-gentifs] [-output <file>]"
-	 "[-fixed-seed] Script.tb\n", prg);
+	 "[-fixed-seed] Script1.tb Script2.tb ... \n", prg);
 
  exit(is_err);
 }
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
   int i = 1;
   unsigned int seed = time(NULL);
   char *s;
-  char *sname = NULL;
+  char **sname = NULL;
   char *output = NULL;
   TBbool gen_tifs = TBfalse;
   term *monitor;
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
   struct sigaction act_debug;
 
   extern time_t startup_time;
-  extern TBbool parse_script(char *, int, char **);
+  extern TBbool parse_script(char **, int, char **);
   extern void chld_handler(int);
 
   act.sa_handler = interrupt_handler;
@@ -293,7 +293,7 @@ int main(int argc, char *argv[])
     } else if (streq(argv[i], "-seed")) {
       seed = atoi(argv[++i]);
     } else {
-      sname = argv[i];
+      sname = &argv[i];
       break;
     }
   }
@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
      * monitor = init_monitoring();
      */
 
-    if(typecheck(sname, gen_tifs, output)){
+    if(typecheck(sname[0], gen_tifs, output)){
  
       if (TBverbose) TBmsg("typechecking completed\n");
       expand_all_calls();

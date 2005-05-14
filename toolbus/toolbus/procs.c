@@ -186,6 +186,18 @@ proc *mk_proc_call(char *id, term_list *args)
 
 /*}}}  */
 
+/*{{{  proc *mk_proc_dyncall(char *current_def_name, char *id, term_list *args, coords *c) */
+
+proc *mk_proc_dyncall(char *current_def_name, char *id, term_list *args, coords *c)
+{   term *res;
+    /* TBmsg("mk_proc_dyncall(%s, %s, %t)\n", current_def_name, id, args);*/
+    res = mk_appl(p_dyncall, mk_list3(mk_var(id, current_def_name, t_term), args, c));
+    /* TBmsg("mk_proc_dyncall: %t\n", res); */
+    return res;
+}
+
+/*}}}  */
+
 /*{{{  void pr_atom(proc *a) */
 
 void pr_atom(proc *a)
@@ -209,9 +221,12 @@ proc_def *mk_proc_def(char *name,
 		      term_list *vars,
 		      proc *p)
 { 
+  proc_def *pd;
   assert(is_list(formals));
 
-  return mk_appl4(s_proc_def, mk_var(name, "", t_term), formals, vars, p);
+  pd = mk_appl4(s_proc_def, mk_var(name, "", t_term), formals, vars, p);
+  /* pr_proc_def(pd); */
+  return pd;
 }
 
 /*}}}  */
@@ -316,6 +331,7 @@ void init_procs(void)
   SYMDEF("dot", p_dot);
   SYMDEF("star", p_star);
   SYMDEF("call", p_call);
+  SYMDEF("dyncall", p_dyncall);
   SYMDEF("semi", p_semi);
   SYMDEF("fmerge", p_fmerge);
   SYMDEF("lmerge", p_lmerge);

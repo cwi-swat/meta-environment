@@ -92,8 +92,7 @@ process MakeWave(N : int) is
 
 %% Define the {\tt display} tool.
 
-tool display is { command = "wish-adapter -script ui-wave.tcl"
-                  host = "vlag.sen"}
+tool display is { command = "wish-adapter -script ui-wave.tcl"}
 
 %% Define the initial \TB\ configuration.
 

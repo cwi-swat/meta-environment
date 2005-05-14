@@ -34,6 +34,7 @@
 #include "tools.h"
 #include "utils.h"
 #include "interpreter.h"
+#include "typecheck.h"
 
 /*}}}  */
 
@@ -136,6 +137,42 @@ proc *expand_calls(proc *P)
 }
 
 /*}}}  */
+/*{{{  proc *expand_dyncall(proc *P, env *Env) */
+
+proc *expand_dyncall(proc *P, env *Env)
+{   env *e;
+    proc *P1;
+    char *proc_name;
+
+    term *Name = elm1(fun_args(P));
+    term *args = elm2(fun_args(P));
+    coords *c = elm3(fun_args(P));
+					
+    assert(is_str(Name) || is_var(Name));
+    term *Val = is_str(Name) ? Name : value(Name, Env);
+
+    if(!is_str(Val))
+         err_fatal("expand_dyncall -- process name should be a string instead of '%t'\n", Val);
+
+    proc_name = str_val(Val);
+    proc_def *pd = definition(TBlookup(proc_name));
+
+    if(!pd)
+	err_fatal("Cannot create process name %s", proc_name);
+    n_expanded_calls++;
+    CALLSDB(TBmsg("expanding %t\n", P);)
+    if(check_formal_actual(TBlookup(proc_name), c, proc_name, pd_formals(pd), args)) {
+	e = create_env(pd_formals(pd), get_txt(pd_name(pd)), args, Env);
+	P1 = replace_formals(pd_body(pd), e);
+	CALLSDB(TBmsg("into %t\n", P1);)
+	    return P1;
+    } else
+       err_fatal("Cannot create process %s since formals/actuals do not match", proc_name);
+    return Delta;
+}
+/*}}}  */
+
+
 /*{{{  term_list *expand_calls_list(term_list *tl) */
 
 term_list *expand_calls_list(term_list *tl)

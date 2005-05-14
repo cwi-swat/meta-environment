@@ -41,6 +41,7 @@
 #include <sys/signal.h>
 #include <signal.h>
 
+extern proc *expand_dyncall(proc *P, env *Env);
 /*}}}  */
 /*{{{  typedefs */
 
@@ -153,10 +154,6 @@ static proc_id *create_process(sym_idx pname, term_list *args,
 			  list_copy(parent_notes), 
 			  mk_str(get_txt(pname)), 
 			  pid,
-
-
-
-
 			  parent_db);
   AP = expand(propagate_env(mk_dot(body, Delta), Env1), Env1);
   if(!is_list(AP))
@@ -450,7 +447,7 @@ static ap_form *dot(ap_form *AP, proc *P2)
 	if(is_atom(AP)){
 	  return mk_semi(AP, P2);
 	} else
-	  err_fatal("dot (2) %t", AP);
+	  err_fatal("dot (2) %t, %t", AP, P2);
 	return Delta; /* pedantic */
     }
   }
@@ -531,7 +528,7 @@ static ap_form *add_cond(term *T, ap_form *AP)
 
 static proc *force_null_env(proc *P)
 {  
-  /* TBmsg("force_null_env: %t\n", P); */
+    /* TBmsg("force_null_env: %t\n", P); */
   if(!P)
     return P;
   if(is_atom(P)){
@@ -562,6 +559,7 @@ static proc *force_null_env(proc *P)
 	at_env(timer_atom(P)) = NULL;
 	return P;
 
+      case p_dyncall:
       case p_call:
       case p_execute:
 
@@ -578,13 +576,14 @@ static proc *force_null_env(proc *P)
 
 static proc *propagate_env(proc *P, env *Env)
 { 
-  /* TBmsg("propagate: %t, %t\n", P, Env); */
+    /* TBmsg("propagate:P= %t, Env=%t\n", P, Env); */
   if(!P)
     return P;
+
   if(is_atom(P)){
-    /* TBmsg("propagate, before: %t\n", P); */
+      /* TBmsg("propagate, before: %t\n", P); */
     update_env_of_atom(P,Env);
-    /* TBmsg("propagate, updated: %t\n", P);*/
+    /* TBmsg("propagate, updated: %t\n", P); */
     return P;
   } else {
     switch(pkind(P)){
@@ -617,6 +616,9 @@ static proc *propagate_env(proc *P, env *Env)
       case p_execute: /* TREAT THESE TWO CASES PROPERLY, WHERE DO WE PUT THE ENV? */
 	return P;
 
+      case p_dyncall:
+	  return P;
+      
       case p_call:  /* Should not appear, is already expanded */
       default:
 	err_fatal("propagate_env: %t", P);
@@ -626,6 +628,7 @@ static proc *propagate_env(proc *P, env *Env)
 }
 
 /*}}}  */
+
 
 /*{{{  static ap_form *expand(proc *P, env *Env) */
 
@@ -653,6 +656,11 @@ static ap_form *expand(proc *P, env *Env)
 	  case p_call:                 /* exp(Pnm(OptTs) . P2) = dot(expand(Pnm(OptTs)), P2) */
 
 	    err_fatal("expand -- unexpected call: %t", P);
+	    res = dot(expand(P1, Env), right(P));
+	    return res;
+
+	  case p_dyncall:
+	    P1 = expand_dyncall(P1, Env);
 	    res = dot(expand(P1, Env), right(P));
 	    return res;
 	  case p_if:
@@ -810,6 +818,9 @@ static ap_form *expand(proc *P, env *Env)
 	  update_env_of_atom(Atom, Env);
 	  return Atom;
 	}
+
+      case p_dyncall:
+	  return expand(expand_dyncall(P, Env), Env);
 
       default:
 
@@ -1160,6 +1171,7 @@ static term *itp1(register term *T)
 
 static TBbool simple_atomic_step(atom *Atom)
 {
+    /* TBmsg("simple_atomic_step(%t)\n", Atom); */
   switch(at_fun(Atom)){
 
     case a_tau:
@@ -1362,7 +1374,8 @@ static void nu(atom *Atom, proc *P, proc_inst *ProcInst1, proc_inst *ProcInst2)
      * Propagate Atom's initial environment.
      */
 
-    P = propagate_env(P, at_env(Atom)); /* <<< */
+    /* P = propagate_env(P, at_env(Atom));  <<< */
+    P = propagate_env(P, pi_env(ProcInst1)); /* <<< */
     AP = expand(P, pi_env(ProcInst1)); /* << which Env should we use here? **/
     if(!is_list(AP))
       AP = mk_list(AP, NULL);
@@ -1440,7 +1453,7 @@ static void atomic_steps(void)
 	  Atom = alt;
 	  P = Delta;
 	}
-	/* TBmsg("Atom = %t\n", Atom); */
+	/* TBmsgg("Atom = %t\n", Atom); */
 	pi_env(current_ProcInst) = at_env(Atom);
 	if(!is_enabled(Atom, current_ProcInst))
 	  continue;
@@ -1448,7 +1461,7 @@ static void atomic_steps(void)
 	if(simple_atomic_step(Atom)){
 	  nu(Atom, P, current_ProcInst, NULL);
 	  work = TBtrue;
-	  /* TBmsg("simple_atomic_step: %t\n", Atom); */
+	  /* TBmsg("simple_atomic_step: %t\n", Atom);*/
 	  add_free_list(all_alts);
 	  if(rand() & 0111){     /* randomly exchange current process with next one */
 	    /* TBmsg("reshuffle after %t\n", Atom); */

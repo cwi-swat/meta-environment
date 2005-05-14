@@ -74,7 +74,7 @@ typedef enum pkind
 
   /* process operators */
   p_plus,                         /* should be first */
-  p_dot, p_star, p_call, p_semi,
+  p_dot, p_star, p_call, p_dyncall, p_semi,
   p_fmerge, p_lmerge,
   p_if,
   p_let,
@@ -180,7 +180,9 @@ sym_idx    reverse_role(sym_idx);
 typedef term proc;
 
 proc      *mk_create(char *, term_list *, var *, coords *);
+
 proc      *mk_proc_call(char *, term *);
+proc      *mk_proc_dyncall(char *, char *, term *, coords *);
 
 #define mk_dot(p1,p2)  (is_delta(p1) ? p1 : mk_appl2(p_dot,p1,p2))
 #define mk_semi(p1,p2) mk_appl2(p_semi,p1,p2)
@@ -215,6 +217,7 @@ proc      *mk_proc_call(char *, term *);
 #define is_dot(p)      ((p) && is_appl(p) && (fun_sym(p) == p_dot))
 #define is_star(p)     ((p) && is_appl(p) && (fun_sym(p) == p_star))
 #define is_call(p)     ((p) && is_appl(p) && (fun_sym(p) == p_call))
+#define is_dyncall(p)  ((p) && is_appl(p) && (fun_sym(p) == p_dyncall))
 #define is_plus(p)     ((p) && is_appl(p) && (fun_sym(p) == p_plus))
 #define is_if(p)       ((p) && is_appl(p) && (fun_sym(p) == p_if))
 #define is_fmerge(p)   ((p) && is_appl(p) && (fun_sym(p) == p_fmerge))

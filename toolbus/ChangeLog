@@ -1,5 +1,35 @@
 $Id$
 
+Sat May 14 22:46:34 CEST 2005 Paul Klint <paulk@cwi.nl>
+ * Extended expansion of process calls P(A1, A2, ...) inside process definitions:
+   - Old situation: P was required to be a process defined somewhere
+     in the script.
+   _ New situation: P may also be a string variable defined in the current
+     process (as formal parameter or let-variable). The string value of P
+     is taken as the process name.
+   - The above implies run-time typechecking (only for these "dynamic calls").
+   - Example:
+       process A(S : str) is printf("%s A\n", S)
+       process B(S : str) is printf("%s B\n", S)
+       process Main is
+       let P: str
+       in
+          P := "B" .
+          P("MESSAGE")
+       endlet
+
+       toolbus(Main)
+	
+     will print: "MESSAGE B"
+   - Possible errors:
+	. The string value is not a name that occurs in some process
+	  definition.
+	. The actual/formal parameters do not match.
+   - Caveat: if P occurs as a variable of a type other than string, the
+     old interpretation applies.
+
+ * Extended the command line options to allow multiple Tscript source files.
+
 Fri Apr 29 13:45:43 CEST 2005 <jong@cwi.nl>
  * toolbus/script.l:
    - increase size of string buffer from 512 to BUFSIZ

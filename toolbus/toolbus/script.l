@@ -67,6 +67,7 @@ snd-do        { ll_inc_pos(6); return(SND_DO); }
 rec-value     { ll_inc_pos(9); return(REC_VALUE); } 
 toolbus       { ll_inc_pos(7); return(TOOLBUS); }   
 process       { ll_inc_pos(7); return(PROCESS); }
+call          { ll_inc_pos(4); return(CALL); }
 is            { ll_inc_pos(2); return(IS); }
 delta         { ll_inc_pos(5); return(DELTA); }     
 tau           { ll_inc_pos(3); return(TAU); }     
@@ -226,7 +227,7 @@ char *get_token(int tk)
   case SND_NOTE: case REC_NOTE: case NO_NOTE:
   case REC_EVENT: case SND_ACK_EVENT:
   case SND_EVAL: case SND_CANCEL: case SND_DO: case REC_VALUE:
-  case TOOLBUS: case PROCESS: case IS: case DELTA: case TAU:
+  case TOOLBUS: case PROCESS: case CALL: case IS: case DELTA: case TAU:
   case TOOL: case HOST: case COMMAND: case CREATE:
   case REC_CONNECT: case REC_DISCONNECT: case EXECUTE:
   case SND_TERMINATE: case SHUTDOWN:

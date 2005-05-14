@@ -74,7 +74,7 @@ static void TBtmpdir(char *dirname)
 #define PP_LINE_MAX 1024
 #define ABS_PATH_MAX _POSIX_PATH_MAX
 
-TBbool parse_script(char *name, int argc, char **argv)
+TBbool parse_script(char **names, int argc, char **argv)
 { int org_stdin, pres;
   char cmd[CMD_MAX];
   char namec[ABS_PATH_MAX];
@@ -82,14 +82,12 @@ TBbool parse_script(char *name, int argc, char **argv)
   char line[PP_LINE_MAX];
   char curdir[ABS_PATH_MAX];
   char dirname[ABS_PATH_MAX];
+  char *name = names[0];
   const char *p;
   FILE *fnamec, *fname;
   int i;
   TBbool in_string = TBfalse;
    
-  /* Open original file */
-  if((fname = fopen(name, "rb")) == NULL)
-    err_sys_fatal("cannot open file `%s'", name);
 
   /* Create a temporary directory */
   TBtmpdir(dirname);
@@ -110,35 +108,42 @@ TBbool parse_script(char *name, int argc, char **argv)
     err_sys_fatal("cannot create temp file `%s' for preprocessor", namec);
   }
 
-  fprintf(fnamec, "# 1 \"%s\"\n", name);  /* set original file name */
+  while((name = *names++)){
+	
+    /* Open Tscript source file */
+    if((fname = fopen(name, "rb")) == NULL)
+      err_sys_fatal("cannot open file `%s'", name);
 
-  /* Copy original file. Remove comments to avoid possible lexical
-     errors because the comment conventions in T scripts and C programs
-     are different.
-     */
+    fprintf(fnamec, "# 1 \"%s\"\n", name);  /* set original file name */
 
-  while(fgets(line, PP_LINE_MAX, fname)){
-    char *cp;
+    /* Copy original file. Remove comments to avoid possible lexical
+       errors because the comment conventions in T scripts and C programs
+       are different.
+    */
 
-    for(cp = line; *cp; cp++){
-      if(in_string){             /* inside string constant */
-	if(*cp == '"') {
-	  in_string = TBfalse;
-	} else if(*cp == '\\')
-	  cp++;
-      } else if(*cp == '"'){     /* start of string constant */
-	  in_string = TBtrue;
-      } else if(cp[0] == '%'){
-	if(cp[1] == '%'){        /* %% style comment */
-	  *cp++ = '\n'; *cp++ = '\0';
-	  break;
-	} 
-      }
+    while(fgets(line, PP_LINE_MAX, fname)){
+	char *cp;
+
+	for(cp = line; *cp; cp++){
+	  if(in_string){             /* inside string constant */
+	    if(*cp == '"') {
+	      in_string = TBfalse;
+	    } else if(*cp == '\\')
+	      cp++;
+	  } else if(*cp == '"'){     /* start of string constant */
+	      in_string = TBtrue;
+	  } else if(cp[0] == '%'){
+	    if(cp[1] == '%'){        /* %% style comment */
+	      *cp++ = '\n'; *cp++ = '\0';
+	      break;
+	    } 
+	  }
+        } 
+	fputs(line, fnamec);
     }
-    fputs(line, fnamec);
+    fclose(fname);
   }
   fputs("\n", fnamec);           /* make sure file ends on newline character */
-  fclose(fname);
   fclose(fnamec);
 
   /* Construct the command cpp command. Any -D or -I arguments from
@@ -295,7 +300,27 @@ term *use_var(char *str, int lino)
   }
   tc_not_decl("variable", str, script_name, lino);
   return mk_var(str, current_def_name, Term);
-}               
+}  
+
+/* Check that a string variable (formal/variable) of given name exists */
+
+TBbool is_defined_formal_or_var_string(char *str)
+{ term_list *tl;
+ 
+  for(tl = current_vars; tl; tl = next(tl)){
+    if(streq_unres(str, get_txt(var_sym(first(tl))))){
+	goto found;
+    }
+  }
+  for(tl = current_formals; tl; tl = next(tl)){
+    if(streq_unres(str, get_txt(var_sym(first(tl))))){
+	goto found;
+    }
+  }
+  return TBfalse;
+ found:
+  return require_type(var_type(first(tl)), Str);
+}             
 
 %}
 
@@ -320,6 +345,7 @@ term *use_var(char *str, int lino)
 %token REC_VALUE
 %token TOOLBUS                   
 %token PROCESS
+%token CALL
 %token IS
 %token CREATE
 %token REC_CONNECT
@@ -623,12 +649,17 @@ proc : atom          { $$.u.proc = $1.u.proc; range($$,$1,$1); }
 
 proc_call :
        NAME actuals
-         { $$.u.proc =  mk_proc_call($1.u.string,$2.u.term_list);
-           tc_call(current_def_name, $$.u.proc, 
-		   mk_coords(script_name, $1.lino, $1.pos, $2.elino, $2.epos));
-           range($$,$1,$2);
-	   free($1.u.string);
+       { coords *crds = mk_coords(script_name, $1.lino, $1.pos, $2.elino, $2.epos);
+	 if(!is_defined_formal_or_var_string($1.u.string)) {
+	   $$.u.proc =  mk_proc_call($1.u.string,$2.u.term_list);
+           tc_call(current_def_name, $$.u.proc,  crds);
+		   
+         } else {
+           $$.u.proc =  mk_proc_dyncall(current_def_name,$1.u.string,$2.u.term_list, crds);
          }
+         range($$,$1,$2);
+         free($1.u.string);
+       } 
      ;
 
 actuals:
