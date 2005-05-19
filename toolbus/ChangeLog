@@ -3,6 +3,11 @@ $Id$
 Thu May 19 09:47:08 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * Merged find_comm_optimization into trunk
 
+Wed May 18 18:23:52 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Optimization experiment: find_comm uses a statically created
+   cache of which processes might communicate with each other.
+   A significant speedup is expected.
+
 Sat May 14 22:46:34 CEST 2005 Paul Klint <paulk@cwi.nl>
  * Extended expansion of process calls P(A1, A2, ...) inside process definitions:
    - Old situation: P was required to be a process defined somewhere
