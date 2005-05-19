@@ -48,6 +48,7 @@
 #include "monitor.h"
 #include "typecheck.h"
 #include "sockets.h"
+#include "partners.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -92,6 +93,8 @@ void bus_shutdown(term *arg)
 	/* Remove sockets that have been made by this toolbus. Defined in sockets.c */
 	remove_socketfile();
   fflush(stderr);
+
+  CPC_destroyCommunicationPartnerCache();
   /* kill(0, SIGKILL); */
   exit(0);
 }
@@ -307,6 +310,7 @@ int main(int argc, char *argv[])
   init_procs();
   init_tools();
   init_interpreter();
+  CPC_initCommunicationPartnerCache();
  
   /* The system module is always present */
   system_init_module(); 

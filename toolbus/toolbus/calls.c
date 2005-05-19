@@ -34,6 +34,7 @@
 #include "tools.h"
 #include "utils.h"
 #include "interpreter.h"
+#include "partners.h"
 #include "typecheck.h"
 
 /*}}}  */
@@ -96,11 +97,11 @@ term_list *replace_formals_list(term_list *tl, env *e)
 
 /*}}}  */
 
-term_list *expand_calls_list(term_list *tl);
+term_list *expand_calls_list(sym_idx procName, term_list *tl);
 
 /*{{{  proc *expand_calls(proc *P) */
 
-proc *expand_calls(proc *P)
+proc *expand_calls(sym_idx procName, proc *P)
 {
   switch(tkind(P)){
     case t_bool:
@@ -123,13 +124,15 @@ proc *expand_calls(proc *P)
 	CALLSDB(TBmsg("expanding %t\n", P);)
 	  e = create_env(pd_formals(pd), get_txt(pd_name(pd)), next(fun_args(P)), NULL);
 	P1 = replace_formals(pd_body(pd), e);
+	CPC_join(pd_name(pd), procName);
+	
 	CALLSDB(TBmsg("into %t\n", P1);)
 	  return P1;
       } else {
-	return mk_appl(fun_sym(P), expand_calls_list(fun_args(P)));
+	return mk_appl(fun_sym(P), expand_calls_list(procName, fun_args(P)));
       }
     case t_list:
-      return expand_calls_list(P);
+      return expand_calls_list(procName, P);
 
     default: err_fatal("expand_body: %t", P);
 	     return NULL; /* pedantic */
@@ -137,9 +140,9 @@ proc *expand_calls(proc *P)
 }
 
 /*}}}  */
-/*{{{  proc *expand_dyncall(proc *P, env *Env) */
+/*{{{  proc *expand_dyncall(sym_idx procName, proc *P, env *Env) */
 
-proc *expand_dyncall(proc *P, env *Env)
+proc *expand_dyncall(sym_idx procName, proc *P, env *Env)
 {   env *e;
     proc *P1;
     char *proc_name;
@@ -152,7 +155,7 @@ proc *expand_dyncall(proc *P, env *Env)
     term *Val = is_str(Name) ? Name : value(Name, Env);
 
     if(!is_str(Val))
-         err_fatal("expand_dyncall -- process name should be a string instead of '%t'\n", Val);
+         err_fatal("expand_dyncall -- process name should be a string instead of '%t' in %t\n", Val, P);
 
     proc_name = str_val(Val);
     proc_def *pd = definition(TBlookup(proc_name));
@@ -164,18 +167,19 @@ proc *expand_dyncall(proc *P, env *Env)
     if(check_formal_actual(TBlookup(proc_name), c, proc_name, pd_formals(pd), args)) {
 	e = create_env(pd_formals(pd), get_txt(pd_name(pd)), args, Env);
 	P1 = replace_formals(pd_body(pd), e);
+	CPC_join(pd_name(pd), procName);
 	CALLSDB(TBmsg("into %t\n", P1);)
 	    return P1;
     } else
        err_fatal("Cannot create process %s since formals/actuals do not match", proc_name);
     return Delta;
 }
+
 /*}}}  */
 
+/*{{{  term_list *expand_calls_list(sym_idx procName, term_list *tl) */
 
-/*{{{  term_list *expand_calls_list(term_list *tl) */
-
-term_list *expand_calls_list(term_list *tl)
+term_list *expand_calls_list(sym_idx procName, term_list *tl)
 {
   term head, *prev;
   assert(is_list(tl));
@@ -183,7 +187,7 @@ term_list *expand_calls_list(term_list *tl)
   /* CALLSDB(TBmsg("expand_calls_list(%t) ... \n", tl);) */
   prev = &head;
   for(next(&head) = tl; tl; tl = next(tl)){
-    next(prev) = mk_list(expand_calls(first(tl)), next(tl));
+    next(prev) = mk_list(expand_calls(procName, first(tl)), next(tl));
     prev = next(prev);
   }
   /* CALLSDB(TBmsg("expand_calls_list returns %t\n", next(&head));) */
@@ -206,7 +210,7 @@ void expand_all_calls()
     for(pdl = Definitions ; pdl; pdl = next(pdl)){
       pd = first(pdl);
       CALLSDB(TBmsg("Before[%d]: %t\n\n", n_expanded_calls, pd);)
-	pd_body(pd) = expand_calls(pd_body(pd));
+	pd_body(pd) = expand_calls(pd_name(pd), pd_body(pd));
       CALLSDB(TBmsg("After[%d]: %t\n", n_expanded_calls, pd);)
     }
   }

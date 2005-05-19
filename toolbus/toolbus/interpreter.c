@@ -36,12 +36,13 @@
 #include "interpreter.h"
 #include "monitor.h"
 #include "typecheck.h"
+#include "partners.h"
 #include <math.h>
 #include <time.h>
 #include <sys/signal.h>
 #include <signal.h>
 
-extern proc *expand_dyncall(proc *P, env *Env);
+extern proc *expand_dyncall(sym_idx procName, proc *P, env *Env);
 /*}}}  */
 /*{{{  typedefs */
 
@@ -79,7 +80,7 @@ int atomic_step_count = 0;
 
 /*{{{  static functions */
 
-static ap_form *expand(proc *P, env *Env);
+static ap_form *expand(sym_idx procName, proc *P, env *Env);
 static term *itp(term *T, proc_inst *ProcInst);
 static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
 			proc_inst **comm_ProcInst, term *Processes);
@@ -155,12 +156,13 @@ static proc_id *create_process(sym_idx pname, term_list *args,
 			  mk_str(get_txt(pname)), 
 			  pid,
 			  parent_db);
-  AP = expand(propagate_env(mk_dot(body, Delta), Env1), Env1);
+  AP = expand(pd_name(pd), propagate_env(mk_dot(body, Delta), Env1), Env1);
   if(!is_list(AP))
     AP = mk_list(AP, NULL);
   pi_alts(ProcInst) = AP;
 
   AllProcesses = mk_list(ProcInst, AllProcesses);
+  CPC_storeInstance(pd_name(pd), ProcInst);
   nproc++;
   return pid;
 }
@@ -632,7 +634,7 @@ static proc *propagate_env(proc *P, env *Env)
 
 /*{{{  static ap_form *expand(proc *P, env *Env) */
 
-static ap_form *expand(proc *P, env *Env)
+static ap_form *expand(sym_idx procName, proc *P, env *Env)
 {
   proc *P1, *P2, *res;
 
@@ -651,20 +653,20 @@ static ap_form *expand(proc *P, env *Env)
 	switch(pkind(P1)){
 	  case p_dot:                  /* exp((P1.P2).P3) = exp(P1.(P2.P3)) */
 
-	    return expand(mk_dot(left(P1), mk_dot(right(P1), right(P))), Env);
+	    return expand(procName, mk_dot(left(P1), mk_dot(right(P1), right(P))), Env);
 
 	  case p_call:                 /* exp(Pnm(OptTs) . P2) = dot(expand(Pnm(OptTs)), P2) */
 
 	    err_fatal("expand -- unexpected call: %t", P);
-	    res = dot(expand(P1, Env), right(P));
+	    res = dot(expand(procName, P1, Env), right(P));
 	    return res;
 
 	  case p_dyncall:
-	    P1 = expand_dyncall(P1, Env);
-	    res = dot(expand(P1, Env), right(P));
+	    P1 = expand_dyncall(procName, P1, Env);
+	    res = dot(expand(procName, P1, Env), right(P));
 	    return res;
 	  case p_if:
-	    res = dot(expand(P1, Env), right(P));
+	    res = dot(expand(procName, P1, Env), right(P));
 	    return res;
 
 	  case p_star:                  /* exp( P1 . P2) = left(P1) . (left(P1) * right(P1)) . P2 +  right(P1) . P2
@@ -673,19 +675,19 @@ static ap_form *expand(proc *P, env *Env)
 					 left(P1)   right(P1)
 					 */
 	    P2 = right(P);
-	    return sum(expand(mk_dot(left(P1), mk_dot(mk_star(left(P1), right(P1)), P2)), Env), 
-		       expand(mk_dot(right(P1), P2), Env));
+	    return sum(expand(procName, mk_dot(left(P1), mk_dot(mk_star(left(P1), right(P1)), P2)), Env), 
+		       expand(procName, mk_dot(right(P1), P2), Env));
 
 
 	  default:                     /* exp(P1.P2) = dot(expand(P1),P2) */
 
-	    return dot(expand(P1,Env),right(P));
+	    return dot(expand(procName, P1,Env),right(P));
 	}
 
 
       case p_plus:                   /* exp((P1+P2)) = sum(exp(P1), exp(P2)) */
 
-	return sum(expand(P1, Env), expand(right(P), Env));
+	return sum(expand(procName, P1, Env), expand(procName, right(P), Env));
 
       case p_star:                   /* exp( P ) = sum(exp(P1.P1*P2), exp(P2))
 				      *
@@ -693,8 +695,8 @@ static ap_form *expand(proc *P, env *Env)
 				      P1    P2 */
 
 	P2 = right(P);
-	return sum(expand(mk_dot(P1, mk_star(P1, P2)), Env), 
-		   expand(P2, Env));
+	return sum(expand(procName, mk_dot(P1, mk_star(P1, P2)), Env), 
+		   expand(procName, P2, Env));
 
       case p_fmerge:
 	{ ap_form *res;
@@ -705,14 +707,14 @@ static ap_form *expand(proc *P, env *Env)
 					/ \
 					left(P1)   right(P2) */
 
-	    res = expand(mk_fmerge(left(P1), mk_fmerge(right(P1), P2)), Env);
+	    res = expand(procName, mk_fmerge(left(P1), mk_fmerge(right(P1), P2)), Env);
 
 	  } else {                      /* exp(P1 || P2) = sum(exp(P1 ||_ P2), exp(P2 ||_ P1)) */
 	    if(term_equal(P1, P2))
-	      res = expand(P1, Env);
+	      res = expand(procName, P1, Env);
 	    else  {   
-	      res = sum(expand(mk_lmerge(P1, P2), Env), 
-			expand(mk_lmerge(P2, P1), Env));
+	      res = sum(expand(procName, mk_lmerge(P1, P2), Env), 
+			expand(procName, mk_lmerge(P2, P1), Env));
 	    }
 	  }
 	  /*	
@@ -728,22 +730,22 @@ static ap_form *expand(proc *P, env *Env)
 	P2 = right(P);
 	if(is_lmerge(P1))            /* exp((P1 ||_ P2) ||_ P3) = exp(P1 ||_ (P2 ||_ P3)) */
 
-	  return expand(mk_lmerge(left(P1), mk_lmerge(right(P1), P2)), Env);
+	  return expand(procName, mk_lmerge(left(P1), mk_lmerge(right(P1), P2)), Env);
 	else                         /* exp(P1 ||_ P2) = lmerge(exp(P1), P2) */
 
-	  return lmerge(expand(P1, Env), P2);
+	  return lmerge(expand(procName, P1, Env), P2);
 
       case p_if:
 	{ term *test = if_test(P);
 	  proc *th = if_then(P), *el = if_else(P);
 	  if(el){
 	    res =
-	      sum(expand(mk_if(test, th, NULL), Env), 
-		  expand(mk_if(mk_appl1(e_not, test), el, NULL), Env));
+	      sum(expand(procName, mk_if(test, th, NULL), Env), 
+		  expand(procName, mk_if(mk_appl1(e_not, test), el, NULL), Env));
 
 	    return res;
 	  } else {
-	    res = add_cond(test, expand(th, Env));
+	    res = add_cond(test, expand(procName, th, Env));
 	    return res;
 	  }
 	}
@@ -758,7 +760,7 @@ static ap_form *expand(proc *P, env *Env)
 
 	  LetEnv = define(vars, LetEnv);
 	  B = propagate_env(B, LetEnv);
-	  B = expand(B, LetEnv);
+	  B = expand(procName, B, LetEnv);
 	  /* TBmsg("let returns: %t\n", B); */
 	  return B;
 	}
@@ -820,7 +822,7 @@ static ap_form *expand(proc *P, env *Env)
 	}
 
       case p_dyncall:
-	  return expand(expand_dyncall(P, Env), Env);
+	  return expand(procName, expand_dyncall(procName, P, Env), Env);
 
       default:
 
@@ -1376,7 +1378,8 @@ static void nu(atom *Atom, proc *P, proc_inst *ProcInst1, proc_inst *ProcInst2)
 
     /* P = propagate_env(P, at_env(Atom));  <<< */
     P = propagate_env(P, pi_env(ProcInst1)); /* <<< */
-    AP = expand(P, pi_env(ProcInst1)); /* << which Env should we use here? **/
+    AP = expand(TBlookup(str_val(pi_name(ProcInst1))), 
+		P, pi_env(ProcInst1)); /* << which Env should we use here? **/
     if(!is_list(AP))
       AP = mk_list(AP, NULL);
 
@@ -1433,6 +1436,7 @@ static void atomic_steps(void)
 	      if(next(AllProcesses)) {
 		AllProcesses = next(AllProcesses);
 		Processes = AllProcesses;
+		CPC_removeInstance(current_ProcInst);
 	      } else {
 		extern void bus_shutdown(term *);
 		/* shutdown when removing the last process */
@@ -1482,7 +1486,8 @@ static void atomic_steps(void)
 	    case a_endlet:
 	      pi_env(current_ProcInst) = undefine(at_args(Atom), pi_env(current_ProcInst));
 	      P = propagate_env(P, pi_env(current_ProcInst));
-	      AP = expand(P, pi_env(current_ProcInst));
+	      AP = expand(TBlookup(str_val(pi_name(current_ProcInst))),
+			  P, pi_env(current_ProcInst));
 	      /* Now merge the alternatives following endlet with the current
 		 list of alternatives for this process */
 	      if(!is_list(AP))
@@ -1512,6 +1517,9 @@ static void atomic_steps(void)
 		if(next(Processes) && find_comm(Atom, &Atom2, &P2, &comm_ProcInst,
 						next(Processes)))
 		{
+		  /* remove the ProcInst from process list, unless it is the first one */
+		  /*Processes = list_delete(Processes, comm_ProcInst);*/
+
 		  nu(Atom, P, current_ProcInst, comm_ProcInst);
 		  nu(Atom2, P2, comm_ProcInst, current_ProcInst);
 		  /*TBmsg("current_ProcInst = %t\n\n", current_ProcInst);*/
@@ -1520,12 +1528,12 @@ static void atomic_steps(void)
 		  add_free_list(all_alts);
 		  /* move current_ProcInst and comm_ProcInst to adjacent positions in the process list,
 		     unless they are already next to each other */
-		  if(comm_ProcInst != first(next(Processes))){
-		    if(Previous)
-		      next(Previous) = mk_list(comm_ProcInst, Processes);
-		    else
-		      AllProcesses = mk_list(comm_ProcInst, Processes);
-		  }		
+		  /*if(comm_ProcInst != first(next(Processes))){*/
+		    /*if(Previous)*/
+		      /*next(Previous) = mk_list(comm_ProcInst, Processes);*/
+		    /*else*/
+		      /*AllProcesses = mk_list(comm_ProcInst, Processes);*/
+		  /*}		*/
 		  goto next_proc;
 		}
 		continue;
@@ -1548,6 +1556,26 @@ next_proc:;
 
 /*}}}  */
 
+/*{{{  static term_list *getProcInstances(term_list *procNames, term *Processes) */
+
+static term_list *getProcInstances(term_list *procNames, term *Processes)
+{
+  term_list *instances = NULL;
+
+  /*TBmsg("Found comm (%d): %l\n", list_length(procNames), procNames);*/
+  /*TBmsg("Running processes (%d): %t\n", list_length(Processes), Processes);*/
+ 
+  for ( ; procNames; procNames = next(procNames)) {
+    sym_idx name = fun_sym(first(procNames));
+
+    instances = list_join(CPC_lookupInstances(name), instances);
+  }
+
+  return instances;
+}
+
+/*}}}  */
+
 /*{{{  static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2, */
 
 static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
@@ -1556,17 +1584,30 @@ static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
   proc_inst *ProcInst;
   register atom *Atom;
   register ap_form *all_alts, *alt, *alts;
-  term_list *Previous = NULL;
+  term_list *partners = NULL;
 
-  for( ; Processes; Previous = Processes, Processes = next(Processes)){
-    assert(is_list(Processes));
-    ProcInst = first(Processes);
+  switch (at_fun(Atom1)) {
+    case a_rec_msg:
+      /*TBmsg("find comm for rec: %t\n", Atom1);*/
+      partners = getProcInstances(CPC_lookupSend(Atom1), Processes);
+      break;
+    case a_snd_msg:
+      /*TBmsg("find comm for snd: %t\n", Atom1);*/
+      partners = getProcInstances(CPC_lookupReceive(Atom1), Processes);
+      break;
+    default:
+      err_fatal("unknown communication type");
+      break;
+  }
+
+  /*TBmsg("partners found (%d): %t\n\n", list_length(partners), partners);*/
+  for( ; partners; partners = next(partners)) {
+    ProcInst = first(partners);
 
     for(all_alts = alts = pi_alts(ProcInst); alts; alts = next(alts)){
       assert(is_list(alts));
       alt = first(alts);
 
-      /* TBmsg("alt: %t\n", alt); */
       if(is_delta(alt))
 	continue;
       if(is_semi(alt)){
@@ -1594,13 +1635,12 @@ static TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2,
 	*Atom2 = Atom;
 	*P2 = right(alt);
 	add_free_list(all_alts);
-	/* remove this ProcInst from process list, unless it is the first one */
-	if(Previous)
-	  next(Previous) = next(Processes);
+	  
 	return TBtrue;	  
       }
     }
   }
+
   return TBfalse;
 }
 

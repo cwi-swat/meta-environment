@@ -32,6 +32,7 @@
 #include "typecheck.h"
 #include "interpreter.h"
 #include "script.h"
+#include "partners.h"
 
 extern int yyparse(void);
 extern int yylex(void);
@@ -424,15 +425,19 @@ atom: comm_atom | note_atom | tool_atom | delta_tau | create | read_print | assi
 
 comm_atom:
        SND_MSG '(' term_list ')'
-         { $$.u.proc =
+         { proc *t =
            mk_atom(a_snd_msg, $3.u.term_list, 
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
+           CPC_storeSend(mk_appl(TBlookup(current_def_name), NULL), t);
+           $$.u.proc = t;
            range($$,$1,$4);
          }
      | REC_MSG '(' term_list ')'
-         { $$.u.proc =
+         { proc *t =
            mk_atom(a_rec_msg, $3.u.term_list,
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
+           CPC_storeReceive(mk_appl(TBlookup(current_def_name), NULL), t);
+           $$.u.proc = t;
            range($$,$1,$4);
          } 
      ;

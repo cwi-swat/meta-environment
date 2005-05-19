@@ -46,12 +46,14 @@ toolbus_SOURCES = \
 	server.c \
 	tools.c \
 	typecheck.c \
-	typecheck.h
+	typecheck.h \
+	partners.c \
+	partners.h
 
 toolbus_LDADD = \
 	lex.yy.o \
 	y.tab.o \
-	-L$(top_builddir)/libtb -ltb
+	-L$(top_builddir)/libtb -ltb 
 
 ctif_SOURCES = ctif.c
 ctif_LDADD = -L$(top_builddir)/libtb -ltb
