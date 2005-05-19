@@ -320,7 +320,7 @@ TBbool is_defined_formal_or_var_string(char *str)
   }
   return TBfalse;
  found:
-  return require_type(var_type(first(tl)), Str);
+  return require_type(Str, var_type(first(tl)));
 }             
 
 %}

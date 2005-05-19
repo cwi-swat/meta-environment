@@ -1,5 +1,9 @@
 $Id$
-
+	
+Thu May 19 23:37:57 CEST 2005 <paulk@cwi.nl>
+ * Fixed bug in dynamic calls: only local variables of type string
+   lead to dynamic calls (as promised).
+	
 Thu May 19 09:47:08 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * Merged find_comm_optimization into trunk
 
