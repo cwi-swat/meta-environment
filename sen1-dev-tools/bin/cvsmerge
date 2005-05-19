@@ -154,6 +154,9 @@ assert_working_copy_up_to_date() {
 }
 
 
+#
+# Initialize the branch
+#
 begin_branch() {
     log begin branch: $*
     
@@ -176,6 +179,9 @@ begin_branch() {
 }
 
 
+#
+# Merge changes from the trunk into the branch
+#
 import_from_trunk() {
     log import changes: $*
     
@@ -280,6 +286,9 @@ assert_progress_is_at_frozen_head() {
 }
 
 
+#
+# Merge changes from the branch into the trunk
+#
 end_branch() {
     log End Branch: $*
 
@@ -312,11 +321,13 @@ end_branch() {
         exit 1
     fi
 
+    # Perform the actual merge
     log cvs update -j $frozen_head_tag -j $branch_tag
     (cvs update -j $frozen_head_tag -j $branch_tag 2>&1) \
         | tee --append $LOGFILE \
         | grep -v 'cvs update:'
 
+    # Remove temporary tag
     log cvs rtag -d $frozen_head_tag $module_name
     cvs rtag -d $frozen_head_tag $module_name >> $LOGFILE 2>&1
     
