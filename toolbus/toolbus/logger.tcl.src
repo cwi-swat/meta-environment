@@ -50,6 +50,7 @@
 # tools(name,size) = total volume (bytes) of communication
 
 set proc_names {}
+set tool_names {}
 
 proc create_proc {pid name} {
   global procs proc_names
@@ -73,7 +74,12 @@ proc create_proc {pid name} {
 }
 
 proc create_tool {tid name} {
-  global tools
+  global tools tool_names
+
+  if { [lsearch $tool_names $name] < 0 && $name != "logger" } {
+     lappend tool_names $name
+  }
+
   if { [info exists tools($name,inst)] } {
      incr tools($name,inst)     
      set tools($tid) $name
@@ -173,11 +179,36 @@ proc print_proc_statistics {} {
       puts -nonewline stderr [format "%10d (%5.1f%%)  " $name_total [expr 100.0 * $name_total / $ntotal]]
       puts stderr ""
   }
-  puts stderr "\n\t\t\t=========== End of Statistics ========="
 }
+
+
+proc print_tool_statistics {} {
+  global tools tool_names
+
+  puts stderr "\n\t\t\t====== ToolBus Tool Statistics =====\n"
+  
+  set natoms 1
+  set total_size 0
+  foreach name $tool_names {
+      incr natoms $tools($name,natom)
+      incr total_size $tools($name,size)
+  }
+  puts stderr [format "%15s%19s%21s\n" Tool "Atomic Steps" Traffic]
+  foreach name $tool_names {
+      puts -nonewline stderr [format "%15s" $name]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $tools($name,natom) [expr 100.0 * $tools($name,natom) / $natoms]]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $tools($name,size) [expr 100.0 * $tools($name,size) / $total_size]]
+      puts stderr ""
+  }
+
+}
+
+
 
 proc rec-terminate { n } {
   print_proc_statistics
+  print_tool_statistics
+  puts stderr "\n\t\t\t=========== End of Statistics ========="
   destroy .; exit
 }
 #-------------------------------------------------------------

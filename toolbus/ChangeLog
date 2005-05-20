@@ -1,5 +1,9 @@
 $Id$
 
+Fri May 20 02:42:56 CEST 2005 <paulk@cwi.nl>
+* Extended logger.tcl with tool statistics.
+  Warning: do not yet believe any of these numbers :-)
+
 Fri May 20 01:59:49 CEST 2005 <paulk@cwi.nl>
  * Extended logger.tcl: at the end of execution of the ToolBus application
    a summary of execution statistics for processes is printed.
