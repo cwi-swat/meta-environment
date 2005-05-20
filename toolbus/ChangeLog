@@ -1,4 +1,8 @@
 $Id$
+
+Fri May 20 01:59:49 CEST 2005 <paulk@cwi.nl>
+ * Extended logger.tcl: at the end of execution of the ToolBus application
+   a summary of execution statistics for processes is printed.
 	
 Thu May 19 23:37:57 CEST 2005 <paulk@cwi.nl>
  * Fixed bug in dynamic calls: only local variables of type string

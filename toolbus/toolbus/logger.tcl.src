@@ -25,7 +25,7 @@
 #
 # create_proc: create a new process with given process-id and name
 # create_tool: create a new tool instance with given tool-id and name
-# update_var: update the valut of a variable in a process
+# update_var: update the value of a variable in a process
 # update_subs: update the subscriptions of a process
 # update_notes: update the notes of a process
 # proc_proc_comm: communication between processes pid1 and pid2
@@ -36,6 +36,9 @@
 # procs(pid)      = name
 # procs(name,inst) = # instances
 # procs(name,natom) = total # of atoms
+# procs(name,nmsg) = total # of messages sent/received
+# procs(name,ntool) = total # of tool related actions
+# procs(name,nnote) = total # of note related actions
 
 # set procs(0) INIT
 # set procs(INIT,inst) 1
@@ -46,8 +49,14 @@
 # tools(name,natom) = total # of atoms
 # tools(name,size) = total volume (bytes) of communication
 
+set proc_names {}
+
 proc create_proc {pid name} {
-  global procs
+  global procs proc_names
+
+  if { [lsearch $proc_names $name] < 0 } {
+     lappend proc_names $name
+  }
 
   if { [info exists procs($name,inst)] } {
      incr procs($name,inst)
@@ -55,6 +64,9 @@ proc create_proc {pid name} {
   } else {
      set procs($name,inst) 1
      set procs($name,natom) 0
+     set procs($name,nmsg) 0
+     set procs($name,ntool) 0
+     set procs($name,nnote) 0
      set procs($pid) $name
      add_proc $name
    }
@@ -75,12 +87,21 @@ proc create_tool {tid name} {
 }
 
 proc update_var {pid var val} {
+ if { [info exists procs($pid)] } {
+      incr procs($procs($pid),natom)
+   }
 }
 
 proc update_subs {pid subs} {
+ if { [info exists procs($pid)] } {
+      incr procs($procs($pid),nnote)
+   }
 }
 
 proc update_notes {pid notes} {
+ if { [info exists procs($pid)] } {
+      incr procs($procs($pid),nnote)
+   }
 }
 
 # Note: for a binary communication between pid1 and pid2, we get
@@ -90,15 +111,29 @@ proc update_notes {pid notes} {
 # We do not draw (the same) connection for the second call.
 
 proc proc_proc_comm {pid1 pid2 dir} {
+  if { [info exists procs($pid1)] } {
+      incr procs($procs($pid1),nmsg)
+   }
+  if { [info exists procs($pid2)] } {
+      incr procs($procs($pid2),nmsg)
+   }
 }
 
 proc proc_tool_comm {pid tid size} {
-   global tools
+   global procs tools
+  if { [info exists procs($pid)] } {
+      incr procs($procs($pid),ntool)
+   }
+
+   incr tools($tools($tid),natom)
    incr tools($tools($tid),size) $size
 }
 
 proc tool_proc_comm {pid tid size} {   
-   global tools
+   global procs tools
+   if { [info exists procs($pid)] } {
+      incr procs($procs($pid),ntool)
+   }
    incr tools($tools($tid),size) $size
 }
 
@@ -111,7 +146,38 @@ proc monitor_atom {pid atfun src blino bpos elino epos} {
    TBsend "snd-continue($pid)"
 }
 
+proc print_proc_statistics {} {
+  global procs proc_names
+
+  puts stderr "\n\t\t\t====== ToolBus Process Statistics =====\n"
+
+  set natoms 1
+  set ntools 1
+  set nmsgs 1
+  set nnotes 1
+  foreach name $proc_names {
+      incr natoms $procs($name,natom)
+      incr ntools $procs($name,ntool)
+      incr nmsgs $procs($name,nmsg)
+      incr nnotes $procs($name,nnote)
+  }
+  set ntotal [expr $natoms + $ntools +$nmsgs +$nnotes]
+  puts stderr [format "%15s%19s%21s%21s%21s%21s\n" Process "Atomic Steps" Messages Notes "Tool Comm." Total]
+  foreach name $proc_names {
+      set name_total [expr $procs($name,natom) + $procs($name,nmsg) + $procs($name,nnote) + $procs($name,ntool)]
+      puts -nonewline stderr [format "%15s" $name]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $procs($name,natom) [expr 100.0 * $procs($name,natom) / $natoms]]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $procs($name,nmsg) [expr 100.0 * $procs($name,nmsg) / $nmsgs]]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $procs($name,nnote) [expr 100.0 * $procs($name,nnote) / $nnotes]]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $procs($name,ntool) [expr 100.0 * $procs($name,ntool) / $ntools]]
+      puts -nonewline stderr [format "%10d (%5.1f%%)  " $name_total [expr 100.0 * $name_total / $ntotal]]
+      puts stderr ""
+  }
+  puts stderr "\n\t\t\t=========== End of Statistics ========="
+}
+
 proc rec-terminate { n } {
+  print_proc_statistics
   destroy .; exit
 }
 #-------------------------------------------------------------
