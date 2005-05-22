@@ -1,4 +1,13 @@
 $Id$
+	
+Sun May 22 22:16:36 CEST 2005 <paulk@cwi.nl>
+* Checked all numbers produced by logger. The to/from data for
+  communication with tools is now correct.
+* Reimplemented the UI of the logger. All statistics are now shown in 
+  a text pane and there are two buttons:
+  Show Statistics: prints all statistcs about processes and tools
+  Clear Data:      sets all counters to zero (this allows detailed
+                   profiling of specific scenarios)
 
 Fri May 20 02:42:56 CEST 2005 <paulk@cwi.nl>
 * Extended logger.tcl with tool statistics.

@@ -65,6 +65,8 @@
 #include <sys/types.h>
 #include <TB.h>
 
+extern term *value(var *v, env *e);
+
 /*}}}  */
 /*{{{  defines */
 
@@ -124,7 +126,9 @@ static void print_term(term * t);
 static void print_list(term_list * l, char *left, char *sep, char *right);
 static TBbool is_to_tool_comm(const char *s);
 static TBbool is_from_tool_comm(char *s);
-static int bytes_in_term(term * t);
+static int bytes_in_var_value(var *v, term*e);
+static int bytes_in_term(term * t, term *e);
+static int bytes_in_list(term * t, term *e);
 static TBbool rec_monitor(term * e, term ** out);
 static TBbool rec_do(term * e, term ** out);
 static TBbool rec_eval(term * e, term ** out);
@@ -368,17 +372,73 @@ is_from_tool_comm(char *s)
 }
 
 /*}}}  */
-/*{{{  static int bytes_in_term( term* t ) */
+
+/*{{{  int bytes_in_var_value(var *v, term *e) */
+
+int bytes_in_var_value(var *v, term *e)
+{
+  register term *e1;
+  register sym_idx sym = var_sym(v);
+
+    for(e1 = e; e1; e1 = next(e1)){ 
+        var *v1 = first(first(e1));
+        term *val = next(first(e1));
+      if(sym == var_sym(v1)){
+	return bytes_in_term(val, e);
+      }
+    }
+    TBmsg("bytes_in_var_value: %t has undefined value\n", v);
+    return 0;
+}
+
+/*}}}  */
+
+/*{{{  static int bytes_in_term( term* t, term *e) */
 
 static int
-bytes_in_term(term * t)
+bytes_in_term(term * t, term *e)
 {
-  int length;
-
-  length = LENSPEC;
-  length += strlen(TBsprintf("%t", t));
-  return length;
+  switch (tkind(t)) {
+  case t_str:
+      return strlen(str_val(t));
+  case t_bstr:
+      return bstr_len(t);
+  case t_bool:
+  case t_int:
+  case t_real:
+  case t_placeholder:
+      return 5;
+  case t_var:
+      return bytes_in_var_value(t, e);
+  case t_appl:
+      { int len_name = strlen(get_txt(fun_sym(t)));
+        if (fun_args(t) != NULL)
+	  return len_name + bytes_in_list(fun_args(t), e);
+        else
+	  return len_name;
+      }
+  case t_list:
+      return bytes_in_list(t, e);
+  case t_env:
+    break;
+  }
+  return 0;
 }
+
+static int
+bytes_in_list(term_list * l, env * e)
+{
+int i, len = 2;
+
+  for (i = 1; i <= list_length(l); i++) {
+    if (i > 1) {
+	len += 1;
+    }
+    len += bytes_in_term(list_index(l, i), e);
+  }
+  return len;
+}
+
 
 /*}}}  */
 /*{{{  static TBbool rec_monitor( term* e, term** out ) */
@@ -395,6 +455,7 @@ rec_monitor(term * e, term ** out)
   int epos;
   int tid;
   int dir;
+  int nbytes;
   term *Env;
   term *Subs;
   term *Notes;
@@ -419,7 +480,7 @@ rec_monitor(term * e, term ** out)
     return TBfalse;
   }
 
-  // TBprintf(stderr, "step: %s(%l)\n", AtFun, AtArgs);
+  /* TBprintf(stderr, "step: %s(%l); Env = %t\n", AtFun, AtArgs, Env); */
 
   wprintf("if [catch { ");
 
@@ -460,8 +521,9 @@ rec_monitor(term * e, term ** out)
     if (TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid) == TBfalse)
       TBmsg("**** to_tool: value of var does not match: var=%t, env=%t", var,
 	    Env);
-    TBprintf(to_wish, "proc_tool_comm %d %d %d\n", pid1, tid,
-	     bytes_in_term(args));
+    nbytes = LENSPEC + bytes_in_term(args, Env);
+    /* TBmsg("proc_tool_com: size = %d, Term = %t\n",  nbytes, args);  */
+    TBprintf(to_wish, "proc_tool_comm %d %d %d\n", pid1, tid, nbytes);
   }
   else if (is_from_tool_comm(AtFun)) {
 
@@ -470,8 +532,9 @@ rec_monitor(term * e, term ** out)
     if (TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid) == TBfalse)
       TBmsg("**** from_tool: val of var doesn't match: var=%t, env=%t", var,
 	    Env);
-    TBprintf(to_wish, "tool_proc_comm %d %d %d\n", pid1, tid,
-	     bytes_in_term(args));
+    nbytes = LENSPEC + bytes_in_term(args, Env);
+    /* TBmsg("tool_proc_com: size = %d, Term = %t\n",  nbytes, args); */
+    TBprintf(to_wish, "tool_proc_comm %d %d %d\n", pid1, tid, nbytes);
   }
 
   if (pid1 > 0) {
