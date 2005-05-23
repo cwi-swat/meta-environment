@@ -1,5 +1,5 @@
 
-SUBDIRS		= toolbus scripts .
+SUBDIRS	= toolbus scripts .
 
 include $(top_srcdir)/java_make_rules
 
@@ -12,7 +12,7 @@ pkgdata_DATA = ${JARFILE}
 
 ACLOCAL_FLAGS = -I .
 
-EXTRA_DIST      = package
+EXTRA_DIST = build.xml package $(JARFILE)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
