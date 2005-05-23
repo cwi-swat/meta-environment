@@ -1,5 +1,17 @@
 # $Id$
 
+Mon May 23 16:37:53 CEST 2005 <jurgenv@cwi.nl>
+ * Prefuse now replaces our own drawing routines, and adds some other
+   layouts next to the old graphviz layout
+
+
+Thu May 12 08:50:58 CEST 2005 <jurgenv@cwi.nl>
+ * Prefuse-experiment: started experimenting with Prefuse 
+   to replace graphviz.
+     * Local copy of graph-support API no longer needed
+     * Rendering of graphs done by prefuse
+     * Added choice of layouts
+
 Tue May 10 08:57:55 CEST 2005 <{jong,kooiker}@cwi.nl>
  * gui/plugin/dialog:
    - Add error dialog
