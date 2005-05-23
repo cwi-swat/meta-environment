@@ -89,6 +89,11 @@ public class Preferences {
 		return Double.parseDouble(spec);
 	}
 
+	public float getFloat(String key) {
+		String spec = properties.getProperty(key);
+		return Float.parseFloat(spec);
+	}
+	
 	public boolean getBoolean(String key) {
 
 		String spec = properties.getProperty(key);

@@ -85,8 +85,13 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
    [  --with-tide-support=DIR      Tide-support distribution is in DIR])
 AC_SUBST(TIDE_SUPPORT)
 
+dnl Require graph-support package
+AC_PACKAGE_REQUIRE(graph-support, tree2graph,
+   [  --with-graph-support=DIR   graph-support is in DIR])
+AC_SUBST(GRAPH_SUPPORT)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -104,10 +109,6 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
 
-dnl Require graph-support package
-AC_PACKAGE_REQUIRE(graph-support, tree2graph,
-   [  --with-graph-support=DIR   graph-support is in DIR])
-AC_SUBST(GRAPH_SUPPORT)
 
 dnl Require sdf-support package
 
@@ -189,6 +190,7 @@ AC_CONFIG_FILES([Makefile
    libltdl/Makefile
    gui/Makefile
    gui/data/Makefile
+   gui/lib/Makefile
    gui/util/Makefile
    gui/plugin/Makefile
    gui/plugin/navigator/Makefile

@@ -3,4 +3,4 @@
 SUBDIRS = \
 	navigator \
 	dialog \
-	graph-painter
+	graph-painter 

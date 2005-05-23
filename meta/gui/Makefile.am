@@ -1,4 +1,5 @@
 SUBDIRS = \
 	  data \
 	  util \
-	  plugin
+	  plugin \
+	  lib

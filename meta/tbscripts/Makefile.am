@@ -47,5 +47,6 @@ pkgdata_DATA = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS)
 
 %.tb: %.tb.src Makefile
 	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g;\
+	     s@__EXTERNAL_JARS__@$(shell echo "$(EXTERNAL_JARS)")@g;\
 	     s@__PKGDATA__@$(pkgdatadir)@g'\
 	     < $< > $@ 

@@ -1,621 +1,307 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
+import java.util.Iterator;
 
-import javax.swing.JComponent;
-import javax.swing.Scrollable;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 
-import nl.cwi.sen1.data.graph.Attribute;
-import nl.cwi.sen1.data.graph.Edge;
-import nl.cwi.sen1.data.graph.EdgeList;
-import nl.cwi.sen1.data.graph.Graph;
-import nl.cwi.sen1.data.graph.Node;
-import nl.cwi.sen1.data.graph.NodeList;
-import nl.cwi.sen1.data.graph.NodeSizer;
-import nl.cwi.sen1.data.graph.Point;
-import nl.cwi.sen1.data.graph.Polygon;
-import nl.cwi.sen1.data.graph.Shape;
 import nl.cwi.sen1.util.Preferences;
+import edu.berkeley.guir.prefuse.Display;
+import edu.berkeley.guir.prefuse.ItemRegistry;
+import edu.berkeley.guir.prefuse.NodeItem;
+import edu.berkeley.guir.prefuse.VisualItem;
+import edu.berkeley.guir.prefuse.action.ActionMap;
+import edu.berkeley.guir.prefuse.action.RepaintAction;
+import edu.berkeley.guir.prefuse.action.animate.LocationAnimator;
+import edu.berkeley.guir.prefuse.action.animate.PolarLocationAnimator;
+import edu.berkeley.guir.prefuse.action.filter.GraphFilter;
+import edu.berkeley.guir.prefuse.action.filter.TreeFilter;
+import edu.berkeley.guir.prefuse.activity.ActionList;
+import edu.berkeley.guir.prefuse.activity.Activity;
+import edu.berkeley.guir.prefuse.activity.SlowInSlowOutPacer;
+import edu.berkeley.guir.prefuse.event.ControlAdapter;
+import edu.berkeley.guir.prefuse.event.FocusEvent;
+import edu.berkeley.guir.prefuse.event.FocusListener;
+import edu.berkeley.guir.prefuse.graph.DefaultGraph;
+import edu.berkeley.guir.prefuse.graph.DefaultNode;
+import edu.berkeley.guir.prefuse.graph.Graph;
+import edu.berkeley.guir.prefuse.render.DefaultEdgeRenderer;
+import edu.berkeley.guir.prefuse.render.DefaultRendererFactory;
+import edu.berkeley.guir.prefuse.render.ShapeRenderer;
+import edu.berkeley.guir.prefuse.render.TextItemRenderer;
+import edu.berkeley.guir.prefusex.controls.DragControl;
+import edu.berkeley.guir.prefusex.controls.FocusControl;
+import edu.berkeley.guir.prefusex.controls.PanControl;
+import edu.berkeley.guir.prefusex.controls.ZoomControl;
+import edu.berkeley.guir.prefusex.force.DragForce;
+import edu.berkeley.guir.prefusex.force.ForceSimulator;
+import edu.berkeley.guir.prefusex.force.NBodyForce;
+import edu.berkeley.guir.prefusex.force.SpringForce;
+import edu.berkeley.guir.prefusex.layout.CircleLayout;
+import edu.berkeley.guir.prefusex.layout.ForceDirectedLayout;
+import edu.berkeley.guir.prefusex.layout.FruchtermanReingoldLayout;
+import edu.berkeley.guir.prefusex.layout.GridLayout;
+import edu.berkeley.guir.prefusex.layout.IndentedTreeLayout;
+import edu.berkeley.guir.prefusex.layout.RadialTreeLayout;
+import edu.berkeley.guir.prefusex.layout.RandomLayout;
+import edu.berkeley.guir.prefusex.layout.VerticalTreeLayout;
 
-public class GraphPanel extends JComponent implements Scrollable {
-	private static final int ARROWHEAD_LENGTH = 15;
-
-	private static final int ARROWHEAD_SHARPNESS = 15;
-
-	private static final int DEFAULT_ZOOM_FACTOR = 100;
-
+public class GraphPanel extends JPanel {
 	private String id;
 
-	private int index;
+	private Display display;
+	private ItemRegistry registry;
 
-	private Graph graph;
+	private GraphPanelListener listener;
 
-	private int max_x;
+	private Activity currentLayout;
+	private ActionMap layouts;
+	private ActionList highlighting;
+	private ActionList animation;
+	
+	private DefaultEdgeRenderer edgeRenderer;
 
-	private int max_y;
+	private ForceSimulator forceSimulator;
 
-	// private boolean dragEnabled = true;
-
-	private FontMetrics metrics;
-
-	private AffineTransform transform;
-
-	private int borderWidth;
-
-	private int borderHeight;
-
-	private Font nodeFont;
-
-	private Node hoveredNode;
-
-	private Node selectedNode;
-
-	private Color nodeBG;
-
-	private Color nodeFG;
-
-	private Color nodeBorder;
-
-	private Color nodeBGHovered;
-
-	private Color nodeFGHovered;
-
-	private Color nodeBorderHovered;
-
-	private Color nodeBorderSelected;
-
-	private Color nodeBGSelected;
-
-	private Color nodeFGSelected;
-
-	private boolean toolTipEnabled = false;
-
-	public GraphPanel(String id, Preferences preferences) {
+	public GraphPanel(String id, Preferences prefs) {
 		this.id = id;
-		this.transform = new AffineTransform();
-		initPreferences(preferences);
-		setAutoscrolls(true);
-		addMouseMotionListener(makeMouseMotionListener());
-	}
+		setLayout(new BorderLayout());
 
-	private MouseMotionListener makeMouseMotionListener() {
-		MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
-			boolean dragging;
+		registry = new ItemRegistry(new DefaultGraph());
+		display = new Display(registry);
 
-			int lastX;
+		display.setHighQuality(true);
 
-			int lastY;
+		// set up a renderer such that nodes show text labels
+		TextItemRenderer nodeRenderer = new TextItemRenderer();
+		nodeRenderer.setTextAttributeName("label");
+		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
+		nodeRenderer.setHorizontalPadding(prefs.getInt("graph.node.border.width"));
+		nodeRenderer.setVerticalPadding(prefs.getInt("graph.node.border.height"));
 
-			public void mouseMoved(MouseEvent event) {
-				dragging = false;
-				Node node = getNodeAt(event.getX(), event.getY());
-				if ((node == null && hoveredNode != null)
-						|| (node != null && (hoveredNode == null || !hoveredNode
-								.getId().equals(node.getId())))) {
-					hoveredNode = node;
+		edgeRenderer = new DefaultEdgeRenderer();
+		edgeRenderer.setRenderType(ShapeRenderer.RENDER_TYPE_DRAW);
+		setStraightEdges();
 
-					if (hoveredNode != null) {
-						if (isToolTipEnabled()) {
-							setToolTipText(hoveredNode.getLabel());
-						} else {
-							setToolTipText(null);
-						}
-					}
-					repaint();
+		registry.setRendererFactory(new DefaultRendererFactory(nodeRenderer,
+				edgeRenderer, null));
+
+		display.addControlListener(new FocusControl(2, highlighting));
+		display.addControlListener(new DragControl(true, true));
+		display.addControlListener(new ZoomControl(true));
+		display.addControlListener(new PanControl(true));
+		display.addControlListener(new ControlAdapter() {
+			public void itemPressed(VisualItem gi, MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					firePopupRequested(gi.getAttribute("id"), e);
 				}
 			}
 
-			public void mouseExited(MouseEvent event) {
-				hoveredNode = null;
-				repaint();
+			public void itemReleased(VisualItem gi, MouseEvent e) {
+				itemPressed(gi, e);
 			}
+		});
 
-			// public void mouseDragged(MouseEvent e) {
-			// if (dragEnabled) {
-			// Component parent = getParent();
-			// while (parent != null && !(parent instanceof JViewport)) {
-			// parent = parent.getParent();
-			// }
-			// JViewport port = (JViewport) parent;
-			// java.awt.Point pos = port.getViewPosition();
-			// int absX = e.getX() - (int) pos.getX();
-			// int absY = e.getY() - (int) pos.getY();
-			// if (!dragging) {
-			// dragging = true;
-			// } else {
-			// int x = (int) pos.getX() + (lastX - absX);
-			// int y = (int) pos.getY() + (lastY - absY);
-			// Dimension portSize = port.getSize();
-			// Dimension size = getSize();
-			// if (x + portSize.width > size.width) {
-			// x = size.width - portSize.width;
-			// }
-			// if (y + portSize.height > size.height) {
-			// y = size.height - portSize.height;
-			// }
-			// if (x < 0) {
-			// x = 0;
-			// }
-			// if (y < 0) {
-			// y = 0;
-			// }
-			// port.setViewPosition(new java.awt.Point(x, y));
-			// }
-			// lastX = absX;
-			// lastY = absY;
-			// }
-			// }
-		};
-		return mouseMotionListener;
+		registry.getDefaultFocusSet().addFocusListener(new FocusListener() {
+			public void focusChanged(FocusEvent e) {
+				NodeItem n = registry
+						.getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
+								.getFirstAdded());
+				fireNodeSelected(n == null ? null : n.getAttribute("id"));
+
+				NodeItem r = registry
+						.getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
+								.getFirstRemoved());
+				highlighting.runNow();
+			}
+		});
+
+		createLayouts();
+        createVisualEffects(prefs);
+        
+		add(display, BorderLayout.CENTER);
 	}
 
-	public void setGraph(Graph graph) {
-		this.graph = graph;
-		updateGeometry();
+	public void setCurvedEdges() {
+		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_CURVE);
+		runNow();
+	}
+	
+	public void setStraightEdges() {
+		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
+		runNow();
 	}
 
-	public void setDragEnabled(boolean on) {
-		// dragEnabled = on;
+	public void setNoAnimation() {
+		animation = new ActionList(registry);
+		animation.add(new RepaintAction());
+	}
+	
+	public void setPolarAnimation() {
+		animation = new ActionList(registry, 1500, 20);
+		animation.setPacingFunction(new SlowInSlowOutPacer());
+		animation.add(new PolarLocationAnimator());
+		animation.add(new RepaintAction());
+	}
+	
+	public void setLinearAnimation() {
+		animation = new ActionList(registry, 1500, 20);
+		animation.setPacingFunction(new SlowInSlowOutPacer());
+		animation.add(new LocationAnimator());
+		animation.add(new RepaintAction());
+	}
+	
+	private void createVisualEffects(Preferences prefs) {
+		setPolarAnimation();
+		createHighlighter(prefs);
 	}
 
-	private void updateGeometry() {
-		if (graph == null) {
-			max_x = 0;
-			max_y = 0;
-		} else {
-			calcBoundingBox();
-		}
-		revalidate();
+	private void createHighlighter(Preferences prefs) {
+		highlighting = new ActionList(registry);
+		highlighting.add(new GraphColoring(prefs));
+		highlighting.add(new RepaintAction());
 	}
 
-	private void calcBoundingBox() {
-		int max_x = 0;
-		int max_y = 0;
-
-		Attribute bbox = graph.getBoundingBox();
-
-		Point from = bbox.getFirst();
-		Point to = bbox.getSecond();
-
-		max_x = Math.max(from.getX(), to.getX());
-		max_y = Math.max(from.getY(), to.getY());
-
-		Point2D point = transform.transform(new Point2D.Float(max_x, max_y),
-				null);
-
-		this.max_x = (int) point.getX();
-		this.max_y = (int) point.getY();
-	}
-
-	public void paint(Graphics g) {
-		g.setColor(getBackground());
-
-		if (graph != null) {
-			Graphics2D g2d = (Graphics2D) g.create();
-
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.transform(transform);
-
-			// Hack around 32k limit bug:
-			// Originally, this fillrect came before the transform (in screen
-			// coordinates),
-			// but calling fillRect with arguments above 32k triggers a bug.
-			// by calling fillRect after transform we can use user coordinates.
-			// As we don't have a suitable limit handy, we just use an
-			// arbitrary
-			// large number below 32k so the whole background will be filled.
-			g2d.fillRect(0, 0, 32000, 32000);
-
-			paintEdges(g2d);
-			paintNodes(g2d);
-
-			g2d.dispose();
+	private class Hierarchy extends VerticalTreeLayout {
+		public Hierarchy () {
+			m_heightInc = 100;
 		}
 	}
+	private void createLayouts() {
+		layouts = new ActionMap();
+		
+		ActionList dot = new ActionList(registry);
+		dot.add(new GraphFilter());
+		dot.add(new GraphDotLayout());
+		layouts.put("Dot", dot);
+		
+		ActionList manual = new ActionList(registry);
+		manual.add(new GraphFilter());
+		layouts.put("Manual", manual);
+		
+		ActionList hierarchy = new ActionList(registry);
+		hierarchy.add(new TreeFilter(false, true, false));
+		hierarchy.add(new Hierarchy());
+		layouts.put("Vertical Tree", hierarchy);
+		
+		ActionList radial = new ActionList(registry);
+		radial.add(new TreeFilter(false, true, false));
+		radial.add(new RadialTreeLayout());
+		layouts.put("Radial Tree", radial);
+		
+		ActionList indented = new ActionList(registry);
+		indented.add(new TreeFilter(false, true, false));
+		indented.add(new IndentedTreeLayout());
+		indented.add(new RepaintAction());
+		layouts.put("Indented Tree", indented);
+		
+		forceSimulator = new ForceSimulator();
+		forceSimulator.addForce(new NBodyForce(-.4f, 0f, .1f));
+		forceSimulator.addForce(new SpringForce(4E-5f, 80f));
+		forceSimulator.addForce(new DragForce(-0.005f));
 
-	public void initPreferences(Preferences preferences) {
-		nodeBG = preferences.getColor("graph.node.background");
-		nodeFG = preferences.getColor("graph.node.foreground");
-		nodeBorder = preferences.getColor("graph.node.border");
+		ActionList contforce = new ActionList(registry, -1, 50);
+		contforce.add(new GraphFilter());
+		contforce.add(new ForceDirectedLayout(forceSimulator, false));
+		contforce.add(new RepaintAction());
+		layouts.put("Force", contforce);
 
-		nodeBGHovered = preferences.getColor("graph.node.hovered.background");
-		nodeFGHovered = preferences.getColor("graph.node.hovered.foreground");
-		nodeBorderHovered = preferences.getColor("graph.node.hovered.border");
+		ActionList random = new ActionList(registry);
+		random.add(new GraphFilter());
+		random.add(new RandomLayout());
+		layouts.put("Random", random);
 
-		nodeBGSelected = preferences.getColor("graph.node.selected.background");
-		nodeFGSelected = preferences.getColor("graph.node.selected.foreground");
-		nodeBorderSelected = preferences.getColor("graph.node.selected.border");
-
-		nodeFont = preferences.getFont("graph.node.font");
-
-		borderWidth = preferences.getInt("graph.node.border.width");
-		borderHeight = preferences.getInt("graph.node.border.height");
+		ActionList circle = new ActionList(registry);
+		circle.add(new GraphFilter());
+		circle.add(new CircleLayout());
+		layouts.put("Circle", circle);
+		
+		ActionList grid = new ActionList(registry);
+		grid.add(new GraphFilter());
+		grid.add(new GridLayout());	
+		layouts.put("Grid", grid);
+		
+		ActionList funny = new ActionList(registry);
+		funny.add(new GraphFilter());
+		funny.add(new FruchtermanReingoldLayout());
+		layouts.put("Funny", funny);
 	}
-
-	public Dimension getPreferredSize() {
-		return new Dimension(max_x + 5, max_y + 5);
+	
+	public ForceSimulator getForceSimulator() {
+		return forceSimulator;
 	}
-
-	public Dimension getMinimumSize() {
-		return getPreferredSize();
+	
+	public Object[] getLayouts() {
+		return layouts.keys(); 
 	}
-
-	private void paintNodes(Graphics2D g) {
-		g.setFont(nodeFont);
-		metrics = g.getFontMetrics();
-
-		NodeList nodes = graph.getNodes();
-		while (!nodes.isEmpty()) {
-			Node node = nodes.getHead();
-			nodes = nodes.getTail();
-
-			paintNode(g, node);
+	
+	public void setLayout(String name) {
+		ActionList newLayout = (ActionList) layouts.get(name);
+		
+		if (newLayout != null) {
+			cancel();
+		    currentLayout = newLayout;
+		    runNow();
 		}
-	}
-
-	private void paintNode(Graphics2D g, Node node) {
-		if (!node.isPositioned()) {
-			return;
-		}
-
-		int x = node.getX();
-		int y = node.getY();
-		int w = node.getWidth();
-		int h = node.getHeight();
-
-		x -= w / 2;
-		y -= h / 2;
-
-		if (!g.hitClip(x, y, w, h)) {
-			return;
-		}
-
-		Color node_bg, node_fg, node_border;
-
-		if (selectedNode != null && selectedNode.getId().equals(node.getId())) {
-			node_bg = nodeBGSelected;
-			node_fg = nodeFGSelected;
-			node_border = nodeBorderSelected;
-		} else if (hoveredNode != null
-				&& hoveredNode.getId().equals(node.getId())) {
-			node_bg = nodeBGHovered;
-			node_fg = nodeFGHovered;
-			node_border = nodeBorderHovered;
-		} else {
-			node_fg = nodeFG;
-
-			Color borderColor = node.getColor();
-			node_border = (borderColor == null ? nodeBorder : borderColor);
-
-			Color fillColor = node.getFillColor();
-			node_bg = (fillColor == null ? nodeBG : fillColor);
-		}
-
-		Shape shape = Graph.getNodeShape(node);
-
-		if (shape.isBox()) {
-			paintBox(g, x, y, w, h, node_bg, node_border);
-		} else if (shape.isEllipse()) {
-			paintEllipse(g, x, y, w, h, node_bg, node_border);
-		} else if (shape.isDiamond()) {
-			paintDiamond(g, x, y, w, h, node_bg, node_border);
-		} else {
-			// default case, we draw a rectangle
-			paintBox(g, x, y, w, h, node_bg, node_border);
-		}
-
-		String name = node.getLabel();
-		int tw = metrics.stringWidth(name);
-		int th = metrics.getAscent();
-
-		g.setColor(node_fg);
-		g.drawString(name, x + (w - tw) / 2, y + (h + th) / 2 - 1);
-	}
-
-	private void paintDiamond(Graphics2D g, int x, int y, int w, int h,
-			Color node_bg, Color node_border) {
-		g.setColor(node_bg);
-		int[] xs = new int[] { x, x + w / 2, x + w, x + w / 2 };
-		int[] ys = new int[] { y + h / 2, y, y + h / 2, y + h };
-
-		g.fillPolygon(xs, ys, 4);
-		g.setColor(node_border);
-		g.drawPolygon(xs, ys, 4);
-	}
-
-	private void paintEllipse(Graphics2D g, int x, int y, int w, int h,
-			Color node_bg, Color node_border) {
-		g.setColor(node_bg);
-		g.fillOval(x, y, w, h);
-		g.setColor(node_border);
-		g.drawOval(x, y, w, h);
-	}
-
-	private void paintBox(Graphics2D g, int x, int y, int w, int h,
-			Color node_bg, Color node_border) {
-		g.setColor(node_bg);
-		g.fillRect(x, y, w, h);
-		g.setColor(node_border);
-		g.drawRect(x, y, w, h);
-	}
-
-	private void paintEdges(Graphics2D g) {
-		EdgeList edges = graph.getEdges();
-
-		while (!edges.isEmpty()) {
-			Edge edge = edges.getHead();
-			edges = edges.getTail();
-
-			paintEdge(g, edge);
+		else {
+			throw new UnsupportedOperationException("Layout " + name + " does not exist");
 		}
 	}
 
-	private void paintEdge(Graphics2D g2d, Edge edge) {
-		if (!edge.isPositioned()) {
-			return;
+	private void runNow() {
+		if (currentLayout != null) {
+			currentLayout.runNow();
+			highlighting.runNow();
+			animation.runNow();
 		}
-
-		Polygon poly = edge.getPolygon();
-
-		Point from = poly.getHead();
-		Point to = from;
-		poly = poly.getTail();
-
-		float fromx = from.getX();
-		float fromy = from.getY();
-
-		GeneralPath gp = new GeneralPath(GeneralPath.WIND_NON_ZERO);
-		gp.moveTo(fromx, fromy);
-
-		while (poly.hasTail() && !poly.getTail().isEmpty()) {
-			Point cp1 = poly.getHead();
-			poly = poly.getTail();
-			Point cp2 = poly.getHead();
-			poly = poly.getTail();
-			Point cur = poly.getHead();
-			poly = poly.getTail();
-
-			from = cp1;
-			to = cur;
-
-			gp.curveTo(cp1.getX(), cp1.getY(), cp2.getX(), cp2.getY(), cur
-					.getX(), cur.getY());
-		}
-
-		if (poly.hasHead()) {
-			from = to;
-			to = poly.getHead();
-			poly = poly.getTail();
-			gp.lineTo(to.getX(), to.getY());
-		}
-
-		g2d.setColor(nodeBorder);
-		g2d.draw(gp);
-		arrowHead(from, to, g2d);
 	}
 
-	private void arrowHead(Point from, Point to, Graphics2D g) {
-		int x1 = from.getX();
-		int y1 = from.getY();
-		int x2 = to.getX();
-		int y2 = to.getY();
-
-		// calculate points for arrowhead
-		double angle = Math.atan2(y2 - y1, x2 - x1) + Math.PI;
-		double theta = Math.toRadians(ARROWHEAD_SHARPNESS);
-		double size = ARROWHEAD_LENGTH;
-
-		int x3 = (int) (x2 + Math.cos(angle - theta) * size);
-		int y3 = (int) (y2 + Math.sin(angle - theta) * size);
-
-		int x4 = (int) (x2 + Math.cos(angle + theta) * size);
-		int y4 = (int) (y2 + Math.sin(angle + theta) * size);
-
-		int[] xs = new int[] { x2, x3, x4, x2 };
-		int[] ys = new int[] { y2, y3, y4, y2 };
-
-		g.fillPolygon(xs, ys, xs.length);
-		g.drawPolygon(xs, ys, xs.length);
+	private void cancel() {
+		if (currentLayout != null) {
+			currentLayout.cancel();
+		}
 	}
 
-	public Node getNodeAt(int mouse_x, int mouse_y) {
-		if (graph == null) {
-			return null;
-		}
+	protected void resize() {
+		setSize(getParent().getWidth(), getParent().getHeight());
+	}
 
-		NodeList nodes = graph.getNodes();
+	void setGraphPanelListener(GraphPanelListener l) {
+		this.listener = l;
+	}
 
-		Point2D mouse_coords = new Point2D.Float(mouse_x, mouse_y);
-		Point2D coords;
+	protected void fireNodeSelected(String selectedNodeId) {
+		listener.nodeSelected(selectedNodeId);
+	}
 
-		try {
-			coords = transform.inverseTransform(mouse_coords, null);
-		} catch (NoninvertibleTransformException e) {
-			throw new RuntimeException("transform cannot be inverted?");
-		}
+	protected void firePopupRequested(String nodeId, MouseEvent e) {
+		listener.popupRequested(nodeId, e);
+	}
 
-		int x = (int) coords.getX();
-		int y = (int) coords.getY();
+	void setGraph(Graph graph) {
+		setSize(getParent().getWidth(), getParent().getHeight());
+		registry.clear();
+		registry.setGraph(graph);
+		runNow();
+	}
 
-		while (!nodes.isEmpty()) {
-			Node node = nodes.getHead();
-			nodes = nodes.getTail();
+	public void setSelectedNode(String nodeId) {
+		Iterator iter = registry.getGraph().getNodes();
 
-			if (node.isPositioned()) {
-				int width = node.getWidth();
-				int height = node.getHeight();
-
-				if (x >= node.getX() - width / 2 && x < node.getX() + width / 2
-						&& y >= node.getY() - height / 2
-						&& y < node.getY() + height / 2) {
-					return node;
-				}
+		while (iter.hasNext()) {
+			DefaultNode node = (DefaultNode) iter.next();
+			if (node.getAttribute("id").equals(nodeId)) {
+				registry.getFocusManager().getDefaultFocusSet().set(node);
 			}
 		}
-
-		return null;
-	}
-
-	public Node getNode(String name) {
-		if (graph == null) {
-			return null;
-		}
-
-		return graph.getNode(name);
-	}
-
-	public Node getSelectedNode() {
-		return selectedNode;
-	}
-
-	public void setSelectedNode(Node node) {
-		selectedNode = node;
-
-		if (node != null) {
-			Rectangle rect = getNodeRectangle(node);
-			scrollRectToVisible(rect);
-		}
-
-		repaint();
-	}
-
-	public void setSelectedNode(String name) {
-		setSelectedNode(getNode(name));
-	}
-
-	public Rectangle getNodeRectangle(Node node) {
-		float[] coords = { (float) node.getX() - node.getWidth() / 2,
-				(float) node.getY() - node.getHeight() / 2,
-				(float) node.getX() + node.getWidth() / 2,
-				(float) node.getY() + node.getHeight() / 2 };
-
-		float[] result = new float[4];
-
-		transform.transform(coords, 0, result, 0, 2);
-
-		return new Rectangle((int) result[0], (int) result[1],
-				(int) (result[2] - result[0]), (int) (result[3] - result[1]));
-	}
-
-	public void setScale(int scale) {
-		float rscale = ((float) scale) / DEFAULT_ZOOM_FACTOR;
-
-		transform = new AffineTransform();
-		transform.scale(rscale, rscale);
-
-		updateGeometry();
-	}
-
-	public Dimension getPreferredScrollableViewportSize() {
-		return getPreferredSize();
-	}
-
-	public int getScrollableBlockIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		switch (orientation) {
-		case SwingConstants.VERTICAL:
-			return visibleRect.width / 2;
-		case SwingConstants.HORIZONTAL:
-			return visibleRect.height / 2;
-		}
-
-		throw new RuntimeException("illegal orientation: " + orientation);
-	}
-
-	public int getScrollableUnitIncrement(Rectangle visibleRect,
-			int orientation, int direction) {
-		switch (orientation) {
-		case SwingConstants.VERTICAL:
-			return visibleRect.width / 8;
-		case SwingConstants.HORIZONTAL:
-			return visibleRect.height / 16;
-		}
-
-		throw new RuntimeException("illegal orientation: " + orientation);
-	}
-
-	public boolean getScrollableTracksViewportWidth() {
-		return false;
-	}
-
-	public boolean getScrollableTracksViewportHeight() {
-		return false;
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-
-	public void setToolTipEnabled(boolean toolTipEnabled) {
-		this.toolTipEnabled = toolTipEnabled;
-	}
-
-	public boolean isToolTipEnabled() {
-		return toolTipEnabled;
-	}
-
-	public int getZoomToFitFactor(Rectangle bounds) {
-		if (graph == null) {
-			return DEFAULT_ZOOM_FACTOR;
-		}
-
-		Attribute bb = graph.getBoundingBox();
-		Point max = bb.getSecond();
-		int height = max.getY();
-		int width = max.getX();
-		double boundsWidth = bounds.getWidth();
-		double boundsHeight = bounds.getHeight();
-
-		double widthFactor = boundsWidth / width;
-		double heightFactor = boundsHeight / height;
-
-		double factor = Math.min(widthFactor, heightFactor);
-
-		return (int) (factor * DEFAULT_ZOOM_FACTOR);
-	}
-
-	public Graph sizeGraph(Graph graph) {
-		final FontMetrics metrics = getFontMetrics(nodeFont);
-
-		if (metrics != null) {
-			NodeSizer sizer = new NodeSizer() {
-				public int getWidth(Node node) {
-					String label = node.getLabel();
-					return metrics.stringWidth(label) + borderWidth * 2;
-				}
-
-				public int getHeight(Node node) {
-					return metrics.getHeight() + borderHeight * 2;
-				}
-			};
-
-			graph = graph.sizeNodes(sizer);
-		}
-		return graph;
-	}
-
+	
+	
+	
 }

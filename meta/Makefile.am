@@ -14,8 +14,8 @@ CLEANFILES = \
 	libltdl/stamp-h1
 
 SUBDIRS = \
-	gui \
 	src \
+	gui \
 	in-output \
 	action-interpreter \
 	term-store \

@@ -8,7 +8,7 @@ JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
 MAIN_CLASS = $(JAVA_PACKAGE).GraphPainter
 
-ANT_ENV += LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.jar:$(top_srcdir)/gui/studio/gui.jar
+LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.jar:$(top_srcdir)/gui/studio/gui.jar:$(top_srcdir)/gui/lib/prefuse.jar
 
 pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
 

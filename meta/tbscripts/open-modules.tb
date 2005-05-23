@@ -208,7 +208,7 @@ process OpenSyntaxParseHandler(Path: str) is
 let
   AnnotatedTree: term,
   Directory: str,
-  Error: term,
+  ErrorMessage: term,
   Extension: str,
   Filename: str,
   Imports: list,
@@ -224,8 +224,8 @@ in
     (
       rec-msg(parse-tree(Pid, ParseResult?))
     +
-      rec-msg(parse-forest(Pid, ParseResult?, Error?))
-      . AddFilenameToParseError(Error, Path, ParseError?)
+      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
+      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
       . snd-msg(es-make-summary("sglr", Path, [ParseError]))
       . rec-msg(es-summary(Summary?))
       . snd-msg(ui-show-feedback-summary(Summary))
@@ -254,8 +254,8 @@ in
     fi
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
-    rec-msg(parse-error(Pid, Error?))
-    . AddFilenameToParseError(Error, Path, ParseError?)
+    rec-msg(parse-error(Pid, ErrorMessage?))
+    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
     . snd-msg(ui-show-feedback-summary(Summary))
