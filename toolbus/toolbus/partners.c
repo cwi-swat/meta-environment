@@ -43,41 +43,6 @@ void CPC_initCommunicationPartnerCache()
 }
 
 /*}}}  */
-
-/*{{{  static void resize()  */
-
-static void resize() 
-{
-  currentSize += INITIAL_SIZE;
-
-  sends_funs_to_procs = realloc(sends_funs_to_procs, currentSize);
-  if (sends_funs_to_procs == NULL) {
-    err_fatal("could not allocate memory for partner cache\n");
-  }
-
-  receives_funs_to_procs = realloc(receives_funs_to_procs, currentSize);
-  if (receives_funs_to_procs == NULL) {
-    err_fatal("could not allocate memory for partner cache\n");
-  }
-
-  sends_procs_to_funs = realloc(sends_procs_to_funs, currentSize);
-  if (sends_procs_to_funs == NULL) {
-    err_fatal("could not allocate memory for partner cache\n");
-  }
-
-  receives_procs_to_funs = realloc(receives_procs_to_funs, currentSize);
-  if (receives_procs_to_funs == NULL) {
-    err_fatal("could not allocate memory for partner cache\n");
-  }
-
-  proc_instances = realloc(proc_instances, currentSize);
-  if (proc_instances == NULL) {
-    err_fatal("could not allocate memory for partner cache\n");
-  }
-}
-
-/*}}}  */
-
 /*{{{  void CPC_destroyCommunicationPartnerCache() */
 
 void CPC_destroyCommunicationPartnerCache()
@@ -94,6 +59,37 @@ void CPC_destroyCommunicationPartnerCache()
 
 /*}}}  */
 
+/*{{{  static void resize(size_t oldSize, size_t newSize, term_list ***array) */
+
+static void recalloc(size_t oldSize, size_t newSize, term_list ***array)
+{
+  
+  *array = realloc(*array, newSize);
+  if (*array == NULL) {
+    err_fatal("recalloc: could not allocate memory");
+  }
+  else {
+    memset(*array+oldSize, 0, newSize - oldSize);
+  }
+}
+
+/*}}}  */
+/*{{{  static void resize()  */
+
+static void resize() 
+{
+  size_t oldSize = currentSize;
+
+  currentSize += INITIAL_SIZE;
+
+  recalloc(oldSize, currentSize, &sends_funs_to_procs);
+  recalloc(oldSize, currentSize, &receives_funs_to_procs);
+  recalloc(oldSize, currentSize, &sends_procs_to_funs);
+  recalloc(oldSize, currentSize, &receives_procs_to_funs);
+  recalloc(oldSize, currentSize, &proc_instances);
+}
+
+/*}}}  */
 
 /*{{{  static void storeItem(term *item, sym_idx index, term_list** store) */
 

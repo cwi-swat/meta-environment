@@ -1,4 +1,9 @@
 $Id$
+
+Tue May 24 09:14:40 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/partners.c: Added memset after realloc to ensure all new 
+   cells are set to zero in the implementations of the communication 
+   partner cache.
 	
 Sun May 22 22:16:36 CEST 2005 <paulk@cwi.nl>
 * Checked all numbers produced by logger. The to/from data for
