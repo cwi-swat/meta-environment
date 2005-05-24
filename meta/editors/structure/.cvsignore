@@ -7,3 +7,4 @@ Makefile.in
 StructureEditor.adt
 StructureEditor.def
 structure-editor
+libStructureEditor.a

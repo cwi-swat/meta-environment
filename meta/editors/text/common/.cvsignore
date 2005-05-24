@@ -4,3 +4,4 @@ Makefile
 Makefile.in
 texteditorapi-config
 texteditorapi-config.local
+libTextEditor.a

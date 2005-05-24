@@ -16,7 +16,6 @@ import javax.swing.event.ChangeListener;
 
 import nl.cwi.sen1.util.Preferences;
 import edu.berkeley.guir.prefusex.force.Force;
-import edu.berkeley.guir.prefusex.force.ForcePanel;
 import edu.berkeley.guir.prefusex.force.ForceSimulator;
 
 /* A panel with sliders to configure a ForceSimulator. Adapted from
@@ -35,18 +34,17 @@ public class GraphForcePanel extends JPanel {
 	private void initUI(Preferences prefs) {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		Force[] forces = fsim.getForces();
-ForcePanel panel;
 		// create a bordered box for every force, containing a
 		// configurator for every parameter of that force
 		for (int i = 0; i < forces.length; i++) {
 			Force f = forces[i];
 			Box box = new Box(BoxLayout.Y_AXIS);
-			
+
 			// We use the class name and the parameter name to get
 			// properties from the preferences
 			String name = f.getClass().getName();
 			name = name.substring(name.lastIndexOf(".") + 1);
-			
+
 			String label = prefs.getString("force." + name + ".label");
 			box.setBorder(BorderFactory.createTitledBorder(label));
 
@@ -61,12 +59,12 @@ ForcePanel panel;
 
 				final JSlider slider = createSlider(prefs, f, name, j, min,
 						max, def);
-				
+
 				final String parLabel = prefs.getString("force." + name + "."
 						+ parName + ".label");
 				JLabel tag = new JLabel(parLabel);
-				tag.setPreferredSize(new Dimension(100,20));
-		        tag.setMaximumSize(new Dimension(100,20));
+				tag.setPreferredSize(new Dimension(100, 20));
+				tag.setMaximumSize(new Dimension(100, 20));
 				tag.setToolTipText("click to return to default");
 				tag.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
@@ -77,8 +75,8 @@ ForcePanel panel;
 				Box paramBox = new Box(BoxLayout.X_AXIS);
 				paramBox.add(tag);
 				paramBox.add(Box.createHorizontalStrut(10));
-			    paramBox.add(Box.createHorizontalGlue());
-			    paramBox.add(slider);
+				paramBox.add(Box.createHorizontalGlue());
+				paramBox.add(slider);
 				box.add(paramBox);
 			}
 			this.add(box);
@@ -111,7 +109,6 @@ ForcePanel panel;
 
 	private JSlider createSlider(Preferences prefs, Force f, String name,
 			int param, final float min, final float max, final float def) {
-		final String parName = f.getParameterName(param);
 		final JSlider slider = new JSlider(0, 100);
 		slider.setBackground(Color.WHITE);
 

@@ -1,11 +1,8 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.io.File;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.ProgressMonitor;
 import javax.swing.SwingUtilities;
 
 import nl.cwi.sen1.gui.Studio;
@@ -23,8 +20,6 @@ public class Dialog implements StudioPlugin, DialogTif {
 	private Studio studio;
 
 	private ProgressList progressList;
-
-	private ProgressMonitor progressMonitor;
 
 	private JFileChooser sharedChooser;
 

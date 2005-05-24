@@ -1,6 +1,5 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 
 import edu.berkeley.guir.prefuse.ItemRegistry;
@@ -12,15 +11,6 @@ public class GraphDotLayout extends Layout {
 
 	public void run(ItemRegistry registry, double frac) {
 		Graph g = registry.getFilteredGraph();
-
-		int nn = g.getNodeCount();
-
-		Rectangle2D r = super.getLayoutBounds(registry);
-		double height = r.getHeight();
-		double width = r.getWidth();
-		double cx = r.getCenterX();
-		double cy = r.getCenterY();
-
 		Iterator nodeIter = g.getNodes();
 		while (nodeIter.hasNext()) {
 			NodeItem n = (NodeItem) nodeIter.next();

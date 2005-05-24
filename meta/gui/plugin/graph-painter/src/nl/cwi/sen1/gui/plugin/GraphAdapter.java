@@ -1,10 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.FontMetrics;
-import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import nl.cwi.sen.api.graph.graph.Factory;
@@ -15,11 +12,9 @@ import nl.cwi.sen.api.graph.graph.types.EdgeList;
 import nl.cwi.sen.api.graph.graph.types.Graph;
 import nl.cwi.sen.api.graph.graph.types.Node;
 import nl.cwi.sen.api.graph.graph.types.NodeList;
-import nl.cwi.sen.api.graph.graph.types.attribute.CurvePoints;
 import nl.cwi.sen.api.graph.graph.types.attribute.Location;
 import nl.cwi.sen.api.graph.graph.types.attribute.Size;
 import nl.cwi.sen1.util.Preferences;
-import edu.berkeley.guir.prefuse.NodeItem;
 import edu.berkeley.guir.prefuse.graph.DefaultEdge;
 import edu.berkeley.guir.prefuse.graph.DefaultGraph;
 import edu.berkeley.guir.prefuse.graph.DefaultNode;

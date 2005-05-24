@@ -36,13 +36,12 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	private Factory graphFactory;
 
 	private Map graphs;
+
 	private Map forcePanels;
 
 	private Preferences preferences;
 
 	private GraphPainterBridge bridge;
-
-	private boolean suspendSelectionNotification;
 
 	private MouseEvent popupEvent;
 
@@ -102,7 +101,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 
 	private JMenu createGraphMenu(final GraphPanel panel, String initialLayout) {
 		JMenu graph = new JMenu("Graph");
-		JMenu layouts = createLayoutMenu(graph,panel, initialLayout);
+		JMenu layouts = createLayoutMenu(graph, panel, initialLayout);
 		graph.add(new JSeparator());
 		JMenu toggles = createTogglesMenu(graph, panel);
 
@@ -189,13 +188,13 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 			GraphPanel graphPanel = (GraphPanel) graphs.get(id);
 			GraphForcePanel forcePanel = new GraphForcePanel(graphPanel
 					.getForceSimulator(), preferences);
-			StudioComponentAdapter adapter = new StudioComponentAdapter("Forces for " + id,
-					forcePanel);
+			StudioComponentAdapter adapter = new StudioComponentAdapter(
+					"Forces for " + id, forcePanel);
 			studio.addComponent(adapter);
 			forcePanels.put(id, adapter);
-		}
-		else {
-			StudioComponentAdapter adapter = (StudioComponentAdapter) forcePanels.get(id);
+		} else {
+			StudioComponentAdapter adapter = (StudioComponentAdapter) forcePanels
+					.get(id);
 			if (adapter != null) {
 				studio.removeComponent(adapter);
 				forcePanels.remove(id);
@@ -203,7 +202,8 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 		}
 	}
 
-	private JMenu createLayoutMenu(JMenu menu, final GraphPanel panel, String initial) {
+	private JMenu createLayoutMenu(JMenu menu, final GraphPanel panel,
+			String initial) {
 		ButtonGroup group = new ButtonGroup();
 
 		final Object[] layouts = panel.getLayouts();
@@ -244,9 +244,7 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 	public void selectNode(String graphId, String nodeId) {
 		GraphPanel panel = getPanel(graphId);
 		if (panel != null) {
-			suspendSelectionNotification = true;
 			panel.setSelectedNode(nodeId);
-			suspendSelectionNotification = false;
 		}
 	}
 

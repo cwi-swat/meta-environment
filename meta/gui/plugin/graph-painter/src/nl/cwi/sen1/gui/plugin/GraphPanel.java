@@ -51,15 +51,19 @@ public class GraphPanel extends JPanel {
 	private String id;
 
 	private Display display;
+
 	private ItemRegistry registry;
 
 	private GraphPanelListener listener;
 
 	private Activity currentLayout;
+
 	private ActionMap layouts;
+
 	private ActionList highlighting;
+
 	private ActionList animation;
-	
+
 	private DefaultEdgeRenderer edgeRenderer;
 
 	private ForceSimulator forceSimulator;
@@ -77,8 +81,10 @@ public class GraphPanel extends JPanel {
 		TextItemRenderer nodeRenderer = new TextItemRenderer();
 		nodeRenderer.setTextAttributeName("label");
 		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
-		nodeRenderer.setHorizontalPadding(prefs.getInt("graph.node.border.width"));
-		nodeRenderer.setVerticalPadding(prefs.getInt("graph.node.border.height"));
+		nodeRenderer.setHorizontalPadding(prefs
+				.getInt("graph.node.border.width"));
+		nodeRenderer.setVerticalPadding(prefs
+				.getInt("graph.node.border.height"));
 
 		edgeRenderer = new DefaultEdgeRenderer();
 		edgeRenderer.setRenderType(ShapeRenderer.RENDER_TYPE_DRAW);
@@ -110,16 +116,13 @@ public class GraphPanel extends JPanel {
 								.getFirstAdded());
 				fireNodeSelected(n == null ? null : n.getAttribute("id"));
 
-				NodeItem r = registry
-						.getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
-								.getFirstRemoved());
 				highlighting.runNow();
 			}
 		});
 
 		createLayouts();
-        createVisualEffects(prefs);
-        
+		createVisualEffects(prefs);
+
 		add(display, BorderLayout.CENTER);
 	}
 
@@ -127,7 +130,7 @@ public class GraphPanel extends JPanel {
 		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_CURVE);
 		runNow();
 	}
-	
+
 	public void setStraightEdges() {
 		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
 		runNow();
@@ -137,21 +140,21 @@ public class GraphPanel extends JPanel {
 		animation = new ActionList(registry);
 		animation.add(new RepaintAction());
 	}
-	
+
 	public void setPolarAnimation() {
 		animation = new ActionList(registry, 1500, 20);
 		animation.setPacingFunction(new SlowInSlowOutPacer());
 		animation.add(new PolarLocationAnimator());
 		animation.add(new RepaintAction());
 	}
-	
+
 	public void setLinearAnimation() {
 		animation = new ActionList(registry, 1500, 20);
 		animation.setPacingFunction(new SlowInSlowOutPacer());
 		animation.add(new LocationAnimator());
 		animation.add(new RepaintAction());
 	}
-	
+
 	private void createVisualEffects(Preferences prefs) {
 		setPolarAnimation();
 		createHighlighter(prefs);
@@ -164,38 +167,39 @@ public class GraphPanel extends JPanel {
 	}
 
 	private class Hierarchy extends VerticalTreeLayout {
-		public Hierarchy () {
+		public Hierarchy() {
 			m_heightInc = 100;
 		}
 	}
+
 	private void createLayouts() {
 		layouts = new ActionMap();
-		
+
 		ActionList dot = new ActionList(registry);
 		dot.add(new GraphFilter());
 		dot.add(new GraphDotLayout());
 		layouts.put("Dot", dot);
-		
+
 		ActionList manual = new ActionList(registry);
 		manual.add(new GraphFilter());
 		layouts.put("Manual", manual);
-		
+
 		ActionList hierarchy = new ActionList(registry);
 		hierarchy.add(new TreeFilter(false, true, false));
 		hierarchy.add(new Hierarchy());
 		layouts.put("Vertical Tree", hierarchy);
-		
+
 		ActionList radial = new ActionList(registry);
 		radial.add(new TreeFilter(false, true, false));
 		radial.add(new RadialTreeLayout());
 		layouts.put("Radial Tree", radial);
-		
+
 		ActionList indented = new ActionList(registry);
 		indented.add(new TreeFilter(false, true, false));
 		indented.add(new IndentedTreeLayout());
 		indented.add(new RepaintAction());
 		layouts.put("Indented Tree", indented);
-		
+
 		forceSimulator = new ForceSimulator();
 		forceSimulator.addForce(new NBodyForce(-.4f, 0f, .1f));
 		forceSimulator.addForce(new SpringForce(4E-5f, 80f));
@@ -216,36 +220,36 @@ public class GraphPanel extends JPanel {
 		circle.add(new GraphFilter());
 		circle.add(new CircleLayout());
 		layouts.put("Circle", circle);
-		
+
 		ActionList grid = new ActionList(registry);
 		grid.add(new GraphFilter());
-		grid.add(new GridLayout());	
+		grid.add(new GridLayout());
 		layouts.put("Grid", grid);
-		
+
 		ActionList funny = new ActionList(registry);
 		funny.add(new GraphFilter());
 		funny.add(new FruchtermanReingoldLayout());
 		layouts.put("Funny", funny);
 	}
-	
+
 	public ForceSimulator getForceSimulator() {
 		return forceSimulator;
 	}
-	
+
 	public Object[] getLayouts() {
-		return layouts.keys(); 
+		return layouts.keys();
 	}
-	
+
 	public void setLayout(String name) {
 		ActionList newLayout = (ActionList) layouts.get(name);
-		
+
 		if (newLayout != null) {
 			cancel();
-		    currentLayout = newLayout;
-		    runNow();
-		}
-		else {
-			throw new UnsupportedOperationException("Layout " + name + " does not exist");
+			currentLayout = newLayout;
+			runNow();
+		} else {
+			throw new UnsupportedOperationException("Layout " + name
+					+ " does not exist");
 		}
 	}
 
@@ -301,7 +305,4 @@ public class GraphPanel extends JPanel {
 		return id;
 	}
 
-	
-	
-	
 }
