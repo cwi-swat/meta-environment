@@ -1,5 +1,9 @@
 # $Id$
 
+Wed May 25 14:58:02 CEST 2005 <kooiker@cwi.nl>
+ * gui:
+   - Solved Eclipse warnings: removed unneeded else, unused arguments
+   
 Mon May 23 16:37:53 CEST 2005 <jurgenv@cwi.nl>
  * Prefuse now replaces our own drawing routines, and adds some other
    layouts next to the old graphviz layout

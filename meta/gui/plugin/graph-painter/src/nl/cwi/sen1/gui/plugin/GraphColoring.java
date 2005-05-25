@@ -41,10 +41,8 @@ public class GraphColoring extends ColorFunction {
 			else {
 				return nodeFg;
 			}
-		} 
-		else {
-		   return defaultFg;
 		}
+        return defaultFg;
 	}
 
 	public Paint getFillColor(VisualItem item) {

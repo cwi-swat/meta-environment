@@ -15,7 +15,6 @@ import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.data.ModuleTreeNode;
-import aterm.ATermFactory;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;
@@ -24,7 +23,7 @@ public class ModuleTree extends JPanel {
 
 	private Navigator navigator;
 
-	public ModuleTree(ATermFactory factory, Navigator modulebrowser,
+	public ModuleTree(Navigator modulebrowser,
 			final ModuleTreeModel manager) {
 		this.navigator = modulebrowser;
 		this.manager = manager;

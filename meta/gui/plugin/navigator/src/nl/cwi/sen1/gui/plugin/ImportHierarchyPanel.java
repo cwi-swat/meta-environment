@@ -64,10 +64,10 @@ public class ImportHierarchyPanel extends JPanel {
 		root.removeAllChildren();
 
 		if (module != null) {
-			setLeafs(importedBy, module, module.getParents());
+			setLeafs(importedBy, module.getParents());
 			makeVisible(importedBy);
 
-			setLeafs(imports, module, module.getChildren());
+			setLeafs(imports, module.getChildren());
 			makeVisible(imports);
 		}
 
@@ -80,7 +80,7 @@ public class ImportHierarchyPanel extends JPanel {
 		}
 	}
 
-	private void setLeafs(DefaultMutableTreeNode node, Module module, List leafs) {
+	private void setLeafs(DefaultMutableTreeNode node, List leafs) {
 		node.removeAllChildren();
 
 		Iterator iter = leafs.iterator();

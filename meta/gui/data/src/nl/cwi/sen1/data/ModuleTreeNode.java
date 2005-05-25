@@ -5,177 +5,174 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class ModuleTreeNode {
-	String name;
+    String name;
 
-	String prefix;
+    String prefix;
 
-	ArrayList children;
+    ArrayList children;
 
-	boolean leaf;
+    boolean leaf;
 
-	public ModuleTreeNode(String name, String prefix, boolean leaf) {
-		this.name = name;
-		this.prefix = prefix;
-		this.leaf = leaf;
-		children = new ArrayList();
-	}
+    public ModuleTreeNode(String name, String prefix, boolean leaf) {
+        this.name = name;
+        this.prefix = prefix;
+        this.leaf = leaf;
+        children = new ArrayList();
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getFullName() {
-		return prefix + getName();
-	}
+    public String getFullName() {
+        return prefix + getName();
+    }
 
-	public ModuleTreeNode addChild(String p, StringTokenizer tokens) {
-		String childName = tokens.nextToken();
-		ModuleTreeNode childNode = null;
-		if (tokens.hasMoreTokens()) {
-			int childIndex = getNodeChild(childName);
+    public ModuleTreeNode addChild(String p, StringTokenizer tokens) {
+        String childName = tokens.nextToken();
+        ModuleTreeNode childNode = null;
+        if (tokens.hasMoreTokens()) {
+            int childIndex = getNodeChild(childName);
 
-			if (childIndex != -1) {
-				childNode = getChild(childIndex);
-			}
-			if (childNode == null) {
-				childNode = new ModuleTreeNode(childName, p, !tokens
-						.hasMoreTokens());
-				children.add(getInsertIndex(childName), childNode);
-			}
-			return childNode.addChild(p + childName + "/", tokens);
-		} else {
-			// if (childNode == null) {
-			childNode = new ModuleTreeNode(childName, p, !tokens
-					.hasMoreTokens());
-			children.add(getInsertIndex(childName), childNode);
+            if (childIndex != -1) {
+                childNode = getChild(childIndex);
+            }
+            if (childNode == null) {
+                childNode = new ModuleTreeNode(childName, p, !tokens
+                        .hasMoreTokens());
+                children.add(getInsertIndex(childName), childNode);
+            }
+            return childNode.addChild(p + childName + "/", tokens);
+        }
+        // if (childNode == null) {
+        childNode = new ModuleTreeNode(childName, p, !tokens.hasMoreTokens());
+        children.add(getInsertIndex(childName), childNode);
 
-			return childNode;
-			// }
-			// return null;
-		}
-	}
+        return childNode;
+        // }
+        // return null;
+    }
 
-	public void removeChild(StringTokenizer tokens) {
-		String childName = tokens.nextToken();
-		int childIndex = getChild(childName);
-		ModuleTreeNode childNode = getChild(childIndex);
+    public void removeChild(StringTokenizer tokens) {
+        String childName = tokens.nextToken();
+        int childIndex = getChild(childName);
+        ModuleTreeNode childNode = getChild(childIndex);
 
-		if (childNode != null) {
-			if (tokens.hasMoreTokens()) {
-				childNode.removeChild(tokens);
-			}
-			if (childNode.getChildCount() == 0) {
-				children.remove(childIndex);
-			}
-		}
-	}
+        if (childNode != null) {
+            if (tokens.hasMoreTokens()) {
+                childNode.removeChild(tokens);
+            }
+            if (childNode.getChildCount() == 0) {
+                children.remove(childIndex);
+            }
+        }
+    }
 
-	public void clearChildren() {
-		children.clear();
-	}
+    public void clearChildren() {
+        children.clear();
+    }
 
-	public ModuleTreeNode getChild(int index) {
-		if ((index < 0) || (index >= children.size())) {
-			return null;
-		}
+    public ModuleTreeNode getChild(int index) {
+        if ((index < 0) || (index >= children.size())) {
+            return null;
+        }
 
-		return (ModuleTreeNode) children.get(index);
-	}
+        return (ModuleTreeNode) children.get(index);
+    }
 
-	public int getChild(String n) {
-		for (int i = 0; i < children.size(); i++) {
-			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+    public int getChild(String n) {
+        for (int i = 0; i < children.size(); i++) {
+            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
-			if (curNode.getName().equals(n)) {
-				return i;
-			}
-		}
+            if (curNode.getName().equals(n)) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	public int getLeafChild(String n) {
-		for (int i = 0; i < children.size(); i++) {
-			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+    public int getLeafChild(String n) {
+        for (int i = 0; i < children.size(); i++) {
+            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
-			if (curNode.getName().equals(n) && curNode.isLeaf()) {
-				return i;
-			}
-		}
+            if (curNode.getName().equals(n) && curNode.isLeaf()) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	public int getNodeChild(String n) {
-		for (int i = 0; i < children.size(); i++) {
-			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+    public int getNodeChild(String n) {
+        for (int i = 0; i < children.size(); i++) {
+            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
-			if (curNode.getName().equals(n) && !curNode.isLeaf()) {
-				return i;
-			}
-		}
+            if (curNode.getName().equals(n) && !curNode.isLeaf()) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	public int getInsertIndex(String n) {
-		for (int i = 0; i < children.size(); i++) {
-			ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+    public int getInsertIndex(String n) {
+        for (int i = 0; i < children.size(); i++) {
+            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
 
-			if (curNode.getName().compareTo(n) > 0) {
-				return i;
-			}
-		}
+            if (curNode.getName().compareTo(n) > 0) {
+                return i;
+            }
+        }
 
-		return children.size();
-	}
+        return children.size();
+    }
 
-	public int getChildCount() {
-		return children.size();
-	}
+    public int getChildCount() {
+        return children.size();
+    }
 
-	public boolean isLeaf() {
-		return leaf;
-	}
+    public boolean isLeaf() {
+        return leaf;
+    }
 
-	public int getIndexOfChild(ModuleTreeNode child) {
-		if (child == null)
-			return -1;
+    public int getIndexOfChild(ModuleTreeNode child) {
+        if (child == null)
+            return -1;
 
-		for (int i = 0; i < children.size(); i++) {
-			if (children.get(i) == child) {
-				return i;
-			}
-		}
-		return -1;
-	}
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) == child) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
-	public List makePath(StringTokenizer tokens, List result) {
-		result.add(this);
+    public List makePath(StringTokenizer tokens, List result) {
+        result.add(this);
 
-		if (isLeaf()) {
-			return result;
-		}
+        if (isLeaf()) {
+            return result;
+        }
 
-		String childName = tokens.nextToken();
-		ModuleTreeNode childNode;
-		if (tokens.hasMoreTokens()) {
-			childNode = getChild(getNodeChild(childName));
-		} else {
-			childNode = getChild(getLeafChild(childName));
-		}
-		if (childNode != null) {
-			if (tokens.hasMoreTokens()) {
-				return childNode.makePath(tokens, result);
-			} else {
-				result.add(childNode);
-			}
-		}
+        String childName = tokens.nextToken();
+        ModuleTreeNode childNode;
+        if (tokens.hasMoreTokens()) {
+            childNode = getChild(getNodeChild(childName));
+        } else {
+            childNode = getChild(getLeafChild(childName));
+        }
+        if (childNode != null) {
+            if (tokens.hasMoreTokens()) {
+                return childNode.makePath(tokens, result);
+            }
+            result.add(childNode);
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	public String toString() {
-		return name;
-	}
+    public String toString() {
+        return name;
+    }
 }

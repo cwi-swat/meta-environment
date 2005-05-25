@@ -21,9 +21,7 @@ public class ListModel extends AbstractListModel {
         if (index >= 0 && index < list.size()) {
 		  return list.get(index);
         }
-        else {
-            return null;
-        }
+        return null;
 	}
 
 	 public int getSize() {
