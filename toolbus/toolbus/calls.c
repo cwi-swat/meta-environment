@@ -151,6 +151,7 @@ proc *expand_dyncall(sym_idx procName, proc *P, env *Env)
     term *args = elm2(fun_args(P));
     coords *c = elm3(fun_args(P));
     term *Val;
+    proc_def *pd;
 					
     assert(is_str(Name) || is_var(Name));
     Val = is_str(Name) ? Name : value(Name, Env);
@@ -159,7 +160,7 @@ proc *expand_dyncall(sym_idx procName, proc *P, env *Env)
          err_fatal("expand_dyncall -- process name should be a string instead of '%t' in %t\n", Val, P);
 
     proc_name = str_val(Val);
-    proc_def *pd = definition(TBlookup(proc_name));
+    pd = definition(TBlookup(proc_name));
 
     if(!pd)
 	err_fatal("Cannot create process name %s", proc_name);
