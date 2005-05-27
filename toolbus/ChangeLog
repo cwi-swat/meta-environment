@@ -1,5 +1,8 @@
 $Id$
 
+Fri May 27 09:23:00 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * toolbus/calls.c: Fixed declaration after statement error.
+
 Tue May 24 09:14:40 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * toolbus/partners.c: Added memset after realloc to ensure all new 
    cells are set to zero in the implementations of the communication 

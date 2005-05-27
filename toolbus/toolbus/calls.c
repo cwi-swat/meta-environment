@@ -150,9 +150,10 @@ proc *expand_dyncall(sym_idx procName, proc *P, env *Env)
     term *Name = elm1(fun_args(P));
     term *args = elm2(fun_args(P));
     coords *c = elm3(fun_args(P));
+    term *Val;
 					
     assert(is_str(Name) || is_var(Name));
-    term *Val = is_str(Name) ? Name : value(Name, Env);
+    Val = is_str(Name) ? Name : value(Name, Env);
 
     if(!is_str(Val))
          err_fatal("expand_dyncall -- process name should be a string instead of '%t' in %t\n", Val, P);
