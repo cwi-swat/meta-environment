@@ -8,9 +8,9 @@ ACLOCAL_FLAGS = -I .
 SUBDIRS = lib
 
 TOOLNAME = error-viewer
-JAVA_PACKAGE = nl.cwi.sen1.error
+JAVA_PACKAGE = nl.cwi.sen1.error.viewer
 JARFILE = $(TOOLNAME)-$(VERSION).jar
-MAIN_CLASS = $(JAVA_PACKAGE).viewer.ErrorViewer
+MAIN_CLASS = $(JAVA_PACKAGE).ErrorViewer
 
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 LOCAL_JARS = $(abstop_srcdir)/lib/jlfgr-1_0.jar
