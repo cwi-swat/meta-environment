@@ -1,0 +1,5 @@
+# $Id$
+
+Mon May 30 15:53:18 CEST 2005 <gerco@cwi.nl>
+ * bin/cvsmerge:
+   - Added an informative warning to change to the branch.

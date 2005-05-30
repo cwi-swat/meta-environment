@@ -175,7 +175,8 @@ begin_branch() {
     log cvs tag $progress_tag
     cvs tag $progress_tag  >> $LOGFILE 2>&1
     
-    info Created branch $branch_tag and progress tag $progress_tag
+    info "Created branch $branch_tag and progress tag $progress_tag"
+    info "Do not forget to switch to this branch!"
 }
 
 
