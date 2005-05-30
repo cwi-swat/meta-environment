@@ -1,5 +1,15 @@
 # $Id$
 
+Mon May 30 10:09:06 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - Also add toolbus dependency to package
+
+Fri May 27 13:20:37 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac:
+   - Add toolbus dependency
+ * toolbus_make_rules:
+   - Use JAVA_PACKAGE iso PACKAGE
+
 Wed May  4 11:08:21 CEST 2005 <kooiker@cwi.nl>
   * src/nl.cwi.sen1.error:
     - Decorate location with LocationNode

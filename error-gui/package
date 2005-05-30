@@ -12,6 +12,8 @@ configuration interface
 requires
 aterm-java 1.6
 
+toolbus 1.0
+
 toolbus-java-adapter 1.0
 
 error-support 1.1
