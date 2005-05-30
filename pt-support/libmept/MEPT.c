@@ -520,6 +520,14 @@ PT_Tree PT_makeTreeAmb(PT_Args args)
 }
 
 /*}}}  */
+/*{{{  PT_Tree PT_makeTreeCycle(void) */
+
+PT_Tree PT_makeTreeCycle(void)
+{
+  return (PT_Tree)(ATerm)ATmakeAppl0(PT_afun3);
+}
+
+/*}}}  */
 /*{{{  PT_Args PT_makeArgsEmpty(void) */
 
 PT_Args PT_makeArgsEmpty(void)
@@ -548,7 +556,7 @@ PT_Args PT_makeArgsMany(PT_Tree head, PT_Args tail)
 
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
 {
-  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun3, (ATerm) lhs, (ATerm) rhs, (ATerm) attributes);
+  return (PT_Production)(ATerm)ATmakeAppl3(PT_afun4, (ATerm) lhs, (ATerm) rhs, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -556,7 +564,7 @@ PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attribu
 
 PT_Production PT_makeProductionList(PT_Symbol rhs)
 {
-  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun4, (ATerm) rhs);
+  return (PT_Production)(ATerm)ATmakeAppl1(PT_afun5, (ATerm) rhs);
 }
 
 /*}}}  */
@@ -564,7 +572,7 @@ PT_Production PT_makeProductionList(PT_Symbol rhs)
 
 PT_Attributes PT_makeAttributesNoAttrs(void)
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun5);
+  return (PT_Attributes)(ATerm)ATmakeAppl0(PT_afun6);
 }
 
 /*}}}  */
@@ -572,7 +580,7 @@ PT_Attributes PT_makeAttributesNoAttrs(void)
 
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs)
 {
-  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun6, (ATerm) attrs);
+  return (PT_Attributes)(ATerm)ATmakeAppl1(PT_afun7, (ATerm) attrs);
 }
 
 /*}}}  */
@@ -604,7 +612,7 @@ PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail)
 
 PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun7, (ATerm) assoc);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun8, (ATerm) assoc);
 }
 
 /*}}}  */
@@ -612,7 +620,7 @@ PT_Attr PT_makeAttrAssoc(PT_Associativity assoc)
 
 PT_Attr PT_makeAttrTerm(ATerm term)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun8, (ATerm) term);
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) term);
 }
 
 /*}}}  */
@@ -620,7 +628,7 @@ PT_Attr PT_makeAttrTerm(ATerm term)
 
 PT_Attr PT_makeAttrId(const char* moduleName)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleName, 0, ATtrue)));
+  return (PT_Attr)(ATerm)ATmakeAppl1(PT_afun10, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleName, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -628,7 +636,7 @@ PT_Attr PT_makeAttrId(const char* moduleName)
 
 PT_Attr PT_makeAttrBracket(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun10);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun11);
 }
 
 /*}}}  */
@@ -636,7 +644,7 @@ PT_Attr PT_makeAttrBracket(void)
 
 PT_Attr PT_makeAttrReject(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun11);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun12);
 }
 
 /*}}}  */
@@ -644,7 +652,7 @@ PT_Attr PT_makeAttrReject(void)
 
 PT_Attr PT_makeAttrPrefer(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun12);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun13);
 }
 
 /*}}}  */
@@ -652,7 +660,7 @@ PT_Attr PT_makeAttrPrefer(void)
 
 PT_Attr PT_makeAttrAvoid(void)
 {
-  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun13);
+  return (PT_Attr)(ATerm)ATmakeAppl0(PT_afun14);
 }
 
 /*}}}  */
@@ -660,7 +668,7 @@ PT_Attr PT_makeAttrAvoid(void)
 
 PT_Associativity PT_makeAssociativityLeft(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun14);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun15);
 }
 
 /*}}}  */
@@ -668,7 +676,7 @@ PT_Associativity PT_makeAssociativityLeft(void)
 
 PT_Associativity PT_makeAssociativityRight(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun15);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun16);
 }
 
 /*}}}  */
@@ -676,7 +684,7 @@ PT_Associativity PT_makeAssociativityRight(void)
 
 PT_Associativity PT_makeAssociativityAssoc(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun16);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun17);
 }
 
 /*}}}  */
@@ -684,7 +692,7 @@ PT_Associativity PT_makeAssociativityAssoc(void)
 
 PT_Associativity PT_makeAssociativityNonAssoc(void)
 {
-  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun17);
+  return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun18);
 }
 
 /*}}}  */
@@ -692,7 +700,7 @@ PT_Associativity PT_makeAssociativityNonAssoc(void)
 
 PT_Symbol PT_makeSymbolLit(const char* string)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun18, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun19, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -700,7 +708,7 @@ PT_Symbol PT_makeSymbolLit(const char* string)
 
 PT_Symbol PT_makeSymbolCf(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun19, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun20, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -708,7 +716,7 @@ PT_Symbol PT_makeSymbolCf(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLex(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun20, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun21, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -716,7 +724,7 @@ PT_Symbol PT_makeSymbolLex(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolEmpty(void)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun21);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun22);
 }
 
 /*}}}  */
@@ -724,7 +732,7 @@ PT_Symbol PT_makeSymbolEmpty(void)
 
 PT_Symbol PT_makeSymbolSeq(PT_Symbols symbols)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun22, (ATerm) symbols);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun23, (ATerm) symbols);
 }
 
 /*}}}  */
@@ -732,7 +740,7 @@ PT_Symbol PT_makeSymbolSeq(PT_Symbols symbols)
 
 PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun23, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun24, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -740,7 +748,7 @@ PT_Symbol PT_makeSymbolOpt(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun24, (ATerm) lhs, (ATerm) rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun25, (ATerm) lhs, (ATerm) rhs);
 }
 
 /*}}}  */
@@ -748,7 +756,7 @@ PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolTuple(PT_Symbol head, PT_Symbols rest)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun25, (ATerm) head, (ATerm) rest);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun26, (ATerm) head, (ATerm) rest);
 }
 
 /*}}}  */
@@ -756,7 +764,7 @@ PT_Symbol PT_makeSymbolTuple(PT_Symbol head, PT_Symbols rest)
 
 PT_Symbol PT_makeSymbolSort(const char* string)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun26, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun27, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -764,7 +772,7 @@ PT_Symbol PT_makeSymbolSort(const char* string)
 
 PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun27, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun28, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -772,7 +780,7 @@ PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun28, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun29, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -780,7 +788,7 @@ PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun29, (ATerm) symbol, (ATerm) separator);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun30, (ATerm) symbol, (ATerm) separator);
 }
 
 /*}}}  */
@@ -788,7 +796,7 @@ PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator)
 
 PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun30, (ATerm) symbol, (ATerm) separator);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun31, (ATerm) symbol, (ATerm) separator);
 }
 
 /*}}}  */
@@ -796,7 +804,7 @@ PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator)
 
 PT_Symbol PT_makeSymbolIterN(PT_Symbol symbol, int number)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun31, (ATerm) symbol, (ATerm) (ATerm) ATmakeInt(number));
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun32, (ATerm) symbol, (ATerm) (ATerm) ATmakeInt(number));
 }
 
 /*}}}  */
@@ -804,7 +812,7 @@ PT_Symbol PT_makeSymbolIterN(PT_Symbol symbol, int number)
 
 PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int number)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl3(PT_afun32, (ATerm) symbol, (ATerm) separator, (ATerm) (ATerm) ATmakeInt(number));
+  return (PT_Symbol)(ATerm)ATmakeAppl3(PT_afun33, (ATerm) symbol, (ATerm) separator, (ATerm) (ATerm) ATmakeInt(number));
 }
 
 /*}}}  */
@@ -812,7 +820,7 @@ PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int numbe
 
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun33, (ATerm) symbols, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun34, (ATerm) symbols, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -820,7 +828,7 @@ PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolParameterizedSort(const char* sort, PT_Symbols parameters)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun34, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue)), (ATerm) parameters);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun35, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue)), (ATerm) parameters);
 }
 
 /*}}}  */
@@ -828,7 +836,7 @@ PT_Symbol PT_makeSymbolParameterizedSort(const char* sort, PT_Symbols parameters
 
 PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun35, (ATerm) lhs, (ATerm) rhs);
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun36, (ATerm) lhs, (ATerm) rhs);
 }
 
 /*}}}  */
@@ -836,7 +844,7 @@ PT_Symbol PT_makeSymbolStrategy(PT_Symbol lhs, PT_Symbol rhs)
 
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun36, (ATerm) symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun37, (ATerm) symbol);
 }
 
 /*}}}  */
@@ -844,7 +852,7 @@ PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLayout(void)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun37);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun38);
 }
 
 /*}}}  */
@@ -852,7 +860,7 @@ PT_Symbol PT_makeSymbolLayout(void)
 
 PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun38, (ATerm) ranges);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun39, (ATerm) ranges);
 }
 
 /*}}}  */
@@ -892,7 +900,7 @@ PT_CharRange PT_makeCharRangeCharacter(int integer)
 
 PT_CharRange PT_makeCharRangeRange(int start, int end)
 {
-  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun39, (ATerm) (ATerm) ATmakeInt(start), (ATerm) (ATerm) ATmakeInt(end));
+  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun40, (ATerm) (ATerm) ATmakeInt(start), (ATerm) (ATerm) ATmakeInt(end));
 }
 
 /*}}}  */
@@ -1093,6 +1101,9 @@ ATbool PT_isValidTree(PT_Tree arg)
   else if (PT_isTreeAmb(arg)) {
     return ATtrue;
   }
+  else if (PT_isTreeCycle(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1154,6 +1165,31 @@ inline ATbool PT_isTreeAmb(PT_Tree arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, PT_patternTreeAmb, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isTreeCycle(PT_Tree arg) */
+
+inline ATbool PT_isTreeCycle(PT_Tree arg)
+{
+  if (ATgetType((ATerm)arg) != AT_APPL) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternTreeCycle);
       last_gc = ATgetGCCount();
     }
 
@@ -3844,6 +3880,9 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
   if (PT_isTreeAmb(arg)) {
     return PT_makeTreeAmb(
         acceptArgs ? acceptArgs(PT_getTreeArgs(arg)) : PT_getTreeArgs(arg));
+  }
+  if (PT_isTreeCycle(arg)) {
+    return PT_makeTreeCycle();
   }
   ATabort("not a Tree: %t\n", arg);
   return (PT_Tree)NULL;

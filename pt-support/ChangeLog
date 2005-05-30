@@ -1,5 +1,10 @@
 $Id$
 
+Mon May 30 13:23:14 CEST 2005 <jurgenv@cwi.nl>
+ * As an experiment, added the 'cycle' tree constructor, it models
+   an edge that points back to the previous ambiguity node to form
+   a parsing cycle.
+
 Wed Feb 23 11:18:18 CET 2005 <jurgenv@cwi.nl>
  * libmept/flattenPT.c: fixed AsFix2 list patterns for lexical lists. They
    only worked with either lists of char-classes, or directly sort names,

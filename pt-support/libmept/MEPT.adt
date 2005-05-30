@@ -4,6 +4,8 @@ constructor(ParseTree, top, parsetree(<top(Tree)>, <amb-cnt(int)>)),
 constructor(Tree, appl, appl(<prod(Production)>, <args(Args)>)), 
 constructor(Tree, char, <character(int)>), 
 constructor(Tree, Amb, amb(<args(Args)>)), 
+constructor(Tree, cycle, cycle),
+
 list(Args, Tree), 
 
 constructor(Production, Default, prod(<lhs(Symbols)>, <rhs(Symbol)>, <attributes(Attributes)>)), 
