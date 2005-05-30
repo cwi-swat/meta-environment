@@ -331,8 +331,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 	{
 		if(highlights != null)
 			return highlights.getToolTipText(evt);
-		else
-			return null;
+        return null;
 	}
 
 	/**

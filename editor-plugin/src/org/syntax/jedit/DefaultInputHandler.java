@@ -163,7 +163,7 @@ public class DefaultInputHandler extends InputHandler
 			keyCode == KeyEvent.VK_META)
 			return;
 
-		if((modifiers & ~KeyEvent.SHIFT_MASK) != 0
+		if((modifiers & ~InputEvent.SHIFT_MASK) != 0
 			|| evt.isActionKey()
 			|| keyCode == KeyEvent.VK_BACK_SPACE
 			|| keyCode == KeyEvent.VK_DELETE
@@ -225,7 +225,7 @@ public class DefaultInputHandler extends InputHandler
 		int modifiers = evt.getModifiers();
 		char c = evt.getKeyChar();
 		if(c != KeyEvent.CHAR_UNDEFINED &&
-			(modifiers & KeyEvent.ALT_MASK) == 0)
+			(modifiers & InputEvent.ALT_MASK) == 0)
 		{
 			if(c >= 0x20 && c != 0x7f)
 			{
@@ -315,8 +315,7 @@ public class DefaultInputHandler extends InputHandler
 			char ch = Character.toUpperCase(key.charAt(0));
 			if(modifiers == 0)
 				return KeyStroke.getKeyStroke(ch);
-			else
-				return KeyStroke.getKeyStroke(ch,modifiers);
+            return KeyStroke.getKeyStroke(ch,modifiers);
 		}
 		else if(key.length() == 0)
 		{

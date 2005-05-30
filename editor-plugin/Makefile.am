@@ -6,9 +6,9 @@ include $(top_srcdir)/toolbus_make_rules
 ACLOCAL_FLAGS = -I .
 
 TOOLNAME = editor-plugin
-JAVA_PACKAGE = nl.cwi.sen1.editor
+JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME)-$(VERSION).jar
-MAIN_CLASS = $(JAVA_PACKAGE).editor.EditorPlugin
+MAIN_CLASS = $(JAVA_PACKAGE).EditorPlugin
 
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 
