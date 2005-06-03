@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
 import metaconfig.types.Items;
+import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
@@ -167,17 +169,34 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     private EditorPanel createPanel(final ATerm editorId, String filename)
             throws IOException {
         final String id = editorId.toString();
-        EditorPanel panel = getPanel(id);
+        EditorPanel editorPanel = getPanel(id);
 
-        if (panel == null) {
-            panel = new EditorPanel(id, filename);
+        if (editorPanel == null) {
+            final EditorPanel panel = new EditorPanel(id, filename);
+            editorPanel = panel;
+            
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
+            
             StudioComponentImpl comp = new StudioComponentImpl(componentName,
                     panel);
             comp.addStudioComponentListener(new StudioComponentAdapter() {
-                public void componentRequestClose() {
+                public void componentRequestClose() throws CloseAbortedException {
+                    if (panel.isModified()) {
+                        switch (JOptionPane.showConfirmDialog(null, "Editor is modified. Do you want to save your changes?")) {
+                            case JOptionPane.YES_OPTION:
+                                try {
+                                    panel.writeContents();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case JOptionPane.CANCEL_OPTION:
+                                throw new CloseAbortedException();
+                        }
+                        
+                    }
                 }
 
                 public void componentClose() {
@@ -194,7 +213,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
             componentsById.put(id, comp);
             studio.addComponent(comp);
         }
-        return panel;
+        return editorPanel;
     }
 
     private EditorPanel getPanel(String id) {

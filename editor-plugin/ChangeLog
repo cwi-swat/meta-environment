@@ -9,10 +9,12 @@ Fri Jun  3 11:47:41 CEST 2005 <kooiker@cwi.nl>
    - Use new addStudioComponentMenu with seperate menupath and action, build
      menus using metaconfig api
    - Update administration after removing editor instance
+   - Show dialog when closing unsaved editor
  * configure.ac:
    - EXTERNAL_JARS += metaconfig-config
  * *.java:
    - Remove Eclipse warnings
+ * Remove generated editor-plugin.idef
 
 Mon May 30 10:13:06 CEST 2005 <kooiker@cwi.nl>
  * More than one file can be edited
