@@ -17,7 +17,7 @@ requires
 
 aterm-java 1.6
 
-error-support 1.1
+error-support 1.2
 
 pt-support 2.0
 
