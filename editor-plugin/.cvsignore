@@ -11,6 +11,7 @@ build
 config.*
 configure
 dist
+editor-plugin.idef
 editor-plugin-*.pkg
 editor-plugin-config
 install-sh
