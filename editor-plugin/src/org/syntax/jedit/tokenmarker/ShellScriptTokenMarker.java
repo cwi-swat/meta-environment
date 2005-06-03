@@ -43,12 +43,9 @@ public class ShellScriptTokenMarker extends TokenMarker
 				addToken(line.count,Token.LITERAL1);
 				return Token.NULL;
 			}
-			else
-			{
-				addToken(line.count,Token.LITERAL1);
-				lineInfo[lineIndex].obj = str;
-				return Token.LITERAL1;
-			}
+            addToken(line.count,Token.LITERAL1);
+            lineInfo[lineIndex].obj = str;
+            return Token.LITERAL1;
 		}
 
 		boolean backslash = false;
@@ -195,12 +192,9 @@ loop:		for(int i = offset; i < length; i++)
 						token = Token.NULL;
 						continue;
 					}
-					else
-					{
-						addToken(i - lastOffset,token);
-						lastOffset = i;
-						token = Token.NULL;
-					}
+                    addToken(i - lastOffset,token);
+                    lastOffset = i;
+                    token = Token.NULL;
 				}
 				break;
 			case Token.LITERAL1:

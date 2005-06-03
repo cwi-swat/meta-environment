@@ -22,7 +22,7 @@ CLEANFILES = $(TOOLNAME)-config $(TOOLNAME)-$(VERSION).pkg
 
 $(TOOLNAME)-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/jlfgr-1_0.jar" \
+		echo "echo $(pkgdatadir)/$(JARFILE)" \
 	) > $@ && chmod +x $@
 
 $(TOOLNAME)-$(VERSION).pkg: package Makefile

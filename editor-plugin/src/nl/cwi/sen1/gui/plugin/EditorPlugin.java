@@ -1,73 +1,142 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+
+import metaconfig.types.Items;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
+import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioPlugin;
 import aterm.ATerm;
+import aterm.ATermList;
+import aterm.pure.PureFactory;
 
 public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     private static final String TOOL_NAME = "editor-plugin";
 
     private Map editors;
 
+    private Map componentsById;
+
     private Studio studio;
+
+    private EditorPluginBridge bridge;
 
     public EditorPlugin() {
         this.editors = new HashMap();
+        this.componentsById = new HashMap();
     }
 
     public void isModified(ATerm editorId) {
-        // TODO Auto-generated method stub
-
+        EditorPanel panel = getPanel(editorId.toString());
+        String modified;
+        
+        if (panel.isModified()) {
+            modified = "true";
+        } else {
+            modified = "false";
+        }
+        
+        ATerm term = studio.getATermFactory().parse(modified);
+        ATerm event = studio.getATermFactory().make(
+                "is-modified(<term>,<term>)", editorId, term);
+        bridge.postEvent(event);
     }
 
     public void writeContents(ATerm editorId) {
-        // TODO Auto-generated method stub
+        EditorPanel panel = getPanel(editorId.toString());
 
+        if (panel != null) {
+            try {
+                panel.writeContents();
+                ATerm event = studio.getATermFactory().make(
+                        "contents-written(<term>)", editorId);
+                bridge.postEvent(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setFocus(ATerm t0, ATerm t1) {
-        // TODO Auto-generated method stub
-
     }
 
     public void registerTextCategories(ATerm t0, ATerm t1) {
-        // TODO Auto-generated method stub
+    }
+
+    public void addActions(final ATerm editorId, ATerm menuList) {
+        StudioComponent comp = (StudioComponent) componentsById.get(editorId
+                .toString());
+
+        addEditorMenus(editorId, comp, (ATermList) menuList);
+        
+        createFileMenu(editorId, comp);
+    }
+
+    private void addEditorMenus(final ATerm editorId, StudioComponent comp,
+            ATermList menuList) {
+        while (!menuList.isEmpty()) {
+            final ATerm menuPath = menuList.getFirst();
+
+            studio.addComponentMenu(comp, menuPath, new AbstractAction(menuPath
+                    .toString()) {
+                public void actionPerformed(ActionEvent e) {
+                    ATerm event = studio.getATermFactory().make(
+                            "menu-event(<term>,<term>)", editorId, menuPath);
+                    bridge.postEvent(event);
+                }
+            });
+            menuList = menuList.getNext();
+        }
 
     }
 
-    public void addActions(ATerm t0, ATerm t1) {
-        // TODO Auto-generated method stub
-
+    private void createFileMenu(final ATerm editorId, StudioComponent comp) {
+        metaconfig.Factory factory = metaconfig.Factory.getInstance((PureFactory)studio.getATermFactory());
+        
+        Items items = factory.makeItems("File", "Save");
+        
+        ATerm menuPath = factory.makeEvent_Default(items);
+        
+        studio.addComponentMenu(comp, menuPath, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ((EditorPanel) editors.get(editorId.toString())).writeContents();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
-
+    
     public void clearFocus(ATerm editorId) {
-        // TODO Auto-generated method stub
-
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        // TODO Auto-generated method stub
-
     }
 
     public void killEditor(ATerm editorId) {
-        // TODO Auto-generated method stub
-
+        StudioComponent comp = (StudioComponent) componentsById.get(editorId
+                .toString());
+        if (comp != null) {
+            componentsById.remove(editorId.toString());
+            editors.remove(editorId.toString());
+            studio.removeComponent(comp);
+        }
     }
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
-        // TODO Auto-generated method stub
-
     }
 
     public void editFile(ATerm editorId, String filename) {
         try {
-            createPanel(editorId.toString(), filename);
+            createPanel(editorId, filename);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,19 +146,11 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     public void editorToFront(ATerm editorId) {
-        // TODO Auto-generated method stub
-
+        studio.requestFocus((StudioComponent) componentsById.get(editorId
+                .toString()));
     }
 
     public void rereadContents(ATerm editorId) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void recAckEvent(ATerm t0) {
-    }
-
-    public void recTerminate(ATerm t0) {
     }
 
     public String getName() {
@@ -98,27 +159,51 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
-        EditorPluginBridge bridge = new EditorPluginBridge(studio
-                .getATermFactory(), this);
+        bridge = new EditorPluginBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);
         studio.connect(getName(), bridge);
     }
 
-    private EditorPanel createPanel(String id, String filename)
+    private EditorPanel createPanel(final ATerm editorId, String filename)
             throws IOException {
+        final String id = editorId.toString();
         EditorPanel panel = getPanel(id);
 
         if (panel == null) {
             panel = new EditorPanel(id, filename);
-            StudioComponentAdapter comp = new StudioComponentAdapter(id, panel);
+            int beginIndex = filename.lastIndexOf("/") + 1;
+            String componentName = filename.substring(beginIndex, filename
+                    .length());
+            StudioComponentImpl comp = new StudioComponentImpl(componentName,
+                    panel);
+            comp.addStudioComponentListener(new StudioComponentAdapter() {
+                public void componentRequestClose() {
+                }
+
+                public void componentClose() {
+                    editors.remove(id);
+                    componentsById.remove(id);
+                    ATerm event = studio.getATermFactory().make(
+                            "editor-disconnected(<term>)", editorId);
+                    bridge.postEvent(event);
+
+                }
+            });
+
             editors.put(id, panel);
+            componentsById.put(id, comp);
             studio.addComponent(comp);
-            // studio.addComponentMenu(panel, createEditorMenu());
         }
         return panel;
     }
 
     private EditorPanel getPanel(String id) {
         return (EditorPanel) editors.get(id);
+    }
+
+    public void recAckEvent(ATerm t0) {
+    }
+
+    public void recTerminate(ATerm t0) {
     }
 }

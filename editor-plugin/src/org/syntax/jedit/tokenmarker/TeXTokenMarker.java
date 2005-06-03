@@ -60,19 +60,16 @@ loop:		for(int i = offset; i < length; i++)
 						token = Token.NULL;
 					continue;
 				}
-				else
-				{
-					//\blah<non alpha>
-					// we leave the character in
-					// the stream, and it's not
-					// part of the command token
-					if(token == BDFORMULA || token == EDFORMULA)
-						token = Token.KEYWORD2;
-					addToken(i - lastOffset,token);
-					if(token == Token.KEYWORD1)
-						token = Token.NULL;
-					lastOffset = i;
-				}
+                //\blah<non alpha>
+                // we leave the character in
+                // the stream, and it's not
+                // part of the command token
+                if(token == BDFORMULA || token == EDFORMULA)
+                	token = Token.KEYWORD2;
+                addToken(i - lastOffset,token);
+                if(token == Token.KEYWORD1)
+                	token = Token.NULL;
+                lastOffset = i;
 			}
 			switch(c)
 			{

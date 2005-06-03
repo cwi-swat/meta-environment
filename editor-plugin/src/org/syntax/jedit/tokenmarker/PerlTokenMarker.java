@@ -58,12 +58,9 @@ public class PerlTokenMarker extends TokenMarker
 				addToken(line.count,token);
 				return Token.NULL;
 			}
-			else
-			{
-				addToken(line.count,token);
-				lineInfo[lineIndex].obj = str;
-				return token;
-			}
+            addToken(line.count,token);
+            lineInfo[lineIndex].obj = str;
+            return token;
 		}
 
 		boolean backslash = false;
@@ -105,8 +102,7 @@ loop:		for(int i = offset; i < length; i++)
 						lastOffset = lastKeyword = length;
 						break loop;
 					}
-					else
-						doKeyword(line,i,c);
+					doKeyword(line, i, c);
 					break;
 				case '$': case '&': case '%': case '@':
 					backslash = false;
@@ -285,8 +281,7 @@ loop:		for(int i = offset; i < length; i++)
 						if(Character.isWhitespace(matchChar)
 							&& !matchSpacesAllowed)
 							break;
-						else
-							matchChar = c;
+						matchChar = c;
 					}
 					else
 					{

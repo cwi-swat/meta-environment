@@ -132,12 +132,9 @@ loop:
 						lastOffset = length;
 						break loop;
 					}
-					else
-					{
-						searchBack(line, i);
-						addToken(1,Token.OPERATOR);
-						lastOffset = i + 1;
-					}
+                    searchBack(line, i);
+                    addToken(1,Token.OPERATOR);
+                    lastOffset = i + 1;
 				}
 				break;
 			case '!':
