@@ -13,7 +13,7 @@ configuration interface
 requires
    aterm 2.3.1
 
-error-support 1.1
+error-support 1.2
 
 toolbuslib 0.8
 
