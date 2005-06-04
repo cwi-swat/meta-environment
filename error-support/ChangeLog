@@ -1,5 +1,9 @@
 $Id$
 
+Sat Jun  4 15:00:30 CEST 2005 <kooiker@cwi.nl>
+ * utils/error-support.c:
+   - Remove declaration after code
+
 Fri Jun  3 14:49:53 CEST 2005 <jurgenv@cwi.nl>
  * Regenerated java errorapi and locationapi with newest apigen
  * Bumped to 1.2
