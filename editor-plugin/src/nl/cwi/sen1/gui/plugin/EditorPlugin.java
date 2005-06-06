@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
+import metaconfig.Factory;
 import metaconfig.types.Items;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
@@ -18,6 +19,7 @@ import nl.cwi.sen1.gui.StudioPlugin;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
+import errorapi.types.Area;
 
 public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     private static final String TOOL_NAME = "editor-plugin";
@@ -38,13 +40,13 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     public void isModified(ATerm editorId) {
         EditorPanel panel = getPanel(editorId.toString());
         String modified;
-        
+
         if (panel.isModified()) {
             modified = "true";
         } else {
             modified = "false";
         }
-        
+
         ATerm term = studio.getATermFactory().parse(modified);
         ATerm event = studio.getATermFactory().make(
                 "is-modified(<term>,<term>)", editorId, term);
@@ -66,7 +68,18 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
         }
     }
 
-    public void setFocus(ATerm t0, ATerm t1) {
+    public void setFocus(ATerm editorId, ATerm focus) {
+        errorapi.Factory factory = errorapi.Factory
+                .getInstance((PureFactory) studio.getATermFactory());
+    
+        EditorPanel panel = (EditorPanel) editors.get(editorId.toString());
+        
+        Area area = factory.AreaFromTerm(focus);
+        
+        panel.setFocus();
+    }
+
+    public void clearFocus(ATerm editorId) {
     }
 
     public void registerTextCategories(ATerm t0, ATerm t1) {
@@ -77,7 +90,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
                 .toString());
 
         addEditorMenus(editorId, comp, (ATermList) menuList);
-        
+
         createFileMenu(editorId, comp);
     }
 
@@ -100,24 +113,23 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     private void createFileMenu(final ATerm editorId, StudioComponent comp) {
-        metaconfig.Factory factory = metaconfig.Factory.getInstance((PureFactory)studio.getATermFactory());
-        
+        Factory factory = Factory.getInstance((PureFactory) studio
+                .getATermFactory());
+
         Items items = factory.makeItems("File", "Save");
-        
+
         ATerm menuPath = factory.makeEvent_Default(items);
-        
+
         studio.addComponentMenu(comp, menuPath, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    ((EditorPanel) editors.get(editorId.toString())).writeContents();
+                    ((EditorPanel) editors.get(editorId.toString()))
+                            .writeContents();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
         });
-    }
-    
-    public void clearFocus(ATerm editorId) {
     }
 
     public void displayMessage(ATerm editorId, String message) {
@@ -174,28 +186,31 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
         if (editorPanel == null) {
             final EditorPanel panel = new EditorPanel(id, filename);
             editorPanel = panel;
-            
+
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
-            
+
             StudioComponentImpl comp = new StudioComponentImpl(componentName,
                     panel);
             comp.addStudioComponentListener(new StudioComponentAdapter() {
-                public void componentRequestClose() throws CloseAbortedException {
+                public void componentRequestClose()
+                        throws CloseAbortedException {
                     if (panel.isModified()) {
-                        switch (JOptionPane.showConfirmDialog(null, "Editor is modified. Do you want to save your changes?")) {
-                            case JOptionPane.YES_OPTION:
-                                try {
-                                    panel.writeContents();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            case JOptionPane.CANCEL_OPTION:
-                                throw new CloseAbortedException();
+                        switch (JOptionPane
+                                .showConfirmDialog(null,
+                                        "Editor is modified. Do you want to save your changes?")) {
+                        case JOptionPane.YES_OPTION:
+                            try {
+                                panel.writeContents();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        case JOptionPane.CANCEL_OPTION:
+                            throw new CloseAbortedException();
                         }
-                        
+
                     }
                 }
 
@@ -213,6 +228,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
             componentsById.put(id, comp);
             studio.addComponent(comp);
         }
+        
         return editorPanel;
     }
 

@@ -16,10 +16,10 @@ public class EditorPanel extends JPanel {
     private String id;
 
     private String filename;
-
+    
+    private JEditTextArea textArea;
+    
     private boolean modified;
-
-    private final JEditTextArea textArea;
 
     public EditorPanel(String id, String filename) throws IOException {
         this.id = id;
@@ -56,6 +56,9 @@ public class EditorPanel extends JPanel {
         
         FileOutputStream fos = new FileOutputStream(filename);
         fos.write(text.getBytes());
+    }
+    
+    public void setFocus() {
     }
 
     public String getId() {
