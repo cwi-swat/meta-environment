@@ -9,6 +9,7 @@ noinst_PROGRAMS=mept-test
 mept_test_SOURCES=mept-test.c
 mept_test_LDADD=\
 	-L$(top_builddir)/libmept -lmept\
+	-L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(top_builddir)/test/terms -ltestTerms \
 	-L$(ATERM)/lib -lATerm
 

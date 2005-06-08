@@ -59,6 +59,18 @@ void testCompare()
 
 /*}}}  */
 
+void testPosInfo() {
+  PT_ParseTree parseTree = PT_addParseTreePosInfo("-", PT_ParseTreeFromTerm(Integers));
+  PT_Tree tree = PT_getParseTreeTree(parseTree);
+
+  assert(PT_hasTreeLocation(tree));
+
+  LOC_Location location = PT_getTreeLocation(tree);
+  ATwarning("%t\n", tree);
+
+  ATwarning("%t\n", location);
+}
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -67,9 +79,11 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  LOC_initLocationApi();
   init_terms_dict();
 
   testCompare();
+  testPosInfo();
 
   return 0;
 }
