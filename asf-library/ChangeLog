@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun  8 09:37:00 CEST 2005 <M336@cwi.nl>
+ * library/basic/Areas.sdf:
+   - Added comments describing the structure of an area
+
 Tue Apr 12 17:05:18 CEST 2005 <markvdb@cwi.nl>
  * Improved the syntax of prefix functions.
 

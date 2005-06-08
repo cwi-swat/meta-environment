@@ -6,6 +6,25 @@ exports
 
 sorts Area
 context-free syntax
+  %% Areas describe the boundaries of substrings in files in a one dimensional
+  %% fashion, but taking newlines into account. The begin-line, begin-column
+  %% are styled after the UNIX standard. We offer both line-column and 
+  %% offset-length representations because neither representation can be 
+  %% computed from the other without the original file.
+
+  %% begin-line: the first line in a file is 1
+  %% begin-column: the first column on a line is 0
+  %% end-line: line on which the end-column occurs
+  %% end-column: first column beyond last character
+
+  %% Example: describing the area starting at T of "This" up to and including 
+  %% R of "constructoR"
+
+  %%  0123456789012345
+  %% 1  This is an
+  %% 2area constructoR
+  %%       
+  %%  area(1,2,2,16,2,26)
 
   "area" "("
     begin-line:NatCon "," 
