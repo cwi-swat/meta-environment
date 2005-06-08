@@ -62,13 +62,32 @@ void testCompare()
 void testPosInfo() {
   PT_ParseTree parseTree = PT_addParseTreePosInfo("-", PT_ParseTreeFromTerm(Integers));
   PT_Tree tree = PT_getParseTreeTree(parseTree);
+  LOC_Location location;
+  LOC_Area area;
+  int beginLine;
+  int endLine;
+  int beginColumn;
+  int endColumn;
+  int offset;
+  int length;
 
   assert(PT_hasTreeLocation(tree));
 
-  LOC_Location location = PT_getTreeLocation(tree);
-  ATwarning("%t\n", tree);
+  location = PT_getTreeLocation(tree);
+  area = LOC_getLocationArea(location);
+  beginLine = LOC_getAreaBeginLine(area);
+  endLine = LOC_getAreaEndLine(area);
+  beginColumn = LOC_getAreaBeginColumn(area);
+  endColumn = LOC_getAreaEndColumn(area);
+  offset = LOC_getAreaOffset(area);
+  length = LOC_getAreaLength(area);
 
-  ATwarning("%t\n", location);
+  test_assert("beginline", beginLine == 1);
+  test_assert("endline", endLine == 2);
+  test_assert("begincolumn", beginColumn == 2);
+  test_assert("endcolumn", endColumn == 5);
+  test_assert("offset", offset == 2);
+  test_assert("length", length == 7);
 }
 
 /*{{{  int main(int argc, char *argv[]) */
@@ -89,4 +108,5 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
+
 

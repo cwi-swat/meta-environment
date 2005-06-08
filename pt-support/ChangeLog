@@ -1,5 +1,8 @@
 $Id$
 
+Wed Jun  8 10:21:52 CEST 2005 <M336@cwi.nl>
+ * tests/test_mept.c: Added unit test for posInfo.
+
 Wed Feb 23 11:18:18 CET 2005 <jurgenv@cwi.nl>
  * libmept/flattenPT.c: fixed AsFix2 list patterns for lexical lists. They
    only worked with either lists of char-classes, or directly sort names,
