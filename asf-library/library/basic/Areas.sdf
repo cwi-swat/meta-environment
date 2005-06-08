@@ -12,6 +12,11 @@ context-free syntax
   %% offset-length representations because neither representation can be 
   %% computed from the other without the original file.
 
+  %% All characters, including tabs and newlines, are counted as one character.
+  %% Positions are calculated based on the original file, not as the file is
+  %% displayed on screen. The '\n' character increases the line and returns
+  %% the column position to 0.
+
   %% begin-line: the first line in a file is 1
   %% begin-column: the first column on a line is 0
   %% end-line: line on which the end-column occurs
