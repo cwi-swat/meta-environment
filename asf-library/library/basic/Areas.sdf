@@ -39,5 +39,3 @@ context-free syntax
     offset:NatCon ","
     length:NatCon ")"
   -> Area {cons("area")}
-
-
