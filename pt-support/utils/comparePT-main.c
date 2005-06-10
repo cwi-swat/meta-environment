@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
 
-  if (argc != 3) {
+  if (argc < 3 || argc > 7) {
     usage(argv[0]);
   }
 
