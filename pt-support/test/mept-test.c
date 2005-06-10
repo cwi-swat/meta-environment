@@ -14,28 +14,35 @@
 
 void testCompare()
 {
+  ATbool modAmbOrdering = ATfalse;
+  ATbool modLayout = ATtrue;
+
   test_assert("true > false", 
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(True)),
-			     PT_getParseTreeTree(PT_ParseTreeFromTerm(False)))
+			     PT_getParseTreeTree(PT_ParseTreeFromTerm(False)),
+                             modAmbOrdering, modLayout)
 	      > 0);
 
   test_assert("false < true", 
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(False)),
-			     PT_getParseTreeTree(PT_ParseTreeFromTerm(True)))
+			     PT_getParseTreeTree(PT_ParseTreeFromTerm(True)),
+                             modAmbOrdering, modLayout)
 	      < 0);
 
   test_assert("whitespace difference",
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(
 		             TrueAndFalse)),
 			     PT_getParseTreeTree(PT_ParseTreeFromTerm(
-			     OtherTrueAndFalse)))
+			     OtherTrueAndFalse)),
+                             modAmbOrdering, modLayout)
 	      == 0);
 
   test_assert("annotations difference",
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(
 			     TrueAndFalse)),
 			     PT_getParseTreeTree(PT_ParseTreeFromTerm(
-			     AnnotatedTrueAndFalse)))
+			     AnnotatedTrueAndFalse)),
+                             modAmbOrdering, modLayout)
 	      == 0);
 
 
@@ -43,18 +50,33 @@ void testCompare()
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(DeclareA)
 						),
 			     PT_getParseTreeTree(PT_ParseTreeFromTerm(DeclareB)
-						))
+						),
+                             modAmbOrdering, modLayout)
 	      < 0);
 
   test_assert("2 > 10",
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(Two)),
-			     PT_getParseTreeTree(PT_ParseTreeFromTerm(Ten)))
+			     PT_getParseTreeTree(PT_ParseTreeFromTerm(Ten)),
+                             modAmbOrdering, modLayout)
 	      > 0);
 
   test_assert("20 > 10",
 	      PT_compareTree(PT_getParseTreeTree(PT_ParseTreeFromTerm(Twenty)),
-			     PT_getParseTreeTree(PT_ParseTreeFromTerm(Ten)))
+			     PT_getParseTreeTree(PT_ParseTreeFromTerm(Ten)),
+                             modAmbOrdering, modLayout)
 	      > 0);
+
+  test_assert("compare modulo amb ordering is true",
+	      PT_compareTree(PT_getParseTreeTop(PT_ParseTreeFromTerm(amb1)),
+			     PT_getParseTreeTop(PT_ParseTreeFromTerm(amb2)),
+                             ATtrue, ATfalse)
+	      == 0);
+
+  test_assert("compare modulo amb ordering is false",
+	      PT_compareTree(PT_getParseTreeTop(PT_ParseTreeFromTerm(amb1)),
+			     PT_getParseTreeTop(PT_ParseTreeFromTerm(amb2)),
+                             ATfalse, ATfalse)
+	      != 0);
 }
 
 /*}}}  */

@@ -3,6 +3,9 @@
 
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2);
 
+static ATbool moduloAmbOrdering;
+static ATbool moduloLayout;
+
 /*{{{  static int PT_compareArgs(PT_Args args1, PT_Args args2) */
 
 static int PT_compareArgs(PT_Args args1, PT_Args args2)
@@ -18,7 +21,7 @@ static int PT_compareArgs(PT_Args args1, PT_Args args2)
     arg2 = PT_getArgsHead(args2);
 
     /* We assume the layout is on equal positions for args1 and args2 */
-    if (!PT_isTreeLayout(arg1)) {
+    if (!moduloLayout || !PT_isTreeLayout(arg1)) {
       result = PT_compareTreeRec(arg1, arg2);
     }
 
@@ -76,6 +79,17 @@ static int PT_compareProduction(PT_Production prod1, PT_Production prod2)
 }
 
 /*}}}  */
+
+static int ambiguityOrdering(const ATerm t1, const ATerm t2) {
+  if (t1 < t2) {
+    return -1;
+  } else if (t2 < t1) {
+    return 1;
+  }
+
+  return 0;
+}
+
 /*{{{  static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2) */
 
 static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2)
@@ -83,6 +97,11 @@ static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2)
   PT_Tree amb1;
   PT_Tree amb2;
   int result = 0;
+
+  if (moduloAmbOrdering == ATtrue) {
+    ambs1 = (PT_Args) ATsort((ATermList) ambs1, ambiguityOrdering);
+    ambs2 = (PT_Args) ATsort((ATermList) ambs2, ambiguityOrdering);
+  }
 
   while (result == 0 && !PT_isArgsEmpty(ambs1)) {
     amb1 = PT_getArgsHead(ambs1);
@@ -169,8 +188,11 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
 
 /*{{{  int PT_compareTree(PT_Tree tree1, PT_Tree tree2)  */
 
-int PT_compareTree(PT_Tree tree1, PT_Tree tree2) 
+int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool modLayout) 
 {
+  moduloAmbOrdering = modAmbOrdering;
+  moduloLayout = modLayout;
+
   assert(PT_isEqualSymbol(PT_getProductionRhs(PT_getTreeProd(tree1)),
 			  PT_getProductionRhs(PT_getTreeProd(tree2))));
 

@@ -8,7 +8,7 @@
 #include "MEPT.h"
 #include <Location.h>
 
-int PT_compareTree(PT_Tree tree1, PT_Tree tree2);
+int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool modLayout);
 
 PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree);
 PT_Tree PT_applyFunctionToArgs(const char *function, const char *sort,

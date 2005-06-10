@@ -1,5 +1,11 @@
 $Id$
 
+Fri Jun 10 15:27:05 CEST 2005 <M328@cwi.nl>
+ * libmept/ordering.c:
+   - Add parameters for ordering alternatives in ambiguity-clusters and ignoring     layout-trees while comparing
+ * test:
+   - Add tests for checking new options
+
 Wed Jun  8 10:21:52 CEST 2005 <M336@cwi.nl>
  * tests/test_mept.c: Added unit test for posInfo.
 
