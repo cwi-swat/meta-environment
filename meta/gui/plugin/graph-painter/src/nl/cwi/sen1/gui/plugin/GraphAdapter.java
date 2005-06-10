@@ -7,6 +7,7 @@ import java.util.Map;
 import nl.cwi.sen.api.graph.graph.Factory;
 import nl.cwi.sen.api.graph.graph.types.Attribute;
 import nl.cwi.sen.api.graph.graph.types.AttributeList;
+import nl.cwi.sen.api.graph.graph.types.Color;
 import nl.cwi.sen.api.graph.graph.types.Edge;
 import nl.cwi.sen.api.graph.graph.types.EdgeList;
 import nl.cwi.sen.api.graph.graph.types.Graph;
@@ -27,16 +28,28 @@ public class GraphAdapter extends DefaultGraph {
 		for (NodeList nodes = graph.getNodes(); !nodes.isEmpty(); nodes = nodes
 				.getTail()) {
 			Node node = nodes.getHead();
-			DefaultNode pNode = new DefaultNode();
+			GraphNode pNode = new GraphNode();
 
-			pNode.setAttribute("id", node.getId().getId());
-			pNode.setAttribute("label", getNodeLabel(node));
-			pNode.setAttribute("dot.x", new Integer(getX(node)).toString());
-			pNode.setAttribute("dot.y", new Integer(getY(node)).toString());
-			pNode.setAttribute("dot.width", new Integer(getWidth(node))
-					.toString());
-			pNode.setAttribute("dot.height", new Integer(getHeight(node))
-					.toString());
+			pNode.setId(node.getId().getId());
+			pNode.setLabel(getNodeLabel(node));
+			pNode.setDotX(getX(node));
+			pNode.setDotY(getY(node));
+			pNode.setDotWidth(getWidth(node));
+			pNode.setDotHeight(getHeight(node));
+
+			Color fillColor = getFillColorAttribute(node);
+
+			if (fillColor != null) {
+				pNode.setFillColor(new java.awt.Color(fillColor.getRed(),
+						fillColor.getGreen(), fillColor.getBlue()));
+			}
+			
+			Color color = getFillColorAttribute(node);
+
+			if (color != null) {
+				pNode.setColor(new java.awt.Color(color.getRed(),
+						color.getGreen(), color.getBlue()));
+			}
 
 			nodeMap.put(node.getId(), pNode);
 			addNode(pNode);
@@ -104,6 +117,20 @@ public class GraphAdapter extends DefaultGraph {
 			Attribute attr = attrs.getHead();
 			if (attr.isSize()) {
 				return (Size) attr;
+			}
+			attrs = attrs.getTail();
+		}
+
+		return null;
+	}
+
+	static private nl.cwi.sen.api.graph.graph.types.Color getFillColorAttribute(
+			Node node) {
+		AttributeList attrs = node.getAttributes();
+		while (!attrs.isEmpty()) {
+			Attribute attr = attrs.getHead();
+			if (attr.isFillColor()) {
+				return attr.getColor();
 			}
 			attrs = attrs.getTail();
 		}

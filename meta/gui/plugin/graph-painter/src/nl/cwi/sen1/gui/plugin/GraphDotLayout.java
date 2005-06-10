@@ -8,17 +8,18 @@ import edu.berkeley.guir.prefuse.action.assignment.Layout;
 import edu.berkeley.guir.prefuse.graph.Graph;
 
 public class GraphDotLayout extends Layout {
-
 	public void run(ItemRegistry registry, double frac) {
 		Graph g = registry.getFilteredGraph();
 		Iterator nodeIter = g.getNodes();
 		while (nodeIter.hasNext()) {
-			NodeItem n = (NodeItem) nodeIter.next();
-			double x = new Double(n.getAttribute("dot.x")).doubleValue();
-			double y = new Double(n.getAttribute("dot.y")).doubleValue();
-			this.setLocation(n, null, x, y);
-		}
-		
-	}
+			NodeItem item = (NodeItem) nodeIter.next();
+			GraphNode node = (GraphNode) item.getEntity();
+			double x = node.getDotX();
+			double y = node.getDotY();
 
+			item.setFillColor(node.getFillColor());
+			this.setLocation(item, null, x, y);
+		}
+
+	}
 }
