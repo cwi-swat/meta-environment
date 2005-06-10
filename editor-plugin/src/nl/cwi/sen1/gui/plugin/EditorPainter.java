@@ -10,6 +10,7 @@ import org.syntax.jedit.TextAreaPainter;
 import errorapi.types.Area;
 
 public class EditorPainter extends TextAreaPainter {
+    private static final Color focusColor = new Color(255,165,0);
     private Area focus;
 
     public EditorPainter(JEditTextArea textArea, TextAreaDefaults defaults) {
@@ -30,7 +31,7 @@ public class EditorPainter extends TextAreaPainter {
             int startCol = focus.getBeginColumn();
             int endCol = focus.getEndColumn();
             if (line >= startLine && line <= endLine) {
-                gfx.setColor(new Color(255,128,255));
+                gfx.setColor(focusColor);
                 paintArea(gfx, line, y, startLine, endLine, startCol, endCol);
             }
         }

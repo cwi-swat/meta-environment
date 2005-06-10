@@ -1941,7 +1941,7 @@ public class JEditTextArea extends JComponent
 		}
 	}
 
-	class MouseHandler extends MouseAdapter
+	protected class MouseHandler extends MouseAdapter
 	{
 		public void mousePressed(MouseEvent evt)
 		{

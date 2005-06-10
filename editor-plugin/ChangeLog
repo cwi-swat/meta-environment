@@ -3,6 +3,7 @@
 Fri Jun 10 10:13:35 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * EditorPainter.java:
    - Add focus highlight
+ * refactorings
 
 Fri Jun  3 11:47:41 CEST 2005 <kooiker@cwi.nl>
  * EditorPanel.java:
