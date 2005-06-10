@@ -9,15 +9,16 @@ import javax.swing.JPanel;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
-import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.SyntaxDocument;
+
+import errorapi.types.Area;
 
 public class EditorPanel extends JPanel {
     private String id;
 
     private String filename;
     
-    private JEditTextArea textArea;
+    private EditorTextArea textArea;
     
     private boolean modified;
 
@@ -34,7 +35,7 @@ public class EditorPanel extends JPanel {
             }
         });
 
-        textArea = new JEditTextArea();
+        textArea = new EditorTextArea();
         textArea.setDocument(document);
         textArea.setText(readContents(filename));
         modified = false;
@@ -58,7 +59,8 @@ public class EditorPanel extends JPanel {
         fos.write(text.getBytes());
     }
     
-    public void setFocus() {
+    public void setFocus(Area focus) {
+        textArea.setFocus(focus);
     }
 
     public String getId() {
@@ -67,6 +69,7 @@ public class EditorPanel extends JPanel {
 
     public void setModified() {
         modified = true;
+        textArea.setFocus(null);
     }
 
     public boolean isModified() {

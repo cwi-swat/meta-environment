@@ -669,7 +669,7 @@ public class TextAreaPainter extends JComponent implements TabExpander
 
 protected void paintCaret(Graphics gfx, int line, int y)
 	{
-		if(textArea.isCaretVisible())
+        if(textArea.isCaretVisible())
 		{
 			int offset = textArea.getCaretPosition() 
 				- textArea.getLineStartOffset(line);

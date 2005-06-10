@@ -74,9 +74,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     
         EditorPanel panel = (EditorPanel) editors.get(editorId.toString());
         
-        Area area = factory.AreaFromTerm(focus);
-        
-        panel.setFocus();
+        panel.setFocus(factory.AreaFromTerm(focus));
     }
 
     public void clearFocus(ATerm editorId) {
@@ -133,6 +131,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     public void displayMessage(ATerm editorId, String message) {
+        System.err.println("Display message: " + message);
     }
 
     public void killEditor(ATerm editorId) {
