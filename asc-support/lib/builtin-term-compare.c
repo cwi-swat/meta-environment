@@ -20,7 +20,7 @@ static PT_Tree makeBooleanFromInt(int result)
 
 PT_Tree ASFE_term_less(PT_Symbol type, PT_Tree left, PT_Tree right)
 {
-  int result = PT_compareTree(left, right);
+  int result = PT_compareTree(left, right, ATfalse, ATtrue);
 
   return makeBooleanFromInt(result);
 }

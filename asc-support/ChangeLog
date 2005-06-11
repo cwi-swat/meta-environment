@@ -1,5 +1,9 @@
 $Id$
 
+Sun Jun 12 00:15:34 CEST 2005 <kooiker@cwi.nl>
+ * lib/builtin-term-compare.c:
+   - Added paramters for modAmbSorting and modLayout to comparePT
+
 Thu Feb 17 16:06:56 CET 2005 <jurgenv@cwi.nl>
  * Added possibility for parsing the input and output before
    rewriting.
