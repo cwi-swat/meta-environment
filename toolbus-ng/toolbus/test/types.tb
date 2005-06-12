@@ -1,0 +1,32 @@
+process Bool(B : bool) is tau
+
+process Int(N : int) is tau
+
+process Real(R : real) is tau
+
+process Str(S : str) is tau
+
+process Bstr(BS : bstr) is tau
+
+process Pf(F : f) is tau
+
+process LINT(L : list(<int>)) is tau
+
+process INTPAIR(L : [<int>, <int>]) is tau
+
+process ALL is
+  let B : bool, N : int, R : real, S : str, BS : bstr, 
+      L : [<int>,<int>], M : list(<int>)
+  in
+	Bool(true) . B := false . Bool(B) .
+	Int(1) . N := 17 . Int(N) .
+	Real(1.5) . R := 3.14 . Real(R) .
+	S := "xyz" . Str("abc") . Str(S) .
+   	Bstr(BS) . 
+	Pf(f) . Pf(f(3)) . Pf(f(3, g(4))) .
+        LINT([1]) . LINT([1,2,3]) . L := [2,3] . LINT(L) . M := [] . LINT(M) .
+        INTPAIR([1,2]) . INTPAIR(L) . M := [1,2,3] . INTPAIR(M) .
+	shutdown("")
+  endlet
+
+toolbus(ALL)

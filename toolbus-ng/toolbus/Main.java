@@ -334,7 +334,7 @@ public class Main {
 
     try {
       T.setVerbose(true);
-      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/If5.tb");
+      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/scope.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
