@@ -1,0 +1,16 @@
+process SCOPE(T : term) is
+let
+  R : term
+in
+  R := 1 .
+  printf("T is %t\n", T) .
+  let
+    S : term, R : int, R : int, T : int
+  in
+    S := 2 .
+    printf("T=%t, R=%t, S=%t\n", T, R, S)
+  endlet
+endlet
+
+toolbus(SCOPE("abc"))
+
