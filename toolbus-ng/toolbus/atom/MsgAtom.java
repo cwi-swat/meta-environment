@@ -11,7 +11,7 @@ import toolbus.process.*;
 import aterm.*;
 import aterm.ATerm;
 
-abstract class MsgAtom extends Atom {
+public abstract class MsgAtom extends Atom {
 
   private State partners = new State(); // communication partners in other processes
   private Ref msg;

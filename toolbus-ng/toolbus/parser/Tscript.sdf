@@ -4,6 +4,9 @@ imports ProcessDef
 exports
   sorts Tscript ToolBusConfig
 
+  context-free start-symbols
+        Tscript
+
   context-free syntax
     "toolbus" "(" {ProcessCall ","}+ ")" -> ToolBusConfig
-    ProcessDef*  ToolBusConfig		 -> Tscript {cons("Tscript")}
+    ProcessDef*  ToolBusConfig		     -> Tscript {cons("Tscript")}

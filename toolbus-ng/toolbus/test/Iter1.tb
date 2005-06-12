@@ -2,15 +2,15 @@ process P is
 let N : int, M : int, X : int
 in
     N := 0 .
-    print before .
+    printf(before) .
     ( if less(N, 5)
       then
-         print N . N := add(N, 1) .
+         printf(N) . N := add(N, 1) .
          M := 10 .
          ( if less(M,13)
            then
 	     X := add(M, N) .
-             print X .
+             printf(X) .
              M := add(M, 1)
            else tau
            fi

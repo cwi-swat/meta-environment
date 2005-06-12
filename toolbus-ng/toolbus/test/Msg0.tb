@@ -1,10 +1,10 @@
 process P is
-  snd-msg 123
+  snd-msg(123)
 
 process Q is
-  rec-msg 123 . print q
+  rec-msg(123) . printf(q)
 
 process R is
-  rec-msg 124 . print r
+  rec-msg(124) . printf(r)
 
 toolbus(P, Q, R)

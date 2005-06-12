@@ -1,6 +1,6 @@
 module TBTerms 
 
-imports asf/syntax/Comments
+imports basic/Comments
 
 exports
 
@@ -8,11 +8,11 @@ exports
   sorts StrCon String  L-Char EscChar
 
   lexical syntax
-    [0-9]+ 		-> NatCon
+    [0-9]+ 		            -> NatCon
     [a-z] [a-zA-Z0-9\-]* 	-> Id
-    "\\" ~[] 			-> EscChar {avoid}
-    ~[\0-\31\"\\] \/ [\t\n] 	-> L-Char
-    EscChar 			-> L-Char
+    "\\" ~[] 			    -> EscChar {avoid}
+    ~[\0-\31\"\\] \/ [\t\n] -> L-Char
+    EscChar 			    -> L-Char
     "\"" L-Char* "\"" 		-> StrCon
     [A-Z] [a-zA-Z0-9]* 		-> Vname
 
@@ -22,31 +22,31 @@ exports
     Vname -/- [a-zA-Z0-9\-]
 
   context-free syntax
-    NatCon			-> Nat 	  {cons("natcon")}
-    Int "." NatCon 		-> Real   {cons("real")}
-    "(" Nat ")" 		-> Nat    {bracket}
-    Nat 			-> Int
-    "+" Nat 			-> Int    {cons("posint")}
-    "-" Nat 			-> Int    {cons("negint")}
-    "(" Int ")" 		-> Int    {bracket}
-    StrCon			-> String {cons("strcon")}
+    NatCon			        -> Nat 	  {cons("natcon")}
+    Int "." NatCon 		    -> Real   {cons("real")}
+    "(" Nat ")" 		    -> Nat    {bracket}
+    Nat 			        -> Int
+    "+" Nat 			    -> Int    {cons("posint")}
+    "-" Nat 			    -> Int    {cons("negint")}
+    "(" Int ")" 		    -> Int    {bracket}
+    StrCon			        -> String {cons("strcon")}
 
-    Int 			-> TBTerm
-    Real			-> TBTerm
-    String 			-> TBTerm 
+    Int 			        -> TBTerm
+    Real			        -> TBTerm
+    String 			        -> TBTerm 
 
-    Vname 			-> Var
-    Var 			-> GenVar  {cons("var")}
-    Var "?" 			-> GenVar  {cons("resvar")}
-    GenVar 			-> TBTerm
+    Vname 			        -> Var
+    Var 			        -> GenVar  {cons("var")}
+    Var "?" 			    -> GenVar  {cons("resvar")}
+    GenVar 			        -> TBTerm
 
-    "<" TBTerm ">" 		-> TBTerm  {cons("placeholder")}
+    "<" TBTerm ">" 		    -> TBTerm  {cons("placeholder")}
 
-    Id 				-> TBTerm   %% {cons("apply")}
+    Id 				        -> TBTerm   %% {cons("apply")}
 
     Id "(" TBTermList ")" 	-> TBTerm  {cons("apply")}
 
-    {TBTerm ","}* 		-> TBTermList
+    {TBTerm ","}* 		    -> TBTermList
 
     "[" TBTermList "]" 		-> TBTerm  %% {cons("termlist")}
 

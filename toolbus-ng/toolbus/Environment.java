@@ -29,7 +29,7 @@ import aterm.*;
  * - getVarIndex
  * - getVarType
  * 
- * During compilation, resolveVars use the environment to replace all varaible indeces by their
+ * During compilation, resolveVars uses the environment to replace all varaiale indices by their
  * actual value. During execution time, operations on variables amount to a simple indexing
  * operation.
  * 
@@ -60,7 +60,8 @@ public class Environment {
    * introduceVars adds a list of variables: each variables gets a new index assigned.
    */
   
-  public void introduceVars(ATermList vars) throws ToolBusException {
+ 
+public void introduceVars(ATermList vars) throws ToolBusException {
     if (executing) {
       throw new ToolBusInternalError("introduceVars during execution");
     }

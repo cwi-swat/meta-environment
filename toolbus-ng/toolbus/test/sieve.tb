@@ -3,21 +3,21 @@ process SIEVE(Max : int) is
   in
      create(FILTER(2), Pid?) .
      N := 3 .
-     if less(N, Max) then snd-msg com(2, N) . N := add(N, 1) fi *
-     if equal(N, Max) then shutdown "done" fi
+     if less(N, Max) then snd-msg(com(2, N)) . N := add(N, 1) fi *
+     if equal(N, Max) then shutdown("done") fi
   endlet
 
 process FILTER(P : int) is
   let Z : int, N : int, Pid : int
   in
-     print P .
-     ( rec-msg com(P, Z?) .
+     printf (P) .
+     ( rec-msg(com(P, Z?)) .
        if equal(mod(Z, P), 0) then tau
        else
           create(FILTER(Z), Pid?) .
-          ( rec-msg com(P, N?) .
+          ( rec-msg(com(P, N?)) .
             if equal(mod(N, P), 0) then tau
-            else snd-msg com(Z, N) fi
+            else snd-msg(com(Z, N)) fi
           ) * delta
        fi
      ) * delta

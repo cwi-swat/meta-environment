@@ -1,0 +1,2 @@
+parsetablegen -v -m Tscript -o Tscript1.trm.tbl -i Atom.sdf  -i ProcessDef.sdf  \
+              -i ProcessExpr.sdf  -i TBTerms.sdf  -i TimeExpr.sdf  -i Tscript.sdf  -i VarDecls.sdf

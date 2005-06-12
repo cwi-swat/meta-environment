@@ -2,12 +2,11 @@
  * @author paulk
  */
 
-package toolbus.atom;
+package toolbus;
 import java.util.*;
 
-import toolbus.*;
+import toolbus.atom.MsgAtom;
 import toolbus.ToolBusException;
-import toolbus.process.*;
 import toolbus.process.ProcessInstance;
 
 import aterm.ATerm;
@@ -70,10 +69,12 @@ public class State {
   }
 
   public void setTest(ATerm test) throws ToolBusException {
-    for (Iterator it = elements.iterator(); it.hasNext();) {
-      Atom a = (Atom) it.next();
-      a.setTest(test);
-    }
+  	if (test != null){
+	    for (Iterator it = elements.iterator(); it.hasNext();) {
+	      StateElement a = (StateElement) it.next();
+	      a.setTest(test);
+	    }
+  	}
   }
 
   public String toString() {

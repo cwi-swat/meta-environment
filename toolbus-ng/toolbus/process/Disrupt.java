@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import toolbus.ToolBusException;
 import toolbus.atom.*;
+import toolbus.State;
 
 public class Disrupt extends AbstractProcessExpression {
   private ProcessExpression left, right;

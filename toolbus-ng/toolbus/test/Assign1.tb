@@ -1,6 +1,6 @@
 process P (X : int) is
   let Y : int
   in
-	Y := X . print X . print Y
+	Y := X . printf(X) . printf(Y)
   endlet
 toolbus(P(123))

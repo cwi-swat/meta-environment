@@ -3,19 +3,19 @@ process PRODUCER(Start : int, Max : int) is
   in
      N := Start .
      ( if less(N, Max)
-       then snd-msg p(N) .
+       then snd-msg(p(N)) .
             N := add(N, 1)
        fi
-     ) * if equal(N, Max) then shutdown done fi
+     ) * if equal(N, Max) then shutdown(done) fi
   endlet
 
 process CONSUMER is
   let Z : int
   in
-     ( rec-msg q(Z?) .
+     ( rec-msg(q(Z?)) .
        if equal(mod(Z, 2), 0)
        then
-          print Z
+          printf(Z)
        else
           tau
        fi
@@ -25,7 +25,7 @@ process CONSUMER is
 process TRAFO is
   let Z : int
   in
-     ( rec-msg p(Z?) . snd-msg q(Z) ) * delta
+     ( rec-msg(p(Z?)) . snd-msg(q(Z)) ) * delta
   endlet
 
 toolbus(

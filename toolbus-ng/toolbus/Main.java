@@ -17,19 +17,14 @@ public class Main {
     aterms = TBTerm.factory;
 
     //PETest();
-    //CallTest();
-     //CallTest2();
-    //IfTest(); 
     //CreateTest();
-    //NestedIterTest();
-     //DisruptTest();
+    //DisruptTest();
     //MergeTest();
     ParseTest();
     //SndAndRecTest();
     //ToolTest();
   }
- 
-  
+
   static void PETest(){
     ATermList al = aterms.makeList(aterms.make("a"));
     ATermList bl = aterms.makeList(aterms.make("b"));
@@ -71,7 +66,6 @@ public class Main {
       System.out.println(e.getMessage());
     }
   }
-
 
   static void CreateTest(){
 
@@ -249,9 +243,7 @@ public class Main {
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }
   }
 
-// ------
-
-static void producerTest(){
+  static void producerTest(){
   //ATerm int0 = aterms.make("0");
   //ATerm int2 = aterms.make("2");
   //ATerm int3 = aterms.make("3");
@@ -341,8 +333,8 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      //T.setVerbose(true);
-      T.parse("toolbus/test/sieve.tb");
+      T.setVerbose(true);
+      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/If5.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
@@ -443,5 +435,5 @@ static void producerTest(){
     }
     catch (Exception e) {System.out.println(e.getMessage());  e.printStackTrace(); }
   }
-  
+
 }
