@@ -25,7 +25,11 @@ public class Print extends Atom {
     if (isEnabled()) {
       Environment e = getEnv();
       PrintWriter out = getToolBus().getPrintWriter();
-      out.println(TBTerm.substitute(arg.value, e).toString());
+      ATerm res = TBTerm.substitute(arg.value, e);
+      for (int i = 0; i < ((ATermList) res).getLength(); i++) {
+        out.print( ((ATermList) res).elementAt(i).toString() );
+      }
+      out.println();
       out.flush();
       return nextState();
     } else {

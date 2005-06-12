@@ -6,32 +6,32 @@ exports
   sorts ProcessExpr ProcessName ProcessCall Invocation
 
   lexical syntax
-    [A-Z] [a-zA-Z0-9\-]* 			-> ProcessName	{cons("id")}
+    [A-Z] [a-zA-Z0-9\-]* 			         -> ProcessName	{cons("id")}
 
 %%  lexical restrictions
 %%    ProcessName -/- [a-zA-Z0-9\-]
 
   context-free syntax
 
-    ProcessName					-> Invocation {cons("apply")}
-    ProcessName "(" {TBTerm ","}* ")"		-> Invocation {cons("apply")}
+    ProcessName					             -> Invocation {cons("apply")}
+    ProcessName "(" {TBTerm ","}* ")"		 -> Invocation {cons("apply")}
 
-    Atom 					-> ProcessExpr
+    Atom 					                 -> ProcessExpr
 %%    Atom TimeExpr 				-> ProcessExpr
-   "create" "(" Invocation  "," GenVar ")" 	-> ProcessExpr {cons("Create")}
-    Invocation					-> ProcessCall  {cons("ProcessCall")}
-    ProcessCall					-> ProcessExpr
+   "create" "(" Invocation  "," GenVar ")" 	 -> ProcessExpr {cons("Create")}
+    Invocation					             -> ProcessCall  {cons("ProcessCall")}
+    ProcessCall					             -> ProcessExpr
 
-    ProcessExpr "." ProcessExpr 		-> ProcessExpr {right, cons("Sequence")}
-    ProcessExpr "+" ProcessExpr 		-> ProcessExpr {left, cons("Alternative")}
-    ProcessExpr "*" ProcessExpr 		-> ProcessExpr {left, cons("Iteration")}
-    ProcessExpr "||" ProcessExpr 		-> ProcessExpr {left, cons("Merge")}
-    ProcessExpr ">>" ProcessExpr 		-> ProcessExpr {right, cons("Disrupt")}
-    "(" ProcessExpr ")" 			-> ProcessExpr {bracket}
-    "let" VarDecls "in" ProcessExpr "endlet" 	-> ProcessExpr {cons("LetDefinition")}
-    "if" TBTerm "then" ProcessExpr "fi" 	-> ProcessExpr {cons("IfThen")}
+    ProcessExpr "." ProcessExpr 		     -> ProcessExpr {right, cons("Sequence")}
+    ProcessExpr "+" ProcessExpr 		     -> ProcessExpr {left, cons("Alternative")}
+    ProcessExpr "*" ProcessExpr 		     -> ProcessExpr {left, cons("Iteration")}
+    ProcessExpr "||" ProcessExpr 		     -> ProcessExpr {left, cons("Merge")}
+    ProcessExpr ">>" ProcessExpr 		     -> ProcessExpr {right, cons("Disrupt")}
+    "(" ProcessExpr ")" 			         -> ProcessExpr {bracket}
+    "let" VarDecls "in" ProcessExpr "endlet" -> ProcessExpr {cons("LetDefinition")}
+    "if" TBTerm "then" ProcessExpr "fi" 	 -> ProcessExpr {cons("IfThen")}
     "if" TBTerm "then" ProcessExpr "else" ProcessExpr "fi" 
-						-> ProcessExpr {cons("IfElse")}
+						                     -> ProcessExpr {cons("IfElse")}
 
   context-free priorities
     ProcessExpr "*" ProcessExpr -> ProcessExpr {left, cons("Iteration")} >

@@ -5,8 +5,6 @@ exports
   sorts ProcessDef ProcessDefs
 
   context-free syntax
-   "process" ProcessName "is" ProcessExpr 
-				-> ProcessDef  {cons("ProcessDefinition0")}
-   "process" ProcessName "(" {VarDecl ","}* ")" "is" ProcessExpr 
-				-> ProcessDef  {cons("ProcessDefinition")}
-    ProcessDef* 		-> ProcessDefs
+   "process" ProcessName "is" ProcessExpr                        -> ProcessDef  {cons("ProcessDefinition0")}
+   "process" ProcessName "(" {VarDecl ","}* ")" "is" ProcessExpr -> ProcessDef  {cons("ProcessDefinition")}
+    ProcessDef* 		                                         -> ProcessDefs

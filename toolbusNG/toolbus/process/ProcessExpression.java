@@ -5,7 +5,7 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.ToolBusException;
-import toolbus.atom.State;
+import toolbus.State;
 
 public interface ProcessExpression {
   public void expand(ProcessInstance processInstance, Stack calls) throws ToolBusException;

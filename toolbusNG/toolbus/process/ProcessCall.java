@@ -7,12 +7,12 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.*;
-import toolbus.atom.State;
+import toolbus.State;
 
 import aterm.*;
 import aterm.ATermList;
 
-public class ProcessCall implements ProcessExpression, StateElement {
+public class ProcessCall extends AbstractProcessExpression implements StateElement {
   private String name;
   private ATermList actuals;
   private ATermList formals;
@@ -20,6 +20,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   private ProcessExpression PE;
   private ProcessInstance processInstance;
   private State startState;
+  private ATerm test;
 
   public ProcessCall(String name, ATermList actuals) {
     this.name = name;
@@ -99,7 +100,6 @@ public class ProcessCall implements ProcessExpression, StateElement {
   public ProcessInstance getProcess() {
     return processInstance;
   }
-
   public boolean contains(StateElement b) {
     //System.err.println(this +" contains " + b);
     return startState.contains(b);
@@ -110,9 +110,32 @@ public class ProcessCall implements ProcessExpression, StateElement {
     processInstance.setCurrentState(s);
     return true;
   }
+  public void setTest(ATerm test) throws ToolBusException {
+  	if(test != null){
+	    ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
+	    if (this.test == null) {
+	      this.test = rtst;
+	    } else {
+	      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+	    }
+  	}
+  }
+
+  public boolean isEnabled() throws ToolBusException {
+    if (test == null)
+      return true;
+    else {
+      boolean res = TBTerm.isTrue(FunctionDescriptors.eval(test, getProcess()));
+      //System.err.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
+      return res;
+    }
+  }
 
   public boolean execute() throws ToolBusException {
     //System.err.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
+  	if(!isEnabled()){
+  		return false;
+  	}
     Environment env = processInstance.getEnv();
     ATermList formals1 = formals;
     ATermList actuals1 = actuals;
@@ -127,6 +150,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
       }
     }
     startState = PE.getStartState();
+    startState.setTest(test);
     processInstance.setCurrentState(startState);
     return startState.execute();
   }

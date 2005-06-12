@@ -1,0 +1,10 @@
+process P is
+  snd-msg(123, 456)
+
+process Q is
+let N : int, N : int
+in
+  rec-msg(N?, 456) . printf(N)
+endlet
+
+toolbus(P, Q)

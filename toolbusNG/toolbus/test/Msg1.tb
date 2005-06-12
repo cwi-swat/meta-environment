@@ -1,10 +1,10 @@
 process P is
-  snd-msg 123
+  snd-msg(123)
 
 process Q is
 let N : int 
 in
-  rec-msg N? . print N
+  rec-msg(N?) . printf(N)
 endlet
 
 toolbus(P, Q)

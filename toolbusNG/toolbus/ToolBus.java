@@ -26,7 +26,7 @@ public class ToolBus {
   private PrintWriter out;
 
   private static String sglr = "/home/paulk/bin/sglr";
-  private static String parseTable = "/home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
+  private static String parseTable = "/home/paulk/.eclipse/toolbusNG/toolbus/parser/Tscript.trm.tbl";
   private static String implodePT = "/home/paulk/bin/implodePT";
   private static boolean verbose = false;
 

@@ -1,5 +1,5 @@
 process P is Q
 
-process Q is print q
+process Q is printf(q)
 
 toolbus(P)

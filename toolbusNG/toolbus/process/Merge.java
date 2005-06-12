@@ -2,8 +2,10 @@ package toolbus.process;
 
 import java.util.Stack;
 
+import aterm.ATerm;
+
 import toolbus.*;
-import toolbus.atom.State;
+import toolbus.State;
 
 /**
  * @author paulk, Aug 7, 2002
@@ -73,6 +75,11 @@ public class Merge implements ProcessExpression, StateElement {
 
   public ProcessInstance getProcess() {
     return processInstance;
+  }
+  
+  public void setTest(ATerm test) throws ToolBusException {
+  	state[LEFT].setTest(test);
+  	state[RIGHT].setTest(test);
   }
 
   public boolean execute() throws ToolBusException {

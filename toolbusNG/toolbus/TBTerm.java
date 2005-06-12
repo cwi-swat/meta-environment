@@ -10,7 +10,7 @@ import aterm.pure.PureFactory;
 /**
  * TBTerm extends ATerms in several ways. This is achieved by staying with the ATerm representation
  * but giving a special meaning to some symbols. The extensions are:
- * - a number of standard terms and placeholders
+ * - a number of standard terms (e.g., int, bool, str, list) and placeholders (e.g, <int>, <bool>< ...)
  * - the notion of variable (var) and result variable (rvar)
  * - special functions (add, greater, ...) that can be typechecked and evaluated
  *    (see FunctionDescriptors)

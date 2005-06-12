@@ -1,2 +1,2 @@
-process P(X : int) is print X
+process P(X : int) is printf(X)
 toolbus(P(123))

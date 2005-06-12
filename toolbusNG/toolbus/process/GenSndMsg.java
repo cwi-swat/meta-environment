@@ -3,7 +3,7 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.ToolBusException;
-import toolbus.atom.State;
+import toolbus.State;
 
 import aterm.ATerm;
 

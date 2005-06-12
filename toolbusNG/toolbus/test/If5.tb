@@ -1,0 +1,53 @@
+process P(N : int) is
+	printf("Test %d fails\n", N) .
+	shutdown("ERRORS IN IF TESTS")
+
+process IfTest is
+  let T : bool, F : bool
+  in
+	T := true . F := false .
+	if T then tau else P(1) fi .
+	if F then P(2) else tau fi .
+
+	if equal(T, true) then tau else P(1) fi .
+	if not-equal(T, true) then P(2) else tau fi .
+
+	if equal(F, false) then tau else P(3) fi .
+	if not-equal(F, false) then P(4) else tau fi .
+
+	if equal(not(F), true) then tau else P(5) fi .        
+	if equal(not(T), false) then tau else P(6) fi .        
+	if equal(or(F,F), false) then tau else P(7) fi .
+    if equal(or(F,T), true) then tau else P(8) fi .
+    if equal(or(T,F), true) then tau else P(9) fi .  
+    if equal(or(T,T), true) then tau else P(10) fi .
+
+    if equal(and(F,F), false) then tau else P(11) fi .
+    if equal(and(F,T), false) then tau else P(12) fi .
+    if equal(and(T,F), false) then tau else P(13) fi .  
+    if equal(and(T,T), true) then tau else P(14) fi .
+
+    if true then
+	   if true then
+	         if true then tau else P(15) fi
+          else
+	         P(16)
+          fi
+       else
+           if true then P(17) else P(18) fi
+       fi .
+
+	if false then
+	   if true then P(19) else P(20) fi
+       else
+          if false then P(21) else tau fi
+        fi .
+
+	( if not(true) then P(22) fi
+       + if equal(true,false) then P(1) fi
+	+ tau
+	) .
+	shutdown("")
+  endlet
+
+toolbus(IfTest)

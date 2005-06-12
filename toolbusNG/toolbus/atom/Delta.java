@@ -1,6 +1,7 @@
 package toolbus.atom;
 
 import toolbus.process.ProcessExpression;
+import toolbus.State;
 
 /**
  * @author paulk, Jul 24, 2002
