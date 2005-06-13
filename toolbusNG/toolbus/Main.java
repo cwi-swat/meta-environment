@@ -40,15 +40,15 @@ public class Main {
     System.out.println(P1);
              
     ProcessDefinition P2 = new ProcessDefinition("P2",
-            new SndMsg((ATermList) aterms.make("[z]"))
+            new SndMsg(aterms.make("[z]"))
     );
     
     ProcessDefinition P3 = new ProcessDefinition("P3",
             new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
               new Sequence(
                 new Print(el), 
-                  new RecMsg((ATermList) aterms.make("[rvar(-1,int,Z)]")),
-                    new Print((ATermList) aterms.make("[var(-1,int,Z)]"))
+                  new RecMsg(aterms.make("[rvar(-1,int,Z)]")),
+                    new Print(aterms.make("[var(-1,int,Z)]"))
                     ))           
     );
         
@@ -71,17 +71,17 @@ public class Main {
 
     ProcessDefinition P1 = 
       new ProcessDefinition("P1", (ATermList) aterms.make("[var(-1,int,x)]"),
-        new Sequence(new Print((ATermList) aterms.make("[\"P1: \", var(-1,int,x)]")),
-               new Print((ATermList) aterms.make("[step-in-P1]"))
+        new Sequence(new Print(aterms.make("[\"P1: \", var(-1,int,x)]")),
+               new Print(aterms.make("[step-in-P1]"))
                )
                );
                
     ProcessDefinition P2 = new ProcessDefinition("P2",
         new LetDefinition((ATermList) aterms.make("[var(-1,int,pid)]"),
           new Sequence(
-           new Print((ATermList) aterms.make("[before]")),
+           new Print(aterms.make("[before]")),
            new Create(aterms.make("P1(5)"), aterms.make("rvar(-1,int,pid)")),
-           new Print((ATermList) aterms.make("[after, \" \", var(-1,int,pid)]"))
+           new Print(aterms.make("[after, \" \", var(-1,int,pid)]"))
           )
           )
     );
@@ -98,26 +98,26 @@ public class Main {
   
   static void DisruptTest(){
     
-    ProcessExpression Pa = new Print((ATermList) aterms.make("[a]"));
-    ProcessExpression Pb = new Print((ATermList) aterms.make("[b]"));
-    ProcessExpression Pc = new Print((ATermList) aterms.make("[c]"));
-    ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
+    ProcessExpression Pa = new Print(aterms.make("[a]"));
+    ProcessExpression Pb = new Print(aterms.make("[b]"));
+    ProcessExpression Pc = new Print(aterms.make("[c]"));
+    ProcessExpression Pd = new Print(aterms.make("[d]"));
     
     ProcessDefinition Pmain = new ProcessDefinition("Pmain",
       new Disrupt(
         new Sequence( Pa, Pb, Pc, Pd),
-        new Alternative(new RecMsg((ATermList) aterms.make("[m1]")),
-                new RecMsg((ATermList) aterms.make("[m2]"))
+        new Alternative(new RecMsg(aterms.make("[m1]")),
+                new RecMsg(aterms.make("[m2]"))
         )
       )
     );
     
     ProcessDefinition P1 = new ProcessDefinition("P1",
-      new SndMsg((ATermList) aterms.make("[m1]"))
+      new SndMsg(aterms.make("[m1]"))
       );
       
      ProcessDefinition P2 = new ProcessDefinition("P2",
-      new SndMsg((ATermList) aterms.make("[m2]"))
+      new SndMsg(aterms.make("[m2]"))
       );
     
     try {
@@ -137,12 +137,12 @@ public class Main {
   static void MergeTest()
   {
     
-    ProcessExpression Pa = new Print((ATermList) aterms.make("[a]"));
-    ProcessExpression Pb = new Print((ATermList) aterms.make("[b]"));
-    ProcessExpression Pc = new Print((ATermList) aterms.make("[c]"));
-    ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
-    ProcessExpression Pe = new Print((ATermList) aterms.make("[e]"));
-    ProcessExpression Pf = new Print((ATermList) aterms.make("[f]"));
+    ProcessExpression Pa = new Print(aterms.make("[a]"));
+    ProcessExpression Pb = new Print(aterms.make("[b]"));
+    ProcessExpression Pc = new Print(aterms.make("[c]"));
+    ProcessExpression Pd = new Print(aterms.make("[d]"));
+    ProcessExpression Pe = new Print(aterms.make("[e]"));
+    ProcessExpression Pf = new Print(aterms.make("[f]"));
  
     ProcessDefinition MERGE =
       new ProcessDefinition("MERGE",
@@ -178,8 +178,8 @@ public class Main {
           new Iteration(
             new IfThen(aterms.make("less(<term>,<term>)", varN, varMax),
               new Sequence(
-                  new SndMsg((ATermList) aterms.make("[<term>,<term>]", int2, varN)),
-                  //new Print((ATermList) aterms.make("[<term>]", varN)),
+                  new SndMsg(aterms.make("[<term>,<term>]", int2, varN)),
+                  //new Print(aterms.make("[<term>]", varN)),
                   new Assign(varN, aterms.make("add(<term>, 1)", varN))
               )
             ), // if
@@ -199,23 +199,23 @@ public class Main {
     new ProcessDefinition("FILTER", (ATermList) aterms.make("[var(-1,int,P)]"),
       new LetDefinition((ATermList) aterms.make("[var(-1,int,Z), var(-1,int,N), var(-1,int,Fid)]"),
         new Sequence(
-          new Print((ATermList) aterms.make("[var(-1,int,P)]")),
+          new Print(aterms.make("[var(-1,int,P)]")),
           new Iteration(
             new Sequence(
-              new RecMsg((ATermList) aterms.make("[<term>,<term>]", varP, Zres)),
+              new RecMsg(aterms.make("[<term>,<term>]", varP, Zres)),
               //new Print((ATermList) aterms.make("[var(-1,int,P), receives, var(-1,int,Z)]")),
               new IfElse(aterms.make("equal(mod(<term>,<term>), 0)", varZ, varP),
                 //new Tau(),
-                new Print((ATermList) aterms.make("[var(-1,int,P), \" kills \", var(-1,int,Z)]")),
+                new Print(aterms.make("[var(-1,int,P), \" kills \", var(-1,int,Z)]")),
                 new Sequence(
                   new Create(aterms.make("FILTER(var(-1,int,Z))"), FidRes),
                   new Iteration(
                     new Sequence(
-                      new RecMsg((ATermList) aterms.make("[<term>,<term>]", varP, Nres)),
+                      new RecMsg(aterms.make("[<term>,<term>]", varP, Nres)),
                       //new Print((ATermList) aterms.make("[var(-1,int,P), receives, var(-1,int,N)]")),
                       new IfElse(aterms.make("equal(mod(<term>,<term>), 0)", varN, varP),
                         new Tau(),
-                        new SndMsg((ATermList) aterms.make("[<term>,<term>]", varZ, varN))
+                        new SndMsg(aterms.make("[<term>,<term>]", varZ, varN))
                       ) // if
                     ), //seq
                     new Delta()
@@ -261,7 +261,7 @@ public class Main {
         new Iteration(
           new IfElse(aterms.make("less(<term>,<term>)", varN, varMax),
             new Sequence(
-                new SndMsg((ATermList) aterms.make("[p(<term>)])", varN)),
+                new SndMsg(aterms.make("[p(<term>)])", varN)),
                 //new Print((ATermList) aterms.make("[<term>]", varN)),
                 new Assign(varN, aterms.make("add(<term>, 1)", varN))
             ),
@@ -286,7 +286,7 @@ public class Main {
     new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
         new Iteration(
           new Sequence(
-            new RecMsg((ATermList) aterms.make("[q(<term>)]", Zres)),
+            new RecMsg(aterms.make("[q(<term>)]", Zres)),
             new IfElse(aterms.make("equal(mod(<term>,2), 0)", varZ),
               //new Print((ATermList) aterms.make("[var(-1,int,Z)]")),
               new Tau(),
@@ -303,8 +303,8 @@ public class Main {
     new LetDefinition((ATermList) aterms.make("[var(-1,int,Z)]"),
         new Iteration(
           new Sequence(
-            new RecMsg((ATermList) aterms.make("[p(<term>)]", Zres)),
-            new SndMsg((ATermList) aterms.make("[q(<term>)]", varZ))
+            new RecMsg(aterms.make("[p(<term>)]", Zres)),
+            new SndMsg(aterms.make("[q(<term>)]", varZ))
           ), // seq
           new Delta()
         ) // iter
@@ -348,7 +348,7 @@ public class Main {
         ProcessDefinition P1 =
         new ProcessDefinition("P1",
         new MsgPair(false, false,  aterms.make("msg1"),
-           new Print ((ATermList) aterms.make("[a,b,c]")),
+           new Print (aterms.make("[a,b,c]")),
            "Sequence",
            new Alternative(new SndMsg(aterms.make("msg1reply")),
                 new SndMsg(aterms.make("msg2reply")))
@@ -406,12 +406,12 @@ public class Main {
              "Sequence",
              new RecMsg(aterms.make("count(rvar(-1,qqq,R))"))
              ),
-             new Print((ATermList) aterms.make("[var(-1,qqq,R)]")),
+             new Print(aterms.make("[var(-1,qqq,R)]")),
             new Assign(aterms.make("var(-1,int, N)"), aterms.make("0")),
             new Iteration(
               new IfThen(aterms.make("less(<term>,15)", varN),
                 new Sequence(
-                  new Print((ATermList) aterms.make("[<term>]", varN)),
+                  new Print(aterms.make("[<term>]", varN)),
                   new Assign(varN, aterms.make("add(<term>, 1)", varN))
               )
             ),

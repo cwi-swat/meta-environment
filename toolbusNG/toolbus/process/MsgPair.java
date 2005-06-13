@@ -32,6 +32,7 @@ public class MsgPair extends AbstractProcessExpression implements StateElement {
   private String operator;
   private ProcessExpression PE;
   private Atom toolAtom = null;
+  private ATerm test;
   
   private ProcessInstance processInstance;
 
@@ -143,6 +144,17 @@ public class MsgPair extends AbstractProcessExpression implements StateElement {
 
   public ProcessInstance getProcess() {
     return processInstance;
+  }
+  
+  public void setTest(ATerm test) throws ToolBusException {
+  	if(test != null){
+	    ATerm rtst = TBTerm.resolveVars(test, getProcess().getEnv());
+	    if (this.test == null) {
+	      this.test = rtst;
+	    } else {
+	      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+	    }
+  	}
   }
 
   public boolean execute() throws ToolBusException {
