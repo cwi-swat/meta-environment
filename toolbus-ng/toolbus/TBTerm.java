@@ -174,6 +174,8 @@ public class TBTerm {
    * Resolve the variables in ATerm t using Environment env.
    * The declaration information in env is used to replace the index and type
    * field in every variable occurrence.
+   * @param t Aterm to be resolved.
+   * @param env environment to be used.
    */
 
   public static ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
@@ -205,7 +207,7 @@ public class TBTerm {
         }
         return lst;
     }
-    throw new ToolBusInternalError("illegal ATerm in compileVars: " + t);
+    throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
   }
 
   /**
@@ -508,7 +510,7 @@ public class TBTerm {
           return true;
         }
       default :
-        throw new ToolBusInternalError("illegal ATerm in match1: " + ta);
+        throw new ToolBusInternalError("illegal ATerm in performMatch: " + ta);
     }
   }
 

@@ -29,7 +29,7 @@ import aterm.*;
  * - getVarIndex
  * - getVarType
  * 
- * During compilation, resolveVars uses the environment to replace all varaiale indices by their
+ * During compilation, resolveVars uses the environment to replace all variable indices by their
  * actual value. During execution time, operations on variables amount to a simple indexing
  * operation.
  * 
@@ -57,7 +57,8 @@ public class Environment {
    */
   
   /**
-   * introduceVars adds a list of variables: each variables gets a new index assigned.
+   * introduceVars adds a list of variables to the environment.
+   * @param vars list of variables; each variables gets a new index assigned.
    */
   
  
@@ -71,47 +72,50 @@ public void introduceVars(ATermList vars) throws ToolBusException {
         declVec.addElement(TBTerm.setVarIndexAndType(var, maxVar, TBTerm.getVarType(var)));
         maxVar++;
       } else {
-        throw new ToolBusInternalError("env.add illegal var: " + var);
+        throw new ToolBusInternalError("introduceVars illegal var: " + var);
       }
     }
   }
   
   /**
-   * introduceBindings adds new variables for the case of formal/actual coorespondence
+   * introduceBindings adds new variables for the case of formal/actual correspondence
    * in process calls. Special care is taken for result variables. A *formal* result
    * variable gets the same index as the *actual* result variable. Both thus effectively
    * share the same value.
+   * @param formals list of formal parameters.
+   * @param actuals list of actual values.
    */
 
-  public void introduceBindings(ATermList vars, ATermList actuals) throws ToolBusException {
+  public void introduceBindings(ATermList formals, ATermList actuals) throws ToolBusException {
     if (executing) {
       throw new ToolBusInternalError("introduceBindings during execution");
     }
-    for (int i = 0; i < vars.getLength(); i++) {
-      ATerm var = vars.elementAt(i);
-      if (TBTerm.isVar(var)) {
-        declVec.addElement(TBTerm.setVarIndexAndType(var, maxVar, TBTerm.getVarType(var)));
+    for (int i = 0; i < formals.getLength(); i++) {
+      ATerm formal = formals.elementAt(i);
+      if (TBTerm.isVar(formal)) {
+        declVec.addElement(TBTerm.setVarIndexAndType(formal, maxVar, TBTerm.getVarType(formal)));
         maxVar++;
-      } else if (TBTerm.isResVar(var)) {
+      } else if (TBTerm.isResVar(formal)) {
         ATerm actual = actuals.elementAt(i);
         if (!TBTerm.isResVar(actual)) {
           throw new ToolBusInternalError("illegal actual: " + actual);
         }
-        if (TBTerm.getVarType(var) != TBTerm.getVarType(actual)) {
-          throw new ToolBusException("incompatible types for " + var + " and " + actual);
+        if (TBTerm.getVarType(formal) != TBTerm.getVarType(actual)) {
+          throw new ToolBusException("incompatible types for " + formal + " and " + actual);
         }
         int index = getVarIndex(actual);
-        declVec.addElement(TBTerm.setVarIndexAndType(var, index, TBTerm.getVarType(var)));
+        declVec.addElement(TBTerm.setVarIndexAndType(formal, index, TBTerm.getVarType(formal)));
         maxVar++;
       } else {
-        throw new ToolBusInternalError("illegal var: " + var);
+        throw new ToolBusInternalError("illegal formal: " + formal);
       }
     }
   }
   /**
-   * removeVars: delete variables introduced by introduceVars and introduceBindings.
+   * removeVars deletes variables introduced by introduceVars and introduceBindings.
    * Note that maxVar is decreased and that declVec[0], ... declVec[maxVar-1] become the
    * visible variables.
+   * @param delta number of variables to be removed.
    */
 
   public void removeVars(int delta) {
@@ -122,10 +126,12 @@ public void introduceVars(ATermList vars) throws ToolBusException {
   }
   
   /**
-   * getVarIndex: lookup of index allocated for given variable
+   * getVarIndex returns the index allocated for given variable
+   * @param var the variable whose index is required
    */
 
   public int getVarIndex(ATerm var) throws ToolBusException {
+  	//System.err.println("getVarIndex(" + var + ")");
     if (executing) {
       throw new ToolBusInternalError("getVarindex during execution");
     }
@@ -134,7 +140,9 @@ public void introduceVars(ATermList vars) throws ToolBusException {
     String name = TBTerm.getVarName(var);
     for (int i = maxVar - 1; i >= 0; i--) {
       ATerm entry = (ATerm) declVec.elementAt(i);
+      //System.err.println("entry = " + entry);
       if (TBTerm.getVarName(entry) == name) {
+      	//System.err.println("entry = " + entry);
         if (TBTerm.isResVar(entry)) {
           return TBTerm.getVarIndex(entry);
         } else {
@@ -146,7 +154,8 @@ public void introduceVars(ATermList vars) throws ToolBusException {
   }
   
   /**
-   * getVarType: lookup declared type for given variable
+   * getVarType return the declared type of a given variable.
+   * @param var the variable whoe type is required
    */
 
   public ATerm getVarType(ATerm var) {
@@ -163,7 +172,7 @@ public void introduceVars(ATermList vars) throws ToolBusException {
   }
   
   /**
-   * setExecuting: switch to execution mode.
+   * setExecuting switches to execution mode.
    */
 
   public void setExecuting() {
@@ -181,7 +190,9 @@ public void introduceVars(ATermList vars) throws ToolBusException {
    */
   
   /**
-   * assignVar: assign a value to a variable.
+   * assignVar assigns a value to a variable.
+   * @param var variable
+   * @param val value to be assigned to variable
    */
 
   public void assignVar(ATerm var, ATerm val) {
@@ -190,7 +201,8 @@ public void introduceVars(ATermList vars) throws ToolBusException {
   }
   
   /**
-   * getValue: fetch value of a variable
+   * getValue fetches the value of a variable.
+   * @param var variable
    */
 
   public ATerm getValue(ATerm var) throws ToolBusException {
@@ -203,6 +215,11 @@ public void introduceVars(ATermList vars) throws ToolBusException {
   }
 
   public String toString() {
-    return declVec.toString();
+  	String res = "{" + maxVar + "|", sep = "";
+    for (int i = 0; i < declVec.size(); i++){
+        res += sep + i + ":" + declVec.elementAt(i).toString();
+        sep = ", ";
+    }
+    return res + "}";
   }
 }

@@ -148,11 +148,11 @@ public class MsgPair extends AbstractProcessExpression implements StateElement {
   
   public void setTest(ATerm test) throws ToolBusException {
   	if(test != null){
-	    ATerm rtst = TBTerm.resolveVars(test, getProcess().getEnv());
+	    //ATerm rtst = TBTerm.resolveVars(test, getProcess().getEnv());
 	    if (this.test == null) {
-	      this.test = rtst;
+	      this.test = test;
 	    } else {
-	      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+	      this.test = TBTerm.factory.make("and(<term>,<term>)", test, this.test);
 	    }
   	}
   }

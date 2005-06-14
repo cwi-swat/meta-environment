@@ -52,8 +52,9 @@ process Cnt is
   let N : int, V : int
   in
       V := 5 . N := 1 .
-      if less(N,10) then N := add(N,1) . Inc(V, V?) fi *
+      if less(N,10) then printf(N,V) . N := add(N,1) . Inc(V, V?) fi *
      if greater-equal(N,10) then CHK(110, V, 14) fi
   endlet
 
-toolbus(A(1), F, Cnt)
+%%toolbus(A(1), F, Cnt)
+toolbus(Cnt)

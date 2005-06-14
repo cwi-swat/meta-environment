@@ -27,7 +27,7 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
     this.actuals = actuals;
     startState = new State();
     startState.add(this);
-    //System.err.println("ProcessCall(\"" + name + "\", " + actuals + ")");
+    System.err.println("ProcessCall(\"" + name + "\", " + actuals + ")");
   }
   public ProcessCall(ATerm call) {
     this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments());
@@ -39,7 +39,7 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    //System.err.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
+    System.err.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
     if (calls.contains(name)) {
       throw new ToolBusException("recursive call of " + name);
     }
@@ -52,16 +52,18 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
   }
 
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
-    //System.err.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
+    System.err.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
     Environment env = P.getEnv();
+    System.err.println("env = " + env);
     actuals = (ATermList) TBTerm.resolveVars(actuals, env);
-    //System.err.println("actuals = " + actuals);
-    //System.err.println("definiton = " + definition);
+    System.err.println("actuals = " + actuals);
     definition.enterScope(env, actuals);
+    System.err.println("after entering scope: env = " + env);
     formals = definition.getCompiledFormals(env);
     PE.compile(P, follows);
     definition.leaveScope(env);
-    //System.err.println("ProcessCall.compile:PE = " + PE);
+    System.err.println("after leaving scope: env = " + env);
+    System.err.println("ProcessCall.compile:PE = " + PE);
   }
 
   public State getFirst() {
@@ -112,11 +114,11 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
   }
   public void setTest(ATerm test) throws ToolBusException {
   	if(test != null){
-	    ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
+	    //ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
 	    if (this.test == null) {
-	      this.test = rtst;
+	      this.test = test;
 	    } else {
-	      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+	      this.test = TBTerm.factory.make("and(<term>,<term>)", test, this.test);
 	    }
   	}
   }
@@ -132,7 +134,7 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
   }
 
   public boolean execute() throws ToolBusException {
-    //System.err.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
+    System.err.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
   	if(!isEnabled()){
   		return false;
   	}
