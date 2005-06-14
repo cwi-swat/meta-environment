@@ -421,3 +421,24 @@ in
     snd-msg(obtain-parse-table-hook-result(Table)) 
   ) * delta
 endlet
+
+process OpenLibraryModuleAction is
+let
+  Extension : str,
+  Directory : str,
+  Path : str,
+  Filename : str
+in
+  PromptForFileWithExtension("Open Library Module", "__ASF_LIBRARY__", ".sdf", Path?)
+  .
+  if equal(Path, "") then
+    tau
+  else
+    SplitFileName(Path, Filename?, Directory?, Extension?)
+    . BuildPath(Directory, Filename, Extension, Path?)
+    . snd-note(start-modules-batch)
+    . OpenModule(Path, sdf, Filename)
+    . snd-note(end-modules-batch)
+  fi
+endlet
+

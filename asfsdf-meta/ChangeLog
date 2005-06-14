@@ -1,5 +1,16 @@
 /* $Id$ */
 
+Tue Jun 14 10:30:27 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
+ * Merged the dynamic buttons branch with the trunk.
+
+Wed May 25 14:15:27 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/user-interface.tb.src:
+   - Add check on empty path in OpenLibraryModuleAction
+
+Tue May 24 15:41:05 CEST 2005 <markvdb@cwi.nl>
+ * Created a branch for experiment with button-actions based on
+   dynamic TB calls.
+
 Tue May  3 15:29:20 CEST 2005 <{markvdb,kooiker}@cwi.nl>
  * meta-scripts/meta-interface.tb.src: reactivated the "asfsdf-checker".
  * meta-scripts/error-display.tb: the errors and warnings are displayed
