@@ -55,7 +55,7 @@ public class ProcessCall extends AbstractProcessExpression implements StateEleme
     System.err.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
     Environment env = P.getEnv();
     System.err.println("env = " + env);
-    actuals = (ATermList) TBTerm.resolveVars(actuals, env);
+    //actuals = (ATermList) TBTerm.resolveVars(actuals, env);
     System.err.println("actuals = " + actuals);
     definition.enterScope(env, actuals);
     System.err.println("after entering scope: env = " + env);
