@@ -9,8 +9,8 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_module_actions(int conn, ATerm, ATerm, const char *);
-ATerm get_actions(int conn, ATerm, ATerm);
+ATerm get_module_action(int conn, ATerm, ATerm, const char *);
+ATerm get_action(int conn, ATerm, ATerm);
 ATerm get_extension_modulename(int conn, const char *);
 ATerm get_module_events(int conn, ATerm, const char *);
 ATerm get_modulename_extension(int conn, const char *);

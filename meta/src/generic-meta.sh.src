@@ -82,7 +82,7 @@ set -- $args
 configfile="meta.conf"
 modulename=""
 extra_scripts="-I${prefix}/share/meta"
-meta_script=${prefix}/share/meta/start-meta-studio.tb
+meta_script=""
 time_out_def=""
 query_def=""
 saving="false"
@@ -141,7 +141,7 @@ do
 		;;
 	-S)     
 		shift
-		meta_script="$1"
+		meta_script="$1 ${meta_script}"
 		;;
         -T)
 		shift; 

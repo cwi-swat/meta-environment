@@ -1,13 +1,26 @@
 # $Id$
 
+Tue Jun 14 10:29:42 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
+ * Merged the dynamic buttons branch with the trunk. 
+
+Wed May 25 14:19:37 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb:
+   - OpenModuleAction: checks on empty Path
+   - removed argument Modulename from GetTree and GetRoot, fixed calling
+     actions that needed Modulename themselves
+   - GetTree does a GetActiveModule to get the Modulename
+
 Wed May 25 14:58:02 CEST 2005 <kooiker@cwi.nl>
  * gui:
    - Solved Eclipse warnings: removed unneeded else, unused arguments
+
+Tue May 24 15:34:21 CEST 2005 <markvdb@cwi.nl>
+ * Created a branch for experiment with button-actions based on
+   dynamic TB calls.
    
 Mon May 23 16:37:53 CEST 2005 <jurgenv@cwi.nl>
  * Prefuse now replaces our own drawing routines, and adds some other
    layouts next to the old graphviz layout
-
 
 Thu May 12 08:50:58 CEST 2005 <jurgenv@cwi.nl>
  * Prefuse-experiment: started experimenting with Prefuse 

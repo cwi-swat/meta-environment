@@ -11,8 +11,8 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<configuration-manager>,add-system-properties(<str>))",
   "rec-eval(<configuration-manager>,get-events(<term>))",
   "rec-eval(<configuration-manager>,get-module-events(<term>,<str>))",
-  "rec-eval(<configuration-manager>,get-actions(<term>,<term>))",
-  "rec-eval(<configuration-manager>,get-module-actions(<term>,<term>,<str>))",
+  "rec-eval(<configuration-manager>,get-action(<term>,<term>))",
+  "rec-eval(<configuration-manager>,get-module-action(<term>,<term>,<str>))",
   "rec-eval(<configuration-manager>,get-extension-modulename(<str>))",
   "rec-eval(<configuration-manager>,get-modulename-extension(<str>))",
   "rec-eval(<configuration-manager>,get-module-paths)",
@@ -28,11 +28,11 @@ ATerm configuration_manager_handler(int conn, ATerm term)
   char *s0;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(get-module-actions(<term>,<term>,<str>))", &t0, &t1, &s0)) {
-    return get_module_actions(conn, t0, t1, s0);
+  if(ATmatch(term, "rec-eval(get-module-action(<term>,<term>,<str>))", &t0, &t1, &s0)) {
+    return get_module_action(conn, t0, t1, s0);
   }
-  if(ATmatch(term, "rec-eval(get-actions(<term>,<term>))", &t0, &t1)) {
-    return get_actions(conn, t0, t1);
+  if(ATmatch(term, "rec-eval(get-action(<term>,<term>))", &t0, &t1)) {
+    return get_action(conn, t0, t1);
   }
   if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
     return get_extension_modulename(conn, s0);

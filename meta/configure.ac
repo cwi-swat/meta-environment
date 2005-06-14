@@ -128,6 +128,12 @@ AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
 
+dnl Require asf-library package
+
+AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
+   [  --with-asf=DIR           Asf+Sdf library is in DIR])
+AC_SUBST(ASF_LIBRARY)
+
 dnl Require pandora package
 AC_PACKAGE_REQUIRE(pandora, pandora,
    [  --with-pandora=DIR         pandora is in DIR])
@@ -208,11 +214,7 @@ AC_CONFIG_FILES([Makefile
    editors/text/emacs/Makefile
    editors/structure/Makefile
    tbscripts/Makefile
-   action-interpreter/Makefile
-   action-interpreter/src/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
-   configuration-manager/action-checker/Makefile
-   configuration-manager/action-checker/src/Makefile
 ])
 AC_OUTPUT

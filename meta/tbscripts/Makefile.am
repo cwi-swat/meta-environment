@@ -19,6 +19,7 @@ TBSCRIPTS = \
   module-selection-listener.tb \
   open-modules.tb \
   parse-focuses.tb \
+  parse-actions.tb \
   pretty-print.tb \
   print-module.tb \
   process-eqs.tb \

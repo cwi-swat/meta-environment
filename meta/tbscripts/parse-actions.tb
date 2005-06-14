@@ -1,0 +1,201 @@
+process StringParseHandler is
+let
+  Tree: term,
+  ParseError: term,
+  Pid: int
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(parse-tree(Pid, Tree?))
+    . snd-msg(tree(Tree))
+  +
+    rec-msg(parse-forest(Pid, Tree?, ParseError?))
+    . snd-msg(tree(Tree))
+  +
+    rec-msg(parse-error(Pid, ParseError?))
+    . Tree := no-tree
+    . snd-msg(tree(Tree))
+  )
+endlet
+
+process ParseString(Text : str, Modulename : str,
+                    Nonterminal : str, Tree : term?) is
+let
+  Pid : int,
+  Table : term
+in
+  GetParseTable(Modulename, trm, false, Table?)
+  . create(StringParseHandler(), Pid?)
+  . ParseText(Pid, Text, Table, Nonterminal)
+  . rec-msg(tree(Tree?))
+endlet
+process ParseAction(EditorId : term) is
+let
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . ParseTerm(EditorId, Modulename)
+endlet
+
+process ParseSyntaxAction(EditorId : term) is
+let
+  ParseSucceeded: bool
+in
+  ParseSyntax(EditorId, sdf, ParseSucceeded?)
+endlet
+
+process ParseEquationsAction(EditorId : term) is
+let
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . ParseEquations(EditorId, Modulename)
+endlet
+
+process ParseTerm(Sid: term, Modulename: str) is
+let
+  Id: int,
+  Nonterminal: term,
+  ParseError: term,
+  Path: str,
+  Pid: int,
+  Summary: term,
+  Table: term
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing term %s", [Modulename])))
+  . GetParseTable(Modulename, trm, false, Table?)
+  . snd-msg(other-top-sort-hook(trm))
+  . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Parse OK"))
+  +
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+  )
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process ParseSyntax(Sid: term, Type: term, ParseSucceeded: bool?) is
+let
+  DependingModules: list,
+  Directory: str,
+  Id: int,
+  ModuleId: str,
+  Modulename: str,
+  NewModules: list,
+  Nonterminal: term,
+  ParseError: term,
+  Path: str,
+  Pid: int,
+  Summary: term,
+  Table: term,
+  Text: str,
+  Tree: term
+in
+  Id := process-id
+  . snd-msg(em-get-modulename(Sid))
+  . rec-msg(em-modulename(Sid, Modulename?))
+  . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
+  . snd-msg(get-module-id-hook(Type))
+  . rec-msg(get-module-id-hook-result(ModuleId?))
+  . GetParseTable(ModuleId, sdf, true, Table?)
+  . snd-msg(syntax-top-sort-hook(sdf))
+  . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
+    . ParseSucceeded := true
+    . GetParsetree(Sid, Tree?)
+    . snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type))
+    .
+    (
+      rec-msg(no-updating-needed)
+      . snd-msg(te-clear-focus(Sid))
+      . snd-msg(te-display-message(Sid, "Parse successful"))
+    +
+      rec-msg(updating-succeeded(DependingModules?))
+      . snd-msg(update-module-in-db(Modulename, Tree, Type))
+      .
+      (
+        rec-msg(updating-succeeded(NewModules?))
+        . OpenModules(NewModules, Type)
+        . snd-msg(te-clear-focus(Sid))
+        . snd-msg(te-display-message(Sid, "Parse successful"))
+      +
+        rec-msg(error-opening(Modulename, name-inconsistent))
+        . snd-msg(invalidate-sdf-in-db(Modulename))
+        . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
+                                    [Modulename])))
+      )
+    +
+      rec-msg(error-opening(Modulename, name-inconsistent))
+      . snd-msg(invalidate-sdf-in-db(Modulename))
+      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
+                                  [Modulename])))
+    )
+  +
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . ParseSucceeded := false
+    . snd-msg(invalidate-sdf-in-db(Modulename))
+  )
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+process ParseEquations(Sid: term, Modulename: str) is
+let
+  Id: int,
+  Nonterminal: term,
+  ParseError: term,
+  Path: str,
+  Pid: int,
+  Summary: term,
+  Table: term,
+  Tree: term
+in
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Parsing equations of %s", [Modulename])))
+  . GetParseTable(Modulename, eqs, true, Table?)
+  . snd-msg(get-rules-top-sort)
+  . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . snd-msg(se-get-parse-tree(Sid))
+    . rec-msg(se-parse-tree(Sid, Tree?))
+    . snd-msg(postprocess-semantics-hook(Modulename, Tree))
+    . rec-msg(postprocess-semantics-hook-result(Modulename, Tree?))
+    . snd-msg(update-eqs-tree-in-db(Modulename, tree(Tree)))
+    . rec-msg(eqs-updated)
+    . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Parse successful"))
+  +
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+  )
+  . snd-note(ui-status(endstat(Id)))
+endlet
+
+

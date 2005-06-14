@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = src action-checker
+SUBDIRS = src

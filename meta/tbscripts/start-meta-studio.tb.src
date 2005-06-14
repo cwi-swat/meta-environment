@@ -29,9 +29,7 @@ let
   MenuEventList: list,
   Pid: int
 in
-  create(ButtonActionExecutor, Pid?)
-  . create(MetaActions, Pid?)
-  . create(MetaCreator, Pid?)
+  create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
 
   . snd-msg(environment-name-hook)

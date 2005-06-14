@@ -101,3 +101,22 @@ in
     . snd-msg(parse-error(Pid, Error))
   )
 endlet
+
+process SdfParseText(Pid: int, Text: str, Table: term, Nonterminal: term) is
+let
+  Error: term,
+  ParseResult: term
+in
+  snd-msg(sdf-parse(Text, Table, Nonterminal))
+  .
+  (
+    rec-msg(sglr-parse-tree(ParseResult?))
+    . snd-msg(parse-tree(Pid, ParseResult))
+  +
+    rec-msg(sglr-parse-forest(ParseResult?, Error?))
+    . snd-msg(parse-forest(Pid, ParseResult, Error))
+  +
+    rec-msg(sglr-parse-error(Error?))
+    . snd-msg(parse-error(Pid, Error))
+  )
+endlet

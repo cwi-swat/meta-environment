@@ -1,6 +1,5 @@
 /* meta-kernel */
 #include "configuration-manager.idef"
-#include "action-interpreter.idef"
 #include "editor-hive.idef"
 #include "editor-manager.idef"
 #include "generic-adapter.idef" 
@@ -43,6 +42,7 @@
 #include "dump-parsetable.tb"
 #include "sdf2-language.tb"
 #include "parse-focuses.tb"
+#include "parse-actions.tb"
 #include "dump-equations.tb"
 #include "dump-sdf-definition.tb"
 #include "pretty-print.tb"
@@ -84,7 +84,6 @@ in
   . create(TermStoreName, Pid?)
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)
-  . create(DumpParseTable, Pid?)
   . create(DumpSdfDefinition, Pid?)
   . create(BuildParseTable, Pid?)
   . create(Meta-Interface, Pid?)

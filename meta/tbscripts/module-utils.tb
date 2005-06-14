@@ -7,7 +7,7 @@ in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Closing %s", [ModuleId])))
   .
-  if equal(Recursive, quote(true)) then
+  if equal(Recursive, true) then
     ComputeModulesToBeClosed(ModuleId, ToBeClosed?)
     .
     if equal(ToBeClosed, []) then

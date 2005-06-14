@@ -11,8 +11,7 @@ in
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
   . OpenModules([MODULENAME], sdf)
-  . snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME, trm))
-  . rec-msg(parse-table-dumped)
+  . DumpParseTable(MODULENAME, OUTFILENAME, trm))
   .
   if equal(SAVING, "true") then
     snd-msg(save-termstore)

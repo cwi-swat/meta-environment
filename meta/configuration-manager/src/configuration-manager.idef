@@ -54,7 +54,7 @@ tool configuration-manager is {
 
 process ConfigurationManager is
 let
-  Actions: list,
+  Action: str,
   CM: configuration-manager,
   Contents: str,
   Event: term,
@@ -82,15 +82,15 @@ in
     . rec-value(CM, events(Events?))
     . snd-msg(cm-module-events(Events))
   +
-    rec-msg(cm-get-actions(Type?, Event?))
-    . snd-eval(CM, get-actions(Type, Event))
-    . rec-value(CM, actions(Actions?))
-    . snd-msg(cm-actions(Actions))
+    rec-msg(cm-get-action(Type?, Event?))
+    . snd-eval(CM, get-action(Type, Event))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-action(Action))
   +
-    rec-msg(cm-get-module-actions(Type?, Event?, ModuleId?))
-    . snd-eval(CM, get-module-actions(Type, Event, ModuleId))
-    . rec-value(CM, actions(Actions?))
-    . snd-msg(cm-module-actions(Actions))
+    rec-msg(cm-get-module-action(Type?, Event?, ModuleId?))
+    . snd-eval(CM, get-module-action(Type, Event, ModuleId))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-module-action(Action))
   +
     rec-msg(get-extension-modulename(Extension?))
     . snd-eval(CM, get-extension-modulename(Extension))

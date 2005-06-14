@@ -1,46 +1,43 @@
 process HandleEvent(Type: term, Event: term) is
 let
-  Actions: list
+  Actions: list,
+  Action: str
 in
-  snd-msg(cm-get-actions(Type, Event))
-  . rec-msg(cm-actions(Actions?))
-  . snd-msg(ai-perform-actions(ui-id, Actions, []))
-  . rec-msg(ai-actions-performed(ui-id, Actions))
+  snd-msg(cm-get-action(Type, Event))
+  . rec-msg(cm-action(Action?))
+  . Action()
 endlet
 
 process LocationSelected(Location: term) is
 let
-  Actions: list
+  Action: str
 in
-  snd-msg(cm-get-actions(feedback-list, click))
-  . rec-msg(cm-actions(Actions?))
-  . snd-msg(ai-perform-actions(feedback-list, Actions, [Location]))
-  . rec-msg(ai-actions-performed(feedback-list, Actions))
+  snd-msg(cm-get-action(feedback-list, click))
+  . rec-msg(cm-action(Action?))
+  . Action(Location)
 endlet
 
 process MessageSelected(Modulename: str, Tree: term) is
 let
-  Actions: list
+  Action: str
 in
-  snd-msg(get-actions(click, message-list, Modulename))
-  . rec-msg(actions(click, message-list, Modulename, Actions?))
-  . snd-msg(ai-perform-actions(message-list, Actions, [Tree, str(Modulename)]))
-  . rec-msg(ai-actions-performed(message-list, Actions))
+  snd-msg(get-action(click, message-list, Modulename))
+  . rec-msg(action(click, message-list, Modulename, Action?))
+  . Action(Tree, Modulename)
 endlet
 
 process NodeSelected(GraphId: str, Node: term) is
 let
-  Actions: list,
+  Action: str,
   Location: term
 in
   snd-msg(gc-get-node-origin(Node))
   .
   (
     rec-msg(gc-origin(Location?))
-    . snd-msg(cm-get-actions(tree-panel, click))
-    . rec-msg(cm-actions(Actions?))
-    . snd-msg(ai-perform-actions(tree-panel, Actions, [Location]))
-    . rec-msg(ai-actions-performed(tree-panel, Actions))
+    . snd-msg(cm-get-action(tree-panel, click))
+    . rec-msg(cm-action(Action?))
+    . Action("Tree Panel selection", Location)
   +
     rec-msg(gc-no-origin)
   )
@@ -69,6 +66,9 @@ in
   +
     rec-msg(ui-message-selected(Modulename?, Tree?))
     . create(MessageSelected(Modulename, Tree), Pid?)
+  +
+    rec-msg(gui-window-closing)
+    . ExitAction
   )
   *
   delta

@@ -554,11 +554,11 @@ MC_Properties MC_makePropertiesMany(MC_Property head, MC_Properties tail)
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_makePropertyAction(MC_ActionDescriptionList descriptions, ATerm actions) */
+/*{{{  MC_Property MC_makePropertyAction(MC_ActionDescriptionList descriptions, const char* action) */
 
-MC_Property MC_makePropertyAction(MC_ActionDescriptionList descriptions, ATerm actions)
+MC_Property MC_makePropertyAction(MC_ActionDescriptionList descriptions, const char* action)
 {
-  return (MC_Property)(ATerm)ATmakeAppl2(MC_afun1, (ATerm) descriptions, (ATerm) actions);
+  return (MC_Property)(ATerm)ATmakeAppl2(MC_afun1, (ATerm) descriptions, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -1315,9 +1315,9 @@ ATbool MC_hasPropertyDescriptions(MC_Property arg)
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasPropertyActions(MC_Property arg) */
+/*{{{  ATbool MC_hasPropertyAction(MC_Property arg) */
 
-ATbool MC_hasPropertyActions(MC_Property arg)
+ATbool MC_hasPropertyAction(MC_Property arg)
 {
   if (MC_isPropertyAction(arg)) {
     return ATtrue;
@@ -1390,12 +1390,12 @@ MC_ActionDescriptionList MC_getPropertyDescriptions(MC_Property arg)
 }
 
 /*}}}  */
-/*{{{  ATerm MC_getPropertyActions(MC_Property arg) */
+/*{{{  char* MC_getPropertyAction(MC_Property arg) */
 
-ATerm MC_getPropertyActions(MC_Property arg)
+char* MC_getPropertyAction(MC_Property arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 1);
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -1457,15 +1457,15 @@ MC_Property MC_setPropertyDescriptions(MC_Property arg, MC_ActionDescriptionList
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions) */
+/*{{{  MC_Property MC_setPropertyAction(MC_Property arg, const char* action) */
 
-MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions)
+MC_Property MC_setPropertyAction(MC_Property arg, const char* action)
 {
   if (MC_isPropertyAction(arg)) {
-    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) actions), 1);
+    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue))), 1);
   }
 
-  ATabort("Property has no Actions: %t\n", arg);
+  ATabort("Property has no Action: %t\n", arg);
   return (MC_Property)NULL;
 }
 
@@ -3394,14 +3394,14 @@ MC_Properties MC_visitProperties(MC_Properties arg, MC_Property (*acceptHead)(MC
 }
 
 /*}}}  */
-/*{{{  MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes)) */
+/*{{{  MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes)) */
 
-MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), ATerm (*acceptActions)(ATerm), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes))
+MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptDescriptions)(MC_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), MC_TextCategoryName (*acceptCategory)(MC_TextCategoryName), MC_TextAttributes (*acceptAttributes)(MC_TextAttributes))
 {
   if (MC_isPropertyAction(arg)) {
     return MC_makePropertyAction(
         acceptDescriptions ? acceptDescriptions(MC_getPropertyDescriptions(arg)) : MC_getPropertyDescriptions(arg),
-        acceptActions ? acceptActions(MC_getPropertyActions(arg)) : MC_getPropertyActions(arg));
+        acceptAction ? acceptAction(MC_getPropertyAction(arg)) : MC_getPropertyAction(arg));
   }
   if (MC_isPropertyExtension(arg)) {
     return MC_makePropertyExtension(

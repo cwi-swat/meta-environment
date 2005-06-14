@@ -121,7 +121,7 @@ endlet
 
 process MenuSelected(Sid: term, EditorType: term) is
 let
-  Actions: list,
+  Action: str,
   Args: list,
   Event: term,
   ModuleId: str
@@ -135,10 +135,9 @@ in
     rec-msg(em-transaction-started(Sid))
     . Args := []
     . GetModuleId(Sid, ModuleId?)
-    . snd-msg(cm-get-module-actions(EditorType, Event, ModuleId))
-    . rec-msg(cm-module-actions(Actions?))
-    . snd-msg(ai-perform-actions(Sid, Actions))
-    . rec-msg(ai-actions-performed(Sid, Actions))
+    . snd-msg(cm-get-module-action(EditorType, Event, ModuleId))
+    . rec-msg(cm-module-action(Action?))
+    . Action(Sid)
     . snd-msg(em-end-transaction(Sid))
   )
 endlet

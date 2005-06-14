@@ -17,7 +17,6 @@ SUBDIRS = \
 	src \
 	gui \
 	in-output \
-	action-interpreter \
 	term-store \
 	tbscripts \
 	configuration-manager \

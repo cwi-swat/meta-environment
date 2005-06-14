@@ -85,12 +85,12 @@ static MC_ActionDescriptionList getDescriptions(MC_ActionType type)
 
 /*}}}  */
 
-/*{{{  static void setActions(ATermTable table, MC_ActionDescription desc, ATermList actions) */
+/*{{{  static void setAction(ATermTable table, MC_ActionDescription desc, const char *action) */
 
-static void setActions(ATermTable table, MC_ActionDescription desc, ATermList actions)
+static void setAction(ATermTable table, MC_ActionDescription desc, const char *action)
 {
   ATerm key = MC_ActionDescriptionToTerm(desc);
-  ATtablePut(table, key, (ATerm) actions);
+  ATtablePut(table, key, (ATerm) ATmakeAppl0(ATmakeAFun(action, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -203,12 +203,12 @@ static void addSystemProperty(MC_Property property)
     modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
   }
   else if (MC_isPropertyAction(property)) {
-    ATermList actions = (ATermList) MC_getPropertyActions(property);
+    const char *action = MC_getPropertyAction(property);
     MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
     while (!MC_isActionDescriptionListEmpty(list)) {
       MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
       addDescription(systemDescriptionsByType, cur);
-      setActions(systemActionsByDescription, cur, actions);
+      setAction(systemActionsByDescription, cur, action);
       list = MC_getActionDescriptionListTail(list);
     }
   }
@@ -254,12 +254,12 @@ static void addUserProperty(MC_Property property)
     userExtensions = addExtension(userExtensions, property);
   }
   else if (MC_isPropertyAction(property)) {
-    ATermList actions = (ATermList) MC_getPropertyActions(property);
+    const char *action = MC_getPropertyAction(property);
     MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
     while (!MC_isActionDescriptionListEmpty(list)) {
       MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
       addDescription(userDescriptionsByType, cur);
-      setActions(userActionsByDescription, cur, actions);
+      setAction(userActionsByDescription, cur, action);
       list = MC_getActionDescriptionListTail(list);
     }
   }
@@ -378,9 +378,9 @@ static ATermList getEventActions(ATerm type, ATerm event)
 }
 
 /*}}}  */
-/*{{{  ATerm get_actions(int cid, ATerm type, ATerm event) */
+/*{{{  ATerm get_action(int cid, ATerm type, ATerm event) */
 
-ATerm get_actions(int cid, ATerm type, ATerm event)
+ATerm get_action(int cid, ATerm type, ATerm event)
 {
   ATermList actions = getEventActions(type, event);
 
@@ -388,13 +388,13 @@ ATerm get_actions(int cid, ATerm type, ATerm event)
     ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
   }
 
-  return ATmake("snd-value(actions(<term>))", actions);
+  return ATmake("snd-value(action(<term>))", actions);
 }
 
 /*}}}  */
-/*{{{  ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId) */
+/*{{{  ATerm get_module_action(int cid, ATerm type, ATerm event, const char *moduleId) */
 
-ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
+ATerm get_module_action(int cid, ATerm type, ATerm event, const char *moduleId)
 {
   ATerm boundType;
   ATermList actions;
@@ -411,7 +411,7 @@ ATerm get_module_actions(int cid, ATerm type, ATerm event, const char *moduleId)
       ATabort("%s:get_actions: no actions for: %t, %t\n", __FILE__, type, event);
     }
   }
-  return ATmake("snd-value(actions(<term>))", actions);
+  return ATmake("snd-value(action(<term>))", actions);
 }
 
 /*}}}  */

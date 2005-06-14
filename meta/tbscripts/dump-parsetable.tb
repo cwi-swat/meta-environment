@@ -1,52 +1,38 @@
-process DumpParseTable is
+process DumpParseTable(ModuleName : str, FileName : str, Type : term) is
 let
   Id: term,
-  ModuleName: str,
-  FileName: str,
   Table: term,
   Path: str,
   Error: term,
   Extension: str,
-  Type: term
+  NewFileName: str
 in
   Id := process-id
+  .  snd-note(ui-status(statf(Id, "Dumping parse table for %s", [ModuleName])))
+  . snd-msg(get-parsetable(ModuleName, Type, true))
   .
   (
-    (
-      rec-msg(dump-parse-table(ModuleName?, Type?))
-      . FileName := ""
-    +
-      rec-msg(dump-parse-table-given-file(ModuleName?, FileName?, Type?))
-    )
-    . snd-note(ui-status(statf(Id, "Dumping parse table for %s", [ModuleName])))
-    . snd-msg(get-parsetable(ModuleName, Type, true))
+    rec-msg(parse-table(Table?))
+    . snd-msg(get-path-from-db(ModuleName))
+    . rec-msg(path(Path?))
+    .
+    if equal(FileName, "") then
+      snd-msg(parsetable-extension-hook(Type))
+      . rec-msg(parsetable-extension-hook-result(Extension?))
+      . snd-msg(io-get-filename(Path, ModuleName, Extension))
+      . rec-msg(io-filename(NewFileName?))
+    else
+      NewFileName := FileName
+    fi
+    . snd-msg(io-unpack-and-write-term-in-baf(NewFileName, Table))
     .
     (
-      rec-msg(parse-table(Table?))
-      . snd-msg(get-path-from-db(ModuleName))
-      . rec-msg(path(Path?))
-      .
-      if equal(FileName, "") then
-        snd-msg(parsetable-extension-hook(Type))
-        . rec-msg(parsetable-extension-hook-result(Extension?))
-        . snd-msg(io-get-filename(Path, ModuleName, Extension))
-        . rec-msg(io-filename(FileName?))
-      else
-        tau
-      fi
-      . snd-msg(io-unpack-and-write-term-in-baf(FileName, Table))
-      .
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(Error?))
-      )
+      rec-msg(io-file-written)
     +
-      rec-msg(no-parse-table(ModuleName))
+      rec-msg(io-file-not-written(Error?))
     )
-    . snd-note(ui-status(endstat(Id)))
-    . snd-msg(parse-table-dumped)
+  +
+    rec-msg(no-parse-table(ModuleName))
   )
-  *
-  delta
+  . snd-note(ui-status(endstat(Id)))
 endlet

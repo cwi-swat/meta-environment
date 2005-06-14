@@ -4,12 +4,11 @@
 
 process HandleModuleEvent(Type: term, Event: term, Module: str) is
 let
-  Actions: list
+  Action: str
 in
-  snd-msg(cm-get-module-actions(Type, Event, Module))
-  . rec-msg(cm-module-actions(Actions?))
-  . snd-msg(ai-perform-actions(ui-id, Actions, [str(Module)]))
-  . rec-msg(ai-actions-performed(ui-id, Actions))
+  snd-msg(cm-get-module-action(Type, Event, Module))
+  . rec-msg(cm-module-action(Action?))
+  . Action(Module)
 endlet
 
 process HandleModulePopup is

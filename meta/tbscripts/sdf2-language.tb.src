@@ -4,21 +4,29 @@ process Open-Sdf2-Language is
 let 
   Error: term,
   Table: term,
+  SdfTable: term,
   Type: term
 in
   Type := sdf
+  . SdfTable := no-table
   .
   (
     rec-msg(get-parse-table(Type))
-    . snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
     .
-    (
-      rec-msg(io-packed-term(Table?))
-      . snd-msg(parse-table(Type, Table))
-    +
-      rec-msg(io-error-reading(Error?))
-      . snd-msg(no-parse-table(Type, Error))
-    )
+    if equal(SdfTable, no-table) then 
+      snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
+      .
+      (
+        rec-msg(io-packed-term(Table?))
+        . SdfTable := Table
+        . snd-msg(parse-table(Type, Table))
+      +
+        rec-msg(io-error-reading(Error?))
+        . snd-msg(no-parse-table(Type, Error))
+      )
+    else
+      snd-msg(parse-table(Type, SdfTable))
+    fi
   )
   * delta
 endlet

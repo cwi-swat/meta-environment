@@ -2,7 +2,7 @@
   constructor(Configuration, list, configuration(<list(Properties)>)),
   list(Properties, Property),
 
-  constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <actions(term)>)),
+  constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <action(str)>)),
   constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
   constructor(Property, module-path, module-path(<path(str)>)),
 
