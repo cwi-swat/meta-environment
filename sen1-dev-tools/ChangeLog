@@ -3,3 +3,14 @@
 Mon May 30 15:53:18 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
    - Added an informative warning to change to the branch.
+
+Tue Jun 14 13:50:51 CEST 2005 <{gerco,jong}@cwi.nl>
+Merged changes from branch optimize-end-branch.
+ * bin/cvsmerge:
+   - Reimplemented in python.
+   - Added support for collision detection (colliding cvs adds).
+   - Improved layout of informative output.
+ * bin/cvsmerge.sh:
+   - Keep shell version of cvsmerge script as backup.
+ * test/scenario:
+   - Test some cvsmerge use cases.

@@ -1,0 +1,101 @@
+#! /bin/sh
+
+unset CVSROOT CVS_RSH
+
+set -x
+
+cvsmerge=/ufs/gerco/src/sen1-dev-tools/bin/cvsmerge
+# cvsmerge="/ufs/sen1/software/installed/sen1-dev-tools+cs/bin/cvsmerge"
+sandbox=`pwd`
+repo=$sandbox/repo
+import=$sandbox/wc
+trunk=$sandbox/wc-trunk
+first=$sandbox/wc-first
+second=$sandbox/wc-second
+
+#
+# Initialize the environment
+#
+rm -rf $repo $import $trunk $first $second
+cvs -d $repo init
+
+#
+# Perform the initial import
+#
+mkdir $import
+cd $import
+echo "Original content file 1" > f1
+echo "Original content file 2" > f2
+mkdir dir
+echo "Original content file 3 in dir" > dir/f3
+echo "Original content file 4 in dir" > dir/f4
+cvs -d $repo import -m "initial import" wc "vendor-1" "release-1"
+cd ..
+rm -rf $import
+
+#
+# Create trunk working copy
+#
+cd $sandbox
+cvs -d $repo checkout wc
+mv wc $trunk
+
+#
+# Make the first change on the trunk
+#
+cd $trunk
+sync; sleep 1; sync
+echo "Trunk change file 1" >> f1
+echo "Trunk change file 3" >> dir/f3
+cvs commit -m "Trunk changes to file 1 and 3"
+
+#
+# Create two branches and check them out
+#
+cd $trunk
+$cvsmerge begin-branch first
+$cvsmerge begin-branch second
+
+cd $sandbox
+cvs -d $repo checkout -r first wc
+mv wc $first
+cvs -d $repo checkout -r second wc
+mv wc $second
+
+#
+# Add changes to branch One
+#
+cd $first
+sync; sleep 1; sync
+echo "One: change f1" >> f1
+echo "One: change f3" >> dir/f3
+echo "One: add x" > x
+echo "One: add y in dir" > dir/y
+cvs add x dir/y
+cvs commit -m "Change and Add"
+
+#
+# Add changes to branch Two
+#
+cd $second
+sync; sleep 1; sync
+echo "Two: change f1" >> f1
+echo "Two: change f3" >> dir/f3
+echo "Two: add x" > x
+echo "Two: add y in dir" > dir/y
+cvs add x dir/y
+cvs commit -m "Change and Add"
+
+#
+# Merge back to trunk
+#
+cd $trunk
+sync; sleep 1; sync
+$cvsmerge end-branch first
+cvs commit -m "Merged changes from branche One"
+
+#
+# Import changes in branch Two
+#
+cd $second
+$cvsmerge import

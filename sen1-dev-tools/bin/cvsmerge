@@ -1,373 +1,371 @@
-#! /bin/sh
+#! /bin/env python
+
+import sys
+import os
+import posix
+import time
+import stat
+import pwd
+import random
+
 
 #
-# TODO: - check whether required tags are present on ALL cvs files
+# Output
 #
 
-# set -x
-
-
-LOGFILE=/var/tmp/cvsmerge.log.$$
-
-
-usage() {
-    cat << __END__
-usage: cvsmerge  begin-branch  <branch-name>
+def usage():
+    sys.stderr.write( """usage: cvsmerge  begin-branch  <branch-name>
        cvsmerge  import-from-trunk
-       cvsmerge  end-branch  <branch-name>
-__END__
-
-    exit 1
-}
+       cvsmerge  end-branch  <branch-name>\n""" )
+    sys.exit( 1 )
 
 
-log() {
-    echo + $* >> $LOGFILE
-}
+def log( string="" ):
+    logFile.seek(0, 2)
+    logFile.write( "+ " + string + "\n" )
+    logFile.flush()
 
 
-info() {
-    log cvsmerge: $*
-    echo $*
-}
-
-
-assert_in_working_copy() {
-    if [ ! -d CVS ]
-    then
-        info the current working directory is not a CVS working copy.
-        exit 1
-    fi
-}
-
-
-get_sticky_tag_cwd() {
-    log get_sticky_tag_cwd
-    (cvs status -v \
-        | grep "Sticky Tag:" \
-        | head -1 \
-        | awk '{print $3}') \
-	2>> $LOGFILE
-}
-
-
-assert_in_trunk_working_copy() {
-    assert_in_working_copy
-    branch_tag=`get_sticky_tag_cwd`
+def info( string="" ):
+    log( "cvsmerge: " + string )
+    sys.stdout.write( string + "\n" )
     
-    if [ "x$branch_tag" != "x(none)" ]
-    then
-        info the current working directory is not a CVS TRUNK working copy
-        exit 1
-    fi
-}
 
-
-assert_in_branch_working_copy() {
-    assert_in_working_copy
-    branch_tag=`get_sticky_tag_cwd`
-
-    if [ "x$branch_tag" = "x(none)" ]
-    then
-        info the current working directory is not a CVS BRANCH working copy
-        exit 1
-    fi
-}
-
-
-assert_argument_count() {
-    count=$1
-    shift
-    
-    if [ $# != $count ]
-    then
-        info wrong number of arguments
-        exit 1
-    fi
-}
-
-
-tag_name_count() {
-    branch_tag=$1
-
-    log tag_name_count
-    (cvs status -v \
-        | egrep -w '\((branch:|revision:)' \
-        | grep $branch_tag \
-        | wc -l) \
-	2>> $LOGFILE
-}
-
-
-assert_valid_branch_creation() {
-    branch_tag=$1
-    progress_tag=$2
-
-    if [ `tag_name_count $branch_tag` != 0 ]
-    then
-        info tag name $branch_tag is already in use in this subtree
-        exit 1
-    fi
-
-    if [ `tag_name_count $progress_tag` != 0 ]
-    then
-        info tag name $progress_tag is already in use in this subtree
-        exit 1
-    fi
-}
-
-
-assert_valid_branch_use() {
-    branch_tag=$1
-    progress_tag=$2
-
-    if [ `tag_name_count $branch_tag` = 0 ]
-    then
-        info tag name $branch_tag not found in this subtree
-        exit 1
-    fi
-
-    if [ `tag_name_count $progress_tag` = 0 ]
-    then
-        info tag name $progress_tag not found in this subtree
-        exit 1
-    fi
-}
-
-
-assert_working_copy_up_to_date() {
-    type_of_wc=$1
-    
-    log assert_working_copy_up_to_date
-    (cvs status \
-        | grep "Status:" \
-        | grep -v -q "Up-to-date") \
-	2>> $LOGFILE
-
-    good=$?
-
-    if [ $good = 0 ]
-    then
-        info working copy not up to date wrt the head of the $type_of_wc
-        exit 1
-    fi
-}
+def error( string ):
+    log( "cvsmerge: " + string )
+    sys.stderr.write( "cvsmerge: " + string + "\n" )
+    sys.exit( 1 )
 
 
 #
-# Initialize the branch
+# CVS Interface
 #
-begin_branch() {
-    log begin branch: $*
-    
-    assert_in_trunk_working_copy
-    assert_argument_count 1 $*
-    
-    branch_tag=$1
-    progress_tag="${branch_tag}_progress"
 
-    assert_valid_branch_creation $branch_tag $progress_tag
-    assert_working_copy_up_to_date trunk
-    
-    log cvs tag -b $branch_tag
-    cvs tag -b $branch_tag >> $LOGFILE 2>&1 
+def cvsGetModuleName():
+    log( "cvsGetModuleName" )
+    repoFile = open( "CVS/Repository" )
+    name = repoFile.readline()
+    repoFile.close()
+    return name[:-1]
 
-    log cvs tag $progress_tag
-    cvs tag $progress_tag  >> $LOGFILE 2>&1
-    
-    info "Created branch $branch_tag and progress tag $progress_tag"
-    info "Do not forget to switch to this branch!"
-}
+
+def cvsDoCVS( command ):
+    log( command )
+    os.system( command )
+
+
+def cvsGetStickyTagCwd():
+    log( "cvsGetStickyTagCwd" )
+    command = ("(cvs status -v" +
+               " | grep 'Sticky Tag:'" +
+               " | head -1" +
+               " | awk '{print $3}') 2>> %s" % logFilename)
+    log( command )
+    pin = os.popen( command )
+    lines = pin.readlines()
+    pin.close()
+    if lines and lines[0]:
+        return lines[0][:-1]
+    else:
+        raise "cannot read sticky tag"
+
+
+def cvsGetTagNameCount( branchTag ):
+    log( "cvsGetTagNameCount" )
+    command = ("(cvs status -v " +
+               " | egrep '\((branch:|revision:)'" +
+               " | grep '%s') 2>> %s" % (branchTag, logFilename))
+    log( command )
+    pin = os.popen( command )
+    lines = pin.readlines()
+    pin.close()
+    if lines:
+        return len(lines)
+    else:
+        return 0
+
+
+def cvsGetNotUpToDateList():
+    log( "cvsGetNotUpToDateList" )
+    pin = os.popen( "(cvs status" +
+                    " | grep 'Status:'" +
+                    " | grep -v 'Up-to-date') 2>> %s" % logFilename )
+    lines = pin.readlines()
+    pin.close()
+    return lines
+
+
+def cvsCreateBranch( branchTag ):
+    command = "cvs tag -b %s >> %s 2>&1" % (branchTag, logFilename)
+    cvsDoCVS( command )
+
+
+def cvsTagCurrent( progressTag ):
+    command = "cvs tag %s >> %s 2>&1" % (progressTag, logFilename)
+    cvsDoCVS( command )
+
+
+def cvsRemoteTagHead( frozenHeadTag, moduleName ):
+    command = ("cvs rtag -r HEAD %s %s >> %s 2>&1" %
+                (frozenHeadTag, moduleName, logFilename))
+    cvsDoCVS( command )
+
+
+def cvsMergeChanges( progressTag, frozenHeadTag ):
+    log( "cvs update -j %s -j %s" % (progressTag, frozenHeadTag))
+    os.system( "(cvs update -j %s -j %s 2>&1)" % (progressTag, frozenHeadTag) +
+               " | tee %s" % errorFilename +
+               " | tee --append %s" % logFilename +
+               " | grep -v 'cvs update:'" )
+
+
+def cvsMoveTag( moduleName, frozenHeadTag, progressTag ):
+    command = ("cvs rtag -F -r %s %s %s >> %s 2>&1" %
+                (frozenHeadTag, progressTag, moduleName, logFilename))
+    cvsDoCVS( command )    
+
+
+def cvsRemoveTag( moduleName, frozenHeadTag ):
+    command = ("cvs rtag -d %s %s >> %s 2>&1" %
+                (frozenHeadTag, moduleName, logFilename))
+    cvsDoCVS( command )    
+
+
+def cvsDifferenceTags( progressTag, frozenHeadTag ):
+    log( "cvs diff -r %s -r %s" % (progressTag, frozenHeadTag) )
+    pin = os.popen( "cvs diff -r %s -r %s 2>> %s" %
+                (progressTag, frozenHeadTag, logFilename) )
+    return pin.readline()
+
+
+def cvsCatFile( frozenHeadTag, moduleName, fileName, newName ):
+    command = ("cvs checkout -p -r %s %s/%s > %s 2>> %s" %
+                (frozenHeadTag, moduleName, fileName, newName, logFilename))
+    cvsDoCVS( command )
 
 
 #
-# Merge changes from the trunk into the branch
+# Precondition Validation
 #
-import_from_trunk() {
-    log import changes: $*
-    
-    assert_argument_count 0 $*
-    assert_in_branch_working_copy    
 
-    branch_tag=`get_sticky_tag_cwd`    
-    progress_tag="${branch_tag}_progress"
+def assertArgumentCount( count, args ):    
+    if len(args) != count:
+        error( "wrong number of arguments" )
 
-    assert_valid_branch_use $branch_tag $progress_tag
-    assert_working_copy_up_to_date branch    
+
+def assertInWorkingCopy():
+    mode = os.stat("CVS")[stat.ST_MODE]
+    if not stat.S_ISDIR(mode):
+        error( "the current working directory is not a CVS working copy" )
+
+
+def assertInTrunkWorkingCopy():
+    assertInWorkingCopy()
+    branchTag = cvsGetStickyTagCwd()
+    if branchTag != "(none)":
+        error("the current working directory is not a CVS TRUNK working copy")
+
+
+def assertInBranchWorkingCopy():
+    assertInWorkingCopy()
+    branchTag = cvsGetStickyTagCwd()    
+    if branchTag == "(none)":
+        error("the current working directory is not a CVS BRANCH working copy")
+
+
+def assertValidBranchCreation( branchTag, progressTag ):
+    if cvsGetTagNameCount(branchTag) != 0:
+        error("tag name '%s' is already in use in this subtree" % branchTag)
+
+    if cvsGetTagNameCount(progressTag) != 0:
+        error("tag name '%s' is already in use in this subtree" % progressTag)
+
+
+def assertValidBranchUse( branchTag, progressTag ):
+    if cvsGetTagNameCount(branchTag) == 0:
+        error( "tag name '%s' not found in this subtree" % branchTag )
+
+    if cvsGetTagNameCount(progressTag) == 0:
+        error( "tag name '%s' not found in this subtree" % progressTag )
+
+
+def assertWorkingCopyUpToDate( typeOfWC ):
+    files = cvsGetNotUpToDateList()
+    if len(files) != 0:
+        error("working copy not up to date wrt the head of the %s" % typeOfWC)
+
+
+def assertProgressIsAtFrozenHead( progressTag, frozenHeadTag ):
+    diffs = cvsDifferenceTags( progressTag, frozenHeadTag )
+    if diffs != "":
+        error( "branch is not up-to-date wrt the head of the trunk" )
+
+
+#
+# Support routines
+#
+
+def createFrozenHeadTag():
+    return "fht_" + pwd.getpwuid(os.getuid())[0] + "_" + str(os.getpid())
+
+
+def getUserOkay( message ):
+    sys.stdout.write( "\nAre you sure? [y/N] " )    
+    answer = sys.stdin.readline()
+    sys.stdout.write( "\n" )
+    if answer != "y\n":
+        error( message )
+
+
+def processCollisions( frozenHeadTag, moduleName ):
+    collision = 0
+    pin = os.popen( "grep 'cvs update:' %s" % errorFilename )
+    line = pin.readline()
+
+    if line:
+        collision = 1
+        info("One or more collisions occured on the following files.")
+        info()
+
+    while line:
+        index = line.find(" exists, but ")
+        if index == -1:
+            continue        # weird
+        fileName = line[17:index]
+        print "  '%s'" % fileName
+        randomString = ".%06d" % random.uniform(0, 100000)
+        os.rename( fileName, fileName + randomString + ".branch" )
+        cvsCatFile( frozenHeadTag, moduleName, fileName,
+                fileName + randomString + ".trunk" )
+        fd = posix.open( fileName, posix.O_CREAT, 0 )
+        posix.close( fd )
+        line = pin.readline()
+
+    if collision:
+        info()
+        info("A collison occurs when a file is created both on the trunk")
+        info("and a branch with the same name. These revisions are available")
+        info("as <file>.<X>.trunk and <file>.<X>.branch, respectively")
+        info("(X is some random number). Manual merging of these revisions")
+        info("is required to solve the collision.")
+
+#
+# Operations
+#
+
+def beginBranch( branchTag ):
+    log( "begin branch '%s'" % branchTag )
         
-    frozen_head_tag=fht_$$_`whoami`
-    module_name=`cat CVS/Repository`
+    progressTag = branchTag + "_progress"
 
-    info "About to import (merge) changes from the trunk into the working"
-    info "copy of module $module_name (branch $branch_tag)".
-    info
-    echo -n "Are you sure? [y/N] "
+    assertInTrunkWorkingCopy()
+    assertValidBranchCreation( branchTag, progressTag )
+    assertWorkingCopyUpToDate( "trunk" )
     
-    read answer
-    echo
-
-    if [ x$answer != xy ]
-    then
-        info Import of changes from trunk aborted.
-        exit 1
-    fi
-
-    log cvs rtag -r HEAD $frozen_head_tag $module_name
-    cvs rtag -r HEAD $frozen_head_tag $module_name >> $LOGFILE 2>&1
-
-    log cvs update -j $progress_tag -j $frozen_head_tag
-    (cvs update -j $progress_tag -j $frozen_head_tag 2>&1) \
-        | tee --append $LOGFILE \
-        | grep -v 'cvs update:'
-
-    log cvs rtag -F -r $frozen_head_tag $progress_tag $module_name
-    cvs rtag -F -r $frozen_head_tag $progress_tag $module_name >> $LOGFILE 2>&1
-
-    log cvs rtag -d $frozen_head_tag $module_name
-    cvs rtag -d $frozen_head_tag $module_name >> $LOGFILE 2>&1
+    cvsCreateBranch( branchTag )
+    cvsTagCurrent( progressTag )
     
-    info "Merged changes from the trunk into the working copy of branch"
-    info "$branch_tag from $module_name."
-    info 
-    info "Don't forget to check for conflicts and commit the merged changes." 
-}
+    info( "Created branch '%s' with progress tag '%s'" %
+            (branchTag, progressTag) )
+    info( "Do not forget to switch to this branch!" )
+    info()
 
 
-assert_progress_is_at_frozen_head() {
-    progress_tag=$1
-    frozen_head_tag=$2
+def importFromTrunk():
+    log( "import changes from trunk" )
 
-    find . -type f -not -regex '.*CVS.*' | while read line
-    do
-        (status=`cvs -Q status $line \
-            | grep "Status:" \
-            | grep -q "Up-to-date"`) \
-	    2>> $LOGFILE
-        unknown=$?
-        
-        if [ $unknown = 1 ]
-        then
-            info skipping file $line
-            continue
-        fi
-        
-        progress_number=(`cvs status -v $line \
-            | egrep -w '\((branch:|revision:)' \
-            | grep $progress_tag \
-            | tr -d '()' \
-            | awk '{print $3}'`) \
-	    2>> $LOGFILE
+    assertInBranchWorkingCopy()    
 
-        frozen_head_number=(`cvs status -v $line \
-            | egrep -w '\((branch:|revision:)' \
-            | grep $frozen_head_tag \
-            | tr -d '()' \
-            | awk '{print $3}'`) \
-	    2>> $LOGFILE
-        
-        if [ $progress_number != $frozen_head_number ]
-        then
-            info branch is not up-to-date wrt the head of the trunk
-            info "File:             $line"
-            info "Last merge:       $progress_number"
-            info "Current revision: $frozen_head_number"
-            info
-            info You probably need to go to the branch working copy
-            info and run \'cvsmerge import-from-trunk\' over there.
+    branchTag = cvsGetStickyTagCwd()
+    progressTag = branchTag + "_progress"
 
-            exit 1
-        fi
-    done
-    status=$?
+    assertValidBranchUse( branchTag, progressTag )
+    assertWorkingCopyUpToDate( "branch" )
+
+    frozenHeadTag = createFrozenHeadTag()
+    moduleName = cvsGetModuleName()
+
+    info( "About to import (merge) changes from the trunk with the working" )
+    info( "copy of module '%s' (branch '%s')." % (moduleName, branchTag) )
+    getUserOkay( "Import of changes from trunk aborted." )
+
+    cvsRemoteTagHead( frozenHeadTag, moduleName )
+    cvsMergeChanges( progressTag, frozenHeadTag )    
+    processCollisions( frozenHeadTag, moduleName )
+    cvsMoveTag( moduleName, frozenHeadTag, progressTag )
+    cvsRemoveTag( moduleName, frozenHeadTag )
+    os.remove( errorFilename )
+
+    info()    
+    info("Merged the latest changes from the trunk into the working copy")
+    info("of branch '%s' from module '%s'.\n" % (branchTag, moduleName) )
+    info("Don't forget to check for conflicts and commit the merged changes.")
+    info()
+
+
+def endBranch( branchTag ):
+    log( "end branch '%s'" % branchTag )
     
-    if [ $status != 0 ]
-    then
-        exit 1
-    fi
-}
+    progressTag = branchTag + "_progress"
+
+    assertInTrunkWorkingCopy
+    assertValidBranchUse( branchTag, progressTag )
+    assertWorkingCopyUpToDate( "trunk" )
+
+    frozenHeadTag = createFrozenHeadTag()
+    moduleName = cvsGetModuleName()
+        
+    cvsRemoteTagHead( frozenHeadTag, moduleName )
+
+    assertProgressIsAtFrozenHead( progressTag, frozenHeadTag )
+    
+    info("About to merge the changes from branch '%s' with" % branchTag)
+    info("the working copy of the trunk of module '%s'." % moduleName)
+    getUserOkay( "Import of changes from trunk aborted." )
+
+    cvsMergeChanges( progressTag, branchTag )    
+    cvsRemoveTag( moduleName, frozenHeadTag )
+    os.remove( errorFilename )
+
+    info()
+    info("Merged the changes from branch '%s' with the working copy of" %
+            branchTag)
+    info("the trunk of module '%s'.\n" % moduleName)
+    info("Don't forget to check for conflicts, commit the merged changes,")
+    info("and when everything checks out to remove tag '%s'." % progressTag ) 
+    info()
 
 
 #
-# Merge changes from the branch into the trunk
+# Main
 #
-end_branch() {
-    log End Branch: $*
 
-    assert_in_trunk_working_copy
-    assert_argument_count 1 $*
-    
-    branch_tag=$1
-    progress_tag="${branch_tag}_progress"
+random.seed()
 
-    assert_valid_branch_use $branch_tag $progress_tag
-    assert_working_copy_up_to_date trunk
-    
-    module_name=`cat CVS/Repository`
-    frozen_head_tag=fht_$$_`whoami`
-    cvs rtag -r HEAD $frozen_head_tag $module_name >> $LOGFILE 2>&1
-    
-    assert_progress_is_at_frozen_head $progress_tag $frozen_head_tag
-    
-    info "About to merge the changes from branch $branch_tag into the working"
-    info "copy of the trunk of module $module_name".
-    info
-    echo -n "Are you sure? [y/N] "
-    
-    read answer
-    echo
+logFilename = "/var/tmp/cvsmerge.log.%d" % os.getpid()
+errorFilename = "/var/tmp/cvsmerge.error.%d" % os.getpid()
 
-    if [ x$answer != xy ]
-    then
-        info Import of changes from trunk aborted.
-        exit 1
-    fi
+if len(sys.argv) < 2:
+    usage()
 
-    # Perform the actual merge
-    log cvs update -j $frozen_head_tag -j $branch_tag
-    (cvs update -j $frozen_head_tag -j $branch_tag 2>&1) \
-        | tee --append $LOGFILE \
-        | grep -v 'cvs update:'
+command = sys.argv[1]
+args = sys.argv[2:]
 
-    # Remove temporary tag
-    log cvs rtag -d $frozen_head_tag $module_name
-    cvs rtag -d $frozen_head_tag $module_name >> $LOGFILE 2>&1
-    
-    info "Merged changes from branch $branch_tag with the working copy of"
-    info "module $module_name".
-    info 
-    info "Don't forget to check for conflicts, commit the merged changes,"
-    info "and when everything checks out to remove tag $progress_tag". 
-}
+print "Logging output to: %s\n" % logFilename
+logFile = open(logFilename, "w")
 
+log( time.strftime("%a, %d %b %Y %H:%M:%S") )
+log( "Executing: " + command + " " + str(args) )
+log()
 
-if [ $# = 0 ]
-then
-    usage
-fi
-
-date >> $LOGFILE
-log Executing: $0 $*
-
-command=$1
-shift
-
-echo Logging output to: $LOGFILE
-echo
-
-case $command in
-    begin | begin-branch)
-        begin_branch $*
-        ;;
-
-    import | import-from-trunk)
-        import_from_trunk $*
-        ;;
-
-    end | end-branch)
-        end_branch $*
-        ;;        
-
-    *)
-        usage
-        ;;
-esac
+if command == "begin" or command == "begin-branch":
+    assertArgumentCount( 1, args )
+    beginBranch( args[0] )
+elif command == "import" or command == "import-from-trunk":
+    assertArgumentCount( 0, args )
+    importFromTrunk()
+elif command == "end" or command == "end-branch":
+    assertArgumentCount( 1, args )
+    endBranch( args[0] )
+else:
+    usage()
