@@ -331,8 +331,8 @@ def endBranch( branchTag ):
     info("Merged the changes from branch '%s' with the working copy of" %
             branchTag)
     info("the trunk of module '%s'.\n" % moduleName)
-    info("Don't forget to check for conflicts, commit the merged changes,")
-    info("and when everything checks out to remove tag '%s'." % progressTag ) 
+    info("Don't forget to check for conflicts and commit the merged changes.")
+    info("When no problem has occurred, remove the tag '%s'." % progressTag ) 
     info()
 
 

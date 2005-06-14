@@ -14,3 +14,7 @@ Merged changes from branch optimize-end-branch.
    - Keep shell version of cvsmerge script as backup.
  * test/scenario:
    - Test some cvsmerge use cases.
+
+Tue Jun 14 14:31:59 CEST 2005  <gerco@cwi.nl>
+ * bin/cvsmerge:
+   (endBranch) Improve the wording of an informative message.
