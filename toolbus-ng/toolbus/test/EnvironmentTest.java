@@ -22,7 +22,6 @@ public class EnvironmentTest extends TestCase {
    */
 
   public void testEnv1() throws ToolBusException {
-    Environment env = new Environment();
     ATerm varX = factory.make("var(-1,int,X)");
     ATerm varY = factory.make("var(-1,str,Y)");
 
@@ -32,7 +31,7 @@ public class EnvironmentTest extends TestCase {
     ATermList vars = factory.makeList(varY);
     vars = factory.makeList(varX, vars);
 
-    env.introduceVars(vars);
+    Environment env.introduceVars(vars);
 
     assertEquals(env.getVarIndex(varX), 0);
     assertEquals(env.getVarIndex(varY), 1);

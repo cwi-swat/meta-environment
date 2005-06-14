@@ -10,7 +10,7 @@ import aterm.ATerm;
 /**
  * MatchResult represents the progress of a match, starting with two environments.
  * It maintains two DeltaEnvironments recording the environment changes.
- * On success, the original environments are uopdated with the delta's.
+ * On success, the original environments are updated with the delta's.
  */
 
 public class MatchResult {
@@ -63,7 +63,7 @@ class DeltaEnvironment {
     for (int i = 0; i < dict.size(); i += 2) {
       ATerm var2 = (ATerm) dict.elementAt(i);
       if (var2.equals(var1))
-        return val.equals((ATerm) dict.elementAt(i + 1));
+        return val.equals(dict.elementAt(i + 1));
     }
     dict.add(var1);
     dict.add(val);

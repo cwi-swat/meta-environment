@@ -20,8 +20,8 @@ public class Main {
     //CreateTest();
     //DisruptTest();
     //MergeTest();
-    ParseTest();
-    //SndAndRecTest();
+    //ParseTest();
+    SndAndRecTest();
     //ToolTest();
   }
 

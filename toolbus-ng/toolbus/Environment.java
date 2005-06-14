@@ -3,78 +3,41 @@
  */
 
 package toolbus;
-import java.util.Vector;
 
 import aterm.*;
 
 /**
  * Environments maintain a relation between variables and their values.
- * The lifecyle of an environment consists of two phases: compile time and execution time.
- * 
- * During compile time (i.e. during compilation of a process definition) a vector (declVec) is maintained
- * of all current variables. Each vector entry contains a var or rvar term corresponding to a variable.
- * The variable maxVar indicates the last addressable variable. The situation is thus:
- * 
- *   var    var    var  ...    var     ...  var
- *    0      1      2   ...  maxVar-1  ...  declVar.size()-1
- *   \---------------------------/
- *     visible in current scope
- *   \---------------------------------------/
- *     all variables declared in some scope
- * 
- * Methods are:
- * - introduceVars
- * - introduceBindings
- * - removeVars
- * - getVarIndex
- * - getVarType
- * 
- * During compilation, resolveVars uses the environment to replace all variable indices by their
- * actual value. During execution time, operations on variables amount to a simple indexing
- * operation.
- * 
- * The switch to execution time is made by setExecuting. It sets the vector to null (to detect 
- * uninitialized variables) and then the following methods are available:
- * - assignVar
- * - getValue
- * 
  */
 
 public class Environment {
-  private int maxVar;
-  private Vector declVec;
+  ATerm var;
+  ATerm val;
+  Environment next;
 
-  private boolean executing;
-
-  public Environment() {
-    maxVar = 0;
-    declVec = new Vector();
-    executing = false;
+  public Environment(ATerm var, ATerm val, Environment env) {
+    this.var = var;
+    this.val = val;
+    this.next = env;
   }
 
   /**
-   * Compile time methods
-   */
-  
-  /**
    * introduceVars adds a list of variables to the environment.
-   * @param vars list of variables; each variables gets a new index assigned.
+   * @param vars list of variables.
    */
   
  
-public void introduceVars(ATermList vars) throws ToolBusException {
-    if (executing) {
-      throw new ToolBusInternalError("introduceVars during execution");
-    }
+  public Environment introduceVars(ATermList vars) throws ToolBusException {
+  	Environment env = this;
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
       if (TBTerm.isVar(var)) {
-        declVec.addElement(TBTerm.setVarIndexAndType(var, maxVar, TBTerm.getVarType(var)));
-        maxVar++;
+        env = new Environment(var, null, env);
       } else {
         throw new ToolBusInternalError("introduceVars illegal var: " + var);
       }
     }
+    return env;
   }
   
   /**
@@ -86,30 +49,26 @@ public void introduceVars(ATermList vars) throws ToolBusException {
    * @param actuals list of actual values.
    */
 
-  public void introduceBindings(ATermList formals, ATermList actuals) throws ToolBusException {
-    if (executing) {
-      throw new ToolBusInternalError("introduceBindings during execution");
-    }
+  public Environment introduceBindings(ATermList formals, ATermList actuals) throws ToolBusException {
+  	Environment env = this;
     for (int i = 0; i < formals.getLength(); i++) {
       ATerm formal = formals.elementAt(i);
+      ATerm actual = actuals.elementAt(i);
+      if (TBTerm.isVar(actual) && (TBTerm.getVarType(formal) != TBTerm.getVarType(actual))){
+        throw new ToolBusException("incompatible types for " + formal + " and " + actual);
+      }
       if (TBTerm.isVar(formal)) {
-        declVec.addElement(TBTerm.setVarIndexAndType(formal, maxVar, TBTerm.getVarType(formal)));
-        maxVar++;
+        env = new Environment(formal, null, env);
       } else if (TBTerm.isResVar(formal)) {
-        ATerm actual = actuals.elementAt(i);
         if (!TBTerm.isResVar(actual)) {
           throw new ToolBusInternalError("illegal actual: " + actual);
         }
-        if (TBTerm.getVarType(formal) != TBTerm.getVarType(actual)) {
-          throw new ToolBusException("incompatible types for " + formal + " and " + actual);
-        }
-        int index = getVarIndex(actual);
-        declVec.addElement(TBTerm.setVarIndexAndType(formal, index, TBTerm.getVarType(formal)));
-        maxVar++;
+        env = new Environment(formal, null, env);
       } else {
         throw new ToolBusInternalError("illegal formal: " + formal);
       }
     }
+    return env;
   }
   /**
    * removeVars deletes variables introduced by introduceVars and introduceBindings.
@@ -118,18 +77,19 @@ public void introduceVars(ATermList vars) throws ToolBusException {
    * @param delta number of variables to be removed.
    */
 
-  public void removeVars(int delta) {
-    if (executing) {
-      throw new ToolBusInternalError("removeVars during execution");
+  public Environment removeVars(int delta) {
+  	Environment env = this;
+    for(int i = 0; i < delta; i++){
+    	env = env.next;
     }
-    maxVar -= delta;
+    return env;
   }
   
   /**
    * getVarIndex returns the index allocated for given variable
    * @param var the variable whose index is required
    */
-
+/*
   public int getVarIndex(ATerm var) throws ToolBusException {
   	//System.err.println("getVarIndex(" + var + ")");
     if (executing) {
@@ -152,16 +112,14 @@ public void introduceVars(ATermList vars) throws ToolBusException {
     }
     throw new ToolBusException("undeclared variable " + name);
   }
-  
+*/
   /**
    * getVarType return the declared type of a given variable.
    * @param var the variable whoe type is required
    */
 
+  /*
   public ATerm getVarType(ATerm var) {
-    if (executing) {
-      throw new ToolBusInternalError("getVarType during execution");
-    }
     if (!(TBTerm.isVar(var) || TBTerm.isResVar(var)))
       throw new ToolBusInternalError("Environment.getVarType: illegal var " + var);
     String name = TBTerm.getVarName(var);
@@ -170,24 +128,7 @@ public void introduceVars(ATermList vars) throws ToolBusException {
         return TBTerm.getVarType((ATerm) declVec.elementAt(i));
     throw new ToolBusInternalError("Environment.getVarIndex: undeclared var " + var);
   }
-  
-  /**
-   * setExecuting switches to execution mode.
-   */
-
-  public void setExecuting() {
-    if (executing) {
-      throw new ToolBusInternalError("setExecuting during execution");
-    }
-    executing = true;
-    declVec.trimToSize();
-    for (int i = 0; i < declVec.size(); i++)
-      declVec.setElementAt(null, i);
-  }
-  
-  /**
-   * Execution time methods
-   */
+  */
   
   /**
    * assignVar assigns a value to a variable.
@@ -196,8 +137,14 @@ public void introduceVars(ATermList vars) throws ToolBusException {
    */
 
   public void assignVar(ATerm var, ATerm val) {
-    //System.out.println("putVar(" + var + ", " + val +")");
-    declVec.setElementAt(val, TBTerm.getVarIndex(var));
+    System.out.println("assignVar(" + var + ", " + val +")");
+	for (Environment env = this; env != null; env = env.next) {
+    	if(var == env.var){
+    		env.val = val;
+    		return;
+    	}
+    }
+    // not found?
   }
   
   /**
@@ -206,18 +153,22 @@ public void introduceVars(ATermList vars) throws ToolBusException {
    */
 
   public ATerm getValue(ATerm var) throws ToolBusException {
-
-    ATerm val = (ATerm) declVec.elementAt(TBTerm.getVarIndex(var));
-    //System.err.println("getVar(" + var + "): " + val);
-    if (val == null)
-      throw new ToolBusException(var + " has undefined value");
-    return val;
-  }
+	for (Environment env = this; env != null; env = env.next) {
+		if (var == env.var) {
+			ATerm val = env.val;
+			if (val == null)
+				throw new ToolBusException(var + " has undefined value");
+			System.err.println("getValue(" + var + "): " + val);
+			return val;
+		}
+	}
+	return var;
+	}
 
   public String toString() {
-  	String res = "{" + maxVar + "|", sep = "";
-    for (int i = 0; i < declVec.size(); i++){
-        res += sep + i + ":" + declVec.elementAt(i).toString();
+  	String res = "{", sep = "";
+	for (Environment env = this; env != null; env = env.next) {
+        res += sep + env.var + " : " + env.val;
         sep = ", ";
     }
     return res + "}";

@@ -42,7 +42,8 @@ public class ProcessDefinition {
   public ATermList getCompiledFormals(Environment env) throws ToolBusException {
   	System.err.println("env = " + env);
   	System.err.println("formals = " + formals);
-    return (ATermList) TBTerm.resolveVars(formals, env);
+    //return (ATermList) TBTerm.resolveVars(formals, env);
+  	return formals;
   }
 
   public ProcessExpression expand(ProcessInstance P, Stack calls, ATermList actuals) throws ToolBusException {

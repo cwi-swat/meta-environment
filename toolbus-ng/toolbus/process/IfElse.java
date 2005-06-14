@@ -34,11 +34,11 @@ public class IfElse extends AbstractProcessExpression {
 
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
     left.compile(P, follows);
-    ATerm rtest = TBTerm.resolveVars(test, P.getEnv());
-    left.getFirst().setTest(rtest);
+    //ATerm rtest = TBTerm.resolveVars(test, P.getEnv());
+    left.getFirst().setTest(test);
     right.compile(P, follows);
 
-    ATerm notTest = rtest.getFactory().make("not(<term>)", rtest);
+    ATerm notTest = test.getFactory().make("not(<term>)", test);
 
     right.getFirst().setTest(notTest);
 

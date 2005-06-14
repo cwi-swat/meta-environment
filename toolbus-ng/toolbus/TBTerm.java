@@ -127,7 +127,7 @@ public class TBTerm {
         return appl.getArguments(); // check length?
       }
     }
-    throw new ToolBusInternalError("illegal var in getVarIndex(" + t + ")");
+    throw new ToolBusInternalError("illegal var in getVarArgs(" + t + ")");
   }
 
   public static int getVarIndex(ATerm t) {
@@ -177,7 +177,7 @@ public class TBTerm {
    * @param t Aterm to be resolved.
    * @param env environment to be used.
    */
-
+/*
   public static ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
     switch (t.getType()) {
       case ATerm.BLOB :
@@ -209,7 +209,7 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
   }
-
+*/
   /**
    * Check that the two sides of an assignment are "compatibele", i.e. they must be equal
    * or the type of the lhs may be more general than that of the rhs.
