@@ -22,7 +22,7 @@ class Ref {
 abstract public class Atom extends AbstractProcessExpression implements StateElement {
   private ProcessInstance processInstance;
   // process instance to which the atom belongs
-  private Environment env; // the environment of that process instance
+  //private Environment env; // the environment of that process instance
   private ATerm test; // optional test that guards this atom
   private Ref[] atomArgs = new Ref[0];
 
@@ -61,7 +61,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   }
 
   public Environment getEnv() {
-    return env;
+    return processInstance.getEnv();
   }
 
   public State getStartState() {
@@ -74,11 +74,11 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
 
   public void setTest(ATerm test) throws ToolBusException {
   	if(test != null){
-	    ATerm rtst = TBTerm.resolveVars(test, env);
+	    //ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
 	    if (this.test == null) {
-	      this.test = rtst;
+	      this.test = test;
 	    } else {
-	      this.test = TBTerm.factory.make("and(<term>,<term>)", rtst, this.test);
+	      this.test = TBTerm.factory.make("and(<term>,<term>)", test, this.test);
 	    }
   	}
   }
@@ -137,7 +137,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
 
   public void compile(ProcessInstance processInstance, State follow) throws ToolBusException {
     this.processInstance = processInstance;
-    env = processInstance.getEnv();
+    Environment env = processInstance.getEnv();
     setFollow(follow);
     //System.err.println(this.getClass().getName() + ": compiling");
     for (int i = 0; i < atomArgs.length; i++) {

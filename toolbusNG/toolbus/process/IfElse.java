@@ -5,6 +5,7 @@
 package toolbus.process;
 import java.util.*;
 
+import toolbus.TBTerm;
 import toolbus.ToolBusException;
 import toolbus.State;
 
@@ -33,10 +34,11 @@ public class IfElse extends AbstractProcessExpression {
 
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
     left.compile(P, follows);
-    left.getFirst().setTest(test);
+    ATerm rtest = TBTerm.resolveVars(test, P.getEnv());
+    left.getFirst().setTest(rtest);
     right.compile(P, follows);
 
-    ATerm notTest = test.getFactory().make("not(<term>)", test);
+    ATerm notTest = rtest.getFactory().make("not(<term>)", rtest);
 
     right.getFirst().setTest(notTest);
 

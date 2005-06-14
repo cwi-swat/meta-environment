@@ -20,7 +20,7 @@ public class ProcessDefinition {
     this.formals = formals;
     this.PE = PE;
 
-    //System.err.println("procdef " + name + " " + formals + " " + PE);
+    System.err.println("procdef " + name + " " + formals + " " + PE);
   }
 
   public ProcessDefinition(String name, ProcessExpression PE) {
@@ -40,6 +40,8 @@ public class ProcessDefinition {
   }
 
   public ATermList getCompiledFormals(Environment env) throws ToolBusException {
+  	System.err.println("env = " + env);
+  	System.err.println("formals = " + formals);
     return (ATermList) TBTerm.resolveVars(formals, env);
   }
 
