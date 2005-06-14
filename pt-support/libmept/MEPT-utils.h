@@ -176,6 +176,7 @@ PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree,
 				  PT_Symbol actualParam);
 
 PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset);
+PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int column);
 
 PT_Args PT_findArgsWithLocation(PT_Args args);
 PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack);

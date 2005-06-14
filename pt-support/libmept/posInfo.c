@@ -36,6 +36,15 @@ typedef struct PT_Position_Tag {
 } PT_Position;
 
 /*}}}  */
+/*{{{  typedef struct PT_PosInFile */
+
+typedef struct PT_PosInFile {
+  int line;
+  int col;
+  int offset;
+} PT_PosInFile;
+
+/*}}}  */
 
 /*{{{  ATbool PT_hasTreeLocation(PT_Tree tree) */
 
@@ -318,20 +327,49 @@ PT_ParseTree PT_addParseTreePosInfoSome(const char *path,
 
 /*}}}  */
 
-/*{{{  static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle) */
+/*{{{  static ATbool PT_containsAreaOffset(LOC_Area haystack, PT_PosInFile *needle) */
 
-static ATbool PT_containsAreaOffset(LOC_Area haystack, int needle)
+static ATbool PT_containsAreaOffset(LOC_Area haystack, PT_PosInFile *needle)
 {
   int start = LOC_getAreaOffset(haystack);
   int end = start + LOC_getAreaLength(haystack);
 
-  return (start < needle) && (needle <= end);
+  return (start < needle->offset) && (needle->offset <= end);
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset) */
+/*{{{  static ATbool PT_containsAreaLineColumn(LOC_Area haystack, PT_PosInFile *needle) */
 
-PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
+static ATbool PT_containsAreaLineColumn(LOC_Area haystack, PT_PosInFile *needle)
+{
+  int beginLine = LOC_getAreaBeginLine(haystack);
+  int endLine = LOC_getAreaEndLine(haystack);
+  int beginCol = LOC_getAreaBeginColumn(haystack);
+  int endCol = LOC_getAreaEndColumn(haystack);
+
+  if (beginLine <= needle->line && endLine >= needle->line) {
+    if (beginLine == endLine) {
+      return (beginCol <= needle->col && endCol >= needle->col);
+    }
+    else if (beginLine == needle->line) {
+      return (beginCol <= needle->col);
+    }
+    else if (endLine == needle->line) {
+      return (endCol >= needle->col);
+    }
+    else {
+      return ((beginLine <= needle->line) && (endLine >= needle->line));
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PT_findTreeAtPosition(PT_Tree tree, ATbool (*contain)(LOC_Area haystack, PT_PosInFile needle), PT_PosInFile pos) */
+
+PT_Tree PT_findTreeAtPosition(PT_Tree tree, ATbool (*contain)(LOC_Area area, PT_PosInFile *position), PT_PosInFile pos)
 {
   LOC_Area area;
   LOC_Location location;
@@ -345,14 +383,14 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
   }
 
   area = LOC_getLocationArea(location);
-  if (!PT_containsAreaOffset(area, offset)) {
+  if (!contain(area, &pos)) {
     return NULL;
   }
 
   if (PT_isTreeAppl(tree)) {
     args = PT_getTreeArgs(tree);
     while (!PT_isArgsEmpty(args)) {
-      PT_Tree child = PT_findTreeAtOffset(PT_getArgsHead(args), offset);
+      PT_Tree child = PT_findTreeAtPosition(PT_getArgsHead(args), contain, pos);
       if (child != NULL) {
 	return child;
       }
@@ -361,6 +399,32 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
   }
 
   return tree;
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset) */
+
+PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
+{
+  PT_PosInFile pos;
+
+  pos.offset = offset;
+  
+  return PT_findTreeAtPosition(tree, PT_containsAreaOffset, pos);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int col) */
+
+PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int col)
+{
+  PT_PosInFile pos;
+
+  pos.line = line;
+  pos.col = col;
+  
+  return PT_findTreeAtPosition(tree, PT_containsAreaLineColumn, pos);
 }
 
 /*}}}  */

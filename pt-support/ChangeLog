@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jun 14 09:01:00 CEST 2005 <kooiker@cwi.nl>
+ * libmept/posInfo.c:
+   - Change findTree to find a tree with an offset or a line-column pair
+
 Fri Jun 10 15:27:05 CEST 2005 <M328@cwi.nl>
  * libmept/ordering.c:
    - Add parameters for ordering alternatives in ambiguity-clusters and ignoring     layout-trees while comparing

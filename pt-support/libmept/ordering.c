@@ -80,7 +80,10 @@ static int PT_compareProduction(PT_Production prod1, PT_Production prod2)
 
 /*}}}  */
 
-static int ambiguityOrdering(const ATerm t1, const ATerm t2) {
+/*{{{  static int ambiguityOrdering(const ATerm t1, const ATerm t2)  */
+
+static int ambiguityOrdering(const ATerm t1, const ATerm t2) 
+{
   if (t1 < t2) {
     return -1;
   } else if (t2 < t1) {
@@ -89,6 +92,8 @@ static int ambiguityOrdering(const ATerm t1, const ATerm t2) {
 
   return 0;
 }
+
+/*}}}  */
 
 /*{{{  static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2) */
 
