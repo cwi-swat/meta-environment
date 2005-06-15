@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jun 15 15:41:36 CEST 2005 <jurgenv@cwi.nl>
+ * src/nl/cwi/sen1/gui/plugin/EditorPanel.java: can open an non-existing
+   file now.
+
 Wed Jun 15 09:39:48 CEST 2005 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - Change mouse-event with offset into mouse-event with line and column
