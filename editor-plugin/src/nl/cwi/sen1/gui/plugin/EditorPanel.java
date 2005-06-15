@@ -31,7 +31,7 @@ public class EditorPanel extends JPanel {
         SyntaxDocument document = new SyntaxDocument();
         document.addUndoableEditListener(new UndoableEditListener() {
             public void undoableEditHappened(UndoableEditEvent e) {
-                setModified();
+                setModified(true);
             }
         });
 
@@ -72,8 +72,8 @@ public class EditorPanel extends JPanel {
         return id;
     }
 
-    public void setModified() {
-        modified = true;
+    public void setModified(boolean modified) {
+        this.modified = modified;
         textArea.setFocus(null);
     }
 

@@ -60,6 +60,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
         if (panel != null) {
             try {
                 panel.writeContents();
+                panel.setModified(false);
                 ATerm event = studio.getATermFactory().make(
                         "contents-written(<term>)", editorId);
                 bridge.postEvent(event);

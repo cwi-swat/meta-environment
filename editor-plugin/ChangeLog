@@ -6,6 +6,7 @@ Wed Jun 15 09:39:48 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/gui/plugin/EditorPlugin.java:
    - Implements displayMessage, setCursorAtOffset
    - Handle mouseclicks in textarea
+   - Reset modified state after saving file
  * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
    - Add getter for textArea
 
