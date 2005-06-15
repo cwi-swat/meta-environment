@@ -1,6 +1,6 @@
 // Java tool interface EditorPluginTif
 // This file is generated automatically, please do not edit!
-// generation time: May 27, 2005 3:49:09 PM
+// generation time: Jun 13, 2005 12:50:25 PM
 
 package nl.cwi.sen1.gui.plugin;
 

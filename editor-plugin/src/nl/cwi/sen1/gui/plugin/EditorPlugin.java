@@ -1,6 +1,8 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,6 @@ import nl.cwi.sen1.gui.StudioPlugin;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
-import errorapi.types.Area;
 
 public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     private static final String TOOL_NAME = "editor-plugin";
@@ -71,9 +72,9 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     public void setFocus(ATerm editorId, ATerm focus) {
         errorapi.Factory factory = errorapi.Factory
                 .getInstance((PureFactory) studio.getATermFactory());
-    
+
         EditorPanel panel = (EditorPanel) editors.get(editorId.toString());
-        
+
         panel.setFocus(factory.AreaFromTerm(focus));
     }
 
@@ -131,7 +132,9 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        System.err.println("Display message: " + message);
+        StudioComponentImpl comp = (StudioComponentImpl) componentsById.get(editorId
+                .toString());
+        comp.setStatusMessage(message);
     }
 
     public void killEditor(ATerm editorId) {
@@ -145,6 +148,8 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
+        EditorPanel panel = getPanel(editorId.toString());
+        panel.getTextArea().getLineOfOffset(offset);
     }
 
     public void editFile(ATerm editorId, String filename) {
@@ -186,6 +191,27 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
             final EditorPanel panel = new EditorPanel(id, filename);
             editorPanel = panel;
 
+            final EditorTextArea textArea = panel.getTextArea();
+
+            // Add mousemotion listener showing sorts in tooltips
+            textArea.getPainter().addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    int l = textArea.yToLine(e.getY());
+                    int offset = textArea.xToOffset(l, e.getX());
+
+                    if (e.getClickCount() == 1) {
+                        ATerm line = studio.getATermFactory().makeInt(l + 1);
+                        ATerm column = studio.getATermFactory().makeInt(offset);
+                        ATerm event = studio
+                                .getATermFactory()
+                                .make(
+                                        "mouse-event(<term>,<term>,<term>)",
+                                        editorId, line, column);
+                        bridge.postEvent(event);
+                    }
+                }
+            });
+
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
@@ -209,7 +235,6 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
                         case JOptionPane.CANCEL_OPTION:
                             throw new CloseAbortedException();
                         }
-
                     }
                 }
 
@@ -219,7 +244,6 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
                     ATerm event = studio.getATermFactory().make(
                             "editor-disconnected(<term>)", editorId);
                     bridge.postEvent(event);
-
                 }
             });
 
@@ -227,7 +251,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
             componentsById.put(id, comp);
             studio.addComponent(comp);
         }
-        
+
         return editorPanel;
     }
 

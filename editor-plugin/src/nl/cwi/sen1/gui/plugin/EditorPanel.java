@@ -25,7 +25,7 @@ public class EditorPanel extends JPanel {
     public EditorPanel(String id, String filename) throws IOException {
         this.id = id;
         this.filename = filename;
-
+        
         setLayout(new BorderLayout());
 
         SyntaxDocument document = new SyntaxDocument();
@@ -37,10 +37,15 @@ public class EditorPanel extends JPanel {
 
         textArea = new EditorTextArea();
         textArea.setDocument(document);
+
         textArea.setText(readContents(filename));
         modified = false;
         textArea.setCaretPosition(0);
         add(textArea, BorderLayout.CENTER);
+    }
+    
+    public EditorTextArea getTextArea() {
+        return textArea;
     }
 
     private String readContents(String filename) throws IOException {

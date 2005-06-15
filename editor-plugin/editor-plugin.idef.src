@@ -7,9 +7,11 @@ let
   T : editor-plugin,
   ActionList : list,
   Area : term,
+  Column: int,
   EditorId : term,
   Editor : str,
   Filename : str,
+  Line: int,
   Offset : int,
   MenuEvent : term,
   Message : str,
@@ -73,9 +75,9 @@ in
     . create(ContentsChanged(EditorId), Pid?)
     . snd-ack-event(T, contents-changed(EditorId))
   +
-    rec-event(T, mouse-event(EditorId?, Offset?))
-    . create(MouseEvent(EditorId, Offset), Pid?)
-    . snd-ack-event(T, mouse-event(EditorId, Offset))
+    rec-event(T, mouse-event(EditorId?, Line?, Column?))
+    . create(MouseEvent(EditorId, Line, Column), Pid?)
+    . snd-ack-event(T, mouse-event(EditorId, Line, Column))
   +
     rec-event(T, menu-event(EditorId?, MenuEvent?))
     . create(MenuEvent(EditorId, MenuEvent), Pid?)
@@ -91,8 +93,8 @@ endlet
 process ContentsChanged(EditorId: term) is
   snd-msg(te-contents-changed(EditorId))
 
-process MouseEvent(EditorId: term, Offset: int) is
-  snd-msg(te-mouse-click-at-offset(EditorId, Offset))
+process MouseEvent(EditorId: term, Line: int, Column: int) is
+  snd-msg(te-mouse-click-at-line-column(EditorId, Line, Column))
   
 process MenuEvent(EditorId: term, MenuEvent: term) is    
   snd-msg(te-menu-event(EditorId, MenuEvent))
