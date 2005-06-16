@@ -10,6 +10,7 @@ Thu Jun 16 12:58:17 CEST 2005 <kooiker@cwi.nl>
    - Paint selection text white
  * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
    - Fix modified notification
+   - Reset UndoManager after writing contents
 
 Wed Jun 15 15:41:36 CEST 2005 <jurgenv@cwi.nl>
  * src/nl/cwi/sen1/gui/plugin/EditorPanel.java: can open an non-existing

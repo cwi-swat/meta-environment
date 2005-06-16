@@ -66,6 +66,9 @@ public class EditorPanel extends JPanel {
 
         FileOutputStream fos = new FileOutputStream(filename);
         fos.write(text.getBytes());
+        
+        textArea.getDocument().stopUndo();
+        textArea.getDocument().startUndo();
     }
 
     public void setFocus(Area focus) {

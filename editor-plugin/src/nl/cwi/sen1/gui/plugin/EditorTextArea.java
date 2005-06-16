@@ -52,7 +52,7 @@ public class EditorTextArea extends TextArea {
 
             // System.err.println("Line: " + line + "(" + x1 + "," + x2 + ")");
 
-            gfx.setColor(new Color(255, 255, 255));
+            gfx.setColor(Color.white);
             int x = _offsetToX(line, x1);
             int y = lineToY(line);
             y += fm.getHeight();
