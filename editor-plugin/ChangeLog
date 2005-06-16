@@ -4,6 +4,11 @@ Thu Jun 16 12:58:17 CEST 2005 <kooiker@cwi.nl>
  * lib/junac-ui.jar:
    - Editor is now based on UJAC-ui which on its turn is based on JEdit. It
      provides find/replace dialog, goto line dialog and an undo manager.
+ * src/nl/cwi/sen1/gui/plugin/EditorTextArea.java:
+   - Turn off EOL markers
+   - Show selection in focus
+ * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
+   - Fix modified notification
 
 Wed Jun 15 15:41:36 CEST 2005 <jurgenv@cwi.nl>
  * src/nl/cwi/sen1/gui/plugin/EditorPanel.java: can open an non-existing
