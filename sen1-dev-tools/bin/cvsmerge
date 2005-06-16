@@ -219,7 +219,7 @@ def getUserOkay( message ):
 
 def processCollisions( frozenHeadTag, moduleName ):
     collision = 0
-    pin = os.popen( "grep 'cvs update:' %s" % errorFilename )
+    pin = os.popen("egrep 'cvs update: file .* exists, but has been added in revision %s' %s" % (frozenHeadTag, errorFilename))
     line = pin.readline()
 
     if line:
@@ -228,10 +228,10 @@ def processCollisions( frozenHeadTag, moduleName ):
         info()
 
     while line:
-        index = line.find(" exists, but ")
+        index = line.find(" exists")
         if index == -1:
-            continue        # weird
-        fileName = line[17:index]
+            error( "cannot find filename in error file." )
+        fileName = line[17:index]       # 17 = "cvs update ..."
         print "  '%s'" % fileName
         randomString = ".%06d" % random.uniform(0, 100000)
         os.rename( fileName, fileName + randomString + ".branch" )

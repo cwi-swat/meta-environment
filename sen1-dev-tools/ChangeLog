@@ -1,8 +1,14 @@
 # $Id$
 
-Mon May 30 15:53:18 CEST 2005 <gerco@cwi.nl>
+Thu Jun 16 14:02:01 CEST 2005 <{gerco,jong}@cwi.nl>
  * bin/cvsmerge:
-   - Added an informative warning to change to the branch.
+   - Fine-tuned the egrep pattern for collision detection.
+ * test/scenario:
+   - Added cvsmerge test cases.
+
+Tue Jun 14 14:31:59 CEST 2005 <gerco@cwi.nl>
+ * bin/cvsmerge:
+   (endBranch) Improve the wording of an informative message.
 
 Tue Jun 14 13:50:51 CEST 2005 <{gerco,jong}@cwi.nl>
 Merged changes from branch optimize-end-branch.
@@ -15,6 +21,7 @@ Merged changes from branch optimize-end-branch.
  * test/scenario:
    - Test some cvsmerge use cases.
 
-Tue Jun 14 14:31:59 CEST 2005  <gerco@cwi.nl>
+Mon May 30 15:53:18 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
-   (endBranch) Improve the wording of an informative message.
+   - Added an informative warning to change to the branch.
+
