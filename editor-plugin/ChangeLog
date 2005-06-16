@@ -7,6 +7,7 @@ Thu Jun 16 12:58:17 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/gui/plugin/EditorTextArea.java:
    - Turn off EOL markers
    - Show selection in focus
+   - Paint selection text white
  * src/nl/cwi/sen1/gui/plugin/EditorPanel.java:
    - Fix modified notification
 

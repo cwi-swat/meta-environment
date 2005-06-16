@@ -3,27 +3,68 @@ package nl.cwi.sen1.gui.plugin;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.text.Segment;
+import javax.swing.text.Utilities;
+
 import org.ujac.ui.editor.TextArea;
 
 import errorapi.types.Area;
 
 public class EditorTextArea extends TextArea {
-    private static final Color focusColor = new Color(255, 165, 0);
+    private static final Color FOCUS_COLOR = new Color(255, 248, 147);
+
+    private static final Color HIGHLIGHT_COLOR = new Color(232, 242, 254);
+
+    private static final Color SELECTION_COLOR = new Color(68, 100, 172);
 
     private Area focus;
 
     public EditorTextArea() {
         super();
+
         setEOLMarkersPainted(false);
+        setLineHighlightColor(HIGHLIGHT_COLOR);
+        setSelectionColor(SELECTION_COLOR);
     }
 
-    /* 
-     * 1. Highlight current line
-     * 2. Paint focus
-     * 3. Paint selection
-     * 4. Paint highlight
-     * 5. Paint brackethighlight
-     * 6. Paint caret
+    protected void paintLine(Graphics gfx, int line) {
+        super.paintLine(gfx, line);
+
+        if (line >= getSelectionStartLine() && line <= getSelectionEndLine()) {
+            int selectionStartLine = getSelectionStartLine();
+            int selectionEndLine = getSelectionEndLine();
+            int lineStart = getLineStartOffset(line);
+
+            int x1, x2;
+            if (selectionStartLine == selectionEndLine) {
+                x1 = selectionStart - lineStart;
+                x2 = selectionEnd - lineStart;
+            } else if (line == selectionStartLine) {
+                x1 = selectionStart - lineStart;
+                x2 = getLineText(line).length();
+            } else if (line == selectionEndLine) {
+                x1 = 0;
+                x2 = selectionEnd - lineStart;
+            } else {
+                x1 = 0;
+                x2 = getLineText(line).length();
+            }
+
+            // System.err.println("Line: " + line + "(" + x1 + "," + x2 + ")");
+
+            gfx.setColor(new Color(255, 255, 255));
+            int x = _offsetToX(line, x1);
+            int y = lineToY(line);
+            y += fm.getHeight();
+            String text = getLineText(line).substring(x1, x2);
+            Segment segment = new Segment(text.toCharArray(), 0, text.length());
+            Utilities.drawTabbedText(segment, x, y, gfx, this, 0);
+        }
+    }
+
+    /*
+     * 1. Highlight current line 2. Paint focus 3. Paint selection 4. Paint
+     * highlight 5. Paint brackethighlight 6. Paint caret
      */
     protected void paintHighlight(Graphics gfx, int line, int y) {
         if (line >= getSelectionStartLine() && line <= getSelectionEndLine()) {
@@ -38,7 +79,7 @@ public class EditorTextArea extends TextArea {
             int startCol = focus.getBeginColumn();
             int endCol = focus.getEndColumn();
             if (line >= startLine && line <= endLine) {
-                gfx.setColor(focusColor);
+                gfx.setColor(FOCUS_COLOR);
                 paintArea(gfx, line, y, startLine, endLine, startCol, endCol);
             }
         }
