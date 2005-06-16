@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jun 16 14:50:55 CEST 2005 <{gerco,jong,jurgenv}@cwi.nl>
+ * bin/cvsmerge:
+   - Reduce the number of broken pipe messages in log file.
+
 Thu Jun 16 14:02:01 CEST 2005 <{gerco,jong}@cwi.nl>
  * bin/cvsmerge:
    - Fine-tuned the egrep pattern for collision detection.
@@ -8,7 +12,7 @@ Thu Jun 16 14:02:01 CEST 2005 <{gerco,jong}@cwi.nl>
 
 Tue Jun 14 14:31:59 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
-   (endBranch) Improve the wording of an informative message.
+   Improve the wording of an informative message.
 
 Tue Jun 14 13:50:51 CEST 2005 <{gerco,jong}@cwi.nl>
 Merged changes from branch optimize-end-branch.

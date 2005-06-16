@@ -57,8 +57,7 @@ def cvsDoCVS( command ):
 def cvsGetStickyTagCwd():
     log( "cvsGetStickyTagCwd" )
     command = ("(cvs status -v" +
-               " | grep 'Sticky Tag:'" +
-               " | head -1" +
+               " | grep --max-count=1 'Sticky Tag:'" +
                " | awk '{print $3}') 2>> %s" % logFilename)
     log( command )
     pin = os.popen( command )
