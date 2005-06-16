@@ -7,82 +7,78 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.JPanel;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-
-import org.syntax.jedit.SyntaxDocument;
 
 import errorapi.types.Area;
 
 public class EditorPanel extends JPanel {
 	private String id;
 
-	private String filename;
+    private String filename;
+    
+    private EditorTextArea textArea;
+    
+    private boolean modified;
 
-	private EditorTextArea textArea;
+    public EditorPanel(String id, String filename) throws IOException {
+        this.id = id;
+        this.filename = filename;
+        
+        setLayout(new BorderLayout());
 
-	private boolean modified;
+//        SyntaxDocument document = new SyntaxDocument();
+//        document.addUndoableEditListener(new UndoableEditListener() {
+//            public void undoableEditHappened(UndoableEditEvent e) {
+//                setModified(true);
+//            }
+//        });
 
-	public EditorPanel(String id, String filename) throws IOException {
-		this.id = id;
-		this.filename = filename;
+        textArea = new EditorTextArea();
+//        textArea.setDocument(document);
 
-		setLayout(new BorderLayout());
+        textArea.setText(readContents(filename));
+        modified = false;
+        textArea.setCaretPosition(0);
+        add(textArea, BorderLayout.CENTER);
+    }
+    
+    public EditorTextArea getTextArea() {
+        return textArea;
+    }
+    
+    private String readContents(String filename) throws IOException {
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            int x = fis.available();
+            byte b[] = new byte[x];
+            fis.read(b);
+            String content = new String(b);
+            return content;
+        } catch (FileNotFoundException e) {
+            return "";
+        }
+    }
 
-		SyntaxDocument document = new SyntaxDocument();
-		document.addUndoableEditListener(new UndoableEditListener() {
-			public void undoableEditHappened(UndoableEditEvent e) {
-				setModified(true);
-			}
-		});
+    public void writeContents() throws IOException {
+        String text = textArea.getText();
+        
+        FileOutputStream fos = new FileOutputStream(filename);
+        fos.write(text.getBytes());
+    }
+    
+    public void setFocus(Area focus) {
+        textArea.setFocus(focus);
+    }
 
-		textArea = new EditorTextArea();
-		textArea.setDocument(document);
+    public String getId() {
+        return id;
+    }
 
-		textArea.setText(readContents(filename));
-		modified = false;
-		textArea.setCaretPosition(0);
-		add(textArea, BorderLayout.CENTER);
-	}
+    public void setModified(boolean modified) {
+        this.modified = modified;
+        textArea.setFocus(null);
+    }
 
-	public EditorTextArea getTextArea() {
-		return textArea;
-	}
-
-	private String readContents(String filename) throws IOException {
-		try {
-			FileInputStream fis = new FileInputStream(filename);
-			int x = fis.available();
-			byte b[] = new byte[x];
-			fis.read(b);
-			String content = new String(b);
-			return content;
-		} catch (FileNotFoundException e) {
-			return "";
-		}
-	}
-
-	public void writeContents() throws IOException {
-		String text = textArea.getText();
-
-		FileOutputStream fos = new FileOutputStream(filename);
-		fos.write(text.getBytes());
-	}
-
-	public void setFocus(Area focus) {
-		textArea.setFocus(focus);
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setModified(boolean modified) {
-		this.modified = modified;
-		textArea.setFocus(null);
-	}
-
-	public boolean isModified() {
-		return modified;
-	}
+    public boolean isModified() {
+        return modified;
+    }
 }

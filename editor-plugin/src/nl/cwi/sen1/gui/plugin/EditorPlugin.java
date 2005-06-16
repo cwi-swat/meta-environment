@@ -195,7 +195,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
             final EditorTextArea textArea = panel.getTextArea();
 
             // Add mousemotion listener showing sorts in tooltips
-            textArea.getPainter().addMouseListener(new MouseAdapter() {
+            textArea.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     int l = textArea.yToLine(e.getY());
                     int offset = textArea.xToOffset(l, e.getX());
