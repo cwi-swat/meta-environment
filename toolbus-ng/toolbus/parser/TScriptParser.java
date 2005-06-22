@@ -100,7 +100,7 @@ class TScriptNodeBuilders {
     define(new NodeBuilder("apply", true) {
       public Object build(Object args[]) throws ToolBusException {
         if (args.length == 1)
-          return args[0];
+          return TBTerm.unquote((ATerm) args[0]);
         if (args.length != 2) {
           throw new ToolBusException("apply: wrong number of args");
         }
@@ -150,7 +150,11 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("strcon", true) {
       public Object build(Object args[]) {
-        return TBTerm.unquote((ATerm) args[0]);
+      	String name = ((ATermAppl) args[0]).getName();
+      	String txt = name.substring(1,name.length()-1);
+      	System.err.println("*** strcon: " + args[0] + "; " + txt);
+      	return TBTerm.unquote((ATerm) args[0]);
+        //return TBTerm.makeStr((String) args[0]);
       }
     });
 
@@ -377,7 +381,7 @@ class TScriptNodeBuilders {
   }
 
   public static Object buildAppl(ATermAppl t) throws ToolBusException {
-    // System.err.println(t);
+     System.err.println("BuildAppl: " + t);
     String name = t.getName();
     ATerm args[] = t.getArgumentArray();
     NodeBuilder nd = (NodeBuilder) Builders.get(name);

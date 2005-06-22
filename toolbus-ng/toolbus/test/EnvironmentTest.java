@@ -22,8 +22,9 @@ public class EnvironmentTest extends TestCase {
    */
 
   public void testEnv1() throws ToolBusException {
-    ATerm varX = factory.make("var(-1,int,X)");
-    ATerm varY = factory.make("var(-1,str,Y)");
+  	Environment env = new Environment();
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(str,Y)");
 
     ATerm intVal = factory.make("123");
     ATerm strVal = factory.make("abc");
@@ -31,25 +32,12 @@ public class EnvironmentTest extends TestCase {
     ATermList vars = factory.makeList(varY);
     vars = factory.makeList(varX, vars);
 
-    Environment env.introduceVars(vars);
-
-    assertEquals(env.getVarIndex(varX), 0);
-    assertEquals(env.getVarIndex(varY), 1);
-
-    assertEquals(env.getVarType(varX), TBTerm.IntType);
-    assertEquals(env.getVarType(varY), TBTerm.StrType);
-
-    varX = TBTerm.resolveVars(varX, env);
-    assertEquals(TBTerm.getVarIndex(varX), 0);
-
-    varY = TBTerm.resolveVars(varY, env);
-    assertEquals(TBTerm.getVarIndex(varY), 1);
-
-    env.setExecuting();
+    env.introduceVars(vars);
+    System.out.println(env);
 
     try {
-      assertEquals(env.getValue(varX), null);
-      assertEquals(env.getValue(varY), null);
+      assertEquals(env.getValue(varX), varX);
+      assertEquals(env.getValue(varY), varY);
       fail();
     } catch (ToolBusException e) {
     }
@@ -74,19 +62,14 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv2() throws ToolBusException {
     Environment env = new Environment();
-    ATerm varX1 = factory.make("var(-1,int,X)");
-    ATerm varX2 = factory.make("var(-1,str,X)");
+    ATerm varX1 = factory.make("var(int,X)");
+    ATerm varX2 = factory.make("var(str,X)");
 
     ATermList vars = factory.makeList(varX2);
     vars = factory.makeList(varX1, vars);
 
     env.introduceVars(vars);
 
-    assertEquals(env.getVarIndex(varX1), 1);
-    assertEquals(env.getVarIndex(varX2), 1);
-
-    assertEquals(env.getVarType(varX1), TBTerm.StrType);
-    assertEquals(env.getVarType(varX2), TBTerm.StrType);
   }
 
   /**
@@ -98,8 +81,8 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv3() throws ToolBusException {
     Environment env = new Environment();
-    ATerm varX = factory.make("var(-1,int,X)");
-    ATerm varY = factory.make("var(-1,int,Y)");
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
     ATerm int3 = factory.make("3");
     ATerm int4 = factory.make("4");
 
@@ -111,14 +94,6 @@ public class EnvironmentTest extends TestCase {
     ATermList formals = factory.makeList(varY);
 
     env.introduceBindings(formals, actuals);
-
-    varX = TBTerm.resolveVars(varX, env);
-    assertEquals(TBTerm.getVarIndex(varX), 0);
-
-    varY = TBTerm.resolveVars(varY, env);
-    assertEquals(TBTerm.getVarIndex(varY), 1);
-
-    env.setExecuting();
 
     env.assignVar(varX, int3);
     env.assignVar(varY, int4);
@@ -139,13 +114,13 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv4() throws ToolBusException {
     Environment env = new Environment();
-    ATerm varX = factory.make("var(-1,int,X)");
-    ATerm varY = factory.make("var(-1,int,Y)");
-    ATerm varZ = factory.make("var(-1,int,Z)");
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
+    ATerm varZ = factory.make("var(int,Z)");
 
-    ATerm rvarX = factory.make("rvar(-1,int,X)");
-    ATerm rvarY = factory.make("rvar(-1,int,Y)");
-    ATerm rvarZ = factory.make("rvar(-1,int,Z)");
+    ATerm rvarX = factory.make("rvar(int,X)");
+    ATerm rvarY = factory.make("rvar(int,Y)");
+    ATerm rvarZ = factory.make("rvar(int,Z)");
 
     ATermList declX = factory.makeList(varX);
     env.introduceVars(declX);
@@ -162,23 +137,6 @@ public class EnvironmentTest extends TestCase {
     ATerm int4 = factory.make("4");
     ATerm int5 = factory.make("5");
     ATerm int6 = factory.make("6");
-
-    varX = TBTerm.resolveVars(varX, env);
-    varY = TBTerm.resolveVars(varY, env);
-    varZ = TBTerm.resolveVars(varZ, env);
-    rvarX = TBTerm.resolveVars(rvarX, env);
-    rvarY = TBTerm.resolveVars(rvarY, env);
-    rvarZ = TBTerm.resolveVars(rvarZ, env);
-
-    assertEquals(env.getVarIndex(varX), 0);
-    assertEquals(env.getVarIndex(varY), 0);
-    assertEquals(env.getVarIndex(varZ), 0);
-
-    assertEquals(env.getVarIndex(rvarX), 0);
-    assertEquals(env.getVarIndex(rvarY), 0);
-    assertEquals(env.getVarIndex(rvarZ), 0);
-
-    env.setExecuting();
 
     env.assignVar(varX, int3);
 

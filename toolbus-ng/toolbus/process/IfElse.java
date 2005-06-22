@@ -5,13 +5,14 @@
 package toolbus.process;
 import java.util.*;
 
+import toolbus.Environment;
 import toolbus.TBTerm;
 import toolbus.ToolBusException;
 import toolbus.State;
 
 import aterm.ATerm;
 
-public class IfElse extends AbstractProcessExpression {
+public class IfElse extends ProcessExpression {
   private ATerm test;
   private ProcessExpression left;
   private ProcessExpression right;
@@ -32,19 +33,24 @@ public class IfElse extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, State follows) throws ToolBusException {
-    left.compile(P, follows);
-    //ATerm rtest = TBTerm.resolveVars(test, P.getEnv());
-    left.getFirst().setTest(test);
-    right.compile(P, follows);
+  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
+    left.compile(P, env, follows);
+    ATerm rtest = TBTerm.resolveVars(test, env);
+    left.getFirst().setTest(rtest, env);
+    right.compile(P, env, follows);
 
-    ATerm notTest = test.getFactory().make("not(<term>)", test);
+    ATerm notTest = rtest.getFactory().make("not(<term>)", rtest);
 
-    right.getFirst().setTest(notTest);
+    right.getFirst().setTest(notTest, env);
 
     setFollow(left.getFollow().union(right.getFollow()));
     //System.err.println("first = " + first);
     //System.err.println("follow = "+ follow);
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	left.replaceFormals(env);
+	right.replaceFormals(env);
   }
 
   public State getAtoms() {

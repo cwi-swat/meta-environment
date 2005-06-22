@@ -1,6 +1,7 @@
 process P(N : int) is Q(N) . printf(N)
 
-process Q(N : int) is N := mul(N,2) . R(N) . printf(N)
+process Q(N : int) is N := mul(N,2) . R(N) 
+       . printf(N)
 
 process R(N : int) is N := mul(N,3) . printf(N)
 

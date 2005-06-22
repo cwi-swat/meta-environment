@@ -4,10 +4,9 @@
 
 package toolbus.process;
 import java.util.*;
-
 import toolbus.*;
-
 import aterm.*;
+import toolbus.atom.EndScope;
 
 public class ProcessDefinition {
 
@@ -20,7 +19,7 @@ public class ProcessDefinition {
     this.formals = formals;
     this.PE = PE;
 
-    System.err.println("procdef " + name + " " + formals + " " + PE);
+    //System.err.println("procdef " + name + " " + formals + " " + PE);
   }
 
   public ProcessDefinition(String name, ProcessExpression PE) {
@@ -31,6 +30,7 @@ public class ProcessDefinition {
     return name;
   }
 
+  /*
   public void enterScope(Environment env, ATermList actuals) throws ToolBusException {
     env.introduceBindings(formals, actuals);
   }
@@ -38,11 +38,9 @@ public class ProcessDefinition {
   public void leaveScope(Environment env) {
     env.removeVars(formals.getLength());
   }
+  */
 
-  public ATermList getCompiledFormals(Environment env) throws ToolBusException {
-  	System.err.println("env = " + env);
-  	System.err.println("formals = " + formals);
-    //return (ATermList) TBTerm.resolveVars(formals, env);
+  public ATermList getFormals() {
   	return formals;
   }
 
@@ -57,7 +55,7 @@ public class ProcessDefinition {
         throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
       }
     };
-    ProcessExpression PE1 = PE.copy();
+    ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals));
     PE1.expand(P, calls);
     return PE1;
   }

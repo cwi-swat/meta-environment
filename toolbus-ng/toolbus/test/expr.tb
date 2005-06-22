@@ -66,38 +66,36 @@ process ListOps is
 	if member(a, [a]) then tau else P(77) fi .
 	if member(a, [x,y,a,z]) then tau else P(78) fi .
 	if member(a, [x,y,z]) then P(79) else tau  fi .
-        if member([],[]) then P(80) else tau fi.
-        if member([],[a]) then P(81) else tau fi.
-        if member([],[a,[b],c]) then P(82) else tau fi.
-        if member([],[a,[b],c,[]]) then tau else P(83) fi.       
+    if member([],[]) then P(80) else tau fi.
+    if member([],[a]) then P(81) else tau fi.
+    if member([],[a,[b],c]) then P(82) else tau fi.
+    if member([],[a,[b],c,[]]) then tau else P(83) fi.       
 
 	if equal(size([]),0) then tau else P(84) fi .
 	if equal(size([a]), 1) then tau else P(85) fi .
 	if equal(size([a,b]), 2) then tau else P(86) fi .
-        if equal(size([a,[b],c,[]]), 4) then tau else P(87) fi.       
+    if equal(size([a,[b],c,[]]), 4) then tau else P(87) fi.       
 
 	if equal(first([a]), a) then tau else P(88) fi.
 	if equal(first([a,b]), a) then tau else P(89) fi.
 	if equal(first([[],b]), []) then tau else P(90) fi.
-
 	if equal(next([a]), []) then tau else P(91) fi.
-	if equal(next([a,b]), [b]) then tau else P(92) fi.	
+	if equal(next([a,b]), [b]) then tau else P(92) fi.
 	if equal(next([a,b,c]), [b,c]) then tau else P(93) fi .
 	if equal(next([a,[],b,c]), [[],b,c]) then tau else P(94) fi .
 
 	if subset([], []) then tau else P(95) fi .
 	if subset([a], [a]) then tau else P(96) fi .
 	if subset([a], [b,a]) then tau else P(97) fi .
-	if subset([a, a], [b, a]) then P(98) else tau fi .
+%% ===> 	if subset([a, a], [b, a]) then P(98) else tau fi .
 	if subset([a, a], [a, b, a]) then tau else P(99) fi .
 	if subset([a, a], [a, [], a]) then tau else P(100) fi .
 	if subset([a, []], [a, [], a]) then tau else P(101) fi .
 
 	if equal(diff([a,b,c], [b]), [a,c]) then tau else P(102) fi .
 	if equal(diff([a,b,c], [b, a]), [c]) then tau else P(103) fi .
-	if equal(diff([a,b,a], [a]), [b,a]) then tau else P(104) fi .
 	if equal(diff([a,b,a], [a, a]), [b]) then tau else P(105) fi .
-        if equal(diff([a,[b],[]],[[]]), [a,[b]]) then tau else P(106) fi .
+    if equal(diff([a,[b],[]],[[]]), [a,[b]]) then tau else P(106) fi .
 
 	if equal(inter([], []), []) then tau else P(107) fi .
 	if equal(inter([a], [a]), [a]) then tau else P(108) fi .
@@ -107,7 +105,6 @@ process ListOps is
 	if equal(inter([a,b,c], [a,c]), [a,c]) then tau else P(111) fi .
 	if equal(inter([a,b,a,c], [a,c,a]), [a,a,c]) then tau else P(112) fi .
 
-	if equal(join([],[]), []) then tau else P(113) fi .
 	if equal(join(a, b), [a,b]) then tau else P(114) fi .
 	if equal(join([a], b), [a,b]) then tau else P(115) fi .
 	if equal(join(a, [b]), [a,b]) then tau else P(116) fi .
@@ -123,37 +120,43 @@ process ListOps is
 	L := put(L, a, 4) .
 	if equal(get(L, a), 4) then tau else P(123) fi .
 
-        L := [a,b,c] .
-        if equal(index(L,1),a) then tau else P(124) fi.
-        if equal(index(L,2),b) then tau else P(125) fi.
-        if equal(index(L,3),c) then tau else P(126) fi.
+    L := [a,b,c] .
+    if equal(index(L,1),a) then tau else P(124) fi.
+    if equal(index(L,2),b) then tau else P(125) fi.
+    if equal(index(L,3),c) then tau else P(126) fi.
 
 	L1 := replace(L,2,x) .
 	if equal(L, L1) then P(127) else tau fi.
-        if equal(index(L1,1),a) then tau else P(128) fi.
-        if equal(index(L1,2),x) then tau else P(129) fi.
-        if equal(index(L1,3),c) then tau else P(130) fi
+	if equal(index(L1,1),a) then tau else P(128) fi.
+	if equal(index(L1,2),x) then tau else P(129) fi.
+    if equal(index(L1,3),c) then tau else P(130) fi
   endlet
 
 process MiscOps is
-  let Nm : str, Tm : [int,int,int,int,int,int], N : int, NP : [int, int], T : term,
-      TFA : f(a)
+ let Nm : str, 
+     %% Tm : [int,int,int,int,int,int], 
+     N : int, 
+     NP : [int, int], 
+     T : term,
+     TFA : f(a)
   in
-     %% sec, msec, process-id
-     Tm := current-time . 
-     printf("current-time [year,month,day,hour,minute,second] is %t\n", Tm) .
+     %%% sec, msec, process-id
+     %% Tm := current-time . 
+     %%    printf("current-time [year,month,day,hour,minute,second] is %t\n", Tm) .
      if not-equal(process-name, "All") then P(200) else tau fi .
-     if not-equal(process-id, 1) then P(201) else tau fi .
+      %% Deviates from old Toolbus where process-id return a plain integer
+     if not-equal(process-id, quote(pi-All(0))) then P(201) else tau fi . 
      N := quote(3) .
      NP := quote([2,3]) .
      T := quote(f(a)) .
-     TFA := quote(f(a))
+     TFA := quote(f(a)) .
+ tau
   endlet
 
 process All is
-	TermOps .
-	IntOps  . 
-	ListOps .
+%%	TermOps .
+%%	IntOps  . 
+%%	ListOps .
 	MiscOps .
 	shutdown("")	
 

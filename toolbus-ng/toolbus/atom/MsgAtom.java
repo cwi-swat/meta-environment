@@ -63,15 +63,15 @@ public abstract class MsgAtom extends Atom {
   }
 
   public boolean matchPartner(MsgAtom b) throws ToolBusException {
-    return TBTerm.match(matchPattern, getEnv(), b.getMatchPattern(), b.getEnv());
+    return TBTerm.match(matchPattern, this.getEnv(), b.getMatchPattern(), b.getEnv());
   }
 
-  public void compile(ProcessInstance processInstance, State follow) throws ToolBusException {
-    super.compile(processInstance, follow);
+  public void compile(ProcessInstance processInstance, Environment env, State follow) throws ToolBusException {
+    super.compile(processInstance, env, follow);
     ATermFactory factory = getId().getFactory();
     matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
 
-    System.err.println(matchPattern);
+    //System.err.println("MsgAtom.compile: " + matchPattern);
   }
 
   public boolean execute() throws ToolBusException {
@@ -85,6 +85,7 @@ public abstract class MsgAtom extends Atom {
       for (int pindex = ToolBus.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1) % psize, pleft--) {
         MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
         ProcessInstance pb = b.getProcess();
+        //System.err.println("MsgAtom.execute: " + this + ";" + b);
         if (pb.contains(b) && b.isEnabled()) {
           if (matchPartner(b)) {
             if (ToolBus.isVerbose()) {

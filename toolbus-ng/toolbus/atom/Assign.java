@@ -24,14 +24,17 @@ public class Assign extends Atom {
     return new Assign(var.value,  exp.value);
   }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    super.compile(P, follow);
-
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    super.compile(P, env, follow);
+    //System.err.println("Assign.compile: env =" + getEnv());
     if (!TBTerm.isVar(var.value))
       throw new ToolBusException("left-hand side of := should be a variable");
     ATerm vartype = TBTerm.getVarType(var.value);
-
-    ATerm exptype = FunctionDescriptors.checkType(exp.value, this.getEnv());
+    
+    //System.err.println(this + "; var = " + var +"; vartype = " + vartype);
+    
+    //System.err.println("Assign: " + env);
+    ATerm exptype = FunctionDescriptors.checkType(exp.value, env, false);
 
     if (!TBTerm.assignCompatible(vartype, exptype) )// lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
@@ -40,13 +43,16 @@ public class Assign extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    Environment e = this.getEnv();
     ProcessInstance p = this.getProcess();
+    Environment env = getEnv();
+    //System.err.println("Assign: " + env);
 
-    ATerm newval = FunctionDescriptors.eval(exp.value, p);
+    ATerm newval = FunctionDescriptors.eval(exp.value, p, env);
     
-    //System.err.println(exp.value + "   " + newval);
-    e.assignVar(var.value, newval);
+    //System.err.println("Assign: " + exp.value + "   " + newval);
+    env.assignVar(var.value, newval);
+    //System.err.println("Assign: " + env);
+    //System.err.println("Assign: " + getFollow());
     return nextState();
   }
 }

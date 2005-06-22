@@ -20,8 +20,8 @@ public class Main {
     //CreateTest();
     //DisruptTest();
     //MergeTest();
-    //ParseTest();
-    SndAndRecTest();
+    ParseTest();
+    //SndAndRecTest();
     //ToolTest();
   }
 
@@ -334,7 +334,7 @@ public class Main {
 
     try {
       T.setVerbose(true);
-      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/bind1.tb");
+      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/expr.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

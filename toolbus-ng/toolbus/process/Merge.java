@@ -1,16 +1,18 @@
 package toolbus.process;
 
+/*** Outdated ***/
+
 import java.util.Stack;
 
-import aterm.ATerm;
 
 import toolbus.*;
 import toolbus.State;
+import aterm.*;
 
 /**
  * @author paulk, Aug 7, 2002
  */
-public class Merge implements ProcessExpression, StateElement {
+public class Merge extends ProcessExpression implements StateElement {
   
   private ProcessExpression expansion;
   private ProcessExpression left;
@@ -40,11 +42,16 @@ public class Merge implements ProcessExpression, StateElement {
     first = left.getFirst().union(right.getFirst());
   }
 
-  public void compile(ProcessInstance processInstance, State followSet) throws ToolBusException {
-    left.compile(processInstance, followSet);
-    right.compile(processInstance, followSet);
+  public void compile(ProcessInstance processInstance, Environment env, State followSet) throws ToolBusException {
+    left.compile(processInstance, env, followSet);
+    right.compile(processInstance, env, followSet);
     this.follow = followSet;
     state = new State[] { left.getFirst(), right.getFirst()};
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	left.replaceFormals(env);
+	right.replaceFormals(env);
   }
 
   public ProcessExpression copy() {
@@ -77,9 +84,9 @@ public class Merge implements ProcessExpression, StateElement {
     return processInstance;
   }
   
-  public void setTest(ATerm test) throws ToolBusException {
-  	state[LEFT].setTest(test);
-  	state[RIGHT].setTest(test);
+  public void setTest(ATerm test, Environment env) throws ToolBusException {
+  	state[LEFT].setTest(test, env);
+  	state[RIGHT].setTest(test, env);
   }
 
   public boolean execute() throws ToolBusException {

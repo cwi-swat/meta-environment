@@ -5,10 +5,11 @@ package toolbus.process;
 
 import java.util.*;
 
+import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.State;
 
-public class Iteration extends AbstractProcessExpression {
+public class Iteration extends ProcessExpression {
   private ProcessExpression left, right;
 
   public Iteration(ProcessExpression left, ProcessExpression right) {
@@ -30,11 +31,16 @@ public class Iteration extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
 
-    left.compile(P, getFirst());
-    right.compile(P, follow);
+    left.compile(P, env, getFirst());
+    right.compile(P, env, follow);
     setFollow(follow);
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	left.replaceFormals(env);
+	right.replaceFormals(env);
   }
 
   public State getAtoms() {

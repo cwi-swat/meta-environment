@@ -6,10 +6,11 @@ package toolbus.process;
 
 import java.util.*;
 
+import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.State;
 
-public class Alternative extends AbstractProcessExpression {
+public class Alternative extends ProcessExpression {
   private ProcessExpression left, right;
 
   public Alternative(ProcessExpression left, ProcessExpression right) {
@@ -31,12 +32,17 @@ public class Alternative extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
    }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    left.compile(P, follow);
-    right.compile(P, follow);
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    left.compile(P, env, follow);
+    right.compile(P, env, follow);
     setFollow(follow);
   }
-
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	left.replaceFormals(env);
+	right.replaceFormals(env);
+  }
+  
   public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }

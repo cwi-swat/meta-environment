@@ -10,6 +10,9 @@ import toolbus.*;
 import toolbus.ToolBusException;
 import toolbus.atom.*;
 
+
+/*** Outdated **/
+
 /*
  *  Handle general message pairs of the following form:
  * 
@@ -23,7 +26,7 @@ import toolbus.atom.*;
  * 
  */
 
-public class MsgPair extends AbstractProcessExpression implements StateElement {
+public class MsgPair extends ProcessExpression implements StateElement {
   private boolean sndThenRec;
   private boolean inTool;
   private ATerm msg;
@@ -123,8 +126,8 @@ public class MsgPair extends AbstractProcessExpression implements StateElement {
     System.err.println(atomPatterns);
   }
 
-  public void compile(ProcessInstance P, State follows) throws ToolBusException {
-    PE.compile(P, follows);
+  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
+    PE.compile(P, env, follows);
     setFollow(PE.getFollow());
   }
 
@@ -146,7 +149,7 @@ public class MsgPair extends AbstractProcessExpression implements StateElement {
     return processInstance;
   }
   
-  public void setTest(ATerm test) throws ToolBusException {
+  public void setTest(ATerm test, Environment env) throws ToolBusException {
   	if(test != null){
 	    //ATerm rtst = TBTerm.resolveVars(test, getProcess().getEnv());
 	    if (this.test == null) {

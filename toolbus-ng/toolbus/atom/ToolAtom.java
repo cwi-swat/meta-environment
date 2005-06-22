@@ -1,7 +1,6 @@
 package toolbus.atom;
 
 import toolbus.*;
-import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
 import aterm.*;
@@ -59,8 +58,8 @@ abstract class ToolAtom extends Atom {
     return TBTerm.substitute(id.value, getEnv());
   }
   
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    super.compile(P, follow);
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    super.compile(P, env, follow);
 
     TB = getProcess().getToolBus();
     ATermFactory factory = TB.getFactory();

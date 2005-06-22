@@ -8,31 +8,42 @@ import java.util.*;
 import toolbus.*;
 import toolbus.State;
 
+import aterm.ATerm;
 import aterm.ATermList;
 
-public class LetDefinition implements ProcessExpression {
-  private ATermList formals;
-  private ProcessExpression PE;
+import toolbus.atom.EndScope;
 
+public class LetDefinition extends ProcessExpression {
+  private ATermList formals;
+  private ProcessExpression PEinit;
+  private ProcessExpression PE;
+  //private ProcessInstance processInstance;
+  //private ATerm test;	
+  
   public LetDefinition(ATermList formals, ProcessExpression PE) {
     this.formals = formals;
-    this.PE = PE;
-    //System.err.println("LetDefinition: " + PE);
+    PEinit = PE;
+    this.PE = new Sequence(PE, new EndScope(formals));
   }
 
   public ProcessExpression copy() {
-    return new LetDefinition(formals, PE.copy());
+    return new LetDefinition(formals, PEinit.copy());
   }
   
   public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
     PE.expand(P, calls);
    }
 
-  public void compile(ProcessInstance P, State follows) throws ToolBusException {
-    Environment env = P.getEnv();
+  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
+    env = env.copy();
+    //System.err.println("LetDef.compile: " + env);
     env.introduceVars(formals);
-    PE.compile(P, follows);
-    env.removeVars(formals.getLength());
+    PE.compile(P, env, follows);
+    env.removeBindings(formals);
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	PE.replaceFormals(env);
   }
 
   public State getFirst() {
@@ -48,10 +59,36 @@ public class LetDefinition implements ProcessExpression {
   }
 
   public State getAtoms() {
-    return PE.getAtoms();
+  	return PE.getAtoms();
   }
 
   public String toString() {
     return "LetDefinition(" + formals + ", " + PE + ")";
   }
+  
+  // Implementation of the StateElement interface
+/*
+  public boolean contains(StateElement a) {
+    return startState.contains(a);
+  }
+
+  public ProcessInstance getProcess() {
+    return processInstance;
+  }
+  
+  public void setTest(ATerm test) throws ToolBusException {
+  	startState.setTest(test);
+  }
+
+  public boolean execute() throws ToolBusException {
+  	Environment env = processInstance.getEnv();
+  	env.introduceVars(formals);
+  	if(PE.getStartState().execute()){
+  		return true;
+  	} else {
+  		env.removeBindings(formals);
+  		return false;
+  	}	
+  }
+  */
 }
