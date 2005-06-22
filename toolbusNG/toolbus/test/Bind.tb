@@ -15,13 +15,13 @@ process A(X : int) is
      C(XX?,Y?) . CHK(8, XX, 10) . CHK(9, Y, 20) .
      XX := 1 . Y := 2 .
      D(XX?, Y?) . CHK(12, XX, 10) . CHK(13, Y, 20) .
-     shutdown("")
+     shutdown("Done")
   endlet
 	
 process B is
   let X : int, Y : int
   in
-     X := 10 . Y := 20
+    X := 10 . Y := 20
   endlet
 
 process C(X : int?, Y : int?) is
@@ -52,9 +52,8 @@ process Cnt is
   let N : int, V : int
   in
       V := 5 . N := 1 .
-      if less(N,10) then printf(N,V) . N := add(N,1) . Inc(V, V?) fi *
+      if less(N,10) then  N := add(N,1) . Inc(V, V?) fi *
      if greater-equal(N,10) then CHK(110, V, 14) fi
   endlet
 
-%%toolbus(A(1), F, Cnt)
-toolbus(Cnt)
+toolbus(A(1), F, Cnt)

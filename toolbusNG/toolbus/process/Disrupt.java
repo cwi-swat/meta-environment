@@ -3,11 +3,12 @@ package toolbus.process;
 import java.util.*;
 import java.util.Vector;
 
+import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.atom.*;
 import toolbus.State;
 
-public class Disrupt extends AbstractProcessExpression {
+public class Disrupt extends ProcessExpression {
   private ProcessExpression left, right;
 
   public Disrupt(ProcessExpression left, ProcessExpression right) {
@@ -25,9 +26,9 @@ public class Disrupt extends AbstractProcessExpression {
     setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    left.compile(P, follow);
-    right.compile(P, follow);
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    left.compile(P, env, follow);
+    right.compile(P, env, follow);
 
     State rightFirst = right.getFirst();
 
@@ -40,6 +41,11 @@ public class Disrupt extends AbstractProcessExpression {
         at.addToFollow(rightFirst);
       }
     }
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+	left.replaceFormals(env);
+	right.replaceFormals(env);
   }
 
   public State getAtoms() {

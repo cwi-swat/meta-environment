@@ -2,12 +2,13 @@ package toolbus.process;
 
 import java.util.Stack;
 
+import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.State;
 
 import aterm.ATerm;
 
-public class GenSndMsg extends AbstractProcessExpression {
+public class GenSndMsg extends ProcessExpression {
   private ATerm msg; // The message to send/receive
   private boolean inPair = false; // part of a send/receive pair (or not)
   private boolean open = false; // the opening action
@@ -32,7 +33,7 @@ public class GenSndMsg extends AbstractProcessExpression {
 
   }
 
-  public void compile(ProcessInstance P, State follows) throws ToolBusException {
+  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
     //    PE.compile(P, follows);
     //    setFollow(PE.getFollow());
   }

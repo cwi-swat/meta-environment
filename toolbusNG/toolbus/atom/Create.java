@@ -23,8 +23,8 @@ public class Create extends Atom {
     return new Create(pcall.value, rvar.value);
   }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    super.compile(P, follow);
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    super.compile(P, env, follow);
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");
@@ -37,7 +37,7 @@ public class Create extends Atom {
       return false;
     String name = ((ATermAppl) pcall.value).getName();
     ATermList cargs = ((ATermAppl) pcall.value).getArguments();
-    ATermList evargs = (ATermList) FunctionDescriptors.eval(cargs, getProcess());
+    ATermList evargs = (ATermList) FunctionDescriptors.eval(cargs, getProcess(), getEnv());
 
     ToolBus TB = getProcess().getToolBus();
 

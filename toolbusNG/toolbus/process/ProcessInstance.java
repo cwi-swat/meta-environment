@@ -21,7 +21,7 @@ public class ProcessInstance {
   private ATerm processId;
   private State elements;
   private State currentState;
-  private Environment env;
+  //private Environment env;
   private ToolBus toolbus;
   private ToolInstance toolInstance;
   private String toolName;
@@ -35,22 +35,18 @@ public class ProcessInstance {
 
     definition = TB.getProcessDefinition(processName);
 
-    //env = new Environment();
+    Environment env = new Environment();
     
-    AFun afun = TBTerm.factory.makeAFun(processName, 1, false);
+    AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
     processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-    
     transactionIdVar = TBTerm.TransactionIdVar;
-    
-    env = new Environment(transactionIdVar, null, null);
+    env.introduceBinding(transactionIdVar, TBTerm.newTransactionId());
 
     call.expand(this, new Stack());
-    call.compile(this, empty);
+    //System.err.println("ProcessInstance: " + env);
+    call.compile(this, env, empty);
     currentState = call.getStartState();
-    //transactionIdVar = TBTerm.resolveVars(transactionIdVar, env);
-    //env.setExecuting();
-    env.assignVar(transactionIdVar, TBTerm.newTransactionId());
-
+ 
     Vector procs = TB.getProcesses();
     elements = call.getAtoms();
     for (int i = 0; i < procs.size(); i++) {
@@ -66,8 +62,10 @@ public class ProcessInstance {
       for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
         Atom a = (Atom) it.next();
         System.err.println(processId + ": " + a + " --> " + a.getFollow());
+        System.err.println("env = " + a.getEnv());
       }
     }
+    //System.err.println("ProcessInstance (leaving): " + env);
   }
 
   public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
@@ -101,16 +99,16 @@ public class ProcessInstance {
     }
   }
 
-  public Environment getEnv() {
-    return env;
-  }
-
   public ToolBus getToolBus() {
     return toolbus;
   }
 
   public ATerm getProcessId() {
     return processId;
+  }
+  
+  public String getProcessName() {
+    return processName;
   }
 
   public ToolInstance getToolInstance() {
@@ -120,7 +118,9 @@ public class ProcessInstance {
   public void terminate(String msg) {
     if (toolInstance != null) {
       try {
-      toolInstance.terminate(env.getValue(transactionIdVar), msg);
+      	System.err.println("terminate should be fixed");
+      //toolInstance.terminate(env.getValue(transactionIdVar), msg);
+      	throw new ToolBusException("Fix terminate");
       } catch (ToolBusException e) {
         throw new ToolBusInternalError("no transactionId in process");
       }

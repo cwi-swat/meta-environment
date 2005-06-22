@@ -8,8 +8,13 @@ import java.util.*;
 import toolbus.atom.MsgAtom;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
+import aterm.*;
 
-import aterm.ATerm;
+
+/**
+ * class State represents one state in the state diagram of a process. It consists of StateElements
+ *
+ */
 
 public class State {
   private Vector elements;
@@ -68,11 +73,11 @@ public class State {
     }
   }
 
-  public void setTest(ATerm test) throws ToolBusException {
+  public void setTest(ATerm test, Environment env) throws ToolBusException {
   	if (test != null){
 	    for (Iterator it = elements.iterator(); it.hasNext();) {
 	      StateElement a = (StateElement) it.next();
-	      a.setTest(test);
+	      a.setTest(test, env);
 	    }
   	}
   }
@@ -88,12 +93,16 @@ public class State {
     return s + "}";
   }
 
-  // The ProcessState interface
+  // The State interface
 
   public boolean contains(StateElement a) {
     return elements.contains(a);
   }
 
+  /**
+   * Execute one step for each element in this state.
+   */
+  
   public boolean execute() throws ToolBusException {
     int size = elements.size();
 
@@ -106,7 +115,7 @@ public class State {
       if (a.execute()) {
         ProcessInstance pa = a.getProcess();
         if (ToolBus.isVerbose()) {
-          System.err.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
+          //System.err.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
         }
         return true;
       }

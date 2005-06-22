@@ -66,9 +66,9 @@ public class TscriptTest extends TestCase {
 
   public void testBasics() {
     assertTrue(runTest("B0"));
-    //assertTrue(runTest("B1"));
-    //assertTrue(runTest("B2"));
-    //assertTrue(runTest("B3"));
+    assertTrue(runTest("B1"));
+    assertTrue(runTest("B2"));
+    assertTrue(runTest("B3"));
   }
 
   public void testAssign() {
@@ -77,6 +77,9 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Assign2"));
     assertTrue(runTest("Assign3"));
     assertTrue(runTest("Assign4"));
+    assertTrue(runTest("Assign5"));
+    assertTrue(runTest("Assign6"));
+    assertTrue(runTest("Bind"));
   }
 
   public void testIf() {
@@ -98,6 +101,8 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Msg1"));
     assertTrue(runTest("Msg2"));
     assertTrue(runTest("Msg3"));
+    assertTrue(runTest("Msg4"));
+    assertTrue(runTest("Msg5"));
   }
 
   public void testCall() {

@@ -17,8 +17,8 @@ public class TBTermTest extends TestCase {
   }
 
   public void testVars() {
-    ATerm var = factory.make("var(3,int,X)");
-    ATerm rvar = factory.make("rvar(3,int,Y)");
+    ATerm var = factory.make("var(int,X)");
+    ATerm rvar = factory.make("rvar(int,Y)");
     assertTrue(TBTerm.isVar(var));
     assertTrue(TBTerm.isResVar(rvar));
   }
@@ -112,10 +112,57 @@ public class TBTermTest extends TestCase {
     assertTrue(!doMatch("f(1,2,3)", "<list>"));
 
   }
+  
+  boolean doMatch(String s1, Environment e1, String s2, Environment e2) {
+    try {
+      return TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
+    } catch (ToolBusException e) {
+      fail(e.getMessage());
+    }
+    return false;
+  }
+  
+  public void testMatchVar() throws ToolBusException {
+  	Environment env1 = new Environment();
+  	Environment env2 = new Environment();
+  	
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
+    ATerm int3 = factory.make("3");
+    ATerm int4 = factory.make("4");
+    ATerm int5 = factory.make("5");
+    ATerm int6 = factory.make("6");
+    
+    ATermList declX = factory.makeList(varX);
+    env1.introduceVars(declX);
+    env1.assignVar(varX, int3);
+    
+    ATermList declY = factory.makeList(varY);
+    env2.introduceVars(declY);
+    env2.assignVar(varY, int4);
+    
+    assertTrue(doMatch("var(int,X)", env1, "3", env2));
+    assertTrue(!doMatch("var(int,X)", env1, "4", env2));
+    assertTrue(doMatch("4", env1, "var(int,Y)", env2));
+    assertTrue(!doMatch("3", env1, "var(int,Y)", env2));
+    
+    assertTrue(doMatch("f(var(int,X))", env1, "f(3)", env2));
+    assertTrue(!doMatch("f(var(int,X))", env1, "f(4)", env2));
+    assertTrue(doMatch("f(4)", env1, "f(var(int,Y))", env2));
+    assertTrue(!doMatch("f(3)", env1, "f(var(int,Y))", env2));
+    
+    assertTrue(doMatch("rvar(int,X)", env1, "5", env2)); 
+    assertEquals(env1.getValue(varX), int5);
+    assertTrue(doMatch("var(int,X)", env1, "5", env2)); 
+    
+    assertTrue(doMatch("6", env1, "rvar(int,Y)", env2)); 
+    assertEquals(env2.getValue(varY), int6);
+    assertTrue(doMatch("6", env1, "var(int,Y)", env2));  
+  }
 
   public ATerm check(String s) throws ToolBusException {
     Environment e = new Environment();
-    return FunctionDescriptors.checkType(factory.make(s), e);
+    return FunctionDescriptors.checkType(factory.make(s), e, false);
   }
 
   public void testStaticCheck() throws ToolBusException {

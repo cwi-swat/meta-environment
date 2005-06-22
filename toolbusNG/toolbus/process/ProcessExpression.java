@@ -1,18 +1,64 @@
 package toolbus.process;
-/**
- * @author paulk, Jul 23, 2002
- */
+
 import java.util.Stack;
 
-import toolbus.ToolBusException;
-import toolbus.State;
+import toolbus.*;
 
-public interface ProcessExpression {
-  public void expand(ProcessInstance processInstance, Stack calls) throws ToolBusException;
-  public void compile(ProcessInstance processInstance, State followSet) throws ToolBusException;
-  public ProcessExpression copy();
-  public State getFirst();
-  public State getFollow();
-  public State getAtoms();
-  public State getStartState();
+/**
+ * ProcesssExpression defines the overall behaviour of process expressions.
+ * 
+ */
+
+abstract public class ProcessExpression {
+	private State first;
+
+	private State follow;
+
+	public ProcessExpression() {
+		first = new State();
+	}
+
+	public State getFirst() {
+		return first;
+	}
+
+	protected void setFirst(State first) {
+		this.first = first;
+	}
+
+	public State getStartState() {
+		return first;
+	}
+
+	protected void addToFirst(StateElement a) {
+		first.add(a);
+	}
+
+	public State getFollow() {
+		return follow;
+	}
+
+	protected void setFollow(State follow) {
+		this.follow = follow;
+	}
+
+	protected void addToFollow(State set) {
+		follow = follow.union(set);
+	}
+
+	abstract public void expand(ProcessInstance processInstance, Stack calls)
+			throws ToolBusException;
+
+	public void compile(ProcessInstance processInstance, Environment env, State followSet)
+			throws ToolBusException {
+	}
+	
+	
+	abstract public void replaceFormals(Environment env) throws ToolBusException;
+
+	abstract public ProcessExpression copy();
+
+	public State getAtoms() {
+		return null;
+	}
 }

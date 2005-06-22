@@ -1,10 +1,9 @@
 package toolbus.atom;
 
+import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.process.*;
-import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
-import toolbus.State;
 
 import aterm.ATerm;
 /**
@@ -20,8 +19,8 @@ public class AckEvent extends ToolAtom {
     return new AckEvent(getToolTerm());
   }
 
-  public void compile(ProcessInstance P, State follow) throws ToolBusException {
-    super.compile(P, follow);
+  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
+    super.compile(P, env, follow);
   }
 
   public boolean execute() throws ToolBusException {

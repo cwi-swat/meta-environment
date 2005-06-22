@@ -11,25 +11,30 @@ import toolbus.process.*;
 
 import aterm.*;
 
-class Ref {
-  protected ATerm value;
-
-  public Ref(ATerm at) {
-    this.value = at;
-  }
+class Test {
+	ATerm testExpr;
+	Environment testEnv;
+	
+	public Test(ATerm test, Environment env){
+		testExpr = test;
+		testEnv = env;
+	}
+	public String toString(){
+		return "Test(" + testExpr + ", " + testEnv + ")";
+	}
 }
 
-abstract public class Atom extends AbstractProcessExpression implements StateElement {
-  private ProcessInstance processInstance;
-  // process instance to which the atom belongs
-  private Environment env; // the environment of that process instance
-  private ATerm test; // optional test that guards this atom
+abstract public class Atom extends ProcessExpression implements StateElement {
+  private ProcessInstance processInstance; // process instance to which the atom belongs
+  private Environment env;                 // the environment of this atom
+  private Vector tests;                    // optional tests that guard this atom
   private Ref[] atomArgs = new Ref[0];
 
   public Atom() {
     super();
     addToFirst(this);
   }
+  
   public void setAtomArgs(Ref r) {
     atomArgs = new Ref[] { r };
   }
@@ -68,18 +73,15 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     return getFirst();
   }
 
-  public ATerm getTest() {
-    return test;
-  }
-
-  public void setTest(ATerm test) throws ToolBusException {
+  public void setTest(ATerm test, Environment env) throws ToolBusException {
   	if(test != null){
-	    //ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
-	    if (this.test == null) {
-	      this.test = test;
-	    } else {
-	      this.test = TBTerm.factory.make("and(<term>,<term>)", test, this.test);
-	    }
+  		env = env.copy();
+	    ATerm rtst = TBTerm.resolveVars(test, env);
+	    if (tests == null)
+	    	tests = new Vector(3);
+	    Test t = new Test(rtst, env);
+	    //System.out.println("setTest: " + t);
+	    this.tests.add(t);
   	}
   }
 
@@ -113,7 +115,7 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     }
     args = args + ")";
 
-    String strtest = (test == null) ? "" : " if " + test;
+    String strtest = (tests == null) ? "" : " if " + tests;
 
     return shortName() + pidStr + args + strtest;
   }
@@ -132,31 +134,37 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
   }
 
   public void expand(ProcessInstance P, Stack calls) {
-
   }
 
-  public void compile(ProcessInstance processInstance, State follow) throws ToolBusException {
-    this.processInstance = processInstance;
-    env = processInstance.getEnv();
+  public void compile(ProcessInstance processInstance, Environment env, State follow) throws ToolBusException {
+  	this.processInstance = processInstance;
+  	this.env = env.copy();
     setFollow(follow);
-    //System.err.println(this.getClass().getName() + ": compiling");
-    /*
-    for (int i = 0; i < atomArgs.length; i++) {
-      //System.err.println("atomArg[" + i + "] = " + atomArgs[i]);
-      ATerm arg = TBTerm.resolveVars(atomArgs[i].value, env);
-      atomArgs[i].value = arg;
-    }
-    */
+    System.err.println("Compiling " + this + ";\n env = " + env);
+    replaceFormals(env);
+  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+  	 for (int i = 0; i < atomArgs.length; i++) {
+        //ystem.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
+        ATerm arg = TBTerm.resolveVars(atomArgs[i].value, env);
+        atomArgs[i].value = arg;
+      }
   }
 
   public boolean isEnabled() throws ToolBusException {
-    if (test == null)
-      return true;
-    else {
-      boolean res = TBTerm.isTrue(FunctionDescriptors.eval(test, getProcess()));
-      //System.err.println(this.getProcess().getProcessId() + ": " + this + " : evaluate: " + test + " ==> " + res);
-      return res;
+    if (tests != null){
+    	//System.err.println("isEnabled: " + this.getProcess().getProcessId() + ": " + this);
+    	for(int i = 0; i < tests.size(); i++){
+    		Test t = (Test) tests.elementAt(i);
+    		//System.err.println("evaluate: " + t);
+    		boolean res = TBTerm.isTrue(FunctionDescriptors.eval(t.testExpr, getProcess(), t.testEnv));
+    		//System.err.println("==> " + res);
+    		if(!res)
+    			return false;
+    	}
     }
+    return true;
   }
 
   // Implementation of the StateElement interface
@@ -179,7 +187,6 @@ abstract public class Atom extends AbstractProcessExpression implements StateEle
     if (!isEnabled()) {
       return false;
     } else {
-
       return nextState();
     }
   }
