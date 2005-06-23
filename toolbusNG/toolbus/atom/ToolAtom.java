@@ -1,6 +1,7 @@
 package toolbus.atom;
 
 import toolbus.*;
+import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 
 import aterm.*;

@@ -154,10 +154,10 @@ process MiscOps is
   endlet
 
 process All is
-%%	TermOps .
-%%	IntOps  . 
-%%	ListOps .
-	MiscOps .
+	TermOps .
+	IntOps  . 
+	ListOps .
+%%	MiscOps .
 	shutdown("")	
 
 toolbus(All)

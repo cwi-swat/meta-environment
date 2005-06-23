@@ -75,7 +75,7 @@ abstract class FunctionDescriptor {
             throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be integer");
         } else if (argtypes[i] == TBTerm.TermType) {
         } else if (argtypes[i] == TBTerm.ListType) {
-          if (actual[i] != TBTerm.ListType)
+          if (actual[i] != TBTerm.ListType && actual[i].getType() != ATerm.LIST)
             throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be list");
         } else
           throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
@@ -368,7 +368,7 @@ public class FunctionDescriptors {
   }
 
   public static ATerm eval(ATerm t, ProcessInstance pi, Environment env) throws ToolBusException {
-	System.err.println("eval: " + t + "; env = " + env);
+	//System.err.println("eval: " + t + "; env = " + env);
     switch (t.getType()) {
       
       case ATerm.BLOB :

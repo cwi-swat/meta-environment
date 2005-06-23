@@ -4,6 +4,7 @@ import toolbus.Environment;
 import toolbus.ToolBusException;
 import toolbus.process.*;
 import toolbus.tool.ToolInstance;
+import toolbus.State;
 
 import aterm.ATerm;
 /**

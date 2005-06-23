@@ -10,7 +10,7 @@ process SIEVE(Max : int) is
 process FILTER(P : int) is
   let Z : int, N : int, Pid : int
   in
-     printf (P) .
+     printf ("%d\n", P) .
      ( rec-msg(com(P, Z?)) .
        if equal(mod(Z, P), 0) then tau
        else

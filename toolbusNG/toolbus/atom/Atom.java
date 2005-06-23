@@ -140,7 +140,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	this.processInstance = processInstance;
   	this.env = env.copy();
     setFollow(follow);
-    System.err.println("Compiling " + this + ";\n env = " + env);
+    //System.err.println("Compiling " + this + ";\n env = " + env);
     replaceFormals(env);
   }
   

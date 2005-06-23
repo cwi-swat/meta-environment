@@ -15,7 +15,7 @@ process CONSUMER is
      ( rec-msg(q(Z?)) .
        if equal(mod(Z, 2), 0)
        then
-          printf(Z)
+          printf("%d\n", Z)
        else
           tau
        fi
