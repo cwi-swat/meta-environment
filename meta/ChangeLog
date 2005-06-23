@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jun 23 18:30:21 CEST 2005 <jurgenv@cwi.nl>
+ * gui/**/graph-painter/**/GraphColoring.java: fixed a bug in the
+   selected module visualization.
+
 Tue Jun 14 10:29:42 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
  * Merged the dynamic buttons branch with the trunk. 
 
