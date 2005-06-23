@@ -3,10 +3,17 @@
  */
 package toolbus.atom;
 
-import toolbus.*;
-import toolbus.process.*;
-
-import aterm.*;
+import toolbus.Environment;
+import toolbus.FunctionDescriptors;
+import toolbus.State;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 public class Create extends Atom {
   private Ref pcall;

@@ -221,7 +221,7 @@ public class TBTerm {
   public static ATerm makeStr(String s){
   	String us = s.substring(1,s.length()-1);
   	System.err.println("makeStr(" + s + ", " + us + ")");
-    AFun afun = factory.makeAFun(us, 0, false);
+    AFun afun = factory.makeAFun(us, 0, true);
     return factory.makeAppl(afun);
   }
 
@@ -249,16 +249,20 @@ public class TBTerm {
 	        }
 	        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
 	        return factory.makeAppl(afun, vargs);	
-        	
         } else {
+
+	        if (args.length == 0){
+	        	if(name.charAt(0) == '"')
+	        		name = name.substring(1,name.length()-1);
+		        AFun afun = factory.makeAFun(name, args.length, true);
+		        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun));
+	      		return factory.makeAppl(afun);
+	        }
 	        AFun afun = factory.makeAFun(name, args.length, false);
-	        if (args.length == 0)
-	          return factory.makeAppl(afun);
 	        ATerm vargs[] = new ATerm[args.length];
 	        for (int i = 0; i < args.length; i++) {
 	          vargs[i] = unquote(args[i]);
 	        }
-	        
 	        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
 	        return factory.makeAppl(afun, vargs);
         }
@@ -387,7 +391,7 @@ public class TBTerm {
    */
 
   public static boolean assignCompatible(ATerm lhsType, ATerm rhsType) throws ToolBusException {
-  	System.err.println("assignCompatible(" + lhsType + "," + rhsType + ")");
+  	//System.err.println("assignCompatible(" + lhsType + "," + rhsType + ")");
     if (isVar(lhsType) || isResVar(lhsType)) {
       throw new ToolBusException("variable not allowd in a type: " + lhsType);
     } else if (isVar(rhsType) || isResVar(rhsType)) {

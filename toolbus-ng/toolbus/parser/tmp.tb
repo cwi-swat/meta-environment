@@ -1,2 +1,2 @@
-process P is let N : f(a) in N := quote(f(a)) endlet
+process P is let N : str in N := "abc" endlet
 toolbus(P)

@@ -24,12 +24,16 @@ public class Print extends Atom {
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
       Environment e = getEnv();
-      //System.err.println("Print: " + e);
+      //System.err.println("Print: " + this);
       PrintWriter out = getToolBus().getPrintWriter();
       ATerm res = TBTerm.substitute(arg.value, e);
-      for (int i = 0; i < ((ATermList) res).getLength(); i++) {
-        out.print( ((ATermList) res).elementAt(i).toString() );
-      }
+      //System.err.println("res =" + res);
+      if(res.getType() == ATerm.LIST){
+	      for (int i = 0; i < ((ATermList) res).getLength(); i++) {
+	        out.print( ((ATermList) res).elementAt(i).toString() );
+	      }
+      } else
+      	  out.print(res.toString());
       out.println();
       out.flush();
       return nextState();

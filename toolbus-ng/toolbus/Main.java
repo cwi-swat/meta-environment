@@ -333,8 +333,8 @@ public class Main {
     ToolBus T = new ToolBus();
 
     try {
-      T.setVerbose(true);
-      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/expr.tb");
+      //T.setVerbose(true);
+      T.parse("/ufs/paulk/workspace/toolbusNG/toolbus/test/expr.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

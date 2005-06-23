@@ -21,7 +21,4 @@ public class Delta extends Atom {
     return new State(); // replace by single copy
   }
 
-  public boolean isEnabled() {
-    return false;
-  }
 }
