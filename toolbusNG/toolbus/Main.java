@@ -334,7 +334,7 @@ public class Main {
 
     try {
       //T.setVerbose(true);
-      T.parse("/ufs/paulk/workspace/toolbusNG/toolbus/test/expr.tb");
+      T.parse("/home/paulk/.eclipse/toolbusNG/toolbus/test/types.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

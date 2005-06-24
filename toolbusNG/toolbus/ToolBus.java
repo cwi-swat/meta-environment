@@ -85,6 +85,7 @@ public class ToolBus {
   private static String getPropertyFile() {
     String stdName = "toolbus.props";
     String user = System.getProperty("user.name");
+    
     String hostname = getHostName();
 
     File f;

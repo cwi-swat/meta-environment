@@ -1,2 +1,2 @@
-process P is let N : str in N := "abc" endlet
+process P is let N : [str,str] in N := ["abc","def"] endlet
 toolbus(P)

@@ -111,5 +111,9 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Call2"));
     assertTrue(runTest("Call3"));
   }
+  
+  public void testExpr() {
+  	assertTrue(runTest("Expr"));
+  }
 
 }

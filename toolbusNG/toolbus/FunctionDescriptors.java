@@ -169,7 +169,6 @@ public class FunctionDescriptors {
 
     define(new FunctionDescriptor("not-equal", TBTerm.TermType, TBTerm.TermType, TBTerm.BoolType) {
       public ATerm apply(ATerm args[], ProcessInstance pi) {
-      	System.err.println("not-equal(" + args[0] + ", " + args[1] + ")");
         return (args[0] != args[1]) ? TBTerm.True : TBTerm.False;
       }
     });
