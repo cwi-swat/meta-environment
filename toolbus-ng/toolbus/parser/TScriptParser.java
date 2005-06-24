@@ -96,6 +96,12 @@ class TScriptNodeBuilders {
         return TBTerm.mkResVar((ATerm) args[0], factory.make("none"));
       }
     });
+    
+    define(new NodeBuilder("placeholder", true) {
+        public Object build(Object args[]) {
+          return factory.makePlaceholder((ATerm) args[0]);
+        }
+      });
 
     define(new NodeBuilder("apply", true) {
       public Object build(Object args[]) throws ToolBusException {
@@ -383,7 +389,7 @@ class TScriptNodeBuilders {
   }
 
   public static Object buildAppl(ATermAppl t) throws ToolBusException {
-    System.err.println("BuildAppl: " + t);
+    //System.err.println("BuildAppl: " + t);
     String name = t.getName();
     ATerm args[] = t.getArgumentArray();
     NodeBuilder nd = (NodeBuilder) Builders.get(name);

@@ -1,9 +1,9 @@
 
-process P(N : int, M : int) is Q(N, M?) . printf(N) . printf(M)
+process P(N : int, M : int) is Q(N, M?) . printf("%d\n", N) . printf("%d\n", M)
 
-process Q(N : int, M : int?) is N := mul(N,2) . M := mul(M, 2) . R(N, M?) . printf(N) . printf(M)
+process Q(N : int, M : int?) is N := mul(N,2) . M := mul(M, 2) . R(N, M?) . printf("%d\n", N) . printf("%d\n", M)
 
-process R(N : int, M : int?) is N := mul(N,3) . M := mul(M,3) . printf(N) . printf(M)
+process R(N : int, M : int?) is N := mul(N,3) . M := mul(M,3) . printf("%d\n", N) . printf("%d\n", M)
 
 toolbus(P(5, 100))
 

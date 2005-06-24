@@ -1,6 +1,6 @@
 process P is
   let X : bool
   in
-	X := true . printf(X)
+	X := true . printf("%d\n", X)
   endlet
 toolbus(P)

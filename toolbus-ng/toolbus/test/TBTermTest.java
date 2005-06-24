@@ -177,7 +177,7 @@ public class TBTermTest extends TestCase {
   }
 
   public boolean compatible(String s1, String s2) throws ToolBusException {
-    return TBTerm.assignCompatible(factory.make(s1), factory.make(s2));
+    return FunctionDescriptors.compatibleType(factory.make(s1), factory.make(s2));
   }
 
   public void testCompatible() throws ToolBusException {

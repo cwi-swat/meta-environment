@@ -9,21 +9,18 @@ import aterm.ATerm;
 
 abstract class FunctionDescriptor {
   private String name;
-  private int nargs;
   private ATerm argtypes[];
   private ATerm resultType;
 
   public FunctionDescriptor(String name, ATerm resultType) {
     this.name = name;
     this.resultType = resultType;
-    nargs = 0;
     argtypes = new ATerm[0];
   }
 
   public FunctionDescriptor(String name, ATerm arg0, ATerm resultType) {
     this.name = name;
     this.resultType = resultType;
-    nargs = 1;
     argtypes = new ATerm[1];
     argtypes[0] = arg0;
   }
@@ -31,7 +28,6 @@ abstract class FunctionDescriptor {
   public FunctionDescriptor(String name, ATerm arg0, ATerm arg1, ATerm resultType) {
     this.name = name;
     this.resultType = resultType;
-    nargs = 2;
     argtypes = new ATerm[2];
     argtypes[0] = arg0;
     argtypes[1] = arg1;
@@ -40,7 +36,6 @@ abstract class FunctionDescriptor {
   public FunctionDescriptor(String name, ATerm arg0, ATerm arg1, ATerm arg2, ATerm resultType) {
     this.name = name;
     this.resultType = resultType;
-    nargs = 3;
     argtypes = new ATerm[3];
     argtypes[0] = arg0;
     argtypes[1] = arg1;
@@ -63,23 +58,11 @@ abstract class FunctionDescriptor {
                }
     if (argtypes.length != actual.length)
       throw new ToolBusException(name + " has wrong number of arguments");
+    
     for (int i = 0; i < argtypes.length; i++) {
-      if (actual[i] == TBTerm.TermType) {
-        System.err.println("arg # " + i + " of " + name + " is term (requires dynamic check)");
-      } else {
-        if (argtypes[i] == TBTerm.BoolType) {
-          if (actual[i] != TBTerm.BoolType)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be boolean");
-        } else if (argtypes[i] == TBTerm.IntType) {
-          if (actual[i] != TBTerm.IntType)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be integer");
-        } else if (argtypes[i] == TBTerm.TermType) {
-        } else if (argtypes[i] == TBTerm.ListType) {
-          if (actual[i] != TBTerm.ListType && actual[i].getType() != ATerm.LIST)
-            throw new ToolBusException("arg #" + i + " of " + name + " is " + actual[i] + " but should be list");
-        } else
-          throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
-      }
+    	if(!FunctionDescriptors.compatibleType(actual[i], argtypes[i]))
+    		throw new ToolBusException("arg # " + i + " of " + name + " is " 
+    				+ actual[i] + " but should be " + argtypes[i]);
     }
     return true;
   }
@@ -461,5 +444,88 @@ public class FunctionDescriptors {
     }
     throw new ToolBusInternalError("illegal ATerm in checkType: " + t);
   }
-
+  
+  public static boolean compareListType(ATermList lst, ATerm e){
+	System.err.println("compatibleListType(" + lst + ", " + e + ")");
+	for(int i = 0; i < lst.getLength() -1; i++){
+		if(!compatibleType(lst.elementAt(i), e))
+			return false;
+	}
+	System.err.println("compatibleListType ==> true");
+	return true;
+  }
+  
+  public static boolean compatibleType(ATerm t1, ATerm t2){
+  	System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
+  	
+ 	if(t1.getType() == ATerm.PLACEHOLDER)
+  		t1 = ((ATermPlaceholder) t1).getPlaceholder();
+ 	if(t2.getType() == ATerm.PLACEHOLDER)
+  		t2 = ((ATermPlaceholder) t2).getPlaceholder();
+ 	
+  	if(t1.equals(t2))
+  		return true;
+  	
+  	if(t1.equals(TBTerm.TermType) || t2.equals(TBTerm.TermType))
+  		return true;
+  	
+  	switch(t1.getType()){
+    case ATerm.BLOB :
+    case ATerm.INT :
+    case ATerm.REAL :
+    	return false;
+    
+    case ATerm.PLACEHOLDER:
+    	return compatibleType(((ATermPlaceholder) t1).getPlaceholder(), t2);
+    
+    case ATerm.APPL:
+       	ATermAppl ap1 = (ATermAppl) t1;
+  		if(t2.getType() != ATerm.APPL){   
+	    	if(ap1.getName() == "list" && t2.getType() == ATerm.LIST) {
+	    		if(ap1.getArity() == 0)
+	    			return true;
+	    		else
+	    			return compareListType((ATermList) t2, ap1.getArgument(0));
+	    	} else
+	    		return false;
+	  	}
+  
+       	ATermAppl ap2 = (ATermAppl) t2;
+       	if(ap1.getName() != ap2.getName())
+       		return false;
+       	if(ap1.getArity() == 0 || ap2.getArity() == 0)
+       		return true;
+       	if(ap1.getArity() != ap2.getArity())
+       		return false;
+       	for(int i = 0; i < ap1.getArity() - 1; i++){
+       		if(!compatibleType(ap1.getArgument(i), ap2.getArgument(i)))
+				return false;
+       	}
+       	return true;
+    	
+    case ATerm.LIST:
+    	if(t2.getType() == ATerm.LIST){
+    		ATermList lst1 = (ATermList) t1;
+    		ATermList lst2 = (ATermList) t2;
+    		if(lst1.getLength() != lst2.getLength())
+    			return false;
+    		for(int i = 0; i < lst1.getLength() -1; i++){
+    			if(!compatibleType(lst1.elementAt(i), lst2.elementAt(i)))
+    				return false;
+    		}
+    		return true;
+    	}
+        if(t2.getType() == ATerm.APPL){
+    		ATermAppl ap = (ATermAppl) t2;
+    		if(ap.getName() == "list"){
+    			if(ap.getArity() == 0)
+    				return true;
+    			else
+    				return compareListType((ATermList) t1, ap.getArgument(0));
+    		} else
+    			return false;
+    	}
+  	}
+    throw new ToolBusInternalError("illegal ATerm in compareType: " + t1);
+  }
 }

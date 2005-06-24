@@ -2,6 +2,6 @@ process P is Q
 
 process Q is R
 
-process R is printf(r)
+process R is printf("r\n")
 
 toolbus(P)

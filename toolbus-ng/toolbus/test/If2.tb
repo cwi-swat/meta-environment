@@ -1,4 +1,4 @@
 process P is
-   if true then if true then printf(ok) else printf(ko) fi else printf(ko) fi
+   if true then if true then printf("ok\n") else printf("ko\n") fi else printf("ko\n") fi
 
 toolbus(P)

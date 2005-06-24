@@ -4,7 +4,7 @@ process P is
 process Q is
 let N : int 
 in
-  rec-msg(N?) . printf(N)
+  rec-msg(N?) . printf("%d\n", N)
 endlet
 
 toolbus(P, Q)

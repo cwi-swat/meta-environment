@@ -2,10 +2,10 @@ process P is
 let N : int
 in
     N := 0 .
-    printf(before) .
+    printf("before\n") .
     ( if less(N, 5)
       then
-         printf(N) . N := add(N, 1)
+         printf("%d\n", N) . N := add(N, 1)
       else
          tau
       fi
