@@ -12,7 +12,7 @@ identification
 configuration interface
 
 requires
-  aterm 2.3.1
+  aterm 2.3.2
 
 error-support 1.2
 
