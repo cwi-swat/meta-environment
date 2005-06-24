@@ -10,34 +10,27 @@ import toolbus.process.*;
 import aterm.*;
 
 /*
- *  NodeBuilder: auxiliary class to represent the build function for a particular node.
+ *  NodeBuilder: auxiliary class to represent the build function for a particular node type.
  */
 
 abstract class NodeBuilder {
   private String name;
-  private boolean unEvaluatedArgs;
 
   /**
    * Method NodeBuilder.
-   * @param name: the name of the cons attribute in the SDF definition
-   * @param unEvaluatedArgs: should the arguments be evaluated before construction or not?
+ * @param name: the name of the cons attribute in the SDF definition
    */
-  public NodeBuilder(String name, boolean unEvaluatedArgs) {
+  public NodeBuilder(String name) {
     this.name = name;
-    this.unEvaluatedArgs = unEvaluatedArgs;
   }
 
   public String getName() {
     return name;
   }
 
-  public boolean unEvaluatedArgs() {
-    return unEvaluatedArgs;
-  }
-
   /**
-   * Method build. Overriddem for each build function.
-   * @param args: the (possibly evaluated) arguments of this build function
+   * Method build. Overridden for each build function for a particular node type.
+   * @param args: the already built arguments of this build function
    * @return Object: the resulting node.
    * @throws ToolBusException
    */
@@ -73,108 +66,70 @@ class TScriptNodeBuilders {
     /*
      * Builders for small ATerms in the parse tree
      */
-    define(new NodeBuilder("vardecl", true) {
+    define(new NodeBuilder("vardecl") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar(TBTerm.unquote((ATerm) args[0]), TBTerm.unquote((ATerm) args[1]));
+        return TBTerm.mkVar((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("resvardecl", true) {
+    define(new NodeBuilder("resvardecl") {
       public Object build(Object args[]) {
         return TBTerm.mkResVar((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("var", true) {
+    define(new NodeBuilder("var") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar(TBTerm.unquote((ATerm) args[0]), factory.make("none"));
+        return TBTerm.mkVar((ATerm) args[0], factory.make("none"));
       }
     });
 
-    define(new NodeBuilder("resvar", true) {
+    define(new NodeBuilder("resvar") {
       public Object build(Object args[]) {
         return TBTerm.mkResVar((ATerm) args[0], factory.make("none"));
       }
     });
     
-    define(new NodeBuilder("placeholder", true) {
+    define(new NodeBuilder("placeholder") {
         public Object build(Object args[]) {
           return factory.makePlaceholder((ATerm) args[0]);
         }
       });
 
-    define(new NodeBuilder("apply", true) {
-      public Object build(Object args[]) throws ToolBusException {
-        if (args.length == 1)
-          return TBTerm.unquote((ATerm) args[0]);
-        if (args.length != 2) {
-          throw new ToolBusException("apply: wrong number of args");
-        }
+    define(new NodeBuilder("apply") {
+		public Object build(Object args[]) throws ToolBusException {
+			if (args.length == 0 || args.length > 2)
+				throw new ToolBusException("apply: wrong number of args");
 
-        String fname = ((ATermAppl) args[0]).getName();
-        ATermList fargs = (ATermList) args[1];
+			ATermList argList = (args.length == 2) ? (ATermList) args[1] : factory.makeList();
+			AFun afun = factory.makeAFun(((ATermAppl) args[0]).getName(),
+					argList.getLength(), false);
 
-        AFun afun = factory.makeAFun(fname, fargs.getLength(), false);
-        ATermList realargs = factory.makeList();
-
-        for (int i = 0; i < fargs.getLength(); i++) {
-          realargs = realargs.append((ATerm) TScriptNodeBuilders.build(fargs.elementAt(i)));
-        }
-        return factory.makeAppl(afun, realargs);
-      }
+			ATerm vargs[] = new ATerm[argList.getLength()];
+			for (int i = 0; i < vargs.length; i++) {
+				vargs[i] = argList.elementAt(i);
+			}
+			return factory.makeAppl(afun, vargs);
+		}
     });
 
-    define(new NodeBuilder("natcon", true) {
+    define(new NodeBuilder("natcon") {
       public Object build(Object args[]) {
         return factory.makeInt(Integer.parseInt(((ATermAppl) args[0]).getName()));
       }
     });
 
-    define(new NodeBuilder("real", true) {
+    define(new NodeBuilder("realcon") {
       public Object build(Object args[]) {
-      	ATermAppl h = (ATermAppl) ((ATermAppl)args[0]).getChildAt(0);
-      	String hs = ((ATermAppl) TBTerm.unquote(h)).getName();
-      	ATermAppl f = (ATermAppl) args[1];
-      	String fs = ((ATermAppl) TBTerm.unquote(f)).getName();
-      	System.err.println("hs = " + hs + "; fs = " + fs);
-      	String sreal = hs + "." + fs;
+      	String sreal = args[0].toString() + "." + args[1].toString();
+    	System.err.println("sreal = " + sreal);
       	return factory.makeReal(new Double(sreal).doubleValue());
       }
     });
 
-    define(new NodeBuilder("posint", true) {
-      public Object build(Object args[]) {
-        return null; // not yet implemented
-      }
-    });
-
-    define(new NodeBuilder("newint", true) {
-      public Object build(Object args[]) {
-        return null; // not yet implemented
-      }
-    });
-
-    define(new NodeBuilder("id", true) {
-      public Object build(Object args[]) {
-        return args[0];
-      }
-    });
-
-    define(new NodeBuilder("strcon", false) {
+    define(new NodeBuilder("strcon") {
       public Object build(Object args[]) {
       	return args[0];
-      }
-    });
-
-    define(new NodeBuilder("trueFun", true) {
-      public Object build(Object args[]) {
-        return TBTerm.True;
-      }
-    });
-
-    define(new NodeBuilder("falseFun", true) {
-      public Object build(Object args[]) {
-        return TBTerm.False;
       }
     });
 
@@ -182,13 +137,13 @@ class TScriptNodeBuilders {
      *  Process constants
      */
 
-    define(new NodeBuilder("Delta", false) {
+    define(new NodeBuilder("Delta") {
       public Object build(Object args[]) {
         return new Delta();
       }
     });
 
-    define(new NodeBuilder("Tau", false) {
+    define(new NodeBuilder("Tau") {
       public Object build(Object args[]) {
         return new Tau();
       }
@@ -198,49 +153,49 @@ class TScriptNodeBuilders {
      *  Builders for process operators
      */
 
-    define(new NodeBuilder("Sequence", false) {
+    define(new NodeBuilder("Sequence") {
       public Object build(Object args[]) {
         return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Alternative", false) {
+    define(new NodeBuilder("Alternative") {
       public Object build(Object args[]) {
         return new Alternative((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Iteration", false) {
+    define(new NodeBuilder("Iteration") {
       public Object build(Object args[]) {
         return new Iteration((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Disrupt", false) {
+    define(new NodeBuilder("Disrupt") {
       public Object build(Object args[]) {
         return new Disrupt((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Merge", false) {
+    define(new NodeBuilder("Merge") {
       public Object build(Object args[]) {
         return new Merge((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("IfElse", false) {
+    define(new NodeBuilder("IfElse") {
       public Object build(Object args[]) {
         return new IfElse((ATerm) args[0], (ProcessExpression) args[1], (ProcessExpression) args[2]);
       }
     });
 
-    define(new NodeBuilder("IfThen", false) {
+    define(new NodeBuilder("IfThen") {
       public Object build(Object args[]) {
         return new IfThen((ATerm) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("LetDefinition", false) {
+    define(new NodeBuilder("LetDefinition") {
       public Object build(Object args[]) {
         return new LetDefinition((ATermList) args[0], (ProcessExpression) args[1]);
       }
@@ -250,25 +205,25 @@ class TScriptNodeBuilders {
      * Process definition and creation
      */
 
-    define(new NodeBuilder("ProcessCall", false) {
+    define(new NodeBuilder("ProcessCall") {
       public Object build(Object args[]) {
         return new ProcessCall(((ATerm) args[0]));
       }
     });
 
-    define(new NodeBuilder("ProcessDefinition0", false) {
+    define(new NodeBuilder("ProcessDefinition0") {
       public Object build(Object args[]) {
         return new ProcessDefinition(((ATermAppl) args[0]).getName(), factory.makeList(), (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("ProcessDefinition", false) {
+    define(new NodeBuilder("ProcessDefinition") {
       public Object build(Object args[]) {
         return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2]);
       }
     });
 
-    define(new NodeBuilder("Create", false) {
+    define(new NodeBuilder("Create") {
       public Object build(Object args[]) {
         return new Create((ATerm) args[0], (ATerm) args[1]);
       }
@@ -278,7 +233,7 @@ class TScriptNodeBuilders {
      *  Messages
      */
 
-    define(new NodeBuilder("RecMsg", false) {
+    define(new NodeBuilder("RecMsg") {
       public Object build(Object args[]) {
         if (args.length == 1) {
           return new RecMsg((ATerm) args[0]);
@@ -288,7 +243,7 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("SndMsg", false) {
+    define(new NodeBuilder("SndMsg") {
       public Object build(Object args[]) {
         if (args.length == 1) {
           return new SndMsg((ATerm) args[0]);
@@ -302,31 +257,31 @@ class TScriptNodeBuilders {
      *  Tool related atoms
      */
 
-    define(new NodeBuilder("Eval", false) {
+    define(new NodeBuilder("Eval") {
       public Object build(Object args[]) {
         return new Eval((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("RecVal", false) {
+    define(new NodeBuilder("RecVal") {
       public Object build(Object args[]) {
         return new RecVal((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("Do", false) {
+    define(new NodeBuilder("Do") {
       public Object build(Object args[]) {
         return new Do((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("Event", false) {
+    define(new NodeBuilder("Event") {
       public Object build(Object args[]) {
         return new Event((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("AckEvent", false) {
+    define(new NodeBuilder("AckEvent") {
       public Object build(Object args[]) {
         return new AckEvent((ATerm) args[0]);
       }
@@ -336,21 +291,21 @@ class TScriptNodeBuilders {
      * Miscellaneous atoms
      */
 
-    define(new NodeBuilder("Assign", false) {
+    define(new NodeBuilder("Assign") {
       public Object build(Object args[]) {
         return new Assign(TBTerm.mkVar((ATerm) args[0], factory.make("none")), (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("Print", false) {
+    define(new NodeBuilder("Print") {
       public Object build(Object args[]) {
         return new Print((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("ShutDown", false) {
+    define(new NodeBuilder("ShutDown") {
       public Object build(Object args[]) {
-        return new ShutDown(TBTerm.unquote((ATerm) args[0]));
+        return new ShutDown((ATerm) args[0]);
       }
     });
   }
@@ -361,55 +316,50 @@ class TScriptNodeBuilders {
    * @return Object: the resulting Tree
    * @throws ToolBusException
    */
+  
   public static Object build(ATerm t) throws ToolBusException {
+		switch (t.getType()) {
+		case ATerm.APPL:
+			System.err.println("build: " + t);
+			ATermAppl ap = (ATermAppl) t;
+			String name = ap.getName();
+			ATerm args[] = ap.getArgumentArray();
+			NodeBuilder nd = (NodeBuilder) Builders.get(name);
+			if (nd == null) {
+				if (args.length == 0) {
+					boolean isquoted = false;
+					if (name.length() > 0 && name.charAt(0) == '"') {
+						name = name.substring(1, name.length() - 1);
+						isquoted = true;
+					}
+					AFun afun = factory.makeAFun(name, 0, isquoted);
+					return factory.makeAppl(afun);
+				} else { 
+					AFun afun = factory.makeAFun(name, args.length, false);
+					ATerm vargs[] = new ATerm[args.length];
+					for (int i = 0; i < args.length; i++) {
+						vargs[i] = (ATerm) build(args[i]);
+					}
+					return factory.makeAppl(afun, vargs);
+				}
+			} else {
+				Object[] oargs = new Object[args.length];
 
-    switch (t.getType()) {
-      case ATerm.BLOB :
-      case ATerm.INT :
-      case ATerm.PLACEHOLDER :
-      case ATerm.REAL :
-        return t;
+				for (int i = 0; i < args.length; i++)
+					oargs[i] = build(args[i]);
+				return nd.build(oargs);
+			}
 
-      case ATerm.LIST :
-        ATermList lst = t.getFactory().makeList();
-        for (int i = 0; i < ((ATermList) t).getLength(); i++) {
-          Object obj = build(((ATermList) t).elementAt(i));
-          if (!(obj instanceof ATerm)) {
-            throw new ToolBusException("non-ATerm occurs in ATermList: " + obj);
-          }
-          lst = lst.append((ATerm) obj);
-        }
-        return lst;
-
-      case ATerm.APPL :
-        return buildAppl((ATermAppl) t);
-      default :
-        throw new ToolBusException("illegal ATerm");
-    }
-  }
-
-  public static Object buildAppl(ATermAppl t) throws ToolBusException {
-    //System.err.println("BuildAppl: " + t);
-    String name = t.getName();
-    ATerm args[] = t.getArgumentArray();
-    NodeBuilder nd = (NodeBuilder) Builders.get(name);
-
-    if (nd == null) {
-      if (args.length == 0)
-        return TBTerm.unquote(t);
-      else
-        throw new ToolBusException("Unkown: " + name);
-    }
-
-    Object[] oargs = new Object[args.length];
-
-    for (int i = 0; i < args.length; i++) {
-      oargs[i] = nd.unEvaluatedArgs() ? args[i] : build(args[i]);
-    }
- 
-    Object res = nd.build(oargs);
-    //System.err.println("BuildAppl: " + t + " ==> " + res);
-    return res;
+		case ATerm.LIST:
+			ATermList lst1 = (ATermList) t;
+			ATermList lst2 = factory.makeList();
+			for (int i = lst1.getLength() - 1; i >= 0; i--) {
+				lst2 = factory.makeList((ATerm) build(lst1.elementAt(i)), lst2);
+			}
+			return lst2;
+		default:
+			return t;
+		}
   }
 }
 

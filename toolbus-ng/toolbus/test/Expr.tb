@@ -151,8 +151,7 @@ process MiscOps is
      N := quote(3) .
      NP := quote([2,3]) .
      T := quote(f(a)) .
-     TFA := quote(f(a)) .
- tau
+     TFA := quote(f(a))
   endlet
 
 process All is

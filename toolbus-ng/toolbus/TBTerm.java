@@ -97,10 +97,7 @@ public class TBTerm {
   }
   
   public static boolean isStr(ATerm t) {
-  	//System.err.println("isStr: " + t);
- 	//System.err.println("isStr: " + isAppl(t));
   	if(isAppl(t)){	
-  		//System.err.println("isStr: " + ((ATermAppl) t).isQuoted());
   	 return (((ATermAppl) t).isQuoted()) && ((ATermAppl) t).getArity() == 0;
   	} else
   		return false;
@@ -233,75 +230,11 @@ public class TBTerm {
   	}
   	return null;
   }
-/*
-  public static ATerm makeStr(String s){
-  	String us = s.substring(1,s.length()-1);
-  	//System.err.println("makeStr(" + s + ", " + us + ")");
-    AFun afun = factory.makeAFun(us, 0, true);
-    return factory.makeAppl(afun);
-  }
-  */
 
-  public static ATerm unquote(ATerm t) {
-  	/*
-    AFun afun = factory.makeAFun(((ATermAppl) t).getName(), 0, false);
-    ATerm res = factory.makeAppl(afun);
-  	System.err.println("unquote(" + t + ") ==> " + res);
-    return res;
-   */
-    switch (t.getType()) {
-      case ATerm.APPL :
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        String name = ((ATermAppl) t).getName();
-        if(name == "apply"){
-        	if(args.length != 2)
-        	 	System.err.println("unquote # of args in apply");
-
-        	ATermList argList = (ATermList) args[1];
-        	AFun afun = factory.makeAFun(((ATermAppl) args[0]). getName(), argList.getLength(), false);
-        	
-	        ATerm vargs[] = new ATerm[argList.getLength()];
-	        for (int i = 0; i < vargs.length; i++) {
-	          vargs[i] = unquote(argList.elementAt(i));
-	        }
-	        //System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
-	        return factory.makeAppl(afun, vargs);	
-        } else if(name == "placeholder"){
-        	return factory.makePlaceholder(unquote(args[0]));
-        } else {
-        	AFun afun;	
-	        if (args.length == 0){
-	        	if(name.length() > 0 && name.charAt(0) == '"') {
-	        		name = name.substring(1,name.length()-1);
-		            afun = factory.makeAFun(name, 0, true);
-	        	} else 
-	        		afun = factory.makeAFun(name, 0, false);
-		    	//System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun));
-		    	return factory.makeAppl(afun);
-	        }
-	        afun = factory.makeAFun(name, args.length, false);
-	        ATerm vargs[] = new ATerm[args.length];
-	        for (int i = 0; i < args.length; i++) {
-	          vargs[i] = unquote(args[i]);
-	        }
-	        //System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
-	        return factory.makeAppl(afun, vargs);
-        }
-        
-      case ATerm.LIST :
-        ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(unquote(((ATermList) t).elementAt(i)), lst);
-        }
-        return lst;
-      default:
-        	return t;
-    }
-  }
 
   public static ATerm mkAnyVar(String V, ATerm name, ATerm type) {
     AFun afun = factory.makeAFun(V, 2, false);
-    ATerm cargs[] = new ATerm[] { unquote(type), unquote(name) };
+    ATerm cargs[] = new ATerm[] { type, name }; // used unquote
     return factory.makeAppl(afun, cargs);
   }
 
@@ -366,7 +299,8 @@ public class TBTerm {
 
   /**
    * Resolve the variables in ATerm t using Environment env.
-   * The declaration information in env is used to replace every variable occurence
+   * The declaration information in env is used to include type information in 
+   * every variable occurence
    * @param t Aterm to be resolved.
    * @param env environment to be used.
    */
@@ -382,8 +316,6 @@ public class TBTerm {
       case ATerm.APPL :
         if (TBTerm.isVar(t) || TBTerm.isResVar(t)){
         	ATerm res = setVarType(t, env.getVarType(t));
-            
-        	//System.err.println("resolveVars:" + t + " return: " + res + "; \nenv = " + env);
             return res;
         }
 
@@ -406,95 +338,6 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
   }
-  /**
-   * Check that the two sides of an assignment are "compatibele", i.e. they must be equal
-   * or the type of the lhs may be more general than that of the rhs.
-   */
-/*
-  public static boolean assignCompatible(ATerm lhsType, ATerm rhsType) throws ToolBusException {
-  	//System.err.println("assignCompatible(" + lhsType + "," + rhsType + ")");
-    if (isVar(lhsType) || isResVar(lhsType)) {
-      throw new ToolBusException("variable not allowd in a type: " + lhsType);
-    } else if (isVar(rhsType) || isResVar(rhsType)) {
-      throw new ToolBusException("variable not allowd in a type: " + rhsType);
-    }
-    if (lhsType == TermType || lhsType == rhsType) {
-      return true;
-    }
-
-    switch (lhsType.getType()) {
-      case ATerm.BLOB :
-      case ATerm.INT :
-      case ATerm.REAL :
-        throw new ToolBusInternalError("assignCompatible: illegal lhsType: " + lhsType);
-      case ATerm.PLACEHOLDER :
-        if (lhsType == IntPlaceholder && rhsType == IntType)
-          return true;
-        else if (lhsType == RealPlaceholder && rhsType == RealType)
-          return true;
-        else if (lhsType == StrPlaceholder && rhsType == StrType)
-          return true;
-        else if (lhsType == ListPlaceholder && (rhsType == ListType || rhsType.getType() == ATerm.LIST))
-          return true;
-        else if (lhsType == TBTerm.TermPlaceholder)
-          return true;
-        else
-          return false;
-      case ATerm.APPL :
-        if (rhsType == TermType) {
-          return true;
-        } else if (lhsType == ListType && rhsType.getType() == ATerm.LIST) {
-          return true;
-        } else if (((ATermAppl) lhsType).getName().equals("list")) {
-          if (rhsType.getType() != ATerm.LIST) {
-            return false;
-          }
-          ATerm lhsargs[] = ((ATermAppl) lhsType).getArgumentArray();
-          if (lhsargs.length != 1) {
-            throw new ToolBusException("illegal list type: " + lhsType);
-          }
-          for (int i = 0; i < ((ATermList) rhsType).getLength(); i++) {
-            if (!assignCompatible(lhsargs[0], ((ATermList) rhsType).elementAt(i))) {
-              return false;
-            }
-          }
-          return true;
-        } else if (
-          rhsType.getType() != ATerm.APPL
-            || !((ATermAppl) lhsType).getName().equals(((ATermAppl) rhsType).getName())) {
-          return false;
-        }
-
-        ATerm lhsargs[] = ((ATermAppl) lhsType).getArgumentArray();
-        ATerm rhsargs[] = ((ATermAppl) rhsType).getArgumentArray();
-        if (lhsargs.length == 0) {
-          return true;
-        } else if (lhsargs.length != rhsargs.length) {
-          return false;
-        }
-        for (int i = 0; i < lhsargs.length; i++) {
-          if (!assignCompatible(lhsargs[i], rhsargs[i])) {
-            return false;
-          }
-        }
-        return true;
-        
-      case ATerm.LIST :
-      	if(rhsType.getType() != ATerm.LIST)
-      		return false;
-        if (((ATermList) lhsType).getLength() != ((ATermList) rhsType).getLength()) {
-          return false;
-        }
-        for (int i = 0; i < ((ATermList) lhsType).getLength(); i++) {
-          if (!assignCompatible(((ATermList) lhsType).elementAt(i), ((ATermList) rhsType).elementAt(i))) {
-            return false;
-          }
-        }
-        return true;
-    }
-    return false;
-  }
-  */
 
   /**
    * Transform a term into a pattern that can be used by tool interfaces.
