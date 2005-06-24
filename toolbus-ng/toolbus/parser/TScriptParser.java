@@ -75,7 +75,7 @@ class TScriptNodeBuilders {
      */
     define(new NodeBuilder("vardecl", true) {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], (ATerm) args[1]);
+        return TBTerm.mkVar(TBTerm.unquote((ATerm) args[0]), TBTerm.unquote((ATerm) args[1]));
       }
     });
 
@@ -87,7 +87,7 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("var", true) {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], factory.make("none"));
+        return TBTerm.mkVar(TBTerm.unquote((ATerm) args[0]), factory.make("none"));
       }
     });
 
@@ -124,9 +124,15 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("realcon", true) {
+    define(new NodeBuilder("real", true) {
       public Object build(Object args[]) {
-        return null;  // not yet implemented
+      	ATermAppl h = (ATermAppl) ((ATermAppl)args[0]).getChildAt(0);
+      	String hs = ((ATermAppl) TBTerm.unquote(h)).getName();
+      	ATermAppl f = (ATermAppl) args[1];
+      	String fs = ((ATermAppl) TBTerm.unquote(f)).getName();
+      	System.err.println("hs = " + hs + "; fs = " + fs);
+      	String sreal = hs + "." + fs;
+      	return factory.makeReal(new Double(sreal).doubleValue());
       }
     });
 
@@ -148,13 +154,9 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("strcon", true) {
+    define(new NodeBuilder("strcon", false) {
       public Object build(Object args[]) {
-      	String name = ((ATermAppl) args[0]).getName();
-      	String txt = name.substring(1,name.length()-1);
-      	System.err.println("*** strcon: " + args[0] + "; " + txt);
-      	return TBTerm.unquote((ATerm) args[0]);
-        /* return TBTerm.makeStr((String) args[0]);*/
+      	return args[0];
       }
     });
 
@@ -342,7 +344,7 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("ShutDown", false) {
       public Object build(Object args[]) {
-        return new ShutDown((ATerm) args[0]);
+        return new ShutDown(TBTerm.unquote((ATerm) args[0]));
       }
     });
   }
@@ -381,7 +383,7 @@ class TScriptNodeBuilders {
   }
 
   public static Object buildAppl(ATermAppl t) throws ToolBusException {
-     //System.err.println("BuildAppl: " + t);
+    System.err.println("BuildAppl: " + t);
     String name = t.getName();
     ATerm args[] = t.getArgumentArray();
     NodeBuilder nd = (NodeBuilder) Builders.get(name);
@@ -398,7 +400,10 @@ class TScriptNodeBuilders {
     for (int i = 0; i < args.length; i++) {
       oargs[i] = nd.unEvaluatedArgs() ? args[i] : build(args[i]);
     }
-    return nd.build(oargs);
+ 
+    Object res = nd.build(oargs);
+    //System.err.println("BuildAppl: " + t + " ==> " + res);
+    return res;
   }
 }
 

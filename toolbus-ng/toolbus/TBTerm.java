@@ -149,9 +149,25 @@ public class TBTerm {
     	ATerm e = lst1.elementAt(i);
     	if(!member(e, l2))
     	  return false;
+    	else
+    		l2 = delete(l2, e);
     }
     return true;
   }
+  
+  public static ATerm delete(ATerm l, ATerm e) {
+ 	ATermList lst = (ATermList) l;	
+	ATermList res = factory.makeList();
+	boolean found = false;
+	for (int i = lst.getLength() - 1; i >= 0; i--) {
+		ATerm e2 = lst.elementAt(i);
+		if (e2.isEqual(e) && !found)
+			found = true;
+		else
+			res = factory.makeList(e2, res);
+	}
+	return res;
+	}
   
   public static ATerm diff(ATerm l1, ATerm l2) {
  	ATermList lst1 = (ATermList) l1;
@@ -161,7 +177,7 @@ public class TBTerm {
     	if(!member(e, l2))
     			res = factory.makeList(e, res);
     }
-    System.err.println("diff(" + l1 + ", " + l2 + ") ==> " + res);
+    //System.err.println("diff(" + l1 + ", " + l2 + ") ==> " + res);
     return res;
   }
   
@@ -173,7 +189,7 @@ public class TBTerm {
     	if(member(e, l2))
     			res = factory.makeList(e, res);
     }
-    System.err.println("inter(" + l1 + ", " + l2 + ") ==> " + res);
+    //System.err.println("inter(" + l1 + ", " + l2 + ") ==> " + res);
     return res;
   }
   
@@ -184,13 +200,13 @@ public class TBTerm {
        	ATerm e = lst1.elementAt(i);
     	res = factory.makeList(e, res);
     }
-    System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
+    //System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
     return res;
   }
   
   public static ATerm index(ATerm l, int i) {
   	ATerm res = ((ATermList) l).elementAt(i - 1);
-  	System.err.println("index(" + l + ", " + i + ")==> " + res);
+  	//System.err.println("index(" + l + ", " + i + ")==> " + res);
   	return res;
   }
   
@@ -217,13 +233,14 @@ public class TBTerm {
   	}
   	return null;
   }
-
+/*
   public static ATerm makeStr(String s){
   	String us = s.substring(1,s.length()-1);
-  	System.err.println("makeStr(" + s + ", " + us + ")");
+  	//System.err.println("makeStr(" + s + ", " + us + ")");
     AFun afun = factory.makeAFun(us, 0, true);
     return factory.makeAppl(afun);
   }
+  */
 
   public static ATerm unquote(ATerm t) {
   	/*
@@ -247,23 +264,25 @@ public class TBTerm {
 	        for (int i = 0; i < vargs.length; i++) {
 	          vargs[i] = unquote(argList.elementAt(i));
 	        }
-	        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
+	        //System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
 	        return factory.makeAppl(afun, vargs);	
         } else {
-
+        	AFun afun;	
 	        if (args.length == 0){
-	        	if(name.charAt(0) == '"')
+	        	if(name.length() > 0 && name.charAt(0) == '"') {
 	        		name = name.substring(1,name.length()-1);
-		        AFun afun = factory.makeAFun(name, args.length, true);
-		        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun));
-	      		return factory.makeAppl(afun);
+		            afun = factory.makeAFun(name, 0, true);
+	        	} else 
+	        		afun = factory.makeAFun(name, 0, false);
+		    	//System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun));
+		    	return factory.makeAppl(afun);
 	        }
-	        AFun afun = factory.makeAFun(name, args.length, false);
+	        afun = factory.makeAFun(name, args.length, false);
 	        ATerm vargs[] = new ATerm[args.length];
 	        for (int i = 0; i < args.length; i++) {
 	          vargs[i] = unquote(args[i]);
 	        }
-	        System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
+	        //System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
 	        return factory.makeAppl(afun, vargs);
         }
         
