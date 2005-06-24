@@ -191,7 +191,7 @@ public class TBTermTest extends TestCase {
     assertTrue(!compatible("f", "g"));
     assertTrue(compatible("f(int)", "f(int)"));
     assertTrue(compatible("f", "f(int)"));
-    assertTrue(!compatible("f(int)", "f()"));
+    assertTrue(compatible("f(int)", "f()"));
 
     assertTrue(compatible("[]", "[]"));
     assertTrue(compatible("[int]", "[int]"));

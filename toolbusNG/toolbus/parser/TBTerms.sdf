@@ -23,7 +23,7 @@ exports
 
   context-free syntax
     NatCon			        -> Nat 	  {cons("natcon")}
-    Int "." NatCon 		    -> Real   {cons("real")}
+    Int "." NatCon 		    -> Real   {cons("realcon")}
     "(" Nat ")" 		    -> Nat    {bracket}
     Nat 			        -> Int
     "+" Nat 			    -> Int    {cons("posint")}
