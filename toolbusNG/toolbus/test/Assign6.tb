@@ -3,9 +3,9 @@ let N : int, M : int
 in
    N := 1 . 
    M := 2 . 
-   printf(N, M) . 
-   let N : int in N := 3 . printf(N, M) endlet . 
-   printf(N, M)
+   printf("%d %d\n", N, M) . 
+   let N : int in N := 3 . printf("%d %d\n", N, M) endlet . 
+   printf("%d %d\n", N, M)
 endlet
 
 toolbus(P)

@@ -1,7 +1,7 @@
 process P is
 let A : int
 in
-  snd-msg(f(123, A?)) . printf(A) . rec-msg(A?) . printf(A)
+  snd-msg(f(123, A?)) . printf("%d\n", A) . rec-msg(A?) . printf("%d\n", A)
 endlet
 
 process Q is

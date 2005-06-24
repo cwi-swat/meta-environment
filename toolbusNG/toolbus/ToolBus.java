@@ -28,6 +28,7 @@ public class ToolBus {
   private static String sglr = "/ufs/paulk/software/installed/bin/sglr";
   private static String parseTable = "/ufs/paulk/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
   private static String implodePT = "/ufs/paulk/software/installed/bin/implodePT";
+  private static String workspace = "/ufs/paulk/eclipse/worlspace";
   private static boolean verbose = false;
 
   /**
@@ -121,6 +122,7 @@ public class ToolBus {
       sglr = props.getProperty("sglr.path", sglr);
       parseTable = props.getProperty("parsetable.path", parseTable);
       implodePT = props.getProperty("implodePT.path", implodePT);
+      workspace = props.getProperty("workspace.path", workspace);
     }
   }
 
@@ -154,6 +156,14 @@ public class ToolBus {
 
   public static boolean isVerbose() {
     return verbose;
+  }
+  
+  /**
+   * Get workspace
+   */
+  
+  public static String getWorkspace(){
+  	return workspace;
   }
 
   /**

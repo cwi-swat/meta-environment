@@ -1,6 +1,6 @@
 process P is
   let X : int
   in
-	X := 122 . X := add(X,1) . printf(X)
+	X := 122 . X := add(X,1) . printf("%d\n", X)
   endlet
 toolbus(P)

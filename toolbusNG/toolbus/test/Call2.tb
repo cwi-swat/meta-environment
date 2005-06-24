@@ -1,8 +1,8 @@
-process P(N : int) is Q(N) . printf(N)
+process P(N : int) is Q(N) . printf("%d\n", N)
 
 process Q(N : int) is N := mul(N,2) . R(N) 
-       . printf(N)
+       . printf("%d\n", N)
 
-process R(N : int) is N := mul(N,3) . printf(N)
+process R(N : int) is N := mul(N,3) . printf("%d\n", N)
 
 toolbus(P(5))

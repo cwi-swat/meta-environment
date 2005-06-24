@@ -1,7 +1,7 @@
 process P is
-   if false then printf(ko)
+   if false then printf("ko\n")
    else 
-      if true then printf(ok) else printf(ko) fi
+      if true then printf("ok\n") else printf("ko\n") fi
    fi
 
 toolbus(P)

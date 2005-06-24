@@ -2,9 +2,9 @@ process P is
 let X : int, Y : int
 in
    X := 10 . Y := 20 .
-   if greater(X,Y) then printf(ko)
+   if greater(X,Y) then printf("ko\n")
    else 
-      if equal(X,10) then printf(ok) else printf(ko) fi
+      if equal(X,10) then printf("ok\n") else printf("ko\n") fi
    fi
 endlet
 

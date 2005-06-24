@@ -2,9 +2,9 @@ process P is
   snd-msg(123)
 
 process Q is
-  rec-msg(123) . printf(q)
+  rec-msg(123) . printf("q\n")
 
 process R is
-  rec-msg(124) . printf(r)
+  rec-msg(124) . printf("r\n")
 
 toolbus(P, Q, R)

@@ -266,6 +266,8 @@ public class TBTerm {
 	        }
 	        //System.err.println( "unquote(" + t + ") ==> " + factory.makeAppl(afun, vargs));
 	        return factory.makeAppl(afun, vargs);	
+        } else if(name == "placeholder"){
+        	return factory.makePlaceholder(unquote(args[0]));
         } else {
         	AFun afun;	
 	        if (args.length == 0){
@@ -408,7 +410,7 @@ public class TBTerm {
    * Check that the two sides of an assignment are "compatibele", i.e. they must be equal
    * or the type of the lhs may be more general than that of the rhs.
    */
-
+/*
   public static boolean assignCompatible(ATerm lhsType, ATerm rhsType) throws ToolBusException {
   	//System.err.println("assignCompatible(" + lhsType + "," + rhsType + ")");
     if (isVar(lhsType) || isResVar(lhsType)) {
@@ -492,6 +494,7 @@ public class TBTerm {
     }
     return false;
   }
+  */
 
   /**
    * Transform a term into a pattern that can be used by tool interfaces.

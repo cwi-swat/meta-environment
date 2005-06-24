@@ -73,7 +73,7 @@ public class Environment {
 	 */
 	public void introduceBinding(ATerm formal, ATerm actual) throws ToolBusException {
 		if (TBTerm.isVar(actual)
-				&& (TBTerm.getVarType(formal) != TBTerm.getVarType(actual))) {
+				&& !FunctionDescriptors.compatibleType(TBTerm.getVarType(formal), TBTerm.getVarType(actual))) {
 			throw new ToolBusException("incompatible types for " + formal
 					+ " and " + actual);
 		}
