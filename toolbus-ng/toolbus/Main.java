@@ -334,7 +334,7 @@ public class Main {
 
     try {
       //T.setVerbose(true);
-      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/Expr.tb");
+      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/tool0.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

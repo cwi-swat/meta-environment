@@ -77,7 +77,7 @@ public class TBTerm {
     TransactionIdVar = factory.make("var(transaction,TransactionId))");
     TransactionIdResVar = factory.make("rvar(transaction,TransactionId))");
 
-    FunctionDescriptors.init(factory);
+    Functions.init(factory);
   }
 
   public static boolean isTrue(ATerm t) {
@@ -231,10 +231,9 @@ public class TBTerm {
   	return null;
   }
 
-
   public static ATerm mkAnyVar(String V, ATerm name, ATerm type) {
     AFun afun = factory.makeAFun(V, 2, false);
-    ATerm cargs[] = new ATerm[] { type, name }; // used unquote
+    ATerm cargs[] = new ATerm[] { type, name };
     return factory.makeAppl(afun, cargs);
   }
 

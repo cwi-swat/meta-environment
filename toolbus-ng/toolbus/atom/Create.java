@@ -4,7 +4,7 @@
 package toolbus.atom;
 
 import toolbus.Environment;
-import toolbus.FunctionDescriptors;
+import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTerm;
 import toolbus.ToolBus;
@@ -44,7 +44,7 @@ public class Create extends Atom {
       return false;
     String name = ((ATermAppl) pcall.value).getName();
     ATermList cargs = ((ATermAppl) pcall.value).getArguments();
-    ATermList evargs = (ATermList) FunctionDescriptors.eval(cargs, getProcess(), getEnv());
+    ATermList evargs = (ATermList) Functions.eval(cargs, getProcess(), getEnv());
 
     ToolBus TB = getProcess().getToolBus();
 

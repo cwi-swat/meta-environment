@@ -30,6 +30,8 @@ public class ToolBus {
   private static String implodePT = "/ufs/paulk/software/installed/bin/implodePT";
   private static String workspace = "/ufs/paulk/eclipse/worlspace";
   private static boolean verbose = false;
+  private static int nerrrors = 0;
+  private static int nwarnings = 0;
 
   /**
    * Constructor with explicit PrintWriter
@@ -171,7 +173,17 @@ public class ToolBus {
    */
 
   public PrintWriter getPrintWriter() {
-    return out;
+  	return out;
+  }
+  
+  public static void error(String src, String msg) {
+  	System.err.println("ToolBus (" + src + "): " + msg);
+  	nerrrors++;
+  }
+  
+  public static void warning(String src, String msg) {
+  	System.err.println("ToolBus (" + src + "): " + msg + " (warning)");
+  	nwarnings++;
   }
 
   /**

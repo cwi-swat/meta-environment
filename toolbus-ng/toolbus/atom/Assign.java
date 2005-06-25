@@ -34,9 +34,9 @@ public class Assign extends Atom {
     //System.err.println(this + "; var = " + var +"; vartype = " + vartype);
     
     //System.err.println("Assign: " + env);
-    ATerm exptype = FunctionDescriptors.checkType(exp.value, env, false);
+    ATerm exptype = Functions.checkType(exp.value, env, false);
 
-    if (!FunctionDescriptors.compatibleType(vartype, exptype) )// lhs = term!
+    if (!Functions.compatibleTypes(vartype, exptype) )// lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
   }
 
@@ -47,7 +47,7 @@ public class Assign extends Atom {
     Environment env = getEnv();
     //System.err.println("Assign: " + env);
 
-    ATerm newval = FunctionDescriptors.eval(exp.value, p, env);
+    ATerm newval = Functions.eval(exp.value, p, env);
     
     //System.err.println("Assign: " + exp.value + "   " + newval);
     env.assignVar(var.value, newval);

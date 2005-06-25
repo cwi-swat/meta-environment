@@ -158,7 +158,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     	for(int i = 0; i < tests.size(); i++){
     		Test t = (Test) tests.elementAt(i);
     		//System.err.println("evaluate: " + t);
-    		boolean res = TBTerm.isTrue(FunctionDescriptors.eval(t.testExpr, getProcess(), t.testEnv));
+    		boolean res = TBTerm.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
     		//System.err.println("==> " + res);
     		if(!res)
     			return false;
