@@ -7,14 +7,12 @@ package toolbus;
 import aterm.*;
 
 /**
- * Bindings implement lists of (variable, value) pairs.
+ * Binding implement lists of (variable, value) pairs.
  */
 
 class Binding {
 	ATerm var;
-
 	ATerm val;
-
 	Binding next;
 
 	public Binding(ATerm var, ATerm val, Binding bnd) {
@@ -73,7 +71,7 @@ public class Environment {
 	 */
 	public void introduceBinding(ATerm formal, ATerm actual) throws ToolBusException {
 		if (TBTerm.isVar(actual)
-				&& !FunctionDescriptors.compatibleType(TBTerm.getVarType(formal), TBTerm.getVarType(actual))) {
+				&& !Functions.compatibleTypes(TBTerm.getVarType(formal), TBTerm.getVarType(actual))) {
 			throw new ToolBusException("incompatible types for " + formal
 					+ " and " + actual);
 		}

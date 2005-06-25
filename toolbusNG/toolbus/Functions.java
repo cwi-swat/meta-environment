@@ -49,19 +49,24 @@ abstract class FunctionDescriptor {
   public ATerm getResultType() {
     return resultType;
   }
-
-  public boolean checkStatic(ATerm actual[]) throws ToolBusException {
-             System.err.println("checkStatic: " + name);
-               for(int i = 0; i < actual.length; i++){
-                   System.err.println("actual[" + i + "] = " + actual[i]);
-                  System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
-               }
+/**
+ * checkStatic performs a static type check for calls to built-in functions
+ * @param actual an array of types of actual parameters
+ * @return boolean
+ * @throws ToolBusException
+ */
+  public boolean checkStatic(ATerm actual[]) {
+             //System.err.println("checkStatic: " + name);
+             //  for(int i = 0; i < actual.length; i++){
+             //      System.err.println("actual[" + i + "] = " + actual[i]);
+             //     System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
+             //  }
     if (argtypes.length != actual.length)
-      throw new ToolBusException(name + " has wrong number of arguments");
+      ToolBus.error("Functions", name + " has wrong number of arguments");
     
     for (int i = 0; i < argtypes.length; i++) {
-    	if(!FunctionDescriptors.compatibleType(actual[i], argtypes[i]))
-    		throw new ToolBusException("arg # " + i + " of " + name + " is " 
+    	if(!Functions.compatibleTypes(actual[i], argtypes[i]))
+    		ToolBus.error("Functions", "arg # " + i + " of " + name + " is " 
     				+ actual[i] + " but should be " + argtypes[i]);
     }
     return true;
@@ -88,10 +93,9 @@ abstract class FunctionDescriptor {
   }
 
   abstract public ATerm apply(ATerm args[], ProcessInstance pi);
-
 }
 
-public class FunctionDescriptors {
+public class Functions {
   private static Hashtable Funs;
   private static ATermFactory factory;
 
@@ -325,12 +329,12 @@ public class FunctionDescriptors {
 
   }
 
-  public static ATerm checkStatic(String fun, ATerm vargs[]) throws ToolBusException {
+  public static ATerm checkStatic(String fun, ATerm args[]) {
     FunctionDescriptor fd = (FunctionDescriptor) Funs.get(fun);
     if (fd == null)
-      throw new ToolBusException("getResultType: unknown function: " + fun);
+      ToolBus.error("Functions", "getResultType: unknown function: " + fun);
 
-    if (fd.checkStatic(vargs))
+    if (fd.checkStatic(args))
       return fd.getResultType();
     else
       return null;
@@ -340,7 +344,7 @@ public class FunctionDescriptors {
     FunctionDescriptor fd = (FunctionDescriptor) Funs.get(fun);
 
     if (fd == null) {
-      throw new ToolBusInternalError("apply: unknown function: " + fun);
+      ToolBus.error("Functions", "apply: unknown function: " + fun);
     }
     try {
       fd.checkRunTime(args); // redundant after typecheck!
@@ -395,14 +399,11 @@ public class FunctionDescriptors {
   public static ATerm checkType(ATerm t, Environment env, boolean quoted) throws ToolBusException {
     //System.err.println("checkType(" + t + ")");
     switch (t.getType()) {
-      case ATerm.BLOB :
-        throw new ToolBusInternalError("checkType: BLOB");
-
       case ATerm.INT :
         return TBTerm.IntType;
 
-      case ATerm.PLACEHOLDER : // ??
-        throw new ToolBusInternalError("checkType: PLACEHOLDER");
+      case ATerm.PLACEHOLDER :
+		return ((ATermPlaceholder) t).getPlaceholder();
 
       case ATerm.REAL :
         return TBTerm.RealType;
@@ -410,7 +411,6 @@ public class FunctionDescriptors {
       case ATerm.APPL :
         if (TBTerm.isVar(t)) {
           ATerm res = TBTerm.getVarType(t);
-          //System.out.println("getType(" + t + ") => " + res);
           return res;
         }
         if (TBTerm.isBoolean(t)) {
@@ -434,7 +434,7 @@ public class FunctionDescriptors {
         	AFun afun = ((ATermAppl) t).getAFun();
         	return factory.makeAppl(afun,vargs);
         } else
-        	return FunctionDescriptors.checkStatic(name, vargs);
+        	return Functions.checkStatic(name, vargs);
       case ATerm.LIST :
         ATermList lst = TBTerm.factory.makeList();
         for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
@@ -445,18 +445,29 @@ public class FunctionDescriptors {
     throw new ToolBusInternalError("illegal ATerm in checkType: " + t);
   }
   
-  public static boolean compareListType(ATermList lst, ATerm e){
-	System.err.println("compatibleListType(" + lst + ", " + e + ")");
+  /**
+   * compatibleTypeList checks that a list of types is compatible with a given
+   * element type
+   * @param lst the list to be checked
+   * @param elmtype the required element type
+   * @return boolean
+   */
+  public static boolean compatibleTypeList(ATermList lst, ATerm elmtype){
 	for(int i = 0; i < lst.getLength() -1; i++){
-		if(!compatibleType(lst.elementAt(i), e))
+		if(!compatibleTypes(lst.elementAt(i), elmtype))
 			return false;
 	}
-	System.err.println("compatibleListType ==> true");
 	return true;
   }
   
-  public static boolean compatibleType(ATerm t1, ATerm t2){
-  	System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
+  /**
+   * compatibleTypes checks that two types are compatible
+   * @param t1 first type
+   * @param t2 second type
+   * @return boolean
+   */
+  public static boolean compatibleTypes(ATerm t1, ATerm t2){
+  	//System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
   	
  	if(t1.getType() == ATerm.PLACEHOLDER)
   		t1 = ((ATermPlaceholder) t1).getPlaceholder();
@@ -470,13 +481,13 @@ public class FunctionDescriptors {
   		return true;
   	
   	switch(t1.getType()){
-    case ATerm.BLOB :
     case ATerm.INT :
+    	return t2.equals(TBTerm.IntType);
     case ATerm.REAL :
-    	return false;
+    	return t2.equals(TBTerm.RealType);
     
     case ATerm.PLACEHOLDER:
-    	return compatibleType(((ATermPlaceholder) t1).getPlaceholder(), t2);
+    	return compatibleTypes(((ATermPlaceholder) t1).getPlaceholder(), t2);
     
     case ATerm.APPL:
        	ATermAppl ap1 = (ATermAppl) t1;
@@ -485,8 +496,12 @@ public class FunctionDescriptors {
 	    		if(ap1.getArity() == 0)
 	    			return true;
 	    		else
-	    			return compareListType((ATermList) t2, ap1.getArgument(0));
-	    	} else
+	    			return compatibleTypeList((ATermList) t2, ap1.getArgument(0));
+	    	} else if(t2.getType() == ATerm.INT && t1.equals(TBTerm.IntType))
+	    		return true;
+			else if(t2.getType() == ATerm.REAL && t1.equals(TBTerm.RealType))
+					return true;
+			else
 	    		return false;
 	  	}
   
@@ -498,7 +513,7 @@ public class FunctionDescriptors {
        	if(ap1.getArity() != ap2.getArity())
        		return false;
        	for(int i = 0; i < ap1.getArity() - 1; i++){
-       		if(!compatibleType(ap1.getArgument(i), ap2.getArgument(i)))
+       		if(!compatibleTypes(ap1.getArgument(i), ap2.getArgument(i)))
 				return false;
        	}
        	return true;
@@ -510,7 +525,7 @@ public class FunctionDescriptors {
     		if(lst1.getLength() != lst2.getLength())
     			return false;
     		for(int i = 0; i < lst1.getLength() -1; i++){
-    			if(!compatibleType(lst1.elementAt(i), lst2.elementAt(i)))
+    			if(!compatibleTypes(lst1.elementAt(i), lst2.elementAt(i)))
     				return false;
     		}
     		return true;
@@ -521,7 +536,7 @@ public class FunctionDescriptors {
     			if(ap.getArity() == 0)
     				return true;
     			else
-    				return compareListType((ATermList) t1, ap.getArgument(0));
+    				return compatibleTypeList((ATermList) t1, ap.getArgument(0));
     		} else
     			return false;
     	}

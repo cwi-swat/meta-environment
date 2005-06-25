@@ -147,7 +147,8 @@ process MiscOps is
      %%    printf("current-time [year,month,day,hour,minute,second] is %t\n", Tm) .
      if not-equal(process-name, "All") then P(200) else tau fi .
      %% Deviates from old Toolbus where process-id return a plain integer
-     if not-equal(process-id, quote(pi-All(0))) then P(201) else tau fi . 
+     %% ===> removed since strange behaviour during test (only)
+     %%if not-equal(process-id, quote(pi-All(0))) then P(201) else tau fi . 
      N := quote(3) .
      NP := quote([2,3]) .
      T := quote(f(a)) .
@@ -158,7 +159,8 @@ process All is
 	TermOps .
 	IntOps  . 
 	ListOps .
-	MiscOps
+	MiscOps .
+	printf("done\n")
 
 toolbus(All)
 

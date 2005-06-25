@@ -60,7 +60,7 @@ public class TscriptTest extends TestCase {
       sout.close();
     } catch (IOException e) {
     }
-    //System.err.println('"' + sout.toString() + '"');
+    System.err.println("*** Output of " + name + ": \"" + sout.toString() + '"');
     return equalOutput(sout.toString(), dir + name + ".out");
   }
 
@@ -112,7 +112,7 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Call3"));
   }
   
-  public void xtestExpr() {
+  public void testExpr() {
   	assertTrue(runTest("Expr"));
   }
   
@@ -120,4 +120,12 @@ public class TscriptTest extends TestCase {
   	assertTrue(runTest("Types"));
   }
 
+  public void testNote() {
+  	assertTrue(runTest("Notes"));
+  }
+  
+  public void testOther(){
+  	assertTrue(runTest("Sieve"));
+ 	assertTrue(runTest("Prod"));
+  }
 }

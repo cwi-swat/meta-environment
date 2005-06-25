@@ -162,7 +162,7 @@ public class TBTermTest extends TestCase {
 
   public ATerm check(String s) throws ToolBusException {
     Environment e = new Environment();
-    return FunctionDescriptors.checkType(factory.make(s), e, false);
+    return Functions.checkType(factory.make(s), e, false);
   }
 
   public void testStaticCheck() throws ToolBusException {
@@ -177,7 +177,7 @@ public class TBTermTest extends TestCase {
   }
 
   public boolean compatible(String s1, String s2) throws ToolBusException {
-    return FunctionDescriptors.compatibleType(factory.make(s1), factory.make(s2));
+    return Functions.compatibleTypes(factory.make(s1), factory.make(s2));
   }
 
   public void testCompatible() throws ToolBusException {

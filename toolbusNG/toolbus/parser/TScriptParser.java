@@ -3,11 +3,43 @@ package toolbus.parser;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import toolbus.*;
-import toolbus.atom.*;
-import toolbus.process.*;
-
-import aterm.*;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.atom.AckEvent;
+import toolbus.atom.Assign;
+import toolbus.atom.Create;
+import toolbus.atom.Delta;
+import toolbus.atom.Do;
+import toolbus.atom.Eval;
+import toolbus.atom.Event;
+import toolbus.atom.NoNote;
+import toolbus.atom.Print;
+import toolbus.atom.RecMsg;
+import toolbus.atom.RecNote;
+import toolbus.atom.RecVal;
+import toolbus.atom.ShutDown;
+import toolbus.atom.SndMsg;
+import toolbus.atom.SndNote;
+import toolbus.atom.Subscribe;
+import toolbus.atom.Tau;
+import toolbus.atom.UnSubscribe;
+import toolbus.process.Alternative;
+import toolbus.process.Disrupt;
+import toolbus.process.IfElse;
+import toolbus.process.IfThen;
+import toolbus.process.Iteration;
+import toolbus.process.LetDefinition;
+import toolbus.process.Merge;
+import toolbus.process.ProcessCall;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
+import toolbus.process.Sequence;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 /*
  *  NodeBuilder: auxiliary class to represent the build function for a particular node type.
@@ -64,7 +96,7 @@ class TScriptNodeBuilders {
    */
   protected static void defineBuilders() {
     /*
-     * Builders for small ATerms in the parse tree
+     * Variables and constants
      */
     define(new NodeBuilder("vardecl") {
       public Object build(Object args[]) {
@@ -122,7 +154,6 @@ class TScriptNodeBuilders {
     define(new NodeBuilder("realcon") {
       public Object build(Object args[]) {
       	String sreal = args[0].toString() + "." + args[1].toString();
-    	System.err.println("sreal = " + sreal);
       	return factory.makeReal(new Double(sreal).doubleValue());
       }
     });
@@ -150,7 +181,7 @@ class TScriptNodeBuilders {
     });
 
     /*
-     *  Builders for process operators
+     *  Process operators
      */
 
     define(new NodeBuilder("Sequence") {
@@ -252,6 +283,40 @@ class TScriptNodeBuilders {
         }
       }
     });
+    
+    /*
+     * Notes
+     */
+    
+    define(new NodeBuilder("Subscribe") {
+        public Object build(Object args[]) { 
+            return new Subscribe((ATerm) args[0]);
+        }
+      });
+    
+    define(new NodeBuilder("UnSubscribe") {
+        public Object build(Object args[]) { 
+            return new UnSubscribe((ATerm) args[0]);
+        }
+      });
+    
+    define(new NodeBuilder("SndNote") {
+        public Object build(Object args[]) { 
+            return new SndNote((ATerm) args[0]);
+        }
+      });
+    
+    define(new NodeBuilder("RecNote") {
+        public Object build(Object args[]) { 
+            return new RecNote((ATerm) args[0]);
+        }
+      });
+    
+    define(new NodeBuilder("NoNote") {
+        public Object build(Object args[]) { 
+            return new NoNote((ATerm) args[0]);
+        }
+      });
 
     /*
      *  Tool related atoms
@@ -311,16 +376,24 @@ class TScriptNodeBuilders {
   }
 
   /**
-   * Method build.
-   * @param t: ATerm to be traversed
-   * @return Object: the resulting Tree
+   * Method build traverses a given ATerm that has been produced by the parser 
+   * and creates a desired structure of class instances.
+   * The ATerm is traversed in a bottom-up fashion:
+   * - ATerms are just rebuilt, only string quotes are stripped where relevant
+   * - When an application has a function name that is defined as node builder,
+   *   that node builder is applied to its arguments. Since node builders can 
+   *   return arbitrary classes we have to be carefull with appropriate casting
+   *   between ATerm and Object.
+   * 
+   * @param t: input tree as produced by the parser
+   * @return Object: the resulting tree of class instances
    * @throws ToolBusException
    */
   
   public static Object build(ATerm t) throws ToolBusException {
 		switch (t.getType()) {
 		case ATerm.APPL:
-			System.err.println("build: " + t);
+			//System.err.println("build: " + t);
 			ATermAppl ap = (ATermAppl) t;
 			String name = ap.getName();
 			ATerm args[] = ap.getArgumentArray();
