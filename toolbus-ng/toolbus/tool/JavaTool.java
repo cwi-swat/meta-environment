@@ -9,7 +9,7 @@ import aterm.*;
 
 /**
  * ToolShield encapsulates an actual tool: it creates an instance of the class that implements the tool
- * and acts as communication channel between the tool and JavaTool. The fullpicture is:
+ * and acts as communication channel between the tool and JavaTool. The full picture is:
  * - JavaTool implements interface ToolInstance (the ToolBus/Tool interface)
  * - Javatool creates an instance of ToolShield (that runs as separate thread)
  * - Toolshield creates an instance of the tool class. Note that the tool constructor
@@ -156,7 +156,7 @@ public class JavaTool implements ToolInstance {
 
   public JavaTool(ToolDefinition toolDef) throws ToolBusException {
     System.err.println("JavaTool");
-    this.className = toolDef.getToolName();
+    this.className = toolDef.getCommand();
     try {
       toolClass = Class.forName(className);
     } catch (ClassNotFoundException e) {

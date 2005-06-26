@@ -21,15 +21,17 @@ exports
     "no-note" "(" TBTerm ")"			         -> Atom {cons("NoNote")}
     
   %% Tool atoms
-  %% rec-connect
-  %% rec-disconnect
-  %% snd-terminate
+
+    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("Execute")}
+    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("RecConnect")}
+    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("RecDisConnect")}
+    "snd-terminate" "(" TBTerm ")"               -> Atom {cons("SndTerminate")}
   
-    "rec-event" "(" TBTermList ")"			     -> Atom {cons("Event")}
-    "snd-ack-event" "(" TBTermList ")"			 -> Atom {cons("AckEvent")}
-    "snd-eval" "(" TBTermList ")" "," TBTerm     -> Atom {cons("Eval")}
-    "rec-value" "(" TBTermList ")" "," TBTerm    -> Atom {cons("Value")}
-    "snd-do" "(" TBTermList ")"				     -> Atom {cons("Do")}
+    "rec-event" "(" TBTerm "," TBTerm")"	     -> Atom {cons("Event")}
+    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("AckEvent")}
+    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("Eval")}
+    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("RecVal")}
+    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("Do")}
  
   %% Delta and Tau
   

@@ -23,15 +23,13 @@ public class ProcessInstance {
   private State currentState;
   private ToolBus toolbus;
   private ToolInstance toolInstance;
-  private String toolName;
   private ATerm transactionIdVar;
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
 
-  public ProcessInstance(ToolBus TB, ProcessCall call, String toolName) throws ToolBusException {
+  public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
     toolbus = TB;
     this.call = call;
-    this.toolName = toolName;
     processName = call.getName();
 
     definition = TB.getProcessDefinition(processName);
@@ -54,8 +52,6 @@ public class ProcessInstance {
       ((ProcessInstance) procs.elementAt(i)).findPartners(elements);
     }
 
-    toolInstance = createToolInstance();
-
     if (ToolBus.isVerbose()) {
       System.err.println(processId + ": " + call);
       System.err.println(processId + ": atoms: =" + elements);
@@ -69,16 +65,8 @@ public class ProcessInstance {
     //System.err.println("ProcessInstance (leaving): " + env);
   }
 
-  public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
-    this(TB, call, null);
-  }
-
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals), null);
-  }
-
-  public ProcessInstance(ToolBus TB, String name, ATermList actuals, String toolName) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals), toolName);
+    this(TB, new ProcessCall(name, actuals));
   }
 
   private ATermList makeSig() throws ToolBusException {
@@ -90,15 +78,14 @@ public class ProcessInstance {
     }
     return sig;
   }
-
-  public ToolInstance createToolInstance() throws ToolBusException {
-    if (toolName == null)
-      return null;
-    else {
-      ToolDefinition toolDef = new ToolDefinition(toolName, makeSig());
-      return new JavaTool(toolDef);
-    }
+/*
+  public ToolInstance createToolInstance(String toolName) throws ToolBusException {
+  	ToolDefinition TD = toolbus.getToolDefinition(toolName);
+    TD.setFunctionSignatures(makeSig());
+    toolInstance = new JavaTool(TD);
+    return toolInstance;
   }
+  */
 
   public ToolBus getToolBus() {
     return toolbus;

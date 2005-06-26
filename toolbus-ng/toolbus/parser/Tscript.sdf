@@ -1,12 +1,12 @@
 module Tscript
-imports ProcessDef
+imports ProcessDef ToolDef
 
 exports
-  sorts Tscript ToolBusConfig
+  sorts Tscript ToolBusConfig 
 
   context-free start-symbols
         Tscript
 
   context-free syntax
-    "toolbus" "(" {ProcessCall ","}+ ")" -> ToolBusConfig
-    ProcessDef*  ToolBusConfig		     -> Tscript {cons("Tscript")}
+    "toolbus" "(" {ProcessCall ","}+ ")"      -> ToolBusConfig
+    (ProcessDef | ToolDef)*  ToolBusConfig    -> Tscript {cons("Tscript")}

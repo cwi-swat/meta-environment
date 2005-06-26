@@ -5,6 +5,7 @@ import aterm.ATermList;
 public class ToolDefinition {
   private String toolName;
   private String hostName;
+  private String command;
   private int restartFrequency;
   private boolean internal;
   private String kind;
@@ -17,6 +18,16 @@ public class ToolDefinition {
     this.internal = true;
     this.kind = "java";
     this.functionSignatures = functionSignatures;
+  }
+  
+  public ToolDefinition(String toolName, String host, String kind, String command){
+    this.toolName = toolName;
+    this.hostName = host;
+    this.restartFrequency = 0;
+    this.internal = true;
+    this.kind = kind;
+    this.command = command;
+    this.functionSignatures = null;
   }
 
   public String getHostName() {
@@ -35,8 +46,12 @@ public class ToolDefinition {
     return kind;
   }
 
-  public String getToolName() {
+  public String getName() {
     return toolName;
+  }
+  
+  public String getCommand(){
+  	return command;
   }
 
   public int getRestartFrequency() {
@@ -49,6 +64,10 @@ public class ToolDefinition {
   
   public ATermList getFunctionSignatures(){
     return functionSignatures;
+  }
+  
+  public void setFunctionSignatures(ATermList sig){
+    functionSignatures = sig;
   }
 
 }

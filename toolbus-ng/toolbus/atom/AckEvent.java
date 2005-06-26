@@ -1,23 +1,24 @@
 package toolbus.atom;
 
 import toolbus.Environment;
-import toolbus.ToolBusException;
-import toolbus.process.*;
-import toolbus.tool.ToolInstance;
 import toolbus.State;
-
+import toolbus.ToolBusException;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolInstance;
 import aterm.ATerm;
+
 /**
  * @author paulk, Jul 31, 2002
  */
 public class AckEvent extends ToolAtom {
 
-  public AckEvent(ATerm toolTerm) {
+  public AckEvent(ATerm toolid, ATerm toolTerm) {
     super(toolTerm);
   }
   
   public ProcessExpression copy(){
-    return new AckEvent(getToolTerm());
+    return new AckEvent(null, getToolTerm());
   }
 
   public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {

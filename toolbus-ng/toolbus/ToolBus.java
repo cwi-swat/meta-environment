@@ -9,6 +9,9 @@ import java.util.*;
 import toolbus.parser.*;
 import toolbus.parser.TScriptParser;
 import toolbus.process.*;
+import toolbus.tool.JavaTool;
+import toolbus.tool.ToolDefinition;
+import toolbus.tool.ToolInstance;
 
 import aterm.*;
 
@@ -20,8 +23,10 @@ public class ToolBus {
 
   private static Random rand = new Random();
   private ATermFactory factory;
-  private Vector processes;
+  private Vector processes; // process instances
+  private Vector tools;     // tool instances
   private Vector procdefs;
+  private Vector tooldefs;
   private TScriptParser parser;
   private PrintWriter out;
 
@@ -42,7 +47,9 @@ public class ToolBus {
     factory = TBTerm.factory;
     this.out = out;
     processes = new Vector();
+    tools = new Vector();
     procdefs = new Vector();
+    tooldefs = new Vector();
     try {
       loadProperties();
     } catch (IOException e) {
@@ -223,15 +230,19 @@ public class ToolBus {
     }
     procdefs.add(PD);
   }
-
+  
   /**
-  * Add a process (with actuals) and attached tool name.
-  */
+   * Add a tool definition.
+   */
 
-  public ProcessInstance addProcess(String name, ATermList actuals, String toolname) throws ToolBusException {
-    ProcessInstance P = new ProcessInstance(this, name, actuals, toolname);
-    processes.add(P);
-    return P;
+  public void addToolDefinition(ToolDefinition TD) throws ToolBusException {
+    String name = TD.getName();
+    for (int i = 0; i < tooldefs.size(); i++) {
+      ToolDefinition TD2 = (ToolDefinition) tooldefs.elementAt(i);
+      if (name == TD2.getName())
+        throw new ToolBusException("duplicate definition of tool " + name);
+    }
+    tooldefs.add(TD);
   }
 
   /**
@@ -261,11 +272,14 @@ public class ToolBus {
     processes.add(P);
     return P;
   }
-
-  public ProcessInstance addProcess(ProcessCall call, String toolName) throws ToolBusException {
-    ProcessInstance P = new ProcessInstance(this, call, toolName);
-    processes.add(P);
-    return P;
+  
+  public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+  	ToolDefinition TD = getToolDefinition(toolName);
+    //TD.setFunctionSignatures(makeSig());
+  	TD.setFunctionSignatures(factory.makeList());
+    ToolInstance ti = new JavaTool(TD);
+    tools.add(ti);
+    return ti;
   }
 
   /**
@@ -279,6 +293,19 @@ public class ToolBus {
         return PD;
     }
     throw new ToolBusException("no definition for process " + name);
+  }
+  
+  /**
+   * Get a tool definition by name.
+   */
+
+  public ToolDefinition getToolDefinition(String name) throws ToolBusException {
+    for (int i = 0; i < tooldefs.size(); i++) {
+      ToolDefinition TD = (ToolDefinition) tooldefs.elementAt(i);
+      if (name == TD.getName())
+        return TD;
+    }
+    throw new ToolBusException("no definition for tool " + name);
   }
 
   /**
