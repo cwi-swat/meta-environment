@@ -1,13 +1,16 @@
-process P1 is 				// toolbus.tool.Example
-let R : int, Name : str
+process P1 is 				%% toolbus.tool.Example
+let R : int, Name : str, Tid : example
 in
-    eval msg("hello") .
-    value count(R?) .
-    print R .
-    event button(Name?)
-    print Name
-    ack-event Name
+    execute(example, Tid?) .
+    snd-eval(Tid, msg("hello")) .
+    rec-value(Tid, count(R?)) .
+    printf("R = %d\n", R) .
+    rec-event(Tid, button(Name?)).
+    printf("received button(%s)\n", Name) .
+    snd-ack-event(Tid, Name)
 endlet
+
+tool example is { host = "localhost" kind = "java" command ="toolbus.tool.Example"}
 
 process P2 is
 let N : int
@@ -15,8 +18,9 @@ in
    N := 0 .
    ( if less(N, 15)
      then
-	print N . N := add(N, 1)
+	    printf("N = %d\n", N) . N := add(N, 1)
      else
+        tau
      fi
   ) *
   if equal(N, 15) then shutdown("end-of-test") fi

@@ -1,2 +1,3 @@
-process P is let N : [str,str] in N := ["abc","def"] endlet
+process P is tau
+tool x is {host = "abc" kind = "def" command = "ghi"}
 toolbus(P)

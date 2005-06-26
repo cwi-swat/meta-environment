@@ -13,6 +13,7 @@ import toolbus.atom.Delta;
 import toolbus.atom.Do;
 import toolbus.atom.Eval;
 import toolbus.atom.Event;
+import toolbus.atom.Execute;
 import toolbus.atom.NoNote;
 import toolbus.atom.Print;
 import toolbus.atom.RecMsg;
@@ -35,6 +36,7 @@ import toolbus.process.ProcessCall;
 import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessExpression;
 import toolbus.process.Sequence;
+import toolbus.tool.ToolDefinition;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -186,6 +188,7 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("Sequence") {
       public Object build(Object args[]) {
+      	System.err.println("Sequence: " + args[0] + ",\n" + args[1]);
         return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
@@ -321,7 +324,42 @@ class TScriptNodeBuilders {
     /*
      *  Tool related atoms
      */
-
+    
+    define(new NodeBuilder("host") {
+        public Object build(Object args[]) {
+            System.err.println("host: " + args[0]);
+          return args[0];
+        }
+      });
+    
+    define(new NodeBuilder("kind") {
+        public Object build(Object args[]) {
+          return args[0];
+        }
+      });
+    
+    define(new NodeBuilder("command") {
+        public Object build(Object args[]) {
+          return args[0];
+        }
+      });
+    
+    define(new NodeBuilder("ToolDef") {
+        public Object build(Object args[]) {
+          System.err.println("ToolDef: " + args[0] + " , " + args[1]);
+          return new ToolDefinition(((ATermAppl) args[0]).getName(),
+          							((ATermAppl) args[1]).getName(),
+									((ATermAppl) args[2]).getName(),
+									((ATermAppl) args[3]).getName());
+        }
+    });
+    
+    define(new NodeBuilder("Execute") {
+        public Object build(Object args[]) {
+          return new Execute((ATerm) args[0], (ATerm) args[1]);
+        }
+      });
+    
     define(new NodeBuilder("Eval") {
       public Object build(Object args[]) {
         return new Eval((ATerm) args[0]);
@@ -348,7 +386,11 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("AckEvent") {
       public Object build(Object args[]) {
-        return new AckEvent((ATerm) args[0]);
+      	System.err.println("AckEvent: " + args[0] + " , " + args[1]);
+      	ATerm t1 = (ATerm) args[0];
+      	ATerm t2 = (ATerm) args[1];
+      	System.err.println("here");
+        return new AckEvent((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
@@ -420,7 +462,9 @@ class TScriptNodeBuilders {
 
 				for (int i = 0; i < args.length; i++)
 					oargs[i] = build(args[i]);
-				return nd.build(oargs);
+				Object res = nd.build(oargs);
+				//System.err.println("build: " + res);
+				return res;
 			}
 
 		case ATerm.LIST:
@@ -464,9 +508,12 @@ public class TScriptParser {
     ATermList decls = (ATermList) args[0];
 
     for (int i = 0; i < decls.getLength(); i++) {
-      ProcessDefinition def = (ProcessDefinition) TScriptNodeBuilders.build(decls.elementAt(i));
+      Object def = TScriptNodeBuilders.build(decls.elementAt(i));
       //System.err.println(def);
-      toolbus.addProcessDefinition(def);
+      if(def instanceof ProcessDefinition)
+      	toolbus.addProcessDefinition((ProcessDefinition) def);
+      else
+    	toolbus.addToolDefinition((ToolDefinition) def);
     }
     ATermList calls = (ATermList) interm.getChildAt(1);
 

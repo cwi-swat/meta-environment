@@ -1,0 +1,11 @@
+module ToolDef
+imports TBTerms
+
+exports
+  sorts ToolDef Host Kind Command
+
+  context-free syntax
+    "tool" Id  "is" "{" Host Kind Command "}"        -> ToolDef {cons("ToolDef")}
+    "kind" "=" String                                -> Kind    {cons("kind")}
+    "host" "=" String                                -> Host    {cons("host")}
+    "command" "=" String                             -> Command {cons("command")}
