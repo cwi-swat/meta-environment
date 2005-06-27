@@ -471,8 +471,13 @@ public class Functions {
   	
  	if(t1.getType() == ATerm.PLACEHOLDER)
   		t1 = ((ATermPlaceholder) t1).getPlaceholder();
+ 	if(TBTerm.isVar(t1) || TBTerm.isResVar(t1))
+ 		t1 = TBTerm.getVarType(t1);
+ 	
  	if(t2.getType() == ATerm.PLACEHOLDER)
   		t2 = ((ATermPlaceholder) t2).getPlaceholder();
+	if(TBTerm.isVar(t2) || TBTerm.isResVar(t2))
+ 		t2 = TBTerm.getVarType(t2);
  	
   	if(t1.equals(t2))
   		return true;

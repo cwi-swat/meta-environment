@@ -88,16 +88,13 @@ public class Main {
       T.execute();
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }      
   }
-
-  
-
   
   static void ParseTest(){
     ToolBus T = new ToolBus();
 
     try {
       //T.setVerbose(true);
-      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/tool0.tb");
+      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/Sieve.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

@@ -41,23 +41,19 @@ public class Execute extends Atom {
 	      throw new ToolBusException("malformed first argument in execute");
 	    if (!TBTerm.isResVar(rvar.value))
 	      throw new ToolBusException("second argument of execute should be a result variable");
+	    if(!Functions.compatibleTypes(tool.value, rvar.value))
+	      throw new ToolBusException("arguments of execute should have the same (tool) type");
 	  }
 	
 	public boolean execute() throws ToolBusException {
 	    if (!isEnabled())
 	      return false;
 	    String name = ((ATermAppl) tool.value).getName();
-	    //ATermList cargs = ((ATermAppl) tool.value).getArguments();
-	    //ATermList evargs = (ATermList) Functions.eval(cargs, getProcess(), getEnv());
-
 	    ToolBus TB = getProcess().getToolBus();
-
-	    ToolInstance TI = TB.addToolInstance(name);
-
-	    //getEnv().assignVar(rvar.value, TI.getToolId());
-	    getEnv().assignVar(rvar.value, TBTerm.True);
+	    ATermList sig = getProcess().makeSig();
+	    ToolInstance TI = TB.addToolInstance(name, sig);
+	    getEnv().assignVar(rvar.value, TI.getToolId());
+	    System.err.println("Execute.execute: " + getEnv());
 	    return nextState();
 	  }
-	
-
 }

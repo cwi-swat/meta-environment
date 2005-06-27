@@ -1,29 +1,36 @@
 package toolbus.atom;
-import toolbus.*;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
-
 import aterm.ATerm;
 
 /**
  * @author paulk, Aug 1, 2002
  */
 
-public class RecVal extends ToolAtom {
+public class RecVal extends Atom {
+	private Ref toolId;
+	private Ref result;
 
-  public RecVal(ATerm toolarg) {
-    super(toolarg);
+  public RecVal(ATerm toolId, ATerm result) {
+    super();
+	this.toolId = new Ref(toolId);
+	this.result = new Ref(result);
+	setAtomArgs(this.toolId, this.result);
   }
   
   public ProcessExpression copy(){
-    return new RecVal(getToolTerm());
+    return new RecVal(this.toolId.value, this.result.value);
   }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ToolInstance ti = getToolInstance();
-    if (ti.getValueFromTool(getSubstitutedId(), getToolTerm(), getEnv())){
+    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
+    ToolInstance ti = getToolBus().getToolInstance(tid);
+    ATerm res = TBTerm.substitute(result.value, getEnv());
+    if (ti.getValueFromTool(tid, res, getEnv())){
       return nextState();
     } else
       return false;
