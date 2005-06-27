@@ -273,13 +273,19 @@ public class ToolBus {
     return P;
   }
   
-  public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+  public ToolInstance addToolInstance(String toolName, ATermList sig) throws ToolBusException {
+  	System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
-    //TD.setFunctionSignatures(makeSig());
-  	TD.setFunctionSignatures(factory.makeList());
-    ToolInstance ti = new JavaTool(TD);
+    TD.setFunctionSignatures(sig);
+    ToolInstance ti = new JavaTool(TD, tools.size());
     tools.add(ti);
     return ti;
+  }
+  
+  public ToolInstance getToolInstance(ATerm tid){
+  	ATermInt arg = (ATermInt) ((ATermAppl) tid).getArgument(0);
+  	int n = arg.getInt();
+  	return (ToolInstance) tools.elementAt(n);
   }
 
   /**

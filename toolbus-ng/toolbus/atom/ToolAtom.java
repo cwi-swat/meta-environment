@@ -33,15 +33,16 @@ abstract class ToolAtom extends Atom {
   public ATerm getId() {
     return id.value;
   }
-
+/*
   public ToolInstance getToolInstance() throws ToolBusException {
-    ToolInstance ti = getProcess().getToolInstance();
+    ToolInstance ti = getToolBus().getToolInstance();
     if (ti == null) {
-      throw new ToolBusException("null tool instance");
+      throw new ToolBusException("getToolInstance: null tool instance");
     } else {
       return ti;
     }
   }
+  */
   
   public ATermList getMatchPattern(){
     return matchPattern;

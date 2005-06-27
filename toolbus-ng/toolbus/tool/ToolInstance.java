@@ -7,6 +7,8 @@ import aterm.*;
  * @author paulk, Jul 30, 2002
  */
 public interface ToolInstance {
+	
+  public ATerm getToolId();
 
   public void sndEvalToTool(ATerm id, ATermAppl call);
 

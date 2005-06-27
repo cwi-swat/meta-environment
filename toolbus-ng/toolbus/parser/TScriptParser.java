@@ -188,7 +188,6 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("Sequence") {
       public Object build(Object args[]) {
-      	System.err.println("Sequence: " + args[0] + ",\n" + args[1]);
         return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
@@ -327,7 +326,6 @@ class TScriptNodeBuilders {
     
     define(new NodeBuilder("host") {
         public Object build(Object args[]) {
-            System.err.println("host: " + args[0]);
           return args[0];
         }
       });
@@ -346,7 +344,6 @@ class TScriptNodeBuilders {
     
     define(new NodeBuilder("ToolDef") {
         public Object build(Object args[]) {
-          System.err.println("ToolDef: " + args[0] + " , " + args[1]);
           return new ToolDefinition(((ATermAppl) args[0]).getName(),
           							((ATermAppl) args[1]).getName(),
 									((ATermAppl) args[2]).getName(),
@@ -362,13 +359,13 @@ class TScriptNodeBuilders {
     
     define(new NodeBuilder("Eval") {
       public Object build(Object args[]) {
-        return new Eval((ATerm) args[0]);
+        return new Eval((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("RecVal") {
       public Object build(Object args[]) {
-        return new RecVal((ATerm) args[0]);
+        return new RecVal((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
@@ -386,10 +383,6 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("AckEvent") {
       public Object build(Object args[]) {
-      	System.err.println("AckEvent: " + args[0] + " , " + args[1]);
-      	ATerm t1 = (ATerm) args[0];
-      	ATerm t2 = (ATerm) args[1];
-      	System.err.println("here");
         return new AckEvent((ATerm) args[0], (ATerm) args[1]);
       }
     });

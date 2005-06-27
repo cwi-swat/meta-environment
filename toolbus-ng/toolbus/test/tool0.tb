@@ -2,6 +2,7 @@ process P1 is 				%% toolbus.tool.Example
 let R : int, Name : str, Tid : example
 in
     execute(example, Tid?) .
+    printf("tool id = %t\n", Tid) .
     snd-eval(Tid, msg("hello")) .
     rec-value(Tid, count(R?)) .
     printf("R = %d\n", R) .

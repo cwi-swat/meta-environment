@@ -132,9 +132,11 @@ class ToolShield extends Thread implements ToolBridge {
  */
 
 public class JavaTool implements ToolInstance {
+  //static private int instanceCount = 0;
   private String className;
   private Class toolClass;
   private Constructor toolConstructor;
+  private ATerm toolId;
   private Thread toolThread;
   private Object toolInstance;
   private Hashtable methodTable;
@@ -154,7 +156,7 @@ public class JavaTool implements ToolInstance {
    * tool and a list of function signatures.
    */
 
-  public JavaTool(ToolDefinition toolDef) throws ToolBusException {
+  public JavaTool(ToolDefinition toolDef, int toolInstance) throws ToolBusException {
     System.err.println("JavaTool");
     this.className = toolDef.getCommand();
     try {
@@ -170,6 +172,8 @@ public class JavaTool implements ToolInstance {
     checkToolSignature(toolDef.getFunctionSignatures());
     toolShield = new ToolShield(toolConstructor, this);
     toolShield.start();
+    AFun afun = TBTerm.factory.makeAFun(toolDef.getName(), 1, false);
+    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolInstance));
   }
 
   /**
@@ -271,9 +275,9 @@ public class JavaTool implements ToolInstance {
       ATermAppl sig = (ATermAppl) sigs.getFirst();
       sigs = sigs.getNext();
       if (sig.getName().equals("Eval")) {
-        ATerm call = sig.getArguments().getFirst();
-        String name = ((ATermAppl) call).getName();
-        ATermList args = ((ATermAppl) call).getArguments();
+      	ATermAppl call = (ATermAppl) sig.getArgument(1);
+        String name = call.getName();
+        ATermList args = call.getArguments();
         methodTable.put(name, findMethod(name, args, false));
       }
       if (sig.getName().equals("AckEvent")) {
@@ -297,6 +301,10 @@ public class JavaTool implements ToolInstance {
     }
   }
 
+  public ATerm getToolId(){
+  	return toolId;
+  }
+  
   /**
    * Send an evaluation request to the ToolShield.
    * (the answer will be returned by the ToolShield using addValue)
@@ -319,7 +327,7 @@ public class JavaTool implements ToolInstance {
    */
 
   private void sndRequestToTool(ATerm id, Integer operation, ATermAppl call) {
-    System.err.println("sndRequestToTool(" + id + ", " + operation + ", " + call);
+    System.err.println("sndRequestToTool(" + id + ", " + operation + ", " + call + ")");
     String name = call.getName();
     ATerm[] args = call.getArgumentArray();
     Object actuals[] = new Object[args.length];

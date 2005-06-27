@@ -22,7 +22,7 @@ public class ProcessInstance {
   private State elements;
   private State currentState;
   private ToolBus toolbus;
-  private ToolInstance toolInstance;
+ // private ToolInstance toolInstance;
   private ATerm transactionIdVar;
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
@@ -62,31 +62,23 @@ public class ProcessInstance {
         System.err.println("env = " + a.getEnv());
       }
     }
-    //System.err.println("ProcessInstance (leaving): " + env);
   }
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
     this(TB, new ProcessCall(name, actuals));
   }
 
-  private ATermList makeSig() throws ToolBusException {
+  public ATermList makeSig() throws ToolBusException {
     ATermList sig = (ATermList) TBTerm.factory.make("[]");
     Vector atoms = call.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       ATerm pat = ((Atom) atoms.get(i)).toATerm();
       sig = TBTerm.factory.makeList(pat, sig);
     }
+    System.err.println("makeSig: " + sig);
     return sig;
   }
-/*
-  public ToolInstance createToolInstance(String toolName) throws ToolBusException {
-  	ToolDefinition TD = toolbus.getToolDefinition(toolName);
-    TD.setFunctionSignatures(makeSig());
-    toolInstance = new JavaTool(TD);
-    return toolInstance;
-  }
-  */
-
+  
   public ToolBus getToolBus() {
     return toolbus;
   }
@@ -99,11 +91,8 @@ public class ProcessInstance {
     return processName;
   }
 
-  public ToolInstance getToolInstance() {
-    return toolInstance;
-  }
-
   public void terminate(String msg) {
+  	/*
     if (toolInstance != null) {
       try {
       	System.err.println("terminate should be fixed");
@@ -113,7 +102,9 @@ public class ProcessInstance {
         throw new ToolBusInternalError("no transactionId in process");
       }
     }
+    */
   }
+  
 
   public void findPartners(State a) {
     elements.findPartners(a);

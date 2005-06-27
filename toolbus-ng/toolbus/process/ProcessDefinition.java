@@ -8,6 +8,11 @@ import toolbus.*;
 import aterm.*;
 import toolbus.atom.EndScope;
 
+
+/**
+ * ProcessDefinition describes the name, formal parameters and body of a
+ * defined process.
+ */
 public class ProcessDefinition {
 
   private String name;
@@ -18,8 +23,6 @@ public class ProcessDefinition {
     this.name = name;
     this.formals = formals;
     this.PE = PE;
-
-    //System.err.println("procdef " + name + " " + formals + " " + PE);
   }
 
   public ProcessDefinition(String name, ProcessExpression PE) {
@@ -29,16 +32,6 @@ public class ProcessDefinition {
   public String getName() {
     return name;
   }
-
-  /*
-  public void enterScope(Environment env, ATermList actuals) throws ToolBusException {
-    env.introduceBindings(formals, actuals);
-  }
-
-  public void leaveScope(Environment env) {
-    env.removeVars(formals.getLength());
-  }
-  */
 
   public ATermList getFormals() {
   	return formals;
