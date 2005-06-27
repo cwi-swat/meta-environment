@@ -1,37 +1,36 @@
 package toolbus.atom;
 
-import toolbus.Environment;
-import toolbus.State;
+import toolbus.TBTerm;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
-import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 
 /**
  * @author paulk, Jul 31, 2002
  */
-public class AckEvent extends ToolAtom {
+public class AckEvent extends Atom {
+	private Ref toolId;
+	private Ref event;
 
-  public AckEvent(ATerm toolid, ATerm toolTerm) {
-    super(toolTerm);
+  public AckEvent(ATerm toolId, ATerm event) {
+ 	super();
+	this.toolId = new Ref(toolId);
+	this.event = new Ref(event);
+	setAtomArgs(this.toolId, this.event);
   }
   
   public ProcessExpression copy(){
-    return new AckEvent(null, getToolTerm());
-  }
-
-  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-    super.compile(P, env, follow);
+    return new AckEvent(this.toolId.value, this.event.value);
   }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-
-    ToolInstance ti = getToolInstance();
-
-    ti.sndAckToTool(getSubstitutedId(), getSubstitutedCall());
+    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
+    ATerm ev = TBTerm.substitute(event.value, getEnv());
+    ToolInstance ti = getToolBus().getToolInstance(tid);
+    ti.sndAckToTool(ev);
     return nextState();
   }
 }

@@ -32,7 +32,6 @@ public class Iteration extends ProcessExpression {
   }
 
   public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-
     left.compile(P, env, getFirst());
     right.compile(P, env, follow);
     setFollow(follow);

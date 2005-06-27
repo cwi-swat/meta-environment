@@ -22,9 +22,6 @@ public class Main {
     //ToolTest();
   }
 
-  
-
- 
   static void DisruptTest(){
     
     ProcessExpression Pa = new Print(aterms.make("[a]"));
@@ -94,7 +91,7 @@ public class Main {
 
     try {
       //T.setVerbose(true);
-      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/Sieve.tb");
+      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/parser/tmp.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

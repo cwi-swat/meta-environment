@@ -4,75 +4,49 @@ package toolbus.process;
 
 import java.util.Stack;
 
-
-import toolbus.*;
+import toolbus.Environment;
 import toolbus.State;
-import aterm.*;
+import toolbus.StateElement;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import aterm.ATerm;
 
 /**
  * @author paulk, Aug 7, 2002
  */
-public class Merge extends ProcessExpression implements StateElement {
+public class Merge extends ProcessExpression {
   
-  private ProcessExpression expansion;
+  private ProcessExpression lmexpansion;
   private ProcessExpression left;
   private ProcessExpression right;
-
-  private State first;
-  private State follow;
-
-  private State state[];
-  private static final int LEFT = 0;
-  private static final int RIGHT = 1;
- 
-  private State startState;
-  private ProcessInstance processInstance;
 
   public Merge(ProcessExpression left, ProcessExpression right) {
     this.left = left;
     this.right = right;
-    startState = new State();
-    startState.add(this);
+    lmexpansion = new Alternative(new LeftMerge(left, right), new LeftMerge(right, left));
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    processInstance = P;
-    left.expand(P, calls);
-    right.expand(P, calls);
-    first = left.getFirst().union(right.getFirst());
+   lmexpansion.expand(P, calls);
   }
 
   public void compile(ProcessInstance processInstance, Environment env, State followSet) throws ToolBusException {
-    left.compile(processInstance, env, followSet);
-    right.compile(processInstance, env, followSet);
-    this.follow = followSet;
-    state = new State[] { left.getFirst(), right.getFirst()};
+  	lmexpansion.compile(processInstance, env, followSet);
   }
   
   public void replaceFormals(Environment env) throws ToolBusException{
-	left.replaceFormals(env);
-	right.replaceFormals(env);
+	lmexpansion.replaceFormals(env);
   }
 
   public ProcessExpression copy() {
     return new Merge(left, right);
   }
 
-  public State getFirst() {
-    return first;
-  }
-
-  public State getStartState() {
-    return startState;
-  }
-
-  public State getFollow() {
-    return follow;
-  }
-
   public State getAtoms() {
-    return left.getAtoms().union(right.getAtoms());
+    return lmexpansion.getAtoms();
   }
+  
+  /*
 
   // Implementation of the StateElement interface
 
@@ -108,5 +82,5 @@ public class Merge extends ProcessExpression implements StateElement {
     } else
       return false;
   }
-
+*/
 }

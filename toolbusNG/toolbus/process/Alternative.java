@@ -46,5 +46,4 @@ public class Alternative extends ProcessExpression {
   public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
-
 }

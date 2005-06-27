@@ -56,5 +56,4 @@ public class ProcessDefinition {
   public String toString() {
     return "ProcessDefinition(" + name + ", " + formals + ", " + PE + ")";
   }
-
 }

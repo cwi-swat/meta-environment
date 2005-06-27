@@ -29,8 +29,8 @@ public class RecVal extends Atom {
       return false;
     ATerm tid = TBTerm.substitute(toolId.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
-    ATerm res = TBTerm.substitute(result.value, getEnv());
-    if (ti.getValueFromTool(tid, res, getEnv())){
+    //ATerm res = TBTerm.substitute(result.value, getEnv());
+    if (ti.getValueFromTool(result.value, getEnv())){
       return nextState();
     } else
       return false;
