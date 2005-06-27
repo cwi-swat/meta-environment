@@ -49,16 +49,12 @@ abstract public class ProcessExpression {
 	abstract public void expand(ProcessInstance processInstance, Stack calls)
 			throws ToolBusException;
 
-	public void compile(ProcessInstance processInstance, Environment env, State followSet)
-			throws ToolBusException {
-	}
-	
+	abstract public void compile(ProcessInstance processInstance, Environment env, State followSet)
+			throws ToolBusException;
 	
 	abstract public void replaceFormals(Environment env) throws ToolBusException;
 
 	abstract public ProcessExpression copy();
 
-	public State getAtoms() {
-		return null;
-	}
+	abstract public State getAtoms();
 }

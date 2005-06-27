@@ -7,8 +7,8 @@ in
     rec-value(Tid, count(R?)) .
     printf("R = %d\n", R) .
     rec-event(Tid, button(Name?)).
-    printf("received button(%s)\n", Name) .
-    snd-ack-event(Tid, Name)
+    printf("received %t\n", button(Name)) .
+    snd-ack-event(Tid, button(Name))
 endlet
 
 tool example is { host = "localhost" kind = "java" command ="toolbus.tool.Example"}
@@ -17,14 +17,14 @@ process P2 is
 let N : int
 in
    N := 0 .
-   ( if less(N, 15)
+   ( if less(N, 50)
      then
 	    printf("N = %d\n", N) . N := add(N, 1)
      else
         tau
      fi
   ) *
-  if equal(N, 15) then shutdown("end-of-test") fi
+  if equal(N, 50) then shutdown("end-of-test") fi
 endlet
 
 toolbus(P1, P2)

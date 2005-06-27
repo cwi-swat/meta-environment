@@ -371,13 +371,13 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("Do") {
       public Object build(Object args[]) {
-        return new Do((ATerm) args[0]);
+        return new Do((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("Event") {
       public Object build(Object args[]) {
-        return new Event((ATerm) args[0]);
+        return new Event((ATerm) args[0], (ATerm) args[1]);
       }
     });
 

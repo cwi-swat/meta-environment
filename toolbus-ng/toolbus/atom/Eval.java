@@ -31,7 +31,7 @@ public class Eval extends Atom {
     ATerm req = TBTerm.substitute(request.value, getEnv());
     //System.err.println("Eval: " + tid + ", " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
-    ti.sndEvalToTool(tid, (ATermAppl) req);
+    ti.sndEvalToTool((ATermAppl) req);
     return nextState();
   }
 
