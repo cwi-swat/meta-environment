@@ -29,11 +29,8 @@ public class Disrupt extends ProcessExpression {
   public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
     left.compile(P, env, follow);
     right.compile(P, env, follow);
-
     State rightFirst = right.getFirst();
-
     setFollow(follow);
-
     Vector atoms = left.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       Atom at = (Atom) atoms.get(i);
@@ -51,5 +48,4 @@ public class Disrupt extends ProcessExpression {
   public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
-
 }
