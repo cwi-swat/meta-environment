@@ -100,23 +100,16 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
 
   public String toString() {
-    String pidStr;
-    if (processInstance != null) {
-      pidStr = "[" + processInstance.getProcessId().toString() + "]";
-    } else {
-      pidStr = "";
-    }
-
+    String pidStr = (processInstance != null) ? "[" + processInstance.getProcessId().toString() + "]" : "";
     String args = "(";
     String sep = "";
+    
     for (int i = 0; i < atomArgs.length; i++) {
       args = args + sep + atomArgs[i].value;
       sep = ", ";
     }
     args = args + ")";
-
     String strtest = (tests == null) ? "" : " if " + tests;
-
     return shortName() + pidStr + args + strtest;
   }
 
@@ -133,8 +126,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return TBTerm.factory.makeAppl(afun, pat);
   }
 
-  public void expand(ProcessInstance P, Stack calls) {
-  }
+  public void expand(ProcessInstance P, Stack calls) {}
 
   public void compile(ProcessInstance processInstance, Environment env, State follow) throws ToolBusException {
   	this.processInstance = processInstance;
@@ -183,12 +175,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return true;
   }
 
-  public boolean execute() throws ToolBusException {
-    if (!isEnabled()) {
-      return false;
-    } else {
-      return nextState();
-    }
+  public boolean execute() throws ToolBusException{
+  	return isEnabled() ? nextState() : false;
   }
-
 }
