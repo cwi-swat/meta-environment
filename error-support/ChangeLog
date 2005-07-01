@@ -8,6 +8,9 @@ Fri Jun  3 14:49:53 CEST 2005 <jurgenv@cwi.nl>
  * Regenerated java errorapi and locationapi with newest apigen
  * Bumped to 1.2
 
+Fri Jul  1 16:36:50 CEST 2005 <jurgenv@cwi.nl>
+ * error-diff.c: Replaced asserts by error messages with graceful exits.
+
 Mon May  9 11:14:10 CEST 2005 <kooiker@cwi.nl>
  * package,configure.ac:
    - Remove aterm-java dependency

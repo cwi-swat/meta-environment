@@ -158,10 +158,18 @@ int main (int argc, char *argv[])
 
   
   input1 = ATreadFromNamedFile(input_file_name1);
-  assert(input1 != NULL);
+  if (input1 == NULL) {
+	ATwarning("%s: no input files given\n", myname);
+        usage();
+	exit(1);
+  }
 
   input2 = ATreadFromNamedFile(input_file_name2);
-  assert(input2 != NULL);
+  if (input2 == NULL) {
+	ATwarning("%s: no second input file given\n", myname);
+        usage();
+	exit(1);
+  }
 
   if (ERR_errorEqual(ERR_ErrorFromTerm(input1), ERR_ErrorFromTerm(input2))) {
     return 0;
