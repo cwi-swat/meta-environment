@@ -1,19 +1,25 @@
 process P1 is 				%% toolbus.tool.Example
-let R : int, Name : str, Tid : example
+let R : int, Tid : example, Pid : term
 in
     execute(example, Tid?) .
+    create(P2(Tid), Pid?) .
     printf("tool id = %t\n", Tid) .
     snd-eval(Tid, msg("hello")) .
     rec-value(Tid, count(R?)) .
-    printf("R = %d\n", R) .
+    printf("R = %d\n", R)
+endlet
+
+tool example is { host = "localhost" kind = "java" command ="toolbus.tool.Example"}
+
+process P2(Tid : example) is
+let Name : str
+in
     rec-event(Tid, button(Name?)).
     printf("received %t\n", button(Name)) .
     snd-ack-event(Tid, button(Name))
 endlet
 
-tool example is { host = "localhost" kind = "java" command ="toolbus.tool.Example"}
-
-process P2 is
+process P3 is
 let N : int
 in
    N := 0 .
@@ -27,4 +33,4 @@ in
   if equal(N, 50) then shutdown("end-of-test") fi
 endlet
 
-toolbus(P1, P2)
+toolbus(P1, P3)

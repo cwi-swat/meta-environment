@@ -69,5 +69,12 @@ public class ToolDefinition {
   public void setFunctionSignatures(ATermList sig){
     functionSignatures = sig;
   }
-
+  
+  public ToolShield makeToolShield(ToolInstance ti){
+  	if(kind == "java")
+  		return new JavaToolShield(this, ti);
+  	else
+  		System.err.println("Unknown tool kind:" + kind);
+  	return null;
+  }
 }

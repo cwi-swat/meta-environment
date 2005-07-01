@@ -1,13 +1,20 @@
 package toolbus.process;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Stack;
+import java.util.Vector;
 
-import toolbus.*;
-import toolbus.atom.*;
-import toolbus.tool.*;
-import toolbus.tool.ToolInstance;
-
-import aterm.*;
+import toolbus.Environment;
+import toolbus.Functions;
+import toolbus.State;
+import toolbus.StateElement;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermList;
 
 /**
  * @author paulk, Jul 23, 2002
@@ -51,7 +58,7 @@ public class ProcessInstance {
     for (int i = 0; i < procs.size(); i++) {
       ((ProcessInstance) procs.elementAt(i)).findPartners(elements);
     }
-
+    addAtomSignature();
     if (ToolBus.isVerbose()) {
       System.err.println(processId + ": " + call);
       System.err.println(processId + ": atoms: =" + elements);
@@ -68,15 +75,12 @@ public class ProcessInstance {
     this(TB, new ProcessCall(name, actuals));
   }
 
-  public ATermList makeSig() throws ToolBusException {
-    ATermList sig = (ATermList) TBTerm.factory.make("[]");
+  private void addAtomSignature() throws ToolBusException {
     Vector atoms = call.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       ATerm pat = ((Atom) atoms.get(i)).toATerm();
-      sig = TBTerm.factory.makeList(pat, sig);
+      toolbus.addToSignature(pat);
     }
-    System.err.println("makeSig: " + sig);
-    return sig;
   }
   
   public ToolBus getToolBus() {

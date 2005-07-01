@@ -8,7 +8,7 @@ import aterm.*;
  * @author paulk, Jul 30, 2002
  */
 public class Example extends Frame implements ActionListener {
-  private ToolBridge bridge;
+  private ToolShield shield;
   private Button button;
   private int count = 0;
   private ATermFactory factory;
@@ -16,10 +16,10 @@ public class Example extends Frame implements ActionListener {
   /**
    * Constructor for Example.
    */
-  public Example(ToolBridge bridge) {
+  public Example(ToolShield shield) {
     System.out.println("Yep, Example instance created");
-    this.bridge = bridge;
-    factory = bridge.getFactory();
+    this.shield = shield;
+    factory = shield.getFactory();
 
     // Build the user interface: just a single button
     button = new Button("Button");
@@ -34,7 +34,7 @@ public class Example extends Frame implements ActionListener {
     if (event.getSource() == button) {
       System.out.println("actionPerformed(" + event + ")");
       // When the user presses the button, we send an event to the ToolBus
-      bridge.sndEventToToolBus(factory.make("button(<str>)", button.getLabel()));
+      shield.sndEventToToolBus(factory.make("button(<str>)", button.getLabel()));
     }
   }
 
@@ -59,7 +59,7 @@ public class Example extends Frame implements ActionListener {
   public void terminate(String msg) {
     // Just exit when the ToolBus terminates
     dispose();  // of this frame
-    bridge.terminate(msg);
+    //shield.terminate(msg);
   }
 
 }
