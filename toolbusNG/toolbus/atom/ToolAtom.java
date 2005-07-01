@@ -1,10 +1,16 @@
 package toolbus.atom;
 
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.State;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.ToolBusInternalError;
 import toolbus.process.ProcessInstance;
-import toolbus.tool.ToolInstance;
-
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 /**
  * @author paulk, Aug 7, 2002

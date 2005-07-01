@@ -15,7 +15,6 @@ import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermList;
 
 /**
  * Execute a tool
@@ -50,8 +49,7 @@ public class Execute extends Atom {
 	      return false;
 	    String name = ((ATermAppl) tool.value).getName();
 	    ToolBus TB = getProcess().getToolBus();
-	    ATermList sig = getProcess().makeSig();
-	    ToolInstance TI = TB.addToolInstance(name, sig);
+	    ToolInstance TI = TB.addToolInstance(name);
 	    getEnv().assignVar(rvar.value, TI.getToolId());
 	    System.err.println("Execute.execute: " + getEnv());
 	    return nextState();

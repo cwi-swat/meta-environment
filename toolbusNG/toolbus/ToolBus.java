@@ -1,22 +1,33 @@
-/**
+ /**
  * @author paulk
  */
 
 package toolbus;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Vector;
 
-import toolbus.parser.*;
+import toolbus.parser.ExternalParser;
 import toolbus.parser.TScriptParser;
-import toolbus.process.*;
-import toolbus.tool.JavaTool;
+import toolbus.process.ProcessCall;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
-
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermInt;
+import aterm.ATermList;
 
 /**
- * ToolBus implements the complete behaviour of one ToolBus.
+ * ToolBus implements the behaviour of one ToolBus.
  */
 
 public class ToolBus {
@@ -27,6 +38,8 @@ public class ToolBus {
   private Vector tools;     // tool instances
   private Vector procdefs;
   private Vector tooldefs;
+  private HashSet atomSignature; 	// signature of all atoms in executing processes
+  									// TODO: should this not be for ALL defined processes? 
   private TScriptParser parser;
   private PrintWriter out;
 
@@ -50,6 +63,7 @@ public class ToolBus {
     tools = new Vector();
     procdefs = new Vector();
     tooldefs = new Vector();
+    atomSignature = new HashSet();
     try {
       loadProperties();
     } catch (IOException e) {
@@ -59,7 +73,7 @@ public class ToolBus {
   }
 
   /**
-   * Constructir with implicit PrintWriter
+   * Constructor with implicit PrintWriter
    */
 
   public ToolBus() {
@@ -273,11 +287,20 @@ public class ToolBus {
     return P;
   }
   
-  public ToolInstance addToolInstance(String toolName, ATermList sig) throws ToolBusException {
+  /** addToolInstance adds a new tool instance
+   * 
+   * @param toolName name of the tool
+   * @param sig signature of tool atoms
+   * @return the tool instance
+   * @throws ToolBusException
+   */
+  
+  public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+  	ATermList sig = getSignature();
   	System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
     TD.setFunctionSignatures(sig);
-    ToolInstance ti = new JavaTool(TD, tools.size());
+    ToolInstance ti = new ToolInstance(TD);
     tools.add(ti);
     return ti;
   }
@@ -313,6 +336,19 @@ public class ToolBus {
     }
     throw new ToolBusException("no definition for tool " + name);
   }
+  
+  public void addToSignature(ATerm asig){
+  	atomSignature.add(asig);
+  }
+  
+  private ATermList getSignature(){
+  	ATermList res = factory.makeList();
+    Iterator it = atomSignature.iterator();
+    while(it.hasNext()){
+    	res = factory.makeList((ATerm) it.next(), res);
+    }
+    return res;
+  }
 
   /**
    * Shutdown of this ToolBus.
@@ -320,14 +356,18 @@ public class ToolBus {
 
   public void shutdown(String msg) throws ToolBusDeathException {
     for (int i = 0; i < processes.size(); i++) {
-      ProcessInstance P = (ProcessInstance) processes.elementAt(i);
-      P.terminate(msg);
+      ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
+      pi.terminate(msg);
+    }
+    for(int i = 0; i < tools.size(); i++){
+    	ToolInstance ti = (ToolInstance) tools.elementAt(i);
+    	ti.terminate(msg);
     }
     throw new ToolBusDeathException(msg);
   }
 
   /**
-   * Execute all the processes.
+   * Execute all the processes in this ToolBus.
    */
 
   public void execute() {
