@@ -95,6 +95,8 @@ class TScriptNodeBuilders {
 
   /**
    * Method defineBuilders.
+   * TODO: variable names in Tscripts that coincide with the names below cause havoc,
+   * e.g., the Tscript variable Delta
    */
   protected static void defineBuilders() {
     /*

@@ -79,7 +79,7 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	public void run() {
-		System.err.println("run of ToolShield called");
+		System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
 		while (true) {
 			while (!requestsForTool.isEmpty())
 				handleRequestForTool();

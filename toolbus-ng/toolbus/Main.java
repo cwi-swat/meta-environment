@@ -90,8 +90,8 @@ public class Main {
     ToolBus T = new ToolBus();
 
     try {
-      //T.setVerbose(true);
-      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/test/tool0.tb");
+      T.setVerbose(true);
+      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/tool/examples/tool1.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

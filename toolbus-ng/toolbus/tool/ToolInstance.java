@@ -72,14 +72,13 @@ public class ToolInstance {
   synchronized public void sndDoToTool(ATermAppl call) {
     toolShield.sndRequestToTool(DO, call);
   }
-
  
   /**
    * Send an acknowledgement to a previous event
    */
 
   synchronized public void sndAckToTool(ATerm eventTerm) throws ToolBusException {
-    System.err.println("sndAckToTool:" + eventTerm);
+    //System.err.println("sndAckToTool:" + eventTerm);
     int eventindex = pendingEvents.indexOf(eventTerm);
     if (eventindex < 0 ) {
       throw new ToolBusException("cannot acknowledge event: " + eventTerm);
@@ -119,7 +118,7 @@ public class ToolInstance {
 
   synchronized public boolean getValueFromTool(ATerm trm, Environment env)
   throws ToolBusException {
-  	System.err.println("getValueFormTool: " + trm);
+  	//System.err.println("getValueFromTool: " + trm);
   	if (valuesFromTool.isEmpty()) {
   		return false;
   	} else {
@@ -141,7 +140,7 @@ public class ToolInstance {
    */
 
   synchronized public boolean getEventFromTool(ATerm trm, Environment env) {
-    System.err.println("getEventFromTool: " + " " + trm);
+    //System.err.println("getEventFromTool: " + " " + trm);
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
         Object event[] = (Object[]) eventsFromTool.get(i);

@@ -167,6 +167,12 @@ public class JavaToolShield extends ToolShield {
         ATermList args = call.getArguments();
         methodTable.put(name, findMethod(name, args, false));
       }
+      if (sig.getName().equals("Do")) {
+      	ATermAppl call = (ATermAppl) sig.getArgument(1);
+        String name = call.getName();
+        ATermList args = call.getArguments();
+        methodTable.put(name, findMethod(name, args, true));
+      }
       if (sig.getName().equals("AckEvent")) {
         String name = "ackEvent";
         ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
