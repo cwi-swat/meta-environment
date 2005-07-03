@@ -1,23 +1,27 @@
-package toolbus.tool;
-import java.awt.*;
-import java.awt.event.*;
+package toolbus.tool.examples;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import aterm.*;
+import toolbus.tool.ToolShield;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 30, 2002
  */
-public class Example extends Frame implements ActionListener {
+public class ButtonTool extends Frame implements ActionListener {
   private ToolShield shield;
   private Button button;
-  private int count = 0;
   private ATermFactory factory;
 
   /**
-   * Constructor for Example.
+   * Constructor for ButtonTool.
+   * @param shield the ToolShield that encapsulates the execution of this tool
    */
-  public Example(ToolShield shield) {
-    System.out.println("Yep, Example instance created");
+  public ButtonTool(ToolShield shield) {
+    System.out.println("ButtonTool instance created");
     this.shield = shield;
     factory = shield.getFactory();
 
@@ -38,19 +42,6 @@ public class Example extends Frame implements ActionListener {
     }
   }
 
-  public ATerm msg(String message) {
-    // Print the incoming message
-    System.out.println("Example tool received msg: " + message);
-    try {
-      Thread.sleep(5);
-    } catch (InterruptedException e) {
-      System.out.println("msg: " + e);
-    }
-
-    // Increase the counter and return the current value to the ToolBus
-    return factory.make("count(<int>))", new Integer(count++));
-  }
-
   public void ackEvent(ATerm event) {
     // This simple tool ignores event acknowledgements
     System.err.println("Example.ackEvent(" + event + ")");
@@ -59,7 +50,6 @@ public class Example extends Frame implements ActionListener {
   public void terminate(String msg) {
     // Just exit when the ToolBus terminates
     dispose();  // of this frame
-    //shield.terminate(msg);
   }
 
 }

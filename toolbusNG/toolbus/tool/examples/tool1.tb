@@ -1,0 +1,27 @@
+process P1 (Name : str, S : int, I : int, Max : int) is 		
+let R : int, Tid : counter, Pid : term, N : int
+in
+
+    execute(counter, Tid?) .
+    printf("%s: tool id = %t\n", Name, Tid) .
+    snd-do(Tid, setStartValue(S)) .
+    N := 0 .
+    ( if less(N, Max)
+     then
+	     snd-eval(Tid, getCounter(I)) .
+         rec-value(Tid, count(R?)) .
+    	 printf("%s: R = %d\n", Name, R) .
+    	 printf("%s: N = %d\n", Name, N) .
+    	 N := add(N, 1)
+     else
+        tau
+     fi
+    ) *
+    if equal(N, Max) then tau fi
+   
+endlet
+
+tool counter is { host = "localhost" kind = "java" command ="toolbus.tool.examples.CounterTool"}
+
+%%toolbus(P1("P1A", 1, 1, 10), P1("P1B", 100, 1, 10))
+toolbus(P1("P1A", 1, 1, 10))
