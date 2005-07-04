@@ -96,6 +96,7 @@ static void reductions(ItemSet vertex)
   int len, iptr, prodnr;
   ATerm prod, symbol;
   ATermList symbols, las;
+  //ATbool nullableRHS; //added
   CC_Class *charClass;
   CC_Set set;
   ItemSetIterator iter;
@@ -110,6 +111,18 @@ static void reductions(ItemSet vertex)
     prod = IT_getProd(item);
     prodnr = IT_getProdNr(item);
     iptr = IT_getDotPosition(item);
+   
+    //ATwarning("production %t and position %d  \n", prod, iptr);//added
+
+    //nulSymbols = GET_LIST_ARG(prod, iptr); //added
+    //nullableRHS = is_rhs_nullable(prod,iptr);//added
+    
+    //if (nullableRHS) {
+    //  ATwarning("%t is nullableRHS \n", prod);//added
+    //}
+    //else {
+    //  ATwarning("%t is not nullableRHS \n", prod);//added
+    //}
 
     symbols = GET_LIST_ARG(prod, 0);
     symbol = GET_ARG(prod, 1);

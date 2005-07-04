@@ -1,5 +1,8 @@
 $Id$
 
+Mon Jul  4 10:12:41 CEST 2005 <economop@cwi.nl>
+ * Removed -m option that was passed to sglr from |sdf2table.src|.
+	
 Tue May  3 15:29:20 CEST 2005 <markvdb@cwi.nl>
  * Fixed a problem with respect to converting sorts into strings.
 
