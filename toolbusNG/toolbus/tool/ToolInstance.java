@@ -96,7 +96,7 @@ public class ToolInstance {
 
   synchronized void addValueFromTool(/*ATerm id,*/ Object res) {
     valuesFromTool.addLast(res);
-    System.err.println("JavaTool.addValue: res = " + res);;
+    System.err.println("ToolInstance.addValue: " + toolId + " res = " + res);
   }
 
   /** 
@@ -118,7 +118,7 @@ public class ToolInstance {
 
   synchronized public boolean getValueFromTool(ATerm trm, Environment env)
   throws ToolBusException {
-  	//System.err.println("getValueFromTool: " + trm);
+  	System.err.println("getValueFromTool " + toolId + ": " + trm);
   	if (valuesFromTool.isEmpty()) {
   		return false;
   	} else {

@@ -6,18 +6,37 @@ in
     printf("%s: tool id = %t\n", Name, Tid) .
     snd-do(Tid, setStartValue(S)) .
     N := 0 .
-    ( if less(N, Max)
-     then
+ %%   ( if less(N, Max)
+ %%    then
 	     snd-eval(Tid, getCounter(I)) .
          rec-value(Tid, count(R?)) .
     	 printf("%s: R = %d\n", Name, R) .
     	 printf("%s: N = %d\n", Name, N) .
-    	 N := add(N, 1)
-     else
-        tau
-     fi
-    ) *
-    if equal(N, Max) then tau fi
+    	 N := add(N, 1) .
+    	 
+  	     snd-eval(Tid, getCounter(I)) .
+         rec-value(Tid, count(R?)) .
+    	 printf("%s: R = %d\n", Name, R) .
+    	 printf("%s: N = %d\n", Name, N) .
+    	 N := add(N, 1) .
+    	 
+    	  	     snd-eval(Tid, getCounter(I)) .
+         rec-value(Tid, count(R?)) .
+    	 printf("%s: R = %d\n", Name, R) .
+    	 printf("%s: N = %d\n", Name, N) .
+    	 N := add(N, 1) .
+    	 
+    	  	  	     snd-eval(Tid, getCounter(I)) .
+         rec-value(Tid, count(R?)) .
+    	 printf("%s: R = %d\n", Name, R) .
+    	 printf("%s: N = %d\n", Name, N) .
+    	 N := add(N, 1) 
+    	 
+ %%    else
+ %%       tau
+ %%    fi
+ %%   ) *
+ %%   if equal(N, Max) then tau fi
    
 endlet
 
