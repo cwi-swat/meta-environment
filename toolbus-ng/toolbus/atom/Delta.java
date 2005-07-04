@@ -1,10 +1,7 @@
 package toolbus.atom;
 
-import java.util.Stack;
-
-import toolbus.process.ProcessExpression;
-import toolbus.process.ProcessInstance;
 import toolbus.State;
+import toolbus.process.ProcessExpression;
 
 /**
  * @author paulk, Jul 24, 2002

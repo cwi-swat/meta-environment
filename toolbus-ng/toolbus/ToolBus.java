@@ -372,7 +372,7 @@ public class ToolBus {
 
   public void execute() {
     boolean work = true;
-    int n = 2000;
+    int n = 3000;
 
     try {
       while (work) {
