@@ -209,39 +209,10 @@ CC_Class *get_first_set(ATerm symbol, ATbool create)
   }
   if (create && first_sets[index] == NULL) {
     first_sets[index] = CC_makeClassEmpty();
-}
+  }
 
   return first_sets[index];
 }
 
 /*}}}  */
 
-
-
-
-
-//Added
-//Returns true if the first set of symbols contains epsilon and false otherwise.
-/*ATbool is_rhs_nullable(ATerm prod, int dotPosition)
-{
-  ATermList symbols;
-  ATerm symbol;
-  CC_Class *set;
-
-  symbols = GET_LIST_ARG(prod, dotPosition++);
-
-  while(!ATisEmpty(symbols)) {
-    symbol = ATgetFirst(symbols);
-    symbols = GET_LIST_ARG(prod, dotPosition++);
-    //symbols = ATgetNext(symbols);
-
-    set = get_first_set(symbol, ATfalse);
-    
-    if (set && !CC_containsChar(set, CC_EPSILON)) {
-      return ATfalse;
-    }
-  }
-
-  return ATtrue;
-}
-*/

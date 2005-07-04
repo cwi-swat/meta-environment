@@ -14,6 +14,4 @@ CC_Class *get_first_set(ATerm symbol, ATbool create);
 void init_first();
 void destroy_first();
 
-//ATbool is_rhs_nullable(ATerm prod, int dotPosition); //Added
-
 #endif
