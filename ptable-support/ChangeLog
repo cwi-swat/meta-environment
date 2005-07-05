@@ -6,7 +6,8 @@
  * Changed the libraries prefix to PTBL_, and regenerated the code.
  * Removed the manual implementations of getLength functions, because 
    they are generated now.
-
+ * Added ptable-support-config.sh.src
+	
 2003-07-04 (jurgenv@cwi.nl)
  * Added package definition file
  * Fixed configure.in error
