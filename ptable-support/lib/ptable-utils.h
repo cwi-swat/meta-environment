@@ -2,8 +2,8 @@
 
 #include <ptable.h>
 
-PT_Production PTA_LookUpProduction(PTA_ParseTable pt, int label);
-int PTAgetGotosLength(PTA_Gotos gotos);
-int PTAgetActionsLength(PTA_Actions actions);
-int PTAgetLabelsLength(PTA_Labels labels);
-int PTAgetStatesLength(PTA_States states);
+/* Note that a PTBL_Production is a PT_Production from the pt-support
+ * package. You may always cast these types. Future versions of 
+ * ApiGen might solve this by introducing modulariy of adt files.
+ */
+PTBL_Production PTA_LookUpProduction(PTA_ParseTable pt, int label);

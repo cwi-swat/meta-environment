@@ -1,63 +1,33 @@
 [
-  [Version, Default, 4],
+constructor(Production, external, <prod(term)>),
+constructor(CharRanges, external, <ranges(term)>),
 
-  [ParseTable, parse-table, 
-               parse-table(<version(Version)>,
-                           <initial-state(int)>,
-                            <labels(Labels)>,
-                            states(<states(States)>),
-                            priorities(<priorities(Priorities)>))],
 
-  [Labels, empty, []],
-  [Labels, list, [<head(Label)>,<[tail(Labels)]>]],
-
-  [Label, Default, label(<production(Production)>,<number(int)>)],
-
-  [States, empty, []],
-  [States, list,  [<head(State)>,<[tail(States)]>]],
-
-  [State, Default, state-rec(<number(int)>,<gotos(Gotos)>,<actions(Actions)>)],
-
-  [Gotos, empty, []],
-  [Gotos, list,  [<head(Goto)>,<[tail(Gotos)]>]],
-
-  [Goto, Default, goto(<ranges(CharRanges)>,<state-number(int)>)],
-
-  [Actions, empty, []],
-  [Actions, list,  [<head(Action)>,<[tail(Actions)]>]],
-
-  [Action, Default, action(<ranges(CharRanges)>,<choices(Choices)>)],
-
-  [Choices, empty, []],
-  [Choices, list,  [<head(Choice)>,<[tail(Choices)]>]],
-  
-  [Choice, reduce, reduce(<length(int)>,
-                          <label(int)>,
-                          <special-attr(SpecialAttr)>)],
-  [Choice, lookahead-reduce, reduce(<length(int)>,
-                                    <label(int)>,
-                                    <special-attr(SpecialAttr)>,
-				    <lookaheads(LookAheads)>)],
-  [Choice, shift, shift(<state-number(int)>)],
-  [Choice, accept, accept],
-
-  [SpecialAttr, none  , 0],
-  [SpecialAttr, reject, 1],
-  [SpecialAttr, prefer, 2],
-  [SpecialAttr, avoid , 4],
-
-  [LookAhead, default, look(<char-class(CharClass)>,<lookaheads(LookAheads)>)],
-
-  [CharClass, default,  char-class(<ranges(CharRanges)>)],
-
-  [LookAheads, empty, []],
-  [LookAheads, list,  [<head(LookAhead)>,<[tail(LookAheads)]>]],
-  
-  [Priorities, empty, []],
-  [Priorities, list,  [<head(Priority)>,<[tail(Priorities)]>]],
-
-  [Priority, left, left-prio(<label1(int)>,<label2(int)>)],
-  [Priority, right, right-prio(<label1(int)>,<label2(int)>)],
-  [Priority, non-assoc, non-assoc(<label1(int)>,<label2(int)>)],
-  [Priority, greater, gtr-prio(<label1(int)>,<label2(int)>)]
+constructor(Version,Default,4),
+constructor(ParseTable,parse-table,parse-table(<version(Version)>,<initial-state(int)>,<labels(Labels)>,states(<states(States)>),priorities(<priorities(Priorities)>))),
+list(Labels,Label),
+constructor(Label,Default,label(<production(Production)>,<number(int)>)),
+list(States,State),
+constructor(State,Default,state-rec(<number(int)>,<gotos(Gotos)>,<actions(Actions)>)),
+list(Gotos,Goto),
+constructor(Goto,Default,goto(<ranges(CharRanges)>,<state-number(int)>)),
+list(Actions,Action),
+constructor(Action,Default,action(<ranges(CharRanges)>,<choices(Choices)>)),
+list(Choices,Choice),
+constructor(Choice,reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>)),
+constructor(Choice,lookahead-reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>,<lookaheads(LookAheads)>)),
+constructor(Choice,shift,shift(<state-number(int)>)),
+constructor(Choice,accept,accept),
+constructor(SpecialAttr,none,0),
+constructor(SpecialAttr,reject,1),
+constructor(SpecialAttr,prefer,2),
+constructor(SpecialAttr,avoid,4),
+constructor(LookAhead,default,look(<char-class(CharClass)>,<lookaheads(LookAheads)>)),
+constructor(CharClass,default,char-class(<ranges(CharRanges)>)),
+list(LookAheads,LookAhead),
+list(Priorities,Priority),
+constructor(Priority,left,left-prio(<label1(int)>,<label2(int)>)),
+constructor(Priority,right,right-prio(<label1(int)>,<label2(int)>)),
+constructor(Priority,non-assoc,non-assoc(<label1(int)>,<label2(int)>)),
+constructor(Priority,greater,gtr-prio(<label1(int)>,<label2(int)>))
 ]

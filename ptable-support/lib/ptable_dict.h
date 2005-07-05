@@ -1,64 +1,69 @@
-/*
- * Generated at Sun Jul  7 20:14:07 2002
- */
-
 #ifndef __ptable_dict_H
 #define __ptable_dict_H
 
 #include <aterm2.h>
 
-extern AFun PTA_afun0;
-extern AFun PTA_afun1;
-extern AFun PTA_afun2;
-extern AFun PTA_afun3;
-extern AFun PTA_afun4;
-extern AFun PTA_afun5;
-extern AFun PTA_afun6;
-extern AFun PTA_afun7;
-extern AFun PTA_afun8;
-extern AFun PTA_afun9;
-extern AFun PTA_afun10;
-extern AFun PTA_afun11;
-extern AFun PTA_afun12;
-extern AFun PTA_afun13;
-extern AFun PTA_afun14;
-extern AFun PTA_afun15;
-extern AFun PTA_afun16;
+extern AFun PTBL_afun8;
+extern AFun PTBL_afun0;
+extern AFun PTBL_afun11;
+extern AFun PTBL_afun5;
+extern AFun PTBL_afun3;
+extern AFun PTBL_afun9;
+extern AFun PTBL_afun16;
+extern AFun PTBL_afun10;
+extern AFun PTBL_afun4;
+extern AFun PTBL_afun13;
+extern AFun PTBL_afun14;
+extern AFun PTBL_afun2;
+extern AFun PTBL_afun7;
+extern AFun PTBL_afun12;
+extern AFun PTBL_afun15;
+extern AFun PTBL_afun6;
+extern AFun PTBL_afun1;
 
-extern ATerm PTA_patternPriorityGreater;
-extern ATerm PTA_patternPriorityNonAssoc;
-extern ATerm PTA_patternPriorityRight;
-extern ATerm PTA_patternPriorityLeft;
-extern ATerm PTA_patternPrioritiesList;
-extern ATerm PTA_patternPrioritiesEmpty;
-extern ATerm PTA_patternLookAheadsList;
-extern ATerm PTA_patternLookAheadsEmpty;
-extern ATerm PTA_patternCharClassDefault;
-extern ATerm PTA_patternLookAheadDefault;
-extern ATerm PTA_patternSpecialAttrAvoid;
-extern ATerm PTA_patternSpecialAttrPrefer;
-extern ATerm PTA_patternSpecialAttrReject;
-extern ATerm PTA_patternSpecialAttrNone;
-extern ATerm PTA_patternChoiceAccept;
-extern ATerm PTA_patternChoiceShift;
-extern ATerm PTA_patternChoiceLookaheadReduce;
-extern ATerm PTA_patternChoiceReduce;
-extern ATerm PTA_patternChoicesList;
-extern ATerm PTA_patternChoicesEmpty;
-extern ATerm PTA_patternActionDefault;
-extern ATerm PTA_patternActionsList;
-extern ATerm PTA_patternActionsEmpty;
-extern ATerm PTA_patternGotoDefault;
-extern ATerm PTA_patternGotosList;
-extern ATerm PTA_patternGotosEmpty;
-extern ATerm PTA_patternStateDefault;
-extern ATerm PTA_patternStatesList;
-extern ATerm PTA_patternStatesEmpty;
-extern ATerm PTA_patternLabelDefault;
-extern ATerm PTA_patternLabelsList;
-extern ATerm PTA_patternLabelsEmpty;
-extern ATerm PTA_patternParseTableParseTable;
-extern ATerm PTA_patternVersionDefault;
+extern ATerm PTBL_patternPriorityGreater;
+extern ATerm PTBL_patternPriorityNonAssoc;
+extern ATerm PTBL_patternPriorityRight;
+extern ATerm PTBL_patternPriorityLeft;
+extern ATerm PTBL_patternPrioritiesMany;
+extern ATerm PTBL_patternPrioritiesSingle;
+extern ATerm PTBL_patternPrioritiesEmpty;
+extern ATerm PTBL_patternLookAheadsMany;
+extern ATerm PTBL_patternLookAheadsSingle;
+extern ATerm PTBL_patternLookAheadsEmpty;
+extern ATerm PTBL_patternCharClassDefault;
+extern ATerm PTBL_patternLookAheadDefault;
+extern ATerm PTBL_patternSpecialAttrAvoid;
+extern ATerm PTBL_patternSpecialAttrPrefer;
+extern ATerm PTBL_patternSpecialAttrReject;
+extern ATerm PTBL_patternSpecialAttrNone;
+extern ATerm PTBL_patternChoiceAccept;
+extern ATerm PTBL_patternChoiceShift;
+extern ATerm PTBL_patternChoiceLookaheadReduce;
+extern ATerm PTBL_patternChoiceReduce;
+extern ATerm PTBL_patternChoicesMany;
+extern ATerm PTBL_patternChoicesSingle;
+extern ATerm PTBL_patternChoicesEmpty;
+extern ATerm PTBL_patternActionDefault;
+extern ATerm PTBL_patternActionsMany;
+extern ATerm PTBL_patternActionsSingle;
+extern ATerm PTBL_patternActionsEmpty;
+extern ATerm PTBL_patternGotoDefault;
+extern ATerm PTBL_patternGotosMany;
+extern ATerm PTBL_patternGotosSingle;
+extern ATerm PTBL_patternGotosEmpty;
+extern ATerm PTBL_patternStateDefault;
+extern ATerm PTBL_patternStatesMany;
+extern ATerm PTBL_patternStatesSingle;
+extern ATerm PTBL_patternStatesEmpty;
+extern ATerm PTBL_patternLabelDefault;
+extern ATerm PTBL_patternLabelsMany;
+extern ATerm PTBL_patternLabelsSingle;
+extern ATerm PTBL_patternLabelsEmpty;
+extern ATerm PTBL_patternParseTableParseTable;
+extern ATerm PTBL_patternVersionDefault;
+extern ATerm PTBL_patternCharRangesExternal;
+extern ATerm PTBL_patternProductionExternal;
 
 extern void init_ptable_dict();
 

@@ -1,8 +1,17 @@
+
+2005-07-05 ({economop,jurgenv}@cwi.nl)
+ * Reincarnating this package for use in the sglr package
+ * Changed configure.in/package/Makefile.am's to fit the current
+   package standards.
+ * Changed the libraries prefix to PTBL_, and regenerated the code.
+ * Removed the manual implementations of getLength functions, because 
+   they are generated now.
+
 2003-07-04 (jurgenv@cwi.nl)
  * Added package definition file
  * Fixed configure.in error
 
-2003-01-22 (jurgenv@cwi.nl)
+2003-01-22 ({markvdb,jurgenv}@cwi.nl)
  * LGPL license
  * SGLR is not any more based on this library due to a 10% efficiency loss.
 
