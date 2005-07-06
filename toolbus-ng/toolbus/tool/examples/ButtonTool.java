@@ -44,7 +44,7 @@ public class ButtonTool extends Frame implements ActionListener {
 
   public void ackEvent(ATerm event) {
     // This simple tool ignores event acknowledgements
-    System.err.println("Example.ackEvent(" + event + ")");
+    System.err.println("ButtonTool.ackEvent(" + event + ")");
   }
 
   public void terminate(String msg) {

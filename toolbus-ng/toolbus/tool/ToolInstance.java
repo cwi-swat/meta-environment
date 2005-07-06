@@ -118,7 +118,7 @@ public class ToolInstance {
 
   synchronized public boolean getValueFromTool(ATerm trm, Environment env)
   throws ToolBusException {
-  	System.err.println("getValueFromTool " + toolId + ": " + trm);
+  	//System.err.println("getValueFromTool " + toolId + ": " + trm);
   	if (valuesFromTool.isEmpty()) {
   		return false;
   	} else {
@@ -158,7 +158,7 @@ public class ToolInstance {
         System.err.println("getEventFromTool: cannot happen :-)");
       }
     }
-    System.err.println("getEventFromTool returns false");
+    //System.err.println("getEventFromTool returns false");
     return false;
   }
 

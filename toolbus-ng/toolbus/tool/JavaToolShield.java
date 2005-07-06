@@ -36,6 +36,7 @@ import aterm.ATermPlaceholder;
 public class JavaToolShield extends ToolShield {
 	private String className;
 	private Class toolClass;
+	private ToolDefinition toolDef;
 	private Constructor toolConstructor;
 	private Object javaToolObject;
 	private Hashtable methodTable;
@@ -49,6 +50,7 @@ public class JavaToolShield extends ToolShield {
 
   public JavaToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
   	super(toolInstance);
+  	this.toolDef = toolDef;
     this.className = toolDef.getCommand();
     try {
       toolClass = Class.forName(className);
@@ -157,26 +159,37 @@ public class JavaToolShield extends ToolShield {
 
   private void checkToolSignature(ATermList sigs) throws ToolBusException {
     System.err.println("checkInputSignature(" + sigs + ")");
+    ATermPlaceholder toolPlaceholder = toolDef.getNameAsPlaceholder();
 
     while (!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl) sigs.getFirst();
       sigs = sigs.getNext();
       if (sig.getName().equals("Eval")) {
-      	ATermAppl call = (ATermAppl) sig.getArgument(1);
-        String name = call.getName();
-        ATermList args = call.getArguments();
-        methodTable.put(name, findMethod(name, args, false));
+      	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
+      	
+      	if(ap.equals(toolPlaceholder)){
+      		ATermAppl call = (ATermAppl) sig.getArgument(1);
+      		String name = call.getName();
+      		ATermList args = call.getArguments();
+      		methodTable.put(name, findMethod(name, args, false));
+      	}
       }
       if (sig.getName().equals("Do")) {
-      	ATermAppl call = (ATermAppl) sig.getArgument(1);
-        String name = call.getName();
-        ATermList args = call.getArguments();
-        methodTable.put(name, findMethod(name, args, true));
+      	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
+      	if(ap.equals(toolPlaceholder)){
+      		ATermAppl call = (ATermAppl) sig.getArgument(1);
+      		String name = call.getName();
+      		ATermList args = call.getArguments();
+      		methodTable.put(name, findMethod(name, args, true));
+      	}
       }
       if (sig.getName().equals("AckEvent")) {
-        String name = "ackEvent";
-        ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
-        methodTable.put(name, findMethod(name, args, true));
+    	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
+      	if(ap.equals(toolPlaceholder)){
+      		String name = "ackEvent";
+      		ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
+      		methodTable.put(name, findMethod(name, args, true));
+      	}
       }
       if (sig.getName().equals("Terminate")) {
         String name = terminate;

@@ -97,6 +97,7 @@ public abstract class ToolShield extends Thread {
 			join();
 		} catch (InterruptedException e) {
 		}
+		stop();
 	}
 
 }
