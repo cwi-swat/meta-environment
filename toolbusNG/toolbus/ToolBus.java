@@ -372,18 +372,27 @@ public class ToolBus {
 
   public void execute() {
     boolean work = true;
-    int n = 3000;
 
     try {
       while (work) {
-        n--;
-        work = n > 0;
+      	work = false;
         for (int i = 0; i < processes.size(); i++) {
+          //System.err.print(".");
           ProcessInstance P = (ProcessInstance) processes.elementAt(i);
-          P.step();
+          work  |= P.step();
+          
           //if (P.isTerminated()) {
           //	processes.remove(P);
           //}
+        }
+        if(!work){
+        	 try{
+        	      Thread.sleep(200);
+        	      }
+        	      catch(InterruptedException e){
+        	      System.out.println("Sleep Interrupted");
+        	      }
+        	work = true;
         }
       }
     } catch (ToolBusException e) {

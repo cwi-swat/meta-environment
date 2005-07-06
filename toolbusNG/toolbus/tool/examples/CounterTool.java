@@ -13,7 +13,7 @@ public class CounterTool {
   private ATermFactory factory;
 
   /**
-   * Constructor for Example.
+   * Constructor for CounterTool.
    */
   public CounterTool(ToolShield shield) {
     System.out.println("Yep, CounterTool instance created");

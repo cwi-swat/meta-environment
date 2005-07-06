@@ -1,46 +1,42 @@
-process P1 (Name : str, S : int, I : int, Max : int) is 		
+process P1 (Name : str, S : int, I : int, Max : int, Del : int) is 		
 let R : int, Tid : counter, Pid : term, N : int
 in
 
     execute(counter, Tid?) .
     printf("%s: tool id = %t\n", Name, Tid) .
     snd-do(Tid, setStartValue(S)) .
+    snd-do(Tid,setDelay(Del)) .
     N := 0 .
- %%   ( if less(N, Max)
- %%    then
+    ( if less(N, Max)
+      then
 	     snd-eval(Tid, getCounter(I)) .
          rec-value(Tid, count(R?)) .
-    	 printf("%s: R = %d\n", Name, R) .
-    	 printf("%s: N = %d\n", Name, N) .
-    	 N := add(N, 1) .
-    	 
-  	     snd-eval(Tid, getCounter(I)) .
-         rec-value(Tid, count(R?)) .
-    	 printf("%s: R = %d\n", Name, R) .
-    	 printf("%s: N = %d\n", Name, N) .
-    	 N := add(N, 1) .
-    	 
-    	  	     snd-eval(Tid, getCounter(I)) .
-         rec-value(Tid, count(R?)) .
-    	 printf("%s: R = %d\n", Name, R) .
-    	 printf("%s: N = %d\n", Name, N) .
-    	 N := add(N, 1) .
-    	 
-    	  	  	     snd-eval(Tid, getCounter(I)) .
-         rec-value(Tid, count(R?)) .
-    	 printf("%s: R = %d\n", Name, R) .
-    	 printf("%s: N = %d\n", Name, N) .
+    	 printf("%s: N= %d, R = %d\n", Name, N, R) .
     	 N := add(N, 1) 
-    	 
- %%    else
- %%       tau
- %%    fi
- %%   ) *
- %%   if equal(N, Max) then tau fi
+ 
+     else
+       tau
+     fi
+    ) *
+    if equal(N, Max) then tau fi
+   
+endlet
+
+process P2 is
+let Tid : button, Name : str
+in 
+   execute(button, Tid?).
+   rec-event(Tid, button(Name?)) .
+   printf("P2: button(%s)\n", Name).
+   snd-ack-event(Tid, button(Name)) .
+   shutdown("P2 shutdown")
    
 endlet
 
 tool counter is { host = "localhost" kind = "java" command ="toolbus.tool.examples.CounterTool"}
 
-%%toolbus(P1("P1A", 1, 1, 10), P1("P1B", 100, 1, 10))
-toolbus(P1("P1A", 1, 1, 10))
+tool button is { host = "localhost" kind = "java" command = "toolbus.tool.examples.ButtonTool"}
+
+%%toolbus(P1("P1A", 1, 1, 10))
+toolbus(P1("A", 1, 1, 10, 5), P1("B", 100, 3, 10, 10), P1("C", 1000, 7, 20, 1), P2)
+

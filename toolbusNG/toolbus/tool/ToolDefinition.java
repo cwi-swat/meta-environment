@@ -1,6 +1,7 @@
 package toolbus.tool;
 
-import aterm.ATermList;
+import aterm.*;
+import toolbus.TBTerm;
 
 public class ToolDefinition {
   private String toolName;
@@ -48,6 +49,11 @@ public class ToolDefinition {
 
   public String getName() {
     return toolName;
+  }
+  
+  public ATermPlaceholder getNameAsPlaceholder(){
+  	ATerm t = TBTerm.factory.make(toolName);
+  	return (ATermPlaceholder) TBTerm.factory.makePlaceholder(t);
   }
   
   public String getCommand(){
