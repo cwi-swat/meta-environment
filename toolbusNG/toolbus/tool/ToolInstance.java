@@ -144,7 +144,7 @@ public class ToolInstance {
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
         Object event[] = (Object[]) eventsFromTool.get(i);
-        ATerm eventId = (ATerm) event[0];
+        //ATerm eventId = (ATerm) event[0];
         ATerm eventTerm = (ATerm) event[1];
         boolean matches = TBTerm.match(trm, env, eventTerm, new Environment());
         //System.err.println(matches + " " + eventId + eventTerm);

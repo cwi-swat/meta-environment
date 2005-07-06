@@ -392,7 +392,8 @@ public class ToolBus {
         	      catch(InterruptedException e){
         	      System.out.println("Sleep Interrupted");
         	      }
-        	work = true;
+        	if(tools.size() > 0 )
+        		work = true;
         }
       }
     } catch (ToolBusException e) {

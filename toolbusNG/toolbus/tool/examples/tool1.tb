@@ -1,7 +1,6 @@
 process P1 (Name : str, S : int, I : int, Max : int, Del : int) is 		
 let R : int, Tid : counter, Pid : term, N : int
 in
-
     execute(counter, Tid?) .
     printf("%s: tool id = %t\n", Name, Tid) .
     snd-do(Tid, setStartValue(S)) .
@@ -19,7 +18,6 @@ in
      fi
     ) *
     if equal(N, Max) then tau fi
-   
 endlet
 
 process P2 is
@@ -30,11 +28,9 @@ in
    printf("P2: button(%s)\n", Name).
    snd-ack-event(Tid, button(Name)) .
    shutdown("P2 shutdown")
-   
 endlet
 
 tool counter is { host = "localhost" kind = "java" command ="toolbus.tool.examples.CounterTool"}
-
 tool button is { host = "localhost" kind = "java" command = "toolbus.tool.examples.ButtonTool"}
 
 %%toolbus(P1("P1A", 1, 1, 10))

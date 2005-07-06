@@ -50,6 +50,7 @@ public class ButtonTool extends Frame implements ActionListener {
   public void terminate(String msg) {
     // Just exit when the ToolBus terminates
     dispose();  // of this frame
+    System.err.println("ButtonTool.terminate()");
   }
 
 }

@@ -197,12 +197,13 @@ public class JavaToolShield extends ToolShield {
         methodTable.put(name, findMethod(name, args, true));
       }
     }
-
+/*
     if (methodTable.get(terminate) == null) {
       String name = terminate;
       ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
       methodTable.put(name, findMethod(name, args, true));
     }
+    */
   }
   
   /**
@@ -230,7 +231,7 @@ public class JavaToolShield extends ToolShield {
   }
 
   /**
-   * Handle a single request from the list
+   * Handle the next request for the tool
    */
 
   protected void handleRequestForTool() {
@@ -245,24 +246,23 @@ public class JavaToolShield extends ToolShield {
     try {
       res = m.invoke(javaToolObject, actuals);
     } catch (Exception e) {
-      System.err.println("ToolShield.handleRequest: " + e);
+      System.err.println("JavaToolShield.handleRequest: " + e);
       e.printStackTrace();
     }
     if (operation == ToolInstance.EVAL) {
       getToolInstance().addValueFromTool(/*id, */res);
     } else if (operation == ToolInstance.TERMINATE) {
-      super.terminate("tool terminated by ToolShield");
+      super.terminate("tool terminated by JavaToolShield");
     }
   }
   
   public void terminate(String msg) {
     Object actuals[] = new Object[] { msg };
     Method m = (Method) methodTable.get(terminate);
-    printMethod(m);
 
-    if (m == null) {
-      throw new ToolBusInternalError("no terminate method");
-    }
+    if (m == null)
+      super.terminate(msg);
+    printMethod(m);
     addRequestForTool(ToolInstance.TERMINATE, m, actuals);
   }
  
