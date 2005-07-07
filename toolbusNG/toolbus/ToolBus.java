@@ -356,13 +356,16 @@ public class ToolBus {
 
   public void shutdown(String msg) throws ToolBusDeathException {
     for (int i = 0; i < processes.size(); i++) {
+    	//System.err.println("shutdown process " + i);
       ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
       pi.terminate(msg);
     }
     for(int i = 0; i < tools.size(); i++){
+       	//System.err.println("shutdown tool " + i);
     	ToolInstance ti = (ToolInstance) tools.elementAt(i);
     	ti.terminate(msg);
     }
+	//System.err.println("shutdown complete");
     throw new ToolBusDeathException(msg);
   }
 
