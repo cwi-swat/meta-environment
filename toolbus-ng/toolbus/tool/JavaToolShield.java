@@ -106,6 +106,9 @@ public class JavaToolShield extends ToolShield {
   
   /**
    * Find a method in the tool class with given name and argument types.
+   * @param name of the method
+   * @param list of argument types
+   * @param returnsVoid doe sthe class return void?
    */
 
   private Method findMethod(String name, ATermList args, boolean returnsVoid) throws ToolBusException {
@@ -138,7 +141,6 @@ public class JavaToolShield extends ToolShield {
     throw new ToolBusException("no method " + name + " found");
   }
   
-
   /**
    * Print a method heading.
    */
@@ -197,13 +199,12 @@ public class JavaToolShield extends ToolShield {
         methodTable.put(name, findMethod(name, args, true));
       }
     }
-/*
+    // Require that there is always a terminate method for the tool
     if (methodTable.get(terminate) == null) {
-      String name = terminate;
-      ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
-      methodTable.put(name, findMethod(name, args, true));
-    }
-    */
+        String name = terminate;
+        ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
+        methodTable.put(name, findMethod(name, args, true));
+      }
   }
   
   /**
@@ -237,7 +238,6 @@ public class JavaToolShield extends ToolShield {
   protected void handleRequestForTool() {
     Object request[] = getNextRequestForTool();
 
-    /*ATerm id = (ATerm) request[0];*/
     Integer operation = (Integer) request[0];
     Method m = (Method) request[1];
     Object[] actuals = (Object[]) request[2];
@@ -252,18 +252,21 @@ public class JavaToolShield extends ToolShield {
     if (operation == ToolInstance.EVAL) {
       getToolInstance().addValueFromTool(/*id, */res);
     } else if (operation == ToolInstance.TERMINATE) {
-      super.terminate("tool terminated by JavaToolShield");
+    	setTerminating();
     }
   }
   
   public void terminate(String msg) {
+  	System.err.println("JavaToolShield.terminate");
     Object actuals[] = new Object[] { msg };
     Method m = (Method) methodTable.get(terminate);
 
-    if (m == null)
-      super.terminate(msg);
-    printMethod(m);
-    addRequestForTool(ToolInstance.TERMINATE, m, actuals);
+    if (m == null){
+    	setTerminating();
+    } else {
+    	printMethod(m);
+    	addRequestForTool(ToolInstance.TERMINATE, m, actuals);
+    }
   }
  
 }

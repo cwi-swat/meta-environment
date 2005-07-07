@@ -22,6 +22,7 @@ public abstract class ToolShield extends Thread {
 	
 	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
 	private LinkedList requestsForTool;		// Requests to be executed by the tool
+	private boolean terminating = false;
 
 	public ToolShield(ToolInstance ti) {
 		requestsForTool = new LinkedList();
@@ -54,7 +55,10 @@ public abstract class ToolShield extends Thread {
 
 	public synchronized void addRequestForTool(/* ATerm id, */Integer operation,
 			Method m, Object[] actuals) {
-		requestsForTool.add(new Object[] { /* id, */operation, m, actuals });
+		if(operation == ToolInstance.TERMINATE){
+			requestsForTool.addFirst(new Object[] { /* id, */operation, m, actuals });
+		} else
+			requestsForTool.add(new Object[] { /* id, */operation, m, actuals });
 	}
 	
 	/**
@@ -80,24 +84,27 @@ public abstract class ToolShield extends Thread {
 
 	public void run() {
 		System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
-		while (true) {
-			while (!requestsForTool.isEmpty())
+		while (!terminating) {
+			//System.err.println("ToolShield.run; 1 "+ toolInstance.getToolId());
+			while (!requestsForTool.isEmpty() && !terminating){
+				//System.err.println("ToolShield.run; 2 "+ toolInstance.getToolId());
 				handleRequestForTool();
-			Thread.yield();
+			}
+			//System.err.println("ToolShield.run; 3 "+ toolInstance.getToolId());
+			if(!terminating)
+				Thread.yield();
 		}
+		//System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
 	}
 	
 	/**
 	 * Terminate execution of this tool
 	 */
 
-	public void terminate(String msg) {
-		System.err.println("ToolShield.terminate(" + msg + ")");
-		try {
-			join();
-		} catch (InterruptedException e) {
-		}
-		stop();
+	abstract public void terminate(String msg) ;
+
+	public void setTerminating() {
+		terminating = true;
 	}
 
 }

@@ -43,6 +43,6 @@ public class CounterTool {
   }
 
   public void terminate(String msg) {
-    System.out.println("CounterTool.terminate()");
+    System.err.println("CounterTool.terminate()");
   }
 }

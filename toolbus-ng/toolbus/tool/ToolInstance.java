@@ -167,6 +167,7 @@ public class ToolInstance {
    * @see toolbus.tool.ToolInstance#terminate(String)
    */
   public   void terminate(String msg){
+  	System.err.println("ToolInstance.terminate: " + toolId);
 	toolShield.terminate(msg);
   }
   
