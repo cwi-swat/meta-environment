@@ -1,5 +1,11 @@
 $Id$
 
+Fri Jul  8 16:12:11 CEST 2005 <jurgenv@cwi.nl>
+ * lib/manager.c: added an error manager file, containing a static
+   reference to a summary that can be inspected and filled. It also
+   includes some convenience functions for creating and storing errors
+   and warnings by a single function application.
+
 Sat Jun  4 15:00:30 CEST 2005 <kooiker@cwi.nl>
  * utils/error-support.c:
    - Remove declaration after code
