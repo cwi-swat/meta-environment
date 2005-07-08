@@ -15,7 +15,8 @@ include_HEADERS = \
 	Error_dict.h \
 	ParsedError.h \
 	ParsedError_dict.h \
-	Error-utils.h
+	Error-utils.h \
+	Error-manager.h
 
 libErrorAPI_a_SOURCES = \
 	Error.c \
@@ -25,7 +26,8 @@ libErrorAPI_a_SOURCES = \
 	init.c \
 	display.c \
 	lift.c \
-	lower.c
+	lower.c \
+	manager.c
 
 libLocationAPI_a_SOURCES = \
 	Location.c \
