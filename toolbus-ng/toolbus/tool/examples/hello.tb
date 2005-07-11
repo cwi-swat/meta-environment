@@ -1,0 +1,19 @@
+%% hello2.tb -- hello script using a separate hello tool
+
+process HELLO is
+  let H : hello,               %% H will represent the hello tool
+      S : str                  %% S is a string valued variable
+  in
+      execute(hello, H?) .     %% Execute hello, H gets a tool id as value
+      snd-eval(H, get-text) .  %% Request a text from the hello tool
+      rec-value(H, text(S?)).  %% Receive it, S gets the text as value
+      printf(S)                %% Print it
+  endlet
+
+%%tool hello is {host = "localhost" kind = "classic" command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello"}
+
+tool hello is {host = "localhost" kind = "classic" command = "java /home/paulk/.eclipse/toolbusNG/toolbud/tool/classic/Client aarde 9050"}
+
+toolbus(HELLO)
+
+

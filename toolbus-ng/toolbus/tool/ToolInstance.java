@@ -56,6 +56,10 @@ public class ToolInstance {
   	return toolId;
   }
   
+  public int getToolCount(){
+  	return toolCount;
+  }
+  
   /**
    * Send an evaluation request to the ToolShield.
    * (the answer will be returned by the ToolShield using addValue)

@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
@@ -50,6 +53,8 @@ public class ToolBus {
   private static boolean verbose = false;
   private static int nerrrors = 0;
   private static int nwarnings = 0;
+  private static int WellKnownSocketPort = 8999;
+  private static ServerSocket WellKnownSocket;
 
   /**
    * Constructor with explicit PrintWriter
@@ -70,6 +75,16 @@ public class ToolBus {
       System.err.println(e.getMessage());
     }
     parser = new TScriptParser(new ExternalParser(sglr, parseTable, implodePT));
+    
+    try {
+    	System.err.println("Creating WellKnownSocket: " + WellKnownSocketPort + " " + InetAddress.getLocalHost());
+    	WellKnownSocket = new ServerSocket(WellKnownSocketPort, 1, InetAddress.getLocalHost());
+    	//WellKnownSocket = new ServerSocket(WellKnownSocketPort);
+    } catch(IOException e){
+    	System.err.println(e);
+    }
+  
+    System.err.println("WellKnownSocket created: " + WellKnownSocket);
   }
 
   /**
@@ -100,6 +115,14 @@ public class ToolBus {
       // ignore, unable to resolve hostname
     }
     return hostname;
+  }
+  
+  public static ServerSocket getWellKnownSocket(){
+  	return WellKnownSocket;
+  }
+  
+  public static int  getWellKnownSocketPort(){
+  	return WellKnownSocketPort;
   }
 
   /**
@@ -299,7 +322,7 @@ public class ToolBus {
   	ATermList sig = getSignature();
   	System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
-    TD.setFunctionSignatures(sig);
+    TD.setToolSignatures(sig);
     ToolInstance ti = new ToolInstance(TD);
     tools.add(ti);
     return ti;

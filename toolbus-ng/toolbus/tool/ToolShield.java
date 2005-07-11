@@ -1,6 +1,5 @@
 package toolbus.tool;
 
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 
 import toolbus.TBTerm;
@@ -18,11 +17,17 @@ import aterm.ATermFactory;
  *  	ToolInstance -> ToolShield --> ClassicToolShield -- TCP/IP connection --> external executable
  */
 
+/**
+ * @author paulk
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
 public abstract class ToolShield extends Thread {
 	
 	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
 	private LinkedList requestsForTool;		// Requests to be executed by the tool
-	private boolean terminating = false;
+	private boolean running = false;
 
 	public ToolShield(ToolInstance ti) {
 		requestsForTool = new LinkedList();
@@ -53,12 +58,14 @@ public abstract class ToolShield extends Thread {
 	 * Add a request from JavaTool to the internal request list
 	 */
 
-	public synchronized void addRequestForTool(/* ATerm id, */Integer operation,
-			Method m, Object[] actuals) {
+	public synchronized void addRequestForTool(Object[] request){
+		requestsForTool.add(request);
+		/*
 		if(operation == ToolInstance.TERMINATE){
-			requestsForTool.addFirst(new Object[] { /* id, */operation, m, actuals });
+			requestsForTool.addFirst(new Object[] { operation, m, actuals });
 		} else
-			requestsForTool.add(new Object[] { /* id, */operation, m, actuals });
+			requestsForTool.add(new Object[] { operation, m, actuals });
+			*/
 	}
 	
 	/**
@@ -67,7 +74,7 @@ public abstract class ToolShield extends Thread {
 	 * @param call ATerm denoting the actual request
 	 */
 
-	abstract public void sndRequestToTool(/* ATerm id, */Integer operation,
+	abstract public void sndRequestToTool(Integer operation,
 			ATermAppl call);
 
 	/**
@@ -77,21 +84,36 @@ public abstract class ToolShield extends Thread {
 	public ATerm sndEventToToolBus(ATerm trm) {
 		return toolInstance.addEventFromTool(trm);
 	}
+	
+	protected synchronized void setRunning(boolean state)  {
+		running = state;
+	}
+	
+	public void stopRunning() {
+		setRunning(false);
+	}
+	
+	/**
+	 * initRun gives subclasses a change to do specific initialization
+	 */
+	public void initRun(){
+	}
 
 	/**
 	 * The run method for this thread
 	 */
 
 	public void run() {
+		initRun();
 		System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
-		while (!terminating) {
+		while (running) {
 			//System.err.println("ToolShield.run; 1 "+ toolInstance.getToolId());
-			while (!requestsForTool.isEmpty() && !terminating){
+			while (!requestsForTool.isEmpty() && running){
 				//System.err.println("ToolShield.run; 2 "+ toolInstance.getToolId());
 				handleRequestForTool();
 			}
 			//System.err.println("ToolShield.run; 3 "+ toolInstance.getToolId());
-			if(!terminating)
+			if(running)
 				Thread.yield();
 		}
 		//System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
@@ -102,9 +124,5 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	abstract public void terminate(String msg) ;
-
-	public void setTerminating() {
-		terminating = true;
-	}
 
 }

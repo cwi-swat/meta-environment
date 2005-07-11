@@ -92,7 +92,7 @@ public class Main {
 
     try {
       //T.setVerbose(true);
-      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/tool/examples/tool1.tb");
+      T.parse(ToolBus.getWorkspace() + "/toolbusNG/toolbus/tool/examples/hello.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
