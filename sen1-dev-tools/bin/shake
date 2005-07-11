@@ -1,0 +1,271 @@
+#! /bin/bash
+
+set -e
+
+# {{{  add_configure_switch
+
+add_configure_switch() {
+  CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS $1"
+}
+
+# }}}
+# {{{  get_repository
+
+get_repository() {
+  module=$1
+  branch=$2
+
+  echo `var ${module}_${branch} _repository`
+}
+
+# }}}
+# {{{  make_build_environment
+
+make_build_environment() {
+  top_module=$1
+  branch=$2
+  repositories=$3
+
+  TOPLEVEL="{<\"$top_module\",\"$branch\">}"
+  echo -n "Creating build environment for $top_module..." >&2
+  /ufs/daybuild/utils/build-build.sh $TOPLEVEL $repositories
+  echo "done." >&2
+  exit 1
+}
+
+# }}}
+
+# {{{  print_modules
+
+print_modules() {
+  modules=$*
+  for module in $modules
+  do
+    echo "  $module"
+  done
+}
+
+# }}}
+# {{{  make_todo_list
+
+make_todo_list() {
+  modules=$*
+  if [ "x$first_module" = "x" ]
+  then
+    must_add=1
+  else
+    must_add=0
+  fi
+
+  for module in $modules
+  do
+    if [ "$module" = "$first_module" ]
+    then
+      must_add=1
+    fi
+
+    if [ $must_add -eq 1 ]
+    then
+      todo="$todo $module"
+    fi
+
+    if [ "x$last_module" != "x" -a "$module" = "$last_module" ]
+    then
+      must_add=0
+    fi
+  done
+  echo $todo
+}
+
+# }}}
+
+# {{{  checkout
+
+checkout() {
+  module=$1
+  branch=$2
+
+  repository=`get_repository $module $branch`
+  cvs_repository="-d $repository"
+  cvs_tag=`var ${module}_${branch} _branchswitch`
+
+  #echo "Checking out $branch of $module:"
+
+  cd $builddir
+
+  cvs $cvs_repository checkout $cvs_tag $module >>$logfile 2>&1
+}
+
+# }}}
+
+# {{{  var
+
+var() {
+# dereference a dynamically constructed variable name:
+  prefix=`echo ${1} | sed 's/[.-]/_/g'`
+  suffix=`echo ${2} | sed 's/[.-]/_/g'`
+  value=`eval echo $\{\`echo ${prefix}\`\`echo ${suffix}\`\}`
+
+  echo ${value}
+}
+
+# }}}
+
+# {{{  usage
+
+usage() {
+
+cat << ENDCAT >&2
+Usage: $program [options]
+
+Parameters:
+  
+  -b | --base <DIR>            specify base dir (absolute)        [`echo $basedir`]
+  -c | --clear-cache           clear build env (reinspect cvs repositories)
+  -f | --first-module <MOD>    specify first module to install
+  -l | --last-module <MOD>     specify last module to install
+  -p | --print-modules         print list of modules to be built
+  -r | --cvs-tag <tag>         specify cvs tag to be built        [trunk]
+  -t | --top-module <MOD>      specify top module to be built     <obligatory>
+  -h | --help                  display this information
+
+Example: ${program} \\
+  --base ~/GLT \\
+  --clear-cache \\
+  --top-module meta \\
+  --first-module pt-support \\
+  --last-module sglr \\
+  --cvs-tag asf-sdf-meta_1-5
+
+Builds the "1-5" release of module "meta" from "pt-support" to "sglr" in ~/GLT
+ENDCAT
+}
+
+# }}}
+# {{{  error
+
+error() {
+  echo $program: $* >&2
+  exit 1
+}
+
+# }}}
+
+program=`basename $0`
+basedir=`pwd`
+repositories="{\":ext:$USER@cvs.cwi.nl:/cvs\",\":ext:$USER@cvs-sop.inria.fr:/CVS/aircube\"}"
+logfile="/var/tmp/shake-$$-${USER}.log"
+
+[ -r ~/.shakerc ] && . ~/.shakerc
+
+# {{{  commandline handling
+
+while [ $# -gt 0 ]
+do
+  case "$1"
+  in
+    -b | --base)
+      shift
+      basedir=$1
+      ;;
+    -c | --clear-cache)
+      clear_cache=1
+      ;;
+    -f | --first-package)
+      shift
+      first_module=$1
+      ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -l | --last-package)
+      shift
+      last_module=$1
+      ;;
+    -p | --print-modules)
+      print_modules=1
+      ;;
+    -r | --cvs-tag)
+      shift
+      cvs_tag=$1
+      ;;
+    -t | --top-module)
+      shift
+      top_module=$1
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# }}}
+
+if [ "x$top_module" = "x" ]
+then
+  error "error: No top-module specified. See $program -h for options." >&2
+fi
+
+if [ "x$cvs_tag" = "x" ]
+then
+  branch="trunk"
+else
+  branch="$cvs_tag"
+fi
+
+dirname="$basedir/${top_module}/${branch}"
+
+buildenv="/var/tmp/shake_${top_module}_${branch}.${USER}"
+
+if [ "x$clear_cache" = "x1" ]
+then
+  rm -f $buildenv
+fi
+
+if [ -r $buildenv ]
+then
+  echo "Using cached build environment file: $buildenv"
+else
+  (make_build_environment $top_module $branch $repositories > $buildenv) \
+    || error "Failed to create build environment."
+  echo "Cached build environment in file: $buildenv"
+fi
+
+echo "Output redirected to: $logfile"
+
+. $buildenv
+
+modules=`var $branch _modules`
+
+builddir=$dirname/build
+installdir=$dirname/install
+
+if [ "x$print_modules" != "x" ]
+then
+  print_modules $modules
+  exit 0
+fi
+
+mkdir -p $builddir $installdir
+
+PATH=${installdir}/bin:${PATH}
+
+for module in `make_todo_list $modules`
+do
+  checkout $module $branch >>$logfile 2>&1
+
+  cd $builddir/$module >>$logfile 2>&1
+
+  #autoreconf --install --symlink >>$logfile 2>&1
+  ./reconf >>$logfile 2>&1
+
+  switches=`var "${module}_${branch}" _switches`
+  eval `echo ./configure "$switches" "$CONFIGURE_OPTIONS" '--prefix="$installdir"'` >>$logfile 2>&1
+
+  make all >>$logfile 2>&1
+
+  make install >>$logfile 2>&1
+done

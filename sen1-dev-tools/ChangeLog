@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Jul 11 16:43:42 CEST 2005 <gerco@cwi.nl>
+ * bin/shake:
+   - Added Hayco's shake script.
+
 Thu Jun 16 14:50:55 CEST 2005 <{gerco,jong,jurgenv}@cwi.nl>
  * bin/cvsmerge:
    - Reduce the number of broken pipe messages in log file.
