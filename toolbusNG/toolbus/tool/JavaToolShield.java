@@ -45,7 +45,7 @@ public class JavaToolShield extends ToolShield {
   /**
    * The constructor for JavaToolShield. 
    * @param toolDef the definition of this tool
-   * @param javaTool the tool instance that created this ToolShield
+   * @param toolInstance the tool instance that created this JavaToolShield
    */
 
   public JavaToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
@@ -60,7 +60,7 @@ public class JavaToolShield extends ToolShield {
     methodTable = new Hashtable();
     try {
     	toolConstructor = findConstructor();
-    	checkToolSignature(toolDef.getFunctionSignatures());
+    	checkToolSignature();
       Object actuals[] = new Object[] { this };
       javaToolObject = toolConstructor.newInstance(actuals);
     } catch (Exception e) {
@@ -106,13 +106,15 @@ public class JavaToolShield extends ToolShield {
   
   /**
    * Find a method in the tool class with given name and argument types.
-   * @param name of the method
-   * @param list of argument types
+   * @param call of the method
    * @param returnsVoid doe sthe class return void?
    */
 
-  private Method findMethod(String name, ATermList args, boolean returnsVoid) throws ToolBusException {
+  private void findMethod(ATermAppl call, boolean returnsVoid) throws ToolBusException {
+    String name = call.getName();
+    ATermList args = call.getArguments();
     System.err.println("findMethod(" + name + ", " + args + ")");
+    
     Method methods[] = toolClass.getDeclaredMethods();
     
     // HDJ: todo: refactor inner loop to separate method to avoid the need for label.
@@ -132,9 +134,11 @@ public class JavaToolShield extends ToolShield {
         }
         
         if (returnsVoid && equalType(TBTerm.VoidType, returntype)) {
-          return methods[i];
+        	methodTable.put(name, methods[i]);
+            return;
         } else if (!returnsVoid && equalType(TBTerm.TermType, returntype)) {
-          return methods[i];
+        	methodTable.put(name, methods[i]);
+            return;
         }
       }
     }
@@ -154,64 +158,41 @@ public class JavaToolShield extends ToolShield {
     }
     System.err.println(")");
   }
-
+  
   /**
    * Check the required signature of the tool class
    */
 
-  private void checkToolSignature(ATermList sigs) throws ToolBusException {
-    System.err.println("checkInputSignature(" + sigs + ")");
-    ATermPlaceholder toolPlaceholder = toolDef.getNameAsPlaceholder();
-
-    while (!sigs.isEmpty()) {
-      ATermAppl sig = (ATermAppl) sigs.getFirst();
-      sigs = sigs.getNext();
-      if (sig.getName().equals("Eval")) {
-      	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
-      	
-      	if(ap.equals(toolPlaceholder)){
-      		ATermAppl call = (ATermAppl) sig.getArgument(1);
-      		String name = call.getName();
-      		ATermList args = call.getArguments();
-      		methodTable.put(name, findMethod(name, args, false));
-      	}
-      }
-      if (sig.getName().equals("Do")) {
-      	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
-      	if(ap.equals(toolPlaceholder)){
-      		ATermAppl call = (ATermAppl) sig.getArgument(1);
-      		String name = call.getName();
-      		ATermList args = call.getArguments();
-      		methodTable.put(name, findMethod(name, args, true));
-      	}
-      }
-      if (sig.getName().equals("AckEvent")) {
-    	ATermPlaceholder ap = (ATermPlaceholder) sig.getArgument(0);
-      	if(ap.equals(toolPlaceholder)){
-      		String name = "ackEvent";
-      		ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
-      		methodTable.put(name, findMethod(name, args, true));
-      	}
-      }
-      if (sig.getName().equals("Terminate")) {
-        String name = terminate;
-        ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
-        methodTable.put(name, findMethod(name, args, true));
-      }
-    }
-    // Require that there is always a terminate method for the tool
-    if (methodTable.get(terminate) == null) {
-        String name = terminate;
-        ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
-        methodTable.put(name, findMethod(name, args, true));
-      }
+  private void checkToolSignature() throws ToolBusException {
+  	ATermList sigs = toolDef.getInputSignature();
+ 	System.err.println("checkInputSignature(" + sigs + ")");
+  	while(!sigs.isEmpty()){
+  		ATermAppl sig = (ATermAppl) sigs.getFirst();
+ 		sigs = sigs.getNext();
+  		if (sig.getName().equals("Eval")) {
+  			ATermAppl call = (ATermAppl) sig.getArgument(1);
+  			findMethod(call, false);
+  		} else
+  			if (sig.getName().equals("Do")) {
+  				ATermAppl call = (ATermAppl) sig.getArgument(1);
+  				findMethod(call, true);
+  			} else
+  				if (sig.getName().equals("AckEvent")) {
+  					ATermAppl call = (ATermAppl) TBTerm.factory.make("ackEvent(<term>)", TBTerm.TermPlaceholder);
+  					findMethod(call, true);
+  				} else
+  					if (sig.getName().equals("Terminate")) {
+  						ATermAppl call = (ATermAppl) TBTerm.factory.make("terminate(<term>)", TBTerm.StrPlaceholder);
+  						findMethod(call, true);
+  					}
+  	}
   }
   
   /**
    * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
    */
 
-  public void sndRequestToTool(/* ATerm id,*/ Integer operation, ATermAppl call) {
+  public void sndRequestToTool(Integer operation, ATermAppl call) {
     System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
     String name = call.getName();
     ATerm[] args = call.getArgumentArray();
@@ -228,7 +209,7 @@ public class JavaToolShield extends ToolShield {
       else
         actuals[i] = args[i];
     }
-    addRequestForTool(operation, m, actuals);
+    addRequestForTool(new Object[] { operation, m, actuals} );
   }
 
   /**
@@ -252,7 +233,7 @@ public class JavaToolShield extends ToolShield {
     if (operation == ToolInstance.EVAL) {
       getToolInstance().addValueFromTool(/*id, */res);
     } else if (operation == ToolInstance.TERMINATE) {
-    	setTerminating();
+    	stopRunning();
     }
   }
   
@@ -262,10 +243,10 @@ public class JavaToolShield extends ToolShield {
     Method m = (Method) methodTable.get(terminate);
 
     if (m == null){
-    	setTerminating();
+    	stopRunning();
     } else {
     	printMethod(m);
-    	addRequestForTool(ToolInstance.TERMINATE, m, actuals);
+    	addRequestForTool(new Object[] {ToolInstance.TERMINATE, m, actuals});
     }
   }
  

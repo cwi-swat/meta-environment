@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -13,13 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import toolbus.TBTerm;
+import toolbus.ToolBus;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
-import aterm.ATermList;
 
 public class ClassicToolShield extends ToolShield {
 	private final static int LENSPEC = 12;
@@ -28,9 +30,10 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = false;
+	private boolean verbose = true;
 	private InputStream inputStream;
 	private OutputStream outputStream;
+	private Process toolProcess;
 
 	private ToolDefinition toolDef;
 	private String toolname;
@@ -42,45 +45,154 @@ public class ClassicToolShield extends ToolShield {
 
 	private ATerm termSndVoid;
 
-	private boolean running;
 	private boolean connected;
+	
+	/**
+	   * The constructor for ClassicToolShield. 
+	   * @param toolDef the definition of this tool
+	   * @param toolInstance the tool instance that created this ClassicToolShield
+	   */
 
 	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
 		super(toolInstance);
 		this.toolDef = toolDef;
-		this.factory = factory;
+		this.factory = TBTerm.factory;
 		this.lockObject = this;
-
 		termSndVoid = factory.parse("snd-void");
 		queueMap = new HashMap();
-		
-		// Execute toolDef.
+		executeTool();
 	}
-/*
-	public void init(String[] args) throws UnknownHostException {
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-TB_PORT")) {
-				port = Integer.parseInt(args[++i]);
-			}
-			if (args[i].equals("-TB_HOST")) {
-				address = InetAddress.getByName(args[++i]);
-			}
-			if (args[i].equals("-TB_TOOL_NAME")) {
-				toolname = args[++i];
-			}
-			if (args[i].equals("-TB_TOOL_ID")) {
-				toolid = Integer.parseInt(args[++i]);
-			}
-			if (args[i].equals("-TB_VERBOSE")) {
-				verbose = true;
-			}
+	
+	void executeTool(){
+		String cmd = toolDef.getCommand() + 
+					//" -TB_HOST "      + toolDef.getHostName() +
+					" -TB_HOST "      + "aarde" +
+					" -TB_TOOL_NAME " + toolDef.getName() +
+					" -TB_TOOL_ID "   + getToolInstance().getToolCount() +
+					" -TB_PORT "      + ToolBus.getWellKnownSocketPort()
+					;
+		System.err.println("executeTool:" + cmd);
+		/*			
+		try {
+			toolProcess = Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+			System.err.println(e);
 		}
-		if (address == null) {
-			address = InetAddress.getLocalHost();
+		*/
+	}
+	
+	public void checkToolSignature() throws IOException {
+		sendTerm(factory.make("snd-do(signature(<term>,<term>)", toolDef
+				.getInputSignature(), toolDef.getOutputSignature()));
+	}
+	
+	public void sndRequestToTool(/* ATerm id,*/ Integer operation, ATermAppl call) {
+		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
+		addRequestForTool(new Object[] {operation, call, null});
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see toolbus.tool.ToolShield#handleRequestForTool()
+	 */
+	protected void handleRequestForTool() {
+		Object request[] = getNextRequestForTool();
+		Integer operation = (Integer) request[0];
+		ATermAppl call = (ATermAppl) request[1];
+		try {
+			sendTerm(call);
+		} catch (IOException e) {
+			System.err.println(e);
 		}
 	}
 	
-*/
+	public void handleIncomingTerm() throws IOException {
+		ATerm t = readTerm();
+
+		info("tool " + toolname + " handling term from toolbus: " + t);
+
+		if (t.match("rec-terminate(<term>)") != null) {
+			setRunning(false);
+			connected = false;
+		}
+
+		handleIncomingTerm(t);
+	}
+
+	public void handleIncomingTerm(ATerm t) throws IOException {
+		handleTerm(t);
+	}
+
+	protected void handleTerm(ATerm t) throws IOException {
+		synchronized (getLockObject()) {
+			ATerm result = handler(t);
+
+			if (t.match("rec-do(<term>)") != null) {
+				sendTerm(termSndVoid);
+			}
+			else if (result != null) {
+				sendTerm(result);
+			}
+
+			List terms = t.match("rec-ack-event(<term>)");
+			if (terms != null) {
+				ackEvent((ATerm) terms.get(0));
+			}
+		}
+	}
+
+	public void sendEvent(ATerm term) {
+		try {
+			sendTerm(factory.make("snd-event(<term>)", term));
+		}
+		catch (IOException e) {
+			throw new RuntimeException("cannot send event: " + e.getMessage());
+		}
+	}
+
+	public void postEvent(ATerm term) {
+		synchronized (getLockObject()) {
+			ATermAppl appl = (ATermAppl) term;
+			EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+			if (queue == null) {
+				queue = new EventQueue();
+				queueMap.put(appl.getName(), queue);
+			}
+			if (queue.ackWaiting()) {
+				queue.addEvent(appl);
+			}
+			else {
+				try {
+					sendTerm(factory.make("snd-event(<term>)", appl));
+				}
+				catch (IOException e) {
+					throw new RuntimeException("cannot post event: " + appl);
+				}
+				queue.setAckWaiting();
+			}
+		}
+	}
+
+	private void ackEvent(ATerm event) throws IOException {
+		ATermAppl appl = (ATermAppl) event;
+		EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+		if (queue != null && queue.ackWaiting()) {
+			appl = queue.nextEvent();
+			if (appl != null) {
+				sendTerm(factory.make("snd-event(<term>)", appl));
+				return;
+			}
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
+	 */
+	public void terminate(String msg) {
+		// TODO Auto-generated method stub
+	}
+	
 	public void setLockObject(Object obj) {
 		lockObject = obj;
 	}
@@ -88,7 +200,6 @@ public class ClassicToolShield extends ToolShield {
 	public Object getLockObject() {
 		return lockObject;
 	}
-	
 
 	public void connect() throws IOException {
 		Socket socket = new Socket(address, port);
@@ -172,7 +283,7 @@ public class ClassicToolShield extends ToolShield {
 		List matches = term.match("rec-do(signature([<list>],[<list>]))");
 		if (matches != null) {
 			info("checking input signature...");
-			checkInputSignature((ATermList) matches.get(0));
+			checkToolSignature();
 			sendTerm(termSndVoid);
 		}
 		else {
@@ -284,111 +395,22 @@ public class ClassicToolShield extends ToolShield {
 		return readTerm(inputStream);
 	}
 	
-	private synchronized void setRunning(boolean state)  {
-		running = state;
-	}
-
-	public void run() {
+	public void initRun() {
+		System.err.println("ClassicToolShield.initRun");
 		setRunning(true);
+		ServerSocket server = ToolBus.getWellKnownSocket();
+		
 		try {
-			while (running) {
-				handleIncomingTerm();
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("IOException: " + e.getMessage());
-		}
-	}
-	
-	public void stopRunning() {
-		setRunning(false);
-	}
-
-	public void handleIncomingTerm() throws IOException {
-		ATerm t = readTerm();
-
-		info("tool " + toolname + " handling term from toolbus: " + t);
-
-		if (t.match("rec-terminate(<term>)") != null) {
-			setRunning(false);
-			connected = false;
-		}
-
-		handleIncomingTerm(t);
-	}
-
-	public void handleIncomingTerm(ATerm t) throws IOException {
-		handleTerm(t);
-	}
-
-	protected void handleTerm(ATerm t) throws IOException {
-		synchronized (getLockObject()) {
-			ATerm result = handler(t);
-
-			if (t.match("rec-do(<term>)") != null) {
-				sendTerm(termSndVoid);
-			}
-			else if (result != null) {
-				sendTerm(result);
-			}
-
-			List terms = t.match("rec-ack-event(<term>)");
-			if (terms != null) {
-				ackEvent((ATerm) terms.get(0));
-			}
+			System.err.println("ClassicToolShield.initRun trying to accept on " + server);
+			Socket connection = server.accept();
+			System.err.println("ClassicToolShield.initRun connected to " + connection);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 
-	public void sendEvent(ATerm term) {
-		try {
-			sendTerm(factory.make("snd-event(<term>)", term));
-		}
-		catch (IOException e) {
-			throw new RuntimeException("cannot send event: " + e.getMessage());
-		}
-	}
 
-	public void postEvent(ATerm term) {
-		synchronized (getLockObject()) {
-			ATermAppl appl = (ATermAppl) term;
-			EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-			if (queue == null) {
-				queue = new EventQueue();
-				queueMap.put(appl.getName(), queue);
-			}
-			if (queue.ackWaiting()) {
-				queue.addEvent(appl);
-			}
-			else {
-				try {
-					sendTerm(factory.make("snd-event(<term>)", appl));
-				}
-				catch (IOException e) {
-					throw new RuntimeException("cannot post event: " + appl);
-				}
-				queue.setAckWaiting();
-			}
-		}
-	}
-
-	private void ackEvent(ATerm event) throws IOException {
-		ATermAppl appl = (ATermAppl) event;
-		EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-		if (queue != null && queue.ackWaiting()) {
-			appl = queue.nextEvent();
-			if (appl != null) {
-				sendTerm(factory.make("snd-event(<term>)", appl));
-				return;
-			}
-		}
-	}
-
-	//}}}
-
-	public void checkInputSignature(ATermList sig) {
-
-	}
 }
 
 /**

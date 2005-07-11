@@ -1,7 +1,11 @@
 package toolbus.tool;
 
-import aterm.*;
 import toolbus.TBTerm;
+import toolbus.tool.classic.ClassicToolShield;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
+import aterm.ATermPlaceholder;
 
 public class ToolDefinition {
   private String toolName;
@@ -10,8 +14,10 @@ public class ToolDefinition {
   private int restartFrequency;
   private boolean internal;
   private String kind;
-  private ATermList functionSignatures;
-
+  private ATermList inputSignature;
+  private ATermList outputSignature;
+/*
+  
   public ToolDefinition(String toolName, ATermList functionSignatures) {
     this.toolName = toolName;
     this.hostName = "localhost";
@@ -20,6 +26,7 @@ public class ToolDefinition {
     this.kind = "java";
     this.functionSignatures = functionSignatures;
   }
+  */
   
   public ToolDefinition(String toolName, String host, String kind, String command){
     this.toolName = toolName;
@@ -28,7 +35,8 @@ public class ToolDefinition {
     this.internal = true;
     this.kind = kind;
     this.command = command;
-    this.functionSignatures = null;
+    inputSignature = TBTerm.factory.makeList();
+    outputSignature = TBTerm.factory.makeList();
   }
 
   public String getHostName() {
@@ -68,17 +76,45 @@ public class ToolDefinition {
     this.restartFrequency = restartFrequency;
   }
   
-  public ATermList getFunctionSignatures(){
-    return functionSignatures;
+  public ATermList getInputSignature(){
+    return inputSignature;
   }
   
-  public void setFunctionSignatures(ATermList sig){
-    functionSignatures = sig;
+  public ATermList getOutputSignature(){
+    return outputSignature;
+  }
+  
+  public void setToolSignatures(ATermList sigs){
+  	ATermPlaceholder toolPlaceholder = getNameAsPlaceholder();
+  	while (!sigs.isEmpty()) {
+  		ATermAppl sig = (ATermAppl) sigs.getFirst();
+  		sigs = sigs.getNext();
+  		//System.err.println("setToolSignatures: " + sig);
+  		if(sig.getArity() > 0){
+  			ATerm ap = sig.getArgument(0);
+  			if(ap.equals(toolPlaceholder)){
+  				if( sig.getName().equals("Eval") || sig.getName().equals("Do") || sig.getName().equals("AckEvent") ||
+  						sig.getName().equals("Terminate")){
+  					inputSignature = TBTerm.factory.makeList(sig, inputSignature);
+  				} else if( sig.getName().equals("Event")){
+  					outputSignature = TBTerm.factory.makeList(sig, outputSignature);
+  				}
+  			}
+  		}
+  	}
+  	
+  	ATerm recTerminate = TBTerm.factory.make("rec-terminate(<term>)", toolPlaceholder);
+  	inputSignature = TBTerm.factory.makeList(recTerminate, inputSignature);
+  	
+  	ATerm sndConnect = TBTerm.factory.make("snd-connect(<term>)", toolPlaceholder);
+  	outputSignature = TBTerm.factory.makeList(sndConnect, outputSignature);
   }
   
   public ToolShield makeToolShield(ToolInstance ti){
   	if(kind == "java")
   		return new JavaToolShield(this, ti);
+  	else if(kind == "classic")
+  		return new ClassicToolShield(this, ti);
   	else
   		System.err.println("Unknown tool kind:" + kind);
   	return null;
