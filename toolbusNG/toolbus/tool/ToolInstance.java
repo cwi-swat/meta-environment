@@ -20,15 +20,14 @@ import aterm.ATermList;
 
 public class ToolInstance {
  
-  private static int toolCount = 0;
-  private ATerm toolId;
-  private Thread toolThread;
-  private Object toolInstance;
+  private static int toolCount = 0; // global counter of tool instances
+  private ATerm toolId;				// id of current tool: toolname(<int>)
   
   private LinkedList valuesFromTool;
   private LinkedList eventsFromTool;
-  private LinkedList pendingEvents;
-  private ToolShield toolShield;
+  private LinkedList pendingEvents;  // ???
+  
+  private ToolShield toolShield;     // The ToolShield that handles this tool
 
   protected static final Integer EVAL = new Integer(1);
   protected static final Integer DO = new Integer(2);
@@ -46,11 +45,11 @@ public class ToolInstance {
     valuesFromTool = new LinkedList();
     eventsFromTool = new LinkedList();
     pendingEvents = new LinkedList();
+    AFun afun = TBTerm.factory.makeAFun(toolDef.getName(), 1, false);
+    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolCount++));
 
     toolShield = toolDef.makeToolShield(this);
     toolShield.start();
-    AFun afun = TBTerm.factory.makeAFun(toolDef.getName(), 1, false);
-    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolCount++));
   }
 
   public ATerm getToolId(){
