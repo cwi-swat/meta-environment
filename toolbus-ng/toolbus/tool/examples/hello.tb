@@ -10,9 +10,7 @@ process HELLO is
       printf(S)                %% Print it
   endlet
 
-tool hello is {host = "localhost" kind = "classic" command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello"}
-
-%%tool hello is {host = "localhost" kind = "classic" command = "java /home/paulk/.eclipse/toolbusNG/toolbud/tool/classic/Client aarde 9050"}
+tool hello is {host = "localhost" kind = "classic" command = "/ufs/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello"}
 
 toolbus(HELLO)
 

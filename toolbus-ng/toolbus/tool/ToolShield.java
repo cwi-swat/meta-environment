@@ -52,13 +52,13 @@ public abstract class ToolShield extends Thread {
 		return request;
 	}
 
-	abstract protected void handleRequestForTool();
+	abstract protected void handleRequestToTool();
 
 	/**
-	 * Add a request from JavaTool to the internal request list
+	 * Add a request to the internal request list
 	 */
 
-	public synchronized void addRequestForTool(Object[] request){
+	public synchronized void addRequestToTool(Object[] request){
 		requestsForTool.add(request);
 		/*
 		if(operation == ToolInstance.TERMINATE){
@@ -94,7 +94,7 @@ public abstract class ToolShield extends Thread {
 	}
 	
 	/**
-	 * initRun gives subclasses a change to do specific initialization
+	 * initRun gives subclasses a chance to do specific initialization
 	 */
 	public void initRun(){
 	}
@@ -110,7 +110,7 @@ public abstract class ToolShield extends Thread {
 			//System.err.println("ToolShield.run; 1 "+ toolInstance.getToolId());
 			while (!requestsForTool.isEmpty() && running){
 				//System.err.println("ToolShield.run; 2 "+ toolInstance.getToolId());
-				handleRequestForTool();
+				handleRequestToTool();
 			}
 			//System.err.println("ToolShield.run; 3 "+ toolInstance.getToolId());
 			if(running)

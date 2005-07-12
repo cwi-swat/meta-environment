@@ -8,7 +8,6 @@ import java.util.Hashtable;
 
 import toolbus.TBTerm;
 import toolbus.ToolBusException;
-import toolbus.ToolBusInternalError;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
@@ -209,14 +208,14 @@ public class JavaToolShield extends ToolShield {
       else
         actuals[i] = args[i];
     }
-    addRequestForTool(new Object[] { operation, m, actuals} );
+    addRequestToTool(new Object[] { operation, m, actuals} );
   }
 
   /**
    * Handle the next request for the tool
    */
 
-  protected void handleRequestForTool() {
+  protected void handleRequestToTool() {
     Object request[] = getNextRequestForTool();
 
     Integer operation = (Integer) request[0];
@@ -231,7 +230,7 @@ public class JavaToolShield extends ToolShield {
       e.printStackTrace();
     }
     if (operation == ToolInstance.EVAL) {
-      getToolInstance().addValueFromTool(/*id, */res);
+      getToolInstance().addValueFromTool(res);
     } else if (operation == ToolInstance.TERMINATE) {
     	stopRunning();
     }
@@ -246,7 +245,7 @@ public class JavaToolShield extends ToolShield {
     	stopRunning();
     } else {
     	printMethod(m);
-    	addRequestForTool(new Object[] {ToolInstance.TERMINATE, m, actuals});
+    	addRequestToTool(new Object[] {ToolInstance.TERMINATE, m, actuals});
     }
   }
  
