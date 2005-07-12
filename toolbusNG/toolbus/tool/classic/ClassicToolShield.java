@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ public class ClassicToolShield extends ToolShield {
 	private Object lockObject;
 	protected ATermFactory factory;
 	private boolean verbose = true;
+	private Socket connection;
 	private InputStream inputStream;
 	private OutputStream outputStream;
 	private Process toolProcess;
@@ -60,6 +60,9 @@ public class ClassicToolShield extends ToolShield {
 		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
 		queueMap = new HashMap();
+		address = ToolBus.getLocalHost();
+		toolname = toolDef.getName();
+		toolid = getToolInstance().getToolCount();
 		executeTool();
 	}
 	
@@ -72,21 +75,21 @@ public class ClassicToolShield extends ToolShield {
 					" -TB_PORT "      + ToolBus.getWellKnownSocketPort()
 					;
 		System.err.println("executeTool:" + cmd);
-		/*			
+			
 		try {
 			toolProcess = Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			System.err.println(e);
 		}
-		*/
+
 	}
 	
 	public void checkToolSignature() throws IOException {
-		sendTerm(factory.make("snd-do(signature(<term>,<term>)", toolDef
+		sendTerm(factory.make("rec-do(signature(<term>,<term>))", toolDef
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 	
-	public void sndRequestToTool(/* ATerm id,*/ Integer operation, ATermAppl call) {
+	public void sndRequestToTool(Integer operation, ATermAppl call) {
 		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
 		addRequestForTool(new Object[] {operation, call, null});
 	}
@@ -202,9 +205,10 @@ public class ClassicToolShield extends ToolShield {
 	}
 
 	public void connect() throws IOException {
-		Socket socket = new Socket(address, port);
-		inputStream = new BufferedInputStream(socket.getInputStream());
-		outputStream = new BufferedOutputStream(socket.getOutputStream());
+		ServerSocket server = ToolBus.getWellKnownSocket();
+		connection = server.accept();
+		inputStream = new BufferedInputStream(connection.getInputStream());
+		outputStream = new BufferedOutputStream(connection.getOutputStream());
 
 		shakeHands();
 		connected = true;
@@ -259,58 +263,43 @@ public class ClassicToolShield extends ToolShield {
 		}
 
 		String myHand = toolname + " " + host + " " + toolid;
-		byte[] hs = myHand.getBytes();
+		info("myhand: <" + myHand + ">");
+		
 		byte[] handshake = new byte[MAX_HANDSHAKE];
-		for (int i = 0; i < hs.length; i++) {
-			handshake[i] = hs[i];
-		}
-		outputStream.write(handshake);
-		outputStream.flush();
+		int nr = inputStream.read(handshake);
 
-		int tid = readInt();
-		if (tid < 0) {
-			throw new RuntimeException("no tool-id assigned by ToolBus");
-		}
-		if (toolid < 0) {
-			toolid = tid;
-			info("got tool-id: " + toolid);
-		}
-		else if (toolid != tid) {
-			throw new RuntimeException("tool-id out of phase");
-		}
+		String toolHand = new String(handshake).substring(0, myHand.length());
+		info(myHand.length() + " " + toolHand.length());
+		info("input: <" + toolHand + ">");
+		if(!myHand.equalsIgnoreCase(toolHand))
+			throw new RuntimeException("received incorrect handshake: " + toolHand);
+		
+		writeInt(toolid);
 
+		info("checking input signature...");
+		checkToolSignature();
 		ATerm term = readTerm();
-		List matches = term.match("rec-do(signature([<list>],[<list>]))");
-		if (matches != null) {
-			info("checking input signature...");
-			checkToolSignature();
-			sendTerm(termSndVoid);
-		}
-		else {
-			throw new RuntimeException("signature information garbled: " + term);
+		info("receive: " + term);
+		if(!term.isEqual(termSndVoid)){
+			throw new RuntimeException("incorrect response after signature check: " + term);
 		}
 	}
 
 	void info(String msg) {
 		if (verbose) {
-			System.err.println("[TOOL: " + toolname + "] " + msg);
+			System.err.println("[TOOLSHIELD: " + toolname + "] " + msg);
 		}
 	}
-
-	private int readInt() throws IOException {
+	
+	private void writeInt(int n) throws IOException {
 		byte[] buffer = new byte[MAX_HANDSHAKE];
-
-		inputStream.read(buffer);
-
-		String string = new String(buffer);
-
-		int space = string.indexOf(' ');
-		int end = string.indexOf(0);
-		String toolname = string.substring(0, space);
-		if (!toolname.equals(this.toolname)) {
-			throw new RuntimeException("wrong toolname in readInt: " + toolname);
+		String s = toolname + " " + Integer.toString(n);
+		byte bs[] = s.getBytes();
+		for (int i = 0; i < bs.length; i++) {
+			buffer[i] = bs[i];
 		}
-		return Integer.parseInt(string.substring(space + 1, end));
+		outputStream.write(buffer);
+		outputStream.flush();
 	}
 
 	public void sendTerm(ATerm term) throws IOException {
@@ -326,7 +315,7 @@ public class ClassicToolShield extends ToolShield {
 			}
 
 			if (verbose) {
-				System.out.print("tool " + toolname + " writes term:\n");
+				System.out.print("toolshield " + toolname + " writes term:\n");
 				System.out.print(new String(ls));
 				System.out.println(term);
 			}
@@ -355,7 +344,7 @@ public class ClassicToolShield extends ToolShield {
 		while (index != LENSPEC) {
 			int bytes_read = inputStream.read(lspecBuf, index, LENSPEC - index);
 			if (bytes_read <= 0) {
-				throw new IOException("ToolBus connection terminated");
+				throw new IOException("Tool connection terminated");
 			}
 			index += bytes_read;
 		}
@@ -373,7 +362,7 @@ public class ClassicToolShield extends ToolShield {
 		while (index != bytesLeft) {
 			int bytes_read = inputStream.read(data, index, bytesLeft - index);
 			if (bytes_read <= 0) {
-				throw new IOException("ToolBus connection terminated");
+				throw new IOException("Tool connection terminated");
 			}
 			index += bytes_read;
 		}
@@ -398,19 +387,16 @@ public class ClassicToolShield extends ToolShield {
 	public void initRun() {
 		System.err.println("ClassicToolShield.initRun");
 		setRunning(true);
-		ServerSocket server = ToolBus.getWellKnownSocket();
 		
 		try {
-			System.err.println("ClassicToolShield.initRun trying to accept on " + server);
-			Socket connection = server.accept();
-			System.err.println("ClassicToolShield.initRun connected to " + connection);
+			System.err.println("ClassicToolShield.initRun trying to connect");
+			connect();
+			System.err.println("ClassicToolShield.initRun connected");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
-
-
 }
 
 /**
