@@ -383,7 +383,7 @@ public class ToolBus {
    * Shutdown of this ToolBus.
    */
 
-  public void shutdown(String msg) throws ToolBusDeathException {
+  public void shutdown(String msg){
     for (int i = 0; i < processes.size(); i++) {
     	//System.err.println("shutdown process " + i);
       ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
@@ -395,7 +395,12 @@ public class ToolBus {
     	ti.terminate(msg);
     }
 	//System.err.println("shutdown complete");
-    throw new ToolBusDeathException(msg);
+    try {
+    	WellKnownSocket.close();
+    } catch(IOException e){
+    	System.err.println(e);
+    }
+    //throw new ToolBusDeathException(msg);
   }
 
   /**
@@ -431,6 +436,6 @@ public class ToolBus {
     } catch (ToolBusException e) {
       System.err.println(e.getMessage());
     }
-    System.err.println("ToolBus halted");
+    shutdown("ToolBus halted");
   }
 }

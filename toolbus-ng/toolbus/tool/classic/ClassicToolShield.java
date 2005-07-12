@@ -40,7 +40,7 @@ class ToolInputHandler extends Thread {
 		running = on;
 	}
 	
-	public void  run(){
+	public void run(){
 		int errorCount = 0;
 		running = true;
 		while(running){
@@ -54,16 +54,15 @@ class ToolInputHandler extends Thread {
 					e.printStackTrace();
 					//throw new ToolBusException("no connection with tool");
 					int n = 2/0;
-				}
-					
+				}	
 			}
 		}
 	}
 }
 
 public class ClassicToolShield extends ToolShield {
-	private final static int LENSPEC = 12;
-	private final static int MAX_HANDSHAKE = 512;
+	private final static int LENSPEC = 12;          // ToolBus dependent parameters
+	private final static int MAX_HANDSHAKE = 512;   // Do not change
 	private final static int MIN_MSG_SIZE = 128;
 
 	private Object lockObject;
@@ -78,13 +77,11 @@ public class ClassicToolShield extends ToolShield {
 	private ToolDefinition toolDef;
 	private String toolname;
 	private InetAddress address;
-	//private int port = -1;
 	private int toolid = -1;
 
 	private Map queueMap;
 
 	private ATerm termSndVoid;
-
 	private boolean connected;
 	
 	/**
@@ -153,10 +150,9 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void handleTermFromTool(ATerm t) {
-		synchronized (getLockObject()) {
-			
+		synchronized (getLockObject()) {	
 			info("tool " + toolname + " handling term from toolbus: " + t);
-
+			
 			List matches = t.match("snd-value(<term>)"); //TODO; more args
 			if (matches != null) {
 				getToolInstance().addValueFromTool(matches.get(0));
@@ -164,20 +160,11 @@ public class ClassicToolShield extends ToolShield {
 			
 			List matches1 = t.match("snd-event(<term>)"); //TODO: more args
 			if (matches1 != null) {
-				getToolInstance().addEventFromTool(matches.get(0));
+				getToolInstance().addEventFromTool(matches1.get(0));
 			}
 		}
 	}
-
-	public void sendEvent(ATerm term) {
-		try {
-			sendTerm(factory.make("snd-event(<term>)", term));
-		}
-		catch (IOException e) {
-			throw new RuntimeException("cannot send event: " + e.getMessage());
-		}
-	}
-
+/*
 	public void postEvent(ATerm term) {
 		synchronized (getLockObject()) {
 			ATermAppl appl = (ATermAppl) term;
@@ -212,6 +199,7 @@ public class ClassicToolShield extends ToolShield {
 			}
 		}
 	}
+	*/
 	
 	/* (non-Javadoc)
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
@@ -338,9 +326,9 @@ public class ClassicToolShield extends ToolShield {
 			outputStream.flush();
 		}
 	}
-
-	public static ATerm readTerm(InputStream stream, ATermFactory factory) throws IOException {
-		return readTerm(stream, factory, stream);
+	
+	public ATerm readTerm() throws IOException {
+		return readTerm(inputStream, factory, getLockObject());
 	}
 
 	public static ATerm readTerm(InputStream inputStream, ATermFactory factory, Object lock) throws IOException {
@@ -382,14 +370,6 @@ public class ClassicToolShield extends ToolShield {
 		result = factory.parse(stringdata);
 
 		return result;
-	}
-
-	public ATerm readTerm(InputStream inputStream) throws IOException {
-		return readTerm(inputStream, factory, getLockObject());
-	}
-
-	public ATerm readTerm() throws IOException {
-		return readTerm(inputStream);
 	}
 	
 	public void initRun() {

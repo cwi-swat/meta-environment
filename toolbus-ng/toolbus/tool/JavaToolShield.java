@@ -33,12 +33,13 @@ import aterm.ATermPlaceholder;
  */
 
 public class JavaToolShield extends ToolShield {
-	private String className;
-	private Class toolClass;
-	private ToolDefinition toolDef;
-	private Constructor toolConstructor;
-	private Object javaToolObject;
-	private Hashtable methodTable;
+	private ToolDefinition toolDef;          // Definition of the tool
+	private String className;                // Name of the class implementing the tool
+	private Class toolClass;                 // The class itself
+	private Constructor toolConstructor;	 // and its constructor function
+	private Object javaToolInstance;         // The instance created for this tool
+	private Hashtable methodTable;           // Table of methods that implement requests
+	
 	private static final String terminate = "terminate";
 
   /**
@@ -61,7 +62,7 @@ public class JavaToolShield extends ToolShield {
     	toolConstructor = findConstructor();
     	checkToolSignature();
       Object actuals[] = new Object[] { this };
-      javaToolObject = toolConstructor.newInstance(actuals);
+      javaToolInstance = toolConstructor.newInstance(actuals);
     } catch (Exception e) {
       System.out.println("JavaToolShield: " + e);
     }
@@ -106,7 +107,7 @@ public class JavaToolShield extends ToolShield {
   /**
    * Find a method in the tool class with given name and argument types.
    * @param call of the method
-   * @param returnsVoid doe sthe class return void?
+   * @param returnsVoid should the class return void?
    */
 
   private void findMethod(ATermAppl call, boolean returnsVoid) throws ToolBusException {
@@ -224,7 +225,7 @@ public class JavaToolShield extends ToolShield {
 
     Object res = null;
     try {
-      res = m.invoke(javaToolObject, actuals);
+      res = m.invoke(javaToolInstance, actuals);
     } catch (Exception e) {
       System.err.println("JavaToolShield.handleRequest: " + e);
       e.printStackTrace();
