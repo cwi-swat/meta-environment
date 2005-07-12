@@ -53,8 +53,9 @@ public class ToolBus {
   private static boolean verbose = false;
   private static int nerrrors = 0;
   private static int nwarnings = 0;
-  private static int WellKnownSocketPort = 8999;
+  private static int WellKnownSocketPort = 9017; //8999;
   private static ServerSocket WellKnownSocket;
+  private static InetAddress localHost;
 
   /**
    * Constructor with explicit PrintWriter
@@ -77,9 +78,10 @@ public class ToolBus {
     parser = new TScriptParser(new ExternalParser(sglr, parseTable, implodePT));
     
     try {
-    	System.err.println("Creating WellKnownSocket: " + WellKnownSocketPort + " " + InetAddress.getLocalHost());
-    	WellKnownSocket = new ServerSocket(WellKnownSocketPort, 1, InetAddress.getLocalHost());
-    	//WellKnownSocket = new ServerSocket(WellKnownSocketPort);
+    	localHost = InetAddress.getLocalHost();
+    	System.err.println("Creating WellKnownSocket: " + WellKnownSocketPort + " " + localHost);
+    	WellKnownSocket = new ServerSocket(WellKnownSocketPort, 1, localHost);
+
     } catch(IOException e){
     	System.err.println(e);
     }
@@ -123,6 +125,10 @@ public class ToolBus {
   
   public static int  getWellKnownSocketPort(){
   	return WellKnownSocketPort;
+  }
+  
+  public static InetAddress getLocalHost(){
+  	return localHost;
   }
 
   /**
