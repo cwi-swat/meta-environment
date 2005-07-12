@@ -18,9 +18,48 @@ import toolbus.ToolBus;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
+import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
+
+/**
+ * ToolInputHandler is executed as a separate thread and listens
+ * for incoming terms from the tool.
+ */
+
+class ToolInputHandler extends Thread {
+	ClassicToolShield toolShield;
+	boolean running = false;
+	
+	ToolInputHandler(ClassicToolShield ts){
+		toolShield = ts;
+	}
+	
+	void setRunning(boolean on){
+		running = on;
+	}
+	
+	public void  run(){
+		int errorCount = 0;
+		running = true;
+		while(running){
+			try {
+				ATerm t = toolShield.readTerm();
+				toolShield.handleTermFromTool(t);
+			} catch(IOException e){
+				System.err.println("ToolInputHandler: " + e);
+				errorCount++;
+				if(errorCount > 5){
+					e.printStackTrace();
+					//throw new ToolBusException("no connection with tool");
+					int n = 2/0;
+				}
+					
+			}
+		}
+	}
+}
 
 public class ClassicToolShield extends ToolShield {
 	private final static int LENSPEC = 12;
@@ -34,11 +73,12 @@ public class ClassicToolShield extends ToolShield {
 	private InputStream inputStream;
 	private OutputStream outputStream;
 	private Process toolProcess;
+	private ToolInputHandler toolInputHandler;
 
 	private ToolDefinition toolDef;
 	private String toolname;
 	private InetAddress address;
-	private int port = -1;
+	//private int port = -1;
 	private int toolid = -1;
 
 	private Map queueMap;
@@ -68,8 +108,8 @@ public class ClassicToolShield extends ToolShield {
 	
 	void executeTool(){
 		String cmd = toolDef.getCommand() + 
-					//" -TB_HOST "      + toolDef.getHostName() +
-					" -TB_HOST "      + "aarde" +
+					" -TB_HOST "      + ToolBus.getLocalHost().getHostName() +
+					//" -TB_HOST "      + "aarde" +
 					" -TB_TOOL_NAME " + toolDef.getName() +
 					" -TB_TOOL_ID "   + getToolInstance().getToolCount() +
 					" -TB_PORT "      + ToolBus.getWellKnownSocketPort()
@@ -91,7 +131,7 @@ public class ClassicToolShield extends ToolShield {
 	
 	public void sndRequestToTool(Integer operation, ATermAppl call) {
 		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
-		addRequestForTool(new Object[] {operation, call, null});
+		addRequestToTool(new Object[] {operation, call, null});
 	}
 	
 	/*
@@ -99,48 +139,32 @@ public class ClassicToolShield extends ToolShield {
 	 * 
 	 * @see toolbus.tool.ToolShield#handleRequestForTool()
 	 */
-	protected void handleRequestForTool() {
+	protected void handleRequestToTool() {
 		Object request[] = getNextRequestForTool();
 		Integer operation = (Integer) request[0];
 		ATermAppl call = (ATermAppl) request[1];
+		AFun fun = TBTerm.factory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
+		ATermAppl req = TBTerm.factory.makeAppl(fun, call);
 		try {
-			sendTerm(call);
+			sendTerm(req);
 		} catch (IOException e) {
 			System.err.println(e);
 		}
 	}
 	
-	public void handleIncomingTerm() throws IOException {
-		ATerm t = readTerm();
-
-		info("tool " + toolname + " handling term from toolbus: " + t);
-
-		if (t.match("rec-terminate(<term>)") != null) {
-			setRunning(false);
-			connected = false;
-		}
-
-		handleIncomingTerm(t);
-	}
-
-	public void handleIncomingTerm(ATerm t) throws IOException {
-		handleTerm(t);
-	}
-
-	protected void handleTerm(ATerm t) throws IOException {
+	public void handleTermFromTool(ATerm t) {
 		synchronized (getLockObject()) {
-			ATerm result = handler(t);
+			
+			info("tool " + toolname + " handling term from toolbus: " + t);
 
-			if (t.match("rec-do(<term>)") != null) {
-				sendTerm(termSndVoid);
+			List matches = t.match("snd-value(<term>)"); //TODO; more args
+			if (matches != null) {
+				getToolInstance().addValueFromTool(matches.get(0));
 			}
-			else if (result != null) {
-				sendTerm(result);
-			}
-
-			List terms = t.match("rec-ack-event(<term>)");
-			if (terms != null) {
-				ackEvent((ATerm) terms.get(0));
+			
+			List matches1 = t.match("snd-event(<term>)"); //TODO: more args
+			if (matches1 != null) {
+				getToolInstance().addEventFromTool(matches.get(0));
 			}
 		}
 	}
@@ -212,24 +236,8 @@ public class ClassicToolShield extends ToolShield {
 
 		shakeHands();
 		connected = true;
-	}
-
-	public void connect(String toolname, InetAddress address, int port) throws IOException {
-		if (toolname != null) {
-			this.toolname = toolname;
-		}
-
-		if (address != null) {
-			this.address = address;
-		}
-
-		if (port != -1) {
-			this.port = port;
-		}
-
-		this.toolid = -1;
-
-		connect();
+		toolInputHandler = new ToolInputHandler(this);
+		toolInputHandler.start();
 	}
 
 	public void disconnect() {
