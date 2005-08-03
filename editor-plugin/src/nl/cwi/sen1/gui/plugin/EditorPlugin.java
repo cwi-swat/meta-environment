@@ -17,7 +17,9 @@ import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioComponentImpl;
+import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
@@ -133,8 +135,8 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        StudioComponentImpl comp = (StudioComponentImpl) componentsById.get(editorId
-                .toString());
+        StudioComponentImpl comp = (StudioComponentImpl) componentsById
+                .get(editorId.toString());
         comp.setStatusMessage(message);
     }
 
@@ -203,11 +205,9 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
                     if (e.getClickCount() == 1) {
                         ATerm line = studio.getATermFactory().makeInt(l + 1);
                         ATerm column = studio.getATermFactory().makeInt(offset);
-                        ATerm event = studio
-                                .getATermFactory()
-                                .make(
-                                        "mouse-event(<term>,<term>,<term>)",
-                                        editorId, line, column);
+                        ATerm event = studio.getATermFactory().make(
+                                "mouse-event(<term>,<term>,<term>)", editorId,
+                                line, column);
                         bridge.postEvent(event);
                     }
                 }
@@ -250,7 +250,8 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 
             editors.put(id, panel);
             componentsById.put(id, comp);
-            studio.addComponent(comp);
+            ((StudioWithPredefinedLayout) studio).addComponent(comp,
+                    StudioImplWithPredefinedLayout.TOP_RIGHT);
         }
 
         return editorPanel;
