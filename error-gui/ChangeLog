@@ -1,5 +1,16 @@
 # $Id$
 
+Wed Aug  3 13:16:18 CEST 2005 <kooiker@cwi.nl>
+ * Merged predefined-gui-layout branch
+
+Mon Jun 27 14:35:39 CEST 2005 <kooiker@cwi.nl>
+ * package:
+   - depends on error-support 1.2
+
+Thu Jun  2 11:01:01 CEST 2005 <kooiker@cwi.nl>
+ * ErrorViewer.java:
+   - Use StudioComponentImpl
+
 Mon May 30 10:09:06 CEST 2005 <kooiker@cwi.nl>
  * package:
    - Also add toolbus dependency to package
