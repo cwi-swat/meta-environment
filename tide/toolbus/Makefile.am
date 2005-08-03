@@ -12,7 +12,7 @@ INCLUDES = \
 	-I${TIDE_SUPPORT}/share/tide-support
 
 tifs: tide.tb 
-	${TOOLBUS}/bin/toolbus ${INCLUDES} -gentifs $< -output tide.tifs
+	${TOOLBUS}/bin/toolbus ${INCLUDES} -output tide.tifs -gentifs $<
 
 control.tb: control.tb.src
 	sed 's@__PKGDATA__@${pkgdatadir}@' < $< > $@

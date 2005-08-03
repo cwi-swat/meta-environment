@@ -164,7 +164,7 @@ public class ToolManager
   
   public TideTool launchTool(String toolName)
   {
-    TideTool tool = (TideTool)getTool(toolName, this);
+    TideTool tool = getTool(toolName, this);
     if (tool == null) {
       TideToolFactory factory =
 	(TideToolFactory)tideTools.get(toolName);

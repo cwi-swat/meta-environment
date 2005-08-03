@@ -122,13 +122,12 @@ public class GdbProcess extends DebugAdapterProcess implements Runnable {
 		if (file == null) {
 			debugMsg("current cpe is unknown");
 			return factory.make("cpe(unknown)");
-		} else {
-			debugMsg("current cpe is in file:" + file + ", line: " + line);
-			return factory.make(
-				"location(line(<str>,<int>))",
-				file,
-				new Integer(line));
 		}
+        debugMsg("current cpe is in file:" + file + ", line: " + line);
+        return factory.make(
+        	"location(line(<str>,<int>))",
+        	file,
+        	new Integer(line));
 	}
 
 	public ATerm actionSourceVar(ATerm file, ATerm offset, ATerm line, ATerm col, ATerm text) {

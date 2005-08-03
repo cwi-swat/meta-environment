@@ -115,7 +115,7 @@ class RuleSelector
     TableColumn column_id = table.getColumn(tableModel.getColumnName(0));
     column_id.setMaxWidth(30);
     DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-    renderer.setHorizontalAlignment(JLabel.CENTER);
+    renderer.setHorizontalAlignment(SwingConstants.CENTER);
     column_id.setCellRenderer(renderer);
 
     setLayout(new BorderLayout());
@@ -353,7 +353,7 @@ class RuleEditor
 
     conditionLabel = new JLabel("Condition:");
     condition = new JTextField();
-    actionLabel = new JLabel("Action:", JLabel.CENTER);
+    actionLabel = new JLabel("Action:", SwingConstants.CENTER);
     action = new JTextArea();
     createButton = new JButton("Create");
     applyButton = new JButton("Apply");

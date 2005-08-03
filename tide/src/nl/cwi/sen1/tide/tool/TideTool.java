@@ -154,4 +154,10 @@ public abstract class TideTool
 			fireStatusMessageChanged(oldMessage, newMessage);
 		}
 	}
+    
+    public void requestClose() {
+    }
+    
+    public void close() {
+    }
 }

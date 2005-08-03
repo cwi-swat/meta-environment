@@ -28,9 +28,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.modifyRule(i0, i1, t2, t3, t4, t5);
     }
-    else {
-      throw new UnsupportedOperationException("method `modifyRule' not supported.");
-    }
+    throw new UnsupportedOperationException("method `modifyRule' not supported.");
   }
 
   //}}}
@@ -41,9 +39,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.disableRule(i0, i1);
     }
-    else {
-      throw new UnsupportedOperationException("method `disableRule' not supported.");
-    }
+    throw new UnsupportedOperationException("method `disableRule' not supported.");
   }
 
   //}}}
@@ -54,9 +50,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.enableRule(i0, i1);
     }
-    else {
-      throw new UnsupportedOperationException("method `enableRule' not supported.");
-    }
+    throw new UnsupportedOperationException("method `enableRule' not supported.");
   }
 
   //}}}
@@ -67,9 +61,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.deleteRule(i0, i1);
     }
-    else {
-      throw new UnsupportedOperationException("method `deleteRule' not supported.");
-    }
+    throw new UnsupportedOperationException("method `deleteRule' not supported.");
   }
 
   //}}}
@@ -80,9 +72,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.createRule(i0, t1, t2, t3, t4, t5);
     }
-    else {
-      throw new UnsupportedOperationException("method `createRule' not supported.");
-    }
+    throw new UnsupportedOperationException("method `createRule' not supported.");
   }
 
   //}}}
@@ -93,9 +83,7 @@ public class DebugAdapterBridge
     if (tool != null) {
       return tool.evaluate(i0, t1);
     }
-    else {
-      throw new UnsupportedOperationException("method `evaluate' not supported.");
-    }
+    throw new UnsupportedOperationException("method `evaluate' not supported.");
   }
 
   //}}}

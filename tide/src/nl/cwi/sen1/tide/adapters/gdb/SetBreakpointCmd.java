@@ -35,10 +35,8 @@ public class SetBreakpointCmd
 	{
 		if(method != null)
 			return "break " + method + "\n";
-		else {
-			File f = new File(file);
-			return "break " + f.getName() + ":" + linenr + "\n";
-		}
+        File f = new File(file);
+        return "break " + f.getName() + ":" + linenr + "\n";
 	}
 
 	public boolean response(String line)

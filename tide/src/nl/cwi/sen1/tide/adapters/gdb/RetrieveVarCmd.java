@@ -81,9 +81,7 @@ public class RetrieveVarCmd extends Command
 		if (reservedKeywords.indexOf(name) != -1) {
 			return true;
 		}
-		else {
-			return false;
-		}
+        return false;
 	}
 	
 	public String command()
@@ -91,9 +89,7 @@ public class RetrieveVarCmd extends Command
 		if (!isReserved(var)) {
 		  return "print " + var + "\n";
 		}
-		else {
-			return "print DezeVariabeleBestaatWaarschijnlijkTochNiet";
-		}
+        return "print DezeVariabeleBestaatWaarschijnlijkTochNiet";
 	}
 
 	synchronized public boolean response(String line)
@@ -126,9 +122,8 @@ public class RetrieveVarCmd extends Command
 		ATermFactory factory = adapter.getFactory();
 		if (value.equals("")) {
 			return VarFormat.makeVarUnknown(factory,error);
-		} else {
-			ATerm atValue = factory.makeAppl(factory.makeAFun(value,0,true));
-			return VarFormat.makeExprVar(factory, var, atValue, pos, linenr, start, end - start);
 		}
+        ATerm atValue = factory.makeAppl(factory.makeAFun(value,0,true));
+        return VarFormat.makeExprVar(factory, var, atValue, pos, linenr, start, end - start);
 	}
 }

@@ -1,4 +1,13 @@
+# $Id$
 
+Wed Aug  3 13:25:03 CEST 2005 <kooiker@cwi.nl>
+ * Merge predefined-gui-layout branch
+ * Indented some java files
+
+Thu Jun  2 09:02:01 CEST 2005 <kooiker@cwi.nl>
+ * toolbus/Makefile.am:
+   - -output option before -gentifs
+ * Remove unnecessary casts and else according to Eclipse warnings
 
 Mon May  9 13:23:41 CEST 2005 <jurgenv@cwi.nl>
  * Removed complicated thread joining and interrupting stuff for closing

@@ -300,44 +300,43 @@ abstract public class DebugAdapterProcess {
 				ATermAppl appl = (ATermAppl) act;
 				if (appl.isQuoted()) {
 					return act;
-				} else {
-					String action = appl.getName();
-					Class myclass = getClass();
-					String name = "action" + capitalize(action, true);
-					int arity = appl.getArity();
+				} 
+				String action = appl.getName();
+				Class myclass = getClass();
+				String name = "action" + capitalize(action, true);
+				int arity = appl.getArity();
 
-					boolean found = false;
+				boolean found = false;
 
-					do {
-						try {
-							Method method =
-								myclass.getDeclaredMethod(name, protos[arity]);
-							found = true;
-							Object[] args = new Object[arity];
-							for (i = 0; i < arity; i++) {
-								args[i] = evaluate(appl.getArgument(i));
-							}
-							debugMsg("invoking method: " + name);
-							return (ATerm) method.invoke(this, args);
-						} catch (NoSuchMethodException e) {
-							found = false;
-						} catch (InvocationTargetException e) {
-							return factory.make("error(\"the function " + name + " has thrown an exception\")");
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-							found = false;
+				do {
+					try {
+						Method method =
+							myclass.getDeclaredMethod(name, protos[arity]);
+						found = true;
+						Object[] args = new Object[arity];
+						for (i = 0; i < arity; i++) {
+							args[i] = evaluate(appl.getArgument(i));
 						}
-						myclass = myclass.getSuperclass();
-					} while (!found && myclass.getSuperclass() != null);
-
-					if (!found) {
-						return factory.make(
-							"error(\"unknown function: "
-								+ action + " (" + name + ")"
-								+ " with arity "
-								+ arity
-								+ "\")");
+						debugMsg("invoking method: " + name);
+						return (ATerm) method.invoke(this, args);
+					} catch (NoSuchMethodException e) {
+						found = false;
+					} catch (InvocationTargetException e) {
+						return factory.make("error(\"the function " + name + " has thrown an exception\")");
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+						found = false;
 					}
+					myclass = myclass.getSuperclass();
+				} while (!found && myclass.getSuperclass() != null);
+
+				if (!found) {
+					return factory.make(
+						"error(\"unknown function: "
+							+ action + " (" + name + ")"
+							+ " with arity "
+							+ arity
+							+ "\")");
 				}
 			default :
 				return act;

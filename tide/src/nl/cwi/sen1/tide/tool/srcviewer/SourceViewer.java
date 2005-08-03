@@ -7,7 +7,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -16,17 +15,12 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
-import javax.swing.filechooser.FileSystemView;
 
-import nl.cwi.sen1.gui.StudioComponentListener;
 import nl.cwi.sen1.tide.tool.ProcessTool;
 import nl.cwi.sen1.tide.tool.ToolManager;
 import nl.cwi.sen1.tide.tool.support.DebugAdapter;
@@ -517,7 +511,7 @@ public class SourceViewer
 	public void addSourceFromList(Iterator iter) {
 		List list = new LinkedList();
 		while (iter.hasNext()) {
-			list.add((String) iter.next());
+			list.add(iter.next());
 		}
 		
 		if (list.size() > 0) {

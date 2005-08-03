@@ -54,7 +54,7 @@ public class FontPreferenceEditor
       fontCount++;
     }
 
-    preview = new JLabel("", JLabel.CENTER);
+    preview = new JLabel("", SwingConstants.CENTER);
     preview.setForeground(Color.black);
     add("Center", preview);
   }

@@ -541,9 +541,8 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 		int direction) {
 		if (orientation == SwingConstants.HORIZONTAL) {
 			return visibleRect.width;
-		} else {
-			return visibleRect.height;
 		}
+        return visibleRect.height;
 	}
 
 	public int getScrollableUnitIncrement(
@@ -555,9 +554,8 @@ class ScrollablePane extends JLayeredPane implements Scrollable {
 
 		if (orientation == SwingConstants.HORIZONTAL) {
 			return metrics.getMaxAdvance();
-		} else {
-			return metrics.getHeight();
 		}
+        return metrics.getHeight();
 	}
 
 	public Dimension getPreferredScrollableViewportSize() {
