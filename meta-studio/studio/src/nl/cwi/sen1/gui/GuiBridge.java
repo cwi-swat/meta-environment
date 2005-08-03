@@ -4,7 +4,8 @@
 
 package nl.cwi.sen1.gui;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class GuiBridge
   extends GuiTool

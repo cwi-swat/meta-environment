@@ -15,5 +15,8 @@ public interface StudioComponent {
 	public void addStudioComponentListener(StudioComponentListener l);
 
 	public void removeStudioComponentListener(StudioComponentListener l);
-
+    
+    public void requestClose() throws CloseAbortedException;
+    
+    public void close();
 }

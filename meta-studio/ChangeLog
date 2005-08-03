@@ -1,5 +1,39 @@
 $Id$
 
+Wed Aug  3 11:47:52 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * StudioImplWithPredefinedLayout.java:
+   - Add addComponent method with viewPosition parameter
+ * StudioWithPredefinedLayout.java:
+   - Extends Studio
+
+Wed Aug  3 10:50:10 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * scripts/gui.src:
+   - Start StudioImplWithPredefinedLayout
+ * StudioImpl.java:
+   - Change methods that can be overridden to protected
+ * StudioImplWithPredefinedLayout.java:
+   - Extract code that creates the predefined layout from StudioImpl.java
+ * MenuItem.java:
+   - Extract menuitem class frome StudioImpl.java
+
+Fri Jun  3 09:56:36 CEST 2005 <kooiker@cwi.nl>
+ * Renamed StudioComponentAdapter to StudioComponentImpl (it was not a real
+   adapter)
+ * Created new StudioComponentAdapter as default implementation of
+   StudioComponentListener
+ * StudioComponentAdapter.java:
+   - addComponentMenu also allows ATerm menuPath and Action action
+ * StudioComponent.java: 
+   - when view is being closed also notify plugin by using requestClose and
+     close methods
+
+Wed May 25 14:05:53 CEST 2005 <kooiker@cwi.nl>
+ * StudioImpl.java:
+   - if top-right window is not present add a new window
+
+Fri May 13 15:08:10 CEST 2005 <kooiker@cwi.nl>
+ * StudioImpl.java: initial layout
+
 Wed May  4 17:45:12 CEST 2005 <{jurgenv,jong}@cwi.nl>
  * StudioImpl.java: added tool.setLockObject(this) to connect()
     - anybody that uses connect(), does not have to worry about race
