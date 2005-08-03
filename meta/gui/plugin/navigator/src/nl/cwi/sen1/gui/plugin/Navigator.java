@@ -6,8 +6,10 @@ import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponentAdapter;
+import nl.cwi.sen1.gui.StudioComponentImpl;
+import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioPlugin;
+import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
 import nl.cwi.sen1.util.StudioPopupMenu;
@@ -34,7 +36,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
     private MouseEvent popupEvent;
 
-    private StudioComponentAdapter navigatorComponent;
+    private StudioComponentImpl navigatorComponent;
 
     public Navigator() {
         String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
@@ -162,8 +164,9 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
     private void addNavigatorComponent() {
         final ModuleTree tree = new ModuleTree(this, moduleModel);
-        navigatorComponent = new StudioComponentAdapter("Navigator", tree);
-        studio.addComponent(navigatorComponent);
+        navigatorComponent = new StudioComponentImpl("Navigator", tree);
+        ((StudioWithPredefinedLayout) studio).addComponent(navigatorComponent,
+                StudioImplWithPredefinedLayout.TOP_LEFT);
         // studio.addComponentMenu(navigatorComponent, new JMenu("Navigate"));
     }
 
@@ -175,9 +178,10 @@ public class Navigator implements StudioPlugin, NavigatorTif {
                 panel.setHierarchy(module);
             }
         });
-        StudioComponentAdapter hierarchyAdapter = new StudioComponentAdapter(
+        StudioComponentImpl hierarchyComponent = new StudioComponentImpl(
                 "Import Hierarchy", panel);
-        studio.addComponent(hierarchyAdapter);
+        ((StudioWithPredefinedLayout) studio).addComponent(hierarchyComponent,
+                StudioImplWithPredefinedLayout.BOTTOM_LEFT);
         // studio.addComponentMenu(hierarchyAdapter, new JMenu("Hierarchy"));
     }
 
