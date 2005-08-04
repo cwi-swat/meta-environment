@@ -59,10 +59,9 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
 				if (path != null) {
-					SelectableNode node = (SelectableNode) path
-							.getLastPathComponent();
-					if (node != null) {
-						node.selected(studio, bridge);		
+					Object node = path.getLastPathComponent();
+					if (node != null && node instanceof SelectableNode) {
+						((SelectableNode) node).selected(studio, bridge);		
 					}
 				}
 			}
