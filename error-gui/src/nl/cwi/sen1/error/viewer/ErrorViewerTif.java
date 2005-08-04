@@ -4,7 +4,7 @@
 
 package nl.cwi.sen1.error.viewer;
 
-import aterm.*;
+import aterm.ATerm;
 
 public interface ErrorViewerTif
 {

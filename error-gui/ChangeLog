@@ -4,6 +4,11 @@ Thu Aug  4 14:23:12 CEST 2005 <jurgenv@cwi.nl>
  * Simplified string description of errors in the viewer. There was
    no way to ignore the details. Now, to see details use 'expand all'
    to ignore them, 'collapse all'. 
+ * Added support for removing errors when they are resolved.
+ * Simplified implementation of ErrorDecorator by introducing a
+   class for every type of node.
+ * An subject is now clickable if it has a clickable location.
+ * An error is now clickable if it has at least one clickable subject.
 
 Wed Aug  3 13:16:18 CEST 2005 <kooiker@cwi.nl>
  * Merged predefined-gui-layout branch

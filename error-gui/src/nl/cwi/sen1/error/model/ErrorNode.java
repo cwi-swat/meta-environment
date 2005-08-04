@@ -1,29 +1,43 @@
 package nl.cwi.sen1.error.model;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 import nl.cwi.sen1.error.viewer.ErrorViewerBridge;
 import nl.cwi.sen1.gui.Studio;
 import errorapi.types.Error;
-import errorapi.types.Summary;
+import errorapi.types.Location;
 
-public class ErrorNode extends DefaultMutableTreeNode {
-	private Summary summary;
+public class ErrorNode extends SelectableNode {
+	private String producer;
+	private String id;
+	private Error error;
+	private Location location;
 
-	public ErrorNode(Object userObject, Summary summary) {
-		super(userObject);
-		this.summary = summary;
+	public ErrorNode(Error error, String producer, String id) {
+		super(error);
+		this.id = id;
+		this.producer = producer;
+		this.error = error;
 	}
 
-	public ErrorNode(Object userObject, boolean allowsChildren, Summary summary) {
-		super(userObject, allowsChildren);
-		this.summary = summary;
+	public String getProducer() {
+		return producer;
 	}
-
-	public Error getFirstError() {
-		return summary.getList().getHead();
+	
+	public String getId() {
+		return id;
+	}
+	
+	public String toString() {
+		return error.getDescription();
+	}
+	
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	public void selected(Studio studio, ErrorViewerBridge bridge) {
+		if (location != null) {
+			bridge.postEvent(studio.getATermFactory().make(
+					"location-selected(<term>)", location.toTerm()));
+		}
 	}
 }

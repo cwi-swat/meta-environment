@@ -70,12 +70,17 @@ public class ErrorPanel extends JPanel {
         ((DefaultTreeModel) tree.getModel()).reload();
         tree.expandPath(new TreePath(top));
     }
+    
+	public void removeAllMatchingErrors(String producer, String id) {
+		errorDecorator.removeAllMatchingErrors(top, producer, id);
+	}
 
     public void expandAll(JTree tree, boolean expand) {
         TreeNode root = (TreeNode) tree.getModel().getRoot();
-
+        
         // Traverse tree from root
         expandAll(tree, new TreePath(root), expand);
+        
     }
 
     private void expandAll(JTree tree, TreePath parent, boolean expand) {
@@ -138,4 +143,6 @@ public class ErrorPanel extends JPanel {
             }
         });
     }
+
+	
 }
