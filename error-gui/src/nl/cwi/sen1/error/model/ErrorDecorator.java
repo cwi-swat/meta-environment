@@ -71,6 +71,9 @@ public class ErrorDecorator {
 	public ErrorNode decorateError(final Error error, Summary summary) {
 		ErrorNode node = new ErrorNode(error, summary) {
 			public String toString() {
+				return error.getDescription();
+				/* with 'expand all' we can see all details, but with the
+         * following code we could never ignore all details:
 				StringBuffer buf = new StringBuffer(error.getDescription());
 				buf.append(": ");
 				SubjectList subjectList = error.getList();
@@ -90,6 +93,7 @@ public class ErrorDecorator {
 					}
 				}
 				return buf.toString();
+				*/
 			}
 		};
 

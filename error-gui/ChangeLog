@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Aug  4 14:23:12 CEST 2005 <jurgenv@cwi.nl>
+ * Simplified string description of errors in the viewer. There was
+   no way to ignore the details. Now, to see details use 'expand all'
+   to ignore them, 'collapse all'. 
+
 Wed Aug  3 13:16:18 CEST 2005 <kooiker@cwi.nl>
  * Merged predefined-gui-layout branch
 
