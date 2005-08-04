@@ -9,6 +9,8 @@ Thu Aug  4 14:23:12 CEST 2005 <jurgenv@cwi.nl>
    class for every type of node.
  * An subject is now clickable if it has a clickable location.
  * An error is now clickable if it has at least one clickable subject.
+ * Repeated clicking on a location will now take you to the location
+   again (solved by turning of the selection after each click).
 
 Wed Aug  3 13:16:18 CEST 2005 <kooiker@cwi.nl>
  * Merged predefined-gui-layout branch

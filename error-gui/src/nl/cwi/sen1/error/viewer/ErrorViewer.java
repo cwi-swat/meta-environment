@@ -1,7 +1,11 @@
 package nl.cwi.sen1.error.viewer;
 
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JTree;
+import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -55,6 +59,7 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	private void addListener() {
 		final JTree tree = panel.getTree();
+		
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
@@ -62,6 +67,7 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 					Object node = path.getLastPathComponent();
 					if (node != null && node instanceof SelectableNode) {
 						((SelectableNode) node).selected(studio, bridge);		
+						tree.clearSelection();
 					}
 				}
 			}
