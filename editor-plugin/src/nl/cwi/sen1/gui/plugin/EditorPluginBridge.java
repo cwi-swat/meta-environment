@@ -4,7 +4,8 @@
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class EditorPluginBridge
   extends EditorPluginTool

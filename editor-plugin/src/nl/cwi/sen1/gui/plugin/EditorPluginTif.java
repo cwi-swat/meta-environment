@@ -4,7 +4,7 @@
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
+import aterm.ATerm;
 
 public interface EditorPluginTif
 {

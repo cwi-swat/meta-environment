@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Aug  4 14:39:12 CEST 2005 <jurgenv@cwi.nl>
+ * Makefile.am: added LOCAL_JARS variable to compile in maintainer-mode
+   and be able to find the editor jar.
+ * src: implemented setCursorAtOffset(), such that we can jump to 
+   the location of an error.
+
 Thu Jun 16 12:58:17 CEST 2005 <kooiker@cwi.nl>
  * lib/junac-ui.jar:
    - Editor is now based on UJAC-ui which on its turn is based on JEdit. It

@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,6 +27,7 @@ public class EditorPanel extends JPanel {
         this.filename = filename;
 
         setLayout(new BorderLayout());
+        //setLayout(new GridBagLayout());
 
         // SyntaxDocument document = new SyntaxDocument();
         textArea = new EditorTextArea();
@@ -41,7 +43,7 @@ public class EditorPanel extends JPanel {
         textArea.setText(readContents(filename));
         modified = false;
         textArea.setCaretPosition(0);
-        add(textArea, BorderLayout.CENTER);
+        add(textArea, BorderLayout.NORTH);
     }
 
     public EditorTextArea getTextArea() {
@@ -71,6 +73,10 @@ public class EditorPanel extends JPanel {
         textArea.getDocument().startUndo();
     }
 
+    public void setCursorAtOffset(int offset) {
+    	getTextArea().setCaretPosition(offset);
+    }
+    
     public void setFocus(Area focus) {
         textArea.setFocus(focus);
     }

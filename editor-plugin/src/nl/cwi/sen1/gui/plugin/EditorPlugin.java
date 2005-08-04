@@ -152,7 +152,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
         EditorPanel panel = getPanel(editorId.toString());
-        panel.getTextArea().getLineOfOffset(offset);
+        panel.setCursorAtOffset(offset);
     }
 
     public void editFile(ATerm editorId, String filename) {

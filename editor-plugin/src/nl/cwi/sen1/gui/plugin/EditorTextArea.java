@@ -93,11 +93,13 @@ public class EditorTextArea extends TextArea {
             highlight.paintHighlight(gfx, line, y);
         }
 
-        if (bracketHighlight && line == getBracketLine())
+        if (bracketHighlight && line == getBracketLine()) {
             paintBracketHighlight(gfx, line, y);
+        }
 
-        if (line == getCaretLine())
+        if (line == getCaretLine()) {
             paintCaret(gfx, line, y);
+        }
     }
 
     private void paintArea(Graphics gfx, int line, int y, int startLine,
