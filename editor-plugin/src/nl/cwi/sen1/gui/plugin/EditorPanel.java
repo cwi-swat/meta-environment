@@ -1,13 +1,20 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.GridBagLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 
@@ -74,7 +81,8 @@ public class EditorPanel extends JPanel {
     }
 
     public void setCursorAtOffset(int offset) {
-    	getTextArea().setCaretPosition(offset);
+    	int length = getTextArea().getText().length();
+    	getTextArea().setCaretPosition(offset > length ? length : offset);
     }
     
     public void setFocus(Area focus) {

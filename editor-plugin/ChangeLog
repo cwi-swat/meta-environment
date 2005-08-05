@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Aug  5 13:08:19 CEST 2005 <jurgenv@cwi.nl>
+ * src: fixed out-of-bounds error in setCursorAtOffset 
+
 Thu Aug  4 14:39:12 CEST 2005 <jurgenv@cwi.nl>
  * Makefile.am: added LOCAL_JARS variable to compile in maintainer-mode
    and be able to find the editor jar.
