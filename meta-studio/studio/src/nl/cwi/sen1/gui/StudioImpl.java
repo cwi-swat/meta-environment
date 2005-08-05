@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
@@ -205,7 +206,11 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
                     component.close();
                 }
             }
-
+            
+			public void windowHidden(DockingWindow arg0) {
+				updateMenuBar();
+				updateStatusBar();
+			}
         });
 
         return root;
@@ -241,12 +246,13 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
     }
 
     protected View createView(StudioComponent component, int id) {
-        String name = component.getName();
+        final String name = component.getName();
         Icon icon = component.getIcon();
         JComponent viewComponent = component.getViewComponent();
         View view = new View(name, icon, viewComponent);
         componentsByView.put(view, component);
         viewsById.addView(id, view);
+        
         return view;
     }
 
@@ -265,6 +271,7 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
                 showView(view);
             }
         });
+        
     }
 
     public void removeComponent(StudioComponent component) {
@@ -316,6 +323,7 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
     private StudioMenuBar createMenuBar() {
         StudioMenuBar menuBar = new StudioMenuBar();
         menuBar.add(createEmptyFileMenu());
+        menuBar.add(createViewsMenu());
         menuBar.add(createThemesMenu());
 
         ATermList menuPaths = menuList;
@@ -353,7 +361,28 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
         return menuBar;
     }
 
-    private List getComponentMenus(StudioComponent component) {
+	private JMenu createViewsMenu() {
+		JMenu menu = new JMenu("Views");
+		int count = viewsById.getViewCount();
+		
+		for (--count; count >= 0; count--) {
+			final View view = viewsById.getViewAtIndex(count);
+			JMenuItem item = new JMenuItem(view.getTitle());
+			item.setEnabled(view.getRootWindow() == null);
+			item.addActionListener(new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				showView(view);
+				view.restoreFocus();
+			}
+			});
+			
+			menu.add(item);
+		}
+		
+		return menu;
+	}
+
+	private List getComponentMenus(StudioComponent component) {
         if (componentMenus == null) {
             return null;
         }

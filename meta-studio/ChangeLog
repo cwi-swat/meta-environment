@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug  5 11:29:08 CEST 2005 <jurgenv@cwi.nl>
+ * StudioImpl: added menu will all active views such that they
+   can be restored even when not visible anymore.
+
 Wed Aug  3 11:47:52 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * StudioImplWithPredefinedLayout.java:
    - Add addComponent method with viewPosition parameter
