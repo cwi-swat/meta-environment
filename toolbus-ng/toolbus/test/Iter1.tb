@@ -9,16 +9,14 @@ in
          M := 10 .
          ( if less(M,13)
            then
-	     X := add(M, N) .
+	         X := add(M, N) .
              printf("%d\n", X) .
              M := add(M, 1)
-           else tau
            fi
          ) * if equal(M, 13) then tau fi
-      else
-         tau
       fi
-    ) * delta
+    ) * 
+    if equal (N,5) then tau fi
 endlet
 
 toolbus(P)

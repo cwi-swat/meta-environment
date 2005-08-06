@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
@@ -53,7 +52,7 @@ public class ToolBus {
   private static boolean verbose = false;
   private static int nerrrors = 0;
   private static int nwarnings = 0;
-  private static int WellKnownSocketPort = 9017; //8999;
+  private static int WellKnownSocketPort = 9020; //8999;
   private static ServerSocket WellKnownSocket;
   private static InetAddress localHost;
 
@@ -385,7 +384,7 @@ public class ToolBus {
 
   public void shutdown(String msg){
     for (int i = 0; i < processes.size(); i++) {
-    	//System.err.println("shutdown process " + i);
+    	System.err.println("shutdown process " + i);
       ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
       pi.terminate(msg);
     }
@@ -394,13 +393,13 @@ public class ToolBus {
     	ToolInstance ti = (ToolInstance) tools.elementAt(i);
     	ti.terminate(msg);
     }
-	//System.err.println("shutdown complete");
+	System.err.println(msg);
     try {
     	WellKnownSocket.close();
     } catch(IOException e){
     	System.err.println(e);
     }
-    //throw new ToolBusDeathException(msg);
+    // throw new ToolBusDeathException(msg);
   }
 
   /**
@@ -414,7 +413,7 @@ public class ToolBus {
       while (work) {
       	work = false;
         for (int i = 0; i < processes.size(); i++) {
-          //System.err.print(".");
+          //System.out.print("$");
           ProcessInstance P = (ProcessInstance) processes.elementAt(i);
           work  |= P.step();
           

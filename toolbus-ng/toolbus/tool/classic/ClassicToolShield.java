@@ -9,9 +9,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import toolbus.TBTerm;
 import toolbus.ToolBus;
@@ -24,16 +22,29 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 
 /**
+ * A classic ToolBus tool is executed as a separate (external) Unix process and connected via
+ * sockets to this ToolBus. The initial connection protocol and initial handshaking are identical
+ * to those of the classic ToolBus.
+ * 
+ * Inside this ToolBus the tool is represented by two threads:
+ * - ToolInputHandler that handles input coming from the external tool
+ * - ClassicToolShield that manages all traffic comming from the ToolBus and routes
+ *   incoming traffic (produced by ToolInputHandler) as well.
+ */
+
+/**
  * ToolInputHandler is executed as a separate thread and listens
  * for incoming terms from the tool.
  */
 
 class ToolInputHandler extends Thread {
 	ClassicToolShield toolShield;
+	ToolInstance toolInstance;
 	boolean running = false;
 	
-	ToolInputHandler(ClassicToolShield ts){
+	ToolInputHandler(ClassicToolShield ts, ToolInstance ti){
 		toolShield = ts;
+		toolInstance = ti;
 	}
 	
 	void setRunning(boolean on){
@@ -46,7 +57,7 @@ class ToolInputHandler extends Thread {
 		while(running){
 			try {
 				ATerm t = toolShield.readTerm();
-				toolShield.handleTermFromTool(t);
+				toolInstance.handleTermFromTool(t);
 			} catch(IOException e){
 				System.err.println("ToolInputHandler: " + e);
 				errorCount++;
@@ -62,8 +73,8 @@ class ToolInputHandler extends Thread {
 
 public class ClassicToolShield extends ToolShield {
 	private final static int LENSPEC = 12;          // ToolBus dependent parameters
-	private final static int MAX_HANDSHAKE = 512;   // Do not change
-	private final static int MIN_MSG_SIZE = 128;
+	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
+	private final static int MIN_MSG_SIZE = 128;	// the C implementation
 
 	private Object lockObject;
 	protected ATermFactory factory;
@@ -149,21 +160,7 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 	
-	public void handleTermFromTool(ATerm t) {
-		synchronized (getLockObject()) {	
-			info("tool " + toolname + " handling term from toolbus: " + t);
-			
-			List matches = t.match("snd-value(<term>)"); //TODO; more args
-			if (matches != null) {
-				getToolInstance().addValueFromTool(matches.get(0));
-			}
-			
-			List matches1 = t.match("snd-event(<term>)"); //TODO: more args
-			if (matches1 != null) {
-				getToolInstance().addEventFromTool(matches1.get(0));
-			}
-		}
-	}
+
 /*
 	public void postEvent(ATerm term) {
 		synchronized (getLockObject()) {
@@ -224,13 +221,13 @@ public class ClassicToolShield extends ToolShield {
 
 		shakeHands();
 		connected = true;
-		toolInputHandler = new ToolInputHandler(this);
+		toolInputHandler = new ToolInputHandler(this, getToolInstance());
 		toolInputHandler.start();
 	}
 
 	public void disconnect() {
 		try {
-			sendTerm(factory.parse("snd-disconnect"));
+			sendTerm(factory.parse("rec-disconnect"));
 		}
 		catch (IOException e) {
 			throw new RuntimeException("cannot disconnect: " + e.getMessage());
@@ -380,6 +377,7 @@ public class ClassicToolShield extends ToolShield {
 			System.err.println("ClassicToolShield.initRun trying to connect");
 			connect();
 			System.err.println("ClassicToolShield.initRun connected");
+			getToolInstance().TCPtransition(getToolInstance().a_snd_connect, null, true);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -393,6 +391,7 @@ public class ClassicToolShield extends ToolShield {
  *
  */
 
+/*
 class EventQueue {
 	private boolean ack = false;
 	private List events = new Vector();
@@ -420,3 +419,4 @@ class EventQueue {
 		events.add(event);
 	}
 }
+*/

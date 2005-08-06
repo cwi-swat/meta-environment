@@ -1,5 +1,6 @@
 /*
  * Created on Jul 7, 2005
+ * @author paulk
  *
  */
 package toolbus.atom;
@@ -11,12 +12,7 @@ import toolbus.tool.ToolInstance;
 import aterm.ATerm;
 import aterm.ATermAppl;
 
-/**
- * @author paulk
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
+
 public class Terminate extends Atom {
 	private Ref toolId;
 	private Ref request;

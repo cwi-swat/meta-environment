@@ -91,7 +91,7 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("If5"));
   }
 
-  public void xxtestIter() {  //TODO: does not terminate
+  public void testIter() {  //TODO: does not terminate
     assertTrue(runTest("Iter0"));
     assertTrue(runTest("Iter1"));
   }

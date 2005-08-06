@@ -33,6 +33,7 @@ public class ProcessInstance {
   private ATerm transactionIdVar;
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
+  private boolean running = true;
 
   public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
     toolbus = TB;
@@ -96,23 +97,14 @@ public class ProcessInstance {
   }
 
   public void terminate(String msg) {
-  	/*
-    if (toolInstance != null) {
-      try {
-      	System.err.println("terminate should be fixed");
-      //toolInstance.terminate(env.getValue(transactionIdVar), msg);
-      	throw new ToolBusException("Fix terminate");
-      } catch (ToolBusException e) {
-        throw new ToolBusInternalError("no transactionId in process");
-      }
-    }
-    */
+  	running = false;
   }
   
 
   public void findPartners(State a) {
     elements.findPartners(a);
   }
+  
   /*
    * Note manipulation
    */
@@ -195,11 +187,15 @@ public class ProcessInstance {
 
   public boolean step() throws ToolBusException {
     //System.err.println(this);
-    return currentState.execute();
+  	if(running){
+  		return currentState.execute();
+  	} else {
+  		return false;
+  	}
   }
 
   public boolean isTerminated() {
-    return (elements.size() == 0);
+    return !running || (elements.size() == 0);
   }
 
   public String toString() {

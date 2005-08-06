@@ -132,13 +132,13 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	this.processInstance = processInstance;
   	this.env = env.copy();
     setFollow(follow);
-    //System.err.println("Compiling " + this + ";\n env = " + env);
+    System.err.println("Compiling " + this + ";\n env = " + env);
     replaceFormals(env);
   }
   
   public void replaceFormals(Environment env) throws ToolBusException{
   	 for (int i = 0; i < atomArgs.length; i++) {
-        //ystem.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
+        //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
         ATerm arg = TBTerm.resolveVars(atomArgs[i].value, env);
         atomArgs[i].value = arg;
       }
@@ -146,7 +146,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 
   public boolean isEnabled() throws ToolBusException {
     if (tests != null){
-    	//System.err.println("isEnabled: " + this.getProcess().getProcessId() + ": " + this);
+    	//System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
     	for(int i = 0; i < tests.size(); i++){
     		Test t = (Test) tests.elementAt(i);
     		//System.err.println("evaluate: " + t);
@@ -156,6 +156,11 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     			return false;
     	}
     }
+    return true;
+  }
+  
+  public boolean nextState() {
+    processInstance.setCurrentState(getNextState());
     return true;
   }
 
@@ -168,11 +173,9 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public ProcessInstance getProcess() {
     return processInstance;
   }
-
-  public boolean nextState() {
-    State s = getFollow();
-    processInstance.setCurrentState(s);
-    return true;
+  
+  public State getNextState(){
+  	return getFollow();
   }
 
   public boolean execute() throws ToolBusException{

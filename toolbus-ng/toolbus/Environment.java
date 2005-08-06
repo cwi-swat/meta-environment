@@ -4,6 +4,7 @@
 
 package toolbus;
 
+import sun.awt.print.PrintStatusDialog;
 import aterm.*;
 
 /**
@@ -179,8 +180,11 @@ public class Environment {
 					//System.err.println("name becomes: " + name);
 				} else {
 					ATerm val = b.val;
-					if (val == null)
+					if (val == null){
+					     Exception e = new ToolBusException(var + " has undefined value");
+					     e.printStackTrace();
 						throw new ToolBusException(var + " has undefined value");
+					}
 					//System.err.println("yields " +  val);
 					return val;
 				}

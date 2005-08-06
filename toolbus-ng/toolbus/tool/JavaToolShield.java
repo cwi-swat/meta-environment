@@ -42,6 +42,7 @@ public class JavaToolShield extends ToolShield {
 	
 	private static final String terminate = "terminate";
 
+
   /**
    * The constructor for JavaToolShield. 
    * @param toolDef the definition of this tool
@@ -249,5 +250,4 @@ public class JavaToolShield extends ToolShield {
     	addRequestToTool(new Object[] {ToolInstance.TERMINATE, m, actuals});
     }
   }
- 
 }

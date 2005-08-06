@@ -11,19 +11,22 @@ process TermOps is
 	if is-int(5) then tau else P(3) fi .
 	if is-int(true) then P(4) else tau fi .
 	
- 	if is-str("abc") then tau else P(5) fi .
-	if is-str(5) then P(6) else tau fi .
+	if is-real(3.14) then tau else P(5) fi .
+	if is-real(true) then P(6) else tau fi .
 	
-	if is-appl(quote(f)) then tau else P(6) fi .
-	if is-appl(quote(f(a,b))) then tau else P(7) fi .
-	if is-appl(5) then P(8) else tau fi .
+ 	if is-str("abc") then tau else P(7) fi .
+	if is-str(5) then P(8) else tau fi .
+	
+	if is-appl(quote(f)) then tau else P(9) fi .
+	if is-appl(quote(f(a,b))) then tau else P(10) fi .
+	if is-appl(5) then P(11) else tau fi .
 
-	if equal(args(quote(f(a,b,c))), [a,b,c]) then tau else P(9) fi .
+	if equal(args(quote(f(a,b,c))), [a,b,c]) then tau else P(1) fi .
 
-	if is-list([]) then tau else P(10) fi .
-	if is-list([a]) then tau else P(11) fi .
-	if is-list([a, b]) then tau else P(12) fi .
-	if is-list(5) then P(13) else tau fi .
+	if is-list([]) then tau else P(13) fi .
+	if is-list([a]) then tau else P(14) fi .
+	if is-list([a, b]) then tau else P(15) fi .
+	if is-list(5) then P(16) else tau fi .
 
 	if is-var(X) then tau else P(14) fi .
 	if is-var(5) then P(15) else tau fi .
@@ -48,7 +51,33 @@ process IntOps is
 	if greater(3, 5) then P(39) else tau fi .
 
 	if less-equal(3, 3) then tau else P(40) fi .
-	if greater-equal(3, 3) then tau else P(41) fi
+	if greater-equal(3, 3) then tau else P(41) fi .
+	
+	if equal(abs(2), 2) then tau else P(42) fi .
+	if equal(abs(sub(2,4)), 2) then tau else P(43) fi
+	
+	
+process RealOps is
+  let R : real in
+	if equal(17.5,17.5) then tau else P(50) fi .
+	if not-equal(17.5,17.5) then P(51) else tau fi .
+
+    R := radd(17.6,5.0) .
+	if equal(radd(17.6,5.0), 22.6) then tau else P(52) fi .
+	R := rabs(rsub(rsub(17.6,5.0), 12.6)) .
+	if rless(R, 0.0001) then tau else P(53) fi .
+	if equal(rmul(3.0,7.0), 21.0) then tau else P(54) fi .
+
+	if rless(3.6, 5.6) then tau else P(56) fi .
+	if rless(5.6, 3.6) then P(57) else tau fi .
+
+	if rgreater(5.6, 3.6) then tau else P(58) fi .
+	if rgreater(3.6, 5.6) then P(59) else tau fi .
+
+	if rless-equal(3.6, 3.6) then tau else P(60) fi .
+	if rgreater-equal(3.6, 3.6) then tau else P(61) fi
+  endlet
+	
 
 process ListOps is
   let L : list, L1 : list
@@ -158,6 +187,7 @@ process MiscOps is
 process All is
 	TermOps .
 	IntOps  . 
+	RealOps .
 	ListOps .
 	MiscOps .
 	printf("done\n")

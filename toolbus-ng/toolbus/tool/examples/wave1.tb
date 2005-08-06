@@ -1,0 +1,18 @@
+process PP is
+   printf("PP start\n") .
+
+   (  rec-msg(exc(2, 1))        %% receive amplitude of left neighbour
+     || snd-msg(exc(1,2))        %% receive amplitude of right neighbour
+     ) .
+      printf("PP\n")
+      
+ process QQ is
+ 
+   printf("QQ start\n") .
+
+   (  rec-msg(exc(1,2))        %% receive amplitude of left neighbour
+     || snd-msg(exc(2,1))        %% receive amplitude of right neighbour
+     ) .
+      printf("QQ\n")
+
+ toolbus(PP, QQ)
