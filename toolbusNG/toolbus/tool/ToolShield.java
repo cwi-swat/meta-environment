@@ -17,17 +17,12 @@ import aterm.ATermFactory;
  *  	ToolInstance -> ToolShield --> ClassicToolShield -- TCP/IP connection --> external executable
  */
 
-/**
- * @author paulk
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 public abstract class ToolShield extends Thread {
 	
 	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
 	private LinkedList requestsForTool;		// Requests to be executed by the tool
 	private boolean running = false;
+	
 
 	public ToolShield(ToolInstance ti) {
 		requestsForTool = new LinkedList();
@@ -116,7 +111,7 @@ public abstract class ToolShield extends Thread {
 			if(running)
 				Thread.yield();
 		}
-		//System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
+		System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
 	}
 	
 	/**
@@ -124,5 +119,4 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	abstract public void terminate(String msg) ;
-
 }

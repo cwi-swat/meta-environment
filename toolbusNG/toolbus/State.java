@@ -18,6 +18,8 @@ import aterm.*;
 
 public class State {
   private Vector elements;
+  
+  private int lastElement = 0;
 
   public State() {
     elements = new Vector();
@@ -81,6 +83,21 @@ public class State {
 	    }
   	}
   }
+  
+  public boolean isEnabled(){
+  	 for (Iterator it = elements.iterator(); it.hasNext();) {
+	      StateElement a = (StateElement) it.next();
+	      try {
+			if(a.isEnabled()){
+			  	return true;
+			  }
+		} catch (ToolBusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  	 }
+  	 return false;
+  }
 
   public String toString() {
     String s = "{";
@@ -98,6 +115,10 @@ public class State {
   public boolean contains(StateElement a) {
     return elements.contains(a);
   }
+  
+  public State getNextState(){
+  return ((StateElement) elements.elementAt(lastElement)).getNextState();
+  }
 
   /**
    * Execute one step for each element in this state.
@@ -109,12 +130,15 @@ public class State {
     if (size == 0)
       return false;
 
-    for (int index = ToolBus.nextInt(size), nleft = size; nleft > 0; index = (index + 1) % size, nleft--) {
+ //   for (int index = ToolBus.nextInt(size), nleft = size; nleft > 0; index = (index + 1) % size, nleft--) {
+    for(int index = (lastElement + 1) % size, nleft = size; nleft > 0; index = (index + 1) % size, nleft--){
       StateElement a = (StateElement) elements.elementAt(index);
 
       if (a.execute()) {
-        ProcessInstance pa = a.getProcess();
+      	lastElement = index;
+ 
         if (ToolBus.isVerbose()) {
+           // ProcessInstance pa = a.getProcess();
           //System.err.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
         }
         return true;

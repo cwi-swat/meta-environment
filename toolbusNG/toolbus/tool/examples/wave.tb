@@ -1,0 +1,100 @@
+
+%% Compute the function $F$. Note the use of the result parameter {\tt Res}.
+
+process F(Z1 : real, Z2 : real, Z3 : real, Z4 : real, Res : real?) is
+  let CdTdX2 : real
+  in
+     CdTdX2 := 0.01 .                                     %% arbitrary value for (c dt/dx)^2
+     Res := radd(rsub(rmul(2.0, Z1), Z2),                 %% 2z1 - z2 +
+                 rmul(CdTdX2,                             %%     (c dt/dx)^2 *
+                     radd(rsub(Z3, rmul(2.0, Z1)), Z4)))  %%     (z3 - 2z1 + z4)
+  endlet
+
+%% Process {\tt P} describes the behaviour of sample point {\tt I} with
+%% left neighbour {\tt L} and right neighbour {\tt R}.
+%% The amplitude in point {\tt I} at time $t - \Delta t$ and $t$
+%% is, respectively {\tt D} and {\tt E}.
+%% The current amplitude in point {\tt I} is written to display tool {\tt Tid}.
+%% The global behaviour of {\tt P} is:
+%% \begin{itemize}
+%% \item Receive the amplitudes of both neighbours.
+%% \item Send the amplitude {\tt E} to both neighbours.
+%% \item Compute the new amplitude {\tt E} at $t + \Delta t$ using
+%% auxiliary process {\tt F} defined above.
+%% \item Repeat these steps.
+%% \end{itemize}
+
+process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real) is
+  let AL : real, AR : real, D : real, D1 : real, E : real
+  in
+     D := Dstart .
+     E := Estart .
+     ( printf("P(%d)\n", I) .
+       (  rec-msg(exc(L, I, AL?))        %% receive amplitude of left neighbour
+       || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
+       || snd-msg(exc(I, L, E))          %% send own amplitude to left neighbour
+       || snd-msg(exc(I, R, E))          %% send own amplitude to right neighbour
+       
+  
+      ) .
+      %% snd-do(Tid, update(I, E))      %% update own amplitude on the display
+      %% snd-do(Tid, update(I,I))
+      printf("update(%d,%t)\n", I, E)
+       .
+       D1 := E .
+       %%F(E, D, AL, AR, E?) .
+       D := D1
+     ) * delta
+  endlet
+  
+process Q(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real) is
+ let AL : real, AR : real, D : real, D1 : real, E : real
+  in
+     D := Dstart .
+     E := Estart .
+	 (
+	   printf("Q(%d)\n", I)
+	 ) * delta
+ endlet
+ 
+
+%% Define the processes at the end points. {\tt I} is the index
+%% of the end point, {\tt NB} is its immediate neighbour.
+
+process Pend(Tid : display, I : int, NB : int) is
+  let W : real
+  in
+   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) || snd-do(Tid, update(I, 0.0))) * delta
+  endlet
+
+%% Construct the processes {\tt Pend}$_0$, {\tt P}$_1$, ..., {\tt P}$_{N-1}$, {\tt Pend}$_N$.
+
+process MakeWave(N : int) is
+  let Tid : display, Id : int, I : int, L : int, R : int
+  in
+     execute(display, Tid?) .         %% create the display
+     snd-do(Tid, mk-wave(N)) .        %% make an N point wave
+     create(Pend(Tid, 0, 1), Id?).    %% create left end point
+     L := sub(N,1) .
+     create(Pend(Tid, N, L), Id?) .   %% create right end point
+     I := 1 .                         %% create the P's in between
+     if less(I, N) then
+        L := sub(I, 1) . R := add(I, 1) .
+        create(P(Tid, L, I, R, 1.0, 1.0), Id?) .
+        I := add(I, 1)
+     fi *
+     delta
+     %% shutdown("end") delay(sec(60))
+  endlet
+
+%% Define the {\tt display} tool.
+
+tool display is { host = "localhost"
+    			  kind = "classic"
+                  command = "/home/paulk/software/installed/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
+                }
+
+%% Define the initial \TB\ configuration.
+
+%%toolbus(MakeWave(8))
+toolbus(PP(2,3), QQ(3,2))
