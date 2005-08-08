@@ -1,17 +1,14 @@
 package nl.cwi.sen1.error.viewer;
 
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 import javax.swing.JTree;
-import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.error.model.SelectableNode;
+import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioPlugin;
@@ -48,9 +45,14 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 		bridge = new ErrorViewerBridge(factory, this);
 		bridge.setLockObject(this);
+
+		StudioComponent comp = new StudioComponentImpl("Error Viewer", panel) {
+			public void requestClose() throws CloseAbortedException {
+				throw new CloseAbortedException();
+			}
+		};
 		studio.connect(getName(), bridge);
-		((StudioWithPredefinedLayout) studio).addComponent(
-				new StudioComponentImpl("Error Viewer", panel),
+		((StudioWithPredefinedLayout) studio).addComponent(comp,
 				StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
 	}
 
@@ -59,14 +61,14 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	private void addListener() {
 		final JTree tree = panel.getTree();
-		
+
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
 				if (path != null) {
 					Object node = path.getLastPathComponent();
 					if (node != null && node instanceof SelectableNode) {
-						((SelectableNode) node).selected(studio, bridge);		
+						((SelectableNode) node).selected(studio, bridge);
 						tree.clearSelection();
 					}
 				}
