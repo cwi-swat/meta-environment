@@ -56,10 +56,7 @@ public class ErrorPanel extends JPanel {
         tree.setShowsRootHandles(true);
 
         DefaultTreeCellRenderer renderer = new ErrorTreeCellRenderer();
-        Icon personIcon = null;
-        renderer.setLeafIcon(personIcon);
-        renderer.setClosedIcon(personIcon);
-        renderer.setOpenIcon(personIcon);
+        
         tree.setCellRenderer(renderer);
 
         JScrollPane scrollPane = new JScrollPane(tree);
