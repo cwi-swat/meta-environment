@@ -2,7 +2,8 @@ package nl.cwi.sen1.tide.tool.support;
 
 //{{{ imports
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 //}}}
 

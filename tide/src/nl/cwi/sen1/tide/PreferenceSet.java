@@ -1,8 +1,16 @@
 package nl.cwi.sen1.tide;
 
-import java.util.*;
-import java.io.*;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Properties;
 
 public class PreferenceSet
 {

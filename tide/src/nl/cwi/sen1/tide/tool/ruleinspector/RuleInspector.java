@@ -2,16 +2,48 @@ package nl.cwi.sen1.tide.tool.ruleinspector;
 
 //{{{ imports
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.util.Iterator;
+import java.util.LinkedList;
 
-import nl.cwi.sen1.tide.tool.*;
-import nl.cwi.sen1.tide.tool.support.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+
+import nl.cwi.sen1.tide.tool.ProcessTool;
+import nl.cwi.sen1.tide.tool.ToolManager;
+import nl.cwi.sen1.tide.tool.support.DebugAdapter;
+import nl.cwi.sen1.tide.tool.support.DebugAdapterListener;
+import nl.cwi.sen1.tide.tool.support.DebugProcess;
+import nl.cwi.sen1.tide.tool.support.DebugProcessListener;
+import nl.cwi.sen1.tide.tool.support.Expr;
+import nl.cwi.sen1.tide.tool.support.Port;
+import nl.cwi.sen1.tide.tool.support.Rule;
 
 //}}}
 

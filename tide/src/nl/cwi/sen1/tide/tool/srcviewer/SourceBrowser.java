@@ -1,11 +1,20 @@
 package nl.cwi.sen1.tide.tool.srcviewer;
 
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.text.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import nl.cwi.sen1.tide.tool.support.*;
+import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
+
+import nl.cwi.sen1.tide.tool.support.Expr;
+import nl.cwi.sen1.tide.tool.support.Rule;
 
 class SourceBrowser extends JTextArea {
 	private static final Color COLOR_SELECTED_POSITION = Color.red;

@@ -1,6 +1,7 @@
 package nl.cwi.sen1.tide.adapters;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
 
 public class DebugAdapterRule
 {

@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
@@ -71,9 +72,15 @@ public class TideControl extends JPanel implements TideControlTif, Runnable {
 
             setLayout(new BorderLayout());
 
-            ((StudioWithPredefinedLayout) studio).addComponent(
-                    new StudioComponentImpl("Processes", new JScrollPane(
-                            processList)),
+            StudioComponentImpl comp = new StudioComponentImpl("Processes", new JScrollPane(
+                            processList)) {
+				public void requestClose() throws CloseAbortedException {
+					throw new CloseAbortedException();
+				}
+            };
+            
+			((StudioWithPredefinedLayout) studio).addComponent(
+                    comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
 
             studio.connect("tide-control", bridge);

@@ -4,7 +4,7 @@
 
 package nl.cwi.sen1.tide;
 
-import aterm.*;
+import aterm.ATerm;
 
 public interface TideControlTif
 {

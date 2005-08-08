@@ -2,8 +2,13 @@ package nl.cwi.sen1.tide.tool.support;
 
 //{{{ imports
 
-import java.util.*;
-import aterm.*;
+import java.util.Iterator;
+import java.util.List;
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 
 //}}}

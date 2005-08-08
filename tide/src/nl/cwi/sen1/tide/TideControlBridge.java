@@ -4,7 +4,8 @@
 
 package nl.cwi.sen1.tide;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class TideControlBridge
   extends TideControlTool

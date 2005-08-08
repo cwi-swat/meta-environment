@@ -1,8 +1,15 @@
 package nl.cwi.sen1.tide.tool.support;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermInt;
 
 public class DebugTool extends DebugToolTool {
 	private Map adapters;

@@ -1,6 +1,6 @@
 package nl.cwi.sen1.tide.tool.support;
 
-import java.util.*;
+import java.util.Iterator;
 
 public class Rule
 {

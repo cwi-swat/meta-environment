@@ -1,8 +1,12 @@
 package nl.cwi.sen1.tide.tool.support;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import aterm.*;
+import aterm.ATerm;
 
 public class DebugProcess {
 	public static final String[] PORT_TYPES = { "step", "stopped", "started" };

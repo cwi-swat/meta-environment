@@ -1,5 +1,11 @@
 # $Id$
 
+Mon Aug  8 11:10:38 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * src/**/TideControl.java: the process tool can not be closed 
+   anymore. From the process tool you can launch all the other
+   debugging tools, so they may be closed and reopened.
+ * organized the imports in a lot of Java files.
+
 Wed Aug  3 13:25:03 CEST 2005 <kooiker@cwi.nl>
  * Merge predefined-gui-layout branch
  * Indented some java files

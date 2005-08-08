@@ -2,15 +2,34 @@ package nl.cwi.sen1.tide.tool.stackviewer;
 
 //{{{ imports
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import nl.cwi.sen1.tide.tool.*;
-import nl.cwi.sen1.tide.tool.support.*;
+import nl.cwi.sen1.tide.tool.ProcessTool;
+import nl.cwi.sen1.tide.tool.ToolManager;
+import nl.cwi.sen1.tide.tool.support.DebugAdapter;
+import nl.cwi.sen1.tide.tool.support.DebugAdapterListener;
+import nl.cwi.sen1.tide.tool.support.DebugProcess;
+import nl.cwi.sen1.tide.tool.support.DebugProcessListener;
+import nl.cwi.sen1.tide.tool.support.Expr;
+import nl.cwi.sen1.tide.tool.support.Port;
+import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
+import nl.cwi.sen1.tide.tool.support.Rule;
 
 //}}}
 

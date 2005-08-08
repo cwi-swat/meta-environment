@@ -1,9 +1,11 @@
 package nl.cwi.sen1.tide.tool;
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
 
-import nl.cwi.sen1.tide.tool.support.*;
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+
+import nl.cwi.sen1.tide.tool.support.DebugAdapter;
 
 public class AdapterAction
   extends AbstractAction

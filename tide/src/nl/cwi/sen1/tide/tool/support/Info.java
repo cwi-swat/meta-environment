@@ -1,6 +1,6 @@
 package nl.cwi.sen1.tide.tool.support;
 
-import java.io.*;
+import java.io.PrintStream;
 
 public class Info
 {

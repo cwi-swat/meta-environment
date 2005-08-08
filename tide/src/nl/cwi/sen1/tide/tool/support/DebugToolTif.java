@@ -4,7 +4,7 @@
 
 package nl.cwi.sen1.tide.tool.support;
 
-import aterm.*;
+import aterm.ATerm;
 
 public interface DebugToolTif
 {

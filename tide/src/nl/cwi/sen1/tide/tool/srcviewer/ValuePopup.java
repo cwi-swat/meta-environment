@@ -2,15 +2,36 @@ package nl.cwi.sen1.tide.tool.srcviewer;
 
 //{{{ imports
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 import nl.cwi.sen1.tide.tool.ToolManager;
-import nl.cwi.sen1.tide.tool.ruleinspector.*;
-import nl.cwi.sen1.tide.tool.support.*;
+import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspector;
+import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspectorFactory;
+import nl.cwi.sen1.tide.tool.support.DebugProcess;
+import nl.cwi.sen1.tide.tool.support.DebugProcessListener;
+import nl.cwi.sen1.tide.tool.support.Expr;
+import nl.cwi.sen1.tide.tool.support.ExprFormat;
+import nl.cwi.sen1.tide.tool.support.Port;
+import nl.cwi.sen1.tide.tool.support.ProcessStatusChangeListener;
+import nl.cwi.sen1.tide.tool.support.Rule;
 
 //}}}
 

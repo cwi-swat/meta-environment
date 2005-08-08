@@ -4,7 +4,8 @@
 
 package nl.cwi.sen1.tide.tool.support;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class DebugToolBridge
   extends DebugToolTool

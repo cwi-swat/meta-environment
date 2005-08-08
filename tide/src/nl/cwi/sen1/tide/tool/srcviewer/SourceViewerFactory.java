@@ -2,7 +2,9 @@ package nl.cwi.sen1.tide.tool.srcviewer;
 
 import javax.swing.Icon;
 
-import nl.cwi.sen1.tide.tool.*;
+import nl.cwi.sen1.tide.tool.ProcessTool;
+import nl.cwi.sen1.tide.tool.ProcessToolFactory;
+import nl.cwi.sen1.tide.tool.ToolManager;
 import nl.cwi.sen1.tide.tool.support.DebugProcess;
 
 public class SourceViewerFactory

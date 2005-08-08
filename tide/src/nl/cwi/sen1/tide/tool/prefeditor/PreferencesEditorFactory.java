@@ -2,7 +2,9 @@ package nl.cwi.sen1.tide.tool.prefeditor;
 
 import javax.swing.Icon;
 
-import nl.cwi.sen1.tide.tool.*;
+import nl.cwi.sen1.tide.tool.TideTool;
+import nl.cwi.sen1.tide.tool.TideToolFactory;
+import nl.cwi.sen1.tide.tool.ToolManager;
 
 public class PreferencesEditorFactory
   implements TideToolFactory
