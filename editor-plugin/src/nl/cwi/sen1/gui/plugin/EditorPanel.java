@@ -99,6 +99,9 @@ public class EditorPanel extends JPanel {
         return id;
     }
 
+    public String getFilename() {
+    	return filename;
+    }
     public void setModified(boolean modified) {
         this.modified = modified;
         textArea.setFocus(null);

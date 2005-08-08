@@ -249,7 +249,7 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 	private void showSaveConfirmDialog(final EditorPanel panel, int optionType)
 			throws CloseAbortedException {
 		switch (JOptionPane.showConfirmDialog(null,
-				"Editor is modified. Do you want to save your changes?", panel.getName(),
+				panel.getFilename() + "\n\nThe editor for this file has unsaved changes.\nDo you want to save your changes?", panel.getFilename(),
 				optionType)) {
 		case JOptionPane.YES_OPTION:
 			try {
