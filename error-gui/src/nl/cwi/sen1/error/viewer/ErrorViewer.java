@@ -1,8 +1,13 @@
 package nl.cwi.sen1.error.viewer;
 
+import java.awt.Color;
+
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.error.model.SelectableNode;
@@ -61,7 +66,8 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	private void addListener() {
 		final JTree tree = panel.getTree();
-
+		
+		
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				TreePath path = tree.getSelectionPath();
@@ -73,7 +79,6 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 					}
 				}
 			}
-
 		});
 	}
 
@@ -84,7 +89,6 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 
 	public void removeFeedbackSummary(String producer, String id) {
 		panel.removeAllMatchingErrors(producer, id);
-		panel.expandAll(panel.getTree(), false);
 	}
 
 	public void recAckEvent(ATerm t0) {

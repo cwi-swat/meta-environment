@@ -3,6 +3,9 @@
 Mon Aug  8 10:50:47 CEST 2005 <{kooiker,jurgenv@cwi.nl}>
  * **/ErrorViewer.java: throw CloseAbortedException since the
    error viewer must always remain accesible
+ * **/*.java: remove error uses a worklist (fixes a bug)
+ * **/ErrorTreeCellRenderer.java:
+   errors are red, warnings are blue, meta-environment I love you.  
 
 Thu Aug  4 14:23:12 CEST 2005 <jurgenv@cwi.nl>
  * Simplified string description of errors in the viewer. There was

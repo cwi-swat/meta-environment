@@ -1,8 +1,12 @@
 package nl.cwi.sen1.error.model;
 
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 import errorapi.types.Error;
 import errorapi.types.ErrorList;
@@ -56,13 +60,21 @@ public class ErrorDecorator {
 	public void removeAllMatchingErrors(DefaultMutableTreeNode top,
 			String producer, String id) {
 		Enumeration errors = top.children();
-
+		// the enumeration is broken if we start deleting nodes from the root,
+		// so we have to make a worklist first.
+		List toBeRemoved = new LinkedList();
+		
 		while (errors.hasMoreElements()) {
 			ErrorNode error = (ErrorNode) errors.nextElement();
 			if (producer.equals(error.getProducer())
 					&& id.equals(error.getId())) {
-				top.remove(error);
+				toBeRemoved.add(error);
 			}
+		}
+		
+		Iterator iter = toBeRemoved.iterator();
+		while (iter.hasNext()) {
+			top.remove((MutableTreeNode) iter.next());
 		}
 	}
 }

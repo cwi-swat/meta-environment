@@ -40,4 +40,20 @@ public class ErrorNode extends SelectableNode {
 					"location-selected(<term>)", location.toTerm()));
 		}
 	}
+	
+	public boolean isError() {
+		return error.isError();
+	}
+	
+	public boolean isWarning() {
+		return error.isWarning();
+	}
+	
+	public boolean isFatal() {
+		return error.isFatal();
+	}
+	
+	public boolean isInfo() {
+		return error.isInfo();
+	}
 }

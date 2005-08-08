@@ -1,6 +1,8 @@
 package nl.cwi.sen1.error.viewer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.Enumeration;
@@ -23,6 +25,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import nl.cwi.sen1.error.model.ErrorDecorator;
+import nl.cwi.sen1.error.model.ErrorNode;
 import errorapi.types.Summary;
 
 public class ErrorPanel extends JPanel {
@@ -31,6 +34,8 @@ public class ErrorPanel extends JPanel {
     private ErrorDecorator errorDecorator;
 
     private DefaultMutableTreeNode top;
+
+	private DefaultTreeModel treeModel;
 
     public ErrorPanel() {
         super(new BorderLayout());
@@ -42,14 +47,15 @@ public class ErrorPanel extends JPanel {
         errorDecorator = new ErrorDecorator();
 
         top = new DefaultMutableTreeNode("Errors");
+        treeModel = new DefaultTreeModel(top);
 
-        tree = new JTree(top);
+        tree = new JTree(treeModel);
         tree.getSelectionModel().setSelectionMode(
                 TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setRootVisible(false);
         tree.setShowsRootHandles(true);
 
-        DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer();
+        DefaultTreeCellRenderer renderer = new ErrorTreeCellRenderer();
         Icon personIcon = null;
         renderer.setLeafIcon(personIcon);
         renderer.setClosedIcon(personIcon);
@@ -73,6 +79,7 @@ public class ErrorPanel extends JPanel {
     
 	public void removeAllMatchingErrors(String producer, String id) {
 		errorDecorator.removeAllMatchingErrors(top, producer, id);
+		treeModel.reload();
 	}
 
     public void expandAll(JTree tree, boolean expand) {
