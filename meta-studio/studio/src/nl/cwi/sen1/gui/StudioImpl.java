@@ -475,7 +475,8 @@ public class StudioImpl extends StudioComponentAdapter implements Studio,
     }
 
     public void recTerminate(ATerm t) {
-        System.exit(0);
+        bridge.stopRunning();
+		frame.dispose();
     }
 
     public void connect(String toolName, final AbstractTool tool) {

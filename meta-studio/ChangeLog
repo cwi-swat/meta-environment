@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug  8 16:50:15 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * **/StudioImpl.java: calls frame.dispose() in rec_terminate
+   to let AWT Threads die.
+
 Fri Aug  5 11:29:08 CEST 2005 <jurgenv@cwi.nl>
  * StudioImpl: added menu will all active views such that they
    can be restored even when not visible anymore.
