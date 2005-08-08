@@ -442,3 +442,122 @@ in
   fi
 endlet
 
+process DebugReduce(EditorId : term,
+                    Modulename : str,
+		    Tree : term,
+		    ResultTree : term?) is
+  /* TODO: changed reduce action to take an extra argument,
+     that will break all currently existing scripts, so we
+     leave it at this for the moment. In 1.6 this can be changed?
+   */
+  snd-msg(debugging(on))
+  . ReduceTerm(Tree, Modulename, ResultTree?)
+  . 
+  if not-equal(ResultTree, error-tree) then
+    snd-msg(promote-posinfo-to-origin(ResultTree))
+    . rec-msg(promoted-posinfo-to-origin(ResultTree?))
+    . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
+    . snd-msg(put-term-tree("reduct.out", ResultTree))
+  else
+    tau
+  fi 
+  . snd-msg(debugging(off)) 
+
+process DebugReduceAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term,
+  ResultTree : term,
+  Direction : term,
+  Available : bool
+in
+  GetTree(EditorId, Tree?, Available?)
+  .
+  if equal(Available, true) then
+    GetActiveModule(EditorId, Modulename?)
+    . DebugReduce(EditorId, Modulename, Tree, ResultTree?)
+    . 
+    if not-equal(ResultTree, error-tree) then
+      ActivateEditorWithTree(ResultTree, Modulename, "reduct.out")
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+process RunAsfTestsAction(Modulename : str) is
+  snd-msg(run-asf-tests(Modulename))
+
+process EditorRunAsfTestsAction(EditorId : term) is
+let
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . snd-msg(run-asf-tests(Modulename))
+endlet
+
+process DebugRunAsfTestsAction(Modulename : str) is
+  snd-msg(debugging(on))
+  . snd-msg(run-asf-tests(Modulename))
+
+process AsfSdfApiGenAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Generate New Module", "", ".sdf", Path?)
+  . snd-msg(asfsdfapigen(Modulename, Path))
+  . rec-msg(asfsdfapigen-done)
+endlet
+
+process ReduceAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term,
+  RTree : term,
+  Available : bool
+in
+  GetTree(EditorId, Tree?, Available?)
+  .
+  if equal(Available, true) then
+    GetActiveModule(EditorId, Modulename?)
+    . Reduce(EditorId, Modulename, Tree, RTree?)
+    . 
+    if not-equal(RTree, error-tree) then
+      ActivateEditorWithTree(RTree, Modulename, "reduct.out")
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+
+process ReduceTerm(Tree: term, Modulename: str, NormalForm: term?) is
+let
+  Summary: term,
+  Equations: term,
+  Id: int,
+  Pid: int,
+  Specification: term
+in
+  Id := process-id
+  . OpenModules([Modulename], sdf)
+  . snd-note(ui-status(stat(Id, "Retrieving equations")))
+  . create(GetSpecification(Modulename), Pid?)
+  .
+  (
+    rec-msg(specification(Specification?))
+    . GetSpecificationEquations(Specification, Equations?)
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(interpret-term-hook(Modulename, Equations, Tree))
+    . rec-msg(interpret-term-hook-result(NormalForm?))
+  +
+    rec-msg(specification-incomplete(Summary?))
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . NormalForm := error-tree
+  )
+endlet
