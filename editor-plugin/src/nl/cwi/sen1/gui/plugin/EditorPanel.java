@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.UndoableEditEvent;
@@ -32,6 +33,8 @@ public class EditorPanel extends JPanel {
     public EditorPanel(String id, String filename) throws IOException {
         this.id = id;
         this.filename = filename;
+        
+        
 
         setLayout(new BorderLayout());
         //setLayout(new GridBagLayout());
@@ -50,7 +53,10 @@ public class EditorPanel extends JPanel {
         textArea.setText(readContents(filename));
         modified = false;
         textArea.setCaretPosition(0);
-        add(textArea, BorderLayout.NORTH);
+        
+        JScrollPane scroller = new JScrollPane(textArea);
+        
+        add(scroller, BorderLayout.CENTER);
     }
 
     public EditorTextArea getTextArea() {
