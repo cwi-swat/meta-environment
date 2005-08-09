@@ -1,15 +1,12 @@
 package nl.cwi.sen1.error.viewer;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.Enumeration;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,7 +22,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import nl.cwi.sen1.error.model.ErrorDecorator;
-import nl.cwi.sen1.error.model.ErrorNode;
 import errorapi.types.Summary;
 
 public class ErrorPanel extends JPanel {

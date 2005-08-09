@@ -1,22 +1,17 @@
 package nl.cwi.sen1.error.viewer;
 
-import java.awt.Color;
-
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.error.model.SelectableNode;
 import nl.cwi.sen1.gui.CloseAbortedException;
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
-import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import aterm.ATerm;
 import aterm.ATermFactory;
@@ -24,7 +19,7 @@ import aterm.pure.PureFactory;
 import errorapi.Factory;
 import errorapi.types.Summary;
 
-public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
+public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 	private static final String TOOL_NAME = "error-viewer";
 
 	private Studio studio;
@@ -95,5 +90,6 @@ public class ErrorViewer implements ErrorViewerTif, StudioPlugin {
 	}
 
 	public void recTerminate(ATerm t0) {
+		fireStudioPluginClosed();
 	}
 }
