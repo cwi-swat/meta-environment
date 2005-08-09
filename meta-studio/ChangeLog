@@ -1,5 +1,13 @@
 $Id$
 
+Tue Aug  9 11:09:03 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
+ * **/StudioImpl.java: introduced new design for terminating
+   a Studio. Each StudioPlugin sends a message to the studio
+   when it terminates, if all plugins are terminated, and
+   the studio wants to terminate too, then System.exit is called.
+   This circumvents all kinds of problems with Threads that
+   want to live on and on (like AWT threads).
+
 Mon Aug  8 16:50:15 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
  * **/StudioImpl.java: calls frame.dispose() in rec_terminate
    to let AWT Threads die.

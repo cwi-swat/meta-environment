@@ -88,6 +88,10 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private boolean menuBarUpdatePending;
 
+	private List plugins;
+
+	protected boolean studioShuttingDown;
+
 	public static void main(String args[]) throws Exception {
 		new StudioImpl(args);
 	}
@@ -140,6 +144,8 @@ public class StudioImpl implements Studio, GuiTif {
 		componentsByView = new HashMap();
 		componentMenus = new HashMap();
 		viewsById = new ViewMap();
+		plugins = new LinkedList();
+		studioShuttingDown = false;
 	}
 
 	synchronized private static int nextComponentID() {
@@ -306,7 +312,6 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	private void createFrame() {
-		// JFrame.setDefaultLookAndFeelDecorated(true);
 		frame = new JFrame();
 		frame.setSize(800, 600);
 		frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
@@ -483,8 +488,8 @@ public class StudioImpl implements Studio, GuiTif {
 	}
 
 	public void recTerminate(ATerm t) {
-		bridge.stopRunning();
-		frame.dispose();
+		studioShuttingDown = true;
+		tryShutDown();
 	}
 
 	public void connect(String toolName, final AbstractTool tool) {
@@ -511,6 +516,7 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private void startPlugin(PluginLoader loader) {
 		final StudioPlugin plugin = loader.instantiatePlugin();
+		registerPlugin(plugin);
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
 				plugin.initStudioPlugin(StudioImpl.this);
@@ -518,6 +524,17 @@ public class StudioImpl implements Studio, GuiTif {
 		});
 		thread.setName(plugin.getName() + "-starter");
 		thread.start();
+	}
+
+	private void registerPlugin(StudioPlugin plugin) {
+		plugins.add(plugin);
+		plugin.addStudioPluginListener(new StudioPluginListener() {
+			public void studioPluginClosed(StudioPlugin plugin) {
+				plugins.remove(plugin);
+				
+				tryShutDown();
+			}
+		});
 	}
 
 	public void loadJar(String pluginJar) {
@@ -549,5 +566,11 @@ public class StudioImpl implements Studio, GuiTif {
 		View view = viewsById.getView(id);
 
 		view.restoreFocus();
+	}
+
+	private void tryShutDown() {
+		if (studioShuttingDown && plugins.isEmpty()) {
+			System.exit(0);
+		}
 	}
 }
