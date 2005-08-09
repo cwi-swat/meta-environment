@@ -14,18 +14,18 @@ import javax.swing.JOptionPane;
 import metaconfig.Factory;
 import metaconfig.types.Items;
 import nl.cwi.sen1.gui.CloseAbortedException;
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
-import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class EditorPlugin implements EditorPluginTif, StudioPlugin {
+public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif  {
 	private static final String TOOL_NAME = "editor-plugin";
 
 	private Map editors;
@@ -275,6 +275,9 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 		while (iter.hasNext()) {
 			EditorPanel panel = (EditorPanel) iter.next();
 			if (panel.isModified()) {
+				String id = panel.getId();
+				StudioComponent comp = getComponentById(id);
+				studio.requestFocus(comp);
 				try {
 					showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
 				} catch (CloseAbortedException e) {
@@ -283,5 +286,10 @@ public class EditorPlugin implements EditorPluginTif, StudioPlugin {
 				}
 			}
 		}
+		fireStudioPluginClosed();
+	}
+
+	private StudioComponent getComponentById(String id) {
+		return (StudioComponent) componentsById.get(id);
 	}
 }

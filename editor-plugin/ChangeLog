@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug  9 10:47:15 CEST 2005 <{jong,kooiker,jurgenv}@cwi.nl>
+ * Updated to new StudioPlugin interface that supports nice
+   closing management.
+
 Mon Aug  8 11:03:59 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
  * src/**/EditorPanel.java: Added scrollbars around an editor. This
    also fixes the bug that the editor can not be resized (for an
