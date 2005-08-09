@@ -1,10 +1,9 @@
 package nl.cwi.sen1.tide;
 
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioPlugin;
 
-public class TideMainFrame 
-implements StudioPlugin {
+public class TideMainFrame extends DefaultStudioPlugin {
 	
 //	private ToolManager manager;
 	private TideControl control;
@@ -14,7 +13,9 @@ implements StudioPlugin {
 	public void initStudioPlugin(Studio studio) {
 //		this.factory = studio.getATermFactory();
 		
-		TideControl control = new TideControl(studio);
+		// TODO: move control code from TideControl to this class
+		TideControl control = new TideControl(studio, this);
+	
 //		manager = control.getManager();
 		
 //		Thread controlThread = new Thread(control);
@@ -25,6 +26,9 @@ implements StudioPlugin {
 		return "TIDE";
 	}
 
+	public void closeTide() {
+		fireStudioPluginClosed();
+	}
 
 //	private void createMenuBar() {
 //		fileMenu = new JMenu("File");

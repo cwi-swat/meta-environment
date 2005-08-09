@@ -52,8 +52,11 @@ public class TideControl extends JPanel implements TideControlTif, Runnable {
 
     protected Thread tideControlThread;
 
-    public TideControl(Studio studio) {
+	private TideMainFrame plugin;
+
+    public TideControl(Studio studio, TideMainFrame plugin) {
         this.studio = studio;
+        this.plugin = plugin;
         nl.cwi.sen1.tide.tool.support.Port.initialize(studio.getATermFactory());
         nl.cwi.sen1.tide.tool.support.Expr.initialize(studio.getATermFactory());
 
@@ -129,6 +132,7 @@ public class TideControl extends JPanel implements TideControlTif, Runnable {
     public void recTerminate(ATerm arg) {
         bridge.stopRunning();
         debugTool.stopRunning();
+        plugin.closeTide();
     }
 
     public void loadPreferences() {

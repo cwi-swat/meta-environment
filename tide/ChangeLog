@@ -1,5 +1,8 @@
 # $Id$
 
+Tue Aug  9 10:48:25 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
+ * Updated to new StudioPlugin interface
+
 Mon Aug  8 11:10:38 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * src/**/TideControl.java: the process tool can not be closed 
    anymore. From the process tool you can launch all the other
