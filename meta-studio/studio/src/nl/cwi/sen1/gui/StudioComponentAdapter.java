@@ -13,5 +13,6 @@ public abstract class StudioComponentAdapter implements StudioComponentListener 
     public void componentClose() {
     }
     
-    
+    public void componentFocusReceived() {
+    }
 }

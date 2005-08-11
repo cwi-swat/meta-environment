@@ -3,6 +3,13 @@ $Id$
 Thu Aug 11 15:52:31 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
  * **/StudioImpl.java: bugfix, menus did not dissappear when
    a View was hidden.
+ * **/StudioComponent.java: added componentReceiveFocus method to
+   the interface, with the transitive closure to other classes
+   to implement a full Listener design.
+   When a View now receives the focus, this is communicated to
+   the component in this view, such that appropriate actions
+   can be implemented.
+
 
 Tue Aug  9 11:09:03 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
  * **/StudioImpl.java: introduced new design for terminating

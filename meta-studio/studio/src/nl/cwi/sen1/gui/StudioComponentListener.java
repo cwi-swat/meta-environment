@@ -8,4 +8,6 @@ public interface StudioComponentListener extends EventListener {
     public void componentRequestClose() throws CloseAbortedException;
     
     public void componentClose();
+    
+    public void componentFocusReceived();
 }

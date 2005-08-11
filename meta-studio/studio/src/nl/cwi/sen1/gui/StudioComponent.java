@@ -19,4 +19,6 @@ public interface StudioComponent {
     public void requestClose() throws CloseAbortedException;
     
     public void close();
+    
+    public void receiveFocus();
 }

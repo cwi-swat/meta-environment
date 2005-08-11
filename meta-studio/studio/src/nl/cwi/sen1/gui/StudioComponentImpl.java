@@ -69,6 +69,16 @@ public class StudioComponentImpl implements StudioComponent {
         }
     }
     
+    protected void fireComponentFocusReceived() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == StudioComponentListener.class) {
+                ((StudioComponentListener) listeners[i + 1])
+                        .componentFocusReceived();
+            }
+        }
+    }
+    
     public String getStatusMessage() {
         return statusMessage;
     }
@@ -95,5 +105,9 @@ public class StudioComponentImpl implements StudioComponent {
     
     public void close() {
         fireComponentClose();
+    }
+    
+    public void receiveFocus() {
+    	fireComponentFocusReceived();
     }
 }

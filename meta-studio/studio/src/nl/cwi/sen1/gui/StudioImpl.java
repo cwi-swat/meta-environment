@@ -184,6 +184,7 @@ public class StudioImpl implements Studio, GuiTif {
 					activeView = newView;
 					updateMenuBar();
 					updateStatusBar();
+					((StudioComponent) componentsByView.get(activeView)).receiveFocus();
 				}
 			}
 
