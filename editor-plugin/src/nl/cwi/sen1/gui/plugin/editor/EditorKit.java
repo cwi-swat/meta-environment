@@ -1,7 +1,6 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.gui.plugin.editor;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -10,37 +9,44 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
-import javax.swing.text.DefaultStyledDocument.AttributeUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-public class UndoableEditorKit extends StyledEditorKit {
+public class EditorKit extends StyledEditorKit {
 	private static UndoManager undoManager = new UndoManager();
 
 	private static UndoAction undo = new UndoAction();
 
 	private static RedoAction redo = new RedoAction();
+	
+	private static FindAction find = new FindAction();
+	
+	private static GotoLineAction gotoLine = new GotoLineAction();
 
 	public static final String undoAction = "undo";
 
 	public static final String redoAction = "redo";
 
+	public static final String findAction = "find";
+	
+	public static final String gotoLineAction = "gotoLine";
+	
 	private UndoableEditListener undoListener;
 
-	public UndoableEditorKit() {
+	public EditorKit() {
 		undoListener = new UndoableEditListener() {
 			public void undoableEditHappened(UndoableEditEvent e) {
-				undoManager.addEdit(e.getEdit());
-				undo.updateUndoState();
-				redo.updateRedoState();
+					undoManager.addEdit(e.getEdit());
+					undo.updateUndoState();
+					redo.updateRedoState();
 			}
 		};
 	}
 
 	public Action[] getActions() {
 		return TextAction.augmentList(super.getActions(), new Action[] { undo,
-				redo });
+				redo, find, gotoLine});
 	}
 
 	public Action getAction(String name) {
@@ -113,10 +119,37 @@ public class UndoableEditorKit extends StyledEditorKit {
 		}
 	}
 	
+	public static class GotoLineAction extends AbstractAction {
+		public GotoLineAction() {
+			super(gotoLineAction);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = (EditorPane) e.getSource();
+			
+			GotoLineDialog d = new GotoLineDialog(editor);
+			d.show();
+			editor.gotoLine(d.getLineNumber());
+		}
+	}
+
+	public static class FindAction extends AbstractAction {
+		public FindAction() {
+			super(findAction);
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			EditorPane editor = (EditorPane) e.getSource();
+			
+			SearchReplaceDialog d = new SearchReplaceDialog(editor);
+			d.show();
+		}
+	}
+
 	public void pauseUndo(JEditorPane editor) {
 		editor.getDocument().removeUndoableEditListener(undoListener);
 	}
-	
+
 	public void resumeUndo(JEditorPane editor) {
 		editor.getDocument().addUndoableEditListener(undoListener);
 	}

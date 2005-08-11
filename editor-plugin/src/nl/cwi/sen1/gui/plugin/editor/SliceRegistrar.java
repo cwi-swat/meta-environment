@@ -1,4 +1,4 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.gui.plugin.editor;
 
 import locationapi.Factory;
 import locationapi.types.Area;
@@ -13,14 +13,10 @@ public class SliceRegistrar {
 	static public void registerSlices(EditorPane editor, ATermList slices) {
 		initFactory(slices);
 		
-		editor.pauseUndo();
-	
 		for ( ; !slices.isEmpty(); slices = slices.getNext()) {
 			Slice slice = factory.SliceFromTerm(slices.getFirst());
 			registerSlice(editor, slice);
 		}
-		
-		editor.resumeUndo();
 	}
 
 	static private void registerSlice(EditorPane editor, Slice slice) {

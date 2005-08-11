@@ -22,6 +22,7 @@ import nl.cwi.sen1.gui.StudioComponentAdapter;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
+import nl.cwi.sen1.gui.plugin.editor.SwingEditor;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
@@ -206,7 +207,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		Editor editorPanel = getPanel(id);
 
 		if (editorPanel == null) {
-			final Editor panel = new Editor(id, filename);
+			final SwingEditor panel = new SwingEditor(id, filename);
 			editorPanel = panel;
 
 			// Add mousemotion listener showing sorts in tooltips

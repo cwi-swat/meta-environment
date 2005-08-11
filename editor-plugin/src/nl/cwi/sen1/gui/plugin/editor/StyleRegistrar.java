@@ -1,7 +1,8 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.gui.plugin.editor;
 
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
+
 
 import metaconfig.types.Color;
 import metaconfig.types.Properties;
