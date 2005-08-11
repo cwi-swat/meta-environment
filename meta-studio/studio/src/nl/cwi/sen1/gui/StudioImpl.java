@@ -352,7 +352,7 @@ public class StudioImpl implements Studio, GuiTif {
 			menuPaths = menuPaths.getNext();
 		}
 
-		if (activeView != null) {
+		if (activeView != null && activeView.getRootWindow() != null) {
 			StudioComponent activeComponent = getComponent(activeView);
 			List menus = getComponentMenus(activeComponent);
 			if (menus != null) {
@@ -531,7 +531,7 @@ public class StudioImpl implements Studio, GuiTif {
 		plugin.addStudioPluginListener(new StudioPluginListener() {
 			public void studioPluginClosed(StudioPlugin plugin) {
 				plugins.remove(plugin);
-				
+
 				tryShutDown();
 			}
 		});

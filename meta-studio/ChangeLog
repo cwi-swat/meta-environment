@@ -1,5 +1,9 @@
 $Id$
 
+Thu Aug 11 15:52:31 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * **/StudioImpl.java: bugfix, menus did not dissappear when
+   a View was hidden.
+
 Tue Aug  9 11:09:03 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
  * **/StudioImpl.java: introduced new design for terminating
    a Studio. Each StudioPlugin sends a message to the studio
