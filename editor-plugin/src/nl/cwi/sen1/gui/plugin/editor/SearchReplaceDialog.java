@@ -72,21 +72,18 @@ public class SearchReplaceDialog extends BaseDialog {
 		return wrapSearchCheck.isSelected();
 	}
 
-	/**
-	 * @see java.awt.Dialog#show()
-	 */
 	public void show() {
+		centerDialog(textArea);
+
+		String newSearch = textArea.getSelectedText();
+		if (newSearch != null && newSearch.length() != 0) {
+			findCombo.insertItemAt(newSearch, 0);
+			findCombo.setSelectedIndex(0);
+		}
 		super.show();
-		// setting focus to find field
 		findCombo.requestFocus();
 	}
 
-	/**
-	 * Constructs a SearchReplaceDialog instance with specific attributes.
-	 * 
-	 * @param textArea
-	 *            The text area.
-	 */
 	public SearchReplaceDialog(EditorPane textArea) {
 		super();
 		setTitle("Find/Replace");
@@ -96,8 +93,6 @@ public class SearchReplaceDialog extends BaseDialog {
 		wrapSearchCheck.setSelected(true);
 
 		initBindings();
-
-		centerDialog(textArea);
 	}
 
 	private void initBindings() {
@@ -316,7 +311,7 @@ public class SearchReplaceDialog extends BaseDialog {
 		getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
 		pack();
-	}// GEN-END:initComponents
+	}
 
 	private void closeButtonActionPerformed() {
 		this.hide();
@@ -333,11 +328,15 @@ public class SearchReplaceDialog extends BaseDialog {
 
 	private void replaceButtonActionPerformed() {
 		String textToReplaceWith = (String) replaceWithCombo.getSelectedItem();
-		updateComboBox(replaceWithCombo, textToReplaceWith);
-		int selectionStart = textArea.getSelectionStart();
-		textArea.replaceSelection(textToReplaceWith);
-		textArea.setSelectionStart(selectionStart);
-		textArea.setSelectionEnd(selectionStart + textToReplaceWith.length());
+
+		if (textToReplaceWith != null) {
+			updateComboBox(replaceWithCombo, textToReplaceWith);
+			int selectionStart = textArea.getSelectionStart();
+			textArea.replaceSelection(textToReplaceWith);
+			textArea.setSelectionStart(selectionStart);
+			textArea.setSelectionEnd(selectionStart
+					+ textToReplaceWith.length());
+		}
 	}
 
 	private void findButtonActionPerformed() {

@@ -2,13 +2,20 @@ package nl.cwi.sen1.gui.plugin.editor;
 
 import java.awt.Color;
 import java.awt.Event;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -34,11 +41,11 @@ public class EditorPane extends JTextPane {
 
 		addBindings();
 
-		focusPainter = new DefaultHighlightPainter(new Color(255, 0, 0));
+		focusPainter = new DefaultHighlightPainter(Color.BLACK);
 		defaultStyle = StyleContext.getDefaultStyleContext().getStyle(
 				StyleContext.DEFAULT_STYLE);
-		// StyleConstants.setFontSize(defaultStyle, 14);
 		modified = false;
+		getStyledDocument().setLogicalStyle(0, defaultStyle);
 		resumeUndo();
 
 		getDocument().addDocumentListener(new DocumentListener() {
@@ -53,6 +60,34 @@ public class EditorPane extends JTextPane {
 				modified = true;
 			}
 		});
+		
+		addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				if (getSelectionStart() != getSelectionEnd()) {
+					clearFocus();
+				}
+			}
+		});
+		addMouseMotionListener(new MouseMotionAdapter() {
+			public void mouseDragged(MouseEvent e) {
+				clearFocus();
+			}
+		});
+		
+		
+	}
+	
+	public void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING,
+          RenderingHints.VALUE_RENDER_QUALITY);
+        super.paintComponent(g2);
+    }
+
+	public void setFocusColor(Color color) {
+		focusPainter = new DefaultHighlightPainter(color);
 	}
 
 	protected void addBinding(JMenu menu, int key, String name) {

@@ -3,21 +3,23 @@ package nl.cwi.sen1.gui.plugin.editor;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
-
 import metaconfig.types.Color;
 import metaconfig.types.Properties;
 import metaconfig.types.Property;
 import metaconfig.types.TextAttributes;
+import metaconfig.types.TextCategoryName;
 import metaconfig.types.TextStyle;
 import metaconfig.types.property.TextCategory;
 
 public class StyleRegistrar {
-	
+	private static final String FOCUS_STYLE_NAME = "***focus***";
+
+	private static final String SELECTION_STYLE_NAME = "***selection***";
 
 	static public void registerTextCategories(EditorPane editor,
 			Properties categories) {
 		editor.unsetStyles();
-		
+
 		for (; !categories.isEmpty(); categories = categories.getTail()) {
 			Property prop = categories.getHead();
 
@@ -29,17 +31,36 @@ public class StyleRegistrar {
 
 	static private void registerTextCategory(EditorPane editor,
 			TextCategory category) {
-		if (category.getCategory().isExtern()) {
+		TextCategoryName type = category.getCategory();
+		TextAttributes attrs = category.getAttributes();
+
+		if (type.isExtern()) {
 			String name = category.getCategory().getName();
-			TextAttributes attrs = category.getAttributes();
 			registerAttributes(editor, name, attrs);
+		} else if (type.isNormal()) {
+			setStyleAttributes(attrs, editor.getDefaultStyle());
+		} else if (type.isSelection()) {
+			Style style = registerAttributes(editor, SELECTION_STYLE_NAME,
+					attrs);
+			editor.setSelectedTextColor((java.awt.Color) style
+					.getAttribute(StyleConstants.Foreground));
+			editor.setSelectionColor((java.awt.Color) style
+					.getAttribute(StyleConstants.Background));
+		} else if (type.isFocus()) {
+			Style style = registerAttributes(editor, FOCUS_STYLE_NAME, attrs);
+			editor.setFocusColor((java.awt.Color) style
+					.getAttribute(StyleConstants.Background));
 		}
 	}
 
-	static private void registerAttributes(EditorPane editor, String name,
+	static private Style registerAttributes(EditorPane editor, String name,
 			TextAttributes attrs) {
 		Style style = editor.addStyle(name, editor.getDefaultStyle());
+		setStyleAttributes(attrs, style);
+		return style;
+	}
 
+	private static void setStyleAttributes(TextAttributes attrs, Style style) {
 		for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
 			metaconfig.types.TextAttribute attr = attrs.getHead();
 

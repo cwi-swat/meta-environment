@@ -34,6 +34,8 @@ public class EditorKit extends StyledEditorKit {
 	public static final String gotoLineAction = "goto-line";
 
 	private UndoableEditListener undoListener;
+	
+	private SearchReplaceDialog searchReplaceDialog;
 
 	public EditorKit(EditorPane editor) {
 		this.editor = editor;
@@ -50,6 +52,8 @@ public class EditorKit extends StyledEditorKit {
 		redo = new RedoAction();
 		find = new FindAction();
 		gotoLine = new GotoLineAction();
+		
+		searchReplaceDialog = new SearchReplaceDialog(editor);
 	}
 
 	public Action[] getActions() {
@@ -145,8 +149,7 @@ public class EditorKit extends StyledEditorKit {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			SearchReplaceDialog d = new SearchReplaceDialog(editor);
-			d.show();
+			searchReplaceDialog.show();
 		}
 	}
 
