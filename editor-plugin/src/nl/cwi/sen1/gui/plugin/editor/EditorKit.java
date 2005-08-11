@@ -15,38 +15,46 @@ import javax.swing.undo.UndoManager;
 
 public class EditorKit extends StyledEditorKit {
 	private static UndoManager undoManager = new UndoManager();
+	private EditorPane editor;
 
-	private static UndoAction undo = new UndoAction();
+	private UndoAction undo;
 
-	private static RedoAction redo = new RedoAction();
-	
-	private static FindAction find = new FindAction();
-	
-	private static GotoLineAction gotoLine = new GotoLineAction();
+	private RedoAction redo;
+
+	private FindAction find;
+
+	private GotoLineAction gotoLine;
 
 	public static final String undoAction = "undo";
 
 	public static final String redoAction = "redo";
 
 	public static final String findAction = "find";
-	
-	public static final String gotoLineAction = "gotoLine";
-	
+
+	public static final String gotoLineAction = "goto-line";
+
 	private UndoableEditListener undoListener;
 
-	public EditorKit() {
+	public EditorKit(EditorPane editor) {
+		this.editor = editor;
+		
 		undoListener = new UndoableEditListener() {
 			public void undoableEditHappened(UndoableEditEvent e) {
-					undoManager.addEdit(e.getEdit());
-					undo.updateUndoState();
-					redo.updateRedoState();
+				undoManager.addEdit(e.getEdit());
+				undo.updateUndoState();
+				redo.updateRedoState();
 			}
 		};
+
+		undo = new UndoAction();
+		redo = new RedoAction();
+		find = new FindAction();
+		gotoLine = new GotoLineAction();
 	}
 
 	public Action[] getActions() {
 		return TextAction.augmentList(super.getActions(), new Action[] { undo,
-				redo, find, gotoLine});
+				redo, find, gotoLine });
 	}
 
 	public Action getAction(String name) {
@@ -61,7 +69,7 @@ public class EditorKit extends StyledEditorKit {
 		return null;
 	}
 
-	public static class UndoAction extends AbstractAction {
+	public class UndoAction extends AbstractAction {
 
 		public UndoAction() {
 			super(undoAction);
@@ -90,7 +98,7 @@ public class EditorKit extends StyledEditorKit {
 		}
 	}
 
-	public static class RedoAction extends AbstractAction {
+	public class RedoAction extends AbstractAction {
 
 		public RedoAction() {
 			super(redoAction);
@@ -118,39 +126,35 @@ public class EditorKit extends StyledEditorKit {
 			}
 		}
 	}
-	
-	public static class GotoLineAction extends AbstractAction {
+
+	public class GotoLineAction extends AbstractAction {
 		public GotoLineAction() {
 			super(gotoLineAction);
 		}
-		
+
 		public void actionPerformed(ActionEvent e) {
-			EditorPane editor = (EditorPane) e.getSource();
-			
 			GotoLineDialog d = new GotoLineDialog(editor);
 			d.show();
 			editor.gotoLine(d.getLineNumber());
 		}
 	}
 
-	public static class FindAction extends AbstractAction {
+	public class FindAction extends AbstractAction {
 		public FindAction() {
 			super(findAction);
 		}
-		
+
 		public void actionPerformed(ActionEvent e) {
-			EditorPane editor = (EditorPane) e.getSource();
-			
 			SearchReplaceDialog d = new SearchReplaceDialog(editor);
 			d.show();
 		}
 	}
 
-	public void pauseUndo(JEditorPane editor) {
+	public void pauseUndo() {
 		editor.getDocument().removeUndoableEditListener(undoListener);
 	}
 
-	public void resumeUndo(JEditorPane editor) {
+	public void resumeUndo() {
 		editor.getDocument().addUndoableEditListener(undoListener);
 	}
 

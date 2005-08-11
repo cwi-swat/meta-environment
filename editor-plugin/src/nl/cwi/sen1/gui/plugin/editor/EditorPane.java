@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Event;
 import java.awt.event.KeyEvent;
 
+import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Keymap;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
@@ -24,8 +27,10 @@ public class EditorPane extends JTextPane {
 
 	private boolean modified;
 
+	private JMenu menu;
+
 	public EditorPane() {
-		setEditorKit(new EditorKit());
+		setEditorKit(new EditorKit(this));
 		pauseUndo();
 
 		addBindings();
@@ -38,21 +43,26 @@ public class EditorPane extends JTextPane {
 		resumeUndo();
 	}
 
-	protected void addBindings() {
-		InputMap inputMap = getInputMap();
-		KeyStroke key;
+	protected void addBinding(JMenu menu, int key, String name) {
+		Action action =  ((EditorKit) getEditorKit()).getAction(name);
+		KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
 
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
-		inputMap.put(key, EditorKit.undoAction);
-
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
-		inputMap.put(key, EditorKit.redoAction);
-
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-		inputMap.put(key, EditorKit.findAction);
-
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_G, Event.CTRL_MASK);
-		inputMap.put(key, EditorKit.gotoLineAction);
+		getInputMap().put(keyStroke, name);
+		JMenuItem item = new JMenuItem(action);
+		item.setAccelerator(keyStroke);
+		menu.add(item);
+	}
+	
+	protected void addBindings() {		
+		menu = new JMenu("Edit");
+		
+		addBinding(menu, KeyEvent.VK_Z, EditorKit.undoAction);
+		addBinding(menu, KeyEvent.VK_Y, EditorKit.redoAction);
+		addBinding(menu, KeyEvent.VK_F, EditorKit.findAction);
+		addBinding(menu, KeyEvent.VK_G, EditorKit.gotoLineAction);
+		addBinding(menu, KeyEvent.VK_C, EditorKit.copyAction);
+		addBinding(menu, KeyEvent.VK_X, EditorKit.cutAction);
+		addBinding(menu, KeyEvent.VK_V, EditorKit.pasteAction);
 	}
 
 	public Style getDefaultStyle() {
@@ -92,24 +102,16 @@ public class EditorPane extends JTextPane {
 	}
 
 	public JMenu getEditorMenu() {
-		JMenu menu = new JMenu("Edit");
-		EditorKit kit = (EditorKit) getEditorKit();
-
-		menu.add(kit.getAction(EditorKit.undoAction));
-		menu.add(kit.getAction(EditorKit.redoAction));
-		menu.add(kit.getAction(DefaultEditorKit.copyAction));
-		menu.add(kit.getAction(DefaultEditorKit.pasteAction));
-		menu.add(kit.getAction(DefaultEditorKit.cutAction));
-
 		return menu;
 	}
+		
 
 	private void pauseUndo() {
-		((EditorKit) getEditorKit()).pauseUndo(this);
+		((EditorKit) getEditorKit()).pauseUndo();
 	}
 
 	private void resumeUndo() {
-		((EditorKit) getEditorKit()).resumeUndo(this);
+		((EditorKit) getEditorKit()).resumeUndo();
 	}
 
 	public void setText(String t) {

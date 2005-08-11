@@ -6,7 +6,7 @@ Thu Aug 11 09:13:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
    - added syntax hightlighting (it's fast!)
    - added Search and Replace
    - added Goto Line
-   - added Edit Menu
+   - added Edit Menu with accelarator keys
 
 Tue Aug  9 10:47:15 CEST 2005 <{jong,kooiker,jurgenv}@cwi.nl>
  * Updated to new StudioPlugin interface that supports nice
