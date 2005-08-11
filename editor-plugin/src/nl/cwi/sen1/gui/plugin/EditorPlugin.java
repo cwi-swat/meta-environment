@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import metaconfig.Factory;
 import metaconfig.types.Items;
+import metaconfig.types.Properties;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
@@ -25,7 +26,8 @@ import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif  {
+public class EditorPlugin extends DefaultStudioPlugin implements
+		EditorPluginTif {
 	private static final String TOOL_NAME = "editor-plugin";
 
 	private Map editors;
@@ -42,7 +44,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 	}
 
 	public void isModified(ATerm editorId) {
-		EditorPanel panel = getPanel(editorId.toString());
+		Editor panel = getPanel(editorId.toString());
 		String modified;
 
 		if (panel.isModified()) {
@@ -58,7 +60,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 	}
 
 	public void writeContents(ATerm editorId) {
-		EditorPanel panel = getPanel(editorId.toString());
+		Editor panel = getPanel(editorId.toString());
 
 		if (panel != null) {
 			try {
@@ -77,7 +79,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		errorapi.Factory factory = errorapi.Factory
 				.getInstance((PureFactory) studio.getATermFactory());
 
-		EditorPanel panel = (EditorPanel) editors.get(editorId.toString());
+		Editor panel = (Editor) editors.get(editorId.toString());
 
 		panel.setFocus(factory.AreaFromTerm(focus));
 	}
@@ -85,7 +87,13 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 	public void clearFocus(ATerm editorId) {
 	}
 
-	public void registerTextCategories(ATerm t0, ATerm t1) {
+	public void registerTextCategories(ATerm editorId, ATerm categories) {
+		Editor panel = getPanel(editorId.toString());
+
+		Properties properties = Factory.getInstance(
+				(PureFactory) categories.getFactory()).PropertiesFromTerm(
+				categories);
+		panel.registerCategories(properties);
 	}
 
 	public void addActions(final ATerm editorId, ATerm menuList) {
@@ -95,6 +103,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		addEditorMenus(editorId, comp, (ATermList) menuList);
 
 		createFileMenu(editorId, comp);
+		createEditMenu((Editor) editors.get(editorId.toString()), comp);
 	}
 
 	private void addEditorMenus(final ATerm editorId, StudioComponent comp,
@@ -126,7 +135,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		studio.addComponentMenu(comp, menuPath, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					((EditorPanel) editors.get(editorId.toString()))
+					((Editor) editors.get(editorId.toString()))
 							.writeContents();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -134,7 +143,11 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 			}
 		});
 	}
-
+	
+	private void createEditMenu(Editor editor, StudioComponent comp) {
+		studio.addComponentMenu(comp, editor.getEditMenu());
+	}
+	
 	public void displayMessage(ATerm editorId, String message) {
 		StudioComponentImpl comp = (StudioComponentImpl) componentsById
 				.get(editorId.toString());
@@ -152,7 +165,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 	}
 
 	public void setCursorAtOffset(ATerm editorId, int offset) {
-		EditorPanel panel = getPanel(editorId.toString());
+		Editor panel = getPanel(editorId.toString());
 		panel.setCursorAtOffset(offset);
 	}
 
@@ -164,7 +177,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		}
 	}
 
-	public void highlightSlices(ATerm editorId, ATerm t1) {
+	public void highlightSlices(ATerm editorId, ATerm slices) {
+		getPanel(editorId.toString()).registerSlices(slices);
 	}
 
 	public void editorToFront(ATerm editorId) {
@@ -186,29 +200,26 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		studio.connect(getName(), bridge);
 	}
 
-	private EditorPanel createPanel(final ATerm editorId, String filename)
+	private Editor createPanel(final ATerm editorId, String filename)
 			throws IOException {
 		final String id = editorId.toString();
-		EditorPanel editorPanel = getPanel(id);
+		Editor editorPanel = getPanel(id);
 
 		if (editorPanel == null) {
-			final EditorPanel panel = new EditorPanel(id, filename);
+			final Editor panel = new Editor(id, filename);
 			editorPanel = panel;
 
-			final EditorTextArea textArea = panel.getTextArea();
-
 			// Add mousemotion listener showing sorts in tooltips
-			textArea.addMouseListener(new MouseAdapter() {
+			panel.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
-					int l = textArea.yToLine(e.getY());
-					int offset = textArea.xToOffset(l, e.getX());
+					int offset = panel.getMouseOffset(e.getX(), e.getY());
 
 					if (e.getClickCount() == 1) {
-						ATerm line = studio.getATermFactory().makeInt(l + 1);
-						ATerm column = studio.getATermFactory().makeInt(offset);
-						ATerm event = studio.getATermFactory().make(
-								"mouse-event(<term>,<term>,<term>)", editorId,
-								line, column);
+						ATerm aoffset = studio.getATermFactory()
+								.makeInt(offset);
+						ATerm event = studio.getATermFactory()
+								.make("mouse-event(<term>,<term>)", editorId,
+										aoffset);
 						bridge.postEvent(event);
 					}
 				}
@@ -224,7 +235,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 				public void componentRequestClose()
 						throws CloseAbortedException {
 					if (panel.isModified()) {
-						showSaveConfirmDialog(panel, JOptionPane.YES_NO_CANCEL_OPTION);
+						showSaveConfirmDialog(panel,
+								JOptionPane.YES_NO_CANCEL_OPTION);
 					}
 				}
 
@@ -246,11 +258,14 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		return editorPanel;
 	}
 
-	private void showSaveConfirmDialog(final EditorPanel panel, int optionType)
+	private void showSaveConfirmDialog(final Editor panel, int optionType)
 			throws CloseAbortedException {
-		switch (JOptionPane.showConfirmDialog(null,
-				panel.getFilename() + "\n\nThe editor for this file has unsaved changes.\nDo you want to save your changes?", panel.getFilename(),
-				optionType)) {
+		switch (JOptionPane
+				.showConfirmDialog(
+						null,
+						panel.getFilename()
+								+ "\n\nThe editor for this file has unsaved changes.\nDo you want to save your changes?",
+						panel.getFilename(), optionType)) {
 		case JOptionPane.YES_OPTION:
 			try {
 				panel.writeContents();
@@ -263,8 +278,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 		}
 	}
 
-	private EditorPanel getPanel(String id) {
-		return (EditorPanel) editors.get(id);
+	private Editor getPanel(String id) {
+		return (Editor) editors.get(id);
 	}
 
 	public void recAckEvent(ATerm t0) {
@@ -273,7 +288,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements EditorPluginTif
 	public void recTerminate(ATerm t0) {
 		Iterator iter = editors.values().iterator();
 		while (iter.hasNext()) {
-			EditorPanel panel = (EditorPanel) iter.next();
+			Editor panel = (Editor) iter.next();
 			if (panel.isModified()) {
 				String id = panel.getId();
 				StudioComponent comp = getComponentById(id);

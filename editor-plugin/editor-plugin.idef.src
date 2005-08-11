@@ -76,8 +76,12 @@ in
     . snd-ack-event(T, contents-changed(EditorId))
   +
     rec-event(T, mouse-event(EditorId?, Line?, Column?))
-    . create(MouseEvent(EditorId, Line, Column), Pid?)
+    . create(MouseEventXY(EditorId, Line, Column), Pid?)
     . snd-ack-event(T, mouse-event(EditorId, Line, Column))
+  +
+    rec-event(T, mouse-event(EditorId?, Offset?))
+    . create(MouseEventOffset(EditorId, Offset), Pid?)
+    . snd-ack-event(T, mouse-event(EditorId, Offset))
   +
     rec-event(T, menu-event(EditorId?, MenuEvent?))
     . create(MenuEvent(EditorId, MenuEvent), Pid?)
@@ -93,9 +97,12 @@ endlet
 process ContentsChanged(EditorId: term) is
   snd-msg(te-contents-changed(EditorId))
 
-process MouseEvent(EditorId: term, Line: int, Column: int) is
+process MouseEventXY(EditorId: term, Line: int, Column: int) is
   snd-msg(te-mouse-click-at-line-column(EditorId, Line, Column))
   
+process MouseEventOffset(EditorId: term, Offset: int) is 
+  snd-msg(te-mouse-click-at-offset(EditorId, Offset))
+
 process MenuEvent(EditorId: term, MenuEvent: term) is    
   snd-msg(te-menu-event(EditorId, MenuEvent))
 

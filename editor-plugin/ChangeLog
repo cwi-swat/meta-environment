@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Aug 11 09:13:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * src/**/*.java: 
+   - reimplemented editorpane using native swing.
+   - added syntax hightlighting (it's fast!)
+
 Tue Aug  9 10:47:15 CEST 2005 <{jong,kooiker,jurgenv}@cwi.nl>
  * Updated to new StudioPlugin interface that supports nice
    closing management.
