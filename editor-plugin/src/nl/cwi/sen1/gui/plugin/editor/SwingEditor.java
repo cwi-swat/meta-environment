@@ -110,4 +110,8 @@ public class SwingEditor extends JPanel implements Editor {
 	public JMenu getEditMenu() {
 		return editorPane.getEditorMenu();
 	}
+	
+	public void requestFocus() {
+		editorPane.requestFocus();
+	}
 }

@@ -248,6 +248,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 							"editor-disconnected(<term>)", editorId);
 					bridge.postEvent(event);
 				}
+				
+				public void componentFocusReceived() {
+					panel.requestFocus();
+				}
 			});
 
 			editors.put(id, panel);
