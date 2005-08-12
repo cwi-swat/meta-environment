@@ -61,11 +61,13 @@ public class GotoLineDialog extends BaseDialog {
         ActionMap actionMap = this.getRootPane().getActionMap();
         actionMap.put("escape", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
+                okPressed = false;
                 GotoLineDialog.this.setVisible(false);
             }
         });
         actionMap.put("enter", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
+                okPressed = true;
                 GotoLineDialog.this.setVisible(false);
             }
         });
