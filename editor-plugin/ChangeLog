@@ -1,5 +1,11 @@
 # $Id$
 
+Fri Aug 12 10:02:23 CEST 2005 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - removed deprecated show/hide methods
+   - removed unused events
+   - fixed cancel in GotoLine dialog
+
 Thu Aug 11 09:13:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * src/**/*.java: 
    - reimplemented editorpane using native swing.

@@ -27,10 +27,8 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -44,6 +42,12 @@ import javax.swing.KeyStroke;
  * Description: A base class for dialogs, adding common key bindings to the dialog, 
  * such as ESCAPE (-> cancel dialog) or ENTER (-> OK action). 
  * <br>Log: $Log$
+ * <br>Log: Revision 1.2  2005/08/12 08:03:23  kooiker
+ * <br>Log:  * src/**/*.java:
+ * <br>Log:    - removed deprecated show/hide methods
+ * <br>Log:    - removed unused events
+ * <br>Log:    - fixed cancel in GotoLine dialog
+ * <br>Log:
  * <br>Log: Revision 1.1  2005/08/11 12:52:47  jurgenv
  * <br>Log:    - added Search and Replace
  * <br>Log:    - added Goto Line
@@ -176,7 +180,7 @@ public class BaseDialog extends JDialog {
        * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
        */
       public void actionPerformed(ActionEvent evt) {
-        okButtonActionPerformed(evt);
+        okButtonActionPerformed();
       }
     });
     actionMap.put("escape", new AbstractAction() {
@@ -184,7 +188,7 @@ public class BaseDialog extends JDialog {
        * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
        */
       public void actionPerformed(ActionEvent evt) {
-        cancelButtonActionPerformed(evt);
+        cancelButtonActionPerformed();
       }
     });
   }
@@ -193,18 +197,18 @@ public class BaseDialog extends JDialog {
    * Processes the action event, raised by the OK button.  
    * @param evt The raised action event.
    */
-  private void okButtonActionPerformed(ActionEvent evt) {
+  private void okButtonActionPerformed() {
     this.state = OK;
-    closeDialog(null);
+    closeDialog();
   }
 
   /**
    * Processes the action event, raised by the Cancel button.  
    * @param evt The raised action event.
    */
-  private void cancelButtonActionPerformed(ActionEvent evt) {
+  private void cancelButtonActionPerformed() {
     this.state = CANCEL;
-    closeDialog(null);
+    closeDialog();
   }
 
 
@@ -212,7 +216,7 @@ public class BaseDialog extends JDialog {
    * Closes the dialog
    * @param evt The window event.  
    */
-  protected void closeDialog(WindowEvent evt) {
+  protected void closeDialog() {
     setVisible(false);
     dispose();
   }

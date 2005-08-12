@@ -138,7 +138,7 @@ public class SearchReplaceDialog extends BaseDialog {
 
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent evt) {
-				closeDialog(evt);
+				closeDialog();
 			}
 		});
 
@@ -314,7 +314,7 @@ public class SearchReplaceDialog extends BaseDialog {
 	}
 
 	private void closeButtonActionPerformed() {
-		this.hide();
+		this.setVisible(false);
 	}
 
 	private void replaceAllButtonActionPerformed() {
