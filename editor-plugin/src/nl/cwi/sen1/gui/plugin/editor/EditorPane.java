@@ -19,8 +19,8 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
@@ -108,9 +108,9 @@ public class EditorPane extends JTextPane {
 		addBinding(menu, KeyEvent.VK_Y, EditorKit.redoAction);
 		addBinding(menu, KeyEvent.VK_F, EditorKit.findAction);
 		addBinding(menu, KeyEvent.VK_G, EditorKit.gotoLineAction);
-		addBinding(menu, KeyEvent.VK_C, EditorKit.copyAction);
-		addBinding(menu, KeyEvent.VK_X, EditorKit.cutAction);
-		addBinding(menu, KeyEvent.VK_V, EditorKit.pasteAction);
+		addBinding(menu, KeyEvent.VK_C, DefaultEditorKit.copyAction);
+		addBinding(menu, KeyEvent.VK_X, DefaultEditorKit.cutAction);
+		addBinding(menu, KeyEvent.VK_V, DefaultEditorKit.pasteAction);
 	}
 
 	public Style getDefaultStyle() {
@@ -242,8 +242,8 @@ public class EditorPane extends JTextPane {
 			boolean caseInsensitive) {
 		int cursor = getCaretPosition();
 		setCaretPosition(0);
-		while (replace(toBeFound, toReplaceWith, caseInsensitive, false, true))
-			;
+		while (replace(toBeFound, toReplaceWith, caseInsensitive, false, true)) {
+        }
 		setCaretPosition(cursor);
 	}
 

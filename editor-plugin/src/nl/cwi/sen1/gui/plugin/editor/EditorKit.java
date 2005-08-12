@@ -149,7 +149,7 @@ public class EditorKit extends StyledEditorKit {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			searchReplaceDialog.show();
+			searchReplaceDialog.setVisible(true);
 		}
 	}
 

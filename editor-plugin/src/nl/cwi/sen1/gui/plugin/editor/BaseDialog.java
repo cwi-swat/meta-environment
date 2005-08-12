@@ -37,28 +37,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 
-/**
- * Name: BaseDialog<br>
- * Description: A base class for dialogs, adding common key bindings to the dialog, 
- * such as ESCAPE (-> cancel dialog) or ENTER (-> OK action). 
- * <br>Log: $Log$
- * <br>Log: Revision 1.2  2005/08/12 08:03:23  kooiker
- * <br>Log:  * src/**/*.java:
- * <br>Log:    - removed deprecated show/hide methods
- * <br>Log:    - removed unused events
- * <br>Log:    - fixed cancel in GotoLine dialog
- * <br>Log:
- * <br>Log: Revision 1.1  2005/08/11 12:52:47  jurgenv
- * <br>Log:    - added Search and Replace
- * <br>Log:    - added Goto Line
- * <br>Log:    - added Edit Menu
- * <br>Log:
- * <br>Log: Revision 1.1  2004/01/20 20:29:57  lauerc
- * <br>Log: Moved user interface components to sub project UJAC-UI.
- * <br>Log:
- * @author $Author$
- * @version $Revision$
- */
 public class BaseDialog extends JDialog {
 
   /** Constant for the dialog state OK. */
