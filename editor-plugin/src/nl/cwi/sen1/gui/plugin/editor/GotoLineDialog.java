@@ -1,6 +1,5 @@
 package nl.cwi.sen1.gui.plugin.editor;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
