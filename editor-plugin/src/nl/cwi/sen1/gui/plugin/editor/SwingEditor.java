@@ -42,7 +42,6 @@ public class SwingEditor extends JPanel implements Editor {
 	}
 
 	public void rereadContents() {
-		System.err.println("reading contents of " + filename);
 		try {
 			readFileContents(filename);
 		} catch (IOException e) {
