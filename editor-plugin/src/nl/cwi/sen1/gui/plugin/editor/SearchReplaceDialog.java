@@ -74,8 +74,6 @@ public class SearchReplaceDialog extends BaseDialog {
 
     public void setVisible(boolean b) {
         if (b) {
-            centerDialog(textArea);
-
             String newSearch = textArea.getSelectedText();
             if (newSearch != null && newSearch.length() != 0) {
                 findCombo.insertItemAt(newSearch, 0);

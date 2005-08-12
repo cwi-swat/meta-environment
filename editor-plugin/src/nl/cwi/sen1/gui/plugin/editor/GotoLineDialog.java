@@ -46,7 +46,7 @@ public class GotoLineDialog extends BaseDialog {
         lineNumberField.setText(Integer.toString(lineNumber + 1));
     }
 
-    public GotoLineDialog(Container parent) {
+    public GotoLineDialog() {
         // super(textArea.getFrame(), false);
         super();
         setModal(true);
@@ -71,7 +71,7 @@ public class GotoLineDialog extends BaseDialog {
             }
         });
 
-        centerDialog(parent);
+//        centerDialog(parent);
     }
 
     private void initComponents() {

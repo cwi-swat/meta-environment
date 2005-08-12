@@ -137,7 +137,7 @@ public class EditorKit extends StyledEditorKit {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			GotoLineDialog d = new GotoLineDialog(editor);
+			GotoLineDialog d = new GotoLineDialog();
 			d.setVisible(true);
 			editor.gotoLine(d.getLineNumber());
 		}
