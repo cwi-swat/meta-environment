@@ -20,6 +20,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
@@ -46,7 +47,7 @@ public class EditorPane extends JTextPane {
 				StyleContext.DEFAULT_STYLE);
 		modified = false;
 		getStyledDocument().setLogicalStyle(0, defaultStyle);
-		resumeUndo();
+ 		resumeUndo();
 
 		getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
