@@ -33,7 +33,7 @@ public class SwingEditor extends JPanel implements Editor {
 		setLayout(new BorderLayout());
 		editorPane = new EditorPane();
 		
-		editorPane.setText(readContents(filename));
+		readFileContents(filename);
 		editorPane.setCaretPosition(0);
 		
 		JScrollPane scroller = new JScrollPane(editorPane);
@@ -41,9 +41,24 @@ public class SwingEditor extends JPanel implements Editor {
 		add(scroller, BorderLayout.CENTER);
 	}
 
+	public void rereadContents() {
+		System.err.println("reading contents of " + filename);
+		try {
+			readFileContents(filename);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void readFileContents(String filename) throws IOException {
+		editorPane.setText(readContents(filename));
+	}
+
 	public void addMouseListener(MouseListener l) {
 		editorPane.addMouseListener(l);
 	}
+	
+	
 
 	private String readContents(String filename) throws IOException {
 		try {
@@ -114,4 +129,5 @@ public class SwingEditor extends JPanel implements Editor {
 	public void requestFocus() {
 		editorPane.requestFocus();
 	}
+
 }

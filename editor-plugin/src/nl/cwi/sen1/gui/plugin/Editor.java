@@ -34,5 +34,6 @@ public interface Editor {
 	public int getMouseOffset(int x, int y);
 
 	public JMenu getEditMenu();
-
+	
+	public void rereadContents();
 }

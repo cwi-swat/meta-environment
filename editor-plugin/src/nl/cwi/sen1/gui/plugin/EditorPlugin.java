@@ -188,6 +188,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 	}
 
 	public void rereadContents(ATerm editorId) {
+		Editor panel = getPanel(editorId.toString());
+		panel.rereadContents();
 	}
 
 	public String getName() {
