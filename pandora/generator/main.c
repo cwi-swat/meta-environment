@@ -155,7 +155,6 @@ int main(int argc, char *argv[])
   int i;
   ATbool useToolbus = ATfalse;
 
-  ATsetChecking(ATtrue);
   ATinit(3, ATlibArgv, &bottomOfStack); 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initMEPTApi(); 
