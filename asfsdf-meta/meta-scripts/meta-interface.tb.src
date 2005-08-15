@@ -75,29 +75,6 @@ in
 
 endlet
 
-process CheckSyntaxSpecification(ModuleName : str) is
-let
-  Syntax    : term,
-  ErrorMessage : str,
-  Feedback  : term,
-  Id : int
-in
-  Id := process-id .
-  snd-note(ui-status(statf(Id, 
-                           "Checking syntax definition: %s",
-                           [ModuleName]))) .
-  snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
-  (
-    rec-msg(syntax(Syntax?)) .
-    snd-msg(check-asfsdf(Syntax, ModuleName)) .
-    rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Feedback)) .
-    Syntax := no-tree
-  +
-    rec-msg(no-syntax(ErrorMessage?))
-  ) .
-  snd-note(ui-status(endstat(Id)))
-endlet
 
 process Preprocess-syntax is
 let
@@ -107,26 +84,15 @@ let
 in
   (
     rec-msg(pre-preprocess-syntax-hook(ModuleName?)).
-    CheckSyntaxSpecification(ModuleName) .
     snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
-    if equal(Checking, quote(true)) then
-      CheckSyntaxSpecification(ModuleName)
-    else
-      tau
-    fi .
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
-    if equal(Checking, quote(true)) then
-      CheckSyntaxSpecification(ModuleName)
-    else
-      tau
-    fi .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) . 
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .

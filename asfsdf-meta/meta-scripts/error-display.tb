@@ -28,9 +28,14 @@ in
     rec-msg(es-summary(Summary?)) .
     snd-msg(ui-show-feedback-summary(Summary))
   +
-    rec-msg(display-sdf-errors(Feedback?)) .
+    rec-msg(display-sdf-errors(ModuleName?, Feedback?)) .
     snd-msg(convert-feedback(Feedback)) .
     rec-msg(converted-feedback(Summary?)) .
+    snd-msg(get-summary-errors(Summary)) .
+    rec-msg(summary-errors(Errors?)) .
+    snd-msg(es-make-summary("sdf-checker", ModuleName, Errors)) .
+    rec-msg(es-summary(Summary?)) .
+    snd-msg(ui-remove-feedback-summary("sdf-checker", ModuleName)) .
     snd-msg(ui-show-feedback-summary(Summary))
   ) * 
   delta
