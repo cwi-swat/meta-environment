@@ -50,9 +50,6 @@ typedef struct name_bucket {
 #define IDM_ALL        -1
 #define IDM_INTERNAL	0
 
-extern name_bucket *hash_table[];
-extern name_bucket *idx_table[];
-
 typedef struct expr_sign {
   sym_idx name;
   type   *restype;

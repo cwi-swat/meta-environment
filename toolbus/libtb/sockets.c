@@ -359,9 +359,9 @@ int connectWellKnownSocket(char *host, int port)
 
 /*}}}  */
 
-/*{{{  int accept_in_interval (int s, struct sockaddr *addr, int *addrlen) */
+/*{{{  int accept_in_interval (int s, struct sockaddr *addr, socklen_t *addrlen) */
 
-int accept_in_interval (int s, struct sockaddr *addr, int *addrlen)
+int accept_in_interval (int s, struct sockaddr *addr, socklen_t *addrlen)
 { int error, sock;
   fd_set read_template;
   struct timeval timeout = { 10, 0};

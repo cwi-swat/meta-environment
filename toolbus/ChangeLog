@@ -1,5 +1,10 @@
 $Id$
 
+Mon Aug 15 14:50:34 CEST 2005 <kooiker@cwi.nl>
+ * libtb/sockets.{c,h}: change int to socklen_t in accept_in_interval
+ * libtb/symbol.h: 
+   - removed unnecessary extern declaration of hash_table and idx_table
+
 Mon Aug 15 14:53:14 CEST 2005 <jong@cwi.nl>
  * configure.in: add AC_PROG_LIBTOOL to cope with dynamic ATerm library
 
