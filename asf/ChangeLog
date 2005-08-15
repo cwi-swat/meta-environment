@@ -1,5 +1,8 @@
 $Id$
 
+Mon Aug 15 14:31:44 CEST 2005 <jurgenv@cwi.nl>
+ * * removed "right-hand side of matching condition is constant" warning.
+
 Wed May  4 11:04:14 CEST 2005 <markvdb@cwi.nl>
  * semantics/asfe/src/reduction.c: 
    - added functionality to deal with "complete" attributes
