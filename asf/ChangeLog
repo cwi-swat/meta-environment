@@ -1,5 +1,10 @@
 $Id$
 
+Mon Aug 15 16:37:05 CEST 2005 <jurgenv@cwi.nl>
+ * asf/syntax/asfsdf-checker/spec/*.asf: renamed error messages and
+   subjects of error messages to comply with the error message standard.
+
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
