@@ -87,14 +87,15 @@ public abstract class MsgAtom extends Atom {
         ProcessInstance pb = b.getProcess();
  
         if (pa != pb && pb.contains(b) && b.isEnabled()) {
-          System.err.println("MsgAtom.execute: " + this + ";" + b);
+          //System.err.println("MsgAtom.execute: " + this + ";" + b);
           if (matchPartner(b)) {
             if (ToolBus.isVerbose()) {
               System.err.println(
                 "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
             }
             this.nextState();
-            b.nextState();
+            //b.nextState();
+            pb.nextState(b);
             return true;
           }
         }

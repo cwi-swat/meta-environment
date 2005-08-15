@@ -80,18 +80,28 @@ public class Merge extends ProcessExpression implements StateElement {
   }
   
   public boolean isEnabled(){
-  	state[LEFT].isEnabled();
-  	
+  	return state[LEFT].isEnabled() || state[RIGHT].isEnabled();
   }
   
   public State getNextState(){
   	State follow = getFollow();
   	
   	if(state[LEFT] == follow)
-  		return state[RIGHT]; //.getNextState();
+  		return state[RIGHT]; 
   	if(state[RIGHT] == follow)
-  		return state[LEFT]; //.getNextState();
+  		return state[LEFT];
   	return mergeState;
+  }
+  
+  public State getNextState(StateElement se) {
+    if(state[LEFT].contains(se)){
+    	return state[LEFT].getNextState(se);
+    } else if(state[RIGHT].contains(se)){
+    	return state[RIGHT].getNextState(se);
+    } else {
+    	System.err.println("Merge.getNextState2 wrong!");
+    	return null;
+    }
   }
 
   public boolean execute() throws ToolBusException {
@@ -121,4 +131,6 @@ public class Merge extends ProcessExpression implements StateElement {
     } else
         return false;
   }
+
+
 }

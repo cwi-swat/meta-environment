@@ -34,15 +34,11 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
        || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
        || snd-msg(exc(I, L, E))          %% send own amplitude to left neighbour
        || snd-msg(exc(I, R, E))          %% send own amplitude to right neighbour
-       
-  
+       || snd-do(Tid, update(I, E))      %% update own amplitude on the display
       ) .
-      %% snd-do(Tid, update(I, E))      %% update own amplitude on the display
-      %% snd-do(Tid, update(I,I))
-      printf("update(%d,%t)\n", I, E)
-       .
+       
        D1 := E .
-       %%F(E, D, AL, AR, E?) .
+       F(E, D, AL, AR, E?) .
        D := D1
      ) * delta
   endlet
@@ -96,5 +92,5 @@ tool display is { host = "localhost"
 
 %% Define the initial \TB\ configuration.
 
-%%toolbus(MakeWave(8))
-toolbus(PP(2,3), QQ(3,2))
+toolbus(MakeWave(8))
+
