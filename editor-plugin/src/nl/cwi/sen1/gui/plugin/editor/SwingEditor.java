@@ -12,9 +12,8 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import nl.cwi.sen1.gui.plugin.Editor;
-
 import metaconfig.types.Properties;
+import nl.cwi.sen1.gui.plugin.Editor;
 import aterm.ATerm;
 import aterm.ATermList;
 import errorapi.types.Area;
@@ -32,7 +31,7 @@ public class SwingEditor extends JPanel implements Editor {
 
 		setLayout(new BorderLayout());
 		editorPane = new EditorPane();
-		
+
 		readFileContents(filename);
 		editorPane.setCaretPosition(0);
 		
@@ -56,8 +55,6 @@ public class SwingEditor extends JPanel implements Editor {
 	public void addMouseListener(MouseListener l) {
 		editorPane.addMouseListener(l);
 	}
-	
-	
 
 	private String readContents(String filename) throws IOException {
 		try {

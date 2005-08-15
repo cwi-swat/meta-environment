@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Aug 15 09:40:23 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - fixed Goto Line 1
+
 Fri Aug 12 10:02:23 CEST 2005 <kooiker@cwi.nl>
  * src/**/*.java:
    - removed deprecated show/hide methods
