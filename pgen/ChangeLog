@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Mon Aug 15 15:15:33 CEST 2005 <kooiker@cwi.nl>
  * src/ksdf2table.{c,h}:
    - removed extern declaration of afun_range and afun_char_class
