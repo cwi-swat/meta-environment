@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Mon Feb  7 16:38:15 CET 2005 <jurgenv@cwi.nl>
  * Added manual implementation of liftModule and lowerModule. These functions
    find the user-defined terms in an ASF module and lift them to parsed
