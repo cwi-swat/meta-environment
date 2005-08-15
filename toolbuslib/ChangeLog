@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Fri Nov 19 16:39:49 CET 2004 <jurgenv@cwi.nl>
  * Bumped to 0.8
 
