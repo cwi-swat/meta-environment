@@ -576,13 +576,6 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
 	     ASF_ASFConditionToTerm(condition)));
   }
 
-  if (isConstant((PT_Tree) rhsCond)) {
-    messages = ERR_makeErrorListSingle(
-         makeWarning("right-hand side of matching condition is constant",
-		     ASF_TreeToTerm(rhsCond)));
-  }
-
-
   newVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
   if (PT_isArgsEmpty(newVars)) {
     return ERR_makeErrorListSingle(
