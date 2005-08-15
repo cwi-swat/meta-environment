@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Wed Dec  8 09:30:17 CET 2004 <{jong,kooiker}@cwi.nl>
  * lib/Makefile.am:
    - Add graph-${VERSION}.jar to EXTRA_DIST 

@@ -6,8 +6,9 @@ AC_CONFIG_SRCDIR([configure.in])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
-dnl Which compiler to use?
+AC_AIX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 dnl {{{  Set CFLAGS
 
@@ -111,12 +112,6 @@ fi
 dnl }}}
 AC_SUBST(SOCKLIBS)
 LIBS=$NOSOCKLIBS
-
-dnl }}}
-
-dnl {{{  Is ranlib needed on this system?
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl }}}
 
