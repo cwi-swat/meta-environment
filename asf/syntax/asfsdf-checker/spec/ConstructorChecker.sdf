@@ -2,6 +2,7 @@ module ConstructorChecker
 
 imports Sdf-Type-Environment
 imports utilities/PosInfo[Attribute]
+imports utilities/PosInfo[AFun]
 
 exports
   context-free syntax

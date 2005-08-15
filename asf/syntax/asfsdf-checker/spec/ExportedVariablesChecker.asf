@@ -19,5 +19,4 @@ equations
             $String2 := "exported variables section"
             ====>
             check-for-exported-variables-section(Grammar, Msgs, $ModuleId) =
-              Msgs, 
-make-warning($String2, $String1, $Location)
+              Msgs, make-warning($String2, $String1, $Location)

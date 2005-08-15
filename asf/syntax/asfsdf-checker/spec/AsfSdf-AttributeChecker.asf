@@ -19,7 +19,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "traversal attributes in non-prefix-function in " || $String1
+           $String3 := "traversal attributes in non-prefix-function"
            =====>
            check-attributes-in-module(Production,
                                       <Msgs, Production*>, $ModuleId) = 
@@ -55,7 +55,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "illegal traversal attribute in " || $String1
+           $String3 := "illegal traversal attribute"
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -67,7 +67,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "missing trafo and/or accu attribute in " || $String1
+           $String3 := "missing trafo and/or accu attribute"
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -79,7 +79,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "missing-break-or-continue-attribute in " || $String1
+           $String3 := "missing-break-or-continue-attribute"
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
              Msgs, make-warning($String3, $String2, $Location)
@@ -91,7 +91,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "missing bottom-up or top-down attribute in " || $String1
+           $String3 := "missing bottom-up or top-down attribute"
            ====>
            check-attributes-in-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -105,7 +105,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "accu should return accumulated type in " || $String1
+           $String3 := "accu should return accumulated type"
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -117,7 +117,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "trafo should return traversed type in " || $String1
+           $String3 := "trafo should return traversed type"
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -130,7 +130,7 @@ equations
            $Location := get-location(Production),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
-           $String3 := "accutrafo should return tuple of correct types in " || $String1
+           $String3 := "accutrafo should return tuple of correct types"
            ====>
            check-form-production(Production, Msgs, $ModuleId) = 
              Msgs, make-error($String3, $String2, $Location)
@@ -219,7 +219,7 @@ equations
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
            $String3 := production2str($FuncName ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
-           $String4 := "inconsistent arguments of traversal productions in " || $String1,
+           $String4 := "inconsistent arguments of traversal productions",
            $String5 := $String2 || " vs. " || $String3,
            $Msg := make-error($String4, $String5, $Location)
            ====>
@@ -234,7 +234,7 @@ equations
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Production),
            $String3 := production2str($FuncName ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
-           $String4 := "inconsistent traversal attributes in " || $String1,
+           $String4 := "inconsistent traversal attributes",
            $String5 := $String2 || " vs. " || $String3,
            $Msg := make-error($String4, $String5, $Location)
            ====>

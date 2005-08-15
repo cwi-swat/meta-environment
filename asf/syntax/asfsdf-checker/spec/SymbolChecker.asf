@@ -17,7 +17,7 @@ equations
            is-literal-symbol($Symbol2) == false,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
@@ -27,27 +27,17 @@ equations
            is-literal-symbol($Symbol2) == false,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
               Msgs, make-warning($String2, $String3, $Location)
 
-%%  [cs-2'3] {$Symbol1 $Symbol2}NatCon+ := $Symbol0,
-%%           is-literal-symbol($Symbol2) == false,
-%%           $Location := get-location($Symbol0),
-%%           $String1 := moduleid2str($ModuleId),
-%%           $String2 := "not supported symbol in " || $String1,
-%%           $String3 := symbol2str($Symbol0)
-%%           ====>
-%%           check-symbols2($Symbol0, Msgs, $ModuleId) =
-%%              Msgs, make-warning($String2, $String3, $Location)
-
   [cs-2'4] $Symbol+ := $Symbol0,
            is-list-symbol($Symbol) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
@@ -57,7 +47,7 @@ equations
            is-list-symbol($Symbol) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
@@ -67,7 +57,7 @@ equations
            is-list-symbol($Symbol1) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
@@ -77,26 +67,16 @@ equations
            is-list-symbol($Symbol1) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "not supported symbol in " || $String1,
+           $String2 := "not supported symbol in",
            $String3 := symbol2str($Symbol0)
            ====>
            check-symbols2($Symbol0, Msgs, $ModuleId) =
               Msgs, make-warning($String2, $String3, $Location)
 
-%%  [cs-2'8] {$Symbol1 $Symbol2}NatCon+ := $Symbol0,
-%%           is-list-symbol($Symbol1) == true,
-%%           $Location := get-location($Symbol0),
-%%           $String1 := moduleid2str($ModuleId),
-%%           $String2 := "not supported symbol in " || $String1,
-%%           $String3 := symbol2str($Symbol0)
-%%           ====>
-%%           check-symbols2($Symbol0, Msgs, $ModuleId) =
-%%              Msgs, make-warning($String2, $String3, $Location)
-
   [cs-4'1] is-charclass-symbol($Symbol0) == true,
            $Location := get-location($Symbol0),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "charclasses not allowed in context-free syntax in " || $String1,
+           $String2 := "character class not allowed in context-free syntax",
            $String3 := symbol2str($Symbol0)
            ====>
            check-charclass-symbols($Symbol0, Msgs, $ModuleId) =
@@ -117,7 +97,5 @@ equations
   [ils-2'3] is-list-symbol($Symbol*) = true
 
   [ils-2'4] is-list-symbol($Symbol+) = true
-
-%%  [ils-2'5] is-list-symbol({$Symbol1 $Symbol2}NatCon+) = true
 
   [default-ils-2'6] is-list-symbol($Symbol) = false

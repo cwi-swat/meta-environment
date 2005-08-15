@@ -13,7 +13,7 @@ equations
   [cs-1'2] syntax Prod* := $Grammar,
            $Location := get-location($Grammar),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "kernel syntax construction in"
+           $String2 := "unsupported kernel syntax construction"
            ====>
            check-syntax2($Grammar, Msgs, $ModuleId) =
              Msgs, make-warning($String2, $String1, $Location)
@@ -21,7 +21,7 @@ equations
   [cs-1'3] priorities Prios := $Grammar,
            $Location := get-location($Grammar),
            $String1 := moduleid2str($ModuleId),
-           $String2 := "kernel syntax construction in"
+           $String2 := "unsupported kernel syntax construction"
            ====>
            check-syntax2($Grammar, Msgs, $ModuleId) =
              Msgs, make-warning($String2, $String1, $Location)

@@ -56,17 +56,19 @@ equations
                                              $FuncName(Symbol,*) -> Symbol Attrs)
 
   [gcsp-2'1] cons( $AFun ) := $Attribute,
-             $Location := get-location($Attribute),
              contains(Symbol, $AFun, ConstructorSet) == true,
-             $String1 := moduleid2str($ModuleId),
-             $String2 := production2str(Prod),
-             $String3 := "constructor has already been used in " || $String1
+             $AFun2 := get($AFun, ConstructorSet)
              ====>
              get-constructor-symbol-pairs2($Attribute, 
                                            [ConstructorSet, Msgs], 
                                            $ModuleId, Symbol, Prod) =
                [ConstructorSet, 
-                Msgs, make-error($String3, $String2, $Location)]
+                Msgs, 
+                error("constructor used more than once",
+                      [localized("first occurrence", get-location($AFun)),
+                       localized("second occurrence", get-location($AFun2))])]
+
+
 
   [gcsp-2'2] contains(Symbol, $AFun, ConstructorSet) == false
              ==================================================
@@ -101,7 +103,7 @@ equations
              contains(Symbol, $AFun, ConstructorSet) == false,
              $String1 := moduleid2str($ModuleId),
              $String2 := production2str(Prod),
-             $String3 := "unknown constructor used in priorities in " || $String1
+             $String3 := "unknown constructor used in priorities"
              ====>
              check-constructor-in-priorities2($Attribute, 
                                               [ConstructorSet, Msgs], 
