@@ -1,5 +1,8 @@
 $Id$
 
+Mon Aug 15 14:53:14 CEST 2005 <jong@cwi.nl>
+ * configure.in: add AC_PROG_LIBTOOL to cope with dynamic ATerm library
+
 Fri May 27 09:23:00 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
  * toolbus/calls.c: Fixed declaration after statement error.
 
