@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Sun Jun 12 00:15:34 CEST 2005 <kooiker@cwi.nl>
  * lib/builtin-term-compare.c:
    - Added paramters for modAmbSorting and modLayout to comparePT
