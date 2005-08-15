@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Mon Aug 15 14:31:44 CEST 2005 <jurgenv@cwi.nl>
  * * removed "right-hand side of matching condition is constant" warning.
 
