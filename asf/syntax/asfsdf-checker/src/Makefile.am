@@ -30,3 +30,6 @@ asfsdfchecker_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
+
+asfc: AsfSdf-Checker.eqs
+	asfc -i $< -o AsfSdf-Checker.c -va
