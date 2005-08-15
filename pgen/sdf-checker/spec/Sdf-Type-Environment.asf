@@ -4,7 +4,7 @@ equations
 
   [cme-1'1] create-module-entry($ModuleId,{ModuleInfoEntry*}) =
               {[$ModuleId, true, 
-                [imports(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
+                [imports(), symbols(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
                ModuleInfoEntry*}
 
   [gmi-1'1] get-module-info([ModuleInfoTable, Messages]) = ModuleInfoTable
@@ -39,7 +39,7 @@ equations
                                           {ModuleInfoEntry*}) = 
                       {[$ModuleId, 
                         true, 
-                        [imports(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
+                        [imports(), symbols(), symbols(), symbols(), symbols(), symbols(), productions(), constructors()]] 
                        ModuleInfoEntry*}
     
   [mic-1'1] module-is-checked($ModuleId,
@@ -56,12 +56,12 @@ equations
                               [$ModuleId, Bool, 
                                [ImportsSet2,
                                 SymbolPairsSet1, SymbolPairsSet2, 
-                                SymbolsSet1, SymbolsSet2, 
+                                SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                 ProductionsSet, ConstructorSet]]
                               ModuleInfoEntry*2}) =
                {ModuleInfoEntry*1
                 [$ModuleId, true, 
-                 [ImportsSet1, SymbolPairsSet1, SymbolPairsSet2, SymbolsSet1, SymbolsSet2, ProductionsSet, ConstructorSet]] 
+                 [ImportsSet1, SymbolPairsSet1, SymbolPairsSet2, SymbolsSet1, SymbolsSet2, SymbolsSet3, ProductionsSet, ConstructorSet]] 
                 ModuleInfoEntry*2}
 
   [default-pii-1'1] put-imports-info($ModuleId, 
@@ -69,7 +69,7 @@ equations
                                      {ModuleInfoEntry*}) =
                        {[$ModuleId, true, 
                          [ImportsSet, symbols(), symbols(), 
-                          symbols(), symbols(), 
+                          symbols(), symbols(), symbols(),
                           productions(), constructors()]] 
                          ModuleInfoEntry*}
 
@@ -77,7 +77,7 @@ equations
                         {ModuleInfoEntry*1
                          [$ModuleId, Bool, 
                           [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                           SymbolsSet1, SymbolsSet2,
+                           SymbolsSet1, SymbolsSet2, SymbolsSet3,
                            ProductionsSet, ConstructorSet]]
                          ModuleInfoEntry*2}) = ImportsSet
 
@@ -87,12 +87,12 @@ equations
                                         [$ModuleId, Bool, 
                                          [ImportsSet,
                                           SymbolPairsSet2, SymbolPairsSet3, 
-                                          SymbolsSet1,  SymbolsSet2,
+                                          SymbolsSet1,  SymbolsSet2, SymbolsSet3,
                                           ProductionsSet, ConstructorSet]]
                                         ModuleInfoEntry*2}) =
                {ModuleInfoEntry*1
                 [$ModuleId, true, 
-                 [ImportsSet, SymbolPairsSet1, SymbolPairsSet3, SymbolsSet1, SymbolsSet2, ProductionsSet, ConstructorSet]] 
+                 [ImportsSet, SymbolPairsSet1, SymbolPairsSet3, SymbolsSet1, SymbolsSet2, SymbolsSet3, ProductionsSet, ConstructorSet]] 
                 ModuleInfoEntry*2}
 
   [default-pdsi-1'1] put-declared-symbols-info($ModuleId, 
@@ -100,7 +100,7 @@ equations
                                                {ModuleInfoEntry*}) =
                        {[$ModuleId, true, 
                          [imports(), SymbolPairsSet, symbols(), 
-                          symbols(), symbols(),
+                          symbols(), symbols(), symbols(),
                           productions(), constructors()]] 
                          ModuleInfoEntry*}
 
@@ -108,7 +108,7 @@ equations
                                  {ModuleInfoEntry*1
                                   [$ModuleId, Bool, 
                                    [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                    SymbolsSet1, SymbolsSet2,
+                                    SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolPairsSet1
 
@@ -132,13 +132,13 @@ equations
                                       {ModuleInfoEntry*1 
                                        [$ModuleId, Bool, 
                                         [ImportsSet, SymbolPairsSet2, SymbolPairsSet3,
-                                         SymbolsSet1, SymbolsSet2,
+                                         SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                          ProductionsSet, ConstructorSet]]
                                        ModuleInfoEntry*2}) =
               {ModuleInfoEntry*1
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet2, SymbolPairsSet1, 
-                 SymbolsSet1, SymbolsSet2, 
+                 SymbolsSet1, SymbolsSet2, SymbolsSet3,
                   ProductionsSet, ConstructorSet]] 
                ModuleInfoEntry*2}
 
@@ -147,7 +147,7 @@ equations
                                               {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
                         [imports(), symbols(), SymbolPairsSet, 
-                         symbols(), symbols(),
+                         symbols(), symbols(), symbols(),
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
 
@@ -155,13 +155,15 @@ equations
                                  {ModuleInfoEntry*1
                                   [$ModuleId, Bool, 
                                    [ImportsSet, SymbolPairsSet1, SymbolPairsSet2,
-                                    SymbolsSet1, SymbolsSet2,
+                                    SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolPairsSet2
 
   [default-gas-1'2] get-aliased-symbols($ModuleId, ModuleInfoTable) = symbols()
 
   [gas-2'2] get-aliased-symbols(, ModuleInfoTable) = symbols()
+
+
 
   [gas-2'3] $ModuleName := get-modulename(Import),
             $ModuleId := get-module-id($ModuleName),
@@ -172,18 +174,20 @@ equations
             get-aliased-symbols(Import Import*, ModuleInfoTable) = 
               merge(SymbolPairsSet1, SymbolPairsSet2)
 
+equations
+
   [pdsi-1'1] put-defined-symbols-info($ModuleId, 
                                       SymbolsSet1,
                                       {ModuleInfoEntry*1 
                                        [$ModuleId, Bool, 
                                         [ImportsSet, SymbolPairsSet2, SymbolPairsSet3, 
-                                         SymbolsSet2, SymbolsSet3,
+                                         SymbolsSet2, SymbolsSet3, SymbolsSet4,
                                          ProductionsSet, ConstructorSet]]
                                        ModuleInfoEntry*2}) =
               {ModuleInfoEntry*1
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet2, SymbolPairsSet2, 
-                 SymbolsSet1, SymbolsSet3, 
+                 SymbolsSet1, SymbolsSet3, SymbolsSet4,
                  ProductionsSet, ConstructorSet]] 
                ModuleInfoEntry*2}
 
@@ -192,7 +196,7 @@ equations
                                               {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
                         [imports(), symbols(), symbols(), 
-                         SymbolsSet, symbols(),
+                         SymbolsSet, symbols(), symbols(),
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
 
@@ -200,7 +204,7 @@ equations
                                  {ModuleInfoEntry*1
                                   [$ModuleId, Bool, 
                                    [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                    SymbolsSet1, SymbolsSet2,
+                                    SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolsSet1
 
@@ -217,18 +221,67 @@ equations
             get-defined-symbols(Import Import*, ModuleInfoTable) = 
               merge(SymbolsSet1, SymbolsSet2)
 
-  [pusi-1'1] put-used-symbols-info($ModuleId, 
+equations
+
+  [pdsi-1'1] put-renamed-symbols-info($ModuleId, 
                                       SymbolsSet1,
                                       {ModuleInfoEntry*1 
                                        [$ModuleId, Bool, 
                                         [ImportsSet, SymbolPairsSet2, SymbolPairsSet3, 
-                                         SymbolsSet2, SymbolsSet3,
+                                         SymbolsSet2, SymbolsSet3, SymbolsSet4,
                                          ProductionsSet, ConstructorSet]]
                                        ModuleInfoEntry*2}) =
               {ModuleInfoEntry*1
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet2, SymbolPairsSet2, 
-                 SymbolsSet2, SymbolsSet1, 
+                 SymbolsSet2, SymbolsSet3, SymbolsSet1,
+                 ProductionsSet, ConstructorSet]] 
+               ModuleInfoEntry*2}
+
+  [default-pdsi-1'1] put-renamed-symbols-info($ModuleId, 
+                                              SymbolsSet,
+                                              {ModuleInfoEntry*}) =
+                      {[$ModuleId, true, 
+                        [imports(), symbols(), symbols(), 
+                         symbols(), symbols(), SymbolsSet,
+                         productions(), constructors()]] 
+                        ModuleInfoEntry*}
+
+  [gds-1'1] get-renamed-symbols($ModuleId,
+                                 {ModuleInfoEntry*1
+                                  [$ModuleId, Bool, 
+                                   [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
+                                    SymbolsSet1, SymbolsSet2, SymbolsSet3,
+                                    ProductionsSet, ConstructorSet]]
+                                  ModuleInfoEntry*2}) = SymbolsSet3
+
+  [default-gds-1'2] get-renamed-symbols($ModuleId, ModuleInfoTable) = symbols()
+
+  [gds-2'1] get-renamed-symbols(, ModuleInfoTable) = symbols()
+
+  [gds-2'2] $ModuleName := get-modulename(Import),
+            $ModuleId := get-module-id($ModuleName),
+            SymbolsSet1 := 
+               get-renamed-symbols($ModuleId, ModuleInfoTable),
+            SymbolsSet2 := get-renamed-symbols(Import*, ModuleInfoTable)
+            ====>
+            get-renamed-symbols(Import Import*, ModuleInfoTable) = 
+              merge(SymbolsSet1, SymbolsSet2)
+
+equations
+
+  [pusi-1'1] put-used-symbols-info($ModuleId, 
+                                      SymbolsSet1,
+                                      {ModuleInfoEntry*1 
+                                       [$ModuleId, Bool, 
+                                        [ImportsSet, SymbolPairsSet2, SymbolPairsSet3, 
+                                         SymbolsSet2, SymbolsSet3, SymbolsSet4,
+                                         ProductionsSet, ConstructorSet]]
+                                       ModuleInfoEntry*2}) =
+              {ModuleInfoEntry*1
+               [$ModuleId, true, 
+                [ImportsSet, SymbolPairsSet2, SymbolPairsSet2, 
+                 SymbolsSet2, SymbolsSet1, SymbolsSet4,
                  ProductionsSet, ConstructorSet]] 
                ModuleInfoEntry*2}
 
@@ -237,7 +290,7 @@ equations
                                            {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
                         [imports(), symbols(), symbols(), 
-                         symbols(), SymbolsSet,
+                         symbols(), SymbolsSet, symbols(),
                          productions(), constructors()]] 
                         ModuleInfoEntry*}
 
@@ -245,7 +298,7 @@ equations
                                  {ModuleInfoEntry*1
                                   [$ModuleId, Bool, 
                                    [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                    SymbolsSet1, SymbolsSet2,
+                                    SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                     ProductionsSet, ConstructorSet]]
                                   ModuleInfoEntry*2}) = SymbolsSet2
 
@@ -267,13 +320,13 @@ equations
                                 {ModuleInfoEntry*1 
                                  [$ModuleId, Bool, 
                                   [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                   SymbolsSet1, SymbolsSet2,
+                                   SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                    ProductionsSet2, ConstructorSet]]
                                  ModuleInfoEntry*2}) =
               {ModuleInfoEntry*1
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                 SymbolsSet1, SymbolsSet2,
+                 SymbolsSet1, SymbolsSet2, SymbolsSet3,
                  ProductionsSet1, ConstructorSet]] 
                ModuleInfoEntry*2}
 
@@ -282,7 +335,7 @@ equations
                                         {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
                         [imports(), symbols(), symbols(), 
-                         symbols(), symbols(),
+                         symbols(), symbols(), symbols(),
                          ProductionsSet, constructors()]] 
                         ModuleInfoEntry*}
 
@@ -290,7 +343,7 @@ equations
                                     {ModuleInfoEntry*1
                                      [$ModuleId, Bool, 
                                       [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                       SymbolsSet1, SymbolsSet2,
+                                       SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                        ProductionsSet, ConstructorSet]]
                                      ModuleInfoEntry*2}) = ProductionsSet
 
@@ -314,13 +367,13 @@ equations
                                  {ModuleInfoEntry*1 
                                  [$ModuleId, Bool, 
                                   [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                                   SymbolsSet1, SymbolsSet2,
+                                   SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                    ProductionsSet, ConstructorSet2]]
                                  ModuleInfoEntry*2}) =
               {ModuleInfoEntry*1
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                 SymbolsSet1, SymbolsSet2, 
+                 SymbolsSet1, SymbolsSet2, SymbolsSet3,
                  ProductionsSet, ConstructorSet1]] 
                ModuleInfoEntry*2}
 
@@ -329,7 +382,7 @@ equations
                                          {ModuleInfoEntry*}) =
                       {[$ModuleId, true, 
                         [imports(), symbols(), symbols(), 
-                         symbols(), symbols(), 
+                         symbols(), symbols(), symbols(),
                          productions(), ConstructorSet]] 
                         ModuleInfoEntry*}
 
@@ -337,7 +390,7 @@ equations
                             {ModuleInfoEntry*1
                              [$ModuleId, Bool, 
                               [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
-                               SymbolsSet1, SymbolsSet2,
+                               SymbolsSet1, SymbolsSet2, SymbolsSet3,
                                ProductionsSet, ConstructorSet]]
                              ModuleInfoEntry*2}) = ConstructorSet
 

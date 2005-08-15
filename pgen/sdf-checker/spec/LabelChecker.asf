@@ -21,14 +21,16 @@ equations
 
   [cl-1'4] $Label:$Symbol2 := $Symbol1,
            contains($Label, LabelsSet) == true,
-           $Location := get-location($Symbol1),
-           $String1 := production2str(Prod),
-           $String2 := moduleid2str($ModuleId),
-           $String3 := "double used label in " || $String2
+           $Location1 := get-location($Label),
+           $Label2 := get($Label, LabelsSet),
+           $Location2 := get-location($Label2)
            ====>
            check-labels3($Symbol1, [LabelsSet, Msgs], $ModuleId, Prod) =
              [LabelsSet, 
-              Msgs, make-error($String3, $String1, $Location)]
+              Msgs, 
+              error("double use of label",
+                   [localized("first occurrence", $Location1),
+                    localized("second occurrence", $Location2)])]
 
   [cl-1'4] contains($Label, LabelsSet) == false
            ====>
@@ -41,3 +43,8 @@ equations
   [default-c-1'2] contains($Label, LabelsSet) = false
 
   [c-2'1] $Label ++ labels($Label*) = labels($Label $Label*)
+
+equations
+
+%% get may seem superfluous, but the found element may contain interesting annotations
+  [g-1] get($Label, labels($Label*1 $Label2 $Label*2)) = $Label2 when $Label == $Label2

@@ -37,7 +37,7 @@ equations
 
   [default-cs-1'2] $String1 := moduleid2str($ModuleId),
                    $String2 := symbol2str($Symbol),
-                   $String3 := "deprecated non-plain sort definition in " || $String1
+                   $String3 := "deprecated declaration of complex symbol"
                    ====>
                    check-symbol($Symbol, [SymbolPairsSet, $Msgs], $Location, $ModuleId) =
                      [SymbolPairsSet, $Msgs, make-warning($String3, $String2, $Location)]
@@ -49,11 +49,14 @@ equations
 
   [default-as-1'2] $String1 := moduleid2str($ModuleId),
                    $String2 := symbol2str($Symbol),
-                   $String3 := "double declared sort in " || $String1
+                   $Symbol2 := get($Symbol, SymbolPairsSet)
                    ====>
                    add-symbol($Symbol,
                               [SymbolPairsSet, $Msgs], $Location, $ModuleId) =
-                     [SymbolPairsSet, $Msgs, make-warning($String3, $String2, $Location)]
+                     [SymbolPairsSet, $Msgs,
+                       warning("double declared sort",
+                              [localized("first occurrence", $Location),
+                               localized("second occurrence", get-location($Symbol2))])]
 
   [ass-1'1] contains($Symbol, symbols(SymbolPair*)) == false
             ====>
@@ -63,11 +66,14 @@ equations
   [default-ass-1'2] $Location := get-location($Symbol),
                     $String1 := moduleid2str($ModuleId),
                     $String2 := symbol2str($Symbol),
-                    $String3 := "double declared start-symbol in " || $String1
+                    $Symbol2 := get($Symbol, SymbolPairsSet)
                     ====>
                     add-start-symbol($Symbol, [SymbolPairsSet, $Msgs], $ModuleId) =
                                      [SymbolPairsSet,
-                                      $Msgs, make-warning($String3, $String2, $Location)]
+                                      $Msgs, 
+		        warning("double declared start-symbol",
+                                 [localized("first occurrence", $Location),
+                                  localized("second occurrence", get-location($Symbol2))])]
 
   [geas-1'1] get-exported-aliased-symbols(exports $Grammar, SymbolsMsgs, 
                                           $ModuleId, SymbolPairsSet) =
@@ -91,18 +97,24 @@ equations
                                 $ModuleId, SymbolPairsSet2) =
                      [symbols($Symbol2 $Symbol*), $Msgs]
 
-  [default-gas-1'3] $Symbol1 -> $Symbol2 := $Alias,
-                    $Location := get-location($Alias),
-                    $String1 := moduleid2str($ModuleId),
+  [default-gas-1'3] $Symbol3 -> $Symbol1 := $Alias,
+                    $Location1 := get-location($Symbol1),
+                    $String1 := symbol2str($Symbol1),
+                    $Symbol2 := get($Symbol1, SymbolPairsSet1),
                     $String2 := symbol2str($Symbol2),
-                    $String3 := "aliased symbol already declared in " || $String1
+                    $Location2 := get-location($Symbol2)
                     ====>
                     get-aliased-symbols($Alias,
                                         [SymbolPairsSet1, $Msgs], 
                                         $ModuleId, SymbolPairsSet2) =
                        [SymbolPairsSet1,
-                        $Msgs, make-warning($String3, $String2, $Location)]
+                        $Msgs, 
+                        warning("alias symbol declared more than once", 
+                               [localized("first occurrence", $Location1),
+                                localized("second occurrence", $Location2)])]
   
+equations
+
   [tc1] get-used-symbols(CHAR, SymbolsSet) = SymbolsSet
 
   [tc2] get-used-symbols(sorts $Symbol*, SymbolsSet) = SymbolsSet
@@ -110,6 +122,8 @@ equations
   [tc3] $Sort != CHAR
         ====>
         get-used-symbols($Sort, SymbolsSet) = add($Sort, SymbolsSet)
+
+equations
 
   [tc4] get-defined-symbols(variables Prod*, SymbolsSet) = SymbolsSet
 
@@ -119,8 +133,12 @@ equations
   [tc6] get-defined-symbols($FuncName ( $Symbol,* ) -> $Symbol $Attributes, 
                             SymbolsSet) = add($Symbol, SymbolsSet)
 
+equations
+
   [grs-1'1] get-renamed-symbols($Symbol1 => $Symbol2, 
                                 SymbolsSet) = add($Symbol2, SymbolsSet)
+
+equations
 
 %% Pre-check one module
 	
@@ -133,8 +151,10 @@ equations
           get-exported-aliased-symbols($Module, [symbols(), ], $ModuleId, 
                                        symbols()),
 
+        RenamedSymbolsSet := get-renamed-symbols($Module, symbols()),
+
         $Msgs3 := get-messages(InfoMsgTuple1),
-        InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, $Msgs3, 
+        InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, $Msgs3,
                                       InfoMsgTuple1),
         ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
         ModuleInfoTable2 := put-declared-symbols-info($ModuleId, 
@@ -143,7 +163,11 @@ equations
         ModuleInfoTable3 := put-aliased-symbols-info($ModuleId, 
                                                      AliasedSymbolPairSet, 
                                                      ModuleInfoTable2),
-        InfoMsgTuple3 :=  put-module-info(ModuleInfoTable3, InfoMsgTuple2)
+
+        ModuleInfoTable4 := put-renamed-symbols-info($ModuleId,
+                                                     RenamedSymbolsSet,
+                                                     ModuleInfoTable3),
+        InfoMsgTuple3 :=  put-module-info(ModuleInfoTable4, InfoMsgTuple2)
         ====>
         pre-check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple3
 
@@ -162,6 +186,9 @@ equations
         DefinedSymbolsSet := 
           get-defined-symbols(Import*, get-module-info(InfoMsgTuple1)),
 
+        RenamedSymbolsSet2 :=
+          get-renamed-symbols(Import*, get-module-info(InfoMsgTuple1)),
+
         [ParameterSymbolPairSet, $Msgs0] := 
           get-parameter-symbols($Module, [symbols(),], $ModuleId),
 
@@ -178,7 +205,8 @@ equations
         UsedSymbolsSet := get-used-symbols($Module, symbols()),
         DefinedSymbolsSet2 := get-defined-symbols($Module, symbols()),
 
-        SymbolsSet := diff(UsedSymbolsSet, 
+        SymbolsSet := diff(UsedSymbolsSet,
+                         merge( 
                            merge(
                              merge(
                                merge(
@@ -186,9 +214,10 @@ equations
                                        AliasedSymbolPairSet2),
                                      DeclaredSymbolPairSet2),
                                     AliasedSymbolPairSet1),
-                                  DeclaredSymbolPairSet1)),
+                                  DeclaredSymbolPairSet1),
+                                  RenamedSymbolsSet2)),
 
-        SymbolsSet2 := diff(SymbolsSet, RenamedSymbolsSet),
+        SymbolsSet2 := SymbolsSet,
 
         SymbolsSet3 := diff(StartSymbolPairsSet,
                             merge(RenamedSymbolsSet,
@@ -196,9 +225,9 @@ equations
                                         DefinedSymbolsSet2))),
 
         $String1 := moduleid2str($ModuleId),
-        $String2 := "undeclared sorts in " || $String1,
+        $String2 := "undeclared sort",
         $Msgs5 := make-symbol-warnings(SymbolsSet2, $String2),
-        $String3 := "start-symbols in " || $String1 || " not defined in any right-hand",
+        $String3 := "start-symbol not defined by any production",
         $Msgs6 := make-symbol-errors(SymbolsSet3, $String3),
 
         $Msgs7 := get-messages(InfoMsgTuple1),                  
@@ -214,7 +243,10 @@ equations
                                    merge(ParameterSymbolPairSet, 
                                          DefinedSymbolsSet2), 
                                    ModuleInfoTable4),
-        InfoMsgTuple4 :=  put-module-info(ModuleInfoTable5, InfoMsgTuple3)
+        ModuleInfoTable6 :=
+          put-renamed-symbols-info($ModuleId,
+                                   RenamedSymbolsSet, ModuleInfoTable5),
+        InfoMsgTuple4 :=  put-module-info(ModuleInfoTable6, InfoMsgTuple3)
         ====>
         check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple4
 
@@ -227,7 +259,7 @@ equations
             $Location := get-location($Sort),
             $String1 := moduleid2str($ModuleId),
             $String2 := production2str(Prod),
-            $String3 := "sort CHAR used in production rule in " || $String1
+            $String3 := "illegal use of reserved sort CHAR in production"
             ====>
             check-CHAR-sort2($Sort, $Msgs, Prod, $ModuleId) =
               $Msgs, make-warning($String3, $String2, $Location)

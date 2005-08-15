@@ -54,6 +54,7 @@ hiddens
     "DeclaredSymbolPairSet"[0-9]* -> SymbolsSet
     "AliasedSymbolPairSet"[0-9]*  -> SymbolsSet
     "DefinedSymbolPairSet"[0-9]*  -> SymbolsSet
+    "RenamedSymbolPairSet"[0-9]*  -> SymbolsSet
 
     "$Msgs"[0-9]*           -> {Error ","}*
   

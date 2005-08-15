@@ -86,8 +86,7 @@ equations
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
            Msgs1 := get-messages(InfoMsgTuple2),
            $StrCon := moduleid2str($ModuleId),
-           Msgs2 := Msgs1,
-make-error("module not available", $StrCon, $Location),
+           Msgs2 := Msgs1, make-error("module not available", $StrCon, $Location),
            InfoMsgTuple3 := put-messages(Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
@@ -165,17 +164,18 @@ make-error("module not available", $StrCon, $Location),
              get-aliased-symbols(Import*, get-module-info(InfoMsgTuple1)),
            DefinedSymbolPairSet :=
              get-defined-symbols(Import*, get-module-info(InfoMsgTuple1)),
-
+	  RenamedSymbolPairSet :=
+             get-renamed-symbols(Import*, get-module-info(InfoMsgTuple1)),
            SymbolsSet1 := 
              get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
            $Msgs1 := get-messages(InfoMsgTuple1),
            SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
                                      AliasedSymbolPairSet),
                                SymbolsSet1),
-           $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort definitions"),
-           SymbolsSet3 := diff(SymbolsSet1,
-                               DefinedSymbolPairSet),
-           $Msgs3 := make-symbol-errors(SymbolsSet3, "used symbols but not defined in any right-hand side"),
+           $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort"),
+           SymbolsSet3 := diff(diff(SymbolsSet1,
+                               DefinedSymbolPairSet), RenamedSymbolPairSet),
+           $Msgs3 := make-symbol-errors(SymbolsSet3, "use of undefined symbol"),
 
            InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, $Msgs3, InfoMsgTuple1)
            ====>

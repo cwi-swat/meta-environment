@@ -38,3 +38,10 @@ equations
               ===>
               merge(symbols($Symbol $Symbol*1), SymbolsSet) = 
                 symbols($Symbol $Symbol*3)
+
+equations
+
+  %% Get seems superfluous, but the element found may have interesting annotations:
+
+  [get-0]  get($Symbol1, symbols($Symbol*1 $Symbol2 $Symbol*2)) = $Symbol2 when $Symbol1 == $Symbol2
+

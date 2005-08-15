@@ -3,6 +3,7 @@ module StartSymbolChecker
 imports Sdf-Type-Environment
 
 imports utilities/PosInfo[Grammar]
+        utilities/PosInfo[ModuleId]
         basic/Booleans
 
 exports

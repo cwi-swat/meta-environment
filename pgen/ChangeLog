@@ -1,5 +1,17 @@
 $Id$
 
+Mon Aug 15 16:37:59 CEST 2005 <jurgenv@cwi.nl>
+ * sdf-checker/spec/*.{asf,sdf}: 
+   - used utilities/Parsing to map subjects of errors to string. This 
+     replaces the manual "to-str" functions.
+   - Renamed some error messages, removing "in module" postfixes,
+     and adding descriptions of subjects.
+   - For all 'double declaration'-like errors and warnings, added
+     location for both instances such that the user can click on them.
+   - The right-hand side of renamings are now interpreted as 
+     definitions of symbols, such that you do not need to give a 
+     dummy production to suppress a warning message.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support

@@ -54,7 +54,7 @@ equations
                                                  productions(Prod*6)),
 
         $String1 := moduleid2str($ModuleId),
-        $String2 := "used in priorities but undefined in " || $String1,
+        $String2 := "undefined production used in priorities",
         Msgs4 := make-production-warnings(Prod*7, $String2),
 
         Msgs5 := get-messages(InfoMsgTuple1),
@@ -92,7 +92,7 @@ equations
            $Location := get-location(Prod),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str(Symbol* -> Symbol1 Attrs),
-           $String3 := "inconsistent rhs in priorities in " || $String1
+           $String3 := "inconsistent right-hand side in priorities"
            ====>
            check-priorities-given-symbol(Prod, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
@@ -105,7 +105,7 @@ equations
            $Location := get-location(Prod),
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($FuncName (Symbol,*) -> Symbol1 Attrs),
-           $String3 := "inconsistent rhs in priorities in " || $String1
+           $String3 := "inconsistent right-hand side in priorities"
            ====>
            check-priorities-given-symbol(Prod, 
                                          Msgs, $ModuleId, Symbol2, ProductionsSet) =
@@ -131,7 +131,7 @@ equations
              $Location := get-location(Prod),
              $String1 := moduleid2str($ModuleId),
              $String2 := production2str(Symbol* -> $StrCon Attrs),
-             $String3 := "literal in right-hand-side not allowed in " || $String1
+             $String3 := "illegal literal in right-hand-side of production"
              ====>
              check-right-hand-sides(Prod, Msgs, $ModuleId) =
                Msgs, make-error($String3, $String2, $Location)
@@ -140,7 +140,7 @@ equations
              $Location := get-location(Prod),
              $String1 := moduleid2str($ModuleId),
              $String2 := production2str($FuncName (Symbol,*) -> $StrCon Attrs),
-             $String3 := "literal in right-hand-side not allowed in " || $String1
+             $String3 := "illegal literal in right-hand side of production"
              ====>
              check-right-hand-sides(Prod, Msgs, $ModuleId) =
                Msgs, make-error($String3, $String2, $Location)
@@ -158,7 +158,7 @@ equations
                     $Location := get-location(Prod),
                     $String1 := moduleid2str($ModuleId),
                     $String2 := production2str(Symbol* -> Symbol Attrs),
-                    $String3 := "only sort allowed in right-hand-side of lexical-function in " || $String1
+                    $String3 := "only sort allowed in right-hand-side of lexical production"
                     ====>
                     check-right-hand-side-lexical-prod(Prod, Msgs, $ModuleId) =
                       Msgs, make-error($String3, $String2, $Location)
@@ -173,7 +173,7 @@ equations
                     $Location := get-location(Prod),
                     $String1 := moduleid2str($ModuleId),
                     $String2 := production2str($FuncName (Symbol,*) -> Symbol Attrs),
-                    $String3 := "only sort allowed in right-hand-side of lexical-function in " || $String1
+                    $String3 := "only sort allowed in right-hand side of lexical production"
                     ====>
                     check-right-hand-side-lexical-prod(Prod, Msgs, $ModuleId) =
                       Msgs, make-error($String3, $String2, $Location)

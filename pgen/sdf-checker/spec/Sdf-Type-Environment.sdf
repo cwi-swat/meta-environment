@@ -20,10 +20,11 @@ exports
 
   context-free syntax
     "[" ImportsSet ","
-        SymbolsSet "," %% declared symbols 
-        SymbolsSet "," %% aliased symbols 
-        SymbolsSet ","     %% defined symbols 
-        SymbolsSet ","     %% used symbols 
+        declared-symbols:SymbolsSet "," 
+        aliased-symbols:SymbolsSet "," 
+        defined-symbols:SymbolsSet "," 
+        used-symbols:SymbolsSet ","    
+        renamed-symbols:SymbolsSet "," 
         ProductionsSet "," 
         ConstructorSet "]" -> Module-Info
 
@@ -55,6 +56,13 @@ exports
                              SymbolsSet, 
                              Module-Info-Table)      -> Module-Info-Table
     get-defined-symbols(Import*, Module-Info-Table)  -> SymbolsSet
+
+  context-free syntax
+   get-renamed-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
+    put-renamed-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)      -> Module-Info-Table
+    get-renamed-symbols(Import*, Module-Info-Table)  -> SymbolsSet
 
   context-free syntax
     get-used-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet

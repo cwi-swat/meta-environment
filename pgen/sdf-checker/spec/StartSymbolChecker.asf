@@ -8,7 +8,7 @@ equations
             $String := moduleid2str($ModuleId)
             ====>
             contains-visible-startsymbols($Definition, $ModuleId) = 
-              make-error("syntax definition contains no start symbols for module", $String)
+              make-error("syntax definition contains no start symbols", $String, get-location($ModuleId))
 
   [cvs-2'1] $ModuleId2 := get-module-name($Module),
             $ModuleId1 != $ModuleId2

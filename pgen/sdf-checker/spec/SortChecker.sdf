@@ -24,18 +24,26 @@ hiddens
     get-parameter-symbols(ModuleName, 
                           Symbols-Msg-Tuple, 
                           ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+  context-free syntax
+
     get-exported-declared-symbols(Module, 
                                   Symbols-Msg-Tuple, 
                                   ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-exported-declared-symbols(Section, 
                                   Symbols-Msg-Tuple, 
                                   ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+  
     get-hidden-declared-symbols(Module, 
                                 Symbols-Msg-Tuple, 
                                 ModuleId)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-hidden-declared-symbols(Section, 
                                 Symbols-Msg-Tuple, 
                                 ModuleId)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
     get-declared-symbols(Section, 
                          Symbols-Msg-Tuple, 
                          ModuleId)   	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
@@ -51,6 +59,9 @@ hiddens
     get-declared-symbol(Symbol, 
                         Symbols-Msg-Tuple, 
                         ModuleId)       	       -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
     get-start-symbols(Module, Symbols-Msg-Tuple, 
                       ModuleId)   	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
     get-start-symbols(Grammar, Symbols-Msg-Tuple, 
@@ -71,6 +82,8 @@ hiddens
                                  Symbols-Msg-Tuple, 
                                  ModuleId, 
                                  SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
     get-hidden-aliased-symbols(Module, 
                                Symbols-Msg-Tuple, 
                                ModuleId, 
@@ -79,6 +92,9 @@ hiddens
                                Symbols-Msg-Tuple, 
                                ModuleId, 
                                SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
     get-aliased-symbols(Grammar, 
                         Symbols-Msg-Tuple, 
                         ModuleId, 
@@ -92,9 +108,14 @@ hiddens
     get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
     get-used-symbols(Grammar, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
     get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, break, top-down)}
+    get-defined-symbols(Renaming, SymbolsSet)  	-> SymbolsSet {traversal(accu, break, top-down)}
     get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
     get-renamed-symbols(Module, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
     get-renamed-symbols(Renaming, SymbolsSet)   -> SymbolsSet {traversal(accu, break, top-down)}
 
@@ -131,6 +152,7 @@ hiddens
     "DeclaredSymbolPairSet"[0-9]*  -> SymbolsSet
     "StartSymbolPairsSet"[0-9]*    -> SymbolsSet
     "AliasedSymbolPairSet"[0-9]*   -> SymbolsSet
+    "RenamedSymbolPairSet"[0-9]*   -> SymbolsSet
     "RenamedSymbolsSet"[0-9]*      -> SymbolsSet
     "DefinedSymbolsSet"[0-9]*      -> SymbolsSet
     "UsedSymbolsSet"[0-9]*         -> SymbolsSet

@@ -2,6 +2,12 @@ module SdfOperations
 
 imports basic/Strings
 imports languages/sdf2/syntax/Sdf2
+imports utilities/Parsing[Production]
+imports utilities/Parsing[Production*]
+imports utilities/Parsing[{Symbol ","}*]
+imports utilities/Parsing[ModuleId]
+imports utilities/Parsing[Symbol]
+imports utilities/Parsing[Symbol*]
 
 exports
   context-free syntax
@@ -14,41 +20,19 @@ exports
     label2str(Label)               -> String
     moduleid2str(ModuleId)         -> String
 
-  sorts Middle
-  lexical syntax
-    [A-Za-z0-9\-]* -> Middle
-
 hiddens
-  context-free syntax
-    sort2strcon(Symbol)    -> StrCon
-    middle2strcon(Middle)  -> StrCon
-    moduleword2strcon(ModuleWord)  -> StrCon
-
-hiddens
-  lexical variables
-    "char*"[0-9]* -> StrChar*
-    "char+"[0-9]* -> StrChar+
-    "char"[0-9]*  -> StrChar
-    "head"[0-9]*  -> [A-Z]
-    "middle-char"[0-9]* -> [A-Za-z0-9\-]
-    "middle-chars"[0-9]* -> [A-Za-z0-9\-]*
-    "middle"[0-9]* -> Middle
-    "last"[0-9]*  -> [A-Za-z0-9]
-    "basename"[0-9]* -> ModuleId
-    "letters"[0-9]* -> [A-Za-z0-9\_\-]+
-    "letter"[0-9]* -> [A-Za-z0-9\_\-]
-
   variables
-    "$Attributes"[0-9]*         -> Attributes
+    "$Attributes"[0-9]*         	-> Attributes
     "$FuncName"[0-9]*		-> FunctionName
-    "$Label"[0-9]*              -> Label
+    "$Label"[0-9]*              	-> Label
     "$StrCon"[0-9]*		-> StrCon
     "$IdCon"[0-9]*		-> IdCon
-    "$Sort"[0-9]*		-> Sort
+    "$Sort"[0-9]*			-> Sort
     "$Symbol"[0-9]*		-> Symbol
-    "$Symbol*"[0-9]*		-> Symbol*
-    "$Symbol+"[0-9]*		-> Symbol+
+    "$Symbol*$"[0-9]*		-> Symbol*
+    "$Symbol+$"[0-9]*		-> Symbol+
     "$Symbolstar"[0-9]*		-> {Symbol ","}*
     "$Symbolplus"[0-9]*		-> {Symbol ","}+
-    "$Production"[0-9]*         -> Production
-    "$Production*"[0-9]*        -> Production*
+    "$Production"[0-9]*         	-> Production
+    "$Production*"[0-9]*        	-> Production*
+    "$ModuleId"[0-9]* 		-> ModuleId

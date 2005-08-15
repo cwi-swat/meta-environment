@@ -1,6 +1,7 @@
 module LabelChecker
 
 imports utilities/PosInfo[Symbol]
+imports utilities/PosInfo[Label]
 imports SdfCheckerFeedback
 imports ModuleOperations
 
@@ -18,6 +19,7 @@ hiddens
 
   context-free syntax
     contains(Label, LabelsSet) -> Boolean
+    get(Label, LabelsSet)      -> Label
     Label "++" LabelsSet       -> LabelsSet
 
   context-free syntax

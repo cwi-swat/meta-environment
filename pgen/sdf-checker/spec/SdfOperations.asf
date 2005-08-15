@@ -1,147 +1,23 @@
 equations
 
-  [production2str-plain]
-    production2str($Symbol* -> $Symbol $Attributes) =
-      symbols2str($Symbol*) 
-      || "->"
-      || symbol2str($Symbol)  
+  [production2str-fwd]
+    production2str($Production) = unparse-to-string($Production)
 
-  [production2str-prefix]
-    production2str($FuncName($Symbolstar) -> $Symbol $Attributes) =
-      functionname2str($FuncName)  
-      || "("
-      || symbolssep2str($Symbolstar)  
-      || ")"
-      || "->"
-      || symbol2str($Symbol)
+  [productions2str-fwd]
+     productions2str($Production*) = unparse-to-string($Production*)
 
-  [productions2str-empty]
-     productions2str() = ""
+  [symbols2str-fwd]
+    symbols2str($Symbol*$) = unparse-to-string($Symbol*$)
 
-  [productions2str-non-empty]
-     productions2str($Production $Production*) =
-       production2str($Production)
-      || " "
-       || productions2str($Production*)
+  [symbolssep2str-fwd]
+    symbolssep2str($Symbolstar) = unparse-to-string($Symbolstar)
 
-  [symbols2str-empty]
-    symbols2str() = "" 
-
-  [symbols2str-one]
-    symbols2str($Symbol) = symbol2str($Symbol)
-
-  [symbols2str-many]
-    symbols2str($Symbol $Symbol+) = 
-      symbol2str($Symbol)
-      || " "
-      || symbols2str($Symbol+)
-
-  [symbolssep2str-empty]
-    symbolssep2str() = "" 
-
-  [symbolssep2str-one]
-    symbolssep2str($Symbol) = symbol2str($Symbol)
-
-  [symbolssep2str-many]
-    symbolssep2str($Symbol , $Symbolplus) = 
-      symbol2str($Symbol)
-      || ","
-      || symbolssep2str($Symbolplus)
-
-  [symbol2str-plainsort]
-    symbol2str($Sort) = sort2strcon($Sort)
-
-  [symbol2str-parameterizedsort]
-    symbol2str($Sort[[$Symbolplus]]) = 
-      sort2strcon($Sort)
-      || "[["
-      || symbolssep2str($Symbolplus)
-      || "]]"
-
-  [symbol2str-literal]
-    symbol2str($StrCon) = $StrCon
-
-  [symbol2str-star]
-    symbol2str($Symbol*) = symbol2str($Symbol) || "*"
-
-  [symbol2str-plus]
-    symbol2str($Symbol+) = symbol2str($Symbol) || "+"
-
-  [symbol2str-option]
-    symbol2str($Symbol?) = symbol2str($Symbol) || "?"
-
-  [symbol2str-sepstar]
-    symbol2str({$Symbol1 $Symbol2}*) = 
-      "{"
-      || symbol2str($Symbol1) 
-      || " "
-      || symbol2str($Symbol2) 
-      || "}*"
-
-  [symbol2str-sepplus]
-    symbol2str({$Symbol1 $Symbol2}+) = 
-      "{" 
-      || symbol2str($Symbol1) 
-      || " "
-      || symbol2str($Symbol2) 
-      || "}+" 
-
-  [symbol2str-tuple]
-    symbol2str(<$Symbol, $Symbolplus>) = 
-      "<"
-      || symbol2str($Symbol) 
-      || ","
-      || symbolssep2str($Symbolplus)
-      || ">"
-
-  [symbol2str-label]
-    symbol2str($Label : $Symbol) = 
-      label2str($Label) 
-      || ":"
-      || symbol2str($Symbol)  
-
-  [default-symbol2str-notimplemented]
-    symbol2str($Symbol) = "not-implemented"
-
+  [symbol2str-fwd]
+    symbol2str($Symbol) = unparse-to-string($Symbol)
+ 
   [label2str-strcon]
     label2str($StrCon) = $StrCon
 
-  [sort2str-onechar]
-    sort2strcon(sort(head)) = strcon(\" strchar(head) \")
-
-  [sort2str-morechar]
-    strcon(\" char* \") := middle2strcon(middle(middle-chars))
-    ===>
-    sort2strcon(sort(head middle-chars last)) = 
-      strcon(\" strchar(head) char* strchar(last) \")
-
-
-  [middle2strcon-empty]
-    middle2strcon() = strcon(\"\")
-
-  [middle2strcon-nonempty]
-    strcon(\" char* \") := middle2strcon(middle(middle-chars))
-    ===>
-    middle2strcon(middle(middle-char middle-chars)) = 
-      strcon(\" strchar(middle-char) char* \")
-
-  [moduleid2str-leaf]
-    moduleid2str(moduleid(moduleword(letters))) = 
-      moduleword2strcon(moduleword(letters))
-
-  [moduleid2str-root]
-    moduleid2str(moduleid(/ basename)) = 
-      "/" || moduleid2str(basename)
-
-  [moduleid2str-path]
-    moduleid2str(moduleid(moduleword(letters) / basename)) = 
-      moduleword2strcon(moduleword(letters)) || "/" ||  moduleid2str(basename)
-
-  [moduleword2str-letter]
-    moduleword2strcon(moduleword(letter)) = strcon(\" strchar(letter) \")
-
-  [moduleword2str-letters]
-    strcon(\" char* \") := moduleword2strcon(moduleword(letters))
-    ===>
-    moduleword2strcon(moduleword(letter letters)) = 
-      strcon(\" strchar(letter) char* \")
+  [moduleid2str-fwd]
+    moduleid2str($ModuleId) = unparse-to-string($ModuleId) 
+   

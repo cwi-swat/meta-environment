@@ -12,6 +12,7 @@ exports
     add(Symbol, SymbolsSet)       -> SymbolsSet
     merge(SymbolsSet, SymbolsSet) -> SymbolsSet
     contains(Symbol, SymbolsSet)  -> Boolean
+    get(Symbol, SymbolsSet)       -> Symbol
 
 hiddens
   variables

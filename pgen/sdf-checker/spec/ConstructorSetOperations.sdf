@@ -12,6 +12,7 @@ exports
   context-free syntax
     contains(Symbol, AFun, ConstructorSet) -> Boolean
     add(Symbol, AFun, ConstructorSet)      -> ConstructorSet
+    get(AFun, ConstructorSet)              -> AFun
 
 hiddens
   variables
