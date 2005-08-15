@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Fri Jul  8 16:12:11 CEST 2005 <jurgenv@cwi.nl>
  * lib/manager.c: added an error manager file, containing a static
    reference to a summary that can be inspected and filled. It also

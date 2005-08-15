@@ -12,7 +12,9 @@ dnl because it would introduce a circular dependency.
 
 AM_MAINTAINER_MODE
 
+AC_AIX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
@@ -53,9 +55,6 @@ fi
 
 AC_SUBST(SOCKLIBS)
 LIBS=$NOSOCKLIBS
-
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 AC_PROG_MAKE_SET([])
 
