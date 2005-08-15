@@ -4,7 +4,9 @@ AC_CONFIG_SRCDIR([configure.in])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
+AC_AIX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 dnl Handle --with-cflags option
 AC_ARG_WITH(cflags,
