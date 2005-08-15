@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Fri Mar 25 09:41:13 CET 2005 <jurgenv@cwi.nl>
  * tests/*.pt: regenerated test files for structured lexicals
  * tests/sorts.c: removed illegal free(), added PT_initMEPTApi();
