@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
+ * configure.in:
+   - add libtool support
+
 Tue Mar 15 13:57:38 CET 2005 <jurgenv@cwi.nl>
  * Bumped version to 3.13 since sglr links to a much changed
    version of libmept (no more flattening of lexicals and layout).
