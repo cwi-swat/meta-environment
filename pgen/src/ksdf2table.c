@@ -315,6 +315,15 @@ ATerm process_productions(SDF_ProductionList prods)
 
 /*}}}  */
 
+/*{{{  AFun get_afun_char_class()  */
+
+AFun get_afun_char_class() 
+{
+  return afun_char_class;
+}
+
+/*}}}  */
+
 /*{{{  static ATerm getProductionNumberForProduction(SDF_Production prod) */
 
 static ATerm getProductionNumberForProduction(SDF_Production prod)

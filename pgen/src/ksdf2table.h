@@ -34,8 +34,6 @@ extern char *unquote_str(char *s);
 /*}}}  */
 /*{{{  AFuns */
 
-extern AFun afun_range;
-extern AFun afun_char_class;
 extern AFun afun_action;
 extern AFun afun_prod;
 extern AFun afun_goto;
@@ -51,7 +49,7 @@ extern ATerm all_chars;
 #define GET_INT_ARG(t,n)  ((ATermInt)GET_ARG(t,n))
 #define GET_LIST_ARG(t,n) ((ATermList)GET_ARG(t,n))
 #define IS_ACTION(t)      (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_action)
-#define IS_CHARCLASS(t)   (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_char_class)
+#define IS_CHARCLASS(t)   (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == get_afun_char_class())
 #define IS_GOTO(t)        (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_goto)
 #define IS_PROD(t)        (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_prod)
 #define IS_RANGE(t)       (ATgetType(t) == AT_APPL && ATgetAFun((ATermAppl)(t)) == afun_range)
@@ -72,3 +70,4 @@ extern int MAX_PROD;
 ATerm generate_parse_table(int version_nr, PT_ParseTree g);
 void init_table_gen();
 void destroy_table_gen();
+AFun get_afun_char_class();
