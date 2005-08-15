@@ -110,16 +110,32 @@ public class State {
     return s + "}";
   }
 
-  // The State interface
-
   public boolean contains(StateElement a) {
-    return elements.contains(a);
+	 for (Iterator it = elements.iterator(); it.hasNext();) {
+	      StateElement b = (StateElement) it.next();
+	      if(b.contains(a)){
+	      	return true;
+	      }
+	 }
+    return false;
   }
   
   public State getNextState(){
   return ((StateElement) elements.elementAt(lastElement)).getNextState();
   }
-
+  
+  public State getNextState(StateElement a){
+	 for (Iterator it = elements.iterator(); it.hasNext();) {
+	      StateElement b = (StateElement) it.next();
+	      //System.err.println("State.getNextState2: trying " + b);
+	      if(b.equals(a) || b.contains(a)){
+	      	return b.getNextState(a);
+	      }
+	 }
+     System.err.println("State.GetNextState2: no element " + a);
+     return null;
+    }
+  
   /**
    * Execute one step for each element in this state.
    */

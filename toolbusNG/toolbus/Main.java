@@ -16,7 +16,7 @@ public class Main {
 		try {
 			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/wave1.tb");
+					+ "/toolbusNG/toolbus/merge1.tb");
 			T.execute();
 		} catch (ToolBusException e) {
 			System.out.println(e.getMessage());

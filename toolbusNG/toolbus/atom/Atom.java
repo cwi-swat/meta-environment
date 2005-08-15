@@ -177,6 +177,15 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public State getNextState(){
   	return getFollow();
   }
+  
+  public State getNextState(StateElement b){
+  	if(this.equals(b)){
+  		return getFollow();
+  	} else {
+  		System.err.println("Atom.getNextState2: wrong arg: " + b);
+  		return null;
+  	}
+  }
 
   public boolean execute() throws ToolBusException{
   	return isEnabled() ? nextState() : false;

@@ -184,6 +184,10 @@ public class ProcessInstance {
   public void setCurrentState(State s) {
     currentState = s;
   }
+  
+  public void nextState(StateElement a){
+  	currentState = currentState.getNextState(a);
+  }
 
   public boolean step() throws ToolBusException {
     //System.err.println(this);
