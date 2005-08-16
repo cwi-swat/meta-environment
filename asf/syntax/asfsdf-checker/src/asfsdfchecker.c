@@ -61,8 +61,31 @@ static PT_Tree addAsfSdfCheckerFunction(PT_ParseTree parseTree,
 }
 
 /*}}}  */
+/*{{{  static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) */
 
-static ATerm checkAsfSdf(ATerm term, const char *name)
+static PT_Tree addAsfSdfCheckerTopFunction(PT_ParseTree parseTree, 
+                                        const char *str )
+{
+  PT_Tree newTree = NULL;
+
+  SDF_ModuleId strCon = SDF_makeModuleId((char *)str);
+  if (PT_isValidParseTree(parseTree)) {
+    PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
+
+    newTree = PT_applyFunctionToTree("check-asfsdf-top-module", "Summary", 2, ptSyntax,
+				     SDF_ModuleIdToTerm(strCon));
+  }
+  else {
+    ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
+            (ATerm) parseTree);
+  }
+
+  return newTree;
+}
+
+/*}}}  */
+
+static ATerm checkAsfSdf(ATerm term, const char *name, ATbool top)
 {
   PT_ParseTree parseTree;
   PT_Tree ptApplied;
@@ -71,7 +94,14 @@ static ATerm checkAsfSdf(ATerm term, const char *name)
 
   setKeepAnnotations(ATtrue);
   parseTree = PT_ParseTreeFromTerm(term);
-  ptApplied = addAsfSdfCheckerFunction(parseTree, name);
+
+  if (top) {
+    ptApplied = addAsfSdfCheckerTopFunction(parseTree, name);
+  }
+  else {
+    ptApplied = addAsfSdfCheckerFunction(parseTree, name);
+  }
+
   reduct = innermost(ptApplied);
   asfix = toasfix(reduct);
 
@@ -88,7 +118,7 @@ static void displayMessages(ATerm term)
 
 ATerm check_asfsdf(int cid, ATerm term, const char *name)
 {
-  ATerm output = checkAsfSdf(ATBunpack(term), name);
+  ATerm output = checkAsfSdf(ATBunpack(term), name, ATtrue);
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
@@ -164,7 +194,7 @@ int main(int argc, char *argv[])
 
     syntax = ATreadFromNamedFile(input);
 
-    msgs = checkAsfSdf(syntax, input);
+    msgs = checkAsfSdf(syntax, input, ATfalse);
 
     displayMessages(msgs);
   }
