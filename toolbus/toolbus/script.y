@@ -21,6 +21,7 @@
 */
 %{
 #include <fcntl.h>
+#include <limits.h>
 
 #include "toolbus.h"
 #include "terms.h"
@@ -33,6 +34,7 @@
 #include "interpreter.h"
 #include "script.h"
 #include "partners.h"
+#include "mkdtemp.h"
 
 extern int yyparse(void);
 extern int yylex(void);
