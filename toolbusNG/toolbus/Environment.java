@@ -4,8 +4,8 @@
 
 package toolbus;
 
-import sun.awt.print.PrintStatusDialog;
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermList;
 
 /**
  * Binding implement lists of (variable, value) pairs.

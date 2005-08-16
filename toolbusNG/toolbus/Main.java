@@ -4,7 +4,6 @@
 
 package toolbus;
 
-import aterm.ATermFactory;
 
 public class Main {
 
@@ -16,13 +15,12 @@ public class Main {
 		try {
 			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/merge1.tb");
+					+ "/toolbusNG/toolbus/tool/examples/wave.tb");
 			T.execute();
 		} catch (ToolBusException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-
 	}
 
 }

@@ -33,22 +33,24 @@ public class EnvironmentTest extends TestCase {
     vars = factory.makeList(varX, vars);
 
     env.introduceVars(vars);
-    System.out.println(env);
-
+/*
     try {
       assertEquals(env.getValue(varX), varX);
       assertEquals(env.getValue(varY), varY);
       fail();
     } catch (ToolBusException e) {
     }
+    */
 
     env.assignVar(varX, intVal);
     assertEquals(env.getValue(varX), intVal);
+    /*
     try {
       assertEquals(env.getValue(varY), null);
       fail();
     } catch (ToolBusException e) {
     }
+    */
 
     env.assignVar(varY, strVal);
     assertEquals(env.getValue(varX), intVal);

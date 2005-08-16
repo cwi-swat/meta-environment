@@ -67,7 +67,7 @@ public class ProcessInstance {
       for (Iterator it = elements.getElementsAsVector().iterator(); it.hasNext();) {
         Atom a = (Atom) it.next();
         System.err.println(processId + ": " + a + " --> " + a.getFollow());
-        System.err.println("env = " + a.getEnv());
+        //System.err.println("env = " + a.getEnv());
       }
     }
   }
