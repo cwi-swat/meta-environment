@@ -7,6 +7,7 @@ import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
 import javax.swing.undo.CannotRedoException;
@@ -26,6 +27,8 @@ public class EditorKit extends StyledEditorKit {
 
     private GotoLineAction gotoLine;
 
+    private GotoMatchingBracketAction gotoMatchingBracket;
+
     public static final String undoAction = "undo";
 
     public static final String redoAction = "redo";
@@ -35,6 +38,8 @@ public class EditorKit extends StyledEditorKit {
     public static final String gotoLineAction = "goto-line";
 
     public static final String deleteLineAction = "delete-line";
+
+    public static final String gotoMatchingBracketAction = "goto-matching-bracket";
 
     private UndoableEditListener undoListener;
 
@@ -60,11 +65,12 @@ public class EditorKit extends StyledEditorKit {
         redo = new RedoAction();
         find = new FindAction();
         gotoLine = new GotoLineAction();
+        gotoMatchingBracket = new GotoMatchingBracketAction();
     }
 
     public Action[] getActions() {
         return TextAction.augmentList(super.getActions(), new Action[] { undo,
-                redo, find, gotoLine });
+                redo, find, gotoLine, gotoMatchingBracket });
     }
 
     public Action getAction(String name) {
@@ -180,6 +186,26 @@ public class EditorKit extends StyledEditorKit {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
                 editor.gotoLine(d.getLineNumber());
+            }
+        }
+    }
+
+    public class GotoMatchingBracketAction extends EditorTextAction {
+        public GotoMatchingBracketAction() {
+            super(gotoMatchingBracketAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                try {
+                    int offset = TextUtilities.findMatchingBracket(editor
+                            .getDocument(), editor.getCaretPosition() - 1);
+                    if (offset != -1) {
+                        editor.setCaretPosition(offset + 1);
+                    }
+                } catch (BadLocationException e1) {
+                }
             }
         }
     }
