@@ -20,6 +20,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
@@ -55,11 +56,8 @@ public class EditorPane extends JTextPane {
 
     public EditorPane() {
         setEditorKit(new EditorKit(this));
+
         setOpaque(false);
-
-        pauseUndo();
-        addBindings();
-
         focusPainter = new DefaultHighlightPainter(Color.BLACK);
         bracketPainter = new BracketHighlightPainter(Color.GRAY);
 
@@ -68,21 +66,11 @@ public class EditorPane extends JTextPane {
         getStyledDocument().setLogicalStyle(0, defaultStyle);
 
         modified = false;
-        resumeUndo();
 
+        addBindings();
         addDocumentListener();
         addCaretListener();
         addMouseMotionListener();
-    }
-
-    protected void addBinding(JMenu menu, int key, String name) {
-        Action action = ((EditorKit) getEditorKit()).getAction(name);
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
-
-        getInputMap().put(keyStroke, name);
-        JMenuItem item = new JMenuItem(action);
-        item.setAccelerator(keyStroke);
-        menu.add(item);
     }
 
     protected void addBindings() {
@@ -97,6 +85,16 @@ public class EditorPane extends JTextPane {
         addBinding(menu, KeyEvent.VK_V, DefaultEditorKit.pasteAction);
     }
 
+    protected void addBinding(JMenu menu, int key, String name) {
+        Action action = ((EditorKit) getEditorKit()).getAction(name);
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
+        
+        getInputMap().put(keyStroke, name);
+        JMenuItem item = new JMenuItem(action);
+        item.setAccelerator(keyStroke);
+        menu.add(item);
+    }
+    
     private void addMouseMotionListener() {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
@@ -208,10 +206,8 @@ public class EditorPane extends JTextPane {
     }
 
     public void setStyle(int offset, int length, String name) {
-        pauseUndo();
         Style style = getStyle(name);
         getStyledDocument().setCharacterAttributes(offset, length, style, true);
-        resumeUndo();
     }
 
     public void unsetStyles() {
@@ -239,29 +235,17 @@ public class EditorPane extends JTextPane {
         return menu;
     }
 
-    private void pauseUndo() {
-        // ((EditorKit) getEditorKit()).pauseUndo();
-    }
-
-    private void resumeUndo() {
-        // ((EditorKit) getEditorKit()).resumeUndo();
-    }
-
     public void setText(String t) {
-        pauseUndo();
+        UndoableEditListener undoListener = ((EditorKit) getEditorKit())
+                .getUndoListener();
+        getDocument().removeUndoableEditListener(undoListener);
         super.setText(t);
         modified = false;
-        resumeUndo();
+        getDocument().addUndoableEditListener(undoListener);
     }
 
     public void setCaretPositionAtEnd() {
         setCaretPosition(getDocument().getLength());
-    }
-
-    public void setCaretPosition(int position) {
-        pauseUndo();
-        super.setCaretPosition(position);
-        resumeUndo();
     }
 
     public void setModified(boolean modified) {

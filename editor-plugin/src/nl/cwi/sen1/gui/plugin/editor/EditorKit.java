@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JEditorPane;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.StyledEditorKit;
@@ -14,160 +13,153 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 public class EditorKit extends StyledEditorKit {
-	private static UndoManager undoManager = new UndoManager();
-	private EditorPane editor;
+    private static final int UNDO_LIMIT = 1000;
 
-	private UndoAction undo;
+    private static UndoManager undoManager = new EditorUndoManager();
 
-	private RedoAction redo;
+    private EditorPane editor;
 
-	private FindAction find;
+    private UndoAction undo;
 
-	private GotoLineAction gotoLine;
+    private RedoAction redo;
 
-	public static final String undoAction = "undo";
+    private FindAction find;
 
-	public static final String redoAction = "redo";
+    private GotoLineAction gotoLine;
 
-	public static final String findAction = "find";
+    public static final String undoAction = "undo";
 
-	public static final String gotoLineAction = "goto-line";
+    public static final String redoAction = "redo";
 
-	private UndoableEditListener undoListener;
-	
-	private SearchReplaceDialog searchReplaceDialog;
+    public static final String findAction = "find";
 
-	public EditorKit(EditorPane editor) {
-		this.editor = editor;
-		
-		undoListener = new UndoableEditListener() {
-			public void undoableEditHappened(UndoableEditEvent e) {
-				undoManager.addEdit(e.getEdit());
-				undo.updateUndoState();
-				redo.updateRedoState();
-			}
-		};
+    public static final String gotoLineAction = "goto-line";
 
-		undo = new UndoAction();
-		redo = new RedoAction();
-		find = new FindAction();
-		gotoLine = new GotoLineAction();
-		
-		searchReplaceDialog = new SearchReplaceDialog(editor);
-	}
+    private UndoableEditListener undoListener;
 
-	public Action[] getActions() {
-		return TextAction.augmentList(super.getActions(), new Action[] { undo,
-				redo, find, gotoLine });
-	}
+    private SearchReplaceDialog searchReplaceDialog;
 
-	public Action getAction(String name) {
-		Action[] actions = getActions();
+    public EditorKit(EditorPane editor) {
+        this.editor = editor;
+        searchReplaceDialog = new SearchReplaceDialog(editor);
 
-		for (int i = 0; i < actions.length; i++) {
-			if (actions[i].getValue(Action.NAME).equals(name)) {
-				return actions[i];
-			}
-		}
+        undoListener = new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+                undoManager.addEdit(e.getEdit());
+                undo.updateUndoState();
+                redo.updateRedoState();
+            }
+        };
+        undoManager.setLimit(UNDO_LIMIT);
 
-		return null;
-	}
+        createActions();
+    }
 
-	public class UndoAction extends AbstractAction {
+    private void createActions() {
+        undo = new UndoAction();
+        redo = new RedoAction();
+        find = new FindAction();
+        gotoLine = new GotoLineAction();
+    }
 
-		public UndoAction() {
-			super(undoAction);
-			setEnabled(false);
-		}
+    public Action[] getActions() {
+        return TextAction.augmentList(super.getActions(), new Action[] { undo,
+                redo, find, gotoLine });
+    }
 
-		public void actionPerformed(ActionEvent e) {
-			try {
-				undoManager.undo();
-			} catch (CannotUndoException ex) {
-				System.out.println("Unable to undo: " + ex);
-				ex.printStackTrace();
-			}
-			updateUndoState();
-			redo.updateRedoState();
-		}
+    public Action getAction(String name) {
+        Action[] actions = getActions();
 
-		protected void updateUndoState() {
-			if (undoManager.canUndo()) {
-				setEnabled(true);
-				putValue(Action.NAME, undoAction);
-			} else {
-				setEnabled(false);
-				putValue(Action.NAME, undoAction);
-			}
-		}
-	}
+        for (int i = 0; i < actions.length; i++) {
+            if (actions[i].getValue(Action.NAME).equals(name)) {
+                return actions[i];
+            }
+        }
 
-	public class RedoAction extends AbstractAction {
+        return null;
+    }
 
-		public RedoAction() {
-			super(redoAction);
-			setEnabled(false);
-		}
+    public class UndoAction extends AbstractAction {
 
-		public void actionPerformed(ActionEvent e) {
-			try {
-				undoManager.redo();
-			} catch (CannotRedoException ex) {
-				System.out.println("Unable to redo: " + ex);
-				ex.printStackTrace();
-			}
-			updateRedoState();
-			undo.updateUndoState();
-		}
+        public UndoAction() {
+            super(undoAction);
+            setEnabled(false);
+        }
 
-		protected void updateRedoState() {
-			if (undoManager.canRedo()) {
-				setEnabled(true);
-				putValue(Action.NAME, redoAction);
-			} else {
-				setEnabled(false);
-				putValue(Action.NAME, redoAction);
-			}
-		}
-	}
+        public void actionPerformed(ActionEvent e) {
+            try {
+                undoManager.undo();
+            } catch (CannotUndoException ex) {
+                System.out.println("Unable to undo: " + ex);
+                ex.printStackTrace();
+            }
+            updateUndoState();
+            redo.updateRedoState();
+        }
 
-	public class GotoLineAction extends AbstractAction {
-		public GotoLineAction() {
-			super(gotoLineAction);
-		}
+        protected void updateUndoState() {
+            if (undoManager.canUndo()) {
+                setEnabled(true);
+                putValue(Action.NAME, undoAction);
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, undoAction);
+            }
+        }
+    }
 
-		public void actionPerformed(ActionEvent e) {
-			GotoLineDialog d = new GotoLineDialog();
-			d.setVisible(true);
-			editor.gotoLine(d.getLineNumber());
-		}
-	}
+    public class RedoAction extends AbstractAction {
 
-	public class FindAction extends AbstractAction {
-		public FindAction() {
-			super(findAction);
-		}
+        public RedoAction() {
+            super(redoAction);
+            setEnabled(false);
+        }
 
-		public void actionPerformed(ActionEvent e) {
-			searchReplaceDialog.setVisible(true);
-		}
-	}
+        public void actionPerformed(ActionEvent e) {
+            try {
+                undoManager.redo();
+            } catch (CannotRedoException ex) {
+                System.out.println("Unable to redo: " + ex);
+                ex.printStackTrace();
+            }
+            updateRedoState();
+            undo.updateUndoState();
+        }
 
-	public void pauseUndo() {
-		editor.getDocument().removeUndoableEditListener(undoListener);
-	}
+        protected void updateRedoState() {
+            if (undoManager.canRedo()) {
+                setEnabled(true);
+                putValue(Action.NAME, redoAction);
+            } else {
+                setEnabled(false);
+                putValue(Action.NAME, redoAction);
+            }
+        }
+    }
 
-	public void resumeUndo() {
-		editor.getDocument().addUndoableEditListener(undoListener);
-	}
+    public class GotoLineAction extends AbstractAction {
+        public GotoLineAction() {
+            super(gotoLineAction);
+        }
 
-	public void install(JEditorPane editor) {
-		super.install(editor);
-		editor.getDocument().addUndoableEditListener(undoListener);
-	}
+        public void actionPerformed(ActionEvent e) {
+            GotoLineDialog d = new GotoLineDialog();
+            d.setVisible(true);
+            editor.gotoLine(d.getLineNumber());
+        }
+    }
 
-	public void deinstall(JEditorPane editor) {
-		super.deinstall(editor);
-		editor.getDocument().removeUndoableEditListener(undoListener);
-	}
+    public class FindAction extends AbstractAction {
+        public FindAction() {
+            super(findAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            searchReplaceDialog.setVisible(true);
+        }
+    }
+
+    public UndoableEditListener getUndoListener() {
+        return undoListener;
+    }
 }
