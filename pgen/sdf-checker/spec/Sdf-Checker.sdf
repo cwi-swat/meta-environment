@@ -11,19 +11,21 @@ exports
   context-free syntax
     check-sdf(SDF)                  -> Summary
     check-sdf(SDF, ModuleId)        -> Summary
+    check-sdf-top-module(SDF, ModuleId)    -> Summary
     check-sdf(Definition, ModuleId, Boolean) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                          -> Info-Msg-Tuple
+    check-sorts-and-prods(ModuleId, Definition, Info-Msg-Tuple)                          -> Info-Msg-Tuple
     pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
     pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
     pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
     check-module(Module, Definition, Info-Msg-Tuple)	       -> Info-Msg-Tuple
     check-modules(Definition, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
     check-imports(ImportsSet, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
-    post-check-modules(Definition, ImportsSet, Info-Msg-Tuple) -> Info-Msg-Tuple
-    post-check-modules(ImportsSet, Info-Msg-Tuple)             -> Info-Msg-Tuple
+    post-check-modules(ModuleId, Definition, ImportsSet, Info-Msg-Tuple) -> Info-Msg-Tuple
+    post-check-modules(ModuleId, ImportsSet, Info-Msg-Tuple)             -> Info-Msg-Tuple
+
     contains-main(Definition, Boolean)                         -> Boolean {traversal(accu, top-down, break)}
     contains-main(Module, Boolean)                             -> Boolean {traversal(accu, top-down, break)}
     main-message(Boolean)                                      -> {Error ","}*

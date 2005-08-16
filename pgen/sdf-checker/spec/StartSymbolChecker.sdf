@@ -8,7 +8,7 @@ imports utilities/PosInfo[Grammar]
 
 exports
   context-free syntax
-    contains-visible-startsymbols(Definition, ModuleId) -> {Error ","}*
+    contains-visible-startsymbols(Definition, ModuleId, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
@@ -28,6 +28,7 @@ hiddens
     "$ModuleId"[0-9]*   -> ModuleId
     "$Boolean"[0-9]*    -> Boolean
     "$Definition"[0-9]* -> Definition
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "$Grammar"[0-9]*    -> Grammar
     "$Symbol*"[0-9]*    -> Symbol*
     "$String"[0-9]*     -> StrCon

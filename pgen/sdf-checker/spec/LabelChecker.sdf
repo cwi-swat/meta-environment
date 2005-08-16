@@ -2,20 +2,20 @@ module LabelChecker
 
 imports utilities/PosInfo[Symbol]
 imports utilities/PosInfo[Label]
-imports SdfCheckerFeedback
+imports Sdf-Type-Environment
 imports ModuleOperations
 
 exports
-  context-free start-symbols {Error ","}*
+  context-free start-symbols Info-Msg-Tuple
   context-free syntax
-    check-labels(Definition) -> {Error ","}*
+    check-labels-definition(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   sorts LabelsSet Labels-Msgs-Tuple
 
   context-free syntax
     labels(Label*)                     -> LabelsSet
-    "[" LabelsSet "," {Error ","}* "]" -> Labels-Msgs-Tuple
+    "[" LabelsSet "," Info-Msg-Tuple "]" -> Labels-Msgs-Tuple
 
   context-free syntax
     contains(Label, LabelsSet) -> Boolean
@@ -23,10 +23,10 @@ hiddens
     Label "++" LabelsSet       -> LabelsSet
 
   context-free syntax
-    check-labels(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
-    check-labels(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
-    check-labels2(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
-    check-labels2(Production, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
+    check-labels(Definition, Info-Msg-Tuple)            -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-labels(Module, Info-Msg-Tuple)                -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-labels2(Module, Info-Msg-Tuple, ModuleId)      -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-labels2(Production, Info-Msg-Tuple, ModuleId)  -> Info-Msg-Tuple {traversal(accu, break, top-down)}
     check-labels3(Symbol*, Labels-Msgs-Tuple, 
                   ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
     check-labels3({Symbol ","}*, Labels-Msgs-Tuple, 
@@ -41,6 +41,7 @@ hiddens
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
     "Msgs"[0-9]*       -> {Error ","}*
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "$Symbol"[0-9]*    -> Symbol
     "$Label"[0-9]*     -> Label
     "$FuncName"[0-9]*  -> FunctionName

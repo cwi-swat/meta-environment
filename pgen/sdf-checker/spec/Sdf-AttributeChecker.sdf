@@ -1,20 +1,20 @@
 module Sdf-AttributeChecker
 
 imports utilities/PosInfo[Production]
-imports SdfCheckerFeedback
+imports Sdf-Type-Environment
 imports ModuleOperations
 
 exports
-  context-free start-symbols {Error ","}*
+  context-free start-symbols Info-Msg-Tuple
   context-free syntax
-    check-sdf-attributes(Definition) -> {Error ","}*
+    check-sdf-attributes(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-attributes(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
-    check-attributes(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
-    check-attributes2(Module, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
-    check-attributes2(Production, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes(Definition, Info-Msg-Tuple)            -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-attributes(Module, Info-Msg-Tuple)                -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-attributes2(Module, Info-Msg-Tuple, ModuleId)     -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-attributes2(Production, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
     is-binary-definition(Production)       -> Boolean
@@ -35,6 +35,7 @@ hiddens
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
     "$Symbol"[0-9]*    -> Symbol
     "Msgs"[0-9]*       -> {Error ","}*
+   "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "$FuncName"[0-9]*   -> FunctionName
 
     "$String"[0-9]*    -> StrCon
