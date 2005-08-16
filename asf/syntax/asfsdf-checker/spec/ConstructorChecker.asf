@@ -15,9 +15,7 @@ equations
                                          [constructors(SymbolCons*1), ], 
                                          $ModuleId),
 
-            Msgs2 := get-messages($ModuleId, InfoMsgTuple1), 
-
-            InfoMsgTuple2 := put-messages($ModuleId, Msgs1, Msgs2, InfoMsgTuple1),
+            InfoMsgTuple2 := put-messages($ModuleId, Msgs1, InfoMsgTuple1),
 
             ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
             ModuleInfoTable2 := put-constructor-info($ModuleId, 
