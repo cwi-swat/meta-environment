@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui.plugin.editor;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Event;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,6 +20,7 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ComponentUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
@@ -46,8 +48,8 @@ public class EditorPane extends JTextPane {
     private JMenu menu;
 
     Color bracketHighlightColor = Color.black;
-    
-    Color lineHighlightColor = new Color(232,242,254);
+
+    Color lineHighlightColor = new Color(232, 242, 254);
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
 
@@ -76,16 +78,16 @@ public class EditorPane extends JTextPane {
     protected void addBinding(JMenu menu, int key, String name) {
         Action action = ((EditorKit) getEditorKit()).getAction(name);
         KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
-        
+
         getInputMap().put(keyStroke, name);
         JMenuItem item = new JMenuItem(action);
         item.setAccelerator(keyStroke);
         menu.add(item);
     }
-    
+
     protected void addBindings() {
         menu = new JMenu("Edit");
-        
+
         addBinding(menu, KeyEvent.VK_Z, EditorKit.undoAction);
         addBinding(menu, KeyEvent.VK_Y, EditorKit.redoAction);
         addBinding(menu, KeyEvent.VK_F, EditorKit.findAction);
@@ -183,10 +185,18 @@ public class EditorPane extends JTextPane {
                 RenderingHints.VALUE_RENDER_QUALITY);
 
         gfx.setColor(lineHighlightColor);
-        gfx.fillRect(lineHighlight.x, lineHighlight.y,
-                lineHighlight.width, lineHighlight.height);
+        gfx.fillRect(lineHighlight.x, lineHighlight.y, lineHighlight.width,
+                lineHighlight.height);
 
         super.paintComponent(g2);
+    }
+
+    public boolean getScrollableTracksViewportWidth() {
+        Component parent = getParent();
+        ComponentUI ui = getUI();
+
+        return parent != null ? (ui.getPreferredSize(this).width <= parent
+                .getSize().width) : true;
     }
 
     public void setFocusColor(Color color) {
@@ -247,7 +257,7 @@ public class EditorPane extends JTextPane {
     public void setCaretPositionAtEnd() {
         setCaretPosition(getDocument().getLength());
     }
-    
+
     public void setCaretPosition(int position) {
         pauseUndo();
         super.setCaretPosition(position);

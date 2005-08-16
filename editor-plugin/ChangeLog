@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug 16 09:45:47 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - turn off linewrap
+
 Mon Aug 15 09:40:23 CEST 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
    - fixed Goto Line 1
