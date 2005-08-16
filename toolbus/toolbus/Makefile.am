@@ -40,6 +40,7 @@ toolbus_SOURCES = \
 	match.c \
 	match.h \
 	mkdtemp.c \
+	mkdtemp.h \
 	monitor.c \
 	monitor.h \
 	procs.c \
