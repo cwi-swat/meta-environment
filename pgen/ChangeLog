@@ -1,5 +1,12 @@
 $Id$
 
+Tue Aug 16 16:43:30 CEST 2005 <jurgenv@cwi.nl>
+ *  sdf-checker/spec/*.{asf,sdf}   The checker accumulates the
+    errors and warnings now PER MODULE, such that only the errors for
+    a specific module may be extracted, although the entire specification
+    had to be analyzed to come up with these errors.
+
+
 Mon Aug 15 16:37:59 CEST 2005 <jurgenv@cwi.nl>
  * sdf-checker/spec/*.{asf,sdf}: 
    - used utilities/Parsing to map subjects of errors to string. This 
