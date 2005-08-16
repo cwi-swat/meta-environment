@@ -8,11 +8,12 @@ equations
 
 equations
 
-  [cdtm] InfoMsgTuple1 := check-sdf(Definition1, Main, false),
-         InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+  [cdtm] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, false),
+         InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+	$StrCon := moduleid2str($ModuleId)
          ====>
          check-asfsdf-top-module(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", "Main", [get-messages($ModuleId, InfoMsgTuple2)])
+          summary("AsfSdfChecker", $StrCon, [get-messages($ModuleId, InfoMsgTuple2)])
 
 equations
 

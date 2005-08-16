@@ -20,6 +20,10 @@ hiddens
     is-asf-sort(Sort) -> Boolean
 
 hiddens
+  context-free start-symbols
+	Boolean
+	Info-Msg-Tuple
+
   variables
     "Module"[0-9]*     -> Module
     "Module*"[0-9]*     -> Module*
