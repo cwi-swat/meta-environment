@@ -55,6 +55,17 @@ static const char rcsid[] =
 #include <string.h>
 #include <unistd.h>
 
+#if HAVE_CONFIG_H
+#  include "config.h"
+#endif
+
+#if HAVE_LRAND48 && HAVE_SRAND48
+  /* Use the rand48() suite */
+#else
+#define lrand48()   random()
+#define srand48(s)  srandom(s)
+#endif
+
 static const char padchar[] =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
@@ -79,7 +90,7 @@ char *mkdtemp(char *path)
      * uses arc4random(3) which is not available everywhere.
      */
     while (*trv == 'X') {
-        int randv = getpid() % (sizeof(padchar) - 1);
+        int randv = lrand48() % (sizeof(padchar) - 1);
         *trv-- = padchar[randv];
     }
     start = trv + 1;
