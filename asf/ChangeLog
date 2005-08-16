@@ -1,5 +1,11 @@
 $Id$
 
+Tue Aug 16 16:42:06 CEST 2005 <jurgenv@cwi.nl>
+ *  asf/syntax/asfsdf-checker/spec/*.asf: The checker accumulates the
+    errors and warnings now PER MODULE, such that only the errors for
+    a specific module may be extracted, although the entire specification
+    had to be analyzed to come up with these errors.
+
 Mon Aug 15 16:37:05 CEST 2005 <jurgenv@cwi.nl>
  * asf/syntax/asfsdf-checker/spec/*.asf: renamed error messages and
    subjects of error messages to comply with the error message standard.
