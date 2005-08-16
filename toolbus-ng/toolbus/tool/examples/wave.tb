@@ -32,13 +32,14 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
      ( printf("P(%d)\n", I) .
        (  rec-msg(exc(L, I, AL?))        %% receive amplitude of left neighbour
        || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
-       || snd-msg(exc(I, L, E))          %% send own amplitude to left neighbour
-       || snd-msg(exc(I, R, E))          %% send own amplitude to right neighbour
-       || snd-do(Tid, update(I, E))      %% update own amplitude on the display
+       || snd-msg(exc(I, L, 1.0))          %% send own amplitude to left neighbour
+       || snd-msg(exc(I, R, 1.0))          %% send own amplitude to right neighbour
+ %%      || snd-do(Tid, update(I, E))      %% update own amplitude on the display
+       || printf("update(%t,%t)\n", I, 1.0)
       ) .
        
        D1 := E .
-       F(E, D, AL, AR, E?) .
+       %%F(E, D, AL, AR, E?) .
        D := D1
      ) * delta
   endlet
@@ -60,7 +61,8 @@ process Q(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
 process Pend(Tid : display, I : int, NB : int) is
   let W : real
   in
-   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) || snd-do(Tid, update(I, 0.0))) * delta
+   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) %% || snd-do(Tid, update(I, 0.0))) * delta
+                                                         || printf("update(%t,%t)\n", I, 0.0)) * delta
   endlet
 
 %% Construct the processes {\tt Pend}$_0$, {\tt P}$_1$, ..., {\tt P}$_{N-1}$, {\tt Pend}$_N$.
@@ -69,7 +71,7 @@ process MakeWave(N : int) is
   let Tid : display, Id : int, I : int, L : int, R : int
   in
      execute(display, Tid?) .         %% create the display
-     snd-do(Tid, mk-wave(N)) .        %% make an N point wave
+     %%snd-do(Tid, mk-wave(N)) .        %% make an N point wave
      create(Pend(Tid, 0, 1), Id?).    %% create left end point
      L := sub(N,1) .
      create(Pend(Tid, N, L), Id?) .   %% create right end point
@@ -87,10 +89,10 @@ process MakeWave(N : int) is
 
 tool display is { host = "localhost"
     			  kind = "classic"
-                  command = "/home/paulk/software/installed/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
+                  command = "/ufs/paulk/software/installed/bin/wish-adapter -script /ufs/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
                 }
 
 %% Define the initial \TB\ configuration.
 
-toolbus(MakeWave(8))
+toolbus(MakeWave(4))
 

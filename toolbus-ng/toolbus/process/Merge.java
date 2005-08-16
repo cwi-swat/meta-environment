@@ -94,10 +94,18 @@ public class Merge extends ProcessExpression implements StateElement {
   }
   
   public State getNextState(StateElement se) {
+ 	State follow = getFollow();
+ 	
+ 	System.err.println("Merge.getNextState: " + se + " ; follow = " + follow);
+	System.err.println("state[LEFT] =" +  state[LEFT]);
+	System.err.println("state[RIGHT] =" +  state[RIGHT]);
+ 	
     if(state[LEFT].contains(se)){
-    	return state[LEFT].getNextState(se);
+    	state[LEFT] = state[LEFT].getNextState(se);
+    	return (state[LEFT] == follow) ? state[RIGHT] : mergeState;
     } else if(state[RIGHT].contains(se)){
-    	return state[RIGHT].getNextState(se);
+    	state[RIGHT] = state[RIGHT].getNextState(se);
+       	return (state[RIGHT] == follow) ? state[LEFT] : mergeState;
     } else {
     	System.err.println("Merge.getNextState2 wrong!");
     	return null;
