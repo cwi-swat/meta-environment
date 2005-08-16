@@ -124,6 +124,7 @@ AC_CHECK_HEADER([sys/un.h],[:],[AC_MSG_ERROR("*** no sys/un.h")])
 AC_CHECK_HEADER([unistd.h],[:],[AC_MSG_ERROR("*** no unistd.h")])
 AC_CHECK_HEADER([math.h],[:],[AC_MSG_ERROR("*** no math.h")])
 
+AC_CHECK_FUNCS([mkdtemp])
 AC_CHECK_FUNCS([strerror])
 AC_CHECK_FUNCS([strdup])
 AC_CHECK_FUNCS([yywrap])

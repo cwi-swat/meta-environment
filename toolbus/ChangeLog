@@ -1,5 +1,10 @@
 $Id$
 
+Tue Aug 16 11:41:48 CEST 2005 <jong@cwi.nl>
+ * configure.in: check for availability of mkdtemp()
+ * toolbus/Makefile.am, toolbus/mkdtemp.c:
+   - added mkdtemp implementation for platforms without native mkdtemp
+
 Mon Aug 15 14:50:34 CEST 2005 <kooiker@cwi.nl>
  * libtb/sockets.{c,h}: change int to socklen_t in accept_in_interval
  * libtb/symbol.h: 
