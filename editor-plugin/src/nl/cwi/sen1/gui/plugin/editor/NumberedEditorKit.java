@@ -17,8 +17,8 @@ import javax.swing.text.ViewFactory;
 class NumberedEditorKit extends EditorKit {
     private static final ViewFactory defaultFactory = new NumberedViewFactory();
 
-    public NumberedEditorKit(EditorPane editor) {
-        super(editor);
+    public NumberedEditorKit() {
+        super();
     }
 
     public ViewFactory getViewFactory() {

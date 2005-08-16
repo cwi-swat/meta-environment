@@ -55,7 +55,7 @@ public class EditorPane extends JTextPane {
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
 
     public EditorPane() {
-        setEditorKit(new EditorKit(this));
+        setEditorKit(new EditorKit());
 
         setOpaque(false);
         focusPainter = new DefaultHighlightPainter(Color.BLACK);

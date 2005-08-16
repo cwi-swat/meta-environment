@@ -7,49 +7,54 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.ButtonGroup;
 import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.KeyStroke;
 
 public class SearchReplaceDialog extends BaseDialog {
-	private EditorPane textArea;
+	private EditorPane editor;
 
-	private javax.swing.JRadioButton backwardRadioButton;
+	private JRadioButton backwardRadioButton;
 
-	private javax.swing.JCheckBox caseSensitiveCheck;
+	private JCheckBox caseSensitiveCheck;
+	private JButton closeButton;
 
-	private javax.swing.JButton closeButton;
+	private ButtonGroup directionButtonGroup;
 
-	private javax.swing.ButtonGroup directionButtonGroup;
+	private JPanel directionPanel;
 
-	private javax.swing.JPanel directionPanel;
+	private JButton findButton;
 
-	private javax.swing.JButton findButton;
+	private JComboBox findCombo;
 
-	private javax.swing.JComboBox findCombo;
+	private JLabel findLabel;
 
-	private javax.swing.JLabel findLabel;
+	private JRadioButton forwardRadioButton;
 
-	private javax.swing.JRadioButton forwardRadioButton;
+	private JPanel jPanel1;
 
-	private javax.swing.JPanel jPanel1;
+	private JPanel mainPanel;
 
-	private javax.swing.JPanel mainPanel;
+	private JPanel optionsPanel;
 
-	private javax.swing.JPanel optionsPanel;
+	private JButton replaceAllButton;
 
-	private javax.swing.JButton replaceAllButton;
+	private JButton replaceButton;
 
-	private javax.swing.JButton replaceButton;
+	private JButton replaceFindButton;
 
-	private javax.swing.JButton replaceFindButton;
+	private JLabel replaceLabel;
 
-	private javax.swing.JLabel replaceLabel;
+	private JComboBox replaceWithCombo;
 
-	private javax.swing.JComboBox replaceWithCombo;
-
-	private javax.swing.JCheckBox wrapSearchCheck;
+	private JCheckBox wrapSearchCheck;
 
 	public String getFindText() {
 		String findText = findCombo.getEditor().getItem().toString();
@@ -74,7 +79,7 @@ public class SearchReplaceDialog extends BaseDialog {
 
 	public void setVisible(boolean b) {
 		if (b) {
-			String newSearch = textArea.getSelectedText();
+			String newSearch = editor.getSelectedText();
 			if (newSearch != null && newSearch.length() != 0) {
 				findCombo.insertItemAt(newSearch, 0);
 				findCombo.setSelectedIndex(0);
@@ -84,10 +89,10 @@ public class SearchReplaceDialog extends BaseDialog {
 		super.setVisible(b);
 	}
 
-	public SearchReplaceDialog(EditorPane textArea) {
+	public SearchReplaceDialog(EditorPane editor) {
 		super();
 		setTitle("Find/Replace");
-		this.textArea = textArea;
+		this.editor = editor;
 		initComponents();
 		forwardRadioButton.setSelected(true);
 		wrapSearchCheck.setSelected(true);
@@ -322,13 +327,13 @@ public class SearchReplaceDialog extends BaseDialog {
 		updateComboBox(findCombo, textToFind);
 		String textToReplaceWith = (String) replaceWithCombo.getSelectedItem();
 		updateComboBox(replaceWithCombo, textToReplaceWith);
-		textArea.replaceAll(textToFind, textToReplaceWith,
+		editor.replaceAll(textToFind, textToReplaceWith,
 				!isCaseSensitiveSearch());
 	}
 
 	private void replaceButtonActionPerformed() {
 		String textToFind = getFindText();
-		String selectedText = textArea.getSelectedText();
+		String selectedText = editor.getSelectedText();
 
 		if ((isCaseSensitiveSearch() && textToFind.equals(selectedText))
 				|| (!isCaseSensitiveSearch() && textToFind
@@ -338,10 +343,10 @@ public class SearchReplaceDialog extends BaseDialog {
 
 			if (textToReplaceWith != null) {
 				updateComboBox(replaceWithCombo, textToReplaceWith);
-				int selectionStart = textArea.getSelectionStart();
-				textArea.replaceSelection(textToReplaceWith);
-				textArea.setSelectionStart(selectionStart);
-				textArea.setSelectionEnd(selectionStart
+				int selectionStart = editor.getSelectionStart();
+				editor.replaceSelection(textToReplaceWith);
+				editor.setSelectionStart(selectionStart);
+				editor.setSelectionEnd(selectionStart
 						+ textToReplaceWith.length());
 			}
 		}
@@ -350,7 +355,7 @@ public class SearchReplaceDialog extends BaseDialog {
 	private void findButtonActionPerformed() {
 		String textToFind = getFindText();
 		updateComboBox(findCombo, textToFind);
-		textArea.find(textToFind, !isCaseSensitiveSearch(), isWrappedSearch(),
+		editor.find(textToFind, !isCaseSensitiveSearch(), isWrappedSearch(),
 				getFindDirection());
 	}
 

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JEditorPane;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.StyledEditorKit;
@@ -16,8 +17,6 @@ public class EditorKit extends StyledEditorKit {
     private static final int UNDO_LIMIT = 1000;
 
     private static UndoManager undoManager = new EditorUndoManager();
-
-    private EditorPane editor;
 
     private UndoAction undo;
 
@@ -35,14 +34,11 @@ public class EditorKit extends StyledEditorKit {
 
     public static final String gotoLineAction = "goto-line";
 
+    public static final String deleteLineAction = "delete-line";
+
     private UndoableEditListener undoListener;
 
-    private SearchReplaceDialog searchReplaceDialog;
-
-    public EditorKit(EditorPane editor) {
-        this.editor = editor;
-        searchReplaceDialog = new SearchReplaceDialog(editor);
-
+    public EditorKit() {
         undoListener = new UndoableEditListener() {
             public void undoableEditHappened(UndoableEditEvent e) {
                 undoManager.addEdit(e.getEdit());
@@ -53,6 +49,10 @@ public class EditorKit extends StyledEditorKit {
         undoManager.setLimit(UNDO_LIMIT);
 
         createActions();
+    }
+
+    public UndoableEditListener getUndoListener() {
+        return undoListener;
     }
 
     private void createActions() {
@@ -77,6 +77,20 @@ public class EditorKit extends StyledEditorKit {
         }
 
         return null;
+    }
+
+    public abstract static class EditorTextAction extends StyledTextAction {
+        public EditorTextAction(String nm) {
+            super(nm);
+        }
+
+        protected final EditorPane getEditorPane(ActionEvent e) {
+            JEditorPane editorPane = getEditor(e);
+            if (editorPane instanceof EditorPane) {
+                return (EditorPane) editorPane;
+            }
+            return null;
+        }
     }
 
     public class UndoAction extends AbstractAction {
@@ -137,7 +151,25 @@ public class EditorKit extends StyledEditorKit {
         }
     }
 
-    public class GotoLineAction extends AbstractAction {
+    public class FindAction extends EditorTextAction {
+        private SearchReplaceDialog searchReplaceDialog;
+
+        public FindAction() {
+            super(findAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                if (searchReplaceDialog == null) {
+                    searchReplaceDialog = new SearchReplaceDialog(editor);
+                }
+                searchReplaceDialog.setVisible(true);
+            }
+        }
+    }
+
+    public class GotoLineAction extends EditorTextAction {
         public GotoLineAction() {
             super(gotoLineAction);
         }
@@ -145,21 +177,10 @@ public class EditorKit extends StyledEditorKit {
         public void actionPerformed(ActionEvent e) {
             GotoLineDialog d = new GotoLineDialog();
             d.setVisible(true);
-            editor.gotoLine(d.getLineNumber());
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                editor.gotoLine(d.getLineNumber());
+            }
         }
-    }
-
-    public class FindAction extends AbstractAction {
-        public FindAction() {
-            super(findAction);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            searchReplaceDialog.setVisible(true);
-        }
-    }
-
-    public UndoableEditListener getUndoListener() {
-        return undoListener;
     }
 }

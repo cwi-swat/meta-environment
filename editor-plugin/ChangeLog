@@ -5,6 +5,9 @@ Tue Aug 16 09:45:47 CEST 2005 <kooiker@cwi.nl>
    - turn off linewrap
  * src/**/EditorUndoManager.java:
    - undomanager that skips stylechanges
+ * src/**/EditorKit.java:
+   - remove editor from constructor
+   - use styledtextaction which can retrieve editor from event
 
 Mon Aug 15 09:40:23 CEST 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
