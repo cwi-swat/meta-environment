@@ -11,12 +11,13 @@ exports
   context-free syntax
     check-asfsdf(SDF)                     -> Summary
     check-asfsdf(SDF, ModuleId)           -> Summary
+    check-asfsdf-top-module(SDF, ModuleId) -> Summary
     check-asfsdf-equations(SDF)           -> Summary
     check-asfsdf-equations(SDF, ModuleId) -> Summary
 
 hiddens 
   context-free syntax
-    check-asfsdf-specificities(Definition, Info-Msg-Tuple) -> {Error ","}*
+    check-asfsdf-specificities(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   variables

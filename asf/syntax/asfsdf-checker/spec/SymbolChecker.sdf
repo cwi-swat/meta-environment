@@ -1,26 +1,27 @@
 module SymbolChecker
 
 imports basic/Booleans 
-imports SdfCheckerFeedback ModuleOperations
+imports ModuleOperations
+imports Sdf-Type-Environment
 imports utilities/PosInfo[Symbol]
 
 exports
-  context-free start-symbols {Error ","}* 
+  context-free start-symbols Info-Msg-Tuple
   context-free syntax
-    check-symbols(Definition) -> {Error ","}*
+    check-symbols-definition(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-symbols(Definition, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
-    check-symbols(Module, {Error ","}*)                -> {Error ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Module, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Grammar, {Error ","}*, ModuleId)     -> {Error ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
-    check-symbols2(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-symbols(Definition, Info-Msg-Tuple)            -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-symbols(Module, Info-Msg-Tuple)                -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-symbols2(Module, Info-Msg-Tuple, ModuleId)      -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-symbols2(Grammar, Info-Msg-Tuple, ModuleId)     -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-symbols2(Production*, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-symbols2(Symbol, Info-Msg-Tuple, ModuleId)      -> Info-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-charclass-symbols(Production*, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
-    check-charclass-symbols(Symbol, {Error ","}*, ModuleId)      -> {Error ","}* {traversal(accu, break, top-down)}
+    check-charclass-symbols(Production*, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-charclass-symbols(Symbol, Info-Msg-Tuple, ModuleId)      -> Info-Msg-Tuple {traversal(accu, break, top-down)}
 
 hiddens
   context-free syntax
@@ -33,6 +34,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "Msgs"[0-9]*       -> {Error ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$StrCon"[0-9]*   -> StrCon

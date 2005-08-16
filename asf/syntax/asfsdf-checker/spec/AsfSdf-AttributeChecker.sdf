@@ -1,23 +1,23 @@
 module AsfSdf-AttributeChecker
 
 imports Sdf-AttributeChecker 
-imports SdfCheckerFeedback
+imports Sdf-Type-Environment
 imports utilities/PosInfo[Production]
 
 exports
   context-free syntax
-    check-asf-attributes(Definition) -> {Error ","}*
+    check-asf-attributes-definition(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-attributes(Definition, {Error ","}*)              -> {Error ","}* {traversal(accu, break, top-down)}
-    check-attributes(Module, {Error ","}*)                  -> {Error ","}* {traversal(accu, break, top-down)}
+    check-attributes(Definition, Info-Msg-Tuple)              -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-attributes(Module, Info-Msg-Tuple)                  -> Info-Msg-Tuple {traversal(accu, break, top-down)}
     check-attributes-in-module(Module, 
-                               <{Error ","}*, Production*>, 
-                               ModuleId)                -> <{Error ","}*, Production*> {traversal(accu, break, top-down)}
+                               <Info-Msg-Tuple, Production*>, 
+                               ModuleId)                -> <Info-Msg-Tuple, Production*> {traversal(accu, break, top-down)}
     check-attributes-in-module(Production, 
-                               <{Error ","}*, Production*>, 
-                               ModuleId)                -> <{Error ","}*, Production*> {traversal(accu, break, top-down)}
+                               <Info-Msg-Tuple, Production*>, 
+                               ModuleId)                -> <Info-Msg-Tuple, Production*> {traversal(accu, break, top-down)}
 
   sorts Fb-Msg
   context-free syntax
@@ -28,8 +28,8 @@ hiddens
     consistent-defined(Production, Production*, ModuleId) -> <Fb-Msg, Error?>
 
   context-free syntax
-    check-form-production(Production, {Error ","}*, ModuleId)          -> {Error ","}*
-    check-attributes-in-production(Production, {Error ","}*, ModuleId) -> {Error ","}*
+    check-form-production(Production, Info-Msg-Tuple, ModuleId)          -> Info-Msg-Tuple
+    check-attributes-in-production(Production, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple
 
   context-free syntax
     contains-accu({ATerm ","}*)      -> Boolean
@@ -69,6 +69,7 @@ hiddens
     "$Symbol"[0-9]*    -> Symbol
     "$Msg"[0-9]*       -> Error
     "Msgs"[0-9]*       -> {Error ","}*
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "$FuncName"[0-9]*  -> FunctionName
 
     "$Location"[0-9]*  -> Location

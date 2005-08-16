@@ -1,41 +1,51 @@
 equations
 
-  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, false),
-        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Main, false),
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
         ====>
         check-asfsdf(definition Definition1) =
-          summary("AsfSdfChecker", "Unknown", [Msgs])
+          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple2)])
+
+equations
+
+  [cdtm] InfoMsgTuple1 := check-sdf(Definition1, Main, false),
+         InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+         ====>
+         check-asfsdf-top-module(definition Definition1, $ModuleId) =
+          summary("AsfSdfChecker", "Main", [get-messages($ModuleId, InfoMsgTuple2)])
+
+equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, false),
-        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
         $StrCon := moduleid2str($ModuleId)
         ====>
         check-asfsdf(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", $StrCon, [Msgs])
+          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple2)])
+
+equations
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown, true),
-        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1)
         ====>
         check-asfsdf-equations(definition Definition1) =
-          summary("AsfSdfChecker", "Unknown", [Msgs])
+          summary("AsfSdfChecker", "Main", [get-all-messages(InfoMsgTuple2)])
 
   [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId, true),
-        Msgs := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
+        InfoMsgTuple2 := check-asfsdf-specificities(Definition1, InfoMsgTuple1),
         $StrCon := moduleid2str($ModuleId)
         ====>
         check-asfsdf-equations(definition Definition1, $ModuleId) =
-          summary("AsfSdfChecker", $StrCon, [Msgs])
+          summary("AsfSdfChecker", $StrCon, [get-all-messages(InfoMsgTuple2)])
 
   [cass-1'1] 
         Definition2 := remove-labels(Definition1),
-        InfoMsgTuple2 := check-constructors(Definition2, InfoMsgTuple1),
-        Msgs1 := get-messages(InfoMsgTuple2),
-        Msgs2 := check-asf-attributes(Definition2),
-        Msgs3 := check-symbols(Definition2),
-        Msgs4 := check-for-asf-sorts(Definition2),
-        Msgs5 := check-for-kernel-syntax(Definition2),
-        Msgs6 := check-for-exported-variables(Definition2)
+        InfoMsgTuple1 := check-constructors(Definition2, InfoMsgTuple),
+        InfoMsgTuple2 := check-asf-attributes-definition(Definition2, InfoMsgTuple1),
+        InfoMsgTuple3 := check-symbols-definition(Definition2, InfoMsgTuple2),
+        InfoMsgTuple4 := check-for-asf-sorts-definition(Definition2, InfoMsgTuple3),
+        InfoMsgTuple5 := check-for-kernel-syntax(Definition2, InfoMsgTuple4),
+        InfoMsgTuple6 := check-for-exported-variables-definition(Definition2, InfoMsgTuple5)
         ====>
-        check-asfsdf-specificities(Definition1, InfoMsgTuple1) = 
-          Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6
+        check-asfsdf-specificities(Definition1, InfoMsgTuple) = InfoMsgTuple6
      

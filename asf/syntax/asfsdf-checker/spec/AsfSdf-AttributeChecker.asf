@@ -1,17 +1,19 @@
 equations
 
-  [ca-1'1] check-asf-attributes(Definition) = check-attributes(Definition, )
+  [ca-1'1] check-asf-attributes-definition(Definition, InfoMsgTuple) = check-attributes(Definition, InfoMsgTuple)
+
+equations
 
   [ca-1'2] $ModuleId := get-module-name(Module),
-           <Msgs2, Production*> := 
-             check-attributes-in-module(Module, <Msgs1,>, $ModuleId)
+           <InfoMsgTuple2, Production*> := 
+             check-attributes-in-module(Module, <InfoMsgTuple1,>, $ModuleId)
            ======================
-           check-attributes(Module, Msgs1) = Msgs2
+           check-attributes(Module, InfoMsgTuple1) = InfoMsgTuple2
 
   [ca-2'1] has-traversal-attribute(Production) == false
            ===========================================
            check-attributes-in-module(Production,
-                                      <Msgs, Production*>, $ModuleId) = <Msgs, Production*>
+                                      <InfoMsgTuple, Production*>, $ModuleId) = <InfoMsgTuple, Production*>
 
 
   [ca-2'2] has-traversal-attribute(Production) == true,
@@ -22,33 +24,33 @@ equations
            $String3 := "traversal attributes in non-prefix-function"
            =====>
            check-attributes-in-module(Production,
-                                      <Msgs, Production*>, $ModuleId) = 
-<Msgs, make-error($String3, $String2, $Location), Production*>
+                                      <InfoMsgTuple, Production*>, $ModuleId) = 
+<put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple), Production*>
 
   [ca-2'3] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
            consistent-defined(Production, Production*, $ModuleId) == <consistent,>,
-           Msgs2 := check-form-production(Production, Msgs1, $ModuleId)
+           InfoMsgTuple2 := check-form-production(Production, InfoMsgTuple1, $ModuleId)
            ====>
            check-attributes-in-module(Production,
-                                      <Msgs1, Production*>, $ModuleId) = <Msgs2, Production*>
+                                      <InfoMsgTuple1, Production*>, $ModuleId) = <InfoMsgTuple2, Production*>
 
   [ca-2'4] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
            consistent-defined(Production, Production*, $ModuleId) == <not-found,>,
-           Msgs2 := check-form-production(Production, Msgs1, $ModuleId),
-           Msgs3 := check-attributes-in-production(Production, Msgs2, $ModuleId)
+           InfoMsgTuple2 := check-form-production(Production, InfoMsgTuple1, $ModuleId),
+           InfoMsgTuple3 := check-attributes-in-production(Production, InfoMsgTuple2, $ModuleId)
            ====>
            check-attributes-in-module(Production,
-                                      <Msgs1, Production*>, $ModuleId) = <Msgs3, Production Production*>
+                                      <InfoMsgTuple1, Production*>, $ModuleId) = <InfoMsgTuple3, Production Production*>
 
   [ca-2'5] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
            <inconsistent, $Msg> := consistent-defined(Production, Production*, $ModuleId) 
            ====>
            check-attributes-in-module(Production,
-                                      <Msgs, Production*>, $ModuleId) = 
-<Msgs, $Msg, Production*>
+                                      <InfoMsgTuple, Production*>, $ModuleId) = 
+                                      <put-messages($ModuleId, $Msg, InfoMsgTuple), Production*>
 
   [ca-3'1] Aterm+ := get-traversal-arguments(Production),
            contains-only-traversal-attributes(Aterm+) == false,
@@ -57,8 +59,8 @@ equations
            $String2 := production2str(Production),
            $String3 := "illegal traversal attribute"
            ====>
-           check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-attributes-in-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
   [ca-3'2] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == false,
@@ -69,8 +71,8 @@ equations
            $String2 := production2str(Production),
            $String3 := "missing trafo and/or accu attribute"
            ====>
-           check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-attributes-in-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
   [ca-3'3] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
@@ -81,8 +83,8 @@ equations
            $String2 := production2str(Production),
            $String3 := "missing-break-or-continue-attribute"
            ====>
-           check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-warning($String3, $String2, $Location)
+           check-attributes-in-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning($String3, $String2, $Location), InfoMsgTuple)
 
   [ca-3'4] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) | contains-trafo(Aterm+) == true,
@@ -93,10 +95,10 @@ equations
            $String2 := production2str(Production),
            $String3 := "missing bottom-up or top-down attribute"
            ====>
-           check-attributes-in-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-attributes-in-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
-  [default-ca-2'5] check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
+  [default-ca-2'5] check-attributes-in-production(Production, InfoMsgTuple, $ModuleId) = InfoMsgTuple
 
   [cf-1'1] Aterm+ := get-traversal-arguments(Production),
            contains-accu(Aterm+) == true,
@@ -107,8 +109,8 @@ equations
            $String2 := production2str(Production),
            $String3 := "accu should return accumulated type"
            ====>
-           check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-form-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
   [cf-1'2] Aterm+ := get-traversal-arguments(Production),
            contains-trafo(Aterm+) == true,
@@ -119,8 +121,8 @@ equations
            $String2 := production2str(Production),
            $String3 := "trafo should return traversed type"
            ====>
-           check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-form-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
 
   [cf-1'3] Aterm+ := get-traversal-arguments(Production),
@@ -132,10 +134,10 @@ equations
            $String2 := production2str(Production),
            $String3 := "accutrafo should return tuple of correct types"
            ====>
-           check-form-production(Production, Msgs, $ModuleId) = 
-             Msgs, make-error($String3, $String2, $Location)
+           check-form-production(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-error($String3, $String2, $Location), InfoMsgTuple)
 
-  [default-cf-1'4] check-form-production(Production, Msgs, $ModuleId) = Msgs
+  [default-cf-1'4] check-form-production(Production, InfoMsgTuple, $ModuleId) = InfoMsgTuple
 
   [iad-1'1] is-accu-definition($FuncName1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2 Attributes) = true
 

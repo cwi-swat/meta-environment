@@ -1,12 +1,14 @@
 equations
 
-  [cs-1'1] check-for-asf-sorts(Definition) = 
-             check-for-asf-sorts(Definition, )
+  [cs-1'1] check-for-asf-sorts-definition(Definition, InfoMsgTuple) = 
+             check-for-asf-sorts(Definition, InfoMsgTuple)
+
+equations
 
   [cs-1'2] $ModuleId := get-module-name(Module)
            ====================================
-           check-for-asf-sorts(Module, Msgs) = 
-             check-asf-sorts(Module, Msgs, $ModuleId)
+           check-for-asf-sorts(Module, InfoMsgTuple) = 
+             check-asf-sorts(Module, InfoMsgTuple, $ModuleId)
 
   [cs-2'2] is-asf-sort($Sort) == true,
            $Location := get-location($Sort),
@@ -14,9 +16,9 @@ equations
            $String2 := "illegal use of reserved sort name",
            $String3 := symbol2str($Sort)
            =========================
-           check-asf-sorts($Sort, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
+           check-asf-sorts($Sort, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-error($String2, $String3, $Location), InfoMsgTuple)
 
-  [ias-1'1] is-asf-sort(sort(ASF- h t)) = true
+  [ias-1'1] is-asf-sort(sort(ASF\- t l)) = true
 
   [default-ias-1'8] is-asf-sort($Sort) = false

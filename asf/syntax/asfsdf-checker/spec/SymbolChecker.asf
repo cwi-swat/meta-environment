@@ -1,17 +1,17 @@
 equations
 
-  [cs-1'1] check-symbols(Definition) = check-symbols(Definition, )
+  [cs-1'1] check-symbols-definition(Definition, InfoMsgTuple) = check-symbols(Definition, InfoMsgTuple)
 
   [cs-1'2] $ModuleId := get-module-name(Module)
            ====================================
-           check-symbols(Module, Msgs) = 
-             check-symbols2(Module, Msgs, $ModuleId)
+           check-symbols(Module, InfoMsgTuple) = 
+             check-symbols2(Module, InfoMsgTuple, $ModuleId)
 
-  [cs-2'1] Msgs2 := check-symbols2(Prod*, Msgs1, $ModuleId),
-           Msgs3 := check-charclass-symbols(Prod*, Msgs2, $ModuleId)
+  [cs-2'1] InfoMsgTuple2 := check-symbols2(Prod*, InfoMsgTuple1, $ModuleId),
+           InfoMsgTuple3 := check-charclass-symbols(Prod*, InfoMsgTuple2, $ModuleId)
            =============================================================
-           check-symbols2(context-free syntax Prod*, Msgs1, $ModuleId) =
-             Msgs3
+           check-symbols2(context-free syntax Prod*, InfoMsgTuple1, $ModuleId) =
+             InfoMsgTuple3
 
   [cs-2'1] {$Symbol1 $Symbol2}+ := $Symbol0,
            is-literal-symbol($Symbol2) == false,
@@ -20,8 +20,8 @@ equations
            $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
 
   [cs-2'2] {$Symbol1 $Symbol2}* := $Symbol0,
            is-literal-symbol($Symbol2) == false,
@@ -30,8 +30,8 @@ equations
            $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
 
   [cs-2'4] $Symbol+ := $Symbol0,
            is-list-symbol($Symbol) == true,
@@ -40,8 +40,8 @@ equations
            $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
 
   [cs-2'5] $Symbol* := $Symbol0,
            is-list-symbol($Symbol) == true,
@@ -50,8 +50,8 @@ equations
            $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
 
   [cs-2'6] {$Symbol1 $Symbol2}+ := $Symbol0,
            is-list-symbol($Symbol1) == true,
@@ -60,8 +60,8 @@ equations
            $String2 := "not supported symbol",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
 
   [cs-2'7] {$Symbol1 $Symbol2}* := $Symbol0,
            is-list-symbol($Symbol1) == true,
@@ -70,8 +70,8 @@ equations
            $String2 := "not supported symbol in",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-symbols2($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-warning($String2, $String3, $Location)
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple )
 
   [cs-4'1] is-charclass-symbol($Symbol0) == true,
            $Location := get-location($Symbol0),
@@ -79,8 +79,8 @@ equations
            $String2 := "character class not allowed in context-free syntax",
            $String3 := symbol2str($Symbol0)
            ====>
-           check-charclass-symbols($Symbol0, Msgs, $ModuleId) =
-              Msgs, make-error($String2, $String3, $Location)
+           check-charclass-symbols($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-error($String2, $String3, $Location), InfoMsgTuple)
 
   [ils-1'1] is-literal-symbol($StrCon) = true
 

@@ -1,26 +1,26 @@
 module KernelSyntaxChecker
 
-imports SdfCheckerFeedback 
+imports Sdf-Type-Environment 
 imports ModuleOperations
 imports utilities/PosInfo[Grammar]
 imports utilities/PosInfo[Renaming]
 
 exports
   context-free syntax
-    check-for-kernel-syntax(Definition) -> {Error ","}*
+    check-for-kernel-syntax(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   context-free syntax
-    check-syntax(Definition, {Error ","}*)        -> {Error ","}* {traversal(accu, break, top-down)}
-    check-syntax(Module, {Error ","}*)            -> {Error ","}* {traversal(accu, break, top-down)}
-    check-syntax2(Module, {Error ","}*, ModuleId)  -> {Error ","}* {traversal(accu, break, top-down)}
-    check-syntax2(Grammar, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-syntax(Definition, Info-Msg-Tuple)        -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-syntax(Module, Info-Msg-Tuple)            -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-syntax2(Module, Info-Msg-Tuple, ModuleId)  -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-syntax2(Grammar, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
-    check-renamings(Definition, {Error ","}*)         -> {Error ","}* {traversal(accu, break, top-down)}
-    check-renamings(Module, {Error ","}*)             -> {Error ","}* {traversal(accu, break, top-down)}
-    check-renamings2(Module, {Error ","}*, ModuleId)   -> {Error ","}* {traversal(accu, break, top-down)}
-    check-renamings2(Renaming, {Error ","}*, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-renamings(Definition, Info-Msg-Tuple)         -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-renamings(Module, Info-Msg-Tuple)             -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-renamings2(Module, Info-Msg-Tuple, ModuleId)   -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-renamings2(Renaming, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
 
 hiddens
   variables
@@ -28,6 +28,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Msgs"[0-9]*       -> {Error ","}*
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
     "Prod"[0-9]*       -> Production
     "Prod*"[0-9]*      -> Production*
     "Prios"[0-9]*      -> Priorities

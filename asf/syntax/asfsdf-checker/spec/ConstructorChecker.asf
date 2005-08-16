@@ -15,9 +15,9 @@ equations
                                          [constructors(SymbolCons*1), ], 
                                          $ModuleId),
 
-            Msgs2 := get-messages(InfoMsgTuple1), 
+            Msgs2 := get-messages($ModuleId, InfoMsgTuple1), 
 
-            InfoMsgTuple2 := put-messages(Msgs1, Msgs2, InfoMsgTuple1),
+            InfoMsgTuple2 := put-messages($ModuleId, Msgs1, Msgs2, InfoMsgTuple1),
 
             ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
             ModuleInfoTable2 := put-constructor-info($ModuleId, 
@@ -64,7 +64,7 @@ equations
                                            $ModuleId, Symbol, Prod) =
                [ConstructorSet, 
                 Msgs, 
-                error("constructor used more than once",
+                warning("constructor used more than once",
                       [localized("first occurrence", get-location($AFun)),
                        localized("second occurrence", get-location($AFun2))])]
 
