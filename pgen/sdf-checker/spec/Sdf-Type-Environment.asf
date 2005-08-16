@@ -33,7 +33,7 @@ equations
                            [$ModuleId, Bool, ModuleInfo, Messages]
                            ModuleInfoEntry*2}]) =
              [{ModuleInfoEntry*1
-                           [$ModuleId, Bool, ModuleInfo, Messages1]
+                           [$ModuleId, Bool, ModuleInfo, Messages1, Messages]
                            ModuleInfoEntry*2}]
 
   [default-pm-1'2] put-messages($ModuleId, Messages, [ModuleInfoTable]) =
@@ -447,7 +447,7 @@ equations
                [$ModuleId, true, 
                 [ImportsSet, SymbolPairsSet1, SymbolPairsSet2, 
                  SymbolsSet1, SymbolsSet2, SymbolsSet3,
-                 ProductionsSet, ConstructorSet], Messages1] 
+                 ProductionsSet, ConstructorSet], Messages1, Messages] 
                ModuleInfoEntry*2}
 
   [default-pci-1'2] put-messages-info($ModuleId, 

@@ -153,8 +153,7 @@ equations
 
         RenamedSymbolsSet := get-renamed-symbols($Module, symbols()),
 
-        $Msgs3 := get-messages($ModuleId, InfoMsgTuple1),
-        InfoMsgTuple2 := put-messages($ModuleId, $Msgs1, $Msgs2, $Msgs3,
+        InfoMsgTuple2 := put-messages($ModuleId, $Msgs1, $Msgs2,
                                       InfoMsgTuple1),
         ModuleInfoTable1 := get-module-info(InfoMsgTuple2),
         ModuleInfoTable2 := put-declared-symbols-info($ModuleId, 
@@ -229,10 +228,9 @@ equations
         $Msgs5 := make-symbol-warnings(SymbolsSet2, $String2),
         $String3 := "start-symbol not defined by any production",
         $Msgs6 := make-symbol-errors(SymbolsSet3, $String3),
-
-        $Msgs7 := get-messages($ModuleId, InfoMsgTuple1),                  
+                 
         InfoMsgTuple3 := put-messages($ModuleId, $Msgs1, $Msgs2, $Msgs3, 
-                                      $Msgs4, $Msgs5, $Msgs6, $Msgs7,
+                                      $Msgs4, $Msgs5, $Msgs6,
                                       InfoMsgTuple1),
 
         ModuleInfoTable3 := get-module-info(InfoMsgTuple3),

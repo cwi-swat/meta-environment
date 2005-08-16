@@ -55,9 +55,8 @@ equations
 
         $String1 := moduleid2str($ModuleId),
         $String2 := "undefined production used in priorities",
-        Msgs4 := make-production-warnings(Prod*7, $String2),
-        Msgs5 := get-messages($ModuleId, InfoMsgTuple1), 
-        InfoMsgTuple3 := put-messages($ModuleId, Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, InfoMsgTuple1),
+        Msgs4 := make-production-warnings(Prod*7, $String2), 
+        InfoMsgTuple3 := put-messages($ModuleId, Msgs1, Msgs2, Msgs3, Msgs4, InfoMsgTuple1),
 
         ModuleInfoTable1 := get-module-info(InfoMsgTuple3),
         ModuleInfoTable2 := put-production-info($ModuleId, 

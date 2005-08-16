@@ -101,9 +101,8 @@ equations
            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
            ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
-           Msgs1 := get-messages($ModuleId, InfoMsgTuple2),
            $StrCon := moduleid2str($ModuleId),
-           Msgs2 := Msgs1, make-error("module not available", $StrCon, $Location),
+           Msgs2 := make-error("module not available", $StrCon, $Location),
            InfoMsgTuple3 := put-messages($ModuleId, Msgs2, InfoMsgTuple2)
            ===================================================
            pre-check-imports(imports(Import Import*), 
@@ -195,13 +194,12 @@ equations
            SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
                                      AliasedSymbolPairSet),
                                SymbolsSet1),
-           $Msgs1 := get-messages($ModuleId, InfoMsgTuple1),
            $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort"),
            SymbolsSet3 := diff(diff(SymbolsSet1,
                                DefinedSymbolPairSet), RenamedSymbolPairSet),
            $Msgs3 := make-symbol-errors(SymbolsSet3, "use of undefined symbol"),
 
-           InfoMsgTuple2 := put-messages($ModuleId, $Msgs1, $Msgs2, $Msgs3, InfoMsgTuple1)
+           InfoMsgTuple2 := put-messages($ModuleId, $Msgs2, $Msgs3, InfoMsgTuple1)
            ====>
            post-check-modules($ModuleId, imports(Import*), InfoMsgTuple1) = InfoMsgTuple2
 
