@@ -48,13 +48,12 @@ static const char rcsid[] =
 
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-#include <glib.h>
 
 static const char padchar[] =
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -80,7 +79,7 @@ char *mkdtemp(char *path)
      * uses arc4random(3) which is not available everywhere.
      */
     while (*trv == 'X') {
-        int randv = g_random_int_range(0, sizeof(padchar) - 1);
+        int randv = getpid() % (sizeof(padchar) - 1);
         *trv-- = padchar[randv];
     }
     start = trv + 1;
