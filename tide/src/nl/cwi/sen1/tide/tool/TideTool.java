@@ -13,106 +13,88 @@ import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentListener;
 import nl.cwi.sen1.tide.tool.support.Expr;
 
-public abstract class TideTool
-  extends JPanel implements StudioComponent
-{
-  private static int next_id = 0;
+public abstract class TideTool extends JPanel implements StudioComponent {
+	private static int next_id = 0;
 
-  private int id;
-  private ToolManager manager;
+	private int id;
 
-  private String name;
-  private Object target;
-  
-  private String statusMessage;
-  
-  private EventListenerList listenerList = new EventListenerList();
+	private ToolManager manager;
 
-  public TideTool(ToolManager manager)
-  {
+	private String name;
 
-    this.manager = manager;
+	private Object target;
 
-    id = next_id++;
-  }
+	private String statusMessage;
 
-  public ToolManager getManager()
-  {
-    return manager;
-  }
+	private EventListenerList listenerList = new EventListenerList();
 
-  //}}}
-  //{{{ public int getId()
+	public TideTool(ToolManager manager) {
 
-  public int getId()
-  {
-    return id;
-  }
+		this.manager = manager;
 
-  //}}}
-  //{{{ public String getName()
+		id = next_id++;
+	}
 
-  public String getName()
-  {
-    return name;
-  }
+	public ToolManager getManager() {
+		return manager;
+	}
 
-  //}}}
-  //{{{ public Object getTarget()
+	// }}}
+	// {{{ public int getId()
 
-  public Object getTarget()
-  {
-    return target;
-  }
+	public int getId() {
+		return id;
+	}
 
-  //}}}
-  //{{{ public void setName(String name)
+	// }}}
+	// {{{ public String getName()
 
-  public void setName(String name)
-  {
-    this.name = name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  //}}}
-  //{{{ public void setTarget(Object target)
+	// }}}
+	// {{{ public Object getTarget()
 
-  public void setTarget(Object target)
-  {
-    this.target = target;
-  }
+	public Object getTarget() {
+		return target;
+	}
 
-  
+	// }}}
+	// {{{ public void setName(String name)
 
-  protected Icon loadIcon(String name)
-  {
-    URL url = getClass().getResource("/resources/images/" + name);
-    return new ImageIcon(url);
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  
+	// }}}
+	// {{{ public void setTarget(Object target)
 
-  public void displayError(Expr error)
-  {
-     displayError(error.getErrorMessage(), error.getErrorData());
-  }
+	public void setTarget(Object target) {
+		this.target = target;
+	}
 
- 
-  public void displayError(String msg, Expr data)
-  {
-    String string = data.toString();
-    if (!string.equals("[]")) {
-      msg += ": " + string;
-    }
+	protected Icon loadIcon(String name) {
+		URL url = getClass().getResource("/resources/images/" + name);
+		return new ImageIcon(url);
+	}
 
-    manager.displayError(msg);
-  }
+	public void displayError(Expr error) {
+		displayError(error.getErrorMessage(), error.getErrorData());
+	}
 
-  
+	public void displayError(String msg, Expr data) {
+		String string = data.toString();
+		if (!string.equals("[]")) {
+			msg += ": " + string;
+		}
 
-  public void destroy()
-  {
-  	manager.removeTool(this);
-  }
+		manager.displayError(msg);
+	}
+
+	public void destroy() {
+		manager.removeTool(this);
+	}
 
 	public Icon getIcon() {
 		return null;
@@ -129,8 +111,8 @@ public abstract class TideTool
 	public void removeStudioComponentListener(StudioComponentListener l) {
 		listenerList.remove(StudioComponentListener.class, l);
 	}
-	
-    //	 Take from javax.swing.event.EventListenerList example
+
+	// Take from javax.swing.event.EventListenerList example
 	protected void fireStatusMessageChanged(String oldMessage, String newMessage) {
 		StatusMessageEvent event = new StatusMessageEvent(this, oldMessage,
 				newMessage);
@@ -141,6 +123,20 @@ public abstract class TideTool
 						.statusMessageChanged(event);
 			}
 		}
+	}
+
+	protected void fireComponentFocusReceived() {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = listeners.length - 2; i >= 0; i -= 2) {
+			if (listeners[i] == StudioComponentListener.class) {
+				((StudioComponentListener) listeners[i + 1])
+						.componentFocusReceived();
+			}
+		}
+	}
+
+	public void receiveFocus() {
+		fireComponentFocusReceived();
 	}
 
 	public String getStatusMessage() {
@@ -154,10 +150,10 @@ public abstract class TideTool
 			fireStatusMessageChanged(oldMessage, newMessage);
 		}
 	}
-    
-    public void requestClose() {
-    }
-    
-    public void close() {
-    }
+
+	public void requestClose() {
+	}
+
+	public void close() {
+	}
 }
