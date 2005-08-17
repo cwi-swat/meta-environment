@@ -3,7 +3,8 @@
 Wed Aug 17 09:51:31 CEST 2005 <kooiker@cwi.nl>
  * src/**/StyleRegistrar.java:
    - first unset styles when receiving new styles
-   - ignore background colors for text styles
+   - ignore background color for text styles when it equals the
+     editor's background
 
 Tue Aug 16 09:45:47 CEST 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:

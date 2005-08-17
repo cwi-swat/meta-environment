@@ -27,6 +27,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
@@ -48,9 +49,11 @@ public class EditorPane extends JTextPane {
 
     private JMenu menu;
 
-    Color bracketHighlightColor = Color.black;
-
-    Color lineHighlightColor = new Color(232, 242, 254);
+    private Color bracketHighlightColor = Color.GRAY;
+ 
+    private Color lineHighlightColor = new Color(232, 242, 254);
+    
+    private Color backgroundColor = Color.WHITE;
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
 
@@ -59,10 +62,12 @@ public class EditorPane extends JTextPane {
 
         setOpaque(false);
         focusPainter = new DefaultHighlightPainter(Color.BLACK);
-        bracketPainter = new BracketHighlightPainter(Color.GRAY);
+        bracketPainter = new BracketHighlightPainter(bracketHighlightColor);
 
         defaultStyle = StyleContext.getDefaultStyleContext().getStyle(
                 StyleContext.DEFAULT_STYLE);
+        defaultStyle.addAttribute(StyleConstants.Background, backgroundColor);
+        
         getStyledDocument().setLogicalStyle(0, defaultStyle);
 
         modified = false;
@@ -89,13 +94,13 @@ public class EditorPane extends JTextPane {
     protected void addBinding(JMenu menu, int key, String name) {
         Action action = ((EditorKit) getEditorKit()).getAction(name);
         KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
-        
+
         getInputMap().put(keyStroke, name);
         JMenuItem item = new JMenuItem(action);
         item.setAccelerator(keyStroke);
         menu.add(item);
     }
-    
+
     private void addMouseMotionListener() {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
@@ -173,7 +178,7 @@ public class EditorPane extends JTextPane {
     }
 
     public void paintComponent(Graphics gfx) {
-        gfx.setColor(Color.white);
+        gfx.setColor(backgroundColor);
         Rectangle r = getVisibleRect();
         gfx.fillRect(r.x, r.y, r.width, r.height);
 

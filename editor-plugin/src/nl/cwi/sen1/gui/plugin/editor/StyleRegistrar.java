@@ -68,9 +68,14 @@ public class StyleRegistrar {
                 StyleConstants.setForeground(style, convertColor(attr
                         .getColor()));
             } else if (attr.isBackgroundColor()) {
-                // Ignore background colors for text
-                // StyleConstants.setBackground(style, convertColor(attr
-                // .getColor()));
+                if (convertColor(attr.getColor()).equals(
+                        style.getAttribute(StyleConstants.Background))) {
+                    System.err.println("Removing background");
+                    style.removeAttribute(StyleConstants.Background);
+                } else {
+                    StyleConstants.setBackground(style, convertColor(attr
+                            .getColor()));
+                }
             } else if (attr.isStyle()) {
                 TextStyle textStyle = attr.getStyle();
 
