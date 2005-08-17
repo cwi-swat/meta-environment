@@ -231,8 +231,6 @@ public class EditorKit extends StyledEditorKit {
                     int offset = selectionStart;
                     int length = selectionEnd - selectionStart;
 
-                    System.err.println(selectionStart + ", " +  selectionEnd);
-                    
                     if ((selectionEnd + 1) < editor.getDocument().getLength()) {
                         length++;
                     } else {
