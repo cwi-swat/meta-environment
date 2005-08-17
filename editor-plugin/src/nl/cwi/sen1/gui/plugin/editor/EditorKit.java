@@ -251,13 +251,10 @@ public class EditorKit extends StyledEditorKit {
         }
 
         private void selectLine(EditorPane editor) throws BadLocationException {
-            int offset;
-
-            offset = editor.getCaretPosition();
+            int offset = editor.getCaretPosition();
             int beginOffset = Utilities.getRowStart(editor, offset);
             editor.setSelectionStart(beginOffset);
 
-            offset = editor.getCaretPosition();
             int endOffset = Utilities.getRowEnd(editor, offset);
             editor.setSelectionEnd(endOffset);
         }
