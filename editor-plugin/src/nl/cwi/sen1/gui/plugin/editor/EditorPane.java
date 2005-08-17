@@ -57,10 +57,6 @@ public class EditorPane extends JTextPane {
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
 
-    private int focusStartOffset;
-
-    private int focusEndOffset;
-
     public EditorPane() {
         setEditorKit(new EditorKit());
 
@@ -233,8 +229,6 @@ public class EditorPane extends JTextPane {
         try {
             focusTag = getHighlighter().addHighlight(offset, length,
                     focusPainter);
-            focusStartOffset = offset;
-            focusEndOffset = length;
         } catch (BadLocationException e) {
             // happens when you give an offset/length outside the editor
         }
@@ -247,24 +241,14 @@ public class EditorPane extends JTextPane {
         focusTag = null;
     }
 
+    public Object getFocusTag() {
+        return focusTag;
+    }
+    
     public JMenu getEditorMenu() {
         return menu;
     }
 
-    public int getFocusStartOffset() {
-        if (focusTag != null) {
-            return focusStartOffset;
-        }
-        return -1;
-    }
-    
-    public int getFocusEndOffset() {
-        if (focusTag != null) {
-            return focusEndOffset;
-        }
-        return -1;
-    }
-    
     public void setText(String t) {
         UndoableEditListener undoListener = ((EditorKit) getEditorKit())
                 .getUndoListener();

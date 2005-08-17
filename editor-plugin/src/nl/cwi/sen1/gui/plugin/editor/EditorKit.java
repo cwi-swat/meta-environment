@@ -10,6 +10,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
+import javax.swing.text.Highlighter.Highlight;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
@@ -261,14 +262,11 @@ public class EditorKit extends StyledEditorKit {
         public void actionPerformed(ActionEvent e) {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
-                int startOffset = editor.getFocusStartOffset();
-                int endOffset = editor.getFocusEndOffset();
+                Highlight highlight = (Highlight) editor.getFocusTag();
+
                 editor.clearFocus();
-                
-                if (startOffset != -1) {
-                    editor.setSelectionStart(startOffset);
-                    editor.setSelectionEnd(endOffset);
-                }
+                editor.setSelectionStart(highlight.getStartOffset());
+                editor.setSelectionEnd(highlight.getEndOffset());
             }
         }
     }
