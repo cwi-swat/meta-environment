@@ -11,7 +11,9 @@ public class SliceRegistrar {
 	private static Factory factory;
 
 	static public void registerSlices(EditorPane editor, ATermList slices) {
-		initFactory(slices);
+        editor.unsetStyles();
+        
+        initFactory(slices);
 		
 		for ( ; !slices.isEmpty(); slices = slices.getNext()) {
 			Slice slice = factory.SliceFromTerm(slices.getFirst());
