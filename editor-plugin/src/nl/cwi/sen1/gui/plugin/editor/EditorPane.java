@@ -59,7 +59,7 @@ public class EditorPane extends JTextPane {
 
     public EditorPane() {
         setEditorKit(new EditorKit());
-
+        
         setOpaque(false);
         focusPainter = new DefaultHighlightPainter(Color.BLACK);
         bracketPainter = new BracketHighlightPainter(bracketHighlightColor);

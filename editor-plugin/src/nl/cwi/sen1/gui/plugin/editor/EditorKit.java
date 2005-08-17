@@ -10,7 +10,6 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
-import javax.swing.text.Utilities;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
@@ -217,14 +216,13 @@ public class EditorKit extends StyledEditorKit {
     public class DeleteLineAction extends EditorTextAction {
         public DeleteLineAction() {
             super(deleteLineAction);
-
         }
 
         public void actionPerformed(ActionEvent e) {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
                 try {
-                    selectLine(editor);
+                    getAction(selectLineAction).actionPerformed(e);
 
                     int selectionStart = editor.getSelectionStart();
                     int selectionEnd = editor.getSelectionEnd();
@@ -246,15 +244,6 @@ public class EditorKit extends StyledEditorKit {
                 }
 
             }
-        }
-
-        private void selectLine(EditorPane editor) throws BadLocationException {
-            int offset = editor.getCaretPosition();
-            int beginOffset = Utilities.getRowStart(editor, offset);
-            editor.setSelectionStart(beginOffset);
-
-            int endOffset = Utilities.getRowEnd(editor, offset);
-            editor.setSelectionEnd(endOffset);
         }
     }
 }
