@@ -31,6 +31,8 @@ public class EditorKit extends StyledEditorKit {
 
     private GotoMatchingBracketAction gotoMatchingBracket;
 
+    private SelectFocusAction selectFocus;
+
     public static final String undoAction = "undo";
 
     public static final String redoAction = "redo";
@@ -42,6 +44,8 @@ public class EditorKit extends StyledEditorKit {
     public static final String deleteLineAction = "delete-line";
 
     public static final String gotoMatchingBracketAction = "goto-matching-bracket";
+
+    public static final String selectFocusAction = "select-focus";
 
     private UndoableEditListener undoListener;
 
@@ -69,11 +73,13 @@ public class EditorKit extends StyledEditorKit {
         gotoLine = new GotoLineAction();
         gotoMatchingBracket = new GotoMatchingBracketAction();
         deleteLine = new DeleteLineAction();
+        selectFocus = new SelectFocusAction();
     }
 
     public Action[] getActions() {
         return TextAction.augmentList(super.getActions(), new Action[] { undo,
-                redo, find, gotoLine, deleteLine, gotoMatchingBracket });
+                redo, find, gotoLine, deleteLine, gotoMatchingBracket,
+                selectFocus });
     }
 
     public Action getAction(String name) {
@@ -235,14 +241,34 @@ public class EditorKit extends StyledEditorKit {
                         if (selectionStart - 1 > 0) {
                             offset = selectionStart - 1;
                             length++;
-                        } 
+                        }
                     }
-                    
+
                     editor.getDocument().remove(offset, length);
                 } catch (BadLocationException e1) {
                     e1.printStackTrace();
                 }
 
+            }
+        }
+    }
+
+    public class SelectFocusAction extends EditorTextAction {
+        public SelectFocusAction() {
+            super(selectFocusAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                int startOffset = editor.getFocusStartOffset();
+                int endOffset = editor.getFocusEndOffset();
+                editor.clearFocus();
+                
+                if (startOffset != -1) {
+                    editor.setSelectionStart(startOffset);
+                    editor.setSelectionEnd(endOffset);
+                }
             }
         }
     }

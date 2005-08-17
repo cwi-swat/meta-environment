@@ -50,16 +50,20 @@ public class EditorPane extends JTextPane {
     private JMenu menu;
 
     private Color bracketHighlightColor = Color.GRAY;
- 
+
     private Color lineHighlightColor = new Color(232, 242, 254);
-    
+
     private Color backgroundColor = Color.WHITE;
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
 
+    private int focusStartOffset;
+
+    private int focusEndOffset;
+
     public EditorPane() {
         setEditorKit(new EditorKit());
-        
+
         setOpaque(false);
         focusPainter = new DefaultHighlightPainter(Color.BLACK);
         bracketPainter = new BracketHighlightPainter(bracketHighlightColor);
@@ -67,7 +71,7 @@ public class EditorPane extends JTextPane {
         defaultStyle = StyleContext.getDefaultStyleContext().getStyle(
                 StyleContext.DEFAULT_STYLE);
         defaultStyle.addAttribute(StyleConstants.Background, backgroundColor);
-        
+
         getStyledDocument().setLogicalStyle(0, defaultStyle);
 
         modified = false;
@@ -90,6 +94,7 @@ public class EditorPane extends JTextPane {
         addBinding(menu, KeyEvent.VK_V, DefaultEditorKit.pasteAction);
         addBinding(menu, KeyEvent.VK_D, EditorKit.deleteLineAction);
         addBinding(menu, KeyEvent.VK_5, EditorKit.gotoMatchingBracketAction);
+        addBinding(menu, KeyEvent.VK_J, EditorKit.selectFocusAction);
     }
 
     protected void addBinding(JMenu menu, int key, String name) {
@@ -222,11 +227,14 @@ public class EditorPane extends JTextPane {
                 getDocument().getLength(), defaultStyle, true);
     }
 
-    public void focus(int offset, int i) {
+    public void focus(int offset, int length) {
         clearFocus();
 
         try {
-            focusTag = getHighlighter().addHighlight(offset, i, focusPainter);
+            focusTag = getHighlighter().addHighlight(offset, length,
+                    focusPainter);
+            focusStartOffset = offset;
+            focusEndOffset = length;
         } catch (BadLocationException e) {
             // happens when you give an offset/length outside the editor
         }
@@ -236,12 +244,27 @@ public class EditorPane extends JTextPane {
         if (focusTag != null) {
             getHighlighter().removeHighlight(focusTag);
         }
+        focusTag = null;
     }
 
     public JMenu getEditorMenu() {
         return menu;
     }
 
+    public int getFocusStartOffset() {
+        if (focusTag != null) {
+            return focusStartOffset;
+        }
+        return -1;
+    }
+    
+    public int getFocusEndOffset() {
+        if (focusTag != null) {
+            return focusEndOffset;
+        }
+        return -1;
+    }
+    
     public void setText(String t) {
         UndoableEditListener undoListener = ((EditorKit) getEditorKit())
                 .getUndoListener();

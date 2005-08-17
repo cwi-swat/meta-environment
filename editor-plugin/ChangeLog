@@ -7,6 +7,7 @@ Wed Aug 17 09:51:31 CEST 2005 <kooiker@cwi.nl>
      editor's background
  * src/**/EditorKit.java:
    - add delete line action
+   - add setSelectionToFocus action
 
 Tue Aug 16 09:45:47 CEST 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
