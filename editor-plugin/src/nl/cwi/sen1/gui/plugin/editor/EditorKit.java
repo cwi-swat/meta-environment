@@ -10,6 +10,7 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
+import javax.swing.text.Utilities;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
@@ -22,6 +23,8 @@ public class EditorKit extends StyledEditorKit {
     private UndoAction undo;
 
     private RedoAction redo;
+
+    private DeleteLineAction deleteLine;
 
     private FindAction find;
 
@@ -66,11 +69,12 @@ public class EditorKit extends StyledEditorKit {
         find = new FindAction();
         gotoLine = new GotoLineAction();
         gotoMatchingBracket = new GotoMatchingBracketAction();
+        deleteLine = new DeleteLineAction();
     }
 
     public Action[] getActions() {
         return TextAction.augmentList(super.getActions(), new Action[] { undo,
-                redo, find, gotoLine, gotoMatchingBracket });
+                redo, find, gotoLine, deleteLine, gotoMatchingBracket });
     }
 
     public Action getAction(String name) {
@@ -207,6 +211,55 @@ public class EditorKit extends StyledEditorKit {
                 } catch (BadLocationException e1) {
                 }
             }
+        }
+    }
+
+    public class DeleteLineAction extends EditorTextAction {
+        public DeleteLineAction() {
+            super(deleteLineAction);
+
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                try {
+                    selectLine(editor);
+
+                    int selectionStart = editor.getSelectionStart();
+                    int selectionEnd = editor.getSelectionEnd();
+                    int offset = selectionStart;
+                    int length = selectionEnd - selectionStart;
+
+                    System.err.println(selectionStart + ", " +  selectionEnd);
+                    
+                    if ((selectionEnd + 1) < editor.getDocument().getLength()) {
+                        length++;
+                    } else {
+                        if (selectionStart - 1 > 0) {
+                            offset = selectionStart - 1;
+                            length++;
+                        } 
+                    }
+                    
+                    editor.getDocument().remove(offset, length);
+                } catch (BadLocationException e1) {
+                    e1.printStackTrace();
+                }
+
+            }
+        }
+
+        private void selectLine(EditorPane editor) throws BadLocationException {
+            int offset;
+
+            offset = editor.getCaretPosition();
+            int beginOffset = Utilities.getRowStart(editor, offset);
+            editor.setSelectionStart(beginOffset);
+
+            offset = editor.getCaretPosition();
+            int endOffset = Utilities.getRowEnd(editor, offset);
+            editor.setSelectionEnd(endOffset);
         }
     }
 }

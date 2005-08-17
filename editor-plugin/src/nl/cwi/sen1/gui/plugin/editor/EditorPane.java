@@ -88,6 +88,7 @@ public class EditorPane extends JTextPane {
         addBinding(menu, KeyEvent.VK_C, DefaultEditorKit.copyAction);
         addBinding(menu, KeyEvent.VK_X, DefaultEditorKit.cutAction);
         addBinding(menu, KeyEvent.VK_V, DefaultEditorKit.pasteAction);
+        addBinding(menu, KeyEvent.VK_D, EditorKit.deleteLineAction);
         addBinding(menu, KeyEvent.VK_5, EditorKit.gotoMatchingBracketAction);
     }
 
