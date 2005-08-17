@@ -70,7 +70,10 @@ public class StyleRegistrar {
             } else if (attr.isBackgroundColor()) {
                 if (convertColor(attr.getColor()).equals(
                         style.getAttribute(StyleConstants.Background))) {
-                    System.err.println("Removing background");
+                    // the linehighlight is drawed in a lower layer than the text,
+                    // so if the textbackground is the same as the background of the
+                    // editor we need to remove the background attribute to prevent
+                    // gaps in the linehighlight
                     style.removeAttribute(StyleConstants.Background);
                 } else {
                     StyleConstants.setBackground(style, convertColor(attr
