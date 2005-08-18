@@ -95,5 +95,5 @@ tool display is { host = "localhost"
 
 %% Define the initial \TB\ configuration.
 
-toolbus(MakeWave(5))
+toolbus(MakeWave(2))
 
