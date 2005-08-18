@@ -20,5 +20,9 @@ public class Delta extends Atom {
   public State getFirst() {
     return new State(); // replace by single copy
   }
+  
+  public boolean execute(){
+  	return false;
+  }
 
 }

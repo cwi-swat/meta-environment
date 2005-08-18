@@ -32,7 +32,7 @@ public class Event extends Atom {
     ToolInstance ti = getToolBus().getToolInstance(tid);
  
     if (ti.getEventFromTool(result.value, getEnv())){
-      return nextState();
+      return true;
     } else
       return false;
   }

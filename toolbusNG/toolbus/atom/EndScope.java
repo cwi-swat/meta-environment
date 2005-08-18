@@ -25,7 +25,7 @@ public class EndScope extends Atom {
 		if (isEnabled()) {
 			Environment env = getEnv();
 			env.removeBindings(((ATermList) refformals.value));
-			return nextState();
+			return true;
 		} else
 			return false;
 	}

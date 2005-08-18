@@ -31,6 +31,6 @@ public class Subscribe extends Atom {
 			return false;
 		System.err.println("Subscribe.execute");
 		getProcess().subscribe(msgpat.value);
-		return nextState();
+		return true;
 	}
 }

@@ -6,6 +6,8 @@ in
     ( if less(N, 5)
       then
          printf("%d\n", N) . N := add(N, 1)
+      else
+         tau
       fi
     ) * 
     if equal (N, 5) then tau fi

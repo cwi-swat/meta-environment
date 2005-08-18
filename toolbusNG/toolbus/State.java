@@ -3,12 +3,11 @@
  */
 
 package toolbus;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Vector;
 
 import toolbus.atom.MsgAtom;
-import toolbus.ToolBusException;
-import toolbus.process.ProcessInstance;
-import aterm.*;
+import aterm.ATerm;
 
 
 /**
@@ -136,8 +135,26 @@ public class State {
      return null;
     }
   
+  /*
+  public boolean nextState(){
+  	return ((StateElement) elements.elementAt(lastElement)).nextState();
+  }
+  
+  public boolean nextState(StateElement a){
+  	for (Iterator it = elements.iterator(); it.hasNext();) {
+  		StateElement b = (StateElement) it.next();
+  		//System.err.println("State.nextState2: trying " + b);
+  		if(b.equals(a) || b.contains(a)){
+  			return b.nextState(a);
+  		}
+  	}
+  	System.err.println("State.nextState2: no element " + a);
+  	return false;
+  }
+  */
+  
   /**
-   * Execute one step for each element in this state.
+   * Execute one step for an element in this state.
    */
   
   public boolean execute() throws ToolBusException {
@@ -154,8 +171,8 @@ public class State {
       	lastElement = index;
  
         if (ToolBus.isVerbose()) {
-           // ProcessInstance pa = a.getProcess();
-          //System.err.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
+           //ProcessInstance pa = a.getProcess();
+          //System.err.println("--- " + pa.getProcessId() + " / " + a.toString());
         }
         return true;
       }

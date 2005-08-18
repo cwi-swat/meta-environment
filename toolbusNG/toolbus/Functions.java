@@ -435,7 +435,7 @@ public class Functions {
   }
 
   public static ATerm eval(ATerm t, ProcessInstance pi, Environment env) throws ToolBusException {
-	//System.err.println("eval: " + t + "; env = " + env);
+	System.err.println("eval: " + t + "; env = " + env);
     switch (t.getType()) {
       
       case ATerm.BLOB :

@@ -144,6 +144,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
       }
   }
 
+  // Implementation of the StateElement interface
+  
   public boolean isEnabled() throws ToolBusException {
     if (tests != null){
     	//System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
@@ -158,13 +160,6 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     }
     return true;
   }
-  
-  public boolean nextState() {
-    processInstance.setCurrentState(getNextState());
-    return true;
-  }
-
-  // Implementation of the StateElement interface
 
   public boolean contains(StateElement b) {
     return this.equals(b);
@@ -173,21 +168,19 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public ProcessInstance getProcess() {
     return processInstance;
   }
-  
+
   public State getNextState(){
+  	System.err.println(this + "getNextState ==> " + getFollow());
   	return getFollow();
   }
   
   public State getNextState(StateElement b){
   	if(this.equals(b)){
   		return getFollow();
-  	} else {
-  		System.err.println("Atom.getNextState2: wrong arg: " + b);
-  		return null;
   	}
+  	System.err.println("Atom.getNextState2: wrong arg: " + b);
+  	return null;
   }
 
-  public boolean execute() throws ToolBusException{
-  	return isEnabled() ? nextState() : false;
-  }
+  abstract public boolean execute() throws ToolBusException;
 }

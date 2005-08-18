@@ -117,7 +117,7 @@ public class ProcessInstance {
   }
   
   public void unsubscribe(ATerm pat){
-  	subscriptions =  (ATermList) TBTerm.delete((ATerm) subscriptions, pat);
+  	subscriptions =  (ATermList) TBTerm.delete(subscriptions, pat);
  	//System.err.println("unsubscribe: after:" + subscriptions);
   }
   
@@ -129,7 +129,7 @@ public class ProcessInstance {
   		ATerm nt = nts.getFirst();
   		//System.err.println("trying: " + nt);
   		if(TBTerm.match(nt, env, pat, env)){
-  			notes = (ATermList) TBTerm.delete((ATerm) notes, nt);
+  			notes = (ATermList) TBTerm.delete(notes, nt);
   			//System.err.println("getNoteFromQueue: " + nt);
   			return true;
   		}
@@ -185,17 +185,22 @@ public class ProcessInstance {
     currentState = s;
   }
   
-  public void nextState(StateElement a){
+  public boolean nextState(){
+  	currentState = currentState.getNextState();
+  	return true;
+  }
+  
+  public boolean nextState(StateElement a){
   	currentState = currentState.getNextState(a);
+  	return true;
   }
 
   public boolean step() throws ToolBusException {
-    //System.err.println(this);
-  	if(running){
-  		return currentState.execute();
-  	} else {
-  		return false;
+    System.err.println("step: " + this);
+  	if(running && currentState.execute()){
+  		return nextState();
   	}
+  	return false;
   }
 
   public boolean isTerminated() {

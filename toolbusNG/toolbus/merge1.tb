@@ -14,10 +14,12 @@ process P is
        printf("%t", FOUR)
       ) .
   
- %%    ( printf("a") . printf("b") . printf("c") ||
- %%      printf("A") . ( printf("%d", ONE) . printf("2") || printf("3") ) . printf("B")
- %%   ) .
-     printf("\nEND OF P\n")
+   %%  ( printf("a") . printf("b") . printf("c") ||
+   %%    printf("A") . ( printf("%d", ONE) . printf("2") || printf("3") ) . printf("B")
+   %% ) .
+   
+   %%(printf("a") || printf("b")) .
+    printf("\nEND OF P\n")
   endlet
   
   toolbus(P)

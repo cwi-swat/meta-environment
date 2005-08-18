@@ -92,8 +92,12 @@ public abstract class MsgAtom extends Atom {
             if (ToolBus.isVerbose()) {
               System.err.println(
                 "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+              System.err.println(
+              	"--- enva = " + this.getEnv());
+              System.err.println(
+                  	"--- envb = " + b.getEnv());
             }
-            this.nextState();
+            //this.nextState();
             //b.nextState();
             pb.nextState(b);
             return true;

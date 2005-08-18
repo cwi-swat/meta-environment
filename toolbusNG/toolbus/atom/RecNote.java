@@ -30,7 +30,7 @@ public class RecNote extends Atom {
 		if (!isEnabled())
 			return false;
 		if (getProcess().getNoteFromQueue(this.msgpat.value, getEnv()))
-			return nextState();
+			return true;
 		else
 			return false;
 	}
