@@ -1,5 +1,10 @@
 $Id$
 
+Thu Aug 18 14:24:25 CEST 2005 <jurgenv@cwi.nl>
+ * grammar/Sdf2.baf: regenerated the parse table with a different
+   basic/Comments module such that comments and todo's are put in
+   their categories (for syntax highlighting)
+
 Tue Aug 16 16:43:30 CEST 2005 <jurgenv@cwi.nl>
  *  sdf-checker/spec/*.{asf,sdf}   The checker accumulates the
     errors and warnings now PER MODULE, such that only the errors for

@@ -4,6 +4,37 @@ definition
 module Main
 imports languages/sdf2/syntax/Sdf2
 %%% $Id$
+           
+module languages/sdf2/syntax/Character-Class
+
+imports languages/sdf2/syntax/Character
+
+exports
+  sorts CharClass CharRange CharRanges OptCharRanges 
+  context-free syntax 
+    Character                           -> CharRange
+    start:Character "-" end:Character   -> CharRange            {cons("range")}
+
+    CharRange                                   -> CharRanges
+    "left":CharRanges "right":CharRanges        -> CharRanges   {cons("conc"),right,memo}
+    "(" CharRanges ")"                          -> CharRanges   {bracket}
+
+                              -> OptCharRanges  {cons("absent")}
+    CharRanges                -> OptCharRanges  {cons("present")}
+
+    "[" OptCharRanges "]"                    -> CharClass  {cons("simple-charclass")}
+    "~" CharClass                            -> CharClass  {cons("comp")}
+    "left":CharClass "/" "right":CharClass   -> CharClass  {cons("diff"),left,memo}
+    "left":CharClass "/\\" "right":CharClass -> CharClass  {cons("isect"),left,memo}
+    "left":CharClass "\\/" "right":CharClass -> CharClass  {cons("union"),left}
+    "(" CharClass ")"                        -> CharClass  {bracket, avoid}
+
+  context-free priorities
+    "~" CharClass             -> CharClass >
+    CharClass "/" CharClass   -> CharClass >
+    CharClass "/\\" CharClass -> CharClass >
+    CharClass "\\/" CharClass -> CharClass           
+%%% $Id$
                   
 module languages/sdf2/syntax/Aliases
 
@@ -47,36 +78,36 @@ exports
     CharClass -> Symbol {cons("char-class")}
      
 %%% $Id$
-           
-module languages/sdf2/syntax/Character-Class
+               
+module languages/sdf2/syntax/Restrictions
 
-imports languages/sdf2/syntax/Character
+imports languages/sdf2/syntax/CC
 
 exports
-  sorts CharClass CharRange CharRanges OptCharRanges 
-  context-free syntax 
-    Character                           -> CharRange
-    start:Character "-" end:Character   -> CharRange            {cons("range")}
+  sorts Lookahead Lookaheads Restriction Restrictions
 
-    CharRange                                   -> CharRanges
-    "left":CharRanges "right":CharRanges        -> CharRanges   {cons("conc"),right,memo}
-    "(" CharRanges ")"                          -> CharRanges   {bracket}
+  context-free syntax
+    CharClass                          -> Lookahead  {cons("char-class")}
+    head:CharClass "." tail:Lookaheads -> Lookahead  {cons("seq")}
 
-                              -> OptCharRanges  {cons("absent")}
-    CharRanges                -> OptCharRanges  {cons("present")}
+    Lookahead                                -> Lookaheads  {cons("single")}
+    "left":Lookaheads "|" "right":Lookaheads -> Lookaheads  {cons("alt"),right}
+    "(" Lookaheads ")"                       -> Lookaheads  {bracket}
+    "[[" list:{Lookahead ","}* "]]"          -> Lookaheads  {cons("list")}
 
-    "[" OptCharRanges "]"                    -> CharClass  {cons("simple-charclass")}
-    "~" CharClass                            -> CharClass  {cons("comp")}
-    "left":CharClass "/" "right":CharClass   -> CharClass  {cons("diff"),left,memo}
-    "left":CharClass "/\\" "right":CharClass -> CharClass  {cons("isect"),left,memo}
-    "left":CharClass "\\/" "right":CharClass -> CharClass  {cons("union"),left}
-    "(" CharClass ")"                        -> CharClass  {bracket, avoid}
+    Symbols "-/-" Lookaheads -> Restriction  {cons("follow")}
 
-  context-free priorities
-    "~" CharClass             -> CharClass >
-    CharClass "/" CharClass   -> CharClass >
-    CharClass "/\\" CharClass -> CharClass >
-    CharClass "\\/" CharClass -> CharClass           
+    list:Restriction* -> Restrictions
+
+    "restrictions" Restrictions -> Grammar  {cons("restrictions")}
+
+    "reject" -> Attribute  {cons("reject")}
+    "prefer" -> Attribute  {cons("prefer")}
+    "avoid"  -> Attribute  {cons("avoid")}
+
+  context-free priorities    
+    CharClass "." Lookaheads    -> Lookahead >
+    Lookaheads "|" Lookaheads   -> Lookaheads
 %%% $Id$
                      
 module languages/sdf2/syntax/Character
@@ -173,10 +204,6 @@ exports
   context-free syntax
     string:StrCon       -> Symbol  {cons("lit")}
 
-%%    fun:IdCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
-%%	-> Production  {avoid, cons("unquoted-fun")}
-%%    str:StrCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
-%%	-> Production  {avoid, cons("quoted-fun")}
     fun:FunctionName "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
 	-> Production  {avoid, cons("prefix-fun")}
 %%% $Id$
@@ -302,37 +329,6 @@ exports
     from:Symbol "=>" to:Symbol                   -> Renaming  {cons("symbol")}
     from-prod:Production "=>" to-prod:Production -> Renaming  {cons("production")}
 
-%%% $Id$
-               
-module languages/sdf2/syntax/Restrictions
-
-imports languages/sdf2/syntax/CC
-
-exports
-  sorts Lookahead Lookaheads Restriction Restrictions
-
-  context-free syntax
-    CharClass                          -> Lookahead  {cons("char-class")}
-    head:CharClass "." tail:Lookaheads -> Lookahead  {cons("seq")}
-
-    Lookahead                                -> Lookaheads  {cons("single")}
-    "left":Lookaheads "|" "right":Lookaheads -> Lookaheads  {cons("alt"),right}
-    "(" Lookaheads ")"                       -> Lookaheads  {bracket}
-    "[[" list:{Lookahead ","}* "]]"          -> Lookaheads  {cons("list")}
-
-    Symbols "-/-" Lookaheads -> Restriction  {cons("follow")}
-
-    list:Restriction* -> Restrictions
-
-    "restrictions" Restrictions -> Grammar  {cons("restrictions")}
-
-    "reject" -> Attribute  {cons("reject")}
-    "prefer" -> Attribute  {cons("prefer")}
-    "avoid"  -> Attribute  {cons("avoid")}
-
-  context-free priorities    
-    CharClass "." Lookaheads    -> Lookahead >
-    Lookaheads "|" Lookaheads   -> Lookaheads
 module languages/sdf2/syntax/Sdf2-Syntax
 
 imports languages/sdf2/syntax/Kernel
@@ -576,8 +572,10 @@ imports
 
 exports
   lexical syntax
-    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line")}
-    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested")}
+    "%%" line:~[\n]* "\n"	   		      -> LAYOUT {cons("line"), category("Comment")}
+    "%" content:~[\%\n]+ "%"  		      -> LAYOUT {cons("nested"), category("Comment")}
+    "%%" [\t\ ]* [Tt][oO][dD][oO] line:~[\n]* "\n" -> LAYOUT {prefer, cons("todo"), category("Todo")}
+
   context-free restrictions
     LAYOUT? -/- [\%]
 module basic/IdentifierCon
