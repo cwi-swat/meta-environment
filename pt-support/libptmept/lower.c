@@ -648,6 +648,8 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
   if (PTPT_isTreeAnnotated(pt)) {
     annos = PTPT_getTreeAnnotation(pt);
     pt = PTPT_getTreeTree(pt);
+    assert(!PTPT_isTreeAnnotated(pt) 
+	   && "encountered an illegal nested annotation");
   }
 
   if (PTPT_isTreeAmb(pt)) {
