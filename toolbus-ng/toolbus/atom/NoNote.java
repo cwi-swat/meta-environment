@@ -33,7 +33,7 @@ public class NoNote extends Atom {
 	    if (!isEnabled())
 	      return false;
 		if (getProcess().noNoteInQueue(this.msgpat.value, getEnv()))
-			return nextState();
+			return true;
 		else
 			return false;
 	 }

@@ -24,6 +24,7 @@ public class Merge extends ProcessExpression implements StateElement {
 
   private State[] state = new State[2];
   private State mergeState;
+  private boolean leftLast = false;
 
   public Merge(ProcessExpression left, ProcessExpression right) {
     expr[LEFT] = left;
@@ -53,7 +54,7 @@ public class Merge extends ProcessExpression implements StateElement {
   }
 
   public ProcessExpression copy() {
-    return new Merge(expr[LEFT], expr[RIGHT]);
+    return new Merge(expr[LEFT].copy(), expr[RIGHT].copy());
   }
 
   public State getAtoms() {
@@ -86,32 +87,75 @@ public class Merge extends ProcessExpression implements StateElement {
   public State getNextState(){
   	State follow = getFollow();
   	
-  	if(state[LEFT] == follow)
-  		return state[RIGHT]; 
-  	if(state[RIGHT] == follow)
-  		return state[LEFT];
-  	return mergeState;
+	System.err.println("Merge.getNextState: " + leftLast + " ; follow = " + follow);
+	System.err.println("state[LEFT] =" +  state[LEFT]);
+	System.err.println("state[RIGHT] =" +  state[RIGHT]);
+	
+	if(state[LEFT] == follow || state[RIGHT] == follow){
+		int x = 3/0;
+	}
+  	
+  	if(leftLast){
+  		State ns = state[LEFT].getNextState();
+  		if(ns == follow){
+  		   System.err.println("state[LEFT] == follow");
+ 		   System.err.println("returning " + state[RIGHT]);
+  		   return state[RIGHT];
+  		} else {
+  			System.err.println("returning " + mergeState);
+  			state[LEFT] = ns;
+  			return mergeState;
+  		}
+  	} else {
+		State ns = state[RIGHT].getNextState();
+  		if(ns == follow){
+  		   System.err.println("state[RIGHT] == follow");
+ 		   System.err.println("returning " + state[LEFT]);
+  		   return state[LEFT];
+  		} else {
+  			System.err.println("returning " + mergeState);
+  			state[RIGHT] = ns;
+  			return mergeState;
+  		}
+  	}
   }
   
   public State getNextState(StateElement se) {
  	State follow = getFollow();
  	
- 	System.err.println("Merge.getNextState: " + se + " ; follow = " + follow);
+ 	System.err.println("Merge.getNextState2: " + leftLast + "; " + se + " ; follow = " + follow);
 	System.err.println("state[LEFT] =" +  state[LEFT]);
 	System.err.println("state[RIGHT] =" +  state[RIGHT]);
  	
     if(state[LEFT].contains(se)){
-    	state[LEFT] = state[LEFT].getNextState(se);
-    	return (state[LEFT] == follow) ? state[RIGHT] : mergeState;
+  		State ns = state[LEFT].getNextState(se);
+  		if(ns == follow){
+  		   System.err.println("state[LEFT] == follow");
+ 		   System.err.println("returning " + state[RIGHT]);
+  		   return state[RIGHT];
+  		} else {
+  			System.err.println("returning " + mergeState);
+  			state[LEFT] = ns;
+  			return mergeState;
+  		}
+    	
     } else if(state[RIGHT].contains(se)){
-    	state[RIGHT] = state[RIGHT].getNextState(se);
-       	return (state[RIGHT] == follow) ? state[LEFT] : mergeState;
+    	State ns = state[RIGHT].getNextState(se);
+  		if(ns == follow){
+  		   System.err.println("state[RIGHT] == follow");
+ 		   System.err.println("returning " + state[LEFT]);
+  		   return state[LEFT];
+  		} else {
+  			System.err.println("returning " + mergeState);
+  			state[RIGHT] = ns;
+  			return mergeState;
+  		}
     } else {
     	System.err.println("Merge.getNextState2 wrong!");
     	return null;
     }
   }
-
+ 
   public boolean execute() throws ToolBusException {
   	int l, r;
     if(ToolBus.nextBoolean()){
@@ -121,23 +165,17 @@ public class Merge extends ProcessExpression implements StateElement {
     }
 
     if (state[l].execute()) {
-    	state[l] = state[l].getNextState();
-    	if(state[l] == getFollow()){
-    	    processInstance.setCurrentState(state[r]);
-    	} else {
-    		processInstance.setCurrentState(mergeState);
-    	}
+    	leftLast = (l == LEFT);
         return true;
-    } else if (state[r].execute()) {  	
-    	state[r] = state[r].getNextState();
-      	if(state[r] == getFollow()){
-    	    processInstance.setCurrentState(state[l]);
-    	} else {
-    		processInstance.setCurrentState(mergeState);
-    	}
+    } else if (state[r].execute()) {  
+    	leftLast = (r == LEFT);
         return true;
     } else
         return false;
+  }
+  
+  public String toString(){
+  	return "Merge(" + state[LEFT] + "; " + state[RIGHT] + ")";
   }
 
 

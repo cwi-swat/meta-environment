@@ -71,9 +71,8 @@ public class Print extends Atom {
       //System.err.println("res =" + res);
       out.print(sprintf((ATermList) res));
       out.flush();
-      return nextState();
-    } else {
-      return false;
+      return true;
     }
+    return false;
   }
 }

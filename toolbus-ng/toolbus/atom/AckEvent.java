@@ -31,6 +31,6 @@ public class AckEvent extends Atom {
     ATerm ev = TBTerm.substitute(event.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
     ti.sndAckToTool(ev);
-    return nextState();
+    return false;
   }
 }

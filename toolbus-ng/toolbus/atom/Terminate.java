@@ -36,6 +36,6 @@ public class Terminate extends Atom {
 	    ATerm req = TBTerm.substitute(request.value, getEnv());
 	    ToolInstance ti = getToolBus().getToolInstance(tid);
 	    ti.terminate((ATermAppl) req);
-	    return nextState();
+	    return true;
 	  }
 }

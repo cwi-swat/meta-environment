@@ -1,20 +1,20 @@
 package toolbus.test;
 
-import java.io.*;
-
-import toolbus.*;
-
-import aterm.ATermFactory;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
 
 import junit.framework.TestCase;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
 
 public class TscriptTest extends TestCase {
-  private ATermFactory factory;
 
   public TscriptTest(String name) {
     super(name);
     TBTerm.init();
-    factory = TBTerm.factory;
   }
 
   private boolean equalOutput(String currentOutput, String prevOutputFile) {
@@ -124,7 +124,7 @@ public class TscriptTest extends TestCase {
   	assertTrue(runTest("Notes"));
   }
   
-  public void xxtestOther(){
+  public void testOther(){
   	assertTrue(runTest("Sieve"));
  	assertTrue(runTest("Prod"));
   }

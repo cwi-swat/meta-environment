@@ -5,11 +5,8 @@
  */
 package toolbus.atom;
 
-import toolbus.Environment;
-import toolbus.State;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
-import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 /**
@@ -33,6 +30,6 @@ public class UnSubscribe extends Atom {
 			return false;
 		System.err.println("UnSubscribe.execute");
 		getProcess().unsubscribe(msgpat.value);
-		return nextState();
+		return true;
 	}
 }

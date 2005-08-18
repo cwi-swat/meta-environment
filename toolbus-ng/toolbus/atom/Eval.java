@@ -32,7 +32,7 @@ public class Eval extends Atom {
     System.err.println("Eval: " + tid + ", " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndEvalToTool((ATermAppl) req)) {
-    	return nextState();
+    	return true;
     } else {
     	return false;
     }

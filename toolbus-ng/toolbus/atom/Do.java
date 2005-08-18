@@ -34,7 +34,7 @@ public class Do extends Atom {
     ATerm req = TBTerm.substitute(request.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndDoToTool((ATermAppl) req)){
-    	return nextState();
+    	return true;
     } else {
     	return false;
     }

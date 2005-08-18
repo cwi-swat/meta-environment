@@ -434,6 +434,7 @@ public class ToolBus {
       }
     } catch (ToolBusException e) {
       System.err.println(e.getMessage());
+      e.printStackTrace();
     }
     shutdown("ToolBus halted");
   }

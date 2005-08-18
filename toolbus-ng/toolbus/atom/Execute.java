@@ -52,6 +52,6 @@ public class Execute extends Atom {
 	    ToolInstance TI = TB.addToolInstance(name);
 	    getEnv().assignVar(rvar.value, TI.getToolId());
 	    System.err.println("Execute.execute: " + getEnv());
-	    return nextState();
+	    return true;
 	  }
 }

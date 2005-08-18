@@ -45,14 +45,16 @@ public class Assign extends Atom {
       return false;
     ProcessInstance p = this.getProcess();
     Environment env = getEnv();
-    //System.err.println("Assign: " + env);
+    System.err.println("Assign: " + this);
+    System.err.println("Assign: " + env);
+
 
     ATerm newval = Functions.eval(exp.value, p, env);
     
-    //System.err.println("Assign: " + exp.value + "   " + newval);
+    System.err.println("Assign: " + exp.value + "   " + newval);
     env.assignVar(var.value, newval);
-    //System.err.println("Assign: " + env);
-    //System.err.println("Assign: " + getFollow());
-    return nextState();
+    System.err.println("Assign: " + env);
+    System.err.println("Assign: " + getFollow());
+    return true;
   }
 }
