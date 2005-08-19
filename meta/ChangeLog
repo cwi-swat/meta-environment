@@ -1,14 +1,66 @@
 # $Id$
 
+Fri Aug 19 09:21:08 CEST 2005 <kooiker@cwi.nl>
+ * Merge editor-plugin branch:
+   - Vi and Emacs support has been removed. In stead we use our own -
+     Java-based - integrated editor.
+
+Tue Aug  9 10:50:16 CEST 2005 <{jurgenv,kooiker,jong}@cwi.nl>
+ * Updated the StudioPlugins to the new interface that deals
+   better with closing.
+
+Fri Aug  5 11:59:01 CEST 2005 <jurgenv@cwi.nl>
+ * Prevented meta gui plugins to be closed, because they can not
+   be retrieved after they have been closed (unlike an editor).
+ * Gave parse errors an identity by using the Sid to find the Path.
+   Now parse errors dissappear when solved, and when the editor
+   is closed.
+ * Replaced gui/lib/prefuse.jar with the latest checkout of prefuse,
+   since the older version started a Thread that could never be stopped.
+
+Thu Aug  4 13:55:48 CEST 2005 <jurgenv@cwi.nl>
+ * tbscripts/button-actions.tb: moved all process from this file
+   to topical files to facilitate debugging, and as another step
+   in the separation-of-concerns-crusade.
+
 Wed Aug  3 13:12:54 CEST 2005 <kooiker@cwi.nl>
  * Merged predefined-gui-layout branch
+ * Import from trunk
 
 Thu Jun 23 18:30:21 CEST 2005 <jurgenv@cwi.nl>
  * gui/**/graph-painter/**/GraphColoring.java: fixed a bug in the
    selected module visualization.
 
+Fri Jun 17 09:06:19 CEST 2005 <jurgenv@cwi.nl>
+ * tbscripts/editing.tb: brought action handler of editors up-to-date
+   with dynamic calls design.
+
+Thu Jun 16 15:08:02 CEST 2005 <jurgenv@cwi.nl>
+ * Synchronized editor-plugin branch with trunk.
+
+Wed Jun 15 16:01:04 CEST 2005 <kooiker@cwi.nl>
+ * editors/structure/structure-editor.c:
+   - Set focus by line-column
+
 Tue Jun 14 10:29:42 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
  * Merged the dynamic buttons branch with the trunk. 
+
+Thu Jun  2 15:28:13 CEST 2005 <kooiker@cwi.nl>
+ * editors/structure/structure-editor.c:
+   - Remove ATBpack when sending slices to the toolbus, the Java editor can't
+     handle packed terms
+ * *.java:
+   - Use StudioComponentImpl iso StudioComponentAdapter
+ * tbscripts/editing.tb:
+   - EditText only asks for module events, because these consists of both
+     events for the given type as well as the events for the given module
+
+Fri May 27 11:52:17 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac: 
+   - Remove libltdl dependency
+   - Add RANLIB
+ * editors:
+   - Remove text editors, because these are replaced by editor-plugin
 
 Wed May 25 14:19:37 CEST 2005 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:

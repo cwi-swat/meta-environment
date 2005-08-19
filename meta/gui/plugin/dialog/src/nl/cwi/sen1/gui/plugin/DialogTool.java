@@ -1,12 +1,18 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: May 10, 2005 8:54:27 AM
+// generation time: May 30, 2005 2:01:34 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class DialogTool
   extends SwingTool

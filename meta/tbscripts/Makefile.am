@@ -2,7 +2,6 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
-  button-actions.tb \
   close-all.tb \
   compile-module.tb \
   dump-equations.tb \
@@ -33,7 +32,13 @@ TBSCRIPTS = \
   start-meta-term-editor.tb \
   status.tb \
   status-to-progress.tb \
-  user-interface.tb
+  user-interface.tb \
+  asfsdf-editor-actions.tb \
+  asfsdf-module-actions.tb \
+  gui-actions.tb \
+  term-actions.tb \
+  term-editor-actions.tb \
+  termstore-actions.tb 
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

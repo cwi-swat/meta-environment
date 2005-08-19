@@ -1,3 +1,22 @@
+process UnParseTerm(Tree: term, Text: str?) is
+  snd-msg(unparse(Tree))
+  . rec-msg(unparsed-text(Text?))
+
+process ParseErrorToSummary(ParseError:term, Sid: term, Summary:term?) is
+let 
+  Path : str
+in
+  snd-msg(em-get-path(Sid)) 
+  .
+  (
+    rec-msg(em-path(Sid, Path?))
+    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    . rec-msg(es-summary(Summary?))
+  +
+    rec-msg(no-such-session(Sid))
+  )
+endlet
+
 process StringParseHandler is
 let
   Tree: term,
@@ -40,9 +59,18 @@ endlet
 
 process ParseSyntaxAction(EditorId : term) is
 let
-  ParseSucceeded: bool
+  ParseSucceeded: bool,
+  Pid : int,
+  Modulename : str
 in
   ParseSyntax(EditorId, sdf, ParseSucceeded?)
+  .
+  if equal(ParseSucceeded, true) then
+    GetActiveModule(EditorId, Modulename?)
+    . create(CheckSyntaxSpecification(Modulename), Pid?)
+  else
+    tau
+  fi
 endlet
 
 process ParseEquationsAction(EditorId : term) is
@@ -69,7 +97,7 @@ in
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
   . GetPath(Sid, Path?)
-  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . snd-msg(ui-remove-feedback-summary("sglr", Path))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
@@ -111,14 +139,11 @@ in
   . snd-msg(syntax-top-sort-hook(sdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
   . GetPath(Sid, Path?)
-  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . snd-msg(ui-remove-feedback-summary("sglr", Path))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid))
-    . snd-msg(io-get-path-directory(Path))
-    . rec-msg(io-directory(Path, Directory?))
-    . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
     . ParseSucceeded := true
     . GetParsetree(Sid, Tree?)
     . snd-msg(unparse(Tree))
@@ -160,6 +185,7 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
+
 process ParseEquations(Sid: term, Modulename: str) is
 let
   Id: int,
@@ -177,7 +203,7 @@ in
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
   . GetPath(Sid, Path?)
-  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+  . snd-msg(ui-remove-feedback-summary("sglr", Path))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (

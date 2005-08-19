@@ -1,8 +1,3 @@
 #! /bin/sh
 
-LIBTOOLIZE="libtoolize --ltdl --copy"
-export LIBTOOLIZE
-
-# --warnings=gnu is essential to make distcheck work in ./libltdl
-${LIBTOOLIZE}
-autoreconf --install --symlink --warnings=gnu $*
+autoreconf --install --symlink $*

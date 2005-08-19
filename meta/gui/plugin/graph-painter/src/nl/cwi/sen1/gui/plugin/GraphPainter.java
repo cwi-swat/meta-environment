@@ -16,10 +16,11 @@ import javax.swing.JSeparator;
 
 import nl.cwi.sen.api.graph.graph.Factory;
 import nl.cwi.sen.api.graph.graph.types.Graph;
+import nl.cwi.sen1.gui.CloseAbortedException;
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
-import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
@@ -28,7 +29,7 @@ import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class GraphPainter implements StudioPlugin, GraphPainterTif {
+public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTif {
     private static final String TOOL_NAME = "graph-painter";
 
     private static final String RESOURCE_DIR = "/resources";
@@ -66,12 +67,12 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 
     public void displayGraph(String id, ATerm graphTerm) {
         GraphPanel panel = getPanel(id);
-        if (panel != null) {
-            Graph graph = graphFactory.GraphFromTerm(graphTerm);
-            panel.setGraph(new nl.cwi.sen1.gui.plugin.GraphAdapter(graph));
-        } else {
-            System.err.println("panel not found");
+        if (panel == null) {
+        	panel = createPanel(id);
         }
+
+        Graph graph = graphFactory.GraphFromTerm(graphTerm);
+        panel.setGraph(new nl.cwi.sen1.gui.plugin.GraphAdapter(graph));
     }
 
     private GraphPanel createPanel(final String id) {
@@ -79,7 +80,12 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
 
         if (panel == null) {
             panel = new GraphPanel(id, preferences);
-            StudioComponentImpl comp = new StudioComponentImpl(id, panel);
+            StudioComponentImpl comp = new StudioComponentImpl(id, panel) {
+				public void requestClose() throws CloseAbortedException {
+					throw new CloseAbortedException();
+				}
+            };
+       
             panel.setGraphPanelListener(new GraphPanelListener() {
                 public void nodeSelected(String nodeId) {
                     bridge.postEvent(studio.getATermFactory().make(
@@ -240,6 +246,8 @@ public class GraphPainter implements StudioPlugin, GraphPainterTif {
     }
 
     public void recTerminate(ATerm t0) {
+    	GraphPanel.cleanUp();
+    	fireStudioPluginClosed();
     }
 
     public void recAckEvent(ATerm t0) {

@@ -1,12 +1,18 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 22, 2005 1:14:23 PM
+// generation time: May 30, 2005 2:02:01 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class GraphPainterTool
   extends SwingTool

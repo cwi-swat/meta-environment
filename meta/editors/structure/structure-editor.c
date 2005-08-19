@@ -311,6 +311,42 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 }
 
 /*}}}  */
+/*{{{  void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col) */
+
+void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col)
+{
+  SE_StructureEditor editor;
+
+  editor = getEditor(editorId);
+  if (editor != NULL) {
+    PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
+    PT_Tree tree = PT_getParseTreeTop(parseTree);
+    PT_Tree cursor;
+
+    cursor = PT_findTreeAtLineColumn(tree, line, col);
+
+    if (cursor == NULL) {
+      cursor = tree;
+    }
+
+    editor = SE_makeStructureEditorDefault(parseTree, cursor);
+
+    if (PT_isTreeLit(cursor)) {
+      editor = moveCursorUp(editor);
+    }
+    while (PT_isTreeLexical(cursor)) {
+      editor = moveCursorUp(editor);
+      cursor = SE_getStructureEditorCursor(editor);
+    }
+
+    setEditor(editorId, editor);
+  }
+  else {
+    ATwarning("set_cursor_at_line_column: no such editor: %t\n", editorId);
+  }
+}
+
+/*}}}  */
 /*{{{  ATerm get_cursor(int cid, ATerm editorId) */
 
 ATerm get_cursor(int cid, ATerm editorId)
@@ -408,7 +444,7 @@ ATerm get_tree_slices(int cid, ATerm editorId)
 					   ATtrue, ATtrue);
     slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
 
-    return ATmake("snd-value(tree-slices(<term>))", ATBpack((ATerm) slices));
+    return ATmake("snd-value(tree-slices(<term>))", (ATerm) slices);
   }
 
   return ATmake("snd-value(no-tree-slices)"); 

@@ -1,6 +1,7 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Color;
+
 import edu.berkeley.guir.prefuse.graph.DefaultNode;
 
 public class GraphNode extends DefaultNode {

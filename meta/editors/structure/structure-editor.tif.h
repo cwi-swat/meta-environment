@@ -9,8 +9,9 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_tree_slices(int conn, ATerm);
 void set_cursor_at_offset(int conn, ATerm, int);
+ATerm get_tree_slices(int conn, ATerm);
+void set_cursor_at_line_column(int conn, ATerm, int, int);
 ATerm get_parse_tree(int conn, ATerm);
 ATerm get_cursor(int conn, ATerm);
 void delete_editor(int conn, ATerm);

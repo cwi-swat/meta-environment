@@ -6,12 +6,14 @@ tool structure-editor is {
 
 process StructureEditor is
 let
+  SE: structure-editor,
+  Column: int,
   Direction: term,
   EditorId: term,
   Focus: term,
+  Line: int,
   Offset: int,
   ParseTree: term,
-  SE: structure-editor,
   Sort: str,
   Tree: term,
   Slices : term
@@ -46,6 +48,9 @@ in
   +
     rec-msg(se-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(SE, set-cursor-at-offset(EditorId, Offset))
+  +
+    rec-msg(se-set-cursor-at-line-column(EditorId?, Line?, Column?))
+    . snd-do(SE, set-cursor-at-line-column(EditorId, Line, Column))
   +
     rec-msg(se-get-cursor(EditorId?))
     . snd-eval(SE, get-cursor(EditorId))

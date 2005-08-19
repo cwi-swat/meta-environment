@@ -5,6 +5,7 @@
 #include "module-selection-listener.tb"
 #include "module-actions.tb"
 #include "error-gui/error-viewer.idef"
+#include "editor-plugin/editor-plugin.idef"
 #include "status-to-progress.tb"
 
 /* sdf-meta */
@@ -12,7 +13,12 @@
 #include "sdf-import-graph.idef"
 
 /* to be resolved */
-#include "button-actions.tb"
+#include <asfsdf-editor-actions.tb>
+#include <asfsdf-module-actions.tb>
+#include <gui-actions.tb>
+#include <term-actions.tb>
+#include <term-editor-actions.tb>
+#include <termstore-actions.tb>
 
 process StartNavigator is
   snd-msg(load-jar("file://__PKGDATA__/navigator.jar", ["file://__PKGDATA__/gui-util.jar","file://__PKGDATA__/gui-data.jar"]))

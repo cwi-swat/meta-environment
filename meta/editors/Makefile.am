@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = manager structure text 
+SUBDIRS = manager structure

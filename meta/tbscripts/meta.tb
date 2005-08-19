@@ -1,6 +1,5 @@
 /* meta-kernel */
 #include "configuration-manager.idef"
-#include "editor-hive.idef"
 #include "editor-manager.idef"
 #include "generic-adapter.idef" 
 #include "graph-converter.idef"

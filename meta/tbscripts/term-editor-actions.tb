@@ -1,0 +1,33 @@
+
+process ActionEditTerm(Filename : str, Modulename : str) is
+let
+  Sid: term,
+  Pid: int,
+  ErrorMessage : str
+in
+  create(EditTerm(Filename, Modulename), Pid?)
+  .
+  (
+    rec-msg(term-editor-started(Filename, Modulename, Sid?))
+    . create(CleanupEditTerm(Sid, Filename), Pid?)
+  +
+    rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
+    . Error(ErrorMessage, [])
+  )
+endlet
+
+process EditorEditTermAction(EditorId : term) is
+let
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . EditTermAction(Modulename)
+endlet
+
+process EditTermAction(Modulename : str) is
+let
+  Filename : str
+in
+  PromptForFile("Edit Term", "", Modulename, Filename?) 
+  . ActionEditTerm(Filename, Modulename)
+endlet

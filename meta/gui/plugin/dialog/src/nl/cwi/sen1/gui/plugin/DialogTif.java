@@ -1,10 +1,10 @@
 // Java tool interface DialogTif
 // This file is generated automatically, please do not edit!
-// generation time: May 10, 2005 8:54:27 AM
+// generation time: May 30, 2005 2:01:34 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
+import aterm.ATerm;
 
 public interface DialogTif
 {

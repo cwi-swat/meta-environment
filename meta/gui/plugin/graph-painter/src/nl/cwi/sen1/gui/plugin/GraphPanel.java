@@ -19,6 +19,7 @@ import edu.berkeley.guir.prefuse.action.filter.GraphFilter;
 import edu.berkeley.guir.prefuse.action.filter.TreeFilter;
 import edu.berkeley.guir.prefuse.activity.ActionList;
 import edu.berkeley.guir.prefuse.activity.Activity;
+import edu.berkeley.guir.prefuse.activity.ActivityManager;
 import edu.berkeley.guir.prefuse.activity.SlowInSlowOutPacer;
 import edu.berkeley.guir.prefuse.event.ControlAdapter;
 import edu.berkeley.guir.prefuse.event.FocusEvent;
@@ -28,7 +29,6 @@ import edu.berkeley.guir.prefuse.graph.DefaultNode;
 import edu.berkeley.guir.prefuse.graph.Graph;
 import edu.berkeley.guir.prefuse.render.DefaultEdgeRenderer;
 import edu.berkeley.guir.prefuse.render.DefaultRendererFactory;
-import edu.berkeley.guir.prefuse.render.PolygonRenderer;
 import edu.berkeley.guir.prefuse.render.ShapeRenderer;
 import edu.berkeley.guir.prefuse.render.TextItemRenderer;
 import edu.berkeley.guir.prefusex.controls.DragControl;
@@ -304,6 +304,10 @@ public class GraphPanel extends JPanel {
 
 	public String getId() {
 		return id;
+	}
+	
+	static public void cleanUp() {
+		ActivityManager.kill();
 	}
 
 }

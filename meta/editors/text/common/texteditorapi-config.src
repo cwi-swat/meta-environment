@@ -1,3 +1,0 @@
-#! /bin/sh
-
-echo __PREFIX__/texteditorapi-__VERSION__.jar

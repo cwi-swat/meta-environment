@@ -216,6 +216,7 @@ let
   ParseError: term,
   ParseResult: term,
   Pid: int,
+  CheckPid: int,
   Summary: term
 in
   Pid := process-id
@@ -243,12 +244,12 @@ in
     .
     if equal(Filename, Path) then
       snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
-      /*. printf("registering %s -> %s\n", Path, ModuleId)*/
       . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId))
       . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
       . snd-msg(sm-get-imported-module-names(ParseResult))
       . rec-msg(sm-imported-module-names(Imports?))
       . SetModuleImports(ModuleId, Imports)
+      . create (CheckSyntaxSpecification(ModuleId), CheckPid?)
     else
       Error("Module %s should be in a file named %s\n", [ModuleId, Filename])
     fi

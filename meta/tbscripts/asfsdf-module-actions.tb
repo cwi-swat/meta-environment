@@ -1,0 +1,258 @@
+process PrintModuleAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Module Text (ASF+SDF)", "", ".txt", Path?)
+  . snd-msg(print-module(Modulename, Path))
+  . rec-msg(module-printed(Modulename))
+endlet
+
+process NewModuleContentHandler is
+let
+  ModuleId: str,
+  Pid: int
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(get-module-contents(Pid, ModuleId?))
+    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
+  +
+    rec-msg(cancel-content-handler(Pid))
+  )
+endlet
+
+process AddImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-all-module-names)
+  . rec-msg(all-module-names(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose a module to import", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
+                               [Import, Modulename])))
+    . AddImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+process RemoveImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-imported-modules(Modulename))
+  . rec-msg(imported-modules(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose an import to remove", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Removing import %s from %s",
+                               [Import, Modulename])))
+    . RemoveImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+process NewModuleAction is
+let
+  Extension : str,
+  Directory : str,
+  Pid: int,
+  FileName : str,
+  Path : str
+in
+  PromptForFileWithExtension("New Module", "", ".sdf", Path?)
+  . SplitFileName(Path, FileName?, Directory?, Extension?)
+  . create(NewModuleContentHandler(), Pid?)
+  . CreateModule(Pid, Directory, FileName, sdf)
+endlet
+
+process OpenModuleAction is
+let
+  Extension : str,
+  Directory : str,
+  Path : str,
+  Filename : str
+in
+  PromptForFileWithExtension("Open Module", "", ".sdf", Path?)
+  .
+  if equal(Path, "") then
+    tau
+  else
+    SplitFileName(Path, Filename?, Directory?, Extension?)
+    . BuildPath(Directory, Filename, Extension, Path?)
+    . snd-note(start-modules-batch)
+    . OpenModule(Path, sdf, Filename)
+    . snd-note(end-modules-batch)
+  fi
+endlet
+
+process DumpEquationsAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations", "", ".eqs", Path?)
+  . snd-msg(dump-equations-given-file(Modulename, Path))
+  . rec-msg(equations-dumped)
+endlet
+
+process DumpParseTableAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Path?)
+  . DumpParseTable(Modulename, Path, trm)
+endlet
+
+process EditorDumpParseTableAction(EditorId : term) is
+let
+  Path : str,
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Path?)
+  . DumpParseTable(Modulename, Path, trm)
+endlet
+
+process DumpEquationsParseTableAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Path?)
+  . DumpParseTable(Modulename, Path, eqs)
+endlet
+
+process EditorDumpEquationsParseTableAction(EditorId : term) is
+let
+  Path : str,
+  Modulename : str
+in
+  GetActiveModule(EditorId, Modulename?)
+  . PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Path?)
+  . DumpParseTable(Modulename, Path, eqs)
+endlet
+
+process DumpSdfDefinitionAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Export SDF Definition", "", ".def", Path?)
+  . snd-msg(dump-sdf-definition(Modulename, Path))
+  . rec-msg(sdf-definition-dumped)
+endlet
+
+process CompileModuleAction(Modulename : str) is
+let
+  Path : str
+in
+  PromptForFileWithExtension("Target C file", "", ".c", Path?)
+  . snd-msg(compile-module(Modulename, Path))
+  . rec-msg(compilation-ready(Modulename))
+endlet
+
+process CloseModuleAction(Modulename : str) is
+let
+  Answer     : term,
+  Recursive  : bool
+in
+  AskQuestion("Do you want to recursively close the imported modules?", Answer?)
+  . if equal(Answer, cancel) then
+      tau
+    else
+      if equal(Answer, yes) then
+        Recursive := true
+      else
+        Recursive := false
+      fi 
+      . CloseModule(Modulename, Recursive)
+    fi
+endlet
+
+process RenameModuleAction(Modulename : str) is
+let
+  Directory : str,
+  Filename : str,
+  Extension : str,
+  Path : str
+in
+  PromptForFileWithExtension("Rename module to", "", ".sdf", Path?)
+  . SplitFileName(Path, Filename?, Directory?, Extension?)
+  . RenameModule(Modulename, Directory, Filename)
+endlet
+
+process CopyModuleAction(Modulename : str) is
+let
+  Path : str,
+  Directory : str,
+  Filename : str,
+  Extension : str
+in
+  PromptForFileWithExtension("Copy module to", "", ".sdf", Path?)
+  . SplitFileName(Path, Filename?, Directory?, Extension?)
+  . CopySdfModule(Modulename, Directory, Filename)
+  . CopyAsfModule(Modulename, Directory, Filename)
+endlet
+
+process DeleteModuleAction(Modulename : str) is
+let
+  Answer : term
+in
+  AskQuestion("Are you sure you want delete this module (from disk)?", Answer?)
+  . if equal(Answer, cancel) then
+      tau
+    else
+      if equal(Answer, yes) then
+        DeleteModule(Modulename)
+      else
+        tau
+      fi 
+    fi
+endlet
+
+process CreateModuleAction(Filename : str) is
+let
+  Directory : str,
+  Pid: int
+in
+  snd-msg(io-relative-to-absolute(["."]))
+  . rec-msg(io-absolute-directories([Directory?]))
+  . create(NewModuleContentHandler(), Pid?)
+  . CreateModule(Pid, Directory, Filename, sdf)
+endlet
+
+process CheckSyntaxSpecification(ModuleName : str) is
+let
+  Syntax    : term,
+  ErrorMessage : str,
+  Feedback  : term,
+  Id : int
+in
+  Id := process-id .
+  snd-note(ui-status(statf(Id, 
+                           "Checking syntax definition: %s",
+                           [ModuleName]))) .
+  snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
+  (
+    rec-msg(syntax(Syntax?)) .
+    snd-msg(check-asfsdf(Syntax, ModuleName)) .
+    rec-msg(feedback(Feedback?)) .
+    snd-msg(display-sdf-errors(ModuleName, Feedback)) .
+    Syntax := no-tree
+  +
+    rec-msg(no-syntax(ErrorMessage?))
+  ) .
+  snd-note(ui-status(endstat(Id)))
+endlet

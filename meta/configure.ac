@@ -8,18 +8,6 @@ AM_MAINTAINER_MODE
 
 AC_PROG_CC
 
-dnl libltdl was installed by 'libtoolize --ltdl', now configure it:
-AC_LIBLTDL_CONVENIENCE
-
-AM_CONDITIONAL(INSTALL_LTDL, [false] )
-AM_CONDITIONAL(CONVENIENCE_LTDL, [true] )
-AC_SUBST(LIBLTDL)
-AC_SUBST(INCLTDL)
-AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
-AC_SUBST(LIBADD_DL)
-AC_CONFIG_SUBDIRS(libltdl)
-
 dnl Handle cflags option
 AC_ARG_WITH(cflags,
   [  --with-cflags=CFLAGS    standard options of c compiler],
@@ -159,6 +147,10 @@ if test "x${JAVA}" = "x"; then
   AC_MSG_ERROR("make sure java version 1.4 or better is in your PATH")
 fi
 
+dnl Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_PROG_MAKE_SET([])
 
@@ -193,7 +185,6 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
-   libltdl/Makefile
    gui/Makefile
    gui/data/Makefile
    gui/lib/Makefile
@@ -208,10 +199,6 @@ AC_CONFIG_FILES([Makefile
    term-store/snapshot/Makefile
    editors/Makefile
    editors/manager/Makefile
-   editors/text/Makefile
-   editors/text/common/Makefile
-   editors/text/gvim/Makefile
-   editors/text/emacs/Makefile
    editors/structure/Makefile
    tbscripts/Makefile
    configuration-manager/Makefile

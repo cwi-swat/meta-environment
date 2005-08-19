@@ -1,0 +1,78 @@
+
+process AskQuestion(Question : str, Answer : term?) is
+  snd-msg(ask-question(Question))
+  . rec-msg(ask-question-result(Answer?))
+
+process ClearHistoryAction is
+  snd-msg(clear-history)
+
+process PromptForFile(Title : str, Path : str, Modulename : str, Filename : str?) is
+let
+  Extension : str
+in
+  snd-msg(get-modulename-extension(Modulename))
+  .
+  (
+    rec-msg(modulename-extension(Modulename, Extension?))
+  +
+    rec-msg(no-modulename-extension(Modulename))
+    . snd-msg(file-extension-hook(trm))
+    . rec-msg(file-extension-hook-result(Extension?))
+  )
+  . snd-msg(ask-for-file(Title, Path, Extension))
+  . rec-msg(ask-for-file-result(Filename?))
+endlet
+
+process PromptForFileWithExtension(String : str, 
+                                   Path : str, 
+				   Extension : str, 
+				   Filename : str?) is
+  snd-msg(ask-for-file(String, Path, Extension))
+  . rec-msg(ask-for-file-result(Filename?))
+
+process Reduce(EditorId : term, Modulename : str, Tree : term, RTree : term?) is
+  snd-msg(debugging(off)) 
+  . ReduceTerm(Tree, Modulename, RTree?)
+  .
+  if not-equal(RTree, error-tree) then
+    snd-msg(promote-posinfo-to-origin(RTree))
+    . rec-msg(promoted-posinfo-to-origin(RTree?))
+    . AnnotateTree(RTree, "reduct.out", RTree?)
+    . snd-msg(put-term-tree("reduct.out", RTree))
+  else
+    tau
+  fi
+
+process ExitAction is
+  shutdown("")
+
+
+process ShowTreeAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term
+in
+  GetActiveModule(EditorId, Modulename?)
+  . GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, no-tree) then
+    ShowTree(Modulename, Tree, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowFullTreeAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term
+in
+  GetActiveModule(EditorId, Modulename?)
+  . GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, no-tree) then
+    ShowTree(Modulename, Tree, true)
+  else
+    tau
+  fi
+endlet

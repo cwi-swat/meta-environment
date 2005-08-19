@@ -19,6 +19,11 @@ ATerm MC_stringToChars(const char *str)
   return (ATerm) result;
 }
 
+ATerm MC_byteToChar(char ch)
+{
+    return (ATerm) ATmakeInt(ch);
+}
+
 char *MC_charsToString(ATerm arg)
 {
   ATermList list = (ATermList) arg;
@@ -37,6 +42,11 @@ char *MC_charsToString(ATerm arg)
   str[i] = '\0';
 
   return str;
+}
+
+char MC_charToByte(ATerm arg)
+{
+    return (char) ATgetInt((ATermInt) arg);
 }
 
 

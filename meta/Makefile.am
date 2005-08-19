@@ -4,14 +4,10 @@ ACLOCAL_FLAGS = -I .
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = make_rules program-check.m4 package libltdl/config-h.in
+EXTRA_DIST = make_rules package
 
 CLEANFILES = \
-	${PACKAGE}-${VERSION}.pkg \
-	libltdl/config.log \
-	libltdl/config.h \
-	libltdl/config.status \
-	libltdl/stamp-h1
+	${PACKAGE}-${VERSION}.pkg
 
 SUBDIRS = \
 	src \

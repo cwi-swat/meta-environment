@@ -1,0 +1,98 @@
+process SplitFileName(Path : str, 
+                      FileName : str?,
+		      Directory : str?, 
+		      Extension : str?) is
+  snd-msg(io-get-path-filename(Path))
+  . rec-msg(io-filename(Path, FileName?))
+  . snd-msg(io-get-path-directory(Path))
+  . rec-msg(io-directory(Path, Directory?))
+  . snd-msg(io-get-path-extension(Path))
+  . rec-msg(io-extension(Path, Extension?))
+
+
+process EqualTrees(Tree1 : term, Tree2 : term, Result : term?) is
+let
+  Value : term
+in
+  snd-msg(equal-trees(Tree1, Tree2))
+  .  rec-msg(Value?)
+  . 
+  if equal(Value, quote(true)) then
+    Result := true
+  else
+    Result := false
+  fi
+endlet
+
+process UnPackTree(Tree : term, UnpackedTree : term?) is
+  snd-msg(io-unpack-term(Tree))
+  . rec-msg(io-term(UnpackedTree?))
+
+process PackTree(Tree : term, PackedTree : term?) is
+  snd-msg(io-pack-term(Tree))
+  . rec-msg(io-term(PackedTree?))
+
+process ActionAddPosInfo(EditorId : term, Tree : term, ResultTree : term?) is
+let
+  Filename : str
+in
+  GetPath(EditorId, Filename?)
+  . AnnotateTree(Tree, Filename, ResultTree?)
+endlet
+
+process CheckSort(Tree : term, SortName : str, Result : term?) is
+let
+  ResultTree : term
+in
+  CheckTreeSort(Tree, SortName, ResultTree?)
+  .
+  if not-equal(ResultTree, error-tree) then
+    Result := true
+  else
+    Result := false
+  fi
+endlet
+
+process ApplyFunction(FuncName : str, SortName : str, Arguments : list, Tree : term?) is
+  snd-msg(apply-function(FuncName, SortName, Arguments))
+  . rec-msg(tree(Tree?))
+
+process PrettyPrint(EditorId : term,
+                    Modulename : str, 
+		    Tree : term, 
+		    RTree : term?) is
+let
+  Filename : str
+in
+  PrettyPrintTerm(Modulename, Tree, RTree?)
+  .
+  if not-equal(RTree, error-tree) then
+    GetPath(EditorId, Filename?)
+    . AnnotateTree(RTree, Filename, RTree?)
+  else
+    tau
+  fi
+endlet
+
+process PrettyPrintAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term,
+  RTree : term,
+  Available : bool
+in
+  GetTree(EditorId, Tree?, Available?)
+  .
+  if equal(Available, true) then
+    GetActiveModule(EditorId, Modulename?)
+    . PrettyPrint(EditorId, Modulename, Tree, RTree?)
+    . 
+    if not-equal(RTree, error-tree) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet

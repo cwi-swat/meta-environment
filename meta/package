@@ -23,6 +23,8 @@ error-support 1.2
 
 error-gui 1.0
 
+editor-plugin 1.0
+
 aterm-java 1.6
 
 toolbus 1.3.1

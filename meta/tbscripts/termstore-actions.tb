@@ -1,0 +1,38 @@
+
+process SaveTermStoreAction is
+let
+  FileName : str
+in
+  PromptForFileWithExtension("Save Term Store", "", ".termstore", FileName?)
+  . SaveTermStore(FileName)
+endlet
+
+
+process ReadTermStoreAction is
+let
+  FileName : str
+in
+  PromptForFileWithExtension("Read Term Store", "", ".termstore", FileName?)
+  . CloseAll
+  . InitializeTermStore(FileName)
+endlet
+
+process SaveTermStore(Path : str) is
+let
+  EditorId : term,
+  Error: term
+in
+  (
+    snd-msg(register-termstore-name(Path))
+    . rec-msg(termstore-name-registered)
+    . snd-msg(save-termstore)
+    .
+    (
+      rec-msg(saved)
+    +
+      rec-msg(not-saved(Error?))
+      . snd-note(ui-status(errorf("Saving failed: %t", [Error])))
+    )
+  )
+endlet
+

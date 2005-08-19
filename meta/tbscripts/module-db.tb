@@ -609,7 +609,7 @@ let
   Filename: str,
   Extension: str
 in
-  snd-msg(ts-get-str-value("module-path", Module))
+  snd-msg(ts-get-str-value("module-path", Module)) 
   . rec-msg(ts-value(Path?))
   . snd-msg(file-extension-hook(Type))
   . rec-msg(file-extension-hook-result(Extension?))

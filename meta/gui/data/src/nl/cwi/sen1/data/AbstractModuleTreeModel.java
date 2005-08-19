@@ -1,8 +1,8 @@
 package nl.cwi.sen1.data;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashSet;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;

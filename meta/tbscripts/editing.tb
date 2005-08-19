@@ -1,3 +1,135 @@
+process ActivateEditor(Modulename : str, Filename : str, Tree : term) is
+let
+  FunSym : str,
+  String : str
+in
+  FunSym := fun(Tree)
+  .
+  if equal(FunSym, "str") then
+    String := first(args(Tree))
+    . ActivateEditorWithString(String, Modulename, Filename)
+  else
+    ActivateEditorWithTree(Tree, Modulename, Filename)
+  fi
+endlet
+
+process DisplayMessage(EditorId : term, Message : str) is
+  snd-msg(te-display-message(EditorId, Message))
+
+process GetActiveModule(EditorId : term, ModuleName : str?) is
+  snd-msg(em-get-modulename(EditorId))
+  .
+  (
+    rec-msg(em-modulename(EditorId, ModuleName?))
+  +
+    rec-msg(em-no-such-session(EditorId)) 
+    . printf("FIX ME: PushActiveModule: No such session, sending dummy modulename\n")
+    . ModuleName := "basic/Whitespace"
+  +
+    rec-msg(em-session-not-bound(EditorId))
+    . printf("FIX ME: PushActiveModule: Session not bound, sending dummy modulename\n")
+    . ModuleName := "basic/Whitespace"
+  )
+
+ 
+process SetRoot(EditorId : term, Tree : term) is
+  ReplaceFocus(EditorId, Tree)
+
+process GetTree(Sid: term, Tree: term?, Available: bool?) is
+let
+  Modulename: str,
+  Registered: bool
+in
+  GetActiveModule(Sid, Modulename?)
+  . ParseTerm(Sid, Modulename)
+  . IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    GetParsetree(Sid, Tree?)
+    . Available := true
+  else
+    Available := false
+  fi
+endlet
+
+process GetFocus(Sid: term, Tree: term?) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    snd-msg(se-get-cursor(Sid))
+    .
+    (
+      rec-msg(se-cursor(Sid, Tree?))
+    +
+      rec-msg(se-no-cursor(Sid))
+      . Tree := no-tree
+    )
+  else
+    Tree := no-tree
+  fi
+endlet
+
+process GetParsetree(Sid: term, Parsetree: term?) is
+  snd-msg(se-get-parse-tree(Sid))
+  . rec-msg(se-parse-tree(Sid, Parsetree?))
+
+process ReplaceFocus(Sid: term, Tree: term) is
+let
+  Text: str,
+  Filename: str,
+  Error: str
+in
+  snd-msg(unparse(Tree))
+  . rec-msg(unparsed-text(Text?))
+  . GetPath(Sid, Filename?)
+  . snd-msg(io-write-text-list(Filename, [Text]))
+  .
+  (
+    rec-msg(io-file-written)
+    . snd-msg(te-reread-contents(Sid))
+  +
+    rec-msg(io-file-not-written(Error?))
+    . snd-note(ui-status(errorf("%s: %s", [Filename, Error])))
+  )
+  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(te-clear-focus(Sid))
+endlet
+
+process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
+let
+  TreeSort: str
+in
+/*
+  snd-msg(se-check-tree-sort(Sort, Tree))
+  .
+  (
+    rec-msg(se-wrong-sort(TreeSort?))
+    . snd-note(ui-status(errorf("Top sort %s of tree does not match %s",
+                                [TreeSort, Sort])))
+    . RTree := error-tree
+  +
+    rec-msg(se-sort-ok)
+    . RTree := Tree
+  )
+*/
+  RTree := Tree
+endlet
+process GetRoot(EditorId : term, Tree : term?) is
+let
+  Available : bool
+in
+  GetTree(EditorId, Tree?, Available?)
+  .
+  if equal(Available, true) then
+    tau
+  else
+    Tree := no-tree
+  fi
+endlet
+
 process GetPath(Sid: term, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
@@ -70,10 +202,10 @@ in
   else
     snd-msg(em-register-editor(Sid, text))
     . GetPath(Sid, Path?)
-    . snd-msg(te-edit-text(Sid, EDITOR, Path))
-    . snd-msg(cm-get-events(Type))
-    . rec-msg(cm-events(Events?))
-    . snd-msg(te-add-actions(Sid, Events))
+    . snd-msg(te-edit-text(Sid, Path))
+    /*. snd-msg(cm-get-events(Type))*/
+    /*. rec-msg(cm-events(Events?))*/
+    /*. snd-msg(te-add-actions(Sid, Events))*/
     . snd-msg(cm-get-module-events(Type, Name))
     . rec-msg(cm-module-events(Events?))
     . snd-msg(te-add-actions(Sid, Events))
@@ -122,7 +254,6 @@ endlet
 process MenuSelected(Sid: term, EditorType: term) is
 let
   Action: str,
-  Args: list,
   Event: term,
   ModuleId: str
 in
@@ -133,7 +264,6 @@ in
     rec-msg(em-no-transaction(Sid))
   +
     rec-msg(em-transaction-started(Sid))
-    . Args := []
     . GetModuleId(Sid, ModuleId?)
     . snd-msg(cm-get-module-action(EditorType, Event, ModuleId))
     . rec-msg(cm-module-action(Action?))
@@ -144,10 +274,19 @@ endlet
 
 process MouseClicked(Sid: term) is
 let
+  Column: int,
+  Line: int,
   Offset: int,
+  Pid: int,
   Registered: bool
 in
-  rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+  (
+    rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+    . create(OffsetHandler(Sid, Offset), Pid?)
+  +
+    rec-msg(te-mouse-click-at-line-column(Sid, Line?, Column?))
+    . create(LineColumnHandler(Sid, Line, Column), Pid?)
+  ) 
   . snd-msg(em-request-transaction(Sid))
   .
   (
@@ -157,13 +296,31 @@ in
     . IsStructureEditorRegistered(Sid, Registered?)
     .
     if equal(Registered, true) then
-      snd-msg(se-set-cursor-at-offset(Sid, Offset))
+      snd-msg(handle-mouse-event(Pid))
       . SynchronizeFocus(Sid)
     else
       tau
     fi
     . snd-msg(em-end-transaction(Sid))
   )
+endlet
+
+process OffsetHandler(Sid: term, Offset: int) is
+let
+  Pid: int
+in
+  Pid := process-id
+  . rec-msg(handle-mouse-event(Pid))
+  . snd-msg(se-set-cursor-at-offset(Sid, Offset))
+endlet
+
+process LineColumnHandler(Sid: term, Line: int, Column: int) is
+let
+  Pid: int
+in
+  Pid := process-id
+  . rec-msg(handle-mouse-event(Pid))
+  . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
 process TextChanged(Sid: term) is
@@ -544,3 +701,188 @@ in
     fi
   fi
 endlet
+
+process MoveCursorLeftAction(EditorId : term) is
+  MoveCursor(EditorId, left)
+
+process MoveCursorRightAction(EditorId : term) is
+  MoveCursor(EditorId, right)
+
+process MoveCursorUpAction(EditorId : term) is
+  MoveCursor(EditorId, up)
+
+process MoveCursorDownAction(EditorId : term) is
+  MoveCursor(EditorId, down)
+
+process MoveCursor(Sid: term, Direction: term) is
+let
+  Registered: bool
+in
+  IsStructureEditorRegistered(Sid, Registered?)
+  .
+  if equal(Registered, true) then
+    snd-msg(se-move-cursor(Sid, Direction))
+    . SynchronizeFocus(Sid)
+  else
+    tau
+  fi
+endlet
+
+process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
+let
+  Error: term,
+  Pid: int,
+  Sid: term,
+  Text: str,
+  ErrorMessage: str
+in
+  if not-equal(Tree, error-tree) then
+    snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(io-write-text-list(Filename, [Text]))
+    .
+    (
+      rec-msg(io-file-written)
+      . create(EditTerm(Filename, Modulename), Pid?)
+      .
+      (
+        rec-msg(term-editor-started(Filename, Modulename, Sid?))
+      +
+        rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
+        . Error(ErrorMessage, [])
+      )
+    +
+      rec-msg(io-file-not-written(Error?))
+      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
+    )
+  fi
+endlet
+
+process ActivateEditorWithString(Text: str, Modulename: str, Filename: str) is
+let
+  Error: term,
+  Pid: int,
+  Sid: term,
+  ErrorMessage: str
+in
+  snd-msg(io-write-text-list(Filename, [Text]))
+  .
+  (
+    rec-msg(io-file-written)
+    . create(EditTerm(Filename, Modulename), Pid?)
+    .
+    (
+      rec-msg(term-editor-started(Filename, Modulename, Sid?))
+    +
+      rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
+      . Error(ErrorMessage, [])
+    )
+  +
+    rec-msg(io-file-not-written(Error?))
+    . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
+  )
+endlet
+
+process EditLocation(Pid: int, Location: term) is
+let
+  EditorType: term,
+  Path: str,
+  Sid: term
+in
+  snd-msg(get-location-filename(Location))
+  . rec-msg(location-filename(Path?))
+  . GetEditorType(Path, EditorType?)
+  . StartEditor(Path, EditorType)
+  . snd-msg(em-get-session-by-path(Path))
+  .
+  (
+    rec-msg(em-session(Path, Sid?))
+    . snd-msg(session(Pid, Sid))
+  +
+    rec-msg(em-no-such-session(Path))
+    . snd-msg(no-such-session(Pid))
+  )
+endlet
+
+process ShowOriginAction(EditorId : term) is
+let
+  Origin: term
+in
+  GetFocusOrigin(EditorId, Origin?)
+  . if equal(Origin, no-origin) then
+      DisplayMessage(EditorId, "No origin information available")
+    else
+      ShowAreaAction("Origin", Origin)
+    fi
+endlet
+    
+process ShowAreaAction(Message : str, Location : term) is
+let
+  Pid: int,
+  Subject : term
+in
+  snd-msg(es-make-subject(Message, Location))
+  . rec-msg(es-subject(Subject?))
+  . create(ShowSubjectHandler(Subject), Pid?)
+  . EditLocation(Pid, Location)
+endlet
+
+process ShowFeedbackLocation(Location : term) is
+let
+  Pid: int
+in
+  create(ShowErrorHandler(Location), Pid?)
+  . EditLocation(Pid, Location)
+endlet
+
+process ShowSubjectHandler(Subject: term) is
+let
+  Pid: int,
+  Sid: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowSubject(Sid, Subject)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process ShowErrorHandler(Location: term) is
+let
+  Pid: int,
+  Sid: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowLocation(Sid, Location)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process CleanupEditTerm(Sid: term, Path : str) is
+  subscribe(em-session-deleted(<term>))
+  . rec-note(em-session-deleted(Sid))
+  . snd-msg(ui-remove-feedback-summary("sglr", Path))
+
+process GetFocusOrigin(EditorId : term, Origin: term?) is
+let
+  Cursor : term
+in
+  snd-msg(se-get-cursor(EditorId))
+  . rec-msg(se-cursor(EditorId, Cursor?))
+  . snd-msg(pa-get-origin(Cursor))
+  .
+  (
+    rec-msg(pa-origin(Origin?))
+  +
+    rec-msg(pa-no-origin)
+    . Origin := no-origin
+  )
+endlet
+

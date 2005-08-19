@@ -5,13 +5,13 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.util.StringFormatter;
 import aterm.ATerm;
 import aterm.ATermList;
 
-public class Dialog implements StudioPlugin, DialogTif {
+public class Dialog extends DefaultStudioPlugin implements  DialogTif {
 
 	private static final String WORKING_DIRECTORY = "user.dir";
 
@@ -51,6 +51,7 @@ public class Dialog implements StudioPlugin, DialogTif {
 	}
 
 	public void recTerminate(ATerm t0) {
+		fireStudioPluginClosed();
 	}
 
 	public void showProgressMessage(String message) {

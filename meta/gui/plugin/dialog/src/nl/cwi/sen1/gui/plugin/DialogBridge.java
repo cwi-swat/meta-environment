@@ -1,10 +1,11 @@
 // Java tool bridge DialogBridge
 // This file is generated automatically, please do not edit!
-// generation time: May 10, 2005 8:54:27 AM
+// generation time: May 30, 2005 2:01:34 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class DialogBridge
   extends DialogTool
@@ -106,9 +107,7 @@ public class DialogBridge
     if (tool != null) {
       return tool.showQuestionDialog(s0);
     }
-    else {
       throw new UnsupportedOperationException("method `showQuestionDialog' not supported.");
-    }
   }
 
   //}}}
@@ -119,9 +118,7 @@ public class DialogBridge
     if (tool != null) {
       return tool.showFileDialog(s0, s1, s2);
     }
-    else {
       throw new UnsupportedOperationException("method `showFileDialog' not supported.");
-    }
   }
 
   //}}}

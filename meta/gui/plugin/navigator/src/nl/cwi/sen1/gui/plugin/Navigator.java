@@ -5,10 +5,11 @@ import java.awt.event.MouseEvent;
 import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
+import nl.cwi.sen1.gui.CloseAbortedException;
+import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
-import nl.cwi.sen1.gui.StudioPlugin;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
@@ -18,7 +19,7 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-public class Navigator implements StudioPlugin, NavigatorTif {
+public class Navigator extends DefaultStudioPlugin implements  NavigatorTif {
     private static final String TOOL_NAME = "navigator";
 
     private static final String RESOURCE_DIR = "/resources";
@@ -131,6 +132,7 @@ public class Navigator implements StudioPlugin, NavigatorTif {
     }
 
     public void recTerminate(ATerm t0) {
+    	fireStudioPluginClosed();
     }
 
     public String getName() {
@@ -164,7 +166,11 @@ public class Navigator implements StudioPlugin, NavigatorTif {
 
     private void addNavigatorComponent() {
         final ModuleTree tree = new ModuleTree(this, moduleModel);
-        navigatorComponent = new StudioComponentImpl("Navigator", tree);
+        navigatorComponent = new StudioComponentImpl("Navigator", tree) {
+			public void requestClose() throws CloseAbortedException {
+				throw new CloseAbortedException();
+			}
+        };
         ((StudioWithPredefinedLayout) studio).addComponent(navigatorComponent,
                 StudioImplWithPredefinedLayout.TOP_LEFT);
         // studio.addComponentMenu(navigatorComponent, new JMenu("Navigate"));
@@ -179,7 +185,11 @@ public class Navigator implements StudioPlugin, NavigatorTif {
             }
         });
         StudioComponentImpl hierarchyComponent = new StudioComponentImpl(
-                "Import Hierarchy", panel);
+                "Import Hierarchy", panel) {
+        	public void requestClose() throws CloseAbortedException {
+				throw new CloseAbortedException();
+			}
+        };
         ((StudioWithPredefinedLayout) studio).addComponent(hierarchyComponent,
                 StudioImplWithPredefinedLayout.BOTTOM_LEFT);
         // studio.addComponentMenu(hierarchyAdapter, new JMenu("Hierarchy"));

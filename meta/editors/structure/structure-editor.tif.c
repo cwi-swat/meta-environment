@@ -5,7 +5,7 @@
 
 #include "structure-editor.tif.h"
 
-#define NR_SIG_ENTRIES	11
+#define NR_SIG_ENTRIES	12
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<structure-editor>,create-editor(<term>,<term>))",
@@ -14,6 +14,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<structure-editor>,get-parse-tree(<term>))",
   "rec-eval(<structure-editor>,get-tree-slices(<term>))",
   "rec-do(<structure-editor>,set-cursor-at-offset(<term>,<int>))",
+  "rec-do(<structure-editor>,set-cursor-at-line-column(<term>,<int>,<int>))",
   "rec-eval(<structure-editor>,get-cursor(<term>))",
   "rec-eval(<structure-editor>,get-focus-at-cursor(<term>))",
   "rec-eval(<structure-editor>,get-sort-at-cursor(<term>))",
@@ -26,14 +27,18 @@ ATerm structure_editor_handler(int conn, ATerm term)
 {
   ATerm in, out;
   /* We need some temporary variables during matching */
-  int i0;
+  int i0, i1;
   ATerm t0, t1;
 
+  if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
+    set_cursor_at_offset(conn, t0, i0);
+    return NULL;
+  }
   if(ATmatch(term, "rec-eval(get-tree-slices(<term>))", &t0)) {
     return get_tree_slices(conn, t0);
   }
-  if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
-    set_cursor_at_offset(conn, t0, i0);
+  if(ATmatch(term, "rec-do(set-cursor-at-line-column(<term>,<int>,<int>))", &t0, &i0, &i1)) {
+    set_cursor_at_line_column(conn, t0, i0, i1);
     return NULL;
   }
   if(ATmatch(term, "rec-eval(get-parse-tree(<term>))", &t0)) {
