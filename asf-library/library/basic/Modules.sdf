@@ -23,4 +23,4 @@ context-free syntax
 sorts TableEntry
 context-free syntax
   %% table-entry pairs are key-value pairs of ATerms
-  "table-entry" "(" key:ATerm "," value:ATerm ")" -> KeyValue
+  "table-entry" "(" key:ATerm "," value:ATerm ")" -> TableEntry
