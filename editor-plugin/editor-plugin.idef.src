@@ -107,5 +107,5 @@ process MenuEvent(EditorId: term, MenuEvent: term) is
   snd-msg(te-menu-event(EditorId, MenuEvent))
 
 process StartEditorPanel is
-  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__:__PKGDATA__/ujac-ui.jar"))
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__"))
 toolbus(EditorPlugin)
