@@ -1,0 +1,26 @@
+module Modules
+
+imports languages/aterm/syntax/ATerms
+
+exports
+context-free start-symbols Module
+
+sorts Module
+context-free syntax
+  %% A module has a unique identifier, optional dependencies and attributes
+  "module" "(" id:ATerm "," "[" {Dependency ","}* "]" "," "[" {Attribute ","}* "]"")" -> Module
+
+sorts Dependency
+context-free syntax
+  %% A dependency consists of a pair module-id to module-id
+  "dependency" "(" ATerm "," ATerm ")" -> Dependency
+
+sorts Attribute
+context-free syntax
+  %% An attribute consists of a namespace and a list of key-value pairs
+  "attribute" "(" namespace:ATerm "," "[" {KeyValue ","}* "]" ")" -> Attribute
+
+sorts KeyValue
+context-free syntax
+  %% Key-value pairs are pairs of ATerms
+  "keyvalue" "(" key:ATerm "," value:ATerm ")" -> KeyValue

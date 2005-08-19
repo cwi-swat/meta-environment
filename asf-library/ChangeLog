@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 19 15:15:10 CEST 2005 <kooiker@cwi.nl>
+ * library/basic/Modules.sdf:
+   - Describes the syntax of the modules used in the meta-env
+
 Wed Jun  8 09:37:00 CEST 2005 <M336@cwi.nl>
  * library/basic/Areas.sdf:
    - Added comments describing the structure of an area
