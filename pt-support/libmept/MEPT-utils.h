@@ -200,6 +200,7 @@ void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities);
 PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout);
 PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout);
 
-ATbool PT_includesCharClass(PT_Symbol smaller, PT_Symbol larger);
+ATbool PT_subsetOfCharClass(PT_Symbol smaller, PT_Symbol larger);
+ATbool PT_elementOfCharClass(PT_Tree character, PT_Symbol charClass);
 
 #endif /* _ME_PT_H */
