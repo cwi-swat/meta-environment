@@ -1,5 +1,9 @@
 $Id$
 
+Fri Aug 19 14:48:33 CEST 2005 <jurgenv@cwi.nl>
+ * restorebrackets/Makefile.am: removed superfluous linking flag
+   that triggered a build error.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
