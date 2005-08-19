@@ -176,7 +176,7 @@ PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges);
 PT_Symbols PT_makeSymbolsEmpty(void);
 PT_Symbols PT_makeSymbolsSingle(PT_Symbol head);
 PT_Symbols PT_makeSymbolsMany(PT_Symbol head, PT_Symbols tail);
-PT_CharRange PT_makeCharRangeCharacter(int integer);
+PT_CharRange PT_makeCharRangeCharacter(int start);
 PT_CharRange PT_makeCharRangeRange(int start, int end);
 PT_CharRanges PT_makeCharRangesEmpty(void);
 PT_CharRanges PT_makeCharRangesSingle(PT_CharRange head);
@@ -393,13 +393,10 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 ATbool PT_isValidCharRange(PT_CharRange arg);
 inline ATbool PT_isCharRangeCharacter(PT_CharRange arg);
 inline ATbool PT_isCharRangeRange(PT_CharRange arg);
-ATbool PT_hasCharRangeInteger(PT_CharRange arg);
 ATbool PT_hasCharRangeStart(PT_CharRange arg);
 ATbool PT_hasCharRangeEnd(PT_CharRange arg);
-int PT_getCharRangeInteger(PT_CharRange arg);
 int PT_getCharRangeStart(PT_CharRange arg);
 int PT_getCharRangeEnd(PT_CharRange arg);
-PT_CharRange PT_setCharRangeInteger(PT_CharRange arg, int integer);
 PT_CharRange PT_setCharRangeStart(PT_CharRange arg, int start);
 PT_CharRange PT_setCharRangeEnd(PT_CharRange arg, int end);
 
@@ -430,7 +427,7 @@ PT_Attr PT_visitAttr(PT_Attr arg, PT_Associativity (*acceptAssoc)(PT_Associativi
 PT_Associativity PT_visitAssociativity(PT_Associativity arg);
 PT_Symbol PT_visitSymbol(PT_Symbol arg, char* (*acceptString)(char*), PT_Symbols (*acceptSymbols)(PT_Symbols), PT_Symbols (*acceptRest)(PT_Symbols), int (*acceptNumber)(int), char* (*acceptSort)(char*), PT_Symbols (*acceptParameters)(PT_Symbols), PT_CharRanges (*acceptRanges)(PT_CharRanges));
 PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));
-PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int (*acceptStart)(int), int (*acceptEnd)(int));
+PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptStart)(int), int (*acceptEnd)(int));
 PT_CharRanges PT_visitCharRanges(PT_CharRanges arg, PT_CharRange (*acceptHead)(PT_CharRange));
 
 /*}}}  */

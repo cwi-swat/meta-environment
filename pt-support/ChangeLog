@@ -1,5 +1,11 @@
 $Id$
 
+Fri Aug 19 09:21:04 CEST 2005 <jurgenv@cwi.nl>
+ * MEPT.adt: changed field <character(int)> in CharRange to
+             <start(int)>, to streamline coding with CharRanges.
+ * character-classes.c: Added functionality in MEPT-utils.h to
+   check whether a char-class symbol is a subset of another.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support

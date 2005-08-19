@@ -51,7 +51,7 @@ constructor(Symbol, layout, layout),
 constructor(Symbol, char-class, char-class(<ranges(CharRanges)>)),
 list(Symbols, Symbol), 
 
-constructor(CharRange, character, <integer(int)>), 
+constructor(CharRange, character, <start(int)>), 
 constructor(CharRange, range, range(<start(int)>, <end(int)>)),
 list(CharRanges, CharRange)
 ]

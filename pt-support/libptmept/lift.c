@@ -511,7 +511,7 @@ static PTPT_CharRange PTPT_liftCharRange(PT_CharRange range)
   PTPT_CharRange result = NULL;
 
   if (PT_isCharRangeCharacter(range)) {
-    PTPT_NatCon nat = PTPT_liftNatCon(PT_getCharRangeInteger(range));
+    PTPT_NatCon nat = PTPT_liftNatCon(PT_getCharRangeStart(range));
     result = PTPT_makeCharRangeCharacter(nat);
   }
   else if (PT_isCharRangeRange(range)) {

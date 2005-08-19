@@ -24,7 +24,7 @@ static int lengthOfInteger(int ch)
 static int lengthOfCharRange(PT_CharRange charRange)
 {
   if (PT_isCharRangeCharacter(charRange)) {
-    int ch = PT_getCharRangeInteger(charRange);
+    int ch = PT_getCharRangeStart(charRange);
     return lengthOfInteger(ch);  
   }
   else if (PT_isCharRangeRange(charRange)) {
@@ -259,7 +259,7 @@ static int yieldCharRange(PT_CharRange charRange, int idx, char *buf, int bufSiz
   assert(idx <= bufSize);
 
   if (PT_isCharRangeCharacter(charRange)) {
-    int ch = PT_getCharRangeInteger(charRange);
+    int ch = PT_getCharRangeStart(charRange);
     idx = yieldInteger(ch, idx, buf, bufSize);
     return idx;
   }

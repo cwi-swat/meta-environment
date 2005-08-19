@@ -20,7 +20,8 @@ libmept_a_SOURCES = \
 	reportAmbs.c \
 	symbol-renaming.c \
 	yieldPT.c \
-	yieldProd.c
+	yieldProd.c \
+	character-classes.c
 
 AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
 

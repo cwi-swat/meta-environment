@@ -880,11 +880,11 @@ PT_Symbols PT_makeSymbolsMany(PT_Symbol head, PT_Symbols tail)
 }
 
 /*}}}  */
-/*{{{  PT_CharRange PT_makeCharRangeCharacter(int integer) */
+/*{{{  PT_CharRange PT_makeCharRangeCharacter(int start) */
 
-PT_CharRange PT_makeCharRangeCharacter(int integer)
+PT_CharRange PT_makeCharRangeCharacter(int start)
 {
-  return (PT_CharRange)(ATerm) (ATerm) ATmakeInt(integer);
+  return (PT_CharRange)(ATerm) (ATerm) ATmakeInt(start);
 }
 
 /*}}}  */
@@ -3550,22 +3550,14 @@ inline ATbool PT_isCharRangeRange(PT_CharRange arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasCharRangeInteger(PT_CharRange arg) */
-
-ATbool PT_hasCharRangeInteger(PT_CharRange arg)
-{
-  if (PT_isCharRangeCharacter(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  ATbool PT_hasCharRangeStart(PT_CharRange arg) */
 
 ATbool PT_hasCharRangeStart(PT_CharRange arg)
 {
-  if (PT_isCharRangeRange(arg)) {
+  if (PT_isCharRangeCharacter(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isCharRangeRange(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3583,20 +3575,14 @@ ATbool PT_hasCharRangeEnd(PT_CharRange arg)
 }
 
 /*}}}  */
-/*{{{  int PT_getCharRangeInteger(PT_CharRange arg) */
-
-int PT_getCharRangeInteger(PT_CharRange arg)
-{
-  
-    return (int)ATgetInt((ATermInt) arg);
-}
-
-/*}}}  */
 /*{{{  int PT_getCharRangeStart(PT_CharRange arg) */
 
 int PT_getCharRangeStart(PT_CharRange arg)
 {
-  
+  if (PT_isCharRangeCharacter(arg)) {
+    return (int)ATgetInt((ATermInt) arg);
+  }
+  else 
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
@@ -3610,24 +3596,14 @@ int PT_getCharRangeEnd(PT_CharRange arg)
 }
 
 /*}}}  */
-/*{{{  PT_CharRange PT_setCharRangeInteger(PT_CharRange arg, int integer) */
-
-PT_CharRange PT_setCharRangeInteger(PT_CharRange arg, int integer)
-{
-  if (PT_isCharRangeCharacter(arg)) {
-    return (PT_CharRange)((ATerm) (ATerm) ATmakeInt(integer));
-  }
-
-  ATabort("CharRange has no Integer: %t\n", arg);
-  return (PT_CharRange)NULL;
-}
-
-/*}}}  */
 /*{{{  PT_CharRange PT_setCharRangeStart(PT_CharRange arg, int start) */
 
 PT_CharRange PT_setCharRangeStart(PT_CharRange arg, int start)
 {
-  if (PT_isCharRangeRange(arg)) {
+  if (PT_isCharRangeCharacter(arg)) {
+    return (PT_CharRange)((ATerm) (ATerm) ATmakeInt(start));
+  }
+  else if (PT_isCharRangeRange(arg)) {
     return (PT_CharRange)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(start)), 0);
   }
 
@@ -4103,13 +4079,13 @@ PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol))
 }
 
 /*}}}  */
-/*{{{  PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int (*acceptStart)(int), int (*acceptEnd)(int)) */
+/*{{{  PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptStart)(int), int (*acceptEnd)(int)) */
 
-PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int (*acceptStart)(int), int (*acceptEnd)(int))
+PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptStart)(int), int (*acceptEnd)(int))
 {
   if (PT_isCharRangeCharacter(arg)) {
     return PT_makeCharRangeCharacter(
-        acceptInteger ? acceptInteger(PT_getCharRangeInteger(arg)) : PT_getCharRangeInteger(arg));
+        acceptStart ? acceptStart(PT_getCharRangeStart(arg)) : PT_getCharRangeStart(arg));
   }
   if (PT_isCharRangeRange(arg)) {
     return PT_makeCharRangeRange(

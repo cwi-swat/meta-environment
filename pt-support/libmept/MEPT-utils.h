@@ -199,4 +199,7 @@ void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities);
 
 PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout);
 PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout);
+
+ATbool PT_includesCharClass(PT_Symbol smaller, PT_Symbol larger);
+
 #endif /* _ME_PT_H */
