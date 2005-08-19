@@ -27,7 +27,6 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
@@ -66,7 +65,6 @@ public class EditorPane extends JTextPane {
 
         defaultStyle = StyleContext.getDefaultStyleContext().getStyle(
                 StyleContext.DEFAULT_STYLE);
-        defaultStyle.addAttribute(StyleConstants.Background, backgroundColor);
 
         getStyledDocument().setLogicalStyle(0, defaultStyle);
 
@@ -163,7 +161,7 @@ public class EditorPane extends JTextPane {
                     bracketOffset + 1, p);
         }
     }
-
+    
     public void highlight(int offset) {
         try {
             Rectangle r = modelToView(offset);
@@ -243,6 +241,10 @@ public class EditorPane extends JTextPane {
 
     public Object getFocusTag() {
         return focusTag;
+    }
+    
+    public Color getBackgroundColor() {
+        return super.getBackground();
     }
     
     public JMenu getEditorMenu() {

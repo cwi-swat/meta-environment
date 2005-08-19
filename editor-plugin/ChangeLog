@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Aug 19 16:27:31 CEST 2005 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - Add getBackgroundColor and remove setting of background color in
+     default style
+
 Fri Aug 19 15:51:03 CEST 2005 <jurgenv@cwi.nl>
  * configure.ac: removed ujac-ui.jar from EXTERNAL_JARS.
  * lib: removed lib directory.

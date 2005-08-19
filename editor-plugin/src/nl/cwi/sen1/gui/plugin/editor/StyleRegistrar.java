@@ -38,7 +38,7 @@ public class StyleRegistrar {
             String name = category.getCategory().getName();
             registerAttributes(editor, name, attrs);
         } else if (type.isNormal()) {
-            setStyleAttributes(attrs, editor.getDefaultStyle());
+            setStyleAttributes(editor, attrs, editor.getDefaultStyle());
         } else if (type.isSelection()) {
             Style style = registerAttributes(editor, SELECTION_STYLE_NAME,
                     attrs);
@@ -56,11 +56,11 @@ public class StyleRegistrar {
     static private Style registerAttributes(EditorPane editor, String name,
             TextAttributes attrs) {
         Style style = editor.addStyle(name, editor.getDefaultStyle());
-        setStyleAttributes(attrs, style);
+        setStyleAttributes(editor, attrs, style);
         return style;
     }
 
-    private static void setStyleAttributes(TextAttributes attrs, Style style) {
+private static void setStyleAttributes(EditorPane editor, TextAttributes attrs, Style style) {
         for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
             metaconfig.types.TextAttribute attr = attrs.getHead();
 
@@ -69,10 +69,13 @@ public class StyleRegistrar {
                         .getColor()));
             } else if (attr.isBackgroundColor()) {
                 if (convertColor(attr.getColor()).equals(
-                        style.getAttribute(StyleConstants.Background))) {
-                    // the linehighlight is drawed in a lower layer than the text,
-                    // so if the textbackground is the same as the background of the
-                    // editor we need to remove the background attribute to prevent
+                        editor.getBackgroundColor())) {
+                    // the linehighlight is drawed in a lower layer than the
+                    // text,
+                    // so if the textbackground is the same as the background of
+                    // the
+                    // editor we need to remove the background attribute to
+                    // prevent
                     // gaps in the linehighlight
                     style.removeAttribute(StyleConstants.Background);
                 } else {
@@ -95,9 +98,7 @@ public class StyleRegistrar {
                 StyleConstants.setFontSize(style, attr.getPoints());
             }
         }
-    }
-
-    static private java.awt.Color convertColor(Color color) {
+    }    static private java.awt.Color convertColor(Color color) {
         return new java.awt.Color(color.getRed(), color.getGreen(), color
                 .getBlue());
     }
