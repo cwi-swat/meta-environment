@@ -21,5 +21,4 @@ restorebrackets_LDADD	= -L$(top_builddir)/libsglr -lsglr \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
-			-L$(SGLR)/lib -lsglr \
 			$(SOCKLIBS)

@@ -769,7 +769,7 @@ void SG_Reducer(stack *st0, state s, label prodl,
   IF_DEBUG(
     fprintf(SG_log(), "Reducing; state %d, token: ", SG_GETSTATE(s));
     SG_PrintToken(SG_log(), current_token);
-    fprintf(SG_log(), ", production: %d\n", SG_GETLABEL(prodl));
+    ATfprintf(SG_log(), ", production: %t\n", SG_LookupProduction(table, SG_GETLABEL(prodl)));
   );
 
   /*  A stack with state s already exists?  */
