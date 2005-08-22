@@ -16,6 +16,6 @@ configuration interface
 requires
   aterm 2.4.1
 
-error-support 1.2
+error-support 1.3
 
 pt-support 2.0
