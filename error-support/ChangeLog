@@ -10,6 +10,10 @@ Fri Jul  8 16:12:11 CEST 2005 <jurgenv@cwi.nl>
    includes some convenience functions for creating and storing errors
    and warnings by a single function application.
 
+Fri Jul	 8 14:12:07 CEST 2005 <jurgenv@cwi.nl>
+ * added a reusable error manager, with some convenience methods for 
+   storing and creating errors.
+
 Sat Jun  4 15:00:30 CEST 2005 <kooiker@cwi.nl>
  * utils/error-support.c:
    - Remove declaration after code
