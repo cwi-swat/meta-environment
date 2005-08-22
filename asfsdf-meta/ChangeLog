@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Aug 22 14:24:48 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Used Cancel flag in PromptForFile cals
+
 Mon Aug  8 10:42:45 CEST 2005 <jurgenv@cwi.nl>
  * meta-scripts/meta-interface.tb: Added ASF specific ToolBus actions,
    that came from the meta package (button-actions.tb) originally. 

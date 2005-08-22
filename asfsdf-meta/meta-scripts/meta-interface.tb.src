@@ -390,21 +390,26 @@ endlet
 
 process OpenLibraryModuleAction is
 let
+  Cancel: bool,
   Extension : str,
   Directory : str,
   Path : str,
   Filename : str
 in
-  PromptForFileWithExtension("Open Library Module", "__ASF_LIBRARY__", ".sdf", Path?)
+  PromptForFileWithExtension("Open Library Module", "__ASF_LIBRARY__", ".sdf", Cancel?, Path?)
   .
-  if equal(Path, "") then
+  if equal(Cancel, true) then
     tau
   else
-    SplitFileName(Path, Filename?, Directory?, Extension?)
-    . BuildPath(Directory, Filename, Extension, Path?)
-    . snd-note(start-modules-batch)
-    . OpenModule(Path, sdf, Filename)
-    . snd-note(end-modules-batch)
+    if equal(Path, "") then
+      tau
+    else
+      SplitFileName(Path, Filename?, Directory?, Extension?)
+      . BuildPath(Directory, Filename, Extension, Path?)
+      . snd-note(start-modules-batch)
+      . OpenModule(Path, sdf, Filename)
+      . snd-note(end-modules-batch)
+    fi
   fi
 endlet
 
@@ -470,11 +475,17 @@ process DebugRunAsfTestsAction(Modulename : str) is
 
 process AsfSdfApiGenAction(Modulename : str) is
 let
-  Path : str
+  Cancel: bool,
+  Path: str
 in
-  PromptForFileWithExtension("Generate New Module", "", ".sdf", Path?)
-  . snd-msg(asfsdfapigen(Modulename, Path))
-  . rec-msg(asfsdfapigen-done)
+  PromptForFileWithExtension("Generate New Module", "", ".sdf", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(asfsdfapigen(Modulename, Path))
+    . rec-msg(asfsdfapigen-done)
+  fi
 endlet
 
 process ReduceAction(EditorId : term) is
