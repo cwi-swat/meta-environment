@@ -15,7 +15,7 @@ identification
 configuration interface
 
 requires
-  error-support 1.2
+  error-support 1.3
 
 asc-support 2.1
 
