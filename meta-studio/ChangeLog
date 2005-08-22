@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 22 13:22:54 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Fix duplicated close on programmatic removal of component
+
 Thu Aug 11 15:52:31 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
  * **/StudioImpl.java: bugfix, menus did not dissappear when
    a View was hidden.
