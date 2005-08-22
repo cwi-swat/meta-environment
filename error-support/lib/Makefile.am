@@ -1,8 +1,8 @@
 # $Id$
 
-pkgdata_DATA = errorapi-${VERSION}.jar locationapi-${VERSION}.jar
+pkgdata_DATA = errorapi.jar locationapi.jar
 
-EXTRA_DIST = errorapi-${VERSION}.jar locationapi-${VERSION}.jar
+EXTRA_DIST = errorapi.jar locationapi.jar
 
 lib_LIBRARIES = libErrorAPI.a libLocationAPI.a
 
@@ -69,6 +69,7 @@ java-error-api: MetaErrors.def Makefile
 		--name errorapi \
 		--output . \
 		--version ${VERSION}
+	mv errorapi-${VERSION}.jar errorapi.jar
 
 ABS_LOCATION_MODULES = \
 	$(foreach i, \
@@ -95,3 +96,4 @@ java-location-api: Location.def Makefile
 		--name locationapi \
 		--output . \
 		--version ${VERSION}
+	mv locationapi-${VERSION}.jar locationapi.jar

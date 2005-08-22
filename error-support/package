@@ -1,7 +1,7 @@
 package 
 identification
    name=error-support
-   version=1.2
+   version=1.3
    location=http://www.cwi.nl/projects/MetaEnv/meta-errors
    info=http://www.cwi.nl/projects/MetaEnv/meta-errors
    description='A generic data-structure for describing errors, warnings, etc.'

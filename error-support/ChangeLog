@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 22 14:51:06 CEST 2005 <jurgenv@cwi.nl>
+ * lib/Makefile.am: removed version numbers from generated jar filenames.
+ * Bumped to version 1.3
+
 Mon Aug 22 13:48:14 CEST 2005 <economop@cwi.nl>
  * lib/manager.c: fixed the initialisation of the error manager to 
    correctly set the |producer| and |id| fields.
@@ -13,10 +17,6 @@ Fri Jul  8 16:12:11 CEST 2005 <jurgenv@cwi.nl>
    reference to a summary that can be inspected and filled. It also
    includes some convenience functions for creating and storing errors
    and warnings by a single function application.
-
-Fri Jul	 8 14:12:07 CEST 2005 <jurgenv@cwi.nl>
- * added a reusable error manager, with some convenience methods for 
-   storing and creating errors.
 
 Sat Jun  4 15:00:30 CEST 2005 <kooiker@cwi.nl>
  * utils/error-support.c:
