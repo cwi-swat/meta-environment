@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Aug 22 10:29:10 CEST 2005 <kooiker@cwi.nl>
+ * configure.ac: Removed strange dependency on asf-library package.
+
 Fri Aug 19 09:21:08 CEST 2005 <kooiker@cwi.nl>
  * Merge editor-plugin branch:
    - Vi and Emacs support has been removed. In stead we use our own -
