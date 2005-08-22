@@ -1,10 +1,16 @@
 process PrintModuleAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Module Text (ASF+SDF)", "", ".txt", Path?)
-  . snd-msg(print-module(Modulename, Path))
-  . rec-msg(module-printed(Modulename))
+  PromptForFileWithExtension("Module Text (ASF+SDF)", "", ".txt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(print-module(Modulename, Path))
+    . rec-msg(module-printed(Modulename))
+  fi
 endlet
 
 process NewModuleContentHandler is
@@ -68,99 +74,152 @@ endlet
 
 process NewModuleAction is
 let
+  Cancel: bool,
   Extension : str,
   Directory : str,
   Pid: int,
   FileName : str,
   Path : str
 in
-  PromptForFileWithExtension("New Module", "", ".sdf", Path?)
-  . SplitFileName(Path, FileName?, Directory?, Extension?)
-  . create(NewModuleContentHandler(), Pid?)
-  . CreateModule(Pid, Directory, FileName, sdf)
+  PromptForFileWithExtension("New Module", "", ".sdf", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFileName(Path, FileName?, Directory?, Extension?)
+    . create(NewModuleContentHandler(), Pid?)
+    . CreateModule(Pid, Directory, FileName, sdf)
+  fi
 endlet
 
 process OpenModuleAction is
 let
+  Cancel: bool,
   Extension : str,
   Directory : str,
   Path : str,
   Filename : str
 in
-  PromptForFileWithExtension("Open Module", "", ".sdf", Path?)
+  PromptForFileWithExtension("Open Module", "", ".sdf", Cancel?, Path?)
   .
-  if equal(Path, "") then
+  if equal(Cancel, true) then
     tau
   else
-    SplitFileName(Path, Filename?, Directory?, Extension?)
-    . BuildPath(Directory, Filename, Extension, Path?)
-    . snd-note(start-modules-batch)
-    . OpenModule(Path, sdf, Filename)
-    . snd-note(end-modules-batch)
+    if equal(Path, "") then
+      tau
+    else
+      SplitFileName(Path, Filename?, Directory?, Extension?)
+      . BuildPath(Directory, Filename, Extension, Path?)
+      . snd-note(start-modules-batch)
+      . OpenModule(Path, sdf, Filename)
+      . snd-note(end-modules-batch)
+    fi
   fi
 endlet
 
 process DumpEquationsAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Equations", "", ".eqs", Path?)
-  . snd-msg(dump-equations-given-file(Modulename, Path))
-  . rec-msg(equations-dumped)
+  PromptForFileWithExtension("Export Equations", "", ".eqs", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(dump-equations-given-file(Modulename, Path))
+    . rec-msg(equations-dumped)
+  fi
 endlet
 
 process DumpParseTableAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Path?)
-  . DumpParseTable(Modulename, Path, trm)
+  PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(Modulename, Path, trm)
+  fi
 endlet
 
 process EditorDumpParseTableAction(EditorId : term) is
 let
+  Cancel: bool,
   Path : str,
   Modulename : str
 in
   GetActiveModule(EditorId, Modulename?)
-  . PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Path?)
-  . DumpParseTable(Modulename, Path, trm)
+  . PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(Modulename, Path, trm)
+  fi
 endlet
 
 process DumpEquationsParseTableAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Path?)
-  . DumpParseTable(Modulename, Path, eqs)
+  PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(Modulename, Path, eqs)
+  fi
 endlet
 
 process EditorDumpEquationsParseTableAction(EditorId : term) is
 let
+  Cancel: bool,
   Path : str,
   Modulename : str
 in
   GetActiveModule(EditorId, Modulename?)
-  . PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Path?)
-  . DumpParseTable(Modulename, Path, eqs)
+  . PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(Modulename, Path, eqs)
+  fi
 endlet
 
 process DumpSdfDefinitionAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export SDF Definition", "", ".def", Path?)
-  . snd-msg(dump-sdf-definition(Modulename, Path))
-  . rec-msg(sdf-definition-dumped)
+  PromptForFileWithExtension("Export SDF Definition", "", ".def", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(dump-sdf-definition(Modulename, Path))
+    . rec-msg(sdf-definition-dumped)
+  fi
 endlet
 
 process CompileModuleAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Target C file", "", ".c", Path?)
-  . snd-msg(compile-module(Modulename, Path))
-  . rec-msg(compilation-ready(Modulename))
+  PromptForFileWithExtension("Target C file", "", ".c", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(compile-module(Modulename, Path))
+    . rec-msg(compilation-ready(Modulename))
+  fi
 endlet
 
 process CloseModuleAction(Modulename : str) is
@@ -183,27 +242,39 @@ endlet
 
 process RenameModuleAction(Modulename : str) is
 let
+  Cancel: bool,
   Directory : str,
   Filename : str,
   Extension : str,
   Path : str
 in
-  PromptForFileWithExtension("Rename module to", "", ".sdf", Path?)
-  . SplitFileName(Path, Filename?, Directory?, Extension?)
-  . RenameModule(Modulename, Directory, Filename)
+  PromptForFileWithExtension("Rename module to", "", ".sdf", Cancel?, Path?)
+  . 
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFileName(Path, Filename?, Directory?, Extension?)
+    . RenameModule(Modulename, Directory, Filename)
+  fi
 endlet
 
 process CopyModuleAction(Modulename : str) is
 let
+  Cancel: bool,
   Path : str,
   Directory : str,
   Filename : str,
   Extension : str
 in
-  PromptForFileWithExtension("Copy module to", "", ".sdf", Path?)
-  . SplitFileName(Path, Filename?, Directory?, Extension?)
-  . CopySdfModule(Modulename, Directory, Filename)
-  . CopyAsfModule(Modulename, Directory, Filename)
+  PromptForFileWithExtension("Copy module to", "", ".sdf", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    SplitFileName(Path, Filename?, Directory?, Extension?)
+    . CopySdfModule(Modulename, Directory, Filename)
+    . CopyAsfModule(Modulename, Directory, Filename)
+  fi
 endlet
 
 process DeleteModuleAction(Modulename : str) is

@@ -26,8 +26,15 @@ endlet
 
 process EditTermAction(Modulename : str) is
 let
-  Filename : str
+  Cancel: bool,
+  Filename: str
 in
-  PromptForFile("Edit Term", "", Modulename, Filename?) 
-  . ActionEditTerm(Filename, Modulename)
+  PromptForFile("Edit Term", "", Modulename, Cancel?, Filename?)
+  . 
+  if equal(Cancel, true) then
+    tau
+  else
+    ActionEditTerm(Filename, Modulename)
+    . printf("Edit term")
+  fi
 endlet

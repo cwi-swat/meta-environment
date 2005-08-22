@@ -6,7 +6,11 @@ process AskQuestion(Question : str, Answer : term?) is
 process ClearHistoryAction is
   snd-msg(clear-history)
 
-process PromptForFile(Title : str, Path : str, Modulename : str, Filename : str?) is
+process PromptForFile(Title : str, 
+                      Path : str, 
+		      Modulename : str, 
+		      Cancel: bool?,
+		      Filename : str?) is
 let
   Extension : str
 in
@@ -20,15 +24,30 @@ in
     . rec-msg(file-extension-hook-result(Extension?))
   )
   . snd-msg(ask-for-file(Title, Path, Extension))
-  . rec-msg(ask-for-file-result(Filename?))
+  .
+  (
+    rec-msg(ask-for-file-result(Filename?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-file-cancel)
+    . Cancel := true
+  )
 endlet
 
 process PromptForFileWithExtension(String : str, 
                                    Path : str, 
 				   Extension : str, 
+				   Cancel: bool?,
 				   Filename : str?) is
   snd-msg(ask-for-file(String, Path, Extension))
-  . rec-msg(ask-for-file-result(Filename?))
+  .
+  (
+    rec-msg(ask-for-file-result(Filename?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-file-cancel)
+    . Cancel := true
+  )
 
 process Reduce(EditorId : term, Modulename : str, Tree : term, RTree : term?) is
   snd-msg(debugging(off)) 

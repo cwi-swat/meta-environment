@@ -1,20 +1,32 @@
 
 process SaveTermStoreAction is
 let
+  Cancel: bool,
   FileName : str
 in
-  PromptForFileWithExtension("Save Term Store", "", ".termstore", FileName?)
-  . SaveTermStore(FileName)
+  PromptForFileWithExtension("Save Term Store", "", ".termstore", Cancel?, FileName?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    SaveTermStore(FileName)
+  fi
 endlet
 
 
 process ReadTermStoreAction is
 let
+  Cancel: bool,
   FileName : str
 in
-  PromptForFileWithExtension("Read Term Store", "", ".termstore", FileName?)
-  . CloseAll
-  . InitializeTermStore(FileName)
+  PromptForFileWithExtension("Read Term Store", "", ".termstore", Cancel?, FileName?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    CloseAll
+    . InitializeTermStore(FileName)
+  fi
 endlet
 
 process SaveTermStore(Path : str) is

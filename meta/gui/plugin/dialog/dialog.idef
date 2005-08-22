@@ -46,7 +46,7 @@ in
     . snd-msg(ask-for-file-result(Filename))
   +
     rec-value(T, file-dialog-cancel)
-    . snd-msg(ask-for-file-result(""))
+    . snd-msg(ask-for-file-cancel)
   )
 endlet
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Aug 22 14:23:40 CEST 2005 <kooiker@cwi.nl>
+ * gui/plugin/dialog/dialog.idef:
+   - sets Cancel flag true if dialog has been canceled
+
 Mon Aug 22 10:29:10 CEST 2005 <kooiker@cwi.nl>
  * configure.ac: Removed strange dependency on asf-library package.
 
