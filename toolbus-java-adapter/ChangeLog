@@ -1,5 +1,12 @@
 $Id$
 
+Wed May 25 15:44:55 CEST 2005 <kooiker@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - don't create else clause for if statement when method returns in if
+     clause
+ * src/toolbus/AbstractTool.java:
+   - remove unused parameter lock from readTerm
+
 Wed Apr 27 10:31:13 CEST 2005 <kooiker@cwi.nl>
  * Create JDK 1.4 compatible jars
 

@@ -19,406 +19,407 @@ import aterm.ATermFactory;
 import aterm.ATermList;
 
 abstract public class AbstractTool implements Tool, Runnable {
-	private final static int LENSPEC = 12;
-	private final static int MAX_HANDSHAKE = 512;
-	private final static int MIN_MSG_SIZE = 128;
+    private final static int LENSPEC = 12;
 
-	private Object lockObject;
+    private final static int MAX_HANDSHAKE = 512;
 
-	protected ATermFactory factory;
-	private boolean verbose = false;
-	private InputStream inputStream;
-	private OutputStream outputStream;
+    private final static int MIN_MSG_SIZE = 128;
 
-	private String toolname;
-	private InetAddress address;
-	private int port = -1;
-	private int toolid = -1;
+    private Object lockObject;
 
-	private Map queueMap;
+    protected ATermFactory factory;
 
-	private ATerm termSndVoid;
+    private boolean verbose = false;
 
-	private boolean running;
-	private boolean connected;
+    private InputStream inputStream;
 
-	public AbstractTool(ATermFactory factory) {
-		this.factory = factory;
+    private OutputStream outputStream;
 
-		termSndVoid = factory.parse("snd-void");
-		queueMap = new HashMap();
-		lockObject = this;
-	}
+    private String toolname;
 
-	public void init(String[] args) throws UnknownHostException {
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-TB_PORT")) {
-				port = Integer.parseInt(args[++i]);
-			}
-			if (args[i].equals("-TB_HOST")) {
-				address = InetAddress.getByName(args[++i]);
-			}
-			if (args[i].equals("-TB_TOOL_NAME")) {
-				toolname = args[++i];
-			}
-			if (args[i].equals("-TB_TOOL_ID")) {
-				toolid = Integer.parseInt(args[++i]);
-			}
-			if (args[i].equals("-TB_VERBOSE")) {
-				verbose = true;
-			}
-		}
-		if (address == null) {
-			address = InetAddress.getLocalHost();
-		}
-	}
+    private InetAddress address;
 
-	public void setLockObject(Object obj) {
-		lockObject = obj;
-	}
+    private int port = -1;
 
-	public Object getLockObject() {
-		return lockObject;
-	}
+    private int toolid = -1;
 
-	public void connect() throws IOException {
-		Socket socket = new Socket(address, port);
-		inputStream = new BufferedInputStream(socket.getInputStream());
-		outputStream = new BufferedOutputStream(socket.getOutputStream());
+    private Map queueMap;
 
-		shakeHands();
-		connected = true;
-	}
+    private ATerm termSndVoid;
 
-	public void connect(String toolname, InetAddress address, int port) throws IOException {
-		if (toolname != null) {
-			this.toolname = toolname;
-		}
+    private boolean running;
 
-		if (address != null) {
-			this.address = address;
-		}
+    private boolean connected;
 
-		if (port != -1) {
-			this.port = port;
-		}
+    public AbstractTool(ATermFactory factory) {
+        this.factory = factory;
 
-		this.toolid = -1;
+        termSndVoid = factory.parse("snd-void");
+        queueMap = new HashMap();
+        lockObject = this;
+    }
 
-		connect();
-	}
+    public void init(String[] args) throws UnknownHostException {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-TB_PORT")) {
+                port = Integer.parseInt(args[++i]);
+            }
+            if (args[i].equals("-TB_HOST")) {
+                address = InetAddress.getByName(args[++i]);
+            }
+            if (args[i].equals("-TB_TOOL_NAME")) {
+                toolname = args[++i];
+            }
+            if (args[i].equals("-TB_TOOL_ID")) {
+                toolid = Integer.parseInt(args[++i]);
+            }
+            if (args[i].equals("-TB_VERBOSE")) {
+                verbose = true;
+            }
+        }
+        if (address == null) {
+            address = InetAddress.getLocalHost();
+        }
+    }
 
-	public void disconnect() {
-		try {
-			sendTerm(factory.parse("snd-disconnect"));
-		}
-		catch (IOException e) {
-			throw new RuntimeException("cannot disconnect: " + e.getMessage());
-		}
-	}
+    public void setLockObject(Object obj) {
+        lockObject = obj;
+    }
 
-	public boolean isConnected() {
-		return connected;
-	}
+    public Object getLockObject() {
+        return lockObject;
+    }
 
-	public void setVerbose(boolean on) {
-		verbose = on;
-	}
+    public void connect() throws IOException {
+        Socket socket = new Socket(address, port);
+        inputStream = new BufferedInputStream(socket.getInputStream());
+        outputStream = new BufferedOutputStream(socket.getOutputStream());
 
-	public boolean getVerbose() {
-		return verbose;
-	}
+        shakeHands();
+        connected = true;
+    }
 
-	public int getPort() {
-		return port;
-	}
+    public void connect(String toolname, InetAddress address, int port)
+            throws IOException {
+        if (toolname != null) {
+            this.toolname = toolname;
+        }
 
-	public InetAddress getAddress() {
-		return address;
-	}
+        if (address != null) {
+            this.address = address;
+        }
 
-	private void shakeHands() throws IOException {
-		String host = address.getHostName();
-		info("host = " + host);
-		if (host == null) {
-			String pair = address.toString();
-			host = pair.substring(0, pair.indexOf('/'));
-			info("local host = " + host);
-		}
+        if (port != -1) {
+            this.port = port;
+        }
 
-		String myHand = toolname + " " + host + " " + toolid;
-		byte[] hs = myHand.getBytes();
-		byte[] handshake = new byte[MAX_HANDSHAKE];
-		for (int i = 0; i < hs.length; i++) {
-			handshake[i] = hs[i];
-		}
-		outputStream.write(handshake);
-		outputStream.flush();
+        this.toolid = -1;
 
-		int tid = readInt();
-		if (tid < 0) {
-			throw new RuntimeException("no tool-id assigned by ToolBus");
-		}
-		if (toolid < 0) {
-			toolid = tid;
-			info("got tool-id: " + toolid);
-		}
-		else if (toolid != tid) {
-			throw new RuntimeException("tool-id out of phase");
-		}
+        connect();
+    }
 
-		ATerm term = readTerm();
-		List matches = term.match("rec-do(signature([<list>],[<list>]))");
-		if (matches != null) {
-			info("checking input signature...");
-			checkInputSignature((ATermList) matches.get(0));
-			sendTerm(termSndVoid);
-		}
-		else {
-			throw new RuntimeException("signature information garbled: " + term);
-		}
-	}
+    public void disconnect() {
+        try {
+            sendTerm(factory.parse("snd-disconnect"));
+        } catch (IOException e) {
+            throw new RuntimeException("cannot disconnect: " + e.getMessage());
+        }
+    }
 
-	void info(String msg) {
-		if (verbose) {
-			System.err.println("[TOOL: " + toolname + "] " + msg);
-		}
-	}
+    public boolean isConnected() {
+        return connected;
+    }
 
-	private int readInt() throws IOException {
-		byte[] buffer = new byte[MAX_HANDSHAKE];
+    public void setVerbose(boolean on) {
+        verbose = on;
+    }
 
-		inputStream.read(buffer);
+    public boolean getVerbose() {
+        return verbose;
+    }
 
-		String string = new String(buffer);
+    public int getPort() {
+        return port;
+    }
 
-		int space = string.indexOf(' ');
-		int end = string.indexOf(0);
-		String toolname = string.substring(0, space);
-		if (!toolname.equals(this.toolname)) {
-			throw new RuntimeException("wrong toolname in readInt: " + toolname);
-		}
-		return Integer.parseInt(string.substring(space + 1, end));
-	}
+    public InetAddress getAddress() {
+        return address;
+    }
 
-	public void sendTerm(ATerm term) throws IOException {
-		synchronized (getLockObject()) {
-			String unparsedTerm = term.toString();
-			int size = unparsedTerm.length();
-			String lenspec = "000000000000" + (size + LENSPEC) + ":";
-			int len = lenspec.length();
-			byte[] ls = new byte[LENSPEC];
+    private void shakeHands() throws IOException {
+        String host = address.getHostName();
+        info("host = " + host);
+        if (host == null) {
+            String pair = address.toString();
+            host = pair.substring(0, pair.indexOf('/'));
+            info("local host = " + host);
+        }
 
-			for (int i = 0; i < LENSPEC; i++) {
-				ls[i] = (byte) lenspec.charAt(len + i - LENSPEC);
-			}
+        String myHand = toolname + " " + host + " " + toolid;
+        byte[] hs = myHand.getBytes();
+        byte[] handshake = new byte[MAX_HANDSHAKE];
+        for (int i = 0; i < hs.length; i++) {
+            handshake[i] = hs[i];
+        }
+        outputStream.write(handshake);
+        outputStream.flush();
 
-			if (verbose) {
-				System.out.print("tool " + toolname + " writes term:\n");
-				System.out.print(new String(ls));
-				System.out.println(term);
-			}
-			outputStream.write(ls);
-			term.writeToTextFile(outputStream);
-			if (LENSPEC + size < MIN_MSG_SIZE) {
-				info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
-			}
-			for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
-				outputStream.write(0);
-			}
-			outputStream.flush();
-		}
-	}
+        int tid = readInt();
+        if (tid < 0) {
+            throw new RuntimeException("no tool-id assigned by ToolBus");
+        }
+        if (toolid < 0) {
+            toolid = tid;
+            info("got tool-id: " + toolid);
+        } else if (toolid != tid) {
+            throw new RuntimeException("tool-id out of phase");
+        }
 
-	public static ATerm readTerm(InputStream stream, ATermFactory factory) throws IOException {
-		return readTerm(stream, factory, stream);
-	}
+        ATerm term = readTerm();
+        List matches = term.match("rec-do(signature([<list>],[<list>]))");
+        if (matches != null) {
+            info("checking input signature...");
+            checkInputSignature((ATermList) matches.get(0));
+            sendTerm(termSndVoid);
+        } else {
+            throw new RuntimeException("signature information garbled: " + term);
+        }
+    }
 
-	public static ATerm readTerm(InputStream inputStream, ATermFactory factory, Object lock) throws IOException {
-		ATerm result;
-		byte[] lspecBuf = new byte[LENSPEC];
-		int index;
+    void info(String msg) {
+        if (verbose) {
+            System.err.println("[TOOL: " + toolname + "] " + msg);
+        }
+    }
 
-		index = 0;
-		while (index != LENSPEC) {
-			int bytes_read = inputStream.read(lspecBuf, index, LENSPEC - index);
-			if (bytes_read <= 0) {
-				throw new IOException("ToolBus connection terminated");
-			}
-			index += bytes_read;
-		}
+    private int readInt() throws IOException {
+        byte[] buffer = new byte[MAX_HANDSHAKE];
 
-		String lspec = new String(lspecBuf);
+        inputStream.read(buffer);
 
-		int bytesLeft = Integer.parseInt(lspec.substring(0, LENSPEC - 1));
-		if (bytesLeft < MIN_MSG_SIZE) {
-			bytesLeft = MIN_MSG_SIZE;
-		}
-		bytesLeft -= LENSPEC;
+        String string = new String(buffer);
 
-		byte[] data = new byte[bytesLeft];
-		index = 0;
-		while (index != bytesLeft) {
-			int bytes_read = inputStream.read(data, index, bytesLeft - index);
-			if (bytes_read <= 0) {
-				throw new IOException("ToolBus connection terminated");
-			}
-			index += bytes_read;
-		}
+        int space = string.indexOf(' ');
+        int end = string.indexOf(0);
+        String toolname = string.substring(0, space);
+        if (!toolname.equals(this.toolname)) {
+            throw new RuntimeException("wrong toolname in readInt: " + toolname);
+        }
+        return Integer.parseInt(string.substring(space + 1, end));
+    }
 
-		String stringdata = new String(data);
+    public void sendTerm(ATerm term) throws IOException {
+        synchronized (getLockObject()) {
+            String unparsedTerm = term.toString();
+            int size = unparsedTerm.length();
+            String lenspec = "000000000000" + (size + LENSPEC) + ":";
+            int len = lenspec.length();
+            byte[] ls = new byte[LENSPEC];
 
-		//info("data read (" + bytesLeft + " bytes): '" + stringdata + "'");
+            for (int i = 0; i < LENSPEC; i++) {
+                ls[i] = (byte) lenspec.charAt(len + i - LENSPEC);
+            }
 
-		result = factory.parse(stringdata);
+            if (verbose) {
+                System.out.print("tool " + toolname + " writes term:\n");
+                System.out.print(new String(ls));
+                System.out.println(term);
+            }
+            outputStream.write(ls);
+            term.writeToTextFile(outputStream);
+            if (LENSPEC + size < MIN_MSG_SIZE) {
+                info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size))
+                        + " zero bytes.");
+            }
+            for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
+                outputStream.write(0);
+            }
+            outputStream.flush();
+        }
+    }
 
-		return result;
-	}
+    public static ATerm readTerm(InputStream inputStream, ATermFactory factory) throws IOException {
+        ATerm result;
+        byte[] lspecBuf = new byte[LENSPEC];
+        int index;
 
-	public ATerm readTerm(InputStream inputStream) throws IOException {
-		return readTerm(inputStream, factory, getLockObject());
-	}
+        index = 0;
+        while (index != LENSPEC) {
+            int bytes_read = inputStream.read(lspecBuf, index, LENSPEC - index);
+            if (bytes_read <= 0) {
+                throw new IOException("ToolBus connection terminated");
+            }
+            index += bytes_read;
+        }
 
-	public ATerm readTerm() throws IOException {
-		return readTerm(inputStream);
-	}
-	
-	private synchronized void setRunning(boolean state)  {
-		running = state;
-	}
+        String lspec = new String(lspecBuf);
 
-	public void run() {
-		setRunning(true);
-		try {
-			while (running) {
-				handleIncomingTerm();
-			}
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("IOException: " + e.getMessage());
-		}
-	}
-	
-	public void stopRunning() {
-		setRunning(false);
-	}
+        int bytesLeft = Integer.parseInt(lspec.substring(0, LENSPEC - 1));
+        if (bytesLeft < MIN_MSG_SIZE) {
+            bytesLeft = MIN_MSG_SIZE;
+        }
+        bytesLeft -= LENSPEC;
 
-	public void handleIncomingTerm() throws IOException {
-		ATerm t = readTerm();
+        byte[] data = new byte[bytesLeft];
+        index = 0;
+        while (index != bytesLeft) {
+            int bytes_read = inputStream.read(data, index, bytesLeft - index);
+            if (bytes_read <= 0) {
+                throw new IOException("ToolBus connection terminated");
+            }
+            index += bytes_read;
+        }
 
-		info("tool " + toolname + " handling term from toolbus: " + t);
+        String stringdata = new String(data);
 
-		if (t.match("rec-terminate(<term>)") != null) {
-			setRunning(false);
-			connected = false;
-		}
+        // info("data read (" + bytesLeft + " bytes): '" + stringdata + "'");
 
-		handleIncomingTerm(t);
-	}
+        result = factory.parse(stringdata);
 
-	public void handleIncomingTerm(ATerm t) throws IOException {
-		handleTerm(t);
-	}
+        return result;
+    }
 
-	protected void handleTerm(ATerm t) throws IOException {
-		synchronized (getLockObject()) {
-			ATerm result = handler(t);
+    public ATerm readTerm(InputStream inputStream) throws IOException {
+         return readTerm(inputStream, factory);
+    }
 
-			if (t.match("rec-do(<term>)") != null) {
-				sendTerm(termSndVoid);
-			}
-			else if (result != null) {
-				sendTerm(result);
-			}
+    public ATerm readTerm() throws IOException {
+        return readTerm(inputStream);
+    }
 
-			List terms = t.match("rec-ack-event(<term>)");
-			if (terms != null) {
-				ackEvent((ATerm) terms.get(0));
-			}
-		}
-	}
+    private synchronized void setRunning(boolean state) {
+        running = state;
+    }
 
-	public void sendEvent(ATerm term) {
-		try {
-			sendTerm(factory.make("snd-event(<term>)", term));
-		}
-		catch (IOException e) {
-			throw new RuntimeException("cannot send event: " + e.getMessage());
-		}
-	}
+    public void run() {
+        setRunning(true);
+        try {
+            while (running) {
+                handleIncomingTerm();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("IOException: " + e.getMessage());
+        }
+    }
 
-	public void postEvent(ATerm term) {
-		synchronized (getLockObject()) {
-			ATermAppl appl = (ATermAppl) term;
-			EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-			if (queue == null) {
-				queue = new EventQueue();
-				queueMap.put(appl.getName(), queue);
-			}
-			if (queue.ackWaiting()) {
-				queue.addEvent(appl);
-			}
-			else {
-				try {
-					sendTerm(factory.make("snd-event(<term>)", appl));
-				}
-				catch (IOException e) {
-					throw new RuntimeException("cannot post event: " + appl);
-				}
-				queue.setAckWaiting();
-			}
-		}
-	}
+    public void stopRunning() {
+        setRunning(false);
+    }
 
-	private void ackEvent(ATerm event) throws IOException {
-		ATermAppl appl = (ATermAppl) event;
-		EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-		if (queue != null && queue.ackWaiting()) {
-			appl = queue.nextEvent();
-			if (appl != null) {
-				sendTerm(factory.make("snd-event(<term>)", appl));
-				return;
-			}
-		}
-	}
+    public void handleIncomingTerm() throws IOException {
+        ATerm t = readTerm();
 
-	//}}}
+        info("tool " + toolname + " handling term from toolbus: " + t);
 
-	abstract public void checkInputSignature(ATermList sig);
-	abstract public ATerm handler(ATerm t);
+        if (t.match("rec-terminate(<term>)") != null) {
+            setRunning(false);
+            connected = false;
+        }
+
+        handleIncomingTerm(t);
+    }
+
+    public void handleIncomingTerm(ATerm t) throws IOException {
+        handleTerm(t);
+    }
+
+    protected void handleTerm(ATerm t) throws IOException {
+        synchronized (getLockObject()) {
+            ATerm result = handler(t);
+
+            if (t.match("rec-do(<term>)") != null) {
+                sendTerm(termSndVoid);
+            } else if (result != null) {
+                sendTerm(result);
+            }
+
+            List terms = t.match("rec-ack-event(<term>)");
+            if (terms != null) {
+                ackEvent((ATerm) terms.get(0));
+            }
+        }
+    }
+
+    public void sendEvent(ATerm term) {
+        try {
+            sendTerm(factory.make("snd-event(<term>)", term));
+        } catch (IOException e) {
+            throw new RuntimeException("cannot send event: " + e.getMessage());
+        }
+    }
+
+    public void postEvent(ATerm term) {
+        synchronized (getLockObject()) {
+            ATermAppl appl = (ATermAppl) term;
+            EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+            if (queue == null) {
+                queue = new EventQueue();
+                queueMap.put(appl.getName(), queue);
+            }
+            if (queue.ackWaiting()) {
+                queue.addEvent(appl);
+            } else {
+                try {
+                    sendTerm(factory.make("snd-event(<term>)", appl));
+                } catch (IOException e) {
+                    throw new RuntimeException("cannot post event: " + appl);
+                }
+                queue.setAckWaiting();
+            }
+        }
+    }
+
+    private void ackEvent(ATerm event) throws IOException {
+        ATermAppl appl = (ATermAppl) event;
+        EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+        if (queue != null && queue.ackWaiting()) {
+            appl = queue.nextEvent();
+            if (appl != null) {
+                sendTerm(factory.make("snd-event(<term>)", appl));
+                return;
+            }
+        }
+    }
+
+    // }}}
+
+    abstract public void checkInputSignature(ATermList sig);
+
+    abstract public ATerm handler(ATerm t);
 }
 
 /**
- * The class EventQueue stores a queue of events, and their
- * acknowledgement status.
- *
+ * The class EventQueue stores a queue of events, and their acknowledgement
+ * status.
+ * 
  */
 
 class EventQueue {
-	private boolean ack = false;
-	private List events = new Vector();
+    private boolean ack = false;
 
-	public boolean ackWaiting() {
-		return ack;
-	}
+    private List events = new Vector();
 
-	public void setAckWaiting() {
-		ack = true;
-	}
+    public boolean ackWaiting() {
+        return ack;
+    }
 
-	public ATermAppl nextEvent() {
-		if (events.size() == 0) {
-			ack = false;
-			return null;
-		}
+    public void setAckWaiting() {
+        ack = true;
+    }
 
-		ATermAppl event = (ATermAppl) events.get(0);
-		events.remove(0);
-		return event;
-	}
+    public ATermAppl nextEvent() {
+        if (events.size() == 0) {
+            ack = false;
+            return null;
+        }
 
-	public void addEvent(ATermAppl event) {
-		events.add(event);
-	}
+        ATermAppl event = (ATermAppl) events.get(0);
+        events.remove(0);
+        return event;
+    }
+
+    public void addEvent(ATermAppl event) {
+        events.add(event);
+    }
 }
