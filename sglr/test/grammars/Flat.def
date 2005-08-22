@@ -2,14 +2,8 @@
 definition
 
 module Main
-imports Layout
 exports
   context-free start-symbols Any
   sorts Any
   lexical syntax
     ~[ ]*         ->  Any
-
-module Layout
-exports
-  lexical syntax
-                 ->  LAYOUT {reject}
