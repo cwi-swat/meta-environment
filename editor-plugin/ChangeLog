@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Aug 22 10:16:50 CEST 2005 <{jurgenv,kooiker}@cwi.nl>
+ * configure.ac: Removed strange dependency on toolbus package.
+
 Fri Aug 19 16:27:31 CEST 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
    - Add getBackgroundColor and remove setting of background color in

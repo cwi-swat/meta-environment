@@ -18,11 +18,6 @@ AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
    [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
 AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
-dnl Require toolbus package
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
-AC_SUBST(TOOLBUS)
-
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])
