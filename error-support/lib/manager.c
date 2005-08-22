@@ -21,7 +21,7 @@ void ERR_initErrorManager(const char *producer, const char *jobId)
 {
   assert(store == NULL && "first cleanup before initializing again");
   ERR_protectSummary(&store);
-  ERR_resetErrorManager();
+  store = ERR_makeSummarySummary(producer, jobId, ERR_makeErrorListEmpty());
 }
 
 void ERR_cleanupErrorManager()

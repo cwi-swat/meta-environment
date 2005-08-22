@@ -1,5 +1,9 @@
 $Id$
 
+Mon Aug 22 13:48:14 CEST 2005 <economop@cwi.nl>
+ * lib/manager.c: fixed the initialisation of the error manager to 
+   correctly set the |producer| and |id| fields.
+	
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
