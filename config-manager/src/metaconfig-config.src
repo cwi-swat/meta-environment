@@ -1,0 +1,3 @@
+#! /bin/sh
+
+echo __PREFIX__/metaconfig-__VERSION__.jar

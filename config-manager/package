@@ -1,0 +1,16 @@
+package 
+identification
+   name=config-manager
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/meta
+   info=http://www.cwi.nl/projects/MetaEnv/meta
+   description='Configuration manager'
+
+   keywords='Configuration manager'
+
+configuration interface
+
+requires
+aterm 2.4.1
+
+error-support 1.3

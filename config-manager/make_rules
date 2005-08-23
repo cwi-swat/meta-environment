@@ -1,0 +1,15 @@
+#
+# $Id$
+#
+
+IDEF=${TOOLBUS}/bin/idef2tif
+TIFS=${TOOLBUS}/bin/tifstoc
+
+tif:
+	for i in `ls *.idef`; do \
+          ${IDEF} $$i; \
+          ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs ;\
+        done
+
+tif-clean:
+	rm -f *.tifs *.tif.[ch]
