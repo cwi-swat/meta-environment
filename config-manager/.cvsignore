@@ -20,5 +20,6 @@ libtool
 libltdl
 ltmain.sh
 config-manager-*.pkg
+config-manager-config
 missing
 mkinstalldirs

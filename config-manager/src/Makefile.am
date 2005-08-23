@@ -14,8 +14,6 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include
 
 bin_PROGRAMS = configmanager
-bin_SCRIPTS = metaconfig-config
-noinst_SCRIPTS = metaconfig-config.local
 noinst_LIBRARIES = libMetaConfig.a
 
 pkgdata_DATA = \
@@ -32,7 +30,6 @@ CLEANFILES = \
 	${bin_SCRIPTS}
 
 EXTRA_DIST = \
-	metaconfig-config.src \
 	metaconfig-${API_VERSION}.jar \
 	configuration-manager.idef \
 	kernel-configuration.tb.src \
@@ -64,16 +61,6 @@ configmanager_LDADD = \
 	$(SOCKLIBS)
 
 absolute_srcdir=$(shell cd ${srcdir}; pwd)
-
-%.local: %.src Makefile
-	sed     's@__VERSION__@${API_VERSION}@g;\
-	        s@__PREFIX__@${absolute_srcdir}@g' \
-	< $< > $@ && chmod +x $@
-
-%: %.src Makefile
-	sed     's@__VERSION__@${API_VERSION}@g;\
-                 s@__PREFIX__@${prefix}/share/meta@g' \
-        < $< > $@ && chmod +x $@
 
 %.tb: %.tb.src Makefile
 	sed 's@__KERNEL_CONFIGURATION__@$(KERNEL_CONFIGURATION)@g;\
