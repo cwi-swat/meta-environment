@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Aug 23 13:46:23 CEST 2005 <kooiker@cwi.nl>
+ * configuration-manager:
+   - Moved to package config-manager
+
 Mon Aug 22 14:23:40 CEST 2005 <kooiker@cwi.nl>
  * gui/plugin/dialog/dialog.idef:
    - sets Cancel flag true if dialog has been canceled

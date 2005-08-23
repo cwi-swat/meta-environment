@@ -18,14 +18,6 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl Handle --with-editor option
-AC_ARG_WITH(editor,
-  [  --with-editor=EDITOR    one of gvim, gnu-emacs (default: gnu-emacs)],
-  DEFAULT_EDITOR=${withval},
-  DEFAULT_EDITOR="gnu-emacs"
-)
-AC_SUBST(DEFAULT_EDITOR)
-
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
