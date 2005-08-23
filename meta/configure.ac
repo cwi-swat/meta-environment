@@ -50,6 +50,11 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
+dnl Require config-manager package
+AC_PACKAGE_REQUIRE(config-manager, config-manager-config,
+   [  --with-config-manager=DIR config-manager is in DIR])
+AC_SUBST(CONFIG_MANAGER)
+
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])
