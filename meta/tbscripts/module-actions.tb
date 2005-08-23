@@ -1,6 +1,6 @@
 #include "navigator.idef"
 #include "graph-painter.idef"
-#include "configuration-manager.idef"
+#include "config-manager/configuration-manager.idef"
 
 process HandleModuleEvent(Type: term, Event: term, Module: str) is
 let

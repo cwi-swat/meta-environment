@@ -3,6 +3,8 @@
 Tue Aug 23 13:46:23 CEST 2005 <kooiker@cwi.nl>
  * configuration-manager:
    - Moved to package config-manager
+ * {meta,module-actions}.tb:
+   - include config-manager/*.tb
 
 Mon Aug 22 14:23:40 CEST 2005 <kooiker@cwi.nl>
  * gui/plugin/dialog/dialog.idef:
