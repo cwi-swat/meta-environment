@@ -39,7 +39,7 @@ void call_c_compiler(ATbool keep_annos,
 	 "  -L" ASF_SUPPORT "/lib" " -lASFME \\\n"
 	 "  -L" PT_SUPPORT "/lib" " -lmept -lPTMEPT \\\n"
 	 "  -L" ERROR_SUPPORT "/lib" " -lErrorAPI \\\n"
-	 "  -L" ATERM "/lib" " -lATerm \\\n"
+	 "  -Wl,--rpath -Wl," ATERM "/lib -lATerm \\\n"
 	 "  -L" TOOLBUSLIB "/lib -lATB \\\n"
 	 "  " SOCKLIBS "\\\n"
 	 "  -DASF_MAIN %s\n",
