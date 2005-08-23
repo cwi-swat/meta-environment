@@ -18,6 +18,11 @@ AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
    [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
 AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
+dnl Require config-manager package
+AC_PACKAGE_REQUIRE(config-manager, config-manager-config,
+   [  --with-config-manager=DIR config-manager is in DIR])
+AC_SUBST(CONFIG_MANAGER)
+
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])
@@ -29,7 +34,7 @@ AC_PACKAGE_REQUIRE(error-support, error-support-config,
 AC_SUBST(ERROR_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${META_STUDIO}/bin/gui-config\`:\`${META_STUDIO}/bin/metaconfig-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/metaconfig-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)
