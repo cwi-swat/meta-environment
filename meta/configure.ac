@@ -187,7 +187,5 @@ AC_CONFIG_FILES([Makefile
    editors/manager/Makefile
    editors/structure/Makefile
    tbscripts/Makefile
-   configuration-manager/Makefile
-   configuration-manager/src/Makefile
 ])
 AC_OUTPUT

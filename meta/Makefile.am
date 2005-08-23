@@ -15,7 +15,6 @@ SUBDIRS = \
 	in-output \
 	term-store \
 	tbscripts \
-	configuration-manager \
 	editors
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
