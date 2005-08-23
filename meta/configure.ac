@@ -71,7 +71,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
