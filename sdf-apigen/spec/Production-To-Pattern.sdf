@@ -9,7 +9,7 @@ context-free syntax
 
     production-to-tree(Production) -> ATerm
     start-symbol-to-tree(Symbol) -> ATerm
-    literal-to-tree(Literal)  -> ATerm
+    literal-to-tree(StrCon)  -> ATerm
 
     symbols-to-args (Symbol* )	-> {ATerm ","}*
     symbol-to-tree (Symbol )	-> ATerm
@@ -30,18 +30,20 @@ variables
  "$AFTree" -> ATerm {strict}
  "$AFTrees" -> {ATerm ","}* {strict}
  "$AFProd" -> ATerm {strict}
- "$Literal" -> Literal {strict}
- "$Label" -> Literal {strict}
+ "$Literal" -> StrCon {strict}
+ "$Label" -> StrCon {strict}
  "$Attributes" -> Attributes {strict}
  "$Sort" -> Sort {strict}
  "$AFSymbol" -> ATerm {strict}
- "$QLit" -> QLiteral {strict}
- "$Type" -> QLiteral {strict}
- "$Char*"[0-9]* -> CHAR* {strict}
+ "$Type" -> StrCon {strict}
  "$Character"[0-9]* -> Character {strict}
  "$CharRanges" -> CharRanges {strict}
- 
+
+lexical variables
+ "$Char*"[0-9]*  -> StrChar* {strict}
+ "$digit+"[0-9]* -> [0-9]+  {strict}
+
 variables
- "_Label" -> Literal {wild}
+ "_Label" -> StrCon {wild}
  "_Symbol"[0-9]* -> Symbol {wild}
  "_Character"[0-9]* -> Character {wild}

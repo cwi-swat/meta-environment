@@ -4,19 +4,18 @@ imports languages/sdf2/syntax/Sdf2
 
 exports
   context-free syntax
-    get-cons(Production) -> Literal
+    get-cons(Production) -> StrCon
 
 hiddens
 
 variables
 	"$PreprocessedModule" -> Module {strict}
-	"$Label"		-> Literal {strict}
+	"$Label"		-> StrCon {strict}
 	"$Symbol"[0-9]*	-> Symbol {strict}
 	"$Symbol*"[0-9]*    -> Symbol* {strict}
 	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
-	"$Literal"		-> Literal {strict}
+	"$Literal"[0-9]*		-> StrCon {strict}
 	"$Attributes"	-> Attributes {strict}
-	"$QLit"	-> QLiteral {strict}
 
 variables
 	"_Symbol*"[0-9]*    -> Symbol* {wild}
@@ -24,7 +23,7 @@ variables
 	"_Attr*"[0-9]* -> {Attribute","}* {wild}
 	"_Production"	-> Production {wild}
 	"_Attributes"	-> Attributes {wild}
-	"_Label" -> Literal {wild}
+	"_Label" -> StrCon {wild}
 
 
 

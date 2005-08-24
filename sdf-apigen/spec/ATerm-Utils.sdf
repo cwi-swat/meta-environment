@@ -2,51 +2,16 @@ module ATerm-Utils
   imports languages/aterm/syntax/ATerms
 
   exports
-    sorts ATermType
-      
     context-free syntax
-      get-type ( ATerm )				-> ATermType
-      "#int"						-> ATermType
-      "#list"						-> ATermType
-      "#appl"						-> ATermType
-      "#placeholder"					-> ATermType
-      afun-concat ( AFun+ )				-> AFun
-
-      aterm-to-lit ( ATerm )				-> Literal
-
       merge-adts ( ATerm , ATerm )			-> ATerm
    
-      quote-all-funs( ATerm )           -> ATerm 
 
 hiddens
-  context-free syntax
-      quote-all-funs-in-list( {ATerm ","}*)           -> {ATerm ","}* 
-
-  "quote-all-funs-in-list" -> AFun {reject}
-  
-  hiddens
-    context-free syntax
-      aterms-to-lit ( {ATerm ","}* )				-> Literal
-      escape ( Literal )				-> Literal
-      Literal "++" Literal  			-> Literal {right}
-
     variables
       "$ADT"		-> ATerm
-      "$AFun"		-> AFun
-      "$AFun+"		-> AFun+
-      "$AFun*"		-> AFun*
       "$AltId"		-> AFun
-      "$Anno+"		-> { ATerm "," }+
-      "$ATerm"[0-9]*	-> ATerm
-      "$ATerm*"[0-9]*	-> { ATerm "," }*
-      "$ATerm+"[0-9]*   -> { ATerm "," }+
-      "$Char"		-> CHAR
-      "$Char*"[0-9]*	-> CHAR*
       "$Entry"[0-9]*	-> ATerm
       "$Entry*"[0-9]*	-> { ATerm "," }*
-      "$Int"		-> IntCon
-      "$L"		-> Literal
       "$Pattern"[0-9]*	-> ATerm
       "$TypeId"		-> AFun
-      "$Literal"[0-9]* -> Literal
 

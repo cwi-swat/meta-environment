@@ -1,7 +1,7 @@
 tests
 
 [prod-test]
- production-to-asfix(lhs:Bool "&" rhs:Bool -> Bool ) ==
+ production-to-asfix("lhs":Bool "&" "rhs":Bool -> Bool ) ==
   prod([sort("Bool"),lit("&"),sort("Bool")],sort("Bool"),no-attrs)
 
 [normalized-prod-test]
@@ -50,14 +50,10 @@ equations
     cf(symbol-to-asfix($Symbol))
 
 [sort]
-  symbol-to-asfix(sort($Char*)) = sort(qliteral(""" $Char* """))
-
+  symbol-to-asfix($Sort) = sort(symbol-to-type($Sort))
 
 [qlit]
-  symbol-to-asfix($QLit) = lit($QLit)
-
-[uqlit]
-  symbol-to-asfix(uqliteral($Char*)) = symbol-to-asfix(qliteral("""$Char*"""))
+  symbol-to-asfix($Literal) = lit($Literal)
 
 [charclass]
   symbol-to-asfix($CharClass) = 
@@ -95,8 +91,8 @@ equations
   symbol-to-asfix($Symbol)
 
 [parameterized]
-  symbol-to-asfix(sort($Char*)[[$Symbol]]) = 
-	parameterized-sort(qliteral("""$Char*"""),[symbol-to-asfix($Symbol)])
+  symbol-to-asfix($Sort[[$Symbol]]) = 
+	parameterized-sort(symbol-to-type($Sort),[symbol-to-asfix($Symbol)])
 
 [formal-param-labelled]
   symbol-to-asfix($Label:<_Symbol-PARAM>) = 
@@ -125,12 +121,12 @@ equations
     char-class(charranges-to-asfix($CharRanges))
 
 [equ-build-asfix-singlechar-charrange]
-  charranges-to-asfix(numchar("\" $Char*)) = 
-    [natcon($Char*)]
+  charranges-to-asfix(numchar(\ $digit+)) = 
+    [natcon($digit+)]
 
 [equ-build-asfix-multiplechars-charrange]
-  charranges-to-asfix(numchar("\" $Char*1)-numchar("\" $Char*2)) = 
-    [range(natcon($Char*1),natcon($Char*2))]
+  charranges-to-asfix(numchar(\ $digit+1)-numchar(\ $digit+2)) = 
+    [range(natcon($digit+1),natcon($digit+2))]
 
 equations
 
@@ -165,29 +161,29 @@ equations
 equations
 
 [left-attr]        
-attr-to-asfix(left) = uqliteral("a""s""s""o""c")(uqliteral("l""e""f""t"))
+attr-to-asfix(left) = idcon(assoc)(idcon(left))
 
 [right-attr]       
-attr-to-asfix(right) = uqliteral("a""s""s""o""c")(uqliteral("r""i""g""h""t"))
+attr-to-asfix(right) = idcon(assoc)(idcon(right))
 
 [nonassoc-attr]       
-attr-to-asfix(non-assoc) =  uqliteral("a""s""s""o""c")(uqliteral("n""o""n""-""a""s""s""o""c"))
+attr-to-asfix(non-assoc) =  idcon(assoc)(idcon(non\-assoc))
 
 [assoc-attr]       
-attr-to-asfix(assoc) = uqliteral("a""s""s""o""c")(uqliteral("a""s""s""o""c"))
+attr-to-asfix(assoc) = idcon(assoc)(idcon(assoc))
 
 [bracket-attr]     
-attr-to-asfix(bracket) = uqliteral("b""r""a""c""k""e""t")
+attr-to-asfix(bracket) = idcon(bracket)
 
 [avoid-attr]       
-attr-to-asfix(avoid) = uqliteral("a""v""o""i""d")
+attr-to-asfix(avoid) = idcon(avoid)
 
 [prefer-attr]      
-attr-to-asfix(prefer) = uqliteral("p""r""e""f""e""r")
+attr-to-asfix(prefer) = idcon(prefer)
 
 [cons-attr]
-attr-to-asfix(cons($ATerm)) = uqliteral("t""e""r""m")(cons($ATerm))
+attr-to-asfix(cons($ATerm)) = idcon(term)(cons($ATerm))
 
 [default-term-attr] 
-attr-to-asfix($ATerm) = uqliteral("t""e""r""m")($ATerm)
+attr-to-asfix($ATerm) = idcon(term)($ATerm)
 

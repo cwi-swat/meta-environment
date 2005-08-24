@@ -8,16 +8,22 @@ exports
 
 context-free syntax
 
-    symbol-to-type(Symbol) -> Literal
+    symbol-to-type(Symbol) -> StrCon
 
 hiddens
 
 variables
- "$Label" -> Literal {strict}
+ "$Label" -> StrCon {strict}
  "$Sort" -> Sort {strict}
- "$Char*"[0-9]* -> CHAR* {strict}
  "$Symbol"[0-9]*	-> Symbol {strict}
 
 variables
- "_Label" -> Literal {wild}
+ "_Label" -> StrCon {wild}
  "_Symbol"[0-9]* -> Symbol {wild}
+
+lexical variables
+  "$Char*"[0-9]* -> StrChar* {strict}
+  "$Head"[0-9]*  -> [A-Z]  {strict}
+  "$Middle*"[0-9]*     -> [A-Za-z0-9\-]* {strict}
+  "$Middle"[0-9]*      -> [A-Za-z0-9\-] {strict}
+  "$Last"[0-9]*       -> [A-Za-z0-9] {strict}

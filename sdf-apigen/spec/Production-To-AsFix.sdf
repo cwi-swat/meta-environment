@@ -13,7 +13,7 @@ exports
 
   context-free syntax
     charclass-to-asfix(CharClass) -> ATerm
-    charranges-to-asfix(CharRanges) -> ATermList
+    charranges-to-asfix(CharRanges) -> ATerm
  
   context-free syntax
     attrs-to-asfix ( Attributes )	-> ATerm
@@ -33,12 +33,17 @@ hiddens
 	"_Symbol" -> Symbol {wild}
 	"_Symbol*" -> Symbol* {wild}
 	"_Attributes" -> Attributes {wild}
-	"_Label" -> Literal {wild}
+	"_Label" -> StrCon {wild}
 
   variables
 	"$Symbol"[0-9]* -> Symbol {strict}
 
+  lexical variables
+    "$Char*"[0-9]*	-> StrChar* {strict}
+    "$digit+"[0-9]*        -> [0-9]+  {strict}
+
   variables
+    "$Literal"[0-9]* -> StrCon {strict}
     "$AFSymbol" -> ATerm
     "$AFSymbols" -> {ATerm ","}*
     "$AFCharRanges"[0-9]* -> {ATerm ","}*
@@ -49,28 +54,26 @@ hiddens
     "$AFAttrs"		-> ATerm
     "$AFProd"		-> ATerm
     "$AFSep"		-> ATerm
-    "$AFSort"		-> Literal
+    "$AFSort"		-> StrCon
     "$ATerm"		-> ATerm
     "$Attr"		-> Attribute
     "$Attr*"[0-9]*	-> { Attribute "," }*
     "$Attr+"		-> { Attribute "," }+
     "$Attributes"	-> Attributes
-    "$Char*"[0-9]*	-> CHAR*
+
     "$CharClass"[0-9]*  -> CharClass
     "$CharRange"[0-9]*  -> CharRange
     "$CharRanges"[0-9]* -> CharRanges
-    "$Label"		-> Literal
+    "$Label"		-> StrCon
     "$ListType"		-> AFun
-    "$Literal"		-> Literal
+    "$StrCon"		-> StrCon
     "$Production"	-> Production
     "$Production*"	-> Production*
-    "$Sep"		-> Literal
+    "$Sep"		-> StrCon
     "$Sort"[0-9]*	-> Sort
     "$Symbol*"		-> Symbol*
     "$Symbol+"		-> Symbol+
     "$TypeId"		-> AFun
-    "$UQLit"		-> UQLiteral
-    "$QLit"		-> Literal
     "$Attributes"	-> Attributes
 
 

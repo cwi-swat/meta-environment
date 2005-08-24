@@ -50,13 +50,13 @@ variables
 	"$Production*"	-> Production* {strict}
 	"$Production"	-> Production {strict}
 	"$Tree" -> ATerm {strict}
-	"$Type"[0-9]* -> Literal {strict}
-	"$Sep"		-> Literal {strict}
-	"$Label"		-> Literal {strict}
+	"$Type"[0-9]* -> StrCon {strict}
+	"$Sep"		-> StrCon {strict}
+	"$Label"		-> StrCon {strict}
 	"$Symbol"[0-9]*	-> Symbol {strict}
 	"$Symbol*"[0-9]*    -> Symbol* {strict}
 	"$Attr*"[0-9]*	-> { Attribute "," }* {strict}
-	"$Literal"		-> Literal {strict}
+	"$Literal"		-> StrCon {strict}
 	"$Attributes"	-> Attributes {strict}
 	"$Grammar" -> Grammar {strict}
 	"$Module" -> Module {strict}
@@ -67,8 +67,7 @@ variables
 	"$Entries"[0-9]* -> {ATerm ","}* {strict}
 	"$Entry"[0-9]* -> ATerm {strict}
 	"$Module*" -> Module* {strict}
-	"$QLit"	-> QLiteral {strict}
-	"$AltId" -> QLiteral {strict}
+	"$AltId" -> StrCon {strict}
 
 variables
 	"_ImpSection*" -> ImpSection* {wild}
@@ -78,9 +77,9 @@ variables
 	"_Attr*"[0-9]* -> {Attribute","}* {wild}
 	"_Production*"	-> Production* {wild}
 	"_Production"	-> Production {wild}
-	"_Literal"		-> Literal {wild}
+	"_Literal"		-> StrCon {wild}
 	"_Attributes"	-> Attributes {wild}
-	"_Label" -> Literal {wild}
+	"_Label" -> StrCon {wild}
 	"_CharClass" -> CharClass {wild}
 	"_Priorities" -> Priorities {wild}
 	"_Restrictions" -> Restrictions {wild}

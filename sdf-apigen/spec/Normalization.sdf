@@ -1,7 +1,9 @@
 module Normalization
 imports UniqueLabels
-imports languages/sdf2/normalization/Character
 imports Literals
+imports Symbols
+imports basic/Identifiers
+imports languages/sdf2/normalization/Character
 imports languages/sdf2/syntax/Sdf2
 imports languages/sdf2/normalization/Basic
 imports languages/sdf2/normalization/Literals
@@ -20,7 +22,7 @@ context-free start-symbols
 
 
 variables
-	"_label" -> Literal {wild}
+	"_label" -> StrCon {wild}
 	"_production*"[0-9]* -> Production* {wild}
 	"_symbol*"[0-9]* -> Symbol* {wild}
 	"_attributes"[0-9]* -> Attributes {wild}
@@ -28,12 +30,16 @@ variables
 	"_priorities"[0-9]* -> Priorities {wild}
 
 variables
-	"$label"[0-9]* -> Literal {strict}
-	"$literal"[0-9]* -> Literal {strict}
+	"$id"[0-9]* -> IdCon {strict}
+	"$label"[0-9]* -> StrCon {strict}
+	"$literal"[0-9]* -> StrCon {strict}
 	"$production*"[0-9]* -> Production* {strict}
 	"$symbol*"[0-9]* -> Symbol* {strict}
 	"$grammar"[0-9]* -> Grammar {strict}
 	"$symbol"[0-9]* -> Symbol {strict}
 	"$charclass"[0-9]* -> CharClass {strict}
 	"$attributes"[0-9]* -> Attributes {strict}
-	"$char*" -> CHAR*
+	"$sort"[0-9]* -> Sort {strict}
+
+lexical variables
+	"$char*" -> StrChar*

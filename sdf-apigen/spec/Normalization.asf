@@ -41,12 +41,7 @@ equations
 equations
 
 [quote-labels]
-	uqliteral($char*):$symbol = qliteral("""$char*"""):$symbol
-
-[quote-literal]
-	$symbol*1 $label:uqliteral($char*) $symbol*2 -> $symbol $attributes =
-	$symbol*1 $label:qliteral("""$char*""") $symbol*2 -> $symbol 
-		$attributes
+	$id:$symbol = idcon2strcon($id):$symbol
 
 [push-out-labels-cf]
 	<$label:$symbol-CF> = $label:<$symbol-CF>
@@ -97,8 +92,8 @@ equations
 equations
 
   [label-sorts]
-	$symbol*1 sort($char*) $symbol*2 -> $symbol $attributes =
-	$symbol*1 qliteral("""$char*"""):sort($char*) $symbol*2 -> $symbol 
+	$symbol*1 $sort $symbol*2 -> $symbol $attributes =
+	$symbol*1 symbol-to-type($sort):$sort $symbol*2 -> $symbol 
 		$attributes 
 
   [label-iter]
@@ -125,8 +120,8 @@ equations
 
 
   [label-lexical-sorts]
-	$symbol*1 <sort($char*)-LEX> $symbol*2 -> $symbol $attributes =
-	$symbol*1 qliteral("""$char*"""):<sort($char*)-LEX> 
+	$symbol*1 <$sort-LEX> $symbol*2 -> $symbol $attributes =
+	$symbol*1 symbol-to-type($sort):<$sort-LEX> 
 		$symbol*2 -> $symbol $attributes
 
   [label-charclasses]

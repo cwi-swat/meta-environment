@@ -3,22 +3,33 @@ equations
 [unique-labels-on-literals]
 $Symbol*0 $Label:$Lit $Symbol*1 $Label:$Lit $Symbol*2 -> $Symbol $Attributes =
 $Symbol*0 $Label:$Lit $Symbol*1 $Label + 1:$Lit $Symbol*2 -> $Symbol $Attributes
+
 [unique-labels-on-charclasses]
 $Symbol*0 $Label:$CharClass $Symbol*1 $Label:$CharClass $Symbol*2 -> $Symbol $Attributes =
 $Symbol*0 $Label:$CharClass $Symbol*1 $Label + 1:$CharClass $Symbol*2 -> $Symbol $Attributes
+
+equations
 
 [label-add]
 $Natcon3 := $Natcon1 + $Natcon2
 ===>
 $Label0 + $Natcon1 + $Natcon2 = $Label0 + $Natcon3
 
-[default-incorporate-nat]
-qliteral(""" $Char+1 """) + natcon($Char+2) : $Symbol1 := $Symbol3,
-$NormalizedSymbol := qliteral(""" $Char+1 "-" $Char+2 """) : $Symbol1
-====>
-$Symbol*1 $Symbol3 $Symbol*2 -> $Symbol $Attributes  = 
-$Symbol*1 $NormalizedSymbol $Symbol*2 -> $Symbol $Attributes
+equations
 
+[concat-one]
+ 	concat(strcon(\" chars \"), natcon(digit)) =
+	strcon(\" chars strchar(\-) strchar(digit) \")
+
+[concat-many]
+	concat($Label, natcon(digit digit+)) = 
+	concat(concat($Label, natcon(digit)), natcon(digit+))
+
+equations
+
+[default-incorporate-nat]
+$Symbol*1 $Label + $Natcon:$Symbol1 $Symbol*2 -> $Symbol $Attributes  = 
+$Symbol*1 concat($Label, $Natcon):$Symbol1 $Symbol*2 -> $Symbol $Attributes
 
 tests
 

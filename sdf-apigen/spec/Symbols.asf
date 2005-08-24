@@ -17,8 +17,18 @@ equations
 	symbol-to-type(_Label:$Sort) = 
 	symbol-to-type($Sort)
 
-[sort-unlabelled]
-	symbol-to-type(sort($Char*)) = qliteral(""" $Char* """)
+[sort-unlabelled-one]
+	symbol-to-type(sort($Head)) = strcon(\" strchar($Head) \")
+
+[sort-unlabelled-two]
+	symbol-to-type(sort($Head $Last)) = strcon(\" strchar($Head) strchar($Last) \")
+
+[sort-unlabelled-more]
+	strcon(\" strchar($Head) $Char* strchar($Last) \") := symbol-to-type(sort($Head $Middle* $Last))
+	===>
+	symbol-to-type(sort($Head $Middle $Middle* $Last)) = 
+	strcon(\" strchar($Head) strchar($Middle) $Char* strchar($Last) \")
+	
 
 [iter]
 	symbol-to-type($Label:$Symbol +) = 

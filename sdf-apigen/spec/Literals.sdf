@@ -6,13 +6,14 @@ exports
 
 context-free syntax
 
+%% an extra constructor for Symbol:
 nested-literal(Production) -> Symbol
 
 context-free syntax
 
-Literal "||" Literal -> Literal {left}
+StrCon "||" StrCon -> StrCon {left}
 
 hiddens
 
-variables
-	"$Char*"[0-9]* -> CHAR* {strict}
+lexical variables
+	"$Char*"[0-9]* -> StrChar* {strict}

@@ -268,8 +268,8 @@ exports
     LAYOUT? -/- [\ \t\n]
 
   context-free syntax
-    true				-> Bool {cons("true")}
-    false				-> Bool {cons("false")}
+    "true"				-> Bool {cons("true")}
+    "false"				-> Bool {cons("false")}
     "left":Bool "&" "right":Bool	-> Bool {cons("and")}
     "left":Bool "|" "right":Bool	-> Bool {cons("or")}
 

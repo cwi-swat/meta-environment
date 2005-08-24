@@ -2,6 +2,6 @@
 equations
 
 [concat]
-	qliteral(""" $Char*1 """) || qliteral(""" $Char*2 """) =
-	qliteral(""" $Char*1 $Char*2 """)
+	strcon(\" $Char*1 \") || strcon(\" $Char*2 \") =
+	strcon(\" $Char*1 $Char*2 \")
 

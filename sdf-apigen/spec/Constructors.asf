@@ -1,8 +1,8 @@
 equations
 
 [consed]
- 	get-cons(_Symbol* -> _Symbol {_Attr*1, cons($QLit), _Attr*2}) =
-	$QLit
+ 	get-cons(_Symbol* -> _Symbol {_Attr*1, cons($Literal), _Attr*2}) =
+	$Literal
 
 [opt-cf-absent]
 	get-cons( -> <_Symbol?-CF> _Attributes) = "Absent"
