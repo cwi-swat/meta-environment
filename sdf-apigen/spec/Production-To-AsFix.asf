@@ -121,11 +121,11 @@ equations
     char-class(charranges-to-asfix($CharRanges))
 
 [equ-build-asfix-singlechar-charrange]
-  charranges-to-asfix(numchar(\ $digit+)) = 
+  charranges-to-asfix(numchar(\\ $digit+)) = 
     [natcon($digit+)]
 
 [equ-build-asfix-multiplechars-charrange]
-  charranges-to-asfix(numchar(\ $digit+1)-numchar(\ $digit+2)) = 
+  charranges-to-asfix(numchar(\\ $digit+1)-numchar(\\ $digit+2)) = 
     [range(natcon($digit+1),natcon($digit+2))]
 
 equations
@@ -161,29 +161,29 @@ equations
 equations
 
 [left-attr]        
-attr-to-asfix(left) = idcon(assoc)(idcon(left))
+attr-to-asfix(left) = assoc(left)
 
 [right-attr]       
-attr-to-asfix(right) = idcon(assoc)(idcon(right))
+attr-to-asfix(right) = assoc(right)
 
 [nonassoc-attr]       
-attr-to-asfix(non-assoc) =  idcon(assoc)(idcon(non\-assoc))
+attr-to-asfix(non-assoc) =  assoc(non-assoc)
 
 [assoc-attr]       
-attr-to-asfix(assoc) = idcon(assoc)(idcon(assoc))
+attr-to-asfix(assoc) = assoc(assoc)
 
 [bracket-attr]     
-attr-to-asfix(bracket) = idcon(bracket)
+attr-to-asfix(bracket) = bracket
 
 [avoid-attr]       
-attr-to-asfix(avoid) = idcon(avoid)
+attr-to-asfix(avoid) = avoid
 
 [prefer-attr]      
-attr-to-asfix(prefer) = idcon(prefer)
+attr-to-asfix(prefer) = prefer
 
 [cons-attr]
-attr-to-asfix(cons($ATerm)) = idcon(term)(cons($ATerm))
+attr-to-asfix(cons($ATerm)) = term(cons($ATerm))
 
 [default-term-attr] 
-attr-to-asfix($ATerm) = idcon(term)($ATerm)
+attr-to-asfix($ATerm) = term($ATerm)
 

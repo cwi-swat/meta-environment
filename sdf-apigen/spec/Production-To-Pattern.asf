@@ -31,10 +31,10 @@ equations
    appl($AFProd,[$AFTrees])
 
 [char-range-one-character-labeled]
-  symbol-to-tree(_Label:[numchar(\ $digit+)]) = natcon($digit+)
+  symbol-to-tree(_Label:[numchar(\\ $digit+)]) = natcon($digit+)
 
 [char-range-one-character-unlabelled]
-  symbol-to-tree([numchar(\ $digit+)]) = natcon($digit+)
+  symbol-to-tree([numchar(\\ $digit+)]) = natcon($digit+)
 
 [char-range]
   [_Character] !:= [$CharRanges]
