@@ -1,0 +1,4 @@
+configuration([
+	module-path("."),
+	module-path("./add-labels")
+])
