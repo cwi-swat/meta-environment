@@ -27,19 +27,21 @@ variables
  "$Trees"[0-9]* -> {ATerm ","}* {strict}
  "$Treep"[0-9]* -> {ATerm ","}+ {strict}
  "$AFProd" -> ATerm {strict}
- "$Literal" -> Literal {strict}
- "$Label" -> Literal {strict}
+ "$Literal" -> StrCon {strict}
+ "$Label" -> StrCon {strict}
  "$Attributes" -> Attributes {strict}
  "$Sort" -> Sort {strict}
  "$AFSymbol" -> ATerm {strict}
- "$QLit" -> QLiteral {strict}
- "$Type" -> QLiteral {strict}
- "$Char*"[0-9]* -> CHAR* {strict}
+ "$Type" -> StrCon {strict}
+ 
  "$Character"[0-9]* -> Character {strict}
  "$CharRanges" -> CharRanges {strict}
  
+lexical variables
+"$Char*"[0-9]* -> StrChar* {strict}
+
 variables
- "_Label" -> Literal {wild}
+ "_Label" -> StrCon {wild}
  "_Symbol"[0-9]* -> Symbol {wild}
  "_Character"[0-9]* -> Character {wild}
- "_Literal" -> Literal {wild}
+ "_Literal" -> StrCon {wild}

@@ -36,7 +36,7 @@ equations
 	$Entries1, $Entries2
 
 [start-symbols-grammar]
-	$Entry := start-symbol-to-adt($Symbol),
+	$Entry := start-symbol-to-adt(<$Symbol-CF>),
 	$Entries2 := grammars-to-adt(context-free start-symbols $Symbol*, )
 	===>
 	grammars-to-adt(context-free start-symbols $Symbol $Symbol*, 
@@ -237,7 +237,7 @@ lhs:Bool "|" rhs:Bool -> Bool {cons("or")}
 
 )
 ==
-[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"arg"("Layout")>])), list("Layout","Lex-Layout"),
+[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"layout"("Layout")>])), constructor("Layout","Lex-to-cf",appl(prod([lex(iter(layout))],cf(layout),no-attrs), [appl(list(lex(iter(layout))),<"list"("Lex-Layout-list")>)])), list("Lex-Layout-list","Lex-Layout"),
 		    constructor("Lex-Digits","Default",appl(prod([lex(iter(char-class([range(48,57)])))],lex(sort("Digits")),no-attrs), [appl(list(lex(iter(char-class([range(48,57)])))),<"list"(chars)>)])),
 		    constructor("Digits","Lex-to-cf",appl(prod([lex(sort("Digits"))],cf(sort("Digits")),no-attrs), [<"Digits"("Lex-Digits")>])),
 		    constructor("Lex-Real","simple",appl(prod([lex(sort("Digits")), lit("."), lex(sort("Digits"))],lex(sort("Real")),attrs([term(cons("simple"))])), [<"Digits"("Lex-Digits")>, appl(prod([char-class([46])],lit("."),no-attrs),[46]), <"mant"("Lex-Digits")>])), constructor("Real","Lex-to-cf",appl(prod([lex(sort("Real"))],cf(sort("Real")),no-attrs), [<"Real"("Lex-Real")>])), constructor("Lex-Real","math",appl(prod([lex(sort("Digits")), lit("."), lex(sort("Digits")), lit("E"), char-class([43,45]), lex(sort("Digits"))],lex(sort("Real")),attrs([term(cons("math"))])), [<"Digits"("Lex-Digits")>, appl(prod([char-class([46])],lit("."),no-attrs),[46]), <"mant"("Lex-Digits")>, appl(prod([char-class([69])],lit("E"),no-attrs),[69]), <"sign"(char)>, <"exp"("Lex-Digits")>])),
@@ -246,7 +246,7 @@ lhs:Bool "|" rhs:Bool -> Bool {cons("or")}
 		    constructor("Lex-Comment","Default",appl(prod([lit("%"), lex(iter-star(char-class([range(0,9),range(11,255)]))), lit("\n")],lex(sort("Comment")),no-attrs), [appl(prod([char-class([37])],lit("%"),no-attrs),[37]), appl(list(lex(iter-star(char-class([range(0,9),range(11,255)])))),<"list"(chars)>), appl(prod([char-class([10])],lit("\n"),no-attrs),[10])])),
 		    constructor("Comment","Lex-to-cf",appl(prod([lex(sort("Comment"))],cf(sort("Comment")),no-attrs), [<"Comment"("Lex-Comment")>])),
 		    constructor("Lex-Layout","comment",appl(prod([lex(sort("Comment"))],lex(layout),attrs([term(cons("comment"))])), [<"Comment"("Lex-Comment")>])),
-		    constructor("Lex-Layout","whitespace",appl(prod([char-class([range(9,10),32])],lex(layout),attrs([term(cons("whitespace"))])), [<"char"(char)>])),
+		    constructor("Lex-Layout","whitespace",appl(prod([char-class([range(9,10),32])],lex(layout),attrs([term(cons("whitespace"))])), [<"ch"(char)>])),
 		    constructor("Bool","percent",appl(prod([lit("%%"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("percent"))])), [appl(prod([char-class([37]), char-class([37])],lit("%%"),no-attrs),[37, 37]), <"ws-after-%%"("OptLayout")>, <"Bool"("Bool")>])),
 		    constructor("Bool","and",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("&"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("and"))])), [<"lhs"("Bool")>, <"ws-after-lhs"("OptLayout")>, appl(prod([char-class([38])],lit("&"),no-attrs),[38]), <"ws-after-&"("OptLayout")>, <"rhs"("Bool")>])),
 		    constructor("Bool","or",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("|"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("or"))])), [<"lhs"("Bool")>, <"ws-after-lhs"("OptLayout")>, appl(prod([char-class([124])],lit("|"),no-attrs),[124]), <"ws-after-|"("OptLayout")>, <"rhs"("Bool")>]))]
@@ -282,10 +282,13 @@ exports
 
 ==
 
-[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"arg"("Layout")>])), list("Layout","Lex-Layout"),
-		    [ constructor("Start","Bool", parsetree(appl(prod([cf(opt(layout)), sort("Bool"), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-Bool"("Bool")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)) ],
-		    [ constructor("Start","BoolList", parsetree(appl(prod([cf(opt(layout)), sort("BoolList"), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-BoolList"("BoolList")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)) ],
-		    constructor("Lex-Layout","Default",appl(prod([char-class([range(9,10),32])],lex(layout),no-attrs), [<"char"(char)>])),
+[constructor("OptLayout","Absent",appl(prod([],cf(opt(layout)),no-attrs), [])), 
+ constructor("OptLayout","Present",appl(prod([cf(layout)],cf(opt(layout)),no-attrs), [<"layout"("Layout")>])), 
+ constructor("Layout","Lex-to-cf",appl(prod([lex(iter(layout))],cf(layout),no-attrs), [appl(list(lex(iter(layout))),<"list"("Lex-Layout-list")>)])), 
+ list("Lex-Layout-list","Lex-Layout"),
+		    constructor("Start","Bool", parsetree(appl(prod([cf(opt(layout)), cf(sort("Bool")), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-Bool"("Bool")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)),
+		    constructor("Start","BoolList", parsetree(appl(prod([cf(opt(layout)), cf(sort("BoolList")), cf(opt(layout))],sort("<START>"),no-attrs), [<"ws-before"("OptLayout")>, <"top-BoolList"("BoolList")>, <"ws-after"("OptLayout")>]),<amb-cnt(int)>)),
+		    constructor("Lex-Layout","Default",appl(prod([char-class([range(9,10),32])],lex(layout),no-attrs), [<"ch"(char)>])),
 		    constructor("Bool","true",appl(prod([lit("true")],cf(sort("Bool")),attrs([term(cons("true"))])), [appl(prod([char-class([116]), char-class([114]), char-class([117]), char-class([101])],lit("true"),no-attrs),[116, 114, 117, 101])])),
 		    constructor("Bool","false",appl(prod([lit("false")],cf(sort("Bool")),attrs([term(cons("false"))])), [appl(prod([char-class([102]), char-class([97]), char-class([108]), char-class([115]), char-class([101])],lit("false"),no-attrs),[102, 97, 108, 115, 101])])),
 		    constructor("Bool","and",appl(prod([cf(sort("Bool")), cf(opt(layout)), lit("&"), cf(opt(layout)), cf(sort("Bool"))],cf(sort("Bool")),attrs([term(cons("and"))])), [<"left"("Bool")>, <"ws-after-left"("OptLayout")>, appl(prod([char-class([38])],lit("&"),no-attrs),[38]), <"ws-after-&"("OptLayout")>, <"right"("Bool")>])),
@@ -295,3 +298,4 @@ exports
 		      lit(";")))),<"elems"("Bool-elems")>), <"ws-after-elems"("OptLayout")>, appl(prod([char-class([93])],lit("]"),no-attrs),[93])])),
 		    separated-list("Bool-elems", "Bool", 
 	[<ws-after-head("OptLayout")>,appl(prod([char-class([59])],lit(";"),no-attrs), [59]),<ws-after-sep("OptLayout")>])]
+

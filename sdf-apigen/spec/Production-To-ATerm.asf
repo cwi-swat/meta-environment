@@ -1,15 +1,15 @@
 equations
 
 [with-args]
- $QLit := get-cons($Symbol* -> $Symbol $Attributes),
+ $Literal := get-cons($Symbol* -> $Symbol $Attributes),
  $Treep := symbols-to-list($Symbol*)
   ===>
- production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $QLit($Treep)
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Literal($Treep)
 
 [default-without-args]
- $QLit := get-cons($Symbol* -> $Symbol $Attributes)
+ $Literal := get-cons($Symbol* -> $Symbol $Attributes)
  ===>
- production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $QLit
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Literal
 
 equations
 

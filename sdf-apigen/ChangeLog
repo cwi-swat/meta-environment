@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Aug 24 16:56:55 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * Fixed TODO (start injections are correct now)
+ * Ported ASF+SDF specification to USE structured lexicals (bootstrapped)
+
 Mon Feb  7 18:35:42 CET 2005 <jurgenv@cwi.nl>
  * TODO: fix major error in generation of start injections. 
    The cf( ) is missing in the left-hand side!
@@ -7,7 +11,7 @@ Mon Feb  7 18:35:42 CET 2005 <jurgenv@cwi.nl>
 Fri Dec 17 13:44:24 CET 2004 <jurgenv@cwi.nl>
  * Bumped to 3.0
  * Reimplemented sdf-apigen. 
- * Supports only structured lexicals from now on.
+ * Generates only ADT's with structured lexicals from now on.
 
 Sat Dec 11 13:28:56 CET 2004 <jurgenv@cwi.nl>
  * spec/Makefile.am:
