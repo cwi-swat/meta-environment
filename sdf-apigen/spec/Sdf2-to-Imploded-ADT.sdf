@@ -59,7 +59,7 @@ variables
 	"$Entries"[0-9]* -> {ATerm ","}* {strict}
 	"$Entry"[0-9]* -> ATerm {strict}
 	"$Module*" -> Module* {strict}
-	"$AltId" -> StrCon {strict}
+	"$AltId" -> IdCon {strict}
 
   variables
 	"_Sep"		-> StrCon {wild}

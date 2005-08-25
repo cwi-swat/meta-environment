@@ -1,15 +1,15 @@
 equations
 
 [with-args]
- $Literal := get-cons($Symbol* -> $Symbol $Attributes),
+ $Id := get-cons($Symbol* -> $Symbol $Attributes),
  $Treep := symbols-to-list($Symbol*)
   ===>
- production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Literal($Treep)
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Id($Treep)
 
 [default-without-args]
- $Literal := get-cons($Symbol* -> $Symbol $Attributes)
+ $Id := get-cons($Symbol* -> $Symbol $Attributes)
  ===>
- production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Literal
+ production-to-imploded-tree($Symbol* -> $Symbol $Attributes) = $Id
 
 equations
 
@@ -35,6 +35,15 @@ equations
 
 [StrCon]
   symbol-to-term($Label:StrCon) = <$Label(str)>
+
+[ATerm]
+  symbol-to-term($Label:TermCon) = <$Label(term)>
+
+[Real]
+  symbol-to-term($Label:RealCon) = <$Label(real)>
+
+[Blob]
+  symbol-to-term($Label:BlobCon) = <$Label(blob)>
 
 [default-sort]
   $Type := symbol-to-type($Label:$Symbol)

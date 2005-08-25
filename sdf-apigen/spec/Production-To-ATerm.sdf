@@ -17,7 +17,7 @@ production-to-imploded-tree(Production) -> ATerm
 
 hiddens
 variables
-
+ "$Id" -> IdCon {strict}
  "$Production"	-> Production {strict}
  "$Production*"	-> Production* {strict}
  "$Symbol"[0-9]*	-> Symbol {strict}
