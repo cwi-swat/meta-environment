@@ -22,6 +22,7 @@ CLEANFILES  = generic-meta meta.1
 	     s@__TIDE__@$(TIDE)@g;\
 	     s@__TIDE_SUPPORT__@$(TIDE_SUPPORT)@g;\
 	     s@__PANDORA__@$(PANDORA)@g;\
+	     s@__CONFIG_MANAGER__@$(CONFIG_MANAGER)@g;\
 	     s@__DEFAULT_EDITOR__@$(DEFAULT_EDITOR)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \

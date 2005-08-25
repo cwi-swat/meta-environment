@@ -182,6 +182,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${sglr}/share/sglr \
    -I${tide}/share/tide \
    -I${tide_support}/share/tide-support \
+   -I${config_manager}/share/config-manager \
    -I${pandora}/share/pandora \
    -I${pgen}/share/pgen \
    ${extra_scripts} \
