@@ -13,6 +13,7 @@ tide=__TIDE__
 tide_support=__TIDE_SUPPORT__
 prefix=__PREFIX__
 editor=__DEFAULT_EDITOR__
+config_manager=__CONFIG_MANAGER__
 myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
