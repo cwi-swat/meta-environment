@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Aug 25 08:53:00 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
+ * Removed meta-kernel.properties, and merged it into the
+   properties of the asfsdf-meta package.
+ * Removed Kernel properties loader
+ * UserProperties toolbus command added.
+
 Tue Aug 23 13:34:10 CEST 2005 <kooiker@cwi.nl>
  * Initial version
 

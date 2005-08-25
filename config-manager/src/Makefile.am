@@ -2,7 +2,6 @@
 
 include $(top_srcdir)/make_rules
 
-KERNEL_CONFIGURATION = "$(pkgdatadir)/meta-kernel.properties"
 USER_CONFIGURATION = "./meta.buttons"
 LIBRARY_PATH = 
 API_VERSION=1.0
@@ -18,13 +17,10 @@ noinst_LIBRARIES = libMetaConfig.a
 
 pkgdata_DATA = \
 	configuration-manager.idef \
-	kernel-configuration.tb \
 	user-configuration.tb \
-	meta-kernel.properties \
 	metaconfig-${API_VERSION}.jar
 
 CLEANFILES = \
-	kernel-configuration.tb \
 	user-configuration.tb \
 	${noinst_SCRIPTS} \
 	${bin_SCRIPTS}
@@ -32,9 +28,7 @@ CLEANFILES = \
 EXTRA_DIST = \
 	metaconfig-${API_VERSION}.jar \
 	configuration-manager.idef \
-	kernel-configuration.tb.src \
 	user-configuration.tb.src \
-	meta-kernel.properties \
 	metaconfig-${API_VERSION}.jar
 
 noinst_HEADERS = \
@@ -63,8 +57,7 @@ configmanager_LDADD = \
 absolute_srcdir=$(shell cd ${srcdir}; pwd)
 
 %.tb: %.tb.src Makefile
-	sed 's@__KERNEL_CONFIGURATION__@$(KERNEL_CONFIGURATION)@g;\
-	    s@__USER_CONFIGURATION__@$(USER_CONFIGURATION)@g;' < $< > $@
+	sed 's@__USER_CONFIGURATION__@$(USER_CONFIGURATION)@g;' < $< > $@
 
 api:
 	adt-to-c \

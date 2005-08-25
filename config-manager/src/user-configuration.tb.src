@@ -21,3 +21,5 @@ in
     rec-msg(io-file-not-exists)
   )
 endlet
+
+toolbus(UserConfiguration)
