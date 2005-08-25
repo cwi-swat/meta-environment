@@ -50,8 +50,8 @@ Booleans.c Booleans.h: Booleans.sdf
 		--prefix SDF \
 		--verbose
 
-booltest.pt: Booleans.trm.tbl booltest.trm 
-	${SGLR} -2t -p Booleans.trm.tbl -i ${top_srcdir}/test/booltest.trm -o $@
+booltest.pt: Booleans.trm.tbl booltest.trm  Makefile
+	${SGLR} -t -p Booleans.trm.tbl -i ${top_srcdir}/test/booltest.trm -o $@
 
 %.trm.tbl: %.sdf
 	${SDF2TABLE} -m `basename $< .sdf` -i $< -o $@
