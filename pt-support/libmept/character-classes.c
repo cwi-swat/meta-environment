@@ -6,7 +6,7 @@ ATbool PT_elementOfCharClass(PT_Tree character, PT_Symbol charClass)
   int ch = PT_getTreeCharacter(character);
   PT_CharRanges ranges = PT_getSymbolRanges(charClass);
 
-  for (; !PT_isCharRangesEmpty(ranges); ranges = PT_getCharRangesTail(ranges)) {
+  for (;!PT_isCharRangesEmpty(ranges); ranges = PT_getCharRangesTail(ranges)) {
     PT_CharRange range = PT_getCharRangesHead(ranges);
     
     if (PT_isCharRangeRange(range)) {
