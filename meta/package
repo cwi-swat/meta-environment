@@ -14,8 +14,9 @@ identification
 
 configuration interface
 
-requires
-   aterm 2.4.1
+require
+
+aterm 2.4.1
 
 meta-studio 1.0
 
@@ -45,10 +46,8 @@ graph-support 0.2
 
 sdf-support 2.2
 
-asc-support 2.1
-
-asf-support 1.4
-
 tide 1.1
 
 tide-support 1.1
+
+config-manager 1.0

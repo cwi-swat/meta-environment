@@ -101,27 +101,10 @@ AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
    [  --with-sdf-support=DIR  sdf-support is in DIR])
 AC_SUBST(SDF_SUPPORT)
 
-dnl Require asf-support package
-
-AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
-   [  --with-asf-support=DIR  asf-support is in DIR])
-AC_SUBST(ASF_SUPPORT)
-
-dnl Require asc-support package
-
-AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
-   [  --with-asc-support=DIR  asc-support is in DIR])
-AC_SUBST(ASC_SUPPORT)
-
 dnl Require pandora package
 AC_PACKAGE_REQUIRE(pandora, pandora,
    [  --with-pandora=DIR         pandora is in DIR])
 AC_SUBST(PANDORA)
-
-ASCINC=${ASC_SUPPORT}/include
-AC_SUBST(ASCINC)
-ASCLIB=${ASC_SUPPORT}/lib
-AC_SUBST(ASCLIB)
 
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
