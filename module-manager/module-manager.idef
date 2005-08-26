@@ -1,0 +1,28 @@
+#ifndef __MODULE_MANAGER_IDEF
+#define __MODULE_MANAGER_IDEF
+
+tool module-manager is { 
+  command = "module-manager"
+}
+
+process ModuleManager is
+let
+  MM : module-manager,
+  Id : term
+in
+  execute(module-manager, MM?)
+  .
+  (
+    rec-msg(mm-create-module(Id?))
+    . snd-do(MM, create-module(Id))
+  +
+    rec-msg(mm-delete-module(Id?))
+    . snd-do(MM, delete-module(Id))
+  )
+  *
+  delta
+endlet
+
+toolbus(ModuleManager)
+
+#endif

@@ -1,0 +1,14 @@
+package 
+identification
+   name=module-support
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/
+   info=http://www.cwi.nl/projects/MetaEnv/
+   description='Module support'
+
+
+   keywords=module-support
+
+configuration interface
+
+requires
