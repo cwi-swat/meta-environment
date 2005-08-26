@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import nl.cwi.sen1.moduledata.Factory;
-import nl.cwi.sen1.moduledata.types.AttributeAttributes;
-import nl.cwi.sen1.moduledata.types.DependencyDependencies;
-import nl.cwi.sen1.moduledata.types.Module;
+import nl.cwi.sen1.moduleapi.Factory;
+import nl.cwi.sen1.moduleapi.types.AttributeAttributes;
+import nl.cwi.sen1.moduleapi.types.DependencyDependencies;
+import nl.cwi.sen1.moduleapi.types.Module;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
