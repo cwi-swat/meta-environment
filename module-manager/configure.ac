@@ -23,8 +23,13 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
+dnl Require module-support package
+AC_PACKAGE_REQUIRE(module-support, module-support-config,
+   [  --with-module-support=DIR      Module-support is in DIR])
+AC_SUBST(MODULE_SUPPORT)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${META_STUDIO}/bin/gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)
