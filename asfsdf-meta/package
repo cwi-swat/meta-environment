@@ -15,7 +15,7 @@ identification
 configuration interface
 
 requires
-   meta PARSE_ERROR_IN_PACKAGE_DEF
+   meta 2.0
 
 asf 1.9
 
