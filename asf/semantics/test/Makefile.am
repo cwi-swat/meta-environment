@@ -14,7 +14,6 @@ TEST_MODULES=\
 	Func \
 	LexConcat \
 	List \
-	ListSpecific \
 	Lookup \
 	Memo-Pico-typecheck \
 	NumberTree \
@@ -31,6 +30,9 @@ TEST_MODULES=\
 	StarStarVar \
 	Traversal-Typecheck \
 	Tuple
+
+# TODO: maybe really remove this test
+#	ListSpecific \
 
 noinst_SCRIPTS=.cvsignore
 

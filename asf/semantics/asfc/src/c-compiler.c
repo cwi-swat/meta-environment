@@ -21,29 +21,29 @@ void call_c_compiler(ATbool keep_annos,
   }
 
   sprintf(commandline,
-         COMPILER " " COMPILERFLAGS " %s "
-	 "-o %s "
+         COMPILER " " COMPILERFLAGS 
+	 " -o %s "
 	 "%s \\\n"
-	 "  -I.\\\n"
-	 "  -I" ASC_SUPPORT "/include \\\n"
-	 "  -I" SGLR "/include \\\n"
-	 "  -I" TIDE_SUPPORT "/include \\\n"
-	 "  -I" ASF_SUPPORT "/include \\\n"
-	 "  -I" PT_SUPPORT "/include \\\n"
-	 "  -I" ATERM "/include \\\n"
-	 "  -I" TOOLBUSLIB "/include \\\n"
-	 "  -I" ERROR_SUPPORT "/include \\\n"
-	 "  -L" ASC_SUPPORT "/lib" " -lasc-support-me \\\n"
-	 "  -L" SGLR "/lib" " -lsglr \\\n"
-	 "  -L" TIDE_SUPPORT "/lib" " -ltide-adapter \\\n"
-	 "  -L" ASF_SUPPORT "/lib" " -lASFME \\\n"
-	 "  -L" PT_SUPPORT "/lib" " -lmept -lPTMEPT \\\n"
-	 "  -L" ERROR_SUPPORT "/lib" " -lErrorAPI \\\n"
-	 "  -Wl,--rpath -Wl," ATERM "/lib -lATerm \\\n"
-	 "  -L" TOOLBUSLIB "/lib -lATB \\\n"
-	 "  " SOCKLIBS "\\\n"
-	 "  -DASF_MAIN %s\n",
-	 run_verbose ? "" : "-Wno-unused",
+	 "\t-I.\\\n"
+	 "\t-I" ASC_SUPPORT "/include \\\n"
+	 "\t-I" SGLR "/include \\\n"
+	 "\t-I" TIDE_SUPPORT "/include \\\n"
+	 "\t-I" ASF_SUPPORT "/include \\\n"
+	 "\t-I" PT_SUPPORT "/include \\\n"
+	 "\t-I" ATERM "/include \\\n"
+	 "\t-I" TOOLBUSLIB "/include \\\n"
+	 "\t-I" ERROR_SUPPORT "/include \\\n"
+	 "\t" ASC_SUPPORT "/lib/libasc-support-me.a \\\n"
+	 "\t" SGLR "/lib/libsglr.a \\\n"
+	 "\t" TIDE_SUPPORT "/lib/libtide-adapter.a \\\n"
+	 "\t" ASF_SUPPORT "/lib/libASFME.a \\\n"
+	 "\t" PT_SUPPORT "/lib/libmept.a \\\n"
+	 "\t" PT_SUPPORT "/lib/libPTMEPT.a \\\n"
+	 "\t" ERROR_SUPPORT "/lib/libErrorAPI.a \\\n"
+	 "\t" TOOLBUSLIB "/lib/libATB.a \\\n"
+	 "\t" ATERM "/lib/libATerm.a \\\n"
+	 "\t" SOCKLIBS "\\\n"
+	 "\t-DASF_MAIN %s\n",
 	 binary, 
 	 sourcefiles,
 	 keep_annos ? "-DASF_WITH_ANNOS" : ""
