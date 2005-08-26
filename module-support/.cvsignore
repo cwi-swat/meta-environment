@@ -9,5 +9,6 @@ config.h.in
 config.log
 config.status
 configure
+libtool
 module-support-*.pkg
 module-support-*.tar.gz
