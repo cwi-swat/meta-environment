@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.cwi.sen1.moduleapi.Factory;
-import nl.cwi.sen1.moduleapi.types.AttributeAttributes;
-import nl.cwi.sen1.moduleapi.types.DependencyDependencies;
+import nl.cwi.sen1.moduleapi.types.AttributeStore;
+import nl.cwi.sen1.moduleapi.types.DependencyList;
 import nl.cwi.sen1.moduleapi.types.Module;
+import nl.cwi.sen1.moduleapi.types.UniqueId;
 import aterm.ATerm;
 import aterm.pure.PureFactory;
 
@@ -17,16 +18,16 @@ public class ModuleManager implements ModuleManagerTif {
     private PureFactory pureFactory;
 
     private Factory factory;
-    
+
     private ModuleManagerBridge bridge;
 
     public ModuleManager(String[] args) {
         modules = new HashMap();
-        
+
         pureFactory = new PureFactory();
-        
+
         factory = Factory.getInstance(pureFactory);
-        
+
         bridge = new ModuleManagerBridge(pureFactory, this);
         try {
             bridge.init(args);
@@ -46,25 +47,27 @@ public class ModuleManager implements ModuleManagerTif {
         thread.start();
     }
 
-    public void createModule(ATerm id) {
+    public void createModule(ATerm namespace, ATerm id) {
         System.err.println("Create module: " + id);
-        
+
         if (modules.get(id) != null) {
             System.err.println("Module bestond al");
             return;
         }
-        
-        DependencyDependencies emptyDependencies = factory
-                .makeDependencyDependencies();
-        AttributeAttributes emptyAttributes = factory.makeAttributeAttributes();
-        Module module = factory.makeModule_Module(id, emptyDependencies,
-                emptyAttributes);
 
-        modules.put(id, module);
+        UniqueId uniqueId = factory.makeUniqueId_UniqueId(namespace, id);
+
+        DependencyList emptyDependencyList = factory.makeDependencyList();
+        AttributeStore emptyAttributeStore = factory.makeAttributeStore();
+        Module module = factory.makeModule_Module(uniqueId, emptyDependencyList,
+                emptyAttributeStore);
+
+        modules.put(uniqueId, module);
     }
 
-    public void deleteModule(ATerm id) {
-        modules.remove(id);
+    public void deleteModule(ATerm namespace, ATerm id) {
+        UniqueId uniqueId = factory.makeUniqueId_UniqueId(namespace, id);
+        modules.remove(uniqueId);
     }
 
     public void recTerminate(ATerm t0) {

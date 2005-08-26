@@ -8,16 +8,17 @@ tool module-manager is {
 process ModuleManager is
 let
   MM : module-manager,
+  Namespace : term,
   Id : term
 in
   execute(module-manager, MM?)
   .
   (
-    rec-msg(mm-create-module(Id?))
-    . snd-do(MM, create-module(Id))
+    rec-msg(mm-create-module(Namespace?, Id?))
+    . snd-do(MM, create-module(Namespace, Id))
   +
-    rec-msg(mm-delete-module(Id?))
-    . snd-do(MM, delete-module(Id))
+    rec-msg(mm-delete-module(Namespace?, Id?))
+    . snd-do(MM, delete-module(Namespace, Id))
   )
   *
   delta

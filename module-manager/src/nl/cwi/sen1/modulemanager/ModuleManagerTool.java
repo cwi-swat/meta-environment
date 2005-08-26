@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Aug 25, 2005 11:11:10 AM
+// generation time: Aug 26, 2005 2:05:15 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -40,8 +40,8 @@ abstract public class ModuleManagerTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<module-manager>,create-module(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,create-module(<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), new Boolean(true));
   }
 
@@ -51,8 +51,8 @@ abstract public class ModuleManagerTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PcreateModule0 = factory.parse("rec-do(create-module(<term>))");
-    PdeleteModule0 = factory.parse("rec-do(delete-module(<term>))");
+    PcreateModule0 = factory.parse("rec-do(create-module(<term>,<term>))");
+    PdeleteModule0 = factory.parse("rec-do(delete-module(<term>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -67,12 +67,12 @@ abstract public class ModuleManagerTool
 
     result = term.match(PcreateModule0);
     if (result != null) {
-      createModule((ATerm)result.get(0));
+      createModule((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PdeleteModule0);
     if (result != null) {
-      deleteModule((ATerm)result.get(0));
+      deleteModule((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PrecTerminate0);
