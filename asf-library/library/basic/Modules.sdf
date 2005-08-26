@@ -4,11 +4,16 @@ exports
 
 context-free start-symbols Module
 
-sorts Module TermCon TableEntry Dependency Attribute
+sorts Module TermCon
 
 context-free syntax
   %% A module has a unique identifier, optional dependencies and attributes
-  "module" "(" id:TermCon "," "[" dependencies:{Dependency ","}* "]" "," "[" attributes:{Attribute ","}* "]"")" -> Module {cons("module")}
+  "module" "(" id:UniqueId "," "[" {Dependency ","}* "]" "," "[" store:{Attribute ","}* "]"")" -> Module {cons("module")}
+
+sorts UniqueId
+context-free syntax
+  %% An unique id consists of a namespace and some id
+  "unique-id" "(" namespace:TermCon "," id:TermCon ")" -> UniqueId {cons("unique-id")}
 
 sorts Dependency
 context-free syntax
