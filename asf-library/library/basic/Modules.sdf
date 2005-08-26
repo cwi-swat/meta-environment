@@ -1,26 +1,26 @@
 module Modules
 
-imports languages/aterm/syntax/ATerms
-
 exports
+
 context-free start-symbols Module
 
-sorts Module
+sorts Module TermCon TableEntry Dependency Attribute
+
 context-free syntax
   %% A module has a unique identifier, optional dependencies and attributes
-  "module" "(" id:ATerm "," "[" dependencies:{Dependency ","}* "]" "," "[" attributes:{Attribute ","}* "]"")" -> Module
+  "module" "(" id:TermCon "," "[" dependencies:{Dependency ","}* "]" "," "[" attributes:{Attribute ","}* "]"")" -> Module {cons("module")}
 
 sorts Dependency
 context-free syntax
   %% A dependency consists of a pair module-id to module-id
-  "dependency" "(" from:ATerm "," to:ATerm ")" -> Dependency
+  "dependency" "(" from:TermCon "," to:TermCon ")" -> Dependency {cons("dependency")}
 
 sorts Attribute
 context-free syntax
   %% An attribute consists of a namespace and a list of table-entries
-  "attribute" "(" namespace:ATerm "," "[" table:{TableEntry ","}* "]" ")" -> Attribute
+  "attribute" "(" namespace:TermCon "," "[" table:{TableEntry ","}* "]" ")" -> Attribute {cons("attribute")}
 
 sorts TableEntry
 context-free syntax
-  %% table-entry pairs are key-value pairs of ATerms
-  "table-entry" "(" key:ATerm "," value:ATerm ")" -> TableEntry
+  %% table-entry pairs are key-value pairs of TermCons
+  "table-entry" "(" key:TermCon "," value:TermCon ")" -> TableEntry {cons("table-entry")}
