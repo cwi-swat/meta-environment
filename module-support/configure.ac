@@ -7,18 +7,7 @@ AC_PREREQ(2.59)
 
 AM_MAINTAINER_MODE
 
-AC_PROG_CC
-
-AC_ARG_WITH(cflags,
-   [  --with-cflags=CFLAGS    standard options of c compiler],
-   CFLAGS=${withval},
-   if test "a${GCC}" = "ayes"; then
-     CFLAGS="-Wall -g -O2"
-   fi;
-)
-AC_SUBST(CFLAGS)
-
-AC_PROG_MAKE_SET([])
+AC_PROG_INSTALL
 
 AC_CONFIG_FILES([Makefile
   lib/Makefile
