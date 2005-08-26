@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = lib
+SUBDIRS = lib script
 
 ACLOCAL_FLAGS = -I .
 
