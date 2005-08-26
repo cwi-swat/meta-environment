@@ -1,0 +1,13 @@
+.classpath
+.project
+Makefile
+Makefile.in
+aclocal.m4
+autom*.cache
+config.cache
+config.h.in
+config.log
+config.status
+configure
+module-support-*.pkg
+module-support-*.tar.gz
