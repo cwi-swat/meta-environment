@@ -13,7 +13,7 @@ ABS_MODULE_MODULES = \
 	${MODULE_MODULES}, \
 	${top_srcdir}/../asf-library/library/basic/$i.sdf)
 
-MetaErrors.def: Makefile
+MetaModules.def: Makefile
 	@(echo "definition"; cat ${ABS_MODULE_MODULES}) > $@
 
 module-api: java-module-api
@@ -22,7 +22,7 @@ java-module-api: MetaModules.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
-		--package nl.cwi.sen1
+		--package nl.cwi.sen1 \
 		--name moduleapi \
 		--output . \
 		--version ${VERSION}
