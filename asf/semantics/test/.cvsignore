@@ -22,8 +22,6 @@ LexConcat
 LexConcat.c
 List
 List.c
-ListSpecific
-ListSpecific.c
 Lookup
 Lookup.c
 Memo-Pico-typecheck

@@ -32,7 +32,7 @@ TEST_MODULES=\
 	Tuple
 
 # TODO: maybe really remove this test
-#	ListSpecific \
+#	ListSpecific
 
 noinst_SCRIPTS=.cvsignore
 
