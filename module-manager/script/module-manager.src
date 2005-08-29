@@ -1,0 +1,9 @@
+#! /bin/sh
+
+set -e
+#set -x
+
+CLASSPATH=__EXTERNAL_JARS__
+CLASSPATH=$CLASSPATH:__JARDIR__/module-manager-1.0.jar
+
+__JAVA__ -classpath $CLASSPATH nl.cwi.sen1.modulemanager.ModuleManager $@
