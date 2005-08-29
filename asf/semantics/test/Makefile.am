@@ -2,7 +2,6 @@ SUBDIRS=eqs input output c-code
 EXTRA_DIST=README
 
 TEST_MODULES=\
-	Concat \
 	AllTraversals \
 	EmptyTraversal \
 	Tree \
