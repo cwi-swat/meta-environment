@@ -1,0 +1,4 @@
+#! /bin/sh
+
+java -classpath __EXTERNAL_JARS__:`__BINDIR__/toolbus-java-adapter-config` toolbus.JavaTif $@
+

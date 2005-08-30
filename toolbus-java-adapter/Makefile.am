@@ -29,7 +29,3 @@ $(TOOLNAME)-config: Makefile
 	echo "#! /bin/sh" > $@
 	echo "echo $(pkgdatadir)/$(JARFILE):$(EXTERNAL_JARS)" >> $@
 	chmod +x $@
-
-tifstojava: Makefile
-	(echo "#! /bin/sh " ;\
-	 printf "java -classpath $(EXTERNAL_JARS):$(pkgdatadir)/$(JARFILE) toolbus.JavaTif \0044\0100\n" ) > $@ && chmod +x $@
