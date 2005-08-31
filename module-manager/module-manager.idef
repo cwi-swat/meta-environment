@@ -8,17 +8,64 @@ tool module-manager is {
 process ModuleManager is
 let
   MM : module-manager,
+  Dependency : term,
+  Dependencies : list,
+  Id : term,
+  Key : term,
+  ModuleId : term,
+  ModuleIds : list,
   Namespace : term,
-  Id : term
+  Value : term
 in
   execute(module-manager, MM?)
   .
   (
-    rec-msg(mm-create-module(Namespace?, Id?))
-    . snd-do(MM, create-module(Namespace, Id))
+    rec-msg(mm-get-module-id(Namespace?, Id?))
+    . snd-eval(MM, get-module-id(Namespace, Id))
+    . rec-value(MM, module-id(ModuleId?))
+    . snd-msg(mm-module-id(Namespace, Id, ModuleId))
   +
-    rec-msg(mm-delete-module(Namespace?, Id?))
-    . snd-do(MM, delete-module(Namespace, Id))
+    rec-msg(mm-create-module(ModuleId?))
+    . snd-do(MM, create-module(ModuleId))
+  +
+    rec-msg(mm-delete-module(ModuleId?))
+    . snd-do(MM, delete-module(ModuleId))
+  +
+    rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
+    . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))
+  +
+    rec-msg(mm-get-attribute(ModuleId?, Namespace?, Key?))
+    . snd-eval(MM, get-attribute(ModuleId, Namespace, Key))
+    .
+    (
+      rec-value(MM, attribute(Value?))
+      . snd-msg(mm-attribute(ModuleId, Namespace, Key, Value))
+    +
+      rec-value(MM, no-such-attribute)
+      . snd-msg(mm-no-such-attribute(ModuleId, Namespace, Key))
+    )
+  +
+    rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
+    . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
+  +
+    rec-msg(mm-add-dependency(ModuleId?, Dependency?))
+    . snd-do(MM, add-dependency(ModuleId, Dependency))
+  +
+    rec-msg(mm-get-depending-modules(ModuleId?))
+    . snd-eval(MM, get-depending-modules(ModuleId))
+    . rec-value(MM, depending-modules(Dependencies?))
+    . snd-msg(mm-depending-modules(ModuleId, Dependencies))
+  +
+    rec-msg(mm-delete-dependency(ModuleId?, Dependency?))
+    . snd-do(MM, delete-dependency(ModuleId, Dependency))
+  +
+    rec-msg(mm-delete-dependencies(ModuleId?))
+    . snd-do(MM, delete-dependencies(ModuleId))
+  +
+    rec-msg(mm-get-dependent-modules(ModuleId?))
+    . snd-eval(MM, get-dependent-modules(ModuleId))
+    . rec-value(MM, dependent-modules(ModuleIds))
+    . snd-msg(mm-dependent-modules(ModuleId, ModuleIds))
   )
   *
   delta
