@@ -41,8 +41,14 @@ in
       rec-value(MM, attribute(Value?))
       . snd-msg(mm-attribute(ModuleId, Namespace, Key, Value))
     +
-      rec-value(MM, no-such-attribute)
-      . snd-msg(mm-no-such-attribute(ModuleId, Namespace, Key))
+      rec-value(MM, no-such-module)
+      . snd-msg(mm-no-such-module(ModuleId, Namespace, Key))
+    +
+      rec-value(MM, no-such-namespace)
+      . snd-msg(mm-no-such-namespace(ModuleId, Namespace, Key))
+    +
+      rec-value(MM, no-such-key)
+      . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
     )
   +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
@@ -53,8 +59,14 @@ in
   +
     rec-msg(mm-get-depending-modules(ModuleId?))
     . snd-eval(MM, get-depending-modules(ModuleId))
-    . rec-value(MM, depending-modules(Dependencies?))
-    . snd-msg(mm-depending-modules(ModuleId, Dependencies))
+    .
+    (
+      rec-value(MM, depending-modules(Dependencies?))
+      . snd-msg(mm-depending-modules(ModuleId, Dependencies))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
   +
     rec-msg(mm-delete-dependency(ModuleId?, Dependency?))
     . snd-do(MM, delete-dependency(ModuleId, Dependency))

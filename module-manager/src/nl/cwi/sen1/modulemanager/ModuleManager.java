@@ -7,6 +7,7 @@ import java.util.Map;
 import nl.cwi.sen1.moduleapi.Factory;
 import nl.cwi.sen1.moduleapi.types.Attribute;
 import nl.cwi.sen1.moduleapi.types.AttributeStore;
+import nl.cwi.sen1.moduleapi.types.Dependency;
 import nl.cwi.sen1.moduleapi.types.DependencyList;
 import nl.cwi.sen1.moduleapi.types.Module;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
@@ -71,11 +72,6 @@ public class ModuleManager implements ModuleManagerTif {
         DependencyList emptyDependencyList = factory.makeDependencyList();
         AttributeStore emptyAttributeStore = factory.makeAttributeStore();
 
-        if (emptyAttributeStore.isEmpty()) {
-            System.err.println("AttributeStore is empty");
-        } else {
-            System.err.println("AttributeStore is NOT empty");
-        }
         Module module = factory.makeModule_Module(id, emptyDependencyList,
                 emptyAttributeStore);
 
@@ -114,7 +110,6 @@ public class ModuleManager implements ModuleManagerTif {
                 entry = factory.makeTableEntry_TableEntry(key, value);
                 table = table.append(entry);
             } else {
-                // Add boolean overwrite to method arguments??
                 System.err.println("MM - addAttribute: key [" + key
                         + "] already exists");
             }
@@ -132,8 +127,6 @@ public class ModuleManager implements ModuleManagerTif {
         } else {
             store = replaceAttribute(attribute, store);
         }
-
-        System.err.println("Store: " + store);
 
         module = module.setStore(store);
 
@@ -154,8 +147,8 @@ public class ModuleManager implements ModuleManagerTif {
 
         if (found) {
             return attribute;
-        } 
-            
+        }
+
         return null;
     }
 
@@ -175,7 +168,7 @@ public class ModuleManager implements ModuleManagerTif {
 
         if (found) {
             return table;
-        } 
+        }
         return null;
     }
 
@@ -215,38 +208,167 @@ public class ModuleManager implements ModuleManagerTif {
         return newStore;
     }
 
-    public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2) {
-        return null;
+    public ATerm getAttribute(ATerm moduleId, ATerm namespace, ATerm key) {
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            return factory.getPureFactory().make("snd-value(no-such-module)");
+        }
+
+        AttributeStore store = module.getStore();
+        TableEntryTable table = getAttributeTable(namespace, store);
+
+        if (table == null) {
+            return factory.getPureFactory()
+                    .make("snd-value(no-such-namespace)");
+        }
+
+        TableEntry entry = getTableEntry(key, table);
+
+        if (entry == null) {
+            return factory.getPureFactory().make("snd-value(no-such-key)");
+        }
+
+        return factory.getPureFactory().make("snd-value(attribute(<term>))",
+                entry.getValue());
     }
 
-    public void deleteAttribute(ATerm t0, ATerm t1, ATerm t2) {
-        // TODO Auto-generated method stub
+    public void deleteAttribute(ATerm moduleId, ATerm namespace, ATerm key) {
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
 
+        if (module == null) {
+            System.err.println("MM - deleteAttribute: no such module ["
+                    + moduleId + "]");
+            return;
+        }
+
+        AttributeStore store = module.getStore();
+        TableEntryTable table = getAttributeTable(namespace, store);
+
+        if (table == null) {
+            System.err.println("MM - deleteAttribute: no such namespace ["
+                    + namespace + "]");
+            return;
+        }
+
+        TableEntryTable newTable = removeKey(key, table);
+
+        if (newTable.equals(table)) {
+            System.err.println("MM - deleteAttribute: no such key [" + key
+                    + "]");
+        }
+
+        Attribute attribute = getAttribute(namespace, store);
+        attribute = attribute.setTable(table);
+
+        store = replaceAttribute(attribute, store);
+
+        module = module.setStore(store);
+
+        modules.put(id, module);
     }
 
-    public void deleteDependencies(ATerm t0) {
-        // TODO Auto-generated method stub
+    private TableEntryTable removeKey(ATerm key, TableEntryTable table) {
+        TableEntryTable newTable = factory.makeTableEntryTable();
 
+        while (!table.isEmpty()) {
+            TableEntry storedTableEntry = table.getHead();
+            if (!storedTableEntry.getKey().equals(key)) {
+                newTable = newTable.append(storedTableEntry);
+            }
+            table = table.getTail();
+        }
+
+        return newTable;
     }
 
-    public void addDependency(ATerm t0, ATerm t1) {
-        // TODO Auto-generated method stub
+    public void addDependency(ATerm moduleId, ATerm dependency) {
+        Dependency dep = factory.DependencyFromTerm(dependency);
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
 
+        if (module == null) {
+            System.err.println("MM - addDependency: no such module ["
+                    + moduleId + "]");
+            return;
+        }
+
+        DependencyList list = module.getList();
+
+        while (!list.isEmpty()) {
+            Dependency head = list.getHead();
+
+            if (head.equals(dep)) {
+                System.err.println("MM - addDependency: depedency [" + dep
+                        + "]already exists");
+                return;
+            }
+            list = list.getTail();
+        }
+
+        list = module.getList().append(dep);
+        module = module.setList(list);
+
+        modules.put(id, module);
     }
 
-    public void deleteDependency(ATerm t0, ATerm t1) {
-        // TODO Auto-generated method stub
+    public void deleteDependencies(ATerm moduleId) {
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
 
+        if (module == null) {
+            System.err.println("MM - addDependency: no such module ["
+                    + moduleId + "]");
+            return;
+        }
+
+        module = module.setList(factory.makeDependencyList());
+        modules.put(id, module);
     }
 
-    public ATerm getDependingModules(ATerm t0) {
-        // TODO Auto-generated method stub
-        return null;
+    public void deleteDependency(ATerm moduleId, ATerm dependency) {
+        Dependency dep = factory.DependencyFromTerm(dependency);
+        DependencyList newList = factory.makeDependencyList();
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            System.err.println("MM - deleteDependency: no such module ["
+                    + moduleId + "]");
+            return;
+        }
+
+        DependencyList list = module.getList();
+
+        while (!list.isEmpty()) {
+            Dependency head = list.getHead();
+
+            if (!head.equals(dep)) {
+                newList = newList.append(head);
+            }
+            list = list.getTail();
+        }
+
+        module = module.setList(newList);
+
+        modules.put(id, module);
+    }
+
+    public ATerm getDependingModules(ATerm moduleId) {
+        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            return factory.getPureFactory().make("snd-value(no-such-module)");
+        }
+
+        return factory.getPureFactory().make(
+                "snd-value(depending-module(<term>))", module.getList());
     }
 
     public ATerm getDependentModules(ATerm t0) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     public void recTerminate(ATerm t0) {
