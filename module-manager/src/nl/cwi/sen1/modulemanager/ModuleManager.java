@@ -2,18 +2,14 @@ package nl.cwi.sen1.modulemanager;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nl.cwi.sen1.moduleapi.Factory;
-import nl.cwi.sen1.moduleapi.types.Attribute;
-import nl.cwi.sen1.moduleapi.types.AttributeStore;
-import nl.cwi.sen1.moduleapi.types.Dependency;
-import nl.cwi.sen1.moduleapi.types.DependencyList;
-import nl.cwi.sen1.moduleapi.types.Module;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
-import nl.cwi.sen1.moduleapi.types.TableEntry;
-import nl.cwi.sen1.moduleapi.types.TableEntryTable;
+import nl.cwi.sen1.modulemanager.model.Module;
 import aterm.ATerm;
+import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class ModuleManager implements ModuleManagerTif {
@@ -54,321 +50,120 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm getModuleId(ATerm namespace, ATerm id) {
         ModuleId moduleId = factory.makeModuleId_ModuleId(namespace, id);
 
-        System.err.println("ModuleId: " + moduleId);
-
-        return factory.getPureFactory().make("snd-value(module-id(<term>))",
-                moduleId.toTerm());
+        return pureFactory.make("snd-value(module-id(<term>))", moduleId
+                .toTerm());
     }
 
-    public void createModule(ATerm moduleId) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
-
+    public void createModule(ATerm id) {
         if (modules.get(id) != null) {
-            System.err.println("MM - createModule: module [" + moduleId
+            System.err.println("MM - createModule: module [" + id
                     + "] already exists");
             return;
         }
 
-        DependencyList emptyDependencyList = factory.makeDependencyList();
-        AttributeStore emptyAttributeStore = factory.makeAttributeStore();
-
-        Module module = factory.makeModule_Module(id, emptyDependencyList,
-                emptyAttributeStore);
-
-        modules.put(id, module);
+        modules.put(id, new Module(id));
     }
 
-    public void deleteModule(ATerm moduleId) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public void deleteModule(ATerm id) {
         modules.remove(id);
     }
 
-    public void addAttribute(ATerm moduleId, ATerm namespace, ATerm key,
-            ATerm value) {
-        TableEntryTable table;
-
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - addAttribute: no such module [" + moduleId
-                    + "]");
+            System.err.println("MM - addModule: module [" + id
+                    + "] doesn't exist");
             return;
         }
 
-        AttributeStore store = module.getStore();
-        table = getAttributeTable(namespace, store);
-
-        if (table == null) {
-            TableEntry tableEntry = factory.makeTableEntry_TableEntry(key,
-                    value);
-            table = factory.makeTableEntryTable(tableEntry);
-        } else {
-            TableEntry entry = getTableEntry(key, table);
-
-            if (entry == null) {
-                entry = factory.makeTableEntry_TableEntry(key, value);
-                table = table.append(entry);
-            } else {
-                System.err.println("MM - addAttribute: key [" + key
-                        + "] already exists");
-            }
-        }
-
-        Attribute attribute = getAttribute(namespace, store);
-        if (attribute == null) {
-            attribute = factory.makeAttribute_Attribute(namespace, table);
-        } else {
-            attribute = attribute.setTable(table);
-        }
-
-        if (store.isEmpty()) {
-            store = store.append(attribute);
-        } else {
-            store = replaceAttribute(attribute, store);
-        }
-
-        module = module.setStore(store);
-
-        modules.put(id, module);
+        module.addAttribute(namespace, key, value);
     }
 
-    private Attribute getAttribute(ATerm namespace, AttributeStore store) {
-        Attribute attribute = null;
-        boolean found = false;
-
-        while (!store.isEmpty() && !found) {
-            attribute = store.getHead();
-            if (attribute.getNamespace().equals(namespace)) {
-                found = true;
-            }
-            store = store.getTail();
-        }
-
-        if (found) {
-            return attribute;
-        }
-
-        return null;
-    }
-
-    private TableEntryTable getAttributeTable(ATerm namespace,
-            AttributeStore store) {
-        TableEntryTable table = null;
-        boolean found = false;
-
-        while (!store.isEmpty() && !found) {
-            Attribute attribute = store.getHead();
-            if (attribute.getNamespace().equals(namespace)) {
-                table = attribute.getTable();
-                found = true;
-            }
-            store = store.getTail();
-        }
-
-        if (found) {
-            return table;
-        }
-        return null;
-    }
-
-    private TableEntry getTableEntry(ATerm key, TableEntryTable table) {
-        TableEntry entry = null;
-        boolean found = false;
-
-        while (!table.isEmpty() && !found) {
-            entry = table.getHead();
-            if (entry.getKey().equals(key)) {
-                found = true;
-            }
-            table = table.getTail();
-        }
-
-        if (found) {
-            return entry;
-        }
-        return null;
-    }
-
-    private AttributeStore replaceAttribute(Attribute attribute,
-            AttributeStore store) {
-        AttributeStore newStore = factory.makeAttributeStore();
-
-        while (!store.isEmpty()) {
-            Attribute storedAttribute = store.getHead();
-            if (!storedAttribute.getNamespace()
-                    .equals(attribute.getNamespace())) {
-                newStore = newStore.append(storedAttribute);
-            } else {
-                newStore = newStore.append(attribute);
-            }
-            store = store.getTail();
-        }
-
-        return newStore;
-    }
-
-    public ATerm getAttribute(ATerm moduleId, ATerm namespace, ATerm key) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public ATerm getAttribute(ATerm id, ATerm namespace, ATerm key) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            return factory.getPureFactory().make("snd-value(no-such-module)");
+            return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        AttributeStore store = module.getStore();
-        TableEntryTable table = getAttributeTable(namespace, store);
+        ATerm value = module.getAttribute(namespace, key);
 
-        if (table == null) {
-            return factory.getPureFactory()
-                    .make("snd-value(no-such-namespace)");
+        if (value == null) {
+            return pureFactory.parse("snd-value(no-such-key)");
         }
 
-        TableEntry entry = getTableEntry(key, table);
-
-        if (entry == null) {
-            return factory.getPureFactory().make("snd-value(no-such-key)");
-        }
-
-        return factory.getPureFactory().make("snd-value(attribute(<term>))",
-                entry.getValue());
+        return pureFactory.make("snd-value(attribute(<term>))", value);
     }
 
-    public void deleteAttribute(ATerm moduleId, ATerm namespace, ATerm key) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public void deleteAttribute(ATerm id, ATerm namespace, ATerm key) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - deleteAttribute: no such module ["
-                    + moduleId + "]");
+            System.err.println("MM - deleteAttribute: module [" + id
+                    + "] doesn't exist");
             return;
         }
 
-        AttributeStore store = module.getStore();
-        TableEntryTable table = getAttributeTable(namespace, store);
-
-        if (table == null) {
-            System.err.println("MM - deleteAttribute: no such namespace ["
-                    + namespace + "]");
-            return;
-        }
-
-        TableEntryTable newTable = removeKey(key, table);
-
-        if (newTable.equals(table)) {
-            System.err.println("MM - deleteAttribute: no such key [" + key
-                    + "]");
-        }
-
-        Attribute attribute = getAttribute(namespace, store);
-        attribute = attribute.setTable(table);
-
-        store = replaceAttribute(attribute, store);
-
-        module = module.setStore(store);
-
-        modules.put(id, module);
+        module.deleteAttribute(namespace, key);
     }
 
-    private TableEntryTable removeKey(ATerm key, TableEntryTable table) {
-        TableEntryTable newTable = factory.makeTableEntryTable();
-
-        while (!table.isEmpty()) {
-            TableEntry storedTableEntry = table.getHead();
-            if (!storedTableEntry.getKey().equals(key)) {
-                newTable = newTable.append(storedTableEntry);
-            }
-            table = table.getTail();
-        }
-
-        return newTable;
-    }
-
-    public void addDependency(ATerm moduleId, ATerm dependency) {
-        Dependency dep = factory.DependencyFromTerm(dependency);
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public void addDependency(ATerm id, ATerm dependency) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - addDependency: no such module ["
-                    + moduleId + "]");
+            System.err.println("MM - deleteAttribute: module [" + id
+                    + "] doesn't exist");
             return;
         }
 
-        DependencyList list = module.getList();
-
-        while (!list.isEmpty()) {
-            Dependency head = list.getHead();
-
-            if (head.equals(dep)) {
-                System.err.println("MM - addDependency: depedency [" + dep
-                        + "]already exists");
-                return;
-            }
-            list = list.getTail();
-        }
-
-        list = module.getList().append(dep);
-        module = module.setList(list);
-
-        modules.put(id, module);
+        module.addDependency(dependency);
     }
 
-    public void deleteDependencies(ATerm moduleId) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
+    public ATerm getDependingModules(ATerm id) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - addDependency: no such module ["
-                    + moduleId + "]");
-            return;
+            return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        module = module.setList(factory.makeDependencyList());
-        modules.put(id, module);
-    }
+        List dependencies = module.getDependencies();
 
-    public void deleteDependency(ATerm moduleId, ATerm dependency) {
-        Dependency dep = factory.DependencyFromTerm(dependency);
-        DependencyList newList = factory.makeDependencyList();
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
-        Module module = (Module) modules.get(id);
-
-        if (module == null) {
-            System.err.println("MM - deleteDependency: no such module ["
-                    + moduleId + "]");
-            return;
+        ATermList list = pureFactory.makeList();
+        for (int i = 0; i < dependencies.size(); i++) {
+            list = list.append((ATerm) dependencies.get(i));
         }
 
-        DependencyList list = module.getList();
-
-        while (!list.isEmpty()) {
-            Dependency head = list.getHead();
-
-            if (!head.equals(dep)) {
-                newList = newList.append(head);
-            }
-            list = list.getTail();
-        }
-
-        module = module.setList(newList);
-
-        modules.put(id, module);
-    }
-
-    public ATerm getDependingModules(ATerm moduleId) {
-        ModuleId id = factory.ModuleIdFromTerm(moduleId);
-        Module module = (Module) modules.get(id);
-
-        if (module == null) {
-            return factory.getPureFactory().make("snd-value(no-such-module)");
-        }
-
-        return factory.getPureFactory().make(
-                "snd-value(depending-module(<term>))", module.getList());
+        return pureFactory.make("snd-value(depending-modules(<list>))", list);
     }
 
     public ATerm getDependentModules(ATerm t0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void deleteDependency(ATerm id, ATerm dependency) {
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            System.err.println("MM - deleteDependency: module [" + id
+                    + "] doesn't exist");
+            return;
+        }
+
+        module.deleteDependency(dependency);
+    }
+
+    public void deleteDependencies(ATerm id) {
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            System.err.println("MM - deleteDependency: module [" + id
+                    + "] doesn't exist");
+            return;
+        }
+
+        module.deleteDependencies();
     }
 
     public void recTerminate(ATerm t0) {

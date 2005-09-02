@@ -1,5 +1,9 @@
 $Id$
 
+Fri Sep  2 14:24:02 CEST 2005 <kooiker@cwi.nl>
+ * Reimplemented modulemanager: use Java type object hierarchy and integrated
+   data structures
+
 Wed Aug 31 15:32:59 CEST 2005 <{markvdb,kooiker}@cwi.nl>
  * Additional functionality in idef and java source
 
