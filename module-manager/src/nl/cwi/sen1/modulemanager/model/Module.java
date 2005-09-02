@@ -1,10 +1,9 @@
 package nl.cwi.sen1.modulemanager.model;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
-
+import java.util.Set;
 
 import aterm.ATerm;
 
@@ -13,13 +12,13 @@ public class Module {
 
     private Map attributes;
 
-    private List dependencies;
+    private Set dependencies;
 
     public Module(ATerm name) {
         this.name = name;
 
         attributes = new HashMap();
-        dependencies = new LinkedList();
+        dependencies = new HashSet();
     }
 
     public ATerm getName() {
@@ -70,7 +69,7 @@ public class Module {
         }
     }
 
-    public List getDependencies() {
+    public Set getDependencies() {
         return dependencies;
     }
 

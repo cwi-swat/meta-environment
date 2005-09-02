@@ -2,8 +2,11 @@ package nl.cwi.sen1.modulemanager;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import nl.cwi.sen1.moduleapi.Factory;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
@@ -127,19 +130,54 @@ public class ModuleManager implements ModuleManagerTif {
             return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        List dependencies = module.getDependencies();
+        Set dependencies = module.getDependencies();
 
-        ATermList list = pureFactory.makeList();
-        for (int i = 0; i < dependencies.size(); i++) {
-            list = list.append((ATerm) dependencies.get(i));
-        }
-
-        return pureFactory.make("snd-value(depending-modules(<list>))", list);
+        return pureFactory.make("snd-value(depending-modules(<list>))",
+                extractATermList(dependencies));
     }
 
-    public ATerm getDependentModules(ATerm t0) {
-        // TODO Auto-generated method stub
-        return null;
+    public ATerm getDependentModules(ATerm id) {
+        Module module = (Module) modules.get(id);
+
+        if (module == null) {
+            return pureFactory.parse("snd-value(no-such-module)");
+        }
+
+        Set dependentModules = getDependents(id);
+
+        return pureFactory.make("snd-value(depending-modules(<list>))",
+                extractATermList(dependentModules));
+    }
+
+    private ATermList extractATermList(Set dependencies) {
+        ATermList list = pureFactory.makeList();
+        for (Iterator iter = dependencies.iterator(); iter.hasNext();) {
+            list = list.append((ATerm) iter.next());
+        }
+        return list;
+    }
+
+    private Set getDependents(ATerm id) {
+        Set dependentModules = new HashSet();
+        LinkedList temp = new LinkedList();
+
+        temp.add(id);
+
+        while (!temp.isEmpty()) {
+            ATerm cur = (ATerm) temp.getFirst();
+            dependentModules.add(cur);
+            temp.remove(cur);
+
+            for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+                Module dependent = (Module) iter.next();
+                if (dependent.getDependencies().contains(cur)
+                        && !dependentModules.contains(dependent.getName())) {
+                    temp.add(cur);
+                }
+            }
+        }
+
+        return dependentModules;
     }
 
     public void deleteDependency(ATerm id, ATerm dependency) {
