@@ -24,12 +24,20 @@ public class Module {
     public ATerm getName() {
         return name;
     }
+    
+    public void setName(ATerm name) {
+        this.name = name;
+    }
 
     public void addAttribute(ATerm namespace, ATerm key, ATerm value) {
         AttributeTable table = getTable(namespace);
 
         if (table != null) {
             table.addEntry(key, value);
+        } else {
+            table = new AttributeTable();
+            table.addEntry(key, value);
+            attributes.put(namespace, table);
         }
     }
 

@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Sep 5, 2005 10:59:17 AM
+// generation time: Sep 5, 2005 2:47:40 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -18,6 +18,7 @@ abstract public class ModuleManagerTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PdeleteDependencies0;
+  private ATerm PaddDependencies0;
   private ATerm PcreateModule0;
   private ATerm PaddDependency0;
   private ATerm PdeleteModule0;
@@ -27,6 +28,8 @@ abstract public class ModuleManagerTool
   private ATerm PgetDependingModules0;
   private ATerm PgetDependentModules0;
   private ATerm PgetAttribute0;
+  private ATerm PrenameModule0;
+  private ATerm PgetModuleIdByAttribute0;
   private ATerm PgetModuleId0;
   private ATerm PrecTerminate0;
 
@@ -50,12 +53,15 @@ abstract public class ModuleManagerTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id(<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,create-module(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,rename-module(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,add-dependencies(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-depending-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), new Boolean(true));
@@ -70,6 +76,7 @@ abstract public class ModuleManagerTool
   private void initPatterns()
   {
     PdeleteDependencies0 = factory.parse("rec-do(delete-dependencies(<term>))");
+    PaddDependencies0 = factory.parse("rec-do(add-dependencies(<term>,<term>))");
     PcreateModule0 = factory.parse("rec-do(create-module(<term>))");
     PaddDependency0 = factory.parse("rec-do(add-dependency(<term>,<term>))");
     PdeleteModule0 = factory.parse("rec-do(delete-module(<term>))");
@@ -79,6 +86,8 @@ abstract public class ModuleManagerTool
     PgetDependingModules0 = factory.parse("rec-eval(get-depending-modules(<term>))");
     PgetDependentModules0 = factory.parse("rec-eval(get-dependent-modules(<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
+    PrenameModule0 = factory.parse("rec-eval(rename-module(<term>,<term>))");
+    PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
     PgetModuleId0 = factory.parse("rec-eval(get-module-id(<term>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -95,6 +104,11 @@ abstract public class ModuleManagerTool
     result = term.match(PdeleteDependencies0);
     if (result != null) {
       deleteDependencies((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PaddDependencies0);
+    if (result != null) {
+      addDependencies((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PcreateModule0);
@@ -138,6 +152,14 @@ abstract public class ModuleManagerTool
     result = term.match(PgetAttribute0);
     if (result != null) {
       return getAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
+    }
+    result = term.match(PrenameModule0);
+    if (result != null) {
+      return renameModule((ATerm)result.get(0), (ATerm)result.get(1));
+    }
+    result = term.match(PgetModuleIdByAttribute0);
+    if (result != null) {
+      return getModuleIdByAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
     }
     result = term.match(PgetModuleId0);
     if (result != null) {

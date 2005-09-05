@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Sep 5, 2005 10:59:17 AM
+// generation time: Sep 5, 2005 2:47:40 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -30,6 +30,19 @@ public class ModuleManagerBridge
     }
     else {
       throw new UnsupportedOperationException("method `deleteDependencies' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void addDependencies(ATerm t0, ATerm t1)
+
+  public void addDependencies(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.addDependencies(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `addDependencies' not supported.");
     }
   }
 
@@ -142,6 +155,28 @@ public class ModuleManagerBridge
       return tool.getAttribute(t0, t1, t2);
     }
       throw new UnsupportedOperationException("method `getAttribute' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm renameModule(ATerm t0, ATerm t1)
+
+  public ATerm renameModule(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      return tool.renameModule(t0, t1);
+    }
+      throw new UnsupportedOperationException("method `renameModule' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getModuleIdByAttribute(ATerm t0, ATerm t1, ATerm t2)
+
+  public ATerm getModuleIdByAttribute(ATerm t0, ATerm t1, ATerm t2)
+  {
+    if (tool != null) {
+      return tool.getModuleIdByAttribute(t0, t1, t2);
+    }
+      throw new UnsupportedOperationException("method `getModuleIdByAttribute' not supported.");
   }
 
   //}}}
