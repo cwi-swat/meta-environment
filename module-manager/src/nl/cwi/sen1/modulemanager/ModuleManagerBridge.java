@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Aug 31, 2005 9:51:40 AM
+// generation time: Sep 5, 2005 10:59:17 AM
 
 package nl.cwi.sen1.modulemanager;
 

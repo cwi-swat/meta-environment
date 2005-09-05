@@ -58,6 +58,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void createModule(ATerm id) {
+        System.err.println("MM - createModule: module [" + id + "]");
+
         if (modules.get(id) != null) {
             System.err.println("MM - createModule: module [" + id
                     + "] already exists");
@@ -68,14 +70,20 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void deleteModule(ATerm id) {
+        System.err.println("MM - deleteModule: module [" + id + "]");
+
         modules.remove(id);
     }
 
     public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
+        System.err.println("MM - addAttribute: module [" + id
+                + "], namespace [" + namespace + "], key [" + key
+                + "], value [" + value + "]");
+
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - addModule: module [" + id
+            System.err.println("MM - addAttribute: module [" + id
                     + "] doesn't exist");
             return;
         }
@@ -84,6 +92,9 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm getAttribute(ATerm id, ATerm namespace, ATerm key) {
+        System.err.println("MM - getAttribute: module [" + id
+                + "], namespace [" + namespace + "], key [" + key + "]");
+
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -100,6 +111,9 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void deleteAttribute(ATerm id, ATerm namespace, ATerm key) {
+        System.err.println("MM - addAttribute: module [" + id
+                + "], namespace [" + namespace + "], key [" + key + "]");
+
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -115,7 +129,7 @@ public class ModuleManager implements ModuleManagerTif {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - deleteAttribute: module [" + id
+            System.err.println("MM - addDependency: module [" + id
                     + "] doesn't exist");
             return;
         }
@@ -196,7 +210,7 @@ public class ModuleManager implements ModuleManagerTif {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
-            System.err.println("MM - deleteDependency: module [" + id
+            System.err.println("MM - deleteDependencies: module [" + id
                     + "] doesn't exist");
             return;
         }
