@@ -379,7 +379,9 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("Event") {
       public Object build(Object args[]) {
-        return new Event((ATerm) args[0], (ATerm) args[1]);
+      	ATermList arglist = (ATermList) args[0];
+      	//return new Event((ATerm) args[0], (ATerm) args[1]);
+      	return new Event(arglist.getFirst(), arglist.getNext());
       }
     });
 

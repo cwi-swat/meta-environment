@@ -28,8 +28,8 @@ public class Do extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    System.err.println("DO.execute: " + this);
-    System.err.println("DO.execute: env = " + getEnv());
+    //System.err.println("DO.execute: " + this);
+    //System.err.println("DO.execute: env = " + getEnv());
     ATerm tid = TBTerm.substitute(toolId.value, getEnv());
     ATerm req = TBTerm.substitute(request.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);

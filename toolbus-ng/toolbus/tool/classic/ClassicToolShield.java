@@ -214,10 +214,13 @@ public class ClassicToolShield extends ToolShield {
 	}
 
 	public void connect() throws IOException {
+		info("connect");
 		ServerSocket server = ToolBus.getWellKnownSocket();
+		info("accepting ...");
 		connection = server.accept();
 		inputStream = new BufferedInputStream(connection.getInputStream());
 		outputStream = new BufferedOutputStream(connection.getOutputStream());
+		info("shakeHands ...");
 
 		shakeHands();
 		connected = true;
@@ -234,7 +237,7 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 
-	public boolean isConnected() {
+	public synchronized boolean isConnected() {
 		return connected;
 	}
 

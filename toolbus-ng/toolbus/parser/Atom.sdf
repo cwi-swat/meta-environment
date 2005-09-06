@@ -22,16 +22,16 @@ exports
     
   %% Tool atoms
 
-    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("Execute")}
-    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("RecConnect")}
-    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("RecDisConnect")}
-    "snd-terminate" "(" TBTerm ")"               -> Atom {cons("SndTerminate")}
+    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("Execute")}       %% term re_var
+    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("RecConnect")}    %% term_list
+    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("RecDisConnect")} %% term_list
+    "snd-terminate" "(" TBTerm ")"               -> Atom {cons("SndTerminate")}  %% term_list
   
-    "rec-event" "(" TBTerm "," TBTerm")"	     -> Atom {cons("Event")}
-    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("AckEvent")}
-    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("Eval")}
-    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("RecVal")}
-    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("Do")}
+    "rec-event" "(" TBTermList ")"	             -> Atom {cons("Event")}         
+    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("AckEvent")}      %% term_list
+    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("Eval")}          %% term_list
+    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("RecVal")}        %% term_list
+    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("Do")}            %% term_list
  
   %% Delta and Tau
   

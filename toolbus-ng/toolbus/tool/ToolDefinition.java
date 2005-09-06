@@ -16,17 +16,6 @@ public class ToolDefinition {
   private String kind;
   private ATermList inputSignature;
   private ATermList outputSignature;
-/*
-  
-  public ToolDefinition(String toolName, ATermList functionSignatures) {
-    this.toolName = toolName;
-    this.hostName = "localhost";
-    this.restartFrequency = 0;
-    this.internal = true;
-    this.kind = "java";
-    this.functionSignatures = functionSignatures;
-  }
-  */
   
   public ToolDefinition(String toolName, String host, String kind, String command){
     this.toolName = toolName;

@@ -10,9 +10,9 @@ process HELLO is
       printf(S)                %% Print it
   endlet
 
-tool hello is {host = "nova" 
+tool hello is {host = "aarde" 
 			   kind = "classic" 
-			   command = "/ufs/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello"
+			   command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello"
 			   %%command = "/home/paulk/software/installed/bin/perl-adapter /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/hello.pl"
 			   }
 

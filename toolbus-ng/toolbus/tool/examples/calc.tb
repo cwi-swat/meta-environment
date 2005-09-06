@@ -1,0 +1,201 @@
+
+process CALC is
+    let Tid : calc, E : str, V : term
+    in 
+        (
+            execute(calc, Tid?).
+            (
+                (
+                    rec-msg(compute, E?) .
+                    snd-eval(Tid, expr(E)) .
+                    rec-value(Tid, val(V?)) .
+                    snd-msg(compute, E, V) .
+                    snd-note(compute(E, V)) 
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% while any of the other two buttons has been pushed.
+
+process UI is
+    let Tid : ui
+    in 
+        (
+            execute(ui, Tid?).
+            (
+                (
+                    (
+                        CALC-BUTTON(Tid) +
+                        LOG-BUTTON(Tid) 
+                    )*
+                    delta 
+                )||
+                (
+                    TIME-BUTTON(Tid) *
+                    delta 
+                )||
+                QUIT-BUTTON(Tid) 
+            )
+        )
+    endlet 
+
+process CALC-BUTTON(Tid : ui) is
+    let N : int, E : str, V : term
+    in 
+        (
+            rec-event(Tid, N?, button(calc)) .
+            snd-eval(Tid, get-expr-dialog) .
+            (
+                rec-value(Tid, cancel) +
+                (
+                    rec-value(Tid, expr(E?)) .
+                    snd-msg(compute, E) .
+                    rec-msg(compute, E, V?) .
+                    snd-do(Tid, display-value(V)) 
+                )
+            ).
+            snd-ack-event(Tid, N) 
+        )
+    endlet 
+process LOG-BUTTON(Tid : ui) is
+    let N : int, L : term
+    in 
+        (
+            rec-event(Tid, N?, button(showLog)) .
+            snd-msg(showLog) .
+            rec-msg(showLog, L?) .
+            snd-do(Tid, display-log(L)) .
+            snd-ack-event(Tid, N) 
+        )
+    endlet 
+process TIME-BUTTON(Tid : ui) is
+    let N : int, T : str
+    in 
+        (
+            rec-event(Tid, N?, button(showTime)) .
+            snd-msg(showTime) .
+            rec-msg(showTime, T?) .
+            snd-do(Tid, display-time(T)) .
+            snd-ack-event(Tid, N) 
+        )
+    endlet 
+process QUIT-BUTTON(Tid : ui) is
+    (
+        rec-event(Tid, button(quit)) .
+        shutdown("End of calc demo") 
+    )
+%% back to a file.
+
+process BATCH is
+    let Tid : batch, E : str, V : int
+    in 
+        (
+            execute(batch, Tid?).
+            (
+                (
+                    snd-eval(Tid, fromFile) .
+                    rec-value(Tid, expr(E?)) .
+                    snd-msg(compute, E) .
+                    rec-msg(compute, E, V?) .
+                    snd-do(Tid, toFile(E, V)) 
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% i.e., a function \script{compute} with a string and an integer as arguments.
+
+process LOG is
+    let Tid : log, E : str, V : term, L : term
+    in 
+        (
+            subscribe(compute(<str>, <term>)) .
+            execute(log, Tid?).
+            (
+                (
+                    (
+                        rec-note(compute(E?, V?)) .
+                        snd-do(Tid, writeLog(E, V)) 
+                    )+
+                    (
+                        rec-msg(showLog) .
+                        snd-eval(Tid, readLog) .
+                        rec-value(Tid, history(L?)) .
+                        snd-msg(showLog, history(L)) 
+                    )
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% be defined without resorting to a tool in the following manner:
+
+process LOG1 is
+    let TheLog : list, E : str, V : term
+    in 
+        (
+            subscribe(compute(<str>, <term>)) .
+            TheLog := [] .
+            (
+                (
+                    (
+                        rec-note(compute(E?, V?)) .
+                        TheLog := join(TheLog, [[E, V]]) 
+                    )+
+                    (
+                        rec-msg(showLog) .
+                        snd-msg(showLog, TheLog) 
+                    )
+                )*
+                delta 
+            )
+        )
+    endlet 
+%% requests for the current time.
+
+process CLOCK is
+    let Tid : clock, T : str
+    in 
+        (
+            execute(clock, Tid?).
+            (
+                (
+                    rec-msg(showTime) .
+                    snd-eval(Tid, readTime) .
+                    rec-value(Tid, time(T?)) .
+                    snd-msg(showTime, T) 
+                )*
+                delta 
+            )
+        )
+    endlet %% \noindent The definition for the \script{calc} tool is:
+
+
+tool calc is 
+{ host = "aarde" 
+  kind = "classic" 
+  command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/calc"}
+
+tool ui is 
+{ host = "aarde" 
+  kind = "classic" 
+  command = "wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/ui-calc.tcl"}
+
+tool batch is 
+{ host = "aarde" 
+  kind = "classic" 
+  command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/batch"}
+
+tool log is 
+{ host = "aarde" 
+  kind = "classic" 
+  command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/log"}
+
+tool clock is 
+{ host = "aarde" 
+  kind = "classic" 
+  command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/clock"}
+
+
+toolbus (UI, CALC, LOG1, CLOCK)

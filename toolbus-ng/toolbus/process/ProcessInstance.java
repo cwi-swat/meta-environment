@@ -196,7 +196,7 @@ public class ProcessInstance {
   }
 
   public boolean step() throws ToolBusException {
-    System.err.println("step: " + this);
+    //System.err.println("step: " + this);
   	if(running && currentState.execute()){
   		return nextState();
   	}

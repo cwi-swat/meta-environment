@@ -103,6 +103,14 @@ public class ToolInstance {
 
     toolShield = toolDef.makeToolShield(this);
     toolShield.start();
+    while(!toolShield.isRunning()){ //TODO Maybe another solution to force the completion of the tool connection?
+    	try{
+  	      Thread.sleep(100);
+  	      }
+  	      catch(InterruptedException e){
+  	      System.out.println("Sleep Interrupted");
+  	      }
+    }
   }
 
   public ATerm getToolId(){
@@ -178,11 +186,11 @@ public class ToolInstance {
 
   synchronized public boolean sndDoToTool(ATermAppl call) {
  	if (TCPtransition(a_rec_do, call, true)){
- 		System.err.println("sndDoToTool: true case");
+ 		//System.err.println("sndDoToTool: true case");
  		toolShield.sndRequestToTool(DO, call);
  		return true;
  	} else {
-		System.err.println("sndDoToTool: false case");
+		//System.err.println("sndDoToTool: false case");
  		return false;
  	}
   }
@@ -224,7 +232,7 @@ public class ToolInstance {
   synchronized public ATerm addEventFromTool(Object obj) {
     Object event[] = new Object[] { TBTerm.newTransactionId(), obj };
     eventsFromTool.addLast(event);
-    System.err.println("JavaTool.addEvenFromTool: id = " + event[0] + " obj= = " + event[1]);
+    System.err.println("ToolInstance.addEvenFromTool: id = " + event[0] + " obj= = " + event[1]);
     return (ATerm) event[0];
   }
  
@@ -263,13 +271,14 @@ public class ToolInstance {
   		
   		List matches = t.match("snd-value(<term>)"); //TODO; more args
   		if (matches != null) {
-  			addValueFromTool(matches.get(0));
+  			addValueFromTool(matches.get(0));  
   		}
   		
-  		List matches1 = t.match("snd-event(<term>)"); //TODO: more args
+  		List matches1 = t.match("snd-event(<term>,<term>)"); //TODO: more args
   		if (matches1 != null) {
-  			addEventFromTool(matches1.get(0));
+  			addEventFromTool(matches1.get(1));
   		}
+  		System.err.println("tool " + toolId + " not handled!");
   }
   
   /**
@@ -300,7 +309,7 @@ public class ToolInstance {
   	
   	//String requestName = ((ATermAppl) request).getName();
   	//int ri = ((Integer) toolRequestIndex.get(requestName)).intValue();
-  	System.err.println("TCPtransition: phase = " + phase + "; ri = " + ri);
+  	//System.err.println("TCPtransition: phase = " + phase + "; ri = " + ri);
   	
   	switch(phase){
   	case PHASE1:
