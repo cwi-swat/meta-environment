@@ -4,7 +4,7 @@ pkgdata_DATA = moduleapi.jar
 
 EXTRA_DIST = moduleapi.jar
 
-MODULE_MODULES = Modules
+MODULE_MODULES = Modules NatCon
 
 api: module-api
 
@@ -21,6 +21,7 @@ module-api: java-module-api
 java-module-api: MetaModules.def Makefile
 	sdf2-to-java \
 		--imploded \
+		--visitable \
 		--input $< \
 		--package nl.cwi.sen1 \
 		--name moduleapi \
