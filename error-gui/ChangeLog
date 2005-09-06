@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Sep  6 09:30:04 CEST 2005 <{kooiker,jurgenv]@cwi.nl>
+ * error-viewer-${VERSION}.pkg: renamed to error-gui-${VERSION}.pkg
+ * error-viewer-config: renamed to error-gui-config
+
 Tue Aug  9 10:49:25 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
  * Updated to new StudioPlugin interface.
 

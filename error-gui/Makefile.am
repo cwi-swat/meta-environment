@@ -16,19 +16,19 @@ abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 LOCAL_JARS = $(abstop_srcdir)/lib/jlfgr-1_0.jar
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
-bin_SCRIPTS = $(TOOLNAME)-config
-noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
+bin_SCRIPTS = $(PACKAGE)-config
+noinst_SCRIPTS = $(PACKAGE)-$(VERSION).pkg
 
 EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef
 
-CLEANFILES = $(TOOLNAME)-config $(TOOLNAME)-$(VERSION).pkg
+CLEANFILES = $(PACKAGE)-config $(PACKAGE)-$(VERSION).pkg
 
-$(TOOLNAME)-config: Makefile
+$(PACKAGE)-config: Makefile
 	@(	echo "#! /bin/sh";\
 		echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/jlfgr-1_0.jar" \
 	) > $@ && chmod +x $@
 
-$(TOOLNAME)-$(VERSION).pkg: package Makefile
+$(PACKAGE)-$(VERSION).pkg: package Makefile
 	cp $< $@
 
 %.idef: %.idef.src Makefile

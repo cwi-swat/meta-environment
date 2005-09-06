@@ -26,7 +26,7 @@ public class ErrorDecorator {
 		if (subject.hasLocation()) {
 			node.add(decorateLocation(subject.getLocation()));
 		}
-
+		
 		return node;
 	}
 

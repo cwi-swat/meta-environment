@@ -12,8 +12,8 @@ build
 config.*
 configure
 dist
-error-viewer-*.pkg
-error-viewer-config
+error-gui-*.pkg
+error-gui-config
 install-sh
 missing
 mkinstalldirs
