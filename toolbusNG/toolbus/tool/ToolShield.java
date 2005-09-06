@@ -80,6 +80,10 @@ public abstract class ToolShield extends Thread {
 		return toolInstance.addEventFromTool(trm);
 	}
 	
+	public synchronized boolean isRunning(){
+		return running;
+	}
+	
 	protected synchronized void setRunning(boolean state)  {
 		running = state;
 	}

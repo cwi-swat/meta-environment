@@ -15,7 +15,7 @@ public class Main {
 		try {
 			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/wave.tb");
+					+ "/toolbusNG/toolbus/tool/examples/calc.tb");
 			T.execute();
 		} catch (ToolBusException e) {
 			System.out.println(e.getMessage());

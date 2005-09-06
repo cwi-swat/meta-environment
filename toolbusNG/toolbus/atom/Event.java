@@ -5,6 +5,7 @@ import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
+import aterm.ATermList;
 
 /**
  * @author paulk, Aug 7, 2002
@@ -14,7 +15,7 @@ public class Event extends Atom {
 	private Ref toolId;
 	private Ref result;
 	
-  public Event(ATerm toolId, ATerm result) {
+  public Event(ATerm toolId, ATermList result) {
   	super();
 	this.toolId = new Ref(toolId);
 	this.result = new Ref(result);
@@ -22,7 +23,7 @@ public class Event extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Event(this.toolId.value, this.result.value);
+    return new Event(this.toolId.value, (ATermList) this.result.value);
   }
 
   public boolean execute() throws ToolBusException {

@@ -170,7 +170,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
 
   public State getNextState(){
-  	System.err.println(this + "getNextState ==> " + getFollow());
+  	//System.err.println(this + "getNextState ==> " + getFollow());
   	return getFollow();
   }
   

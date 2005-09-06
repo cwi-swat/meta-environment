@@ -87,19 +87,19 @@ public abstract class MsgAtom extends Atom {
         ProcessInstance pb = b.getProcess();
  
         if (pa != pb && pb.contains(b) && b.isEnabled()) {
-          System.err.println("MsgAtom.execute: " + this + ";" + b);
-          System.err.println("--- enva = " + this.getEnv());
-          System.err.println("--- envb = " + b.getEnv());
+          //System.err.println("MsgAtom.execute: " + this + ";" + b);
+          //System.err.println("--- enva = " + this.getEnv());
+          //System.err.println("--- envb = " + b.getEnv());
           
           
           if (matchPartner(b)) {
             if (ToolBus.isVerbose()) {
-              System.err.println(
-                "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
-              System.err.println(
-              	"--- enva = " + this.getEnv());
-              System.err.println(
-                  	"--- envb = " + b.getEnv());
+              //System.err.println(
+               // "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+              //System.err.println(
+              //	"--- enva = " + this.getEnv());
+              //System.err.println(
+               //   	"--- envb = " + b.getEnv());
             }
             //this.nextState();
             //b.nextState();

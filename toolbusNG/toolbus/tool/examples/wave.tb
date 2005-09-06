@@ -34,26 +34,16 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
        || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
        || snd-msg(exc(I, L, E))         %% send own amplitude to left neighbour
        || snd-msg(exc(I, R, E))         %% send own amplitude to right neighbour
- %%      || snd-do(Tid, update(I, E))      %% update own amplitude on the display
-       || printf("update(%t,%t)\n", I, 1.0)
+       || snd-do(Tid, update(I, E))      %% update own amplitude on the display
+ %%      || printf("update(%t,%t)\n", I, E)
       ) .
        
        D1 := E .
-       %%F(E, D, AL, AR, E?) .
+       F(E, D, AL, AR, E?) .
        D := D1
      ) * delta
   endlet
   
-process Q(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real) is
- let AL : real, AR : real, D : real, D1 : real, E : real
-  in
-     D := Dstart .
-     E := Estart .
-	 (
-	   printf("Q(%d)\n", I)
-	 ) * delta
- endlet
- 
 
 %% Define the processes at the end points. {\tt I} is the index
 %% of the end point, {\tt NB} is its immediate neighbour.
@@ -61,8 +51,8 @@ process Q(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
 process Pend(Tid : display, I : int, NB : int) is
   let W : real
   in 
-   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) %% || snd-do(Tid, update(I, 0.0))) * delta
-                                                         || printf("update(%t,%t)\n", I, 0.0)) * delta
+   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) || snd-do(Tid, update(I, 0.0))) * delta
+                                                         %% || printf("update(%t,%t)\n", I, 0.0)) * delta
   endlet
 
 %% Construct the processes {\tt Pend}$_0$, {\tt P}$_1$, ..., {\tt P}$_{N-1}$, {\tt Pend}$_N$.
@@ -70,15 +60,15 @@ process Pend(Tid : display, I : int, NB : int) is
 process MakeWave(N : int) is
   let Tid : display, Id : int, I : int, L : int, R : int
   in
-     %%execute(display, Tid?) .         %% create the display
+     execute(display, Tid?) .         %% create the display
      Tid := quote(display(0)) .
-     %%snd-do(Tid, mk-wave(N)) .        %% make an N point wave
+     snd-do(Tid, mk-wave(N))  .       %% make an N point wave
      create(Pend(Tid, 0, 1), Id?).    %% create left end point
      L := sub(N,1) .
      create(Pend(Tid, N, L), Id?) .   %% create right end point
      I := 1 .                         %% create the P's in between
      if less(I, N) then
-        L := sub(I, 1) . R := add(I, 1) .
+       L := sub(I, 1) . R := add(I, 1) .
         create(P(Tid, L, I, R, 1.0, 1.0), Id?) .
         I := add(I, 1)
      fi *
@@ -95,5 +85,5 @@ tool display is { host = "localhost"
 
 %% Define the initial \TB\ configuration.
 
-toolbus(MakeWave(2))
+toolbus(MakeWave(8))
 
