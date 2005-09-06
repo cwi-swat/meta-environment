@@ -1,5 +1,9 @@
 $Id$
 
+Tue Sep  6 11:49:36 CEST 2005 <kooiker@cwi.nl>
+ * library/basic/Modules.sdf:
+   - Extract dependencies from module
+
 Fri Aug 19 15:15:10 CEST 2005 <kooiker@cwi.nl>
  * library/basic/Modules.sdf:
    - Describes the syntax of the modules used in the meta-env

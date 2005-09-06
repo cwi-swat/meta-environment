@@ -1,24 +1,22 @@
 module Modules
 
+imports basic/NatCon
+
 exports
 
 context-free start-symbols Module
 
-sorts Module TermCon
+sorts TermCon
 
+sorts Module 
 context-free syntax
-  %% A module has an identifier, optional dependencies and attributes
-  "module" "(" id:ModuleId "," "[" {Dependency ","}* "]" "," "[" store:{Attribute ","}* "]"")" -> Module {cons("module")}
+  %% A module constists of an identifier and optional attributes
+  "module" "(" id:ModuleId "," "[" store:{Attribute ","}* "]"")" -> Module {cons("module")}
 
 sorts ModuleId
 context-free syntax
-  %% An module id consists of a namespace and some id
-  "module-id" "(" namespace:TermCon "," id:TermCon ")" -> ModuleId {cons("module-id")}
-
-sorts Dependency
-context-free syntax
-  %% A dependency consists of a pair module-id to module-id
-  "dependency" "(" from:TermCon "," to:TermCon ")" -> Dependency {cons("dependency")}
+  %% An module-id is defined by a unique natcon
+  "module-id" "(" id:NatCon ")" -> ModuleId {cons("module-id")}
 
 sorts Attribute
 context-free syntax
@@ -29,3 +27,14 @@ sorts TableEntry
 context-free syntax
   %% table-entry pairs are key-value pairs of TermCons
   "table-entry" "(" key:TermCon "," value:TermCon ")" -> TableEntry {cons("table-entry")}
+
+sorts DependencyList
+context-free syntax
+  %% List of dependencies
+  "dependency-list" "(" "[" table:{Dependency ","}* "]" ")" -> DependencyList {cons("dependency-list")}
+
+sorts Dependency
+context-free syntax
+  %% A module depends on a module-id
+  "dependency" "(" from:NatCon "," to:NatCon ")" -> Dependency {cons("dependency")}
+
