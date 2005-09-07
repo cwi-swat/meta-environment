@@ -182,15 +182,10 @@ in
       .
       (
         rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
-	.
-	if equal(Type, sdf) then
-	  SetModuleSyntaxText(ModuleId, Text)
-	else
         /* Motivation for the set-module-syntax-text-hook
            Which table the module text needs to be saved in is depending on the
            type of module. */
-	  snd-msg(set-module-syntax-text-hook(Type, ModuleId, Text))	
-	fi
+	. snd-msg(set-module-syntax-text-hook(Type, ModuleId, Text))	
       +
         rec-msg(open-syntax-parse-handler-done(Pid))
       )
