@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Sep  7 11:46:54 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/start-meta-studio.tb.src:
+   - Use same scenario entrypoint for opening a module via the menu and via a
+     commandline argument. 
+
 Tue Sep  6 09:43:03 CEST 2005 <kooiker@cwi.nl>
  * configure.ac:
    - Add error-gui to EXTERNAL_JARS

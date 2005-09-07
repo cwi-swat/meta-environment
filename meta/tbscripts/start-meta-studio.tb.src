@@ -33,6 +33,7 @@ process MetaGUI is
 let
   EnvironmentName: str,
   MenuEventList: list,
+  Path: str,
   Pid: int
 in
   create(MetaCreator, Pid?)
@@ -55,7 +56,13 @@ in
   . InitializeTermStore(TERMSTORENAME)
   .
   if not-equal(MODULENAME, "") then
-    OpenModules([MODULENAME], sdf)
+    LocateFile(MODULENAME, sdf, Path?)
+    .
+    if equal(Path, "") then
+      Error("Unable to locate module: %s", [MODULENAME])
+    else
+      OpenModule(Path, sdf, MODULENAME)
+    fi
   else
     tau
   fi
