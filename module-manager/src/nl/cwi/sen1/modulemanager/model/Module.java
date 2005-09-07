@@ -1,9 +1,7 @@
 package nl.cwi.sen1.modulemanager.model;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import aterm.ATerm;
 

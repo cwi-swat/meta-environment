@@ -1,5 +1,8 @@
 $Id$
 
+Wed Sep  7 10:34:16 CEST 2005 <kooiker@cwi.nl>
+ * build.xml: switch to j2sdk 5.0
+
 Fri Sep  2 14:24:02 CEST 2005 <kooiker@cwi.nl>
  * Reimplemented modulemanager: use Java type object hierarchy and integrated
    data structures
