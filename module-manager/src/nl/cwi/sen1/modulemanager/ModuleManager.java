@@ -5,18 +5,25 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import nl.cwi.sen1.moduleapi.Factory;
-import nl.cwi.sen1.moduleapi.types.ModuleId;
+import nl.cwi.sen1.moduleapi.types.Dependency;
 import nl.cwi.sen1.modulemanager.model.Module;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class ModuleManager implements ModuleManagerTif {
+    private int moduleCount;
+
     private Map modules;
+
+    private Map dependencies;
+
+    private Map dependents;
 
     private PureFactory pureFactory;
 
@@ -25,10 +32,11 @@ public class ModuleManager implements ModuleManagerTif {
     private ModuleManagerBridge bridge;
 
     public ModuleManager(String[] args) {
+        moduleCount = 0;
         modules = new HashMap();
-
+        dependencies = new HashMap();
+        dependents = new HashMap();
         pureFactory = new PureFactory();
-
         factory = Factory.getInstance(pureFactory);
 
         bridge = new ModuleManagerBridge(pureFactory, this);
@@ -50,11 +58,14 @@ public class ModuleManager implements ModuleManagerTif {
         thread.start();
     }
 
-    public ATerm getModuleId(ATerm namespace, ATerm id) {
-        ModuleId moduleId = factory.makeModuleId_ModuleId(namespace, id);
+    public ATerm createModule(ATerm name) {
+        System.err.println("MM - createModule: module [" + name + "]");
 
-        return pureFactory.make("snd-value(module-id(<term>))", moduleId
-                .toTerm());
+        modules.put(moduleCount, new Module(name));
+        dependencies.put(moduleCount, new HashSet());
+        dependents.put(moduleCount, new HashSet());
+
+        return pureFactory.make("snd-value(module-id(<int>))", moduleCount++);
     }
 
     public ATerm getModuleIdByAttribute(ATerm namespace, ATerm key, ATerm value) {
@@ -63,53 +74,21 @@ public class ModuleManager implements ModuleManagerTif {
             Module module = (Module) modules.get(moduleId);
 
             if (module.getAttribute(namespace, key).equals(value)) {
-                return pureFactory.make("snd-value(module-id(<term>))", moduleId);
+                return pureFactory.make("snd-value(module-id(<term>))",
+                        moduleId);
             }
         }
 
         return pureFactory.parse("snd-value(no-such-module)");
     }
 
-    public void createModule(ATerm id) {
-        System.err.println("MM - createModule: module [" + id + "]");
-
-        if (modules.get(id) != null) {
-            System.err.println("MM - createModule: module [" + id
-                    + "] already exists");
-            return;
-        }
-
-        modules.put(id, new Module(id));
-    }
-
-    public ATerm renameModule(ATerm id, ATerm name) {
-        System.err.println("MM - renameModule: module [" + id + "]");
-
-        Module module = (Module) modules.get(id);
-        
-        if (module == null) {
-            System.err.println("MM - renameModule: module [" + id
-                    + "] doesn't exists");
-            return pureFactory.parse("snd-value(no-such-module)");
-        }
-
-        modules.remove(id);
-        
-        ModuleId moduleId = factory.makeModuleId_ModuleId(pureFactory.parse("default"), name);
-        
-        module.setName(moduleId);
-        modules.put(moduleId.toTerm(), module);
-        
-        return pureFactory.make("snd-value(new-module-id(<term>))", moduleId.toTerm());
-    }
-
-    public void deleteModule(ATerm id) {
+    public void deleteModule(int id) {
         System.err.println("MM - deleteModule: module [" + id + "]");
 
         modules.remove(id);
     }
 
-    public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
+    public void addAttribute(int id, ATerm namespace, ATerm key, ATerm value) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -118,10 +97,10 @@ public class ModuleManager implements ModuleManagerTif {
             return;
         }
 
-        module.addAttribute(namespace, key, value);
+        module.setAttribute(namespace, key, value);
     }
 
-    public ATerm getAttribute(ATerm id, ATerm namespace, ATerm key) {
+    public ATerm getAttribute(int id, ATerm namespace, ATerm key) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -137,7 +116,7 @@ public class ModuleManager implements ModuleManagerTif {
         return pureFactory.make("snd-value(attribute(<term>))", value);
     }
 
-    public void deleteAttribute(ATerm id, ATerm namespace, ATerm key) {
+    public void deleteAttribute(int id, ATerm namespace, ATerm key) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -149,77 +128,60 @@ public class ModuleManager implements ModuleManagerTif {
         module.deleteAttribute(namespace, key);
     }
 
-    public void addDependencies(ATerm id, ATerm dependencies) {
-        Module module = (Module) modules.get(id);
-
-        if (module == null) {
-            System.err.println("MM - addDependency: module [" + id
-                    + "] doesn't exist");
-            return;
-        }
-
+    public void addDependencies(ATerm dependencies) {
         ATermList deps = (ATermList) dependencies;
 
         while (!deps.isEmpty()) {
-            module.addDependency(deps.getFirst());
+            Dependency dep = (Dependency) deps.getFirst();
+            addDependency(dep.getFrom(), dep.getTo());
             deps = deps.getNext();
         }
     }
 
-    public void addDependency(ATerm id, ATerm dependency) {
-        Module module = (Module) modules.get(id);
+    public void addDependency(int from, int to) {
+        Set deps;
+        Module moduleFrom = (Module) modules.get(from);
+        Module moduleTo = (Module) modules.get(to);
 
-        if (module == null) {
-            System.err.println("MM - addDependency: module [" + id
+        if (moduleFrom == null) {
+            System.err.println("MM - addDependency: module [" + from
                     + "] doesn't exist");
             return;
         }
 
-        module.addDependency(dependency);
+        if (moduleTo == null) {
+            System.err.println("MM - addDependency: module [" + to
+                    + "] doesn't exist");
+            return;
+        }
+
+        deps = (Set) dependencies.get(from);
+        deps.add(to);
+
+        deps = (Set) dependents.get(to);
+        deps.add(from);
     }
 
-    public ATerm getDependingModules(ATerm id) {
+    public ATerm getDependingModules(int id) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
             return pureFactory.parse("snd-value(no-such-module)");
         }
-
-        Set dependencies = module.getDependencies();
 
         return pureFactory.make("snd-value(depending-modules(<list>))",
-                extractATermList(dependencies));
+                extractATermList((Set) dependencies.get(id)));
     }
 
-    public ATerm getAllDependingModules(ATerm id) {
+    public ATerm getDependentModules(int id) {
         Module module = (Module) modules.get(id);
 
         if (module == null) {
             return pureFactory.parse("snd-value(no-such-module)");
         }
-        
-        Set dependencies = module.getDependencies();
-        LinkedList depsList = new LinkedList();
-        for (Iterator iter = dependencies.iterator(); iter.hasNext();) {
-            
-        }
-        
-        
-        
-        return pureFactory.make("snd-value(depending-modules(<list))", extractATermList(dependencies));
-    }
-    
-    public ATerm getDependentModules(ATerm id) {
-        Module module = (Module) modules.get(id);
-
-        if (module == null) {
-            return pureFactory.parse("snd-value(no-such-module)");
-        }
-
-        Set dependentModules = getDependents(id);
 
         return pureFactory.make("snd-value(depending-modules(<list>))",
-                extractATermList(dependentModules));
+                extractATermList((Set) dependents.get(id)));
     }
 
     private ATermList extractATermList(Set dependencies) {
@@ -230,51 +192,45 @@ public class ModuleManager implements ModuleManagerTif {
         return list;
     }
 
-    private Set getDependents(ATerm id) {
-        Set dependentModules = new HashSet();
-        LinkedList temp = new LinkedList();
+    public void deleteDependency(int from, int to) {
+        LinkedList deps;
+        Module moduleFrom = (Module) modules.get(from);
 
-        temp.add(id);
-
-        while (!temp.isEmpty()) {
-            ATerm cur = (ATerm) temp.getFirst();
-            dependentModules.add(cur);
-            temp.remove(cur);
-
-            for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-                Module dependent = (Module) iter.next();
-                if (dependent.getDependencies().contains(cur)
-                        && !dependentModules.contains(dependent.getName())) {
-                    temp.add(cur);
-                }
-            }
+        if (moduleFrom == null) {
+            System.err.println("MM - deleteDependency: module [" + from
+                    + "] doesn't exist");
+            return;
         }
 
-        return dependentModules;
+        Module moduleTo = (Module) modules.get(to);
+
+        if (moduleTo == null) {
+            System.err.println("MM - deleteDependency: module [" + to
+                    + "] doesn't exist");
+            return;
+        }
+
+        deps = (LinkedList) dependencies.get(from);
+        deps.remove(to);
+
+        deps = (LinkedList) dependents.get(to);
+        deps.remove(from);
     }
 
-    public void deleteDependency(ATerm id, ATerm dependency) {
-        Module module = (Module) modules.get(id);
+    public void deleteDependencies(int id) {
+        Module moduleFrom = (Module) modules.get(id);
 
-        if (module == null) {
+        if (moduleFrom == null) {
             System.err.println("MM - deleteDependency: module [" + id
                     + "] doesn't exist");
             return;
         }
-
-        module.deleteDependency(dependency);
-    }
-
-    public void deleteDependencies(ATerm id) {
-        Module module = (Module) modules.get(id);
-
-        if (module == null) {
-            System.err.println("MM - deleteDependencies: module [" + id
-                    + "] doesn't exist");
-            return;
+        
+        List deps = (LinkedList) dependencies.get(id);
+        for (Iterator iter = deps.iterator(); iter.hasNext(); ) {
+            ((LinkedList) dependents.get(iter.next())).remove(id);
         }
-
-        module.deleteDependencies();
+        deps.clear();
     }
 
     public void recTerminate(ATerm t0) {

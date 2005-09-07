@@ -12,13 +12,10 @@ public class Module {
 
     private Map attributes;
 
-    private Set dependencies;
-
     public Module(ATerm name) {
         this.name = name;
 
         attributes = new HashMap();
-        dependencies = new HashSet();
     }
 
     public ATerm getName() {
@@ -29,23 +26,15 @@ public class Module {
         this.name = name;
     }
 
-    public void addAttribute(ATerm namespace, ATerm key, ATerm value) {
+    public void setAttribute(ATerm namespace, ATerm key, ATerm value) {
         AttributeTable table = getTable(namespace);
 
         if (table != null) {
-            table.addEntry(key, value);
+            table.setEntry(key, value);
         } else {
             table = new AttributeTable();
-            table.addEntry(key, value);
+            table.setEntry(key, value);
             attributes.put(namespace, table);
-        }
-    }
-
-    public void replaceAttribute(ATerm namespace, ATerm key, ATerm value) {
-        AttributeTable table = getTable(namespace);
-
-        if (table != null) {
-            table.replaceEntry(key, value);
         }
     }
 
@@ -69,23 +58,5 @@ public class Module {
     private AttributeTable getTable(ATerm namespace) {
         AttributeTable table = (AttributeTable) attributes.get(namespace);
         return table;
-    }
-
-    public void addDependency(ATerm dependency) {
-        if (!dependencies.contains(dependency)) {
-            dependencies.add(dependency);
-        }
-    }
-
-    public Set getDependencies() {
-        return dependencies;
-    }
-
-    public void deleteDependency(ATerm dependency) {
-        dependencies.remove(dependency);
-    }
-    
-    public void deleteDependencies() {
-        dependencies.clear();
     }
 }

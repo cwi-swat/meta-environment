@@ -12,13 +12,7 @@ public class AttributeTable {
         entries = new HashMap();
     }
 
-    public void addEntry(ATerm key, ATerm value) {
-        if (entries.get(key) == null) {
-            entries.put(key, value);
-        }
-    }
-    
-    public void replaceEntry(ATerm key, ATerm value) {
+    public void setEntry(ATerm key, ATerm value) {
         entries.put(key, value);
     }
     

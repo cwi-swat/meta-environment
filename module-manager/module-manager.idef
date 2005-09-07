@@ -10,24 +10,21 @@ let
   MM : module-manager,
   Dependency : term,
   Dependencies : list,
+  From : int,
   Id : term,
   Key : term,
-  ModuleId : term,
+  ModuleId : int,
   Modulename : term,
   Modules : list,
   Namespace : term,
   NewModuleId : term,
   Path : str,
+  To : int,
   Value : term
 in
   execute(module-manager, MM?)
   .
   (
-    rec-msg(mm-get-module-id(Namespace?, Id?))
-    . snd-eval(MM, get-module-id(Namespace, Id))
-    . rec-value(MM, module-id(ModuleId?))
-    . snd-msg(mm-module-id(Namespace, Id, ModuleId))
-  +
     rec-msg(mm-get-module-id-by-attribute(Namespace?, Key?, Value?))
     . snd-eval(MM, get-module-id-by-attribute(Namespace, Key, Value))
     .
@@ -39,19 +36,10 @@ in
       . snd-msg(mm-no-such-module(Namespace, Key, Value))
     )
   +
-    rec-msg(mm-create-module(ModuleId?))
-    . snd-do(MM, create-module(ModuleId))
-  +
-    rec-msg(mm-rename-module(ModuleId?, Modulename?))
-    . snd-eval(MM, rename-module(ModuleId, Modulename))
-    .
-    (
-      rec-value(MM, new-module-id(NewModuleId?))
-      . snd-msg(mm-new-module-id(ModuleId, Modulename, NewModuleId))
-    +
-      rec-value(MM, no-such-module)
-      . snd-msg(mm-no-such-module(ModuleId, Modulename))
-    )
+    rec-msg(mm-create-module(Modulename?))
+    . snd-eval(MM, create-module(Modulename))
+    . rec-value(MM, module-id(ModuleId?))
+    . snd-msg(mm-module-created(Modulename, ModuleId))
   +
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))
@@ -76,25 +64,25 @@ in
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
   +
-    rec-msg(mm-add-dependency(ModuleId?, Dependency?))
-    . snd-do(MM, add-dependency(ModuleId, Dependency))
+    rec-msg(mm-add-dependency(From?, To?))
+    . snd-do(MM, add-dependency(From, To))
   +
-    rec-msg(mm-add-dependencies(ModuleId?, Dependencies?))
-    . snd-do(MM, add-dependencies(ModuleId, Dependencies))
+    rec-msg(mm-add-dependencies(Dependencies?))
+    . snd-do(MM, add-dependencies(Dependencies))
   +
     rec-msg(mm-get-depending-modules(ModuleId?))
     . snd-eval(MM, get-depending-modules(ModuleId))
     .
     (
-      rec-value(MM, depending-modules(Dependencies?))
-      . snd-msg(mm-depending-modules(ModuleId, Dependencies))
+      rec-value(MM, depending-modules(Modules?))
+      . snd-msg(mm-depending-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
-    rec-msg(mm-delete-dependency(ModuleId?, Dependency?))
-    . snd-do(MM, delete-dependency(ModuleId, Dependency))
+    rec-msg(mm-delete-dependency(From?, To?))
+    . snd-do(MM, delete-dependency(From, To))
   +
     rec-msg(mm-delete-dependencies(ModuleId?))
     . snd-do(MM, delete-dependencies(ModuleId))
