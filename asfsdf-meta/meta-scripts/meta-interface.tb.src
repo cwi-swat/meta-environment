@@ -222,6 +222,7 @@ let
   Filename : str,
   Id : int,
   Module : str,
+  ModuleId : str,
   ModuleNames : list,
   Modules : list,
   OpenSyntaxHandlerPid : int,
@@ -307,7 +308,8 @@ in
     . create(OpenSyntaxParseHandler(Path), OpenSyntaxHandlerPid?)
     . snd-msg(get-open-syntax-parse-handler-hook-result(OpenSyntaxHandlerPid))
   +
-    rec-msg(set-module-syntax-text-hook)
+    rec-msg(set-module-syntax-text-hook(sdf, ModuleId?, Text?))
+    . SetModuleSyntaxText(ModuleId, Text)
   +
     rec-msg(get-parse-equation-checking-hook)
     . snd-msg(get-parse-equation-checking-hook-result(true))
