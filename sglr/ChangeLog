@@ -1,5 +1,10 @@
 $Id$
 
+Mon Sep 12 11:15:21 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
+ * restorebrackets.c: generate structured literal representation
+   of brackets instead of casting a symbol to a tree. This
+   fixes a bug.
+
 Fri Aug 19 14:48:33 CEST 2005 <jurgenv@cwi.nl>
  * restorebrackets/Makefile.am: removed superfluous linking flag
    that triggered a build error.
