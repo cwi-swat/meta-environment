@@ -87,8 +87,8 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
     PT_Symbols bracketSymbols = PT_getProductionLhs(bracketProd);
     PT_Symbol openBracketSym = PT_getSymbolsHead(bracketSymbols);
     PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
-    PT_Tree openBracket = PT_TreeFromTerm(PT_SymbolToTerm(openBracketSym));
-    PT_Tree closeBracket = PT_TreeFromTerm(PT_SymbolToTerm(closeBracketSym));
+    PT_Tree openBracket = PT_makeTreeLit(PT_getSymbolString(openBracketSym));
+    PT_Tree closeBracket = PT_makeTreeLit(PT_getSymbolString(closeBracketSym));
     PT_Args newArgs = PT_makeArgsSingle(closeBracket);
     newArgs = PT_makeArgsMany(PT_makeTreeLayoutEmpty(), newArgs);
     newArgs = PT_makeArgsMany(tree, newArgs);
