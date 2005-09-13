@@ -8,12 +8,13 @@ import aterm.ATerm;
 public class Module {
     private ATerm name;
 
-    private Map attributes;
+    private Map attributes = new HashMap();
 
+    public Module() {
+    }
+    
     public Module(ATerm name) {
         this.name = name;
-
-        attributes = new HashMap();
     }
 
     public ATerm getName() {

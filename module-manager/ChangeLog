@@ -1,5 +1,10 @@
 $Id$
 
+Tue Sep 13 14:39:01 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Add method GetAllDependenciesByAttribute
+   - TODO: remove aforementioned method
+
 Wed Sep  7 10:34:16 CEST 2005 <kooiker@cwi.nl>
  * build.xml: switch to j2sdk 5.0
 

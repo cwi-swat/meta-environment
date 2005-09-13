@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Sep 7, 2005 10:05:20 AM
+// generation time: Sep 13, 2005 12:00:34 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -30,19 +30,6 @@ public class ModuleManagerBridge
     }
     else {
       throw new UnsupportedOperationException("method `deleteDependencies' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void addDependencies(ATerm t0)
-
-  public void addDependencies(ATerm t0)
-  {
-    if (tool != null) {
-      tool.addDependencies(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addDependencies' not supported.");
     }
   }
 
@@ -112,6 +99,28 @@ public class ModuleManagerBridge
   }
 
   //}}}
+  //{{{  public ATerm getDependenciesByAttribute(ATerm t0, ATerm t1)
+
+  public ATerm getDependenciesByAttribute(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      return tool.getDependenciesByAttribute(t0, t1);
+    }
+      throw new UnsupportedOperationException("method `getDependenciesByAttribute' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm createModule()
+
+  public ATerm createModule()
+  {
+    if (tool != null) {
+      return tool.createModule();
+    }
+      throw new UnsupportedOperationException("method `createModule' not supported.");
+  }
+
+  //}}}
   //{{{  public ATerm createModule(ATerm t0)
 
   public ATerm createModule(ATerm t0)
@@ -120,28 +129,6 @@ public class ModuleManagerBridge
       return tool.createModule(t0);
     }
       throw new UnsupportedOperationException("method `createModule' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm getDependingModules(int i0)
-
-  public ATerm getDependingModules(int i0)
-  {
-    if (tool != null) {
-      return tool.getDependingModules(i0);
-    }
-      throw new UnsupportedOperationException("method `getDependingModules' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm getDependentModules(int i0)
-
-  public ATerm getDependentModules(int i0)
-  {
-    if (tool != null) {
-      return tool.getDependentModules(i0);
-    }
-      throw new UnsupportedOperationException("method `getDependentModules' not supported.");
   }
 
   //}}}

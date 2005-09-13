@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Sep 7, 2005 10:05:19 AM
+// generation time: Sep 13, 2005 12:00:34 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -18,15 +18,14 @@ abstract public class ModuleManagerTool
   //{{{  Patterns that are used to match against incoming terms
 
   private ATerm PdeleteDependencies0;
-  private ATerm PaddDependencies0;
   private ATerm PaddDependency0;
   private ATerm PdeleteModule0;
   private ATerm PdeleteAttribute0;
   private ATerm PdeleteDependency0;
   private ATerm PaddAttribute0;
+  private ATerm PgetDependenciesByAttribute0;
   private ATerm PcreateModule0;
-  private ATerm PgetDependingModules0;
-  private ATerm PgetDependentModules0;
+  private ATerm PcreateModule1;
   private ATerm PgetAttribute0;
   private ATerm PgetModuleIdByAttribute0;
   private ATerm PrecTerminate0;
@@ -51,17 +50,16 @@ abstract public class ModuleManagerTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,create-module(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<int>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<int>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<int>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<int>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<int>,<int>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,add-dependencies(<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-depending-modules(<int>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<int>,<int>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<int>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependent-modules(<int>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies-by-attribute(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), new Boolean(true));
   }
 
@@ -72,15 +70,14 @@ abstract public class ModuleManagerTool
   private void initPatterns()
   {
     PdeleteDependencies0 = factory.parse("rec-do(delete-dependencies(<int>))");
-    PaddDependencies0 = factory.parse("rec-do(add-dependencies(<term>))");
     PaddDependency0 = factory.parse("rec-do(add-dependency(<int>,<int>))");
     PdeleteModule0 = factory.parse("rec-do(delete-module(<int>))");
     PdeleteAttribute0 = factory.parse("rec-do(delete-attribute(<int>,<term>,<term>))");
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<int>,<int>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<int>,<term>,<term>,<term>))");
-    PcreateModule0 = factory.parse("rec-eval(create-module(<term>))");
-    PgetDependingModules0 = factory.parse("rec-eval(get-depending-modules(<int>))");
-    PgetDependentModules0 = factory.parse("rec-eval(get-dependent-modules(<int>))");
+    PgetDependenciesByAttribute0 = factory.parse("rec-eval(get-dependencies-by-attribute(<term>,<term>))");
+    PcreateModule0 = factory.parse("rec-eval(create-module)");
+    PcreateModule1 = factory.parse("rec-eval(create-module(<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<int>,<term>,<term>))");
     PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -98,11 +95,6 @@ abstract public class ModuleManagerTool
     result = term.match(PdeleteDependencies0);
     if (result != null) {
       deleteDependencies(((Integer)result.get(0)).intValue());
-      return null;
-    }
-    result = term.match(PaddDependencies0);
-    if (result != null) {
-      addDependencies((ATerm)result.get(0));
       return null;
     }
     result = term.match(PaddDependency0);
@@ -130,17 +122,17 @@ abstract public class ModuleManagerTool
       addAttribute(((Integer)result.get(0)).intValue(), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
       return null;
     }
+    result = term.match(PgetDependenciesByAttribute0);
+    if (result != null) {
+      return getDependenciesByAttribute((ATerm)result.get(0), (ATerm)result.get(1));
+    }
     result = term.match(PcreateModule0);
     if (result != null) {
+      return createModule();
+    }
+    result = term.match(PcreateModule1);
+    if (result != null) {
       return createModule((ATerm)result.get(0));
-    }
-    result = term.match(PgetDependingModules0);
-    if (result != null) {
-      return getDependingModules(((Integer)result.get(0)).intValue());
-    }
-    result = term.match(PgetDependentModules0);
-    if (result != null) {
-      return getDependentModules(((Integer)result.get(0)).intValue());
     }
     result = term.match(PgetAttribute0);
     if (result != null) {

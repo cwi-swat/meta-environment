@@ -10,33 +10,27 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.cwi.sen1.moduleapi.Factory;
-import nl.cwi.sen1.moduleapi.types.Dependency;
 import nl.cwi.sen1.modulemanager.model.Module;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class ModuleManager implements ModuleManagerTif {
-    private int moduleCount;
+    private int moduleCount = 0;
 
-    private Map modules;
+    private Map modules = new HashMap();
 
-    private Map dependencies;
+    private Map dependencies = new HashMap();
 
-    private Map dependents;
+    private Map dependents = new HashMap();
 
-    private PureFactory pureFactory;
+    private PureFactory pureFactory = new PureFactory();
 
     private Factory factory;
 
     private ModuleManagerBridge bridge;
 
     public ModuleManager(String[] args) {
-        moduleCount = 0;
-        modules = new HashMap();
-        dependencies = new HashMap();
-        dependents = new HashMap();
-        pureFactory = new PureFactory();
         factory = Factory.getInstance(pureFactory);
 
         bridge = new ModuleManagerBridge(pureFactory, this);
@@ -58,24 +52,34 @@ public class ModuleManager implements ModuleManagerTif {
         thread.start();
     }
 
+    public ATerm createModule() {
+        System.err.println("MM - createModule");
+
+        addModule(new Module());
+        return pureFactory.make("snd-value(module-id(<int>))", moduleCount++);
+    }
+
     public ATerm createModule(ATerm name) {
         System.err.println("MM - createModule: module [" + name + "]");
 
-        modules.put(moduleCount, new Module(name));
+        addModule(new Module(name));
+        return pureFactory.make("snd-value(module-id(<int>))", moduleCount++);
+    }
+
+    private void addModule(Module module) {
+        modules.put(moduleCount, module);
         dependencies.put(moduleCount, new HashSet());
         dependents.put(moduleCount, new HashSet());
-
-        return pureFactory.make("snd-value(module-id(<int>))", moduleCount++);
     }
 
     public ATerm getModuleIdByAttribute(ATerm namespace, ATerm key, ATerm value) {
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ATerm moduleId = (ATerm) iter.next();
+            int moduleId = ((Integer) iter.next()).intValue();
             Module module = (Module) modules.get(moduleId);
 
             if (module.getAttribute(namespace, key).equals(value)) {
-                return pureFactory.make("snd-value(module-id(<term>))",
-                        moduleId);
+                return pureFactory
+                        .make("snd-value(module-id(<int>))", moduleId);
             }
         }
 
@@ -89,6 +93,9 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void addAttribute(int id, ATerm namespace, ATerm key, ATerm value) {
+        // System.err.println("MM - addAttribute: key [" + key + "], value ["
+        // + value + "]");
+
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -101,6 +108,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm getAttribute(int id, ATerm namespace, ATerm key) {
+        // System.err.println("MM - getAttribute: key [" + key + "]");
+
         Module module = (Module) modules.get(id);
 
         if (module == null) {
@@ -112,6 +121,8 @@ public class ModuleManager implements ModuleManagerTif {
         if (value == null) {
             return pureFactory.parse("snd-value(no-such-key)");
         }
+
+        // System.err.println("MM - getAttribute: value [" + value + "]");
 
         return pureFactory.make("snd-value(attribute(<term>))", value);
     }
@@ -128,15 +139,15 @@ public class ModuleManager implements ModuleManagerTif {
         module.deleteAttribute(namespace, key);
     }
 
-    public void addDependencies(ATerm dependencies) {
-        ATermList deps = (ATermList) dependencies;
-
-        while (!deps.isEmpty()) {
-            Dependency dep = (Dependency) deps.getFirst();
-            addDependency(dep.getFrom(), dep.getTo());
-            deps = deps.getNext();
-        }
-    }
+    // public void addDependencies(ATerm dependencies) {
+    // ATermList deps = (ATermList) dependencies;
+    //
+    // while (!deps.isEmpty()) {
+    // Dependency dep = (Dependency) deps.getFirst();
+    // addDependency(dep.getFrom(), dep.getTo());
+    // deps = deps.getNext();
+    // }
+    // }
 
     public void addDependency(int from, int to) {
         Set deps;
@@ -173,16 +184,46 @@ public class ModuleManager implements ModuleManagerTif {
                 extractATermList((Set) dependencies.get(id)));
     }
 
-    public ATerm getDependentModules(int id) {
-        Module module = (Module) modules.get(id);
+    public ATerm getDependenciesByAttribute(ATerm namespace, ATerm key) {
+        ATermList deplist = pureFactory.makeList();
 
-        if (module == null) {
-            return pureFactory.parse("snd-value(no-such-module)");
+        for (Iterator iter = dependencies.keySet().iterator(); iter.hasNext();) {
+            int moduleId = ((Integer) iter.next()).intValue();
+            Set deps = (Set) dependencies.get(moduleId);
+
+            Module module = (Module) modules.get(moduleId);
+            ATerm attribute = module.getAttribute(namespace, key);
+
+            if (attribute != null) {
+                ATermList attributes = pureFactory.makeList();
+                for (Iterator iter2 = deps.iterator(); iter2.hasNext();) {
+                    module = (Module) modules.get(iter2.next());
+                    ATerm moduleAttribute = module.getAttribute(namespace, key);
+
+                    if (moduleAttribute != null) {
+                        attributes = attributes.append(moduleAttribute);
+                    }
+                }
+
+                ATermList dependency = pureFactory.makeList(attribute);
+                dependency = dependency.append(attributes);
+                deplist = deplist.append(dependency);
+            }
         }
-
-        return pureFactory.make("snd-value(depending-modules(<list>))",
-                extractATermList((Set) dependents.get(id)));
+        return pureFactory.make("snd-value(dependencies-by-attribute(<list>))",
+                deplist);
     }
+
+    // public ATerm getDependentModules(int id) {
+    // Module module = (Module) modules.get(id);
+    //
+    // if (module == null) {
+    // return pureFactory.parse("snd-value(no-such-module)");
+    // }
+    //
+    // return pureFactory.make("snd-value(depending-modules(<list>))",
+    // extractATermList((Set) dependents.get(id)));
+    // }
 
     private ATermList extractATermList(Set dependencies) {
         ATermList list = pureFactory.makeList();
@@ -225,9 +266,9 @@ public class ModuleManager implements ModuleManagerTif {
                     + "] doesn't exist");
             return;
         }
-        
+
         List deps = (LinkedList) dependencies.get(id);
-        for (Iterator iter = deps.iterator(); iter.hasNext(); ) {
+        for (Iterator iter = deps.iterator(); iter.hasNext();) {
             ((LinkedList) dependents.get(iter.next())).remove(id);
         }
         deps.clear();
