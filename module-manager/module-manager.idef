@@ -10,16 +10,16 @@ let
   MM : module-manager,
   Dependency : term,
   Dependencies : list,
-  From : int,
+  From : term,
   Id : term,
   Key : term,
-  ModuleId : int,
+  ModuleId : term,
   Modulename : term,
   Modules : list,
   Namespace : term,
   NewModuleId : term,
   Path : str,
-  To : int,
+  To : term,
   Value : term
 in
   execute(module-manager, MM?)
@@ -40,11 +40,6 @@ in
     . snd-eval(MM, create-module)
     . rec-value(MM, module-id(ModuleId?))
     . snd-msg(mm-module-created(ModuleId))
-  +
-    rec-msg(mm-create-module(Modulename?))
-    . snd-eval(MM, create-module(Modulename))
-    . rec-value(MM, module-id(ModuleId?))
-    . snd-msg(mm-module-created(Modulename, ModuleId))
   +
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))

@@ -1,5 +1,9 @@
 $Id$
 
+Mon Sep 19 11:35:43 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - ModuleId is of type ATerm
+
 Tue Sep 13 14:39:01 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager:
    - Add method GetAllDependenciesByAttribute

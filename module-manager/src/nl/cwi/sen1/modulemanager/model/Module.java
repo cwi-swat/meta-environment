@@ -6,25 +6,12 @@ import java.util.Map;
 import aterm.ATerm;
 
 public class Module {
-    private ATerm name;
-
-    private Map attributes = new HashMap();
+    private Map attributes;
 
     public Module() {
+        attributes = new HashMap();
     }
     
-    public Module(ATerm name) {
-        this.name = name;
-    }
-
-    public ATerm getName() {
-        return name;
-    }
-    
-    public void setName(ATerm name) {
-        this.name = name;
-    }
-
     public void setAttribute(ATerm namespace, ATerm key, ATerm value) {
         AttributeTable table = getTable(namespace);
 

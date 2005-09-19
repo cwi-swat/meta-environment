@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Sep 13, 2005 12:00:34 PM
+// generation time: Sep 19, 2005 11:34:33 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -21,12 +21,12 @@ public class ModuleManagerBridge
 
   //}}}
 
-  //{{{  public void deleteDependencies(int i0)
+  //{{{  public void deleteDependencies(ATerm t0)
 
-  public void deleteDependencies(int i0)
+  public void deleteDependencies(ATerm t0)
   {
     if (tool != null) {
-      tool.deleteDependencies(i0);
+      tool.deleteDependencies(t0);
     }
     else {
       throw new UnsupportedOperationException("method `deleteDependencies' not supported.");
@@ -34,12 +34,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void addDependency(int i0, int i1)
+  //{{{  public void addDependency(ATerm t0, ATerm t1)
 
-  public void addDependency(int i0, int i1)
+  public void addDependency(ATerm t0, ATerm t1)
   {
     if (tool != null) {
-      tool.addDependency(i0, i1);
+      tool.addDependency(t0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `addDependency' not supported.");
@@ -47,12 +47,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void deleteModule(int i0)
+  //{{{  public void deleteModule(ATerm t0)
 
-  public void deleteModule(int i0)
+  public void deleteModule(ATerm t0)
   {
     if (tool != null) {
-      tool.deleteModule(i0);
+      tool.deleteModule(t0);
     }
     else {
       throw new UnsupportedOperationException("method `deleteModule' not supported.");
@@ -60,12 +60,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void deleteAttribute(int i0, ATerm t1, ATerm t2)
+  //{{{  public void deleteAttribute(ATerm t0, ATerm t1, ATerm t2)
 
-  public void deleteAttribute(int i0, ATerm t1, ATerm t2)
+  public void deleteAttribute(ATerm t0, ATerm t1, ATerm t2)
   {
     if (tool != null) {
-      tool.deleteAttribute(i0, t1, t2);
+      tool.deleteAttribute(t0, t1, t2);
     }
     else {
       throw new UnsupportedOperationException("method `deleteAttribute' not supported.");
@@ -73,12 +73,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void deleteDependency(int i0, int i1)
+  //{{{  public void deleteDependency(ATerm t0, ATerm t1)
 
-  public void deleteDependency(int i0, int i1)
+  public void deleteDependency(ATerm t0, ATerm t1)
   {
     if (tool != null) {
-      tool.deleteDependency(i0, i1);
+      tool.deleteDependency(t0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `deleteDependency' not supported.");
@@ -86,12 +86,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void addAttribute(int i0, ATerm t1, ATerm t2, ATerm t3)
+  //{{{  public void addAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3)
 
-  public void addAttribute(int i0, ATerm t1, ATerm t2, ATerm t3)
+  public void addAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3)
   {
     if (tool != null) {
-      tool.addAttribute(i0, t1, t2, t3);
+      tool.addAttribute(t0, t1, t2, t3);
     }
     else {
       throw new UnsupportedOperationException("method `addAttribute' not supported.");
@@ -121,23 +121,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public ATerm createModule(ATerm t0)
+  //{{{  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
 
-  public ATerm createModule(ATerm t0)
+  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
   {
     if (tool != null) {
-      return tool.createModule(t0);
-    }
-      throw new UnsupportedOperationException("method `createModule' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm getAttribute(int i0, ATerm t1, ATerm t2)
-
-  public ATerm getAttribute(int i0, ATerm t1, ATerm t2)
-  {
-    if (tool != null) {
-      return tool.getAttribute(i0, t1, t2);
+      return tool.getAttribute(t0, t1, t2);
     }
       throw new UnsupportedOperationException("method `getAttribute' not supported.");
   }
