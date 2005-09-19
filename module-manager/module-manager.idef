@@ -9,10 +9,11 @@ process ModuleManager is
 let
   MM : module-manager,
   Dependency : term,
-  Dependencies : list,
+  Dependencies : term,
   From : term,
   Id : term,
   Key : term,
+  Map : term,
   ModuleId : term,
   Modulename : term,
   Modules : list,
@@ -61,6 +62,11 @@ in
       . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
     )
   +
+    rec-msg(mm-get-module-attribute-map(Namespace?, Key?))
+    . snd-eval(MM, get-module-attribute-map(Namespace, Key))
+    . rec-value(MM, module-attribute-map(Map?))
+    . snd-msg(mm-module-attribute-map(Namespace, Key, Map))
+  +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
   +
@@ -73,11 +79,10 @@ in
     rec-msg(mm-delete-dependencies(ModuleId?))
     . snd-do(MM, delete-dependencies(ModuleId))
   +
-    /* TODO: Remove this message */
-    rec-msg(mm-get-dependencies-by-attribute(Namespace?, Key?))
-    . snd-eval(MM, get-dependencies-by-attribute(Namespace, Key))
-    . rec-value(MM, dependencies-by-attribute(Dependencies?))
-    . snd-msg(mm-dependencies-by-attribute(Namespace, Key, Dependencies))
+    rec-msg(mm-get-dependencies)
+    . snd-eval(MM, get-dependencies)
+    . rec-value(MM, dependencies(Dependencies?))
+    . snd-msg(mm-dependencies(Dependencies))
 /*
   +
     rec-msg(mm-add-dependencies(Dependencies?))

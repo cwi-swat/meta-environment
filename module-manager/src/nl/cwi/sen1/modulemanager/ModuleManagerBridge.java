@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Sep 19, 2005 11:34:33 AM
+// generation time: Sep 19, 2005 3:27:52 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -99,17 +99,6 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public ATerm getDependenciesByAttribute(ATerm t0, ATerm t1)
-
-  public ATerm getDependenciesByAttribute(ATerm t0, ATerm t1)
-  {
-    if (tool != null) {
-      return tool.getDependenciesByAttribute(t0, t1);
-    }
-      throw new UnsupportedOperationException("method `getDependenciesByAttribute' not supported.");
-  }
-
-  //}}}
   //{{{  public ATerm createModule()
 
   public ATerm createModule()
@@ -121,6 +110,17 @@ public class ModuleManagerBridge
   }
 
   //}}}
+  //{{{  public ATerm getDependencies()
+
+  public ATerm getDependencies()
+  {
+    if (tool != null) {
+      return tool.getDependencies();
+    }
+      throw new UnsupportedOperationException("method `getDependencies' not supported.");
+  }
+
+  //}}}
   //{{{  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
 
   public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
@@ -129,6 +129,17 @@ public class ModuleManagerBridge
       return tool.getAttribute(t0, t1, t2);
     }
       throw new UnsupportedOperationException("method `getAttribute' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getModuleAttributeMap(ATerm t0, ATerm t1)
+
+  public ATerm getModuleAttributeMap(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      return tool.getModuleAttributeMap(t0, t1);
+    }
+      throw new UnsupportedOperationException("method `getModuleAttributeMap' not supported.");
   }
 
   //}}}
