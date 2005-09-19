@@ -48,7 +48,7 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm createModule() {
-//        System.err.println("MM - createModule");
+        // System.err.println("MM - createModule");
 
         ATerm moduleId = pureFactory.make("mid(<int>)", moduleCount++);
         addModule(new Module(), moduleId);
@@ -56,6 +56,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     private void addModule(Module module, ATerm moduleId) {
+//        System.err.println("MM - addModule: module [" + moduleId + "]");
+
         modules.put(moduleId, module);
         dependencies.put(moduleId, new HashSet());
         dependents.put(moduleId, new HashSet());
@@ -63,13 +65,12 @@ public class ModuleManager implements ModuleManagerTif {
 
     public ATerm getModuleIdByAttribute(ATerm namespace, ATerm key, ATerm value) {
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            int moduleId = ((Integer) iter.next()).intValue();
-            Module module = (Module) modules.get(moduleId);
+            ATerm moduleId = (ATerm) iter.next();
+            Module module = getModule(moduleId);
 
             if (module.getAttribute(namespace, key).equals(value)) {
-                ATerm moduleIdTerm = pureFactory.make("mid(<int>)", moduleId);
-                return pureFactory
-                        .make("snd-value(module-id(<term>))", moduleIdTerm);
+                return pureFactory.make("snd-value(module-id(<term>))",
+                        moduleId);
             }
         }
 
@@ -83,8 +84,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
-        // System.err.println("MM - addAttribute: key [" + key + "], value ["
-        // + value + "]");
+//        System.err.println("MM - addAttribute: module [" + id + "], key ["
+//                + key + "], value [" + value + "]");
 
         Module module = getModule(id);
 
@@ -98,7 +99,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm getAttribute(ATerm id, ATerm namespace, ATerm key) {
-        // System.err.println("MM - getAttribute: key [" + key + "]");
+//        System.err.println("MM - getAttribute: module [" + id + "], key ["
+//                + key + "]");
 
         Module module = getModule(id);
 
@@ -178,10 +180,10 @@ public class ModuleManager implements ModuleManagerTif {
         ATermList deplist = pureFactory.makeList();
 
         for (Iterator iter = dependencies.keySet().iterator(); iter.hasNext();) {
-            int moduleId = ((Integer) iter.next()).intValue();
+            ATerm moduleId = (ATerm) iter.next();
             Set deps = (Set) dependencies.get(moduleId);
 
-            Module module = (Module) modules.get(moduleId);
+            Module module = getModule(moduleId);
             ATerm attribute = module.getAttribute(namespace, key);
 
             if (attribute != null) {
@@ -265,8 +267,7 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     private Module getModule(ATerm id) {
-        List placeholders = id.match("mid(<int>)");
-        Module module = (Module) modules.get(placeholders.get(0));
+        Module module = (Module) modules.get(id);
         return module;
     }
 
