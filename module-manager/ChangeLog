@@ -1,5 +1,9 @@
 $Id$
 
+Wed Sep 21 14:33:04 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Refactored database into class
+
 Mon Sep 19 11:35:43 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager:
    - ModuleId is of type ATerm

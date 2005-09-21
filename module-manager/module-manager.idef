@@ -16,7 +16,7 @@ let
   Map : term,
   ModuleId : term,
   Modulename : term,
-  Modules : list,
+  Modules : term,
   Namespace : term,
   NewModuleId : term,
   Path : str,
@@ -61,11 +61,6 @@ in
       rec-value(MM, no-such-key)
       . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
     )
-  +
-    rec-msg(mm-get-module-attribute-map(Namespace?, Key?))
-    . snd-eval(MM, get-module-attribute-map(Namespace, Key))
-    . rec-value(MM, module-attribute-map(Map?))
-    . snd-msg(mm-module-attribute-map(Namespace, Key, Map))
   +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
