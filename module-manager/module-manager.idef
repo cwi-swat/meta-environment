@@ -11,6 +11,7 @@ let
   Dependency : term,
   Dependencies : term,
   From : term,
+  Graph : term,
   Id : term,
   Key : term,
   Map : term,
@@ -71,13 +72,18 @@ in
     rec-msg(mm-delete-dependency(From?, To?))
     . snd-do(MM, delete-dependency(From, To))
   +
-    rec-msg(mm-delete-dependencies(ModuleId?))
-    . snd-do(MM, delete-dependencies(ModuleId))
-  +
     rec-msg(mm-get-dependencies)
     . snd-eval(MM, get-dependencies)
     . rec-value(MM, dependencies(Dependencies?))
     . snd-msg(mm-dependencies(Dependencies))
+  +
+    rec-msg(mm-delete-dependencies(ModuleId?))
+    . snd-do(MM, delete-dependencies(ModuleId))
+  +
+    rec-msg(mm-get-module-graph(Namespace?))
+    . snd-eval(MM, get-module-graph(Namespace))
+    . rec-value(MM, module-graph(Graph?))
+    . snd-msg(mm-module-graph(Namespace, Graph))
 /*
   +
     rec-msg(mm-add-dependencies(Dependencies?))

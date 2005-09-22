@@ -28,8 +28,13 @@ AC_PACKAGE_REQUIRE(module-support, module-support-config,
    [  --with-module-support=DIR      Module-support is in DIR])
 AC_SUBST(MODULE_SUPPORT)
 
+dnl Require graph-support package
+AC_PACKAGE_REQUIRE(graph-support, tree2graph,
+   [  --with-graph-support=DIR   graph-support is in DIR])
+AC_SUBST(GRAPH_SUPPORT)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)

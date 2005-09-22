@@ -15,9 +15,9 @@ import nl.cwi.sen1.moduleapi.types.ModuleId;
 public class ModuleDatabase {
     private int moduleCount;
 
-    private Map modules;
+    protected Map modules;
 
-    private Map dependencies;
+    protected Map dependencies;
 
     private Map dependents;
 
@@ -71,7 +71,7 @@ public class ModuleDatabase {
 
         return value;
     }
-
+    
     public ModuleId getModuleIdByAttribute(ATerm namespace, ATerm key,
             ATerm value) {
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {

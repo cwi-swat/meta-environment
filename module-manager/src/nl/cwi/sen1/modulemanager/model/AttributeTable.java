@@ -20,6 +20,10 @@ public class AttributeTable {
         return (ATerm) entries.get(key);
     }
     
+    public Map getEntries() {
+        return entries;
+    }
+    
     public void deleteEntry(ATerm key) {
         entries.remove(key);
     }

@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Sep 21, 2005 1:32:40 PM
+// generation time: Sep 22, 2005 9:50:35 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -96,6 +96,17 @@ public class ModuleManagerBridge
     else {
       throw new UnsupportedOperationException("method `addAttribute' not supported.");
     }
+  }
+
+  //}}}
+  //{{{  public ATerm getModuleGraph(ATerm t0)
+
+  public ATerm getModuleGraph(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getModuleGraph(t0);
+    }
+      throw new UnsupportedOperationException("method `getModuleGraph' not supported.");
   }
 
   //}}}

@@ -5,19 +5,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import nl.cwi.sen1.graph.types.Graph;
 import nl.cwi.sen1.moduleapi.Factory;
 import nl.cwi.sen1.moduleapi.types.Dependency;
 import nl.cwi.sen1.moduleapi.types.DependencyList;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
 import nl.cwi.sen1.moduleapi.types.ModuleIdList;
 import nl.cwi.sen1.modulemanager.model.Module;
-import nl.cwi.sen1.modulemanager.model.ModuleDatabase;
+import nl.cwi.sen1.modulemanager.model.ModuleGraph;
 import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class ModuleManager implements ModuleManagerTif {
-    private ModuleDatabase moduleDB = new ModuleDatabase();
+    private ModuleGraph moduleDB;
 
     private PureFactory pureFactory = new PureFactory();
 
@@ -26,6 +27,8 @@ public class ModuleManager implements ModuleManagerTif {
     private ModuleManagerBridge bridge;
 
     public ModuleManager(String[] args) {
+        moduleDB = new ModuleGraph(pureFactory);
+
         bridge = new ModuleManagerBridge(pureFactory, this);
         try {
             bridge.init(args);
@@ -186,6 +189,15 @@ public class ModuleManager implements ModuleManagerTif {
     public void deleteDependencies(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
         moduleDB.deleteDependencies(moduleId);
+    }
+
+    public ATerm getModuleGraph(ATerm namespace) {
+        Graph graph = moduleDB.getModuleGraph(namespace);
+
+        System.err.println("MM - getModuleGraph: graph [" + graph + "]");
+
+        return pureFactory.make("snd-value(module-graph(<term>))", graph
+                .toTerm());
     }
 
     public void recTerminate(ATerm t0) {

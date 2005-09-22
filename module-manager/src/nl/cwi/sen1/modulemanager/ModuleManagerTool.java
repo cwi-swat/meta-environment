@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Sep 21, 2005 1:32:40 PM
+// generation time: Sep 22, 2005 9:50:35 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -23,6 +23,7 @@ abstract public class ModuleManagerTool
   private ATerm PdeleteAttribute0;
   private ATerm PdeleteDependency0;
   private ATerm PaddAttribute0;
+  private ATerm PgetModuleGraph0;
   private ATerm PcreateModule0;
   private ATerm PgetDependencies0;
   private ATerm PgetAttribute0;
@@ -56,8 +57,9 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), new Boolean(true));
   }
 
@@ -73,6 +75,7 @@ abstract public class ModuleManagerTool
     PdeleteAttribute0 = factory.parse("rec-do(delete-attribute(<term>,<term>,<term>))");
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<term>,<term>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
+    PgetModuleGraph0 = factory.parse("rec-eval(get-module-graph(<term>))");
     PcreateModule0 = factory.parse("rec-eval(create-module)");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
@@ -118,6 +121,10 @@ abstract public class ModuleManagerTool
     if (result != null) {
       addAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
       return null;
+    }
+    result = term.match(PgetModuleGraph0);
+    if (result != null) {
+      return getModuleGraph((ATerm)result.get(0));
     }
     result = term.match(PcreateModule0);
     if (result != null) {

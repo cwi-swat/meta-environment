@@ -34,6 +34,10 @@ public class Module {
         }
         return null;
     }
+    
+    public AttributeTable getAttributes(ATerm namespace) {
+        return getTable(namespace);
+    }
 
     public void deleteAttribute(ATerm namespace, ATerm key) {
         AttributeTable table = getTable(namespace);
