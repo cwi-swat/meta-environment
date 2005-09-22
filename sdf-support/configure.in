@@ -38,11 +38,6 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 dnl }}}
-dnl {{{  toolbus Java library
-AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
-   [  --with-toolbus-java-adapter=DIR   ToolBus Java library is in DIR])
-AC_SUBST(TOOLBUS_JAVA_ADAPTER)
-dnl }}}
 dnl {{{  error-support
 
 dnl Require error-support package
@@ -96,15 +91,6 @@ LIBS=$NOSOCKLIBS
 
 dnl }}}
 
-AC_PATH_PROG(JAVA, java)
-if test "x${JAVA}" = "x"; then
-  AC_MSG_ERROR("java not found")
-fi
-
-dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
-AC_SUBST(EXTERNAL_JARS)
-
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -120,8 +106,6 @@ AC_CONFIG_FILES([Makefile
   utils/sdf-modules/src/Makefile
   utils/sdf-renaming/Makefile
   utils/sdf-renaming/src/Makefile
-  utils/import-graph/Makefile
-  utils/import-graph/sdf/Makefile
   test/Makefile
 ])
 AC_OUTPUT

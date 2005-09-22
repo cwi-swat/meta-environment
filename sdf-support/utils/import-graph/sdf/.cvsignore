@@ -1,9 +1,0 @@
-Makefile
-Makefile.in
-SdfImportGraph.class
-SdfImportGraphBridge.class
-SdfImportGraphTif.class
-SdfImportGraphTool.class
-classjava.stamp
-sdf-import-graph
-sdf-import-graph.tifs

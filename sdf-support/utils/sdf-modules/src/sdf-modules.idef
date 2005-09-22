@@ -1,3 +1,5 @@
+#ifndef __SDF_MODULES__
+#define __SDF_MODULES__
 
 tool sdf-modules is { command = "sdf-modules -TB_COLLECT_LOOP 1" }
 
@@ -118,3 +120,6 @@ in
   )
   * delta
 endlet
+
+#endif /*__SDF_MODULES__*/
+
