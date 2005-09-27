@@ -1,9 +1,5 @@
 $Id$
 
-Thu Sep 22 16:51:29 CEST 2005 <{kooiker,markvdb}@cwi.nl>
- * utils/import-graph:
-   - removed, no longer needed
-
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
