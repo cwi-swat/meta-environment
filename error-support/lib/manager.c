@@ -29,7 +29,7 @@ void ERR_cleanupErrorManager()
   store = NULL;
 }
 
-ERR_Summary ERR_getManagarSummary()
+ERR_Summary ERR_getManagerSummary()
 {
   assert(store != NULL);
   return store;

@@ -1,5 +1,8 @@
 $Id$
 
+Tue Sep 27 10:28:23 CEST 2005 <economop@cwi.nl>
+ * Changed ERR_getManagarSummary() -> ERR_getManagerSummary()
+	
 Mon Aug 22 14:51:06 CEST 2005 <jurgenv@cwi.nl>
  * lib/Makefile.am: removed version numbers from generated jar filenames.
  * Bumped to version 1.3
