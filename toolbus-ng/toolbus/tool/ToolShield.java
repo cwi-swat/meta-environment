@@ -70,14 +70,14 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	abstract public void sndRequestToTool(Integer operation,
-			ATermAppl call);
+			ATerm call);
 
 	/**
 	 * Send an event to our ToolInstance (and hence to the ToolBus)
 	 */
 
-	public ATerm sndEventToToolBus(ATerm trm) {
-		return toolInstance.addEventFromTool(trm);
+	public void sndEventToToolBus(ATerm trm) {
+		toolInstance.addEventFromTool(trm);
 	}
 	
 	public synchronized boolean isRunning(){
