@@ -32,7 +32,7 @@ public class Event extends Atom {
     ATerm tid = TBTerm.substitute(toolId.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
  
-    if (ti.getEventFromTool(result.value, getEnv())){
+    if (ti.getEventFromTool((ATermList) result.value, getEnv())){
       return true;
     } else
       return false;

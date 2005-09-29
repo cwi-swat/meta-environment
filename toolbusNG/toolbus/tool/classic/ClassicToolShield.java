@@ -59,13 +59,15 @@ class ToolInputHandler extends Thread {
 				ATerm t = toolShield.readTerm();
 				toolInstance.handleTermFromTool(t);
 			} catch(IOException e){
-				System.err.println("ToolInputHandler: " + e);
-				errorCount++;
-				if(errorCount > 5){
-					e.printStackTrace();
-					//throw new ToolBusException("no connection with tool");
-					int n = 2/0;
-				}	
+				if(running){
+					System.err.println("ToolInputHandler: " + e);
+					errorCount++;
+					if(errorCount > 5){
+						e.printStackTrace();
+						//throw new ToolBusException("no connection with tool");
+						int n = 2/0;
+					}	
+				}
 			}
 		}
 	}
@@ -90,8 +92,6 @@ public class ClassicToolShield extends ToolShield {
 	private InetAddress address;
 	private int toolid = -1;
 
-	private Map queueMap;
-
 	private ATerm termSndVoid;
 	private boolean connected;
 	
@@ -107,7 +107,7 @@ public class ClassicToolShield extends ToolShield {
 		this.factory = TBTerm.factory;
 		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
-		queueMap = new HashMap();
+
 		address = ToolBus.getLocalHost();
 		toolname = toolDef.getName();
 		toolid = getToolInstance().getToolCount();
@@ -137,7 +137,7 @@ public class ClassicToolShield extends ToolShield {
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 	
-	public void sndRequestToTool(Integer operation, ATermAppl call) {
+	public void sndRequestToTool(Integer operation, ATerm call) {
 		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
 		addRequestToTool(new Object[] {operation, call, null});
 	}
@@ -150,7 +150,7 @@ public class ClassicToolShield extends ToolShield {
 	protected void handleRequestToTool() {
 		Object request[] = getNextRequestForTool();
 		Integer operation = (Integer) request[0];
-		ATermAppl call = (ATermAppl) request[1];
+		ATerm call = (ATerm) request[1];
 		AFun fun = TBTerm.factory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
 		ATermAppl req = TBTerm.factory.makeAppl(fun, call);
 		try {
@@ -160,49 +160,12 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 	
-
-/*
-	public void postEvent(ATerm term) {
-		synchronized (getLockObject()) {
-			ATermAppl appl = (ATermAppl) term;
-			EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-			if (queue == null) {
-				queue = new EventQueue();
-				queueMap.put(appl.getName(), queue);
-			}
-			if (queue.ackWaiting()) {
-				queue.addEvent(appl);
-			}
-			else {
-				try {
-					sendTerm(factory.make("snd-event(<term>)", appl));
-				}
-				catch (IOException e) {
-					throw new RuntimeException("cannot post event: " + appl);
-				}
-				queue.setAckWaiting();
-			}
-		}
-	}
-
-	private void ackEvent(ATerm event) throws IOException {
-		ATermAppl appl = (ATermAppl) event;
-		EventQueue queue = (EventQueue) queueMap.get(appl.getName());
-		if (queue != null && queue.ackWaiting()) {
-			appl = queue.nextEvent();
-			if (appl != null) {
-				sendTerm(factory.make("snd-event(<term>)", appl));
-				return;
-			}
-		}
-	}
-	*/
-	
 	/* (non-Javadoc)
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
 	public void terminate(String msg) {
-		// TODO Auto-generated method stub
+		toolInputHandler.setRunning(false);
+		sndRequestToTool(ToolInstance.TERMINATE, TBTerm.factory.make("<str>", msg));
 	}
 	
 	public void setLockObject(Object obj) {
@@ -380,46 +343,11 @@ public class ClassicToolShield extends ToolShield {
 			System.err.println("ClassicToolShield.initRun trying to connect");
 			connect();
 			System.err.println("ClassicToolShield.initRun connected");
-			getToolInstance().TCPtransition(getToolInstance().a_snd_connect, null, true);
+			//getToolInstance().TCPtransition(getToolInstance().a_snd_connect, null, true);
+			getToolInstance().TCP_goConnected();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
 }
-
-/**
- * The class EventQueue stores a queue of events, and their
- * acknowledgement status.
- *
- */
-
-/*
-class EventQueue {
-	private boolean ack = false;
-	private List events = new Vector();
-
-	public boolean ackWaiting() {
-		return ack;
-	}
-
-	public void setAckWaiting() {
-		ack = true;
-	}
-
-	public ATermAppl nextEvent() {
-		if (events.size() == 0) {
-			ack = false;
-			return null;
-		}
-
-		ATermAppl event = (ATermAppl) events.get(0);
-		events.remove(0);
-		return event;
-	}
-
-	public void addEvent(ATermAppl event) {
-		events.add(event);
-	}
-}
-*/

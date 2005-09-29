@@ -28,14 +28,15 @@ public class ToolInstance {
   
   private LinkedList valuesFromTool;
   private LinkedList eventsFromTool;
-  private LinkedList pendingEvents;  // ???
+  private LinkedList pendingEvents;
   
   private ToolShield toolShield;     // The ToolShield that handles this tool
 
-  protected static final Integer EVAL = new Integer(1);
-  protected static final Integer DO = new Integer(2);
-  protected static final Integer TERMINATE = new Integer(3);
-  public static final String[] OperatorForTool = {"dummy", "rec-eval", "rec-do", "rec-terminate"};
+  public static final Integer EVAL = new Integer(1);
+  public static final Integer DO = new Integer(2);
+  public static final Integer ACK = new Integer(3);
+  public static final Integer TERMINATE = new Integer(4);
+  public static final String[] OperatorForTool = {"dummy", "rec-eval", "rec-do", "rec-ack-event", "rec-terminate"};
   
   public final int a_snd_connect = 0;
   public final int a_snd_disconnect = 1;
@@ -122,13 +123,54 @@ public class ToolInstance {
   }
   
   /**
-   * Send an evaluation request to the ToolShield when evaluating the SndEval atom.
+   * Handle any term that comes from the tool.
+   * @param t 
+   */
+  public synchronized void handleTermFromTool(ATerm t) {	
+		System.err.println("tool " + toolId + " handling term from tool: " + t);
+		
+		if(t.isEqual(termSndVoid)){
+			TCPtransition(a_snd_void, null, true);
+			return;
+		}
+		
+		List matches = t.match("snd-value(<term>)"); //TODO; more args
+		if (matches != null) {
+			addValueFromTool(matches.get(0)); 
+			return;
+		}
+		
+		List matches1 = t.match("snd-event(<term>)");
+		if (matches1 != null) {
+			ATerm t1 = (ATerm) matches1.get(0);
+			addEventFromTool(TBTerm.factory.makeList(t1));
+			return;
+		}
+		List matches2 = t.match("snd-event(<term>,<term>)"); //TODO: more than 2 args
+		if (matches2 != null) {
+			ATerm t1 = (ATerm) matches2.get(0);
+			ATerm t2 = (ATerm) matches2.get(1);
+			
+			addEventFromTool(TBTerm.factory.makeList(t1, TBTerm.factory.makeList(t2)));
+			return;
+		}
+		// connect
+		// disconnect
+		System.err.println("tool " + toolId + " not handled!");
+}
+  /*
+   * Implementation of Eval
+   * 
+   */
+  
+  /**
+   * ToolBus sends an evaluation request to the tool when evaluating the SndEval atom.
    * The answer will be returned by the ToolShield using addValueFromTool.
- * @return boolean
+   * @return boolean
    */
 
   synchronized public boolean sndEvalToTool(ATermAppl call) {
-  	if (TCPtransition(a_rec_eval, call, true)){
+  	if (TCP_goEvalDo()){
   		System.err.println("sndEvalToTool: true case");
   		toolShield.sndRequestToTool(EVAL, call);
   		return true;
@@ -141,7 +183,7 @@ public class ToolInstance {
   /**
    * addValueFromTool is called by ToolShield to add a value returned by the tool 
    * to valuesFromTool. It is eventually passed on to the ToolBus, when evaluation
-   * of the RecValue atom calls getValueFromTool (below)
+   * of the RecValue atom calls getValueFromTool.
    * @param res the tresult returned by the tool
    */
 
@@ -151,7 +193,7 @@ public class ToolInstance {
   }
   
   /**
-   * Retrieve a value obtained from the ToolShield to the ToolBus while evaluating
+   * ToolBus retrieves a value obtained from the tool while evaluating
    * the RecValue atom.
    * @param trm the term returned by the tool
    * @param env the local environment of the RecValue atom
@@ -166,7 +208,7 @@ public class ToolInstance {
   		ATerm result = (ATerm) valuesFromTool.getFirst();
   		boolean matches = TBTerm.match(trm, env, result, new Environment());
   		if (matches) {
-  			if (TCPtransition(a_snd_value, trm, true)){
+  			if (TCP_goConnected()){
   				valuesFromTool.removeFirst();
   				return true;
   			} else {
@@ -177,15 +219,19 @@ public class ToolInstance {
   		}
   	}
   }
+  
+  /*
+  * Implementation of Do
+  */
 
   /**
-   * Send a do request to the tool while evaluating the SndDo atom.
-   * The answer will be returned by the ToolShield using addValueFromTool.
+   * ToolBus sends a do request to the tool while evaluating the SndDo atom.
+   * The answer (SndVoid) will be returned by the ToolShield using addValueFromTool.
    * @return TODO
    */
 
   synchronized public boolean sndDoToTool(ATermAppl call) {
- 	if (TCPtransition(a_rec_do, call, true)){
+ 	if (TCP_goEvalDo()){
  		//System.err.println("sndDoToTool: true case");
  		toolShield.sndRequestToTool(DO, call);
  		return true;
@@ -195,26 +241,32 @@ public class ToolInstance {
  	}
   }
   
+  /*
+   * Implementation of Events
+   */
+  
   /**
-   * Pass an event obtained from the ToolShield to the ToolBus
+   * ToolBus receives an event while evaluating the RecEvent atom.
    * 
    * @see toolbus.tool.ToolInstance#getEventFromTool(ATerm, Environment)
    */
 
-  synchronized public boolean getEventFromTool(ATerm trm, Environment env) {
+  synchronized public boolean getEventFromTool(ATermList alist, Environment env) {
     //System.err.println("getEventFromTool: " + " " + trm);
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
-        Object event[] = (Object[]) eventsFromTool.get(i);
-        //ATerm eventId = (ATerm) event[0];
-        ATerm eventTerm = (ATerm) event[1];
-        boolean matches = TBTerm.match(trm, env, eventTerm, new Environment());
-        //System.err.println(matches + " " + eventId + eventTerm);
+        ATermList eventArgs = (ATermList) eventsFromTool.get(i);
+        boolean matches = TBTerm.match(alist, env, eventArgs, new Environment());
+        System.err.println(matches + " " + eventArgs);
         if (matches) {
-          //env.assignVar(id, eventId);
-          eventsFromTool.remove(i);
-          pendingEvents.addLast(eventTerm);
-          return true;
+          if(ackWaiting(eventArgs.getFirst())){
+          	return false;
+          } else {
+          	eventsFromTool.remove(i);
+          	pendingEvents.addLast(eventArgs);
+            System.err.println("pendingEvents.size = " + pendingEvents.size());
+          	return true;
+          }
         }
       } catch (ToolBusException e) {
         System.err.println("getEventFromTool: cannot happen :-)");
@@ -224,36 +276,54 @@ public class ToolInstance {
     return false;
   }
   
+  private boolean ackWaiting(ATerm key){
+    for (int i = 0; i < pendingEvents.size(); i++) {
+        ATermList eventArgs = (ATermList) pendingEvents.get(i);
+        ATerm keyEvent = eventArgs.getFirst();
+        if(key == keyEvent)
+        	return true;
+    }
+    return false;
+  }
+  
+  private boolean ackPossible(ATerm key){
+    for (int i = 0; i < pendingEvents.size(); i++) {
+        ATermList eventArgs = (ATermList) pendingEvents.get(i);
+        ATerm keyEvent = eventArgs.getFirst();
+        System.err.println("eventArgs " + eventArgs);
+        if(key == keyEvent){
+        	pendingEvents.remove(i);
+        	return true;
+        }
+    }
+    return false;
+  }
+  
   /** 
-   * addEventFromTool adds an event generated by the tool to eventsFromTool
+   * addEventFromTool adds an event generated by the tool to the the eventsFromTool list
    * @param obj generated by tool
    */
 
-  synchronized public ATerm addEventFromTool(Object obj) {
-    Object event[] = new Object[] { TBTerm.newTransactionId(), obj };
-    eventsFromTool.addLast(event);
-    System.err.println("ToolInstance.addEvenFromTool: id = " + event[0] + " obj= = " + event[1]);
-    return (ATerm) event[0];
+  synchronized public void addEventFromTool(Object obj) {
+    eventsFromTool.addLast(obj);
+    System.err.println("ToolInstance.addEvenFromTool: obj = " + obj);
   }
  
   /**
-   * Send an acknowledgement to a previous event
+   * ToolBus sends an acknowledgement to a previous event while executing the AckEvent atom.
    */
 
-  synchronized public void sndAckToTool(ATerm eventTerm) throws ToolBusException {
-    //System.err.println("sndAckToTool:" + eventTerm);
-    int eventindex = pendingEvents.indexOf(eventTerm);
-    if (eventindex < 0 ) {
-      throw new ToolBusException("cannot acknowledge event: " + eventTerm);
+  synchronized public boolean sndAckToTool(ATerm eventTerm) throws ToolBusException {
+    System.err.println("sndAckToTool:" + eventTerm);
+    if (!ackPossible(eventTerm)) {
+      return false;
     }
-    AFun afun = TBTerm.factory.makeAFun("ackEvent", 1, false);
-    ATermList args = TBTerm.factory.makeList(eventTerm);
-    ATermAppl call = TBTerm.factory.makeAppl(afun, args);
-    toolShield.sndRequestToTool(DO, call);
+    toolShield.sndRequestToTool(ACK, eventTerm);
+    return true;
   }
 
   /**
-   * Terminate the execution of this tool.
+   * ToolBus terminates the execution of this tool while executing the Terminate atom.
    * @see toolbus.tool.ToolInstance#terminate(String)
    */
   public void terminate(String msg){
@@ -261,28 +331,8 @@ public class ToolInstance {
   	toolShield.terminate(msg);
   }
   
-  public synchronized void handleTermFromTool(ATerm t) {	
-  		System.err.println("tool " + toolId + " handling term from tool: " + t);
-  		
-  		if(t.isEqual(termSndVoid)){
-  			TCPtransition(a_snd_void, null, true);
-  			return;
-  		}
-  		
-  		List matches = t.match("snd-value(<term>)"); //TODO; more args
-  		if (matches != null) {
-  			addValueFromTool(matches.get(0));  
-  		}
-  		
-  		List matches1 = t.match("snd-event(<term>,<term>)"); //TODO: more args
-  		if (matches1 != null) {
-  			addEventFromTool(matches1.get(1));
-  		}
-  		System.err.println("tool " + toolId + " not handled!");
-  }
-  
   /**
-   * Transition function for the Tool Control Protocol, the protocol that governs 
+   * Transition functions for the Tool Control Protocol, the protocol that governs 
    * the ToolBus/tool communications (Not to be confused with the TCP/IP protocol!)
    * 
    * Note that the protocol is defined from the perspective of the *tool*, i.e., 
@@ -299,84 +349,33 @@ public class ToolInstance {
    * system's kernel when *many* do's are being sent to the same tool.
    */
   
+  
   private int phase = PHASE1;
   
   private static final int PHASE1 = 1; // unconnected
   private static final int PHASE2 = 2; // connected, start state
   private static final int PHASE3 = 3; // snd-eval received;
   
-  public boolean TCPtransition(int ri, ATerm term, boolean update) {
-  	
-  	//String requestName = ((ATermAppl) request).getName();
-  	//int ri = ((Integer) toolRequestIndex.get(requestName)).intValue();
-  	//System.err.println("TCPtransition: phase = " + phase + "; ri = " + ri);
-  	
-  	switch(phase){
-  	case PHASE1:
-  		if(ri == a_snd_connect) {
-  			phase = PHASE2;
-  			return true;	
-  		} else {
-  			return false;
-  		}
-  		
-  	case PHASE2:
-  		switch(ri){
-  		case a_rec_do:
-  		case a_rec_eval:
-  			phase = PHASE3;
-  			return true;
-  			
-  		case a_rec_terminate:
-  		case a_snd_continue:
-  			phase = PHASE2;
-  			return true;
-  			
-  		case a_snd_event:
-  			// TODO
-  			phase = PHASE2;
-  			return true;
-  		case a_rec_ack_event:
-  			// TODO
-  		case a_snd_disconnect:
-  			phase = PHASE1;
-  			return true;
-  		case a_rec_cancel:
-  		case a_snd_value:
-  		case a_snd_connect:
-  			return false;
-  		default:
-  			// ERROR
-  		}
-  		
-  	case PHASE3:
-  		switch(ri){
-  		case a_rec_cancel:
-  		case a_snd_void:
-  		case a_snd_value:
-  			phase = PHASE2;
-  			return true;
-  		case a_snd_continue:
-  		case a_rec_terminate:
-  			phase = PHASE3;
-  			return true;
-  		case a_snd_event:
-  			// TODO
-  		case a_rec_ack_event:
-  			// TODO
-  		case a_rec_eval:
-  		case a_rec_do:
-  		case a_snd_connect:
-  		case a_snd_disconnect:
-  			return false;
-  		default:
-  			// ERROR	
-  		}
-  	default:
-  		// ERROR
-  		
-  	}
-  	return false;
+  public boolean unConnected() {
+  	return phase == PHASE1;
   }
   
+  public boolean TCP_goConnected(){
+  	if(phase == 1 || phase == 3){
+  		phase = PHASE2;
+  		return true;
+  	} else {
+  		return false;
+  	}
+  }
+  
+  public boolean TCP_goEvalDo(){
+  	if(phase == PHASE2){
+  		phase = PHASE3;
+  		return true;
+  	} else {
+  		return false;
+  	}
+  }
 }
+
