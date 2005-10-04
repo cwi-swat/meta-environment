@@ -17,7 +17,7 @@ exports
     ProcessName "(" {TBTerm ","}* ")"		 -> Invocation {cons("apply")}
 
     Atom 					                 -> ProcessExpr
-%%    Atom TimeExpr 				-> ProcessExpr
+    Atom TimeExpr 							 -> ProcessExpr {cons("TimeExpr")}
    "create" "(" Invocation  "," GenVar ")" 	 -> ProcessExpr {cons("Create")}
     Invocation					             -> ProcessCall  {cons("ProcessCall")}
     ProcessCall					             -> ProcessExpr
@@ -34,8 +34,8 @@ exports
 						                     -> ProcessExpr {cons("IfElse")}
 
   context-free priorities
-    ProcessExpr "*" ProcessExpr -> ProcessExpr {left, cons("Iteration")} >
-    ProcessExpr "." ProcessExpr -> ProcessExpr{right, cons("Sequence")}  >
+    ProcessExpr "*" ProcessExpr -> ProcessExpr  {left, cons("Iteration")} >
+    ProcessExpr "." ProcessExpr -> ProcessExpr  {right, cons("Sequence")}  >
     ProcessExpr "+" ProcessExpr -> ProcessExpr  {left, cons("Alternative")}>
-    ProcessExpr "||" ProcessExpr -> ProcessExpr  {left, cons("Merge")} >
+    ProcessExpr "||" ProcessExpr -> ProcessExpr {left, cons("Merge")} >
     ProcessExpr ">>" ProcessExpr -> ProcessExpr {right, cons("Disrupt")}

@@ -21,7 +21,9 @@ public class RecVal extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new RecVal(this.toolId.value, this.result.value);
+    Atom a = new RecVal(this.toolId.value, this.result.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

@@ -36,32 +36,8 @@ public class ToolInstance {
   public static final Integer DO = new Integer(2);
   public static final Integer ACK = new Integer(3);
   public static final Integer TERMINATE = new Integer(4);
+  
   public static final String[] OperatorForTool = {"dummy", "rec-eval", "rec-do", "rec-ack-event", "rec-terminate"};
-  
-  public final int a_snd_connect = 0;
-  public final int a_snd_disconnect = 1;
-  public final int a_rec_terminate = 2;
-  
-  public final int a_rec_eval = 3;
-  public final int a_snd_value = 4;
-  public final int a_rec_cancel = 5;
-  
-  public final int a_rec_do = 6;
-  public final int a_snd_void = 7;
-  
-  public final int a_snd_continue = 8;
-  public final int a_snd_event = 9;
-  public final int a_rec_ack_event = 10;
-  
-  String [] toolRequestAtoms = {
-  		"connect", "disconnect", "terminate",
-		"eval", "value", "cancel",
-		"do", "void",
-		"event", "ack_event",	
-  };
-  
-  Hashtable reverseRole = new Hashtable();
-  Hashtable toolRequestIndex = new Hashtable();
   
   ATerm termSndVoid;
 
@@ -76,26 +52,6 @@ public class ToolInstance {
     valuesFromTool = new LinkedList();
     eventsFromTool = new LinkedList();
     pendingEvents = new LinkedList();
-    
-	for(int i = 0; i < toolRequestAtoms.length; i++){
-		String s = toolRequestAtoms[i];
-		reverseRole.put( "snd-" + s, "rec-" + s);
-		reverseRole.put( "rec-" + s, "snd-" + s);
-	}
-	toolRequestIndex.put("snd-connect", new Integer(a_snd_connect));
-	toolRequestIndex.put("snd-disconnect", new Integer(a_snd_disconnect));
-	toolRequestIndex.put("rec-terminate", new Integer(a_rec_terminate));
-	
-	toolRequestIndex.put("rec-eval", new Integer(a_rec_eval));
-	toolRequestIndex.put("snd-value", new Integer(a_snd_value));
-	toolRequestIndex.put("rec-cancel", new Integer(a_rec_cancel));
-	
-	toolRequestIndex.put("rec-do", new Integer(a_rec_do));
-	toolRequestIndex.put("snd-void", new Integer(a_snd_void));
-
-	toolRequestIndex.put("snd-continue", new Integer(a_snd_continue));
-	toolRequestIndex.put("snd-event", new Integer(a_snd_event));
-	toolRequestIndex.put("rec-ack-event", new Integer(a_rec_ack_event));
 	
 	termSndVoid = TBTerm.factory.parse("snd-void");
 	
@@ -130,7 +86,7 @@ public class ToolInstance {
 		System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t.isEqual(termSndVoid)){
-			TCPtransition(a_snd_void, null, true);
+			TCP_goConnected();
 			return;
 		}
 		

@@ -27,7 +27,9 @@ public class Terminate extends Atom {
 	 * @see toolbus.process.ProcessExpression#copy()
 	 */
 	public ProcessExpression copy() {
-		 return new Terminate(toolId.value, request.value);
+		 Atom a = new Terminate(toolId.value, request.value);
+		 a.copyAtomAttributes(this);
+		 return a;
 	}
 	 public boolean execute() throws ToolBusException {
 	    if (!isEnabled())

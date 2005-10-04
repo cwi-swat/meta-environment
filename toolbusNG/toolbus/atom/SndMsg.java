@@ -18,7 +18,9 @@ public class SndMsg extends MsgAtom {
   }
   
   public ProcessExpression copy(){
-    return new SndMsg(getMsg(), getId());
+    Atom a = new SndMsg(getMsg(), getId());
+    a.copyAtomAttributes(this);
+    return a;
   }
 
 }

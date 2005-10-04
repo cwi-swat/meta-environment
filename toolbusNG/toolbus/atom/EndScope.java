@@ -18,7 +18,9 @@ public class EndScope extends Atom {
 	}
 
 	public ProcessExpression copy() {
-		return new EndScope((ATermList) refformals.value);
+		Atom a = new EndScope((ATermList) refformals.value);
+		 a.copyAtomAttributes(this);
+		 return a;
 	}
 
 	public boolean execute() throws ToolBusException {

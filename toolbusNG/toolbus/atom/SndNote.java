@@ -30,7 +30,9 @@ public class SndNote extends Atom {
 	}
 
 	public ProcessExpression copy() {
-		return new SndNote(note.value);
+		Atom a = new SndNote(note.value);
+		a.copyAtomAttributes(this);
+		return a;
 	}
 	
 	 public boolean execute() throws ToolBusException {

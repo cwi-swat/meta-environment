@@ -21,7 +21,9 @@ public class AckEvent extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new AckEvent(this.toolId.value, this.event.value);
+    Atom a = new AckEvent(this.toolId.value, this.event.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

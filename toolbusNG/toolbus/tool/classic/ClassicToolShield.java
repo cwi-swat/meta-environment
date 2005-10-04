@@ -138,7 +138,7 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void sndRequestToTool(Integer operation, ATerm call) {
-		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
+		//System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
 		addRequestToTool(new Object[] {operation, call, null});
 	}
 	
@@ -336,7 +336,7 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void initRun() {
-		System.err.println("ClassicToolShield.initRun");
+		//System.err.println("ClassicToolShield.initRun");
 		setRunning(true);
 		
 		try {

@@ -29,6 +29,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   private Environment env;                 // the environment of this atom
   private Vector tests;                    // optional tests that guard this atom
   private Ref[] atomArgs = new Ref[0];
+  private int delay = 0;
+  private int timeout = 0;
+  private boolean timeExpr = false;
+  private int startTime;
 
   public Atom() {
     super();
@@ -64,6 +68,12 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public ATerm getAtomArgValue(int i){
     return atomArgs[i].value;
   }
+  
+  public void copyAtomAttributes(Atom a){
+  	delay = a.delay;
+  	timeout = a.timeout;
+  	timeExpr = a.timeExpr;
+  }
 
   public Environment getEnv() {
     return env;
@@ -85,6 +95,33 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	}
   }
 
+  public void addTimeExpr(ATerm t) {
+  	
+  	try {
+	List matches = t.match("delay(<int>)");
+	
+	if (matches != null) {
+		Integer n = (Integer) matches.get(0);
+		delay = n.intValue();
+		timeExpr = true;
+		System.err.println("Added delay " + delay);
+		return;
+	}
+	
+	matches = t.match("timeout(<int>)");
+	
+	if (matches != null) {
+		Integer n = (Integer) matches.get(0);
+		timeout = n.intValue();
+		timeExpr = true;
+		System.err.println("Added timeout " + timeout);
+		return;
+	}
+  	} catch (Exception e) {
+  	   System.out.println("addTimeExpr, cannot handle: " + e);
+	}
+  }
+  
   public ToolBus getToolBus() {
     return processInstance.getToolBus();
   }
@@ -147,6 +184,20 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   // Implementation of the StateElement interface
   
   public boolean isEnabled() throws ToolBusException {
+   	System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
+	if(timeExpr){
+  		System.err.println("Has a TimeExpr; delay = " + delay + "; timeout = " + timeout);
+  		int currentTime = (int) getToolBus().getRunTime();
+  	    System.err.println("startTime = " + startTime + "; currentTime = " + currentTime);
+  		if(delay != 0 && currentTime < startTime + delay){
+  			System.err.println("currentTime < startTime + delay");
+  			return false;
+  		}
+  		if(timeout != 0 && currentTime > startTime + timeout){
+  			System.err.println("currentTime > startTime + timeout");
+  			return false;
+  		}
+  	}
     if (tests != null){
     	//System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
     	for(int i = 0; i < tests.size(); i++){
@@ -171,7 +222,9 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 
   public State getNextState(){
   	//System.err.println(this + "getNextState ==> " + getFollow());
-  	return getFollow();
+  	State s = getFollow();
+  	s.activate();
+  	return s;
   }
   
   public State getNextState(StateElement b){
@@ -180,6 +233,15 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	}
   	System.err.println("Atom.getNextState2: wrong arg: " + b);
   	return null;
+  }
+  
+  public void activate(){
+  	System.err.println("activate");
+  	if(timeExpr){
+  		startTime = (int) getToolBus().getRunTime();
+  		int next = (delay != 0) ? startTime + delay : startTime;
+  		getToolBus().setNextTime(next);
+  	}
   }
 
   abstract public boolean execute() throws ToolBusException;

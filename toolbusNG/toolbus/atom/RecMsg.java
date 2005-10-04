@@ -19,7 +19,9 @@ public class RecMsg extends MsgAtom {
   }
   
   public ProcessExpression copy(){
-    return new RecMsg(getMsg(), getId());
+    atom a = new RecMsg(getMsg(), getId());
+    a.copyAtomAttributes(this);
+    return a;
   }
  
 }

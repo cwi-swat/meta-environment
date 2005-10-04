@@ -405,6 +405,13 @@ public class Functions {
     
     // quote
     // current-time
+    define(new FunctionDescriptor("current-time", TBTerm.IntType) {
+        public ATerm apply(ATerm args[], ProcessInstance pi) {
+        	int n = (int) pi.getRunTime();
+        	return factory.makeInt(n);
+        }
+      });
+    
     // sec
     // msec
 

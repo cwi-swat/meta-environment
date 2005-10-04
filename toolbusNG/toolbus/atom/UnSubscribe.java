@@ -22,7 +22,9 @@ public class UnSubscribe extends Atom {
 	}
 	
 	public ProcessExpression copy() {
-		return new UnSubscribe(msgpat.value);
+		Atom a = new UnSubscribe(msgpat.value);
+		a.copyAtomAttributes(this);
+		return a;
 	}
 	
 	public boolean execute() throws ToolBusException {

@@ -53,6 +53,7 @@ public class ProcessInstance {
     //System.err.println("ProcessInstance: " + env);
     call.compile(this, env, empty);
     currentState = call.getStartState();
+    currentState.activate();
  
     Vector procs = TB.getProcesses();
     elements = call.getAtoms();
@@ -86,6 +87,10 @@ public class ProcessInstance {
   
   public ToolBus getToolBus() {
     return toolbus;
+  }
+  
+  public long getRunTime() {
+  	return toolbus.getRunTime();
   }
 
   public ATerm getProcessId() {

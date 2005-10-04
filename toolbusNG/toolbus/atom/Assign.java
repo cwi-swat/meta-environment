@@ -21,7 +21,9 @@ public class Assign extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Assign(var.value,  exp.value);
+    Atom a = new Assign(var.value,  exp.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {

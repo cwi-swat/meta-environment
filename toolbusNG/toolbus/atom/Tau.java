@@ -14,7 +14,9 @@ public class Tau extends Atom {
   }
 
   public ProcessExpression copy() {
-    return new Tau();
+    Atom a = new Tau();
+    a.copyAtomAttributes(this);
+    return a;
   }
   
   public boolean execute() throws ToolBusException{

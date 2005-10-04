@@ -55,6 +55,9 @@ public class ToolBus {
   private static int WellKnownSocketPort = 9020; //8999;
   private static ServerSocket WellKnownSocket;
   private static InetAddress localHost;
+  private long startTime;
+  private long currentTime;
+  private long nextTime;
 
   /**
    * Constructor with explicit PrintWriter
@@ -86,6 +89,7 @@ public class ToolBus {
     }
   
     System.err.println("WellKnownSocket created: " + WellKnownSocket);
+    nextTime = startTime = System.currentTimeMillis();
   }
 
   /**
@@ -250,6 +254,20 @@ public class ToolBus {
   public static boolean nextBoolean() {
     return rand.nextBoolean();
   }
+  
+  public long getRunTime(){
+  	return System.currentTimeMillis() - startTime;
+  }
+  
+  public void setNextTime(long next){
+  	System.err.println("setNextTime: " + next);
+  	if(nextTime <= currentTime){
+  		nextTime = next;
+  	} else if(next < nextTime){
+  		nextTime = next;
+  	}
+ 	System.err.println("setNextTime: set to " + next);
+  }
 
   /**
    * Parse a Tscript from file and add definitions to this ToolBus.
@@ -412,6 +430,7 @@ public class ToolBus {
     try {
       while (work) {
       	work = false;
+      	currentTime = getRunTime();
         for (int i = 0; i < processes.size(); i++) {
           //System.out.print("$");
           ProcessInstance P = (ProcessInstance) processes.elementAt(i);
@@ -424,12 +443,14 @@ public class ToolBus {
 
         if(!work){
         	 try{
-        	      Thread.sleep(200);
+        	 	  int delay = (int) (nextTime - currentTime);
+        	 	  System.err.println("delay = " + delay);
+        	      Thread.sleep(delay > 0 ? delay : 200);
         	      }
         	      catch(InterruptedException e){
         	      System.out.println("Sleep Interrupted");
         	      }
-        	if(tools.size() > 0 )
+        	if(tools.size() > 0 || nextTime > currentTime)
         		work = true;
         }
       }
