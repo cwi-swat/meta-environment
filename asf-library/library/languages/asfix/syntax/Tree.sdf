@@ -11,8 +11,10 @@ sorts Tree Args Production
 context-free syntax
 
 appl(prod:Production,args:Args) -> Tree {cons("appl")}
-character:NatCon                -> Tree {cons("char")}
+cycle(prod:Production)          -> Tree {cons("cycle")}
 amb(args:Args)                  -> Tree {cons("amb")}
+character:NatCon                -> Tree {cons("char")}
+
 "[" {Tree ","}* "]"             -> Args {cons("list")}
 
 "prod" "(" lhs:Symbols comma1:"," rhs:Symbol comma2:"," attributes:Attributes ")" -> Production {cons("default")}
