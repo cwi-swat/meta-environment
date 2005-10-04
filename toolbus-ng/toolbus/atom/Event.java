@@ -23,7 +23,9 @@ public class Event extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Event(this.toolId.value, (ATermList) this.result.value);
+    Atom a = new Event(this.toolId.value, (ATermList) this.result.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

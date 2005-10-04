@@ -135,23 +135,12 @@ public class State {
      return null;
     }
   
-  /*
-  public boolean nextState(){
-  	return ((StateElement) elements.elementAt(lastElement)).nextState();
-  }
-  
-  public boolean nextState(StateElement a){
-  	for (Iterator it = elements.iterator(); it.hasNext();) {
-  		StateElement b = (StateElement) it.next();
-  		//System.err.println("State.nextState2: trying " + b);
-  		if(b.equals(a) || b.contains(a)){
-  			return b.nextState(a);
-  		}
+  public void activate(){
+  	for (Iterator it = elements.iterator(); it.hasNext();){
+  		StateElement e = (StateElement) it.next();
+  		e.activate();
   	}
-  	System.err.println("State.nextState2: no element " + a);
-  	return false;
   }
-  */
   
   /**
    * Execute one step for an element in this state.

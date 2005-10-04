@@ -22,7 +22,9 @@ public class Do extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Do(toolId.value, request.value);
+    Atom a = new Do(toolId.value, request.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

@@ -8,6 +8,7 @@ import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.atom.AckEvent;
 import toolbus.atom.Assign;
+import toolbus.atom.Atom;
 import toolbus.atom.Create;
 import toolbus.atom.Delta;
 import toolbus.atom.Do;
@@ -411,6 +412,18 @@ class TScriptNodeBuilders {
       public Object build(Object args[]) {
         return new ShutDown((ATerm) args[0]);
       }
+    });
+      
+      /*
+       * Time related items
+       */
+    
+    define(new NodeBuilder("TimeExpr") {
+        public Object build(Object args[]) {
+        	Atom a = (Atom) args[0];
+        	a.addTimeExpr((ATerm) args[1]);
+          return a;
+        }
     });
   }
 

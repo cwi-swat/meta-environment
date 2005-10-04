@@ -20,7 +20,9 @@ public class Eval extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Eval(toolId.value, request.value);
+    Atom a = new Eval(toolId.value, request.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

@@ -30,7 +30,9 @@ public class Execute extends Atom {
 		setAtomArgs(this.tool, this.rvar);
 	}
 	public ProcessExpression copy() {
-		return new Execute(tool.value, rvar.value);
+		Atom a = new Execute(tool.value, rvar.value);
+		a.copyAtomAttributes(this);
+		return a;
 	}
 	
 	public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {

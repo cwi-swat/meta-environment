@@ -13,4 +13,5 @@ public interface StateElement {
   public boolean execute() throws ToolBusException;
   public State getNextState();
   public State getNextState(StateElement se);
+  public void activate();
 }

@@ -18,7 +18,9 @@ public class ShutDown extends Atom {
   }
 
   public ProcessExpression copy() {
-    return new ShutDown(arg.value);
+    Atom a = new ShutDown(arg.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public boolean execute() throws ToolBusException {

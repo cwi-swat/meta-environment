@@ -27,7 +27,9 @@ public class Create extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Create(pcall.value, rvar.value);
+    Atom a = new Create(pcall.value, rvar.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
 
   public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {

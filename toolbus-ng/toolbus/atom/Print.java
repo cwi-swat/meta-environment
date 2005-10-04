@@ -18,7 +18,9 @@ public class Print extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Print(arg.value);
+    Atom a = new Print(arg.value);
+    a.copyAtomAttributes(this);
+    return a;
   }
   
   private String sprintf(ATermList args){

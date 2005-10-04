@@ -14,7 +14,9 @@ public class Delta extends Atom {
   }
   
   public ProcessExpression copy(){
-    return new Delta();
+    Atom a = new Delta();
+    a.copyAtomAttributes(this);
+    return a;
   }
   
   public State getFirst() {

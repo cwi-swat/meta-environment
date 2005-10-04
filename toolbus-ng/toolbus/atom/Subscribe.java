@@ -23,7 +23,9 @@ public class Subscribe extends Atom {
 	}
 	
 	public ProcessExpression copy() {
-		return new Subscribe(msgpat.value);
+		Atom a = new Subscribe(msgpat.value);
+		a.copyAtomAttributes(this);
+		return a;
 	}
 	
 	public boolean execute() throws ToolBusException {

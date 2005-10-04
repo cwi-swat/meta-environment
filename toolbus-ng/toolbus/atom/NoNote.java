@@ -26,7 +26,9 @@ public class NoNote extends Atom {
 	}
 
 	public ProcessExpression copy() {
-		return new NoNote(msgpat.value);
+		Atom a = new NoNote(msgpat.value);
+		a.copyAtomAttributes(this);
+		return a;
 	}
 	
 	 public boolean execute() throws ToolBusException {

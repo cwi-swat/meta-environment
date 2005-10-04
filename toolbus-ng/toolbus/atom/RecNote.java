@@ -23,7 +23,9 @@ public class RecNote extends Atom {
 	}
 	
 	public ProcessExpression copy() {
-		return new RecNote(msgpat.value);
+		Atom a = new RecNote(msgpat.value);
+		a.copyAtomAttributes(this);
+	    return a;
 	}
 	
 	public boolean execute() throws ToolBusException {
