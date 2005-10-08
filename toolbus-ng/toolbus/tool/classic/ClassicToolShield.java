@@ -8,8 +8,6 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
 import toolbus.TBTerm;
 import toolbus.ToolBus;
@@ -80,7 +78,7 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private Socket connection;
 	private InputStream inputStream;
 	private OutputStream outputStream;
@@ -117,7 +115,6 @@ public class ClassicToolShield extends ToolShield {
 	void executeTool(){
 		String cmd = toolDef.getCommand() + 
 					" -TB_HOST "      + ToolBus.getLocalHost().getHostName() +
-					//" -TB_HOST "      + "aarde" +
 					" -TB_TOOL_NAME " + toolDef.getName() +
 					" -TB_TOOL_ID "   + getToolInstance().getToolCount() +
 					" -TB_PORT "      + ToolBus.getWellKnownSocketPort()
@@ -343,7 +340,6 @@ public class ClassicToolShield extends ToolShield {
 			System.err.println("ClassicToolShield.initRun trying to connect");
 			connect();
 			System.err.println("ClassicToolShield.initRun connected");
-			//getToolInstance().TCPtransition(getToolInstance().a_snd_connect, null, true);
 			getToolInstance().TCP_goConnected();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block

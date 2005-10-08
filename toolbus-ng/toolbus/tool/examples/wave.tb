@@ -29,7 +29,7 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
   in
      D := Dstart .
      E := Estart .
-     ( printf("P(%d)\n", I) .
+     ( 
        (  rec-msg(exc(L, I, AL?))        %% receive amplitude of left neighbour
        || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
        || snd-msg(exc(I, L, E))         %% send own amplitude to left neighbour

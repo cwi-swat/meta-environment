@@ -184,17 +184,17 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   // Implementation of the StateElement interface
   
   public boolean isEnabled() throws ToolBusException {
-   	System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
+   	//System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
 	if(timeExpr){
-  		System.err.println("Has a TimeExpr; delay = " + delay + "; timeout = " + timeout);
+  		//System.err.println("Has a TimeExpr; delay = " + delay + "; timeout = " + timeout);
   		int currentTime = (int) getToolBus().getRunTime();
-  	    System.err.println("startTime = " + startTime + "; currentTime = " + currentTime);
+  	    //System.err.println("startTime = " + startTime + "; currentTime = " + currentTime);
   		if(delay != 0 && currentTime < startTime + delay){
-  			System.err.println("currentTime < startTime + delay");
+  			//System.err.println("currentTime < startTime + delay");
   			return false;
   		}
   		if(timeout != 0 && currentTime > startTime + timeout){
-  			System.err.println("currentTime > startTime + timeout");
+  			//System.err.println("currentTime > startTime + timeout");
   			return false;
   		}
   	}
@@ -236,7 +236,6 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
   
   public void activate(){
-  	System.err.println("activate");
   	if(timeExpr){
   		startTime = (int) getToolBus().getRunTime();
   		int next = (delay != 0) ? startTime + delay : startTime;

@@ -1,0 +1,142 @@
+%% The overall steps performed during an auction are
+%% described by the process \script{Auction}.
+
+process Auction is      
+  let Mid : master, Bid : bidder
+  in
+      execute(master, Mid?) .       %% execute the master tool
+      ( ConnectBidder(Mid, Bid?)    %% repeat: add new bidder between sales
+      +	                            %%         or
+        OneSale(Mid)                %%         perform one sale
+      ) *                           
+      rec-event(Mid, quit) .        %% until auction master quits
+      shutdown("Auction is closed") %% close the auction
+  endlet
+
+tool master is { host = "aarde"
+				 kind = "classic"
+				 command = "/home/paulk/software/installed/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/auction/master.tcl" 
+				 }
+
+%% The auxiliary process \script{ConnectBidder} handles
+%% the connection of a new bidder to the auction. It takes the following steps:
+%% \begin{itemize}
+%% \item Receive a connection request from some bidder. This may occur
+%% when someone executes a bidder tool outside the \TB\ (may be even on another computer).
+%% As part of its initialization, the bidder tool will attempt to make a connection
+%% with some \TB\ (the particular \TB\ is given as a parameter when executing the bidder tool).
+%% \item Create an instance of the process \script{Bidder} that defines the
+%% behaviour of this particular bidder.
+%% \item Ask the bidder for its name and send that to the auction master.
+%% \end{itemize}
+
+process ConnectBidder(Mid : master, Bid : bidder?) is
+  let Pid : int, Name : str
+  in
+     rec-connect(Bid?) .            %% receive connection request from new bidder
+     create(Bidder(Bid), Pid?) .    %% create a new Bidder process
+     snd-eval(Bid, get-name) .      %% ask bidder for its name, and send it
+     rec-value(Bid, name(Name?)) .        %% to the master tool
+     snd-do(Mid, new-bidder(Bid, Name))
+  endlet
+
+%% The auxiliary process \script{OneSale} handles all steps needed
+%% for the sale of one item:
+%% \begin{itemize}
+%% \item Receive an event from the master tool announcing a new item for sale.
+%% \item Broadcast this event to all connected bidders and perform one of the following steps
+%% as long as the item is not sold:
+%% \begin{itemize}
+%% \item receive a new bid;
+%% \item connect a new bidder;
+%% \item ask for a final bid if no bids were received during the last 10 seconds;
+%% \item declare the item sold if no new bids arrive within 10 seconds after asking for a final bid.
+%% \end{itemize}
+%% \end{itemize}
+%% The process definition is:
+
+process OneSale(Mid : master) is
+  let Descr : str,                  %% Description of current item for sale
+      InAmount : int,               %% Initial amount for item
+      Amount : int,                 %% Current amount    
+      HighestBid : int,             %% Highest bid so far
+      Final : bool,                 %% Did we already issue a final call for bids?
+      Sold : bool,                  %% Is the item sold?
+      Bid : bidder                  %% New bidder tool connected during sale
+  in
+      rec-event(Mid, new-item(Descr?, InAmount?)) .
+      HighestBid := InAmount .
+      snd-note(new-item(Descr, InAmount)) .
+      Final := false . Sold := false .
+      ( if not(Sold) then
+           rec-msg(bid(Bid?, Amount?)) .
+           snd-do(Mid, new-bid(Bid, Amount)) .
+           if less-equal(Amount, HighestBid) then
+              snd-msg(Bid, rejected)
+           else 
+              HighestBid := Amount .
+              snd-msg(Bid, accepted) .
+              snd-note(update-bid(Amount)) .
+              snd-do(Mid, update-highest-bid(Bid, Amount)) .
+              Final := false
+           fi
+        fi
+      +
+        if not(or(Final, Sold)) then
+           snd-note(any-higher-bid) delay(sec(10)) .
+	   snd-do(Mid, any-higher-bid(10)) .
+           Final := true
+        fi
+      +
+        if and(Final, not(Sold)) then
+           snd-note(sold(HighestBid)) delay(sec(10)) .
+           Sold := true
+        fi
+      +
+        ConnectBidder(Mid, Bid?) .  %% add new bidder during a sale
+        snd-msg(Bid, new-item(Descr, HighestBid)) .
+        Final := false
+      ) *
+      if Sold then snd-ack-event(Mid, new-item(Descr, InAmount)) fi
+  endlet
+
+%% The \script{Bidder} process defines the behaviour of one bidder.
+       
+process Bidder(Bid : bidder) is
+  let Descr : str,                  %% Description of current item for sale  
+      Amount : int,                 %% Current amount    
+      Acceptance : term             %% Acceptance/rejection of our last bid
+  in
+     subscribe(new-item(<str>, <int>)) . subscribe(update-bid(<int>)) .
+     subscribe(sold(<int>)) . subscribe(any-higher-bid) .
+     ( ( rec-msg(Bid, new-item(Descr?, Amount?))
+       +
+         rec-note(new-item(Descr?, Amount?))
+       +
+         rec-disconnect(Bid) . delta
+       ) .
+       snd-do(Bid, new-item(Descr, Amount)) .
+       ( rec-event(Bid, bid(Amount?)) .
+         snd-msg(bid(Bid, Amount)) . rec-msg(Bid, Acceptance?) .
+         snd-do(Bid, accept(Acceptance)) . snd-ack-event(Bid, bid(Amount))
+       + 
+         rec-note(update-bid(Amount?)) . snd-do(Bid, update-bid(Amount))
+       + 
+         rec-note(any-higher-bid) . snd-do(Bid, any-higher-bid)
+       + 
+         rec-disconnect(Bid) . delta
+       ) *
+       rec-note(sold(Amount?)) . snd-do(Bid, sold(Amount))
+     )
+     * delta
+  endlet
+
+tool bidder is
+  { host = "aarde"
+    kind = "classic"
+    command = "/home/paulk/software/installed/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/bidder.tcl -script-args Name"
+  }
+
+%% The complete auction is, finally, defined by the \TB\ configuration:
+
+toolbus(Auction)
