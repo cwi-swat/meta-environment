@@ -169,6 +169,11 @@ public class Merge extends ProcessExpression implements StateElement {
     	return null;
     }
   }
+  
+  public void activate(){
+  	state[LEFT].activate();
+  	state[RIGHT].activate();
+  }
  
   public boolean execute() throws ToolBusException {
   	int l, r;

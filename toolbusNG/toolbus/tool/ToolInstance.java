@@ -1,6 +1,5 @@
  package toolbus.tool;
 
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public class ToolInstance {
    * @param t 
    */
   public synchronized void handleTermFromTool(ATerm t) {	
-		System.err.println("tool " + toolId + " handling term from tool: " + t);
+		// System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t.isEqual(termSndVoid)){
 			TCP_goConnected();
@@ -96,16 +95,16 @@ public class ToolInstance {
 			return;
 		}
 		
-		List matches1 = t.match("snd-event(<term>)");
-		if (matches1 != null) {
-			ATerm t1 = (ATerm) matches1.get(0);
+		matches = t.match("snd-event(<term>)");
+		if (matches != null) {
+			ATerm t1 = (ATerm) matches.get(0);
 			addEventFromTool(TBTerm.factory.makeList(t1));
 			return;
 		}
-		List matches2 = t.match("snd-event(<term>,<term>)"); //TODO: more than 2 args
-		if (matches2 != null) {
-			ATerm t1 = (ATerm) matches2.get(0);
-			ATerm t2 = (ATerm) matches2.get(1);
+		matches = t.match("snd-event(<term>,<term>)"); //TODO: more than 2 args
+		if (matches != null) {
+			ATerm t1 = (ATerm) matches.get(0);
+			ATerm t2 = (ATerm) matches.get(1);
 			
 			addEventFromTool(TBTerm.factory.makeList(t1, TBTerm.factory.makeList(t2)));
 			return;

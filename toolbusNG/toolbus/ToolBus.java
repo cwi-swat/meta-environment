@@ -57,7 +57,7 @@ public class ToolBus {
   private static InetAddress localHost;
   private long startTime;
   private long currentTime;
-  private long nextTime;
+  private long nextTime = 0;
 
   /**
    * Constructor with explicit PrintWriter
@@ -89,7 +89,7 @@ public class ToolBus {
     }
   
     System.err.println("WellKnownSocket created: " + WellKnownSocket);
-    nextTime = startTime = System.currentTimeMillis();
+    startTime = System.currentTimeMillis();
   }
 
   /**
@@ -444,7 +444,7 @@ public class ToolBus {
         if(!work){
         	 try{
         	 	  int delay = (int) (nextTime - currentTime);
-        	 	  System.err.println("delay = " + delay);
+        	 	  //System.err.println("currentTime = " + currentTime + "; nextTime = " + nextTime + "; delay = " + delay);
         	      Thread.sleep(delay > 0 ? delay : 200);
         	      }
         	      catch(InterruptedException e){
