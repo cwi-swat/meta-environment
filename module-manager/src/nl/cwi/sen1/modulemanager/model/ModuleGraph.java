@@ -45,8 +45,6 @@ public class ModuleGraph extends ModuleDatabase {
                     ATerm key = (ATerm) iterEntries.next();
                     ATerm value = (ATerm) entries.get(key);
 
-                    System.err.println("+++ Key: " + key + ", Value: " + value);
-                    
                     if (key.equals(factory.getPureFactory().parse("\"label\""))) {
                         Attribute attr = factory.makeAttribute_Label(value
                                 .toString());

@@ -1,5 +1,9 @@
 $Id$
 
+Mon Oct 10 11:51:58 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager:
+   - Remove debug output
+
 Thu Sep 22 10:13:43 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager:
    - Add ModuleGraph for conversion from internal database to Graph adt format

@@ -194,7 +194,7 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm getModuleGraph(ATerm namespace) {
         Graph graph = moduleDB.getModuleGraph(namespace);
 
-        System.err.println("MM - getModuleGraph: graph [" + graph + "]");
+//        System.err.println("MM - getModuleGraph: graph [" + graph + "]");
 
         return pureFactory.make("snd-value(module-graph(<term>))", graph
                 .toTerm());
