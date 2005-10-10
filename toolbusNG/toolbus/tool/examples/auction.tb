@@ -83,13 +83,13 @@ process OneSale(Mid : master) is
         fi
       +
         if not(or(Final, Sold)) then
-           snd-note(any-higher-bid) delay(sec(10)) .
+           snd-note(any-higher-bid) delay(10000) .
 	   snd-do(Mid, any-higher-bid(10)) .
            Final := true
         fi
       +
         if and(Final, not(Sold)) then
-           snd-note(sold(HighestBid)) delay(sec(10)) .
+           snd-note(sold(HighestBid)) delay(10000) .
            Sold := true
         fi
       +

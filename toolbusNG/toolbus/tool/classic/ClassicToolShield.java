@@ -1,13 +1,8 @@
 package toolbus.tool.classic;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 import toolbus.TBTerm;
 import toolbus.ToolBus;
@@ -78,16 +73,14 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = false;
-	private Socket connection;
+	private boolean verbose = true;
 	private InputStream inputStream;
 	private OutputStream outputStream;
-	private Process toolProcess;
 	private ToolInputHandler toolInputHandler;
 
 	private ToolDefinition toolDef;
 	private String toolname;
-	private InetAddress address;
+
 	private int toolid = -1;
 
 	private ATerm termSndVoid;
@@ -99,34 +92,66 @@ public class ClassicToolShield extends ToolShield {
 	   * @param toolInstance the tool instance that created this ClassicToolShield
 	   */
 
-	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
+	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance, boolean alreadyExecuting) {
 		super(toolInstance);
 		this.toolDef = toolDef;
 		this.factory = TBTerm.factory;
 		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
 
-		address = ToolBus.getLocalHost();
+		//address = ToolBus.getLocalHost();
 		toolname = toolDef.getName();
-		toolid = getToolInstance().getToolCount();
-		executeTool();
+		toolid = toolInstance.getToolCount();
+		if(!alreadyExecuting){
+			executeTool();
+		}
 	}
 	
 	void executeTool(){
 		String cmd = toolDef.getCommand() + 
 					" -TB_HOST "      + ToolBus.getLocalHost().getHostName() +
-					" -TB_TOOL_NAME " + toolDef.getName() +
-					" -TB_TOOL_ID "   + getToolInstance().getToolCount() +
+					" -TB_TOOL_NAME " + toolname +
+					" -TB_TOOL_ID "   + toolid +
 					" -TB_PORT "      + ToolBus.getWellKnownSocketPort()
 					;
 		System.err.println("executeTool:" + cmd);
 			
 		try {
-			toolProcess = Runtime.getRuntime().exec(cmd);
+			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			System.err.println(e);
 		}
+	}
+	
+	public void connect(InputStream in, OutputStream out) throws IOException {
+		inputStream = in;
+		outputStream = out;
+		info("checking input signature...");
+		checkToolSignature();
+		ATerm term = readTerm();
+		info("receive: " + term);
+		if(!term.isEqual(termSndVoid)){
+			throw new RuntimeException("incorrect response after signature check: " + term);
+		}
+		connected = true;
+		getToolInstance().TCP_goConnected();
+		toolInputHandler = new ToolInputHandler(this, getToolInstance());
+		toolInputHandler.start();
+	}
+	
+	public synchronized boolean isConnected() {
+		return connected;
+	}
 
+	public void disconnect() {
+		try {
+			sendTerm(factory.parse("rec-disconnect"));
+			connected = false;
+			getToolInstance().TCP_goDisConnected();
+		}
+		catch (IOException e) {
+			throw new RuntimeException("cannot disconnect: " + e.getMessage());
+		}
 	}
 	
 	public void checkToolSignature() throws IOException {
@@ -172,34 +197,8 @@ public class ClassicToolShield extends ToolShield {
 	public Object getLockObject() {
 		return lockObject;
 	}
-
-	public void connect() throws IOException {
-		info("connect");
-		ServerSocket server = ToolBus.getWellKnownSocket();
-		info("accepting ...");
-		connection = server.accept();
-		inputStream = new BufferedInputStream(connection.getInputStream());
-		outputStream = new BufferedOutputStream(connection.getOutputStream());
-		info("shakeHands ...");
-
-		shakeHands();
-		connected = true;
-		toolInputHandler = new ToolInputHandler(this, getToolInstance());
-		toolInputHandler.start();
-	}
-
-	public void disconnect() {
-		try {
-			sendTerm(factory.parse("rec-disconnect"));
-		}
-		catch (IOException e) {
-			throw new RuntimeException("cannot disconnect: " + e.getMessage());
-		}
-	}
-
-	public synchronized boolean isConnected() {
-		return connected;
-	}
+	
+	
 
 	public void setVerbose(boolean on) {
 		verbose = on;
@@ -209,53 +208,10 @@ public class ClassicToolShield extends ToolShield {
 		return verbose;
 	}
 
-	private void shakeHands() throws IOException {
-		String host = address.getHostName();
-		info("host = " + host);
-		if (host == null) {
-			String pair = address.toString();
-			host = pair.substring(0, pair.indexOf('/'));
-			info("local host = " + host);
-		}
-
-		String myHand = toolname + " " + host + " " + toolid;
-		info("myhand: <" + myHand + ">");
-		
-		byte[] handshake = new byte[MAX_HANDSHAKE];
-		int nr = inputStream.read(handshake);
-
-		String toolHand = new String(handshake).substring(0, myHand.length());
-		info(myHand.length() + " " + toolHand.length());
-		info("input: <" + toolHand + ">");
-		if(!myHand.equalsIgnoreCase(toolHand))
-			throw new RuntimeException("received incorrect handshake: " + toolHand);
-		
-		writeInt(toolid);
-
-		info("checking input signature...");
-		checkToolSignature();
-		ATerm term = readTerm();
-		info("receive: " + term);
-		if(!term.isEqual(termSndVoid)){
-			throw new RuntimeException("incorrect response after signature check: " + term);
-		}
-	}
-
 	void info(String msg) {
 		if (verbose) {
-			System.err.println("[TOOLSHIELD: " + toolname + "] " + msg);
+			System.err.println("[CLASSIC TOOLSHIELD: " + toolname + "] " + msg);
 		}
-	}
-	
-	private void writeInt(int n) throws IOException {
-		byte[] buffer = new byte[MAX_HANDSHAKE];
-		String s = toolname + " " + Integer.toString(n);
-		byte bs[] = s.getBytes();
-		for (int i = 0; i < bs.length; i++) {
-			buffer[i] = bs[i];
-		}
-		outputStream.write(buffer);
-		outputStream.flush();
 	}
 
 	public void sendTerm(ATerm term) throws IOException {
@@ -333,17 +289,7 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void initRun() {
-		//System.err.println("ClassicToolShield.initRun");
+		System.err.println("ClassicToolShield.initRun for " + toolname);
 		setRunning(true);
-		
-		try {
-			System.err.println("ClassicToolShield.initRun trying to connect");
-			connect();
-			System.err.println("ClassicToolShield.initRun connected");
-			getToolInstance().TCP_goConnected();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 }

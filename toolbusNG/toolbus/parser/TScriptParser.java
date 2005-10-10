@@ -12,6 +12,7 @@ import toolbus.atom.Atom;
 import toolbus.atom.Connect;
 import toolbus.atom.Create;
 import toolbus.atom.Delta;
+import toolbus.atom.DisConnect;
 import toolbus.atom.Do;
 import toolbus.atom.Eval;
 import toolbus.atom.Event;
@@ -192,8 +193,8 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("Sequence") {
       public Object build(Object args[]) {
-      	System.err.println("Sequence 1: " + args[0]);
-      	System.err.println("Sequence 2: " + args[1]);
+      	//System.err.println("Sequence[0]: " + args[0]);
+     	//System.err.println("Sequence[1]: " + args[1]);
         return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
@@ -368,13 +369,13 @@ class TScriptNodeBuilders {
           return new Connect((ATerm) args[0]);
         }
       });
-  /*
+  
     define(new NodeBuilder("RecDisConnect") {
         public Object build(Object args[]) {
           return new DisConnect((ATerm) args[0]);
         }
       });
-    */
+    
     
     define(new NodeBuilder("Eval") {
       public Object build(Object args[]) {

@@ -1,10 +1,12 @@
 package toolbus.tool;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 
 import toolbus.TBTerm;
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermFactory;
 
 /**
@@ -40,6 +42,8 @@ public abstract class ToolShield extends Thread {
 	public ATermFactory getFactory() {
 		return TBTerm.factory;
 	}
+	
+	abstract public void connect(InputStream in, OutputStream out) throws IOException;
 
 	protected Object[] getNextRequestForTool() {
 		Object request[] = (Object[]) requestsForTool.getFirst();

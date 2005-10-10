@@ -17,6 +17,7 @@ public class Eval extends Atom {
 	this.toolId = new Ref(toolId);
 	this.request = new Ref(request);
 	setAtomArgs(this.toolId, this.request);
+	externalNameAsReceivedByTool = "rec-eval";
   }
   
   public ProcessExpression copy(){

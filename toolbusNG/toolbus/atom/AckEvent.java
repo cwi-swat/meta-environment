@@ -18,6 +18,7 @@ public class AckEvent extends Atom {
 	this.toolId = new Ref(toolId);
 	this.event = new Ref(event);
 	setAtomArgs(this.toolId, this.event);
+	externalNameAsReceivedByTool = "rec-ack-event";
   }
   
   public ProcessExpression copy(){

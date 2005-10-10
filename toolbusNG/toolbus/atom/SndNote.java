@@ -20,7 +20,6 @@ import toolbus.process.ProcessInstance;
  *
  */
 public class SndNote extends Atom {
-	private State partners = new State();  // communication partners in other processes
 	private Ref note;
 	
 	public SndNote(ATerm note){
@@ -43,7 +42,7 @@ public class SndNote extends Atom {
 	    
 	    for(int i = 0; i < processes.size() ; i++){
 	    	ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
-	    	//System.err.println(getProcess().getProcessName() + " tries to send " + theNote + " to " + pi.getProcessName());
+	    	System.err.println(getProcess().getProcessName() + " tries to send " + theNote + " to " + pi.getProcessName());
 	    	pi.putNoteInQueue(theNote);
 	    }
 	    return true;

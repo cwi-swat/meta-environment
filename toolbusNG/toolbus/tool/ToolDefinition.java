@@ -82,28 +82,29 @@ public class ToolDefinition {
   		if(sig.getArity() > 0){
   			ATerm ap = sig.getArgument(0);
   			if(ap.equals(toolPlaceholder)){
-  				if( sig.getName().equals("Eval") || sig.getName().equals("Do") || sig.getName().equals("AckEvent") ||
-  						sig.getName().equals("Terminate")){
+  				if( sig.getName().equals("rec-eval") || sig.getName().equals("rec-do") || sig.getName().equals("rec-ack-event") ||
+  						sig.getName().equals("rec-terminate")){
   					inputSignature = TBTerm.factory.makeList(sig, inputSignature);
-  				} else if( sig.getName().equals("Event")){
+  				} else if( sig.getName().equals("snd-event")){
   					outputSignature = TBTerm.factory.makeList(sig, outputSignature);
   				}
   			}
   		}
   	}
-  	
+/*  	
   	ATerm recTerminate = TBTerm.factory.make("rec-terminate(<term>)", toolPlaceholder);
   	inputSignature = TBTerm.factory.makeList(recTerminate, inputSignature);
   	
   	ATerm sndConnect = TBTerm.factory.make("snd-connect(<term>)", toolPlaceholder);
   	outputSignature = TBTerm.factory.makeList(sndConnect, outputSignature);
+  	*/
   }
   
-  public ToolShield makeToolShield(ToolInstance ti){
+  public ToolShield makeToolShield(ToolInstance ti, boolean alreadyExecuting){
   	if(kind == "java")
-  		return new JavaToolShield(this, ti);
+  		return new JavaToolShield(this, ti); // add alreadyExecuting
   	else if(kind == "classic")
-  		return new ClassicToolShield(this, ti);
+  		return new ClassicToolShield(this, ti, alreadyExecuting);
   	else
   		System.err.println("Unknown tool kind:" + kind);
   	return null;

@@ -22,6 +22,7 @@ import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
+import toolbus.tool.classic.ToolConnector;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -52,12 +53,13 @@ public class ToolBus {
   private static boolean verbose = false;
   private static int nerrrors = 0;
   private static int nwarnings = 0;
-  private static int WellKnownSocketPort = 9020; //8999;
+  private static int WellKnownSocketPort = 8999;
   private static ServerSocket WellKnownSocket;
   private static InetAddress localHost;
   private long startTime;
   private long currentTime;
   private long nextTime = 0;
+  private ToolConnector toolConnector;
 
   /**
    * Constructor with explicit PrintWriter
@@ -90,6 +92,8 @@ public class ToolBus {
   
     System.err.println("WellKnownSocket created: " + WellKnownSocket);
     startTime = System.currentTimeMillis();
+    toolConnector = new ToolConnector(this);
+    toolConnector.start();
   }
 
   /**
@@ -107,6 +111,11 @@ public class ToolBus {
   public ToolBus(StringWriter out) {
     this(new PrintWriter(out));
   }
+  
+  /**
+   * 
+   * Networking functions
+   */
 
   private static String getHostName() {
     String hostname = "";
@@ -341,20 +350,28 @@ public class ToolBus {
    * @throws ToolBusException
    */
   
-  public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+  synchronized public ToolInstance addToolInstance(String toolName, boolean alreadyExecuting) throws ToolBusException {
   	ATermList sig = getSignature();
   	System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
     TD.setToolSignatures(sig);
-    ToolInstance ti = new ToolInstance(TD);
+    ToolInstance ti = new ToolInstance(TD, tools.size(), alreadyExecuting);
     tools.add(ti);
     return ti;
   }
   
-  public ToolInstance getToolInstance(ATerm tid){
+  synchronized public ToolInstance getToolInstance(ATerm tid){
   	ATermInt arg = (ATermInt) ((ATermAppl) tid).getArgument(0);
   	int n = arg.getInt();
   	return (ToolInstance) tools.elementAt(n);
+  }
+  
+  synchronized public ToolInstance getToolInstance(int n){
+  	return (ToolInstance) tools.elementAt(n);
+  }
+  
+  public ToolInstance getConnectedTool(String toolname){
+  	return toolConnector.getConnectedTool(toolname);
   }
 
   /**
@@ -375,10 +392,15 @@ public class ToolBus {
    */
 
   public ToolDefinition getToolDefinition(String name) throws ToolBusException {
+  	System.err.println("getToolDefinition: " + name);
     for (int i = 0; i < tooldefs.size(); i++) {
+ 
       ToolDefinition TD = (ToolDefinition) tooldefs.elementAt(i);
-      if (name == TD.getName())
+   	  System.err.println("getToolDefinition: " + i + " : " + TD.getName());
+      if (name.equals(TD.getName())){
+      	System.err.println("getToolDefinition: " + TD);
         return TD;
+      }
     }
     throw new ToolBusException("no definition for tool " + name);
   }
@@ -413,6 +435,7 @@ public class ToolBus {
     }
 	System.err.println(msg);
     try {
+    	toolConnector.setRunning(false);
     	WellKnownSocket.close();
     } catch(IOException e){
     	System.err.println(e);

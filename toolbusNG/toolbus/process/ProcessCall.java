@@ -27,7 +27,7 @@ public class ProcessCall extends ProcessExpression {
 
 //	private State startState;
 
-	private ATerm test;
+	//private ATerm test;
 
 	public ProcessCall(String name, ATermList actuals) {
 		this.name = name;
@@ -98,82 +98,4 @@ public class ProcessCall extends ProcessExpression {
 	public String toString() {
 		return "ProcessCall(" + name + ", " + actuals + ")";
 	}
-
-	// The StateElement interface
-/*
-	
-	public boolean canCommunicate(StateElement a) {
-		return false;
-	}
-
-	public void addPartner(StateElement a) {
-	}
-
-	public ProcessInstance getProcess() {
-		return processInstance;
-	}
-
-	public boolean contains(StateElement b) {
-		return startState.contains(b);
-   	}
-
-	public boolean nextState() {
-		State s = PE.getStartState();
-		processInstance.setCurrentState(s);
-		return true;
-	}
-
-	public void setTest(ATerm test) throws ToolBusException {
-		if (test != null) {
-			//ATerm rtst = TBTerm.resolveVars(test, processInstance.getEnv());
-			if (this.test == null) {
-				this.test = test;
-			} else {
-				this.test = TBTerm.factory.make("and(<term>,<term>)", test,
-						this.test);
-			}
-		}
-	}
-
-	public boolean isEnabled() throws ToolBusException {
-		if (test == null)
-			return true;
-		else {
-			boolean res = TBTerm.isTrue(FunctionDescriptors.eval(test,
-					getProcess()));
-			//System.err.println(this.getProcess().getProcessId() + ": " + this
-			// + " : evaluate: " + test + " ==> " + res);
-			return res;
-		}
-	}
-
-	public boolean execute() throws ToolBusException {
-		if (!isEnabled()) {
-			return false;
-		}
-		Environment env = processInstance.getEnv();
-		System.err.println("ProcessCall.execute(" + name + ") formals = "
-				+ formals + "; actuals = " + actuals + "; \nenv = " + env);
-		for (int i = 0; i < formals.getLength(); i++) {
-			ATerm formal = formals.elementAt(i);
-			ATerm actual = actuals.elementAt(i);
-			if (!TBTerm.isResVar(formal)) {
-				env.updateBinding(formal, TBTerm.substitute(actual, env));
-				System.err.println(formal + " gets value "
-						+ env.getValue(formal));
-			} else {
-				if (!TBTerm.isResVar(actual)) {
-					throw new ToolBusException("result variable required, got "
-							+ actual);
-				}
-				env.updateBinding(formal, actual);
-			}
-		}
-		System.err.println("ProcessCall " + name + ":" + env);
-		startState = PE.getStartState();
-		startState.setTest(test);
-		processInstance.setCurrentState(startState);
-		return startState.execute();
-	}
-*/
 }

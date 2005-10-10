@@ -1,5 +1,8 @@
  package toolbus.tool;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,8 +24,9 @@ import aterm.ATermList;
  */
 
 public class ToolInstance {
+	private ToolDefinition toolDef;
  
-  private static int toolCount = 0; // global counter of tool instances
+  private int toolCount = 0;        // id of current tool as integer
   private ATerm toolId;				// id of current tool: toolname(<int>)
   
   private LinkedList valuesFromTool;
@@ -46,8 +50,10 @@ public class ToolInstance {
    * @param toolDefinition definition of the tool
    */
 
-  public ToolInstance(ToolDefinition toolDef) throws ToolBusException {
+  public ToolInstance(ToolDefinition toolDef, int toolCount, boolean alreadyExecuting) throws ToolBusException {
     System.err.println("ToolInstance");
+    this.toolDef = toolDef;   
+    this.toolCount = toolCount;
     valuesFromTool = new LinkedList();
     eventsFromTool = new LinkedList();
     pendingEvents = new LinkedList();
@@ -55,18 +61,14 @@ public class ToolInstance {
 	termSndVoid = TBTerm.factory.parse("snd-void");
 	
     AFun afun = TBTerm.factory.makeAFun(toolDef.getName(), 1, false);
-    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolCount++));
+ 
+    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolCount));
 
-    toolShield = toolDef.makeToolShield(this);
-    toolShield.start();
-    while(!toolShield.isRunning()){ //TODO Maybe another solution to force the completion of the tool connection?
-    	try{
-  	      Thread.sleep(100);
-  	      }
-  	      catch(InterruptedException e){
-  	      System.out.println("Sleep Interrupted");
-  	      }
-    }
+    toolShield = toolDef.makeToolShield(this,alreadyExecuting);
+  }
+  
+  public ToolInstance(ToolDefinition toolDef, int toolCount) throws ToolBusException {
+  	this(toolDef, toolCount, false);
   }
 
   public ATerm getToolId(){
@@ -77,12 +79,21 @@ public class ToolInstance {
   	return toolCount;
   }
   
+  public String getToolName(){
+  	return toolDef.getName();
+  }
+  
+  public void connect(InputStream in, OutputStream out) throws IOException {
+  	toolShield.connect(in, out);
+  	toolShield.start();
+  }
+  
   /**
    * Handle any term that comes from the tool.
    * @param t 
    */
   public synchronized void handleTermFromTool(ATerm t) {	
-		// System.err.println("tool " + toolId + " handling term from tool: " + t);
+		System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t.isEqual(termSndVoid)){
 			TCP_goConnected();
@@ -322,6 +333,11 @@ public class ToolInstance {
   	} else {
   		return false;
   	}
+  }
+  
+  public boolean TCP_goDisConnected(){
+  	phase = PHASE1;
+  	return true;
   }
   
   public boolean TCP_goEvalDo(){

@@ -21,6 +21,7 @@ public class Terminate extends Atom {
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
 		setAtomArgs(this.toolId);
+		externalNameAsReceivedByTool = "rec-terminate";
 	}
 
 	/**
@@ -31,6 +32,8 @@ public class Terminate extends Atom {
 		 a.copyAtomAttributes(this);
 		 return a;
 	}
+	
+	
 	 public boolean execute() throws ToolBusException {
 	    if (!isEnabled())
 	      return false;

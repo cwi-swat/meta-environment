@@ -33,10 +33,12 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   private int timeout = 0;
   private boolean timeExpr = false;
   private int startTime;
+  protected String externalNameAsReceivedByTool;
 
   public Atom() {
     super();
     addToFirst(this);
+    externalNameAsReceivedByTool = shortName();
   }
   
   public void setAtomArgs(Ref r) {
@@ -135,6 +137,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     int i = s.lastIndexOf(".");
     return s.substring(i + 1);
   }
+  
+  private String externalNameReceivedByTool() {
+  	return shortName();
+  }
 
   public String toString() {
     String pidStr = (processInstance != null) ? "[" + processInstance.getProcessId().toString() + "]" : "";
@@ -152,8 +158,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 
   public ATerm toATerm() throws ToolBusException {
     int nargs = atomArgs.length;
-
-    AFun afun = TBTerm.factory.makeAFun(shortName(), nargs, false);
+    //System.err.println("toATerm: " + externalNameAsReceivedByTool);
+    
+    
+    AFun afun = TBTerm.factory.makeAFun(externalNameAsReceivedByTool, nargs, false);
     ATermList pat = TBTerm.factory.makeList();
 
     for (int i = 0; i < nargs; i++) {
@@ -169,7 +177,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	this.processInstance = processInstance;
   	this.env = env.copy();
     setFollow(follow);
-    System.err.println("Compiling " + this + ";\n env = " + env);
+    //System.err.println("Compiling " + this + ";\n env = " + env);
     replaceFormals(env);
   }
   

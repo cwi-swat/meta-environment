@@ -13,10 +13,10 @@ public class Main {
 		ToolBus T = new ToolBus();
 	
 		try {
-			T.setVerbose(false);
+			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/wave.tb");
-					//+ "/toolbusNG/toolbus/test/B0.tb");
+					+ "/toolbusNG/toolbus/tool/examples/auction.tb");
+					//+ "/toolbusNG/toolbus/test/B1.tb");
 			T.execute();
 		} catch (ToolBusException e) {
 			System.out.println(e.getMessage());
