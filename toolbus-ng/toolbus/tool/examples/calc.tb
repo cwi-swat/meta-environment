@@ -198,4 +198,4 @@ tool clock is
   command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/calc/clock"}
 
 
-toolbus (UI, CALC, LOG, CLOCK)
+toolbus (UI, CALC, LOG1, CLOCK)

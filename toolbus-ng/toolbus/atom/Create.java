@@ -53,6 +53,7 @@ public class Create extends Atom {
     ProcessInstance P = TB.addProcess(name, evargs);
 
     getEnv().assignVar(rvar.value, P.getProcessId());
+    System.err.println("Create.execute: process " +  P.getProcessId() + " added");
     return true;
 
   }

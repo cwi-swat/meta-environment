@@ -204,8 +204,20 @@ public class TBTermTest extends TestCase {
 
     assertTrue(compatible("list(int)", "[int, int, int]"));
     assertTrue(!compatible("list(int)", "[int, real, int]"));
+ 
+    assertTrue(compatible("<int>", "13"));
+    assertTrue(compatible("f(<int>)", "f(13)"));
+    assertTrue(compatible("f(<int>,14)", "f(13,<int>)"));
+    assertTrue(compatible("[<int>,14]", "[13,<int>]"));
+    
+    assertTrue(compatible("<real>", "13.5"));
+    assertTrue(compatible("f(<real>)", "f(13.5)"));
+    assertTrue(compatible("f(<real>,14.5)", "f(13.5,<real>)"));
+    assertTrue(compatible("[<real>,14.5]", "[1.5,<real>]"));
+    
+    assertTrue(compatible("<str>", "\"abc\""));
   }
-
+  
   public static Test suite() {
     return new TestSuite(TBTermTest.class);
   }

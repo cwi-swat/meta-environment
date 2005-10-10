@@ -49,6 +49,7 @@ abstract class FunctionDescriptor {
   public ATerm getResultType() {
     return resultType;
   }
+  
 /**
  * checkStatic performs a static type check for calls to built-in functions
  * @param actual an array of types of actual parameters
@@ -56,11 +57,6 @@ abstract class FunctionDescriptor {
  * @throws ToolBusException
  */
   public boolean checkStatic(ATerm actual[]) {
-             //System.err.println("checkStatic: " + name);
-             //  for(int i = 0; i < actual.length; i++){
-             //      System.err.println("actual[" + i + "] = " + actual[i]);
-             //     System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
-             //  }
     if (argtypes.length != actual.length)
       ToolBus.error("Functions", name + " has wrong number of arguments");
     
@@ -555,7 +551,7 @@ public class Functions {
    * @return boolean
    */
   public static boolean compatibleTypes(ATerm t1, ATerm t2){
-  	//System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
+  	System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
   	
  	if(t1.getType() == ATerm.PLACEHOLDER)
   		t1 = ((ATermPlaceholder) t1).getPlaceholder();
@@ -599,6 +595,7 @@ public class Functions {
 	  	}
   
        	ATermAppl ap2 = (ATermAppl) t2;
+    	System.err.println("compatibleType: ap1.getName() = " + ap1.getName() + ";" + "ap2.getName() = " + ap2.getName());
        	if(ap1.getName() != ap2.getName())
        		return false;
        	if(ap1.getArity() == 0 || ap2.getArity() == 0)

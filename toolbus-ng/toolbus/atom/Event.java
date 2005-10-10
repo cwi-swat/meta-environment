@@ -20,6 +20,7 @@ public class Event extends Atom {
 	this.toolId = new Ref(toolId);
 	this.result = new Ref(result);
 	setAtomArgs(this.toolId, this.result);
+	externalNameAsReceivedByTool = "snd-event";
   }
   
   public ProcessExpression copy(){

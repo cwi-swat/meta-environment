@@ -19,6 +19,7 @@ public class Do extends Atom {
 	this.toolId = new Ref(toolId);
 	this.request = new Ref(request);
 	setAtomArgs(this.toolId, this.request);
+	externalNameAsReceivedByTool = "rec-do";
   }
   
   public ProcessExpression copy(){

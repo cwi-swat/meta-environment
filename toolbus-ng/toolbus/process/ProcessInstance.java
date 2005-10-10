@@ -34,6 +34,7 @@ public class ProcessInstance {
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
   private boolean running = true;
+  private boolean verbose = true;
 
   public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
     toolbus = TB;
@@ -61,7 +62,7 @@ public class ProcessInstance {
       ((ProcessInstance) procs.elementAt(i)).findPartners(elements);
     }
     addAtomSignature();
-    if (ToolBus.isVerbose()) {
+    if (false) {
       System.err.println(processId + ": " + call);
       System.err.println(processId + ": atoms: =" + elements);
       System.err.println(processId + ": prefix = " + currentState);
@@ -76,6 +77,12 @@ public class ProcessInstance {
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
     this(TB, new ProcessCall(name, actuals));
   }
+  
+  void info(String msg) {
+	if (verbose) {
+		System.err.println("[ProcessInstance " + processName + "] " + msg);
+	}
+}
 
   private void addAtomSignature() throws ToolBusException {
     Vector atoms = call.getAtoms().getElementsAsVector();
@@ -115,27 +122,27 @@ public class ProcessInstance {
    */
   
   public void subscribe(ATerm pat){
-	//System.err.println("subscribe: pat: " + pat);
- 	//System.err.println("subscribe: before: " + subscriptions);
+	info("subscribe: pat: " + pat);
+ 	info("subscribe: before: " + subscriptions);
   	subscriptions = TBTerm.factory.makeList(pat, subscriptions);
-  	//System.err.println("subscribe: after: " + subscriptions);
+  	info("subscribe: after: " + subscriptions);
   }
   
   public void unsubscribe(ATerm pat){
   	subscriptions =  (ATermList) TBTerm.delete(subscriptions, pat);
- 	//System.err.println("unsubscribe: after:" + subscriptions);
+ 	info("unsubscribe: after:" + subscriptions);
   }
   
   public boolean getNoteFromQueue(ATerm pat, Environment env) throws ToolBusException{
-  	//System.err.println("getNoteFromQueue: " + pat);
-	//System.err.println("getNoteFromQueue: subs  " + subscriptions);
- 	//System.err.println("getNoteFromQueue: notes " + notes);
+  	info("getNoteFromQueue: " + pat);
+	info("getNoteFromQueue: subs  " + subscriptions);
+ 	info("getNoteFromQueue: notes " + notes);
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
-  		//System.err.println("trying: " + nt);
+  		info("trying: " + nt);
   		if(TBTerm.match(nt, env, pat, env)){
   			notes = (ATermList) TBTerm.delete(notes, nt);
-  			//System.err.println("getNoteFromQueue: " + nt);
+  			info("getNoteFromQueue: " + nt);
   			return true;
   		}
   	}
@@ -143,15 +150,15 @@ public class ProcessInstance {
   }
   
   public boolean noNoteInQueue(ATerm pat, Environment env) throws ToolBusException{
-  	//System.err.println("noNoteInQueue: " + pat);
-	//System.err.println("noNoteInQueue: subs  " + subscriptions);
- 	//System.err.println("noNoteInQueue: notes " + notes);
+  	info("noNoteInQueue: " + pat);
+	info("noNoteInQueue: subs  " + subscriptions);
+ 	info("noNoteInQueue: notes " + notes);
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
-  		//System.err.println("trying: " + nt);
+  		info("trying: " + nt);
   		if(TBTerm.match(nt, env, pat, env)){
-  			// What do we do with changes in env???
-  			//System.err.println("noNoteInQueue: " + nt);
+  			// TODO: What do we do with changes in env???
+  			info("noNoteInQueue: " + nt);
   			return false;
   		}
   	}
@@ -159,19 +166,19 @@ public class ProcessInstance {
   }
   
   public boolean putNoteInQueue(ATerm note) throws ToolBusException{
- 	//System.err.println("putNoteInQueue: " + note);
- 	//System.err.println("putNoteInQueue: subs  " + subscriptions);
- 	//System.err.println("putNoteInQueue: notes " + notes);
+ 	info("putNoteInQueue: " + note);
+ 	info("putNoteInQueue: subs  " + subscriptions);
+ 	info("putNoteInQueue: notes " + notes);
   	for(ATermList subs = subscriptions; !subs.isEmpty();subs = subs.getNext()){
   		ATerm sub = subs.getFirst();
- 		//System.err.println("trying: " + sub);
-  		if(Functions.compatibleTypes(sub, note)){
+ 		info("trying: " + sub);
+  		if(TBTerm.mightMatch(sub, note)){
   			notes = TBTerm.factory.makeList(note, notes);
-  			//System.err.println("putNoteInQueue: success " + notes);
+  			info("putNoteInQueue: success " + notes);
   			return true;
   		}
   	}
-  	//System.err.println("putNoteInQueue: failure " + notes);
+  	info("putNoteInQueue: failure " + notes);
   	return false;
   }
 
