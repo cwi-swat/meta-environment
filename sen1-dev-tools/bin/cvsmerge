@@ -9,15 +9,20 @@ import pwd
 import random
 
 
+version = "0.0.0"
+
+
 #
 # Output
 #
 
-def usage():
+def usage( exitCode ):
     sys.stderr.write( """usage: cvsmerge  begin-branch  <branch-name>
        cvsmerge  import-from-trunk
-       cvsmerge  end-branch  <branch-name>\n""" )
-    sys.exit( 1 )
+       cvsmerge  end-branch  <branch-name>
+       cvsmerge  [-v | --version]
+       cvsmerge  [-? | -h | --help]\n""" )
+    sys.exit( exitCode )
 
 
 def log( string="" ):
@@ -345,7 +350,14 @@ logFilename = "/var/tmp/cvsmerge.log.%d" % os.getpid()
 errorFilename = "/var/tmp/cvsmerge.error.%d" % os.getpid()
 
 if len(sys.argv) < 2:
-    usage()
+    usage(1)
+
+if sys.argv[1] == '-?' or sys.argv[1] == '-h' or sys.argv[1] == '--help':
+    usage(0)
+
+if sys.argv[1] == '-v' or sys.argv[1] == '--version':
+    print "cvsmerge version %s" % version
+    sys.exit(0)
 
 command = sys.argv[1]
 args = sys.argv[2:]
@@ -367,4 +379,4 @@ elif command == "end" or command == "end-branch":
     assertArgumentCount( 1, args )
     endBranch( args[0] )
 else:
-    usage()
+    usage(1)

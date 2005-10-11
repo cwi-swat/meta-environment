@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Oct 11 14:26:28 CEST 2005 <gerco@cwi.nl>
+ * bin/cvsmerge:
+   - Added a version identifier for the script. (Closes: #494)
+
 Mon Jul 11 16:43:42 CEST 2005 <gerco@cwi.nl>
  * bin/shake:
    - Added Hayco's shake script.
