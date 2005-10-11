@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import aterm.ATerm;
-
 import nl.cwi.sen1.moduleapi.types.ModuleId;
+import aterm.ATerm;
 
 public class ModuleDatabase {
     private int moduleCount;
@@ -71,7 +69,7 @@ public class ModuleDatabase {
 
         return value;
     }
-    
+
     public ModuleId getModuleIdByAttribute(ATerm namespace, ATerm key,
             ATerm value) {
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
@@ -156,14 +154,14 @@ public class ModuleDatabase {
         Module module = (Module) modules.get(moduleId);
 
         if (module == null) {
-            System.err.println("MM - deleteDependency: module [" + moduleId
+            System.err.println("MM - deleteDependencies: module [" + moduleId
                     + "] doesn't exist");
             return;
         }
 
-        List deps = (LinkedList) dependencies.get(moduleId);
+        HashSet deps = (HashSet) dependencies.get(moduleId);
         for (Iterator iter = deps.iterator(); iter.hasNext();) {
-            ((LinkedList) dependents.get(iter.next())).remove(moduleId);
+            ((HashSet) dependents.get(iter.next())).remove(moduleId);
         }
         deps.clear();
     }

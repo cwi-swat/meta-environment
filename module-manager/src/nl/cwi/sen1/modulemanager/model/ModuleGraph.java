@@ -14,7 +14,9 @@ import nl.cwi.sen1.graph.types.Node;
 import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.graph.types.NodeList;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
+import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.pure.PureFactory;
 
 public class ModuleGraph extends ModuleDatabase {
@@ -46,13 +48,15 @@ public class ModuleGraph extends ModuleDatabase {
                     ATerm value = (ATerm) entries.get(key);
 
                     if (key.equals(factory.getPureFactory().parse("\"label\""))) {
-                        Attribute attr = factory.makeAttribute_Label(value
-                                .toString());
+                        AFun fun = ((ATermAppl) value).getAFun();
+                        System.err.println("Value: " + fun.getName());
+                        Attribute attr = factory.makeAttribute_Label(fun
+                                .getName());
                         attrList = attrList.insert(attr);
                     }
                 }
             }
-            
+
             Node node = factory.makeNode_Default(nodeId, attrList);
             nodeList = nodeList.insert(node);
         }

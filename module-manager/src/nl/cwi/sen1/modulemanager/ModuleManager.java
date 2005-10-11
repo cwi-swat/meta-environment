@@ -78,8 +78,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
-        // System.err.println("MM - addAttribute: module [" + id + "], key ["
-        // + key + "], value [" + value + "]");
+//         System.err.println("MM - addAttribute: module [" + id + "], key ["
+//                + key + "], value [" + value + "]");
 
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
         moduleDB.addAttribute(moduleId, namespace, key, value);

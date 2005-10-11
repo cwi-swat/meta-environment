@@ -1,5 +1,9 @@
 $Id$
 
+Tue Oct 11 13:29:01 CEST 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleGraph.java:
+   - Remove quotes from labels
+
 Mon Oct 10 11:51:58 CEST 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager:
    - Remove debug output
