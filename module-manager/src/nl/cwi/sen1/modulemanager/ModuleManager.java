@@ -59,6 +59,9 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm getModuleIdByAttribute(ATerm namespace, ATerm key, ATerm value) {
+//        System.err.println("MM - getModuleIdByAttribute: namespace ["
+//                + namespace + "], key [" + key + "], value [" + value + "]");
+
         ModuleId moduleId = moduleDB.getModuleIdByAttribute(namespace, key,
                 value);
 
@@ -78,8 +81,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
-//         System.err.println("MM - addAttribute: module [" + id + "], key ["
-//                + key + "], value [" + value + "]");
+        // System.err.println("MM - addAttribute: module [" + id + "], key ["
+        // + key + "], value [" + value + "]");
 
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
         moduleDB.addAttribute(moduleId, namespace, key, value);
@@ -194,7 +197,7 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm getModuleGraph(ATerm namespace) {
         Graph graph = moduleDB.getModuleGraph(namespace);
 
-//        System.err.println("MM - getModuleGraph: graph [" + graph + "]");
+        // System.err.println("MM - getModuleGraph: graph [" + graph + "]");
 
         return pureFactory.make("snd-value(module-graph(<term>))", graph
                 .toTerm());
