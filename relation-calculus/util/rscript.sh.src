@@ -9,7 +9,7 @@
 
 set -e
 
-# {{{  variables
+#   variables
 prefix=__PREFIX__
 bindir=__BINDIR__
 datadir=__DATADIR__
@@ -33,6 +33,7 @@ UNPARSEPT=__PT_SUPPORT__/bin/unparsePT
 
 THE_EVALUATOR=$EVALUATOR
 EVALUATOR_FUN=eval-rscript
+EVALUATOR_WITH_STORE_FUN=eval-rscript-with-rstore
 CHECKER_FUN=check-rscript
 
 
@@ -49,9 +50,9 @@ OUTPUT_TYPE_CHECKER=./.checker.feedback
 TYPE_CHECKING_OK="Rscript is type correct!"
 TMP_FILES=$OUTPUT_TYPE_CHECKER
 
-# }}}
+# 
 
-# {{{  usage
+#   usage
 
 usage() {
 cat << ENDCAT >&2
@@ -75,14 +76,14 @@ Examples:
 ENDCAT
 }
 
-# }}}
-# {{{
+# 
+# 
 die(){
   echo $PRG: $1
   exit 1
 }
-# }}}
-# {{{
+# 
+# 
 check_rscript_file_type(){
   case "$1" in
   *.rscript) ;;
@@ -93,8 +94,8 @@ check_rscript_file_type(){
      die "$1 is not readable"
   fi
 }
-#}}}
-# {{{
+
+# 
 check_rstore_file_type(){
   case "$1" in
   *.rstore) ;;
@@ -106,8 +107,8 @@ check_rstore_file_type(){
      die "$1 is not readable"
   fi
 }
-#}}}
-# {{{
+
+# 
 set_output_style(){
   if test -z "$OUTPUT_AS_TREE"
   then
@@ -116,28 +117,28 @@ set_output_style(){
       OUTPUT="eval cat >"$OUTPUT_AS_TREE
   fi
 }
-# }}}
-# {{{  add_tmp_file
+# 
+#   add_tmp_file
 
 add_tmp_file() {
     TMP_FILES="$TMP_FILES $1"
 }
-# }}}
-# {{{  cleanup
+# 
+#   cleanup
 
 cleanup() {
   rm -f $TMP_FILES
 }
 
-# {{{  parse_rscript
+#   parse_rscript
 
 parse_rscript() {
   $SGLR $VERBOSE -p $RSCRIPT_PARSE_TABLE -s RSCRIPT -i $THE_RSCRIPT -o $THE_RSCRIPT.pt
   add_tmp_file  $THE_RSCRIPT.pt
 }
 
-# }}}
-# {{{  parse_rstore
+# 
+#   parse_rstore
 
 parse_rstore() {
   case $RSTORE in
@@ -150,31 +151,32 @@ parse_rstore() {
   esac
 }
 
-# }}}
-# {{{  check
+# 
+#   check
 
 
 check() {
-  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt | $APPLYFUNCTION -f $CHECKER_FUN -s $SUMMARY_SORT | $TYPE_CHECKER | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
+  $ADDPOSINFO -p $THE_RSCRIPT -i $THE_RSCRIPT.pt  | $APPLYFUNCTION -f $CHECKER_FUN -s $SUMMARY_SORT -o $THE_RSCRIPT.pt.pos
+  add_tmp_file $THE_RSCRIPT.pt.pos
+  $TYPE_CHECKER -i $THE_RSCRIPT.pt.pos | $UNPARSEPT > $OUTPUT_TYPE_CHECKER
 }
 
-# }}}
+# 
 
-# {{{ evaluate
+#  evaluate
 
 evaluate() {
-    if test -n "$RSTORE" 
-    then
-	parse_rstore 
-    fi
-    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT \
-	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE  \
-	  | $THE_EVALUATOR \
-	  | $OUTPUT
-    echo ""
+  if test -n "$RSTORE" 
+  then
+    parse_rstore 
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt -i $PARSED_RSTORE | $THE_EVALUATOR | $OUTPUT
+  else
+    $APPLYFUNCTION -f $EVALUATOR_FUN -s $EVALUATOR_RESULT -i $THE_RSCRIPT.pt | $THE_EVALUATOR | $OUTPUT
+  fi
+  echo ""
 }
    
-# }}}
+# 
 
 if test $# -eq 0
 then
@@ -217,7 +219,6 @@ else
     EVALUATOR_FUN=${EVALUATOR_FUN}${WITH_RSTORE}${AND_YIELD}
 fi
 
-
 set_output_style
 parse_rscript
 check
@@ -244,3 +245,4 @@ else
     echo "There are type errors in $THE_RSCRIPT; script is not executed"
 fi
 
+cleanup
