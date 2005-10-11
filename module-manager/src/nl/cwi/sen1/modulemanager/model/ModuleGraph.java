@@ -49,7 +49,6 @@ public class ModuleGraph extends ModuleDatabase {
 
                     if (key.equals(factory.getPureFactory().parse("\"label\""))) {
                         AFun fun = ((ATermAppl) value).getAFun();
-                        System.err.println("Value: " + fun.getName());
                         Attribute attr = factory.makeAttribute_Label(fun
                                 .getName());
                         attrList = attrList.insert(attr);
