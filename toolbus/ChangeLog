@@ -1,5 +1,11 @@
 $Id$
 
+Thu Oct 20 15:15:24 CEST 2005 <{gerco,jong}@cwi.nl>
+ * configure.in:
+   - add --enable-maintainer-mode
+	 - remove --with-cflags
+	 - fix CFLAGS used during ./configure run
+
 Tue Aug 16 11:41:48 CEST 2005 <jong@cwi.nl>
  * configure.in: check for availability of mkdtemp()
  * toolbus/Makefile.am, toolbus/mkdtemp.c:

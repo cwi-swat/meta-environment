@@ -1,29 +1,42 @@
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
+AC_CANONICAL_TARGET([])
 
-dnl Which compiler to use?
-AC_PROG_CC
+GLT_INIT_PACKAGE
 
-dnl Handle --with-cflags option
-AC_ARG_WITH(cflags,
-   [  --with-cflags=CFLAGS    standard options of c compiler],
-   CFLAGS=${withval},
-   if test "a${GCC}" = "ayes"; then
-     CFLAGS="-Wall -g -O2"
-   fi;
-)
-AC_SUBST(CFLAGS)
+AM_MAINTAINER_MODE
 
-dnl CPP and FlAGS are needed by toolbus for calling preprocessor as 
-dnl configured correctly:
-AC_SUBST(CPP)
-AC_SUBST(CPPFLAGS)
+AC_MSG_CHECKING([whether CFLAGS is already set])
+if test "${CFLAGS+set}" = set; then
+  AC_MSG_RESULT([yes])
+  toolbus_cflags_set=yes
+else
+  AC_MSG_RESULT([no])
+  toolbus_cflags_set=no
+
+  # Avoid setting of CFLAGS by AC_PROG_CC.
+  CFLAGS=""
+fi
 
 AC_AIX
 AC_PROG_CC
 AC_PROG_LIBTOOL
+
+TODO_CFLAGS=""
+if test "$GCC" = yes; then
+  if test "$toolbus_cflags_set" = no; then
+    TODO_CFLAGS="-g -O2 -Wall"
+    if test "$USE_MAINTAINER_MODE" = yes; then
+      TODO_CFLAGS="$TODO_CFLAGS -Werror"
+    fi
+  fi
+fi
+
+dnl CPP and FLAGS are needed by toolbus for calling preprocessor as 
+dnl configured correctly:
+AC_SUBST(CPP)
+AC_SUBST(CPPFLAGS)
 
 AM_PROG_LEX
 AC_PROG_YACC
@@ -161,6 +174,8 @@ AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 # Check for math lib (-lm), use arbitrary function (atof) from
 # C library, since using, e.g., sin leads to compilation errors
 AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
+
+CFLAGS="$CFLAGS $TODO_CFLAGS"
 
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([Makefile
