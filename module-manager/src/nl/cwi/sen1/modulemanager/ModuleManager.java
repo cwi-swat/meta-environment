@@ -157,6 +157,7 @@ public class ModuleManager implements ModuleManagerTif {
                 dependencies.add(tempId);
                 temp.addAll(moduleDB.getDependingModules(tempId));
             }
+            temp.removeFirst();
         }
 
         return pureFactory.make("snd-value(all-depending-modules(<list>))",
