@@ -177,7 +177,7 @@ public class ModuleManager implements ModuleManagerTif {
     private ATermList extractATermList(Set dependencies) {
         ATermList list = pureFactory.makeList();
         for (Iterator iter = dependencies.iterator(); iter.hasNext();) {
-            list = list.append((ATerm) iter.next());
+            list = list.append(((ModuleId) iter.next()).toTerm());
         }
         return list;
     }

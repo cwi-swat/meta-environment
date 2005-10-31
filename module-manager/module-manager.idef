@@ -69,6 +69,17 @@ in
     rec-msg(mm-add-dependency(From?, To?))
     . snd-do(MM, add-dependency(From, To))
   +
+    rec-msg(mm-get-depending-modules(ModuleId?))
+    . snd-eval(MM, get-depending-modules(ModuleId))
+    .
+    (
+      rec-value(MM, depending-modules(Modules?))
+      . snd-msg(mm-depending-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
     rec-msg(mm-delete-dependency(From?, To?))
     . snd-do(MM, delete-dependency(From, To))
   +
@@ -88,17 +99,6 @@ in
   +
     rec-msg(mm-add-dependencies(Dependencies?))
     . snd-do(MM, add-dependencies(Dependencies))
-  +
-    rec-msg(mm-get-depending-modules(ModuleId?))
-    . snd-eval(MM, get-depending-modules(ModuleId))
-    .
-    (
-      rec-value(MM, depending-modules(Modules?))
-      . snd-msg(mm-depending-modules(ModuleId, Modules))
-    +
-      rec-value(MM, no-such-module(ModuleId))
-      . snd-msg(mm-no-such-module(ModuleId))
-    )
   +
     rec-msg(mm-get-dependent-modules(ModuleId?))
     . snd-eval(MM, get-dependent-modules(ModuleId))

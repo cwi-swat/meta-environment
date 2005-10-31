@@ -40,6 +40,8 @@ public class ModuleDatabase {
 
     public void removeModule(ModuleId moduleId) {
         modules.remove(moduleId);
+        dependencies.remove(moduleId);
+        dependents.remove(moduleId);
     }
 
     public void addAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
