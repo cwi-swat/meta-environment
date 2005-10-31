@@ -1,7 +1,9 @@
 package nl.cwi.sen1.modulemanager;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,8 +61,8 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public ATerm getModuleIdByAttribute(ATerm namespace, ATerm key, ATerm value) {
-//        System.err.println("MM - getModuleIdByAttribute: namespace ["
-//                + namespace + "], key [" + key + "], value [" + value + "]");
+        // System.err.println("MM - getModuleIdByAttribute: namespace ["
+        // + namespace + "], key [" + key + "], value [" + value + "]");
 
         ModuleId moduleId = moduleDB.getModuleIdByAttribute(namespace, key,
                 value);
@@ -138,6 +140,26 @@ public class ModuleManager implements ModuleManagerTif {
         }
 
         return pureFactory.make("snd-value(depending-modules(<list>))",
+                extractATermList(dependencies));
+    }
+
+    public ATerm getAllDependingModules(ATerm id) {
+        ModuleId moduleId = factory.ModuleIdFromTerm(id);
+
+        Set dependencies = new HashSet();
+        LinkedList temp = new LinkedList();
+
+        temp.add(moduleId);
+
+        while (!temp.isEmpty()) {
+            ModuleId tempId = (ModuleId) temp.getFirst();
+            if (!dependencies.contains(tempId)) {
+                dependencies.add(tempId);
+                temp.addAll(moduleDB.getDependingModules(tempId));
+            }
+        }
+
+        return pureFactory.make("snd-value(all-depending-modules(<list>))",
                 extractATermList(dependencies));
     }
 

@@ -80,6 +80,17 @@ in
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
+    rec-msg(mm-get-all-depending-modules(ModuleId?))
+    . snd-eval(MM, get-all-depending-modules(ModuleId))
+    .
+    (
+      rec-value(MM, all-depending-modules(Modules?))
+      . snd-msg(mm-all-depending-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
     rec-msg(mm-delete-dependency(From?, To?))
     . snd-do(MM, delete-dependency(From, To))
   +
