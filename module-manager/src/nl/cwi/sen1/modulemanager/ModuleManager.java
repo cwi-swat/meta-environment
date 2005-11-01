@@ -74,7 +74,7 @@ public class ModuleManager implements ModuleManagerTif {
     }
 
     public void deleteModule(ATerm id) {
-        System.err.println("MM - deleteModule: module [" + id + "]");
+//        System.err.println("MM - deleteModule: module [" + id + "]");
 
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
         moduleDB.removeModule(moduleId);

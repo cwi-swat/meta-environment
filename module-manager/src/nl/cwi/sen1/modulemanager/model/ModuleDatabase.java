@@ -122,9 +122,6 @@ public class ModuleDatabase {
 
         dependencies = (Set) parents.get(moduleToId);
         dependencies.add(moduleFromId);
-
-        System.err.println("children: " + children);
-        System.err.println("parents: " + parents);
     }
 
     public Set getChildren(ModuleId moduleId) {
