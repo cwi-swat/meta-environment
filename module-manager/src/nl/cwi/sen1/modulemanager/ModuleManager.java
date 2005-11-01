@@ -1,9 +1,7 @@
 package nl.cwi.sen1.modulemanager;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -133,7 +131,7 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm getDependingModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-        Set dependencies = moduleDB.getDependingModules(moduleId);
+        Set dependencies = moduleDB.getChildren(moduleId);
 
         if (dependencies == null) {
             return pureFactory.parse("snd-value(no-such-module)");
@@ -146,22 +144,23 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm getAllDependingModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-        Set dependencies = new HashSet();
-        LinkedList temp = new LinkedList();
+        Set dependencies = moduleDB.getAllChildren(moduleId);
 
-        temp.add(moduleId);
-
-        while (!temp.isEmpty()) {
-            ModuleId tempId = (ModuleId) temp.getFirst();
-            if (!dependencies.contains(tempId)) {
-                dependencies.add(tempId);
-                temp.addAll(moduleDB.getDependingModules(tempId));
-            }
-            temp.removeFirst();
+        if (dependencies == null) {
+            return pureFactory.parse("snd-value(no-such-module)");
         }
 
         return pureFactory.make("snd-value(all-depending-modules(<list>))",
                 extractATermList(dependencies));
+    }
+
+    public ATerm getClosableModules(ATerm id) {
+        ModuleId moduleId = factory.ModuleIdFromTerm(id);
+
+        Set closableModules = moduleDB.getClosableModules(moduleId);
+
+        return pureFactory.make("snd-value(closable-modules(<list>))",
+                extractATermList(closableModules));
     }
 
     public ATerm getDependencies() {

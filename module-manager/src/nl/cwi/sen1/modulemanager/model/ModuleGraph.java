@@ -62,11 +62,11 @@ public class ModuleGraph extends ModuleDatabase {
     }
 
     private void setEdges() {
-        for (Iterator iter = dependencies.keySet().iterator(); iter.hasNext();) {
+        for (Iterator iter = children.keySet().iterator(); iter.hasNext();) {
             ModuleId moduleId = (ModuleId) iter.next();
             NodeId nodeFromId = factory.makeNodeId_Default(moduleId.toTerm());
 
-            Set dependingModules = (Set) dependencies.get(moduleId);
+            Set dependingModules = (Set) children.get(moduleId);
 
             for (Iterator depsIter = dependingModules.iterator(); depsIter
                     .hasNext();) {

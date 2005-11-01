@@ -15,15 +15,15 @@ public class ModuleDatabase {
 
     protected Map modules;
 
-    protected Map dependencies;
+    protected Map children;
 
-    private Map dependents;
+    private Map parents;
 
     public ModuleDatabase() {
         moduleCount = 0;
         modules = new HashMap();
-        dependencies = new HashMap();
-        dependents = new HashMap();
+        children = new HashMap();
+        parents = new HashMap();
     }
 
     public int getNextModuleId() {
@@ -34,14 +34,15 @@ public class ModuleDatabase {
         // System.err.println("MM - addModule: module [" + moduleId + "]");
 
         modules.put(moduleId, module);
-        dependencies.put(moduleId, new HashSet());
-        dependents.put(moduleId, new HashSet());
+        children.put(moduleId, new HashSet());
+        parents.put(moduleId, new HashSet());
     }
 
     public void removeModule(ModuleId moduleId) {
+        deleteDependencies(moduleId);
         modules.remove(moduleId);
-        dependencies.remove(moduleId);
-        dependents.remove(moduleId);
+        children.remove(moduleId);
+        parents.remove(moduleId);
     }
 
     public void addAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
@@ -100,7 +101,7 @@ public class ModuleDatabase {
     }
 
     public void addDependency(ModuleId moduleFromId, ModuleId moduleToId) {
-        Set deps;
+        Set dependencies;
         Module moduleFrom = (Module) modules.get(moduleFromId);
         Module moduleTo = (Module) modules.get(moduleToId);
 
@@ -116,15 +117,61 @@ public class ModuleDatabase {
             return;
         }
 
-        deps = (Set) dependencies.get(moduleFromId);
-        deps.add(moduleToId);
+        dependencies = (Set) children.get(moduleFromId);
+        dependencies.add(moduleToId);
 
-        deps = (Set) dependents.get(moduleToId);
-        deps.add(moduleFromId);
+        dependencies = (Set) parents.get(moduleToId);
+        dependencies.add(moduleFromId);
+
+        System.err.println("children: " + children);
+        System.err.println("parents: " + parents);
     }
 
-    public Set getDependingModules(ModuleId moduleId) {
-        return (Set) dependencies.get(moduleId);
+    public Set getChildren(ModuleId moduleId) {
+        return (Set) children.get(moduleId);
+    }
+
+    public Set getParents(ModuleId moduleId) {
+        return (Set) parents.get(moduleId);
+    }
+
+    public Set getAllChildren(ModuleId moduleId) {
+        Set dependencies = new HashSet();
+        LinkedList temp = new LinkedList();
+
+        temp.add(moduleId);
+
+        while (!temp.isEmpty()) {
+            ModuleId tempId = (ModuleId) temp.getFirst();
+            if (!dependencies.contains(tempId)) {
+                dependencies.add(tempId);
+                temp.addAll(getChildren(tempId));
+            }
+            temp.removeFirst();
+        }
+
+        return dependencies;
+    }
+
+    public Set getClosableModules(ModuleId moduleId) {
+        Set dependencies = getAllChildren(moduleId);
+        LinkedList temp = new LinkedList();
+
+        temp.addAll(dependencies);
+
+        while (!temp.isEmpty()) {
+            ModuleId tempId = (ModuleId) temp.getFirst();
+            Set parents = getParents(tempId);
+
+            if (!dependencies.containsAll(parents)) {
+                Set children = getAllChildren(tempId);
+                dependencies.removeAll(children);
+            }
+
+            temp.removeFirst();
+        }
+
+        return dependencies;
     }
 
     public void deleteDependency(ModuleId moduleFromId, ModuleId moduleToId) {
@@ -145,14 +192,16 @@ public class ModuleDatabase {
             return;
         }
 
-        deps = (LinkedList) dependencies.get(moduleFromId);
+        deps = (LinkedList) children.get(moduleFromId);
         deps.remove(moduleToId);
 
-        deps = (LinkedList) dependents.get(moduleToId);
+        deps = (LinkedList) parents.get(moduleToId);
         deps.remove(moduleFromId);
     }
 
     public void deleteDependencies(ModuleId moduleId) {
+        Set dependencies;
+
         Module module = (Module) modules.get(moduleId);
 
         if (module == null) {
@@ -161,14 +210,23 @@ public class ModuleDatabase {
             return;
         }
 
-        HashSet deps = (HashSet) dependencies.get(moduleId);
-        for (Iterator iter = deps.iterator(); iter.hasNext();) {
-            ((HashSet) dependents.get(iter.next())).remove(moduleId);
+        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+            ModuleId tempId = (ModuleId) iter.next();
+            dependencies = getChildren(tempId);
+            if (dependencies.contains(moduleId)) {
+                dependencies.remove(moduleId);
+            }
+            dependencies = getParents(tempId);
+            if (dependencies.contains(moduleId)) {
+                dependencies.remove(moduleId);
+            }
         }
-        deps.clear();
+
+        dependencies = (Set) children.get(moduleId);
+        dependencies.clear();
     }
 
     public Map getDependencies() {
-        return dependencies;
+        return children;
     }
 }

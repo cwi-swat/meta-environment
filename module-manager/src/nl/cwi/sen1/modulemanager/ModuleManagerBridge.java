@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Oct 31, 2005 4:02:52 PM
+// generation time: Nov 1, 2005 10:32:32 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -140,6 +140,17 @@ public class ModuleManagerBridge
       return tool.getDependingModules(t0);
     }
       throw new UnsupportedOperationException("method `getDependingModules' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getClosableModules(ATerm t0)
+
+  public ATerm getClosableModules(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getClosableModules(t0);
+    }
+      throw new UnsupportedOperationException("method `getClosableModules' not supported.");
   }
 
   //}}}

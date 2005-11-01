@@ -1,5 +1,12 @@
 $Id$
 
+Tue Nov  1 11:47:07 CET 2005 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
+   - Fix bug in deletedependencies where some dependencies were not removed
+   - Fix delete module also deleting the dependencies
+ * module-manager.idef:
+   - Add mm-get-closable-modules message
+
 Mon Oct 31 15:17:30 CET 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
    - Remove module from dependency lists when deleting it

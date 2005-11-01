@@ -91,6 +91,11 @@ in
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
+    rec-msg(mm-get-closable-modules(ModuleId?))
+    . snd-eval(MM, get-closable-modules(ModuleId))
+    . rec-value(MM, closable-modules(Modules?))
+    . snd-msg(mm-closable-modules(ModuleId, Modules))
+  +
     rec-msg(mm-delete-dependency(From?, To?))
     . snd-do(MM, delete-dependency(From, To))
   +
