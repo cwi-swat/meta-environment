@@ -73,8 +73,15 @@ public class ModuleManager implements ModuleManagerTif {
                 .toTerm());
     }
 
+    public ATerm getAllModulesByAttribute(ATerm namespace, ATerm key) {
+        Set modules = moduleDB.getAllModulesByAttribute(namespace, key);
+
+        return pureFactory.make("snd-value(modules(<list>))",
+                extractATermList(modules));
+    }
+
     public void deleteModule(ATerm id) {
-//        System.err.println("MM - deleteModule: module [" + id + "]");
+        // System.err.println("MM - deleteModule: module [" + id + "]");
 
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
         moduleDB.removeModule(moduleId);

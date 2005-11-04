@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 1, 2005 10:32:32 AM
+// generation time: Nov 4, 2005 8:26:01 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -99,25 +99,14 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public ATerm getModuleGraph(ATerm t0)
+  //{{{  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
 
-  public ATerm getModuleGraph(ATerm t0)
+  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
   {
     if (tool != null) {
-      return tool.getModuleGraph(t0);
+      return tool.getAttribute(t0, t1, t2);
     }
-      throw new UnsupportedOperationException("method `getModuleGraph' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm createModule()
-
-  public ATerm createModule()
-  {
-    if (tool != null) {
-      return tool.createModule();
-    }
-      throw new UnsupportedOperationException("method `createModule' not supported.");
+      throw new UnsupportedOperationException("method `getAttribute' not supported.");
   }
 
   //}}}
@@ -129,6 +118,17 @@ public class ModuleManagerBridge
       return tool.getDependencies();
     }
       throw new UnsupportedOperationException("method `getDependencies' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getAllDependingModules(ATerm t0)
+
+  public ATerm getAllDependingModules(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getAllDependingModules(t0);
+    }
+      throw new UnsupportedOperationException("method `getAllDependingModules' not supported.");
   }
 
   //}}}
@@ -154,25 +154,14 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public ATerm getAllDependingModules(ATerm t0)
+  //{{{  public ATerm createModule()
 
-  public ATerm getAllDependingModules(ATerm t0)
+  public ATerm createModule()
   {
     if (tool != null) {
-      return tool.getAllDependingModules(t0);
+      return tool.createModule();
     }
-      throw new UnsupportedOperationException("method `getAllDependingModules' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
-
-  public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2)
-  {
-    if (tool != null) {
-      return tool.getAttribute(t0, t1, t2);
-    }
-      throw new UnsupportedOperationException("method `getAttribute' not supported.");
+      throw new UnsupportedOperationException("method `createModule' not supported.");
   }
 
   //}}}
@@ -184,6 +173,28 @@ public class ModuleManagerBridge
       return tool.getModuleIdByAttribute(t0, t1, t2);
     }
       throw new UnsupportedOperationException("method `getModuleIdByAttribute' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getAllModulesByAttribute(ATerm t0, ATerm t1)
+
+  public ATerm getAllModulesByAttribute(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      return tool.getAllModulesByAttribute(t0, t1);
+    }
+      throw new UnsupportedOperationException("method `getAllModulesByAttribute' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getModuleGraph(ATerm t0)
+
+  public ATerm getModuleGraph(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getModuleGraph(t0);
+    }
+      throw new UnsupportedOperationException("method `getModuleGraph' not supported.");
   }
 
   //}}}

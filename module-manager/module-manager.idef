@@ -17,7 +17,7 @@ let
   Map : term,
   ModuleId : term,
   Modulename : term,
-  Modules : term,
+  Modules : list,
   Namespace : term,
   NewModuleId : term,
   Path : str,
@@ -27,6 +27,11 @@ in
   execute(module-manager, MM?)
   .
   (
+    rec-msg(mm-create-module)
+    . snd-eval(MM, create-module)
+    . rec-value(MM, module-id(ModuleId?))
+    . snd-msg(mm-module-created(ModuleId))
+  +
     rec-msg(mm-get-module-id-by-attribute(Namespace?, Key?, Value?))
     . snd-eval(MM, get-module-id-by-attribute(Namespace, Key, Value))
     .
@@ -38,10 +43,10 @@ in
       . snd-msg(mm-no-such-module(Namespace, Key, Value))
     )
   +
-    rec-msg(mm-create-module)
-    . snd-eval(MM, create-module)
-    . rec-value(MM, module-id(ModuleId?))
-    . snd-msg(mm-module-created(ModuleId))
+    rec-msg(mm-get-all-modules-by-attribute(Namespace?, Key?))
+    . snd-eval(MM, get-all-modules-by-attribute(Namespace, Key))
+    . rec-value(MM, modules(Modules?))
+    . snd-msg(mm-modules(Modules))
   +
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))

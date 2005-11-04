@@ -1,5 +1,9 @@
 $Id$
 
+Fri Nov  4 11:58:07 CET 2005 <kooiker@ciw.nl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
+   - Add method getAllModulesByAttribute
+
 Tue Nov  1 11:47:07 CET 2005 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
    - Fix bug in deletedependencies where some dependencies were not removed
