@@ -37,7 +37,7 @@ public class DisConnect extends Atom {
 	public boolean execute() throws ToolBusException {
 		if (!isEnabled())
 		      return false;
-		System.err.println("DisConnect.execute called, returns false");
+		//System.err.println("DisConnect.execute called, returns false");
 		return false;
 	}
 }

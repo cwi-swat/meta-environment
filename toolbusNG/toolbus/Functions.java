@@ -551,7 +551,7 @@ public class Functions {
    * @return boolean
    */
   public static boolean compatibleTypes(ATerm t1, ATerm t2){
-  	System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
+  	//System.err.println("compatibleType(" + t1 + ", " + t2 + ")");
   	
  	if(t1.getType() == ATerm.PLACEHOLDER)
   		t1 = ((ATermPlaceholder) t1).getPlaceholder();
@@ -595,7 +595,11 @@ public class Functions {
 	  	}
   
        	ATermAppl ap2 = (ATermAppl) t2;
-    	System.err.println("compatibleType: ap1.getName() = " + ap1.getName() + ";" + "ap2.getName() = " + ap2.getName());
+    	//System.err.println("compatibleType: ap1.getName() = " + ap1.getName() + ";" + "ap2.getName() = " + ap2.getName());
+    	if(t1.equals(TBTerm.StrType) && ap2.getArity() == 0 && ap2.isQuoted())
+    		return true;
+       	if(t2.equals(TBTerm.StrType) && ap1.getArity() == 0 && ap1.isQuoted())
+    		return true;
        	if(ap1.getName() != ap2.getName())
        		return false;
        	if(ap1.getArity() == 0 || ap2.getArity() == 0)

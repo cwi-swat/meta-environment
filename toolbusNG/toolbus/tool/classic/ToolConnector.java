@@ -30,7 +30,7 @@ public class ToolConnector extends Thread {
 	private final static int MIN_MSG_SIZE = 128;	// the C implementation
 	private ToolBus toolbus;
 	private boolean running = false;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	//private InetAddress address;
 	private String toolname;
 	private Socket connection;

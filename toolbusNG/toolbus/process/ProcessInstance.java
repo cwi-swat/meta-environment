@@ -34,7 +34,7 @@ public class ProcessInstance {
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
   private boolean running = true;
-  private boolean verbose = true;
+  private boolean verbose = false;
 
   public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
     toolbus = TB;

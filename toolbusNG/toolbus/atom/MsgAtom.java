@@ -71,7 +71,7 @@ public abstract class MsgAtom extends Atom {
     ATermFactory factory = getId().getFactory();
     matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
 
-    System.err.println("MsgAtom.compile: " + matchPattern);
+    //System.err.println("MsgAtom.compile: " + matchPattern);
   }
 
   public boolean execute() throws ToolBusException {

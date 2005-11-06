@@ -210,12 +210,29 @@ public class TBTermTest extends TestCase {
     assertTrue(compatible("f(<int>,14)", "f(13,<int>)"));
     assertTrue(compatible("[<int>,14]", "[13,<int>]"));
     
+    assertTrue(compatible("13", "<int>"));
+    assertTrue(compatible( "f(13)", "f(<int>)"));
+    assertTrue(compatible("f(13,<int>)", "f(<int>,14)"));
+    assertTrue(compatible("[13,<int>]", "[<int>,14]"));
+    
     assertTrue(compatible("<real>", "13.5"));
     assertTrue(compatible("f(<real>)", "f(13.5)"));
     assertTrue(compatible("f(<real>,14.5)", "f(13.5,<real>)"));
     assertTrue(compatible("[<real>,14.5]", "[1.5,<real>]"));
     
+    assertTrue(compatible("13.5", "<real>"));
+    assertTrue(compatible("f(13.5)", "f(<real>)"));
+    assertTrue(compatible("f(13.5,<real>)", "f(<real>,14.5)"));
+    assertTrue(compatible("[1.5,<real>]", "[<real>,14.5]"));
+    
     assertTrue(compatible("<str>", "\"abc\""));
+    assertTrue(!compatible("<str>", "f(1)"));
+    assertTrue(!compatible("<str>", "f"));
+    
+    assertTrue(compatible("\"abc\"", "<str>"));
+    assertTrue(!compatible("f(1)", "<str>"));
+    assertTrue(!compatible("f", "<str>"));
+    
   }
   
   public static Test suite() {
