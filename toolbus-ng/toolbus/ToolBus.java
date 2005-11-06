@@ -355,7 +355,7 @@ public class ToolBus {
   	System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
     TD.setToolSignatures(sig);
-    ToolInstance ti = new ToolInstance(TD, tools.size(), alreadyExecuting);
+    ToolInstance ti = new ToolInstance(TD, this, tools.size(), alreadyExecuting);
     tools.add(ti);
     return ti;
   }
@@ -468,14 +468,18 @@ public class ToolBus {
         	 try{
         	 	  int delay = (int) (nextTime - currentTime);
         	 	  //System.err.println("currentTime = " + currentTime + "; nextTime = " + nextTime + "; delay = " + delay);
-        	      Thread.sleep(delay > 0 ? delay : 200);
+        	      synchronized(this) {
+        	      		wait(delay > 0 ? delay : 200);
         	      }
+        	 }
+        	      
         	      catch(InterruptedException e){
         	      System.out.println("Sleep Interrupted");
         	      }
         	if(tools.size() > 0 || nextTime > currentTime)
         		work = true;
         }
+        
       }
     } catch (ToolBusException e) {
       System.err.println(e.getMessage());

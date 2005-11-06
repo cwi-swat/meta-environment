@@ -15,7 +15,7 @@ public class Main {
 		try {
 			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/auction.tb");
+					+ "/toolbusNG/toolbus/tool/examples/wave.tb");
 					//+ "/toolbusNG/toolbus/test/B1.tb");
 			T.execute();
 		} catch (ToolBusException e) {

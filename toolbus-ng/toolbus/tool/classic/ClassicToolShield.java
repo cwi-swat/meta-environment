@@ -73,7 +73,7 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private InputStream inputStream;
 	private OutputStream outputStream;
 	private ToolInputHandler toolInputHandler;
