@@ -3,12 +3,8 @@ package nl.cwi.sen1.gui.plugin;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import edu.berkeley.guir.prefuse.VisualItem;
@@ -25,9 +21,11 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		double height = bounds.getHeight();
 		Shape result = null;
 		
+		item.setAttribute("text-offset", "0");
+		
 		nl.cwi.sen.api.graph.graph.types.Shape shape = node.getShape();
 		if (shape.isDiamond()) {
-			result = getDiamondShape(x, y, width, height);
+			result = getDiamondShape(item, x, y, width, height);
 		}
 		else if (shape.isBox()) {
 			result = getBoxShape(x, y, width, height);
@@ -42,7 +40,7 @@ public class GraphNodeRenderer extends TextItemRenderer {
 			result = getBoxShape(x, y, width, height);			
 		}
 		
-		return result;
+		return new GraphCompositeShape(super.getRawShape(item), result);
 	}
 
 	private Shape getCircleShape(double x, double y, double width, double height) {
@@ -58,15 +56,26 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		return new Rectangle2D.Double(x, y, width, height);
 	}
 
-	private Shape getDiamondShape(double x, double y, double width, double height) {
+	private Shape getDiamondShape(VisualItem item, double x, double y, double width, double height) {
 		int ix = (int) x;
 		int iy = (int) y;
 		int iw = (int) width;
 		int ih = (int) height;
-		int[] xs = new int[] {ix - (iw/ih)*(ih/2), ix + iw / 2, ix + iw + (iw/ih)*(ih/2), ix + iw / 2 };
-		int[] ys = new int[] {iy + ih / 2, iy + ih + (ih/iw)*(iw / 2), iy + ih / 2, iy - (ih/iw)*(iw / 2)  };
+		int[] xs = new int[] {ix - (iw/ih)*(ih/2), ix + iw / 2, ix + iw + (iw/ih)*(ih/2), ix + iw / 2};
+		int[] ys = new int[] {iy + ih / 2, iy + ih + (ih/iw)*(iw / 2), iy + ih / 2, iy - (ih/iw)*(iw / 2)};
 			
 		return new Polygon(xs, ys, 4);
 	}
+	
+	public void render(Graphics2D g, VisualItem item) {
+        GraphCompositeShape comp = (GraphCompositeShape) getShape(item);
+        Shape outer = comp.getOuterShape();
+        
+        super.drawShape(g, item , outer);
+        int tmp = getRenderType(item);
+        setRenderType(TextItemRenderer.RENDER_TYPE_NONE);
+        super.render(g, item);
+        setRenderType(tmp);
+	} 
 	
 }
