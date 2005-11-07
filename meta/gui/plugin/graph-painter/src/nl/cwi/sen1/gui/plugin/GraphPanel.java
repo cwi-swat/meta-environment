@@ -79,7 +79,7 @@ public class GraphPanel extends JPanel {
 		display.setHighQuality(true);
 
 		// set up a renderer such that nodes show text labels
-		TextItemRenderer nodeRenderer = new TextItemRenderer();
+		TextItemRenderer nodeRenderer = new GraphNodeRenderer();
 		nodeRenderer.setTextAttributeName("label");
 		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
 		nodeRenderer.setHorizontalPadding(prefs

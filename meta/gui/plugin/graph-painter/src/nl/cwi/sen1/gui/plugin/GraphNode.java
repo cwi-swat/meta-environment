@@ -2,6 +2,8 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Color;
 
+import nl.cwi.sen.api.graph.graph.types.Shape;
+
 import edu.berkeley.guir.prefuse.graph.DefaultNode;
 
 public class GraphNode extends DefaultNode {
@@ -11,6 +13,7 @@ public class GraphNode extends DefaultNode {
 	private int dotHeight;
 	private Color color;
 	private Color fillColor;
+	private Shape shape;
 	
 	public void setId(String id) {
 		setAttribute("id", id);
@@ -34,6 +37,14 @@ public class GraphNode extends DefaultNode {
 	
 	public int getDotY() {
 		return dotY;
+	}
+	
+	public Shape getShape() {
+		return shape;
+	}
+	
+	public void setShape(Shape shape) {
+		this.shape = shape;
 	}
 	
 	public void setDotWidth(int width) {

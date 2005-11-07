@@ -13,6 +13,7 @@ import nl.cwi.sen.api.graph.graph.types.EdgeList;
 import nl.cwi.sen.api.graph.graph.types.Graph;
 import nl.cwi.sen.api.graph.graph.types.Node;
 import nl.cwi.sen.api.graph.graph.types.NodeList;
+import nl.cwi.sen.api.graph.graph.types.Shape;
 import nl.cwi.sen.api.graph.graph.types.attribute.Location;
 import nl.cwi.sen.api.graph.graph.types.attribute.Size;
 import nl.cwi.sen1.util.Preferences;
@@ -36,6 +37,7 @@ public class GraphAdapter extends DefaultGraph {
 			pNode.setDotY(getY(node));
 			pNode.setDotWidth(getWidth(node));
 			pNode.setDotHeight(getHeight(node));
+			pNode.setShape(getShape(node));
 
 			Color fillColor = getFillColorAttribute(node);
 
@@ -64,6 +66,19 @@ public class GraphAdapter extends DefaultGraph {
 
 			addEdge(pEdge);
 		}
+	}
+
+	private Shape getShape(Node node) {
+		AttributeList attrs = node.getAttributes();
+		while (!attrs.isEmpty()) {
+			Attribute attr = attrs.getHead();
+			if (attr.isShape()) {
+				return (Shape) attr.getShape();
+			}
+			attrs = attrs.getTail();
+		}
+
+		return null;
 	}
 
 	static private Location getLocationAttribute(Node node) {
