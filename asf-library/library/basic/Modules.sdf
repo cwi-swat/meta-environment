@@ -8,6 +8,10 @@ context-free start-symbols Module
 
 sorts TermCon
 
+sorts Modules
+context-free syntax
+  "modules" "(" "[" {Module ","}* "]"")" -> Modules {const("modules")}
+
 sorts Module 
 context-free syntax
   %% A module constists of an identifier and optional attributes
@@ -16,7 +20,7 @@ context-free syntax
 sorts ModuleId
 context-free syntax
   %% An module-id is defined by a unique natcon
-  "module-id" "(" id:NatCon ")" -> ModuleId {cons("module-id")}
+  "mid" "(" id:NatCon ")" -> ModuleId {cons("mid")}
 
 sorts Attribute
 context-free syntax
@@ -28,13 +32,20 @@ context-free syntax
   %% table-entry pairs are key-value pairs of TermCons
   "table-entry" "(" key:TermCon "," value:TermCon ")" -> TableEntry {cons("table-entry")}
 
-sorts DependencyList
+sorts Dependencies
 context-free syntax
   %% List of dependencies
-  "dependency-list" "(" "[" table:{Dependency ","}* "]" ")" -> DependencyList {cons("dependency-list")}
+  "dependencies" "(" "[" {Dependency ","}* "]" ")" -> Dependencies {cons("dependencies")}
 
 sorts Dependency
 context-free syntax
-  %% A module depends on a module-id
-  "dependency" "(" from:NatCon "," to:NatCon ")" -> Dependency {cons("dependency")}
+  %% A module depends on zero or more module-id
+  "dependency" "(" from:ModuleId "," list:{ModuleId ","}*")" -> Dependency {cons("dependency")}
 
+sorts AttributeMap
+context-free syntax
+  "attribute-map" "(" "[" {ModuleAttribute ","}* "]" ")" -> AttributeMap {cons("attribute-map")}
+
+sorts ModuleAttribute
+context-free syntax
+  "module-attribute" "(" id:ModuleId "," attribute:TermCon ")" -> ModuleAttribute {cons("module-attribute")}
