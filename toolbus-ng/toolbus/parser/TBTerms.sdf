@@ -22,33 +22,33 @@ exports
     Vname -/- [a-zA-Z0-9\-]
 
   context-free syntax
-    NatCon			        -> Nat 	  {cons("natcon")}
-    Int "." NatCon 		    -> Real   {cons("realcon")}
+    NatCon			        -> Nat 	  {cons("ttt-natcon")}
+    Int "." NatCon 		    -> Real   {cons("ttt-realcon")}
     "(" Nat ")" 		    -> Nat    {bracket}
     Nat 			        -> Int
-    "+" Nat 			    -> Int    {cons("posint")}
-    "-" Nat 			    -> Int    {cons("negint")}
+    "+" Nat 			    -> Int    {cons("ttt-posint")}
+    "-" Nat 			    -> Int    {cons("ttt-negint")}
     "(" Int ")" 		    -> Int    {bracket}
-    StrCon			        -> String {cons("strcon")}
+    StrCon			        -> String {cons("ttt-strcon")}
 
     Int 			        -> TBTerm
     Real			        -> TBTerm
     String 			        -> TBTerm 
 
     Vname 			        -> Var
-    Var 			        -> GenVar  {cons("var")}
-    Var "?" 			    -> GenVar  {cons("resvar")}
+    Var 			        -> GenVar  {cons("ttt-var")}
+    Var "?" 			    -> GenVar  {cons("ttt-resvar")}
     GenVar 			        -> TBTerm
 
-    "<" TBTerm ">" 		    -> TBTerm  {cons("placeholder")}
+    "<" TBTerm ">" 		    -> TBTerm  {cons("ttt-placeholder")}
 
-    Id 				        -> TBTerm   %% {cons("apply")}
+    Id 				        -> TBTerm   %% {cons("ttt-apply")}
 
-    Id "(" TBTermList ")" 	-> TBTerm  {cons("apply")}
+    Id "(" TBTermList ")" 	-> TBTerm  {cons("ttt-apply")}
 
     {TBTerm ","}* 		    -> TBTermList
 
-    "[" TBTermList "]" 		-> TBTerm  %% {cons("termlist")}
+    "[" TBTermList "]" 		-> TBTerm  %% {cons("ttt-termlist")}
 
 
  

@@ -21,18 +21,23 @@ process TermOps is
 	if is-appl(quote(f(a,b))) then tau else P(10) fi .
 	if is-appl(5) then P(11) else tau fi .
 
-	if equal(args(quote(f(a,b,c))), [a,b,c]) then tau else P(1) fi .
+	if equal(args(quote(f(a,b,c))), [a,b,c]) then tau else P(12) fi .
+	if equal(fun(quote(f(a,b,c))), "f") then tau else P(13) fi .
 
-	if is-list([]) then tau else P(13) fi .
-	if is-list([a]) then tau else P(14) fi .
-	if is-list([a, b]) then tau else P(15) fi .
-	if is-list(5) then P(16) else tau fi .
-
-	if is-var(X) then tau else P(14) fi .
-	if is-var(5) then P(15) else tau fi .
+	if is-list([]) then tau else P(14) fi .
+	if is-list([a]) then tau else P(15) fi .
+	if is-list([a, b]) then tau else P(16) fi .
+	if is-list(5) then P(17) else tau fi .
 	
-	if is-result-var(X?) then tau else P(16) fi .
-	if is-result-var(5) then P(17) else tau fi
+	if is-empty([]) then tau else P(18) fi . 
+	if is-empty([a,b]) then P(19) else tau fi .
+	
+
+	if is-var(X) then tau else P(20) fi .
+	if is-var(5) then P(21) else tau fi .
+	
+	if is-result-var(X?) then tau else P(22) fi .
+	if is-result-var(5) then P(23) else tau fi
   endlet
 
 process IntOps is
@@ -177,7 +182,7 @@ process MiscOps is
      if not-equal(process-name, "All") then P(200) else tau fi .
      %% Deviates from old Toolbus where process-id return a plain integer
      %% ===> removed since strange behaviour during test (only)
-     %%if not-equal(process-id, quote(pi-All(0))) then P(201) else tau fi . 
+     if not-equal(process-id, 0) then P(201) else tau fi . 
      N := quote(3) .
      NP := quote([2,3]) .
      T := quote(f(a)) .

@@ -13,5 +13,5 @@ exports
  %%   Delay "(" TBTermList ")" TimeOut "(" TBTermList ")" 
  %%				-> TimeExpr {cons("delayTimeOutExpr")}
  
-    "delay" "(" TBTerm ")"   -> TimeExpr {cons("delay")}
-    "timeout" "(" TBTerm ")" -> TimeExpr {cons("timeout")}
+    "delay" "(" TBTerm ")"   -> TimeExpr {cons("ttt-delay")}
+    "timeout" "(" TBTerm ")" -> TimeExpr {cons("ttt-timeout")}

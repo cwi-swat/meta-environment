@@ -337,7 +337,7 @@ public class ToolBus {
    */
 
   public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
-    ProcessInstance P = new ProcessInstance(this, call);
+    ProcessInstance P = new ProcessInstance(this, call, processes.size());
     processes.add(P);
     return P;
   }

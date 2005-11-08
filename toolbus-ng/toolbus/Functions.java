@@ -152,11 +152,27 @@ public class Functions {
         }
       });
     
-    // is-empty
-    // is-var
-    // is-result-var
-    // is-formal
-    // fun
+    define(new FunctionDescriptor("is-empty", TBTerm.TermType, TBTerm.BoolType) {
+        public ATerm apply(ATerm args[], ProcessInstance pi) {
+          if(TBTerm.isList(args[0])){
+          	if(((ATermList) args[0]).getLength() == 0)
+          		return  TBTerm.True;
+          }
+          return TBTerm.False;
+        }
+      });
+    
+    // is-var, see method eval
+    // is-result-var, see method eval
+    // TODO: is-formal
+    
+    define(new FunctionDescriptor("fun", TBTerm.TermType, TBTerm.StrType) {
+        public ATerm apply(ATerm args[], ProcessInstance pi) {
+        	System.err.println("fun: " + args[0] + ";" + ((ATermAppl) args[0]).getAFun());
+        	String fname  = ((ATermAppl) args[0]).getName();
+          return TBTerm.factory.make("<str>", fname);
+        }
+      });
     
     define(new FunctionDescriptor("args", TBTerm.TermType, TBTerm.ListType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
@@ -386,9 +402,9 @@ public class Functions {
     
     // functions
 
-    define(new FunctionDescriptor("process-id", TBTerm.TermType) {
+    define(new FunctionDescriptor("process-id", TBTerm.IntType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
-          return pi.getProcessId();
+          return TBTerm.factory.makeInt(pi.getProcessId());
         }
       });
     
