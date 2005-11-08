@@ -7,47 +7,47 @@ exports
   context-free syntax
   
   %% communication atoms
-    "snd-msg" "(" TBTermList ")"			    -> Atom	{cons("SndMsg")}
-    "snd-msg" "(" TBTermList ")" "to" TBTerm	-> Atom	{cons("SndMsg")}
+    "snd-msg" "(" TBTermList ")"			    -> Atom	{cons("ttt-SndMsg")}
+    "snd-msg" "(" TBTermList ")" "to" TBTerm	-> Atom	{cons("ttt-SndMsg")}
 
-    "rec-msg""(" TBTermList ")"		            -> Atom {cons("RecMsg")}
-    "rec-msg" "(" TBTermList ")" "from" TBTerm	-> Atom {cons("RecMsg")}
+    "rec-msg""(" TBTermList ")"		            -> Atom {cons("ttt-RecMsg")}
+    "rec-msg" "(" TBTermList ")" "from" TBTerm	-> Atom {cons("ttt-RecMsg")}
     
   %%note atoms
-    "subscribe" "(" TBTerm ")"                   -> Atom {cons("Subscribe")}
-    "unsubscribe" "(" TBTerm ")"                 -> Atom {cons("UnSubscribe")}
-    "snd-note" "(" TBTerm ")"			         -> Atom {cons("SndNote")}
-    "rec-note" "(" TBTerm ")"			         -> Atom {cons("RecNote")}   
-    "no-note" "(" TBTerm ")"			         -> Atom {cons("NoNote")}
+    "subscribe" "(" TBTerm ")"                   -> Atom {cons("ttt-Subscribe")}
+    "unsubscribe" "(" TBTerm ")"                 -> Atom {cons("ttt-UnSubscribe")}
+    "snd-note" "(" TBTerm ")"			         -> Atom {cons("ttt-SndNote")}
+    "rec-note" "(" TBTerm ")"			         -> Atom {cons("ttt-RecNote")}   
+    "no-note" "(" TBTerm ")"			         -> Atom {cons("ttt-NoNote")}
     
   %% Tool atoms
 
-    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("Execute")}       %% term re_var
-    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("RecConnect")}    %% term_list
-    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("RecDisConnect")} %% term_list
-    "snd-terminate" "(" TBTerm ")"               -> Atom {cons("SndTerminate")}  %% term_list
+    "execute" "(" TBTerm "," TBTerm ")"          -> Atom {cons("ttt-Execute")}       %% term re_var
+    "rec-connect" "(" TBTerm ")"                 -> Atom {cons("ttt-RecConnect")}    %% term_list
+    "rec-disconnect" "(" TBTerm ")"              -> Atom {cons("ttt-RecDisConnect")} %% term_list
+    "snd-terminate" "(" TBTerm "," TBTerm ")"    -> Atom {cons("ttt-SndTerminate")}  %% term_list
   
-    "rec-event" "(" TBTermList ")"	             -> Atom {cons("Event")}         
-    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("AckEvent")}      %% term_list
-    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("Eval")}          %% term_list
-    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("RecVal")}        %% term_list
-    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("Do")}            %% term_list
+    "rec-event" "(" TBTermList ")"	             -> Atom {cons("ttt-Event")}         
+    "snd-ack-event" "(" TBTerm "," TBTerm ")"	 -> Atom {cons("ttt-AckEvent")}      %% term_list
+    "snd-eval" "(" TBTerm "," TBTerm ")"         -> Atom {cons("ttt-Eval")}          %% term_list
+    "rec-value" "(" TBTerm "," TBTerm ")"        -> Atom {cons("ttt-RecVal")}        %% term_list
+    "snd-do" "(" TBTerm "," TBTerm ")"		     -> Atom {cons("ttt-Do")}            %% term_list
  
   %% Delta and Tau
   
-    "tau"				                         -> Atom {cons("Tau")}
-    "delta"				                         -> Atom {cons("Delta")}
+    "tau"				                         -> Atom {cons("ttt-Tau")}
+    "delta"				                         -> Atom {cons("ttt-Delta")}
      
   %% Read and Print
   
-     "printf" "(" TBTermList ")"			     -> Atom {cons("Print")}
-     "read" "(" TBTermList ")"                   -> Atom {cons("Read")}
+     "printf" "(" TBTermList ")"			     -> Atom {cons("ttt-Print")}
+     "read" "(" TBTermList ")"                   -> Atom {cons("ttt-Read")}
      
   %% Shutdown
-      "shutdown" "(" TBTerm ")"                  -> Atom {cons("ShutDown")}
+      "shutdown" "(" TBTerm ")"                  -> Atom {cons("ttt-ShutDown")}
       
   %% Assign
 
-     Var ":=" TBTerm 			                 -> Atom {cons("Assign")}
+     Var ":=" TBTerm 			                 -> Atom {cons("ttt-Assign")}
 
  

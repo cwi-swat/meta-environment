@@ -25,7 +25,7 @@ public class ProcessInstance {
   private ProcessDefinition definition;
   private ProcessExpression call;
   private String processName;
-  private ATerm processId;
+  private int processId;
   private State elements;
   private State currentState;
   private ToolBus toolbus;
@@ -36,7 +36,7 @@ public class ProcessInstance {
   private boolean running = true;
   private boolean verbose = false;
 
-  public ProcessInstance(ToolBus TB, ProcessCall call) throws ToolBusException {
+  public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException {
     toolbus = TB;
     this.call = call;
     processName = call.getName();
@@ -45,8 +45,8 @@ public class ProcessInstance {
 
     Environment env = new Environment();
     
-    AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
-    processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
+    //AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
+    //processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
     transactionIdVar = TBTerm.TransactionIdVar;
     env.introduceBinding(transactionIdVar, TBTerm.newTransactionId());
 
@@ -75,7 +75,7 @@ public class ProcessInstance {
   }
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals));
+    this(TB, new ProcessCall(name, actuals), 0);
   }
   
   void info(String msg) {
@@ -100,7 +100,7 @@ public class ProcessInstance {
   	return toolbus.getRunTime();
   }
 
-  public ATerm getProcessId() {
+  public int getProcessId() {
     return processId;
   }
   

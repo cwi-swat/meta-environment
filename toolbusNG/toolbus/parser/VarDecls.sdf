@@ -5,6 +5,6 @@ exports
   sorts VarDecl VarDecls
 
   context-free syntax
-    Var ":" TBTerm 	    -> VarDecl 	{cons("vardecl")}
-    Var ":" TBTerm "?" 	-> VarDecl 	{cons("resvardecl")}
+    Var ":" TBTerm 	    -> VarDecl 	{cons("ttt-vardecl")}
+    Var ":" TBTerm "?" 	-> VarDecl 	{cons("ttt-resvardecl")}
     {VarDecl ","}* 	    -> VarDecls

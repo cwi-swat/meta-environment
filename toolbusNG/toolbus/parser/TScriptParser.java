@@ -27,6 +27,7 @@ import toolbus.atom.SndMsg;
 import toolbus.atom.SndNote;
 import toolbus.atom.Subscribe;
 import toolbus.atom.Tau;
+import toolbus.atom.Terminate;
 import toolbus.atom.UnSubscribe;
 import toolbus.process.Alternative;
 import toolbus.process.Disrupt;
@@ -105,40 +106,44 @@ class TScriptNodeBuilders {
     /*
      * Variables and constants
      */
-    define(new NodeBuilder("vardecl") {
+    define(new NodeBuilder("ttt-vardecl") {
       public Object build(Object args[]) {
         return TBTerm.mkVar((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("resvardecl") {
+    define(new NodeBuilder("ttt-resvardecl") {
       public Object build(Object args[]) {
         return TBTerm.mkResVar((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("var") {
+    define(new NodeBuilder("ttt-var") {
       public Object build(Object args[]) {
         return TBTerm.mkVar((ATerm) args[0], factory.make("none"));
       }
     });
 
-    define(new NodeBuilder("resvar") {
+    define(new NodeBuilder("ttt-resvar") {
       public Object build(Object args[]) {
         return TBTerm.mkResVar((ATerm) args[0], factory.make("none"));
       }
     });
     
-    define(new NodeBuilder("placeholder") {
+    define(new NodeBuilder("ttt-placeholder") {
         public Object build(Object args[]) {
           return factory.makePlaceholder((ATerm) args[0]);
         }
       });
 
-    define(new NodeBuilder("apply") {
+    define(new NodeBuilder("ttt-apply") {
 		public Object build(Object args[]) throws ToolBusException {
-			if (args.length == 0 || args.length > 2)
-				throw new ToolBusException("apply: wrong number of args");
+			if (args.length == 0 || args.length > 2){
+				for(int i = 0; i < args.length; i++){
+					System.err.println("ttt-apply: arg[" + i + "]:" + args[i]);
+				}
+				throw new ToolBusException("ttt-apply: wrong number of args");
+			}
 
 			ATermList argList = (args.length == 2) ? (ATermList) args[1] : factory.makeList();
 			AFun afun = factory.makeAFun(((ATermAppl) args[0]).getName(),
@@ -152,20 +157,20 @@ class TScriptNodeBuilders {
 		}
     });
 
-    define(new NodeBuilder("natcon") {
+    define(new NodeBuilder("ttt-natcon") {
       public Object build(Object args[]) {
         return factory.makeInt(Integer.parseInt(((ATermAppl) args[0]).getName()));
       }
     });
 
-    define(new NodeBuilder("realcon") {
+    define(new NodeBuilder("ttt-realcon") {
       public Object build(Object args[]) {
       	String sreal = args[0].toString() + "." + args[1].toString();
       	return factory.makeReal(new Double(sreal).doubleValue());
       }
     });
 
-    define(new NodeBuilder("strcon") {
+    define(new NodeBuilder("ttt-strcon") {
       public Object build(Object args[]) {
       	return args[0];
       }
@@ -175,13 +180,13 @@ class TScriptNodeBuilders {
      *  Process constants
      */
 
-    define(new NodeBuilder("Delta") {
+    define(new NodeBuilder("ttt-Delta") {
       public Object build(Object args[]) {
         return new Delta();
       }
     });
 
-    define(new NodeBuilder("Tau") {
+    define(new NodeBuilder("ttt-Tau") {
       public Object build(Object args[]) {
         return new Tau();
       }
@@ -191,7 +196,7 @@ class TScriptNodeBuilders {
      *  Process operators
      */
 
-    define(new NodeBuilder("Sequence") {
+    define(new NodeBuilder("ttt-Sequence") {
       public Object build(Object args[]) {
       	//System.err.println("Sequence[0]: " + args[0]);
      	//System.err.println("Sequence[1]: " + args[1]);
@@ -199,43 +204,43 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("Alternative") {
+    define(new NodeBuilder("ttt-Alternative") {
       public Object build(Object args[]) {
         return new Alternative((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Iteration") {
+    define(new NodeBuilder("ttt-Iteration") {
       public Object build(Object args[]) {
         return new Iteration((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Disrupt") {
+    define(new NodeBuilder("ttt-Disrupt") {
       public Object build(Object args[]) {
         return new Disrupt((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("Merge") {
+    define(new NodeBuilder("ttt-Merge") {
       public Object build(Object args[]) {
         return new Merge((ProcessExpression) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("IfElse") {
+    define(new NodeBuilder("ttt-IfElse") {
       public Object build(Object args[]) {
         return new IfElse((ATerm) args[0], (ProcessExpression) args[1], (ProcessExpression) args[2]);
       }
     });
 
-    define(new NodeBuilder("IfThen") {
+    define(new NodeBuilder("ttt-IfThen") {
       public Object build(Object args[]) {
         return new IfThen((ATerm) args[0], (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("LetDefinition") {
+    define(new NodeBuilder("ttt-LetDefinition") {
       public Object build(Object args[]) {
         return new LetDefinition((ATermList) args[0], (ProcessExpression) args[1]);
       }
@@ -245,25 +250,25 @@ class TScriptNodeBuilders {
      * Process definition and creation
      */
 
-    define(new NodeBuilder("ProcessCall") {
+    define(new NodeBuilder("ttt-ProcessCall") {
       public Object build(Object args[]) {
         return new ProcessCall(((ATerm) args[0]));
       }
     });
 
-    define(new NodeBuilder("ProcessDefinition0") {
+    define(new NodeBuilder("ttt-ProcessDefinition0") {
       public Object build(Object args[]) {
         return new ProcessDefinition(((ATermAppl) args[0]).getName(), factory.makeList(), (ProcessExpression) args[1]);
       }
     });
 
-    define(new NodeBuilder("ProcessDefinition") {
+    define(new NodeBuilder("ttt-ProcessDefinition") {
       public Object build(Object args[]) {
         return new ProcessDefinition(((ATermAppl) args[0]).getName(), (ATermList) args[1], (ProcessExpression) args[2]);
       }
     });
 
-    define(new NodeBuilder("Create") {
+    define(new NodeBuilder("ttt-Create") {
       public Object build(Object args[]) {
         return new Create((ATerm) args[0], (ATerm) args[1]);
       }
@@ -273,7 +278,7 @@ class TScriptNodeBuilders {
      *  Messages
      */
 
-    define(new NodeBuilder("RecMsg") {
+    define(new NodeBuilder("ttt-RecMsg") {
       public Object build(Object args[]) {
         if (args.length == 1) {
           return new RecMsg((ATerm) args[0]);
@@ -283,7 +288,7 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("SndMsg") {
+    define(new NodeBuilder("ttt-SndMsg") {
       public Object build(Object args[]) {
         if (args.length == 1) {
           return new SndMsg((ATerm) args[0]);
@@ -297,31 +302,31 @@ class TScriptNodeBuilders {
      * Notes
      */
     
-    define(new NodeBuilder("Subscribe") {
+    define(new NodeBuilder("ttt-Subscribe") {
         public Object build(Object args[]) { 
             return new Subscribe((ATerm) args[0]);
         }
       });
     
-    define(new NodeBuilder("UnSubscribe") {
+    define(new NodeBuilder("ttt-UnSubscribe") {
         public Object build(Object args[]) { 
             return new UnSubscribe((ATerm) args[0]);
         }
       });
     
-    define(new NodeBuilder("SndNote") {
+    define(new NodeBuilder("ttt-SndNote") {
         public Object build(Object args[]) { 
             return new SndNote((ATerm) args[0]);
         }
       });
     
-    define(new NodeBuilder("RecNote") {
+    define(new NodeBuilder("ttt-RecNote") {
         public Object build(Object args[]) { 
             return new RecNote((ATerm) args[0]);
         }
       });
     
-    define(new NodeBuilder("NoNote") {
+    define(new NodeBuilder("ttt-NoNote") {
         public Object build(Object args[]) { 
             return new NoNote((ATerm) args[0]);
         }
@@ -331,71 +336,91 @@ class TScriptNodeBuilders {
      *  Tool related atoms
      */
     
-    define(new NodeBuilder("host") {
+    define(new NodeBuilder("ttt-host") {
         public Object build(Object args[]) {
           return args[0];
         }
       });
     
-    define(new NodeBuilder("kind") {
+    define(new NodeBuilder("ttt-kind") {
         public Object build(Object args[]) {
           return args[0];
         }
       });
     
-    define(new NodeBuilder("command") {
+    define(new NodeBuilder("ttt-command") {
         public Object build(Object args[]) {
           return args[0];
         }
       });
     
-    define(new NodeBuilder("ToolDef") {
+    define(new NodeBuilder("ttt-ToolDef") {
         public Object build(Object args[]) {
-          return new ToolDefinition(((ATermAppl) args[0]).getName(),
-          							((ATermAppl) args[1]).getName(),
-									((ATermAppl) args[2]).getName(),
-									((ATermAppl) args[3]).getName());
+ 
+          System.err.println("ToolDef 0: " + ((ATermAppl) args[0]).getName());
+          System.err.println("ToolDef 1: " + ((ATermAppl) args[1]).getName());
+          System.err.println("ToolDef 2: " + ((ATermAppl) args[2]).getName());
+          System.err.println("ToolDef 3: " + ((ATermAppl) args[3]).getName());
+          
+          String name = ((ATermAppl) args[0]).getName();
+          
+          String host = ((ATermAppl) args[1]).getName();   
+          host = (host == "None") ? null : ((host == "Some") ? ((ATermAppl) ((ATermAppl) args[1]).getArgument(0)).getName() : host);
+          
+		  String kind = ((ATermAppl) args[2]).getName();
+	      kind = (kind == "None") ? null : ((kind == "Some") ? ((ATermAppl) ((ATermAppl) args[2]).getArgument(0)).getName() : kind);
+	      
+		  String command = ((ATermAppl) args[3]).getName();
+	      command = (command == "None") ? null : ((command == "Some") ? ((ATermAppl) ((ATermAppl) args[3]).getArgument(0)).getName() : command);
+		  
+          return new ToolDefinition(name, host, kind, command);
         }
     });
     
-    define(new NodeBuilder("Execute") {
+    define(new NodeBuilder("ttt-Execute") {
         public Object build(Object args[]) {
           return new Execute((ATerm) args[0], (ATerm) args[1]);
         }
       });
     
-    define(new NodeBuilder("RecConnect") {
+    define(new NodeBuilder("ttt-SndTerminate") {
+        public Object build(Object args[]) {
+          return new Terminate((ATerm) args[0], (ATerm) args[1]);
+        }
+      });
+    
+    define(new NodeBuilder("ttt-RecConnect") {
         public Object build(Object args[]) {
           return new Connect((ATerm) args[0]);
         }
       });
   
-    define(new NodeBuilder("RecDisConnect") {
+    define(new NodeBuilder("ttt-RecDisConnect") {
         public Object build(Object args[]) {
           return new DisConnect((ATerm) args[0]);
         }
       });
     
     
-    define(new NodeBuilder("Eval") {
+    define(new NodeBuilder("ttt-Eval") {
       public Object build(Object args[]) {
         return new Eval((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("RecVal") {
+    define(new NodeBuilder("ttt-RecVal") {
       public Object build(Object args[]) {
         return new RecVal((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("Do") {
+    define(new NodeBuilder("ttt-Do") {
       public Object build(Object args[]) {
         return new Do((ATerm) args[0], (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("Event") {
+    define(new NodeBuilder("ttt-Event") {
       public Object build(Object args[]) {
       	ATermList arglist = (ATermList) args[0];
       	//return new Event((ATerm) args[0], (ATerm) args[1]);
@@ -403,7 +428,7 @@ class TScriptNodeBuilders {
       }
     });
 
-    define(new NodeBuilder("AckEvent") {
+    define(new NodeBuilder("ttt-AckEvent") {
       public Object build(Object args[]) {
         return new AckEvent((ATerm) args[0], (ATerm) args[1]);
       }
@@ -413,19 +438,19 @@ class TScriptNodeBuilders {
      * Miscellaneous atoms
      */
 
-    define(new NodeBuilder("Assign") {
+    define(new NodeBuilder("ttt-Assign") {
       public Object build(Object args[]) {
         return new Assign(TBTerm.mkVar((ATerm) args[0], factory.make("none")), (ATerm) args[1]);
       }
     });
 
-    define(new NodeBuilder("Print") {
+    define(new NodeBuilder("ttt-Print") {
       public Object build(Object args[]) {
         return new Print((ATerm) args[0]);
       }
     });
 
-    define(new NodeBuilder("ShutDown") {
+    define(new NodeBuilder("ttt-ShutDown") {
       public Object build(Object args[]) {
         return new ShutDown((ATerm) args[0]);
       }
@@ -435,7 +460,7 @@ class TScriptNodeBuilders {
        * Time related items
        */
     
-    define(new NodeBuilder("TimeExpr") {
+    define(new NodeBuilder("ttt-TimeExpr") {
         public Object build(Object args[]) {
         	Atom a = (Atom) args[0];
         	a.addTimeExpr((ATerm) args[1]);
@@ -526,29 +551,42 @@ public class TScriptParser {
       throw new ToolBusException(e.getMessage());
     }
 
-    if (interm.getType() != ATerm.APPL || ((ATermAppl) interm).getName() != "Tscript" || interm.getChildCount() != 2) {
+    if (interm.getType() != ATerm.APPL || ((ATermAppl) interm).getName() != "ttt-Tscript") {
       throw new ToolBusException("ill-formed tree");
     }
 
     ATerm args[] = ((ATermAppl) interm).getArgumentArray();
 
     ATermList decls = (ATermList) args[0];
+    ATermList calls = TBTerm.factory.makeList();
 
     for (int i = 0; i < decls.getLength(); i++) {
-      Object def = TScriptNodeBuilders.build(decls.elementAt(i));
-      //System.err.println(def);
-      if(def instanceof ProcessDefinition)
-      	toolbus.addProcessDefinition((ProcessDefinition) def);
-      else
+      //System.err.println(decls.elementAt(i));
+      Object elm = decls.elementAt(i);
+      if(elm instanceof ATermList){
+      	 ATermList toolbusArgs = (ATermList) elm;
+      	 //System.err.println("adding toolbus args: " + toolbusArgs);
+      	 
+      	 for(int j = 0; j < toolbusArgs.getLength(); j++){
+      	 	calls = calls.append(toolbusArgs.elementAt(j));
+      	 }
+      	 //System.err.println("calls = " + calls);
+      } else {
+      	Object def = TScriptNodeBuilders.build((ATerm) elm);
+
+      	if(def instanceof ProcessDefinition)
+      		toolbus.addProcessDefinition((ProcessDefinition) def);
+      	else if(def instanceof ToolDefinition)
     	toolbus.addToolDefinition((ToolDefinition) def);
+      	else
+      		throw new ToolBusException("Process or Tool definition expected");
+      }
     }
-    ATermList calls = (ATermList) interm.getChildAt(1);
-
-    for (int i = 0; i < calls.getLength(); i++) {
-      ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(i));
-      //System.err.println(call);
-      toolbus.addProcess(call);
-    }
-
+    System.err.println("toolbus config: " + calls);
+    for (int j = 0; j < calls.getLength(); j++) {
+        ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
+        System.err.println(call);
+        toolbus.addProcess(call);
+      }
   }
 }

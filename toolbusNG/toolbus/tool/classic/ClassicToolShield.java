@@ -51,7 +51,7 @@ class ToolInputHandler extends Thread {
 			try {
 				ATerm t = toolShield.readTerm();
 				toolInstance.handleTermFromTool(t);
-			} catch(IOException e){
+			} catch(IOException e){  //TODO: generate a snd-disconnect when the connectionn disappears
 				if(running){
 					System.err.println("ToolInputHandler: " + e);
 					errorCount++;

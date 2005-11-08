@@ -6,36 +6,36 @@ exports
   sorts ProcessExpr ProcessName ProcessCall Invocation
 
   lexical syntax
-    [A-Z] [a-zA-Z0-9\-]* 			         -> ProcessName	{cons("id")}
+    [A-Z] [a-zA-Z0-9\-]* 			         -> ProcessName	{cons("ttt-id")}
 
 %%  lexical restrictions
 %%    ProcessName -/- [a-zA-Z0-9\-]
 
   context-free syntax
 
-    ProcessName					             -> Invocation {cons("apply")}
-    ProcessName "(" {TBTerm ","}* ")"		 -> Invocation {cons("apply")}
+    ProcessName					             -> Invocation {cons("ttt-apply")}
+    ProcessName "(" {TBTerm ","}* ")"		 -> Invocation {cons("ttt-apply")}
 
     Atom 					                 -> ProcessExpr
-    Atom TimeExpr 							 -> ProcessExpr {cons("TimeExpr")}
-   "create" "(" Invocation  "," GenVar ")" 	 -> ProcessExpr {cons("Create")}
-    Invocation					             -> ProcessCall  {cons("ProcessCall")}
+    Atom TimeExpr 							 -> ProcessExpr {cons("ttt-TimeExpr")}
+   "create" "(" Invocation  "," GenVar ")" 	 -> ProcessExpr {cons("ttt-Create")}
+    Invocation					             -> ProcessCall  {cons("ttt-ProcessCall")}
     ProcessCall					             -> ProcessExpr
 
-    ProcessExpr "." ProcessExpr 		     -> ProcessExpr {right, cons("Sequence")}
-    ProcessExpr "+" ProcessExpr 		     -> ProcessExpr {left, cons("Alternative")}
-    ProcessExpr "*" ProcessExpr 		     -> ProcessExpr {left, cons("Iteration")}
-    ProcessExpr "||" ProcessExpr 		     -> ProcessExpr {left, cons("Merge")}
-    ProcessExpr ">>" ProcessExpr 		     -> ProcessExpr {right, cons("Disrupt")}
+    ProcessExpr "." ProcessExpr 		     -> ProcessExpr {right, cons("ttt-Sequence")}
+    ProcessExpr "+" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Alternative")}
+    ProcessExpr "*" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Iteration")}
+    ProcessExpr "||" ProcessExpr 		     -> ProcessExpr {left, cons("ttt-Merge")}
+    ProcessExpr ">>" ProcessExpr 		     -> ProcessExpr {right, cons("ttt-Disrupt")}
     "(" ProcessExpr ")" 			         -> ProcessExpr {bracket}
-    "let" VarDecls "in" ProcessExpr "endlet" -> ProcessExpr {cons("LetDefinition")}
-    "if" TBTerm "then" ProcessExpr "fi" 	 -> ProcessExpr {cons("IfThen")}
+    "let" VarDecls "in" ProcessExpr "endlet" -> ProcessExpr {cons("ttt-LetDefinition")}
+    "if" TBTerm "then" ProcessExpr "fi" 	 -> ProcessExpr {cons("ttt-IfThen")}
     "if" TBTerm "then" ProcessExpr "else" ProcessExpr "fi" 
-						                     -> ProcessExpr {cons("IfElse")}
+						                     -> ProcessExpr {cons("ttt-IfElse")}
 
   context-free priorities
-    ProcessExpr "*" ProcessExpr -> ProcessExpr  {left, cons("Iteration")} >
-    ProcessExpr "." ProcessExpr -> ProcessExpr  {right, cons("Sequence")}  >
-    ProcessExpr "+" ProcessExpr -> ProcessExpr  {left, cons("Alternative")}>
-    ProcessExpr "||" ProcessExpr -> ProcessExpr {left, cons("Merge")} >
-    ProcessExpr ">>" ProcessExpr -> ProcessExpr {right, cons("Disrupt")}
+    ProcessExpr "*" ProcessExpr -> ProcessExpr  {left, cons("ttt-Iteration")} >
+    ProcessExpr "." ProcessExpr -> ProcessExpr  {right, cons("ttt-Sequence")}  >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr  {left, cons("ttt-Alternative")}>
+    ProcessExpr "||" ProcessExpr -> ProcessExpr {left, cons("ttt-Merge")} >
+    ProcessExpr ">>" ProcessExpr -> ProcessExpr {right, cons("ttt-Disrupt")}

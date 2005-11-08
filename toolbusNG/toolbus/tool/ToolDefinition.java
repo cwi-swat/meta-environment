@@ -101,10 +101,10 @@ public class ToolDefinition {
   }
   
   public ToolShield makeToolShield(ToolInstance ti, boolean alreadyExecuting){
-  	if(kind == "java")
-  		return new JavaToolShield(this, ti); // add alreadyExecuting
-  	else if(kind == "classic")
+  	if(kind == null || kind == "classic")
   		return new ClassicToolShield(this, ti, alreadyExecuting);
+  	if(kind == "java")
+  		return new JavaToolShield(this, ti); // TODO: add alreadyExecuting
   	else
   		System.err.println("Unknown tool kind:" + kind);
   	return null;
