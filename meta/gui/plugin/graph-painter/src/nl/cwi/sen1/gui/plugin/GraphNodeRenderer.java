@@ -1,6 +1,5 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -21,8 +20,6 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		double height = bounds.getHeight();
 		Shape result = null;
 		
-		item.setAttribute("text-offset", "0");
-		
 		nl.cwi.sen.api.graph.graph.types.Shape shape = node.getShape();
 		if (shape.isDiamond()) {
 			result = getDiamondShape(item, x, y, width, height);
@@ -40,7 +37,7 @@ public class GraphNodeRenderer extends TextItemRenderer {
 			result = getBoxShape(x, y, width, height);			
 		}
 		
-		return new GraphCompositeShape(super.getRawShape(item), result);
+		return new GraphCompositeShape(super.getRawShape(item), result); 
 	}
 
 	private Shape getCircleShape(double x, double y, double width, double height) {
@@ -63,7 +60,7 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		int ih = (int) height;
 		int[] xs = new int[] {ix - (iw/ih)*(ih/2), ix + iw / 2, ix + iw + (iw/ih)*(ih/2), ix + iw / 2};
 		int[] ys = new int[] {iy + ih / 2, iy + ih + (ih/iw)*(iw / 2), iy + ih / 2, iy - (ih/iw)*(iw / 2)};
-			
+		
 		return new Polygon(xs, ys, 4);
 	}
 	
@@ -76,6 +73,5 @@ public class GraphNodeRenderer extends TextItemRenderer {
         setRenderType(TextItemRenderer.RENDER_TYPE_NONE);
         super.render(g, item);
         setRenderType(tmp);
-	} 
-	
+	}
 }

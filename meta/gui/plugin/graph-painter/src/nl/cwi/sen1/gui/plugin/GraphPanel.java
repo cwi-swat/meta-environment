@@ -69,6 +69,8 @@ public class GraphPanel extends JPanel {
 
 	private ForceSimulator forceSimulator;
 
+	private TextItemRenderer nodeRenderer;
+
 	public GraphPanel(String id, Preferences prefs) {
 		this.id = id;
 		setLayout(new BorderLayout());
@@ -78,8 +80,7 @@ public class GraphPanel extends JPanel {
 
 		display.setHighQuality(true);
 
-		// set up a renderer such that nodes show text labels
-		TextItemRenderer nodeRenderer = new GraphNodeRenderer();
+		nodeRenderer = new GraphNodeRenderer();
 		nodeRenderer.setTextAttributeName("label");
 		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
 		nodeRenderer.setHorizontalPadding(prefs
@@ -87,9 +88,9 @@ public class GraphPanel extends JPanel {
 		nodeRenderer.setVerticalPadding(prefs
 				.getInt("graph.node.border.height"));
 
-		edgeRenderer = new DefaultEdgeRenderer();
+		edgeRenderer = new GraphEdgeRenderer();
 		edgeRenderer.setRenderType(ShapeRenderer.RENDER_TYPE_DRAW);
-		setStraightEdges();
+		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
 
 		registry.setRendererFactory(new DefaultRendererFactory(nodeRenderer,
 				edgeRenderer, null));

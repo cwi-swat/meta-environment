@@ -1,7 +1,11 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.awt.FontMetrics;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import nl.cwi.sen.api.graph.graph.Factory;
@@ -13,11 +17,12 @@ import nl.cwi.sen.api.graph.graph.types.EdgeList;
 import nl.cwi.sen.api.graph.graph.types.Graph;
 import nl.cwi.sen.api.graph.graph.types.Node;
 import nl.cwi.sen.api.graph.graph.types.NodeList;
+import nl.cwi.sen.api.graph.graph.types.Point;
+import nl.cwi.sen.api.graph.graph.types.Polygon;
 import nl.cwi.sen.api.graph.graph.types.Shape;
 import nl.cwi.sen.api.graph.graph.types.attribute.Location;
 import nl.cwi.sen.api.graph.graph.types.attribute.Size;
 import nl.cwi.sen1.util.Preferences;
-import edu.berkeley.guir.prefuse.graph.DefaultEdge;
 import edu.berkeley.guir.prefuse.graph.DefaultGraph;
 import edu.berkeley.guir.prefuse.graph.DefaultNode;
 
@@ -62,12 +67,46 @@ public class GraphAdapter extends DefaultGraph {
 			Edge edge = edges.getHead();
 			DefaultNode fromNode = (DefaultNode) nodeMap.get(edge.getFrom());
 			DefaultNode toNode = (DefaultNode) nodeMap.get(edge.getTo());
-			DefaultEdge pEdge = new DefaultEdge(fromNode, toNode, true);
+			GraphEdge pEdge = new GraphEdge(fromNode, toNode);
+			
+			pEdge.setDotControlPoints(getControlPoints(edge));
 
 			addEdge(pEdge);
 		}
 	}
 
+	private Point2D[] getControlPoints(Edge edge) {
+		Polygon poly = getPolygon(edge);
+		List points = new LinkedList();
+
+        for ( ; !poly.isEmpty(); poly = poly.getTail()) {
+            Point cp1 = poly.getHead();
+            points.add(new Point2D.Float(cp1.getX(), cp1.getY()));
+        }
+        
+        Point2D[] result = new Point2D[points.size()];
+        Iterator iter = points.iterator();
+        
+        for (int i = 0; iter.hasNext(); i++) {
+        	result[i] = (Point2D) iter.next();
+        }
+        
+        return result;
+	}
+
+	private Polygon getPolygon(Edge edge) {
+		AttributeList attrs = edge.getAttributes();
+		while (!attrs.isEmpty()) {
+			Attribute attr = attrs.getHead();
+			if (attr.isCurvePoints()) {
+				return attr.getPoints();
+			}
+			attrs = attrs.getTail();
+		}
+
+		return null;
+	}
+	
 	private Shape getShape(Node node) {
 		AttributeList attrs = node.getAttributes();
 		while (!attrs.isEmpty()) {
