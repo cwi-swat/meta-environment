@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 
+import javax.swing.AbstractAction;
 import javax.swing.JPanel;
 
 import nl.cwi.sen1.util.Preferences;
@@ -31,6 +32,7 @@ import edu.berkeley.guir.prefuse.render.DefaultEdgeRenderer;
 import edu.berkeley.guir.prefuse.render.DefaultRendererFactory;
 import edu.berkeley.guir.prefuse.render.ShapeRenderer;
 import edu.berkeley.guir.prefuse.render.TextItemRenderer;
+import edu.berkeley.guir.prefuse.util.display.ExportDisplayAction;
 import edu.berkeley.guir.prefusex.controls.DragControl;
 import edu.berkeley.guir.prefusex.controls.FocusControl;
 import edu.berkeley.guir.prefusex.controls.PanControl;
@@ -104,6 +106,7 @@ public class GraphPanel extends JPanel {
 				if (e.isPopupTrigger()) {
 					firePopupRequested(gi.getAttribute("id"), e);
 				}
+
 			}
 
 			public void itemReleased(VisualItem gi, MouseEvent e) {
@@ -126,6 +129,10 @@ public class GraphPanel extends JPanel {
 		createVisualEffects(prefs);
 
 		add(display, BorderLayout.CENTER);
+	}
+
+	public AbstractAction getSaveImageAction() {
+		return new ExportDisplayAction(display);
 	}
 
 	public void setCurvedEdges() {
@@ -306,7 +313,7 @@ public class GraphPanel extends JPanel {
 	public String getId() {
 		return id;
 	}
-	
+
 	static public void cleanUp() {
 		ActivityManager.kill();
 	}

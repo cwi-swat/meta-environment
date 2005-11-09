@@ -57,6 +57,7 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
         this.forcePanels = new HashMap();
     }
 
+   
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         graphFactory = new Factory((PureFactory) studio.getATermFactory());
@@ -116,6 +117,11 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
 
         graph.add(layouts);
         graph.add(toggles);
+        
+        JMenuItem export = new JMenuItem("Export");
+        export.addActionListener(panel.getSaveImageAction());
+        graph.add(export);
+        
         return graph;
     }
 
