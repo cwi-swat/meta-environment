@@ -143,7 +143,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
 
   public String toString() {
-    String pidStr = (processInstance != null) ? "[" + processInstance.getProcessId().toString() + "]" : "";
+    String pidStr = (processInstance != null) ? "[" + processInstance.getProcessId() + "]" : "";
     String args = "(";
     String sep = "";
     

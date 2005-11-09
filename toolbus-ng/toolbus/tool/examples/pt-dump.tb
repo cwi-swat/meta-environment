@@ -5268,7 +5268,7 @@ in
     rec-msg(io-file-contents(Text?))
   +
     rec-msg(io-error-reading(ErrorMessage?)) .
-    Text := "error-text"                          %% <==== was error-text
+    Text := "error-text"
   )
 endlet
 
@@ -6558,198 +6558,71 @@ in
   . rec-msg(termstore-initialized)
   . snd-msg(creation-finished)
 endlet
-tool user-interface is {
-  command = "meta-studio"
-}
 
-process Ui is
+
+process StatusDisplay is
 let
-  UI : user-interface,
-  Id : term,
+  Lst : list,
   Str : str,
-  Pairs : list,
-  Mods : list,
-  FileName : str,
-  Path : str,
-  Extension : str,
-  On : term,
-  Graph : term,
-  LayoutedGraph : term,
-  ModuleName : str,
-  EnvironmentName : str,
-  GraphId : str,
-  ActionEvent : term,
-  Tree : term,
-  ButtonNames : str,
-  ButtonList : list,
-  Title : str,
-  Answer : term,
-  Type : term,
-  Arguments : list,
-  ModuleList : term,
-  EditorId : term,
+  Id : term,
+  Tool : str,
+  Identification : str,
   Error : term,
-  Summary : term,
-  Choices : list,
-  Choice : str,
-  Question : str,
-  Producer : str,
-  SummaryId : str,
-  OpenOrSave : term
+  Errors : list,
+  Summary : term
 in
-  subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
-  subscribe(show-feedback-summary(<term>)) .
   subscribe(refresh-feedback-summary(<term>)) .
-  subscribe(remove-feedback-summary(<str>,<str>)) .
-  Id := process-id.
-  execute(user-interface,UI?).
-  snd-msg(environment-name-hook).
-  rec-msg(environment-name-hook-result(EnvironmentName?)).
-  snd-do(UI, initialize-ui(EnvironmentName)) .
   (
-    (
-      rec-note(ui-status(stat(Id?, Str?))) .
-      snd-do(UI, add-status(Id, Str))
-    +
-      rec-note(ui-status(statf(Id?, Str?, Arguments?))) .
-      snd-do(UI, add-statusf(Id, Str, Arguments))
-    +
-      rec-note(ui-status(endstat(Id?))) .
-      snd-do(UI, end-status(Id))
-    +
-      rec-note(ui-status(error(Str?))) .
-      snd-do(UI, error(Str))
-    +
-      rec-note(ui-status(errorf(Str?, Arguments?))) .
-      snd-do(UI, errorf(Str, Arguments))
-    +
-      rec-note(ui-status(warning(Str?))) .
-      snd-do(UI, warning(Str))
-    +
-      rec-note(ui-status(warningf(Str?, Arguments?))) .
-      snd-do(UI, warningf(Str, Arguments))
-    +
-      rec-note(ui-status(message(Str?))) .
-      snd-do(UI, message(Str))
-    +
-      rec-note(ui-status(messagef(Str?, Arguments?))) .
-      snd-do(UI, messagef(Str, Arguments))
-    +
-      rec-note(show-feedback-summary(Summary?)) .
-      snd-do(UI, show-feedback-summary(Summary))
-    +
-      rec-note(refresh-feedback-summary(Summary?)) .
-      snd-do(UI, refresh-feedback-summary(Summary))
-    +
-      rec-note(remove-feedback-summary(Producer?, SummaryId?)) .
-      snd-do(UI, remove-feedback-summary(Producer, SummaryId))
-    ) * delta
-  ||
-    (
-      rec-msg(display-graph(GraphId?, Graph?)) .
-      snd-do(UI, display-graph(GraphId, Graph))
-    +
-      rec-event(UI, clear-all).
-      snd-msg(clear-all).
-      rec-msg(cleared-all).
-      snd-ack-event(UI, clear-all)
-    +
-      rec-event(UI, debugging(On?)) .
-      snd-msg(debugging(On)) .
-      snd-ack-event(UI, debugging(On))
-    +
-      rec-msg(calculate-import-graph(Pairs?)).
-      snd-eval(UI, make-graph(Pairs)) .
-      rec-value(UI, graph(Graph?)) .
-      Pairs := [] .
-      snd-msg(import-graph(Graph))
-    +
-      rec-note(display-import-graph(Pairs?)).
-      snd-do(UI, new-graph(Pairs)) .
-      Pairs := []
-    +
-      rec-event(UI, layout-graph(GraphId?, Graph?)) .
-      snd-msg(layout-graph(Graph)) .
-      rec-msg(graph-layouted(LayoutedGraph?)) .
-      snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
-      snd-ack-event(UI, layout-graph(GraphId, Graph))
-    +
-      rec-event(UI, get-buttons(Type?, ModuleName?)) .
-      snd-msg(get-auxiliary-buttons(Type, ModuleName)) .
-      rec-msg(button-list(ModuleName, ButtonList?)).
-      snd-do(UI, buttons-found(Type, ModuleName, ButtonList)) .
-      snd-ack-event(UI, get-buttons(Type, ModuleName))
-    +
-      rec-event(UI, button-selected(Type?, ModuleName?, ActionEvent?)) .
-      snd-msg(extra-button-action(ActionEvent, [str(ModuleName)], Type,
-                                  ModuleName, ui-id)) .
-      snd-ack-event(UI, button-selected(Type, ModuleName, ActionEvent))
-    +
-      rec-event(UI, button-selected(Type?, ActionEvent?)) .
-      snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
-      snd-ack-event(UI, button-selected(Type, ActionEvent))
-    +
-      rec-msg(ask-for-file(OpenOrSave?, Title?, Path?, Extension?)) .
-      snd-eval(UI, show-file-dialog(OpenOrSave, Title, Path, Extension)) .
-      rec-value(UI, file-name(FileName?)) .
-      snd-msg(ask-for-file-result(FileName))
-    +
-      rec-msg(ask-question(Title?)) .
-      snd-eval(UI, show-question-dialog(Title)) .
-      rec-value(UI, answer(Answer?)) .
-      snd-msg(ask-question-result(Answer))
-    +
-      rec-msg(clear-history) .
-      snd-do(UI, clear-history)
-    +
-      rec-event(UI, node-info(ModuleName?, Tree?)).
-      snd-msg(extra-button-action(click, [Tree, str(ModuleName)],
-                                 tree-panel, "*", message-id)) .
-      snd-ack-event(UI, node-info(ModuleName, Tree))
-    +
-      rec-event(UI, error-selected(Error?)) .
-      snd-msg(extra-button-action(click, [Error],
-                                  feedback-list, "*", feedback-list)) .
-      snd-ack-event(UI, error-selected(Error))
-    +
-      rec-msg(show-list-choice(Title?, Question?, Choices?)) .
-      snd-do(UI, showListChoice(Title, Question, Choices))
-    +
-      rec-event(UI, list-choice(Title, Choice?)) .
-      snd-msg(list-choice(Title, Choice)) .
-      snd-ack-event(UI, list-choice(Title, Choice))
-    +
-      rec-event(UI, cancel-list-choice(Title)) .
-      snd-msg(cancel-list-choice(Title)) .
-      snd-ack-event(UI, cancel-list-choice(Title))
-    ) *
-    (
-      rec-event(UI, quit)
-    +
-      rec-disconnect(UI)
-    ) .
-    shutdown("MetaStudio exiting\n")
-  )
+    rec-note(ui-status(error(Str?))) .
+    printf("Error: %s", Str)
+  +
+    rec-note(ui-status(errorf(Str?, Lst?))) .
+    printf("Error: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(warning(Str?))) .
+    printf("Warning: %s", Str)
+  +
+    rec-note(ui-status(warningf(Str?, Lst?))) .
+    printf("Warning: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(message(Str?))) .
+    printf("Message: %s", Str)
+  +
+    rec-note(ui-status(messagef(Str?, Lst?))) .
+    printf("Message: %s [%t]\n", Str, Lst)
+  +
+    rec-note(refresh-feedback-summary(Summary?)) .
+    snd-msg(display-feedback(Summary))
+  ) *
+  delta
 endlet
 
-process MetaGUI is
+process StandalonePtDumper is
 let
   ModuleName : str,
-  Pid : int,
-  TermStoreContents : term,
-  ErrorMessage : str
+  ErrorMessage : str,
+  Pid : int
 in
-  create(Ui, Pid?) .
+  create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
   InitializeTermStore("") .
-  if not-equal("", "") then
-    snd-msg(open-modules(["\"\""], sdf)) .
-    rec-msg(finished-opening-modules)
+  snd-msg(open-modules(["Rscript"], sdf)) .
+  rec-msg(finished-opening-modules) .
+  snd-msg(dump-parse-table-given-file("Rscript", "", trm)) .
+  rec-msg(parse-table-dumped) .
+  if equal("false", "true") then
+    snd-msg(save-termstore) .
+    (
+      rec-msg(saved)
+    +
+      rec-msg(not-saved(ErrorMessage?))
+    )
   else
     tau
-  fi
+  fi .
+  shutdown("")
 endlet
 
-toolbus(MetaGUI)
+toolbus(StandalonePtDumper)

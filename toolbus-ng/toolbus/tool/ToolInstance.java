@@ -53,7 +53,6 @@ public class ToolInstance {
    */
 
   public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount, boolean alreadyExecuting) throws ToolBusException {
-    System.err.println("ToolInstance");
     this.toolDef = toolDef;   
     this.toolbus = myToolBus;
     this.toolCount = toolCount;

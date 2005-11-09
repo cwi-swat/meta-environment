@@ -31,7 +31,6 @@ public class Subscribe extends Atom {
 	public boolean execute() throws ToolBusException {
 		if (!isEnabled())
 			return false;
-		System.err.println("Subscribe.execute");
 		getProcess().subscribe(msgpat.value);
 		return true;
 	}
