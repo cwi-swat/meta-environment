@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import aterm.ATermList;
+
 import nl.cwi.sen.api.graph.graph.Factory;
 import nl.cwi.sen.api.graph.graph.types.Attribute;
 import nl.cwi.sen.api.graph.graph.types.AttributeList;
@@ -194,17 +196,17 @@ public class GraphAdapter extends DefaultGraph {
 
 	static private Node setSizeAttribute(Node node, Size sizeAttr) {
 		Factory factory = node.getGraphFactory();
-		AttributeList result = factory.makeAttributeList_Empty();
+		AttributeList result = factory.makeAttributeList();
 		AttributeList attrs = node.getAttributes();
 		while (!attrs.isEmpty()) {
 			Attribute attr = attrs.getHead();
 			if (!attr.isSize()) {
-				result = factory.makeAttributeList_Multi(attr, result);
+				result = factory.makeAttributeList(attr, result);
 			}
 			attrs = attrs.getTail();
 		}
 
-		result = factory.makeAttributeList_Multi(sizeAttr, result);
+		result = factory.makeAttributeList(sizeAttr, result);
 		return node.setAttributes(result);
 	}
 
@@ -224,14 +226,14 @@ public class GraphAdapter extends DefaultGraph {
 			Graph graph) {
 		Factory factory = graph.getGraphFactory();
 		NodeList nodes = graph.getNodes();
-		NodeList result = factory.makeNodeList_Empty();
+		NodeList result = factory.makeNodeList();
 
 		for (; !nodes.isEmpty(); nodes = nodes.getTail()) {
 			Node node = nodes.getHead();
 			node = setNodeSize(metrics, prefs, node);
-			result = factory.makeNodeList_Multi(node, result);
+			result = factory.makeNodeList(node, result);
 		}
 
-		return graph.setNodes(result);
+		return graph.setNodes(result.reverseNodeList());
 	}
 }

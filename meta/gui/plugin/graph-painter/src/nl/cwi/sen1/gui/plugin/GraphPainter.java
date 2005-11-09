@@ -60,7 +60,7 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
    
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
-        graphFactory = new Factory((PureFactory) studio.getATermFactory());
+        graphFactory = Factory.getInstance((PureFactory) studio.getATermFactory());
         bridge = new GraphPainterBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);
         studio.connect(getName(), bridge);
