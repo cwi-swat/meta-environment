@@ -1,6 +1,5 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

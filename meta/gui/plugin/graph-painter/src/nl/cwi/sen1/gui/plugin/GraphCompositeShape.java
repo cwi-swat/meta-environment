@@ -25,43 +25,43 @@ public class GraphCompositeShape implements Shape {
 	}
 	
 	public boolean contains(double x, double y) {
-		return inner.contains(x,y);
+		return outer.contains(x,y);
 	}
 
 	public boolean contains(double x, double y, double w, double h) {
-		return inner.contains(x,y,w,h);
+		return outer.contains(x,y,w,h);
 	}
 
 	public boolean intersects(double x, double y, double w, double h) {
-		return inner.intersects(x,y,w,h);
+		return outer.intersects(x,y,w,h);
 	}
 
 	public Rectangle getBounds() {
-		return inner.getBounds();
+		return outer.getBounds();
 	}
 
 	public boolean contains(Point2D p) {
-		return inner.contains(p);
+		return outer.contains(p);
 	}
 
 	public Rectangle2D getBounds2D() {
-		return inner.getBounds2D();
+		return outer.getBounds2D();
 	}
 
 	public boolean contains(Rectangle2D r) {
-		return inner.contains(r);
+		return outer.contains(r);
 	}
 
 	public boolean intersects(Rectangle2D r) {
-		return inner.intersects(r);
+		return outer.intersects(r);
 	}
 
 	public PathIterator getPathIterator(AffineTransform at) {
-		return inner.getPathIterator(at);
+		return outer.getPathIterator(at);
 	}
 
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {
-		return inner.getPathIterator(at, flatness);
+		return outer.getPathIterator(at, flatness);
 	}
 
 }

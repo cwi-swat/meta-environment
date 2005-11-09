@@ -1,5 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.Shape;
@@ -66,12 +67,29 @@ public class GraphNodeRenderer extends TextItemRenderer {
 	
 	public void render(Graphics2D g, VisualItem item) {
         GraphCompositeShape comp = (GraphCompositeShape) getShape(item);
-        Shape outer = comp.getOuterShape();
         
-        super.drawShape(g, item , outer);
-        int tmp = getRenderType(item);
-        setRenderType(TextItemRenderer.RENDER_TYPE_NONE);
-        super.render(g, item);
-        setRenderType(tmp);
+        Shape outer = comp.getOuterShape();
+        drawShape(g, item , outer);
+
+		Shape inner = comp.getInnerShape();
+        renderText(g, item, inner);
+	}
+	
+	public void renderText(Graphics2D g, VisualItem item, Shape shape) {
+		String s = getText(item);
+		if ( s != null ) {			
+			Rectangle2D r = shape.getBounds2D();
+			g.setPaint(item.getColor());
+			g.setFont(m_font);
+			FontMetrics fm = g.getFontMetrics();
+            double size = item.getSize();
+            double x = r.getX() + size*m_horizBorder;
+            double y = r.getY() + size*m_vertBorder;
+			g.drawString(s, (float)x, (float)y+fm.getAscent());
+			if ( isHyperlink(item) ) {
+                int lx = (int)Math.round(x), ly = (int)Math.round(y);
+				g.drawLine(lx,ly,lx+fm.stringWidth(s),ly+fm.getHeight()-1);
+			}
+		}
 	}
 }
