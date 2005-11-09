@@ -125,24 +125,24 @@ static Graph printOverFlowNode(Graph graph,
    
   sprintf(str, "Graph contains more than %d nodes!", MAX_NR_OF_NODES);
   nameAttr = makeAttributeLabel(str);
-  attrList = makeAttributeListMulti(nameAttr, attrList);
+  attrList = makeAttributeListMany(nameAttr, attrList);
   
   shapeAttr = makeAttributeShape(makeShapeEllipse());
-  attrList = makeAttributeListMulti(shapeAttr, attrList);
+  attrList = makeAttributeListMany(shapeAttr, attrList);
 
   node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
-  nodes = makeNodeListMulti(node, nodes);
+  nodes = makeNodeListMany(node, nodes);
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
     Attribute dir = makeAttributeDirection(makeDirectionNone());
-    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty()); 
+    AttributeList l = makeAttributeListMany(dir, makeAttributeListEmpty()); 
     edge = makeEdgeDefault(parentId, nodeId, l);
 
     edges = getGraphEdges(graph);
-    edges = makeEdgeListMulti(edge, edges);
+    edges = makeEdgeListMany(edge, edges);
     graph = setGraphEdges(graph, edges);
   }
 
@@ -180,28 +180,28 @@ static Graph printNode(const char *name,
   parentId = makeNodeIdDefault(str);
    
   nameAttr = makeAttributeLabel(contents);
-  attrList = makeAttributeListMulti(nameAttr, attrList);
+  attrList = makeAttributeListMany(nameAttr, attrList);
   
   shapeAttr = makeAttributeShape(shape);
-  attrList = makeAttributeListMulti(shapeAttr, attrList);
+  attrList = makeAttributeListMany(shapeAttr, attrList);
 
   if (posInfo) {
     messageAttr = makeAttributeInfo("origin", posInfo);
-    attrList = makeAttributeListMulti(messageAttr, attrList);
+    attrList = makeAttributeListMany(messageAttr, attrList);
   }
   node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
-  nodes = makeNodeListMulti(node, nodes);
+  nodes = makeNodeListMany(node, nodes);
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
     Attribute dir = makeAttributeDirection(makeDirectionNone());
-    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty()); 
+    AttributeList l = makeAttributeListSingle(dir);
     edge = makeEdgeDefault(parentId, nodeId, l);
 
     edges = getGraphEdges(graph);
-    edges = makeEdgeListMulti(edge, edges);
+    edges = makeEdgeListMany(edge, edges);
     graph = setGraphEdges(graph, edges);
   }
 
@@ -236,37 +236,37 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   parentId = makeNodeIdDefault(str);
  
   nameAttr = makeAttributeLabel(contents);
-  attrList = makeAttributeListMulti(nameAttr, attrList);
+  attrList = makeAttributeListMany(nameAttr, attrList);
    
   shape = makeShapeDiamond(); 
   shapeAttr = makeAttributeShape(shape);
-  attrList = makeAttributeListMulti(shapeAttr, attrList);
+  attrList = makeAttributeListMany(shapeAttr, attrList);
 
   color = makeColorRgb(205, 55, 0);
   colorAttr = makeAttributeColor(color);
-  attrList = makeAttributeListMulti(colorAttr, attrList);
+  attrList = makeAttributeListMany(colorAttr, attrList);
 
   color = makeColorRgb(255, 165, 0);
   colorAttr = makeAttributeFillColor(color);
-  attrList = makeAttributeListMulti(colorAttr, attrList);
+  attrList = makeAttributeListMany(colorAttr, attrList);
 
   style = makeStyleFilled();
   styleAttr = makeAttributeStyle(style);
-  attrList = makeAttributeListMulti(styleAttr, attrList);
+  attrList = makeAttributeListMany(styleAttr, attrList);
  
   node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
-  nodes = makeNodeListMulti(node, nodes);
+  nodes = makeNodeListMany(node, nodes);
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
     Attribute dir = makeAttributeDirection(makeDirectionNone());
-    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty());
+    AttributeList l = makeAttributeListSingle(dir);
     edge = makeEdgeDefault(parentId, nodeId, l);
 
     edges = getGraphEdges(graph);
-    edges = makeEdgeListMulti(edge, edges);
+    edges = makeEdgeListMany(edge, edges);
     graph = setGraphEdges(graph, edges);
   }
 

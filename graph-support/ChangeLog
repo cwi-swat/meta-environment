@@ -3,6 +3,7 @@ $Id$
 Wed Nov  9 09:59:05 CET 2005 <jurgenv@cwi.nl>
  * Changed Graph.adt to use lists.
  * Regenerated Java api
+ * Regenerated C api and adapted the corresponding code.
 
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:

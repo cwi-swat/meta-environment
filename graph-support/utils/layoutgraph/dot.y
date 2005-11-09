@@ -199,14 +199,14 @@ static Polygon parseCoordinateList(char *coords, ATbool endToBegin)
 	}
 	do {
     Point point = parsePoint(token);
-		poly = makePolygonMulti(point, poly);
+		poly = makePolygonMany(point, poly);
 	} while ((token = strtok(NULL, " ")));
   
   if (endToBegin) {
-	  poly = makePolygonMulti(last, poly);
+	  poly = makePolygonMany(last, poly);
   }
 
-	return PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
+	return reversePolygon(poly);
 }
 
 static Attribute parseBoundaries(char *coords)
@@ -265,19 +265,19 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 
     if (ATisEqual(key, ATparse("\"bb\""))) {
        Attribute attr = parseBoundaries(sval);
-			 list = makeAttributeListMulti(attr, list);
+			 list = makeAttributeListMany(attr, list);
     }
 		else if (ATisEqual(key, ATparse("\"fillcolor\""))) {
 			Color color = parseColor(sval);
-			list = makeAttributeListMulti(makeAttributeFillColor(color), list);
+			list = makeAttributeListMany(makeAttributeFillColor(color), list);
 		}
 		else if (ATisEqual(key, ATparse("\"color\""))) {
 			Color color = parseColor(sval);
-			list = makeAttributeListMulti(makeAttributeColor(color), list);
+			list = makeAttributeListMany(makeAttributeColor(color), list);
 		}
 		else if (ATisEqual(key, ATparse("\"style\""))) {
 		  Style style = StyleFromTerm(ATparse(sval));
-			list = makeAttributeListMulti(makeAttributeStyle(style), list);
+			list = makeAttributeListMany(makeAttributeStyle(style), list);
 		}
 		else if (ATisEqual(key, ATparse("\"width\""))) {
       width = inchToPixel(atof(sval));
@@ -287,24 +287,24 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 		}
 		else if (ATisEqual(key, ATparse("\"shape\""))) {
       Shape shape = ShapeFromTerm(ATparse(sval));
-      list = makeAttributeListMulti(makeAttributeShape(shape), list);
+      list = makeAttributeListMany(makeAttributeShape(shape), list);
 		}
     else if (ATisEqual(key, ATparse("\"dir\""))) {
       Direction dir = DirectionFromTerm(ATparse(sval));
-      list = makeAttributeListMulti(makeAttributeDirection(dir), list);
+      list = makeAttributeListMany(makeAttributeDirection(dir), list);
 		}
 		else if (ATisEqual(key, ATparse("\"pos\""))) {
       if (sval[0] == 'e') {
         /* List of coordinates, last element first but the rest in order */
         Attribute attr = makeAttributeCurvePoints(
                            parseCoordinateList(sval+2, ATtrue));
-				list = makeAttributeListMulti(attr, list);
+				list = makeAttributeListMany(attr, list);
 			}
 			else if (sval[0] == 's') {
         /* List of coordinates, all in order */
         Attribute attr = makeAttributeCurvePoints(
                            parseCoordinateList(sval+2, ATfalse));
-				list = makeAttributeListMulti(attr, list);
+				list = makeAttributeListMany(attr, list);
 			}
 			else {
         if (type == NODE) {
@@ -317,12 +317,12 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 					x = atoi(sval);
 					*sep++ = ',';
 					y = atoi(sep);
-					list = makeAttributeListMulti(makeAttributeLocation(x, y), list);
+					list = makeAttributeListMany(makeAttributeLocation(x, y), list);
 				}
         else {
           Attribute attr = makeAttributeCurvePoints(
                              parseCoordinateList(sval, ATfalse));
-				  list = makeAttributeListMulti(attr, list);
+				  list = makeAttributeListMany(attr, list);
         }
 
 			}
@@ -332,7 +332,7 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 	}
 
 	if (width != -1 && height != -1) {
-    list = makeAttributeListMulti(makeAttributeSize(width, height), list);
+    list = makeAttributeListMany(makeAttributeSize(width, height), list);
 	}
 
 	return list;

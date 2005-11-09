@@ -70,7 +70,7 @@ static AttributeList deleteAttribute(AttributeList attrs, Attribute attr)
     if (isEqualAttributeList(result, tail)) {
       return attrs;
     } else {
-      return makeAttributeListMulti(head, result);
+      return makeAttributeListMany(head, result);
     }
   }
 
@@ -82,7 +82,7 @@ static AttributeList deleteAttribute(AttributeList attrs, Attribute attr)
 static AttributeList mergeAttribute(AttributeList attrs, Attribute attr)
 {
   attrs = deleteAttribute(attrs, attr);
-  attrs = makeAttributeListMulti(attr, attrs);
+  attrs = makeAttributeListMany(attr, attrs);
 
   return attrs;
 }
@@ -167,7 +167,7 @@ void mergeNodeAttributes(NodeId nodeId, AttributeList attrs)
 
 void addEdge(NodeId from, NodeId to, AttributeList attrs)
 {
-  edgeList = makeEdgeListMulti(makeEdgeDefault(from, to, attrs), edgeList);
+  edgeList = makeEdgeListMany(makeEdgeDefault(from, to, attrs), edgeList);
 }
 
 /*}}}  */

@@ -1,7 +1,3 @@
-/*
- * Generated at Wed Oct  8 13:53:37 2003
- */
-
 #ifndef __Graph_dict_H
 #define __Graph_dict_H
 
@@ -47,10 +43,12 @@ extern AFun afun1;
 extern AFun afun6;
 
 extern ATerm patternPointDefault;
-extern ATerm patternPolygonMulti;
+extern ATerm patternPolygonMany;
+extern ATerm patternPolygonSingle;
 extern ATerm patternPolygonEmpty;
 extern ATerm patternEdgeDefault;
-extern ATerm patternEdgeListMulti;
+extern ATerm patternEdgeListMany;
+extern ATerm patternEdgeListSingle;
 extern ATerm patternEdgeListEmpty;
 extern ATerm patternDirectionNone;
 extern ATerm patternDirectionBoth;
@@ -86,11 +84,13 @@ extern ATerm patternAttributeDirection;
 extern ATerm patternAttributeCurvePoints;
 extern ATerm patternAttributeColor;
 extern ATerm patternAttributeBoundingBox;
-extern ATerm patternAttributeListMulti;
+extern ATerm patternAttributeListMany;
+extern ATerm patternAttributeListSingle;
 extern ATerm patternAttributeListEmpty;
 extern ATerm patternNodeIdDefault;
 extern ATerm patternNodeDefault;
-extern ATerm patternNodeListMulti;
+extern ATerm patternNodeListMany;
+extern ATerm patternNodeListSingle;
 extern ATerm patternNodeListEmpty;
 extern ATerm patternGraphDefault;
 

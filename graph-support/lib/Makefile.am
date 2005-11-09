@@ -13,9 +13,7 @@ INCLUDES = -I${ATERM}/include
 JARFILE = ${top_srcdir}/lib/graph-${VERSION}.jar
 
 c-api: Graph.adt
-	upgrade-adt -i $< -o $<.upgraded
-	adt-to-c --input $<.upgraded --output Graph
-	rm -f $<.upgraded
+	adt-to-c --input $< --name graph --prefix G_ --output Graph
 
 java-api: Graph.adt
 	adt-to-java \
