@@ -281,7 +281,9 @@ public class ClassicToolShield extends ToolShield {
 
 		String stringdata = new String(data);
 
-		//info("data read (" + bytesLeft + " bytes): '" + stringdata + "'");
+		System.err.println("data read (" + bytesLeft + " bytes) " + stringdata.substring(0,60));
+		
+
 
 		result = factory.parse(stringdata);
 

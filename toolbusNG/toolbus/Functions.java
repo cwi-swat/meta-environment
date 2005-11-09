@@ -521,7 +521,7 @@ public class Functions {
         }
         String name = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        if (args.length == 0)
+        if (args.length == 0 && Funs.get(name) == null)
             return t;
         if(name == "quote")
         	return checkType(args[0], env, true);

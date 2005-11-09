@@ -171,6 +171,7 @@ process ListOps is
 process MiscOps is
  let Nm : str, 
      %% Tm : [int,int,int,int,int,int], 
+     Id : int,
      N : int, 
      NP : [int, int], 
      T : term,
@@ -183,6 +184,8 @@ process MiscOps is
      %% Deviates from old Toolbus where process-id return a plain integer
      %% ===> removed since strange behaviour during test (only)
      if not-equal(process-id, 0) then P(201) else tau fi . 
+     Id := process-id .
+     if not-equal(Id, 0) then P(202) else tau fi .
      N := quote(3) .
      NP := quote([2,3]) .
      T := quote(f(a)) .

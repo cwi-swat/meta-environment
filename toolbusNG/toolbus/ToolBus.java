@@ -352,7 +352,7 @@ public class ToolBus {
   
   synchronized public ToolInstance addToolInstance(String toolName, boolean alreadyExecuting) throws ToolBusException {
   	ATermList sig = getSignature();
-  	System.err.println("addToolInstance: " + toolName + ", " + sig);
+  	//System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
     TD.setToolSignatures(sig);
     ToolInstance ti = new ToolInstance(TD, this, tools.size(), alreadyExecuting);
@@ -392,13 +392,13 @@ public class ToolBus {
    */
 
   public ToolDefinition getToolDefinition(String name) throws ToolBusException {
-  	System.err.println("getToolDefinition: " + name);
+  	//System.err.println("getToolDefinition: " + name);
     for (int i = 0; i < tooldefs.size(); i++) {
  
       ToolDefinition TD = (ToolDefinition) tooldefs.elementAt(i);
-   	  System.err.println("getToolDefinition: " + i + " : " + TD.getName());
+   	  //System.err.println("getToolDefinition: " + i + " : " + TD.getName());
       if (name.equals(TD.getName())){
-      	System.err.println("getToolDefinition: " + TD);
+      	//System.err.println("getToolDefinition: " + TD);
         return TD;
       }
     }

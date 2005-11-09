@@ -55,7 +55,7 @@ public class ToolConnector extends Thread {
 				connect();
 			} catch(IOException e){
 				if(running){
-					System.err.println("ToolConnector: " + e);
+					System.err.println("ToolConnector for " + toolname + ": " + e);
 					errorCount++;
 					if(errorCount > 5){
 						e.printStackTrace();

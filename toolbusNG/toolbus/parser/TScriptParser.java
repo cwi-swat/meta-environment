@@ -357,10 +357,10 @@ class TScriptNodeBuilders {
     define(new NodeBuilder("ttt-ToolDef") {
         public Object build(Object args[]) {
  
-          System.err.println("ToolDef 0: " + ((ATermAppl) args[0]).getName());
-          System.err.println("ToolDef 1: " + ((ATermAppl) args[1]).getName());
-          System.err.println("ToolDef 2: " + ((ATermAppl) args[2]).getName());
-          System.err.println("ToolDef 3: " + ((ATermAppl) args[3]).getName());
+          //System.err.println("ToolDef 0: " + ((ATermAppl) args[0]).getName());
+          //System.err.println("ToolDef 1: " + ((ATermAppl) args[1]).getName());
+          //System.err.println("ToolDef 2: " + ((ATermAppl) args[2]).getName());
+          //System.err.println("ToolDef 3: " + ((ATermAppl) args[3]).getName());
           
           String name = ((ATermAppl) args[0]).getName();
           
@@ -582,10 +582,8 @@ public class TScriptParser {
       		throw new ToolBusException("Process or Tool definition expected");
       }
     }
-    System.err.println("toolbus config: " + calls);
     for (int j = 0; j < calls.getLength(); j++) {
         ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
-        System.err.println(call);
         toolbus.addProcess(call);
       }
   }

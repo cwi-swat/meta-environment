@@ -37,6 +37,7 @@ public class Assign extends Atom {
     
     //System.err.println("Assign: " + env);
     ATerm exptype = Functions.checkType(exp.value, env, false);
+    //System.err.println(this + "; exp = " + exp.value + "; exptype = " + exptype);
 
     if (!Functions.compatibleTypes(vartype, exptype) )// lhs = term!
       throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
