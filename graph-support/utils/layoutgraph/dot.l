@@ -12,12 +12,16 @@ comment		"//".*\n
 ws		{layout}|{comment}
 id		[a-zA-Z0-9_]+
 %%
-digraph { return DIGRAPH; }
-edge { return EDGE; }
-graph { return GRAPH; }
-node { return NODE; }
-strict { return STRICT; }
-subgraph { return SUBGRAPH; }
+
+"digraph" { return DIGRAPH; }
+"edge" { return EDGE; }
+"graph" { return GRAPH; }
+"node" { return NODE; }
+"strict" { return STRICT; }
+"subgraph" { return SUBGRAPH; }
+
+"{" { return CBO; }
+"}" { return CBC; }
 
 {ws} { }
 {id} {

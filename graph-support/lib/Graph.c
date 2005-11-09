@@ -692,11 +692,19 @@ Attribute makeAttributeStyle(Style style)
 }
 
 /*}}}  */
+/*{{{  Attribute makeAttributeLevel(const char* level) */
+
+Attribute makeAttributeLevel(const char* level)
+{
+  return (Attribute)(ATerm)ATmakeAppl1(afun13, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  Color makeColorRgb(int red, int green, int blue) */
 
 Color makeColorRgb(int red, int green, int blue)
 {
-  return (Color)(ATerm)ATmakeAppl3(afun13, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+  return (Color)(ATerm)ATmakeAppl3(afun14, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 
 /*}}}  */
@@ -704,7 +712,7 @@ Color makeColorRgb(int red, int green, int blue)
 
 Style makeStyleBold(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun14);
+  return (Style)(ATerm)ATmakeAppl0(afun15);
 }
 
 /*}}}  */
@@ -712,7 +720,7 @@ Style makeStyleBold(void)
 
 Style makeStyleDashed(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun15);
+  return (Style)(ATerm)ATmakeAppl0(afun16);
 }
 
 /*}}}  */
@@ -720,7 +728,7 @@ Style makeStyleDashed(void)
 
 Style makeStyleDotted(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun16);
+  return (Style)(ATerm)ATmakeAppl0(afun17);
 }
 
 /*}}}  */
@@ -728,7 +736,7 @@ Style makeStyleDotted(void)
 
 Style makeStyleFilled(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun17);
+  return (Style)(ATerm)ATmakeAppl0(afun18);
 }
 
 /*}}}  */
@@ -736,7 +744,7 @@ Style makeStyleFilled(void)
 
 Style makeStyleInvisible(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun18);
+  return (Style)(ATerm)ATmakeAppl0(afun19);
 }
 
 /*}}}  */
@@ -744,7 +752,7 @@ Style makeStyleInvisible(void)
 
 Style makeStyleSolid(void)
 {
-  return (Style)(ATerm)ATmakeAppl0(afun19);
+  return (Style)(ATerm)ATmakeAppl0(afun20);
 }
 
 /*}}}  */
@@ -752,7 +760,7 @@ Style makeStyleSolid(void)
 
 Shape makeShapeBox(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun20);
+  return (Shape)(ATerm)ATmakeAppl0(afun21);
 }
 
 /*}}}  */
@@ -760,7 +768,7 @@ Shape makeShapeBox(void)
 
 Shape makeShapeCircle(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun21);
+  return (Shape)(ATerm)ATmakeAppl0(afun22);
 }
 
 /*}}}  */
@@ -768,7 +776,7 @@ Shape makeShapeCircle(void)
 
 Shape makeShapeDiamond(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun22);
+  return (Shape)(ATerm)ATmakeAppl0(afun23);
 }
 
 /*}}}  */
@@ -776,7 +784,7 @@ Shape makeShapeDiamond(void)
 
 Shape makeShapeEgg(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun23);
+  return (Shape)(ATerm)ATmakeAppl0(afun24);
 }
 
 /*}}}  */
@@ -784,7 +792,7 @@ Shape makeShapeEgg(void)
 
 Shape makeShapeEllipse(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun24);
+  return (Shape)(ATerm)ATmakeAppl0(afun25);
 }
 
 /*}}}  */
@@ -792,7 +800,7 @@ Shape makeShapeEllipse(void)
 
 Shape makeShapeHexagon(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun25);
+  return (Shape)(ATerm)ATmakeAppl0(afun26);
 }
 
 /*}}}  */
@@ -800,7 +808,7 @@ Shape makeShapeHexagon(void)
 
 Shape makeShapeHouse(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun26);
+  return (Shape)(ATerm)ATmakeAppl0(afun27);
 }
 
 /*}}}  */
@@ -808,7 +816,7 @@ Shape makeShapeHouse(void)
 
 Shape makeShapeOctagon(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun27);
+  return (Shape)(ATerm)ATmakeAppl0(afun28);
 }
 
 /*}}}  */
@@ -816,7 +824,7 @@ Shape makeShapeOctagon(void)
 
 Shape makeShapeParallelogram(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun28);
+  return (Shape)(ATerm)ATmakeAppl0(afun29);
 }
 
 /*}}}  */
@@ -824,7 +832,7 @@ Shape makeShapeParallelogram(void)
 
 Shape makeShapePlaintext(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun29);
+  return (Shape)(ATerm)ATmakeAppl0(afun30);
 }
 
 /*}}}  */
@@ -832,7 +840,7 @@ Shape makeShapePlaintext(void)
 
 Shape makeShapeTrapezium(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun30);
+  return (Shape)(ATerm)ATmakeAppl0(afun31);
 }
 
 /*}}}  */
@@ -840,7 +848,7 @@ Shape makeShapeTrapezium(void)
 
 Shape makeShapeTriangle(void)
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun31);
+  return (Shape)(ATerm)ATmakeAppl0(afun32);
 }
 
 /*}}}  */
@@ -848,7 +856,7 @@ Shape makeShapeTriangle(void)
 
 Direction makeDirectionForward(void)
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun32);
+  return (Direction)(ATerm)ATmakeAppl0(afun33);
 }
 
 /*}}}  */
@@ -856,7 +864,7 @@ Direction makeDirectionForward(void)
 
 Direction makeDirectionBack(void)
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun33);
+  return (Direction)(ATerm)ATmakeAppl0(afun34);
 }
 
 /*}}}  */
@@ -864,7 +872,7 @@ Direction makeDirectionBack(void)
 
 Direction makeDirectionBoth(void)
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun34);
+  return (Direction)(ATerm)ATmakeAppl0(afun35);
 }
 
 /*}}}  */
@@ -872,7 +880,7 @@ Direction makeDirectionBoth(void)
 
 Direction makeDirectionNone(void)
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun35);
+  return (Direction)(ATerm)ATmakeAppl0(afun36);
 }
 
 /*}}}  */
@@ -904,7 +912,7 @@ EdgeList makeEdgeListMany(Edge head, EdgeList tail)
 
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes)
 {
-  return (Edge)(ATerm)ATmakeAppl3(afun36, (ATerm) from, (ATerm) to, (ATerm) attributes);
+  return (Edge)(ATerm)ATmakeAppl3(afun37, (ATerm) from, (ATerm) to, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -936,7 +944,7 @@ Polygon makePolygonMany(Point head, Polygon tail)
 
 Point makePointDefault(int x, int y)
 {
-  return (Point)(ATerm)ATmakeAppl2(afun37, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun38, (ATerm) (ATerm) ATmakeInt(x), (ATerm) (ATerm) ATmakeInt(y));
 }
 
 /*}}}  */
@@ -1655,6 +1663,9 @@ ATbool isValidAttribute(Attribute arg)
   else if (isAttributeStyle(arg)) {
     return ATtrue;
   }
+  else if (isAttributeLevel(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1901,6 +1912,28 @@ inline ATbool isAttributeStyle(Attribute arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool isAttributeLevel(Attribute arg) */
+
+inline ATbool isAttributeLevel(Attribute arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, patternAttributeLevel, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool hasAttributeFirst(Attribute arg) */
 
 ATbool hasAttributeFirst(Attribute arg)
@@ -2058,6 +2091,17 @@ ATbool hasAttributeStyle(Attribute arg)
 }
 
 /*}}}  */
+/*{{{  ATbool hasAttributeLevel(Attribute arg) */
+
+ATbool hasAttributeLevel(Attribute arg)
+{
+  if (isAttributeLevel(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  Point getAttributeFirst(Attribute arg) */
 
 Point getAttributeFirst(Attribute arg)
@@ -2184,6 +2228,15 @@ Style getAttributeStyle(Attribute arg)
 {
   
     return (Style)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  char* getAttributeLevel(Attribute arg) */
+
+char* getAttributeLevel(Attribute arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
@@ -2368,6 +2421,19 @@ Attribute setAttributeStyle(Attribute arg, Style style)
   }
 
   ATabort("Attribute has no Style: %t\n", arg);
+  return (Attribute)NULL;
+}
+
+/*}}}  */
+/*{{{  Attribute setAttributeLevel(Attribute arg, const char* level) */
+
+Attribute setAttributeLevel(Attribute arg, const char* level)
+{
+  if (isAttributeLevel(arg)) {
+    return (Attribute)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(level, 0, ATtrue))), 0);
+  }
+
+  ATabort("Attribute has no Level: %t\n", arg);
   return (Attribute)NULL;
 }
 
@@ -3713,9 +3779,9 @@ AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attr
 }
 
 /*}}}  */
-/*{{{  Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style)) */
+/*{{{  Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*)) */
 
-Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style))
+Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*))
 {
   if (isAttributeBoundingBox(arg)) {
     return makeAttributeBoundingBox(
@@ -3764,6 +3830,10 @@ Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acc
   if (isAttributeStyle(arg)) {
     return makeAttributeStyle(
         acceptStyle ? acceptStyle(getAttributeStyle(arg)) : getAttributeStyle(arg));
+  }
+  if (isAttributeLevel(arg)) {
+    return makeAttributeLevel(
+        acceptLevel ? acceptLevel(getAttributeLevel(arg)) : getAttributeLevel(arg));
   }
   ATabort("not a Attribute: %t\n", arg);
   return (Attribute)NULL;

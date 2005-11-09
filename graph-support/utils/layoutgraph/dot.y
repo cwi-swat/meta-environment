@@ -28,11 +28,13 @@ static NodeId buildNodeId(char *id);
 %token INT
 %token ID
 %token EDGEOP
+%token CBO
+%token CBC
 
 %start graph
 %%
 graph:
-	opt_strict graph_or_digraph opt_id '{' stmt_list '}' { }
+	opt_strict graph_or_digraph opt_id CBO stmt_list CBC { }
 	;
 
 opt_strict:
@@ -64,6 +66,7 @@ stmt:
 	node_stmt { }
 	| edge_stmt { }
 	| attr_stmt { }
+  | CBO stmt_list CBC { }
 	| ID '=' ID { }
 	;
 
@@ -71,7 +74,9 @@ attr_stmt:
   GRAPH attr_list  { mergeGraphAttributes(buildAttributeList(GRAPH,
                                                              $2.attributes)); }
   | NODE attr_list { }
-  | EDGE attr_list { };
+  | EDGE attr_list { }
+  | CBO a_list CBC { }
+  ;
 
 opt_attr_list:
 	{ $$.attributes = ATempty; }
@@ -216,7 +221,9 @@ static Attribute parseBoundaries(char *coords)
   int x,y;
 
 	token = strtok(coords, ",");
-  assert(token);
+  if (token == NULL) {
+    return NULL;
+  }
   x = atoi(token);
 
 	token = strtok(NULL, ",");
@@ -265,7 +272,9 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 
     if (ATisEqual(key, ATparse("\"bb\""))) {
        Attribute attr = parseBoundaries(sval);
-			 list = makeAttributeListMany(attr, list);
+       if (attr != NULL) {
+			   list = makeAttributeListMany(attr, list);
+       }
     }
 		else if (ATisEqual(key, ATparse("\"fillcolor\""))) {
 			Color color = parseColor(sval);

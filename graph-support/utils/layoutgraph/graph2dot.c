@@ -1,6 +1,24 @@
 
 #include "Graph.h"
 
+static ATermTable levels;
+
+/*{{{  static void storeLevel(ATerm id, ATerm level) */
+
+static void storeLevel(ATerm id, ATerm level)
+{
+  ATermList list = (ATermList) ATtableGet(levels, level);
+  if (list == NULL) {
+    list = ATmakeList1(id);
+  }
+  else {
+    list = ATinsert(list, id);
+  }
+  ATtablePut(levels, level, (ATerm) list);
+}
+
+/*}}}  */
+
 /*{{{  static float pixelToInch(int pixel) */
 
 static float pixelToInch(int pixel)
@@ -46,7 +64,7 @@ static void printColor(Color color, FILE *file)
 /*}}}  */
 /*{{{  static void printAttribute(Attribute attr, FILE *file) */
 
-static void printAttribute(Attribute attr, FILE *file)
+static void printAttribute(ATerm id, Attribute attr, FILE *file)
 {
   if (isAttributeLabel(attr)) {
     ATfprintf(file, "label=%y", ATmakeAFun(getAttributeLabel(attr), 0, ATtrue));
@@ -81,6 +99,10 @@ static void printAttribute(Attribute attr, FILE *file)
   }
   else if (isAttributeInfo(attr)) {
   }
+  else if (isAttributeLevel(attr)) {
+    ATerm level = ATmake("<str>", getAttributeLevel(attr));
+    storeLevel(id, level);
+  }
   else {
     ATwarning("unknown attribute type: %t\n", attr);
   }
@@ -89,10 +111,10 @@ static void printAttribute(Attribute attr, FILE *file)
 /*}}}  */
 /*{{{  static void printAttributes(AttributeList attrs, FILE *file) */
 
-static void printAttributes(AttributeList attrs, FILE *file)
+static void printAttributes(ATerm id, AttributeList attrs, FILE *file)
 {
   while (!isAttributeListEmpty(attrs)) {
-    printAttribute(getAttributeListHead(attrs), file);
+    printAttribute(id, getAttributeListHead(attrs), file);
     attrs = getAttributeListTail(attrs);
     fprintf(file, " ");
   }
@@ -103,8 +125,9 @@ static void printAttributes(AttributeList attrs, FILE *file)
 
 static void printNode(Node node, FILE *file)
 {
-  ATfprintf(file, "%t [", NodeIdToTerm(getNodeId(node)));
-  printAttributes(getNodeAttributes(node), file);
+  ATerm id = NodeIdToTerm(getNodeId(node));
+  ATfprintf(file, "%t [", id);
+  printAttributes(id, getNodeAttributes(node), file);
   fprintf(file, "]\n");
 }
 
@@ -129,8 +152,7 @@ static void printEdge(Edge edge, FILE *file)
   if (!isAttributeListEmpty(getEdgeAttributes(edge))) {
     ATfprintf(file,"[");
   }
-  printAttributes(getEdgeAttributes(edge), file);
-
+  printAttributes(ATparse("\"***edge***\""),getEdgeAttributes(edge), file);
 
   if (!isAttributeListEmpty(getEdgeAttributes(edge))) {
     ATfprintf(file, "]");
@@ -151,21 +173,46 @@ static void printEdges(EdgeList edges, FILE *file)
 }
 
 /*}}}  */
+/*{{{  static void printLevels(FILE* file)  */
+
+static void printLevels(FILE* file) 
+{
+  ATermList keys = ATtableKeys(levels);
+
+  for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
+    ATerm key = ATgetFirst(keys);
+    ATermList level = (ATermList) ATtableGet(levels, key);
+
+    fprintf(file, "{rank=same ");
+    for ( ; !ATisEmpty(level); level = ATgetNext(level)) {
+      ATfprintf(file, "%t ", ATgetFirst(level));
+    }
+    fprintf(file," }\n");
+  }
+}
+
+/*}}}  */
 /*{{{  static void printGraph(Graph graph, FILE *file) */
 
 static void printGraph(Graph graph, FILE *file)
 {
+  levels = ATtableCreate(1024, 75);
   fprintf(file, "digraph TheGraph { \n");
 
   printNodes(getGraphNodes(graph), file);
   printEdges(getGraphEdges(graph), file);
-
+  printLevels(file);
   fprintf(file, "\n}\n");
+  ATtableDestroy(levels);
 }
 
 /*}}}  */
 
 void graph2dot(Graph graph, FILE *file) 
 {
+  FILE *tmp = fopen("debug.dot","w");
   printGraph(graph, file);
+  printGraph(graph, tmp);
+
+
 }

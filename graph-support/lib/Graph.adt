@@ -21,6 +21,7 @@
   constructor(Attribute, shape, shape(<shape(Shape)>)),
   constructor(Attribute, size, size(<width(int)>, <height(int)>)),
   constructor(Attribute, style, style(<style(Style)>)),
+  constructor(Attribute, level, level(<level(str)>)),
   constructor(Color, rgb, rgb(<red(int)>, <green(int)>, <blue(int)>)),
   constructor(Style, bold, bold),
   constructor(Style, dashed, dashed),

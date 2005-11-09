@@ -155,6 +155,7 @@ static Graph printOverFlowNode(Graph graph,
 static Graph printNode(const char *name,
                        Graph graph, 
 		       Shape shape,
+		       Attribute level,
                        int parentNr, 
                        int nodeNr, 
                        char *contents, 
@@ -184,6 +185,10 @@ static Graph printNode(const char *name,
   
   shapeAttr = makeAttributeShape(shape);
   attrList = makeAttributeListMany(shapeAttr, attrList);
+
+  if (level != NULL) {
+    attrList = makeAttributeListMany(level, attrList);
+  }
 
   if (posInfo) {
     messageAttr = makeAttributeInfo("origin", posInfo);
@@ -307,7 +312,8 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      graph = printNode(name, graph, makeShapeEllipse(), parent,key,
+      graph = printNode(name, graph, makeShapeEllipse(),
+			makeAttributeLevel("characters"), parent,key,
 			escape(ch),"character", posInfoArea);
     }
 
@@ -325,7 +331,7 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
                                               makeShapeEllipse();
 
     if (!layout && (literals_on || !literal)) {
-      graph = printNode(name, graph, shape, parent,key,productions_on ?
+      graph = printNode(name, graph, shape, NULL, parent,key,productions_on ?
 				PT_yieldProduction(PT_getTreeProd(tree)) :
 				PT_yieldSymbol(rhs),
 				productions_on ? "" :
@@ -333,7 +339,7 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 				posInfoArea);
     }
     else if (layout && layout_on) {
-      graph = printNode(name, graph,shape,parent,key, "LAYOUT?","layout", 
+      graph = printNode(name, graph,shape,NULL, parent,key, "LAYOUT?","layout", 
 			posInfoArea); 
     }
 
