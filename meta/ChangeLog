@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Nov  9 09:22:36 CET 2005 <jurgenv@cwi.nl>
+ * Added possibility for exporting pictures from the graph viewer.
+ * Added rendering of curved edges to graph viewer (computed by graphviz).
+
 Wed Sep  7 11:46:54 CEST 2005 <kooiker@cwi.nl>
  * tbscripts/start-meta-studio.tb.src:
    - Use same scenario entrypoint for opening a module via the menu and via a
