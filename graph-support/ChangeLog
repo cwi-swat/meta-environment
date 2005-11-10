@@ -4,6 +4,9 @@ Thu Nov 10 13:31:10 CET 2005 <jurgenv@cwi.nl>
  * utils/tree2graph: The representation of cycles changed in AsFix, it now 
    has a number that denotes the length of each cycle. We use this number 
    to construct an edge that points up (length - 1) nodes in the tree.
+ * utils/tree2graph: When mapping a tree to a graph that contains a cycle,
+   but the cycle is not complete (because a partial tree was selected) we
+   print a dummy node to explain what happened.
 
 Wed Nov  9 09:59:05 CET 2005 <jurgenv@cwi.nl>
  * Changed Graph.adt to use lists.
