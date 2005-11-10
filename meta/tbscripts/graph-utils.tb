@@ -4,11 +4,12 @@ process RenderGraph(GraphPanelId: str, Graph: term?) is
   . snd-msg(gl-layout-graph(Graph))
   . rec-msg(gl-graph(Graph?))
 
-process ShowTree(Modulename: str, Tree: term, ShowLeafs: term) is
+process ShowTree(Modulename: str, Tree: term, ShowLeafs: term, 
+                 SharingOn: term) is
 let
   Graph: term
 in
-  snd-msg(gc-tree-to-graph(Modulename, Tree, ShowLeafs))
+  snd-msg(gc-tree-to-graph(Modulename, Tree, ShowLeafs, SharingOn))
   . rec-msg(gc-graph(Graph?))
   . RenderGraph("parsetree", Graph?)
   . snd-msg(gp-display-graph("parsetree", Graph))

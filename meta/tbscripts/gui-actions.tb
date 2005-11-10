@@ -75,7 +75,7 @@ in
   . GetFocus(EditorId, Tree?)
   .
   if not-equal(Tree, no-tree) then
-    ShowTree(Modulename, Tree, false)
+    ShowTree(Modulename, Tree, false, false)
   else
     tau
   fi
@@ -90,7 +90,22 @@ in
   . GetFocus(EditorId, Tree?)
   .
   if not-equal(Tree, no-tree) then
-    ShowTree(Modulename, Tree, true)
+    ShowTree(Modulename, Tree, true, false)
+  else
+    tau
+  fi
+endlet
+
+process ShowSharedTreeAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term
+in
+  GetActiveModule(EditorId, Modulename?)
+  . GetFocus(EditorId, Tree?)
+  .
+  if not-equal(Tree, no-tree) then
+    ShowTree(Modulename, Tree, true, true)
   else
     tau
   fi
