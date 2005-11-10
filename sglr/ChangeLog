@@ -1,17 +1,21 @@
 $Id$
 
+Thu Nov 10 14:40:28 CET 2005 <jurgenv@cwi.nl>
+ * The 'maximum ambiguities reached' upperbound has dissappeared now,
+   since the flattening was the bottleneck here. It used to behave
+   exponentially, but with the memoization we are back at a feasible
+   algorithm. The maximum is not needed anymore. 
+   (note that tree2graph is still an exponential algorithm if you
+    do not turn sharing on).
+
 Tue Jun  7 12:00:29 CEST 2005 <jurgenv@cwi.nl>
  * Flattening to AsFix2ME significantly optimized by applying memoization
    (actual optimization is located in the pt-support package)
- * TODO: bring erroneous regression tests to normal regressin tests, since
-   cycles are allowed now.
 
 Sun Jun  5 10:51:38 CEST 2005 <jurgenv@cwi.nl>
  * Added new filter: 'Remove cycles' under the '-fc' option.
    If the filter is active, all cycles are removed from all
-   ambiguity clusters.
-   The filter is set default to on for experimentation purposes, but
-   this will be changed shortly.
+   ambiguity clusters. The filter is set default to off  by default. 
 
 Mon May 30 14:11:44 CEST 2005 <jurgenv@cwi.nl>
  * Adapted SGLR to produce cyclic parse trees using a new constructor
