@@ -19,6 +19,7 @@
 /*{{{  defines */
 
 #define SORT_AMBIGUOUS "<ambiguous>"
+#define SORT_CYCLE "<cycle>"
 #define SORT_UNKNOWN "<unknown>"
 
 /*}}}  */
@@ -207,6 +208,9 @@ static PT_Symbol getTreeSort(PT_Tree tree)
   }
   else if (PT_isTreeAmb(tree)) {
     return PT_makeSymbolSort(SORT_AMBIGUOUS);
+  }
+  else if (PT_isTreeCycle(tree)) {
+    return PT_makeSymbolSort(SORT_CYCLE);
   }
   else {
     return PT_makeSymbolSort(SORT_UNKNOWN);
