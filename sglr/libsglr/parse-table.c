@@ -36,7 +36,7 @@ AFun  SG_ArgGtrPrio_AFun,
       SG_ReduceLA_AFun, SG_Accept_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
       SG_Eager_AFun, SG_Uneager_AFun,
-      SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
+      SG_Aprod_AFun, SG_Amb_AFun, SG_Cycle_AFun, SG_Range_AFun, SG_CharClass_AFun,
       SG_Action_AFun, SG_Goto_AFun, SG_PT5_AFun,
       SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
       SG_ParseError_AFun, SG_EOF_Error_AFun,
@@ -68,6 +68,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Uneager_AFun,     ATmakeAFun(SG_AVOID_AFUN,       2, ATfalse));
   SG_AFUN_INIT(SG_Aprod_AFun,       ATmakeAFun(SG_APROD_AFUN,       1, ATfalse));
   SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,         1, ATfalse));
+  SG_AFUN_INIT(SG_Cycle_AFun,         ATmakeAFun(SG_CYCLE_AFUN,         2, ATfalse));
 
   SG_AFUN_INIT(SG_GtrPrio_AFun,      ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
   SG_AFUN_INIT(SG_ArgGtrPrio_AFun,   ATmakeAFun(SG_ARG_GTRPRIO_AFUN, 3, ATfalse));

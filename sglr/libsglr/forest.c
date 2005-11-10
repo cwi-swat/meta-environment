@@ -16,12 +16,14 @@
 #include "parse-table.h"
 #include "sglr.h"
 #include "sglr-strings.h"
-#include "marking.h"
+#include "levels.h"
 
 extern long sg_nr_rejects;
 
 ATermTable resolvedtable = NULL;
 ATermTable postable = NULL;
+
+/*{{{  int SG_InjectionFilterSucceeded(int mode) */
 
 int SG_InjectionFilterSucceeded(int mode)
 {
@@ -40,6 +42,9 @@ int SG_InjectionFilterSucceeded(int mode)
   }
 }
 
+/*}}}  */
+/*{{{  int SG_CountEagernessFilterSucceeded(int mode) */
+
 int SG_CountEagernessFilterSucceeded(int mode)
 {
   static int count = 0;
@@ -56,6 +61,9 @@ int SG_CountEagernessFilterSucceeded(int mode)
       return count;
   }
 }
+
+/*}}}  */
+/*{{{  int SG_InjectionCountCalls(int mode) */
 
 int SG_InjectionCountCalls(int mode)
 {
@@ -74,6 +82,9 @@ int SG_InjectionCountCalls(int mode)
   }
 }
 
+/*}}}  */
+/*{{{  int SG_CountEagernessGtrCalls(int mode) */
+
 int SG_CountEagernessGtrCalls(int mode)
 {
   static int count = 0;
@@ -91,6 +102,9 @@ int SG_CountEagernessGtrCalls(int mode)
   }
 }
 
+/*}}}  */
+/*{{{  int SG_PreferAndAvoidCalls(int mode) */
+
 int SG_PreferAndAvoidCalls(int mode)
 {
   static int count = 0;
@@ -107,7 +121,10 @@ int SG_PreferAndAvoidCalls(int mode)
       return count;
   }
 }
-               
+
+/*}}}  */
+/*{{{  int SG_AmbCalls(int mode) */
+
 int SG_AmbCalls(int mode)
 {
   static int count = 0;
@@ -124,6 +141,9 @@ int SG_AmbCalls(int mode)
       return count;
   }
 }
+
+/*}}}  */
+/*{{{  int SG_MaxNrAmb(int mode) */
 
 int SG_MaxNrAmb(int mode)
 {
@@ -142,6 +162,9 @@ int SG_MaxNrAmb(int mode)
   }
 }
 
+/*}}}  */
+/*{{{  int SGnrAmb(int mode) */
+
 int SGnrAmb(int mode)
 {
   static int count = 0;
@@ -158,6 +181,9 @@ int SGnrAmb(int mode)
       return count;
   }
 }
+
+/*}}}  */
+/*{{{  int SG_ClustersVisited(int mode) */
 
 int SG_ClustersVisited(int mode)
 {
@@ -176,6 +202,10 @@ int SG_ClustersVisited(int mode)
     }
 }
 
+/*}}}  */
+
+/*{{{  ATbool SG_StartInjection(parse_table *pt, label l) */
+
 ATbool SG_StartInjection(parse_table *pt, label l)
 {
   return ATmatch((ATerm) SG_LookupProduction(pt, l),
@@ -184,8 +214,12 @@ ATbool SG_StartInjection(parse_table *pt, label l)
                  NULL, NULL, NULL);
 }
 
+/*}}}  */
+
 
 /*  The function |SG_Apply| is defined directly in terms of ATerm functions.  */
+
+/*{{{  tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr) */
 
 tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
 {
@@ -222,168 +256,36 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr)
   return t;
 }
 
-/*  Managing Cyclic Syntax...  */
-ATermList Cycle = NULL;
+/*}}}  */
 
-ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, PosMap visited);
-
-ATbool SG_TermIsCyclicAmbs(size_t *pos, ATermList ambs, PosMap visited)
-{
-  tree amb;
-  ATbool hasCycle = ATfalse;
-  size_t saved_pos = *pos;       
-
-  for (; !hasCycle && !ATisEmpty(ambs); ambs = ATgetNext(ambs)) { 
-    amb = (tree) ATgetFirst(ambs);
-    *pos = saved_pos;
-    hasCycle = SG_TermIsCyclicRecursive((tree) amb, pos, ATtrue, visited);
-  }
-
-  return hasCycle;
-}
+/*{{{  static label SG_GetProdLabel(tree aprod) */
 
 static label SG_GetProdLabel(tree aprod)
 {
   return ATgetInt((ATermInt) ATgetArgument(aprod, 0));
 }
 
+/*}}}  */
+/*{{{  label SG_GetApplProdLabel(tree appl) */
+
 label SG_GetApplProdLabel(tree appl)
 {
   return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
 }
+
+/*}}}  */
+/*{{{  label SG_GetRejectProdLabel(tree appl) */
 
 label SG_GetRejectProdLabel(tree appl)
 {
   return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
 }
 
-ATbool SG_TermIsCyclicRecursive(tree t, size_t *pos, ATbool inAmbs, PosMap visited)
-{
-  ATermList ambs;
-  ATermInt cluster_idx;
-
-  if (Cycle) {
-    return ATtrue;
-  }
-  
-  switch (ATgetType(t)) {
-    case AT_APPL:
-      if (inAmbs) {
-        /*  No ambiguity  */
-        SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t, 1),
-                                 pos, ATfalse, visited);
-      } 
-      else {
-        if (SG_InputAmbiMapIsSet(*pos) > 0) {
-	  SGnrAmb(SG_NR_INC);       
-          cluster_idx = SG_AmbiTablesGetIndex((ATerm) t, *pos);
-  
-	  if (SG_IsMarked((ATerm) cluster_idx)) {
-	    /*  Cycle detected  */
-	    Cycle = ATempty; 
-	    return ATtrue; 
-          }
-          ambs = (ATermList)SG_AmbiTablesGetClusterOnIndex(cluster_idx);
-        }
-        else {
-          cluster_idx = NULL;
-          ambs = ATempty;
-        }
-
-        if (ATisEmpty(ambs)) {
-          SG_TermIsCyclicRecursive((tree) ATgetArgument((ATermAppl) t,1),
-                                   pos, ATfalse, visited);
-        } 
-        else {
-          /*  Encountered an ambiguity cluster  */
-          int idx = ATgetInt(cluster_idx);
-          int savedPos = *pos;
-          int length = PosMapIsSet(visited, idx);
-
-	  if (length == -1) {
-	    SG_Mark((ATerm) cluster_idx); 
-	    
-	    SG_TermIsCyclicAmbs(pos, ambs, visited);
-
-	    PosMapSet(visited, idx, *pos - savedPos);  	  
-	    SG_UnMark((ATerm) cluster_idx);
-	  }
-          else {
-            *pos = *pos + length;
-          } 
-        }
-      }
-      break;
-    case AT_LIST:
-      if (!ATisEmpty((ATermList) t)) {
-        SG_TermIsCyclicRecursive((forest) ATgetFirst((ATermList) t),
-                                 pos, ATfalse, visited);
-        SG_TermIsCyclicRecursive((forest) ATgetNext((ATermList) t),
-                                 pos, ATfalse, visited);
-      }
-      break;
-    case AT_INT:
-      (*pos)++;
-      break;
-    default:
-      break;
-  }
-
-  /*  Remember labels of productions in cycle */
-  if (Cycle && ATgetType(t) == AT_APPL) {
-    if (ATisEqualAFun(ATgetAFun(ATgetArgument(t, 0)), SG_Aprod_AFun)) {
-      Cycle = ATinsert(Cycle,
-                      (ATerm) SG_GetATint(SG_GetApplProdLabel((tree) t), 0));
-    }
-  }
-  return Cycle && !ATisEmpty(Cycle);
-}
-
-ATbool SG_TermIsCyclic(tree t)
-{
-  ATbool cyclic;
-  PosMap visited = PosMapCreate(SG_MaxNrAmb(SG_NR_ASK));
-  size_t pos = 0;
-
-  SGnrAmb(SG_NR_ZERO);
-  SG_initMarks();
-
-  cyclic = SG_TermIsCyclicRecursive(t, &pos, ATfalse, visited);
-
-  PosMapDestroy(visited);
-  SG_cleanupMarks();
-
-  /*  
-  AT_assertUnmarked(t);
-  */
- 
-  return cyclic;
-}
-
-
-ATermList SG_CyclicTerm(parse_table *pt, forest t)
-{
-  Cycle = NULL;
-
-
-  if (!SG_TermIsCyclic(t)) {
-    return ATempty;
-  }
-
-  if (Cycle) {
-    ATermList cycleprods = ATempty;
-
-    for (; !ATisEmpty(Cycle); Cycle = ATgetNext(Cycle)) {
-      cycleprods = ATinsert(cycleprods,
-                            (ATerm) SG_LookupProduction(pt,
-                              (label) ATgetInt((ATermInt) ATgetFirst(Cycle))));
-    }
-    return cycleprods;
-  }
-  return ATempty;
-}
+/*}}}  */
 
 /* Yield converts aprods to AsFix */
+/*{{{  tree SG_YieldTree(parse_table *pt, tree t) */
+
 tree SG_YieldTree(parse_table *pt, tree t)
 {
   tree      arg, res, newarg;
@@ -392,10 +294,6 @@ tree SG_YieldTree(parse_table *pt, tree t)
   ATerm     prod;
 
   if (!t) {
-    return NULL;
-  }
-
-  if (SGnrAmb(SG_NR_ASK) > SG_TOO_MANY_AMBS) {
     return NULL;
   }
 
@@ -418,7 +316,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
         if (ATisEqual(newarg, arg) && ATisEqual(newargs, tail)) {
 	  newargs = args;
         } else {
-          newargs = ATinsert(newargs, (ATerm)newarg); 
+	  newargs = ATinsert(newargs, (ATerm)newarg); 
         }
       }
       else {
@@ -453,6 +351,9 @@ tree SG_YieldTree(parse_table *pt, tree t)
          res = SG_YieldTree(pt, (tree)ATgetFirst(ambs));
        }
     }
+    else if (fun == SG_Cycle_AFun) {
+      res = t;
+    }
     else {
       prod = ATgetArgument((ATerm) t, 0); /* get the prod */
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the args */
@@ -472,9 +373,13 @@ tree SG_YieldTree(parse_table *pt, tree t)
   return t;
 }
 
+/*}}}  */
+
 /*
  SG_GtrPriority(l0, l1) returns true iff priority(l0) > priority(l0)
  */
+
+/*{{{  static ATbool SG_GtrPriority(parse_table *pt, int argNumber ,  */
 
 static ATbool SG_GtrPriority(parse_table *pt, int argNumber , 
                              ATermInt lt0, ATermInt lt1)
@@ -496,10 +401,17 @@ static ATbool SG_GtrPriority(parse_table *pt, int argNumber ,
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  ATbool SGGtrPriority(parse_table *pt, int argNumber, label l0, label l1) */
+
 ATbool SGGtrPriority(parse_table *pt, int argNumber, label l0, label l1)
 {
   return SG_GtrPriority(pt, argNumber, ATmakeInt(l0), ATmakeInt(l1));
 }
+
+/*}}}  */
+
+/*{{{  static int SG_ProdType_AFun(AFun f) */
 
 static int SG_ProdType_AFun(AFun f)
 {
@@ -520,6 +432,9 @@ static int SG_ProdType_AFun(AFun f)
   return -1;
 }
 
+/*}}}  */
+/*{{{  static int SG_ProdType_Tree(tree t) */
+
 static int SG_ProdType_Tree(tree t)
 {
   int  TreeType = 0;
@@ -531,9 +446,13 @@ static int SG_ProdType_Tree(tree t)
   return TreeType;
 }
 
+/*}}}  */
+
 /* Recursive check whether a tree contains at least
  * one reject node.
  */
+
+/*{{{  static ATbool SG_HasRejectProd(tree t) */
 
 static ATbool SG_HasRejectProd(tree t)
 {
@@ -548,67 +467,26 @@ static ATbool SG_HasRejectProd(tree t)
   return ATfalse;
 }
 
-#if 0
-static ATbool SG_ContainsReject(tree t)
-{
-  AFun     fun;
-  ATbool   result = ATfalse;
+/*}}}  */
 
-  switch (ATgetType(t)) {
-    case AT_APPL:
-      fun = ATgetAFun(t);
-
-      if (fun == SG_Reject_AFun) {
-        result = ATtrue;
-      }
-      else if (fun == SG_Amb_AFun) {
-        ATermList ambs = (ATermList) ATgetArgument((ATerm) t, 0);
-        for (; !ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
-          result = result ||
-                   SG_ContainsReject((tree) ATgetFirst((ATermList) t));
-          if (result) {
-            /* if one of the elements contains an ambiguity, we can stop now */
-            break;
-          }
-        }
-      }
-      else {
-        result = SG_ContainsReject((tree) ATgetArgument((ATermAppl) t, 1));
-      }
-      break;
-    case AT_LIST:
-      if (ATisEmpty((ATermList) t)) {
-        break;
-      }
-      for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
-        result = result ||
-                 SG_ContainsReject((tree) ATgetFirst((ATermList) t));
-        if (result) {
-          /* if one of the elements contains an ambiguity, we can stop now */
-          break;
-        }
-      }
-      break;
-    case AT_INT:
-    case AT_REAL:
-    case AT_PLACEHOLDER:
-    case AT_BLOB:
-    default:
-      break;
-  }
-  return result;
-}
-#endif
+/*{{{  static ATbool SG_ProdIsAvoid(int prodtype) */
 
 static ATbool SG_ProdIsAvoid(int prodtype)
 {
   return prodtype == SG_PT_UNEAGER;
 } 
 
+/*}}}  */
+/*{{{  static ATbool SG_ProdIsPrefer(int prodtype) */
+
 static ATbool SG_ProdIsPrefer(int prodtype)
 {
   return prodtype == SG_PT_EAGER;
 } 
+
+/*}}}  */
+
+/*{{{  static size_t SG_CountAvoidsInTree(tree t0) */
 
 static size_t SG_CountAvoidsInTree(tree t0)
 {
@@ -624,6 +502,9 @@ static size_t SG_CountAvoidsInTree(tree t0)
       ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
 
       return SG_CountAvoidsInTree((tree) ATgetFirst(ambs));
+    }
+    else if (fun == SG_Cycle_AFun) {
+      return 0;
     }
     else {
       if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
@@ -653,6 +534,9 @@ static size_t SG_CountAvoidsInTree(tree t0)
   return avoids;
 }     
 
+/*}}}  */
+/*{{{  static size_t SG_CountPrefersInTree(tree t0) */
+
 static size_t SG_CountPrefersInTree(tree t0)
 {
   ATermList ambs;
@@ -667,6 +551,9 @@ static size_t SG_CountPrefersInTree(tree t0)
       ambs = (ATermList) ATgetArgument((ATermAppl) t0, 0);
 
       return SG_CountPrefersInTree((tree) ATgetFirst(ambs));
+    }
+    else if (fun == SG_Cycle_AFun) {
+      return 0;
     }
     else {
       if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {
@@ -696,12 +583,16 @@ static size_t SG_CountPrefersInTree(tree t0)
   return prefers;
 }     
 
+/*}}}  */
+
 /* SG_CountInjectionsInTree counts injections using
  * a parse tree, instead of using the multiset directly.
  *
  * this is due to the fact that the multiset is not defined
  * on ambiguity clusters, but injection count is.
  */
+
+/*{{{  static size_t SG_CountInjectionsInTree(parse_table *pt, tree t) */
 
 static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
 {
@@ -713,7 +604,7 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
   if (ATgetType(t) == AT_APPL) {
     fun = ATgetAFun((ATerm) t);
   
-    if (fun != SG_Amb_AFun) {
+    if (fun != SG_Amb_AFun && fun != SG_Cycle_AFun) {
       l = SG_GetApplProdLabel(t);
 
       if (SG_ProdIsInjection(pt, l)) {
@@ -725,6 +616,10 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
   }
   return injections;
 }    
+
+/*}}}  */
+
+/*{{{  static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t) */
 
 static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
 {
@@ -738,31 +633,56 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
   switch (ATgetType(t)) {
   case AT_APPL:
     fun = ATgetAFun((ATerm) t);
+
     l = SG_GetApplProdLabel(t);
 
-    if(fun == SG_Amb_AFun) {
+    if (fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
       /* Either we have a singleton or
        * the injection count of all elements in the cluster are
        * equal due to earlier filtering, so we just take the first.
        */
       first = (tree) ATgetFirst(ambs);
-      injections += SG_CountAllInjectionsInTree(pt, first);
-
-    } else {
+      injections = SG_CountAllInjectionsInTree(pt, first);
+    }
+    else if (fun == SG_Cycle_AFun) {
+      /* injection counting is meaningless for trees that have
+       * cycles, so return -1, and let the caller handle this case
+       */
+      return -1;
+    }  
+    else {
+      size_t kidsInjections = 0;
       kids = ATgetArgument((ATermAppl) t, 1);
 
       if (SG_ProdIsInjection(pt, l)) {
         injections++;
       }
 
-      injections += SG_CountAllInjectionsInTree(pt, (tree) kids);
+      kidsInjections = SG_CountAllInjectionsInTree(pt, (tree) kids);
+
+      if (kidsInjections != -1) {
+	injections+=kidsInjections;
+      }
+      else {
+	injections = -1;
+      }
     }
     break;
   case AT_LIST:
     for (; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
       ATerm elem = ATgetFirst((ATermList) t);
-      injections += SG_CountAllInjectionsInTree(pt, (tree) elem);
+      size_t kidInjections;
+
+      kidInjections = SG_CountAllInjectionsInTree(pt, (tree) elem);
+
+      if (kidInjections == -1) {
+	injections = -1;
+	break;
+      }
+      else {
+	injections += kidInjections;
+      }
     }
     break;
   case AT_INT:
@@ -776,6 +696,8 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
   return injections;
 }     
 
+/*}}}  */
+
 /* Below we define the filters that compare two trees */
 
 /*
@@ -784,10 +706,13 @@ static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
     - t0 is regular and t1 is avoid
  */
 
+/*{{{  static tree SG_Jump_Over_Injections(parse_table *pt, tree t) */
+
 static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
 {
   if (ATgetType(t) == AT_APPL &&
-      ATgetAFun(t) != SG_Amb_AFun) {
+      ATgetAFun(t) != SG_Amb_AFun &&
+      ATgetAFun(t) != SG_Cycle_AFun) {
     label prod = SG_GetApplProdLabel(t);
         
     while (SG_ProdIsUserDefinedInjection(pt, prod)) {
@@ -795,7 +720,8 @@ static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
       t = (tree)ATgetFirst(injSons);
   
       if (ATgetType(t) == AT_APPL &&
-          ATgetAFun(t) != SG_Amb_AFun) {
+          ATgetAFun(t) != SG_Amb_AFun &&
+	  ATgetAFun(t) != SG_Cycle_AFun) {
         prod = SG_GetApplProdLabel(t);
       }
       else {
@@ -806,10 +732,14 @@ static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
   return t;
 }
 
+/*}}}  */
+/*{{{  static tree SG_Jump_Over_Injections_Modulo_Eagerness(parse_table *pt, tree t) */
+
 static tree SG_Jump_Over_Injections_Modulo_Eagerness(parse_table *pt, tree t)
 {
   if (ATgetType(t) == AT_APPL &&
       ATgetAFun(t) != SG_Amb_AFun &&
+      ATgetAFun(t) != SG_Cycle_AFun &&
       SG_ProdType_Tree(t) != SG_PT_EAGER &&
       SG_ProdType_Tree(t) != SG_PT_UNEAGER) {
     label prod = SG_GetApplProdLabel(t);
@@ -820,6 +750,7 @@ static tree SG_Jump_Over_Injections_Modulo_Eagerness(parse_table *pt, tree t)
 
       if (ATgetType(t) == AT_APPL &&
           ATgetAFun(t) != SG_Amb_AFun &&
+	  ATgetAFun(t) != SG_Cycle_AFun &&
           SG_ProdType_Tree(t) != SG_PT_EAGER &&
           SG_ProdType_Tree(t) != SG_PT_UNEAGER) {
         prod = SG_GetApplProdLabel(t);
@@ -832,6 +763,10 @@ static tree SG_Jump_Over_Injections_Modulo_Eagerness(parse_table *pt, tree t)
   return t;
 }
 
+/*}}}  */
+
+/*{{{  static ATbool SG_MoreEager(int prodtype0, int prodtype1) */
+
 static ATbool SG_MoreEager(int prodtype0, int prodtype1)
 {
   if (prodtype0 != prodtype1 && 
@@ -842,6 +777,9 @@ static ATbool SG_MoreEager(int prodtype0, int prodtype1)
 
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1) */
 
 static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
 {
@@ -855,14 +793,19 @@ static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
   newt1 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t1);
   if (ATgetType(newt0) == AT_APPL &&
       ATgetAFun(newt0) != SG_Amb_AFun &&
+      ATgetAFun(newt0) != SG_Cycle_AFun &&
       ATgetType(newt1) == AT_APPL &&
-      ATgetAFun(newt1) != SG_Amb_AFun) {
+      ATgetAFun(newt1) != SG_Amb_AFun &&
+      ATgetAFun(newt1) != SG_Cycle_AFun) {
     if (SG_MoreEager(SG_ProdType_Tree(newt0), SG_ProdType_Tree(newt1))) {
       return ATtrue;
     }
   }
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1) */
 
 static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
@@ -881,6 +824,10 @@ static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return NULL;
 }
 
+/*}}}  */
+
+/*{{{  static int countDistinctArguments(ATermList args0, ATermList args1) */
+
 static int countDistinctArguments(ATermList args0, ATermList args1)
 {
   int diffs = 0;
@@ -896,6 +843,10 @@ static int countDistinctArguments(ATermList args0, ATermList args1)
   return diffs;
 }
 
+/*}}}  */
+
+/*{{{  static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1) */
+
 static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
@@ -904,7 +855,11 @@ static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 
   if (ATgetAFun(t0) == SG_Amb_AFun
       ||
-      ATgetAFun(t1) == SG_Amb_AFun) {
+      ATgetAFun(t1) == SG_Amb_AFun
+      || 
+      ATgetAFun(t0) == SG_Cycle_AFun
+      ||
+      ATgetAFun(t1) == SG_Cycle_AFun) {
     return NULL;
   }
   if (!ATisEqual(l0,l1)) {
@@ -944,6 +899,8 @@ static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return NULL;
 }
 
+/*}}}  */
+
 /*
  * This filter is needed because it can happen that one tree
  * contains "avoid"s and the other tree contains "prefer"s.
@@ -955,6 +912,8 @@ static tree SG_Indirect_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
  *  t1 is prefer over t2 if 
  *  #prefers in t1 >= #prefers in t2 && #avoids in t1 <= #avoids in t2)      
  */
+
+/*{{{  static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1) */
 
 static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
@@ -999,6 +958,8 @@ static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return max;
 }
 
+/*}}}  */
+
 #if 0
 /*{{{  static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1) */
 
@@ -1032,19 +993,27 @@ static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 /*}}}  */
 #endif
 
+/*{{{  static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1) */
+
 static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 {
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
   size_t in0   = SG_CountAllInjectionsInTree(pt, t0);
   size_t in1   = SG_CountAllInjectionsInTree(pt, t1);
- 
+
+
   IF_STATISTICS(
     SG_InjectionCountCalls(SG_NR_INC);
     if (in0 != in1) {
       SG_InjectionFilterSucceeded(SG_NR_INC);
     }
     );
+
+  if (in0 == -1 || in1 == -1) {
+    /* one of them had a cycle, abort */
+    return NULL;
+  } 
 
   if (in0 > in1) {
     IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
@@ -1059,6 +1028,8 @@ static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
   return NULL;
 }
 
+/*}}}  */
+
 /*
  SG_Filter -- a generic hook to add disambiguating `filters'
 
@@ -1067,6 +1038,8 @@ static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
  Returns:    the preferred term of the two, or NULL if there is no
  filter that prefers either one of them
  */
+/*{{{  static tree SG_Filter(parse_table *pt, tree t0, tree t1) */
+
 static tree SG_Filter(parse_table *pt, tree t0, tree t1)
 {
   tree max = NULL;
@@ -1131,6 +1104,10 @@ static tree SG_Filter(parse_table *pt, tree t0, tree t1)
   return max;
 }
 
+/*}}}  */
+
+/*{{{  ATermList SG_FilterAmbList(parse_table *pt, ATermList ambs, tree t) */
+
 ATermList SG_FilterAmbList(parse_table *pt, ATermList ambs, tree t)
 {
   ATermList  new = ATempty;
@@ -1172,6 +1149,10 @@ ATermList SG_FilterAmbList(parse_table *pt, ATermList ambs, tree t)
   return new;
 }
 
+/*}}}  */
+
+/*{{{  static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree) */
+
 static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree)
 {
   if (ATisEqual(t, injT)) {
@@ -1184,6 +1165,10 @@ static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree)
     return ATsetArgument((ATermAppl)t, (ATerm)ATmakeList1((ATerm)newSon), 1);
   }
 }
+
+/*}}}  */
+
+/*{{{  static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl) */
 
 static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
 {
@@ -1237,7 +1222,8 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
         return NULL;
       }
     }
-    else if (ATgetType(injSon) == AT_APPL) {
+    else if (ATgetType(injSon) == AT_APPL 
+	     && ATgetAFun(injSon) != SG_Cycle_AFun) {
       proda = SG_GetApplProdLabel(injSon);
       l1 = SG_GetATint(proda, 0);
       
@@ -1250,6 +1236,10 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
   return ATsetArgument((ATermAppl)t, (ATerm)ATreverse(newSons), 1);
 }
 
+/*}}}  */
+
+/*{{{  static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t) */
+
 static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
 {
   /* If the tree has an associativity prod and it has an
@@ -1257,7 +1247,9 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
    * is an unresolved conflict!
    */
 
-  if (ATgetType(t) == AT_APPL && ATgetAFun(t) != SG_Amb_AFun) {
+  if (ATgetType(t) == AT_APPL 
+      && ATgetAFun(t) != SG_Amb_AFun
+      && ATgetAFun(t) != SG_Cycle_AFun) {
     label     prodl   = SG_GetApplProdLabel(t);
 
     if (SG_FILTER_PRIORITY) {
@@ -1269,15 +1261,21 @@ static tree SG_Associativity_Priority_Filter(parse_table *pt, tree t)
   return t;
 }
 
-static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
-                 ATbool inAmbs);
+/*}}}  */
 
-static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
+static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
+                 ATbool inAmbs, ATbool cycle, int level);
+
+/*{{{  static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos,  */
+
+static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos, 
+			  ATbool cycle, int level)
 {
   ATermList newambs;
   tree amb, newamb;
   ATermList localAmbs = ambs;
   size_t saved_pos = *pos;
+  size_t new_pos = saved_pos;
 
   if (SG_FILTER) {
     if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
@@ -1287,7 +1285,8 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
 	  /* We need to filter the first tree in order to get the position
 	   * information correct.
 	   */
-          SG_FilterTreeRecursive(pt, amb, pos, ATtrue);
+          SG_FilterTreeRecursive(pt, amb, pos, ATtrue, cycle, level+1);
+
           return NULL;
         }
       }
@@ -1299,11 +1298,19 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
   for (;!ATisEmpty(ambs); ambs = ATgetNext(ambs)) {
     *pos = saved_pos;
     amb = (tree) ATgetFirst(ambs);
-    newamb = SG_FilterTreeRecursive(pt, amb, pos, ATtrue);
+    newamb = SG_FilterTreeRecursive(pt, amb, pos, ATtrue, cycle, level+1);
+
+    if (*pos != saved_pos) {
+      new_pos = *pos;
+    }
+    
+
     if (newamb) {
       newambs = ATinsert(newambs, (ATerm)newamb);
     }
   }
+
+  *pos = new_pos;
   ambs = newambs;
 
   if (SG_FILTER) {
@@ -1333,7 +1340,8 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
   }
 
   if (ATgetLength(ambs) == 1) {
-    return (tree)ATgetFirst(ambs);
+    tree first = (tree)ATgetFirst(ambs);
+      return first;
   }
 
   /* if there are ambiguities left, create an amb node */
@@ -1343,19 +1351,43 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
   return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
 }
 
+/*}}}  */
+/*{{{  static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos, */
+
 static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
-                                   ATbool inAmbs)
+                                   ATbool inAmbs, ATbool cycle,
+				   int level)
 {
   int type = ATgetType(t);
   ATermList args, ambs;
   ATermList newargs, tail, newtail;
   tree arg, newt, newarg;
   ATerm key;
+  ATerm clusterIndex = NULL;
 
   switch(type) {
   case AT_APPL:
     if (SG_InputAmbiMapIsSet(*pos) > 0) {
       ambs = (ATermList) SG_AmbiTablesGetCluster((ATerm) t, *pos);
+      clusterIndex = (ATerm) SG_AmbiTablesGetIndex((ATerm) t, *pos);
+
+      /*ATwarning("checking for cycle\n");*/
+      if (!inAmbs && clusterIndex && SG_getLevel(clusterIndex) != -1) {
+
+	if (SG_FILTER_REMOVECYCLES) {
+	  /*ATwarning("CYCLE DETECTED\n");*/
+	  return NULL;
+	}
+	else {
+	  tree first = (tree) ATgetFirst(ambs);
+	  PT_Production prod = (PT_Production) 
+	    SG_LookupProduction(pt, SG_GetApplProdLabel(first));
+	  PT_Symbol rhs = PT_getProductionRhs(prod);
+	  int ambLevel = SG_getLevel(clusterIndex);
+	 
+	  return (tree) PT_makeTreeCycle(rhs, level - ambLevel);
+	}
+      }
     }
     else {
       ambs = ATempty;
@@ -1371,10 +1403,12 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
 
       newt = (tree)ATtableGet(resolvedtable, key);
       if (!newt) {
-        newt = SG_FilterAmbs(pt, ambs, pos);
+	SG_setLevel(clusterIndex, level);
+        newt = SG_FilterAmbs(pt, ambs, pos, cycle, level);
+	SG_unsetLevel(clusterIndex);
         if (newt) {
-          ATtablePut(resolvedtable, key, (ATerm) newt);
-          ATtablePut(postable, key, (ATerm)ATmakeInt(*pos));
+	  ATtablePut(resolvedtable, key, (ATerm) newt);
+	  ATtablePut(postable, key, (ATerm)ATmakeInt(*pos));
         }
         else {
           return NULL;
@@ -1388,7 +1422,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
     else {
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
       newargs = (ATermList)SG_FilterTreeRecursive(pt, (tree) args, pos,
-                          ATfalse);
+                          ATfalse, cycle, level);
       if (SG_FILTER) {
         if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
 	  /* The check for reject productions has to be done afterwards
@@ -1414,14 +1448,15 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
       arg = (tree) ATgetFirst(args);
       tail = ATgetNext(args);
 
-      newarg = (tree) SG_FilterTreeRecursive(pt, arg, pos, ATfalse);
+      newarg = (tree) SG_FilterTreeRecursive(pt, arg, pos, ATfalse, 
+					     cycle, level+1);
 
       if (ATisEmpty(tail)) {
         newtail = ATempty;
       } 
       else {
         newtail = (ATermList)SG_FilterTreeRecursive(pt, (tree)tail, pos,
-                          ATfalse);
+                          ATfalse, cycle, level);
         if (!newtail) {
           return NULL;
         }
@@ -1453,6 +1488,9 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
   }
 }
 
+/*}}}  */
+
+/*{{{  tree SG_FilterTree(parse_table *pt, tree t) */
 
 tree SG_FilterTree(parse_table *pt, tree t)
 {
@@ -1471,7 +1509,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
    nrAmbs = SGnrAmb(SG_NR_ASK);
    IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
 
-   newT = SG_FilterTreeRecursive(pt, t, &pos, ATfalse);
+   SG_initLevels();
+   newT = SG_FilterTreeRecursive(pt, t, &pos, ATfalse, ATfalse, 0);
+   SG_cleanupLevels();
    
    IF_VERBOSE(
       /* print 100% bar, the rest was solved by caching ambclusters */
@@ -1486,7 +1526,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
    return newT; 
 }
 
+/*}}}  */
 
+/*{{{  tree SG_SelectOnTopSort(parse_table *pt, tree t, const char *sort) */
 
 tree SG_SelectOnTopSort(parse_table *pt, tree t, const char *sort)
 {
@@ -1544,3 +1586,5 @@ tree SG_SelectOnTopSort(parse_table *pt, tree t, const char *sort)
   }
   return NULL;
 }
+
+/*}}}  */

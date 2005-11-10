@@ -52,6 +52,7 @@ void  SGinitParser(ATbool toolbus_mode)
   }
 
   SG_FILTER_ON();
+  SG_FILTER_REMOVECYCLES_OFF();
   SG_FILTER_DIRECTEAGERNESS_ON();
   SG_FILTER_EAGERNESS_ON();
   SG_FILTER_INJECTIONCOUNT_ON();
@@ -59,7 +60,6 @@ void  SGinitParser(ATbool toolbus_mode)
   SG_FILTER_REJECT_ON();
   
   SG_BINARY_ON();
-  SG_CYCLE_ON();
 }
 
 void SGshowMode()
@@ -74,7 +74,6 @@ void SGshowMode()
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
   ATfprintf(stderr, "FILTER:      %s\n", SG_FILTER?"y":"n");
   ATfprintf(stderr, "STARTSYMBOL: %s\n", SG_STARTSYMBOL?"y":"n");
-  ATfprintf(stderr, "CYCLE:       %s\n", SG_CYCLE?"y":"n");
 }
 
 /**  The ToolBus API functions  **/

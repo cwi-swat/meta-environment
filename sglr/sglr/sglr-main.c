@@ -31,12 +31,12 @@
 int     outputflag                       = ATtrue;
 int     binaryflag                       = ATtrue;
 int     filterflag                       = ATtrue;
+int     filter_removecyclesflag          = ATfalse;  /* heuristic filter */
 int     filter_directeagernessflag       = ATtrue;
-int     filter_eagernessflag             = ATtrue;
-int     filter_injectioncountflag        = ATtrue;
+int     filter_eagernessflag             = ATtrue; /* heuristic filter */
+int     filter_injectioncountflag        = ATtrue; /* heuristic filter */
 int     filter_priorityflag              = ATtrue;
 int     filter_rejectflag                = ATtrue;
-int     cycleflag                        = ATtrue;
 int     verboseflag                      = ATfalse;
 int     debugflag                        = ATfalse;
 int     statisticsflag                   = ATfalse;
@@ -117,9 +117,9 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-2         : use AsFix2 output format             [%s]\n"
               "\t-A         : ambiguities are treated as errors    [%s]\n"
               "\t-b         : output AsFix in binary format (BAF)  [%s]\n"
-              "\t-c         : toggle cycle detection               [%s]\n"
               "\t-d         : toggle debug mode                    [%s]\n"
               "\t-f[deipr] : toggle filtering, or specific filter [%s]\n"
+              "\t  c : remove cycles                               [%s]\n"
               "\t  d : direct eagerness                            [%s]\n"
               "\t  e : eagerness                                   [%s]\n"
               "\t  i : injection count                             [%s]\n"
@@ -139,9 +139,9 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(!asfix2meflag),
               DEFAULTMODE(ambiguityerrorflag),
               DEFAULTMODE(binaryflag), 
-              DEFAULTMODE(cycleflag),
               DEFAULTMODE(debugflag), 
               DEFAULTMODE(filterflag),
+              DEFAULTMODE(filter_removecyclesflag),
               DEFAULTMODE(filter_directeagernessflag),
               DEFAULTMODE(filter_eagernessflag),
               DEFAULTMODE(filter_injectioncountflag),
@@ -177,7 +177,6 @@ struct option longopts[] =
   {"asfix2",          no_argument,       &asfix2meflag,        ATtrue},
   {"debug",           no_argument,       &debugflag,           ATtrue},
   {"no-filter",       optional_argument, &filterflag,          ATfalse},
-  {"cycle-detect",    no_argument,       &cycleflag,           ATtrue},
   {"help",            no_argument,       NULL,                 'h'},
   {"input",           required_argument, NULL,                 'i'},
   {"log",             no_argument,       NULL,                 'l'},
@@ -201,6 +200,9 @@ void handle_filter_options(void)
   else {
     if (strlen(optarg) == 1) {
       switch(optarg[0]) {
+	case 'c':
+	  filter_removecyclesflag = !filter_removecyclesflag;
+	  break;
         case 'd':
           filter_directeagernessflag = !filter_directeagernessflag;
           break;
@@ -250,7 +252,6 @@ void handle_options (int argc, char **argv)
       case '?':   show_help        = ATtrue;              break;
       case 'A':   ambiguityerrorflag = !ambiguityerrorflag; break;
       case 'b':   binaryflag       = ATtrue;              break;
-      case 'c':   cycleflag        = !cycleflag;          break;
       case 'd':   debugflag        = !debugflag;          break;
       case 'f':   handle_filter_options();                break;     
       case 'h':   show_help        = ATtrue;              break;
@@ -282,12 +283,12 @@ ATbool set_global_options(void)
   if(debugflag)                    SG_DEBUG_ON();
   if(verboseflag)                  SG_VERBOSE_ON();
   if(filterflag)                   SG_FILTER_ON();
+  if(filter_removecyclesflag)      SG_FILTER_REMOVECYCLES_OFF();
   if(filter_directeagernessflag)   SG_FILTER_DIRECTEAGERNESS_ON();
   if(filter_eagernessflag)         SG_FILTER_EAGERNESS_ON();
   if(filter_injectioncountflag)    SG_FILTER_INJECTIONCOUNT_ON();
   if(filter_priorityflag)          SG_FILTER_PRIORITY_ON();
   if(filter_rejectflag)            SG_FILTER_REJECT_ON();
-  if(cycleflag)                    SG_CYCLE_ON();
   if(start_symbol)                 SG_STARTSYMBOL_ON();
   if(statisticsflag)               SG_SHOWSTAT_ON();
   if(outputflag)                   SG_OUTPUT_ON();

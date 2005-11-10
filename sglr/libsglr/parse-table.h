@@ -71,7 +71,7 @@ extern  AFun  SG_Regular_AFun, SG_Reject_AFun,
 #ifndef NO_EAGERNESS
 SG_Eager_AFun, SG_Uneager_AFun,
 #endif
-SG_Aprod_AFun, SG_Amb_AFun;
+SG_Aprod_AFun, SG_Amb_AFun, SG_Cycle_AFun;
 
 /*  Function prototypes  */
 

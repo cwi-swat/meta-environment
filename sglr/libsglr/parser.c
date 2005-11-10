@@ -1103,7 +1103,6 @@ tree SG_ConvertA2ToA2ME(tree t)
 
 static tree SG_ParseResult(const char *path, const char *sort)
 {
-  ATermList cycle;
   tree      t;
 
   if (accepting_stack) {
@@ -1123,20 +1122,6 @@ static tree SG_ParseResult(const char *path, const char *sort)
           /*  Flag this error at start, not end, of file  */
           SG_ResetCoordinates();
           return SG_ParseError(path, ATempty, 0, NULL);
-        }
-      }
-
-      /*  Now detect, and report, cycles in the tree */
-      if (SG_CYCLE) {
-        if (SG_MaxNrAmb(SG_NR_ASK) > 0) {
-  
-          IF_STATISTICS(SG_Timer());
-          cycle = SG_CyclicTerm(table, t);
-          IF_STATISTICS(fprintf(SG_log(), 
-                                "Cycle detection took %.6fs\n", SG_Timer()));
-          if (!ATisEmpty(cycle)) {
-            return SG_ParseError(path, cycle, 0, NULL);
-          }
         }
       }
 
@@ -1185,12 +1170,6 @@ static tree SG_ParseResult(const char *path, const char *sort)
 
           return t;
         }
-	else {
-          if (SGnrAmb(SG_NR_ASK) > SG_TOO_MANY_AMBS) {
-		  ATwarning("Too many ambiguities\n");
-            return SG_ParseError(path, ATempty, SGnrAmb(SG_NR_ASK), NULL);
-          }
-	}
       }
     }
   }

@@ -180,7 +180,7 @@ do
 		asfile=`basename $base .$ext`.asfix2
 		org=$dir/$asfile.org
 		out=${TMPDIR:-/var/tmp}/$asfile.$$
-		$SGLR $VERBOSE --cycle -2 -p $ptbl -i $file -o $out	2>/dev/null
+		$SGLR $VERBOSE -2 -p $ptbl -i $file -o $out	2>/dev/null
 	        if $COMPARE $VERBOSE $out $org	> /dev/null
 	        then
 			Notify "Regression test for error term $base succeeded"

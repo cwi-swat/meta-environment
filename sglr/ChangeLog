@@ -1,5 +1,22 @@
 $Id$
 
+Tue Jun  7 12:00:29 CEST 2005 <jurgenv@cwi.nl>
+ * Flattening to AsFix2ME significantly optimized by applying memoization
+   (actual optimization is located in the pt-support package)
+ * TODO: bring erroneous regression tests to normal regressin tests, since
+   cycles are allowed now.
+
+Sun Jun  5 10:51:38 CEST 2005 <jurgenv@cwi.nl>
+ * Added new filter: 'Remove cycles' under the '-fc' option.
+   If the filter is active, all cycles are removed from all
+   ambiguity clusters.
+   The filter is set default to on for experimentation purposes, but
+   this will be changed shortly.
+
+Mon May 30 14:11:44 CEST 2005 <jurgenv@cwi.nl>
+ * Adapted SGLR to produce cyclic parse trees using a new constructor
+ * Merged separate cycle detection phase into filtering phase
+
 Mon Sep 12 11:15:21 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
  * restorebrackets.c: generate structured literal representation
    of brackets instead of casting a symbol to a tree. This
