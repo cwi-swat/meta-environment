@@ -122,6 +122,14 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
         export.addActionListener(panel.getSaveImageAction());
         graph.add(export);
         
+        JMenuItem reset = new JMenuItem("Reset view");
+        reset.addActionListener(new AbstractAction() {
+        	public void actionPerformed(ActionEvent e) {
+        		panel.restoreZoomAndPan();
+        	}
+        });
+        graph.add(reset);
+        
         return graph;
     }
 

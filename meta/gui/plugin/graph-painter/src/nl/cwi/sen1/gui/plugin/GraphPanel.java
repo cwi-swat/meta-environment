@@ -2,6 +2,9 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
@@ -54,6 +57,7 @@ public class GraphPanel extends JPanel {
 	private String id;
 
 	private Display display;
+	private Display overview;
 
 	private ItemRegistry registry;
 
@@ -78,13 +82,15 @@ public class GraphPanel extends JPanel {
 		setLayout(new BorderLayout());
 
 		registry = new ItemRegistry(new DefaultGraph());
+		
 		display = new Display(registry);
-
 		display.setHighQuality(true);
+		
+	
 
 		nodeRenderer = new GraphNodeRenderer();
 		nodeRenderer.setTextAttributeName("label");
-		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
+ 		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
 		nodeRenderer.setHorizontalPadding(prefs
 				.getInt("graph.node.border.width"));
 		nodeRenderer.setVerticalPadding(prefs
@@ -307,6 +313,15 @@ public class GraphPanel extends JPanel {
 			if (node.getAttribute("id").equals(nodeId)) {
 				registry.getFocusManager().getDefaultFocusSet().set(node);
 			}
+		}
+	}
+	
+	public void restoreZoomAndPan() {
+		try {
+			display.setTransform(new AffineTransform());
+			display.repaint();
+		} catch (NoninvertibleTransformException e) {
+			// this does not happen
 		}
 	}
 
