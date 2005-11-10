@@ -1,5 +1,11 @@
 $Id$
 
+Thu Nov 10 12:52:01 CET 2005 <jurgenv@cwi.nl>
+ * Generalized the definition of a cycle tree node. A cycle tree node 
+   now has a type and a length. The length is the length of a cycle. The
+   meaning of a cycle is an edge (reduction) that points back |length-1| 
+   nodes upwards in the tree to construct a cycle.
+
 Fri Aug 19 09:21:04 CEST 2005 <jurgenv@cwi.nl>
  * MEPT.adt: changed field <character(int)> in CharRange to
              <start(int)>, to streamline coding with CharRanges.
@@ -20,8 +26,23 @@ Fri Jun 10 15:27:05 CEST 2005 <M328@cwi.nl>
  * test:
    - Add tests for checking new options
 
+Wed Jun  8 10:46:50 CEST 2005 <jurgenv@cwi.nl>
+ * NOTE: Having cycles in parse trees has some effects on how one can 
+   interpret ambiguity clusters. Not all members of the cluster will
+   yield the same string anymore. Principally they still do, because
+   a cycle points back to the amb node, but in practise this means that
+   you can't select a random amb node to compute the width of an
+   ambiguity cluster anymore. You must pick one that is not a cycle to do
+   this. 
+ * libmept/posInfo.c: dealt with previous remark in implementation of 
+   addPosInfo.
+
 Wed Jun  8 10:21:52 CEST 2005 <M336@cwi.nl>
  * tests/test_mept.c: Added unit test for posInfo.
+
+Mon May 30 13:26:37 CEST 2005 <jurgenv@cwi.nl>
+ * As an experiment, added the 'cycle' Tree constructor, it models an
+   edge that goes back to the previous ambiguity cluster to form a cycle.
 
 Wed Feb 23 11:18:18 CET 2005 <jurgenv@cwi.nl>
  * libmept/flattenPT.c: fixed AsFix2 list patterns for lexical lists. They

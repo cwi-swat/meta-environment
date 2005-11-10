@@ -208,17 +208,27 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
     PT_Args args = PT_getTreeArgs(tree);
     PT_Args new = PT_makeArgsEmpty();
     PT_Position save = *current;
+    PT_Position newPos = save;
 
     for (;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
       *current = save;
       new = PT_makeArgsMany(PT_addTreePosInfo(arg, current), new);
-      
+
+      if (current->offset != save.offset) {
+	/* only update newPos if this amb was not a cycle */
+	newPos = *current;
+      }
     }
+
+    /* if the last amb was a cycle, we want the positions after
+     * an amb that was not a cycle
+     */
+    *current = newPos;
 
     tree = PT_makeTreeAmb(PT_reverseArgs(new));
   }
-  else {
+  else if (!PT_isTreeCycle(tree)) {
     ATwarning("unhandled tree: %s (%t)\n",
 	      PT_yieldTreeToString(tree, ATfalse),
 	      tree);

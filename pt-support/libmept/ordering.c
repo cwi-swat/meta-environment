@@ -146,7 +146,7 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
      PT_Production prod1;
      PT_Production prod2;
 
-     if (PT_isTreeAmb(tree2)) {
+     if (PT_isTreeAmb(tree2) || PT_isTreeCycle(tree2)) {
        return -1;
      }
 
@@ -172,14 +172,30 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
      if (PT_isTreeAppl(tree2)) {
        return 1;
      }
+     else if (PT_isTreeCycle(tree2)) {
+       return -1;
+     }
 
      args1 = PT_getTreeArgs(tree1);
      args2 = PT_getTreeArgs(tree2);
 
      return PT_compareAmbs(args1, args2);
    }
-   else if (PT_isTreeLit(tree1) ||
-	    PT_isTreeChar(tree1)) {
+   else if (PT_isTreeCycle(tree1)) {
+     PT_Production prod1;
+     PT_Production prod2;
+
+     if (PT_isTreeAmb(tree2) || PT_isTreeAppl(tree2)) {
+       return 1;
+     }
+
+     prod1 = PT_getTreeProd(tree1);
+     prod2 = PT_getTreeProd(tree2);
+     
+     return PT_compareProduction(prod1, prod2);
+
+   }
+   else if (PT_isTreeChar(tree1)) {
      return ATcompare(ATremoveAnnotations(PT_TreeToTerm(tree1)), 
 		      ATremoveAnnotations(PT_TreeToTerm(tree2)));
 

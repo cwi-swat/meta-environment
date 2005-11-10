@@ -60,6 +60,9 @@ static void visitTree(PT_Tree tree, TreeYielder yielder)
   if (PT_isTreeChar(tree)) {
     yielder->yieldChar(PT_getTreeCharacter(tree));
   }
+  else if (PT_isTreeCycle(tree)) {
+    return;
+  }
   else if (PT_isTreeAppl(tree)) {
     visitArgs(PT_getTreeArgs(tree), yielder);
   }

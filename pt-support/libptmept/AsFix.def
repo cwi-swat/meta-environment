@@ -105,9 +105,11 @@ sorts Tree Args Production
 
 context-free syntax
 
-appl(prod:Production,args:Args) -> Tree {cons("appl")}
-character:NatCon                -> Tree {cons("char")}
+appl(prod:Production,args:Args)          -> Tree {cons("appl")}
+cycle(symbol:Symbol,cycle-length:NatCon) -> Tree {cons("cycle")}
 amb(args:Args)                  -> Tree {cons("amb")}
+character:NatCon                -> Tree {cons("char")}
+
 "[" {Tree ","}* "]"             -> Args {cons("list")}
 
 "prod" "(" lhs:Symbols comma1:"," rhs:Symbol comma2:"," attributes:Attributes ")" -> Production {cons("default")}
@@ -150,16 +152,14 @@ hiddens
 module languages/aterm/syntax/IntCon
 
 imports basic/Whitespace
+	basic/NatCon
 
 hiddens
   context-free start-symbols 
     IntCon
 
 exports
-
-  sorts NatCon IntCon
-  lexical syntax   
-    digits:[0-9]+ -> NatCon  {cons("digits")}
+  sorts IntCon
   context-free syntax
     NatCon         -> IntCon {cons("natural")}
     pos:"+" NatCon -> IntCon {cons("positive")}
@@ -193,6 +193,20 @@ lexical syntax
     ~[\0-\31\n\t\"\\]          -> StrChar {cons("normal")}
 
     [\"] chars:StrChar* [\"]   -> StrCon  {cons("default")}
+module basic/NatCon
+
+exports
+
+sorts NatCon
+
+lexical syntax
+  
+ [0-9]+ -> NatCon {cons("digits")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
 module basic/IdentifierCon
 
 exports

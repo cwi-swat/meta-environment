@@ -729,6 +729,11 @@ static PTPT_Tree PTPT_liftTreeRec(PT_Tree pt)
     int val = PT_getTreeCharacter(pt);
     result = PTPT_makeTreeChar(PTPT_liftNatCon(val));
   }
+  else if (PT_isTreeCycle(pt)) {
+    PTPT_Symbol symbol = PTPT_liftSymbol(PT_getTreeSymbol(pt));
+    PTPT_NatCon length = PTPT_liftNatCon(PT_getTreeCycleLength(pt));
+    result = PTPT_makeTreeCycle(e,e,symbol,e,e,length,e);
+  }
   else {
     ATwarning("lift: unknown term %t\n", pt);
     assert(ATfalse);

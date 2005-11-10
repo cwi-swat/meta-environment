@@ -42,6 +42,9 @@ static ERR_SubjectList getAmbiguities(const char *path,
 
   /*}}}  */
   }
+  else if (PT_isTreeCycle(tree)) {
+    return ambSubjects;
+  }
   else if (PT_isTreeAppl(tree)) {
   /*{{{  handle normal application */
 

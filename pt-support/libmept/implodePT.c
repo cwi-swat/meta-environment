@@ -374,6 +374,9 @@ static ATerm implodeTerm(PT_Tree tree)
   else if (PT_isTreeAppl(tree)) {
     result = implodeApplication(tree);
   }
+  else if (PT_isTreeCycle(tree)) {
+    result = NULL;
+  }
   else {
     ATerror("implodeTerm: not an application term: %t\n", tree);
     return NULL;

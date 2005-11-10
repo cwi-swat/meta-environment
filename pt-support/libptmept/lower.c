@@ -666,6 +666,15 @@ PT_Tree PTPT_lowerTree(PTPT_Tree pt)
 
     result = PT_makeTreeAppl(prod, args);
   }
+  else if (PTPT_isTreeCycle(pt)) {
+    PT_Symbol symbol;
+    int length;
+
+    symbol = PTPT_lowerSymbol(PTPT_getTreeSymbol(pt));
+    length = PTPT_lowerNatCon(PTPT_getTreeCycleLength(pt));
+
+    result = PT_makeTreeCycle(symbol,length);
+  }
   else if (PTPT_isTreeChar(pt)) {
     PTPT_NatCon val = PTPT_getTreeCharacter(pt);
 

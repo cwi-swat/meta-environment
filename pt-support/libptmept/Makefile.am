@@ -27,10 +27,11 @@ AsFix.def:
 	cat ${LIBRARY}/languages/asfix/syntax/*.sdf ; \
 	cat ${LIBRARY}/languages/aterm/syntax/*.sdf ; \
 	cat ${LIBRARY}/basic/StrCon.sdf ; \
+	cat ${LIBRARY}/basic/NatCon.sdf ; \
 	cat ${LIBRARY}/basic/IdentifierCon.sdf ; \
 	cat ${LIBRARY}/basic/Whitespace.sdf) > $@
 
-api: AsFix.def
+api: 
 	sdf2-to-c -i $< -P PTPT_ -o PTMEPT
 
 api-clean:
