@@ -104,7 +104,7 @@ static void popParent()
 /*}}}  */
 /*{{{  static long getParent(int distance) */
 
-static long getParent(int distance)
+static int getParent(int distance)
 {
   ATerm result = ATelementAt(parentStack, distance);
 
@@ -384,8 +384,16 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
   }
   else if (PT_isTreeCycle(tree)) {
     int length  = PT_getTreeCycleLength(tree);
-    long pointer = getParent(length - 1);
-    graph = addEdge(graph, parent, pointer);
+    int pointer = getParent(length - 1);
+    if (pointer != -1) {
+      graph = addEdge(graph, parent, pointer);
+    }
+    else {
+      static char label[] = "Unreachable node on cyclic path";
+      graph = printNode(label, graph, makeShapeEllipse(),
+			NULL, parent, key,
+			label,"cycle", posInfoArea);
+    }
   }
   else if (PT_isTreeAppl(tree)) {
     /*{{{  handle appl */
