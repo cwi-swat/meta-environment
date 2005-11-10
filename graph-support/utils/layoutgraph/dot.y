@@ -53,8 +53,9 @@ opt_id:
 	;
 
 stmt_list:
-	{ }
-	| stmt opt_semi stmt_list { }
+	stmt opt_semi { }
+  |				
+	stmt_list stmt opt_semi { }
 	;
 
 opt_semi:
@@ -75,7 +76,6 @@ attr_stmt:
                                                              $2.attributes)); }
   | NODE attr_list { }
   | EDGE attr_list { }
-  | CBO a_list CBC { }
   ;
 
 opt_attr_list:

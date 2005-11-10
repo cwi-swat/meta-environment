@@ -21,6 +21,8 @@ static ATbool literals_on;
 static ATbool sharing_on;
 static ATermIndexedSet done;
 
+static ATermList parentStack;
+
 static long   unique_key;
 static size_t size;
 
@@ -78,6 +80,40 @@ char* escape(const char* str)
   escaped[j] = '\0';
 
   return escaped;
+}
+
+/*}}}  */
+
+/*{{{  static void pushParent(long id) */
+
+static void pushParent(long id)
+{
+  ATermInt value = ATmakeInt(id);
+  parentStack = ATinsert(parentStack, (ATerm) value);
+}
+
+/*}}}  */
+/*{{{  static void popParent() */
+
+static void popParent()
+{
+  parentStack = ATgetNext(parentStack);
+  return;
+}
+
+/*}}}  */
+/*{{{  static long getParent(int distance) */
+
+static long getParent(int distance)
+{
+  ATerm result = ATelementAt(parentStack, distance);
+
+  if (result != NULL) {
+    return ATgetInt((ATermInt) result);
+  }
+  else {
+    return -1;
+  }
 }
 
 /*}}}  */
@@ -201,7 +237,7 @@ static Graph printNode(const char *name,
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
-    Attribute dir = makeAttributeDirection(makeDirectionNone());
+    Attribute dir = makeAttributeDirection(makeDirectionForward());
     AttributeList l = makeAttributeListSingle(dir);
     edge = makeEdgeDefault(parentId, nodeId, l);
 
@@ -266,7 +302,7 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
-    Attribute dir = makeAttributeDirection(makeDirectionNone());
+    Attribute dir = makeAttributeDirection(makeDirectionForward());
     AttributeList l = makeAttributeListSingle(dir);
     edge = makeEdgeDefault(parentId, nodeId, l);
 
@@ -274,6 +310,33 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
     edges = makeEdgeListMany(edge, edges);
     graph = setGraphEdges(graph, edges);
   }
+
+  return graph;
+}
+
+/*}}}  */
+
+/*{{{  static Graph addEdge(Graph graph, int from, int to) */
+
+static Graph addEdge(Graph graph, int from, int to)
+{
+  char str[BUFSIZ];
+  Attribute dir = makeAttributeDirection(makeDirectionForward());
+  AttributeList l = makeAttributeListSingle(dir);
+  NodeId fromId, toId;
+  Edge edge;
+  EdgeList edges;
+
+  sprintf(str, "N%d", from);
+  fromId = makeNodeIdDefault(str);
+
+  sprintf(str, "N%d", to);
+  toId = makeNodeIdDefault(str);
+
+  edge = makeEdgeDefault(fromId, toId, l);
+  edges = getGraphEdges(graph);
+  edges = makeEdgeListMany(edge, edges);
+  graph = setGraphEdges(graph, edges);
 
   return graph;
 }
@@ -319,6 +382,11 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 
     /*}}}  */
   }
+  else if (PT_isTreeCycle(tree)) {
+    int length  = PT_getTreeCycleLength(tree);
+    long pointer = getParent(length - 1);
+    graph = addEdge(graph, parent, pointer);
+  }
   else if (PT_isTreeAppl(tree)) {
     /*{{{  handle appl */
     PT_Args args = PT_getTreeArgs(tree);
@@ -350,11 +418,13 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
     if ((layout_on || !layout) && (literals_on || !literal)) {
       int argnr;
 
+      pushParent(key);
       for(argnr = 0;PT_hasArgsHead(args); 
 	  args = PT_getArgsTail(args), argnr++) {
 	  PT_Tree arg = PT_getArgsHead(args);
 	  graph = treeToGraph(name, graph,arg,key,argnr);
       }
+      popParent(key);
     }
 
     /*}}}  */
@@ -369,10 +439,13 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
       
     graph = printAmbNode(graph,parent,key,PT_yieldSymbol(symbol));
 
+
+    pushParent(key);
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
       graph = treeToGraph(name, graph,arg,key,0);
     }
+    popParent();
 
     /*}}}  */
   }
@@ -405,6 +478,9 @@ Graph PT_printTreeToGraph(const char *name, PT_Tree tree, ATbool characters,
   if (sharing_on) {
     done = ATindexedSetCreate(1024, 80);
   }
+
+  parentStack = ATempty;
+  ATprotectList(&parentStack);
 
   unique_key = 0;
   size = INITIAL_SIZE;

@@ -210,9 +210,5 @@ static void printGraph(Graph graph, FILE *file)
 
 void graph2dot(Graph graph, FILE *file) 
 {
-  FILE *tmp = fopen("debug.dot","w");
   printGraph(graph, file);
-  printGraph(graph, tmp);
-
-
 }
