@@ -1,5 +1,8 @@
 $Id$
 
+Thu Nov 10 17:07:38 CET 2005 <jurgenv@cwi.nl>
+ * utils/import-graph: Adapted implementation to new Graph API.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support

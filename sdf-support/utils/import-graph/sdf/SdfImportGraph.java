@@ -29,7 +29,7 @@ public class SdfImportGraph implements SdfImportGraphTif {
 
 	public static void main(String[] args) throws IOException {
 		factory = new PureFactory();
-		graphFactory = new Factory(factory);
+		graphFactory = Factory.getInstance(factory);
 		new SdfImportGraph(args);
 	}
 
@@ -45,7 +45,7 @@ public class SdfImportGraph implements SdfImportGraphTif {
 		Set nodeSet = new HashSet();
 		List nodeSequence = new LinkedList();
 
-		EdgeList edges = graphFactory.makeEdgeList_Empty();
+		EdgeList edges = graphFactory.makeEdgeList();
 
 		while (!imports.isEmpty()) {
 			ATermList pair = (ATermList) imports.getFirst();
@@ -68,13 +68,13 @@ public class SdfImportGraph implements SdfImportGraphTif {
 					nodeSequence.add(toTerm);
 				}
 
-				AttributeList attrs = graphFactory.makeAttributeList_Empty();
+				AttributeList attrs = graphFactory.makeAttributeList();
 				Edge edge = graphFactory.makeEdge_Default(from, to, attrs);
-				edges = graphFactory.makeEdgeList_Multi(edge, edges);
+				edges = graphFactory.makeEdgeList(edge, edges);
 			}
 		}
 
-		NodeList nodes = graphFactory.makeNodeList_Empty();
+		NodeList nodes = graphFactory.makeNodeList();
 
 		Iterator iter = nodeSequence.iterator();
 		while (iter.hasNext()) {
@@ -84,15 +84,15 @@ public class SdfImportGraph implements SdfImportGraphTif {
 			Attribute shapeAttr = graphFactory.makeAttribute_Shape(shape);
 			Attribute labelAttr = graphFactory
 					.makeAttribute_Label(makeLabel(name));
-			AttributeList attrs = graphFactory.makeAttributeList_Empty();
-			attrs = graphFactory.makeAttributeList_Multi(shapeAttr, attrs);
-			attrs = graphFactory.makeAttributeList_Multi(labelAttr, attrs);
+			AttributeList attrs = graphFactory.makeAttributeList();
+			attrs = graphFactory.makeAttributeList(shapeAttr, attrs);
+			attrs = graphFactory.makeAttributeList(labelAttr, attrs);
 			Node node = graphFactory.makeNode_Default(id, attrs);
-			nodes = graphFactory.makeNodeList_Multi(node, nodes);
+			nodes = graphFactory.makeNodeList(node, nodes);
 		}
 
 		return graphFactory.makeGraph_Default(nodes, edges, graphFactory
-				.makeAttributeList_Empty());
+				.makeAttributeList());
 	}
 
 	private static String makeLabel(ATerm name) {
