@@ -1,11 +1,5 @@
 configuration([
-  module-path("."),
-  module-path("restructure"),
-  module-path("cobflow"),
-  module-path("ppcobol"),
-  module-path("grammars/cobol_restructure"),
-  module-path("grammars/dot.0"),
- action([description(tree-panel, click)],
+  action([description(tree-panel, click)],
          "ShowAreaAction"),
   action([description(feedback-list, click)],
          "ShowFeedbackLocation"),

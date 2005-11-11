@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Nov 11 14:51:19 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/standard.asfsdf.buttons.src:
+   - Remove Cobol module paths
+
 Wed Sep  7 13:38:11 CEST 2005 <kooiker@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - Add set-module-syntax-text-hook for sdf 
