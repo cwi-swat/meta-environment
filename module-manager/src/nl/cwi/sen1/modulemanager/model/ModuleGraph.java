@@ -13,6 +13,7 @@ import nl.cwi.sen1.graph.types.Graph;
 import nl.cwi.sen1.graph.types.Node;
 import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.graph.types.NodeList;
+import nl.cwi.sen1.graph.types.Shape;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
 import aterm.AFun;
 import aterm.ATerm;
@@ -55,6 +56,9 @@ public class ModuleGraph extends ModuleDatabase {
                     }
                 }
             }
+            
+            Shape shape = factory.makeShape_Box();
+            attrList = attrList.insert(factory.makeAttribute_Shape(shape));
 
             Node node = factory.makeNode_Default(nodeId, attrList);
             nodeList = nodeList.insert(node);

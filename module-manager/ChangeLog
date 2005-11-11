@@ -1,5 +1,9 @@
 $Id$
 
+Fri Nov 11 15:38:11 CET 2005 <kooiker@cwinl>
+ * src/nl/cwi/sen1/modulemanager/module/ModuleGraph.java:
+   - Add attribute shape (defaults to Box)
+
 Fri Nov  4 11:58:07 CET 2005 <kooiker@ciw.nl>
  * src/nl/cwi/sen1/modulemanager/module/ModuleDatabase.java:
    - Add method getAllModulesByAttribute
