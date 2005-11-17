@@ -9,7 +9,7 @@ import pwd
 import random
 
 
-version = "0.0.0"
+version = "0.1.0"
 
 
 #
@@ -19,6 +19,7 @@ version = "0.0.0"
 def usage( exitCode ):
     sys.stderr.write( """usage: cvsmerge  begin-branch  <branch-name>
        cvsmerge  import-from-trunk
+       cvsmerge  reset-import
        cvsmerge  end-branch  <branch-name>
        cvsmerge  [-v | --version]
        cvsmerge  [-? | -h | --help]\n""" )
@@ -38,7 +39,7 @@ def info( string="" ):
 
 def error( string ):
     log( "cvsmerge: " + string )
-    sys.stderr.write( "cvsmerge: " + string + "\n" )
+    sys.stderr.write( "cvsmerge: " + string + "!\n" )
     sys.exit( 1 )
 
 
@@ -104,8 +105,8 @@ def cvsCreateBranch( branchTag ):
     cvsDoCVS( command )
 
 
-def cvsTagCurrent( progressTag ):
-    command = "cvs tag %s >> %s 2>&1" % (progressTag, logFilename)
+def cvsTagCurrent( tag ):
+    command = "cvs tag %s >> %s 2>&1" % (tag, logFilename)
     cvsDoCVS( command )
 
 
@@ -123,9 +124,9 @@ def cvsMergeChanges( progressTag, frozenHeadTag ):
                " | grep -v 'cvs update:'" )
 
 
-def cvsMoveTag( moduleName, frozenHeadTag, progressTag ):
+def cvsMoveTag( moduleName, movingTag, dstTag ):
     command = ("cvs rtag -F -r %s %s %s >> %s 2>&1" %
-                (frozenHeadTag, progressTag, moduleName, logFilename))
+                (dstTag, movingTag, moduleName, logFilename))
     cvsDoCVS( command )    
 
 
@@ -205,6 +206,11 @@ def assertProgressIsAtFrozenHead( progressTag, frozenHeadTag ):
         error( "branch is not up-to-date wrt the head of the trunk" )
 
 
+def assertHasBackupTag( branchTag, backupTag ):
+    if cvsGetTagNameCount(backupTag) == 0:
+        error("branch '%s' does not have a backup tag" % branchTag)
+
+
 #
 # Support routines
 #
@@ -261,6 +267,7 @@ def beginBranch( branchTag ):
     log( "begin branch '%s'" % branchTag )
         
     progressTag = branchTag + "_progress"
+    backupTag = branchTag + "_backup"
 
     assertInTrunkWorkingCopy()
     assertValidBranchCreation( branchTag, progressTag )
@@ -268,9 +275,11 @@ def beginBranch( branchTag ):
     
     cvsCreateBranch( branchTag )
     cvsTagCurrent( progressTag )
+    cvsTagCurrent( backupTag )
     
-    info( "Created branch '%s' with progress tag '%s'" %
-            (branchTag, progressTag) )
+    info()
+    info( "Created branch '%s' with progress tag '%s' and backup tag '%s'" %
+            (branchTag, progressTag, backupTag) )
     info( "Do not forget to switch to this branch!" )
     info()
 
@@ -282,6 +291,7 @@ def importFromTrunk():
 
     branchTag = cvsGetStickyTagCwd()
     progressTag = branchTag + "_progress"
+    backupTag = branchTag + "_backup"
 
     assertValidBranchUse( branchTag, progressTag )
     assertWorkingCopyUpToDate( "branch" )
@@ -291,12 +301,13 @@ def importFromTrunk():
 
     info( "About to import (merge) changes from the trunk with the working" )
     info( "copy of module '%s' (branch '%s')." % (moduleName, branchTag) )
-    getUserOkay( "Import of changes from trunk aborted." )
+    getUserOkay( "Import of changes from trunk aborted!" )
 
     cvsRemoteTagHead( frozenHeadTag, moduleName )
     cvsMergeChanges( progressTag, frozenHeadTag )    
     processCollisions( frozenHeadTag, moduleName )
-    cvsMoveTag( moduleName, frozenHeadTag, progressTag )
+    cvsMoveTag( moduleName, backupTag, progressTag )
+    cvsMoveTag( moduleName, progressTag, frozenHeadTag )
     cvsRemoveTag( moduleName, frozenHeadTag )
     os.remove( errorFilename )
 
@@ -307,12 +318,42 @@ def importFromTrunk():
     info()
 
 
+def resetImport():
+    log( "reset import tag to its previous state" )
+
+    assertInBranchWorkingCopy()    
+
+    branchTag = cvsGetStickyTagCwd()
+    progressTag = branchTag + "_progress"
+    backupTag = branchTag + "_backup"
+
+    assertValidBranchUse( branchTag, progressTag )
+    assertHasBackupTag( branchTag, backupTag )
+    assertWorkingCopyUpToDate( "branch" )
+
+    moduleName = cvsGetModuleName()
+
+    info( "About to reset the progress tag of module '%s' (branch '%s')" %
+            (moduleName, branchTag) )
+    info( "to its previous state." )
+    getUserOkay( "Reset of the progress tag aborted!" )
+
+    cvsMoveTag( moduleName, progressTag, backupTag )
+
+    info()    
+    info("Reset the progress tag of module '%s' (branch '%s') to its" %
+            (moduleName, branchTag) )
+    info("previous state." )
+    info()
+
+
 def endBranch( branchTag ):
     log( "end branch '%s'" % branchTag )
     
     progressTag = branchTag + "_progress"
+    backupTag = branchTag + "_backup"
 
-    assertInTrunkWorkingCopy
+    assertInTrunkWorkingCopy()
     assertValidBranchUse( branchTag, progressTag )
     assertWorkingCopyUpToDate( "trunk" )
 
@@ -325,7 +366,7 @@ def endBranch( branchTag ):
     
     info("About to merge the changes from branch '%s' with" % branchTag)
     info("the working copy of the trunk of module '%s'." % moduleName)
-    getUserOkay( "Import of changes from trunk aborted." )
+    getUserOkay( "Import of changes from trunk aborted!" )
 
     cvsMergeChanges( progressTag, branchTag )    
     cvsRemoveTag( moduleName, frozenHeadTag )
@@ -336,7 +377,8 @@ def endBranch( branchTag ):
             branchTag)
     info("the trunk of module '%s'.\n" % moduleName)
     info("Don't forget to check for conflicts and commit the merged changes.")
-    info("When no problem has occurred, remove the tag '%s'." % progressTag ) 
+    info("When no problem has occurred, remove the progress and backup tags")
+    info("('%s' and '%s')." % (progressTag, backupTag) ) 
     info()
 
 
@@ -375,6 +417,9 @@ if command == "begin" or command == "begin-branch":
 elif command == "import" or command == "import-from-trunk":
     assertArgumentCount( 0, args )
     importFromTrunk()
+elif command == "reset" or command == "reset-import":
+    assertArgumentCount( 0, args )
+    resetImport()
 elif command == "end" or command == "end-branch":
     assertArgumentCount( 1, args )
     endBranch( args[0] )

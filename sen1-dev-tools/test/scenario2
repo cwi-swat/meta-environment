@@ -1,0 +1,142 @@
+#! /bin/sh
+
+#
+# This script exercises the "cvsmerge reset-import" command.
+#
+
+unset CVSROOT CVS_RSH
+
+set -x
+
+cvsmerge=/ufs/gerco/src/sen1-dev-tools/bin/cvsmerge
+sandbox=`pwd`
+repodir=$sandbox/repo
+importdir=$sandbox/wc
+trunkdir=$sandbox/wc-trunk
+branchdir=$sandbox/wc-branch
+branchname=gerco
+
+#
+# Initialize the environment
+#
+rm -rf $repodir $importdir $trunkdir $branchdir
+cvs -d $repodir init
+
+#
+# Perform the initial import
+#
+echo "@@@@  Import"
+mkdir $importdir
+cd $importdir
+echo "Original content file 1" > f1
+echo "Original content file 2" > f2
+mkdir dir
+echo "Original content file 3 in dir" > dir/f3
+echo "Original content file 4 in dir" > dir/f4
+mkdir boring
+echo "Original content saai in boring" > boring/saai
+mkdir disappearing
+echo "Original content saai in boring" > disappearing/bla
+cvs -q -d $repodir import -m "initial import" wc "vendor-1" "release-1"
+cd ..
+rm -rf $importdir
+
+#
+# Create trunk working copy
+#
+cd $sandbox
+cvs -q -d $repodir checkout wc
+mv wc $trunkdir
+
+#
+# Make some pre-branch changes on the trunk
+#
+echo "@@@@  Trunk: pre-branch changes"
+cd $trunkdir
+sync; sleep 1; sync
+echo "Trunk: change file 1 (pb)" >> f1
+echo "Trunk: change file 2 (pb)" >> f2
+echo "Trunk: change file 3 (pb)" >> dir/f3
+echo "Trunk: change file 4 (pb)" >> dir/f4
+cvs -q remove -f disappearing/bla
+cvs -q commit -m "Trunk changes to f1, f2, dir/f3, dir/f4 and disappearing/bla"
+
+#
+# Create a branch and check it out
+#
+cd $trunkdir
+$cvsmerge begin-branch $branchname
+
+cd $sandbox
+cvs -q -d $repodir checkout -r gerco wc
+mv wc $branchdir
+
+#
+# Add changes to branch
+#
+echo "@@@@  Branch: pre-import changes"
+cd $branchdir
+sync; sleep 1; sync
+echo "Branch: change file 1" >> f1
+echo "Branch: change file 2" >> f2
+echo "Branch: change file 3" >> dir/f3
+echo "Branch: change file 4" >> dir/f4
+echo "Branch: add x" > x
+echo "Branch: add y in dir" > dir/y
+mkdir dir2
+cvs -q add dir2
+echo "Branch: add z" > dir2/z
+cvs -q add x dir/y dir2/z
+cvs -q commit -m "Branch change f1, f2, dir/f3, and dir/f4, and add x, dir/y, and dir2/z"
+
+#
+# Make some post-branch changes on the trunk
+#
+echo "@@@@  Trunk: post-branch changes (1)"
+cd $trunkdir
+sync; sleep 1; sync
+echo "Trunk: change file 2" >> f2
+echo "Trunk: change file 4" >> dir/f4
+cvs -q commit -m "Trunk changes to f2 and dir/f4"
+
+#
+# Import changes from trunk
+#
+echo "@@@@  Branch: import changes from trunk (1)"
+cd $branchdir
+sync; sleep 1; sync
+$cvsmerge import
+
+#
+# Revert changes from trunk
+#
+echo "@@@@  Branch: revert changes from trunk"
+cd $branchdir
+sync; sleep 1; sync
+rm -f f2 dir/f4
+cvs -q update f2 dir/f4
+$cvsmerge reset
+
+#
+# Make some post-branch changes on the trunk
+#
+echo "@@@@  Trunk: post-branch changes (2)"
+cd $trunkdir
+sync; sleep 1; sync
+echo "Trunk: change file 2 again" >> f2
+echo "Trunk: change file 4 again" >> dir/f4
+cvs -q commit -m "Trunk changes to f2 and dir/f4"
+
+#
+# Import changes from trunk (again)
+#
+echo "@@@@  Branch: import changes from trunk (2)"
+cd $branchdir
+sync; sleep 1; sync
+$cvsmerge import
+
+echo "Now fix the conflicts and press enter"
+read line
+
+cvs -q commit -m "Import trunk changes"
+

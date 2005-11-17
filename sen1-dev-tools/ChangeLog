@@ -1,5 +1,14 @@
 # $Id$
 
+Thu Nov 17 10:44:07 CET 2005 <gerco@cwi.nl>
+ * bin/cvsmerge:
+   - Added the "cvsmerge reset-import" command. (Closes: #476)
+   - Increased the minor version number.
+ * test/scenario1:
+   - Renamed scenario to scenario1.
+ * test/scenario2:
+   - Added test script for "cvsmerge reset-import" command.
+
 Tue Oct 11 14:26:28 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
    - Added a version identifier for the script. (Closes: #494)
@@ -10,7 +19,7 @@ Mon Jul 11 16:43:42 CEST 2005 <gerco@cwi.nl>
 
 Thu Jun 16 14:50:55 CEST 2005 <{gerco,jong,jurgenv}@cwi.nl>
  * bin/cvsmerge:
-   - Reduce the number of broken pipe messages in log file.
+   - Reduced the number of broken pipe messages in log file.
 
 Thu Jun 16 14:02:01 CEST 2005 <{gerco,jong}@cwi.nl>
  * bin/cvsmerge:
@@ -20,7 +29,7 @@ Thu Jun 16 14:02:01 CEST 2005 <{gerco,jong}@cwi.nl>
 
 Tue Jun 14 14:31:59 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
-   Improve the wording of an informative message.
+   - Improved the wording of an informative message.
 
 Tue Jun 14 13:50:51 CEST 2005 <{gerco,jong}@cwi.nl>
 Merged changes from branch optimize-end-branch.
@@ -29,9 +38,9 @@ Merged changes from branch optimize-end-branch.
    - Added support for collision detection (colliding cvs adds).
    - Improved layout of informative output.
  * bin/cvsmerge.sh:
-   - Keep shell version of cvsmerge script as backup.
+   - Keep the shell version of cvsmerge script as backup.
  * test/scenario:
-   - Test some cvsmerge use cases.
+   - Added a test script for some cvsmerge use cases.
 
 Mon May 30 15:53:18 CEST 2005 <gerco@cwi.nl>
  * bin/cvsmerge:

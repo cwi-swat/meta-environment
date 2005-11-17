@@ -1,5 +1,9 @@
 #! /bin/sh
 
+#
+# This script exercises the "cvsmerge import" command.
+#
+
 unset CVSROOT CVS_RSH
 
 set -x
