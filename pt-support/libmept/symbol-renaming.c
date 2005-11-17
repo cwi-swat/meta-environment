@@ -162,6 +162,10 @@ PT_Tree PT_renameInTree(PT_Tree tree,
     if (PT_isEqualSymbol(rhs, formalParam) && PT_isSymbolLit(actualParam)) {
       newTree = PT_makeTreeLit(PT_getSymbolString(actualParam));
     }
+    else if (PT_isEqualSymbol(rhs, formalParam) && PT_isSymbolCilit(actualParam)) 
+    {
+      newTree = PT_makeTreeCilit(PT_getSymbolString(actualParam));
+    }
     else {
       PT_Args       args = PT_getTreeArgs(tree);
       PT_Production newProd = renameInProduction(prod, formalParam, 

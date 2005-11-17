@@ -137,6 +137,7 @@ PT_Tree PT_makeTreeLayoutFromString(const char *str);
 
 PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree);
 PT_Tree PT_makeTreeLit(const char* string);
+PT_Tree PT_makeTreeCilit(const char* string);
 
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 

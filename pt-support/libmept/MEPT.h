@@ -154,6 +154,7 @@ PT_Associativity PT_makeAssociativityRight(void);
 PT_Associativity PT_makeAssociativityAssoc(void);
 PT_Associativity PT_makeAssociativityNonAssoc(void);
 PT_Symbol PT_makeSymbolLit(const char* string);
+PT_Symbol PT_makeSymbolCilit(const char* string);
 PT_Symbol PT_makeSymbolCf(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLex(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolEmpty(void);
@@ -324,6 +325,7 @@ inline ATbool PT_isAssociativityNonAssoc(PT_Associativity arg);
 
 ATbool PT_isValidSymbol(PT_Symbol arg);
 inline ATbool PT_isSymbolLit(PT_Symbol arg);
+inline ATbool PT_isSymbolCilit(PT_Symbol arg);
 inline ATbool PT_isSymbolCf(PT_Symbol arg);
 inline ATbool PT_isSymbolLex(PT_Symbol arg);
 inline ATbool PT_isSymbolEmpty(PT_Symbol arg);

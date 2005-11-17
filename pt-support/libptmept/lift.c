@@ -411,6 +411,10 @@ static PTPT_Symbol PTPT_liftSymbol(PT_Symbol symbol)
     PTPT_StrCon lit = PTPT_liftStrCon(PT_getSymbolString(symbol));
     result = PTPT_makeSymbolLit(e,e,lit,e);
   }
+  else if (PT_isSymbolCilit(symbol)) {
+    PTPT_StrCon lit = PTPT_liftStrCon(PT_getSymbolString(symbol));
+    result = PTPT_makeSymbolCilit(e,e,lit,e);
+  }
   else if (PT_isSymbolCf(symbol)) {
     PTPT_Symbol new = PTPT_liftSymbol(PT_getSymbolSymbol(symbol));
     result = PTPT_makeSymbolCf(e,e,new,e);

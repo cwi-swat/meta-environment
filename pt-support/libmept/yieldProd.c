@@ -59,7 +59,8 @@ lengthOfSymbol(PT_Symbol symbol)
   if (PT_isOptLayoutSymbol(symbol)) {
     return 0;
   }
-  if (PT_isSymbolLit(symbol)) {
+
+  if (PT_isSymbolLit(symbol) || PT_isSymbolCilit(symbol)) {
     char *str = PT_getSymbolString(symbol);
     return strlen(str) + 2;
   }
@@ -303,15 +304,16 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
   if (PT_isOptLayoutSymbol(symbol)) {
     return idx;
   }
-  if (PT_isSymbolLit(symbol)) {
+  if (PT_isSymbolLit(symbol) || PT_isSymbolCilit(symbol)) {
+    ATbool ci = PT_isSymbolCilit(symbol);
     char *str = PT_getSymbolString(symbol);
     int len = strlen(str);
 
-    buf[idx++] = '"';
+    buf[idx++] = ci ? '\'' : '"';
     for (i = 0; i < len; i++) {
       buf[idx++] = str[i];
     }
-    buf[idx++] = '"';
+    buf[idx++] = ci ? '\'' : '"';
 
     return idx;
   }

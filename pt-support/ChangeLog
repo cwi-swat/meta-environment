@@ -1,5 +1,8 @@
 $Id$
 
+Thu Nov 17 10:01:57 CET 2005 <jurgenv@cwi.nl>
+ * */*.c: Added AsFix representation for case insensitive literals
+
 Thu Nov 10 12:52:01 CET 2005 <jurgenv@cwi.nl>
  * Generalized the definition of a cycle tree node. A cycle tree node 
    now has a type and a length. The length is the length of a cycle. The

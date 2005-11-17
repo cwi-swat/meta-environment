@@ -660,6 +660,56 @@ PT_Tree PT_makeTreeLit(const char* string)
 }
 
 /*}}}  */
+/*{{{  PT_Tree PT_makeTreeLit(const char* string) */
+
+PT_Tree PT_makeTreeCilit(const char* string)
+{
+  int len = strlen(string);
+  int i;
+  PT_Args args = PT_makeArgsEmpty();
+  PT_Symbols symbols = PT_makeSymbolsEmpty();
+  PT_Symbol symbol = PT_makeSymbolCilit(string);
+  PT_Attributes attrs = PT_makeAttributesNoAttrs();
+  PT_Production prod;
+
+  for (i = len - 1; i >= 0; i--) {
+    PT_Tree arg;
+    PT_Symbol symbol;
+
+    arg = PT_makeTreeChar(string[i]);
+    args = PT_makeArgsMany(arg, args);
+
+    if (string[i] >= 'A' && string[i] <= 'Z') {
+      PT_CharRanges range1 =  PT_makeCharRangesSingle(              
+	                         PT_makeCharRangeCharacter(string[i]));
+      PT_CharRanges range2 =  PT_makeCharRangesSingle(              
+	                         PT_makeCharRangeCharacter(string[i]+
+							   ('a' - 'A')));
+      symbol = PT_makeSymbolCharClass(PT_concatCharRanges(range1,range2));
+    }
+    else if (string[i] >= 'a' && string[i] <= 'z') {
+      PT_CharRanges range1 =  PT_makeCharRangesSingle(              
+	                         PT_makeCharRangeCharacter(string[i]));
+      PT_CharRanges range2 =  PT_makeCharRangesSingle(              
+	                         PT_makeCharRangeCharacter(string[i]-
+							   ('a' - 'A')));
+      symbol = PT_makeSymbolCharClass(PT_concatCharRanges(range1,range2));
+    }
+    else {
+      symbol = PT_makeSymbolCharClass(
+	         PT_makeCharRangesSingle(
+	           PT_makeCharRangeCharacter(string[i])));
+    }
+
+    symbols = PT_makeSymbolsMany(symbol, symbols);
+  }
+
+  prod = PT_makeProductionDefault(symbols, symbol, attrs);
+
+  return PT_makeTreeAppl(prod, args);
+}
+
+/*}}}  */
 
 /* Args */
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */

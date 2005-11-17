@@ -331,6 +331,11 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
 
     result = PT_makeSymbolLit(ATgetName(lit));
   }
+  if (PTPT_isSymbolCilit(symbol)) {
+    AFun lit = PTPT_lowerStrCon(PTPT_getSymbolString(symbol));
+
+    result = PT_makeSymbolCilit(ATgetName(lit));
+  }
   else if (PTPT_isSymbolCf(symbol)) {
     PT_Symbol new = PTPT_lowerSymbol(PTPT_getSymbolSymbol(symbol));
 

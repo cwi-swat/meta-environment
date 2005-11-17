@@ -32,7 +32,7 @@ AsFix.def:
 	cat ${LIBRARY}/basic/Whitespace.sdf) > $@
 
 api: 
-	sdf2-to-c -i $< -P PTPT_ -o PTMEPT
+	sdf2-to-c -i AsFix.def --prefix PTPT_ -o PTMEPT
 
 api-clean:
 	rm -f PTMEPT.[ch] PTMEPT_dict.* PTMEPT.adt

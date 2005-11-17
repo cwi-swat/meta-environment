@@ -29,6 +29,7 @@ constructor(Associativity, assoc, assoc),
 constructor(Associativity, non-assoc, non-assoc),
 
 constructor(Symbol, lit, lit(<string(str)>)), 
+constructor(Symbol, cilit, cilit(<string(str)>)), 
 constructor(Symbol, cf, cf(<symbol(Symbol)>)), 
 constructor(Symbol, lex, lex(<symbol(Symbol)>)), 
 constructor(Symbol, empty, empty), 
