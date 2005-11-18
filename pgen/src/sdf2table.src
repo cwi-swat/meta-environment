@@ -1,7 +1,5 @@
 #! /bin/sh
 
-set -x
-
 Revision='$Revision$'
 
 bindir=__BINDIR__
