@@ -1,5 +1,10 @@
 $Id$
 
+Fri Nov 18 16:17:12 CET 2005 <kooiker@cwi.nl>
+ * src/sdf2table.src:
+   - Output filename does not contain .def. anymore when using definition as 
+     input
+
 Thu Aug 18 14:24:25 CEST 2005 <jurgenv@cwi.nl>
  * grammar/Sdf2.baf: regenerated the parse table with a different
    basic/Comments module such that comments and todo's are put in
