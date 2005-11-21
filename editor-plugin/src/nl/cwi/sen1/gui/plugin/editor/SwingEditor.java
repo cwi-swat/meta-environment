@@ -138,5 +138,9 @@ public class SwingEditor extends JPanel implements Editor {
     public void removeEditorModifiedListener(EditorModifiedListener l) {
         editorPane.removeEditorModifiedListener(l);
     }
+
+    public void setEditable(boolean b) {
+        editorPane.setEditable(b);
+    }
 }
 

@@ -1,11 +1,10 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jun 13, 2005 12:50:25 PM
+// generation time: Nov 21, 2005 3:59:12 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class EditorPluginBridge
   extends EditorPluginTool
@@ -74,19 +73,6 @@ public class EditorPluginBridge
   }
 
   //}}}
-  //{{{  public void addActions(ATerm t0, ATerm t1)
-
-  public void addActions(ATerm t0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.addActions(t0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addActions' not supported.");
-    }
-  }
-
-  //}}}
   //{{{  public void clearFocus(ATerm t0)
 
   public void clearFocus(ATerm t0)
@@ -96,6 +82,19 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `clearFocus' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void addActions(ATerm t0, ATerm t1)
+
+  public void addActions(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.addActions(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `addActions' not supported.");
     }
   }
 
@@ -187,6 +186,19 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `rereadContents' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void setReadonly(ATerm t0)
+
+  public void setReadonly(ATerm t0)
+  {
+    if (tool != null) {
+      tool.setReadonly(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setReadonly' not supported.");
     }
   }
 

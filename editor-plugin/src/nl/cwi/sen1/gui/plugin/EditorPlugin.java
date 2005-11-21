@@ -155,6 +155,11 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		comp.setStatusMessage(message);
 	}
 
+    public void setReadonly(ATerm editorId) {
+        Editor panel = getPanel(editorId.toString());
+        panel.setEditable(false);
+    }
+
 	public void killEditor(ATerm editorId) {
 		StudioComponent comp = (StudioComponent) componentsById.get(editorId
 				.toString());

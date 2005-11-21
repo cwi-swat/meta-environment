@@ -1,18 +1,12 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Jun 13, 2005 12:50:25 PM
+// generation time: Nov 21, 2005 3:59:11 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import toolbus.SwingTool;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
+import toolbus.*;
+import java.util.*;
 
 abstract public class EditorPluginTool
   extends SwingTool
@@ -27,8 +21,8 @@ abstract public class EditorPluginTool
   private ATerm PwriteContents0;
   private ATerm PsetFocus0;
   private ATerm PregisterTextCategories0;
-  private ATerm PaddActions0;
   private ATerm PclearFocus0;
+  private ATerm PaddActions0;
   private ATerm PdisplayMessage0;
   private ATerm PkillEditor0;
   private ATerm PsetCursorAtOffset0;
@@ -36,6 +30,7 @@ abstract public class EditorPluginTool
   private ATerm PhighlightSlices0;
   private ATerm PeditorToFront0;
   private ATerm PrereadContents0;
+  private ATerm PsetReadonly0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -59,6 +54,7 @@ abstract public class EditorPluginTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-readonly(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"), new Boolean(true));
@@ -85,8 +81,8 @@ abstract public class EditorPluginTool
     PwriteContents0 = factory.parse("rec-do(write-contents(<term>))");
     PsetFocus0 = factory.parse("rec-do(set-focus(<term>,<term>))");
     PregisterTextCategories0 = factory.parse("rec-do(register-text-categories(<term>,<term>))");
-    PaddActions0 = factory.parse("rec-do(add-actions(<term>,<term>))");
     PclearFocus0 = factory.parse("rec-do(clear-focus(<term>))");
+    PaddActions0 = factory.parse("rec-do(add-actions(<term>,<term>))");
     PdisplayMessage0 = factory.parse("rec-do(display-message(<term>,<str>))");
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<term>,<int>))");
@@ -94,6 +90,7 @@ abstract public class EditorPluginTool
     PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>,<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front(<term>))");
     PrereadContents0 = factory.parse("rec-do(reread-contents(<term>))");
+    PsetReadonly0 = factory.parse("rec-do(set-readonly(<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -127,14 +124,14 @@ abstract public class EditorPluginTool
       registerTextCategories((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
-    result = term.match(PaddActions0);
-    if (result != null) {
-      addActions((ATerm)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
     result = term.match(PclearFocus0);
     if (result != null) {
       clearFocus((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PaddActions0);
+    if (result != null) {
+      addActions((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PdisplayMessage0);
@@ -170,6 +167,11 @@ abstract public class EditorPluginTool
     result = term.match(PrereadContents0);
     if (result != null) {
       rereadContents((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PsetReadonly0);
+    if (result != null) {
+      setReadonly((ATerm)result.get(0));
       return null;
     }
     result = term.match(PrecAckEvent0);

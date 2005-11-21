@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Nov 21 16:12:15 CET 2005 <kooiker@cwi.nl>
+ * src/**/SwingEditor.java:
+   - setEditable can be set to true or false
+
 Mon Nov 21 13:15:45 CET 2005 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
    - throws EditorModified event when text has been changed

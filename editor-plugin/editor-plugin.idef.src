@@ -27,6 +27,9 @@ in
     rec-msg(te-edit-text(EditorId?, Filename?))
     . snd-do(T, edit-file(EditorId, Filename))
   +
+    rec-msg(te-set-readonly(EditorId?))
+    . snd-do(T, set-readonly(EditorId))
+  +
     rec-msg(te-add-actions(EditorId?, ActionList?))
     . snd-do(T, add-actions(EditorId, ActionList))
   +

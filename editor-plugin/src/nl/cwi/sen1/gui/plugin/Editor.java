@@ -40,4 +40,6 @@ public interface Editor {
 	public JMenu getEditMenu();
 	
 	public void rereadContents();
+    
+    public void setEditable(boolean b);
 }
