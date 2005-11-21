@@ -252,7 +252,6 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     private void addEditorModifiedListener(final ATerm editorId, final SwingEditor panel) {
         panel.addEditorModifiedListener(new EditorModifiedListener() {
             public void editorModified(EditorModifiedEvent e) {
-                System.err.println("Editor modified!");
                 ATerm event = studio.getATermFactory().make("contents-changed(<term>)", editorId);
                 bridge.postEvent(event);
             }

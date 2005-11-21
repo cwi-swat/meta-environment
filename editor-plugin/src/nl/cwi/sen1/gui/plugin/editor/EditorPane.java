@@ -384,7 +384,6 @@ public class EditorPane extends JTextPane {
     }
 
     public void fireEditorModifiedEvent() {
-        System.err.println("Fire modified event");
         EditorModifiedEvent e = new EditorModifiedEvent(this);
         Iterator iter = listeners.iterator();
         while (iter.hasNext()) {
