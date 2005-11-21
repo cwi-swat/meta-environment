@@ -10,6 +10,9 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
@@ -30,6 +33,9 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
+
+import nl.cwi.sen1.gui.plugin.EditorModifiedEvent;
+import nl.cwi.sen1.gui.plugin.EditorModifiedListener;
 
 public class EditorPane extends JTextPane {
     private Style defaultStyle;
@@ -55,6 +61,8 @@ public class EditorPane extends JTextPane {
     private Color backgroundColor = Color.WHITE;
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
+    
+    private List listeners = new LinkedList();
 
     public EditorPane() {
         setEditorKit(new EditorKit());
@@ -132,10 +140,12 @@ public class EditorPane extends JTextPane {
 
             public void insertUpdate(DocumentEvent e) {
                 modified = true;
+                fireEditorModifiedEvent();
             }
 
             public void removeUpdate(DocumentEvent e) {
                 modified = true;
+                fireEditorModifiedEvent();
             }
         });
     }
@@ -363,6 +373,22 @@ public class EditorPane extends JTextPane {
         if (index != -1) {
             setCaretPosition(index < text.length() ? index : index - 1);
         }
+    }
+    
+    public void addEditorModifiedListener(EditorModifiedListener l) {
+        listeners.add(l);
+    }
 
+    public void removeEditorModifiedListener(EditorModifiedListener l) {
+        listeners.remove(l);
+    }
+
+    public void fireEditorModifiedEvent() {
+        System.err.println("Fire modified event");
+        EditorModifiedEvent e = new EditorModifiedEvent(this);
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            ((EditorModifiedListener) iter.next()).editorModified(e);
+        }
     }
 }

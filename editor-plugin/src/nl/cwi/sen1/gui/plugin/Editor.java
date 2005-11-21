@@ -12,6 +12,10 @@ import errorapi.types.Area;
 public interface Editor {
 
 	public void addMouseListener(MouseListener l);
+    
+    public void addEditorModifiedListener(EditorModifiedListener l);
+    
+    public void removeEditorModifiedListener(EditorModifiedListener l);
 
 	public void writeContents() throws IOException;
 

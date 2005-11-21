@@ -212,49 +212,15 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			final SwingEditor panel = new SwingEditor(id, filename);
 			editorPanel = panel;
 
-			// Add mousemotion listener showing sorts in tooltips
-			panel.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
-					int offset = panel.getMouseOffset(e.getX(), e.getY());
-
-					if (e.getClickCount() == 1) {
-						ATerm aoffset = studio.getATermFactory()
-								.makeInt(offset);
-						ATerm event = studio.getATermFactory()
-								.make("mouse-event(<term>,<term>)", editorId,
-										aoffset);
-						bridge.postEvent(event);
-					}
-				}
-			});
-
+			addMouseListener(editorId, panel);
+            addEditorModifiedListener(editorId, panel);
+            
 			int beginIndex = filename.lastIndexOf("/") + 1;
 			String componentName = filename.substring(beginIndex, filename
 					.length());
-
 			StudioComponentImpl comp = new StudioComponentImpl(componentName,
 					panel);
-			comp.addStudioComponentListener(new StudioComponentAdapter() {
-				public void componentRequestClose()
-						throws CloseAbortedException {
-					if (panel.isModified()) {
-						showSaveConfirmDialog(panel,
-								JOptionPane.YES_NO_CANCEL_OPTION);
-					}
-				}
-
-				public void componentClose() {
-					editors.remove(id);
-					componentsById.remove(id);
-					ATerm event = studio.getATermFactory().make(
-							"editor-disconnected(<term>)", editorId);
-					bridge.postEvent(event);
-				}
-				
-				public void componentFocusReceived() {
-					panel.requestFocus();
-				}
-			});
+			addStudioComponentListener(editorId, id, panel, comp);
 
 			editors.put(id, panel);
 			componentsById.put(id, comp);
@@ -265,6 +231,58 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 		return editorPanel;
 	}
 
+    private void addMouseListener(final ATerm editorId, final SwingEditor panel) {
+        // Add mousemotion listener showing sorts in tooltips
+        panel.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                int offset = panel.getMouseOffset(e.getX(), e.getY());
+                
+                if (e.getClickCount() == 1) {
+                    ATerm aoffset = studio.getATermFactory()
+                    .makeInt(offset);
+                    ATerm event = studio.getATermFactory()
+                    .make("mouse-event(<term>,<term>)", editorId,
+                            aoffset);
+                    bridge.postEvent(event);
+                }
+            }
+        });
+    }
+    
+    private void addEditorModifiedListener(final ATerm editorId, final SwingEditor panel) {
+        panel.addEditorModifiedListener(new EditorModifiedListener() {
+            public void editorModified(EditorModifiedEvent e) {
+                System.err.println("Editor modified!");
+                ATerm event = studio.getATermFactory().make("contents-changed(<term>)", editorId);
+                bridge.postEvent(event);
+            }
+        });
+    }
+
+    private void addStudioComponentListener(final ATerm editorId, final String id, final SwingEditor panel, StudioComponentImpl comp) {
+        comp.addStudioComponentListener(new StudioComponentAdapter() {
+            public void componentRequestClose()
+            throws CloseAbortedException {
+                if (panel.isModified()) {
+                    showSaveConfirmDialog(panel,
+                            JOptionPane.YES_NO_CANCEL_OPTION);
+                }
+            }
+            
+            public void componentClose() {
+                editors.remove(id);
+                componentsById.remove(id);
+                ATerm event = studio.getATermFactory().make(
+                        "editor-disconnected(<term>)", editorId);
+                bridge.postEvent(event);
+            }
+            
+            public void componentFocusReceived() {
+                panel.requestFocus();
+            }
+        });
+    }
+    
 	private void showSaveConfirmDialog(final Editor panel, int optionType)
 			throws CloseAbortedException {
 		switch (JOptionPane
