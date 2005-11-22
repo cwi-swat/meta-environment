@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 21, 2005 3:59:12 PM
+// generation time: Nov 22, 2005 8:05:59 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -151,6 +151,19 @@ public class EditorPluginBridge
   }
 
   //}}}
+  //{{{  public void setEditable(ATerm t0, ATerm t1)
+
+  public void setEditable(ATerm t0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.setEditable(t0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setEditable' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public void highlightSlices(ATerm t0, ATerm t1)
 
   public void highlightSlices(ATerm t0, ATerm t1)
@@ -186,19 +199,6 @@ public class EditorPluginBridge
     }
     else {
       throw new UnsupportedOperationException("method `rereadContents' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void setReadonly(ATerm t0)
-
-  public void setReadonly(ATerm t0)
-  {
-    if (tool != null) {
-      tool.setReadonly(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `setReadonly' not supported.");
     }
   }
 

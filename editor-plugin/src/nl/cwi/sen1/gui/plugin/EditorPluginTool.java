@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 21, 2005 3:59:11 PM
+// generation time: Nov 22, 2005 8:05:59 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -27,10 +27,10 @@ abstract public class EditorPluginTool
   private ATerm PkillEditor0;
   private ATerm PsetCursorAtOffset0;
   private ATerm PeditFile0;
+  private ATerm PsetEditable0;
   private ATerm PhighlightSlices0;
   private ATerm PeditorToFront0;
   private ATerm PrereadContents0;
-  private ATerm PsetReadonly0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -54,7 +54,7 @@ abstract public class EditorPluginTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-readonly(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,reread-contents(<term>))"), new Boolean(true));
@@ -87,10 +87,10 @@ abstract public class EditorPluginTool
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<term>,<int>))");
     PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>))");
+    PsetEditable0 = factory.parse("rec-do(set-editable(<term>,<term>))");
     PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>,<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front(<term>))");
     PrereadContents0 = factory.parse("rec-do(reread-contents(<term>))");
-    PsetReadonly0 = factory.parse("rec-do(set-readonly(<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -154,6 +154,11 @@ abstract public class EditorPluginTool
       editFile((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
+    result = term.match(PsetEditable0);
+    if (result != null) {
+      setEditable((ATerm)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
     result = term.match(PhighlightSlices0);
     if (result != null) {
       highlightSlices((ATerm)result.get(0), (ATerm)result.get(1));
@@ -167,11 +172,6 @@ abstract public class EditorPluginTool
     result = term.match(PrereadContents0);
     if (result != null) {
       rereadContents((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(PsetReadonly0);
-    if (result != null) {
-      setReadonly((ATerm)result.get(0));
       return null;
     }
     result = term.match(PrecAckEvent0);
