@@ -139,11 +139,11 @@ public class ToolInstance {
 
   synchronized public boolean sndEvalToTool(ATermAppl call) {
   	if (TCP_goEvalDo()){
-  		System.err.println("sndEvalToTool: true case");
+  		//System.err.println("sndEvalToTool: true case");
   		toolShield.sndRequestToTool(EVAL, call);
   		return true;
   	} else {
-  		System.err.println("sndEvalToTool: false case");
+  		//System.err.println("sndEvalToTool: false case");
   		return false;
   	}
   }
@@ -157,7 +157,7 @@ public class ToolInstance {
 
   synchronized public void addValueFromTool(Object res) {
     valuesFromTool.addLast(res);
-    System.err.println("ToolInstance.addValue: " + toolId + " res = " + res);
+    //System.err.println("ToolInstance.addValue: " + toolId + " res = " + res);
   }
   
   /**
@@ -169,7 +169,7 @@ public class ToolInstance {
 
   synchronized public boolean getValueFromTool(ATerm trm, Environment env)
   throws ToolBusException {
-  	//System.err.println("getValueFromTool " + toolId + ": " + trm);
+  	System.err.println("getValueFromTool " + toolId + ": " + trm);
   	if (valuesFromTool.isEmpty()) {
   		return false;
   	} else {
@@ -297,7 +297,7 @@ public class ToolInstance {
    * ToolBus terminates the execution of this tool while executing the Terminate atom.
    * @see toolbus.tool.ToolInstance#terminate(String)
    */
-  public void terminate(String msg){
+  public void terminate(ATerm msg){
   	System.err.println("ToolInstance.terminate: " + toolId);
   	toolShield.terminate(msg);
   }

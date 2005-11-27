@@ -126,8 +126,8 @@ public class MsgPair extends ProcessExpression implements StateElement {
     System.err.println(atomPatterns);
   }
 
-  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
-    PE.compile(P, env, follows);
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
+    PE.compile(P, null, env, follows);
     setFollow(PE.getFollow());
   }
 

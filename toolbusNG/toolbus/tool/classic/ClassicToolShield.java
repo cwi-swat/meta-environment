@@ -1,5 +1,7 @@
 package toolbus.tool.classic;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,7 +55,7 @@ class ToolInputHandler extends Thread {
 				toolInstance.handleTermFromTool(t);
 			} catch(IOException e){  //TODO: generate a snd-disconnect when the connectionn disappears
 				if(running){
-					System.err.println("ToolInputHandler: " + e);
+					System.err.println("ToolInputHandler (" + toolShield.getToolName() + ") " + e);
 					errorCount++;
 					if(errorCount > 5){
 						e.printStackTrace();
@@ -73,7 +75,7 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = false;
+	private boolean verbose = true;
 	private InputStream inputStream;
 	private OutputStream outputStream;
 	private ToolInputHandler toolInputHandler;
@@ -155,6 +157,8 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void checkToolSignature() throws IOException {
+		System.err.println("checkToolSignature: input: " + toolDef.getInputSignature());
+		System.err.println("checkToolSignature: output: " + toolDef.getOutputSignature());
 		sendTerm(factory.make("rec-do(signature(<term>,<term>))", toolDef
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
@@ -185,9 +189,9 @@ public class ClassicToolShield extends ToolShield {
 	/* (non-Javadoc)
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
-	public void terminate(String msg) {
+	public void terminate(ATerm msg) {
 		toolInputHandler.setRunning(false);
-		sndRequestToTool(ToolInstance.TERMINATE, TBTerm.factory.make("<str>", msg));
+		sndRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 	
 	public void setLockObject(Object obj) {
@@ -198,6 +202,9 @@ public class ClassicToolShield extends ToolShield {
 		return lockObject;
 	}
 	
+	public String getToolName(){
+		return toolname;
+	}
 	
 
 	public void setVerbose(boolean on) {
@@ -229,13 +236,19 @@ public class ClassicToolShield extends ToolShield {
 			if (verbose) {
 				System.out.print("toolshield " + toolname + " writes term:\n");
 				System.out.print(new String(ls));
-				System.out.println(term);
+				String s = term.toString();
+				for(int i = 0; i < s.length() && i < 100; i++){
+					if(s.charAt(i) != 0) {
+						System.out.print(s.charAt(i));
+					}
+				}
+				System.out.println("");
 			}
 			outputStream.write(ls);
 			term.writeToTextFile(outputStream);
-			if (LENSPEC + size < MIN_MSG_SIZE) {
-				info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
-			}
+			//if (LENSPEC + size < MIN_MSG_SIZE) {
+			//	info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
+			//}
 			for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
 				outputStream.write(0);
 			}
@@ -256,7 +269,7 @@ public class ClassicToolShield extends ToolShield {
 		while (index != LENSPEC) {
 			int bytes_read = inputStream.read(lspecBuf, index, LENSPEC - index);
 			if (bytes_read <= 0) {
-				throw new IOException("Tool connection terminated");
+				throw new IOException("Tool connection terminated (1)");
 			}
 			index += bytes_read;
 		}
@@ -274,17 +287,30 @@ public class ClassicToolShield extends ToolShield {
 		while (index != bytesLeft) {
 			int bytes_read = inputStream.read(data, index, bytesLeft - index);
 			if (bytes_read <= 0) {
-				throw new IOException("Tool connection terminated");
+				throw new IOException("Tool connection terminated (2)");
 			}
 			index += bytes_read;
 		}
 
-		String stringdata = new String(data);
+		//String stringdata = new String(data,"UTF8");
+		//System.err.println("data size = " + data.length + "; string size = " + stringdata.length());
+		//
+		//StringBuffer sb = new StringBuffer(data.length);				
 
-		System.err.println("data read (" + bytesLeft + " bytes) " + stringdata.substring(0,60));
+		//for(int i = 0; i < data.length; i++){
+		//	sb.append((char)data[i]);
+		//}
+		String stringdata = new String(data,0);
 		
-
-
+		//System.out.print("data read (" + bytesLeft + " bytes) ");
+		//for(int i = 0; i < 100 & i < data.length; i++){
+		//	if(data[i] != 0)
+		//		System.out.print(stringdata.charAt(i));
+		//	else
+		//		System.out.print("Z");
+		//	}
+		//System.out.println("");
+		
 		result = factory.parse(stringdata);
 
 		return result;

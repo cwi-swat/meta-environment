@@ -3,6 +3,8 @@
  */
 package toolbus.atom;
 
+import java.util.Stack;
+
 import toolbus.*;
 import toolbus.process.*;
 import toolbus.process.ProcessInstance;
@@ -25,11 +27,22 @@ public class Assign extends Atom {
     a.copyAtomAttributes(this);
     return a;
   }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+  	//System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
+  	var.value = TBTerm.resolveVars(var.value, env);
+ 	//System.err.println("Assign.replaceformals: " + var.value);
+  	var.value = TBTerm.replaceAssignableVar(var.value, env);
+    exp.value = TBTerm.resolveVars(exp.value, env);
+    exp.value = TBTerm.replaceFormals(exp.value, env);
+	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
+ }
 
-  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-    super.compile(P, env, follow);
-    //System.err.println("Assign.compile: env =" + getEnv());
-    if (!TBTerm.isVar(var.value))
+
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+    super.compile(P, calls, env, follow);
+    //System.err.println("Assign.compile: " + this + " env =" + getEnv());
+    if (!(TBTerm.isVar(var.value) || TBTerm.isResVar(var.value)))
       throw new ToolBusException("left-hand side of := should be a variable");
     ATerm vartype = TBTerm.getVarType(var.value);
     
@@ -48,12 +61,13 @@ public class Assign extends Atom {
       return false;
     ProcessInstance p = this.getProcess();
     Environment env = getEnv();
+    //System.err.println("Atom.execute: "+ this);
     //System.err.println("Assign: " + this);
     //System.err.println("Assign: " + env);
 
     ATerm newval = Functions.eval(exp.value, p, env);
     
-    //System.err.println("Assign: " + exp.value + "   " + newval);
+    //System.err.println("Assign.execute: " + exp.value + "; " + newval);
     env.assignVar(var.value, newval);
     //System.err.println("Assign: " + env);
     //System.err.println("Assign: " + getFollow());

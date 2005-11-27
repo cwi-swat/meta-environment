@@ -47,16 +47,22 @@ public class Sequence extends ProcessExpression {
 		return "Seq(" + left.toString() + ", " + right.toString() + ")";
 	}
 
-	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-		left.expand(P, calls);
-		right.expand(P, calls);
-		setFirst(left.getFirst());
-	}
+//	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+//		left.expand(P, calls);
+//		right.expand(P, calls);
+//		setFirst(left.getFirst());
+//	}
+	public void computeFirst(){
+	  	left.computeFirst();
+	  	right.computeFirst();
+	  	setFirst(left.getFirst());
+	  }	
 
-	public void compile(ProcessInstance P, Environment env, State follow)
+	public void compile(ProcessInstance P, Stack calls, Environment env, State follow)
 			throws ToolBusException {
-		right.compile(P, env, follow);
-		left.compile(P, env, right.getFirst());
+		right.compile(P, calls, env, follow);
+		left.compile(P, calls, env, right.getFirst());
+		
 		setFollow(follow);
 	}
 

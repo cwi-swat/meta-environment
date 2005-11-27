@@ -61,7 +61,7 @@ process MakeWave(N : int) is
   let Tid : display, Id : int, I : int, L : int, R : int
   in
      execute(display, Tid?) .         %% create the display
-     Tid := quote(display(0)) .
+     %%Tid := quote(display(0)) .
      snd-do(Tid, mk-wave(N))  .       %% make an N point wave
      create(Pend(Tid, 0, 1), Id?).    %% create left end point
      L := sub(N,1) .

@@ -40,7 +40,7 @@ public class Terminate extends Atom {
 	    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
 	    ATerm req = TBTerm.substitute(request.value, getEnv());
 	    ToolInstance ti = getToolBus().getToolInstance(tid);
-	    ti.terminate((ATermAppl) req);
+	    ti.terminate(req);
 	    return true;
 	  }
 }

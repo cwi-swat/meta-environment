@@ -1,4 +1,3 @@
-
 tool configuration-manager is {
   command = "configmanager"
 }
@@ -109,7 +108,6 @@ endlet
 
 toolbus(ConfigurationManager)
 
-
 tool editor-hive is {
   command = "editor-hive"
 }
@@ -192,7 +190,6 @@ endlet
 
 toolbus(EditorHive)
 
-
 tool editor-manager is {
   command = "editor-manager"
 }
@@ -249,7 +246,6 @@ in
 endlet
 
 toolbus(EditorManager)
-
 
 tool generic-adapter is {
   command = "gen-adapter"
@@ -313,7 +309,6 @@ in
 endlet
 
 toolbus(GenericAdapter)
-
 
 tool graph-converter is {
   command = "tree2graph"
@@ -523,7 +518,6 @@ endlet
 
 toolbus(GraphLayouter)
 
-
 tool position-annotator is {
   command = "addPosInfo"
 }
@@ -565,7 +559,6 @@ endlet
 
 toolbus(PositionAnnotator)
 
-
 tool sglr is {
   command = "sglr"
 }
@@ -595,7 +588,7 @@ in
       rec-value(SGLR, language-opened(ModuleId)) .
       snd-eval(SGLR, parse-string(ModuleId, Nonterminal, Text, Path, CountingFiltersOn)) .
       (
-        rec-value(SGLR, parsetree(Tree?, NrOfAmbs?)) . 
+        rec-value(SGLR, parsetree(Tree?, NrOfAmbs?)) .
         snd-msg(parse-result-asfix2me(Id, parsetree(Tree, NrOfAmbs), no-errors))
       +
         rec-value(SGLR, summary(ToolId?, ErrorId?, Error?)) .
@@ -616,7 +609,6 @@ in
 endlet
 
 toolbus(SGLR)
-
 
 tool structure-editor is {
   command = "se"
@@ -715,6 +707,7 @@ in
       rec-value(SE, wrong-sort(Nonterminal?)) .
       snd-msg(se-wrong-sort(Nonterminal))
     )
+
   +
     rec-msg(se-get-focus-location(EditorId?)) .
     snd-eval(SE, get-focus-location(EditorId)) .
@@ -739,7 +732,6 @@ endlet
 
 toolbus(StructureEditor)
 
-
 tool unparser is {
   command = "unparsePT"
 }
@@ -762,10 +754,6 @@ in
 endlet
 
 toolbus(Unparser)
-
-
-
-
 
 tool tide-control is {
 
@@ -929,6 +917,7 @@ in
   snd-msg(adapter-disconnected(A))
 endlet
 
+
 process TIDE-ADAPTER-CONNECT is
 let
   A : debug-adapter,
@@ -940,10 +929,7 @@ in
 endlet
 
 
-
 toolbus(CONTROL, TOOL-CONNECT, TIDE-ADAPTER-CONNECT)
-
-
 
 
 
@@ -977,8 +963,6 @@ in
   )*
   delta
 endlet
-
-
 
 
 process ApplyFunc is
@@ -1048,8 +1032,6 @@ in
 endlet
 
 
-
-
 process GoToEditorLocation(EditorId : term, Location : term) is
 let
   Offset : int
@@ -1091,6 +1073,7 @@ in
     rec-msg(no-feedback-first-location)
   )
 endlet
+
 process AbortMetaEnvironment is
 let
   TimeOut : int
@@ -1237,7 +1220,6 @@ in
     fi
   fi
 endlet
-
 
 process EditorCreator is
 let
@@ -1983,10 +1965,6 @@ in
   ) * delta
 endlet
 
-
-
-
-
 tool sdf-modules is { command = "sdf-modules -TB_COLLECT_LOOP 1" }
 
 toolbus(SdfModules)
@@ -2013,7 +1991,7 @@ let
 in
   execute(sdf-modules, SM?) .
   (
-    rec-msg(sm-get-module-id(Module?)) . 
+    rec-msg(sm-get-module-id(Module?)) .
     snd-eval(SM, get-module-id(Module)) .
     rec-value(SM, module-id(ModuleId?)) .
     snd-msg(sm-module-id(ModuleId))
@@ -3895,7 +3873,6 @@ in
     delta
 endlet
 
-
 process Save-modules is
 let
   Id : term,
@@ -4201,6 +4178,7 @@ process UpdateTextInModuleDb(Type: term, ModuleName: str, Text: str) is
   else
     tau
   fi
+
 process ButtonActionReceiver is
 let
   ActionEvent : term,
@@ -5745,9 +5723,6 @@ in
 endlet
 
 
-
-
-
 process Asfc is
 let
   COM : asfc,
@@ -5904,7 +5879,6 @@ endlet
 tool asfe is { command = "asfe" }
 
 
-
 process AddEqSyn is
 let
   NewSyntax : term,
@@ -5928,7 +5902,6 @@ endlet
 tool addeqssyntax is {command = "addeqssyntax"}
 
 
-
 process RemoveVars is
 let
   NewSyntax : term,
@@ -5950,7 +5923,6 @@ in
 endlet
 
 tool removevarsyntax is {command = "removevarsyntax"}
-
 
 
 
@@ -6063,6 +6035,7 @@ in
 endlet
 
 toolbus(ErrorSupport)
+
 process ASFSDFApigen is
 let
   ASFSDFApigenTool : toolASFSDFApigen,
@@ -6490,9 +6463,6 @@ endlet
 
 
 
-
-
-
 process META is
 let
   Id : term,
@@ -6598,9 +6568,10 @@ in
   delta
 endlet
 
-process StandalonePtDumper is
+
+process StandaloneEqsDumper is
 let
-  ModuleName : str,
+  Equations : term,
   ErrorMessage : str,
   Pid : int
 in
@@ -6608,10 +6579,10 @@ in
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
   InitializeTermStore("") .
-  snd-msg(open-modules(["Rscript"], sdf)) .
+  snd-msg(open-modules(["RscriptCalculator"], sdf)) .
   rec-msg(finished-opening-modules) .
-  snd-msg(dump-parse-table-given-file("Rscript", "", trm)) .
-  rec-msg(parse-table-dumped) .
+  snd-msg(dump-equations-given-file("RscriptCalculator", "")) .
+  rec-msg(equations-dumped) .
   if equal("false", "true") then
     snd-msg(save-termstore) .
     (
@@ -6625,4 +6596,4 @@ in
   shutdown("")
 endlet
 
-toolbus(StandalonePtDumper)
+toolbus(StandaloneEqsDumper)

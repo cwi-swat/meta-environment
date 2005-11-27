@@ -25,7 +25,7 @@ public class ShutDown extends Atom {
 
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
-      getToolBus().shutdown(arg.value.toString());
+      getToolBus().shutdown(arg.value);
       return true;
     } else {
       return false;

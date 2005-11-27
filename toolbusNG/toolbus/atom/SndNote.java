@@ -42,7 +42,7 @@ public class SndNote extends Atom {
 	    
 	    for(int i = 0; i < processes.size() ; i++){
 	    	ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
-	    	System.err.println(getProcess().getProcessName() + " tries to send note " + theNote + " to " + pi.getProcessName());
+	    	//System.err.println(getProcess().getProcessName() + " tries to send note " + theNote + " to " + pi.getProcessName());
 	    	pi.putNoteInQueue(theNote);
 	    }
 	    return true;

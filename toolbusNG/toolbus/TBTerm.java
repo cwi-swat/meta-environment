@@ -33,6 +33,8 @@ public class TBTerm {
   public static ATerm ListType;
 
   public static ATerm VoidType; // for the benefit of JavaTools
+  
+  public static ATerm Undefined;
 
   public static ATerm BoolPlaceholder;
   public static ATerm IntPlaceholder;
@@ -65,6 +67,8 @@ public class TBTerm {
     ListType = factory.make("list");
 
     VoidType = factory.make("void");
+    
+    Undefined = factory.make("undefined");
 
     BoolPlaceholder = factory.makePlaceholder(BoolType);
     IntPlaceholder = factory.makePlaceholder(IntType);
@@ -112,7 +116,7 @@ public class TBTerm {
   }
   
   public static boolean isList(ATerm t) {
-  	return t.getType() == ATerm.LIST;
+  	return  t.getType() == ATerm.LIST;
   }
   
   public static ATerm getArgs(ATerm t) {
@@ -124,11 +128,22 @@ public class TBTerm {
   }
   
   public static ATerm first(ATerm l){
-  	return ((ATermList) l).elementAt(0);
+ 	ATermList lst = (ATermList) l;
+ 	if(!lst.isEmpty()){
+ 		return lst.elementAt(0);
+ 	} else {
+ 		System.err.println("**** first on empty list ****");
+ 		return TBTerm.Undefined;
+ 	}
   }
   
   public static ATerm next(ATerm l){
-  	return ((ATermList) l).getNext();
+  	ATermList lst = (ATermList) l;
+  	if(lst.isEmpty()) {
+  		return lst;
+  	} else {
+  		return lst.getNext();
+  	}
   }
   
   public static boolean member(ATerm e, ATerm l){
@@ -191,13 +206,17 @@ public class TBTerm {
   }
   
   public static ATerm join(ATerm l1, ATerm l2) {
+  	//if(l1 == null)
+  	//	return l2;
+  	//if(l2 == null)
+  	//	return l1;
  	ATermList lst1 = isList(l1) ? (ATermList) l1 : factory.makeList(l1);
  	ATermList res = isList(l2) ? (ATermList) l2 : factory.makeList(l2);
     for (int i = lst1.getLength() - 1; i >= 0; i--) {
        	ATerm e = lst1.elementAt(i);
     	res = factory.makeList(e, res);
     }
-    //System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
+    System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
     return res;
   }
   
@@ -228,21 +247,23 @@ public class TBTerm {
   		if(k.isEqual(pair.getFirst()))
   				return pair.getLast();
   	}
-  	return null;
+  	return TBTerm.Undefined;
   }
 
-  public static ATerm mkAnyVar(String V, ATerm name, ATerm type) {
-    AFun afun = factory.makeAFun(V, 2, false);
+  public static ATerm mkAnyVar(String varKind, ATerm name, String processName, ATerm type) {
+    AFun afun = factory.makeAFun(varKind, 2, false);
+    String qname = name.toString() + "$" + processName;
+    name = factory.make(qname);
     ATerm cargs[] = new ATerm[] { type, name };
     return factory.makeAppl(afun, cargs);
   }
 
-  public static ATerm mkVar(ATerm name, ATerm type) {
-    return mkAnyVar("var", name, type);
+  public static ATerm mkVar(ATerm name, String processName, ATerm type) {
+    return mkAnyVar("var", name, processName, type);
   }
 
-  public static ATerm mkResVar(ATerm name, ATerm type) {
-    return mkAnyVar("rvar", name, type);
+  public static ATerm mkResVar(ATerm name, String processName, ATerm type) {
+    return mkAnyVar("rvar", name, processName, type);
   }
 
   public static boolean isResVar(ATerm t) {
@@ -257,7 +278,7 @@ public class TBTerm {
     if (t.getType() == ATerm.APPL) {
       ATermAppl appl = (ATermAppl) t;
       if (appl.getName() == "var" || appl.getName() == "rvar") {
-        return appl.getArguments(); // check length?
+        return appl.getArguments(); // TODO: check length?
       }
     }
     throw new ToolBusInternalError("illegal var in getVarArgs(" + t + ")");
@@ -285,8 +306,8 @@ public class TBTerm {
     if (!isResVar(t)) {
       throw new ToolBusInternalError("wrong arg in makeVar(" + t + ")");
     }
-    ATermList args = ((ATermAppl) t).getArguments();
-    AFun afun = t.getFactory().makeAFun("var", args.getLength(), false);
+    ATerm args[] = ((ATermAppl) t).getArgumentArray();
+    AFun afun = t.getFactory().makeAFun("var", args.length, false);
     return TBTerm.factory.makeAppl(afun, args);
   }
 
@@ -305,6 +326,10 @@ public class TBTerm {
    */
 
   public static ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
+  	//System.err.println("resolveVars: " + t + ": " + env);
+  	if(t == TBTerm.Undefined){
+  		return t;
+  	}
     switch (t.getType()) {
       case ATerm.BLOB :
       case ATerm.INT :
@@ -313,9 +338,13 @@ public class TBTerm {
         return t;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t) || TBTerm.isResVar(t)){
+        if (TBTerm.isVar(t)) {
         	ATerm res = setVarType(t, env.getVarType(t));
             return res;
+        }
+        if(TBTerm.isResVar(t)){
+        	ATerm res = setVarType(t, env.getVarType(t));
+        	return res;
         }
 
         AFun afun = ((ATermAppl) t).getAFun();
@@ -337,14 +366,84 @@ public class TBTerm {
     }
     throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
   }
+  
+  public static ATerm replaceAssignableVar(ATerm t, Environment env) throws ToolBusException {
+  	//System.err.println("replaceAssignableVar: " + t + "; " + env);
+  	 if (TBTerm.isVar(t) || TBTerm.isResVar(t)){
+    	Binding b = env.getBinding(t);
+    	//System.err.println("Binding = " + b.var + ";" + b.val);
+    	if(b == null || (b.val == Undefined)){
+    		return t;
+    	}
+    	if(b.isFormal() && isResVar(b.val)){
+    			return replaceAssignableVar(b.val, env);
+    	} 
+    	return b.var;
+    } 
+  	throw new ToolBusInternalError("illegal ATerm in replaceAssignableVar: " + t);
+  }
+  
+  /**
+   * Replace the formals in ATerm t by their values using Environment env.
+   * @param t Aterm containing formals
+   * @param env environment to be used.
+   */
+
+  public static ATerm replaceFormals(ATerm t, Environment env) throws ToolBusException {
+
+    switch (t.getType()) {
+      case ATerm.BLOB :
+      case ATerm.INT :
+      case ATerm.PLACEHOLDER :
+      case ATerm.REAL :
+        return t;
+
+      case ATerm.APPL :
+        if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
+           	t = setVarType(t, env.getVarType(t)); 	
+        	Binding b = env.getBinding(t);
+        	if(b == null || (b.val == Undefined)){
+        		return t;
+        	}
+        	//} else if(b.isFormal() && isResVar(b.val)){
+        	//	return replaceFormals(b.val, env);
+        	//} else {
+        	//	return b.var;
+        	return t;
+        	
+        }
+
+        AFun afun = ((ATermAppl) t).getAFun();
+        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        ATerm cargs[] = new ATerm[args.length];
+        if (args.length == 0)
+          return t;
+        for (int i = 0; i < args.length; i++) {
+          cargs[i] = replaceFormals(args[i], env);
+        }
+        return TBTerm.factory.makeAppl(afun, cargs);
+
+      case ATerm.LIST :
+        ATermList lst = TBTerm.factory.makeList();
+        for (int i = 0; i < ((ATermList) t).getLength(); i++) {
+          lst = lst.append(replaceFormals(((ATermList) t).elementAt(i), env));
+        }
+        return lst;
+    }
+    throw new ToolBusInternalError("illegal ATerm in replaceFormals: " + t);
+  }
 
   /**
    * Transform a term into a pattern that can be used by tool interfaces.
    */
 
   public static ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
+  	if(t == TBTerm.Undefined){
+  		return t;
+  	}
     switch (t.getType()) {
-      case ATerm.BLOB : // ??
+      case ATerm.BLOB :
+      	throw new ToolBusInternalError("makePattern for BLOB not implemented");
 
       case ATerm.INT :
         return IntPlaceholder;
@@ -395,6 +494,9 @@ public class TBTerm {
    */
 
   public static ATerm substitute(ATerm t, Environment env) throws ToolBusException {
+  	if(t == TBTerm.Undefined){
+  		return t;
+  	}
     switch (t.getType()) {
       case ATerm.BLOB :
       case ATerm.INT :
@@ -402,10 +504,10 @@ public class TBTerm {
       case ATerm.REAL :
         return t;
       case ATerm.APPL :
-        if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
+        if (TBTerm.isVar(t)) {
           return env.getValue(t);
         }
-        if (TBTerm.isBoolean(t)) {
+        if (TBTerm.isResVar(t) || TBTerm.isBoolean(t)) {
           return t;
         }
         AFun afun = ((ATermAppl) t).getAFun();
@@ -467,6 +569,7 @@ public class TBTerm {
   }
 
   private static boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
+  	//System.err.println("performMatch: " + ta + " " + tb);
     if (TBTerm.isVar(ta))
       if (fullMatch) {
         ta = enva.getValue(ta);
@@ -486,21 +589,21 @@ public class TBTerm {
         return false;
       }
       if (fullMatch) {
-        mr.assignLeft(ta, tb); // check var type!
+        mr.assignLeft(ta, TBTerm.substitute(tb, envb)); // TODO check var type!
       }
       return true;
     }
 
     if (TBTerm.isResVar(tb)) {
       if (fullMatch) {
-        mr.assignRight(tb, ta); // check var type!
+        mr.assignRight(tb, TBTerm.substitute(ta, enva)); // TODO check var type!
       }
       return true;
     }
 
     switch (ta.getType()) {
       case ATerm.BLOB :
-        return ta.equals(tb); // || (tb == TBTerm.BlobPlaceholder);
+        return ta.isEqual(tb) || (tb == TBTerm.StrPlaceholder);
       case ATerm.INT :
         return ta.equals(tb) || (tb == TBTerm.IntPlaceholder);
       case ATerm.REAL :
@@ -510,7 +613,9 @@ public class TBTerm {
           return true;
         else if (ta == RealPlaceholder && tb.getType() == ATerm.REAL)
           return true;
-        else if (ta == StrPlaceholder && tb.getType() == ATerm.APPL && ((ATermAppl) tb).getArity() == 0)
+        else if (ta == StrPlaceholder && 
+        		((tb.getType() == ATerm.APPL && ((ATermAppl) tb).getArity() == 0)) || 
+				  tb.getType() == ATerm.BLOB)
           return true;
         else if (ta == ListPlaceholder && tb.getType() == ATerm.LIST)
           return true;

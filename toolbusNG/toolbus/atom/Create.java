@@ -3,6 +3,8 @@
  */
 package toolbus.atom;
 
+import java.util.Stack;
+
 import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
@@ -32,8 +34,8 @@ public class Create extends Atom {
     return a;
   }
 
-  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-    super.compile(P, env, follow);
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+    super.compile(P, calls, env, follow);
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");

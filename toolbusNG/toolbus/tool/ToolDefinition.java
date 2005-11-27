@@ -74,6 +74,7 @@ public class ToolDefinition {
   }
   
   public void setToolSignatures(ATermList sigs){
+  	boolean hasRecAckEvent = false;
   	ATermPlaceholder toolPlaceholder = getNameAsPlaceholder();
   	while (!sigs.isEmpty()) {
   		ATermAppl sig = (ATermAppl) sigs.getFirst();
@@ -82,8 +83,11 @@ public class ToolDefinition {
   		if(sig.getArity() > 0){
   			ATerm ap = sig.getArgument(0);
   			if(ap.equals(toolPlaceholder)){
-  				if( sig.getName().equals("rec-eval") || sig.getName().equals("rec-do") || sig.getName().equals("rec-ack-event") ||
-  						sig.getName().equals("rec-terminate")){
+  				if(sig.getName().equals("rec-ack-event")){
+  					hasRecAckEvent = true;
+  				}
+  				if( sig.getName().equals("rec-eval") || sig.getName().equals("rec-do") ){
+  						//|| sig.getName().equals("rec-ack-event") || sig.getName().equals("rec-terminate")){
   					inputSignature = TBTerm.factory.makeList(sig, inputSignature);
   				} else if( sig.getName().equals("snd-event")){
   					outputSignature = TBTerm.factory.makeList(sig, outputSignature);
@@ -91,13 +95,18 @@ public class ToolDefinition {
   			}
   		}
   	}
-/*  	
-  	ATerm recTerminate = TBTerm.factory.make("rec-terminate(<term>)", toolPlaceholder);
+  	
+  	ATerm recTerminate = TBTerm.factory.make("rec-terminate(<term>,<term>)", toolPlaceholder, TBTerm.TermPlaceholder);
   	inputSignature = TBTerm.factory.makeList(recTerminate, inputSignature);
+  	
+  	if(hasRecAckEvent){
+  		ATerm recAckEvent = TBTerm.factory.make("rec-ack-event(<term>,<term>)", toolPlaceholder, TBTerm.TermPlaceholder);
+  		inputSignature = TBTerm.factory.makeList(recAckEvent, inputSignature);
+  	}
   	
   	ATerm sndConnect = TBTerm.factory.make("snd-connect(<term>)", toolPlaceholder);
   	outputSignature = TBTerm.factory.makeList(sndConnect, outputSignature);
-  	*/
+  	
   }
   
   public ToolShield makeToolShield(ToolInstance ti, boolean alreadyExecuting){

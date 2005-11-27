@@ -34,17 +34,22 @@ public class Merge extends ProcessExpression implements StateElement {
     mergeState.add(this);
   }
 
-  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-  	expr[LEFT].expand(P, calls);
-  	expr[RIGHT].expand(P, calls);
-  }
-
-  public void compile(ProcessInstance processInstance, Environment env, State followSet) throws ToolBusException {
+ // public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+ // 	expr[LEFT].expand(P, calls);
+ // 	expr[RIGHT].expand(P, calls);
+ // }
+  
+  public void computeFirst(){
+ 	 expr[LEFT].computeFirst();
+ 	 expr[RIGHT].computeFirst();
+ }
+  
+  public void compile(ProcessInstance processInstance, Stack calls, Environment env, State followSet) throws ToolBusException {
   	this.processInstance = processInstance;
-  	expr[LEFT].compile(processInstance, env, followSet);
+  	expr[LEFT].compile(processInstance, calls, env, followSet);
   	initialState[LEFT] = state[LEFT] = expr[LEFT].getFirst();
  
-  	expr[RIGHT].compile(processInstance, env, followSet);
+  	expr[RIGHT].compile(processInstance, calls, env, followSet);
  	initialState[RIGHT] = state[RIGHT] = expr[RIGHT].getFirst();
  	setFollow(followSet);
   }

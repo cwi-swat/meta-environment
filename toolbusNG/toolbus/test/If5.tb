@@ -30,21 +30,21 @@ process IfTest is
     if true then
 	   if true then
 	         if true then tau else P(15) fi
-          else
-	         P(16)
-          fi
        else
-           if true then P(17) else P(18) fi
-       fi .
+	         P(16)
+       fi
+    else
+       if true then P(17) else P(18) fi
+    fi .
 
 	if false then
 	   if true then P(19) else P(20) fi
-       else
-          if false then P(21) else tau fi
-        fi .
+    else
+       if false then P(21) else tau fi
+    fi .
 
 	( if not(true) then P(22) fi
-       + if equal(true,false) then P(1) fi
+    + if equal(true,false) then P(1) fi
 	+ tau
 	) .
 	shutdown("")

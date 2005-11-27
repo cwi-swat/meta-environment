@@ -4,6 +4,8 @@
  */
 package toolbus.atom;
 
+import java.util.Stack;
+
 import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
@@ -35,8 +37,8 @@ public class Execute extends Atom {
 		return a;
 	}
 	
-	public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-	    super.compile(P, env, follow);
+	public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+	    super.compile(P, calls, env, follow);
 	 
 	    if (tool.value.getType() != ATerm.APPL)
 	      throw new ToolBusException("malformed first argument in execute");
@@ -53,7 +55,7 @@ public class Execute extends Atom {
 	    ToolBus TB = getProcess().getToolBus();
 	    ToolInstance TI = TB.addToolInstance(name, false);
 	    getEnv().assignVar(rvar.value, TI.getToolId());
-	    System.err.println("Execute.execute: " + getEnv());
+	    //System.err.println("Execute.execute: " + getEnv());
 	    return true;
 	  }
 }

@@ -1440,7 +1440,7 @@ in
       rec-msg(new-editor(EditorId?)) .
 
       create(EditorActionsLoop(EditorId, Type, ModuleName, Text, Tree), Pid?) .
-      snd-msg(te-edit-text(EditorId, "gnu-emacs", FileName, ButtonList))
+      snd-msg(te-edit-text(EditorId, "emacs", FileName, ButtonList)) %% gnu-emacs
     +
       rec-msg(existing-editor(EditorId?)) .
       snd-msg(get-editor-module-name(EditorId)) .
@@ -1480,7 +1480,7 @@ let
 in
   subscribe(delete-editor(<term>)) .
   subscribe(syntax-changed(ModuleName)) .
-  if equal(quote(Tree), quote(none))
+  if equal(Tree, quote(none)) %%quote
   then
     snd-msg(se-set-text(EditorId, Text)) .
     EditorsSynchronized := false
@@ -4227,8 +4227,8 @@ let
   FunName : str,
   Stack : list
 in
-  ButtonActions := quote(Actions) .
-  Stack := quote(StackArgs) .
+  ButtonActions := Actions . %%quote
+  Stack := StackArgs  . %%quote
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .
@@ -4259,7 +4259,7 @@ in
 endlet
 
 process StackIsEmpty(Stack : list, Empty : term?) is
-  if equal(Stack, []) then
+  if is-empty(Stack) then   %% was: equal(Stack, [])
     Empty := true
   else
     Empty := false
@@ -4267,7 +4267,8 @@ process StackIsEmpty(Stack : list, Empty : term?) is
 
 process StackPopTerm(Stack : list, NewStack : list?, Top : term?) is
   Top := first(Stack).
-  NewStack := next(Stack)
+  NewStack := next(Stack) .
+  printf("StackPopTerm: Top = %t, NewStack = %t\n", Top, NewStack)
 
 process StackPopString(Stack : list, NewStack : list?, Top : str?) is
 let
@@ -4286,19 +4287,20 @@ in
 endlet
 
 process StackPushTerm(Stack : list, NewStack : list?, Top : term) is
-  NewStack := join(Top, Stack)
-
+  NewStack := join(Top, Stack) .
+  printf("StackPushTerm: Top = %t, NewStack = %t\n", Top, NewStack)   %%
+   
 process StackPushString(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?,quote(str(Top)))
+  StackPushTerm(Stack,NewStack?,str(Top))  %% quote
 
 process StackPushInt(Stack : list, NewStack : list?, Top : int) is
-  StackPushTerm(Stack,NewStack?, quote(int(Top)))
+  StackPushTerm(Stack,NewStack?, int(Top)) %% quote
 
 process StackPushFile(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?, quote(file(Top)))
+  StackPushTerm(Stack,NewStack?, file(Top)) %% quote
 
 process StackPushPath(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?, quote(path(Top)))
+  StackPushTerm(Stack,NewStack?, path(Top)) %% quote
 
 process ReturnSuccess(EditorId : term, Stack : list) is
   snd-msg(stack(Stack), EditorId)
@@ -4539,11 +4541,11 @@ in
         CheckTreeSort(STree, SortName, RTree?) .
         if not-equal(RTree, error-tree) then
           StackPushTerm(Stack, Stack?, RTree) .
-          StackPushTerm(Stack, Stack?, quote(true)) .
+          StackPushTerm(Stack, Stack?, true) . %% quote
           ReturnSuccess(EditorId, Stack)
         else
           StackPushTerm(Stack, Stack?, STree) .
-          StackPushTerm(Stack, Stack?, quote(false)) .
+          StackPushTerm(Stack, Stack?, false) . %% quote
           ReturnSuccess(EditorId, Stack)
         fi
       +
@@ -6298,7 +6300,7 @@ in
     snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
-    if equal(Checking, quote(true)) then
+    if equal(Checking, true) then   %% true
       CheckSyntaxSpecification(ModuleName, eqs)
     else
       tau
@@ -6309,7 +6311,7 @@ in
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
-    if equal(Checking, quote(true)) then
+    if equal(Checking, true) then %%quote
       CheckSyntaxSpecification(ModuleName, trm)
     else
       tau

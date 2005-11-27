@@ -37,7 +37,7 @@ public class ProcessDefinition {
   	return formals;
   }
 
-  public ProcessExpression expand(ProcessInstance P, Stack calls, ATermList actuals) throws ToolBusException {
+  public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusException {
     if (actuals.getLength() != formals.getLength()) {
       throw new ToolBusException(name + ": mismatch " + formals + " and " + actuals);
     }
@@ -49,7 +49,8 @@ public class ProcessDefinition {
       }
     };
     ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals));
-    PE1.expand(P, calls);
+    //PE1.expand(P, calls);
+    //System.err.println("ProcessDef.expand => " + PE1);
     return PE1;
   }
 
