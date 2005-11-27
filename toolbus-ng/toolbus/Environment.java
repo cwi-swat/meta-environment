@@ -4,37 +4,32 @@
 
 package toolbus;
 
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import aterm.ATerm;
 import aterm.ATermList;
 
 /**
- * Binding implement lists of (variable, value) pairs.
+ * Binding implements s (variable, value) pair.
  */
 
 class Binding {
 	ATerm var;
 	ATerm val;
-	Binding next;
 	boolean isFormal = false;
-
-	public Binding(ATerm var, Binding bnd) {
-		this.var = var;
-		this.val = TBTerm.Undefined;
-		this.next = bnd;
-	}
 	
-	public Binding(ATerm var, ATerm val, Binding bnd) {
+	public Binding(ATerm var, ATerm val, boolean isFormal) {
 		this.var = var;
 		this.val = val;
-		this.next = bnd;
-		this.isFormal = true;
-	}
-	
-	public Binding(ATerm var, ATerm val, boolean isFormal, Binding bnd) {
-		this.var = var;
-		this.val = val;
-		this.next = bnd;
 		this.isFormal = isFormal;
+	}
+	public Binding(ATerm var, ATerm val) {
+		this(var, val, true);
+	}
+
+	public Binding(ATerm var) {
+		this(var,TBTerm.Undefined,false);
 	}
 	
 	public boolean isFormal(){
@@ -51,25 +46,25 @@ class Binding {
  */
 
 public class Environment {
-	protected Binding bindings;
+	protected Hashtable bindings;
 
 	public Environment() {
-		bindings = null;
+		bindings = new Hashtable(10);
 	}
 	
-	public Environment(Binding b){
+	public Environment(Hashtable b){
 		bindings = b;
 	}
 	
 	public Environment copy() {
 		Environment env = new Environment();
-		env.bindings = bindings;
+		env.bindings = (Hashtable) bindings.clone();
 		return env;
 	}
 
 	/**
 	 * introduceVars adds a list of variables to the environment.
-	 * They are initialized to Undefined
+	 * They are initialized to Undefined.
 	 * 
 	 * @param vars
 	 *            list of variables.
@@ -79,10 +74,9 @@ public class Environment {
 		for (int i = 0; i < vars.getLength(); i++) {
 			ATerm var = vars.elementAt(i);
 			if (TBTerm.isVar(var)) {
-				bindings = new Binding(var, bindings);
+				bindings.put(TBTerm.getVarName(var), new Binding(var));
 			} else {
-				throw new ToolBusInternalError("introduceVar illegal var: "
-						+ var);
+				throw new ToolBusInternalError("introduceVar illegal var: " + var);
 			}
 		}
 		//System.err.println("introduceVars(" + vars + ") yields:\n" + this);
@@ -99,20 +93,20 @@ public class Environment {
 	 *            list of actual values.
 	 */
 	public void introduceBinding(ATerm formal, ATerm actual, boolean isFormal) throws ToolBusException {
-		actual = TBTerm.replaceFormals(actual, this); //TODO
+		actual = TBTerm.replaceFormals(actual, this);
 		if (TBTerm.isVar(actual)
 				&& !Functions.compatibleTypes(TBTerm.getVarType(formal), TBTerm.getVarType(actual))) {
 			throw new ToolBusException("incompatible types for " + formal
 					+ " and " + actual + " in " + this);
 		}
-		//actual = TBTerm.substitute(actual,this);      //TODO
+
 		if (TBTerm.isVar(formal)) {
-			bindings = new Binding(formal, actual, isFormal, bindings);
+			bindings.put(TBTerm.getVarName(formal), new Binding(formal, actual, isFormal));
 		} else if (TBTerm.isResVar(formal)) {
 			if (!TBTerm.isResVar(actual)) {
 				throw new ToolBusInternalError("illegal actual: " + actual);
 			}
-			bindings = new Binding(formal, actual, isFormal, bindings);
+			bindings.put(TBTerm.getVarName(formal), new Binding(formal, actual, isFormal));
 		} else {
 			throw new ToolBusInternalError("illegal formal: " + formal);
 		}
@@ -133,11 +127,9 @@ public class Environment {
 
 	public void introduceBindings(ATermList formals, ATermList actuals, boolean isFormal)
 			throws ToolBusException {
-		//System.err.println("introduceBindings: " + formals + " => " + actuals);
 		for (int i = 0; i < formals.getLength(); i++) {
 			introduceBinding(formals.elementAt(i), actuals.elementAt(i), isFormal);
 		}
-		//System.err.println(this);
 	}
 
 	/**
@@ -150,8 +142,8 @@ public class Environment {
 
 	public void removeBindings(ATermList formals) {
 		for (int i = 0; i < formals.getLength(); i++) {
-			if (bindings != null)
-				bindings = bindings.next;
+			ATerm formal = formals.elementAt(i);
+			bindings.remove(TBTerm.getVarName(formal));
 		}
 	}
 
@@ -166,14 +158,17 @@ public class Environment {
 
 	public void assignVar(ATerm var, ATerm val) {
 		//System.err.println("assignVar(" + var + ", " + val + ")");
-		String name = TBTerm.getVarName(var);
-		for (Binding b = bindings; b != null; b = b.next) {
+		while(true){
+			String name = TBTerm.getVarName(var);
+			Binding b = (Binding) bindings.get(name);
+			if(b == null){
+				bindings.put(name, new Binding(var, val));
+				return;
+			}
 			String bname = TBTerm.getVarName(b.var);
-			//System.err.println(name + " == " + bname);
 			if (name == bname) {
-				//System.err.println("yes, checking " + b.val);
 				if(b.isFormal() && TBTerm.isResVar(b.var)){
-					name = TBTerm.getVarName(b.val);
+					var = b.val;
 				} else {
 					b.val = val;
 					b.setFormal(false);
@@ -181,8 +176,6 @@ public class Environment {
 				}
 			}
 		}
-		System.err.println("**** not found ****");
-		bindings = new Binding(var, val, bindings);
 	}
 
 	public ATerm getVarType(ATerm var) {
@@ -190,12 +183,14 @@ public class Environment {
 			throw new ToolBusInternalError(
 					"Environment.getVarType: illegal var " + var);
 		String name = TBTerm.getVarName(var);
-		for (Binding b = bindings; b != null; b = b.next)
-			if (TBTerm.getVarName(b.var) == name)
-				return TBTerm.getVarType(b.var);
+		Binding b = (Binding) bindings.get(name);
+		if(b == null){
+			return TBTerm.getVarType(var);
+		}
+		if (TBTerm.getVarName(b.var) == name){
+			return TBTerm.getVarType(b.var);
+		}
 		return TBTerm.getVarType(var);
-		//throw new ToolBusInternalError(
-		//		"Environment.getVarType: undeclared var " + var);
 	}
 	
 	/**
@@ -208,13 +203,15 @@ public class Environment {
 	public Binding getBinding(ATerm var) throws ToolBusException {
 		//System.err.println("getBinding(" + var + " in " + this + ")");
 		String name = TBTerm.getVarName(var);
-		for (Binding b = bindings; b != null; b = b.next) {
-			String bname = TBTerm.getVarName(b.var);
-			if (name == bname) {
-				return b;
-			}
+		return (Binding) bindings.get(name);
+	}
+	
+	public boolean isDeclaredAsStringVar(String name){
+		Binding b = (Binding) bindings.get(name);
+		if(b == null){
+			return false;
 		}
-		return null;
+		return (TBTerm.getVarType(b.var) == TBTerm.StrType);
 	}
 
 	/**
@@ -226,47 +223,32 @@ public class Environment {
 
 	public ATerm getValue(ATerm var) throws ToolBusException {
 		//System.err.println("getValue(" + var + " in " + this + ")");
-		String name = TBTerm.getVarName(var);
-		for (Binding b = bindings; b != null; b = b.next) {
+
+		while(true){
+			String name = TBTerm.getVarName(var);
+			Binding b = (Binding) bindings.get(name);
+			if(b == null){
+				//return var;
+				throw new ToolBusException(var + " has undefined value");
+			}
 			String bname = TBTerm.getVarName(b.var);
-			//System.err.println("comparing " + name + " and " + bname);
 			if (name == bname) {
 				if(b.isFormal() && (TBTerm.isResVar(b.val) || TBTerm.isVar(b.val))){
-					name = TBTerm.getVarName(b.val);
-					//System.err.println("name becomes: " + name);
+					var = b.val;				
 				} else {
 					ATerm val = b.val;
 					val = TBTerm.substitute(val, this);
-					/**
-					if(b.isFormal()){
-						System.err.println("further evaluate: " + val);
-						ATerm oval = val;
-						val = Functions.eval(val, null, new Environment(b.next));  // TODO: empty PI
-						//val = TBTerm.substitute(val, this);
-						System.err.println("further evaluate: " + oval + " => " + val);
-					}
-					**/
-					//if(val == null){
-					//	//val = TBTerm.Undefined;
-					//	val = var;
-					//}
-					//if (val == null){
-					//     Exception e = new ToolBusException(var + " has undefined value");
-					//     e.printStackTrace();
-					//	throw new ToolBusException(var + " has undefined value");
-					//}
-					//System.err.println("getValue " + var + " yields " +  val);
 					return val;
 				}
 			}
 		}
-		System.err.println("getValue yields " +  var);
-		return var;
 	}
 
 	public String toString() {
 		String res = "{", sep = "";
-		for (Binding b = bindings; b != null; b = b.next) {
+		Enumeration all = bindings.elements();
+		while (all.hasMoreElements()) {
+			Binding b = (Binding) all.nextElement();
 			String op = b.isFormal() ? " :-> " : " : ";
 			res += sep + b.var + op + b.val;
 			sep = ", ";
