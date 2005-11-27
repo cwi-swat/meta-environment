@@ -82,6 +82,7 @@ abstract class NodeBuilder {
 class TScriptNodeBuilders {
   private static Hashtable Builders;
   private static ATermFactory factory;
+  protected static String processName = "";
 
   public static void init(ATermFactory fac) {
     factory = fac;
@@ -108,25 +109,25 @@ class TScriptNodeBuilders {
      */
     define(new NodeBuilder("ttt-vardecl") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], (ATerm) args[1]);
+        return TBTerm.mkVar((ATerm) args[0], processName, (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("ttt-resvardecl") {
       public Object build(Object args[]) {
-        return TBTerm.mkResVar((ATerm) args[0], (ATerm) args[1]);
+        return TBTerm.mkResVar((ATerm) args[0], processName, (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("ttt-var") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], factory.make("none"));
+        return TBTerm.mkVar((ATerm) args[0], processName, factory.make("none"));
       }
     });
 
     define(new NodeBuilder("ttt-resvar") {
       public Object build(Object args[]) {
-        return TBTerm.mkResVar((ATerm) args[0], factory.make("none"));
+        return TBTerm.mkResVar((ATerm) args[0], processName, factory.make("none"));
       }
     });
     
@@ -440,7 +441,7 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("ttt-Assign") {
       public Object build(Object args[]) {
-        return new Assign(TBTerm.mkVar((ATerm) args[0], factory.make("none")), (ATerm) args[1]);
+        return new Assign(TBTerm.mkVar((ATerm) args[0], processName, factory.make("none")), (ATerm) args[1]);
       }
     });
 
@@ -574,9 +575,13 @@ public class TScriptParser {
       } else {
       	Object def = TScriptNodeBuilders.build((ATerm) elm);
 
-      	if(def instanceof ProcessDefinition)
-      		toolbus.addProcessDefinition((ProcessDefinition) def);
-      	else if(def instanceof ToolDefinition)
+      	if(def instanceof ProcessDefinition){
+      		String processName = ((ProcessDefinition) def).getName();
+      		TScriptNodeBuilders.processName = processName;
+      		// First we parse elm as a ProcessDefinition and extract the process name,
+      		// next we parse again! so that we qualify all variables with that name.
+      		toolbus.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders.build((ATerm) elm));
+      	} else if(def instanceof ToolDefinition)
     	toolbus.addToolDefinition((ToolDefinition) def);
       	else
       		throw new ToolBusException("Process or Tool definition expected");

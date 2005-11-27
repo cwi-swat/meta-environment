@@ -1,11 +1,20 @@
 package toolbus.test;
-import toolbus.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
-import aterm.*;
-import aterm.ATerm;
-
-import junit.framework.*;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import toolbus.Environment;
+import toolbus.Functions;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
+import aterm.ATerm;
+import aterm.ATermBlob;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 public class TBTermTest extends TestCase {
   private ATermFactory factory;
@@ -122,12 +131,32 @@ public class TBTermTest extends TestCase {
     return false;
   }
   
+  boolean doSubst(String s1, Environment e, String s2) throws ToolBusException{
+  	return TBTerm.substitute(factory.make(s1), e).isEqual(factory.make(s2));
+  }
+  
+  public void testSubstitute() throws ToolBusException {
+ 	Environment env1 = new Environment();
+    ATerm varX = factory.make("var(int,X)");
+    ATerm int3 = factory.make("3");
+    ATermList declX = factory.makeList(varX);
+    env1.introduceVars(declX);
+    env1.assignVar(varX, int3);
+    
+    assertTrue(doSubst("1", env1, "1"));
+    assertTrue(doSubst("var(int,X)", env1, "3"));
+    assertTrue(doSubst("f(var(int,X))", env1, "f(3)"));
+    assertTrue(doSubst("rvar(int,X)", env1, "rvar(int,X)"));
+    assertTrue(doSubst("f(rvar(int,X))", env1, "f(rvar(int,X))"));  
+  }
+  
   public void testMatchVar() throws ToolBusException {
   	Environment env1 = new Environment();
   	Environment env2 = new Environment();
   	
     ATerm varX = factory.make("var(int,X)");
     ATerm varY = factory.make("var(int,Y)");
+    ATerm varB = factory.make("var(str,B)");
     ATerm int3 = factory.make("3");
     ATerm int4 = factory.make("4");
     ATerm int5 = factory.make("5");
@@ -157,7 +186,27 @@ public class TBTermTest extends TestCase {
     
     assertTrue(doMatch("6", env1, "rvar(int,Y)", env2)); 
     assertEquals(env2.getValue(varY), int6);
-    assertTrue(doMatch("6", env1, "var(int,Y)", env2));  
+    assertTrue(doMatch("6", env1, "var(int,Y)", env2)); 
+    
+    assertTrue(doMatch("rvar(int,X)", env1, "f(var(int,Y))", env2));
+    assertEquals(env1.getValue(varX), factory.make("f(6)"));
+    
+    assertTrue(doMatch("g(var(int,X))", env1, "rvar(int,Y)", env2));
+    assertEquals(env2.getValue(varY), factory.make("g(f(6))"));
+    
+    ATermBlob b1 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
+    ATermBlob b2 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
+    
+    ATermList declB = factory.makeList(varB);
+    env1.introduceVars(declB);
+    env1.assignVar(varB, b1);  
+    
+    assertTrue(doMatch(b1.toString(), env1, b1.toString(), env2));
+    assertTrue(doMatch(b1.toString(), env1, b2.toString(), env2));
+    assertTrue(doMatch(b1.toString(), env1, "<str>", env2));
+    assertTrue(doMatch("<str>", env1, b1.toString(), env2));
+    
+    assertTrue(doMatch("var(str,B)", env1, b1.toString(), env2));
   }
 
   public ATerm check(String s) throws ToolBusException {
@@ -233,6 +282,73 @@ public class TBTermTest extends TestCase {
     assertTrue(!compatible("f(1)", "<str>"));
     assertTrue(!compatible("f", "<str>"));
     
+  }
+  
+  ATerm writeRead(ATerm term) {
+	File f = new File("tmp");
+	FileOutputStream os;
+	try {
+		os = new FileOutputStream(f);
+		term.writeToTextFile(os);
+		os.close();
+		FileInputStream is = new FileInputStream(f);
+		ATerm t = factory.readFromTextFile(is);
+		return t;
+	} catch (FileNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (Exception ex) {
+		// TODO Auto-generated catch block
+		ex.printStackTrace();
+	}
+	return null;
+  }
+  
+  public void testBlob() {
+  	ATermBlob b = factory.makeBlob(new byte[]{'a', 'b', 'c'});
+  	byte data[] = b.getBlobData();
+  	assertTrue(data[0] == 'a');
+  	assertTrue(data[1] == 'b');
+  	assertTrue(data[2] == 'c');
+ 	System.err.println(b.toString());
+  	ATermBlob c = (ATermBlob) factory.make(b.toString());
+  	data = c.getBlobData();
+ 
+ 	assertTrue(data[0] == 'a');
+  	assertTrue(data[1] == 'b');
+  	assertTrue(data[2] == 'c'); 	
+  	
+	ATermBlob d = factory.makeBlob(new byte[]{'a', -128, -3});
+  	data = d.getBlobData();
+  	assertTrue(data[0] == 'a');
+  	assertTrue(data[1] == -128);
+  	assertTrue(data[2] == -3);
+ 	System.err.println(d.toString());
+  	ATermBlob e = (ATermBlob) factory.make(d.toString());
+  	data = e.getBlobData();
+ 
+ 	assertTrue(data[0] == 'a');
+  	assertTrue(data[1] == -128);
+  	assertTrue(data[2] == -3); 	
+  	
+  	assertTrue(b.isEqual(b));
+ 	ATermBlob b2 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
+ 	assertTrue(b.isEqual(b2));
+ 	assertTrue(!b.isEqual(d));
+ 	
+ 	//System.err.println("b = " + b);
+	//System.err.println("writeRead(b) = " + writeRead(b));
+ 	
+	assertTrue(writeRead(b).isEqual(b));
+	assertTrue(writeRead(d).isEqual(d));
+	assertTrue(writeRead(d).isEqual(e));
+	assertTrue(writeRead(e).isEqual(d));
+	
+	//ATerm f1 = factory.make("f(<term>)", b);
+	//ATerm f2 = factory.make("f(<term>)", c);
+	//assertTrue(f1.isEqual(f1));
+	//assertTrue(f2.isEqual(f2));
+	//assertTrue(f1.isEqual(f2));
   }
   
   public static Test suite() {

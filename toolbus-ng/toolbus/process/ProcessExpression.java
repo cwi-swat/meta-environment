@@ -23,6 +23,7 @@ abstract public class ProcessExpression {
 	}
 
 	protected void setFirst(State first) {
+		//System.err.println("setFirst: " + first);
 		this.first = first;
 	}
 
@@ -46,10 +47,12 @@ abstract public class ProcessExpression {
 		follow = follow.union(set);
 	}
 
-	abstract public void expand(ProcessInstance processInstance, Stack calls)
-			throws ToolBusException;
+//	abstract public void expand(ProcessInstance processInstance, Stack calls)
+//			throws ToolBusException;
+	
+	abstract public void computeFirst();
 
-	abstract public void compile(ProcessInstance processInstance, Environment env, State followSet)
+	abstract public void compile(ProcessInstance processInstance, Stack calls, Environment env, State followSet)
 			throws ToolBusException;
 	
 	abstract public void replaceFormals(Environment env) throws ToolBusException;

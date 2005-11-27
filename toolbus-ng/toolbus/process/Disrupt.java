@@ -20,15 +20,21 @@ public class Disrupt extends ProcessExpression {
     return new Disrupt(left, right);
   }
 
-  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    left.expand(P, calls);
-    right.expand(P, calls);
-    setFirst(left.getFirst().union(right.getFirst()));
-  }
+ // public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+ //   left.expand(P, calls);
+ //   right.expand(P, calls);
+ //   setFirst(left.getFirst().union(right.getFirst()));
+ // }
+  
+  public void computeFirst(){
+ 	 left.computeFirst();
+ 	 right.computeFirst();
+ 	 setFirst(left.getFirst().union(right.getFirst()));
+ }
 
-  public void compile(ProcessInstance P, Environment env, State follow) throws ToolBusException {
-    left.compile(P, env, follow);
-    right.compile(P, env, follow);
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+    left.compile(P, calls, env, follow);
+    right.compile(P, calls, env, follow);
     State rightFirst = right.getFirst();
     setFollow(follow);
     Vector atoms = left.getAtoms().getElementsAsVector();

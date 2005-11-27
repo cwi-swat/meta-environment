@@ -422,7 +422,7 @@ public class ToolBus {
    * Shutdown of this ToolBus.
    */
 
-  public void shutdown(String msg){
+  public void shutdown(ATerm msg){
     for (int i = 0; i < processes.size(); i++) {
     	System.err.println("shutdown process " + i);
       ProcessInstance pi = (ProcessInstance) processes.elementAt(i);
@@ -485,6 +485,6 @@ public class ToolBus {
       System.err.println(e.getMessage());
       e.printStackTrace();
     }
-    shutdown("ToolBus halted");
+    shutdown(factory.make("ToolBus halted"));
   }
 }

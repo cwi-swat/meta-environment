@@ -126,5 +126,5 @@ public abstract class ToolShield extends Thread {
 	 * Terminate execution of this tool
 	 */
 
-	abstract public void terminate(String msg) ;
+	abstract public void terminate(ATerm msg) ;
 }

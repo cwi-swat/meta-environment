@@ -67,7 +67,7 @@ public class Print extends Atom {
   public boolean execute() throws ToolBusException {
     if (isEnabled()) {
       Environment e = getEnv();
-      //System.err.println("Print: " + this);
+      //System.err.println("Print: " + this + "; env = " + e);
       PrintWriter out = getToolBus().getPrintWriter();
       ATerm res = TBTerm.substitute(arg.value, e);
       //System.err.println("res =" + res);

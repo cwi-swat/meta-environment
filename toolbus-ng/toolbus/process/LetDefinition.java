@@ -30,20 +30,26 @@ public class LetDefinition extends ProcessExpression {
     return new LetDefinition(formals, PEinit.copy());
   }
   
-  public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
-    PE.expand(P, calls);
-   }
+ // public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
+ //   PE.expand(P, calls);
+  // }
+  
+  public void computeFirst(){
+ 	 PE.computeFirst();
+ }
 
-  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
     env = env.copy();
     //System.err.println("LetDef.compile: " + env);
     env.introduceVars(formals);
-    PE.compile(P, env, follows);
+    PE.compile(P, calls, env, follows);
     env.removeBindings(formals);
   }
   
   public void replaceFormals(Environment env) throws ToolBusException{
+    env.introduceVars(formals);
 	PE.replaceFormals(env);
+	env.removeBindings(formals);
   }
 
   public State getFirst() {

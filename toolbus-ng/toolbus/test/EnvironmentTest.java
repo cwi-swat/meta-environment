@@ -95,7 +95,7 @@ public class EnvironmentTest extends TestCase {
     ATermList actuals = factory.makeList(varX);
     ATermList formals = factory.makeList(varY);
 
-    env.introduceBindings(formals, actuals);
+    env.introduceBindings(formals, actuals, true);
 
     env.assignVar(varX, int3);
     env.assignVar(varY, int4);
@@ -129,11 +129,11 @@ public class EnvironmentTest extends TestCase {
 
     ATermList formals1 = factory.makeList(rvarY);
     ATermList actuals1 = factory.makeList(rvarX);
-    env.introduceBindings(formals1, actuals1);
+    env.introduceBindings(formals1, actuals1, true);
 
     ATermList formals2 = factory.makeList(rvarZ);
     ATermList actuals2 = factory.makeList(rvarY);
-    env.introduceBindings(formals2, actuals2);
+    env.introduceBindings(formals2, actuals2, true);
 
     ATerm int3 = factory.make("3");
     ATerm int4 = factory.make("4");

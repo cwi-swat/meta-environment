@@ -27,17 +27,23 @@ public class IfElse extends ProcessExpression {
     return new IfElse(test, left.copy(), right.copy());
   }
 
-  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    left.expand(P, calls);
-    right.expand(P, calls);
-    setFirst(left.getFirst().union(right.getFirst()));
-  }
+ // public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+  //  left.expand(P, calls);
+  //  right.expand(P, calls);
+ //   setFirst(left.getFirst().union(right.getFirst()));
+  //}
+  
+  public void computeFirst(){
+ 	 left.computeFirst();
+ 	 right.computeFirst();
+ 	 setFirst(left.getFirst().union(right.getFirst()));
+ }
 
-  public void compile(ProcessInstance P, Environment env, State follows) throws ToolBusException {
-    left.compile(P, env, follows);
+  public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
+    left.compile(P, calls, env, follows);
     ATerm rtest = TBTerm.resolveVars(test, env);
     left.getFirst().setTest(rtest, env);
-    right.compile(P, env, follows);
+    right.compile(P, calls, env, follows);
 
     ATerm notTest = rtest.getFactory().make("not(<term>)", rtest);
 

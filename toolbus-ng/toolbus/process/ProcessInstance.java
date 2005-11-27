@@ -39,6 +39,7 @@ public class ProcessInstance {
   public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException {
     toolbus = TB;
     this.call = call;
+    call.setEvalArgs(false);
     processName = call.getName();
 
     definition = TB.getProcessDefinition(processName);
@@ -50,9 +51,10 @@ public class ProcessInstance {
     transactionIdVar = TBTerm.TransactionIdVar;
     env.introduceBinding(transactionIdVar, TBTerm.newTransactionId());
 
-    call.expand(this, new Stack());
+    //call.expand(this, new Stack());
+    call.computeFirst();
     //System.err.println("ProcessInstance: " + env);
-    call.compile(this, env, empty);
+    call.compile(this, new Stack(), env, empty);
     currentState = call.getStartState();
     currentState.activate();
  
@@ -75,7 +77,7 @@ public class ProcessInstance {
   }
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals), 0);
+    this(TB, new ProcessCall(name, actuals, false), 0);
   }
   
   void info(String msg) {
@@ -108,7 +110,7 @@ public class ProcessInstance {
     return processName;
   }
 
-  public void terminate(String msg) {
+  public void terminate(ATerm msg) {
   	running = false;
   }
   

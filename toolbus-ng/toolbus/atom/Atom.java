@@ -162,18 +162,19 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     
     
     AFun afun = TBTerm.factory.makeAFun(externalNameAsReceivedByTool, nargs, false);
-    ATermList pat = TBTerm.factory.makeList();
+    ATerm pat[] = new ATerm[nargs];
 
     for (int i = 0; i < nargs; i++) {
-      pat = pat.append(TBTerm.makePattern(atomArgs[i].value, getEnv(), true));
+      pat[i] = TBTerm.makePattern(atomArgs[i].value, getEnv(), true);
     }
-
     return TBTerm.factory.makeAppl(afun, pat);
   }
 
-  public void expand(ProcessInstance P, Stack calls) {}
+ // public void expand(ProcessInstance P, Stack calls) {}
+  
+  public void computeFirst() {}
 
-  public void compile(ProcessInstance processInstance, Environment env, State follow) throws ToolBusException {
+  public void compile(ProcessInstance processInstance, Stack calls, Environment env, State follow) throws ToolBusException {
   	this.processInstance = processInstance;
   	this.env = env.copy();
     setFollow(follow);
@@ -185,6 +186,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	 for (int i = 0; i < atomArgs.length; i++) {
         //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
         ATerm arg = TBTerm.resolveVars(atomArgs[i].value, env);
+        arg = TBTerm.replaceFormals(arg, env);
+        //System.err.println("atomArg[" + i + "] = " + atomArgs[i].value + " => " + arg + "; env = " + env);
         atomArgs[i].value = arg;
       }
   }

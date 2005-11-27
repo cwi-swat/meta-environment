@@ -15,11 +15,34 @@ class Binding {
 	ATerm var;
 	ATerm val;
 	Binding next;
+	boolean isFormal = false;
 
+	public Binding(ATerm var, Binding bnd) {
+		this.var = var;
+		this.val = TBTerm.Undefined;
+		this.next = bnd;
+	}
+	
 	public Binding(ATerm var, ATerm val, Binding bnd) {
 		this.var = var;
 		this.val = val;
 		this.next = bnd;
+		this.isFormal = true;
+	}
+	
+	public Binding(ATerm var, ATerm val, boolean isFormal, Binding bnd) {
+		this.var = var;
+		this.val = val;
+		this.next = bnd;
+		this.isFormal = isFormal;
+	}
+	
+	public boolean isFormal(){
+		return isFormal;
+	}
+	
+	public void setFormal(boolean b){
+		isFormal = b;
 	}
 }
 
@@ -34,6 +57,10 @@ public class Environment {
 		bindings = null;
 	}
 	
+	public Environment(Binding b){
+		bindings = b;
+	}
+	
 	public Environment copy() {
 		Environment env = new Environment();
 		env.bindings = bindings;
@@ -42,16 +69,17 @@ public class Environment {
 
 	/**
 	 * introduceVars adds a list of variables to the environment.
+	 * They are initialized to Undefined
 	 * 
 	 * @param vars
 	 *            list of variables.
 	 */
 
-	public void introduceVars(ATermList vars) throws ToolBusException {
+	public void introduceVars(ATermList vars) throws ToolBusInternalError {
 		for (int i = 0; i < vars.getLength(); i++) {
 			ATerm var = vars.elementAt(i);
 			if (TBTerm.isVar(var)) {
-				bindings = new Binding(var, null, bindings);
+				bindings = new Binding(var, bindings);
 			} else {
 				throw new ToolBusInternalError("introduceVar illegal var: "
 						+ var);
@@ -70,22 +98,28 @@ public class Environment {
 	 * @param actuals
 	 *            list of actual values.
 	 */
-	public void introduceBinding(ATerm formal, ATerm actual) throws ToolBusException {
+	public void introduceBinding(ATerm formal, ATerm actual, boolean isFormal) throws ToolBusException {
+		actual = TBTerm.replaceFormals(actual, this); //TODO
 		if (TBTerm.isVar(actual)
 				&& !Functions.compatibleTypes(TBTerm.getVarType(formal), TBTerm.getVarType(actual))) {
 			throw new ToolBusException("incompatible types for " + formal
-					+ " and " + actual);
+					+ " and " + actual + " in " + this);
 		}
+		//actual = TBTerm.substitute(actual,this);      //TODO
 		if (TBTerm.isVar(formal)) {
-			bindings = new Binding(formal, actual, bindings);
+			bindings = new Binding(formal, actual, isFormal, bindings);
 		} else if (TBTerm.isResVar(formal)) {
 			if (!TBTerm.isResVar(actual)) {
 				throw new ToolBusInternalError("illegal actual: " + actual);
 			}
-			bindings = new Binding(formal, actual, bindings);
+			bindings = new Binding(formal, actual, isFormal, bindings);
 		} else {
 			throw new ToolBusInternalError("illegal formal: " + formal);
 		}
+	}
+	
+	public void introduceBinding(ATerm formal, ATerm actual) throws ToolBusException {
+		introduceBinding(formal, actual, false);
 	}
 	
 	/**
@@ -97,11 +131,13 @@ public class Environment {
 	 *            list of actual parameters.
 	 */
 
-	public void introduceBindings(ATermList formals, ATermList actuals)
+	public void introduceBindings(ATermList formals, ATermList actuals, boolean isFormal)
 			throws ToolBusException {
+		//System.err.println("introduceBindings: " + formals + " => " + actuals);
 		for (int i = 0; i < formals.getLength(); i++) {
-			introduceBinding(formals.elementAt(i), actuals.elementAt(i));
+			introduceBinding(formals.elementAt(i), actuals.elementAt(i), isFormal);
 		}
+		//System.err.println(this);
 	}
 
 	/**
@@ -136,15 +172,16 @@ public class Environment {
 			//System.err.println(name + " == " + bname);
 			if (name == bname) {
 				//System.err.println("yes, checking " + b.val);
-				if(b.val != null && TBTerm.isResVar(b.val)){
+				if(b.isFormal() && TBTerm.isResVar(b.var)){
 					name = TBTerm.getVarName(b.val);
 				} else {
 					b.val = val;
+					b.setFormal(false);
 					return;
 				}
 			}
 		}
-		//System.err.println("not found");
+		System.err.println("**** not found ****");
 		bindings = new Binding(var, val, bindings);
 	}
 
@@ -160,12 +197,31 @@ public class Environment {
 		//throw new ToolBusInternalError(
 		//		"Environment.getVarType: undeclared var " + var);
 	}
-
+	
 	/**
 	 * getValue fetches the value of a variable.
 	 * 
 	 * @param var
 	 *            variable whole value is needed.
+	 */
+
+	public Binding getBinding(ATerm var) throws ToolBusException {
+		//System.err.println("getBinding(" + var + " in " + this + ")");
+		String name = TBTerm.getVarName(var);
+		for (Binding b = bindings; b != null; b = b.next) {
+			String bname = TBTerm.getVarName(b.var);
+			if (name == bname) {
+				return b;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * getValue fetches the value of a variable.
+	 * 
+	 * @param var
+	 *            variable whose value is needed.
 	 */
 
 	public ATerm getValue(ATerm var) throws ToolBusException {
@@ -175,29 +231,44 @@ public class Environment {
 			String bname = TBTerm.getVarName(b.var);
 			//System.err.println("comparing " + name + " and " + bname);
 			if (name == bname) {
-				if(b.val != null && (TBTerm.isResVar(b.val) || TBTerm.isVar(b.val))){
+				if(b.isFormal() && (TBTerm.isResVar(b.val) || TBTerm.isVar(b.val))){
 					name = TBTerm.getVarName(b.val);
 					//System.err.println("name becomes: " + name);
 				} else {
 					ATerm val = b.val;
-					if (val == null){
-					     Exception e = new ToolBusException(var + " has undefined value");
-					     e.printStackTrace();
-						throw new ToolBusException(var + " has undefined value");
+					val = TBTerm.substitute(val, this);
+					/**
+					if(b.isFormal()){
+						System.err.println("further evaluate: " + val);
+						ATerm oval = val;
+						val = Functions.eval(val, null, new Environment(b.next));  // TODO: empty PI
+						//val = TBTerm.substitute(val, this);
+						System.err.println("further evaluate: " + oval + " => " + val);
 					}
-					//System.err.println("yields " +  val);
+					**/
+					//if(val == null){
+					//	//val = TBTerm.Undefined;
+					//	val = var;
+					//}
+					//if (val == null){
+					//     Exception e = new ToolBusException(var + " has undefined value");
+					//     e.printStackTrace();
+					//	throw new ToolBusException(var + " has undefined value");
+					//}
+					//System.err.println("getValue " + var + " yields " +  val);
 					return val;
 				}
 			}
 		}
-		//System.err.println("yields " +  var);
+		System.err.println("getValue yields " +  var);
 		return var;
 	}
 
 	public String toString() {
 		String res = "{", sep = "";
 		for (Binding b = bindings; b != null; b = b.next) {
-			res += sep + b.var + " : " + b.val;
+			String op = b.isFormal() ? " :-> " : " : ";
+			res += sep + b.var + op + b.val;
 			sep = ", ";
 		}
 		return res + "}";

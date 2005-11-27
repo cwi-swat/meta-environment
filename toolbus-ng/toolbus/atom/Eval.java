@@ -29,10 +29,10 @@ public class Eval extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    System.err.println("Eval: " + getEnv());
+    //System.err.println("Eval: " + getEnv());
     ATerm tid = TBTerm.substitute(toolId.value, getEnv());
     ATerm req = TBTerm.substitute(request.value, getEnv());
-    System.err.println("Eval: " + tid + ", " + req);
+    //System.err.println("Eval: " + tid + ", " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndEvalToTool((ATermAppl) req)) {
     	return true;

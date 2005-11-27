@@ -3,6 +3,7 @@
  */
 
 package toolbus.atom;
+import java.util.Stack;
 import java.util.Vector;
 
 import toolbus.*;
@@ -66,8 +67,8 @@ public abstract class MsgAtom extends Atom {
     return TBTerm.match(matchPattern, this.getEnv(), b.getMatchPattern(), b.getEnv());
   }
 
-  public void compile(ProcessInstance processInstance, Environment env, State follow) throws ToolBusException {
-    super.compile(processInstance, env, follow);
+  public void compile(ProcessInstance processInstance, Stack calls, Environment env, State follow) throws ToolBusException {
+    super.compile(processInstance, calls, env, follow);
     ATermFactory factory = getId().getFactory();
     matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
 
@@ -95,11 +96,11 @@ public abstract class MsgAtom extends Atom {
           if (matchPartner(b)) {
             if (ToolBus.isVerbose()) {
               //System.err.println(
-               // "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+              //  "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
               //System.err.println(
               //	"--- enva = " + this.getEnv());
               //System.err.println(
-               //   	"--- envb = " + b.getEnv());
+              //    	"--- envb = " + b.getEnv());
             }
             //this.nextState();
             //b.nextState();

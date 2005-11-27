@@ -154,6 +154,9 @@ public class Functions {
     
     define(new FunctionDescriptor("is-empty", TBTerm.TermType, TBTerm.BoolType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
+          //if(args[0] == null){
+          //	return TBTerm.True;
+          //}
           if(TBTerm.isList(args[0])){
           	if(((ATermList) args[0]).getLength() == 0)
           		return  TBTerm.True;
@@ -168,7 +171,6 @@ public class Functions {
     
     define(new FunctionDescriptor("fun", TBTerm.TermType, TBTerm.StrType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
-        	System.err.println("fun: " + args[0] + ";" + ((ATermAppl) args[0]).getAFun());
         	String fname  = ((ATermAppl) args[0]).getName();
           return TBTerm.factory.make("<str>", fname);
         }
@@ -212,13 +214,17 @@ public class Functions {
     
     define(new FunctionDescriptor("equal", TBTerm.TermType, TBTerm.TermType, TBTerm.BoolType) {
       public ATerm apply(ATerm args[], ProcessInstance pi) {
-        return (args[0] == args[1]) ? TBTerm.True : TBTerm.False;
+        ATerm res = (args[0] == args[1]) ? TBTerm.True : TBTerm.False;
+      	//System.err.println("equal: " + args[0] + " == " + args[1] + " ==> " + res);
+      	return res;
       }
     });
 
     define(new FunctionDescriptor("not-equal", TBTerm.TermType, TBTerm.TermType, TBTerm.BoolType) {
       public ATerm apply(ATerm args[], ProcessInstance pi) {
-        return (args[0] != args[1]) ? TBTerm.True : TBTerm.False;
+        ATerm res = (args[0] != args[1]) ? TBTerm.True : TBTerm.False;
+    	//System.err.println("not-equal: " + args[0] + " == " + args[1] + " ==> " + res);
+      	return res;
       }
     });
     
@@ -334,6 +340,9 @@ public class Functions {
     
     define(new FunctionDescriptor("size", TBTerm.ListType, TBTerm.IntType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
+          //if(args[0] == null){
+          //	return factory.makeInt(0);
+          //}
           return factory.makeInt(TBTerm.size(args[0]));
         }
       });
@@ -364,11 +373,17 @@ public class Functions {
     
     define(new FunctionDescriptor("first", TBTerm.ListType, TBTerm.TermType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
+          //if(args[0] == null){
+          //	return null;
+         //}
           return TBTerm.first(args[0]);
         }
       });
     define(new FunctionDescriptor("next", TBTerm.ListType, TBTerm.ListType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
+        	//if(args[0] == null){
+        	//	return null;
+        	//}
           return TBTerm.next(args[0]);
         }
       });
@@ -464,7 +479,7 @@ public class Functions {
         return t;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t))
+        if (TBTerm.isVar(t) || TBTerm.isResVar(t))
           return env.getValue(t);
         if (TBTerm.isBoolean(t))
           return t;
@@ -472,8 +487,10 @@ public class Functions {
         		return t;
         String fun = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        if (fun == "quote")  // check # of args
-    		return args[0];
+        if (fun == "quote"){ // TODO: check # of args
+        	System.err.println("quote: " + t + " ==> " + TBTerm.substitute(args[0], env));
+    		return TBTerm.substitute(args[0], env);
+        }
         if(fun == "is-var")
         	return TBTerm.isVar(args[0]) ? TBTerm.True : TBTerm.False;
         if(fun == "is-result-var")
