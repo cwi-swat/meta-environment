@@ -43,6 +43,7 @@ public class EnvironmentTest extends TestCase {
     */
 
     env.assignVar(varX, intVal);
+    System.err.println("value = " + env.getValue(varX));
     assertEquals(env.getValue(varX), intVal);
     /*
     try {

@@ -5,14 +5,12 @@ import java.util.Stack;
 import java.util.Vector;
 
 import toolbus.Environment;
-import toolbus.Functions;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTerm;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.atom.Atom;
-import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermList;
 

@@ -80,7 +80,8 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		
 		processInstance = P;
 		env = env.copy();
-		if(false){ // env.isDeclaredAsStringVar(name)){ // A dynamic call?
+		if(env.isDeclaredAsStringVar(name)){ // A dynamic call?
+			System.err.println("yes dynamic!");
 			isStaticCall = false;
 		} else {	
 			if (calls.contains(name)) {
