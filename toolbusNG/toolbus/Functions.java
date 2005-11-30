@@ -505,8 +505,9 @@ public class Functions {
 
       case ATerm.LIST :
         ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(eval(((ATermList) t).elementAt(i), pi, env), lst);
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(eval(tlst.elementAt(i), pi, env));
         }
         return lst;
     }
@@ -554,8 +555,9 @@ public class Functions {
         	return Functions.checkStatic(name, vargs);
       case ATerm.LIST :
         ATermList lst = TBTerm.factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = TBTerm.factory.makeList(checkType(((ATermList) t).elementAt(i), env, quoted), lst);
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(checkType(tlst.elementAt(i), env, quoted));
         }
         return lst;
     }
@@ -570,8 +572,8 @@ public class Functions {
    * @return boolean
    */
   public static boolean compatibleTypeList(ATermList lst, ATerm elmtype){
-	for(int i = 0; i < lst.getLength() -1; i++){
-		if(!compatibleTypes(lst.elementAt(i), elmtype))
+	for( ; !lst.isEmpty(); lst = lst.getNext()){
+		if(!compatibleTypes(lst.getFirst(), elmtype))
 			return false;
 	}
 	return true;
@@ -651,8 +653,8 @@ public class Functions {
     		ATermList lst2 = (ATermList) t2;
     		if(lst1.getLength() != lst2.getLength())
     			return false;
-    		for(int i = 0; i < lst1.getLength() -1; i++){
-    			if(!compatibleTypes(lst1.elementAt(i), lst2.elementAt(i)))
+    		for( ; !lst1.isEmpty(); lst1 = lst1.getNext(), lst2 = lst2.getNext()){
+    			if(!compatibleTypes(lst1.getFirst(), lst2.getFirst()))
     				return false;
     		}
     		return true;

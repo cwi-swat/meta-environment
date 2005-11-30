@@ -71,8 +71,8 @@ public class Environment {
 	 */
 
 	public void introduceVars(ATermList vars) throws ToolBusInternalError {
-		for (int i = 0; i < vars.getLength(); i++) {
-			ATerm var = vars.elementAt(i);
+		for( ; !vars.isEmpty(); vars = vars.getNext()){
+			ATerm var = vars.getFirst();
 			if (TBTerm.isVar(var)) {
 				bindings.put(TBTerm.getVarName(var), new Binding(var));
 			} else {
@@ -127,8 +127,11 @@ public class Environment {
 
 	public void introduceBindings(ATermList formals, ATermList actuals, boolean isFormal)
 			throws ToolBusException {
-		for (int i = 0; i < formals.getLength(); i++) {
-			introduceBinding(formals.elementAt(i), actuals.elementAt(i), isFormal);
+		if(formals.getLength() != actuals.getLength()){
+			throw new ToolBusInternalError("formal/actuals list have unequal length: "+ formals + " and " + actuals);
+		}
+		for( ; !formals.isEmpty(); formals = formals.getNext(), actuals = actuals.getNext()){
+			introduceBinding(formals.getFirst(), actuals.getFirst(), isFormal);
 		}
 	}
 
@@ -141,8 +144,8 @@ public class Environment {
 	 */
 
 	public void removeBindings(ATermList formals) {
-		for (int i = 0; i < formals.getLength(); i++) {
-			ATerm formal = formals.elementAt(i);
+		for( ; !formals.isEmpty(); formals = formals.getNext()){
+			ATerm formal = formals.getFirst();
 			bindings.remove(TBTerm.getVarName(formal));
 		}
 	}

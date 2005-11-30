@@ -15,8 +15,8 @@ public class Main {
 		try {
 			T.setVerbose(true);
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/eqs-dump.tb");
-				    //+ "/toolbusNG/toolbus/test/dyncall1.tb");
+					+ "/toolbusNG/toolbus/tool/examples/wave.tb");
+				    //+ "/toolbusNG/toolbus/test/Sieve.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
 		} catch (ToolBusException e) {

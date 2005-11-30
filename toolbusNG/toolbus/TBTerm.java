@@ -359,9 +359,11 @@ public class TBTerm {
 
       case ATerm.LIST :
         ATermList lst = TBTerm.factory.makeList();
-        for (int i = 0; i < ((ATermList) t).getLength(); i++) {
-          lst = lst.append(resolveVars(((ATermList) t).elementAt(i), env));
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(resolveVars(tlst.elementAt(i), env));
         }
+ 
         return lst;
     }
     throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
@@ -424,9 +426,11 @@ public class TBTerm {
         return TBTerm.factory.makeAppl(afun, cargs);
 
       case ATerm.LIST :
+        
         ATermList lst = TBTerm.factory.makeList();
-        for (int i = 0; i < ((ATermList) t).getLength(); i++) {
-          lst = lst.append(replaceFormals(((ATermList) t).elementAt(i), env));
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(replaceFormals(tlst.elementAt(i), env));
         }
         return lst;
     }
@@ -479,11 +483,14 @@ public class TBTerm {
         return factory.makeAppl(fun, vargs);
 
       case ATerm.LIST :
-        ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(makePattern(((ATermList) t).elementAt(i), env, true), lst);
+      	
+        ATermList lst = TBTerm.factory.makeList();
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(makePattern(tlst.elementAt(i), env, true));
         }
         return lst;
+        
     }
     throw new ToolBusInternalError("illegal ATerm in getType: " + t);
   }
@@ -520,9 +527,11 @@ public class TBTerm {
         }
         return factory.makeAppl(afun, vargs);
       case ATerm.LIST :
-        ATermList lst = factory.makeList();
-        for (int i = ((ATermList) t).getLength() - 1; i >= 0; i--) {
-          lst = factory.makeList(substitute(((ATermList) t).elementAt(i), env), lst);
+ 
+        ATermList lst = TBTerm.factory.makeList();
+        ATermList tlst = (ATermList) t;
+        for (int i = tlst.getLength() - 1; i >= 0; i--) {
+          lst = lst.insert(substitute(tlst.elementAt(i), env));
         }
         return lst;
     }
@@ -653,10 +662,14 @@ public class TBTerm {
         if (((ATermList) ta).getLength() != ((ATermList) tb).getLength())
           return false;
         else {
-          for (int i = 0; i < ((ATermList) ta).getLength(); i++) {
-            if (!performMatch(((ATermList) ta).elementAt(i), ((ATermList) tb).elementAt(i)))
-              return false;
-          }
+        	ATermList lsta = (ATermList) ta;
+        	ATermList lstb = (ATermList) tb;
+        	while(!lsta.isEmpty()){
+        		if(!performMatch(lsta.getFirst(), lstb.getFirst()))
+        				return false;
+        		lsta = lsta.getNext();
+        		lstb = lstb.getNext();
+        	}
           return true;
         }
       default :
