@@ -2,47 +2,51 @@
 #include "graph-painter.idef"
 #include "config-manager/configuration-manager.idef"
 
-process HandleModuleEvent(Type: term, Event: term, Module: str) is
+process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
 let
-  Action: str
+  Action: str,
+  Modulename: str
 in
-  snd-msg(cm-get-module-action(Type, Event, Module))
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . snd-msg(cm-get-module-action(Type, Event, Modulename))
   . rec-msg(cm-module-action(Action?))
-  . Action(Module)
+  . Action(ModuleId)
 endlet
 
 process HandleModulePopup is
 let
-  Module: str,
   GraphId: str,
-  NodeId: str,
+  ModuleId: term,
+  Modulename: str,
   Menu: term,
   PopupMenu: list,
   Type: term
 in
   (
-    NAV-RequestPopup(Module?)
-    . snd-msg(cm-get-module-events(module-popup, Module))
+    NAV-RequestPopup(ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . snd-msg(cm-get-module-events(module-popup, Modulename))
     . rec-msg(cm-module-events(PopupMenu?))
-    . NAV-ShowPopup(Module, PopupMenu)
+    . NAV-ShowPopup(ModuleId, PopupMenu)
   +
-    NAV-PopupEvent(Module?, Menu?)
-    . HandleModuleEvent(module-popup, Menu, Module)
+    NAV-PopupEvent(ModuleId?, Menu?)
+    . HandleModuleEvent(module-popup, Menu, ModuleId)
   +
-    GP-RequestPopup(GraphId?, NodeId?)
+    GP-RequestPopup(GraphId?, ModuleId?)
     .
     if equal(GraphId, "import-graph") then
-      snd-msg(cm-get-module-events(module-popup, NodeId))
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+      . snd-msg(cm-get-module-events(module-popup, Modulename))
       . rec-msg(cm-module-events(PopupMenu?))
-      . GP-ShowPopup("import-graph", NodeId, PopupMenu)
+      . GP-ShowPopup("import-graph", ModuleId, PopupMenu)
     else
       tau
     fi
   +
-    GP-PopupEvent(GraphId?, NodeId?, Menu?)
+    GP-PopupEvent(GraphId?, ModuleId?, Menu?)
     .
     if equal(GraphId, "import-graph") then
-      HandleModuleEvent(module-popup, Menu, NodeId)
+      HandleModuleEvent(module-popup, Menu, ModuleId)
     else
       tau
     fi

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
@@ -54,10 +53,11 @@ import edu.berkeley.guir.prefusex.layout.RandomLayout;
 import edu.berkeley.guir.prefusex.layout.VerticalTreeLayout;
 
 public class GraphPanel extends JPanel {
-	private String id;
+	private static final String ID = "id";
+
+    private String id;
 
 	private Display display;
-	private Display overview;
 
 	private ItemRegistry registry;
 
@@ -85,8 +85,6 @@ public class GraphPanel extends JPanel {
 		
 		display = new Display(registry);
 		display.setHighQuality(true);
-		
-	
 
 		nodeRenderer = new GraphNodeRenderer();
 		nodeRenderer.setTextAttributeName("label");
@@ -110,9 +108,8 @@ public class GraphPanel extends JPanel {
 		display.addControlListener(new ControlAdapter() {
 			public void itemPressed(VisualItem gi, MouseEvent e) {
 				if (e.isPopupTrigger()) {
-					firePopupRequested(gi.getAttribute("id"), e);
+					firePopupRequested(gi.getAttribute(ID), e);
 				}
-
 			}
 
 			public void itemReleased(VisualItem gi, MouseEvent e) {
@@ -125,7 +122,7 @@ public class GraphPanel extends JPanel {
 				NodeItem n = registry
 						.getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
 								.getFirstAdded());
-				fireNodeSelected(n == null ? null : n.getAttribute("id"));
+				fireNodeSelected(n == null ? null : n.getAttribute(ID));
 
 				highlighting.runNow();
 			}
@@ -171,7 +168,7 @@ public class GraphPanel extends JPanel {
 	}
 
 	private void createVisualEffects(Preferences prefs) {
-		setPolarAnimation();
+		setNoAnimation();
 		createHighlighter(prefs);
 	}
 
@@ -295,7 +292,7 @@ public class GraphPanel extends JPanel {
 	}
 
 	protected void firePopupRequested(String nodeId, MouseEvent e) {
-		listener.popupRequested(nodeId, e);
+        listener.popupRequested(nodeId, e);
 	}
 
 	void setGraph(Graph graph) {
@@ -310,7 +307,7 @@ public class GraphPanel extends JPanel {
 
 		while (iter.hasNext()) {
 			DefaultNode node = (DefaultNode) iter.next();
-			if (node.getAttribute("id").equals(nodeId)) {
+			if (node.getAttribute(ID).equals(nodeId)) {
 				registry.getFocusManager().getDefaultFocusSet().set(node);
 			}
 		}

@@ -1,5 +1,5 @@
-#ifndef _GUI_NAVIGATOR
-#define _GUI_NAVIGATOR
+#ifndef _GUI_NAVIGATOR_
+#define _GUI_NAVIGATOR_
 
 tool navigator is { }
 
@@ -7,8 +7,8 @@ process Navigator is
 let
   Menu: term,
   Graph: term,
-  Module: str,
-  Modules : list,
+  ModuleId: term,
+  ImportGraph : term,
   PopupMenu: list,
   Str : str,
   T: navigator
@@ -16,26 +16,26 @@ in
   rec-connect(T?)
   .
     (
-      rec-msg(nav-set-modules(Modules?))
-      . snd-do(T, set-modules(Modules))
+      rec-msg(nav-set-modules(ImportGraph?))
+      . snd-do(T, set-modules(ImportGraph))
     +
-      rec-msg(nav-select-module(Module?))
-      . snd-do(T, select-module(Module))
+      rec-msg(nav-select-module(ModuleId?))
+      . snd-do(T, select-module(ModuleId))
     +
-      rec-event(T, module-selected(Module?))
-      . snd-note(nav-module-selected(Module))
-      . snd-ack-event(T, module-selected(Module))
+      rec-event(T, module-selected(ModuleId?))
+      . snd-note(nav-module-selected(ModuleId))
+      . snd-ack-event(T, module-selected(ModuleId))
     +
-      rec-event(T, request-popup-event(Module?))
-      . snd-msg(nav-request-popup-event(Module))
-      . snd-ack-event(T, request-popup-event(Module))
+      rec-event(T, request-popup-event(ModuleId?))
+      . snd-msg(nav-request-popup-event(ModuleId))
+      . snd-ack-event(T, request-popup-event(ModuleId))
     +
-      rec-msg(nav-show-popup(Module, PopupMenu?))
-      . snd-do(T, show-popup(Module, PopupMenu))
+      rec-msg(nav-show-popup(ModuleId, PopupMenu?))
+      . snd-do(T, show-popup(ModuleId, PopupMenu))
     +
-      rec-event(T, popup-menu-event(Module?, Menu?))
-      . snd-msg(nav-menu-selected(Module, Menu))
-      . snd-ack-event(T, popup-menu-event(Module, Menu))
+      rec-event(T, popup-menu-event(ModuleId?, Menu?))
+      . snd-msg(nav-menu-selected(ModuleId, Menu))
+      . snd-ack-event(T, popup-menu-event(ModuleId, Menu))
     )
     *
       rec-disconnect(T)
@@ -44,18 +44,15 @@ endlet
 process NAV-AddListener is
   subscribe(nav-module-selected(<str>))
 
-
-
-
-process NAV-RequestPopup(ModuleId: str?) is
+process NAV-RequestPopup(ModuleId: term?) is
   rec-msg(nav-request-popup-event(ModuleId?))
 
-process NAV-ShowPopup(ModuleId: str, PopupMenu: list) is
+process NAV-ShowPopup(ModuleId: term, PopupMenu: list) is
   snd-msg(nav-show-popup(ModuleId, PopupMenu))
 
-process NAV-PopupEvent(ModuleId: str?, MenuItem: term?) is
+process NAV-PopupEvent(ModuleId: term?, MenuItem: term?) is
   rec-msg(nav-menu-selected(ModuleId?, MenuItem?))
 
 toolbus(Navigator)
 
-#endif
+#endif /*_GUI_NAVIGATOR_*/

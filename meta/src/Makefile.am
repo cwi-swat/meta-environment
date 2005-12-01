@@ -23,6 +23,7 @@ CLEANFILES  = generic-meta meta.1
 	     s@__TIDE_SUPPORT__@$(TIDE_SUPPORT)@g;\
 	     s@__PANDORA__@$(PANDORA)@g;\
 	     s@__CONFIG_MANAGER__@$(CONFIG_MANAGER)@g;\
+	     s@__MODULE_MANAGER__@$(MODULE_MANAGER)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
 	chmod +x $@

@@ -4,14 +4,15 @@
 process StandalonePtDumper is
 let
   ErrorMessage: str,
+  ModuleId: term,
   Pid: int
 in
   create(StatusDisplay, Pid?)
   . create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
-  . OpenModules([MODULENAME], sdf)
-  . DumpParseTable(MODULENAME, OUTFILENAME, trm))
+  . OpenModule(MODULENAME, ModuleId?)
+  . DumpParseTable(ModuleId, OUTFILENAME, trm)
   .
   if equal(SAVING, "true") then
     snd-msg(save-termstore)

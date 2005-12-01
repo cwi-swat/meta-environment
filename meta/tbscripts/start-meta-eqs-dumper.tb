@@ -5,6 +5,7 @@
 process StandaloneEqsDumper is
 let
   ErrorMessage: str,
+  ModuleId: term,
   Pid: int
 in
   create(StatusDisplay, Pid?)
@@ -12,8 +13,8 @@ in
   . create(StandaloneErrorList, Pid?)
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
-  . OpenModules([MODULENAME], sdf)
-  . snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME))
+  . OpenModules(MODULENAME, ModuleId?)
+  . snd-msg(dump-equations-given-file(ModuleId, OUTFILENAME))
   . rec-msg(equations-dumped)
   .
   if equal(SAVING, "true") then

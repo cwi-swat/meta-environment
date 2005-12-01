@@ -1,8 +1,138 @@
 # $Id$
 
+Thu Dec  1 08:36:53 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb: pass modulename over which a term is edited to editor
+ * gui/plugins/navigator: use statusbar
+
+Mon Nov 28 08:15:45 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/status-to-progress.tb:
+   - Use new progress window
+
+Wed Nov 23 08:15:31 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/open-modules.tb:
+   - Use listener to annotate tree after parsing
+ * gui/plugins/progress:
+   - Progress plugin shows progress of a scenario 
+
+Tue Nov 22 11:10:33 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Add worklist counter that only draws the import graph when there is no
+     work left
+ * tbscripts/open-modules.tb:
+   - Fix bug in IsLibraryModule
+ * tbscripts/*.tb:
+   - Add #includes
+
+Mon Nov 21 16:14:38 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - When module is a librarymodule set editor to readonly
+
+Wed Nov 16 08:33:37 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/asfsdf-module-actions.tb:
+   - Use ModuleId through scenarios
+
+Mon Nov 14 08:50:04 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/{gui-actions,graph-utils}.tb:
+   - Remove unused name argument in call to ShowTree and graphconverter
+ * gui/plugin/dialog/src/nl/cwi/sen1/gui/plugin/Dialog.java:
+   - Add filefilter to filechooser
+ * in-output/src/main.{idef,c}:
+   - Add function get-relative-filename that returns the filename relatave to
+   one of the searchpaths
+ * gui/plugin/dialog/src/nl/cwi/sen1/gui/plugin/GraphPanel.java:
+   - Set no animation as default
+
 Wed Nov  9 09:22:36 CET 2005 <jurgenv@cwi.nl>
  * Added possibility for exporting pictures from the graph viewer.
  * Added rendering of curved edges to graph viewer (computed by graphviz).
+
+Fri Nov  4 11:56:38 CET 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Reduce term scenario works with ModuleIds
+
+Thu Nov  3 11:35:26 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/parse-actions.tb:
+   - Remove unused ParseString and handler
+ * tbscripts/term-editor-actions.tb:
+   - Inline ActionEditTerm process
+   - Use moduleId
+
+Wed Nov  2 10:06:18 CET 2005 <kooiker@cwi.nl>
+ * in-output/src/main.c:
+   - get-path-filename returns the true filename without prefixes
+ * tbscripts/open-modules.tb:
+   - add Tree setters and getters for equations
+   - ReplaceExtension simplified
+ * tbscripts/asf-editor-actions.tb:
+   - Use SetModulePath for setting the path, which also casts the string path
+     to a term path
+ * tbscripts/editing.tb:
+   - remove process GetEquationsTree, use getter in stead
+ * tbscripts/term-actions.tb:
+   - SplitFileName does not use search paths anymore
+ * tbscripts/get-parsetable.tb,process-eqs.tb:
+   - Remove Checking parameter: a listener pattern has yet to be introduced
+
+Tue Nov  1 11:50:01 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/module-utils.tb
+   - Removed computation of recursive closing of modules
+ * tbscripts/module-manager.tb
+   - Add interface process to get-closable-modules
+
+Mon Oct 31 15:18:33 CET 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Close a single module works again
+
+Wed Oct 26 10:00:55 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/parse-actions.tb:
+   - Change the deletion of the dependencies before parsing to setting the
+     status attribute of the module to unknown
+ * gui/plugins/navigator/src:
+   - Show ModuleId in navigator tree when label has not been set yet
+
+Tue Oct 25 13:22:25 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/scenarios:
+   - Add NonExistingImport scenario
+ * tbscipts:
+   - Edit syntax of nonexisting module results in creating this module
+ * gui/plugins/navigator/src:
+   - Return ModuleId on mouseclick
+   - Display label iso moduleid
+
+Tue Oct 11 15:19:09 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts/scenarios:
+   - Test directory for common scenarios
+
+Tue Oct 11 11:17:51 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Add dependencies-changed-event api
+
+Tue Oct  4 11:09:56 CEST 2005 <markvdb@cwi.nl>
+ * in-output/src
+   - get-filename uses the search directories.
+ * tbscripts
+   - search directories obtained and passed on to IO.
+ * tbscripts
+   - improved the editing of syntaxes. It is not yet
+     finished.
+
+Thu Sep 22 16:36:29 CEST 2005 <kooiker@cwi.nl>
+ * Use moduleId of type term
+ * tbscripts/start-meta-studio.tb.src:
+   - remove reference to removed sdf-import-graph.idef
+
+Mon Sep 19 12:45:14 CEST 2005 <{kooiker,markvdb}@cwi.nl>
+ * tbscripts:
+   - Use term type for moduleId
+   - Split asfsdf-editor-actions into asf and sdf actions
+
+Tue Sep 13 14:37:57 CEST 2005 <kooiker@cwi.nl>
+ * tbscripts:
+   - Introduced producer/consumer observer pattern
+   - Add manual written api for attribute-changed-event as an example for a
+     future toolbusscript api generator
+   - attribute-changed-event includes unittests
+   - Add assert library for unit tests
 
 Wed Sep  7 11:46:54 CEST 2005 <kooiker@cwi.nl>
  * tbscripts/start-meta-studio.tb.src:
@@ -14,6 +144,12 @@ Wed Sep  7 11:46:54 CEST 2005 <kooiker@cwi.nl>
 Tue Sep  6 09:43:03 CEST 2005 <kooiker@cwi.nl>
  * configure.ac:
    - Add error-gui to EXTERNAL_JARS
+
+Wed Aug 31 15:35:48 CEST 2005 <{markvdb,kooiker}@cwi.nl>
+ * module-manager.tb: Add interface to module-manager
+
+Fri Aug 26 11:21:42 CEST 2005 <kooiker@cwi.nl>
+ * Factored out module-manager to module-manager package
 
 Tue Aug 23 13:46:23 CEST 2005 <kooiker@cwi.nl>
  * configuration-manager:

@@ -10,12 +10,12 @@
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<editor-manager>,create-session(<str>))",
   "rec-eval(<editor-manager>,get-path(<term>))",
-  "rec-eval(<editor-manager>,bind-session(<term>,<str>))",
-  "rec-eval(<editor-manager>,get-modulename(<term>))",
+  "rec-eval(<editor-manager>,bind-session(<term>,<term>))",
+  "rec-eval(<editor-manager>,get-moduleid(<term>))",
   "rec-do(<editor-manager>,register-editor(<term>,<term>))",
   "rec-eval(<editor-manager>,is-editor-registered(<term>,<term>))",
   "rec-do(<editor-manager>,unregister-editor(<term>,<term>))",
-  "rec-eval(<editor-manager>,get-sessions-by-modulename(<str>))",
+  "rec-eval(<editor-manager>,get-sessions-by-moduleid(<term>))",
   "rec-eval(<editor-manager>,get-session-by-path(<str>))",
   "rec-do(<editor-manager>,delete-session(<term>))",
   "rec-eval(<editor-manager>,request-transaction(<term>))",
@@ -42,17 +42,17 @@ ATerm editor_manager_handler(int conn, ATerm term)
     register_editor(conn, t0, t1);
     return NULL;
   }
-  if(ATmatch(term, "rec-eval(get-sessions-by-modulename(<str>))", &s0)) {
-    return get_sessions_by_modulename(conn, s0);
+  if(ATmatch(term, "rec-eval(get-sessions-by-moduleid(<term>))", &t0)) {
+    return get_sessions_by_moduleid(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-modulename(<term>))", &t0)) {
-    return get_modulename(conn, t0);
+  if(ATmatch(term, "rec-eval(get-moduleid(<term>))", &t0)) {
+    return get_moduleid(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-session-by-path(<str>))", &s0)) {
     return get_session_by_path(conn, s0);
   }
-  if(ATmatch(term, "rec-eval(bind-session(<term>,<str>))", &t0, &s0)) {
-    return bind_session(conn, t0, s0);
+  if(ATmatch(term, "rec-eval(bind-session(<term>,<term>))", &t0, &t1)) {
+    return bind_session(conn, t0, t1);
   }
   if(ATmatch(term, "rec-do(delete-session(<term>))", &t0)) {
     delete_session(conn, t0);

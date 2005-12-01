@@ -1,0 +1,18 @@
+
+process EditorEditSyntaxAction(EditorId : term) is
+let 
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditSyntaxAction(ModuleId)
+endlet
+
+process EditSyntaxAction(ModuleId : term) is
+let
+  Pid: int,
+  Sid: term
+in
+  create(EditSyntax(ModuleId), Pid?)
+  . rec-msg(syntax-editor-started(ModuleId, Sid?))
+  . create(CleanupEditTerm(Sid, ModuleId), Pid?)
+endlet

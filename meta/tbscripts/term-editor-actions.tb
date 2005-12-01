@@ -1,40 +1,37 @@
-
-process ActionEditTerm(Filename : str, Modulename : str) is
-let
-  Sid: term,
-  Pid: int,
-  ErrorMessage : str
-in
-  create(EditTerm(Filename, Modulename), Pid?)
-  .
-  (
-    rec-msg(term-editor-started(Filename, Modulename, Sid?))
-    . create(CleanupEditTerm(Sid, Filename), Pid?)
-  +
-    rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
-    . Error(ErrorMessage, [])
-  )
-endlet
+#include <module-manager.tb>
+#include <sdf-namespace.h>
 
 process EditorEditTermAction(EditorId : term) is
 let
-  Modulename : str
+  ModuleId : term
 in
-  GetActiveModule(EditorId, Modulename?)
-  . EditTermAction(Modulename)
+  GetModuleId(EditorId, ModuleId?)
+  . EditTermAction(ModuleId)
 endlet
 
-process EditTermAction(Modulename : str) is
+process EditTermAction(ModuleId : term) is
 let
   Cancel: bool,
-  Filename: str
+  ErrorMessage: str,
+  Filename: str,
+  Modulename: str,
+  Pid: int,
+  Sid: term
 in
-  PromptForFile("Edit Term", "", Modulename, Cancel?, Filename?)
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . PromptForFile("Edit Term", "", Modulename, Cancel?, Filename?)
   . 
   if equal(Cancel, true) then
     tau
   else
-    ActionEditTerm(Filename, Modulename)
-    . printf("Edit term")
+    create(EditTerm(Filename, ModuleId), Pid?)
+    .
+    (
+      rec-msg(term-editor-started(Filename, ModuleId, Sid?))
+      . create(CleanupEditTerm(Sid, Filename), Pid?)
+    +
+      rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
+      . Error(ErrorMessage, [])
+    )
   fi
 endlet

@@ -1,45 +1,48 @@
-process CloseModule(ModuleId: str, Recursive: bool) is
+#include <module-manager.tb>
+
+process CloseModule(ModuleId: term, Recursive: bool) is
 let
-  Depending: list,
+  Dependencies: list,
   Id: int,
-  ToBeClosed: list
+  Modulename: str,
+  CloseModules: list,
+  NewTerm: term
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Closing %s", [ModuleId])))
+  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
   .
   if equal(Recursive, true) then
-    ComputeModulesToBeClosed(ModuleId, ToBeClosed?)
+    MM-GetClosableModules(ModuleId, CloseModules?)
     .
-    if equal(ToBeClosed, []) then
-      Error("Unable to close %s, it would break some import(s).", [ModuleId])
+    if equal(CloseModules, []) then
+      Error("Unable to close %s, it would break some import(s).", [Modulename])
     else
-      CloseModules(ToBeClosed)
+      CloseModules(CloseModules)
     fi
   else
-    GetDependingModules(ModuleId, Depending?)
+    MM-GetModuleDependencies(ModuleId, Dependencies?)
     .
-    if equal(Depending, []) then
+    if equal(Dependencies, []) then
       CloseModules([ModuleId])
     else
       Error("Unable to close %s, it would break the import of: %t",
-            [ModuleId, Depending])
+            [Modulename, Dependencies])
     fi
   fi
-  . snd-note(ui-status(endstat(Id)))
 endlet
 
-process CloseModules(ToBeClosed: list) is
+process CloseModules(CloseModules: list) is
 let
-  ModuleId: str,
+  ModuleId: term,
   Modules: list
 in
-  Modules := ToBeClosed
+  Modules := quote(CloseModules)
+  . TODO("why quote previous statement")
   .
   if not-equal(Modules, []) then
     ModuleId := first(Modules)
     . DeleteSessions(ModuleId)
-    . snd-msg(close-module-in-db(ModuleId))
-    . rec-msg(module-closed(ModuleId))
+    . MM-DeleteModule(ModuleId)
     . Modules := next(Modules)
   fi
   *
@@ -54,43 +57,13 @@ let
 in
   snd-msg(ts-get-key-value-pairs("import-relations"))
   . rec-msg(ts-pairs(ImportRelations?))
-  . snd-msg(sm-get-all-depending-module-names(ImportRelations, ModuleId))
-  . rec-msg(sm-all-depending-module-names(DependingModules?))
+  . TODO("GetDependingModules can be removed?")
+  /*. snd-msg(sm-get-all-depending-module-names(ImportRelations, ModuleId))*/
+  /*. rec-msg(sm-all-depending-module-names(DependingModules?))*/
 endlet
 
-process ComputeModulesToBeClosed(ModuleId: str, ToBeClosed: list?) is
+process DeleteModule(Modulename: str) is
 let
-  Depending: list,
-  CurModule: str,
-  Imports: list,
-  Needed: list,
-  Runner: list
-in
-  snd-msg(get-all-imported-module-names(ModuleId))
-  . rec-msg(all-imported-module-names(Imports?))
-  . Needed := []
-  . Runner := Imports
-  .
-  if not-equal(Runner, []) then
-    CurModule := first(Runner)
-    . GetDependingModules(CurModule, Depending?)
-    . Runner := next(Runner)
-    .
-    if not(subset(Depending, Imports)) then
-      Needed := join(CurModule, Needed)
-    else
-      tau
-    fi
-  fi
-  *
-  if equal(Runner, []) then
-    ToBeClosed := diff(Imports, Needed)
-  fi
-endlet
-
-process DeleteModule(ModuleName: str) is
-let
-  Directories: list,
   Changed: list,
   Id: int,
   Path: str,
@@ -98,27 +71,25 @@ let
   Status: term
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Deleting %s", [ModuleName])))
-  . snd-msg(get-module-paths)
-  . rec-msg(module-paths(Directories?))
+  . snd-note(ui-status(statf(Id, "Deleting %s", [Modulename])))
   . snd-msg(file-extension-hook(sdf))
   . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(get-path-from-db(ModuleName))
+  . snd-msg(get-path-from-db(Modulename))
   .
   (
     rec-msg(path(Path?))
-    . RemoveModuleFromDisk(Path, ModuleName)
+    . RemoveModuleFromDisk(Path, Modulename)
   +
     rec-msg(no-path)
   )
-  . DeleteSessions(ModuleName)
-  . snd-msg(delete-module-from-db(ModuleName))
+  . DeleteSessions(Modulename)
+  . snd-msg(delete-module-from-db(Modulename))
   . rec-msg(changed-modules(Changed?))
   . SaveSdfModules(Changed, Status?)
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process RenameModule(ModuleId: str, Directory: str, Filename: str) is
+process RenameModule(Modulename: str, Directory: str, Filename: str) is
 let
   Extension: str,
   Id: int,
@@ -126,25 +97,26 @@ let
   Path: str
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Renaming %s", [ModuleId])))
-  . CopySdfModule(ModuleId, Directory, Filename)
-  . CopyAsfModule(ModuleId, Directory, Filename)
+  . snd-note(ui-status(statf(Id, "Renaming %s", [Modulename])))
+  . CopySdfModule(Modulename, Directory, Filename)
+  . CopyAsfModule(Modulename, Directory, Filename)
   . snd-msg(file-extension-hook(sdf))
   . rec-msg(file-extension-hook-result(Extension?))
   . BuildPath(Directory, Filename, Extension, Path?)
-  . GetModuleForPath(Path, NewModule?)
-  . RenameImports(ModuleId, NewModule)
-  . DeleteModule(ModuleId)
+  /*. GetModuleForPath(Path, NewModule?)*/
+  . RenameImports(Modulename, NewModule)
+  . DeleteModule(Modulename)
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process CreateModule(Pid: int, Directory: str, Filename: str, Type: term) is
+process CreateNewModule(Pid: int, Directory: str, Filename: str, Type: term) is
 let
   BaseDir: str,
   Contents: list,
   Error: term,
   Extension: str,
-  ModuleId: str,
+  ModuleId: term,
+  Modulename: str,
   Path: str,
   SearchPaths: list
 in
@@ -153,69 +125,67 @@ in
   . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
   .
   (
-    rec-msg(sm-new-module-name(BaseDir?, ModuleId?))
-    . snd-msg(is-module-in-db(ModuleId))
+    rec-msg(sm-new-module-name(BaseDir?, Modulename?))
+    . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
     .
-    (
-      rec-msg(exists-in-module-db(ModuleId))
-      . CancelCreateModule(Pid, "Module %s already exists", [ModuleId])
-    +
-      rec-msg(not-exists-in-module-db(ModuleId))
-      . snd-msg(file-extension-hook(Type))
+    if equal(ModuleId, UNDEFINED) then
+      snd-msg(file-extension-hook(Type))
       . rec-msg(file-extension-hook-result(Extension?))
-      . BuildPath(BaseDir, ModuleId, Extension, Path?)
+      . BuildPath(BaseDir, Modulename, Extension, Path?)
       . snd-msg(io-exists-file(Path))
       .
       (
         rec-msg(io-file-exists)
-        . CancelCreateModule(Pid, "File %s already exists", [Path])
+        . CancelCreateNewModule(Pid, "File %s already exists", [Path])
       +
         rec-msg(io-file-not-exists)
-        . snd-msg(get-module-contents(Pid, ModuleId))
+        . snd-msg(get-module-contents(Pid, Modulename))
         . rec-msg(module-contents(Pid, Contents?))
         . snd-msg(io-write-text-list(Path, Contents))
         .
         (
           rec-msg(io-file-written)
-          . OpenModule(Path, Type, ModuleId)
+          . OpenModule(Modulename, ModuleId?)
         +
           rec-msg(io-file-not-written(Error?))
           . snd-note(ui-status(errorf("%s: %s", [Path, Error])))
         )
       )
-    )
+    else
+      CancelCreateNewModule(Pid, "Module %s already exists", [Modulename])
+    fi
   +
     rec-msg(sm-new-module-name-inconsistent)
-    . CancelCreateModule(Pid,
+    . CancelCreateNewModule(Pid,
                          "Module %s in %s is inconsistent with module paths",
-                         [ModuleId, Path])
+                         [Modulename, Path])
   )
 endlet
 
-process CancelCreateModule(Pid: int, Error: str, Args: list) is
+process CancelCreateNewModule(Pid: int, Error: str, Args: list) is
   snd-note(ui-status(errorf(Error, Args)))
   . snd-msg(cancel-content-handler(Pid))
 
-process CopySdfModule(SrcModuleId: str, Directory: str, Filename: str) is
+process CopySdfModule(SrcModulename: str, Directory: str, Filename: str) is
 let
   Id: int,
   Pid: int
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Copying %s to %s", [SrcModuleId, Filename])))
-  . create(CopySdfContentHandler(SrcModuleId), Pid?)
-  . CreateModule(Pid, Directory, Filename, sdf)
+  . snd-note(ui-status(statf(Id, "Copying %s to %s", [SrcModulename, Filename])))
+  . create(CopySdfContentHandler(SrcModulename), Pid?)
+  . CreateNewModule(Pid, Directory, Filename, sdf)
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process CopyAsfModule(SrcModuleId: str, Directory: str, Filename: str) is
+process CopyAsfModule(SrcModulename: str, Directory: str, Filename: str) is
 let
   DestPath: str,
   Error: str,
   Extension: str,
   SrcPath: str
 in
-  LocateFile(SrcModuleId, asf, SrcPath?)
+  LocateFile(SrcModulename, asf, SrcPath?)
   . snd-msg(io-exists-file(SrcPath))
   .
   (
@@ -244,20 +214,20 @@ in
   )
 endlet
 
-process CopySdfContentHandler(SrcModuleId: str) is
+process CopySdfContentHandler(SrcModulename: str) is
 let
   Contents: str,
-  DestModuleId: str,
+  DestModulename: str,
   Pid: int,
   Syntax: term
 in
   Pid := process-id
   .
   (
-    rec-msg(get-module-contents(Pid, DestModuleId?))
-    . snd-msg(ts-get-term-value("sdf-tree", SrcModuleId))
+    rec-msg(get-module-contents(Pid, DestModulename?))
+    . snd-msg(ts-get-term-value("sdf-tree", SrcModulename))
     . rec-msg(ts-value(Syntax?))
-    . snd-msg(sm-rename-modulename-in-module(Syntax, DestModuleId))
+    . snd-msg(sm-rename-modulename-in-module(Syntax, DestModulename))
     . rec-msg(sm-modulename-renamed-in-module(Syntax?))
     . snd-msg(unparse(Syntax))
     . rec-msg(unparsed-text(Contents?))
@@ -267,28 +237,28 @@ in
   )
 endlet
 
-process AddImport(ModuleId: str, Import: str) is
+process AddImport(Modulename: str, Import: str) is
 let
   Depending: list,
   Status: term
 in
-  DeleteSessions(ModuleId)
-  . GetDependingModules(ModuleId, Depending?)
+  DeleteSessions(Modulename)
+  . GetDependingModules(Modulename, Depending?)
   . MDB-InvalidateModules(Depending, sdf)
-  . AddImportInDB(ModuleId, Import)
-  . SaveAsfSdfModule(ModuleId, Status?)
+  . AddImportInDB(Modulename, Import)
+  . SaveAsfSdfModule(Modulename, Status?)
 endlet
 
-process RemoveImport(ModuleId: str, Import: str) is
+process RemoveImport(Modulename: str, Import: str) is
 let
   Depending: list,
   Status: term
 in
-  DeleteSessions(ModuleId)
-  . GetDependingModules(ModuleId, Depending?)
+  DeleteSessions(Modulename)
+  . GetDependingModules(Modulename, Depending?)
   . MDB-InvalidateModules(Depending, sdf)
-  . RemoveImportInDB(ModuleId, Import)
-  . SaveAsfSdfModule(ModuleId, Status?)
+  . RemoveImportInDB(Modulename, Import)
+  . SaveAsfSdfModule(Modulename, Status?)
 endlet
 
 process SaveSdfModules(Modules: list, Status: term?) is
@@ -310,22 +280,22 @@ in
   fi
 endlet
 
-process SaveAsfSdfModule(Module: str, Status: term?) is
-  snd-msg(save-module(Module, asfsdf))
-  . rec-msg(saved-module(Module, Status?))
+process SaveAsfSdfModule(Modulename: str, Status: term?) is
+  snd-msg(save-module(Modulename, asfsdf))
+  . rec-msg(saved-module(Modulename, Status?))
 
-process RemoveModuleFromDisk(Directory: str, Module: str) is
+process RemoveModuleFromDisk(Directory: str, Modulename: str) is
 let
   Extension: str,
   Path: str
 in
   snd-msg(file-extension-hook(sdf))
   . rec-msg(file-extension-hook-result(Extension?))
-  . BuildPath(Directory, Module, Extension, Path?)
+  . BuildPath(Directory, Modulename, Extension, Path?)
   . RemoveFile(Path)
   . snd-msg(file-extension-hook(asf))
   . rec-msg(file-extension-hook-result(Extension?))
-  . BuildPath(Directory, Module, Extension, Path?)
+  . BuildPath(Directory, Modulename, Extension, Path?)
   . snd-msg(io-exists-file(Path))
   .
   (
@@ -358,33 +328,33 @@ in
   fi
 endlet
 
-process RenameImport(ModuleId: str, OldImport: str, NewImport: str) is
+process RenameImport(Modulename: str, OldImport: str, NewImport: str) is
 let
   Status: term,
   Tree: term
 in
-  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
+  snd-msg(ts-get-term-value("sdf-tree", Modulename))
   . rec-msg(ts-value(Tree?))
   . snd-msg(sm-remove-import-from-module(Tree, OldImport))
   . rec-msg(sm-import-removed-from-module(Tree?))
   . snd-msg(sm-add-import-to-module(Tree, NewImport))
   . rec-msg(sm-import-added-to-module(Tree?))
-  . MDB-StoreModuleTree(ModuleId, Tree)
-  . snd-msg(save-module(ModuleId, sdf))
-  . rec-msg(saved-module(ModuleId, Status?))
+  . MDB-StoreModuleTree(Modulename, Tree)
+  . snd-msg(save-module(Modulename, sdf))
+  . rec-msg(saved-module(Modulename, Status?))
 endlet
 
-process AddImportInDB(Mod: str, Import: str) is
-  snd-msg(add-import-in-db(Mod, Import))
-  . rec-msg(add-import-done(Mod))
+process AddImportInDB(Modulename: str, Import: str) is
+  snd-msg(add-import-in-db(Modulename, Import))
+  . rec-msg(add-import-done(Modulename))
 
-process RemoveImportInDB(Mod: str, Import: str) is
-  snd-msg(remove-import-in-db(Mod, Import))
+process RemoveImportInDB(Modulename: str, Import: str) is
+  snd-msg(remove-import-in-db(Modulename, Import))
   . rec-msg(remove-import-done)
 
-process CheckSyntaxConsistency(ModuleName: str, Path: str, Type: term) is
+process CheckSyntaxConsistency(Modulename: str, Path: str, Type: term) is
 let
-  FileName: str,
+  Filename: str,
   FileText: str,
   Tree: term,
   DependingModules: list,
@@ -394,17 +364,17 @@ let
 in
   snd-msg(file-extension-hook(Type))
   . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Path, ModuleName, Extension))
-  . rec-msg(io-filename(FileName?))
-  . snd-msg(io-exists-file(FileName))
+  . snd-msg(io-get-filename(Path, Modulename, Extension))
+  . rec-msg(io-filename(Filename?))
+  . snd-msg(io-exists-file(Filename))
   .
   (
     rec-msg(io-file-exists)
-    . snd-msg(io-read-file(FileName))
+    . snd-msg(io-read-file(Filename))
     .
     (
       rec-msg(io-file-contents(FileText?))
-      . snd-msg(update-module-text-in-db(ModuleName, FileText, no-tree, Type))
+      . snd-msg(update-module-text-in-db(Modulename, FileText, UNDEFINED, Type))
       .
       (
 	rec-msg(no-updating-needed)
@@ -413,15 +383,15 @@ in
 	. printf("this bites\n")
 	.
 	if equal(Error, no-errors) then
-	  snd-msg(update-module-in-db(ModuleName, Tree, Type))
+	  snd-msg(update-module-in-db(Modulename, Tree, Type))
 	  .
 	  (
 	    rec-msg(updating-succeeded(Imports?))
-	    . OpenModules(Imports, Type)
+	    /*. OpenModules(Imports, Type)*/
 	  +
-	    rec-msg(error-opening(ModuleName, name-inconsistent))
+	    rec-msg(error-opening(Modulename, name-inconsistent))
 	    . Error("Check consistency: module name %s contains an error",
-		    [ModuleName])
+		    [Modulename])
 	  )
 	else
 	  printf("CheckSyntaxConsistency: error ignored: %t\n", Error)
@@ -430,19 +400,19 @@ in
     +
       rec-msg(io-error-reading(Error?))
       . printf("TODO: fix this error message %t\n", Error)
-      . snd-msg(close-module-in-db(ModuleName))
-      . rec-msg(module-closed(ModuleName))
+      . snd-msg(close-module-in-db(Modulename))
+      . rec-msg(module-closed(Modulename))
     )
   +
     rec-msg(io-file-not-exists)
-    . snd-msg(close-module-in-db(ModuleName))
-    . rec-msg(module-closed(ModuleName))
+    . snd-msg(close-module-in-db(Modulename))
+    . rec-msg(module-closed(Modulename))
   )
 endlet
 
-process CheckEquationConsistency(ModuleName: str, Path: str) is
+process CheckEquationConsistency(Modulename: str, Path: str) is
 let
-  FileName: str,
+  Filename: str,
   FileText: str,
   RepositoryText: str,
   Extension: str,
@@ -450,50 +420,50 @@ let
 in
   snd-msg(file-extension-hook(asf))
   . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Path, ModuleName, Extension))
-  . rec-msg(io-filename(FileName?))
-  . snd-msg(io-exists-file(FileName))
+  . snd-msg(io-get-filename(Path, Modulename, Extension))
+  . rec-msg(io-filename(Filename?))
+  . snd-msg(io-exists-file(Filename))
   .
   (
     rec-msg(io-file-exists)
-    . snd-msg(io-read-file(FileName))
+    . snd-msg(io-read-file(Filename))
     .
     (
       rec-msg(io-file-contents(FileText?))
-      . snd-msg(update-eqs-text-in-db(ModuleName, FileText))
-      . rec-msg(eqs-text-updated(ModuleName))
+      . snd-msg(update-eqs-text-in-db(Modulename, FileText))
+      . rec-msg(eqs-text-updated(Modulename))
     +
       rec-msg(io-error-reading(Error?))
       . printf("TODO: fix this error %t\n", Error)
     )
   +
     rec-msg(io-file-not-exists)
-    . snd-msg(get-eqs-text(ModuleName))
+    . snd-msg(get-eqs-text(Modulename))
     .
     (
-      rec-msg(eqs-text(ModuleName, RepositoryText?))
-      . snd-msg(remove-eqs-from-db(ModuleName))
+      rec-msg(eqs-text(Modulename, RepositoryText?))
+      . snd-msg(remove-eqs-from-db(Modulename))
       . rec-msg(eqs-removed-from-db)
     +
-      rec-msg(no-eqs-text(ModuleName))
+      rec-msg(no-eqs-text(Modulename))
     )
   )
 endlet
 
 
-process CheckModuleConsistency(ModuleName: str) is
+process CheckModuleConsistency(Modulename: str) is
 let
   Directory: str,
   Extension: str,
   Path: str,
   Type: term
 in
-  snd-msg(get-path-from-db(ModuleName))
+  snd-msg(get-path-from-db(Modulename))
   . rec-msg(path(Path?))
   /* Motivation for the do-consistency-check-hook
      How to do consistency check is package dependent. E.g. an ASDF module
      should not be checked the same way as an asf+sdf module. */
-  . snd-msg(do-consistency-check-hook(ModuleName, Path))
+  . snd-msg(do-consistency-check-hook(Modulename, Path))
   . rec-msg(do-consistency-check-hook-result)
 endlet
 

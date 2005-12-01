@@ -1,36 +1,18 @@
-#include "meta/dialog.idef"
-
 process StatusToProgress is
 let
-  Arguments: list,
-  Id: term,
-  Message: str,
-  ProgressId: term
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Name: str,
+  Value: term
 in
-  subscribe(ui-status(<term>))
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
   .
   (
-    (
-      rec-note(ui-status(start(ProgressId?, Message?)))
-      . ShowProgressDialog(Message)
-      .
-      (
-        rec-note(ui-status(statf(Id?, Message?, Arguments?)))
-	. ShowProgressMessageWithArguments(Message, Arguments)
-      +
-	rec-note(ui-status(stat(Id?, Message?)))
-	. ShowProgressMessage(Message)
-      ) 
-      *
-      rec-note(ui-status(stop(ProgressId)))
-      . CloseProgressDialog() 
-    )
-    +
-      rec-note(ui-status(errorf(Message?, Arguments?)))
-      . ShowErrorDialogWithArguments(Message, Arguments)
-    +
-      rec-note(ui-status(error(Message)))
-      . ShowErrorDialog(Message)
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(Name, Value))
   ) * delta 
 endlet
 

@@ -1,3 +1,6 @@
+#ifndef __PARSE_FOCUSES__
+#define __PARSE_FOCUSES__
+
 process ReadFile(Path: str, Contents: str?) is
 let
   Error: term
@@ -12,8 +15,8 @@ in
   )
 endlet
 
-process AnnotateTree(Tree: term, Filename: str, AnnotatedTree: term?) is
-  snd-msg(add-posinfo-packed(Filename, Tree))
+process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
+  snd-msg(add-posinfo-packed(File, Tree))
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
 
 process HasTextChanged(Sid: term, TextChanged: bool?) is
@@ -120,3 +123,5 @@ in
     . snd-msg(parse-error(Pid, Error))
   )
 endlet
+
+#endif /*__PARSE_FOCUSES__*/

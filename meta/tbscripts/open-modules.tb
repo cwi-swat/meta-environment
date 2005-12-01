@@ -1,4 +1,13 @@
-process LocateFile(ModuleId: str, Type: term, Path: str?) is
+#include <module-manager.tb>
+#include <sdf-modules.tb>
+#include <parse-focuses.tb>
+#include <term-actions.tb>
+
+#include "sdf-namespace.h"
+
+#define EMPTY_PATH ""
+
+process LocateFile(Modulename: str, Type: term, Path: str?) is
 let
   Extension: str,
   Directory: str,
@@ -7,23 +16,9 @@ let
 in
   snd-msg(get-module-paths)
   . rec-msg(module-paths(Directories?))
-  /* Motivation for the extra-mod-path-hook
-     We need to be able to locate files outside the current directory and
-     the asf-library. Furthermore we must avoid collision with files
-     created by the user. */
-  . snd-msg(extra-mod-path-hook)
-  . rec-msg(extra-mod-path-hook-result(ExtraModules?))
-  .
-  if not-equal(ExtraModules, []) then
-    Directories := ExtraModules
-  else
-    tau
-  fi
-
-
   . snd-msg(file-extension-hook(Type))
   . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-find-file(Directories, ModuleId, Extension))
+  . snd-msg(io-find-file(Directories, Modulename, Extension))
   .
   (
     rec-msg(io-file-not-found)
@@ -34,11 +29,11 @@ in
     . Directories := next(Directories)
     .
     if not-equal(Directories, []) then
-      DealWithMultipleOccurrences(Directory, ModuleId, Extension, Directories)
+      DealWithMultipleOccurrences(Directory, Modulename, Extension, Directories)
     else
       tau
     fi
-    . BuildPath(Directory, ModuleId, Extension, Path?)
+    . BuildPath(Directory, Modulename, Extension, Path?)
   )
 endlet
 
@@ -46,16 +41,14 @@ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
   snd-msg(io-get-filename(Directory, Filename, Extension))
   . rec-msg(io-filename(Path?))
 
-process ReplaceExtension(SrcPath: str, Extension: str, DstPath: str?) is
+process ReplaceExtension(SrcPath: str, NewExtension: str, DstPath: str?) is
 let
   Directory: str,
+  OldExtension: str,
   Filename: str
 in
-  snd-msg(io-get-path-directory(SrcPath))
-  . rec-msg(io-directory(SrcPath, Directory?))
-  . snd-msg(io-get-path-filename(SrcPath))
-  . rec-msg(io-filename(SrcPath, Filename?))
-  . BuildPath(Directory, Filename, Extension, DstPath?)
+  SplitFilename(SrcPath, Filename?, Directory?, OldExtension?)
+  . BuildPath(Directory, Filename, NewExtension, DstPath?)
 endlet
 
 process DealWithMultipleOccurrences(Chosen: str, Name: str, Extension: str,
@@ -89,103 +82,172 @@ in
   fi
 endlet
 
-process OpenModule(Path: str, Type: term, ModuleId: str) is
+process IsLibraryModule(ModuleId: term, LibraryModule: bool?) is
 let
+  Directories: list,
+  Extension: str,
+  Filename: str,
   Modulename: str,
-  Imports: list
+  Path: str
 in
-  snd-note(ui-status(start(ModuleId, "Open Module")))
-  . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
-  . OpenSyntax(Path, Type)
-  . snd-msg(ts-get-str-value("path-modulename", Path))
+  snd-msg(get-library-paths)
+  . rec-msg(library-paths(Directories?))
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . snd-msg(io-get-relative-filename(Directories, Path, ".sdf"))
+  . rec-msg(io-filename(Directories, Path, ".sdf", Filename?))
   .
-  (
-    rec-msg(ts-value(Modulename?))
-    . GetModuleImports(Modulename, Imports?)
-    . OpenModules(Imports, Type)
-  +
-    rec-msg(ts-no-value)
-  )
-  . snd-note(ui-status(stop(ModuleId)))
+  if equal(Filename, "") then
+    LibraryModule := false
+  else
+    LibraryModule := true
+  fi
 endlet
 
-process OpenModules(Modules: list, Type: term) is
-let
-  Imports: list,
-  ModuleId: str,
-  Path: str,
-  Todo: list
-in
-  snd-note(ui-status(start(Modules, "Open Modules")))
-  . Todo := Modules
-  . snd-note(start-modules-batch)
+process CreateModule(Modulename: str, ModuleId: term?) is
+  MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
   .
-  if not-equal(Todo, []) then
-    ModuleId := first(Todo)
-    . Todo := next(Todo)
-    . LocateFile(ModuleId, Type, Path?)
-    .
-    if equal(Path, "") then
-      Error("Unable to locate module: %s", [ModuleId])
-    else
-      snd-msg(ts-contains-key("path-modulename", Path))
-      .
-      (
-        rec-msg(ts-contains-key)
-      +
-        rec-msg(ts-not-contains-key)
-        . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleId))
-        . OpenSyntax(Path, Type)
-        . GetModuleImports(ModuleId, Imports?)
-        . Todo := join(Imports, Todo)
-      )
-    fi
+  if equal(ModuleId, UNDEFINED) then
+    MM-CreateModule(ModuleId?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unknown)
+  else
+    tau
   fi
-  *
-  if equal(Todo, []) then
-    snd-note(end-modules-batch)
-    . snd-note(ui-status(stop(Modules)))
+
+process OpenModule(Modulename: str, ModuleId: term?) is
+let
+  Editable: bool,
+  LibraryModule: bool,
+  Path: str
+in
+  CreateModule(Modulename, ModuleId?)
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  .
+  if equal(Path, EMPTY_PATH) then
+    LocateFile(Modulename, sdf, Path?)
+    .
+    if equal(Path, EMPTY_PATH) then
+      Error("Unable to locate module: %s", [Modulename])
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
+    else
+      SetModulePath(ModuleId, SDF_NAMESPACE, Path)
+      . IsLibraryModule(ModuleId, LibraryModule?)
+      . Editable := not(LibraryModule)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+    fi
+  else
+    tau
   fi
 endlet
+
+process SDFModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",unknown,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . OpenSyntax(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleParser)
+
+process SDFSetModuleImports is
+let
+  Event: attribute-changed-event,
+  Import: str,
+  ImportId: term,
+  Imports: list,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
+    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetImportedModuleNames(Tree, Imports?)
+    .
+    if not-equal(Imports, []) then 
+      Import := first(Imports)
+      . Imports := next(Imports)
+      . OpenModule(Import, ImportId?)
+      . MM-AddModuleDependency(ModuleId, ImportId)
+    fi
+    *
+    if equal(Imports, []) then
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFSetModuleImports)
+
+process SDFRemoveDependencies is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . DeleteModuleSyntaxTree(ModuleId)
+    . MM-DeleteModuleDependencies(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFRemoveDependencies)
 
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
 
-process OpenSyntax(Path: str, Type: term) is
+process OpenSyntax(ModuleId: term) is
 let
   Error: term,
   Id: int,
-  ModuleId: str,
+  Modulename: str,
   ParseTable: term,
+  Path: str,
   Pid: int,
   Sort: term,
-  Text: str
+  Text: str,
+  Type: term
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Opening %s", [Path])))
-  . snd-msg(io-read-file(Path))
+  . Type := sdf
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . ReadFile(Path, Text?)
   .
-  (
-    rec-msg(io-file-contents(Text?))
-    . snd-msg(get-parse-table(Type))
+  if not-equal(Text, "") then
+    snd-msg(get-parse-table(Type))
     .
     (
       rec-msg(parse-table(Type, ParseTable?))
       . snd-msg(syntax-top-sort-hook(Type))
       . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-      /* Motivation for the get-open-syntax-parse-handler-hook
-         The choice of syntax parse handler is dependent of the type of module,
-         which needs to be parsed. */
-      . snd-msg(get-open-syntax-parse-handler-hook(Type, Path))
-      . rec-msg(get-open-syntax-parse-handler-hook-result(Pid?))
+      . create(OpenSyntaxParseHandler(ModuleId), Pid?)
       . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
-        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId?))
-        /* Motivation for the set-module-syntax-text-hook
-           Which table the module text needs to be saved in is depending on the
-           type of module. */
-	. snd-msg(set-module-syntax-text-hook(Type, ModuleId, Text))	
+        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId))
+        . SetModuleSyntaxText(ModuleId, Text)
       +
         rec-msg(open-syntax-parse-handler-done(Pid))
       )
@@ -193,28 +255,29 @@ in
       rec-msg(no-parse-table(Type, Error?))
       . Error("TODO fix the error No parse table: %t\n", [Error])
     )
-  +
-    rec-msg(io-error-reading(Error?))
-    . Error("TODO fix this error io-error-reading: %t\n", [Error])
-  )
+  else
+    Error("TODO fix this error io-error-reading: %t\n", [Error])
+  fi
 endlet
 
-process OpenSyntaxParseHandler(Path: str) is
+process OpenSyntaxParseHandler(ModuleId: term) is
 let
   AnnotatedTree: term,
   Directory: str,
   ErrorMessage: term,
   Extension: str,
-  Filename: str,
+  File: str,
   Imports: list,
-  ModuleId: str,
+  Modulename: str,
   ParseError: term,
   ParseResult: term,
+  Path: str,
   Pid: int,
   CheckPid: int,
   Summary: term
 in
   Pid := process-id
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   .
   (
     (
@@ -226,31 +289,30 @@ in
       . rec-msg(es-summary(Summary?))
       . snd-msg(ui-show-feedback-summary(Summary))
     )
-    . AnnotateTree(ParseResult, Path, AnnotatedTree?)
     . snd-msg(sm-get-module-id(ParseResult))
-    . rec-msg(sm-module-id(ModuleId?))
+    . rec-msg(sm-module-id(Modulename?))
     . snd-msg(io-get-path-directory(Path))
     . rec-msg(io-directory(Path, Directory?))
-    . snd-msg(sm-get-module-path(Directory, ModuleId))
+    . snd-msg(sm-get-module-path(Directory, Modulename))
     . rec-msg(sm-module-path(Directory?))
     . snd-msg(io-get-path-extension(Path))
     . rec-msg(io-extension(Path, Extension?))
-    . BuildPath(Directory, ModuleId, Extension, Filename?)
+    . BuildPath(Directory, Modulename, Extension, File?)
     .
-    if equal(Filename, Path) then
-      snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
-      . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId))
-      . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
-      . snd-msg(sm-get-imported-module-names(ParseResult))
-      . rec-msg(sm-imported-module-names(Imports?))
-      . SetModuleImports(ModuleId, Imports)
-      . create (CheckSyntaxSpecification(ModuleId), CheckPid?)
+    if equal(File, Path) then
+      SetModuleSyntaxTree(ModuleId, ParseResult)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
+      /* Use Listener to check Syntax Specification */
+      /*. create (CheckSyntaxSpecification(ModuleId), CheckPid?)*/
     else
-      Error("Module %s should be in a file named %s\n", [ModuleId, Filename])
+      Error("Module %s should be in a file named %s\n", [Modulename, File])
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
     fi
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
     rec-msg(parse-error(Pid, ErrorMessage?))
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
     . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
@@ -258,3 +320,86 @@ in
     . snd-msg(open-syntax-parse-handler-done(Pid))
   )
 endlet
+
+process AnnotateTreeListener is
+let
+  AnnotatedTree: term,
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Path: str,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . AnnotateTree(Tree, Path, AnnotatedTree?)
+    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
+  )
+  *
+  delta
+endlet
+
+toolbus(AnnotateTreeListener)
+
+process SetModuleSyntaxText(ModuleId: term, Text: str) is
+  snd-msg(ts-put-str-value("sdf-text", ModuleId, Text))
+
+process SetModuleSyntaxTree(ModuleId: term, Tree: term) is
+  snd-msg(ts-put-term-value("sdf-tree", ModuleId, Tree))
+
+process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
+  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
+  .
+  (
+    rec-msg(ts-value(Tree?))
+  +
+    rec-msg(ts-no-value)
+    . Tree := UNDEFINED
+  )
+
+process DeleteModuleSyntaxTree(ModuleId: term) is
+  snd-msg(ts-remove-value("sdf-tree", ModuleId))
+
+process SetModuleEquationsTree(ModuleId: term, Tree: term) is
+  snd-msg(ts-put-term-value("asf-tree", ModuleId, Tree))
+
+process GetModuleEquationsTree(ModuleId: term, Tree: term?) is
+  snd-msg(ts-get-term-value("asf-tree", ModuleId))
+  .
+  (
+    rec-msg(ts-value(Tree?))
+  +
+    rec-msg(ts-no-value)
+    . Tree := UNDEFINED
+  )
+
+process DeleteModuleEquationsTree(ModuleId: term) is
+  snd-msg(ts-remove-value("asf-tree", ModuleId))
+
+process GetModulePath(ModuleId: term, Namespace: term, Path: str?) is
+let
+  Term: path,
+  HasAttribute: bool
+in
+  MM-HasAttribute(ModuleId, Namespace, "path", HasAttribute?)
+  .
+  if equal(HasAttribute, true) then
+    MM-GetAttribute(ModuleId, Namespace, "path", Term?)
+    . Path := first(args(Term))
+  else
+    Path := EMPTY_PATH
+  fi
+endlet
+
+process SetModulePath(ModuleId: term, Namespace: term, Path: str) is
+let
+  Term: path
+in
+  Term := quote(path(Path))
+  . MM-SetAttribute(ModuleId, Namespace, "path", Term)
+endlet
+

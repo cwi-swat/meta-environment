@@ -1,0 +1,27 @@
+#ifndef _GUI_PROGRESS_
+#define _GUI_PROGRESS_
+
+tool progress is { }
+
+process Progress is
+let
+  Message: str,
+  Status: term,
+  T: progress
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(pro-set-status(Message?, Status?))
+    . snd-do(T, set-status(Message, Status))
+  +
+    rec-msg(clear-status-window)
+    . snd-do(T, clear-status-window)
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+toolbus(Progress)
+
+#endif /*_GUI_PROGRESS_*/

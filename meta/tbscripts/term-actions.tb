@@ -1,4 +1,7 @@
-process SplitFileName(Path : str, 
+#ifndef __TERM_ACTIONS__
+#define __TERM_ACTIONS__
+
+process SplitFilename(Path : str, 
                       FileName : str?,
 		      Directory : str?, 
 		      Extension : str?) is
@@ -8,7 +11,6 @@ process SplitFileName(Path : str,
   . rec-msg(io-directory(Path, Directory?))
   . snd-msg(io-get-path-extension(Path))
   . rec-msg(io-extension(Path, Extension?))
-
 
 process EqualTrees(Tree1 : term, Tree2 : term, Result : term?) is
 let
@@ -84,7 +86,8 @@ in
   GetTree(EditorId, Tree?, Available?)
   .
   if equal(Available, true) then
-    GetActiveModule(EditorId, Modulename?)
+    TODO("Modulename has to be ModuleId!!")
+    . GetModuleId(EditorId, Modulename?)
     . PrettyPrint(EditorId, Modulename, Tree, RTree?)
     . 
     if not-equal(RTree, error-tree) then
@@ -92,7 +95,8 @@ in
     else 
       tau
     fi
-  else
-    tau
+  else tau
   fi
 endlet
+
+#endif /*__TERM_ACTIONS__*/

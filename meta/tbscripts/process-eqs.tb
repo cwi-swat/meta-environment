@@ -11,29 +11,23 @@ in
   . rec-msg(io-filename(Filename?))
 endlet
 
-process ParseEquationsText(ModuleId: str, Text: str) is
+process ParseEquationsText(ModuleId: term, Text: str) is
 let
-  Checking: term,
   Nonterminal: term,
   Pid: int,
   Table: term
 in
-  /* Motivation for the get-parse-equation-checking-hook
-     Since the asf which we generate should be valid under any circumstance
-     it is not necessary to check it. Therefor we need to be able to disable
-     the checking option to GetParseTable in ParseEquationsText. */
-  snd-msg(get-parse-equation-checking-hook)
-  . rec-msg(get-parse-equation-checking-hook-result(Checking?))
-  . GetParseTable(ModuleId, eqs, Checking, Table?)
+  GetParseTable(ModuleId, eqs, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
   . create(ParseEquationsHandler(ModuleId), Pid?)
   . ParseText(Pid, Text, Table, Nonterminal)
 endlet
 
-process ParseEquationsHandler(ModuleId: str) is
+process ParseEquationsHandler(ModuleId: term) is
 let
   Equations: term,
+  Modulename: str,
   ParseError: term,
   Pid: int,
   ParseResult: term
@@ -43,8 +37,9 @@ in
   (
     rec-msg(parse-tree(Pid, ParseResult?))
     . MDB-AddEquationsPosInfo(ModuleId, ParseResult, Equations?)
-    . snd-msg(postprocess-semantics-hook(ModuleId, Equations))
-    . rec-msg(postprocess-semantics-hook-result(ModuleId, Equations?))
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . snd-msg(postprocess-semantics-hook(Modulename, Equations))
+    . rec-msg(postprocess-semantics-hook-result(Modulename, Equations?))
     . snd-msg(parse-equations-ok(ModuleId, Equations))
   +
     (
@@ -56,11 +51,15 @@ in
   )
 endlet
 
-process GetAsfModule(ModuleId: str) is
+process GetAsfModule(ModuleId: term) is
 let
+  AsfExt: str,
+  AsfPath: str,
   Error: term,
   Equations: term,
+  Modulename: str,
   ParseError: term,
+  SdfPath: str,
   Summary: term,
   Text: str
 in
@@ -71,42 +70,52 @@ in
     . snd-msg(equations(ModuleId, Equations))
   +
     rec-msg(ts-no-value)
-    /* Motivation for the get-asf-equations-text-hook
-       The asf generated for the asdf modules should not be saved on the
-       disk, and therefor we can not use the previous implementation.
-       We need to load the text from the termstore. */
-    . snd-msg(get-asf-equations-text-hook(ModuleId))
-    . rec-msg(get-asf-equations-text-hook-result(Text?))
-    .
-    if equal(Text, "") then
+    . TODO("codeclone with EditEquationsAction")
+    . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+    .  
+    if equal(SdfPath, "") then
       snd-msg(no-equations(ModuleId))
     else
-      ParseEquationsText(ModuleId, Text)
+      snd-msg(file-extension-hook(asf))
+      . rec-msg(file-extension-hook-result(AsfExt?))
+      . ReplaceExtension(SdfPath, AsfExt, AsfPath?)
+      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
+      . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
+      . ReadFile(AsfPath, Text?)
       .
-      (
-        rec-msg(parse-equations-ok(ModuleId, Equations?))
-        . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
-        . snd-msg(equations(ModuleId, Equations))
-      +
-        rec-msg(parse-equations-failed(ModuleId, Error?))
-	. AddFilenameToParseError(Error, ModuleId, ParseError?)
-        . snd-msg(es-make-summary("sglr", ModuleId, [ParseError]))
-	. rec-msg(es-summary(Summary?))
-        . snd-msg(error-in-equations(ModuleId, Summary))
-      )
+      if equal(Text, "") then
+        snd-msg(no-equations(ModuleId))
+      else
+        ParseEquationsText(ModuleId, Text)
+        .
+        (
+          rec-msg(parse-equations-ok(ModuleId, Equations?))
+          . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
+          . snd-msg(equations(ModuleId, Equations))
+        +
+          rec-msg(parse-equations-failed(ModuleId, Error?))
+	  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+          . AddFilenameToParseError(Error, Modulename, ParseError?)
+          . snd-msg(es-make-summary("sglr", Modulename, [ParseError]))
+          . rec-msg(es-summary(Summary?))
+          . snd-msg(error-in-equations(ModuleId, Summary))
+        )
+      fi
     fi
   )
 endlet
 
-process GetImportsForRenaming(ModuleName: str, ModuleNames: list, Imports: term?) is
+process GetImportsForRenaming(ModuleId: term, ModuleNames: list, Imports: term?) is
 let
+  Modulename: str,
   Modules: list
 in
   snd-msg(get-modules(ModuleNames))
   .
   (
     rec-msg(modules(Modules?))
-    . snd-msg(sm-get-all-needed-imports(Modules, ModuleName))
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . snd-msg(sm-get-all-needed-imports(Modules, Modulename))
     . rec-msg(sm-all-needed-imports(Imports?))
   +
     rec-msg(no-modules)
@@ -114,12 +123,13 @@ in
   )
 endlet
 
-process GetSpecification(ModuleId: str) is
+process GetSpecification(ModuleId: term) is
 let
   Error: term,
-  CurModule: str,
+  CurModule: term,
   Equations: term,
   Imports: list,
+  Modulename: str,
   Modules: list,
   Pid: int,
   Specification: term,
@@ -129,11 +139,12 @@ let
 in
   Id := process-id
   . snd-note(ui-status(start(Id, "Get Specification")))
-  . MDB-GetAllImportedModulenames(ModuleId, Modules?)
+  . MM-GetAllModuleDependencies(ModuleId, Modules?)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
   . Count := size(Modules)
   . Specification := []
-  .
+  . TODO("remove computation by using listeners?")
+  . 
   if and(not-equal(Modules, []), equal(Error, undefined)) then
     CurModule := first(Modules)
     . create(GetAsfModule(CurModule), Pid?)
@@ -146,11 +157,12 @@ in
        * proposal: merge the renaming and normalization tools,
        * possibly including the get-imports tool. 
        */
-      . snd-note(ui-status(statf(Id, "Normalizing %s",[CurModule])))
+      . MM-GetAttribute(CurModule, SDF_NAMESPACE, "name", Modulename?)
+      . snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
-      . snd-note(ui-status(statf(Id, "Renaming %s",[CurModule])))
-      . snd-msg(sr-rename-module(Imports, CurModule, Equations))
+      . snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
+      . snd-msg(sr-rename-module(Imports, Modulename, Equations))
       . rec-msg(sr-renamed-module(Equations?))
       . Specification := join(Specification, Equations)
     +

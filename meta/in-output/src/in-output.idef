@@ -169,6 +169,11 @@ in
     . rec-value(IO, filename(Filename?))
     . snd-msg(io-filename(Filename))
   +
+    rec-msg(io-get-relative-filename(Directories?, Path?, Extension?))
+    . snd-eval(IO, get-relative-filename(Directories, Path, Extension))
+    . rec-value(IO, filename(Filename?))
+    . snd-msg(io-filename(Directories, Path, Extension, Filename))
+  +
     rec-msg(io-get-path-directory(Path?))
     . snd-eval(IO, get-path-directory(Path))
     . rec-value(IO, directory(Directory?))

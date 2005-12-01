@@ -1,3 +1,6 @@
+/* defines */
+#define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)
+
 /* meta-kernel */
 #include "configuration-manager.idef"
 #include "editor-manager.idef"

@@ -60,6 +60,16 @@ AC_PACKAGE_REQUIRE(config-manager, config-manager-config,
    [  --with-config-manager=DIR config-manager is in DIR])
 AC_SUBST(CONFIG_MANAGER)
 
+dnl Require config-manager package
+AC_PACKAGE_REQUIRE(module-manager, module-manager-config,
+   [  --with-module-manager=DIR module-manager is in DIR])
+AC_SUBST(MODULE_MANAGER)
+
+dnl Require module-support package
+AC_PACKAGE_REQUIRE(module-support, module-support-config,
+   [  --with-module-support=DIR      Module-support is in DIR])
+AC_SUBST(MODULE_SUPPORT)
+
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])
@@ -172,6 +182,7 @@ AC_CONFIG_FILES([Makefile
    gui/plugin/navigator/Makefile
    gui/plugin/dialog/Makefile
    gui/plugin/graph-painter/Makefile
+   gui/plugin/progress/Makefile
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile

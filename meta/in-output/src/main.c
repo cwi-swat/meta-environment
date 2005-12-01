@@ -269,7 +269,7 @@ ATerm remove_file(int cid, const char *path)
 
 ATerm copy_file(int cid, const char *srcPath, const char *destPath)
 {
-  int size;
+  size_t size;
   char *contents;
   ERR_Summary summary = NULL;
 
@@ -481,6 +481,45 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
 }
 
 /*}}}  */
+
+/*{{{  ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension) */
+
+ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension)
+{
+  ATerm result = NULL;
+  ATermList searchPaths = (ATermList) paths;
+
+  assert(path != NULL);
+
+  while (!ATisEmpty(searchPaths) && !result) {
+    ATerm searchPath = ATgetFirst(searchPaths);
+    const char *pathString = ATgetString(searchPath);
+    if (strncmp(pathString, path, strlen(pathString)) == 0) {
+      char *copy;
+      char *extension;
+
+      copy = strdup(path + strlen(pathString) + 1);
+      assert(copy != NULL);
+
+      extension = strrchr(copy, EXTENSION_SEPARATOR);
+      if (extension != NULL) {
+        *extension = EOS;
+      }
+      result = ATmake("filename(<str>)", copy);
+      free(copy);
+    }
+    searchPaths = ATgetNext(searchPaths);
+  }
+
+  if (!result) {
+    result = ATmake("filename(<str>)", "");
+  }
+
+  return ATmake("snd-value(<term>)", result);
+}
+
+/*}}}  */
+
 /*{{{  ATerm compare_files(int cid, const char *f1, const char *f2) */
 
 ATerm compare_files(int cid, const char *f1, const char *f2)
@@ -533,49 +572,6 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
 }
 
 /*}}}  */
-/*{{{  ATerm decons_filename(int conn, const char *filename, const char *extension) */
-
-ATerm decons_filename(int conn, const char *filename, const char *extension)
-{
-  int filenameLength = strlen(filename);
-  int extensionLength = strlen(extension);
-  ATerm result;
-  char *buf;
-  char *save;
-  const char *path;
-  char *p;
-
-  buf = strdup(filename);
-  assert(buf != NULL);
-  save = buf;
-  
-  p = buf + filenameLength - extensionLength;
-  if (strncmp(p, extension, extensionLength) == 0) {
-    *p = '\0';
-  }
-  else {
-    extension = "";
-  }
-
-  p = strrchr(buf, '/'); /* TODO: separator is hardcoded */
-  if (p != NULL) {
-    path = buf;
-    *p++ = '\0';
-    buf = p;
-  }
-  else {
-    path = "";
-  }
-
-  result = ATmake("snd-value(file-name(<str>,<str>,<str>))",
-		path, buf, extension);
-
-  free(save);
-
-  return result;
-}
-
-/*}}}  */
 
 /*{{{  ATerm get_path_directory(int conn, const char *path) */
 
@@ -608,30 +604,26 @@ ATerm get_path_directory(int conn, const char *path)
 
 ATerm get_path_filename(int conn, const char *path)
 {
+  char *copy;
+  char *extension;
   char *filename;
-  ATerm result;
+  ATerm result = NULL;
 
   assert(path != NULL);
 
-  filename = strrchr(path, PATH_SEPARATOR);
-  if (filename != NULL) {
-    char *copy;
-    char *extension;
+  copy = strdup(path);
+  assert(copy != NULL);
 
-    copy = strdup(filename + 1);
-    assert(copy != NULL);
-
-    extension = strrchr(copy, EXTENSION_SEPARATOR);
-    if (extension != NULL) {
-      *extension = EOS;
-    }
-    result = ATmake("filename(<str>)", copy);
-    free(copy);
-  }
-  else {
-    result = ATmake("filename(<str>)", "");
+  extension = strrchr(copy, EXTENSION_SEPARATOR);
+  if (extension != NULL) {
+    *extension = EOS;
   }
 
+  filename = strrchr(copy, PATH_SEPARATOR);
+  result = ATmake("filename(<str>)", ++filename);
+
+  free(copy);
+  
   return ATmake("snd-value(<term>)", result);
 }
 

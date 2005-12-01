@@ -1,0 +1,5 @@
+#include <sdf-modules.idef>
+
+process GetImportedModuleNames(Tree: term, Imports: list?) is
+  snd-msg(sm-get-imported-module-names(Tree))
+  . rec-msg(sm-imported-module-names(Imports?)) 

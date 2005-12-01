@@ -1,47 +1,35 @@
-process ActivateEditor(Modulename : str, Filename : str, Tree : term) is
-let
-  FunSym : str,
-  String : str
-in
-  FunSym := fun(Tree)
-  .
-  if equal(FunSym, "str") then
-    String := first(args(Tree))
-    . ActivateEditorWithString(String, Modulename, Filename)
-  else
-    ActivateEditorWithTree(Tree, Modulename, Filename)
-  fi
-endlet
+#include <module-manager.tb>
+#include <sdf-namespace.h>
+#include <asf-namespace.h>
+
+#define EMPTY_PATH ""
 
 process DisplayMessage(EditorId : term, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
 
-process GetActiveModule(EditorId : term, ModuleName : str?) is
-  snd-msg(em-get-modulename(EditorId))
+process GetModuleId(Sid: term, ModuleId: term?) is
+  snd-msg(em-get-moduleid(Sid))
   .
   (
-    rec-msg(em-modulename(EditorId, ModuleName?))
+    rec-msg(em-moduleid(Sid, ModuleId?))
   +
-    rec-msg(em-no-such-session(EditorId)) 
-    . printf("FIX ME: PushActiveModule: No such session, sending dummy modulename\n")
-    . ModuleName := "basic/Whitespace"
+    rec-msg(em-no-such-session(Sid))
+    . printf("FIX ME: PushActiveModule: No such session\n")
+    . ModuleId := UNDEFINED
   +
-    rec-msg(em-session-not-bound(EditorId))
-    . printf("FIX ME: PushActiveModule: Session not bound, sending dummy modulename\n")
-    . ModuleName := "basic/Whitespace"
+    rec-msg(em-session-not-bound(Sid))
+    . printf("FIX ME: PushActiveModule: Session not bound\n")
+    . ModuleId := UNDEFINED
   )
-
  
-process SetRoot(EditorId : term, Tree : term) is
-  ReplaceFocus(EditorId, Tree)
-
 process GetTree(Sid: term, Tree: term?, Available: bool?) is
 let
-  Modulename: str,
+  ModuleId: term,
   Registered: bool
 in
-  GetActiveModule(Sid, Modulename?)
-  . ParseTerm(Sid, Modulename)
+  printf("GetTree\n").
+  GetModuleId(Sid, ModuleId?)
+  . ParseTerm(Sid, ModuleId)
   . IsStructureEditorRegistered(Sid, Registered?)
   .
   if equal(Registered, true) then
@@ -65,10 +53,10 @@ in
       rec-msg(se-cursor(Sid, Tree?))
     +
       rec-msg(se-no-cursor(Sid))
-      . Tree := no-tree
+      . Tree := UNDEFINED
     )
   else
-    Tree := no-tree
+    Tree := UNDEFINED
   fi
 endlet
 
@@ -117,33 +105,10 @@ in
 */
   RTree := Tree
 endlet
-process GetRoot(EditorId : term, Tree : term?) is
-let
-  Available : bool
-in
-  GetTree(EditorId, Tree?, Available?)
-  .
-  if equal(Available, true) then
-    tau
-  else
-    Tree := no-tree
-  fi
-endlet
 
 process GetPath(Sid: term, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
-
-process GetModuleId(Sid: term, ModuleId: str?) is
-  snd-msg(em-get-modulename(Sid))
-  .
-  (
-    rec-msg(em-modulename(Sid, ModuleId?))
-  +
-    rec-msg(em-session-not-bound(Sid))
-    . printf("FIX ME: GetModuleId: Session not bound, setting dummy module\n")
-    . ModuleId := "basic/Whitespace"
-  )
 
 process GetEditorType(Path: str, EditorType: term?) is
 let
@@ -191,10 +156,11 @@ process IsTextEditorRegistered(Sid: term, Registered: bool?) is
 
 process EditText(Sid: term, Type: term, Name: str, AlreadyExists: bool?) is
 let
-  Events: list,
   Path: str,
-  Categories: term
+  Categories: term,
+  ModuleId: term
 in
+  TODO("Often an empty Name is supplied, refactor!").
   IsTextEditorRegistered(Sid, AlreadyExists?)
   .
   if equal(AlreadyExists, true) then
@@ -202,17 +168,24 @@ in
   else
     snd-msg(em-register-editor(Sid, text))
     . GetPath(Sid, Path?)
-    . snd-msg(te-edit-text(Sid, Path))
+    . snd-msg(te-edit-text(Sid, Path, Name))
     /*. snd-msg(cm-get-events(Type))*/
     /*. rec-msg(cm-events(Events?))*/
     /*. snd-msg(te-add-actions(Sid, Events))*/
-    . snd-msg(cm-get-module-events(Type, Name))
-    . rec-msg(cm-module-events(Events?))
-    . snd-msg(te-add-actions(Sid, Events))
+    . SetEditActions(Sid, Type, Name)
     . snd-msg(get-text-categories)
     . rec-msg(text-categories(Categories?)) 
     . snd-msg(te-register-text-categories(Sid, Categories))
   fi
+endlet
+
+process SetEditActions(Sid: term, Type: term, Name: str) is
+let
+  Events: list
+in
+  snd-msg(cm-get-module-events(Type, Name))
+  . rec-msg(cm-module-events(Events?))
+  . snd-msg(te-add-actions(Sid, Events))
 endlet
 
 process EditStructure(Sid: term, Tree: term) is
@@ -255,7 +228,7 @@ process MenuSelected(Sid: term, EditorType: term) is
 let
   Action: str,
   Event: term,
-  ModuleId: str
+  ModuleId: term
 in
   rec-msg(te-menu-event(Sid, Event?))
   . snd-msg(em-request-transaction(Sid))
@@ -384,12 +357,12 @@ in
   . snd-msg(em-delete-session(Sid))
 endlet
 
-process DeleteSessions(ModuleId: str) is
+process DeleteSessions(ModuleId: term) is
 let
   Sid: term,
   Sids: list
 in
-  snd-msg(em-get-sessions-by-modulename(ModuleId))
+  snd-msg(em-get-sessions-by-moduleid(ModuleId))
   .
   (
     rec-msg(em-sessions(ModuleId, Sids?))
@@ -398,7 +371,6 @@ in
       if not-equal(Sids, []) then
         Sid := first(Sids)
         . DeleteSession(Sid)
-	/*. snd-msg(kill-editor(Sid))*/
         . Sids := next(Sids)
       fi
     )
@@ -407,11 +379,11 @@ in
       tau
     fi
   +
-    rec-msg(em-no-such-session(Sid))
+    rec-msg(em-no-such-session(ModuleId))
   )
 endlet
 
-process GetSyntaxTree(ModuleId: str, Tree: term?, Available: bool?) is
+process GetSyntaxTree(ModuleId: term, Tree: term?, Available: bool?) is
   snd-msg(get-syntax-tree(ModuleId))
   .
   (
@@ -422,48 +394,48 @@ process GetSyntaxTree(ModuleId: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-process EditSyntax(Path: str) is
+process EditSyntax(ModuleId: term) is
 let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   HasText: bool,
   HasStructure: bool,
-  ModuleId: str,
+  Modulename: str,
+  Path: str,
+  Editable: bool,
+  SdfExt: str,
   Sid: term,
   Tree: term
 in
   EditorType := syntax-editor
+  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+  . 
+  if equal(Path, EMPTY_PATH) then
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?) 
+    . snd-msg(file-extension-hook(sdf))
+    . rec-msg(file-extension-hook-result(SdfExt?))
+    . BuildPath(".", Modulename, SdfExt, Path?)
+    . printf("EditSyntax: Use CreateNewModule instead???\n")
+  else
+    tau
+  fi
   . Edit(Path, Sid?)
   . EditText(Sid, EditorType, "", AlreadyExists?)
-  . snd-msg(syntax-editor-started(Path, Sid))
+  . snd-msg(syntax-editor-started(ModuleId, Sid))
   .
   if equal(AlreadyExists, false) then
-    snd-msg(ts-get-str-value("path-modulename", Path))
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    . snd-msg(te-set-editable(Sid, Editable))
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetSyntaxTree(ModuleId, Tree?, Available?)
     .
-    (
-      rec-msg(ts-value(ModuleId?))
-      . snd-msg(em-bind-session(Sid, ModuleId))
-      . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetSyntaxTree(ModuleId, Tree?, Available?)
-      .
-      if equal(Available, true) then
-        EditStructure(Sid, Tree)
-      else
-        tau
-      fi
-    +
-      rec-msg(ts-no-value)
-      . snd-msg(ts-get-str-value("path-weak-modulename", Path))
-      .
-      (
-        rec-msg(ts-value(ModuleId?))
-        . snd-msg(em-bind-session(Sid, ModuleId))
-        . rec-msg(em-session-bound(Sid, ModuleId))
-      +
-        rec-msg(ts-no-value)
-      )
-    )
+    if equal(Available, true) then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
     .
     (
       MenuSelected(Sid, EditorType)
@@ -479,7 +451,8 @@ in
     . DeleteSession(Sid)
     .
     if and(HasText, not(HasStructure)) then
-      OpenSyntax(Path, sdf)
+      TODO("OpenSyntax or, better, parse when structure has been lost")
+      . OpenSyntax(ModuleId)
     else
       tau
     fi
@@ -488,48 +461,34 @@ in
   fi
 endlet
 
-process GetEquationsTree(ModuleId: str, Tree: term?, Available: bool?) is
-  snd-msg(get-equations-for-module(ModuleId))
-  .
-  (
-    rec-msg(equations(Tree?))
-    . Available := true
-  +
-    rec-msg(no-equations)
-    . Available := false
-  )
-
-process EditEquations(Path: str) is
+process EditEquations(ModuleId: term) is
 let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
-  ModuleId: str,
+  Path: str,
+  Editable: bool,
   Sid: term,
   Tree: term
 in
   EditorType := equations-editor
+  . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   . Edit(Path, Sid?)
   . EditText(Sid, EditorType, "", AlreadyExists?)
   . snd-msg(equations-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
-    snd-msg(ts-get-str-value("path-modulename", Path))
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    . snd-msg(te-set-editable(Sid, Editable)) 
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetModuleEquationsTree(ModuleId, Tree?)
     .
-    (
-      rec-msg(ts-value(ModuleId?))
-      . snd-msg(em-bind-session(Sid, ModuleId))
-      . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetEquationsTree(ModuleId, Tree?, Available?)
-      .
-      if equal(Available, true) then
-        EditStructure(Sid, Tree)
-      else
-        tau
-      fi
-    +
-      rec-msg(ts-no-value)
-    )
+    if not-equal(Tree, UNDEFINED) then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
     .
     (
       MenuSelected(Sid, EditorType)
@@ -557,7 +516,7 @@ process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
     . Available := false
   )
 
-process GetModuleByPath(Path: str, ModuleId: str?, Available: bool?) is
+process GetModuleByPath(Path: str, ModuleId: term?) is
 let
   Sid: term
 in
@@ -565,35 +524,34 @@ in
   .
   (
     rec-msg(em-session(Path, Sid?))
-    . snd-msg(em-get-modulename(Sid))
-    . rec-msg(em-modulename(Sid, ModuleId?))
-    . Available := true
+    . snd-msg(em-get-moduleid(Sid))
+    . rec-msg(em-moduleid(Sid, ModuleId?))
   +
     rec-msg(em-no-such-session(Path))
-    . Available := false
   )
 endlet
 
-process CheckSanity(Path: str, RequestedModuleId: str, Valid: bool?) is
+process CheckSanity(Path: str, RequestedModuleId: term, Valid: bool?) is
 let
   Available: bool,
-  CurrentModuleId: str
+  CurrentModuleId: term
 in
-  GetModuleByPath(Path, CurrentModuleId?, Available?)
+  GetModuleByPath(Path, CurrentModuleId?)
   . 
-  if equal(Available, true) then
-    Valid := equal(CurrentModuleId, RequestedModuleId)
-  else
+  if equal(CurrentModuleId, UNDEFINED) then
     Valid := true
+  else
+    Valid := equal(CurrentModuleId, RequestedModuleId)
   fi
 endlet
 
-process EditTerm(Path: str, ModuleId: str) is
+process EditTerm(Path: str, ModuleId: term) is
 let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
   Error: str,
+  Modulename: str,
   Sid: term,
   Tree: term,
   Valid: bool
@@ -603,7 +561,8 @@ in
   .
   if equal(Valid, true) then
     Edit(Path, Sid?)
-    . EditText(Sid, EditorType, ModuleId, AlreadyExists?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . EditText(Sid, EditorType, Modulename, AlreadyExists?)
     . snd-msg(term-editor-started(Path, ModuleId, Sid))
     .
     if equal(AlreadyExists, false) then
@@ -636,16 +595,6 @@ in
   fi
 endlet
 
-process GetModuleForPath(Path: str, ModuleId: str?) is
-  snd-msg(ts-get-str-value("path-modulename", Path))
-  .
-  (
-    rec-msg(ts-value(ModuleId?))
-  +
-    rec-msg(ts-no-value)
-    . ModuleId := ""
-  )
-
 process GetModuleByExtension(Path: str, ModuleId: str?, Available: bool?) is
 let
   Extension: str
@@ -667,24 +616,27 @@ process StartEditor(Path: str, EditorType: term) is
 let
   Available: bool,
   ErrorMsg: str,
-  ModuleId: str,
+  ModuleId: term,
+  Modulename: str,
   Pid: int,
-  Sid: term
+  Sid: term,
+  Term: path
 in
   if equal(EditorType, term-editor) then
-    GetModuleByExtension(Path, ModuleId?, Available?)
+    GetModuleByExtension(Path, Modulename?, Available?)
     .
     if equal(Available, false) then
-      GetModuleByPath(Path, ModuleId?, Available?)
+      /*GetModuleByPath(Path, Modulename?, Available?)*/
+      TODO("GetModuleByPath")
     fi
     . 
     if equal(Available, true) then
-      create(EditTerm(Path, ModuleId), Pid?)
+      create(EditTerm(Path, Modulename), Pid?)
       .
       (
-        rec-msg(term-editor-started(Path, ModuleId, Sid?))
+        rec-msg(term-editor-started(Path, Modulename, Sid?))
       +
-        rec-msg(term-editor-not-started(Path, ModuleId, ErrorMsg?))
+        rec-msg(term-editor-not-started(Path, Modulename, ErrorMsg?))
         . Error(ErrorMsg, [])
       )
     else
@@ -693,11 +645,15 @@ in
     fi
   else
     if equal(EditorType, syntax-editor) then
-      create(EditSyntax(Path), Pid?)
-      . rec-msg(syntax-editor-started(Path, Sid?))
+      Term := quote(path(Path))
+      . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", Term, ModuleId?)
+      . create(EditSyntax(ModuleId), Pid?)
+      . rec-msg(syntax-editor-started(ModuleId, Sid?))
     else
-      create(EditEquations(Path), Pid?)
-      . rec-msg(equations-editor-started(Path, Sid?))
+      Term := quote(path(Path))
+      . MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", Term, ModuleId?)
+      . create(EditEquations(ModuleId), Pid?)
+      . rec-msg(equations-editor-started(ModuleId, Sid?))
     fi
   fi
 endlet
@@ -728,7 +684,7 @@ in
   fi
 endlet
 
-process ActivateEditorWithTree(Tree: term, Modulename: str, Filename: str) is
+process ActivateEditorWithTree(Tree: term, ModuleId: term, Filename: str) is
 let
   Error: term,
   Pid: int,
@@ -743,12 +699,12 @@ in
     .
     (
       rec-msg(io-file-written)
-      . create(EditTerm(Filename, Modulename), Pid?)
+      . create(EditTerm(Filename, ModuleId), Pid?)
       .
       (
-        rec-msg(term-editor-started(Filename, Modulename, Sid?))
+        rec-msg(term-editor-started(Filename, ModuleId, Sid?))
       +
-        rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
+        rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
         . Error(ErrorMessage, [])
       )
     +
@@ -756,31 +712,6 @@ in
       . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
     )
   fi
-endlet
-
-process ActivateEditorWithString(Text: str, Modulename: str, Filename: str) is
-let
-  Error: term,
-  Pid: int,
-  Sid: term,
-  ErrorMessage: str
-in
-  snd-msg(io-write-text-list(Filename, [Text]))
-  .
-  (
-    rec-msg(io-file-written)
-    . create(EditTerm(Filename, Modulename), Pid?)
-    .
-    (
-      rec-msg(term-editor-started(Filename, Modulename, Sid?))
-    +
-      rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
-      . Error(ErrorMessage, [])
-    )
-  +
-    rec-msg(io-file-not-written(Error?))
-    . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
-  )
 endlet
 
 process EditLocation(Pid: int, Location: term) is
@@ -792,6 +723,7 @@ in
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
   . GetEditorType(Path, EditorType?)
+  /*. MM-GetModuleIdByAttribute(*/
   . StartEditor(Path, EditorType)
   . snd-msg(em-get-session-by-path(Path))
   .
@@ -865,10 +797,10 @@ in
   )
 endlet
 
-process CleanupEditTerm(Sid: term, Path : str) is
+process CleanupEditTerm(Sid: term, ModuleId : term) is
   subscribe(em-session-deleted(<term>))
   . rec-note(em-session-deleted(Sid))
-  . snd-msg(ui-remove-feedback-summary("sglr", Path))
+  /*. snd-msg(ui-remove-feedback-summary("sglr", ModuleId))*/
 
 process GetFocusOrigin(EditorId : term, Origin: term?) is
 let

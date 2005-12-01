@@ -1,9 +1,12 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
 
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
@@ -11,104 +14,120 @@ import nl.cwi.sen1.util.StringFormatter;
 import aterm.ATerm;
 import aterm.ATermList;
 
-public class Dialog extends DefaultStudioPlugin implements  DialogTif {
+public class Dialog extends DefaultStudioPlugin implements DialogTif {
 
-	private static final String WORKING_DIRECTORY = "user.dir";
+    private static final String WORKING_DIRECTORY = "user.dir";
 
-	private static final String TOOL_NAME = "dialog";
+    private static final String TOOL_NAME = "dialog";
 
-	private Studio studio;
+    private Studio studio;
 
-	private ProgressList progressList;
+    private ProgressList progressList;
 
-	private JFileChooser sharedChooser;
+    private JFileChooser sharedChooser;
 
-	public Dialog() {
-		sharedChooser = new JFileChooser(System.getProperty(WORKING_DIRECTORY));
-	}
+    public Dialog() {
+        sharedChooser = new JFileChooser(System.getProperty(WORKING_DIRECTORY));
+    }
 
-	public String getName() {
-		return TOOL_NAME;
-	}
+    public String getName() {
+        return TOOL_NAME;
+    }
 
-	public void initStudioPlugin(Studio studio) {
-		this.studio = studio;
-		DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
-		studio.connect(getName(), bridge);
-	}
+    public void initStudioPlugin(Studio studio) {
+        this.studio = studio;
+        DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
+        studio.connect(getName(), bridge);
+    }
 
-	public ATerm showFileDialog(String title, String path, String filter) {
-		JFileChooser chooser = sharedChooser;
-		if (!"".equals(path)) {
-			chooser = new JFileChooser(path);
-		}
-		if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
-			path = chooser.getSelectedFile().getAbsolutePath();
-			return studio.getATermFactory().make(
-					"snd-value(file-dialog-approve(<str>))", path);
-		}
-		return studio.getATermFactory().make("snd-value(file-dialog-cancel)");
-	}
+    public ATerm showFileDialog(String title, String path,
+            final String extension) {
+        JFileChooser chooser = sharedChooser;
+        if (!"".equals(path)) {
+            chooser = new JFileChooser(path);
+        }
+        FileFilter filter = new FileFilter() {
+            public boolean accept(File file) {
+                if (file.isDirectory()) {
+                    return true;
+                }
 
-	public void recTerminate(ATerm t0) {
-		fireStudioPluginClosed();
-	}
+                String filename = file.getName();
+                return filename.endsWith(extension);
+            }
 
-	public void showProgressMessage(String message) {
-		if (progressList != null) {
-			progressList.addMessage(message);
-		}
-	}
+            public String getDescription() {
+                return "*" + extension;
+            }
+        };
+        chooser.addChoosableFileFilter(filter);
+        if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
+            path = chooser.getSelectedFile().getAbsolutePath();
+            return studio.getATermFactory().make(
+                    "snd-value(file-dialog-approve(<str>))", path);
+        }
+        return studio.getATermFactory().make("snd-value(file-dialog-cancel)");
+    }
 
-	public void showProgressList(final String title) {
-		progressList = new ProgressList((JFrame) null, title, true);
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				progressList.setVisible(true);
-			}
-		});
-	}
+    public void recTerminate(ATerm t0) {
+        fireStudioPluginClosed();
+    }
 
-	public void closeProgressList() {
-		if (progressList != null) {
-			progressList.dispose();
-		}
-	}
+    public void showProgressMessage(String message) {
+        if (progressList != null) {
+            progressList.addMessage(message);
+        }
+    }
 
-	public void showProgressMessageWithArguments(String format, ATerm args) {
-		String message = StringFormatter.format(format, (ATermList) args);
-		if (progressList != null) {
-			progressList.addMessage(message);
-		}
-	}
+    public void showProgressList(final String title) {
+        progressList = new ProgressList((JFrame) null, title, true);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                progressList.setVisible(true);
+            }
+        });
+    }
 
-	public ATerm showQuestionDialog(String question) {
-		int choice = JOptionPane.showConfirmDialog(null, question);
+    public void closeProgressList() {
+        if (progressList != null) {
+            progressList.dispose();
+        }
+    }
 
-		if (choice == JOptionPane.YES_OPTION) {
-			return studio.getATermFactory().make("snd-value(answer(yes))");
-		}
-		if (choice == JOptionPane.NO_OPTION) {
-			return studio.getATermFactory().make("snd-value(answer(no))");
-		}
+    public void showProgressMessageWithArguments(String format, ATerm args) {
+        String message = StringFormatter.format(format, (ATermList) args);
+        if (progressList != null) {
+            progressList.addMessage(message);
+        }
+    }
 
-		return studio.getATermFactory().make("snd-value(answer(cancel))");
-	}
+    public ATerm showQuestionDialog(String question) {
+        int choice = JOptionPane.showConfirmDialog(null, question);
 
-	public void showErrorDialog(String errorMessage) {
-		if (progressList != null) {
-			progressList.dispose();
-		}
-		JOptionPane.showMessageDialog(null, errorMessage, "Error",
-				JOptionPane.ERROR_MESSAGE);
-	}
+        if (choice == JOptionPane.YES_OPTION) {
+            return studio.getATermFactory().make("snd-value(answer(yes))");
+        }
+        if (choice == JOptionPane.NO_OPTION) {
+            return studio.getATermFactory().make("snd-value(answer(no))");
+        }
 
-	public void showErrorDialogWithArguments(String errorMessage, ATerm args) {
-		String message = StringFormatter.format(errorMessage, (ATermList) args);
-		if (progressList != null) {
-			progressList.dispose();
-		}
-		JOptionPane.showMessageDialog(null, message, "Error",
-				JOptionPane.ERROR_MESSAGE);
-	}
+        return studio.getATermFactory().make("snd-value(answer(cancel))");
+    }
+
+    public void showErrorDialog(String errorMessage) {
+        if (progressList != null) {
+            progressList.dispose();
+        }
+        JOptionPane.showMessageDialog(null, errorMessage, "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showErrorDialogWithArguments(String errorMessage, ATerm args) {
+        String message = StringFormatter.format(errorMessage, (ATermList) args);
+        if (progressList != null) {
+            progressList.dispose();
+        }
+        JOptionPane.showMessageDialog(null, message, "Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
 }

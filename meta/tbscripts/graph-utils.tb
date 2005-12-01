@@ -1,15 +1,22 @@
+#ifndef __GRAPH_UTILS__
+#define __GRAPH_UTILS__
+
+#define GRAPH_NAMESPACE "graph"
+
+#include <sdf-namespace.h>
+
 process RenderGraph(GraphPanelId: str, Graph: term?) is
   snd-msg(gp-render-graph(GraphPanelId, Graph))
   . rec-msg(gp-rendered-graph(GraphPanelId, Graph?))
   . snd-msg(gl-layout-graph(Graph))
   . rec-msg(gl-graph(Graph?))
 
-process ShowTree(Modulename: str, Tree: term, ShowLeafs: term, 
+process ShowTree(Tree: term, ShowLeafs: term, 
                  SharingOn: term) is
 let
   Graph: term
 in
-  snd-msg(gc-tree-to-graph(Modulename, Tree, ShowLeafs, SharingOn))
+  snd-msg(gc-tree-to-graph(Tree, ShowLeafs, SharingOn))
   . rec-msg(gc-graph(Graph?))
   . RenderGraph("parsetree", Graph?)
   . snd-msg(gp-display-graph("parsetree", Graph))
@@ -18,33 +25,95 @@ endlet
 process DrawImportGraph is
 let
   ImportGraph: term,
-  ImportRelations: list
+  ImportRelations: term
 in
-  snd-msg(ts-get-key-value-pairs("import-relations"))
-  . rec-msg(ts-pairs(ImportRelations?))
-  . snd-msg(nav-set-modules(ImportRelations))
-  . snd-msg(sig-import-relation-to-graph(ImportRelations))
-  . rec-msg(sig-graph(ImportRelations, ImportGraph?))
+  MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
+  . snd-msg(nav-set-modules(ImportGraph))
   . RenderGraph("import-graph", ImportGraph?)
   . snd-msg(gp-display-graph("import-graph", ImportGraph))
 endlet
 
 process ImportGraphPainter is
-  subscribe(ts-table-updated("import-relations"))
-  . subscribe(start-modules-batch)
-  . subscribe(end-modules-batch)
+let
+  AttributeEvent: attribute-changed-event,
+  Dependencies: list,
+  DependenciesEvent: dependencies-changed-event,
+  Dependency: term,
+  ModuleId: term,
+  Status: term,
+  Value: term,
+  Worklist: list
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened)
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unavailable)
+  . MM-Subscribe-Dependencies-Changed(<term>)
+  . subscribe(mm-module-deleted(<term>))
+  . Worklist := []
   .
   (
-    rec-note(ts-table-updated("import-relations"))
-    . DrawImportGraph()
+    rec-note(mm-attribute-changed(AttributeEvent?))
+    . ACE-GetModuleId(AttributeEvent, ModuleId?) 
+    . ACE-GetNewValue(AttributeEvent, Value?)
+    .
+    if equal(Value, opened) then
+      Worklist := diff(Worklist, [ModuleId])
+      . MM-GetModuleDependencies(ModuleId, Dependencies?) 
+      .
+      if not-equal(Dependencies, []) then
+        Dependency := first(Dependencies)
+        .
+        if not(member(Dependency, Worklist)) then
+          MM-GetAttribute(Dependency, SDF_NAMESPACE, "status", Status?)
+          .
+          if not(or(equal(Status, opened),or(equal(Status,error),equal(Status,unavailable)))) then
+            Worklist := join(Worklist, [Dependency])
+          else
+            tau
+          fi
+        else
+          tau
+        fi
+        . Dependencies := next(Dependencies)
+      fi
+      *
+      if equal(Dependencies, []) then
+        tau
+      fi
+      .
+      if equal(Worklist, []) then
+        DrawImportGraph()
+      else
+        tau
+      fi
+    else 
+      if or(equal(Value, error), equal(Value, unavailable)) then
+        Worklist := diff(Worklist, [ModuleId])
+        .
+        if equal(Worklist, []) then
+          DrawImportGraph()
+        else
+          tau
+        fi
+      else
+        tau
+      fi
+    fi
   +
-    rec-note(start-modules-batch)
-    . unsubscribe(ts-table-updated("import-relations"))
-    . rec-note(end-modules-batch)
-    . subscribe(ts-table-updated("import-relations"))
-    . DrawImportGraph()
+    rec-note(mm-dependencies-changed(DependenciesEvent?))
+  +
+    rec-note(mm-module-deleted(Value?))
+    .
+    if not-equal(Worklist, []) then
+      DrawImportGraph()
+    else
+      tau
+    fi
   )
   *
   delta
+endlet
 
 toolbus(ImportGraphPainter)
+
+#endif /*__GRAPH_UTILS__*/

@@ -12,8 +12,8 @@ toolbus=__TOOLBUS__
 tide=__TIDE__
 tide_support=__TIDE_SUPPORT__
 prefix=__PREFIX__
-editor=__DEFAULT_EDITOR__
 config_manager=__CONFIG_MANAGER__
+module_manager=__MODULE_MANAGER__
 myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
@@ -184,6 +184,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${tide}/share/tide \
    -I${tide_support}/share/tide-support \
    -I${config_manager}/share/config-manager \
+   -I${module_manager}/share/module-manager \
    -I${pandora}/share/pandora \
    -I${pgen}/share/pgen \
    ${extra_scripts} \

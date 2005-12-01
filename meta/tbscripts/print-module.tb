@@ -4,47 +4,45 @@ let
   SdfText: str,
   AsfText: str,
   AsfTree: term,
-  ModuleName: str,
+  ModuleId: term,
+  Modulename: str,
   Path: str,
-  FileName: str,
+  Filename: str,
   ErrMsg: str
 in
   Id := process-id
   .
   (
-    rec-msg(print-module(ModuleName?, FileName?))
-    . snd-note(ui-status(statf(Id, "Printing %s", [ModuleName])))
-    . snd-msg(get-path-from-db(ModuleName))
-    . rec-msg(path(Path?))
-    . snd-msg(ts-get-str-value("sdf-text", ModuleName))
+    rec-msg(print-module(ModuleId?, Filename?))
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . snd-msg(ts-get-str-value("sdf-text", ModuleId))
     .
     (
       rec-msg(ts-value(SdfText?))
-      . snd-msg(ts-get-term-value("asf-tree", ModuleName))
+      . snd-msg(ts-get-term-value("asf-tree", ModuleId))
       .
       (
         rec-msg(ts-value(AsfTree?))
         . snd-msg(unparse(AsfTree))
         . rec-msg(unparsed-text(AsfText?))
-        . snd-msg(io-write-text-list(FileName, [SdfText, "\n", AsfText]))
+        . snd-msg(io-write-text-list(Filename, [SdfText, "\n", AsfText]))
       +
         rec-msg(ts-no-value)
-        . snd-msg(io-write-text-list(FileName, [SdfText]))
+        . snd-msg(io-write-text-list(Filename, [SdfText]))
       )
       .
       (
         rec-msg(io-file-written)
       +
         rec-msg(io-file-not-written(ErrMsg?))
-        . snd-note(ui-status(errorf("Printing of %s failed: %s",
-                                    [ModuleName, ErrMsg])))
+        . snd-note(ui-status(errorf("Printing failed: %s",
+                                    [ErrMsg])))
       )
     +
       rec-msg(ts-no-value)
-      . snd-note(ui-status(errorf("Printing of %s failed", [ModuleName])))
+      . snd-note(ui-status(errorf("Printing failed")))
     )
-    . snd-note(ui-status(endstat(Id)))
-    . snd-msg(module-printed(ModuleName))
+    . snd-msg(module-printed(ModuleId))
   )
   *
   delta

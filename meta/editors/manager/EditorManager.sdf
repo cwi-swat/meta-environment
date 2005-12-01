@@ -5,6 +5,8 @@ imports basic/StrCon
 imports basic/Whitespace
 
 exports
+  sorts TermCon
+
   sorts Sid
   context-free syntax
     "sid" "(" id:NatCon ")" -> Sid
@@ -15,7 +17,7 @@ exports
 
   sorts ModuleId
   context-free syntax
-    name:StrCon -> ModuleId
+    "mid" "(" id:NatCon ")" -> ModuleId 
 
   sorts SessionStatus
   context-free syntax

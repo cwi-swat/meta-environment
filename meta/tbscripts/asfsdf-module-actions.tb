@@ -1,4 +1,7 @@
-process PrintModuleAction(Modulename : str) is
+#ifndef __ASFSDF_MODULE_ACTIONS__
+#define __ASFSDF_MODULE_ACTIONS__
+
+process PrintModuleAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -8,8 +11,8 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(print-module(Modulename, Path))
-    . rec-msg(module-printed(Modulename))
+    snd-msg(print-module(ModuleId, Path))
+    . rec-msg(module-printed(ModuleId))
   fi
 endlet
 
@@ -86,9 +89,9 @@ in
   if equal(Cancel, true) then
     tau
   else
-    SplitFileName(Path, FileName?, Directory?, Extension?)
+    SplitFilename(Path, FileName?, Directory?, Extension?)
     . create(NewModuleContentHandler(), Pid?)
-    . CreateModule(Pid, Directory, FileName, sdf)
+    . CreateNewModule(Pid, Directory, FileName, sdf)
   fi
 endlet
 
@@ -98,7 +101,8 @@ let
   Extension : str,
   Directory : str,
   Path : str,
-  Filename : str
+  Filename : str,
+  ModuleId : term
 in
   PromptForFileWithExtension("Open Module", "", ".sdf", Cancel?, Path?)
   .
@@ -108,16 +112,14 @@ in
     if equal(Path, "") then
       tau
     else
-      SplitFileName(Path, Filename?, Directory?, Extension?)
-      . BuildPath(Directory, Filename, Extension, Path?)
-      . snd-note(start-modules-batch)
-      . OpenModule(Path, sdf, Filename)
-      . snd-note(end-modules-batch)
+      SplitFilename(Path, Filename?, Directory?, Extension?)
+      /*. BuildPath(Directory, Filename, Extension, Path?)*/
+      . OpenModule(Filename, ModuleId?)
     fi
   fi
 endlet
 
-process DumpEquationsAction(Modulename : str) is
+process DumpEquationsAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -127,12 +129,12 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(dump-equations-given-file(Modulename, Path))
+    snd-msg(dump-equations-given-file(ModuleId, Path))
     . rec-msg(equations-dumped)
   fi
 endlet
 
-process DumpParseTableAction(Modulename : str) is
+process DumpParseTableAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -142,7 +144,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(Modulename, Path, trm)
+    DumpParseTable(ModuleId, Path, trm)
   fi
 endlet
 
@@ -150,19 +152,19 @@ process EditorDumpParseTableAction(EditorId : term) is
 let
   Cancel: bool,
   Path : str,
-  Modulename : str
+  ModuleId : term
 in
-  GetActiveModule(EditorId, Modulename?)
+  GetModuleId(EditorId, ModuleId?)
   . PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(Modulename, Path, trm)
+    DumpParseTable(ModuleId, Path, trm)
   fi
 endlet
 
-process DumpEquationsParseTableAction(Modulename : str) is
+process DumpEquationsParseTableAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -172,7 +174,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(Modulename, Path, eqs)
+    DumpParseTable(ModuleId, Path, eqs)
   fi
 endlet
 
@@ -180,19 +182,19 @@ process EditorDumpEquationsParseTableAction(EditorId : term) is
 let
   Cancel: bool,
   Path : str,
-  Modulename : str
+  ModuleId : term
 in
-  GetActiveModule(EditorId, Modulename?)
+  GetModuleId(EditorId, ModuleId?)
   . PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
   else
-    DumpParseTable(Modulename, Path, eqs)
+    DumpParseTable(ModuleId, Path, eqs)
   fi
 endlet
 
-process DumpSdfDefinitionAction(Modulename : str) is
+process DumpSdfDefinitionAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -202,12 +204,12 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(dump-sdf-definition(Modulename, Path))
+    snd-msg(dump-sdf-definition(ModuleId, Path))
     . rec-msg(sdf-definition-dumped)
   fi
 endlet
 
-process CompileModuleAction(Modulename : str) is
+process CompileModuleAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
@@ -217,12 +219,12 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(compile-module(Modulename, Path))
-    . rec-msg(compilation-ready(Modulename))
+    snd-msg(compile-module(ModuleId, Path))
+    . rec-msg(compilation-ready(ModuleId))
   fi
 endlet
 
-process CloseModuleAction(Modulename : str) is
+process CloseModuleAction(ModuleId : term) is
 let
   Answer     : term,
   Recursive  : bool
@@ -236,7 +238,7 @@ in
       else
         Recursive := false
       fi 
-      . CloseModule(Modulename, Recursive)
+      . CloseModule(ModuleId, Recursive)
     fi
 endlet
 
@@ -253,7 +255,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    SplitFileName(Path, Filename?, Directory?, Extension?)
+    SplitFilename(Path, Filename?, Directory?, Extension?)
     . RenameModule(Modulename, Directory, Filename)
   fi
 endlet
@@ -271,7 +273,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    SplitFileName(Path, Filename?, Directory?, Extension?)
+    SplitFilename(Path, Filename?, Directory?, Extension?)
     . CopySdfModule(Modulename, Directory, Filename)
     . CopyAsfModule(Modulename, Directory, Filename)
   fi
@@ -301,29 +303,29 @@ in
   snd-msg(io-relative-to-absolute(["."]))
   . rec-msg(io-absolute-directories([Directory?]))
   . create(NewModuleContentHandler(), Pid?)
-  . CreateModule(Pid, Directory, Filename, sdf)
+  . CreateNewModule(Pid, Directory, Filename, sdf)
 endlet
 
-process CheckSyntaxSpecification(ModuleName : str) is
+process CheckSyntaxSpecification(ModuleId : term) is
 let
   Syntax    : term,
   ErrorMessage : str,
   Feedback  : term,
-  Id : int
+  Id : int,
+  Modulename : str
 in
   Id := process-id .
-  snd-note(ui-status(statf(Id, 
-                           "Checking syntax definition: %s",
-                           [ModuleName]))) .
-  snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
+  snd-msg(get-all-syntax-definitions(ModuleId, eqs)) .
   (
     rec-msg(syntax(Syntax?)) .
-    snd-msg(check-asfsdf(Syntax, ModuleName)) .
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
+    snd-msg(check-asfsdf(Syntax, Modulename)) .
     rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(ModuleName, Feedback)) .
-    Syntax := no-tree
+    snd-msg(display-sdf-errors(Modulename, Feedback)) .
+    Syntax := UNDEFINED
   +
     rec-msg(no-syntax(ErrorMessage?))
-  ) .
-  snd-note(ui-status(endstat(Id)))
+  )
 endlet
+
+#endif /*__ASFSDF_MODULE_ACTIONS__*/

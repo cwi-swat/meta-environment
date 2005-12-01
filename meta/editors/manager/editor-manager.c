@@ -91,7 +91,7 @@ static EM_Session findSession(const char *path)
 /*}}}  */
 /*{{{  static ATermList findSessions(const char *moduleId) */
 
-static ATermList findSessions(const char *moduleId)
+static ATermList findSessions(ATerm moduleId)
 {
   ATermList result;
   ATermList bindingList;
@@ -100,7 +100,7 @@ static ATermList findSessions(const char *moduleId)
   assert(moduleId != NULL);
 
   result = ATempty;
-  needle = EM_makeModuleIdDefault(moduleId);
+  needle = EM_ModuleIdFromTerm(moduleId);
   bindingList = ATtableKeys(bindings);
   while (!ATisEmpty(bindingList)) {
     EM_Sid cur = EM_SidFromTerm(ATgetFirst(bindingList));
@@ -160,9 +160,9 @@ ATerm create_session(int cid, const char *path)
 }
 
 /*}}}  */
-/*{{{  ATerm bind_session(int cid, ATerm sid, const char *moduleId) */
+/*{{{  ATerm bind_session(int cid, ATerm sid, ATerm moduleId) */
 
-ATerm bind_session(int cid, ATerm sid, const char *moduleId)
+ATerm bind_session(int cid, ATerm sid, ATerm moduleId)
 {
   assert(sid != NULL);
   assert(moduleId != NULL);
@@ -172,11 +172,12 @@ ATerm bind_session(int cid, ATerm sid, const char *moduleId)
   }
   else {
     EM_ModuleId id = getModuleId(sid);
-    if (id != NULL && strcmp(moduleId, EM_getModuleIdName(id)) != 0) {
-      ATabort("editor-manager:bind_session: attempt to rebind %t (%s)\n",
+    EM_ModuleId module = EM_ModuleIdFromTerm(moduleId);
+    if (id != NULL && EM_isEqualModuleId(module, id) != 0) {
+      ATabort("editor-manager:bind_session: attempt to rebind %t (%t)\n",
 	      sid, moduleId);
     }
-    putModuleId(sid, EM_makeModuleIdDefault(moduleId));
+    putModuleId(sid, module);
 
     return sndValue(ATmake("session-bound"));
   }
@@ -202,11 +203,11 @@ ATerm get_session_by_path(int cid, const char *path)
 }
 
 /*}}}  */
-/*{{{  ATerm get_sessions_by_modulename(int cid, const char *modulename) */
+/*{{{  ATerm get_sessions_by_moduleid(int cid, ATerm moduleId) */
 
-ATerm get_sessions_by_modulename(int cid, const char *modulename)
+ATerm get_sessions_by_moduleid(int cid, ATerm moduleId)
 {
-  ATermList sessions = findSessions(modulename);
+  ATermList sessions = findSessions(moduleId);
   return sndValue(ATmake("sessions(<term>)", sessions));
 }
 
@@ -251,9 +252,9 @@ ATerm get_path(int cid, ATerm sid)
 }
 
 /*}}}  */
-/*{{{  ATerm get_modulename(int cid, ATerm sid) */
+/*{{{  ATerm get_moduleid(int cid, ATerm sid) */
 
-ATerm get_modulename(int cid, ATerm sid)
+ATerm get_moduleid(int cid, ATerm sid)
 {
   EM_Session session;
   EM_ModuleId moduleId;
@@ -268,8 +269,7 @@ ATerm get_modulename(int cid, ATerm sid)
     return sndValue(ATmake("session-not-bound"));
   }
   else {
-    const char *modulename = EM_getModuleIdName(moduleId);
-    return sndValue(ATmake("modulename(<str>)", modulename));
+    return sndValue(ATmake("moduleid(<term>)", moduleId));
   }
 }
 

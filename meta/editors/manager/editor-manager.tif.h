@@ -12,10 +12,10 @@
 ATerm is_editor_registered(int conn, ATerm, ATerm);
 void unregister_editor(int conn, ATerm, ATerm);
 void register_editor(int conn, ATerm, ATerm);
-ATerm get_sessions_by_modulename(int conn, const char *);
-ATerm get_modulename(int conn, ATerm);
+ATerm get_sessions_by_moduleid(int conn, ATerm);
+ATerm get_moduleid(int conn, ATerm);
 ATerm get_session_by_path(int conn, const char *);
-ATerm bind_session(int conn, ATerm, const char *);
+ATerm bind_session(int conn, ATerm, ATerm);
 void delete_session(int conn, ATerm);
 ATerm get_path(int conn, ATerm);
 ATerm request_transaction(int conn, ATerm);

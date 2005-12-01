@@ -21,7 +21,7 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		double height = bounds.getHeight();
 		Shape result = null;
 		
-		nl.cwi.sen.api.graph.graph.types.Shape shape = node.getShape();
+        nl.cwi.sen1.graph.types.Shape shape = node.getShape();
 		if (shape.isDiamond()) {
 			result = getDiamondShape(item, x, y, width, height);
 		}

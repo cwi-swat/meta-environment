@@ -53,7 +53,8 @@ public class ImportHierarchyPanel extends JPanel {
 							.getLastPathComponent();
 
 					if (node.isLeaf()) {
-						model.selectModule(node.toString());
+                        System.err.println("ImportHierarchyPanel - addTreeSelectionListener: FIX ME");
+//						model.selectModule(node);
 					}
 				}
 			}

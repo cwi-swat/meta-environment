@@ -1,0 +1,141 @@
+#ifndef __MODULE_MANAGER__
+#define __MODULE_MANAGER__
+
+#include <module-manager.idef>
+#include <attribute-changed-event.tb>
+#include <dependencies-changed-event.tb>
+
+#define UNDEFINED undefined
+
+process MM-CreateModule(ModuleId: term?) is
+  snd-msg(mm-create-module)
+  . rec-msg(mm-module-created(ModuleId?))
+
+process MM-GetModuleIdByAttribute(Namespace: term, Key: term, Value: term, ModuleId: term?) is
+  snd-msg(mm-get-module-id-by-attribute(Namespace, Key, Value))
+  .
+  (
+    rec-msg(mm-module-id(Namespace, Key, Value, ModuleId?))
+  +
+    rec-msg(mm-no-such-module(Namespace, Key, Value))
+    . ModuleId := UNDEFINED 
+  )
+
+process MM-GetAllModules(Namespace: term, Key: term, Modules: list?) is
+  snd-msg(mm-get-all-modules-by-attribute(Namespace, Key))
+  . rec-msg(mm-modules(Namespace, Key, Modules?))
+
+process MM-DeleteModule(ModuleId: term) is
+  snd-msg(mm-delete-module(ModuleId))
+  . snd-note(mm-module-deleted(ModuleId))
+
+process MM-SetAttribute(ModuleId: term, Namespace: term, Key: term, Value: term) is
+let
+  Event : attribute-changed-event,
+  HasValue : bool,
+  OldValue : term
+in
+  MM-HasAttribute(ModuleId, Namespace, Key, HasValue?)
+  .
+  if equal(HasValue, true) then
+    MM-GetAttribute(ModuleId, Namespace, Key, OldValue?)
+  else
+    OldValue := UNDEFINED
+  fi
+  . snd-msg(mm-add-attribute(ModuleId, Namespace, Key, Value))
+  . ACE-MakeEvent(ModuleId, Namespace, Key, OldValue, Value, Event?)
+  . snd-note(mm-attribute-changed(Event))
+endlet
+
+process MM-HasAttribute(ModuleId: term, Namespace: term, Key: term, HasAttribute: bool?) is
+let
+  Value: term
+in
+  snd-msg(mm-get-attribute(ModuleId, Namespace, Key))
+  .
+  (
+    rec-msg(mm-attribute(ModuleId, Namespace, Key, Value?))
+    . HasAttribute := true
+  +
+    rec-msg(mm-no-such-module(ModuleId, Namespace, Key))
+    . HasAttribute := false
+  +
+    rec-msg(mm-no-such-key(ModuleId, Namespace, Key))
+    . HasAttribute := false
+  )
+endlet
+
+process MM-GetAttribute(ModuleId: term, Namespace: term, Key: term, Value: term?) is
+  snd-msg(mm-get-attribute(ModuleId, Namespace, Key))
+  .
+  (
+    rec-msg(mm-attribute(ModuleId, Namespace, Key, Value?))
+  +
+    rec-msg(mm-no-such-module(ModuleId, Namespace, Key))
+    . printf("module-manager - MM-GetAttribute: Unregistered moduleid exception\n")
+    . printf("ModuleId: [%t], Namespace: [%t], Key: [%t]\n", ModuleId, Namespace, Key)
+    . shutdown("")
+  + 
+    rec-msg(mm-no-such-key(ModuleId, Namespace, Key))
+    . printf("module-manager - MM-GetAttribute: Unregistered key exception\n")
+    . printf("ModuleId: [%t], Namespace: [%t], Key: [%t]\n", ModuleId, Namespace, Key)
+    . shutdown("")
+  )
+
+process MM-AddModuleDependency(ModuleId: term, Dependency: term) is
+let
+  Event: dependencies-changed-event
+in
+  snd-msg(mm-add-dependency(ModuleId, Dependency))
+  . DCE-MakeEvent(ModuleId, Event?)
+  . snd-note(mm-dependencies-changed(Event))
+endlet
+
+process MM-GetDependencies(Dependencies: term?) is
+  snd-msg(mm-get-dependencies)
+  . rec-msg(mm-dependencies(Dependencies?))
+
+process MM-GetModuleDependencies(ModuleId: term, Dependencies: list?) is
+  snd-msg(mm-get-depending-modules(ModuleId))
+  .
+  (
+    rec-msg(mm-depending-modules(ModuleId, Dependencies?))
+  +
+    rec-msg(mm-no-such-module(ModuleId))
+    . Dependencies := UNDEFINED
+  )
+
+process MM-GetAllModuleDependencies(ModuleId: term, Dependencies: list?) is
+  snd-msg(mm-get-all-depending-modules(ModuleId))
+  .
+  (
+    rec-msg(mm-all-depending-modules(ModuleId, Dependencies?))
+  +
+    rec-msg(mm-no-such-module(ModuleId))
+    . Dependencies := UNDEFINED
+  )
+
+process MM-GetClosableModules(ModuleId: term, Modules: list?) is
+  snd-msg(mm-get-closable-modules(ModuleId))
+  . rec-msg(mm-closable-modules(ModuleId, Modules?))
+
+process MM-DeleteModuleDependencies(ModuleId: term) is
+let
+  Event: dependencies-changed-event
+in
+  snd-msg(mm-delete-dependencies(ModuleId))
+  . DCE-MakeEvent(ModuleId, Event?)
+  . snd-note(mm-dependencies-changed(Event))
+endlet
+
+process MM-GetModuleGraph(Namespace: term, Graph: term?) is
+  snd-msg(mm-get-module-graph(Namespace))
+  . rec-msg(mm-module-graph(Namespace, Graph?))
+
+process MM-Subscribe-Attribute-Changed(ModuleId: term, Namespace: term, Key: term, OldValue: term, NewValue: term) is
+  subscribe(mm-attribute-changed(attribute-changed-event(ModuleId, Namespace, Key, OldValue, NewValue)))
+
+process MM-Subscribe-Dependencies-Changed(ModuleId: term) is
+  subscribe(mm-dependencies-changed(dependencies-changed-event(ModuleId)))
+
+#endif /* __MODULE_MANAGER__ */

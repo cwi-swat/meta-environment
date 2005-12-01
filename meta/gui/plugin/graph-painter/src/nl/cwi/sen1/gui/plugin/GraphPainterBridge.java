@@ -1,11 +1,10 @@
 // Java tool bridge GraphPainterBridge
 // This file is generated automatically, please do not edit!
-// generation time: May 30, 2005 2:02:01 PM
+// generation time: Sep 22, 2005 3:23:47 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class GraphPainterBridge
   extends GraphPainterTool
@@ -35,12 +34,12 @@ public class GraphPainterBridge
   }
 
   //}}}
-  //{{{  public void selectNode(String s0, String s1)
+  //{{{  public void selectNode(String s0, ATerm t1)
 
-  public void selectNode(String s0, String s1)
+  public void selectNode(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.selectNode(s0, s1);
+      tool.selectNode(s0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `selectNode' not supported.");
@@ -48,12 +47,12 @@ public class GraphPainterBridge
   }
 
   //}}}
-  //{{{  public void showPopup(String s0, String s1, ATerm t2)
+  //{{{  public void showPopup(String s0, ATerm t1, ATerm t2)
 
-  public void showPopup(String s0, String s1, ATerm t2)
+  public void showPopup(String s0, ATerm t1, ATerm t2)
   {
     if (tool != null) {
-      tool.showPopup(s0, s1, t2);
+      tool.showPopup(s0, t1, t2);
     }
     else {
       throw new UnsupportedOperationException("method `showPopup' not supported.");

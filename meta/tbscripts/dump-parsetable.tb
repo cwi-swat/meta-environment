@@ -1,30 +1,30 @@
-process DumpParseTable(ModuleName : str, FileName : str, Type : term) is
+process DumpParseTable(ModuleId : term, Filename : str, Type : term) is
 let
-  Id: term,
-  Table: term,
-  Path: str,
+  Directory: str,
   Error: term,
   Extension: str,
-  NewFileName: str
+  Id: term,
+  NewFilename: str,
+  NewPath: str,
+  Path: str,
+  Table: term
 in
   Id := process-id
-  .  snd-note(ui-status(statf(Id, "Dumping parse table for %s", [ModuleName])))
-  . snd-msg(get-parsetable(ModuleName, Type, true))
+  . snd-msg(get-parsetable(ModuleId, Type))
   .
   (
     rec-msg(parse-table(Table?))
-    . snd-msg(get-path-from-db(ModuleName))
-    . rec-msg(path(Path?))
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     .
-    if equal(FileName, "") then
+    if equal(Filename, "") then
       snd-msg(parsetable-extension-hook(Type))
       . rec-msg(parsetable-extension-hook-result(Extension?))
-      . snd-msg(io-get-filename(Path, ModuleName, Extension))
-      . rec-msg(io-filename(NewFileName?))
+      . ReplaceExtension(Path, Extension, NewPath?)
+      . SplitFilename(NewPath, NewFilename?, Directory?, Extension?)
     else
-      NewFileName := FileName
+      NewFilename := Filename
     fi
-    . snd-msg(io-unpack-and-write-term-in-baf(NewFileName, Table))
+    . snd-msg(io-unpack-and-write-term-in-baf(NewFilename, Table))
     .
     (
       rec-msg(io-file-written)
@@ -32,7 +32,6 @@ in
       rec-msg(io-file-not-written(Error?))
     )
   +
-    rec-msg(no-parse-table(ModuleName))
+    rec-msg(no-parse-table(ModuleId))
   )
-  . snd-note(ui-status(endstat(Id)))
 endlet

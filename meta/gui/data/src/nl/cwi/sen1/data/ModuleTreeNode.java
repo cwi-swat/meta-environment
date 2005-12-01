@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import aterm.ATerm;
+
 public class ModuleTreeNode {
+    ATerm id;
+    
     String name;
 
     String prefix;
@@ -13,13 +17,18 @@ public class ModuleTreeNode {
 
     boolean leaf;
 
-    public ModuleTreeNode(String name, String prefix, boolean leaf) {
+    public ModuleTreeNode(ATerm id, String name, String prefix, boolean leaf) {
+        this.id = id;
         this.name = name;
         this.prefix = prefix;
         this.leaf = leaf;
         children = new ArrayList();
     }
 
+    public ATerm getId() {
+        return id;
+    }
+    
     public String getName() {
         return name;
     }
@@ -28,7 +37,7 @@ public class ModuleTreeNode {
         return prefix + getName();
     }
 
-    public ModuleTreeNode addChild(String p, StringTokenizer tokens) {
+    public ModuleTreeNode addChild(ATerm id, String p, StringTokenizer tokens) {
         String childName = tokens.nextToken();
         ModuleTreeNode childNode = null;
         if (tokens.hasMoreTokens()) {
@@ -38,14 +47,14 @@ public class ModuleTreeNode {
                 childNode = getChild(childIndex);
             }
             if (childNode == null) {
-                childNode = new ModuleTreeNode(childName, p, !tokens
+                childNode = new ModuleTreeNode(id, childName, p, !tokens
                         .hasMoreTokens());
                 children.add(getInsertIndex(childName), childNode);
             }
-            return childNode.addChild(p + childName + "/", tokens);
+            return childNode.addChild(id, p + childName + "/", tokens);
         }
         // if (childNode == null) {
-        childNode = new ModuleTreeNode(childName, p, !tokens.hasMoreTokens());
+        childNode = new ModuleTreeNode(id, childName, p, !tokens.hasMoreTokens());
         children.add(getInsertIndex(childName), childNode);
 
         return childNode;

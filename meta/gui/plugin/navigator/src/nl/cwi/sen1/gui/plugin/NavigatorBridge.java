@@ -1,11 +1,10 @@
 // Java tool bridge NavigatorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 22, 2005 1:03:35 PM
+// generation time: Oct 12, 2005 3:14:03 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class NavigatorBridge
   extends NavigatorTool
@@ -22,12 +21,12 @@ public class NavigatorBridge
 
   //}}}
 
-  //{{{  public void selectModule(String s0)
+  //{{{  public void selectModule(ATerm t0)
 
-  public void selectModule(String s0)
+  public void selectModule(ATerm t0)
   {
     if (tool != null) {
-      tool.selectModule(s0);
+      tool.selectModule(t0);
     }
     else {
       throw new UnsupportedOperationException("method `selectModule' not supported.");
@@ -48,12 +47,12 @@ public class NavigatorBridge
   }
 
   //}}}
-  //{{{  public void showPopup(String s0, ATerm t1)
+  //{{{  public void showPopup(ATerm t0, ATerm t1)
 
-  public void showPopup(String s0, ATerm t1)
+  public void showPopup(ATerm t0, ATerm t1)
   {
     if (tool != null) {
-      tool.showPopup(s0, t1);
+      tool.showPopup(t0, t1);
     }
     else {
       throw new UnsupportedOperationException("method `showPopup' not supported.");

@@ -19,6 +19,11 @@ ATerm EM_stringToChars(const char *str)
   return (ATerm) result;
 }
 
+ATerm EM_byteToChar(char ch)
+{
+    return (ATerm) ATmakeInt(ch);
+}
+
 char *EM_charsToString(ATerm arg)
 {
   ATermList list = (ATermList) arg;
@@ -37,6 +42,11 @@ char *EM_charsToString(ATerm arg)
   str[i] = '\0';
 
   return str;
+}
+
+char EM_charToByte(ATerm arg)
+{
+    return (char) ATgetInt((ATermInt) arg);
 }
 
 
@@ -254,11 +264,11 @@ EM_EditorType EM_makeEditorTypeDefault(const char* name)
 }
 
 /*}}}  */
-/*{{{  EM_ModuleId EM_makeModuleIdDefault(const char* name) */
+/*{{{  EM_ModuleId EM_makeModuleIdDefault(int id) */
 
-EM_ModuleId EM_makeModuleIdDefault(const char* name)
+EM_ModuleId EM_makeModuleIdDefault(int id)
 {
-  return (EM_ModuleId)(ATerm)ATmakeAppl1(EM_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (EM_ModuleId)(ATerm)ATmakeAppl1(EM_afun0, (ATerm) (ATerm) ATmakeInt(id));
 }
 
 /*}}}  */
@@ -490,9 +500,9 @@ inline ATbool EM_isModuleIdDefault(EM_ModuleId arg)
 }
 
 /*}}}  */
-/*{{{  ATbool EM_hasModuleIdName(EM_ModuleId arg) */
+/*{{{  ATbool EM_hasModuleIdId(EM_ModuleId arg) */
 
-ATbool EM_hasModuleIdName(EM_ModuleId arg)
+ATbool EM_hasModuleIdId(EM_ModuleId arg)
 {
   if (EM_isModuleIdDefault(arg)) {
     return ATtrue;
@@ -501,24 +511,24 @@ ATbool EM_hasModuleIdName(EM_ModuleId arg)
 }
 
 /*}}}  */
-/*{{{  char* EM_getModuleIdName(EM_ModuleId arg) */
+/*{{{  int EM_getModuleIdId(EM_ModuleId arg) */
 
-char* EM_getModuleIdName(EM_ModuleId arg)
+int EM_getModuleIdId(EM_ModuleId arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
 /*}}}  */
-/*{{{  EM_ModuleId EM_setModuleIdName(EM_ModuleId arg, const char* name) */
+/*{{{  EM_ModuleId EM_setModuleIdId(EM_ModuleId arg, int id) */
 
-EM_ModuleId EM_setModuleIdName(EM_ModuleId arg, const char* name)
+EM_ModuleId EM_setModuleIdId(EM_ModuleId arg, int id)
 {
   if (EM_isModuleIdDefault(arg)) {
-    return (EM_ModuleId)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue))), 0);
+    return (EM_ModuleId)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(id)), 0);
   }
 
-  ATabort("ModuleId has no Name: %t\n", arg);
+  ATabort("ModuleId has no Id: %t\n", arg);
   return (EM_ModuleId)NULL;
 }
 
@@ -623,12 +633,92 @@ ATbool EM_hasSessionId(EM_Session arg)
 }
 
 /*}}}  */
+/*{{{  ATbool EM_hasSessionPath(EM_Session arg) */
+
+ATbool EM_hasSessionPath(EM_Session arg)
+{
+  if (EM_isSessionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool EM_hasSessionStatus(EM_Session arg) */
+
+ATbool EM_hasSessionStatus(EM_Session arg)
+{
+  if (EM_isSessionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool EM_hasSessionReferenceCount(EM_Session arg) */
+
+ATbool EM_hasSessionReferenceCount(EM_Session arg)
+{
+  if (EM_isSessionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool EM_hasSessionList(EM_Session arg) */
+
+ATbool EM_hasSessionList(EM_Session arg)
+{
+  if (EM_isSessionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  EM_Sid EM_getSessionId(EM_Session arg) */
 
 EM_Sid EM_getSessionId(EM_Session arg)
 {
   
     return (EM_Sid)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  char* EM_getSessionPath(EM_Session arg) */
+
+char* EM_getSessionPath(EM_Session arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  EM_SessionStatus EM_getSessionStatus(EM_Session arg) */
+
+EM_SessionStatus EM_getSessionStatus(EM_Session arg)
+{
+  
+    return (EM_SessionStatus)ATgetArgument((ATermAppl)arg, 2);
+}
+
+/*}}}  */
+/*{{{  int EM_getSessionReferenceCount(EM_Session arg) */
+
+int EM_getSessionReferenceCount(EM_Session arg)
+{
+  
+    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 3));
+}
+
+/*}}}  */
+/*{{{  EM_EditorTypeList EM_getSessionList(EM_Session arg) */
+
+EM_EditorTypeList EM_getSessionList(EM_Session arg)
+{
+  
+    return (EM_EditorTypeList)ATgetArgument((ATermAppl)arg, 4);
 }
 
 /*}}}  */
@@ -645,26 +735,6 @@ EM_Session EM_setSessionId(EM_Session arg, EM_Sid id)
 }
 
 /*}}}  */
-/*{{{  ATbool EM_hasSessionPath(EM_Session arg) */
-
-ATbool EM_hasSessionPath(EM_Session arg)
-{
-  if (EM_isSessionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* EM_getSessionPath(EM_Session arg) */
-
-char* EM_getSessionPath(EM_Session arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
 /*{{{  EM_Session EM_setSessionPath(EM_Session arg, const char* path) */
 
 EM_Session EM_setSessionPath(EM_Session arg, const char* path)
@@ -675,26 +745,6 @@ EM_Session EM_setSessionPath(EM_Session arg, const char* path)
 
   ATabort("Session has no Path: %t\n", arg);
   return (EM_Session)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool EM_hasSessionStatus(EM_Session arg) */
-
-ATbool EM_hasSessionStatus(EM_Session arg)
-{
-  if (EM_isSessionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  EM_SessionStatus EM_getSessionStatus(EM_Session arg) */
-
-EM_SessionStatus EM_getSessionStatus(EM_Session arg)
-{
-  
-    return (EM_SessionStatus)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -711,26 +761,6 @@ EM_Session EM_setSessionStatus(EM_Session arg, EM_SessionStatus status)
 }
 
 /*}}}  */
-/*{{{  ATbool EM_hasSessionReferenceCount(EM_Session arg) */
-
-ATbool EM_hasSessionReferenceCount(EM_Session arg)
-{
-  if (EM_isSessionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  int EM_getSessionReferenceCount(EM_Session arg) */
-
-int EM_getSessionReferenceCount(EM_Session arg)
-{
-  
-    return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 3));
-}
-
-/*}}}  */
 /*{{{  EM_Session EM_setSessionReferenceCount(EM_Session arg, int referenceCount) */
 
 EM_Session EM_setSessionReferenceCount(EM_Session arg, int referenceCount)
@@ -741,26 +771,6 @@ EM_Session EM_setSessionReferenceCount(EM_Session arg, int referenceCount)
 
   ATabort("Session has no ReferenceCount: %t\n", arg);
   return (EM_Session)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool EM_hasSessionList(EM_Session arg) */
-
-ATbool EM_hasSessionList(EM_Session arg)
-{
-  if (EM_isSessionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  EM_EditorTypeList EM_getSessionList(EM_Session arg) */
-
-EM_EditorTypeList EM_getSessionList(EM_Session arg)
-{
-  
-    return (EM_EditorTypeList)ATgetArgument((ATermAppl)arg, 4);
 }
 
 /*}}}  */
@@ -877,6 +887,17 @@ ATbool EM_hasEditorTypeListHead(EM_EditorTypeList arg)
 }
 
 /*}}}  */
+/*{{{  ATbool EM_hasEditorTypeListTail(EM_EditorTypeList arg) */
+
+ATbool EM_hasEditorTypeListTail(EM_EditorTypeList arg)
+{
+  if (EM_isEditorTypeListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  EM_EditorType EM_getEditorTypeListHead(EM_EditorTypeList arg) */
 
 EM_EditorType EM_getEditorTypeListHead(EM_EditorTypeList arg)
@@ -886,6 +907,15 @@ EM_EditorType EM_getEditorTypeListHead(EM_EditorTypeList arg)
   }
   else 
     return (EM_EditorType)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  EM_EditorTypeList EM_getEditorTypeListTail(EM_EditorTypeList arg) */
+
+EM_EditorTypeList EM_getEditorTypeListTail(EM_EditorTypeList arg)
+{
+  
+    return (EM_EditorTypeList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -902,26 +932,6 @@ EM_EditorTypeList EM_setEditorTypeListHead(EM_EditorTypeList arg, EM_EditorType 
 
   ATabort("EditorTypeList has no Head: %t\n", arg);
   return (EM_EditorTypeList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool EM_hasEditorTypeListTail(EM_EditorTypeList arg) */
-
-ATbool EM_hasEditorTypeListTail(EM_EditorTypeList arg)
-{
-  if (EM_isEditorTypeListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  EM_EditorTypeList EM_getEditorTypeListTail(EM_EditorTypeList arg) */
-
-EM_EditorTypeList EM_getEditorTypeListTail(EM_EditorTypeList arg)
-{
-  
-    return (EM_EditorTypeList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
@@ -968,13 +978,13 @@ EM_EditorType EM_visitEditorType(EM_EditorType arg, char* (*acceptName)(char*))
 }
 
 /*}}}  */
-/*{{{  EM_ModuleId EM_visitModuleId(EM_ModuleId arg, char* (*acceptName)(char*)) */
+/*{{{  EM_ModuleId EM_visitModuleId(EM_ModuleId arg, int (*acceptId)(int)) */
 
-EM_ModuleId EM_visitModuleId(EM_ModuleId arg, char* (*acceptName)(char*))
+EM_ModuleId EM_visitModuleId(EM_ModuleId arg, int (*acceptId)(int))
 {
   if (EM_isModuleIdDefault(arg)) {
     return EM_makeModuleIdDefault(
-        acceptName ? acceptName(EM_getModuleIdName(arg)) : EM_getModuleIdName(arg));
+        acceptId ? acceptId(EM_getModuleIdId(arg)) : EM_getModuleIdId(arg));
   }
   ATabort("not a ModuleId: %t\n", arg);
   return (EM_ModuleId)NULL;

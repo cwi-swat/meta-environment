@@ -1,0 +1,34 @@
+#include <asf-namespace.h>
+
+process EditorEditEquationsAction(EditorId : term) is
+let 
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditEquationsAction(ModuleId)
+endlet
+
+
+process EditEquationsAction(ModuleId : term) is
+let
+  AsfPath: str,
+  SdfPath: str,
+  AsfExt: str,
+  Pid: int,
+  Sid: term
+in
+  GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+  .
+  if equal(SdfPath, "") then
+    tau
+  else
+    snd-msg(file-extension-hook(asf))
+    . rec-msg(file-extension-hook-result(AsfExt?))
+    . ReplaceExtension(SdfPath, AsfExt, AsfPath?)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
+    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
+    . create(EditEquations(ModuleId), Pid?)
+    . rec-msg(equations-editor-started(AsfPath, Sid?))
+    . create(CleanupEditTerm(Sid, ModuleId), Pid?)
+  fi
+endlet

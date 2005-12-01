@@ -2,8 +2,12 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
+  assert.tb \
+  asf-namespace.h \
+  attribute-changed-event.tb \
   close-all.tb \
   compile-module.tb \
+  dependencies-changed-event.tb \
   dump-equations.tb \
   dump-parsetable.tb \
   dump-sdf-definition.tb \
@@ -14,6 +18,7 @@ TBSCRIPTS = \
   meta.tb \
   module-actions.tb \
   module-db.tb \
+  module-manager.tb \
   module-utils.tb \
   module-selection-listener.tb \
   open-modules.tb \
@@ -24,6 +29,8 @@ TBSCRIPTS = \
   process-eqs.tb \
   restore-term-brackets.tb \
   save-module.tb \
+  sdf-modules.tb \
+  sdf-namespace.h \
   standalone-errorlist.tb \
   start-meta-eqs-dumper.tb \
   start-meta-equations-editor.tb \
@@ -33,7 +40,8 @@ TBSCRIPTS = \
   status.tb \
   status-to-progress.tb \
   user-interface.tb \
-  asfsdf-editor-actions.tb \
+  sdf-editor-actions.tb \
+  asf-editor-actions.tb \
   asfsdf-module-actions.tb \
   gui-actions.tb \
   term-actions.tb \

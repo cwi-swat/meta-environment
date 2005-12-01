@@ -10,7 +10,7 @@ let
   GraphId: str,
   Menu: term,
   PopupMenu: list,
-  NodeId: str
+  NodeId: term
 in
   rec-connect(T?)
   .
@@ -46,17 +46,15 @@ in
 endlet
 
 process GP-AddListener is
-  subscribe(gp-node-selected(<str>,<str>))
+  subscribe(gp-node-selected(<str>,<term>))
 
-
-
-process GP-RequestPopup(GraphId: str?, NodeId: str?) is
+process GP-RequestPopup(GraphId: str?, NodeId: term?) is
   rec-msg(gp-request-popup-event(GraphId?, NodeId?))
 
-process GP-ShowPopup(GraphId: str, NodeId: str, PopupMenu: list) is
+process GP-ShowPopup(GraphId: str, NodeId: term, PopupMenu: list) is
   snd-msg(gp-show-popup(GraphId, NodeId, PopupMenu))
 
-process GP-PopupEvent(GraphId: str?, NodeId: str?, MenuItem: term?) is
+process GP-PopupEvent(GraphId: str?, NodeId: term?, MenuItem: term?) is
   rec-msg(gp-menu-selected(GraphId?, NodeId?, MenuItem?))
 
 toolbus(GraphPainter)

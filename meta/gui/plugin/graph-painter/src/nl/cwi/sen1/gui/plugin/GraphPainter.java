@@ -14,8 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
-import nl.cwi.sen.api.graph.graph.Factory;
-import nl.cwi.sen.api.graph.graph.types.Graph;
+import nl.cwi.sen1.graph.Factory;
+import nl.cwi.sen1.graph.types.Graph;
+import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
@@ -29,7 +30,8 @@ import aterm.ATerm;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTif {
+public class GraphPainter extends DefaultStudioPlugin implements
+        GraphPainterTif {
     private static final String TOOL_NAME = "graph-painter";
 
     private static final String RESOURCE_DIR = "/resources";
@@ -60,7 +62,8 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
    
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
-        graphFactory = Factory.getInstance((PureFactory) studio.getATermFactory());
+        graphFactory = Factory.getInstance((PureFactory) studio
+                .getATermFactory());
         bridge = new GraphPainterBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);
         studio.connect(getName(), bridge);
@@ -69,37 +72,42 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
     public void displayGraph(String id, ATerm graphTerm) {
         GraphPanel panel = getPanel(id);
         if (panel == null) {
-        	panel = createPanel(id);
+            panel = createPanel(id);
         }
 
         Graph graph = graphFactory.GraphFromTerm(graphTerm);
         panel.setGraph(new nl.cwi.sen1.gui.plugin.GraphAdapter(graph));
     }
 
-    private GraphPanel createPanel(final String id) {
-        GraphPanel panel = getPanel(id);
+    private GraphPanel createPanel(final String graphId) {
+        GraphPanel panel = getPanel(graphId);
 
         if (panel == null) {
-            panel = new GraphPanel(id, preferences);
-            StudioComponentImpl comp = new StudioComponentImpl(id, panel) {
-				public void requestClose() throws CloseAbortedException {
-					throw new CloseAbortedException();
-				}
+            panel = new GraphPanel(graphId, preferences);
+            StudioComponentImpl comp = new StudioComponentImpl(graphId, panel) {
+                public void requestClose() throws CloseAbortedException {
+                    throw new CloseAbortedException();
+                }
             };
-       
+
             panel.setGraphPanelListener(new GraphPanelListener() {
-                public void nodeSelected(String nodeId) {
+                public void nodeSelected(String id) {
+                    NodeId nodeId = graphFactory.NodeIdFromString(id);
                     bridge.postEvent(studio.getATermFactory().make(
-                            "node-selected(<str>,<str>)", id, nodeId));
+                            "node-selected(<str>,<term>)", graphId,
+                            nodeId.toTerm()));
                 }
 
-                public void popupRequested(String nodeId, MouseEvent e) {
+                public void popupRequested(String id, MouseEvent e) {
                     popupEvent = e;
+
+                    NodeId nodeId = graphFactory.NodeIdFromString(id);
                     bridge.postEvent(studio.getATermFactory().make(
-                            "request-popup-event(<str>,<str>)", id, nodeId));
+                            "request-popup-event(<str>,<term>)", graphId,
+                            nodeId.toTerm()));
                 }
             });
-            graphs.put(id, panel);
+            graphs.put(graphId, panel);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
             studio.addComponentMenu(comp, createGraphMenu(panel, "Dot"));
@@ -260,26 +268,26 @@ public class GraphPainter extends DefaultStudioPlugin implements  GraphPainterTi
     }
 
     public void recTerminate(ATerm t0) {
-    	GraphPanel.cleanUp();
-    	fireStudioPluginClosed();
+        GraphPanel.cleanUp();
+        fireStudioPluginClosed();
     }
 
     public void recAckEvent(ATerm t0) {
     }
 
-    public void selectNode(String graphId, String nodeId) {
+    public void selectNode(String graphId, ATerm nodeId) {
         GraphPanel panel = getPanel(graphId);
         if (panel != null) {
-            panel.setSelectedNode(nodeId);
+            panel.setSelectedNode(nodeId.toString());
         }
     }
 
-    public void showPopup(final String graphId, final String nodeId, ATerm menu) {
+    public void showPopup(final String graphId, final ATerm nodeId, ATerm menu) {
         StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
         popup.setPopupHandler(new PopupHandler() {
             public void popupSelected(ATerm action) {
                 bridge.postEvent(studio.getATermFactory().make(
-                        "popup-menu-event(<str>,<str>,<term>)", graphId,
+                        "popup-menu-event(<str>,<term>,<term>)", graphId,
                         nodeId, action));
             }
         });

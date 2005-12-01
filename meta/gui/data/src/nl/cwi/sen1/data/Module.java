@@ -4,11 +4,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import aterm.ATerm;
+
 
 public class Module implements Comparable {
 	public static final int STATE_NORMAL = 0;
 	public static final int STATE_NEW = 1;
 
+    private ATerm _id;
+    
 	private String _name;
 
 	private List _parent;
@@ -19,8 +23,9 @@ public class Module implements Comparable {
 
 	private int State = STATE_NORMAL;
 
-	public Module(String name) {
-		setName(name);
+	public Module(ATerm id, String name) {
+		setId(id);
+        setName(name);
 		initParentList();
 
 		childListModel = new ListModel(_child);
@@ -33,6 +38,10 @@ public class Module implements Comparable {
 		return _name.compareTo(peer.getName());
 	}
 
+    public ATerm getId() {
+        return _id;
+    }
+    
 	public String getName() {
 		return _name;
 	}
@@ -41,6 +50,10 @@ public class Module implements Comparable {
 		return _name.substring(_name.lastIndexOf('/'),-1);
 	}
 
+    private void setId(ATerm id) {
+        _id = id;
+    }
+    
 	private void setName(String name) {
 		_name = name;
 	}

@@ -1,3 +1,5 @@
+#include <gui-actions.tb>
+
 process HandleEvent(Type: term, Event: term) is
 let
   Actions: list,

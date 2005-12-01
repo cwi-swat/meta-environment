@@ -15,6 +15,7 @@ import nl.cwi.sen1.data.Module;
 import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.data.ModuleTreeNode;
+import nl.cwi.sen1.gui.plugin.Navigator;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;
@@ -85,7 +86,7 @@ public class ModuleTree extends JPanel {
 		if (path != null) {
 			ModuleTreeNode selectedModule = (ModuleTreeNode) path
 					.getLastPathComponent();
-			return manager.getModule(selectedModule.getFullName());
+			return manager.getModule(selectedModule.getId());
 		}
 
 		return null;

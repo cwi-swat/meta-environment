@@ -1,18 +1,12 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: May 30, 2005 2:02:01 PM
+// generation time: Sep 22, 2005 3:23:47 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import toolbus.SwingTool;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
+import toolbus.*;
+import java.util.*;
 
 abstract public class GraphPainterTool
   extends SwingTool
@@ -51,8 +45,8 @@ abstract public class GraphPainterTool
   {
     sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<graph-painter>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<graph-painter>,<term>)"), new Boolean(true));
   }
@@ -64,8 +58,8 @@ abstract public class GraphPainterTool
   private void initPatterns()
   {
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
-    PselectNode0 = factory.parse("rec-do(select-node(<str>,<str>))");
-    PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<str>,<term>))");
+    PselectNode0 = factory.parse("rec-do(select-node(<str>,<term>))");
+    PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>,<term>))");
     PsizeGraph0 = factory.parse("rec-eval(size-graph(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -87,12 +81,12 @@ abstract public class GraphPainterTool
     }
     result = term.match(PselectNode0);
     if (result != null) {
-      selectNode((String)result.get(0), (String)result.get(1));
+      selectNode((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PshowPopup0);
     if (result != null) {
-      showPopup((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      showPopup((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PsizeGraph0);

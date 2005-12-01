@@ -8,7 +8,7 @@ process EditorManager is
 let
   EditorType: term,
   EM : editor-manager,
-  ModuleId: str,
+  ModuleId: term,
   Path : str,
   Sid : term,
   Sids: list
@@ -43,12 +43,12 @@ in
       . snd-msg(em-no-such-session(Sid))
     )
   +
-    rec-msg(em-get-modulename(Sid?))
-    . snd-eval(EM, get-modulename(Sid))
+    rec-msg(em-get-moduleid(Sid?))
+    . snd-eval(EM, get-moduleid(Sid))
     .
     (
-      rec-value(EM, modulename(ModuleId?))
-      . snd-msg(em-modulename(Sid, ModuleId))
+      rec-value(EM, moduleid(ModuleId?))
+      . snd-msg(em-moduleid(Sid, ModuleId))
     +
       rec-value(EM, no-such-session)
       . snd-msg(em-no-such-session(Sid))
@@ -77,8 +77,8 @@ in
     rec-msg(em-unregister-editor(Sid?, EditorType?))
     . snd-do(EM, unregister-editor(Sid, EditorType))
   +
-    rec-msg(em-get-sessions-by-modulename(ModuleId?))
-    . snd-eval(EM, get-sessions-by-modulename(ModuleId))
+    rec-msg(em-get-sessions-by-moduleid(ModuleId?))
+    . snd-eval(EM, get-sessions-by-moduleid(ModuleId))
     . rec-value(EM, sessions(Sids?))
     . snd-msg(em-sessions(ModuleId, Sids))
   +

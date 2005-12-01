@@ -9,18 +9,19 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm write_in_baf(int conn, const char *, ATerm);
 ATerm unpack_and_write_in_baf(int conn, const char *, ATerm);
-ATerm write_text_list(int conn, const char *, ATerm);
+ATerm write_in_baf(int conn, const char *, ATerm);
 ATerm read_text_file(int conn, const char *);
-ATerm unpack_term(int conn, ATerm);
+ATerm write_text_list(int conn, const char *, ATerm);
 ATerm read_and_pack_term(int conn, const char *);
-ATerm pack_term(int conn, ATerm);
+ATerm unpack_term(int conn, ATerm);
 ATerm read_term_file(int conn, const char *);
-ATerm exists_file(int conn, const char *);
+ATerm pack_term(int conn, ATerm);
 ATerm compare_files(int conn, const char *, const char *);
-ATerm copy_file(int conn, const char *, const char *);
+ATerm exists_file(int conn, const char *);
 ATerm get_filename(int conn, const char *, const char *, const char *);
+ATerm copy_file(int conn, const char *, const char *);
+ATerm get_relative_filename(int conn, ATerm, const char *, const char *);
 ATerm remove_file(int conn, const char *);
 ATerm get_path_directory(int conn, const char *);
 ATerm find_file(int conn, ATerm, const char *, const char *);

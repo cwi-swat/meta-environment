@@ -2,8 +2,7 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.awt.Color;
 
-import nl.cwi.sen.api.graph.graph.types.Shape;
-
+import nl.cwi.sen1.graph.types.Shape;
 import edu.berkeley.guir.prefuse.graph.DefaultNode;
 
 public class GraphNode extends DefaultNode {

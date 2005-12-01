@@ -13,6 +13,8 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import aterm.ATerm;
+
 public class ModuleTreeModel extends AbstractModuleTreeModel implements
 		TreeModel, Serializable {
 	private ModuleTreeNode root;
@@ -24,7 +26,7 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 	public ModuleTreeModel() {
 		moduleTable = new HashMap();
 		moduleSelectionListeners = new LinkedList();
-		root = new ModuleTreeNode("", "", false);
+		root = new ModuleTreeNode(null, "", "", false);
 	}
 
 	public Object getRoot() {
@@ -60,8 +62,8 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 		moduleSelectionListeners.add(listener);
 	}
 
-	public void selectModule(String moduleName) {
-		selectModule(getModule(moduleName));
+	public void selectModule(ATerm moduleId) {
+		selectModule(getModule(moduleId));
 	}
 
 	public void selectModule(Module module) {
@@ -72,21 +74,22 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 		}
 	}
 
-	public Module getModule(String name) {
-		return (Module) moduleTable.get(name);
+	public Module getModule(ATerm moduleId) {
+		return (Module) moduleTable.get(moduleId);
 	}
 
 	public void addModule(Module module) {
-		String name = module.getName();
+		ATerm moduleId = module.getId();
+        String name = module.getName();
 
-		if (moduleTable.put(name, module) == null) {
-			root.addChild("", new StringTokenizer(name, "/"));
+		if (moduleTable.put(moduleId, module) == null) {
+            root.addChild(moduleId, "", new StringTokenizer(name, "/"));
 			repaintTree();
 		}
 	}
 
-	public void removeModule(String name) {
-		moduleTable.remove(name);
+	public void removeModule(ATerm id, String name) {
+		moduleTable.remove(id);
 		root.removeChild(new StringTokenizer(name, "/"));
 		repaintTree();
 	}
