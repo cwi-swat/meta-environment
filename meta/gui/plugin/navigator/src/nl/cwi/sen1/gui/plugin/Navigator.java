@@ -156,7 +156,7 @@ public class Navigator extends DefaultStudioPlugin implements  NavigatorTif {
             public void moduleSelected(Module module) {
                 if (!suspendSelectionNotification) {
                     String name = module != null ? module.toString() : " ";
-                    navigatorComponent.setStatusMessage(name);
+//                    navigatorComponent.setStatusMessage(name);
                     bridge.postEvent(studio.getATermFactory().make(
                             "module-selected(<str>)", name));
                 }
