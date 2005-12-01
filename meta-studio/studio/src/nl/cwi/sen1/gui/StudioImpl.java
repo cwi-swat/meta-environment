@@ -211,9 +211,9 @@ public class StudioImpl implements Studio, GuiTif {
                     StudioComponent component = (StudioComponent) componentsByView
                             .get(window);
                     
-                    StatusBar statusBar = (StatusBar) componentStatusBar.get(component);
+//                    StatusBar statusBar = (StatusBar) componentStatusBar.get(component);
                     
-                    statusPanel.remove(statusBar);
+//                    statusPanel.remove(statusBar);
                     componentsByView.remove(window);
                     idsByComponent.remove(component);
                     componentMenus.remove(component);
