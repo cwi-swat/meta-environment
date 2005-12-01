@@ -1,0 +1,52 @@
+[
+  constructor(Configuration, list, configuration(<list(Properties)>)),
+  list(Properties, Property),
+
+  constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <action(str)>)),
+  constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
+  constructor(Property, library-path, library-path(<path(str)>)),
+  constructor(Property, module-path, module-path(<path(str)>)),
+
+  constructor(Property, text-category, text-category(<category(TextCategoryName)>,<attributes(TextAttributes)>)),
+
+  constructor(ActionDescription, default, description(<action-type(ActionType)>, <event(Event)>)),
+  list(ActionDescriptionList, ActionDescription),
+
+  constructor(ActionType, term-editor, term-editor),
+  constructor(ActionType, term-editor-for-module, term-editor(<module-id(str)>)),
+
+  constructor(ActionType, equations-editor, equations-editor),
+  constructor(ActionType, syntax-editor, syntax-editor),
+  constructor(ActionType, feedback-list, feedback-list),
+  constructor(ActionType, tree-panel, tree-panel),
+  constructor(ActionType, module-popup, module-popup(<module-id(str)>)),
+  constructor(ActionType, new-module-popup, new-module-popup),
+  constructor(ActionType, studio-menubar, studio-menubar),
+  constructor(ActionType, studio-toolbar, studio-toolbar),
+  constructor(ActionType, wildcard, "*"),
+
+  constructor(Event, click, click),
+  constructor(Event, icon, icon(<title(str)>, <path(str)>)),
+
+  constructor(Event, default, menu(<items(Items)>)),
+  constructor(Event, shortcut, menu(<items(Items)>, <shortcut(str)>)),
+  list(Items, str),
+
+  constructor(ModuleName, wildcard, "*"),
+
+  constructor(TextCategoryName, focus, focus),
+  constructor(TextCategoryName, selection, selection),
+  constructor(TextCategoryName, normal, normal),
+  constructor(TextCategoryName, extern, extern(<name(str)>)),
+
+  list(TextAttributes, TextAttribute),
+  constructor(TextAttribute, foreground-color, foreground-color(<color(Color)>)),
+  constructor(TextAttribute, background-color, background-color(<color(Color)>)),
+  constructor(TextAttribute, style, style(<style(TextStyle)>)),
+  constructor(TextAttribute, font, font(<name(str)>)),
+  constructor(TextAttribute, size, size(<points(int)>)),
+  constructor(TextStyle, bold, bold),
+  constructor(TextStyle, italics, italics),
+  constructor(TextStyle, underlined, underlined),
+  constructor(Color, rgb, rgb(<red(int)>,<green(int)>,<blue(int)>))
+]
