@@ -12,7 +12,7 @@ configuration interface
 
 requires
 
-aterm 2.4.2
+aterm 2.4.1
 
 toolbuslib 0.8
 

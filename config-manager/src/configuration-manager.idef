@@ -62,7 +62,8 @@ let
   Event: term,
   Events: list,
   Type: term,
-  ModuleId: str,
+  LibraryPaths: list,
+  ModuleId: term,
   ModulePaths: list,
   Extension: str,
   Categories: term
@@ -120,6 +121,11 @@ in
     . snd-eval(CM, get-module-paths)
     . rec-value(CM, module-paths(ModulePaths?))
     . snd-msg(module-paths(ModulePaths))
+  +
+    rec-msg(get-library-paths)
+    . snd-eval(CM, get-library-paths)
+    . rec-value(CM, library-paths(LibraryPaths?))
+    . snd-msg(library-paths(LibraryPaths))
   +
     rec-msg(get-text-categories)
     . snd-eval(CM, get-text-categories)

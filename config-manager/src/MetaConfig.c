@@ -580,11 +580,19 @@ MC_Property MC_makePropertyExtension(const char* language, const char* extension
 }
 
 /*}}}  */
+/*{{{  MC_Property MC_makePropertyLibraryPath(const char* path) */
+
+MC_Property MC_makePropertyLibraryPath(const char* path)
+{
+  return (MC_Property)(ATerm)ATmakeAppl1(MC_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  MC_Property MC_makePropertyModulePath(const char* path) */
 
 MC_Property MC_makePropertyModulePath(const char* path)
 {
-  return (MC_Property)(ATerm)ATmakeAppl1(MC_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (MC_Property)(ATerm)ATmakeAppl1(MC_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -592,7 +600,7 @@ MC_Property MC_makePropertyModulePath(const char* path)
 
 MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAttributes attributes)
 {
-  return (MC_Property)(ATerm)ATmakeAppl2(MC_afun4, (ATerm) category, (ATerm) attributes);
+  return (MC_Property)(ATerm)ATmakeAppl2(MC_afun5, (ATerm) category, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -600,7 +608,7 @@ MC_Property MC_makePropertyTextCategory(MC_TextCategoryName category, MC_TextAtt
 
 MC_ActionDescription MC_makeActionDescriptionDefault(MC_ActionType actionType, MC_Event event)
 {
-  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun5, (ATerm) actionType, (ATerm) event);
+  return (MC_ActionDescription)(ATerm)ATmakeAppl2(MC_afun6, (ATerm) actionType, (ATerm) event);
 }
 
 /*}}}  */
@@ -632,7 +640,7 @@ MC_ActionDescriptionList MC_makeActionDescriptionListMany(MC_ActionDescription h
 
 MC_ActionType MC_makeActionTypeTermEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun6);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun7);
 }
 
 /*}}}  */
@@ -640,7 +648,7 @@ MC_ActionType MC_makeActionTypeTermEditor(void)
 
 MC_ActionType MC_makeActionTypeTermEditorForModule(const char* moduleId)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -648,7 +656,7 @@ MC_ActionType MC_makeActionTypeTermEditorForModule(const char* moduleId)
 
 MC_ActionType MC_makeActionTypeEquationsEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun8);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun9);
 }
 
 /*}}}  */
@@ -656,7 +664,7 @@ MC_ActionType MC_makeActionTypeEquationsEditor(void)
 
 MC_ActionType MC_makeActionTypeSyntaxEditor(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun9);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun10);
 }
 
 /*}}}  */
@@ -664,7 +672,7 @@ MC_ActionType MC_makeActionTypeSyntaxEditor(void)
 
 MC_ActionType MC_makeActionTypeFeedbackList(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun10);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun11);
 }
 
 /*}}}  */
@@ -672,7 +680,7 @@ MC_ActionType MC_makeActionTypeFeedbackList(void)
 
 MC_ActionType MC_makeActionTypeTreePanel(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun11);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun12);
 }
 
 /*}}}  */
@@ -680,7 +688,7 @@ MC_ActionType MC_makeActionTypeTreePanel(void)
 
 MC_ActionType MC_makeActionTypeModulePopup(const char* moduleId)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun12, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (MC_ActionType)(ATerm)ATmakeAppl1(MC_afun13, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -688,7 +696,7 @@ MC_ActionType MC_makeActionTypeModulePopup(const char* moduleId)
 
 MC_ActionType MC_makeActionTypeNewModulePopup(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun13);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun14);
 }
 
 /*}}}  */
@@ -696,7 +704,7 @@ MC_ActionType MC_makeActionTypeNewModulePopup(void)
 
 MC_ActionType MC_makeActionTypeStudioMenubar(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun14);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun15);
 }
 
 /*}}}  */
@@ -704,7 +712,7 @@ MC_ActionType MC_makeActionTypeStudioMenubar(void)
 
 MC_ActionType MC_makeActionTypeStudioToolbar(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun15);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun16);
 }
 
 /*}}}  */
@@ -712,7 +720,7 @@ MC_ActionType MC_makeActionTypeStudioToolbar(void)
 
 MC_ActionType MC_makeActionTypeWildcard(void)
 {
-  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun16);
+  return (MC_ActionType)(ATerm)ATmakeAppl0(MC_afun17);
 }
 
 /*}}}  */
@@ -720,7 +728,7 @@ MC_ActionType MC_makeActionTypeWildcard(void)
 
 MC_Event MC_makeEventClick(void)
 {
-  return (MC_Event)(ATerm)ATmakeAppl0(MC_afun17);
+  return (MC_Event)(ATerm)ATmakeAppl0(MC_afun18);
 }
 
 /*}}}  */
@@ -728,7 +736,7 @@ MC_Event MC_makeEventClick(void)
 
 MC_Event MC_makeEventIcon(const char* title, const char* path)
 {
-  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun18, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun19, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -736,7 +744,7 @@ MC_Event MC_makeEventIcon(const char* title, const char* path)
 
 MC_Event MC_makeEventDefault(MC_Items items)
 {
-  return (MC_Event)(ATerm)ATmakeAppl1(MC_afun19, (ATerm) items);
+  return (MC_Event)(ATerm)ATmakeAppl1(MC_afun20, (ATerm) items);
 }
 
 /*}}}  */
@@ -744,7 +752,7 @@ MC_Event MC_makeEventDefault(MC_Items items)
 
 MC_Event MC_makeEventShortcut(MC_Items items, const char* shortcut)
 {
-  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun20, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (MC_Event)(ATerm)ATmakeAppl2(MC_afun21, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -776,7 +784,7 @@ MC_Items MC_makeItemsMany(const char* head, MC_Items tail)
 
 MC_ModuleName MC_makeModuleNameWildcard(void)
 {
-  return (MC_ModuleName)(ATerm)ATmakeAppl0(MC_afun16);
+  return (MC_ModuleName)(ATerm)ATmakeAppl0(MC_afun17);
 }
 
 /*}}}  */
@@ -784,7 +792,7 @@ MC_ModuleName MC_makeModuleNameWildcard(void)
 
 MC_TextCategoryName MC_makeTextCategoryNameFocus(void)
 {
-  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun21);
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun22);
 }
 
 /*}}}  */
@@ -792,7 +800,7 @@ MC_TextCategoryName MC_makeTextCategoryNameFocus(void)
 
 MC_TextCategoryName MC_makeTextCategoryNameSelection(void)
 {
-  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun22);
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun23);
 }
 
 /*}}}  */
@@ -800,7 +808,7 @@ MC_TextCategoryName MC_makeTextCategoryNameSelection(void)
 
 MC_TextCategoryName MC_makeTextCategoryNameNormal(void)
 {
-  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun23);
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl0(MC_afun24);
 }
 
 /*}}}  */
@@ -808,7 +816,7 @@ MC_TextCategoryName MC_makeTextCategoryNameNormal(void)
 
 MC_TextCategoryName MC_makeTextCategoryNameExtern(const char* name)
 {
-  return (MC_TextCategoryName)(ATerm)ATmakeAppl1(MC_afun24, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (MC_TextCategoryName)(ATerm)ATmakeAppl1(MC_afun25, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -840,7 +848,7 @@ MC_TextAttributes MC_makeTextAttributesMany(MC_TextAttribute head, MC_TextAttrib
 
 MC_TextAttribute MC_makeTextAttributeForegroundColor(MC_Color color)
 {
-  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun25, (ATerm) color);
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun26, (ATerm) color);
 }
 
 /*}}}  */
@@ -848,7 +856,7 @@ MC_TextAttribute MC_makeTextAttributeForegroundColor(MC_Color color)
 
 MC_TextAttribute MC_makeTextAttributeBackgroundColor(MC_Color color)
 {
-  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun26, (ATerm) color);
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun27, (ATerm) color);
 }
 
 /*}}}  */
@@ -856,7 +864,7 @@ MC_TextAttribute MC_makeTextAttributeBackgroundColor(MC_Color color)
 
 MC_TextAttribute MC_makeTextAttributeStyle(MC_TextStyle style)
 {
-  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun27, (ATerm) style);
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun28, (ATerm) style);
 }
 
 /*}}}  */
@@ -864,7 +872,7 @@ MC_TextAttribute MC_makeTextAttributeStyle(MC_TextStyle style)
 
 MC_TextAttribute MC_makeTextAttributeFont(const char* name)
 {
-  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun28, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun29, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -872,7 +880,7 @@ MC_TextAttribute MC_makeTextAttributeFont(const char* name)
 
 MC_TextAttribute MC_makeTextAttributeSize(int points)
 {
-  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun29, (ATerm) (ATerm) ATmakeInt(points));
+  return (MC_TextAttribute)(ATerm)ATmakeAppl1(MC_afun30, (ATerm) (ATerm) ATmakeInt(points));
 }
 
 /*}}}  */
@@ -880,7 +888,7 @@ MC_TextAttribute MC_makeTextAttributeSize(int points)
 
 MC_TextStyle MC_makeTextStyleBold(void)
 {
-  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun30);
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun31);
 }
 
 /*}}}  */
@@ -888,7 +896,7 @@ MC_TextStyle MC_makeTextStyleBold(void)
 
 MC_TextStyle MC_makeTextStyleItalics(void)
 {
-  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun31);
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun32);
 }
 
 /*}}}  */
@@ -896,7 +904,7 @@ MC_TextStyle MC_makeTextStyleItalics(void)
 
 MC_TextStyle MC_makeTextStyleUnderlined(void)
 {
-  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun32);
+  return (MC_TextStyle)(ATerm)ATmakeAppl0(MC_afun33);
 }
 
 /*}}}  */
@@ -904,7 +912,7 @@ MC_TextStyle MC_makeTextStyleUnderlined(void)
 
 MC_Color MC_makeColorRgb(int red, int green, int blue)
 {
-  return (MC_Color)(ATerm)ATmakeAppl3(MC_afun33, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+  return (MC_Color)(ATerm)ATmakeAppl3(MC_afun34, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 
 /*}}}  */
@@ -1216,6 +1224,9 @@ ATbool MC_isValidProperty(MC_Property arg)
   else if (MC_isPropertyExtension(arg)) {
     return ATtrue;
   }
+  else if (MC_isPropertyLibraryPath(arg)) {
+    return ATtrue;
+  }
   else if (MC_isPropertyModulePath(arg)) {
     return ATtrue;
   }
@@ -1262,6 +1273,28 @@ inline ATbool MC_isPropertyExtension(MC_Property arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, MC_patternPropertyExtension, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isPropertyLibraryPath(MC_Property arg) */
+
+inline ATbool MC_isPropertyLibraryPath(MC_Property arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternPropertyLibraryPath, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1362,7 +1395,10 @@ ATbool MC_hasPropertyExtension(MC_Property arg)
 
 ATbool MC_hasPropertyPath(MC_Property arg)
 {
-  if (MC_isPropertyModulePath(arg)) {
+  if (MC_isPropertyLibraryPath(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isPropertyModulePath(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1431,7 +1467,10 @@ char* MC_getPropertyExtension(MC_Property arg)
 
 char* MC_getPropertyPath(MC_Property arg)
 {
-  
+  if (MC_isPropertyLibraryPath(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
@@ -1510,7 +1549,10 @@ MC_Property MC_setPropertyExtension(MC_Property arg, const char* extension)
 
 MC_Property MC_setPropertyPath(MC_Property arg, const char* path)
 {
-  if (MC_isPropertyModulePath(arg)) {
+  if (MC_isPropertyLibraryPath(arg)) {
+    return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
+  }
+  else if (MC_isPropertyModulePath(arg)) {
     return (MC_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
   }
 
@@ -3417,6 +3459,10 @@ MC_Property MC_visitProperty(MC_Property arg, MC_ActionDescriptionList (*acceptD
     return MC_makePropertyExtension(
         acceptLanguage ? acceptLanguage(MC_getPropertyLanguage(arg)) : MC_getPropertyLanguage(arg),
         acceptExtension ? acceptExtension(MC_getPropertyExtension(arg)) : MC_getPropertyExtension(arg));
+  }
+  if (MC_isPropertyLibraryPath(arg)) {
+    return MC_makePropertyLibraryPath(
+        acceptPath ? acceptPath(MC_getPropertyPath(arg)) : MC_getPropertyPath(arg));
   }
   if (MC_isPropertyModulePath(arg)) {
     return MC_makePropertyModulePath(

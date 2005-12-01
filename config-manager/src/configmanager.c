@@ -34,6 +34,7 @@ static ATermList userTextCategories = NULL;
 static ATermList systemTextCategories = NULL;
 
 static ATermList modulePaths = NULL;
+static ATermList libraryPaths = NULL;
 
 /*}}}  */
 
@@ -202,6 +203,10 @@ static void addSystemProperty(MC_Property property)
     const char *path = MC_getPropertyPath(property);
     modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
   }
+  else if (MC_isPropertyLibraryPath(property)) {
+    const char *path = MC_getPropertyPath(property);
+    libraryPaths = ATinsert(libraryPaths, ATmake("<str>", path));
+  }
   else if (MC_isPropertyAction(property)) {
     const char *action = MC_getPropertyAction(property);
     MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
@@ -237,6 +242,7 @@ void add_system_properties(int cid, const char *contents)
 	properties = MC_getPropertiesTail(properties);
       }
       modulePaths = ATreverse(modulePaths);
+      libraryPaths = ATreverse(libraryPaths);
     }
   }
   else {
@@ -344,16 +350,17 @@ ATerm get_events(int cid, ATerm actionType)
 }
 
 /*}}}  */
-/*{{{  ATerm get_module_events(int cid, ATerm type, const char *moduleId) */
+/*{{{  ATerm get_module_events(int cid, ATerm type, ATerm moduleId) */
 
-ATerm get_module_events(int cid, ATerm type, const char *moduleId)
+ATerm get_module_events(int cid, ATerm type, ATerm moduleId)
 {
   ATerm boundType;
   ATermList result1, result2;
 
   char *fun = ATgetName(ATgetAFun((ATermAppl)type));
   boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
-                                           ATmake("<str>", moduleId));
+                                           ATmake("<str>", 
+						  ATwriteToString(moduleId)));
 
   result1 = getEvents(type);
   result2 = getEvents(boundType);
@@ -392,16 +399,16 @@ ATerm get_action(int cid, ATerm type, ATerm event)
 }
 
 /*}}}  */
-/*{{{  ATerm get_module_action(int cid, ATerm type, ATerm event, const char *moduleId) */
+/*{{{  ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId) */
 
-ATerm get_module_action(int cid, ATerm type, ATerm event, const char *moduleId)
+ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId)
 {
   ATerm boundType;
   ATermList actions;
 
   char *fun = ATgetName(ATgetAFun((ATermAppl)type));
   boundType = (ATerm)ATmakeAppl1(ATmakeAFun(fun, 1, ATfalse),
-                                           ATmake("<str>", moduleId));
+                                           ATmake("<str>", ATwriteToString(moduleId)));
 
   actions = getEventActions(boundType, event);
   if (actions == NULL) {
@@ -449,9 +456,9 @@ ATerm get_extension_modulename(int cid, const char *extension)
 }
 
 /*}}}  */
-/*{{{  ATerm get_modulename_extension(int cid, const char *modulename) */
+/*{{{  ATerm get_modulename_extension(int cid, ATerm moduleId) */
 
-ATerm get_modulename_extension(int cid, const char *modulename)
+ATerm get_modulename_extension(int cid, ATerm moduleId)
 {
   ATermList extensions = getExtensions();
 
@@ -462,7 +469,7 @@ ATerm get_modulename_extension(int cid, const char *modulename)
       char *language = MC_getPropertyLanguage(property);
       char *extension = MC_getPropertyExtension(property);
 
-      if (strcmp(language, modulename) == 0) {
+      if (strcmp(language, ATwriteToString(moduleId)) == 0) {
 	return ATmake("snd-value(modulename-extension(<str>))", extension);
       }
     }
@@ -479,7 +486,16 @@ ATerm get_modulename_extension(int cid, const char *modulename)
 
 ATerm get_module_paths(int cid)
 {
-  return ATmake("snd-value(module-paths(<term>))", modulePaths);
+  ATermList paths = ATconcat(modulePaths, libraryPaths);
+  return ATmake("snd-value(module-paths(<term>))", paths);
+}
+
+/*}}}  */
+/*{{{  ATerm get_library_paths(int cid) */
+
+ATerm get_library_paths(int cid)
+{
+  return ATmake("snd-value(library-paths(<term>))", libraryPaths);
 }
 
 /*}}}  */
@@ -526,6 +542,9 @@ static void initConfigurationManager(void)
   else {
     modulePaths = (ATermList) ATmake("[<str>]", curdir);
   }
+
+  ATprotectList(&libraryPaths);
+  libraryPaths = ATempty;
 
   ATprotectList(&userExtensions);
   userExtensions = ATempty;

@@ -1,5 +1,14 @@
 # $Id$
 
+Mon Nov 21 16:13:06 CET 2005 <kooiker@ciw.nl>
+ * src/configuration.adt:
+   - Add notion of librarypath
+ * src/configuration-manager.idef:
+   - add get-library-paths
+
+Tue Oct  4 13:29:32 CEST 2005 <markvdb@cwi.nl>
+ * Introduced the new ModuleId as term instead of string.
+
 Thu Aug 25 08:53:00 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
  * Removed meta-kernel.properties, and merged it into the
    properties of the asfsdf-meta package.
