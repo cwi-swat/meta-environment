@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Dec  1 08:35:43 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Create statusbar for each editor
+
 Tue Nov 22 08:15:52 CET 2005 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add editable argument to setEditable

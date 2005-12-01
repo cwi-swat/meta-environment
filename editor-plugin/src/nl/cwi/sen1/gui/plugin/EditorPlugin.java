@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import metaconfig.Factory;
@@ -16,6 +17,7 @@ import metaconfig.types.Items;
 import metaconfig.types.Properties;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
+import nl.cwi.sen1.gui.StatusBar;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
@@ -36,13 +38,16 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     private Map componentsById;
 
+    private Map statusbarsById;
+
     private Studio studio;
 
     private EditorPluginBridge bridge;
 
     public EditorPlugin() {
-        this.editors = new HashMap();
-        this.componentsById = new HashMap();
+        editors = new HashMap();
+        componentsById = new HashMap();
+        statusbarsById = new HashMap();
     }
 
     public void isModified(ATerm editorId) {
@@ -150,15 +155,18 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        StudioComponentImpl comp = (StudioComponentImpl) componentsById
-                .get(editorId.toString());
-        comp.setStatusMessage(message);
+        StatusBar statusBar = (StatusBar) statusbarsById.get(editorId
+                .toString());
+
+        JLabel status = (JLabel) statusBar.getComponent("Status");
+        status.setText(message);
+        // comp.setStatusMessage(message);
     }
 
     public void setEditable(ATerm editorId, ATerm editable) {
         ATermFactory factory = studio.getATermFactory();
         boolean edit = true;
-        
+
         if (editable.equals(factory.make("false"))) {
             edit = false;
         }
@@ -172,6 +180,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 .toString());
         if (comp != null) {
             componentsById.remove(editorId.toString());
+            statusbarsById.remove(editorId.toString());
             editors.remove(editorId.toString());
             studio.removeComponent(comp);
         }
@@ -182,9 +191,17 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         panel.setCursorAtOffset(offset);
     }
 
-    public void editFile(ATerm editorId, String filename) {
+    public void editFile(ATerm editorId, String filename, String modulename) {
         try {
             createPanel(editorId, filename);
+            StatusBar statusBar = (StatusBar) statusbarsById.get(editorId
+                    .toString());
+            JLabel label = (JLabel) statusBar.getComponent("Module");
+            if (modulename.equals("")) {
+                label.setText(" ");
+            } else {
+                label.setText(modulename);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -234,10 +251,16 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     panel);
             addStudioComponentListener(editorId, id, panel, comp);
 
+            StatusBar statusBar = new StatusBar();
+            statusBar.add(new JLabel(" "), 0.7, "Status");
+            statusBar.add(new JLabel(" "), 0.3, "Module");
+
             editors.put(id, panel);
             componentsById.put(id, comp);
+            statusbarsById.put(id, statusBar);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
+            studio.addComponentStatusBar(comp, statusBar);
         }
 
         return editorPanel;
