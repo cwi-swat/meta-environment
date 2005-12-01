@@ -21,5 +21,7 @@ public interface Studio {
     public void addComponentMenu(StudioComponent component, ATerm menuPath,
             Action action);
 
+    public void addComponentStatusBar(StudioComponent component, StatusBar statusBar);
+    
     public void requestFocus(StudioComponent component);
 }

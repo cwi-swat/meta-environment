@@ -10,7 +10,7 @@ public interface StudioComponent {
 	
 	public JComponent getViewComponent();
 
-	public String getStatusMessage();
+	public StatusBar getStatusBar();
 
 	public void addStudioComponentListener(StudioComponentListener l);
 

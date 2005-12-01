@@ -1,5 +1,9 @@
 $Id$
 
+Thu Dec  1 08:34:55 CET 2005 <kooiker@cwi.nl>
+ * studio/**/StatusBar.java:
+   - Add StatusBar for each component
+
 Mon Aug 22 13:22:54 CEST 2005 <{jong,kooiker}@cwi.nl>
  * studio/**/StudioImpl.java:
    - Fix duplicated close on programmatic removal of component

@@ -7,7 +7,7 @@ import javax.swing.event.EventListenerList;
 public class StudioComponentImpl implements StudioComponent {
     private Icon icon;
 
-    private String statusMessage;
+    private StatusBar statusBar;
 
     private EventListenerList listenerList = new EventListenerList();
 
@@ -79,17 +79,17 @@ public class StudioComponentImpl implements StudioComponent {
         }
     }
     
-    public String getStatusMessage() {
-        return statusMessage;
+    public StatusBar getStatusBar() {
+        return statusBar;
     }
 
-    public void setStatusMessage(String newMessage) {
-        String oldMessage = statusMessage;
-        statusMessage = newMessage;
-        if (newMessage == null || !newMessage.equals(oldMessage)) {
-            fireStatusMessageChanged(oldMessage, newMessage);
-        }
-    }
+//    public void setStatusMessage(String newMessage) {
+//        String oldMessage = statusBar;
+//        statusBar = newMessage;
+//        if (newMessage == null || !newMessage.equals(oldMessage)) {
+//            fireStatusMessageChanged(oldMessage, newMessage);
+//        }
+//    }
 
     public Icon getIcon() {
         return icon;

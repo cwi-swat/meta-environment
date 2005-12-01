@@ -1,7 +1,7 @@
 package nl.cwi.sen1.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -26,11 +25,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.border.EtchedBorder;
 
 import net.infonode.docking.DockingWindow;
 import net.infonode.docking.DockingWindowAdapter;
@@ -70,6 +69,10 @@ public class StudioImpl implements Studio, GuiTif {
 
     protected Map componentsByView;
 
+    private Map componentMenus;
+
+    private Map componentStatusBar;
+
     protected RootWindow rootWindow;
 
     private RootWindowProperties properties;
@@ -78,13 +81,11 @@ public class StudioImpl implements Studio, GuiTif {
 
     private ATermList menuList;
 
-    private Map componentMenus;
-
     private DockingWindowsTheme currentTheme;
 
     private View activeView;
 
-    private JLabel statusBar;
+    private JPanel statusPanel;
 
     private boolean menuBarUpdatePending;
 
@@ -143,6 +144,7 @@ public class StudioImpl implements Studio, GuiTif {
         idsByComponent = new HashMap();
         componentsByView = new HashMap();
         componentMenus = new HashMap();
+        componentStatusBar = new HashMap();
         viewsById = new ViewMap();
         plugins = new LinkedList();
         studioShuttingDown = false;
@@ -208,8 +210,15 @@ public class StudioImpl implements Studio, GuiTif {
                 if (window instanceof View) {
                     StudioComponent component = (StudioComponent) componentsByView
                             .get(window);
-
+                    
+                    StatusBar statusBar = (StatusBar) componentStatusBar.get(component);
+                    
+                    statusPanel.remove(statusBar);
+                    componentsByView.remove(window);
                     idsByComponent.remove(component);
+                    componentMenus.remove(component);
+                    componentStatusBar.remove(component);
+
                     component.close();
                 }
             }
@@ -225,9 +234,10 @@ public class StudioImpl implements Studio, GuiTif {
 
     private void updateStatusBar() {
         if (activeView != null) {
-            StudioComponent component = getComponent(activeView);
-            String message = component.getStatusMessage();
-            statusBar.setText(message == null ? " " : message);
+            String componentName = getComponent(activeView).getName();
+            CardLayout cl = (CardLayout) statusPanel.getLayout();
+            cl.show(statusPanel, componentName);
+
         }
     }
 
@@ -264,17 +274,16 @@ public class StudioImpl implements Studio, GuiTif {
     }
 
     protected int registerComponent(final StudioComponent component) {
-        component.addStudioComponentListener(new StudioComponentAdapter() {
-            public void statusMessageChanged(StatusMessageEvent event) {
-                StudioComponent activeComponent = (StudioComponent) componentsByView
-                        .get(activeView);
-                if (event.getSource() == activeComponent) {
-                    String message = event.getNewMessage();
-                    statusBar.setText(message == null ? " " : message);
-                }
-            }
-
-        });
+        // component.addStudioComponentListener(new StudioComponentAdapter() {
+        // public void statusMessageChanged(StatusMessageEvent event) {
+        // StudioComponent activeComponent = (StudioComponent) componentsByView
+        // .get(activeView);
+        // if (event.getSource() == activeComponent) {
+        // String message = event.getNewMessage();
+        // statusBar.setText(message == null ? " " : message);
+        // }
+        // }
+        // });
         int id = nextComponentID();
         idsByComponent.put(component, new Integer(id));
         return id;
@@ -327,11 +336,16 @@ public class StudioImpl implements Studio, GuiTif {
         frame.setVisible(true);
     }
 
-    private Component createStatusBar() {
-        this.statusBar = new JLabel(" ");
-        statusBar.setBorder(BorderFactory
-                .createEtchedBorder(EtchedBorder.RAISED));
-        return statusBar;
+    private JPanel createStatusBar() {
+        statusPanel = new JPanel(new CardLayout());
+        StatusBar statusBar = new StatusBar();
+        statusBar.add(new JLabel(" "));
+        statusPanel.add(statusBar, "system");
+        // statusBar.setBorder(BorderFactory
+        // .createEtchedBorder(EtchedBorder.RAISED));
+        // statusPanel.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+
+        return statusPanel;
     }
 
     private StudioMenuBar createMenuBar() {
@@ -560,6 +574,11 @@ public class StudioImpl implements Studio, GuiTif {
 
         componentMenus.put(component, menus);
         updateMenuBar();
+    }
+
+    public void addComponentStatusBar(StudioComponent component,
+            StatusBar statusBar) {
+        statusPanel.add(statusBar, component.getName());
     }
 
     public void requestFocus(StudioComponent component) {
