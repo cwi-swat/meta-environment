@@ -1,5 +1,0 @@
-*.tifs
-.deps
-Makefile
-Makefile.in
-import-graph

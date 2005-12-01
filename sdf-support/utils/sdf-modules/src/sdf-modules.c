@@ -13,7 +13,6 @@
 #include <MEPT-utils.h>
 #include "sdf-modules.tif.h"
 #include "sdf-imports.h"
-#include "plain-imports.h"
 
 /*}}}  */
 
@@ -57,16 +56,6 @@ static void version(const char *msg)
 
 /*}}}  */
 
-/*{{{  ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)  */
-
-ATerm get_all_needed_module_names(int cid, ATerm pairs, const char* name) 
-{
-  ATerm id = ATmake("<str>", name);
-  ATermList imports = PI_getTransitiveImports((ATermList) ATBunpack(pairs), id);
-  return ATmake("snd-value(all-needed-module-names(<term>))", imports);
-}
-
-/*}}}  */
 /*{{{  ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name)  */
 
 ATerm get_all_needed_imports(int cid, ATerm atModules, const char* name) 
@@ -90,31 +79,6 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
   ATermList imports = SI_getImports(module);
  
   return ATmake("snd-value(imported-module-names(<term>))", imports);
-}
-
-/*}}}  */
-
-/*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, const char* name) */
-
-ATerm get_all_depending_module_names(int cid, ATerm pairs, const char* name)
-{
-  ATerm id = ATmake("<str>", name);
-  ATermList depending = PI_getDependingModules((ATermList) pairs, id);
-
-  return ATmake("snd-value(all-depending-module-names(<term>))",
-		depending);
-}
-
-/*}}}  */
-/*{{{  ATerm get_depending_modules(int cid, ATerm atModules, const char* name) */
-
-ATerm get_depending_module_names(int cid, ATerm pairs, const char* name)
-{
-  ATerm id = ATmake("<str>", name);
-  ATermList depending = PI_getDirectDependingModules((ATermList) pairs, id);
-
-  return ATmake("snd-value(depending-module-names(<term>))",
-		depending);
 }
 
 /*}}}  */

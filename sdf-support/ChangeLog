@@ -3,6 +3,14 @@ $Id$
 Thu Nov 10 17:07:38 CET 2005 <jurgenv@cwi.nl>
  * utils/import-graph: Adapted implementation to new Graph API.
 
+Thu Sep 22 16:51:29 CEST 2005 <{kooiker,markvdb}@cwi.nl>
+ * utils/import-graph:
+   - removed, no longer needed
+
+Mon Sep 12 11:44:28 CEST 2005 <kooiker@cwi.nl>
+ * utils/sdf-modules/src:
+   - Removed plain-imports because these are handled by the module-manager
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support

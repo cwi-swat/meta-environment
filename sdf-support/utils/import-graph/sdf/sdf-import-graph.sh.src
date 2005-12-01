@@ -1,3 +1,0 @@
-#! /bin/sh
-
-__JAVA__ -classpath __EXTERNAL_JARS__:__INSTALL_DIR__ sdf.SdfImportGraph $@

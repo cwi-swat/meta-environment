@@ -1,5 +1,5 @@
 
-SUBDIRS = sdf-modules sdf-renaming import-graph
+SUBDIRS = sdf-modules sdf-renaming
 
 EXTRA_DIST = sdf-support-config.src
 

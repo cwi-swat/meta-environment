@@ -9,8 +9,7 @@ bin_PROGRAMS = sdf-modules
 
 sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	module-table.c \
-	sdf-imports.c \
-	plain-imports.c
+	sdf-imports.c
 
 sdf_modules_LDADD = \
 	-L$(top_builddir)/lib -lSDFME  \
@@ -23,8 +22,7 @@ sdf_modules_LDADD = \
 noinst_HEADERS = \
 	sdf-modules.tif.h \
 	module-table.h \
-	sdf-imports.h \
-	plain-imports.h
+	sdf-imports.h
 
 INCLUDES = \
 	-I$(top_srcdir)/lib  \

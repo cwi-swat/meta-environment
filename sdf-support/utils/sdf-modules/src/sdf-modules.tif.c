@@ -5,15 +5,12 @@
 
 #include "sdf-modules.tif.h"
 
-#define NR_SIG_ENTRIES	14
+#define NR_SIG_ENTRIES	11
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<sdf-modules>,get-module-id(<term>))",
   "rec-eval(<sdf-modules>,get-module-path(<str>,<str>))",
   "rec-eval(<sdf-modules>,get-new-module-name(<list>,<str>,<str>))",
-  "rec-eval(<sdf-modules>,get-all-needed-module-names(<list>,<str>))",
-  "rec-eval(<sdf-modules>,get-depending-module-names(<list>,<str>))",
-  "rec-eval(<sdf-modules>,get-all-depending-module-names(<list>,<str>))",
   "rec-eval(<sdf-modules>,get-all-needed-imports(<list>,<str>))",
   "rec-eval(<sdf-modules>,get-imported-module-names(<term>))",
   "rec-eval(<sdf-modules>,make-sdf-definition(<list>))",
@@ -32,23 +29,14 @@ ATerm sdf_modules_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(get-all-needed-imports(<term>,<str>))", &t0, &s0)) {
-    return get_all_needed_imports(conn, t0, s0);
-  }
-  if(ATmatch(term, "rec-eval(get-all-depending-module-names(<term>,<str>))", &t0, &s0)) {
-    return get_all_depending_module_names(conn, t0, s0);
-  }
   if(ATmatch(term, "rec-eval(get-imported-module-names(<term>))", &t0)) {
     return get_imported_module_names(conn, t0);
-  }
-  if(ATmatch(term, "rec-eval(get-depending-module-names(<term>,<str>))", &t0, &s0)) {
-    return get_depending_module_names(conn, t0, s0);
   }
   if(ATmatch(term, "rec-eval(make-sdf-definition(<term>))", &t0)) {
     return make_sdf_definition(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-all-needed-module-names(<term>,<str>))", &t0, &s0)) {
-    return get_all_needed_module_names(conn, t0, s0);
+  if(ATmatch(term, "rec-eval(get-all-needed-imports(<term>,<str>))", &t0, &s0)) {
+    return get_all_needed_imports(conn, t0, s0);
   }
   if(ATmatch(term, "rec-eval(is-valid-modulename(<str>))", &s0)) {
     return is_valid_modulename(conn, s0);

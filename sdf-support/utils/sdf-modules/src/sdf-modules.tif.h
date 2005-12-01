@@ -9,12 +9,9 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_all_needed_imports(int conn, ATerm, const char *);
-ATerm get_all_depending_module_names(int conn, ATerm, const char *);
 ATerm get_imported_module_names(int conn, ATerm);
-ATerm get_depending_module_names(int conn, ATerm, const char *);
 ATerm make_sdf_definition(int conn, ATerm);
-ATerm get_all_needed_module_names(int conn, ATerm, const char *);
+ATerm get_all_needed_imports(int conn, ATerm, const char *);
 ATerm is_valid_modulename(int conn, const char *);
 ATerm get_new_module_name(int conn, ATerm, const char *, const char *);
 ATerm remove_import_from_module(int conn, ATerm, const char *);
