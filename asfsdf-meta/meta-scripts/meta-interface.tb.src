@@ -10,6 +10,7 @@
 #include "error-display.tb"
 #include "error-support.idef"
 #include "asfsdfapigen.tb"
+#include "graph-arbiter.tb"
 
 process Create-Asf-Processes is
 let Pid : int 
@@ -80,23 +81,26 @@ process Preprocess-syntax is
 let
   Syntax     : term, 
   Checking   : term, 
-  ModuleName : str
+  ModuleId   : term,
+  Modulename : str
 in
   (
-    rec-msg(pre-preprocess-syntax-hook(ModuleName?)).
-    snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
+    rec-msg(pre-preprocess-syntax-hook(ModuleId?)).
+    snd-msg(pre-preprocess-syntax-hook-result(ModuleId))
   +
-    rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
-    snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
+    rec-msg(preprocess-syntax-hook(ModuleId?, eqs, Syntax?)).
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
+    snd-msg(add-eqs-syntax(Modulename, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
-    Syntax := no-tree
+    snd-msg(preprocess-syntax-hook-result(ModuleId, Syntax)) .
+    Syntax := help-the-garbage-collector
   +
-    rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
-    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
+    rec-msg(preprocess-syntax-hook(ModuleId?, trm, Syntax?)).
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
+    snd-msg(remove-var-syntax(Modulename, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) . 
-    snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
-    Syntax := no-tree
+    snd-msg(preprocess-syntax-hook-result(ModuleId, Syntax)) .
+    Syntax := help-the-garbage-collector
   )*delta
 endlet
 
@@ -104,7 +108,8 @@ process Interpret-term is
 let
   Id         : int,
   Semantics  : term,
-  ModuleName : str,
+  ModuleId   : term,
+  Modulename : str,
   Tree       : term,
   NormalForm : term,
   Errors     : list,
@@ -112,14 +117,15 @@ let
 in
   Id := process-id.
   (
-    rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
+    rec-msg(interpret-term-hook(ModuleId?, Semantics?, Tree?)).
     snd-note(ui-status(stat(Id, "Rewriting"))) .
-    snd-msg(rewrite(ModuleName, Semantics, Tree)).
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
+    snd-msg(rewrite(Modulename, Semantics, Tree)).
     (
       (
 	rec-msg(rewrite-result(NormalForm?)).
-	snd-msg(restore-term-brackets(ModuleName, NormalForm)).
-	rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
+	snd-msg(restore-term-brackets(ModuleId, NormalForm)).
+	rec-msg(restore-term-brackets-result(ModuleId, NormalForm?))
       +
 	rec-msg(rewrite-text(Text?)) .
 	NormalForm := quote(str(Text))
@@ -127,7 +133,7 @@ in
       . snd-msg(clear-rewrite-errors)
     +
       rec-msg(rewrite-errors(Errors?)).
-      snd-msg(display-rewrite-errors(ModuleName, Errors)).
+      snd-msg(display-rewrite-errors(Modulename, Errors)).
       NormalForm := error-tree
     ).
     snd-note(ui-status(endstat(Id))).
@@ -139,18 +145,17 @@ process Postprocess-semantics is
 let
   Semantics : term,
   Msgs      : list,
-  Name : str,
+  Modulename : str,
   Id : int
 in
   Id := process-id .
   (
-    rec-msg(postprocess-semantics-hook(Name?, Semantics?)).
-    snd-note(ui-status(statf(Id, "Checking equations: %s", [Name]))) .
+    rec-msg(postprocess-semantics-hook(Modulename?, Semantics?)).
     snd-msg(check-asf(Semantics)).
     rec-msg(messages(Msgs?)).
-    snd-msg(display-asf-errors(Name, Msgs)).
+    snd-msg(display-asf-errors(Modulename, Msgs)).
     snd-note(ui-status(endstat(Id))) .
-    snd-msg(postprocess-semantics-hook-result(Name, Semantics))
+    snd-msg(postprocess-semantics-hook-result(Modulename, Semantics))
   )*delta
 endlet
 
@@ -158,7 +163,8 @@ process Compile-semantics is
 let
   Id         : int,
   Semantics  : term,
-  ModuleName : str,
+  ModuleId   : term,
+  Modulename : str,
   Progress   : str,
   OutputFileName : str,
   Table : term
@@ -166,23 +172,25 @@ in
   Id := process-id .
   subscribe(asfc-progress(<term>)) .
   (
-    rec-msg(compile-semantics-hook(ModuleName?, OutputFileName?, Semantics?)).
-    snd-msg(get-parsetable(ModuleName, trm, no)) .
+    rec-msg(compile-semantics-hook(ModuleId?, OutputFileName?, Semantics?)).
+    snd-msg(get-parsetable(ModuleId, trm)) .
     (
       rec-msg(parse-table(Table?)) .
-      snd-msg(compile-module(ModuleName, OutputFileName, Semantics, Table)) .
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
+      snd-msg(compile-module(Modulename, OutputFileName, Semantics, Table)) .
       (
         rec-note(asfc-progress(Progress?)).
         snd-note(ui-status(endstat(Id))).
         snd-note(ui-status(statf(Id,"Compiling %s - %s",
-                                [ModuleName, Progress])))
-      )*
-      rec-msg(compilation-done(ModuleName))
+                                [Modulename, Progress])))
+      )
+      *
+      rec-msg(compilation-done(Modulename))
     +
-      rec-msg(no-parsetable(ModuleName))
+      rec-msg(no-parsetable(ModuleId))
     ) .
     snd-note(ui-status(endstat(Id))).
-    snd-msg(compile-semantics-hook-done(ModuleName))
+    snd-msg(compile-semantics-hook-done(ModuleId))
   )*delta
 endlet
 
@@ -222,7 +230,7 @@ let
   Filename : str,
   Id : int,
   Module : str,
-  ModuleId : str,
+  ModuleId : term,
   ModuleNames : list,
   Modules : list,
   OpenSyntaxHandlerPid : int,
@@ -304,30 +312,8 @@ in
     rec-msg(extra-mod-path-hook).
     snd-msg(extra-mod-path-hook-result([]))
   +
-    rec-msg(get-open-syntax-parse-handler-hook(sdf,Path?))
-    . create(OpenSyntaxParseHandler(Path), OpenSyntaxHandlerPid?)
-    . snd-msg(get-open-syntax-parse-handler-hook-result(OpenSyntaxHandlerPid))
-  +
-    rec-msg(set-module-syntax-text-hook(sdf, ModuleId?, Text?))
-    . SetModuleSyntaxText(ModuleId, Text)
-  +
     rec-msg(get-parse-equation-checking-hook)
     . snd-msg(get-parse-equation-checking-hook-result(true))
-  +
-    rec-msg(get-asf-equations-text-hook(Module?))
-    /* BuildEquationsFilename */
-    . snd-msg(ts-get-str-value("module-path", Module))
-    .
-    (
-      rec-msg(ts-value(Directory?))
-      . snd-msg(io-get-filename(Directory, Module, ".asf"))
-      . rec-msg(io-filename(Filename?))
-      . ReadFile(Filename, Text?)
-      . snd-msg(get-asf-equations-text-hook-result(Text))
-    +
-      rec-msg(ts-no-value)
-      . snd-msg(get-asf-equations-text-hook-result(""))
-    )
   +
     rec-msg(post-initialization-hook)
     . snd-msg(post-initialization-hook-finished) 
@@ -363,28 +349,27 @@ endlet
 
 process ParseTable-hooks is
 let
-  Module : str,
-  Table : term,
-  Checking : term
+  ModuleId : term,
+  Table : term
 in
   (
-    rec-msg(obtain-parse-table-hook(trm, Module?, Checking?)) .
-    snd-msg(get-parsetable(Module, trm, Checking)) .
+    rec-msg(obtain-parse-table-hook(trm, ModuleId?)) .
+    snd-msg(get-parsetable(ModuleId, trm)) .
     (
       rec-msg(parse-table(Table?))
     +
-      rec-msg(no-parse-table(Module?)) .
-      Table := no-table
+      rec-msg(no-parse-table(ModuleId?)) .
+      Table := UNDEFINED
     ).
     snd-msg(obtain-parse-table-hook-result(Table)) 
   + 
-    rec-msg(obtain-parse-table-hook(eqs, Module?, Checking?)) .
-    snd-msg(get-parsetable(Module, eqs, Checking)) .
+    rec-msg(obtain-parse-table-hook(eqs, ModuleId?)) .
+    snd-msg(get-parsetable(ModuleId, eqs)) .
     (
       rec-msg(parse-table(Table?))
     +
-      rec-msg(no-parse-table(Module?)) .
-      Table := no-table
+      rec-msg(no-parse-table(ModuleId?)) .
+      Table := UNDEFINED
     ).
     snd-msg(obtain-parse-table-hook-result(Table)) 
   ) * delta
@@ -393,12 +378,17 @@ endlet
 process OpenLibraryModuleAction is
 let
   Cancel: bool,
-  Extension : str,
+  Directories : list,
   Directory : str,
+  Extension : str,
   Path : str,
-  Filename : str
+  Filename : str,
+  ModuleId : term,
+  Modulename : str
 in
-  PromptForFileWithExtension("Open Library Module", "__ASF_LIBRARY__", ".sdf", Cancel?, Path?)
+  Extension := ".sdf"
+  . PromptForFileWithExtension("Open Library Module", "__ASF_LIBRARY__", 
+                               Extension, Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -406,11 +396,11 @@ in
     if equal(Path, "") then
       tau
     else
-      SplitFileName(Path, Filename?, Directory?, Extension?)
-      . BuildPath(Directory, Filename, Extension, Path?)
-      . snd-note(start-modules-batch)
-      . OpenModule(Path, sdf, Filename)
-      . snd-note(end-modules-batch)
+      snd-msg(get-library-paths)
+      . rec-msg(library-paths(Directories?))
+      . snd-msg(io-get-relative-filename(Directories, Path, Extension))
+      . rec-msg(io-filename(Directories, Path, Extension, Modulename?))
+      . OpenModule(Modulename, ModuleId?)
     fi
   fi
 endlet
@@ -424,6 +414,7 @@ process DebugReduce(EditorId : term,
      leave it at this for the moment. In 1.6 this can be changed?
    */
   snd-msg(debugging(on))
+  . TODO("process Reduce in gui-actions.tb and DebugReduce in meta-interface.tb?")
   . ReduceTerm(Tree, Modulename, ResultTree?)
   . 
   if not-equal(ResultTree, error-tree) then
@@ -447,7 +438,8 @@ in
   GetTree(EditorId, Tree?, Available?)
   .
   if equal(Available, true) then
-    GetActiveModule(EditorId, Modulename?)
+    GetModuleId(EditorId, Modulename?)
+    . printf("TODO: Modulename has to be a term!!\n")
     . DebugReduce(EditorId, Modulename, Tree, ResultTree?)
     . 
     if not-equal(ResultTree, error-tree) then
@@ -467,7 +459,8 @@ process EditorRunAsfTestsAction(EditorId : term) is
 let
   Modulename : str
 in
-  GetActiveModule(EditorId, Modulename?)
+  GetModuleId(EditorId, Modulename?)
+  . printf("TODO: Modulename has to be a term!!\n")
   . snd-msg(run-asf-tests(Modulename))
 endlet
 
@@ -492,7 +485,7 @@ endlet
 
 process ReduceAction(EditorId : term) is
 let
-  Modulename : str,
+  ModuleId : term,
   Tree : term,
   RTree : term,
   Available : bool
@@ -500,11 +493,11 @@ in
   GetTree(EditorId, Tree?, Available?)
   .
   if equal(Available, true) then
-    GetActiveModule(EditorId, Modulename?)
-    . Reduce(EditorId, Modulename, Tree, RTree?)
+    GetModuleId(EditorId, ModuleId?)
+    . Reduce(EditorId, ModuleId, Tree, RTree?)
     . 
     if not-equal(RTree, error-tree) then
-      ActivateEditorWithTree(RTree, Modulename, "reduct.out")
+      ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
     else 
       tau
     fi
@@ -514,24 +507,25 @@ in
 endlet
 
 
-process ReduceTerm(Tree: term, Modulename: str, NormalForm: term?) is
+process ReduceTerm(Tree: term, ModuleId: term, NormalForm: term?) is
 let
   Summary: term,
   Equations: term,
   Id: int,
+  Modulename: str,
   Pid: int,
   Specification: term
 in
   Id := process-id
-  . OpenModules([Modulename], sdf)
+  /*. OpenModules([Modulename], sdf)*/
   . snd-note(ui-status(stat(Id, "Retrieving equations")))
-  . create(GetSpecification(Modulename), Pid?)
+  . create(GetSpecification(ModuleId), Pid?)
   .
   (
     rec-msg(specification(Specification?))
     . GetSpecificationEquations(Specification, Equations?)
     . snd-note(ui-status(endstat(Id)))
-    . snd-msg(interpret-term-hook(Modulename, Equations, Tree))
+    . snd-msg(interpret-term-hook(ModuleId, Equations, Tree))
     . rec-msg(interpret-term-hook-result(NormalForm?))
   +
     rec-msg(specification-incomplete(Summary?))

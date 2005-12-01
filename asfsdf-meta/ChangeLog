@@ -1,8 +1,21 @@
 /* $Id$ */
 
-Fri Nov 11 14:51:19 CET 2005 <kooiker@cwi.nl>
- * meta-scripts/standard.asfsdf.buttons.src:
-   - Remove Cobol module paths
+Mon Nov 14 14:26:15 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - OpenLibrayModule gets relative filename
+
+Tue Oct  4 11:09:56 CEST 2005 <markvdb@cwi.nl>
+ * meta-scripts/meta-interface.tb.src
+   - reactivated the OpenModule proces.
+
+Thu Sep 22 16:41:34 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/graph-arbiter.tb
+   - Adds attributes to the module-manager GRAPH namespace on attribute
+     changes
+
+Mon Sep 19 12:45:42 CEST 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Use term type for moduleId
 
 Wed Sep  7 13:38:11 CEST 2005 <kooiker@cwi.nl>
  * meta-scripts/meta-interface.tb.src:

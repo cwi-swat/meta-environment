@@ -3,12 +3,14 @@
 TBSCRIPTS = \
 	meta-interface.tb \
 	error-display.tb \
+	graph-arbiter.tb \
 	asfsdfapigen.tb
 
 EXTRA_DIST = \
 	meta-interface.tb.src \
 	error-display.tb \
 	asfsdfapigen.tb \
+	graph-arbiter.tb \
 	standard.asfsdf.buttons \
 	standard.asfsdf.buttons.src
 
