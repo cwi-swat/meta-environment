@@ -1,0 +1,16 @@
+dnl $Id$
+
+AC_INIT
+AC_CONFIG_SRCDIR([configure.ac])
+GLT_INIT_PACKAGE
+AC_PREREQ(2.59)
+
+AM_MAINTAINER_MODE
+
+AC_PROG_INSTALL
+
+AC_CONFIG_FILES([Makefile
+  lib/Makefile
+  script/Makefile
+])
+AC_OUTPUT
