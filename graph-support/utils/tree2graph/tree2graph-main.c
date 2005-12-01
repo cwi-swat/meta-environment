@@ -58,21 +58,21 @@ void rec_terminate(int cid, ATerm t)
 }
  
 /*}}}  */
-/*{{{  ATerm tree2graph(int cid, char *name, ATerm tree) */
+/*{{{  ATerm tree2graph(int cid, ATerm tree, ATerm leaves_on, */
 
-ATerm tree2graph(int cid, const char *name, ATerm tree, ATerm leaves_on,
+ATerm tree2graph(int cid, ATerm tree, ATerm leaves_on,
 		 ATerm sharing_on)
 {
   ATbool leavesFlag = ATmatch(leaves_on, "true");
   ATbool sharingFlag = ATmatch(sharing_on, "true");
 
-  Graph graph = PT_printAnyToGraph(name, tree, leavesFlag, ATtrue, leavesFlag, 
+  Graph graph = PT_printAnyToGraph(tree, leavesFlag, ATtrue, leavesFlag, 
 				   leavesFlag, sharingFlag);
 
   return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
 }
 
-/*}}}  */ 
+/*}}}  */
 /*{{{  ATerm get_node_origin(int cid, ATerm t) */
 
 ATerm get_node_origin(int cid, ATerm t)
@@ -163,8 +163,7 @@ int main (int argc, char *argv[])
 	      myname, input_file_name);
     }
 
-    graph = PT_printAnyToGraph("",
-                               tree, characters, productions,
+    graph = PT_printAnyToGraph(tree, characters, productions,
 			       layout, literals, sharing);
 
     if (!strcmp(output_file_name,"-")) {

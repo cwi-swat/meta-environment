@@ -572,11 +572,11 @@ Node makeNodeDefault(NodeId id, AttributeList attributes)
 }
 
 /*}}}  */
-/*{{{  NodeId makeNodeIdDefault(const char* id) */
+/*{{{  NodeId makeNodeIdDefault(ATerm id) */
 
-NodeId makeNodeIdDefault(const char* id)
+NodeId makeNodeIdDefault(ATerm id)
 {
-  return (NodeId)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue));
+  return (NodeId)(ATerm) id;
 }
 
 /*}}}  */
@@ -1439,21 +1439,21 @@ ATbool hasNodeIdId(NodeId arg)
 }
 
 /*}}}  */
-/*{{{  char* getNodeIdId(NodeId arg) */
+/*{{{  ATerm getNodeIdId(NodeId arg) */
 
-char* getNodeIdId(NodeId arg)
+ATerm getNodeIdId(NodeId arg)
 {
   
-    return (char*)ATgetName(ATgetAFun((ATermAppl) arg));
+    return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  NodeId setNodeIdId(NodeId arg, const char* id) */
+/*{{{  NodeId setNodeIdId(NodeId arg, ATerm id) */
 
-NodeId setNodeIdId(NodeId arg, const char* id)
+NodeId setNodeIdId(NodeId arg, ATerm id)
 {
   if (isNodeIdDefault(arg)) {
-    return (NodeId)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)));
+    return (NodeId)((ATerm) id);
   }
 
   ATabort("NodeId has no Id: %t\n", arg);
@@ -3745,9 +3745,9 @@ Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttri
 }
 
 /*}}}  */
-/*{{{  NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*)) */
+/*{{{  NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm)) */
 
-NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*))
+NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm))
 {
   if (isNodeIdDefault(arg)) {
     return makeNodeIdDefault(

@@ -13,7 +13,7 @@
 
 #define YYERROR_VERBOSE
 
-static ATermList buildDotAttributes(NodeId key, NodeId value, ATermList attrs);
+static ATermList appendKeyValue(char *key, char *value, ATermList attrs);
 static AttributeList buildAttributeList(int type,ATermList dotAttributes);
 static NodeId buildNodeId(char *id);
 
@@ -99,14 +99,14 @@ opt_a_list:
 
 a_list:
 	ID opt_value opt_comma opt_a_list {
-		$$.attributes = buildDotAttributes(buildNodeId($1.string), $2.nodeId, $4.attributes);
+		$$.attributes = appendKeyValue($1.string, $2.string, $4.attributes);
 	}
 
 	;
 
 opt_value:
-	{ $$.nodeId = buildNodeId(strdup("true")); }
-	| '=' ID { $$.nodeId = buildNodeId($2.string); }
+	{ $$.string = strdup("true"); }
+	| '=' ID { $$.string = $2.string; }
 	;
 
 opt_comma:
@@ -261,14 +261,14 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
   AttributeList list = makeAttributeListEmpty();
 	int width = -1, height = -1;
 
-	/*ATwarning("dotAttributes=%t\n", dotAttributes); */
+	/*ATwarning("dotAttributes=%t\n", dotAttributes);*/
   while (!ATisEmpty(dotAttributes)) {
     ATermList pair = (ATermList)ATgetFirst(dotAttributes);
 		ATerm key = ATgetFirst(pair);
 		ATerm value = ATgetFirst(ATgetNext(pair));
 		char *sval = ATgetName(ATgetAFun((ATermAppl)value));
 
-		/*ATwarning("key=%t, value=%s\n", key, sval);  */
+		/*ATwarning("key=%t, value=%s\n", key, sval);*/
 
     if (ATisEqual(key, ATparse("\"bb\""))) {
        Attribute attr = parseBoundaries(sval);
@@ -348,18 +348,22 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 }
 
 static ATermList
-buildDotAttributes(NodeId key, NodeId value, ATermList attrs)
+appendKeyValue(char *key, char *value, ATermList attrs)
 {
-  ATermList result = ATinsert(attrs, (ATerm)ATmakeList2(NodeIdToTerm(key),
-													NodeIdToTerm(value)));
+  ATerm keyTerm = (ATerm)ATmakeAppl0(ATmakeAFun(key, 0, ATtrue));
+  ATerm valueTerm = (ATerm)ATmakeAppl0(ATmakeAFun(value, 0, ATtrue));
+  ATermList result = ATinsert(attrs, (ATerm)ATmakeList2(keyTerm, valueTerm));
+
 	protectTerm((ATerm)result);
+  free(key);
+  free(value);
 
 	return result;
 }
 
 static NodeId buildNodeId(char *id)
 {
-  NodeId nodeId = makeNodeIdDefault(id);
+  NodeId nodeId = makeNodeIdDefault(ATparse(id));
 
   free(id);
 	protectTerm(NodeIdToTerm(nodeId));

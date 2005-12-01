@@ -1,5 +1,16 @@
 $Id$
 
+Mon Nov 14 08:48:36 CET 2005 <kooiker@cwi.nl>
+ * utils/layoutgraph/graph2dot.c:
+   - Quote nodenames
+ * utils/tree2graph/*:
+   - Remove unused name argument
+ * utils/layoutgraph/layoutgraph.c:
+   - Unlink dot files
+
+Fri Nov 11 13:57:49 CET 2005 <kooiker@cwi.nl>
+ * Merged from trunk
+
 Thu Nov 10 13:31:10 CET 2005 <jurgenv@cwi.nl>
  * utils/tree2graph: The representation of cycles changed in AsFix, it now 
    has a number that denotes the length of each cycle. We use this number 
@@ -15,6 +26,14 @@ Wed Nov  9 09:59:05 CET 2005 <jurgenv@cwi.nl>
  * Added support for ranking of nodes 
  * Used support for ranking in tree2graph to put all character leaves
    of a parse tree on a single level.
+
+Thu Sep 22 16:37:39 CEST 2005 <{jong,kooiker,markvdb}@cwi.nl>
+ * lib/graph:
+   - Use list functionality
+   - NodeId accepts a term
+ * utils/layoutgraph/dot.y:
+   - conversion from term to NodeId and the other way around
+   - createDotAttribute renamed to appendKeyValue
 
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:

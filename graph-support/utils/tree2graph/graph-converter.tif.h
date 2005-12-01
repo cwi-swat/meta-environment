@@ -9,7 +9,7 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm tree2graph(int conn, const char *, ATerm, ATerm, ATerm);
+ATerm tree2graph(int conn, ATerm, ATerm, ATerm);
 ATerm get_node_origin(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm graph_converter_handler(int conn, ATerm term);

@@ -6,7 +6,7 @@
                     <attributes(AttributeList)>)),
   list(NodeList, Node),
   constructor(Node, default, node(<id(NodeId)>, <attributes(AttributeList)>)),
-  constructor(NodeId, default, <id(str)>),
+  constructor(NodeId, default, <id(term)>),
   list(AttributeList, Attribute),
   constructor(Attribute,
               bounding-box,

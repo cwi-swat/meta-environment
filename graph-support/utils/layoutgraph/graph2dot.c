@@ -126,7 +126,7 @@ static void printAttributes(ATerm id, AttributeList attrs, FILE *file)
 static void printNode(Node node, FILE *file)
 {
   ATerm id = NodeIdToTerm(getNodeId(node));
-  ATfprintf(file, "%t [", id);
+  ATfprintf(file, "\"%t\" [", id);
   printAttributes(id, getNodeAttributes(node), file);
   fprintf(file, "]\n");
 }
@@ -148,7 +148,8 @@ static void printNodes(NodeList nodes, FILE *file)
 static void printEdge(Edge edge, FILE *file)
 {
   // Edges are reversed to get the graph in the Meta-Environt to look 'right'
-  ATfprintf(file, "%t -> %t ", getEdgeFrom(edge), getEdgeTo(edge));
+  ATfprintf(file, "\"%s\" ", ATwriteToString(NodeIdToTerm(getEdgeFrom(edge))));
+  ATfprintf(file, "-> \"%s\" ", ATwriteToString(NodeIdToTerm(getEdgeTo(edge))));
   if (!isAttributeListEmpty(getEdgeAttributes(edge))) {
     ATfprintf(file,"[");
   }
@@ -185,7 +186,7 @@ static void printLevels(FILE* file)
 
     fprintf(file, "{rank=same ");
     for ( ; !ATisEmpty(level); level = ATgetNext(level)) {
-      ATfprintf(file, "%t ", ATgetFirst(level));
+      ATfprintf(file, "\"%t\" ", ATgetFirst(level));
     }
     fprintf(file," }\n");
   }

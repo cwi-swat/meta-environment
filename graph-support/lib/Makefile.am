@@ -13,12 +13,12 @@ INCLUDES = -I${ATERM}/include
 JARFILE = ${top_srcdir}/lib/graph-${VERSION}.jar
 
 c-api: Graph.adt
-	adt-to-c --input $< --name Graph 
+	adt-to-c --input $< --name Graph
 
 java-api: Graph.adt
 	adt-to-java \
 		--input Graph.adt \
-		--package nl.cwi.sen.api.graph \
+		--package nl.cwi.sen1 \
 		--name graph \
 		--import 'aterm.*' \
 		--version ${VERSION}

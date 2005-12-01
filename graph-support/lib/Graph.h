@@ -140,7 +140,7 @@ NodeList makeNodeListEmpty(void);
 NodeList makeNodeListSingle(Node head);
 NodeList makeNodeListMany(Node head, NodeList tail);
 Node makeNodeDefault(NodeId id, AttributeList attributes);
-NodeId makeNodeIdDefault(const char* id);
+NodeId makeNodeIdDefault(ATerm id);
 AttributeList makeAttributeListEmpty(void);
 AttributeList makeAttributeListSingle(Attribute head);
 AttributeList makeAttributeListMany(Attribute head, AttributeList tail);
@@ -253,8 +253,8 @@ Node setNodeAttributes(Node arg, AttributeList attributes);
 ATbool isValidNodeId(NodeId arg);
 inline ATbool isNodeIdDefault(NodeId arg);
 ATbool hasNodeIdId(NodeId arg);
-char* getNodeIdId(NodeId arg);
-NodeId setNodeIdId(NodeId arg, const char* id);
+ATerm getNodeIdId(NodeId arg);
+NodeId setNodeIdId(NodeId arg, ATerm id);
 
 /*}}}  */
 /*{{{  AttributeList accessors */
@@ -445,7 +445,7 @@ Point setPointY(Point arg, int y);
 Graph visitGraph(Graph arg, NodeList (*acceptNodes)(NodeList), EdgeList (*acceptEdges)(EdgeList), AttributeList (*acceptAttributes)(AttributeList));
 NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node));
 Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList));
-NodeId visitNodeId(NodeId arg, char* (*acceptId)(char*));
+NodeId visitNodeId(NodeId arg, ATerm (*acceptId)(ATerm));
 AttributeList visitAttributeList(AttributeList arg, Attribute (*acceptHead)(Attribute));
 Attribute visitAttribute(Attribute arg, Point (*acceptFirst)(Point), Point (*acceptSecond)(Point), Color (*acceptColor)(Color), Polygon (*acceptPoints)(Polygon), Direction (*acceptDirection)(Direction), char* (*acceptKey)(char*), ATerm (*acceptValue)(ATerm), char* (*acceptLabel)(char*), int (*acceptX)(int), int (*acceptY)(int), Shape (*acceptShape)(Shape), int (*acceptWidth)(int), int (*acceptHeight)(int), Style (*acceptStyle)(Style), char* (*acceptLevel)(char*));
 Color visitColor(Color arg, int (*acceptRed)(int), int (*acceptGreen)(int), int (*acceptBlue)(int));
