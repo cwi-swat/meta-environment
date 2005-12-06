@@ -11,7 +11,7 @@ include_HEADERS = \
 	Config_dict.h
 
 libConfigAPI_a_SOURCES = \
-	Config.c
+	Config.c \
 	Config_dict.c
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
