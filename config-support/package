@@ -12,3 +12,5 @@ identification
 configuration interface
 
 requires
+
+aterm 1.0
