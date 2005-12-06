@@ -28,6 +28,11 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl Require config-support library
+AC_PACKAGE_REQUIRE(config-support, config-support-config,
+   [  --with-config-support=DIR   config-support is in DIR])
+AC_SUBST(CONFIG_SUPPORT)
+
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
