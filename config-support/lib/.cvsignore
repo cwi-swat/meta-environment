@@ -1,0 +1,7 @@
+*.adt
+*.dict
+.deps
+Makefile
+Makefile.in
+configapi
+nl

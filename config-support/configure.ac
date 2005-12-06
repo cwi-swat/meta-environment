@@ -11,6 +11,5 @@ AC_PROG_INSTALL
 
 AC_CONFIG_FILES([Makefile
   lib/Makefile
-  script/Makefile
 ])
 AC_OUTPUT
