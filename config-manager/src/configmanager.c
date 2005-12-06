@@ -4,7 +4,7 @@
 
 #include "configuration-manager.tif.h"
 #include <ctype.h>
-#include "MetaConfig.h"
+#include "Config.h"
 #include <unistd.h> 
 #include <assert.h>
 
@@ -38,47 +38,47 @@ static ATermList libraryPaths = NULL;
 
 /*}}}  */
 
-/*{{{  static void addDescription(ATermTable table, MC_ActionDescription desc) */
+/*{{{  static void addDescription(ATermTable table, CFG_ActionDescription desc) */
 
-static void addDescription(ATermTable table, MC_ActionDescription desc)
+static void addDescription(ATermTable table, CFG_ActionDescription desc)
 {
   ATerm type;
   ATermList list;
 
-  type = MC_ActionTypeToTerm(MC_getActionDescriptionActionType(desc));
+  type = CFG_ActionTypeToTerm(CFG_getActionDescriptionActionType(desc));
 
   list = (ATermList) ATtableGet(table, type);
   if (list == NULL) {
     list = ATempty;
   }
-  list = ATinsert(list, MC_ActionDescriptionToTerm(desc));
+  list = ATinsert(list, CFG_ActionDescriptionToTerm(desc));
 
   ATtablePut(table, type, (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  static MC_ActionDescriptionList getDescriptions(MC_ActionType type) */
+/*{{{  static CFG_ActionDescriptionList getDescriptions(CFG_ActionType type) */
 
-static MC_ActionDescriptionList getDescriptions(MC_ActionType type)
+static CFG_ActionDescriptionList getDescriptions(CFG_ActionType type)
 {
-  MC_ActionDescriptionList result;
-  MC_ActionDescriptionList list;
+  CFG_ActionDescriptionList result;
+  CFG_ActionDescriptionList list;
   ATerm key;
   ATerm value;
 
-  key = MC_ActionTypeToTerm(type);
-  result = MC_makeActionDescriptionListEmpty();
+  key = CFG_ActionTypeToTerm(type);
+  result = CFG_makeActionDescriptionListEmpty();
 
   value = ATtableGet(userDescriptionsByType, key);
   if (value != NULL) {
-    list = MC_ActionDescriptionListFromTerm(value);
-    result = MC_concatActionDescriptionList(result, list);
+    list = CFG_ActionDescriptionListFromTerm(value);
+    result = CFG_concatActionDescriptionList(result, list);
   }
 
   value = ATtableGet(systemDescriptionsByType, key);
   if (value != NULL) {
-    list = MC_ActionDescriptionListFromTerm(value);
-    result = MC_concatActionDescriptionList(result, list);
+    list = CFG_ActionDescriptionListFromTerm(value);
+    result = CFG_concatActionDescriptionList(result, list);
   }
 
   return result;
@@ -86,23 +86,23 @@ static MC_ActionDescriptionList getDescriptions(MC_ActionType type)
 
 /*}}}  */
 
-/*{{{  static void setAction(ATermTable table, MC_ActionDescription desc, const char *action) */
+/*{{{  static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action) */
 
-static void setAction(ATermTable table, MC_ActionDescription desc, const char *action)
+static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action)
 {
-  ATerm key = MC_ActionDescriptionToTerm(desc);
+  ATerm key = CFG_ActionDescriptionToTerm(desc);
   ATtablePut(table, key, (ATerm) ATmakeAppl0(ATmakeAFun(action, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  static ATermList getActions(MC_ActionDescription desc) */
+/*{{{  static ATermList getActions(CFG_ActionDescription desc) */
 
-static ATermList getActions(MC_ActionDescription desc)
+static ATermList getActions(CFG_ActionDescription desc)
 {
   ATerm key;
   ATermList value;
 
-  key = MC_ActionDescriptionToTerm(desc);
+  key = CFG_ActionDescriptionToTerm(desc);
   value = (ATermList) ATtableGet(userActionsByDescription, key);
   if (value == NULL) {
     value = (ATermList) ATtableGet(systemActionsByDescription, key);
@@ -175,49 +175,49 @@ void register_user_directories(int cid, ATerm paths)
 
 /*}}}  */
 
-/*{{{  static void addExtension(ATermList extensions, MC_Property property) */
+/*{{{  static void addExtension(ATermList extensions, CFG_Property property) */
 
-static ATermList addExtension(ATermList extensions, MC_Property property)
+static ATermList addExtension(ATermList extensions, CFG_Property property)
 {
-  return ATinsert(extensions, MC_PropertyToTerm(property));
+  return ATinsert(extensions, CFG_PropertyToTerm(property));
 }
 
 /*}}}  */
-/*{{{  static void addTextCategory(ATermList categories, MC_Property property) */
+/*{{{  static void addTextCategory(ATermList categories, CFG_Property property) */
 
-static ATermList addTextCategory(ATermList categories, MC_Property property)
+static ATermList addTextCategory(ATermList categories, CFG_Property property)
 {
-  return ATinsert(categories, MC_PropertyToTerm(property));
+  return ATinsert(categories, CFG_PropertyToTerm(property));
 }
 
 /*}}}  */
 
-/*{{{  static void addSystemProperty(MC_Property property) */
+/*{{{  static void addSystemProperty(CFG_Property property) */
 
-static void addSystemProperty(MC_Property property)
+static void addSystemProperty(CFG_Property property)
 {
-  if (MC_isPropertyExtension(property)) {
+  if (CFG_isPropertyExtension(property)) {
     systemExtensions = addExtension(systemExtensions, property);
   }
-  else if (MC_isPropertyModulePath(property)) {
-    const char *path = MC_getPropertyPath(property);
+  else if (CFG_isPropertyModulePath(property)) {
+    const char *path = CFG_getPropertyPath(property);
     modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
   }
-  else if (MC_isPropertyLibraryPath(property)) {
-    const char *path = MC_getPropertyPath(property);
+  else if (CFG_isPropertyLibraryPath(property)) {
+    const char *path = CFG_getPropertyPath(property);
     libraryPaths = ATinsert(libraryPaths, ATmake("<str>", path));
   }
-  else if (MC_isPropertyAction(property)) {
-    const char *action = MC_getPropertyAction(property);
-    MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
-    while (!MC_isActionDescriptionListEmpty(list)) {
-      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+  else if (CFG_isPropertyAction(property)) {
+    const char *action = CFG_getPropertyAction(property);
+    CFG_ActionDescriptionList list = CFG_getPropertyDescriptions(property);
+    while (!CFG_isActionDescriptionListEmpty(list)) {
+      CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
       addDescription(systemDescriptionsByType, cur);
       setAction(systemActionsByDescription, cur, action);
-      list = MC_getActionDescriptionListTail(list);
+      list = CFG_getActionDescriptionListTail(list);
     }
   }
-  else if (MC_isPropertyTextCategory(property)) {
+  else if (CFG_isPropertyTextCategory(property)) {
     systemTextCategories = addTextCategory(systemTextCategories, property);
   }
   else {
@@ -233,13 +233,13 @@ void add_system_properties(int cid, const char *contents)
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
-    MC_Configuration configuration = MC_ConfigurationFromTerm(actions);
-    if (MC_isValidConfiguration(configuration)) {
-      MC_Properties properties = MC_getConfigurationList(configuration);
-      while (!MC_isPropertiesEmpty(properties)) {
-	MC_Property property = MC_getPropertiesHead(properties);
+    CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
+    if (CFG_isValidConfiguration(configuration)) {
+      CFG_Properties properties = CFG_getConfigurationList(configuration);
+      while (!CFG_isPropertiesEmpty(properties)) {
+	CFG_Property property = CFG_getPropertiesHead(properties);
 	addSystemProperty(property);
-	properties = MC_getPropertiesTail(properties);
+	properties = CFG_getPropertiesTail(properties);
       }
       modulePaths = ATreverse(modulePaths);
       libraryPaths = ATreverse(libraryPaths);
@@ -252,24 +252,24 @@ void add_system_properties(int cid, const char *contents)
 
 /*}}}  */
 
-/*{{{  static void addUserProperty(MC_Property property) */
+/*{{{  static void addUserProperty(CFG_Property property) */
 
-static void addUserProperty(MC_Property property)
+static void addUserProperty(CFG_Property property)
 {
-  if (MC_isPropertyExtension(property)) {
+  if (CFG_isPropertyExtension(property)) {
     userExtensions = addExtension(userExtensions, property);
   }
-  else if (MC_isPropertyAction(property)) {
-    const char *action = MC_getPropertyAction(property);
-    MC_ActionDescriptionList list = MC_getPropertyDescriptions(property);
-    while (!MC_isActionDescriptionListEmpty(list)) {
-      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
+  else if (CFG_isPropertyAction(property)) {
+    const char *action = CFG_getPropertyAction(property);
+    CFG_ActionDescriptionList list = CFG_getPropertyDescriptions(property);
+    while (!CFG_isActionDescriptionListEmpty(list)) {
+      CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
       addDescription(userDescriptionsByType, cur);
       setAction(userActionsByDescription, cur, action);
-      list = MC_getActionDescriptionListTail(list);
+      list = CFG_getActionDescriptionListTail(list);
     }
   }
-  else if (MC_isPropertyTextCategory(property)) {
+  else if (CFG_isPropertyTextCategory(property)) {
     userTextCategories = addTextCategory(userTextCategories, property);
   }
   else {
@@ -285,13 +285,13 @@ void add_user_properties(int cid, const char *contents)
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
-    MC_Configuration configuration = MC_ConfigurationFromTerm(actions);
-    if (MC_isValidConfiguration(configuration)) {
-      MC_Properties properties = MC_getConfigurationList(configuration);
-      while (!MC_isPropertiesEmpty(properties)) {
-	MC_Property property = MC_getPropertiesHead(properties);
+    CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
+    if (CFG_isValidConfiguration(configuration)) {
+      CFG_Properties properties = CFG_getConfigurationList(configuration);
+      while (!CFG_isPropertiesEmpty(properties)) {
+	CFG_Property property = CFG_getPropertiesHead(properties);
 	addUserProperty(property);
-	properties = MC_getPropertiesTail(properties);
+	properties = CFG_getPropertiesTail(properties);
       }
     }
   }
@@ -325,15 +325,15 @@ void remove_user_properties(int cid)
 static ATermList getEvents(ATerm actionType)
 {
   ATermList result = ATempty;
-  MC_ActionType type = MC_ActionTypeFromTerm(actionType);
-  MC_ActionDescriptionList list = getDescriptions(type);
+  CFG_ActionType type = CFG_ActionTypeFromTerm(actionType);
+  CFG_ActionDescriptionList list = getDescriptions(type);
 
   if (list != NULL) {
-    while (!MC_isActionDescriptionListEmpty(list)) {
-      MC_ActionDescription cur = MC_getActionDescriptionListHead(list);
-      MC_Event event = MC_getActionDescriptionEvent(cur);
-      result = ATinsert(result, MC_EventToTerm(event));
-      list = MC_getActionDescriptionListTail(list);
+    while (!CFG_isActionDescriptionListEmpty(list)) {
+      CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
+      CFG_Event event = CFG_getActionDescriptionEvent(cur);
+      result = ATinsert(result, CFG_EventToTerm(event));
+      list = CFG_getActionDescriptionListTail(list);
     }
   }
 
@@ -374,11 +374,11 @@ ATerm get_module_events(int cid, ATerm type, ATerm moduleId)
 
 static ATermList getEventActions(ATerm type, ATerm event)
 {
-  MC_ActionDescription desc;
+  CFG_ActionDescription desc;
   ATermList actions;
 
-  desc = MC_makeActionDescriptionDefault(MC_ActionTypeFromTerm(type),
-					 MC_EventFromTerm(event));
+  desc = CFG_makeActionDescriptionDefault(CFG_ActionTypeFromTerm(type),
+					 CFG_EventFromTerm(event));
   actions = getActions(desc);
 
   return actions;
@@ -438,11 +438,11 @@ ATerm get_extension_modulename(int cid, const char *extension)
   ATermList extensions = getExtensions();
   
   while (!ATisEmpty(extensions)) {
-    MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));
+    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(extensions)));
 
-    if (MC_isPropertyExtension(property)) {
-      const char *language = MC_getPropertyLanguage(property);
-      const char *stored = MC_getPropertyExtension(property);
+    if (CFG_isPropertyExtension(property)) {
+      const char *language = CFG_getPropertyLanguage(property);
+      const char *stored = CFG_getPropertyExtension(property);
 
       if (strcmp(extension, stored) == 0) {
 	return ATmake("snd-value(extension-modulename(<str>))", language);
@@ -463,11 +463,11 @@ ATerm get_modulename_extension(int cid, ATerm moduleId)
   ATermList extensions = getExtensions();
 
   while (!ATisEmpty(extensions)) {
-    MC_Property property = MC_PropertyFromTerm((ATgetFirst(extensions)));
+    CFG_Property property = CFG_PropertyFromTerm((ATgetFirst(extensions)));
 
-    if (MC_isPropertyExtension(property)) {
-      char *language = MC_getPropertyLanguage(property);
-      char *extension = MC_getPropertyExtension(property);
+    if (CFG_isPropertyExtension(property)) {
+      char *language = CFG_getPropertyLanguage(property);
+      char *extension = CFG_getPropertyExtension(property);
 
       if (strcmp(language, ATwriteToString(moduleId)) == 0) {
 	return ATmake("snd-value(modulename-extension(<str>))", extension);
@@ -586,7 +586,7 @@ int main(int argc, char *argv[])
   }
 
   ATBinit(argc, argv, &bottomOfStack);
-  MC_initMetaConfigApi();
+  CFG_initConfigApi();
   initConfigurationManager();
   /*ATsetChecking(ATtrue);*/
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Dec  6 12:49:14 CET 2005 <kooiker@cwinl>
+ * src/*:
+   - use config-support package and remove .adt and libraries
+
 Mon Nov 21 16:13:06 CET 2005 <kooiker@ciw.nl>
  * src/configuration.adt:
    - Add notion of librarypath
