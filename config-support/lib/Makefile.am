@@ -14,6 +14,8 @@ libConfigAPI_a_SOURCES = \
 	Config.c
 	Config_dict.c
 
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
+
 INCLUDES = -I${ATERM}/include
 
 api: config-api
