@@ -13,4 +13,6 @@ configuration interface
 
 requires
 
-aterm 1.0
+aterm 2.4.2
+
+
