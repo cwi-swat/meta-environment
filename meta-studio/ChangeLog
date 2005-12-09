@@ -1,5 +1,8 @@
 $Id$
 
+Fri Dec  9 08:59:32 CET 2005 <kooiker@cwi.nl>
+ * lib/idw-gpl-1.4.0.jar: new version
+
 Thu Dec  1 08:34:55 CET 2005 <kooiker@cwi.nl>
  * studio/**/StatusBar.java:
    - Add StatusBar for each component
