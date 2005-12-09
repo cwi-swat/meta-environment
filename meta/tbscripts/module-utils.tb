@@ -450,7 +450,6 @@ in
   )
 endlet
 
-
 process CheckModuleConsistency(Modulename: str) is
 let
   Directory: str,
@@ -460,11 +459,8 @@ let
 in
   snd-msg(get-path-from-db(Modulename))
   . rec-msg(path(Path?))
-  /* Motivation for the do-consistency-check-hook
-     How to do consistency check is package dependent. E.g. an ASDF module
-     should not be checked the same way as an asf+sdf module. */
-  . snd-msg(do-consistency-check-hook(Modulename, Path))
-  . rec-msg(do-consistency-check-hook-result)
+  . CheckSyntaxConsistency(Modulename, Path, sdf)
+  . CheckEquationConsistency(Modulename, Path)
 endlet
 
 process InitializeTermStore(Name: str) is
@@ -475,7 +471,6 @@ process InitializeTermStore(Name: str) is
   else
     tau
   fi
-
 
 process TermStoreActivation is
 let
@@ -503,34 +498,18 @@ in
       rec-msg(io-term(TermStoreContents?))
       . snd-msg(ts-load-snapshot(TermStoreContents))
       . rec-msg(ts-snapshot-loaded)
-      /* Motivation for the termstore-consistency-check-hook
-         When loading an initial termstore as is the case in the ASDF package,
-         we might not need the consistency check. */
-      . snd-msg(termstore-consistency-check-hook)
-      . rec-msg(termstore-consistency-check-hook-result(Checking?))
-      .
-      if equal(Checking, quote(true)) then
-      /* Motivation for the get-modulenames-for-consistency-checking-hook
-         It might not bee all modules, which should be included in an
-         consistency check. E.g. if an initial termstore is part of a given
-         termstore, one might not want to do consistency check of the modules
-         of the initial termstore, because, they should never change doing the
-         lifetime of a meta env. distribution. */
-	snd-msg(get-modulenames-for-consistency-checking-hook)
-	. rec-msg(get-modulenames-for-consistency-checking-hook-result(ModuleNames?))
-	. snd-note(ui-status(stat(Id,
+      . snd-msg(get-all-module-names)
+      . rec-msg(all-module-names(ModuleNames))
+      . snd-note(ui-status(stat(Id,
                                 "Checking consistency of term-store content")))
-	.
-	if not-equal(ModuleNames, []) then
-	  ModuleName := first(ModuleNames)
-	  . ModuleNames := next(ModuleNames)
-	  . CheckModuleConsistency(ModuleName)
-	fi
-	*
-	if equal(ModuleNames, []) then
-	  tau
-	fi
-      else
+      .
+      if not-equal(ModuleNames, []) then
+        ModuleName := first(ModuleNames)
+        . ModuleNames := next(ModuleNames)
+        . CheckModuleConsistency(ModuleName)
+      fi
+      *
+      if equal(ModuleNames, []) then
         tau
       fi
     +
@@ -544,7 +523,6 @@ in
   )
   . snd-note(ui-status(stop(Id)))
 endlet
-
 
 process TermStoreName is
 let

@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Dec  9 10:52:22 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/module-utils.tb:
+   - Remove use of check consistency hooks
+
 Thu Dec  1 08:36:53 CET 2005 <kooiker@cwi.nl>
  * tbscripts/editing.tb: pass modulename over which a term is edited to editor
  * gui/plugins/navigator: use statusbar
