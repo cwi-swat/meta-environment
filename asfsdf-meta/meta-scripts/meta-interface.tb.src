@@ -242,7 +242,6 @@ in
   Id := process-id
   . Create-Asf-Processes
   . create(ParseTable-hooks, Pid?)
-  . create(Additional-Interface, Pid?)
   . AddAsfProperties()
   .
   (
@@ -317,35 +316,8 @@ in
   +
     rec-msg(post-initialization-hook)
     . snd-msg(post-initialization-hook-finished) 
-  +
-    /* Send from TermStoreActivation in module-utils.tb.
-       Should we check the consistency of the termstore? */
-    rec-msg(termstore-consistency-check-hook)
-    . snd-msg(termstore-consistency-check-hook-result(true))
-  +
-    /* Send from TermStoreActivation in module-utils.tb.
-       Which modules in the termstore should be checked? */
-    rec-msg(get-modulenames-for-consistency-checking-hook)
-    . snd-msg(get-all-module-names)
-    .  rec-msg(all-module-names(ModuleNames?))
-    . snd-msg(get-modulenames-for-consistency-checking-hook-result(ModuleNames))
   ) * delta
 endlet
-
-process Additional-Interface is
-let
-  Path: str,
-  ModuleName: str
-in
-  (
-    /* Send from CheckModuleConsistency in module-utils.tb. */
-    rec-msg(do-consistency-check-hook(ModuleName?, Path?))
-    . CheckSyntaxConsistency(ModuleName, Path, sdf)
-    . CheckEquationConsistency(ModuleName, Path)
-    . snd-msg(do-consistency-check-hook-result)
-   )* delta
-endlet
-
 
 process ParseTable-hooks is
 let

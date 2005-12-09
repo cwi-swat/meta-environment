@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Dec  9 10:53:06 CET 2005 <kooiker@cwi.nl>
+ * meta-scripts/meta-interface.tb.src:
+   - Remove check consistency hooks
+
 Mon Nov 14 14:26:15 CET 2005 <kooiker@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - OpenLibrayModule gets relative filename
