@@ -12,7 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import metaconfig.types.Properties;
+import nl.cwi.sen1.configapi.types.Properties;
 import nl.cwi.sen1.gui.plugin.Editor;
 import nl.cwi.sen1.gui.plugin.EditorModifiedListener;
 import aterm.ATerm;

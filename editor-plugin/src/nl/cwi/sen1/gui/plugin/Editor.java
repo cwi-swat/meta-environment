@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.swing.JMenu;
 
-import metaconfig.types.Properties;
+import nl.cwi.sen1.configapi.types.Properties;
 import aterm.ATerm;
 import errorapi.types.Area;
 

@@ -12,9 +12,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import metaconfig.Factory;
-import metaconfig.types.Items;
-import metaconfig.types.Properties;
+import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.Items;
+import nl.cwi.sen1.configapi.types.Properties;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.StatusBar;

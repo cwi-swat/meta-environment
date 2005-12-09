@@ -3,13 +3,14 @@ package nl.cwi.sen1.gui.plugin.editor;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
-import metaconfig.types.Color;
-import metaconfig.types.Properties;
-import metaconfig.types.Property;
-import metaconfig.types.TextAttributes;
-import metaconfig.types.TextCategoryName;
-import metaconfig.types.TextStyle;
-import metaconfig.types.property.TextCategory;
+import nl.cwi.sen1.configapi.types.Color;
+import nl.cwi.sen1.configapi.types.Properties;
+import nl.cwi.sen1.configapi.types.Property;
+import nl.cwi.sen1.configapi.types.TextAttribute;
+import nl.cwi.sen1.configapi.types.TextAttributes;
+import nl.cwi.sen1.configapi.types.TextCategoryName;
+import nl.cwi.sen1.configapi.types.TextStyle;
+import nl.cwi.sen1.configapi.types.property.TextCategory;
 
 public class StyleRegistrar {
     private static final String FOCUS_STYLE_NAME = "***focus***";
@@ -62,7 +63,7 @@ public class StyleRegistrar {
 
 private static void setStyleAttributes(EditorPane editor, TextAttributes attrs, Style style) {
         for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
-            metaconfig.types.TextAttribute attr = attrs.getHead();
+            TextAttribute attr = attrs.getHead();
 
             if (attr.isForegroundColor()) {
                 StyleConstants.setForeground(style, convertColor(attr

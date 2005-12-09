@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Dec  9 11:06:22 CET 2005 <kooiker@cwi.nl>
+ * src/**,configure.ac:
+   - use config-support iso config-manager
+
 Thu Dec  1 08:35:43 CET 2005 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Create statusbar for each editor
