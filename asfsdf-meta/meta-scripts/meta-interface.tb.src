@@ -241,7 +241,6 @@ let
 in
   Id := process-id
   . Create-Asf-Processes
-  . create(ParseTable-hooks, Pid?)
   . AddAsfProperties()
   .
   (
@@ -316,34 +315,6 @@ in
   +
     rec-msg(post-initialization-hook)
     . snd-msg(post-initialization-hook-finished) 
-  ) * delta
-endlet
-
-process ParseTable-hooks is
-let
-  ModuleId : term,
-  Table : term
-in
-  (
-    rec-msg(obtain-parse-table-hook(trm, ModuleId?)) .
-    snd-msg(get-parsetable(ModuleId, trm)) .
-    (
-      rec-msg(parse-table(Table?))
-    +
-      rec-msg(no-parse-table(ModuleId?)) .
-      Table := UNDEFINED
-    ).
-    snd-msg(obtain-parse-table-hook-result(Table)) 
-  + 
-    rec-msg(obtain-parse-table-hook(eqs, ModuleId?)) .
-    snd-msg(get-parsetable(ModuleId, eqs)) .
-    (
-      rec-msg(parse-table(Table?))
-    +
-      rec-msg(no-parse-table(ModuleId?)) .
-      Table := UNDEFINED
-    ).
-    snd-msg(obtain-parse-table-hook-result(Table)) 
   ) * delta
 endlet
 

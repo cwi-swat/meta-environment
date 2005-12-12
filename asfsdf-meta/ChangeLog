@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Mon Dec 12 13:43:52 CET 2005 <kooiker@cwi.nl>
+ * package:
+   - Bumped to version 2.0
+ * meta-scripts/meta-interface.tb.src:
+   - Remove get-parsetable hooks
+
 Fri Dec  9 10:53:06 CET 2005 <kooiker@cwi.nl>
  * meta-scripts/meta-interface.tb.src:
    - Remove check consistency hooks
