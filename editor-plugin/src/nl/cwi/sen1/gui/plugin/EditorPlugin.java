@@ -145,7 +145,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     ((Editor) editors.get(editorId.toString())).writeContents();
                     ATerm event = studio.getATermFactory().make(
                             "contents-saved(<term>)", editorId);
-                    //bridge.postEvent(event);
+                    bridge.postEvent(event);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
