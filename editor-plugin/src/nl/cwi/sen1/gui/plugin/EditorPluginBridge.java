@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Dec 12, 2005 9:33:01 AM
+// generation time: Dec 12, 2005 9:36:35 AM
 
 package nl.cwi.sen1.gui.plugin;
 

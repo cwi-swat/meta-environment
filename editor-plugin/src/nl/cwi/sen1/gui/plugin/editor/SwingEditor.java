@@ -67,11 +67,12 @@ public class SwingEditor extends JPanel implements Editor {
     }
 
     public void writeContents() throws IOException {
-        System.err.println("Write contents");
         String text = editorPane.getText();
 
         FileOutputStream fos = new FileOutputStream(filename);
         fos.write(text.getBytes());
+        
+        editorPane.setModified(false);
     }
 
     public void setCursorAtOffset(int offset) {

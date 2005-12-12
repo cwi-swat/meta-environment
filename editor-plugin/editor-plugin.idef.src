@@ -80,6 +80,10 @@ in
     . create(ContentsChanged(EditorId), Pid?)
     . snd-ack-event(T, contents-changed(EditorId))
   +
+    rec-event(T, contents-saved(EditorId?))
+    . create(ContentsSaved(EditorId), Pid?)
+    . snd-ack-event(T, contents-saved(EditorId))
+  +
     rec-event(T, mouse-event(EditorId?, Line?, Column?))
     . create(MouseEventXY(EditorId, Line, Column), Pid?)
     . snd-ack-event(T, mouse-event(EditorId, Line, Column))
@@ -101,6 +105,9 @@ endlet
 
 process ContentsChanged(EditorId: term) is
   snd-msg(te-contents-changed(EditorId))
+
+process ContentsSaved(EditorId: term) is
+  snd-msg(te-contents-saved(EditorId))
 
 process MouseEventXY(EditorId: term, Line: int, Column: int) is
   snd-msg(te-mouse-click-at-line-column(EditorId, Line, Column))

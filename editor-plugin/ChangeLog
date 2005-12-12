@@ -3,6 +3,8 @@
 Mon Dec 12 09:31:12 CET 2005 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - add Modulename argument to te-edit-text
+ * src/**/SwingEditor.java:
+   - set modified to false after save
 
 Fri Dec  9 11:06:22 CET 2005 <kooiker@cwi.nl>
  * src/**,configure.ac:
