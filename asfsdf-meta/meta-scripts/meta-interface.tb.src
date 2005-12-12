@@ -175,7 +175,7 @@ in
     rec-msg(compile-semantics-hook(ModuleId?, OutputFileName?, Semantics?)).
     snd-msg(get-parsetable(ModuleId, trm)) .
     (
-      rec-msg(parse-table(Table?)) .
+      rec-msg(parsetable(Table?)) .
       MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
       snd-msg(compile-module(Modulename, OutputFileName, Semantics, Table)) .
       (
