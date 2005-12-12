@@ -10,6 +10,8 @@ Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
    - Restructured get-parsetable scenario
  * tbscripts/module-db.tb:
    - Remove references to import-relations and module-path
+ * tbscripts/graph-utils.tb:
+   - Factor out UpdateWorklist
 
 Fri Dec  9 10:52:22 CET 2005 <kooiker@cwi.nl>
  * tbscripts/module-utils.tb:

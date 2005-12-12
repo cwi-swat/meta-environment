@@ -147,12 +147,12 @@ in
   +
     rec-msg(add-parsetable-to-db(ModuleId?, eqs, Table?))
     . snd-msg(ts-put-term-value("asf-parsetable", ModuleId, Table))
-    . Table := no-table
+    . Table := UNDEFINED
     . snd-msg(parsetable-added)
   +
     rec-msg(add-parsetable-to-db(ModuleId?, trm, Table?))
     . snd-msg(ts-put-term-value("term-parsetable", ModuleId, Table))
-    . Table := no-table
+    . Table := UNDEFINED
     . snd-msg(parsetable-added)
   +
     rec-msg(get-path-from-db(Name?))
@@ -169,7 +169,7 @@ in
     (
       rec-msg(ts-value(Table?))
       . snd-msg(table(Table))
-      . Table := no-table
+      . Table := UNDEFINED
     +
       rec-msg(ts-no-value)
       . snd-msg(no-table)

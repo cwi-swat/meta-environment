@@ -36,11 +36,8 @@ endlet
 process ImportGraphPainter is
 let
   AttributeEvent: attribute-changed-event,
-  Dependencies: list,
   DependenciesEvent: dependencies-changed-event,
-  Dependency: term,
   ModuleId: term,
-  Status: term,
   Value: term,
   Worklist: list
 in
@@ -57,29 +54,7 @@ in
     . ACE-GetNewValue(AttributeEvent, Value?)
     .
     if equal(Value, opened) then
-      Worklist := diff(Worklist, [ModuleId])
-      . MM-GetModuleDependencies(ModuleId, Dependencies?) 
-      .
-      if not-equal(Dependencies, []) then
-        Dependency := first(Dependencies)
-        .
-        if not(member(Dependency, Worklist)) then
-          MM-GetAttribute(Dependency, SDF_NAMESPACE, "status", Status?)
-          .
-          if not(or(equal(Status, opened),or(equal(Status,error),equal(Status,unavailable)))) then
-            Worklist := join(Worklist, [Dependency])
-          else
-            tau
-          fi
-        else
-          tau
-        fi
-        . Dependencies := next(Dependencies)
-      fi
-      *
-      if equal(Dependencies, []) then
-        tau
-      fi
+      UpdateWorklist(ModuleId, Value, Worklist?)
       .
       if equal(Worklist, []) then
         DrawImportGraph()
@@ -112,6 +87,37 @@ in
   )
   *
   delta
+endlet
+
+process UpdateWorklist(ModuleId: term, Value: term, Worklist: list?) is
+let
+  Dependencies: list,
+  Dependency: term,
+  Status: term
+in
+  Worklist := diff(Worklist, [ModuleId])
+  . MM-GetModuleDependencies(ModuleId, Dependencies?) 
+  .
+  if not-equal(Dependencies, []) then
+    Dependency := first(Dependencies)
+    .
+    if not(member(Dependency, Worklist)) then
+      MM-GetAttribute(Dependency, SDF_NAMESPACE, "status", Status?)
+      .
+      if not(or(equal(Status, opened),or(equal(Status,error),equal(Status,unavailable)))) then
+        Worklist := join(Worklist, [Dependency])
+      else
+        tau
+      fi
+    else
+      tau
+    fi
+    . Dependencies := next(Dependencies)
+  fi
+  *
+  if equal(Dependencies, []) then
+    tau
+  fi
 endlet
 
 toolbus(ImportGraphPainter)
