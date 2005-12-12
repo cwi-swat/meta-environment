@@ -329,6 +329,7 @@ in
     .
     if equal(Registered, true) then
       DeleteStructureEditor(Sid)
+      . DeleteModuleSyntaxTree(ModuleId)
       . snd-msg(te-clear-focus(Sid))
       . snd-msg(te-display-message(Sid,
                                    "Editor contents have changed, focus is unavailable until next parse."))

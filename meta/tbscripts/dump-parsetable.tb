@@ -13,7 +13,7 @@ in
   . snd-msg(get-parsetable(ModuleId, Type))
   .
   (
-    rec-msg(parse-table(Table?))
+    rec-msg(parsetable(Table?))
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     .
     if equal(Filename, "") then
@@ -32,6 +32,6 @@ in
       rec-msg(io-file-not-written(Error?))
     )
   +
-    rec-msg(no-parse-table(ModuleId))
+    rec-msg(no-parsetable(ModuleId))
   )
 endlet

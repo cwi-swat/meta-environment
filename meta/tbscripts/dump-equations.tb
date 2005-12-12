@@ -19,8 +19,6 @@ in
     +
       rec-msg(dump-equations-given-file(ModuleId?, Filename?))
     )
-    . snd-msg(pre-preprocess-syntax-hook(ModuleId))
-    . rec-msg(pre-preprocess-syntax-hook-result(ModuleId))
     . create(GetSpecification(ModuleId), Pid?)
     .
     (

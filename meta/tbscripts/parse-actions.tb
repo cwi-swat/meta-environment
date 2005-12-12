@@ -96,10 +96,10 @@ in
   Id := process-id
   . GetModuleId(Sid, ModuleId?)
   . Type := sdf
-  . snd-msg(get-parse-table(Type))
+  . snd-msg(get-parsetable(Type))
   .
   (
-    rec-msg(parse-table(Type, Table?))
+    rec-msg(parsetable(Type, Table?))
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
     . snd-msg(syntax-top-sort-hook(Type))
     . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
@@ -121,7 +121,7 @@ in
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
     )
   +
-    rec-msg(no-parse-table(Type, Error?))
+    rec-msg(no-parsetable(Type, Error?))
     . Error("TODO fix the error No parse table: %t\n", [Error])
   )
   . snd-note(ui-status(endstat(Id)))

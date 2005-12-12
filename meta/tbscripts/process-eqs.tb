@@ -110,7 +110,8 @@ let
   Modulename: str,
   Modules: list
 in
-  snd-msg(get-modules(ModuleNames))
+  TODO("Change get-modules into GetModules")
+  . snd-msg(get-modules(ModuleNames))
   .
   (
     rec-msg(modules(Modules?))

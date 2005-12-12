@@ -6,6 +6,10 @@ Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
    - Check if editable attribute exists
  * tbscripts/open-modules.tb:
    - More generic parse listener
+ * tbscripts/get-parsetable.tb:
+   - Restructured get-parsetable scenario
+ * tbscripts/module-db.tb:
+   - Remove references to import-relations and module-path
 
 Fri Dec  9 10:52:22 CET 2005 <kooiker@cwi.nl>
  * tbscripts/module-utils.tb:

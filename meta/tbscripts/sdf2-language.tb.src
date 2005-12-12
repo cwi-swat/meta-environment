@@ -8,24 +8,24 @@ let
   Type: term
 in
   Type := sdf
-  . SdfTable := no-table
+  . SdfTable := UNDEFINED
   .
   (
-    rec-msg(get-parse-table(Type))
+    rec-msg(get-parsetable(Type))
     .
-    if equal(SdfTable, no-table) then 
+    if equal(SdfTable, UNDEFINED) then 
       snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
       .
       (
         rec-msg(io-packed-term(Table?))
         . SdfTable := Table
-        . snd-msg(parse-table(Type, Table))
+        . snd-msg(parsetable(Type, Table))
       +
         rec-msg(io-error-reading(Error?))
-        . snd-msg(no-parse-table(Type, Error))
+        . snd-msg(no-parsetable(Type, Error))
       )
     else
-      snd-msg(parse-table(Type, SdfTable))
+      snd-msg(parsetable(Type, SdfTable))
     fi
   )
   * delta

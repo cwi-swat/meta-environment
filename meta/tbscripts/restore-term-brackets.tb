@@ -10,11 +10,11 @@ in
     . snd-msg(get-parsetable(ModuleId, trm))
     .
     (
-      rec-msg(parse-table(Table?))
+      rec-msg(parsetable(Table?))
       . snd-msg(restore-brackets(Tree, Table))
       . rec-msg(brackets-restored(Tree?))
     +
-      rec-msg(no-parse-table(ModuleId))
+      rec-msg(no-parsetable(ModuleId))
       . Tree := UNDEFINED
     )
     . snd-msg(restore-term-brackets-result(ModuleId, Tree))

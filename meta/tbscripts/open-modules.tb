@@ -176,7 +176,7 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
     . GetModuleSyntaxTree(ModuleId, Tree?)
-    . GetImportedModuleNames(Tree, Imports?)
+    . GetImportedModulenames(Tree, Imports?)
     .
     if not-equal(Imports, []) then 
       Import := first(Imports)
@@ -236,10 +236,10 @@ in
   . ReadFile(Path, Text?)
   .
   if not-equal(Text, "") then
-    snd-msg(get-parse-table(Type))
+    snd-msg(get-parsetable(Type))
     .
     (
-      rec-msg(parse-table(Type, ParseTable?))
+      rec-msg(parsetable(Type, ParseTable?))
       . snd-msg(syntax-top-sort-hook(Type))
       . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
       . create(OpenSyntaxParseHandler(ModuleId), Pid?)
@@ -252,7 +252,7 @@ in
         rec-msg(open-syntax-parse-handler-done(Pid))
       )
     +
-      rec-msg(no-parse-table(Type, Error?))
+      rec-msg(no-parsetable(Type, Error?))
       . Error("TODO fix the error No parse table: %t\n", [Error])
     )
   else
