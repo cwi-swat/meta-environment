@@ -1,5 +1,11 @@
 # $Id$
 
+Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Handle contents saved event
+ * tbscripts/open-modules.tb:
+   - More generic parse listener
+
 Fri Dec  9 10:52:22 CET 2005 <kooiker@cwi.nl>
  * tbscripts/module-utils.tb:
    - Remove use of check consistency hooks

@@ -147,7 +147,7 @@ let
   ModuleId: term,
   NewPath: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",unknown,available)
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))

@@ -296,11 +296,29 @@ in
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
+process TextSaved(Sid: term, EditorType: term) is
+let
+  ModuleId: term
+in
+  rec-msg(te-contents-saved(Sid))
+  . printf("Contents saved for %t of type %t\n", Sid, EditorType)
+  .
+  if equal(EditorType, syntax-editor) then
+    GetModuleId(Sid, ModuleId?) 
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+  else
+    tau
+  fi
+endlet
+
 process TextChanged(Sid: term) is
 let
+  ModuleId: term,
   Registered: bool
 in
   rec-msg(te-contents-changed(Sid))
+  . GetModuleId(Sid, ModuleId?)
+  . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
   . snd-msg(em-request-transaction(Sid))
   .
   (
@@ -443,6 +461,8 @@ in
       MouseClicked(Sid)
     +
       TextChanged(Sid)
+    +
+      TextSaved(Sid, EditorType)
     )
     *
     EditorDisconnected(Sid)
@@ -496,6 +516,8 @@ in
       MouseClicked(Sid)
     +
       TextChanged(Sid)
+    +
+      TextSaved(Sid, EditorType)
     )
     *
     EditorDisconnected(Sid)
@@ -582,6 +604,8 @@ in
         MouseClicked(Sid)
       +
         TextChanged(Sid)
+      +
+        TextSaved(Sid, EditorType)
       )
       *
       EditorDisconnected(Sid)
