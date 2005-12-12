@@ -493,6 +493,7 @@ let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
+  HasAttribute: bool,
   Path: str,
   Editable: bool,
   Sid: term,
