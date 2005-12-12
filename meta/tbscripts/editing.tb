@@ -417,6 +417,7 @@ let
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
+  HasAttribute: bool,
   HasText: bool,
   HasStructure: bool,
   Modulename: str,
@@ -443,7 +444,13 @@ in
   . snd-msg(syntax-editor-started(ModuleId, Sid))
   .
   if equal(AlreadyExists, false) then
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+    .
+    if equal(HasAttribute, true) then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    else
+      Editable := true
+    fi
     . snd-msg(te-set-editable(Sid, Editable))
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
@@ -498,7 +505,13 @@ in
   . snd-msg(equations-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+    .
+    if equal(HasAttribute, true) then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    else
+      Editable := true
+    fi
     . snd-msg(te-set-editable(Sid, Editable)) 
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))

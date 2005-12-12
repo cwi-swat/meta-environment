@@ -3,6 +3,7 @@
 Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - Handle contents saved event
+   - Check if editable attribute exists
  * tbscripts/open-modules.tb:
    - More generic parse listener
 
