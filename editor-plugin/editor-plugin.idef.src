@@ -13,10 +13,11 @@ let
   Editor : str,
   Filename : str,
   Line: int,
-  Offset : int,
   MenuEvent : term,
   Message : str,
   Modified : term,
+  Modulename: str,
+  Offset : int,
   Pid: int,
   Categories: term,
   Slices: term
@@ -25,8 +26,8 @@ in
   . rec-connect(T?)
   .
   (
-    rec-msg(te-edit-text(EditorId?, Filename?))
-    . snd-do(T, edit-file(EditorId, Filename))
+    rec-msg(te-edit-text(EditorId?, Filename?, Modulename?))
+    . snd-do(T, edit-file(EditorId, Filename, Modulename))
   +
     rec-msg(te-set-editable(EditorId?, Editable?))
     . snd-do(T, set-editable(EditorId, Editable))

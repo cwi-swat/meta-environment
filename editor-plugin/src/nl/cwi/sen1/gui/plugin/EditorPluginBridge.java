@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Dec 1, 2005 8:29:41 AM
+// generation time: Dec 12, 2005 9:28:57 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -138,12 +138,12 @@ public class EditorPluginBridge
   }
 
   //}}}
-  //{{{  public void editFile(ATerm t0, String s1, String s2)
+  //{{{  public void editFile(ATerm t0, String s1)
 
-  public void editFile(ATerm t0, String s1, String s2)
+  public void editFile(ATerm t0, String s1)
   {
     if (tool != null) {
-      tool.editFile(t0, s1, s2);
+      tool.editFile(t0, s1);
     }
     else {
       throw new UnsupportedOperationException("method `editFile' not supported.");

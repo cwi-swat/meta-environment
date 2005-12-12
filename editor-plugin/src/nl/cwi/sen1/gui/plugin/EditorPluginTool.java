@@ -1,6 +1,6 @@
 // Java tool interface class EditorPluginTool
 // This file is generated automatically, please do not edit!
-// generation time: Dec 1, 2005 8:29:41 AM
+// generation time: Dec 12, 2005 9:28:56 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -53,7 +53,7 @@ abstract public class EditorPluginTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<editor-plugin>,edit-file(<term>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,set-editable(<term>,<bool>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,add-actions(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<editor-plugin>,write-contents(<term>))"), new Boolean(true));
@@ -86,7 +86,7 @@ abstract public class EditorPluginTool
     PdisplayMessage0 = factory.parse("rec-do(display-message(<term>,<str>))");
     PkillEditor0 = factory.parse("rec-do(kill-editor(<term>))");
     PsetCursorAtOffset0 = factory.parse("rec-do(set-cursor-at-offset(<term>,<int>))");
-    PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>,<str>))");
+    PeditFile0 = factory.parse("rec-do(edit-file(<term>,<str>))");
     PsetEditable0 = factory.parse("rec-do(set-editable(<term>,<term>))");
     PhighlightSlices0 = factory.parse("rec-do(highlight-slices(<term>,<term>))");
     PeditorToFront0 = factory.parse("rec-do(editor-to-front(<term>))");
@@ -151,7 +151,7 @@ abstract public class EditorPluginTool
     }
     result = term.match(PeditFile0);
     if (result != null) {
-      editFile((ATerm)result.get(0), (String)result.get(1), (String)result.get(2));
+      editFile((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PsetEditable0);
