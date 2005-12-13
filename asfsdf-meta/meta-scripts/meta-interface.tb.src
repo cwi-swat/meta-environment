@@ -245,12 +245,6 @@ in
     rec-msg(extension-to-type-hook(".sdf")).
     snd-msg(extension-to-type-hook-result(sdf))
   +
-    rec-msg(syntax-top-sort-hook(sdf)).
-    snd-msg(syntax-top-sort-hook-result(sort("Module")))
-  +
-    rec-msg(other-top-sort-hook(trm)).
-    snd-msg(other-top-sort-hook-result(sort("")))
-  +
     rec-msg(semantics-top-sort-hook).
     snd-msg(semantics-top-sort-hook-result(sort("ASF-Module")))
   + 
