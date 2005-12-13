@@ -1,0 +1,10 @@
+# Reported to cause segmentation fault since communication partner cache was
+# introduced (Bug #481)
+
+process P is
+  snd-msg("p")
+
+process Q is
+  rec-msg("p")
+
+toolbus(P, Q)

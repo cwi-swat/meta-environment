@@ -1,5 +1,8 @@
 $Id$
 
+Tue Dec 13 13:03:48 CET 2005 <jong@cwi.nl>
+ * test/bug-481.tb: testcase exercising Bug #481
+
 Thu Oct 20 15:15:24 CEST 2005 <{gerco,jong}@cwi.nl>
  * configure.in:
    - add --enable-maintainer-mode
