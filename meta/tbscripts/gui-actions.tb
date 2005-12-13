@@ -8,9 +8,6 @@ process AskQuestion(Question : str, Answer : term?) is
   snd-msg(ask-question(Question))
   . rec-msg(ask-question-result(Answer?))
 
-process ClearHistoryAction is
-  snd-msg(clear-history)
-
 process PromptForFile(Title : str, 
                       Path : str, 
 		      Modulename : str, 

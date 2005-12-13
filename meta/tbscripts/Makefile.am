@@ -45,8 +45,7 @@ TBSCRIPTS = \
   asfsdf-module-actions.tb \
   gui-actions.tb \
   term-actions.tb \
-  term-editor-actions.tb \
-  termstore-actions.tb 
+  term-editor-actions.tb
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

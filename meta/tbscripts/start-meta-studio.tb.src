@@ -19,7 +19,6 @@
 #include <gui-actions.tb>
 #include <term-actions.tb>
 #include <term-editor-actions.tb>
-#include <termstore-actions.tb>
 
 process StartNavigator is
   snd-msg(load-jar("file://__PKGDATA__/navigator.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
