@@ -5,6 +5,11 @@ Tue Dec 13 14:04:38 CET 2005 <kooiker@cwi.nl>
    - No longer used
  * gui-actions.tb:
    - Remove clear history action
+ * open-modules.tb:
+   - Set relative path when file is unavailable
+   - Use GetParseTable iso snd-msg(get-parsetable)
+ * parse-actions.tb:
+   - Remove ParseSyntax since syntax is parsed when saving the syntax
 
 Mon Dec 12 11:32:04 CET 2005 <kooiker@cwi.nl>
  * tbscripts/editing.tb:

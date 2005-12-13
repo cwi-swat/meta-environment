@@ -28,20 +28,7 @@ in
 endlet
 
 process ParseSyntaxAction(EditorId : term) is
-let
-  ParseSucceeded: bool,
-  Pid : int,
-  ModuleId : term
-in
-  ParseSyntax(EditorId, ParseSucceeded?)
-  .
-  if equal(ParseSucceeded, true) then
-    GetModuleId(EditorId, ModuleId?)
-    . create(CheckSyntaxSpecification(ModuleId), Pid?)
-  else
-    tau
-  fi
-endlet
+  TODO("Use save function")
 
 process ParseEquationsAction(EditorId : term) is
 let
@@ -53,7 +40,6 @@ endlet
 
 process ParseTerm(Sid: term, ModuleId: term) is
 let
-  Nonterminal: term,
   ParseError: term,
   Path: str,
   Pid: int,
@@ -61,11 +47,9 @@ let
   Table: term
 in
   GetParseTable(ModuleId, trm, Table?)
-  . snd-msg(other-top-sort-hook(trm))
-  . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
   . GetPath(Sid, Path?)
   . snd-msg(ui-remove-feedback-summary("sglr", Path))
-  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  . create(ParseEditor(Sid, Table, ""), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid))
@@ -77,56 +61,6 @@ in
     . snd-msg(ui-show-feedback-summary(Summary))
   )
 endlet
-
-process ParseSyntax(Sid: term, ParseSucceeded: bool?) is
-let
-  Id: int,
-  ModuleId: term,
-  ParseError: term,
-  Path: str,
-  Pid: int,
-  Summary: term,
-  Table: term,
-  Error: term,
-  AnnotatedTree: term,
-  Sort: term,
-  Tree: term,
-  Type: term
-in
-  Id := process-id
-  . GetModuleId(Sid, ModuleId?)
-  . Type := sdf
-  . snd-msg(get-parsetable(Type))
-  .
-  (
-    rec-msg(parsetable(Type, Table?))
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
-    . snd-msg(syntax-top-sort-hook(Type))
-    . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-    . snd-msg(ui-remove-feedback-summary("sglr", Path))
-    . create(ParseEditor(Sid, Table, Sort), Pid?)
-    .
-    (
-      rec-msg(parse-editor-ok(Sid))
-      . ParseSucceeded := true
-      . GetParsetree(Sid, Tree?)
-      . AnnotateTree(Tree, Path, AnnotatedTree?)
-      . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
-    +
-      rec-msg(parse-editor-failed(Sid, ParseError?))
-      . ParseErrorToSummary(ParseError, Sid, Summary?)
-      . snd-msg(ui-show-feedback-summary(Summary))
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
-    )
-  +
-    rec-msg(no-parsetable(Type, Error?))
-    . Error("TODO fix the error No parse table: %t\n", [Error])
-  )
-  . snd-note(ui-status(endstat(Id)))
-endlet
-
 
 process ParseEquations(Sid: term, ModuleId: term) is
 let

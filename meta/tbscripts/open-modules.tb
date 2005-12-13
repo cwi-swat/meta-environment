@@ -118,7 +118,8 @@ process OpenModule(Modulename: str, ModuleId: term?) is
 let
   Editable: bool,
   LibraryModule: bool,
-  Path: str
+  Path: str,
+  SdfExt: str
 in
   CreateModule(Modulename, ModuleId?)
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
@@ -128,6 +129,11 @@ in
     .
     if equal(Path, EMPTY_PATH) then
       Error("Unable to locate module: %s", [Modulename])
+      . snd-msg(file-extension-hook(sdf))
+      . rec-msg(file-extension-hook-result(SdfExt?))
+      . BuildPath(".", Modulename, SdfExt, Path?)
+      . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
     else
       SetModulePath(ModuleId, SDF_NAMESPACE, Path)
@@ -226,7 +232,6 @@ let
   ParseTable: term,
   Path: str,
   Pid: int,
-  Sort: term,
   Text: str,
   Type: term
 in
@@ -236,24 +241,15 @@ in
   . ReadFile(Path, Text?)
   .
   if not-equal(Text, "") then
-    snd-msg(get-parsetable(Type))
+    GetParseTable(ModuleId, Type, ParseTable?)
+    . create(OpenSyntaxParseHandler(ModuleId), Pid?)
+    . ParseText(Pid, Text, ParseTable, "Module")
     .
     (
-      rec-msg(parsetable(Type, ParseTable?))
-      . snd-msg(syntax-top-sort-hook(Type))
-      . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-      . create(OpenSyntaxParseHandler(ModuleId), Pid?)
-      . ParseText(Pid, Text, ParseTable, Sort)
-      .
-      (
-        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId))
-        . SetModuleSyntaxText(ModuleId, Text)
-      +
-        rec-msg(open-syntax-parse-handler-done(Pid))
-      )
+      rec-msg(open-syntax-parse-handler-done(Pid, ModuleId))
+      . SetModuleSyntaxText(ModuleId, Text)
     +
-      rec-msg(no-parsetable(Type, Error?))
-      . Error("TODO fix the error No parse table: %t\n", [Error])
+      rec-msg(open-syntax-parse-handler-done(Pid))
     )
   else
     Error("TODO fix this error io-error-reading: %t\n", [Error])
