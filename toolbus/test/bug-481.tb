@@ -1,5 +1,5 @@
-# Reported to cause segmentation fault since communication partner cache was
-# introduced (Bug #481)
+/* Reported to cause segmentation fault since communication partner cache was
+ introduced (Bug #481) */
 
 process P is
   snd-msg("p")
