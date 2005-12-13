@@ -24,7 +24,6 @@ in
   create(Asfc, Pid?).
   create(DisplayErrors, Pid?) .
   create(ErrorSupport, Pid?) .
-  create(Preprocess-syntax, Pid?) .
   create(Interpret-term, Pid?) .
   create(Postprocess-semantics, Pid?) .
   create(Compile-semantics, Pid?) .
@@ -74,34 +73,6 @@ in
     )
   ) * delta
 
-endlet
-
-
-process Preprocess-syntax is
-let
-  Syntax     : term, 
-  Checking   : term, 
-  ModuleId   : term,
-  Modulename : str
-in
-  (
-    rec-msg(pre-preprocess-syntax-hook(ModuleId?)).
-    snd-msg(pre-preprocess-syntax-hook-result(ModuleId))
-  +
-    rec-msg(preprocess-syntax-hook(ModuleId?, eqs, Syntax?)).
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-    snd-msg(add-eqs-syntax(Modulename, Syntax)) .
-    rec-msg(extended-syntax(Syntax?)) .
-    snd-msg(preprocess-syntax-hook-result(ModuleId, Syntax)) .
-    Syntax := help-the-garbage-collector
-  +
-    rec-msg(preprocess-syntax-hook(ModuleId?, trm, Syntax?)).
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-    snd-msg(remove-var-syntax(Modulename, Syntax)) .
-    rec-msg(changed-syntax(Syntax?)) . 
-    snd-msg(preprocess-syntax-hook-result(ModuleId, Syntax)) .
-    Syntax := help-the-garbage-collector
-  )*delta
 endlet
 
 process Interpret-term is
@@ -285,24 +256,6 @@ in
   + 
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
-  +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
-  +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree"))) 
-  +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, sdf)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, sdf)) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, eqs)) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, trm)) .
-    snd-msg(initial-modules-added(Modules)) 
   +
     rec-msg(clear-module-db-hook) .
     snd-msg(module-db-hook-done) 

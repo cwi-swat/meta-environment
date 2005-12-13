@@ -1,5 +1,14 @@
 /* $Id$ */
 
+Tue Dec 13 14:15:33 CET 2005 <kooiker@cwi.nl>
+ * standard.asfsdf.buttons.src:
+   - Remove Refactore menu
+   - Remove Cache menu
+   - Remove Tools->Clear Info and Log menu entry
+ * meta-interface.tb.src:
+   - Remove Preprocess-syntax process
+   - Remove number of hooks
+
 Mon Dec 12 13:43:52 CET 2005 <kooiker@cwi.nl>
  * package:
    - Bumped to version 2.0
