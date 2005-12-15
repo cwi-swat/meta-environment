@@ -1,0 +1,3 @@
+line 5: First argument of snd-msg or rec-msg should be a function application
+line 8: First argument of snd-msg or rec-msg should be a function application
+ToolBus: execution stopped due to the above error(s)
