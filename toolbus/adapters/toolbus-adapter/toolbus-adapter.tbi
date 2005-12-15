@@ -45,7 +45,7 @@ in
     snd-msg(toolbus-instances(Instances))
     +
     rec-event(TA, toolbus-rec-msg(Msg?)) .
-    snd-msg(Msg) .
+    snd-msg(toolbus-message(Msg)) .
     snd-ack-event(TA, toolbus-rec-msg(Msg))
     +
     rec-event(TA, toolbus-stopped(Id?)) .

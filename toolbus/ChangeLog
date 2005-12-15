@@ -1,5 +1,9 @@
 $Id$
 
+Thu Dec 15 16:32:54 CET 2005 <jurgenv@cwi.nl>
+ * adapters/toolbus-adapter/toolbus-adapter.tbi: wrapped Msg by
+   toolbus-msg(Msg) in the script, because of new requirement.
+
 Thu Dec 15 15:49:54 CET 2005 <{kooiker,jurgenv}@cwi.nl>
  * toolbus/{typecheck.c,script.y}: Extended typechecker to not accept
    snd-msg or rec-msg with a first argument that is not a function
