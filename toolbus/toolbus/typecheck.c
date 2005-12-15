@@ -114,6 +114,42 @@ void pr_coords(coords *c)
 }
 
 /*}}}  */
+/*{{{  static void tc_msg(atom *Atom) */
+
+static TBbool tc_msg(atom *Atom)
+{
+  term_list *kids = at_args(Atom);
+  term *first = first(kids);
+
+  if (!is_appl(first)) {
+    pr_coords(at_coords(Atom));
+    TBprintf(stderr, "First argument of snd-msg or rec-msg should be "
+	     "a function application\n");
+    nerror++;
+    return TBfalse;
+  }
+
+  return TBtrue;
+}
+
+/*}}}  */
+/*{{{  void tc_sndmsg(atom *Atom)  */
+
+TBbool tc_sndmsg(atom *Atom) 
+{
+  return tc_msg(Atom);
+}
+
+/*}}}  */
+/*{{{  void tc_recmsg(atom *Atom)  */
+
+TBbool tc_recmsg(atom *Atom) 
+{
+  return tc_msg(Atom);
+}
+
+/*}}}  */
+
 /*{{{  void tc_printf(atom *Atom) */
 
 void tc_printf(atom *Atom)

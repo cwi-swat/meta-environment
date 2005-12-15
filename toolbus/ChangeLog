@@ -1,5 +1,12 @@
 $Id$
 
+Thu Dec 15 15:49:54 CET 2005 <{kooiker,jurgenv}@cwi.nl>
+ * toolbus/{typecheck.c,script.y}: Extended typechecker to not accept
+   snd-msg or rec-msg with a first argument that is not a function
+   application. This is necessary for the communication partner cache
+   to work properly. This closes Bug #481.
+ * test/Makefile.am: flipped test case for bug 481 to a fail test.
+
 Tue Dec 13 13:03:48 CET 2005 <jong@cwi.nl>
  * test/bug-481.tb: testcase exercising Bug #481
 

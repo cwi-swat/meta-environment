@@ -25,6 +25,8 @@
 void tc_create(atom *);
 void tc_printf(atom *);
 void tc_call(char *, atom *, coords *);
+TBbool tc_sndmsg(atom *);
+TBbool tc_recmsg(atom *);
 void tc_execute(proc *);
 void tc_connect(proc *);
 void tc_assign(atom *);

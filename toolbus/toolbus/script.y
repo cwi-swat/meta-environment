@@ -430,7 +430,9 @@ comm_atom:
          { proc *t =
            mk_atom(a_snd_msg, $3.u.term_list, 
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
-           CPC_storeSend(mk_appl(TBlookup(current_def_name), NULL), t);
+	   if (tc_sndmsg(t)) {
+	     CPC_storeSend(mk_appl(TBlookup(current_def_name), NULL), t);
+           }
            $$.u.proc = t;
            range($$,$1,$4);
          }
@@ -438,7 +440,9 @@ comm_atom:
          { proc *t =
            mk_atom(a_rec_msg, $3.u.term_list,
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
-           CPC_storeReceive(mk_appl(TBlookup(current_def_name), NULL), t);
+           if (tc_recmsg(t)) {
+             CPC_storeReceive(mk_appl(TBlookup(current_def_name), NULL), t);
+           }
            $$.u.proc = t;
            range($$,$1,$4);
          } 

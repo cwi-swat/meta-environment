@@ -33,10 +33,13 @@ OK_TESTS = \
 	bind-ok \
 	expr-ok \
 	types-ok \
-	garbage-ok \
-	bug-481-ok
+	garbage-ok
 
-ERROR_TESTS     = expr-errors-fail tc-errors-fail scope-fail
+ERROR_TESTS = \
+	      expr-errors-fail \
+	      tc-errors-fail \
+	      scope-fail \
+	      bug-481-fail
 
 GENERATED_BY_TESTS = \
 	fa \

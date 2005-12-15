@@ -129,7 +129,11 @@ void CPC_storeSend(term *processName, atom *Atom)
 {
   term_list *kids = at_args(Atom);
   term *first = first(kids);
-  sym_idx idx = fun_sym(first);
+  sym_idx idx;
+
+  assert(is_appl(first) && "first arg of snd-msg is not an appl");
+
+  idx = fun_sym(first);
 
   assert(at_fun(Atom) == a_snd_msg);
 
@@ -153,7 +157,11 @@ void CPC_storeReceive(term *processName, atom *Atom)
 {
   term_list *kids = at_args(Atom);
   term *first = first(kids);
-  sym_idx idx = fun_sym(first);
+  sym_idx idx;
+
+  assert(is_appl(first) && "first arg of rec-msg is not an appl");
+
+  idx = fun_sym(first);
 
   assert(at_fun(Atom) == a_rec_msg);
 
