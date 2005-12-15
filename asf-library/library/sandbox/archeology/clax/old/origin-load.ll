@@ -1,6 +1,11 @@
 ; Loadfile for origin functions.
 ; ---------------------------------------------------------------------------- ;
 ; $Log$
+; Revision 1.2  2005/12/15 12:16:04  kooiker
+;  * library/sandbox/archeology/clax/{old,origins}/aux.ll
+;    - renamed to auxiliary.ll because on Windows and thus Cygwin filenames are
+;      not allowed to be called aux.*, prn.*, con.* etc.
+;
 ; Revision 1.1  2003/04/15 08:48:24  jurgenv
 ; * added several specifications recovered via 'software archeology',
 ;   changed the extensions, but not tested any of them!
@@ -24,7 +29,7 @@
 (loadfile "interface.ll" t)
 (loadfile "origin.ll" t)
 (loadfile "propagate.ll" t)
-(loadfile "aux.ll" t)
+(loadfile "auxiliary.ll" t)
 
 ; ---------------------------------------------------------------------------- ;
 ; Load the LeLisp sets:
