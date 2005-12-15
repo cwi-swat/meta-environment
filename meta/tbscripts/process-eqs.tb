@@ -105,23 +105,21 @@ in
   )
 endlet
 
-process GetImportsForRenaming(ModuleId: term, ModuleNames: list, Imports: term?) is
+process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is
 let
   Modulename: str,
   Modules: list
 in
-  TODO("Change get-modules into GetModules")
-  . snd-msg(get-modules(ModuleNames))
+  GetModules(ModuleIds, Modules?)
   .
-  (
+  if equal(Modules, []) then
+    Imports := []
+  else
     rec-msg(modules(Modules?))
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     . snd-msg(sm-get-all-needed-imports(Modules, Modulename))
     . rec-msg(sm-all-needed-imports(Imports?))
-  +
-    rec-msg(no-modules)
-    . Imports := []
-  )
+  fi
 endlet
 
 process GetSpecification(ModuleId: term) is

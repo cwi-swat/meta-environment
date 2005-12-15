@@ -27,7 +27,6 @@ let
   ModuleId: term,
   Registered: bool
 in
-  printf("GetTree\n").
   GetModuleId(Sid, ModuleId?)
   . ParseTerm(Sid, ModuleId)
   . IsStructureEditorRegistered(Sid, Registered?)
