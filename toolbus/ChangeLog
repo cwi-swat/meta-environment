@@ -1,5 +1,9 @@
 $Id$
 
+Fri Dec 16 13:03:52 CET 2005 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - added bug-481.tb{,.out} to extra dist
+
 Thu Dec 15 16:32:54 CET 2005 <jurgenv@cwi.nl>
  * adapters/toolbus-adapter/toolbus-adapter.tbi: wrapped Msg by
    toolbus-msg(Msg) in the script, because of new requirement.
