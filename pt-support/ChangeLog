@@ -1,5 +1,9 @@
 $Id$
 
+Fri Dec 16 10:33:44 CET 2005 <kooiker@cwi.nl>
+ * utils/apply-function.idef:
+   - return result of tree-equal with surrounding function application
+
 Thu Nov 17 10:01:57 CET 2005 <jurgenv@cwi.nl>
  * */*.c: Added AsFix representation for case insensitive literals
 

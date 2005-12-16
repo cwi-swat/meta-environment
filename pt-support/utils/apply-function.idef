@@ -30,7 +30,7 @@ in
     snd-eval(AF, equal-trees(Tree, Tree2)).
     rec-value(AF, result(Result?)).
     snd-terminate(AF, "done") .
-    snd-msg(Result)
+    snd-msg(tree-is-equal(Result))
   ) *
   delta
 endlet
