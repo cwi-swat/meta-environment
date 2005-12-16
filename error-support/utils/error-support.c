@@ -16,7 +16,6 @@
 
 static char myname[] = "error-support";
 static char myversion[] = "1.0";
-static char myarguments[] = "hi:o:vV";
 
 /*}}}  */
 
@@ -25,17 +24,7 @@ static char myarguments[] = "hi:o:vV";
 void usage(void)
 {
   fprintf(stderr,
-          "Yields the string that the input parse tree derives, \n"
-          "including each an every whitespace character.\n"
-          "This is *not* a pretty-printer, just an unparser.\n\n"
-          "Usage: %s [%s]\n"
-          "Options:\n"
-          "\t-h              display help information (usage)\n"
-          "\t-i filename     input from file (default stdin)\n"
-          "\t-o filename     output to file (default stdout)\n"
-          "\t-v              verbose mode\n"
-          "\t-V              reveal program version (i.e. %s)\n",
-          myname, myarguments, myversion);
+          "This is a ToolBus tool that offers an API to errors.\n");
 }
 
 /*}}}  */
@@ -327,15 +316,7 @@ ATerm make_summary(int conn, const char *producer, const char *id, ATerm errors)
 
 int main(int argc, char *argv[])
 {
-  int c;
   ATerm bottomOfStack;
-  char *inputName = "-";
-  char *outputName = "-";
-  FILE *outputFile = NULL;
-  ATbool proceed = ATtrue;
-  ATbool verbose = ATfalse;
-
-#ifndef WITHOUT_TOOLBUS
   ATbool use_toolbus = ATfalse;
   int i;
 
@@ -350,61 +331,9 @@ int main(int argc, char *argv[])
     cid = ATBconnect(NULL, NULL, -1, error_support_handler);
     ATBeventloop();
   }
-  else
-#endif
-
-  {
-    extern char *optarg;
-    extern int optind;
-
-    while ((c = getopt(argc, argv, myarguments)) != -1) {
-      switch (c) {
-        case 'i':
-          inputName = optarg;
-          break;
-        case 'o':
-          outputName = optarg;
-          break;
-        case 'v':
-          verbose = ATtrue;
-          break;
-        case 'V':
-          version();
-          proceed = ATfalse;
-          break;
-        case 'h': /* fallthrough intended */
-        default:
-          usage();
-          proceed = ATfalse;
-          break;
-      }
-    }
-    argc -= optind;
-    argv += optind;
-
-    ATinit(argc, argv, &bottomOfStack);
-    initErrorApi();
-
-    if (proceed) {
-      ATerm term;
-
-      if (!strcmp(outputName, "") || !strcmp(outputName, "-")) {
-        outputFile = stdout;
-      }
-      else if (!(outputFile = fopen(outputName, "wb"))) {
-        ATerror("%s: cannot open %s for writing\n", myname, outputName);
-      }
-
-      term = ATreadFromNamedFile(inputName);
-      if (term == NULL) {
-        ATerror("%s: parse error in input term.\n", myname);
-      }
-      else {
-        ERR_Error error = PERR_lowerError(PERR_ErrorFromTerm(term));
-        ATfprintf(outputFile, "%t", error);
-        fclose(outputFile);
-     }
-    }
+  else {
+    ATwarning("This is a ToolBus tool\n");
+    return 1;
   }
 
   return 0;
