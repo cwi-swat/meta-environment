@@ -327,10 +327,10 @@ static Graph addEdge(Graph graph, int from, int to)
   EdgeList edges;
 
   sprintf(str, "N%d", from);
-  fromId = makeNodeIdDefault(str);
+  fromId = makeNodeIdDefault(ATmake(str));
 
   sprintf(str, "N%d", to);
-  toId = makeNodeIdDefault(str);
+  toId = makeNodeIdDefault(ATmake(str));
 
   edge = makeEdgeDefault(fromId, toId, l);
   edges = getGraphEdges(graph);

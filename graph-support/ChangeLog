@@ -1,5 +1,9 @@
 $Id$
 
+Sat Dec 17 19:00:43 CET 2005 <kooiker@cwi.nl>
+ * utils/tree2graph/PT2graph.c:
+   - pass ATerm to makeNodeIdDefault
+
 Mon Nov 14 08:48:36 CET 2005 <kooiker@cwi.nl>
  * utils/layoutgraph/graph2dot.c:
    - Quote nodenames
