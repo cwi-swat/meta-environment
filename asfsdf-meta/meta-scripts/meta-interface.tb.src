@@ -307,7 +307,7 @@ process DebugReduce(EditorId : term,
   . TODO("process Reduce in gui-actions.tb and DebugReduce in meta-interface.tb?")
   . ReduceTerm(Tree, Modulename, ResultTree?)
   . 
-  if not-equal(ResultTree, error-tree) then
+  if not-equal(ResultTree, UNDEFINED) then
     snd-msg(promote-posinfo-to-origin(ResultTree))
     . rec-msg(promoted-posinfo-to-origin(ResultTree?))
     . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
@@ -386,7 +386,7 @@ in
     GetModuleId(EditorId, ModuleId?)
     . Reduce(EditorId, ModuleId, Tree, RTree?)
     . 
-    if not-equal(RTree, error-tree) then
+    if not-equal(RTree, UNDEFINED) then
       ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
     else 
       tau
@@ -421,6 +421,6 @@ in
     rec-msg(specification-incomplete(Summary?))
     . snd-note(ui-status(endstat(Id)))
     . snd-msg(ui-show-feedback-summary(Summary))
-    . NormalForm := error-tree
+    . NormalForm := UNDEFINED
   )
 endlet

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Dec 19 09:53:29 CET 2005 <kooiker@cwi.nl>
+ * meta-interface.tb.src:
+   - Changed error-tree into UNDEFINED
+
 Tue Dec 13 14:15:33 CET 2005 <kooiker@cwi.nl>
  * standard.asfsdf.buttons.src:
    - Remove Refactore menu
