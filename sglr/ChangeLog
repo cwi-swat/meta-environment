@@ -1,5 +1,8 @@
 $Id$
 
+Mon Dec 19 09:35:54 CET 2005 <jurgenv@cwi.nl>
+ * Brought regress-terms.sh up-to-date with error-diff tool.
+
 Thu Nov 10 14:40:28 CET 2005 <jurgenv@cwi.nl>
  * The 'maximum ambiguities reached' upperbound has dissappeared now,
    since the flattening was the bottleneck here. It used to behave
@@ -20,6 +23,9 @@ Sun Jun  5 10:51:38 CEST 2005 <jurgenv@cwi.nl>
 Mon May 30 14:11:44 CEST 2005 <jurgenv@cwi.nl>
  * Adapted SGLR to produce cyclic parse trees using a new constructor
  * Merged separate cycle detection phase into filtering phase
+
+Fri Nov 18 12:42:11 CET 2005 <jurgenv@cwi.nl>
+ * Bumped to 3.14
 
 Mon Sep 12 11:15:21 CEST 2005 <{markvdb,jurgenv}@cwi.nl>
  * restorebrackets.c: generate structured literal representation

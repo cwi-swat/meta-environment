@@ -185,7 +185,7 @@ do
 	        then
 			Notify "Regression test for error term $base succeeded"
 		else
-	        	if $ERRORCOMPARE -1 $out -2 $org		> /dev/null
+	        	if $ERRORCOMPARE $out $org		> /dev/null
 	        	then
 				if [ $update -eq 0 ] ; then
 	                		${RM} -f $out
