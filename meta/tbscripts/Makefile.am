@@ -15,6 +15,7 @@ TBSCRIPTS = \
   feedback.tb \
   graph-utils.tb \
   get-parsetable.tb \
+  idle-state.tb \
   meta.tb \
   module-actions.tb \
   module-db.tb \

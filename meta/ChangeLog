@@ -8,6 +8,8 @@ Mon Dec 19 09:54:36 CET 2005 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - add editortype as argument in TextChanged
    - delete correct tree on text changed (syntax or equations)
+ * tbscripts/idle-state.tb:
+   - Calculates if the environment is in idle state
 
 Tue Dec 13 14:04:38 CET 2005 <kooiker@cwi.nl>
  * termstore-actions.tb:
