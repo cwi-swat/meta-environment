@@ -310,14 +310,23 @@ in
   fi
 endlet
 
-process TextChanged(Sid: term) is
+process TextChanged(Sid: term, EditorType: term) is
 let
   ModuleId: term,
   Registered: bool
 in
   rec-msg(te-contents-changed(Sid))
   . GetModuleId(Sid, ModuleId?)
-  . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
+  . 
+  if equal(EditorType, syntax-editor) then
+    MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
+  else 
+    if equal(EditorType, equations-editor) then
+      MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", edited)
+    else
+      tau
+    fi
+  fi
   . snd-msg(em-request-transaction(Sid))
   .
   (
@@ -328,7 +337,16 @@ in
     .
     if equal(Registered, true) then
       DeleteStructureEditor(Sid)
-      . DeleteModuleSyntaxTree(ModuleId)
+      .
+      if equal(EditorType, syntax-editor) then
+        DeleteModuleSyntaxTree(ModuleId)
+      else
+        if equal(EditorType, equations-editor) then
+	  DeleteModuleEquationsTree(ModuleId)
+	else
+	  tau
+	fi
+      fi
       . snd-msg(te-clear-focus(Sid))
       . snd-msg(te-display-message(Sid,
                                    "Editor contents have changed, focus is unavailable until next parse."))
@@ -467,7 +485,7 @@ in
     +
       MouseClicked(Sid)
     +
-      TextChanged(Sid)
+      TextChanged(Sid, EditorType)
     +
       TextSaved(Sid, EditorType)
     )
@@ -529,7 +547,7 @@ in
     +
       MouseClicked(Sid)
     +
-      TextChanged(Sid)
+      TextChanged(Sid, EditorType)
     +
       TextSaved(Sid, EditorType)
     )
@@ -617,7 +635,7 @@ in
       +
         MouseClicked(Sid)
       +
-        TextChanged(Sid)
+        TextChanged(Sid, EditorType)
       +
         TextSaved(Sid, EditorType)
       )

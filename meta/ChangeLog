@@ -5,6 +5,9 @@ Mon Dec 19 09:54:36 CET 2005 <kooiker@cwi.nl>
    - fixed missing application function in equal-trees
  * tbscripts/process-eqs.tb:
    - fixed hanging rec-msg
+ * tbscripts/editing.tb:
+   - add editortype as argument in TextChanged
+   - delete correct tree on text changed (syntax or equations)
 
 Tue Dec 13 14:04:38 CET 2005 <kooiker@cwi.nl>
  * termstore-actions.tb:
