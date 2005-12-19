@@ -1,5 +1,9 @@
 $Id$
 
+Mon Dec 19 09:15:14 CET 2005 <{kooiker,jurgenv}@cwi.nl>
+ * libptmept/lower.c: Fixed a nice bug, forgot an 'else' before an
+   'if'.
+
 Fri Dec 16 10:33:44 CET 2005 <kooiker@cwi.nl>
  * utils/apply-function.idef:
    - return result of tree-equal with surrounding function application
