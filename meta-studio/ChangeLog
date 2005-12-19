@@ -1,5 +1,9 @@
 $Id$
 
+Mon Dec 19 11:04:17 CET 2005 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Removed toolbar
+
 Fri Dec  9 08:59:32 CET 2005 <kooiker@cwi.nl>
  * lib/idw-gpl-1.4.0.jar: new version
 

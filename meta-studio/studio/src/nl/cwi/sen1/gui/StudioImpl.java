@@ -177,6 +177,7 @@ public class StudioImpl implements Studio, GuiTif {
         // properties object, so all property values of the
         // theme and in our property object will be used by the root window
         root.getRootWindowProperties().addSuperObject(properties);
+        // root.getRootWindowProperties().getTabWindowProperties().getTabbedPanelProperties().getTabAreaProperties().setTabAreaVisiblePolicy(TabAreaVisiblePolicy.MORE_THAN_ONE_TAB);
 
         root.getWindowBar(Direction.DOWN).setEnabled(true);
 
@@ -210,10 +211,11 @@ public class StudioImpl implements Studio, GuiTif {
                 if (window instanceof View) {
                     StudioComponent component = (StudioComponent) componentsByView
                             .get(window);
-                    
-//                    StatusBar statusBar = (StatusBar) componentStatusBar.get(component);
-                    
-//                    statusPanel.remove(statusBar);
+
+                    // StatusBar statusBar = (StatusBar)
+                    // componentStatusBar.get(component);
+
+                    // statusPanel.remove(statusBar);
                     componentsByView.remove(window);
                     idsByComponent.remove(component);
                     componentMenus.remove(component);
@@ -324,7 +326,7 @@ public class StudioImpl implements Studio, GuiTif {
     private void createFrame() {
         frame = new JFrame();
         frame.setSize(800, 600);
-        frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
+        // frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
         frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
         frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
         frame.addWindowListener(new WindowAdapter() {
@@ -472,7 +474,6 @@ public class StudioImpl implements Studio, GuiTif {
         properties.replaceSuperObject(currentTheme.getRootWindowProperties(),
                 theme.getRootWindowProperties());
         currentTheme = theme;
-
     }
 
     public void addMenuEvents(ATerm menus) {

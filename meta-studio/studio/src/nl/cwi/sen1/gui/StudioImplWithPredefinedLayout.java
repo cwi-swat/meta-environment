@@ -43,7 +43,7 @@ public class StudioImplWithPredefinedLayout extends StudioImpl implements
         SplitWindow rightWindow = new SplitWindow(false, 0.8f, toprightWindow,
                 bottomrightWindow);
 
-        root.setWindow(new SplitWindow(true, 0.2f, leftWindow, rightWindow));
+        root.setWindow(new SplitWindow(true, 0.25f, leftWindow, rightWindow));
 
         return root;
     }
