@@ -7,6 +7,7 @@ import java.io.*;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import metastudio.*;
+import metastudio.utils.ExtensionFilter;
 
 public class MetaRecord {
 	private File saveFile;
