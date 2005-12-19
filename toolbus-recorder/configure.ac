@@ -41,5 +41,6 @@ AC_PROG_MAKE_SET([])
 dnl Which files need updating?
 AC_CONFIG_FILES([
 		Makefile
+		script/Makefile
 ])
 AC_OUTPUT

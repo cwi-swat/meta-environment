@@ -5,7 +5,7 @@ ACLOCAL_FLAGS = -I .
 CLEANFILES = \
 	${PACKAGE}-${VERSION}.pkg ${JARFILE}
 
-SUBDIRS = 
+SUBDIRS = script
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

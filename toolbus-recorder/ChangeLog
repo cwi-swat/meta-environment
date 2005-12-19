@@ -4,4 +4,6 @@ Mon Dec 19 14:06:54 CET 2005 <{dzebric,jurgenv}@cwi.nl>
  * Started a package that will contain the work by Peter Heibrink:
    A ToolBus recorder and player that can be used for regression testing
    of ToolBus applications.
+ * We generate the wrapper scripts for starting the Java tools, such
+   that the locations of used jars is computed by configure.
  * Initial version is 0.1
