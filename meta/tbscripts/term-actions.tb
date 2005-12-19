@@ -17,7 +17,7 @@ let
   Value : term
 in
   snd-msg(equal-trees(Tree1, Tree2))
-  .  rec-msg(Value?)
+  .  rec-msg(tree-is-equal(Value?))
   . 
   if equal(Value, quote(true)) then
     Result := true

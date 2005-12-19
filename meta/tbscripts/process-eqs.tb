@@ -115,8 +115,7 @@ in
   if equal(Modules, []) then
     Imports := []
   else
-    rec-msg(modules(Modules?))
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     . snd-msg(sm-get-all-needed-imports(Modules, Modulename))
     . rec-msg(sm-all-needed-imports(Imports?))
   fi

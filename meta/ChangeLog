@@ -1,5 +1,11 @@
 # $Id$
 
+Mon Dec 19 09:54:36 CET 2005 <kooiker@cwi.nl>
+ * tbscripts/term-actions.tb:
+   - fixed missing application function in equal-trees
+ * tbscripts/process-eqs.tb:
+   - fixed hanging rec-msg
+
 Tue Dec 13 14:04:38 CET 2005 <kooiker@cwi.nl>
  * termstore-actions.tb:
    - No longer used
