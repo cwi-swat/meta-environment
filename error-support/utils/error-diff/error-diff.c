@@ -152,23 +152,44 @@ static ATbool ERR_summaryEqual(ERR_Summary summary1, ERR_Summary summary2) {
 
 
 static ATbool isTermSummary(ATerm term) {
-	AFun fun;
+  AFun fun;
 
-	if (term == NULL) {
-					return ATfalse;
-	}
+  if (term == NULL) {
+    return ATfalse;
+  }
 
-	if (ATgetType(term) != AT_APPL) {
-					return ATfalse;
-	}
+  if (ATgetType(term) != AT_APPL) {
+    return ATfalse;
+  }
 
-	fun = ATgetAFun((ATermAppl) term);
+  fun = ATgetAFun((ATermAppl) term);
 
-	if (strcmp(ATgetName(fun), "summary")) {
-					return ATfalse;
-	}
+  if (strcmp(ATgetName(fun), "summary")) {
+    return ATfalse;
+  }
 
-	return ATtrue;
+  return ATtrue;
+}
+
+static ATbool isTermError(ATerm term) {
+  AFun fun;
+
+  if (term == NULL) {
+    return ATfalse;
+  }
+
+  if (ATgetType(term) != AT_APPL) {
+    return ATfalse;
+  }
+
+  fun = ATgetAFun((ATermAppl) term);
+
+  if (strcmp(ATgetName(fun), "error") &&
+      strcmp(ATgetName(fun), "warning")) {
+    return ATfalse;
+  }
+
+  return ATtrue;
 }
 
 int main (int argc, char *argv[]) {
@@ -204,18 +225,30 @@ int main (int argc, char *argv[]) {
   input2 = ATreadFromNamedFile(input_file_names[1]);
 
   if (!isTermSummary(input1) || !isTermSummary(input2)) {
-	  ATwarning("%s: please provide two Summaries, and nothing else\n",
-			  myname);
-	  usage();
-	  exit(1);
-  }
-
-  if (ERR_summaryEqual(ERR_SummaryFromTerm(input1), 
-			  ERR_SummaryFromTerm(input2))) {
-    return 0;
+    if (!isTermError(input1) || !isTermError(input2)) {
+      ATwarning("%s: please provide two Summaries or two Errors, "
+		"and nothing else\n", myname);
+      usage();
+      exit(1);
+    }
+    else {
+      if (ERR_errorEqual(ERR_ErrorFromTerm(input1), 
+			 ERR_ErrorFromTerm(input2))) {
+	return 0;
+      }
+      else {
+	return 1;
+      }
+    }
   }
   else {
-    return 1;
+    if (ERR_summaryEqual(ERR_SummaryFromTerm(input1), 
+			 ERR_SummaryFromTerm(input2))) {
+      return 0;
+    }
+    else {
+      return 1;
+    }
   }
 }
 
