@@ -1,0 +1,7 @@
+#! /bin/sh
+
+/opt/asfsdf-meta-1.5.3/bin/generic-metaplayback \
+  -I /opt/asfsdf-meta-1.5.3/share/asf \
+  -I /opt/asfsdf-meta-1.5.3/share/asfsdf-meta \
+#  -p /opt/asfsdf-meta-1.5.3/bin \
+  $*

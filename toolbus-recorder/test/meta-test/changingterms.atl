@@ -1,0 +1,3 @@
+Ui;end-status("__changing_int__")
+Ui;add-status("__changing_int__","__constant_str__")
+Ui;add-statusf("__changing_int__","__constant_str__","__constant_str__")
