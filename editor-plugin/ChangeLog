@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Dec 20 13:25:26 CET 2005 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - confirm save when killing an editor
+
 Mon Dec 12 09:31:12 CET 2005 <kooiker@cwi.nl>
  * editor-plugin.idef.src:
    - add Modulename argument to te-edit-text

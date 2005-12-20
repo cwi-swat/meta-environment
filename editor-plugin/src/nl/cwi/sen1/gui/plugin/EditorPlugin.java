@@ -181,7 +181,20 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     public void killEditor(ATerm editorId) {
         StudioComponent comp = (StudioComponent) componentsById.get(editorId
                 .toString());
+
         if (comp != null) {
+            Editor panel = getPanel(editorId.toString());
+
+            if (panel.isModified()) {
+                studio.requestFocus(comp);
+                try {
+                    showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
+                } catch (CloseAbortedException e) {
+                    // this should never happen (no CANCEL button)
+                    e.printStackTrace();
+                }
+            }
+
             componentsById.remove(editorId.toString());
             statusbarsById.remove(editorId.toString());
             editors.remove(editorId.toString());
