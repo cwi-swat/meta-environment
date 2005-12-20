@@ -23,8 +23,6 @@ void usage(void) {
         myname, myversion);
 }
 
-
-
 static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2) {
   char *description1 = ERR_getSubjectDescription(subject1);
   char *description2 = ERR_getSubjectDescription(subject2);
@@ -37,7 +35,7 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2) {
 	ERR_isLocationAreaInFile(location2)) {
       ERR_Area area1 = ERR_getLocationArea(location1);
       ERR_Area area2 = ERR_getLocationArea(location2);
-
+      
       return ERR_isEqualArea(area1, area2);
     }
     else if (ERR_isLocationArea(location1) &&
@@ -54,7 +52,6 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2) {
   }
   return ATfalse;
 }
-
 
 static ATbool ERR_subjectListEqual(ERR_SubjectList subjectlist1, ERR_SubjectList subjectlist2) {
   if (ERR_isSubjectListEmpty(subjectlist1)
@@ -76,8 +73,7 @@ static ATbool ERR_subjectListEqual(ERR_SubjectList subjectlist1, ERR_SubjectList
   return ATfalse;
 }
 
-static ATbool ERR_errorEqual(ERR_Error error1, ERR_Error error2)
-{
+static ATbool ERR_errorEqual(ERR_Error error1, ERR_Error error2) {
   char *description1 = ERR_getErrorDescription(error1);
   char *description2 = ERR_getErrorDescription(error2);
 
@@ -142,14 +138,12 @@ static ATbool ERR_summaryEqual(ERR_Summary summary1, ERR_Summary summary2) {
 	else if (strcmp(producer1, producer2)) {
 		return ATfalse;
 	}
-	else if (ERR_ErrorListEqual(list1, list2)) {
+	else if (!ERR_ErrorListEqual(list1, list2)) {
 		return ATfalse;
 	}
 
 	return ATtrue;
 }
-
-
 
 static ATbool isTermSummary(ATerm term) {
   AFun fun;

@@ -1,5 +1,8 @@
 $Id$
 
+Tue Dec 20 13:33:58 CEST 2005 <economop@cwi.nl>
+ * Fixed bug in error-diff.
+
 Tue Sep 27 10:28:23 CEST 2005 <economop@cwi.nl>
  * Changed ERR_getManagarSummary() -> ERR_getManagerSummary()
 	
