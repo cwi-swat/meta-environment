@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 4, 2005 8:26:01 AM
+// generation time: Dec 9, 2005 10:59:01 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -28,6 +28,7 @@ abstract public class ModuleManagerTool
   private ATerm PgetAllDependingModules0;
   private ATerm PgetDependingModules0;
   private ATerm PgetClosableModules0;
+  private ATerm PgetAllModules0;
   private ATerm PcreateModule0;
   private ATerm PgetModuleIdByAttribute0;
   private ATerm PgetAllModulesByAttribute0;
@@ -56,6 +57,7 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules-by-attribute(<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
@@ -88,6 +90,7 @@ abstract public class ModuleManagerTool
     PgetAllDependingModules0 = factory.parse("rec-eval(get-all-depending-modules(<term>))");
     PgetDependingModules0 = factory.parse("rec-eval(get-depending-modules(<term>))");
     PgetClosableModules0 = factory.parse("rec-eval(get-closable-modules(<term>))");
+    PgetAllModules0 = factory.parse("rec-eval(get-all-modules)");
     PcreateModule0 = factory.parse("rec-eval(create-module)");
     PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
     PgetAllModulesByAttribute0 = factory.parse("rec-eval(get-all-modules-by-attribute(<term>,<term>))");
@@ -153,6 +156,10 @@ abstract public class ModuleManagerTool
     result = term.match(PgetClosableModules0);
     if (result != null) {
       return getClosableModules((ATerm)result.get(0));
+    }
+    result = term.match(PgetAllModules0);
+    if (result != null) {
+      return getAllModules();
     }
     result = term.match(PcreateModule0);
     if (result != null) {

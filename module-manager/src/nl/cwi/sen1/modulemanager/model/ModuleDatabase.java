@@ -31,8 +31,6 @@ public class ModuleDatabase {
     }
 
     public void addModule(Module module, ModuleId moduleId) {
-        // System.err.println("MM - addModule: module [" + moduleId + "]");
-
         modules.put(moduleId, module);
         children.put(moduleId, new HashSet());
         parents.put(moduleId, new HashSet());
@@ -86,15 +84,26 @@ public class ModuleDatabase {
 
         return null;
     }
-    
+
     public Set getAllModulesByAttribute(ATerm namespace, ATerm key) {
         Set allModules = new HashSet();
-        
+
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
             ModuleId moduleId = (ModuleId) iter.next();
             Module module = (Module) modules.get(moduleId);
 
             allModules.add(module.getAttribute(namespace, key));
+        }
+
+        return allModules;
+    }
+
+    public Set getAllModules() {
+        Set allModules = new HashSet();
+
+        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+            ModuleId moduleId = (ModuleId) iter.next();
+            allModules.add(moduleId);
         }
 
         return allModules;
@@ -222,10 +231,6 @@ public class ModuleDatabase {
 
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
             ModuleId tempId = (ModuleId) iter.next();
-            dependencies = getChildren(tempId);
-            if (dependencies.contains(moduleId)) {
-                dependencies.remove(moduleId);
-            }
             dependencies = getParents(tempId);
             if (dependencies.contains(moduleId)) {
                 dependencies.remove(moduleId);
@@ -234,6 +239,8 @@ public class ModuleDatabase {
 
         dependencies = (Set) children.get(moduleId);
         dependencies.clear();
+        
+        System.err.println("Parents: " + parents);
     }
 
     public Map getDependencies() {

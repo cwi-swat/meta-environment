@@ -48,6 +48,11 @@ in
     . rec-value(MM, modules(Modules?))
     . snd-msg(mm-modules(Modules))
   +
+    rec-msg(mm-get-all-modules)
+    . snd-eval(MM, get-all-modules)
+    . rec-value(MM, modules(Modules?))
+    . snd-msg(mm-modules(Modules))
+  +
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))
   +

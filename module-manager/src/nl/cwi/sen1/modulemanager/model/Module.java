@@ -3,8 +3,6 @@ package nl.cwi.sen1.modulemanager.model;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 import aterm.ATerm;
 
 public class Module {

@@ -1,5 +1,10 @@
 $Id$
 
+Mon Dec 19 14:46:37 CET 2005 <kooiker@cwi.nl>
+ * src/**/ModuleDatabase.java:
+   - Only delete children dependencies of module when deleting all
+     dependencies
+
 Fri Nov 11 15:38:11 CET 2005 <kooiker@cwinl>
  * src/nl/cwi/sen1/modulemanager/module/ModuleGraph.java:
    - Add attribute shape (defaults to Box)
