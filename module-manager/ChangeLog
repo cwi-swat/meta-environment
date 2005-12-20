@@ -1,5 +1,9 @@
 $Id$
 
+Tue Dec 20 13:24:03 CET 2005 <kooiker@cwi.nl>
+ * src/**/ModuleDatabase.java:
+   - Add private removeAllDependencies, used when removing a module
+
 Mon Dec 19 14:46:37 CET 2005 <kooiker@cwi.nl>
  * src/**/ModuleDatabase.java:
    - Only delete children dependencies of module when deleting all

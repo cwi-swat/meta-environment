@@ -37,7 +37,7 @@ public class ModuleDatabase {
     }
 
     public void removeModule(ModuleId moduleId) {
-        deleteDependencies(moduleId);
+        deleteAllDependencies(moduleId);
         modules.remove(moduleId);
         children.remove(moduleId);
         parents.remove(moduleId);
@@ -241,6 +241,18 @@ public class ModuleDatabase {
         dependencies.clear();
     }
 
+    private void deleteAllDependencies(ModuleId moduleId) {
+        deleteDependencies(moduleId);
+        
+        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+            ModuleId tempId = (ModuleId) iter.next();
+            Set dependencies = getChildren(tempId);
+            if (dependencies.contains(moduleId)) {
+                dependencies.remove(moduleId);
+            }
+        }
+    }
+    
     public Map getDependencies() {
         return children;
     }
