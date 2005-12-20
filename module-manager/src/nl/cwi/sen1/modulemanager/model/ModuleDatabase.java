@@ -239,8 +239,6 @@ public class ModuleDatabase {
 
         dependencies = (Set) children.get(moduleId);
         dependencies.clear();
-        
-        System.err.println("Parents: " + parents);
     }
 
     public Map getDependencies() {
