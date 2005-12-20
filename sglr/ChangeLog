@@ -1,5 +1,9 @@
 $Id$
 
+Tue Dec 20 11:02:55 CET 2005 <kooiker@cwi.nl>
+ * test/errorneous/bi.{cycle,asfix2.org}:
+   - Readded: distcheck complained about missing tests
+
 Mon Dec 19 09:35:54 CET 2005 <jurgenv@cwi.nl>
  * Brought regress-terms.sh up-to-date with error-diff tool.
 
