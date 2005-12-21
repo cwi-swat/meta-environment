@@ -13,7 +13,7 @@ in
   . snd-msg(get-parsetable(ModuleId, Type))
   .
   (
-    rec-msg(parsetable(Table?))
+    rec-msg(parsetable(Type, Table?))
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     .
     if equal(Filename, "") then

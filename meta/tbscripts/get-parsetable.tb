@@ -12,12 +12,13 @@ in
       . Table := UNDEFINED
     )
   else
-    snd-msg(get-parsetable(ModuleId, Type)) .
+    snd-msg(get-parsetable(ModuleId, Type))
+    .
     (
       rec-msg(parsetable(Type, Table?))
     +
-      rec-msg(no-parsetable(ModuleId)) .
-      Table := UNDEFINED
+      rec-msg(no-parsetable(ModuleId))
+      . Table := UNDEFINED
     )
   fi
 endlet
