@@ -358,7 +358,7 @@ process DebugRunAsfTestsAction(Modulename : str) is
   snd-msg(debugging(on))
   . snd-msg(run-asf-tests(Modulename))
 
-process AsfSdfApiGenAction(Modulename : str) is
+process AsfSdfApiGenAction(ModuleId: term) is
 let
   Cancel: bool,
   Path: str
@@ -368,7 +368,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(asfsdfapigen(Modulename, Path))
+    snd-msg(asfsdfapigen(ModuleId, Path))
     . rec-msg(asfsdfapigen-done)
   fi
 endlet

@@ -10,9 +10,10 @@ let
   Feedback : term,
   Filename : str,
   FullPath : str,
-  ModuleName : str,
+  ModuleId : term,
   NewEquationsText : str ,
   NewEquationsTree : term,
+  NewModuleId: term,
   NewSyntaxText : str,
   NewSyntaxTree : term,
   Path: str,
@@ -29,17 +30,17 @@ in
   snd-msg(file-extension-hook(asf)) .
   rec-msg(file-extension-hook-result(AsfExt?)) .
   (
-    rec-msg(asfsdfapigen(ModuleName?, Path?)) .
+    rec-msg(asfsdfapigen(ModuleId?, Path?)) .
     snd-msg(io-get-path-filename(Path)) .
     rec-msg(io-filename(Path, Filename?)) .
     snd-msg(io-get-path-directory(Path)) .
     rec-msg(io-directory(Path, Directory?)) .
-    snd-msg(get-search-paths) .
-    rec-msg(search-paths(SearchPaths?)) .
+    snd-msg(get-module-paths) .
+    rec-msg(module-paths(SearchPaths?)) .
     snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename)) .
     (
       rec-msg(sm-new-module-name(Directory?, Filename?)) .
-      snd-msg(get-syntax-tree(ModuleName)) .
+      snd-msg(get-syntax-tree(ModuleId)) .
       (
 	rec-msg(syntax(SyntaxTree?)) .
 	snd-msg(apply-rewrite(Rewriter, "generate-syntax", "Module", 
@@ -74,7 +75,7 @@ in
 	  snd-msg(io-write-text-list(FullPath, [NewEquationsText])) .
 	  (
 	    rec-msg(io-file-written)  .
-	    snd-msg(open-initial-module(Directory, Filename, SdfExt)) 
+	    OpenModule(Filename, NewModuleId?)
 	  +
 	    rec-msg(io-file-not-written(ErrorMessage?)) .
 	    snd-note(ui-status(errorf("Generating module failed: %s",[ErrorMessage])))
