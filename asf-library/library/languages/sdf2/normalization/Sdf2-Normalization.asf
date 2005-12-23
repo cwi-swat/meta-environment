@@ -90,6 +90,7 @@ equations
 
 [0] <cc -LEX> = cc  [0] <cc -CF> = cc 
 [0] <L  -LEX> = L   [0] <L  -CF> = L   
+[0] <IL -LEX> = IL  [0] <IL -CF> = IL
 
 %% varsyms should not be removed, because that would ruin the injection from
 %% varsym into normal syms. 

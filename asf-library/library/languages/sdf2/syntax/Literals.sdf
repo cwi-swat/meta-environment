@@ -7,13 +7,17 @@ imports basic/StrCon
 imports basic/IdentifierCon
 
 exports
-  sorts FunctionName
+  sorts FunctionName SingleQuotedStrCon
+  lexical syntax
+    [\'] chars:StrChar* [\']   -> SingleQuotedStrCon  {cons("default")}
+
   context-free syntax
     IdCon  -> FunctionName {cons("unquoted-fun")}
     StrCon -> FunctionName {cons("quoted-fun")}
 
   context-free syntax
-    string:StrCon       -> Symbol  {cons("lit")}
+    string:StrCon                -> Symbol {cons("lit")}
+    ci-string:SingleQuotedStrCon -> Symbol {cons("ci-lit")}
 
     fun:FunctionName "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
 	-> Production  {avoid, cons("prefix-fun")}

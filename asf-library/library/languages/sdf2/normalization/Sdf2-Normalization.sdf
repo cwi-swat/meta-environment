@@ -39,6 +39,7 @@ exports
 hiddens
   variables
     "L"[0-9\']*         -> StrCon
+    "IL"[0-9\']*        -> SingleQuotedStrCon
     "I"[0-9\']* 	-> IdCon
     "_G"[0-9\']*        -> Grammar 
     "_"[ABC][0-9\']*    -> Symbol

@@ -2,16 +2,24 @@ module languages/sdf2/normalization/Literals
 imports
         languages/sdf2/syntax/Literals
         languages/sdf2/normalization/CC
+        languages/sdf2/normalization/Character-Arithmetic
+
 exports
   context-free syntax
     "l[[" Grammar "]]"     -> Grammar
     literals(SymbolSet)    -> Productions
     chars(StrCon)          -> Symbols
+    ci-chars(SingleQuotedStrCon) -> Symbols
     symbols({Symbol ","}*) -> Symbols
 
 hiddens
   context-free syntax
     id2str(IdCon)   -> StrCon
+    extend(Symbols) -> Symbols
+    "extend"        -> IdCon {reject}
+
+  context-free start-symbols
+	Symbols Grammar
 
 hiddens
   lexical variables
@@ -25,6 +33,7 @@ hiddens
 
   variables
     "$"?"L"             -> StrCon
+    "$"?"l"             -> SingleQuotedStrCon
     "I"                 -> IdCon
     "'g"[0-9\']*        -> {Symbol ","}*
     "'g+"[0-9\']*       -> {Symbol ","}+
@@ -34,5 +43,6 @@ hiddens
     "'"[abc][0-9\']*    -> Symbol* 
     "!"[0-9\']*         -> Attributes
     "cc"[0-9\']*        -> CharClass 
+    "_c"[0-9\']* 	      -> Character
 
  

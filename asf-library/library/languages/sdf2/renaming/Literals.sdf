@@ -4,4 +4,5 @@ imports languages/sdf2/renaming/Kernel languages/sdf2/syntax/Literals
 hiddens
   variables
     "L"[0-9\']* -> StrCon
+    "S"[0-9\']* -> SingleQuotedStrCon
    "'r"[0-9\']* -> Renamings   

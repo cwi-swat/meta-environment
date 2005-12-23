@@ -10,6 +10,7 @@ equations
 
   [0]         l[[_G]]             = _G syntax literals(symbols(_G))
   [0]         literals({L})       = chars(L) -> L
+  [0]         literals({l})       = ci-chars(l) -> l
   [default-0] literals({_A})      =
   [0]         literals({})        =
   [0]         literals({'a+ 'b+}) = literals({'a+}) ++ literals({'b+})
@@ -68,6 +69,50 @@ equations
         =========================================
         chars( strcon(\" strchar(\ d1 d2 d3) C* \") ) = 
 	cc ++ chars(strcon(\" C* \"))
+
+equations
+
+  [forward-to-chars-and-extend-classes]
+	'a+ := chars(strcon(\" C* \")),
+	'a+2 := extend('a+)
+	======================================
+	ci-chars(singlequotedstrcon(\' C* \')) = 'a+2
+
+
+equations
+
+[empty] extend() = 
+
+[loop] 	_A2  := extend(_A),
+	'a+2 := extend('a+)
+	=========================
+	extend(_A 'a+) = _A2 'a+2
+
+[lowercase] 
+	[_c] := cc,
+	a <= _c == true,
+	_c <= z == true
+	===>
+	extend(cc) = [_c char(int(_c) - 32)]
+
+[uppercase] 
+	[_c] := cc,
+	A <= _c == true,
+	_c <= Z == true
+	===>
+	extend(cc) = [_c char(int(_c) + 32)]
+
+[default] extend(_A) = _A
+ 
+tests
+
+[a] extend([a]) == [aA]  
+[z] extend([z]) == [zZ]  
+[A] extend([A]) == [Aa] 
+[Z] extend([Z]) == [Zz]  
+[d] extend([\$]) == [\$]
+
+equations
 
 %% Prefix function productions are translated to normal productions by 
 %% enclosing the parentheses and commas in double quotes.
