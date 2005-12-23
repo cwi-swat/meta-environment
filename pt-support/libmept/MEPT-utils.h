@@ -45,6 +45,7 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod);
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isTreeAlt(PT_Tree tree);
 ATbool PT_isTreeLit(PT_Tree tree);
+ATbool PT_isTreeCilit(PT_Tree tree);
 ATbool PT_isTreeSeq(PT_Tree tree);
 ATbool PT_isTreeOpt(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);

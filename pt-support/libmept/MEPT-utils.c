@@ -455,6 +455,19 @@ ATbool PT_isTreeLit(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isTreeCiLit(PT_Tree tree) */
+
+ATbool PT_isTreeCilit(PT_Tree tree)
+{
+  if (PT_hasTreeProd(tree)) {
+    return PT_isSymbolCilit(PT_getProductionRhs(PT_getTreeProd(tree)));
+  }
+  else {
+    return ATfalse;
+  }
+}
+
+/*}}}  */
 
 /*{{{  ATbool PT_isTreeVar(PT_Tree tree)  */
 
