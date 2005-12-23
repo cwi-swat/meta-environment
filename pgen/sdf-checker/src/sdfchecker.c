@@ -78,7 +78,6 @@ static void displayMessages(ATerm term)
   PERR_Summary pSummary;
   ERR_Summary summary;
 
-  ATwarning("errors = %t\n", term);
   pStart = PERR_StartFromTerm(term);
   pSummary = PERR_getStartTopSummary(pStart);
   summary = PERR_lowerSummary(pSummary);
