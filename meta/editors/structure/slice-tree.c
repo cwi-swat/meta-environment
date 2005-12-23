@@ -136,7 +136,7 @@ static void treeToSlices(PT_Tree tree)
     return;
   }
   else {
-    if (PT_isTreeLit(tree)) {
+    if (PT_isTreeLit(tree) || PT_isTreeCilit(tree)) {
       PT_Args chars = PT_getTreeArgs(tree);
 
       if (hasAlphanumericChars(chars)) {
