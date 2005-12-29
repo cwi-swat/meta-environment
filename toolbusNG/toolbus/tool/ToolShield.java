@@ -1,8 +1,7 @@
 package toolbus.tool;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 
 import toolbus.TBTerm;
@@ -43,7 +42,7 @@ public abstract class ToolShield extends Thread {
 		return TBTerm.factory;
 	}
 	
-	abstract public void connect(InputStream in, OutputStream out) throws IOException;
+	abstract public void connect(SocketChannel channel) throws IOException;
 
 	protected Object[] getNextRequestForTool() {
 		Object request[] = (Object[]) requestsForTool.getFirst();

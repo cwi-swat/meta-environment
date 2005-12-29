@@ -1,0 +1,12 @@
+process A(S : str) is printf("%s A\n", S)
+
+process B(S : str) is printf("%s B\n", S)
+
+process Main is 
+let B : str
+in
+    B := "A" .
+    B("abc") 
+endlet
+
+toolbus(Main)

@@ -1,10 +1,12 @@
 package toolbus.tool.classic;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
 
 import toolbus.TBTerm;
 import toolbus.ToolBus;
@@ -31,7 +33,7 @@ import aterm.ATermFactory;
  * ToolInputHandler is executed as a separate thread and listens
  * for incoming terms from the tool.
  */
-
+/***
 class ToolInputHandler extends Thread {
 	ClassicToolShield toolShield;
 	ToolInstance toolInstance;
@@ -67,6 +69,7 @@ class ToolInputHandler extends Thread {
 		}
 	}
 }
+***/
 
 public class ClassicToolShield extends ToolShield {
 	private final static int LENSPEC = 12;          // ToolBus dependent parameters
@@ -75,10 +78,12 @@ public class ClassicToolShield extends ToolShield {
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = false;
-	private InputStream inputStream;
-	private OutputStream outputStream;
-	private ToolInputHandler toolInputHandler;
+	private boolean verbose = true;
+//	private InputStream inputStream;
+//	private OutputStream outputStream;
+	private SocketChannel client;
+	private Selector selector;
+//	private ToolInputHandler toolInputHandler;
 
 	private ToolDefinition toolDef;
 	private String toolname;
@@ -125,9 +130,8 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 	
-	public void connect(InputStream in, OutputStream out) throws IOException {
-		inputStream = in;
-		outputStream = out;
+	public void connect(SocketChannel client) throws IOException {
+		this.client = client;
 		info("checking input signature...");
 		checkToolSignature();
 		ATerm term = readTerm();
@@ -137,8 +141,11 @@ public class ClassicToolShield extends ToolShield {
 		}
 		connected = true;
 		getToolInstance().TCP_goConnected();
-		toolInputHandler = new ToolInputHandler(this, getToolInstance());
-		toolInputHandler.start();
+		//toolInputHandler = new ToolInputHandler(this, getToolInstance());
+		//toolInputHandler.start();
+		selector = Selector.open();
+		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+		clientKey.attach(this);
 	}
 	
 	public synchronized boolean isConnected() {
@@ -190,7 +197,7 @@ public class ClassicToolShield extends ToolShield {
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
 	public void terminate(ATerm msg) {
-		toolInputHandler.setRunning(false);
+	//	toolInputHandler.setRunning(false);
 		sndRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 	
@@ -244,37 +251,42 @@ public class ClassicToolShield extends ToolShield {
 				}
 				System.out.println("");
 			}
-			outputStream.write(ls);
-			term.writeToTextFile(outputStream);
-			//if (LENSPEC + size < MIN_MSG_SIZE) {
-			//	info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
-			//}
-			for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
-				outputStream.write(0);
+			client.write(ByteBuffer.wrap(ls));
+			term.writeToTextFile(Channels.newOutputStream(client));
+			if (LENSPEC + size < MIN_MSG_SIZE) {
+				info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
 			}
-			outputStream.flush();
+			for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
+			//	client.put((byte)0);
+			}
+			//outputStream.flush();
 		}
 	}
-	
-	public ATerm readTerm() throws IOException {
-		return readTerm(inputStream, factory, getLockObject());
-	}
 
-	public static ATerm readTerm(InputStream inputStream, ATermFactory factory, Object lock) throws IOException {
+	public ATerm readTerm() throws IOException {
 		ATerm result;
-		byte[] lspecBuf = new byte[LENSPEC];
+		ByteBuffer lspecBuf = ByteBuffer.allocate(LENSPEC);
 		int index;
+		
+		info("readTerm ...");
 
 		index = 0;
 		while (index != LENSPEC) {
-			int bytes_read = inputStream.read(lspecBuf, index, LENSPEC - index);
+			int bytes_read = client.read(lspecBuf);
 			if (bytes_read <= 0) {
 				throw new IOException("Tool connection terminated (1)");
 			}
 			index += bytes_read;
 		}
+		lspecBuf.flip();
+		String s = "";
+		while(lspecBuf.hasRemaining()){
+			s = s + (char) lspecBuf.get();
+		}
+		info("read: <" + s + ">");
+		
 
-		String lspec = new String(lspecBuf);
+		String lspec = s;
 
 		int bytesLeft = Integer.parseInt(lspec.substring(0, LENSPEC - 1));
 		if (bytesLeft < MIN_MSG_SIZE) {
@@ -282,15 +294,22 @@ public class ClassicToolShield extends ToolShield {
 		}
 		bytesLeft -= LENSPEC;
 
-		byte[] data = new byte[bytesLeft];
+		ByteBuffer data = ByteBuffer.allocate(bytesLeft);
 		index = 0;
 		while (index != bytesLeft) {
-			int bytes_read = inputStream.read(data, index, bytesLeft - index);
+			int bytes_read = client.read(data);
 			if (bytes_read <= 0) {
 				throw new IOException("Tool connection terminated (2)");
 			}
 			index += bytes_read;
 		}
+		
+		data.flip();
+		s = "";
+		while(data.hasRemaining()){
+			s = s + (char) data.get();
+		}
+		info("read: <" + s + ">");
 
 		//String stringdata = new String(data,"UTF8");
 		//System.err.println("data size = " + data.length + "; string size = " + stringdata.length());
@@ -300,7 +319,7 @@ public class ClassicToolShield extends ToolShield {
 		//for(int i = 0; i < data.length; i++){
 		//	sb.append((char)data[i]);
 		//}
-		String stringdata = new String(data,0);
+		String stringdata = s ; //new String(data,0);
 		
 		//System.out.print("data read (" + bytesLeft + " bytes) ");
 		//for(int i = 0; i < 100 & i < data.length; i++){
