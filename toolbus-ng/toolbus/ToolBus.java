@@ -5,14 +5,24 @@
 package toolbus;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 import toolbus.parser.ExternalParser;
@@ -22,6 +32,7 @@ import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
+import toolbus.tool.classic.ClassicToolShield;
 import toolbus.tool.classic.ToolConnector;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -53,9 +64,27 @@ public class ToolBus {
   private static boolean verbose = false;
   private static int nerrrors = 0;
   private static int nwarnings = 0;
+  
   private static int WellKnownSocketPort = 8999;
+  private static ServerSocketChannel WellKnownSocketChannel;
   private static ServerSocket WellKnownSocket;
   private static InetAddress localHost;
+  private static Selector selector;
+  
+	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
+	private final static int MIN_MSG_SIZE = 128;	// the C implementation
+	private ToolBus toolbus;
+	private boolean running = false;
+	//private InetAddress address;
+	private String toolname;
+	//private Socket connection;
+	private InputStream inputStream;
+	private OutputStream outputStream;
+	private int toolid = -1;
+	private Vector connectedTools;
+	private SocketChannel client;
+	private ByteBuffer handshake ;
+  
   private long startTime;
   private long currentTime;
   private long nextTime = 0;
@@ -83,17 +112,25 @@ public class ToolBus {
     
     try {
     	localHost = InetAddress.getLocalHost();
-    	System.err.println("Creating WellKnownSocket: " + WellKnownSocketPort + " " + localHost);
-    	WellKnownSocket = new ServerSocket(WellKnownSocketPort, 1, localHost);
+    	info("Creating WellKnownSocket: " + WellKnownSocketPort + " " + localHost);
+    	WellKnownSocketChannel = ServerSocketChannel.open();
+    	//WellKnownSocket = new ServerSocket(WellKnownSocketPort, 1, localHost);
+    	WellKnownSocket = WellKnownSocketChannel.socket();
+    	WellKnownSocket.bind(new InetSocketAddress(WellKnownSocketPort));
+    	WellKnownSocketChannel.configureBlocking(false);
+    	selector = Selector.open();
+    	WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+    	
+	    handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
 
     } catch(IOException e){
-    	System.err.println(e);
+    	e.printStackTrace();
     }
   
-    System.err.println("WellKnownSocket created: " + WellKnownSocket);
+    info("WellKnownSocket created: " + WellKnownSocket);
     startTime = System.currentTimeMillis();
-    toolConnector = new ToolConnector(this);
-    toolConnector.start();
+   // toolConnector = new ToolConnector(this);
+   // toolConnector.start();
   }
 
   /**
@@ -111,6 +148,142 @@ public class ToolBus {
   public ToolBus(StringWriter out) {
     this(new PrintWriter(out));
   }
+  
+  void info(String msg) {
+	if (verbose) {
+		System.err.println("[TOOLBUS] " + msg);
+	}
+}
+  
+  private void handleInputFromTools(){
+  	try {
+  		selector.select();
+  	} catch(IOException e){
+    	e.printStackTrace();
+    }
+  	Set readyKeys = selector.selectedKeys();
+  	Iterator iterator = readyKeys.iterator();
+  	while(iterator.hasNext()){
+  		SelectionKey key = (SelectionKey) iterator.next();
+  		iterator.remove();
+  		info("key " + key);
+  		
+  		try{	
+	  		if(key.isAcceptable()){
+	  			ServerSocketChannel server = (ServerSocketChannel) key.channel();
+	  			client = server.accept();
+	  			client.configureBlocking(true);
+	  			shakeHands();
+	  			
+	  		} else if(key.isReadable()){
+	  			client = (SocketChannel) key.channel();
+	  			ClassicToolShield ts = (ClassicToolShield) key.attachment();
+	  			ts.readTerm();
+	  		} else {
+	  			System.err.println("NO WRITE POSSIBLE in handleInputFromTools");
+	  		}
+  		} catch (IOException e){
+  			key.cancel();
+  			try {
+  				key.channel().close();
+  			} catch (IOException ce) {}
+  		}
+  		
+  	}
+  }
+  
+	private void shakeHands() throws IOException {
+		//	String host = address.getHostName();
+		//	info("host = " + host);
+		//	if (host == null) {
+		//		String pair = address.toString();
+		//		host = pair.substring(0, pair.indexOf('/'));
+		//		info("local host = " + host);
+		//	}
+			
+			//byte[] handshake = new byte[MAX_HANDSHAKE];
+		    //ByteBuffer handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
+			int nr = client.read(handshake);
+			
+			info(nr + " bytes read from client");
+			handshake.flip();
+			String s = "";
+			while(handshake.hasRemaining()){
+				s = s + (char) handshake.get();
+			}
+			info("read: <" + s + ">");
+			
+			String toolHand = s.toLowerCase().trim();
+			info("input: <" + toolHand + ">");
+			String elems[] = toolHand.split(" ");
+
+			toolname = elems[0];
+			info("toolname = " + toolname);
+			String host = elems[1];
+			info("host = " + host);
+			
+			int lastd = -1;
+			for(int i = 0; i < elems[2].length(); i++){
+				if((i == 0) && (elems[2].charAt(0) == '-')){
+					lastd = i;
+				} else if(!Character.isDigit(elems[2].charAt(i))){
+					break;
+				}
+				lastd = i;
+			}
+			toolid = Integer.parseInt(elems[2].substring(0,lastd+1));
+			info("toolid = " + toolid);
+			
+			if(toolid >= 0){
+				writeInt(toolid);
+				ToolInstance ti = getToolInstance(toolid);
+				ti.connect(client);
+			} else {
+				try {
+					ToolInstance ti = toolbus.addToolInstance(toolname, true);
+					toolid = ti.getToolCount();
+					writeInt(toolid);
+					info("shakeHands: created ti");
+					connectedTools.add(ti);
+					info("shakeHands: added to list");
+					//for(int i = 0; i < connectedTools.size(); i++){
+					//	ToolInstance ti1 = (ToolInstance) connectedTools.elementAt(i);
+					//	info("shakeHands: considering: " + ti1.getToolName());
+					//}
+					
+					ti.connect(client);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		
+		public ToolInstance getConnectedTool(String toolname){
+			//info("getConnectedTool: " + toolname);
+			for(int i = 0; i < connectedTools.size(); i++){
+				ToolInstance ti = (ToolInstance) connectedTools.elementAt(i);
+				//info("getConnectedTool: considering: " + ti.getToolName());
+				if(ti.getToolName().equals(toolname)){
+					connectedTools.removeElementAt(i);
+					//info("getConnectedTool: " + toolname + " ==> " + ti);
+					return ti;
+				}
+			}
+			//info("getConnectedTool: " + toolname + " ==> null");
+			return null;
+		}
+		
+		private void writeInt(int n) throws IOException {
+			//byte[] buffer = new byte[MAX_HANDSHAKE];
+			handshake.clear();
+			String s = toolname + " " + Integer.toString(n);
+			
+			byte bs[] = s.getBytes();
+			for (int i = 0; i < bs.length; i++) {
+				handshake.put(bs[i]);
+			}
+			client.write(handshake);
+		}
   
   /**
    * 
@@ -370,9 +543,9 @@ public class ToolBus {
   	return (ToolInstance) tools.elementAt(n);
   }
   
-  public ToolInstance getConnectedTool(String toolname){
-  	return toolConnector.getConnectedTool(toolname);
-  }
+  //public ToolInstance getConnectedTool(String toolname){
+  //	return toolConnector.getConnectedTool(toolname);
+ // }
 
   /**
    * Get a process definition by name.
@@ -462,6 +635,7 @@ public class ToolBus {
           //if (P.isTerminated()) {
           //	processes.remove(P);
           //}
+          handleInputFromTools();
         }
 
         if(!work){

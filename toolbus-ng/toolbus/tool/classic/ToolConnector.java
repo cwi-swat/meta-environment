@@ -120,7 +120,7 @@ public class ToolConnector extends Thread {
 		if(toolid >= 0){
 			writeInt(toolid);
 			ToolInstance ti = toolbus.getToolInstance(toolid);
-			ti.connect(inputStream, outputStream);
+			ti.connect(inputStream);
 		} else {
 			try {
 				ToolInstance ti = toolbus.addToolInstance(toolname, true);
@@ -129,12 +129,12 @@ public class ToolConnector extends Thread {
 				info("shakeHands: created ti");
 				connectedTools.add(ti);
 				info("shakeHands: added to list");
-				for(int i = 0; i < connectedTools.size(); i++){
-					ToolInstance ti1 = (ToolInstance) connectedTools.elementAt(i);
-					info("shakeHands: considering: " + ti1.getToolName());
-				}
+				//for(int i = 0; i < connectedTools.size(); i++){
+				//	ToolInstance ti1 = (ToolInstance) connectedTools.elementAt(i);
+				//	info("shakeHands: considering: " + ti1.getToolName());
+				//}
 				
-				ti.connect(inputStream, outputStream);
+				ti.connect(inputStream);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

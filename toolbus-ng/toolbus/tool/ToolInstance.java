@@ -1,8 +1,7 @@
  package toolbus.tool;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -85,8 +84,8 @@ public class ToolInstance {
   	return toolDef.getName();
   }
   
-  public void connect(InputStream in, OutputStream out) throws IOException {
-  	toolShield.connect(in, out);
+  public void connect(SocketChannel client) throws IOException {
+  	toolShield.connect(client);
   	toolShield.start();
   }
   
