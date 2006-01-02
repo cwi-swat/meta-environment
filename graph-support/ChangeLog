@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan  2 11:58:01 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - add MAINTAINER_MODE to api generation
+
 Sat Dec 17 19:00:43 CET 2005 <kooiker@cwi.nl>
  * utils/tree2graph/PT2graph.c:
    - pass ATerm to makeNodeIdDefault
