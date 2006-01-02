@@ -4,6 +4,7 @@ pkgdata_DATA = moduleapi.jar
 
 EXTRA_DIST = moduleapi.jar
 
+if MAINTAINER_MODE
 MODULE_MODULES = Modules NatCon
 
 api: module-api
@@ -28,3 +29,4 @@ java-module-api: MetaModules.def Makefile
 		--output . \
 		--version ${VERSION}
 	mv moduleapi-${VERSION}.jar moduleapi.jar
+endif

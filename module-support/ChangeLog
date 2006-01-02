@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan  2 11:17:22 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - add "if MAINTAINER_MODE" to api generation 
+
 Tue Sep  6 11:50:17 CEST 2005 <kooiker@cwi.nl>
  * Regenerated library incorparting Modules.sdf changes
 
