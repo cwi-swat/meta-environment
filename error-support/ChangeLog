@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan  2 11:15:00 CET 2006 <kooiker@cwi.nl>
+ * configure.ac,package:
+   - Remove toolbus dependency
+
 Tue Dec 20 13:33:58 CEST 2005 <economop@cwi.nl>
  * Fixed bug in error-diff.
 

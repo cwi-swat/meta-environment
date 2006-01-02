@@ -35,6 +35,7 @@ libLocationAPI_a_SOURCES = \
 	ParsedLocation.c \
 	ParsedLocation_dict.c
 
+if MAINTAINER_MODE
 #CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 INCLUDES = -I${ATERM}/include
 
@@ -97,3 +98,4 @@ java-location-api: Location.def Makefile
 		--output . \
 		--version ${VERSION}
 	mv locationapi-${VERSION}.jar locationapi.jar
+endif

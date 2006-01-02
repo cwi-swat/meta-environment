@@ -34,11 +34,6 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-dnl Require toolbus package
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
-AC_SUBST(TOOLBUS)
-
 NOSOCKLIBS=$LIBS
 SOCKET_FOUND=no
 SOCKLIBS=
