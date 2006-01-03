@@ -153,32 +153,37 @@ def cvsCatFile( frozenHeadTag, moduleName, fileName, newName ):
 # Precondition Validation
 #
 
-def assertArgumentCount( count, args ):    
+def verifyArgumentCount( count, args ):    
     if len(args) != count:
         error( "wrong number of arguments" )
 
 
-def assertInWorkingCopy():
-    mode = os.stat("CVS")[stat.ST_MODE]
-    if not stat.S_ISDIR(mode):
-        error( "the current working directory is not a CVS working copy" )
+def verifyInWorkingCopy():
+    try:
+        mode = os.stat("CVS")[stat.ST_MODE]
+        if stat.S_ISDIR(mode):
+            return
+    except OSError:
+        pass
+
+    error( "the current working directory is not a CVS working copy" )
 
 
-def assertInTrunkWorkingCopy():
-    assertInWorkingCopy()
+def verifyInTrunkWorkingCopy():
+    verifyInWorkingCopy()
     branchTag = cvsGetStickyTagCwd()
     if branchTag != "(none)":
         error("the current working directory is not a CVS TRUNK working copy")
 
 
-def assertInBranchWorkingCopy():
-    assertInWorkingCopy()
+def verifyInBranchWorkingCopy():
+    verifyInWorkingCopy()
     branchTag = cvsGetStickyTagCwd()    
     if branchTag == "(none)":
         error("the current working directory is not a CVS BRANCH working copy")
 
 
-def assertValidBranchCreation( branchTag, progressTag ):
+def verifyValidBranchCreation( branchTag, progressTag ):
     if cvsGetTagNameCount(branchTag) != 0:
         error("tag name '%s' is already in use in this subtree" % branchTag)
 
@@ -186,7 +191,7 @@ def assertValidBranchCreation( branchTag, progressTag ):
         error("tag name '%s' is already in use in this subtree" % progressTag)
 
 
-def assertValidBranchUse( branchTag, progressTag ):
+def verifyValidBranchUse( branchTag, progressTag ):
     if cvsGetTagNameCount(branchTag) == 0:
         error( "tag name '%s' not found in this subtree" % branchTag )
 
@@ -194,19 +199,19 @@ def assertValidBranchUse( branchTag, progressTag ):
         error( "tag name '%s' not found in this subtree" % progressTag )
 
 
-def assertWorkingCopyUpToDate( typeOfWC ):
+def verifyWorkingCopyUpToDate( typeOfWC ):
     files = cvsGetNotUpToDateList()
     if len(files) != 0:
         error("working copy not up to date wrt the head of the %s" % typeOfWC)
 
 
-def assertProgressIsAtFrozenHead( progressTag, frozenHeadTag ):
+def verifyProgressIsAtFrozenHead( progressTag, frozenHeadTag ):
     diffs = cvsDifferenceTags( progressTag, frozenHeadTag )
     if diffs != "":
         error( "branch is not up-to-date wrt the head of the trunk" )
 
 
-def assertHasBackupTag( branchTag, backupTag ):
+def verifyHasBackupTag( branchTag, backupTag ):
     if cvsGetTagNameCount(backupTag) == 0:
         error("branch '%s' does not have a backup tag" % branchTag)
 
@@ -269,9 +274,9 @@ def beginBranch( branchTag ):
     progressTag = branchTag + "_progress"
     backupTag = branchTag + "_backup"
 
-    assertInTrunkWorkingCopy()
-    assertValidBranchCreation( branchTag, progressTag )
-    assertWorkingCopyUpToDate( "trunk" )
+    verifyInTrunkWorkingCopy()
+    verifyValidBranchCreation( branchTag, progressTag )
+    verifyWorkingCopyUpToDate( "trunk" )
     
     cvsCreateBranch( branchTag )
     cvsTagCurrent( progressTag )
@@ -287,14 +292,14 @@ def beginBranch( branchTag ):
 def importFromTrunk():
     log( "import changes from trunk" )
 
-    assertInBranchWorkingCopy()    
+    verifyInBranchWorkingCopy()    
 
     branchTag = cvsGetStickyTagCwd()
     progressTag = branchTag + "_progress"
     backupTag = branchTag + "_backup"
 
-    assertValidBranchUse( branchTag, progressTag )
-    assertWorkingCopyUpToDate( "branch" )
+    verifyValidBranchUse( branchTag, progressTag )
+    verifyWorkingCopyUpToDate( "branch" )
 
     frozenHeadTag = createFrozenHeadTag()
     moduleName = cvsGetModuleName()
@@ -321,15 +326,15 @@ def importFromTrunk():
 def resetImport():
     log( "reset import tag to its previous state" )
 
-    assertInBranchWorkingCopy()    
+    verifyInBranchWorkingCopy()    
 
     branchTag = cvsGetStickyTagCwd()
     progressTag = branchTag + "_progress"
     backupTag = branchTag + "_backup"
 
-    assertValidBranchUse( branchTag, progressTag )
-    assertHasBackupTag( branchTag, backupTag )
-    assertWorkingCopyUpToDate( "branch" )
+    verifyValidBranchUse( branchTag, progressTag )
+    verifyHasBackupTag( branchTag, backupTag )
+    verifyWorkingCopyUpToDate( "branch" )
 
     moduleName = cvsGetModuleName()
 
@@ -353,16 +358,16 @@ def endBranch( branchTag ):
     progressTag = branchTag + "_progress"
     backupTag = branchTag + "_backup"
 
-    assertInTrunkWorkingCopy()
-    assertValidBranchUse( branchTag, progressTag )
-    assertWorkingCopyUpToDate( "trunk" )
+    verifyInTrunkWorkingCopy()
+    verifyValidBranchUse( branchTag, progressTag )
+    verifyWorkingCopyUpToDate( "trunk" )
 
     frozenHeadTag = createFrozenHeadTag()
     moduleName = cvsGetModuleName()
         
     cvsRemoteTagHead( frozenHeadTag, moduleName )
 
-    assertProgressIsAtFrozenHead( progressTag, frozenHeadTag )
+    verifyProgressIsAtFrozenHead( progressTag, frozenHeadTag )
     
     info("About to merge the changes from branch '%s' with" % branchTag)
     info("the working copy of the trunk of module '%s'." % moduleName)
@@ -412,16 +417,16 @@ log( "Executing: " + command + " " + str(args) )
 log()
 
 if command == "begin" or command == "begin-branch":
-    assertArgumentCount( 1, args )
+    verifyArgumentCount( 1, args )
     beginBranch( args[0] )
 elif command == "import" or command == "import-from-trunk":
-    assertArgumentCount( 0, args )
+    verifyArgumentCount( 0, args )
     importFromTrunk()
 elif command == "reset" or command == "reset-import":
-    assertArgumentCount( 0, args )
+    verifyArgumentCount( 0, args )
     resetImport()
 elif command == "end" or command == "end-branch":
-    assertArgumentCount( 1, args )
+    verifyArgumentCount( 1, args )
     endBranch( args[0] )
 else:
     usage(1)

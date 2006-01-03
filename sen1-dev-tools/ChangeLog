@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Jan  3 11:24:15 CET 2006 <gerco@cwi.nl>
+ * bin/cvsmerge:
+   - Renamed assert* to verify*.
+   - Added try/catch for OSError exception in assertInWorkingCopy.
+
 Thu Nov 17 10:44:07 CET 2005 <gerco@cwi.nl>
  * bin/cvsmerge:
    - Added the "cvsmerge reset-import" command. (Closes: #476)
