@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan  3 13:54:11 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/close-all.tb:
+   - fix scenario
+
 Wed Dec 21 10:00:33 CET 2005 <kooiker@cwi.nl>
  * tbscripts/dump-parsetable.tb:
    - receive parsetable with type

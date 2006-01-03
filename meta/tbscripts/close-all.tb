@@ -1,27 +1,10 @@
 process CloseAll is
 let
   Id: term,
-  Modulename: str,
+  ModuleId: term,
   Modules: list
 in
   Id := process-id
-  . snd-note(ui-status(start(Id, "Close Modules")))
-  . snd-note(ui-status(stat(Id, "Closing")))
-  . snd-msg(get-all-module-names)
-  . rec-msg(all-module-names(Modules?))
-  .
-  (
-    if not-equal(Modules, []) then
-      Modulename := first(Modules)
-      . DeleteSessions(Modulename)
-      . Modules := next(Modules)
-    fi
-  )
-  *
-  if equal(Modules, []) then
-    tau
-  fi
-  . snd-msg(clear-module-db)
-  . rec-msg(module-db-cleared)
-  . snd-note(ui-status(stop(Id)))
+  . MM-GetAllModules(Modules?)
+  . CloseModules(Modules)
 endlet

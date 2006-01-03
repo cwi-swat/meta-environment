@@ -21,9 +21,9 @@ process MM-GetModuleIdByAttribute(Namespace: term, Key: term, Value: term, Modul
     . ModuleId := UNDEFINED 
   )
 
-process MM-GetAllModules(Namespace: term, Key: term, Modules: list?) is
-  snd-msg(mm-get-all-modules-by-attribute(Namespace, Key))
-  . rec-msg(mm-modules(Namespace, Key, Modules?))
+process MM-GetAllModules(Modules: list?) is
+  snd-msg(mm-get-all-modules)
+  . rec-msg(mm-modules(Modules?))
 
 process MM-DeleteModule(ModuleId: term) is
   snd-msg(mm-delete-module(ModuleId))
