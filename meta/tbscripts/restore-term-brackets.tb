@@ -10,7 +10,8 @@ in
     . snd-msg(get-parsetable(ModuleId, trm))
     .
     (
-      rec-msg(parsetable(Table?))
+      rec-msg(parsetable(trm, Table?))
+      . TODO("integrate editor types and language types")
       . snd-msg(restore-brackets(Tree, Table))
       . rec-msg(brackets-restored(Tree?))
     +
