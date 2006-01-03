@@ -35,9 +35,10 @@ libLocationAPI_a_SOURCES = \
 	ParsedLocation.c \
 	ParsedLocation_dict.c
 
+INCLUDES = -I${ATERM}/include
+
 if MAINTAINER_MODE
 #CFLAGS += -DDISABLE_DYNAMIC_CHECKING
-INCLUDES = -I${ATERM}/include
 
 BASIC_MODULES = StrCon NatCon Whitespace
 LOCATION_MODULES = Locations Areas Slices
