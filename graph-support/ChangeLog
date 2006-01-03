@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jan  3 08:18:25 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - remove INCLUDES from MAINTAINER_MODE section
+
 Mon Jan  2 11:58:01 CET 2006 <kooiker@cwi.nl>
  * lib/Makefile.am:
    - add MAINTAINER_MODE to api generation

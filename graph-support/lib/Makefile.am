@@ -11,10 +11,9 @@ EXTRA_DIST = Graph.adt graph-${VERSION}.jar
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 
 JARFILE = ${top_srcdir}/lib/graph-${VERSION}.jar
-
-if MAINTAINER_MODE
 INCLUDES = -I${ATERM}/include 
 
+if MAINTAINER_MODE
 c-api: Graph.adt
 	adt-to-c --input $< --name Graph
 
