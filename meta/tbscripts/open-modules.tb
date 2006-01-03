@@ -334,6 +334,7 @@ in
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     . AnnotateTree(Tree, Path, AnnotatedTree?)
     . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "annotated", true)
   )
   *
   delta

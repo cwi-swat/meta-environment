@@ -483,8 +483,7 @@ in
     else
       tau
     fi
-    . TODO("Add new key (orthogonal state): annotated!!\n")
-    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,opened)
+    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"annotated",<term>,true)
     .
     (
       MenuSelected(Sid, EditorType)
