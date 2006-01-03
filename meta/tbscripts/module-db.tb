@@ -198,18 +198,6 @@ in
       )
     fi
   +
-    rec-msg(get-syntax-tree(ModuleId?))
-    . snd-msg(ts-get-term-value("sdf-tree", ModuleId))
-    .
-    (
-      rec-msg(ts-value(Syntax?))
-      . snd-msg(syntax(Syntax))
-      . Syntax := UNDEFINED
-    +
-      rec-msg(ts-no-value)
-      . snd-msg(unavailable)
-    )
-  +
     rec-msg(get-equations(Name?))
     . snd-msg(ts-get-term-value("asf-tree", Name))
     .

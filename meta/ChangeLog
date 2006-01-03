@@ -1,6 +1,8 @@
 # $Id$
 
 Tue Jan  3 13:54:11 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Add UpdateStructure listener that updates the structure editor
  * tbscripts/close-all.tb:
    - fix scenario
 

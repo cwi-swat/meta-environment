@@ -11,7 +11,7 @@ in
     .
     (
       rec-msg(parsetable(trm, Table?))
-      . TODO("integrate editor types and language types")
+      . TODO("integrate editor types and language namespaces")
       . snd-msg(restore-brackets(Tree, Table))
       . rec-msg(brackets-restored(Tree?))
     +

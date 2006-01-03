@@ -295,12 +295,27 @@ in
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
+process UpdateStructure(Sid: term, EditorType: term) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Slices: term,
+  Tree: term
+in
+  rec-note(mm-attribute-changed(Event?))
+  . GetModuleId(Sid, ModuleId?)
+  . GetModuleSyntaxTree(ModuleId, Tree?) 
+  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(se-get-tree-slices(Sid))
+  . rec-msg(se-tree-slices(Sid, Slices?))
+  . snd-msg(te-highlight-slices(Sid, Slices))
+endlet
+
 process TextSaved(Sid: term, EditorType: term) is
 let
   ModuleId: term
 in
   rec-msg(te-contents-saved(Sid))
-  . printf("Contents saved for %t of type %t\n", Sid, EditorType)
   .
   if equal(EditorType, syntax-editor) then
     GetModuleId(Sid, ModuleId?) 
@@ -419,17 +434,6 @@ in
   )
 endlet
 
-process GetSyntaxTree(ModuleId: term, Tree: term?, Available: bool?) is
-  snd-msg(get-syntax-tree(ModuleId))
-  .
-  (
-    rec-msg(syntax(Tree?))
-    . Available := true
-  +
-    rec-msg(unavailable)
-    . Available := false
-  )
-
 process EditSyntax(ModuleId: term) is
 let
   AlreadyExists: bool,
@@ -472,13 +476,15 @@ in
     . snd-msg(te-set-editable(Sid, Editable))
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetSyntaxTree(ModuleId, Tree?, Available?)
+    . GetModuleSyntaxTree(ModuleId, Tree?)
     .
-    if equal(Available, true) then
+    if not-equal(Tree, UNDEFINED) then
       EditStructure(Sid, Tree)
     else
       tau
     fi
+    . TODO("Add new key (orthogonal state): annotated!!\n")
+    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,opened)
     .
     (
       MenuSelected(Sid, EditorType)
@@ -488,6 +494,8 @@ in
       TextChanged(Sid, EditorType)
     +
       TextSaved(Sid, EditorType)
+    +
+      UpdateStructure(Sid, EditorType)
     )
     *
     EditorDisconnected(Sid)
