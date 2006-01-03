@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jan  3 13:11:35 CET 2006 <kooiker@cwi.nl>
+ * module-manager.idef, src/**/*.java:
+   - Remove unused convenience method getAllModulesByAttribute
+
 Tue Dec 20 13:24:03 CET 2005 <kooiker@cwi.nl>
  * src/**/ModuleDatabase.java:
    - Add private removeAllDependencies, used when removing a module

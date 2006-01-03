@@ -85,19 +85,6 @@ public class ModuleDatabase {
         return null;
     }
 
-    public Set getAllModulesByAttribute(ATerm namespace, ATerm key) {
-        Set allModules = new HashSet();
-
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
-            Module module = (Module) modules.get(moduleId);
-
-            allModules.add(module.getAttribute(namespace, key));
-        }
-
-        return allModules;
-    }
-
     public Set getAllModules() {
         Set allModules = new HashSet();
 

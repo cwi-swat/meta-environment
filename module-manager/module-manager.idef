@@ -43,11 +43,6 @@ in
       . snd-msg(mm-no-such-module(Namespace, Key, Value))
     )
   +
-    rec-msg(mm-get-all-modules-by-attribute(Namespace?, Key?))
-    . snd-eval(MM, get-all-modules-by-attribute(Namespace, Key))
-    . rec-value(MM, modules(Modules?))
-    . snd-msg(mm-modules(Modules))
-  +
     rec-msg(mm-get-all-modules)
     . snd-eval(MM, get-all-modules)
     . rec-value(MM, modules(Modules?))

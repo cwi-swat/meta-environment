@@ -68,13 +68,6 @@ public class ModuleManager implements ModuleManagerTif {
                 .toTerm());
     }
 
-    public ATerm getAllModulesByAttribute(ATerm namespace, ATerm key) {
-        Set modules = moduleDB.getAllModulesByAttribute(namespace, key);
-
-        return pureFactory.make("snd-value(modules(<list>))",
-                extractATermList(modules));
-    }
-    
     public ATerm getAllModules() {
         Set modules = moduleDB.getAllModules();
 

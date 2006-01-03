@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Dec 9, 2005 10:59:01 AM
+// generation time: Jan 3, 2006 1:11:14 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -31,7 +31,6 @@ abstract public class ModuleManagerTool
   private ATerm PgetAllModules0;
   private ATerm PcreateModule0;
   private ATerm PgetModuleIdByAttribute0;
-  private ATerm PgetAllModulesByAttribute0;
   private ATerm PgetModuleGraph0;
   private ATerm PrecTerminate0;
 
@@ -56,7 +55,6 @@ abstract public class ModuleManagerTool
   {
     sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules-by-attribute(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
@@ -93,7 +91,6 @@ abstract public class ModuleManagerTool
     PgetAllModules0 = factory.parse("rec-eval(get-all-modules)");
     PcreateModule0 = factory.parse("rec-eval(create-module)");
     PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
-    PgetAllModulesByAttribute0 = factory.parse("rec-eval(get-all-modules-by-attribute(<term>,<term>))");
     PgetModuleGraph0 = factory.parse("rec-eval(get-module-graph(<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -168,10 +165,6 @@ abstract public class ModuleManagerTool
     result = term.match(PgetModuleIdByAttribute0);
     if (result != null) {
       return getModuleIdByAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
-    }
-    result = term.match(PgetAllModulesByAttribute0);
-    if (result != null) {
-      return getAllModulesByAttribute((ATerm)result.get(0), (ATerm)result.get(1));
     }
     result = term.match(PgetModuleGraph0);
     if (result != null) {
