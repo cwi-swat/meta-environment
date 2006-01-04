@@ -37,10 +37,6 @@ in
   . MDB-InitializeFileExtensions()
   .
   (
-    rec-msg(clear-module-db)
-    . MDB-ClearModuleDb()
-    . snd-msg(module-db-cleared)
-  +
     rec-msg(get-eqs-text(Name?))
     . snd-msg(ts-get-str-value("asf-text", Name))
     .
@@ -52,15 +48,6 @@ in
       . snd-msg(no-eqs-text(Name))
     )
   +
-    rec-msg(remove-eqs-from-db(Name?))
-    . snd-msg(ts-remove-value("asf-tree", Name))
-    . snd-msg(ts-remove-value("asf-text", Name))
-    . snd-msg(eqs-removed-from-db)
-  +
-    rec-msg(add-eqs-to-db(Name?, text(EqsText?)))
-    . snd-msg(ts-put-str-value("asf-text", Name, EqsText))
-    . snd-msg(eqs-added)
-  +
     rec-msg(update-eqs-tree-in-db(ModuleId?, tree(EqsTree?)))
     . GetModulePath(ModuleId, ASF_NAMESPACE, Filename?)
     . snd-msg(add-posinfo-to-depth(Filename, EqsTree, POSINFO_DEPTH))
@@ -68,12 +55,6 @@ in
     . snd-msg(ts-put-term-value("asf-tree", ModuleId, EqsTree))
     . EqsTree := UNDEFINED
     . snd-msg(eqs-updated)
-  +
-    rec-msg(update-eqs-text-in-db(Name?, EqsText?))
-    . snd-msg(ts-remove-value("asf-tree", Name))
-    . snd-msg(ts-put-str-value("asf-text", Name, EqsText))
-    . snd-msg(eqs-text-updated(Name))
-    . EqsText := ""
   +
     rec-msg(get-path-from-db(Name?))
     . TODO("get-path-from-db has to be handled by ModuleManager")
@@ -129,7 +110,6 @@ process MDB-ClearModuleDb is
   . snd-msg(ts-clear-table("asf-tree"))
   . snd-msg(ts-clear-table("asf-text"))
   . snd-msg(ts-clear-table("term-tree"))
-  . snd-msg(clear-module-db-hook)
   . rec-msg(module-db-hook-done)
 
 /* Used by ModuleDB */
