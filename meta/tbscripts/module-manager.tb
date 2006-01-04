@@ -3,9 +3,41 @@
 
 #include <module-manager.idef>
 #include <attribute-changed-event.tb>
+#include <child-attribute-changed-event.tb>
 #include <dependencies-changed-event.tb>
 
 #define UNDEFINED undefined
+
+process MM-PropagateAttributeChanges is
+let
+  ChildEvent: attribute-changed-event,
+  Parents: list,
+  ModuleId: term,
+  ParentId: term,
+  Event: child-attribute-changed-event
+in
+  MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(ChildEvent?)) 
+    . ACE-GetModuleId(ChildEvent, ModuleId?)
+    . MM-GetAllModuleParents(ModuleId, Parents?)
+    . 
+    if not-equal(Parents, []) then
+      ParentId := first(Parents)
+      . Parents := next(Parents)
+      . CACE-MakeEvent(ParentId, ChildEvent, Event?)
+      . snd-note(mm-child-attribute-changed(Event))
+    fi
+    *
+    if equal(Parents, []) then
+      tau
+    fi
+  )
+  * delta
+endlet
+
+toolbus(MM-PropagateAttributeChanges)
 
 process MM-CreateModule(ModuleId: term?) is
   snd-msg(mm-create-module)
@@ -112,7 +144,17 @@ process MM-GetAllModuleDependencies(ModuleId: term, Dependencies: list?) is
     rec-msg(mm-all-depending-modules(ModuleId, Dependencies?))
   +
     rec-msg(mm-no-such-module(ModuleId))
-    . Dependencies := UNDEFINED
+    . Dependencies := []
+  )
+
+process MM-GetAllModuleParents(ModuleId: term, Parents: list?) is
+  snd-msg(mm-get-all-dependent-modules(ModuleId))
+  .
+  (
+    rec-msg(mm-all-dependent-modules(ModuleId, Parents?))
+  +
+    rec-msg(mm-no-such-module(ModuleId))
+    . Parents := []
   )
 
 process MM-GetClosableModules(ModuleId: term, Modules: list?) is
@@ -134,6 +176,9 @@ process MM-GetModuleGraph(Namespace: term, Graph: term?) is
 
 process MM-Subscribe-Attribute-Changed(ModuleId: term, Namespace: term, Key: term, OldValue: term, NewValue: term) is
   subscribe(mm-attribute-changed(attribute-changed-event(ModuleId, Namespace, Key, OldValue, NewValue)))
+
+process MM-Subscribe-Child-Attribute-Changed(ParentId: term, ChildId: term, Namespace: term, Key: term, OldValue: term, NewValue: term) is
+  subscribe(mm-child-attribute-changed(child-attribute-changed-event(ParentId, attribute-changed-event(ChildId, Namespace, Key, OldValue, NewValue))))
 
 process MM-Subscribe-Dependencies-Changed(ModuleId: term) is
   subscribe(mm-dependencies-changed(dependencies-changed-event(ModuleId)))

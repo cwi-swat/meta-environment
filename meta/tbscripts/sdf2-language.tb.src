@@ -5,13 +5,14 @@ let
   Error: term,
   Table: term,
   SdfTable: term,
-  Type: term
+  Type: term,
+  ModuleId: term
 in
   Type := sdf
   . SdfTable := UNDEFINED
   .
   (
-    rec-msg(get-parsetable(Type))
+    rec-msg(get-parsetable(ModuleId?, Type))
     .
     if equal(SdfTable, UNDEFINED) then 
       snd-msg(io-read-and-pack-term("__SDF2TABLE__"))
@@ -19,13 +20,13 @@ in
       (
         rec-msg(io-packed-term(Table?))
         . SdfTable := Table
-        . snd-msg(parsetable(Type, Table))
+        . snd-msg(parsetable(ModuleId, Type, Table))
       +
         rec-msg(io-error-reading(Error?))
-        . snd-msg(no-parsetable(Type, Error))
+        . snd-msg(no-parsetable(ModuleId, Type))
       )
     else
-      snd-msg(parsetable(Type, SdfTable))
+      snd-msg(parsetable(ModuleId, Type, SdfTable))
     fi
   )
   * delta

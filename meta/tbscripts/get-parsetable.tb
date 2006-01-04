@@ -1,83 +1,124 @@
+#include <child-attribute-changed-event.tb>
+
+
 process GetParseTable(ModuleId: term, Type: term, Table: term?) is
 let
   Error: term
 in
-  if equal(Type, sdf) then
-    snd-msg(get-parsetable(sdf))
-    .
-    (
-      rec-msg(parsetable(sdf, Table?))
-    +
-      rec-msg(no-parsetable(sdf, Error?))
-      . Table := UNDEFINED
-    )
-  else
-    snd-msg(get-parsetable(ModuleId, Type))
-    .
-    (
-      rec-msg(parsetable(Type, Table?))
-    +
-      rec-msg(no-parsetable(ModuleId))
-      . Table := UNDEFINED
-    )
-  fi
-endlet
-
-process BuildParseTable is
-let
-  ModuleId: term,
-  Modulename: str,
-  Type: term,
-  Table: term,
-  Syntax: term,
-  ErrorMsg: str,
-  Id: int,
-  Error : term
-in
-  Id := process-id
+  snd-msg(get-parsetable(ModuleId, Type))
   .
   (
-    rec-msg(get-parsetable(ModuleId?, Type?))
-    . snd-msg(get-table-from-db(ModuleId, Type))
-    .
-    (
-      rec-msg(table(Table?))
-      . snd-msg(parsetable(Type, Table))
-    +
-      rec-msg(no-table)
-      . snd-msg(get-all-syntax-definitions(ModuleId, Type))
-      .
-      (
-        rec-msg(syntax(Syntax?)) 
-	. MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-        . snd-msg(add-eqs-syntax(Modulename, Syntax))
-        . rec-msg(extended-syntax(Syntax?))
-        . snd-msg(generate-parsetable(Syntax, Modulename))
-        . Syntax := UNDEFINED
-        .
-        (
-          rec-msg(parsetable(Table?))
-          . snd-msg(add-parsetable-to-db(ModuleId, Type, Table))
-          . rec-msg(parsetable-added)
-          . snd-note(ui-status(endstat(Id)))
-          . snd-msg(parsetable(Type, Table))
-          . Table := UNDEFINED
-        +
-          rec-msg(no-parsetable)
-          . snd-note(ui-status(endstat(Id)))
-          . snd-note(ui-status(error("Unexpected error in definition")))
-	  . TODO("Return real error")
-          . snd-msg(no-parsetable(ModuleId))
-        )
-      +
-        rec-msg(no-syntax(ErrorMsg?))
-        . snd-note(ui-status(endstat(Id)))
-        . snd-note(ui-status(errorf("%s", [ErrorMsg])))
-	. TODO("Return real error")
-        . snd-msg(no-parsetable(ModuleId))
-      )
-    )
+    rec-msg(parsetable(ModuleId, Type, Table?))
+  +
+    rec-msg(no-parsetable(ModuleId, Type))
+    . Table := UNDEFINED
   )
-  *
-  delta
 endlet
+
+process GenerateParsetable(Modulename: str, Syntax: term, Table: term?) is
+  snd-msg(generate-parsetable(Syntax, Modulename))
+  . 
+  (
+    rec-msg(parsetable(Table?))
+  +
+    rec-msg(no-parsetable)
+    . Table := UNDEFINED
+  )
+
+process BuildParsetable(TableName: str, Type: term, PreprocessSyntaxHandler: str) is
+let
+  ModuleId: term,
+  Syntax: term,
+  Table: term,
+  Modulename: str,
+  NewSyntax: term
+in
+  InitCache(TableName)
+  .
+  (
+    rec-msg(get-parsetable(ModuleId?, Type))
+    . GetCachedValue(TableName, ModuleId, Table?)
+    .
+    if equal(Table, UNDEFINED) then
+      GetSyntaxDefinition(ModuleId, Syntax?)
+      . 
+      if not-equal(Syntax, UNDEFINED) then
+	MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+        . PreprocessSyntaxHandler(Modulename, Syntax, NewSyntax?)
+	. GenerateParsetable(Modulename, NewSyntax, Table?)
+	.
+	if not-equal(Table, UNDEFINED) then
+	  PutCachedValue(TableName, ModuleId, Table)
+	  . snd-msg(parsetable(ModuleId, Type, Table))
+	else
+	  snd-msg(no-parsetable(ModuleId, Type))
+	fi
+      else
+	TODO("error message") 
+	. snd-msg(no-parsetable(ModuleId, Type))
+      fi
+    else
+      snd-msg(parsetable(ModuleId, Type, Table))
+      . printf("reusing cached value\n")
+    fi
+  )
+  * delta
+endlet
+
+process RemoveVarSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
+  snd-msg(remove-var-syntax(Modulename, Syntax)) 
+  . rec-msg(changed-syntax(NewSyntax?)) 
+
+toolbus(BuildParsetable("term-parsetable", trm, "RemoveVarSyntax"))
+
+process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
+  snd-msg(add-eqs-syntax(Modulename, Syntax))
+  . rec-msg(extended-syntax(NewSyntax?))
+
+toolbus(BuildParsetable("equations-parsetable", eqs, "AddEqsSyntax"))
+
+/* sort of generic caching processes */
+process StatusAvailableCacheHandler(TableName: str) is
+let
+  AttributeEvent: attribute-changed-event,
+  ChildAttributeEvent: child-attribute-changed-event,
+  ModuleId: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
+  . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,SDF_NAMESPACE,"status",<term>,available)
+  .
+  (
+    (
+      rec-note(mm-attribute-changed(AttributeEvent?))
+      . ACE-GetModuleId(AttributeEvent, ModuleId?)
+    +
+      rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
+      . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
+    )
+    .
+    snd-msg(ts-remove-value(TableName, ModuleId))
+  )
+  * delta
+endlet
+
+process InitCache(TableName: str) is
+let
+  Pid : int
+in
+  snd-msg(ts-add-table(TableName, "term"))
+  . create(StatusAvailableCacheHandler(TableName), Pid?)
+endlet
+
+process GetCachedValue(TableName: str, Key: term, Value: term?) is
+  snd-msg(ts-get-term-value(TableName, Key))
+  .
+  (
+    rec-msg(ts-value(Value?)) 
+  +
+    rec-msg(ts-no-value)
+    . Value := UNDEFINED
+  )
+
+process PutCachedValue(TableName: str, Key: term, Value: term) is
+  snd-msg(ts-put-term-value(TableName, Key, Value))

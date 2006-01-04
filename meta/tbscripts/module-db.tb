@@ -145,58 +145,11 @@ in
     . snd-msg(eqs-text-updated(Name))
     . EqsText := ""
   +
-    rec-msg(add-parsetable-to-db(ModuleId?, eqs, Table?))
-    . snd-msg(ts-put-term-value("asf-parsetable", ModuleId, Table))
-    . Table := UNDEFINED
-    . snd-msg(parsetable-added)
-  +
-    rec-msg(add-parsetable-to-db(ModuleId?, trm, Table?))
-    . snd-msg(ts-put-term-value("term-parsetable", ModuleId, Table))
-    . Table := UNDEFINED
-    . snd-msg(parsetable-added)
-  +
     rec-msg(get-path-from-db(Name?))
     . TODO("get-path-from-db has to be handled by ModuleManager")
   +
-    (
-      rec-msg(get-table-from-db(ModuleId?, trm))
-      . snd-msg(ts-get-term-value("term-parsetable", Name))
-    +
-      rec-msg(get-table-from-db(ModuleId?, eqs))
-      . snd-msg(ts-get-term-value("asf-parsetable", ModuleId))
-    )
-    .
-    (
-      rec-msg(ts-value(Table?))
-      . snd-msg(table(Table))
-      . Table := UNDEFINED
-    +
-      rec-msg(ts-no-value)
-      . snd-msg(no-table)
-    )
-  +
     rec-msg(get-all-module-names)
     . TODO("get-all-module-names has to be replaced by MM-GetAllModules")
-  +
-    rec-msg(get-all-syntax-definitions(ModuleId?, Type?))
-    . MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
-    . GetModules(ModuleIds, Modules?)
-    .
-    if equal(Modules, []) then
-      snd-msg(no-syntax("syntax incomplete"))
-    else
-      snd-msg(sm-make-sdf-definition(Modules))
-      . Modules := []
-      .
-      (
-        rec-msg(sm-sdf-definition(Syntax?))
-        . snd-msg(syntax(Syntax))
-        . Syntax := UNDEFINED
-      +
-        rec-msg(sm-no-sdf-definition)
-        . snd-msg(no-syntax("syntax incomplete"))
-      )
-    fi
   +
     rec-msg(get-equations(Name?))
     . snd-msg(ts-get-term-value("asf-tree", Name))
@@ -224,11 +177,6 @@ in
       rec-msg(ts-no-value)
       . snd-msg(no-term-tree(Filename))
     )
-  +
-    rec-msg(invalidate-parsetables(Name?))
-    . GetDependingModules(Name, DependingModules?)
-    . MDB-InvalidateModule(Name, sdf)
-    . MDB-InvalidateModules(DependingModules, sdf)
   )
   *
   delta
@@ -242,8 +190,6 @@ process MDB-InitializeModuleDb is
   . snd-msg(ts-add-table("asf-tree", "term"))
   . snd-msg(ts-add-table("asf-text", "str"))
   . snd-msg(ts-add-table("term-tree", "term"))
-  . snd-msg(ts-add-table("asf-parsetable", "term"))
-  . snd-msg(ts-add-table("term-parsetable", "term"))
 
 /* Used by ModuleDB */
 process MDB-ClearModuleDb is
@@ -253,8 +199,6 @@ process MDB-ClearModuleDb is
   . snd-msg(ts-clear-table("asf-tree"))
   . snd-msg(ts-clear-table("asf-text"))
   . snd-msg(ts-clear-table("term-tree"))
-  . snd-msg(ts-clear-table("asf-parsetable"))
-  . snd-msg(ts-clear-table("term-parsetable"))
   . snd-msg(clear-module-db-hook)
   . rec-msg(module-db-hook-done)
 
@@ -399,8 +343,6 @@ let
   Path: str
 in
   snd-msg(ts-remove-value("asf-tree", Modulename))
-  . snd-msg(ts-remove-value("asf-parsetable", Modulename))
-  . snd-msg(ts-remove-value("term-parsetable", Modulename))
 endlet
 
 /* Used by ModuleDB */
@@ -440,6 +382,8 @@ process MDB-InvalidateEntry(Name: str, Text: str, DependingModules: list?) is
   . MDB-InvalidateModules(DependingModules, sdf)
 
 process GetModules(ModuleIds: list, Modules: list?) is
+  TODO("remove database dependency here by reusing parse scenario, which by accident caches for efficiency")
+  .
   snd-msg(ts-get-values("sdf-tree", ModuleIds))
   .
   (
@@ -448,3 +392,25 @@ process GetModules(ModuleIds: list, Modules: list?) is
     rec-msg(ts-no-values)
     . Modules := []
   )
+
+process GetSyntaxDefinition(ModuleId: term, Syntax: term?) is
+let
+  ModuleIds: list,
+  Modules: list
+in
+  MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
+  . GetModules(ModuleIds, Modules?)
+  . 
+  if equal(Modules, []) then
+    Syntax := UNDEFINED
+  else
+    snd-msg(sm-make-sdf-definition(Modules))
+    .
+    (
+      rec-msg(sm-sdf-definition(Syntax?))
+    +
+      rec-msg(sm-no-sdf-definition)
+      . Syntax := UNDEFINED
+    )
+  fi
+endlet

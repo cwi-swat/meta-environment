@@ -5,6 +5,7 @@ TBSCRIPTS = \
   assert.tb \
   asf-namespace.h \
   attribute-changed-event.tb \
+  child-attribute-changed-event.tb \
   close-all.tb \
   compile-module.tb \
   dependencies-changed-event.tb \

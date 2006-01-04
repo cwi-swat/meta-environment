@@ -83,7 +83,6 @@ in
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)
   . create(DumpSdfDefinition, Pid?)
-  . create(BuildParseTable, Pid?)
   . create(Meta-Interface, Pid?)
   . create(ModuleDB, Pid?)
   . create(Open-Sdf2-Language, Pid?)
