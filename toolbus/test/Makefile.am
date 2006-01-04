@@ -25,7 +25,7 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
                   expr-errors.tb.out scope.tb.out tc-errors.tb.out \
                   test-removesocket.src anno.tb test-annos.src read.src \
-		  read.tb bug-481.tb bug-481.tb.out dyncall.tb dyncall.tb.out
+		  read.tb bug-481.tb bug-481.tb.out dyncall.tb dyncall.src
 
 OK_TESTS = \
 	if-ok \
