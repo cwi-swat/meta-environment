@@ -662,7 +662,6 @@ static ap_form *expand(sym_idx procName, proc *P, env *Env)
 	    return res;
 
 	  case p_dyncall:
-	    P1 = expand_dyncall(procName, P1, Env);
 	    res = dot(expand(procName, P1, Env), right(P));
 	    return res;
 	  case p_if:
@@ -822,8 +821,9 @@ static ap_form *expand(sym_idx procName, proc *P, env *Env)
 	}
 
       case p_dyncall:
-	  return expand(procName, expand_dyncall(procName, P, Env), Env);
-
+	 P = expand_dyncall(procName, P, Env);
+	 P = propagate_env(P, Env);
+	 return expand(procName, P, Env);
       default:
 
 	err_fatal("expand, top level: %t", P);

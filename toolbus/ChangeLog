@@ -1,5 +1,10 @@
 $Id$
 
+Wed Jan  4 15:21:01 CET 2006 <{jurgenv,kooiker,paulk}@cwi.nl>
+ * toolbus/interpreter.c: fixed a bug in expansion of dynamic calls,
+   the result variables of a dyncall were not propagated to the
+   rest of the execution of a process.
+
 Fri Dec 16 13:03:52 CET 2005 <kooiker@cwi.nl>
  * test/Makefile.am:
    - added bug-481.tb{,.out} to extra dist

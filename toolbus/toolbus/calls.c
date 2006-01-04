@@ -103,7 +103,7 @@ term_list *expand_calls_list(sym_idx procName, term_list *tl);
 
 proc *expand_calls(sym_idx procName, proc *P)
 {
-  switch(tkind(P)){
+  switch (tkind(P)) {
     case t_bool:
     case t_int:
     case t_real:
@@ -122,7 +122,7 @@ proc *expand_calls(sym_idx procName, proc *P)
 	  err_fatal("expand_calls -- undefined process name %s", get_txt(var_sym(first(fun_args(P)))));
 	n_expanded_calls++;
 	CALLSDB(TBmsg("expanding %t\n", P);)
-	  e = create_env(pd_formals(pd), get_txt(pd_name(pd)), next(fun_args(P)), NULL);
+	e = create_env(pd_formals(pd), get_txt(pd_name(pd)), next(fun_args(P)), NULL);
 	P1 = replace_formals(pd_body(pd), e);
 	CPC_join(pd_name(pd), procName);
 	
