@@ -1,5 +1,8 @@
 $Id$
 
+Wed Jan  4 15:27:04 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * src/**/*.java: added getAllParents functionality.
+
 Tue Jan  3 13:11:35 CET 2006 <kooiker@cwi.nl>
  * module-manager.idef, src/**/*.java:
    - Remove unused convenience method getAllModulesByAttribute

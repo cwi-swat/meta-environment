@@ -123,6 +123,20 @@ public class ModuleManager implements ModuleManagerTif {
                 extractATermList(dependencies));
     }
 
+    public ATerm getAllDependentModules(ATerm id) {
+        ModuleId moduleId = factory.ModuleIdFromTerm(id);
+
+        Set dependencies = moduleDB.getAllParents(moduleId);
+
+        if (dependencies == null) {
+            return pureFactory.parse("snd-value(no-such-module)");
+        }
+
+        return pureFactory.make("snd-value(all-dependent-modules(<list>))",
+                extractATermList(dependencies));
+
+    }
+
     public ATerm getAllDependingModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 

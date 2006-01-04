@@ -137,10 +137,6 @@ public class ModuleDatabase {
         return (Set) children.get(moduleId);
     }
 
-    public Set getParents(ModuleId moduleId) {
-        return (Set) parents.get(moduleId);
-    }
-
     public Set getAllChildren(ModuleId moduleId) {
         Set dependencies = new HashSet();
         LinkedList temp = new LinkedList();
@@ -158,6 +154,29 @@ public class ModuleDatabase {
 
         return dependencies;
     }
+
+    public Set getParents(ModuleId moduleId) {
+        return (Set) parents.get(moduleId);
+    }
+
+    public Set getAllParents(ModuleId moduleId) {
+        Set dependencies = new HashSet();
+        LinkedList temp = new LinkedList();
+
+        temp.add(moduleId);
+
+        while (!temp.isEmpty()) {
+            ModuleId tempId = (ModuleId) temp.getFirst();
+            if (!dependencies.contains(tempId)) {
+                dependencies.add(tempId);
+                temp.addAll(getParents(tempId));
+            }
+            temp.removeFirst();
+        }
+
+        return dependencies;
+    }
+
 
     public Set getClosableModules(ModuleId moduleId) {
         Set dependencies = getAllChildren(moduleId);

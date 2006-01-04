@@ -16,6 +16,7 @@ public interface ModuleManagerTif
   public void addAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3);
   public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2);
   public ATerm getDependencies();
+  public ATerm getAllDependentModules(ATerm t0);
   public ATerm getAllDependingModules(ATerm t0);
   public ATerm getDependingModules(ATerm t0);
   public ATerm getClosableModules(ATerm t0);

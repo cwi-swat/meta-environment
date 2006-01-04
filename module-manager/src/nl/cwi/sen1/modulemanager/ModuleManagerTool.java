@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 3, 2006 1:11:14 PM
+// generation time: Jan 4, 2006 11:10:53 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -25,6 +25,7 @@ abstract public class ModuleManagerTool
   private ATerm PaddAttribute0;
   private ATerm PgetAttribute0;
   private ATerm PgetDependencies0;
+  private ATerm PgetAllDependentModules0;
   private ATerm PgetAllDependingModules0;
   private ATerm PgetDependingModules0;
   private ATerm PgetClosableModules0;
@@ -63,6 +64,7 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-depending-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-depending-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-dependent-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), new Boolean(true));
@@ -85,6 +87,7 @@ abstract public class ModuleManagerTool
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
+    PgetAllDependentModules0 = factory.parse("rec-eval(get-all-dependent-modules(<term>))");
     PgetAllDependingModules0 = factory.parse("rec-eval(get-all-depending-modules(<term>))");
     PgetDependingModules0 = factory.parse("rec-eval(get-depending-modules(<term>))");
     PgetClosableModules0 = factory.parse("rec-eval(get-closable-modules(<term>))");
@@ -141,6 +144,10 @@ abstract public class ModuleManagerTool
     result = term.match(PgetDependencies0);
     if (result != null) {
       return getDependencies();
+    }
+    result = term.match(PgetAllDependentModules0);
+    if (result != null) {
+      return getAllDependentModules((ATerm)result.get(0));
     }
     result = term.match(PgetAllDependingModules0);
     if (result != null) {
