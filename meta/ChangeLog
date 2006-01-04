@@ -6,6 +6,15 @@ Tue Jan  3 13:54:11 CET 2006 <kooiker@cwi.nl>
  * tbscripts/close-all.tb:
    - fix scenario
 
+Wed Jan  4 15:27:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * tbscripts/*.tb: reimplemented get-parsetable.
+   - introduced reusable caching processes
+   - introcuced reusable BuildParseTable process
+   - localized caching of parsetables to relevant processes
+   - removed tables for caching parsetables from module-db
+   - added new event: child-attribute-changed-event, which fires
+     for any module that has a child that changed.
+
 Wed Dec 21 10:00:33 CET 2005 <kooiker@cwi.nl>
  * tbscripts/dump-parsetable.tb:
    - receive parsetable with type
