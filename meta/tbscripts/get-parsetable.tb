@@ -1,5 +1,7 @@
-#include <child-attribute-changed-event.tb>
+#ifndef __GET_PARSETABLE__
+#define __GET_PARSETABLE__
 
+#include <caching.tb>
 
 process GetParseTable(ModuleId: term, Type: term, Table: term?) is
 let
@@ -15,16 +17,9 @@ in
   )
 endlet
 
-process GenerateParsetable(Modulename: str, Syntax: term, Table: term?) is
-  snd-msg(generate-parsetable(Syntax, Modulename))
-  . 
-  (
-    rec-msg(parsetable(Table?))
-  +
-    rec-msg(no-parsetable)
-    . Table := UNDEFINED
-  )
-
+/* BuildParseTable is started somewhere else, such that a specific
+ * PreprocessSyntaxHandler can be bound for specific types of languages
+ */
 process BuildParsetable(TableName: str, Type: term, PreprocessSyntaxHandler: str) is
 let
   ModuleId: term,
@@ -65,60 +60,14 @@ in
   * delta
 endlet
 
-process RemoveVarSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
-  snd-msg(remove-var-syntax(Modulename, Syntax)) 
-  . rec-msg(changed-syntax(NewSyntax?)) 
-
-toolbus(BuildParsetable("term-parsetable", trm, "RemoveVarSyntax"))
-
-process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
-  snd-msg(add-eqs-syntax(Modulename, Syntax))
-  . rec-msg(extended-syntax(NewSyntax?))
-
-toolbus(BuildParsetable("equations-parsetable", eqs, "AddEqsSyntax"))
-
-/* sort of generic caching processes */
-process StatusAvailableCacheHandler(TableName: str) is
-let
-  AttributeEvent: attribute-changed-event,
-  ChildAttributeEvent: child-attribute-changed-event,
-  ModuleId: term,
-  Value: term
-in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
-  . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,SDF_NAMESPACE,"status",<term>,available)
-  .
+process GenerateParsetable(Modulename: str, Syntax: term, Table: term?) is
+  snd-msg(generate-parsetable(Syntax, Modulename))
+  . 
   (
-    (
-      rec-note(mm-attribute-changed(AttributeEvent?))
-      . ACE-GetModuleId(AttributeEvent, ModuleId?)
-    +
-      rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
-      . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
-    )
-    .
-    snd-msg(ts-remove-value(TableName, ModuleId))
-  )
-  * delta
-endlet
-
-process InitCache(TableName: str) is
-let
-  Pid : int
-in
-  snd-msg(ts-add-table(TableName, "term"))
-  . create(StatusAvailableCacheHandler(TableName), Pid?)
-endlet
-
-process GetCachedValue(TableName: str, Key: term, Value: term?) is
-  snd-msg(ts-get-term-value(TableName, Key))
-  .
-  (
-    rec-msg(ts-value(Value?)) 
+    rec-msg(parsetable(Table?))
   +
-    rec-msg(ts-no-value)
-    . Value := UNDEFINED
+    rec-msg(no-parsetable)
+    . Table := UNDEFINED
   )
 
-process PutCachedValue(TableName: str, Key: term, Value: term) is
-  snd-msg(ts-put-term-value(TableName, Key, Value))
+#endif /* __GET_PARSETABLE__ */

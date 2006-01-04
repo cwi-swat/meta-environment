@@ -51,17 +51,6 @@ in
   fi
 endlet
 
-process GetDependingModules(ModuleId: str, DependingModules: list?) is
-let
-  ImportRelations: list
-in
-  snd-msg(ts-get-key-value-pairs("import-relations"))
-  . rec-msg(ts-pairs(ImportRelations?))
-  . TODO("GetDependingModules can be removed?")
-  /*. snd-msg(sm-get-all-depending-module-names(ImportRelations, ModuleId))*/
-  /*. rec-msg(sm-all-depending-module-names(DependingModules?))*/
-endlet
-
 process DeleteModule(Modulename: str) is
 let
   Changed: list,
@@ -226,7 +215,7 @@ in
   (
     rec-msg(get-module-contents(Pid, DestModulename?))
     . snd-msg(ts-get-term-value("sdf-tree", SrcModulename))
-    . rec-msg(ts-value(Syntax?))
+    . rec-msg(ts-value("sdf-tree", SrcModulename, Syntax?))
     . snd-msg(sm-rename-modulename-in-module(Syntax, DestModulename))
     . rec-msg(sm-modulename-renamed-in-module(Syntax?))
     . snd-msg(unparse(Syntax))
@@ -237,6 +226,7 @@ in
   )
 endlet
 
+#ifdef DEAD 
 process AddImport(Modulename: str, Import: str) is
 let
   Depending: list,
@@ -260,6 +250,7 @@ in
   . RemoveImportInDB(Modulename, Import)
   . SaveAsfSdfModule(Modulename, Status?)
 endlet
+#endif
 
 process SaveSdfModules(Modules: list, Status: term?) is
 let
@@ -313,7 +304,7 @@ let
   Depending: list
 in
   snd-msg(ts-get-key-value-pairs("import-relations"))
-  . rec-msg(ts-pairs(ImportRelations?))
+  . rec-msg(ts-pairs("import-relations", ImportRelations?))
   . snd-msg(sm-get-depending-module-names(ImportRelations, OldImport))
   . rec-msg(sm-depending-module-names(Depending?))
   .
@@ -334,12 +325,12 @@ let
   Tree: term
 in
   snd-msg(ts-get-term-value("sdf-tree", Modulename))
-  . rec-msg(ts-value(Tree?))
+  . rec-msg(ts-value("sdf-tree", Modulename, Tree?))
   . snd-msg(sm-remove-import-from-module(Tree, OldImport))
   . rec-msg(sm-import-removed-from-module(Tree?))
   . snd-msg(sm-add-import-to-module(Tree, NewImport))
   . rec-msg(sm-import-added-to-module(Tree?))
-  . MDB-StoreModuleTree(Modulename, Tree)
+  /* . MDB-StoreModuleTree(Modulename, Tree) dead */
   . snd-msg(save-module(Modulename, sdf))
   . rec-msg(saved-module(Modulename, Status?))
 endlet

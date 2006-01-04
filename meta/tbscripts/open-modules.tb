@@ -352,9 +352,9 @@ process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
   snd-msg(ts-get-term-value("sdf-tree", ModuleId))
   .
   (
-    rec-msg(ts-value(Tree?))
+    rec-msg(ts-value("sdf-tree", ModuleId, Tree?))
   +
-    rec-msg(ts-no-value)
+    rec-msg(ts-no-value("sdf-tree", ModuleId))
     . Tree := UNDEFINED
   )
 
@@ -368,9 +368,9 @@ process GetModuleEquationsTree(ModuleId: term, Tree: term?) is
   snd-msg(ts-get-term-value("asf-tree", ModuleId))
   .
   (
-    rec-msg(ts-value(Tree?))
+    rec-msg(ts-value("asf-tree", ModuleId, Tree?))
   +
-    rec-msg(ts-no-value)
+    rec-msg(ts-no-value("asf-tree", ModuleId))
     . Tree := UNDEFINED
   )
 

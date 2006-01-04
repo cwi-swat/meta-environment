@@ -1,0 +1,12 @@
+#ifndef __EQS_PARSETABLE__
+#define __EQS_PARSETABLE__
+
+#include <get-parsetable.tb>
+
+process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
+  snd-msg(add-eqs-syntax(Modulename, Syntax))
+  . rec-msg(extended-syntax(NewSyntax?))
+
+toolbus(BuildParsetable("equations-parsetable", eqs, "AddEqsSyntax"))
+
+#endif /* __EQS_PARSETABLE__ */

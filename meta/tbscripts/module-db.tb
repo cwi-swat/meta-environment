@@ -41,84 +41,14 @@ in
     . MDB-ClearModuleDb()
     . snd-msg(module-db-cleared)
   +
-    rec-msg(delete-module-from-db(Name?))
-    . GetDependingModules(Name, DependingModules?)
-    . MDB-RemoveImportFromModules(Name, DependingModules)
-    . snd-msg(ts-remove-value-from-all-tables(Name))
-    . snd-msg(changed-modules(DependingModules))
-  +
-    rec-msg(close-module-in-db(Name?))
-    . MDB-InvalidateModule(Name, sdf)
-    . snd-msg(ts-remove-value-from-all-tables(Name))
-    . snd-msg(module-closed(Name))
-  +
-    rec-msg(invalidate-sdf-in-db(Name?))
-    . MDB-InvalidateEntry(Name, "", DependingModules?)
-  +
-    rec-msg(update-module-in-db(Name?, SyntaxTree?, sdf))
-    . snd-msg(sm-get-module-id(SyntaxTree))
-    . rec-msg(sm-module-id(Modulename?))
-    .
-    if equal(Name, Modulename) then
-      MDB-AddModulePosInfo(Modulename, SyntaxTree, SyntaxTree?)
-      . snd-msg(ts-put-term-value("sdf-tree", Name, SyntaxTree))
-      . GetImportedModulenames(SyntaxTree, Modules?)
-      . SyntaxTree := UNDEFINED
-      . rec-msg(ts-keys(Modules?))
-      . snd-msg(updating-succeeded(Modules))
-    else
-      snd-msg(error-opening(Name, name-inconsistent))
-    fi
-  +
-    rec-msg(update-module-text-in-db(Name?, SyntaxText?, SyntaxTree?, sdf))
-    .
-    if equal(SyntaxTree, UNDEFINED) then
-      Modulename := Name
-    else
-      snd-msg(sm-get-module-id(SyntaxTree))
-      . rec-msg(sm-module-id(Modulename?))
-    fi
-    .
-    if equal(Name, Modulename) then
-      snd-msg(ts-get-str-value("sdf-text", Name))
-      .
-      (
-        rec-msg(ts-value(LocalText?))
-	.
-	if equal(SyntaxText, LocalText) then
-	  SyntaxText := ""
-	  . snd-msg(no-updating-needed)
-	else
-	  MDB-InvalidateEntry(Name, SyntaxText, DependingModules?)
-	  . SyntaxText := ""
-	  . snd-msg(updating-succeeded(DependingModules))
-	fi
-      +
-        rec-msg(ts-no-value)
-	. MDB-InvalidateEntry(Name, SyntaxText, DependingModules?)
-	. SyntaxText := ""
-	. snd-msg(updating-succeeded(DependingModules))
-      )
-    else
-      snd-msg(error-opening(Name, name-inconsistent))
-    fi
-  +
-    rec-msg(add-import-in-db(OldName?, NewName?))
-    . MDB-AddImportToModule(OldName, NewName)
-    . snd-msg(add-import-done(OldName))
-  +
-    rec-msg(remove-import-in-db(OldName?, NewName?))
-    . MDB-RemoveImportFromModules(NewName, [OldName])
-    . snd-msg(remove-import-done)
-  +
     rec-msg(get-eqs-text(Name?))
     . snd-msg(ts-get-str-value("asf-text", Name))
     .
     (
-      rec-msg(ts-value(EqsText?))
+      rec-msg(ts-value("asf-text", Name, EqsText?))
       . snd-msg(eqs-text(Name, EqsText))
     +
-      rec-msg(ts-no-value)
+      rec-msg(ts-no-value("asf-text", Name))
       . snd-msg(no-eqs-text(Name))
     )
   +
@@ -155,11 +85,11 @@ in
     . snd-msg(ts-get-term-value("asf-tree", Name))
     .
     (
-      rec-msg(ts-value(EqsTree?))
+      rec-msg(ts-value("asf-tree", Name, EqsTree?))
       . snd-msg(equations(EqsTree))
       . EqsTree := UNDEFINED
     +
-      rec-msg(ts-no-value)
+      rec-msg(ts-no-value("asf-tree", Name))
       . snd-msg(unavailable)
     )
   +
@@ -170,11 +100,11 @@ in
     . snd-msg(ts-get-term-value("term-tree", Filename))
     .
     (
-      rec-msg(ts-value(TermTree?))
+      rec-msg(ts-value("term-tree", Filename, TermTree?))
       . snd-msg(term-tree(Filename, TermTree))
       . TermTree := UNDEFINED
     +
-      rec-msg(ts-no-value)
+      rec-msg(ts-no-value("term-tree", Filename))
       . snd-msg(no-term-tree(Filename))
     )
   )
@@ -217,134 +147,6 @@ in
   . snd-msg(ts-put-str-value("extensions", "term", TermExt))
 endlet
 
-/* Used in module-utils.tb */
-process MDB-StoreModuleTree(Name: str, Syntax: term) is
-let
-  Modules: list,
-  Text: str
-in
-  snd-msg(ts-put-term-value("sdf-tree", Name, Syntax))
-  . snd-msg(unparse(Syntax))
-  . rec-msg(unparsed-text(Text?))
-  . snd-msg(ts-put-str-value("sdf-text", Name, Text))
-  . GetImportedModulenames(Syntax, Modules?)
-  . GetDependingModules(Name, Modules?)
-  . MDB-InvalidateModule(Name, sdf)
-  . MDB-InvalidateModules(Modules, sdf)
-endlet
-
-/* Used by ModuleDB */
-process MDB-RemoveImportFromModules(Name: str, ActualModules: list) is
-let
-  Module: str,
-  Modules: list,
-  Imports: list,
-  Syntax: term,
-  Status: term
-in
-  Modules := ActualModules
-  .
-  if not(equal(Modules, [])) then
-    Module := first(Modules)
-    . Modules := next(Modules)
-    . snd-msg(ts-get-term-value("sdf-tree", Module))
-    .
-    (
-      rec-msg(ts-value(Syntax?))
-      . snd-msg(sm-get-imported-module-names(Syntax))
-      . rec-msg(sm-imported-module-names(Imports?))
-      . MDB-ContainedIn(Name, Imports, Status?)
-      .
-      if equal(Status, success) then
-        snd-msg(sm-remove-import-from-module(Syntax, Name))
-        . Syntax := UNDEFINED
-        . rec-msg(sm-import-removed-from-module(Syntax?))
-        . MDB-StoreModuleTree(Module, Syntax)
-        . Syntax := UNDEFINED
-      else
-        tau
-      fi
-    +
-      rec-msg(ts-no-value)
-    )
-  fi
-  *
-  if equal(Modules, []) then
-    tau
-  fi
-endlet
-
-/* Used by ModuleDB */
-process MDB-AddImportToModule(ModuleId: str, Import: str) is
-let
-  Syntax: term
-in
-  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
-  . rec-msg(ts-value(Syntax?))
-  . snd-msg(sm-add-import-to-module(Syntax, Import))
-  . Syntax := UNDEFINED
-  . rec-msg(sm-import-added-to-module(Syntax?))
-  . MDB-StoreModuleTree(ModuleId, Syntax)
-endlet
-
-/* Used by MDB-RemoveImportFromModules */
-process MDB-ContainedIn(Name: str, Modules: list, Status: term?) is
-let
-  Module: str,
-  Runner: list
-in
-  Status := no-success
-  . Runner := Modules
-  .
-  if not-equal(Runner, []) then
-    Module := first(Runner)
-    . Runner := next(Runner)
-    .
-    if equal(Module, Name) then
-      Status := success
-    else
-      tau
-    fi
-  fi
-  *
-  if equal(Runner, []) then
-    tau
-  fi
-endlet
-
-/* Used in module-utils.tb */
-/* Used by MDB-StoreModuleTree */
-/* Used by MDB-AddImportToModule */
-process MDB-InvalidateModules(Modules: list, Type: term) is
-let
-  Module: str,
-  Runner: list
-in
-  Runner := Modules
-  .
-  if not-equal(Runner, []) then
-    Module := first(Runner)
-    . Runner := next(Runner)
-    . MDB-InvalidateModule(Module, Type)
-  fi
-  *
-  if equal(Runner, []) then
-    tau
-  fi
-endlet
-
-/* Used by MDB-InvalidateModules */
-/* Used by MDB-StoreModuleTree */
-/* Used by ModuleDB */
-process MDB-InvalidateModule(Modulename: str, Type: term) is
-let
-  Directory: str,
-  Extension: str,
-  Path: str
-in
-  snd-msg(ts-remove-value("asf-tree", Modulename))
-endlet
-
 /* Used by ModuleDB */
 process MDB-AddModulePosInfo(Module: str, In: term, Out: term?) is
   MDB-AddPosInfo(Module, sdf, In, Out?)
@@ -373,23 +175,15 @@ in
   fi
 endlet
 
-/* Used by ModuleDB */
-process MDB-InvalidateEntry(Name: str, Text: str, DependingModules: list?) is
-  snd-msg(ts-put-str-value("sdf-text", Name, Text))
-  . snd-msg(ts-remove-value("sdf-tree", Name))
-  . GetDependingModules(Name, DependingModules?)
-  . MDB-InvalidateModule(Name, sdf)
-  . MDB-InvalidateModules(DependingModules, sdf)
-
 process GetModules(ModuleIds: list, Modules: list?) is
   TODO("remove database dependency here by reusing parse scenario, which by accident caches for efficiency")
   .
   snd-msg(ts-get-values("sdf-tree", ModuleIds))
   .
   (
-    rec-msg(ts-values(Modules?))
+    rec-msg(ts-values("sdf-tree", ModuleIds, Modules?))
   +
-    rec-msg(ts-no-values)
+    rec-msg(ts-no-values("sdf-tree", ModuleIds))
     . Modules := []
   )
 

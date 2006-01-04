@@ -21,10 +21,12 @@
 
 /* sdf-meta */
 #include "parsetablegen.idef"
+#include "term-parsetable.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
 #include "restorebrackets.idef"
+#include "equations-parsetable.tb"
 
 /* to be resolved */
 #include "feedback.tb"

@@ -1,16 +1,3 @@
-process BuildEquationsFilename(ModuleId: str, Filename: str?) is
-let
-  Directory: str,
-  Extension: str
-in
-  snd-msg(ts-get-str-value("module-path", ModuleId))
-  . rec-msg(ts-value(Directory?))
-  . snd-msg(file-extension-hook(asf))
-  . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Directory, ModuleId, Extension))
-  . rec-msg(io-filename(Filename?))
-endlet
-
 process ParseEquationsText(ModuleId: term, Text: str) is
 let
   Nonterminal: term,
@@ -66,10 +53,10 @@ in
   snd-msg(ts-get-term-value("asf-tree", ModuleId))
   .
   (
-    rec-msg(ts-value(Equations?))
+    rec-msg(ts-value("asf-tree", ModuleId, Equations?))
     . snd-msg(equations(ModuleId, Equations))
   +
-    rec-msg(ts-no-value)
+    rec-msg(ts-no-value("asf-tree", ModuleId))
     . TODO("codeclone with EditEquationsAction")
     . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
     .  

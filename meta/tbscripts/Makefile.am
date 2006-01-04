@@ -5,6 +5,7 @@ TBSCRIPTS = \
   assert.tb \
   asf-namespace.h \
   attribute-changed-event.tb \
+  caching.tb \
   child-attribute-changed-event.tb \
   close-all.tb \
   compile-module.tb \
@@ -16,6 +17,8 @@ TBSCRIPTS = \
   feedback.tb \
   graph-utils.tb \
   get-parsetable.tb \
+  equations-parsetable.tb \
+  term-parsetable.tb \
   idle-state.tb \
   meta.tb \
   module-actions.tb \

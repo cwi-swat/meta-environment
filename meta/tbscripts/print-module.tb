@@ -18,16 +18,16 @@ in
     . snd-msg(ts-get-str-value("sdf-text", ModuleId))
     .
     (
-      rec-msg(ts-value(SdfText?))
+      rec-msg(ts-value("sdf-text", ModuleId, SdfText?))
       . snd-msg(ts-get-term-value("asf-tree", ModuleId))
       .
       (
-        rec-msg(ts-value(AsfTree?))
+        rec-msg(ts-value("asf-tree", ModuleId, AsfTree?))
         . snd-msg(unparse(AsfTree))
         . rec-msg(unparsed-text(AsfText?))
         . snd-msg(io-write-text-list(Filename, [SdfText, "\n", AsfText]))
       +
-        rec-msg(ts-no-value)
+        rec-msg(ts-no-value("asf-tree", ModuleId))
         . snd-msg(io-write-text-list(Filename, [SdfText]))
       )
       .
@@ -39,7 +39,7 @@ in
                                     [ErrMsg])))
       )
     +
-      rec-msg(ts-no-value)
+      rec-msg(ts-no-value("sdf-text", ModuleId))
       . snd-note(ui-status(errorf("Printing failed")))
     )
     . snd-msg(module-printed(ModuleId))
