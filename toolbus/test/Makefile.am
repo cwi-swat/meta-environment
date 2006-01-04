@@ -17,7 +17,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-TESTS           = TBmatch1 TermIO test-removesocket read test-annos $(OK_TESTS) $(ERROR_TESTS)
+TESTS           = TBmatch1 TermIO test-removesocket read test-annos dyncall $(OK_TESTS) $(ERROR_TESTS)
 
 noinst_PROGRAMS = TBmatch1 TermIO
 
@@ -25,7 +25,7 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
                   expr-errors.tb.out scope.tb.out tc-errors.tb.out \
                   test-removesocket.src anno.tb test-annos.src read.src \
-		  read.tb bug-481.tb bug-481.tb.out
+		  read.tb bug-481.tb bug-481.tb.out dyncall.tb dyncall.tb.out
 
 OK_TESTS = \
 	if-ok \
@@ -34,7 +34,7 @@ OK_TESTS = \
 	bind-ok \
 	expr-ok \
 	types-ok \
-	garbage-ok
+	garbage-ok 
 
 ERROR_TESTS = \
 	      expr-errors-fail \

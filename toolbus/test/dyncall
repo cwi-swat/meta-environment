@@ -1,0 +1,14 @@
+#! /bin/sh
+#
+
+top_builddir=..
+srcdir=.
+
+# This test sometimes hangs, we give it a reasonable cpu limit
+ulimit -t 25
+
+${top_builddir}/toolbus/toolbus ${srcdir}/dyncall.tb > test.out 2>&1
+fgrep "SUCCESS" test.out > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  exit 1
+fi

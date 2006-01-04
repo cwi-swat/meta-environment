@@ -1,0 +1,24 @@
+
+
+process A is
+let
+ Arg2 : term,
+ Result : term,
+ B : str
+in
+  Arg2 := hoi .
+  B := "C" .
+  B(Arg2, Result?) .
+  if not-equal(Result, hallo) then
+    printf("FAIL")
+  else
+    printf("SUCCESS")
+  fi
+   
+endlet
+
+process C(Arg: term, Result2: term?) is
+  Result2 := hallo
+
+toolbus(A) 
+  
