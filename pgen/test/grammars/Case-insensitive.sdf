@@ -1,0 +1,14 @@
+definition
+module Main
+
+exports
+
+lexical syntax
+ [\t\n\r\ ] -> LAYOUT
+
+context-free syntax
+
+'case-insensitive' -> Statement
+
+context-free start-symbols
+	Statement

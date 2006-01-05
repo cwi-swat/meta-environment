@@ -161,6 +161,7 @@ for dir in $dirs
 do
 #	cd $dir
         for stx in `ls $dir/*.sdf` ; do
+	    echo "Checking: $stx"
 	        RegressGenTable $stx
         done
 	${RM} -f $dir/*.asfix[12]

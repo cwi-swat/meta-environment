@@ -1,9 +1,13 @@
 $Id$
 
+Wed Jan  4 17:42:45 CET 2006 <jurgenv@cwi.nl>
+ * normalizer: Implemented case-insensitive literals.
+ * tests: added test for ci literals.
+
 Fri Dec 23 10:32:37 CET 2005 <jurgenv@cwi.nl>
  * grammar/Sdf2.baf: added syntax for case-insensitive literals.
    A literal spelled with single quoted, like 'true', generates
-   [tT][rR][uU][eE] -> 'true', such that true can be spelled with
+   [Tt][Rr][Uu][Ee] -> 'true', such that true can be spelled with
    any combination of lowercase and uppercase characters.
    TODO: regenerate normalizer
 

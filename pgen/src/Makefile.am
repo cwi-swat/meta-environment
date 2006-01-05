@@ -47,7 +47,7 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                         -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                         -L$(TOOLBUSLIB)/lib -lATB \
-                        -L$(ATERM)/lib -lATerm \
+                        -L$(ATERM)/lib/ -lATerm-dbg \
                         $(SOCKLIBS)
 
 CLEANFILES = \
