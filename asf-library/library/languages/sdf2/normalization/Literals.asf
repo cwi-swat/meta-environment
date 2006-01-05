@@ -73,10 +73,11 @@ equations
 equations
 
   [forward-to-chars-and-extend-classes]
-	'a+ := chars(strcon(\" C* \")),
+         L := convert-chars(l),
+	'a+ := chars(L),
 	'a+2 := extend('a+)
 	======================================
-	ci-chars(singlequotedstrcon(\' C* \')) = 'a+2
+	ci-chars(l) = 'a+2
 
 
 equations
@@ -103,7 +104,25 @@ equations
 	extend(cc) = [_c char(int(_c) + 32)]
 
 [default] extend(_A) = _A
- 
+
+equations
+
+[single]  convert-chars('\'')  = "'"
+[newline] convert-chars('\n') = "\n"
+[quote]   convert-chars('"')  = "\""
+[tab]     convert-chars('\t')  = "\t"
+[back]    convert-chars('\\')  = "\\"
+[ddd]     convert-chars(singlequotedstrcon(\' singlequotedstrchar(\d1 d2 d3) \')) = strcon(\" strchar(\d1 d2 d3) \")
+[normal]  convert-chars(singlequotedstrcon(\' singlequotedstrchar(normal) \')) = strcon(\" strchar(normal) \")
+
+[done] 
+	convert-chars('') = ""
+[loop] 
+	strcon(\" C+ \") := convert-chars(singlequotedstrcon(\' S+ \')),
+	strcon(\" C  \") := convert-chars(singlequotedstrcon(\' S \'))
+	===>
+	convert-chars(singlequotedstrcon(\' S S+ \')) = strcon(\" C C+ \")
+
 tests
 
 [a] extend([a]) == [aA]  

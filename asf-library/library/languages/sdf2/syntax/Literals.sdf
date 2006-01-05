@@ -7,9 +7,17 @@ imports basic/StrCon
 imports basic/IdentifierCon
 
 exports
-  sorts FunctionName SingleQuotedStrCon
+  sorts FunctionName SingleQuotedStrCon SingleQuotedStrChar
   lexical syntax
-    [\'] chars:StrChar* [\']   -> SingleQuotedStrCon  {cons("default")}
+
+    "\\n"                      -> SingleQuotedStrChar {cons("newline")}
+    "\\t"                      -> SingleQuotedStrChar {cons("tab")}
+    "\\'"                      -> SingleQuotedStrChar {cons("quote")}
+    "\\\\"                     -> SingleQuotedStrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> SingleQuotedStrChar {cons("decimal")}
+    ~[\0-\31\n\t\'\\]          -> SingleQuotedStrChar {cons("normal")}
+
+    [\'] chars:SingleQuotedStrChar* [\']   -> SingleQuotedStrCon  {cons("default")}
 
   context-free syntax
     IdCon  -> FunctionName {cons("unquoted-fun")}

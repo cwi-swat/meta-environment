@@ -15,6 +15,8 @@ exports
 hiddens
   context-free syntax
     id2str(IdCon)   -> StrCon
+    convert-chars(SingleQuotedStrCon) -> StrCon
+    convert-char(SingleQuotedStrChar) -> StrChar
     extend(Symbols) -> Symbols
     "extend"        -> IdCon {reject}
 
@@ -26,10 +28,14 @@ hiddens
     "C*" -> StrChar*
     "C+" -> StrChar+
     "C"  -> StrChar
+    "S*" -> SingleQuotedStrChar*
+    "S+" -> SingleQuotedStrChar+
+    "S"  -> SingleQuotedStrChar
     "d"[0-9]*  -> [0-9]
     "d+" -> [0-9]+
     "h"[0-9]*  -> [A-Za-z] 
     "t"  -> [A-Za-z\-0-9]*
+    "normal"  -> ~[\0-\31\n\t\'\\]
 
   variables
     "$"?"L"             -> StrCon
@@ -44,5 +50,7 @@ hiddens
     "!"[0-9\']*         -> Attributes
     "cc"[0-9\']*        -> CharClass 
     "_c"[0-9\']* 	      -> Character
+    "s"[0-9\']*        -> SingleQuotedStrChar
+    "c"[0-9\']*        -> StrChar
 
  
