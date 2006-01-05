@@ -251,9 +251,6 @@ in
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
   +
-    rec-msg(clear-module-db-hook) .
-    snd-msg(module-db-hook-done) 
-  +
     rec-msg(extra-mod-path-hook).
     snd-msg(extra-mod-path-hook-result([]))
   +
