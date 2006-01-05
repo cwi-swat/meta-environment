@@ -41,11 +41,11 @@ in
     .
     (
       rec-value(TS, result(StrValue?))
-      . snd-msg(ts-value(StrValue))
+      . snd-msg(ts-value(TableName, Key, StrValue))
       . StrValue := "help-the-garbage-collector"
     +
       rec-value(TS, no-result)
-      . snd-msg(ts-no-value)
+      . snd-msg(ts-no-value(TableName, Key))
     )
   +
     rec-msg(ts-get-term-value(TableName?, Key?))
@@ -53,12 +53,11 @@ in
     .
     (
       rec-value(TS, result(TermValue?))
-      . TODO("missing key from result message can lead to non-determinism")
-      . snd-msg(ts-value(TermValue))
+      . snd-msg(ts-value(TableName, Key, TermValue))
       . TermValue := no-tree
     +
       rec-value(TS, no-result)
-      . snd-msg(ts-no-value)
+      . snd-msg(ts-no-value(TableName, Key))
     )
   +
     rec-msg(ts-remove-value(TableName?, Key?))
@@ -69,34 +68,34 @@ in
     .
     (
       rec-value(TS, result(yes))
-      . snd-msg(ts-contains-key)
+      . snd-msg(ts-contains-key(TableName, Key))
     +
       rec-value(TS, result(no))
-      . snd-msg(ts-not-contains-key)
+      . snd-msg(ts-not-contains-key(TableName, Key))
     )
   +
     rec-msg(ts-get-all-keys(TableName?))
     . snd-eval(TS, get-all-keys(TableName))
     . rec-value(TS, result(Keys?))
-    . snd-msg(ts-all-keys(Keys))
+    . snd-msg(ts-all-keys(TableName, Keys))
     . Keys := []
   +
     rec-msg(ts-get-key-value-pairs(TableName?))
     . snd-eval(TS, get-key-value-pairs(TableName))
     . rec-value(TS, result(Pairs?))
-    . snd-msg(ts-pairs(Pairs))
+    . snd-msg(ts-pairs(TableName, Pairs))
     . Pairs := []
   +
     rec-msg(ts-filter-keys(TableName?, Keys?))
     . snd-eval(TS, filter-keys(TableName, Keys))
     . rec-value(TS, result(Keys?))
-    . snd-msg(ts-keys(Keys))
+    . snd-msg(ts-keys(TableName, Keys))
     . Keys := []
   +
     rec-msg(ts-get-all-values(TableName?))
     . snd-eval(TS, get-all-values(TableName))
     . rec-value(TS, result(Values?))
-    . snd-msg(ts-all-values(Values))
+    . snd-msg(ts-all-values(TableName, Values))
     . Values := []
   +
     rec-msg(ts-get-values(TableName?, Keys?))
@@ -104,10 +103,10 @@ in
     .
     (
       rec-value(TS, result(Values?))
-      . snd-msg(ts-values(Values))
+      . snd-msg(ts-values(TableName, Keys, Values))
     +
       rec-value(TS, no-result)
-      . snd-msg(ts-no-values)
+      . snd-msg(ts-no-values(TableName, Keys))
     )
     . Values := [help-the-garbage-collector]
   +
