@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jan  5 09:10:08 CET 2006 <jurgenv@cwi.nl>
+ * **: added rudimentary support for case-insensitive literals. Their
+   actual spelling is ignored when matching.
+ * asfe: improved error messages with more than one cause.
+
 Sat Aug 27 09:04:30 CEST 2005 <kooiker@cwi.nl>
  * semantics/test/Makefile.am: remove trailing backslash
 
@@ -12,7 +17,6 @@ Tue Aug 16 16:42:06 CEST 2005 <jurgenv@cwi.nl>
 Mon Aug 15 16:37:05 CEST 2005 <jurgenv@cwi.nl>
  * asf/syntax/asfsdf-checker/spec/*.asf: renamed error messages and
    subjects of error messages to comply with the error message standard.
-
 
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:

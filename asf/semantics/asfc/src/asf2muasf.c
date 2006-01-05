@@ -629,6 +629,9 @@ static MA_Term treeToTerm(PT_Tree tree)
   else if (PT_isTreeLit(tree)) {
     result = NULL; 
   }
+  else if (PT_isTreeCilit(tree)) {
+    result = NULL;
+  }
   else if (PT_isTreeAppl(tree)) {
     ATbool returnsList = prodReturnsList(PT_getTreeProd(tree));
     result = applTreeToTerm(tree, returnsList);

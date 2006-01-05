@@ -444,31 +444,45 @@ static ATerm matchAppl(ATerm env,
   /*}}}  */
   /*{{{  static ATerm matchArgument(ATerm env,  */
 
-  static ATerm matchArgument(ATerm env, 
-			     PT_Tree arg1, PT_Tree arg2,
-			     ASF_ASFConditionList conds,
-			     PT_Args orgargs1, PT_Args orgargs2,
-			     ATerm lhs_posinfo, int depth)
-  {
-    ATerm newenv = fail_env;
+static ATerm matchArgument(ATerm env, 
+			   PT_Tree arg1, PT_Tree arg2,
+			   ASF_ASFConditionList conds,
+			   PT_Args orgargs1, PT_Args orgargs2,
+			   ATerm lhs_posinfo, int depth)
+{
+  ATerm newenv = fail_env;
 
 
-    if (depth > MAX_DEPTH / 2) {
-      char tmp[256];
-      sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
-	      MAX_DEPTH / 2);
-      RWaddError(tmp, "");
-      return fail_env;
-    }
+  if (depth > MAX_DEPTH / 2) {
+    char tmp[256];
+    sprintf(tmp, "maximum stack depth during matching (%d) exceeded.", 
+	    MAX_DEPTH / 2);
+    RWaddDoubleLocatedError(tmp, 
+			    PT_yieldTree(arg1), PT_getTreeLocation(arg1),
+			    PT_yieldTree(arg2), PT_getTreeLocation(arg2));
+    return fail_env;
+  }
 
-    /* equality check is cheap, so try this first */
-    if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
+  /* equality check is cheap, so try this first */
+  if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
 		     PT_removeTreeAnnotations(arg2))) {
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
-  else if (PT_isTreeLayout(arg1) || PT_isTreeLit(arg1)) {
+  else if (PT_isTreeLayout(arg1) || PT_isTreeLit(arg1) || PT_isTreeCilit(arg1)) {
     /* Literals and layout always match */
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+  }
+  else if (PT_isTreeCycle(arg1)) {
+    /* we assume here cycles are always the same, which does
+     * not influence anything since a cycle never has any
+     * characters as child
+     */
+    if (PT_isTreeCycle(arg2)) {
+      return newenv;
+    }
+    else {
+      return fail_env;
+    }
   }
   else if (PT_isTreeApplList(arg1) &&
 	   PT_isTreeApplList(arg2)) {
