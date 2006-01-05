@@ -146,6 +146,9 @@ ATerm innermost(PT_Tree tree)
   else if (PT_isTreeLit(tree)) {
     result = NULL;
   }
+  else if (PT_isTreeCilit(tree)) {
+    result = NULL;
+  }
   else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     PT_Args args = PT_getTreeArgs(tree);

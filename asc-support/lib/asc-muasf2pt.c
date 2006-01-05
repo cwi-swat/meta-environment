@@ -143,9 +143,20 @@ static PT_Tree restoreLiteral(PT_Symbol symbol)
 {
   PT_Tree result;
 
-  /* TODO: fix this incomplete implementation (escapes) */
   result = PT_makeTreeLit(PT_getSymbolString(symbol));
   return result;
+}
+
+/*}}}  */
+/*{{{  static PT_Tree restoreCiliteral(PT_Symbol symbol) */
+
+static PT_Tree restoreCiliteral(PT_Symbol symbol)
+{
+  PT_Tree result;
+  
+  result = PT_makeTreeCilit(PT_getSymbolString(symbol));
+  return result;
+
 }
 
 /*}}}  */
@@ -235,6 +246,9 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     else if (PT_isSymbolLit(symbol)) {
       tree = restoreLiteral(symbol);
     }
+    else if (PT_isSymbolCilit(symbol)) {
+      tree = restoreCiliteral(symbol);
+    }
     else { 
       /*assert(j >= 0 && j < arity && "not enough arguments, or too much");*/
       if (j < 0 || j >= arity) {
@@ -273,6 +287,7 @@ static PT_Tree termToTree(ATerm tree)
     ATerm annos = ATgetAnnotations(tree);
 
     if(ATgetType(tree) == AT_APPL) {
+
       prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
       if(!prod) {
 	ATabort("unknown production symbol: %s\n",

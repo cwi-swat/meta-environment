@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jan  5 09:21:01 CET 2006 <jurgenv@cwi.nl>
+ * Added rudimentary implementation of ciliterals. They are ignored
+   like normal literals, and restored with the spelling that is copied
+   from the SDF definition (as it can be found in a PT_Symbol).
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
