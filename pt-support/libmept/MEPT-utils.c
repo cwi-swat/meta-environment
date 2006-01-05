@@ -673,7 +673,7 @@ PT_Tree PT_makeTreeLit(const char* string)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_makeTreeLit(const char* string) */
+/*{{{  PT_Tree PT_makeTreeCilit(const char* string) */
 
 PT_Tree PT_makeTreeCilit(const char* string)
 {
@@ -706,7 +706,7 @@ PT_Tree PT_makeTreeCilit(const char* string)
       PT_CharRanges range2 =  PT_makeCharRangesSingle(              
 	                         PT_makeCharRangeCharacter(string[i]-
 							   ('a' - 'A')));
-      symbol = PT_makeSymbolCharClass(PT_concatCharRanges(range1,range2));
+      symbol = PT_makeSymbolCharClass(PT_concatCharRanges(range2,range1));
     }
     else {
       symbol = PT_makeSymbolCharClass(
