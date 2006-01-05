@@ -59,6 +59,7 @@ CLEANFILES = \
 	$(GENERATED_BY_TESTS) \
 	test-removesocket \
 	test-annos \
+	dyncall \
 	read
 
 LDADD           = -L$(top_builddir)/libtb -ltb
