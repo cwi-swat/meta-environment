@@ -193,9 +193,9 @@ SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l)
 /*}}}  */
 
 
-/*{{{  SDF_LexStrCon SDF_makeLexStrCon(const char* str) */
+/*{{{  static SDF_LexStrCharChars SDF_makeLexStrChars(const char* str) */
 
-SDF_LexStrCon SDF_makeLexStrCon(const char* str)
+static SDF_LexStrCharChars SDF_makeLexStrChars(const char* str)
 {
   int len = strlen(str);
   int i;
@@ -239,15 +239,86 @@ SDF_LexStrCon SDF_makeLexStrCon(const char* str)
   }
 
 
-  return SDF_makeLexStrConDefault(list);
+  return list;
 }
 
 /*}}}  */
-/*{{{  SDF_QLiteral SDF_makeQLiteral(const char *str)  */
+
+SDF_LexStrCon SDF_makeLexStrCon(const char* str) 
+{
+  return SDF_makeLexStrConDefault(SDF_makeLexStrChars(str));
+}
+
+/*{{{  static SDF_LexStrCharChars SDF_makeLexStrChars(const char* str) */
+
+static SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrChars(const char* str)
+{
+  int len = strlen(str);
+  int i;
+  SDF_LexSingleQuotedStrCharChars list = SDF_makeLexSingleQuotedStrCharCharsEmpty();
+
+  for (i = len - 1; i >= 0; i--) {
+    SDF_LexSingleQuotedStrChar ch;
+
+    switch(str[i]) {
+      case '\n':
+	ch = SDF_makeLexSingleQuotedStrCharNewline();
+	break;
+      case '\t':
+	ch = SDF_makeLexSingleQuotedStrCharTab();
+	break;
+      case '\'':
+	ch = SDF_makeLexSingleQuotedStrCharQuote();
+	break;
+      case '\\':
+	ch = SDF_makeLexSingleQuotedStrCharBackslash();
+	break;
+      default:
+	if (isprint((int) str[i])) {
+	  ch = SDF_makeLexSingleQuotedStrCharNormal(str[i]);
+	}
+	else {
+	  int value = str[i];
+	  int a, b, c;
+
+	  c = value % 10;
+	  value /= 10;
+	  b = value % 10;
+	  value /= 10;
+	  a = value;
+
+	  ch = SDF_makeLexSingleQuotedStrCharDecimal(a,b,c);
+	}
+    }
+
+    list = SDF_makeLexSingleQuotedStrCharCharsMany(ch, list);
+  }
+
+
+  return list;
+}
+
+/*}}}  */
+
+SDF_LexSingleQuotedStrCon SDF_makeLexSingleQuotedStrCon(const char* str)
+{
+  return SDF_makeLexSingleQuotedStrConDefault(SDF_makeLexSingleQuotedStrChars(str));
+}
+
+  
+/*{{{  SDF_StrCon SDF_makeStrCon(const char *str)  */
 
 SDF_StrCon SDF_makeStrCon(const char *str) 
 {
   return SDF_makeStrConLexToCf(SDF_makeLexStrCon(str));
+}
+
+/*}}}  */
+/*{{{  SDF_StrCon SDF_makeStrCon(const char *str)  */
+
+SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrCon(const char *str) 
+{
+  return SDF_makeSingleQuotedStrConLexToCf(SDF_makeLexSingleQuotedStrCon(str));
 }
 
 /*}}}  */

@@ -219,14 +219,28 @@ imports basic/StrCon
 imports basic/IdentifierCon
 
 exports
+  sorts FunctionName SingleQuotedStrCon SingleQuotedStrChar
+  lexical syntax
+
+    "\\n"                      -> SingleQuotedStrChar {cons("newline")}
+    "\\t"                      -> SingleQuotedStrChar {cons("tab")}
+    "\\'"                      -> SingleQuotedStrChar {cons("quote")}
+    "\\\\"                     -> SingleQuotedStrChar {cons("backslash")}
+    "\\" a:[0-9]b:[0-9]c:[0-9] -> SingleQuotedStrChar {cons("decimal")}
+    ~[\0-\31\n\t\'\\]          -> SingleQuotedStrChar {cons("normal")}
+
+    [\'] chars:SingleQuotedStrChar* [\']   -> SingleQuotedStrCon  {cons("default")}
+
   context-free syntax
-    string:StrCon       -> Symbol  {cons("lit")}
+    IdCon  -> FunctionName {cons("unquoted-fun")}
+    StrCon -> FunctionName {cons("quoted-fun")}
 
-    fun:IdCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
-	-> Production  {avoid, cons("unquoted-fun")}
+  context-free syntax
+    string:StrCon                -> Symbol {cons("lit")}
+    ci-string:SingleQuotedStrCon -> Symbol {cons("ci-lit")}
 
-    str:StrCon "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
-	-> Production  {avoid, cons("quoted-fun")}
+    fun:FunctionName "(" arguments:{Symbol ","}* ")" "->" result:Symbol Attributes 
+	-> Production  {avoid, cons("prefix-fun")}
 %%% $Id$
                  
 module languages/sdf2/syntax/Modules
@@ -326,10 +340,7 @@ exports
     Symbol "*"                                    -> Symbol {cons("iter-star")}
     "{" Symbol sep:Symbol "}" "+"                 -> Symbol {cons("iter-sep")}
     "{" Symbol sep:Symbol "}" "*"                 -> Symbol {cons("iter-star-sep")}
- %%   Symbol  n:NatCon "+"                          -> Symbol {cons("iter-n")}
- %%   "{" Symbol sep:Symbol "}" n:NatCon "+"        -> Symbol {cons("iter-sep-n")}
     "<" head:Symbol "," rest:{Symbol ","}+ ">"    -> Symbol {cons("tuple")}
-    "left":Symbol "#" "right":Symbol              -> Symbol {right,cons("pair")}
     "(" arguments:Symbols "=>" results:Symbol ")" -> Symbol {cons("func")}
     "left":Symbol "|" "right":Symbol              -> Symbol {right,cons("alt")}
     "(" "left":Symbol "->" "right":Symbol ")"     -> Symbol {cons("strategy")}
@@ -338,8 +349,6 @@ exports
     {Symbol "?"               -> Symbol
     Symbol "*"                -> Symbol
     Symbol "+"                -> Symbol} >
-%%    Symbol NatCon "+"         -> Symbol} >
-    Symbol "#" Symbol         -> Symbol  >
     Symbol "|" Symbol         -> Symbol       
 %%% $Id$
                                                               
@@ -386,39 +395,6 @@ exports
   context-free priorities    
     CharClass "." Lookaheads    -> Lookahead >
     Lookaheads "|" Lookaheads   -> Lookaheads
-module languages/sdf2/syntax/Sdf2-Syntax
-
-imports languages/sdf2/syntax/Kernel
-        languages/sdf2/syntax/Basic
-        languages/sdf2/syntax/Modules
-        languages/sdf2/syntax/Regular
-        languages/sdf2/syntax/Lifting
-        languages/sdf2/syntax/Priority
-        languages/sdf2/syntax/CC
-        languages/sdf2/syntax/Sorts
-        languages/sdf2/syntax/Start-Symbols
-        languages/sdf2/syntax/Literals
-        languages/sdf2/syntax/Labels
-        languages/sdf2/syntax/Restrictions
-        languages/sdf2/syntax/Aliases
-
-exports
-  sorts SDF
-
-  context-free syntax
-    "<START>" -> Symbol {cons("start")}
-    "<Start>" -> Symbol {cons("file-start")}
-
-    "lexical"      "priorities" Priorities      -> Grammar {cons("lexical-priorities")}
-    "context-free" "priorities" Priorities      -> Grammar {cons("context-free-priorities")}
-    "lexical"      "restrictions" Restrictions  -> Grammar {cons("lexical-restrictions")}
-    "context-free" "restrictions" Restrictions  -> Grammar {cons("context-free-restrictions")}
-
-    "definition" Definition -> SDF {cons("definition")}
-
-  context-free priorities
-    Symbol "|" Symbol  -> Symbol >
-    Label ":" Symbol -> Symbol                  
 %%% $Id$
 
 module languages/sdf2/syntax/Sdf2
@@ -488,6 +464,39 @@ exports
 exports
   context-free start-symbols
     SDF Module
+module languages/sdf2/syntax/Sdf2-Syntax
+
+imports languages/sdf2/syntax/Kernel
+        languages/sdf2/syntax/Basic
+        languages/sdf2/syntax/Modules
+        languages/sdf2/syntax/Regular
+        languages/sdf2/syntax/Lifting
+        languages/sdf2/syntax/Priority
+        languages/sdf2/syntax/CC
+        languages/sdf2/syntax/Sorts
+        languages/sdf2/syntax/Start-Symbols
+        languages/sdf2/syntax/Literals
+        languages/sdf2/syntax/Labels
+        languages/sdf2/syntax/Restrictions
+        languages/sdf2/syntax/Aliases
+
+exports
+  sorts SDF
+
+  context-free syntax
+    "<START>" -> Symbol {cons("start")}
+    "<Start>" -> Symbol {cons("file-start")}
+
+    "lexical"      "priorities" Priorities      -> Grammar {cons("lexical-priorities")}
+    "context-free" "priorities" Priorities      -> Grammar {cons("context-free-priorities")}
+    "lexical"      "restrictions" Restrictions  -> Grammar {cons("lexical-restrictions")}
+    "context-free" "restrictions" Restrictions  -> Grammar {cons("context-free-restrictions")}
+
+    "definition" Definition -> SDF {cons("definition")}
+
+  context-free priorities
+    Symbol "|" Symbol  -> Symbol >
+    Label ":" Symbol -> Symbol                  
 %%% $Id$
                        
 module languages/sdf2/syntax/Sorts
@@ -585,6 +594,9 @@ lexical restrictions
 IdCon -/- [A-Za-z\-0-9]
 
 module basic/Comments
+
+imports
+  basic/Whitespace
 
 exports
   lexical syntax

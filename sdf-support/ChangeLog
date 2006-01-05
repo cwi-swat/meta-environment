@@ -1,5 +1,8 @@
 $Id$
 
+Thu Nov 17 10:29:25 CET 2005 <jurgenv@cwi.nl>
+ * */*.c: extended SDF with case insensitive literals
+
 Thu Nov 10 17:07:38 CET 2005 <jurgenv@cwi.nl>
  * utils/import-graph: Adapted implementation to new Graph API.
 

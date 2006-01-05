@@ -47,6 +47,12 @@ typedef struct _SDF_Productions *SDF_Productions;
 typedef struct _SDF_AttributeList *SDF_AttributeList;
 typedef struct _SDF_ProductionList *SDF_ProductionList;
 typedef struct _SDF_Label *SDF_Label;
+typedef struct _SDF_LexSingleQuotedStrChar *SDF_LexSingleQuotedStrChar;
+typedef struct _SDF_SingleQuotedStrChar *SDF_SingleQuotedStrChar;
+typedef struct _SDF_LexSingleQuotedStrCon *SDF_LexSingleQuotedStrCon;
+typedef struct _SDF_SingleQuotedStrCon *SDF_SingleQuotedStrCon;
+typedef struct _SDF_FunctionName *SDF_FunctionName;
+typedef struct _SDF_LexSingleQuotedStrCharChars *SDF_LexSingleQuotedStrCharChars;
 typedef struct _SDF_SymbolArguments *SDF_SymbolArguments;
 typedef struct _SDF_LexModuleWord *SDF_LexModuleWord;
 typedef struct _SDF_ModuleWord *SDF_ModuleWord;
@@ -83,8 +89,8 @@ typedef struct _SDF_Restriction *SDF_Restriction;
 typedef struct _SDF_Restrictions *SDF_Restrictions;
 typedef struct _SDF_LookaheadList *SDF_LookaheadList;
 typedef struct _SDF_RestrictionList *SDF_RestrictionList;
-typedef struct _SDF_SDF *SDF_SDF;
 typedef struct _SDF_Sort *SDF_Sort;
+typedef struct _SDF_SDF *SDF_SDF;
 typedef struct _SDF_LexSort *SDF_LexSort;
 typedef struct _SDF_SymbolParameters *SDF_SymbolParameters;
 typedef struct _SDF_Symbols *SDF_Symbols;
@@ -141,6 +147,12 @@ void SDF_protectProductions(SDF_Productions *arg);
 void SDF_protectAttributeList(SDF_AttributeList *arg);
 void SDF_protectProductionList(SDF_ProductionList *arg);
 void SDF_protectLabel(SDF_Label *arg);
+void SDF_protectLexSingleQuotedStrChar(SDF_LexSingleQuotedStrChar *arg);
+void SDF_protectSingleQuotedStrChar(SDF_SingleQuotedStrChar *arg);
+void SDF_protectLexSingleQuotedStrCon(SDF_LexSingleQuotedStrCon *arg);
+void SDF_protectSingleQuotedStrCon(SDF_SingleQuotedStrCon *arg);
+void SDF_protectFunctionName(SDF_FunctionName *arg);
+void SDF_protectLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars *arg);
 void SDF_protectSymbolArguments(SDF_SymbolArguments *arg);
 void SDF_protectLexModuleWord(SDF_LexModuleWord *arg);
 void SDF_protectModuleWord(SDF_ModuleWord *arg);
@@ -177,8 +189,8 @@ void SDF_protectRestriction(SDF_Restriction *arg);
 void SDF_protectRestrictions(SDF_Restrictions *arg);
 void SDF_protectLookaheadList(SDF_LookaheadList *arg);
 void SDF_protectRestrictionList(SDF_RestrictionList *arg);
-void SDF_protectSDF(SDF_SDF *arg);
 void SDF_protectSort(SDF_Sort *arg);
+void SDF_protectSDF(SDF_SDF *arg);
 void SDF_protectLexSort(SDF_LexSort *arg);
 void SDF_protectSymbolParameters(SDF_SymbolParameters *arg);
 void SDF_protectSymbols(SDF_Symbols *arg);
@@ -267,6 +279,18 @@ SDF_ProductionList SDF_ProductionListFromTerm(ATerm t);
 ATerm SDF_ProductionListToTerm(SDF_ProductionList arg);
 SDF_Label SDF_LabelFromTerm(ATerm t);
 ATerm SDF_LabelToTerm(SDF_Label arg);
+SDF_LexSingleQuotedStrChar SDF_LexSingleQuotedStrCharFromTerm(ATerm t);
+ATerm SDF_LexSingleQuotedStrCharToTerm(SDF_LexSingleQuotedStrChar arg);
+SDF_SingleQuotedStrChar SDF_SingleQuotedStrCharFromTerm(ATerm t);
+ATerm SDF_SingleQuotedStrCharToTerm(SDF_SingleQuotedStrChar arg);
+SDF_LexSingleQuotedStrCon SDF_LexSingleQuotedStrConFromTerm(ATerm t);
+ATerm SDF_LexSingleQuotedStrConToTerm(SDF_LexSingleQuotedStrCon arg);
+SDF_SingleQuotedStrCon SDF_SingleQuotedStrConFromTerm(ATerm t);
+ATerm SDF_SingleQuotedStrConToTerm(SDF_SingleQuotedStrCon arg);
+SDF_FunctionName SDF_FunctionNameFromTerm(ATerm t);
+ATerm SDF_FunctionNameToTerm(SDF_FunctionName arg);
+SDF_LexSingleQuotedStrCharChars SDF_LexSingleQuotedStrCharCharsFromTerm(ATerm t);
+ATerm SDF_LexSingleQuotedStrCharCharsToTerm(SDF_LexSingleQuotedStrCharChars arg);
 SDF_SymbolArguments SDF_SymbolArgumentsFromTerm(ATerm t);
 ATerm SDF_SymbolArgumentsToTerm(SDF_SymbolArguments arg);
 SDF_LexModuleWord SDF_LexModuleWordFromTerm(ATerm t);
@@ -339,10 +363,10 @@ SDF_LookaheadList SDF_LookaheadListFromTerm(ATerm t);
 ATerm SDF_LookaheadListToTerm(SDF_LookaheadList arg);
 SDF_RestrictionList SDF_RestrictionListFromTerm(ATerm t);
 ATerm SDF_RestrictionListToTerm(SDF_RestrictionList arg);
-SDF_SDF SDF_SDFFromTerm(ATerm t);
-ATerm SDF_SDFToTerm(SDF_SDF arg);
 SDF_Sort SDF_SortFromTerm(ATerm t);
 ATerm SDF_SortToTerm(SDF_Sort arg);
+SDF_SDF SDF_SDFFromTerm(ATerm t);
+ATerm SDF_SDFToTerm(SDF_SDF arg);
 SDF_LexSort SDF_LexSortFromTerm(ATerm t);
 ATerm SDF_LexSortToTerm(SDF_LexSort arg);
 SDF_SymbolParameters SDF_SymbolParametersFromTerm(ATerm t);
@@ -459,6 +483,18 @@ SDF_ProductionList SDF_makeProductionList3(SDF_OptLayout wsAfterHead, SDF_Produc
 SDF_ProductionList SDF_makeProductionList4(SDF_OptLayout wsAfterHead, SDF_Production elem1, SDF_Production elem2, SDF_Production elem3, SDF_Production elem4);
 SDF_ProductionList SDF_makeProductionList5(SDF_OptLayout wsAfterHead, SDF_Production elem1, SDF_Production elem2, SDF_Production elem3, SDF_Production elem4, SDF_Production elem5);
 SDF_ProductionList SDF_makeProductionList6(SDF_OptLayout wsAfterHead, SDF_Production elem1, SDF_Production elem2, SDF_Production elem3, SDF_Production elem4, SDF_Production elem5, SDF_Production elem6);
+int SDF_getLexSingleQuotedStrCharCharsLength (SDF_LexSingleQuotedStrCharChars arg);
+SDF_LexSingleQuotedStrCharChars SDF_reverseLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg);
+SDF_LexSingleQuotedStrCharChars SDF_appendLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg, SDF_LexSingleQuotedStrChar elem);
+SDF_LexSingleQuotedStrCharChars SDF_concatLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg0, SDF_LexSingleQuotedStrCharChars arg1);
+SDF_LexSingleQuotedStrCharChars SDF_sliceLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg, int start, int end);
+SDF_LexSingleQuotedStrChar SDF_getLexSingleQuotedStrCharCharsLexSingleQuotedStrCharAt(SDF_LexSingleQuotedStrCharChars arg, int index);
+SDF_LexSingleQuotedStrCharChars SDF_replaceLexSingleQuotedStrCharCharsLexSingleQuotedStrCharAt(SDF_LexSingleQuotedStrCharChars arg, SDF_LexSingleQuotedStrChar elem, int index);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharChars2(SDF_LexSingleQuotedStrChar elem1, SDF_LexSingleQuotedStrChar elem2);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharChars3(SDF_LexSingleQuotedStrChar elem1, SDF_LexSingleQuotedStrChar elem2, SDF_LexSingleQuotedStrChar elem3);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharChars4(SDF_LexSingleQuotedStrChar elem1, SDF_LexSingleQuotedStrChar elem2, SDF_LexSingleQuotedStrChar elem3, SDF_LexSingleQuotedStrChar elem4);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharChars5(SDF_LexSingleQuotedStrChar elem1, SDF_LexSingleQuotedStrChar elem2, SDF_LexSingleQuotedStrChar elem3, SDF_LexSingleQuotedStrChar elem4, SDF_LexSingleQuotedStrChar elem5);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharChars6(SDF_LexSingleQuotedStrChar elem1, SDF_LexSingleQuotedStrChar elem2, SDF_LexSingleQuotedStrChar elem3, SDF_LexSingleQuotedStrChar elem4, SDF_LexSingleQuotedStrChar elem5, SDF_LexSingleQuotedStrChar elem6);
 int SDF_getSymbolArgumentsLength (SDF_SymbolArguments arg);
 SDF_SymbolArguments SDF_reverseSymbolArguments(SDF_SymbolArguments arg);
 SDF_SymbolArguments SDF_appendSymbolArguments(SDF_SymbolArguments arg0, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_Symbol arg1);
@@ -724,6 +760,7 @@ SDF_Symbol SDF_makeSymbolCharClass(SDF_CharClass CharClass);
 SDF_Symbol SDF_makeSymbolLabel(SDF_Label Label, SDF_OptLayout wsAfterLabel, SDF_OptLayout wsAfterColon, SDF_Symbol Symbol);
 SDF_Symbol SDF_makeSymbolLifting(SDF_OptLayout wsAfterLeftQuote, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol);
 SDF_Symbol SDF_makeSymbolLit(SDF_StrCon string);
+SDF_Symbol SDF_makeSymbolCiLit(SDF_SingleQuotedStrCon ciString);
 SDF_Symbol SDF_makeSymbolEmpty(SDF_OptLayout wsAfterParenOpen);
 SDF_Symbol SDF_makeSymbolSeq(SDF_OptLayout wsAfterParenOpen, SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_SymbolTail tail, SDF_OptLayout wsAfterTail);
 SDF_Symbol SDF_makeSymbolOpt(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol);
@@ -732,7 +769,6 @@ SDF_Symbol SDF_makeSymbolIterStar(SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol
 SDF_Symbol SDF_makeSymbolIterSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose);
 SDF_Symbol SDF_makeSymbolIterStarSep(SDF_OptLayout wsAfterBraceOpen, SDF_Symbol Symbol, SDF_OptLayout wsAfterSymbol, SDF_Symbol sep, SDF_OptLayout wsAfterSep, SDF_OptLayout wsAfterBraceClose);
 SDF_Symbol SDF_makeSymbolTuple(SDF_OptLayout wsAfterLessThan, SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterComma, SDF_SymbolRest rest, SDF_OptLayout wsAfterRest);
-SDF_Symbol SDF_makeSymbolPair(SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterHash, SDF_Symbol right);
 SDF_Symbol SDF_makeSymbolFunc(SDF_OptLayout wsAfterParenOpen, SDF_Symbols arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterEqualsGreaterThan, SDF_Symbol results, SDF_OptLayout wsAfterResults);
 SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterBar, SDF_Symbol right);
 SDF_Symbol SDF_makeSymbolStrategy(SDF_OptLayout wsAfterParenOpen, SDF_Symbol left, SDF_OptLayout wsAfterLeft, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol right, SDF_OptLayout wsAfterRight);
@@ -776,8 +812,7 @@ SDF_Attribute SDF_makeAttributeAvoid(void);
 SDF_Attributes SDF_makeAttributesAttrs(SDF_OptLayout wsAfterBraceOpen, SDF_AttributeList list, SDF_OptLayout wsAfterList);
 SDF_Attributes SDF_makeAttributesNoAttrs(void);
 SDF_Production SDF_makeProductionProd(SDF_Symbols Symbols, SDF_OptLayout wsAfterSymbols, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes);
-SDF_Production SDF_makeProductionUnquotedFun(SDF_IdCon fun, SDF_OptLayout wsAfterFun, SDF_OptLayout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterParenClose, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes);
-SDF_Production SDF_makeProductionQuotedFun(SDF_StrCon str, SDF_OptLayout wsAfterStr, SDF_OptLayout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterParenClose, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes);
+SDF_Production SDF_makeProductionPrefixFun(SDF_FunctionName fun, SDF_OptLayout wsAfterFun, SDF_OptLayout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_OptLayout wsAfterArguments, SDF_OptLayout wsAfterParenClose, SDF_OptLayout wsAfterGreaterThan, SDF_Symbol result, SDF_OptLayout wsAfterResult, SDF_Attributes Attributes);
 SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list);
 SDF_AttributeList SDF_makeAttributeListEmpty(void);
 SDF_AttributeList SDF_makeAttributeListSingle(SDF_Attribute head);
@@ -787,6 +822,20 @@ SDF_ProductionList SDF_makeProductionListSingle(SDF_Production head);
 SDF_ProductionList SDF_makeProductionListMany(SDF_Production head, SDF_OptLayout wsAfterHead, SDF_ProductionList tail);
 SDF_Label SDF_makeLabelQuoted(SDF_StrCon StrCon);
 SDF_Label SDF_makeLabelUnquoted(SDF_IdCon IdCon);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharNewline(void);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharTab(void);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharQuote(void);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharBackslash(void);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharDecimal(char a, char b, char c);
+SDF_LexSingleQuotedStrChar SDF_makeLexSingleQuotedStrCharNormal(char ch);
+SDF_SingleQuotedStrChar SDF_makeSingleQuotedStrCharLexToCf(SDF_LexSingleQuotedStrChar SingleQuotedStrChar);
+SDF_LexSingleQuotedStrCon SDF_makeLexSingleQuotedStrConDefault(SDF_LexSingleQuotedStrCharChars chars);
+SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrConLexToCf(SDF_LexSingleQuotedStrCon SingleQuotedStrCon);
+SDF_FunctionName SDF_makeFunctionNameUnquotedFun(SDF_IdCon IdCon);
+SDF_FunctionName SDF_makeFunctionNameQuotedFun(SDF_StrCon StrCon);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharCharsEmpty(void);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharCharsSingle(SDF_LexSingleQuotedStrChar head);
+SDF_LexSingleQuotedStrCharChars SDF_makeLexSingleQuotedStrCharCharsMany(SDF_LexSingleQuotedStrChar head, SDF_LexSingleQuotedStrCharChars tail);
 SDF_SymbolArguments SDF_makeSymbolArgumentsEmpty(void);
 SDF_SymbolArguments SDF_makeSymbolArgumentsSingle(SDF_Symbol head);
 SDF_SymbolArguments SDF_makeSymbolArgumentsMany(SDF_Symbol head, SDF_OptLayout wsAfterHead, SDF_OptLayout wsAfterSep, SDF_SymbolArguments tail);
@@ -867,8 +916,8 @@ SDF_LookaheadList SDF_makeLookaheadListMany(SDF_Lookahead head, SDF_OptLayout ws
 SDF_RestrictionList SDF_makeRestrictionListEmpty(void);
 SDF_RestrictionList SDF_makeRestrictionListSingle(SDF_Restriction head);
 SDF_RestrictionList SDF_makeRestrictionListMany(SDF_Restriction head, SDF_OptLayout wsAfterHead, SDF_RestrictionList tail);
-SDF_SDF SDF_makeSDFDefinition(SDF_OptLayout wsAfterDefinition, SDF_Definition Definition);
 SDF_Sort SDF_makeSortLexToCf(SDF_LexSort Sort);
+SDF_SDF SDF_makeSDFDefinition(SDF_OptLayout wsAfterDefinition, SDF_Definition Definition);
 SDF_LexSort SDF_makeLexSortOneChar(char head);
 SDF_LexSort SDF_makeLexSortMoreChars(char head, const char* middle, char last);
 SDF_SymbolParameters SDF_makeSymbolParametersEmpty(void);
@@ -936,6 +985,12 @@ ATbool SDF_isEqualProductions(SDF_Productions arg0, SDF_Productions arg1);
 ATbool SDF_isEqualAttributeList(SDF_AttributeList arg0, SDF_AttributeList arg1);
 ATbool SDF_isEqualProductionList(SDF_ProductionList arg0, SDF_ProductionList arg1);
 ATbool SDF_isEqualLabel(SDF_Label arg0, SDF_Label arg1);
+ATbool SDF_isEqualLexSingleQuotedStrChar(SDF_LexSingleQuotedStrChar arg0, SDF_LexSingleQuotedStrChar arg1);
+ATbool SDF_isEqualSingleQuotedStrChar(SDF_SingleQuotedStrChar arg0, SDF_SingleQuotedStrChar arg1);
+ATbool SDF_isEqualLexSingleQuotedStrCon(SDF_LexSingleQuotedStrCon arg0, SDF_LexSingleQuotedStrCon arg1);
+ATbool SDF_isEqualSingleQuotedStrCon(SDF_SingleQuotedStrCon arg0, SDF_SingleQuotedStrCon arg1);
+ATbool SDF_isEqualFunctionName(SDF_FunctionName arg0, SDF_FunctionName arg1);
+ATbool SDF_isEqualLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg0, SDF_LexSingleQuotedStrCharChars arg1);
 ATbool SDF_isEqualSymbolArguments(SDF_SymbolArguments arg0, SDF_SymbolArguments arg1);
 ATbool SDF_isEqualLexModuleWord(SDF_LexModuleWord arg0, SDF_LexModuleWord arg1);
 ATbool SDF_isEqualModuleWord(SDF_ModuleWord arg0, SDF_ModuleWord arg1);
@@ -972,8 +1027,8 @@ ATbool SDF_isEqualRestriction(SDF_Restriction arg0, SDF_Restriction arg1);
 ATbool SDF_isEqualRestrictions(SDF_Restrictions arg0, SDF_Restrictions arg1);
 ATbool SDF_isEqualLookaheadList(SDF_LookaheadList arg0, SDF_LookaheadList arg1);
 ATbool SDF_isEqualRestrictionList(SDF_RestrictionList arg0, SDF_RestrictionList arg1);
-ATbool SDF_isEqualSDF(SDF_SDF arg0, SDF_SDF arg1);
 ATbool SDF_isEqualSort(SDF_Sort arg0, SDF_Sort arg1);
+ATbool SDF_isEqualSDF(SDF_SDF arg0, SDF_SDF arg1);
 ATbool SDF_isEqualLexSort(SDF_LexSort arg0, SDF_LexSort arg1);
 ATbool SDF_isEqualSymbolParameters(SDF_SymbolParameters arg0, SDF_SymbolParameters arg1);
 ATbool SDF_isEqualSymbols(SDF_Symbols arg0, SDF_Symbols arg1);
@@ -1402,6 +1457,7 @@ inline ATbool SDF_isSymbolCharClass(SDF_Symbol arg);
 inline ATbool SDF_isSymbolLabel(SDF_Symbol arg);
 inline ATbool SDF_isSymbolLifting(SDF_Symbol arg);
 inline ATbool SDF_isSymbolLit(SDF_Symbol arg);
+inline ATbool SDF_isSymbolCiLit(SDF_Symbol arg);
 inline ATbool SDF_isSymbolEmpty(SDF_Symbol arg);
 inline ATbool SDF_isSymbolSeq(SDF_Symbol arg);
 inline ATbool SDF_isSymbolOpt(SDF_Symbol arg);
@@ -1410,7 +1466,6 @@ inline ATbool SDF_isSymbolIterStar(SDF_Symbol arg);
 inline ATbool SDF_isSymbolIterSep(SDF_Symbol arg);
 inline ATbool SDF_isSymbolIterStarSep(SDF_Symbol arg);
 inline ATbool SDF_isSymbolTuple(SDF_Symbol arg);
-inline ATbool SDF_isSymbolPair(SDF_Symbol arg);
 inline ATbool SDF_isSymbolFunc(SDF_Symbol arg);
 inline ATbool SDF_isSymbolAlt(SDF_Symbol arg);
 inline ATbool SDF_isSymbolStrategy(SDF_Symbol arg);
@@ -1431,6 +1486,7 @@ ATbool SDF_hasSymbolWsAfterLabel(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterColon(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterLeftQuote(SDF_Symbol arg);
 ATbool SDF_hasSymbolString(SDF_Symbol arg);
+ATbool SDF_hasSymbolCiString(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterParenOpen(SDF_Symbol arg);
 ATbool SDF_hasSymbolHead(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterHead(SDF_Symbol arg);
@@ -1443,16 +1499,15 @@ ATbool SDF_hasSymbolWsAfterBraceClose(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterComma(SDF_Symbol arg);
 ATbool SDF_hasSymbolRest(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterRest(SDF_Symbol arg);
-ATbool SDF_hasSymbolLeft(SDF_Symbol arg);
-ATbool SDF_hasSymbolWsAfterLeft(SDF_Symbol arg);
-ATbool SDF_hasSymbolWsAfterHash(SDF_Symbol arg);
-ATbool SDF_hasSymbolRight(SDF_Symbol arg);
 ATbool SDF_hasSymbolArguments(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterArguments(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
 ATbool SDF_hasSymbolResults(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterResults(SDF_Symbol arg);
+ATbool SDF_hasSymbolLeft(SDF_Symbol arg);
+ATbool SDF_hasSymbolWsAfterLeft(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterBar(SDF_Symbol arg);
+ATbool SDF_hasSymbolRight(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterGreaterThan(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterRight(SDF_Symbol arg);
 ATbool SDF_hasSymbolSort(SDF_Symbol arg);
@@ -1472,6 +1527,7 @@ SDF_OptLayout SDF_getSymbolWsAfterLabel(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterColon(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterLeftQuote(SDF_Symbol arg);
 SDF_StrCon SDF_getSymbolString(SDF_Symbol arg);
+SDF_SingleQuotedStrCon SDF_getSymbolCiString(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterParenOpen(SDF_Symbol arg);
 SDF_Symbol SDF_getSymbolHead(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterHead(SDF_Symbol arg);
@@ -1484,16 +1540,15 @@ SDF_OptLayout SDF_getSymbolWsAfterBraceClose(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterComma(SDF_Symbol arg);
 SDF_SymbolRest SDF_getSymbolRest(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterRest(SDF_Symbol arg);
-SDF_Symbol SDF_getSymbolLeft(SDF_Symbol arg);
-SDF_OptLayout SDF_getSymbolWsAfterLeft(SDF_Symbol arg);
-SDF_OptLayout SDF_getSymbolWsAfterHash(SDF_Symbol arg);
-SDF_Symbol SDF_getSymbolRight(SDF_Symbol arg);
 SDF_Symbols SDF_getSymbolArguments(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterArguments(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
 SDF_Symbol SDF_getSymbolResults(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterResults(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolLeft(SDF_Symbol arg);
+SDF_OptLayout SDF_getSymbolWsAfterLeft(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterBar(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolRight(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterGreaterThan(SDF_Symbol arg);
 SDF_OptLayout SDF_getSymbolWsAfterRight(SDF_Symbol arg);
 SDF_Sort SDF_getSymbolSort(SDF_Symbol arg);
@@ -1513,6 +1568,7 @@ SDF_Symbol SDF_setSymbolWsAfterLabel(SDF_Symbol arg, SDF_OptLayout wsAfterLabel)
 SDF_Symbol SDF_setSymbolWsAfterColon(SDF_Symbol arg, SDF_OptLayout wsAfterColon);
 SDF_Symbol SDF_setSymbolWsAfterLeftQuote(SDF_Symbol arg, SDF_OptLayout wsAfterLeftQuote);
 SDF_Symbol SDF_setSymbolString(SDF_Symbol arg, SDF_StrCon string);
+SDF_Symbol SDF_setSymbolCiString(SDF_Symbol arg, SDF_SingleQuotedStrCon ciString);
 SDF_Symbol SDF_setSymbolWsAfterParenOpen(SDF_Symbol arg, SDF_OptLayout wsAfterParenOpen);
 SDF_Symbol SDF_setSymbolHead(SDF_Symbol arg, SDF_Symbol head);
 SDF_Symbol SDF_setSymbolWsAfterHead(SDF_Symbol arg, SDF_OptLayout wsAfterHead);
@@ -1525,16 +1581,15 @@ SDF_Symbol SDF_setSymbolWsAfterBraceClose(SDF_Symbol arg, SDF_OptLayout wsAfterB
 SDF_Symbol SDF_setSymbolWsAfterComma(SDF_Symbol arg, SDF_OptLayout wsAfterComma);
 SDF_Symbol SDF_setSymbolRest(SDF_Symbol arg, SDF_SymbolRest rest);
 SDF_Symbol SDF_setSymbolWsAfterRest(SDF_Symbol arg, SDF_OptLayout wsAfterRest);
-SDF_Symbol SDF_setSymbolLeft(SDF_Symbol arg, SDF_Symbol left);
-SDF_Symbol SDF_setSymbolWsAfterLeft(SDF_Symbol arg, SDF_OptLayout wsAfterLeft);
-SDF_Symbol SDF_setSymbolWsAfterHash(SDF_Symbol arg, SDF_OptLayout wsAfterHash);
-SDF_Symbol SDF_setSymbolRight(SDF_Symbol arg, SDF_Symbol right);
 SDF_Symbol SDF_setSymbolArguments(SDF_Symbol arg, SDF_Symbols arguments);
 SDF_Symbol SDF_setSymbolWsAfterArguments(SDF_Symbol arg, SDF_OptLayout wsAfterArguments);
 SDF_Symbol SDF_setSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg, SDF_OptLayout wsAfterEqualsGreaterThan);
 SDF_Symbol SDF_setSymbolResults(SDF_Symbol arg, SDF_Symbol results);
 SDF_Symbol SDF_setSymbolWsAfterResults(SDF_Symbol arg, SDF_OptLayout wsAfterResults);
+SDF_Symbol SDF_setSymbolLeft(SDF_Symbol arg, SDF_Symbol left);
+SDF_Symbol SDF_setSymbolWsAfterLeft(SDF_Symbol arg, SDF_OptLayout wsAfterLeft);
 SDF_Symbol SDF_setSymbolWsAfterBar(SDF_Symbol arg, SDF_OptLayout wsAfterBar);
+SDF_Symbol SDF_setSymbolRight(SDF_Symbol arg, SDF_Symbol right);
 SDF_Symbol SDF_setSymbolWsAfterGreaterThan(SDF_Symbol arg, SDF_OptLayout wsAfterGreaterThan);
 SDF_Symbol SDF_setSymbolWsAfterRight(SDF_Symbol arg, SDF_OptLayout wsAfterRight);
 SDF_Symbol SDF_setSymbolSort(SDF_Symbol arg, SDF_Sort Sort);
@@ -1771,8 +1826,7 @@ SDF_Attributes SDF_setAttributesWsAfterList(SDF_Attributes arg, SDF_OptLayout ws
 
 ATbool SDF_isValidProduction(SDF_Production arg);
 inline ATbool SDF_isProductionProd(SDF_Production arg);
-inline ATbool SDF_isProductionUnquotedFun(SDF_Production arg);
-inline ATbool SDF_isProductionQuotedFun(SDF_Production arg);
+inline ATbool SDF_isProductionPrefixFun(SDF_Production arg);
 ATbool SDF_hasProductionSymbols(SDF_Production arg);
 ATbool SDF_hasProductionWsAfterSymbols(SDF_Production arg);
 ATbool SDF_hasProductionWsAfterGreaterThan(SDF_Production arg);
@@ -1785,36 +1839,30 @@ ATbool SDF_hasProductionWsAfterParenOpen(SDF_Production arg);
 ATbool SDF_hasProductionArguments(SDF_Production arg);
 ATbool SDF_hasProductionWsAfterArguments(SDF_Production arg);
 ATbool SDF_hasProductionWsAfterParenClose(SDF_Production arg);
-ATbool SDF_hasProductionStr(SDF_Production arg);
-ATbool SDF_hasProductionWsAfterStr(SDF_Production arg);
 SDF_Symbols SDF_getProductionSymbols(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterSymbols(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterGreaterThan(SDF_Production arg);
 SDF_Symbol SDF_getProductionResult(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterResult(SDF_Production arg);
 SDF_Attributes SDF_getProductionAttributes(SDF_Production arg);
-SDF_IdCon SDF_getProductionFun(SDF_Production arg);
+SDF_FunctionName SDF_getProductionFun(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterFun(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterParenOpen(SDF_Production arg);
 SDF_SymbolArguments SDF_getProductionArguments(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterArguments(SDF_Production arg);
 SDF_OptLayout SDF_getProductionWsAfterParenClose(SDF_Production arg);
-SDF_StrCon SDF_getProductionStr(SDF_Production arg);
-SDF_OptLayout SDF_getProductionWsAfterStr(SDF_Production arg);
 SDF_Production SDF_setProductionSymbols(SDF_Production arg, SDF_Symbols Symbols);
 SDF_Production SDF_setProductionWsAfterSymbols(SDF_Production arg, SDF_OptLayout wsAfterSymbols);
 SDF_Production SDF_setProductionWsAfterGreaterThan(SDF_Production arg, SDF_OptLayout wsAfterGreaterThan);
 SDF_Production SDF_setProductionResult(SDF_Production arg, SDF_Symbol result);
 SDF_Production SDF_setProductionWsAfterResult(SDF_Production arg, SDF_OptLayout wsAfterResult);
 SDF_Production SDF_setProductionAttributes(SDF_Production arg, SDF_Attributes Attributes);
-SDF_Production SDF_setProductionFun(SDF_Production arg, SDF_IdCon fun);
+SDF_Production SDF_setProductionFun(SDF_Production arg, SDF_FunctionName fun);
 SDF_Production SDF_setProductionWsAfterFun(SDF_Production arg, SDF_OptLayout wsAfterFun);
 SDF_Production SDF_setProductionWsAfterParenOpen(SDF_Production arg, SDF_OptLayout wsAfterParenOpen);
 SDF_Production SDF_setProductionArguments(SDF_Production arg, SDF_SymbolArguments arguments);
 SDF_Production SDF_setProductionWsAfterArguments(SDF_Production arg, SDF_OptLayout wsAfterArguments);
 SDF_Production SDF_setProductionWsAfterParenClose(SDF_Production arg, SDF_OptLayout wsAfterParenClose);
-SDF_Production SDF_setProductionStr(SDF_Production arg, SDF_StrCon str);
-SDF_Production SDF_setProductionWsAfterStr(SDF_Production arg, SDF_OptLayout wsAfterStr);
 
 /*}}}  */
 /*{{{  SDF_Productions accessors */
@@ -1874,6 +1922,83 @@ SDF_StrCon SDF_getLabelStrCon(SDF_Label arg);
 SDF_IdCon SDF_getLabelIdCon(SDF_Label arg);
 SDF_Label SDF_setLabelStrCon(SDF_Label arg, SDF_StrCon StrCon);
 SDF_Label SDF_setLabelIdCon(SDF_Label arg, SDF_IdCon IdCon);
+
+/*}}}  */
+/*{{{  SDF_LexSingleQuotedStrChar accessors */
+
+ATbool SDF_isValidLexSingleQuotedStrChar(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharNewline(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharTab(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharQuote(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharBackslash(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharDecimal(SDF_LexSingleQuotedStrChar arg);
+inline ATbool SDF_isLexSingleQuotedStrCharNormal(SDF_LexSingleQuotedStrChar arg);
+ATbool SDF_hasLexSingleQuotedStrCharA(SDF_LexSingleQuotedStrChar arg);
+ATbool SDF_hasLexSingleQuotedStrCharB(SDF_LexSingleQuotedStrChar arg);
+ATbool SDF_hasLexSingleQuotedStrCharC(SDF_LexSingleQuotedStrChar arg);
+ATbool SDF_hasLexSingleQuotedStrCharCh(SDF_LexSingleQuotedStrChar arg);
+char SDF_getLexSingleQuotedStrCharA(SDF_LexSingleQuotedStrChar arg);
+char SDF_getLexSingleQuotedStrCharB(SDF_LexSingleQuotedStrChar arg);
+char SDF_getLexSingleQuotedStrCharC(SDF_LexSingleQuotedStrChar arg);
+char SDF_getLexSingleQuotedStrCharCh(SDF_LexSingleQuotedStrChar arg);
+SDF_LexSingleQuotedStrChar SDF_setLexSingleQuotedStrCharA(SDF_LexSingleQuotedStrChar arg, char a);
+SDF_LexSingleQuotedStrChar SDF_setLexSingleQuotedStrCharB(SDF_LexSingleQuotedStrChar arg, char b);
+SDF_LexSingleQuotedStrChar SDF_setLexSingleQuotedStrCharC(SDF_LexSingleQuotedStrChar arg, char c);
+SDF_LexSingleQuotedStrChar SDF_setLexSingleQuotedStrCharCh(SDF_LexSingleQuotedStrChar arg, char ch);
+
+/*}}}  */
+/*{{{  SDF_SingleQuotedStrChar accessors */
+
+ATbool SDF_isValidSingleQuotedStrChar(SDF_SingleQuotedStrChar arg);
+inline ATbool SDF_isSingleQuotedStrCharLexToCf(SDF_SingleQuotedStrChar arg);
+ATbool SDF_hasSingleQuotedStrCharSingleQuotedStrChar(SDF_SingleQuotedStrChar arg);
+SDF_LexSingleQuotedStrChar SDF_getSingleQuotedStrCharSingleQuotedStrChar(SDF_SingleQuotedStrChar arg);
+SDF_SingleQuotedStrChar SDF_setSingleQuotedStrCharSingleQuotedStrChar(SDF_SingleQuotedStrChar arg, SDF_LexSingleQuotedStrChar SingleQuotedStrChar);
+
+/*}}}  */
+/*{{{  SDF_LexSingleQuotedStrCon accessors */
+
+ATbool SDF_isValidLexSingleQuotedStrCon(SDF_LexSingleQuotedStrCon arg);
+inline ATbool SDF_isLexSingleQuotedStrConDefault(SDF_LexSingleQuotedStrCon arg);
+ATbool SDF_hasLexSingleQuotedStrConChars(SDF_LexSingleQuotedStrCon arg);
+SDF_LexSingleQuotedStrCharChars SDF_getLexSingleQuotedStrConChars(SDF_LexSingleQuotedStrCon arg);
+SDF_LexSingleQuotedStrCon SDF_setLexSingleQuotedStrConChars(SDF_LexSingleQuotedStrCon arg, SDF_LexSingleQuotedStrCharChars chars);
+
+/*}}}  */
+/*{{{  SDF_SingleQuotedStrCon accessors */
+
+ATbool SDF_isValidSingleQuotedStrCon(SDF_SingleQuotedStrCon arg);
+inline ATbool SDF_isSingleQuotedStrConLexToCf(SDF_SingleQuotedStrCon arg);
+ATbool SDF_hasSingleQuotedStrConSingleQuotedStrCon(SDF_SingleQuotedStrCon arg);
+SDF_LexSingleQuotedStrCon SDF_getSingleQuotedStrConSingleQuotedStrCon(SDF_SingleQuotedStrCon arg);
+SDF_SingleQuotedStrCon SDF_setSingleQuotedStrConSingleQuotedStrCon(SDF_SingleQuotedStrCon arg, SDF_LexSingleQuotedStrCon SingleQuotedStrCon);
+
+/*}}}  */
+/*{{{  SDF_FunctionName accessors */
+
+ATbool SDF_isValidFunctionName(SDF_FunctionName arg);
+inline ATbool SDF_isFunctionNameUnquotedFun(SDF_FunctionName arg);
+inline ATbool SDF_isFunctionNameQuotedFun(SDF_FunctionName arg);
+ATbool SDF_hasFunctionNameIdCon(SDF_FunctionName arg);
+ATbool SDF_hasFunctionNameStrCon(SDF_FunctionName arg);
+SDF_IdCon SDF_getFunctionNameIdCon(SDF_FunctionName arg);
+SDF_StrCon SDF_getFunctionNameStrCon(SDF_FunctionName arg);
+SDF_FunctionName SDF_setFunctionNameIdCon(SDF_FunctionName arg, SDF_IdCon IdCon);
+SDF_FunctionName SDF_setFunctionNameStrCon(SDF_FunctionName arg, SDF_StrCon StrCon);
+
+/*}}}  */
+/*{{{  SDF_LexSingleQuotedStrCharChars accessors */
+
+ATbool SDF_isValidLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg);
+inline ATbool SDF_isLexSingleQuotedStrCharCharsEmpty(SDF_LexSingleQuotedStrCharChars arg);
+inline ATbool SDF_isLexSingleQuotedStrCharCharsSingle(SDF_LexSingleQuotedStrCharChars arg);
+inline ATbool SDF_isLexSingleQuotedStrCharCharsMany(SDF_LexSingleQuotedStrCharChars arg);
+ATbool SDF_hasLexSingleQuotedStrCharCharsHead(SDF_LexSingleQuotedStrCharChars arg);
+ATbool SDF_hasLexSingleQuotedStrCharCharsTail(SDF_LexSingleQuotedStrCharChars arg);
+SDF_LexSingleQuotedStrChar SDF_getLexSingleQuotedStrCharCharsHead(SDF_LexSingleQuotedStrCharChars arg);
+SDF_LexSingleQuotedStrCharChars SDF_getLexSingleQuotedStrCharCharsTail(SDF_LexSingleQuotedStrCharChars arg);
+SDF_LexSingleQuotedStrCharChars SDF_setLexSingleQuotedStrCharCharsHead(SDF_LexSingleQuotedStrCharChars arg, SDF_LexSingleQuotedStrChar head);
+SDF_LexSingleQuotedStrCharChars SDF_setLexSingleQuotedStrCharCharsTail(SDF_LexSingleQuotedStrCharChars arg, SDF_LexSingleQuotedStrCharChars tail);
 
 /*}}}  */
 /*{{{  SDF_SymbolArguments accessors */
@@ -2517,6 +2642,15 @@ SDF_RestrictionList SDF_setRestrictionListWsAfterHead(SDF_RestrictionList arg, S
 SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_RestrictionList tail);
 
 /*}}}  */
+/*{{{  SDF_Sort accessors */
+
+ATbool SDF_isValidSort(SDF_Sort arg);
+inline ATbool SDF_isSortLexToCf(SDF_Sort arg);
+ATbool SDF_hasSortSort(SDF_Sort arg);
+SDF_LexSort SDF_getSortSort(SDF_Sort arg);
+SDF_Sort SDF_setSortSort(SDF_Sort arg, SDF_LexSort Sort);
+
+/*}}}  */
 /*{{{  SDF_SDF accessors */
 
 ATbool SDF_isValidSDF(SDF_SDF arg);
@@ -2527,15 +2661,6 @@ SDF_OptLayout SDF_getSDFWsAfterDefinition(SDF_SDF arg);
 SDF_Definition SDF_getSDFDefinition(SDF_SDF arg);
 SDF_SDF SDF_setSDFWsAfterDefinition(SDF_SDF arg, SDF_OptLayout wsAfterDefinition);
 SDF_SDF SDF_setSDFDefinition(SDF_SDF arg, SDF_Definition Definition);
-
-/*}}}  */
-/*{{{  SDF_Sort accessors */
-
-ATbool SDF_isValidSort(SDF_Sort arg);
-inline ATbool SDF_isSortLexToCf(SDF_Sort arg);
-ATbool SDF_hasSortSort(SDF_Sort arg);
-SDF_LexSort SDF_getSortSort(SDF_Sort arg);
-SDF_Sort SDF_setSortSort(SDF_Sort arg, SDF_LexSort Sort);
 
 /*}}}  */
 /*{{{  SDF_LexSort accessors */
@@ -2739,7 +2864,7 @@ SDF_Grammar SDF_visitGrammar(SDF_Grammar arg, SDF_OptLayout (*acceptWsAfterAlias
 SDF_Alias SDF_visitAlias(SDF_Alias arg, SDF_Symbol (*acceptSymbol)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterArrow)(SDF_OptLayout), SDF_Symbol (*acceptAlias)(SDF_Symbol));
 SDF_Aliases SDF_visitAliases(SDF_Aliases arg, SDF_AliasList (*acceptList)(SDF_AliasList));
 SDF_AliasList SDF_visitAliasList(SDF_AliasList arg, SDF_Alias (*acceptHead)(SDF_Alias), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
-SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCF)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLEX)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVAR)(SDF_OptLayout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Label (*acceptLabel)(SDF_Label), SDF_OptLayout (*acceptWsAfterLabel)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeftQuote)(SDF_OptLayout), SDF_StrCon (*acceptString)(SDF_StrCon), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_OptLayout (*acceptWsAfterTail)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceClose)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterComma)(SDF_OptLayout), SDF_SymbolRest (*acceptRest)(SDF_SymbolRest), SDF_OptLayout (*acceptWsAfterRest)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterHash)(SDF_OptLayout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualsGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterResults)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBar)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterRight)(SDF_OptLayout), SDF_Sort (*acceptSort)(SDF_Sort), SDF_OptLayout (*acceptWsAfterSort)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBracketOpenBracketOpen)(SDF_OptLayout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_OptLayout (*acceptWsAfterParameters)(SDF_OptLayout));
+SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_OptLayout (*acceptWsAfterLessThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSymbol)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCF)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLEX)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterVAR)(SDF_OptLayout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Label (*acceptLabel)(SDF_Label), SDF_OptLayout (*acceptWsAfterLabel)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterColon)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeftQuote)(SDF_OptLayout), SDF_StrCon (*acceptString)(SDF_StrCon), SDF_SingleQuotedStrCon (*acceptCiString)(SDF_SingleQuotedStrCon), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_OptLayout (*acceptWsAfterTail)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBraceClose)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterComma)(SDF_OptLayout), SDF_SymbolRest (*acceptRest)(SDF_SymbolRest), SDF_OptLayout (*acceptWsAfterRest)(SDF_OptLayout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterEqualsGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterResults)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBar)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterRight)(SDF_OptLayout), SDF_Sort (*acceptSort)(SDF_Sort), SDF_OptLayout (*acceptWsAfterSort)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterBracketOpenBracketOpen)(SDF_OptLayout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_OptLayout (*acceptWsAfterParameters)(SDF_OptLayout));
 SDF_CharRange SDF_visitCharRange(SDF_CharRange arg, SDF_Character (*acceptCharacter)(SDF_Character), SDF_Character (*acceptStart)(SDF_Character), SDF_OptLayout (*acceptWsAfterStart)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfter)(SDF_OptLayout), SDF_Character (*acceptEnd)(SDF_Character));
 SDF_CharRanges SDF_visitCharRanges(SDF_CharRanges arg, SDF_CharRange (*acceptCharRange)(SDF_CharRange), SDF_OptLayout (*acceptWsAfterLeft)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterCharRanges)(SDF_OptLayout));
 SDF_OptCharRanges SDF_visitOptCharRanges(SDF_OptCharRanges arg, SDF_CharRanges (*acceptCharRanges)(SDF_CharRanges));
@@ -2752,11 +2877,17 @@ SDF_Character SDF_visitCharacter(SDF_Character arg, SDF_NumChar (*acceptNumChar)
 SDF_ATermAttribute SDF_visitATermAttribute(SDF_ATermAttribute arg, SDF_ATerm (*acceptAterm)(SDF_ATerm));
 SDF_Attribute SDF_visitAttribute(SDF_Attribute arg, SDF_ATermAttribute (*acceptATermAttribute)(SDF_ATermAttribute), SDF_OptLayout (*acceptWsAfterId)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_ModuleName (*acceptModuleName)(SDF_ModuleName), SDF_OptLayout (*acceptWsAfterModuleName)(SDF_OptLayout), SDF_Associativity (*acceptAssociativity)(SDF_Associativity));
 SDF_Attributes SDF_visitAttributes(SDF_Attributes arg, SDF_OptLayout (*acceptWsAfterBraceOpen)(SDF_OptLayout), SDF_AttributeList (*acceptList)(SDF_AttributeList), SDF_OptLayout (*acceptWsAfterList)(SDF_OptLayout));
-SDF_Production SDF_visitProduction(SDF_Production arg, SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterSymbols)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_Symbol (*acceptResult)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterResult)(SDF_OptLayout), SDF_Attributes (*acceptAttributes)(SDF_Attributes), SDF_IdCon (*acceptFun)(SDF_IdCon), SDF_OptLayout (*acceptWsAfterFun)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_SymbolArguments (*acceptArguments)(SDF_SymbolArguments), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenClose)(SDF_OptLayout), SDF_StrCon (*acceptStr)(SDF_StrCon), SDF_OptLayout (*acceptWsAfterStr)(SDF_OptLayout));
+SDF_Production SDF_visitProduction(SDF_Production arg, SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_OptLayout (*acceptWsAfterSymbols)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterGreaterThan)(SDF_OptLayout), SDF_Symbol (*acceptResult)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterResult)(SDF_OptLayout), SDF_Attributes (*acceptAttributes)(SDF_Attributes), SDF_FunctionName (*acceptFun)(SDF_FunctionName), SDF_OptLayout (*acceptWsAfterFun)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenOpen)(SDF_OptLayout), SDF_SymbolArguments (*acceptArguments)(SDF_SymbolArguments), SDF_OptLayout (*acceptWsAfterArguments)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterParenClose)(SDF_OptLayout));
 SDF_Productions SDF_visitProductions(SDF_Productions arg, SDF_ProductionList (*acceptList)(SDF_ProductionList));
 SDF_AttributeList SDF_visitAttributeList(SDF_AttributeList arg, SDF_Attribute (*acceptHead)(SDF_Attribute), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_ProductionList SDF_visitProductionList(SDF_ProductionList arg, SDF_Production (*acceptHead)(SDF_Production), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
 SDF_Label SDF_visitLabel(SDF_Label arg, SDF_StrCon (*acceptStrCon)(SDF_StrCon), SDF_IdCon (*acceptIdCon)(SDF_IdCon));
+SDF_LexSingleQuotedStrChar SDF_visitLexSingleQuotedStrChar(SDF_LexSingleQuotedStrChar arg, char (*acceptA)(char), char (*acceptB)(char), char (*acceptC)(char), char (*acceptCh)(char));
+SDF_SingleQuotedStrChar SDF_visitSingleQuotedStrChar(SDF_SingleQuotedStrChar arg, SDF_LexSingleQuotedStrChar (*acceptSingleQuotedStrChar)(SDF_LexSingleQuotedStrChar));
+SDF_LexSingleQuotedStrCon SDF_visitLexSingleQuotedStrCon(SDF_LexSingleQuotedStrCon arg, SDF_LexSingleQuotedStrCharChars (*acceptChars)(SDF_LexSingleQuotedStrCharChars));
+SDF_SingleQuotedStrCon SDF_visitSingleQuotedStrCon(SDF_SingleQuotedStrCon arg, SDF_LexSingleQuotedStrCon (*acceptSingleQuotedStrCon)(SDF_LexSingleQuotedStrCon));
+SDF_FunctionName SDF_visitFunctionName(SDF_FunctionName arg, SDF_IdCon (*acceptIdCon)(SDF_IdCon), SDF_StrCon (*acceptStrCon)(SDF_StrCon));
+SDF_LexSingleQuotedStrCharChars SDF_visitLexSingleQuotedStrCharChars(SDF_LexSingleQuotedStrCharChars arg, SDF_LexSingleQuotedStrChar (*acceptHead)(SDF_LexSingleQuotedStrChar));
 SDF_SymbolArguments SDF_visitSymbolArguments(SDF_SymbolArguments arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_LexModuleWord SDF_visitLexModuleWord(SDF_LexModuleWord arg, char* (*acceptLetters)(char*));
 SDF_ModuleWord SDF_visitModuleWord(SDF_ModuleWord arg, SDF_LexModuleWord (*acceptModuleWord)(SDF_LexModuleWord));
@@ -2793,8 +2924,8 @@ SDF_Restriction SDF_visitRestriction(SDF_Restriction arg, SDF_Symbols (*acceptSy
 SDF_Restrictions SDF_visitRestrictions(SDF_Restrictions arg, SDF_RestrictionList (*acceptList)(SDF_RestrictionList));
 SDF_LookaheadList SDF_visitLookaheadList(SDF_LookaheadList arg, SDF_Lookahead (*acceptHead)(SDF_Lookahead), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_RestrictionList SDF_visitRestrictionList(SDF_RestrictionList arg, SDF_Restriction (*acceptHead)(SDF_Restriction), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout));
-SDF_SDF SDF_visitSDF(SDF_SDF arg, SDF_OptLayout (*acceptWsAfterDefinition)(SDF_OptLayout), SDF_Definition (*acceptDefinition)(SDF_Definition));
 SDF_Sort SDF_visitSort(SDF_Sort arg, SDF_LexSort (*acceptSort)(SDF_LexSort));
+SDF_SDF SDF_visitSDF(SDF_SDF arg, SDF_OptLayout (*acceptWsAfterDefinition)(SDF_OptLayout), SDF_Definition (*acceptDefinition)(SDF_Definition));
 SDF_LexSort SDF_visitLexSort(SDF_LexSort arg, char (*acceptHead)(char), char* (*acceptMiddle)(char*), char (*acceptLast)(char));
 SDF_SymbolParameters SDF_visitSymbolParameters(SDF_SymbolParameters arg, SDF_Symbol (*acceptHead)(SDF_Symbol), SDF_OptLayout (*acceptWsAfterHead)(SDF_OptLayout), SDF_OptLayout (*acceptWsAfterSep)(SDF_OptLayout));
 SDF_Symbols SDF_visitSymbols(SDF_Symbols arg, SDF_SymbolList (*acceptList)(SDF_SymbolList));

@@ -71,6 +71,7 @@ SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l);
 
 SDF_LexStrCon SDF_makeLexStrCon(const char *str);
 SDF_StrCon SDF_makeStrCon(const char *str);
+SDF_SingleQuotedStrCon SDF_makeSingleQuotedStrCon(const char *str);
 SDF_Sort SDF_makeSort(const char *str);
 
 #endif /* _SDF_UTILS_H */

@@ -143,6 +143,12 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 
     result = SDF_makeSymbolLit(lit);
   }
+  else if (PT_isSymbolCilit(ptSymbol)) {
+    char *str = PT_getSymbolString(ptSymbol);
+    SDF_SingleQuotedStrCon lit = SDF_makeSingleQuotedStrCon(str);
+
+    result = SDF_makeSymbolCiLit(lit);
+  }
   else if (PT_isSymbolCf(ptSymbol)
 	   || PT_isSymbolLex(ptSymbol)
 	   || PT_isSymbolVarSym(ptSymbol)) {
