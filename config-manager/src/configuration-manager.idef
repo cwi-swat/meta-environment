@@ -117,15 +117,15 @@ in
       . snd-msg(no-modulename-extension(ModuleId))
     )
   +
-    rec-msg(get-module-paths)
+    rec-msg(cm-get-module-paths)
     . snd-eval(CM, get-module-paths)
     . rec-value(CM, module-paths(ModulePaths?))
-    . snd-msg(module-paths(ModulePaths))
+    . snd-msg(cm-module-paths(ModulePaths))
   +
-    rec-msg(get-library-paths)
+    rec-msg(cm-get-library-paths)
     . snd-eval(CM, get-library-paths)
     . rec-value(CM, library-paths(LibraryPaths?))
-    . snd-msg(library-paths(LibraryPaths))
+    . snd-msg(cm-library-paths(LibraryPaths))
   +
     rec-msg(get-text-categories)
     . snd-eval(CM, get-text-categories)
