@@ -1,11 +1,10 @@
 // Java tool bridge DialogBridge
 // This file is generated automatically, please do not edit!
-// generation time: May 30, 2005 2:01:34 PM
+// generation time: Jan 6, 2006 2:33:13 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class DialogBridge
   extends DialogTool
@@ -111,12 +110,12 @@ public class DialogBridge
   }
 
   //}}}
-  //{{{  public ATerm showFileDialog(String s0, String s1, String s2)
+  //{{{  public ATerm showFileDialog(String s0, ATerm t1, String s2)
 
-  public ATerm showFileDialog(String s0, String s1, String s2)
+  public ATerm showFileDialog(String s0, ATerm t1, String s2)
   {
     if (tool != null) {
-      return tool.showFileDialog(s0, s1, s2);
+      return tool.showFileDialog(s0, t1, s2);
     }
       throw new UnsupportedOperationException("method `showFileDialog' not supported.");
   }

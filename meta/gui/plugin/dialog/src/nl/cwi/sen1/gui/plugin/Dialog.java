@@ -12,6 +12,7 @@ import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.util.StringFormatter;
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class Dialog extends DefaultStudioPlugin implements DialogTif {
@@ -40,12 +41,28 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         studio.connect(getName(), bridge);
     }
 
-    public ATerm showFileDialog(String title, String path,
+    private File[] buildFileArray(ATermList paths) {
+        File[] array = new File[paths.getLength()];
+
+        for (int i = 0; !paths.isEmpty(); paths = paths.getNext(), i++) {
+            array[i] = new File(((ATermAppl) paths.getFirst()).getName());
+        }
+        return array;
+    }
+
+    public ATerm showFileDialog(String title, ATerm paths,
             final String extension) {
         JFileChooser chooser = sharedChooser;
-        if (!"".equals(path)) {
-            chooser = new JFileChooser(path);
+        
+        System.err.println(":::" + paths);
+
+        if (!((ATermList) paths).isEmpty()) {
+            File[] roots = buildFileArray((ATermList) paths);
+            SearchPathLimitedFileSystemView fsv = new SearchPathLimitedFileSystemView(
+                    roots);
+            chooser = new JFileChooser(fsv);
         }
+        
         FileFilter filter = new FileFilter() {
             public boolean accept(File file) {
                 if (file.isDirectory()) {
@@ -60,9 +77,10 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
                 return "*" + extension;
             }
         };
+        
         chooser.addChoosableFileFilter(filter);
         if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
-            path = chooser.getSelectedFile().getAbsolutePath();
+            String path = chooser.getSelectedFile().getAbsolutePath();
             return studio.getATermFactory().make(
                     "snd-value(file-dialog-approve(<str>))", path);
         }

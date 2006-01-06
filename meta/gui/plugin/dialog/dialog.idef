@@ -9,15 +9,15 @@ let
   Arguments: list,
   DialogTitle: str,
   ErrorMessage: str,
-  Path: str,
+  Paths: list,
   Question: str,
   Extension: str
 in
   rec-connect(T?)
   .
   (
-    rec-msg(ask-for-file(DialogTitle?, Path?, Extension?))
-    . ShowFileDialog(T, DialogTitle, Path, Extension)
+    rec-msg(ask-for-file(DialogTitle?, Paths?, Extension?))
+    . ShowFileDialog(T, DialogTitle, Paths, Extension)
   +
     rec-msg(ask-question(Question?))
     . ShowQuestionDialog(T, Question)
@@ -35,11 +35,11 @@ in
   rec-disconnect(T)
 endlet
 
-process ShowFileDialog(T: dialog, DialogTitle: str, Path: str, Extension: str) is
+process ShowFileDialog(T: dialog, DialogTitle: str, Paths: list, Extension: str) is
 let
   Filename: str
 in
-  snd-eval(T, show-file-dialog(DialogTitle, Path, Extension))
+  snd-eval(T, show-file-dialog(DialogTitle, Paths, Extension))
   .
   (
     rec-value(T, file-dialog-approve(Filename?))

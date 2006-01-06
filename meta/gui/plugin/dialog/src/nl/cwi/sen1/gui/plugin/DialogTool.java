@@ -1,18 +1,12 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: May 30, 2005 2:01:34 PM
+// generation time: Jan 6, 2006 2:33:13 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import toolbus.SwingTool;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
+import toolbus.*;
+import java.util.*;
 
 abstract public class DialogTool
   extends SwingTool
@@ -54,7 +48,7 @@ abstract public class DialogTool
   {
     sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<list>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), new Boolean(true));
@@ -76,7 +70,7 @@ abstract public class DialogTool
     PshowErrorDialog0 = factory.parse("rec-do(show-error-dialog(<str>))");
     PcloseProgressList0 = factory.parse("rec-do(close-progress-list)");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
-    PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
+    PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<term>,<str>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -125,7 +119,7 @@ abstract public class DialogTool
     }
     result = term.match(PshowFileDialog0);
     if (result != null) {
-      return showFileDialog((String)result.get(0), (String)result.get(1), (String)result.get(2));
+      return showFileDialog((String)result.get(0), (ATerm)result.get(1), (String)result.get(2));
     }
     result = term.match(PrecTerminate0);
     if (result != null) {

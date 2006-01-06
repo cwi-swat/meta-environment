@@ -1,10 +1,10 @@
 // Java tool interface DialogTif
 // This file is generated automatically, please do not edit!
-// generation time: May 30, 2005 2:01:34 PM
+// generation time: Jan 6, 2006 2:33:13 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.ATerm;
+import aterm.*;
 
 public interface DialogTif
 {
@@ -15,6 +15,6 @@ public interface DialogTif
   public void showErrorDialog(String s0);
   public void closeProgressList();
   public ATerm showQuestionDialog(String s0);
-  public ATerm showFileDialog(String s0, String s1, String s2);
+  public ATerm showFileDialog(String s0, ATerm t1, String s2);
   public void recTerminate(ATerm t0);
 }
