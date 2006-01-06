@@ -165,20 +165,6 @@ in
   )*delta
 endlet
 
-process Postprocess-collected-semantics is
-let
-  Semantics : term,
-  ModuleName : str,
-  Modules   : list
-in 
-  (
-    rec-msg(postprocess-collected-semantics-hook(ModuleName?, Modules?)).
-    snd-msg(extract-equations(Modules)).
-    rec-msg(extract-equations-result(Semantics?)).
-    snd-msg(postprocess-collected-semantics-hook-result(ModuleName, Semantics)) 
-  ) * delta
-endlet
-
 process AddAsfProperties is
 let
   Contents: str,
@@ -218,9 +204,6 @@ in
     rec-msg(environment-name-hook).
     snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment (v__VERSION__)"))
   +
-    rec-msg(library-location-hook).
-    snd-msg(library-location-hook-result("__ASF_LIBRARY__"))
-  +
     rec-msg(file-extension-hook(sdf)).
     snd-msg(file-extension-hook-result(".sdf"))
   +
@@ -239,26 +222,8 @@ in
     rec-msg(parsetable-extension-hook(eqs)) .
     snd-msg(parsetable-extension-hook-result(".asf.tbl"))
   +
-    rec-msg(get-module-id-hook(sdf)) .
-    snd-msg(get-module-id-hook-result("Sdf2")) 
-  +
-    rec-msg(extension-to-type-hook(".sdf")).
-    snd-msg(extension-to-type-hook-result(sdf))
-  +
     rec-msg(semantics-top-sort-hook).
     snd-msg(semantics-top-sort-hook-result(sort("ASF-Module")))
-  + 
-    rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
-    snd-msg(other-tables-invalidated-hook)
-  +
-    rec-msg(extra-mod-path-hook).
-    snd-msg(extra-mod-path-hook-result([]))
-  +
-    rec-msg(get-parse-equation-checking-hook)
-    . snd-msg(get-parse-equation-checking-hook-result(true))
-  +
-    rec-msg(post-initialization-hook)
-    . snd-msg(post-initialization-hook-finished) 
   ) * delta
 endlet
 
