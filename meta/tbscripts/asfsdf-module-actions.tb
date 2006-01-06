@@ -1,12 +1,16 @@
 #ifndef __ASFSDF_MODULE_ACTIONS__
 #define __ASFSDF_MODULE_ACTIONS__
 
+process GetSearchPaths(Paths: list?) is
+  snd-msg(cm-get-module-paths)
+  . rec-msg(cm-module-paths(Paths?))
+
 process PrintModuleAction(ModuleId : term) is
 let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Module Text (ASF+SDF)", "", ".txt", Cancel?, Path?)
+  PromptForFileWithExtension("Module Text (ASF+SDF)", [], ".txt", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -85,9 +89,11 @@ let
   Directory : str,
   Pid: int,
   FileName : str,
-  Path : str
+  Path : str,
+  Paths: list
 in
-  PromptForFileWithExtension("New Module", "", ".sdf", Cancel?, Path?)
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("New Module", Paths, ".sdf", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -105,9 +111,11 @@ let
   Directory : str,
   Path : str,
   Filename : str,
-  ModuleId : term
+  ModuleId : term,
+  Paths: list
 in
-  PromptForFileWithExtension("Open Module", "", ".sdf", Cancel?, Path?)
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Open Module", Paths, ".sdf", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -116,6 +124,9 @@ in
       tau
     else
       SplitFilename(Path, Filename?, Directory?, Extension?)
+      . snd-msg(io-get-relative-filename(["."], Path, Extension))
+      . rec-msg(io-filename(["."], Path, Extension, Filename?))
+      . printf("Filename: %t\n", Filename)
       /*. BuildPath(Directory, Filename, Extension, Path?)*/
       . OpenModule(Filename, ModuleId?)
     fi
@@ -127,7 +138,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Equations", "", ".eqs", Cancel?, Path?)
+  PromptForFileWithExtension("Export Equations", [], ".eqs", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -142,7 +153,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Cancel?, Path?)
+  PromptForFileWithExtension("Export Term ParseTable", [], ".trm.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -158,7 +169,7 @@ let
   ModuleId : term
 in
   GetModuleId(EditorId, ModuleId?)
-  . PromptForFileWithExtension("Export Term ParseTable", "", ".trm.tbl", Cancel?, Path?)
+  . PromptForFileWithExtension("Export Term ParseTable", [], ".trm.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -172,7 +183,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Cancel?, Path?)
+  PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -188,7 +199,7 @@ let
   ModuleId : term
 in
   GetModuleId(EditorId, ModuleId?)
-  . PromptForFileWithExtension("Export Equations ParseTable", "", ".eqs.tbl", Cancel?, Path?)
+  . PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -202,7 +213,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export SDF Definition", "", ".def", Cancel?, Path?)
+  PromptForFileWithExtension("Export SDF Definition", [], ".def", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -217,7 +228,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Target C file", "", ".c", Cancel?, Path?)
+  PromptForFileWithExtension("Target C file", [], ".c", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -251,9 +262,11 @@ let
   Directory : str,
   Filename : str,
   Extension : str,
-  Path : str
+  Path : str,
+  Paths : list
 in
-  PromptForFileWithExtension("Rename module to", "", ".sdf", Cancel?, Path?)
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Rename module to", Paths, ".sdf", Cancel?, Path?)
   . 
   if equal(Cancel, true) then
     tau
@@ -269,9 +282,11 @@ let
   Path : str,
   Directory : str,
   Filename : str,
-  Extension : str
+  Extension : str,
+  Paths : list
 in
-  PromptForFileWithExtension("Copy module to", "", ".sdf", Cancel?, Path?)
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Copy module to", Paths, ".sdf", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -303,7 +318,8 @@ let
   Directory : str,
   Pid: int
 in
-  snd-msg(io-relative-to-absolute(["."]))
+  TODO("werk niet als . niet in het zoekpad sit\n")
+  . snd-msg(io-relative-to-absolute(["."]))
   . rec-msg(io-absolute-directories([Directory?]))
   . create(NewModuleContentHandler(), Pid?)
   . CreateNewModule(Pid, Directory, Filename, sdf)

@@ -8,8 +8,9 @@ process AskQuestion(Question : str, Answer : term?) is
   snd-msg(ask-question(Question))
   . rec-msg(ask-question-result(Answer?))
 
+
 process PromptForFile(Title : str, 
-                      Path : str, 
+                      Paths : list, 
 		      Modulename : str, 
 		      Cancel: bool?,
 		      Filename : str?) is
@@ -25,7 +26,7 @@ in
     . snd-msg(file-extension-hook(trm))
     . rec-msg(file-extension-hook-result(Extension?))
   )
-  . snd-msg(ask-for-file(Title, Path, Extension))
+  . snd-msg(ask-for-file(Title, Paths, Extension))
   .
   (
     rec-msg(ask-for-file-result(Filename?))
@@ -37,11 +38,11 @@ in
 endlet
 
 process PromptForFileWithExtension(String : str, 
-                                   Path : str, 
+                                   Paths : list, 
 				   Extension : str, 
 				   Cancel: bool?,
 				   Filename : str?) is
-  snd-msg(ask-for-file(String, Path, Extension))
+  snd-msg(ask-for-file(String, Paths, Extension))
   .
   (
     rec-msg(ask-for-file-result(Filename?))

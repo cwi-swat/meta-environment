@@ -109,8 +109,8 @@ let
   Path: str,
   SearchPaths: list
 in
-  snd-msg(get-module-paths)
-  . rec-msg(module-paths(SearchPaths?))
+  snd-msg(cm-get-module-paths)
+  . rec-msg(cm-module-paths(SearchPaths?))
   . snd-msg(sm-get-new-module-name(SearchPaths, Directory, Filename))
   .
   (

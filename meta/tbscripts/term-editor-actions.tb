@@ -19,7 +19,7 @@ let
   Sid: term
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-  . PromptForFile("Edit Term", "", Modulename, Cancel?, Filename?)
+  . PromptForFile("Edit Term", [], Modulename, Cancel?, Filename?)
   . 
   if equal(Cancel, true) then
     tau
