@@ -168,9 +168,6 @@ in
     snd-msg(em-register-editor(Sid, text))
     . GetPath(Sid, Path?)
     . snd-msg(te-edit-text(Sid, Path, Name))
-    /*. snd-msg(cm-get-events(Type))*/
-    /*. rec-msg(cm-events(Events?))*/
-    /*. snd-msg(te-add-actions(Sid, Events))*/
     . SetEditActions(Sid, Type, Name)
     . snd-msg(get-text-categories)
     . rec-msg(text-categories(Categories?)) 
@@ -316,12 +313,16 @@ let
   ModuleId: term
 in
   rec-msg(te-contents-saved(Sid))
+  . GetModuleId(Sid, ModuleId?)
   .
   if equal(EditorType, syntax-editor) then
-    GetModuleId(Sid, ModuleId?) 
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+    MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
   else
-    tau
+    if equal(EditorType, equations-editor) then
+      MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available) 
+    else
+      tau
+    fi
   fi
 endlet
 

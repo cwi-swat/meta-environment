@@ -37,17 +37,6 @@ in
   . MDB-InitializeFileExtensions()
   .
   (
-    rec-msg(get-eqs-text(Name?))
-    . snd-msg(ts-get-str-value("asf-text", Name))
-    .
-    (
-      rec-msg(ts-value("asf-text", Name, EqsText?))
-      . snd-msg(eqs-text(Name, EqsText))
-    +
-      rec-msg(ts-no-value("asf-text", Name))
-      . snd-msg(no-eqs-text(Name))
-    )
-  +
     rec-msg(update-eqs-tree-in-db(ModuleId?, tree(EqsTree?)))
     . GetModulePath(ModuleId, ASF_NAMESPACE, Filename?)
     . snd-msg(add-posinfo-to-depth(Filename, EqsTree, POSINFO_DEPTH))
@@ -55,24 +44,6 @@ in
     . snd-msg(ts-put-term-value("asf-tree", ModuleId, EqsTree))
     . EqsTree := UNDEFINED
     . snd-msg(eqs-updated)
-  +
-    rec-msg(get-path-from-db(Name?))
-    . TODO("get-path-from-db has to be handled by ModuleManager")
-  +
-    rec-msg(get-all-module-names)
-    . TODO("get-all-module-names has to be replaced by MM-GetAllModules")
-  +
-    rec-msg(get-equations(Name?))
-    . snd-msg(ts-get-term-value("asf-tree", Name))
-    .
-    (
-      rec-msg(ts-value("asf-tree", Name, EqsTree?))
-      . snd-msg(equations(EqsTree))
-      . EqsTree := UNDEFINED
-    +
-      rec-msg(ts-no-value("asf-tree", Name))
-      . snd-msg(unavailable)
-    )
   +
     rec-msg(put-term-tree(Filename?, TermTree?))
     . snd-msg(ts-put-term-value("term-tree", Filename, TermTree))
@@ -103,16 +74,6 @@ process MDB-InitializeModuleDb is
   . snd-msg(ts-add-table("term-tree", "term"))
 
 /* Used by ModuleDB */
-process MDB-ClearModuleDb is
-  snd-msg(ts-clear-table("extensions"))
-  . snd-msg(ts-clear-table("sdf-tree"))
-  . snd-msg(ts-clear-table("sdf-text"))
-  . snd-msg(ts-clear-table("asf-tree"))
-  . snd-msg(ts-clear-table("asf-text"))
-  . snd-msg(ts-clear-table("term-tree"))
-  . rec-msg(module-db-hook-done)
-
-/* Used by ModuleDB */
 process MDB-InitializeFileExtensions is
 let
   SyntaxExt: str,
@@ -126,10 +87,6 @@ in
   . snd-msg(ts-put-str-value("extensions", "equations", RulesExt))
   . snd-msg(ts-put-str-value("extensions", "term", TermExt))
 endlet
-
-/* Used by ModuleDB */
-process MDB-AddModulePosInfo(Module: str, In: term, Out: term?) is
-  MDB-AddPosInfo(Module, sdf, In, Out?)
 
 /* Used in process-eqs.tb */
 process MDB-AddEquationsPosInfo(ModuleId: term, In: term, Out: term?) is
