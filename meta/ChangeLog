@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Jan  6 15:21:08 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * gui/plugin/dialog/**.java: FileDialog supports limiting the view
+   to a set of root directories. This prevents the user from opening
+   SDF modules that are outside the search path for example.
+
 Tue Jan  3 13:54:11 CET 2006 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - Add UpdateStructure listener that updates the structure editor
