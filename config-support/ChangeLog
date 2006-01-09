@@ -1,4 +1,9 @@
 $Id$
 
+Mon Jan  9 08:55:21 CET 2006 <jurgenv@cwi.nl>
+ * lib/configuration.adt: changed properties module-path and library-path
+   to have a label for each path. This label can be used for visualization
+   purposes.
+
 Thu Dec  1 15:52:19 CET 2005 <kooiker@cwi.nl>
  * Initial version of config-support

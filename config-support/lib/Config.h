@@ -31,36 +31,22 @@ typedef struct _CFG_Color *CFG_Color;
 
 void CFG_initConfigApi(void);
 
-/*{{{  (un)protect functions */
+/*{{{  protect functions */
 
 void CFG_protectConfiguration(CFG_Configuration *arg);
-void CFG_unprotectConfiguration(CFG_Configuration *arg);
 void CFG_protectProperties(CFG_Properties *arg);
-void CFG_unprotectProperties(CFG_Properties *arg);
 void CFG_protectProperty(CFG_Property *arg);
-void CFG_unprotectProperty(CFG_Property *arg);
 void CFG_protectActionDescription(CFG_ActionDescription *arg);
-void CFG_unprotectActionDescription(CFG_ActionDescription *arg);
 void CFG_protectActionDescriptionList(CFG_ActionDescriptionList *arg);
-void CFG_unprotectActionDescriptionList(CFG_ActionDescriptionList *arg);
 void CFG_protectActionType(CFG_ActionType *arg);
-void CFG_unprotectActionType(CFG_ActionType *arg);
 void CFG_protectEvent(CFG_Event *arg);
-void CFG_unprotectEvent(CFG_Event *arg);
 void CFG_protectItems(CFG_Items *arg);
-void CFG_unprotectItems(CFG_Items *arg);
 void CFG_protectModuleName(CFG_ModuleName *arg);
-void CFG_unprotectModuleName(CFG_ModuleName *arg);
 void CFG_protectTextCategoryName(CFG_TextCategoryName *arg);
-void CFG_unprotectTextCategoryName(CFG_TextCategoryName *arg);
 void CFG_protectTextAttributes(CFG_TextAttributes *arg);
-void CFG_unprotectTextAttributes(CFG_TextAttributes *arg);
 void CFG_protectTextAttribute(CFG_TextAttribute *arg);
-void CFG_unprotectTextAttribute(CFG_TextAttribute *arg);
 void CFG_protectTextStyle(CFG_TextStyle *arg);
-void CFG_unprotectTextStyle(CFG_TextStyle *arg);
 void CFG_protectColor(CFG_Color *arg);
-void CFG_unprotectColor(CFG_Color *arg);
 
 /*}}}  */
 /*{{{  term conversion functions */
@@ -155,8 +141,8 @@ CFG_Properties CFG_makePropertiesSingle(CFG_Property head);
 CFG_Properties CFG_makePropertiesMany(CFG_Property head, CFG_Properties tail);
 CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList descriptions, const char* action);
 CFG_Property CFG_makePropertyExtension(const char* language, const char* extension);
-CFG_Property CFG_makePropertyLibraryPath(const char* path);
-CFG_Property CFG_makePropertyModulePath(const char* path);
+CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path);
+CFG_Property CFG_makePropertyModulePath(const char* label, const char* path);
 CFG_Property CFG_makePropertyTextCategory(CFG_TextCategoryName category, CFG_TextAttributes attributes);
 CFG_ActionDescription CFG_makeActionDescriptionDefault(CFG_ActionType actionType, CFG_Event event);
 CFG_ActionDescriptionList CFG_makeActionDescriptionListEmpty(void);
@@ -252,6 +238,7 @@ ATbool CFG_hasPropertyDescriptions(CFG_Property arg);
 ATbool CFG_hasPropertyAction(CFG_Property arg);
 ATbool CFG_hasPropertyLanguage(CFG_Property arg);
 ATbool CFG_hasPropertyExtension(CFG_Property arg);
+ATbool CFG_hasPropertyLabel(CFG_Property arg);
 ATbool CFG_hasPropertyPath(CFG_Property arg);
 ATbool CFG_hasPropertyCategory(CFG_Property arg);
 ATbool CFG_hasPropertyAttributes(CFG_Property arg);
@@ -259,6 +246,7 @@ CFG_ActionDescriptionList CFG_getPropertyDescriptions(CFG_Property arg);
 char* CFG_getPropertyAction(CFG_Property arg);
 char* CFG_getPropertyLanguage(CFG_Property arg);
 char* CFG_getPropertyExtension(CFG_Property arg);
+char* CFG_getPropertyLabel(CFG_Property arg);
 char* CFG_getPropertyPath(CFG_Property arg);
 CFG_TextCategoryName CFG_getPropertyCategory(CFG_Property arg);
 CFG_TextAttributes CFG_getPropertyAttributes(CFG_Property arg);
@@ -266,6 +254,7 @@ CFG_Property CFG_setPropertyDescriptions(CFG_Property arg, CFG_ActionDescription
 CFG_Property CFG_setPropertyAction(CFG_Property arg, const char* action);
 CFG_Property CFG_setPropertyLanguage(CFG_Property arg, const char* language);
 CFG_Property CFG_setPropertyExtension(CFG_Property arg, const char* extension);
+CFG_Property CFG_setPropertyLabel(CFG_Property arg, const char* label);
 CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path);
 CFG_Property CFG_setPropertyCategory(CFG_Property arg, CFG_TextCategoryName category);
 CFG_Property CFG_setPropertyAttributes(CFG_Property arg, CFG_TextAttributes attributes);
@@ -432,7 +421,7 @@ CFG_Color CFG_setColorBlue(CFG_Color arg, int blue);
 
 CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties));
 CFG_Properties CFG_visitProperties(CFG_Properties arg, CFG_Property (*acceptHead)(CFG_Property));
-CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes));
+CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes));
 CFG_ActionDescription CFG_visitActionDescription(CFG_ActionDescription arg, CFG_ActionType (*acceptActionType)(CFG_ActionType), CFG_Event (*acceptEvent)(CFG_Event));
 CFG_ActionDescriptionList CFG_visitActionDescriptionList(CFG_ActionDescriptionList arg, CFG_ActionDescription (*acceptHead)(CFG_ActionDescription));
 CFG_ActionType CFG_visitActionType(CFG_ActionType arg, char* (*acceptModuleId)(char*));

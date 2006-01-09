@@ -80,16 +80,11 @@ void CFG_initConfigApi(void)
 
 /*}}}  */
 
-/*{{{  (un)protect functions */
+/*{{{  protect functions */
 
 void CFG_protectConfiguration(CFG_Configuration *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectConfiguration(CFG_Configuration *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectProperties(CFG_Properties *arg)
@@ -97,19 +92,9 @@ void CFG_protectProperties(CFG_Properties *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectProperties(CFG_Properties *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectProperty(CFG_Property *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectProperty(CFG_Property *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectActionDescription(CFG_ActionDescription *arg)
@@ -117,19 +102,9 @@ void CFG_protectActionDescription(CFG_ActionDescription *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectActionDescription(CFG_ActionDescription *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectActionDescriptionList(CFG_ActionDescriptionList *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectActionDescriptionList(CFG_ActionDescriptionList *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectActionType(CFG_ActionType *arg)
@@ -137,19 +112,9 @@ void CFG_protectActionType(CFG_ActionType *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectActionType(CFG_ActionType *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectEvent(CFG_Event *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectEvent(CFG_Event *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectItems(CFG_Items *arg)
@@ -157,19 +122,9 @@ void CFG_protectItems(CFG_Items *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectItems(CFG_Items *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectModuleName(CFG_ModuleName *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectModuleName(CFG_ModuleName *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectTextCategoryName(CFG_TextCategoryName *arg)
@@ -177,19 +132,9 @@ void CFG_protectTextCategoryName(CFG_TextCategoryName *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectTextCategoryName(CFG_TextCategoryName *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectTextAttributes(CFG_TextAttributes *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectTextAttributes(CFG_TextAttributes *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 void CFG_protectTextAttribute(CFG_TextAttribute *arg)
@@ -197,29 +142,14 @@ void CFG_protectTextAttribute(CFG_TextAttribute *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectTextAttribute(CFG_TextAttribute *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectTextStyle(CFG_TextStyle *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void CFG_unprotectTextStyle(CFG_TextStyle *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void CFG_protectColor(CFG_Color *arg)
 {
   ATprotect((ATerm*)((void*) arg));
-}
-
-void CFG_unprotectColor(CFG_Color *arg)
-{
-  ATunprotect((ATerm*)((void*) arg));
 }
 
 
@@ -650,19 +580,19 @@ CFG_Property CFG_makePropertyExtension(const char* language, const char* extensi
 }
 
 /*}}}  */
-/*{{{  CFG_Property CFG_makePropertyLibraryPath(const char* path) */
+/*{{{  CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path) */
 
-CFG_Property CFG_makePropertyLibraryPath(const char* path)
+CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  CFG_Property CFG_makePropertyModulePath(const char* path) */
+/*{{{  CFG_Property CFG_makePropertyModulePath(const char* label, const char* path) */
 
-CFG_Property CFG_makePropertyModulePath(const char* path)
+CFG_Property CFG_makePropertyModulePath(const char* label, const char* path)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -1364,7 +1294,7 @@ inline ATbool CFG_isPropertyLibraryPath(CFG_Property arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyLibraryPath, NULL);
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyLibraryPath, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1386,7 +1316,7 @@ inline ATbool CFG_isPropertyModulePath(CFG_Property arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyModulePath, NULL);
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyModulePath, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1455,6 +1385,20 @@ ATbool CFG_hasPropertyLanguage(CFG_Property arg)
 ATbool CFG_hasPropertyExtension(CFG_Property arg)
 {
   if (CFG_isPropertyExtension(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool CFG_hasPropertyLabel(CFG_Property arg) */
+
+ATbool CFG_hasPropertyLabel(CFG_Property arg)
+{
+  if (CFG_isPropertyLibraryPath(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isPropertyModulePath(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1533,15 +1477,27 @@ char* CFG_getPropertyExtension(CFG_Property arg)
 }
 
 /*}}}  */
-/*{{{  char* CFG_getPropertyPath(CFG_Property arg) */
+/*{{{  char* CFG_getPropertyLabel(CFG_Property arg) */
 
-char* CFG_getPropertyPath(CFG_Property arg)
+char* CFG_getPropertyLabel(CFG_Property arg)
 {
   if (CFG_isPropertyLibraryPath(arg)) {
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
   }
   else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  char* CFG_getPropertyPath(CFG_Property arg) */
+
+char* CFG_getPropertyPath(CFG_Property arg)
+{
+  if (CFG_isPropertyLibraryPath(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -1615,15 +1571,31 @@ CFG_Property CFG_setPropertyExtension(CFG_Property arg, const char* extension)
 }
 
 /*}}}  */
+/*{{{  CFG_Property CFG_setPropertyLabel(CFG_Property arg, const char* label) */
+
+CFG_Property CFG_setPropertyLabel(CFG_Property arg, const char* label)
+{
+  if (CFG_isPropertyLibraryPath(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue))), 0);
+  }
+  else if (CFG_isPropertyModulePath(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue))), 0);
+  }
+
+  ATabort("Property has no Label: %t\n", arg);
+  return (CFG_Property)NULL;
+}
+
+/*}}}  */
 /*{{{  CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path) */
 
 CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path)
 {
   if (CFG_isPropertyLibraryPath(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
   }
   else if (CFG_isPropertyModulePath(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
   }
 
   ATabort("Property has no Path: %t\n", arg);
@@ -3516,9 +3488,9 @@ CFG_Properties CFG_visitProperties(CFG_Properties arg, CFG_Property (*acceptHead
 }
 
 /*}}}  */
-/*{{{  CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes)) */
+/*{{{  CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes)) */
 
-CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes))
+CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes))
 {
   if (CFG_isPropertyAction(arg)) {
     return CFG_makePropertyAction(
@@ -3532,10 +3504,12 @@ CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acc
   }
   if (CFG_isPropertyLibraryPath(arg)) {
     return CFG_makePropertyLibraryPath(
+        acceptLabel ? acceptLabel(CFG_getPropertyLabel(arg)) : CFG_getPropertyLabel(arg),
         acceptPath ? acceptPath(CFG_getPropertyPath(arg)) : CFG_getPropertyPath(arg));
   }
   if (CFG_isPropertyModulePath(arg)) {
     return CFG_makePropertyModulePath(
+        acceptLabel ? acceptLabel(CFG_getPropertyLabel(arg)) : CFG_getPropertyLabel(arg),
         acceptPath ? acceptPath(CFG_getPropertyPath(arg)) : CFG_getPropertyPath(arg));
   }
   if (CFG_isPropertyTextCategory(arg)) {

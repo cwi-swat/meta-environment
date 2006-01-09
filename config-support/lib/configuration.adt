@@ -4,8 +4,8 @@
 
   constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <action(str)>)),
   constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
-  constructor(Property, library-path, library-path(<path(str)>)),
-  constructor(Property, module-path, module-path(<path(str)>)),
+  constructor(Property, library-path, library-path(<label(str)>,<path(str)>)),
+  constructor(Property, module-path, module-path(<label(str)>,<path(str)>)),
 
   constructor(Property, text-category, text-category(<category(TextCategoryName)>,<attributes(TextAttributes)>)),
 
