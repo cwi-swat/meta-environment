@@ -1,5 +1,10 @@
 # $Id$
 
+Mon Jan  9 08:57:44 CET 2006 <jurgenv@cwi.nl>
+ * in-output/src/*: added dependency on ConfigApi. The in-output
+   tool now reads AND writes CFG_Properties when dealing with
+   searchPaths.
+
 Fri Jan  6 15:21:08 CET 2006 <{kooiker,jurgenv}@cwi.nl>
  * gui/plugin/dialog/**.java: FileDialog supports limiting the view
    to a set of root directories. This prevents the user from opening
