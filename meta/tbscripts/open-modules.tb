@@ -25,6 +25,7 @@ in
     . Path := ""
   +
     rec-msg(io-file-found(Directories?))
+    . TODO("Directory is not a str\n")
     . Directory := first(Directories)
     . Directories := next(Directories)
     .
@@ -397,6 +398,7 @@ let
   Term: path
 in
   Term := quote(path(Path))
+  . printf("Path set: %t\n", Path)
   . MM-SetAttribute(ModuleId, Namespace, "path", Term)
 endlet
 

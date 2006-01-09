@@ -111,8 +111,10 @@ let
   Directory : str,
   Path : str,
   Filename : str,
+  RelativeFilename : str,
   ModuleId : term,
-  Paths: list
+  Paths: list,
+  FoundPath: str
 in
   GetSearchPaths(Paths?)
   . PromptForFileWithExtension("Open Module", Paths, ".sdf", Cancel?, Path?)
@@ -124,11 +126,16 @@ in
       tau
     else
       SplitFilename(Path, Filename?, Directory?, Extension?)
-      . snd-msg(io-get-relative-filename(["."], Path, Extension))
-      . rec-msg(io-filename(["."], Path, Extension, Filename?))
-      . printf("Filename: %t\n", Filename)
-      /*. BuildPath(Directory, Filename, Extension, Path?)*/
-      . OpenModule(Filename, ModuleId?)
+      . snd-msg(io-get-relative-filename(Paths, Path, Extension))
+      . rec-msg(io-filename(Paths, Path, Extension, RelativeFilename?))
+      . BuildPath(Directory, RelativeFilename, Extension, FoundPath?)
+      . printf("Found: %t, orignal: %t\n", FoundPath, Path)
+      .
+      if equal(FoundPath, Path) then
+        OpenModule(RelativeFilename, ModuleId?)
+      else
+        Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])
+      fi
     fi
   fi
 endlet

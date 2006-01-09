@@ -24,7 +24,7 @@ process StartNavigator is
   snd-msg(load-jar("file://__PKGDATA__/navigator.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
 
 process StartDialogTool is
-  snd-msg(load-jar("file://__PKGDATA__/dialog.jar", ["file://__PKGDATA__/gui-util.jar"]))
+  snd-msg(load-jar("file://__PKGDATA__/dialog.jar", "__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
 
 process StartGraphPanel is
   snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
