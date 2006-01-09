@@ -32,7 +32,7 @@ configuration([
    text-category(extern("Info"),[style(bold),foreground-color(rgb(0,255,0))]),
    text-category(extern("Fatal"),[style(bold),background-color(rgb(255,0,0))]),
 
-  library-path("__ASF_LIBRARY__"),
+  library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(studio-menubar, menu(["File", "New Module"])),
            description(studio-toolbar, icon("New Module", "New24.gif"))],
          "NewModuleAction"),

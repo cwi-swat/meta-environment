@@ -238,7 +238,8 @@ let
   Modulename : str
 in
   Extension := ".sdf"
-  . PromptForFileWithExtension("Open Library Module", ["__ASF_LIBRARY__"], 
+  . TODO("remove this OpenLibraryModuleAction action\n")
+  . PromptForFileWithExtension("Open Library Module", [module-path("ASF+SDF Library", "__ASF_LIBRARY__")], 
                                Extension, Cancel?, Path?)
   .
   if equal(Cancel, true) then
