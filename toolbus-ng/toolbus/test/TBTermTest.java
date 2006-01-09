@@ -336,19 +336,19 @@ public class TBTermTest extends TestCase {
  	assertTrue(b.isEqual(b2));
  	assertTrue(!b.isEqual(d));
  	
- 	//System.err.println("b = " + b);
-	//System.err.println("writeRead(b) = " + writeRead(b));
+ 	System.err.println("b = " + b);
+	System.err.println("writeRead(b) = " + writeRead(b));
  	
 	assertTrue(writeRead(b).isEqual(b));
 	assertTrue(writeRead(d).isEqual(d));
 	assertTrue(writeRead(d).isEqual(e));
 	assertTrue(writeRead(e).isEqual(d));
 	
-	//ATerm f1 = factory.make("f(<term>)", b);
-	//ATerm f2 = factory.make("f(<term>)", c);
-	//assertTrue(f1.isEqual(f1));
-	//assertTrue(f2.isEqual(f2));
-	//assertTrue(f1.isEqual(f2));
+	ATerm f1 = factory.make("f(<term>)", b);
+	ATerm f2 = factory.make("f(<term>)", c);
+	assertTrue(f1.isEqual(f1));
+	assertTrue(f2.isEqual(f2));
+	//assertTrue(f1.isEqual(f2));  // No equality on blobs yet!
   }
   
   public static Test suite() {

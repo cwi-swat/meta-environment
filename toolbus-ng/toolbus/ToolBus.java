@@ -14,6 +14,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -45,6 +46,8 @@ import aterm.ATermList;
  */
 
 public class ToolBus {
+	
+  private static boolean verbose = true;
 
   private static Random rand = new Random();
   private ATermFactory factory;
@@ -61,34 +64,31 @@ public class ToolBus {
   private static String parseTable = "/ufs/paulk/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
   private static String implodePT = "/ufs/paulk/software/installed/bin/implodePT";
   private static String workspace = "/ufs/paulk/eclipse/worlspace";
-  private static boolean verbose = false;
+ 
   private static int nerrrors = 0;
   private static int nwarnings = 0;
   
   private static int WellKnownSocketPort = 8999;
-  private static ServerSocketChannel WellKnownSocketChannel;
-  private static ServerSocket WellKnownSocket;
+  private ServerSocketChannel WellKnownSocketChannel;
+  private ServerSocket WellKnownSocket;
   private static InetAddress localHost;
   private static Selector selector;
   
-	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
-	private final static int MIN_MSG_SIZE = 128;	// the C implementation
-	private ToolBus toolbus;
-	private boolean running = false;
-	//private InetAddress address;
-	private String toolname;
-	//private Socket connection;
-	private InputStream inputStream;
-	private OutputStream outputStream;
-	private int toolid = -1;
-	private Vector connectedTools;
-	private SocketChannel client;
-	private ByteBuffer handshake ;
+  private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
+  private final static int MIN_MSG_SIZE = 128;	// the C implementation
+  private ToolBus toolbus;
+  private String toolname;
+ 
+  private int toolid = -1;
+  private Vector connectedTools;
+  private SocketChannel client;
+  private ByteBuffer handshake ;
   
   private long startTime;
   private long currentTime;
   private long nextTime = 0;
-  private ToolConnector toolConnector;
+  
+  private boolean shutdownDone = false;
 
   /**
    * Constructor with explicit PrintWriter
@@ -100,6 +100,7 @@ public class ToolBus {
     this.out = out;
     processes = new Vector();
     tools = new Vector();
+    connectedTools = new Vector();
     procdefs = new Vector();
     tooldefs = new Vector();
     atomSignature = new HashSet();
@@ -120,7 +121,6 @@ public class ToolBus {
     	WellKnownSocketChannel.configureBlocking(false);
     	selector = Selector.open();
     	WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-    	
 	    handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
 
     } catch(IOException e){
@@ -129,8 +129,7 @@ public class ToolBus {
   
     info("WellKnownSocket created: " + WellKnownSocket);
     startTime = System.currentTimeMillis();
-   // toolConnector = new ToolConnector(this);
-   // toolConnector.start();
+ 
   }
 
   /**
@@ -155,9 +154,9 @@ public class ToolBus {
 	}
 }
   
-  private void handleInputFromTools(){
+  private void handleInputFromTools(long timeout){
   	try {
-  		selector.select();
+  		selector.select(timeout);
   	} catch(IOException e){
     	e.printStackTrace();
     }
@@ -166,21 +165,24 @@ public class ToolBus {
   	while(iterator.hasNext()){
   		SelectionKey key = (SelectionKey) iterator.next();
   		iterator.remove();
-  		info("key " + key);
+  		//info("key " + key);
   		
   		try{	
 	  		if(key.isAcceptable()){
+	  			//info("case acceptable");
 	  			ServerSocketChannel server = (ServerSocketChannel) key.channel();
 	  			client = server.accept();
 	  			client.configureBlocking(true);
 	  			shakeHands();
 	  			
 	  		} else if(key.isReadable()){
+	  			//info("case readable");
 	  			client = (SocketChannel) key.channel();
 	  			ClassicToolShield ts = (ClassicToolShield) key.attachment();
-	  			ts.readTerm();
+	  			ATerm term = ts.readTerm();
+	  			ts.getToolInstance().handleTermFromTool(term);
 	  		} else {
-	  			System.err.println("NO WRITE POSSIBLE in handleInputFromTools");
+	  			System.err.println("NO INPUT POSSIBLE in handleInputFromTools");
 	  		}
   		} catch (IOException e){
   			key.cancel();
@@ -203,6 +205,8 @@ public class ToolBus {
 			
 			//byte[] handshake = new byte[MAX_HANDSHAKE];
 		    //ByteBuffer handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
+		
+			handshake.clear();
 			int nr = client.read(handshake);
 			
 			info(nr + " bytes read from client");
@@ -221,6 +225,8 @@ public class ToolBus {
 			info("toolname = " + toolname);
 			String host = elems[1];
 			info("host = " + host);
+			
+			info("elems[2] = " + elems[2]);
 			
 			int lastd = -1;
 			for(int i = 0; i < elems[2].length(); i++){
@@ -277,12 +283,19 @@ public class ToolBus {
 			//byte[] buffer = new byte[MAX_HANDSHAKE];
 			handshake.clear();
 			String s = toolname + " " + Integer.toString(n);
-			
+
 			byte bs[] = s.getBytes();
-			for (int i = 0; i < bs.length; i++) {
-				handshake.put(bs[i]);
+			info("writeInt: " + s + "; length = " + bs.length);
+			for (int i = 0; i < MAX_HANDSHAKE; i++) {
+				if(i < bs.length){
+					handshake.put(bs[i]);
+				} else {
+					handshake.put((byte)0);
+				}
 			}
-			client.write(handshake);
+			handshake.flip();
+			int k = client.write(handshake);
+			info("writeInt(" + n + ") writes " + k + "  bytes");
 		}
   
   /**
@@ -304,8 +317,8 @@ public class ToolBus {
     return hostname;
   }
   
-  public static ServerSocket getWellKnownSocket(){
-  	return WellKnownSocket;
+  public ServerSocket getWellKnownSocket(){
+  	return this.WellKnownSocket;
   }
   
   public static int  getWellKnownSocketPort(){
@@ -314,6 +327,10 @@ public class ToolBus {
   
   public static InetAddress getLocalHost(){
   	return localHost;
+  }
+  
+  public static Selector getSelector(){
+	  return selector;
   }
 
   /**
@@ -608,12 +625,14 @@ public class ToolBus {
     }
 	System.err.println(msg);
     try {
-    	toolConnector.setRunning(false);
     	WellKnownSocket.close();
+    	WellKnownSocketChannel.close();
+    	selector.close();
     } catch(IOException e){
     	System.err.println(e);
     }
-    // throw new ToolBusDeathException(msg);
+    shutdownDone = true;
+    //throw new ToolBusException("");
   }
 
   /**
@@ -631,29 +650,23 @@ public class ToolBus {
           //System.out.print("$");
           ProcessInstance P = (ProcessInstance) processes.elementAt(i);
           work  |= P.step();
-          
           //if (P.isTerminated()) {
           //	processes.remove(P);
           //}
-          handleInputFromTools();
         }
-
-        if(!work){
-        	 try{
-        	 	  int delay = (int) (nextTime - currentTime);
-        	 	  //System.err.println("currentTime = " + currentTime + "; nextTime = " + nextTime + "; delay = " + delay);
-        	      synchronized(this) {
-        	      		wait(delay > 0 ? delay : 200);
-        	      }
-        	 }
-        	      
-        	      catch(InterruptedException e){
-        	      System.out.println("Sleep Interrupted");
-        	      }
-        	if(tools.size() > 0 || nextTime > currentTime)
-        		work = true;
+        if(!shutdownDone){
+	        long timeout = Math.max(nextTime - currentTime, 200);
+	        if(work){
+	        	handleInputFromTools(20);
+	        } else {
+	        	handleInputFromTools(timeout);
+	        }
+	
+	        if(tools.size() > 0 || nextTime > currentTime)
+	    		work = true;
+        } else {
+        	return;
         }
-        
       }
     } catch (ToolBusException e) {
       System.err.println(e.getMessage());

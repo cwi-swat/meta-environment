@@ -35,6 +35,7 @@ public class Do extends Atom {
     //System.err.println("DO.execute: env = " + getEnv());
     ATerm tid = TBTerm.substitute(toolId.value, getEnv());
     ATerm req = TBTerm.substitute(request.value, getEnv());
+    //System.err.println("req = " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndDoToTool((ATermAppl) req)){
     	return true;

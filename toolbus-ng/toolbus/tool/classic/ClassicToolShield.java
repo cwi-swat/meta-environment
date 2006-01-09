@@ -23,68 +23,24 @@ import aterm.ATermFactory;
  * sockets to this ToolBus. The initial connection protocol and initial handshaking are identical
  * to those of the classic ToolBus.
  * 
- * Inside this ToolBus the tool is represented by two threads:
- * - ToolInputHandler that handles input coming from the external tool
+ * Inside this ToolBus the tool is represented by one thread:
  * - ClassicToolShield that manages all traffic comming from the ToolBus and routes
- *   incoming traffic (produced by ToolInputHandler) as well.
+ *   incoming traffic (produced by select in the ToolBus class) as well.
  */
-
-/**
- * ToolInputHandler is executed as a separate thread and listens
- * for incoming terms from the tool.
- */
-/***
-class ToolInputHandler extends Thread {
-	ClassicToolShield toolShield;
-	ToolInstance toolInstance;
-	boolean running = false;
-	
-	ToolInputHandler(ClassicToolShield ts, ToolInstance ti){
-		toolShield = ts;
-		toolInstance = ti;
-	}
-	
-	void setRunning(boolean on){
-		running = on;
-	}
-	
-	public void run(){
-		int errorCount = 0;
-		running = true;
-		while(running){
-			try {
-				ATerm t = toolShield.readTerm();
-				toolInstance.handleTermFromTool(t);
-			} catch(IOException e){  //TODO: generate a snd-disconnect when the connectionn disappears
-				if(running){
-					System.err.println("ToolInputHandler (" + toolShield.getToolName() + ") " + e);
-					errorCount++;
-					if(errorCount > 5){
-						e.printStackTrace();
-						//throw new ToolBusException("no connection with tool");
-						int n = 2/0;
-					}	
-				}
-			}
-		}
-	}
-}
-***/
 
 public class ClassicToolShield extends ToolShield {
+	private boolean verbose = true;
+	
 	private final static int LENSPEC = 12;          // ToolBus dependent parameters
 	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
-	private final static int MIN_MSG_SIZE = 128;	// the C implementation
+	private final static int MIN_MSG_SIZE = 128;	   // the C implementation
 
 	private Object lockObject;
 	protected ATermFactory factory;
-	private boolean verbose = true;
-//	private InputStream inputStream;
-//	private OutputStream outputStream;
-	private SocketChannel client;
-	private Selector selector;
-//	private ToolInputHandler toolInputHandler;
 
+	private SocketChannel client;
+	private static Selector selector;
+	
 	private ToolDefinition toolDef;
 	private String toolname;
 
@@ -106,14 +62,14 @@ public class ClassicToolShield extends ToolShield {
 		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
 
-		//address = ToolBus.getLocalHost();
 		toolname = toolDef.getName();
 		toolid = toolInstance.getToolCount();
+		selector = ToolBus.getSelector();
 		if(!alreadyExecuting){
 			executeTool();
 		}
 	}
-	
+		
 	void executeTool(){
 		String cmd = toolDef.getCommand() + 
 					" -TB_HOST "      + ToolBus.getLocalHost().getHostName() +
@@ -141,10 +97,8 @@ public class ClassicToolShield extends ToolShield {
 		}
 		connected = true;
 		getToolInstance().TCP_goConnected();
-		//toolInputHandler = new ToolInputHandler(this, getToolInstance());
-		//toolInputHandler.start();
-		selector = Selector.open();
-		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+		client.configureBlocking(false);
+		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ);
 		clientKey.attach(this);
 	}
 	
@@ -164,14 +118,14 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void checkToolSignature() throws IOException {
-		System.err.println("checkToolSignature: input: " + toolDef.getInputSignature());
-		System.err.println("checkToolSignature: output: " + toolDef.getOutputSignature());
+		info("checkToolSignature: input: " + toolDef.getInputSignature());
+		info("checkToolSignature: output: " + toolDef.getOutputSignature());
 		sendTerm(factory.make("rec-do(signature(<term>,<term>))", toolDef
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 	
 	public void sndRequestToTool(Integer operation, ATerm call) {
-		//System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
+		info("sndRequestToTool(" + operation + ", " + call + ")");
 		addRequestToTool(new Object[] {operation, call, null});
 	}
 	
@@ -251,13 +205,24 @@ public class ClassicToolShield extends ToolShield {
 				}
 				System.out.println("");
 			}
-			client.write(ByteBuffer.wrap(ls));
-			term.writeToTextFile(Channels.newOutputStream(client));
+			int n = client.write(ByteBuffer.wrap(ls));
+			info(n + " bytes written for ls");
+			//term.writeToTextFile(Channels.newOutputStream(client));
+			n = client.write(ByteBuffer.wrap(unparsedTerm.getBytes()));
+			info(n + " bytes written for term");
 			if (LENSPEC + size < MIN_MSG_SIZE) {
 				info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
 			}
-			for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
-			//	client.put((byte)0);
+			int fill = MIN_MSG_SIZE - (LENSPEC + size);
+			if(fill > 0){
+				byte filler[] = new byte[fill];
+				for (int i = 0; i < fill; i++) {
+				//	client.put((byte)0);
+					filler[i] = 0;
+				}
+				n = client.write(ByteBuffer.wrap(filler));
+	
+				info(n + " bytes written for filler");
 			}
 			//outputStream.flush();
 		}
@@ -268,11 +233,12 @@ public class ClassicToolShield extends ToolShield {
 		ByteBuffer lspecBuf = ByteBuffer.allocate(LENSPEC);
 		int index;
 		
-		info("readTerm ...");
+		info("readTerm from ... " + client.toString());
 
 		index = 0;
 		while (index != LENSPEC) {
 			int bytes_read = client.read(lspecBuf);
+			info(bytes_read + " bytes read");
 			if (bytes_read <= 0) {
 				throw new IOException("Tool connection terminated (1)");
 			}
