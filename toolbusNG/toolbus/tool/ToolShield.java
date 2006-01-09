@@ -21,7 +21,7 @@ import aterm.ATermFactory;
 public abstract class ToolShield extends Thread {
 	
 	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
-	private LinkedList requestsForTool;		// Requests to be executed by the tool
+	private LinkedList requestsForTool;	// Requests to be executed by the tool
 	private boolean running = false;
 	
 
@@ -30,14 +30,13 @@ public abstract class ToolShield extends Thread {
 		toolInstance = ti;
 	}
 
-	protected ToolInstance getToolInstance() {
+	public ToolInstance getToolInstance() {
 		return toolInstance;
 	}
 
 	/**
 	 * Provide the current ATermfactory.
 	 */
-
 	public ATermFactory getFactory() {
 		return TBTerm.factory;
 	}
@@ -57,6 +56,7 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	public synchronized void addRequestToTool(Object[] request){
+		//System.err.println("addRequestToTool: " + request);
 		requestsForTool.add(request);
 		/*
 		if(operation == ToolInstance.TERMINATE){
@@ -107,18 +107,22 @@ public abstract class ToolShield extends Thread {
 
 	public void run() {
 		initRun();
-		System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
+		//System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
 		while (running) {
 			//System.err.println("ToolShield.run; 1 "+ toolInstance.getToolId());
+			//System.err.println("running = " + running);
+			//System.err.println("requestsForTool.isEmpty() = " + requestsForTool.isEmpty());
 			while (!requestsForTool.isEmpty() && running){
-				//System.err.println("ToolShield.run; 2 "+ toolInstance.getToolId());
+				//System.err.println("ToolShield.run; 2 "+ toolInstance.getToolId() + " nr of requests = " + requestsForTool.size());
 				handleRequestToTool();
 			}
 			//System.err.println("ToolShield.run; 3 "+ toolInstance.getToolId());
-			if(running)
-				Thread.yield();
+			if(running){
+				//System.err.println("now yielding the thread");
+				yield();
+			}
 		}
-		System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
+		//System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());
 	}
 	
 	/**

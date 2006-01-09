@@ -51,8 +51,8 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
 process Pend(Tid : display, I : int, NB : int) is
   let W : real
   in 
-   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0)) || snd-do(Tid, update(I, 0.0))) * delta
-                                                         %% || printf("update(%t,%t)\n", I, 0.0)) * delta
+   ( rec-msg(exc(NB, I, W?)) || snd-msg(exc(I, NB, 0.0))  || snd-do(Tid, update(I, 0.0))) * delta
+                                                         %%   || printf("update(%t,%t)\n", I, 0.0)) * delta
   endlet
 
 %% Construct the processes {\tt Pend}$_0$, {\tt P}$_1$, ..., {\tt P}$_{N-1}$, {\tt Pend}$_N$.

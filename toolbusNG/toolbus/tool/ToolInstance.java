@@ -331,7 +331,8 @@ public class ToolInstance {
   }
   
   public boolean TCP_goConnected(){
-  	if(phase == 1 || phase == 3){
+	//System.err.println("TCP_goConnnected, phase = " + phase);
+  	if(phase == PHASE1 || phase == PHASE3){
   		phase = PHASE2;
   		return true;
   	} else {
@@ -345,6 +346,7 @@ public class ToolInstance {
   }
   
   public boolean TCP_goEvalDo(){
+	  //System.err.println("TCP_EvalDo, phase = " + phase);
   	if(phase == PHASE2){
   		phase = PHASE3;
   		return true;
