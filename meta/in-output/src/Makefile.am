@@ -11,6 +11,7 @@ noinst_HEADERS = in-output.tif.h
 
 INCLUDES = \
 	-I$(ERROR_SUPPORT)/include \
+	-I$(CONFIG_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
@@ -20,6 +21,7 @@ in_output_SOURCES = \
 
 in_output_LDADD = \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
+	-L$(CONFIG_SUPPORT)/lib -lConfigAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)

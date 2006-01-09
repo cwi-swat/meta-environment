@@ -13,6 +13,7 @@
 #include <aterm2.h>
 #include <atb-tool.h>
 #include <Error.h>
+#include <Config.h>
 
 #include "in-output.tif.h"
 
@@ -219,16 +220,18 @@ static ATerm createFilesDifferentMessage()
 
 ATerm relative_to_absolute(int cid, ATerm paths)
 {
-  ATermList relativePaths = (ATermList) paths;
-  ATermList result = ATempty;
+  CFG_Properties relativePaths = CFG_PropertiesFromTerm(paths);
+  CFG_Properties result = CFG_makePropertiesEmpty();
   ERR_Summary summary = NULL;
 
-  while (!ATisEmpty(relativePaths)) {
-    const char *relativePath = ATgetString(ATgetFirst(relativePaths));
+  while (!CFG_isPropertiesEmpty(relativePaths)) {
+    CFG_Property prop = CFG_getPropertiesHead(relativePaths);
+    const char *relativePath = CFG_getPropertyPath(prop);
     char *absolutePath = expandPath(relativePath);
 
     if (absolutePath != NULL) {
-      result = ATinsert(result, ATmake("<str>", absolutePath));
+      prop = CFG_setPropertyPath(prop, absolutePath);
+      result = CFG_makePropertiesMany(prop, result);
     }
     else {
       summary = createSummary("Unable to expand", relativePath);
@@ -238,12 +241,13 @@ ATerm relative_to_absolute(int cid, ATerm paths)
     free(absolutePath);
     absolutePath = NULL;
 
-    relativePaths = ATgetNext(relativePaths);
+    relativePaths = CFG_getPropertiesTail(relativePaths);
   }
 
   if (summary == NULL) {
     /* Found files should be reported in order of the searchPaths */
-    return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
+    return ATmake("snd-value(absolute-directories(<term>))", 
+		  CFG_reverseProperties(result));
   }
   else {
     return makeResultMessage(summary);
@@ -459,16 +463,19 @@ ATerm exists_file(int cid, const char *path)
 ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
 {
   char filename[PATH_LEN];
-  ATermList searchPaths = (ATermList) paths;
+  CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
   ATermList directories = ATempty;
  
-  for (; !ATisEmpty(searchPaths); searchPaths = ATgetNext(searchPaths)) {
-    ATerm path = ATgetFirst(searchPaths);
-    const char *pathString = ATgetString(path);
+  for ( ; !CFG_isPropertiesEmpty(searchPaths); 
+       searchPaths = CFG_getPropertiesTail(searchPaths)) {
+    CFG_Property path = CFG_getPropertiesHead(searchPaths);
+    const char *pathString = CFG_getPropertyPath(path);
     sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
 
     if (fileExists(filename)) {
-      directories = ATinsert(directories, path);
+      directories = ATinsert(directories, 
+			     (ATerm)
+			     ATmakeAppl(ATmakeAFun(pathString, 0, ATtrue)));
     }
   }
 
@@ -487,13 +494,14 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
 ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension)
 {
   ATerm result = NULL;
-  ATermList searchPaths = (ATermList) paths;
+  CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
 
+  ATwarning("io: paths: %t\nio: path: %s\nio: ext %s\n", paths, path, extension);
   assert(path != NULL);
 
-  while (!ATisEmpty(searchPaths) && !result) {
-    ATerm searchPath = ATgetFirst(searchPaths);
-    const char *pathString = ATgetString(searchPath);
+  while (!CFG_isPropertiesEmpty(searchPaths) && !result) {
+    CFG_Property searchPath = CFG_getPropertiesHead(searchPaths);
+    const char *pathString = CFG_getPropertyPath(searchPath);
     if (strncmp(pathString, path, strlen(pathString)) == 0) {
       char *copy;
       char *extension;
@@ -508,7 +516,7 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
       result = ATmake("filename(<str>)", copy);
       free(copy);
     }
-    searchPaths = ATgetNext(searchPaths);
+    searchPaths = CFG_getPropertiesTail(searchPaths);
   }
 
   if (!result) {
@@ -716,6 +724,8 @@ int main(int argc, char *argv[])
   if (toolbus_mode) {
     ATBinit(argc, argv, &bottomOfStack);
     ERR_initErrorApi();
+    CFG_initConfigApi();
+
     cid = ATBconnect(NULL, NULL, -1, in_output_handler);
     ATBeventloop();
   }
