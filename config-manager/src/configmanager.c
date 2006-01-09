@@ -33,8 +33,8 @@ static ATermList systemExtensions = NULL;
 static ATermList userTextCategories = NULL;
 static ATermList systemTextCategories = NULL;
 
-static ATermList modulePaths = NULL;
-static ATermList libraryPaths = NULL;
+static CFG_Properties modulePaths = NULL;
+static CFG_Properties libraryPaths = NULL;
 
 /*}}}  */
 
@@ -170,7 +170,7 @@ ATerm parse_config_file(int cid, const char *contents)
 
 void register_user_directories(int cid, ATerm paths)
 {
-  modulePaths = (ATermList) paths;
+  modulePaths = CFG_makePropertiesEmpty();
 }
 
 /*}}}  */
@@ -200,12 +200,10 @@ static void addSystemProperty(CFG_Property property)
     systemExtensions = addExtension(systemExtensions, property);
   }
   else if (CFG_isPropertyModulePath(property)) {
-    const char *path = CFG_getPropertyPath(property);
-    modulePaths = ATinsert(modulePaths, ATmake("<str>", path));
+    modulePaths = CFG_makePropertiesMany(property, modulePaths);
   }
   else if (CFG_isPropertyLibraryPath(property)) {
-    const char *path = CFG_getPropertyPath(property);
-    libraryPaths = ATinsert(libraryPaths, ATmake("<str>", path));
+    libraryPaths = CFG_makePropertiesMany(property, libraryPaths);
   }
   else if (CFG_isPropertyAction(property)) {
     const char *action = CFG_getPropertyAction(property);
@@ -221,7 +219,7 @@ static void addSystemProperty(CFG_Property property)
     systemTextCategories = addTextCategory(systemTextCategories, property);
   }
   else {
-    ATabort(__FILE__ ":addSystemProperty: unhandled property: %t\n", property);
+    ATwarning(__FILE__ ":addSystemProperty: unhandled property: %t\n", property);
   }
 }
 
@@ -241,8 +239,8 @@ void add_system_properties(int cid, const char *contents)
 	addSystemProperty(property);
 	properties = CFG_getPropertiesTail(properties);
       }
-      modulePaths = ATreverse(modulePaths);
-      libraryPaths = ATreverse(libraryPaths);
+      modulePaths = CFG_reverseProperties(modulePaths);
+      libraryPaths = CFG_reverseProperties(libraryPaths);
     }
   }
   else {
@@ -273,7 +271,7 @@ static void addUserProperty(CFG_Property property)
     userTextCategories = addTextCategory(userTextCategories, property);
   }
   else {
-    ATabort(__FILE__ ":addUserProperty: unhandled property: %t\n", property);
+    ATwarning(__FILE__ ":addUserProperty: unhandled property: %t\n", property);
   }
 }
 
@@ -301,21 +299,29 @@ void add_user_properties(int cid, const char *contents)
 }
 
 /*}}}  */
-/*{{{  void remove_user_properties(int cid) */
 
-void remove_user_properties(int cid)
-{
+static CFG_Property getWorkspace() {
   char curdir[MAX_PATH_LENGTH];
-  ATtableReset(userDescriptionsByType);
-  ATtableReset(userActionsByDescription);
-  userTextCategories = ATempty;
 
   if (getcwd(curdir, MAX_PATH_LENGTH) == NULL) {
     ATerror("__FILE__: could not get current working directory");
   }
   else {
-    modulePaths = (ATermList) ATmake("[<str>]", curdir);
+    return CFG_makePropertyModulePath("Workspace",curdir);
   }
+
+  return NULL;
+}
+
+/*{{{  void remove_user_properties(int cid) */
+
+void remove_user_properties(int cid)
+{
+  ATtableReset(userDescriptionsByType);
+  ATtableReset(userActionsByDescription);
+  userTextCategories = ATempty;
+
+  modulePaths = CFG_makePropertiesSingle(getWorkspace());
 }
 
 /*}}}  */
@@ -486,7 +492,7 @@ ATerm get_modulename_extension(int cid, ATerm moduleId)
 
 ATerm get_module_paths(int cid)
 {
-  ATermList paths = ATconcat(modulePaths, libraryPaths);
+  CFG_Properties paths = CFG_concatProperties(modulePaths, libraryPaths);
   return ATmake("snd-value(module-paths(<term>))", paths);
 }
 
@@ -533,18 +539,11 @@ void version(const char *msg)
 
 static void initConfigurationManager(void)
 {
-  char curdir[MAX_PATH_LENGTH];
-
   ATprotectList(&modulePaths);
-  if (getcwd(curdir, MAX_PATH_LENGTH) == NULL) {
-    ATerror("__FILE__: could not get current working directory");
-  }
-  else {
-    modulePaths = (ATermList) ATmake("[<str>]", curdir);
-  }
+  modulePaths = CFG_makePropertiesSingle(getWorkspace());
 
   ATprotectList(&libraryPaths);
-  libraryPaths = ATempty;
+  libraryPaths = CFG_makePropertiesEmpty();
 
   ATprotectList(&userExtensions);
   userExtensions = ATempty;

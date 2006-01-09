@@ -1,5 +1,11 @@
 # $Id$
 
+Mon Jan  9 08:56:25 CET 2006 <jurgenv@cwi.nl>
+ * src/*: 
+    - library-paths and module-paths now have labels
+    - refactored getcwd code to remove code clone
+    - named cwd directory "Workspace"
+
 Tue Dec  6 12:49:14 CET 2005 <kooiker@cwinl>
  * src/*:
    - use config-support package and remove .adt and libraries
