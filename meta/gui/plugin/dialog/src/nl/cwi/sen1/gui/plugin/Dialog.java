@@ -11,17 +11,20 @@ import javax.swing.filechooser.FileFilter;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.util.StringFormatter;
+import nl.cwi.sen1.configapi.Factory;
+
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class Dialog extends DefaultStudioPlugin implements DialogTif {
-
     private static final String WORKING_DIRECTORY = "user.dir";
 
     private static final String TOOL_NAME = "dialog";
 
     private Studio studio;
+
+    private Factory factory;
 
     private ProgressList progressList;
 
@@ -38,29 +41,19 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
+	factory = Factory.getInstance((aterm.pure.PureFactory)studio.getATermFactory());
         studio.connect(getName(), bridge);
-    }
-
-    private File[] buildFileArray(ATermList paths) {
-        File[] array = new File[paths.getLength()];
-
-        for (int i = 0; !paths.isEmpty(); paths = paths.getNext(), i++) {
-            array[i] = new File(((ATermAppl) paths.getFirst()).getName());
-        }
-        return array;
     }
 
     public ATerm showFileDialog(String title, ATerm paths,
             final String extension) {
         JFileChooser chooser = sharedChooser;
         
-        System.err.println(":::" + paths);
-
         if (!((ATermList) paths).isEmpty()) {
-            File[] roots = buildFileArray((ATermList) paths);
-            SearchPathLimitedFileSystemView fsv = new SearchPathLimitedFileSystemView(
-                    roots);
+            DialogFileSystemView fsv = new DialogFileSystemView(
+                    factory.PropertiesFromTerm(paths));
             chooser = new JFileChooser(fsv);
+            chooser.setFileView(new DialogFileView(fsv));
         }
         
         FileFilter filter = new FileFilter() {
