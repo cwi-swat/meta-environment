@@ -61,6 +61,11 @@ AC_PACKAGE_REQUIRE(config-manager, config-manager-config,
 AC_SUBST(CONFIG_MANAGER)
 
 dnl Require config-manager package
+AC_PACKAGE_REQUIRE(config-support, config-support-config,
+   [  --with-config-support=DIR config-support is in DIR])
+AC_SUBST(CONFIG_SUPPORT)
+
+dnl Require config-manager package
 AC_PACKAGE_REQUIRE(module-manager, module-manager-config,
    [  --with-module-manager=DIR module-manager is in DIR])
 AC_SUBST(MODULE_MANAGER)
@@ -91,7 +96,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
