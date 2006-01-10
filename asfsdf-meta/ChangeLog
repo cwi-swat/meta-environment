@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Tue Jan 10 08:47:15 CET 2006 <kooiker@cwi.nl>
+ * meta-scripts/{meta-interface.tb,standard.asfsdf.buttons}.src:
+   - Remove Open Library Module, Open Module is multirooted an can handle
+     library modules
+
 Wed Dec 21 13:31:11 CET 2005 <kooiker@cwi.nl>
  * meta-scripts/{meta-interface.tb.src,asfsdfapigen.tb}:
    - fixed asfsdfapigen scenario (still used modulename iso moduleid)

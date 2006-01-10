@@ -226,37 +226,6 @@ in
   ) * delta
 endlet
 
-process OpenLibraryModuleAction is
-let
-  Cancel: bool,
-  Directories : list,
-  Directory : str,
-  Extension : str,
-  Path : str,
-  Filename : str,
-  ModuleId : term,
-  Modulename : str
-in
-  Extension := ".sdf"
-  . TODO("remove this OpenLibraryModuleAction action\n")
-  . PromptForFileWithExtension("Open Library Module", [module-path("ASF+SDF Library", "__ASF_LIBRARY__")], 
-                               Extension, Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    if equal(Path, "") then
-      tau
-    else
-      snd-msg(cm-get-library-paths)
-      . rec-msg(cm-library-paths(Directories?))
-      . snd-msg(io-get-relative-filename(Directories, Path, Extension))
-      . rec-msg(io-filename(Directories, Path, Extension, Modulename?))
-      . OpenModule(Modulename, ModuleId?)
-    fi
-  fi
-endlet
-
 process DebugReduce(EditorId : term,
                     Modulename : str,
 		    Tree : term,

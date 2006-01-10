@@ -129,9 +129,5 @@ configuration([
   action([description(new-module-popup, menu(["Create this module"]))],
          "create-module"),
   action([description(new-module-popup, menu(["Delete this module"]))],
-         "delete-module"),
-  action([description(studio-menubar, menu(["File", "Open Library Module"])),
-          description(studio-toolbar, icon("Open Library Module",
-                                           "Import24.gif"))],
-         "OpenLibraryModuleAction")
+         "delete-module")
 ])
