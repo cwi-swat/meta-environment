@@ -89,13 +89,14 @@ let
   Extension: str,
   Filename: str,
   Modulename: str,
-  Path: str
+  Path: str,
+  Prefix: str
 in
   snd-msg(cm-get-library-paths)
   . rec-msg(cm-library-paths(Directories?))
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   . snd-msg(io-get-relative-filename(Directories, Path, ".sdf"))
-  . rec-msg(io-filename(Directories, Path, ".sdf", Filename?))
+  . rec-msg(io-filename(Directories, Path, ".sdf", Prefix?, Filename?))
   .
   if equal(Filename, "") then
     LibraryModule := false

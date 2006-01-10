@@ -114,7 +114,8 @@ let
   RelativeFilename : str,
   ModuleId : term,
   Paths: list,
-  FoundPath: str
+  FoundPath: str,
+  Prefix: str
 in
   GetSearchPaths(Paths?)
   . PromptForFileWithExtension("Open Module", Paths, ".sdf", Cancel?, Path?)
@@ -127,9 +128,8 @@ in
     else
       SplitFilename(Path, Filename?, Directory?, Extension?)
       . snd-msg(io-get-relative-filename(Paths, Path, Extension))
-      . rec-msg(io-filename(Paths, Path, Extension, RelativeFilename?))
-      . BuildPath(Directory, RelativeFilename, Extension, FoundPath?)
-      . printf("Found: %t, orignal: %t\n", FoundPath, Path)
+      . rec-msg(io-filename(Paths, Path, Extension, Prefix?, RelativeFilename?))
+      . BuildPath(Prefix, RelativeFilename, Extension, FoundPath?)
       .
       if equal(FoundPath, Path) then
         OpenModule(RelativeFilename, ModuleId?)

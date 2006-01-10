@@ -15,6 +15,7 @@ let
   IO: in-output,
   Name: str,
   Path: str,
+  Prefix: str,
   SourcePath: str,
   Term: term
 in
@@ -171,8 +172,8 @@ in
   +
     rec-msg(io-get-relative-filename(Directories?, Path?, Extension?))
     . snd-eval(IO, get-relative-filename(Directories, Path, Extension))
-    . rec-value(IO, filename(Filename?))
-    . snd-msg(io-filename(Directories, Path, Extension, Filename))
+    . rec-value(IO, filename(Prefix?, Filename?))
+    . snd-msg(io-filename(Directories, Path, Extension, Prefix, Filename))
   +
     rec-msg(io-get-path-directory(Path?))
     . snd-eval(IO, get-path-directory(Path))

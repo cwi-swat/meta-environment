@@ -513,14 +513,14 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
       if (extension != NULL) {
         *extension = EOS;
       }
-      result = ATmake("filename(<str>)", copy);
+      result = ATmake("filename(<str>,<str>)", pathString, copy);
       free(copy);
     }
     searchPaths = CFG_getPropertiesTail(searchPaths);
   }
 
   if (!result) {
-    result = ATmake("filename(<str>)", "");
+    result = ATmake("filename(<str>,<str>)", "", "");
   }
 
   return ATmake("snd-value(<term>)", result);

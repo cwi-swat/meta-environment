@@ -1,8 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.filechooser.FileView;
 

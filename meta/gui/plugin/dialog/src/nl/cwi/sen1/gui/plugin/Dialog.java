@@ -8,13 +8,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.util.StringFormatter;
-import nl.cwi.sen1.configapi.Factory;
-
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class Dialog extends DefaultStudioPlugin implements DialogTif {
