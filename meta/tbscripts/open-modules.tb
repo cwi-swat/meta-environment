@@ -152,8 +152,7 @@ endlet
 process SDFModuleParser is
 let
   Event: attribute-changed-event,
-  ModuleId: term,
-  NewPath: term
+  ModuleId: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
   .
@@ -362,22 +361,6 @@ process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
 
 process DeleteModuleSyntaxTree(ModuleId: term) is
   snd-msg(ts-remove-value("sdf-tree", ModuleId))
-
-process SetModuleEquationsTree(ModuleId: term, Tree: term) is
-  snd-msg(ts-put-term-value("asf-tree", ModuleId, Tree))
-
-process GetModuleEquationsTree(ModuleId: term, Tree: term?) is
-  snd-msg(ts-get-term-value("asf-tree", ModuleId))
-  .
-  (
-    rec-msg(ts-value("asf-tree", ModuleId, Tree?))
-  +
-    rec-msg(ts-no-value("asf-tree", ModuleId))
-    . Tree := UNDEFINED
-  )
-
-process DeleteModuleEquationsTree(ModuleId: term) is
-  snd-msg(ts-remove-value("asf-tree", ModuleId))
 
 process GetModulePath(ModuleId: term, Namespace: term, Path: str?) is
 let

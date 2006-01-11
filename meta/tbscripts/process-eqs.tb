@@ -1,60 +1,212 @@
-process ParseEquationsText(ModuleId: term, Text: str) is
+#include <asf-namespace.h>
+#include <sdf-namespace.h>
+#include <module-manager.tb>
+#include <equations-parsetable.tb>
+
+process ASFModuleOpener is
 let
-  Nonterminal: term,
-  Pid: int,
-  Table: term
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term
 in
-  GetParseTable(ModuleId, eqs, Table?)
-  . snd-msg(get-rules-top-sort)
-  . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
-  . create(ParseEquationsHandler(ModuleId), Pid?)
-  . ParseText(Pid, Text, Table, Nonterminal)
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . OpenASFModule(ModuleId)
+  )
+  *
+  delta
 endlet
 
-process ParseEquationsHandler(ModuleId: term) is
+toolbus(ASFModuleOpener)
+
+process OpenASFModule(ModuleId: term) is
 let
-  Equations: term,
+  AsfExt: str,
+  AsfPath: str,
+  Editable: bool,
+  LibraryModule: bool,
   Modulename: str,
-  ParseError: term,
+  Path: str,
+  Present: bool,
+  Registered: bool,
+  SdfPath: str
+in
+  MM-HasAttribute(ModuleId, ASF_NAMESPACE, "status", Registered?)
+  . 
+  if not-equal(Registered,true) then 
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
+    . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+    . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
+    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
+  else
+    tau
+  fi
+  . snd-msg(io-exists-file(AsfPath))
+  .
+  (
+    rec-msg(io-file-exists)
+    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
+    . IsLibraryModule(ModuleId, LibraryModule?)
+    . Editable := not(LibraryModule)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
+  +
+    rec-msg(io-file-not-exists)
+  )
+endlet
+
+process CheckASFModule(ModuleId: term, Tree: term) is
+let
+  Summary : term,
+  Errors: list,
+  Modulename: str
+in
+  MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename?) 
+  . snd-msg(check-asf(Modulename, Tree))
+  . rec-msg(messages(Errors?))
+  . snd-msg(ui-remove-feedback-summary("asf-checker", Modulename))
+  . snd-msg(es-make-summary("asf-checker", Modulename, Errors))
+  . rec-msg(es-summary(Summary?))
+  . snd-msg(ui-show-feedback-summary(Summary))
+endlet
+
+process ASFModuleChecker is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,parsed)  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . CheckASFModule(ModuleId, Tree)
+  )
+  *
+  delta
+endlet
+
+/*toolbus(ASFModuleChecker)*/
+
+process ASFModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetASFParseTree(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleParser)
+
+process GetASFParseTree(ModuleId: term) is
+let
+  Id: int,
+  ParseTable: term,
+  Path: str,
   Pid: int,
-  ParseResult: term
+  Result: term,
+  Text: str,
+  Type: term
+in
+  Id := process-id
+  . Type := eqs
+  . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  . ReadFile(Path, Text?)
+  .
+  if not-equal(Text, "") then
+    GetParseTable(ModuleId, Type, ParseTable?)
+    . create(ASFParseTreeHandler(ModuleId), Pid?)
+    . ParseText(Pid, Text, ParseTable, ASF_TOPSORT)
+    .
+    (
+      rec-msg(asf-parse-handler-done(Pid, ModuleId))
+      . SetModuleEquationsText(ModuleId, Text)
+    +
+      rec-msg(asf-parse-handler-done(Pid))
+    )
+    /* Use Listener? */
+    /*. AddEquationsPosInfo(ModuleId, Tree, Result?)*/
+  else 
+    TODO("valid error message")
+  fi
+endlet
+
+process ASFParseTreeHandler(ModuleId: term) is
+let
+  ErrorMessage: term,
+  Nonterminal: term,
+  ParseError: term,
+  ParseResult: term,
+  Path: str,
+  Pid: int,
+  Summary: term,
+  Table: term
 in
   Pid := process-id
   .
   (
-    rec-msg(parse-tree(Pid, ParseResult?))
-    . MDB-AddEquationsPosInfo(ModuleId, ParseResult, Equations?)
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(postprocess-semantics-hook(Modulename, Equations))
-    . rec-msg(postprocess-semantics-hook-result(Modulename, Equations?))
-    . snd-msg(parse-equations-ok(ModuleId, Equations))
-  +
     (
-      rec-msg(parse-forest(Pid, ParseResult?, ParseError?))
+      rec-msg(parse-tree(Pid, ParseResult?))
     +
-      rec-msg(parse-error(Pid, ParseError?))
+      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
+      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
+      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+      . rec-msg(es-summary(Summary?))
+      . snd-msg(ui-show-feedback-summary(Summary))
     )
-    . snd-msg(parse-equations-failed(ModuleId, ParseError))
+    . SetModuleEquationsTree(ModuleId, ParseResult)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", parsed)
+    . snd-msg(asf-parse-handler-done(Pid, ModuleId))
+  +
+    rec-msg(parse-error(Pid, ErrorMessage?))
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", error)
+    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
+    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    . rec-msg(es-summary(Summary?))
+    . snd-msg(asf-parse-handler-done(Pid))
   )
 endlet
 
+/*** HIERO ***/
+process AddEquationsPosInfo(ModuleId: term, In: term, Out: term?) is
+let
+  Path: str
+in
+  GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  . AnnotateTree(In, Path, Out?) 
+endlet
+
+/*
 process GetAsfModule(ModuleId: term) is
 let
   AsfExt: str,
   AsfPath: str,
   Error: term,
-  Equations: term,
   Modulename: str,
   ParseError: term,
   SdfPath: str,
   Summary: term,
-  Text: str
+  Text: str,
+  Tree: term
 in
   snd-msg(ts-get-term-value("asf-tree", ModuleId))
   .
   (
-    rec-msg(ts-value("asf-tree", ModuleId, Equations?))
-    . snd-msg(equations(ModuleId, Equations))
+    rec-msg(ts-value("asf-tree", ModuleId, Tree?))
+    . snd-msg(equations(ModuleId, Tree))
   +
     rec-msg(ts-no-value("asf-tree", ModuleId))
     . TODO("codeclone with EditEquationsAction")
@@ -73,24 +225,23 @@ in
       if equal(Text, "") then
         snd-msg(no-equations(ModuleId))
       else
-        ParseEquationsText(ModuleId, Text)
+        ParseEquationsText(ModuleId, Text, Tree?)
         .
-        (
-          rec-msg(parse-equations-ok(ModuleId, Equations?))
-          . snd-msg(ts-put-term-value("asf-tree", ModuleId, Equations))
-          . snd-msg(equations(ModuleId, Equations))
-        +
-          rec-msg(parse-equations-failed(ModuleId, Error?))
-	  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+	if equal(Tree, UNDEFINED) then
+	  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
           . AddFilenameToParseError(Error, Modulename, ParseError?)
           . snd-msg(es-make-summary("sglr", Modulename, [ParseError]))
           . rec-msg(es-summary(Summary?))
           . snd-msg(error-in-equations(ModuleId, Summary))
-        )
+	else
+          snd-msg(ts-put-term-value("asf-tree", ModuleId, Tree))
+          . snd-msg(equations(ModuleId, Tree))
+	fi
       fi
     fi
   )
 endlet
+*/
 
 process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is
 let
@@ -132,17 +283,16 @@ in
   . 
   if and(not-equal(Modules, []), equal(Error, undefined)) then
     CurModule := first(Modules)
-    . create(GetAsfModule(CurModule), Pid?)
+    . GetModuleEquationsTree(CurModule, Equations?)
     .
-    (
-      rec-msg(no-equations(CurModule))
-    +
-      rec-msg(equations(CurModule, Equations?))
+    if equal(Equations, UNDEFINED) then
+      tau
+    else
       /* normalization should occur BEFORE renaming 
        * proposal: merge the renaming and normalization tools,
        * possibly including the get-imports tool. 
        */
-      . MM-GetAttribute(CurModule, SDF_NAMESPACE, "name", Modulename?)
+      MM-GetAttribute(CurModule, SDF_NAMESPACE, "name", Modulename?)
       . snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
@@ -177,3 +327,22 @@ process GetSpecificationEquations(Specification: term, Equations: term?) is
 process GetSpecificationTests(Specification: term, Tests: term?) is
   snd-msg(extract-tests(Specification))
   . rec-msg(extract-tests-result(Tests?))
+
+process SetModuleEquationsText(ModuleId: term, Text: str) is
+  snd-msg(ts-put-str-value("asf-text", ModuleId, Text))
+
+process SetModuleEquationsTree(ModuleId: term, Tree: term) is
+  snd-msg(ts-put-term-value("asf-tree", ModuleId, Tree))
+
+process GetModuleEquationsTree(ModuleId: term, Tree: term?) is
+  snd-msg(ts-get-term-value("asf-tree", ModuleId))
+  .
+  (
+    rec-msg(ts-value("asf-tree", ModuleId, Tree?))
+  +
+    rec-msg(ts-no-value("asf-tree", ModuleId))
+    . Tree := UNDEFINED
+  )
+
+process DeleteModuleEquationsTree(ModuleId: term) is
+  snd-msg(ts-remove-value("asf-tree", ModuleId))
