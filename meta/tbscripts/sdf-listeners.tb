@@ -92,6 +92,7 @@ process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
 
 process DeleteModuleSyntaxTree(ModuleId: term) is
   snd-msg(ts-remove-value("sdf-tree", ModuleId))
+
 process AnnotateTreeListener is
 let
   AnnotatedTree: term,

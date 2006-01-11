@@ -472,8 +472,6 @@ in
     +
       rec-msg(asf-parse-handler-done(Pid))
     )
-    /* Use Listener? */
-    /*. AddEquationsPosInfo(ModuleId, Tree, Result?)*/
   else 
     TODO("valid error message")
   fi
@@ -586,6 +584,7 @@ let
   Imports: list,
   Modulename: str,
   Modules: list,
+  Opened: bool,
   Pid: int,
   Specification: term,
   Id : int,
@@ -595,45 +594,51 @@ in
   Id := process-id
   . snd-note(ui-status(start(Id, "Get Specification")))
   . MM-GetAllModuleDependencies(ModuleId, Modules?)
-  . GetImportsForRenaming(ModuleId, Modules, Imports?)
-  . Count := size(Modules)
-  . Specification := []
-  . TODO("remove computation by using listeners?")
+  . CheckModulesOpened(Modules, Opened?)
   . 
-  if and(not-equal(Modules, []), equal(Error, undefined)) then
-    CurModule := first(Modules)
-    . GetModuleEquationsTree(CurModule, Equations?)
-    .
-    if equal(Equations, UNDEFINED) then
-      tau
-    else
-      /* normalization should occur BEFORE renaming 
-       * proposal: merge the renaming and normalization tools,
-       * possibly including the get-imports tool. 
-       */
-      MM-GetAttribute(CurModule, SDF_NAMESPACE, "name", Modulename?)
-      . snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
-      . snd-msg(normalize-module(Equations)) 
-      . rec-msg(normalize-module-result(Equations?))
-      . snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
-      . snd-msg(sr-rename-module(Imports, Modulename, Equations))
-      . rec-msg(sr-renamed-module(Equations?))
-      . Specification := join(Specification, Equations)
+  if equal(Opened, true) then
+    GetImportsForRenaming(ModuleId, Modules, Imports?)
+    . Count := size(Modules)
+    . Specification := []
+    . TODO("remove computation by using listeners?")
+    . 
+    if and(not-equal(Modules, []), equal(Error, undefined)) then
+      CurModule := first(Modules)
+      . GetModuleEquationsTree(CurModule, Equations?)
+      .
+      if equal(Equations, UNDEFINED) then
+	tau
+      else
+	/* normalization should occur BEFORE renaming 
+	 * proposal: merge the renaming and normalization tools,
+	 * possibly including the get-imports tool. 
+	 */
+	MM-GetAttribute(CurModule, SDF_NAMESPACE, "name", Modulename?)
+	. snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
+	. snd-msg(normalize-module(Equations)) 
+	. rec-msg(normalize-module-result(Equations?))
+	. snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
+	. snd-msg(sr-rename-module(Imports, Modulename, Equations))
+	. rec-msg(sr-renamed-module(Equations?))
+	. Specification := join(Specification, Equations)
+      fi
+      . Modules := next(Modules)
+      . Done := sub(Count, size(Modules))
+      . printf("\rDone %d/%d\n", Done, Count )
     fi
-    . Modules := next(Modules)
-    . Done := sub(Count, size(Modules))
-    . printf("\rDone %d/%d\n", Done, Count )
+    *
+    (
+      if not-equal(Error, undefined) then
+	snd-msg(specification-incomplete(Error))
+      fi
+    +
+      if equal(Modules, []) then
+	snd-msg(specification(Specification)) 
+      fi
+    )
+  else
+    printf("Not all modules are openend: %t\n", Modules)
   fi
-  *
-  (
-    if not-equal(Error, undefined) then
-      snd-msg(specification-incomplete(Error))
-    fi
-  +
-    if equal(Modules, []) then
-      snd-msg(specification(Specification)) 
-    fi
-  )
   . snd-note(ui-status(stop(Id)))
 endlet
 

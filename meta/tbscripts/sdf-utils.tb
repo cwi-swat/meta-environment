@@ -621,4 +621,38 @@ in
     . rec-msg(sm-all-needed-imports(Imports?))
   fi
 endlet
+
+process CheckModulesOpened(ModuleList: list, Opened: bool?) is
+let
+  ModuleId: term,
+  Modules: list,
+  Status: term
+in
+  Modules := ModuleList
+  . Opened := true
+  .
+  if and(not-equal(Modules, []), equal(Opened, true)) then
+    ModuleId := first(Modules)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
+    .
+    if not-equal(Status, openend) then
+      Opened := false
+    else
+      tau
+    fi
+    . Modules := next(Modules)
+  fi
+  *
+  (
+    if equal(Modules, []) then
+      tau
+    fi
+  +
+    if equal(Opened, false) then
+      tau
+    fi
+  )
+endlet
+
+
 #endif
