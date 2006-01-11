@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jan 11 08:25:38 CET 2006 <kooiker@cwi.nl>
+ * meta/config:
+   - remove unused directory
+
 Tue Jan 10 08:44:50 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * in-output/src/{main.c,in-output.idef}:
    - return also prefix path when computing relative filename
