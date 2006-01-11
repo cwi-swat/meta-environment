@@ -11,6 +11,8 @@
 #include "error-support.idef"
 #include "asfsdfapigen.tb"
 #include "graph-arbiter.tb"
+#include "config-utils.tb"
+#include "asf-actions.tb"
 
 process Create-Asf-Processes is
 let Pid : int 

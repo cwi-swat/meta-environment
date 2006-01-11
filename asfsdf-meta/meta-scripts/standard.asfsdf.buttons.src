@@ -8,7 +8,7 @@ configuration([
   action([description(module-popup, menu(["Close..."]))],
          "CloseModuleAction"),
   action([description(studio-menubar, menu(["File", "Close All"]))],
-         "CloseAll"),
+         "CloseAllAction"),
   action([description(studio-menubar, menu(["File", "Exit"]))],
          "ExitAction"),
 
