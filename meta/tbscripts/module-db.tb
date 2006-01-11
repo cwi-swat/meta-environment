@@ -2,35 +2,17 @@
 #include <sdf-modules.idef>
 #include <sdf-renaming.idef>
 #include <term-store.idef>
+
 #define DEBUG printf("FILE: %s LINE: %d\n", __FILE__, __LINE__)
 
 #define POSINFO_DEPTH 4
 
 process ModuleDB is
 let
-  DependingModules: list,
-  EqsText: str,
   EqsTree: term,
-  ErrorMsg: str,
-  Extension: str,
   Filename: str,
-  LocalText: str,
   ModuleId: term,
-  ModuleIds: list,
-  Modulename: str,
-  Modules: list,
-  Name: str,
-  NewName: str,
-  OldName: str,
-  Pairs: list,
-  Path: str,
-  Syntax: term,
-  SyntaxText: str,
-  SyntaxTree: term,
-  Table: term,
-  Tablename: str,
-  TermTree: term,
-  Type: term
+  TermTree: term
 in
   MDB-InitializeModuleDb()
   . snd-msg(termstore-initialized)
@@ -87,6 +69,3 @@ in
   . snd-msg(ts-put-str-value("extensions", "equations", RulesExt))
   . snd-msg(ts-put-str-value("extensions", "term", TermExt))
 endlet
-
-
-

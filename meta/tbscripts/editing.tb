@@ -12,7 +12,6 @@
 #include <asf-editor-utils.tb>
 #include <config-utils.tb>
 
-
 process DisplayMessage(EditorId : term, Message : str) is
   snd-msg(te-display-message(EditorId, Message))
 

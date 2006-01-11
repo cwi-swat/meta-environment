@@ -347,6 +347,7 @@ in
     tau
   fi
 endlet
+
 process PrintModule is
 let
   Id: term,
@@ -398,7 +399,6 @@ in
   delta
 endlet
 
-
 process OpenASFModule(ModuleId: term) is
 let
   AsfExt: str,
@@ -411,18 +411,12 @@ let
   Registered: bool,
   SdfPath: str
 in
-  MM-HasAttribute(ModuleId, ASF_NAMESPACE, "status", Registered?)
-  . 
-  if not-equal(Registered,true) then 
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
-    . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
-    . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
-    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
-    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
-  else
-    tau
-  fi
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
+  . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+  . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
+  . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
+  . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
   . snd-msg(io-exists-file(AsfPath))
   .
   (
