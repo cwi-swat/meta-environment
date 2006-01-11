@@ -1,6 +1,8 @@
 # $Id$
 
-Wed Jan 11 08:25:38 CET 2006 <kooiker@cwi.nl>
+Wed Jan 11 08:25:38 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta/tbscripts:
+   - Split into asf and sdf particular scripts 
  * meta/config:
    - remove unused directory
 

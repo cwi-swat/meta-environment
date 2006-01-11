@@ -23,12 +23,14 @@
 #include "parsetablegen.idef"
 #include "term-parsetable.tb"
 #include "sdf-listeners.tb"
+#include "sdf-actions.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
 #include "restorebrackets.idef"
 #include "asf-language.tb"
 #include "asf-listeners.tb"
+#include "asf-actions.tb"
 
 /* to be resolved */
 #include "editor-error-display.tb"
