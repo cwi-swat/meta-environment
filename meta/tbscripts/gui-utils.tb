@@ -1,5 +1,8 @@
 #include <gui-actions.tb>
 
+process Error(Message: str, MessageArgs: list) is
+  snd-note(ui-status(errorf(Message, MessageArgs)))
+
 process HandleEvent(Type: term, Event: term) is
 let
   Actions: list,
@@ -71,6 +74,41 @@ in
   +
     rec-msg(gui-window-closing)
     . ExitAction
+  )
+  *
+  delta
+endlet
+
+process StatusDisplay is
+let
+  Lst: list,
+  Str: str,
+  Summary: term
+in
+  subscribe(ui-status(<term>))
+  . subscribe(show-feedback-summary(<term>))
+  .
+  (
+    rec-note(ui-status(error(Str?)))
+    . printf("Error: %s", Str)
+  +
+    rec-note(ui-status(errorf(Str?, Lst?)))
+    . printf("Error: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(warning(Str?)))
+    . printf("Warning: %s", Str)
+  +
+    rec-note(ui-status(warningf(Str?, Lst?)))
+    . printf("Warning: %s [%t]\n", Str, Lst)
+  +
+    rec-note(ui-status(message(Str?)))
+    . printf("Message: %s", Str)
+  +
+    rec-note(ui-status(messagef(Str?, Lst?)))
+    . printf("Message: %s [%t]\n", Str, Lst)
+  +
+    rec-note(show-feedback-summary(Summary?))
+    . snd-msg(display-feedback(Summary))
   )
   *
   delta

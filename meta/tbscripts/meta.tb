@@ -14,7 +14,7 @@
 #include "unparser.idef"
 
 /* user interface */
-#include "user-interface.tb"
+#include "gui-utils.tb"
 
 /* tide support */
 #include <tide.tb> 
@@ -22,32 +22,23 @@
 /* sdf-meta */
 #include "parsetablegen.idef"
 #include "term-parsetable.tb"
+#include "sdf-listeners.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
 #include "restorebrackets.idef"
-#include "equations-parsetable.tb"
+#include "asf-language.tb"
+#include "asf-listeners.tb"
 
 /* to be resolved */
-#include "feedback.tb"
+#include "editor-error-display.tb"
 #include "editing.tb"
-#include "restore-term-brackets.tb"
-#include "open-modules.tb"
+#include "sdf-utils.tb"
 #include "module-db.tb"
 #include "module-utils.tb"
-#include "print-module.tb"
-#include "close-all.tb"
-#include "process-eqs.tb"
-#include "compile-module.tb"
-#include "save-module.tb" 
-#include "get-parsetable.tb"
-#include "dump-parsetable.tb"
+#include "asf-utils.tb"
+#include "parsetable-utils.tb"
 #include "sdf2-language.tb"
-#include "parse-focuses.tb"
-#include "parse-actions.tb"
-#include "dump-equations.tb"
-#include "dump-sdf-definition.tb"
-#include "pretty-print.tb"
 #include "meta-interface.tb"
 
 process META is

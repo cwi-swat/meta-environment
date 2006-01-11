@@ -1,0 +1,56 @@
+#ifndef __TERM_EDITOR_UTILS__
+#define __TERM_EDITOR_UTILS__
+#include <editing.tb>
+
+process EditTerm(Path: str, ModuleId: term) is
+let
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  Error: str,
+  Modulename: str,
+  Sid: term,
+  Tree: term,
+  Valid: bool
+in
+  EditorType := term-editor
+  . CheckSanity(Path, ModuleId, Valid?)
+  .
+  if equal(Valid, true) then
+    Edit(Path, Sid?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . EditText(Sid, EditorType, Modulename, AlreadyExists?)
+    . snd-msg(term-editor-started(Path, ModuleId, Sid))
+    .
+    if equal(AlreadyExists, false) then
+      snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetTermTree(Path, Tree?, Available?)
+      .
+      if equal(Available, true) then
+        EditStructure(Sid, Tree)
+      else
+        tau
+      fi
+      .
+      (
+        MenuSelected(Sid, EditorType)
+      +
+        MouseClicked(Sid)
+      +
+        TextChanged(Sid, EditorType)
+      +
+        TextSaved(Sid, EditorType)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
+    else
+      tau
+    fi
+  else
+    Error := "Term is already being edited over a different module."
+    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
+  fi
+endlet
+#endif /* __TERM_EDITOR_UTILS__ */

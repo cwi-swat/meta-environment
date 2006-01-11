@@ -1,3 +1,5 @@
+#ifndef __SDF_EDITOR_ACTIONS__
+#define __SDF_EDITOR_ACTIONS__
 
 process EditorEditSyntaxAction(EditorId : term) is
 let 
@@ -16,3 +18,5 @@ in
   . rec-msg(syntax-editor-started(ModuleId, Sid?))
   . create(CleanupEditTerm(Sid, ModuleId), Pid?)
 endlet
+
+#endif /* __SDF_EDITOR_ACTIONS__ */

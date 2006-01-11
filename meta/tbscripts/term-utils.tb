@@ -1,0 +1,55 @@
+#ifndef __TERM__UTILS__
+#define __TERM__UTILS__
+
+process ParseTerm(Sid: term, ModuleId: term) is
+let
+  ParseError: term,
+  Path: str,
+  Pid: int,
+  Summary: term,
+  Table: term
+in
+  GetParseTable(ModuleId, trm, Table?)
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", Path))
+  . create(ParseEditor(Sid, Table, ""), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Parse OK"))
+  +
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+  )
+endlet
+
+process RestoreTermBrackets is
+let
+  Table: term,
+  Tree: term,
+  ModuleId: term
+in
+  (
+    rec-msg(restore-term-brackets(ModuleId?, Tree?))
+    . TODO("codeclone: create process GetParseTable that returns Table")
+    . snd-msg(get-parsetable(ModuleId, trm))
+    .
+    (
+      rec-msg(parsetable(ModuleId, trm, Table?))
+      . TODO("integrate editor types and language namespaces")
+      . snd-msg(restore-brackets(Tree, Table))
+      . rec-msg(brackets-restored(Tree?))
+    +
+      rec-msg(no-parsetable(ModuleId, trm))
+      . Tree := UNDEFINED
+    )
+    . snd-msg(restore-term-brackets-result(ModuleId, Tree))
+  )
+  *
+  delta
+endlet
+
+
+#endif /* __TERM__UTILS__ */

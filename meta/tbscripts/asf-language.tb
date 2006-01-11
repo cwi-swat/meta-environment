@@ -1,7 +1,7 @@
-#ifndef __EQS_PARSETABLE__
-#define __EQS_PARSETABLE__
+#ifndef __ASF_LANGUAGE__
+#define __ASF_LANGUAGE__
 
-#include <get-parsetable.tb>
+#include <parsetable-utils.tb>
 
 process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
   snd-msg(add-eqs-syntax(Modulename, Syntax))
@@ -9,4 +9,4 @@ process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
 
 toolbus(BuildParsetable("equations-parsetable", eqs, "AddEqsSyntax"))
 
-#endif /* __EQS_PARSETABLE__ */
+#endif /* __ASF_LANGUAGE__ */

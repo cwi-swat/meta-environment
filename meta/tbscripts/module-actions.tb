@@ -1,3 +1,6 @@
+#ifndef __MODULE_ACTIONS__
+#define __MODULE_ACTIONS__
+
 #include "navigator.idef"
 #include "graph-painter.idef"
 #include "config-manager/configuration-manager.idef"
@@ -57,3 +60,4 @@ endlet
 
 toolbus(HandleModulePopup)
 
+#endif /* __MODULE_ACTIONS__ */

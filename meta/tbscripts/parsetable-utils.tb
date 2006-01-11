@@ -1,7 +1,7 @@
-#ifndef __GET_PARSETABLE__
-#define __GET_PARSETABLE__
+#ifndef __PARSETABLE_UTILS__
+#define __PARSETABLE_UTILS__
 
-#include <caching.tb>
+#include <cache-utils.tb>
 
 process GetParseTable(ModuleId: term, Type: term, Table: term?) is
 let
@@ -70,4 +70,4 @@ process GenerateParsetable(Modulename: str, Syntax: term, Table: term?) is
     . Table := UNDEFINED
   )
 
-#endif /* __GET_PARSETABLE__ */
+#endif /* __PARSETABLE_UTILS__ */

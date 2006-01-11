@@ -1,0 +1,59 @@
+#ifndef __ASF_EDITOR_UTILS__
+#define __ASF_EDITOR_UTILS__
+#include <editing.tb>
+
+process EditEquations(ModuleId: term) is
+let
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  HasAttribute: bool,
+  Path: str,
+  Editable: bool,
+  Sid: term,
+  Tree: term
+in
+  EditorType := equations-editor
+  . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  . Edit(Path, Sid?)
+  . EditText(Sid, EditorType, "", AlreadyExists?)
+  . snd-msg(equations-editor-started(Path, Sid))
+  .
+  if equal(AlreadyExists, false) then
+    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+    .
+    if equal(HasAttribute, true) then
+      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+    else
+      Editable := true
+    fi
+    . snd-msg(te-set-editable(Sid, Editable)) 
+    . snd-msg(em-bind-session(Sid, ModuleId))
+    . rec-msg(em-session-bound(Sid, ModuleId))
+    . GetModuleEquationsTree(ModuleId, Tree?)
+    .
+    if not-equal(Tree, UNDEFINED) then
+      EditStructure(Sid, Tree)
+    else
+      tau
+    fi
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      MouseClicked(Sid)
+    +
+      TextChanged(Sid, EditorType)
+    +
+      TextSaved(Sid, EditorType)
+    )
+    *
+    EditorDisconnected(Sid)
+    . DeleteSession(Sid)
+  else
+    tau
+  fi
+endlet
+
+
+#endif /* __ASF_EDITOR_UTILS__ */

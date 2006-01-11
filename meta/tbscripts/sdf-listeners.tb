@@ -1,0 +1,139 @@
+#ifndef __SDF_LISTENERS__
+#define __SDF_LISTENERS__
+
+process SDFModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . OpenSyntax(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleParser)
+
+process SDFSetModuleImports is
+let
+  Event: attribute-changed-event,
+  Import: str,
+  ImportId: term,
+  Imports: list,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
+    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetImportedModulenames(Tree, Imports?)
+    .
+    if not-equal(Imports, []) then 
+      Import := first(Imports)
+      . Imports := next(Imports)
+      . OpenModule(Import, ImportId?)
+      . MM-AddModuleDependency(ModuleId, ImportId)
+    fi
+    *
+    if equal(Imports, []) then
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFSetModuleImports)
+
+process SDFRemoveDependencies is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . DeleteModuleSyntaxTree(ModuleId)
+    . MM-DeleteModuleDependencies(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFRemoveDependencies)
+
+process SetModuleSyntaxText(ModuleId: term, Text: str) is
+  snd-msg(ts-put-str-value("sdf-text", ModuleId, Text))
+
+process SetModuleSyntaxTree(ModuleId: term, Tree: term) is
+  snd-msg(ts-put-term-value("sdf-tree", ModuleId, Tree))
+
+process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
+  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
+  .
+  (
+    rec-msg(ts-value("sdf-tree", ModuleId, Tree?))
+  +
+    rec-msg(ts-no-value("sdf-tree", ModuleId))
+    . Tree := UNDEFINED
+  )
+
+process DeleteModuleSyntaxTree(ModuleId: term) is
+  snd-msg(ts-remove-value("sdf-tree", ModuleId))
+process AnnotateTreeListener is
+let
+  AnnotatedTree: term,
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Path: str,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . AnnotateTree(Tree, Path, AnnotatedTree?)
+    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "annotated", true)
+  )
+  *
+  delta
+endlet
+
+toolbus(AnnotateTreeListener)
+
+process StatusToProgress is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Name: str,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(Name, Value))
+  ) * delta 
+endlet
+
+toolbus(StatusToProgress)
+#endif /* __SDF_LISTENERS__ */

@@ -1,9 +1,21 @@
-#ifndef __ASFSDF_MODULE_ACTIONS__
-#define __ASFSDF_MODULE_ACTIONS__
+#ifndef __SDF_ACTIONS__
+#define __SDF_ACTIONS__
 
-process GetSearchPaths(Paths: list?) is
-  snd-msg(cm-get-module-paths)
-  . rec-msg(cm-module-paths(Paths?))
+#include <config-utils.tb>
+
+process ParseSyntaxAction(EditorId : term) is
+  TODO("Use save function")
+
+process CloseAllAction is
+let
+  Id: term,
+  ModuleId: term,
+  Modules: list
+in
+  Id := process-id
+  . MM-GetAllModules(Modules?)
+  . CloseModules(Modules)
+endlet
 
 process PrintModuleAction(ModuleId : term) is
 let
@@ -18,21 +30,6 @@ in
     snd-msg(print-module(ModuleId, Path))
     . rec-msg(module-printed(ModuleId))
   fi
-endlet
-
-process NewModuleContentHandler is
-let
-  ModuleId: str,
-  Pid: int
-in
-  Pid := process-id
-  .
-  (
-    rec-msg(get-module-contents(Pid, ModuleId?))
-    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
-  +
-    rec-msg(cancel-content-handler(Pid))
-  )
 endlet
 
 #ifdef DEAD
@@ -332,26 +329,5 @@ in
   . CreateNewModule(Pid, Directory, Filename, sdf)
 endlet
 
-process CheckSyntaxSpecification(ModuleId : term) is
-let
-  Syntax    : term,
-  ErrorMessage : str,
-  Feedback  : term,
-  Id : int,
-  Modulename : str
-in
-  Id := process-id .
-  snd-msg(get-all-syntax-definitions(ModuleId, eqs)) .
-  (
-    rec-msg(syntax(Syntax?)) .
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-    snd-msg(check-asfsdf(Syntax, Modulename)) .
-    rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Modulename, Feedback)) .
-    Syntax := UNDEFINED
-  +
-    rec-msg(no-syntax(ErrorMessage?))
-  )
-endlet
 
-#endif /*__ASFSDF_MODULE_ACTIONS__*/
+#endif /*__SDF_ACTIONS__*/

@@ -7,7 +7,7 @@
 #include "module-actions.tb"
 #include "error-gui/error-viewer.idef"
 #include "editor-plugin/editor-plugin.idef"
-#include "status-to-progress.tb"
+#include "serialization-utils.tb"
 
 /* sdf-meta */
 #include "graph-utils.tb"
@@ -15,7 +15,7 @@
 /* to be resolved */
 #include <sdf-editor-actions.tb>
 #include <asf-editor-actions.tb>
-#include <asfsdf-module-actions.tb>
+#include <module-actions.tb>
 #include <gui-actions.tb>
 #include <term-actions.tb>
 #include <term-editor-actions.tb>

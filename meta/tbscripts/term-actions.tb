@@ -1,21 +1,14 @@
 #ifndef __TERM_ACTIONS__
 #define __TERM_ACTIONS__
 
-process SplitFilename(Path : str, 
-                      FileName : str?,
-		      Directory : str?, 
-		      Extension : str?) is
-  snd-msg(io-get-path-filename(Path))
-  . rec-msg(io-filename(Path, FileName?))
-  . snd-msg(io-get-path-directory(Path))
-  . rec-msg(io-directory(Path, Directory?))
-  . snd-msg(io-get-path-extension(Path))
-  . rec-msg(io-extension(Path, Extension?))
+#include <pretty-print-utils.tb>
+#include <term-utils.tb>
 
 process EqualTrees(Tree1 : term, Tree2 : term, Result : term?) is
 let
   Value : term
 in
+  TODO("term-actions.tb bevat niet-action processes").
   snd-msg(equal-trees(Tree1, Tree2))
   .  rec-msg(tree-is-equal(Value?))
   . 
@@ -25,14 +18,6 @@ in
     Result := false
   fi
 endlet
-
-process UnPackTree(Tree : term, UnpackedTree : term?) is
-  snd-msg(io-unpack-term(Tree))
-  . rec-msg(io-term(UnpackedTree?))
-
-process PackTree(Tree : term, PackedTree : term?) is
-  snd-msg(io-pack-term(Tree))
-  . rec-msg(io-term(PackedTree?))
 
 process ActionAddPosInfo(EditorId : term, Tree : term, ResultTree : term?) is
 let
@@ -99,4 +84,12 @@ in
   fi
 endlet
 
+process ParseAction(EditorId : term) is
+
+let
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . ParseTerm(EditorId, ModuleId)
+endlet
 #endif /*__TERM_ACTIONS__*/

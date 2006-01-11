@@ -1,0 +1,25 @@
+#ifndef __ASF_ACTIONS__
+#define __ASF_ACTIONS__
+
+process Reduce(EditorId : term, ModuleId : term, Tree : term, RTree : term?) is
+  snd-msg(debugging(off)) 
+  . ReduceTerm(Tree, ModuleId, RTree?)
+  .
+  if not-equal(RTree, UNDEFINED) then
+    snd-msg(promote-posinfo-to-origin(RTree))
+    . rec-msg(promoted-posinfo-to-origin(RTree?))
+    . AnnotateTree(RTree, "reduct.out", RTree?)
+    . snd-msg(put-term-tree("reduct.out", RTree))
+  else
+    tau
+  fi
+
+process ParseEquationsAction(EditorId : term) is
+let
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . ParseEquations(EditorId, ModuleId)
+endlet
+
+#endif /* __ASF_ACTIONS__ */
