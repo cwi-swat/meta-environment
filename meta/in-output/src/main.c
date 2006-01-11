@@ -1,5 +1,3 @@
-/*{{{  includes */
-
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -17,62 +15,36 @@
 
 #include "in-output.tif.h"
 
-/*}}}  */
-/*{{{  defines */
-
 #define EOS '\0'
 #define PATH_LEN (_POSIX_PATH_MAX)
 #define PATH_SEPARATOR '/'
 #define EXTENSION_SEPARATOR '.'
 #define TOOL_NAME "in-output"
 
-/*}}}  */
-/*{{{  typedefs */
-
 typedef ATbool (*Writer)(ATerm, FILE *);
-
-/*}}}  */
-/*{{{  variables */
 
 ATbool run_verbose = ATfalse;
 
 static char myversion[] = "1.5";
 static char myarguments[] = "hvV";
 
-/*}}}  */
-
-/*{{{  static const char *ATgetString(ATerm t) */
-
-static const char *ATgetString(ATerm t)
-{
+static const char *ATgetString(ATerm t) {
   assert(t != NULL && ATgetType(t) == AT_APPL);
 
   return ATgetName(ATgetAFun((ATermAppl) t));
 }
 
-/*}}}  */
-/*{{{  static ATbool fileExists(const char *fname) */
-
-static ATbool fileExists(const char *fname)
-{
+static ATbool fileExists(const char *fname) {
   struct stat st;
   return stat(fname, &st) != EOF ? ATtrue : ATfalse;
 }
 
-/*}}}  */
-/*{{{  static size_t getFileSize(const char *s) */
-
-static size_t getFileSize(const char *s)
-{
+static size_t getFileSize(const char *s) {
   struct stat st;
   return (stat((char *)s, &st)!=EOF) ? st.st_size : -1L;
 }
 
-/*}}}  */
-/*{{{  static char *readFileContents(const char *fnam, size_t *size) */
-
-static char *readFileContents(const char *fnam, size_t *size)
-{
+static char *readFileContents(const char *fnam, size_t *size) {
   char *buf = NULL;
   FILE *fd;
 
@@ -101,17 +73,13 @@ static char *readFileContents(const char *fnam, size_t *size)
   return buf ;
 }
 
-/*}}}  */
- /*{{{  static char *expandPath(const char *relative_path) */
-
 /* Expand a relative path to its absolute equivalent
  *
  * - ATerror upon serious failure (no current directory, no memory)
  * - returns NULL when relative_path could not be expanded
  * - returns calloc(3)-ed pointer containing absolute path otherwise.
  */
-static char *expandPath(const char *relative_path)
-{
+static char *expandPath(const char *relative_path) {
   char *absolute_path = NULL;
   char *trial_path = NULL;
   char current_dir[PATH_LEN + 1];
@@ -149,12 +117,7 @@ static char *expandPath(const char *relative_path)
   return absolute_path;
 }
 
-/*}}}  */
-
-/*{{{  static ATerm makeResultMessage(ERR_Summary summary) */
-
-static ATerm makeResultMessage(ERR_Summary summary)
-{
+static ATerm makeResultMessage(ERR_Summary summary) {
   ATerm result;
 
   if (summary == NULL) {
@@ -167,11 +130,7 @@ static ATerm makeResultMessage(ERR_Summary summary)
   return result;
 }
 
-/*}}}  */
-/*{{{  static ERR_Summary createSummary(const char *msg, const char *path) */
-
-static ERR_Summary createSummary(const char *msg, const char *path)
-{
+static ERR_Summary createSummary(const char *msg, const char *path) {
   ERR_Location location = ERR_makeLocationFile(path);
   ERR_Subject subject = ERR_makeSubjectLocalized(strerror(errno), location);
   ERR_SubjectList subjects = ERR_makeSubjectListSingle(subject);
@@ -181,45 +140,23 @@ static ERR_Summary createSummary(const char *msg, const char *path)
   return ERR_makeSummarySummary(TOOL_NAME, path, errors);
 }
 
-/*}}}  */
-
-/*{{{  static ATerm createFileNotFoundMessage() */
-
-static ATerm createFileNotFoundMessage()
-{
+static ATerm createFileNotFoundMessage() {
   return ATmake("snd-value(file-not-found)");
 }
 
-/*}}}  */
-/*{{{  static ATerm createFileFoundMessage(ATermList directories) */
-
-static ATerm createFileFoundMessage(ATermList directories)
-{
+static ATerm createFileFoundMessage(ATermList directories) {
   return ATmake("snd-value(file-found(<term>))", directories);
 }
 
-/*}}}  */
-/*{{{  static ATerm createFilesEqualMessage() */
-
-static ATerm createFilesEqualMessage()
-{
+static ATerm createFilesEqualMessage() {
   return ATmake("snd-value(equal)");
 }
 
-/*}}}  */
-/*{{{  static ATerm createFilesDifferentMessage() */
-
-static ATerm createFilesDifferentMessage()
-{
+static ATerm createFilesDifferentMessage() {
   return ATmake("snd-value(different)");
 }
 
-/*}}}  */
-
-/*{{{  ATerm relative_to_absolute(int cid, ATerm paths) */
-
-ATerm relative_to_absolute(int cid, ATerm paths)
-{
+ATerm relative_to_absolute(int cid, ATerm paths) {
   CFG_Properties relativePaths = CFG_PropertiesFromTerm(paths);
   CFG_Properties result = CFG_makePropertiesEmpty();
   ERR_Summary summary = NULL;
@@ -254,11 +191,7 @@ ATerm relative_to_absolute(int cid, ATerm paths)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm remove_file(int cid, const char *path) */
-
-ATerm remove_file(int cid, const char *path)
-{
+ATerm remove_file(int cid, const char *path) {
   ERR_Summary summary = NULL;
 
   if (unlink(path) != 0) {
@@ -268,11 +201,7 @@ ATerm remove_file(int cid, const char *path)
   return makeResultMessage(summary);
 }
 
-/*}}}  */
-/*{{{  ATerm copy_file(int cid, const char *srcPath, const char *destPath) */
-
-ATerm copy_file(int cid, const char *srcPath, const char *destPath)
-{
+ATerm copy_file(int cid, const char *srcPath, const char *destPath) {
   size_t size;
   char *contents;
   ERR_Summary summary = NULL;
@@ -299,29 +228,15 @@ ATerm copy_file(int cid, const char *srcPath, const char *destPath)
   return makeResultMessage(summary);
 }
 
-/*}}}  */
-
-/*{{{  ATerm pack_term(int cid, ATerm term) */
-
-ATerm pack_term(int cid, ATerm term)
-{
+ATerm pack_term(int cid, ATerm term) {
   return ATmake("snd-value(term(<term>))", ATBpack(term));
 }
 
-/*}}}  */
-/*{{{  ATerm unpack_term(int cid, ATerm term) */
-
-ATerm unpack_term(int cid, ATerm term)
-{
+ATerm unpack_term(int cid, ATerm term) {
   return ATmake("snd-value(term(<term>))", ATBunpack(term));
 }
 
-/*}}}  */
-
-/*{{{  ATerm read_text_file(int cid, const char *path) */
-
-ATerm read_text_file(int cid, const char *path)
-{
+ATerm read_text_file(int cid, const char *path) {
   char *contents = NULL;
   size_t size;
 
@@ -336,11 +251,7 @@ ATerm read_text_file(int cid, const char *path)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm read_and_pack_term(int cid, const char *path) */
-
-ATerm read_and_pack_term(int cid, const char *path)
-{
+ATerm read_and_pack_term(int cid, const char *path) {
   ATerm contents = ATreadFromNamedFile(path);
 
   if (contents == NULL) {
@@ -350,11 +261,7 @@ ATerm read_and_pack_term(int cid, const char *path)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm read_term_file(int cid, const char *path) */
-
-ATerm read_term_file(int cid, const char *path)
-{
+ATerm read_term_file(int cid, const char *path) {
   ATerm contents = ATreadFromNamedFile(path);
  
   if (contents == NULL) {
@@ -365,12 +272,7 @@ ATerm read_term_file(int cid, const char *path)
   }
 }
 
-/*}}}  */
-
-/*{{{  static ERR_Summary write_file(const char *path, ATerm content, Writer writer) */
-
-static ATerm write_file(const char *path, ATerm content, Writer writer)
-{
+static ATerm write_file(const char *path, ATerm content, Writer writer) {
   FILE *file;
   ERR_Summary summary = NULL;
 
@@ -393,11 +295,7 @@ static ATerm write_file(const char *path, ATerm content, Writer writer)
   return makeResultMessage(summary);
 }
 
-/*}}}  */
-/*{{{  static ATbool text_list_writer(ATerm content, FILE *f) */
-
-static ATbool text_list_writer(ATerm content, FILE *f)
-{
+static ATbool text_list_writer(ATerm content, FILE *f) {
   ATermList list = (ATermList) content;
   while (!ATisEmpty(list)) {
     const char *str = ATgetString(ATgetFirst(list));
@@ -409,45 +307,23 @@ static ATbool text_list_writer(ATerm content, FILE *f)
   return ATtrue;
 }
 
-/*}}}  */
-
-/*{{{  ATerm write_text_list(int cid, const char *path, ATerm content) */
-
-ATerm write_text_list(int cid, const char *path, ATerm content)
-{
+ATerm write_text_list(int cid, const char *path, ATerm content) {
   return write_file(path, ATBunpack(content), text_list_writer);
 }
 
-/*}}}  */
-/*{{{  ATerm write_term_as_text(int cid, const char *path, ATerm content) */
-
-ATerm write_term_as_text(int cid, const char *path, ATerm content)
-{
+ATerm write_term_as_text(int cid, const char *path, ATerm content) {
   return write_file(path, ATBunpack(content), ATwriteToTextFile);
 }
 
-/*}}}  */
-/*{{{  ATerm write_in_baf(int cid, const char *path, ATerm content) */
-
-ATerm write_in_baf(int cid, const char *path, ATerm content)
-{
+ATerm write_in_baf(int cid, const char *path, ATerm content) {
   return write_file(path, content, ATwriteToBinaryFile);
 }
 
-/*}}}  */
-/*{{{  ATerm unpack_and_write_in_baf(int cid, const char *path, ATerm content) */
-
-ATerm unpack_and_write_in_baf(int cid, const char *path, ATerm content)
-{
+ATerm unpack_and_write_in_baf(int cid, const char *path, ATerm content) {
   return write_file(path, ATBunpack(content), ATwriteToBinaryFile);
 }
 
-/*}}}  */
-
-/*{{{  ATerm exists_file(int cid, const char *path) */
-
-ATerm exists_file(int cid, const char *path)
-{
+ATerm exists_file(int cid, const char *path) {
   ERR_Summary summary = NULL;
 
   if (!fileExists(path)) {
@@ -457,11 +333,7 @@ ATerm exists_file(int cid, const char *path)
   return makeResultMessage(summary);
 }
 
-/*}}}  */
-/*{{{  ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) */
-
-ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
-{
+ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
   char filename[PATH_LEN];
   CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
   ATermList directories = ATempty;
@@ -487,16 +359,10 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension)
   }
 }
 
-/*}}}  */
-
-/*{{{  ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension) */
-
-ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension)
-{
+ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension) {
   ATerm result = NULL;
   CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
 
-  ATwarning("io: paths: %t\nio: path: %s\nio: ext %s\n", paths, path, extension);
   assert(path != NULL);
 
   while (!CFG_isPropertiesEmpty(searchPaths) && !result) {
@@ -526,12 +392,7 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
   return ATmake("snd-value(<term>)", result);
 }
 
-/*}}}  */
-
-/*{{{  ATerm compare_files(int cid, const char *f1, const char *f2) */
-
-ATerm compare_files(int cid, const char *f1, const char *f2)
-{
+ATerm compare_files(int cid, const char *f1, const char *f2) {
   struct stat st1;
   struct stat st2;
 
@@ -551,11 +412,7 @@ ATerm compare_files(int cid, const char *f1, const char *f2)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm get_filename(int cid, const char *directory, const char *name, const char *extension) */
-
-ATerm get_filename(int cid, const char *directory, const char *name, const char *extension)
-{
+ATerm get_filename(int cid, const char *directory, const char *name, const char *extension) {
   ATerm result;
   char *buf;
   char path[PATH_LEN];
@@ -579,12 +436,7 @@ ATerm get_filename(int cid, const char *directory, const char *name, const char 
   return result;
 }
 
-/*}}}  */
-
-/*{{{  ATerm get_path_directory(int conn, const char *path) */
-
-ATerm get_path_directory(int conn, const char *path)
-{
+ATerm get_path_directory(int conn, const char *path) {
   char *copy;
   char *directory;
   ATerm result;
@@ -607,11 +459,7 @@ ATerm get_path_directory(int conn, const char *path)
   return ATmake("snd-value(<term>)", result);
 }
 
-/*}}}  */
-/*{{{  ATerm get_path_filename(int conn, const char *path) */
-
-ATerm get_path_filename(int conn, const char *path)
-{
+ATerm get_path_filename(int conn, const char *path) {
   char *copy;
   char *extension;
   char *filename;
@@ -635,11 +483,7 @@ ATerm get_path_filename(int conn, const char *path)
   return ATmake("snd-value(<term>)", result);
 }
 
-/*}}}  */
-/*{{{  ATerm get_path_extension(int conn, const char *path) */
-
-ATerm get_path_extension(int conn, const char *path)
-{
+ATerm get_path_extension(int conn, const char *path) {
   const char *extension;
 
   assert(path != NULL);
@@ -654,21 +498,11 @@ ATerm get_path_extension(int conn, const char *path)
   }
 }
 
-/*}}}  */
-
-/*{{{  void rec_terminate(int cid, ATerm arg) */
-
-void rec_terminate(int cid, ATerm arg)
-{
+void rec_terminate(int cid, ATerm arg) {
   exit(0);
 }
 
-/*}}}  */
-
-/*{{{  static void usage(const char *prg, ATbool is_err) */
-
-static void usage(const char *prg, ATbool is_err)
-{
+static void usage(const char *prg, ATbool is_err) {
   ATwarning(
 	    "Usage: %s [options]\n"
 	    "Options:\n"
@@ -679,21 +513,12 @@ static void usage(const char *prg, ATbool is_err)
   exit(is_err ? 1 : 0);
 }
 
-/*}}}  */
-/*{{{  static void version(const char *prg) */
-
-static void version(const char *prg)
-{
+static void version(const char *prg) {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
 }
 
-/*}}}  */
-
-/*{{{  int main(int argc, char *argv[]) */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   int   c, cid, toolbus_mode = 0;
   ATerm bottomOfStack;
 
@@ -733,4 +558,3 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-/*}}}  */

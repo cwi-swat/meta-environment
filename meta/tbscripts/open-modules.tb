@@ -399,7 +399,6 @@ let
   Term: path
 in
   Term := quote(path(Path))
-  . printf("Path set: %t\n", Path)
   . MM-SetAttribute(ModuleId, Namespace, "path", Term)
 endlet
 
