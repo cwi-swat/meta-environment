@@ -64,7 +64,7 @@ in
     +
       TextSaved(Sid, EditorType)
     +
-      UpdateStructure(Sid, EditorType)
+      UpdateSyntaxStructure(Sid, EditorType)
     )
     *
     EditorDisconnected(Sid)
@@ -81,6 +81,22 @@ in
   else
     tau
   fi
+endlet
+
+process UpdateSyntaxStructure(Sid: term, EditorType: term) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Slices: term,
+  Tree: term
+in
+  rec-note(mm-attribute-changed(Event?))
+  . GetModuleId(Sid, ModuleId?)
+  . GetModuleSyntaxTree(ModuleId, Tree?) 
+  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(se-get-tree-slices(Sid))
+  . rec-msg(se-tree-slices(Sid, Slices?))
+  . snd-msg(te-highlight-slices(Sid, Slices))
 endlet
 
 #endif /* __SDF_EDITOR_UTILS__ */

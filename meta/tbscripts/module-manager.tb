@@ -67,7 +67,8 @@ let
   HasValue : bool,
   OldValue : term
 in
-  MM-HasAttribute(ModuleId, Namespace, Key, HasValue?)
+  printf("%t: setting attribute %t of %t to %t\n", Namespace, Key, ModuleId, Value)
+  . MM-HasAttribute(ModuleId, Namespace, Key, HasValue?)
   .
   if equal(HasValue, true) then
     MM-GetAttribute(ModuleId, Namespace, Key, OldValue?)

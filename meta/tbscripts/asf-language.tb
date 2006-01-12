@@ -2,11 +2,15 @@
 #define __ASF_LANGUAGE__
 
 #include <parsetable-utils.tb>
+#include <asf-namespace.h>
+#include <sdf-namespace.h>
 
 process AddEqsSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
   snd-msg(add-eqs-syntax(Modulename, Syntax))
   . rec-msg(extended-syntax(NewSyntax?))
 
-toolbus(BuildParsetable("equations-parsetable", eqs, "AddEqsSyntax"))
+/* note that we provide the SDF_NAMESPACE on purpose */
+toolbus(BuildParsetable("equations-parsetable", SDF_NAMESPACE, eqs, "AddEqsSyntax"))
+
 
 #endif /* __ASF_LANGUAGE__ */

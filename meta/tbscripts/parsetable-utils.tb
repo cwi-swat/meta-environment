@@ -20,7 +20,7 @@ endlet
 /* BuildParseTable is started somewhere else, such that a specific
  * PreprocessSyntaxHandler can be bound for specific types of languages
  */
-process BuildParsetable(TableName: str, Type: term, PreprocessSyntaxHandler: str) is
+process BuildParsetable(TableName: str, Namespace: term, Type: term, PreprocessSyntaxHandler: str) is
 let
   ModuleId: term,
   Syntax: term,
@@ -28,7 +28,7 @@ let
   Modulename: str,
   NewSyntax: term
 in
-  InitCache(TableName)
+  InitCache(TableName, Namespace, available)
   .
   (
     rec-msg(get-parsetable(ModuleId?, Type))
@@ -54,7 +54,6 @@ in
       fi
     else
       snd-msg(parsetable(ModuleId, Type, Table))
-      . printf("reusing cached value\n")
     fi
   )
   * delta

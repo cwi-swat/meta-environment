@@ -19,14 +19,6 @@ in
   . MDB-InitializeFileExtensions()
   .
   (
-    rec-msg(update-eqs-tree-in-db(ModuleId?, tree(EqsTree?)))
-    . GetModulePath(ModuleId, ASF_NAMESPACE, Filename?)
-    . snd-msg(add-posinfo-to-depth(Filename, EqsTree, POSINFO_DEPTH))
-    . rec-msg(tree-with-pos-info(EqsTree?))
-    . snd-msg(ts-put-term-value("asf-tree", ModuleId, EqsTree))
-    . EqsTree := UNDEFINED
-    . snd-msg(eqs-updated)
-  +
     rec-msg(put-term-tree(Filename?, TermTree?))
     . snd-msg(ts-put-term-value("term-tree", Filename, TermTree))
   +
@@ -51,8 +43,6 @@ process MDB-InitializeModuleDb is
   snd-msg(ts-add-table("extensions", "str"))
   . snd-msg(ts-add-table("sdf-tree", "term"))
   . snd-msg(ts-add-table("sdf-text", "str"))
-  . snd-msg(ts-add-table("asf-tree", "term"))
-  . snd-msg(ts-add-table("asf-text", "str"))
   . snd-msg(ts-add-table("term-tree", "term"))
 
 /* Used by ModuleDB */

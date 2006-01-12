@@ -1,6 +1,7 @@
 #ifndef __ASF_EDITOR_UTILS__
 #define __ASF_EDITOR_UTILS__
 #include <editing.tb>
+#include <asf-namespace.h>
 
 process EditEquations(ModuleId: term) is
 let
@@ -14,6 +15,7 @@ let
   Tree: term
 in
   EditorType := equations-editor
+  . printf("%t: editing module %t\n", ASF_NAMESPACE, ModuleId)
   . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   . Edit(Path, Sid?)
   . EditText(Sid, EditorType, "", AlreadyExists?)
@@ -30,13 +32,14 @@ in
     . snd-msg(te-set-editable(Sid, Editable)) 
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetModuleEquationsTree(ModuleId, Tree?)
+    . GetASFParseTree(ModuleId, Tree?)
     .
     if not-equal(Tree, UNDEFINED) then
       EditStructure(Sid, Tree)
     else
       tau
     fi
+    . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",available,parsed)
     .
     (
       MenuSelected(Sid, EditorType)
@@ -46,6 +49,8 @@ in
       TextChanged(Sid, EditorType)
     +
       TextSaved(Sid, EditorType)
+    +
+      UpdateEquationsStructure(Sid, EditorType)
     )
     *
     EditorDisconnected(Sid)
@@ -55,5 +60,21 @@ in
   fi
 endlet
 
+process UpdateEquationsStructure(Sid: term, EditorType: term) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Slices: term,
+  Tree: term
+in
+  rec-note(mm-attribute-changed(Event?))
+  . printf("updating equations editor\n")
+  . GetModuleId(Sid, ModuleId?)
+  . GetASFParseTree(ModuleId, Tree?) 
+  . snd-msg(se-update(Sid, Tree))
+  . snd-msg(se-get-tree-slices(Sid))
+  . rec-msg(se-tree-slices(Sid, Slices?))
+  . snd-msg(te-highlight-slices(Sid, Slices))
+endlet
 
 #endif /* __ASF_EDITOR_UTILS__ */

@@ -29,61 +29,38 @@ let
   NewPath: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,parsed)  .
+  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",available,parsed)  
+  .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . CheckASFModule(ModuleId, Tree)
+    . CheckASFModule(ModuleId)
   )
   *
   delta
 endlet
 
-/*toolbus(ASFModuleChecker)*/
+toolbus(ASFModuleChecker)
 
 process ASFModuleParser is
 let
   Event: attribute-changed-event,
-  ModuleId: term
+  ModuleId: term,
+  Tree: term
 in
   MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))
+    . printf("ASF module available for parsing\n")
     . ACE-GetModuleId(Event, ModuleId?)
-    . GetASFParseTree(ModuleId)
+    . GetASFParseTree(ModuleId, Tree?)
+    . Tree := help-garbage-collector
   )
   *
   delta
 endlet
 
 toolbus(ASFModuleParser)
-
-
-process AnnotateEquationsTreeListener is
-let
-  AnnotatedTree: term,
-  Event: attribute-changed-event,
-  ModuleId: term,
-  Path: str,
-  Tree: term
-in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,parsed)
-  . TODO("Instantieer met namespace -> generiek voor SDF en ASF")
-  .
-  (
-    rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
-    . GetModuleSyntaxTree(ModuleId, Tree?)
-    . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
-    . AnnotateTree(Tree, Path, AnnotatedTree?)
-    . SetModuleEquationsTree(ModuleId, AnnotatedTree)
-    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "annotated", true)
-  )
-  *
-  delta
-endlet
-
-toolbus(AnnotateEquationsTreeListener)
 
 #endif /* __ASF_LISTENERS__ */

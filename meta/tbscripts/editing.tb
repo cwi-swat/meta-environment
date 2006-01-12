@@ -361,21 +361,6 @@ in
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
-process UpdateStructure(Sid: term, EditorType: term) is
-let
-  Event: attribute-changed-event,
-  ModuleId: term,
-  Slices: term,
-  Tree: term
-in
-  rec-note(mm-attribute-changed(Event?))
-  . GetModuleId(Sid, ModuleId?)
-  . GetModuleSyntaxTree(ModuleId, Tree?) 
-  . snd-msg(se-update(Sid, Tree))
-  . snd-msg(se-get-tree-slices(Sid))
-  . rec-msg(se-tree-slices(Sid, Slices?))
-  . snd-msg(te-highlight-slices(Sid, Slices))
-endlet
 
 process TextSaved(Sid: term, EditorType: term) is
 let
@@ -426,11 +411,13 @@ in
       if equal(EditorType, syntax-editor) then
         DeleteModuleSyntaxTree(ModuleId)
       else
+        tau
+        /*
         if equal(EditorType, equations-editor) then
 	  DeleteModuleEquationsTree(ModuleId)
 	else
 	  tau
-	fi
+	fi */
       fi
       . snd-msg(te-clear-focus(Sid))
       . snd-msg(te-display-message(Sid,

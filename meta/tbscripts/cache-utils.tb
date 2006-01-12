@@ -28,16 +28,17 @@ in
     )
     .
     snd-msg(ts-remove-value(TableName, ModuleId))
+    . printf("%t: key %t removed from cache\n", TableName, ModuleId)
   )
   * delta
 endlet
 
-process InitCache(TableName: str) is
+process InitCache(TableName: str, Namespace: term, NewValue: term) is
 let
   Pid : int
 in
   snd-msg(ts-add-table(TableName, "term"))
-  . create(ClearCacheHandler(TableName,SDF_NAMESPACE,"status",<term>,available), Pid?)
+  . create(ClearCacheHandler(TableName, Namespace,"status",<term>,NewValue), Pid?)
 endlet
 
 process GetCachedValue(TableName: str, Key: term, Value: term?) is
@@ -45,12 +46,15 @@ process GetCachedValue(TableName: str, Key: term, Value: term?) is
   .
   (
     rec-msg(ts-value(TableName, Key, Value?)) 
+    . printf("%t: key %t in cache\n", TableName, Key)
   +
     rec-msg(ts-no-value(TableName, Key))
+    . printf("%t: key %t NOT in cache\n", TableName, Key)
     . Value := UNDEFINED
   )
 
 process PutCachedValue(TableName: str, Key: term, Value: term) is
-  snd-msg(ts-put-term-value(TableName, Key, Value))
+  printf("%t: stored key %t in cache\n", TableName, Key)
+  . snd-msg(ts-put-term-value(TableName, Key, Value))
 
 #endif /* __CACHING__ */

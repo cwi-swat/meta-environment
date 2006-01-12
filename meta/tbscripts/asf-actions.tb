@@ -14,6 +14,7 @@ process Reduce(EditorId : term, ModuleId : term, Tree : term, RTree : term?) is
     tau
   fi
 
+/*
 process ParseEquationsAction(EditorId : term) is
 let
   ModuleId : term
@@ -21,5 +22,5 @@ in
   GetModuleId(EditorId, ModuleId?)
   . ParseEquations(EditorId, ModuleId)
 endlet
-
+*/
 #endif /* __ASF_ACTIONS__ */
