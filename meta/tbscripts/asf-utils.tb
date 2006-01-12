@@ -92,20 +92,15 @@ process MDB-AddEquationsPosInfo(ModuleId: term, In: term, Out: term?) is
 
 process MDB-AddPosInfo(ModuleId: term, Type: term, In: term, Out: term?) is
 let
-  AsfExt: str,
-  AsfPath: str,
-  SdfPath: str
+  Path: str
 in
   printf("Another codeclone of EditEquationsAction\n").
-  GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+  GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   .  
-  if equal(SdfPath, "") then
+  if equal(Path, "") then
     snd-msg(no-equations(ModuleId))
   else
-    snd-msg(file-extension-hook(asf))
-    . rec-msg(file-extension-hook-result(AsfExt?))
-    . ReplaceExtension(SdfPath, AsfExt, AsfPath?)
-   . AnnotateTree(In, AsfPath, Out?)
+    AnnotateTree(In, Path, Out?)
   fi
 endlet
 
@@ -412,6 +407,7 @@ let
   SdfPath: str
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . printf("Opening ASF Module for %t\n", Modulename)
   . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
   . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
   . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
@@ -426,8 +422,10 @@ in
     . Editable := not(LibraryModule)
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable)
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
+    . printf("ASF module found for %t\n", Modulename)
   +
     rec-msg(io-file-not-exists)
+    . printf("No ASF module found for %t\n", Modulename)
   )
 endlet
 
@@ -458,12 +456,13 @@ let
 in
   Id := process-id
   . Type := eqs
+  . printf("Parsing ASF file \n")
   . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   . ReadFile(Path, Text?)
   .
   if not-equal(Text, "") then
     GetParseTable(ModuleId, Type, ParseTable?)
-    . create(ASFParseTreeHandler(ModuleId), Pid?)
+    . create(ASFParseTreeHandler(ModuleId, Path), Pid?)
     . ParseText(Pid, Text, ParseTable, ASF_TOPSORT)
     .
     (
@@ -477,13 +476,12 @@ in
   fi
 endlet
 
-process ASFParseTreeHandler(ModuleId: term) is
+process ASFParseTreeHandler(ModuleId: term, Path: str) is
 let
   ErrorMessage: term,
   Nonterminal: term,
   ParseError: term,
   ParseResult: term,
-  Path: str,
   Pid: int,
   Summary: term,
   Table: term
@@ -525,12 +523,10 @@ endlet
 /*
 process GetAsfModule(ModuleId: term) is
 let
-  AsfExt: str,
-  AsfPath: str,
+  Path: str,
   Error: term,
   Modulename: str,
   ParseError: term,
-  SdfPath: str,
   Summary: term,
   Text: str,
   Tree: term
@@ -543,17 +539,12 @@ in
   +
     rec-msg(ts-no-value("asf-tree", ModuleId))
     . TODO("codeclone with EditEquationsAction")
-    . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+    . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
     .  
-    if equal(SdfPath, "") then
+    if equal(Path, "") then
       snd-msg(no-equations(ModuleId))
     else
-      snd-msg(file-extension-hook(asf))
-      . rec-msg(file-extension-hook-result(AsfExt?))
-      . ReplaceExtension(SdfPath, AsfExt, AsfPath?)
-      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
-      . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
-      . ReadFile(AsfPath, Text?)
+      . ReadFile(Path, Text?)
       .
       if equal(Text, "") then
         snd-msg(no-equations(ModuleId))
@@ -561,7 +552,7 @@ in
         ParseEquationsText(ModuleId, Text, Tree?)
         .
 	if equal(Tree, UNDEFINED) then
-	  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+	  MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename?)
           . AddFilenameToParseError(Error, Modulename, ParseError?)
           . snd-msg(es-make-summary("sglr", Modulename, [ParseError]))
           . rec-msg(es-summary(Summary?))

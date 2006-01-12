@@ -2,6 +2,7 @@
 #define __ASF_LISTENERS__
 
 #include <asf-namespace.h>
+#include <asf-utils.tb>
 
 process ASFModuleOpener is
 let
@@ -67,7 +68,7 @@ let
   Path: str,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,parsed)
   . TODO("Instantieer met namespace -> generiek voor SDF en ASF")
   .
   (

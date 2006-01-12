@@ -11,24 +11,17 @@ endlet
 
 process EditEquationsAction(ModuleId : term) is
 let
-  AsfPath: str,
-  SdfPath: str,
-  AsfExt: str,
+  Path: str,
   Pid: int,
   Sid: term
 in
-  GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
+  GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   .
-  if equal(SdfPath, "") then
+  if equal(Path, "") then
     tau
   else
-    snd-msg(file-extension-hook(asf))
-    . rec-msg(file-extension-hook-result(AsfExt?))
-    . ReplaceExtension(SdfPath, AsfExt, AsfPath?)
-    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
-    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
-    . create(EditEquations(ModuleId), Pid?)
-    . rec-msg(equations-editor-started(AsfPath, Sid?))
+    create(EditEquations(ModuleId), Pid?)
+    . rec-msg(equations-editor-started(Path, Sid?))
     . create(CleanupEditTerm(Sid, ModuleId), Pid?)
   fi
 endlet

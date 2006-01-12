@@ -595,7 +595,8 @@ in
                                 [Path])))
     fi
   else
-    if equal(EditorType, syntax-editor) then
+    TODO("Factor out ASF, SDF dependencies with process parameter\n")
+    . if equal(EditorType, syntax-editor) then
       Term := quote(path(Path))
       . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", Term, ModuleId?)
       . create(EditSyntax(ModuleId), Pid?)

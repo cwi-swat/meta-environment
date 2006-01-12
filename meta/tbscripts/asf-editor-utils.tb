@@ -20,10 +20,10 @@ in
   . snd-msg(equations-editor-started(Path, Sid))
   .
   if equal(AlreadyExists, false) then
-    MM-HasAttribute(ModuleId, SDF_NAMESPACE, "editable", HasAttribute?)
+    MM-HasAttribute(ModuleId, ASF_NAMESPACE, "editable", HasAttribute?)
     .
     if equal(HasAttribute, true) then
-      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable?)
+      MM-GetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable?)
     else
       Editable := true
     fi
