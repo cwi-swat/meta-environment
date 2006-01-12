@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Jan 12 16:45:30 CET 2006 <jurgenv@cwi.nl>
+ * meta/tbscripts: parsing and checking ASF files is now done
+   via listeners.
+ * meta/tbscripts: parsing ASF files is cached transparently
+ * meta/tbscripts: now more Parse buttons for ASF and SDF files
+
 Wed Jan 11 08:25:38 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * meta/tbscripts:
    - Split into asf and sdf particular scripts 
