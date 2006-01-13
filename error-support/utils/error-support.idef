@@ -1,3 +1,6 @@
+#ifndef __ERROR_SUPPORT__
+#define __ERROR_SUPPORT__
+
 tool error-support is { command = "error-support" }
 
 process ErrorSupport is
@@ -146,3 +149,5 @@ in
 endlet
 
 toolbus(ErrorSupport)
+
+#endif /* __ERROR_SUPPORT__ */
