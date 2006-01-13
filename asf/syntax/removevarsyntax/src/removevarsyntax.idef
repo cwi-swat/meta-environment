@@ -1,3 +1,6 @@
+#ifndef __REMOVEVARSYNTAX__
+#define __REMOVEVARSYNTAX__
+
 tool removevarsyntax is {command = "removevarsyntax"}
 
 process RemoveVarSyntax is
@@ -22,3 +25,4 @@ endlet
 
 toolbus(RemoveVarSyntax)
 
+#endif /* __REMOVEVARSYNTAX__ */
