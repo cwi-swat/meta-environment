@@ -1,6 +1,5 @@
 tool term-store is { command = "term-store -TB_COLLECT_LOOP 1" }
 
-toolbus(TermStore)
 
 process TermStore is
 let
@@ -127,3 +126,5 @@ in
   *
   delta
 endlet
+
+toolbus(TermStore)

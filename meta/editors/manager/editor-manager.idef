@@ -1,8 +1,4 @@
-/* $Id$ */
-
-tool editor-manager is {
-  command = "editor-manager"
-}
+tool editor-manager is { command = "editor-manager" }
 
 process EditorManager is
 let

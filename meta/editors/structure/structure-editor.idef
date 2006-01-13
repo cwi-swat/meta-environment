@@ -1,8 +1,4 @@
-/* $Id$ */
-
-tool structure-editor is {
-  command = "structure-editor"
-}
+tool structure-editor is { command = "structure-editor" }
 
 process StructureEditor is
 let
