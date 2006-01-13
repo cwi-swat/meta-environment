@@ -16,6 +16,7 @@ import nl.cwi.sen1.data.ModuleSelectionListener;
 import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.data.ModuleTreeNode;
 import nl.cwi.sen1.gui.plugin.Navigator;
+import nl.cwi.sen1.gui.plugin.data.ModuleSelectionModel;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;

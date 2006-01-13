@@ -3,19 +3,30 @@
 
 process SynchronizeModuleSelection is
 let
-  Module: str
+  Module: term
 in
-  subscribe(nav-module-selected(<str>))
-  . subscribe(gp-node-selected(<str>,<str>))
+  subscribe(nav-module-selected(<term>))
+  . subscribe(gp-node-selected(<str>,<term>))
   .
   (
     rec-note(nav-module-selected(Module?))
     . snd-msg(gp-select-node("import-graph", Module))
+    . ShowModuleDetails(Module)
   +
     rec-note(gp-node-selected("import-graph", Module?))
     . snd-msg(nav-select-module(Module))
+    . ShowModuleDetails(Module)
   ) 
   * delta
+endlet
+
+process ShowModuleDetails(Module: term) is
+let
+  Attributes: term
+in
+  printf("Module: %t\n", Module).
+  MM-GetAllAttributes(Module, Attributes?)
+  . snd-msg(md-set-details(Attributes))
 endlet
 
 toolbus(SynchronizeModuleSelection)

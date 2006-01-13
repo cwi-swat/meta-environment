@@ -42,7 +42,7 @@ in
 endlet
 
 process NAV-AddListener is
-  subscribe(nav-module-selected(<str>))
+  subscribe(nav-module-selected(<term>))
 
 process NAV-RequestPopup(ModuleId: term?) is
   rec-msg(nav-request-popup-event(ModuleId?))

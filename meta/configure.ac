@@ -96,7 +96,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -184,6 +184,7 @@ AC_CONFIG_FILES([Makefile
    gui/lib/Makefile
    gui/util/Makefile
    gui/plugin/Makefile
+   gui/plugin/moduledetails/Makefile
    gui/plugin/navigator/Makefile
    gui/plugin/dialog/Makefile
    gui/plugin/graph-painter/Makefile

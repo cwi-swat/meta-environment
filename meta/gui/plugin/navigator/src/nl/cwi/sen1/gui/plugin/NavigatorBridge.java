@@ -1,6 +1,6 @@
 // Java tool bridge NavigatorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Oct 12, 2005 3:14:03 PM
+// generation time: Jan 13, 2006 9:21:30 AM
 
 package nl.cwi.sen1.gui.plugin;
 

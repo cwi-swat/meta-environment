@@ -3,6 +3,7 @@
 #include "meta/dialog.idef"
 #include "graph-painter.idef"
 #include "progress.idef"
+#include "moduledetails.idef"
 #include "module-selection-listener.tb"
 #include "module-actions.tb"
 #include "error-gui/error-viewer.idef"
@@ -32,6 +33,9 @@ process StartGraphPanel is
 process StartProgressPanel is
   snd-msg(load-jar("file://__PKGDATA__/progress.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
 
+process StartModuledetailsPanel is
+  snd-msg(load-jar("file://__PKGDATA__/moduledetails.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
 process MetaGUI is
 let
   EnvironmentName: str,
@@ -55,6 +59,7 @@ in
   . StartDialogTool()
   . StartGraphPanel()
   . StartProgressPanel()
+  . StartModuledetailsPanel()
 
   . InitializeTermStore(TERMSTORENAME)
   .

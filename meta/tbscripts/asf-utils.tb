@@ -17,10 +17,8 @@ let
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
   . printf("Opening ASF Module for %t\n", Modulename)
-  . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
   . GetModulePath(ModuleId, SDF_NAMESPACE, SdfPath?)
   . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
-  . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
   . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
   . snd-msg(io-exists-file(AsfPath))
   .
@@ -29,6 +27,8 @@ in
     . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
     . IsLibraryModule(ModuleId, LibraryModule?)
     . Editable := not(LibraryModule)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "name", Modulename)
+    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable)
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
     . printf("ASF module found for %t\n", Modulename)

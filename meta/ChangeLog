@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Jan 13 10:12:44 CET 2006 <kooiker@cwi.nl>
+ * gui/plugin/{moduledetails,navigator}:
+   - Replaced ImportHieracy by Moduledetails plugin
+
 Thu Jan 12 16:45:30 CET 2006 <jurgenv@cwi.nl>
  * meta/tbscripts: parsing and checking ASF files is now done
    via listeners.

@@ -100,43 +100,10 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         return module;
     }
 
-    private void setImports(Graph graph) {
-        // while (!importList.isEmpty()) {
-        // ATermList importPair = (ATermList) importList.getFirst();
-        // importList = importList.getNext();
-        //
-        // ATermAppl fromTerm = (ATermAppl) importPair.getFirst();
-        // String from = fromTerm.getName();
-        // Module moduleFrom = moduleModel.getModule(from);
-        // if (moduleFrom == null) {
-        // moduleFrom = addModule(from);
-        // moduleFrom.setState(Module.STATE_NEW);
-        // }
-        //
-        // ATermList imports = (ATermList) importPair.elementAt(1);
-        //
-        // while (!imports.isEmpty()) {
-        // ATermAppl toTerm = (ATermAppl) imports.getFirst();
-        // imports = imports.getNext();
-        //
-        // String to = toTerm.getName();
-        // Module moduleTo = moduleModel.getModule(to);
-        // if (moduleTo == null) {
-        // moduleTo = addModule(to);
-        // moduleTo.setState(Module.STATE_NEW);
-        // }
-        //
-        // moduleFrom.addChild(to);
-        // moduleTo.addParent(from);
-        // }
-        // }
-    }
-
     public void setModules(ATerm graphTerm) {
         Graph graph = graphFactory.GraphFromTerm(graphTerm);
 
         setModules(graph);
-        setImports(graph);
     }
 
     public void postPopupRequest(MouseEvent e, Module module) {
@@ -181,7 +148,6 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
         createModel();
         addNavigatorComponent();
-        addImportHierarchyComponent();
     }
 
     private void createModel() {
@@ -209,26 +175,6 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
                 StudioImplWithPredefinedLayout.TOP_LEFT);
         studio.addComponentStatusBar(navigatorComponent, statusBar);
         // studio.addComponentMenu(navigatorComponent, new JMenu("Navigate"));
-    }
-
-    private void addImportHierarchyComponent() {
-        final ImportHierarchyPanel panel = new ImportHierarchyPanel(
-                moduleModel, preferences);
-        moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
-            public void moduleSelected(Module module) {
-                panel.setHierarchy(module);
-            }
-        });
-        StudioComponentImpl hierarchyComponent = new StudioComponentImpl(
-                "Import Hierarchy", panel) {
-            public void requestClose() throws CloseAbortedException {
-                throw new CloseAbortedException();
-            }
-        };
-        ((StudioWithPredefinedLayout) studio).addComponent(hierarchyComponent,
-                StudioImplWithPredefinedLayout.BOTTOM_LEFT);
-        studio.addComponentStatusBar(hierarchyComponent, statusBar);
-        // studio.addComponentMenu(hierarchyAdapter, new JMenu("Hierarchy"));
     }
 
     public void selectModule(ATerm moduleId) {

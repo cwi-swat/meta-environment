@@ -1,4 +1,4 @@
-package nl.cwi.sen1.gui.plugin;
+package nl.cwi.sen1.gui.plugin.data;
 
 import java.util.ArrayList;
 import java.util.List;

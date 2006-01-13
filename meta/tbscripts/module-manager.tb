@@ -115,6 +115,10 @@ process MM-GetAttribute(ModuleId: term, Namespace: term, Key: term, Value: term?
     . shutdown("")
   )
 
+process MM-GetAllAttributes(ModuleId: term, Attributes: term?) is
+  snd-msg(mm-get-all-attributes(ModuleId))
+  . rec-msg(mm-attributes(ModuleId, Attributes?))
+
 process MM-AddModuleDependency(ModuleId: term, Dependency: term) is
 let
   Event: dependencies-changed-event

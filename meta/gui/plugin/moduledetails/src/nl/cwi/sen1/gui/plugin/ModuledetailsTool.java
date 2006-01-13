@@ -1,6 +1,6 @@
-// Java tool interface class NavigatorTool
+// Java tool interface class ModuledetailsTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:30 AM
+// generation time: Jan 13, 2006 9:21:54 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,27 +8,24 @@ import aterm.*;
 import toolbus.*;
 import java.util.*;
 
-abstract public class NavigatorTool
+abstract public class ModuledetailsTool
   extends SwingTool
-  implements NavigatorTif
+  implements ModuledetailsTif
 {
   // This table will hold the complete input signature
   private Map sigTable = new HashMap();
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PselectModule0;
-  private ATerm PsetModules0;
-  private ATerm PshowPopup0;
-  private ATerm PrecAckEvent0;
+  private ATerm PsetDetails0;
   private ATerm PrecTerminate0;
 
   //}}}
 
-  //{{{  protected NavigatorTool(ATermFactory factory)
+  //{{{  protected ModuledetailsTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
-  protected NavigatorTool(ATermFactory factory)
+  protected ModuledetailsTool(ATermFactory factory)
   {
     super(factory);
     initSigTable();
@@ -42,11 +39,8 @@ abstract public class NavigatorTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<navigator>,set-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<navigator>,select-module(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<navigator>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<navigator>,<term>)"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<moduledetails>,set-details(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-terminate(<moduledetails>,<term>)"), new Boolean(true));
   }
 
   //}}}
@@ -55,10 +49,7 @@ abstract public class NavigatorTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PselectModule0 = factory.parse("rec-do(select-module(<term>))");
-    PsetModules0 = factory.parse("rec-do(set-modules(<term>))");
-    PshowPopup0 = factory.parse("rec-do(show-popup(<term>,<term>))");
-    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
+    PsetDetails0 = factory.parse("rec-do(set-details(<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -71,24 +62,9 @@ abstract public class NavigatorTool
   {
     List result;
 
-    result = term.match(PselectModule0);
+    result = term.match(PsetDetails0);
     if (result != null) {
-      selectModule((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(PsetModules0);
-    if (result != null) {
-      setModules((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(PshowPopup0);
-    if (result != null) {
-      showPopup((ATerm)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PrecAckEvent0);
-    if (result != null) {
-      recAckEvent((ATerm)result.get(0));
+      setDetails((ATerm)result.get(0));
       return null;
     }
     result = term.match(PrecTerminate0);
