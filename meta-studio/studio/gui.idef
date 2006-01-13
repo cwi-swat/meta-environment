@@ -1,9 +1,7 @@
-#ifndef __GUI_IDEF
-#define __GUI_IDEF
+#ifndef __GUI_IDEF__
+#define __GUI_IDEF__
 
-tool gui is {
-  command = "gui"
-}
+tool gui is { command = "gui" }
 
 process GUI is
 let
