@@ -1,3 +1,6 @@
+#ifndef __ASFE__
+#define __ASFE__
+
 tool asfe is { command = "asfe" }
 
 process Asfe is
@@ -16,37 +19,37 @@ in
   Id := process-id .
   Tide := off .
   (
-    rec-msg(debugging(Tide?))  /* 'on' or 'off' */
+    rec-msg(asfe-debugging(Tide?))  /* 'on' or 'off' */
   +
     (
-      rec-msg(rewrite(ModuleName?, Equations?, Term?)) .
+      rec-msg(asfe-rewrite(ModuleName?, Equations?, Term?)) .
       ParseTable := none
     +
-      rec-msg(rewrite(ModuleName?, Equations?, ParseTable?, Term?))
+      rec-msg(asfe-rewrite(ModuleName?, Equations?, ParseTable?, Term?))
     ) .
     execute(asfe, Eval?) .
     snd-eval(Eval, interpret(ModuleName, Equations, ParseTable, Term, Tide)) .
     (
       rec-value(Eval, rewrite-result(NormalForm?)) .
-      snd-msg(rewrite-result(NormalForm))
+      snd-msg(asfe-rewrite-result(NormalForm))
     +
       rec-value(Eval, rewrite-errors(ErrorList?)) .
-      snd-msg(rewrite-errors(ErrorList))
+      snd-msg(asfe-rewrite-errors(ErrorList))
     ).
     snd-terminate(Eval,"done").
     %% Equations and terms can be big, so we clear the variables here
     Equations := none.
     Term      := none 
   +
-    rec-msg(run-tests(Equations?, Tests?)) .
+    rec-msg(asfe-run-tests(Equations?, Tests?)) .
     execute(asfe, Eval?) .
     snd-eval(Eval, run-tests(Equations, Tests, Tide)) .
     (
       rec-value(Eval, test-results(ErrorList?)) .
-      snd-msg(test-results(ErrorList))
+      snd-msg(asfe-test-results(ErrorList))
     +
       rec-value(Eval, rewrite-errors(ErrorList?)) .
-      snd-msg(rewrite-errors(ErrorList))
+      snd-msg(asfe-rewrite-errors(ErrorList))
     ) .
     Equations := none .
     Tests := none
@@ -55,3 +58,5 @@ in
 endlet
 
 toolbus(Asfe)
+
+#endif /* __ASFE__ */

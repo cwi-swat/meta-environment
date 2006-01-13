@@ -3,7 +3,7 @@
 
 tool removevarsyntax is {command = "removevarsyntax"}
 
-process RemoveVarSyntax is
+process Remove-Var-Syntax is
 let
   NewSyntax : term,
   Syntax    : term,
@@ -23,6 +23,6 @@ in
   delta
 endlet
 
-toolbus(RemoveVarSyntax)
+toolbus(Remove-Var-Syntax)
 
 #endif /* __REMOVEVARSYNTAX__ */
