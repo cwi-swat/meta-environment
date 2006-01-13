@@ -1,171 +1,5 @@
 /* $Id$ */
 
-#include "asfc.idef"
-#include "asfoperations.idef"
-#include "asfchecker.idef"
-#include "asfsdfchecker.idef"
-#include "asfe.idef"
-#include "addeqssyntax.idef"
-#include "removevarsyntax.idef"
-#include "error-display.tb"
-#include "error-support.idef"
-#include "asfsdfapigen.tb"
-#include "graph-arbiter.tb"
-#include "config-utils.tb"
-#include "asf-actions.tb"
-
-process Create-Asf-Processes is
-let Pid : int 
-in
-  create(Asfe, Pid?).
-  create(AsfSdfChecker, Pid?).
-  create(AsfChecker, Pid?).
-  create(AsfOperations, Pid?).
-  create(AddEqSyn, Pid?).
-  create(RemoveVars, Pid?).
-  create(Asfc, Pid?).
-  create(DisplayErrors, Pid?) .
-  create(ErrorSupport, Pid?) .
-  create(Interpret-term, Pid?) .
-  create(Postprocess-semantics, Pid?) .
-  create(Compile-semantics, Pid?) .
-  create(TestAsfSpecification, Pid?)
-endlet
- 
-process TestAsfSpecification is
-let
-  Specification : term,
-  Equations : term,
-  Tests : term,
-  ModuleName : str,
-  Id : int,
-  Pid : int,
-  Errors : list,
-  Summary: term
-in
-  Id := process-id .
-  (
-    rec-msg(run-asf-tests(ModuleName?)) .
-    snd-note(ui-status(stat(Id, "Retrieving equations and tests"))) .
-    create(GetSpecification(ModuleName), Pid?) .
-    (
-      rec-msg(specification(Specification?)) .
-      GetSpecificationEquations(Specification, Equations?) .
-      GetSpecificationTests(Specification, Tests?) .
-      snd-note(ui-status(endstat(Id))) .
-      snd-note(ui-status(stat(Id, "Running tests"))) .
-      snd-msg(run-tests(Equations, Tests)) .
-      (
-        rec-msg(test-results(Errors?)) .
-        snd-msg(ui-remove-feedback-summary("asf-tests",ModuleName)) .
-	snd-msg(es-make-summary("asf-tests", ModuleName, Errors)).
-	rec-msg(es-summary(Summary?)).
-        snd-msg(ui-show-feedback-summary(Summary))
-      +
-        rec-msg(rewrite-errors(Errors?)).
-        snd-msg(display-rewrite-errors(ModuleName, Errors))
-      ) .
-      snd-note(ui-status(endstat(Id))) 
-    +  
-      rec-msg(specification-incomplete(Summary?)) .
-      snd-msg(ui-show-feedback-summary(Summary)) .
-      snd-note(ui-status(endstat(Id))) .
-      snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
-    )
-  ) * delta
-
-endlet
-
-process Interpret-term is
-let
-  Id         : int,
-  Semantics  : term,
-  ModuleId   : term,
-  Modulename : str,
-  Tree       : term,
-  NormalForm : term,
-  Errors     : list,
-  Text       : str
-in
-  Id := process-id.
-  (
-    rec-msg(interpret-term-hook(ModuleId?, Semantics?, Tree?)).
-    snd-note(ui-status(stat(Id, "Rewriting"))) .
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-    snd-msg(rewrite(Modulename, Semantics, Tree)).
-    (
-      (
-	rec-msg(rewrite-result(NormalForm?)).
-	snd-msg(restore-term-brackets(ModuleId, NormalForm)).
-	rec-msg(restore-term-brackets-result(ModuleId, NormalForm?))
-      +
-	rec-msg(rewrite-text(Text?)) .
-	NormalForm := quote(str(Text))
-      )
-      . snd-msg(clear-rewrite-errors)
-    +
-      rec-msg(rewrite-errors(Errors?)).
-      snd-msg(display-rewrite-errors(Modulename, Errors)).
-      NormalForm := error-tree
-    ).
-    snd-note(ui-status(endstat(Id))).
-    snd-msg(interpret-term-hook-result(NormalForm))
-  )*delta
-endlet
-
-process Postprocess-semantics is
-let
-  Semantics : term,
-  Msgs      : list,
-  Modulename : str,
-  Id : int
-in
-  Id := process-id .
-  (
-    rec-msg(postprocess-semantics-hook(Modulename?, Semantics?)).
-    snd-msg(check-asf(Semantics)).
-    rec-msg(messages(Msgs?)).
-    snd-msg(display-asf-errors(Modulename, Msgs)).
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(postprocess-semantics-hook-result(Modulename, Semantics))
-  )*delta
-endlet
-
-process Compile-semantics is
-let
-  Id         : int,
-  Semantics  : term,
-  ModuleId   : term,
-  Modulename : str,
-  Progress   : str,
-  OutputFileName : str,
-  Table : term
-in
-  Id := process-id .
-  subscribe(asfc-progress(<term>)) .
-  (
-    rec-msg(compile-semantics-hook(ModuleId?, OutputFileName?, Semantics?)).
-    snd-msg(get-parsetable(ModuleId, trm)) .
-    (
-      rec-msg(parsetable(Table?)) .
-      MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-      snd-msg(compile-module(Modulename, OutputFileName, Semantics, Table)) .
-      (
-        rec-note(asfc-progress(Progress?)).
-        snd-note(ui-status(endstat(Id))).
-        snd-note(ui-status(statf(Id,"Compiling %s - %s",
-                                [Modulename, Progress])))
-      )
-      *
-      rec-msg(compilation-done(Modulename))
-    +
-      rec-msg(no-parsetable(ModuleId))
-    ) .
-    snd-note(ui-status(endstat(Id))).
-    snd-msg(compile-semantics-hook-done(ModuleId))
-  )*delta
-endlet
-
 process AddAsfProperties is
 let
   Contents: str,
@@ -198,98 +32,36 @@ let
   Type : term
 in
   Id := process-id
-  . Create-Asf-Processes
   . AddAsfProperties()
   .
   (
-    rec-msg(environment-name-hook).
-    snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment (v__VERSION__)"))
+    rec-msg(environment-name-hook)
+    .  TODO("environment name HOOK should dissappear")
+    . snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment (v__VERSION__)"))
   +
-    rec-msg(file-extension-hook(sdf)).
-    snd-msg(file-extension-hook-result(".sdf"))
+    rec-msg(file-extension-hook(sdf))
+    . TODO("use of SDF HOOK should be removed\n")
   +
-    rec-msg(file-extension-hook(asf)).
-    snd-msg(file-extension-hook-result(".asf"))
+    rec-msg(file-extension-hook(asf))
+    . TODO("use of ASF HOOK should be removed\n")
   +
     rec-msg(file-extension-hook(trm)).
-    snd-msg(file-extension-hook-result(".trm"))
+    . TODO("use of term extension HOOK should be removed\n")
   +
     rec-msg(file-extensions-hook).
-    snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
+    . TODO("use of file extensions HOOK should be removed\n")
   +
     rec-msg(parsetable-extension-hook(trm)) .
-    snd-msg(parsetable-extension-hook-result(".trm.tbl"))
+    . TODO("use of trm table ext HOOK should be removed\n")
   +
     rec-msg(parsetable-extension-hook(eqs)) .
-    snd-msg(parsetable-extension-hook-result(".asf.tbl"))
+    . TODO("use of eqs table ext HOOK should be removed\n")
   +
     rec-msg(semantics-top-sort-hook).
-    snd-msg(semantics-top-sort-hook-result(sort("ASF-Module")))
+    . TODO("use of semantics top sort HOOK should be removed\n")
   ) * delta
 endlet
 
-process DebugReduce(EditorId : term,
-                    Modulename : str,
-		    Tree : term,
-		    ResultTree : term?) is
-  /* TODO: changed reduce action to take an extra argument,
-     that will break all currently existing scripts, so we
-     leave it at this for the moment. In 1.6 this can be changed?
-   */
-  snd-msg(debugging(on))
-  . TODO("process Reduce in gui-actions.tb and DebugReduce in meta-interface.tb?")
-  . ReduceTerm(Tree, Modulename, ResultTree?)
-  . 
-  if not-equal(ResultTree, UNDEFINED) then
-    snd-msg(promote-posinfo-to-origin(ResultTree))
-    . rec-msg(promoted-posinfo-to-origin(ResultTree?))
-    . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
-    . snd-msg(put-term-tree("reduct.out", ResultTree))
-  else
-    tau
-  fi 
-  . snd-msg(debugging(off)) 
-
-process DebugReduceAction(EditorId : term) is
-let
-  Modulename : str,
-  Tree : term,
-  ResultTree : term,
-  Direction : term,
-  Available : bool
-in
-  GetTree(EditorId, Tree?, Available?)
-  .
-  if equal(Available, true) then
-    GetModuleId(EditorId, Modulename?)
-    . printf("TODO: Modulename has to be a term!!\n")
-    . DebugReduce(EditorId, Modulename, Tree, ResultTree?)
-    . 
-    if not-equal(ResultTree, error-tree) then
-      ActivateEditorWithTree(ResultTree, Modulename, "reduct.out")
-    else 
-      tau
-    fi
-  else
-    tau
-  fi
-endlet
-
-process RunAsfTestsAction(Modulename : str) is
-  snd-msg(run-asf-tests(Modulename))
-
-process EditorRunAsfTestsAction(EditorId : term) is
-let
-  Modulename : str
-in
-  GetModuleId(EditorId, Modulename?)
-  . printf("TODO: Modulename has to be a term!!\n")
-  . snd-msg(run-asf-tests(Modulename))
-endlet
-
-process DebugRunAsfTestsAction(Modulename : str) is
-  snd-msg(debugging(on))
-  . snd-msg(run-asf-tests(Modulename))
 
 process AsfSdfApiGenAction(ModuleId: term) is
 let
@@ -308,54 +80,5 @@ in
   fi
 endlet
 
-process ReduceAction(EditorId : term) is
-let
-  ModuleId : term,
-  Tree : term,
-  RTree : term,
-  Available : bool
-in
-  GetTree(EditorId, Tree?, Available?)
-  .
-  if equal(Available, true) then
-    GetModuleId(EditorId, ModuleId?)
-    . Reduce(EditorId, ModuleId, Tree, RTree?)
-    . 
-    if not-equal(RTree, UNDEFINED) then
-      ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
-    else 
-      tau
-    fi
-  else
-    tau
-  fi
-endlet
 
 
-process ReduceTerm(Tree: term, ModuleId: term, NormalForm: term?) is
-let
-  Summary: term,
-  Equations: term,
-  Id: int,
-  Modulename: str,
-  Pid: int,
-  Specification: term
-in
-  Id := process-id
-  /*. OpenModules([Modulename], sdf)*/
-  . snd-note(ui-status(stat(Id, "Retrieving equations")))
-  . create(GetSpecification(ModuleId), Pid?)
-  .
-  (
-    rec-msg(specification(Specification?))
-    . GetSpecificationEquations(Specification, Equations?)
-    . snd-note(ui-status(endstat(Id)))
-    . snd-msg(interpret-term-hook(ModuleId, Equations, Tree))
-    . rec-msg(interpret-term-hook-result(NormalForm?))
-  +
-    rec-msg(specification-incomplete(Summary?))
-    . snd-note(ui-status(endstat(Id)))
-    . snd-msg(ui-show-feedback-summary(Summary))
-    . NormalForm := UNDEFINED
-  )
-endlet
