@@ -4,6 +4,8 @@ equations
 
   [1]   natcon(0y) = Nat when Nat := natcon(y)
 
+  [0] Nat1 + Nat2 = Nat3
+
 %% -- addition --
    [2]    0 + Nat = Nat
    [3]    Nat + 0 = Nat

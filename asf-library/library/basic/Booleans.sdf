@@ -21,7 +21,7 @@ hiddens
   imports
     basic/Comments
   variables
-    "Bool" -> Boolean
+    "Bool"[0-9]* -> Boolean
 
  
 
