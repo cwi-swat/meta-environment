@@ -1,8 +1,4 @@
-/* $Id$ */
-
-tool error-support is {
-  command = "error-support"
-}
+tool error-support is { command = "error-support" }
 
 process ErrorSupport is
 let
