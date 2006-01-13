@@ -3,28 +3,40 @@
 
 process SynchronizeModuleSelection is
 let
-  Module: term
+  Event: attribute-changed-event,
+  EventModuleId: term,
+  ModuleId: term
 in
   subscribe(nav-module-selected(<term>))
   . subscribe(gp-node-selected(<str>,<term>))
+  . MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
   .
   (
-    rec-note(nav-module-selected(Module?))
-    . snd-msg(gp-select-node("import-graph", Module))
-    . ShowModuleDetails(Module)
+    rec-note(nav-module-selected(ModuleId?))
+    . snd-msg(gp-select-node("import-graph", ModuleId))
+    . ShowModuleDetails(ModuleId)
   +
-    rec-note(gp-node-selected("import-graph", Module?))
-    . snd-msg(nav-select-module(Module))
-    . ShowModuleDetails(Module)
+    rec-note(gp-node-selected("import-graph", ModuleId?))
+    . snd-msg(nav-select-module(ModuleId))
+    . ShowModuleDetails(ModuleId)
+  +
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, EventModuleId?)
+    . 
+    if equal(ModuleId, EventModuleId) then
+      ShowModuleDetails(ModuleId)
+    else
+      tau
+    fi
   ) 
   * delta
 endlet
 
-process ShowModuleDetails(Module: term) is
+process ShowModuleDetails(ModuleId: term) is
 let
   Attributes: term
 in
-  MM-GetAllAttributes(Module, Attributes?)
+  MM-GetAllAttributes(ModuleId, Attributes?)
   . snd-msg(md-set-details(Attributes))
 endlet
 
