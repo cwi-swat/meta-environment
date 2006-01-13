@@ -40,9 +40,9 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     private Studio studio;
 
     private StatusBar statusBar;
-    
+
     private JLabel status;
-    
+
     private Factory graphFactory;
 
     // TODO: use preferences
@@ -59,7 +59,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
                 + ".properties");
         this.preferences = new Preferences(getClass().getResourceAsStream(
                 propertyPath));
-        
+
         statusBar = new StatusBar();
         status = new JLabel(" ");
         statusBar.add(status);
@@ -155,10 +155,9 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
             public void moduleSelected(Module module) {
                 if (!suspendSelectionNotification) {
-                    String name = module != null ? module.toString() : " ";
-                    status.setText(name);
+                    status.setText(module.toString());
                     bridge.postEvent(studio.getATermFactory().make(
-                            "module-selected(<str>)", name));
+                            "module-selected(<term>)", module.getId()));
                 }
             }
         });

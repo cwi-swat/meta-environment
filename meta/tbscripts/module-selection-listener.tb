@@ -24,7 +24,6 @@ process ShowModuleDetails(Module: term) is
 let
   Attributes: term
 in
-  printf("Module: %t\n", Module).
   MM-GetAllAttributes(Module, Attributes?)
   . snd-msg(md-set-details(Attributes))
 endlet
