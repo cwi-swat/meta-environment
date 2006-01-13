@@ -61,6 +61,8 @@ in
   delta
 endlet
 
+/* TODO: add syntax checker */
+
 toolbus(ASFModuleParser)
 
 #endif /* __ASF_LISTENERS__ */

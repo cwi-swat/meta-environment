@@ -16,7 +16,6 @@ let
 in
   MDB-InitializeModuleDb()
   . snd-msg(termstore-initialized)
-  . MDB-InitializeFileExtensions()
   .
   (
     rec-msg(put-term-tree(Filename?, TermTree?))
@@ -44,18 +43,3 @@ process MDB-InitializeModuleDb is
   . snd-msg(ts-add-table("sdf-tree", "term"))
   . snd-msg(ts-add-table("sdf-text", "str"))
   . snd-msg(ts-add-table("term-tree", "term"))
-
-/* Used by ModuleDB */
-process MDB-InitializeFileExtensions is
-let
-  SyntaxExt: str,
-  RulesExt: str,
-  TermExt: str
-in
-  snd-msg(get-file-extensions)
-  . rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?),
-                                term(TermExt?)))
-  . snd-msg(ts-put-str-value("extensions", "syntax", SyntaxExt))
-  . snd-msg(ts-put-str-value("extensions", "equations", RulesExt))
-  . snd-msg(ts-put-str-value("extensions", "term", TermExt))
-endlet

@@ -23,8 +23,7 @@ in
     rec-msg(modulename-extension(Modulename, Extension?))
   +
     rec-msg(no-modulename-extension(Modulename))
-    . snd-msg(file-extension-hook(trm))
-    . rec-msg(file-extension-hook-result(Extension?))
+    . Extension := ".trm"
   )
   . snd-msg(ask-for-file(Title, Paths, Extension))
   .

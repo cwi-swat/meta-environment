@@ -18,27 +18,6 @@ in
   )
 endlet
 
-process CheckSyntaxSpecification(ModuleId : term) is
-let
-  Syntax    : term,
-  ErrorMessage : str,
-  Feedback  : term,
-  Id : int,
-  Modulename : str
-in
-  Id := process-id .
-  snd-msg(get-all-syntax-definitions(ModuleId, eqs)) .
-  (
-    rec-msg(syntax(Syntax?)) .
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?).
-    snd-msg(check-asfsdf(Syntax, Modulename)) .
-    rec-msg(feedback(Feedback?)) .
-    snd-msg(display-sdf-errors(Modulename, Feedback)) .
-    Syntax := UNDEFINED
-  +
-    rec-msg(no-syntax(ErrorMessage?))
-  )
-endlet
 
 process DumpParseTable(ModuleId : term, Filename : str, Type : term) is
 let
@@ -59,10 +38,13 @@ in
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     .
     if equal(Filename, "") then
+      TODO("DumpParseTable got empty filename")
+      /*
       snd-msg(parsetable-extension-hook(Type))
       . rec-msg(parsetable-extension-hook-result(Extension?))
       . ReplaceExtension(Path, Extension, NewPath?)
       . SplitFilename(NewPath, NewFilename?, Directory?, Extension?)
+      */
     else
       NewFilename := Filename
     fi
@@ -464,20 +446,17 @@ process OpenModule(Modulename: str, ModuleId: term?) is
 let
   Editable: bool,
   LibraryModule: bool,
-  Path: str,
-  SdfExt: str
+  Path: str
 in
   CreateModule(Modulename, ModuleId?)
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   .
   if equal(Path, EMPTY_PATH) then
-    LocateFile(Modulename, sdf, Path?)
+    LocateFile(Modulename, SDF_EXTENSION, Path?)
     .
     if equal(Path, EMPTY_PATH) then
       Error("Unable to locate module: %s", [Modulename])
-      . snd-msg(file-extension-hook(sdf))
-      . rec-msg(file-extension-hook-result(SdfExt?))
-      . BuildPath(".", Modulename, SdfExt, Path?)
+      . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
       . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
@@ -635,7 +614,7 @@ in
     ModuleId := first(Modules)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
     .
-    if not-equal(Status, openend) then
+    if not-equal(Status, opened) then
       Opened := false
     else
       tau

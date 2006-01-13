@@ -7,17 +7,14 @@ process GetSearchPaths(Paths: list?) is
   snd-msg(cm-get-module-paths)
   . rec-msg(cm-module-paths(Paths?))
 
-process LocateFile(Modulename: str, Type: term, Path: str?) is
+process LocateFile(Modulename: str, Extension: str, Path: str?) is
 let
-  Extension: str,
   Directory: str,
   Directories: list,
   ExtraModules : list
 in
   snd-msg(cm-get-module-paths)
   . rec-msg(cm-module-paths(Directories?))
-  . snd-msg(file-extension-hook(Type))
-  . rec-msg(file-extension-hook-result(Extension?))
   . snd-msg(io-find-file(Directories, Modulename, Extension))
   .
   (

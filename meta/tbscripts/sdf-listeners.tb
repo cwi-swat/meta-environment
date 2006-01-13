@@ -1,6 +1,29 @@
 #ifndef __SDF_LISTENERS__
 #define __SDF_LISTENERS__
 
+#include <module-manager.tb>
+#include <sdf-namespace.h>
+
+process SDFModuleLabelSetter is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Modulename: str
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Modulename?)
+    . MM-SetModuleGraphAttribute(ModuleId, "label", Modulename)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleLabelSetter)
+
 process SDFModuleParser is
 let
   Event: attribute-changed-event,

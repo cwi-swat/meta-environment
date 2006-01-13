@@ -24,9 +24,7 @@ in
   . 
   if equal(Path, EMPTY_PATH) then
     MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?) 
-    . snd-msg(file-extension-hook(sdf))
-    . rec-msg(file-extension-hook-result(SdfExt?))
-    . BuildPath(".", Modulename, SdfExt, Path?)
+    . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
     . printf("EditSyntax: Use CreateNewModule instead???\n")
   else
     tau

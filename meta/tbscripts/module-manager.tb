@@ -7,6 +7,10 @@
 #include <dependencies-changed-event.tb>
 
 #define UNDEFINED undefined
+#define GRAPH_NAMESPACE "graph"
+
+process MM-SetModuleGraphAttribute(ModuleId: term, Key: term, Value: term) is
+  MM-SetAttribute(ModuleId, GRAPH_NAMESPACE, Key, Value)
 
 process MM-PropagateAttributeChanges is
 let

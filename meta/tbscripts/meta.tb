@@ -54,11 +54,6 @@ in
   Id := process-id
   .
   (
-    rec-msg(get-file-extensions) .
-    snd-msg(file-extensions-hook).
-    rec-msg(file-extensions-hook-result(Syntax?, Semantics?, Term?)).
-    snd-msg(set-file-extensions(syntax(Syntax), rules(Semantics), term(Term)))
-  +
     rec-msg(get-rules-top-sort) .
     snd-msg(semantics-top-sort-hook).
     rec-msg(semantics-top-sort-hook-result(Sort?)).
@@ -75,17 +70,13 @@ let
 in
   create(META, Pid?)
   . create(TermStoreName, Pid?)
-  . create(Compile-module, Pid?)
-  . create(DumpEquations, Pid?)
   . create(DumpSdfDefinition, Pid?)
   . create(Meta-Interface, Pid?)
   . create(ModuleDB, Pid?)
   . create(Open-Sdf2-Language, Pid?)
   . create(PGen, Pid?)
   . create(PrintModule, Pid?)
-  . create(RestoreBrackets, Pid?)
   . create(RestoreTermBrackets, Pid?)
-  . create(Save-modules, Pid?)
   . create(UserInterfaceHandler, Pid?)
   . rec-msg(termstore-initialized) 
   . snd-msg(creation-finished)

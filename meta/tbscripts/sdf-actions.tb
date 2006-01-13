@@ -137,20 +137,6 @@ in
   fi
 endlet
 
-process DumpEquationsAction(ModuleId : term) is
-let
-  Cancel: bool,
-  Path : str
-in
-  PromptForFileWithExtension("Export Equations", [], ".eqs", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    snd-msg(dump-equations-given-file(ModuleId, Path))
-    . rec-msg(equations-dumped)
-  fi
-endlet
 
 process DumpParseTableAction(ModuleId : term) is
 let
@@ -227,20 +213,6 @@ in
   fi
 endlet
 
-process CompileModuleAction(ModuleId : term) is
-let
-  Cancel: bool,
-  Path : str
-in
-  PromptForFileWithExtension("Target C file", [], ".c", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    snd-msg(compile-module(ModuleId, Path))
-    . rec-msg(compilation-ready(ModuleId))
-  fi
-endlet
 
 process CloseModuleAction(ModuleId : term) is
 let
