@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Jan 13 11:53:02 CET 2006 <jurgenv@cwi.nl>
+ * Updated to new StudioPlugin interface (added getStatusBar)
+
 Tue Aug  9 10:48:25 CEST 2005 <{jurgenv,jong,kooiker}@cwi.nl>
  * Updated to new StudioPlugin interface
 

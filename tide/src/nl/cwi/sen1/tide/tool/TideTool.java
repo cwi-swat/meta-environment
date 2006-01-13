@@ -11,6 +11,7 @@ import javax.swing.event.EventListenerList;
 import nl.cwi.sen1.gui.StatusMessageEvent;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentListener;
+import nl.cwi.sen1.gui.StatusBar;
 import nl.cwi.sen1.tide.tool.support.Expr;
 
 public abstract class TideTool extends JPanel implements StudioComponent {
@@ -40,6 +41,11 @@ public abstract class TideTool extends JPanel implements StudioComponent {
 	}
 
 	// }}}
+
+        public StatusBar getStatusBar() {
+	  return new StatusBar();
+	}
+
 	// {{{ public int getId()
 
 	public int getId() {
