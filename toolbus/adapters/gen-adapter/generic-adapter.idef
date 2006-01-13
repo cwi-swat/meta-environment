@@ -1,12 +1,8 @@
 /* $Id$ */
 
-tool generic-adapter is {
-  command = "gen-adapter"
-}
+tool generic-adapter is { command = "gen-adapter" }
 
-tool term-generic-adapter is {
-  command = "gen-adapter -term-output"
-}
+tool term-generic-adapter is { command = "gen-adapter -term-output" }
 
 process
   ADAPTER(Id: generic-adapter, Cmd: str, Inp: str, Outp: str?)
