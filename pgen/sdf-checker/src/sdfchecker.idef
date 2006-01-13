@@ -1,6 +1,5 @@
-/*
-  $Id$
-   */
+tool sdfchecker is {command = "sdfchecker"}
+
 process SdfChecker is
 let
   Msgs   : list,
@@ -18,4 +17,4 @@ in
   delta
 endlet
 
-tool sdfchecker is {command = "sdfchecker"}
+toolbus(SdfChecker)

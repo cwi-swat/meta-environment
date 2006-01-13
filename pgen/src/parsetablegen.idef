@@ -1,11 +1,4 @@
-/*
-  $Id$
- */
-
-tool parsetablegen is {
-  command = "parsetablegen"
-}
-
+tool parsetablegen is { command = "parsetablegen" }
 
 process PGen is
 let
@@ -31,3 +24,5 @@ in
   )*
   delta
 endlet
+
+toolbus(PGen)
