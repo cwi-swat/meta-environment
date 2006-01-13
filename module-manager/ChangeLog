@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jan 13 08:52:56 CET 2006 <kooiker@cwi.nl>
+ * module-manager.idef, src/**/*.java:
+   - get-all-attributes get all attributes for a given moduleid
+
 Wed Jan  4 15:27:04 CET 2006 <{kooiker,jurgenv}@cwi.nl>
  * src/**/*.java: added getAllParents functionality.
 

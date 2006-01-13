@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import nl.cwi.sen1.moduleapi.types.AttributeStore;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
 import aterm.ATerm;
 
@@ -109,6 +110,18 @@ public class ModuleDatabase {
         module.deleteAttribute(namespace, key);
     }
 
+    public AttributeStore getAllAttributes(ModuleId moduleId) {
+        Module module = (Module) modules.get(moduleId);
+
+        if (module == null) {
+            System.err.println("MM - getAllAttributes: module [" + moduleId
+                    + "] doesn't exist");
+            return null;
+        }
+
+        return module.getAttributes();
+    }
+
     public void addDependency(ModuleId moduleFromId, ModuleId moduleToId) {
         Set dependencies;
         Module moduleFrom = (Module) modules.get(moduleFromId);
@@ -176,7 +189,6 @@ public class ModuleDatabase {
 
         return dependencies;
     }
-
 
     public Set getClosableModules(ModuleId moduleId) {
         Set dependencies = getAllChildren(moduleId);
@@ -249,7 +261,7 @@ public class ModuleDatabase {
 
     private void deleteAllDependencies(ModuleId moduleId) {
         deleteDependencies(moduleId);
-        
+
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
             ModuleId tempId = (ModuleId) iter.next();
             Set dependencies = getChildren(tempId);
@@ -258,7 +270,7 @@ public class ModuleDatabase {
             }
         }
     }
-    
+
     public Map getDependencies() {
         return children;
     }

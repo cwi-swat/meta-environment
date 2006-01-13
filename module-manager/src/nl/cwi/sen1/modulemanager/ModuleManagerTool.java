@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 4, 2006 11:10:53 AM
+// generation time: Jan 12, 2006 6:58:11 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -24,6 +24,7 @@ abstract public class ModuleManagerTool
   private ATerm PdeleteDependency0;
   private ATerm PaddAttribute0;
   private ATerm PgetAttribute0;
+  private ATerm PgetAllAttributes0;
   private ATerm PgetDependencies0;
   private ATerm PgetAllDependentModules0;
   private ATerm PgetAllDependingModules0;
@@ -60,6 +61,7 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-depending-modules(<term>))"), new Boolean(true));
@@ -86,6 +88,7 @@ abstract public class ModuleManagerTool
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<term>,<term>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
+    PgetAllAttributes0 = factory.parse("rec-eval(get-all-attributes(<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
     PgetAllDependentModules0 = factory.parse("rec-eval(get-all-dependent-modules(<term>))");
     PgetAllDependingModules0 = factory.parse("rec-eval(get-all-depending-modules(<term>))");
@@ -140,6 +143,10 @@ abstract public class ModuleManagerTool
     result = term.match(PgetAttribute0);
     if (result != null) {
       return getAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
+    }
+    result = term.match(PgetAllAttributes0);
+    if (result != null) {
+      return getAllAttributes((ATerm)result.get(0));
     }
     result = term.match(PgetDependencies0);
     if (result != null) {

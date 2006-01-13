@@ -1,6 +1,6 @@
 // Java tool interface ModuleManagerTif
 // This file is generated automatically, please do not edit!
-// generation time: Jan 3, 2006 1:11:14 PM
+// generation time: Jan 12, 2006 6:58:11 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -15,6 +15,7 @@ public interface ModuleManagerTif
   public void deleteDependency(ATerm t0, ATerm t1);
   public void addAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3);
   public ATerm getAttribute(ATerm t0, ATerm t1, ATerm t2);
+  public ATerm getAllAttributes(ATerm t0);
   public ATerm getDependencies();
   public ATerm getAllDependentModules(ATerm t0);
   public ATerm getAllDependingModules(ATerm t0);

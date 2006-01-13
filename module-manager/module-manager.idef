@@ -8,6 +8,7 @@ tool module-manager is {
 process ModuleManager is
 let
   MM : module-manager,
+  AttributeList : term,
   Dependency : term,
   Dependencies : term,
   From : term,
@@ -67,6 +68,11 @@ in
       rec-value(MM, no-such-key)
       . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
     )
+  +
+    rec-msg(mm-get-all-attributes(ModuleId?))
+    . snd-eval(MM, get-all-attributes(ModuleId))
+    . rec-value(MM, attributes(AttributeList?))
+    . snd-msg(mm-attributes(ModuleId, AttributeList))
   +
     rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
     . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import nl.cwi.sen1.graph.types.Graph;
 import nl.cwi.sen1.moduleapi.Factory;
+import nl.cwi.sen1.moduleapi.types.AttributeStore;
 import nl.cwi.sen1.moduleapi.types.Dependency;
 import nl.cwi.sen1.moduleapi.types.DependencyList;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
@@ -51,7 +52,7 @@ public class ModuleManager implements ModuleManagerTif {
     public ATerm createModule() {
         ModuleId moduleId = factory
                 .makeModuleId_Mid(moduleDB.getNextModuleId());
-        moduleDB.addModule(new Module(), moduleId);
+        moduleDB.addModule(new Module(factory), moduleId);
         return pureFactory.make("snd-value(module-id(<term>))", moduleId
                 .toTerm());
     }
@@ -73,6 +74,14 @@ public class ModuleManager implements ModuleManagerTif {
 
         return pureFactory.make("snd-value(modules(<list>))",
                 extractATermList(modules));
+    }
+
+    public ATerm getAllAttributes(ATerm id) {
+        ModuleId moduleId = factory.ModuleIdFromTerm(id);
+        AttributeStore attributes = moduleDB.getAllAttributes(moduleId);
+
+        return pureFactory.make("snd-value(attributes(<term>))", attributes
+                .toTerm());
     }
 
     public void deleteModule(ATerm id) {
