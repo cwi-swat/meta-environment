@@ -61,3 +61,4 @@ in
   ) *  rec-disconnect(A) .
   snd-msg(adapter-disconnected(A))
 endlet 
+
