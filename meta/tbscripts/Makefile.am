@@ -44,7 +44,8 @@ TBSCRIPTS = \
   term-editor-actions.tb \
   term-editor-utils.tb \
   term-parsetable.tb \
-  term-utils.tb
+  term-utils.tb \
+  undefined.h
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

@@ -1,5 +1,6 @@
-#include "navigator.idef"
-#include "graph-painter.idef"
+#include <navigator.idef>
+#include <graph-painter.idef>
+#include <undefined.h>
 
 process SynchronizeModuleSelection is
 let
@@ -7,7 +8,8 @@ let
   EventModuleId: term,
   ModuleId: term
 in
-  subscribe(nav-module-selected(<term>))
+  ModuleId := UNDEFINED
+  . subscribe(nav-module-selected(<term>))
   . subscribe(gp-node-selected(<str>,<term>))
   . MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
   .

@@ -5,8 +5,8 @@
 #include <attribute-changed-event.tb>
 #include <child-attribute-changed-event.tb>
 #include <dependencies-changed-event.tb>
+#include <undefined.h>
 
-#define UNDEFINED undefined
 #define GRAPH_NAMESPACE "graph"
 
 process MM-SetModuleGraphAttribute(ModuleId: term, Key: term, Value: term) is
