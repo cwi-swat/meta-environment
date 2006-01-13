@@ -1,9 +1,4 @@
-/* $Id$ */
-
-tool restorebrackets is 
-{ 
-  command = "restorebrackets"
-}
+tool restorebrackets is { command = "restorebrackets" }
 
 process RestoreBrackets is
 let
@@ -23,3 +18,5 @@ in
     )
   ) * delta
 endlet
+
+toolbus(RestoreBrackets)

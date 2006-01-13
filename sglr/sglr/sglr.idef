@@ -1,8 +1,4 @@
-/* $Id$ */
-
-tool sglr is {
-  command = "sglr"
-}
+tool sglr is { command = "sglr" }
 
 process SGLR is
 let
