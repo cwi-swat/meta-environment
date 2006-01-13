@@ -155,9 +155,11 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         moduleModel.addModuleSelectionListener(new ModuleSelectionListener() {
             public void moduleSelected(Module module) {
                 if (!suspendSelectionNotification) {
-                    status.setText(module.toString());
-                    bridge.postEvent(studio.getATermFactory().make(
-                            "module-selected(<term>)", module.getId()));
+                    if (module != null) {
+                        status.setText(module.toString());
+                        bridge.postEvent(studio.getATermFactory().make(
+                                "module-selected(<term>)", module.getId()));
+                    }
                 }
             }
         });
