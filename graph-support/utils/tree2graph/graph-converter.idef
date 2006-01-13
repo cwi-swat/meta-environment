@@ -1,8 +1,5 @@
-/* $Id $ */
 
-tool graph-converter is {
-  command = "tree2graph"
-}
+tool graph-converter is { command = "tree2graph" }
 
 process GraphConverter is
 let

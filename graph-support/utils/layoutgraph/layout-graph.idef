@@ -1,7 +1,5 @@
 
-tool layoutgraph is {
-  command = "layoutgraph"
-}
+tool layoutgraph is { command = "layoutgraph" }
 
 process GraphLayouter is
 let
