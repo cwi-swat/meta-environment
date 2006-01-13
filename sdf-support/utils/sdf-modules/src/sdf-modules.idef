@@ -3,7 +3,6 @@
 
 tool sdf-modules is { command = "sdf-modules -TB_COLLECT_LOOP 1" }
 
-toolbus(SdfModules)
 
 process SdfModules is
 let
@@ -102,5 +101,7 @@ in
   )
   * delta
 endlet
+
+toolbus(SdfModules)
 
 #endif /*__SDF_MODULES__*/
