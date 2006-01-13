@@ -1,4 +1,5 @@
-/* $Id$ */
+
+tool pandora is { command = "pandora" }  
 
 process Pandora is
 let
@@ -22,6 +23,5 @@ in
   ) * delta
 endlet
 
-tool pandora is { command = "pandora" }  
 
 toolbus(Pandora)
