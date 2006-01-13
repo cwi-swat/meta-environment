@@ -45,40 +45,17 @@ in
     rec-msg(file-extension-hook(asf))
     . TODO("use of ASF HOOK should be removed\n")
   +
-    rec-msg(file-extension-hook(trm)).
+    rec-msg(file-extension-hook(trm))
     . TODO("use of term extension HOOK should be removed\n")
   +
-    rec-msg(file-extensions-hook).
-    . TODO("use of file extensions HOOK should be removed\n")
-  +
-    rec-msg(parsetable-extension-hook(trm)) .
+    rec-msg(parsetable-extension-hook(trm)) 
     . TODO("use of trm table ext HOOK should be removed\n")
   +
-    rec-msg(parsetable-extension-hook(eqs)) .
+    rec-msg(parsetable-extension-hook(eqs)) 
     . TODO("use of eqs table ext HOOK should be removed\n")
   +
-    rec-msg(semantics-top-sort-hook).
+    rec-msg(semantics-top-sort-hook)
     . TODO("use of semantics top sort HOOK should be removed\n")
   ) * delta
 endlet
-
-
-process AsfSdfApiGenAction(ModuleId: term) is
-let
-  Cancel: bool,
-  Path: str,
-  Paths: list
-in
-  GetSearchPaths(Paths?)
-  . PromptForFileWithExtension("Generate New Module", Paths, ".sdf", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    snd-msg(asfsdfapigen(ModuleId, Path))
-    . rec-msg(asfsdfapigen-done)
-  fi
-endlet
-
-
 
