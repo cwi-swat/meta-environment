@@ -1,4 +1,4 @@
-/* $Id$ */
+tool asfc is { command = "asfc" }
 
 process Asfc is
 let
@@ -26,4 +26,5 @@ in
   delta
 endlet
 
-tool asfc is { command = "asfc -print-gc-info -termtable 20" }
+
+toolbus(Asfc)

@@ -1,3 +1,5 @@
+tool toolASFSDFApigen is { command = "ASFSDFApigen" }
+
 process ASFSDFApigen is
 let
   ASFSDFApigenTool : toolASFSDFApigen,
@@ -24,5 +26,4 @@ in
   delta
 endlet
 
-tool toolASFSDFApigen is { command = "ASFSDFApigen" }
 toolbus(ASFSDFApigen)

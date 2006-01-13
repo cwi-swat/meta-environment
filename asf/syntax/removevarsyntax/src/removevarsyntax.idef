@@ -1,7 +1,6 @@
-/*
-  $Id$
- */
-process RemoveVars is
+tool removevarsyntax is {command = "removevarsyntax"}
+
+process RemoveVarSyntax is
 let
   NewSyntax : term,
   Syntax    : term,
@@ -21,4 +20,5 @@ in
   delta
 endlet
 
-tool removevarsyntax is {command = "removevarsyntax"}
+toolbus(RemoveVarSyntax)
+

@@ -1,6 +1,5 @@
-/*
-  $Id$
-   */
+tool asfchecker is {command = "asfchecker -TB_COLLECT_LOOP 1"}
+
 process AsfChecker is
 let
   Msgs  : list,
@@ -18,4 +17,4 @@ in
   delta
 endlet
 
-tool asfchecker is {command = "asfchecker -TB_COLLECT_LOOP 1"}
+toolbus(AsfChecker)

@@ -1,6 +1,5 @@
-/*
-  $Id$
-   */
+tool asfoperations is {command = "asfoperations -TB_COLLECT_LOOP 1"}
+
 process AsfOperations is
 let
   Module : term,
@@ -28,4 +27,4 @@ in
   delta
 endlet
 
-tool asfoperations is {command = "asfoperations -TB_COLLECT_LOOP 1"}
+toolbus(AsfOperations)

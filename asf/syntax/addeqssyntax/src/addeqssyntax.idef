@@ -1,7 +1,6 @@
-/*
-  $Id$
- */
-process AddEqSyn is
+tool addeqssyntax is {command = "addeqssyntax"}
+
+process AddEquationSyntax is
 let
   NewSyntax : term,
   Syntax    : term,
@@ -21,4 +20,5 @@ in
   delta
 endlet
 
-tool addeqssyntax is {command = "addeqssyntax"}
+toolbus(AddEquationSyntax)
+

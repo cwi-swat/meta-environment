@@ -1,4 +1,4 @@
-/* $Id$ */
+tool asfe is { command = "asfe" }
 
 process Asfe is
 let
@@ -54,4 +54,4 @@ in
   delta
 endlet
 
-tool asfe is { command = "asfe" }
+toolbus(Asfe)

@@ -1,6 +1,5 @@
-/*
-  $Id$
-   */
+tool asfsdfchecker is {command = "asfsdfchecker"}
+
 process AsfSdfChecker is
 let
   Feedback   : term,
@@ -20,4 +19,4 @@ in
   delta
 endlet
 
-tool asfsdfchecker is {command = "asfsdfchecker"}
+toolbus(AsfSdfChecker)
