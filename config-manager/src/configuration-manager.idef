@@ -1,7 +1,9 @@
-#ifndef _CONFIGURATION_MANAGER
-#define _CONFIGURATION_MANAGER
+#ifndef _CONFIGURATION_MANAGER__
+#define _CONFIGURATION_MANAGER__
 
 /*
+
+TODO: find out what this is, and how we get it working again
 #ifndef CONFIG_FILE
 #define CONFIG_FILE "meta.conf"
 #endif
@@ -50,9 +52,7 @@ endlet
   +
 */
 
-tool configuration-manager is {
-  command = "configmanager"
-}
+tool configuration-manager is { command = "configmanager" }
 
 process ConfigurationManager is
 let
