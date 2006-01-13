@@ -1,8 +1,5 @@
-/* $Id$ */
 
-tool position-annotator is {
-  command = "addPosInfo"
-}
+tool position-annotator is { command = "addPosInfo" }
 
 process PositionAnnotator is
 let

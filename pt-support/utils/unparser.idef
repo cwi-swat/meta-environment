@@ -1,8 +1,6 @@
 /* $Id$ */
 
-tool unparser is {
-  command = "unparsePT"
-}
+tool unparser is { command = "unparsePT" }
 
 process Unparser is
 let
