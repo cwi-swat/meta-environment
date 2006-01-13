@@ -1,6 +1,6 @@
 tool apply-function is { command = "apply-function" }  
 
-process ApplyFunction is
+process Apply-Function is
 let
   AF       : apply-function,
   FuncName : str,
@@ -38,4 +38,4 @@ in
 endlet
 
 
-toolbus(ApplyFunction)
+toolbus(Apply-Function)
