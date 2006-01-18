@@ -1,3 +1,56 @@
 #!/bin/sh
 
+me=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+myarguments="hV"
+myoptions="ldflags,includes,prefix"
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt --options $myarguments --longoptions $myoptions -- $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        --ldflags)
+            echo __LDFLAGS__;
+	    exit 0;;
+        --includes)
+            echo __INCLUDES__;
+	    exit 0;;
+        --prefix)
+            echo __PREFIX__
+	    exit 0;;
+        -h)
+            Usage ; exit 0 ;;
+        -V)
+            Version ; exit 0 ;;
+        --)
+           ;;
+    # Add additional command line options here...
+    *)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
 echo "__PREFIX__"
