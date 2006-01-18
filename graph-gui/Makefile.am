@@ -3,8 +3,6 @@
 include $(top_srcdir)/java_make_rules
 include $(top_srcdir)/toolbus_make_rules
 
-SUBDIRS = script
-
 ACLOCAL_FLAGS = -I .
 
 TOOLNAME = graph-painter
