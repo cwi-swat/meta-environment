@@ -16,6 +16,8 @@ configuration interface
 requires
    aterm 2.4.2
 
+aterm-java 1.6
+
 sglr 3.14
 
 pgen 2.2
