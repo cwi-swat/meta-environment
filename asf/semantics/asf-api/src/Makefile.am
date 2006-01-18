@@ -10,27 +10,12 @@ ASFSDFApigen_SOURCES = \
 	ASFSDFApigen.c \
 	toolASFSDFApigen.tif.c
 
-ASFSDFApigen_LDADD =\
-	-L${ASC_SUPPORT}/lib -lasc-support-me \
-	-L${SGLR}/lib -lsglr \
-	-L${TIDE_SUPPORT}/lib -ltide-adapter \
-	-L${ASF_SUPPORT}/lib -lASFME \
-	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
-	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
-	${SOCKLIBS}
+ASFSDFApigen_LDADD = $(ASC_LD_FLAGS)
 
 INCLUDES = \
 	-DASF_MAIN\
 	-DTOOLBUS\
-	-I${ASC_SUPPORT}/include \
-	-I${SGLR}/include \
-	-I${ASF_SUPPORT}/include \
-	-I${PT_SUPPORT}/include \
-	-I${ERROR_SUPPORT}/include \
-	-I${TOOLBUSLIB}/include  \
-	-I${ATERM}/include 
+	$(ASC_INCLUDES)
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
 	asfc -i $< -o ASFSDFApigen.c -t -v -c 

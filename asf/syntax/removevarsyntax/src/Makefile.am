@@ -1,15 +1,8 @@
 include ${top_srcdir}/make_rules
 
 INCLUDES = \
-	-I$(ASC_SUPPORT)/include \
-	-I$(SGLR)/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(SDF_SUPPORT)/include \
-	-I$(ASF_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(ATERM)/include
-
+	   -I$(SDF_SUPPORT)/include \
+	   $(ASC_INCLUDES)
 
 EXTRA_DIST = removevarsyntax.idef 
 
@@ -23,13 +16,5 @@ removevarsyntax_SOURCES = \
 	removevarsyntax.tif.c
 
 removevarsyntax_LDADD   = \
-                       -L$(ASC_SUPPORT)/lib -lasc-support-me \
-                       -L$(SGLR)/lib -lsglr \
-                       -L$(TIDE_SUPPORT)/lib -ltide-adapter \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
-                       -L$(ASF_SUPPORT)/lib -lASFME \
-                       -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-                       -L$(TOOLBUSLIB)/lib -lATB \
-                       -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-                       -L$(ATERM)/lib -lATerm \
-			$(SOCKLIBS)
+                       $(ASC_LD_FLAGS) 

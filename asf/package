@@ -19,8 +19,6 @@ requires
 
 asc-support 2.1
 
-sglr 3.14
-
 asf-support 1.4
 
 sdf-support 2.2

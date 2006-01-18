@@ -37,23 +37,9 @@ asfe_SOURCES =\
 	builtins.c
 
 asfe_LDADD = \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(ASC_SUPPORT)/lib -lasc-support-me \
-	-L$(SGLR)/lib -lsglr \
-	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
-	-L$(ATERM)/lib -lATerm \
-	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
-	$(SOCKLIBS)
+	     -L$(ERROR_SUPPORT)/lib -lLocationAPI \
+	     $(ASC_LD_FLAGS)
 
-INCLUDES = \
-	-I${TIDE_SUPPORT}/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(SGLR)/include \
-	-I$(ATERM)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ASF_SUPPORT)/include \
-	-I$(ASC_SUPPORT)/include \
-	${TRAVERSALSDEF} ${LAYOUTDEF}
+INCLUDES = $(ASC_INCLUDES) \
+	     -I$(ERROR_SUPPORT)/include \
+	     ${TRAVERSALSDEF} ${LAYOUTDEF}

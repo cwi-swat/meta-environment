@@ -27,38 +27,17 @@ noinst_HEADERS = asfc.tif.h \
                  idef.h
 
 asfc_LDADD   = \
-	       -L$(ASC_SUPPORT)/lib -lasc-support-me \
-               -L$(SGLR)/lib -lsglr \
-               -L$(TIDE_SUPPORT)/lib -ltide-adapter \
-               -L$(PT_SUPPORT)/lib -lPTMEPT -lmept \
-               -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
-               -L$(TOOLBUSLIB)/lib -lATB \
-               -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-               -L$(ATERM)/lib -lATerm \
-		$(SOCKLIBS)
+	       $(ASC_LD_FLAGS)
 
-DEFINES = -DASC_SUPPORT="\"$(ASC_SUPPORT)\"" \
-          -DSGLR="\"$(SGLR)\""   \
-          -DTIDE_SUPPORT="\"$(TIDE_SUPPORT)\""   \
-          -DPT_SUPPORT="\"$(PT_SUPPORT)\""   \
-          -DASF_SUPPORT="\"$(ASF_SUPPORT)\""   \
-          -DERROR_SUPPORT="\"$(ERROR_SUPPORT)\""   \
-          -DATERM="\"$(ATERM)\"" \
-          -DTOOLBUSLIB="\"$(TOOLBUSLIB)\"" \
-          -DSOCKLIBS="\"$(SOCKLIBS)\"" \
+DEFINES = -DASC_INCLUDES="\"$(ASC_INCLUDES)\"" \
+          -DASC_LD_FLAGS="\"$(ASC_LD_FLAGS)\""   \
           -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
           -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
           -DCOMPILER="\"$(CC)\"" \
           -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
 INCLUDES  = $(DEFINES) \
-            -I$(ASC_SUPPORT)/include \
-            -I$(SGLR)/include \
-            -I$(PT_SUPPORT)/include \
-            -I$(ERROR_SUPPORT)/include \
-            -I$(ASF_SUPPORT)/include \
-            -I$(ATERM)/include \
-            -I$(TOOLBUSLIB)/include \
+	    $(ASC_INCLUDES) \
             -I$(srcdir)/muasf 
 

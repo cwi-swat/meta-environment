@@ -24,25 +24,8 @@ void call_c_compiler(ATbool keep_annos,
          COMPILER " " COMPILERFLAGS 
 	 " -o %s "
 	 "%s \\\n"
-	 "\t-I.\\\n"
-	 "\t-I" ASC_SUPPORT "/include \\\n"
-	 "\t-I" SGLR "/include \\\n"
-	 "\t-I" TIDE_SUPPORT "/include \\\n"
-	 "\t-I" ASF_SUPPORT "/include \\\n"
-	 "\t-I" PT_SUPPORT "/include \\\n"
-	 "\t-I" ATERM "/include \\\n"
-	 "\t-I" TOOLBUSLIB "/include \\\n"
-	 "\t-I" ERROR_SUPPORT "/include \\\n"
-	 "\t" ASC_SUPPORT "/lib/libasc-support-me.a \\\n"
-	 "\t" SGLR "/lib/libsglr.a \\\n"
-	 "\t" TIDE_SUPPORT "/lib/libtide-adapter.a \\\n"
-	 "\t" ASF_SUPPORT "/lib/libASFME.a \\\n"
-	 "\t" PT_SUPPORT "/lib/libmept.a \\\n"
-	 "\t" PT_SUPPORT "/lib/libPTMEPT.a \\\n"
-	 "\t" ERROR_SUPPORT "/lib/libErrorAPI.a \\\n"
-	 "\t" TOOLBUSLIB "/lib/libATB.a \\\n"
-	 "\t" ATERM "/lib/libATerm.a \\\n"
-	 "\t" SOCKLIBS "\\\n"
+	 "\t" ASC_INCLUDES "\\\n"
+	 "\t" ASC_LD_FLAGS "\\\n"
 	 "\t-DASF_MAIN %s\n",
 	 binary, 
 	 sourcefiles,
