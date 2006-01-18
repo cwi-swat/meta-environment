@@ -15,6 +15,8 @@ LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.j
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
+bin_SCRIPTS = $(TOOLNAME)-config
+noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
 
 EXTRA_DIST = ${JARFILE} $(TOOLNAME).idef
 
@@ -26,4 +28,4 @@ $(TOOLNAME)-config: Makefile
 	) > $@ && chmod +x $@
 
 $(TOOLNAME)-$(VERSION).pkg: package Makefile
-    cp $< $@
+	cp $< $@
