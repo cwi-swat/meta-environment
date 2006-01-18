@@ -1,5 +1,10 @@
 $Id$
 
+Wed Jan 18 16:27:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * utils/asc-support-config.src: added options --ldflags --includes
+   and --prefix to config script, such that transitive dependencies
+   may be hidden from users of asc-support.
+
 Thu Jan  5 09:21:01 CET 2006 <jurgenv@cwi.nl>
  * Added rudimentary implementation of ciliterals. They are ignored
    like normal literals, and restored with the spelling that is copied
