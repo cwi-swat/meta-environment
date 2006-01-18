@@ -1,10 +1,4 @@
-INCLUDES = \
-	-I$(ASC_SUPPORT)/include \
-	-I$(SGLR)/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ATERM)/include
+INCLUDES = ${ASC_INCLUDES}
 
 EXTRA_DIST = \
 	Box_dict.c \
@@ -26,16 +20,7 @@ pandora_SOURCES = \
 	Box-to-Text.c \
 	pandora.tif.c
 
-pandora_LDADD = \
-	-L$(ASC_SUPPORT)/lib -lasc-support-me \
-	-L$(SGLR)/lib -lsglr \
-	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
-	${SOCKLIBS}
+pandora_LDADD = ${ASC_LD_FLAGS}
 
 asfc:
 	asfc \

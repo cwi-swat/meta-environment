@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Wed Jan 18 16:29:16 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * src/Makefile.am,package,configure.in: got rid of transitive
+   dependencies of asc-support by using asc-support-config script
+   at configure time.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
