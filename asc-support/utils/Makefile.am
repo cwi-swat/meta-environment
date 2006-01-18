@@ -8,6 +8,7 @@ noinst_SCRIPTS = gen-forward.sh gen-protos.sh gen-link-test.sh
 CLEANFILES = asc-support-config
 
 ASC_INCLUDES=\
+        -I$(prefix)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
