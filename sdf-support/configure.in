@@ -10,7 +10,7 @@ AC_AIX
 AC_PROG_CC
 AC_PROG_LIBTOOL
 
-dnl {{{  Set CFLAGS
+dnl   Set CFLAGS
 
 dnl Handle --with-cflags option
 AC_ARG_WITH(cflags,
@@ -22,9 +22,9 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl }}}
+dnl 
 
-dnl {{{  ATerm
+dnl   ATerm
 
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
@@ -32,13 +32,13 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
 AC_SUBST(ATERM)
 
 
-dnl }}}
-dnl {{{  toolbus library
+dnl 
+dnl   toolbus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
-dnl }}}
-dnl {{{  error-support
+dnl 
+dnl   error-support
 
 dnl Require error-support package
 AC_PACKAGE_REQUIRE(error-support, error-support-config,
@@ -46,8 +46,8 @@ AC_PACKAGE_REQUIRE(error-support, error-support-config,
 AC_SUBST(ERROR_SUPPORT)
 
 
-dnl }}}
-dnl {{{  pt-support
+dnl 
+dnl   pt-support
 
 dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
@@ -55,20 +55,11 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
 AC_SUBST(PT_SUPPORT)
 
 
-dnl }}}
-dnl {{{  graph-support
-
-dnl Require graph-support package
-AC_PACKAGE_REQUIRE(graph-support, graph-support-config,
-   [  --with-graph-support=DIR   graph-support is in DIR])
-AC_SUBST(GRAPH_SUPPORT)
-
-
-dnl }}}
-dnl {{{  Require socket/gethostname
+dnl 
+dnl   Require socket/gethostname
 
 NOSOCKLIBS=$LIBS
-dnl {{{  check for socket in -lsun and -lsocket
+dnl   check for socket in -lsun and -lsocket
 SOCKET_FOUND=no
 SOCKLIBS=
 AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
@@ -76,8 +67,8 @@ if test ${SOCKET_FOUND} = no; then
   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
 fi
 
-dnl }}}
-dnl {{{  check for gethostname in -lsun and -lsocket
+dnl 
+dnl   check for gethostname in -lsun and -lsocket
 
 GHN_FOUND=no
 AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
@@ -85,11 +76,11 @@ if test ${GHN_FOUND} = no; then
   AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
 fi
 
-dnl }}}
+dnl 
 AC_SUBST(SOCKLIBS)
 LIBS=$NOSOCKLIBS
 
-dnl }}}
+dnl 
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
