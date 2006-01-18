@@ -2,14 +2,9 @@ include $(top_srcdir)/make_rules
 
 TESTS		= test-chars
 
-INCLUDES	= -I${ATERM}/include \
-		-I${TOOLBUSLIB}/include \
-		-I${SGLR}/include \
-		-I${ERROR_SUPPORT}/include \
-		-I${PT_SUPPORT}/include \
-		-I${SDF_SUPPORT}/include \
-		-I${ASF_SUPPORT}/include \
-		-I${ASC_SUPPORT}/include
+INCLUDES	= \
+		  ${ASC_INCLUDES} \
+		  -I${SDF_SUPPORT}/include
 
 check_PROGRAMS	= test-chars
 bin_PROGRAMS	= parsetablegen
@@ -39,16 +34,9 @@ test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
-parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
-                        -L$(SGLR)/lib -lsglr \
-                        -L$(TIDE_SUPPORT)/lib -ltide-adapter \
+parsetablegen_LDADD   = \
                         -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
-                        -L$(ASF_SUPPORT)/lib -lASFME \
-                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-                        -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-                        -L$(TOOLBUSLIB)/lib -lATB \
-                        -L$(ATERM)/lib/ -lATerm-dbg \
-                        $(SOCKLIBS)
+			$(ASC_LD_FLAGS)
 
 CLEANFILES = \
 	parse-sdf2 \

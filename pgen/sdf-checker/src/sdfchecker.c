@@ -128,7 +128,6 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottomOfStack);
-  SDF_initSDFMEApi();
   initErrorApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);

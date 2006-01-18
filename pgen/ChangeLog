@@ -1,5 +1,10 @@
 $Id$
 
+Wed Jan 18 16:29:16 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * src/Makefile.am,package,configure.in: got rid of transitive
+   dependencies of asc-support by using asc-support-config script
+   at configure time.
+
 Wed Jan  4 17:42:45 CET 2006 <jurgenv@cwi.nl>
  * normalizer: Implemented case-insensitive literals.
  * tests: added test for ci literals.
