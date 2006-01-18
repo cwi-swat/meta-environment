@@ -41,6 +41,8 @@ AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
 	[  --with-aterm-java=DIR  ATerm-Java-library is in DIR])
 JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
 AC_SUBST(JAVA_ATERM)
+EXTERNAL_JARS=${JAVA_ATERM}
+AC_SUBST(EXTERNAL_JARS)
 dnl }}}
 dnl  Handle --with-asc-support
 
