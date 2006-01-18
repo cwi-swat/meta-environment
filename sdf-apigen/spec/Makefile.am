@@ -7,14 +7,7 @@ bin_PROGRAMS = Sdf2-to-ADT Sdf2-to-Imploded-ADT
 AM_CFLAGS = -DASF_MAIN
 
 INCLUDES = \
-	-I$(ASCINC) \
-	-I$(SGLR)/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(TIDE_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ASF_SUPPORT)/include \
-	-I$(ATERM)/include
+	$(ASC_INCLUDES)
 
 pkgdata_DATA = Sdf2-to-ADT.trm.tbl
 
@@ -26,27 +19,11 @@ EXTRA_DIST = \
 
 Sdf2_to_ADT_SOURCES = Sdf2-to-AsFix2ME-ADT.c
 Sdf2_to_ADT_LDADD = \
-	-L$(ASCLIB) -lasc-support-me \
-	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
-	-L$(SGLR)/lib -lsglr \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
-	$(SOCKLIBS)
+	$(ASC_LD_FLAGS)
 
 Sdf2_to_Imploded_ADT_SOURCES = Sdf2-to-Imploded-ADT.c
 Sdf2_to_Imploded_ADT_LDADD = \
-	-L$(ASCLIB) -lasc-support-me \
-	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
-	-L$(SGLR)/lib -lsglr \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
-	$(SOCKLIBS)
+	$(ASC_LD_FLAGS)
 
 table:
 	pt-dump -m Sdf2-to-AsFix2ME-ADT -o Sdf2-to-ADT.trm.tbl

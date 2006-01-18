@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jan 18 17:21:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
+ * configure.in,package,spec/Makefile.am: removed transitive
+   dependencies of asc-support, using the asc-support-config script.
+
 Wed Aug 24 16:56:55 CEST 2005 <{kooiker,jurgenv}@cwi.nl>
  * Fixed TODO (start injections are correct now)
  * Ported ASF+SDF specification to USE structured lexicals (bootstrapped)
