@@ -29,7 +29,7 @@ import aterm.ATermFactory;
  */
 
 public class ClassicToolShield extends ToolShield {
-	private boolean verbose = true;
+	private boolean verbose = false;
 	
 	private final static int LENSPEC = 12;          // ToolBus dependent parameters
 	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
@@ -48,6 +48,16 @@ public class ClassicToolShield extends ToolShield {
 
 	private ATerm termSndVoid;
 	private boolean connected;
+	
+	private int receiveTermBytesLeft = 0;
+	private int receiveTermIndex = 0;
+	private ByteBuffer receiveTermData;
+	private ByteBuffer receiveTermLengthSpec = ByteBuffer.allocate(LENSPEC);
+	
+	private int sendTermBytesLeft = 0;
+	private int sendTermFill = 0;
+	private ByteBuffer sendTermData;
+	private ByteBuffer sendTermLengthSpec = ByteBuffer.allocate(LENSPEC);
 	
 	/**
 	   * The constructor for ClassicToolShield. 
@@ -90,7 +100,7 @@ public class ClassicToolShield extends ToolShield {
 		this.client = client;
 		info("checking input signature...");
 		checkToolSignature();
-		ATerm term = readTerm();
+		ATerm term = receiveTerm();
 		info("receive: " + term);
 		if(!term.isEqual(termSndVoid)){
 			throw new RuntimeException("incorrect response after signature check: " + term);
@@ -98,7 +108,7 @@ public class ClassicToolShield extends ToolShield {
 		connected = true;
 		getToolInstance().TCP_goConnected();
 		client.configureBlocking(false);
-		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ);
+		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 		clientKey.attach(this);
 	}
 	
@@ -125,7 +135,7 @@ public class ClassicToolShield extends ToolShield {
 	}
 	
 	public void sndRequestToTool(Integer operation, ATerm call) {
-		info("sndRequestToTool(" + operation + ", " + call + ")");
+		//info("sndRequestToTool(" + operation + ", " + call + ")");
 		addRequestToTool(new Object[] {operation, call, null});
 	}
 	
@@ -151,7 +161,6 @@ public class ClassicToolShield extends ToolShield {
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
 	public void terminate(ATerm msg) {
-	//	toolInputHandler.setRunning(false);
 		sndRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 	
@@ -167,7 +176,6 @@ public class ClassicToolShield extends ToolShield {
 		return toolname;
 	}
 	
-
 	public void setVerbose(boolean on) {
 		verbose = on;
 	}
@@ -178,25 +186,28 @@ public class ClassicToolShield extends ToolShield {
 
 	void info(String msg) {
 		if (verbose) {
-			System.err.println("[CLASSIC TOOLSHIELD: " + toolname + "] " + msg);
+			System.err.println("[CLASSIC TOOLSHIELD: " + toolname + "] " + msg.substring(0,Math.min(msg.length(),100)));
 		}
 	}
 
-	public void sendTerm(ATerm term) throws IOException {
+	public synchronized void sendTerm(ATerm term) throws IOException {
 		synchronized (getLockObject()) {
-			String unparsedTerm = term.toString();
-			int size = unparsedTerm.length();
+			byte termAsBytes[] = term.toByteArray();
+			int size = termAsBytes.length;
+			
 			String lenspec = "000000000000" + (size + LENSPEC) + ":";
 			int len = lenspec.length();
-			byte[] ls = new byte[LENSPEC];
+			//byte[] ls = new byte[LENSPEC];
+			
+			sendTermLengthSpec.clear();
 
 			for (int i = 0; i < LENSPEC; i++) {
-				ls[i] = (byte) lenspec.charAt(len + i - LENSPEC);
+				sendTermLengthSpec.put((byte)lenspec.charAt(len + i - LENSPEC));
 			}
 
 			if (verbose) {
 				System.out.print("toolshield " + toolname + " writes term:\n");
-				System.out.print(new String(ls));
+				//System.out.print(new String(ls));
 				String s = term.toString();
 				for(int i = 0; i < s.length() && i < 100; i++){
 					if(s.charAt(i) != 0) {
@@ -205,99 +216,95 @@ public class ClassicToolShield extends ToolShield {
 				}
 				System.out.println("");
 			}
-			int n = client.write(ByteBuffer.wrap(ls));
-			info(n + " bytes written for ls");
-			//term.writeToTextFile(Channels.newOutputStream(client));
-			n = client.write(ByteBuffer.wrap(unparsedTerm.getBytes()));
-			info(n + " bytes written for term");
-			if (LENSPEC + size < MIN_MSG_SIZE) {
-				info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size)) + " zero bytes.");
+			sendTermLengthSpec.flip();
+			//int n = client.write(ByteBuffer.wrap(ls));
+			int n = 0;
+			while(sendTermLengthSpec.hasRemaining()){
+				n += client.write(sendTermLengthSpec);
 			}
-			int fill = MIN_MSG_SIZE - (LENSPEC + size);
-			if(fill > 0){
-				byte filler[] = new byte[fill];
-				for (int i = 0; i < fill; i++) {
-				//	client.put((byte)0);
+			info(n + " bytes written for sendTermLenghSpec");
+			
+			sendTermData = ByteBuffer.wrap(termAsBytes);
+			sendTermFill = MIN_MSG_SIZE - (LENSPEC + size);
+			
+			n = client.write(sendTermData);
+			info(n + " bytes written for unparsedTerm");
+			sendTerm();
+		}
+	}
+	
+	public synchronized void sendTerm() throws IOException {
+		if(sendTermData != null){
+			if(sendTermData.hasRemaining()){
+				int n = client.write(sendTermData);
+				info(n + " bytes written for unparsedTerm");
+				return;
+			}
+	
+			if(sendTermFill > 0){
+				info("padding with " + sendTermFill + " zero bytes.");
+				byte filler[] = new byte[sendTermFill];
+				for (int i = 0; i < sendTermFill; i++) {
 					filler[i] = 0;
 				}
-				n = client.write(ByteBuffer.wrap(filler));
-	
-				info(n + " bytes written for filler");
+				ByteBuffer bfiller = ByteBuffer.wrap(filler);
+				while(bfiller.hasRemaining()){
+					int n = client.write(bfiller);
+					info(n + " bytes written for filler");
+				}
 			}
-			//outputStream.flush();
+			sendTermData = null;
 		}
 	}
 
-	public ATerm readTerm() throws IOException {
-		ATerm result;
-		ByteBuffer lspecBuf = ByteBuffer.allocate(LENSPEC);
-		int index;
-		
-		info("readTerm from ... " + client.toString());
-
-		index = 0;
-		while (index != LENSPEC) {
-			int bytes_read = client.read(lspecBuf);
-			info(bytes_read + " bytes read");
-			if (bytes_read <= 0) {
-				throw new IOException("Tool connection terminated (1)");
+	public synchronized ATerm receiveTerm() throws IOException {
+		if(receiveTermBytesLeft == 0){  // Start reading a new term
+			info("readTerm from ... " + client.toString());
+			receiveTermLengthSpec.clear();
+			int index = 0;
+			
+			while (index != LENSPEC) {
+				int bytes_read = client.read(receiveTermLengthSpec);
+				info(bytes_read + " bytes read");
+				if (bytes_read == -1) {
+					throw new IOException("Tool connection terminated (1)");
+				}
+				index += bytes_read;
 			}
-			index += bytes_read;
-		}
-		lspecBuf.flip();
-		String s = "";
-		while(lspecBuf.hasRemaining()){
-			s = s + (char) lspecBuf.get();
-		}
-		info("read: <" + s + ">");
-		
-
-		String lspec = s;
-
-		int bytesLeft = Integer.parseInt(lspec.substring(0, LENSPEC - 1));
-		if (bytesLeft < MIN_MSG_SIZE) {
-			bytesLeft = MIN_MSG_SIZE;
-		}
-		bytesLeft -= LENSPEC;
-
-		ByteBuffer data = ByteBuffer.allocate(bytesLeft);
-		index = 0;
-		while (index != bytesLeft) {
-			int bytes_read = client.read(data);
-			if (bytes_read <= 0) {
-				throw new IOException("Tool connection terminated (2)");
+			receiveTermLengthSpec.flip();
+			
+			info("limit = " + receiveTermLengthSpec.limit());
+			StringBuffer lspec = new StringBuffer(LENSPEC);
+			while(receiveTermLengthSpec.hasRemaining()){
+				lspec.append((char) receiveTermLengthSpec.get());
 			}
-			index += bytes_read;
+	
+			receiveTermBytesLeft = Integer.parseInt(lspec.substring(0, LENSPEC - 1));
+			if (receiveTermBytesLeft < MIN_MSG_SIZE) {
+				receiveTermBytesLeft = MIN_MSG_SIZE;
+			}
+			receiveTermBytesLeft -= LENSPEC;
+	
+			if(receiveTermData == null || receiveTermData.capacity() < receiveTermBytesLeft){
+				receiveTermData = ByteBuffer.allocate(receiveTermBytesLeft);
+			} else {
+				receiveTermData.clear();
+			}
+			receiveTermIndex = 0;
 		}
-		
-		data.flip();
-		s = "";
-		while(data.hasRemaining()){
-			s = s + (char) data.get();
+		int bytes_read = client.read(receiveTermData);
+		info("bytes_read = " + bytes_read);
+		if (bytes_read == -1) {
+			throw new IOException("Tool connection terminated (2)");
 		}
-		info("read: <" + s + ">");
-
-		//String stringdata = new String(data,"UTF8");
-		//System.err.println("data size = " + data.length + "; string size = " + stringdata.length());
-		//
-		//StringBuffer sb = new StringBuffer(data.length);				
-
-		//for(int i = 0; i < data.length; i++){
-		//	sb.append((char)data[i]);
-		//}
-		String stringdata = s ; //new String(data,0);
+		receiveTermIndex += bytes_read;
 		
-		//System.out.print("data read (" + bytesLeft + " bytes) ");
-		//for(int i = 0; i < 100 & i < data.length; i++){
-		//	if(data[i] != 0)
-		//		System.out.print(stringdata.charAt(i));
-		//	else
-		//		System.out.print("Z");
-		//	}
-		//System.out.println("");
-		
-		result = factory.parse(stringdata);
-
+		if(receiveTermIndex != receiveTermBytesLeft){
+			return null;
+		}
+		receiveTermData.flip();
+		ATerm result = factory.readFromByteBuffer(receiveTermData);
+		receiveTermBytesLeft = 0;
 		return result;
 	}
 	

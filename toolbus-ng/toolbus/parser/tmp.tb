@@ -1,3 +1,8 @@
-process P is printf("a\n"). printf("b\n") delay(10) . printf("c\n")
+process P is
+let Id : int
+in
+    Id := process-id .
+    printf("process-id = %d", Id)
+endlet
 
 toolbus(P)

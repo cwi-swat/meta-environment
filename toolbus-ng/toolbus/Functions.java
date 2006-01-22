@@ -488,7 +488,7 @@ public class Functions {
         String fun = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
         if (fun == "quote"){ // TODO: check # of args
-        	System.err.println("quote: " + t + " ==> " + TBTerm.substitute(args[0], env));
+        	//System.err.println("quote: " + t + " ==> " + TBTerm.substitute(args[0], env));
     		return TBTerm.substitute(args[0], env);
         }
         if(fun == "is-var")

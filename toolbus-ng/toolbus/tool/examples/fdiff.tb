@@ -1,0 +1,20 @@
+%% fdiff.tb -- diff of file received from and sent back to tool */
+
+process FDIFF is
+  let FD : fdiff,                %% D will represent the hello tool
+      S : str                  %% S is a string valued variable
+  in
+      execute(fdiff, FD?) .      %% Execute diff, D gets a tool id as value
+%%      snd-eval(FD, get-text("/home/paulk/software/installed//share/pgen/Sdf2.baf")) .  %% Request a text from the diff tool
+      snd-eval(FD, get-text("/home/paulk/tst1.txt")) .
+      rec-value(FD, text(S?)) . %% Receive it, S gets the text as value
+      snd-eval(FD, get-diff(S)) . 
+      rec-value(FD, text(S?)) .
+      printf(S) .                %% Print it    
+      printf("\n") .
+      printf("done\n")
+  endlet
+
+tool fdiff is {command = "/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/hello/fdiff"}
+
+toolbus(FDIFF)

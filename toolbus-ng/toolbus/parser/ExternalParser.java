@@ -63,7 +63,8 @@ public class ExternalParser {
     execute(parseCommand, sourceFileName, asfixFileName, "parse");
     InputStream in = execute(implodeCommand, asfixFileName, "implode");
     try {
-      result = TBTerm.factory.readFromTextFile(in);
+    	InputStreamReader reader = new InputStreamReader(in);
+      result = TBTerm.factory.readFromTextFile(reader);
     } catch (IOException e) {
       throw new ExternalProcessException(e.getMessage(), "read ATerm from file");
     }
