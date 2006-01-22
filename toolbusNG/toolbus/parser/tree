@@ -1,0 +1,1 @@
+ttt-Tscript([ttt-ToolDef("t",None,None,Some(ttt-command(ttt-strcon("\"abc\""))))])

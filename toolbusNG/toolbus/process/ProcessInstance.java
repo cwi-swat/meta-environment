@@ -18,6 +18,9 @@ import aterm.ATermList;
  * @author paulk, Jul 23, 2002
  */
 public class ProcessInstance {
+	
+  private boolean verbose = false;
+	 
   static int processCount = 0;
   static State empty = new State();
   private ProcessDefinition definition;
@@ -32,7 +35,7 @@ public class ProcessInstance {
   private ATermList subscriptions = TBTerm.factory.makeList();
   private ATermList notes = TBTerm.factory.makeList();
   private boolean running = true;
-  private boolean verbose = false;
+ 
 
   public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException {
     toolbus = TB;

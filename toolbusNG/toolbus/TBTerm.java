@@ -216,7 +216,7 @@ public class TBTerm {
        	ATerm e = lst1.elementAt(i);
     	res = factory.makeList(e, res);
     }
-    System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
+    //System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
     return res;
   }
   

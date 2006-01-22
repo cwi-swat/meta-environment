@@ -47,7 +47,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 	
-  private static boolean verbose = true;
+  private static boolean verbose = false;
 
   private static Random rand = new Random();
   private ATermFactory factory;
@@ -150,7 +150,7 @@ public class ToolBus {
   
   void info(String msg) {
 	if (verbose) {
-		System.err.println("[TOOLBUS] " + msg);
+		System.err.println("[TOOLBUS] " + msg.substring(0,Math.min(msg.length(),100)));
 	}
 }
   
@@ -163,26 +163,34 @@ public class ToolBus {
   	Set readyKeys = selector.selectedKeys();
   	Iterator iterator = readyKeys.iterator();
   	while(iterator.hasNext()){
-  		SelectionKey key = (SelectionKey) iterator.next();
+  		SelectionKey key = (SelectionKey) (iterator.next());
   		iterator.remove();
   		//info("key " + key);
   		
   		try{	
 	  		if(key.isAcceptable()){
-	  			//info("case acceptable");
+	  			info("case acceptable");
 	  			ServerSocketChannel server = (ServerSocketChannel) key.channel();
 	  			client = server.accept();
 	  			client.configureBlocking(true);
 	  			shakeHands();
 	  			
 	  		} else if(key.isReadable()){
-	  			//info("case readable");
+	  			info("case readable");
 	  			client = (SocketChannel) key.channel();
 	  			ClassicToolShield ts = (ClassicToolShield) key.attachment();
-	  			ATerm term = ts.readTerm();
-	  			ts.getToolInstance().handleTermFromTool(term);
+	  			ATerm term = ts.receiveTerm();
+	  			if(term != null){
+	  				info("TERM READ");
+	  				ts.getToolInstance().handleTermFromTool(term);
+	  			}
+	  		} else if(key.isWritable()){
+	  			info("case readable");
+	  			client = (SocketChannel) key.channel();
+	  			ClassicToolShield ts = (ClassicToolShield) key.attachment();
+	  			ts.sendTerm();
 	  		} else {
-	  			System.err.println("NO INPUT POSSIBLE in handleInputFromTools");
+	  			System.err.println("Cannot handle key in handleInputFromTools");
 	  		}
   		} catch (IOException e){
   			key.cancel();
@@ -190,7 +198,6 @@ public class ToolBus {
   				key.channel().close();
   			} catch (IOException ce) {}
   		}
-  		
   	}
   }
   
@@ -669,6 +676,7 @@ public class ToolBus {
         }
       }
     } catch (ToolBusException e) {
+      System.err.println("Exception in ToolBus.execute");
       System.err.println(e.getMessage());
       e.printStackTrace();
     }
