@@ -17,6 +17,7 @@ let
   Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,Namespace,AttributeName,OldValue,NewValue)
+  . TODO("WARNING: cache is also flushed when OldValue is unkown!")
   . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,Namespace,AttributeName,OldValue,NewValue)
   .
   (

@@ -109,23 +109,30 @@ let
   Runner: list,
   Result: list,
   ModuleTree: term,
-  ModuleId: term
+  ModuleId: term,
+  Incomplete: bool
 in
   Runner := ModuleIds
   . Result := []
   .
-  if and(not-equal(Runner, []),not-equal(ModuleTree,UNDEFINED)) then
+  if and(not-equal(Runner, []),not-equal(Incomplete,true)) then
     ModuleId := first(Runner)
     . GetSDFParseTree(ModuleId, ModuleTree?)
+    . 
+    if equal(ModuleTree, UNDEFINED) then
+      Incomplete := true
+    else
+      tau
+    fi
     . Result := join(ModuleTree, Result) 
     . Runner := next(Runner) 
   fi
   *
-  if equal(Runner, []) then
+  if or(equal(Runner, []),equal(Incomplete,true)) then
     tau
   fi
   .
-  if equal(ModuleTree, UNDEFINED) then
+  if equal(Incomplete, true) then
     Modules := []
   else
     Modules := Result
