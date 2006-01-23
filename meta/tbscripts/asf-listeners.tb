@@ -8,9 +8,12 @@ process ASFModuleOpener is
 let
   Event: attribute-changed-event,
   ModuleId: term,
-  NewPath: term
+  NewPath: term,
+  Idle: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened)  .
+  Idle := no
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened) 
+  .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)

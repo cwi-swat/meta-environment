@@ -114,7 +114,7 @@ in
   Runner := ModuleIds
   . Result := []
   .
-  if not-equal(Runner, []) then
+  if and(not-equal(Runner, []),not-equal(ModuleTree,UNDEFINED)) then
     ModuleId := first(Runner)
     . GetSDFParseTree(ModuleId, ModuleTree?)
     . Result := join(ModuleTree, Result) 
@@ -124,7 +124,12 @@ in
   if equal(Runner, []) then
     tau
   fi
-  . Modules := Result
+  .
+  if equal(ModuleTree, UNDEFINED) then
+    Modules := []
+  else
+    Modules := Result
+  fi
 endlet
 
 process GetSyntaxDefinition(ModuleId: term, Syntax: term?) is
