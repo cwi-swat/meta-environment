@@ -2,6 +2,10 @@
 #define __SDF_UTILS__
 
 #include <sdf-modules.idef>
+#include <error-support.idef>
+
+#define SDF_TREE_CACHE "sdf-annotated-tree"
+
 
 process NewModuleContentHandler is
 let
@@ -101,16 +105,27 @@ in
 endlet
 
 process GetModules(ModuleIds: list, Modules: list?) is
-  TODO("remove database dependency here by reusing parse scenario, which by accident caches for efficiency")
+let
+  Runner: list,
+  Result: list,
+  ModuleTree: term,
+  ModuleId: term
+in
+  Runner := ModuleIds
+  . Result := []
   .
-  snd-msg(ts-get-values("sdf-tree", ModuleIds))
-  .
-  (
-    rec-msg(ts-values("sdf-tree", ModuleIds, Modules?))
-  +
-    rec-msg(ts-no-values("sdf-tree", ModuleIds))
-    . Modules := []
-  )
+  if not-equal(Runner, []) then
+    ModuleId := first(Runner)
+    . GetSDFParseTree(ModuleId, ModuleTree?)
+    . Result := join(ModuleTree, Result) 
+    . Runner := next(Runner) 
+  fi
+  *
+  if equal(Runner, []) then
+    tau
+  fi
+  . Modules := Result
+endlet
 
 process GetSyntaxDefinition(ModuleId: term, Syntax: term?) is
 let
@@ -449,6 +464,7 @@ let
   Path: str
 in
   CreateModule(Modulename, ModuleId?)
+  . printf("opening module\n")
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   .
   if equal(Path, EMPTY_PATH) then
@@ -461,9 +477,9 @@ in
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
     else
-      SetModulePath(ModuleId, SDF_NAMESPACE, Path)
-      . IsLibraryModule(ModuleId, LibraryModule?)
+      IsLibraryModule(ModuleId, LibraryModule?)
       . Editable := not(LibraryModule)
+      . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
     fi
@@ -472,42 +488,56 @@ in
   fi
 endlet
 
+toolbus(InitCache(SDF_TREE_CACHE, SDF_NAMESPACE, edited))
+toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,available))
 
-process OpenSyntax(ModuleId: term) is
+process GetSDFParseTree(ModuleId: term, Result: term?) is
 let
-  Error: term,
   Id: int,
   Modulename: str,
   ParseTable: term,
   Path: str,
   Pid: int,
   Text: str,
-  Type: term
+  Type: term,
+  Tree: term,
+  Annotated: term
 in
   Id := process-id
-  . Type := sdf
-  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-  . ReadFile(Path, Text?)
+  . GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
   .
-  if not-equal(Text, "") then
-    GetParseTable(ModuleId, Type, ParseTable?)
-    . create(OpenSyntaxParseHandler(ModuleId), Pid?)
-    . ParseText(Pid, Text, ParseTable, "Module")
+  if equal(Tree, UNDEFINED) then
+    Type := sdf
+    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . ReadFile(Path, Text?)
     .
-    (
-      rec-msg(open-syntax-parse-handler-done(Pid, ModuleId))
-      . SetModuleSyntaxText(ModuleId, Text)
-    +
-      rec-msg(open-syntax-parse-handler-done(Pid))
-    )
+    if not-equal(Text, "") then
+      GetParseTable(ModuleId, Type, ParseTable?)
+      . create(SDFParseTreeHandler(ModuleId, Path), Pid?)
+      . ParseText(Pid, Text, ParseTable, SDF_TOPSORT)
+      .
+      (
+        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId, Tree?))
+        . AnnotateTree(Tree, Path, Annotated?)
+        . Result := Annotated
+        . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
+        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
+      +
+        rec-msg(open-syntax-parse-handler-done(Pid))
+        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+        . Result := UNDEFINED
+      )
+    else
+      Result := UNDEFINED
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+    fi
   else
-    Error("TODO fix this error io-error-reading: %t\n", [Error])
+    Result := Tree
   fi
 endlet
 
-process OpenSyntaxParseHandler(ModuleId: term) is
+process SDFParseTreeHandler(ModuleId: term, Path: str) is
 let
-  AnnotatedTree: term,
   Directory: str,
   ErrorMessage: term,
   Extension: str,
@@ -516,48 +546,27 @@ let
   Modulename: str,
   ParseError: term,
   ParseResult: term,
-  Path: str,
   Pid: int,
   CheckPid: int,
   Summary: term
 in
   Pid := process-id
-  . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   .
   (
     (
       rec-msg(parse-tree(Pid, ParseResult?))
+      . snd-msg(ui-remove-feedback-summary("sglr", Path))
     +
       rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
       . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
       . snd-msg(es-make-summary("sglr", Path, [ParseError]))
       . rec-msg(es-summary(Summary?))
+      . snd-msg(ui-remove-feedback-summary("sglr", Path))
       . snd-msg(ui-show-feedback-summary(Summary))
     )
-    . snd-msg(sm-get-module-id(ParseResult))
-    . rec-msg(sm-module-id(Modulename?))
-    . snd-msg(io-get-path-directory(Path))
-    . rec-msg(io-directory(Path, Directory?))
-    . snd-msg(sm-get-module-path(Directory, Modulename))
-    . rec-msg(sm-module-path(Directory?))
-    . snd-msg(io-get-path-extension(Path))
-    . rec-msg(io-extension(Path, Extension?))
-    . BuildPath(Directory, Modulename, Extension, File?)
-    .
-    if equal(File, Path) then
-      SetModuleSyntaxTree(ModuleId, ParseResult)
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
-      /* Use Listener to check Syntax Specification */
-      /*. create (CheckSyntaxSpecification(ModuleId), CheckPid?)*/
-    else
-      Error("Module %s should be in a file named %s\n", [Modulename, File])
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
-    fi
-    . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
+    . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId, ParseResult))
   +
     rec-msg(parse-error(Pid, ErrorMessage?))
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
     . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
@@ -566,23 +575,37 @@ in
   )
 endlet
 
-process SdfParseText(Pid: int, Text: str, Table: term, Nonterminal: term) is
+process SDFIdentifyModule(ModuleId: term) is
 let
-  Error: term,
-  ParseResult: term
+  Tree: term,
+  Path: str,
+  Directory: str,
+  Modulename: str,
+  File: str
 in
-  snd-msg(sdf-parse(Text, Table, Nonterminal))
+  GetSDFParseTree(ModuleId, Tree?)
   .
-  (
-    rec-msg(sglr-parse-tree(ParseResult?))
-    . snd-msg(parse-tree(Pid, ParseResult))
-  +
-    rec-msg(sglr-parse-forest(ParseResult?, Error?))
-    . snd-msg(parse-forest(Pid, ParseResult, Error))
-  +
-    rec-msg(sglr-parse-error(Error?))
-    . snd-msg(parse-error(Pid, Error))
-  )
+  if not-equal(Tree, UNDEFINED) then
+    GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . printf("Path: %s\n", Path)
+    . snd-msg(sm-get-module-id(Tree))
+    . rec-msg(sm-module-id(Modulename?))
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(sm-get-module-path(Directory, Modulename))
+    . rec-msg(sm-module-path(Directory?))
+    . BuildPath(Directory, Modulename, SDF_EXTENSION, File?)
+    .
+    if equal(File, Path) then
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", identified)
+    else
+      Error("Module %s should be in a file named %s\n", [Modulename, File])
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+    fi
+  else
+    tau
+  fi
 endlet
 
 process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is

@@ -2,6 +2,11 @@
 #define __ASF_UTILS__
 
 #include <sdf-namespace.h>
+#include <error-support.idef>
+#include <sdf-renaming.idef>
+#include <asfoperations.idef>
+#include <asfe.idef>
+#include <asfchecker.idef>
 
 #define ASF_TREE_CACHE "asf-annotated-tree"
 
@@ -31,7 +36,6 @@ in
   .
   (
     rec-msg(io-file-exists)
-    . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
     . IsLibraryModule(ModuleId, LibraryModule?)
     . Editable := not(LibraryModule)
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "editable", Editable)
@@ -111,7 +115,6 @@ let
 in
   Id := process-id
   . GetCachedValue(ASF_TREE_CACHE, ModuleId, Tree?)
-  . Tree := UNDEFINED
   .
   if equal(Tree, UNDEFINED) then
     Type := eqs
@@ -140,7 +143,7 @@ in
       . TODO("valid error message\n")
     fi
   else
-    tau
+    Result := Tree
   fi 
 endlet
 
@@ -174,9 +177,9 @@ in
     . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
-    . snd-msg(asf-parse-handler-error(Pid))
     . snd-msg(ui-remove-feedback-summary("sglr", Path))
     . snd-msg(ui-show-feedback-summary(Summary))
+    . snd-msg(asf-parse-handler-error(Pid))
   )
 endlet
 
@@ -356,17 +359,17 @@ in
     . GetSpecificationTests(Specification, Tests?) 
     . snd-note(ui-status(endstat(Id))) 
     . snd-note(ui-status(stat(Id, "Running tests"))) 
-    . snd-msg(run-tests(Equations, Tests)) 
+    . snd-msg(asfe-run-tests(Equations, Tests)) 
     .
     (
-      rec-msg(test-results(Errors?)) 
+      rec-msg(asfe-test-results(Errors?)) 
       . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
       . snd-msg(ui-remove-feedback-summary("asf-tests",Modulename)) 
       . snd-msg(es-make-summary("asf-tests", Modulename, Errors))
       . rec-msg(es-summary(Summary?))
       . snd-msg(ui-show-feedback-summary(Summary))
     +
-      rec-msg(rewrite-errors(Errors?))
+      rec-msg(asfe-rewrite-errors(Errors?))
       . snd-msg(ui-remove-feedback-summary("asfe", "all")) 
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
@@ -398,20 +401,20 @@ in
     GetSpecificationEquations(Specification, Equations?)
     . snd-note(ui-status(stat(Id, "Rewriting"))) 
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(rewrite(Modulename, Equations, Tree))
+    . snd-msg(asfe-rewrite(Modulename, Equations, Tree))
     .
     (
       (
-        rec-msg(rewrite-result(NormalForm?))
+        rec-msg(asfe-rewrite-result(NormalForm?))
         . snd-msg(restore-term-brackets(ModuleId, NormalForm))
         . rec-msg(restore-term-brackets-result(ModuleId, NormalForm?))
       +
-        rec-msg(rewrite-text(Text?)) 
+        rec-msg(asfe-rewrite-text(Text?)) 
         . NormalForm := quote(str(Text))
       )  
       . snd-msg(ui-remove-feedback-summary("asfe", "all"))
     +
-      rec-msg(rewrite-errors(Errors?))
+      rec-msg(asfe-rewrite-errors(Errors?))
       . snd-msg(ui-remove-feedback-summary("asfe", "all")) 
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
@@ -424,29 +427,25 @@ in
   fi
 endlet
 
-process Reduce(EditorId : term, ModuleId : term, Tree : term, RTree : term?) is
-  snd-msg(debugging(off)) 
+process Reduce(ModuleId : term, Tree : term, RTree : term?) is
+  snd-msg(asfe-debugging(off)) 
   . ReduceTerm(Tree, ModuleId, RTree?)
   .
   if not-equal(RTree, UNDEFINED) then
     snd-msg(promote-posinfo-to-origin(RTree))
     . rec-msg(promoted-posinfo-to-origin(RTree?))
     . AnnotateTree(RTree, "reduct.out", RTree?)
-    . snd-msg(put-term-tree("reduct.out", RTree))
   else
     tau
   fi
 
-process DebugReduce(EditorId : term,
-                    Modulename : str,
-		    Tree : term,
-		    ResultTree : term?) is
+process DebugReduce(ModuleId : term, Tree : term, ResultTree : term?) is
   /* TODO: changed reduce action to take an extra argument,
      that will break all currently existing scripts, so we
      leave it at this for the moment. In 1.6 this can be changed?
    */
-  snd-msg(debugging(on))
-  . ReduceTerm(Tree, Modulename, ResultTree?)
+  snd-msg(asfe-debugging(on))
+  . ReduceTerm(Tree, ModuleId, ResultTree?)
   . 
   if not-equal(ResultTree, UNDEFINED) then
     snd-msg(promote-posinfo-to-origin(ResultTree))
@@ -456,11 +455,7 @@ process DebugReduce(EditorId : term,
   else
     tau
   fi 
-  . snd-msg(debugging(off)) 
-
-process DebugRunAsfTestsAction(Modulename : str) is
-  snd-msg(debugging(on))
-  . snd-msg(run-asf-tests(Modulename))
+  . snd-msg(asfe-debugging(off)) 
 
 
 /*****

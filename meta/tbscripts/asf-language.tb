@@ -2,6 +2,7 @@
 #define __ASF_LANGUAGE__
 
 #include <parsetable-utils.tb>
+#include <addeqssyntax.idef>
 #include <asf-namespace.h>
 #include <sdf-namespace.h>
 

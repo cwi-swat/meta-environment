@@ -15,7 +15,6 @@ let
   Tree: term
 in
   EditorType := equations-editor
-  . printf("%t: editing module %t\n", ASF_NAMESPACE, ModuleId)
   . GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
   . Edit(Path, Sid?)
   . EditText(Sid, EditorType, "", AlreadyExists?)
@@ -46,9 +45,11 @@ in
     +
       MouseClicked(Sid)
     +
-      TextChanged(Sid, EditorType)
+      rec-msg(te-contents-changed(Sid))
+      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", edited)
     +
-      TextSaved(Sid, EditorType)
+      rec-msg(te-contents-saved(Sid))
+      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
     +
       UpdateEquationsStructure(Sid, EditorType)
     )
@@ -68,13 +69,9 @@ let
   Tree: term
 in
   rec-note(mm-attribute-changed(Event?))
-  . printf("updating equations editor\n")
   . GetModuleId(Sid, ModuleId?)
   . GetASFParseTree(ModuleId, Tree?) 
-  . snd-msg(se-update(Sid, Tree))
-  . snd-msg(se-get-tree-slices(Sid))
-  . rec-msg(se-tree-slices(Sid, Slices?))
-  . snd-msg(te-highlight-slices(Sid, Slices))
+  . RegisterTree(Sid, Tree)
 endlet
 
 #endif /* __ASF_EDITOR_UTILS__ */

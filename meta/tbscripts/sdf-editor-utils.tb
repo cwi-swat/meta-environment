@@ -17,13 +17,15 @@ let
   Editable: bool,
   SdfExt: str,
   Sid: term,
+  Event: attribute-changed-event,
   Tree: term
 in
   EditorType := syntax-editor
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   . 
   if equal(Path, EMPTY_PATH) then
-    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?) 
+    TODO("dit is ook raar\n")
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?) 
     . BuildPath(".", Modulename, SDF_EXTENSION, Path?)
     . printf("EditSyntax: Use CreateNewModule instead???\n")
   else
@@ -44,57 +46,47 @@ in
     . snd-msg(te-set-editable(Sid, Editable))
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
-    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetSDFParseTree(ModuleId, Tree?)
     .
     if not-equal(Tree, UNDEFINED) then
       EditStructure(Sid, Tree)
     else
       tau
     fi
-    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"annotated",<term>,true)
+    . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
     .
     (
       MenuSelected(Sid, EditorType)
     +
       MouseClicked(Sid)
     +
-      TextChanged(Sid, EditorType)
+      rec-msg(te-contents-changed(Sid))
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
     +
-      TextSaved(Sid, EditorType)
+      rec-msg(te-contents-saved(Sid))
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
+      . UpdateSyntaxStructure(Sid)
     +
-      UpdateSyntaxStructure(Sid, EditorType)
+      rec-note(mm-attribute-changed(Event?))
+      . UpdateSyntaxStructure(Sid)
     )
     *
     EditorDisconnected(Sid)
-    . IsTextEditorRegistered(Sid, HasText?)
-    . IsStructureEditorRegistered(Sid, HasStructure?)
     . DeleteSession(Sid)
-    .
-    if and(HasText, not(HasStructure)) then
-      TODO("OpenSyntax or, better, parse when structure has been lost")
-      . OpenSyntax(ModuleId)
-    else
-      tau
-    fi
   else
     tau
   fi
 endlet
 
-process UpdateSyntaxStructure(Sid: term, EditorType: term) is
+process UpdateSyntaxStructure(Sid: term) is
 let
-  Event: attribute-changed-event,
   ModuleId: term,
   Slices: term,
   Tree: term
 in
-  rec-note(mm-attribute-changed(Event?))
-  . GetModuleId(Sid, ModuleId?)
-  . GetModuleSyntaxTree(ModuleId, Tree?) 
-  . snd-msg(se-update(Sid, Tree))
-  . snd-msg(se-get-tree-slices(Sid))
-  . rec-msg(se-tree-slices(Sid, Slices?))
-  . snd-msg(te-highlight-slices(Sid, Slices))
+  GetModuleId(Sid, ModuleId?)
+  . GetSDFParseTree(ModuleId, Tree?)
+  . RegisterTree(Sid, Tree) 
 endlet
 
 #endif /* __SDF_EDITOR_UTILS__ */

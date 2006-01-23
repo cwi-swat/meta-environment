@@ -1,19 +1,22 @@
 #include <pandora.idef>
 
-process PrettyPrintTerm(ModuleName: str, Tree: term, Result: term?) is
+process PrettyPrint(Path : str,
+		    Tree : term, 
+		    Result : term?) is
 let
-  Feedback: term,
-  Id: int
+  Id : int,
+  Feedback: term
 in
   Id := process-id
-  . Result := error-tree
   . snd-note(ui-status(stat(Id, "Pretty printing...")))
   . snd-msg(pretty-print(Tree))
   .
   (
     rec-msg(pretty-print-result(Result?))
+    . AnnotateTree(Result, Path, Result?)
   +
     rec-msg(pretty-print-error(Feedback?))
+    . Result := UNDEFINED
   )
   . snd-note(ui-status(endstat(Id)))
 endlet

@@ -16,7 +16,7 @@ in
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetNewValue(Event, Modulename?)
-    . MM-SetModuleGraphAttribute(ModuleId, "label", Modulename)
+    . MM-SetModuleGraphAttribute(ModuleId, "label", label(Modulename))
   )
   *
   delta
@@ -27,20 +27,42 @@ toolbus(SDFModuleLabelSetter)
 process SDFModuleParser is
 let
   Event: attribute-changed-event,
-  ModuleId: term
+  ModuleId: term,
+  Tree: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . OpenSyntax(ModuleId)
+    . GetSDFParseTree(ModuleId, Tree?)
+    . Tree := help-garbage-collector
   )
   *
   delta
 endlet
 
 toolbus(SDFModuleParser)
+
+process SDFModuleIdentifier is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . SDFIdentifyModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleIdentifier)
+
 
 process SDFSetModuleImports is
 let
@@ -51,13 +73,13 @@ let
   ModuleId: term,
   Tree: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
-    . GetModuleSyntaxTree(ModuleId, Tree?)
+    . GetSDFParseTree(ModuleId, Tree?)
     . GetImportedModulenames(Tree, Imports?)
     .
     if not-equal(Imports, []) then 
@@ -88,7 +110,6 @@ in
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . DeleteModuleSyntaxTree(ModuleId)
     . MM-DeleteModuleDependencies(ModuleId)
   )
   *
@@ -96,50 +117,6 @@ in
 endlet
 
 toolbus(SDFRemoveDependencies)
-
-process SetModuleSyntaxText(ModuleId: term, Text: str) is
-  snd-msg(ts-put-str-value("sdf-text", ModuleId, Text))
-
-process SetModuleSyntaxTree(ModuleId: term, Tree: term) is
-  snd-msg(ts-put-term-value("sdf-tree", ModuleId, Tree))
-
-process GetModuleSyntaxTree(ModuleId: term, Tree: term?) is
-  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
-  .
-  (
-    rec-msg(ts-value("sdf-tree", ModuleId, Tree?))
-  +
-    rec-msg(ts-no-value("sdf-tree", ModuleId))
-    . Tree := UNDEFINED
-  )
-
-process DeleteModuleSyntaxTree(ModuleId: term) is
-  snd-msg(ts-remove-value("sdf-tree", ModuleId))
-
-process AnnotateTreeListener is
-let
-  AnnotatedTree: term,
-  Event: attribute-changed-event,
-  ModuleId: term,
-  Path: str,
-  Tree: term
-in
-  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
-  .
-  (
-    rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
-    . GetModuleSyntaxTree(ModuleId, Tree?)
-    . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-    . AnnotateTree(Tree, Path, AnnotatedTree?)
-    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
-    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "annotated", true)
-  )
-  *
-  delta
-endlet
-
-toolbus(AnnotateTreeListener)
 
 process StatusToProgress is
 let

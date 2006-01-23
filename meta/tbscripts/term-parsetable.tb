@@ -2,6 +2,7 @@
 #define __TERM_PARSETABLE__
 
 #include <parsetable-utils.tb>
+#include <removevarsyntax.idef>
 
 process RemoveVarSyntax(Modulename: str, Syntax: term, NewSyntax: term?) is
   snd-msg(remove-var-syntax(Modulename, Syntax)) 

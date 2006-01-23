@@ -2,6 +2,7 @@
 #define __CACHING__
 
 #include <child-attribute-changed-event.tb>
+#include <term-store.idef>
 
 /* sort of generic caching processes */
 process ClearCacheHandler(TableName: str, 

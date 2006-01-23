@@ -1,28 +1,50 @@
 #ifndef __TERM__UTILS__
 #define __TERM__UTILS__
 
-process ParseTerm(Sid: term, ModuleId: term) is
+#include <undefined.h>
+#define NO_NONTERMINAL ""
+
+process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
 let
+  Error: term,
+  Id: int,
+  Table: term,
   ParseError: term,
-  Path: str,
+  ParseResult: term,
   Pid: int,
   Summary: term,
-  Table: term
+  Text: str
 in
-  GetParseTable(ModuleId, trm, Table?)
-  . GetPath(Sid, Path?)
-  . snd-msg(ui-remove-feedback-summary("sglr", Path))
-  . create(ParseEditor(Sid, Table, ""), Pid?)
+  Id := process-id
+  . GetParseTable(ModuleId, trm, Table?)
+  . ReadFile(Path, Text?)
   .
-  (
-    rec-msg(parse-editor-ok(Sid))
-    . snd-msg(te-clear-focus(Sid))
-    . snd-msg(te-display-message(Sid, "Parse OK"))
-  +
-    rec-msg(parse-editor-failed(Sid, ParseError?))
-    . ParseErrorToSummary(ParseError, Sid, Summary?)
-    . snd-msg(ui-show-feedback-summary(Summary))
-  )
+  if not-equal(Text, "") then
+    create(ParseText(Id, Text, Table, NO_NONTERMINAL), Pid?)
+    .
+    (
+      (
+        rec-msg(parse-tree(Id, ParseResult?))
+      +
+        rec-msg(parse-forest(Id, ParseResult?, Error?))
+        . AddFilenameToParseError(Error, Path, ParseError?)
+        . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+        . rec-msg(es-summary(Summary?))
+        . snd-msg(ui-show-feedback-summary(Summary))
+      )
+      . AnnotateTree(ParseResult, Path, Result?)
+      . snd-msg(ui-remove-feedback-summary("sglr", Path))
+    +
+      rec-msg(parse-error(Id, Error?))
+      . AddFilenameToParseError(Error, Path, ParseError?)
+      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+      . rec-msg(es-summary(Summary?))
+      . snd-msg(ui-show-feedback-summary(Summary))
+      . Result := UNDEFINED
+    )  
+  else
+    Error("TODO fix this error io-error-reading: %t\n", [Error])
+  fi
 endlet
 
 process RestoreTermBrackets is

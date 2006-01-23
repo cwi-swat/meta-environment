@@ -36,7 +36,6 @@
 #include "editor-error-display.tb"
 #include "editing.tb"
 #include "sdf-utils.tb"
-#include "module-db.tb"
 #include "module-utils.tb"
 #include "asf-utils.tb"
 #include "parsetable-utils.tb"
@@ -72,12 +71,10 @@ in
   . create(TermStoreName, Pid?)
   . create(DumpSdfDefinition, Pid?)
   . create(Meta-Interface, Pid?)
-  . create(ModuleDB, Pid?)
   . create(Open-Sdf2-Language, Pid?)
   . create(PGen, Pid?)
   . create(PrintModule, Pid?)
   . create(RestoreTermBrackets, Pid?)
   . create(UserInterfaceHandler, Pid?)
-  . rec-msg(termstore-initialized) 
   . snd-msg(creation-finished)
 endlet

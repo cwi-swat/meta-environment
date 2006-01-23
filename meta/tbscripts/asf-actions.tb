@@ -3,19 +3,23 @@
 
 #include <asf-utils.tb>
 #include <ASFSDFApigen.idef>
+#include <term-utils.tb>
+#include <undefined.h>
 
 process ReduceAction(EditorId : term) is
 let
   ModuleId : term,
   Tree : term,
   RTree : term,
-  Available : bool
+  Available : bool,
+  Path: str
 in
-  GetTree(EditorId, Tree?, Available?)
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
   .
-  if equal(Available, true) then
-    GetModuleId(EditorId, ModuleId?)
-    . Reduce(EditorId, ModuleId, Tree, RTree?)
+  if not-equal(Tree, UNDEFINED) then
+    Reduce(ModuleId, Tree, RTree?)
     . 
     if not-equal(RTree, UNDEFINED) then
       ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
@@ -58,6 +62,10 @@ endlet
 process RunAsfTestsAction(ModuleId : term) is
   TestAsfSpecification(ModuleId) 
 
+process DebugRunAsfTestsAction(ModuleId : term) is
+  snd-msg(asfe-debugging(on))
+  . RunAsfTestsAction(ModuleId)
+
 process EditorRunAsfTestsAction(EditorId : term) is
 let
   ModuleId : term
@@ -72,14 +80,16 @@ let
   Tree : term,
   ResultTree : term,
   Direction : term,
-  Available : bool
+  Available : bool,
+  ModuleId: term,
+  Path: str
 in
-  GetTree(EditorId, Tree?, Available?)
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
   .
-  if equal(Available, true) then
-    GetModuleId(EditorId, Modulename?)
-    . printf("TODO: Modulename has to be a term!!\n")
-    . DebugReduce(EditorId, Modulename, Tree, ResultTree?)
+  if not-equal(Tree, UNDEFINED) then
+    DebugReduce(ModuleId, Tree, ResultTree?)
     . 
     if not-equal(ResultTree, error-tree) then
       ActivateEditorWithTree(ResultTree, Modulename, "reduct.out")

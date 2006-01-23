@@ -42,6 +42,26 @@ endlet
 
 toolbus(ASFModuleChecker)
 
+process ASFModuleShapeChanger is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,available)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetModuleGraphAttribute(ModuleId, "shape", shape(ellipse))
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleShapeChanger)
+
 process ASFModuleParser is
 let
   Event: attribute-changed-event,

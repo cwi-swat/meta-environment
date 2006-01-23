@@ -30,23 +30,6 @@ process GetModuleId(Sid: term, ModuleId: term?) is
     . ModuleId := UNDEFINED
   )
  
-process GetTree(Sid: term, Tree: term?, Available: bool?) is
-let
-  ModuleId: term,
-  Registered: bool
-in
-  GetModuleId(Sid, ModuleId?)
-  . ParseTerm(Sid, ModuleId)
-  . IsStructureEditorRegistered(Sid, Registered?)
-  .
-  if equal(Registered, true) then
-    GetParsetree(Sid, Tree?)
-    . Available := true
-  else
-    Available := false
-  fi
-endlet
-
 process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
 let
   Path: str,
@@ -361,72 +344,23 @@ in
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
 endlet
 
-
-process TextSaved(Sid: term, EditorType: term) is
+process RegisterTree(Sid: term, Tree: term) is
 let
-  ModuleId: term
+  Slices : list
 in
-  rec-msg(te-contents-saved(Sid))
-  . GetModuleId(Sid, ModuleId?)
-  .
-  if equal(EditorType, syntax-editor) then
-    MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
-  else
-    if equal(EditorType, equations-editor) then
-      MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available) 
-    else
-      tau
-    fi
-  fi
-endlet
-
-process TextChanged(Sid: term, EditorType: term) is
-let
-  ModuleId: term,
-  Registered: bool
-in
-  rec-msg(te-contents-changed(Sid))
-  . GetModuleId(Sid, ModuleId?)
-  . 
-  if equal(EditorType, syntax-editor) then
-    MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", edited)
-  else 
-    if equal(EditorType, equations-editor) then
-      MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", edited)
-    else
-      tau
-    fi
-  fi
-  . snd-msg(em-request-transaction(Sid))
-  .
-  (
-    rec-msg(em-no-transaction(Sid))
-  +
-    rec-msg(em-transaction-started(Sid))
-    . IsStructureEditorRegistered(Sid, Registered?)
+  if not-equal(Tree, UNDEFINED) then
+    snd-msg(se-update(Sid, Tree))
+    . snd-msg(se-get-tree-slices(Sid))
     .
-    if equal(Registered, true) then
-      DeleteStructureEditor(Sid)
-      .
-      if equal(EditorType, syntax-editor) then
-        DeleteModuleSyntaxTree(ModuleId)
-      else
-        tau
-        /*
-        if equal(EditorType, equations-editor) then
-	  DeleteModuleEquationsTree(ModuleId)
-	else
-	  tau
-	fi */
-      fi
-      . snd-msg(te-clear-focus(Sid))
-      . snd-msg(te-display-message(Sid,
-                                   "Editor contents have changed, focus is unavailable until next parse."))
-    else
-      tau
-    fi
-    . snd-msg(em-end-transaction(Sid))
-  )
+    (
+      rec-msg(se-tree-slices(Sid, Slices?))
+      . snd-msg(te-highlight-slices(Sid, Slices))
+    +
+      rec-msg(se-no-tree-slices(Sid))
+    )
+  else
+    TODO("No tree, this should not happen!\n")
+  fi
 endlet
 
 process EditorDisconnected(Sid: term) is
@@ -490,18 +424,6 @@ in
     rec-msg(em-no-such-session(ModuleId))
   )
 endlet
-
-
-process GetTermTree(Filename: str, Tree: term?, Available: bool?) is
-  snd-msg(get-term-tree(Filename))
-  .
-  (
-    rec-msg(term-tree(Filename, Tree?))
-    . Available := true
-  +
-    rec-msg(no-term-tree(Filename))
-    . Available := false
-  )
 
 process GetModuleByPath(Path: str, ModuleId: term?) is
 let

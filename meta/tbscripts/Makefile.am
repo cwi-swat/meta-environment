@@ -24,7 +24,6 @@ TBSCRIPTS = \
   io-utils.tb \
   meta.tb \
   module-actions.tb \
-  module-db.tb \
   module-manager.tb \
   module-selection-listener.tb \
   module-utils.tb \

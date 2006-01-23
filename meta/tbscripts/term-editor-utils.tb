@@ -1,9 +1,12 @@
 #ifndef __TERM_EDITOR_UTILS__
 #define __TERM_EDITOR_UTILS__
+
 #include <editing.tb>
+#include <term-utils.tb>
 
 process EditTerm(Path: str, ModuleId: term) is
 let
+  Event: attribute-changed-event,
   AlreadyExists: bool,
   Available: bool,
   EditorType: term,
@@ -25,22 +28,27 @@ in
     if equal(AlreadyExists, false) then
       snd-msg(em-bind-session(Sid, ModuleId))
       . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetTermTree(Path, Tree?, Available?)
+      . GetTermParsetree(ModuleId, Path, Tree?)
       .
-      if equal(Available, true) then
+      if not-equal(Tree, UNDEFINED) then
         EditStructure(Sid, Tree)
       else
         tau
       fi
+      . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",available,parsed)
       .
       (
         MenuSelected(Sid, EditorType)
       +
         MouseClicked(Sid)
       +
-        TextChanged(Sid, EditorType)
+        rec-msg(te-contents-changed(Sid))
       +
-        TextSaved(Sid, EditorType)
+        rec-msg(te-contents-saved(Sid))
+        . UpdateTermStructure(Sid)
+      +
+        rec-note(mm-attribute-changed(Event?))
+        . UpdateTermStructure(Sid)
       )
       *
       EditorDisconnected(Sid)
@@ -53,4 +61,24 @@ in
     . snd-msg(term-editor-not-started(Path, ModuleId, Error))
   fi
 endlet
+
+process UpdateTermStructure(Sid: term) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Slices: term,
+  Tree: term,
+  Path: str
+in
+  GetModuleId(Sid, ModuleId?)
+  . GetPath(Sid, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?) 
+  .
+  if not-equal(Tree, UNDEFINED) then
+    RegisterTree(Sid, Tree)
+  else
+    tau
+  fi
+endlet
+
 #endif /* __TERM_EDITOR_UTILS__ */
