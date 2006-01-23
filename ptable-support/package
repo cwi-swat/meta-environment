@@ -1,0 +1,13 @@
+package 
+identification
+   name=ptable-support
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/ptable-support
+   info=http://www.cwi.nl/projects/MetaEnv/ptable-support
+   description='A data-structure for representing SDF2 parse tables'
+   keywords=meta-environment, sdf, parse tables
+
+configuration interface
+
+requires
+  aterm 2.4.2

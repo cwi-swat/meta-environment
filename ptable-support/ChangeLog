@@ -1,4 +1,9 @@
 
+
+Mon Jan 23 16:40:40 CET 2006 <jurgenv@cwi.nl>
+ * {configure.in,package,init-package.m4}: added standard package files
+   that were missing.
+
 2005-07-05 ({economop,jurgenv}@cwi.nl)
  * Reincarnating this package for use in the sglr package
  * Changed configure.in/package/Makefile.am's to fit the current
