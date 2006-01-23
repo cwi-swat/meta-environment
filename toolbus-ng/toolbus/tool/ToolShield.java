@@ -106,6 +106,7 @@ public abstract class ToolShield extends Thread {
 	 */
 
 	public void run() {
+		this.setName(toolInstance.getToolName());
 		initRun();
 		//System.err.println("run of ToolShield " + toolInstance.getToolId() + " called");
 		while (running) {
@@ -119,7 +120,12 @@ public abstract class ToolShield extends Thread {
 			//System.err.println("ToolShield.run; 3 "+ toolInstance.getToolId());
 			if(running){
 				//System.err.println("now yielding the thread");
-				yield();
+				try {
+					sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		//System.err.println("ToolShield.run; 4 "+ toolInstance.getToolId());

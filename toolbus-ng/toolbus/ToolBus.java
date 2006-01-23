@@ -664,7 +664,7 @@ public class ToolBus {
         if(!shutdownDone){
 	        long timeout = Math.max(nextTime - currentTime, 200);
 	        if(work){
-	        	handleInputFromTools(20);
+	        	handleInputFromTools(5);
 	        } else {
 	        	handleInputFromTools(timeout);
 	        }
