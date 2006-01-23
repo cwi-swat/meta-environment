@@ -32,37 +32,46 @@ public class ModuleGraph extends ModuleDatabase {
     }
 
     private void setNodes(ATerm namespace) {
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
-            NodeId nodeId = factory.makeNodeId_Default(moduleId.toTerm());
+      for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+	boolean shapeSet = false;
+	ModuleId moduleId = (ModuleId) iter.next();
+	NodeId nodeId = factory.makeNodeId_Default(moduleId.toTerm());
 
-            Module module = (Module) modules.get(moduleId);
-            AttributeList attrList = factory.makeAttributeList();
+	Module module = (Module) modules.get(moduleId);
+	AttributeList attrList = factory.makeAttributeList();
 
-            AttributeTable table = module.getAttributes(namespace);
-            if (table != null) {
-                Map entries = table.getEntries();
+	AttributeTable table = module.getAttributes(namespace);
+	if (table != null) {
+	  Map entries = table.getEntries();
 
-                for (Iterator iterEntries = entries.keySet().iterator(); iterEntries
-                        .hasNext();) {
-                    ATerm key = (ATerm) iterEntries.next();
-                    ATerm value = (ATerm) entries.get(key);
+	  for (Iterator iterEntries = entries.keySet().iterator(); iterEntries
+	      .hasNext();) {
+	    ATerm key = (ATerm) iterEntries.next();
+	    ATerm value = (ATerm) entries.get(key);
 
-                    if (key.equals(factory.getPureFactory().parse("\"label\""))) {
-                        AFun fun = ((ATermAppl) value).getAFun();
-                        Attribute attr = factory.makeAttribute_Label(fun
-                                .getName());
-                        attrList = attrList.insert(attr);
-                    }
-                }
-            }
-            
-            Shape shape = factory.makeShape_Box();
-            attrList = attrList.insert(factory.makeAttribute_Shape(shape));
+	    try {
+	      Attribute attr = factory.AttributeFromTerm(value);
+	      attrList = attrList.insert(attr);
 
-            Node node = factory.makeNode_Default(nodeId, attrList);
-            nodeList = nodeList.insert(node);
-        }
+	      if (attr.isShape()) {
+		shapeSet = true;
+	      }
+	    }
+	    catch (IllegalArgumentException exc) {	
+	      System.err.println("Illegal graph attribute: " + value);
+	    }
+	  }
+
+	}
+
+	if (!shapeSet) {
+	  Shape shape = factory.makeShape_Box();
+	  attrList = attrList.insert(factory.makeAttribute_Shape(shape));
+	}
+
+	Node node = factory.makeNode_Default(nodeId, attrList);
+	nodeList = nodeList.insert(node);
+      }
     }
 
     private void setEdges() {
