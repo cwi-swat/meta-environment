@@ -78,34 +78,45 @@ in
     rec-msg(mm-add-dependency(From?, To?))
     . snd-do(MM, add-dependency(From, To))
   +
-    rec-msg(mm-get-depending-modules(ModuleId?))
-    . snd-eval(MM, get-depending-modules(ModuleId))
+    rec-msg(mm-get-children-modules(ModuleId?))
+    . snd-eval(MM, get-children-modules(ModuleId))
     .
     (
-      rec-value(MM, depending-modules(Modules?))
-      . snd-msg(mm-depending-modules(ModuleId, Modules))
+      rec-value(MM, children-modules(Modules?))
+      . snd-msg(mm-children-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
-    rec-msg(mm-get-all-depending-modules(ModuleId?))
-    . snd-eval(MM, get-all-depending-modules(ModuleId))
+    rec-msg(mm-get-all-children-modules(ModuleId?))
+    . snd-eval(MM, get-all-children-modules(ModuleId))
     .
     (
-      rec-value(MM, all-depending-modules(Modules?))
-      . snd-msg(mm-all-depending-modules(ModuleId, Modules))
+      rec-value(MM, all-children-modules(Modules?))
+      . snd-msg(mm-all-children-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
       . snd-msg(mm-no-such-module(ModuleId))
     )
   +
-    rec-msg(mm-get-all-dependent-modules(ModuleId?))
-    . snd-eval(MM, get-all-dependent-modules(ModuleId))
+    rec-msg(mm-get-all-parent-modules(ModuleId?))
+    . snd-eval(MM, get-all-parent-modules(ModuleId))
     .
     (
-      rec-value(MM, all-dependent-modules(Modules?))
-      . snd-msg(mm-all-dependent-modules(ModuleId, Modules))
+      rec-value(MM, all-parent-modules(Modules?))
+      . snd-msg(mm-all-parent-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
+    rec-msg(mm-get-parent-modules(ModuleId?))
+    . snd-eval(MM, get-parent-modules(ModuleId))
+    .
+    (
+      rec-value(MM, parent-modules(Modules?))
+      . snd-msg(mm-parent-modules(ModuleId, Modules))
     +
       rec-value(MM, no-such-module(ModuleId))
       . snd-msg(mm-no-such-module(ModuleId))

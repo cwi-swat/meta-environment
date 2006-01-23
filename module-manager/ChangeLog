@@ -4,6 +4,11 @@ Mon Jan 23 09:05:52 CET 2006 <jurgenv@cwi.nl>
  * src/**/ModuleManager.java: Mapping of dependencies to a graph
    can now handle any well known graph attribute, such as color
    and shape.
+ * src/**/*.java,module-manager.idef: changed nomenclature:
+	- [Dd]epending -> [Cc]hildren
+	- [Dd]ependent -> [Pp]arents
+ * src/**/*.java,module-manager.idef: added get-parents next to
+   get-all-parents
 
 Fri Jan 13 08:52:56 CET 2006 <kooiker@cwi.nl>
  * module-manager.idef, src/**/*.java:

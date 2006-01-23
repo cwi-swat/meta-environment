@@ -119,7 +119,7 @@ public class ModuleManager implements ModuleManagerTif {
         moduleDB.addDependency(moduleFromId, moduleToId);
     }
 
-    public ATerm getDependingModules(ATerm id) {
+    public ATerm getChildrenModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
         Set dependencies = moduleDB.getChildren(moduleId);
@@ -128,11 +128,11 @@ public class ModuleManager implements ModuleManagerTif {
             return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        return pureFactory.make("snd-value(depending-modules(<list>))",
+        return pureFactory.make("snd-value(children-modules(<list>))",
                 extractATermList(dependencies));
     }
 
-    public ATerm getAllDependentModules(ATerm id) {
+    public ATerm getAllParentModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
         Set dependencies = moduleDB.getAllParents(moduleId);
@@ -141,12 +141,26 @@ public class ModuleManager implements ModuleManagerTif {
             return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        return pureFactory.make("snd-value(all-dependent-modules(<list>))",
+        return pureFactory.make("snd-value(all-parent-modules(<list>))",
                 extractATermList(dependencies));
 
     }
 
-    public ATerm getAllDependingModules(ATerm id) {
+    public ATerm getParentModules(ATerm id) {
+        ModuleId moduleId = factory.ModuleIdFromTerm(id);
+
+        Set dependencies = moduleDB.getParents(moduleId);
+
+        if (dependencies == null) {
+            return pureFactory.parse("snd-value(no-such-module)");
+        }
+
+        return pureFactory.make("snd-value(parent-modules(<list>))",
+                extractATermList(dependencies));
+
+    }
+
+    public ATerm getAllChildrenModules(ATerm id) {
         ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
         Set dependencies = moduleDB.getAllChildren(moduleId);
@@ -155,7 +169,7 @@ public class ModuleManager implements ModuleManagerTif {
             return pureFactory.parse("snd-value(no-such-module)");
         }
 
-        return pureFactory.make("snd-value(all-depending-modules(<list>))",
+        return pureFactory.make("snd-value(all-children-modules(<list>))",
                 extractATermList(dependencies));
     }
 

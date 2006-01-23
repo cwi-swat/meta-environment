@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 12, 2006 6:58:11 PM
+// generation time: Jan 23, 2006 9:14:16 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -132,36 +132,25 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public ATerm getAllDependentModules(ATerm t0)
+  //{{{  public ATerm getChildrenModules(ATerm t0)
 
-  public ATerm getAllDependentModules(ATerm t0)
+  public ATerm getChildrenModules(ATerm t0)
   {
     if (tool != null) {
-      return tool.getAllDependentModules(t0);
+      return tool.getChildrenModules(t0);
     }
-      throw new UnsupportedOperationException("method `getAllDependentModules' not supported.");
+      throw new UnsupportedOperationException("method `getChildrenModules' not supported.");
   }
 
   //}}}
-  //{{{  public ATerm getAllDependingModules(ATerm t0)
+  //{{{  public ATerm getAllParentModules(ATerm t0)
 
-  public ATerm getAllDependingModules(ATerm t0)
+  public ATerm getAllParentModules(ATerm t0)
   {
     if (tool != null) {
-      return tool.getAllDependingModules(t0);
+      return tool.getAllParentModules(t0);
     }
-      throw new UnsupportedOperationException("method `getAllDependingModules' not supported.");
-  }
-
-  //}}}
-  //{{{  public ATerm getDependingModules(ATerm t0)
-
-  public ATerm getDependingModules(ATerm t0)
-  {
-    if (tool != null) {
-      return tool.getDependingModules(t0);
-    }
-      throw new UnsupportedOperationException("method `getDependingModules' not supported.");
+      throw new UnsupportedOperationException("method `getAllParentModules' not supported.");
   }
 
   //}}}
@@ -173,6 +162,17 @@ public class ModuleManagerBridge
       return tool.getClosableModules(t0);
     }
       throw new UnsupportedOperationException("method `getClosableModules' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getAllChildrenModules(ATerm t0)
+
+  public ATerm getAllChildrenModules(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getAllChildrenModules(t0);
+    }
+      throw new UnsupportedOperationException("method `getAllChildrenModules' not supported.");
   }
 
   //}}}
@@ -217,6 +217,17 @@ public class ModuleManagerBridge
       return tool.getModuleGraph(t0);
     }
       throw new UnsupportedOperationException("method `getModuleGraph' not supported.");
+  }
+
+  //}}}
+  //{{{  public ATerm getParentModules(ATerm t0)
+
+  public ATerm getParentModules(ATerm t0)
+  {
+    if (tool != null) {
+      return tool.getParentModules(t0);
+    }
+      throw new UnsupportedOperationException("method `getParentModules' not supported.");
   }
 
   //}}}

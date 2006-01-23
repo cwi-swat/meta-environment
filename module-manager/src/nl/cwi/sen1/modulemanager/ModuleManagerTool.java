@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 12, 2006 6:58:11 PM
+// generation time: Jan 23, 2006 9:14:16 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -26,14 +26,15 @@ abstract public class ModuleManagerTool
   private ATerm PgetAttribute0;
   private ATerm PgetAllAttributes0;
   private ATerm PgetDependencies0;
-  private ATerm PgetAllDependentModules0;
-  private ATerm PgetAllDependingModules0;
-  private ATerm PgetDependingModules0;
+  private ATerm PgetChildrenModules0;
+  private ATerm PgetAllParentModules0;
   private ATerm PgetClosableModules0;
+  private ATerm PgetAllChildrenModules0;
   private ATerm PgetAllModules0;
   private ATerm PcreateModule0;
   private ATerm PgetModuleIdByAttribute0;
   private ATerm PgetModuleGraph0;
+  private ATerm PgetParentModules0;
   private ATerm PrecTerminate0;
 
   //}}}
@@ -64,9 +65,10 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-depending-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-depending-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-dependent-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), new Boolean(true));
@@ -90,14 +92,15 @@ abstract public class ModuleManagerTool
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
     PgetAllAttributes0 = factory.parse("rec-eval(get-all-attributes(<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
-    PgetAllDependentModules0 = factory.parse("rec-eval(get-all-dependent-modules(<term>))");
-    PgetAllDependingModules0 = factory.parse("rec-eval(get-all-depending-modules(<term>))");
-    PgetDependingModules0 = factory.parse("rec-eval(get-depending-modules(<term>))");
+    PgetChildrenModules0 = factory.parse("rec-eval(get-children-modules(<term>))");
+    PgetAllParentModules0 = factory.parse("rec-eval(get-all-parent-modules(<term>))");
     PgetClosableModules0 = factory.parse("rec-eval(get-closable-modules(<term>))");
+    PgetAllChildrenModules0 = factory.parse("rec-eval(get-all-children-modules(<term>))");
     PgetAllModules0 = factory.parse("rec-eval(get-all-modules)");
     PcreateModule0 = factory.parse("rec-eval(create-module)");
     PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
     PgetModuleGraph0 = factory.parse("rec-eval(get-module-graph(<term>))");
+    PgetParentModules0 = factory.parse("rec-eval(get-parent-modules(<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -152,21 +155,21 @@ abstract public class ModuleManagerTool
     if (result != null) {
       return getDependencies();
     }
-    result = term.match(PgetAllDependentModules0);
+    result = term.match(PgetChildrenModules0);
     if (result != null) {
-      return getAllDependentModules((ATerm)result.get(0));
+      return getChildrenModules((ATerm)result.get(0));
     }
-    result = term.match(PgetAllDependingModules0);
+    result = term.match(PgetAllParentModules0);
     if (result != null) {
-      return getAllDependingModules((ATerm)result.get(0));
-    }
-    result = term.match(PgetDependingModules0);
-    if (result != null) {
-      return getDependingModules((ATerm)result.get(0));
+      return getAllParentModules((ATerm)result.get(0));
     }
     result = term.match(PgetClosableModules0);
     if (result != null) {
       return getClosableModules((ATerm)result.get(0));
+    }
+    result = term.match(PgetAllChildrenModules0);
+    if (result != null) {
+      return getAllChildrenModules((ATerm)result.get(0));
     }
     result = term.match(PgetAllModules0);
     if (result != null) {
@@ -183,6 +186,10 @@ abstract public class ModuleManagerTool
     result = term.match(PgetModuleGraph0);
     if (result != null) {
       return getModuleGraph((ATerm)result.get(0));
+    }
+    result = term.match(PgetParentModules0);
+    if (result != null) {
+      return getParentModules((ATerm)result.get(0));
     }
     result = term.match(PrecTerminate0);
     if (result != null) {
