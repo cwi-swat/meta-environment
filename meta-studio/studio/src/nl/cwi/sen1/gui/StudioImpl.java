@@ -2,7 +2,7 @@ package nl.cwi.sen1.gui;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -166,8 +166,6 @@ public class StudioImpl implements Studio, GuiTif {
 
         RootWindow root = new RootWindow(viewSerializer);
 
-        root.setPreferredSize(new Dimension(800, 600));
-
         // Set gradient theme. The theme properties object is the super object
         // of our properties object, which
         // means our property value settings will override the theme values
@@ -239,7 +237,6 @@ public class StudioImpl implements Studio, GuiTif {
             String componentName = getComponent(activeView).getName();
             CardLayout cl = (CardLayout) statusPanel.getLayout();
             cl.show(statusPanel, componentName);
-
         }
     }
 
@@ -325,7 +322,6 @@ public class StudioImpl implements Studio, GuiTif {
 
     private void createFrame() {
         frame = new JFrame();
-        frame.setSize(800, 600);
         // frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
         frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
         frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
@@ -334,6 +330,8 @@ public class StudioImpl implements Studio, GuiTif {
                 bridge.postEvent(factory.make("window-closing-event"));
             }
         });
+        frame.pack();
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
