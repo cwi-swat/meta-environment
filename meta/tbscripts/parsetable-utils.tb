@@ -26,9 +26,11 @@ let
   Syntax: term,
   Table: term,
   Modulename: str,
-  NewSyntax: term
+  NewSyntax: term,
+  Pid: int
 in
-  InitCache(TableName, Namespace, available)
+  InitCache(TableName)
+  . create(TransitiveClearCacheHandler(TableName, Namespace, "status", <term>, available), Pid?)
   .
   (
     rec-msg(get-parsetable(ModuleId?, Type))

@@ -500,8 +500,8 @@ in
   fi
 endlet
 
-toolbus(InitCache(SDF_TREE_CACHE, SDF_NAMESPACE, edited))
-toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,available))
+toolbus(InitCache(SDF_TREE_CACHE))
+toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edited))
 
 process GetSDFParseTree(ModuleId: term, Result: term?) is
 let

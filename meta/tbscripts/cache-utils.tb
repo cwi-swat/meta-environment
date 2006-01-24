@@ -12,36 +12,45 @@ process ClearCacheHandler(TableName: str,
                           NewValue: term) is
 let
   AttributeEvent: attribute-changed-event,
-  ChildAttributeEvent: child-attribute-changed-event,
   ModuleId: term,
   Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,Namespace,AttributeName,OldValue,NewValue)
-  . TODO("WARNING: cache is also flushed when OldValue is unkown!")
-  . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,Namespace,AttributeName,OldValue,NewValue)
   .
   (
-    (
-      rec-note(mm-attribute-changed(AttributeEvent?))
-      . ACE-GetModuleId(AttributeEvent, ModuleId?)
-    +
-      rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
-      . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
-    )
-    .
-    snd-msg(ts-remove-value(TableName, ModuleId))
+    rec-note(mm-attribute-changed(AttributeEvent?))
+    . ACE-GetModuleId(AttributeEvent, ModuleId?)
+    . snd-msg(ts-remove-value(TableName, ModuleId))
     . printf("%t: key %t removed from cache\n", TableName, ModuleId)
   )
   * delta
 endlet
 
-process InitCache(TableName: str, Namespace: term, NewValue: term) is
+process TransitiveClearCacheHandler(TableName: str, 
+                          Namespace: term, 
+                          AttributeName: term, 
+                          OldValue: term,
+                          NewValue: term) is
 let
-  Pid : int
+  ChildAttributeEvent: child-attribute-changed-event,
+  ModuleId: term,
+  Value: term,
+  Pid: int
 in
-  snd-msg(ts-add-table(TableName, "term"))
-  . create(ClearCacheHandler(TableName, Namespace,"status",<term>,NewValue), Pid?)
+  create(ClearCacheHandler(TableName, Namespace, AttributeName, OldValue, NewValue), Pid?)
+  . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,Namespace,AttributeName,OldValue,NewValue)
+  .
+  (
+    rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
+    . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
+    . snd-msg(ts-remove-value(TableName, ModuleId))
+    . printf("%t: key %t removed from cache\n", TableName, ModuleId)
+  )
+  * delta
 endlet
+
+process InitCache(TableName: str) is
+  snd-msg(ts-add-table(TableName, "term"))
 
 process GetCachedValue(TableName: str, Key: term, Value: term?) is
   snd-msg(ts-get-term-value(TableName, Key))

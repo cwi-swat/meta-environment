@@ -99,8 +99,9 @@ in
 endlet
 
 /* TODO: ensure cache is initialized before first call */
-toolbus(InitCache(ASF_TREE_CACHE, ASF_NAMESPACE, edited))
-toolbus(ClearCacheHandler(ASF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,available))
+toolbus(InitCache(ASF_TREE_CACHE))
+toolbus(ClearCacheHandler(ASF_TREE_CACHE, ASF_NAMESPACE, "status", <term>,edited))
+toolbus(TransitiveClearCacheHandler(ASF_TREE_CACHE, SDF_NAMESPACE, "status", <term>,available))
 
 process GetASFParseTree(ModuleId: term, Result: term?) is
 let
