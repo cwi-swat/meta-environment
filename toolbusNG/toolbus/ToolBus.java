@@ -5,16 +5,12 @@
 package toolbus;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -34,7 +30,6 @@ import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.classic.ClassicToolShield;
-import toolbus.tool.classic.ToolConnector;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
@@ -664,7 +659,7 @@ public class ToolBus {
         if(!shutdownDone){
 	        long timeout = Math.max(nextTime - currentTime, 200);
 	        if(work){
-	        	handleInputFromTools(5);
+	        	handleInputFromTools(10);
 	        } else {
 	        	handleInputFromTools(timeout);
 	        }

@@ -1,9 +1,7 @@
 package toolbus.tool.classic;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -23,9 +21,8 @@ import aterm.ATermFactory;
  * sockets to this ToolBus. The initial connection protocol and initial handshaking are identical
  * to those of the classic ToolBus.
  * 
- * Inside this ToolBus the tool is represented by one thread:
- * - ClassicToolShield that manages all traffic comming from the ToolBus and routes
- *   incoming traffic (produced by select in the ToolBus class) as well.
+ * ClassicToolShield manages all traffic comming from the ToolBus and routes
+ * incoming traffic (produced by select in the ToolBus class) as well.
  */
 
 public class ClassicToolShield extends ToolShield {
@@ -35,7 +32,7 @@ public class ClassicToolShield extends ToolShield {
 	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
 	private final static int MIN_MSG_SIZE = 128;	   // the C implementation
 
-	private Object lockObject;
+//	private Object lockObject;
 	protected ATermFactory factory;
 
 	private SocketChannel client;
@@ -54,7 +51,6 @@ public class ClassicToolShield extends ToolShield {
 	private ByteBuffer receiveTermData;
 	private ByteBuffer receiveTermLengthSpec = ByteBuffer.allocate(LENSPEC);
 	
-	private int sendTermBytesLeft = 0;
 	private int sendTermFill = 0;
 	private ByteBuffer sendTermData;
 	private ByteBuffer sendTermLengthSpec = ByteBuffer.allocate(LENSPEC);
@@ -69,7 +65,7 @@ public class ClassicToolShield extends ToolShield {
 		super(toolInstance);
 		this.toolDef = toolDef;
 		this.factory = TBTerm.factory;
-		this.lockObject = this;
+//		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
 
 		toolname = toolDef.getName();
@@ -134,20 +130,7 @@ public class ClassicToolShield extends ToolShield {
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 	
-	public void sndRequestToTool(Integer operation, ATerm call) {
-		//info("sndRequestToTool(" + operation + ", " + call + ")");
-		addRequestToTool(new Object[] {operation, call, null});
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see toolbus.tool.ToolShield#handleRequestForTool()
-	 */
-	protected void handleRequestToTool() {
-		Object request[] = getNextRequestForTool();
-		Integer operation = (Integer) request[0];
-		ATerm call = (ATerm) request[1];
+	protected void handleRequestToTool(Integer operation, ATerm call) {
 		AFun fun = TBTerm.factory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
 		ATermAppl req = TBTerm.factory.makeAppl(fun, call);
 		try {
@@ -161,16 +144,16 @@ public class ClassicToolShield extends ToolShield {
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
 	public void terminate(ATerm msg) {
-		sndRequestToTool(ToolInstance.TERMINATE, msg);
+		handleRequestToTool(ToolInstance.TERMINATE, msg);
 	}
-	
-	public void setLockObject(Object obj) {
+
+/*	public void setLockObject(Object obj) {
 		lockObject = obj;
 	}
 
 	public Object getLockObject() {
 		return lockObject;
-	}
+	}*/
 	
 	public String getToolName(){
 		return toolname;
@@ -191,7 +174,7 @@ public class ClassicToolShield extends ToolShield {
 	}
 
 	public synchronized void sendTerm(ATerm term) throws IOException {
-		synchronized (getLockObject()) {
+		//synchronized (getLockObject()) {
 			byte termAsBytes[] = term.toByteArray();
 			int size = termAsBytes.length;
 			
@@ -230,7 +213,7 @@ public class ClassicToolShield extends ToolShield {
 			n = client.write(sendTermData);
 			info(n + " bytes written for unparsedTerm");
 			sendTerm();
-		}
+		//}
 	}
 	
 	public synchronized void sendTerm() throws IOException {
@@ -306,10 +289,5 @@ public class ClassicToolShield extends ToolShield {
 		ATerm result = factory.readFromByteBuffer(receiveTermData);
 		receiveTermBytesLeft = 0;
 		return result;
-	}
-	
-	public void initRun() {
-		System.err.println("ClassicToolShield.initRun for " + toolname);
-		setRunning(true);
 	}
 }

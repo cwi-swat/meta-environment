@@ -86,7 +86,7 @@ public class ToolInstance {
   
   public void connect(SocketChannel client) throws IOException {
   	toolShield.connect(client);
-  	toolShield.start();
+ // 	toolShield.start();
   }
   
   /**
