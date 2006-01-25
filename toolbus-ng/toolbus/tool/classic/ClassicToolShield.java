@@ -32,11 +32,11 @@ public class ClassicToolShield extends ToolShield {
 	private final static int MAX_HANDSHAKE = 512;   // Do not change since they correspond with
 	private final static int MIN_MSG_SIZE = 128;	   // the C implementation
 
-//	private Object lockObject;
 	protected ATermFactory factory;
 
 	private SocketChannel client;
-	private static Selector selector;
+	private Selector selector;
+	private SelectionKey clientKey;
 	
 	private ToolDefinition toolDef;
 	private String toolname;
@@ -104,11 +104,10 @@ public class ClassicToolShield extends ToolShield {
 		connected = true;
 		getToolInstance().TCP_goConnected();
 		client.configureBlocking(false);
-		SelectionKey clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-		clientKey.attach(this);
+		clientKey = client.register(selector, SelectionKey.OP_READ, this);
 	}
 	
-	public synchronized boolean isConnected() {
+	public boolean isConnected() {
 		return connected;
 	}
 
@@ -173,8 +172,7 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 
-	public synchronized void sendTerm(ATerm term) throws IOException {
-		//synchronized (getLockObject()) {
+	public void sendTerm(ATerm term) throws IOException {
 			byte termAsBytes[] = term.toByteArray();
 			int size = termAsBytes.length;
 			
@@ -210,13 +208,16 @@ public class ClassicToolShield extends ToolShield {
 			sendTermData = ByteBuffer.wrap(termAsBytes);
 			sendTermFill = MIN_MSG_SIZE - (LENSPEC + size);
 			
+			if(clientKey != null){
+				clientKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+			}
+			
 			n = client.write(sendTermData);
 			info(n + " bytes written for unparsedTerm");
 			sendTerm();
-		//}
 	}
 	
-	public synchronized void sendTerm() throws IOException {
+	public void sendTerm() throws IOException {
 		if(sendTermData != null){
 			if(sendTermData.hasRemaining()){
 				int n = client.write(sendTermData);
@@ -236,11 +237,16 @@ public class ClassicToolShield extends ToolShield {
 					info(n + " bytes written for filler");
 				}
 			}
+			ToolBus.settoolActionCompleted();
 			sendTermData = null;
-		}
+			if(clientKey != null){
+				clientKey.interestOps(SelectionKey.OP_READ);
+			}
+		} else
+			System.err.println("sendTerm: no data");
 	}
 
-	public synchronized ATerm receiveTerm() throws IOException {
+	public ATerm receiveTerm() throws IOException {
 		if(receiveTermBytesLeft == 0){  // Start reading a new term
 			info("readTerm from ... " + client.toString());
 			receiveTermLengthSpec.clear();
@@ -288,6 +294,7 @@ public class ClassicToolShield extends ToolShield {
 		receiveTermData.flip();
 		ATerm result = factory.readFromByteBuffer(receiveTermData);
 		receiveTermBytesLeft = 0;
+		ToolBus.settoolActionCompleted();
 		return result;
 	}
 }
