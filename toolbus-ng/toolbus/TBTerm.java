@@ -4,7 +4,12 @@
 
 package toolbus;
 
-import aterm.*;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
+import aterm.pure.ATermImpl;
 import aterm.pure.PureFactory;
 
 /**
@@ -17,7 +22,7 @@ import aterm.pure.PureFactory;
  * - matching and substitution
  */
 
-public class TBTerm {
+public class TBTerm  {
 
   public static ATermFactory factory;
 
@@ -47,6 +52,9 @@ public class TBTerm {
   public static ATerm TransactionIdResVar;
 
   private static int nTransactions = 0;
+  
+  private static String varString = "var";
+  private static String rvarString = "rvar";
 
   public static void init() {
     if (!initDone) {
@@ -257,27 +265,33 @@ public class TBTerm {
     ATerm cargs[] = new ATerm[] { type, name };
     return factory.makeAppl(afun, cargs);
   }
+  
+  public static ATerm mkQualVar(String varKind, ATerm qname, ATerm type) {
+	    AFun afun = factory.makeAFun(varKind, 2, false);
+	    ATerm cargs[] = new ATerm[] { type, qname };
+	    return factory.makeAppl(afun, cargs);
+	  }
 
   public static ATerm mkVar(ATerm name, String processName, ATerm type) {
-    return mkAnyVar("var", name, processName, type);
+    return mkAnyVar(varString, name, processName, type);
   }
 
   public static ATerm mkResVar(ATerm name, String processName, ATerm type) {
-    return mkAnyVar("rvar", name, processName, type);
+    return mkAnyVar(rvarString, name, processName, type);
   }
 
   public static boolean isResVar(ATerm t) {
-    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == "rvar";
+    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == rvarString;
   }
 
   public static boolean isVar(ATerm t) {
-    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == "var";
+    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == varString;
   }
 
   private static ATermList getVarArgs(ATerm t) {
     if (t.getType() == ATerm.APPL) {
       ATermAppl appl = (ATermAppl) t;
-      if (appl.getName() == "var" || appl.getName() == "rvar") {
+      if (appl.getName() == varString || appl.getName() == rvarString) {
         return appl.getArguments(); // TODO: check length?
       }
     }
@@ -297,9 +311,9 @@ public class TBTerm {
     ATermList args = ((ATermAppl) t).getArguments();
       ATerm varname = args.getLast();
       if (isVar(t))
-        return TBTerm.factory.make("var(<term>,<term>)", type, varname);
+        return mkQualVar(varString, varname, type);
       else
-        return TBTerm.factory.make("rvar(<term>,<term>)", type, varname);
+        return mkQualVar(rvarString, varname, type);
   }
 
   public static ATerm changeResVarIntoVar(ATerm t) {
@@ -307,7 +321,7 @@ public class TBTerm {
       throw new ToolBusInternalError("wrong arg in makeVar(" + t + ")");
     }
     ATerm args[] = ((ATermAppl) t).getArgumentArray();
-    AFun afun = t.getFactory().makeAFun("var", args.length, false);
+    AFun afun = t.getFactory().makeAFun(varString, args.length, false);
     return TBTerm.factory.makeAppl(afun, args);
   }
 
