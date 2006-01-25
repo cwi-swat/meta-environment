@@ -93,7 +93,7 @@ public class ToolInstance {
    * Handle any term that comes from the tool.
    * @param t 
    */
-  public synchronized void handleTermFromTool(ATerm t) {	
+  public void handleTermFromTool(ATerm t) {	
 		//System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t.isEqual(termSndVoid)){
@@ -136,7 +136,7 @@ public class ToolInstance {
    * @return boolean
    */
 
-  synchronized public boolean sndEvalToTool(ATermAppl call) {
+  public boolean sndEvalToTool(ATermAppl call) {
   	if (TCP_goEvalDo()){
   		//System.err.println("sndEvalToTool: true case");
   		toolShield.sndRequestToTool(EVAL, call);
@@ -154,7 +154,7 @@ public class ToolInstance {
    * @param res the tresult returned by the tool
    */
 
-  synchronized public void addValueFromTool(Object res) {
+  public void addValueFromTool(Object res) {
     valuesFromTool.addLast(res);
     //System.err.println("ToolInstance.addValue: " + toolId + " res = " + res);
   }
@@ -166,7 +166,7 @@ public class ToolInstance {
    * @param env the local environment of the RecValue atom
    */
 
-  synchronized public boolean getValueFromTool(ATerm trm, Environment env)
+  public boolean getValueFromTool(ATerm trm, Environment env)
   throws ToolBusException {
   	//System.err.println("getValueFromTool " + toolId + ": " + trm);
   	if (valuesFromTool.isEmpty()) {
@@ -197,7 +197,7 @@ public class ToolInstance {
    * @return TODO
    */
 
-  synchronized public boolean sndDoToTool(ATermAppl call) {
+  public boolean sndDoToTool(ATermAppl call) {
  	if (TCP_goEvalDo()){
  		//System.err.println("sndDoToTool: true case");
  		toolShield.sndRequestToTool(DO, call);
@@ -218,7 +218,7 @@ public class ToolInstance {
    * @see toolbus.tool.ToolInstance#getEventFromTool(ATerm, Environment)
    */
 
-  synchronized public boolean getEventFromTool(ATermList alist, Environment env) {
+  public boolean getEventFromTool(ATermList alist, Environment env) {
     //System.err.println("getEventFromTool: " + " " + trm);
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
@@ -274,16 +274,16 @@ public class ToolInstance {
   public void addEventFromTool(Object obj) {
     eventsFromTool.addLast(obj);
     System.err.println("ToolInstance.addEvenFromTool: obj = " + obj);
-    synchronized (toolbus) {
+    /*synchronized (toolbus) {
     	toolbus.notifyAll();
-	}
+	}*/
   }
  
   /**
    * ToolBus sends an acknowledgement to a previous event while executing the AckEvent atom.
    */
 
-  synchronized public boolean sndAckToTool(ATerm eventTerm) throws ToolBusException {
+  public boolean sndAckToTool(ATerm eventTerm) throws ToolBusException {
     System.err.println("sndAckToTool:" + eventTerm);
     if (!ackPossible(eventTerm)) {
       return false;

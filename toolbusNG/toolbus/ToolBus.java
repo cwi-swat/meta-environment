@@ -84,6 +84,7 @@ public class ToolBus {
   private long nextTime = 0;
   
   private boolean shutdownDone = false;
+  private static boolean toolActionCompleted = false;
 
   /**
    * Constructor with explicit PrintWriter
@@ -542,7 +543,7 @@ public class ToolBus {
    * @throws ToolBusException
    */
   
-  synchronized public ToolInstance addToolInstance(String toolName, boolean alreadyExecuting) throws ToolBusException {
+  public ToolInstance addToolInstance(String toolName, boolean alreadyExecuting) throws ToolBusException {
   	ATermList sig = getSignature();
   	//System.err.println("addToolInstance: " + toolName + ", " + sig);
   	ToolDefinition TD = getToolDefinition(toolName);
@@ -552,13 +553,13 @@ public class ToolBus {
     return ti;
   }
   
-  synchronized public ToolInstance getToolInstance(ATerm tid){
+  public ToolInstance getToolInstance(ATerm tid){
   	ATermInt arg = (ATermInt) ((ATermAppl) tid).getArgument(0);
   	int n = arg.getInt();
   	return (ToolInstance) tools.elementAt(n);
   }
   
-  synchronized public ToolInstance getToolInstance(int n){
+  public ToolInstance getToolInstance(int n){
   	return (ToolInstance) tools.elementAt(n);
   }
   
@@ -609,6 +610,10 @@ public class ToolBus {
     }
     return res;
   }
+  
+  public static void settoolActionCompleted(){
+	  toolActionCompleted = true;
+  }
 
   /**
    * Shutdown of this ToolBus.
@@ -642,30 +647,37 @@ public class ToolBus {
    */
 
   public void execute() {
-    boolean work = true;
-
+    int passes = 0;
+    int noWorkPasses = 0;
+    
     try {
-      while (work) {
-      	work = false;
+      while (true) {
+      	boolean work = true;
       	currentTime = getRunTime();
-        for (int i = 0; i < processes.size(); i++) {
-          //System.out.print("$");
-          ProcessInstance P = (ProcessInstance) processes.elementAt(i);
-          work  |= P.step();
-          //if (P.isTerminated()) {
-          //	processes.remove(P);
-          //}
-        }
-        if(!shutdownDone){
-	        long timeout = Math.max(nextTime - currentTime, 200);
-	        if(work){
-	        	handleInputFromTools(10);
-	        } else {
-	        	handleInputFromTools(timeout);
+      	while(work || toolActionCompleted){	
+         	passes++;
+      		work = toolActionCompleted = false;
+	        for (int i = 0; i < processes.size(); i++) {
+	          ProcessInstance P = (ProcessInstance) processes.elementAt(i);
+	          work  |= P.step();
+	          //if (P.isTerminated()) {
+	          //	processes.remove(P);
+	          //}
 	        }
+        }
+        noWorkPasses++;
+        if(passes % 100 == 0){
+      	   System.err.println("TOOLBUS.execute STATISTICS");
+      	    System.err.println("# of passes over script: " + passes);
+      	    System.err.println("# of no work passes over script: " + noWorkPasses);  
+      	  }      
+        
+        if(!shutdownDone){
+	        long timeout = nextTime - currentTime;
+	        handleInputFromTools(timeout > 0 ? timeout : 3000);
 	
-	        if(tools.size() > 0 || nextTime > currentTime)
-	    		work = true;
+	       // if(tools.size() > 0 || nextTime > currentTime)
+	    	//	work = true;
         } else {
         	return;
         }
@@ -675,6 +687,7 @@ public class ToolBus {
       System.err.println(e.getMessage());
       e.printStackTrace();
     }
+ 
     shutdown(factory.make("ToolBus halted"));
   }
 }
