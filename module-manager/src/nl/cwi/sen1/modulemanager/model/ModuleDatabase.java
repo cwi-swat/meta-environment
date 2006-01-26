@@ -86,7 +86,7 @@ public class ModuleDatabase {
 			inherit(attr, id);
 		}
 	}
-	
+
 	/**
 	 * Set an attribute of a module to a new value if: - the new value is
 	 * different from the old value
@@ -123,8 +123,8 @@ public class ModuleDatabase {
 			/* check if the new attribute value triggers an inherited attribute */
 			triggerAllInheritedAttributes(moduleId);
 		} else {
-			System.err.println("attribute not set" + moduleId + namespace + " "
-					+ key + " " + value);
+			System.err.println("\tattribute not set" + moduleId + namespace
+					+ " " + key + " " + value);
 		}
 
 	}
@@ -137,7 +137,7 @@ public class ModuleDatabase {
 	private void propagateToParents(ModuleId id, InheritedAttribute attr) {
 		Set parents = getParents(id);
 
-		System.err.println("propagateInheritedAttribute: " + id + "," + attr);
+		System.err.println("\tpropagateInheritedAttribute: " + id + "," + attr);
 
 		for (Iterator iter = parents.iterator(); iter.hasNext();) {
 			ModuleId parent = (ModuleId) iter.next();
@@ -154,6 +154,9 @@ public class ModuleDatabase {
 	 * Note the hidden recursion this function call setAttribute again which may
 	 * trigger this method.
 	 * 
+	 * If the module is part of a cycle, and all elements of the cycle are set
+	 * to the old value, we may set this module to the new value too.
+	 * 
 	 * @param attr
 	 *            all info about an inherited attribute
 	 * @param moduleId
@@ -164,12 +167,16 @@ public class ModuleDatabase {
 		ATerm comparedValue = module.getAttribute(attr.getNamespace(), attr
 				.getKey());
 
-		System.err.println("inherit: an attribute (" + attr + ") for " + moduleId);
-		// The first precondition is that the oldValue matches
+		System.err.println("\tinherit: an attribute (" + attr + ") for "
+				+ moduleId);
+		// The first precondition is that the oldValue matches (guarantees
+		// termination)
 		if (comparedValue == null
 				|| (comparedValue != null && !attr.getOldValue().isEqual(
 						comparedValue))) {
-			System.err.println("inherit: old value does not match for " + moduleId + "("  + comparedValue + "==" + attr.getOldValue() + ")");
+			System.err.println("\tinherit: old value does not match for "
+					+ moduleId + "(" + comparedValue + "=="
+					+ attr.getOldValue() + ")");
 			return;
 		}
 
@@ -177,29 +184,76 @@ public class ModuleDatabase {
 		boolean allSet = true;
 		boolean oneSet = false;
 
-		for (Iterator innerIter = children.iterator(); innerIter.hasNext();) {
-			ModuleId child = (ModuleId) innerIter.next();
+		boolean isCyclic = isCyclic(moduleId);
+		System.err.println("module " + moduleId + " is " + (isCyclic ? "cyclic" : "not cyclic"));
+
+		for (Iterator iter = children.iterator(); iter.hasNext();) {
+			ModuleId child = (ModuleId) iter.next();
 			Module innerModule = (Module) modules.get(child);
 
 			ATerm value = innerModule.getAttribute(attr.getNamespace(), attr
 					.getKey());
 
-			if (!value.isEqual(attr.getNewValue())) {
-				allSet = false;
+			if (isCyclic && getAllChildren(child).contains(moduleId)) {
+				// check if all elements of cycle are set to oldvalue or newvalue
+				Set cycle = getModulesInCycle(moduleId);
+				
+				for (Iterator inner = cycle.iterator(); inner.hasNext(); ) {
+					ModuleId elem = (ModuleId) inner.next();
+					Module elemModule = (Module) modules.get(elem);
+					
+					ATerm elemValue = elemModule.getAttribute(attr.getNamespace(), attr
+							.getKey());
+					
+					if (!elemValue.isEqual(attr.getNewValue()) &&
+							!elemValue.isEqual(attr.getOldValue())) {
+						allSet = false;
+					}
+				}
 			} else {
-				oneSet = true;
+				if (!value.isEqual(attr.getNewValue())) {
+					allSet = false;
+				} else {
+					oneSet = true;
+				}
 			}
 		}
 
 		if ((attr.inheritFromAll() && allSet)
 				|| (attr.inheritFromOne() && oneSet)) {
-			System.err.println("Inheriting an attribute on " + moduleId);
+			System.err.println("\tInheriting an attribute on " + moduleId);
 			setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
 					.getNewValue());
+		} else {
+			System.err.println("\tinherit: not all children of " + moduleId
+					+ " had the attribute");
+		}
+	}
+
+	private void findCycles(ModuleId current, Set modules, Set path) {
+		if (path.contains(current)) {
+			modules.addAll(path);
 		}
 		else {
-			System.err.println("inherit: not all children of " + moduleId + " had the attribute");
+			path.add(current);
+			for (Iterator iter = getChildren(current).iterator(); iter.hasNext(); ) {
+				ModuleId child = (ModuleId) iter.next();
+				findCycles(child, modules, path);
+			}
+			path.remove(current);
 		}
+	}
+	
+	private Set getModulesInCycle(ModuleId moduleId) {
+		Set cycle = new HashSet();
+		findCycles(moduleId, cycle, new HashSet());
+		return cycle;
+	}
+
+	private boolean isCyclic(ModuleId id) {
+		Set parents = getAllParents(id);
+
+		return parents.contains(id);
 	}
 
 	public ATerm getModuleAttribute(ModuleId moduleId, ATerm namespace,
@@ -300,8 +354,8 @@ public class ModuleDatabase {
 		Set dependencies = new HashSet();
 		LinkedList temp = new LinkedList();
 
-		temp.add(moduleId);
-
+		temp.addAll(getChildren(moduleId));
+		
 		while (!temp.isEmpty()) {
 			ModuleId tempId = (ModuleId) temp.getFirst();
 			if (!dependencies.contains(tempId)) {
@@ -322,8 +376,8 @@ public class ModuleDatabase {
 		Set dependencies = new HashSet();
 		LinkedList temp = new LinkedList();
 
-		temp.add(moduleId);
-
+		temp.addAll(getParents(moduleId));
+		
 		while (!temp.isEmpty()) {
 			ModuleId tempId = (ModuleId) temp.getFirst();
 			if (!dependencies.contains(tempId)) {
