@@ -132,16 +132,12 @@ in
         . AnnotateTree(Tree, Path, Annotated?) 
         . Result := Annotated
         . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
-	. MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", parsed)
       +
         rec-msg(asf-parse-handler-error(Pid))
-        . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", error)
         . Result := UNDEFINED
       )
     else 
       Result := UNDEFINED
-      . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
-      . TODO("valid error message\n")
     fi
   else
     Result := Tree
@@ -285,51 +281,47 @@ in
   Id := process-id
   . snd-note(ui-status(start(Id, "Get Specification")))
   . MM-GetAllModuleDependencies(ModuleId, Modules?)
-  . CheckModulesOpened(Modules, Opened?)
+  . Modules := join([ModuleId], Modules)
+  . printf("Modules: %t\n", Modules)
+  . GetImportsForRenaming(ModuleId, Modules, Imports?)
+  . Count := size(Modules)
+  . Specification := []
+  . TODO("remove computation by using listeners?")
   . 
-  if equal(Opened, true) then
-    GetImportsForRenaming(ModuleId, Modules, Imports?)
-    . Count := size(Modules)
-    . Specification := []
-    . TODO("remove computation by using listeners?")
-    . 
-    if and(not-equal(Modules, []), equal(Error, undefined)) then
-      CurModule := first(Modules)
-      . GetASFParseTree(CurModule, Equations?)
-      .
-      if equal(Equations, UNDEFINED) then
-	tau
-      else
-	/* normalization should occur BEFORE renaming 
-	 * proposal: merge the renaming and normalization tools,
-	 * possibly including the get-imports tool. 
-	 */
-	MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
-	. snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
-	. snd-msg(normalize-module(Equations)) 
-	. rec-msg(normalize-module-result(Equations?))
-	. snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
-	. snd-msg(sr-rename-module(Imports, Modulename, Equations))
-	. rec-msg(sr-renamed-module(Equations?))
-	. Specification := join(Specification, Equations)
-      fi
-      . Modules := next(Modules)
-      . Done := sub(Count, size(Modules))
-      . snd-note(ui-status(statf(Id, "Done %d of %d modules\n", [Done, Count])))
+  if and(not-equal(Modules, []), equal(Error, undefined)) then
+    CurModule := first(Modules)
+    . GetASFParseTree(CurModule, Equations?)
+    .
+    if equal(Equations, UNDEFINED) then
+      tau
+    else
+    /* normalization should occur BEFORE renaming 
+     * proposal: merge the renaming and normalization tools,
+     * possibly including the get-imports tool. 
+     */
+      MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
+      . snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
+      . snd-msg(normalize-module(Equations)) 
+      . rec-msg(normalize-module-result(Equations?))
+      . snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
+      . snd-msg(sr-rename-module(Imports, Modulename, Equations))
+      . rec-msg(sr-renamed-module(Equations?))
+      . Specification := join(Specification, Equations)
     fi
-    *
-    (
-      if not-equal(Error, undefined) then
-        Result := UNDEFINED
-      fi
-    +
-      if equal(Modules, []) then
-	Result := Specification
-      fi
-    )
-  else
-    tau
+    . Modules := next(Modules)
+    . Done := sub(Count, size(Modules))
+    . snd-note(ui-status(statf(Id, "Done %d of %d modules\n", [Done, Count])))
   fi
+  *
+  (
+    if not-equal(Error, undefined) then
+      Result := UNDEFINED
+    fi
+  +
+    if equal(Modules, []) then
+      Result := Specification
+    fi
+  )
   . snd-note(ui-status(stop(Id)))
 endlet
 

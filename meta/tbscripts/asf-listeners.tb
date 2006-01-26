@@ -78,6 +78,12 @@ in
     . printf("ASF module available for parsing\n")
     . ACE-GetModuleId(Event, ModuleId?)
     . GetASFParseTree(ModuleId, Tree?)
+    . 
+    if not-equal(Tree, UNDEFINED) then
+       MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", parsed)
+    else
+       MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", error)
+    fi
     . Tree := help-garbage-collector
   )
   *
