@@ -20,7 +20,7 @@ EXTRA_DIST = \
 	standard.asfsdf.buttons.src
 
 CLEANFILES = \
-	asf-initialize.tb \
+	$(GENERATED_TBSCRIPTS) \
 	standard.asfsdf.buttons
 
 pkgdata_DATA = \
