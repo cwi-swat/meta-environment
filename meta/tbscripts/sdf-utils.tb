@@ -405,7 +405,7 @@ in
 	rec-msg(no-updating-needed)
       +
 	rec-msg(updating-succeeded(DependingModules?))
-	. printf("this bites\n")
+	. TODO("this bites\n")
 	.
 	if equal(Error, no-errors) then
 	  snd-msg(update-module-in-db(Modulename, Tree, Type))
@@ -419,7 +419,7 @@ in
 		    [Modulename])
 	  )
 	else
-	  printf("CheckSyntaxConsistency: error ignored: %t\n", Error)
+	  printf("TODO: CheckSyntaxConsistency: error ignored: %t\n", Error)
 	fi
       )
     +
@@ -477,7 +477,6 @@ let
   Path: str
 in
   CreateModule(Modulename, ModuleId?)
-  . printf("opening module\n")
   . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
   .
   if equal(Path, EMPTY_PATH) then
@@ -597,7 +596,6 @@ in
   .
   if not-equal(Tree, UNDEFINED) then
     GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-    . printf("Path: %s\n", Path)
     . snd-msg(sm-get-module-id(Tree))
     . rec-msg(sm-module-id(Modulename?))
     . snd-msg(io-get-path-directory(Path))

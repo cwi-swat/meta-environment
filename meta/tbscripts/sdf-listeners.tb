@@ -4,9 +4,7 @@
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 
-#define FG_ERROR_COLOR   rgb(255,255,255)
 #define BG_ERROR_COLOR   rgb(255,165,0)
-#define FG_CORRECT_COLOR rgb(0,0,0)
 #define BG_CORRECT_COLOR rgb(255,255,221)
 
 process InitializeInheritedStatus is
@@ -54,10 +52,8 @@ in
     .
     if equal(Value, error) then
       MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
-      . MM-SetModuleGraphAttribute(ModuleId, "fgcolor", color(FG_ERROR_COLOR))
     else
       MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
-      . MM-SetModuleGraphAttribute(ModuleId, "fgcolor", color(FG_CORRECT_COLOR))
     fi
   )
   *
@@ -77,7 +73,6 @@ in
   .
   (
     rec-note(mm-attribute-changed(Event?))
-    . printf("AVAILABLE CAUGHT\n")
     . ACE-GetModuleId(Event, ModuleId?)
     . GetSDFParseTree(ModuleId, Tree?)
     .

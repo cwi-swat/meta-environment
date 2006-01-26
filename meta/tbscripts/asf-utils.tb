@@ -282,7 +282,6 @@ in
   . snd-note(ui-status(start(Id, "Get Specification")))
   . MM-GetAllModuleDependencies(ModuleId, Modules?)
   . Modules := join([ModuleId], Modules)
-  . printf("Modules: %t\n", Modules)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
   . Count := size(Modules)
   . Specification := []

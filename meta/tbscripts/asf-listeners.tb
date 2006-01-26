@@ -75,7 +75,6 @@ in
   .
   (
     rec-note(mm-attribute-changed(Event?))
-    . printf("ASF module available for parsing\n")
     . ACE-GetModuleId(Event, ModuleId?)
     . GetASFParseTree(ModuleId, Tree?)
     . 

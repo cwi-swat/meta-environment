@@ -21,7 +21,6 @@ in
     rec-note(mm-attribute-changed(AttributeEvent?))
     . ACE-GetModuleId(AttributeEvent, ModuleId?)
     . snd-msg(ts-remove-value(TableName, ModuleId))
-    . printf("%t: key %t removed from cache\n", TableName, ModuleId)
   )
   * delta
 endlet
@@ -44,7 +43,6 @@ in
     rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
     . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
     . snd-msg(ts-remove-value(TableName, ModuleId))
-    . printf("%t: key %t removed from cache\n", TableName, ModuleId)
   )
   * delta
 endlet
@@ -57,15 +55,12 @@ process GetCachedValue(TableName: str, Key: term, Value: term?) is
   .
   (
     rec-msg(ts-value(TableName, Key, Value?)) 
-    . printf("%t: key %t in cache\n", TableName, Key)
   +
     rec-msg(ts-no-value(TableName, Key))
-    . printf("%t: key %t NOT in cache\n", TableName, Key)
     . Value := UNDEFINED
   )
 
 process PutCachedValue(TableName: str, Key: term, Value: term) is
-  printf("%t: stored key %t in cache\n", TableName, Key)
-  . snd-msg(ts-put-term-value(TableName, Key, Value))
+  snd-msg(ts-put-term-value(TableName, Key, Value))
 
 #endif /* __CACHING__ */
