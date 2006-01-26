@@ -51,7 +51,7 @@ let
   MenuEventList: list,
   ModuleId: term
 in
-  snd-msg(set-title("ASF+SDF Meta-Environment))
+  snd-msg(set-title("ASF+SDF Meta-Environment"))
   . snd-msg(cm-get-events(studio-menubar))
   . rec-msg(cm-events(MenuEventList?))
   . snd-msg(gui-add-menu-events(MenuEventList))
@@ -65,7 +65,7 @@ in
     OpenModule(MODULENAME, ModuleId?)
   else
     tau
-  fi
+  fi 
 endlet
 
 toolbus(InitializeASFSDFMetaEnvironment)
