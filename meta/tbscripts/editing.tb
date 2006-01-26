@@ -30,65 +30,6 @@ process GetModuleId(Sid: term, ModuleId: term?) is
     . ModuleId := UNDEFINED
   )
  
-process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
-let
-  Path: str,
-  Pid: int,
-  StructureEditor: bool,
-  Text: str,
-  TextChanged: bool
-in
-  HasTextChanged(Sid, TextChanged?)
-  .
-  if equal(TextChanged, quote(true)) then
-    snd-msg(te-write-contents(Sid))
-    . rec-msg(te-contents-written(Sid))
-    . StructureEditor := false
-  else
-    IsStructureEditorRegistered(Sid, StructureEditor?)
-  fi
-  .
-  if equal(StructureEditor, quote(true)) then
-    snd-msg(parse-editor-ok(Sid))
-  else
-    GetPath(Sid, Path?)
-    . ReadFile(Path, Text?)
-    . create(EditorParseHandler(Sid), Pid?)
-    . ParseText(Pid, Text, Table, Nonterminal)
-  fi
-endlet
-
-process EditorParseHandler(Sid: term) is
-let
-  AnnotatedTree: term,
-  Error: term,
-  Filename: str,
-  Pid: int,
-  ParseError: term,
-  ParseResult: term
-in
-  Pid := process-id
-  . GetPath(Sid, Filename?)
-  .
-  (
-    rec-msg(parse-tree(Pid, ParseResult?))
-    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
-    . EditStructure(Sid, AnnotatedTree)
-    . snd-msg(parse-editor-ok(Sid))
-  +
-    rec-msg(parse-forest(Pid, ParseResult?, Error?))
-    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
-    . EditStructure(Sid, AnnotatedTree)
-    . AddFilenameToParseError(Error, Filename, ParseError?)
-    . snd-msg(parse-editor-failed(Sid, ParseError))
-  +
-    rec-msg(parse-error(Pid, Error?))
-    . AddFilenameToParseError(Error, Filename, ParseError?)
-    . ShowError(Sid, ParseError)
-    . snd-msg(parse-editor-failed(Sid, ParseError))
-  )
-endlet
-
 process GetFocus(Sid: term, Tree: term?) is
 let
   Registered: bool
@@ -108,10 +49,6 @@ in
     Tree := UNDEFINED
   fi
 endlet
-
-process GetParsetree(Sid: term, Parsetree: term?) is
-  snd-msg(se-get-parse-tree(Sid))
-  . rec-msg(se-parse-tree(Sid, Parsetree?))
 
 process ReplaceFocus(Sid: term, Tree: term) is
 let
