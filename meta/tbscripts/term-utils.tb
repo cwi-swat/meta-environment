@@ -47,30 +47,18 @@ in
   fi
 endlet
 
-process RestoreTermBrackets is
+process RestoreTermBrackets(ModuleId: term, Tree: term, Result: term?) is
 let
-  Table: term,
-  Tree: term,
-  ModuleId: term
+  Table: term
 in
-  (
-    rec-msg(restore-term-brackets(ModuleId?, Tree?))
-    . TODO("codeclone: create process GetParseTable that returns Table")
-    . snd-msg(get-parsetable(ModuleId, trm))
-    .
-    (
-      rec-msg(parsetable(ModuleId, trm, Table?))
-      . TODO("integrate editor types and language namespaces")
-      . snd-msg(restore-brackets(Tree, Table))
-      . rec-msg(brackets-restored(Tree?))
-    +
-      rec-msg(no-parsetable(ModuleId, trm))
-      . Tree := UNDEFINED
-    )
-    . snd-msg(restore-term-brackets-result(ModuleId, Tree))
-  )
-  *
-  delta
+  GetParseTable(ModuleId, trm, Table?)
+  . 
+  if not-equal(Table, UNDEFINED) then
+    snd-msg(restore-brackets(Tree, Table))
+    . rec-msg(brackets-restored(Result?))
+  else
+    Result := UNDEFINED
+  fi
 endlet
 
 

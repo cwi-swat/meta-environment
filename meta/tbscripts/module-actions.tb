@@ -1,6 +1,7 @@
 #ifndef __MODULE_ACTIONS__
 #define __MODULE_ACTIONS__
 
+#include <sdf-namespace.h>
 #include "navigator.idef"
 #include "graph-painter.idef"
 #include "config-manager/configuration-manager.idef"

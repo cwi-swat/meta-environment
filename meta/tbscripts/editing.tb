@@ -3,7 +3,6 @@
 
 #include <module-manager.tb>
 #include <sdf-namespace.h>
-#include <asf-namespace.h>
 #include <term-actions.tb>
 #include <parse-utils.tb>
 #include <io-utils.tb>
@@ -409,6 +408,7 @@ in
   )
 endlet
 
+/*
 process StartEditor(Path: str, EditorType: term) is
 let
   Available: bool,
@@ -423,7 +423,7 @@ in
     GetModuleByExtension(Path, Modulename?, Available?)
     .
     if equal(Available, false) then
-      /*GetModuleByPath(Path, Modulename?, Available?)*/
+      GetModuleByPath(Path, Modulename?, Available?)
       TODO("GetModuleByPath")
     fi
     . 
@@ -455,6 +455,7 @@ in
     fi
   fi
 endlet
+*/
 
 process MoveCursorLeftAction(EditorId : term) is
   MoveCursor(EditorId, left)
@@ -518,10 +519,12 @@ let
   Path: str,
   Sid: term
 in
+  TODO("reimplement\n")
+/*
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
   . GetEditorType(Path, EditorType?)
-  /*. MM-GetModuleIdByAttribute(*/
+  . MM-GetModuleIdByAttribute(
   . StartEditor(Path, EditorType)
   . snd-msg(em-get-session-by-path(Path))
   .
@@ -532,6 +535,7 @@ in
     rec-msg(em-no-such-session(Path))
     . snd-msg(no-such-session(Pid))
   )
+*/
 endlet
 
 process ShowOriginAction(EditorId : term) is
