@@ -1,0 +1,24 @@
+#ifndef __ASF_INITIALIZE__
+#define __ASF_INITIALIZE__
+
+#include <asf-listeners.tb>
+
+process AddAsfProperties is
+let
+  Contents: str,
+  Error: term
+in
+  snd-msg(io-read-file("/ufs/jurgenv/glt/installed/cleantrunk/share/asfsdf-meta//standard.asfsdf.buttons")) .
+  (
+    rec-msg(io-file-contents(Contents?))
+    . snd-msg(cm-add-system-properties(Contents))
+    . rec-msg(cm-system-properties-added)
+  +
+    rec-msg(io-error-reading(Error?))
+    . printf("AddAsfProperties: %t\n", Error)
+  )
+endlet
+
+toolbus(AddAsfProperties)
+
+#endif /* __ASF_INITIALIZE__ */

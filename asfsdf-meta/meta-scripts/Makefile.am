@@ -1,5 +1,9 @@
 # $Id$
 
+GENERATED_TBSCRIPTS = \
+	asf-initialize.tb \
+	start-meta-studio.tb 
+
 TBSCRIPTS = \
 	asf-actions.tb \
 	asf-editor-actions.tb \
@@ -10,7 +14,7 @@ TBSCRIPTS = \
 
 EXTRA_DIST = \
 	$(TBSCRIPTS) \
-	asf-initialize.tb.src \
+	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
 	standard.asfsdf.buttons \
 	standard.asfsdf.buttons.src
 
@@ -20,7 +24,7 @@ CLEANFILES = \
 
 pkgdata_DATA = \
 	$(TBSCRIPTS) \
-	asf-initialize.tb \
+	$(GENERATED_TBSCRIPTS) \
 	standard.asfsdf.buttons
 
 LIBRARY_LOCATION = \
@@ -30,6 +34,8 @@ LIBRARY_LOCATION = \
 	sed 's@__ASF__@${ASF}@g; \
 	     s@__ASFSDF_META__@${prefix}/share/asfsdf-meta/@g; \
 	     s@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g; \
+	     s@__EXTERNAL_JARS__@$(shell echo "$(EXTERNAL_JARS)")@g;\
+	     s@__PKGDATA__@$(pkgdatadir)@g; \
 	     s@__META__@${META}@g; \
 	     s@__VERSION__@${VERSION}@g;' \
 	     < $< \

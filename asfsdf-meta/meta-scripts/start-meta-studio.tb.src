@@ -1,0 +1,71 @@
+#define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)
+
+/* meta-kernel */
+#include "configuration-manager.idef"
+#include "generic-adapter.idef"
+#include "graph-converter.idef"
+#include "in-output.idef"
+#include "layout-graph.idef"
+#include "module-utils.tb"
+#include <module-actions.tb>
+#include <gui-actions.tb>
+#include "gui-utils.tb"
+#include <tide.tb>
+#include "module-selection-listener.tb"
+#include "module-actions.tb"
+#include "editor-manager.idef"
+#include "error-gui/error-viewer.idef"
+#include "editor-plugin/editor-plugin.idef"
+/* #include "serialization-utils.tb" */
+
+/* sdf-meta */
+#include "parsetablegen.idef"
+#include "term-parsetable.tb"
+#include "sdf-listeners.tb"
+#include "sdf-actions.tb"
+#include "graph-utils.tb"
+#include "editing.tb"
+#include "editor-error-display.tb"
+#include "sdf-utils.tb"
+#include "parsetable-utils.tb"
+#include "sdf2-language.tb"
+#include <sdf-editor-actions.tb>
+#include <term-editor-actions.tb>
+#include <term-actions.tb>
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
+
+/* asf-sdf-meta */
+#include "apply-function.idef"
+#include "restorebrackets.idef"
+#include "asf-language.tb"
+#include "asf-listeners.tb"
+#include "asf-actions.tb"
+#include "asf-utils.tb"
+#include <asf-editor-actions.tb>
+
+process InitializeASFSDFMetaEnvironment is
+let
+  MenuEventList: list,
+  ModuleId: term
+in
+  snd-msg(set-title("ASF+SDF Meta-Environment))
+  . snd-msg(cm-get-events(studio-menubar))
+  . rec-msg(cm-events(MenuEventList?))
+  . snd-msg(gui-add-menu-events(MenuEventList))
+  . StartNavigator()
+  . StartDialogTool()
+  . StartGraphPanel()
+  . StartProgressPanel()
+  . StartModuledetailsPanel()
+  .
+  if not-equal(MODULENAME, "") then
+    OpenModule(MODULENAME, ModuleId?)
+  else
+    tau
+  fi
+endlet
+
+toolbus(InitializeASFSDFMetaEnvironment)
