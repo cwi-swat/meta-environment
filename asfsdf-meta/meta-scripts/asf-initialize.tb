@@ -2,6 +2,7 @@
 #define __ASF_INITIALIZE__
 
 #include <asf-listeners.tb>
+#include <asf-language.tb>
 
 process AddAsfProperties is
 let
