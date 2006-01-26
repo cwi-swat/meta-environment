@@ -91,7 +91,6 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void addAttribute(ATerm id, ATerm namespace, ATerm key, ATerm value) {
-		System.err.println("addAttribute:" + id + " " + namespace + " " + key + " " + value);
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 		moduleDB.setAttribute(moduleId, namespace, key, value);
 	}
@@ -241,24 +240,27 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 
 	public void attributeSet(ModuleId id, ATerm namespace, ATerm key,
 			ATerm oldValue, ATerm newValue) {
-		System.err.println("listener: " + id + " " + namespace + " " +key + " " +oldValue + " " +newValue);
-		
+
 		if (oldValue == null) {
-			/* The old value is unknown, so we construct a pattern that may mean any term */
-			oldValue = key.getFactory().parse("undefined"); 
+			/*
+			 * The old value is unknown, so we construct a pattern that may mean
+			 * any term
+			 */
+			oldValue = key.getFactory().parse("undefined");
 		}
-		
+
 		bridge.postEvent(pureFactory.make(
 				"attribute-changed(<term>,<term>,<term>,<term>,<term>)", id
 						.toTerm(), namespace, key, oldValue, newValue));
 	}
 
-	public void registerInheritedAttribute(ATerm namespace, ATerm key, ATerm oldValue, ATerm newValue, ATerm type) {
-		moduleDB.registerInheritedAttribute(namespace, key, oldValue, newValue, type);
+	public void registerInheritedAttribute(ATerm namespace, ATerm key,
+			ATerm oldValue, ATerm newValue, ATerm type) {
+		moduleDB.registerInheritedAttribute(namespace, key, oldValue, newValue,
+				type);
 	}
 
 	public void recAckEvent(ATerm t0) {
-		System.err.println("ack event received:" + t0);
-		
+		// intentionally empty
 	}
 }

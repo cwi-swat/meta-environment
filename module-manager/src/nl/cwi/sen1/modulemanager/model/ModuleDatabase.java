@@ -55,7 +55,6 @@ public class ModuleDatabase {
 		InheritedAttribute attr = inheritedAttributes.put(namespace, key,
 				oldValue, newValue, type);
 		triggerAttributeOnAllModules(attr);
-		System.err.println("registered: " + attr);
 	}
 
 	public void unregisterInheritedAttribute(ATerm namespace, ATerm key,
@@ -122,11 +121,7 @@ public class ModuleDatabase {
 
 			/* check if the new attribute value triggers an inherited attribute */
 			triggerAllInheritedAttributes(moduleId);
-		} else {
-			System.err.println("\tattribute not set" + moduleId + namespace
-					+ " " + key + " " + value);
-		}
-
+		} 
 	}
 
 	private void fireAttributeSetListener(ModuleId id, ATerm namespace,
@@ -137,7 +132,6 @@ public class ModuleDatabase {
 	private void propagateToParents(ModuleId id, InheritedAttribute attr) {
 		Set parents = getParents(id);
 
-		System.err.println("\tpropagateInheritedAttribute: " + id + "," + attr);
 
 		for (Iterator iter = parents.iterator(); iter.hasNext();) {
 			ModuleId parent = (ModuleId) iter.next();
@@ -167,19 +161,13 @@ public class ModuleDatabase {
 		ATerm comparedValue = module.getAttribute(attr.getNamespace(), attr
 				.getKey());
 
-		System.err.println("\tinherit: an attribute (" + attr + ") for "
-				+ moduleId);
 		// The first precondition is that the oldValue matches (guarantees
 		// termination)
-		System.err.println("type of old:" + attr.getOldValue().getType() + "(" + attr.getOldValue() + ")");
 		
 		if ((attr.getOldValue().getType() != ATerm.PLACEHOLDER)
 				&& ( comparedValue == null
 				|| (comparedValue != null && !attr.getOldValue().isEqual(
 						comparedValue)))) {
-			System.err.println("\tinherit: old value does not match for "
-					+ moduleId + "(" + comparedValue + "=="
-					+ attr.getOldValue() + ")");
 			return;
 		}
 
@@ -188,8 +176,6 @@ public class ModuleDatabase {
 		boolean oneSet = false;
 
 		boolean isCyclic = isCyclic(moduleId);
-		System.err.println("module " + moduleId + " is "
-				+ (isCyclic ? "cyclic" : "not cyclic"));
 
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			ModuleId child = (ModuleId) iter.next();
@@ -233,13 +219,9 @@ public class ModuleDatabase {
 
 		if ((attr.inheritFromAll() && allSet)
 				|| (attr.inheritFromOne() && oneSet)) {
-			System.err.println("\tInheriting an attribute on " + moduleId);
 			setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
 					.getNewValue());
-		} else {
-			System.err.println("\tinherit: not all children of " + moduleId
-					+ " had the attribute");
-		}
+		} 
 	}
 
 	private void findCycles(ModuleId current, Set modules, Set path) {

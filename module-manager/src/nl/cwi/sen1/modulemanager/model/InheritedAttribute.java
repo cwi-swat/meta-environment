@@ -41,7 +41,7 @@ public class InheritedAttribute {
 	public ATerm getOldValue() {
 		return oldValue;
 	}
-	
+
 	public boolean inheritFromAll() {
 		return type == INHERIT_FROM_ALL;
 	}

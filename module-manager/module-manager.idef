@@ -54,7 +54,6 @@ in
     . snd-do(MM, delete-module(ModuleId))
   +
     rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, NewValue?, AttributeType?))
-    . printf("snd-do-register-inherited-attribute\n")
     . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, NewValue, AttributeType))
   +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
@@ -62,7 +61,6 @@ in
   +
     rec-event(MM, attribute-changed(ModuleId?, Namespace?, Key?, OldValue?, NewValue?))
     . snd-ack-event(MM, attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
-    . printf("manager event: %t %t %t %t %t\n", ModuleId, Namespace, Key, OldValue, NewValue)
     . snd-msg(mm-attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
   +
     rec-msg(mm-get-attribute(ModuleId?, Namespace?, Key?))
