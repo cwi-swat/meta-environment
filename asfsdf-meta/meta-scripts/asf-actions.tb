@@ -1,0 +1,122 @@
+#ifndef __ASF_ACTIONS__
+#define __ASF_ACTIONS__
+
+#include <asf-utils.tb>
+#include <ASFSDFApigen.idef>
+#include <term-utils.tb>
+#include <undefined.h>
+
+process ReduceAction(EditorId : term) is
+let
+  ModuleId : term,
+  Tree : term,
+  RTree : term,
+  Available : bool,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    Reduce(ModuleId, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+process DumpEquationsAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations", [], ".eqs", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpEquationsGivenFile(ModuleId, Path)
+  fi
+endlet
+
+process CompileModuleAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Target C file", [], ".c", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    CompileModule(ModuleId, Path)
+  fi
+endlet
+
+process RunAsfTestsAction(ModuleId : term) is
+  TestAsfSpecification(ModuleId) 
+
+process DebugRunAsfTestsAction(ModuleId : term) is
+  snd-msg(asfe-debugging(on))
+  . RunAsfTestsAction(ModuleId)
+
+process EditorRunAsfTestsAction(EditorId : term) is
+let
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . TestAsfSpecification(ModuleId)
+endlet
+
+process DebugReduceAction(EditorId : term) is
+let
+  Modulename : str,
+  Tree : term,
+  ResultTree : term,
+  Direction : term,
+  Available : bool,
+  ModuleId: term,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    DebugReduce(ModuleId, Tree, ResultTree?)
+    . 
+    if not-equal(ResultTree, error-tree) then
+      ActivateEditorWithTree(ResultTree, Modulename, "reduct.out")
+    else 
+      tau
+    fi
+  else
+    tau
+  fi
+endlet
+
+
+process AsfSdfApiGenAction(ModuleId: term) is
+let
+  Cancel: bool,
+  Path: str,
+  Paths: list
+in
+  GetSearchPaths(Paths?)
+  . PromptForFileWithExtension("Generate New Module", Paths, ".sdf", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    GenerateASFSDFApi(ModuleId, Path)
+  fi
+endlet
+
+
+#endif /* __ASF_ACTIONS__ */

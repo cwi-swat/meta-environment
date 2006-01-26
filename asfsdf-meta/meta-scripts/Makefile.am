@@ -1,19 +1,26 @@
 # $Id$
 
 TBSCRIPTS = \
-	meta-interface.tb 
+	asf-actions.tb \
+	asf-editor-actions.tb \
+	asf-editor-utils.tb \
+	asf-language.tb \
+	asf-listeners.tb \
+	asf-utils.tb 
 
 EXTRA_DIST = \
-	meta-interface.tb.src \
+	$(TBSCRIPTS) \
+	asf-initialize.tb.src \
 	standard.asfsdf.buttons \
 	standard.asfsdf.buttons.src
 
 CLEANFILES = \
-	meta-interface.tb \
+	asf-initialize.tb \
 	standard.asfsdf.buttons
 
 pkgdata_DATA = \
 	$(TBSCRIPTS) \
+	asf-initialize.tb \
 	standard.asfsdf.buttons
 
 LIBRARY_LOCATION = \

@@ -1,0 +1,27 @@
+#include <asf-namespace.h>
+
+process EditorEditEquationsAction(EditorId : term) is
+let 
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditEquationsAction(ModuleId)
+endlet
+
+
+process EditEquationsAction(ModuleId : term) is
+let
+  Path: str,
+  Pid: int,
+  Sid: term
+in
+  GetModulePath(ModuleId, ASF_NAMESPACE, Path?)
+  .
+  if equal(Path, "") then
+    tau
+  else
+    create(EditEquations(ModuleId), Pid?)
+    . rec-msg(equations-editor-started(Path, Sid?))
+    . create(CleanupEditTerm(Sid, ModuleId), Pid?)
+  fi
+endlet
