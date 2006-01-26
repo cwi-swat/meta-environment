@@ -533,15 +533,12 @@ in
         . AnnotateTree(Tree, Path, Annotated?)
         . Result := Annotated
         . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
-        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
       +
         rec-msg(open-syntax-parse-handler-done(Pid))
-        . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
         . Result := UNDEFINED
       )
     else
       Result := UNDEFINED
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
     fi
   else
     Result := Tree
