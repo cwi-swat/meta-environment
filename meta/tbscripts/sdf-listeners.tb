@@ -4,6 +4,11 @@
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 
+process InitializeInheritedStatus is
+  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
+
+toolbus(InitializeInheritedStatus)
+
 process SDFModuleLabelSetter is
 let
   Event: attribute-changed-event,
@@ -83,14 +88,18 @@ in
     . GetImportedModulenames(Tree, Imports?)
     .
     if not-equal(Imports, []) then 
-      Import := first(Imports)
-      . Imports := next(Imports)
-      . OpenModule(Import, ImportId?)
-      . MM-AddModuleDependency(ModuleId, ImportId)
-    fi
-    *
-    if equal(Imports, []) then
-      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+      if not-equal(Imports, []) then 
+        Import := first(Imports)
+        . Imports := next(Imports)
+        . OpenModule(Import, ImportId?)
+        . MM-AddModuleDependency(ModuleId, ImportId)
+      fi
+      *
+      if equal(Imports, []) then
+        MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+      fi
+    else
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", complete) 
     fi
   )
   *

@@ -12,7 +12,7 @@ let
   Worklist: list
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
-  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened)
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,complete)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unavailable)
   . MM-Subscribe-Dependencies-Changed(<term>)
@@ -27,7 +27,7 @@ in
     if equal(Value, unknown) then
       Worklist := join(Worklist, [ModuleId])
     else
-      if equal(Value, opened) then
+      if equal(Value, complete) then
 	Worklist := diff(Worklist, [ModuleId])
 	.
 	if equal(Worklist, []) then

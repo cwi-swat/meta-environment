@@ -9,39 +9,30 @@
 
 #define GRAPH_NAMESPACE "graph"
 
-process MM-SetModuleGraphAttribute(ModuleId: term, Key: term, Value: term) is
-  MM-SetAttribute(ModuleId, GRAPH_NAMESPACE, Key, Value)
+process MM-RegisterInheritedAttribute(Namespace: term, Key: term, OldValue: term, NewValue: term, Type: term) is
+  snd-msg(mm-register-inherited-attribute(Namespace, Key, OldValue, NewValue, Type))
 
-process MM-PropagateAttributeChanges is
+process MM-NotifyAboutChangedAttributes is
 let
-  ChildEvent: attribute-changed-event,
-  Parents: list,
-  ModuleId: term,
-  ParentId: term,
-  Event: child-attribute-changed-event
+  Event: attribute-changed-event,
+  Namespace: term,
+  Key: term,
+  OldValue: term,
+  NewValue: term,
+  ModuleId: term
 in
-  MM-Subscribe-Attribute-Changed(<term>,<term>,<term>,<term>,<term>)
-  .
   (
-    rec-note(mm-attribute-changed(ChildEvent?)) 
-    . ACE-GetModuleId(ChildEvent, ModuleId?)
-    . MM-GetAllModuleParents(ModuleId, Parents?)
-    . 
-    if not-equal(Parents, []) then
-      ParentId := first(Parents)
-      . Parents := next(Parents)
-      . CACE-MakeEvent(ParentId, ChildEvent, Event?)
-      . snd-note(mm-child-attribute-changed(Event))
-    fi
-    *
-    if equal(Parents, []) then
-      tau
-    fi
-  )
-  * delta
+    rec-msg(mm-attribute-changed(ModuleId?, Namespace?, Key?, OldValue?, NewValue?))
+    . printf("notifying: %t %t %t %t %t\n", ModuleId, Namespace, Key, OldValue, NewValue)
+    . ACE-MakeEvent(ModuleId, Namespace, Key, OldValue, NewValue, Event?)
+    . snd-note(mm-attribute-changed(Event))
+  ) * delta
 endlet
 
-toolbus(MM-PropagateAttributeChanges)
+toolbus(MM-NotifyAboutChangedAttributes)
+
+process MM-SetModuleGraphAttribute(ModuleId: term, Key: term, Value: term) is
+  MM-SetAttribute(ModuleId, GRAPH_NAMESPACE, Key, Value)
 
 process MM-CreateModule(ModuleId: term?) is
   snd-msg(mm-create-module)
@@ -66,23 +57,8 @@ process MM-DeleteModule(ModuleId: term) is
   . snd-note(mm-module-deleted(ModuleId))
 
 process MM-SetAttribute(ModuleId: term, Namespace: term, Key: term, Value: term) is
-let
-  Event : attribute-changed-event,
-  HasValue : bool,
-  OldValue : term
-in
   printf("%t: setting attribute %t of %t to %t\n", Namespace, Key, ModuleId, Value)
-  . MM-HasAttribute(ModuleId, Namespace, Key, HasValue?)
-  .
-  if equal(HasValue, true) then
-    MM-GetAttribute(ModuleId, Namespace, Key, OldValue?)
-  else
-    OldValue := UNDEFINED
-  fi
   . snd-msg(mm-add-attribute(ModuleId, Namespace, Key, Value))
-  . ACE-MakeEvent(ModuleId, Namespace, Key, OldValue, Value, Event?)
-  . snd-note(mm-attribute-changed(Event))
-endlet
 
 process MM-HasAttribute(ModuleId: term, Namespace: term, Key: term, HasAttribute: bool?) is
 let
