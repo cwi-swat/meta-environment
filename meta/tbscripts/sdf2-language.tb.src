@@ -1,4 +1,6 @@
 /* $Id$ */
+#ifndef __SDF2_LANGUAGE__
+#define __SDF2_LANGUAGE__
 
 process Open-Sdf2-Language is
 let 
@@ -31,3 +33,7 @@ in
   )
   * delta
 endlet
+
+toolbus(Open-Sdf2-Language)
+
+#endif /* __SDF2_LANGUAGE__ */
