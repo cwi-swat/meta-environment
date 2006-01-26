@@ -171,9 +171,12 @@ public class ModuleDatabase {
 				+ moduleId);
 		// The first precondition is that the oldValue matches (guarantees
 		// termination)
-		if (comparedValue == null
+		System.err.println("type of old:" + attr.getOldValue().getType() + "(" + attr.getOldValue() + ")");
+		
+		if ((attr.getOldValue().getType() != ATerm.PLACEHOLDER)
+				&& ( comparedValue == null
 				|| (comparedValue != null && !attr.getOldValue().isEqual(
-						comparedValue))) {
+						comparedValue)))) {
 			System.err.println("\tinherit: old value does not match for "
 					+ moduleId + "(" + comparedValue + "=="
 					+ attr.getOldValue() + ")");
@@ -185,7 +188,8 @@ public class ModuleDatabase {
 		boolean oneSet = false;
 
 		boolean isCyclic = isCyclic(moduleId);
-		System.err.println("module " + moduleId + " is " + (isCyclic ? "cyclic" : "not cyclic"));
+		System.err.println("module " + moduleId + " is "
+				+ (isCyclic ? "cyclic" : "not cyclic"));
 
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			ModuleId child = (ModuleId) iter.next();
@@ -195,19 +199,27 @@ public class ModuleDatabase {
 					.getKey());
 
 			if (isCyclic && getAllChildren(child).contains(moduleId)) {
-				// check if all elements of cycle are set to oldvalue or newvalue
+				// check if all elements of cycle are set to oldvalue or
+				// newvalue
 				Set cycle = getModulesInCycle(moduleId);
-				
-				for (Iterator inner = cycle.iterator(); inner.hasNext(); ) {
+
+				for (Iterator inner = cycle.iterator(); inner.hasNext();) {
 					ModuleId elem = (ModuleId) inner.next();
 					Module elemModule = (Module) modules.get(elem);
-					
-					ATerm elemValue = elemModule.getAttribute(attr.getNamespace(), attr
-							.getKey());
-					
-					if (!elemValue.isEqual(attr.getNewValue()) &&
-							!elemValue.isEqual(attr.getOldValue())) {
+
+					ATerm elemValue = elemModule.getAttribute(attr
+							.getNamespace(), attr.getKey());
+
+					if (!elemValue.isEqual(attr.getNewValue())
+							&& 
+							(attr.getOldValue().getType() != ATerm.PLACEHOLDER
+									&& !elemValue.isEqual(attr.getOldValue()))) {
 						allSet = false;
+					}
+					else {
+						if (elemValue.isEqual(attr.getNewValue())) {
+						  oneSet = true;
+						}
 					}
 				}
 			} else {
@@ -233,17 +245,17 @@ public class ModuleDatabase {
 	private void findCycles(ModuleId current, Set modules, Set path) {
 		if (path.contains(current)) {
 			modules.addAll(path);
-		}
-		else {
+		} else {
 			path.add(current);
-			for (Iterator iter = getChildren(current).iterator(); iter.hasNext(); ) {
+			for (Iterator iter = getChildren(current).iterator(); iter
+					.hasNext();) {
 				ModuleId child = (ModuleId) iter.next();
 				findCycles(child, modules, path);
 			}
 			path.remove(current);
 		}
 	}
-	
+
 	private Set getModulesInCycle(ModuleId moduleId) {
 		Set cycle = new HashSet();
 		findCycles(moduleId, cycle, new HashSet());
@@ -355,7 +367,7 @@ public class ModuleDatabase {
 		LinkedList temp = new LinkedList();
 
 		temp.addAll(getChildren(moduleId));
-		
+
 		while (!temp.isEmpty()) {
 			ModuleId tempId = (ModuleId) temp.getFirst();
 			if (!dependencies.contains(tempId)) {
@@ -377,7 +389,7 @@ public class ModuleDatabase {
 		LinkedList temp = new LinkedList();
 
 		temp.addAll(getParents(moduleId));
-		
+
 		while (!temp.isEmpty()) {
 			ModuleId tempId = (ModuleId) temp.getFirst();
 			if (!dependencies.contains(tempId)) {

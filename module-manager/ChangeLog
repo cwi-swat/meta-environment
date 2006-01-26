@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jan 26 12:00:12 CET 2006 <jurgenv@cwi.nl>
+ * <+comment+>
+
 Mon Jan 23 09:05:52 CET 2006 <jurgenv@cwi.nl>
  * src/**/ModuleManager.java: Mapping of dependencies to a graph
    can now handle any well known graph attribute, such as color

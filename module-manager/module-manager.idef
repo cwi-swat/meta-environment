@@ -54,6 +54,7 @@ in
     . snd-do(MM, delete-module(ModuleId))
   +
     rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, NewValue?, AttributeType?))
+    . printf("snd-do-register-inherited-attribute\n")
     . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, NewValue, AttributeType))
   +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
