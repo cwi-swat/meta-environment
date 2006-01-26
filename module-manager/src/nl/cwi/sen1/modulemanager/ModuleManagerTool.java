@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 23, 2006 9:14:16 AM
+// generation time: Jan 26, 2006 10:49:33 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -23,6 +23,7 @@ abstract public class ModuleManagerTool
   private ATerm PdeleteAttribute0;
   private ATerm PdeleteDependency0;
   private ATerm PaddAttribute0;
+  private ATerm PregisterInheritedAttribute0;
   private ATerm PgetAttribute0;
   private ATerm PgetAllAttributes0;
   private ATerm PgetDependencies0;
@@ -35,6 +36,7 @@ abstract public class ModuleManagerTool
   private ATerm PgetModuleIdByAttribute0;
   private ATerm PgetModuleGraph0;
   private ATerm PgetParentModules0;
+  private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   //}}}
@@ -60,7 +62,9 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
@@ -89,6 +93,7 @@ abstract public class ModuleManagerTool
     PdeleteAttribute0 = factory.parse("rec-do(delete-attribute(<term>,<term>,<term>))");
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<term>,<term>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
+    PregisterInheritedAttribute0 = factory.parse("rec-do(register-inherited-attribute(<term>,<term>,<term>,<term>,<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
     PgetAllAttributes0 = factory.parse("rec-eval(get-all-attributes(<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
@@ -101,6 +106,7 @@ abstract public class ModuleManagerTool
     PgetModuleIdByAttribute0 = factory.parse("rec-eval(get-module-id-by-attribute(<term>,<term>,<term>))");
     PgetModuleGraph0 = factory.parse("rec-eval(get-module-graph(<term>))");
     PgetParentModules0 = factory.parse("rec-eval(get-parent-modules(<term>))");
+    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -141,6 +147,11 @@ abstract public class ModuleManagerTool
     result = term.match(PaddAttribute0);
     if (result != null) {
       addAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
+      return null;
+    }
+    result = term.match(PregisterInheritedAttribute0);
+    if (result != null) {
+      registerInheritedAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3), (ATerm)result.get(4));
       return null;
     }
     result = term.match(PgetAttribute0);
@@ -190,6 +201,11 @@ abstract public class ModuleManagerTool
     result = term.match(PgetParentModules0);
     if (result != null) {
       return getParentModules((ATerm)result.get(0));
+    }
+    result = term.match(PrecAckEvent0);
+    if (result != null) {
+      recAckEvent((ATerm)result.get(0));
+      return null;
     }
     result = term.match(PrecTerminate0);
     if (result != null) {

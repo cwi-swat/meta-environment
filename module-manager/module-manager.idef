@@ -21,7 +21,10 @@ let
   NewModuleId : term,
   Path : str,
   To : term,
-  Value : term
+  Value : term,
+  OldValue: term,
+  NewValue: term,
+  AttributeType: term
 in
   execute(module-manager, MM?)
   .
@@ -50,8 +53,16 @@ in
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))
   +
+    rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, NewValue?, AttributeType?))
+    . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, NewValue, AttributeType))
+  +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
     . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))
+  +
+    rec-event(MM, attribute-changed(ModuleId?, Namespace?, Key?, OldValue?, NewValue?))
+    . snd-ack-event(MM, attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
+    . printf("manager event: %t %t %t %t %t\n", ModuleId, Namespace, Key, OldValue, NewValue)
+    . snd-msg(mm-attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
   +
     rec-msg(mm-get-attribute(ModuleId?, Namespace?, Key?))
     . snd-eval(MM, get-attribute(ModuleId, Namespace, Key))

@@ -15,9 +15,7 @@ import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.graph.types.NodeList;
 import nl.cwi.sen1.graph.types.Shape;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
-import aterm.AFun;
 import aterm.ATerm;
-import aterm.ATermAppl;
 import aterm.pure.PureFactory;
 
 public class ModuleGraph extends ModuleDatabase {
@@ -27,7 +25,8 @@ public class ModuleGraph extends ModuleDatabase {
 
     private Factory factory;
 
-    public ModuleGraph(PureFactory pureFactory) {
+    public ModuleGraph(PureFactory pureFactory, AttributeSetListener l) {
+    	super(l);
         factory = Factory.getInstance(pureFactory);
     }
 

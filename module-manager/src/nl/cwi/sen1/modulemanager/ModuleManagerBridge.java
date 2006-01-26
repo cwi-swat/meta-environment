@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 23, 2006 9:14:16 AM
+// generation time: Jan 26, 2006 10:49:34 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -95,6 +95,19 @@ public class ModuleManagerBridge
     }
     else {
       throw new UnsupportedOperationException("method `addAttribute' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4)
+
+  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4)
+  {
+    if (tool != null) {
+      tool.registerInheritedAttribute(t0, t1, t2, t3, t4);
+    }
+    else {
+      throw new UnsupportedOperationException("method `registerInheritedAttribute' not supported.");
     }
   }
 
@@ -228,6 +241,19 @@ public class ModuleManagerBridge
       return tool.getParentModules(t0);
     }
       throw new UnsupportedOperationException("method `getParentModules' not supported.");
+  }
+
+  //}}}
+  //{{{  public void recAckEvent(ATerm t0)
+
+  public void recAckEvent(ATerm t0)
+  {
+    if (tool != null) {
+      tool.recAckEvent(t0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `recAckEvent' not supported.");
+    }
   }
 
   //}}}
