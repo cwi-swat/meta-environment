@@ -94,6 +94,7 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
     . GetSDFParseTree(ModuleId, Tree?)
+    . MM-DeleteModuleDependencies(ModuleId)
     . GetImportedModulenames(Tree, Imports?)
     .
     if not-equal(Imports, []) then 
