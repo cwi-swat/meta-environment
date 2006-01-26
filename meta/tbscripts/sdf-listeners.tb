@@ -4,6 +4,11 @@
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 
+#define FG_ERROR_COLOR   rgb(255,255,255)
+#define BG_ERROR_COLOR   rgb(255,165,0)
+#define FG_CORRECT_COLOR rgb(0,0,0)
+#define BG_CORRECT_COLOR rgb(255,255,221)
+
 process InitializeInheritedStatus is
   MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, one)
@@ -30,6 +35,37 @@ in
 endlet
 
 toolbus(SDFModuleLabelSetter)
+
+process SDFModuleColorChanger is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, error) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
+      . MM-SetModuleGraphAttribute(ModuleId, "fgcolor", color(FG_ERROR_COLOR))
+    else
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+      . MM-SetModuleGraphAttribute(ModuleId, "fgcolor", color(FG_CORRECT_COLOR))
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleColorChanger)
+
 
 process SDFModuleParser is
 let
