@@ -19,89 +19,88 @@ import aterm.ATerm;
 import aterm.pure.PureFactory;
 
 public class ModuleGraph extends ModuleDatabase {
-    private NodeList nodeList;
+	private NodeList nodeList;
 
-    private EdgeList edgeList;
+	private EdgeList edgeList;
 
-    private Factory factory;
+	private Factory factory;
 
-    public ModuleGraph(PureFactory pureFactory, AttributeSetListener l) {
-    	super(l);
-        factory = Factory.getInstance(pureFactory);
-    }
-
-    private void setNodes(ATerm namespace) {
-      for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-	boolean shapeSet = false;
-	ModuleId moduleId = (ModuleId) iter.next();
-	NodeId nodeId = factory.makeNodeId_Default(moduleId.toTerm());
-
-	Module module = (Module) modules.get(moduleId);
-	AttributeList attrList = factory.makeAttributeList();
-
-	AttributeTable table = module.getAttributes(namespace);
-	if (table != null) {
-	  Map entries = table.getEntries();
-
-	  for (Iterator iterEntries = entries.keySet().iterator(); iterEntries
-	      .hasNext();) {
-	    ATerm key = (ATerm) iterEntries.next();
-	    ATerm value = (ATerm) entries.get(key);
-
-	    try {
-	      Attribute attr = factory.AttributeFromTerm(value);
-	      attrList = attrList.insert(attr);
-
-	      if (attr.isShape()) {
-		shapeSet = true;
-	      }
-	    }
-	    catch (IllegalArgumentException exc) {	
-	      System.err.println("Illegal graph attribute: " + value);
-	    }
-	  }
-
+	public ModuleGraph(PureFactory pureFactory, AttributeSetListener l) {
+		super(l);
+		factory = Factory.getInstance(pureFactory);
 	}
 
-	if (!shapeSet) {
-	  Shape shape = factory.makeShape_Box();
-	  attrList = attrList.insert(factory.makeAttribute_Shape(shape));
+	private void setNodes(ATerm namespace) {
+		for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
+			boolean shapeSet = false;
+			ModuleId moduleId = (ModuleId) iter.next();
+			NodeId nodeId = factory.makeNodeId_Default(moduleId.toTerm());
+
+			Module module = (Module) modules.get(moduleId);
+			AttributeList attrList = factory.makeAttributeList();
+
+			AttributeTable table = module.getAttributes(namespace);
+			if (table != null) {
+				Map entries = table.getEntries();
+
+				for (Iterator iterEntries = entries.keySet().iterator(); iterEntries
+						.hasNext();) {
+					ATerm key = (ATerm) iterEntries.next();
+					ATerm value = (ATerm) entries.get(key);
+
+					try {
+						Attribute attr = factory.AttributeFromTerm(value);
+						attrList = attrList.insert(attr);
+
+						if (attr.isShape()) {
+							shapeSet = true;
+						}
+					} catch (IllegalArgumentException exc) {
+						System.err.println("Illegal graph attribute: " + value);
+					}
+				}
+
+			}
+
+			if (!shapeSet) {
+				Shape shape = factory.makeShape_Box();
+				attrList = attrList.insert(factory.makeAttribute_Shape(shape));
+			}
+
+			Node node = factory.makeNode_Default(nodeId, attrList);
+			nodeList = nodeList.insert(node);
+		}
 	}
 
-	Node node = factory.makeNode_Default(nodeId, attrList);
-	nodeList = nodeList.insert(node);
-      }
-    }
+	private void setEdges() {
+		for (Iterator iter = children.keySet().iterator(); iter.hasNext();) {
+			ModuleId moduleId = (ModuleId) iter.next();
+			NodeId nodeFromId = factory.makeNodeId_Default(moduleId.toTerm());
 
-    private void setEdges() {
-        for (Iterator iter = children.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
-            NodeId nodeFromId = factory.makeNodeId_Default(moduleId.toTerm());
+			Set dependingModules = (Set) children.get(moduleId);
 
-            Set dependingModules = (Set) children.get(moduleId);
+			for (Iterator depsIter = dependingModules.iterator(); depsIter
+					.hasNext();) {
+				ModuleId dependencyId = (ModuleId) depsIter.next();
+				NodeId nodeToId = factory.makeNodeId_Default(dependencyId
+						.toTerm());
 
-            for (Iterator depsIter = dependingModules.iterator(); depsIter
-                    .hasNext();) {
-                ModuleId dependencyId = (ModuleId) depsIter.next();
-                NodeId nodeToId = factory.makeNodeId_Default(dependencyId
-                        .toTerm());
+				Edge edge = factory.makeEdge_Default(nodeFromId, nodeToId,
+						factory.makeAttributeList());
 
-                Edge edge = factory.makeEdge_Default(nodeFromId, nodeToId,
-                        factory.makeAttributeList());
+				edgeList = edgeList.insert(edge);
+			}
+		}
+	}
 
-                edgeList = edgeList.insert(edge);
-            }
-        }
-    }
+	public Graph getModuleGraph(ATerm namespace) {
+		nodeList = factory.makeNodeList();
+		edgeList = factory.makeEdgeList();
 
-    public Graph getModuleGraph(ATerm namespace) {
-        nodeList = factory.makeNodeList();
-        edgeList = factory.makeEdgeList();
+		setNodes(namespace);
+		setEdges();
+		AttributeList attrList = factory.makeAttributeList();
 
-        setNodes(namespace);
-        setEdges();
-        AttributeList attrList = factory.makeAttributeList();
-
-        return factory.makeGraph_Default(nodeList, edgeList, attrList);
-    }
+		return factory.makeGraph_Default(nodeList, edgeList, attrList);
+	}
 }
