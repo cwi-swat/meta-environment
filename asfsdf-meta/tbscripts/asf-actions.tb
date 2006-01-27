@@ -9,26 +9,21 @@
 process ReduceAction(EditorId : term) is
 let
   ModuleId : term,
-  Tree : term,
-  RTree : term,
-  Available : bool,
   Path: str
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
-  . GetTermParsetree(ModuleId, Path, Tree?)
-  .
-  if not-equal(Tree, UNDEFINED) then
-    Reduce(ModuleId, Tree, RTree?)
-    . 
-    if not-equal(RTree, UNDEFINED) then
-      ActivateEditorWithTree(RTree, ModuleId, "reduct.out")
-    else 
-      tau
-    fi
-  else
-    tau
-  fi
+  . Reduce(ModuleId, Path, off)
+endlet
+
+process DebugReduceAction(EditorId : term) is
+let
+  ModuleId: term,
+  Path: str
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . Reduce(ModuleId, Path, on)
 endlet
 
 process DumpEquationsAction(ModuleId : term) is
@@ -73,34 +68,6 @@ in
   GetModuleId(EditorId, ModuleId?)
   . TestAsfSpecification(ModuleId)
 endlet
-
-process DebugReduceAction(EditorId : term) is
-let
-  Modulename : str,
-  Tree : term,
-  ResultTree : term,
-  Direction : term,
-  Available : bool,
-  ModuleId: term,
-  Path: str
-in
-  GetModuleId(EditorId, ModuleId?)
-  . GetPath(EditorId, Path?)
-  . GetTermParsetree(ModuleId, Path, Tree?)
-  .
-  if not-equal(Tree, UNDEFINED) then
-    DebugReduce(ModuleId, Tree, ResultTree?)
-    . 
-    if not-equal(ResultTree, error-tree) then
-      ActivateEditorWithTree(ResultTree, Modulename, "reduct.out")
-    else 
-      tau
-    fi
-  else
-    tau
-  fi
-endlet
-
 
 process AsfSdfApiGenAction(ModuleId: term) is
 let

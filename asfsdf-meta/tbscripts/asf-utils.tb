@@ -375,7 +375,7 @@ in
   fi
 endlet
 
-process ReduceTerm(Tree: term, ModuleId: term, NormalForm: term?) is
+process ReduceTerm(Tree: term, ModuleId: term, Debugging: term, NormalForm: term?) is
 let
   Summary: term,
   Equations: term,
@@ -394,16 +394,11 @@ in
     GetSpecificationEquations(Specification, Equations?)
     . snd-note(ui-status(stat(Id, "Rewriting"))) 
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
-    . snd-msg(asfe-rewrite(Modulename, Equations, Tree))
+    . snd-msg(asfe-rewrite(Modulename, Equations, Tree, Debugging))
     .
     (
-      (
-        rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets?))
-        . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
-      +
-        rec-msg(asfe-rewrite-text(Text?)) 
-        . NormalForm := quote(str(Text))
-      )  
+      rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets?))
+      . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
       . snd-msg(ui-remove-feedback-summary("asfe", "all"))
     +
       rec-msg(asfe-rewrite-errors(Errors?))
@@ -411,7 +406,7 @@ in
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
       . snd-msg(ui-show-feedback-summary(Summary))
-      . NormalForm := error-tree
+      . NormalForm := UNDEFINED
     )
     . snd-note(ui-status(endstat(Id)))
   else
@@ -419,35 +414,28 @@ in
   fi
 endlet
 
-process Reduce(ModuleId : term, Tree : term, RTree : term?) is
-  snd-msg(asfe-debugging(off)) 
-  . ReduceTerm(Tree, ModuleId, RTree?)
+process Reduce(ModuleId : term, Path : str, Debugging: term) is
+let
+  ResultTree: term,
+  Tree: term
+in
+  GetTermParsetree(ModuleId, Path, Tree?)
   .
-  if not-equal(RTree, UNDEFINED) then
-    snd-msg(promote-posinfo-to-origin(RTree))
-    . rec-msg(promoted-posinfo-to-origin(RTree?))
-    . AnnotateTree(RTree, "reduct.out", RTree?)
+  if not-equal(Tree, UNDEFINED) then
+    ReduceTerm(Tree, ModuleId, Debugging, ResultTree?)
+    .
+    if not-equal(ResultTree, UNDEFINED) then
+      snd-msg(promote-posinfo-to-origin(ResultTree))
+      . rec-msg(promoted-posinfo-to-origin(ResultTree?))
+      . AnnotateTree(ResultTree, "reduct.out", Tree?)
+      . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+    else
+      tau
+    fi
   else
     tau
   fi
-
-process DebugReduce(ModuleId : term, Tree : term, ResultTree : term?) is
-  /* TODO: changed reduce action to take an extra argument,
-     that will break all currently existing scripts, so we
-     leave it at this for the moment. In 1.6 this can be changed?
-   */
-  snd-msg(asfe-debugging(on))
-  . ReduceTerm(Tree, ModuleId, ResultTree?)
-  . 
-  if not-equal(ResultTree, UNDEFINED) then
-    snd-msg(promote-posinfo-to-origin(ResultTree))
-    . rec-msg(promoted-posinfo-to-origin(ResultTree?))
-    . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
-  else
-    tau
-  fi 
-  . snd-msg(asfe-debugging(off)) 
-
+endlet
 
 /*****
  BELOW HERE IS ALL DOUBTFUL
