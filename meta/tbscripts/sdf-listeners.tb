@@ -6,6 +6,7 @@
 
 #define BG_ERROR_COLOR   rgb(255,165,0)
 #define BG_CORRECT_COLOR rgb(255,255,221)
+#define BG_GRAYED_OUT rgb (211,211,211)
 
 process InitializeInheritedStatus is
   MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
@@ -62,6 +63,34 @@ endlet
 
 toolbus(SDFModuleColorChanger)
 
+process SDFModuleVisualizeEditable is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,true)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,false)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, quote(false)) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_GRAYED_OUT))
+    else
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+    fi
+  )
+  *
+  delta
+endlet
+
+
+toolbus(SDFModuleVisualizeEditable)
 
 process SDFModuleParser is
 let
