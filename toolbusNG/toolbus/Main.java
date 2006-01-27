@@ -13,7 +13,7 @@ public class Main {
 	
 		try {
 			T.parse(ToolBus.getWorkspace()
-					+ "/toolbusNG/toolbus/tool/examples/eqs-dump.tb");
+					+ "/toolbusNG/toolbus/tool/examples/pt-dump.tb");
 				    //+ "/toolbusNG/toolbus/test/Bind.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();

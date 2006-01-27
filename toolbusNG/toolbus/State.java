@@ -39,7 +39,6 @@ public class State {
     for (Iterator it = b.getElementsAsVector().iterator(); it.hasNext();)
       c.add((StateElement) it.next());
 
-    //System.err.println("union(" + this + ", " + b + ") => " + c);
     return c;
   }
 
@@ -52,7 +51,6 @@ public class State {
   }
 
   public void findPartners(State set) {
-    //System.err.println("StateElementSet.findpartners: " + elements + " / " + set);
     for (Iterator ita = elements.iterator(); ita.hasNext();) {
       StateElement a = (StateElement) ita.next();
       if (!(a instanceof MsgAtom)) {
@@ -152,7 +150,6 @@ public class State {
     if (size == 0)
       return false;
 
- //   for (int index = ToolBus.nextInt(size), nleft = size; nleft > 0; index = (index + 1) % size, nleft--) {
     for(int index = (lastElement + 1) % size, nleft = size; nleft > 0; index = (index + 1) % size, nleft--){
       StateElement a = (StateElement) elements.elementAt(index);
 

@@ -1,5 +1,6 @@
 package toolbus.tool.classic;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -54,6 +55,9 @@ public class ClassicToolShield extends ToolShield {
 	private int sendTermFill = 0;
 	private ByteBuffer sendTermData;
 	private ByteBuffer sendTermLengthSpec = ByteBuffer.allocate(LENSPEC);
+	private ByteBuffer sendTermFiller = ByteBuffer.allocate(MIN_MSG_SIZE);
+	private ByteArrayOutputStream sendByteArrayOutputStream = new ByteArrayOutputStream();
+	private boolean sendTermInProgress = false;
 	
 	/**
 	   * The constructor for ClassicToolShield. 
@@ -65,11 +69,13 @@ public class ClassicToolShield extends ToolShield {
 		super(toolInstance);
 		this.toolDef = toolDef;
 		this.factory = TBTerm.factory;
-//		this.lockObject = this;
 		termSndVoid = factory.parse("snd-void");
 
 		toolname = toolDef.getName();
 		toolid = toolInstance.getToolCount();
+		for(int i = 0; i < MIN_MSG_SIZE; i++){
+			sendTermFiller.put((byte)0);
+		}
 		selector = ToolBus.getSelector();
 		if(!alreadyExecuting){
 			executeTool();
@@ -146,14 +152,6 @@ public class ClassicToolShield extends ToolShield {
 		handleRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 
-/*	public void setLockObject(Object obj) {
-		lockObject = obj;
-	}
-
-	public Object getLockObject() {
-		return lockObject;
-	}*/
-	
 	public String getToolName(){
 		return toolname;
 	}
@@ -173,12 +171,11 @@ public class ClassicToolShield extends ToolShield {
 	}
 
 	public void sendTerm(ATerm term) throws IOException {
-			byte termAsBytes[] = term.toByteArray();
-			int size = termAsBytes.length;
+			byte termAsBytes[] = term.toByteArray(sendByteArrayOutputStream);
+			int sendTermBytesLeft = termAsBytes.length;
 			
-			String lenspec = "000000000000" + (size + LENSPEC) + ":";
+			String lenspec = "000000000000" + (sendTermBytesLeft + LENSPEC) + ":";
 			int len = lenspec.length();
-			//byte[] ls = new byte[LENSPEC];
 			
 			sendTermLengthSpec.clear();
 
@@ -198,27 +195,34 @@ public class ClassicToolShield extends ToolShield {
 				System.out.println("");
 			}
 			sendTermLengthSpec.flip();
-			//int n = client.write(ByteBuffer.wrap(ls));
 			int n = 0;
 			while(sendTermLengthSpec.hasRemaining()){
 				n += client.write(sendTermLengthSpec);
 			}
 			info(n + " bytes written for sendTermLenghSpec");
 			
-			sendTermData = ByteBuffer.wrap(termAsBytes);
-			sendTermFill = MIN_MSG_SIZE - (LENSPEC + size);
+			sendTermFill = MIN_MSG_SIZE - (LENSPEC + sendTermBytesLeft);
+			
+			if(sendTermData == null || sendTermData.capacity() < sendTermBytesLeft){
+				sendTermData = ByteBuffer.allocate(sendTermBytesLeft);
+			} else {
+				sendTermData.clear();
+			}	
+			sendTermData.put(termAsBytes);
+			sendTermData.flip();
 			
 			if(clientKey != null){
 				clientKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 			}
 			
+			sendTermInProgress = true;
 			n = client.write(sendTermData);
 			info(n + " bytes written for unparsedTerm");
 			sendTerm();
 	}
 	
 	public void sendTerm() throws IOException {
-		if(sendTermData != null){
+		if(sendTermInProgress){
 			if(sendTermData.hasRemaining()){
 				int n = client.write(sendTermData);
 				info(n + " bytes written for unparsedTerm");
@@ -227,21 +231,19 @@ public class ClassicToolShield extends ToolShield {
 	
 			if(sendTermFill > 0){
 				info("padding with " + sendTermFill + " zero bytes.");
-				byte filler[] = new byte[sendTermFill];
-				for (int i = 0; i < sendTermFill; i++) {
-					filler[i] = 0;
-				}
-				ByteBuffer bfiller = ByteBuffer.wrap(filler);
-				while(bfiller.hasRemaining()){
-					int n = client.write(bfiller);
+				
+				sendTermFiller.position(0);
+				sendTermFiller.limit(sendTermFill);
+				while(sendTermFiller.hasRemaining()){
+					int n = client.write(sendTermFiller);
 					info(n + " bytes written for filler");
 				}
 			}
 			ToolBus.settoolActionCompleted();
-			sendTermData = null;
 			if(clientKey != null){
 				clientKey.interestOps(SelectionKey.OP_READ);
 			}
+			sendTermInProgress = false;
 		} else
 			System.err.println("sendTerm: no data");
 	}

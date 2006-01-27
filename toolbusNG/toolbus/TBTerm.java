@@ -9,7 +9,6 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
-import aterm.pure.ATermImpl;
 import aterm.pure.PureFactory;
 
 /**
@@ -55,6 +54,10 @@ public class TBTerm  {
   
   private static String varString = "var";
   private static String rvarString = "rvar";
+  
+  private static AFun varAFun;
+  private static AFun rvarAFun;
+  
 
   public static void init() {
     if (!initDone) {
@@ -88,6 +91,9 @@ public class TBTerm  {
 
     TransactionIdVar = factory.make("var(transaction,TransactionId))");
     TransactionIdResVar = factory.make("rvar(transaction,TransactionId))");
+    
+    varAFun = factory.makeAFun("var", 2, false);
+    rvarAFun = factory.makeAFun("rvar", 2, false);
 
     Functions.init(factory);
   }
@@ -259,17 +265,15 @@ public class TBTerm  {
   }
 
   public static ATerm mkAnyVar(String varKind, ATerm name, String processName, ATerm type) {
-    AFun afun = factory.makeAFun(varKind, 2, false);
+    AFun afun = (varKind == varString) ? varAFun : rvarAFun;
     String qname = name.toString() + "$" + processName;
     name = factory.make(qname);
-    ATerm cargs[] = new ATerm[] { type, name };
-    return factory.makeAppl(afun, cargs);
+    return factory.makeAppl(afun, type, name);
   }
   
   public static ATerm mkQualVar(String varKind, ATerm qname, ATerm type) {
-	    AFun afun = factory.makeAFun(varKind, 2, false);
-	    ATerm cargs[] = new ATerm[] { type, qname };
-	    return factory.makeAppl(afun, cargs);
+	    AFun afun = (varKind == varString) ? varAFun : rvarAFun;
+	    return factory.makeAppl(afun, type, qname);
 	  }
 
   public static ATerm mkVar(ATerm name, String processName, ATerm type) {
@@ -280,18 +284,26 @@ public class TBTerm  {
     return mkAnyVar(rvarString, name, processName, type);
   }
 
-  public static boolean isResVar(ATerm t) {
-    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == rvarString;
+  public static boolean isResVar(ATermAppl apt) {
+    return apt.getAFun() == rvarAFun;
   }
+  
+  public static boolean isResVar(ATerm t) {
+	    return t.getType() == ATerm.APPL && ((ATermAppl) t).getAFun() == rvarAFun;
+	  }
 
+  public static boolean isVar(ATermAppl apt) {
+    return apt.getAFun() == varAFun;
+  }
+  
   public static boolean isVar(ATerm t) {
-    return t.getType() == ATerm.APPL && ((ATermAppl) t).getName() == varString;
+	    return t.getType() == ATerm.APPL && ((ATermAppl) t).getAFun() == varAFun;
   }
 
   private static ATermList getVarArgs(ATerm t) {
     if (t.getType() == ATerm.APPL) {
       ATermAppl appl = (ATermAppl) t;
-      if (appl.getName() == varString || appl.getName() == rvarString) {
+      if (appl.getAFun() == varAFun || appl.getAFun() == rvarAFun) {
         return appl.getArguments(); // TODO: check length?
       }
     }
@@ -308,9 +320,10 @@ public class TBTerm  {
 
   public static ATerm setVarType(ATerm t, ATerm type) {
     //System.out.println("setVarType(" + t + ", " + type + ")");
-    ATermList args = ((ATermAppl) t).getArguments();
+	  ATermAppl apt = (ATermAppl) t;
+    ATermList args = apt.getArguments();
       ATerm varname = args.getLast();
-      if (isVar(t))
+      if (isVar(apt))
         return mkQualVar(varString, varname, type);
       else
         return mkQualVar(rvarString, varname, type);
@@ -352,17 +365,18 @@ public class TBTerm  {
         return t;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t)) {
-        	ATerm res = setVarType(t, env.getVarType(t));
+    	  ATermAppl apt = (ATermAppl) t;
+        if (TBTerm.isVar(apt)) {
+        	ATerm res = setVarType(apt, env.getVarType(t));
             return res;
         }
-        if(TBTerm.isResVar(t)){
-        	ATerm res = setVarType(t, env.getVarType(t));
+        if(TBTerm.isResVar(apt)){
+        	ATerm res = setVarType(apt, env.getVarType(t));
         	return res;
         }
 
-        AFun afun = ((ATermAppl) t).getAFun();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        AFun afun = apt.getAFun();
+        ATerm args[] = apt.getArgumentArray();
         ATerm cargs[] = new ATerm[args.length];
         if (args.length == 0)
           return t;
@@ -385,7 +399,8 @@ public class TBTerm  {
   
   public static ATerm replaceAssignableVar(ATerm t, Environment env) throws ToolBusException {
   	//System.err.println("replaceAssignableVar: " + t + "; " + env);
-  	 if (TBTerm.isVar(t) || TBTerm.isResVar(t)){
+	  ATermAppl apt = (ATermAppl) t;
+  	 if (TBTerm.isVar(apt) || TBTerm.isResVar(apt)){
     	Binding b = env.getBinding(t);
     	//System.err.println("Binding = " + b.var + ";" + b.val);
     	if(b == null || (b.val == Undefined)){
@@ -415,8 +430,9 @@ public class TBTerm  {
         return t;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
-           	t = setVarType(t, env.getVarType(t)); 	
+    	  ATermAppl apt = (ATermAppl) t;
+        if (TBTerm.isVar(apt) || TBTerm.isResVar(apt)) {
+           	t = setVarType(apt, env.getVarType(apt)); 	
         	Binding b = env.getBinding(t);
         	if(b == null || (b.val == Undefined)){
         		return t;
@@ -429,8 +445,8 @@ public class TBTerm  {
         	
         }
 
-        AFun afun = ((ATermAppl) t).getAFun();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        AFun afun = apt.getAFun();
+        ATerm args[] = apt.getArgumentArray();
         ATerm cargs[] = new ATerm[args.length];
         if (args.length == 0)
           return t;
@@ -473,23 +489,24 @@ public class TBTerm  {
         return RealPlaceholder;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t) || TBTerm.isResVar(t)) {
-          ATerm type = TBTerm.getVarType(t);
+    	  ATermAppl apt = (ATermAppl) t;
+        if (TBTerm.isVar(apt) || TBTerm.isResVar(apt)) {
+          ATerm type = TBTerm.getVarType(apt);
           return factory.makePlaceholder(type);
         }
-        if (TBTerm.isBoolean(t)) {
+        if (TBTerm.isBoolean(apt)) {
           return BoolPlaceholder;
         }
-        AFun fun = ((ATermAppl) t).getAFun();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        AFun fun = apt.getAFun();
+        ATerm args[] = apt.getArgumentArray();
         if (args.length == 0) {
           if (fun.isQuoted())
             return StrPlaceholder;
           else
-            return t;
+            return apt;
         }
         if (!recurring)
-          return factory.makePlaceholder(t);
+          return factory.makePlaceholder(apt);
         ATerm vargs[] = new ATerm[args.length];
         for (int i = 0; i < args.length; i++) {
           vargs[i] = makePattern(args[i], env, false);
@@ -524,15 +541,17 @@ public class TBTerm  {
       case ATerm.PLACEHOLDER :
       case ATerm.REAL :
         return t;
+        
       case ATerm.APPL :
-        if (TBTerm.isVar(t)) {
-          return env.getValue(t);
+    	  ATermAppl apt = (ATermAppl) t;
+        if (TBTerm.isVar(apt)) {
+          return env.getValue(apt);
         }
-        if (TBTerm.isResVar(t) || TBTerm.isBoolean(t)) {
+        if (TBTerm.isResVar(apt) || TBTerm.isBoolean(apt)) {
           return t;
         }
-        AFun afun = ((ATermAppl) t).getAFun();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        AFun afun = apt.getAFun();
+        ATerm args[] = apt.getArgumentArray();
         if (args.length == 0)
           return t;
         ATerm vargs[] = new ATerm[args.length];
@@ -540,6 +559,7 @@ public class TBTerm  {
           vargs[i] = substitute(args[i], env);
         }
         return factory.makeAppl(afun, vargs);
+        
       case ATerm.LIST :
  
         ATermList lst = TBTerm.factory.makeList();
@@ -627,10 +647,13 @@ public class TBTerm  {
     switch (ta.getType()) {
       case ATerm.BLOB :
         return ta.isEqual(tb) || (tb == TBTerm.StrPlaceholder);
+        
       case ATerm.INT :
         return ta.equals(tb) || (tb == TBTerm.IntPlaceholder);
+        
       case ATerm.REAL :
         return ta.equals(tb) || (tb == TBTerm.RealPlaceholder);
+        
       case ATerm.PLACEHOLDER :
         if (ta.equals(IntPlaceholder) && tb.getType() == ATerm.INT)
           return true;
@@ -646,21 +669,26 @@ public class TBTerm  {
           return true;
         else
           return false;
+        
       case ATerm.APPL :
+    	ATermAppl apta = (ATermAppl) ta;
+    	  
         if (tb.getType() == ATerm.PLACEHOLDER) {
-          if (tb == StrPlaceholder && ((ATermAppl) ta).getArity() == 0)
+          if (tb == StrPlaceholder && apta.getArity() == 0)
             return true;
           else if (tb == TermPlaceholder)
             return true;
           else
             return false;
         }
-        if (tb.getType() != ATerm.APPL
-          || ((ATermAppl) ta).getName() != ((ATermAppl) tb).getName()
-          || ((ATermAppl) ta).getArity() != ((ATermAppl) tb).getArity())
+        if (tb.getType() != ATerm.APPL)
+        	return false;
+        ATermAppl aptb= (ATermAppl) tb;
+        if(apta.getArity() != aptb.getArity() ||
+           apta.getName() != aptb.getName())
           return false;
         else {
-          ATerm a_args[] = ((ATermAppl) ta).getArgumentArray();
+          ATerm a_args[] = apta.getArgumentArray();
           ATerm b_args[] = ((ATermAppl) tb).getArgumentArray();
           for (int i = 0; i < a_args.length; i++) {
             if (!performMatch(a_args[i], b_args[i]))
