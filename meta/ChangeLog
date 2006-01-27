@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Jan 27 13:21:52 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/editing.tb:
+   - Create structure editor if it does not already exists when updating the
+     tree.
+
 Fri Jan 13 10:12:44 CET 2006 <kooiker@cwi.nl>
  * gui/plugin/{moduledetails,navigator}:
    - Replaced ImportHieracy by Moduledetails plugin

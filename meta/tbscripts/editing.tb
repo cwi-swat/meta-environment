@@ -172,22 +172,31 @@ in
   . snd-msg(te-add-actions(Sid, Events))
 endlet
 
-process EditStructure(Sid: term, Tree: term) is
+process SE-UpdateTree(Sid: term, Tree: term) is
 let
   Registered: bool,
   Slices: term
 in
-  IsStructureEditorRegistered(Sid, Registered?)
-  .
-  if equal(Registered, true) then
-    snd-msg(se-delete(Sid))
+  if not-equal(Tree, UNDEFINED) then
+    IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      snd-msg(se-update(Sid, Tree))
+    else
+      snd-msg(em-register-editor(Sid, structure))
+      . snd-msg(se-create(Sid, Tree))
+    fi
+    . snd-msg(se-get-tree-slices(Sid))
+    .
+    (
+      rec-msg(se-tree-slices(Sid, Slices?))
+      . snd-msg(te-highlight-slices(Sid, Slices))
+    +
+      rec-msg(se-no-tree-slices(Sid))
+    )
   else
-    snd-msg(em-register-editor(Sid, structure))
+    tau 
   fi
-  . snd-msg(se-create(Sid, Tree))
-  . snd-msg(se-get-tree-slices(Sid))
-  . rec-msg(se-tree-slices(Sid, Slices?))
-  . snd-msg(te-highlight-slices(Sid, Slices))
 endlet
 
 process SynchronizeFocus(Sid: term) is
@@ -278,25 +287,6 @@ in
   Pid := process-id
   . rec-msg(handle-mouse-event(Pid))
   . snd-msg(se-set-cursor-at-line-column(Sid, Line, Column))
-endlet
-
-process RegisterTree(Sid: term, Tree: term) is
-let
-  Slices : list
-in
-  if not-equal(Tree, UNDEFINED) then
-    snd-msg(se-update(Sid, Tree))
-    . snd-msg(se-get-tree-slices(Sid))
-    .
-    (
-      rec-msg(se-tree-slices(Sid, Slices?))
-      . snd-msg(te-highlight-slices(Sid, Slices))
-    +
-      rec-msg(se-no-tree-slices(Sid))
-    )
-  else
-    TODO("No tree, this should not happen!\n")
-  fi
 endlet
 
 process EditorDisconnected(Sid: term) is

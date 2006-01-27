@@ -29,12 +29,7 @@ in
       snd-msg(em-bind-session(Sid, ModuleId))
       . rec-msg(em-session-bound(Sid, ModuleId))
       . GetTermParsetree(ModuleId, Path, Tree?)
-      .
-      if not-equal(Tree, UNDEFINED) then
-        EditStructure(Sid, Tree)
-      else
-        tau
-      fi
+      . SE-UpdateTree(Sid, Tree)
       . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",available,parsed)
       .
       (
@@ -75,7 +70,7 @@ in
   . GetTermParsetree(ModuleId, Path, Tree?) 
   .
   if not-equal(Tree, UNDEFINED) then
-    RegisterTree(Sid, Tree)
+    SE-UpdateTree(Sid, Tree)
   else
     tau
   fi

@@ -47,12 +47,7 @@ in
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
     . GetSDFParseTree(ModuleId, Tree?)
-    .
-    if not-equal(Tree, UNDEFINED) then
-      EditStructure(Sid, Tree)
-    else
-      tau
-    fi
+    . SE-UpdateTree(Sid, Tree)
     . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,parsed)
     .
     (
@@ -86,7 +81,7 @@ let
 in
   GetModuleId(Sid, ModuleId?)
   . GetSDFParseTree(ModuleId, Tree?)
-  . RegisterTree(Sid, Tree) 
+  . SE-UpdateTree(Sid, Tree) 
 endlet
 
 #endif /* __SDF_EDITOR_UTILS__ */
