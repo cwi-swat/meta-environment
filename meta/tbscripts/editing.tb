@@ -82,7 +82,7 @@ in
     rec-msg(se-wrong-sort(TreeSort?))
     . snd-note(ui-status(errorf("Top sort %s of tree does not match %s",
                                 [TreeSort, Sort])))
-    . RTree := error-tree
+    . RTree := UNDEFINED
   +
     rec-msg(se-sort-ok)
     . RTree := Tree
