@@ -1,5 +1,6 @@
 #ifndef __ASF_EDITOR_UTILS__
 #define __ASF_EDITOR_UTILS__
+
 #include <editing.tb>
 #include <asf-namespace.h>
 
@@ -32,12 +33,7 @@ in
     . snd-msg(em-bind-session(Sid, ModuleId))
     . rec-msg(em-session-bound(Sid, ModuleId))
     . GetASFParseTree(ModuleId, Tree?)
-    .
-    if not-equal(Tree, UNDEFINED) then
-      EditStructure(Sid, Tree)
-    else
-      tau
-    fi
+    . SE-UpdateTree(Sid, Tree)
     . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",available,parsed)
     .
     (
@@ -71,7 +67,7 @@ in
   rec-note(mm-attribute-changed(Event?))
   . GetModuleId(Sid, ModuleId?)
   . GetASFParseTree(ModuleId, Tree?) 
-  . RegisterTree(Sid, Tree)
+  . SE-UpdateTree(Sid, Tree)
 endlet
 
 #endif /* __ASF_EDITOR_UTILS__ */
