@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jan 27 14:46:45 CET 2006 <kooiker@cwi.nl>
+ * asf/semantics/asfe/src/asfe.idef:
+   - Debugging is now a parameter for asfe-rewrite
+
 Wed Jan 18 17:00:38 CET 2006 <{kooiker,jurgenv}@cwi.nl>
  * **/Makefile.am: using ASC_INCLUDES and ASC_LD_FLAGS to compile
    generated code of ASF+SDF specifications

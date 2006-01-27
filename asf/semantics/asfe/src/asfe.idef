@@ -16,44 +16,45 @@ let
   ParseTable : term,
   Tests : term
 in
-  Id := process-id .
-  Tide := off .
+  Id := process-id
+  .
   (
-    rec-msg(asfe-debugging(Tide?))  /* 'on' or 'off' */
+    (
+      rec-msg(asfe-rewrite(ModuleName?, Equations?, Term?, Tide?))
+      . ParseTable := none
+    +
+      rec-msg(asfe-rewrite(ModuleName?, Equations?, ParseTable?, Term?, Tide?))
+    ) 
+    . execute(asfe, Eval?) 
+    . snd-eval(Eval, interpret(ModuleName, Equations, ParseTable, Term, Tide))
+    .
+    (
+      rec-value(Eval, rewrite-result(NormalForm?)) 
+      . snd-msg(asfe-rewrite-result(NormalForm))
+    +
+      rec-value(Eval, rewrite-errors(ErrorList?))
+      . snd-msg(asfe-rewrite-errors(ErrorList))
+    )
+    . snd-terminate(Eval,"done")
+    /* Equations and terms can be big, so we clear the variables here */
+    . Equations := none
+    . Term := none 
   +
+    rec-msg(asfe-run-tests(Equations?, Tests?)) 
+    . execute(asfe, Eval?) 
+    . snd-eval(Eval, run-tests(Equations, Tests, Tide)) 
+    .
     (
-      rec-msg(asfe-rewrite(ModuleName?, Equations?, Term?)) .
-      ParseTable := none
+      rec-value(Eval, test-results(ErrorList?)) 
+      . snd-msg(asfe-test-results(ErrorList))
     +
-      rec-msg(asfe-rewrite(ModuleName?, Equations?, ParseTable?, Term?))
-    ) .
-    execute(asfe, Eval?) .
-    snd-eval(Eval, interpret(ModuleName, Equations, ParseTable, Term, Tide)) .
-    (
-      rec-value(Eval, rewrite-result(NormalForm?)) .
-      snd-msg(asfe-rewrite-result(NormalForm))
-    +
-      rec-value(Eval, rewrite-errors(ErrorList?)) .
-      snd-msg(asfe-rewrite-errors(ErrorList))
-    ).
-    snd-terminate(Eval,"done").
-    %% Equations and terms can be big, so we clear the variables here
-    Equations := none.
-    Term      := none 
-  +
-    rec-msg(asfe-run-tests(Equations?, Tests?)) .
-    execute(asfe, Eval?) .
-    snd-eval(Eval, run-tests(Equations, Tests, Tide)) .
-    (
-      rec-value(Eval, test-results(ErrorList?)) .
-      snd-msg(asfe-test-results(ErrorList))
-    +
-      rec-value(Eval, rewrite-errors(ErrorList?)) .
-      snd-msg(asfe-rewrite-errors(ErrorList))
-    ) .
-    Equations := none .
-    Tests := none
-  ) *
+      rec-value(Eval, rewrite-errors(ErrorList?)) 
+      . snd-msg(asfe-rewrite-errors(ErrorList))
+    ) 
+    . Equations := none 
+    . Tests := none
+  ) 
+  *
   delta
 endlet
 
