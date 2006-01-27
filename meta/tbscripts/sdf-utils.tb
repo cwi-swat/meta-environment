@@ -489,9 +489,9 @@ in
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", true)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", unavailable)
     else
-      IsLibraryModule(ModuleId, LibraryModule?)
+      SetModulePath(ModuleId, SDF_NAMESPACE, Path)
+      . IsLibraryModule(ModuleId, LibraryModule?)
       . Editable := not(LibraryModule)
-      . SetModulePath(ModuleId, SDF_NAMESPACE, Path)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "editable", Editable)
       . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", available)
     fi

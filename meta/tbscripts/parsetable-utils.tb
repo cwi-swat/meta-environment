@@ -2,6 +2,7 @@
 #define __PARSETABLE_UTILS__
 
 #include <cache-utils.tb>
+#include <parsetablegen.idef>
 
 process GetParseTable(ModuleId: term, Type: term, Table: term?) is
 let

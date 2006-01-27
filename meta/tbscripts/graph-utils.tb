@@ -24,6 +24,7 @@ endlet
 
 process ImportGraphPainter is
 let
+  Event: attribute-changed-event,
   ImportGraph: term,
   ImportRelations: term
 in
