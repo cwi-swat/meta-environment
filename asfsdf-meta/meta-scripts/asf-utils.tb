@@ -398,7 +398,7 @@ in
     .
     (
       (
-        rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets))
+        rec-msg(asfe-rewrite-result(NormalFormWithoutBrackets?))
         . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
       +
         rec-msg(asfe-rewrite-text(Text?)) 
@@ -443,7 +443,6 @@ process DebugReduce(ModuleId : term, Tree : term, ResultTree : term?) is
     snd-msg(promote-posinfo-to-origin(ResultTree))
     . rec-msg(promoted-posinfo-to-origin(ResultTree?))
     . AnnotateTree(ResultTree, "reduct.out", ResultTree?)
-    . snd-msg(put-term-tree("reduct.out", ResultTree))
   else
     tau
   fi 
