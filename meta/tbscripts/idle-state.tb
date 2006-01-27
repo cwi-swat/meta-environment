@@ -7,7 +7,10 @@ process IdleState is
 let
   AttributeEvent: attribute-changed-event,
   DependenciesEvent: dependencies-changed-event,
+  Key: term,
   ModuleId: term,
+  Namespace: term,
+  OldValue: term,
   Value: term,
   Worklist: list
 in
@@ -16,14 +19,13 @@ in
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,opened)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unavailable)
+  . MM-Subscribe-Attribute-Changed(<term>,GRAPH_NAMESPACE,<term>,<term>,<term>)
   . MM-Subscribe-Dependencies-Changed(<term>)
   . subscribe(mm-module-deleted(<term>))
   . Worklist := []
   .
   (
-    rec-note(mm-attribute-changed(AttributeEvent?))
-    . ACE-GetModuleId(AttributeEvent, ModuleId?) 
-    . ACE-GetNewValue(AttributeEvent, Value?)
+    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, SDF_NAMESPACE, Key?, OldValue?, Value?)))
     .
     if equal(Value, unknown) then
       Worklist := join(Worklist, [ModuleId])
@@ -60,6 +62,14 @@ in
     fi
   +
     rec-note(mm-module-deleted(Value?))
+    .
+    if equal(Worklist, []) then
+      snd-note(is-state(idle))
+    else
+      tau
+    fi
+  +
+    rec-note(mm-attribute-changed(attribute-changed-event(ModuleId?, GRAPH_NAMESPACE, Key?, OldValue?, Value?)))
     .
     if equal(Worklist, []) then
       snd-note(is-state(idle))
