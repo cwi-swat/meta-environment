@@ -84,7 +84,7 @@ in
     else
        MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", error)
     fi
-    . Tree := help-garbage-collector
+    . Tree := UNDEFINED
   )
   *
   delta

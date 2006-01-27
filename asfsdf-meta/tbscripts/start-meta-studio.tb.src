@@ -19,7 +19,6 @@
 /* #include "serialization-utils.tb" */
 
 /* sdf-meta */
-#include "parsetablegen.idef"
 #include "term-parsetable.tb"
 #include "sdf-listeners.tb"
 #include "sdf-actions.tb"
