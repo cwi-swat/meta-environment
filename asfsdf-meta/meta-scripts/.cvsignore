@@ -1,4 +1,5 @@
 Makefile
 Makefile.in
 standard.asfsdf.buttons
+asf-initialize.tb
 start-meta-studio.tb
