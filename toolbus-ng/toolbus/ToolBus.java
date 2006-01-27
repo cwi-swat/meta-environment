@@ -651,12 +651,12 @@ public class ToolBus {
     int noWorkPasses = 0;
     
     try {
+      boolean work = true;
       while (true) {
-      	boolean work = true;
       	currentTime = getRunTime();
-      	while(work || toolActionCompleted){	
+      	while(work){	
          	passes++;
-      		work = toolActionCompleted = false;
+      		work = false;
 	        for (int i = 0; i < processes.size(); i++) {
 	          ProcessInstance P = (ProcessInstance) processes.elementAt(i);
 	          work  |= P.step();
@@ -664,8 +664,10 @@ public class ToolBus {
 	          //	processes.remove(P);
 	          //}
 	        }
+	        if(!work)
+	        	noWorkPasses++;
         }
-        noWorkPasses++;
+ 
         if(passes % 100 == 0){
       	   System.err.println("TOOLBUS.execute STATISTICS");
       	    System.err.println("# of passes over script: " + passes);
@@ -674,7 +676,9 @@ public class ToolBus {
         
         if(!shutdownDone){
 	        long timeout = nextTime - currentTime;
-	        handleInputFromTools(timeout > 0 ? timeout : 3000);
+	        toolActionCompleted = false;
+	        handleInputFromTools(timeout > 0 ? timeout : 10000);
+	        work = toolActionCompleted || timeout > 0;
 	
 	       // if(tools.size() > 0 || nextTime > currentTime)
 	    	//	work = true;
