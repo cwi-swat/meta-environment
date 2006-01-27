@@ -168,7 +168,7 @@ endlet
 
 toolbus(SDFRemoveDependencies)
 
-process StatusToProgress is
+process SDFStatusToProgress is
 let
   Event: attribute-changed-event,
   ModuleId: term,
@@ -186,5 +186,5 @@ in
   ) * delta 
 endlet
 
-toolbus(StatusToProgress)
+toolbus(SDFStatusToProgress)
 #endif /* __SDF_LISTENERS__ */
