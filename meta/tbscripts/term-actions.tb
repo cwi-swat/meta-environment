@@ -33,7 +33,7 @@ let
 in
   CheckTreeSort(Tree, SortName, ResultTree?)
   .
-  if not-equal(ResultTree, error-tree) then
+  if not-equal(ResultTree, UNDEFINED) then
     Result := true
   else
     Result := false
@@ -58,7 +58,7 @@ in
   if not-equal(Tree, UNDEFINED) then
     PrettyPrint(Path, Tree, RTree?)
     . 
-    if not-equal(RTree, error-tree) then
+    if not-equal(RTree, UNDEFINED) then
       ReplaceFocus(EditorId, RTree)
     else 
       tau

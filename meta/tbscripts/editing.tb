@@ -481,7 +481,7 @@ let
   Text: str,
   ErrorMessage: str
 in
-  if not-equal(Tree, error-tree) then
+  if not-equal(Tree, UNDEFINED) then
     snd-msg(unparse(Tree))
     . rec-msg(unparsed-text(Text?))
     . snd-msg(io-write-text-list(Filename, [Text]))
