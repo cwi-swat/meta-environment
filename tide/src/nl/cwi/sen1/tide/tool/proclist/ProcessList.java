@@ -46,7 +46,7 @@ public class ProcessList
   public ProcessList(ToolManager manager)
   {
     info = new Info("ProcessList");
-    setBackground(new Color(0x66, 0x66, 0x99));
+    setBackground(new Color(0xFF, 0xFF, 0xFF));
     setLayout(new BorderLayout());
 
     adapterPanel = new JPanel();

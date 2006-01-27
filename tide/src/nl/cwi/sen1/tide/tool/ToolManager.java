@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.tide.PreferenceSet;
 import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspector;
 import nl.cwi.sen1.tide.tool.ruleinspector.RuleInspectorFactory;
@@ -17,234 +18,193 @@ import nl.cwi.sen1.tide.tool.support.DebugAdapter;
 import nl.cwi.sen1.tide.tool.support.DebugProcess;
 import nl.cwi.sen1.tide.tool.support.Rule;
 
-public class ToolManager
-{
-  private Studio studio;
+public class ToolManager {
+	private Studio studio;
 
-  private Map tideTools;
+	private Map tideTools;
 
-  private java.util.List processToolList;
-  private java.util.List processActionList;
-  private Map processTools;
+	private java.util.List processToolList;
 
-  private java.util.List adapterToolList;
-  private java.util.List adapterActionList;
-  private Map adapterTools;
+	private java.util.List processActionList;
 
-  private Map toolInstances;
+	private Map processTools;
 
-  private PreferenceSet preferences;
+	private java.util.List adapterToolList;
 
-  //{{{ public ToolManager(JDesktopPane desktop, Properties defaults)
+	private java.util.List adapterActionList;
 
-  public ToolManager(Studio studio, Properties defaults)
-  {
-    this.studio = studio;
+	private Map adapterTools;
 
-    tideTools = new HashMap();
+	private Map toolInstances;
 
-    processToolList = new LinkedList();
-    processActionList = new LinkedList();
-    processTools = new HashMap();
+	private PreferenceSet preferences;
 
-    adapterToolList = new LinkedList();
-    adapterActionList = new LinkedList();
-    adapterTools = new HashMap();
+	// {{{ public ToolManager(JDesktopPane desktop, Properties defaults)
 
-    toolInstances = new HashMap();
+	public ToolManager(Studio studio, Properties defaults) {
+		this.studio = studio;
 
-    preferences = new PreferenceSet(defaults);
+		tideTools = new HashMap();
 
-    try {
-      preferences.loadPreferences();
-    } catch (IOException e) {
-        // Preferences could not be loaded because ~/.tiderc does not exist probably
-    }
-  }
+		processToolList = new LinkedList();
+		processActionList = new LinkedList();
+		processTools = new HashMap();
 
- 
+		adapterToolList = new LinkedList();
+		adapterActionList = new LinkedList();
+		adapterTools = new HashMap();
 
-  public PreferenceSet getPreferences()
-  {
-    return preferences;
-  }
+		toolInstances = new HashMap();
 
- 
+		preferences = new PreferenceSet(defaults);
 
-  public TideTool getTool(String toolName, Object target)
-  {
-    Map tools = (Map)toolInstances.get(toolName);
-    if (tools != null) {
-      return (TideTool)tools.get(target);
-    }
+		try {
+			preferences.loadPreferences();
+		} catch (IOException e) {
+			// Preferences could not be loaded because ~/.tiderc does not exist
+			// probably
+		}
+	}
 
-    return null;
-  }
+	public PreferenceSet getPreferences() {
+		return preferences;
+	}
 
- 
+	public TideTool getTool(String toolName, Object target) {
+		Map tools = (Map) toolInstances.get(toolName);
+		if (tools != null) {
+			return (TideTool) tools.get(target);
+		}
 
-  public void putTool(String toolName, Object target, TideTool tool)
-  {
-    tool.setName(toolName);
-    tool.setTarget(target);
-    Map tools = (Map)toolInstances.get(toolName);
-    if (tools == null) {
-      tools = new HashMap();
-      toolInstances.put(toolName, tools);
-    }
+		return null;
+	}
 
-    tools.put(target, tool);
-  }
+	public void putTool(String toolName, Object target, TideTool tool) {
+		tool.setName(toolName);
+		tool.setTarget(target);
+		Map tools = (Map) toolInstances.get(toolName);
+		if (tools == null) {
+			tools = new HashMap();
+			toolInstances.put(toolName, tools);
+		}
 
-  
-  public void removeTool(TideTool tool)
-  {
-    Map tools = (Map)toolInstances.get(tool.getName());
-    studio.removeComponent(tool);
-    tools.remove(tool.getTarget());
-  }
+		tools.put(target, tool);
+	}
 
-  
+	public void removeTool(TideTool tool) {
+		Map tools = (Map) toolInstances.get(tool.getName());
+		studio.removeComponent(tool);
+		tools.remove(tool.getTarget());
+	}
 
-  public void registerTool(TideToolFactory factory)
-  {
-    String name = factory.getName();
-    tideTools.put(name, factory);
-  }
+	public void registerTool(TideToolFactory factory) {
+		String name = factory.getName();
+		tideTools.put(name, factory);
+	}
 
- 
+	public void registerProcessTool(ProcessToolFactory factory) {
+		String name = factory.getName();
+		processToolList.add(name);
+		processActionList.add(new ProcessAction(name, factory.getIcon(), this));
+		processTools.put(name, factory);
+	}
 
-  public void registerProcessTool(ProcessToolFactory factory)
-  {
-    String name = factory.getName();
-    processToolList.add(name);
-    processActionList.add(new ProcessAction(name, factory.getIcon(), this));
-    processTools.put(name, factory);
-  }
+	// }}}
+	// {{{ public void registerAdapterTool(AdapterToolFactory factory)
 
-  //}}}
-  //{{{ public void registerAdapterTool(AdapterToolFactory factory)
+	public void registerAdapterTool(AdapterToolFactory factory) {
+		String name = factory.getName();
 
-  public void registerAdapterTool(AdapterToolFactory factory)
-  {
-    String name = factory.getName();
+		adapterToolList.add(name);
+		adapterActionList.add(new AdapterAction(name, factory.getIcon(), this));
+		adapterTools.put(name, factory);
+	}
 
-    adapterToolList.add(name);
-    adapterActionList.add(new AdapterAction(name, factory.getIcon(), this));
-    adapterTools.put(name, factory);
-  }
+	public Iterator processToolIterator() {
+		return processToolList.iterator();
+	}
 
- 
-  public Iterator processToolIterator()
-  {
-    return processToolList.iterator();
-  }
+	public Iterator adapterToolIterator() {
+		return adapterToolList.iterator();
+	}
 
-  
+	public Iterator processActionIterator() {
+		return processActionList.iterator();
+	}
 
-  public Iterator adapterToolIterator()
-  {
-    return adapterToolList.iterator();
-  }
+	public Iterator adapterActionIterator() {
+		return adapterActionList.iterator();
+	}
 
- 
+	public void displayError(String msg) {
+		JOptionPane.showMessageDialog(null, "Tide error", msg,
+				JOptionPane.ERROR_MESSAGE);
+	}
 
-  public Iterator processActionIterator()
-  {
-    return processActionList.iterator();
-  }
+	public TideTool launchTool(String toolName) {
+		TideTool tool = getTool(toolName, this);
+		if (tool == null) {
+			TideToolFactory factory = (TideToolFactory) tideTools.get(toolName);
+			tool = factory.createTool();
+			putTool(toolName, this, tool);
+			
+			((StudioImplWithPredefinedLayout) studio).addComponent(tool,
+					StudioImplWithPredefinedLayout.TOP_LEFT);
+		}
+		
+		return tool;
+		
+	}
+	
+	public ProcessTool launchProcessTool(String toolName, DebugProcess process) {
+		ProcessTool tool = (ProcessTool) getTool(toolName, process);
+		if (tool == null) {
+			ProcessToolFactory factory = (ProcessToolFactory) processTools
+					.get(toolName);
+			tool = factory.createTool(process);
+			putTool(toolName, process, tool);
 
-  
+			((StudioImplWithPredefinedLayout) studio).addComponent(tool,
+					StudioImplWithPredefinedLayout.TOP_RIGHT);
+		}
 
-  public Iterator adapterActionIterator()
-  {
-    return adapterActionList.iterator();
-  }
+		return tool;
+	}
 
-  
-  public TideTool launchTool(String toolName)
-  {
-    TideTool tool = getTool(toolName, this);
-    if (tool == null) {
-      TideToolFactory factory =
-	(TideToolFactory)tideTools.get(toolName);
-      tool = factory.createTool();
-      putTool(toolName, this, tool);
+	public AdapterTool launchAdapterTool(String toolName, DebugAdapter adapter) {
+		AdapterTool tool = (AdapterTool) getTool(toolName, adapter);
+		if (tool == null) {
+			AdapterToolFactory factory = (AdapterToolFactory) adapterTools
+					.get(toolName);
+			tool = factory.createTool(adapter);
+			putTool(toolName, adapter, tool);
+			((StudioImplWithPredefinedLayout) studio).addComponent(tool, 
+					StudioImplWithPredefinedLayout.BOTTOM_RIGHT);
+		}
+		return tool;
+	}
 
-      studio.addComponent(tool);
-    }
+	public void setCurrentProcess(DebugProcess process) {
+		Iterator iter = processActionIterator();
+		while (iter.hasNext()) {
+			ProcessAction action = (ProcessAction) iter.next();
+			action.setProcess(process);
+		}
+	}
 
-    return tool;
+	public void setCurrentAdapter(DebugAdapter adapter) {
+		Iterator iter = adapterActionIterator();
+		while (iter.hasNext()) {
+			AdapterAction action = (AdapterAction) iter.next();
+			action.setAdapter(adapter);
+		}
+	}
 
-  }
+	public void editRule(DebugProcess process, Rule rule) {
+		String toolName = RuleInspectorFactory.NAME;
+		RuleInspector inspector = (RuleInspector) launchProcessTool(toolName,
+				process);
+		inspector.editRule(rule);
+	}
 
-  //}}}
-  //{{{ public void displayError(String msg)
-
-  public void displayError(String msg)
-  {
-    JOptionPane.showMessageDialog(null, "Tide error", msg, JOptionPane.ERROR_MESSAGE);
-  }
-
-  public ProcessTool launchProcessTool(String toolName, DebugProcess process)
-  {
-    ProcessTool tool = (ProcessTool)getTool(toolName, process);
-    if (tool == null) {
-      ProcessToolFactory factory =
-	(ProcessToolFactory)processTools.get(toolName);
-      tool = factory.createTool(process);
-      putTool(toolName, process, tool);
-
-      studio.addComponent(tool);    }
-
-    return tool;
-  }
-
-  
-
-  public AdapterTool launchAdapterTool(String toolName, DebugAdapter adapter)
-  {
-    AdapterTool tool = (AdapterTool)getTool(toolName, adapter);
-    if (tool == null) {
-      AdapterToolFactory factory =
-	(AdapterToolFactory)adapterTools.get(toolName);
-      tool = factory.createTool(adapter);
-      putTool(toolName, adapter, tool);
-      studio.addComponent(tool);
-    }
-    return tool;
-  }
-
-  
-
-  public void setCurrentProcess(DebugProcess process)
-  {
-    Iterator iter = processActionIterator();
-    while (iter.hasNext()) {
-      ProcessAction action = (ProcessAction)iter.next();
-      action.setProcess(process);
-    }
-  }
-
-  
-
-  public void setCurrentAdapter(DebugAdapter adapter)
-  {
-    Iterator iter = adapterActionIterator();
-    while (iter.hasNext()) {
-      AdapterAction action = (AdapterAction)iter.next();
-      action.setAdapter(adapter);
-    }
-  }
-
-  
-  public void editRule(DebugProcess process, Rule rule)
-  {
-    String toolName = RuleInspectorFactory.NAME;
-    RuleInspector inspector = 
-      (RuleInspector)launchProcessTool(toolName, process);
-    inspector.editRule(rule);
-  }
-
-  
 }
