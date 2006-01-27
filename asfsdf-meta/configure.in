@@ -26,7 +26,7 @@ AC_SUBST(ASF_LIBRARY)
 
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
-  meta-scripts/Makefile
+  tbscripts/Makefile
   src/Makefile
   demo/Makefile
   demo/old-pico/Makefile
