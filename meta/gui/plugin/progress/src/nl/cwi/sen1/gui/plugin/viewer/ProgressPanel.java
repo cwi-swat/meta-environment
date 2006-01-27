@@ -15,9 +15,9 @@ public class ProgressPanel extends JPanel {
 
     public ProgressPanel() {
         super(new BorderLayout());
-        String[] columnNames = { "Module", "Status" };
 
-        model = new ProgressTableModel(columnNames);
+        model = new ProgressTableModel();
+        model.addColumn("Module");
         table = new JTable(model);
 
         // JToolBar toolBar = new JToolBar("Error ToolBar",
@@ -29,7 +29,7 @@ public class ProgressPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void setStatus(String message, String value) {
-        model.setStatus(message, value);
+    public void setStatus(String message, String columnName, String value) {
+        model.setStatus(message, columnName, value);
     }
 }

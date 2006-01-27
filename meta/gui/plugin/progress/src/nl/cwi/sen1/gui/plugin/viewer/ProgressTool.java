@@ -1,12 +1,13 @@
 // Java tool interface class ProgressTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 28, 2005 8:06:26 AM
+// generation time: Jan 27, 2006 9:01:16 AM
 
 package nl.cwi.sen1.gui.plugin.viewer;
 
 import aterm.*;
 import toolbus.*;
 import java.util.*;
+
 
 abstract public class ProgressTool
   extends SwingTool
@@ -40,7 +41,7 @@ abstract public class ProgressTool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<progress>,clear-status-window)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<progress>,<term>)"), new Boolean(true));
   }
@@ -52,7 +53,7 @@ abstract public class ProgressTool
   private void initPatterns()
   {
     PclearStatusWindow0 = factory.parse("rec-do(clear-status-window)");
-    PsetStatus0 = factory.parse("rec-do(set-status(<str>,<term>))");
+    PsetStatus0 = factory.parse("rec-do(set-status(<str>,<str>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -72,7 +73,7 @@ abstract public class ProgressTool
     }
     result = term.match(PsetStatus0);
     if (result != null) {
-      setStatus((String)result.get(0), (ATerm)result.get(1));
+      setStatus((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PrecTerminate0);

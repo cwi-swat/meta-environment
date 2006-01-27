@@ -1,54 +1,33 @@
 package nl.cwi.sen1.gui.plugin.data;
 
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.Vector;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
-public class ProgressTableModel extends AbstractTableModel {
-    private String[] columnNames;
-    private LinkedList data;
-    
-    
-    public ProgressTableModel(String[] columnNames) {
-        this.columnNames = columnNames;
-        data = new LinkedList();
-    }
-    
-    public int getRowCount() {
-        return data.size();
-    }
-
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    public String getColumnName(int col) {
-        return columnNames[col];
-    }
-    
-    public Object getValueAt(int rowIndex, int columnIndex) {
-        String[] row = (String[]) data.get(rowIndex);
-        return row[columnIndex];
-    }
-    
-    public void setStatus(String modulename, String status) {
-        String[] found = null;
-        
-        for (Iterator iter = data.iterator(); iter.hasNext();) {
-            String[] row = (String[]) iter.next();
-            if (row[0].equals(modulename)) {
+public class ProgressTableModel extends DefaultTableModel {
+    public void setStatus(String message, String columnName, String status) {
+        Vector found = null;
+        for (Iterator iter = dataVector.iterator(); iter.hasNext();) {
+            Vector row = (Vector) iter.next(); 
+            if (row.elementAt(0).equals(message)) {
                 found = row;
             }
         }
         
+        int column = findColumn(columnName);
+        if (column == -1) {
+            addColumn(columnName);
+            column = findColumn(columnName);
+        }
+        
         if (found != null) {
-            found[1] = status;
+            found.setElementAt(status, column);
         } else {
-            found = new String[2];
-            found[0] = modulename;
-            found[1] = status;
-            data.add(found);
+            String[] rowData = new String[getColumnCount()];
+            rowData[0] = message;
+            rowData[column] = status;
+            addRow(rowData);
         }
         fireTableDataChanged();
     }
