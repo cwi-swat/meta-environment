@@ -1,3 +1,6 @@
+#ifndef __PARSETABLEGEN__
+#define __PARSETABLEGEN__
+
 tool parsetablegen is { command = "parsetablegen" }
 
 process PGen is
@@ -26,3 +29,5 @@ in
 endlet
 
 toolbus(PGen)
+
+#endif /* __PARSETABLEGEN__ */
