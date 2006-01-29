@@ -7,7 +7,12 @@ package toolbus.parser;
  */
 
 public class ExternalProcessException extends java.io.IOException {
-    private String processType;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String processType;
 
     /**
      * Create an exception for signalling failures of external

@@ -224,7 +224,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
 
   public boolean contains(StateElement b) {
-    return this.equals(b);
+    return this == b;
   }
 
   public ProcessInstance getProcess() {

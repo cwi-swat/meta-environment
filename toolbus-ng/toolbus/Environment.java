@@ -11,7 +11,7 @@ import aterm.ATerm;
 import aterm.ATermList;
 
 /**
- * Binding implements s (variable, value) pair.
+ * Binding implements a (variable, value) pair.
  */
 
 class Binding {
@@ -46,19 +46,19 @@ class Binding {
  */
 
 public class Environment {
-	protected Hashtable bindings;
+	protected Hashtable<String,Binding> bindings;
 
 	public Environment() {
-		bindings = new Hashtable(10);
+		bindings = new Hashtable<String,Binding>(10);
 	}
 	
-	public Environment(Hashtable b){
+	public Environment(Hashtable<String,Binding> b){
 		bindings = b;
 	}
 	
 	public Environment copy() {
 		Environment env = new Environment();
-		env.bindings = (Hashtable) bindings.clone();
+		env.bindings = (Hashtable<String,Binding>) bindings.clone();
 		return env;
 	}
 
@@ -163,7 +163,7 @@ public class Environment {
 		//System.err.println("assignVar(" + var + ", " + val + ")");
 		while(true){
 			String name = TBTerm.getVarName(var);
-			Binding b = (Binding) bindings.get(name);
+			Binding b = bindings.get(name);
 			if(b == null){
 				bindings.put(name, new Binding(var, val));
 				return;
@@ -186,7 +186,7 @@ public class Environment {
 			throw new ToolBusInternalError(
 					"Environment.getVarType: illegal var " + var);
 		String name = TBTerm.getVarName(var);
-		Binding b = (Binding) bindings.get(name);
+		Binding b = bindings.get(name);
 		if(b == null){
 			return TBTerm.getVarType(var);
 		}
@@ -206,11 +206,11 @@ public class Environment {
 	public Binding getBinding(ATerm var) throws ToolBusException {
 		//System.err.println("getBinding(" + var + " in " + this + ")");
 		String name = TBTerm.getVarName(var);
-		return (Binding) bindings.get(name);
+		return bindings.get(name);
 	}
 	
 	public boolean isDeclaredAsStringVar(String name){
-		Binding b = (Binding) bindings.get(name);
+		Binding b = bindings.get(name);
 		if(b == null){
 			return false;
 		}
@@ -229,7 +229,7 @@ public class Environment {
 
 		while(true){
 			String name = TBTerm.getVarName(var);
-			Binding b = (Binding) bindings.get(name);
+			Binding b = bindings.get(name);
 			if(b == null){
 				//return var;
 				throw new ToolBusException(var + " has undefined value");

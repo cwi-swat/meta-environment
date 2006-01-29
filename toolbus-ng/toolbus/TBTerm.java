@@ -4,6 +4,8 @@
 
 package toolbus;
 
+import java.util.HashMap;
+
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -543,7 +545,7 @@ public class TBTerm  {
         return t;
         
       case ATerm.APPL :
-    	  ATermAppl apt = (ATermAppl) t;
+    	ATermAppl apt = (ATermAppl) t;
         if (TBTerm.isVar(apt)) {
           return env.getValue(apt);
         }
@@ -583,15 +585,21 @@ public class TBTerm  {
   private static Environment envb;
   private static boolean fullMatch = true;
   private static MatchResult mr;
+  
+  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
 
   public static boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
   	//System.err.println("match: ta = " + ta + "  ; " + "enva = " + enva);
  	//System.err.println("       tb = " + ta + "  ; " + "envb = " + envb);
-    mr = new MatchResult(enva, envb);
 
+    if(!mightMatch(ta, tb)){
+    	return false;
+    }
+    
+    mr = new MatchResult(enva, envb);
     TBTerm.enva = enva;
     TBTerm.envb = envb;
-
+    
     fullMatch = true;
     boolean res = performMatch(ta, tb);
     if (res) {
@@ -601,11 +609,34 @@ public class TBTerm  {
     } else
       return false;
   }
+  
+ // private static int mightMatchCnt = 0;
+ // private static int cachedMatches = 0;
+  
 
   public static boolean mightMatch(ATerm ta, ATerm tb) {
     fullMatch = false;
+ //   mightMatchCnt += 1;
     try {
-      return performMatch(ta, tb);
+      HashMap<ATerm,Boolean> taCache = matchCache.get(ta);
+      if(taCache != null){
+    	  Boolean occurstb = taCache.get(tb);
+    	  if(occurstb != null){
+ //   		  cachedMatches += 1;
+    		  return occurstb.booleanValue();
+    	  }
+      } else {
+    	  taCache = new HashMap<ATerm,Boolean>(100);
+    	  matchCache.put(ta, taCache);
+      }
+ //     if(mightMatchCnt % 100 == 0){
+ //   	  System.err.println("mightMatchCnt = " + mightMatchCnt + "; cachedMatches = " + cachedMatches + "(" +
+ //   			  (cachedMatches * 100 /  mightMatchCnt) + "%)");
+ //     }
+      boolean res =  performMatch(ta, tb);
+      taCache.put(tb, res ? Boolean.TRUE : Boolean.FALSE);
+      return res;
+      
     } catch (ToolBusException e) {
       throw new ToolBusInternalError(e.getMessage());
     }

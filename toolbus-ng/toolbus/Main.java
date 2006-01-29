@@ -14,7 +14,7 @@ public class Main {
 		try {
 			T.parse(ToolBus.getWorkspace()
 					+ "/toolbusNG/toolbus/tool/examples/pt-dump.tb");
-				    //+ "/toolbusNG/toolbus/test/Bind.tb");
+				    //+ "/toolbusNG/toolbus/test/B0.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
 		} catch (ToolBusException e) {
