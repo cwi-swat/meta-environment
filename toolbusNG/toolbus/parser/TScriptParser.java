@@ -80,13 +80,13 @@ abstract class NodeBuilder {
  */
 
 class TScriptNodeBuilders {
-  private static Hashtable Builders;
+  private static Hashtable<String,NodeBuilder> Builders;
   private static ATermFactory factory;
   protected static String processName = "";
 
   public static void init(ATermFactory fac) {
     factory = fac;
-    Builders = new Hashtable();
+    Builders = new Hashtable<String,NodeBuilder>();
     defineBuilders();
   }
 
@@ -492,7 +492,7 @@ class TScriptNodeBuilders {
 			ATermAppl ap = (ATermAppl) t;
 			String name = ap.getName();
 			ATerm args[] = ap.getArgumentArray();
-			NodeBuilder nd = (NodeBuilder) Builders.get(name);
+			NodeBuilder nd = Builders.get(name);
 			if (nd == null) {
 				if (args.length == 0) {
 					boolean isquoted = false;

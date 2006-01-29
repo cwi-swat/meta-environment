@@ -84,6 +84,10 @@ public class ToolInstance {
   	return toolDef.getName();
   }
   
+  public ToolBus getToolBus(){
+	  return toolbus;
+  }
+  
   public void connect(SocketChannel client) throws IOException {
   	toolShield.connect(client);
  // 	toolShield.start();
@@ -274,9 +278,6 @@ public class ToolInstance {
   public void addEventFromTool(Object obj) {
     eventsFromTool.addLast(obj);
     System.err.println("ToolInstance.addEvenFromTool: obj = " + obj);
-    /*synchronized (toolbus) {
-    	toolbus.notifyAll();
-	}*/
   }
  
   /**
@@ -299,6 +300,7 @@ public class ToolInstance {
   public void terminate(ATerm msg){
   	System.err.println("ToolInstance.terminate: " + toolId);
   	toolShield.terminate(msg);
+  	toolbus.removeToolInstance(this);
   }
   
   /**

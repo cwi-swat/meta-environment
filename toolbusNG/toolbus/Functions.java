@@ -527,18 +527,19 @@ public class Functions {
         return TBTerm.RealType;
 
       case ATerm.APPL :
-        if (TBTerm.isVar(t)) {
-          ATerm res = TBTerm.getVarType(t);
+    	ATermAppl apt = (ATermAppl) t;
+        if (TBTerm.isVar(apt)) {
+          ATerm res = TBTerm.getVarType(apt);
           return res;
         }
-        if (TBTerm.isBoolean(t)) {
+        if (TBTerm.isBoolean(apt)) {
           return TBTerm.BoolType;
         }
-        if (((ATermAppl) t).isQuoted() && ((ATermAppl) t).getArity() == 0) {
+        if (apt.isQuoted() && apt.getArity() == 0) {
           return TBTerm.StrType;
         }
-        String name = ((ATermAppl) t).getName();
-        ATerm args[] = ((ATermAppl) t).getArgumentArray();
+        String name = apt.getName();
+        ATerm args[] = apt.getArgumentArray();
         if (args.length == 0 && Funs.get(name) == null)
             return t;
         if(name == "quote")
@@ -549,10 +550,11 @@ public class Functions {
           vargs[i] = checkType(args[i], env, quoted);
         }
         if(quoted){
-        	AFun afun = ((ATermAppl) t).getAFun();
+        	AFun afun = apt.getAFun();
         	return factory.makeAppl(afun,vargs);
         } else
         	return Functions.checkStatic(name, vargs);
+        
       case ATerm.LIST :
         ATermList lst = TBTerm.factory.makeList();
         ATermList tlst = (ATermList) t;

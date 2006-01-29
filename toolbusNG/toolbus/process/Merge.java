@@ -33,11 +33,6 @@ public class Merge extends ProcessExpression implements StateElement {
     mergeState = new State();
     mergeState.add(this);
   }
-
- // public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
- // 	expr[LEFT].expand(P, calls);
- // 	expr[RIGHT].expand(P, calls);
- // }
   
   public void computeFirst(){
  	 expr[LEFT].computeFirst();

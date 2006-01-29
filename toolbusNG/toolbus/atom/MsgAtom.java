@@ -3,6 +3,7 @@
  */
 
 package toolbus.atom;
+
 import java.util.Stack;
 import java.util.Vector;
 
@@ -14,102 +15,104 @@ import aterm.ATerm;
 
 public abstract class MsgAtom extends Atom {
 
-  private State partners = new State(); // communication partners in other processes
-  private Ref msg;
-  private Ref id;
+	private State partners = new State(); // communication partners in other processes
 
-  private ATerm matchPattern;
+	private Ref msg;
 
-  public MsgAtom(ATerm msg) {
-    super();
-    this.msg = new Ref(msg);
-    this.id = new Ref(this instanceof RecMsg ? TBTerm.TransactionIdResVar : TBTerm.TransactionIdVar);
-    setAtomArgs(this.msg, this.id);
-  }
+	private Ref id;
 
-  public MsgAtom(ATerm msg, ATerm id) {
-    super();
-    this.msg = new Ref(msg);
-    this.id = new Ref(id);
-    setAtomArgs(this.msg, this.id);
-  }
+	private ATerm matchPattern;
 
-  public ATerm getMsg() {
-    return msg.value;
-  }
+	public MsgAtom(ATerm msg) {
+		super();
+		this.msg = new Ref(msg);
+		this.id = new Ref(this instanceof RecMsg ? TBTerm.TransactionIdResVar
+				: TBTerm.TransactionIdVar);
+		setAtomArgs(this.msg, this.id);
+	}
 
-  public ATerm getId() {
-    return id.value;
-  }
+	public MsgAtom(ATerm msg, ATerm id) {
+		super();
+		this.msg = new Ref(msg);
+		this.id = new Ref(id);
+		setAtomArgs(this.msg, this.id);
+	}
 
-  public ATerm getMatchPattern() {
-    return matchPattern;
-  }
+	public ATerm getMsg() {
+		return msg.value;
+	}
 
-  public boolean canCommunicate(MsgAtom a) {
-    return ((this instanceof SndMsg && a instanceof RecMsg) || (this instanceof RecMsg && a instanceof SndMsg))
-      && TBTerm.mightMatch(getMsg(), a.getMsg());
-  }
+	public ATerm getId() {
+		return id.value;
+	}
 
-  public void addMsgPartner(StateElement a) {
-    partners.add(a);
-  }
+	public ATerm getMatchPattern() {
+		return matchPattern;
+	}
 
-  public State getMsgPartners() {
-    return partners;
-  }
+	public boolean canCommunicate(MsgAtom a) {
+		return ((this instanceof SndMsg && a instanceof RecMsg) || 
+				 (this instanceof RecMsg && a instanceof SndMsg))
+				 && TBTerm.mightMatch(getMsg(), a.getMsg());
+	}
 
-  public boolean hasMsgPartners() {
-    return partners.size() > 0;
-  }
+	public void addMsgPartner(StateElement a) {
+		partners.add(a);
+	}
 
-  public boolean matchPartner(MsgAtom b) throws ToolBusException {
-    return TBTerm.match(matchPattern, this.getEnv(), b.getMatchPattern(), b.getEnv());
-  }
+	public State getMsgPartners() {
+		return partners;
+	}
 
-  public void compile(ProcessInstance processInstance, Stack calls, Environment env, State follow) throws ToolBusException {
-    super.compile(processInstance, calls, env, follow);
-    ATermFactory factory = getId().getFactory();
-    matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
+	public boolean hasMsgPartners() {
+		return partners.size() > 0;
+	}
 
-    //System.err.println("MsgAtom.compile: " + matchPattern);
-  }
+	public boolean matchPartner(MsgAtom b) throws ToolBusException {
+		return TBTerm.match(matchPattern, this.getEnv(), b.getMatchPattern(), b
+				.getEnv());
+	}
 
-  public boolean execute() throws ToolBusException {
-    if (!isEnabled())
-      return false;
-    Vector partnervec = partners.getElementsAsVector();
-    int psize = partnervec.size();
+	public void compile(ProcessInstance processInstance, Stack calls,
+			Environment env, State follow) throws ToolBusException {
+		super.compile(processInstance, calls, env, follow);
+		ATermFactory factory = getId().getFactory();
+		matchPattern = factory.makeList(getMsg(), factory.makeList(getId()));
 
-    if (psize > 0) {
-      ProcessInstance pa = getProcess();
-      for (int pindex = ToolBus.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1) % psize, pleft--) {
-        MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
-        ProcessInstance pb = b.getProcess();
- 
-        if (pa != pb && pb.contains(b) && b.isEnabled()) {
-          //System.err.println("MsgAtom.execute: " + this + ";" + b);
-          //System.err.println("--- enva = " + this.getEnv());
-          //System.err.println("--- envb = " + b.getEnv());
-          
-          
-          if (matchPartner(b)) {
-            if (ToolBus.isVerbose()) {
-              //System.err.println(
-              //  "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
-              //System.err.println(
-              //	"--- enva = " + this.getEnv());
-              //System.err.println(
-              //    	"--- envb = " + b.getEnv());
-            }
-            //this.nextState();
-            //b.nextState();
-            pb.nextState(b);
-            return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
+		//System.err.println("MsgAtom.compile: " + matchPattern);
+	}
+
+	public boolean execute() throws ToolBusException {
+		if (!isEnabled())
+			return false;
+		Vector partnervec = partners.getElementsAsVector();
+		int psize = partnervec.size();
+
+		if (psize > 0) {
+			ProcessInstance pa = getProcess();
+			for (int pindex = ToolBus.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1)
+					% psize, pleft--) {
+				MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
+				ProcessInstance pb = b.getProcess();
+
+				if (pa != pb && pb.contains(b) && b.isEnabled()) {
+					//System.err.println("MsgAtom.execute: " + this + ";" + b);
+					//System.err.println("--- enva = " + this.getEnv());
+					//System.err.println("--- envb = " + b.getEnv());
+
+					if (matchPartner(b)) {
+						//System.err.println(
+						//  "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
+						//System.err.println(
+						//	"--- enva = " + this.getEnv());
+						//System.err.println(
+						//    	"--- envb = " + b.getEnv());
+						pb.nextState(b);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

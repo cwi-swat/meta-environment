@@ -2,7 +2,7 @@ process P is
   snd-msg(123)
 
 process Q is
-  rec-msg(123) . printf("q\n")
+  rec-msg(123) . printf("q\n") . shutdown("done")
 
 process R is
   rec-msg(124) . printf("r\n")

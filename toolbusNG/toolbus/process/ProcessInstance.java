@@ -19,7 +19,7 @@ import aterm.ATermList;
  */
 public class ProcessInstance {
 	
-  private boolean verbose = false;
+  private final boolean verbose = false;
 	 
   static int processCount = 0;
   static State empty = new State();
@@ -59,10 +59,10 @@ public class ProcessInstance {
     currentState = call.getStartState();
     currentState.activate();
  
-    Vector procs = TB.getProcesses();
     elements = call.getAtoms();
-    for (int i = 0; i < procs.size(); i++) {
-      ((ProcessInstance) procs.elementAt(i)).findPartners(elements);
+
+    for (ProcessInstance P : TB.getProcesses()) {
+        P.findPartners(elements);
     }
     addAtomSignature();
     if (false) {
@@ -219,7 +219,10 @@ public class ProcessInstance {
   }
 
   public boolean isTerminated() {
-    return !running || (elements.size() == 0);
+	if(!running || currentState.size() == 0){
+		return true;
+	}
+	return false;
   }
 
   public String toString() {
