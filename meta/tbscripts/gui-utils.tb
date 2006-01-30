@@ -124,13 +124,4 @@ in
   delta
 endlet
 
-process StartNavigator is
-  snd-msg(load-jar("file://__PKGDATA__/navigator.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
-
-process StartDialogTool is
-  snd-msg(load-jar("file://__PKGDATA__/dialog.jar", "__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
-
-process StartModuledetailsPanel is
-  snd-msg(load-jar("file://__PKGDATA__/moduledetails.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
-
 #endif /* __GUI_UTILS__ */

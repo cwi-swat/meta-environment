@@ -1,10 +1,8 @@
 # $Id$
 
 Mon Jan 30 10:48:14 CET 2006 <kooiker@cwi.nl>
- * gui/plugins/graph-painter:
-   - Moved to graph-gui package
- * gui/plugins/progress:
-   - Moved to progress-gui package
+ * gui:
+   - Moved all plugins into their own package
 
 Fri Jan 27 13:21:52 CET 2006 <kooiker@cwi.nl>
  * tbscripts/editing.tb:

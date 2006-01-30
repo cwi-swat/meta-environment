@@ -3,4 +3,3 @@ Makefile
 Makefile.in
 help.tb
 sdf2-language.tb
-gui-utils.tb

@@ -43,22 +43,25 @@ AC_PACKAGE_REQUIRE(progress-gui, progress-gui-config,
    [  --with-progress-gui=DIR progress-gui is in DIR])
 AC_SUBST(PROGRESS_GUI)
 
-dnl Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
+dnl Require dialog-gui package
+AC_PACKAGE_REQUIRE(dialog-gui, dialog-gui-config,
+   [  --with-dialog-gui=DIR dialog-gui is in DIR])
+AC_SUBST(DIALOG_GUI)
+
+dnl Require module-details-gui package
+AC_PACKAGE_REQUIRE(module-details-gui, module-details-gui-config,
+   [  --with-module-details-gui=DIR module-details-gui is in DIR])
+AC_SUBST(MODULE_DETAILS_GUI)
+
+dnl Require navigator-gui package
+AC_PACKAGE_REQUIRE(navigator-gui, navigator-gui-config,
+   [  --with-navigator-gui=DIR navigator-gui is in DIR])
+AC_SUBST(NAVIGATOR_GUI)
 
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
-
-dnl Require ToolBus Java Adapter
-AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
-   [  --with-toolbus-java-adapter=DIR   ToolBus Java adapter is in DIR])
-AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
@@ -70,20 +73,15 @@ AC_PACKAGE_REQUIRE(config-manager, config-manager-config,
    [  --with-config-manager=DIR config-manager is in DIR])
 AC_SUBST(CONFIG_MANAGER)
 
-dnl Require config-manager package
+dnl Require config-support package
 AC_PACKAGE_REQUIRE(config-support, config-support-config,
    [  --with-config-support=DIR config-support is in DIR])
 AC_SUBST(CONFIG_SUPPORT)
 
-dnl Require config-manager package
+dnl Require module-manager package
 AC_PACKAGE_REQUIRE(module-manager, module-manager-config,
    [  --with-module-manager=DIR module-manager is in DIR])
 AC_SUBST(MODULE_MANAGER)
-
-dnl Require module-support package
-AC_PACKAGE_REQUIRE(module-support, module-support-config,
-   [  --with-module-support=DIR      Module-support is in DIR])
-AC_SUBST(MODULE_SUPPORT)
 
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
@@ -106,7 +104,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_GUI}/bin/graph-gui-config\`:`\${PROGRESS_GUI}/bin/progress-gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_GUI}/bin/graph-gui-config\`:\`${PROGRESS_GUI}/bin/progress-gui-config\`:\`${DIALOG_GUI}/bin/dialog-gui-config\`:\`${MODULE_DETAILS_GUI}/bin/module-details-gui-config\`:\`${NAVIGATOR_GUI}/bin/navigator-gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -189,14 +187,6 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
-   gui/Makefile
-   gui/data/Makefile
-   gui/lib/Makefile
-   gui/util/Makefile
-   gui/plugin/Makefile
-   gui/plugin/moduledetails/Makefile
-   gui/plugin/navigator/Makefile
-   gui/plugin/dialog/Makefile
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile

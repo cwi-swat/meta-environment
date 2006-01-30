@@ -12,6 +12,7 @@ TBSCRIPTS = \
   editor-error-display.tb \
   graph-utils.tb \
   gui-actions.tb \
+  gui-utils.tb \
   idle-state.tb \
   io-utils.tb \
   module-actions.tb \
@@ -37,8 +38,7 @@ TBSCRIPTS = \
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \
-  sdf2-language.tb  \
-  gui-utils.tb
+  sdf2-language.tb
 
 EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)
 
