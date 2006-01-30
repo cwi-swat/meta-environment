@@ -12,7 +12,7 @@
 #include <tide.tb>
 #include "module-selection-listener.tb"
 #include "module-actions.tb"
-#include "editor-manager.idef"
+#include "editor-manager/editor-manager.idef"
 #include "error-gui/error-viewer.idef"
 #include "editor-plugin/editor-plugin.idef"
 #include "module-details-gui/moduledetails.idef"

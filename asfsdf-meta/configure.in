@@ -24,6 +24,18 @@ AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
    [  --with-asf=DIR           Asf+Sdf library is in DIR])
 AC_SUBST(ASF_LIBRARY)
 
+AC_PACKAGE_REQUIRE(io-support, in-output,
+   [  --with-io-support=DIR         io-support is in DIR])
+AC_SUBST(PGEN)
+
+AC_PACKAGE_REQUIRE(structure-editor, structure-editor,
+   [  --with-structure-editor=DIR         structure-editor is in DIR])
+AC_SUBST(PGEN)
+
+AC_PACKAGE_REQUIRE(editor-manager, editor-manager,
+   [  --with-editor-manager=DIR         editor-manager is in DIR])
+AC_SUBST(PGEN)
+
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
   tbscripts/Makefile
