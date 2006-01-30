@@ -13,8 +13,7 @@ SUBDIRS = \
 	src \
 	in-output \
 	term-store \
-	tbscripts \
-	editors
+	tbscripts
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

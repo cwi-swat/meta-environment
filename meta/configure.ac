@@ -191,8 +191,6 @@ AC_CONFIG_FILES([Makefile
    in-output/src/Makefile
    term-store/Makefile
    term-store/snapshot/Makefile
-   editors/Makefile
-   editors/manager/Makefile
    tbscripts/Makefile
 ])
 AC_OUTPUT
