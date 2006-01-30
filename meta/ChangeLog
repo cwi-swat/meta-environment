@@ -1,6 +1,8 @@
 # $Id$
 
 Mon Jan 30 10:48:14 CET 2006 <kooiker@cwi.nl>
+ * in-output:
+   - Moved in-output tool into its own package
  * editors:
    - Moved structure editor and editor manager into their own package
  * gui:
