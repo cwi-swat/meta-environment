@@ -2,10 +2,10 @@ package
 identification
    name=io-support
    version=1.0
-   location=http://www.cwi.nl/projects/MetaEnv/pgen
-   info=http://www.cwi.nl/projects/MetaEnv/pgen
+   location=http://www.cwi.nl/projects/MetaEnv/io-support
+   info=http://www.cwi.nl/projects/MetaEnv/io-support
 
-   description=io-support
+   description='ToolBus tool for file i/o'
 
    keywords=io-support
 
