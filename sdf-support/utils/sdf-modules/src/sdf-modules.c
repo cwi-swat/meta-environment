@@ -175,7 +175,7 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, const char *path, const ch
    */
 
   for (; !ATisEmpty(search); search = ATgetNext(search)) {
-    char *current = ATgetName(ATgetAFun((ATermAppl) ATgetFirst(search)));
+    char *current = ATgetName(ATgetAFun((ATermAppl) ATgetArgument(ATgetFirst(search), 1)));
     int currentLen = strlen(current);
 
     if (strncmp(current, path, currentLen) == 0) {
