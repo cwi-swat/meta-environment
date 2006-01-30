@@ -12,8 +12,8 @@ build
 config.*
 configure
 dist
-graph-gui-*.pkg
-graph-gui-config
+dialog-gui-*.pkg
+dialog-gui-config
 install-sh
 missing
 mkinstalldirs
