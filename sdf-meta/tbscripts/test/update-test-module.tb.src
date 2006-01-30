@@ -1,0 +1,34 @@
+#include <module-db.idef>
+#include <in-output.idef>
+
+process Test is
+let 
+  Id: term,
+  SdfTree: term,
+  Path: str,
+  I: int,
+  Modules: list
+in
+  /* Setup a module in the module database */
+  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(is-module-in-db("Pico-Booleans")).
+  rec-msg(not-exists-in-module-db("Pico-Booleans")).
+  snd-msg(open-file("Pico-Booleans")).
+  rec-msg(opened-file("Pico-Booleans", tree(SdfTree?), Path?, timestamp(I?))).
+  snd-msg(add-sdf2-module-to-db("Pico-Booleans", Path, SdfTree, 
+                                timestamp(I), "changed")).
+  rec-msg(need-modules(Modules?)).
+  /* Finished setup. */
+
+  /* Now try and see whether updating an unchanged module works */
+  snd-msg(update-module-in-db(SdfTree, "sdf")).
+  (
+     rec-msg(extra-modules(Modules?))
+  +
+     printf("FAILED! Waiting for update to return\n") delay(sec(2))
+  ).
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test,Io,ModuleDB)

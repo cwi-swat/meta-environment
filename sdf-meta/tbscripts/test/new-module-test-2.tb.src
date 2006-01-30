@@ -1,0 +1,19 @@
+#include <in-output.idef>
+#include <module-db.idef>
+#include <file-creator.tb>
+
+process Test is
+  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(create-new-module("ExistingModule")) .
+  (
+    rec-msg(module-created) .
+    printf("new-module-test-2 FAILED!\n")
+  +
+    rec-msg(module-not-created("Module already exists in text or baf"))
+  +
+    shutdown("new-module-test-2 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+toolbus(Test, Io, ModuleDB, File-creator)

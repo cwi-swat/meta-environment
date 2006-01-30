@@ -1,0 +1,18 @@
+#include <sglr.idef>
+
+process Test is
+  /* This assumes there is *NO* table "NonExistingLang.tbl" in the
+   * root (/) directory.
+   */
+  snd-msg(open-language("NonExistingLang", "/NonExistingLang.tbl")) .
+  (
+    rec-msg(language-opened("NonExistingLang")) .
+    printf("open-table-test-1 FAILED!")
+  +
+    rec-msg(language-not-opened("NonExistingLang"))
+  +
+    shutdown("open-table-test-1 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+toolbus(Test, Parser)

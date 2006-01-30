@@ -1,0 +1,44 @@
+#include <in-output.idef>
+#include <module-db.idef>
+#include <file-creator.tb>
+
+process Test is
+let
+  SdfTree: term,
+  Path : str,
+  Time : term
+in
+  %% Read an existing module in baf.
+  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(open-file("Empty")) .
+  (
+    rec-msg(opened-file("Empty", tree(SdfTree?), Path?, Time?))
+  +
+    shutdown("new-module-test-3 FAILED! (timeout in read)\n") delay(sec(5))
+  ) .
+
+  %% Update the module-db.
+  snd-msg(add-sdf2-module-to-db("Empty", Path, SdfTree, Time, "unchanged")) .
+  (
+    rec-msg(need-modules([]))
+  +
+    shutdown("new-module-test-3 FAILED! (timeout in update-db)\n") delay(sec(5))
+  ) .
+
+  %% Here comes the actual test.
+  snd-msg(create-new-module("Empty")) .
+  (
+    rec-msg(module-created) .
+    printf("new-module-test-3 FAILED!\n")
+  +
+    rec-msg(module-not-created("Module already in database"))
+  +
+    shutdown("new-module-test-3 FAILED! (timeout)\n") delay(sec(5))
+  )
+  .
+  shutdown("") delay(sec(2))
+
+endlet
+
+toolbus(Test, Io, ModuleDB, File-creator)

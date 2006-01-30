@@ -1,0 +1,220 @@
+#ifndef __SDF_LISTENERS__
+#define __SDF_LISTENERS__
+
+#include <module-manager.tb>
+#include <sdf-namespace.h>
+#include <progress-gui/progress.idef>
+
+#define BG_ERROR_COLOR   rgb(255,165,0)
+#define BG_CORRECT_COLOR rgb(255,255,221)
+#define BG_GRAYED_OUT rgb (211,211,211)
+
+process InitializeInheritedStatus is
+  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", error, available, one)
+
+toolbus(InitializeInheritedStatus)
+
+process SDFModuleLabelSetter is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Modulename: str
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Modulename?)
+    . MM-SetModuleGraphAttribute(ModuleId, "label", label(Modulename))
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleLabelSetter)
+
+process SDFModuleColorChanger is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, error) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
+    else
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleColorChanger)
+
+process SDFModuleVisualizeEditable is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Tree: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,true)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"editable",<term>,false)  
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . ACE-GetNewValue(Event, Value?)
+    .
+    if equal(Value, quote(false)) then
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_GRAYED_OUT))
+    else
+      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+    fi
+  )
+  *
+  delta
+endlet
+
+
+toolbus(SDFModuleVisualizeEditable)
+
+process SDFModuleParser is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . GetSDFParseTree(ModuleId, Tree?)
+    .
+    if equal(Tree, UNDEFINED) then
+       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+    else
+       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", parsed)
+    fi
+    . Tree := help-garbage-collector
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleParser)
+
+process SDFModuleIdentifier is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . SDFIdentifyModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFModuleIdentifier)
+
+
+process SDFSetModuleImports is
+let
+  Event: attribute-changed-event,
+  Import: str,
+  ImportId: term,
+  Imports: list,
+  ModuleId: term,
+  Tree: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,identified)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opening)
+    . GetSDFParseTree(ModuleId, Tree?)
+    . MM-DeleteModuleDependencies(ModuleId)
+    . GetImportedModulenames(Tree, Imports?)
+    .
+    if not-equal(Imports, []) then 
+      if not-equal(Imports, []) then 
+        Import := first(Imports)
+        . Imports := next(Imports)
+        . OpenModule(Import, ImportId?)
+        . MM-AddModuleDependency(ModuleId, ImportId)
+      fi
+      *
+      if equal(Imports, []) then
+        MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened)
+      fi
+    else
+      MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened) 
+      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", complete) 
+    fi
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFSetModuleImports)
+
+process SDFRemoveDependencies is
+let
+  Event: attribute-changed-event,
+  ModuleId: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,unknown)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-DeleteModuleDependencies(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(SDFRemoveDependencies)
+
+process SDFStatusToProgress is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Name: str,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(Name, SDF_NAMESPACE, Value))
+  ) * delta 
+endlet
+
+toolbus(SDFStatusToProgress)
+#endif /* __SDF_LISTENERS__ */

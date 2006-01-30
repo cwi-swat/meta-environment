@@ -1,0 +1,63 @@
+#! /bin/sh
+
+# $Id$
+
+datadir=__DATADIR__
+sglr=__SGLR__
+
+builddir=__TOP_BUILDDIR__/tbscripts/test
+
+toolbus="__TOOLBUS__/bin/toolbus \
+           -I${sglr}/share \
+           -I__TOP_SRCDIR__/module-db \
+           -I__TOP_SRCDIR__/in-output \
+           -I__TOP_SRCDIR__/tbscripts"
+
+PATH=${PATH}:__SGLR__/bin
+PATH=${PATH}:__TOP_BUILDDIR__/module-db
+PATH=${PATH}:__TOP_BUILDDIR__/in-output
+
+tests=0
+failed=0    
+
+(sleep 30 ; kill $$ > /dev/null 2>&1) &
+
+call_toolbus () {
+  script=$1
+  tests=`expr $tests + 1`   
+  result=`${toolbus} ${script} 2>&1`
+  toolbus_exit=$?
+  if [ $toolbus_exit != 0 ]; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  elif echo $result | grep -i failed >/dev/null ; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  else
+    printf .
+  fi             
+}
+
+# Test 1. Attempt to create a non-existing module.
+rm -f NonExistingModule.sdf
+call_toolbus new-module-test-1.tb
+rm -f NonExistingModule.sdf
+
+# Test 2. Attempt to create a module that would overwrite an existing file.
+rm -f ./ExistingModule.sdf
+echo "module ExistingModule" > ./ExistingModule.sdf
+call_toolbus new-module-test-2.tb
+rm -f ./ExistingModule.sdf
+
+# Test 3. Attempt to create a module that already exists in the module-db.
+call_toolbus new-module-test-3.tb
+
+echo ""
+
+
+if [ $failed != 0 ]; then
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi          

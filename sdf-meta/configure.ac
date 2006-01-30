@@ -1,0 +1,13 @@
+AC_INIT
+AC_CONFIG_SRCDIR([configure.ac])
+GLT_INIT_PACKAGE
+AC_PREREQ(2.59)
+
+AC_PROG_MAKE_SET([])
+
+dnl add outputfiles as argument below
+AC_CONFIG_FILES([
+  Makefile
+  tbscripts/Makefile
+])
+AC_OUTPUT 

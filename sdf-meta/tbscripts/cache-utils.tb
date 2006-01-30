@@ -1,0 +1,66 @@
+#ifndef __CACHING__
+#define __CACHING__
+
+#include <child-attribute-changed-event.tb>
+#include <term-store.idef>
+
+/* sort of generic caching processes */
+process ClearCacheHandler(TableName: str, 
+                          Namespace: term, 
+                          AttributeName: term, 
+                          OldValue: term,
+                          NewValue: term) is
+let
+  AttributeEvent: attribute-changed-event,
+  ModuleId: term,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,Namespace,AttributeName,OldValue,NewValue)
+  .
+  (
+    rec-note(mm-attribute-changed(AttributeEvent?))
+    . ACE-GetModuleId(AttributeEvent, ModuleId?)
+    . snd-msg(ts-remove-value(TableName, ModuleId))
+  )
+  * delta
+endlet
+
+process TransitiveClearCacheHandler(TableName: str, 
+                          Namespace: term, 
+                          AttributeName: term, 
+                          OldValue: term,
+                          NewValue: term) is
+let
+  ChildAttributeEvent: child-attribute-changed-event,
+  ModuleId: term,
+  Value: term,
+  Pid: int
+in
+  create(ClearCacheHandler(TableName, Namespace, AttributeName, OldValue, NewValue), Pid?)
+  . MM-Subscribe-Child-Attribute-Changed(<term>,<term>,Namespace,AttributeName,OldValue,NewValue)
+  .
+  (
+    rec-note(mm-child-attribute-changed(ChildAttributeEvent?))
+    . CACE-GetModuleId(ChildAttributeEvent, ModuleId?)
+    . snd-msg(ts-remove-value(TableName, ModuleId))
+  )
+  * delta
+endlet
+
+process InitCache(TableName: str) is
+  snd-msg(ts-add-table(TableName, "term"))
+
+process GetCachedValue(TableName: str, Key: term, Value: term?) is
+  snd-msg(ts-get-term-value(TableName, Key))
+  .
+  (
+    rec-msg(ts-value(TableName, Key, Value?)) 
+  +
+    rec-msg(ts-no-value(TableName, Key))
+    . Value := UNDEFINED
+  )
+
+process PutCachedValue(TableName: str, Key: term, Value: term) is
+  snd-msg(ts-put-term-value(TableName, Key, Value))
+
+#endif /* __CACHING__ */

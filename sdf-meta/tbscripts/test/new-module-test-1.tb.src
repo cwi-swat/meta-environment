@@ -1,0 +1,17 @@
+#include <in-output.idef>
+#include <module-db.idef>
+#include <file-creator.tb>
+
+process Test is
+  snd-msg(create-new-module("NonExistingModule")) .
+  (
+    rec-msg(module-created)
+  +
+    rec-msg(module-exists) .
+    printf("new-module-test-1 FAILED!\n")
+  +
+    shutdown("new-module-test-1 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+toolbus(Test, Io, ModuleDB, File-creator)

@@ -1,0 +1,7 @@
+Makefile
+Makefile.in
+ambi-test.tb
+toolbus-test
+module-test
+parser-test
+*.tb

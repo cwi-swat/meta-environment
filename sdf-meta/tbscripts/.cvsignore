@@ -1,0 +1,5 @@
+.*.swp
+Makefile
+Makefile.in
+help.tb
+sdf2-language.tb
