@@ -1,0 +1,63 @@
+$Id$
+
+SDF2 parser generator
+
+
+Installation Instructions
+=========================
+
+1) Required packages.
+
+   The parser generator requires the following packages:
+
+   -GNU make, available from:
+       www.gnu.org
+
+   See the file ./package for the dependencies of pgen.
+
+   Before building the parser generator, you should first install these
+   packages.
+
+2) Configuring the parser generator.
+
+   Assuming that all dependencies are available in your PATH variable,
+   and that the parser generator should be installed in <pgen> then the 
+   following command will configure pgen accordingly:
+
+   ./configure --prefix=<pgen>
+
+   Note. Default behaviour of configure is that it will look for libraries
+         in <prefix>/lib and for executables in your search paths. So,
+         you do not need to specify the locations of all dependencies
+         explicitly.
+
+   If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
+   different options use --with-cflags="<options>" when you run configure.
+
+   ./configure --help gives a detailed list of configuration options.       
+
+3) Building the parser generator.
+
+   Assuming that GNU make is called "gmake" on your system then the
+   following commands will build and install the parser generator:
+
+   gmake
+   gmake install
+
+4) Checking the parser generator.
+
+   The parser generator can be tested via:
+
+   gmake check
+
+5) Bug reporting and support.
+
+   Please report bugs via:
+
+   http://www.cwi.nl/projects/MetaEnv/bugs
+
+   This is the general bug reporting page of the ASF+SDF Meta-Environment.
+
+   Support can be obtained via:
+
+   meta-support@cwi.nl

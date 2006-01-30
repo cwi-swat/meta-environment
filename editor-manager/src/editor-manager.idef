@@ -1,0 +1,113 @@
+tool editor-manager is { command = "editor-manager" }
+
+process EditorManager is
+let
+  EditorType: term,
+  EM : editor-manager,
+  ModuleId: term,
+  Path : str,
+  Sid : term,
+  Sids: list
+in
+  execute(editor-manager, EM?)
+  .
+  (
+    rec-msg(em-create-session(Path?))
+    . snd-eval(EM, create-session(Path))
+    . rec-value(EM, session(Sid?))
+    . snd-msg(em-session(Path, Sid))
+  +
+    rec-msg(em-get-path(Sid?))
+    . snd-eval(EM, get-path(Sid))
+    .
+    (
+      rec-value(EM, path(Path?))
+      . snd-msg(em-path(Sid, Path))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-bind-session(Sid?, ModuleId?))
+    . snd-eval(EM, bind-session(Sid, ModuleId))
+    .
+    (
+      rec-value(EM, session-bound)
+      . snd-msg(em-session-bound(Sid, ModuleId))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-get-moduleid(Sid?))
+    . snd-eval(EM, get-moduleid(Sid))
+    .
+    (
+      rec-value(EM, moduleid(ModuleId?))
+      . snd-msg(em-moduleid(Sid, ModuleId))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    +
+      rec-value(EM, session-not-bound)
+      . snd-msg(em-session-not-bound(Sid))
+    )
+  +
+    rec-msg(em-register-editor(Sid?, EditorType?))
+    . snd-do(EM, register-editor(Sid, EditorType))
+  +
+    rec-msg(em-is-editor-registered(Sid?, EditorType?))
+    . snd-eval(EM, is-editor-registered(Sid, EditorType))
+    .
+    (
+      rec-value(EM, editor-registered)
+      . snd-msg(em-editor-registered(Sid, EditorType))
+    +
+      rec-value(EM, editor-not-registered)
+      . snd-msg(em-editor-not-registered(Sid, EditorType))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Sid))
+    )
+  +
+    rec-msg(em-unregister-editor(Sid?, EditorType?))
+    . snd-do(EM, unregister-editor(Sid, EditorType))
+  +
+    rec-msg(em-get-sessions-by-moduleid(ModuleId?))
+    . snd-eval(EM, get-sessions-by-moduleid(ModuleId))
+    . rec-value(EM, sessions(Sids?))
+    . snd-msg(em-sessions(ModuleId, Sids))
+  +
+    rec-msg(em-get-session-by-path(Path?))
+    . snd-eval(EM, get-session-by-path(Path))
+    .
+    (
+      rec-value(EM, session(Sid?))
+      . snd-msg(em-session(Path, Sid))
+    +
+      rec-value(EM, no-such-session)
+      . snd-msg(em-no-such-session(Path))
+    )
+  +
+    rec-msg(em-delete-session(Sid?))
+    . snd-do(EM, delete-session(Sid))
+    . snd-note(em-session-deleted(Sid))
+  +
+    rec-msg(em-request-transaction(Sid?))
+    . snd-eval(EM, request-transaction(Sid))
+    .
+    (
+      rec-value(EM, transaction-started)
+      . snd-msg(em-transaction-started(Sid))
+    +
+      rec-value(EM, no-transaction)
+      . snd-msg(em-no-transaction(Sid))
+    )
+  +
+    rec-msg(em-end-transaction(Sid?))
+    . snd-do(EM, end-transaction(Sid))
+  )
+  * delta
+endlet
+
+toolbus(EditorManager)
