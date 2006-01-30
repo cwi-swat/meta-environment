@@ -104,7 +104,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_GUI}/bin/graph-gui-config\`:\`${PROGRESS_GUI}/bin/progress-gui-config\`:\`${DIALOG_GUI}/bin/dialog-gui-config\`:\`${MODULE_DETAILS_GUI}/bin/module-details-gui-config\`:\`${NAVIGATOR_GUI}/bin/navigator-gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${GRAPH_GUI}/bin/graph-gui-config\`:\`${PROGRESS_GUI}/bin/progress-gui-config\`:\`${DIALOG_GUI}/bin/dialog-gui-config\`:\`${MODULE_DETAILS_GUI}/bin/module-details-gui-config\`:\`${NAVIGATOR_GUI}/bin/navigator-gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
