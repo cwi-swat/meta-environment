@@ -187,8 +187,6 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
-   in-output/Makefile
-   in-output/src/Makefile
    term-store/Makefile
    term-store/snapshot/Makefile
    tbscripts/Makefile

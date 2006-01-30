@@ -11,7 +11,6 @@ CLEANFILES = \
 
 SUBDIRS = \
 	src \
-	in-output \
 	term-store \
 	tbscripts
 
