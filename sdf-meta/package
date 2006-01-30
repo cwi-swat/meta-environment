@@ -11,4 +11,5 @@ configuration interface
 
 requires
 
+pgen 2.2
 

@@ -5,6 +5,11 @@ AC_PREREQ(2.59)
 
 AC_PROG_MAKE_SET([])
 
+dnl Require pgen package
+AC_PACKAGE_REQUIRE(pgen, sdf2table,
+  [  --with-pgen=DIR         pgen is in DIR])
+AC_SUBST(PGEN)
+
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([
   Makefile

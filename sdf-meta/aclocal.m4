@@ -540,3 +540,4 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([init-package.m4])
+m4_include([program-check.m4])
