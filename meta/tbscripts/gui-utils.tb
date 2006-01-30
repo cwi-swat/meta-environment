@@ -3,10 +3,10 @@
 
 #include <gui-actions.tb>
 #include <meta-studio/gui.idef>
-#include <dialog.idef>
+#include <dialog-gui/dialog.idef>
 #include <graph-gui/graph-painter.idef>
 #include <progress-gui/progress.idef>
-#include <moduledetails.idef>
+#include <module-details-gui/moduledetails.idef>
 
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))

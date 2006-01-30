@@ -1,4 +1,4 @@
-#include <navigator.idef>
+#include <navigator-gui/navigator.idef>
 #include <graph-gui/graph-painter.idef>
 #include <undefined.h>
 

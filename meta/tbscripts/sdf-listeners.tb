@@ -3,6 +3,7 @@
 
 #include <module-manager.tb>
 #include <sdf-namespace.h>
+#include <progress-gui/progress.idef>
 
 #define BG_ERROR_COLOR   rgb(255,165,0)
 #define BG_CORRECT_COLOR rgb(255,255,221)

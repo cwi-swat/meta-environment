@@ -3,6 +3,7 @@
 
 #include <graph-utils.tb>
 #include <module-manager.tb>
+#include <dialog-gui/dialog.idef>
 
 process AskQuestion(Question : str, Answer : term?) is
   snd-msg(ask-question(Question))
