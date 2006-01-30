@@ -21,7 +21,7 @@ editor_manager_SOURCES = \
 	editor-manager.c
 
 editor_manager_LDADD = \
-	-L$(top_builddir)/editors/manager -lEditorManager \
+	-L$(top_builddir)/src -lEditorManager \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
