@@ -223,7 +223,7 @@ process CancelCreateNewModule(Pid: int, Error: str, Args: list) is
   snd-note(ui-status(errorf(Error, Args)))
   . snd-msg(cancel-content-handler(Pid))
 
-process CreateNewModule(Pid: int, Directory: str, Filename: str, Type: term) is
+process CreateNewModule(Pid: int, Directory: str, Filename: str) is
 let
   BaseDir: str,
   Contents: list,
@@ -243,9 +243,7 @@ in
     . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "name", Modulename, ModuleId?)
     .
     if equal(ModuleId, UNDEFINED) then
-      snd-msg(file-extension-hook(Type))
-      . rec-msg(file-extension-hook-result(Extension?))
-      . BuildPath(BaseDir, Modulename, Extension, Path?)
+      BuildPath(BaseDir, Modulename, SDF_EXTENSION, Path?)
       . snd-msg(io-exists-file(Path))
       .
       (
@@ -272,7 +270,7 @@ in
     rec-msg(sm-new-module-name-inconsistent)
     . CancelCreateNewModule(Pid,
                          "Module %s in %s is inconsistent with module paths",
-                         [Modulename, Path])
+                         [Filename, Path])
   )
 endlet
 
@@ -284,7 +282,7 @@ in
   Id := process-id
   . snd-note(ui-status(statf(Id, "Copying %s to %s", [SrcModulename, Filename])))
   . create(CopySdfContentHandler(SrcModulename), Pid?)
-  . CreateNewModule(Pid, Directory, Filename, sdf)
+  . CreateNewModule(Pid, Directory, Filename)
   . snd-note(ui-status(endstat(Id)))
 endlet
 

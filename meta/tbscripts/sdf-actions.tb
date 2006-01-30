@@ -97,7 +97,7 @@ in
   else
     SplitFilename(Path, FileName?, Directory?, Extension?)
     . create(NewModuleContentHandler(), Pid?)
-    . CreateNewModule(Pid, Directory, FileName, sdf)
+    . CreateNewModule(Pid, Directory, FileName)
   fi
 endlet
 
@@ -298,7 +298,7 @@ in
   . snd-msg(io-relative-to-absolute(["."]))
   . rec-msg(io-absolute-directories([Directory?]))
   . create(NewModuleContentHandler(), Pid?)
-  . CreateNewModule(Pid, Directory, Filename, sdf)
+  . CreateNewModule(Pid, Directory, Filename)
 endlet
 
 
