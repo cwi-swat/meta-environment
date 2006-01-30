@@ -1,5 +1,4 @@
 *.tar.gz
-*.idef
 .classpath
 .project
 INSTALL

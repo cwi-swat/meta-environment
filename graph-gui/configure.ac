@@ -33,8 +33,13 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])
 AC_SUBST(GRAPH_SUPPORT)
 
+dnl Require meta-studio package
+AC_PACKAGE_REQUIRE(meta-studio, gui-config,
+   [  --with-meta-studio=DIR meta-studio is in DIR])
+AC_SUBST(META_STUDIO)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${META_STUDIO}/bin/gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)
