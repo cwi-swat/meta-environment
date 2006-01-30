@@ -289,17 +289,4 @@ in
     fi
 endlet
 
-process CreateModuleAction(Filename : str) is
-let
-  Directory : str,
-  Pid: int
-in
-  TODO("werk niet als . niet in het zoekpad sit\n")
-  . snd-msg(io-relative-to-absolute(["."]))
-  . rec-msg(io-absolute-directories([Directory?]))
-  . create(NewModuleContentHandler(), Pid?)
-  . CreateNewModule(Pid, Directory, Filename)
-endlet
-
-
 #endif /*__SDF_ACTIONS__*/
