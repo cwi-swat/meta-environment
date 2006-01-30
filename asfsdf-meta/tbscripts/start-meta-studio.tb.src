@@ -9,13 +9,17 @@
 #include "module-utils.tb"
 #include <module-actions.tb>
 #include <gui-actions.tb>
-#include "gui-utils.tb"
 #include <tide.tb>
 #include "module-selection-listener.tb"
 #include "module-actions.tb"
 #include "editor-manager.idef"
 #include "error-gui/error-viewer.idef"
 #include "editor-plugin/editor-plugin.idef"
+#include "module-details-gui/moduledetails.idef"
+#include "navigator-gui/navigator.idef"
+#include "dialog-gui/dialog.idef"
+#include "progress-gui/progress.idef"
+#include "gui-utils.tb"
 /* #include "serialization-utils.tb" */
 
 /* sdf-meta */
