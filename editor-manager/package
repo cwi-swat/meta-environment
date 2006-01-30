@@ -5,7 +5,7 @@ identification
    location=http://www.cwi.nl/projects/MetaEnv/editor-manager
    info=http://www.cwi.nl/projects/MetaEnv/editor-manager
 
-   description=editor-manager
+   description='editor-manager'
 
    keywords=editor-manager
 
