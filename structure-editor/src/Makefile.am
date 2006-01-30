@@ -25,7 +25,7 @@ structure_editor_SOURCES = \
 	slice-tree.c
 
 structure_editor_LDADD = \
-	-L$(top_builddir)/editors/structure -lStructureEditor \
+	-L$(top_builddir)/src -lStructureEditor \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \

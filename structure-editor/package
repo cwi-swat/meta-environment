@@ -2,8 +2,8 @@ package
 identification
    name=structure-editor
    version=1.0
-   location=http://www.cwi.nl/projects/MetaEnv/pgen
-   info=http://www.cwi.nl/projects/MetaEnv/pgen
+   location=http://www.cwi.nl/projects/MetaEnv/structure-editor
+   info=http://www.cwi.nl/projects/MetaEnv/structure-editor
 
    description=structure-editor
 
