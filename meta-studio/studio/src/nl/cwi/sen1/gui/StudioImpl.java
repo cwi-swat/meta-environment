@@ -322,6 +322,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     private void createFrame() {
         frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         // frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
         frame.getContentPane().add(createStatusBar(), BorderLayout.SOUTH);
         frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
@@ -332,7 +333,6 @@ public class StudioImpl implements Studio, GuiTif {
         });
         frame.pack();
         frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
     }
 

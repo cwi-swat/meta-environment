@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jan 30 10:32:26 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/util/*.java:
+   - Added several classes from meta package
+
 Tue Jan 24 11:08:30 CET 2006 <kooiker@cwi.nl>
  * studio/src/nl/cwi/sen1/gui/StudioImpl.java:
    - Set frame to maximized
