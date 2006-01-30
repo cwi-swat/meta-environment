@@ -53,6 +53,9 @@ process NAV-ShowPopup(ModuleId: term, PopupMenu: list) is
 process NAV-PopupEvent(ModuleId: term?, MenuItem: term?) is
   rec-msg(nav-menu-selected(ModuleId?, MenuItem?))
 
+process StartNavigator is
+  snd-msg(load-jar("file://__PKGDATA__/navigator.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
 toolbus(Navigator)
 
 #endif /*_GUI_NAVIGATOR_*/
