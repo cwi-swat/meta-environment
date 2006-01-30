@@ -33,6 +33,11 @@ AC_PACKAGE_REQUIRE(error-gui, error-gui-config,
    [  --with-error-gui=DIR error-gui is in DIR])
 AC_SUBST(ERROR_GUI)
 
+dnl Require graph-gui package
+AC_PACKAGE_REQUIRE(graph-gui, graph-gui-config,
+   [  --with-graph-gui=DIR graph-gui is in DIR])
+AC_SUBST(ERROR_GUI)
+
 dnl Require ATerm Java library
 AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
    [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
@@ -96,7 +101,7 @@ AC_PACKAGE_REQUIRE(graph-support, tree2graph,
 AC_SUBST(GRAPH_SUPPORT)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:${TIDE}/share/tide/tide.jar:\`${META_STUDIO}/bin/gui-config\`:\`${CONFIG_MANAGER}/bin/config-manager-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${ERROR_GUI}/bin/error-gui-config\`:\`${CONFIG_SUPPORT}/bin/config-support-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_GUI}/bin/graph-gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -187,7 +192,6 @@ AC_CONFIG_FILES([Makefile
    gui/plugin/moduledetails/Makefile
    gui/plugin/navigator/Makefile
    gui/plugin/dialog/Makefile
-   gui/plugin/graph-painter/Makefile
    gui/plugin/progress/Makefile
    in-output/Makefile
    in-output/src/Makefile
