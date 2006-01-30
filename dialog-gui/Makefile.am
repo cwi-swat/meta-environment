@@ -5,8 +5,6 @@ include $(top_srcdir)/toolbus_make_rules
 
 ACLOCAL_FLAGS = -I .
 
-SUBDIRS = lib
-
 TOOLNAME = dialog
 JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar

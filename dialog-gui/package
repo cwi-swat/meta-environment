@@ -1,13 +1,13 @@
 package 
 identification
-   name=graph-gui
+   name=dialog-gui
    version=1.0
    location=http://www.cwi.nl/projects/MetaEnv/
    info=http://www.cwi.nl/projects/MetaEnv/
-   description='Graph gui'
+   description='Dialog gui'
 
 
-   keywords=graph-gui
+   keywords=dialog-gui
 
 configuration interface
 
@@ -23,3 +23,5 @@ module-support 1.0
 graph-support 0.2
 
 meta-studio 1.0
+
+config-support 1.0
