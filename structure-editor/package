@@ -5,7 +5,7 @@ identification
    location=http://www.cwi.nl/projects/MetaEnv/structure-editor
    info=http://www.cwi.nl/projects/MetaEnv/structure-editor
 
-   description=structure-editor
+   description='structure-editor'
 
    keywords=structure-editor
 
