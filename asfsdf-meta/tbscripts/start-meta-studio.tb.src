@@ -4,7 +4,7 @@
 #include "configuration-manager.idef"
 #include "generic-adapter.idef"
 #include "graph-converter.idef"
-#include "in-output.idef"
+#include "io-support/in-output.idef"
 #include "layout-graph.idef"
 #include "module-utils.tb"
 #include <module-actions.tb>
@@ -37,7 +37,7 @@
 #include <term-actions.tb>
 #include "position-annotator.idef"
 #include "sglr.idef"
-#include "structure-editor.idef"
+#include "structure-editor/structure-editor.idef"
 #include "unparser.idef"
 
 /* asf-sdf-meta */
