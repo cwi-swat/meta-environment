@@ -5,27 +5,35 @@ include $(top_srcdir)/toolbus_make_rules
 
 ACLOCAL_FLAGS = -I .
 
+SUBDIRS = lib
+
 TOOLNAME = graph-painter
 JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
 MAIN_CLASS = $(JAVA_PACKAGE).GraphPainter
 
-LOCAL_JARS=$(top_srcdir)/gui/data/gui-data.jar:$(top_srcdir)/gui/util/gui-util.jar:$(top_srcdir)/gui/studio/gui.jar:$(top_srcdir)/gui/lib/prefuse.jar
-
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
+LOCAL_JARS = $(abstop_srcdir)/lib/prefuse.jar
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
-bin_SCRIPTS = $(TOOLNAME)-config
-noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
+bin_SCRIPTS = $(PACKAGE)-config
+noinst_SCRIPTS = $(PACKAGE)-$(VERSION).pkg
 
-EXTRA_DIST = ${JARFILE} $(TOOLNAME).idef
+EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef
 
-CLEANFILES = $(TOOLNAME)-config $(TOOLNAME)-$(VERSION).pkg
+CLEANFILES = $(PACKAGE)-config $(PACKAGE)-$(VERSION).pkg
 
-$(TOOLNAME)-config: Makefile
-	@( echo "#! /bin/sh";\
-	   echo "echo $(pkgdatadir)/$(JARFILE)" \
+$(PACKAGE)-config: Makefile
+	@(	echo "#! /bin/sh";\
+		echo "echo $(pkgdatadir)/$(JARFILE)" \
 	) > $@ && chmod +x $@
 
-$(TOOLNAME)-$(VERSION).pkg: package Makefile
+$(PACKAGE)-$(VERSION).pkg: package Makefile
 	cp $< $@
+
+%.idef: %.idef.src Makefile
+	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
+	    -e 's@__LOCAL_JARS__@$(LOCAL_JARS)@g'\
+	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
+	    -e 's@__JARFILE__@$(JARFILE)@g'\
+	     < $< > $@
