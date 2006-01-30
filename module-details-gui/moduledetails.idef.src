@@ -18,6 +18,9 @@ in
       rec-disconnect(T)
 endlet
 
+process StartModuledetailsPanel is
+  snd-msg(load-jar("file://__PKGDATA__/moduledetails.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
 toolbus(Moduledetails)
 
 #endif /*__MODULE_DETAILS__*/
