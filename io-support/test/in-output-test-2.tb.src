@@ -1,0 +1,17 @@
+#include <in-output.idef>
+
+process Test is
+  snd-msg(process-search-paths("meta.conf", ["__SRCDIR__"])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(exists-sdf-module("Empty1")) .
+  (
+    rec-msg(sdf-module-exists("Empty1"))
+  +
+    rec-msg(sdf-module-not-exists("Empty1")) .
+    printf("in-output-test-2 FAILED!\n")
+  +
+    shutdown("test-2 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+
+toolbus(Test, Io)

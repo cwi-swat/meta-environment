@@ -1,0 +1,21 @@
+package 
+identification
+   name=io-support
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/pgen
+   info=http://www.cwi.nl/projects/MetaEnv/pgen
+
+   description=io-support
+
+   keywords=io-support
+
+configuration interface
+
+requires
+aterm 2.4.2
+
+error-support 1.0
+
+config-support 1.0
+
+toolbuslib 0.8

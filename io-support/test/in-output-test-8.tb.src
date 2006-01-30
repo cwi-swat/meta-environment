@@ -1,0 +1,29 @@
+#include <in-output.idef>
+
+process Test is
+let
+  SdfText : str,
+  SdfTree : term,
+  Path    : str,
+  Time    : term,
+  Msg     : str
+in
+  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
+  rec-msg(search-paths-processed("meta.conf")) .
+  snd-msg(open-file("TestSdf")) .
+  (
+    rec-msg(opened-file("TestSdf", text(SdfText?), Path?, Time?))
+  +
+    (
+      rec-msg(opened-file("TestSdf", tree(SdfTree?), Path?, Time?))
+    +
+      rec-msg(error-opening("TestSdf"))
+    ) .
+    printf("in-output-test-8 FAILED!\n")
+  +
+    shutdown("test-8 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)

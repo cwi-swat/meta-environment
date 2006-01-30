@@ -1,0 +1,19 @@
+#include <in-output.idef>
+
+process Test is
+let
+  Msg: str
+in
+  snd-msg(create-empty-sdf-module("EmptySdf2Module")) .
+  (
+    rec-msg(module-created("EmptySdf2Module"))
+  +
+    rec-msg(module-creation-failed("EmptySdf2Module", Msg?)) .
+    printf("in-output-test-4 FAILED! (%s)\n", Msg)
+  +
+    shutdown("test-4 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)

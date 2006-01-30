@@ -1,0 +1,19 @@
+#include <in-output.idef>
+
+process Test is
+let
+  Msg: str
+in
+  snd-msg(create-empty-equations("EmptyEqsSection", "__BUILDDIR__/EmptyEqsSection.sdf")) .
+  (
+    rec-msg(empty-equations-created("__BUILDDIR__/EmptyEqsSection.asf"))
+  +
+    rec-msg(empty-equations-not-created("EmptyEqsSection", Msg?)) .
+    printf("in-output-test-5 FAILED! (%s)\n", Msg)
+  +
+    shutdown("test-5 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)
