@@ -1,0 +1,22 @@
+package 
+identification
+   name=pgen
+   version=2.2
+   location=http://www.cwi.nl/projects/MetaEnv/pgen
+   info=http://www.cwi.nl/projects/MetaEnv/pgen
+
+   description='Pgen is a parser generator for SDF to be used in combination
+                with sglr.'
+
+   keywords=meta-environment, meta-environment, sglr, pgen, parser generator, glr, scannerless, disambiguation
+
+configuration interface
+
+requires
+pt-support 2.0
+
+error-support 1.0
+
+aterm 2.4.2
+
+toolbuslib 0.8
