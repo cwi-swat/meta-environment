@@ -4,9 +4,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
-import nl.cwi.sen1.data.Module;
-import nl.cwi.sen1.data.ModuleSelectionListener;
-import nl.cwi.sen1.data.ModuleTreeModel;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Attribute;
 import nl.cwi.sen1.graph.types.AttributeList;
@@ -20,6 +17,9 @@ import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
+import nl.cwi.sen1.gui.plugin.data.Module;
+import nl.cwi.sen1.gui.plugin.data.ModuleSelectionListener;
+import nl.cwi.sen1.gui.plugin.data.ModuleTreeModel;
 import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
 import nl.cwi.sen1.util.StudioPopupMenu;

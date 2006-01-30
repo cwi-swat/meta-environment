@@ -11,12 +11,12 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import nl.cwi.sen1.data.Module;
-import nl.cwi.sen1.data.ModuleSelectionListener;
-import nl.cwi.sen1.data.ModuleTreeModel;
-import nl.cwi.sen1.data.ModuleTreeNode;
 import nl.cwi.sen1.gui.plugin.Navigator;
+import nl.cwi.sen1.gui.plugin.data.Module;
+import nl.cwi.sen1.gui.plugin.data.ModuleSelectionListener;
 import nl.cwi.sen1.gui.plugin.data.ModuleSelectionModel;
+import nl.cwi.sen1.gui.plugin.data.ModuleTreeModel;
+import nl.cwi.sen1.gui.plugin.data.ModuleTreeNode;
 
 public class ModuleTree extends JPanel {
 	private JTree tree;

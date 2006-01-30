@@ -23,11 +23,6 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
-dnl Require module-support package
-AC_PACKAGE_REQUIRE(module-support, module-support-config,
-   [  --with-module-support=DIR      Module-support is in DIR])
-AC_SUBST(MODULE_SUPPORT)
-
 dnl Require graph-support package
 AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])
@@ -39,7 +34,7 @@ AC_PACKAGE_REQUIRE(meta-studio, gui-config,
 AC_SUBST(META_STUDIO)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${MODULE_SUPPORT}/bin/module-support-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${META_STUDIO}/bin/gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${META_STUDIO}/bin/gui-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)
@@ -53,6 +48,5 @@ AC_PROG_MAKE_SET([])
 dnl Which files need updating?
 AC_CONFIG_FILES([
   Makefile
-  lib/Makefile
 ])
 AC_OUTPUT
