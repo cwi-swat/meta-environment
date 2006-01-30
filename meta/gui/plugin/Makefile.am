@@ -3,5 +3,4 @@
 SUBDIRS = \
 	moduledetails \
 	navigator \
-	dialog \
-	progress	
+	dialog

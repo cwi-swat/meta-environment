@@ -59,3 +59,5 @@ module-support 1.0
 module-manager 1.0
 
 graph-gui 1.0
+
+progress-gui 1.0
