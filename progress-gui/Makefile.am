@@ -5,15 +5,12 @@ include $(top_srcdir)/toolbus_make_rules
 
 ACLOCAL_FLAGS = -I .
 
-SUBDIRS = lib
-
-TOOLNAME = graph-painter
+TOOLNAME = progress
 JAVA_PACKAGE = nl.cwi.sen1.gui.plugin
 JARFILE = $(TOOLNAME).jar
-MAIN_CLASS = $(JAVA_PACKAGE).GraphPainter
+MAIN_CLASS = $(JAVA_PACKAGE).Progress
 
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
-LOCAL_JARS = $(abstop_srcdir)/lib/prefuse.jar
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
 bin_SCRIPTS = $(PACKAGE)-config
@@ -25,7 +22,7 @@ CLEANFILES = $(PACKAGE)-config $(PACKAGE)-$(VERSION).pkg
 
 $(PACKAGE)-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/prefuse.jar" \
+		echo "echo $(pkgdatadir)/$(JARFILE)" \
 	) > $@ && chmod +x $@
 
 $(PACKAGE)-$(VERSION).pkg: package Makefile

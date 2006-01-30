@@ -1,0 +1,31 @@
+#ifndef __PROGRESS__
+#define __PROGRESS__
+
+tool progress is { }
+
+process Progress is
+let
+  Columnname: str,
+  Message: str,
+  Status: term,
+  T: progress
+in
+  rec-connect(T?)
+  .
+  (
+    rec-msg(pro-set-status(Message?, Columnname?, Status?))
+    . snd-do(T, set-status(Message, Columnname, Status))
+  +
+    rec-msg(clear-status-window)
+    . snd-do(T, clear-status-window)
+  )
+  *
+  rec-disconnect(T)
+endlet
+
+process StartProgressPanel is
+  snd-msg(load-jar("file://__PKGDATA__/progress.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
+
+toolbus(Progress)
+
+#endif /*__PROGRESS__*/
