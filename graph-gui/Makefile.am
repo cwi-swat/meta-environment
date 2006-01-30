@@ -25,7 +25,7 @@ CLEANFILES = $(PACKAGE)-config $(PACKAGE)-$(VERSION).pkg
 
 $(PACKAGE)-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo $(pkgdatadir)/$(JARFILE)" \
+		echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/prefuse.jar" \
 	) > $@ && chmod +x $@
 
 $(PACKAGE)-$(VERSION).pkg: package Makefile
