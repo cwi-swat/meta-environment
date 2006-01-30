@@ -4,7 +4,7 @@
 #include <gui-actions.tb>
 #include <meta-studio/gui.idef>
 #include <dialog.idef>
-#include <graph-painter.idef>
+#include <graph-gui/graph-painter.idef>
 #include <progress.idef>
 #include <moduledetails.idef>
 
@@ -129,9 +129,6 @@ process StartNavigator is
 
 process StartDialogTool is
   snd-msg(load-jar("file://__PKGDATA__/dialog.jar", "__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
-
-process StartGraphPanel is
-  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))
 
 process StartProgressPanel is
   snd-msg(load-jar("file://__PKGDATA__/progress.jar", "__PKGDATA__/gui-util.jar:__PKGDATA__/gui-data.jar:__EXTERNAL_JARS__"))

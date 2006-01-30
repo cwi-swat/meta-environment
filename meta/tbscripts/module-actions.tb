@@ -3,7 +3,7 @@
 
 #include <sdf-namespace.h>
 #include "navigator.idef"
-#include "graph-painter.idef"
+#include "graph-gui/graph-painter.idef"
 #include "config-manager/configuration-manager.idef"
 
 process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is

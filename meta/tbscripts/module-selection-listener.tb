@@ -1,5 +1,5 @@
 #include <navigator.idef>
-#include <graph-painter.idef>
+#include <graph-gui/graph-painter.idef>
 #include <undefined.h>
 
 process SynchronizeModuleSelection is

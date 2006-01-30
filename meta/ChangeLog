@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Jan 30 10:48:14 CET 2006 <kooiker@cwi.nl>
+ * gui/plugins/graph-painter:
+   - Moved to graph-gui package
+
 Fri Jan 27 13:21:52 CET 2006 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - Create structure editor if it does not already exists when updating the
