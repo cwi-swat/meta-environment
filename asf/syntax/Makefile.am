@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS = addeqssyntax removevarsyntax asfsdf-checker 
+SUBDIRS = addeqssyntax asfsdf-checker 

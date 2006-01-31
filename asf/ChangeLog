@@ -1,5 +1,8 @@
 $Id$
 
+Tue Jan 31 18:01:50 CET 2006 <jurgenv@cwi.nl>
+ * asf/syntax/removevarsyntax: moved to pgen package
+
 Fri Jan 27 14:46:45 CET 2006 <kooiker@cwi.nl>
  * asf/semantics/asfe/src/asfe.idef:
    - Debugging is now a parameter for asfe-rewrite
