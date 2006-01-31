@@ -1,0 +1,130 @@
+tool term-store is { command = "term-store -TB_COLLECT_LOOP 1" }
+
+
+process TermStore is
+let
+  TS: term-store,
+  TableName: str,
+  Key: term,
+  TableNames: list,
+  TermValue: term,
+  StrValue: str,
+  Keys: list,
+  Values: list,
+  ValueType: str,
+  Pairs: list,
+  Snapshot: term
+in
+  execute(term-store, TS?)
+  .
+  (
+    rec-msg(ts-add-table(TableName?, ValueType?))
+    . snd-do(TS, add-table(TableName, ValueType))
+  +
+    rec-msg(ts-remove-table(TableName?))
+    . snd-do(TS, remove-table(TableName))
+  +
+    rec-msg(ts-clear-table(TableName?))
+    . snd-do(TS, clear-table(TableName))
+  +
+    rec-msg(ts-put-term-value(TableName?, Key?, TermValue?))
+    . snd-do(TS, put-term-value(TableName, Key, TermValue))
+    . TermValue := help-the-garbage-collector 
+  +
+    rec-msg(ts-put-str-value(TableName?, Key?, StrValue?))
+    . snd-do(TS, put-str-value(TableName, Key, StrValue))
+    . StrValue := "help-the-garbage-collector"
+  +
+    rec-msg(ts-get-str-value(TableName?, Key?))
+    . snd-eval(TS, get-str-value(TableName, Key))
+    .
+    (
+      rec-value(TS, result(StrValue?))
+      . snd-msg(ts-value(TableName, Key, StrValue))
+      . StrValue := "help-the-garbage-collector"
+    +
+      rec-value(TS, no-result)
+      . snd-msg(ts-no-value(TableName, Key))
+    )
+  +
+    rec-msg(ts-get-term-value(TableName?, Key?))
+    . snd-eval(TS, get-term-value(TableName, Key))
+    .
+    (
+      rec-value(TS, result(TermValue?))
+      . snd-msg(ts-value(TableName, Key, TermValue))
+      . TermValue := no-tree
+    +
+      rec-value(TS, no-result)
+      . snd-msg(ts-no-value(TableName, Key))
+    )
+  +
+    rec-msg(ts-remove-value(TableName?, Key?))
+    . snd-do(TS, remove-value(TableName, Key))
+  +
+    rec-msg(ts-contains-key(TableName?, Key?))
+    . snd-eval(TS, contains-key(TableName, Key))
+    .
+    (
+      rec-value(TS, result(yes))
+      . snd-msg(ts-contains-key(TableName, Key))
+    +
+      rec-value(TS, result(no))
+      . snd-msg(ts-not-contains-key(TableName, Key))
+    )
+  +
+    rec-msg(ts-get-all-keys(TableName?))
+    . snd-eval(TS, get-all-keys(TableName))
+    . rec-value(TS, result(Keys?))
+    . snd-msg(ts-all-keys(TableName, Keys))
+    . Keys := []
+  +
+    rec-msg(ts-get-key-value-pairs(TableName?))
+    . snd-eval(TS, get-key-value-pairs(TableName))
+    . rec-value(TS, result(Pairs?))
+    . snd-msg(ts-pairs(TableName, Pairs))
+    . Pairs := []
+  +
+    rec-msg(ts-filter-keys(TableName?, Keys?))
+    . snd-eval(TS, filter-keys(TableName, Keys))
+    . rec-value(TS, result(Keys?))
+    . snd-msg(ts-keys(TableName, Keys))
+    . Keys := []
+  +
+    rec-msg(ts-get-all-values(TableName?))
+    . snd-eval(TS, get-all-values(TableName))
+    . rec-value(TS, result(Values?))
+    . snd-msg(ts-all-values(TableName, Values))
+    . Values := []
+  +
+    rec-msg(ts-get-values(TableName?, Keys?))
+    . snd-eval(TS, get-values(TableName, Keys))
+    .
+    (
+      rec-value(TS, result(Values?))
+      . snd-msg(ts-values(TableName, Keys, Values))
+    +
+      rec-value(TS, no-result)
+      . snd-msg(ts-no-values(TableName, Keys))
+    )
+    . Values := [help-the-garbage-collector]
+  +
+    rec-msg(ts-remove-value-from-all-tables(Key?))
+    . snd-eval(TS, remove-value-from-all-tables(Key))
+    . rec-value(TS, removed-from-tables(TableNames?))
+  +
+    rec-msg(ts-get-snapshot)
+    . snd-eval(TS, get-snapshot)
+    . rec-value(TS, result(Snapshot?))
+    . snd-msg(ts-snapshot(Snapshot))
+  +
+    rec-msg(ts-load-snapshot(Snapshot?))
+    . snd-eval(TS, load-snapshot(Snapshot))
+    . rec-value(TS, tables-loaded(TableNames?))
+    . snd-msg(ts-snapshot-loaded)
+  )
+  *
+  delta
+endlet
+
+toolbus(TermStore)
