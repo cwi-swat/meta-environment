@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jan 31 17:55:26 CET 2006 <jurgenv@cwi.nl>
+ * removevarssyntax: This tool removes the variable definitions
+   from an SDF module or definition. It used to be located in the
+   package for ASF, but since it is ASF independent I've put it here.
+
 Wed Jan 18 16:29:16 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * src/Makefile.am,package,configure.in: got rid of transitive
    dependencies of asc-support by using asc-support-config script

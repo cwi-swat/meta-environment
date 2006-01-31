@@ -6,7 +6,7 @@ ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
-SUBDIRS = src grammar sdf-checker test sdf-upgrade
+SUBDIRS = src grammar sdf-checker test sdf-upgrade removevarsyntax
 
 EXTRA_DIST = reconf program-check.m4 make_rules package
 

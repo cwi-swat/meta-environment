@@ -1,6 +1,7 @@
 Makefile.in
 Makefile
 .deps
+.libs
 *.tifs
 parsetablegen
 sdf2table
