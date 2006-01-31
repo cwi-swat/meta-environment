@@ -1,0 +1,7 @@
+#! /bin/sh
+
+__META__/bin/generic-meta \
+  -I __SDF_SUPPORT__/share/sdf-support \
+  -I __PREFIX__/share/sdf-meta \
+  -p __SDF_SUPPORT__/bin \
+  -S __PREFIX__/share/sdf-meta/start-meta-studio.tb $*
