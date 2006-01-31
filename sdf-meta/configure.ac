@@ -10,6 +10,11 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
   [  --with-pgen=DIR         pgen is in DIR])
 AC_SUBST(PGEN)
 
+dnl Require meta package
+AC_PACKAGE_REQUIRE(meta, generic-meta,
+  [  --with-meta=DIR         Meta-Environment is in DIR])
+AC_SUBST(META)
+
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([
   Makefile
