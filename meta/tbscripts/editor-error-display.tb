@@ -1,3 +1,6 @@
+#ifndef __EDITOR_ERROR_DISPLAY__
+#define __EDITOR_ERROR_DISPLAY__
+
 process GoToEditorArea(Sid: term, Area: term) is
 let
   Offset: int
@@ -70,3 +73,5 @@ in
   . Error := first(Errors)
   . ShowError(Sid, Error)
 endlet
+
+#endif /* __EDITOR_ERROR_DISPLAY__ */

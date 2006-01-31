@@ -1,5 +1,5 @@
-#ifndef __CACHING__
-#define __CACHING__
+#ifndef __CACHE_UTILS__
+#define __CACHE_UTILS__
 
 #include <child-attribute-changed-event.tb>
 #include <term-store.idef>
@@ -63,4 +63,4 @@ process GetCachedValue(TableName: str, Key: term, Value: term?) is
 process PutCachedValue(TableName: str, Key: term, Value: term) is
   snd-msg(ts-put-term-value(TableName, Key, Value))
 
-#endif /* __CACHING__ */
+#endif /* __CACHE_UTILS__ */
