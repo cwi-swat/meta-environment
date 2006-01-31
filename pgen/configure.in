@@ -101,6 +101,8 @@ AC_CONFIG_FILES([Makefile
    sdf-checker/src/Makefile
    sdf-upgrade/Makefile
    sdf-upgrade/spec/Makefile
+   removevarsyntax/Makefile
+   removevarsyntax/src/Makefile
    test/Makefile
    test/grammars/Makefile
    test/tables/Makefile 
