@@ -7,6 +7,7 @@
 #include <asfoperations.idef>
 #include <asfe.idef>
 #include <asfchecker.idef>
+#include <unparser.idef>
 
 #define ASF_TREE_CACHE "asf-annotated-tree"
 

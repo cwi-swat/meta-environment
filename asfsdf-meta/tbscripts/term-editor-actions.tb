@@ -1,0 +1,42 @@
+#ifndef __TERM_EDITOR_ACTIONS__
+#define __TERM_EDITOR_ACTIONS__
+
+#include <module-manager.tb>
+#include <sdf-namespace.h>
+
+process EditorEditTermAction(EditorId : term) is
+let
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . EditTermAction(ModuleId)
+endlet
+
+process EditTermAction(ModuleId : term) is
+let
+  Cancel: bool,
+  ErrorMessage: str,
+  Filename: str,
+  Modulename: str,
+  Pid: int,
+  Sid: term
+in
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  . PromptForFile("Edit Term", [], Modulename, Cancel?, Filename?)
+  . 
+  if equal(Cancel, true) then
+    tau
+  else
+    create(EditTerm(Filename, ModuleId), Pid?)
+    .
+    (
+      rec-msg(term-editor-started(Filename, ModuleId, Sid?))
+      . create(CleanupEditTerm(Sid, Filename), Pid?)
+    +
+      rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
+      . Error(ErrorMessage, [])
+    )
+  fi
+endlet
+
+#endif /* __TERM_EDITOR_ACTIONS__ */
