@@ -2,30 +2,36 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST  = generic-meta.sh.src 
+EXTRA_DIST  = $(wildcard *.src)
 
-bin_SCRIPTS = generic-meta 
+bin_SCRIPTS = meta-config
 
-CLEANFILES  = generic-meta meta.1 
+TBSCRIPTS = \
+	    -I$(TERM_STORE)/share/term-store \
+	    -I$(EDITOR_MANAGER)/share/editor-manager \
+	    -I$(EDITOR_PLUGIN)/share/editor-plugin \
+	    -I$(STRUCTURE_EDITOR)/share/structure-editor \
+	    -I$(ERROR_SUPPORT)/share/error-support \
+	    -I$(ERROR_GUI)/share/error-gui \
+	    -I$(GRAPH_SUPPORT)/share/graph-support \
+	    -I$(DIALOG_GUI)/share/dialog-gui \
+	    -I$(META_STUDIO)/share/meta-studio \
+	    -I$(PROGRESS_GUI)/share/progress-gui \
+	    -I$(MODULE_DETAILS_GUI)/share/module-details-gui \
+	    -I$(IO_SUPPORT)/share/io-support \
+	    -I$(MODULE_MANAGER)/share/module-manager \
+	    -I$(NAVIGATOR_GUI)/share/navigator-gui \
+	    -I$(SGLR)/share/sglr \
+	    -I$(PT_SUPPORT)/share/pt-support \
+	    -I$(ERROR_SUPPORT)/share/error-support \
+	    -I$(PANDORA)/share/pandora \
+	    -I$(TIDE)/share/tide \
+	    -I$(TIDE_SUPPORT)/share/tide-support \
+	    -I$(CONFIGURATION_MANAGER)/share/configuration-manager \
+	    -I$(GRAPH_GUI)/share/graph-gui
+
+CLEANFILES  = meta-config
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
-	     s@__ATERM__@$(ATERM)@g;\
-	     s@__TOOLBUS__@$(TOOLBUS)@g;\
-	     s@__ERROR_SUPPORT__@$(ERROR_SUPPORT)@g;\
-	     s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g;\
-	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
-	     s@__SDF_SUPPORT__@$(SDF_SUPPORT)@g;\
-	     s@__GRAPH_SUPPORT__@$(GRAPH_SUPPORT)@g;\
-	     s@__PGEN__@$(PGEN)@g;\
-	     s@__SGLR__@$(SGLR)@g;\
-	     s@__TIDE__@$(TIDE)@g;\
-	     s@__TIDE_SUPPORT__@$(TIDE_SUPPORT)@g;\
-	     s@__PANDORA__@$(PANDORA)@g;\
-	     s@__CONFIG_MANAGER__@$(CONFIG_MANAGER)@g;\
-	     s@__MODULE_MANAGER__@$(MODULE_MANAGER)@g;\
-	     s@__VERSION__@$(VERSION)@g;\
-	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
-	chmod +x $@
-
-
+	     s@__TBSCRIPTS__@$(TBSCRIPTS)@g;' < $< > $@ && chmod +x $@

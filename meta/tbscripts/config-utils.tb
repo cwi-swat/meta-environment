@@ -1,6 +1,8 @@
 #ifndef __CONFIG_UTILS__
 #define __CONFIG_UTILS__
 
+#include <configuration-manager.idef>
+
 #define EMPTY_PATH ""
 
 process GetSearchPaths(Paths: list?) is

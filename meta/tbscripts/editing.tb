@@ -6,7 +6,6 @@
 #include <structure-editor/structure-editor.idef>
 
 #include <module-manager.tb>
-#include <configuration-manager.tb>
 #include <io-utils.tb>
 #include <config-utils.tb>
 #include <editor-error-display.tb>
