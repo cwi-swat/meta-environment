@@ -1,16 +1,16 @@
 # $Id$
 
 EXTRA_DIST = \
-	meta.sh.src \
+	asfsdf-meta.sh.src \
 	pt-dump.sh.src \
 	eqs-dump.sh.src
 
 CLEANFILES = \
-	meta \
+	asfsdf-meta \
 	pt-dump \
 	eqs-dump
 
-bin_SCRIPTS = meta pt-dump eqs-dump
+bin_SCRIPTS = asfsdf-meta pt-dump eqs-dump
 
 % : %.sh.src Makefile
 	sed 's@__ASF__@${ASF}@g;\
