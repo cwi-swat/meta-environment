@@ -2,13 +2,7 @@
 #define __EDITING__
 
 #include <module-manager.tb>
-#include <sdf-namespace.h>
-#include <term-actions.tb>
-#include <parse-utils.tb>
 #include <io-utils.tb>
-#include <term-editor-utils.tb>
-#include <sdf-editor-utils.tb>
-#include <asf-editor-utils.tb>
 #include <config-utils.tb>
 
 process DisplayMessage(EditorId : term, Message : str) is
