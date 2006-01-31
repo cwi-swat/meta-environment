@@ -20,7 +20,6 @@ TBSCRIPTS = \
   pretty-print-utils.tb \
   serialization-utils.tb \
   term-actions.tb \
-  term-parsetable.tb \
   term-utils.tb \
   undefined.h
   
