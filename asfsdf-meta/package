@@ -15,17 +15,10 @@ identification
 configuration interface
 
 requires
-   meta 2.0
+sdf-meta 1.0
+
+meta 2.0
 
 asf 1.9
 
-pgen 2.2
-
 asf-library 1.2
-
-io-support 1.0
-
-structure-editor 1.0
-
-editor-manager 1.0
-

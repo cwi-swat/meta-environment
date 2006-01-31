@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Tue Jan 31 13:01:12 CET 2006 <kooiker@cwi.nl>
+ * src/start-*-editor:
+   - Removed
+
 Fri Jan 27 13:23:25 CET 2006 <kooiker@cwi.nl>
  * moved meta-scripts to tbscripts
  * tbscripts/asf-utils.tb:

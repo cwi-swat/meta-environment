@@ -4,7 +4,6 @@
 #include "configuration-manager.idef"
 #include "generic-adapter.idef"
 #include "graph-converter.idef"
-#include "io-support/in-output.idef"
 #include "layout-graph.idef"
 #include "module-utils.tb"
 #include <module-actions.tb>
