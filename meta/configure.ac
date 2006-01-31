@@ -103,6 +103,11 @@ AC_PACKAGE_REQUIRE(term-store, term-store,
    [  --with-term-store=DIR      term-store distribution is in DIR])
 AC_SUBST(TERM_STORE)
 
+dnl Require io-support package
+AC_PACKAGE_REQUIRE(io-support, in-output,
+   [  --with-io-support=DIR      io-support distribution is in DIR])
+AC_SUBST(IO_SUPPORT)
+
 dnl Require graph-support package
 AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])

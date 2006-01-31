@@ -1,6 +1,8 @@
 #ifndef __IO_UTILS__
 #define __IO_UTILS__
 
+#include <io-support/in-output.idef>
+
 process RemoveFile(Path: str) is
 let
   Summary: term
