@@ -1,6 +1,8 @@
 #ifndef __EDITOR_ERROR_DISPLAY__
 #define __EDITOR_ERROR_DISPLAY__
 
+#include <error-support.idef>
+
 process GoToEditorArea(Sid: term, Area: term) is
 let
   Offset: int

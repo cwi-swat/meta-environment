@@ -2,7 +2,6 @@
 
 aterm=__ATERM__
 pt_support=__PT_SUPPORT__
-sdf_support=__SDF_SUPPORT__
 error_support=__ERROR_SUPPORT__
 graph_support=__GRAPH_SUPPORT__
 sglr=__SGLR__
@@ -18,7 +17,7 @@ myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
 ${error_support}/bin:${graph_support}/bin:${toolbus}/bin:\
-${sdf_support}/bin:${pandora}/bin:${tide}/bin:${PATH}"; 
+${pandora}/bin:${tide}/bin:${PATH}"; 
 export PATH
 
 CLASSPATH=__EXTERNAL_JARS__:${CLASSPATH}
@@ -178,7 +177,6 @@ toolbus $xargs ${toolbusdefs} \
    -I${aterm}/share \
    -I${error_support}/share/error-support \
    -I${pt_support}/share/pt-support \
-   -I${sdf_support}/share/sdf-support \
    -I${graph_support}/share/graph-support \
    -I${sglr}/share/sglr \
    -I${tide}/share/tide \

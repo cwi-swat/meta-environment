@@ -1,6 +1,11 @@
 #ifndef __PARSE_FOCUSES__
 #define __PARSE_FOCUSES__
 
+#include <sglr.idef>
+#include <unparser.idef>
+#include <position-annotator.idef>
+#include <error-support.idef>
+
 process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
   snd-msg(add-posinfo-packed(File, Tree))
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
