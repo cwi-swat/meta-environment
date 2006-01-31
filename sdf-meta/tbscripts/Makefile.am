@@ -2,7 +2,6 @@
 
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
-  editing.tb \
   idle-state.tb \
   module-manager.tb \
   parsetable-utils.tb \
