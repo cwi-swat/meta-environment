@@ -11,7 +11,6 @@ CLEANFILES = \
 
 SUBDIRS = \
 	src \
-	term-store \
 	tbscripts
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
