@@ -2,4 +2,4 @@ Makefile.in
 Makefile
 .deps
 generic-meta
-meta-config.sh
+meta-config
