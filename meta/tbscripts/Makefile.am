@@ -8,6 +8,7 @@ TBSCRIPTS = \
   child-attribute-changed-event.tb \
   config-utils.tb \
   dependencies-changed-event.tb \
+  editing.tb \
   editor-error-display.tb \
   graph-utils.tb \
   gui-actions.tb \
