@@ -5,7 +5,7 @@ autom4te.cache
 config.log
 config.status
 configure
-toolbus-java-adapter-*.jar
-toolbus-java-adapter-*.pkg
-toolbus-java-adapter-*.tar.gz
-toolbus-java-adapter-config
+sdf-meta-*.jar
+sdf-meta-*.pkg
+sdf-meta-*.tar.gz
+sdf-meta-config
