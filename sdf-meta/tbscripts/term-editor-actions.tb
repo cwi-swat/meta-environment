@@ -1,3 +1,6 @@
+#ifndef __TERM_EDITOR_ACTIONS__
+#define __TERM_EDITOR_ACTIONS__
+
 #include <module-manager.tb>
 #include <sdf-namespace.h>
 
@@ -35,3 +38,5 @@ in
     )
   fi
 endlet
+
+#endif /* __TERM_EDITOR_ACTIONS__ */
