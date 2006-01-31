@@ -98,6 +98,11 @@ AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
    [  --with-tide-support=DIR      Tide-support distribution is in DIR])
 AC_SUBST(TIDE_SUPPORT)
 
+dnl Require term-store package
+AC_PACKAGE_REQUIRE(term-store, term-store,
+   [  --with-term-store=DIR      term-store distribution is in DIR])
+AC_SUBST(TERM_STORE)
+
 dnl Require graph-support package
 AC_PACKAGE_REQUIRE(graph-support, tree2graph,
    [  --with-graph-support=DIR   graph-support is in DIR])
