@@ -5,6 +5,7 @@
 
 #include <idle-state.tb>
 #include <layout-graph.idef>
+#include <graph-converter.idef>
 
 process RenderGraph(GraphPanelId: str, Graph: term?) is
   snd-msg(gp-render-graph(GraphPanelId, Graph))

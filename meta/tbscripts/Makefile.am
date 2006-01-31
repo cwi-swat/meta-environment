@@ -10,10 +10,12 @@ TBSCRIPTS = \
 	    dependencies-changed-event.tb \
 	    editing.tb \
 	    editor-error-display.tb \
+	    error-utils.tb \
 	    graph-utils.tb \
 	    gui-actions.tb \
 	    gui-utils.tb \
 	    io-utils.tb \
+	    meta.tb \
 	    module-manager.tb \
 	    module-selection-listener.tb \
 	    module-utils.tb \

@@ -5,6 +5,8 @@
 #include <unparser.idef>
 #include <position-annotator.idef>
 #include <error-support.idef>
+#include <restorebrackets.idef>
+#include <unparser.idef>
 
 process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
   snd-msg(add-posinfo-packed(File, Tree))
@@ -56,4 +58,17 @@ in
   )
 endlet
 
+process RestoreTermBrackets(ModuleId: term, Tree: term, Result: term?) is
+let
+  Table: term
+in
+  GetParseTable(ModuleId, trm, Table?)
+  . 
+  if not-equal(Table, UNDEFINED) then
+    snd-msg(restore-brackets(Tree, Table))
+    . rec-msg(brackets-restored(Result?))
+  else
+    Result := UNDEFINED
+  fi
+endlet
 #endif /*__PARSE_FOCUSES__*/

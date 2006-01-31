@@ -1,0 +1,7 @@
+
+#ifndef __ERROR_UTILS__
+#define __ERROR_UTILS__
+
+#include <error-gui/error-viewer.idef>
+
+#endif

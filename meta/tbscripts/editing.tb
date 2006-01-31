@@ -1,9 +1,15 @@
 #ifndef __EDITING__
 #define __EDITING__
 
+#include <editor-manager/editor-manager.idef>
+#include <editor-plugin/editor-plugin.idef>
+#include <structure-editor/structure-editor.idef>
+
 #include <module-manager.tb>
+#include <configuration-manager.tb>
 #include <io-utils.tb>
 #include <config-utils.tb>
+#include <editor-error-display.tb>
 
 process DisplayMessage(EditorId : term, Message : str) is
   snd-msg(te-display-message(EditorId, Message))

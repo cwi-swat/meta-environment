@@ -1,5 +1,9 @@
+#ifndef __MODULE_SELECTION_LISTENER__
+#define __MODULE_SELECTION_LISTENER__
+
 #include <navigator-gui/navigator.idef>
 #include <graph-gui/graph-painter.idef>
+#include <module-details-gui/moduledetails.idef>
 #include <undefined.h>
 
 process SynchronizeModuleSelection is
@@ -43,3 +47,5 @@ in
 endlet
 
 toolbus(SynchronizeModuleSelection)
+
+#endif /* __MODULE_SELECTION_LISTENER__ */
