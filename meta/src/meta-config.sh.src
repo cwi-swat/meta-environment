@@ -3,13 +3,15 @@
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 myarguments="hV"
-myoptions="ldflags,includes,prefix"
+myoptions="toolbus-includes,prefix"
 
 Usage() {
 cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
-    -V              reveal program version (i.e. $myversion)
+    -V                   reveal program version (i.e. $myversion)
+    --toolbus-includes   print ToolBus include path
+    --prefix             print installation prefix
 E_O_USAGE
 }
 
@@ -32,7 +34,7 @@ do
     case "$1"
     in
         --toolbus-includes)
-            echo __TBSCRIPTS__
+            echo __TBSCRIPTS__;
 	    exit 0;;
         --prefix)
             echo __PREFIX__
