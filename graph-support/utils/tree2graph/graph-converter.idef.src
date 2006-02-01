@@ -1,0 +1,36 @@
+
+tool graph-converter is { command = "__PREFIX__/bin/tree2graph" }
+
+process GraphConverter is
+let
+  GC: graph-converter,
+  Graph: term,
+  LeafsOn: term,
+  SharingOn: term,
+  Location: term,
+  Node: term,
+  Tree: term
+in
+  execute(graph-converter, GC?)
+  .
+  (
+    rec-msg(gc-tree-to-graph(Tree?, LeafsOn?, SharingOn?))
+    . snd-eval(GC, tree2graph(Tree, LeafsOn, SharingOn))
+    . rec-value(GC, graph(Graph?))
+    . snd-msg(gc-graph(Graph))
+  +
+    rec-msg(gc-get-node-origin(Node?))
+    . snd-eval(GC, get-node-origin(Node))
+    .
+    (
+      rec-value(GC, origin(Location?))
+      . snd-msg(gc-origin(Location))
+    +
+      rec-value(GC, no-origin)
+      . snd-msg(gc-no-origin)
+    )
+  )
+  * delta
+endlet
+
+toolbus(GraphConverter)

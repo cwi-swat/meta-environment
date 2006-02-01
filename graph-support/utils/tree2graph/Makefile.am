@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = graph-converter.idef
+EXTRA_DIST = graph-converter.idef.src
 
 bin_PROGRAMS = tree2graph
 
@@ -32,3 +32,6 @@ tree2graph_LDADD = \
    -L$(ERROR_SUPPORT)/lib -lErrorAPI \
    -L${ATERM}/lib -lATerm \
    ${SOCKLIBS}
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

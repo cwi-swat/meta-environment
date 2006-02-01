@@ -4,7 +4,7 @@ include ${top_srcdir}/make_rules
 bin_PROGRAMS = layoutgraph graph2dot
 pkgdata_DATA = layout-graph.idef 
 
-EXTRA_DIST = layout-graph.idef dot.l dot.y
+EXTRA_DIST = layout-graph.idef.src dot.l dot.y
 
 CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output
 
@@ -48,3 +48,6 @@ y.tab.c y.tab.h: dot.y
 
 lex.yy.c : dot.l y.tab.h
 	$(LEX) $(AM_LFLAGS) $(LFLAGS) $<
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

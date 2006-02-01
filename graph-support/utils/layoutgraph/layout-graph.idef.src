@@ -1,0 +1,19 @@
+
+tool layoutgraph is { command = "__PREFIX__/bin/layoutgraph" }
+
+process GraphLayouter is
+let
+  GL : layoutgraph,
+  Graph : term
+in
+  (
+    rec-msg(gl-layout-graph(Graph?))
+    . execute(layoutgraph, GL?)
+    . snd-eval(GL, layout-graph(Graph))
+    . rec-value(GL, graph-layouted(Graph?))
+    . snd-terminate(GL, "done")
+    . snd-msg(gl-graph(Graph))
+  ) * delta
+endlet
+
+toolbus(GraphLayouter)
