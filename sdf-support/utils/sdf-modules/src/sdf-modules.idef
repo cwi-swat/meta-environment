@@ -1,7 +1,7 @@
 #ifndef __SDF_MODULES__
 #define __SDF_MODULES__
 
-tool sdf-modules is { command = "sdf-modules -TB_COLLECT_LOOP 1" }
+tool sdf-modules is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/sdf-modules -TB_COLLECT_LOOP 1" }
 
 
 process SdfModules is

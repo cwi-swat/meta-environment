@@ -3,6 +3,9 @@
 include ${top_srcdir}/make_rules
 
 EXTRA_DIST = sdf-modules.idef.src
+
+CLEANFILES = sdf-modules.idef
+
 pkgdata_DATA = sdf-modules.idef
 
 bin_PROGRAMS = sdf-modules

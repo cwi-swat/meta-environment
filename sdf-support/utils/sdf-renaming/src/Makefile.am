@@ -3,6 +3,9 @@
 include ${top_srcdir}/make_rules
 
 EXTRA_DIST = sdf-renaming.idef.src
+
+CLEANFILES = sdf-renaming.idef
+
 pkgdata_DATA = sdf-renaming.idef
 
 bin_PROGRAMS = sdf-renaming

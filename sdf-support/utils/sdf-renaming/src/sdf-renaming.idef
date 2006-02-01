@@ -1,5 +1,5 @@
 
-tool sdf-renaming is { command = "sdf-renaming -TB_COLLECT_LOOP 1" }
+tool sdf-renaming is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/sdf-renaming -TB_COLLECT_LOOP 1" }
 
 process SdfRenaming is
 let
