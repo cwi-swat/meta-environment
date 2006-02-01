@@ -4,11 +4,9 @@ ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST = package
 
-CLEANFILES = \
-	${PACKAGE}-${VERSION}.pkg
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
-SUBDIRS = \
-	tbscripts
+SUBDIRS = src tbscripts
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 

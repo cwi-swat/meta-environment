@@ -11,7 +11,7 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
 AC_SUBST(PGEN)
 
 dnl Require meta package
-AC_PACKAGE_REQUIRE(meta, generic-meta,
+AC_PACKAGE_REQUIRE(meta, meta-config,
   [  --with-meta=DIR         Meta-Environment is in DIR])
 AC_SUBST(META)
 
