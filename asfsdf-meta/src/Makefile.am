@@ -5,6 +5,7 @@ EXTRA_DIST = $(wildcard *.src)
 bin_SCRIPTS = asfsdf-meta pt-dump eqs-dump asfsdf-meta-config
 
 TBSCRIPTS = \
+	    -I$(prefix)/share/asfsdf-meta \
 	    -I$(ASF)/share/asf \
 	    `$(SDF_META)/bin/sdf-meta-config --toolbus-includes`
 
