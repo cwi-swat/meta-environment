@@ -10,7 +10,7 @@ INCLUDES = \
 	-I$(CONFIG_SUPPORT)/include
 
 EXTRA_DIST = \
-	configuration-manager.idef \
+	configuration-manager.idef.src \
 	user-configuration.tb.src
 
 bin_PROGRAMS = configmanager
@@ -42,3 +42,7 @@ absolute_srcdir=$(shell cd ${srcdir}; pwd)
 
 %.tb: %.tb.src Makefile
 	sed 's@__USER_CONFIGURATION__@$(USER_CONFIGURATION)@g;' < $< > $@
+	   
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+

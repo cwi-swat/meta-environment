@@ -1,0 +1,90 @@
+#ifndef _CONFIGURATION_MANAGER__
+#define _CONFIGURATION_MANAGER__
+
+tool configuration-manager is { command = "__PREFIX__/bin/configmanager" }
+
+process ConfigurationManager is
+let
+  Action: str,
+  CM: configuration-manager,
+  Contents: str,
+  Event: term,
+  Events: list,
+  Type: term,
+  LibraryPaths: list,
+  ModuleId: term,
+  ModulePaths: list,
+  Extension: str,
+  Categories: term
+in
+  execute(configuration-manager, CM?)
+  .
+  (
+    rec-msg(cm-add-system-properties(Contents?))
+    . snd-do(CM, add-system-properties(Contents))
+    . snd-msg(cm-system-properties-added)
+  +
+    rec-msg(cm-get-events(Type?))
+    . snd-eval(CM, get-events(Type))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-events(Events))
+  +
+    rec-msg(cm-get-module-events(Type?, ModuleId?))
+    . snd-eval(CM, get-module-events(Type, ModuleId))
+    . rec-value(CM, events(Events?))
+    . snd-msg(cm-module-events(Events))
+  +
+    rec-msg(cm-get-action(Type?, Event?))
+    . snd-eval(CM, get-action(Type, Event))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-action(Action))
+  +
+    rec-msg(cm-get-module-action(Type?, Event?, ModuleId?))
+    . snd-eval(CM, get-module-action(Type, Event, ModuleId))
+    . rec-value(CM, action(Action?))
+    . snd-msg(cm-module-action(Action))
+  +
+    rec-msg(get-extension-modulename(Extension?))
+    . snd-eval(CM, get-extension-modulename(Extension))
+    .
+    (
+      rec-value(CM, extension-modulename(ModuleId?))
+      . snd-msg(extension-modulename(Extension, ModuleId))
+    +
+      rec-value(CM, no-modulename)
+      . snd-msg(no-extension-modulename(Extension))
+    )
+  +
+    rec-msg(get-modulename-extension(ModuleId?))
+    . snd-eval(CM, get-modulename-extension(ModuleId))
+    .
+    (
+      rec-value(CM, modulename-extension(Extension?))
+      . snd-msg(modulename-extension(ModuleId, Extension))
+    +
+      rec-value(CM, no-extension)
+      . snd-msg(no-modulename-extension(ModuleId))
+    )
+  +
+    rec-msg(cm-get-module-paths)
+    . snd-eval(CM, get-module-paths)
+    . rec-value(CM, module-paths(ModulePaths?))
+    . snd-msg(cm-module-paths(ModulePaths))
+  +
+    rec-msg(cm-get-library-paths)
+    . snd-eval(CM, get-library-paths)
+    . rec-value(CM, library-paths(LibraryPaths?))
+    . snd-msg(cm-library-paths(LibraryPaths))
+  +
+    rec-msg(get-text-categories)
+    . snd-eval(CM, get-text-categories)
+    . rec-value(CM, text-categories(Categories?))
+    . snd-msg(text-categories(Categories))
+  )
+  *
+  delta
+endlet
+
+toolbus(ConfigurationManager)
+
+#endif
