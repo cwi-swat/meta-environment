@@ -1,5 +1,4 @@
 Makefile.in
 Makefile
 .deps
-generic-meta
 meta-config

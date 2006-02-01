@@ -16,7 +16,7 @@ E_O_USAGE
 }
 
 Version() {
-    echo "$myname v$myversion" >&2
+    echo "$me v$myversion" >&2
 }
 
 # getopt handles command line...
