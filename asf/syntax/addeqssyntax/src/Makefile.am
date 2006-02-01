@@ -10,6 +10,8 @@ pkgdata_DATA = addeqssyntax.idef
 
 EXTRA_DIST = addeqssyntax.idef.src 
 
+CLEANFILES = addeqssyntax.idef
+
 noinst_HEADERS = addeqssyntax.tif.h
 
 addeqssyntax_SOURCES = \

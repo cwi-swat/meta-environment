@@ -15,6 +15,8 @@ pkgdata_DATA = asfchecker.idef
 
 EXTRA_DIST = asfchecker.idef.src asfchecker.tif.c asfchecker.tif.h
 
+CLEANFILES = asfchecker.idef
+
 noinst_HEADERS 	= equationChecker.h asfchecker.tif.h statistics.h
 
 asfchecker_SOURCES = \

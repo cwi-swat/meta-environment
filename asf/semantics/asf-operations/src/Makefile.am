@@ -10,6 +10,8 @@ pkgdata_DATA    = asfoperations.idef
 
 EXTRA_DIST   = asfoperations.idef.src 
 
+CLEANFILES = asfoperations.idef
+
 noinst_HEADERS 	= \
 	asfoperations.tif.h \
 	asfnormalization.h 
