@@ -43,7 +43,7 @@ EXTRA_DIST = structure-editor.idef.src
 
 if MAINTAINER_MODE
 
-CLEANFILES = structure-editor.tifs
+CLEANFILES = structure-editor.tifs structure-editor.idef
 
 api: StructureEditor.sdf
 	(echo definition; cat $<) > `basename $< .sdf`.def
