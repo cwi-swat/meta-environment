@@ -33,6 +33,7 @@ $(TOOLNAME)-$(VERSION).pkg: package Makefile
 %.idef: %.idef.src Makefile
 	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
 	    -e 's@__LOCAL_JARS__@$(LOCAL_JARS)@g'\
+	    -e 's@__PREFIX__@$(prefix)@g'\
 	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
 	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@
