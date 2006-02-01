@@ -1,7 +1,7 @@
 SUBDIRS = lift-error lower-error error-diff
 
 EXTRA_DIST = \
-	error-support.idef
+	error-support.idef.src
 
 pkgdata_DATA = \
 	error-support.idef
@@ -30,6 +30,9 @@ error_support_LDADD = \
 	${SOCKLIBS}
 
 CLEANFILES=${bin_SCRIPTS}
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 ${PACKAGE}-config: Makefile
 	@(	echo "#! /bin/sh";\
