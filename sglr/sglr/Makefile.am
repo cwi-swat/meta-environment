@@ -4,6 +4,8 @@ include ${top_srcdir}/make_rules
 
 EXTRA_DIST = sglr.idef.src
 
+CLEANFILES = sglr.idef
+
 INCLUDES = \
 	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \

@@ -1,4 +1,4 @@
-tool restorebrackets is { command = "restorebrackets" }
+tool restorebrackets is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/restorebrackets" }
 
 process RestoreBrackets is
 let

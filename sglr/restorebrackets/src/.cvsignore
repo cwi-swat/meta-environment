@@ -2,4 +2,5 @@ Makefile
 Makefile.in
 .deps
 restorebrackets
+restorebrackets.idef
 *.tifs

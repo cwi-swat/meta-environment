@@ -1,4 +1,4 @@
-tool sglr is { command = "sglr" }
+tool sglr is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/sglr" }
 
 process SGLR is
 let

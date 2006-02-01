@@ -4,6 +4,8 @@ include ${top_srcdir}/make_rules
 
 EXTRA_DIST		= restorebrackets.idef.src
 
+CLEANFILES = restorebrackets.idef
+
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(PT_SUPPORT)/include \
 			-I$(ERROR_SUPPORT)/include \
