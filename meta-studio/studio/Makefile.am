@@ -18,5 +18,5 @@ CLEANFILES = $(TOOLNAME)-config
 
 $(TOOLNAME)-config: Makefile
 	echo "#! /bin/sh" > $@
-	echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/idw-gpl-1.4.0.jar" >> $@
+	echo "echo $(pkgdatadir)/$(JARFILE):$(pkgdatadir)/idw-gpl-1.4.0.jar:$(pkgdatadir)/gui-util.jar" >> $@
 	chmod +x $@
