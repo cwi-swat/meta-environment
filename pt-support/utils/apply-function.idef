@@ -1,4 +1,4 @@
-tool apply-function is { command = "apply-function" }  
+tool apply-function is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/apply-function" }  
 
 process Apply-Function is
 let

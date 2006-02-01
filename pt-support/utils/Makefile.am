@@ -9,6 +9,11 @@ EXTRA_DIST = \
 	position-annotator.idef.src \
 	apply-function.idef.src
 
+CLEANFILES = \
+	     unparser.idef \
+	     position-annotator.idef \
+	     apply-function.idef
+
 bin_PROGRAMS = \
 	flattenPT \
 	unparsePT \

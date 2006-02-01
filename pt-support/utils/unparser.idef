@@ -1,6 +1,6 @@
 /* $Id$ */
 
-tool unparser is { command = "unparsePT" }
+tool unparser is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/unparsePT" }
 
 process Unparser is
 let

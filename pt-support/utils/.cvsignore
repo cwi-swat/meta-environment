@@ -12,3 +12,6 @@ tree2dot
 apply-function
 *.tifs
 comparePT
+apply-function.idef
+unparser.idef
+position-annotater.idef

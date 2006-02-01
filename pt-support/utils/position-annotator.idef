@@ -1,5 +1,5 @@
 
-tool position-annotator is { command = "addPosInfo" }
+tool position-annotator is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/addPosInfo" }
 
 process PositionAnnotator is
 let
