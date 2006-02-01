@@ -1,0 +1,162 @@
+#ifndef __MODULE_MANAGER_IDEF
+#define __MODULE_MANAGER_IDEF
+
+tool module-manager is { command = "__PREFIX__/bin/module-manager" }
+
+process ModuleManager is
+let
+  MM : module-manager,
+  AttributeList : term,
+  Dependency : term,
+  Dependencies : term,
+  From : term,
+  Graph : term,
+  Id : term,
+  Key : term,
+  Map : term,
+  ModuleId : term,
+  Modulename : term,
+  Modules : list,
+  Namespace : term,
+  NewModuleId : term,
+  Path : str,
+  To : term,
+  Value : term,
+  OldValue: term,
+  NewValue: term,
+  AttributeType: term
+in
+  execute(module-manager, MM?)
+  .
+  (
+    rec-msg(mm-create-module)
+    . snd-eval(MM, create-module)
+    . rec-value(MM, module-id(ModuleId?))
+    . snd-msg(mm-module-created(ModuleId))
+  +
+    rec-msg(mm-get-module-id-by-attribute(Namespace?, Key?, Value?))
+    . snd-eval(MM, get-module-id-by-attribute(Namespace, Key, Value))
+    .
+    (
+      rec-value(MM, module-id(ModuleId?))
+      . snd-msg(mm-module-id(Namespace, Key, Value, ModuleId))
+    +
+      rec-value(MM, no-such-module)
+      . snd-msg(mm-no-such-module(Namespace, Key, Value))
+    )
+  +
+    rec-msg(mm-get-all-modules)
+    . snd-eval(MM, get-all-modules)
+    . rec-value(MM, modules(Modules?))
+    . snd-msg(mm-modules(Modules))
+  +
+    rec-msg(mm-delete-module(ModuleId?))
+    . snd-do(MM, delete-module(ModuleId))
+  +
+    rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, NewValue?, AttributeType?))
+    . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, NewValue, AttributeType))
+  +
+    rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
+    . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))
+  +
+    rec-event(MM, attribute-changed(ModuleId?, Namespace?, Key?, OldValue?, NewValue?))
+    . snd-ack-event(MM, attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
+    . snd-msg(mm-attribute-changed(ModuleId, Namespace, Key, OldValue, NewValue))
+  +
+    rec-msg(mm-get-attribute(ModuleId?, Namespace?, Key?))
+    . snd-eval(MM, get-attribute(ModuleId, Namespace, Key))
+    .
+    (
+      rec-value(MM, attribute(Value?))
+      . snd-msg(mm-attribute(ModuleId, Namespace, Key, Value))
+    +
+      rec-value(MM, no-such-module)
+      . snd-msg(mm-no-such-module(ModuleId, Namespace, Key))
+    +
+      rec-value(MM, no-such-key)
+      . snd-msg(mm-no-such-key(ModuleId, Namespace, Key))
+    )
+  +
+    rec-msg(mm-get-all-attributes(ModuleId?))
+    . snd-eval(MM, get-all-attributes(ModuleId))
+    . rec-value(MM, attributes(AttributeList?))
+    . snd-msg(mm-attributes(ModuleId, AttributeList))
+  +
+    rec-msg(mm-delete-attribute(ModuleId?, Namespace, Key?))
+    . snd-do(MM, delete-attribute(ModuleId, Namespace, Key))
+  +
+    rec-msg(mm-add-dependency(From?, To?))
+    . snd-do(MM, add-dependency(From, To))
+  +
+    rec-msg(mm-get-children-modules(ModuleId?))
+    . snd-eval(MM, get-children-modules(ModuleId))
+    .
+    (
+      rec-value(MM, children-modules(Modules?))
+      . snd-msg(mm-children-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
+    rec-msg(mm-get-all-children-modules(ModuleId?))
+    . snd-eval(MM, get-all-children-modules(ModuleId))
+    .
+    (
+      rec-value(MM, all-children-modules(Modules?))
+      . snd-msg(mm-all-children-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
+    rec-msg(mm-get-all-parent-modules(ModuleId?))
+    . snd-eval(MM, get-all-parent-modules(ModuleId))
+    .
+    (
+      rec-value(MM, all-parent-modules(Modules?))
+      . snd-msg(mm-all-parent-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
+    rec-msg(mm-get-parent-modules(ModuleId?))
+    . snd-eval(MM, get-parent-modules(ModuleId))
+    .
+    (
+      rec-value(MM, parent-modules(Modules?))
+      . snd-msg(mm-parent-modules(ModuleId, Modules))
+    +
+      rec-value(MM, no-such-module(ModuleId))
+      . snd-msg(mm-no-such-module(ModuleId))
+    )
+  +
+    rec-msg(mm-get-closable-modules(ModuleId?))
+    . snd-eval(MM, get-closable-modules(ModuleId))
+    . rec-value(MM, closable-modules(Modules?))
+    . snd-msg(mm-closable-modules(ModuleId, Modules))
+  +
+    rec-msg(mm-delete-dependency(From?, To?))
+    . snd-do(MM, delete-dependency(From, To))
+  +
+    rec-msg(mm-get-dependencies)
+    . snd-eval(MM, get-dependencies)
+    . rec-value(MM, dependencies(Dependencies?))
+    . snd-msg(mm-dependencies(Dependencies))
+  +
+    rec-msg(mm-delete-dependencies(ModuleId?))
+    . snd-do(MM, delete-dependencies(ModuleId))
+  +
+    rec-msg(mm-get-module-graph(Namespace?))
+    . snd-eval(MM, get-module-graph(Namespace))
+    . rec-value(MM, module-graph(Graph?))
+    . snd-msg(mm-module-graph(Namespace, Graph))
+  )
+  *
+  delta
+endlet
+
+toolbus(ModuleManager)
+
+#endif
