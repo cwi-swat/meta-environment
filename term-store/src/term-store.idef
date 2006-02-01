@@ -1,4 +1,4 @@
-tool term-store is { command = "term-store -TB_COLLECT_LOOP 1" }
+tool term-store is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/../install/bin/term-store -TB_COLLECT_LOOP 1" }
 
 
 process TermStore is
