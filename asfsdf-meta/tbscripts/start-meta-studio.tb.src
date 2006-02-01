@@ -28,14 +28,12 @@ in
   . StartGraphPanel()
   . StartProgressPanel()
   . StartModuledetailsPanel()
-  /*
   .
   if not-equal(MODULENAME, "") then
     OpenModule(MODULENAME, ModuleId?)
   else
     tau
   fi 
-*/
 endlet
 
 toolbus(InitializeASFSDFMetaEnvironment)

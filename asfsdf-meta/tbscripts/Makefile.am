@@ -2,7 +2,8 @@
 
 GENERATED_TBSCRIPTS = \
 	asf-initialize.tb \
-	start-meta-studio.tb 
+	start-meta-studio.tb \
+	start-eqs-dump.tb
 
 TBSCRIPTS = \
 	asf-actions.tb \

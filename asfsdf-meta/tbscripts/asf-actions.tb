@@ -2,7 +2,7 @@
 #define __ASF_ACTIONS__
 
 #include <asf-utils.tb>
-#include <ASFSDFApigen.idef>
+/*#include <ASFSDFApigen.idef>*/
 #include <term-utils.tb>
 #include <undefined.h>
 
