@@ -25,6 +25,7 @@ pkgdata_DATA = \
 
 CLEANFILES = \
 	user-configuration.tb \
+	configuration-manager.idef \
 	${noinst_SCRIPTS} \
 	${bin_SCRIPTS}
 

@@ -10,4 +10,5 @@ metaconfig-config
 metaconfig-config.local
 standard.buttons
 user-configuration.tb
+configuration-manager.idef
 libMetaConfig.a
