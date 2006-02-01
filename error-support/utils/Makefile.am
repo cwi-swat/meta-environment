@@ -29,7 +29,7 @@ error_support_LDADD = \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}
 
-CLEANFILES=${bin_SCRIPTS}
+CLEANFILES=${bin_SCRIPTS} error-support.idef
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

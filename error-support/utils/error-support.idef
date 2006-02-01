@@ -1,7 +1,7 @@
 #ifndef __ERROR_SUPPORT__
 #define __ERROR_SUPPORT__
 
-tool error-support is { command = "error-support" }
+tool error-support is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/error-support" }
 
 process ErrorSupport is
 let
