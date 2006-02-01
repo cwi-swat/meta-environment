@@ -13,7 +13,7 @@ noinst_SCRIPTS	= sdf2table.test
 pkgdata_DATA	= parsetablegen.idef
 man_MANS	= sdf2table.1
 
-EXTRA_DIST	= parsetablegen.idef \
+EXTRA_DIST	= parsetablegen.idef.src \
                   sdf2table.src \
                   parse-sdf2.src \
                   sdf2table.pod \
@@ -58,6 +58,7 @@ CLEANFILES = \
 % : %.src Makefile
 	sed 's@__BINDIR__@$(bindir)@g;\
              s@__ACTIVATE__@1@g;\
+             s@__PREFIX__@${prefix}@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \

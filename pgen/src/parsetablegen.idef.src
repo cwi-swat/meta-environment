@@ -1,0 +1,33 @@
+#ifndef __PARSETABLEGEN__
+#define __PARSETABLEGEN__
+
+tool parsetablegen is { command = "__PREFIX__/bin/parsetablegen" }
+
+process PGen is
+let
+  GENTABLE  : parsetablegen,
+  Syntax    : term,
+  Name      : str,
+  Table     : term
+in
+  (
+    rec-msg(generate-parsetable(Syntax?, Name?)) .
+    execute(parsetablegen,GENTABLE?) .
+    snd-eval(GENTABLE, generate-table(Syntax, Name)) .
+    (
+      rec-value(GENTABLE, generation-finished(Table?)) .
+      snd-msg(parsetable(Table))
+      +
+      rec-value(GENTABLE, generation-failed).
+      snd-msg(no-parsetable)
+    ) .
+    snd-terminate(GENTABLE, "done") .
+    Syntax := none .
+    Table := none
+  )*
+  delta
+endlet
+
+toolbus(PGen)
+
+#endif /* __PARSETABLEGEN__ */

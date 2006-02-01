@@ -4,7 +4,7 @@ INCLUDES = \
 	   -I$(SDF_SUPPORT)/include \
 	   $(ASC_INCLUDES)
 
-EXTRA_DIST = removevarsyntax.idef 
+EXTRA_DIST = removevarsyntax.idef.src 
 
 pkgdata_DATA = removevarsyntax.idef
 noinst_HEADERS = removevarsyntax.tif.h
@@ -18,3 +18,6 @@ removevarsyntax_SOURCES = \
 removevarsyntax_LDADD   = \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        $(ASC_LD_FLAGS) 
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

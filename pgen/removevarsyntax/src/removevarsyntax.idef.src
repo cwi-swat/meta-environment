@@ -1,0 +1,28 @@
+#ifndef __REMOVEVARSYNTAX__
+#define __REMOVEVARSYNTAX__
+
+tool removevarsyntax is {command = "__PREFIX__/bin/removevarsyntax"}
+
+process Remove-Var-Syntax is
+let
+  NewSyntax : term,
+  Syntax    : term,
+  RVS       : removevarsyntax,
+  ModuleName : str
+in  
+  (
+    rec-msg(remove-var-syntax(ModuleName?, Syntax?)) .
+    execute(removevarsyntax, RVS?) .
+    snd-eval(RVS, remove-var-syntax(ModuleName, Syntax)).
+    rec-value(RVS, changed-syntax(NewSyntax?)). 
+    snd-msg(changed-syntax(NewSyntax)).
+    snd-terminate(RVS,"done").
+    Syntax := none.
+    NewSyntax := none
+  )*
+  delta
+endlet
+
+toolbus(Remove-Var-Syntax)
+
+#endif /* __REMOVEVARSYNTAX__ */
