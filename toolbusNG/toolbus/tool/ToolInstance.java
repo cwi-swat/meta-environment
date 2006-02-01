@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import toolbus.Environment;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import aterm.AFun;
@@ -59,11 +59,11 @@ public class ToolInstance {
     eventsFromTool = new LinkedList();
     pendingEvents = new LinkedList();
 	
-	termSndVoid = TBTerm.factory.parse("snd-void");
+	termSndVoid = TBTermFactory.make("snd-void");
 	
-    AFun afun = TBTerm.factory.makeAFun(toolDef.getName(), 1, false);
+    AFun afun = TBTermFactory.makeAFun(toolDef.getName(), 1, false);
  
-    toolId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(toolCount));
+    toolId = TBTermFactory.makeAppl(afun, TBTermFactory.makeInt(toolCount));
 
     toolShield = toolDef.makeToolShield(this,alreadyExecuting);
   }
@@ -114,7 +114,7 @@ public class ToolInstance {
 		matches = t.match("snd-event(<term>)");
 		if (matches != null) {
 			ATerm t1 = (ATerm) matches.get(0);
-			addEventFromTool(TBTerm.factory.makeList(t1));
+			addEventFromTool(TBTermFactory.makeList(t1));
 			return;
 		}
 		matches = t.match("snd-event(<term>,<term>)"); //TODO: more than 2 args
@@ -122,7 +122,7 @@ public class ToolInstance {
 			ATerm t1 = (ATerm) matches.get(0);
 			ATerm t2 = (ATerm) matches.get(1);
 			
-			addEventFromTool(TBTerm.factory.makeList(t1, TBTerm.factory.makeList(t2)));
+			addEventFromTool(TBTermFactory.makeList(t1, TBTermFactory.makeList(t2)));
 			return;
 		}
 		// connect
@@ -177,7 +177,7 @@ public class ToolInstance {
   		return false;
   	} else {
   		ATerm result = (ATerm) valuesFromTool.getFirst();
-  		boolean matches = TBTerm.match(trm, env, result, new Environment());
+  		boolean matches = TBTermFactory.match(trm, env, result, new Environment());
   		if (matches) {
   			if (TCP_goConnected()){
   				valuesFromTool.removeFirst();
@@ -227,7 +227,7 @@ public class ToolInstance {
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
         ATermList eventArgs = (ATermList) eventsFromTool.get(i);
-        boolean matches = TBTerm.match(alist, env, eventArgs, new Environment());
+        boolean matches = TBTermFactory.match(alist, env, eventArgs, new Environment());
         System.err.println(matches + " " + eventArgs);
         if (matches) {
           if(ackWaiting(eventArgs.getFirst())){

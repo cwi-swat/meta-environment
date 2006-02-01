@@ -2,7 +2,7 @@ package toolbus.parser;
 
 import java.io.*;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 
 import aterm.ATerm;
 
@@ -64,7 +64,7 @@ public class ExternalParser {
     InputStream in = execute(implodeCommand, asfixFileName, "implode");
     try {
     	InputStreamReader reader = new InputStreamReader(in);
-      result = TBTerm.factory.readFromTextFile(reader);
+      result = TBTermFactory.getPureFactory().readFromTextFile(reader);
     } catch (IOException e) {
       throw new ExternalProcessException(e.getMessage(), "read ATerm from file");
     }

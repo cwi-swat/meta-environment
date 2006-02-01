@@ -6,15 +6,16 @@ import java.io.IOException;
 import java.io.StringWriter;
 
 import junit.framework.TestCase;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
+import aterm.pure.PureFactory;
 
 public class TscriptTest extends TestCase {
 
   public TscriptTest(String name) {
     super(name);
-    TBTerm.init();
+    TBTermFactory.init(new PureFactory());
   }
 
   private boolean equalOutput(String currentOutput, String prevOutputFile) {

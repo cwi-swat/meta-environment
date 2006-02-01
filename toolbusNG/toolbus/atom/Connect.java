@@ -6,7 +6,8 @@
  */
 package toolbus.atom;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -41,12 +42,12 @@ public class Connect extends Atom {
 		if (!isEnabled())
 		      return false;
 		//System.err.println("Connect.execute called; toolname = " + ((ATermAppl) TBTerm.getVarType(toolId.value)).getName());
-		ToolInstance ti = getToolBus().getConnectedTool(((ATermAppl) TBTerm.getVarType(toolId.value)).getName());
+		ToolInstance ti = getToolBus().getConnectedTool(((ATermAppl) ((TBTermVar)toolId.value).getVarType()).getName());
 		if(ti == null){
 			return false;
 		} else {
 			ATerm toolid = ti.getToolId();
-			getEnv().assignVar(toolId.value, toolid);
+			getEnv().assignVar((TBTermVar)toolId.value, toolid);
 			//System.err.println("Connect.execute assigns: " + toolid);
 			return true;
 		}

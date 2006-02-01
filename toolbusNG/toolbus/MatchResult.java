@@ -26,11 +26,11 @@ public class MatchResult {
     this.deltaRight = new DeltaEnvironment();
   }
   
-  public void assignLeft(ATerm rvar, ATerm val){
+  public void assignLeft(TBTermVar rvar, ATerm val){
     deltaLeft.assign(rvar, val);
   }
   
-   public void assignRight(ATerm rvar, ATerm val){
+   public void assignRight(TBTermVar rvar, ATerm val){
     deltaRight.assign(rvar, val);
   }
   
@@ -58,8 +58,8 @@ class DeltaEnvironment {
     dict = new Vector();
   }
 
-  public boolean assign(ATerm rvar, ATerm val) {
-    ATerm var1 = TBTerm.changeResVarIntoVar(rvar);
+  public boolean assign(TBTermVar rvar, ATerm val) {
+    TBTermVar var1 = TBTermFactory.changeResVarIntoVar(rvar);
     for (int i = 0; i < dict.size(); i += 2) {
       ATerm var2 = (ATerm) dict.elementAt(i);
       if (var2.equals(var1))
@@ -75,7 +75,7 @@ class DeltaEnvironment {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
       //System.err.println("DeltaEnvironment.update variable " + var + " with value " + val);
-      env.assignVar(var, val);
+      env.assignVar((TBTermVar)var, val);
     }
   }
 }

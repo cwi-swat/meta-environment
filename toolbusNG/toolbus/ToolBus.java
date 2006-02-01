@@ -39,6 +39,7 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermInt;
 import aterm.ATermList;
+import aterm.pure.PureFactory;
 
 /**
  * ToolBus implements the behaviour of one ToolBus.
@@ -124,8 +125,9 @@ public class ToolBus {
 	 */
 
 	public ToolBus(PrintWriter out) {
-		TBTerm.init();
-		factory = TBTerm.factory;
+
+		TBTermFactory.init();
+		factory = TBTermFactory.getPureFactory();
 		this.out = out;
 		processes = new LinkedList<ProcessInstance>();
 		processesIterator = null;

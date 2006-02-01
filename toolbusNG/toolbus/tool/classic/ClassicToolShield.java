@@ -7,7 +7,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
@@ -83,7 +83,7 @@ public class ClassicToolShield extends ToolShield {
 			boolean alreadyExecuting) {
 		super(toolInstance);
 		this.toolDef = toolDef;
-		this.factory = TBTerm.factory;
+		this.factory = TBTermFactory.getPureFactory();
 		termSndVoid = factory.parse("snd-void");
 
 		toolname = toolDef.getName();
@@ -150,9 +150,9 @@ public class ClassicToolShield extends ToolShield {
 	}
 
 	protected void handleRequestToTool(Integer operation, ATerm call) {
-		AFun fun = TBTerm.factory.makeAFun(
+		AFun fun = TBTermFactory.makeAFun(
 				ToolInstance.OperatorForTool[operation.intValue()], 1, false);
-		ATermAppl req = TBTerm.factory.makeAppl(fun, call);
+		ATermAppl req = TBTermFactory.makeAppl(fun, call);
 		//System.err.println("handleRequestToTool: " + req);
 		try {
 			sendTerm(req);

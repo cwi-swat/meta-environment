@@ -1,6 +1,6 @@
 package toolbus.atom;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -30,8 +30,8 @@ public class AckEvent extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
-    ATerm ev = TBTerm.substitute(event.value, getEnv());
+    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
+    ATerm ev = TBTermFactory.substitute(event.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
     return ti.sndAckToTool(ev);
   }

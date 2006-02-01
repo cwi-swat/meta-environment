@@ -4,23 +4,24 @@
 
 package toolbus;
 
+
 public class Main {
 
 	public static void main(String[] args) {
-		TBTerm.init();
-	
 		ToolBus T = new ToolBus();
 	
 		try {
 			T.parse(ToolBus.getWorkspace()
 					+ "/toolbusNG/toolbus/tool/examples/pt-dump.tb");
-				    //+ "/toolbusNG/toolbus/test/B0.tb");
+				    //+ "/toolbusNG/toolbus/test/Assign6.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
 		} catch (ToolBusException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		
+		System.err.println(TBTermFactory.statistics());
 	}
 
 }

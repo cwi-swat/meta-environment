@@ -23,7 +23,7 @@ import aterm.pure.PureFactory;
  * - matching and substitution
  */
 
-public class TBTerm  {
+public class xxTBTerm  {
 
   public static ATermFactory factory;
 
@@ -263,7 +263,7 @@ public class TBTerm  {
   		if(k.isEqual(pair.getFirst()))
   				return pair.getLast();
   	}
-  	return TBTerm.Undefined;
+  	return TBTermFactory.Undefined;
   }
 
   public static ATerm mkAnyVar(String varKind, ATerm name, String processName, ATerm type) {

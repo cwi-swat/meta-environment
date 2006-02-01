@@ -1,6 +1,6 @@
 package toolbus.atom;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -33,8 +33,8 @@ public class Do extends Atom {
       return false;
     //System.err.println("DO.execute: " + this);
     //System.err.println("DO.execute: env = " + getEnv());
-    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
-    ATerm req = TBTerm.substitute(request.value, getEnv());
+    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
+    ATerm req = TBTermFactory.substitute(request.value, getEnv());
     //System.err.println("req = " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndDoToTool((ATermAppl) req)){

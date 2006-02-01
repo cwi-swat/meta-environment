@@ -1,5 +1,5 @@
 package toolbus.atom;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -30,8 +30,8 @@ public class Eval extends Atom {
     if (!isEnabled())
       return false;
     //System.err.println("Eval: " + getEnv());
-    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
-    ATerm req = TBTerm.substitute(request.value, getEnv());
+    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
+    ATerm req = TBTermFactory.substitute(request.value, getEnv());
     //System.err.println("Eval: " + tid + ", " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndEvalToTool((ATermAppl) req)) {

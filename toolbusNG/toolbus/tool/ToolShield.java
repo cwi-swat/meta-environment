@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
@@ -34,7 +34,7 @@ public abstract class ToolShield {
 	 * Provide the current ATermfactory.
 	 */
 	public ATermFactory getFactory() {
-		return TBTerm.factory;
+		return TBTermFactory.getPureFactory();
 	}
 	
 	abstract public void connect(SocketChannel channel) throws IOException;

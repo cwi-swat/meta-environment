@@ -3,10 +3,11 @@
  */
 
 package toolbus.process;
-import java.util.*;
-import toolbus.*;
-import aterm.*;
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
 import toolbus.atom.EndScope;
+import aterm.ATerm;
+import aterm.ATermList;
 
 
 /**
@@ -26,7 +27,7 @@ public class ProcessDefinition {
   }
 
   public ProcessDefinition(String name, ProcessExpression PE) {
-    this(name, (ATermList) TBTerm.factory.make("[]"), PE);
+    this(name, (ATermList) TBTermFactory.make("[]"), PE);
   }
 
   public String getName() {
@@ -44,7 +45,7 @@ public class ProcessDefinition {
     for (int i = 0; i < actuals.getLength(); i++) {
       ATerm formal = (ATerm) formals.getChildAt(i);
       ATerm actual = (ATerm) actuals.getChildAt(i);
-      if (TBTerm.isResVar(formal) && !TBTerm.isResVar(actual)) {
+      if (TBTermFactory.isResVar(formal) && !TBTermFactory.isResVar(actual)) {
         throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
       }
     };

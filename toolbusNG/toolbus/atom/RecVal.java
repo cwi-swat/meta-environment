@@ -1,5 +1,5 @@
 package toolbus.atom;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -29,9 +29,9 @@ public class RecVal extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ATerm tid = TBTerm.substitute(toolId.value, getEnv());
+    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
-    ATerm res = TBTerm.substitute(result.value, getEnv());
+    ATerm res = TBTermFactory.substitute(result.value, getEnv());
     if (ti.getValueFromTool(res, getEnv())){
     	//System.err.println("RecValue.execute succeeded");	
       return true;

@@ -1,6 +1,6 @@
 package toolbus.tool;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.tool.classic.ClassicToolShield;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -24,8 +24,8 @@ public class ToolDefinition {
     this.internal = true;
     this.kind = kind;
     this.command = command;
-    inputSignature = TBTerm.factory.makeList();
-    outputSignature = TBTerm.factory.makeList();
+    inputSignature = TBTermFactory.makeList();
+    outputSignature = TBTermFactory.makeList();
   }
 
   public String getHostName() {
@@ -49,8 +49,8 @@ public class ToolDefinition {
   }
   
   public ATermPlaceholder getNameAsPlaceholder(){
-  	ATerm t = TBTerm.factory.make(toolName);
-  	return (ATermPlaceholder) TBTerm.factory.makePlaceholder(t);
+  	ATerm t = TBTermFactory.make(toolName);
+  	return (ATermPlaceholder) TBTermFactory.makePlaceholder(t);
   }
   
   public String getCommand(){
@@ -88,24 +88,24 @@ public class ToolDefinition {
   				}
   				if( sig.getName().equals("rec-eval") || sig.getName().equals("rec-do") ){
   						//|| sig.getName().equals("rec-ack-event") || sig.getName().equals("rec-terminate")){
-  					inputSignature = TBTerm.factory.makeList(sig, inputSignature);
+  					inputSignature = TBTermFactory.makeList(sig, inputSignature);
   				} else if( sig.getName().equals("snd-event")){
-  					outputSignature = TBTerm.factory.makeList(sig, outputSignature);
+  					outputSignature = TBTermFactory.makeList(sig, outputSignature);
   				}
   			}
   		}
   	}
   	
-  	ATerm recTerminate = TBTerm.factory.make("rec-terminate(<term>,<term>)", toolPlaceholder, TBTerm.TermPlaceholder);
-  	inputSignature = TBTerm.factory.makeList(recTerminate, inputSignature);
+  	ATerm recTerminate = TBTermFactory.make("rec-terminate(<term>,<term>)", toolPlaceholder, TBTermFactory.TermPlaceholder);
+  	inputSignature = TBTermFactory.makeList(recTerminate, inputSignature);
   	
   	if(hasRecAckEvent){
-  		ATerm recAckEvent = TBTerm.factory.make("rec-ack-event(<term>,<term>)", toolPlaceholder, TBTerm.TermPlaceholder);
-  		inputSignature = TBTerm.factory.makeList(recAckEvent, inputSignature);
+  		ATerm recAckEvent = TBTermFactory.make("rec-ack-event(<term>,<term>)", toolPlaceholder, TBTermFactory.TermPlaceholder);
+  		inputSignature = TBTermFactory.makeList(recAckEvent, inputSignature);
   	}
   	
-  	ATerm sndConnect = TBTerm.factory.make("snd-connect(<term>)", toolPlaceholder);
-  	outputSignature = TBTerm.factory.makeList(sndConnect, outputSignature);
+  	ATerm sndConnect = TBTermFactory.make("snd-connect(<term>)", toolPlaceholder);
+  	outputSignature = TBTermFactory.makeList(sndConnect, outputSignature);
   	
   }
   

@@ -94,7 +94,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 			//System.err.println("ProcessCall.compile(" + name + ", " + P + "," + PE + ")");
 			setFollow(follows);
 			formals = definition.getFormals();
-			actuals = (ATermList) TBTerm.resolveVars(actuals, env);
+			actuals = (ATermList) TBTermFactory.resolveVars(actuals, env);
 			env.introduceBindings(formals, actuals, evalArgs);
 			//System.err.println("ProcessCall.compile(" + name + "): " + env);
 			PE.computeFirst();
