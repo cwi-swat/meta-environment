@@ -36,5 +36,5 @@ CLEANFILES	= *.tifs
 
 EXTRA_DIST = \
 	TA.adt \
-	adapter.idef.src
+	adapter.idef
 
