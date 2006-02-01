@@ -1,7 +1,7 @@
 #ifndef __GUI_IDEF__
 #define __GUI_IDEF__
 
-tool gui is { command = "gui" }
+tool gui is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/gui" }
 
 process GUI is
 let
