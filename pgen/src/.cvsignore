@@ -4,6 +4,7 @@ Makefile
 .libs
 *.tifs
 parsetablegen
+parsetablegen.idef
 sdf2table
 gen-table
 sdf2table.1

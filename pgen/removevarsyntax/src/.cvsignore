@@ -2,5 +2,6 @@ Makefile.in
 Makefile
 .deps
 removevarsyntax
+removevarsyntax.idef
 *.tifs
 .libs

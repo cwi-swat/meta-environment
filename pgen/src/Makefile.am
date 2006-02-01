@@ -42,7 +42,8 @@ CLEANFILES = \
 	parse-sdf2 \
 	sdf2table \
 	sdf2table.1 \
-	sdf2table.test 
+	sdf2table.test \
+	parsetablegen.idef
 
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing

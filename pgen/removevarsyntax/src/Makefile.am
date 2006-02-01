@@ -6,6 +6,8 @@ INCLUDES = \
 
 EXTRA_DIST = removevarsyntax.idef.src 
 
+CLEANFILES = removevarsyntax.idef
+
 pkgdata_DATA = removevarsyntax.idef
 noinst_HEADERS = removevarsyntax.tif.h
 bin_PROGRAMS = removevarsyntax
