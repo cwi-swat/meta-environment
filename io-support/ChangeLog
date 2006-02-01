@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
+ * configure.ac:
+   - use libtool
+
 Tue Jan 31 09:57:49 CET 2006 <kooiker@cwi.nl>
  * test:
    - Removed unused tests

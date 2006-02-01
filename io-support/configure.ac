@@ -7,6 +7,7 @@ AC_PREREQ(2.59)
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 dnl Handle --with-cflags option
 AC_ARG_WITH(cflags,
@@ -38,9 +39,9 @@ AC_PACKAGE_REQUIRE(config-support, config-support-config,
    [  --with-config-support=DIR config-support is in DIR])
 AC_SUBST(CONFIG_SUPPORT)
 
-dnl Is ranlib needed on this system?
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
+dnl Our own version of libdir whose value is set dynamically
+AC_SUBST(INSTLIBDIR)
+INSTLIBDIR="$libdir"
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_PROG_MAKE_SET([])
