@@ -4,6 +4,8 @@ include ${top_srcdir}/make_rules
 
 EXTRA_DIST = graph-converter.idef.src
 
+CLEANFILES = graph-converter.idef
+
 bin_PROGRAMS = tree2graph
 
 INCLUDES = \

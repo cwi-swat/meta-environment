@@ -6,7 +6,7 @@ pkgdata_DATA = layout-graph.idef
 
 EXTRA_DIST = layout-graph.idef.src dot.l dot.y
 
-CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output
+CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output layout-graph.idef
 
 YFLAGS = -d
 

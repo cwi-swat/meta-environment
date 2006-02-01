@@ -1,5 +1,5 @@
 
-tool layoutgraph is { command = "layoutgraph" }
+tool layoutgraph is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/layoutgraph" }
 
 process GraphLayouter is
 let

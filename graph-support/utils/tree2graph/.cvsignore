@@ -4,3 +4,4 @@ Makefile
 Makefile.in
 tree2graph
 graph-converter.tifs
+graph-converter.idef

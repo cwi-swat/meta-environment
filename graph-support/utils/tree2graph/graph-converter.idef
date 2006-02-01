@@ -1,5 +1,5 @@
 
-tool graph-converter is { command = "tree2graph" }
+tool graph-converter is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/tree2graph" }
 
 process GraphConverter is
 let
