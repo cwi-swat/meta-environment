@@ -14,3 +14,5 @@ requires
 meta 2.0
 
 pgen 2.2
+
+sdf-support 2.2

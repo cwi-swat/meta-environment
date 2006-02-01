@@ -9,6 +9,7 @@ TBSCRIPTS = \
 	    sdf-editor-actions.tb \
 	    sdf-editor-utils.tb \
 	    sdf-listeners.tb \
+	    sdf-meta.tb \
 	    sdf-namespace.h \
 	    sdf-utils.tb \
 	    term-actions.tb \

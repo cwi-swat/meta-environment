@@ -10,6 +10,11 @@ AC_PACKAGE_REQUIRE(pgen, sdf2table,
   [  --with-pgen=DIR         pgen is in DIR])
 AC_SUBST(PGEN)
 
+dnl Require sdf-support package
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+  [  --with-sdf-support=DIR         sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
 dnl Require meta package
 AC_PACKAGE_REQUIRE(meta, meta-config,
   [  --with-meta=DIR         Meta-Environment is in DIR])
