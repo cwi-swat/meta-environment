@@ -8,7 +8,7 @@ let
   Contents: str,
   Error: term
 in
-  snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.buttons")) .
+  snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.actions")) .
   (
     rec-msg(io-file-contents(Contents?))
     . snd-msg(cm-add-system-properties(Contents))

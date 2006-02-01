@@ -17,18 +17,18 @@ EXTRA_DIST = \
 	$(TBSCRIPTS) \
 	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
 	asf-namespace.h \
-	standard.asfsdf.buttons \
-	standard.asfsdf.buttons.src
+	standard.asfsdf.actions \
+	standard.asfsdf.actions.src
 
 CLEANFILES = \
 	$(GENERATED_TBSCRIPTS) \
-	standard.asfsdf.buttons
+	standard.asfsdf.actions
 
 pkgdata_DATA = \
 	$(TBSCRIPTS) \
 	$(GENERATED_TBSCRIPTS) \
 	asf-namespace.h \
-	standard.asfsdf.buttons
+	standard.asfsdf.actions
 
 LIBRARY_LOCATION = \
 	${ASF_LIBRARY}/share/asf-library/library
@@ -42,6 +42,6 @@ LIBRARY_LOCATION = \
 	     < $< \
 	     > $@
 
-standard.asfsdf.buttons:  standard.asfsdf.buttons.src Makefile
+standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
 	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g;\
 	     s@__ASF__@${ASF}@g;' < $< > $@
