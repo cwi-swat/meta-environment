@@ -18,7 +18,6 @@ EXTRA_DIST = \
 	$(TBSCRIPTS) \
 	$(foreach i, $(GENERATED_TBSCRIPTS), $i.src) \
 	asf-namespace.h \
-	standard.asfsdf.actions \
 	standard.asfsdf.actions.src
 
 CLEANFILES = \

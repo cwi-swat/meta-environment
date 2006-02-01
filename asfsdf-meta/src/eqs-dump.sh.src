@@ -1,7 +1,74 @@
 #! /bin/sh
 
-__META__/bin/generic-meta \
-  -I __ASF__/share/asf \
-  -I __PREFIX__/share/asfsdf-meta \
-  -p __ASF__/bin \
-  -S __META__/share/meta/start-meta-eqs-dumper.tb $* 
+MODULENAME=""
+OUTPUTFILE=""
+
+me=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+myarguments="hm:o:V"
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname [options]
+Options:
+    -V                   reveal program version (i.e. $myversion)
+    -m <modulename>      open module <modulename>
+    -o <outputfile>      output filename
+E_O_USAGE
+}
+
+Version() {
+    echo "$me v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt --options $myarguments -- $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+        -m)
+	    shift;
+            MODULENAME=$1 ;;
+        -o)
+	    shift;
+            OUTPUTFILE=$1 ;;
+        -V)
+            Version ; exit 0 ;;
+        --)
+           ;;
+    # Add additional command line options here...
+    *)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
+if [ "a${MODULENAME}" == "a" ]; then
+  echo "Please provide a module name"
+  Usage
+  exit 1
+fi
+
+if [ "a${OUTPUTFILE}" == "a" ]; then
+  echo "Please provide an output file"
+  Usage
+  exit 1
+fi
+
+INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
+toolbus \
+  -DMODULENAME=\\\"${MODULENAME}\\\" \
+  -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
+  ${INCLUDES} \
+  __PREFIX__/share/asfsdf-meta/start-eqs-dump.tb $*

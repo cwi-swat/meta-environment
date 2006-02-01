@@ -1,6 +1,6 @@
 Makefile
 Makefile.in
-standard.asfsdf.buttons
+standard.asfsdf.actions
 asf-initialize.tb
 start-meta-studio.tb
 start-eqs-dump.tb
