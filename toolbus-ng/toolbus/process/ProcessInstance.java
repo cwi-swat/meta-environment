@@ -7,7 +7,8 @@ import java.util.Vector;
 import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.atom.Atom;
@@ -31,9 +32,9 @@ public class ProcessInstance {
   private State currentState;
   private ToolBus toolbus;
  // private ToolInstance toolInstance;
-  private ATerm transactionIdVar;
-  private ATermList subscriptions = TBTerm.factory.makeList();
-  private ATermList notes = TBTerm.factory.makeList();
+  private TBTermVar transactionIdVar;
+  private ATermList subscriptions = TBTermFactory.makeList();
+  private ATermList notes = TBTermFactory.makeList();
   private boolean running = true;
  
 
@@ -49,8 +50,8 @@ public class ProcessInstance {
     
     //AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
     //processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-    transactionIdVar = TBTerm.TransactionIdVar;
-    env.introduceBinding(transactionIdVar, TBTerm.newTransactionId());
+    transactionIdVar = TBTermFactory.TransactionIdVar;
+    env.introduceBinding(transactionIdVar, TBTermFactory.newTransactionId());
 
     //call.expand(this, new Stack());
     call.computeFirst();
@@ -127,12 +128,12 @@ public class ProcessInstance {
   public void subscribe(ATerm pat){
 	info("subscribe: pat: " + pat);
  	info("subscribe: before: " + subscriptions);
-  	subscriptions = TBTerm.factory.makeList(pat, subscriptions);
+  	subscriptions = TBTermFactory.makeList(pat, subscriptions);
   	info("subscribe: after: " + subscriptions);
   }
   
   public void unsubscribe(ATerm pat){
-  	subscriptions =  (ATermList) TBTerm.delete(subscriptions, pat);
+  	subscriptions =  (ATermList) TBTermFactory.delete(subscriptions, pat);
  	info("unsubscribe: after:" + subscriptions);
   }
   
@@ -143,8 +144,8 @@ public class ProcessInstance {
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
-  		if(TBTerm.match(nt, env, pat, env)){
-  			notes = (ATermList) TBTerm.delete(notes, nt);
+  		if(TBTermFactory.match(nt, env, pat, env)){
+  			notes = (ATermList) TBTermFactory.delete(notes, nt);
   			info("getNoteFromQueue: " + nt);
   			return true;
   		}
@@ -159,7 +160,7 @@ public class ProcessInstance {
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
-  		if(TBTerm.match(nt, env, pat, env)){
+  		if(TBTermFactory.match(nt, env, pat, env)){
   			// TODO: What do we do with changes in env???
   			info("noNoteInQueue: " + nt);
   			return false;
@@ -175,8 +176,8 @@ public class ProcessInstance {
   	for(ATermList subs = subscriptions; !subs.isEmpty();subs = subs.getNext()){
   		ATerm sub = subs.getFirst();
  		info("trying: " + sub);
-  		if(TBTerm.mightMatch(sub, note)){
-  			notes = TBTerm.factory.makeList(note, notes);
+  		if(TBTermFactory.mightMatch(sub, note)){
+  			notes = TBTermFactory.makeList(note, notes);
   			info("putNoteInQueue: success " + notes);
   			return true;
   		}

@@ -26,8 +26,8 @@ public abstract class MsgAtom extends Atom {
 	public MsgAtom(ATerm msg) {
 		super();
 		this.msg = new Ref(msg);
-		this.id = new Ref(this instanceof RecMsg ? TBTerm.TransactionIdResVar
-				: TBTerm.TransactionIdVar);
+		this.id = new Ref(this instanceof RecMsg ? TBTermFactory.TransactionIdResVar
+				: TBTermFactory.TransactionIdVar);
 		setAtomArgs(this.msg, this.id);
 	}
 
@@ -50,11 +50,7 @@ public abstract class MsgAtom extends Atom {
 		return matchPattern;
 	}
 
-	public boolean canCommunicate(MsgAtom a) {
-		return ((this instanceof SndMsg && a instanceof RecMsg) || 
-				 (this instanceof RecMsg && a instanceof SndMsg))
-				 && TBTerm.mightMatch(getMsg(), a.getMsg());
-	}
+	abstract public boolean canCommunicate(MsgAtom a);
 
 	public void addMsgPartner(StateElement a) {
 		partners.add(a);
@@ -69,7 +65,7 @@ public abstract class MsgAtom extends Atom {
 	}
 
 	public boolean matchPartner(MsgAtom b) throws ToolBusException {
-		return TBTerm.match(matchPattern, this.getEnv(), b.getMatchPattern(), b
+		return TBTermFactory.match(matchPattern, this.getEnv(), b.getMatchPattern(), b
 				.getEnv());
 	}
 

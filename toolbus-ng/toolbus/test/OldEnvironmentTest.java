@@ -1,21 +1,14 @@
 package toolbus.test;
 
-import junit.framework.TestCase;
-import toolbus.Environment;
-import toolbus.TBTermFactory;
-import toolbus.TBTermVar;
-import toolbus.ToolBusException;
-import aterm.ATerm;
-import aterm.ATermList;
-import aterm.pure.PureFactory;
+import toolbus.*;
 
-public class EnvironmentTest extends TestCase {
-  private PureFactory factory;
+public class OldEnvironmentTest extends TestCase {
+  private ATermFactory factory;
 
   public EnvironmentTest(String name) {
     super(name);
-    factory = new PureFactory();
-    TBTermFactory.init(factory);
+    TBTerm.init();
+    factory = TBTerm.factory;
   }
 
   /**
@@ -24,10 +17,8 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv1() throws ToolBusException {
   	Environment env = new Environment();
-    ATerm intType = TBTermFactory.make("int");
-    ATerm strType = TBTermFactory.make("str");
-    TBTermVar varX = TBTermFactory.makeTBTermVar("X", intType);
-    TBTermVar varY = TBTermFactory.makeTBTermVar("Y", strType);
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(str,Y)");
 
     ATerm intVal = factory.make("123");
     ATerm strVal = factory.make("abc");
@@ -68,11 +59,8 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv2() throws ToolBusException {
     Environment env = new Environment();
-    
-    ATerm intType = TBTermFactory.make("int");
-    ATerm strType = TBTermFactory.make("str");
-    TBTermVar varX1 = TBTermFactory.makeTBTermVar("X", intType);
-    TBTermVar varX2 = TBTermFactory.makeTBTermVar("X", strType);
+    ATerm varX1 = factory.make("var(int,X)");
+    ATerm varX2 = factory.make("var(str,X)");
 
     ATermList vars = factory.makeList(varX2);
     vars = factory.makeList(varX1, vars);
@@ -90,12 +78,8 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv3() throws ToolBusException {
     Environment env = new Environment();
-    ATerm intType = TBTermFactory.make("int");
-    ATerm strType = TBTermFactory.make("str");
-    
-    TBTermVar varX = TBTermFactory.makeTBTermVar("X", intType);
-    TBTermVar varY = TBTermFactory.makeTBTermVar("Y", intType); 
-    
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
     ATerm int3 = factory.make("3");
     ATerm int4 = factory.make("4");
 
@@ -127,35 +111,24 @@ public class EnvironmentTest extends TestCase {
 
   public void testEnv4() throws ToolBusException {
     Environment env = new Environment();
-    
-    ATerm intType = TBTermFactory.make("int");
-    ATerm strType = TBTermFactory.make("str");
-    
-    TBTermVar varX = TBTermFactory.makeTBTermVar("X", intType);
-    TBTermVar varY = TBTermFactory.makeTBTermVar("Y", intType);  
-    TBTermVar varZ = TBTermFactory.makeTBTermVar("Z", intType);  
-    
-    assertTrue(TBTermFactory.isVar(varX));
-    
-    TBTermVar rvarX = TBTermFactory.makeTBTermResVar("X", intType);
-    TBTermVar rvarY = TBTermFactory.makeTBTermResVar("Y", intType);  
-    TBTermVar rvarZ = TBTermFactory.makeTBTermResVar("Z", intType);  
-    
-    assertTrue(TBTermFactory.isResVar(rvarX));
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
+    ATerm varZ = factory.make("var(int,Z)");
+
+    ATerm rvarX = factory.make("rvar(int,X)");
+    ATerm rvarY = factory.make("rvar(int,Y)");
+    ATerm rvarZ = factory.make("rvar(int,Z)");
 
     ATermList declX = factory.makeList(varX);
     env.introduceVars(declX);
-    System.err.println("env = " + env);
 
     ATermList formals1 = factory.makeList(rvarY);
     ATermList actuals1 = factory.makeList(rvarX);
     env.introduceBindings(formals1, actuals1, true);
-    System.err.println("env = " + env);
 
     ATermList formals2 = factory.makeList(rvarZ);
     ATermList actuals2 = factory.makeList(rvarY);
     env.introduceBindings(formals2, actuals2, true);
-    System.err.println("env = " + env);
 
     ATerm int3 = factory.make("3");
     ATerm int4 = factory.make("4");

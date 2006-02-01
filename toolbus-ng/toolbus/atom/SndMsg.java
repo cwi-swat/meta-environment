@@ -3,6 +3,7 @@
  */
 
 package toolbus.atom;
+import toolbus.TBTermFactory;
 import toolbus.process.ProcessExpression;
 
 import aterm.*;
@@ -22,5 +23,8 @@ public class SndMsg extends MsgAtom {
     a.copyAtomAttributes(this);
     return a;
   }
-
+  public boolean canCommunicate(MsgAtom a) {
+		return (a instanceof RecMsg
+				 && TBTermFactory.mightMatch(getMsg(), a.getMsg()));
+	}
 }

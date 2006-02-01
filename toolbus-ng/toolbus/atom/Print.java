@@ -26,7 +26,7 @@ public class Print extends Atom {
   private String sprintf(ATermList args){
   	if(args.getLength() == 0)
   		new ToolBusException("missing arguments");
-  	if(TBTerm.isStr(args.elementAt(0)))
+  	if(TBTermFactory.isStr(args.elementAt(0)))
   			new ToolBusException("first argument should be a string");
   	String fmt = ((ATermAppl) args.elementAt(0)).getName();
   	String res = new String();
@@ -69,7 +69,7 @@ public class Print extends Atom {
       Environment e = getEnv();
       //System.err.println("Print: " + this + "; env = " + e);
       PrintWriter out = getToolBus().getPrintWriter();
-      ATerm res = TBTerm.substitute(arg.value, e);
+      ATerm res = TBTermFactory.substitute(arg.value, e);
       //System.err.println("res =" + res);
       out.print(sprintf((ATermList) res));
       out.flush();

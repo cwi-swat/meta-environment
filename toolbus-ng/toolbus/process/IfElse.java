@@ -3,13 +3,12 @@
  */
 
 package toolbus.process;
-import java.util.*;
+import java.util.Stack;
 
 import toolbus.Environment;
-import toolbus.TBTerm;
-import toolbus.ToolBusException;
 import toolbus.State;
-
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
 import aterm.ATerm;
 
 public class IfElse extends ProcessExpression {
@@ -41,7 +40,7 @@ public class IfElse extends ProcessExpression {
 
   public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
     left.compile(P, calls, env, follows);
-    ATerm rtest = TBTerm.resolveVars(test, env);
+    ATerm rtest = TBTermFactory.resolveVars(test, env);
     left.getFirst().setTest(rtest, env);
     right.compile(P, calls, env, follows);
 

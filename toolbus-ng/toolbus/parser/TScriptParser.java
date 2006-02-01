@@ -3,7 +3,7 @@ package toolbus.parser;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.atom.AckEvent;
@@ -109,25 +109,25 @@ class TScriptNodeBuilders {
      */
     define(new NodeBuilder("ttt-vardecl") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], processName, (ATerm) args[1]);
+        return TBTermFactory.mkVar((ATerm) args[0], processName, (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("ttt-resvardecl") {
       public Object build(Object args[]) {
-        return TBTerm.mkResVar((ATerm) args[0], processName, (ATerm) args[1]);
+        return TBTermFactory.mkResVar((ATerm) args[0], processName, (ATerm) args[1]);
       }
     });
 
     define(new NodeBuilder("ttt-var") {
       public Object build(Object args[]) {
-        return TBTerm.mkVar((ATerm) args[0], processName, factory.make("none"));
+        return TBTermFactory.mkVar((ATerm) args[0], processName, TBTermFactory.make("none"));
       }
     });
 
     define(new NodeBuilder("ttt-resvar") {
       public Object build(Object args[]) {
-        return TBTerm.mkResVar((ATerm) args[0], processName, factory.make("none"));
+        return TBTermFactory.mkResVar((ATerm) args[0], processName, TBTermFactory.make("none"));
       }
     });
     
@@ -441,7 +441,7 @@ class TScriptNodeBuilders {
 
     define(new NodeBuilder("ttt-Assign") {
       public Object build(Object args[]) {
-        return new Assign(TBTerm.mkVar((ATerm) args[0], processName, factory.make("none")), (ATerm) args[1]);
+        return new Assign(TBTermFactory.mkVar((ATerm) args[0], processName, TBTermFactory.make("none")), (ATerm) args[1]);
       }
     });
 
@@ -535,12 +535,12 @@ class TScriptNodeBuilders {
 
 public class TScriptParser {
 
-  private static ATermFactory factory = TBTerm.factory;
+  private static ATermFactory factory = TBTermFactory.getPureFactory();
   private ExternalParser externalparser;
 
   public TScriptParser(ExternalParser ep) {
     externalparser = ep;
-    factory = TBTerm.factory;
+    factory = TBTermFactory.getPureFactory();
     TScriptNodeBuilders.init(factory);
   }
 
@@ -559,7 +559,7 @@ public class TScriptParser {
     ATerm args[] = ((ATermAppl) interm).getArgumentArray();
 
     ATermList decls = (ATermList) args[0];
-    ATermList calls = TBTerm.factory.makeList();
+    ATermList calls = TBTermFactory.makeList();
 
     for (int i = 0; i < decls.getLength(); i++) {
       //System.err.println(decls.elementAt(i));

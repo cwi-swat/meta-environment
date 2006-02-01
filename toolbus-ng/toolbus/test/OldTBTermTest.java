@@ -1,5 +1,4 @@
 package toolbus.test;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,74 +9,70 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import toolbus.Environment;
 import toolbus.Functions;
+import toolbus.TBTerm;
 import toolbus.TBTermFactory;
-import toolbus.TBTermVar;
 import toolbus.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermBlob;
+import aterm.ATermFactory;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
-public class TBTermTest extends TestCase {
-  private PureFactory factory;
+public class OldTBTermTest extends TestCase {
+  private ATermFactory factory;
 
   public TBTermTest(String arg0) {
     super(arg0);
-    factory = new PureFactory();
-    TBTermFactory.init(factory);
+    TBTerm.init();
+    factory = TBTerm.factory;
   }
 
-  public void testVars() {
-	TBTermVar var = TBTermFactory.makeTBTermVar("X", factory.make("int"));
-    TBTermVar rvar = TBTermFactory.makeTBTermResVar("X", factory.make("int"));
+  public void xtestVars() {
+    ATerm var = factory.make("var(int,X)");
+    ATerm rvar = factory.make("rvar(int,Y)");
     assertTrue(TBTermFactory.isVar(var));
-    assertTrue(!TBTermFactory.isResVar(var));
-    
     assertTrue(TBTermFactory.isResVar(rvar));
-    assertTrue(!TBTermFactory.isVar(rvar));
   }
 
-  public void testBooleans() {
-    assertTrue(TBTermFactory.isBoolean(TBTermFactory.True));
-    assertTrue(TBTermFactory.isBoolean(TBTermFactory.False));
+  public void xtestBooleans() {
+    assertTrue(TBTerm.isBoolean(TBTerm.True));
+    assertTrue(TBTerm.isBoolean(TBTerm.False));
   }
 
-  public void testConstants() {
-    //assertEquals(TBTermFactory.True.getFactory(), factory);
-    assertEquals(TBTermFactory.True, TBTermFactory.make("true"));
-    assertEquals(TBTermFactory.False, TBTermFactory.make("false"));
-    assertEquals(TBTermFactory.BoolType, TBTermFactory.make("bool"));
-    assertEquals(TBTermFactory.IntType, TBTermFactory.make("int"));
-    assertEquals(TBTermFactory.RealType, TBTermFactory.make("real"));
-    assertEquals(TBTermFactory.StrType, TBTermFactory.make("str"));
-    assertEquals(TBTermFactory.TermType, TBTermFactory.make("term"));
-    assertEquals(TBTermFactory.ListType, TBTermFactory.make("list"));
+  public void xtestConstants() {
+    assertEquals(TBTerm.True.getFactory(), factory);
+    assertEquals(TBTerm.True, factory.make("true"));
+    assertEquals(TBTerm.False, factory.make("false"));
+    assertEquals(TBTerm.BoolType, factory.make("bool"));
+    assertEquals(TBTerm.IntType, factory.make("int"));
+    assertEquals(TBTerm.RealType, factory.make("real"));
+    assertEquals(TBTerm.StrType, factory.make("str"));
+    assertEquals(TBTerm.TermType, factory.make("term"));
+    assertEquals(TBTerm.ListType, factory.make("list"));
 
-    assertEquals(TBTermFactory.VoidType, TBTermFactory.make("void"));
+    assertEquals(TBTerm.VoidType, factory.make("void"));
 
-    assertEquals(TBTermFactory.BoolPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.BoolType));
-    assertEquals(TBTermFactory.IntPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.IntType));
-    assertEquals(TBTermFactory.RealPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.RealType));
+    assertEquals(TBTerm.BoolPlaceholder, factory.makePlaceholder(TBTerm.BoolType));
+    assertEquals(TBTerm.IntPlaceholder, factory.makePlaceholder(TBTerm.IntType));
+    assertEquals(TBTerm.RealPlaceholder, factory.makePlaceholder(TBTerm.RealType));
 
-    assertEquals(TBTermFactory.StrPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.StrType));
-    assertEquals(TBTermFactory.TermPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.TermType));
-    assertEquals(TBTermFactory.ListPlaceholder, TBTermFactory.makePlaceholder(TBTermFactory.ListType));
-    assertEquals(TBTermFactory.IntPlaceholder, TBTermFactory.make("<int>"));
-   
+    assertEquals(TBTerm.StrPlaceholder, factory.makePlaceholder(TBTerm.StrType));
+    assertEquals(TBTerm.TermPlaceholder, factory.makePlaceholder(TBTerm.TermType));
+    assertEquals(TBTerm.ListPlaceholder, factory.makePlaceholder(TBTerm.ListType));
   }
 
   boolean doMatch(String s1, String s2) {
     Environment e1 = new Environment();
     Environment e2 = new Environment();
     try {
-      return TBTermFactory.match(TBTermFactory.make(s1), e1, TBTermFactory.make(s2), e2);
+      return TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
     } catch (ToolBusException e) {
       fail(e.getMessage());
     }
     return false;
   }
 
-  public void testMatch() {
+  public void xtestMatch() {
+
     assertTrue(doMatch("1", "1"));
     assertTrue(!doMatch("1", "2"));
 
@@ -125,113 +120,80 @@ public class TBTermTest extends TestCase {
 
     assertTrue(!doMatch("<list>", "f(1,2,3)"));
     assertTrue(!doMatch("f(1,2,3)", "<list>"));
+
   }
   
   boolean doMatch(String s1, Environment e1, String s2, Environment e2) {
     try {
-      return TBTermFactory.match(TBTermFactory.make(s1), e1, TBTermFactory.make(s2), e2);
+      return TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
     } catch (ToolBusException e) {
       fail(e.getMessage());
     }
     return false;
   }
-  boolean doMatch(ATerm t1, Environment e1, ATerm t2, Environment e2) {
-	    try {
-	      return TBTermFactory.match(t1, e1, t2, e2);
-	    } catch (ToolBusException e) {
-	      fail(e.getMessage());
-	    }
-	    return false;
-	  }
   
   boolean doSubst(String s1, Environment e, String s2) throws ToolBusException{
-  	return TBTermFactory.substitute(TBTermFactory.make(s1), e).isEqual(TBTermFactory.make(s2));
+  	return TBTerm.substitute(factory.make(s1), e).isEqual(factory.make(s2));
   }
   
-  boolean doSubst(ATerm t1, Environment e, ATerm t2) throws ToolBusException{
-	  	return TBTermFactory.substitute(t1, e).isEqual(t2);
-	  }
-  
-  public void testSubstitute() throws ToolBusException {
+  public void xtestSubstitute() throws ToolBusException {
  	Environment env1 = new Environment();
-    TBTermVar varX = TBTermFactory.makeTBTermVar("X", TBTermFactory.make("int"));	
-    TBTermVar rvarX = TBTermFactory.makeTBTermResVar("X", TBTermFactory.make("int"));	
-    ATerm int3 = TBTermFactory.make("3");
-    ATermList declX = TBTermFactory.makeList(varX);
+    ATerm varX = factory.make("var(int,X)");
+    ATerm int3 = factory.make("3");
+    ATermList declX = factory.makeList(varX);
     env1.introduceVars(declX);
     env1.assignVar(varX, int3);
     
-    ATerm f3 = TBTermFactory.make("f(3)");
-    ATerm fvarX = TBTermFactory.make("f(<term>)", varX);
-    ATerm frvarX = TBTermFactory.make("f(<term>)", rvarX);
-    
-    System.err.println("f3 = " + f3);
-    System.err.println("fvarX = " + fvarX);
-    System.err.println("frvarX = " + frvarX);
-    
     assertTrue(doSubst("1", env1, "1"));
-    assertTrue(doSubst(varX, env1, int3));
-    System.err.println("after subs: " + TBTermFactory.substitute(fvarX,env1));
-    assertTrue(doSubst(fvarX, env1, f3));
-    assertTrue(doSubst(rvarX, env1, rvarX));
-    assertTrue(doSubst(frvarX, env1, frvarX));  
+    assertTrue(doSubst("var(int,X)", env1, "3"));
+    assertTrue(doSubst("f(var(int,X))", env1, "f(3)"));
+    assertTrue(doSubst("rvar(int,X)", env1, "rvar(int,X)"));
+    assertTrue(doSubst("f(rvar(int,X))", env1, "f(rvar(int,X))"));  
   }
   
-  public void testMatchVar() throws ToolBusException {
+  public void xtestMatchVar() throws ToolBusException {
   	Environment env1 = new Environment();
   	Environment env2 = new Environment();
   	
-    TBTermVar varX = TBTermFactory.makeTBTermVar("X", TBTermFactory.make("int"));	
-    TBTermVar rvarX = TBTermFactory.makeTBTermResVar("X", TBTermFactory.make("int"));	
-    TBTermVar varY = TBTermFactory.makeTBTermVar("Y", TBTermFactory.make("int"));
-    TBTermVar rvarY = TBTermFactory.makeTBTermResVar("Y", TBTermFactory.make("int"));
-    TBTermVar varB = TBTermFactory.makeTBTermVar("B", TBTermFactory.make("str"));	
-  
-    ATerm int3 = TBTermFactory.make("3");
-    ATerm int4 = TBTermFactory.make("4");
-    ATerm int5 = TBTermFactory.make("5");
-    ATerm int6 = TBTermFactory.make("6");
+    ATerm varX = factory.make("var(int,X)");
+    ATerm varY = factory.make("var(int,Y)");
+    ATerm varB = factory.make("var(str,B)");
+    ATerm int3 = factory.make("3");
+    ATerm int4 = factory.make("4");
+    ATerm int5 = factory.make("5");
+    ATerm int6 = factory.make("6");
     
-    ATermList declX = TBTermFactory.makeList(varX);
+    ATermList declX = factory.makeList(varX);
     env1.introduceVars(declX);
     env1.assignVar(varX, int3);
     
-    ATermList declY = TBTermFactory.makeList(varY);
+    ATermList declY = factory.makeList(varY);
     env2.introduceVars(declY);
     env2.assignVar(varY, int4);
     
-    assertTrue(doMatch(varX, env1, int3, env2));
-    assertTrue(!doMatch(varX, env1, int4, env2));
-    assertTrue(doMatch(int4, env1, varY, env2));
-    assertTrue(!doMatch(int3, env1, varY, env2));
+    assertTrue(doMatch("var(int,X)", env1, "3", env2));
+    assertTrue(!doMatch("var(int,X)", env1, "4", env2));
+    assertTrue(doMatch("4", env1, "var(int,Y)", env2));
+    assertTrue(!doMatch("3", env1, "var(int,Y)", env2));
     
-    ATerm f3 = TBTermFactory.make("f(3)");
-    ATerm f4 = TBTermFactory.make("f(4)");
-    ATerm f6 = TBTermFactory.make("f(6)");
-    ATerm gf6 = TBTermFactory.make("g(f(6))");
-    ATerm fvarX = TBTermFactory.make("f(<term>)", varX);
-    ATerm fvarY = TBTermFactory.make("f(<term>)", varY);
-    ATerm frvarX = TBTermFactory.make("f(<term>)", rvarX);
-    ATerm gvarX = TBTermFactory.make("g(<term>)", varX);
+    assertTrue(doMatch("f(var(int,X))", env1, "f(3)", env2));
+    assertTrue(!doMatch("f(var(int,X))", env1, "f(4)", env2));
+    assertTrue(doMatch("f(4)", env1, "f(var(int,Y))", env2));
+    assertTrue(!doMatch("f(3)", env1, "f(var(int,Y))", env2));
     
-    assertTrue(doMatch(fvarX, env1, f3, env2));
-    assertTrue(!doMatch(fvarX, env1, f4, env2));
-    assertTrue(doMatch(f4, env1, fvarY, env2));
-    assertTrue(!doMatch(f3, env1, fvarY, env2));
-    
-    assertTrue(doMatch(rvarX, env1, int5, env2)); 
+    assertTrue(doMatch("rvar(int,X)", env1, "5", env2)); 
     assertEquals(env1.getValue(varX), int5);
-    assertTrue(doMatch(varX, env1, int5, env2)); 
+    assertTrue(doMatch("var(int,X)", env1, "5", env2)); 
     
-    assertTrue(doMatch(int6, env1, rvarY, env2)); 
+    assertTrue(doMatch("6", env1, "rvar(int,Y)", env2)); 
     assertEquals(env2.getValue(varY), int6);
-    assertTrue(doMatch(int6, env1, varY, env2)); 
+    assertTrue(doMatch("6", env1, "var(int,Y)", env2)); 
     
-    assertTrue(doMatch(rvarX, env1, fvarY, env2));
-    assertEquals(env1.getValue(varX), f6);
+    assertTrue(doMatch("rvar(int,X)", env1, "f(var(int,Y))", env2));
+    assertEquals(env1.getValue(varX), factory.make("f(6)"));
     
-    assertTrue(doMatch(gvarX, env1, rvarY, env2));
-    assertEquals(env2.getValue(varY), gf6);
+    assertTrue(doMatch("g(var(int,X))", env1, "rvar(int,Y)", env2));
+    assertEquals(env2.getValue(varY), factory.make("g(f(6))"));
 /*    
     ATermBlob b1 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
     ATermBlob b2 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
@@ -251,25 +213,25 @@ public class TBTermTest extends TestCase {
 
   public ATerm check(String s) throws ToolBusException {
     Environment e = new Environment();
-    return Functions.checkType(TBTermFactory.make(s), e, false);
+    return Functions.checkType(factory.make(s), e, false);
   }
 
-  public void testStaticCheck() throws ToolBusException {
-    assertEquals(check("1"), TBTermFactory.IntType);
-    assertEquals(check("1.5"), TBTermFactory.RealType);
-    assertEquals(check("\"abc\""), TBTermFactory.StrType);
-    assertEquals(check("true"), TBTermFactory.BoolType);
-    assertEquals(check("false"), TBTermFactory.BoolType);
+  public void xtestStaticCheck() throws ToolBusException {
+    assertEquals(check("1"), TBTerm.IntType);
+    assertEquals(check("1.5"), TBTerm.RealType);
+    assertEquals(check("\"abc\""), TBTerm.StrType);
+    assertEquals(check("true"), TBTerm.BoolType);
+    assertEquals(check("false"), TBTerm.BoolType);
 
-    assertEquals(check("add(1,2)"), TBTermFactory.IntType);
-    assertEquals(check("greater(1,2)"), TBTermFactory.BoolType);
+    assertEquals(check("add(1,2)"), TBTerm.IntType);
+    assertEquals(check("greater(1,2)"), TBTerm.BoolType);
   }
 
   public boolean compatible(String s1, String s2) throws ToolBusException {
-    return Functions.compatibleTypes(TBTermFactory.make(s1), TBTermFactory.make(s2));
+    return Functions.compatibleTypes(factory.make(s1), factory.make(s2));
   }
 
-  public void testCompatible() throws ToolBusException {
+  public void xtestCompatible() throws ToolBusException {
     assertTrue(compatible("int", "int"));
     assertTrue(!compatible("int", "real"));
 
@@ -345,7 +307,7 @@ public class TBTermTest extends TestCase {
 	return null;
   }
   
-  public void xxtestBlob() {
+  public void testBlob() {
   	ATermBlob b = factory.makeBlob(new byte[]{'a', 'b', 'c'});
   	/*
   	byte data[] = b.getBlobData();
@@ -405,4 +367,3 @@ public class TBTermTest extends TestCase {
   }
 
 }
-

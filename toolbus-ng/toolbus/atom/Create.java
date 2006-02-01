@@ -8,7 +8,8 @@ import java.util.Stack;
 import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
@@ -39,7 +40,7 @@ public class Create extends Atom {
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");
-    if (!TBTerm.isResVar(rvar.value))
+    if (!TBTermFactory.isResVar(rvar.value))
       throw new ToolBusException("second argument of create should be a result variable");
   }
 
@@ -54,7 +55,7 @@ public class Create extends Atom {
 
     ProcessInstance P = TB.addProcess(name, evargs);
 
-    getEnv().assignVar(rvar.value, TBTerm.factory.makeInt(P.getProcessId()));
+    getEnv().assignVar((TBTermVar)rvar.value, TBTermFactory.makeInt(P.getProcessId()));
     //System.err.println("Create.execute: process " +  P.getProcessId() + " added");
     return true;
 

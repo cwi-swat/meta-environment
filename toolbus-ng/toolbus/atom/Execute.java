@@ -9,7 +9,8 @@ import java.util.Stack;
 import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
@@ -42,7 +43,7 @@ public class Execute extends Atom {
 	 
 	    if (tool.value.getType() != ATerm.APPL)
 	      throw new ToolBusException("malformed first argument in execute");
-	    if (!TBTerm.isResVar(rvar.value))
+	    if (!TBTermFactory.isResVar(rvar.value))
 	      throw new ToolBusException("second argument of execute should be a result variable");
 	    if(!Functions.compatibleTypes(tool.value, rvar.value))
 	      throw new ToolBusException("arguments of execute should have the same (tool) type");
@@ -54,7 +55,9 @@ public class Execute extends Atom {
 	    String name = ((ATermAppl) tool.value).getName();
 	    ToolBus TB = getProcess().getToolBus();
 	    ToolInstance TI = TB.addToolInstance(name, false);
-	    getEnv().assignVar(rvar.value, TI.getToolId());
+	
+	    getEnv().assignVar((TBTermVar)rvar.value, TI.getToolId());
+	    
 	    //System.err.println("Execute.execute: " + getEnv());
 	    return true;
 	  }

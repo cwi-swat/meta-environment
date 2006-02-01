@@ -5,9 +5,7 @@
  */
 package toolbus.atom;
 
-import java.util.HashSet;
-
-import toolbus.TBTerm;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
@@ -35,7 +33,7 @@ public class SndNote extends Atom {
 	 public boolean execute() throws ToolBusException {
 	    if (!isEnabled())
 	      return false;
-	    ATerm theNote = TBTerm.substitute(this.note.value, getEnv());
+	    ATerm theNote = TBTermFactory.substitute(this.note.value, getEnv());
 	    
 	   // for(int i = 0; i < processes.size() ; i++){
 	   // 	ProcessInstance pi = (ProcessInstance) processes.elementAt(i);

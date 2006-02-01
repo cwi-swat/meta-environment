@@ -28,13 +28,13 @@ public class Assign extends Atom {
     return a;
   }
   
-  public void replaceFormals(Environment env) throws ToolBusException{
+  public void replaceFormals(Environment env) throws ToolBusException {
   	//System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
-  	var.value = TBTerm.resolveVars(var.value, env);
+  	var.value = TBTermFactory.resolveVars(var.value, env);
  	//System.err.println("Assign.replaceformals: " + var.value);
-  	var.value = TBTerm.replaceAssignableVar(var.value, env);
-    exp.value = TBTerm.resolveVars(exp.value, env);
-    exp.value = TBTerm.replaceFormals(exp.value, env);
+  	var.value = TBTermFactory.replaceAssignableVar((TBTermVar)var.value, env);
+    exp.value = TBTermFactory.resolveVars(exp.value, env);
+    exp.value = TBTermFactory.replaceFormals(exp.value, env);
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
  }
 
@@ -42,9 +42,9 @@ public class Assign extends Atom {
   public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
     super.compile(P, calls, env, follow);
     //System.err.println("Assign.compile: " + this + " env =" + getEnv());
-    if (!(TBTerm.isVar(var.value) || TBTerm.isResVar(var.value)))
+    if (!(TBTermFactory.isVar(var.value) || TBTermFactory.isResVar(var.value)))
       throw new ToolBusException("left-hand side of := should be a variable");
-    ATerm vartype = TBTerm.getVarType(var.value);
+    ATerm vartype = ((TBTermVar)var.value).getVarType();
     
     //System.err.println(this + "; var = " + var +"; vartype = " + vartype);
     
@@ -68,7 +68,7 @@ public class Assign extends Atom {
     ATerm newval = Functions.eval(exp.value, p, env);
     
     //System.err.println("Assign.execute: " + exp.value + "; " + newval);
-    env.assignVar(var.value, newval);
+    env.assignVar((TBTermVar)var.value, newval);
     //System.err.println("Assign: " + env);
     //System.err.println("Assign: " + getFollow());
     return true;
