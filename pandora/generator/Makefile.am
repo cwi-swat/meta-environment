@@ -1,13 +1,11 @@
 INCLUDES = ${ASC_INCLUDES}
 
 EXTRA_DIST = \
-	Box_dict.c \
-	Box_dict.h \
-	pandora.idef
+	pandora.idef.src
 
 bin_PROGRAMS = pandora 
 
-noinst_HEADERS = pandora.h Box.h Box-utils.h pandora.tif.h
+noinst_HEADERS = pandora.h Box.h Box-utils.h Box_dict.h pandora.tif.h
 
 pkgdata_DATA = pandora.idef
 
@@ -21,6 +19,9 @@ pandora_SOURCES = \
 	pandora.tif.c
 
 pandora_LDADD = ${ASC_LD_FLAGS}
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 asfc:
 	asfc \
