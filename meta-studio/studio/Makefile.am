@@ -14,7 +14,7 @@ pkgdata_DATA = ${JARFILE} $(TOOLNAME).idef
 
 EXTRA_DIST = ${JARFILE} $(TOOLNAME).idef.src
 
-CLEANFILES = $(TOOLNAME)-config
+CLEANFILES = $(TOOLNAME)-config $(TOOLNAME).idef
 
 $(TOOLNAME)-config: Makefile
 	echo "#! /bin/sh" > $@

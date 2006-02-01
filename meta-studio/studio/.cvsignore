@@ -3,3 +3,4 @@ Makefile.in
 build
 dist
 gui-config
+gui.idef
