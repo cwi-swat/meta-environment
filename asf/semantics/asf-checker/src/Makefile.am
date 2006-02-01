@@ -13,7 +13,7 @@ bin_PROGRAMS = asfchecker
 
 pkgdata_DATA = asfchecker.idef
 
-EXTRA_DIST = asfchecker.idef asfchecker.tif.c asfchecker.tif.h
+EXTRA_DIST = asfchecker.idef.src asfchecker.tif.c asfchecker.tif.h
 
 noinst_HEADERS 	= equationChecker.h asfchecker.tif.h statistics.h
 
@@ -32,3 +32,5 @@ asfchecker_LDADD   = \
         -L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

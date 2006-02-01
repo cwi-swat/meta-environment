@@ -1,6 +1,6 @@
 pkgdata_DATA = $(wildcard *.idef)
 
-EXTRA_DIST = $(wildcard *.idef)
+EXTRA_DIST = $(wildcard *.idef.src)
 
 noinst_HEADERS = toolASFSDFApigen.tif.h
 
@@ -19,3 +19,6 @@ INCLUDES = \
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
 	asfc -i $< -o ASFSDFApigen.c -t -v -c 
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

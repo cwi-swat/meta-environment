@@ -8,7 +8,7 @@ bin_PROGRAMS = addeqssyntax
 
 pkgdata_DATA = addeqssyntax.idef
 
-EXTRA_DIST = addeqssyntax.idef 
+EXTRA_DIST = addeqssyntax.idef.src 
 
 noinst_HEADERS = addeqssyntax.tif.h
 
@@ -24,3 +24,5 @@ addeqssyntax_LDADD = \
 asfc:
 	asfc -i Add-Eqs-Syntax.eqs -o Add-Eqs-Syntax.c -v
 
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

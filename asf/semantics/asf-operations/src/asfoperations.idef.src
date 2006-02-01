@@ -1,0 +1,30 @@
+tool asfoperations is {command = "__PREFIX__/bin/asfoperations -TB_COLLECT_LOOP 1"}
+
+process AsfOperations is
+let
+  Module : term,
+  Equations  : term,
+  Tests  : term,
+  AO         : asfoperations
+in
+  execute(asfoperations, AO?) .
+  (
+    rec-msg(extract-equations(Equations?)).
+    snd-eval(AO, extract-equations(Equations)).
+    rec-value(AO, extract-equations-result(Equations?)).
+    snd-msg(extract-equations-result(Equations))
+  +
+    rec-msg(extract-tests(Equations?)) .
+    snd-eval(AO, extract-tests(Equations)) .
+    rec-value(AO, extract-tests-result(Tests?)) .
+    snd-msg(extract-tests-result(Tests)) 
+  +
+    rec-msg(normalize-module(Module?)) .
+    snd-eval(AO, normalize-module(Module)) .
+    rec-value(AO, normalized-module(Module?)) .
+    snd-msg(normalize-module-result(Module))
+  )*
+  delta
+endlet
+
+toolbus(AsfOperations)

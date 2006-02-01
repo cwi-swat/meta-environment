@@ -1,0 +1,29 @@
+tool toolASFSDFApigen is { command = "__PREFIX__/bin/ASFSDFApigen" }
+
+process ASFSDFApigen is
+let
+  ASFSDFApigenTool : toolASFSDFApigen,
+  Term       : term,
+  Args       : list,
+  Function   : str,
+  Sort       : str
+in
+  (
+    (
+      rec-msg(rewrite("ASFSDFApigen", Term?)) .
+      execute(toolASFSDFApigen, ASFSDFApigenTool?) .
+      snd-eval(ASFSDFApigenTool, rewrite(Term))
+    +
+      rec-msg(apply-rewrite("ASFSDFApigen", Function?, Sort?, Args?)).
+      execute(toolASFSDFApigen, ASFSDFApigenTool?) .
+      snd-eval(ASFSDFApigenTool, apply-rewrite(Function,Sort,Args))
+    ).
+    rec-value(ASFSDFApigenTool, normalform(Term?)) .
+    snd-terminate(ASFSDFApigenTool,"done").
+    snd-msg(normalform("ASFSDFApigen", Term)).
+    Term := null
+  ) *
+  delta
+endlet
+
+toolbus(ASFSDFApigen)

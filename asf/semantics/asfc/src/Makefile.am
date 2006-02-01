@@ -5,7 +5,7 @@ SUBDIRS = muasf
 bin_PROGRAMS     = asfc
 pkgdata_DATA     = asfc.idef
 
-EXTRA_DIST       = asfc.idef
+EXTRA_DIST       = asfc.idef.src
 
 asfc_SOURCES = asfc.tif.c \
                asfc.c \
@@ -41,3 +41,5 @@ INCLUDES  = $(DEFINES) \
 	    $(ASC_INCLUDES) \
             -I$(srcdir)/muasf 
 
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

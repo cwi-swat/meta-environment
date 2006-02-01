@@ -3,7 +3,7 @@ include $(top_srcdir)/make_rules
 bin_PROGRAMS      = asfe
 
 pkgdata_DATA      = asfe.idef
-EXTRA_DIST        = asfe.idef
+EXTRA_DIST        = asfe.idef.src
 
 noinst_HEADERS = \
 	asfe.tif.h \
@@ -43,3 +43,6 @@ asfe_LDADD = \
 INCLUDES = $(ASC_INCLUDES) \
 	     -I$(ERROR_SUPPORT)/include \
 	     ${TRAVERSALSDEF} ${LAYOUTDEF}
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

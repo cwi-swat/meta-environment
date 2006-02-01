@@ -8,7 +8,7 @@ bin_PROGRAMS = asfoperations
 
 pkgdata_DATA    = asfoperations.idef
 
-EXTRA_DIST   = asfoperations.idef 
+EXTRA_DIST   = asfoperations.idef.src 
 
 noinst_HEADERS 	= \
 	asfoperations.tif.h \
@@ -26,3 +26,7 @@ asfoperations_LDADD = $(ASC_LD_FLAGS)
 #       which is essential here.
 asfc:
 	asfc -i ASF-Normalization.eqs -o ASF-Normalization.c -v -a	
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
