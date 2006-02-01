@@ -10,12 +10,7 @@ TBSCRIPTS = \
 	asf-editor-utils.tb \
 	asf-language.tb \
 	asf-listeners.tb \
-	asf-utils.tb \
-	term-actions.tb \
-	term-editor-actions.tb \
-	term-editor-utils.tb \
-	term-parsetable.tb \
-	term-utils.tb
+	asf-utils.tb 
 
 EXTRA_DIST = \
 	$(TBSCRIPTS) \

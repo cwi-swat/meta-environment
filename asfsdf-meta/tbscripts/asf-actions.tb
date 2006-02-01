@@ -85,5 +85,49 @@ in
   fi
 endlet
 
+process PrintModuleAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Module Text (ASF+SDF)", [], ".txt", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(print-module(ModuleId, Path))
+    . rec-msg(module-printed(ModuleId))
+  fi
+endlet
+
+process DumpEquationsParseTableAction(ModuleId : term) is
+let
+  Cancel: bool,
+  Path : str
+in
+  PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, Path, eqs)
+  fi
+endlet
+
+process EditorDumpEquationsParseTableAction(EditorId : term) is
+let
+  Cancel: bool,
+  Path : str,
+  ModuleId : term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    DumpParseTable(ModuleId, Path, eqs)
+  fi
+endlet
 
 #endif /* __ASF_ACTIONS__ */

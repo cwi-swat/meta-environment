@@ -1,43 +1,21 @@
 #define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)
 
 /* meta-kernel */
-#include "configuration-manager.idef"
-#include "generic-adapter.idef"
-#include "graph-converter.idef"
-#include "module-utils.tb"
-#include <module-actions.tb>
-#include <gui-actions.tb>
-#include <tide.tb>
-#include "module-selection-listener.tb"
-#include "module-actions.tb"
-#include "editor-manager/editor-manager.idef"
-#include "error-gui/error-viewer.idef"
-#include "editor-plugin/editor-plugin.idef"
-#include "module-details-gui/moduledetails.idef"
-#include "navigator-gui/navigator.idef"
-#include "dialog-gui/dialog.idef"
-#include "progress-gui/progress.idef"
-#include "gui-utils.tb"
-/* #include "serialization-utils.tb" */
+#include <meta.tb>
 
 /* sdf-meta */
+#include <module-actions.tb>
 #include "term-parsetable.tb"
 #include "sdf-listeners.tb"
 #include "sdf-actions.tb"
-#include "graph-utils.tb"
-#include "editing.tb"
-#include "editor-error-display.tb"
 #include "sdf-utils.tb"
 #include "parsetable-utils.tb"
 #include "sdf2-language.tb"
 #include <sdf-editor-actions.tb>
 #include <term-editor-actions.tb>
 #include <term-actions.tb>
-#include "structure-editor/structure-editor.idef"
-#include "unparser.idef"
 
 /* asf-sdf-meta */
-#include "restorebrackets.idef"
 #include "asf-language.tb"
 #include "asf-listeners.tb"
 #include "asf-actions.tb"
