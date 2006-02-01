@@ -1,6 +1,5 @@
 # $Id$
 
-# Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
 	    assert.tb \
 	    attribute-changed-event.tb \

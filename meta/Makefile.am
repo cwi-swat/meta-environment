@@ -2,9 +2,7 @@
 
 ACLOCAL_FLAGS = -I .
 
-include ${top_srcdir}/make_rules
-
-EXTRA_DIST = make_rules package
+EXTRA_DIST = package
 
 CLEANFILES = \
 	${PACKAGE}-${VERSION}.pkg

@@ -1,7 +1,5 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
-
 EXTRA_DIST  = $(wildcard *.src)
 
 bin_SCRIPTS = meta-config
