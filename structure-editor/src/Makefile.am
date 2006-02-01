@@ -36,7 +36,10 @@ libStructureEditor_a_SOURCES = \
 	StructureEditor.c \
 	StructureEditor_dict.c
 
-EXTRA_DIST = structure-editor.idef
+EXTRA_DIST = structure-editor.idef.src
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 if MAINTAINER_MODE
 
