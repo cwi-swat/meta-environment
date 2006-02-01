@@ -1,10 +1,10 @@
-#ifndef __MODULE_ACTIONS__
-#define __MODULE_ACTIONS__
+#ifndef __SDF_MODULE_ACTIONS__
+#define __SDF_MODULE_ACTIONS__
 
 #include <sdf-namespace.h>
-#include "navigator-gui/navigator.idef"
-#include "graph-gui/graph-painter.idef"
-#include "config-manager/configuration-manager.idef"
+#include <navigator.idef>
+#include <graph-painter.idef>
+#include <configuration-manager.idef>
 
 process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
 let
@@ -61,4 +61,4 @@ endlet
 
 toolbus(HandleModulePopup)
 
-#endif /* __MODULE_ACTIONS__ */
+#endif /* __SDF_MODULE_ACTIONS__ */

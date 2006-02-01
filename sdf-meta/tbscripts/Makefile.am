@@ -3,12 +3,12 @@
 # Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
   idle-state.tb \
-  module-manager.tb \
   parsetable-utils.tb \
   sdf-actions.tb \
   sdf-editor-actions.tb \
   sdf-editor-utils.tb \
   sdf-listeners.tb \
+  sdf-module-actions.tb \
   sdf-namespace.h \
   sdf-utils.tb
   
