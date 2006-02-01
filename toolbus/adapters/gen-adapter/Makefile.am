@@ -1,5 +1,7 @@
 EXTRA_DIST = generic-adapter.idef.src gen-adapter.guide.tex
 
+CLEAN_FILES = generic-adapter.idef
+
 bin_PROGRAMS = gen-adapter bc-adapter
 pkgdata_DATA = generic-adapter.idef
 
