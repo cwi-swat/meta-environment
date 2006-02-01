@@ -1,4 +1,8 @@
+#ifndef __ASF_EDITOR_ACTIONS__
+#define __ASF_EDITOR_ACTIONS__
+
 #include <asf-namespace.h>
+#include <asf-editor-utils.tb>
 
 process EditorEditEquationsAction(EditorId : term) is
 let 
@@ -25,3 +29,5 @@ in
     . create(CleanupEditTerm(Sid, ModuleId), Pid?)
   fi
 endlet
+
+#endif /* __ASF_EDITOR_ACTIONS__ */

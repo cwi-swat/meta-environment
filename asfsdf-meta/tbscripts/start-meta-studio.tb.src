@@ -7,11 +7,11 @@
 #include <sdf-meta.tb>
 
 /* asf-sdf-meta */
-#include "asf-language.tb"
-#include "asf-listeners.tb"
-#include "asf-actions.tb"
-#include "asf-utils.tb"
-#include "asf-initialize.tb"
+#include <asf-language.tb>
+#include <asf-listeners.tb>
+#include <asf-actions.tb>
+#include <asf-utils.tb>
+#include <asf-initialize.tb>
 #include <asf-editor-actions.tb>
 
 process InitializeASFSDFMetaEnvironment is
@@ -28,12 +28,14 @@ in
   . StartGraphPanel()
   . StartProgressPanel()
   . StartModuledetailsPanel()
+  /*
   .
   if not-equal(MODULENAME, "") then
     OpenModule(MODULENAME, ModuleId?)
   else
     tau
   fi 
+*/
 endlet
 
 toolbus(InitializeASFSDFMetaEnvironment)
