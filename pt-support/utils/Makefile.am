@@ -5,9 +5,9 @@ SUBDIRS = implodePT
 AM_CFLAGS = -Wall -Werror -g -O2
 
 EXTRA_DIST = \
-	unparser.idef \
-	position-annotator.idef \
-	apply-function.idef
+	unparser.idef.src \
+	position-annotator.idef.src \
+	apply-function.idef.src
 
 bin_PROGRAMS = \
 	flattenPT \
@@ -113,3 +113,6 @@ tif:
 
 tif-clean:
 	rm -f *.tifs *.tif.[ch]
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
