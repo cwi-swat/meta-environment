@@ -8,4 +8,5 @@ EditorManager.dict
 Makefile
 Makefile.in
 editor-manager
+editor-manager.idef
 libEditorManager.a

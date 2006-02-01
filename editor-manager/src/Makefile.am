@@ -37,7 +37,7 @@ EXTRA_DIST = editor-manager.idef.src
 
 if MAINTAINER_MODE
 
-CLEANFILES = editor-manager.tifs
+CLEANFILES = editor-manager.tifs editor-manager.idef
 
 api: EditorManager.sdf
 	(echo definition; cat $<) > `basename $< .sdf`.def
