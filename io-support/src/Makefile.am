@@ -26,6 +26,9 @@ in_output_LDADD = \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
 if MAINTAINER_MODE
 
 CLEANFILES = in-output.tifs
