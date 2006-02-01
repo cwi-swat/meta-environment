@@ -27,5 +27,7 @@ INCLUDES	        = -I$(ATERM)/include \
                           -I$(TOOLBUSLIB)/include \
 			  -I$(srcdir)/snapshot
 
+CLEANFILES = term-store.idef
+
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

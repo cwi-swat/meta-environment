@@ -3,4 +3,5 @@
 Makefile
 Makefile.in
 term-store
+term-store.idef
 term-store.tifs
