@@ -8,6 +8,7 @@ TBSCRIPTS = \
 	    sdf-actions.tb \
 	    sdf-editor-actions.tb \
 	    sdf-editor-utils.tb \
+	    sdf-initialize.tb \
 	    sdf-listeners.tb \
 	    sdf-meta.tb \
 	    sdf-namespace.h \
@@ -18,14 +19,20 @@ TBSCRIPTS = \
 	    term-parsetable.tb \
 	    term-utils.tb
   
-GENERATED_TBSCRIPTS = sdf2-language.tb
+GENERATED_TBSCRIPTS = sdf2-language.tb start-meta-studio.tb
 
-EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)
+EXTRA_DIST = \
+	     $(TBSCRIPTS) \
+	     $(GENERATED_TBSCRIPTS:.tb=.tb.src)
 
 CLEANFILES = $(GENERATED_TBSCRIPTS)
 
-pkgdata_DATA = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS)
+pkgdata_DATA = \
+	       $(TBSCRIPTS) \
+	       $(GENERATED_TBSCRIPTS) \
+	       standard.sdf.actions
 
 %.tb: %.tb.src Makefile
-	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g;' \
-             < $< > $@ 
+	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
+             s@__SDF_META__@$(prefix)/share/sdf-meta@g;' \
+	    < $< > $@ 

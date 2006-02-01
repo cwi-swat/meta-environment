@@ -2,7 +2,7 @@
 
 EXTRA_DIST  = $(wildcard *.src)
 
-bin_SCRIPTS = sdf-meta-config
+bin_SCRIPTS = sdf-meta-config sdf-meta
 
 TBSCRIPTS = \
 	    -I$(prefix)/share/sdf-meta \

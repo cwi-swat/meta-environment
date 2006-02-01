@@ -1,6 +1,8 @@
 $Id$
 
 Wed Feb  1 08:34:13 CET 2006 <kooiker@cwi.nl>
+ * src,tbscripts:
+   - Standalone SDF Meta Environment
  * tbscripts:
    - Added term scripts
    - Renamed module-actions.tb to sdf-module-actions.tb
