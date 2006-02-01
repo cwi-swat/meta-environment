@@ -7,6 +7,7 @@
 #include <graph-painter.idef>
 #include <progress.idef>
 #include <moduledetails.idef>
+#include <error-viewer.idef>
 
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))

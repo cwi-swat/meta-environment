@@ -9,6 +9,7 @@ TBSCRIPTS = \
 	    dependencies-changed-event.tb \
 	    editing.tb \
 	    editor-error-display.tb \
+	    error-output.tb \
 	    error-utils.tb \
 	    graph-utils.tb \
 	    gui-actions.tb \

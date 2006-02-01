@@ -1,0 +1,9 @@
+#ifndef __ERROR_OUTPUT__
+#define __ERROR_OUTPUT__
+
+/* This is for commandline error output only */
+process Error(Message: str, MessageArgs: list) is
+  TODO("Use error support utils to print error")
+  . printf("%s: %t\n", Message, MessageArgs)
+
+#endif /* __ERROR_OUTPUT__ */

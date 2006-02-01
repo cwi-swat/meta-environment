@@ -2,6 +2,6 @@
 #ifndef __ERROR_UTILS__
 #define __ERROR_UTILS__
 
-#include <error-viewer.idef>
+#include <error-support.idef>
 
 #endif
