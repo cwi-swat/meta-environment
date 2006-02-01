@@ -5,6 +5,7 @@ EXTRA_DIST  = $(wildcard *.src)
 bin_SCRIPTS = meta-config
 
 TBSCRIPTS = \
+	    -I$(prefix)/share/meta \
 	    -I$(TERM_STORE)/share/term-store \
 	    -I$(EDITOR_MANAGER)/share/editor-manager \
 	    -I$(EDITOR_PLUGIN)/share/editor-plugin \
