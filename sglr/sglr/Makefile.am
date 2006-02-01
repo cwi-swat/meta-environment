@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = sglr.idef
+EXTRA_DIST = sglr.idef.src
 
 INCLUDES = \
 	-I$(top_srcdir)/libsglr \
@@ -24,3 +24,6 @@ sglr_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm-dbg \
 	$(SOCKLIBS)
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

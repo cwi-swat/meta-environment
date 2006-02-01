@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST		= restorebrackets.idef
+EXTRA_DIST		= restorebrackets.idef.src
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(PT_SUPPORT)/include \
@@ -22,3 +22,7 @@ restorebrackets_LDADD	= -L$(top_builddir)/libsglr -lsglr \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
