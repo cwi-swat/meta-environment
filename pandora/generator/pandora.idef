@@ -1,5 +1,5 @@
 
-tool pandora is { command = "pandora" }  
+tool pandora is { command = "/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/pandora" }  
 
 process Pandora is
 let

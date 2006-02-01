@@ -1,7 +1,8 @@
 INCLUDES = ${ASC_INCLUDES}
 
-EXTRA_DIST = \
-	pandora.idef.src
+EXTRA_DIST = pandora.idef.src
+
+CLEANFILES = pandora.idef
 
 bin_PROGRAMS = pandora 
 
