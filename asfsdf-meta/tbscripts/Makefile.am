@@ -11,7 +11,8 @@ TBSCRIPTS = \
 	asf-editor-utils.tb \
 	asf-language.tb \
 	asf-listeners.tb \
-	asf-utils.tb 
+	asf-utils.tb \
+	asfsdf-meta.tb
 
 EXTRA_DIST = \
 	$(TBSCRIPTS) \

@@ -1,8 +1,6 @@
 #ifndef __ASF_INITIALIZE__
 #define __ASF_INITIALIZE__
 
-#include <asf-listeners.tb>
-
 process AddAsfProperties is
 let
   Contents: str,
