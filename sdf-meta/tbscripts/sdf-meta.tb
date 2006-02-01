@@ -1,0 +1,15 @@
+#ifndef __SDF_META__
+#define __SDF_META__
+
+#include <sdf-module-actions.tb>
+#include <term-parsetable.tb>
+#include <sdf-listeners.tb>
+#include <sdf-actions.tb>
+#include <sdf-utils.tb>
+#include <parsetable-utils.tb>
+#include <sdf2-language.tb>
+#include <sdf-editor-actions.tb>
+#include <term-editor-actions.tb>
+#include <term-actions.tb>
+
+#endif /* __SDF_META__ */
