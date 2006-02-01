@@ -35,9 +35,11 @@ EXTRA_DIST = editor-manager.idef.src
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
-if MAINTAINER_MODE
+CLEANFILES = \
+	     editor-manager.tifs \
+	     editor-manager.idef
 
-CLEANFILES = editor-manager.tifs editor-manager.idef
+if MAINTAINER_MODE
 
 api: EditorManager.sdf
 	(echo definition; cat $<) > `basename $< .sdf`.def
