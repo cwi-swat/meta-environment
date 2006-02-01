@@ -30,7 +30,10 @@ libEditorManager_a_SOURCES = \
 	EditorManager.c \
 	EditorManager_dict.c
 
-EXTRA_DIST = editor-manager.idef
+EXTRA_DIST = editor-manager.idef.src
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
 if MAINTAINER_MODE
 
