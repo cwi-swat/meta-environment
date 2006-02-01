@@ -3,6 +3,7 @@
 
 #include <sdf-modules.idef>
 #include <error-support.idef>
+#include <parse-utils.tb>
 
 #define SDF_TREE_CACHE "sdf-annotated-tree"
 

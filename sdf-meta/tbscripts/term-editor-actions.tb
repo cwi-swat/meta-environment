@@ -2,6 +2,7 @@
 #define __TERM_EDITOR_ACTIONS__
 
 #include <module-manager.tb>
+#include <term-editor-utils.tb>
 #include <sdf-namespace.h>
 
 process EditorEditTermAction(EditorId : term) is

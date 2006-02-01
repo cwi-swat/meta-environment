@@ -1,6 +1,8 @@
 #ifndef __SDF_EDITOR_ACTIONS__
 #define __SDF_EDITOR_ACTIONS__
 
+#include <sdf-editor-utils.tb>
+
 process EditorEditSyntaxAction(EditorId : term) is
 let 
   ModuleId : term
