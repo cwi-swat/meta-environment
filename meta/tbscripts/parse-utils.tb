@@ -6,7 +6,6 @@
 #include <position-annotator.idef>
 #include <error-support.idef>
 #include <restorebrackets.idef>
-#include <unparser.idef>
 
 process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
   snd-msg(add-posinfo-packed(File, Tree))

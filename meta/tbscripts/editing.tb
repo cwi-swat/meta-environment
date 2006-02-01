@@ -405,36 +405,6 @@ in
   fi
 endlet
 
-process ActivateEditorWithTree(Tree: term, ModuleId: term, Filename: str) is
-let
-  Error: term,
-  Pid: int,
-  Sid: term,
-  Text: str,
-  ErrorMessage: str
-in
-  if not-equal(Tree, UNDEFINED) then
-    snd-msg(unparse(Tree))
-    . rec-msg(unparsed-text(Text?))
-    . snd-msg(io-write-text-list(Filename, [Text]))
-    .
-    (
-      rec-msg(io-file-written)
-      . create(EditTerm(Filename, ModuleId), Pid?)
-      .
-      (
-        rec-msg(term-editor-started(Filename, ModuleId, Sid?))
-      +
-        rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
-        . Error(ErrorMessage, [])
-      )
-    +
-      rec-msg(io-file-not-written(Error?))
-      . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
-    )
-  fi
-endlet
-
 process EditLocation(Pid: int, Location: term) is
 let
   EditorType: term,
