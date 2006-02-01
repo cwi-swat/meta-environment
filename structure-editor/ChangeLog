@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
+ * configure.ac:
+   - use libtool
+
 Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
  * Initial version
 
