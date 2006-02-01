@@ -56,6 +56,11 @@ AC_PACKAGE_REQUIRE(module-manager, module-manager-config,
    [  --with-module-manager=DIR module-manager is in DIR])
 AC_SUBST(MODULE_MANAGER)
 
+dnl Require editor-manager package
+AC_PACKAGE_REQUIRE(editor-manager, editor-manager,
+   [  --with-editor-manager=DIR editor-manager is in DIR])
+AC_SUBST(EDITOR_MANAGER)
+
 dnl Require meta-studio package
 AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])

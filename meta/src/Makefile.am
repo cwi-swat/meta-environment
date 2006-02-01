@@ -26,7 +26,7 @@ TBSCRIPTS = \
 	    -I$(PANDORA)/share/pandora \
 	    -I$(TIDE)/share/tide \
 	    -I$(TIDE_SUPPORT)/share/tide-support \
-	    -I$(CONFIGURATION_MANAGER)/share/configuration-manager \
+	    -I$(CONFIG_MANAGER)/share/config-manager \
 	    -I$(GRAPH_GUI)/share/graph-gui
 
 CLEANFILES  = meta-config

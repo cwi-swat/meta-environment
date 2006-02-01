@@ -2,11 +2,11 @@
 #define __GUI_UTILS__
 
 #include <gui-actions.tb>
-#include <meta-studio/gui.idef>
-#include <dialog-gui/dialog.idef>
-#include <graph-gui/graph-painter.idef>
-#include <progress-gui/progress.idef>
-#include <module-details-gui/moduledetails.idef>
+#include <gui.idef>
+#include <dialog.idef>
+#include <graph-painter.idef>
+#include <progress.idef>
+#include <moduledetails.idef>
 
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))

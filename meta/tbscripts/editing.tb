@@ -1,9 +1,9 @@
 #ifndef __EDITING__
 #define __EDITING__
 
-#include <editor-manager/editor-manager.idef>
-#include <editor-plugin/editor-plugin.idef>
-#include <structure-editor/structure-editor.idef>
+#include <editor-manager.idef>
+#include <editor-plugin.idef>
+#include <structure-editor.idef>
 
 #include <module-manager.tb>
 #include <io-utils.tb>
