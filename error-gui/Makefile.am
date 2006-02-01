@@ -21,7 +21,10 @@ noinst_SCRIPTS = $(PACKAGE)-$(VERSION).pkg
 
 EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef.src
 
-CLEANFILES = $(PACKAGE)-config $(PACKAGE)-$(VERSION).pkg
+CLEANFILES = \
+	     $(PACKAGE)-config \
+	     $(PACKAGE)-$(VERSION).pkg \
+	     $(TOOLNAME).idef
 
 $(PACKAGE)-config: Makefile
 	@(	echo "#! /bin/sh";\
