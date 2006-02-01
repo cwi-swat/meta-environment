@@ -2,8 +2,10 @@
 #define __SDF_UTILS__
 
 #include <sdf-modules.idef>
-#include <error-support.idef>
 #include <parse-utils.tb>
+#include <error-utils.tb>
+#include <io-utils.tb>
+#include <config-utils.tb>
 
 #define SDF_TREE_CACHE "sdf-annotated-tree"
 

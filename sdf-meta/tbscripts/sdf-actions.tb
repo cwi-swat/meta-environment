@@ -3,6 +3,7 @@
 
 #include <config-utils.tb>
 #include <sdf-namespace.h>
+#include <gui-utils.tb>
 
 process CloseAllAction is
 let
