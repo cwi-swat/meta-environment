@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = sdf-renaming.idef
+EXTRA_DIST = sdf-renaming.idef.src
 pkgdata_DATA = sdf-renaming.idef
 
 bin_PROGRAMS = sdf-renaming
@@ -23,3 +23,6 @@ INCLUDES	        = -I$(top_srcdir)/lib \
                           -I$(SDF_SUPPORT)/include \
                           -I$(ERROR_SUPPORT)/include \
                           -I$(PT_SUPPORT)/include
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@

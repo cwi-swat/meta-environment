@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = sdf-modules.idef
+EXTRA_DIST = sdf-modules.idef.src
 pkgdata_DATA = sdf-modules.idef
 
 bin_PROGRAMS = sdf-modules
@@ -31,3 +31,6 @@ INCLUDES = \
 	-I$(PT_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(SDF_SUPPORT)/include
+
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
