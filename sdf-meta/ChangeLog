@@ -2,6 +2,7 @@ $Id$
 
 Wed Feb  1 08:34:13 CET 2006 <kooiker@cwi.nl>
  * tbscripts:
+   - Added term scripts
    - Renamed module-actions.tb to sdf-module-actions.tb
    - Fixed Makefile.am
 

@@ -1,0 +1,79 @@
+#ifndef __TERM_EDITOR_UTILS__
+#define __TERM_EDITOR_UTILS__
+
+#include <editing.tb>
+#include <term-utils.tb>
+
+process EditTerm(Path: str, ModuleId: term) is
+let
+  Event: attribute-changed-event,
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  Error: str,
+  Modulename: str,
+  Sid: term,
+  Tree: term,
+  Valid: bool
+in
+  EditorType := term-editor
+  . CheckSanity(Path, ModuleId, Valid?)
+  .
+  if equal(Valid, true) then
+    Edit(Path, Sid?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+    . EditText(Sid, EditorType, Modulename, AlreadyExists?)
+    . snd-msg(term-editor-started(Path, ModuleId, Sid))
+    .
+    if equal(AlreadyExists, false) then
+      snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetTermParsetree(ModuleId, Path, Tree?)
+      . SE-UpdateTree(Sid, Tree)
+      . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",available,parsed)
+      .
+      (
+        MenuSelected(Sid, EditorType)
+      +
+        MouseClicked(Sid)
+      +
+        rec-msg(te-contents-changed(Sid))
+      +
+        rec-msg(te-contents-saved(Sid))
+        . UpdateTermStructure(Sid)
+      +
+        rec-note(mm-attribute-changed(Event?))
+        . UpdateTermStructure(Sid)
+      )
+      *
+      EditorDisconnected(Sid)
+      . DeleteSession(Sid)
+    else
+      tau
+    fi
+  else
+    Error := "Term is already being edited over a different module."
+    . snd-msg(term-editor-not-started(Path, ModuleId, Error))
+  fi
+endlet
+
+process UpdateTermStructure(Sid: term) is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Slices: term,
+  Tree: term,
+  Path: str
+in
+  GetModuleId(Sid, ModuleId?)
+  . GetPath(Sid, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?) 
+  .
+  if not-equal(Tree, UNDEFINED) then
+    SE-UpdateTree(Sid, Tree)
+  else
+    tau
+  fi
+endlet
+
+#endif /* __TERM_EDITOR_UTILS__ */

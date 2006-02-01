@@ -2,9 +2,7 @@
 #define __SDF_ACTIONS__
 
 #include <config-utils.tb>
-
-process ParseSyntaxAction(EditorId : term) is
-  TODO("Use save function")
+#include <sdf-namespace.h>
 
 process CloseAllAction is
 let
@@ -17,68 +15,6 @@ in
   . CloseModules(Modules)
 endlet
 
-process PrintModuleAction(ModuleId : term) is
-let
-  Cancel: bool,
-  Path : str
-in
-  PromptForFileWithExtension("Module Text (ASF+SDF)", [], ".txt", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    snd-msg(print-module(ModuleId, Path))
-    . rec-msg(module-printed(ModuleId))
-  fi
-endlet
-
-#ifdef DEAD
-process AddImportAction(Modulename: str) is
-let
-  Id: int,
-  Import: str,
-  Options: list
-in
-  Id := process-id
-  . snd-msg(get-all-module-names)
-  . rec-msg(all-module-names(Options?))
-  . snd-msg(show-list-choice(Modulename, "Choose a module to import", Options))
-  .
-  (
-    rec-msg(list-choice(Modulename, Import?))
-    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
-                               [Import, Modulename])))
-    . AddImport(Modulename, Import)
-    . snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(cancel-list-choice(Modulename))
-  )
-endlet
-
-process RemoveImportAction(Modulename: str) is
-let
-  Id: int,
-  Import: str,
-  Options: list
-in
-  Id := process-id
-  . snd-msg(get-imported-modules(Modulename))
-  . rec-msg(imported-modules(Options?))
-  . snd-msg(show-list-choice(Modulename, "Choose an import to remove", Options))
-  .
-  (
-    rec-msg(list-choice(Modulename, Import?))
-    . snd-note(ui-status(statf(Id, "Removing import %s from %s",
-                               [Import, Modulename])))
-    . RemoveImport(Modulename, Import)
-    . snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(cancel-list-choice(Modulename))
-  )
-endlet
-
-#endif
-
 process NewModuleAction is
 let
   Cancel: bool,
@@ -90,7 +26,7 @@ let
   Paths: list
 in
   GetSearchPaths(Paths?)
-  . PromptForFileWithExtension("New Module", Paths, ".sdf", Cancel?, Path?)
+  . PromptForFileWithExtension("New Module", Paths, SDF_EXTENSION, Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -115,7 +51,7 @@ let
   Prefix: str
 in
   GetSearchPaths(Paths?)
-  . PromptForFileWithExtension("Open Module", Paths, ".sdf", Cancel?, Path?)
+  . PromptForFileWithExtension("Open Module", Paths, SDF_EXTENSION, Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -168,36 +104,6 @@ in
   fi
 endlet
 
-process DumpEquationsParseTableAction(ModuleId : term) is
-let
-  Cancel: bool,
-  Path : str
-in
-  PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    DumpParseTable(ModuleId, Path, eqs)
-  fi
-endlet
-
-process EditorDumpEquationsParseTableAction(EditorId : term) is
-let
-  Cancel: bool,
-  Path : str,
-  ModuleId : term
-in
-  GetModuleId(EditorId, ModuleId?)
-  . PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
-  .
-  if equal(Cancel, true) then
-    tau
-  else
-    DumpParseTable(ModuleId, Path, eqs)
-  fi
-endlet
-
 process DumpSdfDefinitionAction(ModuleId : term) is
 let
   Cancel: bool,
@@ -232,6 +138,7 @@ in
     fi
 endlet
 
+#ifdef DEAD
 process RenameModuleAction(Modulename : str) is
 let
   Cancel: bool,
@@ -242,7 +149,7 @@ let
   Paths : list
 in
   GetSearchPaths(Paths?)
-  . PromptForFileWithExtension("Rename module to", Paths, ".sdf", Cancel?, Path?)
+  . PromptForFileWithExtension("Rename module to", Paths, SDF_EXTENSION, Cancel?, Path?)
   . 
   if equal(Cancel, true) then
     tau
@@ -262,7 +169,7 @@ let
   Paths : list
 in
   GetSearchPaths(Paths?)
-  . PromptForFileWithExtension("Copy module to", Paths, ".sdf", Cancel?, Path?)
+  . PromptForFileWithExtension("Copy module to", Paths, SDF_EXTENSION, Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -289,4 +196,50 @@ in
     fi
 endlet
 
+
+process AddImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-all-module-names)
+  . rec-msg(all-module-names(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose a module to import", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Adding import %s to %s",
+                               [Import, Modulename])))
+    . AddImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+process RemoveImportAction(Modulename: str) is
+let
+  Id: int,
+  Import: str,
+  Options: list
+in
+  Id := process-id
+  . snd-msg(get-imported-modules(Modulename))
+  . rec-msg(imported-modules(Options?))
+  . snd-msg(show-list-choice(Modulename, "Choose an import to remove", Options))
+  .
+  (
+    rec-msg(list-choice(Modulename, Import?))
+    . snd-note(ui-status(statf(Id, "Removing import %s from %s",
+                               [Import, Modulename])))
+    . RemoveImport(Modulename, Import)
+    . snd-note(ui-status(endstat(Id)))
+  +
+    rec-msg(cancel-list-choice(Modulename))
+  )
+endlet
+
+#endif
 #endif /*__SDF_ACTIONS__*/

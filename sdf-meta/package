@@ -11,10 +11,6 @@ configuration interface
 
 requires
 
-pgen 2.2
-
 meta 2.0
 
-structure-editor 1.0
-
-editor-manager 1.0
+pgen 2.2
