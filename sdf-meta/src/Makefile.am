@@ -10,7 +10,7 @@ TBSCRIPTS = \
 	    -I$(SDF_SUPPORT)/share/sdf-support \
 	    `$(META)/bin/meta-config --toolbus-includes`
 
-CLEANFILES  = sdf-meta-config
+CLEANFILES  = sdf-meta-config sdf-meta
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\

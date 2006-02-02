@@ -23,7 +23,8 @@ GENERATED_TBSCRIPTS = sdf2-language.tb start-meta-studio.tb
 
 EXTRA_DIST = \
 	     $(TBSCRIPTS) \
-	     $(GENERATED_TBSCRIPTS:.tb=.tb.src)
+	     $(GENERATED_TBSCRIPTS:.tb=.tb.src) \
+	     standard.sdf.actions
 
 CLEANFILES = $(GENERATED_TBSCRIPTS)
 
