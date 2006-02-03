@@ -12,8 +12,8 @@ public class Eval extends Atom {
 	private Ref toolId;
 	private Ref request;
 
-  public Eval(ATerm toolId, ATerm request) {
-    super();
+  public Eval(ATerm toolId, ATerm request, TBTermFactory tbfactory) {
+    super(tbfactory);
 	this.toolId = new Ref(toolId);
 	this.request = new Ref(request);
 	setAtomArgs(this.toolId, this.request);
@@ -21,7 +21,7 @@ public class Eval extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new Eval(toolId.value, request.value);
+    Atom a = new Eval(toolId.value, request.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
@@ -30,8 +30,8 @@ public class Eval extends Atom {
     if (!isEnabled())
       return false;
     //System.err.println("Eval: " + getEnv());
-    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
-    ATerm req = TBTermFactory.substitute(request.value, getEnv());
+    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+    ATerm req = tbfactory.substitute(request.value, getEnv());
     //System.err.println("Eval: " + tid + ", " + req);
     ToolInstance ti = getToolBus().getToolInstance(tid);
     if(ti.sndEvalToTool((ATermAppl) req)) {

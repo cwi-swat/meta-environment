@@ -56,15 +56,16 @@ public class ExternalParser {
   /**
    * Parse the source file with the given name int an ATerm that represents
    * its abstract syntax tree.
+ * @param tbfactory TODO
    */
-  public ATerm parse(String sourceFileName) throws ExternalProcessException {
+  public ATerm parse(String sourceFileName, TBTermFactory tbfactory) throws ExternalProcessException {
     ATerm result = null;
     String asfixFileName = getNewFileName("asfix");
     execute(parseCommand, sourceFileName, asfixFileName, "parse");
     InputStream in = execute(implodeCommand, asfixFileName, "implode");
     try {
     	InputStreamReader reader = new InputStreamReader(in);
-      result = TBTermFactory.getPureFactory().readFromTextFile(reader);
+      result = tbfactory.readFromTextFile(reader);
     } catch (IOException e) {
       throw new ExternalProcessException(e.getMessage(), "read ATerm from file");
     }

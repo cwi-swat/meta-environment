@@ -14,16 +14,18 @@ import aterm.ATerm;
  */
 
 public class MatchResult {
+  private TBTermFactory tbfactory;
   private Environment left;
   private DeltaEnvironment deltaLeft;
   private Environment right;
   private DeltaEnvironment deltaRight;
 
   public MatchResult(Environment left, Environment right) {
+	tbfactory = left.getTBTermFactory();
     this.left = left;
-    this.deltaLeft = new DeltaEnvironment();
+    this.deltaLeft = new DeltaEnvironment(tbfactory);
     this.right = right;
-    this.deltaRight = new DeltaEnvironment();
+    this.deltaRight = new DeltaEnvironment(tbfactory);
   }
   
   public void assignLeft(TBTermVar rvar, ATerm val){
@@ -53,13 +55,15 @@ public class MatchResult {
 
 class DeltaEnvironment {
   private Vector dict;
+  private TBTermFactory tbfactory;
 
-  public DeltaEnvironment() {
+  public DeltaEnvironment(TBTermFactory tbfactory) {
+	  this.tbfactory = tbfactory;
     dict = new Vector();
   }
 
   public boolean assign(TBTermVar rvar, ATerm val) {
-    TBTermVar var1 = TBTermFactory.changeResVarIntoVar(rvar);
+    TBTermVar var1 = tbfactory.changeResVarIntoVar(rvar);
     for (int i = 0; i < dict.size(); i += 2) {
       ATerm var2 = (ATerm) dict.elementAt(i);
       if (var2.equals(var1))

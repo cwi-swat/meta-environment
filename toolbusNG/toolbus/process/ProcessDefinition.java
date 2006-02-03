@@ -19,16 +19,18 @@ public class ProcessDefinition {
   private String name;
   private ATermList formals;
   private ProcessExpression PE;
+  private TBTermFactory tbfactory;
 
-  public ProcessDefinition(String name, ATermList formals, ProcessExpression PE) {
+  public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory) {
     this.name = name;
     this.formals = formals;
     this.PE = PE;
+    this.tbfactory = tbfactory;
   }
 
-  public ProcessDefinition(String name, ProcessExpression PE) {
-    this(name, (ATermList) TBTermFactory.make("[]"), PE);
-  }
+ // public ProcessDefinition(String name, ProcessExpression PE) {
+ //   this(name, (ATermList) TBTermFactory.make("[]"), PE);
+ // }
 
   public String getName() {
     return name;
@@ -45,11 +47,11 @@ public class ProcessDefinition {
     for (int i = 0; i < actuals.getLength(); i++) {
       ATerm formal = (ATerm) formals.getChildAt(i);
       ATerm actual = (ATerm) actuals.getChildAt(i);
-      if (TBTermFactory.isResVar(formal) && !TBTermFactory.isResVar(actual)) {
+      if (tbfactory.isResVar(formal) && !tbfactory.isResVar(actual)) {
         throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
       }
     };
-    ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals));
+    ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals, tbfactory), tbfactory);
     //PE1.expand(P, calls);
     //System.err.println("ProcessDef.expand => " + PE1);
     return PE1;

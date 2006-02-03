@@ -8,212 +8,170 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
-public class TBTermFactory {
+public class TBTermFactory extends PureFactory {
 
 	/**
 	 * A term of type VAR
 	 */
 	public static final int VAR = 8;
 
-	private static aterm.pure.PureFactory factory;
+	private AFun fun_TBTermVar;
 
-	private static AFun fun_TBTermVar;
+	private TBTermVar proto_TBTermVar;
 
-	private static TBTermVar proto_TBTermVar;
+	public ATerm True;
 
-	public static ATerm True;
+	public ATerm False;
 
-	public static ATerm False;
+	public ATerm BoolType;
 
-	public static ATerm BoolType;
+	public ATerm IntType;
 
-	public static ATerm IntType;
+	public ATerm RealType;
 
-	public static ATerm RealType;
+	public ATerm StrType;
 
-	public static ATerm StrType;
+	public ATerm TermType;
 
-	public static ATerm TermType;
+	public ATerm ListType;
 
-	public static ATerm ListType;
+	public ATerm VoidType; // for the benefit of JavaTools
 
-	public static ATerm VoidType; // for the benefit of JavaTools
+	public ATerm Undefined;
 
-	public static ATerm Undefined;
+	public ATerm BoolPlaceholder;
 
-	public static ATerm BoolPlaceholder;
+	public ATerm IntPlaceholder;
 
-	public static ATerm IntPlaceholder;
+	public ATerm RealPlaceholder;
 
-	public static ATerm RealPlaceholder;
+	public ATerm StrPlaceholder;
 
-	public static ATerm StrPlaceholder;
+	public ATerm TermPlaceholder;
 
-	public static ATerm TermPlaceholder;
-
-	public static ATerm ListPlaceholder;
+	public ATerm ListPlaceholder;
 	
-	public static ATermList EmptyList;
+	public ATermList EmptyList;
 
-	public static TBTermVar TransactionIdVar;
+	public TBTermVar TransactionIdVar;
 
-	public static TBTermVar TransactionIdResVar;
+	public TBTermVar TransactionIdResVar;
 	
-	public static ATerm transaction;
+	public ATerm transaction;
 
-	private static int nTransactions = 0;
+	private int nTransactions = 0;
 	
-	 public static void init() {
-		 if(factory == null){
-			 init(new PureFactory());
-		 }
+	private static TBTermFactory instance = null;
+	
+	public TBTermFactory() {
+		super();
+	    initialize();
+	  }
+	
+	public static TBTermFactory getInstance() {
+		 if (instance == null) {
+		        instance = new TBTermFactory();
+		        instance.initialize();
+		    }
+		 return instance;
 	}
 
-	public static PureFactory getPureFactory() {
-		return factory;
-	}
+	public void initialize() {
+		//pattern_TBTermVar = parse("var(<term>,<str>,<term>)");
+		fun_TBTermVar = makeAFun("var", 3, false);
+		proto_TBTermVar = new TBTermVar(this);
 
-	public static void init(PureFactory fact) {
-		factory = fact;
+		True = make("true");
+		False = make("false");
+		BoolType = make("bool");
+		IntType = make("int");
+		RealType = make("real");
+		StrType = make("str");
+		TermType = make("term");
+		ListType = make("list");
+
+		VoidType = make("void");
+
+		Undefined = make("undefined");
+
+		BoolPlaceholder = makePlaceholder(BoolType);
+		IntPlaceholder = makePlaceholder(IntType);
+		RealPlaceholder = makePlaceholder(RealType);
+		StrPlaceholder = makePlaceholder(StrType);
+		TermPlaceholder = makePlaceholder(TermType);
+		ListPlaceholder = makePlaceholder(ListType);
 		
-		//pattern_TBTermVar = factory.parse("var(<term>,<str>,<term>)");
-		fun_TBTermVar = factory.makeAFun("var", 3, false);
-		proto_TBTermVar = new TBTermVar();
-
-//		pattern_TBTermResVar = factory.parse("rvar(<term>,<str>)");
-//		fun_TBTermResVar = factory.makeAFun("rvar", 2, false);
-//		proto_TBTermResVar = new TBTermResVar();
-
-		True = factory.make("true");
-		False = factory.make("false");
-		BoolType = factory.make("bool");
-		IntType = factory.make("int");
-		RealType = factory.make("real");
-		StrType = factory.make("str");
-		TermType = factory.make("term");
-		ListType = factory.make("list");
-
-		VoidType = factory.make("void");
-
-		Undefined = factory.make("undefined");
-
-		BoolPlaceholder = factory.makePlaceholder(BoolType);
-		IntPlaceholder = factory.makePlaceholder(IntType);
-		RealPlaceholder = factory.makePlaceholder(RealType);
-		StrPlaceholder = factory.makePlaceholder(StrType);
-		TermPlaceholder = factory.makePlaceholder(TermType);
-		ListPlaceholder = factory.makePlaceholder(ListType);
+		EmptyList = makeList();
 		
-		EmptyList = factory.makeList();
-		
-		transaction = factory.make("transaction");
+		transaction = make("transaction");
 
 		TransactionIdVar = makeTBTermVar("transactionId", transaction);
 		TransactionIdResVar = makeTBTermResVar("transactionId", transaction);
 
-		Functions.init(factory);
+		Functions.init(this);
 	}
 	
-	public static String statistics(){
-		return factory.toString();
+	public String statistics(){
+		return toString();
 	}
 
-	public static TBTermVar makeTBTermVar(String name, ATerm type, ATerm isResult,
+	public TBTermVar makeTBTermVar(String name, ATerm type, ATerm isResult,
 			aterm.ATermList annos) {
 		synchronized (proto_TBTermVar) {
 			ATerm[] args = new ATerm[3];
 			args[0] = type;
-			args[1] = factory.make(name);
+			args[1] = make(name);
 			args[2] = isResult;
 			proto_TBTermVar.initHashCode(annos, fun_TBTermVar, args);
-			return (TBTermVar) factory.build(proto_TBTermVar);
+			return (TBTermVar) build(proto_TBTermVar);
 		}
 	}
 
-	public static TBTermVar makeTBTermVar(String name, ATerm type) {
+	public TBTermVar makeTBTermVar(String name, ATerm type) {
 		return makeTBTermVar(name, type, False, EmptyList);
 	}
 	
-	public static TBTermVar makeTBTermVar(String name, ATerm type, ATerm isResVar) {
+	public TBTermVar makeTBTermVar(String name, ATerm type, ATerm isResVar) {
 		return makeTBTermVar(name, type, isResVar, EmptyList);
 	}
 	
-	public static TBTermVar makeTBTermResVar(String name, ATerm type) {
+	public TBTermVar makeTBTermResVar(String name, ATerm type) {
 		return makeTBTermVar(name, type, True, EmptyList);
 	}
 	
-	public static TBTermVar mkVar(ATerm name, String processName, ATerm type){
+	public TBTermVar mkVar(ATerm name, String processName, ATerm type){
 		return makeTBTermVar(name.toString() + "$" + processName, type);
 	}
 	
-	public static TBTermVar mkResVar(ATerm name, String processName, ATerm type){
+	public TBTermVar mkResVar(ATerm name, String processName, ATerm type){
 		return makeTBTermResVar(name.toString() + "$" + processName, type);
 	}
 	
-	public static ATerm newTransactionId() {
-		AFun afun = factory.makeAFun("transaction", 1, false);
-		ATerm arg = factory.makeInt(nTransactions++);
-		return factory.makeAppl(afun, arg);
-	}
-
-	public static ATerm make(String pat) {
-		return factory.parse(pat);
-	}
-	public static ATerm make(String pat, ATerm a1) {
-		return factory.make(pat, a1);
-	}
-	public static ATerm make(String pat, ATerm a1, ATerm a2) {
-		return factory.make(pat, a1, a2);
-	}
-	public static ATerm make(String pat, ATerm a1, ATerm a2, ATerm a3) {
-		return factory.make(pat, a1, a2, a3);
-	}
-	public static AFun makeAFun(String name, int arity, boolean quoted){
-		return factory.makeAFun(name, arity, quoted);
-	}
-	public static ATermAppl makeAppl(AFun afun, ATerm a1){
-		return factory.makeAppl(afun, a1);
-	}
-	
-	public static ATerm makePlaceholder(ATerm t){
-		return factory.makePlaceholder(t);
-	}
-	
-	public static ATermList makeList(){
-		return EmptyList;
-	}
-	
-	public static ATermList makeList(ATerm t){
-		return factory.makeList(t);
-	}
-	
-	public static ATermList makeList(ATerm t, ATermList l){
-		return factory.makeList(t, l);
-	}
-	
-	public static ATerm makeInt(int n){
-		return factory.makeInt(n);
+	public ATerm newTransactionId() {
+		AFun afun = makeAFun("transaction", 1, false);
+		ATerm arg = makeInt(nTransactions++);
+		return makeAppl(afun, arg);
 	}
 	
 	/*****/
 
-	public static boolean isTrue(ATerm t) {
+	public boolean isTrue(ATerm t) {
 		return t == True;
 	}
 
-	public static boolean isFalse(ATerm t) {
+	public boolean isFalse(ATerm t) {
 		return t == False;
 	}
 
-	public static boolean isBoolean(ATerm t) {
+	public boolean isBoolean(ATerm t) {
 		return t == True || t == False;
 	}
 
-	public static boolean isInt(ATerm t) {
+	public boolean isInt(ATerm t) {
 		return t.getType() == ATerm.INT;
 	}
 
-	public static boolean isStr(ATerm t) {
+	public boolean isStr(ATerm t) {
 		if (isAppl(t)) {
 			return (((ATermAppl) t).isQuoted())
 					&& ((ATermAppl) t).getArity() == 0;
@@ -221,37 +179,37 @@ public class TBTermFactory {
 			return false;
 	}
 
-	public static boolean isReal(ATerm t) {
+	public boolean isReal(ATerm t) {
 		return (t.getType() == ATerm.REAL);
 	}
 
-	public static boolean isAppl(ATerm t) {
+	public boolean isAppl(ATerm t) {
 		return t.getType() == ATerm.APPL;
 	}
 
-	public static boolean isList(ATerm t) {
+	public boolean isList(ATerm t) {
 		return t.getType() == ATerm.LIST;
 	}
 
-	public static ATerm getArgs(ATerm t) {
+	public ATerm getArgs(ATerm t) {
 		return ((ATermAppl) t).getArguments();
 	}
 
-	public static int size(ATerm l) {
+	public int size(ATerm l) {
 		return ((ATermList) l).getLength();
 	}
 
-	public static ATerm first(ATerm l) {
+	public ATerm first(ATerm l) {
 		ATermList lst = (ATermList) l;
 		if (!lst.isEmpty()) {
 			return lst.elementAt(0);
 		} else {
 			System.err.println("**** first on empty list ****");
-			return TBTermFactory.Undefined;
+			return Undefined;
 		}
 	}
 
-	public static ATerm next(ATerm l) {
+	public ATerm next(ATerm l) {
 		ATermList lst = (ATermList) l;
 		if (lst.isEmpty()) {
 			return lst;
@@ -260,7 +218,7 @@ public class TBTermFactory {
 		}
 	}
 
-	public static boolean member(ATerm e, ATerm l) {
+	public boolean member(ATerm e, ATerm l) {
 		ATermList lst = (ATermList) l;
 		int length = lst.getLength();
 		for (int i = 0; i < length ; i++) {
@@ -270,7 +228,7 @@ public class TBTermFactory {
 		return false;
 	}
 
-	public static boolean subset(ATerm l1, ATerm l2) {
+	public boolean subset(ATerm l1, ATerm l2) {
 		ATermList lst1 = (ATermList) l1;
 		int length1 = lst1.getLength();
 		for (int i = 0; i < length1; i++) {
@@ -283,7 +241,7 @@ public class TBTermFactory {
 		return true;
 	}
 
-	public static ATerm delete(ATerm l, ATerm e) {
+	public ATermList delete(ATerm l, ATerm e) {
 		ATermList lst = (ATermList) l;
 		ATermList res = EmptyList;
 		boolean found = false;
@@ -292,72 +250,72 @@ public class TBTermFactory {
 			if (e2.isEqual(e) && !found)
 				found = true;
 			else
-				res = factory.makeList(e2, res);
+				res = makeList(e2, res);
 		}
 		return res;
 	}
 
-	public static ATerm diff(ATerm l1, ATerm l2) {
+	public ATerm diff(ATerm l1, ATerm l2) {
 		ATermList lst1 = (ATermList) l1;
 		ATermList res = EmptyList;
 		for (int i = lst1.getLength() - 1; i >= 0; i--) {
 			ATerm e = lst1.elementAt(i);
 			if (!member(e, l2))
-				res = factory.makeList(e, res);
+				res = makeList(e, res);
 		}
 		//System.err.println("diff(" + l1 + ", " + l2 + ") ==> " + res);
 		return res;
 	}
 
-	public static ATerm inter(ATerm l1, ATerm l2) {
+	public ATerm inter(ATerm l1, ATerm l2) {
 		ATermList lst1 = (ATermList) l1;
 		ATermList res = EmptyList;
 		for (int i = lst1.getLength() - 1; i >= 0; i--) {
 			ATerm e = lst1.elementAt(i);
 			if (member(e, l2))
-				res = factory.makeList(e, res);
+				res = makeList(e, res);
 		}
 		//System.err.println("inter(" + l1 + ", " + l2 + ") ==> " + res);
 		return res;
 	}
 
-	public static ATerm join(ATerm l1, ATerm l2) {
+	public ATerm join(ATerm l1, ATerm l2) {
 		//if(l1 == null)
 		//	return l2;
 		//if(l2 == null)
 		//	return l1;
-		ATermList lst1 = isList(l1) ? (ATermList) l1 : factory.makeList(l1);
-		ATermList res = isList(l2) ? (ATermList) l2 : factory.makeList(l2);
+		ATermList lst1 = isList(l1) ? (ATermList) l1 : makeList(l1);
+		ATermList res = isList(l2) ? (ATermList) l2 : makeList(l2);
 		for (int i = lst1.getLength() - 1; i >= 0; i--) {
 			ATerm e = lst1.elementAt(i);
-			res = factory.makeList(e, res);
+			res = makeList(e, res);
 		}
 		//System.err.println("join(" + l1 + ", " + l2 + ") ==> " + res);
 		return res;
 	}
 
-	public static ATerm index(ATerm l, int i) {
+	public ATerm index(ATerm l, int i) {
 		ATerm res = ((ATermList) l).elementAt(i - 1);
 		//System.err.println("index(" + l + ", " + i + ")==> " + res);
 		return res;
 	}
 
-	public static ATerm replace(ATerm l, int n, ATerm e) {
+	public ATerm replace(ATerm l, int n, ATerm e) {
 		ATermList lst = (ATermList) l;
 		ATermList res = EmptyList;
 		for (int i = lst.getLength() - 1; i >= 0; i--) {
 			ATerm elem = (i == n - 1) ? e : lst.elementAt(i);
-			res = factory.makeList(elem, res);
+			res = makeList(elem, res);
 		}
 		return res;
 	}
 
-	public static ATerm put(ATerm l, ATerm k, ATerm v) {
-		ATermList pair = factory.makeList(k, factory.makeList(v));
-		return factory.makeList(pair, (ATermList) l);
+	public ATerm put(ATerm l, ATerm k, ATerm v) {
+		ATermList pair = makeList(k, makeList(v));
+		return makeList(pair, (ATermList) l);
 	}
 
-	public static ATerm get(ATerm l, ATerm k) {
+	public ATerm get(ATerm l, ATerm k) {
 		ATermList lst = (ATermList) l;
 		for (ATermList pair = (ATermList) lst.getFirst(); !lst.isEmpty(); lst = lst
 				.getNext()) {
@@ -367,19 +325,19 @@ public class TBTermFactory {
 		return Undefined;
 	}
 	
-	public static boolean isVar(ATerm t) {
+	public boolean isVar(ATerm t) {
 	    return t.getType() == VAR && !((TBTermVar) t).isResultVar();
 	  }
 	
-	public static boolean isResVar(ATerm t) {
+	public boolean isResVar(ATerm t) {
 	    return t.getType() == VAR && ((TBTermVar) t).isResultVar();
 	}
 	
-	public static boolean isAnyVar(ATerm t) {
+	public boolean isAnyVar(ATerm t) {
 	    return t.getType() == VAR;
 	}
 	
-	public static TBTermVar changeResVarIntoVar(TBTermVar rvar){
+	public TBTermVar changeResVarIntoVar(TBTermVar rvar){
 		return makeTBTermVar(rvar.getVarName(), rvar.getVarType());
 	}
 	
@@ -391,9 +349,9 @@ public class TBTermFactory {
 	   * @param env environment to be used.
 	   */
 
-	  public static ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
+	  public ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
 	  	//System.err.println("resolveVars: " + t + ": " + env);
-	  	if(t == TBTermFactory.Undefined){
+	  	if(t == Undefined){
 	  		return t;
 	  	}
 	    switch (t.getType()) {
@@ -403,7 +361,7 @@ public class TBTermFactory {
 	      case ATerm.REAL :
 	        return t;
 	        
-	      case TBTermFactory.VAR:
+	      case VAR:
 	    	  TBTermVar v = (TBTermVar) t;
 	    	  v = v.setVarType(env.getVarType(v));
 	    	  //System.err.println("resolveVar returns: " + v + "; " + env);
@@ -421,7 +379,7 @@ public class TBTermFactory {
 	        for (int i = 0; i < nargs; i++) {
 	          cargs[i] = resolveVars(args[i], env);
 	        }
-	        return TBTermFactory.factory.makeAppl(afun, cargs);
+	        return makeAppl(afun, cargs);
 
 	      case ATerm.LIST :
 	        ATermList lst = EmptyList;
@@ -435,7 +393,7 @@ public class TBTermFactory {
 	    throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
 	  }
 	  
-	  public static TBTermVar replaceAssignableVar(TBTermVar v, Environment env) throws ToolBusException {
+	  public TBTermVar replaceAssignableVar(TBTermVar v, Environment env) throws ToolBusException {
 	  	//System.err.println("replaceAssignableVar: " + v + "; " + env);
 
     	Binding b = env.getBinding(v);
@@ -455,7 +413,7 @@ public class TBTermFactory {
 	   * @param env environment to be used.
 	   */
 
-	  public static ATerm replaceFormals(ATerm t, Environment env) throws ToolBusException {
+	  public ATerm replaceFormals(ATerm t, Environment env) throws ToolBusException {
 
 	    switch (t.getType()) {
 	      case ATerm.BLOB :
@@ -464,7 +422,7 @@ public class TBTermFactory {
 	      case ATerm.REAL :
 	        return t;
 	        
-	      case TBTermFactory.VAR:
+	      case VAR:
 	    	  
 	    	TBTermVar v = (TBTermVar) t;
 			v = v.setVarType(env.getVarType(v));
@@ -491,11 +449,11 @@ public class TBTermFactory {
 	        for (int i = 0; i < nargs; i++) {
 	          cargs[i] = replaceFormals(args[i], env);
 	        }
-	        return TBTermFactory.factory.makeAppl(afun, cargs);
+	        return makeAppl(afun, cargs);
 
 	      case ATerm.LIST :
 	        
-	        ATermList lst = TBTermFactory.EmptyList;
+	        ATermList lst = EmptyList;
 	        ATermList tlst = (ATermList) t;
 	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
 	          lst = lst.insert(replaceFormals(tlst.elementAt(i), env));
@@ -509,8 +467,8 @@ public class TBTermFactory {
 	   * Transform a term into a pattern that can be used by tool interfaces.
 	   */
 
-	  public static ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
-	  	if(t == TBTermFactory.Undefined){
+	  public ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
+	  	if(t == Undefined){
 	  		return t;
 	  	}
 	    switch (t.getType()) {
@@ -526,14 +484,14 @@ public class TBTermFactory {
 	      case ATerm.REAL :
 	        return RealPlaceholder;
 	        
-	      case TBTermFactory.VAR:
+	      case VAR:
 	    	  TBTermVar var = (TBTermVar) t;
 	    	  ATerm type = var.getVarType();
-	    	  return factory.makePlaceholder(type);
+	    	  return makePlaceholder(type);
 
 	      case ATerm.APPL :
 	    	ATermAppl apt = (ATermAppl) t;
-	        if (TBTermFactory.isBoolean(apt)) {
+	        if(isBoolean(apt)) {
 	          return BoolPlaceholder;
 	        }
 	        AFun fun = apt.getAFun();
@@ -545,16 +503,16 @@ public class TBTermFactory {
 	            return apt;
 	        }
 	        if (!recurring)
-	          return factory.makePlaceholder(apt);
+	          return makePlaceholder(apt);
 	        ATerm vargs[] = new ATerm[args.length];
 	        for (int i = 0; i < args.length; i++) {
 	          vargs[i] = makePattern(args[i], env, false);
 	        }
-	        return factory.makeAppl(fun, vargs);
+	        return makeAppl(fun, vargs);
 
 	      case ATerm.LIST :
 	      	
-	        ATermList lst = TBTermFactory.EmptyList;
+	        ATermList lst = EmptyList;
 	        ATermList tlst = (ATermList) t;
 	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
 	          lst = lst.insert(makePattern(tlst.elementAt(i), env, true));
@@ -570,8 +528,8 @@ public class TBTermFactory {
 	   * 
 	   */
 
-	  public static ATerm substitute(ATerm t, Environment env) throws ToolBusException {
-	  	if(t == TBTermFactory.Undefined){
+	  public ATerm substitute(ATerm t, Environment env) throws ToolBusException {
+	  	if(t == Undefined){
 	  		return t;
 	  	}
 	    switch (t.getType()) {
@@ -581,7 +539,7 @@ public class TBTermFactory {
 	      case ATerm.REAL :
 	        return t;
 	        
-	      case TBTermFactory.VAR:
+	      case VAR:
 	    	  TBTermVar var = (TBTermVar) t;
 	    	  if(var.isResultVar()){
 	    		  return var;
@@ -590,7 +548,7 @@ public class TBTermFactory {
 	        
 	      case ATerm.APPL :
 	    	ATermAppl apt = (ATermAppl) t;
-	        if (TBTermFactory.isBoolean(apt)) {
+	        if (isBoolean(apt)) {
 	          return t;
 	        }
 	        AFun afun = apt.getAFun();
@@ -602,11 +560,11 @@ public class TBTermFactory {
 	        for (int i = 0; i < nargs; i++) {
 	          vargs[i] = substitute(args[i], env);
 	        }
-	        return factory.makeAppl(afun, vargs);
+	        return makeAppl(afun, vargs);
 	        
 	      case ATerm.LIST :
 	 
-	        ATermList lst = TBTermFactory.EmptyList;
+	        ATermList lst = EmptyList;
 	        ATermList tlst = (ATermList) t;
 	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
 	          lst = lst.insert(substitute(tlst.elementAt(i), env));
@@ -630,7 +588,7 @@ public class TBTermFactory {
 	  
 	  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
 
-	  public static boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
+	  public boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
 	  	//System.err.println("match: ta = " + ta + "  ; " + "enva = " + enva);
 	 	//System.err.println("       tb = " + ta + "  ; " + "envb = " + envb);
 
@@ -656,7 +614,7 @@ public class TBTermFactory {
 	 // private static int cachedMatches = 0;
 	  
 
-	  public static boolean mightMatch(ATerm ta, ATerm tb) {
+	  public boolean mightMatch(ATerm ta, ATerm tb) {
 	    fullMatch = false;
 	 
 	 //   mightMatchCnt += 1;
@@ -688,25 +646,25 @@ public class TBTermFactory {
 	    }
 	  }
 
-	  private static boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
+	  private boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
 	  	//System.err.println("performMatch: " + ta + " " + tb);
 
 	    switch (ta.getType()) {
 
-		case TBTermFactory.VAR:
+		case VAR:
 			TBTermVar varta = (TBTermVar) ta;
 			if (!fullMatch) {
 				return true;
 			}
 
 			if (varta.isResultVar()) {
-				if (TBTermFactory.isResVar(tb)) {
+				if (isResVar(tb)) {
 					return false;
 				}
-				if (TBTermFactory.isVar(tb)) {
+				if (isVar(tb)) {
 					tb = envb.getValue((TBTermVar) tb);
 				}
-				mr.assignLeft(varta, TBTermFactory.substitute(tb, envb)); // TODO check var type!
+				mr.assignLeft(varta, substitute(tb, envb)); // TODO check var type!
 				return true;
 			}
 
@@ -714,84 +672,84 @@ public class TBTermFactory {
 			return performMatch(ta, tb);
 
 		case ATerm.BLOB:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
 			}
-			return ta.isEqual(tb) || (tb == TBTermFactory.StrPlaceholder);
+			return ta.isEqual(tb) || (tb == StrPlaceholder);
 
 		case ATerm.INT:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
 			}
-			return ta.equals(tb) || (tb == TBTermFactory.IntPlaceholder);
+			return ta.equals(tb) || (tb == IntPlaceholder);
 
 		case ATerm.REAL:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
 			}
-			return ta.equals(tb) || (tb == TBTermFactory.RealPlaceholder);
+			return ta.equals(tb) || (tb == RealPlaceholder);
 
 		case ATerm.PLACEHOLDER:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
 			}
-			if (ta == TBTermFactory.IntPlaceholder && tb.getType() == ATerm.INT)
+			if (ta == IntPlaceholder && tb.getType() == ATerm.INT)
 				return true;
-			else if (ta == TBTermFactory.RealPlaceholder
+			else if (ta == RealPlaceholder
 					&& tb.getType() == ATerm.REAL)
 				return true;
-			else if (ta == TBTermFactory.StrPlaceholder
+			else if (ta == StrPlaceholder
 					&& ((tb.getType() == ATerm.APPL && ((ATermAppl) tb)
 							.getArity() == 0)) || tb.getType() == ATerm.BLOB)
 				return true;
-			else if (ta == TBTermFactory.ListPlaceholder
+			else if (ta == ListPlaceholder
 					&& tb.getType() == ATerm.LIST)
 				return true;
-			else if (ta == TBTermFactory.TermPlaceholder)
+			else if (ta == TermPlaceholder)
 				return true;
 			else
 				return false;
 
 		case ATerm.APPL:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -823,13 +781,13 @@ public class TBTermFactory {
 			}
 
 		case ATerm.LIST:
-			if (TBTermFactory.isAnyVar(tb)) {
+			if (isAnyVar(tb)) {
 				TBTermVar vartb = (TBTermVar) tb;
 				if (!fullMatch) {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, TBTermFactory.substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);

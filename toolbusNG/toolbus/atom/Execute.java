@@ -26,14 +26,14 @@ public class Execute extends Atom {
 	private Ref tool;
 	private Ref rvar;
 
-	public Execute(ATerm tool, ATerm rvar){
-		super();
+	public Execute(ATerm tool, ATerm rvar, TBTermFactory tbfactory){
+		super(tbfactory);
 		this.tool = new Ref(tool);
 		this.rvar = new Ref(rvar);
 		setAtomArgs(this.tool, this.rvar);
 	}
 	public ProcessExpression copy() {
-		Atom a = new Execute(tool.value, rvar.value);
+		Atom a = new Execute(tool.value, rvar.value, tbfactory);
 		a.copyAtomAttributes(this);
 		return a;
 	}
@@ -43,7 +43,7 @@ public class Execute extends Atom {
 	 
 	    if (tool.value.getType() != ATerm.APPL)
 	      throw new ToolBusException("malformed first argument in execute");
-	    if (!TBTermFactory.isResVar(rvar.value))
+	    if (!tbfactory.isResVar(rvar.value))
 	      throw new ToolBusException("second argument of execute should be a result variable");
 	    if(!Functions.compatibleTypes(tool.value, rvar.value))
 	      throw new ToolBusException("arguments of execute should have the same (tool) type");

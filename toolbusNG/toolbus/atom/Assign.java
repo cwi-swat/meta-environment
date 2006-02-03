@@ -7,7 +7,6 @@ import java.util.Stack;
 
 import toolbus.*;
 import toolbus.process.*;
-import toolbus.process.ProcessInstance;
 
 import aterm.ATerm;
 
@@ -15,26 +14,26 @@ public class Assign extends Atom {
   private Ref var;
   private Ref exp;
 
-  public Assign(ATerm v, ATerm e) {
-    super();
+  public Assign(ATerm v, ATerm e, TBTermFactory tbfactory) {
+    super(tbfactory);
     var = new Ref(v);
     exp = new Ref(e);
     setAtomArgs(var, exp);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Assign(var.value,  exp.value);
+    Atom a = new Assign(var.value,  exp.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
   
   public void replaceFormals(Environment env) throws ToolBusException {
   	//System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
-  	var.value = TBTermFactory.resolveVars(var.value, env);
+  	var.value = tbfactory.resolveVars(var.value, env);
  	//System.err.println("Assign.replaceformals: " + var.value);
-  	var.value = TBTermFactory.replaceAssignableVar((TBTermVar)var.value, env);
-    exp.value = TBTermFactory.resolveVars(exp.value, env);
-    exp.value = TBTermFactory.replaceFormals(exp.value, env);
+  	var.value = tbfactory.replaceAssignableVar((TBTermVar)var.value, env);
+    exp.value = tbfactory.resolveVars(exp.value, env);
+    exp.value = tbfactory.replaceFormals(exp.value, env);
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
  }
 
@@ -42,7 +41,7 @@ public class Assign extends Atom {
   public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
     super.compile(P, calls, env, follow);
     //System.err.println("Assign.compile: " + this + " env =" + getEnv());
-    if (!(TBTermFactory.isVar(var.value) || TBTermFactory.isResVar(var.value)))
+    if (!tbfactory.isAnyVar(var.value))
       throw new ToolBusException("left-hand side of := should be a variable");
     ATerm vartype = ((TBTermVar)var.value).getVarType();
     

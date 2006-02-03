@@ -6,6 +6,7 @@
  */
 package toolbus.atom;
 
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
@@ -19,14 +20,14 @@ import aterm.ATerm;
 public class DisConnect extends Atom {
 	private Ref toolId;
 	
-	public  DisConnect(ATerm toolId){
-	    super();
+	public  DisConnect(ATerm toolId, TBTermFactory tbfactory){
+	    super(tbfactory);
 		this.toolId = new Ref(toolId);
 		setAtomArgs(this.toolId);
 	  }
 	  
 	  public ProcessExpression copy(){
-	    Atom a = new DisConnect(toolId.value);
+	    Atom a = new DisConnect(toolId.value, tbfactory);
 	    a.copyAtomAttributes(this);
 	    return a;
 	  }

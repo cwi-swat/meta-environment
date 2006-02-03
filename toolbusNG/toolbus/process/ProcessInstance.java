@@ -33,25 +33,28 @@ public class ProcessInstance {
   private ToolBus toolbus;
  // private ToolInstance toolInstance;
   private TBTermVar transactionIdVar;
-  private ATermList subscriptions = TBTermFactory.makeList();
-  private ATermList notes = TBTermFactory.makeList();
+  private TBTermFactory tbfactory;
+  private ATermList subscriptions;
+  private ATermList notes;
   private boolean running = true;
- 
 
   public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException {
     toolbus = TB;
+    tbfactory = TB.getTBTermFactory();
     this.call = call;
+    subscriptions = tbfactory.EmptyList;
+    notes = tbfactory.EmptyList;;
     call.setEvalArgs(false);
     processName = call.getName();
 
     definition = TB.getProcessDefinition(processName);
 
-    Environment env = new Environment();
+    Environment env = new Environment(tbfactory);
     
     //AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
     //processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
-    transactionIdVar = TBTermFactory.TransactionIdVar;
-    env.introduceBinding(transactionIdVar, TBTermFactory.newTransactionId());
+    transactionIdVar = tbfactory.TransactionIdVar;
+    env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
 
     //call.expand(this, new Stack());
     call.computeFirst();
@@ -79,7 +82,11 @@ public class ProcessInstance {
   }
 
   public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals, false), 0);
+    this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory()), 0);
+  }
+  
+  public TBTermFactory getTBTermFactory(){
+	  return tbfactory;
   }
   
   void info(String msg) {
@@ -128,12 +135,12 @@ public class ProcessInstance {
   public void subscribe(ATerm pat){
 	info("subscribe: pat: " + pat);
  	info("subscribe: before: " + subscriptions);
-  	subscriptions = TBTermFactory.makeList(pat, subscriptions);
+  	subscriptions = tbfactory.makeList(pat, subscriptions);
   	info("subscribe: after: " + subscriptions);
   }
   
   public void unsubscribe(ATerm pat){
-  	subscriptions =  (ATermList) TBTermFactory.delete(subscriptions, pat);
+  	subscriptions =  tbfactory.delete(subscriptions, pat);
  	info("unsubscribe: after:" + subscriptions);
   }
   
@@ -144,8 +151,8 @@ public class ProcessInstance {
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
-  		if(TBTermFactory.match(nt, env, pat, env)){
-  			notes = (ATermList) TBTermFactory.delete(notes, nt);
+  		if(tbfactory.match(nt, env, pat, env)){
+  			notes = tbfactory.delete(notes, nt);
   			info("getNoteFromQueue: " + nt);
   			return true;
   		}
@@ -160,7 +167,7 @@ public class ProcessInstance {
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
-  		if(TBTermFactory.match(nt, env, pat, env)){
+  		if(tbfactory.match(nt, env, pat, env)){
   			// TODO: What do we do with changes in env???
   			info("noNoteInQueue: " + nt);
   			return false;
@@ -176,8 +183,8 @@ public class ProcessInstance {
   	for(ATermList subs = subscriptions; !subs.isEmpty();subs = subs.getNext()){
   		ATerm sub = subs.getFirst();
  		info("trying: " + sub);
-  		if(TBTermFactory.mightMatch(sub, note)){
-  			notes = TBTermFactory.makeList(note, notes);
+  		if(tbfactory.mightMatch(sub, note)){
+  			notes = tbfactory.makeList(note, notes);
   			info("putNoteInQueue: success " + notes);
   			return true;
   		}

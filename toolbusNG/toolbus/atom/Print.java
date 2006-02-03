@@ -2,23 +2,27 @@
  * @author paulk
  */
 package toolbus.atom;
-import java.io.*;
+import java.io.PrintWriter;
 
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 public class Print extends Atom {
   private Ref arg;
 
-  public Print(ATerm a) {
-    super();
+  public Print(ATerm a, TBTermFactory tbfactory) {
+    super(tbfactory);
     arg = new Ref(a);
     setAtomArgs(arg);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Print(arg.value);
+    Atom a = new Print(arg.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
@@ -26,7 +30,7 @@ public class Print extends Atom {
   private String sprintf(ATermList args){
   	if(args.getLength() == 0)
   		new ToolBusException("missing arguments");
-  	if(TBTermFactory.isStr(args.elementAt(0)))
+  	if(tbfactory.isStr(args.elementAt(0)))
   			new ToolBusException("first argument should be a string");
   	String fmt = ((ATermAppl) args.elementAt(0)).getName();
   	String res = new String();
@@ -69,7 +73,7 @@ public class Print extends Atom {
       Environment e = getEnv();
       //System.err.println("Print: " + this + "; env = " + e);
       PrintWriter out = getToolBus().getPrintWriter();
-      ATerm res = TBTermFactory.substitute(arg.value, e);
+      ATerm res = tbfactory.substitute(arg.value, e);
       //System.err.println("res =" + res);
       out.print(sprintf((ATermList) res));
       out.flush();

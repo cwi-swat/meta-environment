@@ -27,10 +27,6 @@ class Binding {
 	public Binding(TBTermVar var, ATerm val) {
 		this(var, val, true);
 	}
-
-	public Binding(TBTermVar var) {
-		this(var,TBTermFactory.Undefined,false);
-	}
 	
 	public boolean isFormal(){
 		return isFormal;
@@ -47,19 +43,25 @@ class Binding {
 
 public class Environment {
 	protected Hashtable<String,Binding> bindings;
+	private TBTermFactory tbfactory;
 
-	public Environment() {
+	public Environment(TBTermFactory tbfactory) {
 		bindings = new Hashtable<String,Binding>(10);
+		this.tbfactory = tbfactory;
 	}
 	
-	public Environment(Hashtable<String,Binding> b){
-		bindings = b;
-	}
+//	public Environment(Hashtable<String,Binding> b){
+//		bindings = b;
+//	}
 	
 	public Environment copy() {
-		Environment env = new Environment();
+		Environment env = new Environment(tbfactory);
 		env.bindings = (Hashtable<String,Binding>) bindings.clone();
 		return env;
+	}
+	
+	public TBTermFactory getTBTermFactory(){
+		return tbfactory;
 	}
 
 	/**
@@ -73,9 +75,9 @@ public class Environment {
 	public void introduceVars(ATermList vars) throws ToolBusInternalError {
 		for( ; !vars.isEmpty(); vars = vars.getNext()){
 			ATerm t = vars.getFirst();
-			if (TBTermFactory.isAnyVar(t)) {
+			if (tbfactory.isAnyVar(t)) {
 				TBTermVar var = (TBTermVar) t;
-				bindings.put(var.getVarName(), new Binding(var));
+				bindings.put(var.getVarName(), new Binding(var,tbfactory.Undefined));
 			} else {
 				throw new ToolBusInternalError("introduceVar illegal var: " + t);
 			}
@@ -95,16 +97,16 @@ public class Environment {
 	 */
 	public void introduceBinding(TBTermVar formalVar, ATerm actual, boolean isFormal) throws ToolBusException {
 		//System.err.println("introduceBinding: " + formalVar + ", " + actual);
-		actual = TBTermFactory.replaceFormals(actual, this);
+		actual = tbfactory.replaceFormals(actual, this);
 		//System.err.println("actual: " + actual);
-		if (TBTermFactory.isAnyVar(actual)){
+		if (tbfactory.isAnyVar(actual)){
 			TBTermVar actualVar = (TBTermVar) actual;
 		    if(!Functions.compatibleTypes(formalVar.getVarType(), actualVar.getVarType())) {
 		    	throw new ToolBusException("incompatible types for " + formalVar
 					+ " and " + actualVar + " in " + this);
 		    }
 		}
-		if(formalVar.isResultVar() && !TBTermFactory.isResVar(actual)) {
+		if(formalVar.isResultVar() && !tbfactory.isResVar(actual)) {
 				throw new ToolBusInternalError("illegal actual: " + actual);
 		} else {
 			bindings.put(formalVar.getVarName(), new Binding(formalVar, actual, isFormal));
@@ -132,7 +134,7 @@ public class Environment {
 		}
 		for( ; !formals.isEmpty(); formals = formals.getNext(), actuals = actuals.getNext()){
 			ATerm first = formals.getFirst();
-			if(!TBTermFactory.isAnyVar(first)){
+			if(!tbfactory.isAnyVar(first)){
 				throw new ToolBusInternalError("illegal formal: " + first);
 			}
 			introduceBinding((TBTermVar)first, actuals.getFirst(), isFormal);
@@ -150,7 +152,7 @@ public class Environment {
 	public void removeBindings(ATermList formals) {
 		for( ; !formals.isEmpty(); formals = formals.getNext()){
 			ATerm first = formals.getFirst();
-			if(!TBTermFactory.isAnyVar(first)){
+			if(!tbfactory.isAnyVar(first)){
 				throw new ToolBusInternalError("illegal formal: " + first);
 			}
 			TBTermVar formalVar = (TBTermVar) first;
@@ -229,7 +231,7 @@ public class Environment {
 		if(b == null){
 			return false;
 		}
-		return (b.var.getVarType() == TBTermFactory.StrType);
+		return (b.var.getVarType() == tbfactory.StrType);
 	}
 
 	/**
@@ -251,11 +253,11 @@ public class Environment {
 			}
 			String bname = b.var.getVarName();
 			if (name.equals(bname)) {
-				if(b.isFormal() && (TBTermFactory.isAnyVar(b.val))){
+				if(b.isFormal() && (tbfactory.isAnyVar(b.val))){
 					var = (TBTermVar)b.val;				
 				} else {
 					ATerm val = b.val;
-					val = TBTermFactory.substitute(val, this);
+					val = tbfactory.substitute(val, this);
 					return val;
 				}
 			}

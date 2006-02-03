@@ -7,10 +7,8 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.*;
-import toolbus.State;
 
 import aterm.*;
-import aterm.ATermList;
 
 public class ProcessCall extends ProcessExpression implements StateElement{
 	private String name;
@@ -33,19 +31,20 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	
 	private boolean isStaticCall = true;
 
-	public ProcessCall(String name, ATermList actuals) {
+	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory) {
+		super(tbfactory);
 		this.name = name;
 		this.actuals = actuals;
 		firstState = new State();
 		firstState.add(this);
 	}
 
-	public ProcessCall(ATerm call) {
-		this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments());
+	public ProcessCall(ATerm call, TBTermFactory tbfactory) {
+		this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments(), tbfactory);
 	}
 	
-	public ProcessCall(String name, ATermList actuals, boolean evalArgs) {
-		this(name, actuals);
+	public ProcessCall(String name, ATermList actuals, boolean evalArgs, TBTermFactory tbfactory) {
+		this(name, actuals, tbfactory);
 		this.evalArgs = evalArgs;
 	}
 	
@@ -54,7 +53,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	}
 
 	public ProcessExpression copy() {
-		return new ProcessCall(name, actuals, evalArgs);
+		return new ProcessCall(name, actuals, evalArgs, tbfactory);
 	}
 
 //	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
@@ -94,7 +93,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 			//System.err.println("ProcessCall.compile(" + name + ", " + P + "," + PE + ")");
 			setFollow(follows);
 			formals = definition.getFormals();
-			actuals = (ATermList) TBTermFactory.resolveVars(actuals, env);
+			actuals = (ATermList) tbfactory.resolveVars(actuals, env);
 			env.introduceBindings(formals, actuals, evalArgs);
 			//System.err.println("ProcessCall.compile(" + name + "): " + env);
 			PE.computeFirst();

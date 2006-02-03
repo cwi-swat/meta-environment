@@ -16,14 +16,15 @@ public class IfElse extends ProcessExpression {
   private ProcessExpression left;
   private ProcessExpression right;
 
-  public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse) {
+  public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse, TBTermFactory tbfactory) {
+	super(tbfactory);
     this.test = test;
     this.left = Pthen;
     this.right = Pelse;
   }
 
   public ProcessExpression copy() {
-    return new IfElse(test, left.copy(), right.copy());
+    return new IfElse(test, left.copy(), right.copy(), tbfactory);
   }
 
  // public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
@@ -40,7 +41,7 @@ public class IfElse extends ProcessExpression {
 
   public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
     left.compile(P, calls, env, follows);
-    ATerm rtest = TBTermFactory.resolveVars(test, env);
+    ATerm rtest = P.getTBTermFactory().resolveVars(test, env);
     left.getFirst().setTest(rtest, env);
     right.compile(P, calls, env, follows);
 

@@ -35,8 +35,6 @@ public class ClassicToolShield extends ToolShield {
 
 	private final static int MIN_MSG_SIZE = 128; // the C implementation
 
-	protected ATermFactory factory;
-
 	private SocketChannel client;
 
 	private Selector selector;
@@ -83,8 +81,7 @@ public class ClassicToolShield extends ToolShield {
 			boolean alreadyExecuting) {
 		super(toolInstance);
 		this.toolDef = toolDef;
-		this.factory = TBTermFactory.getPureFactory();
-		termSndVoid = factory.parse("snd-void");
+		termSndVoid = tbfactory.parse("snd-void");
 
 		toolname = toolDef.getName();
 		toolid = toolInstance.getToolCount();
@@ -133,7 +130,7 @@ public class ClassicToolShield extends ToolShield {
 
 	public void disconnect() {
 		try {
-			sendTerm(factory.parse("rec-disconnect"));
+			sendTerm(tbfactory.parse("rec-disconnect"));
 			connected = false;
 			getToolInstance().TCP_goDisConnected();
 		} catch (IOException e) {
@@ -145,14 +142,14 @@ public class ClassicToolShield extends ToolShield {
 	public void checkToolSignature() throws IOException {
 		info("checkToolSignature: input: " + toolDef.getInputSignature());
 		info("checkToolSignature: output: " + toolDef.getOutputSignature());
-		sendTerm(factory.make("rec-do(signature(<term>,<term>))", toolDef
+		sendTerm(tbfactory.make("rec-do(signature(<term>,<term>))", toolDef
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 
 	protected void handleRequestToTool(Integer operation, ATerm call) {
-		AFun fun = TBTermFactory.makeAFun(
+		AFun fun = tbfactory.makeAFun(
 				ToolInstance.OperatorForTool[operation.intValue()], 1, false);
-		ATermAppl req = TBTermFactory.makeAppl(fun, call);
+		ATermAppl req = tbfactory.makeAppl(fun, call);
 		//System.err.println("handleRequestToTool: " + req);
 		try {
 			sendTerm(req);
@@ -314,7 +311,7 @@ public class ClassicToolShield extends ToolShield {
 			return null;
 		}
 		receiveTermData.flip();
-		ATerm result = factory.readFromByteBuffer(receiveTermData);
+		ATerm result = tbfactory.readFromByteBuffer(receiveTermData);
 		receiveTermBytesLeft = 0;
 		ToolBus.settoolActionCompleted();
 		return result;

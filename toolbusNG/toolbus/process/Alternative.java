@@ -7,19 +7,21 @@ package toolbus.process;
 import java.util.*;
 
 import toolbus.Environment;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.State;
 
 public class Alternative extends ProcessExpression {
   private ProcessExpression left, right;
 
-  public Alternative(ProcessExpression left, ProcessExpression right) {
+  public Alternative(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory) {
+	super(tbfactory);
     this.left = left;
     this.right = right;
   }
 
   public ProcessExpression copy() {
-    return new Alternative(left.copy(), right.copy());
+    return new Alternative(left.copy(), right.copy(), tbfactory);
   }
 
   public String toString() {

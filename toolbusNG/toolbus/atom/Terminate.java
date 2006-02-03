@@ -16,7 +16,8 @@ public class Terminate extends Atom {
 	private Ref toolId;
 	private Ref request;
 	
-	public Terminate(ATerm toolId, ATerm request){
+	public Terminate(ATerm toolId, ATerm request, TBTermFactory tbfactory){
+		super(tbfactory);
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
 		setAtomArgs(this.toolId);
@@ -27,7 +28,7 @@ public class Terminate extends Atom {
 	 * @see toolbus.process.ProcessExpression#copy()
 	 */
 	public ProcessExpression copy() {
-		 Atom a = new Terminate(toolId.value, request.value);
+		 Atom a = new Terminate(toolId.value, request.value, tbfactory);
 		 a.copyAtomAttributes(this);
 		 return a;
 	}
@@ -36,8 +37,8 @@ public class Terminate extends Atom {
 	 public boolean execute() throws ToolBusException {
 	    if (!isEnabled())
 	      return false;
-	    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
-	    ATerm req = TBTermFactory.substitute(request.value, getEnv());
+	    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+	    ATerm req = tbfactory.substitute(request.value, getEnv());
 	    ToolInstance ti = getToolBus().getToolInstance(tid);
 	    ti.terminate(req);
 	    return true;

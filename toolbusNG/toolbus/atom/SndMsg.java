@@ -5,26 +5,25 @@
 package toolbus.atom;
 import toolbus.TBTermFactory;
 import toolbus.process.ProcessExpression;
-
-import aterm.*;
+import aterm.ATerm;
 
 public class SndMsg extends MsgAtom {
 
-  public SndMsg(ATerm msg) {
-    super(msg);
+  public SndMsg(ATerm msg, TBTermFactory tbfactory) {
+    super(msg, tbfactory);
   }
   
-  public SndMsg(ATerm msg, ATerm qual) {
-    super(msg, qual);
+  public SndMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
+    super(msg, qual, tbfactory);
   }
   
   public ProcessExpression copy(){
-    Atom a = new SndMsg(getMsg(), getId());
+    Atom a = new SndMsg(getMsg(), getId(), tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
   public boolean canCommunicate(MsgAtom a) {
 		return (a instanceof RecMsg
-				 && TBTermFactory.mightMatch(getMsg(), a.getMsg()));
+				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
 	}
 }

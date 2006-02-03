@@ -15,8 +15,8 @@ public class Event extends Atom {
 	private Ref toolId;
 	private Ref result;
 	
-  public Event(ATerm toolId, ATermList result) {
-  	super();
+  public Event(ATerm toolId, ATermList result, TBTermFactory tbfactory) {
+  	super(tbfactory);
 	this.toolId = new Ref(toolId);
 	this.result = new Ref(result);
 	setAtomArgs(this.toolId, this.result);
@@ -24,7 +24,7 @@ public class Event extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new Event(this.toolId.value, (ATermList) this.result.value);
+    Atom a = new Event(this.toolId.value, (ATermList) this.result.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
@@ -32,7 +32,7 @@ public class Event extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ATerm tid = TBTermFactory.substitute(toolId.value, getEnv());
+    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
  
     if (ti.getEventFromTool((ATermList)result.value, getEnv())){

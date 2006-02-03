@@ -6,19 +6,21 @@ package toolbus.process;
 import java.util.*;
 
 import toolbus.Environment;
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.State;
 
 public class Iteration extends ProcessExpression {
   private ProcessExpression left, right;
 
-  public Iteration(ProcessExpression left, ProcessExpression right) {
+  public Iteration(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory) {
+	super(tbfactory);
     this.left = left;
     this.right = right;
   }
 
   public ProcessExpression copy() {
-    return new Iteration(left.copy(), right.copy());
+    return new Iteration(left.copy(), right.copy(), tbfactory);
   }
 
   public String toString() {

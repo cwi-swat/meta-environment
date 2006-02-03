@@ -10,11 +10,16 @@ import toolbus.*;
  */
 
 abstract public class ProcessExpression {
+	
+	protected TBTermFactory tbfactory;
+	
 	private State first;
 
 	private State follow;
 
-	public ProcessExpression() {
+	public ProcessExpression(TBTermFactory tbfactory) {
+		this.tbfactory = tbfactory;
+		assert tbfactory != null;
 		first = new State();
 	}
 

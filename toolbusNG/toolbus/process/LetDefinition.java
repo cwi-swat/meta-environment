@@ -3,15 +3,14 @@
  */
 
 package toolbus.process;
-import java.util.*;
+import java.util.Stack;
 
-import toolbus.*;
+import toolbus.Environment;
 import toolbus.State;
-
-import aterm.ATerm;
-import aterm.ATermList;
-
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
 import toolbus.atom.EndScope;
+import aterm.ATermList;
 
 public class LetDefinition extends ProcessExpression {
   private ATermList formals;
@@ -20,14 +19,15 @@ public class LetDefinition extends ProcessExpression {
   //private ProcessInstance processInstance;
   //private ATerm test;	
   
-  public LetDefinition(ATermList formals, ProcessExpression PE) {
+  public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory) {
+	super(tbfactory);
     this.formals = formals;
     PEinit = PE;
-    this.PE = new Sequence(PE, new EndScope(formals));
+    this.PE = new Sequence(PE, new EndScope(formals, tbfactory), tbfactory);
   }
 
   public ProcessExpression copy() {
-    return new LetDefinition(formals, PEinit.copy());
+    return new LetDefinition(formals, PEinit.copy(), tbfactory);
   }
   
  // public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {

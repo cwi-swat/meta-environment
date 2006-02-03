@@ -50,8 +50,8 @@ public class ToolBus {
 	private static final boolean verbose = false;
 
 	private static Random rand = new Random();
-
-	private ATermFactory factory;
+	
+	private TBTermFactory tbfactory;
 
 	private LinkedList<ProcessInstance> processes; // process instances
 	
@@ -125,9 +125,7 @@ public class ToolBus {
 	 */
 
 	public ToolBus(PrintWriter out) {
-
-		TBTermFactory.init();
-		factory = TBTermFactory.getPureFactory();
+		tbfactory = new TBTermFactory();
 		this.out = out;
 		processes = new LinkedList<ProcessInstance>();
 		processesIterator = null;
@@ -142,9 +140,9 @@ public class ToolBus {
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-		parser = new TScriptParser(new ExternalParser(sglr, parseTable,
-				implodePT));
-
+		parser = new TScriptParser(
+					new ExternalParser(sglr, parseTable, implodePT), 
+					tbfactory);
 		try {
 			localHost = InetAddress.getLocalHost();
 			info("Creating WellKnownSocket: " + WellKnownSocketPort + " "
@@ -420,8 +418,8 @@ public class ToolBus {
 	 * Get the ATermFactory used.
 	 */
 
-	public ATermFactory getFactory() {
-		return factory;
+	public TBTermFactory getTBTermFactory() {
+		return tbfactory;
 	}
 
 	/**
@@ -547,7 +545,7 @@ public class ToolBus {
 	 */
 
 	public ProcessInstance addProcess(String name) throws ToolBusException {
-		return addProcess(name, (ATermList) factory.make("[]"));
+		return addProcess(name, tbfactory.EmptyList);
 	}
 
 	/**
@@ -575,7 +573,7 @@ public class ToolBus {
 		ToolDefinition TD = getToolDefinition(toolName);
 		TD.setToolSignatures(sig);
 		ToolInstance ti = new ToolInstance(TD, this, tools.size(),
-				alreadyExecuting);
+				alreadyExecuting, tbfactory);
 		tools.add(ti);
 		return ti;
 	}
@@ -635,10 +633,10 @@ public class ToolBus {
 	}
 
 	private ATermList getSignature() {
-		ATermList res = factory.makeList();
+		ATermList res = tbfactory.EmptyList;
 		Iterator it = atomSignature.iterator();
 		while (it.hasNext()) {
-			res = factory.makeList((ATerm) it.next(), res);
+			res = tbfactory.makeList((ATerm) it.next(), res);
 		}
 		return res;
 	}
@@ -731,7 +729,7 @@ public class ToolBus {
 						toolinputPasses += 1;
 					}
 				} else {
-					shutdown(factory.make("ToolBus Halted"));
+					shutdown(tbfactory.make("ToolBus Halted"));
 					return;
 				}
 			}
@@ -740,6 +738,6 @@ public class ToolBus {
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 		}
-		shutdown(factory.make("ToolBus halted"));
+		shutdown(tbfactory.make("ToolBus halted"));
 	}
 }
