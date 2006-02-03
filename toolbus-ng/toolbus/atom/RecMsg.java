@@ -2,8 +2,7 @@ package toolbus.atom;
 
 import toolbus.TBTermFactory;
 import toolbus.process.ProcessExpression;
-
-import aterm.*;
+import aterm.ATerm;
 
 /**
  * @author paulk, Aug 3, 2002
@@ -11,23 +10,23 @@ import aterm.*;
 
 public class RecMsg extends MsgAtom {
 
-  public RecMsg(ATerm msg) {
-    super(msg);
+  public RecMsg(ATerm msg, TBTermFactory tbfactory) {
+    super(msg, tbfactory);
   }
   
-   public RecMsg(ATerm msg, ATerm qual) {
-    super(msg, qual);
+   public RecMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
+    super(msg, qual, tbfactory);
   }
   
   public ProcessExpression copy(){
-    Atom a = new RecMsg(getMsg(), getId());
+    Atom a = new RecMsg(getMsg(), getId(), tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
   
   public boolean canCommunicate(MsgAtom a) {
 		return (a instanceof SndMsg
-				 && TBTermFactory.mightMatch(getMsg(), a.getMsg()));
+				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
 	}
  
 }

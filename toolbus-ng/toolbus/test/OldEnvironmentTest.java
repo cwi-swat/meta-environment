@@ -16,7 +16,7 @@ public class OldEnvironmentTest extends TestCase {
    */
 
   public void testEnv1() throws ToolBusException {
-  	Environment env = new Environment();
+  	Environment env = new Environment(tbfactory);
     ATerm varX = factory.make("var(int,X)");
     ATerm varY = factory.make("var(str,Y)");
 
@@ -58,7 +58,7 @@ public class OldEnvironmentTest extends TestCase {
    */
 
   public void testEnv2() throws ToolBusException {
-    Environment env = new Environment();
+    Environment env = new Environment(tbfactory);
     ATerm varX1 = factory.make("var(int,X)");
     ATerm varX2 = factory.make("var(str,X)");
 
@@ -77,7 +77,7 @@ public class OldEnvironmentTest extends TestCase {
    */
 
   public void testEnv3() throws ToolBusException {
-    Environment env = new Environment();
+    Environment env = new Environment(tbfactory);
     ATerm varX = factory.make("var(int,X)");
     ATerm varY = factory.make("var(int,Y)");
     ATerm int3 = factory.make("3");
@@ -110,7 +110,7 @@ public class OldEnvironmentTest extends TestCase {
   */
 
   public void testEnv4() throws ToolBusException {
-    Environment env = new Environment();
+    Environment env = new Environment(tbfactory);
     ATerm varX = factory.make("var(int,X)");
     ATerm varY = factory.make("var(int,Y)");
     ATerm varZ = factory.make("var(int,Z)");

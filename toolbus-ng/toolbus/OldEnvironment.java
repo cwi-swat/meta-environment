@@ -58,7 +58,7 @@ public class OldEnvironment {
 	}
 	
 	public Environment copy() {
-		Environment env = new Environment();
+		Environment env = new Environment(tbfactory);
 		env.bindings = (Hashtable<String,Binding>) bindings.clone();
 		return env;
 	}

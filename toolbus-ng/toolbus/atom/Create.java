@@ -22,15 +22,15 @@ public class Create extends Atom {
   private Ref pcall;
   private Ref rvar;
 
-  public Create(ATerm c, ATerm v) {
-    super();
+  public Create(ATerm c, ATerm v, TBTermFactory tbfactory) {
+    super(tbfactory);
     pcall = new Ref(c);
     rvar = new Ref(v);
     setAtomArgs(pcall, rvar);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Create(pcall.value, rvar.value);
+    Atom a = new Create(pcall.value, rvar.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
@@ -40,7 +40,7 @@ public class Create extends Atom {
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");
-    if (!TBTermFactory.isResVar(rvar.value))
+    if (!tbfactory.isResVar(rvar.value))
       throw new ToolBusException("second argument of create should be a result variable");
   }
 
@@ -55,7 +55,7 @@ public class Create extends Atom {
 
     ProcessInstance P = TB.addProcess(name, evargs);
 
-    getEnv().assignVar((TBTermVar)rvar.value, TBTermFactory.makeInt(P.getProcessId()));
+    getEnv().assignVar((TBTermVar)rvar.value, tbfactory.makeInt(P.getProcessId()));
     //System.err.println("Create.execute: process " +  P.getProcessId() + " added");
     return true;
 

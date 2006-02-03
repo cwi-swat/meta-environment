@@ -11,6 +11,7 @@ import java.util.Stack;
 import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import aterm.ATerm;
@@ -30,8 +31,8 @@ public class DynamicProcessCall extends ProcessCall implements StateElement {
 	private State follows;
 	private boolean uninitialized = true;
 	
-	public DynamicProcessCall(ATerm name, ATermList actuals) {
-		super("", actuals);
+	public DynamicProcessCall(ATerm name, ATermList actuals, TBTermFactory tbfactory) {
+		super("", actuals, tbfactory);
 		this.name = name;
 		super.actuals = actuals;
 		firstState = new State();
@@ -39,7 +40,7 @@ public class DynamicProcessCall extends ProcessCall implements StateElement {
 	}
 	
 	public ProcessExpression copy() {
-		return new DynamicProcessCall(name, super.actuals);
+		return new DynamicProcessCall(name, super.actuals, tbfactory);
 	}
 
 	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {

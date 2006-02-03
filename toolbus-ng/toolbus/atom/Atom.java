@@ -35,8 +35,9 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   private int startTime;
   protected String externalNameAsReceivedByTool;
 
-  public Atom() {
-    super();
+  public Atom(TBTermFactory tbfactory) {
+    super(tbfactory);
+    assert tbfactory != null;
     addToFirst(this);
     externalNameAsReceivedByTool = shortName();
   }
@@ -88,7 +89,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public void setTest(ATerm test, Environment env) throws ToolBusException {
   	if(test != null){
   		env = env.copy();
-	    ATerm rtst = TBTermFactory.resolveVars(test, env);
+	    ATerm rtst = tbfactory.resolveVars(test, env);
 	    if (tests == null)
 	    	tests = new Vector(3);
 	    Test t = new Test(rtst, env);
@@ -161,13 +162,13 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     //System.err.println("toATerm: " + externalNameAsReceivedByTool);
     
     
-    AFun afun = TBTermFactory.getPureFactory().makeAFun(externalNameAsReceivedByTool, nargs, false);
+    AFun afun = tbfactory.makeAFun(externalNameAsReceivedByTool, nargs, false);
     ATerm pat[] = new ATerm[nargs];
 
     for (int i = 0; i < nargs; i++) {
-      pat[i] = TBTermFactory.makePattern(atomArgs[i].value, getEnv(), true);
+      pat[i] = tbfactory.makePattern(atomArgs[i].value, getEnv(), true);
     }
-    return TBTermFactory.getPureFactory().makeAppl(afun, pat);
+    return tbfactory.makeAppl(afun, pat);
   }
 
  // public void expand(ProcessInstance P, Stack calls) {}
@@ -185,8 +186,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public void replaceFormals(Environment env) throws ToolBusException{
   	 for (int i = 0; i < atomArgs.length; i++) {
         //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
-        ATerm arg = TBTermFactory.resolveVars(atomArgs[i].value, env);
-        arg = TBTermFactory.replaceFormals(arg, env);
+        ATerm arg = tbfactory.resolveVars(atomArgs[i].value, env);
+        arg = tbfactory.replaceFormals(arg, env);
         //System.err.println("atomArg[" + i + "] = " + atomArgs[i].value + " => " + arg + "; env = " + env);
         atomArgs[i].value = arg;
       }
@@ -214,7 +215,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     	for(int i = 0; i < tests.size(); i++){
     		Test t = (Test) tests.elementAt(i);
     		//System.err.println("evaluate: " + t);
-    		boolean res = TBTermFactory.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
+    		boolean res = tbfactory.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
     		//System.err.println("==> " + res);
     		if(!res)
     			return false;

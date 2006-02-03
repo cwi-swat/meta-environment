@@ -61,8 +61,8 @@ public class OldTBTermTest extends TestCase {
   }
 
   boolean doMatch(String s1, String s2) {
-    Environment e1 = new Environment();
-    Environment e2 = new Environment();
+    Environment e1 = new Environment(tbfactory);
+    Environment e2 = new Environment(tbfactory);
     try {
       return TBTerm.match(factory.make(s1), e1, factory.make(s2), e2);
     } catch (ToolBusException e) {
@@ -137,7 +137,7 @@ public class OldTBTermTest extends TestCase {
   }
   
   public void xtestSubstitute() throws ToolBusException {
- 	Environment env1 = new Environment();
+ 	Environment env1 = new Environment(tbfactory);
     ATerm varX = factory.make("var(int,X)");
     ATerm int3 = factory.make("3");
     ATermList declX = factory.makeList(varX);
@@ -152,8 +152,8 @@ public class OldTBTermTest extends TestCase {
   }
   
   public void xtestMatchVar() throws ToolBusException {
-  	Environment env1 = new Environment();
-  	Environment env2 = new Environment();
+  	Environment env1 = new Environment(tbfactory);
+  	Environment env2 = new Environment(tbfactory);
   	
     ATerm varX = factory.make("var(int,X)");
     ATerm varY = factory.make("var(int,Y)");
@@ -212,7 +212,7 @@ public class OldTBTermTest extends TestCase {
   }
 
   public ATerm check(String s) throws ToolBusException {
-    Environment e = new Environment();
+    Environment e = new Environment(tbfactory);
     return Functions.checkType(factory.make(s), e, false);
   }
 

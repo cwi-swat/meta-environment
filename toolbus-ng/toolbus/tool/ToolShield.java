@@ -21,9 +21,11 @@ import aterm.ATermFactory;
 public abstract class ToolShield {
 	
 	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
+	protected TBTermFactory tbfactory;
 	
 	public ToolShield(ToolInstance ti) {
 		toolInstance = ti;
+		tbfactory = ti.getTBTermFactory();
 	}
 
 	public ToolInstance getToolInstance() {
@@ -31,10 +33,10 @@ public abstract class ToolShield {
 	}
 
 	/**
-	 * Provide the current ATermfactory.
+	 * Provide the current TBTTermfactory.
 	 */
-	public ATermFactory getFactory() {
-		return TBTermFactory.getPureFactory();
+	public TBTermFactory getTBTermFactory() {
+		return tbfactory;
 	}
 	
 	abstract public void connect(SocketChannel channel) throws IOException;

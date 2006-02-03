@@ -35,6 +35,7 @@ public class ToolInstance {
   private LinkedList pendingEvents;
   
   private ToolShield toolShield;     // The ToolShield that handles this tool
+  private TBTermFactory tbfactory;
 
   public static final Integer EVAL = new Integer(1);
   public static final Integer DO = new Integer(2);
@@ -48,29 +49,31 @@ public class ToolInstance {
   /**
    * Construct a ToolInstance. 
  * @param myToolBus TODO
+ * @param tbfactory TODO
  * @param toolDefinition definition of the tool
    */
 
-  public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount, boolean alreadyExecuting) throws ToolBusException {
+  public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount, boolean alreadyExecuting, TBTermFactory tbfactory) throws ToolBusException {
     this.toolDef = toolDef;   
     this.toolbus = myToolBus;
     this.toolCount = toolCount;
+    this.tbfactory = tbfactory;
     valuesFromTool = new LinkedList();
     eventsFromTool = new LinkedList();
     pendingEvents = new LinkedList();
 	
-	termSndVoid = TBTermFactory.make("snd-void");
+	termSndVoid = tbfactory.make("snd-void");
 	
-    AFun afun = TBTermFactory.makeAFun(toolDef.getName(), 1, false);
+    AFun afun = tbfactory.makeAFun(toolDef.getName(), 1, false);
  
-    toolId = TBTermFactory.makeAppl(afun, TBTermFactory.makeInt(toolCount));
+    toolId = tbfactory.makeAppl(afun, tbfactory.makeInt(toolCount));
 
     toolShield = toolDef.makeToolShield(this,alreadyExecuting);
   }
   
-  public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount) throws ToolBusException {
-  	this(toolDef, myToolBus, toolCount, false);
-  }
+ // public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount) throws ToolBusException {
+ // 	this(toolDef, myToolBus, toolCount, false, tbfactory);
+ // }
 
   public ATerm getToolId(){
   	return toolId;
@@ -86,6 +89,10 @@ public class ToolInstance {
   
   public ToolBus getToolBus(){
 	  return toolbus;
+  }
+  
+  public TBTermFactory getTBTermFactory(){
+	  return tbfactory;
   }
   
   public void connect(SocketChannel client) throws IOException {
@@ -114,7 +121,7 @@ public class ToolInstance {
 		matches = t.match("snd-event(<term>)");
 		if (matches != null) {
 			ATerm t1 = (ATerm) matches.get(0);
-			addEventFromTool(TBTermFactory.makeList(t1));
+			addEventFromTool(tbfactory.makeList(t1));
 			return;
 		}
 		matches = t.match("snd-event(<term>,<term>)"); //TODO: more than 2 args
@@ -122,7 +129,7 @@ public class ToolInstance {
 			ATerm t1 = (ATerm) matches.get(0);
 			ATerm t2 = (ATerm) matches.get(1);
 			
-			addEventFromTool(TBTermFactory.makeList(t1, TBTermFactory.makeList(t2)));
+			addEventFromTool(tbfactory.makeList(t1, tbfactory.makeList(t2)));
 			return;
 		}
 		// connect
@@ -177,7 +184,7 @@ public class ToolInstance {
   		return false;
   	} else {
   		ATerm result = (ATerm) valuesFromTool.getFirst();
-  		boolean matches = TBTermFactory.match(trm, env, result, new Environment());
+  		boolean matches = tbfactory.match(trm, env, result, new Environment(tbfactory));
   		if (matches) {
   			if (TCP_goConnected()){
   				valuesFromTool.removeFirst();
@@ -227,7 +234,7 @@ public class ToolInstance {
     for (int i = 0; i < eventsFromTool.size(); i++) {
       try {
         ATermList eventArgs = (ATermList) eventsFromTool.get(i);
-        boolean matches = TBTermFactory.match(alist, env, eventArgs, new Environment());
+        boolean matches = tbfactory.match(alist, env, eventArgs, new Environment(tbfactory));
         System.err.println(matches + " " + eventArgs);
         if (matches) {
           if(ackWaiting(eventArgs.getFirst())){

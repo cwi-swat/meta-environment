@@ -7,8 +7,8 @@ import aterm.ATermList;
 
 public class TBTermVar extends AbstractTBTerm {
 
-	public TBTermVar() {
-		super();
+	public TBTermVar(TBTermFactory tbfactory) {
+		super(tbfactory);
 	}
 	
 	 protected void init(int hashCode, ATermList annos) {
@@ -16,7 +16,7 @@ public class TBTermVar extends AbstractTBTerm {
 	}
 	 
 	public shared.SharedObject duplicate() {
-		TBTermVar clone = new TBTermVar();
+		TBTermVar clone = new TBTermVar(tbfactory);
 		clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
 		return clone;
 	}
@@ -41,12 +41,12 @@ public class TBTermVar extends AbstractTBTerm {
 	}
 
 	public TBTermVar setVarType(ATerm tp) {
-		TBTermVar v = TBTermFactory.makeTBTermVar(getVarName(), tp, getArgument(2));
+		TBTermVar v = tbfactory.makeTBTermVar(getVarName(), tp, getArgument(2));
 		//System.err.println("setVarType(" + tp + "): " + this + " => " + v);
 		return v;
 	}
 	
 	public boolean isResultVar(){
-		return getArgument(2) == TBTermFactory.True;
+		return getArgument(2) == tbfactory.True;
 	}
 }

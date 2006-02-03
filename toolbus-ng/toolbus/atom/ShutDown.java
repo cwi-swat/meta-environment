@@ -1,5 +1,6 @@
 package toolbus.atom;
 
+import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 
@@ -11,14 +12,14 @@ import aterm.ATerm;
 public class ShutDown extends Atom {
   private Ref arg;
 
-  public ShutDown(ATerm trm) {
-    super();
+  public ShutDown(ATerm trm, TBTermFactory tbfactory) {
+    super(tbfactory);
     arg = new Ref(trm);
     setAtomArgs(arg);
   }
 
   public ProcessExpression copy() {
-    Atom a = new ShutDown(arg.value);
+    Atom a = new ShutDown(arg.value, tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }

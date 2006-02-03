@@ -5,6 +5,7 @@ import java.util.Stack;
 import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
+import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import aterm.ATerm;
@@ -27,7 +28,8 @@ public class Merge extends ProcessExpression implements StateElement {
   private State mergeState;
   private boolean leftLast = false;
 
-  public Merge(ProcessExpression left, ProcessExpression right) {
+  public Merge(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory) {
+	super(tbfactory);
     expr[LEFT] = left;
     expr[RIGHT] = right;
     mergeState = new State();
@@ -55,7 +57,7 @@ public class Merge extends ProcessExpression implements StateElement {
   }
 
   public ProcessExpression copy() {
-    return new Merge(expr[LEFT].copy(), expr[RIGHT].copy());
+    return new Merge(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory);
   }
 
   public State getAtoms() {

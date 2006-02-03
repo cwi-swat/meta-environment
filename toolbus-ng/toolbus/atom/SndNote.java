@@ -18,14 +18,14 @@ import aterm.ATerm;
 public class SndNote extends Atom {
 	private Ref note;
 	
-	public SndNote(ATerm note){
-		super();
+	public SndNote(ATerm note, TBTermFactory tbfactory){
+		super(tbfactory);
 		this.note = new Ref(note);
 		setAtomArgs(this.note);
 	}
 
 	public ProcessExpression copy() {
-		Atom a = new SndNote(note.value);
+		Atom a = new SndNote(note.value, tbfactory);
 		a.copyAtomAttributes(this);
 		return a;
 	}
@@ -33,7 +33,7 @@ public class SndNote extends Atom {
 	 public boolean execute() throws ToolBusException {
 	    if (!isEnabled())
 	      return false;
-	    ATerm theNote = TBTermFactory.substitute(this.note.value, getEnv());
+	    ATerm theNote = tbfactory.substitute(this.note.value, getEnv());
 	    
 	   // for(int i = 0; i < processes.size() ; i++){
 	   // 	ProcessInstance pi = (ProcessInstance) processes.elementAt(i);

@@ -12,10 +12,11 @@ import toolbus.ToolBusException;
 import aterm.pure.PureFactory;
 
 public class TscriptTest extends TestCase {
+	private TBTermFactory tbfactory;
 
   public TscriptTest(String name) {
     super(name);
-    TBTermFactory.init(new PureFactory());
+    tbfactory = TBTermFactory.getInstance();
   }
 
   private boolean equalOutput(String currentOutput, String prevOutputFile) {

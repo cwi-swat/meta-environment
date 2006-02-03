@@ -11,7 +11,6 @@ import toolbus.*;
 import toolbus.process.*;
 
 import aterm.*;
-import aterm.ATerm;
 
 public abstract class MsgAtom extends Atom {
 
@@ -23,16 +22,16 @@ public abstract class MsgAtom extends Atom {
 
 	private ATerm matchPattern;
 
-	public MsgAtom(ATerm msg) {
-		super();
+	public MsgAtom(ATerm msg, TBTermFactory tbfactory) {
+		super(tbfactory);
 		this.msg = new Ref(msg);
-		this.id = new Ref(this instanceof RecMsg ? TBTermFactory.TransactionIdResVar
-				: TBTermFactory.TransactionIdVar);
+		this.id = new Ref(this instanceof RecMsg ? tbfactory.TransactionIdResVar
+				: tbfactory.TransactionIdVar);
 		setAtomArgs(this.msg, this.id);
 	}
 
-	public MsgAtom(ATerm msg, ATerm id) {
-		super();
+	public MsgAtom(ATerm msg, ATerm id, TBTermFactory tbfactory) {
+		super(tbfactory);
 		this.msg = new Ref(msg);
 		this.id = new Ref(id);
 		setAtomArgs(this.msg, this.id);
@@ -65,7 +64,7 @@ public abstract class MsgAtom extends Atom {
 	}
 
 	public boolean matchPartner(MsgAtom b) throws ToolBusException {
-		return TBTermFactory.match(matchPattern, this.getEnv(), b.getMatchPattern(), b
+		return tbfactory.match(matchPattern, this.getEnv(), b.getMatchPattern(), b
 				.getEnv());
 	}
 

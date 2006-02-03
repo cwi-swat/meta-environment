@@ -5,11 +5,12 @@ import aterm.pure.ATermApplImpl;
 public abstract class AbstractTBTerm extends ATermApplImpl {
 	  protected aterm.ATerm term;
 
-	 // private TBTermFactory abstractTBTermFactory;
+	 protected TBTermFactory tbfactory;
+	 
 
-	  public AbstractTBTerm() {
-	    super(TBTermFactory.getPureFactory());
-	  //  this.abstractTBTermFactory = abstractTBTermFactory;
+	  public AbstractTBTerm(TBTermFactory tbfactory) {
+	    super(tbfactory);
+	    this.tbfactory = tbfactory;
 	  }
 
 	  public void init(int hashCode, aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] args) {
