@@ -36,6 +36,8 @@ static ATermList systemTextCategories = NULL;
 static CFG_Properties modulePaths = NULL;
 static CFG_Properties libraryPaths = NULL;
 
+static void add_configuration_properties(ATerm actions);
+
 /*}}}  */
 
 /*{{{  static void addDescription(ATermTable table, CFG_ActionDescription desc) */
@@ -196,7 +198,12 @@ static ATermList addTextCategory(ATermList categories, CFG_Property property)
 
 static void addSystemProperty(CFG_Property property)
 {
-  if (CFG_isPropertyExtension(property)) {
+  if (CFG_isPropertyImport(property)) {
+    char *path = CFG_getPropertyPath(property);
+    ATerm import_contents = ATreadFromNamedFile(path);
+    add_configuration_properties(import_contents);
+  }
+  else if (CFG_isPropertyExtension(property)) {
     systemExtensions = addExtension(systemExtensions, property);
   }
   else if (CFG_isPropertyModulePath(property)) {
@@ -227,7 +234,7 @@ static void addSystemProperty(CFG_Property property)
 
 static void add_configuration_properties(ATerm actions) {
   CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
-  if (CFG_isConfigurationList(configuration)) {
+  if (CFG_isValidConfiguration(configuration)) {
     CFG_Properties properties = CFG_getConfigurationList(configuration);
     while (!CFG_isPropertiesEmpty(properties)) {
       CFG_Property property = CFG_getPropertiesHead(properties);
@@ -236,11 +243,6 @@ static void add_configuration_properties(ATerm actions) {
     }
     modulePaths = CFG_reverseProperties(modulePaths);
     libraryPaths = CFG_reverseProperties(libraryPaths);
-  }
-  else if (CFG_isConfigurationImport(configuration)) {
-    char *path = CFG_getConfigurationPath(configuration);
-    ATerm import_contents = ATreadFromNamedFile(path);
-    add_configuration_properties(import_contents);
   }
 }
 
