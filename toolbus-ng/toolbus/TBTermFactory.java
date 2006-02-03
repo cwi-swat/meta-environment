@@ -584,7 +584,7 @@ public class TBTermFactory extends PureFactory {
 	  private static Environment enva;
 	  private static Environment envb;
 	  private static boolean fullMatch = true;
-	  private static MatchResult mr;
+	  private MatchResult mr = new MatchResult(this);
 	  
 	  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
 
@@ -596,7 +596,7 @@ public class TBTermFactory extends PureFactory {
 	  //  	return false;
 	  //  }
 	   
-	    mr = new MatchResult(enva, envb);
+	    mr.reset(enva, envb);
 	    TBTermFactory.enva = enva;
 	    TBTermFactory.envb = envb;
 	    

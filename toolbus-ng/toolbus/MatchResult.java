@@ -20,12 +20,17 @@ public class MatchResult {
   private Environment right;
   private DeltaEnvironment deltaRight;
 
-  public MatchResult(Environment left, Environment right) {
-	tbfactory = left.getTBTermFactory();
-    this.left = left;
-    this.deltaLeft = new DeltaEnvironment(tbfactory);
-    this.right = right;
-    this.deltaRight = new DeltaEnvironment(tbfactory);
+  public MatchResult(TBTermFactory tbfactory) {
+	  this.tbfactory = tbfactory;
+	  this.deltaLeft = new DeltaEnvironment(tbfactory);
+	  this.deltaRight = new DeltaEnvironment(tbfactory);
+  }
+  
+  public void reset(Environment left, Environment right){
+	  this.left = left;
+	  deltaLeft.reset();
+	  this.right = right;
+	  deltaRight.reset();
   }
   
   public void assignLeft(TBTermVar rvar, ATerm val){
@@ -58,13 +63,18 @@ class DeltaEnvironment {
   private TBTermFactory tbfactory;
 
   public DeltaEnvironment(TBTermFactory tbfactory) {
-	  this.tbfactory = tbfactory;
-    dict = new Vector();
+	this.tbfactory = tbfactory;
+    dict = new Vector(50);
+  }
+  
+  public void reset(){
+	  dict.removeAllElements();
   }
 
   public boolean assign(TBTermVar rvar, ATerm val) {
     TBTermVar var1 = tbfactory.changeResVarIntoVar(rvar);
-    for (int i = 0; i < dict.size(); i += 2) {
+    int dsize = dict.size();
+    for (int i = 0; i < dsize; i += 2) {
       ATerm var2 = (ATerm) dict.elementAt(i);
       if (var2.equals(var1))
         return val.equals(dict.elementAt(i + 1));
@@ -75,7 +85,8 @@ class DeltaEnvironment {
   }
 
   public void update(Environment env) {
-    for (int i = 0; i < dict.size(); i += 2) {
+	  int dsize = dict.size();
+    for (int i = 0; i < dsize; i += 2) {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
       //System.err.println("DeltaEnvironment.update variable " + var + " with value " + val);
