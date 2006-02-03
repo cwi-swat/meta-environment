@@ -224,6 +224,26 @@ static void addSystemProperty(CFG_Property property)
 }
 
 /*}}}  */
+
+static void add_configuration_properties(ATerm actions) {
+  CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
+  if (CFG_isConfigurationList(configuration)) {
+    CFG_Properties properties = CFG_getConfigurationList(configuration);
+    while (!CFG_isPropertiesEmpty(properties)) {
+      CFG_Property property = CFG_getPropertiesHead(properties);
+      addSystemProperty(property);
+      properties = CFG_getPropertiesTail(properties);
+    }
+    modulePaths = CFG_reverseProperties(modulePaths);
+    libraryPaths = CFG_reverseProperties(libraryPaths);
+  }
+  else if (CFG_isConfigurationImport(configuration)) {
+    char *path = CFG_getConfigurationPath(configuration);
+    ATerm import_contents = ATreadFromNamedFile(path);
+    add_configuration_properties(import_contents);
+  }
+}
+
 /*{{{  void add_system_properties(int cid, const char *contents) */
 
 void add_system_properties(int cid, const char *contents)
@@ -231,17 +251,7 @@ void add_system_properties(int cid, const char *contents)
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
-    CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
-    if (CFG_isValidConfiguration(configuration)) {
-      CFG_Properties properties = CFG_getConfigurationList(configuration);
-      while (!CFG_isPropertiesEmpty(properties)) {
-	CFG_Property property = CFG_getPropertiesHead(properties);
-	addSystemProperty(property);
-	properties = CFG_getPropertiesTail(properties);
-      }
-      modulePaths = CFG_reverseProperties(modulePaths);
-      libraryPaths = CFG_reverseProperties(libraryPaths);
-    }
+    add_configuration_properties(actions);
   }
   else {
     ATwarning("%s:add_system_properties: parse error in input.\n", __FILE__);

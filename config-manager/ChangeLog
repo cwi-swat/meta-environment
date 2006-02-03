@@ -1,5 +1,10 @@
 # $Id$
 
+Fri Feb  3 10:17:59 CET 2006 <kooiker@cwi.nl>
+ * src/Config.c:
+   - Factored out add_configuration_properties so it can be reused to import
+     a configuration from file
+
 Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
  * configure.ac:
    - use libtool
