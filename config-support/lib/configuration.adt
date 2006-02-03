@@ -1,4 +1,6 @@
 [
+  constructor(Configuration, import, import(<path(str)>)),
+
   constructor(Configuration, list, configuration(<list(Properties)>)),
   list(Properties, Property),
 

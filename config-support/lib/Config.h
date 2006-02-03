@@ -135,6 +135,7 @@ CFG_TextAttributes CFG_makeTextAttributes6(CFG_TextAttribute elem1, CFG_TextAttr
 /*}}}  */
 /*{{{  constructors */
 
+CFG_Configuration CFG_makeConfigurationImport(const char* path);
 CFG_Configuration CFG_makeConfigurationList(CFG_Properties list);
 CFG_Properties CFG_makePropertiesEmpty(void);
 CFG_Properties CFG_makePropertiesSingle(CFG_Property head);
@@ -206,9 +207,13 @@ ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1);
 /*{{{  CFG_Configuration accessors */
 
 ATbool CFG_isValidConfiguration(CFG_Configuration arg);
+inline ATbool CFG_isConfigurationImport(CFG_Configuration arg);
 inline ATbool CFG_isConfigurationList(CFG_Configuration arg);
+ATbool CFG_hasConfigurationPath(CFG_Configuration arg);
 ATbool CFG_hasConfigurationList(CFG_Configuration arg);
+char* CFG_getConfigurationPath(CFG_Configuration arg);
 CFG_Properties CFG_getConfigurationList(CFG_Configuration arg);
+CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path);
 CFG_Configuration CFG_setConfigurationList(CFG_Configuration arg, CFG_Properties list);
 
 /*}}}  */
@@ -419,7 +424,7 @@ CFG_Color CFG_setColorBlue(CFG_Color arg, int blue);
 /*}}}  */
 /*{{{  sort visitors */
 
-CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties));
+CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties));
 CFG_Properties CFG_visitProperties(CFG_Properties arg, CFG_Property (*acceptHead)(CFG_Property));
 CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes));
 CFG_ActionDescription CFG_visitActionDescription(CFG_ActionDescription arg, CFG_ActionType (*acceptActionType)(CFG_ActionType), CFG_Event (*acceptEvent)(CFG_Event));

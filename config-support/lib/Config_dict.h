@@ -35,6 +35,7 @@ extern AFun CFG_afun23;
 extern AFun CFG_afun30;
 extern AFun CFG_afun7;
 extern AFun CFG_afun24;
+extern AFun CFG_afun35;
 extern AFun CFG_afun29;
 extern AFun CFG_afun1;
 extern AFun CFG_afun6;
@@ -87,6 +88,7 @@ extern ATerm CFG_patternPropertiesMany;
 extern ATerm CFG_patternPropertiesSingle;
 extern ATerm CFG_patternPropertiesEmpty;
 extern ATerm CFG_patternConfigurationList;
+extern ATerm CFG_patternConfigurationImport;
 
 extern void init_Config_dict();
 

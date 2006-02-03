@@ -532,11 +532,19 @@ CFG_TextAttributes CFG_makeTextAttributes6(CFG_TextAttribute elem1, CFG_TextAttr
 /*}}}  */
 /*{{{  constructors */
 
+/*{{{  CFG_Configuration CFG_makeConfigurationImport(const char* path) */
+
+CFG_Configuration CFG_makeConfigurationImport(const char* path)
+{
+  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+}
+
+/*}}}  */
 /*{{{  CFG_Configuration CFG_makeConfigurationList(CFG_Properties list) */
 
 CFG_Configuration CFG_makeConfigurationList(CFG_Properties list)
 {
-  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun0, (ATerm) list);
+  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun1, (ATerm) list);
 }
 
 /*}}}  */
@@ -568,7 +576,7 @@ CFG_Properties CFG_makePropertiesMany(CFG_Property head, CFG_Properties tail)
 
 CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList descriptions, const char* action)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun1, (ATerm) descriptions, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun2, (ATerm) descriptions, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(action, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -576,7 +584,7 @@ CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList descriptions, cons
 
 CFG_Property CFG_makePropertyExtension(const char* language, const char* extension)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -584,7 +592,7 @@ CFG_Property CFG_makePropertyExtension(const char* language, const char* extensi
 
 CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -592,7 +600,7 @@ CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path)
 
 CFG_Property CFG_makePropertyModulePath(const char* label, const char* path)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(label, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -600,7 +608,7 @@ CFG_Property CFG_makePropertyModulePath(const char* label, const char* path)
 
 CFG_Property CFG_makePropertyTextCategory(CFG_TextCategoryName category, CFG_TextAttributes attributes)
 {
-  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun5, (ATerm) category, (ATerm) attributes);
+  return (CFG_Property)(ATerm)ATmakeAppl2(CFG_afun6, (ATerm) category, (ATerm) attributes);
 }
 
 /*}}}  */
@@ -608,7 +616,7 @@ CFG_Property CFG_makePropertyTextCategory(CFG_TextCategoryName category, CFG_Tex
 
 CFG_ActionDescription CFG_makeActionDescriptionDefault(CFG_ActionType actionType, CFG_Event event)
 {
-  return (CFG_ActionDescription)(ATerm)ATmakeAppl2(CFG_afun6, (ATerm) actionType, (ATerm) event);
+  return (CFG_ActionDescription)(ATerm)ATmakeAppl2(CFG_afun7, (ATerm) actionType, (ATerm) event);
 }
 
 /*}}}  */
@@ -640,7 +648,7 @@ CFG_ActionDescriptionList CFG_makeActionDescriptionListMany(CFG_ActionDescriptio
 
 CFG_ActionType CFG_makeActionTypeTermEditor(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun7);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun8);
 }
 
 /*}}}  */
@@ -648,7 +656,7 @@ CFG_ActionType CFG_makeActionTypeTermEditor(void)
 
 CFG_ActionType CFG_makeActionTypeTermEditorForModule(const char* moduleId)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl1(CFG_afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (CFG_ActionType)(ATerm)ATmakeAppl1(CFG_afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -656,7 +664,7 @@ CFG_ActionType CFG_makeActionTypeTermEditorForModule(const char* moduleId)
 
 CFG_ActionType CFG_makeActionTypeEquationsEditor(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun9);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun10);
 }
 
 /*}}}  */
@@ -664,7 +672,7 @@ CFG_ActionType CFG_makeActionTypeEquationsEditor(void)
 
 CFG_ActionType CFG_makeActionTypeSyntaxEditor(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun10);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun11);
 }
 
 /*}}}  */
@@ -672,7 +680,7 @@ CFG_ActionType CFG_makeActionTypeSyntaxEditor(void)
 
 CFG_ActionType CFG_makeActionTypeFeedbackList(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun11);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun12);
 }
 
 /*}}}  */
@@ -680,7 +688,7 @@ CFG_ActionType CFG_makeActionTypeFeedbackList(void)
 
 CFG_ActionType CFG_makeActionTypeTreePanel(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun12);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun13);
 }
 
 /*}}}  */
@@ -688,7 +696,7 @@ CFG_ActionType CFG_makeActionTypeTreePanel(void)
 
 CFG_ActionType CFG_makeActionTypeModulePopup(const char* moduleId)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl1(CFG_afun13, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
+  return (CFG_ActionType)(ATerm)ATmakeAppl1(CFG_afun14, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(moduleId, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -696,7 +704,7 @@ CFG_ActionType CFG_makeActionTypeModulePopup(const char* moduleId)
 
 CFG_ActionType CFG_makeActionTypeNewModulePopup(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun14);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun15);
 }
 
 /*}}}  */
@@ -704,7 +712,7 @@ CFG_ActionType CFG_makeActionTypeNewModulePopup(void)
 
 CFG_ActionType CFG_makeActionTypeStudioMenubar(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun15);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun16);
 }
 
 /*}}}  */
@@ -712,7 +720,7 @@ CFG_ActionType CFG_makeActionTypeStudioMenubar(void)
 
 CFG_ActionType CFG_makeActionTypeStudioToolbar(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun16);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun17);
 }
 
 /*}}}  */
@@ -720,7 +728,7 @@ CFG_ActionType CFG_makeActionTypeStudioToolbar(void)
 
 CFG_ActionType CFG_makeActionTypeWildcard(void)
 {
-  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun17);
+  return (CFG_ActionType)(ATerm)ATmakeAppl0(CFG_afun18);
 }
 
 /*}}}  */
@@ -728,7 +736,7 @@ CFG_ActionType CFG_makeActionTypeWildcard(void)
 
 CFG_Event CFG_makeEventClick(void)
 {
-  return (CFG_Event)(ATerm)ATmakeAppl0(CFG_afun18);
+  return (CFG_Event)(ATerm)ATmakeAppl0(CFG_afun19);
 }
 
 /*}}}  */
@@ -736,7 +744,7 @@ CFG_Event CFG_makeEventClick(void)
 
 CFG_Event CFG_makeEventIcon(const char* title, const char* path)
 {
-  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun19, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun20, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -744,7 +752,7 @@ CFG_Event CFG_makeEventIcon(const char* title, const char* path)
 
 CFG_Event CFG_makeEventDefault(CFG_Items items)
 {
-  return (CFG_Event)(ATerm)ATmakeAppl1(CFG_afun20, (ATerm) items);
+  return (CFG_Event)(ATerm)ATmakeAppl1(CFG_afun21, (ATerm) items);
 }
 
 /*}}}  */
@@ -752,7 +760,7 @@ CFG_Event CFG_makeEventDefault(CFG_Items items)
 
 CFG_Event CFG_makeEventShortcut(CFG_Items items, const char* shortcut)
 {
-  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun21, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (CFG_Event)(ATerm)ATmakeAppl2(CFG_afun22, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -784,7 +792,7 @@ CFG_Items CFG_makeItemsMany(const char* head, CFG_Items tail)
 
 CFG_ModuleName CFG_makeModuleNameWildcard(void)
 {
-  return (CFG_ModuleName)(ATerm)ATmakeAppl0(CFG_afun17);
+  return (CFG_ModuleName)(ATerm)ATmakeAppl0(CFG_afun18);
 }
 
 /*}}}  */
@@ -792,7 +800,7 @@ CFG_ModuleName CFG_makeModuleNameWildcard(void)
 
 CFG_TextCategoryName CFG_makeTextCategoryNameFocus(void)
 {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun22);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun23);
 }
 
 /*}}}  */
@@ -800,7 +808,7 @@ CFG_TextCategoryName CFG_makeTextCategoryNameFocus(void)
 
 CFG_TextCategoryName CFG_makeTextCategoryNameSelection(void)
 {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun23);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun24);
 }
 
 /*}}}  */
@@ -808,7 +816,7 @@ CFG_TextCategoryName CFG_makeTextCategoryNameSelection(void)
 
 CFG_TextCategoryName CFG_makeTextCategoryNameNormal(void)
 {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun24);
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl0(CFG_afun25);
 }
 
 /*}}}  */
@@ -816,7 +824,7 @@ CFG_TextCategoryName CFG_makeTextCategoryNameNormal(void)
 
 CFG_TextCategoryName CFG_makeTextCategoryNameExtern(const char* name)
 {
-  return (CFG_TextCategoryName)(ATerm)ATmakeAppl1(CFG_afun25, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (CFG_TextCategoryName)(ATerm)ATmakeAppl1(CFG_afun26, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -848,7 +856,7 @@ CFG_TextAttributes CFG_makeTextAttributesMany(CFG_TextAttribute head, CFG_TextAt
 
 CFG_TextAttribute CFG_makeTextAttributeForegroundColor(CFG_Color color)
 {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun26, (ATerm) color);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun27, (ATerm) color);
 }
 
 /*}}}  */
@@ -856,7 +864,7 @@ CFG_TextAttribute CFG_makeTextAttributeForegroundColor(CFG_Color color)
 
 CFG_TextAttribute CFG_makeTextAttributeBackgroundColor(CFG_Color color)
 {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun27, (ATerm) color);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun28, (ATerm) color);
 }
 
 /*}}}  */
@@ -864,7 +872,7 @@ CFG_TextAttribute CFG_makeTextAttributeBackgroundColor(CFG_Color color)
 
 CFG_TextAttribute CFG_makeTextAttributeStyle(CFG_TextStyle style)
 {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun28, (ATerm) style);
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun29, (ATerm) style);
 }
 
 /*}}}  */
@@ -872,7 +880,7 @@ CFG_TextAttribute CFG_makeTextAttributeStyle(CFG_TextStyle style)
 
 CFG_TextAttribute CFG_makeTextAttributeFont(const char* name)
 {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun29, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun30, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -880,7 +888,7 @@ CFG_TextAttribute CFG_makeTextAttributeFont(const char* name)
 
 CFG_TextAttribute CFG_makeTextAttributeSize(int points)
 {
-  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun30, (ATerm) (ATerm) ATmakeInt(points));
+  return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun31, (ATerm) (ATerm) ATmakeInt(points));
 }
 
 /*}}}  */
@@ -888,7 +896,7 @@ CFG_TextAttribute CFG_makeTextAttributeSize(int points)
 
 CFG_TextStyle CFG_makeTextStyleBold(void)
 {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun31);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun32);
 }
 
 /*}}}  */
@@ -896,7 +904,7 @@ CFG_TextStyle CFG_makeTextStyleBold(void)
 
 CFG_TextStyle CFG_makeTextStyleItalics(void)
 {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun32);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun33);
 }
 
 /*}}}  */
@@ -904,7 +912,7 @@ CFG_TextStyle CFG_makeTextStyleItalics(void)
 
 CFG_TextStyle CFG_makeTextStyleUnderlined(void)
 {
-  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun33);
+  return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun34);
 }
 
 /*}}}  */
@@ -912,7 +920,7 @@ CFG_TextStyle CFG_makeTextStyleUnderlined(void)
 
 CFG_Color CFG_makeColorRgb(int red, int green, int blue)
 {
-  return (CFG_Color)(ATerm)ATmakeAppl3(CFG_afun34, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
+  return (CFG_Color)(ATerm)ATmakeAppl3(CFG_afun35, (ATerm) (ATerm) ATmakeInt(red), (ATerm) (ATerm) ATmakeInt(green), (ATerm) (ATerm) ATmakeInt(blue));
 }
 
 /*}}}  */
@@ -997,10 +1005,35 @@ ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1)
 
 ATbool CFG_isValidConfiguration(CFG_Configuration arg)
 {
-  if (CFG_isConfigurationList(arg)) {
+  if (CFG_isConfigurationImport(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isConfigurationList(arg)) {
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool CFG_isConfigurationImport(CFG_Configuration arg) */
+
+inline ATbool CFG_isConfigurationImport(CFG_Configuration arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternConfigurationImport, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1008,11 +1041,32 @@ ATbool CFG_isValidConfiguration(CFG_Configuration arg)
 
 inline ATbool CFG_isConfigurationList(CFG_Configuration arg)
 {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, CFG_patternConfigurationList, NULL));
-#endif
-  return ATtrue;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternConfigurationList, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool CFG_hasConfigurationPath(CFG_Configuration arg) */
+
+ATbool CFG_hasConfigurationPath(CFG_Configuration arg)
+{
+  if (CFG_isConfigurationImport(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
 /*}}}  */
@@ -1027,12 +1081,34 @@ ATbool CFG_hasConfigurationList(CFG_Configuration arg)
 }
 
 /*}}}  */
+/*{{{  char* CFG_getConfigurationPath(CFG_Configuration arg) */
+
+char* CFG_getConfigurationPath(CFG_Configuration arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
 /*{{{  CFG_Properties CFG_getConfigurationList(CFG_Configuration arg) */
 
 CFG_Properties CFG_getConfigurationList(CFG_Configuration arg)
 {
   
     return (CFG_Properties)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path) */
+
+CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path)
+{
+  if (CFG_isConfigurationImport(arg)) {
+    return (CFG_Configuration)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
+  }
+
+  ATabort("Configuration has no Path: %t\n", arg);
+  return (CFG_Configuration)NULL;
 }
 
 /*}}}  */
@@ -3454,10 +3530,14 @@ CFG_Color CFG_setColorBlue(CFG_Color arg, int blue)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties)) */
+/*{{{  CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties)) */
 
-CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties))
+CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties))
 {
+  if (CFG_isConfigurationImport(arg)) {
+    return CFG_makeConfigurationImport(
+        acceptPath ? acceptPath(CFG_getConfigurationPath(arg)) : CFG_getConfigurationPath(arg));
+  }
   if (CFG_isConfigurationList(arg)) {
     return CFG_makeConfigurationList(
         acceptList ? acceptList(CFG_getConfigurationList(arg)) : CFG_getConfigurationList(arg));
