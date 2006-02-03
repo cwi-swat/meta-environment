@@ -11,6 +11,5 @@
 #include <sdf-editor-actions.tb>
 #include <term-editor-actions.tb>
 #include <term-actions.tb>
-#include <sdf-initialize.tb>
 
 #endif /* __SDF_META__ */

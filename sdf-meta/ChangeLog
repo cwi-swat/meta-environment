@@ -1,5 +1,9 @@
 $Id$
 
+Fri Feb  3 13:11:41 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-meta.tb,start-meta-studio.tb.src:
+   - Only start sdf-initialize when stand alone SDF environment is used
+
 Wed Feb  1 08:34:13 CET 2006 <kooiker@cwi.nl>
  * src,tbscripts:
    - Standalone SDF Meta Environment
