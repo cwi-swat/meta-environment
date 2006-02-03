@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Feb  3 13:07:05 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/standard.asfsdf.actions.src:
+   - Import standard.sdf.action and additional ASF actions
+
 Wed Feb  1 16:34:39 CET 2006 <kooiker@cwi.nl>
  * tbscripts/asfsdf-meta.tb:
    - Separate scripts that includes all needed asf scripts 

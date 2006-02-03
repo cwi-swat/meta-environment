@@ -44,4 +44,5 @@ LIBRARY_LOCATION = \
 
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
 	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g;\
+	     s@__SDF_META__@${SDF_META}@g; \
 	     s@__ASF__@${ASF}@g;' < $< > $@
