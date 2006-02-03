@@ -49,8 +49,6 @@ public class ClassicToolShield extends ToolShield {
 
 	private ATerm termSndVoid;
 
-	private boolean connected;
-
 	private int receiveTermBytesLeft = 0;
 
 	private int receiveTermIndex = 0;
@@ -70,6 +68,13 @@ public class ClassicToolShield extends ToolShield {
 	private ByteArrayOutputStream sendByteArrayOutputStream = new ByteArrayOutputStream();
 
 	private boolean sendTermInProgress = false;
+	
+	private int toolStatus = unitialized;
+	
+	private final int uninitialized = -1;
+	private final int sendingSignature = 0;
+	private final int receivingSignatureConfirm = 1;
+	private final int connected = 2;
 
 	/**
 	 * The constructor for ClassicToolShield. 
@@ -110,28 +115,31 @@ public class ClassicToolShield extends ToolShield {
 
 	public void connect(SocketChannel client) throws IOException {
 		this.client = client;
+		client.configureBlocking(false);
+		clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
 		info("checking input signature...");
+		toolStatus = sendingSignature;
 		checkToolSignature();
-		ATerm term = receiveTerm();
-		info("receive: " + term);
+	}
+	
+	void connectAfterSignatureConfirmation(ATerm term){
+		info("connect2, receive: " + term);
 		if (!term.isEqual(termSndVoid)) {
 			throw new RuntimeException(
 					"incorrect response after signature check: " + term);
 		}
-		connected = true;
+		isConnected = true;
 		getToolInstance().TCP_goConnected();
-		client.configureBlocking(false);
-		clientKey = client.register(selector, SelectionKey.OP_READ, this);
 	}
 
 	public boolean isConnected() {
-		return connected;
+		return toolStatus == connected;
 	}
 
 	public void disconnect() {
 		try {
 			sendTerm(tbfactory.parse("rec-disconnect"));
-			connected = false;
+			isConnected = false;
 			getToolInstance().TCP_goDisConnected();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -210,7 +218,7 @@ public class ClassicToolShield extends ToolShield {
 		}
 		sendTermLengthSpec.flip();
 		int n = 0;
-		while (sendTermLengthSpec.hasRemaining()) {
+		while (sendTermLengthSpec.hasRemaining()) {  //TODO wachtloop!
 			n += client.write(sendTermLengthSpec);
 		}
 		info(n + " bytes written for sendTermLenghSpec");
@@ -248,7 +256,7 @@ public class ClassicToolShield extends ToolShield {
 
 				sendTermFiller.position(0);
 				sendTermFiller.limit(sendTermFill);
-				while (sendTermFiller.hasRemaining()) {
+				while (sendTermFiller.hasRemaining()) { //TODO wachtloop!
 					int n = client.write(sendTermFiller);
 					info(n + " bytes written for filler");
 				}
@@ -258,6 +266,9 @@ public class ClassicToolShield extends ToolShield {
 				clientKey.interestOps(SelectionKey.OP_READ);
 			}
 			sendTermInProgress = false;
+			if(toolStatus == sendingSignature){
+				toolStatus = receivingSignatureConfirm;
+			}
 		} else
 			System.err.println("sendTerm: no data");
 	}
@@ -269,7 +280,7 @@ public class ClassicToolShield extends ToolShield {
 			int index = 0;
 
 			while (index != LENSPEC) {
-				int bytes_read = client.read(receiveTermLengthSpec);
+				int bytes_read = client.read(receiveTermLengthSpec);  //TODO: hier zit ook een wachtloop!
 				info(bytes_read + " bytes read");
 				if (bytes_read == -1) {
 					return null;
@@ -314,6 +325,12 @@ public class ClassicToolShield extends ToolShield {
 		ATerm result = tbfactory.readFromByteBuffer(receiveTermData);
 		receiveTermBytesLeft = 0;
 		ToolBus.settoolActionCompleted();
-		return result;
+		if(isConnected()){
+			return result;
+		} else if(toolStatus == receivingSignatureConfirm){
+		   	connectAfterSignatureConfirmation();
+			return null;
+		} else
+			System.err.println("receiveTerm: illegal toolStatus");
 	}
 }
