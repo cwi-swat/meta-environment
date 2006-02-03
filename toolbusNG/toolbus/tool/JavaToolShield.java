@@ -1,9 +1,11 @@
 
 package toolbus.tool;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.channels.SocketChannel;
 import java.util.Hashtable;
 
 import toolbus.TBTerm;
@@ -250,4 +252,19 @@ public class JavaToolShield extends ToolShield {
     	addRequestToTool(new Object[] {ToolInstance.TERMINATE, m, actuals});
     }
   }
+
+public void connect(SocketChannel channel) throws IOException {
+	// TODO Auto-generated method stub
+	
+}
+
+protected void handleRequestToTool(Integer operation, ATerm call) {
+	// TODO Auto-generated method stub
+	
+}
+
+public void terminate(ATerm msg) {
+	// TODO Auto-generated method stub
+	
+}
 }

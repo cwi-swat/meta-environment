@@ -42,8 +42,8 @@ public class MatchResult {
   }
   
   public void updateEnvs(){
-    deltaLeft.update(left);
-    deltaRight.update(right);
+    deltaLeft.update(left,right);
+    deltaRight.update(right,left);
   }
 
   public String toString() {
@@ -84,13 +84,13 @@ class DeltaEnvironment {
     return true;
   }
 
-  public void update(Environment env) {
-	  int dsize = dict.size();
+  public void update(Environment env, Environment envb) {
+	int dsize = dict.size();
     for (int i = 0; i < dsize; i += 2) {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
       //System.err.println("DeltaEnvironment.update variable " + var + " with value " + val);
-      env.assignVar((TBTermVar)var, val);
+      enva.assignVar((TBTermVar)var, tbfactory.substitute(val, envb));
     }
   }
 }

@@ -664,7 +664,7 @@ public class TBTermFactory extends PureFactory {
 				if (isVar(tb)) {
 					tb = envb.getValue((TBTermVar) tb);
 				}
-				mr.assignLeft(varta, substitute(tb, envb)); // TODO check var type!
+				mr.assignLeft(varta, tb); // TODO check var type!
 				return true;
 			}
 
@@ -678,7 +678,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -692,7 +692,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta, enva); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -706,7 +706,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta, enva); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -720,7 +720,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta, enva); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -749,7 +749,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -787,7 +787,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, substitute(ta, enva)); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
