@@ -5,7 +5,6 @@
 #include <asf-listeners.tb>
 #include <asf-actions.tb>
 #include <asf-utils.tb>
-#include <asf-initialize.tb>
 #include <asf-editor-actions.tb>
 
 #endif /* __ASFSDF_META__ */

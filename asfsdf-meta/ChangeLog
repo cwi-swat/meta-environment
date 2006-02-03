@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Fri Feb  3 13:13:46 CET 2006 <kooiker@cwi.nl>
+ * asf-initialize.tb, start-meta-studio.tb.src:
+   - Only initialize ASF when stand alone ASF+SDF environment is used
+
 Fri Feb  3 13:07:05 CET 2006 <kooiker@cwi.nl>
  * tbscripts/standard.asfsdf.actions.src:
    - Import standard.sdf.action and additional ASF actions
