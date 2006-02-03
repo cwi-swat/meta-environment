@@ -84,11 +84,11 @@ extern ATerm CFG_patternPropertyModulePath;
 extern ATerm CFG_patternPropertyLibraryPath;
 extern ATerm CFG_patternPropertyExtension;
 extern ATerm CFG_patternPropertyAction;
+extern ATerm CFG_patternPropertyImport;
 extern ATerm CFG_patternPropertiesMany;
 extern ATerm CFG_patternPropertiesSingle;
 extern ATerm CFG_patternPropertiesEmpty;
 extern ATerm CFG_patternConfigurationList;
-extern ATerm CFG_patternConfigurationImport;
 
 extern void init_Config_dict();
 

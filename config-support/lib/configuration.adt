@@ -1,9 +1,8 @@
 [
-  constructor(Configuration, import, import(<path(str)>)),
-
   constructor(Configuration, list, configuration(<list(Properties)>)),
   list(Properties, Property),
 
+  constructor(Property, import, import(<path(str)>)),
   constructor(Property, action, action(<descriptions(ActionDescriptionList)>, <action(str)>)),
   constructor(Property, extension, extension(<language(str)>, <extension(str)>)),
   constructor(Property, library-path, library-path(<label(str)>,<path(str)>)),

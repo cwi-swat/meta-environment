@@ -2,7 +2,7 @@ $Id$
 
 Fri Feb  3 10:16:47 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * lib/configuration.adt:
-   - Add new configuration import that takes a path that points to an
+   - Add new property import that takes a path that points to an
      configuration file
 
 Mon Jan  9 08:55:21 CET 2006 <jurgenv@cwi.nl>

@@ -135,11 +135,11 @@ CFG_TextAttributes CFG_makeTextAttributes6(CFG_TextAttribute elem1, CFG_TextAttr
 /*}}}  */
 /*{{{  constructors */
 
-CFG_Configuration CFG_makeConfigurationImport(const char* path);
 CFG_Configuration CFG_makeConfigurationList(CFG_Properties list);
 CFG_Properties CFG_makePropertiesEmpty(void);
 CFG_Properties CFG_makePropertiesSingle(CFG_Property head);
 CFG_Properties CFG_makePropertiesMany(CFG_Property head, CFG_Properties tail);
+CFG_Property CFG_makePropertyImport(const char* path);
 CFG_Property CFG_makePropertyAction(CFG_ActionDescriptionList descriptions, const char* action);
 CFG_Property CFG_makePropertyExtension(const char* language, const char* extension);
 CFG_Property CFG_makePropertyLibraryPath(const char* label, const char* path);
@@ -207,13 +207,9 @@ ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1);
 /*{{{  CFG_Configuration accessors */
 
 ATbool CFG_isValidConfiguration(CFG_Configuration arg);
-inline ATbool CFG_isConfigurationImport(CFG_Configuration arg);
 inline ATbool CFG_isConfigurationList(CFG_Configuration arg);
-ATbool CFG_hasConfigurationPath(CFG_Configuration arg);
 ATbool CFG_hasConfigurationList(CFG_Configuration arg);
-char* CFG_getConfigurationPath(CFG_Configuration arg);
 CFG_Properties CFG_getConfigurationList(CFG_Configuration arg);
-CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path);
 CFG_Configuration CFG_setConfigurationList(CFG_Configuration arg, CFG_Properties list);
 
 /*}}}  */
@@ -234,33 +230,34 @@ CFG_Properties CFG_setPropertiesTail(CFG_Properties arg, CFG_Properties tail);
 /*{{{  CFG_Property accessors */
 
 ATbool CFG_isValidProperty(CFG_Property arg);
+inline ATbool CFG_isPropertyImport(CFG_Property arg);
 inline ATbool CFG_isPropertyAction(CFG_Property arg);
 inline ATbool CFG_isPropertyExtension(CFG_Property arg);
 inline ATbool CFG_isPropertyLibraryPath(CFG_Property arg);
 inline ATbool CFG_isPropertyModulePath(CFG_Property arg);
 inline ATbool CFG_isPropertyTextCategory(CFG_Property arg);
+ATbool CFG_hasPropertyPath(CFG_Property arg);
 ATbool CFG_hasPropertyDescriptions(CFG_Property arg);
 ATbool CFG_hasPropertyAction(CFG_Property arg);
 ATbool CFG_hasPropertyLanguage(CFG_Property arg);
 ATbool CFG_hasPropertyExtension(CFG_Property arg);
 ATbool CFG_hasPropertyLabel(CFG_Property arg);
-ATbool CFG_hasPropertyPath(CFG_Property arg);
 ATbool CFG_hasPropertyCategory(CFG_Property arg);
 ATbool CFG_hasPropertyAttributes(CFG_Property arg);
+char* CFG_getPropertyPath(CFG_Property arg);
 CFG_ActionDescriptionList CFG_getPropertyDescriptions(CFG_Property arg);
 char* CFG_getPropertyAction(CFG_Property arg);
 char* CFG_getPropertyLanguage(CFG_Property arg);
 char* CFG_getPropertyExtension(CFG_Property arg);
 char* CFG_getPropertyLabel(CFG_Property arg);
-char* CFG_getPropertyPath(CFG_Property arg);
 CFG_TextCategoryName CFG_getPropertyCategory(CFG_Property arg);
 CFG_TextAttributes CFG_getPropertyAttributes(CFG_Property arg);
+CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path);
 CFG_Property CFG_setPropertyDescriptions(CFG_Property arg, CFG_ActionDescriptionList descriptions);
 CFG_Property CFG_setPropertyAction(CFG_Property arg, const char* action);
 CFG_Property CFG_setPropertyLanguage(CFG_Property arg, const char* language);
 CFG_Property CFG_setPropertyExtension(CFG_Property arg, const char* extension);
 CFG_Property CFG_setPropertyLabel(CFG_Property arg, const char* label);
-CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path);
 CFG_Property CFG_setPropertyCategory(CFG_Property arg, CFG_TextCategoryName category);
 CFG_Property CFG_setPropertyAttributes(CFG_Property arg, CFG_TextAttributes attributes);
 
@@ -424,9 +421,9 @@ CFG_Color CFG_setColorBlue(CFG_Color arg, int blue);
 /*}}}  */
 /*{{{  sort visitors */
 
-CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties));
+CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties));
 CFG_Properties CFG_visitProperties(CFG_Properties arg, CFG_Property (*acceptHead)(CFG_Property));
-CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes));
+CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes));
 CFG_ActionDescription CFG_visitActionDescription(CFG_ActionDescription arg, CFG_ActionType (*acceptActionType)(CFG_ActionType), CFG_Event (*acceptEvent)(CFG_Event));
 CFG_ActionDescriptionList CFG_visitActionDescriptionList(CFG_ActionDescriptionList arg, CFG_ActionDescription (*acceptHead)(CFG_ActionDescription));
 CFG_ActionType CFG_visitActionType(CFG_ActionType arg, char* (*acceptModuleId)(char*));

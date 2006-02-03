@@ -532,19 +532,11 @@ CFG_TextAttributes CFG_makeTextAttributes6(CFG_TextAttribute elem1, CFG_TextAttr
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  CFG_Configuration CFG_makeConfigurationImport(const char* path) */
-
-CFG_Configuration CFG_makeConfigurationImport(const char* path)
-{
-  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
-}
-
-/*}}}  */
 /*{{{  CFG_Configuration CFG_makeConfigurationList(CFG_Properties list) */
 
 CFG_Configuration CFG_makeConfigurationList(CFG_Properties list)
 {
-  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun1, (ATerm) list);
+  return (CFG_Configuration)(ATerm)ATmakeAppl1(CFG_afun0, (ATerm) list);
 }
 
 /*}}}  */
@@ -569,6 +561,14 @@ CFG_Properties CFG_makePropertiesSingle(CFG_Property head)
 CFG_Properties CFG_makePropertiesMany(CFG_Property head, CFG_Properties tail)
 {
   return (CFG_Properties)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
+/*{{{  CFG_Property CFG_makePropertyImport(const char* path) */
+
+CFG_Property CFG_makePropertyImport(const char* path)
+{
+  return (CFG_Property)(ATerm)ATmakeAppl1(CFG_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -1005,35 +1005,10 @@ ATbool CFG_isEqualColor(CFG_Color arg0, CFG_Color arg1)
 
 ATbool CFG_isValidConfiguration(CFG_Configuration arg)
 {
-  if (CFG_isConfigurationImport(arg)) {
-    return ATtrue;
-  }
-  else if (CFG_isConfigurationList(arg)) {
+  if (CFG_isConfigurationList(arg)) {
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool CFG_isConfigurationImport(CFG_Configuration arg) */
-
-inline ATbool CFG_isConfigurationImport(CFG_Configuration arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternConfigurationImport, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
 }
 
 /*}}}  */
@@ -1041,32 +1016,11 @@ inline ATbool CFG_isConfigurationImport(CFG_Configuration arg)
 
 inline ATbool CFG_isConfigurationList(CFG_Configuration arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, CFG_patternConfigurationList, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  ATbool CFG_hasConfigurationPath(CFG_Configuration arg) */
-
-ATbool CFG_hasConfigurationPath(CFG_Configuration arg)
-{
-  if (CFG_isConfigurationImport(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, CFG_patternConfigurationList, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -1081,34 +1035,12 @@ ATbool CFG_hasConfigurationList(CFG_Configuration arg)
 }
 
 /*}}}  */
-/*{{{  char* CFG_getConfigurationPath(CFG_Configuration arg) */
-
-char* CFG_getConfigurationPath(CFG_Configuration arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-}
-
-/*}}}  */
 /*{{{  CFG_Properties CFG_getConfigurationList(CFG_Configuration arg) */
 
 CFG_Properties CFG_getConfigurationList(CFG_Configuration arg)
 {
   
     return (CFG_Properties)ATgetArgument((ATermAppl)arg, 0);
-}
-
-/*}}}  */
-/*{{{  CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path) */
-
-CFG_Configuration CFG_setConfigurationPath(CFG_Configuration arg, const char* path)
-{
-  if (CFG_isConfigurationImport(arg)) {
-    return (CFG_Configuration)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
-  }
-
-  ATabort("Configuration has no Path: %t\n", arg);
-  return (CFG_Configuration)NULL;
 }
 
 /*}}}  */
@@ -1294,7 +1226,10 @@ CFG_Properties CFG_setPropertiesTail(CFG_Properties arg, CFG_Properties tail)
 
 ATbool CFG_isValidProperty(CFG_Property arg)
 {
-  if (CFG_isPropertyAction(arg)) {
+  if (CFG_isPropertyImport(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isPropertyAction(arg)) {
     return ATtrue;
   }
   else if (CFG_isPropertyExtension(arg)) {
@@ -1310,6 +1245,28 @@ ATbool CFG_isValidProperty(CFG_Property arg)
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool CFG_isPropertyImport(CFG_Property arg) */
+
+inline ATbool CFG_isPropertyImport(CFG_Property arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternPropertyImport, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -1423,6 +1380,23 @@ inline ATbool CFG_isPropertyTextCategory(CFG_Property arg)
 }
 
 /*}}}  */
+/*{{{  ATbool CFG_hasPropertyPath(CFG_Property arg) */
+
+ATbool CFG_hasPropertyPath(CFG_Property arg)
+{
+  if (CFG_isPropertyImport(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isPropertyLibraryPath(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isPropertyModulePath(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
 /*{{{  ATbool CFG_hasPropertyDescriptions(CFG_Property arg) */
 
 ATbool CFG_hasPropertyDescriptions(CFG_Property arg)
@@ -1481,20 +1455,6 @@ ATbool CFG_hasPropertyLabel(CFG_Property arg)
 }
 
 /*}}}  */
-/*{{{  ATbool CFG_hasPropertyPath(CFG_Property arg) */
-
-ATbool CFG_hasPropertyPath(CFG_Property arg)
-{
-  if (CFG_isPropertyLibraryPath(arg)) {
-    return ATtrue;
-  }
-  else if (CFG_isPropertyModulePath(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  ATbool CFG_hasPropertyCategory(CFG_Property arg) */
 
 ATbool CFG_hasPropertyCategory(CFG_Property arg)
@@ -1514,6 +1474,21 @@ ATbool CFG_hasPropertyAttributes(CFG_Property arg)
     return ATtrue;
   }
   return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* CFG_getPropertyPath(CFG_Property arg) */
+
+char* CFG_getPropertyPath(CFG_Property arg)
+{
+  if (CFG_isPropertyImport(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (CFG_isPropertyLibraryPath(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
@@ -1565,18 +1540,6 @@ char* CFG_getPropertyLabel(CFG_Property arg)
 }
 
 /*}}}  */
-/*{{{  char* CFG_getPropertyPath(CFG_Property arg) */
-
-char* CFG_getPropertyPath(CFG_Property arg)
-{
-  if (CFG_isPropertyLibraryPath(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-  }
-  else 
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
 /*{{{  CFG_TextCategoryName CFG_getPropertyCategory(CFG_Property arg) */
 
 CFG_TextCategoryName CFG_getPropertyCategory(CFG_Property arg)
@@ -1592,6 +1555,25 @@ CFG_TextAttributes CFG_getPropertyAttributes(CFG_Property arg)
 {
   
     return (CFG_TextAttributes)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path) */
+
+CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path)
+{
+  if (CFG_isPropertyImport(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 0);
+  }
+  else if (CFG_isPropertyLibraryPath(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
+  }
+  else if (CFG_isPropertyModulePath(arg)) {
+    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
+  }
+
+  ATabort("Property has no Path: %t\n", arg);
+  return (CFG_Property)NULL;
 }
 
 /*}}}  */
@@ -1659,22 +1641,6 @@ CFG_Property CFG_setPropertyLabel(CFG_Property arg, const char* label)
   }
 
   ATabort("Property has no Label: %t\n", arg);
-  return (CFG_Property)NULL;
-}
-
-/*}}}  */
-/*{{{  CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path) */
-
-CFG_Property CFG_setPropertyPath(CFG_Property arg, const char* path)
-{
-  if (CFG_isPropertyLibraryPath(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
-  }
-  else if (CFG_isPropertyModulePath(arg)) {
-    return (CFG_Property)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue))), 1);
-  }
-
-  ATabort("Property has no Path: %t\n", arg);
   return (CFG_Property)NULL;
 }
 
@@ -3530,14 +3496,10 @@ CFG_Color CFG_setColorBlue(CFG_Color arg, int blue)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties)) */
+/*{{{  CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties)) */
 
-CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, char* (*acceptPath)(char*), CFG_Properties (*acceptList)(CFG_Properties))
+CFG_Configuration CFG_visitConfiguration(CFG_Configuration arg, CFG_Properties (*acceptList)(CFG_Properties))
 {
-  if (CFG_isConfigurationImport(arg)) {
-    return CFG_makeConfigurationImport(
-        acceptPath ? acceptPath(CFG_getConfigurationPath(arg)) : CFG_getConfigurationPath(arg));
-  }
   if (CFG_isConfigurationList(arg)) {
     return CFG_makeConfigurationList(
         acceptList ? acceptList(CFG_getConfigurationList(arg)) : CFG_getConfigurationList(arg));
@@ -3568,10 +3530,14 @@ CFG_Properties CFG_visitProperties(CFG_Properties arg, CFG_Property (*acceptHead
 }
 
 /*}}}  */
-/*{{{  CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes)) */
+/*{{{  CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes)) */
 
-CFG_Property CFG_visitProperty(CFG_Property arg, CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), char* (*acceptPath)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes))
+CFG_Property CFG_visitProperty(CFG_Property arg, char* (*acceptPath)(char*), CFG_ActionDescriptionList (*acceptDescriptions)(CFG_ActionDescriptionList), char* (*acceptAction)(char*), char* (*acceptLanguage)(char*), char* (*acceptExtension)(char*), char* (*acceptLabel)(char*), CFG_TextCategoryName (*acceptCategory)(CFG_TextCategoryName), CFG_TextAttributes (*acceptAttributes)(CFG_TextAttributes))
 {
+  if (CFG_isPropertyImport(arg)) {
+    return CFG_makePropertyImport(
+        acceptPath ? acceptPath(CFG_getPropertyPath(arg)) : CFG_getPropertyPath(arg));
+  }
   if (CFG_isPropertyAction(arg)) {
     return CFG_makePropertyAction(
         acceptDescriptions ? acceptDescriptions(CFG_getPropertyDescriptions(arg)) : CFG_getPropertyDescriptions(arg),
