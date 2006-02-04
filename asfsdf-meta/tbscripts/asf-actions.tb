@@ -14,6 +14,7 @@ in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
   . Reduce(ModuleId, Path, off)
+  . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
 process DebugReduceAction(EditorId : term) is
@@ -24,6 +25,7 @@ in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
   . Reduce(ModuleId, Path, on)
+  . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
 process DumpEquationsAction(ModuleId : term) is

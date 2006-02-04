@@ -415,21 +415,20 @@ in
   fi
 endlet
 
-process Reduce(ModuleId : term, Path : str, Debugging: term) is
+process Reduce(ModuleId : term, Path : str, Debugging: term, Tree: term?) is
 let
-  ResultTree: term,
-  Tree: term
+  Parsetree: term,
+  ResultTree: term
 in
-  GetTermParsetree(ModuleId, Path, Tree?)
+  GetTermParsetree(ModuleId, Path, Parsetree?)
   .
-  if not-equal(Tree, UNDEFINED) then
-    ReduceTerm(Tree, ModuleId, Debugging, ResultTree?)
+  if not-equal(Parsetree, UNDEFINED) then
+    ReduceTerm(Parsetree, ModuleId, Debugging, ResultTree?)
     .
     if not-equal(ResultTree, UNDEFINED) then
       snd-msg(promote-posinfo-to-origin(ResultTree))
       . rec-msg(promoted-posinfo-to-origin(ResultTree?))
       . AnnotateTree(ResultTree, "reduct.out", Tree?)
-      . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
     else
       tau
     fi

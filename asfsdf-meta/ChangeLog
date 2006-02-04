@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Sat Feb  4 13:31:51 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/{asf-utils,asf-actions}.tb:
+   - Move ActivateEditorWithTree to asf-actions since it is no part of the
+     Reduce functionality
+
 Fri Feb  3 13:13:46 CET 2006 <kooiker@cwi.nl>
  * asf-initialize.tb, start-meta-studio.tb.src:
    - Only initialize ASF when stand alone ASF+SDF environment is used
