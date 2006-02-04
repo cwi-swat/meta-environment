@@ -12,7 +12,7 @@ public class Main {
 	
 		try {
 			T.parse(ToolBus.getWorkspace()
-					 + "/toolbusNG/toolbus/tool/examples/pt-dump.tb");
+					 + "/toolbusNG/toolbus/tool/java/tool1.tb");
 				    //+ "/toolbusNG/toolbus/test/Assign6.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
@@ -21,7 +21,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		System.err.println(T.getTBTermFactory().statistics());
+		//System.err.println(T.getTBTermFactory().statistics());
 	}
 
 }

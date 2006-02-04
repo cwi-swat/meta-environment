@@ -84,13 +84,18 @@ class DeltaEnvironment {
     return true;
   }
 
-  public void update(Environment env, Environment envb) {
+  public void update(Environment enva, Environment envb) {
 	int dsize = dict.size();
     for (int i = 0; i < dsize; i += 2) {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
       //System.err.println("DeltaEnvironment.update variable " + var + " with value " + val);
-      enva.assignVar((TBTermVar)var, tbfactory.substitute(val, envb));
+      try {
+		enva.assignVar((TBTermVar)var, tbfactory.substitute(val, envb));
+	} catch (ToolBusException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     }
   }
 }

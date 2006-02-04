@@ -30,8 +30,8 @@ in
    shutdown("P2 shutdown")
 endlet
 
-tool counter is { host = "localhost" kind = "java" command ="toolbus.tool.examples.CounterTool"}
-tool button is { host = "localhost" kind = "java" command = "toolbus.tool.examples.ButtonTool"}
+tool counter is { kind = "java" command ="toolbus.tool.java.CounterTool"}
+tool button is { kind = "java" command = "toolbus.tool.java.ButtonTool"}
 
 %%toolbus(P1("P1A", 1, 1, 10))
 toolbus(P1("A", 1, 1, 10, 5), P1("B", 100, 3, 10, 10), P1("C", 1000, 7, 20, 1), P2)

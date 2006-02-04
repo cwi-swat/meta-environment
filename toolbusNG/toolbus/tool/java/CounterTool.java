@@ -1,24 +1,23 @@
-package toolbus.tool.examples;
-import toolbus.tool.ToolShield;
+package toolbus.tool.java;
+import toolbus.TBTermFactory;
 import aterm.ATerm;
-import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 30, 2002
  */
 public class CounterTool {
-  private ToolShield shield;
+  private JavaToolShield shield;
   private int count = 0;
   private int delay = 5;
-  private ATermFactory factory;
+  private TBTermFactory tbfactory;
 
   /**
    * Constructor for CounterTool.
    */
-  public CounterTool(ToolShield shield) {
+  public CounterTool(JavaToolShield shield) {
     System.out.println("Yep, CounterTool instance created");
     this.shield = shield;
-    factory = shield.getFactory();
+    tbfactory = shield.getTBTermFactory();
   }
   
   public void setStartValue(int n){
@@ -39,7 +38,7 @@ public class CounterTool {
     // Increase the counter and return the current value to the ToolBus
     int res = count;
     count += incr;
-    return factory.make("count(<int>))", new Integer(res));
+    return tbfactory.make("count(<int>))", new Integer(res));
   }
 
   public void terminate(String msg) {

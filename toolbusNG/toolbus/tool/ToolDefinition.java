@@ -2,6 +2,7 @@ package toolbus.tool;
 
 import toolbus.TBTermFactory;
 import toolbus.tool.classic.ClassicToolShield;
+import toolbus.tool.java.JavaToolShield;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;

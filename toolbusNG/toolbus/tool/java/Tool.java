@@ -1,4 +1,4 @@
-package toolbus.tool.classic;
+package toolbus.tool.java;
 
 import java.io.IOException;
 import java.net.InetAddress;

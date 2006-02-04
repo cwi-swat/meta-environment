@@ -7,7 +7,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
-import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
@@ -15,7 +14,6 @@ import toolbus.tool.ToolShield;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermFactory;
 
 /**
  * A classic ToolBus tool is executed as a separate (external) Unix process and connected via
@@ -48,33 +46,13 @@ public class ClassicToolShield extends ToolShield {
 	private int toolid = -1;
 
 	private ATerm termSndVoid;
-
-	private int receiveTermBytesLeft = 0;
-
-	private int receiveTermIndex = 0;
-
-	private ByteBuffer receiveTermData;
-
-	private ByteBuffer receiveTermLengthSpec = ByteBuffer.allocate(LENSPEC);
-
-	private int sendTermFill = 0;
-
-	private ByteBuffer sendTermData;
-
-	private ByteBuffer sendTermLengthSpec = ByteBuffer.allocate(LENSPEC);
-
-	private ByteBuffer sendTermFiller = ByteBuffer.allocate(MIN_MSG_SIZE);
-
-	private ByteArrayOutputStream sendByteArrayOutputStream = new ByteArrayOutputStream();
-
-	private boolean sendTermInProgress = false;
-	
-	private int toolStatus = unitialized;
 	
 	private final int uninitialized = -1;
 	private final int sendingSignature = 0;
 	private final int receivingSignatureConfirm = 1;
 	private final int connected = 2;
+	
+	private int toolStatus = uninitialized;
 
 	/**
 	 * The constructor for ClassicToolShield. 
@@ -128,7 +106,7 @@ public class ClassicToolShield extends ToolShield {
 			throw new RuntimeException(
 					"incorrect response after signature check: " + term);
 		}
-		isConnected = true;
+		toolStatus = connected;
 		getToolInstance().TCP_goConnected();
 	}
 
@@ -139,7 +117,7 @@ public class ClassicToolShield extends ToolShield {
 	public void disconnect() {
 		try {
 			sendTerm(tbfactory.parse("rec-disconnect"));
-			isConnected = false;
+			toolStatus = connected;
 			getToolInstance().TCP_goDisConnected();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -154,7 +132,7 @@ public class ClassicToolShield extends ToolShield {
 				.getInputSignature(), toolDef.getOutputSignature()));
 	}
 
-	protected void handleRequestToTool(Integer operation, ATerm call) {
+	protected void sndRequestToTool(Integer operation, ATerm call) {
 		AFun fun = tbfactory.makeAFun(
 				ToolInstance.OperatorForTool[operation.intValue()], 1, false);
 		ATermAppl req = tbfactory.makeAppl(fun, call);
@@ -171,7 +149,7 @@ public class ClassicToolShield extends ToolShield {
 	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
 	 */
 	public void terminate(ATerm msg) {
-		handleRequestToTool(ToolInstance.TERMINATE, msg);
+		sndRequestToTool(ToolInstance.TERMINATE, msg);
 		clientKey.cancel();
 		try {
 			client.close();
@@ -191,8 +169,21 @@ public class ClassicToolShield extends ToolShield {
 					+ msg.substring(0, Math.min(msg.length(), 100)));
 		}
 	}
+	
+	private int sendTermFill = 0;
 
+	private ByteBuffer sendTermData;
+
+	private ByteBuffer sendTermLengthSpec = ByteBuffer.allocate(LENSPEC);
+
+	private ByteBuffer sendTermFiller = ByteBuffer.allocate(MIN_MSG_SIZE);
+
+	private ByteArrayOutputStream sendByteArrayOutputStream = new ByteArrayOutputStream();
+
+	private boolean sendTermInProgress = false;
+	
 	public void sendTerm(ATerm term) throws IOException {
+		sendByteArrayOutputStream.reset();
 		byte termAsBytes[] = term.toByteArray(sendByteArrayOutputStream);
 		int sendTermBytesLeft = termAsBytes.length;
 
@@ -272,7 +263,15 @@ public class ClassicToolShield extends ToolShield {
 		} else
 			System.err.println("sendTerm: no data");
 	}
+	
+	private int receiveTermBytesLeft = 0;
 
+	private int receiveTermIndex = 0;
+
+	private ByteBuffer receiveTermData;
+
+	private ByteBuffer receiveTermLengthSpec = ByteBuffer.allocate(LENSPEC);
+	
 	public ATerm receiveTerm() throws IOException {
 		if (receiveTermBytesLeft == 0) { // Start reading a new term
 			info("readTerm from ... " + client.toString());
@@ -290,14 +289,14 @@ public class ClassicToolShield extends ToolShield {
 			}
 			receiveTermLengthSpec.flip();
 
-			info("limit = " + receiveTermLengthSpec.limit());
-			StringBuffer lspec = new StringBuffer(LENSPEC);
+			receiveTermBytesLeft = 0;
 			while (receiveTermLengthSpec.hasRemaining()) {
-				lspec.append((char) receiveTermLengthSpec.get());
+				int c = receiveTermLengthSpec.get();
+				if(c != ':'){
+					receiveTermBytesLeft = receiveTermBytesLeft * 10 + (c - '0');
+				}
 			}
-
-			receiveTermBytesLeft = Integer.parseInt(lspec.substring(0,
-					LENSPEC - 1));
+			
 			if (receiveTermBytesLeft < MIN_MSG_SIZE) {
 				receiveTermBytesLeft = MIN_MSG_SIZE;
 			}
@@ -328,9 +327,11 @@ public class ClassicToolShield extends ToolShield {
 		if(isConnected()){
 			return result;
 		} else if(toolStatus == receivingSignatureConfirm){
-		   	connectAfterSignatureConfirmation();
+		   	connectAfterSignatureConfirmation(result);
 			return null;
-		} else
+		} else {
 			System.err.println("receiveTerm: illegal toolStatus");
+			return null;
+		}
 	}
 }
