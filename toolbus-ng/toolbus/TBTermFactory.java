@@ -372,10 +372,10 @@ public class TBTermFactory extends PureFactory {
 
 	        AFun afun = apt.getAFun();
 	        ATerm args[] = apt.getArgumentArray();
-	        ATerm cargs[] = new ATerm[args.length];
 	        int nargs = args.length;
 	        if (nargs == 0)
-	          return t;
+		          return t;
+	        ATerm cargs[] = new ATerm[nargs];
 	        for (int i = 0; i < nargs; i++) {
 	          cargs[i] = resolveVars(args[i], env);
 	        }
@@ -496,7 +496,8 @@ public class TBTermFactory extends PureFactory {
 	        }
 	        AFun fun = apt.getAFun();
 	        ATerm args[] = apt.getArgumentArray();
-	        if (args.length == 0) {
+	        int nargs = args.length;
+	        if (nargs == 0) {
 	          if (fun.isQuoted())
 	            return StrPlaceholder;
 	          else
@@ -504,8 +505,8 @@ public class TBTermFactory extends PureFactory {
 	        }
 	        if (!recurring)
 	          return makePlaceholder(apt);
-	        ATerm vargs[] = new ATerm[args.length];
-	        for (int i = 0; i < args.length; i++) {
+	        ATerm vargs[] = new ATerm[nargs];
+	        for (int i = 0; i < nargs; i++) {
 	          vargs[i] = makePattern(args[i], env, false);
 	        }
 	        return makeAppl(fun, vargs);
@@ -586,7 +587,7 @@ public class TBTermFactory extends PureFactory {
 	  private static boolean fullMatch = true;
 	  private MatchResult mr = new MatchResult(this);
 	  
-	  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
+//	  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
 
 	  public boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
 	  	//System.err.println("match: ta = " + ta + "  ; " + "enva = " + enva);
@@ -692,7 +693,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta, enva); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -706,7 +707,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta, enva); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);
@@ -720,7 +721,7 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta, enva); // TODO check var type!
+					mr.assignRight(vartb, ta); // TODO check var type!
 					return true;
 				}
 				tb = envb.getValue(vartb);

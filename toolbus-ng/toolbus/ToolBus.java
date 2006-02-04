@@ -188,6 +188,7 @@ public class ToolBus {
 	}
 
 	private void handleInputFromTools(long timeout) {
+		//System.err.println("handleInputFromTools(" + timeout + ")");
 		try {
 			if(selector.select(timeout) == 0){
 				return;
@@ -219,7 +220,7 @@ public class ToolBus {
 					ATerm term = ts.receiveTerm();
 					if (term != null) {
 						info("TERM READ");
-						ts.getToolInstance().handleTermFromTool(term);
+						ts.sndValueFromToolToToolBus(term);
 					}
 				} else if (key.isWritable()) {
 					info("case readable");
@@ -246,7 +247,7 @@ public class ToolBus {
 
 	private void shakeHands() throws IOException {
 		handshake.clear();
-		int nr = client.read(handshake);
+		int nr = client.read(handshake);             // <== read
 
 		info(nr + " bytes read from client");
 		handshake.flip();
@@ -280,14 +281,14 @@ public class ToolBus {
 		info("toolid = " + toolid);
 
 		if (toolid >= 0) {
-			writeInt(toolid);
+			writeInt(toolid);                         // <=== write
 			ToolInstance ti = getToolInstance(toolid);
 			ti.connect(client);
 		} else {
 			try {
 				ToolInstance ti = toolbus.addToolInstance(toolname, true);
 				toolid = ti.getToolCount();
-				writeInt(toolid);
+				writeInt(toolid);                     // <=== write
 				info("shakeHands: created ti");
 				connectedTools.add(ti);
 				info("shakeHands: added to list");

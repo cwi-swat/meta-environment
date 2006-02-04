@@ -1,29 +1,28 @@
-package toolbus.tool.examples;
+package toolbus.tool.java;
 import java.awt.Button;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import toolbus.tool.ToolShield;
+import toolbus.TBTermFactory;
 import aterm.ATerm;
-import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 30, 2002
  */
 public class ButtonTool extends Frame implements ActionListener {
-  private ToolShield shield;
+  private JavaToolShield shield;
   private Button button;
-  private ATermFactory factory;
+  private TBTermFactory tbfactory;
 
   /**
    * Constructor for ButtonTool.
    * @param shield the ToolShield that encapsulates the execution of this tool
    */
-  public ButtonTool(ToolShield shield) {
+  public ButtonTool(JavaToolShield shield) {
     System.out.println("ButtonTool instance created");
     this.shield = shield;
-    factory = shield.getFactory();
+    tbfactory = shield.getTBTermFactory();
 
     // Build the user interface: just a single button
     button = new Button("Button");
@@ -38,7 +37,7 @@ public class ButtonTool extends Frame implements ActionListener {
     if (event.getSource() == button) {
       System.out.println("actionPerformed(" + event + ")");
       // When the user presses the button, we send an event to the ToolBus
-      shield.sndEventToToolBus(factory.make("button(<str>)", button.getLabel()));
+      shield.sndEventFromToolToToolBus(tbfactory.make("button(<str>)", button.getLabel()));
     }
   }
 

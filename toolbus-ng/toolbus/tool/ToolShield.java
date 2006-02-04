@@ -2,11 +2,9 @@ package toolbus.tool;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
-import java.util.LinkedList;
 
 import toolbus.TBTermFactory;
 import aterm.ATerm;
-import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 31, 2002
@@ -41,25 +39,25 @@ public abstract class ToolShield {
 	
 	abstract public void connect(SocketChannel channel) throws IOException;
 	
-	abstract protected void handleRequestToTool(Integer operation, ATerm call);
-	
 	/**
 	 * sndRequestToTool sends a request to the tool
 	 * @param operation to be performed
 	 * @param call ATerm denoting the actual request
 	 */
 	
-	public void sndRequestToTool(Integer operation, ATerm call) {
-		//info("sndRequestToTool(" + operation + ", " + call + ")");
-		handleRequestToTool(operation, call);
-	}
+	abstract protected void sndRequestToTool(Integer operation, ATerm call);
+
 
 	/**
 	 * Send an event to our ToolInstance (and hence to the ToolBus)
 	 */
 
-	public void sndEventToToolBus(ATerm trm) {
+	public void sndEventFromToolToToolBus(ATerm trm) {
 		toolInstance.addEventFromTool(trm);
+	}
+	
+	public void sndValueFromToolToToolBus(ATerm trm){
+		toolInstance.handleTermFromTool(trm);
 	}
 	
 	/**
