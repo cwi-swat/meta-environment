@@ -17,6 +17,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -36,10 +37,8 @@ import toolbus.tool.ToolInstance;
 import toolbus.tool.classic.ClassicToolShield;
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermFactory;
 import aterm.ATermInt;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
 /**
  * ToolBus implements the behaviour of one ToolBus.
@@ -119,6 +118,8 @@ public class ToolBus {
 	private boolean shutdownDone = false;
 
 	private static boolean toolActionCompleted = false;
+	
+	private static HashMap<Integer,ToolBus> portToToolBus = new HashMap<Integer,ToolBus>();
 
 	/**
 	 * Constructor with explicit PrintWriter
@@ -154,6 +155,7 @@ public class ToolBus {
 			selector = Selector.open();
 			WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
+			portToToolBus.put(new Integer(WellKnownSocketPort),this);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -178,6 +180,15 @@ public class ToolBus {
 
 	public ToolBus(StringWriter out) {
 		this(new PrintWriter(out));
+	}
+	
+	public static ToolBus getToolBus(int port) throws ToolBusException{
+		ToolBus tb = portToToolBus.get(port);
+		if(tb != null){
+			return tb;
+		} else {
+			throw new ToolBusException("No ToolBus associated with port " + port);
+		}
 	}
 
 	void info(String msg) {
@@ -673,7 +684,7 @@ public class ToolBus {
 		}
 		shutdownDone = true;
 		// throw new ToolBusException("");
-
+		portToToolBus.remove(WellKnownSocketPort);
 	}
 
 	/**

@@ -91,13 +91,18 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 
-	public void connect(SocketChannel client) throws IOException {
-		this.client = client;
-		client.configureBlocking(false);
-		clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
-		info("checking input signature...");
-		toolStatus = sendingSignature;
-		checkToolSignature();
+	public void connect(Object connection) throws IOException {
+		if(connection instanceof SocketChannel){
+			SocketChannel client = (SocketChannel) connection;
+			this.client = client;
+			client.configureBlocking(false);
+			clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
+			info("checking input signature...");
+			toolStatus = sendingSignature;
+			checkToolSignature();
+		} else {
+			throw new IOException("connection should be a SocketChannel");
+		}
 	}
 	
 	void connectAfterSignatureConfirmation(ATerm term){
@@ -128,8 +133,7 @@ public class ClassicToolShield extends ToolShield {
 	public void checkToolSignature() throws IOException {
 		info("checkToolSignature: input: " + toolDef.getInputSignature());
 		info("checkToolSignature: output: " + toolDef.getOutputSignature());
-		sendTerm(tbfactory.make("rec-do(signature(<term>,<term>))", toolDef
-				.getInputSignature(), toolDef.getOutputSignature()));
+		sendTerm(tbfactory.make("rec-do(<term>)", toolDef.getSignature()));
 	}
 
 	protected void sndRequestToTool(Integer operation, ATerm call) {

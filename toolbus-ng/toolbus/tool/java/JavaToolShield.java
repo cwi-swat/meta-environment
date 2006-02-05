@@ -3,7 +3,6 @@ package toolbus.tool.java;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.channels.SocketChannel;
@@ -11,23 +10,26 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 
 import toolbus.TBTermFactory;
+import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
+import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
 import aterm.ATermList;
 import aterm.ATermPlaceholder;
 
+/*
 class JavaToolShieldThread extends Thread {
-	private JavaToolShield javaToolShield;
+	private ToolShield javaToolShield;
 	private Object javaToolInstance;         // The instance created for this tool
 	private LinkedList requests = new LinkedList();
 	private boolean running = false;
 	
-	public JavaToolShieldThread(JavaToolShield jts, Constructor toolConstructor, Object[] actuals){
+	public JavaToolShieldThread(ToolShield jts, Constructor toolConstructor, Object[] actuals){
 		javaToolShield = jts;
 	     try {
 			javaToolInstance = toolConstructor.newInstance(actuals);
@@ -63,7 +65,7 @@ class JavaToolShieldThread extends Thread {
 	    if (operation == ToolInstance.EVAL) {
 	      javaToolShield.sndValueFromToolToToolBus(res);
 	    } else if (operation == ToolInstance.TERMINATE) {
-	      javaToolShield.terminate("tool terminated by ToolShield");
+	      javaToolShield.terminate(javaToolShield.getTBTermFactory().make("tool terminated by ToolShield"));
 	    }
 	  }
 	
@@ -85,7 +87,7 @@ class JavaToolShieldThread extends Thread {
 		running = false;
 	}
 }
-
+*/
 
 /**
  * @author paulk
@@ -113,10 +115,11 @@ public class JavaToolShield extends ToolShield {
 
 	private Hashtable<String,Method> methodTable;           // Table of methods that implement requests
 	private TBTermFactory tbfactory;         // Term factory to be used.
-	private JavaToolShieldThread shield;
 	
 	private static final String terminate = "terminate";
-
+	
+	private Object javaToolInstance;			// The actual instance of the constructor class for this tool
+	private AbstractTool abstractToolInstance; // The AbstractTool instance ("bridge") created by it
 
   /**
    * The constructor for JavaToolShield. 
@@ -138,11 +141,18 @@ public class JavaToolShield extends ToolShield {
     tbfactory = toolInstance.getTBTermFactory();
     try {
     	toolConstructor = findConstructor();
-    	checkToolSignature();
-        Object actuals[] = new Object[] { this };
-        shield = new JavaToolShieldThread(this, toolConstructor, actuals);
+  
+        String actuals[] = new String[] { 
+        		"-TB_PORT", "" + ToolBus.getWellKnownSocketPort(),
+        		"-TB_HOST", ToolBus.getLocalHost().getHostName(),
+        		"-TB_TOOL_NAME", toolDef.getName(),
+        		"-TB_TOOL_ID", "" + toolInstance.getToolCount(),
+        		"-TB_VERBOSE", "false" };
+			
+        javaToolInstance = toolConstructor.newInstance(new Object[] { actuals });
     } catch (Exception e) {
       System.out.println("JavaToolShield: " + e);
+      e.printStackTrace();
     }
   }
   
@@ -157,17 +167,49 @@ public class JavaToolShield extends ToolShield {
       if(parameters.length >= 1){
     	  System.err.println("findConstructor: " + parameters[0].getName());
       }
-      if (parameters.length == 1 && parameters[0].getName().equals("toolbus.tool.java.JavaToolShield")) {
+      System.err.println(parameters[0].getSimpleName() + " ; " + parameters[0].isArray());
+      if (parameters.length == 1 && 
+    	  parameters[0].getSimpleName().equals("String[]")){
         return constructors[i];
       }
     }
     throw new ToolBusException("no appropriate constructor found for " + className);
   }
-
+  
+  public void connect(Object connection) throws IOException {
+		if(connection instanceof AbstractTool){
+			abstractToolInstance = (AbstractTool) connection;	
+		  	abstractToolInstance.checkInputSignature(toolDef.getInputSignature());
+		} else {
+			throw new IOException("connection object should be instance of AbstractTool");
+		}
+	}
+  
   /**
-   * Check equality of types in a signature definition and a Java type
+   * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
    */
 
+  public void sndRequestToTool(Integer operation, ATerm call) {
+		AFun fun = tbfactory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
+		ATermAppl req = tbfactory.makeAppl(fun, call);
+		try {
+			abstractToolInstance.handleIncomingTerm(req);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  }
+  
+  public void terminate(ATerm msg) {
+		System.err.println("JavaToolShield.terminate");
+
+		sndRequestToTool(ToolInstance.TERMINATE, msg);
+	}
+
+  /**
+	 * Check equality of types in a signature definition and a Java type
+	 */
+/*
   private boolean equalType(ATerm t, Class c) {
     if (t.getType() == ATerm.PLACEHOLDER) {
       t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
@@ -184,13 +226,14 @@ public class JavaToolShield extends ToolShield {
     }
     return false;
   }
+  */
   
   /**
    * Find a method in the tool class with given name and argument types.
    * @param call of the method
    * @param returnsVoid should the class return void?
    */
-
+/*
   private void findMethod(ATermAppl call, boolean returnsVoid) throws ToolBusException {
     String name = call.getName();
     ATermList args = call.getArguments();
@@ -225,6 +268,7 @@ public class JavaToolShield extends ToolShield {
     }
     throw new ToolBusException("no method " + name + " found");
   }
+  */
   
   /**
    * Print a method heading.
@@ -243,7 +287,7 @@ public class JavaToolShield extends ToolShield {
   /**
    * Check the required signature of the tool class
    */
-
+/*
   private void checkToolSignature() throws ToolBusException {
   	ATermList sigs = toolDef.getInputSignature();
  	System.err.println("checkInputSignature(" + sigs + ")");
@@ -268,11 +312,12 @@ public class JavaToolShield extends ToolShield {
   					}
   	}
   }
+  */
   
   /**
    * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
    */
-
+/*
   public void sndRequestToTool(Integer operation, ATerm call) {
     System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
     ATermAppl acall = (ATermAppl) call;
@@ -294,29 +339,11 @@ public class JavaToolShield extends ToolShield {
     shield.addRequestForTool(operation, m, actuals);
   }
   
-  synchronized protected void returnValueFromTool(ATerm res){
-	  getToolInstance().addValueFromTool(res);
-  }
+ // synchronized protected void returnValueFromTool(ATerm res){
+//	  getToolInstance().addValueFromTool(res);
+ // }
   
-  public void terminate(String msg) {
-  	System.err.println("JavaToolShield.terminate");
-    Object actuals[] = new Object[] { msg };
-    Method m = (Method) methodTable.get(terminate);
-
-    if (m == null){
-    	shield.stopRunning();
-    } else {
-    	printMethod(m);
-    	shield.addRequestForTool(ToolInstance.TERMINATE, m, actuals);
-    }
-  }
-
-public void connect(SocketChannel channel) throws IOException {
-	shield.connect();
-}
-
-public void terminate(ATerm msg) {
-	// TODO Auto-generated method stub
+ */
 	
-}
+
 }
