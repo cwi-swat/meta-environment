@@ -12,7 +12,8 @@ public class Main {
 	
 		try {
 			T.parse(ToolBus.getWorkspace()
-					 + "/toolbusNG/toolbus/tool/java/tool1.tb");
+					 + "/toolbusNG/toolbus/tool/java/example.tb");
+			
 				    //+ "/toolbusNG/toolbus/test/Assign6.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();

@@ -37,7 +37,7 @@ public abstract class ToolShield {
 		return tbfactory;
 	}
 	
-	abstract public void connect(SocketChannel channel) throws IOException;
+	abstract public void connect(Object connection) throws IOException;
 	
 	/**
 	 * sndRequestToTool sends a request to the tool

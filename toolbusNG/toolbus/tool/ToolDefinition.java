@@ -76,6 +76,10 @@ public class ToolDefinition {
     return outputSignature;
   }
   
+  public ATerm getSignature(){
+	return tbfactory.make("signature(<term>,<term>))", inputSignature, outputSignature);
+  }
+  
   public void setToolSignatures(ATermList sigs){
   	boolean hasRecAckEvent = false;
   	ATermPlaceholder toolPlaceholder = getNameAsPlaceholder();

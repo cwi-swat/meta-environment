@@ -70,10 +70,6 @@ public class ToolInstance {
 
     toolShield = toolDef.makeToolShield(this,alreadyExecuting);
   }
-  
- // public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount) throws ToolBusException {
- // 	this(toolDef, myToolBus, toolCount, false, tbfactory);
- // }
 
   public ATerm getToolId(){
   	return toolId;
@@ -95,9 +91,8 @@ public class ToolInstance {
 	  return tbfactory;
   }
   
-  public void connect(SocketChannel client) throws IOException {
-  	toolShield.connect(client);
- // 	toolShield.start();
+  public void connect(Object connection) throws IOException {
+  	toolShield.connect(connection);
   }
   
   /**
