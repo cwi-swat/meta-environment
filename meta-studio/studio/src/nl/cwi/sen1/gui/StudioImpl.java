@@ -234,14 +234,21 @@ public class StudioImpl implements Studio, GuiTif {
 
 	private void updateStatusBar() {
 		if (activeView != null) {
-			String componentName = getComponent(activeView).getName();
-			CardLayout cl = (CardLayout) statusPanel.getLayout();
+			StudioComponent active = getComponent(activeView);
 
-			if (cl != null) {
-				cl.show(statusPanel, componentName);
+			if (active != null) {
+				String componentName = active.getName();
+				CardLayout cl = (CardLayout) statusPanel.getLayout();
+
+				if (cl != null) {
+					cl.show(statusPanel, componentName);
+				} else {
+					System.err
+							.println("Internal error: no status panel available");
+				}
 			}
 			else {
-				System.err.println("TODO: Internal error: no status panel available");
+				System.err.println("Internal error: no active component found");
 			}
 		}
 	}
