@@ -1,9 +1,9 @@
-module languages/c/syntax/CAfterPreprocessor
+module languages/c/syntax/Default-C-After-CPP
 
 %% This module assumes you've run the "cpp" command before parsing
 
 imports languages/c/syntax/C
-imports languages/c/syntax/Whitespace
+imports languages/generic-cpp/syntax/Whitespace
 
 hiddens
 
