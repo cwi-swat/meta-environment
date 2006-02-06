@@ -119,8 +119,14 @@ public class ModuleDatabase {
 				propagateToParents(moduleId, attr);
 			}
 
-			/* check if the new attribute value triggers an inherited attribute */
-			triggerAllInheritedAttributes(moduleId);
+			/* Check if the new attribute value triggers an inherited attribute */
+			try {
+			  triggerAllInheritedAttributes(moduleId);
+			}
+			catch (StackOverflowError e) {
+				System.err.println("ERROR: the inherited attributes trigger eachother in an endless loop!:" + inheritedAttributes);
+				throw e;
+			}
 		} 
 	}
 
@@ -135,7 +141,6 @@ public class ModuleDatabase {
 
 		for (Iterator iter = parents.iterator(); iter.hasNext();) {
 			ModuleId parent = (ModuleId) iter.next();
-
 			inherit(attr, parent);
 		}
 	}
