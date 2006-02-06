@@ -12,7 +12,6 @@
 process InitializeInheritedStatus is
   MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", error, available, one)
 
 toolbus(InitializeInheritedStatus)
 
