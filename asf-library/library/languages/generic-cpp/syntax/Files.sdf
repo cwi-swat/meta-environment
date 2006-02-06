@@ -1,0 +1,9 @@
+module languages/generic-cpp/syntax/Files
+
+exports
+
+sorts Filename SystemInclude LocalInclude 
+
+lexical syntax
+  [A-Za-z0-9\/\_\.\,]* -> Filename
+

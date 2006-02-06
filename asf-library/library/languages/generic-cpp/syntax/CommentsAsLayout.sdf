@@ -1,4 +1,4 @@
-module languages/generic-cpp/syntax/CommentAsLayout
+module languages/generic-cpp/syntax/CommentsAsLayout
 imports languages/generic-cpp/syntax/Comments
 
 exports
