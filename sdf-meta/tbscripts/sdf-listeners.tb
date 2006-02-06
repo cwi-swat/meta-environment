@@ -10,10 +10,13 @@
 #define BG_GRAYED_OUT rgb (211,211,211)
 
 process InitializeInheritedStatus is
-  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, all)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, one)
+  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, complete, all)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, child-error, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, child-error, child-error, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, available, all)
 
 toolbus(InitializeInheritedStatus)
+
 
 process SDFModuleLabelSetter is
 let
@@ -44,14 +47,16 @@ let
   Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,error)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,child-error)  
   . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",error,<term>)  
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",child-error,<term>)  
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetNewValue(Event, Value?)
     .
-    if equal(Value, error) then
+    if or(equal(Value, error),equal(Value,child-error)) then
       MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
     else
       MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
