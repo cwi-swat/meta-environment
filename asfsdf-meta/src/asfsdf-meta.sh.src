@@ -5,6 +5,8 @@ MODULENAME=""
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 myarguments="hm:V"
+myoptions="viewer"
+VIEWER=""
 
 Usage() {
 cat << E_O_USAGE >&2
@@ -12,6 +14,7 @@ Usage: $myname [options]
 Options:
     -V                   reveal program version (i.e. $myversion)
     -m <modulename>      open module <modulename>
+    --viewer             start up with ToolBus viewer
 E_O_USAGE
 }
 
@@ -20,7 +23,7 @@ Version() {
 }
 
 # getopt handles command line...
-args=`getopt --options $myarguments -- $* 2> /dev/null`
+args=`getopt --options $myarguments --longoptions $myoptions -- $* 2> /dev/null`
 if test $? != 0
 then
         Usage
@@ -40,6 +43,8 @@ do
             MODULENAME=$1 ;;
         -V)
             Version ; exit 0 ;;
+	--debug)
+	    VIEWER="-viewer" ;;
         --)
            ;;
     # Add additional command line options here...
@@ -51,6 +56,7 @@ done
 
 INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
 toolbus \
+  ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   ${INCLUDES} \
   __PREFIX__/share/asfsdf-meta/start-meta-studio.tb $*
