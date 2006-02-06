@@ -9,22 +9,24 @@
 process ReduceAction(EditorId : term) is
 let
   ModuleId : term,
-  Path: str
+  Path: str,
+  ResultTree: term
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
-  . Reduce(ModuleId, Path, off)
+  . Reduce(ModuleId, Path, off, ResultTree?)
   . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
 process DebugReduceAction(EditorId : term) is
 let
   ModuleId: term,
-  Path: str
+  Path: str,
+  ResultTree: term
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
-  . Reduce(ModuleId, Path, on)
+  . Reduce(ModuleId, Path, on, ResultTree?)
   . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
