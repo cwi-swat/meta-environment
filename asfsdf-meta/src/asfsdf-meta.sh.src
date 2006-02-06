@@ -55,7 +55,7 @@ do
 done
 
 INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
-toolbus \
+__TOOLBUS__/bin/toolbus \
   ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   ${INCLUDES} \

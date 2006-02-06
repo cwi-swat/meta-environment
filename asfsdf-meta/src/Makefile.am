@@ -18,5 +18,6 @@ CLEANFILES = \
 % : %.sh.src Makefile
 	sed 's@__ASF__@${ASF}@g;\
 	     s@__META__@${META}@g;\
+	     s@__TOOLBUS__@${TOOLBUS}@g;\
 	     s@__PREFIX__@${prefix}@g;\
 	     s@__TBSCRIPTS__@${TBSCRIPTS}@g;' < $< > $@ && chmod +x $@
