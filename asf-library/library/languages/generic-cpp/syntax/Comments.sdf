@@ -1,0 +1,12 @@
+module languages/generic-cpp/syntax/Comments
+
+exports
+
+sorts Comment Asterisk
+
+lexical syntax
+	[\/][\*] ( ~[\*] | Asterisk )* [\*][\/] -> Comment {category("Comment")}
+	[\*] 				-> Asterisk
+
+lexical restrictions
+	Asterisk -/- [\/]
