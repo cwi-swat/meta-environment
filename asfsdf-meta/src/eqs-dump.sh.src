@@ -67,7 +67,7 @@ if [ "a${OUTPUTFILE}" == "a" ]; then
 fi
 
 INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
-toolbus \
+__TOOLBUS__/bin/toolbus \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
   ${INCLUDES} \
