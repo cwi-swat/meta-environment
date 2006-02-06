@@ -84,7 +84,7 @@ public class TideControl extends JPanel implements TideControlTif, Runnable {
             
 			((StudioWithPredefinedLayout) studio).addComponent(
                     comp,
-                    StudioImplWithPredefinedLayout.TOP_RIGHT);
+                    StudioImplWithPredefinedLayout.TOP_LEFT);
 
             studio.connect("tide-control", bridge);
             studio.connect("debug-tool", debugTool);
