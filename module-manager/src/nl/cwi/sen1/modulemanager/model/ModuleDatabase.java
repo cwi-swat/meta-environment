@@ -51,35 +51,27 @@ public class ModuleDatabase {
 	}
 
 	public void registerInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm oldValue, ATerm newValue, ATerm type) {
+			ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
 		InheritedAttribute attr = inheritedAttributes.put(namespace, key,
-				oldValue, newValue, type);
-		triggerAttributeOnAllModules(attr);
+				oldValue, childValue, newValue, type);
+		// TODO: needs only to be done for bottom modules??
+		triggerAllAttributeOnAllModules(attr);
 	}
 
 	public void unregisterInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm oldValue, ATerm newValue) {
-		inheritedAttributes.remove(namespace, key, oldValue, newValue);
+			ATerm oldValue, ATerm childValue, ATerm newValue) {
+		inheritedAttributes.remove(namespace, key, oldValue, childValue, newValue);
 	}
 
-	private void triggerAttributeOnAllModules(InheritedAttribute attr) {
+	private void triggerAllAttributeOnAllModules(InheritedAttribute attr) {
 		for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
 			ModuleId moduleId = (ModuleId) iter.next();
-			triggerAttributeOnModule(attr, moduleId);
-		}
-	}
-
-	private void triggerAttributeOnModule(InheritedAttribute attr,
-			ModuleId moduleId) {
-		Module module = (Module) modules.get(moduleId);
-		ATerm value = module.getAttribute(attr.getNamespace(), attr.getKey());
-
-		if (value != null && value.isEqual(attr.getNewValue())) {
-			propagateToParents(moduleId, attr);
+			triggerAllInheritedAttributes(moduleId);
 		}
 	}
 
 	private void triggerAllInheritedAttributes(ModuleId id) {
+		System.err.println("Trigger all " + inheritedAttributes.size());
 		for (Iterator iter = inheritedAttributes.iterator(); iter.hasNext();) {
 			InheritedAttribute attr = (InheritedAttribute) iter.next();
 			inherit(attr, id);
@@ -99,6 +91,7 @@ public class ModuleDatabase {
 			ATerm value) {
 		Module module = (Module) modules.get(moduleId);
 
+		System.err.println("setting attribute " + key + " of " + moduleId + " to " + value);
 		if (module == null) {
 			System.err.println("MM - addAttribute: module [" + moduleId
 					+ "] doesn't exist");
@@ -112,21 +105,11 @@ public class ModuleDatabase {
 
 			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
 
-			InheritedAttribute attr = inheritedAttributes.get(namespace, key,
-					value);
-
-			if (attr != null) {
-				propagateToParents(moduleId, attr);
-			}
-
-			/* Check if the new attribute value triggers an inherited attribute */
-			try {
-			  triggerAllInheritedAttributes(moduleId);
-			}
-			catch (StackOverflowError e) {
-				System.err.println("ERROR: the inherited attributes trigger eachother in an endless loop!:" + inheritedAttributes);
-				throw e;
-			}
+			// maybe the parents of this module now have to be updated
+			propagateToParents(moduleId);
+			
+            // maybe this module now matches the preconditions for an inherited attribute
+			triggerAllInheritedAttributes(moduleId);
 		} 
 	}
 
@@ -135,13 +118,12 @@ public class ModuleDatabase {
 		listener.attributeSet(id, namespace, key, oldValue, newValue);
 	}
 
-	private void propagateToParents(ModuleId id, InheritedAttribute attr) {
+	private void propagateToParents(ModuleId id) {
 		Set parents = getParents(id);
-
 
 		for (Iterator iter = parents.iterator(); iter.hasNext();) {
 			ModuleId parent = (ModuleId) iter.next();
-			inherit(attr, parent);
+			triggerAllInheritedAttributes(parent);
 		}
 	}
 
@@ -166,6 +148,7 @@ public class ModuleDatabase {
 		ATerm comparedValue = module.getAttribute(attr.getNamespace(), attr
 				.getKey());
 
+		System.err.println("trying to inherit: " + attr + "on " + moduleId);
 		// The first precondition is that the oldValue matches (guarantees
 		// termination)
 		
@@ -173,6 +156,7 @@ public class ModuleDatabase {
 				&& ( comparedValue == null
 				|| (comparedValue != null && !attr.getOldValue().isEqual(
 						comparedValue)))) {
+			System.err.println("inheritance failed because oldvalue did not match");
 			return;
 		}
 
@@ -201,20 +185,20 @@ public class ModuleDatabase {
 					ATerm elemValue = elemModule.getAttribute(attr
 							.getNamespace(), attr.getKey());
 
-					if (!elemValue.isEqual(attr.getNewValue())
+					if (!elemValue.isEqual(attr.getChildValue())
 							&& 
 							(attr.getOldValue().getType() != ATerm.PLACEHOLDER
 									&& !elemValue.isEqual(attr.getOldValue()))) {
 						allSet = false;
 					}
 					else {
-						if (elemValue.isEqual(attr.getNewValue())) {
+						if (elemValue.isEqual(attr.getChildValue())) {
 						  oneSet = true;
 						}
 					}
 				}
 			} else {
-				if (!value.isEqual(attr.getNewValue())) {
+				if (!value.isEqual(attr.getChildValue())) {
 					allSet = false;
 				} else {
 					oneSet = true;
@@ -224,9 +208,13 @@ public class ModuleDatabase {
 
 		if ((attr.inheritFromAll() && allSet)
 				|| (attr.inheritFromOne() && oneSet)) {
+			System.err.println("inheritance succeeded for " + moduleId);
 			setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
 					.getNewValue());
 		} 
+		else {
+		  System.err.println("inheritance failed because children were not set to ChildValue");
+		}
 	}
 
 	private void findCycles(ModuleId current, Set modules, Set path) {

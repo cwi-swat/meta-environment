@@ -1,6 +1,6 @@
 // Java tool bridge ModuleManagerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 26, 2006 10:49:34 AM
+// generation time: Feb 6, 2006 5:32:57 PM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -99,12 +99,12 @@ public class ModuleManagerBridge
   }
 
   //}}}
-  //{{{  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4)
+  //{{{  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4, ATerm t5)
 
-  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4)
+  public void registerInheritedAttribute(ATerm t0, ATerm t1, ATerm t2, ATerm t3, ATerm t4, ATerm t5)
   {
     if (tool != null) {
-      tool.registerInheritedAttribute(t0, t1, t2, t3, t4);
+      tool.registerInheritedAttribute(t0, t1, t2, t3, t4, t5);
     }
     else {
       throw new UnsupportedOperationException("method `registerInheritedAttribute' not supported.");

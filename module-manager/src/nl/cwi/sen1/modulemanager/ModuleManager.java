@@ -255,8 +255,8 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void registerInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm oldValue, ATerm newValue, ATerm type) {
-		moduleDB.registerInheritedAttribute(namespace, key, oldValue, newValue,
+			ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
+		moduleDB.registerInheritedAttribute(namespace, key, oldValue, childValue, newValue,
 				type);
 	}
 

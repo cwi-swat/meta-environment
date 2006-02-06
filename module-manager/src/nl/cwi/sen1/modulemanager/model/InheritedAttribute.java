@@ -8,6 +8,8 @@ public class InheritedAttribute {
 	private ATerm key;
 
 	private ATerm oldValue;
+	
+	private ATerm childValue;
 
 	private ATerm newValue;
 
@@ -18,10 +20,11 @@ public class InheritedAttribute {
 	public static final int INHERIT_FROM_ALL = 1;
 
 	public InheritedAttribute(ATerm namespace, ATerm key, ATerm oldValue,
-			ATerm newValue, int type) {
+			ATerm childValue, ATerm newValue, int type) {
 		this.namespace = namespace;
 		this.key = key;
 		this.newValue = newValue;
+		this.childValue = childValue;
 		this.oldValue = oldValue;
 		this.type = type;
 	}
@@ -36,6 +39,10 @@ public class InheritedAttribute {
 
 	public ATerm getNewValue() {
 		return newValue;
+	}
+
+	public ATerm getChildValue() {
+		return childValue;
 	}
 
 	public ATerm getOldValue() {
@@ -58,7 +65,7 @@ public class InheritedAttribute {
 	}
 
 	public String toString() {
-		return "attr[" + namespace + ", " + key + ", " + oldValue + ", "
+		return "attr[" + namespace + ", " + key + ", old:" + oldValue + ", child:" + childValue + ", new:"
 				+ newValue + ", " + type + "]";
 	}
 }

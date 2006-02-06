@@ -1,7 +1,13 @@
 $Id$
 
-Thu Jan 26 12:00:12 CET 2006 <jurgenv@cwi.nl>
- * <+comment+>
+Mon Feb  6 18:36:00 CET 2006 <{markvdb,jurgenv}@cwi.nl>
+ *  src/**/*.java: added a new element of an inherited attribute:
+    the child value in order to make a distinction between the
+    old value of the current module, and the old value of the child
+    modules when inheriting an attribute. The precondition is now
+    that all (or one) child modules must be set to the ChildValue, AND
+    the current module must be set to OldValue before the attribute
+    can be set to NewValue.
 
 Mon Jan 23 09:05:52 CET 2006 <jurgenv@cwi.nl>
  * src/**/ModuleManager.java: Mapping of dependencies to a graph
