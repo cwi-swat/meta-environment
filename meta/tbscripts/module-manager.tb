@@ -9,8 +9,8 @@
 
 #define GRAPH_NAMESPACE "graph"
 
-process MM-RegisterInheritedAttribute(Namespace: term, Key: term, OldValue: term, NewValue: term, Type: term) is
-  snd-msg(mm-register-inherited-attribute(Namespace, Key, OldValue, NewValue, Type))
+process MM-RegisterInheritedAttribute(Namespace: term, Key: term, OldValue: term, ChildValue: term, NewValue: term, Type: term) is
+  snd-msg(mm-register-inherited-attribute(Namespace, Key, OldValue, ChildValue, NewValue, Type))
 
 process MM-NotifyAboutChangedAttributes is
 let
