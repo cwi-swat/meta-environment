@@ -5,5 +5,8 @@ exports
 sorts Filename SystemInclude LocalInclude 
 
 lexical syntax
-  [A-Za-z0-9\/\_\.\,]* -> Filename
+   ~[\"\n\>]+          -> Filename
+
+lexical restrictions
+   Filename -/- ~[\"\n\>]
 

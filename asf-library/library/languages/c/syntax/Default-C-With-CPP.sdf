@@ -10,60 +10,88 @@ imports languages/c/syntax/C
 %% in which ways the preprocessor statements are intertwined with the C
 %% constructs. This module covers a lot of 'nice' uses of the preprocessor.
 
-%% Conditional statements
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
+%% generic CPP substitions
+imports languages/generic-cpp/syntax/Substitutions[Identifier Expression StringConstant]
+
+%% where can we put include directives
+imports languages/generic-cpp/syntax/Includes[ExternalDeclaration]
+
+%% definition of expression macros
+imports languages/generic-cpp/syntax/Macros[Identifier Expression Statement]
+
+%% Conditional statements 
+imports languages/generic-cpp/syntax/Conditionals[
 	Identifier
 	Expression
-	StringConstant
 	Statement+
 	Statement
 ]
 
 %% Conditional declarations
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
+imports languages/generic-cpp/syntax/Conditionals[
 	Identifier
 	Expression
-	StringConstant
 	Declaration+
 	Declaration
 ]
 
+%% Conditional part of a block statement:
+imports languages/generic-cpp/syntax/Conditionals[
+	Identifier
+	Expression
+	(Declaration+ Statement+)
+	Statement
+]
+
 %% Conditional functions
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
+imports languages/generic-cpp/syntax/Conditionals[
 	Identifier
 	{Expression ";"}+
-	StringConstant
 	ExternalDeclaration+
-	ExternalDeclaration
+	FunctionDefinition
+]
+
+%% Macros with expressions as definitions
+imports languages/generic-cpp/syntax/Macros[
+	Identifier
+	Expression
+	Declaration
 ]
 
 %% Macros with bracketed statements as definitions
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
+imports languages/generic-cpp/syntax/Macros[
 	Identifier
 	( "(" Statement ")" )
-	StringConstant
-	ExternalDeclaration+
-	ExternalDeclaration
+	Declaration
 ]
 
 %% Macros with normal statements as definitions
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
-	Identifier
+imports languages/generic-cpp/syntax/Macros[
+	Identifier 
 	Statement
-	StringConstant
-	ExternalDeclaration+
-	ExternalDeclaration
+	Declaration
 ]
 
 %% Macro that yield a declaration without ; at the end
-imports languages/generic-cpp/syntax/Generic-Preprocessor[
+imports languages/generic-cpp/syntax/Macros[
 	Identifier
 	( Specifier+ {InitDeclarator ","}+ )
-	StringConstant
-	ExternalDeclaration+
-	ExternalDeclaration
+	Declaration
 ]
 
+%% Macro that yields a while with one statement without ; at the end
+imports languages/generic-cpp/syntax/Macros[
+	Identifier
+	( "while" "(" Expression ")" Expression)
+	Declaration
+]
+
+%% Macro that yields a do while without ; at the end
+imports languages/generic-cpp/syntax/Macros[
+	Identifier
+	( "do" Statement "while" "(" Expression ")" )
+	Declaration
+]
 exports
 
 context-free syntax
