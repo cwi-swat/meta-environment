@@ -77,7 +77,7 @@ public class ToolBus {
 
 	private static String implodePT = "/ufs/paulk/software/installed/bin/implodePT";
 
-	private static String workspace = "/ufs/paulk/eclipse/worlspace";
+	private static String workspace = "/ufs/paulk/eclipse/workspace";
 
 	private static int nerrrors = 0;
 
@@ -97,11 +97,7 @@ public class ToolBus {
 
 	private final static int MIN_MSG_SIZE = 128; // the C implementation
 
-	private ToolBus toolbus;
-
 	private String toolname;
-
-	private int toolid = -1;
 
 	private Vector<ToolInstance> connectedTools;
 
@@ -288,7 +284,7 @@ public class ToolBus {
 			}
 			lastd = i;
 		}
-		toolid = Integer.parseInt(elems[2].substring(0, lastd + 1));
+		int toolid = Integer.parseInt(elems[2].substring(0, lastd + 1));
 		info("toolid = " + toolid);
 
 		try{
@@ -296,7 +292,7 @@ public class ToolBus {
 			if (toolid >= 0) {
 				ti = getToolInstance(toolid);
 			} else {
-				ti = toolbus.addToolInstance(toolname, true);
+				ti = addToolInstance(toolname);
 				toolid = ti.getToolCount();			
 			}
 			writeInt(toolid);                     // <=== write
@@ -573,13 +569,11 @@ public class ToolBus {
 	/** addToolInstance adds a new tool instance
 	 * 
 	 * @param toolName name of the tool
-	 * @param sig signature of tool atoms
 	 * @return the tool instance
 	 * @throws ToolBusException
 	 */
 
-	public ToolInstance addToolInstance(String toolName,
-			boolean alreadyExecuting) throws ToolBusException {
+	public ToolInstance addToolInstance(String toolName) throws ToolBusException {
 		ATermList sig = getSignature();
 		//System.err.println("addToolInstance: " + toolName + ", " + sig);
 		ToolDefinition TD = getToolDefinition(toolName);
