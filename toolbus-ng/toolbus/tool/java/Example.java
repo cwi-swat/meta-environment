@@ -21,7 +21,7 @@ public class Example
     new Example(null,args);
   }
 
-  public Example(ATermFactory fac, String[] args)
+  public Example(ATermFactory fac, String[] args) // added fac argument
     throws IOException
   {
     //factory = new aterm.pure.PureFactory();
@@ -46,7 +46,7 @@ public class Example
     bridge.connect();
 
     // Start the tool event loop
-    bridge.run();
+    bridge.start();
   }
 
   public void actionPerformed(ActionEvent event)

@@ -1,5 +1,6 @@
 package toolbus.atom;
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -12,6 +13,7 @@ import aterm.ATerm;
 public class RecVal extends Atom {
 	private Ref toolId;
 	private Ref result;
+	private ToolInstance toolInstance;
 
   public RecVal(ATerm toolId, ATerm result, TBTermFactory tbfactory) {
     super(tbfactory);
@@ -25,18 +27,28 @@ public class RecVal extends Atom {
     a.copyAtomAttributes(this);
     return a;
   }
+  
+  public void activate(){
+	  toolInstance = null;
+	  super.activate();
+  }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
-    ToolInstance ti = getToolBus().getToolInstance(tid);
-    ATerm res = tbfactory.substitute(result.value, getEnv());
-    if (ti.getValueFromTool(res, getEnv())){
-    	//System.err.println("RecValue.execute succeeded");	
-      return true;
-    } else
-      return false;
+    
+    if(toolInstance == null){
+		ATerm tid = getEnv().getValue((TBTermVar)toolId.value);
+		toolInstance = getToolBus().getToolInstance(tid);
+    }
+    if(toolInstance.canValue()){
+    	ATerm res = tbfactory.substitute(result.value, getEnv());
+    	if (toolInstance.getValueFromTool(res, getEnv())){
+    		//System.err.println("RecValue.execute succeeded");	
+    		return true;
+    	}
+    }
+    return false;
   }
 
 }

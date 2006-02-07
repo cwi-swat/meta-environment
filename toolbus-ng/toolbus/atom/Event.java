@@ -32,6 +32,7 @@ public class Event extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
+    if(false){ // <_-------------------
     ATerm tid = tbfactory.substitute(toolId.value, getEnv());
     ToolInstance ti = getToolBus().getToolInstance(tid);
  
@@ -39,6 +40,7 @@ public class Event extends Atom {
       return true;
     } else
       return false;
+    } else return false;
   }
 
 }

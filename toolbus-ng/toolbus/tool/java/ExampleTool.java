@@ -6,6 +6,7 @@ package toolbus.tool.java;
 
 import aterm.*;
 import toolbus.*;
+
 import java.util.*;
 
 abstract public class ExampleTool

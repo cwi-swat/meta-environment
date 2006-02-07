@@ -46,7 +46,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 
-	private static final boolean verbose = true;
+	private static final boolean verbose = false;
 
 	private static Random rand = new Random();
 	
@@ -132,7 +132,7 @@ public class ToolBus {
 		processesIterator = null;
 		tools = new Vector<ToolInstance>();
 		toolsIterator = null;
-		connectedTools = new Vector<ToolInstance>();
+		connectedTools = new Vector<ToolInstance>(30);
 		procdefs = new Vector<ProcessDefinition>();
 		tooldefs = new Vector<ToolDefinition>();
 		atomSignature = new HashSet<ATerm>();
@@ -291,37 +291,37 @@ public class ToolBus {
 		toolid = Integer.parseInt(elems[2].substring(0, lastd + 1));
 		info("toolid = " + toolid);
 
-		if (toolid >= 0) {
-			writeInt(toolid);                         // <=== write
-			ToolInstance ti = getToolInstance(toolid);
-			ti.connect(client);
-		} else {
-			try {
-				ToolInstance ti = toolbus.addToolInstance(toolname, true);
-				toolid = ti.getToolCount();
-				writeInt(toolid);                     // <=== write
-				info("shakeHands: created ti");
-				connectedTools.add(ti);
-				info("shakeHands: added to list");
-				ti.connect(client);
-			} catch (Exception e) {
-				e.printStackTrace();
+		try{
+			ToolInstance ti;
+			if (toolid >= 0) {
+				ti = getToolInstance(toolid);
+			} else {
+				ti = toolbus.addToolInstance(toolname, true);
+				toolid = ti.getToolCount();			
 			}
+			writeInt(toolid);                     // <=== write
+			ti.connect(client);
+		} catch (Exception e){
+			e.printStackTrace();
 		}
+	}
+	
+	public void addConnectedTool(ToolInstance ti){
+		connectedTools.add(ti);
 	}
 
 	public ToolInstance getConnectedTool(String toolname) {
-		// info("getConnectedTool: " + toolname);
+		 info("getConnectedTool: " + toolname);
 		for (int i = 0; i < connectedTools.size(); i++) {
 			ToolInstance ti = (ToolInstance) connectedTools.elementAt(i);
-			// info("getConnectedTool: considering: " + ti.getToolName());
+			 info("getConnectedTool: considering: " + ti.getToolName());
 			if (ti.getToolName().equals(toolname)) {
 				connectedTools.removeElementAt(i);
-				// info("getConnectedTool: " + toolname + " ==> " + ti);
+				info("getConnectedTool: " + toolname + " ==> " + ti);
 				return ti;
 			}
 		}
-		// info("getConnectedTool: " + toolname + " ==> null");
+		info("getConnectedTool: " + toolname + " ==> null");
 		return null;
 	}
 
@@ -581,7 +581,7 @@ public class ToolBus {
 	public ToolInstance addToolInstance(String toolName,
 			boolean alreadyExecuting) throws ToolBusException {
 		ATermList sig = getSignature();
-		System.err.println("addToolInstance: " + toolName + ", " + sig);
+		//System.err.println("addToolInstance: " + toolName + ", " + sig);
 		ToolDefinition TD = getToolDefinition(toolName);
 		TD.setToolSignatures(sig);
 		ToolInstance ti = new ToolInstance(TD, this, tools.size(), tbfactory);
@@ -641,7 +641,15 @@ public class ToolBus {
 	}
 
 	public void addToSignature(ATerm asig) {
-		atomSignature.add(asig);
+		try {
+			ATerm pat = tbfactory.makePattern(asig,true);
+			atomSignature.add(pat);
+			//System.err.println("asig = " + asig);
+			//System.err.println("pat  = " + pat);
+		} catch (ToolBusException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private ATermList getSignature() {

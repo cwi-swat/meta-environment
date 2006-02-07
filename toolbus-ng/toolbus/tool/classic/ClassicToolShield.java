@@ -43,7 +43,8 @@ public class ClassicToolShield extends ToolShield {
 
 	private String toolname;
 
-	private int toolid = -1;
+	private int toolCount = -1;
+	private ATerm toolId;
 
 	private ATerm termSndVoid;
 	
@@ -66,7 +67,8 @@ public class ClassicToolShield extends ToolShield {
 		termSndVoid = tbfactory.parse("snd-void");
 
 		toolname = toolDef.getName();
-		toolid = toolInstance.getToolCount();
+		toolCount = toolInstance.getToolCount();
+		toolId = toolInstance.getToolId();
 		for (int i = 0; i < MIN_MSG_SIZE; i++) {
 			sendTermFiller.put((byte) 0);
 		}
@@ -76,7 +78,7 @@ public class ClassicToolShield extends ToolShield {
 	public void executeTool() {
 		String cmd = toolDef.getCommand() + " -TB_HOST "
 				+ ToolBus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
-				+ toolname + " -TB_TOOL_ID " + toolid + " -TB_PORT "
+				+ toolname + " -TB_TOOL_ID " + toolCount + " -TB_PORT "
 				+ ToolBus.getWellKnownSocketPort();
 		System.err.println("executeTool:" + cmd);
 
@@ -108,7 +110,7 @@ public class ClassicToolShield extends ToolShield {
 					"incorrect response after signature check: " + term);
 		}
 		toolStatus = connected;
-		getToolInstance().TCP_goConnected();
+		toolInstance.handleTermFromTool(tbfactory.make("snd-connect(<term>)", toolId));
 	}
 
 	public boolean isConnected() {

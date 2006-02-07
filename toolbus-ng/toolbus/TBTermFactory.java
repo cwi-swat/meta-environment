@@ -465,9 +465,10 @@ public class TBTermFactory extends PureFactory {
 
 	  /**
 	   * Transform a term into a pattern that can be used by tool interfaces.
+	   * 
 	   */
 
-	  public ATerm makePattern(ATerm t, Environment env, boolean recurring) throws ToolBusException {
+	  public ATerm makePattern(ATerm t, boolean recurring) throws ToolBusException { //TODO: remove argument recurring?
 	  	if(t == Undefined){
 	  		return t;
 	  	}
@@ -503,11 +504,11 @@ public class TBTermFactory extends PureFactory {
 	          else
 	            return apt;
 	        }
-	        if (!recurring)
-	          return makePlaceholder(apt);
+	        //if (!recurring)
+	       //   return makePlaceholder(apt);
 	        ATerm vargs[] = new ATerm[nargs];
 	        for (int i = 0; i < nargs; i++) {
-	          vargs[i] = makePattern(args[i], env, false);
+	          vargs[i] = makePattern(args[i], false);
 	        }
 	        return makeAppl(fun, vargs);
 
@@ -516,7 +517,7 @@ public class TBTermFactory extends PureFactory {
 	        ATermList lst = EmptyList;
 	        ATermList tlst = (ATermList) t;
 	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
-	          lst = lst.insert(makePattern(tlst.elementAt(i), env, true));
+	          lst = lst.insert(makePattern(tlst.elementAt(i), true));
 	        }
 	        return lst;
 	        

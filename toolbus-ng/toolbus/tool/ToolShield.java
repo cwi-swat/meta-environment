@@ -18,7 +18,7 @@ import aterm.ATerm;
 
 public abstract class ToolShield {
 	
-	private ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
+	protected ToolInstance toolInstance;		// Backward link to ToolInstance that created this ToolShield
 	protected TBTermFactory tbfactory;
 	
 	public ToolShield(ToolInstance ti) {
