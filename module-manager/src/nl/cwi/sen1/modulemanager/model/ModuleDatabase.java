@@ -23,6 +23,8 @@ public class ModuleDatabase {
 	private Map parents;
 
 	private AttributeSetListener listener;
+	
+	private int indent = 0;
 
 	public ModuleDatabase(AttributeSetListener l) {
 		moduleCount = 0;
@@ -60,7 +62,8 @@ public class ModuleDatabase {
 
 	public void unregisterInheritedAttribute(ATerm namespace, ATerm key,
 			ATerm oldValue, ATerm childValue, ATerm newValue) {
-		inheritedAttributes.remove(namespace, key, oldValue, childValue, newValue);
+		inheritedAttributes.remove(namespace, key, oldValue, childValue,
+				newValue);
 	}
 
 	private void triggerAllAttributeOnAllModules(InheritedAttribute attr) {
@@ -71,8 +74,14 @@ public class ModuleDatabase {
 	}
 
 	private void triggerAllInheritedAttributes(ModuleId id) {
-		System.err.println("Trigger all " + inheritedAttributes.size());
 		for (Iterator iter = inheritedAttributes.iterator(); iter.hasNext();) {
+			InheritedAttribute attr = (InheritedAttribute) iter.next();
+			inherit(attr, id);
+		}
+	}
+
+	private void triggerInheritedAttributes(ModuleId id, Set attrs) {
+		for (Iterator iter = attrs.iterator(); iter.hasNext();) {
 			InheritedAttribute attr = (InheritedAttribute) iter.next();
 			inherit(attr, id);
 		}
@@ -91,7 +100,6 @@ public class ModuleDatabase {
 			ATerm value) {
 		Module module = (Module) modules.get(moduleId);
 
-		System.err.println("setting attribute " + key + " of " + moduleId + " to " + value);
 		if (module == null) {
 			System.err.println("MM - addAttribute: module [" + moduleId
 					+ "] doesn't exist");
@@ -101,16 +109,22 @@ public class ModuleDatabase {
 		ATerm oldValue = module.getAttribute(namespace, key);
 
 		if (oldValue == null || !oldValue.isEqual(value)) {
+			indent++;
 			module.setAttribute(namespace, key, value);
-
+			
 			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
 
 			// maybe the parents of this module now have to be updated
-			propagateToParents(moduleId);
+			Set attrs = inheritedAttributes.getByChildValue(namespace, key, value);
+			if (!attrs.isEmpty()) {
+				propagateToParents(moduleId, attrs);
+			}
 			
-            // maybe this module now matches the preconditions for an inherited attribute
+			// maybe this module now matches the preconditions for an inherited
+			// attribute
 			triggerAllInheritedAttributes(moduleId);
-		} 
+			indent--;
+		}
 	}
 
 	private void fireAttributeSetListener(ModuleId id, ATerm namespace,
@@ -118,12 +132,12 @@ public class ModuleDatabase {
 		listener.attributeSet(id, namespace, key, oldValue, newValue);
 	}
 
-	private void propagateToParents(ModuleId id) {
+	private void propagateToParents(ModuleId id, Set attrs) {
 		Set parents = getParents(id);
 
 		for (Iterator iter = parents.iterator(); iter.hasNext();) {
 			ModuleId parent = (ModuleId) iter.next();
-			triggerAllInheritedAttributes(parent);
+			triggerInheritedAttributes(parent, attrs);
 		}
 	}
 
@@ -145,33 +159,25 @@ public class ModuleDatabase {
 	 */
 	private void inherit(InheritedAttribute attr, ModuleId moduleId) {
 		Module module = (Module) modules.get(moduleId);
-		ATerm comparedValue = module.getAttribute(attr.getNamespace(), attr
-				.getKey());
+		ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
 
-		System.err.println("trying to inherit: " + attr + "on " + moduleId);
 		// The first precondition is that the oldValue matches (guarantees
 		// termination)
-		
-		if ((attr.getOldValue().getType() != ATerm.PLACEHOLDER)
-				&& ( comparedValue == null
-				|| (comparedValue != null && !attr.getOldValue().isEqual(
-						comparedValue)))) {
-			System.err.println("inheritance failed because oldvalue did not match");
+
+		if (noMatchForOldValue(attr, comparedValue)) {
 			return;
 		}
 
 		Set children = getChildren(moduleId);
 		boolean allSet = true;
 		boolean oneSet = false;
-
 		boolean isCyclic = isCyclic(moduleId);
 
 		for (Iterator iter = children.iterator(); iter.hasNext();) {
 			ModuleId child = (ModuleId) iter.next();
 			Module innerModule = (Module) modules.get(child);
 
-			ATerm value = innerModule.getAttribute(attr.getNamespace(), attr
-					.getKey());
+			ATerm value = getValueOfInheritedAttribute(attr, innerModule);
 
 			if (isCyclic && getAllChildren(child).contains(moduleId)) {
 				// check if all elements of cycle are set to oldvalue or
@@ -182,18 +188,15 @@ public class ModuleDatabase {
 					ModuleId elem = (ModuleId) inner.next();
 					Module elemModule = (Module) modules.get(elem);
 
-					ATerm elemValue = elemModule.getAttribute(attr
-							.getNamespace(), attr.getKey());
+					ATerm elemValue = getValueOfInheritedAttribute(attr,
+							elemModule);
 
 					if (!elemValue.isEqual(attr.getChildValue())
-							&& 
-							(attr.getOldValue().getType() != ATerm.PLACEHOLDER
-									&& !elemValue.isEqual(attr.getOldValue()))) {
+							&& noMatchForOldValue(attr, elemValue)) {
 						allSet = false;
-					}
-					else {
+					} else {
 						if (elemValue.isEqual(attr.getChildValue())) {
-						  oneSet = true;
+							oneSet = true;
 						}
 					}
 				}
@@ -208,13 +211,21 @@ public class ModuleDatabase {
 
 		if ((attr.inheritFromAll() && allSet)
 				|| (attr.inheritFromOne() && oneSet)) {
-			System.err.println("inheritance succeeded for " + moduleId);
 			setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
 					.getNewValue());
-		} 
-		else {
-		  System.err.println("inheritance failed because children were not set to ChildValue");
 		}
+	}
+
+	private ATerm getValueOfInheritedAttribute(InheritedAttribute attr,
+			Module module) {
+		return module.getAttribute(attr.getNamespace(), attr.getKey());
+	}
+
+	private boolean noMatchForOldValue(InheritedAttribute attr,
+			ATerm comparedValue) {
+		return (attr.getOldValue().getType() != ATerm.PLACEHOLDER)
+				&& (comparedValue == null || (comparedValue != null && !attr
+						.getOldValue().isEqual(comparedValue)));
 	}
 
 	private void findCycles(ModuleId current, Set modules, Set path) {
@@ -234,6 +245,7 @@ public class ModuleDatabase {
 	private Set getModulesInCycle(ModuleId moduleId) {
 		Set cycle = new HashSet();
 		findCycles(moduleId, cycle, new HashSet());
+		indentedPrint("Cycle: " + cycle);
 		return cycle;
 	}
 
@@ -462,5 +474,12 @@ public class ModuleDatabase {
 
 	public Map getDependencies() {
 		return children;
+	}
+	
+	private void indentedPrint(String message) {
+		for (int i = 0; i < indent; i++) {
+			System.err.print(" ");
+		}
+		System.err.println(message);
 	}
 }

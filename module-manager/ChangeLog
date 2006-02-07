@@ -8,6 +8,9 @@ Mon Feb  6 18:36:00 CET 2006 <{markvdb,jurgenv}@cwi.nl>
     that all (or one) child modules must be set to the ChildValue, AND
     the current module must be set to OldValue before the attribute
     can be set to NewValue.
+ * All inherited attributes are now triggered on all set attributes,
+   not just the ones that would be set to the NewValue. We have to
+   look at this with an optimization eye.
 
 Mon Jan 23 09:05:52 CET 2006 <jurgenv@cwi.nl>
  * src/**/ModuleManager.java: Mapping of dependencies to a graph
