@@ -64,6 +64,7 @@ abstract public class ExampleTool
   public ATerm handler(ATerm term)
   {
     List result;
+    System.err.println("handler: " + term);
 
     result = term.match(Pmsg0);
     if (result != null) {

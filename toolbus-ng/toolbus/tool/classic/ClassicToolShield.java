@@ -60,8 +60,7 @@ public class ClassicToolShield extends ToolShield {
 	 * @param toolInstance the tool instance that created this ClassicToolShield
 	 */
 
-	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance,
-			boolean alreadyExecuting) {
+	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
 		super(toolInstance);
 		this.toolDef = toolDef;
 		termSndVoid = tbfactory.parse("snd-void");
@@ -72,12 +71,9 @@ public class ClassicToolShield extends ToolShield {
 			sendTermFiller.put((byte) 0);
 		}
 		selector = ToolBus.getSelector();
-		if (!alreadyExecuting) {
-			executeTool();
-		}
 	}
 
-	void executeTool() {
+	public void executeTool() {
 		String cmd = toolDef.getCommand() + " -TB_HOST "
 				+ ToolBus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
 				+ toolname + " -TB_TOOL_ID " + toolid + " -TB_PORT "

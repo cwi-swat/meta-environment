@@ -29,9 +29,11 @@ public abstract class ToolShield {
 	public ToolInstance getToolInstance() {
 		return toolInstance;
 	}
+	
+	abstract public void executeTool();
 
 	/**
-	 * Provide the current TBTTermfactory.
+	 * Provide the current TBTermfactory.
 	 */
 	public TBTermFactory getTBTermFactory() {
 		return tbfactory;

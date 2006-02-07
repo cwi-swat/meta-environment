@@ -21,7 +21,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 	private Object lockObject;
 
 	protected ATermFactory factory;
-	private boolean verbose = false;
+	private boolean verbose = true;
 	
 	private ToolBus myToolBus;
 	private ToolInstance myToolInstance;
@@ -66,6 +66,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 		}
 		try {
 			myToolBus = ToolBus.getToolBus(port);
+			myToolInstance = myToolBus.getToolInstance(toolid);
 		} catch (ToolBusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,7 +82,6 @@ abstract public class AbstractTool implements Tool, Runnable {
 	}
 
 	public void connect() throws IOException {
-		myToolInstance = myToolBus.getToolInstance(toolid);
 		myToolInstance.connect(this);
 		connected = true;
 	}
@@ -142,11 +142,13 @@ abstract public class AbstractTool implements Tool, Runnable {
 		setRunning(false);
 	}
 
-	public void run() {
+	synchronized public void run() {
 		setRunning(true);
 		while (running) {
 			try {
-				wait();
+				System.err.println("before wait");
+				wait(100);
+				System.err.println("after wait");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

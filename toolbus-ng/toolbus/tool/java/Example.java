@@ -18,13 +18,14 @@ public class Example
   public static final void main(String[] args)
     throws IOException
   {
-    new Example(args);
+    new Example(null,args);
   }
 
-  public Example(String[] args)
+  public Example(ATermFactory fac, String[] args)
     throws IOException
   {
-    factory = new aterm.pure.PureFactory();
+    //factory = new aterm.pure.PureFactory();
+	  factory = fac;
 
     // Build the user interface: just a single button
     button = new Button("Button");

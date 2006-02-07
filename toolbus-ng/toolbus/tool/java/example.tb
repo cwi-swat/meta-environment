@@ -10,7 +10,7 @@ in
   execute(example, T?) .
   (
     (
-      snd-eval(T, msg("Hello World!")) delay(sec(3)) .
+      snd-eval(T, msg("Hello World!")) .
       rec-value(T, count(Count?)) .
       printf("Hello number %d\n", Count)
     ) * delta 
