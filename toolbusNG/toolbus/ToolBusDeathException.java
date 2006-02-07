@@ -7,19 +7,8 @@ package toolbus;
  */
 public class ToolBusDeathException extends ToolBusException {
 
-  /**
-   * Constructor for ToolBusDeathException.
-   */
-  public ToolBusDeathException() {
-    super();
-  }
-
-  /**
-   * Constructor for ToolBusDeathException.
-   * @param arg0
-   */
   public ToolBusDeathException(String arg0) {
-    super(arg0);
+    super("Factal error during ToolBus execution: " + arg0);
   }
 
 }

@@ -9,13 +9,6 @@ public class ToolBusException extends Exception {
 
   /**
    * Constructor for ToolBusRunTimeException.
-   */
-  public ToolBusException() {
-    super();
-  }
-
-  /**
-   * Constructor for ToolBusRunTimeException.
    * @param arg0
    */
   public ToolBusException(String arg0) {
