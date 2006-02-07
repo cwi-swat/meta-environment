@@ -7,13 +7,18 @@ static ATermTable optionsTable;
 static ATerm on = NULL;
 static ATerm off = NULL;
 
-void OPT_initialise() {
-  /* There are 16 options. 75% of 22 = 16.5*/
-  optionsTable = ATtableCreate(22,75);
-  on = ATparse("on");
-  ATprotect(&on);
-  off = ATparse("off");
-  ATprotect(&off);
+void OPT_initialize() {
+  static ATbool initialized = ATfalse;
+
+  if (!initialized) {
+    /* There are 16 options in SGLR and 8 in asc-support. 75% of 32 = 24 */
+    optionsTable = ATtableCreate(32,75);
+    on = ATparse("on");
+    ATprotect(&on);
+    off = ATparse("off");
+    ATprotect(&off);
+    initialized = ATtrue;
+  }
 }
 
 void OPT_cleanup() {
