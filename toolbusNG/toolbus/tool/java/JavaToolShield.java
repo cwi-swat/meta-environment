@@ -6,11 +6,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Hashtable;
 
+import toolbus.AbstractTool;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
@@ -130,10 +133,18 @@ public class JavaToolShield extends ToolShield {
 		this.className = toolDef.getCommand();
 		System.err.println("className = " + className);
 		try {
-			toolClass = Class.forName(className);
+			URL u1 = new URL("file:///home/paulk/./eclipse/toolbusNG");
+			URL u2 = new URL("file:///home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/");
+			URLClassLoader loader = new URLClassLoader(new URL[] {u1, u2});
+			toolClass = Class.forName(className,false,loader);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.err.println("class " + className + " not found");
+			System.err.println(e);
 		}
+
+		//toolClass = Class.forName(className);
 		methodTable = new Hashtable<String, Method>();
 		tbfactory = toolInstance.getTBTermFactory();
 
@@ -188,6 +199,8 @@ public class JavaToolShield extends ToolShield {
 		} else {
 			throw new IOException("connection object should be instance of AbstractTool");
 		}
+		//getToolInstance().TCP_goConnected();
+		toolInstance.handleTermFromTool(tbfactory.make("snd-connect(<term>)", toolInstance.getToolId()));
 	}
   
   /**
@@ -278,7 +291,7 @@ public class JavaToolShield extends ToolShield {
   /**
    * Print a method heading.
    */
-
+/*
   private void printMethod(Method m) {
     Class returntype = m.getReturnType();
     Class parameters[] = m.getParameterTypes();
@@ -288,6 +301,7 @@ public class JavaToolShield extends ToolShield {
     }
     System.err.println(")");
   }
+  */
   
   /**
    * Check the required signature of the tool class

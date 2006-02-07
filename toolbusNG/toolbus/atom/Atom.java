@@ -27,7 +27,7 @@ class Test {
 abstract public class Atom extends ProcessExpression implements StateElement {
   private ProcessInstance processInstance; // process instance to which the atom belongs
   private Environment env;                 // the environment of this atom
-  private Vector tests;                    // optional tests that guard this atom
+  private Vector<Test> tests;             // optional tests that guard this atom
   private Ref[] atomArgs = new Ref[0];
   private int delay = 0;
   private int timeout = 0;
@@ -91,7 +91,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   		env = env.copy();
 	    ATerm rtst = tbfactory.resolveVars(test, env);
 	    if (tests == null)
-	    	tests = new Vector(3);
+	    	tests = new Vector<Test>(3);
 	    Test t = new Test(rtst, env);
 	    //System.out.println("setTest: " + t);
 	    this.tests.add(t);
@@ -166,7 +166,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     ATerm pat[] = new ATerm[nargs];
 
     for (int i = 0; i < nargs; i++) {
-      pat[i] = tbfactory.makePattern(atomArgs[i].value, getEnv(), true);
+      pat[i] = tbfactory.makePattern(atomArgs[i].value, true);
     }
     return tbfactory.makeAppl(afun, pat);
   }

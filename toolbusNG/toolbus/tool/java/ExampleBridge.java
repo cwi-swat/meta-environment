@@ -25,6 +25,7 @@ public class ExampleBridge
 
   public ATerm msg(String s0)
   {
+	System.err.println("msg(" + s0 + ") called");
     if (tool != null) {
       return tool.msg(s0);
     }

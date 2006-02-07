@@ -1,4 +1,4 @@
-package toolbus.tool.java;
+package toolbus;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,15 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import toolbus.ToolBus;
-import toolbus.ToolBusException;
 import toolbus.tool.ToolInstance;
+import toolbus.tool.java.Tool;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-abstract public class AbstractTool implements Tool, Runnable {
+abstract public class AbstractTool  extends Thread implements Tool{
 
 	private Object lockObject;
 
@@ -31,7 +30,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 	private int port = -1;
 	private int toolid = -1;
 
-	private Map queueMap;
+	private Map<String,EventQueue> queueMap;
 
 	private ATerm termSndVoid;
 
@@ -39,10 +38,12 @@ abstract public class AbstractTool implements Tool, Runnable {
 	private boolean connected;
 
 	public AbstractTool(ATermFactory factory) {
+		
+		System.err.println("constructor for AbstractTool called");
 		this.factory = factory;
 
 		termSndVoid = factory.parse("snd-void");
-		queueMap = new HashMap();
+		queueMap = new HashMap<String,EventQueue>();
 		lockObject = this;
 	}
 
@@ -132,6 +133,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 	}
 
 	public void sendTerm(ATerm term) throws IOException {
+		myToolInstance.handleTermFromTool(term);
 	}
 	
 	private synchronized void setRunning(boolean state)  {
@@ -143,12 +145,13 @@ abstract public class AbstractTool implements Tool, Runnable {
 	}
 
 	synchronized public void run() {
+		//this.start();
 		setRunning(true);
 		while (running) {
 			try {
-				System.err.println("before wait");
-				wait(100);
-				System.err.println("after wait");
+				//System.err.println("before wait");
+				wait();
+				//System.err.println("after wait");
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -156,7 +159,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 		}
 	}
 
-	protected void handleIncomingTerm(ATerm t) throws IOException {
+	public void handleIncomingTerm(ATerm t) throws IOException {
 		synchronized (getLockObject()) {
 			
 			info("tool " + toolname + " handling term from toolbus: " + t);
@@ -171,7 +174,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 				sendTerm(termSndVoid);
 			}
 			else if (result != null) {
-				myToolInstance.addValueFromTool(result);
+				sendTerm(result);
 			}
 
 			List terms = t.match("rec-ack-event(<term>)");
@@ -188,7 +191,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 	public void postEvent(ATerm term) {
 		synchronized (getLockObject()) {
 			ATermAppl appl = (ATermAppl) term;
-			EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+			EventQueue queue = queueMap.get(appl.getName());
 			if (queue == null) {
 				queue = new EventQueue();
 				queueMap.put(appl.getName(), queue);
@@ -210,7 +213,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 
 	private void ackEvent(ATerm event) throws IOException {
 		ATermAppl appl = (ATermAppl) event;
-		EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+		EventQueue queue = queueMap.get(appl.getName());
 		if (queue != null && queue.ackWaiting()) {
 			appl = queue.nextEvent();
 			if (appl != null) {

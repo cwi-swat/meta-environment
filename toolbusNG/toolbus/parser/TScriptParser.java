@@ -380,7 +380,9 @@ class TScriptNodeBuilders {
     
     define(new NodeBuilder("ttt-Execute") {
         public Object build(Object args[]) {
-          return new Execute((ATerm) args[0], (ATerm) args[1], tbfactory);
+        	Execute ex = new Execute((ATerm) args[0], (ATerm) args[1], tbfactory);
+        	Connect con = new Connect((ATerm) args[1], tbfactory);
+          return new Sequence(ex, con, tbfactory);
         }
       });
     

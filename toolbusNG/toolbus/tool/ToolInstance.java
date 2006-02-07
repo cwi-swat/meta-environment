@@ -105,7 +105,7 @@ public class ToolInstance {
   public void handleTermFromTool(ATerm t) {	
 		//System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
-		if(t.isEqual(termSndVoid)){
+		if(t == termSndVoid){
 			TCP_goConnected();
 			return;
 		}
@@ -130,7 +130,12 @@ public class ToolInstance {
 			addEventFromTool(tbfactory.makeList(t1, tbfactory.makeList(t2)));
 			return;
 		}
-		// connect
+		matches = t.match("snd-connect(<term>)");
+		if(matches != null){
+			TCP_goConnected();
+			toolbus.addConnectedTool(this);
+			return;
+		}
 		// disconnect
 		System.err.println("tool " + toolId + " not handled!");
 }
@@ -266,7 +271,7 @@ public class ToolInstance {
     for (int i = 0; i < pendingEvents.size(); i++) {
         ATermList eventArgs = (ATermList) pendingEvents.get(i);
         ATerm keyEvent = eventArgs.getFirst();
-        System.err.println("eventArgs " + eventArgs);
+        //System.err.println("eventArgs " + eventArgs);
         if(key == keyEvent){
         	pendingEvents.remove(i);
         	return true;
@@ -282,7 +287,7 @@ public class ToolInstance {
 
   public void addEventFromTool(Object obj) {
     eventsFromTool.addLast(obj);
-    System.err.println("ToolInstance.addEvenFromTool: obj = " + obj);
+    //System.err.println("ToolInstance.addEvenFromTool: obj = " + obj);
   }
  
   /**
@@ -290,7 +295,7 @@ public class ToolInstance {
    */
 
   public boolean sndAckToTool(ATerm eventTerm) throws ToolBusException {
-    System.err.println("sndAckToTool:" + eventTerm);
+    //System.err.println("sndAckToTool:" + eventTerm);
     if (!ackPossible(eventTerm)) {
       return false;
     }
@@ -303,7 +308,7 @@ public class ToolInstance {
    * @see toolbus.tool.ToolInstance#terminate(String)
    */
   public void terminate(ATerm msg){
-  	System.err.println("ToolInstance.terminate: " + toolId);
+  	//System.err.println("ToolInstance.terminate: " + toolId);
   	toolShield.terminate(msg);
   	toolbus.removeToolInstance(this);
   }
@@ -333,11 +338,11 @@ public class ToolInstance {
   private static final int PHASE2 = 2; // connected, start state
   private static final int PHASE3 = 3; // snd-eval received;
   
-  public boolean unConnected() {
-  	return phase == PHASE1;
-  }
+ // public boolean unConnected() {
+ // 	return phase == PHASE1;
+ // }
   
-  public boolean TCP_goConnected(){
+  private boolean TCP_goConnected(){
 	//System.err.println("TCP_goConnnected, phase = " + phase);
   	if(phase == PHASE1 || phase == PHASE3){
   		phase = PHASE2;
@@ -352,7 +357,7 @@ public class ToolInstance {
   	return true;
   }
   
-  public boolean TCP_goEvalDo(){
+  private boolean TCP_goEvalDo(){
 	  //System.err.println("TCP_EvalDo, phase = " + phase);
   	if(phase == PHASE2){
   		phase = PHASE3;
@@ -360,6 +365,18 @@ public class ToolInstance {
   	} else {
   		return false;
   	}
+  }
+  
+  public boolean canEvalDo(){
+	  return phase == PHASE2;
+  }
+  
+  public boolean canValue(){
+	  return phase == PHASE3;
+  }
+  
+  public boolean isConnected(){
+	  return phase != PHASE1;
   }
 }
 

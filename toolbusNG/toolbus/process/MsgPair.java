@@ -115,7 +115,7 @@ public class MsgPair extends ProcessExpression implements StateElement {
     for (int i = 0; i < atoms.size(); i++) {
       Atom atom = (Atom) atoms.elementAt(i);
       if ((sndThenRec && atom instanceof RecMsg) || (!sndThenRec && atom instanceof SndMsg) ){
-        atomPatterns = atomPatterns.append(TBTerm.makePattern(atom.getAtomArgValue(0), atom.getEnv(), true));
+        atomPatterns = atomPatterns.append(TBTerm.makePattern(atom.getAtomArgValue(0), true));
       } else {
         throw new ToolBusException((sndThenRec) ? "SndMsg" : "RecMsg" + " required, but " + atoms.elementAt(i) + " found");
       }

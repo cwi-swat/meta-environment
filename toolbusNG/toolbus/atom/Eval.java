@@ -1,5 +1,6 @@
 package toolbus.atom;
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -11,6 +12,7 @@ import aterm.ATermAppl;
 public class Eval extends Atom {
 	private Ref toolId;
 	private Ref request;
+	private ToolInstance toolInstance;
 
   public Eval(ATerm toolId, ATerm request, TBTermFactory tbfactory) {
     super(tbfactory);
@@ -25,20 +27,28 @@ public class Eval extends Atom {
     a.copyAtomAttributes(this);
     return a;
   }
+  
+ 
+  public void activate() {
+	toolInstance = null;
+	super.activate();
+  }
 
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    //System.err.println("Eval: " + getEnv());
-    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
-    ATerm req = tbfactory.substitute(request.value, getEnv());
-    //System.err.println("Eval: " + tid + ", " + req);
-    ToolInstance ti = getToolBus().getToolInstance(tid);
-    if(ti.sndEvalToTool((ATermAppl) req)) {
-    	return true;
-    } else {
-    	return false;
+
+    if(toolInstance == null){
+    	ATerm tid = getEnv().getValue((TBTermVar)toolId.value);
+    	toolInstance = getToolBus().getToolInstance(tid);
     }
+    if(toolInstance.canEvalDo()){
+    	ATerm req = tbfactory.substitute(request.value, getEnv());
+    	if(toolInstance.sndEvalToTool((ATermAppl) req)){
+    		return true;
+    	}
+    }
+    return false;
   }
 
 }

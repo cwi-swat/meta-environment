@@ -2,7 +2,7 @@
 // This file is generated automatically, please do not edit!
 // generation time: Nov 7, 2005 9:24:59 PM
 
-package toolbus;
+package toolbus.tool.java;
 
 import aterm.*;
 

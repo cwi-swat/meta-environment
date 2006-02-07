@@ -5,4 +5,4 @@ CLASS_PATH=/home/paulk/.eclipse/toolbusNG:/home/paulk/software/source/aterm-java
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/share/eclipse/plugins/com.appperfect.teststudio_6.5.0/lib:
 export LD_LIBRARY_PATH
 
-"$JAVA_HOME"/bin/java -verboseGC -Xms1000m -Xmx1000m -classpath "$CLASS_PATH" -Xoptimize toolbus.Main --output-dir /tmp
+"$JAVA_HOME"/bin/java -server -classpath "$CLASS_PATH" toolbus.Main --output-dir /tmp
