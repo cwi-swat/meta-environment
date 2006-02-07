@@ -24,9 +24,8 @@ void OPT_cleanup() {
   off = NULL;
 }
 
-/* we use ATerms to index into the hash table,
- * for different types  of option values the names
- * are wrapped with different names, like flag, or string.
+/* We use ATerms to index into the hash table. For different types of option 
+ * values the names are wrapped with different names, like flag, or string.
  */
 static ATerm stringToATerm(const char *name) {
   return (ATerm) ATmakeAppl0(ATmakeAFun(name, 0, ATfalse));
@@ -36,6 +35,10 @@ static char* ATermToString(ATerm term) {
   assert(ATgetType(term) == AT_APPL);
 
   return ATgetName(ATgetAFun((ATermAppl) term));
+}
+
+static ATerm intName(const char *name) {
+  return ATmake("int(<term>)", stringToATerm(name));
 }
 
 static ATerm flagName(const char *name) {
@@ -73,4 +76,14 @@ const char* OPT_getStringValue(const char *name) {
   ATerm value = ATtableGet(optionsTable, stringName(name));
   assert(value != NULL);
   return  ATermToString(value);
+}
+
+void OPT_setIntValue(const char *name, int value) {
+  ATtablePut(optionsTable, intName(name), (ATerm)ATmakeInt(value));
+}
+
+int OPT_getIntValue(const char *name) {
+  ATerm value = ATtableGet(optionsTable, intName(name));
+  assert(value != NULL);
+  return ATgetInt((ATermInt)value);
 }

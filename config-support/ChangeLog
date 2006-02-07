@@ -1,5 +1,13 @@
 $Id$
 
+Tue Feb  7 11:30:11 CET 2006 <economop@cwi.nl>
+ * Added an int wrapper for the hash table that stores the option values in 
+   |options.c|.
+ * Added the accessor functions for int valed options in |options.{c,h}|.
+
+Mon Feb  6 11:19:36 CET 2006 <economop@cwi.nl>
+ * Added |options.{c,h}| that can be used to store tool's options.
+
 Fri Feb  3 10:16:47 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * lib/configuration.adt:
    - Add new property import that takes a path that points to an

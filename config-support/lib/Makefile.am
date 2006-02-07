@@ -8,11 +8,13 @@ lib_LIBRARIES = libConfigAPI.a
 
 include_HEADERS = \
 	Config.h \
-	Config_dict.h
+	Config_dict.h \
+	options.h
 
 libConfigAPI_a_SOURCES = \
 	Config.c \
-	Config_dict.c
+	Config_dict.c \
+	options.c
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 

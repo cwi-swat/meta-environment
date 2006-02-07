@@ -11,3 +11,6 @@ ATbool OPT_getFlag(const char *name);
 
 void   OPT_setStringValue(const char *name, const char *value);
 const char* OPT_getStringValue(const char *name);
+
+void   OPT_setIntValue(const char *name, int value);
+int    OPT_getIntValue(const char *name);
