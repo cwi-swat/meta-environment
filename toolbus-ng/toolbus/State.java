@@ -3,7 +3,7 @@
  */
 
 package toolbus;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Vector;
 
 import toolbus.atom.Atom;
@@ -26,7 +26,7 @@ public class State {
   
   private boolean allAtoms = true;
   
-  private HashMap<StateElement,Boolean> cache = new HashMap<StateElement,Boolean>(10);
+  private IdentityHashMap<StateElement,Boolean> cache = new IdentityHashMap<StateElement,Boolean>(10);
 
   public State() {
     elements = new Vector<StateElement>();

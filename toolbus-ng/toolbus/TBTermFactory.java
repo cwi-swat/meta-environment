@@ -1,7 +1,5 @@
 package toolbus;
 
-import java.util.HashMap;
-
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;

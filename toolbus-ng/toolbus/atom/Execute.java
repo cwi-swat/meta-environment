@@ -54,7 +54,7 @@ public class Execute extends Atom {
 	      return false;
 	    String name = ((ATermAppl) tool.value).getName();
 	    ToolBus TB = getProcess().getToolBus();
-	    ToolInstance TI = TB.addToolInstance(name, false);
+	    ToolInstance TI = TB.addToolInstance(name);
 	
 	    getEnv().assignVar((TBTermVar)rvar.value, TI.getToolId());
 	    
