@@ -53,7 +53,7 @@ public class ToolInstance {
  * @param toolDefinition definition of the tool
    */
 
-  public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount, boolean alreadyExecuting, TBTermFactory tbfactory) throws ToolBusException {
+  public ToolInstance(ToolDefinition toolDef, ToolBus myToolBus, int toolCount, TBTermFactory tbfactory) throws ToolBusException {
     this.toolDef = toolDef;   
     this.toolbus = myToolBus;
     this.toolCount = toolCount;
@@ -67,8 +67,11 @@ public class ToolInstance {
     AFun afun = tbfactory.makeAFun(toolDef.getName(), 1, false);
  
     toolId = tbfactory.makeAppl(afun, tbfactory.makeInt(toolCount));
-
-    toolShield = toolDef.makeToolShield(this,alreadyExecuting);
+    toolShield = toolDef.makeToolShield(this);
+  }
+  
+  public void executeTool(){
+	  toolShield.executeTool();
   }
 
   public ATerm getToolId(){

@@ -3,11 +3,10 @@ package toolbus.tool.java;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.channels.SocketChannel;
 import java.util.Hashtable;
-import java.util.LinkedList;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
@@ -18,9 +17,7 @@ import toolbus.tool.ToolShield;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermInt;
-import aterm.ATermList;
-import aterm.ATermPlaceholder;
+import aterm.ATermFactory;
 
 /*
 class JavaToolShieldThread extends Thread {
@@ -128,52 +125,60 @@ public class JavaToolShield extends ToolShield {
    */
 
   public JavaToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
-  	super(toolInstance);
-  	this.toolDef = toolDef;
-    this.className = toolDef.getCommand();
-    System.err.println("className = " + className);
-    try {
-      toolClass = Class.forName(className);
-    } catch (ClassNotFoundException e) {
-      System.err.println("class " + className + " not found");
-    }
-    methodTable = new Hashtable<String,Method>();
-    tbfactory = toolInstance.getTBTermFactory();
-    try {
-    	toolConstructor = findConstructor();
+		super(toolInstance);
+		this.toolDef = toolDef;
+		this.className = toolDef.getCommand();
+		System.err.println("className = " + className);
+		try {
+			toolClass = Class.forName(className);
+		} catch (ClassNotFoundException e) {
+			System.err.println("class " + className + " not found");
+		}
+		methodTable = new Hashtable<String, Method>();
+		tbfactory = toolInstance.getTBTermFactory();
+
+		try {
+			toolConstructor = findConstructor();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
   
-        String actuals[] = new String[] { 
-        		"-TB_PORT", "" + ToolBus.getWellKnownSocketPort(),
-        		"-TB_HOST", ToolBus.getLocalHost().getHostName(),
-        		"-TB_TOOL_NAME", toolDef.getName(),
-        		"-TB_TOOL_ID", "" + toolInstance.getToolCount(),
-        		"-TB_VERBOSE", "false" };
-			
-        javaToolInstance = toolConstructor.newInstance(new Object[] { actuals });
-    } catch (Exception e) {
-      System.out.println("JavaToolShield: " + e);
-      e.printStackTrace();
-    }
+  public void executeTool() {
+		String actuals[] = new String[] { "-TB_PORT",
+				"" + ToolBus.getWellKnownSocketPort(), "-TB_HOST",
+				ToolBus.getLocalHost().getHostName(), "-TB_TOOL_NAME",
+				toolDef.getName(), "-TB_TOOL_ID",
+				"" + getToolInstance().getToolCount(), "-TB_VERBOSE", "false" };
+
+		try {
+			System.err.println("JavaToolShield.executeTool");
+			javaToolInstance = toolConstructor
+					.newInstance(new Object[] { tbfactory, actuals });
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
   }
   
   /**
-   * Find the constructor of the tool class.
-   */
-
-  private Constructor findConstructor() throws ToolBusException {
-    Constructor[] constructors = toolClass.getConstructors();
-    for (int i = 0; i < constructors.length; i++) {
-      Class parameters[] = constructors[i].getParameterTypes();
-      if(parameters.length >= 1){
-    	  System.err.println("findConstructor: " + parameters[0].getName());
-      }
-      System.err.println(parameters[0].getSimpleName() + " ; " + parameters[0].isArray());
-      if (parameters.length == 1 && 
-    	  parameters[0].getSimpleName().equals("String[]")){
-        return constructors[i];
-      }
-    }
-    throw new ToolBusException("no appropriate constructor found for " + className);
+	* Find the constructor of the tool class.
+    * @throws NoSuchMethodException 
+    * @throws SecurityException 
+	*/
+  
+  private Constructor findConstructor() throws SecurityException, NoSuchMethodException {
+	  return toolClass.getConstructor(ATermFactory.class, String[].class);
   }
   
   public void connect(Object connection) throws IOException {
@@ -192,6 +197,7 @@ public class JavaToolShield extends ToolShield {
   public void sndRequestToTool(Integer operation, ATerm call) {
 		AFun fun = tbfactory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
 		ATermAppl req = tbfactory.makeAppl(fun, call);
+		System.err.println("sndRequestToTool: " + req);
 		try {
 			abstractToolInstance.handleIncomingTerm(req);
 		} catch (IOException e) {
@@ -202,7 +208,6 @@ public class JavaToolShield extends ToolShield {
   
   public void terminate(ATerm msg) {
 		System.err.println("JavaToolShield.terminate");
-
 		sndRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 

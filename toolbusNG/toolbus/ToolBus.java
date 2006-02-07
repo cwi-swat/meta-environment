@@ -46,7 +46,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 
-	private static final boolean verbose = false;
+	private static final boolean verbose = true;
 
 	private static Random rand = new Random();
 	
@@ -581,23 +581,23 @@ public class ToolBus {
 	public ToolInstance addToolInstance(String toolName,
 			boolean alreadyExecuting) throws ToolBusException {
 		ATermList sig = getSignature();
-		//System.err.println("addToolInstance: " + toolName + ", " + sig);
+		System.err.println("addToolInstance: " + toolName + ", " + sig);
 		ToolDefinition TD = getToolDefinition(toolName);
 		TD.setToolSignatures(sig);
-		ToolInstance ti = new ToolInstance(TD, this, tools.size(),
-				alreadyExecuting, tbfactory);
+		ToolInstance ti = new ToolInstance(TD, this, tools.size(), tbfactory);
 		tools.add(ti);
+		ti.executeTool();
 		return ti;
 	}
 
-	public ToolInstance getToolInstance(ATerm tid) {
+	synchronized public ToolInstance getToolInstance(ATerm tid) {
 		ATermInt arg = (ATermInt) ((ATermAppl) tid).getArgument(0);
 		int n = arg.getInt();
-		return (ToolInstance) tools.elementAt(n);
+		return tools.elementAt(n);
 	}
 
-	public ToolInstance getToolInstance(int n) {
-		return (ToolInstance) tools.elementAt(n);
+	synchronized public ToolInstance getToolInstance(int n) {
+		return tools.elementAt(n);
 	}
 
     public void removeToolInstance(ToolInstance ti){
