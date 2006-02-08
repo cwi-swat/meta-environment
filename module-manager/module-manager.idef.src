@@ -24,6 +24,7 @@ let
   Value : term,
   OldValue: term,
   NewValue: term,
+  ChildValue: term,
   AttributeType: term
 in
   execute(module-manager, MM?)
@@ -53,8 +54,8 @@ in
     rec-msg(mm-delete-module(ModuleId?))
     . snd-do(MM, delete-module(ModuleId))
   +
-    rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, NewValue?, AttributeType?))
-    . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, NewValue, AttributeType))
+    rec-msg(mm-register-inherited-attribute(Namespace?, Key?, OldValue?, ChildValue?, NewValue?, AttributeType?))
+    . snd-do(MM, register-inherited-attribute(Namespace, Key, OldValue, ChildValue, NewValue, AttributeType))
   +
     rec-msg(mm-add-attribute(ModuleId?, Namespace?, Key?, Value?))
     . snd-do(MM, add-attribute(ModuleId, Namespace, Key, Value))

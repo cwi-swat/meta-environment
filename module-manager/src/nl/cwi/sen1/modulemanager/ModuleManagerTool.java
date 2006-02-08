@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2006 3:24:25 PM
+// generation time: Feb 8, 2006 3:32:05 PM
 
 package nl.cwi.sen1.modulemanager;
 
