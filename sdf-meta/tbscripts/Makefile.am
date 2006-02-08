@@ -32,7 +32,7 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	     $(GENERATED_TBSCRIPTS) \
-	     standard.sdf.buttons
+	     standard.sdf.actions
 
 pkgdata_DATA = \
 	       $(TBSCRIPTS) \
