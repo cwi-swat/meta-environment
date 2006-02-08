@@ -10,8 +10,8 @@
 #include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
-#include <parsetable-utils.tb>
 #include <sdf2-language.tb>
+#include <term-parsetable.tb>
 
 process StartPtDumper is
 let
@@ -24,12 +24,14 @@ in
   . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,complete)
   . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,error)
   . rec-note(mm-attribute-changed(Event?))
+  . printf("Receive attribute-changed\n")
   . ACE-GetNewValue(Event, Value?)
   . 
   if equal(Value, error) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
-    DumpParseTable(ModuleId, OUTPUTFILE, sdf)
+    printf("About to dump parsetable...\n").
+    DumpParseTable(ModuleId, OUTPUTFILE, trm)
   fi
   . shutdown("")
 endlet
