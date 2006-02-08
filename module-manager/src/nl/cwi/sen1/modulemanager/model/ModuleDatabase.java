@@ -167,9 +167,9 @@ public class ModuleDatabase {
 		Module module = (Module) modules.get(moduleId);
 		ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
 
-		System.err.println("inherit: " + attr + " on " + moduleId + "?");
+//		System.err.println("inherit: " + attr + " on " + moduleId + "?");
 		if (noMatchForOldValue(attr, comparedValue)) {
-			System.err.println("\tno because old value does not match");
+//			System.err.println("\tno because old value does not match");
 			return;
 		}
 
@@ -178,17 +178,17 @@ public class ModuleDatabase {
 			Set parents = getCycleParents(cycle);
 			Set children = getCycleChildren(cycle);
 
-			indentedPrint("cycle: " + cycle);
-			indentedPrint("cycle-parents: " + parents);
-			indentedPrint("cycle-children: " + children);
+//			indentedPrint("cycle: " + cycle);
+//			indentedPrint("cycle-parents: " + parents);
+//			indentedPrint("cycle-children: " + children);
 
 //			// TODO: maybe cycle contains root is enough
 			if (attr.inheritFromOne() && cycle.contains(root)) {
 				children.add(root);
 				children.removeAll(getChildren(root));
 				cycle.remove(root);
-				indentedPrint("2cycle: " + cycle);
-				indentedPrint("2cycle-children: " + children);
+//				indentedPrint("2cycle: " + cycle);
+//				indentedPrint("2cycle-children: " + children);
 			}
 			else if (cycle.contains(root))  {
 				cycle.remove(root);
@@ -202,8 +202,8 @@ public class ModuleDatabase {
 				ATerm elemValue = getValueOfInheritedAttribute(attr, elemModule);
 
 				if (noMatchForOldValue(attr, elemValue)) {
-					System.err.println("\tno because " + elem
-							+ " is not set to old value");
+//					System.err.println("\tno because " + elem
+//							+ " is not set to old value");
 					return;
 				}
 			}
@@ -227,20 +227,20 @@ public class ModuleDatabase {
 
 			if ((attr.inheritFromAll() && allSet)
 					|| (attr.inheritFromOne() && oneSet)) {
-				System.err.println("\tyes!");
+//				System.err.println("\tyes!");
 
 				setAttributeOnModules(cycle, attr.getNamespace(),
 						attr.getKey(), attr.getNewValue());
 
-				System.err.println("parents of cycle:" + parents);
+//				System.err.println("parents of cycle:" + parents);
 
 				for (Iterator iter = parents.iterator(); iter.hasNext();) {
 					ModuleId parent = (ModuleId) iter.next();
 					inherit(attr, root, parent);
 				}
-			} else {
-				System.err
-						.println("\tno because kids do not match precondition");
+//			} else {
+//				System.err
+//						.println("\tno because kids do not match precondition");
 			}
 
 		} else { /* not cyclic */
@@ -341,7 +341,6 @@ public class ModuleDatabase {
 	private Set getModulesInCycle(ModuleId moduleId) {
 		Set cycle = new HashSet();
 		findCycles(moduleId, cycle, new HashSet());
-		indentedPrint("Cycle: " + cycle);
 		return cycle;
 	}
 
