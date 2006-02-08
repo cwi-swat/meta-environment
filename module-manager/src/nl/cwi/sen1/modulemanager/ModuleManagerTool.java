@@ -1,6 +1,6 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 6, 2006 5:32:57 PM
+// generation time: Feb 8, 2006 11:42:04 AM
 
 package nl.cwi.sen1.modulemanager;
 
@@ -62,7 +62,7 @@ abstract public class ModuleManagerTool
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
@@ -93,7 +93,7 @@ abstract public class ModuleManagerTool
     PdeleteAttribute0 = factory.parse("rec-do(delete-attribute(<term>,<term>,<term>))");
     PdeleteDependency0 = factory.parse("rec-do(delete-dependency(<term>,<term>))");
     PaddAttribute0 = factory.parse("rec-do(add-attribute(<term>,<term>,<term>,<term>))");
-    PregisterInheritedAttribute0 = factory.parse("rec-do(register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>))");
+    PregisterInheritedAttribute0 = factory.parse("rec-do(register-inherited-attribute(<term>,<term>,<term>,<term>,<term>))");
     PgetAttribute0 = factory.parse("rec-eval(get-attribute(<term>,<term>,<term>))");
     PgetAllAttributes0 = factory.parse("rec-eval(get-all-attributes(<term>))");
     PgetDependencies0 = factory.parse("rec-eval(get-dependencies)");
@@ -151,7 +151,7 @@ abstract public class ModuleManagerTool
     }
     result = term.match(PregisterInheritedAttribute0);
     if (result != null) {
-      registerInheritedAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3), (ATerm)result.get(4), (ATerm)result.get(5));
+      registerInheritedAttribute((ATerm)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3), (ATerm)result.get(4));
       return null;
     }
     result = term.match(PgetAttribute0);
