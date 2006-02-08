@@ -2,7 +2,10 @@
 
 EXTRA_DIST = $(wildcard *.src)
 
-bin_SCRIPTS = asfsdf-meta eqs-dump asfsdf-meta-config
+bin_SCRIPTS = \
+	      asfsdf-meta \
+	      eqs-dump \
+	      asfsdf-meta-config
 
 TBSCRIPTS = \
 	    -I$(prefix)/share/asfsdf-meta \
@@ -10,13 +13,11 @@ TBSCRIPTS = \
 	    `$(SDF_META)/bin/sdf-meta-config --toolbus-includes`
 
 CLEANFILES = \
-	asfsdf-meta \
-	asfsdf-meta-config \
-	eqs-dump
+	     asfsdf-meta \
+	     asfsdf-meta-config \
+	     eqs-dump
 
 % : %.sh.src Makefile
-	sed 's@__ASF__@${ASF}@g;\
-	     s@__META__@${META}@g;\
-	     s@__TOOLBUS__@${TOOLBUS}@g;\
+	sed 's@__TOOLBUS__@${TOOLBUS}@g;\
 	     s@__PREFIX__@${prefix}@g;\
 	     s@__TBSCRIPTS__@${TBSCRIPTS}@g;' < $< > $@ && chmod +x $@
