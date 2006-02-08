@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb  8 16:17:42 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/start-pt-dump.tb.src,src/pt-dump.sh.src:
+   - Add pt-dump scenario
+
 Fri Feb  3 13:11:41 CET 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-meta.tb,start-meta-studio.tb.src:
    - Only start sdf-initialize when stand alone SDF environment is used

@@ -41,17 +41,11 @@ in
   . snd-msg(get-parsetable(ModuleId, Type))
   .
   (
-    rec-msg(parsetable(Type, Table?))
+    rec-msg(parsetable(ModuleId, Type, Table?))
     . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
     .
     if equal(Filename, "") then
       TODO("DumpParseTable got empty filename")
-      /*
-      snd-msg(parsetable-extension-hook(Type))
-      . rec-msg(parsetable-extension-hook-result(Extension?))
-      . ReplaceExtension(Path, Extension, NewPath?)
-      . SplitFilename(NewPath, NewFilename?, Directory?, Extension?)
-      */
     else
       NewFilename := Filename
     fi
@@ -212,7 +206,7 @@ in
   .
   if not-equal(Modules, []) then
     ModuleId := first(Modules)
-    . DeleteSessions(ModuleId)
+    /*. DeleteSessions(ModuleId)*/
     . MM-DeleteModule(ModuleId)
     . Modules := next(Modules)
   fi
@@ -565,14 +559,14 @@ in
   (
     (
       rec-msg(parse-tree(Pid, ParseResult?))
-      . snd-msg(ui-remove-feedback-summary("sglr", Path))
+      /*. snd-msg(ui-remove-feedback-summary("sglr", Path))*/
     +
       rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
       . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
       . snd-msg(es-make-summary("sglr", Path, [ParseError]))
       . rec-msg(es-summary(Summary?))
-      . snd-msg(ui-remove-feedback-summary("sglr", Path))
-      . snd-msg(ui-show-feedback-summary(Summary))
+      /*. snd-msg(ui-remove-feedback-summary("sglr", Path))*/
+      /*. snd-msg(ui-show-feedback-summary(Summary))*/
     )
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId, ParseResult))
   +
@@ -580,7 +574,7 @@ in
     . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
-    . snd-msg(ui-show-feedback-summary(Summary))
+    /*. snd-msg(ui-show-feedback-summary(Summary))*/
     . snd-msg(open-syntax-parse-handler-done(Pid))
   )
 endlet

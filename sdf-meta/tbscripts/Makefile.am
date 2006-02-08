@@ -12,6 +12,7 @@ TBSCRIPTS = \
 	    sdf-listeners.tb \
 	    sdf-meta.tb \
 	    sdf-namespace.h \
+	    sdf-progress-listener.tb \
 	    sdf-utils.tb \
 	    term-actions.tb \
 	    term-editor-actions.tb \
@@ -24,16 +25,25 @@ GENERATED_TBSCRIPTS = sdf2-language.tb start-meta-studio.tb
 EXTRA_DIST = \
 	     $(TBSCRIPTS) \
 	     $(GENERATED_TBSCRIPTS:.tb=.tb.src) \
-	     standard.sdf.actions
+	     standard.sdf.actions.src
 
-CLEANFILES = $(GENERATED_TBSCRIPTS)
+CLEANFILES = \
+	     $(GENERATED_TBSCRIPTS) \
+	     standard.sdf.buttons
 
 pkgdata_DATA = \
 	       $(TBSCRIPTS) \
 	       $(GENERATED_TBSCRIPTS) \
 	       standard.sdf.actions
 
+LIBRARY_LOCATION = \
+		   ${ASFSDF_LIBRARY}/share/asf-library/library
+
 %.tb: %.tb.src Makefile
 	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
              s@__SDF_META__@$(prefix)/share/sdf-meta@g;' \
 	    < $< > $@ 
+
+standard.sdf.actions:  standard.sdf.actions.src Makefile
+	sed 's@__ASFSDF_LIBRARY__@${LIBRARY_LOCATION}@g;' < $< > $@
+

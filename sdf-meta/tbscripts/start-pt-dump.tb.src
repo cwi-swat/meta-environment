@@ -1,0 +1,39 @@
+#define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)
+
+/* meta-kernel */
+#include <module-utils.tb>
+#include <error-utils.tb>
+#include <error-output.tb>
+
+/* sdf-meta */
+#include <sdf-module-actions.tb>
+#include <sdf-listeners.tb>
+#include <sdf-utils.tb>
+#include <parsetable-utils.tb>
+#include <sdf2-language.tb>
+
+/* asf-sdf-meta */
+#include <asf-initialize.tb>
+
+process StartPtDumper is
+let
+  MenuEventList: list,
+  ModuleId: term,
+  Event: attribute-changed-event,
+  Value: term
+in
+  OpenModule(MODULENAME, ModuleId?)
+  . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,complete)
+  . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,error)
+  . rec-note(mm-attribute-changed(Event?))
+  . ACE-GetNewValue(Event, Value?)
+  . 
+  if equal(Value, error) then
+    printf("Error occurred loading %t\n", MODULENAME)
+  else
+    DumpParseTable(ModuleId, OUTPUTFILE, sdf)
+  fi
+  . shutdown("")
+endlet
+
+toolbus(StartPtDumper)

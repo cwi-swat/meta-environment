@@ -1,0 +1,24 @@
+#ifndef __SDF_PROGRESS_LISTENER__
+#define __SDF_PROGRESS_LISTENER__
+
+process SDFStatusToProgress is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  Name: str,
+  Value: term
+in
+  MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
+    . ACE-GetNewValue(Event, Value?)
+    . snd-msg(pro-set-status(Name, SDF_NAMESPACE, Value))
+  ) * delta 
+endlet
+
+toolbus(SDFStatusToProgress)
+
+#endif /* __SDF_PROGRESS_LISTENER__ */

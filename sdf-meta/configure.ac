@@ -20,6 +20,15 @@ AC_PACKAGE_REQUIRE(meta, meta-config,
   [  --with-meta=DIR         Meta-Environment is in DIR])
 AC_SUBST(META)
 
+dnl Require ASF!!+SDF library
+AC_PACKAGE_REQUIRE(asfsdf-library, asf-library-config,
+   [  --with-asfsdf-library=DIR           Asf+Sdf library is in DIR])
+AC_SUBST(ASFSDF_LIBRARY)
+
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR       ToolBus is in DIR])
+AC_SUBST(TOOLBUS)
+
 dnl add outputfiles as argument below
 AC_CONFIG_FILES([
   Makefile
