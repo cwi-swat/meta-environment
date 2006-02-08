@@ -23,7 +23,7 @@ AC_SUBST(META)
 dnl Require ASF!!+SDF library
 AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
    [  --with-asf-library=DIR           Asf+Sdf library is in DIR])
-AC_SUBST(ASFSDF_LIBRARY)
+AC_SUBST(ASF_LIBRARY)
 
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR       ToolBus is in DIR])

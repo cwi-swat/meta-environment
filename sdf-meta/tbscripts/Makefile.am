@@ -40,7 +40,7 @@ pkgdata_DATA = \
 	       standard.sdf.actions
 
 LIBRARY_LOCATION = \
-		   ${ASFSDF_LIBRARY}/share/asf-library/library
+		   ${ASF_LIBRARY}/share/asf-library/library
 
 %.tb: %.tb.src Makefile
 	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
@@ -48,5 +48,5 @@ LIBRARY_LOCATION = \
 	    < $< > $@ 
 
 standard.sdf.actions:  standard.sdf.actions.src Makefile
-	sed 's@__ASFSDF_LIBRARY__@${LIBRARY_LOCATION}@g;' < $< > $@
+	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g;' < $< > $@
 
