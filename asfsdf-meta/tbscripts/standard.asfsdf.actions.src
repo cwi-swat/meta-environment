@@ -1,6 +1,5 @@
 configuration([
   import("__SDF_META__/share/sdf-meta/standard.sdf.actions"),
-  library-path("ASF+SDF Library","__ASF_LIBRARY__"),
   action([description(term-editor, menu(["Actions","Reduce"]))],
          "ReduceAction"),
   action([description(term-editor, menu(["Actions", "Edit Equations"]))],

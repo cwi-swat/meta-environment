@@ -2,7 +2,7 @@
 
 EXTRA_DIST = $(wildcard *.src)
 
-bin_SCRIPTS = asfsdf-meta pt-dump eqs-dump asfsdf-meta-config
+bin_SCRIPTS = asfsdf-meta eqs-dump asfsdf-meta-config
 
 TBSCRIPTS = \
 	    -I$(prefix)/share/asfsdf-meta \
@@ -12,7 +12,6 @@ TBSCRIPTS = \
 CLEANFILES = \
 	asfsdf-meta \
 	asfsdf-meta-config \
-	pt-dump \
 	eqs-dump
 
 % : %.sh.src Makefile

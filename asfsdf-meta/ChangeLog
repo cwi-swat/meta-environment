@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Feb  8 16:11:21 CET 2006 <kooiker@cwi.nl>
+ * src/pt-dump.sh.src,tbscripts/start-pt-dump.tb.src:
+   - Moved to sdf-meta
+
 Mon Feb  6 11:51:34 CET 2006 <jurgenv@cwi.nl>
  * {package,configure.in}: Added dependency on ToolBus
 

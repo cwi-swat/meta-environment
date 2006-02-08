@@ -531,6 +531,7 @@ in
   ) * delta */
 endlet
 
+#ifdef DEAD 
 process DeleteModule(Modulename: str) is
 let
   Changed: list,
@@ -607,7 +608,6 @@ in
   )
 endlet
 
-#ifdef DEAD 
 process AddImport(Modulename: str, Import: str) is
 let
   Depending: list,

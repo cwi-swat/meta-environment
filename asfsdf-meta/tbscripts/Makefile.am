@@ -30,9 +30,6 @@ pkgdata_DATA = \
 	asf-namespace.h \
 	standard.asfsdf.actions
 
-LIBRARY_LOCATION = \
-	${ASF_LIBRARY}/share/asf-library/library
-
 %.tb : %.tb.src Makefile
 	sed 's@__ASF__@${ASF}@g; \
 	     s@__ASFSDF_META__@${prefix}/share/asfsdf-meta/@g; \
@@ -43,6 +40,4 @@ LIBRARY_LOCATION = \
 	     > $@
 
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
-	sed 's@__ASF_LIBRARY__@${LIBRARY_LOCATION}@g;\
-	     s@__SDF_META__@${SDF_META}@g; \
-	     s@__ASF__@${ASF}@g;' < $< > $@
+	sed 's@__SDF_META__@${SDF_META}@g;' < $< > $@
