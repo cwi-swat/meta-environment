@@ -101,8 +101,8 @@ public class ModuleDatabase {
 			ATerm value) {
 		Module module = (Module) modules.get(moduleId);
 
-		indentedPrint("setAttribute: " + key + " to " + value + " on "
-				+ moduleId);
+//		indentedPrint("setAttribute: " + key + " to " + value + " on "
+//				+ moduleId);
 		if (module == null) {
 			System.err.println("MM - addAttribute: module [" + moduleId
 					+ "] doesn't exist");
