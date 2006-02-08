@@ -6,14 +6,12 @@
 #include <error-output.tb>
 
 /* sdf-meta */
+#include <sdf-initialize.tb>
 #include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>
 #include <parsetable-utils.tb>
 #include <sdf2-language.tb>
-
-/* asf-sdf-meta */
-#include <asf-initialize.tb>
 
 process StartPtDumper is
 let

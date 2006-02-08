@@ -20,7 +20,10 @@ TBSCRIPTS = \
 	    term-parsetable.tb \
 	    term-utils.tb
   
-GENERATED_TBSCRIPTS = sdf2-language.tb start-meta-studio.tb
+GENERATED_TBSCRIPTS = \
+		      sdf2-language.tb \
+		      start-meta-studio.tb \
+		      start-pt-dump.tb
 
 EXTRA_DIST = \
 	     $(TBSCRIPTS) \
