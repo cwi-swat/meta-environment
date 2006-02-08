@@ -20,6 +20,10 @@ AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
    [  --with-asf=DIR           Asf+Sdf library is in DIR])
 AC_SUBST(ASF_LIBRARY)
 
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR       ToolBus is in DIR])
+AC_SUBST(ASF_LIBRARY)
+
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
   tbscripts/Makefile

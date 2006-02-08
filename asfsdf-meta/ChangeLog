@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Mon Feb  6 11:51:34 CET 2006 <jurgenv@cwi.nl>
+ * {package,configure.in}: Added dependency on ToolBus
+
 Sat Feb  4 13:31:51 CET 2006 <kooiker@cwi.nl>
  * tbscripts/{asf-utils,asf-actions}.tb:
    - Move ActivateEditorWithTree to asf-actions since it is no part of the
