@@ -1,5 +1,8 @@
 $Id$
 
+Wed Feb  8 11:53:16 CET 2006 <economop@cwi.nl>
+ * Changed |OPT_initialise()| to |OPT_initialized()|.
+ 
 Tue Feb  7 15:14:48 CET 2006 <economop@cwi.nl>
  * Added check to see if the options have already been initialized in
    |options.c|.

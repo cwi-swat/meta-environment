@@ -4,7 +4,7 @@
 
 #include <aterm2.h>
 
-void   OPT_initialise();
+void   OPT_initialize();
 void   OPT_cleanup();
 void   OPT_setFlag(const char *name, ATbool value);
 ATbool OPT_getFlag(const char *name);
