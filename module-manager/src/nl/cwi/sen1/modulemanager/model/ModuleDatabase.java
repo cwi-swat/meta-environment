@@ -190,9 +190,8 @@ public class ModuleDatabase {
 				indentedPrint("2cycle: " + cycle);
 				indentedPrint("2cycle-children: " + children);
 			}
-			else if (cycle.contains(root)) {
-				
-				
+			else if (cycle.contains(root))  {
+				cycle.remove(root);
 			}
 
 			// check all elements of the cycle
