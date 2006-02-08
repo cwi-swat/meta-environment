@@ -10,10 +10,20 @@
 #define BG_GRAYED_OUT rgb (211,211,211)
 
 process InitializeInheritedStatus is
+  /* the first one must not have any <term> holes because of a ToolBus bug */
+  
+  /* once all kids are complete, we are complete */
   MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, complete, all)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, error, child-error, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", <term>, child-error, child-error, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, available, all)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, complete, all)
+
+  /* if one of our kids is an error, we become a child-error */
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, error, child-error, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, error, child-error, one)
+
+  /* if one of our kids is a child error, we are also a child-error  */
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, child-error, child-error, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, child-error, child-error, one)
+
 
 toolbus(InitializeInheritedStatus)
 
