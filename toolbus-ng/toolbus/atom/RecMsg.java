@@ -25,7 +25,8 @@ public class RecMsg extends MsgAtom {
   }
   
   public boolean canCommunicate(MsgAtom a) {
-		return (a instanceof SndMsg
+		return (getProcess() != a.getProcess() &&
+				a instanceof SndMsg
 				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
 	}
  

@@ -4,6 +4,8 @@
 
 package toolbus;
 
+import toolbus.atom.Atom;
+
 
 
 public class Main {
@@ -22,6 +24,7 @@ public class Main {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+		Atom.statistics();
 		
 		//System.err.println(T.getTBTermFactory().statistics());
 	}

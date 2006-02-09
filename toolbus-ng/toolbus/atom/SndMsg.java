@@ -23,7 +23,8 @@ public class SndMsg extends MsgAtom {
     return a;
   }
   public boolean canCommunicate(MsgAtom a) {
-		return (a instanceof RecMsg
+		return (getProcess() != a.getProcess() &&
+				a instanceof RecMsg
 				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
 	}
 }
