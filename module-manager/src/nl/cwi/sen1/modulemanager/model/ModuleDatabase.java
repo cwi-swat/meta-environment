@@ -424,8 +424,6 @@ public class ModuleDatabase {
 
 		dependencies = (Set) parents.get(moduleToId);
 		dependencies.add(moduleFromId);
-
-		triggerAllInheritedAttributes(moduleFromId);
 	}
 
 	public Set getChildren(ModuleId moduleId) {
