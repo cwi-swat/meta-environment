@@ -24,12 +24,6 @@ process InitializeInheritedStatus is
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, child-error, child-error, one)
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, child-error, child-error, one)
 
-  /* if one of our kids is repaired, see if we can be repaired by resetting
-   * the status
-   */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, opened, complete, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, complete, one)
-
 toolbus(InitializeInheritedStatus)
 
 
