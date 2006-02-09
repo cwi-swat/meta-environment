@@ -88,6 +88,11 @@ public class ModuleDatabase {
 		}
 	}
 
+	public void setAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
+			ATerm value) {
+		setAttribute(moduleId, namespace, key, value, true);
+	}
+
 	/**
 	 * Set an attribute of a module to a new value if: - the new value is
 	 * different from the old value
@@ -98,11 +103,11 @@ public class ModuleDatabase {
 	 * @param value
 	 */
 	public void setAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
-			ATerm value) {
+			ATerm value, boolean propagate) {
 		Module module = (Module) modules.get(moduleId);
 
-//		indentedPrint("setAttribute: " + key + " to " + value + " on "
-//				+ moduleId);
+		// indentedPrint("setAttribute: " + key + " to " + value + " on "
+		// + moduleId);
 		if (module == null) {
 			System.err.println("MM - addAttribute: module [" + moduleId
 					+ "] doesn't exist");
@@ -113,16 +118,17 @@ public class ModuleDatabase {
 
 		if (oldValue == null || !oldValue.isEqual(value)) {
 			indent++;
-			
+
 			module.setAttribute(namespace, key, value);
 
 			fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
 
-			// maybe the parents of this module now have to be updated
-			Set attrs = inheritedAttributes.getByChildValue(namespace, key,
-					value);
-			if (!attrs.isEmpty()) {
-				propagateToParents(moduleId, attrs);
+			if (propagate) {
+				Set attrs = inheritedAttributes.getByChildValue(namespace, key,
+						value);
+				if (!attrs.isEmpty()) {
+					propagateToParents(moduleId, attrs);
+				}
 			}
 
 			// maybe this module now matches the preconditions for an inherited
@@ -164,33 +170,22 @@ public class ModuleDatabase {
 	 */
 	private void inherit(InheritedAttribute attr, ModuleId root,
 			ModuleId moduleId) {
-		Module module = (Module) modules.get(moduleId);
-		ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
-
-//		System.err.println("inherit: " + attr + " on " + moduleId + "?");
-		if (noMatchForOldValue(attr, comparedValue)) {
-//			System.err.println("\tno because old value does not match");
-			return;
-		}
-
 		if (isCyclic(moduleId)) {
+			if (root.isEqual(moduleId)) {
+				singleModuleInherit(attr, moduleId, false);
+			}
+
 			Set cycle = getModulesInCycle(moduleId);
-			Set parents = getCycleParents(cycle);
+
 			Set children = getCycleChildren(cycle);
 
-//			indentedPrint("cycle: " + cycle);
-//			indentedPrint("cycle-parents: " + parents);
-//			indentedPrint("cycle-children: " + children);
+			boolean cycleContainsRoot = cycle.contains(root);
 
-//			// TODO: maybe cycle contains root is enough
-			if (attr.inheritFromOne() && cycle.contains(root)) {
+			if (attr.inheritFromOne() && cycleContainsRoot) {
 				children.add(root);
 				children.removeAll(getChildren(root));
 				cycle.remove(root);
-//				indentedPrint("2cycle: " + cycle);
-//				indentedPrint("2cycle-children: " + children);
-			}
-			else if (cycle.contains(root))  {
+			} else if (attr.inheritFromAll() && cycleContainsRoot) {
 				cycle.remove(root);
 			}
 
@@ -202,71 +197,63 @@ public class ModuleDatabase {
 				ATerm elemValue = getValueOfInheritedAttribute(attr, elemModule);
 
 				if (noMatchForOldValue(attr, elemValue)) {
-//					System.err.println("\tno because " + elem
-//							+ " is not set to old value");
+					// System.err.println("\tno because " + elem
+					// + " is not set to old value");
 					return;
 				}
 			}
 
-			// check all children of the cycle
-			boolean allSet = true;
-			boolean oneSet = false;
-
-			for (Iterator iter = children.iterator(); iter.hasNext();) {
-				ModuleId child = (ModuleId) iter.next();
-				Module innerModule = (Module) modules.get(child);
-
-				ATerm value = getValueOfInheritedAttribute(attr, innerModule);
-
-				if (!value.isEqual(attr.getChildValue())) {
-					allSet = false;
-				} else {
-					oneSet = true;
-				}
-			}
-
-			if ((attr.inheritFromAll() && allSet)
-					|| (attr.inheritFromOne() && oneSet)) {
-//				System.err.println("\tyes!");
-
+			if (checkPreconditionOnChildren(attr, children)) {
 				setAttributeOnModules(cycle, attr.getNamespace(),
 						attr.getKey(), attr.getNewValue());
 
-//				System.err.println("parents of cycle:" + parents);
-
+				Set parents = getCycleParents(cycle);
 				for (Iterator iter = parents.iterator(); iter.hasNext();) {
 					ModuleId parent = (ModuleId) iter.next();
 					inherit(attr, root, parent);
 				}
-//			} else {
-//				System.err
-//						.println("\tno because kids do not match precondition");
 			}
-
 		} else { /* not cyclic */
-			Set children = getChildren(moduleId);
-			boolean allSet = true;
-			boolean oneSet = false;
+			singleModuleInherit(attr, moduleId, true);
+		}
+	}
 
-			for (Iterator iter = children.iterator(); iter.hasNext();) {
-				ModuleId child = (ModuleId) iter.next();
-				Module innerModule = (Module) modules.get(child);
+	private void singleModuleInherit(InheritedAttribute attr,
+			ModuleId moduleId, boolean propagate) {
+		Module module = (Module) modules.get(moduleId);
+		ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
 
-				ATerm value = getValueOfInheritedAttribute(attr, innerModule);
+		if (noMatchForOldValue(attr, comparedValue)) {
+			return;
+		}
 
-				if (!value.isEqual(attr.getChildValue())) {
-					allSet = false;
-				} else {
-					oneSet = true;
-				}
-			}
+		if (checkPreconditionOnChildren(attr, getChildren(moduleId))) {
+			setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
+					.getNewValue(), propagate);
+		}
+	}
 
-			if ((attr.inheritFromAll() && allSet)
-					|| (attr.inheritFromOne() && oneSet)) {
-				setAttribute(moduleId, attr.getNamespace(), attr.getKey(), attr
-						.getNewValue());
+	private boolean checkPreconditionOnChildren(InheritedAttribute attr,
+			Set children) {
+		boolean allSet = true;
+		boolean oneSet = false;
+
+		for (Iterator iter = children.iterator(); iter.hasNext();) {
+			ModuleId child = (ModuleId) iter.next();
+
+			Module innerModule = (Module) modules.get(child);
+
+			ATerm value = getValueOfInheritedAttribute(attr, innerModule);
+
+			if (!value.isEqual(attr.getChildValue())) {
+				allSet = false;
+			} else {
+				oneSet = true;
 			}
 		}
+
+		return (attr.inheritFromAll() && allSet)
+				|| (attr.inheritFromOne() && oneSet);
 	}
 
 	private void setAttributeOnModules(Set cycle, ATerm namespace, ATerm key,
