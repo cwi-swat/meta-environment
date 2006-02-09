@@ -107,17 +107,14 @@ toolbus(TransitiveClearCacheHandler(ASF_TREE_CACHE, SDF_NAMESPACE, "status", <te
 
 process GetASFParseTree(ModuleId: term, Result: term?) is
 let
-  Id: int,
   ParseTable: term,
   Path: str,
   Pid: int,
   Text: str,
   Type: term,
-  Tree: term,
-  Annotated: term
+  Tree: term
 in
-  Id := process-id
-  . GetCachedValue(ASF_TREE_CACHE, ModuleId, Tree?)
+  GetCachedValue(ASF_TREE_CACHE, ModuleId, Tree?)
   .
   if equal(Tree, UNDEFINED) then
     Type := eqs
@@ -131,8 +128,7 @@ in
       .
       (
         rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-        . AnnotateTree(Tree, Path, Annotated?) 
-        . Result := Annotated
+        . AnnotateTree(Tree, Path, Result?) 
         . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
       +
         rec-msg(parse-handler-done(Pid))
