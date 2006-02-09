@@ -43,6 +43,7 @@ in
     . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", available)
   +
     rec-msg(io-file-not-exists)
+    . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unavailable)
   )
 endlet
 
@@ -125,16 +126,16 @@ in
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
-      . create(ASFParseTreeHandler(ModuleId, Path), Pid?)
+      . create(ParseTreeHandler(ModuleId, Path), Pid?)
       . ParseText(Pid, Text, ParseTable, ASF_TOPSORT)
       .
       (
-        rec-msg(asf-parse-handler-done(Pid, ModuleId, Tree?))
+        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
         . AnnotateTree(Tree, Path, Annotated?) 
         . Result := Annotated
         . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
       +
-        rec-msg(asf-parse-handler-error(Pid))
+        rec-msg(parse-handler-done(Pid))
         . Result := UNDEFINED
       )
     else 
@@ -143,42 +144,6 @@ in
   else
     Result := Tree
   fi 
-endlet
-
-process ASFParseTreeHandler(ModuleId: term, Path: str) is
-let
-  ErrorMessage: term,
-  Nonterminal: term,
-  ParseError: term,
-  ParseResult: term,
-  Pid: int,
-  Summary: term,
-  Table: term
-in
-  Pid := process-id
-  .
-  (
-    (
-      rec-msg(parse-tree(Pid, ParseResult?))
-      . snd-msg(ui-remove-feedback-summary("sglr", Path))
-    +
-      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
-      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
-      . rec-msg(es-summary(Summary?))
-      . snd-msg(ui-remove-feedback-summary("sglr", Path))
-      . snd-msg(ui-show-feedback-summary(Summary))
-    )
-    . snd-msg(asf-parse-handler-done(Pid, ModuleId, ParseResult))
-  +
-    rec-msg(parse-error(Pid, ErrorMessage?))
-    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
-    . rec-msg(es-summary(Summary?))
-    . snd-msg(ui-remove-feedback-summary("sglr", Path))
-    . snd-msg(ui-show-feedback-summary(Summary))
-    . snd-msg(asf-parse-handler-error(Pid))
-  )
 endlet
 
 process RunCompiler(Modulename: str, Table: term, Equations: term, OutputFile: str ) is

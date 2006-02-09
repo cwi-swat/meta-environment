@@ -94,23 +94,4 @@ endlet
 
 toolbus(ASFModuleParser)
 
-process ASFStatusToProgress is
-let
-  Event: attribute-changed-event,
-  ModuleId: term,
-  Name: str,
-  Value: term
-in
-  MM-Subscribe-Attribute-Changed(<term>,ASF_NAMESPACE,"status",<term>,<term>)
-  .
-  (
-    rec-note(mm-attribute-changed(Event?))
-    . ACE-GetModuleId(Event, ModuleId?)
-    . MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Name?)
-    . ACE-GetNewValue(Event, Value?)
-    . snd-msg(pro-set-status(Name, ASF_NAMESPACE, Value))
-  ) * delta 
-endlet
-
-toolbus(ASFStatusToProgress)
 #endif /* __ASF_LISTENERS__ */

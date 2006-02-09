@@ -11,6 +11,7 @@ TBSCRIPTS = \
 	asf-editor-utils.tb \
 	asf-language.tb \
 	asf-listeners.tb \
+	asf-progress-listener.tb \
 	asf-utils.tb \
 	asfsdf-meta.tb
 

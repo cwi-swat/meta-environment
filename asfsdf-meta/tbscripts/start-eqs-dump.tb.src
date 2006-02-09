@@ -16,6 +16,7 @@
 #include <asf-language.tb>
 #include <asf-utils.tb>
 #include <asf-initialize.tb>
+#include <asf-listeners.tb>
 
 process StartEqsDumper is
 let
@@ -25,14 +26,16 @@ let
   Value: term
 in
   OpenModule(MODULENAME, ModuleId?)
-  . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,complete)
-  . MM-Subscribe-Attribute-Changed(ModuleId,SDF_NAMESPACE,"status",<term>,error)
+  . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,parsed)
+  . MM-Subscribe-Attribute-Changed(ModuleId,ASF_NAMESPACE,"status",<term>,unavailable)
+  . MM-Subscribe-Attribute-Changed(<term>,<term>,"status",<term>,error)
   . rec-note(mm-attribute-changed(Event?))
   . ACE-GetNewValue(Event, Value?)
   . 
-  if equal(Value, error) then
+  if or(equal(Value, error),equal(Value, unknown)) then
     printf("Error occurred loading %t\n", MODULENAME)
   else
+    printf("Dumping...\n").
     DumpEquationsGivenFile(ModuleId, OUTPUTFILE)
   fi
   . shutdown("")

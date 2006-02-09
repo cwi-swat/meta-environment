@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Thu Feb  9 11:48:41 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/*.tb:
+   - Extract ASF Progress Listener
+   - Use generic ParseTreeHandler
+   - Fixed eqs-dump
+
 Wed Feb  8 16:11:21 CET 2006 <kooiker@cwi.nl>
  * src/pt-dump.sh.src,tbscripts/start-pt-dump.tb.src:
    - Moved to sdf-meta
