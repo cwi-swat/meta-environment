@@ -539,7 +539,7 @@ public class ToolBus {
 
 	public ProcessInstance addProcess(String name, ATermList actuals)
 			throws ToolBusException {
-		ProcessInstance P = new ProcessInstance(this, name, actuals);
+		ProcessInstance P = new ProcessInstance(this, name, actuals, processes.size());
 		if(processesIterator != null){
 			processesIterator.add(P);
 		} else {

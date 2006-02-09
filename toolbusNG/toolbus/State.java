@@ -44,21 +44,13 @@ public class State {
 
   public State union(State b) {
     State c = new State();
-
-    //for (Iterator it = elements.iterator(); it.hasNext();)
-    //   c.add((StateElement) it.next());
     
     for(StateElement se : elements){
     	c.add(se);
     }
-
-   // for (Iterator it = b.getElementsAsVector().iterator(); it.hasNext();)
-   //   c.add((StateElement) it.next());
-    
     for(StateElement se : b.getElementsAsVector()){
     	c.add(se);
     }
-
     return c;
   }
 
@@ -85,6 +77,8 @@ public class State {
         if (ca.canCommunicate(cb)) {
           ca.addMsgPartner(cb);
           cb.addMsgPartner(ca);
+          //System.err.println(" -- " + ca);
+          //System.err.println("    " + cb);
         }
       }
     }

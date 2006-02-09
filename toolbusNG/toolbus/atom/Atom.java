@@ -4,12 +4,22 @@
 
 package toolbus.atom;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
 
-import toolbus.*;
-import toolbus.process.*;
-
-import aterm.*;
+import toolbus.Environment;
+import toolbus.Functions;
+import toolbus.State;
+import toolbus.StateElement;
+import toolbus.TBTermFactory;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
+import aterm.AFun;
+import aterm.ATerm;
 
 class Test {
 	ATerm testExpr;
@@ -34,12 +44,43 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   private boolean timeExpr = false;
   private int startTime;
   protected String externalNameAsReceivedByTool;
+  
+  static private HashMap<String,Integer> instances = new HashMap<String,Integer>(40);
+  static private HashMap<String,Integer> enabled = new HashMap<String,Integer>(40);
+  static private HashMap<String,Integer> notEnabled = new HashMap<String,Integer>(40);
+  static private HashMap<String,Integer> npartners = new HashMap<String,Integer>(40);
 
   public Atom(TBTermFactory tbfactory) {
     super(tbfactory);
     assert tbfactory != null;
     addToFirst(this);
     externalNameAsReceivedByTool = shortName();
+    incr(instances);
+  }
+  
+  protected void incr(HashMap<String,Integer> map){
+	  String name = this.getClass().getName();
+	  if(map.containsKey(name)){
+		  int n = map.get(name);
+		  map.put(name,n+1);
+	  } else {
+		  map.put(name,1);
+	  }
+  }
+  
+  public static void statistics(){
+	  int ninstances = 0;
+	  int nenabled = 0;
+	  int nNotEnabled = 0;
+	  for(String name : instances.keySet()){
+		  int ins = instances.get(name); ninstances += ins;
+		  int en = enabled.get(name) == null ? 0 : enabled.get(name); nenabled += en;
+		  int ne = notEnabled.get(name) == null ? 0 : notEnabled.get(name); nNotEnabled += ne;
+		  System.err.println(name + "\t" + ins + "\t" + en + "(+)" + ne + "(-)");
+	  }
+	  System.err.println("Instances:   " + ninstances);
+	  System.err.println("enabled:     " + nenabled);
+	  System.err.println("not enabled: " + nNotEnabled);
   }
   
   public void setAtomArgs(Ref r) {
@@ -203,10 +244,12 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	    //System.err.println("startTime = " + startTime + "; currentTime = " + currentTime);
   		if(delay != 0 && currentTime < startTime + delay){
   			//System.err.println("currentTime < startTime + delay");
+  			incr(notEnabled);
   			return false;
   		}
   		if(timeout != 0 && currentTime > startTime + timeout){
   			//System.err.println("currentTime > startTime + timeout");
+  			incr(notEnabled);
   			return false;
   		}
   	}
@@ -217,10 +260,13 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     		//System.err.println("evaluate: " + t);
     		boolean res = tbfactory.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
     		//System.err.println("==> " + res);
-    		if(!res)
+    		if(!res){
+    			incr(notEnabled);
     			return false;
+    		}
     	}
     }
+    incr(enabled);
     return true;
   }
 

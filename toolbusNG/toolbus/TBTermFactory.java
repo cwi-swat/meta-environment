@@ -427,13 +427,12 @@ public class TBTermFactory extends PureFactory {
 			Binding b = env.getBinding(v);
 			if (b == null || (b.val == Undefined)) {
 				return v;
-			}
-			//} else if(b.isFormal() && isResVar(b.val)){ //TODO: OK?
-			//	return replaceFormals(b.val, env);
+			} //else if(b.isFormal() && isResVar(b.val)){ //TODO: OK?
+				//return replaceFormals(b.val, env);
 			//} else {
 			//	return b.val;
 		//	}
-				return v;
+			return v;
 
 	      case ATerm.APPL :
 	    	ATermAppl apt = (ATermAppl) t;
@@ -639,15 +638,20 @@ public class TBTermFactory extends PureFactory {
 	  * */
 	      boolean res =  performMatch(ta, tb);
 	      /* taCache.put(tb, res ? Boolean.TRUE : Boolean.FALSE); */
+		  //if(ta.equals(tmp) || tb.equals(tmp)){
+	     //if(res)
+		//	  System.err.println("mightMatch(" + ta + ", " + tb + ") ==> " + res);
+		 // }
 	      return res;
 	      
 	    } catch (ToolBusException e) {
 	      throw new ToolBusInternalError(e.getMessage());
 	    }
 	  }
+	  ATerm tmp =  make("open-language(sdf)");
 
 	  private boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
-	  	//System.err.println("performMatch: " + ta + " " + tb);
+
 
 	    switch (ta.getType()) {
 
@@ -767,12 +771,12 @@ public class TBTermFactory extends PureFactory {
 			if (tb.getType() != ATerm.APPL)
 				return false;
 			ATermAppl aptb = (ATermAppl) tb;
-			if (apta.getArity() != aptb.getArity()
-					|| apta.getName() != aptb.getName())
+			if ((apta.getArity() != aptb.getArity()) || 
+				(apta.getName() != aptb.getName()))
 				return false;
 			else {
 				ATerm a_args[] = apta.getArgumentArray();
-				ATerm b_args[] = ((ATermAppl) tb).getArgumentArray();
+				ATerm b_args[] = aptb.getArgumentArray();
 				for (int i = 0; i < a_args.length; i++) {
 					if (!performMatch(a_args[i], b_args[i]))
 						return false;

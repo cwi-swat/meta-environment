@@ -42,6 +42,7 @@ public class ProcessInstance {
     toolbus = TB;
     tbfactory = TB.getTBTermFactory();
     this.call = call;
+    this.processId = processId;
     subscriptions = tbfactory.EmptyList;
     notes = tbfactory.EmptyList;;
     call.setEvalArgs(false);
@@ -66,7 +67,9 @@ public class ProcessInstance {
     elements = call.getAtoms();
 
     for (ProcessInstance P : TB.getProcesses()) {
-        P.findPartners(elements);
+    	if(P != this){
+    		P.findPartners(elements);
+    	}
     }
     addAtomSignature();
     if (false) {
@@ -81,8 +84,8 @@ public class ProcessInstance {
     }
   }
 
-  public ProcessInstance(ToolBus TB, String name, ATermList actuals) throws ToolBusException {
-    this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory()), 0);
+  public ProcessInstance(ToolBus TB, String name, ATermList actuals, int processId) throws ToolBusException {
+    this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory()), processId);
   }
   
   public TBTermFactory getTBTermFactory(){
@@ -122,10 +125,9 @@ public class ProcessInstance {
   public void terminate(ATerm msg) {
   	running = false;
   }
-  
 
   public void findPartners(State a) {
-    elements.findPartners(a);
+	elements.findPartners(a);
   }
   
   /*
@@ -145,9 +147,9 @@ public class ProcessInstance {
   }
   
   public boolean getNoteFromQueue(ATerm pat, Environment env) throws ToolBusException{
-  	info("getNoteFromQueue: " + pat);
-	info("getNoteFromQueue: subs  " + subscriptions);
- 	info("getNoteFromQueue: notes " + notes);
+  	//info("getNoteFromQueue: " + pat);
+	//info("getNoteFromQueue: subs  " + subscriptions);
+ 	//info("getNoteFromQueue: notes " + notes);
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
@@ -161,9 +163,9 @@ public class ProcessInstance {
   }
   
   public boolean noNoteInQueue(ATerm pat, Environment env) throws ToolBusException{
-  	info("noNoteInQueue: " + pat);
-	info("noNoteInQueue: subs  " + subscriptions);
- 	info("noNoteInQueue: notes " + notes);
+  	//info("noNoteInQueue: " + pat);
+	//info("noNoteInQueue: subs  " + subscriptions);
+ 	//info("noNoteInQueue: notes " + notes);
   	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
   		ATerm nt = nts.getFirst();
   		info("trying: " + nt);
@@ -177,9 +179,9 @@ public class ProcessInstance {
   }
   
   public boolean putNoteInQueue(ATerm note) throws ToolBusException{
- 	info("putNoteInQueue: " + note);
- 	info("putNoteInQueue: subs  " + subscriptions);
- 	info("putNoteInQueue: notes " + notes);
+ 	//info("putNoteInQueue: " + note);
+ 	//info("putNoteInQueue: subs  " + subscriptions);
+ 	//info("putNoteInQueue: notes " + notes);
   	for(ATermList subs = subscriptions; !subs.isEmpty();subs = subs.getNext()){
   		ATerm sub = subs.getFirst();
  		info("trying: " + sub);
