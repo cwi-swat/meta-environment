@@ -5,7 +5,8 @@
 #include <sdf-namespace.h>
 #include <progress.idef>
 
-#define BG_ERROR_COLOR   rgb(255,165,0)
+#define BG_ERROR_COLOR rgb(224,64,60)
+#define BG_CHILD_ERROR_COLOR rgb(255,128,114)
 #define BG_CORRECT_COLOR rgb(255,255,221)
 #define BG_GRAYED_OUT rgb (211,211,211)
 
@@ -30,8 +31,11 @@ toolbus(InitializeInheritedStatus)
 process SDFModuleLabelSetter is
 let
   Event: attribute-changed-event,
+  Extension: str,
   ModuleId: term,
-  Modulename: str
+  Modulename: str,
+  Name: str,
+  Prefix: str
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"name",<term>,<term>)
   .
@@ -39,6 +43,7 @@ in
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetNewValue(Event, Modulename?)
+    /*. SplitFilename(Modulename, Name?, Prefix?, Extension?)*/
     . MM-SetModuleGraphAttribute(ModuleId, "label", label(Modulename))
   )
   *
@@ -65,10 +70,15 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetNewValue(Event, Value?)
     .
-    if or(equal(Value, error),equal(Value,child-error)) then
+    if equal(Value, error) then
       MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_ERROR_COLOR))
     else
-      MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+      if equal(Value,child-error) then
+        MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CHILD_ERROR_COLOR))
+
+      else
+        MM-SetModuleGraphAttribute(ModuleId, "bgcolor", fill-color(BG_CORRECT_COLOR))
+      fi
     fi
   )
   *

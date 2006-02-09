@@ -3,6 +3,10 @@ $Id$
 Thu Feb  9 11:48:05 CET 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-utils.tb:
    - Use generic ParseTreeHandler
+ * tbscripts/{term-utils,sdf-utils}.tb:
+   - Simplify GetXXXParsetree process
+ * tbscripts/sdf-listeners.tb:
+   - Use brighter color for child-errors
 
 Wed Feb  8 16:17:42 CET 2006 <kooiker@cwi.nl>
  * tbscripts/start-pt-dump.tb.src,src/pt-dump.sh.src:

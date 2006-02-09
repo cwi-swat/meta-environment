@@ -9,7 +9,6 @@
 
 #define SDF_TREE_CACHE "sdf-annotated-tree"
 
-
 process NewModuleContentHandler is
 let
   ModuleId: str,
@@ -500,18 +499,14 @@ toolbus(ClearCacheHandler(SDF_TREE_CACHE, SDF_NAMESPACE, "status", <term>, edite
 
 process GetSDFParseTree(ModuleId: term, Result: term?) is
 let
-  Id: int,
-  Modulename: str,
   ParseTable: term,
   Path: str,
   Pid: int,
   Text: str,
   Type: term,
-  Tree: term,
-  Annotated: term
+  Tree: term
 in
-  Id := process-id
-  . GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
+  GetCachedValue(SDF_TREE_CACHE, ModuleId, Tree?)
   .
   if equal(Tree, UNDEFINED) then
     Type := sdf
@@ -525,8 +520,7 @@ in
       .
       (
         rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-        . AnnotateTree(Tree, Path, Annotated?)
-        . Result := Annotated
+        . AnnotateTree(Tree, Path, Result?)
         . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
       +
         rec-msg(parse-handler-done(Pid))
