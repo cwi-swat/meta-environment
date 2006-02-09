@@ -12,6 +12,12 @@
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
 
+process RemoveSummary(Producer: str, SummaryId: str) is
+  snd-msg(ui-remove-feedback-summary(Producer, SummaryId))
+  
+process DisplaySummary(Summary: term) is
+  snd-msg(ui-show-feedback-summary(Summary))
+
 process HandleEvent(Type: term, Event: term) is
 let
   Actions: list,

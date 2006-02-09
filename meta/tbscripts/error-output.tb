@@ -6,4 +6,11 @@ process Error(Message: str, MessageArgs: list) is
   TODO("Use error support utils to print error")
   . printf("%s: %t\n", Message, MessageArgs)
 
+process DisplaySummary(Summary: term) is
+  TODO("Use error support utils to print error")
+  . printf("%t\n", Summary) 
+
+process RemoveSummary(Produces: str, SummaryId: str) is
+  tau
+
 #endif /* __ERROR_OUTPUT__ */

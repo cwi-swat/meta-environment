@@ -3,6 +3,8 @@
 Thu Feb  9 11:47:15 CET 2006 <kooiker@cwi.nl>
  * tbscripts/parse-utils.tb:
    - Add generic ParsetreeHandler
+ * tbscripts/{gui-utils,error-output}.tb:
+   - Add extra layer to route errors to gui or commandline
 
 Mon Feb  6 18:44:41 CET 2006 <jurgenv@cwi.nl>
  * Module manager adapted with an extra argument: ChildValue

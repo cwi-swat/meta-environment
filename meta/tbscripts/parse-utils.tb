@@ -51,11 +51,14 @@ in
   (
     (
       rec-msg(parse-tree(Pid, ParseResult?))
+      . RemoveSummary("sglr", Path)
     +
       rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
       . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
       . snd-msg(es-make-summary("sglr", Path, [ParseError]))
       . rec-msg(es-summary(Summary?))
+      . RemoveSummary("sglr", Path)
+      . DisplaySummary(Summary)
     )
     . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
   +
@@ -63,6 +66,7 @@ in
     . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
+    . DisplaySummary(Summary)
     . snd-msg(parse-handler-done(Pid))
   )
 endlet

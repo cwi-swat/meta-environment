@@ -494,7 +494,7 @@ endlet
 process CleanupEditTerm(Sid: term, ModuleId : term) is
   subscribe(em-session-deleted(<term>))
   . rec-note(em-session-deleted(Sid))
-  /*. snd-msg(ui-remove-feedback-summary("sglr", ModuleId))*/
+  /*. RemoveSummary("sglr", ModuleId)*/
 
 process GetFocusOrigin(EditorId : term, Origin: term?) is
 let

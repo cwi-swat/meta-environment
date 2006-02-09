@@ -13,7 +13,7 @@ in
     rec-msg(io-file-removed(Path))
   +
     rec-msg(io-file-not-removed(Path, Summary?))
-    . snd-msg(ui-show-feedback-summary(Summary))
+    . DisplaySummary(Summary)
   )
 endlet
 
