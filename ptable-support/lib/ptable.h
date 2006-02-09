@@ -1,16 +1,10 @@
 #ifndef _PTABLE_H
 #define _PTABLE_H
 
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
 #include "ptable_dict.h"
-
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct _PTBL_Production *PTBL_Production;
 typedef struct _PTBL_CharRanges *PTBL_CharRanges;
@@ -27,42 +21,54 @@ typedef struct _PTBL_Action *PTBL_Action;
 typedef struct _PTBL_Choices *PTBL_Choices;
 typedef struct _PTBL_Choice *PTBL_Choice;
 typedef struct _PTBL_SpecialAttr *PTBL_SpecialAttr;
+typedef struct _PTBL_LookAheads *PTBL_LookAheads;
 typedef struct _PTBL_LookAhead *PTBL_LookAhead;
 typedef struct _PTBL_CharClass *PTBL_CharClass;
-typedef struct _PTBL_LookAheads *PTBL_LookAheads;
 typedef struct _PTBL_Priorities *PTBL_Priorities;
 typedef struct _PTBL_Priority *PTBL_Priority;
 
-/*}}}  */
-
 void PTBL_initPtableApi(void);
 
-/*{{{  protect functions */
-
 void PTBL_protectProduction(PTBL_Production *arg);
+void PTBL_unprotectProduction(PTBL_Production *arg);
 void PTBL_protectCharRanges(PTBL_CharRanges *arg);
+void PTBL_unprotectCharRanges(PTBL_CharRanges *arg);
 void PTBL_protectVersion(PTBL_Version *arg);
+void PTBL_unprotectVersion(PTBL_Version *arg);
 void PTBL_protectParseTable(PTBL_ParseTable *arg);
+void PTBL_unprotectParseTable(PTBL_ParseTable *arg);
 void PTBL_protectLabels(PTBL_Labels *arg);
+void PTBL_unprotectLabels(PTBL_Labels *arg);
 void PTBL_protectLabel(PTBL_Label *arg);
+void PTBL_unprotectLabel(PTBL_Label *arg);
 void PTBL_protectStates(PTBL_States *arg);
+void PTBL_unprotectStates(PTBL_States *arg);
 void PTBL_protectState(PTBL_State *arg);
+void PTBL_unprotectState(PTBL_State *arg);
 void PTBL_protectGotos(PTBL_Gotos *arg);
+void PTBL_unprotectGotos(PTBL_Gotos *arg);
 void PTBL_protectGoto(PTBL_Goto *arg);
+void PTBL_unprotectGoto(PTBL_Goto *arg);
 void PTBL_protectActions(PTBL_Actions *arg);
+void PTBL_unprotectActions(PTBL_Actions *arg);
 void PTBL_protectAction(PTBL_Action *arg);
+void PTBL_unprotectAction(PTBL_Action *arg);
 void PTBL_protectChoices(PTBL_Choices *arg);
+void PTBL_unprotectChoices(PTBL_Choices *arg);
 void PTBL_protectChoice(PTBL_Choice *arg);
+void PTBL_unprotectChoice(PTBL_Choice *arg);
 void PTBL_protectSpecialAttr(PTBL_SpecialAttr *arg);
-void PTBL_protectLookAhead(PTBL_LookAhead *arg);
-void PTBL_protectCharClass(PTBL_CharClass *arg);
+void PTBL_unprotectSpecialAttr(PTBL_SpecialAttr *arg);
 void PTBL_protectLookAheads(PTBL_LookAheads *arg);
+void PTBL_unprotectLookAheads(PTBL_LookAheads *arg);
+void PTBL_protectLookAhead(PTBL_LookAhead *arg);
+void PTBL_unprotectLookAhead(PTBL_LookAhead *arg);
+void PTBL_protectCharClass(PTBL_CharClass *arg);
+void PTBL_unprotectCharClass(PTBL_CharClass *arg);
 void PTBL_protectPriorities(PTBL_Priorities *arg);
+void PTBL_unprotectPriorities(PTBL_Priorities *arg);
 void PTBL_protectPriority(PTBL_Priority *arg);
-
-/*}}}  */
-/*{{{  term conversion functions */
-
+void PTBL_unprotectPriority(PTBL_Priority *arg);
 PTBL_Production PTBL_ProductionFromTerm(ATerm t);
 ATerm PTBL_ProductionToTerm(PTBL_Production arg);
 PTBL_CharRanges PTBL_CharRangesFromTerm(ATerm t);
@@ -93,20 +99,16 @@ PTBL_Choice PTBL_ChoiceFromTerm(ATerm t);
 ATerm PTBL_ChoiceToTerm(PTBL_Choice arg);
 PTBL_SpecialAttr PTBL_SpecialAttrFromTerm(ATerm t);
 ATerm PTBL_SpecialAttrToTerm(PTBL_SpecialAttr arg);
+PTBL_LookAheads PTBL_LookAheadsFromTerm(ATerm t);
+ATerm PTBL_LookAheadsToTerm(PTBL_LookAheads arg);
 PTBL_LookAhead PTBL_LookAheadFromTerm(ATerm t);
 ATerm PTBL_LookAheadToTerm(PTBL_LookAhead arg);
 PTBL_CharClass PTBL_CharClassFromTerm(ATerm t);
 ATerm PTBL_CharClassToTerm(PTBL_CharClass arg);
-PTBL_LookAheads PTBL_LookAheadsFromTerm(ATerm t);
-ATerm PTBL_LookAheadsToTerm(PTBL_LookAheads arg);
 PTBL_Priorities PTBL_PrioritiesFromTerm(ATerm t);
 ATerm PTBL_PrioritiesToTerm(PTBL_Priorities arg);
 PTBL_Priority PTBL_PriorityFromTerm(ATerm t);
 ATerm PTBL_PriorityToTerm(PTBL_Priority arg);
-
-/*}}}  */
-/*{{{  list functions */
-
 int PTBL_getLabelsLength (PTBL_Labels arg);
 PTBL_Labels PTBL_reverseLabels(PTBL_Labels arg);
 PTBL_Labels PTBL_appendLabels(PTBL_Labels arg, PTBL_Label elem);
@@ -191,10 +193,6 @@ PTBL_Priorities PTBL_makePriorities3(PTBL_Priority elem1, PTBL_Priority elem2, P
 PTBL_Priorities PTBL_makePriorities4(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4);
 PTBL_Priorities PTBL_makePriorities5(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5);
 PTBL_Priorities PTBL_makePriorities6(PTBL_Priority elem1, PTBL_Priority elem2, PTBL_Priority elem3, PTBL_Priority elem4, PTBL_Priority elem5, PTBL_Priority elem6);
-
-/*}}}  */
-/*{{{  constructors */
-
 PTBL_Production PTBL_makeProductionExternal(ATerm prod);
 PTBL_CharRanges PTBL_makeCharRangesExternal(ATerm ranges);
 PTBL_Version PTBL_makeVersionDefault(void);
@@ -226,22 +224,16 @@ PTBL_SpecialAttr PTBL_makeSpecialAttrNone(void);
 PTBL_SpecialAttr PTBL_makeSpecialAttrReject(void);
 PTBL_SpecialAttr PTBL_makeSpecialAttrPrefer(void);
 PTBL_SpecialAttr PTBL_makeSpecialAttrAvoid(void);
-PTBL_LookAhead PTBL_makeLookAheadDefault(PTBL_CharClass charClass, PTBL_LookAheads lookaheads);
-PTBL_CharClass PTBL_makeCharClassDefault(PTBL_CharRanges ranges);
 PTBL_LookAheads PTBL_makeLookAheadsEmpty(void);
 PTBL_LookAheads PTBL_makeLookAheadsSingle(PTBL_LookAhead head);
 PTBL_LookAheads PTBL_makeLookAheadsMany(PTBL_LookAhead head, PTBL_LookAheads tail);
+PTBL_LookAhead PTBL_makeLookAheadDefault(PTBL_CharClass charClass, PTBL_LookAheads lookaheads);
+PTBL_CharClass PTBL_makeCharClassDefault(PTBL_CharRanges ranges);
 PTBL_Priorities PTBL_makePrioritiesEmpty(void);
 PTBL_Priorities PTBL_makePrioritiesSingle(PTBL_Priority head);
 PTBL_Priorities PTBL_makePrioritiesMany(PTBL_Priority head, PTBL_Priorities tail);
-PTBL_Priority PTBL_makePriorityLeft(int label1, int label2);
-PTBL_Priority PTBL_makePriorityRight(int label1, int label2);
-PTBL_Priority PTBL_makePriorityNonAssoc(int label1, int label2);
 PTBL_Priority PTBL_makePriorityGreater(int label1, int label2);
-
-/*}}}  */
-/*{{{  equality functions */
-
+PTBL_Priority PTBL_makePriorityArgGreater(int label1, int argumentNumber, int label2);
 ATbool PTBL_isEqualProduction(PTBL_Production arg0, PTBL_Production arg1);
 ATbool PTBL_isEqualCharRanges(PTBL_CharRanges arg0, PTBL_CharRanges arg1);
 ATbool PTBL_isEqualVersion(PTBL_Version arg0, PTBL_Version arg1);
@@ -257,39 +249,23 @@ ATbool PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1);
 ATbool PTBL_isEqualChoices(PTBL_Choices arg0, PTBL_Choices arg1);
 ATbool PTBL_isEqualChoice(PTBL_Choice arg0, PTBL_Choice arg1);
 ATbool PTBL_isEqualSpecialAttr(PTBL_SpecialAttr arg0, PTBL_SpecialAttr arg1);
+ATbool PTBL_isEqualLookAheads(PTBL_LookAheads arg0, PTBL_LookAheads arg1);
 ATbool PTBL_isEqualLookAhead(PTBL_LookAhead arg0, PTBL_LookAhead arg1);
 ATbool PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1);
-ATbool PTBL_isEqualLookAheads(PTBL_LookAheads arg0, PTBL_LookAheads arg1);
 ATbool PTBL_isEqualPriorities(PTBL_Priorities arg0, PTBL_Priorities arg1);
 ATbool PTBL_isEqualPriority(PTBL_Priority arg0, PTBL_Priority arg1);
-
-/*}}}  */
-/*{{{  PTBL_Production accessors */
-
 ATbool PTBL_isValidProduction(PTBL_Production arg);
 inline ATbool PTBL_isProductionExternal(PTBL_Production arg);
 ATbool PTBL_hasProductionProd(PTBL_Production arg);
 ATerm PTBL_getProductionProd(PTBL_Production arg);
 PTBL_Production PTBL_setProductionProd(PTBL_Production arg, ATerm prod);
-
-/*}}}  */
-/*{{{  PTBL_CharRanges accessors */
-
 ATbool PTBL_isValidCharRanges(PTBL_CharRanges arg);
 inline ATbool PTBL_isCharRangesExternal(PTBL_CharRanges arg);
 ATbool PTBL_hasCharRangesRanges(PTBL_CharRanges arg);
 ATerm PTBL_getCharRangesRanges(PTBL_CharRanges arg);
 PTBL_CharRanges PTBL_setCharRangesRanges(PTBL_CharRanges arg, ATerm ranges);
-
-/*}}}  */
-/*{{{  PTBL_Version accessors */
-
 ATbool PTBL_isValidVersion(PTBL_Version arg);
 inline ATbool PTBL_isVersionDefault(PTBL_Version arg);
-
-/*}}}  */
-/*{{{  PTBL_ParseTable accessors */
-
 ATbool PTBL_isValidParseTable(PTBL_ParseTable arg);
 inline ATbool PTBL_isParseTableParseTable(PTBL_ParseTable arg);
 ATbool PTBL_hasParseTableVersion(PTBL_ParseTable arg);
@@ -307,10 +283,6 @@ PTBL_ParseTable PTBL_setParseTableInitialState(PTBL_ParseTable arg, int initialS
 PTBL_ParseTable PTBL_setParseTableLabels(PTBL_ParseTable arg, PTBL_Labels labels);
 PTBL_ParseTable PTBL_setParseTableStates(PTBL_ParseTable arg, PTBL_States states);
 PTBL_ParseTable PTBL_setParseTablePriorities(PTBL_ParseTable arg, PTBL_Priorities priorities);
-
-/*}}}  */
-/*{{{  PTBL_Labels accessors */
-
 ATbool PTBL_isValidLabels(PTBL_Labels arg);
 inline ATbool PTBL_isLabelsEmpty(PTBL_Labels arg);
 inline ATbool PTBL_isLabelsSingle(PTBL_Labels arg);
@@ -321,10 +293,6 @@ PTBL_Label PTBL_getLabelsHead(PTBL_Labels arg);
 PTBL_Labels PTBL_getLabelsTail(PTBL_Labels arg);
 PTBL_Labels PTBL_setLabelsHead(PTBL_Labels arg, PTBL_Label head);
 PTBL_Labels PTBL_setLabelsTail(PTBL_Labels arg, PTBL_Labels tail);
-
-/*}}}  */
-/*{{{  PTBL_Label accessors */
-
 ATbool PTBL_isValidLabel(PTBL_Label arg);
 inline ATbool PTBL_isLabelDefault(PTBL_Label arg);
 ATbool PTBL_hasLabelProduction(PTBL_Label arg);
@@ -333,10 +301,6 @@ PTBL_Production PTBL_getLabelProduction(PTBL_Label arg);
 int PTBL_getLabelNumber(PTBL_Label arg);
 PTBL_Label PTBL_setLabelProduction(PTBL_Label arg, PTBL_Production production);
 PTBL_Label PTBL_setLabelNumber(PTBL_Label arg, int number);
-
-/*}}}  */
-/*{{{  PTBL_States accessors */
-
 ATbool PTBL_isValidStates(PTBL_States arg);
 inline ATbool PTBL_isStatesEmpty(PTBL_States arg);
 inline ATbool PTBL_isStatesSingle(PTBL_States arg);
@@ -347,10 +311,6 @@ PTBL_State PTBL_getStatesHead(PTBL_States arg);
 PTBL_States PTBL_getStatesTail(PTBL_States arg);
 PTBL_States PTBL_setStatesHead(PTBL_States arg, PTBL_State head);
 PTBL_States PTBL_setStatesTail(PTBL_States arg, PTBL_States tail);
-
-/*}}}  */
-/*{{{  PTBL_State accessors */
-
 ATbool PTBL_isValidState(PTBL_State arg);
 inline ATbool PTBL_isStateDefault(PTBL_State arg);
 ATbool PTBL_hasStateNumber(PTBL_State arg);
@@ -362,10 +322,6 @@ PTBL_Actions PTBL_getStateActions(PTBL_State arg);
 PTBL_State PTBL_setStateNumber(PTBL_State arg, int number);
 PTBL_State PTBL_setStateGotos(PTBL_State arg, PTBL_Gotos gotos);
 PTBL_State PTBL_setStateActions(PTBL_State arg, PTBL_Actions actions);
-
-/*}}}  */
-/*{{{  PTBL_Gotos accessors */
-
 ATbool PTBL_isValidGotos(PTBL_Gotos arg);
 inline ATbool PTBL_isGotosEmpty(PTBL_Gotos arg);
 inline ATbool PTBL_isGotosSingle(PTBL_Gotos arg);
@@ -376,10 +332,6 @@ PTBL_Goto PTBL_getGotosHead(PTBL_Gotos arg);
 PTBL_Gotos PTBL_getGotosTail(PTBL_Gotos arg);
 PTBL_Gotos PTBL_setGotosHead(PTBL_Gotos arg, PTBL_Goto head);
 PTBL_Gotos PTBL_setGotosTail(PTBL_Gotos arg, PTBL_Gotos tail);
-
-/*}}}  */
-/*{{{  PTBL_Goto accessors */
-
 ATbool PTBL_isValidGoto(PTBL_Goto arg);
 inline ATbool PTBL_isGotoDefault(PTBL_Goto arg);
 ATbool PTBL_hasGotoRanges(PTBL_Goto arg);
@@ -388,10 +340,6 @@ PTBL_CharRanges PTBL_getGotoRanges(PTBL_Goto arg);
 int PTBL_getGotoStateNumber(PTBL_Goto arg);
 PTBL_Goto PTBL_setGotoRanges(PTBL_Goto arg, PTBL_CharRanges ranges);
 PTBL_Goto PTBL_setGotoStateNumber(PTBL_Goto arg, int stateNumber);
-
-/*}}}  */
-/*{{{  PTBL_Actions accessors */
-
 ATbool PTBL_isValidActions(PTBL_Actions arg);
 inline ATbool PTBL_isActionsEmpty(PTBL_Actions arg);
 inline ATbool PTBL_isActionsSingle(PTBL_Actions arg);
@@ -402,10 +350,6 @@ PTBL_Action PTBL_getActionsHead(PTBL_Actions arg);
 PTBL_Actions PTBL_getActionsTail(PTBL_Actions arg);
 PTBL_Actions PTBL_setActionsHead(PTBL_Actions arg, PTBL_Action head);
 PTBL_Actions PTBL_setActionsTail(PTBL_Actions arg, PTBL_Actions tail);
-
-/*}}}  */
-/*{{{  PTBL_Action accessors */
-
 ATbool PTBL_isValidAction(PTBL_Action arg);
 inline ATbool PTBL_isActionDefault(PTBL_Action arg);
 ATbool PTBL_hasActionRanges(PTBL_Action arg);
@@ -414,10 +358,6 @@ PTBL_CharRanges PTBL_getActionRanges(PTBL_Action arg);
 PTBL_Choices PTBL_getActionChoices(PTBL_Action arg);
 PTBL_Action PTBL_setActionRanges(PTBL_Action arg, PTBL_CharRanges ranges);
 PTBL_Action PTBL_setActionChoices(PTBL_Action arg, PTBL_Choices choices);
-
-/*}}}  */
-/*{{{  PTBL_Choices accessors */
-
 ATbool PTBL_isValidChoices(PTBL_Choices arg);
 inline ATbool PTBL_isChoicesEmpty(PTBL_Choices arg);
 inline ATbool PTBL_isChoicesSingle(PTBL_Choices arg);
@@ -428,10 +368,6 @@ PTBL_Choice PTBL_getChoicesHead(PTBL_Choices arg);
 PTBL_Choices PTBL_getChoicesTail(PTBL_Choices arg);
 PTBL_Choices PTBL_setChoicesHead(PTBL_Choices arg, PTBL_Choice head);
 PTBL_Choices PTBL_setChoicesTail(PTBL_Choices arg, PTBL_Choices tail);
-
-/*}}}  */
-/*{{{  PTBL_Choice accessors */
-
 ATbool PTBL_isValidChoice(PTBL_Choice arg);
 inline ATbool PTBL_isChoiceReduce(PTBL_Choice arg);
 inline ATbool PTBL_isChoiceLookaheadReduce(PTBL_Choice arg);
@@ -452,40 +388,11 @@ PTBL_Choice PTBL_setChoiceLabel(PTBL_Choice arg, int label);
 PTBL_Choice PTBL_setChoiceSpecialAttr(PTBL_Choice arg, PTBL_SpecialAttr specialAttr);
 PTBL_Choice PTBL_setChoiceLookaheads(PTBL_Choice arg, PTBL_LookAheads lookaheads);
 PTBL_Choice PTBL_setChoiceStateNumber(PTBL_Choice arg, int stateNumber);
-
-/*}}}  */
-/*{{{  PTBL_SpecialAttr accessors */
-
 ATbool PTBL_isValidSpecialAttr(PTBL_SpecialAttr arg);
 inline ATbool PTBL_isSpecialAttrNone(PTBL_SpecialAttr arg);
 inline ATbool PTBL_isSpecialAttrReject(PTBL_SpecialAttr arg);
 inline ATbool PTBL_isSpecialAttrPrefer(PTBL_SpecialAttr arg);
 inline ATbool PTBL_isSpecialAttrAvoid(PTBL_SpecialAttr arg);
-
-/*}}}  */
-/*{{{  PTBL_LookAhead accessors */
-
-ATbool PTBL_isValidLookAhead(PTBL_LookAhead arg);
-inline ATbool PTBL_isLookAheadDefault(PTBL_LookAhead arg);
-ATbool PTBL_hasLookAheadCharClass(PTBL_LookAhead arg);
-ATbool PTBL_hasLookAheadLookaheads(PTBL_LookAhead arg);
-PTBL_CharClass PTBL_getLookAheadCharClass(PTBL_LookAhead arg);
-PTBL_LookAheads PTBL_getLookAheadLookaheads(PTBL_LookAhead arg);
-PTBL_LookAhead PTBL_setLookAheadCharClass(PTBL_LookAhead arg, PTBL_CharClass charClass);
-PTBL_LookAhead PTBL_setLookAheadLookaheads(PTBL_LookAhead arg, PTBL_LookAheads lookaheads);
-
-/*}}}  */
-/*{{{  PTBL_CharClass accessors */
-
-ATbool PTBL_isValidCharClass(PTBL_CharClass arg);
-inline ATbool PTBL_isCharClassDefault(PTBL_CharClass arg);
-ATbool PTBL_hasCharClassRanges(PTBL_CharClass arg);
-PTBL_CharRanges PTBL_getCharClassRanges(PTBL_CharClass arg);
-PTBL_CharClass PTBL_setCharClassRanges(PTBL_CharClass arg, PTBL_CharRanges ranges);
-
-/*}}}  */
-/*{{{  PTBL_LookAheads accessors */
-
 ATbool PTBL_isValidLookAheads(PTBL_LookAheads arg);
 inline ATbool PTBL_isLookAheadsEmpty(PTBL_LookAheads arg);
 inline ATbool PTBL_isLookAheadsSingle(PTBL_LookAheads arg);
@@ -496,10 +403,19 @@ PTBL_LookAhead PTBL_getLookAheadsHead(PTBL_LookAheads arg);
 PTBL_LookAheads PTBL_getLookAheadsTail(PTBL_LookAheads arg);
 PTBL_LookAheads PTBL_setLookAheadsHead(PTBL_LookAheads arg, PTBL_LookAhead head);
 PTBL_LookAheads PTBL_setLookAheadsTail(PTBL_LookAheads arg, PTBL_LookAheads tail);
-
-/*}}}  */
-/*{{{  PTBL_Priorities accessors */
-
+ATbool PTBL_isValidLookAhead(PTBL_LookAhead arg);
+inline ATbool PTBL_isLookAheadDefault(PTBL_LookAhead arg);
+ATbool PTBL_hasLookAheadCharClass(PTBL_LookAhead arg);
+ATbool PTBL_hasLookAheadLookaheads(PTBL_LookAhead arg);
+PTBL_CharClass PTBL_getLookAheadCharClass(PTBL_LookAhead arg);
+PTBL_LookAheads PTBL_getLookAheadLookaheads(PTBL_LookAhead arg);
+PTBL_LookAhead PTBL_setLookAheadCharClass(PTBL_LookAhead arg, PTBL_CharClass charClass);
+PTBL_LookAhead PTBL_setLookAheadLookaheads(PTBL_LookAhead arg, PTBL_LookAheads lookaheads);
+ATbool PTBL_isValidCharClass(PTBL_CharClass arg);
+inline ATbool PTBL_isCharClassDefault(PTBL_CharClass arg);
+ATbool PTBL_hasCharClassRanges(PTBL_CharClass arg);
+PTBL_CharRanges PTBL_getCharClassRanges(PTBL_CharClass arg);
+PTBL_CharClass PTBL_setCharClassRanges(PTBL_CharClass arg, PTBL_CharRanges ranges);
 ATbool PTBL_isValidPriorities(PTBL_Priorities arg);
 inline ATbool PTBL_isPrioritiesEmpty(PTBL_Priorities arg);
 inline ATbool PTBL_isPrioritiesSingle(PTBL_Priorities arg);
@@ -510,25 +426,18 @@ PTBL_Priority PTBL_getPrioritiesHead(PTBL_Priorities arg);
 PTBL_Priorities PTBL_getPrioritiesTail(PTBL_Priorities arg);
 PTBL_Priorities PTBL_setPrioritiesHead(PTBL_Priorities arg, PTBL_Priority head);
 PTBL_Priorities PTBL_setPrioritiesTail(PTBL_Priorities arg, PTBL_Priorities tail);
-
-/*}}}  */
-/*{{{  PTBL_Priority accessors */
-
 ATbool PTBL_isValidPriority(PTBL_Priority arg);
-inline ATbool PTBL_isPriorityLeft(PTBL_Priority arg);
-inline ATbool PTBL_isPriorityRight(PTBL_Priority arg);
-inline ATbool PTBL_isPriorityNonAssoc(PTBL_Priority arg);
 inline ATbool PTBL_isPriorityGreater(PTBL_Priority arg);
+inline ATbool PTBL_isPriorityArgGreater(PTBL_Priority arg);
 ATbool PTBL_hasPriorityLabel1(PTBL_Priority arg);
 ATbool PTBL_hasPriorityLabel2(PTBL_Priority arg);
+ATbool PTBL_hasPriorityArgumentNumber(PTBL_Priority arg);
 int PTBL_getPriorityLabel1(PTBL_Priority arg);
 int PTBL_getPriorityLabel2(PTBL_Priority arg);
+int PTBL_getPriorityArgumentNumber(PTBL_Priority arg);
 PTBL_Priority PTBL_setPriorityLabel1(PTBL_Priority arg, int label1);
 PTBL_Priority PTBL_setPriorityLabel2(PTBL_Priority arg, int label2);
-
-/*}}}  */
-/*{{{  sort visitors */
-
+PTBL_Priority PTBL_setPriorityArgumentNumber(PTBL_Priority arg, int argumentNumber);
 PTBL_Production PTBL_visitProduction(PTBL_Production arg, ATerm (*acceptProd)(ATerm));
 PTBL_CharRanges PTBL_visitCharRanges(PTBL_CharRanges arg, ATerm (*acceptRanges)(ATerm));
 PTBL_Version PTBL_visitVersion(PTBL_Version arg);
@@ -544,12 +453,10 @@ PTBL_Action PTBL_visitAction(PTBL_Action arg, PTBL_CharRanges (*acceptRanges)(PT
 PTBL_Choices PTBL_visitChoices(PTBL_Choices arg, PTBL_Choice (*acceptHead)(PTBL_Choice));
 PTBL_Choice PTBL_visitChoice(PTBL_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTBL_SpecialAttr (*acceptSpecialAttr)(PTBL_SpecialAttr), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads), int (*acceptStateNumber)(int));
 PTBL_SpecialAttr PTBL_visitSpecialAttr(PTBL_SpecialAttr arg);
+PTBL_LookAheads PTBL_visitLookAheads(PTBL_LookAheads arg, PTBL_LookAhead (*acceptHead)(PTBL_LookAhead));
 PTBL_LookAhead PTBL_visitLookAhead(PTBL_LookAhead arg, PTBL_CharClass (*acceptCharClass)(PTBL_CharClass), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads));
 PTBL_CharClass PTBL_visitCharClass(PTBL_CharClass arg, PTBL_CharRanges (*acceptRanges)(PTBL_CharRanges));
-PTBL_LookAheads PTBL_visitLookAheads(PTBL_LookAheads arg, PTBL_LookAhead (*acceptHead)(PTBL_LookAhead));
 PTBL_Priorities PTBL_visitPriorities(PTBL_Priorities arg, PTBL_Priority (*acceptHead)(PTBL_Priority));
-PTBL_Priority PTBL_visitPriority(PTBL_Priority arg, int (*acceptLabel1)(int), int (*acceptLabel2)(int));
-
-/*}}}  */
+PTBL_Priority PTBL_visitPriority(PTBL_Priority arg, int (*acceptLabel1)(int), int (*acceptLabel2)(int), int (*acceptArgumentNumber)(int));
 
 #endif /* _PTABLE_H */

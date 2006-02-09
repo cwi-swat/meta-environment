@@ -3,31 +3,39 @@ constructor(Production, external, <prod(term)>),
 constructor(CharRanges, external, <ranges(term)>),
 
 
-constructor(Version,Default,4),
+constructor(Version,Default,6),
+
 constructor(ParseTable,parse-table,parse-table(<version(Version)>,<initial-state(int)>,<labels(Labels)>,states(<states(States)>),priorities(<priorities(Priorities)>))),
+
 list(Labels,Label),
 constructor(Label,Default,label(<production(Production)>,<number(int)>)),
+
 list(States,State),
 constructor(State,Default,state-rec(<number(int)>,<gotos(Gotos)>,<actions(Actions)>)),
+
 list(Gotos,Goto),
 constructor(Goto,Default,goto(<ranges(CharRanges)>,<state-number(int)>)),
+
 list(Actions,Action),
 constructor(Action,Default,action(<ranges(CharRanges)>,<choices(Choices)>)),
+
 list(Choices,Choice),
 constructor(Choice,reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>)),
 constructor(Choice,lookahead-reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>,<lookaheads(LookAheads)>)),
 constructor(Choice,shift,shift(<state-number(int)>)),
 constructor(Choice,accept,accept),
+
 constructor(SpecialAttr,none,0),
 constructor(SpecialAttr,reject,1),
 constructor(SpecialAttr,prefer,2),
 constructor(SpecialAttr,avoid,4),
-constructor(LookAhead,default,look(<char-class(CharClass)>,<lookaheads(LookAheads)>)),
-constructor(CharClass,default,char-class(<ranges(CharRanges)>)),
+
 list(LookAheads,LookAhead),
+constructor(LookAhead,default,look(<char-class(CharClass)>,<lookaheads(LookAheads)>)),
+
+constructor(CharClass,default,char-class(<ranges(CharRanges)>)),
+
 list(Priorities,Priority),
-constructor(Priority,left,left-prio(<label1(int)>,<label2(int)>)),
-constructor(Priority,right,right-prio(<label1(int)>,<label2(int)>)),
-constructor(Priority,non-assoc,non-assoc(<label1(int)>,<label2(int)>)),
-constructor(Priority,greater,gtr-prio(<label1(int)>,<label2(int)>))
+constructor(Priority,greater,gtr-prio(<label1(int)>,<label2(int)>)),
+constructor(Priority,arg-greater,arg-gtr-prio(<label1(int)>, <argument-number(int)>, <label2(int)>))
 ]

@@ -1,5 +1,8 @@
 
 
+Thu Feb  9 15:27:26 CET 2006 <economop@cwi.nl>
+ * in process of changing parsetable representation
+
 Mon Jan 23 16:40:40 CET 2006 <jurgenv@cwi.nl>
  * {configure.in,package,init-package.m4}: added standard package files
    that were missing.
