@@ -38,6 +38,35 @@ in
   )
 endlet
 
+process ParseTreeHandler(ModuleId: term, Path: str) is
+let
+  ErrorMessage: term,
+  ParseError: term,
+  ParseResult: term,
+  Pid: int,
+  Summary: term
+in
+  Pid := process-id
+  .
+  (
+    (
+      rec-msg(parse-tree(Pid, ParseResult?))
+    +
+      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
+      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
+      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+      . rec-msg(es-summary(Summary?))
+    )
+    . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
+  +
+    rec-msg(parse-error(Pid, ErrorMessage?))
+    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
+    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    . rec-msg(es-summary(Summary?))
+    . snd-msg(parse-handler-done(Pid))
+  )
+endlet
+
 process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
@@ -70,4 +99,7 @@ in
     Result := UNDEFINED
   fi
 endlet
+
+
+
 #endif /*__PARSE_FOCUSES__*/
