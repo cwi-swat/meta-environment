@@ -520,16 +520,16 @@ in
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
-      . create(SDFParseTreeHandler(ModuleId, Path), Pid?)
+      . create(ParseTreeHandler(ModuleId, Path), Pid?)
       . ParseText(Pid, Text, ParseTable, SDF_TOPSORT)
       .
       (
-        rec-msg(open-syntax-parse-handler-done(Pid, ModuleId, Tree?))
+        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
         . AnnotateTree(Tree, Path, Annotated?)
         . Result := Annotated
         . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
       +
-        rec-msg(open-syntax-parse-handler-done(Pid))
+        rec-msg(parse-handler-done(Pid))
         . Result := UNDEFINED
       )
     else
@@ -538,45 +538,6 @@ in
   else
     Result := Tree
   fi
-endlet
-
-process SDFParseTreeHandler(ModuleId: term, Path: str) is
-let
-  Directory: str,
-  ErrorMessage: term,
-  Extension: str,
-  File: str,
-  Imports: list,
-  Modulename: str,
-  ParseError: term,
-  ParseResult: term,
-  Pid: int,
-  CheckPid: int,
-  Summary: term
-in
-  Pid := process-id
-  .
-  (
-    (
-      rec-msg(parse-tree(Pid, ParseResult?))
-      /*. snd-msg(ui-remove-feedback-summary("sglr", Path))*/
-    +
-      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
-      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
-      . rec-msg(es-summary(Summary?))
-      /*. snd-msg(ui-remove-feedback-summary("sglr", Path))*/
-      /*. snd-msg(ui-show-feedback-summary(Summary))*/
-    )
-    . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId, ParseResult))
-  +
-    rec-msg(parse-error(Pid, ErrorMessage?))
-    . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
-    . rec-msg(es-summary(Summary?))
-    /*. snd-msg(ui-show-feedback-summary(Summary))*/
-    . snd-msg(open-syntax-parse-handler-done(Pid))
-  )
 endlet
 
 process SDFIdentifyModule(ModuleId: term) is
