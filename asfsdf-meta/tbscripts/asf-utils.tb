@@ -6,6 +6,7 @@
 #include <sdf-renaming.idef>
 #include <asfoperations.idef>
 #include <asfe.idef>
+#include <asfc.idef>
 #include <asfchecker.idef>
 #include <term-utils.tb>
 
