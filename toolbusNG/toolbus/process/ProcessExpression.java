@@ -37,7 +37,7 @@ abstract public class ProcessExpression {
 	}
 
 	protected void addToFirst(StateElement a) {
-		first.add(a);
+		first.addElement(a);
 	}
 
 	public State getFollow() {

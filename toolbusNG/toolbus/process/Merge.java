@@ -33,7 +33,7 @@ public class Merge extends ProcessExpression implements StateElement {
     expr[LEFT] = left;
     expr[RIGHT] = right;
     mergeState = new State();
-    mergeState.add(this);
+    mergeState.addElement(this);
   }
   
   public void computeFirst(){

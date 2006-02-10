@@ -14,36 +14,36 @@ import aterm.*;
 
 public abstract class MsgAtom extends Atom {
 
-	private State partners = new State(); // communication partners in other processes
-
+	private State msgPartners = new State();  // communication partners in other processes
+	
 	private Ref msg;
 
-	private Ref id;
+//	private Ref id;
 
 	private ATerm matchPattern;
 
 	public MsgAtom(ATerm msg, TBTermFactory tbfactory) {
 		super(tbfactory);
 		this.msg = new Ref(msg);
-		this.id = new Ref(this instanceof RecMsg ? tbfactory.TransactionIdResVar
-				: tbfactory.TransactionIdVar);
-		setAtomArgs(this.msg, this.id);
+//		this.id = new Ref(this instanceof RecMsg ? tbfactory.TransactionIdResVar
+//				: tbfactory.TransactionIdVar);
+		setAtomArgs(this.msg);
 	}
 
-	public MsgAtom(ATerm msg, ATerm id, TBTermFactory tbfactory) {
-		super(tbfactory);
-		this.msg = new Ref(msg);
-		this.id = new Ref(id);
-		setAtomArgs(this.msg, this.id);
-	}
+//	public MsgAtom(ATerm msg, ATerm id, TBTermFactory tbfactory) {
+//		super(tbfactory);
+//		this.msg = new Ref(msg);
+//		this.id = new Ref(id);
+//		setAtomArgs(this.msg);
+//	}
 
 	public ATerm getMsg() {
 		return msg.value;
 	}
 
-	public ATerm getId() {
-		return id.value;
-	}
+//	public ATerm getId() {
+//		return id.value;
+//	}
 
 	public ATerm getMatchPattern() {
 		return matchPattern;
@@ -51,16 +51,33 @@ public abstract class MsgAtom extends Atom {
 
 	abstract public boolean canCommunicate(MsgAtom a);
 
-	public void addMsgPartner(StateElement a) {
-		partners.add(a);
+	public void addMsgPartner(State set) {
+	    for (StateElement b : set.getElementsAsVector()) {
+			if (!(b instanceof MsgAtom)) {
+				continue;
+			}
+			MsgAtom cb = (MsgAtom) b;
+			if (this.canCommunicate(cb)) {
+				this.addElement(cb);
+				cb.addMsgPartner(this);
+				// System.err.println(" -- " + ca);
+				// System.err.println(" " + cb);
+			}
+		}
+
+		msgPartners.addElement(this);
+	}
+	
+	public void delMsgPartner(StateElement a) {
+		msgPartners.delElement(a);
 	}
 
 	public State getMsgPartners() {
-		return partners;
+		return msgPartners;
 	}
 
 	public boolean hasMsgPartners() {
-		return partners.size() > 0;
+		return msgPartners.size() > 0;
 	}
 
 	public boolean matchPartner(MsgAtom b) throws ToolBusException {
@@ -78,13 +95,14 @@ public abstract class MsgAtom extends Atom {
 	}
 
 	public boolean execute() throws ToolBusException {
-		if (!isEnabled())
+		if (!isEnabled()) {
 			return false;
-		Vector partnervec = partners.getElementsAsVector();
+		}
+		Vector partnervec = msgPartners.getElementsAsVector();
 		int psize = partnervec.size();
-		//if(psize > 65){
-		//	System.err.println(this + ": " + psize + " partners");
-		//}
+		// if(psize > 65){
+		// System.err.println(this + ": " + psize + " partners");
+		// }
 
 		if (psize > 0) {
 			ProcessInstance pa = getProcess();
@@ -93,23 +111,26 @@ public abstract class MsgAtom extends Atom {
 				MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
 				ProcessInstance pb = b.getProcess();
 
-				if ( pa != pb && pb.contains(b) && b.isEnabled()) {
-					//System.err.println("MsgAtom.execute: " + this + ";" + b);
-					//System.err.println("--- enva = " + this.getEnv());
-					//System.err.println("--- envb = " + b.getEnv());
+				if (pa != pb && pb.contains(b) && b.isEnabled()) {
+					// System.err.println("MsgAtom.execute: " + this + ";" + b);
+					// System.err.println("--- enva = " + this.getEnv());
+					// System.err.println("--- envb = " + b.getEnv());
 
 					if (matchPartner(b)) {
-						//System.err.println(
-						//  "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
-						//System.err.println(
-						//	"--- enva = " + this.getEnv());
-						//System.err.println(
-						//    	"--- envb = " + b.getEnv());
+						// System.err.println(
+						// "--- " + pa.getProcessId() + "/" + pb.getProcessId()
+						// + ": " + this +" communicates with " + b);
+						// System.err.println(
+						// "--- enva = " + this.getEnv());
+						// System.err.println(
+						// "--- envb = " + b.getEnv());
 						pb.nextState(b);
 						return true;
 					} else {
-						//System.err.println("-- " + pa.getProcessId() + " " + this);
-						//System.err.println("   " + pb.getProcessId() + " " + b);
+						// System.err.println("-- " + pa.getProcessId() + " " +
+						// this);
+						// System.err.println(" " + pb.getProcessId() + " " +
+						// b);
 					}
 				}
 			}

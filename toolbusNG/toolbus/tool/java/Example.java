@@ -30,7 +30,7 @@ public class Example
     // Build the user interface: just a single button
     button = new Button("Button");
     button.addActionListener(this);
-    add(button);
+    addElement(button);
     pack();
     show();
 

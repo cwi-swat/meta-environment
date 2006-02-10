@@ -13,7 +13,7 @@ public class CommunicationList extends LinkedList {
   private void initCommunicationList(ATermList representation) {
     ATermList iter = representation;
     while (!iter.isEmpty()) {
-      add(Communication.create((ATermAppl) iter.getFirst()));
+      addElement(Communication.create((ATermAppl) iter.getFirst()));
       iter = iter.getNext();
     }
   }

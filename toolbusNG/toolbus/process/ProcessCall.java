@@ -36,7 +36,7 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 		this.name = name;
 		this.actuals = actuals;
 		firstState = new State();
-		firstState.add(this);
+		firstState.addElement(this);
 	}
 
 	public ProcessCall(ATerm call, TBTermFactory tbfactory) {

@@ -53,13 +53,13 @@ public class TBTermFactory extends PureFactory {
 
 	public ATermList EmptyList;
 
-	public TBTermVar TransactionIdVar;
+//	public TBTermVar TransactionIdVar;
 
-	public TBTermVar TransactionIdResVar;
+//	public TBTermVar TransactionIdResVar;
 
-	public ATerm transaction;
+//	public ATerm transaction;
 
-	private int nTransactions = 0;
+//	private int nTransactions = 0;
 
 	private static TBTermFactory instance = null;
 
@@ -103,10 +103,10 @@ public class TBTermFactory extends PureFactory {
 
 		EmptyList = makeList();
 
-		transaction = make("transaction");
+//		transaction = make("transaction");
 
-		TransactionIdVar = makeTBTermVar("transactionId", transaction);
-		TransactionIdResVar = makeTBTermResVar("transactionId", transaction);
+//		TransactionIdVar = makeTBTermVar("transactionId", transaction);
+//		TransactionIdResVar = makeTBTermResVar("transactionId", transaction);
 
 		Functions.init(this);
 	}
@@ -147,11 +147,11 @@ public class TBTermFactory extends PureFactory {
 		return makeTBTermResVar(name.toString() + "$" + processName, type);
 	}
 
-	public ATerm newTransactionId() {
-		AFun afun = makeAFun("transaction", 1, false);
-		ATerm arg = makeInt(nTransactions++);
-		return makeAppl(afun, arg);
-	}
+//	public ATerm newTransactionId() {
+//		AFun afun = makeAFun("transaction", 1, false);
+//		ATerm arg = makeInt(nTransactions++);
+//		return makeAppl(afun, arg);
+//	}
 
 	/*****/
 
