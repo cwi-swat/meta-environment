@@ -303,7 +303,7 @@ public class ToolBus {
 	}
 	
 	public void addConnectedTool(ToolInstance ti){
-		connectedTools.add(ti);
+		connectedTools.addElement(ti);
 	}
 
 	public ToolInstance getConnectedTool(String toolname) {
@@ -515,7 +515,7 @@ public class ToolBus {
 				throw new ToolBusException("duplicate definition of process "
 						+ name);
 		}
-		procdefs.add(PD);
+		procdefs.addElement(PD);
 	}
 
 	/**
@@ -530,7 +530,7 @@ public class ToolBus {
 				throw new ToolBusException("duplicate definition of tool "
 						+ name);
 		}
-		tooldefs.add(TD);
+		tooldefs.addElement(TD);
 	}
 
 	/**
@@ -579,7 +579,7 @@ public class ToolBus {
 		ToolDefinition TD = getToolDefinition(toolName);
 		TD.setToolSignatures(sig);
 		ToolInstance ti = new ToolInstance(TD, this, tools.size(), tbfactory);
-		tools.add(ti);
+		tools.addElement(ti);
 		ti.executeTool();
 		return ti;
 	}

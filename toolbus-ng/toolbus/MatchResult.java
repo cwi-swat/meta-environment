@@ -79,8 +79,8 @@ class DeltaEnvironment {
       if (var2.equals(var1))
         return val.equals(dict.elementAt(i + 1));
     }
-    dict.add(var1);
-    dict.add(val);
+    dict.addElement(var1);
+    dict.addElement(val);
     return true;
   }
 

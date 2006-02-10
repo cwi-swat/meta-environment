@@ -36,7 +36,7 @@ public class Tif {
     processList = new LinkedList();
     ATermList iter = (ATermList) representation.getArgument(3);
     while (!iter.isEmpty()) {
-      processList.add(new Process(iter.getFirst()));
+      processList.addElement(new Process(iter.getFirst()));
       iter = iter.getNext();
     }
   }

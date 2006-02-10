@@ -135,7 +135,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 	    	tests = new Vector<Test>(3);
 	    Test t = new Test(rtst, env);
 	    //System.out.println("setTest: " + t);
-	    this.tests.add(t);
+	    this.tests.addElement(t);
   	}
   }
 
@@ -276,6 +276,22 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 
   public ProcessInstance getProcess() {
     return processInstance;
+  }
+  
+  public void addMsgPartners(State s){
+	  
+  }
+  
+  public void delMsgPartners(State s){
+	  
+  }
+  
+  public void addNotePartners(State s){
+	  
+  }
+  
+ public void delNotePartners(State s){
+	  
   }
 
   public State getNextState(){

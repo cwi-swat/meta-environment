@@ -13,12 +13,12 @@ public class SndMsg extends MsgAtom {
     super(msg, tbfactory);
   }
   
-  public SndMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
-    super(msg, qual, tbfactory);
-  }
+ // public SndMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
+ //   super(msg, qual, tbfactory);
+ // }
   
   public ProcessExpression copy(){
-    Atom a = new SndMsg(getMsg(), getId(), tbfactory);
+    Atom a = new SndMsg(getMsg(), tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }

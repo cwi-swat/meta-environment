@@ -14,12 +14,12 @@ public class RecMsg extends MsgAtom {
     super(msg, tbfactory);
   }
   
-   public RecMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
-    super(msg, qual, tbfactory);
-  }
+ //  public RecMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
+ //   super(msg, qual, tbfactory);
+ // }
   
   public ProcessExpression copy(){
-    Atom a = new RecMsg(getMsg(), getId(), tbfactory);
+    Atom a = new RecMsg(getMsg(), tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }

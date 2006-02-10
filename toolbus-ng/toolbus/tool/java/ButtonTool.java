@@ -28,7 +28,7 @@ public class ButtonTool extends Frame implements ActionListener {
     button = new Button("Button");
     button.addActionListener(this);
 
-    add(button);
+    addElement(button);
     pack();
     show();
   }

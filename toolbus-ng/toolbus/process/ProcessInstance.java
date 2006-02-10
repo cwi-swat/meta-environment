@@ -32,8 +32,7 @@ public class ProcessInstance {
   private State elements;
   private State currentState;
   private ToolBus toolbus;
- // private ToolInstance toolInstance;
-  private TBTermVar transactionIdVar;
+//  private TBTermVar transactionIdVar;
   private TBTermFactory tbfactory;
   private LinkedList<ATerm> subscriptions;
   private LinkedList<ATerm> notes;
@@ -53,8 +52,8 @@ public class ProcessInstance {
 
     Environment env = new Environment(tbfactory);
     
-    transactionIdVar = tbfactory.TransactionIdVar;
-    env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
+ //   transactionIdVar = tbfactory.TransactionIdVar;
+ //   env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
 
     call.computeFirst();
     call.compile(this, new Stack(), env, empty);
@@ -65,7 +64,7 @@ public class ProcessInstance {
 
     for (ProcessInstance P : TB.getProcesses()) {
     	if(P != this){
-    		P.findMsgPartners(elements);
+    		P.addMsgPartners(elements);
     	}
     }
     addAtomSignature();
@@ -93,8 +92,10 @@ public class ProcessInstance {
 	if (verbose) {
 		System.err.println("[ProcessInstance " + processName + "] " + msg);
 	}
-}
+  }
 
+  //TODO: delAtomSignature
+  
   private void addAtomSignature() throws ToolBusException {
     Vector<StateElement> atoms = call.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
@@ -121,10 +122,28 @@ public class ProcessInstance {
 
   public void terminate(ATerm msg) {
   	running = false;
+    for (ProcessInstance P : toolbus.getProcesses()) {
+    	if(P != this){
+    		P.delMsgPartners(elements);
+    		P.delNotePartners(elements);
+    	}
+    }
   }
 
-  public void findMsgPartners(State a) {
-	elements.findMsgPartners(a);
+  public void addMsgPartners(State a) {
+	elements.addMsgPartners(a);
+  }
+  
+  public void delMsgPartners(State a) {
+	elements.delMsgPartners(a);
+  }
+  
+  public void addNotePartners(State a) {
+	elements.addNotePartners(a);
+  }
+	  
+  public void delNotePartners(State a) {
+	elements.delNotePartners(a);
   }
   
   /*

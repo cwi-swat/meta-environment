@@ -41,7 +41,7 @@ abstract public class Communication {
     for (int i = 0; i < arity; i++) {
       ATermAppl arg = (ATermAppl) args.getArgument(i);
       String typeName = arg.getAFun().getName();
-      argumentList.add(typeName);
+      argumentList.addElement(typeName);
     }
   }
 

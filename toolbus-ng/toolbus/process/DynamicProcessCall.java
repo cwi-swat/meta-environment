@@ -36,7 +36,7 @@ public class DynamicProcessCall extends ProcessCall implements StateElement {
 		this.name = name;
 		super.actuals = actuals;
 		firstState = new State();
-		firstState.add(this);
+		firstState.addElement(this);
 	}
 	
 	public ProcessExpression copy() {

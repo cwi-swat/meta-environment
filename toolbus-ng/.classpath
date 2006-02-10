@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry exported="true" sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
-	<classpathentry exported="true" kind="src" path="/shared-objects"/>
 	<classpathentry exported="true" sourcepath="/home/paulk/download/junit3.7/src.jar" kind="lib" path="junit.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/aterm-java"/>
-	<classpathentry kind="lib" path="/home/paulk/download/jjtraveler-0.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ufs/paulk/download/aterm-1.6-pk.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ufs/paulk/download/jjtraveler-0.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="/ufs/paulk/software/source/shared-objects/shared-objects-1.4.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

@@ -32,7 +32,7 @@ public class State {
     elements = new Vector<StateElement>();
   }
 
-  public void add(StateElement a) {
+  public void addElement(StateElement a) {
     if (!elements.contains(a)) {
       elements.addElement(a);
       nElements += 1;
@@ -41,15 +41,22 @@ public class State {
       }
     }
   }
+  
+  public void delElement(StateElement a) {
+    if (elements.contains(a)) {
+      elements.remove(a);
+      nElements -= 1;
+    }
+  }
 
   public State union(State b) {
     State c = new State();
     
     for(StateElement se : elements){
-    	c.add(se);
+    	c.addElement(se);
     }
     for(StateElement se : b.getElementsAsVector()){
-    	c.add(se);
+    	c.addElement(se);
     }
     return c;
   }
@@ -61,8 +68,21 @@ public class State {
   public int size() {
     return elements.size();
   }
+  
+  public void addMsgPartners(State s){
+	  for (StateElement a : elements) {
+		  a.addMsgPartners(s);
+	  }
+  }
+  
+  public void delMsgPartners(State s){
+	  for (StateElement a : elements) {
+		  a.delMsgPartners(s);
+	  }
+  }
 
-  public void findMsgPartners(State set) {
+  /*
+  public void addMsgPartners(State set) {
     for (StateElement a : elements) {
       if (!(a instanceof MsgAtom)) {
         continue;
@@ -82,6 +102,42 @@ public class State {
         }
       }
     }
+  }
+  
+  public void delMsgPartners(State set){
+  for (StateElement a : elements) {
+      if (!(a instanceof MsgAtom)) {
+        continue;
+      }
+      MsgAtom ca = (MsgAtom) a;
+
+      for (StateElement b : set.getElementsAsVector()) {
+        if (!(b instanceof MsgAtom)) {
+          continue;
+        }
+        MsgAtom cb = (MsgAtom) b;
+        if (ca.canCommunicate(cb)) {
+          ca.delMsgPartner(cb);
+          cb.delMsgPartner(ca);
+          //System.err.println(" -- " + ca);
+          //System.err.println("    " + cb);
+        }
+      }
+    }
+  }
+  
+  */
+  
+  public void addNotePartners(State set){
+	  for (StateElement a : elements) {
+		  a.addNotePartners(set);
+	  }  
+  }
+  
+  public void delNotePartners(State set){
+	  for (StateElement a : elements) {
+		  a.delNotePartners(set);
+	  }  
   }
 
   public void setTest(ATerm test, Environment env) throws ToolBusException {
@@ -146,7 +202,7 @@ public class State {
 	 }
      System.err.println("State.GetNextState2: no element " + a);
      return null;
-    }
+  }
   
   public void activate(){
   	for (StateElement e : elements){
