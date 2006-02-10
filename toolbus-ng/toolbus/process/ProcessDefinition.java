@@ -28,10 +28,6 @@ public class ProcessDefinition {
     this.tbfactory = tbfactory;
   }
 
- // public ProcessDefinition(String name, ProcessExpression PE) {
- //   this(name, (ATermList) TBTermFactory.make("[]"), PE);
- // }
-
   public String getName() {
     return name;
   }
@@ -52,8 +48,6 @@ public class ProcessDefinition {
       }
     };
     ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals, tbfactory), tbfactory);
-    //PE1.expand(P, calls);
-    //System.err.println("ProcessDef.expand => " + PE1);
     return PE1;
   }
 

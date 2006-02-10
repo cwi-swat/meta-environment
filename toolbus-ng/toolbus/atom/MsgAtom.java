@@ -71,7 +71,8 @@ public abstract class MsgAtom extends Atom {
 	public void compile(ProcessInstance processInstance, Stack calls,
 			Environment env, State follow) throws ToolBusException {
 		super.compile(processInstance, calls, env, follow);
-		matchPattern = tbfactory.makeList(getMsg(), tbfactory.makeList(getId()));
+		//matchPattern = tbfactory.makeList(getMsg(), tbfactory.makeList(getId()));
+		matchPattern = getMsg();
 
 		//System.err.println("MsgAtom.compile: " + matchPattern);
 	}
@@ -81,7 +82,7 @@ public abstract class MsgAtom extends Atom {
 			return false;
 		Vector partnervec = partners.getElementsAsVector();
 		int psize = partnervec.size();
-		//if(psize > 5){
+		//if(psize > 65){
 		//	System.err.println(this + ": " + psize + " partners");
 		//}
 
@@ -91,12 +92,8 @@ public abstract class MsgAtom extends Atom {
 					% psize, pleft--) {
 				MsgAtom b = (MsgAtom) partnervec.elementAt(pindex);
 				ProcessInstance pb = b.getProcess();
-				if(pa.getProcessId() == pb.getProcessId()){
-					System.err.println("-- " + pa);
-					System.err.println("   " + pb);
-				}
 
-				if ( pa != pb && b.isEnabled() && pb.contains(b)) {
+				if ( pa != pb && pb.contains(b) && b.isEnabled()) {
 					//System.err.println("MsgAtom.execute: " + this + ";" + b);
 					//System.err.println("--- enva = " + this.getEnv());
 					//System.err.println("--- envb = " + b.getEnv());
@@ -111,8 +108,8 @@ public abstract class MsgAtom extends Atom {
 						pb.nextState(b);
 						return true;
 					} else {
-						System.err.println("-- " + pa.getProcessId() + " " + this);
-						System.err.println("   " + pb.getProcessId() + " " + b);
+						//System.err.println("-- " + pa.getProcessId() + " " + this);
+						//System.err.println("   " + pb.getProcessId() + " " + b);
 					}
 				}
 			}
