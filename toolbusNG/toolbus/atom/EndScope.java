@@ -20,6 +20,10 @@ public class EndScope extends Atom {
 		 a.copyAtomAttributes(this);
 		 return a;
 	}
+	
+	 public void replaceFormals(Environment env) throws ToolBusException{
+		 return;
+	 }
 
 	public boolean execute() throws ToolBusException {
 		if (isEnabled()) {

@@ -62,7 +62,7 @@ public class State {
     return elements.size();
   }
 
-  public void findPartners(State set) {
+  public void findMsgPartners(State set) {
     for (StateElement a : elements) {
       if (!(a instanceof MsgAtom)) {
         continue;

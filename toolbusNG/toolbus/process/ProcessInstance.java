@@ -1,6 +1,7 @@
 package toolbus.process;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -34,8 +35,8 @@ public class ProcessInstance {
  // private ToolInstance toolInstance;
   private TBTermVar transactionIdVar;
   private TBTermFactory tbfactory;
-  private ATermList subscriptions;
-  private ATermList notes;
+  private LinkedList<ATerm> subscriptions;
+  private LinkedList<ATerm> notes;
   private boolean running = true;
 
   public ProcessInstance(ToolBus TB, ProcessCall call, int processId) throws ToolBusException {
@@ -43,8 +44,8 @@ public class ProcessInstance {
     tbfactory = TB.getTBTermFactory();
     this.call = call;
     this.processId = processId;
-    subscriptions = tbfactory.EmptyList;
-    notes = tbfactory.EmptyList;;
+    subscriptions = new LinkedList<ATerm>();
+    notes = new LinkedList<ATerm>();
     call.setEvalArgs(false);
     processName = call.getName();
 
@@ -52,14 +53,10 @@ public class ProcessInstance {
 
     Environment env = new Environment(tbfactory);
     
-    //AFun afun = TBTerm.factory.makeAFun("pi-" + processName, 1, false);
-    //processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
     transactionIdVar = tbfactory.TransactionIdVar;
     env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
 
-    //call.expand(this, new Stack());
     call.computeFirst();
-    //System.err.println("ProcessInstance: " + env);
     call.compile(this, new Stack(), env, empty);
     currentState = call.getStartState();
     currentState.activate();
@@ -68,7 +65,7 @@ public class ProcessInstance {
 
     for (ProcessInstance P : TB.getProcesses()) {
     	if(P != this){
-    		P.findPartners(elements);
+    		P.findMsgPartners(elements);
     	}
     }
     addAtomSignature();
@@ -99,7 +96,7 @@ public class ProcessInstance {
 }
 
   private void addAtomSignature() throws ToolBusException {
-    Vector atoms = call.getAtoms().getElementsAsVector();
+    Vector<StateElement> atoms = call.getAtoms().getElementsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       ATerm pat = ((Atom) atoms.get(i)).toATerm();
       toolbus.addToSignature(pat);
@@ -126,8 +123,8 @@ public class ProcessInstance {
   	running = false;
   }
 
-  public void findPartners(State a) {
-	elements.findPartners(a);
+  public void findMsgPartners(State a) {
+	elements.findMsgPartners(a);
   }
   
   /*
@@ -135,27 +132,18 @@ public class ProcessInstance {
    */
   
   public void subscribe(ATerm pat){
-	info("subscribe: pat: " + pat);
- 	info("subscribe: before: " + subscriptions);
-  	subscriptions = tbfactory.makeList(pat, subscriptions);
-  	info("subscribe: after: " + subscriptions);
+  	subscriptions.add(pat);
   }
   
   public void unsubscribe(ATerm pat){
-  	subscriptions =  tbfactory.delete(subscriptions, pat);
- 	info("unsubscribe: after:" + subscriptions);
+  	subscriptions.remove(pat);
+ 	//info("unsubscribe: after:" + subscriptions);
   }
   
   public boolean getNoteFromQueue(ATerm pat, Environment env) throws ToolBusException{
-  	//info("getNoteFromQueue: " + pat);
-	//info("getNoteFromQueue: subs  " + subscriptions);
- 	//info("getNoteFromQueue: notes " + notes);
-  	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
-  		ATerm nt = nts.getFirst();
-  		info("trying: " + nt);
-  		if(tbfactory.match(nt, env, pat, env)){
-  			notes = tbfactory.delete(notes, nt);
-  			info("getNoteFromQueue: " + nt);
+	for(ATerm note : notes){
+  		if(tbfactory.match(note, env, pat, env)){
+  			notes.remove();
   			return true;
   		}
   	}
@@ -163,15 +151,9 @@ public class ProcessInstance {
   }
   
   public boolean noNoteInQueue(ATerm pat, Environment env) throws ToolBusException{
-  	//info("noNoteInQueue: " + pat);
-	//info("noNoteInQueue: subs  " + subscriptions);
- 	//info("noNoteInQueue: notes " + notes);
-  	for(ATermList nts = notes; !nts.isEmpty();nts = nts.getNext()){
-  		ATerm nt = nts.getFirst();
-  		info("trying: " + nt);
-  		if(tbfactory.match(nt, env, pat, env)){
+	for(ATerm note : notes){
+  		if(tbfactory.match(note, env, pat, env)){
   			// TODO: What do we do with changes in env???
-  			info("noNoteInQueue: " + nt);
   			return false;
   		}
   	}
@@ -179,19 +161,12 @@ public class ProcessInstance {
   }
   
   public boolean putNoteInQueue(ATerm note) throws ToolBusException{
- 	//info("putNoteInQueue: " + note);
- 	//info("putNoteInQueue: subs  " + subscriptions);
- 	//info("putNoteInQueue: notes " + notes);
-  	for(ATermList subs = subscriptions; !subs.isEmpty();subs = subs.getNext()){
-  		ATerm sub = subs.getFirst();
- 		info("trying: " + sub);
+  	for(ATerm sub : subscriptions){
   		if(tbfactory.mightMatch(sub, note)){
-  			notes = tbfactory.makeList(note, notes);
-  			info("putNoteInQueue: success " + notes);
+  			notes.addLast(note);
   			return true;
   		}
   	}
-  	info("putNoteInQueue: failure " + notes);
   	return false;
   }
 

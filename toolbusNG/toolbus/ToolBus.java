@@ -226,7 +226,7 @@ public class ToolBus {
 					ClassicToolShield ts = (ClassicToolShield) key.attachment();
 					ATerm term = ts.receiveTerm();
 					if (term != null) {
-						info("TERM READ");
+						info("TERM READ: " + term);
 						ts.sndValueFromToolToToolBus(term);
 					}
 				} else if (key.isWritable()) {
@@ -713,6 +713,7 @@ public class ToolBus {
 						ProcessInstance P = processesIterator.next();
 						work |= P.step();
 						if (P.isTerminated()) {
+							System.err.println(P.getProcessName() + " terminated, total = " + processes.size());
 							processesIterator.remove();
 						}
 						if(shutdownDone){

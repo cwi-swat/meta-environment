@@ -36,20 +36,24 @@ public class Do extends Atom {
   }
 
   public boolean execute() throws ToolBusException {
-    if (!isEnabled())
-      return false;
- 
-   if(toolInstance == null){
-    	ATerm tid = getEnv().getValue((TBTermVar)toolId.value);
-    	toolInstance = getToolBus().getToolInstance(tid);
-    }
-    if(toolInstance.canEvalDo()){
-    	ATerm req = tbfactory.substitute(request.value, getEnv());
-    	if(toolInstance.sndDoToTool((ATermAppl) req)){
-    		return true;
-    	}
-    }
-    return false;
+	if (!isEnabled())
+		return false;
+	if (toolInstance == null) {
+		ATerm tid;
+		if (tbfactory.isAnyVar(toolId.value)) {
+			tid = getEnv().getValue((TBTermVar) toolId.value);
+		} else {
+			tid = toolId.value;
+		}
+		toolInstance = getToolBus().getToolInstance(tid);
+	}
+	if (toolInstance.canEvalDo()) {
+		ATerm req = tbfactory.substitute(request.value, getEnv());
+		if (toolInstance.sndDoToTool((ATermAppl) req)) {
+			return true;
+		}
+	}
+	return false;
   }
 
 }

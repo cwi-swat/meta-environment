@@ -1,5 +1,7 @@
 package toolbus;
 
+import java.util.HashMap;
+
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -48,30 +50,30 @@ public class TBTermFactory extends PureFactory {
 	public ATerm TermPlaceholder;
 
 	public ATerm ListPlaceholder;
-	
+
 	public ATermList EmptyList;
 
 	public TBTermVar TransactionIdVar;
 
 	public TBTermVar TransactionIdResVar;
-	
+
 	public ATerm transaction;
 
 	private int nTransactions = 0;
-	
+
 	private static TBTermFactory instance = null;
-	
+
 	public TBTermFactory() {
 		super();
-	    initialize();
-	  }
-	
+		initialize();
+	}
+
 	public static TBTermFactory getInstance() {
-		 if (instance == null) {
-		        instance = new TBTermFactory();
-		        instance.initialize();
-		    }
-		 return instance;
+		if (instance == null) {
+			instance = new TBTermFactory();
+			instance.initialize();
+		}
+		return instance;
 	}
 
 	public void initialize() {
@@ -98,9 +100,9 @@ public class TBTermFactory extends PureFactory {
 		StrPlaceholder = makePlaceholder(StrType);
 		TermPlaceholder = makePlaceholder(TermType);
 		ListPlaceholder = makePlaceholder(ListType);
-		
+
 		EmptyList = makeList();
-		
+
 		transaction = make("transaction");
 
 		TransactionIdVar = makeTBTermVar("transactionId", transaction);
@@ -108,8 +110,8 @@ public class TBTermFactory extends PureFactory {
 
 		Functions.init(this);
 	}
-	
-	public String statistics(){
+
+	public String statistics() {
 		return toString();
 	}
 
@@ -128,29 +130,29 @@ public class TBTermFactory extends PureFactory {
 	public TBTermVar makeTBTermVar(String name, ATerm type) {
 		return makeTBTermVar(name, type, False, EmptyList);
 	}
-	
+
 	public TBTermVar makeTBTermVar(String name, ATerm type, ATerm isResVar) {
 		return makeTBTermVar(name, type, isResVar, EmptyList);
 	}
-	
+
 	public TBTermVar makeTBTermResVar(String name, ATerm type) {
 		return makeTBTermVar(name, type, True, EmptyList);
 	}
-	
-	public TBTermVar mkVar(ATerm name, String processName, ATerm type){
+
+	public TBTermVar mkVar(ATerm name, String processName, ATerm type) {
 		return makeTBTermVar(name.toString() + "$" + processName, type);
 	}
-	
-	public TBTermVar mkResVar(ATerm name, String processName, ATerm type){
+
+	public TBTermVar mkResVar(ATerm name, String processName, ATerm type) {
 		return makeTBTermResVar(name.toString() + "$" + processName, type);
 	}
-	
+
 	public ATerm newTransactionId() {
 		AFun afun = makeAFun("transaction", 1, false);
 		ATerm arg = makeInt(nTransactions++);
 		return makeAppl(afun, arg);
 	}
-	
+
 	/*****/
 
 	public boolean isTrue(ATerm t) {
@@ -219,7 +221,7 @@ public class TBTermFactory extends PureFactory {
 	public boolean member(ATerm e, ATerm l) {
 		ATermList lst = (ATermList) l;
 		int length = lst.getLength();
-		for (int i = 0; i < length ; i++) {
+		for (int i = 0; i < length; i++) {
 			if (e.isEqual(lst.elementAt(i)))
 				return true;
 		}
@@ -322,338 +324,360 @@ public class TBTermFactory extends PureFactory {
 		}
 		return Undefined;
 	}
-	
+
 	public boolean isVar(ATerm t) {
-	    return t.getType() == VAR && !((TBTermVar) t).isResultVar();
-	  }
-	
+		return t.getType() == VAR && !((TBTermVar) t).isResultVar();
+	}
+
 	public boolean isResVar(ATerm t) {
-	    return t.getType() == VAR && ((TBTermVar) t).isResultVar();
+		return t.getType() == VAR && ((TBTermVar) t).isResultVar();
 	}
-	
+
 	public boolean isAnyVar(ATerm t) {
-	    return t.getType() == VAR;
+		return t.getType() == VAR;
 	}
-	
-	public TBTermVar changeResVarIntoVar(TBTermVar rvar){
+
+	public TBTermVar changeResVarIntoVar(TBTermVar rvar) {
 		return makeTBTermVar(rvar.getVarName(), rvar.getVarType());
 	}
-	
-	 /**
-	   * Resolve the variables in ATerm t using Environment env.
-	   * The declaration information in env is used to include type information in 
-	   * every variable occurence
-	   * @param t Aterm to be resolved.
-	   * @param env environment to be used.
-	   */
 
-	  public ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
-	  	//System.err.println("resolveVars: " + t + ": " + env);
-	  	if(t == Undefined){
-	  		return t;
-	  	}
-	    switch (t.getType()) {
-	      case ATerm.BLOB :
-	      case ATerm.INT :
-	      case ATerm.PLACEHOLDER :
-	      case ATerm.REAL :
-	        return t;
-	        
-	      case VAR:
-	    	  TBTermVar v = (TBTermVar) t;
-	    	  v = v.setVarType(env.getVarType(v));
-	    	  //System.err.println("resolveVar returns: " + v + "; " + env);
-	    	  return v;
-	    	  
-	      case ATerm.APPL :
-	    	ATermAppl apt = (ATermAppl) t;
+	/**
+	 * Resolve the variables in ATerm t using Environment env.
+	 * The declaration information in env is used to include type information in 
+	 * every variable occurence
+	 * @param t Aterm to be resolved.
+	 * @param env environment to be used.
+	 */
 
-	        AFun afun = apt.getAFun();
-	        ATerm args[] = apt.getArgumentArray();
-	        int nargs = args.length;
-	        if (nargs == 0)
-		          return t;
-	        ATerm cargs[] = new ATerm[nargs];
-	        for (int i = 0; i < nargs; i++) {
-	          cargs[i] = resolveVars(args[i], env);
-	        }
-	        return makeAppl(afun, cargs);
+	public ATerm resolveVars(ATerm t, Environment env) throws ToolBusException {
+		//System.err.println("resolveVars: " + t + ": " + env);
+		if (t == Undefined) {
+			return t;
+		}
+		switch (t.getType()) {
+		case ATerm.BLOB:
+		case ATerm.INT:
+		case ATerm.PLACEHOLDER:
+		case ATerm.REAL:
+			return t;
 
-	      case ATerm.LIST :
-	        ATermList lst = EmptyList;
-	        ATermList tlst = (ATermList) t;
-	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
-	          lst = lst.insert(resolveVars(tlst.elementAt(i), env));
-	        }
-	 
-	        return lst;
-	    }
-	    throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
-	  }
-	  
-	  public TBTermVar replaceAssignableVar(TBTermVar v, Environment env) throws ToolBusException {
-	  	//System.err.println("replaceAssignableVar: " + v + "; " + env);
+		case VAR:
+			TBTermVar v = (TBTermVar) t;
+			v = v.setVarType(env.getVarType(v));
+			//System.err.println("resolveVar returns: " + v + "; " + env);
+			return v;
 
-    	Binding b = env.getBinding(v);
-    	//System.err.println("Binding = " + b.var + ";" + b.val);
-    	if(b == null || (b.val == Undefined)){
-    		return v;
-    	}
-    	if(b.isFormal() && isResVar(b.val)){
-    			return replaceAssignableVar((TBTermVar)b.val, env);
-    	} 
-    	return b.var;
-	  }
-	  
-	  /**
-	   * Replace the formals in ATerm t by their values using Environment env.
-	   * @param t Aterm containing formals
-	   * @param env environment to be used.
-	   */
+		case ATerm.APPL:
+			ATermAppl apt = (ATermAppl) t;
 
-	  public ATerm replaceFormals(ATerm t, Environment env) throws ToolBusException {
+			AFun afun = apt.getAFun();
+			ATerm args[] = apt.getArgumentArray();
+			int nargs = args.length;
+			if (nargs == 0)
+				return t;
+			ATerm cargs[] = new ATerm[nargs];
+			for (int i = 0; i < nargs; i++) {
+				cargs[i] = resolveVars(args[i], env);
+			}
+			return makeAppl(afun, cargs);
 
-	    switch (t.getType()) {
-	      case ATerm.BLOB :
-	      case ATerm.INT :
-	      case ATerm.PLACEHOLDER :
-	      case ATerm.REAL :
-	        return t;
-	        
-	      case VAR:
-	    	  
-	    	TBTermVar v = (TBTermVar) t;
+		case ATerm.LIST:
+			ATermList lst = EmptyList;
+			ATermList tlst = (ATermList) t;
+			for (int i = tlst.getLength() - 1; i >= 0; i--) {
+				lst = lst.insert(resolveVars(tlst.elementAt(i), env));
+			}
+
+			return lst;
+		}
+		throw new ToolBusInternalError("illegal ATerm in resolveVars: " + t);
+	}
+
+	public TBTermVar replaceAssignableVar(TBTermVar v, Environment env)
+			throws ToolBusException {
+		//System.err.println("replaceAssignableVar: " + v + "; " + env);
+
+		Binding b = env.getBinding(v);
+		//System.err.println("Binding = " + b.var + ";" + b.val);
+		if (b == null || (b.val == Undefined)) {
+			return v;
+		}
+		if (b.isFormal() && isResVar(b.val)) {
+			return replaceAssignableVar((TBTermVar) b.val, env);
+		}
+		return b.var;
+	}
+
+	/**
+	 * Replace the formals in ATerm t by their values using Environment env.
+	 * @param t Aterm containing formals
+	 * @param env environment to be used.
+	 */
+
+	public ATerm replaceFormals(ATerm t, Environment env)
+			throws ToolBusException {
+
+		switch (t.getType()) {
+		case ATerm.BLOB:
+		case ATerm.INT:
+		case ATerm.PLACEHOLDER:
+		case ATerm.REAL:
+			return t;
+
+		case VAR:
+
+			TBTermVar v = (TBTermVar) t;
 			v = v.setVarType(env.getVarType(v));
 			Binding b = env.getBinding(v);
 			if (b == null || (b.val == Undefined)) {
+				//System.err.println("replaceFormals(" + v + ") => " + v);
 				return v;
-			} //else if(b.isFormal() && isResVar(b.val)){ //TODO: OK?
-				//return replaceFormals(b.val, env);
-			//} else {
-			//	return b.val;
-		//	}
-			return v;
+			} else if (b.isFormal() && isResVar(b.val)) { //TODO: OK?
+				ATerm tmp = replaceFormals(b.val, env);
+				//System.err.println("replaceFormals(" + v + ") => " + tmp);
+				return tmp;
+			} else {
+				//System.err.println("replaceFormals(" + v + ") => " + b.val);
+				return b.val;
+			}
+		//return v;
 
-	      case ATerm.APPL :
-	    	ATermAppl apt = (ATermAppl) t;
+		case ATerm.APPL:
+			ATermAppl apt = (ATermAppl) t;
 
-	        AFun afun = apt.getAFun();
-	        ATerm args[] = apt.getArgumentArray();
-	        ATerm cargs[] = new ATerm[args.length];
-	        int nargs = args.length;
-	        if (nargs == 0)
-	          return t;
-	        for (int i = 0; i < nargs; i++) {
-	          cargs[i] = replaceFormals(args[i], env);
-	        }
-	        return makeAppl(afun, cargs);
+			AFun afun = apt.getAFun();
+			ATerm args[] = apt.getArgumentArray();
+			ATerm cargs[] = new ATerm[args.length];
+			int nargs = args.length;
+			if (nargs == 0)
+				return t;
+			for (int i = 0; i < nargs; i++) {
+				cargs[i] = replaceFormals(args[i], env);
+			}
+			return makeAppl(afun, cargs);
 
-	      case ATerm.LIST :
-	        
-	        ATermList lst = EmptyList;
-	        ATermList tlst = (ATermList) t;
-	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
-	          lst = lst.insert(replaceFormals(tlst.elementAt(i), env));
-	        }
-	        return lst;
-	    }
-	    throw new ToolBusInternalError("illegal ATerm in replaceFormals: " + t);
-	  }
+		case ATerm.LIST:
 
-	  /**
-	   * Transform a term into a pattern that can be used by tool interfaces.
-	   * 
-	   */
+			ATermList lst = EmptyList;
+			ATermList tlst = (ATermList) t;
+			for (int i = tlst.getLength() - 1; i >= 0; i--) {
+				lst = lst.insert(replaceFormals(tlst.elementAt(i), env));
+			}
+			return lst;
+		}
+		throw new ToolBusInternalError("illegal ATerm in replaceFormals: " + t);
+	}
 
-	  public ATerm makePattern(ATerm t, boolean recurring) throws ToolBusException { //TODO: remove argument recurring?
-	  	if(t == Undefined){
-	  		return t;
-	  	}
-	    switch (t.getType()) {
-	      case ATerm.BLOB :
-	      	throw new ToolBusInternalError("makePattern for BLOB not implemented");
+	/**
+	 * Transform a term into a pattern that can be used by tool interfaces.
+	 * 
+	 */
 
-	      case ATerm.INT :
-	        return IntPlaceholder;
+	public ATerm makePattern(ATerm t, boolean recurring)
+			throws ToolBusException { //TODO: remove argument recurring?
+		if (t == Undefined) {
+			return t;
+		}
+		switch (t.getType()) {
+		case ATerm.BLOB:
+			throw new ToolBusInternalError(
+					"makePattern for BLOB not implemented");
 
-	      case ATerm.PLACEHOLDER :
-	        return t;
+		case ATerm.INT:
+			return IntPlaceholder;
 
-	      case ATerm.REAL :
-	        return RealPlaceholder;
-	        
-	      case VAR:
-	    	  TBTermVar var = (TBTermVar) t;
-	    	  ATerm type = var.getVarType();
-	    	  return makePlaceholder(type);
+		case ATerm.PLACEHOLDER:
+			return t;
 
-	      case ATerm.APPL :
-	    	ATermAppl apt = (ATermAppl) t;
-	        if(isBoolean(apt)) {
-	          return BoolPlaceholder;
-	        }
-	        AFun fun = apt.getAFun();
-	        ATerm args[] = apt.getArgumentArray();
-	        int nargs = args.length;
-	        if (nargs == 0) {
-	          if (fun.isQuoted())
-	            return StrPlaceholder;
-	          else
-	            return apt;
-	        }
-	        //if (!recurring)
-	       //   return makePlaceholder(apt);
-	        ATerm vargs[] = new ATerm[nargs];
-	        for (int i = 0; i < nargs; i++) {
-	          vargs[i] = makePattern(args[i], false);
-	        }
-	        return makeAppl(fun, vargs);
+		case ATerm.REAL:
+			return RealPlaceholder;
 
-	      case ATerm.LIST :
-	      	
-	        ATermList lst = EmptyList;
-	        ATermList tlst = (ATermList) t;
-	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
-	          lst = lst.insert(makePattern(tlst.elementAt(i), true));
-	        }
-	        return lst;
-	        
-	    }
-	    throw new ToolBusInternalError("illegal ATerm in getType: " + t);
-	  }
+		case VAR:
+			TBTermVar var = (TBTermVar) t;
+			ATerm type = var.getVarType();
+			return makePlaceholder(type);
 
-	  /**
-	   * Replace all variables in an ATerm by their value.
-	   * 
-	   */
+		case ATerm.APPL:
+			ATermAppl apt = (ATermAppl) t;
+			if (isBoolean(apt)) {
+				return BoolPlaceholder;
+			}
+			AFun fun = apt.getAFun();
+			ATerm args[] = apt.getArgumentArray();
+			int nargs = args.length;
+			if (nargs == 0) {
+				if (fun.isQuoted())
+					return StrPlaceholder;
+				else
+					return apt;
+			}
+			//if (!recurring)
+			//   return makePlaceholder(apt);
+			ATerm vargs[] = new ATerm[nargs];
+			for (int i = 0; i < nargs; i++) {
+				vargs[i] = makePattern(args[i], false);
+			}
+			return makeAppl(fun, vargs);
 
-	  public ATerm substitute(ATerm t, Environment env) throws ToolBusException {
-	  	if(t == Undefined){
-	  		return t;
-	  	}
-	    switch (t.getType()) {
-	      case ATerm.BLOB :
-	      case ATerm.INT :
-	      case ATerm.PLACEHOLDER :
-	      case ATerm.REAL :
-	        return t;
-	        
-	      case VAR:
-	    	  TBTermVar var = (TBTermVar) t;
-	    	  if(var.isResultVar()){
-	    		  return var;
-	    	  }
-	    	  return env.getValue(var);
-	        
-	      case ATerm.APPL :
-	    	ATermAppl apt = (ATermAppl) t;
-	        if (isBoolean(apt)) {
-	          return t;
-	        }
-	        AFun afun = apt.getAFun();
-	        ATerm args[] = apt.getArgumentArray();
-	        int nargs = args.length;
-	        if (nargs == 0)
-	          return t;
-	        ATerm vargs[] = new ATerm[nargs];
-	        for (int i = 0; i < nargs; i++) {
-	          vargs[i] = substitute(args[i], env);
-	        }
-	        return makeAppl(afun, vargs);
-	        
-	      case ATerm.LIST :
-	 
-	        ATermList lst = EmptyList;
-	        ATermList tlst = (ATermList) t;
-	        for (int i = tlst.getLength() - 1; i >= 0; i--) {
-	          lst = lst.insert(substitute(tlst.elementAt(i), env));
-	        }
-	        return lst;
-	    }
-	    throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
-	  }
+		case ATerm.LIST:
 
-	  /**
-	   * Matching of two terms. Both terms use a different environment. There are two flavours of matching:
-	   * match      -- complete match with full treatment of variabeles
-	   * mightMatch -- a partial match that ignores variables.
-	   * 
-	   */
+			ATermList lst = EmptyList;
+			ATermList tlst = (ATermList) t;
+			for (int i = tlst.getLength() - 1; i >= 0; i--) {
+				lst = lst.insert(makePattern(tlst.elementAt(i), true));
+			}
+			return lst;
 
-	  private static Environment enva;
-	  private static Environment envb;
-	  private static boolean fullMatch = true;
-	  private MatchResult mr = new MatchResult(this);
-	  
-//	  private static HashMap<ATerm, HashMap<ATerm,Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm,Boolean>>(10000);
+		}
+		throw new ToolBusInternalError("illegal ATerm in getType: " + t);
+	}
 
-	  public boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb) throws ToolBusException {
-	  	//System.err.println("match: ta = " + ta + "  ; " + "enva = " + enva);
-	 	//System.err.println("       tb = " + ta + "  ; " + "envb = " + envb);
+	/**
+	 * Replace all variables in an ATerm by their value.
+	 * 
+	 */
 
-	  //  if(!mightMatch(ta, tb)){
-	  //  	return false;
-	  //  }
-	   
-	    mr.reset(enva, envb);
-	    TBTermFactory.enva = enva;
-	    TBTermFactory.envb = envb;
-	    
-	    fullMatch = true;
-	    boolean res = performMatch(ta, tb);
-	    if (res) {
-	      mr.updateEnvs();
-	      //System.err.println("match: " + mr);
-	      return true;
-	    } else
-	      return false;
-	  }
-	  
-	 // private static int mightMatchCnt = 0;
-	 // private static int cachedMatches = 0;
-	  
+	public ATerm substitute(ATerm t, Environment env) throws ToolBusException {
+		if (t == Undefined) {
+			return t;
+		}
+		switch (t.getType()) {
+		case ATerm.BLOB:
+		case ATerm.INT:
+		case ATerm.PLACEHOLDER:
+		case ATerm.REAL:
+			return t;
 
-	  public boolean mightMatch(ATerm ta, ATerm tb) {
-	    fullMatch = false;
-	 
-	 //   mightMatchCnt += 1;
-	    try {
-	    	/*
-	    }
-	      HashMap<ATerm,Boolean> taCache = matchCache.get(ta);
-	      if(taCache != null){
-	    	  Boolean occurstb = taCache.get(tb);
-	    	  if(occurstb != null){
-	 //   		  cachedMatches += 1;
-	    		  return occurstb.booleanValue();
-	    	  }
-	      } else {
-	    	  taCache = new HashMap<ATerm,Boolean>(100);
-	    	  matchCache.put(ta, taCache);
-	      }
-	 //     if(mightMatchCnt % 100 == 0){
-	 //   	  System.err.println("mightMatchCnt = " + mightMatchCnt + "; cachedMatches = " + cachedMatches + "(" +
-	 //   			  (cachedMatches * 100 /  mightMatchCnt) + "%)");
-	 //     }
-	  * */
-	      boolean res =  performMatch(ta, tb);
-	      /* taCache.put(tb, res ? Boolean.TRUE : Boolean.FALSE); */
-		  //if(ta.equals(tmp) || tb.equals(tmp)){
-	     //if(res)
-		//	  System.err.println("mightMatch(" + ta + ", " + tb + ") ==> " + res);
-		 // }
-	      return res;
-	      
-	    } catch (ToolBusException e) {
-	      throw new ToolBusInternalError(e.getMessage());
-	    }
-	  }
-	  ATerm tmp =  make("open-language(sdf)");
+		case VAR:
+			TBTermVar var = (TBTermVar) t;
+			if (var.isResultVar()) {
+				return var;
+			}
+			return env.getValue(var);
 
-	  private boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
+		case ATerm.APPL:
+			ATermAppl apt = (ATermAppl) t;
+			if (isBoolean(apt)) {
+				return t;
+			}
+			AFun afun = apt.getAFun();
+			ATerm args[] = apt.getArgumentArray();
+			int nargs = args.length;
+			if (nargs == 0)
+				return t;
+			ATerm vargs[] = new ATerm[nargs];
+			for (int i = 0; i < nargs; i++) {
+				vargs[i] = substitute(args[i], env);
+			}
+			return makeAppl(afun, vargs);
 
+		case ATerm.LIST:
 
-	    switch (ta.getType()) {
+			ATermList lst = EmptyList;
+			ATermList tlst = (ATermList) t;
+			for (int i = tlst.getLength() - 1; i >= 0; i--) {
+				lst = lst.insert(substitute(tlst.elementAt(i), env));
+			}
+			return lst;
+		}
+		throw new ToolBusInternalError("illegal ATerm in substitute: " + t);
+	}
+
+	/**
+	 * Matching of two terms. Both terms use a different environment. There are two flavours of matching:
+	 * match      -- complete match with full treatment of variabeles
+	 * mightMatch -- a partial match that ignores variables.
+	 * 
+	 */
+
+	private static Environment enva;
+
+	private static Environment envb;
+
+	private static boolean fullMatch = true;
+
+	private MatchResult mr = new MatchResult(this);
+
+	private static HashMap<ATerm, HashMap<ATerm, Boolean>> matchCache = new HashMap<ATerm, HashMap<ATerm, Boolean>>(
+			10000);
+
+	private static int mightMatchCnt = 0;
+	private static int matches = 0;
+	private static int trueMatches = 0;
+
+	private static int cachedMatches = 0;
+
+	public boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb)
+			throws ToolBusException {
+		// System.err.println("match: ta = " + ta + " ; " + "enva = " + enva);
+		// System.err.println(" tb = " + ta + " ; " + "envb = " + envb);
+//		matches += 1;
+//		if(matches % 1000 == 0){
+//			System.err.println(matches + " matches; (true: " + (trueMatches * 100.0 /matches) + "%)");
+//			System.err.println("mightMatchCnt: " + mightMatchCnt);
+//		}
+//		if (!mightMatch(ta, tb)) {
+//			return false;
+//		}
+
+		mr.reset(enva, envb);
+		TBTermFactory.enva = enva;
+		TBTermFactory.envb = envb;
+
+		fullMatch = true;
+
+		boolean res = performMatch(ta, tb);
+
+		if (res) {
+			mr.updateEnvs();
+			// System.err.println("match: " + mr);
+			trueMatches += 1;
+			return true;
+		} else
+			return false;
+	}
+
+	public boolean mightMatch(ATerm ta, ATerm tb) {
+		fullMatch = false;
+
+		mightMatchCnt += 1;
+		
+		try {
+			/*
+			if (mightMatchCnt % 10000 == 0) {
+				System.err.println("mightMatchCnt = " + mightMatchCnt
+						+ "; cachedMatches = " + cachedMatches + "("
+						+ (cachedMatches * 100 / mightMatchCnt) + "%)");
+			}
+			HashMap<ATerm, Boolean> taCache = matchCache.get(ta);
+			if (taCache != null) {
+				Boolean occurstb = taCache.get(tb);
+				if (occurstb != null) {
+					cachedMatches += 1;
+					return occurstb.booleanValue();
+				}
+			} else {
+				taCache = new HashMap<ATerm, Boolean>(100);
+				matchCache.put(ta, taCache);
+			}
+
+*/
+			boolean res = performMatch(ta, tb);
+//			taCache.put(tb, res ? Boolean.TRUE : Boolean.FALSE);
+
+			// if(res)
+			//	  System.err.println("mightMatch(" + ta + ", " + tb + ") ==> " + res);
+
+			return res;
+
+		} catch (ToolBusException e) {
+			throw new ToolBusInternalError(e.getMessage());
+		}
+	}
+
+	private boolean performMatch(ATerm ta, ATerm tb) throws ToolBusException {
+
+		switch (ta.getType()) {
 
 		case VAR:
 			TBTermVar varta = (TBTermVar) ta;
@@ -731,15 +755,13 @@ public class TBTermFactory extends PureFactory {
 			}
 			if (ta == IntPlaceholder && tb.getType() == ATerm.INT)
 				return true;
-			else if (ta == RealPlaceholder
-					&& tb.getType() == ATerm.REAL)
+			else if (ta == RealPlaceholder && tb.getType() == ATerm.REAL)
 				return true;
 			else if (ta == StrPlaceholder
 					&& ((tb.getType() == ATerm.APPL && ((ATermAppl) tb)
 							.getArity() == 0)) || tb.getType() == ATerm.BLOB)
 				return true;
-			else if (ta == ListPlaceholder
-					&& tb.getType() == ATerm.LIST)
+			else if (ta == ListPlaceholder && tb.getType() == ATerm.LIST)
 				return true;
 			else if (ta == TermPlaceholder)
 				return true;
@@ -771,8 +793,8 @@ public class TBTermFactory extends PureFactory {
 			if (tb.getType() != ATerm.APPL)
 				return false;
 			ATermAppl aptb = (ATermAppl) tb;
-			if ((apta.getArity() != aptb.getArity()) || 
-				(apta.getName() != aptb.getName()))
+			if ((apta.getArity() != aptb.getArity())
+					|| (apta.getName() != aptb.getName()))
 				return false;
 			else {
 				ATerm a_args[] = apta.getArgumentArray();
@@ -818,5 +840,4 @@ public class TBTermFactory extends PureFactory {
 		}
 	}
 
-	
 }

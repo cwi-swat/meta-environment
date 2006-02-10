@@ -16,8 +16,8 @@ public class Main {
 			//T.parse("/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/toolbus/test.tb");
 			T.parse(ToolBus.getWorkspace()
 					// + "/toolbusNG/toolbus/tool/java/example.tb");
- 					+ "/toolbusNG/toolbus/tool/classic/wave.tb");
-				    //+ "/toolbusNG/toolbus/test/Assign6.tb");
+ 					+ "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
+				    //+ "/toolbusNG/toolbus/test/Msg0.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
 		} catch (ToolBusException e) {

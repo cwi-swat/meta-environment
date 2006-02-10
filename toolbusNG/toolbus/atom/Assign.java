@@ -37,7 +37,6 @@ public class Assign extends Atom {
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
  }
 
-
   public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
     super.compile(P, calls, env, follow);
     //System.err.println("Assign.compile: " + this + " env =" + getEnv());
