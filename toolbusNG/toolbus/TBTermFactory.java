@@ -436,11 +436,12 @@ public class TBTermFactory extends PureFactory {
 				ATerm tmp = replaceFormals(b.val, env);
 				//System.err.println("replaceFormals(" + v + ") => " + tmp);
 				return tmp;
-			} else {
+			} else if(b.isFormal() && !b.isAssignable()){
 				//System.err.println("replaceFormals(" + v + ") => " + b.val);
 				return b.val;
+			} else  {
+				return v;
 			}
-		//return v;
 
 		case ATerm.APPL:
 			ATermAppl apt = (ATermAppl) t;
@@ -821,11 +822,14 @@ public class TBTermFactory extends PureFactory {
 			if (tb == ListPlaceholder) {
 				return true;
 			}
-			if (((ATermList) ta).getLength() != ((ATermList) tb).getLength())
+			if(tb.getType() != ATerm.LIST){
+				return false;
+			}
+			ATermList lsta = (ATermList) ta;
+			ATermList lstb = (ATermList) tb;
+			if (lsta.getLength() != lstb.getLength())
 				return false;
 			else {
-				ATermList lsta = (ATermList) ta;
-				ATermList lstb = (ATermList) tb;
 				while (!lsta.isEmpty()) {
 					if (!performMatch(lsta.getFirst(), lstb.getFirst()))
 						return false;

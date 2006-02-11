@@ -4,7 +4,9 @@
 
 package toolbus.tool.java;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
+
 
 public class ExampleBridge
   extends ExampleTool

@@ -1,7 +1,5 @@
-import java.util.*;
-
-import aterm.*;
-import aterm.pure.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TBAddressBookService implements AddressBookTif
 {

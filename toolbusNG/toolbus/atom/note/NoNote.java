@@ -3,15 +3,14 @@
  * @author paulk
  *
  */
-package toolbus.atom;
+package toolbus.atom.note;
 
-import aterm.ATerm;
-import toolbus.Environment;
-import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
-import toolbus.process.ProcessInstance;
+import aterm.ATerm;
 
 /**
  * 

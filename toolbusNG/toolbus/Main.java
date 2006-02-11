@@ -17,7 +17,7 @@ public class Main {
 			T.parse(ToolBus.getWorkspace()
 					// + "/toolbusNG/toolbus/tool/java/example.tb");
  					+ "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
-				    //+ "/toolbusNG/toolbus/test/Msg0.tb");
+				    //+ "/toolbusNG/toolbus/test/Notes.tb");
 					//			+ "/toolbusNG/toolbus/parser/tmp.tb");
 			T.execute();
 		} catch (ToolBusException e) {

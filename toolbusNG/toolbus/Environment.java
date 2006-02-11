@@ -17,23 +17,32 @@ import aterm.ATermList;
 class Binding {
 	TBTermVar var;
 	ATerm val;
-	boolean isFormal = false;
+	boolean formal = false;
+	boolean assignable = false;
 	
 	public Binding(TBTermVar var, ATerm val, boolean isFormal) {
 		this.var = var;
 		this.val = val;
-		this.isFormal = isFormal;
+		this.formal = isFormal;
 	}
 	public Binding(TBTermVar var, ATerm val) {
 		this(var, val, true);
 	}
 	
 	public boolean isFormal(){
-		return isFormal;
+		return formal;
 	}
 	
 	public void setFormal(boolean b){
-		isFormal = b;
+		formal = b;
+	}
+	
+	public boolean isAssignable(){
+		return assignable;
+	}
+	
+	public void setAssignable(boolean b){
+		 assignable = b;
 	}
 }
 
@@ -262,6 +271,11 @@ public class Environment {
 				}
 			}
 		}
+	}
+	
+	public void setAssignable (TBTermVar var) throws ToolBusException {
+		Binding b = getBinding(var);
+		b.setAssignable(true);
 	}
 
 	public String toString() {

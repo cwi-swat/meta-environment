@@ -2,8 +2,6 @@ package toolbus.tifs;
 
 import java.util.Iterator;
 
-import aterm.ATerm;
-
 public class Event extends Communication {
   public Event(ATerm t) {
     super(t);

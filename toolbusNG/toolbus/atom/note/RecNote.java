@@ -3,10 +3,12 @@
  * @author paulk
  *
  */
-package toolbus.atom;
+package toolbus.atom.note;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
@@ -14,25 +16,27 @@ import aterm.ATerm;
  * 
  *
  */
-public class Subscribe extends Atom {
+public class RecNote extends Atom {
 	private Ref msgpat;
-	
-	public Subscribe(ATerm msgpat, TBTermFactory tbfactory) {
+
+	public RecNote(ATerm msgpat, TBTermFactory tbfactory) {
 		super(tbfactory);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);
 	}
-	
+
 	public ProcessExpression copy() {
-		Atom a = new Subscribe(msgpat.value, tbfactory);
+		Atom a = new RecNote(msgpat.value, tbfactory);
 		a.copyAtomAttributes(this);
 		return a;
 	}
-	
+
 	public boolean execute() throws ToolBusException {
-		if (!isEnabled())
+		if (isEnabled()
+				&& getProcess().getNoteFromQueue(this.msgpat.value, getEnv())) {
+			return true;
+		} else {
 			return false;
-		getProcess().subscribe(msgpat.value);
-		return true;
+		}
 	}
 }

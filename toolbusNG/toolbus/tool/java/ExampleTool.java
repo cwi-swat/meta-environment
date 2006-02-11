@@ -4,10 +4,15 @@
 
 package toolbus.tool.java;
 
-import aterm.*;
-import toolbus.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import toolbus.AbstractTool;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class ExampleTool
   extends AbstractTool

@@ -9,7 +9,6 @@ import junit.framework.TestCase;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
-import aterm.pure.PureFactory;
 
 public class TscriptTest extends TestCase {
 	private TBTermFactory tbfactory;

@@ -1,4 +1,5 @@
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface IAddressBookService extends Remote {
   public int createEntry() throws RemoteException;

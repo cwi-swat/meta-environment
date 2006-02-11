@@ -4,7 +4,8 @@
 
 package toolbus.tool.java;
 
-import aterm.*;
+import aterm.ATerm;
+
 
 public interface ExampleTif
 {

@@ -1,8 +1,6 @@
 package toolbus.tifs;
 
-import java.util.*;
-
-import aterm.*;
+import java.util.Iterator;
 
 public class Process {
   private ATermAppl representation;

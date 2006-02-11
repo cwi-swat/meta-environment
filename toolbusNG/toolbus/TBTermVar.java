@@ -5,6 +5,7 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 
 
+
 public class TBTermVar extends AbstractTBTerm {
 
 	public TBTermVar(TBTermFactory tbfactory) {

@@ -1,6 +1,8 @@
-import java.rmi.*;
-import java.rmi.server.*;
-import java.util.*;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RMIAddressBookService
   extends UnicastRemoteObject

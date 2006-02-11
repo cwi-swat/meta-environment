@@ -1,7 +1,8 @@
 package casestudy.iiop;
 
 import java.rmi.RemoteException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.rmi.PortableRemoteObject;
 

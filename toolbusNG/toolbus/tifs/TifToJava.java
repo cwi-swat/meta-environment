@@ -1,9 +1,13 @@
 package toolbus.tifs;
 
-import java.io.*;
-import java.util.*;
-
-import aterm.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 public class TifToJava {
   private Tif tif;

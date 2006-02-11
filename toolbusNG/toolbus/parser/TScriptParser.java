@@ -6,29 +6,29 @@ import java.util.Hashtable;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
-import toolbus.atom.AckEvent;
 import toolbus.atom.Assign;
 import toolbus.atom.Atom;
-import toolbus.atom.Connect;
 import toolbus.atom.Create;
 import toolbus.atom.Delta;
-import toolbus.atom.DisConnect;
 import toolbus.atom.Do;
-import toolbus.atom.Eval;
-import toolbus.atom.Event;
-import toolbus.atom.Execute;
-import toolbus.atom.NoNote;
 import toolbus.atom.Print;
-import toolbus.atom.RecMsg;
-import toolbus.atom.RecNote;
-import toolbus.atom.RecVal;
 import toolbus.atom.ShutDown;
-import toolbus.atom.SndMsg;
-import toolbus.atom.SndNote;
-import toolbus.atom.Subscribe;
 import toolbus.atom.Tau;
-import toolbus.atom.Terminate;
-import toolbus.atom.UnSubscribe;
+import toolbus.atom.msg.RecMsg;
+import toolbus.atom.msg.SndMsg;
+import toolbus.atom.note.NoNote;
+import toolbus.atom.note.RecNote;
+import toolbus.atom.note.SndNote;
+import toolbus.atom.note.Subscribe;
+import toolbus.atom.note.UnSubscribe;
+import toolbus.atom.tool.AckEvent;
+import toolbus.atom.tool.Connect;
+import toolbus.atom.tool.DisConnect;
+import toolbus.atom.tool.Eval;
+import toolbus.atom.tool.Event;
+import toolbus.atom.tool.Execute;
+import toolbus.atom.tool.RecVal;
+import toolbus.atom.tool.Terminate;
 import toolbus.process.Alternative;
 import toolbus.process.Disrupt;
 import toolbus.process.IfElse;
@@ -284,7 +284,9 @@ class TScriptNodeBuilders {
         if (args.length == 1) {
           return new RecMsg((ATerm) args[0], tbfactory);
         } else {
-          return new RecMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
+           	System.err.println("ttt-RecMsg: too many arguments");
+           	return null;
+          //return new RecMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
         }
       }
     });
@@ -294,7 +296,9 @@ class TScriptNodeBuilders {
         if (args.length == 1) {
           return new SndMsg((ATerm) args[0], tbfactory);
         } else {
-          return new SndMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
+        	System.err.println("ttt-SndMsg: too many arguments");
+        	return null;
+          //return new SndMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
         }
       }
     });

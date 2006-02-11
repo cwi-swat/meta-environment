@@ -1,6 +1,8 @@
-package toolbus.atom;
+package toolbus.atom.msg;
 
 import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
+import toolbus.atom.Atom;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
@@ -29,5 +31,10 @@ public class RecMsg extends MsgAtom {
 				a instanceof SndMsg
 				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
 	}
- 
+	
+  public boolean execute() throws ToolBusException {
+	  // Communication is always initiated by the sender,
+	  // So for the receiver nothing needs to be done.
+	  return false;
+  }
 }

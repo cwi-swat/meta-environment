@@ -1,7 +1,6 @@
 package toolbus.tool;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 
 import toolbus.TBTermFactory;
 import aterm.ATerm;

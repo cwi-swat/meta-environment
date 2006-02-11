@@ -3,10 +3,12 @@
  * @author paulk
  *
  */
-package toolbus.atom;
+package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;

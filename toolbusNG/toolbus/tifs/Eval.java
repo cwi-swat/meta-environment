@@ -2,8 +2,6 @@ package toolbus.tifs;
 
 import java.util.Iterator;
 
-import aterm.*;
-
 public class Eval extends Communication {
   public Eval(ATerm t) {
     super(t);

@@ -1,6 +1,7 @@
 package toolbus.atom;
 
-import aterm.*;
+import aterm.ATerm;
+
 
 public class Ref {
   public ATerm value;

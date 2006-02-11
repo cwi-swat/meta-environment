@@ -2,6 +2,7 @@ package toolbus;
 
 import aterm.pure.ATermApplImpl;
 
+
 public abstract class AbstractTBTerm extends ATermApplImpl {
 	  protected aterm.ATerm term;
 

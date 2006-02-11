@@ -16,7 +16,6 @@ import toolbus.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermBlob;
 import aterm.ATermList;
-import aterm.pure.PureFactory;
 
 public class TBTermTest extends TestCase {
   private TBTermFactory tbfactory;
@@ -102,6 +101,9 @@ public class TBTermTest extends TestCase {
     assertTrue(doMatch("f(1,2)", "f(1,2)"));
     assertTrue(!doMatch("f(1)", "f(1,2)"));
     assertTrue(!doMatch("f(1,2)", "f(1)"));
+    
+    assertTrue(!doMatch("f", "[1,2,3]"));
+    assertTrue(!doMatch("[1,2,3]", "f"));
 
     assertTrue(doMatch("<int>", "1"));
     assertTrue(doMatch("1", "<int>"));

@@ -2,8 +2,6 @@ package toolbus.tifs;
 
 import java.util.LinkedList;
 
-import aterm.*;
-
 public class CommunicationList extends LinkedList {
 
   public CommunicationList(ATermList representation) {

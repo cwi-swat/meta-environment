@@ -1,9 +1,11 @@
 package toolbus.parser;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import toolbus.TBTermFactory;
-
 import aterm.ATerm;
 
 /**
