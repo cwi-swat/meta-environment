@@ -2,7 +2,8 @@ package casestudy.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddressBookImpl extends UnicastRemoteObject implements AddressBook {
   private Map addressMap;

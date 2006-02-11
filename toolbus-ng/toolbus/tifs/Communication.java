@@ -1,8 +1,8 @@
 package toolbus.tifs;
 
-import java.util.*;
-
-import aterm.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 abstract public class Communication {
   private ATermAppl representation;

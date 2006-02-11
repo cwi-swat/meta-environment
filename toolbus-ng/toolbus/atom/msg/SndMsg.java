@@ -2,8 +2,9 @@
  * @author paulk, Jul 16, 2002
  */
 
-package toolbus.atom;
+package toolbus.atom.msg;
 import toolbus.TBTermFactory;
+import toolbus.atom.Atom;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 

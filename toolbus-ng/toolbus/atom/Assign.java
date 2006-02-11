@@ -5,9 +5,14 @@ package toolbus.atom;
 
 import java.util.Stack;
 
-import toolbus.*;
-import toolbus.process.*;
-
+import toolbus.Environment;
+import toolbus.Functions;
+import toolbus.State;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 public class Assign extends Atom {
@@ -32,6 +37,8 @@ public class Assign extends Atom {
   	var.value = tbfactory.resolveVars(var.value, env);
  	//System.err.println("Assign.replaceformals: " + var.value);
   	var.value = tbfactory.replaceAssignableVar((TBTermVar)var.value, env);
+  	env.setAssignable((TBTermVar)var.value);
+  	
     exp.value = tbfactory.resolveVars(exp.value, env);
     exp.value = tbfactory.replaceFormals(exp.value, env);
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);

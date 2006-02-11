@@ -3,7 +3,6 @@ package toolbus.atom;
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessExpression;
-
 import aterm.ATerm;
 
 /**

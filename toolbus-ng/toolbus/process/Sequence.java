@@ -7,9 +7,9 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.Environment;
+import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
-import toolbus.State;
 
 public class Sequence extends ProcessExpression {
 	private ProcessExpression left, right;

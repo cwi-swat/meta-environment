@@ -7,7 +7,6 @@ import java.util.IdentityHashMap;
 import java.util.Vector;
 
 import toolbus.atom.Atom;
-import toolbus.atom.MsgAtom;
 import aterm.ATerm;
 
 
@@ -48,6 +47,18 @@ public class State {
       nElements -= 1;
     }
   }
+  
+  public void addPartners(State set){
+	  for(StateElement e : set.getElementsAsVector()){
+		  e.addPartners(set);
+	  }
+  }
+  
+  public void delPartners(State set){
+	  for(StateElement e : set.getElementsAsVector()){
+		  e.delPartners(set);
+	  }
+  }
 
   public State union(State b) {
     State c = new State();
@@ -68,82 +79,11 @@ public class State {
   public int size() {
     return elements.size();
   }
-  
-  public void addMsgPartners(State s){
-	  for (StateElement a : elements) {
-		  a.addMsgPartners(s);
-	  }
-  }
-  
-  public void delMsgPartners(State s){
-	  for (StateElement a : elements) {
-		  a.delMsgPartners(s);
-	  }
-  }
-
-  /*
-  public void addMsgPartners(State set) {
-    for (StateElement a : elements) {
-      if (!(a instanceof MsgAtom)) {
-        continue;
-      }
-      MsgAtom ca = (MsgAtom) a;
-
-      for (StateElement b : set.getElementsAsVector()) {
-        if (!(b instanceof MsgAtom)) {
-          continue;
-        }
-        MsgAtom cb = (MsgAtom) b;
-        if (ca.canCommunicate(cb)) {
-          ca.addMsgPartner(cb);
-          cb.addMsgPartner(ca);
-          //System.err.println(" -- " + ca);
-          //System.err.println("    " + cb);
-        }
-      }
-    }
-  }
-  
-  public void delMsgPartners(State set){
-  for (StateElement a : elements) {
-      if (!(a instanceof MsgAtom)) {
-        continue;
-      }
-      MsgAtom ca = (MsgAtom) a;
-
-      for (StateElement b : set.getElementsAsVector()) {
-        if (!(b instanceof MsgAtom)) {
-          continue;
-        }
-        MsgAtom cb = (MsgAtom) b;
-        if (ca.canCommunicate(cb)) {
-          ca.delMsgPartner(cb);
-          cb.delMsgPartner(ca);
-          //System.err.println(" -- " + ca);
-          //System.err.println("    " + cb);
-        }
-      }
-    }
-  }
-  
-  */
-  
-  public void addNotePartners(State set){
-	  for (StateElement a : elements) {
-		  a.addNotePartners(set);
-	  }  
-  }
-  
-  public void delNotePartners(State set){
-	  for (StateElement a : elements) {
-		  a.delNotePartners(set);
-	  }  
-  }
 
   public void setTest(ATerm test, Environment env) throws ToolBusException {
   	if (test != null){
 	    for (StateElement a : elements) {
-	      a.setTest(test, env);
+	       a.setTest(test, env);
 	    }
   	}
   }

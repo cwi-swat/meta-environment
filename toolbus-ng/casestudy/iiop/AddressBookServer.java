@@ -1,6 +1,7 @@
 package casestudy.iiop;
 
-import javax.naming.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 public class AddressBookServer {
 

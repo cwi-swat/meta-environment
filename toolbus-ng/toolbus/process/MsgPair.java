@@ -1,14 +1,19 @@
 package toolbus.process;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
 import java.util.Stack;
+import java.util.Vector;
 
-import aterm.*;
-import aterm.ATerm;
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.State;
+import toolbus.StateElement;
 import toolbus.ToolBusException;
-import toolbus.atom.*;
+import toolbus.ToolBusInternalError;
+import toolbus.atom.Atom;
+import toolbus.atom.msg.RecMsg;
+import toolbus.atom.msg.SndMsg;
+import toolbus.atom.tool.Eval;
+import toolbus.atom.tool.Event;
 
 
 /*** Outdated **/

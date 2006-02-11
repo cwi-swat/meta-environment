@@ -1,7 +1,6 @@
  package toolbus.tool;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 

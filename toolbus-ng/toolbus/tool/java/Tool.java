@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermList;
 
 public interface Tool
 {

@@ -2,7 +2,7 @@
  * Created on Jun 26, 2005
  *
  */
-package toolbus.atom;
+package toolbus.atom.tool;
 
 import java.util.Stack;
 
@@ -13,6 +13,8 @@ import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
+import toolbus.atom.Atom;
+import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;

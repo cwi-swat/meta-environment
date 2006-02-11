@@ -4,12 +4,12 @@ package toolbus.process;
  * @author paulk
  */
 
-import java.util.*;
+import java.util.Stack;
 
 import toolbus.Environment;
+import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
-import toolbus.State;
 
 public class Alternative extends ProcessExpression {
   private ProcessExpression left, right;

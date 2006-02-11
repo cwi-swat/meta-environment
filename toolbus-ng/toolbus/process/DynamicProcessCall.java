@@ -12,7 +12,6 @@ import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermList;

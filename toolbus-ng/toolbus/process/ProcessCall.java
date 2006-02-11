@@ -6,9 +6,14 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.*;
-
-import aterm.*;
+import toolbus.Environment;
+import toolbus.State;
+import toolbus.StateElement;
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 public class ProcessCall extends ProcessExpression implements StateElement{
 	private String name;
@@ -198,6 +203,23 @@ public class ProcessCall extends ProcessExpression implements StateElement{
 	  		return firstState;
 	  	}
 	  }
+	  
+	  public void addPartners(State s) {
+	  }
+
+		public void delPartners(State s) {
+			
+			
+		}
+
+		public void addNotePartners(State s) {
+			
+			
+		}
+
+		public void delNotePartners(State s) {
+			
+		}
 	  
 	  public void activate(){
 	  	if(isStaticCall){

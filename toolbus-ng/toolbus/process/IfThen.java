@@ -5,7 +5,6 @@ package toolbus.process;
 
 import toolbus.TBTermFactory;
 import toolbus.atom.Delta;
-
 import aterm.ATerm;
 public class IfThen extends IfElse {
   public IfThen(ATerm test, ProcessExpression Pthen, TBTermFactory tbfactory) {

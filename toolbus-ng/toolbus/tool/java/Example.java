@@ -1,10 +1,13 @@
 package toolbus.tool.java;
 
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class Example
   extends Frame
@@ -30,7 +33,7 @@ public class Example
     // Build the user interface: just a single button
     button = new Button("Button");
     button.addActionListener(this);
-    addElement(button);
+    add(button);
     pack();
     show();
 

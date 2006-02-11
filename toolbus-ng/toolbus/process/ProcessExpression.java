@@ -2,7 +2,11 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.State;
+import toolbus.StateElement;
+import toolbus.TBTermFactory;
+import toolbus.ToolBusException;
 
 /**
  * ProcesssExpression defines the overall behaviour of process expressions.

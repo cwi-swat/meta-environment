@@ -278,20 +278,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return processInstance;
   }
   
-  public void addMsgPartners(State s){
-	  
+  public void addPartners(State s){
   }
   
-  public void delMsgPartners(State s){
-	  
-  }
-  
-  public void addNotePartners(State s){
-	  
-  }
-  
- public void delNotePartners(State s){
-	  
+  public void delPartners(State s){
   }
 
   public State getNextState(){
