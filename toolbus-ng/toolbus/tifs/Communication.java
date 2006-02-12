@@ -4,6 +4,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermAppl;
+
 abstract public class Communication {
   private ATermAppl representation;
   private List argumentList;

@@ -4,27 +4,17 @@
 
 package toolbus;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import java.util.Properties;
 import java.util.Random;
-import java.util.Set;
 import java.util.Vector;
 
 import toolbus.parser.ExternalParser;
@@ -34,7 +24,6 @@ import toolbus.process.ProcessDefinition;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
-import toolbus.tool.classic.ClassicToolShield;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermInt;
@@ -51,6 +40,8 @@ public class ToolBus {
 	private static Random rand = new Random();
 	
 	private TBTermFactory tbfactory;
+	
+	private IOManager iomanager;
 
 	private LinkedList<ProcessInstance> processes; // process instances
 	
@@ -60,9 +51,9 @@ public class ToolBus {
 	
 	private Iterator<ToolInstance> toolsIterator;
 
-	private Vector<ProcessDefinition> procdefs;
+	private HashMap<String,ProcessDefinition> procdefs;
 
-	private Vector<ToolDefinition> tooldefs;
+	private HashMap<String,ToolDefinition> tooldefs;
 
 	private HashSet<ATerm> atomSignature; // signature of all atoms in executing processes
 
@@ -71,40 +62,12 @@ public class ToolBus {
 
 	private PrintWriter out;
 
-	private static String sglr = "/ufs/paulk/software/installed/bin/sglr";
-
-	private static String parseTable = "/ufs/paulk/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
-
-	private static String implodePT = "/ufs/paulk/software/installed/bin/implodePT";
-
-	private static String workspace = "/ufs/paulk/eclipse/workspace";
-
 	private static int nerrrors = 0;
 
 	private static int nwarnings = 0;
 
-	private static int WellKnownSocketPort = 8999;
-
-	private ServerSocketChannel WellKnownSocketChannel;
-
-	private ServerSocket WellKnownSocket;
-
-	private static InetAddress localHost;
-
-	private static Selector selector;
-
-	private final static int MAX_HANDSHAKE = 512; // Do not change since they correspond with
-
-	private final static int MIN_MSG_SIZE = 128; // the C implementation
-
-	private String toolname;
-
-	private Vector<ToolInstance> connectedTools;
-
-	private SocketChannel client;
-
-	private ByteBuffer handshake;
-
+	private LinkedList<ToolInstance> connectedTools;
+	
 	private long startTime;
 
 	private long currentTime;
@@ -113,9 +76,7 @@ public class ToolBus {
 
 	private boolean shutdownDone = false;
 
-	private static boolean toolActionCompleted = false;
-	
-	private static HashMap<Integer,ToolBus> portToToolBus = new HashMap<Integer,ToolBus>();
+	private boolean toolActionCompleted = false;
 
 	/**
 	 * Constructor with explicit PrintWriter
@@ -128,38 +89,21 @@ public class ToolBus {
 		processesIterator = null;
 		tools = new Vector<ToolInstance>();
 		toolsIterator = null;
-		connectedTools = new Vector<ToolInstance>(30);
-		procdefs = new Vector<ProcessDefinition>();
-		tooldefs = new Vector<ToolDefinition>();
+		connectedTools = new LinkedList<ToolInstance>();
+		procdefs = new HashMap<String,ProcessDefinition>();
+		tooldefs = new HashMap<String,ToolDefinition>();
 		atomSignature = new HashSet<ATerm>();
-		try {
-			loadProperties();
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}
+		
+		PropertyManager.loadProperties();
+		
 		parser = new TScriptParser(
-					new ExternalParser(sglr, parseTable, implodePT), 
+					new ExternalParser(
+							get("sglr.path"), 
+							get("parsetable.path"), 
+							get("implodePT.path")), 
 					tbfactory);
-		try {
-			localHost = InetAddress.getLocalHost();
-			info("Creating WellKnownSocket: " + WellKnownSocketPort + " "
-					+ localHost);
-			WellKnownSocketChannel = ServerSocketChannel.open();
-			WellKnownSocket = WellKnownSocketChannel.socket();
-			WellKnownSocket.bind(new InetSocketAddress(WellKnownSocketPort));
-			WellKnownSocketChannel.configureBlocking(false);
-			selector = Selector.open();
-			WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-			handshake = ByteBuffer.allocate(MAX_HANDSHAKE);
-			portToToolBus.put(new Integer(WellKnownSocketPort),this);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		info("WellKnownSocket created: " + WellKnownSocket);
+		iomanager = new IOManager(this);
 		startTime = System.currentTimeMillis();
-
 	}
 
 	/**
@@ -177,15 +121,6 @@ public class ToolBus {
 	public ToolBus(StringWriter out) {
 		this(new PrintWriter(out));
 	}
-	
-	public static ToolBus getToolBus(int port) throws ToolBusException{
-		ToolBus tb = portToToolBus.get(port);
-		if(tb != null){
-			return tb;
-		} else {
-			throw new ToolBusException("No ToolBus associated with port " + port);
-		}
-	}
 
 	void info(String msg) {
 		if (verbose) {
@@ -193,126 +128,37 @@ public class ToolBus {
 					+ msg.substring(0, Math.min(msg.length(), 100)));
 		}
 	}
-
-	private void handleInputFromTools(long timeout) {
-		//System.err.println("handleInputFromTools(" + timeout + ")");
-		try {
-			if(selector.select(timeout) == 0){
-				return;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Set readyKeys = selector.selectedKeys();
-		//System.err.println("handleInputFromTools(" + timeout + ") # readyKeys = " + readyKeys.size());
-		Iterator iterator = readyKeys.iterator();
-		while (iterator.hasNext()) {
-			SelectionKey key = (SelectionKey) (iterator.next());
-			iterator.remove();
-			info("key " + key);
-
-			try {
-				if (key.isAcceptable()) {
-					info("case acceptable");
-					ServerSocketChannel server = (ServerSocketChannel) key
-							.channel();
-					client = server.accept();
-					client.configureBlocking(true);
-					shakeHands();
-
-				} else if (key.isReadable()) {
-					info("case readable");
-					client = (SocketChannel) key.channel();
-					ClassicToolShield ts = (ClassicToolShield) key.attachment();
-					ATerm term = ts.receiveTerm();
-					if (term != null) {
-						info("TERM READ: " + term);
-						ts.sndValueFromToolToToolBus(term);
-					}
-				} else if (key.isWritable()) {
-					info("case readable");
-					client = (SocketChannel) key.channel();
-					ClassicToolShield ts = (ClassicToolShield) key.attachment();
-					ts.sendTerm();
-				} else {
-					System.err
-							.println("Cannot handle key in handleInputFromTools");
-				}
-			} catch (IOException e) {
-				System.err.println("handleInputFromTools: " + e);
-				e.printStackTrace();
-				key.cancel();
-				try {
-					key.channel().close();
-				} catch (IOException ce) {
-					System.err.println("handleInputFromTools: " + ce);
-					ce.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void shakeHands() throws IOException {
-		handshake.clear();
-		int nr = client.read(handshake);             // <== read
-
-		info(nr + " bytes read from client");
-		handshake.flip();
-		String s = "";
-		while (handshake.hasRemaining()) {
-			s = s + (char) handshake.get();
-		}
-		info("read: <" + s + ">");
-
-		String toolHand = s.toLowerCase().trim();
-		info("input: <" + toolHand + ">");
-		String elems[] = toolHand.split(" ");
-
-		toolname = elems[0];
-		info("toolname = " + toolname);
-		String host = elems[1];
-		info("host = " + host);
-
-		info("elems[2] = " + elems[2]);
-
-		int lastd = -1;
-		for (int i = 0; i < elems[2].length(); i++) {
-			if ((i == 0) && (elems[2].charAt(0) == '-')) {
-				lastd = i;
-			} else if (!Character.isDigit(elems[2].charAt(i))) {
-				break;
-			}
-			lastd = i;
-		}
-		int toolid = Integer.parseInt(elems[2].substring(0, lastd + 1));
-		info("toolid = " + toolid);
-
-		try{
-			ToolInstance ti;
-			if (toolid >= 0) {
-				ti = getToolInstance(toolid);
-			} else {
-				ti = addToolInstance(toolname);
-				toolid = ti.getToolCount();			
-			}
-			writeInt(toolid);                     // <=== write
-			ti.connect(client);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+	
+	public String get(String p){
+		String r = PropertyManager.get(p);
+		System.err.println("get(" + p + ") => " + r);
+		return r;
 	}
 	
-	public void addConnectedTool(ToolInstance ti){
-		connectedTools.addElement(ti);
+	public String get(String p, String def){
+		String r = PropertyManager.get(p,def);
+		System.err.println("get(" + p + ", " + def + ") => " + r);
+		return r;
 	}
 
-	public ToolInstance getConnectedTool(String toolname) {
-		 info("getConnectedTool: " + toolname);
-		for (int i = 0; i < connectedTools.size(); i++) {
-			ToolInstance ti = (ToolInstance) connectedTools.elementAt(i);
-			 info("getConnectedTool: considering: " + ti.getToolName());
+	
+	public void wakeup(){
+		iomanager.wakeup();
+	}
+
+	
+	synchronized public void addConnectedTool(ToolInstance ti){
+		connectedTools.addLast(ti);
+	}
+
+	synchronized public ToolInstance getConnectedTool(String toolname) {
+	    info("getConnectedTool: " + toolname + " length = " + connectedTools.size());
+	    ListIterator<ToolInstance> cti = connectedTools.listIterator();
+		while(cti.hasNext()){
+			ToolInstance ti = cti.next();
+			 info("getConnectedTool: considering: " + ti.getToolName() + "; " + ti.getToolId());
 			if (ti.getToolName().equals(toolname)) {
-				connectedTools.removeElementAt(i);
+				cti.remove();
 				info("getConnectedTool: " + toolname + " ==> " + ti);
 				return ti;
 			}
@@ -320,24 +166,21 @@ public class ToolBus {
 		info("getConnectedTool: " + toolname + " ==> null");
 		return null;
 	}
-
-	private void writeInt(int n) throws IOException {
-		// byte[] buffer = new byte[MAX_HANDSHAKE];
-		handshake.clear();
-		String s = toolname + " " + Integer.toString(n);
-
-		byte bs[] = s.getBytes();
-		info("writeInt: " + s + "; length = " + bs.length);
-		for (int i = 0; i < MAX_HANDSHAKE; i++) {
-			if (i < bs.length) {
-				handshake.put(bs[i]);
-			} else {
-				handshake.put((byte) 0);
+	
+	synchronized public ToolInstance getConnectedToolById(String toolname, ATerm tid) {
+	    info("getConnectedToolById: " + toolname + ", tid = " + tid + " length = " + connectedTools.size());
+	    ListIterator<ToolInstance> cti = connectedTools.listIterator();
+		while(cti.hasNext()){
+			ToolInstance ti = cti.next();
+			 info("getConnectedTool: considering: " + ti.getToolName() + "; " + ti.getToolId());
+			if (ti.getToolName().equals(toolname) && ti.getToolId() == tid) {
+				cti.remove();
+				info("getConnectedToolById: " + toolname + " ==> " + ti + "(" + ti.getToolId() + ")");
+				return ti;
 			}
 		}
-		handshake.flip();
-		int k = client.write(handshake);
-		info("writeInt(" + n + ") writes " + k + "  bytes");
+		info("getConnectedToolById: " + toolname + " ==> null");
+		return null;
 	}
 
 	/**
@@ -345,7 +188,7 @@ public class ToolBus {
 	 * Networking functions
 	 */
 
-	private static String getHostName() {
+	static String getHostName() {
 		String hostname = "";
 		try {
 			hostname = java.net.InetAddress.getLocalHost().getHostName();
@@ -359,67 +202,16 @@ public class ToolBus {
 		return hostname;
 	}
 
-	public ServerSocket getWellKnownSocket() {
-		return this.WellKnownSocket;
+	public int getWellKnownSocketPort() {
+		return iomanager.getWellKnownSocketPort();
 	}
 
-	public static int getWellKnownSocketPort() {
-		return WellKnownSocketPort;
+	public InetAddress getLocalHost() {
+		return iomanager.getLocalHost();
 	}
 
-	public static InetAddress getLocalHost() {
-		return localHost;
-	}
-
-	public static Selector getSelector() {
-		return selector;
-	}
-
-	/**
-	 * Get the name of the property file to be used
-	 */
-
-	private static String getPropertyFile() {
-		String stdName = "toolbus.props";
-		String user = System.getProperty("user.name");
-
-		String hostname = getHostName();
-
-		File f;
-		String fname;
-		fname = user + "@" + hostname + "-" + stdName;
-		f = new File(fname);
-		if (f.exists()) {
-			return fname;
-		}
-
-		fname = user + "-" + stdName;
-		f = new File(fname);
-		if (f.exists()) {
-			return fname;
-		}
-		fname = stdName;
-		f = new File(fname);
-		if (f.exists()) {
-			return fname;
-		}
-		return null;
-	}
-
-	/**
-	 * Load properties from property file; use defaults if absent
-	 */
-
-	private static void loadProperties() throws IOException {
-		Properties props = new Properties();
-		String pname = getPropertyFile();
-		if (pname != null) {
-			props.load(ClassLoader.getSystemResourceAsStream(pname));
-			sglr = props.getProperty("sglr.path", sglr);
-			parseTable = props.getProperty("parsetable.path", parseTable);
-			implodePT = props.getProperty("implodePT.path", implodePT);
-			workspace = props.getProperty("workspace.path", workspace);
-		}
+	public Selector getSelector() {
+		return iomanager.getSelector();
 	}
 
 	/**
@@ -439,14 +231,6 @@ public class ToolBus {
 	}
 
 	/**
-	 * Get workspace
-	 */
-
-	public static String getWorkspace() {
-		return workspace;
-	}
-
-	/**
 	 * Get current PrintWriter.
 	 */
 
@@ -462,14 +246,6 @@ public class ToolBus {
 	public static void warning(String src, String msg) {
 		System.err.println("ToolBus (" + src + "): " + msg + " (warning)");
 		nwarnings++;
-	}
-
-	/**
-	 * Generate next random integer.
-	 */
-
-	public static int nextInt(int n) {
-		return rand.nextInt(n);
 	}
 
 	/**
@@ -509,13 +285,10 @@ public class ToolBus {
 	public void addProcessDefinition(ProcessDefinition PD)
 			throws ToolBusException {
 		String name = PD.getName();
-		for (int i = 0; i < procdefs.size(); i++) {
-			ProcessDefinition PD2 = (ProcessDefinition) procdefs.elementAt(i);
-			if (name == PD2.getName())
-				throw new ToolBusException("duplicate definition of process "
-						+ name);
+		if(procdefs.containsKey(name)){
+			throw new ToolBusException("duplicate definition of process " + name);
 		}
-		procdefs.addElement(PD);
+		procdefs.put(name,PD);
 	}
 
 	/**
@@ -524,20 +297,19 @@ public class ToolBus {
 
 	public void addToolDefinition(ToolDefinition TD) throws ToolBusException {
 		String name = TD.getName();
-		for (int i = 0; i < tooldefs.size(); i++) {
-			ToolDefinition TD2 = (ToolDefinition) tooldefs.elementAt(i);
-			if (name == TD2.getName())
-				throw new ToolBusException("duplicate definition of tool "
-						+ name);
+		if(tooldefs.containsKey(name)){
+			throw new ToolBusException("duplicate definition of tool " + name);
+		} else {
+			tooldefs.put(name, TD);
+			TD.setToolBus(this);
 		}
-		tooldefs.addElement(TD);
 	}
 
 	/**
 	 * Add a process (with actuals).
 	 */
 
-	public ProcessInstance addProcess(String name, ATermList actuals)
+	synchronized public ProcessInstance addProcess(String name, ATermList actuals)
 			throws ToolBusException {
 		ProcessInstance P = new ProcessInstance(this, name, actuals, processes.size());
 		if(processesIterator != null){
@@ -552,7 +324,7 @@ public class ToolBus {
 	 * Add a process (without actuals).
 	 */
 
-	public ProcessInstance addProcess(String name) throws ToolBusException {
+	synchronized public ProcessInstance addProcess(String name) throws ToolBusException {
 		return addProcess(name, tbfactory.EmptyList);
 	}
 
@@ -560,7 +332,7 @@ public class ToolBus {
 	 * Add a process (as ProcessCall); previous two will become obsolete.
 	 */
 
-	public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
+	synchronized public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
 		ProcessInstance P = new ProcessInstance(this, call, processes.size());
 		processes.add(P);
 		return P;
@@ -573,7 +345,7 @@ public class ToolBus {
 	 * @throws ToolBusException
 	 */
 
-	public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+	synchronized public ToolInstance addToolInstance(String toolName) throws ToolBusException {
 		ATermList sig = getSignature();
 		//System.err.println("addToolInstance: " + toolName + ", " + sig);
 		ToolDefinition TD = getToolDefinition(toolName);
@@ -584,20 +356,24 @@ public class ToolBus {
 		return ti;
 	}
 
-	synchronized public ToolInstance getToolInstance(ATerm tid) {
+	synchronized public ToolInstance getToolInstance(ATerm tid) throws UnconnectedToolException {
 		ATermInt arg = (ATermInt) ((ATermAppl) tid).getArgument(0);
-		int n = arg.getInt();
-		return tools.elementAt(n);
+		return getToolInstance(arg.getInt());
 	}
 
-	synchronized public ToolInstance getToolInstance(int n) {
-		return tools.elementAt(n);
+	synchronized public ToolInstance getToolInstance(int n)throws UnconnectedToolException {
+		if(n >= tools.size()){
+			throw new UnconnectedToolException("tool: " + n);
+		} else {
+			return tools.elementAt(n);
+		}
 	}
 
-    public void removeToolInstance(ToolInstance ti){
+    synchronized public void removeToolInstance(ToolInstance ti){
     	if(toolsIterator == null){
     		tools.remove(ti);
     	} else {
+    		//TODO: this may generate orphan tool instances
     	}
     }
 
@@ -607,12 +383,11 @@ public class ToolBus {
 
 	public ProcessDefinition getProcessDefinition(String name)
 			throws ToolBusException {
-		for (int i = 0; i < procdefs.size(); i++) {
-			ProcessDefinition PD = (ProcessDefinition) procdefs.elementAt(i);
-			if (name == PD.getName())
-				return PD;
+		if(procdefs.containsKey(name)){
+			return procdefs.get(name);
+		} else {
+			throw new ToolBusException("no definition for process " + name);
 		}
-		throw new ToolBusException("no definition for process " + name);
 	}
 
 	/**
@@ -622,14 +397,8 @@ public class ToolBus {
 	public ToolDefinition getToolDefinition(String name)
 			throws ToolBusException {
 		//System.err.println("getToolDefinition: " + name);
-		for (int i = 0; i < tooldefs.size(); i++) {
-
-			ToolDefinition TD = (ToolDefinition) tooldefs.elementAt(i);
-			//System.err.println("getToolDefinition: " + i + " : " + TD.getName());
-			if (name.equals(TD.getName())) {
-				//System.err.println("getToolDefinition: " + TD);
-				return TD;
-			}
+		if(tooldefs.containsKey(name)){
+			return tooldefs.get(name);
 		}
 		throw new ToolBusException("no definition for tool " + name);
 	}
@@ -655,7 +424,7 @@ public class ToolBus {
 		return res;
 	}
 
-	public static void settoolActionCompleted() {
+	public void settoolActionCompleted() {
 		toolActionCompleted = true;
 	}
 
@@ -663,7 +432,7 @@ public class ToolBus {
 	 * Shutdown of this ToolBus.
 	 */
 
-	public void shutdown(ATerm msg) {
+	synchronized public void shutdown(ATerm msg) {
 
 		for (ProcessInstance pi : processes) {
 			pi.terminate(msg);
@@ -675,18 +444,9 @@ public class ToolBus {
 			ti.terminate(msg);
 			toolsIterator.remove();
 		}
+		iomanager.closeConnections();
 		System.err.println(msg);
-
-		try {
-			WellKnownSocket.close();
-			WellKnownSocketChannel.close();
-			selector.close();
-		} catch (IOException e) {
-			System.err.println(e);
-		}
 		shutdownDone = true;
-		// throw new ToolBusException("");
-		portToToolBus.remove(WellKnownSocketPort);
 	}
 
 	/**
@@ -739,7 +499,7 @@ public class ToolBus {
 					work = false;
 					while(!work){
 						work = toolActionCompleted = false;
-						handleInputFromTools(timeout > 0 ? timeout : 10000);
+						iomanager.handleInputFromTools(timeout > 0 ? timeout : 10000);
 						work = toolActionCompleted || timeout > 0;
 						toolinputPasses += 1;
 					}

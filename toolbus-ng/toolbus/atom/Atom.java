@@ -72,15 +72,16 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 	  int ninstances = 0;
 	  int nenabled = 0;
 	  int nNotEnabled = 0;
+	  System.err.printf("\n========================= Atom Statistics ========================\n");
+ 
 	  for(String name : instances.keySet()){
 		  int ins = instances.get(name); ninstances += ins;
 		  int en = enabled.get(name) == null ? 0 : enabled.get(name); nenabled += en;
 		  int ne = notEnabled.get(name) == null ? 0 : notEnabled.get(name); nNotEnabled += ne;
-		  System.err.println(name + "\t" + ins + "\t" + en + "(+)" + ne + "(-)");
+		  System.err.printf("| %30s%8d%8d (+)%8d (-) |\n", name, ins, en, ne);		  			  
 	  }
-	  System.err.println("Instances:   " + ninstances);
-	  System.err.println("enabled:     " + nenabled);
-	  System.err.println("not enabled: " + nNotEnabled);
+	  System.err.printf("| %30s%8d%8d    %8d     |\n", "TOTAL", ninstances, nenabled, nNotEnabled);
+	  System.err.printf("==================================================================\n");	 
   }
   
   public void setAtomArgs(Ref r) {

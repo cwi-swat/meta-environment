@@ -44,9 +44,16 @@ public class Connect extends Atom {
 		if (!isEnabled())
 		      return false;
 		//System.err.println("Connect.execute called; toolname = " + toolId.value);
-		ToolInstance ti = getToolBus().getConnectedTool(((ATermAppl) ((TBTermVar)toolId.value).getVarType()).getName());
-		//ATerm id = getEnv().getValue((TBTermVar)toolId.value);
-		//System.err.println("id = " + id);
+		ATerm id = getEnv().getValue((TBTermVar)toolId.value);
+		ToolInstance ti;
+		String toolname = ((ATermAppl)((TBTermVar)toolId.value).getVarType()).getName();
+		if(id == tbfactory.Undefined){
+			ti = getToolBus().getConnectedTool(toolname);
+		} else {
+			ti = getToolBus().getConnectedToolById(toolname, id);
+		}
+		
+		//System.err.println(getProcess().getProcessName() +  ": id = " + id);
 		if(ti == null){
 			return false;
 		} else {

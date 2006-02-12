@@ -42,6 +42,8 @@ public class Do extends Atom {
 		ATerm tid;
 		if (tbfactory.isAnyVar(toolId.value)) {
 			tid = getEnv().getValue((TBTermVar) toolId.value);
+			if(tid == tbfactory.Undefined)
+				return false;
 		} else {
 			tid = toolId.value;
 		}

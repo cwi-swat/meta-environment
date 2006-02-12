@@ -1,6 +1,11 @@
 package toolbus.tool;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Vector;
+
 import toolbus.TBTermFactory;
+import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.tool.classic.ClassicToolShield;
 import toolbus.tool.java.JavaToolShield;
@@ -10,11 +15,16 @@ import aterm.ATermList;
 import aterm.ATermPlaceholder;
 
 public class ToolDefinition {
+	
+	private ToolBus toolbus;
+	
 	private String toolName;
 
 	private String hostName;
 
 	private String command;
+	
+	private String className;
 
 	private String kind;
 
@@ -34,6 +44,10 @@ public class ToolDefinition {
 		inputSignature = tbfactory.EmptyList;
 		outputSignature = tbfactory.EmptyList;
 	}
+	
+	public void setToolBus(ToolBus tb){
+		toolbus = tb;
+	}
 
 	public String getHostName() {
 		return hostName;
@@ -51,9 +65,55 @@ public class ToolDefinition {
 		ATerm t = tbfactory.make(toolName);
 		return tbfactory.makePlaceholder(t);
 	}
+	
+	public URL[] getLoadPath(){
+		System.err.println("toolName = " + toolName);
+		String path = toolbus.get(toolName + ".classpath");
+		if(path == null){
+			path = toolbus.get("java.classpath");
+		}
+		System.err.println("path = " + path);
+		String[] elems = path.split("[ ,\n\r]+");
+		Vector<URL> urls = new Vector<URL>(elems.length);
+		String url = "";
+		for(int i = 0; i < elems.length; i++){
+			try {
+				url = elems[i];
+				if(url.length() > 0){
+					if(url.charAt(0) == '/'){
+						url = "file://" + url;
+					}
+					System.err.println("url = '" + url + "'");
+					urls.add(new URL(url));
+				}
+			} catch (MalformedURLException e) {
+				System.err.println("Malformed URL " + url + " ignored");
+			}
+		}
+		return (URL[]) urls.toArray(new URL[urls.size()]);
+	}
+	
+	private boolean usesJavaAdapter(){
+		if(command.matches(".*java-adapter.*")){
+			String[] words = command.split("[ \t\n\r]+");
+			for(int i = 0; i < words.length; i++){
+				String word = words[i];
+				if(word.equals("-class") && i + 1 < words.length){
+					className = words[i+1];
+					System.err.println("-class followed by: " + className);
+					return true;
+				}
+			}	
+		}
+		return false;
+	}
 
 	public String getCommand() {
-		return command;
+		return (command);
+	}
+	
+	public String getClassName(){
+		return toolbus.get(toolName + ".class", className);
 	}
 
 	public ATermList getInputSignature() {
@@ -109,13 +169,15 @@ public class ToolDefinition {
 				toolPlaceholder);
 		outputSignature = tbfactory.makeList(sndConnect, outputSignature);
 	}
+	
+
 
 	public ToolShield makeToolShield(ToolInstance ti) throws ToolBusException {
-		if (kind == null || kind == "classic")
-			return new ClassicToolShield(this, ti);
-		if (kind == "java")
+		if (kind == "java" || (kind == null && usesJavaAdapter()))
 			return new JavaToolShield(this, ti);
-		else
-			throw new ToolBusException("Unknown tool kind:" + kind);
+		if (kind == "classic" || kind == null)
+			return new ClassicToolShield(this, ti);
+
+		throw new ToolBusException("Unknown tool kind:" + kind);
 	}
 }
