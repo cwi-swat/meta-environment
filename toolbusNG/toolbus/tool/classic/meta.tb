@@ -4227,8 +4227,8 @@ let
   FunName : str,
   Stack : list
 in
-  ButtonActions := Actions . %%quote
-  Stack := StackArgs  . %%quote
+  ButtonActions := quote(Actions) .
+  Stack := quote(StackArgs)  .
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .
@@ -4291,16 +4291,16 @@ process StackPushTerm(Stack : list, NewStack : list?, Top : term) is
   printf("StackPushTerm: Top = %t, NewStack = %t\n", Top, NewStack)   %%
    
 process StackPushString(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?,str(Top))  %% quote
+  StackPushTerm(Stack,NewStack?,quote(str(Top)))
 
 process StackPushInt(Stack : list, NewStack : list?, Top : int) is
-  StackPushTerm(Stack,NewStack?, int(Top)) %% quote
+  StackPushTerm(Stack,NewStack?, quote(int(Top)))
 
 process StackPushFile(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?, file(Top)) %% quote
+  StackPushTerm(Stack,NewStack?, quote(file(Top)))
 
 process StackPushPath(Stack : list, NewStack : list?, Top : str) is
-  StackPushTerm(Stack,NewStack?, path(Top)) %% quote
+  StackPushTerm(Stack,NewStack?, quote(path(Top)))
 
 process ReturnSuccess(EditorId : term, Stack : list) is
   snd-msg(stack(Stack), EditorId)
@@ -4541,11 +4541,11 @@ in
         CheckTreeSort(STree, SortName, RTree?) .
         if not-equal(RTree, error-tree) then
           StackPushTerm(Stack, Stack?, RTree) .
-          StackPushTerm(Stack, Stack?, true) . %% quote
+          StackPushTerm(Stack, Stack?, quote(true)) .
           ReturnSuccess(EditorId, Stack)
         else
           StackPushTerm(Stack, Stack?, STree) .
-          StackPushTerm(Stack, Stack?, false) . %% quote
+          StackPushTerm(Stack, Stack?, quote(false)) .
           ReturnSuccess(EditorId, Stack)
         fi
       +
@@ -6300,7 +6300,7 @@ in
     snd-msg(pre-preprocess-syntax-hook-result(ModuleName))
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Checking?, Syntax?)).
-    if equal(Checking, true) then   %% true
+    if equal(Checking, quote(true)) then
       CheckSyntaxSpecification(ModuleName, eqs)
     else
       tau
@@ -6311,7 +6311,7 @@ in
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Checking?, Syntax?)).
-    if equal(Checking, true) then %%quote
+    if equal(Checking, quote(true)) then
       CheckSyntaxSpecification(ModuleName, trm)
     else
       tau

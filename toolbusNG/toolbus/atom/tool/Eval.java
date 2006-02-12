@@ -2,6 +2,7 @@ package toolbus.atom.tool;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBusException;
+import toolbus.UnconnectedToolException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
@@ -42,7 +43,13 @@ public class Eval extends Atom {
 
     if(toolInstance == null){
     	ATerm tid = getEnv().getValue((TBTermVar)toolId.value);
-    	toolInstance = getToolBus().getToolInstance(tid);
+    	if(tid == tbfactory.Undefined)
+			return false;
+    	try { 
+    		toolInstance = getToolBus().getToolInstance(tid);
+    	} catch(UnconnectedToolException e){
+			return false;
+		}
     }
     if(toolInstance.canEvalDo()){
     	ATerm req = tbfactory.substitute(request.value, getEnv());

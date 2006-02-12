@@ -2,6 +2,7 @@ package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBusException;
+import toolbus.UnconnectedToolException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
 import toolbus.process.ProcessExpression;
@@ -14,6 +15,7 @@ import aterm.ATerm;
 public class AckEvent extends Atom {
 	private Ref toolId;
 	private Ref event;
+	private ToolInstance toolInstance;
 
   public AckEvent(ATerm toolId, ATerm event, TBTermFactory tbfactory) {
  	super(tbfactory);
@@ -32,9 +34,17 @@ public class AckEvent extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    ATerm tid = tbfactory.substitute(toolId.value, getEnv());
-    ATerm ev = tbfactory.substitute(event.value, getEnv());
-    ToolInstance ti = getToolBus().getToolInstance(tid);
-    return ti.sndAckToTool(ev);
+    if(toolInstance == null){
+    	ATerm tid = tbfactory.substitute(toolId.value, getEnv());
+    	if(tid == tbfactory.Undefined)
+			return false;
+    	try { 
+		   toolInstance = getToolBus().getToolInstance(tid);
+    	} catch(UnconnectedToolException e){
+    		return false;
+    	}
+    }
+   	ATerm ev = tbfactory.substitute(event.value, getEnv());
+	return toolInstance.sndAckToTool(ev);
   }
 }

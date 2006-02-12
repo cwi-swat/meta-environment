@@ -9,26 +9,29 @@ import java.io.IOException;
 import aterm.ATerm;
 import aterm.ATermFactory;
 
-public class Example
+public class Example1
   extends Frame
-  implements ExampleTif, ActionListener
+  implements ActionListener
 {
   private ATermFactory factory;
-  private ExampleBridge bridge;
+  private JavaToolBridge bridge;
   private Button button;
   private int count;
 
   public static final void main(String[] args)
     throws IOException
   {
-    new Example(null,args);
+    new Example1(null,args);
   }
 
-  public Example(ATermFactory fac, String[] args) // added fac argument
+  public Example1(JavaToolBridge bridge, String[] args)
     throws IOException
   {
-    //factory = new aterm.pure.PureFactory();
-	  factory = fac;
+	this.bridge = bridge;
+	
+	// Obtain the ATerm factory from the bridge passed to us.
+	// It is crucial that all tools use the same factory!
+	factory = bridge.getFactory();
 
     // Build the user interface: just a single button
     button = new Button("Button");
@@ -36,14 +39,6 @@ public class Example
     add(button);
     pack();
     show();
-
-    // Create the bridge that will forward incoming messages
-    // to method calls in this Example object
-    bridge = new ExampleBridge(factory, this);
-
-    // Initalize vital parameters, like the ToolBus TCP/IP port, tool name,
-    // etc. that are passed to us using the command line arguments.
-    bridge.init(args);
     
     // Actually establish the connection with the ToolBus
     bridge.connect();
@@ -56,6 +51,7 @@ public class Example
   {
     if (event.getSource() == button) {
       // When the user presses the button, we send an event to the ToolBus
+      System.err.println("actionPerformed: button");
       bridge.postEvent(factory.make("button(<str>)", button.getLabel()));
     }
   }
@@ -76,7 +72,7 @@ public class Example
 
   public void recTerminate(ATerm arg)
   {
-    // Just exit when the ToolBus terminates
-    System.exit(0);
+    // Clean up when this tool terminates
+	dispose();  // of this frame
   }
 }

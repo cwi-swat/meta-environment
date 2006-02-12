@@ -1,19 +1,19 @@
 
-tool example is { kind = "java" command="toolbus.tool.java.Example" }
+tool example1 is { kind = "java" command="toolbus.tool.java.Example1" }
 
-process EXAMPLE is
+process EXAMPLE1 is
 let
-  T : example,
+  T : example1,
   Count : int,
   Name  : str
 in
-  execute(example, T?) .
+  execute(example1, T?) .
   (
     (  
       snd-eval(T, msg("Hello World!")) .
       rec-value(T, count(Count?)) .
       printf("Hello number %d\n", Count)
-    ) * delta 
+    )  * delta 
     ||
     ( rec-event(T, button(Name?)) .
       printf("Button pressed: %s\n", Name) .
@@ -22,5 +22,5 @@ in
   )
 endlet
 
-toolbus(EXAMPLE)
+toolbus(EXAMPLE1)
 

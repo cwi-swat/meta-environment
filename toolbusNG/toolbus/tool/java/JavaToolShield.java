@@ -1,92 +1,26 @@
-
 package toolbus.tool.java;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Hashtable;
 
-import toolbus.AbstractTool;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
+import toolbus.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
-import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
-import aterm.ATermFactory;
+import aterm.ATermInt;
+import aterm.ATermList;
+import aterm.ATermPlaceholder;
 
-/*
-class JavaToolShieldThread extends Thread {
-	private ToolShield javaToolShield;
-	private Object javaToolInstance;         // The instance created for this tool
-	private LinkedList requests = new LinkedList();
-	private boolean running = false;
-	
-	public JavaToolShieldThread(ToolShield jts, Constructor toolConstructor, Object[] actuals){
-		javaToolShield = jts;
-	     try {
-			javaToolInstance = toolConstructor.newInstance(actuals);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	}
-	
-	public void connect(){
-		
-	}
-	
-	synchronized void addRequestForTool(int operation, Method m, Object[] actuals){
-		requests.addLast(new Object[] { operation, m, actuals});
-	}
-	
-	protected void handleRequestForTool() {
-	    Object request[] = (Object[])requests.getFirst();
-	    requests.removeFirst();
-
-	    Integer operation = (Integer) request[0];
-	    Method m = (Method) request[1];
-	    Object[] actuals = (Object[]) request[2];
-
-	    ATerm res = null;
-	    try {
-	      res = (ATerm) m.invoke(javaToolInstance, actuals);
-	    } catch (Exception e) {
-	      System.err.println("ToolShield.handleRequest: " + e);
-	      e.printStackTrace();
-	    }
-	    if (operation == ToolInstance.EVAL) {
-	      javaToolShield.sndValueFromToolToToolBus(res);
-	    } else if (operation == ToolInstance.TERMINATE) {
-	      javaToolShield.terminate(javaToolShield.getTBTermFactory().make("tool terminated by ToolShield"));
-	    }
-	  }
-	
-	public void run(){
-		while(running){
-			while(requests.size() > 0){
-				handleRequestForTool();
-			}
-			try {
-				sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void stopRunning(){
-		running = false;
-	}
-}
-*/
 
 /**
  * @author paulk
@@ -107,43 +41,43 @@ class JavaToolShieldThread extends Thread {
  */
 
 public class JavaToolShield extends ToolShield {
-	private ToolDefinition toolDef;          // Definition of the tool
-	private String className;                // Name of the class implementing the tool
-	private Class toolClass;                 // The class itself
-	private Constructor toolConstructor;	 // and its constructor function
-
-	private Hashtable<String,Method> methodTable;           // Table of methods that implement requests
-	private TBTermFactory tbfactory;         // Term factory to be used.
 	
-	private static final String terminate = "terminate";
+	private ToolBus toolbus;
 	
-	private Object javaToolInstance;			// The actual instance of the constructor class for this tool
-	private AbstractTool abstractToolInstance; // The AbstractTool instance ("bridge") created by it
+	private ToolDefinition toolDef; 				// Definition of the tool
 
-  /**
-   * The constructor for JavaToolShield. 
-   * @param toolDef the definition of this tool
-   * @param toolInstance the tool instance that created this JavaToolShield
-   */
+	private String className; 						// Name of the class implementing the tool
 
-  public JavaToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
+	private Class toolClass; 						// The class itself
+
+	private Constructor toolConstructor; 			// and its constructor function
+
+	private Hashtable<String, Method> methodTable; // Table of methods that implement requests
+
+	private TBTermFactory tbfactory; 				// Term factory to be used.
+
+	private JavaToolBridge bridge;					// The bridge created for it
+
+	/**
+	 * The constructor for JavaToolShield. 
+	 * @param toolDef the definition of this tool
+	 * @param toolInstance the tool instance that created this JavaToolShield
+	 */
+
+	public JavaToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
 		super(toolInstance);
 		this.toolDef = toolDef;
-		this.className = toolDef.getCommand();
+		this.className = toolDef.getClassName();
 		System.err.println("className = " + className);
+		toolbus = toolInstance.getToolBus();
 		try {
-			URL u1 = new URL("file:///home/paulk/./eclipse/toolbusNG");
-			URL u2 = new URL("file:///home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/");
-			URLClassLoader loader = new URLClassLoader(new URL[] {u1, u2});
-			toolClass = Class.forName(className,false,loader);
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			URL[] urls = toolDef.getLoadPath();
+			URLClassLoader loader = new URLClassLoader(urls);
+			toolClass = Class.forName(className, false, loader);
 		} catch (ClassNotFoundException e) {
 			System.err.println(e);
 		}
 
-		//toolClass = Class.forName(className);
 		methodTable = new Hashtable<String, Method>();
 		tbfactory = toolInstance.getTBTermFactory();
 
@@ -154,214 +88,212 @@ public class JavaToolShield extends ToolShield {
 			e.printStackTrace();
 		}
 	}
-  
-  public void executeTool() {
+
+	synchronized public void executeTool() {
 		String actuals[] = new String[] { "-TB_PORT",
-				"" + ToolBus.getWellKnownSocketPort(), "-TB_HOST",
-				ToolBus.getLocalHost().getHostName(), "-TB_TOOL_NAME",
+				"" + toolbus.getWellKnownSocketPort(), "-TB_HOST",
+				toolbus.getLocalHost().getHostName(), "-TB_TOOL_NAME",
 				toolDef.getName(), "-TB_TOOL_ID",
 				"" + getToolInstance().getToolCount(), "-TB_VERBOSE", "false" };
 
-		try {
-			System.err.println("JavaToolShield.executeTool");
-			javaToolInstance = toolConstructor
-					.newInstance(new Object[] { tbfactory, actuals });
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-  }
-  
-  /**
-	* Find the constructor of the tool class.
-    * @throws NoSuchMethodException 
-    * @throws SecurityException 
-	*/
-  
-  private Constructor findConstructor() throws SecurityException, NoSuchMethodException {
-	  return toolClass.getConstructor(ATermFactory.class, String[].class);
-  }
-  
-  public void connect(Object connection) throws IOException {
-		if(connection instanceof AbstractTool){
-			abstractToolInstance = (AbstractTool) connection;	
-		  	abstractToolInstance.checkInputSignature(toolDef.getInputSignature());
-		} else {
-			throw new IOException("connection object should be instance of AbstractTool");
-		}
-		//getToolInstance().TCP_goConnected();
-		toolInstance.handleTermFromTool(tbfactory.make("snd-connect(<term>)", toolInstance.getToolId()));
+		System.err.println("JavaToolShield.executeTool");
+		bridge = new JavaToolBridge(toolConstructor, toolInstance, actuals);
 	}
-  
-  /**
-   * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
-   */
 
-  public void sndRequestToTool(Integer operation, ATerm call) {
-		AFun fun = tbfactory.makeAFun(ToolInstance.OperatorForTool[operation.intValue()], 1, false);
-		ATermAppl req = tbfactory.makeAppl(fun, call);
-		System.err.println("sndRequestToTool: " + req);
+	/**
+	 * Find the constructor of the tool class.
+	 * 
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 */
+
+	private Constructor findConstructor() throws SecurityException,
+			NoSuchMethodException {
+		return toolClass.getConstructor(JavaToolBridge.class, String[].class);
+	}
+
+	synchronized public void connect(Object connection) throws IOException {
+		if (connection instanceof JavaToolBridge) {
+			bridge = (JavaToolBridge) connection;
+			//if(cbridge != bridge){
+			//	throw new IOException("connection object is instance of wrong JavaToolBridge");
+			//}
+			try {
+				checkInputSignature();
+			} catch (ToolBusException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			throw new IOException(
+					"connection object should be instance of JavaToolBridge");
+		}
+		toolInstance.handleTermFromTool(tbfactory.make("snd-connect(<term>)",
+				toolInstance.getToolId()));
+		System.err.println("JavaToolShield.connect done");
+	}
+
+	/**
+	 * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
+	 */
+
+	synchronized public void sndRequestToTool(int operation, ATerm call) {
+		System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
+		ATermAppl acall = (ATermAppl) call;
+
+		String name;
+		ATerm[] args;
+		if (operation == ToolInstance.ACK) {
+			name = "recAckEvent";
+			args = new ATerm[] { call };
+		} else if (operation == ToolInstance.TERMINATE) {
+			name = "recTerminate";
+			args = new ATerm[] { call };
+		} else {
+			name = acall.getName();
+			args = acall.getArgumentArray();
+		}
+
+		Object actuals[] = new Object[args.length];
+
+		Method m = (Method) methodTable.get(name);
+		Class parameters[] = m.getParameterTypes();
+		for (int i = 0; i < args.length; i++) {
+			String ptype = parameters[i].getName();
+			if (ptype.equals("int"))
+				actuals[i] = new Integer(((ATermInt) args[i]).getInt());
+			else if (ptype.equals("java.lang.String"))
+				actuals[i] = ((ATermAppl) args[i]).getName();
+			else
+				actuals[i] = args[i];
+		}
 		try {
-			abstractToolInstance.handleIncomingTerm(req);
+			bridge.handleTermFromToolBus(operation, m, actuals);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-  }
-  
-  public void terminate(ATerm msg) {
+	}
+
+	public void terminate(ATerm msg) {
 		System.err.println("JavaToolShield.terminate");
 		sndRequestToTool(ToolInstance.TERMINATE, msg);
 	}
 
-  /**
-	 * Check equality of types in a signature definition and a Java type
+	/**
+	 * Check equality of one type in a signature definition and a Java parameter type
 	 */
-/*
-  private boolean equalType(ATerm t, Class c) {
-    if (t.getType() == ATerm.PLACEHOLDER) {
-      t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
-    }
-    String ctype = c.getName();
-    if (t == tbfactory.IntType) {
-      return ctype.equals("int");
-    } else if (t == tbfactory.StrType) {
-      return ctype.equals("java.lang.String");
-    } else if (t == tbfactory.TermType) {
-      return ctype.equals("aterm.ATerm");
-    } else if (t == tbfactory.VoidType) {
-      return ctype.equals("void");
-    }
-    return false;
-  }
-  */
-  
-  /**
-   * Find a method in the tool class with given name and argument types.
-   * @param call of the method
-   * @param returnsVoid should the class return void?
-   */
-/*
-  private void findMethod(ATermAppl call, boolean returnsVoid) throws ToolBusException {
-    String name = call.getName();
-    ATermList args = call.getArguments();
-    System.err.println("findMethod(" + name + ", " + args + ")");
-    
-    Method methods[] = toolClass.getDeclaredMethods();
-    
-    // HDJ: todo: refactor inner loop to separate method to avoid the need for label.
-    searchMethods : 
-      for (int i = 0; i < methods.length; i++) {
-      Class returntype = methods[i].getReturnType();
-      Class parameters[] = methods[i].getParameterTypes();
 
-      if (methods[i].getName().equals(name) && Modifier.isPublic(methods[i].getModifiers())) {
-        if (args.getLength() != parameters.length)
-          continue;
-        
-        for (int j = 0; j < parameters.length; j++) {
-          if (!equalType(args.getFirst(), parameters[j]))
-            continue searchMethods;
-          args = args.getNext();
-        }
-        
-        if (returnsVoid && equalType(tbfactory.VoidType, returntype)) {
-        	methodTable.put(name, methods[i]);
-            return;
-        } else if (!returnsVoid && equalType(tbfactory.TermType, returntype)) {
-        	methodTable.put(name, methods[i]);
-            return;
-        }
-      }
-    }
-    throw new ToolBusException("no method " + name + " found");
-  }
-  */
-  
-  /**
-   * Print a method heading.
-   */
-/*
-  private void printMethod(Method m) {
-    Class returntype = m.getReturnType();
-    Class parameters[] = m.getParameterTypes();
-    System.err.print(Modifier.toString(m.getModifiers()) + " " + returntype.getName() + " " + m.getName() + "(");
-    for (int i = 0; i < parameters.length; i++) {
-      System.err.print(parameters[i].getName() + " ");
-    }
-    System.err.println(")");
-  }
-  */
-  
-  /**
-   * Check the required signature of the tool class
-   */
-/*
-  private void checkToolSignature() throws ToolBusException {
-  	ATermList sigs = toolDef.getInputSignature();
- 	System.err.println("checkInputSignature(" + sigs + ")");
-  	while(!sigs.isEmpty()){
-  		ATermAppl sig = (ATermAppl) sigs.getFirst();
- 		sigs = sigs.getNext();
-  		if (sig.getName().equals("Eval")) {
-  			ATermAppl call = (ATermAppl) sig.getArgument(1);
-  			findMethod(call, false);
-  		} else
-  			if (sig.getName().equals("Do")) {
-  				ATermAppl call = (ATermAppl) sig.getArgument(1);
-  				findMethod(call, true);
-  			} else
-  				if (sig.getName().equals("AckEvent")) {
-  					ATermAppl call = (ATermAppl) tbfactory.make("ackEvent(<term>)", tbfactory.TermPlaceholder);
-  					findMethod(call, true);
-  				} else
-  					if (sig.getName().equals("Terminate")) {
-  						ATermAppl call = (ATermAppl) tbfactory.make("terminate(<term>)", tbfactory.StrPlaceholder);
-  						findMethod(call, true);
-  					}
-  	}
-  }
-  */
-  
-  /**
-   * Send an eval or do request to the tool by adding it to the request queue of the ToolShield
-   */
-/*
-  public void sndRequestToTool(Integer operation, ATerm call) {
-    System.err.println("sndRequestToTool(" + operation + ", " + call + ")");
-    ATermAppl acall = (ATermAppl) call;
-    String name = acall.getName();
-    ATerm[] args = acall.getArgumentArray();
-    Object actuals[] = new Object[args.length];
-
-    Method m = (Method) methodTable.get(name);
-    Class parameters[] = m.getParameterTypes();
-    for (int i = 0; i < args.length; i++) {
-      String ptype = parameters[i].getName();
-      if (ptype.equals("int"))
-        actuals[i] = new Integer(((ATermInt) args[i]).getInt());
-      else if (ptype.equals("java.lang.String"))
-        actuals[i] = ((ATermAppl) args[i]).getName();
-      else
-        actuals[i] = args[i];
-    }
-    shield.addRequestForTool(operation, m, actuals);
-  }
-  
- // synchronized protected void returnValueFromTool(ATerm res){
-//	  getToolInstance().addValueFromTool(res);
- // }
-  
- */
+	private boolean equalType(ATerm t, Class c) {
+		//System.err.println("equalType(" + t + ", " + c + ")");
+		if (t.getType() == ATerm.PLACEHOLDER) {
+			t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
+		}
+		String ctype = c.getName();
+		if(ctype.equals("aterm.ATerm")){
+			return true;
+		}
+		if (t == tbfactory.IntType) {
+			return ctype.equals("int");
+		} else if (t == tbfactory.StrType) {
+			return ctype.equals("java.lang.String");
+		} else if (t == tbfactory.TermType) {
+			return ctype.equals("aterm.ATerm");
+		} else if (t == tbfactory.VoidType) {
+			return ctype.equals("void");
+		}
+		return false;
+	}
 	
+	/**
+	 * Check equality of a list of type in a signature definition and a lists of Java parameter types
+	 */
+
+	private boolean equalTypes(ATermList args, Class[] parameters){
+		if (args.getLength() != parameters.length)
+			return false;;
+		for(Class parameter : parameters){
+			if (!equalType(args.getFirst(), parameter))
+				return false;
+			args = args.getNext();
+		}
+		return true;
+	}
+
+	/**
+	 * Find a method in the tool class with given name and argument types.
+	 * @param call of the method
+	 * @param returnsVoid should the class return void?
+	 */
+
+	private void findMethod(ATermAppl call, boolean returnsVoid)
+			throws ToolBusException {
+		String name = call.getName();
+		ATermList args = call.getArguments();
+		//System.err.println("findMethod(" + name + ", " + args + ")");
+
+		Method methods[] = toolClass.getDeclaredMethods();
+
+		for(Method method : methods){
+			Class returntype = method.getReturnType();
+			Class parameters[] = method.getParameterTypes();
+			if (method.getName().equals(name)
+					&& Modifier.isPublic(method.getModifiers())
+				    && equalTypes(args, parameters)){
+				
+				if (returnsVoid && equalType(tbfactory.VoidType, returntype)) {
+					methodTable.put(name, method);
+					return;
+				} else if (!returnsVoid && equalType(tbfactory.TermType, returntype)) {
+					methodTable.put(name, method);
+					return;
+				}
+			}
+		}
+		throw new ToolBusException("no method " + name + " found");
+	}
+
+	/**
+	 * Print a method heading.
+	 */
+
+	private void printMethod(Method m) {
+		Class returntype = m.getReturnType();
+		Class parameters[] = m.getParameterTypes();
+		System.err.print(Modifier.toString(m.getModifiers()) + " "
+				+ returntype.getName() + " " + m.getName() + "(");
+		for (int i = 0; i < parameters.length; i++) {
+			System.err.print(parameters[i].getName() + " ");
+		}
+		System.err.println(")");
+	}
+
+	/**
+	 * Check the required signature of the tool class
+	 */
+
+	private void checkInputSignature() throws ToolBusException {
+		ATermList sigs = toolDef.getInputSignature();
+		System.err.println("checkInputSignature(" + sigs + ")");
+		while (!sigs.isEmpty()) {
+			ATermAppl sig = (ATermAppl) sigs.getFirst();
+			sigs = sigs.getNext();
+			if (sig.getName().equals("rec-eval")) {
+				ATermAppl call = (ATermAppl) sig.getArgument(1);
+				findMethod(call, false);
+			} else if (sig.getName().equals("rec-do")) {
+				ATermAppl call = (ATermAppl) sig.getArgument(1);
+				findMethod(call, true);
+			} else if (sig.getName().equals("rec-ack-event")) {
+				ATermAppl call = (ATermAppl) tbfactory.make(
+						"recAckEvent(<term>)", tbfactory.TermPlaceholder);
+				findMethod(call, true);
+			} else if (sig.getName().equals("rec-terminate")) {
+				ATermAppl call = (ATermAppl) tbfactory.make(
+						"recTerminate(<term>)", tbfactory.TermPlaceholder);
+				findMethod(call, true);
+			}
+		}
+	}
 
 }

@@ -1,23 +1,27 @@
 package toolbus.tool.java;
-import toolbus.TBTermFactory;
+import java.io.IOException;
+
 import aterm.ATerm;
+import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 30, 2002
  */
 public class CounterTool {
-  private JavaToolShield shield;
+  private JavaToolBridge bridge;
   private int count = 0;
   private int delay = 5;
-  private TBTermFactory tbfactory;
+  private ATermFactory factory;
 
   /**
    * Constructor for CounterTool.
    */
-  public CounterTool(JavaToolShield shield) {
+  public CounterTool(JavaToolBridge bridge, String[] args)  throws IOException {
     System.out.println("Yep, CounterTool instance created");
-    this.shield = shield;
-    tbfactory = shield.getTBTermFactory();
+    this.bridge = bridge;
+    factory = bridge.getFactory();
+    bridge.connect();
+    bridge.start();
   }
   
   public void setStartValue(int n){
@@ -38,10 +42,10 @@ public class CounterTool {
     // Increase the counter and return the current value to the ToolBus
     int res = count;
     count += incr;
-    return tbfactory.make("count(<int>))", new Integer(res));
+    return factory.make("snd-value(count(<int>)))", new Integer(res));
   }
 
-  public void terminate(String msg) {
+  public void recTerminate(ATerm msg) {
     System.err.println("CounterTool.terminate()");
   }
 }

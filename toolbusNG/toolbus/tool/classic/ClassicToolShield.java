@@ -25,6 +25,7 @@ import aterm.ATermAppl;
  */
 
 public class ClassicToolShield extends ToolShield {
+	
 	private final boolean verbose = false;
 
 	private final static int LENSPEC = 12; // ToolBus dependent parameters
@@ -45,6 +46,7 @@ public class ClassicToolShield extends ToolShield {
 
 	private int toolCount = -1;
 	private ATerm toolId;
+	private ToolBus toolbus;
 
 	private ATerm termSndVoid;
 	
@@ -52,6 +54,7 @@ public class ClassicToolShield extends ToolShield {
 	private final int sendingSignature = 0;
 	private final int receivingSignatureConfirm = 1;
 	private final int connected = 2;
+	private final int terminated = 3;
 	
 	private int toolStatus = uninitialized;
 
@@ -64,6 +67,7 @@ public class ClassicToolShield extends ToolShield {
 	public ClassicToolShield(ToolDefinition toolDef, ToolInstance toolInstance) {
 		super(toolInstance);
 		this.toolDef = toolDef;
+		this.toolbus = toolInstance.getToolBus();
 		termSndVoid = tbfactory.parse("snd-void");
 
 		toolname = toolDef.getName();
@@ -72,14 +76,14 @@ public class ClassicToolShield extends ToolShield {
 		for (int i = 0; i < MIN_MSG_SIZE; i++) {
 			sendTermFiller.put((byte) 0);
 		}
-		selector = ToolBus.getSelector();
+		selector = toolbus.getSelector();
 	}
 
 	public void executeTool() {
 		String cmd = toolDef.getCommand() + " -TB_HOST "
-				+ ToolBus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
+				+ toolbus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
 				+ toolname + " -TB_TOOL_ID " + toolCount + " -TB_PORT "
-				+ ToolBus.getWellKnownSocketPort();
+				+ toolbus.getWellKnownSocketPort();
 		System.err.println("executeTool:" + cmd);
 
 		try {
@@ -134,11 +138,11 @@ public class ClassicToolShield extends ToolShield {
 		sendTerm(tbfactory.make("rec-do(<term>)", toolDef.getSignature()));
 	}
 
-	protected void sndRequestToTool(Integer operation, ATerm call) {
+	protected void sndRequestToTool(int operation, ATerm call) {
 		AFun fun = tbfactory.makeAFun(
-				ToolInstance.OperatorForTool[operation.intValue()], 1, false);
+				ToolInstance.OperatorForTool[operation], 1, false);
 		ATermAppl req = tbfactory.makeAppl(fun, call);
-		//System.err.println("handleRequestToTool: " + req);
+		//System.err.println("sndRequestToTool: " + req);
 		try {
 			sendTerm(req);
 		} catch (IOException e) {
@@ -147,17 +151,22 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 
+	
 	/* (non-Javadoc)
-	 * @see toolbus.tool.ToolShield#terminate(java.lang.String)
+	 * @see toolbus.tool.ToolShield#terminate(aterm.ATerm)
 	 */
 	public void terminate(ATerm msg) {
-		sndRequestToTool(ToolInstance.TERMINATE, msg);
-		clientKey.cancel();
-		try {
-			client.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(toolStatus != terminated){
+			toolStatus = terminated;
+			System.err.println(toolId + ": terminate(" + msg + ")");
+			sndRequestToTool(ToolInstance.TERMINATE, msg);
+			clientKey.cancel();
+			try {
+				client.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -254,7 +263,7 @@ public class ClassicToolShield extends ToolShield {
 					info(n + " bytes written for filler");
 				}
 			}
-			ToolBus.settoolActionCompleted();
+			toolbus.settoolActionCompleted();
 			if (clientKey != null) {
 				clientKey.interestOps(SelectionKey.OP_READ);
 			}
@@ -325,7 +334,7 @@ public class ClassicToolShield extends ToolShield {
 		receiveTermData.flip();
 		ATerm result = tbfactory.readFromByteBuffer(receiveTermData);
 		receiveTermBytesLeft = 0;
-		ToolBus.settoolActionCompleted();
+		toolbus.settoolActionCompleted();
 		if(isConnected()){
 			return result;
 		} else if(toolStatus == receivingSignatureConfirm){
