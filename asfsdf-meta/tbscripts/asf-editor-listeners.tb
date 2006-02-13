@@ -17,6 +17,8 @@ in
     . rec-msg(equations-editor-started(ModuleId, Sid?))
     . snd-msg(editor-started(ASF_EXTENSION, Path))
   )
+  *
+  delta
 endlet
 
 toolbus(StartASFEditor)
