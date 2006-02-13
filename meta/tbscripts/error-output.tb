@@ -10,7 +10,7 @@ process DisplaySummary(Summary: term) is
   TODO("Use error support utils to print error")
   . printf("%t\n", Summary) 
 
-process RemoveSummary(Produces: str, SummaryId: str) is
+process RemoveSummary(Producer: str, SummaryId: str) is
   tau
 
 #endif /* __ERROR_OUTPUT__ */
