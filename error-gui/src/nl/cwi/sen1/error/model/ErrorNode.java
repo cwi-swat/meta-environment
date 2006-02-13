@@ -21,7 +21,11 @@ public class ErrorNode extends SelectableNode {
 	public String getProducer() {
 		return producer;
 	}
-	
+
+    public Location getLocation() {
+        return location;
+    }
+    
 	public String getId() {
 		return id;
 	}

@@ -1,11 +1,10 @@
 // Java tool bridge ErrorViewerBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 8, 2005 4:18:23 PM
+// generation time: Feb 13, 2006 10:27:06 AM
 
 package nl.cwi.sen1.error.viewer;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class ErrorViewerBridge
   extends ErrorViewerTool
@@ -31,6 +30,19 @@ public class ErrorViewerBridge
     }
     else {
       throw new UnsupportedOperationException("method `showFeedbackSummary' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void removeFeedbackSummary(String s0)
+
+  public void removeFeedbackSummary(String s0)
+  {
+    if (tool != null) {
+      tool.removeFeedbackSummary(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
     }
   }
 

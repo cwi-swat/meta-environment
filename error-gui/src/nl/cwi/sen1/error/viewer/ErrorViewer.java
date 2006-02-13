@@ -85,6 +85,10 @@ public class ErrorViewer extends DefaultStudioPlugin implements ErrorViewerTif {
 	public void removeFeedbackSummary(String producer, String id) {
 		panel.removeAllMatchingErrors(producer, id);
 	}
+    
+    public void removeFeedbackSummary(String path) {
+        panel.removeAllMatchingErrors(path);
+    }
 
 	public void recAckEvent(ATerm t0) {
 	}

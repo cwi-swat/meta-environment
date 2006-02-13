@@ -77,4 +77,25 @@ public class ErrorDecorator {
 			top.remove((MutableTreeNode) iter.next());
 		}
 	}
+
+    public void removeAllMatchingErrors(DefaultMutableTreeNode top,
+            String path) {
+        Enumeration errors = top.children();
+        // the enumeration is broken if we start deleting nodes from the root,
+        // so we have to make a worklist first.
+        List toBeRemoved = new LinkedList();
+        
+        while (errors.hasMoreElements()) {
+            ErrorNode error = (ErrorNode) errors.nextElement();
+            if (path.equals(error.getLocation().getFilename())) {
+                toBeRemoved.add(error);
+            }
+        }
+        
+        Iterator iter = toBeRemoved.iterator();
+        while (iter.hasNext()) {
+            top.remove((MutableTreeNode) iter.next());
+        }
+    }
+    
 }

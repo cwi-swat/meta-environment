@@ -75,6 +75,11 @@ public class ErrorPanel extends JPanel {
 		treeModel.reload();
 	}
 
+    public void removeAllMatchingErrors(String path) {
+        errorDecorator.removeAllMatchingErrors(top, path);
+        treeModel.reload();
+    }
+
     public void expandAll(JTree tree, boolean expand) {
         TreeNode root = (TreeNode) tree.getModel().getRoot();
         

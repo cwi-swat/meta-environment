@@ -1,18 +1,12 @@
 // Java tool interface class ErrorViewerTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 8, 2005 4:18:23 PM
+// generation time: Feb 13, 2006 10:27:06 AM
 
 package nl.cwi.sen1.error.viewer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import toolbus.SwingTool;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
+import toolbus.*;
+import java.util.*;
 
 abstract public class ErrorViewerTool
   extends SwingTool
@@ -25,6 +19,7 @@ abstract public class ErrorViewerTool
 
   private ATerm PshowFeedbackSummary0;
   private ATerm PremoveFeedbackSummary0;
+  private ATerm PremoveFeedbackSummary1;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
@@ -49,6 +44,7 @@ abstract public class ErrorViewerTool
   {
     sigTable.put(factory.parse("rec-do(<error-viewer>,show-feedback-summary(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<error-viewer>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<error-viewer>,<term>)"), new Boolean(true));
   }
@@ -60,7 +56,8 @@ abstract public class ErrorViewerTool
   private void initPatterns()
   {
     PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
-    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
+    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>))");
+    PremoveFeedbackSummary1 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -80,6 +77,11 @@ abstract public class ErrorViewerTool
       return null;
     }
     result = term.match(PremoveFeedbackSummary0);
+    if (result != null) {
+      removeFeedbackSummary((String)result.get(0));
+      return null;
+    }
+    result = term.match(PremoveFeedbackSummary1);
     if (result != null) {
       removeFeedbackSummary((String)result.get(0), (String)result.get(1));
       return null;

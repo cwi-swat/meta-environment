@@ -5,6 +5,7 @@ let
   T : error-viewer,
   Error : term,
   Location : term,
+  Path: str,
   Producer : str,
   Summary : term,
   SummaryId : str
@@ -18,6 +19,9 @@ in
   +
     rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
     . snd-do(T, remove-feedback-summary(Producer, SummaryId))
+  +
+    rec-msg(ui-remove-feedback-summary(Path?))
+    . snd-do(T, remove-feedback-summary(Path))
   +
     rec-event(T, error-selected(Error?))
     . snd-msg(ui-error-selected(Error))

@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Feb 13 10:29:17 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/error/viewer/ErrorPanel.java:
+   - Add remove summary on path
+
 Tue Sep  6 09:30:04 CEST 2005 <{kooiker,jurgenv]@cwi.nl>
  * error-viewer-${VERSION}.pkg: renamed to error-gui-${VERSION}.pkg
  * error-viewer-config: renamed to error-gui-config
