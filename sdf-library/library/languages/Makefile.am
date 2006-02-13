@@ -10,4 +10,5 @@ SUBDIRS = \
 	c \
 	fdl \
 	pico \
-	sdf2  
+	sdf2  \
+	generic-cpp 
