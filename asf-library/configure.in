@@ -14,9 +14,6 @@ AC_CONFIG_FILES([Makefile
    library/containers/Makefile
    library/utilities/Makefile
    library/languages/Makefile
-   library/languages/cpp/Makefile
-   library/languages/c/Makefile
-   library/languages/asfix/Makefile
    library/languages/asf/Makefile
    library/languages/asf/pretty/Makefile
    library/languages/asf/normalization/Makefile
