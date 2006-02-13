@@ -1,0 +1,24 @@
+#ifndef __ASF_EDITOR_LISTENERS__
+#define __ASF_EDITOR_LISTENERS__
+
+#include <asf-namespace.h>
+
+process StartASFEditor is
+let
+  ModuleId: term,
+  Path: str,
+  Pid: int,
+  Sid: term
+in
+  (
+    rec-msg(start-editor(ASF_EXTENSION, Path?))
+    . MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", path(Path), ModuleId?)
+    . create(EditEquations(ModuleId), Pid?)
+    . rec-msg(equations-editor-started(ModuleId, Sid?))
+    . snd-msg(editor-started(ASF_EXTENSION, Path))
+  )
+endlet
+
+toolbus(StartASFEditor)
+
+#endif /* __ASF_EDITOR_LISTENERS__ */
