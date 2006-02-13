@@ -25,7 +25,7 @@ in
     tau
   else
     create(EditEquations(ModuleId), Pid?)
-    . rec-msg(equations-editor-started(Path, Sid?))
+    . rec-msg(equations-editor-started(ModuleId, Sid?))
     . create(CleanupEditTerm(Sid, ModuleId), Pid?)
   fi
 endlet
