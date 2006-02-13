@@ -8,6 +8,7 @@ GENERATED_TBSCRIPTS = \
 TBSCRIPTS = \
 	asf-actions.tb \
 	asf-editor-actions.tb \
+	asf-editor-listeners.tb \
 	asf-editor-utils.tb \
 	asf-language.tb \
 	asf-listeners.tb \

@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Feb 13 10:01:24 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/asf-editor-listeners.tb:
+   - Add listener to start ASF editor
+
 Thu Feb  9 11:48:41 CET 2006 <kooiker@cwi.nl>
  * tbscripts/*.tb:
    - Extract ASF Progress Listener
