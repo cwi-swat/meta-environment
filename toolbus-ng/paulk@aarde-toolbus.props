@@ -2,6 +2,21 @@ sglr.path=/home/paulk/software/installed/bin/sglr
 parsetable.path=/home/paulk/.eclipse/toolbusNG/toolbus/parser/Tscript.trm.tbl
 implodePT.path=/home/paulk/software/installed/bin/implodePT
 workspace.path=/home/paulk/.eclipse
+include.path=/home/paulk/.eclipse/toolbusNG/toolbus/parser, \
+/home/paulk/tmp/software/installed/share/toolbus, \
+/home/paulk/tmp/software/installed/share/meta, \
+/home/paulk/tmp/software/installed/share, \
+/home/paulk/tmp/software/installed/share/error-support, \
+/home/paulk/tmp/software/installed/share/pt-support, \
+/home/paulk/tmp/software/installed/share/sdf-support, \
+/home/paulk/tmp/software/installed/share/asf, \
+/home/paulk/tmp/software/installed/share/asfsdf-meta, \
+/home/paulk/tmp/software/installed/share/graph-support, \
+/home/paulk/tmp/software/installed/share/sglr, \
+/home/paulk/tmp/software/installed/share/tide, \
+/home/paulk/tmp/software/installed/share/tide-support, \
+/home/paulk/tmp/software/installed/share/pandora, \
+/home/paulk/tmp/software/installed/share/pgen	 			 		 			 			 			 			 
 java.classpath=/home/paulk/.eclipse/toolbusNG, \
                 /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/
 testing.class=toolbus.Testing

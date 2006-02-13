@@ -1,8 +1,9 @@
 module Include
-imports
+imports TBTerms
 
 exports
-   sorts Include
+   sorts Include Define
    
    context-free syntax
      "#include" StrCon		-> Include {cons("ttt-Include")}
+     "#define"  Vname StrCon    -> Define  {cons("ttt-Define")}

@@ -101,7 +101,7 @@ public class ToolBus {
 							get("sglr.path"), 
 							get("parsetable.path"), 
 							get("implodePT.path")), 
-					tbfactory);
+					this);
 		iomanager = new IOManager(this);
 		startTime = System.currentTimeMillis();
 	}
@@ -275,7 +275,7 @@ public class ToolBus {
 	 */
 
 	public void parse(String filename) throws ToolBusException {
-		parser.parse(this, filename);
+		parser.parse(filename);
 	}
 
 	/**
