@@ -48,6 +48,7 @@ in
       *
       EditorDisconnected(Sid)
       . DeleteSession(Sid)
+      . snd-msg(ui-remove-feedback-summary(Path))
     else
       tau
     fi
