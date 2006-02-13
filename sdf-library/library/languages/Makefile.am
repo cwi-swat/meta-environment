@@ -10,5 +10,4 @@ SUBDIRS = \
 	c \
 	fdl \
 	pico \
-	sdf2  \
-	tex
+	sdf2  

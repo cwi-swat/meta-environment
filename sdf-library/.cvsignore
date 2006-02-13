@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+aclocal.m4
+sdf-library-*.pkg
+sdf-library-*.tar.gz
+autom4te.cache
+config.cache
+config.h.in
+config.log
+config.status
+configure
