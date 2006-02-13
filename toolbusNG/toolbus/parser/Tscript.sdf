@@ -9,4 +9,5 @@ exports
 
   context-free syntax
     "toolbus" "(" {ProcessCall ","}+ ")"      -> ToolBusConfig
-    (ProcessDef | ToolDef | ToolBusConfig)*   -> Tscript {cons("ttt-Tscript")}
+    (ProcessDef | ToolDef | 
+     ToolBusConfig | Include)*                -> Tscript {cons("ttt-Tscript")}

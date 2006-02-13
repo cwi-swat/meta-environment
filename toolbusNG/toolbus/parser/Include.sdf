@@ -1,0 +1,8 @@
+module Include
+imports
+
+exports
+   sorts Include
+   
+   context-free syntax
+     "#include" StrCon		-> Include {cons("ttt-Include")}

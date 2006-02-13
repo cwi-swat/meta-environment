@@ -474,6 +474,15 @@ class TScriptNodeBuilders {
           return a;
         }
     });
+    
+    define(new NodeBuilder("ttt-Include") {
+        public Object build(Object args[]) {
+        	String filename = ((ATermAppl) args[0]).getName();
+        	
+          return new Include(filename, tbfactory);
+        }
+      });
+        
   }
 
   /**
@@ -550,8 +559,16 @@ public class TScriptParser {
     tbfactory = tbfac;
     TScriptNodeBuilders.init(tbfactory);
   }
+  private ATermList calls;
 
   public void parse(ToolBus toolbus, String filename) throws ToolBusException {
+	  ATermList decls = doparse(toolbus, filename);
+	  calls = tbfactory.EmptyList;
+	  generateTree(decls);
+	  generateInitialCall();
+  }
+  
+  public ATermList doparse(ToolBus toolbus, String filename) throws ToolBusException {
     ATerm interm;
     try {
       interm = externalparser.parse(filename, tbfactory);
@@ -566,8 +583,10 @@ public class TScriptParser {
     ATerm args[] = ((ATermAppl) interm).getArgumentArray();
 
     ATermList decls = (ATermList) args[0];
-    ATermList calls = tbfactory.EmptyList;
-
+    return decls;
+  }
+  
+  public void generateTree(AtermList decls){
     for (int i = 0; i < decls.getLength(); i++) {
       //System.err.println(decls.elementAt(i));
       Object elm = decls.elementAt(i);
@@ -594,6 +613,8 @@ public class TScriptParser {
       		throw new ToolBusException("Process or Tool definition expected");
       }
     }
+  }
+  void generateInitialCall(){
     for (int j = 0; j < calls.getLength(); j++) {
         ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
         toolbus.addProcess(call);
