@@ -63,11 +63,4 @@ public class ErrorNode extends SelectableNode {
     public boolean isInfo() {
         return error.isInfo();
     }
-
-    public boolean equals(Object o) {
-        ErrorNode node = (ErrorNode) o;
-        
-        return (node.producer.equals(producer) && node.error.equals(error)
-                && node.location.equals(location) && node.id.equals(id));
-    }
 }

@@ -49,21 +49,11 @@ public class ErrorDecorator {
     public void addErrors(DefaultMutableTreeNode top, Summary summary) {
         String producer = summary.getProducer();
         String id = summary.getId();
-        boolean errorExists = false;
 
         for (ErrorList errorList = summary.getList(); !errorList.isEmpty(); errorList = errorList
                 .getTail()) {
             Error head = errorList.getHead();
-            for (int i = 0; i < top.getChildCount(); i++) {
-                ErrorNode error = (ErrorNode) top.getChildAt(i);
-                if (error.equals(decorateError(head, producer, id))) {
-                    errorExists = true;
-                }
-            }
-
-            if (!errorExists) {
-                top.add(decorateError(head, producer, id));
-            } 
+            top.add(decorateError(head, producer, id));
         }
     }
 
