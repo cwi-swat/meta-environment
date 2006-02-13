@@ -158,8 +158,6 @@ in
   fi
 endlet
 
-
-
 process GetImportedModulenames(Tree: term, Imports: list?) is
   snd-msg(sm-get-imported-module-names(Tree))
   . rec-msg(sm-imported-module-names(Imports?)) 
@@ -167,13 +165,11 @@ process GetImportedModulenames(Tree: term, Imports: list?) is
 process CloseModule(ModuleId: term, Recursive: bool) is
 let
   Dependencies: list,
-  Id: int,
   Modulename: str,
   CloseModules: list,
   NewTerm: term
 in
-  Id := process-id
-  . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
   .
   if equal(Recursive, true) then
     MM-GetClosableModules(ModuleId, CloseModules?)
@@ -184,7 +180,7 @@ in
       CloseModules(CloseModules)
     fi
   else
-    MM-GetModuleDependencies(ModuleId, Dependencies?)
+    MM-GetModuleParents(ModuleId, Dependencies?)
     .
     if equal(Dependencies, []) then
       CloseModules([ModuleId])
@@ -201,11 +197,10 @@ let
   Modules: list
 in
   Modules := quote(CloseModules)
-  . TODO("why quote previous statement")
   .
   if not-equal(Modules, []) then
     ModuleId := first(Modules)
-    /*. DeleteSessions(ModuleId)*/
+    . DeleteSessions(ModuleId)
     . MM-DeleteModule(ModuleId)
     . Modules := next(Modules)
   fi
