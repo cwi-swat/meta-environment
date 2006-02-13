@@ -1,6 +1,6 @@
 EXTRA_DIST=make_rules
 
-SUBDIRS=basic containers utilities languages
+SUBDIRS=basic languages
 
 uninstall:
 	rm -rf ${pkgdatadir}/library
