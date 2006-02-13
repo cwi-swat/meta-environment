@@ -472,9 +472,10 @@ public class ModuleDatabase {
 
 	public Set getClosableModules(ModuleId moduleId) {
 		Set dependencies = getAllChildren(moduleId);
-		LinkedList temp = new LinkedList();
+        LinkedList temp = new LinkedList();
 
-		temp.addAll(dependencies);
+        dependencies.add(moduleId);
+        temp.addAll(dependencies);
 
 		while (!temp.isEmpty()) {
 			ModuleId tempId = (ModuleId) temp.getFirst();
@@ -482,7 +483,8 @@ public class ModuleDatabase {
 
 			if (!dependencies.containsAll(parents)) {
 				Set children = getAllChildren(tempId);
-				dependencies.removeAll(children);
+                dependencies.removeAll(children);
+                dependencies.remove(tempId);
 			}
 
 			temp.removeFirst();
