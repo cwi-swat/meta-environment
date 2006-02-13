@@ -20,9 +20,9 @@ AC_PACKAGE_REQUIRE(meta, meta-config,
   [  --with-meta=DIR         Meta-Environment is in DIR])
 AC_SUBST(META)
 
-dnl Require ASF!!+SDF library
-AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
-   [  --with-asf-library=DIR           Asf+Sdf library is in DIR])
+dnl Require SDF library
+AC_PACKAGE_REQUIRE(sdf-library, sdf-library-config,
+   [  --with-sdf-library=DIR           Sdf library is in DIR])
 AC_SUBST(ASF_LIBRARY)
 
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
