@@ -1,0 +1,20 @@
+module languages/c/syntax/Declarators[Declarator Identifier]
+
+exports
+
+sorts Pointer Expression Parameters 
+
+context-free syntax
+
+Pointer Declarator 			-> Declarator {non-assoc}
+Identifier 				-> Declarator
+"(" Declarator ")" 			-> Declarator {bracket}
+Declarator "[" Expression? "]"		-> Declarator
+Declarator "(" Parameters? ")" 		-> Declarator
+
+context-free priorities
+{
+Declarator "(" Parameters? ")" 		-> Declarator
+Declarator "[" Expression? "]" 	-> Declarator
+}
+> Pointer Declarator 			-> Declarator

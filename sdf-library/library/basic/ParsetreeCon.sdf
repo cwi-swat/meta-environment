@@ -1,0 +1,18 @@
+module basic/ParsetreeCon[X]
+
+imports basic/BytesCon
+imports basic/NatCon
+imports basic/Errors
+
+exports 
+
+context-free syntax
+
+  "parse-tree" "(" left-layout:Bytes  "," 
+                   tree:X             "," 
+                   right-layout:Bytes ","
+                   amb-cnt:NatCon
+               ")"                   -> Parsetree[[X]] {cons("success")}
+
+  "parse-error" "(" Summary ")"      -> Parsetree[[X]] {cons("failure")}
+ 

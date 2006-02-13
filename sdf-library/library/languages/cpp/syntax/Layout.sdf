@@ -1,0 +1,15 @@
+module languages/cpp/syntax/Layout
+
+imports languages/cpp/syntax/CommentsAsLayout
+imports languages/cpp/syntax/LineCommentsAsLayout
+
+exports
+ lexical syntax
+   Comment      -> LAYOUT {prefer} %% adds a prefer to the existing injection
+   LineComment  -> LAYOUT {prefer} %% idem
+
+
+ lexical syntax
+    [\t\ ]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\t\ ]

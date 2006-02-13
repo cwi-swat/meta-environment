@@ -1,0 +1,39 @@
+module languages/cpp/syntax/Expr
+
+imports basic/Integers
+	basic/Strings
+	languages/cpp/syntax/Ident
+
+exports
+
+sorts Expr
+
+context-free syntax
+	Integer -> Value
+	String -> Value
+	Id -> Value
+
+	Value -> Expr
+
+	lhs:Value "==" rhs:Value -> Expr {cons("equals")}
+	lhs:Value "!=" rhs:Value -> Expr {cons("disequals")}
+
+	lhs:Value ">" rhs:Value -> Expr {cons("greater-than")}
+	lhs:Value "<" rhs:Value -> Expr {cons("less-than")}
+	lhs:Value "<=" rhs:Value -> Expr {cons("less-than-or-eq")}
+	lhs:Value ">=" rhs:Value -> Expr {cons("greater-than-or-eq")}
+
+	"defined" "(" id:Id ")" -> Expr {cons("defined-parens")}
+	"defined" id:Id -> Expr {cons("defined-no-parens")}
+	"!" arg:Expr -> Expr {cons("negation")}
+	"(" Expr ")" -> Expr {bracket}
+	lhs:Expr "||" rhs:Expr -> Expr {left,cons("disjunction")}
+	lhs:Expr "&&" rhs:Expr -> Expr {left,cons("conjunction")}
+
+context-free priorities
+	"!" arg:Expr -> Expr {cons("negation")}
+	>
+	lhs:Expr "&&" rhs:Expr -> Expr {left,cons("conjunction")}
+	>
+	lhs:Expr "||" rhs:Expr -> Expr {left,cons("disjunction")}
+

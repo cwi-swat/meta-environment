@@ -1,0 +1,65 @@
+dnl $Id$
+
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
+GLT_INIT_PACKAGE
+AC_PREREQ(2.59)
+
+AC_PROG_MAKE_SET([])
+
+AC_CONFIG_FILES([Makefile
+   utils/Makefile
+   library/Makefile
+   library/basic/Makefile
+   library/containers/Makefile
+   library/utilities/Makefile
+   library/languages/Makefile
+   library/languages/cpp/Makefile
+   library/languages/cpp/syntax/Makefile
+   library/languages/c/Makefile
+   library/languages/c/syntax/Makefile
+   library/languages/asfix/Makefile
+   library/languages/asfix/syntax/Makefile
+   library/languages/asf/Makefile
+   library/languages/asf/syntax/Makefile
+   library/languages/asf/pretty/Makefile
+   library/languages/asf/normalization/Makefile
+   library/languages/asf/addeqssyntax/Makefile
+   library/languages/asf/removevariables/Makefile
+   library/languages/asf/idioms/Makefile
+   library/languages/aterm/Makefile
+   library/languages/aterm/syntax/Makefile
+   library/languages/aterm/pretty/Makefile
+   library/languages/sdf2/Makefile
+   library/languages/sdf2/syntax/Makefile
+   library/languages/sdf2/normalization/Makefile
+   library/languages/sdf2/projection/Makefile
+   library/languages/sdf2/renaming/Makefile
+   library/languages/sdf2/pretty/Makefile
+   library/languages/sdf2/idioms/Makefile
+   library/languages/pico/Makefile
+   library/languages/pico/syntax/Makefile
+   library/languages/pico/pretty/Makefile
+   library/languages/pico/interpreter/Makefile
+   library/languages/pico/compiler/Makefile
+   library/languages/pico/typechecker/Makefile
+   library/languages/pico/debugger/Makefile
+   library/languages/pico/examples/Makefile
+   library/languages/box/Makefile
+   library/languages/box/syntax/Makefile
+   library/languages/box/utilities/Makefile
+   library/languages/casl/Makefile
+   library/languages/casl/syntax/Makefile
+   library/languages/casl/tocasfix/Makefile
+   library/languages/tex/Makefile
+   library/languages/tex/syntax/Makefile
+   library/languages/fdl/Makefile
+   library/languages/fdl/check/Makefile
+   library/languages/fdl/pretty/Makefile
+   library/languages/fdl/syntax/Makefile
+   library/languages/fdl/evolution/Makefile
+   library/languages/fdl/utilities/Makefile
+   library/languages/fdl/utilities/bdd/Makefile
+
+])
+AC_OUTPUT

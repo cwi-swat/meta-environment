@@ -1,0 +1,25 @@
+module languages/sdf2/idioms/CaseInsensitivity
+
+imports basic/Whitespace
+
+%% In SDF2 there are two notations for literals (or keywords).
+%% The first form is spelled with double quotes ("), as in "begin".
+%% The second form is spelled with single quoted ('), as in 'begin'.
+%% The latter generates a case-insensitive implementation, while
+%% the first literal generates a language restricted exactly to
+%% the given spelling.
+
+exports
+
+lexical syntax
+ [A-Za-z]+ -> Id
+
+context-free syntax
+
+"begin" Id+ "end"  -> Program
+
+'start' Id+ 'done' -> CaseInsensitiveProgram
+
+context-free start-symbols
+  Program
+  CaseInsensitiveProgram

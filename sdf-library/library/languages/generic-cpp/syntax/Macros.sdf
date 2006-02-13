@@ -1,0 +1,19 @@
+module languages/generic-cpp/syntax/Macros[
+  Identifier
+  Expression
+  Result
+]
+
+imports languages/generic-cpp/syntax/Files
+
+exports
+
+context-free syntax
+  "#" "define" Identifier                                       -> Result
+  "#" "define" Identifier Expression                            -> Result
+  "#" "define" Identifier "(" {Identifier ","}* ")" Expression  -> Result
+  "#" "undef" Expression                                        -> Result
+  "#" "line" Expression Filename?                               -> Result
+  "#" "error" Expression?                                       -> Result
+  "#" "pragma" Expression?                                      -> Result
+  "#"                                                           -> Result

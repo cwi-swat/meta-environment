@@ -1,0 +1,15 @@
+module languages/aterm/syntax/IntCon
+
+imports basic/Whitespace
+	basic/NatCon
+
+hiddens
+  context-free start-symbols 
+    IntCon
+
+exports
+  sorts IntCon
+  context-free syntax
+    NatCon         -> IntCon {cons("natural")}
+    pos:"+" NatCon -> IntCon {cons("positive")}
+    neg:"-" NatCon -> IntCon {cons("negative")}

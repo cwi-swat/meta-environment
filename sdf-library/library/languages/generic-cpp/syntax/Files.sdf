@@ -1,0 +1,12 @@
+module languages/generic-cpp/syntax/Files
+
+exports
+
+sorts Filename SystemInclude LocalInclude 
+
+lexical syntax
+   ~[\"\n\>]+          -> Filename
+
+lexical restrictions
+   Filename -/- ~[\"\n\>]
+

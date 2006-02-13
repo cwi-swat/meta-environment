@@ -1,0 +1,50 @@
+module languages/graph/syntax/Graph
+
+imports languages/aterm/syntax/ATerms basic/Integers basic/Strings
+
+exports
+   sorts 
+	Graph NodeList Node NodeId
+	AttributeList Attribute
+	Shape Direction EdgeList Edge Polygon Point
+
+   context-free syntax
+	graph(NodeList, EdgeList,AttributeList)		-> Graph
+	"[" {Node ","}* "]"				-> NodeList
+	node(NodeId, AttributeList)			-> Node
+	String						-> NodeId
+	"[" {Attribute ","}* "]"			-> AttributeList
+	
+	label(String)					-> Attribute
+	shape(Shape)					-> Attribute
+	location(Integer,Integer)			-> Attribute
+	size(Integer, Integer)				-> Attribute
+	curve-points(Polygon)				-> Attribute
+	bounding-box(Point, Point)			-> Attribute
+	direction(Direction)				-> Attribute
+	info(String, ATerm)				-> Attribute
+	
+	plaintext					-> Shape
+	ellipse						-> Shape
+	circle						-> Shape
+	egg						-> Shape
+	triangle					-> Shape
+	box						-> Shape
+	diamond						-> Shape
+	trapezium					-> Shape
+	parallelogram					-> Shape
+	house						-> Shape
+	hexagon						-> Shape
+	octagon						-> Shape
+
+	forward						-> Direction
+	back						-> Direction
+	both						-> Direction
+	none						-> Direction
+
+	"[" {Edge ","}*	"]"				-> EdgeList
+	edge(NodeId, NodeId, AttributeList)		-> Edge
+
+	"[" {Point ","}* "]"				-> Polygon
+	point(Integer, Integer)				-> Point
+		

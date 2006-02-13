@@ -1,0 +1,12 @@
+trp(   
+begin
+  declare x : natural,
+          s : string;
+
+  x := 10;
+  while x do
+   x := x - 1;
+   s := s || "#"
+  od
+end
+)

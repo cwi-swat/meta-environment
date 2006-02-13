@@ -1,0 +1,10 @@
+Makefile.in
+Makefile
+*.sdf.baf
+*.asf.baf
+*.trm.tbl
+*.eqs
+.deps
+link-test.c
+link-test
+

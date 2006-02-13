@@ -1,0 +1,58 @@
+
+
+#define foo(x,y) x
+
+
+#define ABC
+
+#define ABC 54 345
+
+#define bar (x,y)
+
+#define f(x)
+
+#    define f(   x )
+
+#define bla(x) x \
+	y
+
+slkdjfkla
+asdlfjalskd
+
+
+#define _ , 
+
+#define ABC
+
+#define bla /* skjfls */
+
+/* 
+
+
+#include <stdio.h>
+
+sadlfkjas
+
+*/
+
+#define f(...) basdkasldjlaks
+
+#define f(a,b,c,...) skjfhkshf
+
+
+#define p(x) printf("\
+#define f %s", x)
+
+
+#define X /* skjfhksdhfk */
+
+p(hoi);
+
+
+/* sihfskj
+
+
+*/  # define     sldkfjsdlfj sdfsdjdf
+  /* sdhfjkshdf */ # /* skdnfksfd */ define /*hoi
+*/ foo/*sda*/(x) x+1
+
