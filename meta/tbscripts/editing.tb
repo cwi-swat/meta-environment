@@ -361,8 +361,7 @@ in
   fi
 endlet
 
-
-process GetModuleByExtension(Path: str, ModuleId: str?, Available: bool?) is
+process GetModuleByExtension(Path: str, ModuleId: term?) is
 let
   Extension: str
 in
@@ -372,10 +371,9 @@ in
   .
   (
     rec-msg(extension-modulename(Extension, ModuleId?))
-    . Available := true
   +
     rec-msg(no-extension-modulename(Extension))
-    . Available := false
+    . ModuleId := UNDEFINED
   )
 endlet
 
@@ -407,27 +405,35 @@ endlet
 
 process EditLocation(Pid: int, Location: term) is
 let
-  EditorType: term,
+  Extension: str,
+  Filename: str,
   Path: str,
+  Prefix: str,
   Sid: term
 in
-  TODO("reimplement\n")
-/*
   snd-msg(get-location-filename(Location))
   . rec-msg(location-filename(Path?))
-  . GetEditorType(Path, EditorType?)
-  . MM-GetModuleIdByAttribute(
-  . StartEditor(Path, EditorType)
   . snd-msg(em-get-session-by-path(Path))
   .
   (
     rec-msg(em-session(Path, Sid?))
+    . snd-msg(te-editor-to-front(Sid))
     . snd-msg(session(Pid, Sid))
   +
     rec-msg(em-no-such-session(Path))
-    . snd-msg(no-such-session(Pid))
+    . SplitFilename(Path, Filename?, Prefix?, Extension?)
+    . snd-msg(start-editor(Extension, Path))
+    . rec-msg(editor-started(Extension, Path))
+    . snd-msg(em-get-session-by-path(Path))
+    .
+    (
+      rec-msg(em-session(Path, Sid?))
+      . snd-msg(session(Pid, Sid))
+    +
+      rec-msg(em-no-such-session(Path))
+      . snd-msg(no-such-session(Pid))
+    )
   )
-*/
 endlet
 
 process ShowOriginAction(EditorId : term) is
@@ -511,73 +517,5 @@ in
     . Origin := no-origin
   )
 endlet
-
-process GetEditorType(Path: str, EditorType: term?) is
-let
-  Extension: str
-in
-  TODO("fix sdf and asf dependency")
-  . snd-msg(io-get-path-extension(Path))
-  . rec-msg(io-extension(Path, Extension?))
-  .
-  if equal(Extension, ".sdf") then
-    EditorType := syntax-editor
-  else
-    if equal(Extension, ".asf") then
-      EditorType := equations-editor
-    else
-      EditorType := term-editor
-    fi
-  fi
-endlet
-
-/*
-process StartEditor(Path: str, EditorType: term) is
-let
-  Available: bool,
-  ErrorMsg: str,
-  ModuleId: term,
-  Modulename: str,
-  Pid: int,
-  Sid: term,
-  Term: path
-in
-  if equal(EditorType, term-editor) then
-    GetModuleByExtension(Path, Modulename?, Available?)
-    .
-    if equal(Available, false) then
-      GetModuleByPath(Path, Modulename?, Available?)
-      TODO("GetModuleByPath")
-    fi
-    . 
-    if equal(Available, true) then
-      create(EditTerm(Path, Modulename), Pid?)
-      .
-      (
-        rec-msg(term-editor-started(Path, Modulename, Sid?))
-      +
-        rec-msg(term-editor-not-started(Path, Modulename, ErrorMsg?))
-        . Error(ErrorMsg, [])
-      )
-    else
-      snd-note(ui-status(errorf("Unable to determine modulename for: %s",
-                                [Path])))
-    fi
-  else
-    TODO("Factor out ASF, SDF dependencies with process parameter\n")
-    . if equal(EditorType, syntax-editor) then
-      Term := quote(path(Path))
-      . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", Term, ModuleId?)
-      . create(EditSyntax(ModuleId), Pid?)
-      . rec-msg(syntax-editor-started(ModuleId, Sid?))
-    else
-      Term := quote(path(Path))
-      . MM-GetModuleIdByAttribute(ASF_NAMESPACE, "path", Term, ModuleId?)
-      . create(EditEquations(ModuleId), Pid?)
-      . rec-msg(equations-editor-started(ModuleId, Sid?))
-    fi
-  fi
-endlet
-*/
 
 #endif /* __EDITING__ */
