@@ -67,11 +67,7 @@ public class ErrorNode extends SelectableNode {
     public boolean equals(Object o) {
         ErrorNode node = (ErrorNode) o;
         
-        boolean equal = (node.producer.equals(producer) && node.error.equals(error)
+        return (node.producer.equals(producer) && node.error.equals(error)
                 && node.location.equals(location) && node.id.equals(id));
-    
-        System.err.println("EQUAL? " + equal);
-        
-        return equal;
     }
 }
