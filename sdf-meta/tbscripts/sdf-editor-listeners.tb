@@ -1,0 +1,26 @@
+#ifndef __SDF_EDITOR_LISTENERS__
+#define __SDF_EDITOR_LISTENERS__
+
+#include <sdf-namespace.h>
+
+process StartSDFEditor is
+let
+  ModuleId: term,
+  Path: str,
+  Pid: int,
+  Sid: term
+in
+  (
+    rec-msg(start-editor(SDF_EXTENSION, Path?))
+    . MM-GetModuleIdByAttribute(SDF_NAMESPACE, "path", path(Path), ModuleId?)
+    . create(EditSyntax(ModuleId), Pid?)
+    . rec-msg(syntax-editor-started(ModuleId, Sid?))
+    . snd-msg(editor-started(SDF_EXTENSION, Path))
+  )
+  *
+  delta
+endlet
+
+toolbus(StartSDFEditor)
+
+#endif /* __SDF_EDITOR_LISTENERS__ */

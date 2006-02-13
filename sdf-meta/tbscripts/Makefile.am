@@ -7,6 +7,7 @@ TBSCRIPTS = \
 	    sdf-module-actions.tb \
 	    sdf-actions.tb \
 	    sdf-editor-actions.tb \
+	    sdf-editor-listeners.tb \
 	    sdf-editor-utils.tb \
 	    sdf-initialize.tb \
 	    sdf-listeners.tb \

@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 13 09:59:03 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-editor-listeners.tb:
+   - Listener for starting SDF editor
+
 Thu Feb  9 11:48:05 CET 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-utils.tb:
    - Use generic ParseTreeHandler
