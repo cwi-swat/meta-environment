@@ -8,8 +8,6 @@ configuration([
          "EditorEditEquationsAction"),
   action([description(equations-editor, menu(["Actions", "Run Tests"]))],
          "EditorRunAsfTestsAction"),
-  action([description(syntax-editor, menu(["Actions", "Edit Term"]))],
-         "EditorEditTermAction"),
   action([description(syntax-editor, menu(["Actions", "Run Tests"]))],
          "EditorRunAsfTestsAction"),
   action([description(term-editor, menu(["Debug","Reduce"]))],
