@@ -16,86 +16,95 @@ import errorapi.types.SubjectList;
 import errorapi.types.Summary;
 
 public class ErrorDecorator {
-	public LocationNode decorateLocation(final Location location) {
-		return new LocationNode(location);
-	}
+    public LocationNode decorateLocation(final Location location) {
+        return new LocationNode(location);
+    }
 
-	public SubjectNode decorateSubject(final Subject subject) {
-		SubjectNode node = new SubjectNode(subject);
+    public SubjectNode decorateSubject(final Subject subject) {
+        SubjectNode node = new SubjectNode(subject);
 
-		if (subject.hasLocation()) {
-			node.add(decorateLocation(subject.getLocation()));
-		}
-		
-		return node;
-	}
+        if (subject.hasLocation()) {
+            node.add(decorateLocation(subject.getLocation()));
+        }
 
-	public ErrorNode decorateError(final Error error, String producer, String id) {
-		ErrorNode node = new ErrorNode(error, producer, id);
-		SubjectList subjectList = error.getList();
+        return node;
+    }
 
-		while (!subjectList.isEmpty()) {
-			Subject head = subjectList.getHead();
-			node.add(decorateSubject(head));
-			if (head.hasLocation()) {
-				node.setLocation(head.getLocation());
-			}
-			subjectList = subjectList.getTail();
-		}
+    public ErrorNode decorateError(final Error error, String producer, String id) {
+        ErrorNode node = new ErrorNode(error, producer, id);
+        SubjectList subjectList = error.getList();
 
-		return node;
-	}
+        while (!subjectList.isEmpty()) {
+            Subject head = subjectList.getHead();
+            node.add(decorateSubject(head));
+            if (head.hasLocation()) {
+                node.setLocation(head.getLocation());
+            }
+            subjectList = subjectList.getTail();
+        }
 
-	public void addErrors(DefaultMutableTreeNode top, Summary summary) {
-		String producer = summary.getProducer();
-		String id = summary.getId();
+        return node;
+    }
 
-		for (ErrorList errorList = summary.getList(); !errorList.isEmpty(); errorList = errorList
-				.getTail()) {
-			Error head = errorList.getHead();
-			top.add(decorateError(head, producer, id));
-		}
-	}
+    public void addErrors(DefaultMutableTreeNode top, Summary summary) {
+        String producer = summary.getProducer();
+        String id = summary.getId();
+        boolean errorExists = false;
 
-	public void removeAllMatchingErrors(DefaultMutableTreeNode top,
-			String producer, String id) {
-		Enumeration errors = top.children();
-		// the enumeration is broken if we start deleting nodes from the root,
-		// so we have to make a worklist first.
-		List toBeRemoved = new LinkedList();
-		
-		while (errors.hasMoreElements()) {
-			ErrorNode error = (ErrorNode) errors.nextElement();
-			if (producer.equals(error.getProducer())
-					&& id.equals(error.getId())) {
-				toBeRemoved.add(error);
-			}
-		}
-		
-		Iterator iter = toBeRemoved.iterator();
-		while (iter.hasNext()) {
-			top.remove((MutableTreeNode) iter.next());
-		}
-	}
+        for (ErrorList errorList = summary.getList(); !errorList.isEmpty(); errorList = errorList
+                .getTail()) {
+            Error head = errorList.getHead();
+            for (int i = 0; i < top.getChildCount(); i++) {
+                ErrorNode error = (ErrorNode) top.getChildAt(i);
+                if (error.equals(decorateError(head, producer, id))) {
+                    errorExists = true;
+                }
+            }
+
+            if (!errorExists) {
+                top.add(decorateError(head, producer, id));
+            } 
+        }
+    }
 
     public void removeAllMatchingErrors(DefaultMutableTreeNode top,
-            String path) {
+            String producer, String id) {
         Enumeration errors = top.children();
         // the enumeration is broken if we start deleting nodes from the root,
         // so we have to make a worklist first.
         List toBeRemoved = new LinkedList();
-        
+
+        while (errors.hasMoreElements()) {
+            ErrorNode error = (ErrorNode) errors.nextElement();
+            if (producer.equals(error.getProducer())
+                    && id.equals(error.getId())) {
+                toBeRemoved.add(error);
+            }
+        }
+
+        Iterator iter = toBeRemoved.iterator();
+        while (iter.hasNext()) {
+            top.remove((MutableTreeNode) iter.next());
+        }
+    }
+
+    public void removeAllMatchingErrors(DefaultMutableTreeNode top, String path) {
+        Enumeration errors = top.children();
+        // the enumeration is broken if we start deleting nodes from the root,
+        // so we have to make a worklist first.
+        List toBeRemoved = new LinkedList();
+
         while (errors.hasMoreElements()) {
             ErrorNode error = (ErrorNode) errors.nextElement();
             if (path.equals(error.getLocation().getFilename())) {
                 toBeRemoved.add(error);
             }
         }
-        
+
         Iterator iter = toBeRemoved.iterator();
         while (iter.hasNext()) {
             top.remove((MutableTreeNode) iter.next());
         }
     }
-    
+
 }
