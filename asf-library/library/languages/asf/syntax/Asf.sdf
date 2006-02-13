@@ -1,3 +1,0 @@
-module languages/asf/syntax/Asf[Tree]
-
-imports languages/asf/syntax/Module[Tree]

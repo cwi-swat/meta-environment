@@ -1,8 +1,0 @@
-module languages/asf/syntax/Characters
-hiddens
-  sorts CHAR
-exports
-  lexical syntax
-    [\"] value:~[\257] [\"] -> CHAR {cons("default")}
-
-

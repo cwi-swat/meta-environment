@@ -1,5 +1,8 @@
 $Id$
 
+Mon Feb 13 13:59:27 CET 2006 <jurgenv@cwi.nl>
+ * library/**: Moved all syntax definitions to sdf-library!
+
 Fri Dec 23 10:37:18 CET 2005 <jurgenv@cwi.nl>
  * library/languages/sdf2/*: added case-insensitive literals to SDF2
 

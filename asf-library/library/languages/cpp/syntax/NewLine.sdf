@@ -1,9 +1,0 @@
-module languages/cpp/syntax/NewLine
-
-exports
-
-sorts NewLine
-
-lexical syntax
-	[\n] -> NewLine
-

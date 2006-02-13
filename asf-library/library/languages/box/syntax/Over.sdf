@@ -1,8 +1,0 @@
-module languages/box/syntax/Over
-
-imports Box
-exports
-  context-free syntax
-    "O" SOptions "[" Box BoxString Box "]" -> Box
-
-%%%
