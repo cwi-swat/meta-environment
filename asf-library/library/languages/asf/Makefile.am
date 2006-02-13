@@ -1,3 +1,3 @@
 include $(top_srcdir)/library/make_rules
 
-SUBDIRS = syntax pretty addeqssyntax normalization removevariables idioms
+SUBDIRS = pretty addeqssyntax normalization removevariables idioms
