@@ -8,6 +8,7 @@ SUBDIRS = \
 	casl \
 	cpp \
 	c \
+	graph \
 	fdl \
 	pico \
 	sdf2  \

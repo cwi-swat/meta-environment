@@ -14,6 +14,8 @@ AC_CONFIG_FILES([Makefile
    library/languages/Makefile
    library/languages/cpp/Makefile
    library/languages/cpp/syntax/Makefile
+   library/languages/generic-cpp/Makefile
+   library/languages/generic-cpp/syntax/Makefile
    library/languages/c/Makefile
    library/languages/c/syntax/Makefile
    library/languages/asfix/Makefile
@@ -34,6 +36,8 @@ AC_CONFIG_FILES([Makefile
    library/languages/casl/syntax/Makefile
    library/languages/fdl/Makefile
    library/languages/fdl/syntax/Makefile
+   library/languages/graph/Makefile
+   library/languages/graph/syntax/Makefile
 
 ])
 AC_OUTPUT
