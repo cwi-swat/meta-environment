@@ -60,44 +60,30 @@ in
   )
 endlet
 
-process DumpSdfDefinition is
+process DumpSdfDefinition(ModuleId: term, Filename: str) is
 let
-  Id: int,
-  ModuleId: term,
   Syntax: term,
   Path: str,
   Text: str,
-  Filename: str,
   Error: term,
   ErrorMessage: str
 in
-  Id := process-id
+  GetSyntaxDefinition(ModuleId, Syntax?)
   .
-  (
-    rec-msg(dump-sdf-definition(ModuleId?, Filename?))
-    . snd-msg(get-all-syntax-definitions(ModuleId, trm))
+  if not-equal(Syntax, UNDEFINED) then
+    GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
+    . snd-msg(unparse(Syntax))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(io-write-text-list(Filename, [Text]))
     .
     (
-      rec-msg(syntax(Syntax?))
-      . GetModulePath(ModuleId, SDF_NAMESPACE, Path?)
-      . snd-msg(unparse(Syntax))
-      . rec-msg(unparsed-text(Text?))
-      . snd-msg(io-write-text-list(Filename, [Text]))
-      .
-      (
-        rec-msg(io-file-written)
-      +
-        rec-msg(io-file-not-written(Error?))
-        . snd-note(ui-status(errorf("%s: %t", [Filename, Error])))
-      )
+      rec-msg(io-file-written)
     +
-      rec-msg(no-syntax(ErrorMessage?))
-      . snd-note(ui-status(errorf("%s", [ErrorMessage])))
+      rec-msg(io-file-not-written(Error?))
     )
-    . snd-msg(sdf-definition-dumped)
-  )
-  *
-  delta
+  else
+    tau
+  fi
 endlet
 
 process GetModules(ModuleIds: list, Modules: list?) is

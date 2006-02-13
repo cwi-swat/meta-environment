@@ -115,8 +115,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    snd-msg(dump-sdf-definition(ModuleId, Path))
-    . rec-msg(sdf-definition-dumped)
+    DumpSdfDefinition(ModuleId, Path)
   fi
 endlet
 
