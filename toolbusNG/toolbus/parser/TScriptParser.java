@@ -102,7 +102,13 @@ class TScriptNodeBuilders {
    * TODO: variable names in Tscripts that coincide with the names below cause havoc,
    * e.g., the Tscript variable Delta
    */
-  protected static void defineBuilders() {
+  /**
+ * 
+ */
+/**
+ * 
+ */
+protected static void defineBuilders() {
     /*
      * Variables and constants
      */
@@ -474,6 +480,9 @@ class TScriptNodeBuilders {
           return a;
         }
     });
+    /*
+     * Include directive
+     */
     
     define(new NodeBuilder("ttt-Include") {
         public Object build(Object args[]) {
@@ -553,23 +562,28 @@ public class TScriptParser {
 
   private static TBTermFactory tbfactory;
   private ExternalParser externalparser;
+  private Set<String> includedFiles;
 
   public TScriptParser(ExternalParser ep, TBTermFactory tbfac) {
     externalparser = ep;
     tbfactory = tbfac;
+    includedFiles = new Set<String>();
     TScriptNodeBuilders.init(tbfactory);
   }
   private ATermList calls;
 
   public void parse(ToolBus toolbus, String filename) throws ToolBusException {
-	  ATermList decls = doparse(toolbus, filename);
 	  calls = tbfactory.EmptyList;
-	  generateTree(decls);
-	  generateInitialCall();
+	  ATermList decls = doparse(toolbus, filename);
+	  generateInitialProcessCalls();
   }
   
   public ATermList doparse(ToolBus toolbus, String filename) throws ToolBusException {
     ATerm interm;
+    if(includedFiles.contains(filename)){
+    	return;
+    }
+    includedFiles.add(filename);
     try {
       interm = externalparser.parse(filename, tbfactory);
     } catch (IOException e) {
@@ -583,10 +597,7 @@ public class TScriptParser {
     ATerm args[] = ((ATermAppl) interm).getArgumentArray();
 
     ATermList decls = (ATermList) args[0];
-    return decls;
-  }
-  
-  public void generateTree(AtermList decls){
+ 
     for (int i = 0; i < decls.getLength(); i++) {
       //System.err.println(decls.elementAt(i));
       Object elm = decls.elementAt(i);
@@ -614,7 +625,8 @@ public class TScriptParser {
       }
     }
   }
-  void generateInitialCall(){
+  
+  void generateInitialprocessCalls(){
     for (int j = 0; j < calls.getLength(); j++) {
         ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
         toolbus.addProcess(call);
