@@ -9,6 +9,6 @@ public class Include {
 	}
 	
 	public ATerm parse(){
-		doparse(toolbus, filename);
+		TscriptParser.doparse(toolbus, filename);
 	}
 }
