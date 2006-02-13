@@ -16,6 +16,10 @@ AC_PACKAGE_REQUIRE(asf, asfc,
    [  --with-asf=DIR           Asf is in DIR])
 AC_SUBST(ASF)
 
+AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
+   [  --with-asf-library=DIR       ASF library is in DIR])
+AC_SUBST(TOOLBUS)
+
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR       ToolBus is in DIR])
 AC_SUBST(TOOLBUS)
