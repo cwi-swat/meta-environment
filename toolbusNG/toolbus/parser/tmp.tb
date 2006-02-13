@@ -1,8 +1,6 @@
-process P is
-let Id : int
-in
-    Id := process-id .
-    printf("process-id = %d", Id)
-endlet
 
-toolbus(P)
+#include "tmp0.tb"
+
+process P is printf("P\n")
+
+toolbus(P, Q)

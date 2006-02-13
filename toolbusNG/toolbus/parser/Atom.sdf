@@ -8,10 +8,10 @@ exports
   
   %% communication atoms
     "snd-msg" "(" TBTermList ")"			    -> Atom	{cons("ttt-SndMsg")}
-    "snd-msg" "(" TBTermList ")" "to" TBTerm	-> Atom	{cons("ttt-SndMsg")}
+ %%   "snd-msg" "(" TBTermList ")" "to" TBTerm	-> Atom	{cons("ttt-SndMsg")}
 
     "rec-msg""(" TBTermList ")"		            -> Atom {cons("ttt-RecMsg")}
-    "rec-msg" "(" TBTermList ")" "from" TBTerm	-> Atom {cons("ttt-RecMsg")}
+ %%   "rec-msg" "(" TBTermList ")" "from" TBTerm	-> Atom {cons("ttt-RecMsg")}
     
   %%note atoms
     "subscribe" "(" TBTerm ")"                   -> Atom {cons("ttt-Subscribe")}

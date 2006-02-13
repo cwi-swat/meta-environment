@@ -1,5 +1,6 @@
 package toolbus.tool;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Vector;
@@ -80,7 +81,7 @@ public class ToolDefinition {
 			try {
 				url = elems[i];
 				if(url.length() > 0){
-					if(url.charAt(0) == '/'){
+					if(url.charAt(0) == File.separatorChar){
 						url = "file://" + url;
 					}
 					System.err.println("url = '" + url + "'");
@@ -169,8 +170,6 @@ public class ToolDefinition {
 				toolPlaceholder);
 		outputSignature = tbfactory.makeList(sndConnect, outputSignature);
 	}
-	
-
 
 	public ToolShield makeToolShield(ToolInstance ti) throws ToolBusException {
 		if (kind == "java" || (kind == null && usesJavaAdapter()))

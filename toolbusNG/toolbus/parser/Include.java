@@ -2,13 +2,12 @@ package toolbus.parser;
 
 public class Include {
 	private String filename;
-	private TBTermFactory tbfactory;
 
-	public Include(ExternalParser ep, String filename, TBTermFactory tbfactory){
+	public Include(String filename){
 		this.filename = filename;
 	}
 	
-	public ATerm parse(){
-		TscriptParser.doparse(toolbus, filename);
+	public String getFilename(){
+		return filename;
 	}
 }

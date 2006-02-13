@@ -1,6 +1,8 @@
 package toolbus.parser;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Hashtable;
 
 import toolbus.TBTermFactory;
@@ -81,10 +83,12 @@ abstract class NodeBuilder {
 class TScriptNodeBuilders {
   private static Hashtable<String,NodeBuilder> Builders;
   private static TBTermFactory tbfactory;
+  private static TScriptParser tsparser;
   protected static String processName = "";
 
-  public static void init(TBTermFactory tbfac) {
+  public static void init(TBTermFactory tbfac, TScriptParser tp) {
     tbfactory = tbfac;
+    tsparser = tp;
     Builders = new Hashtable<String,NodeBuilder>();
     defineBuilders();
   }
@@ -488,10 +492,10 @@ protected static void defineBuilders() {
         public Object build(Object args[]) {
         	String filename = ((ATermAppl) args[0]).getName();
         	
-          return new Include(filename, tbfactory);
+          return new Include(filename);
         }
       });
-        
+      
   }
 
   /**
@@ -562,23 +566,25 @@ public class TScriptParser {
 
   private static TBTermFactory tbfactory;
   private ExternalParser externalparser;
-  private Set<String> includedFiles;
+  private HashSet<String> includedFiles;
+  private ToolBus toolbus;
 
-  public TScriptParser(ExternalParser ep, TBTermFactory tbfac) {
+  public TScriptParser(ExternalParser ep, ToolBus tb) {
     externalparser = ep;
-    tbfactory = tbfac;
-    includedFiles = new Set<String>();
-    TScriptNodeBuilders.init(tbfactory);
+    toolbus = tb;
+    tbfactory = toolbus.getTBTermFactory();
+    includedFiles = new HashSet<String>();
+    TScriptNodeBuilders.init(tbfactory, this);
   }
   private ATermList calls;
 
-  public void parse(ToolBus toolbus, String filename) throws ToolBusException {
+  public void parse(String filename) throws ToolBusException {
 	  calls = tbfactory.EmptyList;
-	  ATermList decls = doparse(toolbus, filename);
+	  doParse(filename);
 	  generateInitialProcessCalls();
   }
   
-  public ATermList doparse(ToolBus toolbus, String filename) throws ToolBusException {
+  public void doParse(String filename) throws ToolBusException {
     ATerm interm;
     if(includedFiles.contains(filename)){
     	return;
@@ -615,18 +621,45 @@ public class TScriptParser {
       	if(def instanceof ProcessDefinition){
       		String processName = ((ProcessDefinition) def).getName();
       		TScriptNodeBuilders.processName = processName;
-      		// First we parse elm as a ProcessDefinition and extract the process name,
-      		// next we parse again! so that we qualify all variables with that name.
+      		// We have already parsed def as a ProcessDefinition and extract its process name,
+      		// next we parse it again! so that we qualify all variables with that name.
+      		// TODO: replace by a simple scan that replaces the variables.
       		toolbus.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders.build((ATerm) elm));
-      	} else if(def instanceof ToolDefinition)
-    	toolbus.addToolDefinition((ToolDefinition) def);
-      	else
+      	} else if(def instanceof ToolDefinition) {
+    	    toolbus.addToolDefinition((ToolDefinition) def);
+      	} else if(def instanceof Include){
+      		doParseInclude(((Include) def).getFilename());
+      	} else
       		throw new ToolBusException("Process or Tool definition expected");
       }
     }
   }
   
-  void generateInitialprocessCalls(){
+  public void doParseInclude(String filename) throws ToolBusException{
+	  if(filename.length() > 0 && filename.charAt(0) == File.separatorChar){
+		  File f  = new File(filename);
+		  if(f.exists()){
+			  doParse(filename);
+			  return;
+		  } 
+	  } else {
+		  String path = toolbus.get("include.path", ".");
+		  String[] elems = path.split("[ ,\t\n\r]+");
+		  for(String dir : elems){
+			  if(dir.length() > 0){
+				  String absoluteName = dir + File.separator + filename;
+				  File f  = new File(absoluteName);
+				  if(f.exists()){
+					  doParse(absoluteName);
+					  return;
+				  }
+			  }
+		  }
+	  }
+	  throw new ToolBusException("Cannot resolve include file '" + filename + "'");
+  }
+  
+  void generateInitialProcessCalls() throws ToolBusException {
     for (int j = 0; j < calls.getLength(); j++) {
         ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
         toolbus.addProcess(call);

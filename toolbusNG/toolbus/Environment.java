@@ -8,6 +8,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import aterm.ATerm;
+import aterm.ATermAppl;
 import aterm.ATermList;
 
 /**
@@ -210,16 +211,22 @@ public class Environment {
 	//		System.err.println(name + "; " + s + " => " + name.equals(s));
 	//	
 	//	}
+		ATerm res;
 		if(b == null){
 			//System.err.println("getVarType (b == null) => " + var.getVarType());
-			return var.getVarType();
-		}
+			res = var.getVarType();
+		} else
 		if (b.var.getVarName().equals(name)){
 			//System.err.println("getVarType (equals) => " + b.var.getVarType());
-			return b.var.getVarType();
+			res = b.var.getVarType();
+		} else {
+			//System.err.println("getVarType => " + var.getVarType());
+			res = var.getVarType();
 		}
-		//System.err.println("getVarType => " + var.getVarType());
-		return var.getVarType();
+		if(((ATermAppl) res).getName() == "none"){
+			System.err.println("Undeclared var " + var);
+		}
+		return res;
 	}
 	
 	/**
