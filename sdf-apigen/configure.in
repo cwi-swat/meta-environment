@@ -49,9 +49,9 @@ dnl  Handle --with-asc-support
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
 	[  --with-asc-support=DIR  asc-support is in DIR])
 
-ASC_LD_FLAGS=\`${ASC_SUPPORT}/bin/asc-support-config --ldflags\`
+ASC_LD_FLAGS="\`${ASC_SUPPORT}/bin/asc-support-config --ldflags\`"
 AC_SUBST(ASC_LD_FLAGS)
-ASC_INCLUDES=\`${ASC_SUPPORT}/bin/asc-support-config --includes\`
+ASC_INCLUDES="\`${ASC_SUPPORT}/bin/asc-support-config --includes\`"
 AC_SUBST(ASC_INCLUDES)
 
 dnl 
