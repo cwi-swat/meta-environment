@@ -17,6 +17,7 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.Vector;
 
+import toolbus.atom.Atom;
 import toolbus.parser.ExternalParser;
 import toolbus.parser.TScriptParser;
 import toolbus.process.ProcessCall;
@@ -42,6 +43,8 @@ public class ToolBus {
 	private TBTermFactory tbfactory;
 	
 	private IOManager iomanager;
+	
+	private PropertyManager propertyManager;
 
 	private LinkedList<ProcessInstance> processes; // process instances
 	
@@ -77,12 +80,38 @@ public class ToolBus {
 	private boolean shutdownDone = false;
 
 	private boolean toolActionCompleted = false;
+	
+	/**
+	 * Execution of ToolBus as a Main program
+	 * @param args command line arguments
+	 */
+	
+	public static void main(String[] args) {
+		ToolBus T = new ToolBus(args);
+		String ws = T.get("workspace.path");
+		try {
+			T.parse(
+			  //"/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/toolbus/test.tb");
+				//	"/home/paulk/tmp/software/installed//share/meta/start-meta-pt-dumper.tb");
+			  //ws + "/toolbusNG/toolbus/tool/java/example1.tb");
+ 			  //ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
+			  //ws + "/toolbusNG/toolbus/test/Notes.tb");
+			  ws + "/toolbusNG/toolbus/tmp.tb");
+			T.execute();
+		} catch (ToolBusException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		Atom.statistics();
+		
+		//System.err.println(T.getTBTermFactory().statistics());
+	}
 
 	/**
 	 * Constructor with explicit PrintWriter
 	 */
 
-	public ToolBus(PrintWriter out) {
+	public ToolBus(String[] args, PrintWriter out) {
 		tbfactory = new TBTermFactory();
 		this.out = out;
 		processes = new LinkedList<ProcessInstance>();
@@ -94,7 +123,7 @@ public class ToolBus {
 		tooldefs = new HashMap<String,ToolDefinition>();
 		atomSignature = new HashSet<ATerm>();
 		
-		PropertyManager.loadProperties();
+		propertyManager = new PropertyManager(args);
 		
 		parser = new TScriptParser(
 					new ExternalParser(
@@ -110,16 +139,16 @@ public class ToolBus {
 	 * Constructor with implicit PrintWriter
 	 */
 
-	public ToolBus() {
-		this(new PrintWriter(System.out));
+	public ToolBus(String[] args) {
+		this(args, new PrintWriter(System.out));
 	}
 
 	/**
 	 * Constructor with explicit StringWriter
 	 */
 
-	public ToolBus(StringWriter out) {
-		this(new PrintWriter(out));
+	public ToolBus(String[] args, StringWriter out) {
+		this(args, new PrintWriter(out));
 	}
 
 	void info(String msg) {
@@ -130,13 +159,13 @@ public class ToolBus {
 	}
 	
 	public String get(String p){
-		String r = PropertyManager.get(p);
+		String r = propertyManager.get(p);
 		System.err.println("get(" + p + ") => " + r);
 		return r;
 	}
 	
 	public String get(String p, String def){
-		String r = PropertyManager.get(p,def);
+		String r = propertyManager.get(p,def);
 		System.err.println("get(" + p + ", " + def + ") => " + r);
 		return r;
 	}

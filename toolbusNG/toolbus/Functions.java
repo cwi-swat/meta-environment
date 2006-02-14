@@ -90,6 +90,10 @@ abstract class FunctionDescriptor {
       } else if (argtypes[i] == tbfactory.RealType) {
         if (!(actual[i] instanceof ATermReal))
           throw new ToolBusException("arg #" + i + " of " + name + " should be real");
+      } else if (argtypes[i] == tbfactory.StrType){
+    	if (!(actual[i] instanceof ATermAppl) || ((ATermAppl)actual[i]).getArity() > 0){
+    	   throw new ToolBusException("arg #" + i + " of " + name + " should be string");  
+    	  }
       } else if (argtypes[i] == tbfactory.TermType) {
       } else if (argtypes[i] == tbfactory.ListType) {
         if (!(actual[i] instanceof ATermList))
@@ -435,6 +439,19 @@ public class Functions {
     define(new FunctionDescriptor(tbfactory, "process-name", tbfactory.StrType) {
         public ATerm apply(ATerm args[], ProcessInstance pi) {
         	AFun afun = tbfactory.makeAFun(pi.getProcessName(),0,true);
+        	return tbfactory.makeAppl(afun);
+        }
+      });
+    
+    define(new FunctionDescriptor(tbfactory, "get-property", tbfactory.StrType, tbfactory.StrType) {
+        public ATerm apply(ATerm args[], ProcessInstance pi) {
+        	ToolBus tb = pi.getToolBus();
+        	String arg = ((ATermAppl) args[0]).getName();
+        	String val = tb.get(arg);
+        	if(val == null){
+        		val ="";
+        	}
+        	AFun afun = tbfactory.makeAFun(val,0,true);
         	return tbfactory.makeAppl(afun);
         }
       });

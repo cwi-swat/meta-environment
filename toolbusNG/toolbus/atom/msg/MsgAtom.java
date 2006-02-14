@@ -83,7 +83,7 @@ public abstract class MsgAtom extends Atom {
 				b.getMatchPattern(), b.getEnv());
 	}
 
-	public void compile(ProcessInstance processInstance, Stack calls,
+	public void compile(ProcessInstance processInstance, Stack<String> calls,
 			Environment env, State follow) throws ToolBusException {
 		super.compile(processInstance, calls, env, follow);
 		// matchPattern = tbfactory.makeList(getMsg(),

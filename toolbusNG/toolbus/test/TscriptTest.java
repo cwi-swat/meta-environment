@@ -50,7 +50,7 @@ public class TscriptTest extends TestCase {
 
   private boolean runTest(String name) {
     StringWriter sout = new StringWriter();
-    ToolBus T = new ToolBus(sout);
+    ToolBus T = new ToolBus(new String[0], sout);
     try {
       T.parse(dir + name + ".tb");
       T.execute();

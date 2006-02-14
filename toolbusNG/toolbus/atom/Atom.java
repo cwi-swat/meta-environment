@@ -217,7 +217,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   
   public void computeFirst() {}
 
-  public void compile(ProcessInstance processInstance, Stack calls, Environment env, State follow) throws ToolBusException {
+  public void compile(ProcessInstance processInstance, Stack<String> calls, Environment env, State follow) throws ToolBusException {
   	this.processInstance = processInstance;
   	this.env = env.copy();
     setFollow(follow);

@@ -39,7 +39,7 @@ public class IfElse extends ProcessExpression {
  	 setFirst(left.getFirst().union(right.getFirst()));
  }
 
-  public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
+  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
     left.compile(P, calls, env, follows);
     ATerm rtest = P.getTBTermFactory().resolveVars(test, env);
     left.getFirst().setTest(rtest, env);
