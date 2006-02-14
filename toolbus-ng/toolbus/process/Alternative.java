@@ -40,7 +40,7 @@ public class Alternative extends ProcessExpression {
   	 setFirst(left.getFirst().union(right.getFirst()));
   }
 
-  public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
     left.compile(P, calls, env, follow);
     right.compile(P, calls, env, follow);
     setFollow(follow);

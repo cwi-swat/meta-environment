@@ -48,7 +48,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		expr[RIGHT].computeFirst();
 	}
 
-	public void compile(ProcessInstance processInstance, Stack calls,
+	public void compile(ProcessInstance processInstance, Stack<String> calls,
 			Environment env, State followSet) throws ToolBusException {
 		this.processInstance = processInstance;
 		expr[LEFT].compile(processInstance, calls, env, followSet);

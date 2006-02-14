@@ -46,7 +46,7 @@ public class DynamicProcessCall extends ProcessCall implements StateElement {
 		super.processInstance = P;
 	}
 	
-	public void compile(ProcessInstance P, Stack calls, Environment env, State follows)
+	public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows)
 	throws ToolBusException {
 		this.env = env;
 		this.follows = follows;

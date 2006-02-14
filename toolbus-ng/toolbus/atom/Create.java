@@ -35,7 +35,7 @@ public class Create extends Atom {
     return a;
   }
 
-  public void compile(ProcessInstance P, Stack calls, Environment env, State follow) throws ToolBusException {
+  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
     super.compile(P, calls, env, follow);
  
     if (pcall.value.getType() != ATerm.APPL)

@@ -60,10 +60,6 @@ public class Environment {
 		this.tbfactory = tbfactory;
 	}
 	
-//	public Environment(Hashtable<String,Binding> b){
-//		bindings = b;
-//	}
-	
 	public Environment copy() {
 		Environment env = new Environment(tbfactory);
 		env.bindings = (Hashtable<String,Binding>) bindings.clone();

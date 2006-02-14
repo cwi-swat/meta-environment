@@ -38,7 +38,7 @@ public class LetDefinition extends ProcessExpression {
  	 PE.computeFirst();
  }
 
-  public void compile(ProcessInstance P, Stack calls, Environment env, State follows) throws ToolBusException {
+  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
     env = env.copy();
     //System.err.println("LetDef.compile: " + env);
     env.introduceVars(formals);

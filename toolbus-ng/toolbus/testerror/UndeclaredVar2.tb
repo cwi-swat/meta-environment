@@ -1,0 +1,5 @@
+process P is
+let N : int
+    N := X
+endlet
+tools(P)
