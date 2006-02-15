@@ -1,3 +1,5 @@
+include ${top_srcdir}/make_rules
+
 INCLUDES = ${ASC_INCLUDES}
 
 EXTRA_DIST = pandora.idef.src
