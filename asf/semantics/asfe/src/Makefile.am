@@ -38,6 +38,8 @@ asfe_SOURCES =\
 	test-runner.c\
 	builtins.c
 
+
+asfe_DEPENDENCIES =
 asfe_LDADD = \
 	     -L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	     $(ASC_LD_FLAGS)

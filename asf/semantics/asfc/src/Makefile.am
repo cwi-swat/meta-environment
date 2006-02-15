@@ -28,6 +28,7 @@ noinst_HEADERS = asfc.tif.h \
                  c-compiler.h \
                  idef.h
 
+asfc_DEPENDENCIES =
 asfc_LDADD   = \
                -L./muasf -lMuASF \
 	       $(ASC_LD_FLAGS)

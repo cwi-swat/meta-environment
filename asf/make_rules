@@ -1,5 +1,9 @@
 # $Id$
 
+ASC_INCLUDES := $(shell ${ASC_INCLUDES_SCRIPT})
+ASC_LD_FLAGS := $(shell ${ASC_LD_FLAGS_SCRIPT})
+
+
 IDEF=$(TOOLBUS)/bin/idef2tif
 TIFS=$(TOOLBUS)/bin/tifstoc
 

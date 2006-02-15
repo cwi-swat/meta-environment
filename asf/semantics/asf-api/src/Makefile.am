@@ -1,3 +1,5 @@
+include ${top_srcdir}/make_rules
+
 pkgdata_DATA = $(wildcard *.idef)
 
 EXTRA_DIST = $(wildcard *.idef.src)
@@ -13,8 +15,8 @@ ASFSDFApigen_SOURCES = \
 ASFSDFApigen_LDADD = $(ASC_LD_FLAGS)
 
 INCLUDES = \
-	-DASF_MAIN\
-	-DTOOLBUS\
+	-DASF_MAIN \
+	-DTOOLBUS \
 	$(ASC_INCLUDES)
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
