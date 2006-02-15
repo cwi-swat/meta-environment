@@ -62,7 +62,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
         statusBar = new StatusBar();
         status = new JLabel(" ");
-        statusBar.add(status);
+        statusBar.addComponent(status, 100);
     }
 
     private void setModules(Graph graph) {
