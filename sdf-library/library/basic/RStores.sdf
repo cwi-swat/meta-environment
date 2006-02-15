@@ -12,14 +12,14 @@ sorts RElem RStore RType RTuple
 context-free syntax
 
  "int" "(" int-value:NatCon ")"       -> RElem {cons("integer")}
- "str" "(" str-value:StrCon ")"       -> RElem {cons("string")}
+ "str" "(" str-value:StrCon ")"       -> RElem {cons("str")}
  "loc" "(" loc-value:Location ")"     -> RElem {cons("location")}
  "set"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("set")}
  "bag"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("bag")}
  "tuple" "(" "[" {RElem ","}+ "]" ")" -> RElem {cons("tuple")}
 
  "int" 				      -> RType {cons("integer")}
- "str"				      -> RType {cons("string")}
+ "str"				      -> RType {cons("str")}
  "loc"				      -> RType {cons("location")}
  "tuple" "(" "[" {RType ","}+ "]" ")" -> RType {cons("tuple")}
  "set"   "(" RType  ")"               -> RType {cons("set")}
