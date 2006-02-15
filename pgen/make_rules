@@ -27,13 +27,13 @@ clean-tif:
 CENTER="Meta-Environment Documentation"
 
 %.7:    %.pod
-	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=7 $> $@
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=7 $< > $@
 %.1:    %.pod
-	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $> $@
+	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
 
 %.txt: %.pod
-	-$(POD2TEXT) $> $@
+	-$(POD2TEXT) $< > $@
 
 %.html: %.pod
-	-$(POD2HTML) $> $@
+	-$(POD2HTML) $< > $@
 	-rm -f pod2html-*
