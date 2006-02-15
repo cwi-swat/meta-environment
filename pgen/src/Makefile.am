@@ -2,6 +2,7 @@ include $(top_srcdir)/make_rules
 
 TESTS		= test-chars
 
+
 INCLUDES	= \
 		  ${ASC_INCLUDES} \
 		  -I${SDF_SUPPORT}/include
@@ -33,10 +34,10 @@ test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
 test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
+
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
-parsetablegen_LDADD   = \
-                        -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
-			$(ASC_LD_FLAGS)
+parsetablegen_DEPENDENCIES = 
+parsetablegen_LDADD   = -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT $(ASC_LD_FLAGS) 
 
 CLEANFILES = \
 	parse-sdf2 \

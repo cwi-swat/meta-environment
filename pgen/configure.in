@@ -46,10 +46,10 @@ dnl Require asc-support package
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
    [  --with-asc-support=DIR  asc-support is in DIR])
 AC_SUBST(ASC_SUPPORT)
-ASC_LD_FLAGS="\`${ASC_SUPPORT}/bin/asc-support-config --ldflags\`"
-AC_SUBST(ASC_LD_FLAGS)
-ASC_INCLUDES="\`${ASC_SUPPORT}/bin/asc-support-config --includes\`"
-AC_SUBST(ASC_INCLUDES)
+ASC_LD_FLAGS_SCRIPT="${ASC_SUPPORT}/bin/asc-support-config --ldflags"
+AC_SUBST(ASC_LD_FLAGS_SCRIPT)
+ASC_INCLUDES_SCRIPT="${ASC_SUPPORT}/bin/asc-support-config --includes"
+AC_SUBST(ASC_INCLUDES_SCRIPT)
 
 dnl Require sdf-support package
 AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config, 
