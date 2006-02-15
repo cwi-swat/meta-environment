@@ -13,4 +13,7 @@ process DisplaySummary(Summary: term) is
 process RemoveSummary(Producer: str, SummaryId: str) is
   tau
 
+process SetStatus(Message: str) is
+  printf(Message)
+
 #endif /* __ERROR_OUTPUT__ */

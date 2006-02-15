@@ -95,4 +95,7 @@ in
   fi
 endlet
 
+process SetStatus(Message : str) is
+  snd-msg(gui-set-status(Message))
+
 #endif /*__GUI_ACTIONS__*/
