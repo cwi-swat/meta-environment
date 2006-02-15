@@ -28,7 +28,7 @@ context-free syntax
  "user" "(" StrCon ")"                -> RType {cons("user")} 
  "parameter" "(" StrCon ")"           -> RType {cons("parameter")}                                      
 
- "rtuple" "(" id:StrCon "," type:RType "," data:RElem ")" -> RTuple {cons("rtuple")}
+ "rtuple" "(" id:StrCon "," rtype:RType "," data:RElem ")" -> RTuple {cons("rtuple")}
 
  "rstore" "(" "[" { RTuple ","}* "]" ")" -> RStore {cons("rstore")}
 
