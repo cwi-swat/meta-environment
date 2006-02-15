@@ -1,0 +1,38 @@
+module basic/RStores
+
+exports 
+
+imports basic/NatCon
+imports basic/StrCon
+imports basic/Locations
+
+sorts RElem RStore RType RTuple
+
+
+context-free syntax
+
+ "int" "(" int-value:NatCon ")"       -> RElem {cons("int")}
+ "str" "(" str-value:StrCon ")"       -> RElem {cons("str")}
+ "loc" "(" loc-value:Location ")"     -> RElem {cons("loc")}
+ "set"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("set")}
+ "bag"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("bag")}
+ "tuple" "(" "[" {RElem ","}+ "]" ")" -> RElem {cons("tuple")}
+
+ "int" 				      -> RType {cons("int")}
+ "str"				      -> RType {cons("str")}
+ "loc"				      -> RType {cons("loc")}
+ "tuple" "(" "[" {RType ","}+ "]" ")" -> RType {cons("tuple")}
+ "set"   "(" RType  ")"               -> RType {cons("set")}
+ "bag"   "(" RType  ")"               -> RType {cons("bag")}
+ "rel" "(" "[" {RType ","}* "]" ")"   -> RType {cons("rel")}
+ "user" "(" StrCon ")"                -> RType {cons("user")} 
+ "parameter" "(" StrCon ")"           -> RType {cons("parameter")}                                      
+
+ "rtuple" "(" id:StrCon "," type:RType "," data:RElem ")" -> RTuple {cons("rtuple")}
+
+ "rstore" "(" "[" { RTuple ","}* "]" ")" -> RStore {cons("rstore")}
+
+hiddens
+context-free start-symbols	
+		RStore
+
