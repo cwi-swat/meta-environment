@@ -262,17 +262,20 @@ in
      * possibly including the get-imports tool. 
      */
       MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
-      . snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))
+      . SetStatus("Normalizing ...")
+      /*. snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))*/
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
-      . snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))
+      . SetStatus("Renaming ...")
+      /*. snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))*/
       . snd-msg(sr-rename-module(Imports, Modulename, Equations))
       . rec-msg(sr-renamed-module(Equations?))
+      . SetStatus("")
       . Specification := join(Specification, Equations)
     fi
     . Modules := next(Modules)
     . Done := sub(Count, size(Modules))
-    . snd-note(ui-status(statf(Id, "Done %d of %d modules\n", [Done, Count])))
+    /*. snd-note(ui-status(statf(Id, "Done %d of %d modules\n", [Done, Count])))*/
   fi
   *
   (
@@ -284,7 +287,6 @@ in
       Result := Specification
     fi
   )
-  . snd-note(ui-status(stop(Id)))
 endlet
 
 process GetSpecificationEquations(Specification: term, Equations: term?) is
@@ -355,7 +357,7 @@ in
   .
   if not-equal(Specification, UNDEFINED) then
     GetSpecificationEquations(Specification, Equations?)
-    . snd-note(ui-status(stat(Id, "Rewriting"))) 
+    . SetStatus("Rewriting...")
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     . snd-msg(asfe-rewrite(Modulename, Equations, Tree, Debugging))
     .
@@ -371,7 +373,7 @@ in
       . snd-msg(ui-show-feedback-summary(Summary))
       . NormalForm := UNDEFINED
     )
-    . snd-note(ui-status(endstat(Id)))
+    . SetStatus("")
   else
     NormalForm := UNDEFINED
   fi
