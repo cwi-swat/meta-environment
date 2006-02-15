@@ -268,8 +268,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             addStudioComponentListener(editorId, id, panel, comp);
 
             StatusBar statusBar = new StatusBar();
-            statusBar.add(new JLabel(" "), 0.7, "Status");
-            statusBar.add(new JLabel(" "), 0.3, "Module");
+            statusBar.add(new JLabel(" "), 100, "Status");
+            statusBar.add(new JLabel(" "), 100, "Module");
 
             editors.put(id, panel);
             componentsById.put(id, comp);
