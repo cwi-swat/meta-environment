@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb 15 16:04:49 CET 2006 <kooiker@cwi.nl>
+ * src/nl/cwi/sen1/util/*.java:
+   - Add system panel to statusbar
+
 Mon Jan 30 10:32:26 CET 2006 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/util/*.java:
    - Added several classes from meta package

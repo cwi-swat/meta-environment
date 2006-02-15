@@ -1,11 +1,10 @@
 // Java tool bridge GuiBridge
 // This file is generated automatically, please do not edit!
-// generation time: May 2, 2005 2:24:06 PM
+// generation time: Feb 15, 2006 3:22:37 PM
 
 package nl.cwi.sen1.gui;
 
-import aterm.ATerm;
-import aterm.ATermFactory;
+import aterm.*;
 
 public class GuiBridge
   extends GuiTool
@@ -70,6 +69,19 @@ public class GuiBridge
     }
     else {
       throw new UnsupportedOperationException("method `loadJarClasspath' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void setStatus(String s0)
+
+  public void setStatus(String s0)
+  {
+    if (tool != null) {
+      tool.setStatus(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `setStatus' not supported.");
     }
   }
 

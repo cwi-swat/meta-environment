@@ -9,6 +9,7 @@ let
   URLs: list,
   MenuEvent: term,
   MenuEventList: list,
+  Message: str,
   JarName: str,
   ClassName: str,
   Title: str,
@@ -28,6 +29,9 @@ in
   +
     rec-msg(load-jar(JarName?, URLs?))
     . snd-do(GUI, load-jar-urls(JarName, URLs))
+  +
+    rec-msg(gui-set-status(Message?))
+    . snd-do(GUI, set-status(Message))
   +
     rec-msg(gui-add-menu-events(MenuEventList?))
     . snd-do(GUI, add-menu-events(MenuEventList))

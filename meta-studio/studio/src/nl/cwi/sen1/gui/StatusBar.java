@@ -1,41 +1,35 @@
 package nl.cwi.sen1.gui;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.FlowLayout;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-public class StatusBar extends Box {
-    private Toolkit kit;
-
-    private Dimension screenSize;
-    
+public class StatusBar extends JPanel {
     private Map components;
 
     public StatusBar() {
-        super(BoxLayout.X_AXIS);
+        super();
+        setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 
-        kit = Toolkit.getDefaultToolkit();
-        screenSize = kit.getScreenSize();
         components = new HashMap();
     }
 
-    public void add(JComponent c, double size) {
-        c.setPreferredSize(new Dimension((int) (size * screenSize.width), 22));
+    public void addComponent(JComponent c, int size) {
+        c.setPreferredSize(new Dimension(size, 18));
         c.setBorder(BorderFactory.createLoweredBevelBorder());
         add(c);
     }
 
-    public void add(JComponent c, double size, String name) {
+    public void add(JComponent c, int size, String name) {
         components.put(name, c);
-        add(c, size);
+        addComponent(c, size);
     }
-    
+
     public JComponent getComponent(String name) {
         return (JComponent) components.get(name);
     }

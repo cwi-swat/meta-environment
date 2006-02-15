@@ -1,18 +1,12 @@
 // Java tool interface class GuiTool
 // This file is generated automatically, please do not edit!
-// generation time: May 2, 2005 2:24:06 PM
+// generation time: Feb 15, 2006 3:22:37 PM
 
 package nl.cwi.sen1.gui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import toolbus.SwingTool;
-import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermFactory;
-import aterm.ATermList;
+import aterm.*;
+import toolbus.*;
+import java.util.*;
 
 abstract public class GuiTool
   extends SwingTool
@@ -27,6 +21,7 @@ abstract public class GuiTool
   private ATerm PloadJar0;
   private ATerm PaddMenuEvents0;
   private ATerm PloadJarClasspath0;
+  private ATerm PsetStatus0;
   private ATerm PsetTitle0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -54,6 +49,7 @@ abstract public class GuiTool
     sigTable.put(factory.parse("rec-do(<gui>,load-jar(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-jar-classpath(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,load-jar-urls(<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<gui>,set-status(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<gui>,add-menu-events(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-ack-event(<gui>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<gui>,<term>)"), new Boolean(true));
@@ -69,6 +65,7 @@ abstract public class GuiTool
     PloadJar0 = factory.parse("rec-do(load-jar(<str>))");
     PaddMenuEvents0 = factory.parse("rec-do(add-menu-events(<term>))");
     PloadJarClasspath0 = factory.parse("rec-do(load-jar-classpath(<str>,<str>))");
+    PsetStatus0 = factory.parse("rec-do(set-status(<str>))");
     PsetTitle0 = factory.parse("rec-do(set-title(<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -101,6 +98,11 @@ abstract public class GuiTool
     result = term.match(PloadJarClasspath0);
     if (result != null) {
       loadJarClasspath((String)result.get(0), (String)result.get(1));
+      return null;
+    }
+    result = term.match(PsetStatus0);
+    if (result != null) {
+      setStatus((String)result.get(0));
       return null;
     }
     result = term.match(PsetTitle0);
