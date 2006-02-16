@@ -1,0 +1,33 @@
+module languages/asf/asfsdf-checker/ExportedVariablesChecker 
+
+imports languages/asf/asfsdf-checker/Sdf-Type-Environment
+        languages/asf/asfsdf-checker/ModuleOperations
+imports utilities/PosInfo[Grammar]
+
+exports
+  context-free syntax
+    check-for-exported-variables-definition(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  context-free syntax
+    check-for-exported-variables(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-for-exported-variables(Module, Info-Msg-Tuple) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+
+    check-for-exported-variables-section(Module, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple  {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Section, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-for-exported-variables-section(Grammar, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    
+
+hiddens
+  variables
+    "Module"[0-9]*     -> Module
+    "$ModuleId"[0-9]*  -> ModuleId
+    "Definition"[0-9]* -> Definition
+    "Grammar"[0-9]*    -> Grammar
+    "Section"[0-9]*     -> Section
+    "Production*"[0-9]* -> Production*
+    "Msgs"[0-9]*       -> {Error ","}*
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
+
+    "$String"[0-9]*    -> StrCon
+    "$Location"[0-9]* -> Location

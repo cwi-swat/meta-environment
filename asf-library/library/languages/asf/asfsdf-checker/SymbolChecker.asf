@@ -1,0 +1,101 @@
+equations
+
+  [cs-1'1] check-symbols-definition(Definition, InfoMsgTuple) = check-symbols(Definition, InfoMsgTuple)
+
+  [cs-1'2] $ModuleId := get-module-name(Module)
+           ====================================
+           check-symbols(Module, InfoMsgTuple) = 
+             check-symbols2(Module, InfoMsgTuple, $ModuleId)
+
+  [cs-2'1] InfoMsgTuple2 := check-symbols2(Prod*, InfoMsgTuple1, $ModuleId),
+           InfoMsgTuple3 := check-charclass-symbols(Prod*, InfoMsgTuple2, $ModuleId)
+           =============================================================
+           check-symbols2(context-free syntax Prod*, InfoMsgTuple1, $ModuleId) =
+             InfoMsgTuple3
+
+  [cs-2'1] {$Symbol1 $Symbol2}+ := $Symbol0,
+           is-literal-symbol($Symbol2) == false,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
+
+  [cs-2'2] {$Symbol1 $Symbol2}* := $Symbol0,
+           is-literal-symbol($Symbol2) == false,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
+
+  [cs-2'4] $Symbol+ := $Symbol0,
+           is-list-symbol($Symbol) == true,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
+
+  [cs-2'5] $Symbol* := $Symbol0,
+           is-list-symbol($Symbol) == true,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
+
+  [cs-2'6] {$Symbol1 $Symbol2}+ := $Symbol0,
+           is-list-symbol($Symbol1) == true,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple)
+
+  [cs-2'7] {$Symbol1 $Symbol2}* := $Symbol0,
+           is-list-symbol($Symbol1) == true,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "not supported symbol in",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-symbols2($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String3, $Location), InfoMsgTuple )
+
+  [cs-4'1] is-charclass-symbol($Symbol0) == true,
+           $Location := get-location($Symbol0),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "character class not allowed in context-free syntax",
+           $String3 := symbol2str($Symbol0)
+           ====>
+           check-charclass-symbols($Symbol0, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-error($String2, $String3, $Location), InfoMsgTuple)
+
+  [ils-1'1] is-literal-symbol($StrCon) = true
+
+  [default-ils-1'2] is-literal-symbol($Symbol) = false
+
+  [iccs-1'1] is-charclass-symbol(CC) = true
+
+  [default-iccs-1'2] is-charclass-symbol($Symbol) = false
+
+  [ils-2'1] is-list-symbol({$Symbol1 $Symbol2}+) = true
+
+  [ils-2'2] is-list-symbol({$Symbol1 $Symbol2}*) = true
+
+  [ils-2'3] is-list-symbol($Symbol*) = true
+
+  [ils-2'4] is-list-symbol($Symbol+) = true
+
+  [default-ils-2'6] is-list-symbol($Symbol) = false

@@ -1,0 +1,43 @@
+equations
+
+  [cks-1'1] InfoMsgTuple1 := check-syntax(Definition, InfoMsgTuple),
+           InfoMsgTuple2 := check-renamings(Definition, InfoMsgTuple1)
+           ==========================================
+           check-for-kernel-syntax(Definition, InfoMsgTuple) = InfoMsgTuple2
+
+  [cs-1'1] $ModuleId := get-module-name(Module)
+           ===================================
+           check-syntax(Module, InfoMsgTuple) = 
+             check-syntax2(Module, InfoMsgTuple, $ModuleId)
+
+  [cs-1'2] syntax Prod* := $Grammar,
+           $Location := get-location($Grammar),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "unsupported kernel syntax construction"
+           ====>
+           check-syntax2($Grammar, InfoMsgTuple, $ModuleId) =
+             put-messages($ModuleId, make-warning($String2, $String1, $Location), InfoMsgTuple)
+
+  [cs-1'3] priorities Prios := $Grammar,
+           $Location := get-location($Grammar),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "unsupported kernel syntax construction"
+           ====>
+           check-syntax2($Grammar, InfoMsgTuple, $ModuleId) =
+             put-messages($ModuleId, make-warning($String2, $String1, $Location), InfoMsgTuple)
+
+  [cr-1'1] $ModuleId := get-module-name(Module)
+           ===================================
+           check-renamings(Module, InfoMsgTuple) = 
+             check-renamings2(Module, InfoMsgTuple, $ModuleId)
+
+  [cr-1'2] Prod1 => Prod2 := $Renaming,
+           $Location := get-location($Renaming),
+           $String1 := moduleid2str($ModuleId),
+           $String2 := "production renamings not supported",
+           $String3 := production2str(Prod1),
+           $String4 := production2str(Prod2),
+           $String5 := $String3 || " => " || $String4
+           ====>
+           check-renamings2($Renaming, InfoMsgTuple, $ModuleId) =
+             put-messages($ModuleId, make-warning($String2, $String5, $Location), InfoMsgTuple)

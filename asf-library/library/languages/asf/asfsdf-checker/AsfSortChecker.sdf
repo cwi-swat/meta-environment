@@ -1,0 +1,41 @@
+module languages/asf/asfsdf-checker/AsfSortChecker
+
+imports
+   basic/Booleans 
+   Sdf-Type-Environment
+   ModuleOperations
+imports utilities/PosInfo[Sort]
+
+exports
+  context-free syntax
+    check-for-asf-sorts-definition(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  context-free syntax
+    check-for-asf-sorts(Definition, Info-Msg-Tuple)   -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-for-asf-sorts(Module, Info-Msg-Tuple)       -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-asf-sorts(Module, Info-Msg-Tuple, ModuleId) -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+    check-asf-sorts(Sort, Info-Msg-Tuple, ModuleId)   -> Info-Msg-Tuple {traversal(accu, break, top-down)}
+
+    is-asf-sort(Sort) -> Boolean
+
+hiddens
+  context-free start-symbols
+	Boolean
+	Info-Msg-Tuple
+
+  variables
+    "Module"[0-9]*     -> Module
+    "Module*"[0-9]*     -> Module*
+    "$ModuleId"[0-9]*  -> ModuleId
+    "Definition"[0-9]* -> Definition
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple
+    "Msgs"[0-9]*       -> {Error ","}*
+    "$Sort"[0-9]*    -> Sort
+
+    "$String"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location
+
+  lexical variables
+    "t" -> [A-Za-z0-9\-]*
+    "l" -> [A-Za-z0-9]
