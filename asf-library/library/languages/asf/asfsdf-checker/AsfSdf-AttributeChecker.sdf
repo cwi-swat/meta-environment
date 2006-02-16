@@ -1,7 +1,7 @@
 module languages/asf/asfsdf-checker/AsfSdf-AttributeChecker
 
-imports Sdf-AttributeChecker 
-imports Sdf-Type-Environment
+imports languages/sdf2/checker/Sdf-AttributeChecker 
+imports languages/sdf2/checker/Sdf-Type-Environment
 imports utilities/PosInfo[Production]
 
 exports

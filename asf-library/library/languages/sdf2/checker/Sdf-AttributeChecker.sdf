@@ -1,8 +1,8 @@
 module languages/sdf2/checker/Sdf-AttributeChecker
 
 imports utilities/PosInfo[Production]
-imports Sdf-Type-Environment
-imports ModuleOperations
+imports languages/sdf2/checker/Sdf-Type-Environment
+imports languages/sdf2/checker/ModuleOperations
 
 exports
   context-free start-symbols Info-Msg-Tuple

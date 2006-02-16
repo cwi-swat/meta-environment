@@ -1,7 +1,7 @@
 module languages/asf/asfsdf-checker/KernelSyntaxChecker
 
-imports Sdf-Type-Environment 
-imports ModuleOperations
+imports languages/sdf2/checker/Sdf-Type-Environment 
+imports languages/sdf2/checker/ModuleOperations
 imports utilities/PosInfo[Grammar]
 imports utilities/PosInfo[Renaming]
 

@@ -1,6 +1,6 @@
 module languages/asf/asfsdf-checker/ConstructorChecker
 
-imports Sdf-Type-Environment
+imports languages/sdf2/checker/Sdf-Type-Environment
 imports utilities/PosInfo[Attribute]
 imports utilities/PosInfo[AFun]
 

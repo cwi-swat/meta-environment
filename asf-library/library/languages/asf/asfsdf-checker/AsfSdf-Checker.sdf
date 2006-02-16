@@ -1,9 +1,13 @@
 module languages/asf/asfsdf-checker/AsfSdf-Checker
 
-imports ConstructorChecker
-imports ExportedVariablesChecker
-imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker 
-        SymbolChecker RemoveLabels AsfSortChecker
+imports languages/asf/asfsdf-checker/ConstructorChecker
+imports languages/asf/asfsdf-checker/ExportedVariablesChecker
+imports languages/sdf2/checker/Sdf-Checker 
+imports languages/asf/asfsdf-checker/AsfSdf-AttributeChecker 
+imports languages/asf/asfsdf-checker/KernelSyntaxChecker 
+imports languages/asf/asfsdf-checker/SymbolChecker
+imports languages/sdf2/checker/RemoveLabels
+imports languages/asf/asfsdf-checker/AsfSortChecker
 
 exports
   context-free start-symbols Summary
