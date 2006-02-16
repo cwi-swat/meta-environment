@@ -1,0 +1,217 @@
+equations
+
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, $ModuleId, false),
+           Msg* := get-all-messages(InfoMsgTuple),
+           $StrCon := moduleid2str($ModuleId)
+           ====>
+           check-sdf(definition Definition, $ModuleId) =
+             summary("SdfChecker", $StrCon, [Msg*])
+
+equations
+
+  [cs-1'1] InfoMsgTuple := check-sdf(Definition, Main, false),
+           Msg*1 := get-all-messages(InfoMsgTuple),
+           Bool := contains-main(Definition, false),
+           Msg*2 := main-message(Bool)
+           ====>
+           check-sdf(definition Definition) =
+             summary("SdfChecker", "Main", [Msg*2, Msg*1])
+
+equations
+
+[cstm-1'1] 
+        $StrCon := moduleid2str($ModuleId),
+        InfoMsgTuple := check-sdf(Definition, $ModuleId, false),
+        Msg* := get-messages($ModuleId, InfoMsgTuple)
+        ====>
+        check-sdf-top-module(definition Definition, $ModuleId) =
+        summary("SdfChecker", $StrCon, [Msg*])
+
+equations
+
+  [cs-1'1] InfoMsgTuple1 := check-labels-definition(Definition1, [{}]),
+           Definition2 := remove-labels(Definition1),
+           InfoMsgTuple2 := check-sorts-and-prods(ModuleId, Definition2, InfoMsgTuple1),
+           InfoMsgTuple3 := check-sdf-attributes(Definition2, InfoMsgTuple2)
+           ====>
+           check-sdf(Definition1, $ModuleId, false) =  InfoMsgTuple3
+
+  [cs-1'1] InfoMsgTuple1 := check-labels-definition(Definition1, [{}]),
+           Definition2 := remove-labels(Definition1),
+           InfoMsgTuple2 := check-sorts-and-prods(ModuleId, Definition2, InfoMsgTuple1),
+           InfoMsgTuple3 := check-sdf-attributes(Definition2, InfoMsgTuple2)
+           ====>
+           check-sdf(Definition1, $ModuleId, true) = InfoMsgTuple3
+
+equations
+
+  [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
+            ===============================================================
+            check-modules(Module Module*, Definition,  InfoMsgTuple1) =
+              check-modules(Module*, Definition, InfoMsgTuple2)
+
+  [cms-1'2] check-modules(, Definition, InfoMsgTuple) = InfoMsgTuple
+
+equations
+ 
+  [pcms1'1] InfoMsgTuple2 := pre-check-module(Module, Definition, InfoMsgTuple1)
+            ===================================================================
+            pre-check-modules(Module Module*, Definition,  InfoMsgTuple1) =
+              pre-check-modules(Module*, Definition, InfoMsgTuple2)
+
+  [pcms1'2] pre-check-modules(, Definition, InfoMsgTuple) = InfoMsgTuple
+
+equations
+ 
+  [ci-1'1] $ModuleName := get-modulename(Import),
+           $ModuleId := get-module-id($ModuleName),
+           Module := get-module($ModuleId, Definition),
+           Module != module-not-available,
+           InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
+           ===============================================================
+           check-imports(imports(Import Import*), 
+                         Definition, InfoMsgTuple1) =
+             check-imports(imports(Import*), Definition, InfoMsgTuple2)
+ 
+  [ci-1'2] $ModuleName := get-modulename(Import),
+           $ModuleId := get-module-id($ModuleName),
+           get-module($ModuleId, Definition) == module-not-available
+           ========================================================
+           check-imports(imports(Import Import*), 
+                         Definition, InfoMsgTuple) = InfoMsgTuple
+
+  [ci-1'3] check-imports(imports(), Definition, InfoMsgTuple) = InfoMsgTuple
+
+equations
+ 
+  [pci-1'1] $ModuleName := get-modulename(Import),
+            $ModuleId := get-module-id($ModuleName),
+            Module := get-module($ModuleId, Definition),
+            Module != module-not-available,
+            InfoMsgTuple2 := pre-check-module(Module, Definition, InfoMsgTuple1)
+            ===================================================================
+            pre-check-imports(imports(Import Import*), 
+                              Definition, InfoMsgTuple1) =
+              pre-check-imports(imports(Import*), Definition, InfoMsgTuple2)
+ 
+  [pci-12] $ModuleName := get-modulename(Import),
+           $Location := get-location(Import),
+           $ModuleId := get-module-id($ModuleName),
+           get-module($ModuleId, Definition) == module-not-available,
+           ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
+           ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
+           InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
+           $StrCon := moduleid2str($ModuleId),
+           Msgs2 := make-error("module not available", $StrCon, $Location),
+           InfoMsgTuple3 := put-messages($ModuleId, Msgs2, InfoMsgTuple2)
+           ===================================================
+           pre-check-imports(imports(Import Import*), 
+                             Definition, InfoMsgTuple1) = InfoMsgTuple3
+
+  [pci-1'3] pre-check-imports(imports(), Definition, InfoMsgTuple) = InfoMsgTuple
+
+equations
+
+  [csp-1'1] InfoMsgTuple1 := pre-check-modules(Definition, Definition, InfoMsgTuple),
+            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
+            ModuleInfoTable2 := mark-modules-as-unchecked(ModuleInfoTable1),
+            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
+            InfoMsgTuple3 := check-modules(Definition, Definition, InfoMsgTuple2),
+            InfoMsgTuple4 := post-check-modules(ModuleId, Definition, imports(), InfoMsgTuple3)
+            ====>
+            check-sorts-and-prods($ModuleId, Definition, InfoMsgTuple) = InfoMsgTuple4
+
+equations
+	
+  [pcm-1'1] $ModuleId := get-module-name(Module),
+            ModuleInfoTable := get-module-info(InfoMsgTuple),
+            module-is-checked($ModuleId, ModuleInfoTable) == true
+            ====================================================
+            pre-check-module(Module, Definition, InfoMsgTuple) = InfoMsgTuple
+
+ 	
+  [pcm-1'2] $ModuleId := get-module-name(Module),
+            ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
+
+            module-is-checked($ModuleId, ModuleInfoTable1) == false,
+            ModuleInfoTable2 := create-module-entry($ModuleId, ModuleInfoTable1), 
+
+            ImportsSet1 := get-all-imports-transitive(Module, Definition),
+            ModuleInfoTable3 := put-imports-info($ModuleId, ImportsSet1, ModuleInfoTable2),
+             
+            InfoMsgTuple2 :=  put-module-info(ModuleInfoTable3, InfoMsgTuple1),
+
+            ImportsSet2 := get-all-imports(Module),
+            InfoMsgTuple3 := 
+              pre-check-imports(ImportsSet2, Definition, InfoMsgTuple2),
+            InfoMsgTuple4 := pre-check-module-sorts(Module, InfoMsgTuple3)
+            ==============================================================
+            pre-check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple4
+
+equations
+	
+  [cm-1'1] $ModuleId := get-module-name(Module),
+           ModuleInfoTable := get-module-info(InfoMsgTuple),
+           module-is-checked($ModuleId, ModuleInfoTable) == true
+           ====================================================
+           check-module(Module, Definition, InfoMsgTuple) = InfoMsgTuple
+	
+  [cm-1'2] $ModuleId := get-module-name(Module),
+           ModuleInfoTable1 := get-module-info(InfoMsgTuple1),
+
+           module-is-checked($ModuleId, ModuleInfoTable1) == false,
+           ModuleInfoTable2 := set-module-as-checked($ModuleId, ModuleInfoTable1), 
+           InfoMsgTuple2 :=  put-module-info(ModuleInfoTable2, InfoMsgTuple1),
+
+           ImportsSet := get-all-imports(Module),
+           InfoMsgTuple4 := check-imports(ImportsSet, Definition, InfoMsgTuple2),
+
+           InfoMsgTuple5 := check-module-sorts(Module, InfoMsgTuple4),
+           InfoMsgTuple6 := check-module-prods(Module, InfoMsgTuple5)
+           ====>
+           check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple6
+
+equations
+
+ [pcm-1'1] post-check-modules($ModuleId, ,ImportsSet, InfoMsgTuple) = 
+             post-check-modules($ModuleId, ImportsSet, InfoMsgTuple)
+
+ [pcm-1'1] $ModuleId2 := get-module-name(Module)
+           ====>
+           post-check-modules($ModuleId, Module Module*, imports(Import*), InfoMsgTuple) = 
+              post-check-modules($ModuleId2, Module*, imports($ModuleId Import*), InfoMsgTuple)
+
+ [pcm-2'1] DeclaredSymbolPairSet := 
+             get-declared-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           AliasedSymbolPairSet := 
+             get-aliased-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           DefinedSymbolPairSet :=
+             get-defined-symbols(Import*, get-module-info(InfoMsgTuple1)),
+	  RenamedSymbolPairSet :=
+             get-renamed-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           SymbolsSet1 := 
+             get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
+                                     AliasedSymbolPairSet),
+                               SymbolsSet1),
+           $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort"),
+           SymbolsSet3 := diff(diff(SymbolsSet1,
+                               DefinedSymbolPairSet), RenamedSymbolPairSet),
+           $Msgs3 := make-symbol-errors(SymbolsSet3, "use of undefined symbol"),
+
+           InfoMsgTuple2 := put-messages($ModuleId, $Msgs2, $Msgs3, InfoMsgTuple1)
+           ====>
+           post-check-modules($ModuleId, imports(Import*), InfoMsgTuple1) = InfoMsgTuple2
+
+equations
+
+  [cm-1'1] Main == get-module-name(Module)
+           ====>
+           contains-main(Module, Bool) = true
+
+equations
+
+  [mm-1'1] main-message(true) =
+
+  [mm-1'1] main-message(false) = 
+             make-error("Main module not defined", "Main")

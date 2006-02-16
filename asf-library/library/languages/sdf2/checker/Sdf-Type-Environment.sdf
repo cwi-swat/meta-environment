@@ -1,0 +1,125 @@
+module languages/sdf2/checker/Sdf-Type-Environment
+
+imports languages/sdf2/checker/SdfCheckerFeedback
+imports languages/sdf2/checker/ImportOperations 
+imports languages/sdf2/checker/ConstructorSetOperations
+
+exports
+  sorts Info-Msg-Tuple Module-Info-Entry Module-Info-Table
+        Module-Info
+
+  context-free syntax
+    "[" Module-Info-Table "]" -> Info-Msg-Tuple
+
+  context-free syntax
+    create-info-msg-tuple()                            -> Info-Msg-Tuple
+    create-module-entry(ModuleId, Module-Info-Table)   -> Module-Info-Table
+    get-module-info(Info-Msg-Tuple)                    -> Module-Info-Table
+    get-messages(ModuleId, Info-Msg-Tuple)             -> {Error ","}*
+    get-all-messages(Info-Msg-Tuple)                   -> {Error ","}*
+
+    put-module-info(Module-Info-Table, Info-Msg-Tuple) -> Info-Msg-Tuple
+    put-messages(ModuleId, {Error ","}*, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+  context-free syntax
+    "[" ImportsSet ","
+        declared-symbols:SymbolsSet "," 
+        aliased-symbols:SymbolsSet "," 
+        defined-symbols:SymbolsSet "," 
+        used-symbols:SymbolsSet ","    
+        renamed-symbols:SymbolsSet "," 
+        ProductionsSet "," 
+        ConstructorSet "]"       -> Module-Info
+
+  context-free syntax
+    "[" ModuleId "," Boolean "," Module-Info "," messages:{Error ","}* "]" -> Module-Info-Entry
+    "{" Module-Info-Entry* "}"                   -> Module-Info-Table
+
+  context-free syntax
+    module-is-checked(ModuleId, Module-Info-Table)     -> Boolean
+    set-module-as-checked(ModuleId, Module-Info-Table) -> Module-Info-Table
+    mark-modules-as-unchecked(Module-Info-Table)       -> Module-Info-Table
+
+  context-free syntax
+    get-declared-symbols(ModuleId, Module-Info-Table)  -> SymbolsSet
+    put-declared-symbols-info(ModuleId,
+                              SymbolsSet, 
+                              Module-Info-Table)       -> Module-Info-Table
+    get-declared-symbols(Import*, Module-Info-Table)   -> SymbolsSet
+
+  context-free syntax
+    get-imports(ModuleId, Module-Info-Table)   -> ImportsSet
+    put-imports-info(ModuleId,
+                     ImportsSet, 
+                     Module-Info-Table)        -> Module-Info-Table
+
+  context-free syntax
+    get-defined-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
+    put-defined-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)      -> Module-Info-Table
+    get-defined-symbols(Import*, Module-Info-Table)  -> SymbolsSet
+
+  context-free syntax
+   get-renamed-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
+    put-renamed-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)      -> Module-Info-Table
+    get-renamed-symbols(Import*, Module-Info-Table)  -> SymbolsSet
+
+  context-free syntax
+    get-used-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    put-used-symbols-info(ModuleId,
+                          SymbolsSet, 
+                          Module-Info-Table)        -> Module-Info-Table
+    get-used-symbols(Import*, Module-Info-Table) -> SymbolsSet
+
+  context-free syntax
+    get-aliased-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
+    put-aliased-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)        -> Module-Info-Table
+    get-aliased-symbols(Import*, Module-Info-Table) -> SymbolsSet
+
+  context-free syntax
+    get-defined-productions(ModuleId, Module-Info-Table)  -> ProductionsSet
+    put-production-info(ModuleId,
+                        ProductionsSet, 
+                        Module-Info-Table)                 -> Module-Info-Table
+    get-defined-productions(Import*, Module-Info-Table) -> ProductionsSet
+
+  context-free syntax
+    get-constructors(ModuleId, Module-Info-Table)   -> ConstructorSet
+    put-constructor-info(ModuleId,
+                         ConstructorSet, 
+                         Module-Info-Table)         -> Module-Info-Table
+    get-constructors(Import*, Module-Info-Table) -> ConstructorSet
+
+ context-free syntax
+    get-messages(ModuleId, Module-Info-Table)  -> {Error ","}*
+    put-messages-info(ModuleId,
+                         {Error ","}*, 
+                         Module-Info-Table)    -> Module-Info-Table
+    get-messages(Import*, Module-Info-Table)   -> {Error ","}*
+
+hiddens
+  variables
+    "Bool"[0-9]*             -> Boolean
+    "Messages"[0-9]*         -> {Error ","}*
+    "$ModuleId"[0-9]*        -> ModuleId
+    "$ModuleName"[0-9]*      -> ModuleName
+    "ModuleInfoEntry"[0-9]*  -> Module-Info-Entry
+    "ModuleInfoEntry*"[0-9]* -> Module-Info-Entry*
+    "ModuleInfoTable"[0-9]*  -> Module-Info-Table
+    "ModuleInfo"[0-9]*       -> Module-Info
+    "SymbolPair*"[0-9]*      -> Symbol*
+    "SymbolPairsSet"[0-9]*   -> SymbolsSet
+    "SymbolsSet"[0-9]*       -> SymbolsSet
+    "Symbol*"[0-9]*          -> Symbol*
+    "Import"[0-9]*           -> Import
+    "Import*"[0-9]*          -> Import*
+    "ImportsSet"[0-9]*       -> ImportsSet
+    "Production*"[0-9]*      -> Production*
+    "ProductionsSet"[0-9]*   -> ProductionsSet
+    "ConstructorSet"[0-9]*   -> ConstructorSet
+    "SymbolCons*"[0-9]*      -> SymbolConsPair*

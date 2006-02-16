@@ -1,0 +1,185 @@
+module languages/sdf2/checker/SortChecker
+
+imports languages/sdf2/checker/Sdf-Type-Environment
+imports utilities/PosInfo[Sort]
+imports utilities/PosInfo[Symbol]
+imports utilities/PosInfo[Alias]
+
+exports
+
+  context-free syntax
+    pre-check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-module-sorts(Module, Info-Msg-Tuple)     -> Info-Msg-Tuple
+
+hiddens
+  sorts Symbols-Msg-Tuple
+
+  context-free syntax
+    "[" SymbolsSet "," {Error ","}* "]" -> Symbols-Msg-Tuple
+
+  context-free syntax
+    get-parameter-symbols(Module, 
+                          Symbols-Msg-Tuple, 
+                          ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-parameter-symbols(ModuleName, 
+                          Symbols-Msg-Tuple, 
+                          ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+  context-free syntax
+
+    get-exported-declared-symbols(Module, 
+                                  Symbols-Msg-Tuple, 
+                                  ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-exported-declared-symbols(Section, 
+                                  Symbols-Msg-Tuple, 
+                                  ModuleId)  -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+  
+    get-hidden-declared-symbols(Module, 
+                                Symbols-Msg-Tuple, 
+                                ModuleId)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-hidden-declared-symbols(Section, 
+                                Symbols-Msg-Tuple, 
+                                ModuleId)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
+    get-declared-symbols(Section, 
+                         Symbols-Msg-Tuple, 
+                         ModuleId)   	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-declared-symbols(Grammar, 
+                         Symbols-Msg-Tuple, 
+                         ModuleId)  	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-declared-symbol(Symbols, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId)        	       -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-declared-symbol(Symbol*, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId)       	       -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-declared-symbol(Symbol, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId)       	       -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
+    get-start-symbols(Module, Symbols-Msg-Tuple, 
+                      ModuleId)   	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbols(Grammar, Symbols-Msg-Tuple, 
+                      ModuleId)      	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbol(Symbol*, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-start-symbol(Symbol, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}  
+    add-start-symbol(Symbol, Symbols-Msg-Tuple, 
+                     ModuleId)       	               -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-exported-aliased-symbols(Module, 
+                                 Symbols-Msg-Tuple, 
+                                 ModuleId, 
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-exported-aliased-symbols(Section, 
+                                 Symbols-Msg-Tuple, 
+                                 ModuleId, 
+                                 SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-hidden-aliased-symbols(Module, 
+                               Symbols-Msg-Tuple, 
+                               ModuleId, 
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-hidden-aliased-symbols(Section, 
+                               Symbols-Msg-Tuple, 
+                               ModuleId, 
+                               SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+
+    get-aliased-symbols(Grammar, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId, 
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+    get-aliased-symbols(Alias, 
+                        Symbols-Msg-Tuple, 
+                        ModuleId, 
+                        SymbolsSet)    -> Symbols-Msg-Tuple {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
+    get-used-symbols(Grammar, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
+    get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, break, top-down)}
+    get-defined-symbols(Renaming, SymbolsSet)  	-> SymbolsSet {traversal(accu, break, top-down)}
+    get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
+    get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
+    get-renamed-symbols(Module, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
+    get-renamed-symbols(Renaming, SymbolsSet)   -> SymbolsSet {traversal(accu, break, top-down)}
+
+  context-free syntax
+    add-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
+
+  context-free syntax
+    check-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
+
+  context-free syntax
+    check-CHAR-sort(Module, {Error ","}*, ModuleId)                  -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort(Grammar, {Error ","}*, ModuleId)                 -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort(Production, {Error ","}*, ModuleId)              -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort2(Production, {Error ","}*, Production, ModuleId) -> {Error ","}* {traversal(accu, break, top-down)}
+    check-CHAR-sort2(Sort, {Error ","}*, Production, ModuleId)       -> {Error ","}* {traversal(accu, break, top-down)}
+
+exports
+  context-free syntax
+    make-symbol-warnings(SymbolsSet, String) -> {Error ","}*
+    make-symbol-errors(SymbolsSet, String)   -> {Error ","}*
+
+hiddens
+  variables
+    "$Attributes"[0-9]* -> Attributes
+    "$Definition"[0-9]*	-> Definition
+
+    "$Module"[0-9]*     -> Module
+    "$Module*"[0-9]*    -> Module*
+    "$ModuleId"[0-9]*   -> ModuleId
+
+    "$Sort"[0-9]*           -> Sort
+    "$Symbol*"[0-9]*        -> Symbol*
+    "ParameterSymbolPairSet"[0-9]* -> SymbolsSet
+    "DeclaredSymbolPairSet"[0-9]*  -> SymbolsSet
+    "StartSymbolPairsSet"[0-9]*    -> SymbolsSet
+    "AliasedSymbolPairSet"[0-9]*   -> SymbolsSet
+    "RenamedSymbolPairSet"[0-9]*   -> SymbolsSet
+    "RenamedSymbolsSet"[0-9]*      -> SymbolsSet
+    "DefinedSymbolsSet"[0-9]*      -> SymbolsSet
+    "UsedSymbolsSet"[0-9]*         -> SymbolsSet
+    "$Symbol,*"[0-9]*       -> {Symbol ","}*
+    "$Symbol"[0-9]*         -> Symbol
+    "$Symbols"[0-9]*        -> Symbols
+    "SymbolPairsSet"[0-9]*  -> SymbolsSet
+    "SymbolsSet"[0-9]*      -> SymbolsSet
+    "SymbolsMsgs"[0-9]*     -> Symbols-Msg-Tuple
+    "$StrCon"[0-9]*         -> StrCon
+    "$IdCon"[0-9]*          -> IdCon
+    "$FuncName"[0-9]*       -> FunctionName
+    "$Alias"[0-9]*          -> Alias
+
+    "Import*"[0-9]*         -> Import*
+  
+    "Prod*"[0-9]*           -> Production*
+    "Prod"[0-9]*            -> Production
+
+    "$Grammar"[0-9]*        -> Grammar
+
+    "$Msg"[0-9]*            -> Error
+    "$Msg*"[0-9]*           -> {Error ","}*
+    "$Msgs"[0-9]*           -> {Error ","}*
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
+
+    "$String"[0-9]*         -> StrCon
+    "$Location"[0-9]*       -> Location

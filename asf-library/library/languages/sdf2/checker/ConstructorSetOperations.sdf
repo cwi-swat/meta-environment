@@ -1,0 +1,22 @@
+module languages/sdf2/checker/ConstructorSetOperations
+
+imports basic/Booleans languages/sdf2/syntax/Sdf2
+
+exports
+  sorts ConstructorSet SymbolConsPair
+
+  context-free syntax
+    "[" Symbol "," AFun "]"    -> SymbolConsPair
+    constructors(SymbolConsPair*) -> ConstructorSet
+
+  context-free syntax
+    contains(Symbol, AFun, ConstructorSet) -> Boolean
+    add(Symbol, AFun, ConstructorSet)      -> ConstructorSet
+    get(AFun, ConstructorSet)              -> AFun
+
+hiddens
+  variables
+    "ConstructorSet"[0-9]* -> ConstructorSet
+    "SymbolCons*"[0-9]*    -> SymbolConsPair*
+    "Symbol"[0-9]*         -> Symbol
+    "$AFun"[0-9]*          -> AFun

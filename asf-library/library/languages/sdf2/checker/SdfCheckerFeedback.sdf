@@ -1,0 +1,23 @@
+module languages/sdf2/checker/SdfCheckerFeedback
+
+imports basic/Errors
+imports basic/Comments
+imports languages/sdf2/checker/SymbolSetOperations 
+imports languages/sdf2/checker/SdfOperations
+imports languages/sdf2/checker/ProductionSetOperations
+
+exports
+  context-free syntax
+    make-warning(msg:StrCon, subject:StrCon)           -> {Error ","}*
+    make-warning(msg:StrCon, subject:StrCon, Location) -> {Error ","}*
+    make-warning(msg:StrCon)                   	 -> {Error ","}*
+  context-free syntax
+    make-error(msg:StrCon, subject:StrCon)             -> {Error ","}*
+    make-error(msg:StrCon, subject:StrCon, Location)   -> {Error ","}*
+    make-error(msg:StrCon)                     	 -> {Error ","}*
+    
+
+hiddens
+  variables 
+    "$StrCon"[0-9]* -> StrCon
+    "$Location"[0-9]* -> Location

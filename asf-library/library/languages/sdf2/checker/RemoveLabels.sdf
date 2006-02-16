@@ -1,0 +1,13 @@
+module languages/sdf2/checker/RemoveLabels
+
+imports languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    remove-labels(Definition) -> Definition {traversal(trafo, break, top-down)}
+    remove-labels(Symbol)     -> Symbol {traversal(trafo, break, top-down)}
+
+hiddens
+  variables
+    "Symbol"[0-9]* -> Symbol
+    "$Label"[0-9]* -> Label

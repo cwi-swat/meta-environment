@@ -1,0 +1,93 @@
+equations
+
+  [ca-1'1] check-sdf-attributes(Definition, InfoMsgTuple) =
+             check-attributes(Definition, InfoMsgTuple)
+
+  [ca-1'2] $ModuleId := get-module-name(Module)
+           ====>
+           check-attributes(Module, InfoMsgTuple) = 
+             check-attributes2(Module, InfoMsgTuple, $ModuleId)
+
+  [ca-2'1] $Symbol* -> $Symbol {Attr*1, bracket, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-bracket-definition($Symbol* -> $Symbol) == false,
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: bracket", $String, $Location), InfoMsgTuple)
+
+  [ca-2'2] $FuncName( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2} := Production,
+           $Location := get-location(Production),
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) =
+             put-messages($ModuleId, make-warning("illegal attribute: bracket", $String, $Location), InfoMsgTuple)
+
+  [ca-2'3] $Symbol* -> $Symbol {Attr*1, left, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false,
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId,  make-warning("illegal attribute: left", $String, $Location), InfoMsgTuple)
+
+  [ca-2'4] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2} := Production,
+           $Location := get-location(Production),
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: left", $String, $Location), InfoMsgTuple)
+
+  [ca-2'5] $Symbol* -> $Symbol {Attr*1, assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false,
+           $String := production2str(Production)
+           =================================================
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: assoc", $String, $Location), InfoMsgTuple)
+
+  [ca-2'6] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: assoc", $String, $Location), InfoMsgTuple)
+
+  [ca-2'7] $Symbol* -> $Symbol {Attr*1, right, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false,
+           $String := production2str(Production)
+           =================================================
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: right", $String, $Location), InfoMsgTuple)
+
+
+  [ca-2'8] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2} := Production,
+           $Location := get-location(Production),
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: right", $String, $Location), InfoMsgTuple)
+
+  [ca-2'8] $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false,
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: non-assoc", $String, $Location), InfoMsgTuple)
+
+  [ca-2'9] $FuncName ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           $String := production2str(Production)
+           ====>
+           check-attributes2(Production, InfoMsgTuple, $ModuleId) = 
+             put-messages($ModuleId, make-warning("illegal attribute: non-assoc", $String, $Location), InfoMsgTuple)
+
+  [ibd-1'1] is-binary-definition($Symbol1 $Symbol* $Symbol1 -> $Symbol1) = true  
+
+  [default-ibd-1'3] is-binary-definition(Production) = false
+
+  [ibd-2'1] is-bracket-definition($String1 $Symbol $String2 -> $Symbol) = true 
+
+  [default-ibd-2'2] is-bracket-definition(Production) = false
