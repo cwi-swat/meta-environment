@@ -125,7 +125,7 @@ in
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
       . create(ParseTreeHandler(ModuleId, Path), Pid?)
-      . ParseText(Pid, Text, ParseTable, ASF_TOPSORT)
+      . ParseText(Pid, Text, ParseTable, ASF_TOPSORT, on)
       .
       (
         rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
