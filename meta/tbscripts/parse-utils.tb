@@ -19,12 +19,12 @@ process AddFilenameToParseError(Error: term, Filename: str, Result: term?) is
   snd-msg(es-add-filename-in-error(Filename, Error))
   . rec-msg(es-filename-in-error(Filename, Result?))
 
-process ParseText(Pid: int, Text: str, Table: term, Nonterminal: term) is
+process ParseText(Pid: int, Text: str, Table: term, Nonterminal: term, Heuristics: term) is
 let
   Error: term,
   ParseResult: term
 in
-  snd-msg(sglr-parse(Text, Table, Nonterminal))
+  snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
   .
   (
     rec-msg(sglr-parse-tree(ParseResult?))
