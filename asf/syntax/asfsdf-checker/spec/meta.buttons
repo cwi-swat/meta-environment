@@ -1,4 +1,0 @@
-configuration([
-module-path("."),
-module-path("../../../../pgen/sdf-checker/spec")
-])
