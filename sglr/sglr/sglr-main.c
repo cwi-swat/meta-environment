@@ -55,14 +55,27 @@ char   *parse_table_name  = NULL;
 
 /*{{{  ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort) */
 
-ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort)
+ATerm parse(int cid, const char *input, ATerm parseTable, const char *topSort, ATerm heuristics)
 {
   parse_table *pt;
   ATerm tree = NULL;
   int ambiguityCount;
   ATerm result;
 
+  if (ATisEqual(heuristics, ATparse("on"))) {
+    SG_FILTER_EAGERNESS_ON();
+    SG_FILTER_INJECTIONCOUNT_ON();
+  }
+  else if (ATisEqual(heuristics, ATparse("off"))) {
+    SG_FILTER_EAGERNESS_OFF();
+    SG_FILTER_INJECTIONCOUNT_OFF();
+  }
+  else {
+    ATwarning("Heuristics argument should be either 'on' or 'off'\n");
+  }
+
   pt = SG_BuildParseTable((ATermAppl) ATBunpack(parseTable), NULL);
+
 
   if (pt != NULL) {
     result = SGparseStringAsAsFix(input, (SGLR_ParseTable)pt, topSort, NULL);
