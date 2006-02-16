@@ -1,0 +1,24 @@
+equations
+
+  [cfev-1] check-for-exported-variables-definition(Definition, InfoMsgTuple) =
+             check-for-exported-variables(Definition, InfoMsgTuple ) 
+
+equations
+
+  [cfev-2] $ModuleId := get-module-name(Module)
+           ====>
+           check-for-exported-variables(Module, InfoMsgTuple) =
+             check-for-exported-variables-section(Module, InfoMsgTuple, $ModuleId)
+
+  [cfevs-1] check-for-exported-variables-section(exports Grammar, InfoMsgTuple, $ModuleId) =
+              check-for-exported-variables-section(Grammar, InfoMsgTuple, $ModuleId)
+
+  [default-cfevs-2] check-for-exported-variables-section(Section, InfoMsgTuple, $ModuleId) = InfoMsgTuple
+
+  [cfevs-2] variables Production* := Grammar,
+            $Location := get-location(Grammar),
+            $String1 := moduleid2str($ModuleId),
+            $String2 := "exported variables section"
+            ====>
+            check-for-exported-variables-section(Grammar, InfoMsgTuple, $ModuleId) =
+              put-messages($ModuleId, make-warning($String2, $String1, $Location), InfoMsgTuple)
