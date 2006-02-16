@@ -8,12 +8,13 @@ imports basic/Locations
 
 sorts RElem RStore RType RTuple
 
+%% This module defines a syntax/API for stores of typed relations
 
 context-free syntax
 
- "int" "(" int-value:NatCon ")"       -> RElem {cons("integer")}
+ "int" "(" int-value:NatCon ")"       -> RElem {cons("int")}
  "str" "(" str-value:StrCon ")"       -> RElem {cons("str")}
- "loc" "(" loc-value:Location ")"     -> RElem {cons("location")}
+ "loc" "(" location:Location ")"      -> RElem {cons("location")}
  "set"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("set")}
  "bag"   "(" "[" {RElem ","}* "]" ")" -> RElem {cons("bag")}
  "tuple" "(" "[" {RElem ","}+ "]" ")" -> RElem {cons("tuple")}
