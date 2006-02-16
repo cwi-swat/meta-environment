@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 bin_PROGRAMS = in-output
 pkgdata_DATA = in-output.idef
 
-EXTRA_DIST = in-output.idef
+EXTRA_DIST = in-output.idef.src
 
 noinst_HEADERS = in-output.tif.h 
 

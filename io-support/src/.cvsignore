@@ -4,3 +4,4 @@ Makefile
 in-output
 *.tifs
 .libs
+*.idef
