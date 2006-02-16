@@ -1,6 +1,6 @@
 #! /bin/sh
 
-LIMIT=10
+LIMIT=5
 
 for ((a=1; a <= LIMIT ; a++))
 do

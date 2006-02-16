@@ -18,7 +18,7 @@ in
   .
   if not-equal(Text, "") then
     create(ParseTreeHandler(ModuleId, Path), Pid?)
-    . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL)
+    . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
     .
     (
       rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
