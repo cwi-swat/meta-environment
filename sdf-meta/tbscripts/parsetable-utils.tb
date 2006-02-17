@@ -31,7 +31,7 @@ let
   Pid: int
 in
   InitCache(TableName)
-  . create(TransitiveClearCacheHandler(TableName, Namespace, "status", <term>, available), Pid?)
+  . create(ClearCacheHandler(TableName, SDF_NAMESPACE, "status", <term>, complete), Pid?)
   .
   (
     rec-msg(get-parsetable(ModuleId?, Type))
