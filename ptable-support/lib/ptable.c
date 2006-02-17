@@ -54,10 +54,10 @@ typedef struct ATerm _PTBL_States;
 typedef struct ATerm _PTBL_State;
 typedef struct ATerm _PTBL_Gotos;
 typedef struct ATerm _PTBL_Goto;
-typedef struct ATerm _PTBL_Actions;
-typedef struct ATerm _PTBL_Action;
 typedef struct ATerm _PTBL_Choices;
 typedef struct ATerm _PTBL_Choice;
+typedef struct ATerm _PTBL_Actions;
+typedef struct ATerm _PTBL_Action;
 typedef struct ATerm _PTBL_SpecialAttr;
 typedef struct ATerm _PTBL_LookAheads;
 typedef struct ATerm _PTBL_LookAhead;
@@ -149,22 +149,6 @@ void PTBL_unprotectGoto(PTBL_Goto *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_protectActions(PTBL_Actions *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-void PTBL_unprotectActions(PTBL_Actions *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
-void PTBL_protectAction(PTBL_Action *arg) {
-  ATprotect((ATerm*)((void*) arg));
-}
-
-void PTBL_unprotectAction(PTBL_Action *arg) {
-  ATunprotect((ATerm*)((void*) arg));
-}
-
 void PTBL_protectChoices(PTBL_Choices *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -178,6 +162,22 @@ void PTBL_protectChoice(PTBL_Choice *arg) {
 }
 
 void PTBL_unprotectChoice(PTBL_Choice *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_protectActions(PTBL_Actions *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_unprotectActions(PTBL_Actions *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_protectAction(PTBL_Action *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_unprotectAction(PTBL_Action *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -309,22 +309,6 @@ ATerm PTBL_GotoToTerm(PTBL_Goto arg) {
   return (ATerm)arg;
 }
 
-PTBL_Actions PTBL_ActionsFromTerm(ATerm t) {
-  return (PTBL_Actions)t;
-}
-
-ATerm PTBL_ActionsToTerm(PTBL_Actions arg) {
-  return (ATerm)arg;
-}
-
-PTBL_Action PTBL_ActionFromTerm(ATerm t) {
-  return (PTBL_Action)t;
-}
-
-ATerm PTBL_ActionToTerm(PTBL_Action arg) {
-  return (ATerm)arg;
-}
-
 PTBL_Choices PTBL_ChoicesFromTerm(ATerm t) {
   return (PTBL_Choices)t;
 }
@@ -338,6 +322,22 @@ PTBL_Choice PTBL_ChoiceFromTerm(ATerm t) {
 }
 
 ATerm PTBL_ChoiceToTerm(PTBL_Choice arg) {
+  return (ATerm)arg;
+}
+
+PTBL_Actions PTBL_ActionsFromTerm(ATerm t) {
+  return (PTBL_Actions)t;
+}
+
+ATerm PTBL_ActionsToTerm(PTBL_Actions arg) {
+  return (ATerm)arg;
+}
+
+PTBL_Action PTBL_ActionFromTerm(ATerm t) {
+  return (PTBL_Action)t;
+}
+
+ATerm PTBL_ActionToTerm(PTBL_Action arg) {
   return (ATerm)arg;
 }
 
@@ -533,54 +533,6 @@ PTBL_Gotos PTBL_makeGotos6(PTBL_Goto elem1, PTBL_Goto elem2, PTBL_Goto elem3, PT
   return (PTBL_Gotos) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
-int PTBL_getActionsLength (PTBL_Actions arg) {
-  return ATgetLength((ATermList) arg);
-}
-
-PTBL_Actions PTBL_reverseActions(PTBL_Actions arg) {
-  return (PTBL_Actions) ATreverse((ATermList) arg);
-}
-
-PTBL_Actions PTBL_appendActions(PTBL_Actions arg, PTBL_Action elem) {
-  return (PTBL_Actions) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
-}
-
-PTBL_Actions PTBL_concatActions(PTBL_Actions arg0, PTBL_Actions arg1) {
-  return (PTBL_Actions) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
-
-PTBL_Actions PTBL_sliceActions(PTBL_Actions arg, int start, int end) {
-  return (PTBL_Actions) ATgetSlice((ATermList) arg, start, end);
-}
-
-PTBL_Action PTBL_getActionsActionAt(PTBL_Actions arg, int index) {
- return (PTBL_Action)ATelementAt((ATermList) arg,index);
-}
-
-PTBL_Actions PTBL_replaceActionsActionAt(PTBL_Actions arg, PTBL_Action elem, int index) {
- return (PTBL_Actions) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
-}
-
-PTBL_Actions PTBL_makeActions2(PTBL_Action elem1, PTBL_Action elem2) {
-  return (PTBL_Actions) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
-}
-
-PTBL_Actions PTBL_makeActions3(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3) {
-  return (PTBL_Actions) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
-}
-
-PTBL_Actions PTBL_makeActions4(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4) {
-  return (PTBL_Actions) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
-}
-
-PTBL_Actions PTBL_makeActions5(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5) {
-  return (PTBL_Actions) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
-}
-
-PTBL_Actions PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5, PTBL_Action elem6) {
-  return (PTBL_Actions) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
-}
-
 int PTBL_getChoicesLength (PTBL_Choices arg) {
   return ATgetLength((ATermList) arg);
 }
@@ -627,6 +579,54 @@ PTBL_Choices PTBL_makeChoices5(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice
 
 PTBL_Choices PTBL_makeChoices6(PTBL_Choice elem1, PTBL_Choice elem2, PTBL_Choice elem3, PTBL_Choice elem4, PTBL_Choice elem5, PTBL_Choice elem6) {
   return (PTBL_Choices) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+
+int PTBL_getActionsLength (PTBL_Actions arg) {
+  return ATgetLength((ATermList) arg);
+}
+
+PTBL_Actions PTBL_reverseActions(PTBL_Actions arg) {
+  return (PTBL_Actions) ATreverse((ATermList) arg);
+}
+
+PTBL_Actions PTBL_appendActions(PTBL_Actions arg, PTBL_Action elem) {
+  return (PTBL_Actions) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+
+PTBL_Actions PTBL_concatActions(PTBL_Actions arg0, PTBL_Actions arg1) {
+  return (PTBL_Actions) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+
+PTBL_Actions PTBL_sliceActions(PTBL_Actions arg, int start, int end) {
+  return (PTBL_Actions) ATgetSlice((ATermList) arg, start, end);
+}
+
+PTBL_Action PTBL_getActionsActionAt(PTBL_Actions arg, int index) {
+ return (PTBL_Action)ATelementAt((ATermList) arg,index);
+}
+
+PTBL_Actions PTBL_replaceActionsActionAt(PTBL_Actions arg, PTBL_Action elem, int index) {
+ return (PTBL_Actions) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+
+PTBL_Actions PTBL_makeActions2(PTBL_Action elem1, PTBL_Action elem2) {
+  return (PTBL_Actions) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+
+PTBL_Actions PTBL_makeActions3(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3) {
+  return (PTBL_Actions) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+
+PTBL_Actions PTBL_makeActions4(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4) {
+  return (PTBL_Actions) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+
+PTBL_Actions PTBL_makeActions5(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5) {
+  return (PTBL_Actions) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+
+PTBL_Actions PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action elem3, PTBL_Action elem4, PTBL_Action elem5, PTBL_Action elem6) {
+  return (PTBL_Actions) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
 int PTBL_getLookAheadsLength (PTBL_LookAheads arg) {
@@ -758,8 +758,8 @@ PTBL_States PTBL_makeStatesSingle(PTBL_State head) {
 PTBL_States PTBL_makeStatesMany(PTBL_State head, PTBL_States tail) {
   return (PTBL_States)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-PTBL_State PTBL_makeStateDefault(int number, PTBL_Gotos gotos, PTBL_Actions actions) {
-  return (PTBL_State)(ATerm)ATmakeAppl3(PTBL_afun4, (ATerm) (ATerm) ATmakeInt(number), (ATerm) gotos, (ATerm) actions);
+PTBL_State PTBL_makeStateDefault(int number, PTBL_Gotos gotos, PTBL_Choices choices) {
+  return (PTBL_State)(ATerm)ATmakeAppl3(PTBL_afun4, (ATerm) (ATerm) ATmakeInt(number), (ATerm) gotos, (ATerm) choices);
 }
 PTBL_Gotos PTBL_makeGotosEmpty(void) {
   return (PTBL_Gotos)(ATerm)ATempty;
@@ -773,18 +773,6 @@ PTBL_Gotos PTBL_makeGotosMany(PTBL_Goto head, PTBL_Gotos tail) {
 PTBL_Goto PTBL_makeGotoDefault(PTBL_CharRanges ranges, int stateNumber) {
   return (PTBL_Goto)(ATerm)ATmakeAppl2(PTBL_afun5, (ATerm) ranges, (ATerm) (ATerm) ATmakeInt(stateNumber));
 }
-PTBL_Actions PTBL_makeActionsEmpty(void) {
-  return (PTBL_Actions)(ATerm)ATempty;
-}
-PTBL_Actions PTBL_makeActionsSingle(PTBL_Action head) {
-  return (PTBL_Actions)(ATerm)ATmakeList1((ATerm) head);
-}
-PTBL_Actions PTBL_makeActionsMany(PTBL_Action head, PTBL_Actions tail) {
-  return (PTBL_Actions)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-PTBL_Action PTBL_makeActionDefault(PTBL_CharRanges ranges, PTBL_Choices choices) {
-  return (PTBL_Action)(ATerm)ATmakeAppl2(PTBL_afun6, (ATerm) ranges, (ATerm) choices);
-}
 PTBL_Choices PTBL_makeChoicesEmpty(void) {
   return (PTBL_Choices)(ATerm)ATempty;
 }
@@ -794,17 +782,29 @@ PTBL_Choices PTBL_makeChoicesSingle(PTBL_Choice head) {
 PTBL_Choices PTBL_makeChoicesMany(PTBL_Choice head, PTBL_Choices tail) {
   return (PTBL_Choices)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-PTBL_Choice PTBL_makeChoiceReduce(int length, int label, PTBL_SpecialAttr specialAttr) {
-  return (PTBL_Choice)(ATerm)ATmakeAppl3(PTBL_afun7, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr);
+PTBL_Choice PTBL_makeChoiceDefault(PTBL_CharRanges ranges, PTBL_Actions actions) {
+  return (PTBL_Choice)(ATerm)ATmakeAppl2(PTBL_afun6, (ATerm) ranges, (ATerm) actions);
 }
-PTBL_Choice PTBL_makeChoiceLookaheadReduce(int length, int label, PTBL_SpecialAttr specialAttr, PTBL_LookAheads lookaheads) {
-  return (PTBL_Choice)(ATerm)ATmakeAppl4(PTBL_afun8, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr, (ATerm) lookaheads);
+PTBL_Actions PTBL_makeActionsEmpty(void) {
+  return (PTBL_Actions)(ATerm)ATempty;
 }
-PTBL_Choice PTBL_makeChoiceShift(int stateNumber) {
-  return (PTBL_Choice)(ATerm)ATmakeAppl1(PTBL_afun9, (ATerm) (ATerm) ATmakeInt(stateNumber));
+PTBL_Actions PTBL_makeActionsSingle(PTBL_Action head) {
+  return (PTBL_Actions)(ATerm)ATmakeList1((ATerm) head);
 }
-PTBL_Choice PTBL_makeChoiceAccept(void) {
-  return (PTBL_Choice)(ATerm)ATmakeAppl0(PTBL_afun10);
+PTBL_Actions PTBL_makeActionsMany(PTBL_Action head, PTBL_Actions tail) {
+  return (PTBL_Actions)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+PTBL_Action PTBL_makeActionReduce(int length, int label, PTBL_SpecialAttr specialAttr) {
+  return (PTBL_Action)(ATerm)ATmakeAppl3(PTBL_afun7, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr);
+}
+PTBL_Action PTBL_makeActionLookaheadReduce(int length, int label, PTBL_SpecialAttr specialAttr, PTBL_LookAheads lookaheads) {
+  return (PTBL_Action)(ATerm)ATmakeAppl4(PTBL_afun8, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr, (ATerm) lookaheads);
+}
+PTBL_Action PTBL_makeActionShift(int stateNumber) {
+  return (PTBL_Action)(ATerm)ATmakeAppl1(PTBL_afun9, (ATerm) (ATerm) ATmakeInt(stateNumber));
+}
+PTBL_Action PTBL_makeActionAccept(void) {
+  return (PTBL_Action)(ATerm)ATmakeAppl0(PTBL_afun10);
 }
 PTBL_SpecialAttr PTBL_makeSpecialAttrNone(void) {
   return (PTBL_SpecialAttr)(ATerm)ATmakeInt(0);
@@ -889,19 +889,19 @@ ATbool PTBL_isEqualGoto(PTBL_Goto arg0, PTBL_Goto arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTBL_isEqualActions(PTBL_Actions arg0, PTBL_Actions arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-ATbool PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1) {
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
 ATbool PTBL_isEqualChoices(PTBL_Choices arg0, PTBL_Choices arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
 ATbool PTBL_isEqualChoice(PTBL_Choice arg0, PTBL_Choice arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTBL_isEqualActions(PTBL_Actions arg0, PTBL_Actions arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTBL_isEqualAction(PTBL_Action arg0, PTBL_Action arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -1456,7 +1456,7 @@ ATbool PTBL_hasStateGotos(PTBL_State arg) {
   return ATfalse;
 }
 
-ATbool PTBL_hasStateActions(PTBL_State arg) {
+ATbool PTBL_hasStateChoices(PTBL_State arg) {
   if (PTBL_isStateDefault(arg)) {
     return ATtrue;
   }
@@ -1473,9 +1473,9 @@ PTBL_Gotos PTBL_getStateGotos(PTBL_State arg) {
     return (PTBL_Gotos)ATgetArgument((ATermAppl)arg, 1);
 }
 
-PTBL_Actions PTBL_getStateActions(PTBL_State arg) {
+PTBL_Choices PTBL_getStateChoices(PTBL_State arg) {
   
-    return (PTBL_Actions)ATgetArgument((ATermAppl)arg, 2);
+    return (PTBL_Choices)ATgetArgument((ATermAppl)arg, 2);
 }
 
 PTBL_State PTBL_setStateNumber(PTBL_State arg, int number) {
@@ -1496,12 +1496,12 @@ PTBL_State PTBL_setStateGotos(PTBL_State arg, PTBL_Gotos gotos) {
   return (PTBL_State)NULL;
 }
 
-PTBL_State PTBL_setStateActions(PTBL_State arg, PTBL_Actions actions) {
+PTBL_State PTBL_setStateChoices(PTBL_State arg, PTBL_Choices choices) {
   if (PTBL_isStateDefault(arg)) {
-    return (PTBL_State)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) actions), 2);
+    return (PTBL_State)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) choices), 2);
   }
 
-  ATabort("State has no Actions: %t\n", arg);
+  ATabort("State has no Choices: %t\n", arg);
   return (PTBL_State)NULL;
 }
 
@@ -1679,180 +1679,6 @@ PTBL_Goto PTBL_setGotoStateNumber(PTBL_Goto arg, int stateNumber) {
   return (PTBL_Goto)NULL;
 }
 
-ATbool PTBL_isValidActions(PTBL_Actions arg) {
-  if (PTBL_isActionsEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isActionsSingle(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isActionsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-inline ATbool PTBL_isActionsEmpty(PTBL_Actions arg) {
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTBL_patternActionsEmpty));
-#endif
-  return ATtrue;
-}
-
-inline ATbool PTBL_isActionsSingle(PTBL_Actions arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionsSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-inline ATbool PTBL_isActionsMany(PTBL_Actions arg) {
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-ATbool PTBL_hasActionsHead(PTBL_Actions arg) {
-  if (PTBL_isActionsSingle(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isActionsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-ATbool PTBL_hasActionsTail(PTBL_Actions arg) {
-  if (PTBL_isActionsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-PTBL_Action PTBL_getActionsHead(PTBL_Actions arg) {
-  if (PTBL_isActionsSingle(arg)) {
-    return (PTBL_Action)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (PTBL_Action)ATgetFirst((ATermList)arg);
-}
-
-PTBL_Actions PTBL_getActionsTail(PTBL_Actions arg) {
-  
-    return (PTBL_Actions)ATgetNext((ATermList)arg);
-}
-
-PTBL_Actions PTBL_setActionsHead(PTBL_Actions arg, PTBL_Action head) {
-  if (PTBL_isActionsSingle(arg)) {
-    return (PTBL_Actions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (PTBL_isActionsMany(arg)) {
-    return (PTBL_Actions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("Actions has no Head: %t\n", arg);
-  return (PTBL_Actions)NULL;
-}
-
-PTBL_Actions PTBL_setActionsTail(PTBL_Actions arg, PTBL_Actions tail) {
-  if (PTBL_isActionsMany(arg)) {
-    return (PTBL_Actions)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
-  }
-
-  ATabort("Actions has no Tail: %t\n", arg);
-  return (PTBL_Actions)NULL;
-}
-
-ATbool PTBL_isValidAction(PTBL_Action arg) {
-  if (PTBL_isActionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-inline ATbool PTBL_isActionDefault(PTBL_Action arg) {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTBL_patternActionDefault, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-ATbool PTBL_hasActionRanges(PTBL_Action arg) {
-  if (PTBL_isActionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-ATbool PTBL_hasActionChoices(PTBL_Action arg) {
-  if (PTBL_isActionDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-PTBL_CharRanges PTBL_getActionRanges(PTBL_Action arg) {
-  
-    return (PTBL_CharRanges)ATgetArgument((ATermAppl)arg, 0);
-}
-
-PTBL_Choices PTBL_getActionChoices(PTBL_Action arg) {
-  
-    return (PTBL_Choices)ATgetArgument((ATermAppl)arg, 1);
-}
-
-PTBL_Action PTBL_setActionRanges(PTBL_Action arg, PTBL_CharRanges ranges) {
-  if (PTBL_isActionDefault(arg)) {
-    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) ranges), 0);
-  }
-
-  ATabort("Action has no Ranges: %t\n", arg);
-  return (PTBL_Action)NULL;
-}
-
-PTBL_Action PTBL_setActionChoices(PTBL_Action arg, PTBL_Choices choices) {
-  if (PTBL_isActionDefault(arg)) {
-    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) choices), 1);
-  }
-
-  ATabort("Action has no Choices: %t\n", arg);
-  return (PTBL_Action)NULL;
-}
-
 ATbool PTBL_isValidChoices(PTBL_Choices arg) {
   if (PTBL_isChoicesEmpty(arg)) {
     return ATtrue;
@@ -1971,22 +1797,90 @@ PTBL_Choices PTBL_setChoicesTail(PTBL_Choices arg, PTBL_Choices tail) {
 }
 
 ATbool PTBL_isValidChoice(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isChoiceShift(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isChoiceAccept(arg)) {
+  if (PTBL_isChoiceDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-inline ATbool PTBL_isChoiceReduce(PTBL_Choice arg) {
+inline ATbool PTBL_isChoiceDefault(PTBL_Choice arg) {
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternChoiceDefault, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+ATbool PTBL_hasChoiceRanges(PTBL_Choice arg) {
+  if (PTBL_isChoiceDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+ATbool PTBL_hasChoiceActions(PTBL_Choice arg) {
+  if (PTBL_isChoiceDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+PTBL_CharRanges PTBL_getChoiceRanges(PTBL_Choice arg) {
+  
+    return (PTBL_CharRanges)ATgetArgument((ATermAppl)arg, 0);
+}
+
+PTBL_Actions PTBL_getChoiceActions(PTBL_Choice arg) {
+  
+    return (PTBL_Actions)ATgetArgument((ATermAppl)arg, 1);
+}
+
+PTBL_Choice PTBL_setChoiceRanges(PTBL_Choice arg, PTBL_CharRanges ranges) {
+  if (PTBL_isChoiceDefault(arg)) {
+    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) ranges), 0);
+  }
+
+  ATabort("Choice has no Ranges: %t\n", arg);
+  return (PTBL_Choice)NULL;
+}
+
+PTBL_Choice PTBL_setChoiceActions(PTBL_Choice arg, PTBL_Actions actions) {
+  if (PTBL_isChoiceDefault(arg)) {
+    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) actions), 1);
+  }
+
+  ATabort("Choice has no Actions: %t\n", arg);
+  return (PTBL_Choice)NULL;
+}
+
+ATbool PTBL_isValidActions(PTBL_Actions arg) {
+  if (PTBL_isActionsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+inline ATbool PTBL_isActionsEmpty(PTBL_Actions arg) {
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternActionsEmpty));
+#endif
+  return ATtrue;
+}
+
+inline ATbool PTBL_isActionsSingle(PTBL_Actions arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -1996,7 +1890,7 @@ inline ATbool PTBL_isChoiceReduce(PTBL_Choice arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternChoiceReduce, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionsSingle, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2004,7 +1898,10 @@ inline ATbool PTBL_isChoiceReduce(PTBL_Choice arg) {
   }
 }
 
-inline ATbool PTBL_isChoiceLookaheadReduce(PTBL_Choice arg) {
+inline ATbool PTBL_isActionsMany(PTBL_Actions arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2014,7 +1911,7 @@ inline ATbool PTBL_isChoiceLookaheadReduce(PTBL_Choice arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternChoiceLookaheadReduce, NULL, NULL, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionsMany, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2022,7 +1919,74 @@ inline ATbool PTBL_isChoiceLookaheadReduce(PTBL_Choice arg) {
   }
 }
 
-inline ATbool PTBL_isChoiceShift(PTBL_Choice arg) {
+ATbool PTBL_hasActionsHead(PTBL_Actions arg) {
+  if (PTBL_isActionsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+ATbool PTBL_hasActionsTail(PTBL_Actions arg) {
+  if (PTBL_isActionsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+PTBL_Action PTBL_getActionsHead(PTBL_Actions arg) {
+  if (PTBL_isActionsSingle(arg)) {
+    return (PTBL_Action)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (PTBL_Action)ATgetFirst((ATermList)arg);
+}
+
+PTBL_Actions PTBL_getActionsTail(PTBL_Actions arg) {
+  
+    return (PTBL_Actions)ATgetNext((ATermList)arg);
+}
+
+PTBL_Actions PTBL_setActionsHead(PTBL_Actions arg, PTBL_Action head) {
+  if (PTBL_isActionsSingle(arg)) {
+    return (PTBL_Actions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PTBL_isActionsMany(arg)) {
+    return (PTBL_Actions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("Actions has no Head: %t\n", arg);
+  return (PTBL_Actions)NULL;
+}
+
+PTBL_Actions PTBL_setActionsTail(PTBL_Actions arg, PTBL_Actions tail) {
+  if (PTBL_isActionsMany(arg)) {
+    return (PTBL_Actions)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("Actions has no Tail: %t\n", arg);
+  return (PTBL_Actions)NULL;
+}
+
+ATbool PTBL_isValidAction(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionLookaheadReduce(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionShift(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionAccept(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+inline ATbool PTBL_isActionReduce(PTBL_Action arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2032,7 +1996,7 @@ inline ATbool PTBL_isChoiceShift(PTBL_Choice arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternChoiceShift, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionReduce, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2040,7 +2004,7 @@ inline ATbool PTBL_isChoiceShift(PTBL_Choice arg) {
   }
 }
 
-inline ATbool PTBL_isChoiceAccept(PTBL_Choice arg) {
+inline ATbool PTBL_isActionLookaheadReduce(PTBL_Action arg) {
   {
     static ATerm last_arg = NULL;
     static int last_gc = -1;
@@ -2050,7 +2014,7 @@ inline ATbool PTBL_isChoiceAccept(PTBL_Choice arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternChoiceAccept);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionLookaheadReduce, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2058,136 +2022,172 @@ inline ATbool PTBL_isChoiceAccept(PTBL_Choice arg) {
   }
 }
 
-ATbool PTBL_hasChoiceLength(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
+inline ATbool PTBL_isActionShift(PTBL_Action arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionShift, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+inline ATbool PTBL_isActionAccept(PTBL_Action arg) {
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternActionAccept);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+ATbool PTBL_hasActionLength(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
     return ATtrue;
   }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
+  else if (PTBL_isActionLookaheadReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-ATbool PTBL_hasChoiceLabel(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
+ATbool PTBL_hasActionLabel(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
     return ATtrue;
   }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-ATbool PTBL_hasChoiceSpecialAttr(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return ATtrue;
-  }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
+  else if (PTBL_isActionLookaheadReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-ATbool PTBL_hasChoiceLookaheads(PTBL_Choice arg) {
-  if (PTBL_isChoiceLookaheadReduce(arg)) {
+ATbool PTBL_hasActionSpecialAttr(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isActionLookaheadReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-ATbool PTBL_hasChoiceStateNumber(PTBL_Choice arg) {
-  if (PTBL_isChoiceShift(arg)) {
+ATbool PTBL_hasActionLookaheads(PTBL_Action arg) {
+  if (PTBL_isActionLookaheadReduce(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-int PTBL_getChoiceLength(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
+ATbool PTBL_hasActionStateNumber(PTBL_Action arg) {
+  if (PTBL_isActionShift(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+int PTBL_getActionLength(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
   }
   else 
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-int PTBL_getChoiceLabel(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
+int PTBL_getActionLabel(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
   }
   else 
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 1));
 }
 
-PTBL_SpecialAttr PTBL_getChoiceSpecialAttr(PTBL_Choice arg) {
-  if (PTBL_isChoiceReduce(arg)) {
+PTBL_SpecialAttr PTBL_getActionSpecialAttr(PTBL_Action arg) {
+  if (PTBL_isActionReduce(arg)) {
     return (PTBL_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
   }
   else 
     return (PTBL_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
 }
 
-PTBL_LookAheads PTBL_getChoiceLookaheads(PTBL_Choice arg) {
+PTBL_LookAheads PTBL_getActionLookaheads(PTBL_Action arg) {
   
     return (PTBL_LookAheads)ATgetArgument((ATermAppl)arg, 3);
 }
 
-int PTBL_getChoiceStateNumber(PTBL_Choice arg) {
+int PTBL_getActionStateNumber(PTBL_Action arg) {
   
     return (int)ATgetInt((ATermInt) ATgetArgument((ATermAppl)arg, 0));
 }
 
-PTBL_Choice PTBL_setChoiceLength(PTBL_Choice arg, int length) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(length)), 0);
+PTBL_Action PTBL_setActionLength(PTBL_Action arg, int length) {
+  if (PTBL_isActionReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(length)), 0);
   }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(length)), 0);
+  else if (PTBL_isActionLookaheadReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(length)), 0);
   }
 
-  ATabort("Choice has no Length: %t\n", arg);
-  return (PTBL_Choice)NULL;
+  ATabort("Action has no Length: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 
-PTBL_Choice PTBL_setChoiceLabel(PTBL_Choice arg, int label) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(label)), 1);
+PTBL_Action PTBL_setActionLabel(PTBL_Action arg, int label) {
+  if (PTBL_isActionReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(label)), 1);
   }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(label)), 1);
+  else if (PTBL_isActionLookaheadReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(label)), 1);
   }
 
-  ATabort("Choice has no Label: %t\n", arg);
-  return (PTBL_Choice)NULL;
+  ATabort("Action has no Label: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 
-PTBL_Choice PTBL_setChoiceSpecialAttr(PTBL_Choice arg, PTBL_SpecialAttr specialAttr) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) specialAttr), 2);
+PTBL_Action PTBL_setActionSpecialAttr(PTBL_Action arg, PTBL_SpecialAttr specialAttr) {
+  if (PTBL_isActionReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) specialAttr), 2);
   }
-  else if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) specialAttr), 2);
+  else if (PTBL_isActionLookaheadReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) specialAttr), 2);
   }
 
-  ATabort("Choice has no SpecialAttr: %t\n", arg);
-  return (PTBL_Choice)NULL;
+  ATabort("Action has no SpecialAttr: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 
-PTBL_Choice PTBL_setChoiceLookaheads(PTBL_Choice arg, PTBL_LookAheads lookaheads) {
-  if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) lookaheads), 3);
+PTBL_Action PTBL_setActionLookaheads(PTBL_Action arg, PTBL_LookAheads lookaheads) {
+  if (PTBL_isActionLookaheadReduce(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) lookaheads), 3);
   }
 
-  ATabort("Choice has no Lookaheads: %t\n", arg);
-  return (PTBL_Choice)NULL;
+  ATabort("Action has no Lookaheads: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 
-PTBL_Choice PTBL_setChoiceStateNumber(PTBL_Choice arg, int stateNumber) {
-  if (PTBL_isChoiceShift(arg)) {
-    return (PTBL_Choice)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(stateNumber)), 0);
+PTBL_Action PTBL_setActionStateNumber(PTBL_Action arg, int stateNumber) {
+  if (PTBL_isActionShift(arg)) {
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeInt(stateNumber)), 0);
   }
 
-  ATabort("Choice has no StateNumber: %t\n", arg);
-  return (PTBL_Choice)NULL;
+  ATabort("Action has no StateNumber: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 
 ATbool PTBL_isValidSpecialAttr(PTBL_SpecialAttr arg) {
@@ -2808,12 +2808,12 @@ PTBL_States PTBL_visitStates(PTBL_States arg, PTBL_State (*acceptHead)(PTBL_Stat
   ATabort("not a States: %t\n", arg);
   return (PTBL_States)NULL;
 }
-PTBL_State PTBL_visitState(PTBL_State arg, int (*acceptNumber)(int), PTBL_Gotos (*acceptGotos)(PTBL_Gotos), PTBL_Actions (*acceptActions)(PTBL_Actions)) {
+PTBL_State PTBL_visitState(PTBL_State arg, int (*acceptNumber)(int), PTBL_Gotos (*acceptGotos)(PTBL_Gotos), PTBL_Choices (*acceptChoices)(PTBL_Choices)) {
   if (PTBL_isStateDefault(arg)) {
     return PTBL_makeStateDefault(
         acceptNumber ? acceptNumber(PTBL_getStateNumber(arg)) : PTBL_getStateNumber(arg),
         acceptGotos ? acceptGotos(PTBL_getStateGotos(arg)) : PTBL_getStateGotos(arg),
-        acceptActions ? acceptActions(PTBL_getStateActions(arg)) : PTBL_getStateActions(arg));
+        acceptChoices ? acceptChoices(PTBL_getStateChoices(arg)) : PTBL_getStateChoices(arg));
   }
   ATabort("not a State: %t\n", arg);
   return (PTBL_State)NULL;
@@ -2843,31 +2843,6 @@ PTBL_Goto PTBL_visitGoto(PTBL_Goto arg, PTBL_CharRanges (*acceptRanges)(PTBL_Cha
   ATabort("not a Goto: %t\n", arg);
   return (PTBL_Goto)NULL;
 }
-PTBL_Actions PTBL_visitActions(PTBL_Actions arg, PTBL_Action (*acceptHead)(PTBL_Action)) {
-  if (PTBL_isActionsEmpty(arg)) {
-    return PTBL_makeActionsEmpty();
-  }
-  if (PTBL_isActionsSingle(arg)) {
-    return PTBL_makeActionsSingle(
-        acceptHead ? acceptHead(PTBL_getActionsHead(arg)) : PTBL_getActionsHead(arg));
-  }
-  if (PTBL_isActionsMany(arg)) {
-    return PTBL_makeActionsMany(
-        acceptHead ? acceptHead(PTBL_getActionsHead(arg)) : PTBL_getActionsHead(arg),
-        PTBL_visitActions(PTBL_getActionsTail(arg), acceptHead));
-  }
-  ATabort("not a Actions: %t\n", arg);
-  return (PTBL_Actions)NULL;
-}
-PTBL_Action PTBL_visitAction(PTBL_Action arg, PTBL_CharRanges (*acceptRanges)(PTBL_CharRanges), PTBL_Choices (*acceptChoices)(PTBL_Choices)) {
-  if (PTBL_isActionDefault(arg)) {
-    return PTBL_makeActionDefault(
-        acceptRanges ? acceptRanges(PTBL_getActionRanges(arg)) : PTBL_getActionRanges(arg),
-        acceptChoices ? acceptChoices(PTBL_getActionChoices(arg)) : PTBL_getActionChoices(arg));
-  }
-  ATabort("not a Action: %t\n", arg);
-  return (PTBL_Action)NULL;
-}
 PTBL_Choices PTBL_visitChoices(PTBL_Choices arg, PTBL_Choice (*acceptHead)(PTBL_Choice)) {
   if (PTBL_isChoicesEmpty(arg)) {
     return PTBL_makeChoicesEmpty();
@@ -2884,29 +2859,54 @@ PTBL_Choices PTBL_visitChoices(PTBL_Choices arg, PTBL_Choice (*acceptHead)(PTBL_
   ATabort("not a Choices: %t\n", arg);
   return (PTBL_Choices)NULL;
 }
-PTBL_Choice PTBL_visitChoice(PTBL_Choice arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTBL_SpecialAttr (*acceptSpecialAttr)(PTBL_SpecialAttr), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads), int (*acceptStateNumber)(int)) {
-  if (PTBL_isChoiceReduce(arg)) {
-    return PTBL_makeChoiceReduce(
-        acceptLength ? acceptLength(PTBL_getChoiceLength(arg)) : PTBL_getChoiceLength(arg),
-        acceptLabel ? acceptLabel(PTBL_getChoiceLabel(arg)) : PTBL_getChoiceLabel(arg),
-        acceptSpecialAttr ? acceptSpecialAttr(PTBL_getChoiceSpecialAttr(arg)) : PTBL_getChoiceSpecialAttr(arg));
-  }
-  if (PTBL_isChoiceLookaheadReduce(arg)) {
-    return PTBL_makeChoiceLookaheadReduce(
-        acceptLength ? acceptLength(PTBL_getChoiceLength(arg)) : PTBL_getChoiceLength(arg),
-        acceptLabel ? acceptLabel(PTBL_getChoiceLabel(arg)) : PTBL_getChoiceLabel(arg),
-        acceptSpecialAttr ? acceptSpecialAttr(PTBL_getChoiceSpecialAttr(arg)) : PTBL_getChoiceSpecialAttr(arg),
-        acceptLookaheads ? acceptLookaheads(PTBL_getChoiceLookaheads(arg)) : PTBL_getChoiceLookaheads(arg));
-  }
-  if (PTBL_isChoiceShift(arg)) {
-    return PTBL_makeChoiceShift(
-        acceptStateNumber ? acceptStateNumber(PTBL_getChoiceStateNumber(arg)) : PTBL_getChoiceStateNumber(arg));
-  }
-  if (PTBL_isChoiceAccept(arg)) {
-    return PTBL_makeChoiceAccept();
+PTBL_Choice PTBL_visitChoice(PTBL_Choice arg, PTBL_CharRanges (*acceptRanges)(PTBL_CharRanges), PTBL_Actions (*acceptActions)(PTBL_Actions)) {
+  if (PTBL_isChoiceDefault(arg)) {
+    return PTBL_makeChoiceDefault(
+        acceptRanges ? acceptRanges(PTBL_getChoiceRanges(arg)) : PTBL_getChoiceRanges(arg),
+        acceptActions ? acceptActions(PTBL_getChoiceActions(arg)) : PTBL_getChoiceActions(arg));
   }
   ATabort("not a Choice: %t\n", arg);
   return (PTBL_Choice)NULL;
+}
+PTBL_Actions PTBL_visitActions(PTBL_Actions arg, PTBL_Action (*acceptHead)(PTBL_Action)) {
+  if (PTBL_isActionsEmpty(arg)) {
+    return PTBL_makeActionsEmpty();
+  }
+  if (PTBL_isActionsSingle(arg)) {
+    return PTBL_makeActionsSingle(
+        acceptHead ? acceptHead(PTBL_getActionsHead(arg)) : PTBL_getActionsHead(arg));
+  }
+  if (PTBL_isActionsMany(arg)) {
+    return PTBL_makeActionsMany(
+        acceptHead ? acceptHead(PTBL_getActionsHead(arg)) : PTBL_getActionsHead(arg),
+        PTBL_visitActions(PTBL_getActionsTail(arg), acceptHead));
+  }
+  ATabort("not a Actions: %t\n", arg);
+  return (PTBL_Actions)NULL;
+}
+PTBL_Action PTBL_visitAction(PTBL_Action arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTBL_SpecialAttr (*acceptSpecialAttr)(PTBL_SpecialAttr), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads), int (*acceptStateNumber)(int)) {
+  if (PTBL_isActionReduce(arg)) {
+    return PTBL_makeActionReduce(
+        acceptLength ? acceptLength(PTBL_getActionLength(arg)) : PTBL_getActionLength(arg),
+        acceptLabel ? acceptLabel(PTBL_getActionLabel(arg)) : PTBL_getActionLabel(arg),
+        acceptSpecialAttr ? acceptSpecialAttr(PTBL_getActionSpecialAttr(arg)) : PTBL_getActionSpecialAttr(arg));
+  }
+  if (PTBL_isActionLookaheadReduce(arg)) {
+    return PTBL_makeActionLookaheadReduce(
+        acceptLength ? acceptLength(PTBL_getActionLength(arg)) : PTBL_getActionLength(arg),
+        acceptLabel ? acceptLabel(PTBL_getActionLabel(arg)) : PTBL_getActionLabel(arg),
+        acceptSpecialAttr ? acceptSpecialAttr(PTBL_getActionSpecialAttr(arg)) : PTBL_getActionSpecialAttr(arg),
+        acceptLookaheads ? acceptLookaheads(PTBL_getActionLookaheads(arg)) : PTBL_getActionLookaheads(arg));
+  }
+  if (PTBL_isActionShift(arg)) {
+    return PTBL_makeActionShift(
+        acceptStateNumber ? acceptStateNumber(PTBL_getActionStateNumber(arg)) : PTBL_getActionStateNumber(arg));
+  }
+  if (PTBL_isActionAccept(arg)) {
+    return PTBL_makeActionAccept();
+  }
+  ATabort("not a Action: %t\n", arg);
+  return (PTBL_Action)NULL;
 }
 PTBL_SpecialAttr PTBL_visitSpecialAttr(PTBL_SpecialAttr arg) {
   if (PTBL_isSpecialAttrNone(arg)) {

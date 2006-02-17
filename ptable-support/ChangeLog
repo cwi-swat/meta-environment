@@ -1,4 +1,9 @@
+$Id$
 
+Fri Feb 17 16:18:48 CET 2006 <economop@cwi.nl>
+ * Changed the names of the functions in the API without changing the
+   structure of the parse table. Intermediate commit before complete
+   restructuring.
 
 Thu Feb  9 15:27:26 CET 2006 <economop@cwi.nl>
  * in process of changing parsetable representation
