@@ -44,8 +44,8 @@ in
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . ACE-GetNewValue(Event, Modulename?)
-    /*. SplitFilename(Modulename, Name?, Prefix?, Extension?)*/
-    . MM-SetModuleGraphAttribute(ModuleId, "label", label(Modulename))
+    . SplitFilename(Modulename, Name?, Prefix?, Extension?)
+    . MM-SetModuleGraphAttribute(ModuleId, "label", label(Name))
     . snd-msg(io-get-file(Modulename))
     . rec-msg(io-file(Modulename, File?))
     . MM-SetModuleGraphAttribute(ModuleId, "file", file(File))
