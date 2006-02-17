@@ -4,7 +4,6 @@ TBSCRIPTS = \
 	    assert.tb \
 	    attribute-changed-event.tb \
 	    cache-utils.tb \
-	    child-attribute-changed-event.tb \
 	    config-utils.tb \
 	    dependencies-changed-event.tb \
 	    editing.tb \

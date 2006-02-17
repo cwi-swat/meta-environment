@@ -3,7 +3,6 @@
 
 #include <module-manager.idef>
 #include <attribute-changed-event.tb>
-#include <child-attribute-changed-event.tb>
 #include <dependencies-changed-event.tb>
 #include <undefined.h>
 
@@ -169,9 +168,6 @@ process MM-GetModuleGraph(Namespace: term, Graph: term?) is
 
 process MM-Subscribe-Attribute-Changed(ModuleId: term, Namespace: term, Key: term, OldValue: term, NewValue: term) is
   subscribe(mm-attribute-changed(attribute-changed-event(ModuleId, Namespace, Key, OldValue, NewValue)))
-
-process MM-Subscribe-Child-Attribute-Changed(ParentId: term, ChildId: term, Namespace: term, Key: term, OldValue: term, NewValue: term) is
-  subscribe(mm-child-attribute-changed(child-attribute-changed-event(ParentId, attribute-changed-event(ChildId, Namespace, Key, OldValue, NewValue))))
 
 process MM-Subscribe-Dependencies-Changed(ModuleId: term) is
   subscribe(mm-dependencies-changed(dependencies-changed-event(ModuleId)))
