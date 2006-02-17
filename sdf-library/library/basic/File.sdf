@@ -10,5 +10,3 @@ context-free start-symbols File
 sorts File
 context-free syntax
   "file" "(" path:Path "," name:StrCon "," extension:StrCon ")" -> File {cons("file")}
-
-  "without-extension" "(" path:Path "," name:StrCon ")" -> File {cons("without-extension")}
