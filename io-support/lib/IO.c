@@ -256,11 +256,19 @@ IO_File IO_makeFileFile(IO_Path path, const char* name, const char* extension)
 }
 
 /*}}}  */
-/*{{{  IO_Path IO_makePathPath(IO_SegmentList list) */
+/*{{{  IO_Path IO_makePathAbsolute(IO_SegmentList list) */
 
-IO_Path IO_makePathPath(IO_SegmentList list)
+IO_Path IO_makePathAbsolute(IO_SegmentList list)
 {
   return (IO_Path)(ATerm)ATmakeAppl1(IO_afun1, (ATerm) list);
+}
+
+/*}}}  */
+/*{{{  IO_Path IO_makePathRelative(IO_SegmentList list) */
+
+IO_Path IO_makePathRelative(IO_SegmentList list)
+{
+  return (IO_Path)(ATerm)ATmakeAppl1(IO_afun2, (ATerm) list);
 }
 
 /*}}}  */
@@ -268,7 +276,7 @@ IO_Path IO_makePathPath(IO_SegmentList list)
 
 IO_Segment IO_makeSegmentSegment(const char* name)
 {
-  return (IO_Segment)(ATerm)ATmakeAppl1(IO_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
+  return (IO_Segment)(ATerm)ATmakeAppl1(IO_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(name, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -479,22 +487,57 @@ IO_File IO_setFileExtension(IO_File arg, const char* extension)
 
 ATbool IO_isValidPath(IO_Path arg)
 {
-  if (IO_isPathPath(arg)) {
+  if (IO_isPathAbsolute(arg)) {
+    return ATtrue;
+  }
+  else if (IO_isPathRelative(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool IO_isPathPath(IO_Path arg) */
+/*{{{  inline ATbool IO_isPathAbsolute(IO_Path arg) */
 
-inline ATbool IO_isPathPath(IO_Path arg)
+inline ATbool IO_isPathAbsolute(IO_Path arg)
 {
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, IO_patternPathPath, NULL));
-#endif
-  return ATtrue;
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, IO_patternPathAbsolute, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool IO_isPathRelative(IO_Path arg) */
+
+inline ATbool IO_isPathRelative(IO_Path arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, IO_patternPathRelative, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -502,7 +545,10 @@ inline ATbool IO_isPathPath(IO_Path arg)
 
 ATbool IO_hasPathList(IO_Path arg)
 {
-  if (IO_isPathPath(arg)) {
+  if (IO_isPathAbsolute(arg)) {
+    return ATtrue;
+  }
+  else if (IO_isPathRelative(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -513,7 +559,10 @@ ATbool IO_hasPathList(IO_Path arg)
 
 IO_SegmentList IO_getPathList(IO_Path arg)
 {
-  
+  if (IO_isPathAbsolute(arg)) {
+    return (IO_SegmentList)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
     return (IO_SegmentList)ATgetArgument((ATermAppl)arg, 0);
 }
 
@@ -522,7 +571,10 @@ IO_SegmentList IO_getPathList(IO_Path arg)
 
 IO_Path IO_setPathList(IO_Path arg, IO_SegmentList list)
 {
-  if (IO_isPathPath(arg)) {
+  if (IO_isPathAbsolute(arg)) {
+    return (IO_Path)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
+  }
+  else if (IO_isPathRelative(arg)) {
     return (IO_Path)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
   }
 
@@ -895,8 +947,12 @@ IO_File IO_visitFile(IO_File arg, IO_Path (*acceptPath)(IO_Path), char* (*accept
 
 IO_Path IO_visitPath(IO_Path arg, IO_SegmentList (*acceptList)(IO_SegmentList))
 {
-  if (IO_isPathPath(arg)) {
-    return IO_makePathPath(
+  if (IO_isPathAbsolute(arg)) {
+    return IO_makePathAbsolute(
+        acceptList ? acceptList(IO_getPathList(arg)) : IO_getPathList(arg));
+  }
+  if (IO_isPathRelative(arg)) {
+    return IO_makePathRelative(
         acceptList ? acceptList(IO_getPathList(arg)) : IO_getPathList(arg));
   }
   ATabort("not a Path: %t\n", arg);

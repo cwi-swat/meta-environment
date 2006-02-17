@@ -12,6 +12,7 @@
 #include <atb-tool.h>
 #include <Error.h>
 #include <Config.h>
+#include <IO.h>
 
 #include "in-output.tif.h"
 
@@ -498,6 +499,63 @@ ATerm get_path_extension(int conn, const char *path) {
   }
 }
 
+ATerm get_file(int cid, const char *directory) {
+  char *copy, *segment, *segment_end;
+  char *filename, *extension = NULL;
+  ATbool absolutePath = ATfalse;
+  IO_File file;
+  IO_Path path;
+  IO_SegmentList segmentList = IO_makeSegmentListEmpty();
+  ATerm result = NULL;
+
+  assert(directory != NULL);
+
+  copy = strdup(directory);
+  assert(copy != NULL);
+
+  segment = copy;
+
+  for (segment_end = copy; *segment_end; segment_end++) {
+    if (*segment_end == PATH_SEPARATOR) {
+      if (segment_end == copy) {
+	absolutePath = ATtrue;
+      } else {
+	*segment_end = EOS;
+	segmentList = IO_appendSegmentList(segmentList, 
+					   IO_makeSegmentSegment(segment));
+      }
+      segment = segment_end + 1;
+    }
+  }
+
+  segment_end = strrchr(segment, EXTENSION_SEPARATOR);
+  if (segment_end != NULL) {
+    *segment_end = EOS;
+    extension = ++segment_end;
+  }
+
+  filename = strdup(segment);
+
+  if (absolutePath == ATtrue) {
+    path = IO_makePathAbsolute(segmentList);
+  }
+  else {
+    path = IO_makePathRelative(segmentList);
+  }
+
+  if (extension != NULL) {
+    file = IO_makeFileFile(path, filename, extension);
+  } else {
+    file = IO_makeFileFile(path, filename, "");
+  }
+  result = ATmake("file(<term>)", IO_FileToTerm(file));
+
+  free(copy);
+  free(filename);
+  
+  return ATmake("snd-value(<term>)", result);
+}
+
 void rec_terminate(int cid, ATerm arg) {
   exit(0);
 }
@@ -550,6 +608,7 @@ int main(int argc, char *argv[]) {
     ATBinit(argc, argv, &bottomOfStack);
     ERR_initErrorApi();
     CFG_initConfigApi();
+    IO_initIOApi();
 
     cid = ATBconnect(NULL, NULL, -1, in_output_handler);
     ATBeventloop();

@@ -12,6 +12,7 @@ let
   Filename: str,
   Filename1: str,
   Filename2: str,
+  File: file,
   IO: in-output,
   Name: str,
   Path: str,
@@ -189,6 +190,11 @@ in
     . snd-eval(IO, get-path-extension(Path))
     . rec-value(IO, extension(Extension?))
     . snd-msg(io-extension(Path, Extension))
+  +
+    rec-msg(io-get-file(Path?))
+    . snd-eval(IO, get-file(Path))
+    . rec-value(IO, file(File?))
+    . snd-msg(io-file(Path, File))
   )
   *
   delta

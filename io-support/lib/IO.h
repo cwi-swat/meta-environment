@@ -77,7 +77,8 @@ IO_SegmentList IO_makeSegmentList6 (IO_Segment elem1, IO_Segment elem2,
 
 IO_File IO_makeFileFile (IO_Path path, const char *name,
 			 const char *extension);
-IO_Path IO_makePathPath (IO_SegmentList list);
+IO_Path IO_makePathAbsolute (IO_SegmentList list);
+IO_Path IO_makePathRelative (IO_SegmentList list);
 IO_Segment IO_makeSegmentSegment (const char *name);
 IO_SegmentList IO_makeSegmentListEmpty (void);
 IO_SegmentList IO_makeSegmentListSingle (IO_Segment head);
@@ -114,7 +115,8 @@ IO_File IO_setFileExtension (IO_File arg, const char *extension);
 /*{{{  IO_Path accessors */
 
 ATbool IO_isValidPath (IO_Path arg);
-inline ATbool IO_isPathPath (IO_Path arg);
+inline ATbool IO_isPathAbsolute (IO_Path arg);
+inline ATbool IO_isPathRelative (IO_Path arg);
 ATbool IO_hasPathList (IO_Path arg);
 IO_SegmentList IO_getPathList (IO_Path arg);
 IO_Path IO_setPathList (IO_Path arg, IO_SegmentList list);
