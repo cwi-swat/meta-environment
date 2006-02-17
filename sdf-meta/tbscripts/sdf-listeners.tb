@@ -32,6 +32,7 @@ process SDFModuleLabelSetter is
 let
   Event: attribute-changed-event,
   Extension: str,
+  File: file,
   ModuleId: term,
   Modulename: str,
   Name: str,
@@ -45,6 +46,9 @@ in
     . ACE-GetNewValue(Event, Modulename?)
     /*. SplitFilename(Modulename, Name?, Prefix?, Extension?)*/
     . MM-SetModuleGraphAttribute(ModuleId, "label", label(Modulename))
+    . snd-msg(io-get-file(Modulename))
+    . rec-msg(io-file(Modulename, File?))
+    . MM-SetModuleGraphAttribute(ModuleId, "file", file(File))
   )
   *
   delta
