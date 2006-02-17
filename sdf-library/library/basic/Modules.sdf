@@ -1,4 +1,4 @@
-module Modules
+module basic/Modules
 
 imports basic/NatCon
 
