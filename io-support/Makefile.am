@@ -6,7 +6,7 @@ ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
-SUBDIRS = src
+SUBDIRS = lib src
 
 EXTRA_DIST = reconf program-check.m4 make_rules package
 

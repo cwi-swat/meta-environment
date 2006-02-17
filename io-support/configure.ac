@@ -75,6 +75,7 @@ AC_CHECK_HEADER(getopt.h)
 
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
+   lib/Makefile
    src/Makefile 
 ])
 AC_OUTPUT
