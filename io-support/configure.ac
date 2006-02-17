@@ -77,5 +77,6 @@ dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    lib/Makefile
    src/Makefile 
+   script/Makefile
 ])
 AC_OUTPUT
