@@ -3,6 +3,7 @@
 
 #include <aterm2.h>
 
+extern AFun afun39;
 extern AFun afun17;
 extern AFun afun22;
 extern AFun afun3;
@@ -74,6 +75,8 @@ extern ATerm patternStyleDotted;
 extern ATerm patternStyleDashed;
 extern ATerm patternStyleBold;
 extern ATerm patternColorRgb;
+extern ATerm patternFileExternal;
+extern ATerm patternAttributeFile;
 extern ATerm patternAttributeLevel;
 extern ATerm patternAttributeStyle;
 extern ATerm patternAttributeSize;

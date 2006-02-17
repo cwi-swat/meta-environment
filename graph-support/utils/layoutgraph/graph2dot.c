@@ -103,6 +103,8 @@ static void printAttribute(ATerm id, Attribute attr, FILE *file)
     ATerm level = ATmake("<str>", getAttributeLevel(attr));
     storeLevel(id, level);
   }
+  else if (isAttributeFile(attr)) {
+  }
   else {
     ATwarning("unknown attribute type: %t\n", attr);
   }
