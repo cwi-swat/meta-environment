@@ -128,7 +128,6 @@ AC_CONFIG_FILES([Makefile
    syntax/addeqssyntax/src/Makefile
    syntax/asfsdf-checker/Makefile
    syntax/asfsdf-checker/src/Makefile
-   syntax/asfsdf-checker/spec/Makefile
    semantics/Makefile
    semantics/asfc/Makefile
    semantics/asfc/src/Makefile
