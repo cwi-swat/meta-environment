@@ -97,10 +97,7 @@ AC_CONFIG_FILES([Makefile
    src/Makefile 
    grammar/Makefile 
    sdf-checker/Makefile
-   sdf-checker/spec/Makefile
    sdf-checker/src/Makefile
-   sdf-upgrade/Makefile
-   sdf-upgrade/spec/Makefile
    removevarsyntax/Makefile
    removevarsyntax/src/Makefile
    test/Makefile
