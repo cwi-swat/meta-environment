@@ -19,6 +19,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/asf/normalization/Makefile
    library/languages/asf/addeqssyntax/Makefile
    library/languages/asf/removevariables/Makefile
+   library/languages/asf/asfsdf-checker/Makefile
    library/languages/asf/idioms/Makefile
    library/languages/aterm/Makefile
    library/languages/aterm/pretty/Makefile
@@ -27,6 +28,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/sdf2/projection/Makefile
    library/languages/sdf2/renaming/Makefile
    library/languages/sdf2/pretty/Makefile
+   library/languages/sdf2/checker/Makefile
    library/languages/sdf2/idioms/Makefile
    library/languages/pico/Makefile
    library/languages/pico/pretty/Makefile
