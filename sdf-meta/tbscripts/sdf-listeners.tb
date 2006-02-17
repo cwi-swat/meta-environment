@@ -18,7 +18,7 @@ process InitializeInheritedStatus is
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, complete, all)
 
   /* we are not complete anymore, when one of our kids is available */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, available, opened, one)
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, edited, opened, one)
   . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, opened, opened, one)
 
   /* if one of our kids is an error, we become a child-error */
