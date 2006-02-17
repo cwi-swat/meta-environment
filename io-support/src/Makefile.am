@@ -31,6 +31,10 @@ in_output_LDADD = \
 
 if MAINTAINER_MODE
 
-CLEANFILES = in-output.tifs
+CLEANFILES = in-output.tifs in-output.idef
+
+else
+
+CLEANFILES = in-output.idef
 
 endif
