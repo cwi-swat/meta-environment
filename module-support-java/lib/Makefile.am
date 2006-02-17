@@ -12,7 +12,7 @@ api: module-api
 ABS_MODULE_MODULES = \
 	$(foreach i, \
 	${MODULE_MODULES}, \
-	${top_srcdir}/../asf-library/library/basic/$i.sdf)
+	${top_srcdir}/../sdf-library/library/basic/$i.sdf)
 
 MetaModules.def: Makefile
 	@(echo "definition"; cat ${ABS_MODULE_MODULES}) > $@
