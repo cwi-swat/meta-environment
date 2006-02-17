@@ -20,7 +20,6 @@ in
     rec-note(mm-attribute-changed(AttributeEvent?))
     . ACE-GetModuleId(AttributeEvent, ModuleId?)
     . snd-msg(ts-remove-value(TableName, ModuleId))
-    . printf("CACHE: removed cached value [%t,%t]\n", TableName, ModuleId)
   )
   * delta
 endlet
@@ -33,10 +32,8 @@ process GetCachedValue(TableName: str, Key: term, Value: term?) is
   .
   (
     rec-msg(ts-value(TableName, Key, Value?)) 
-    . printf("CACHE: reused cached value [%t,%t]\n", TableName, Key)
   +
     rec-msg(ts-no-value(TableName, Key))
-    . printf("CACHE: no cached value [%t,%t]\n", TableName, Key)
     . Value := UNDEFINED
   )
 
