@@ -20,6 +20,7 @@ import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.gui.plugin.data.Module;
 import nl.cwi.sen1.gui.plugin.data.ModuleSelectionListener;
 import nl.cwi.sen1.gui.plugin.data.ModuleTreeModel;
+import nl.cwi.sen1.ioapi.types.File;
 import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
 import nl.cwi.sen1.util.StudioPopupMenu;
@@ -44,6 +45,8 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     private JLabel status;
 
     private Factory graphFactory;
+
+    private nl.cwi.sen1.ioapi.Factory ioFactory;
 
     // TODO: use preferences
     private Preferences preferences;
@@ -82,10 +85,15 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         Module module = moduleModel.getModule(moduleId);
         if (module == null) {
             String label = moduleId.toString();
+            File file = null;
             AttributeList attrs = node.getAttributes();
 
             while (!attrs.isEmpty()) {
                 Attribute attr = attrs.getHead();
+                if (attr.isFile()) {
+                    ATerm term = attr.getFile().toTerm();
+                    file = ioFactory.FileFromTerm(term);
+                }
                 if (attr.isLabel()) {
                     label = attr.getLabel();
                 }
@@ -93,7 +101,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
                 attrs = attrs.getTail();
             }
 
-            module = new Module(moduleId, label);
+            module = new Module(moduleId, file, label);
             moduleModel.addModule(module);
         }
 
@@ -141,6 +149,8 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         graphFactory = Factory.getInstance((PureFactory) studio
+                .getATermFactory());
+        ioFactory = nl.cwi.sen1.ioapi.Factory.getInstance((PureFactory) studio
                 .getATermFactory());
         bridge = new NavigatorBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);

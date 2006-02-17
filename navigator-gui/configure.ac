@@ -33,8 +33,13 @@ AC_PACKAGE_REQUIRE(meta-studio, gui-config,
    [  --with-meta-studio=DIR meta-studio is in DIR])
 AC_SUBST(META_STUDIO)
 
+dnl Require io-support package
+AC_PACKAGE_REQUIRE(io-support, in-output,
+   [  --with-io-support=DIR io-suport is in DIR])
+AC_SUBST(IO_SUPPORT)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${META_STUDIO}/bin/gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`:\`${META_STUDIO}/bin/gui-config\`:\`${IO_SUPPORT}/bin/io-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)

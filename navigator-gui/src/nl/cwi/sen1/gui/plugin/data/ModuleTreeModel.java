@@ -13,7 +13,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-
+import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
 public class ModuleTreeModel extends AbstractModuleTreeModel implements
@@ -81,10 +81,10 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
 
 	public void addModule(Module module) {
 		ATerm moduleId = module.getId();
-        String name = module.getName();
+        File file = module.getFile();
 
 		if (moduleTable.put(moduleId, module) == null) {
-            root.addChild(moduleId, "", new StringTokenizer(name, "/"));
+            root.addChild(moduleId, "", file);
 			repaintTree();
 		}
 	}

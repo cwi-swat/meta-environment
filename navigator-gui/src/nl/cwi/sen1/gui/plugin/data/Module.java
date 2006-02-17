@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-
+import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
 
@@ -15,6 +15,8 @@ public class Module implements Comparable {
     private ATerm _id;
     
 	private String _name;
+    
+    private File _file;
 
 	private List _parent;
 	private List _child;
@@ -24,10 +26,11 @@ public class Module implements Comparable {
 
 	private int State = STATE_NORMAL;
 
-	public Module(ATerm id, String name) {
+	public Module(ATerm id, File file, String name) {
 		setId(id);
         setName(name);
-		initParentList();
+        setFile(file);
+        initParentList();
 
 		childListModel = new ListModel(_child);
 		parentListModel = new ListModel(_parent);
@@ -58,6 +61,10 @@ public class Module implements Comparable {
 	private void setName(String name) {
 		_name = name;
 	}
+    
+    private void setFile(File file) {
+        _file = file;
+    }
 
 	public void addParent(String parent) {
 		_parent.add(parent);
@@ -117,4 +124,8 @@ public class Module implements Comparable {
 	public void setState(int State) {
 		this.State = State;
 	}
+
+    public File getFile() {
+        return _file;
+    }
 }

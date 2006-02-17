@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import nl.cwi.sen1.ioapi.types.File;
+import nl.cwi.sen1.ioapi.types.Path;
+import nl.cwi.sen1.ioapi.types.Segment;
+import nl.cwi.sen1.ioapi.types.SegmentList;
 import aterm.ATerm;
 
 public class ModuleTreeNode {
     ATerm id;
-    
+
     String name;
 
     String prefix;
@@ -28,7 +32,7 @@ public class ModuleTreeNode {
     public ATerm getId() {
         return id;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -37,29 +41,34 @@ public class ModuleTreeNode {
         return prefix + getName();
     }
 
-    public ModuleTreeNode addChild(ATerm id, String p, StringTokenizer tokens) {
-        String childName = tokens.nextToken();
+    public ModuleTreeNode addChild(ATerm id, String p, File file) {
+        Path path = file.getPath();
+        SegmentList segments = path.getList();
         ModuleTreeNode childNode = null;
-        if (tokens.hasMoreTokens()) {
-            int childIndex = getNodeChild(childName);
 
-            if (childIndex != -1) {
-                childNode = getChild(childIndex);
-            }
-            if (childNode == null) {
-                childNode = new ModuleTreeNode(id, childName, p, !tokens
-                        .hasMoreTokens());
-                children.add(getInsertIndex(childName), childNode);
-            }
-            return childNode.addChild(id, p + childName + "/", tokens);
+        if (segments.isEmpty()) {
+            childNode = new ModuleTreeNode(id, file.getName(), p, true);
+            children.add(getInsertIndex(file.getName()), childNode);
+
+            return childNode;
         }
-        // if (childNode == null) {
-        childNode = new ModuleTreeNode(id, childName, p, !tokens.hasMoreTokens());
-        children.add(getInsertIndex(childName), childNode);
 
-        return childNode;
-        // }
-        // return null;
+        Segment segment = segments.getHead();
+        String childName = segment.getName();
+        int childIndex = getNodeChild(childName);
+
+        if (childIndex != -1) {
+            childNode = getChild(childIndex);
+        }
+        if (childNode == null) {
+            childNode = new ModuleTreeNode(id, childName, p, false);
+            children.add(getInsertIndex(childName), childNode);
+        }
+        path = path.getIoapiFactory().makePath_Relative(segments.getTail());
+        file = file.getIoapiFactory().makeFile_File(path, file.getName(),
+                file.getExtension());
+
+        return childNode.addChild(id, p + childName + "/", file);
     }
 
     public void removeChild(StringTokenizer tokens) {
