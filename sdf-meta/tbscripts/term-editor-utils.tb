@@ -30,7 +30,7 @@ in
       . rec-msg(em-session-bound(Sid, ModuleId))
       . GetTermParsetree(ModuleId, Path, Tree?)
       . SE-UpdateTree(Sid, Tree)
-      . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",available,parsed)
+      . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",<term>,complete)
       .
       (
         MenuSelected(Sid, EditorType)
