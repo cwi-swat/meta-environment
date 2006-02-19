@@ -501,7 +501,7 @@ ATerm get_path_extension(int conn, const char *path) {
 
 ATerm get_file(int cid, const char *directory) {
   char *copy, *segment, *segment_end;
-  char *filename, *extension = NULL;
+  char *extension = NULL;
   ATbool absolutePath = ATfalse;
   IO_File file;
   IO_Path path;
@@ -534,8 +534,6 @@ ATerm get_file(int cid, const char *directory) {
     extension = ++segment_end;
   }
 
-  filename = strdup(segment);
-
   if (absolutePath == ATtrue) {
     path = IO_makePathAbsolute(segmentList);
   }
@@ -544,14 +542,13 @@ ATerm get_file(int cid, const char *directory) {
   }
 
   if (extension != NULL) {
-    file = IO_makeFileFile(path, filename, extension);
+    file = IO_makeFileFile(path, segment, extension);
   } else {
-    file = IO_makeFileFile(path, filename, "");
+    file = IO_makeFileFile(path, segment, "");
   }
   result = ATmake("file(<term>)", IO_FileToTerm(file));
 
   free(copy);
-  free(filename);
   
   return ATmake("snd-value(<term>)", result);
 }
