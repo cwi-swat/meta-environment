@@ -8,6 +8,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
 import toolbus.ToolBus;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
@@ -51,10 +53,11 @@ public class ClassicToolShield extends ToolShield {
 	private ATerm termSndVoid;
 	
 	private final int uninitialized = -1;
-	private final int sendingSignature = 0;
-	private final int receivingSignatureConfirm = 1;
-	private final int connected = 2;
-	private final int terminated = 3;
+	private final int executed = 0;
+	private final int sendingSignature = 1;
+	private final int receivingSignatureConfirm = 2;
+	private final int connected = 3;
+	private final int terminated = 4;
 	
 	private int toolStatus = uninitialized;
 
@@ -79,7 +82,7 @@ public class ClassicToolShield extends ToolShield {
 		selector = toolbus.getSelector();
 	}
 
-	public void executeTool() {
+	public void executeTool() throws ToolBusException {
 		String cmd = toolDef.getCommand() + " -TB_HOST "
 				+ toolbus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
 				+ toolname + " -TB_TOOL_ID " + toolCount + " -TB_PORT "
@@ -89,8 +92,9 @@ public class ClassicToolShield extends ToolShield {
 		try {
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
-			System.err.println("executeTool " + toolname + ": " + e);
+			throw new ToolBusError(("while starting tool " + toolname + ": " + e.getMessage()));
 		}
+		toolStatus = executed;
 	}
 
 	public void connect(Object connection) throws IOException {
@@ -156,7 +160,7 @@ public class ClassicToolShield extends ToolShield {
 	 * @see toolbus.tool.ToolShield#terminate(aterm.ATerm)
 	 */
 	public void terminate(ATerm msg) {
-		if(toolStatus != terminated){
+		if(toolStatus == connected && toolStatus != terminated){
 			toolStatus = terminated;
 			System.err.println(toolId + ": terminate(" + msg + ")");
 			sndRequestToTool(ToolInstance.TERMINATE, msg);

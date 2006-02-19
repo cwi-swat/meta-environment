@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.exceptions.ToolBusException;
 import toolbus.tool.classic.ClassicToolShield;
 import toolbus.tool.java.JavaToolShield;
 import aterm.ATerm;
@@ -41,6 +41,7 @@ public class ToolDefinition {
 		this.hostName = host;
 		this.kind = kind;
 		this.command = command;
+		this.className = command;
 		this.tbfactory = tbfactory;
 		inputSignature = tbfactory.EmptyList;
 		outputSignature = tbfactory.EmptyList;

@@ -4,9 +4,9 @@
 package toolbus.atom;
 import java.io.PrintWriter;
 
-import toolbus.Environment;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 import aterm.ATermAppl;

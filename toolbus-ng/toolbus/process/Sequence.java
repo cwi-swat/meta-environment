@@ -6,10 +6,10 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 
 public class Sequence extends ProcessExpression {
 	private ProcessExpression left, right;
@@ -50,11 +50,6 @@ public class Sequence extends ProcessExpression {
 		return "Seq(" + left.toString() + ", " + right.toString() + ")";
 	}
 
-//	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-//		left.expand(P, calls);
-//		right.expand(P, calls);
-//		setFirst(left.getFirst());
-//	}
 	public void computeFirst(){
 	  	left.computeFirst();
 	  	right.computeFirst();
@@ -77,5 +72,4 @@ public class Sequence extends ProcessExpression {
 	public State getAtoms() {
 		return left.getAtoms().union(right.getAtoms());
 	}
-
 }

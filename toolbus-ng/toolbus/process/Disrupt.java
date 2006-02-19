@@ -3,11 +3,11 @@ package toolbus.process;
 import java.util.Stack;
 import java.util.Vector;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 
 public class Disrupt extends ProcessExpression {
   private ProcessExpression left, right;

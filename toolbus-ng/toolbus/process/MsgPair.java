@@ -4,16 +4,16 @@ import java.lang.reflect.Constructor;
 import java.util.Stack;
 import java.util.Vector;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
-import toolbus.ToolBusException;
-import toolbus.ToolBusInternalError;
 import toolbus.atom.Atom;
 import toolbus.atom.msg.RecMsg;
 import toolbus.atom.msg.SndMsg;
 import toolbus.atom.tool.Eval;
 import toolbus.atom.tool.Event;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusInternalError;
 
 
 /*** Outdated **/

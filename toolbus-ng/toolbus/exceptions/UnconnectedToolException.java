@@ -1,4 +1,5 @@
-package toolbus;
+package toolbus.exceptions;
+
 
 public class UnconnectedToolException extends ToolBusException {
 

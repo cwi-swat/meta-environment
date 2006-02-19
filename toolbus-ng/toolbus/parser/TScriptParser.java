@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedList;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
 import toolbus.atom.Assign;
 import toolbus.atom.Atom;
 import toolbus.atom.Create;
@@ -31,6 +31,8 @@ import toolbus.atom.tool.Event;
 import toolbus.atom.tool.Execute;
 import toolbus.atom.tool.RecVal;
 import toolbus.atom.tool.Terminate;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.Alternative;
 import toolbus.process.Disrupt;
 import toolbus.process.IfElse;
@@ -576,10 +578,10 @@ public class TScriptParser {
     includedFiles = new HashSet<String>();
     TScriptNodeBuilders.init(tbfactory, this);
   }
-  private ATermList calls;
+  private LinkedList<ATerm> calls;
 
   public void parse(String filename) throws ToolBusException {
-	  calls = tbfactory.EmptyList;
+	  calls = new LinkedList<ATerm>();
 	  doParse(filename);
 	  generateInitialProcessCalls();
   }
@@ -608,29 +610,30 @@ public class TScriptParser {
       //System.err.println(decls.elementAt(i));
       Object elm = decls.elementAt(i);
       if(elm instanceof ATermList){
-      	 ATermList toolbusArgs = (ATermList) elm;
-      	 //System.err.println("adding toolbus args: " + toolbusArgs);
-      	 
+      	 ATermList toolbusArgs = (ATermList) elm; 
       	 for(int j = 0; j < toolbusArgs.getLength(); j++){
-      	 	calls = calls.append(toolbusArgs.elementAt(j));
+      	 	calls.addLast(toolbusArgs.elementAt(j));
       	 }
-      	 //System.err.println("calls = " + calls);
       } else {
-      	Object def = TScriptNodeBuilders.build((ATerm) elm);
-
-      	if(def instanceof ProcessDefinition){
-      		String processName = ((ProcessDefinition) def).getName();
-      		TScriptNodeBuilders.processName = processName;
-      		// We have already parsed def as a ProcessDefinition and extract its process name,
-      		// next we parse it again! so that we qualify all variables with that name.
-      		// TODO: replace by a simple scan that replaces the variables.
-      		toolbus.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders.build((ATerm) elm));
-      	} else if(def instanceof ToolDefinition) {
-    	    toolbus.addToolDefinition((ToolDefinition) def);
-      	} else if(def instanceof Include){
-      		doParseInclude(((Include) def).getFilename());
-      	} else
-      		throw new ToolBusException("Process or Tool definition expected");
+    	  try {
+	      	Object def = TScriptNodeBuilders.build((ATerm) elm);
+	
+	      	if(def instanceof ProcessDefinition){
+	      		String processName = ((ProcessDefinition) def).getName();
+	      		TScriptNodeBuilders.processName = processName;
+	      		// We have already parsed def as a ProcessDefinition and extracted its process name,
+	      		// next we parse it again! so that we qualify all variables with that name.
+	      		// TODO: replace by a simple scan that replaces the variables.
+	      		toolbus.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders.build((ATerm) elm));
+	      	} else if(def instanceof ToolDefinition) {
+	    	    toolbus.addToolDefinition((ToolDefinition) def);
+	      	} else if(def instanceof Include){
+	      		doParseInclude(((Include) def).getFilename());
+	      	} else
+	      		toolbus.error(filename, "Process or Tool definition expected");
+    	  } catch(ToolBusError e){
+    		  toolbus.error(filename, e.getMessage());
+    	  }
       }
     }
   }
@@ -660,9 +663,19 @@ public class TScriptParser {
   }
   
   void generateInitialProcessCalls() throws ToolBusException {
-    for (int j = 0; j < calls.getLength(); j++) {
-        ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(calls.elementAt(j));
-        toolbus.addProcess(call);
+	if(calls.size() == 0){
+		throw new ToolBusError("Initial configuration of ToolBus processes is missing");
+	}
+    for (ATerm acall : calls){
+    	String pname = "";
+    	try {
+    		pname = "<unknown>";
+    		ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(acall);
+    		pname = call.getName();
+    		toolbus.addProcess(call);
+    	} catch (ToolBusException e){
+    		toolbus.error("process " + pname, e.getMessage());
+    	}
       }
   }
 }

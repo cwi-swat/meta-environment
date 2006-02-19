@@ -10,9 +10,9 @@ import java.util.Vector;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -38,7 +38,7 @@ public class SndNote extends Atom {
 		return a;
 	}
 
-	public void addPartners(State set) {
+	public void addPartners(State set) throws ToolBusException {
 		for (StateElement b : set.getElementsAsVector()) {
 			if (!(b instanceof Subscribe)) {
 				continue;

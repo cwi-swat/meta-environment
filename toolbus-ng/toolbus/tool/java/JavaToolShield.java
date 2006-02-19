@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Hashtable;
 
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
 import toolbus.tool.ToolDefinition;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.ToolShield;
@@ -57,6 +57,11 @@ public class JavaToolShield extends ToolShield {
 	private TBTermFactory tbfactory; 				// Term factory to be used.
 
 	private JavaToolBridge bridge;					// The bridge created for it
+	
+	private final int unitialized = -1;
+	private final int running = 0;
+	
+	private int toolState = unitialized;
 
 	/**
 	 * The constructor for JavaToolShield. 
@@ -70,26 +75,26 @@ public class JavaToolShield extends ToolShield {
 		this.className = toolDef.getClassName();
 		System.err.println("className = " + className);
 		toolbus = toolInstance.getToolBus();
+		
+		methodTable = new Hashtable<String, Method>();
+		tbfactory = toolInstance.getTBTermFactory();
+	}
+
+	synchronized public void executeTool() throws ToolBusException {
 		try {
 			URL[] urls = toolDef.getLoadPath();
 			URLClassLoader loader = new URLClassLoader(urls);
 			toolClass = Class.forName(className, false, loader);
 		} catch (ClassNotFoundException e) {
-			System.err.println(e);
+			throw new ToolBusError("while starting tool " + toolDef.getName() + ": class " + className + " not found");
 		}
-
-		methodTable = new Hashtable<String, Method>();
-		tbfactory = toolInstance.getTBTermFactory();
 
 		try {
 			toolConstructor = findConstructor();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		throw new ToolBusError("while starting tool " + toolDef.getName() + ": appropriate constructor cannot be found");
 		}
-	}
-
-	synchronized public void executeTool() {
+		
 		String actuals[] = new String[] { "-TB_PORT",
 				"" + toolbus.getWellKnownSocketPort(), "-TB_HOST",
 				toolbus.getLocalHost().getHostName(), "-TB_TOOL_NAME",
@@ -98,6 +103,7 @@ public class JavaToolShield extends ToolShield {
 
 		System.err.println("JavaToolShield.executeTool");
 		bridge = new JavaToolBridge(toolConstructor, toolInstance, actuals);
+		toolState = running;
 	}
 
 	/**
@@ -176,8 +182,10 @@ public class JavaToolShield extends ToolShield {
 	}
 
 	public void terminate(ATerm msg) {
-		System.err.println("JavaToolShield.terminate");
-		sndRequestToTool(ToolInstance.TERMINATE, msg);
+		if(toolState == running){
+			System.err.println("JavaToolShield.terminate");
+			sndRequestToTool(ToolInstance.TERMINATE, msg);
+		}
 	}
 
 	/**

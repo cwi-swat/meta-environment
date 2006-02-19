@@ -8,11 +8,11 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermList;
 

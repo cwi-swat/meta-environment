@@ -8,7 +8,7 @@ import java.io.StringWriter;
 import junit.framework.TestCase;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.exceptions.ToolBusException;
 
 public class TscriptTest extends TestCase {
 	private TBTermFactory tbfactory;
@@ -50,16 +50,18 @@ public class TscriptTest extends TestCase {
 
   private boolean runTest(String name) {
     StringWriter sout = new StringWriter();
-    ToolBus T = new ToolBus(new String[0], sout);
     try {
+      ToolBus T = new ToolBus(new String[0], sout);
       T.parse(dir + name + ".tb");
       T.execute();
     } catch (ToolBusException e) {
+    	System.err.println("runTest: "+ e.getMessage());
     }
 
     try {
       sout.close();
     } catch (IOException e) {
+    	System.err.println("runTest: "+ e.getMessage());
     }
     System.err.println("*** Output of " + name + ": \"" + sout.toString() + '"');
     return equalOutput(sout.toString(), dir + name + ".out");
@@ -121,7 +123,7 @@ public class TscriptTest extends TestCase {
   	assertTrue(runTest("Types"));
   }
 
-  public void xxtestNote() {
+  public void testNote() {
   	assertTrue(runTest("Notes"));
   }
   

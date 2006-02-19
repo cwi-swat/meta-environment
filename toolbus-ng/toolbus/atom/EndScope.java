@@ -1,9 +1,13 @@
 package toolbus.atom;
 
-import toolbus.Environment;
+import java.util.Stack;
+
+import toolbus.State;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
 import aterm.ATermList;
 
 public class EndScope extends Atom {
@@ -24,10 +28,15 @@ public class EndScope extends Atom {
 	 public void replaceFormals(Environment env) throws ToolBusException{
 		 return;
 	 }
+	 
+	 public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
+		 env.removeBindings(((ATermList) refformals.value)); 
+	 }
 
 	public boolean execute() throws ToolBusException {
 		if (isEnabled()) {
 			Environment env = getEnv();
+			System.err.println("EndScope.execute: " + env);
 			env.removeBindings(((ATermList) refformals.value));
 			return true;
 		} else

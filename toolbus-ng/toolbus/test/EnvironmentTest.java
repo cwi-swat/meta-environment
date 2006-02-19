@@ -1,10 +1,10 @@
 package toolbus.test;
 
 import junit.framework.TestCase;
-import toolbus.Environment;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -140,7 +140,7 @@ public class EnvironmentTest extends TestCase {
     TBTermVar rvarY = tbfactory.makeTBTermResVar("Y", intType);  
     TBTermVar rvarZ = tbfactory.makeTBTermResVar("Z", intType);  
     
-    assertTrue(tbfactory.isResVar(rvarX));
+    assertTrue(tbfactory.isResultVar(rvarX));
 
     ATermList declX = tbfactory.makeList(varX);
     env.introduceVars(declX);

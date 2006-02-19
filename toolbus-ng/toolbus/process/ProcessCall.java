@@ -6,11 +6,11 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -63,22 +63,16 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		return new ProcessCall(name, actuals, evalArgs, tbfactory);
 	}
 
-	//	public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-	//		//System.err.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
-	//		if (calls.contains(name)) {
-	//			throw new ToolBusException("recursive call of " + name);
-	//		}
-	//		processInstance = P;
-	//		definition = P.getToolBus().getProcessDefinition(name);
-	//		calls.push(name);
-	//		PE = definition.getProcessExpression(actuals);
-	//		//System.err.println("ProcessCall.expand(" + name + ") => " + PE);
-	//		calls.pop();
-	//	}
-
 	public void computeFirst() {
 		//System.err.println("ProcessCall.computeFirst: " + firstState);
 		setFirst(firstState);
+	}
+	
+	public void replaceFormals(Environment env) throws ToolBusException {
+		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
+		if(isStaticCall){
+			actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
+		}
 	}
 
 	public void compile(ProcessInstance P, Stack<String> calls,
@@ -100,25 +94,23 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 			//System.err.println("ProcessCall.compile(" + name + ", " + P + "," + PE + ")");
 			setFollow(follows);
 			formals = definition.getFormals();
-			actuals = (ATermList) tbfactory.resolveVars(actuals, env);
+			actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
+			
 			env.introduceBindings(formals, actuals, evalArgs);
+			actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
+
 			//System.err.println("ProcessCall.compile(" + name + "): " + env);
+			//System.err.println("actuals = " + actuals);
 			PE.computeFirst();
 			PE.replaceFormals(env);
-
 			PE.compile(P, calls, env, follows);
 			firstState = PE.getStartState();
 			env.removeBindings(formals);
-			calls.pop();
+			calls.pop();			
 		}
 	}
 
-	public void replaceFormals(Environment env) throws ToolBusException {
-		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
-		//if(isStaticCall){
-		//	PE.replaceFormals(env);
-		//}
-	}
+
 
 	public State getFirst() {
 		//System.err.println("ProcessCall.getFirst: " + firstState);
@@ -206,10 +198,10 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		}
 	}
 
-	public void addPartners(State s) {
+	public void addPartners(State s) throws ToolBusException {
 	}
 
-	public void delPartners(State s) {
+	public void delPartners(State s) throws ToolBusException {
 
 	}
 

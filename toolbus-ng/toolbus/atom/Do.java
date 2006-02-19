@@ -2,7 +2,7 @@ package toolbus.atom;
 
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.ToolBusException;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;

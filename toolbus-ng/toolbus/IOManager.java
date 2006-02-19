@@ -12,6 +12,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
 
+import toolbus.exceptions.ToolBusError;
 import toolbus.tool.ToolInstance;
 import toolbus.tool.classic.ClassicToolShield;
 import aterm.ATerm;
@@ -42,7 +43,7 @@ public class IOManager {
 	
 	private Selector selector;
 	
-	public IOManager(ToolBus toolbus){
+	public IOManager(ToolBus toolbus) throws ToolBusError{
 		this.toolbus = toolbus;
 		try {
 			localHost = InetAddress.getLocalHost();
@@ -56,20 +57,19 @@ public class IOManager {
 			WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
 		} catch (IOException e) {
-			System.err.println("Cannot create IOManager");
-			e.printStackTrace();
+			throw new ToolBusError("Cannot create IOManager: " + e.getMessage());
 		}
 
 		info("WellKnownSocket created: " + WellKnownSocket);
 	}
 	
-	public void closeConnections(){
+	public void closeConnections() throws ToolBusError{
 		try {
 		WellKnownSocket.close();
 		WellKnownSocketChannel.close();
 		selector.close();
 		} catch (IOException e) {
-			System.err.println(e);
+			throw new ToolBusError("Cannot create IOManager: " + e.getMessage());
 		}
 	}
 	

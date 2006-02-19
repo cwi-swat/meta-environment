@@ -2,67 +2,35 @@
  * @author paulk, Jul 19, 2002
  */
 
-package toolbus;
+package toolbus.environment;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-
+import toolbus.Functions;
+import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.ToolBusInternalError;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
-/**
- * Binding implements a (variable, value) pair.
- */
-
-class Binding {
-	TBTermVar var;
-	ATerm val;
-	boolean formal = false;
-	boolean assignable = false;
-	
-	public Binding(TBTermVar var, ATerm val, boolean isFormal) {
-		this.var = var;
-		this.val = val;
-		this.formal = isFormal;
-	}
-	public Binding(TBTermVar var, ATerm val) {
-		this(var, val, true);
-	}
-	
-	public boolean isFormal(){
-		return formal;
-	}
-	
-	public void setFormal(boolean b){
-		formal = b;
-	}
-	
-	public boolean isAssignable(){
-		return assignable;
-	}
-	
-	public void setAssignable(boolean b){
-		 assignable = b;
-	}
-}
 
 /**
  * Environments maintain a relation between variables and their values.
  */
 
 public class Environment {
-	protected Hashtable<String,Binding> bindings;
+	protected Bindings bindings;
 	private TBTermFactory tbfactory;
 
 	public Environment(TBTermFactory tbfactory) {
-		bindings = new Hashtable<String,Binding>(10);
+		bindings = new HashBindings();
 		this.tbfactory = tbfactory;
 	}
 	
 	public Environment copy() {
 		Environment env = new Environment(tbfactory);
-		env.bindings = (Hashtable<String,Binding>) bindings.clone();
+		env.bindings = bindings.clone();
 		return env;
 	}
 	
@@ -79,6 +47,7 @@ public class Environment {
 	 */
 
 	public void introduceVars(ATermList vars) throws ToolBusInternalError {
+		//System.err.println(this.hashCode() + " introduceVars: " + vars);
 		for( ; !vars.isEmpty(); vars = vars.getNext()){
 			ATerm t = vars.getFirst();
 			if (tbfactory.isAnyVar(t)) {
@@ -88,7 +57,7 @@ public class Environment {
 				throw new ToolBusInternalError("introduceVar illegal var: " + t);
 			}
 		}
-		//System.err.println("introduceVars(" + vars + ") yields:\n" + this);
+		//System.err.println(this.hashCode() + " introduceVars yields:" + this);
 	}
 
 	/**
@@ -102,17 +71,17 @@ public class Environment {
 	 *            list of actual values.
 	 */
 	public void introduceBinding(TBTermVar formalVar, ATerm actual, boolean isFormal) throws ToolBusException {
-		//System.err.println("introduceBinding: " + formalVar + ", " + actual);
+		//System.err.println(this.hashCode() + " introduceBinding: " + formalVar + ", " + actual);
 		actual = tbfactory.replaceFormals(actual, this);
 		//System.err.println("actual: " + actual);
 		if (tbfactory.isAnyVar(actual)){
 			TBTermVar actualVar = (TBTermVar) actual;
 		    if(!Functions.compatibleTypes(formalVar.getVarType(), actualVar.getVarType())) {
-		    	throw new ToolBusException("incompatible types for " + formalVar
+		    	throw new ToolBusError("incompatible types for " + formalVar
 					+ " and " + actualVar + " in " + this);
 		    }
 		}
-		if(formalVar.isResultVar() && !tbfactory.isResVar(actual)) {
+		if(formalVar.isResultVar() && !tbfactory.isResultVar(actual)) {
 				throw new ToolBusInternalError("illegal actual: " + actual);
 		} else {
 			bindings.put(formalVar.getVarName(), new Binding(formalVar, actual, isFormal));
@@ -156,6 +125,7 @@ public class Environment {
 	 */
 
 	public void removeBindings(ATermList formals) {
+		//System.err.println(this.hashCode() + "/" + bindings.hashCode() + " removeBindings: " + formals);
 		for( ; !formals.isEmpty(); formals = formals.getNext()){
 			ATerm first = formals.getFirst();
 			if(!tbfactory.isAnyVar(first)){
@@ -164,6 +134,7 @@ public class Environment {
 			TBTermVar formalVar = (TBTermVar) first;
 			bindings.remove(formalVar.getVarName());
 		}
+		//System.err.println(this.hashCode() + "/" + bindings.hashCode() + " removeBindings yields: " + this);
 	}
 
 	/**
@@ -198,15 +169,11 @@ public class Environment {
 		}
 	}
 
-	public ATerm getVarType(TBTermVar var) {
+	public ATerm getVarType(TBTermVar var) throws ToolBusError {
 		//System.err.println("getVarType(" + var + ");" + this);
 		String name = var.getVarName();
 		Binding b = bindings.get(name);
-	//	System.err.println("keys = " + bindings.keySet());
-	//	for(String s : bindings.keySet()){
-	//		System.err.println(name + "; " + s + " => " + name.equals(s));
-	//	
-	//	}
+	
 		ATerm res;
 		if(b == null){
 			//System.err.println("getVarType (b == null) => " + var.getVarType());
@@ -219,8 +186,9 @@ public class Environment {
 			//System.err.println("getVarType => " + var.getVarType());
 			res = var.getVarType();
 		}
-		if(((ATermAppl) res).getName() == "none"){
-			System.err.println("Undeclared var " + var);
+		
+		if((res.getType() == ATerm.APPL) && ((ATermAppl) res).getName() == "none"){
+			throw new ToolBusError("Undeclared variable " + var.getExternalVarName());
 		}
 		return res;
 	}
@@ -254,14 +222,14 @@ public class Environment {
 	 */
 
 	public ATerm getValue(TBTermVar var) throws ToolBusException {
-		//System.err.println("getValue(" + var + " in " + this + ")");
+		//System.err.println(this.hashCode() + " getValue(" + var + " in " + this + ")");
 
 		while(true){
 			String name = var.getVarName();
 			Binding b = bindings.get(name);
 			if(b == null){
-				return var;
-				//throw new ToolBusException(var + " has undefined value");
+				//return var;
+				throw new ToolBusError("variable " + var.getExternalVarName() + " has undefined value");
 			}
 			String bname = b.var.getVarName();
 			if (name.equals(bname)) {
@@ -278,19 +246,45 @@ public class Environment {
 	
 	public void setAssignable (TBTermVar var) throws ToolBusException {
 		Binding b = getBinding(var);
-		b.setAssignable(true);
-	}
-
-	public String toString() {
-		String res = "{", sep = "";
-		Enumeration all = bindings.elements();
-		while (all.hasMoreElements()) {
-			Binding b = (Binding) all.nextElement();
-			String op = b.isFormal() ? " :-> " : " : ";
-			res += sep + b.var + op + b.val;
-			sep = ", ";
+		if(b != null){
+			b.setAssignable(true);
+		} else {
+			throw new ToolBusInternalError("setAssignable: variable " + var.getExternalVarName() + " does not exist!");
 		}
-		return res + "}";
+	}
+	
+	public ATerm replaceFormal(TBTermVar v) throws ToolBusException {
+		//System.err.println("replaceFormal(" + v + "); " + this);
+		v = v.setVarType(getVarType(v));
+		Binding b = getBinding(v);
+		//System.err.println(b);
+		if (b == null || (b.val == tbfactory.Undefined)) {
+			//System.err.println("1. replaceFormals(" + v + ") => " + v);
+			return v;
+		} else if (b.isFormal()){
+			if(b.isAssignable() || tbfactory.isResultVar(b.val)){
+				//System.err.println("2. replaceFormal(" + v + ") => " + v);
+				return v;
+			}
+			if(tbfactory.isVar(b.val)) { //TODO: OK?
+				ATerm tmp = tbfactory.replaceFormals(b.val, this);
+				//System.err.println("3. replaceFormal(" + v + ") => " + tmp);
+				return tmp;
+			} else if(tbfactory.isResultVar(b.val)) { //TODO: OK?
+					ATerm tmp = tbfactory.replaceFormals(b.val, this);
+					//System.err.println("3. replaceFormal(" + v + ") => " + tmp);
+					return tmp;
+			} else {
+				//System.err.println("4. replaceFormal(" + v + ") => " + b.val);
+				return b.val;
+			}
+		}
+		//System.err.println("5. replaceFormal(" + v + ") => " + v);
+		return v;
+	}
+	
+	public String toString() {
+		return bindings.toString();
 	}
 }
 

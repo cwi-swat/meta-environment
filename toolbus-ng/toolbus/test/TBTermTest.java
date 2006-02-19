@@ -8,11 +8,11 @@ import java.io.FileReader;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermBlob;
 import aterm.ATermList;
@@ -29,9 +29,9 @@ public class TBTermTest extends TestCase {
 	TBTermVar var = tbfactory.makeTBTermVar("X", tbfactory.make("int"));
     TBTermVar rvar = tbfactory.makeTBTermResVar("X", tbfactory.make("int"));
     assertTrue(tbfactory.isVar(var));
-    assertTrue(!tbfactory.isResVar(var));
+    assertTrue(!tbfactory.isResultVar(var));
     
-    assertTrue(tbfactory.isResVar(rvar));
+    assertTrue(tbfactory.isResultVar(rvar));
     assertTrue(!tbfactory.isVar(rvar));
   }
 
@@ -125,6 +125,21 @@ public class TBTermTest extends TestCase {
 
     assertTrue(!doMatch("<list>", "f(1,2,3)"));
     assertTrue(!doMatch("f(1,2,3)", "<list>"));
+    
+    assertTrue(doMatch("<list(int)>", "[1,2,3]"));
+    assertTrue(doMatch("[1,2,3]", "<list(int)>"));
+    
+    assertTrue(!doMatch("<list(int)>", "[1.0,2.0,3.0]"));
+    assertTrue(!doMatch("[1.0,2.0,3.0]", "<list(int)>"));
+    
+    assertTrue(doMatch("<list(int,str,real)>", "[1,\"two\",3.0]"));
+    assertTrue(doMatch("[1,\"two\",3.0]", "<list(int,str,real)>"));
+    
+    assertTrue(!doMatch("<list(int,str,real)>", "[1,\"two\"]"));
+    assertTrue(!doMatch("[1,\"two\"]", "<list(int,str,real)>"));
+    
+    assertTrue(!doMatch("<list(int,str,real)>", "[1,\"two\",3]"));
+    assertTrue(!doMatch("[1,\"two\",3]", "<list(int,str,real)>"));
   }
   
   boolean doMatch(String s1, Environment e1, String s2, Environment e2) {

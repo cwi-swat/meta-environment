@@ -4,7 +4,7 @@ in
    N := 1 . 
    M := 2 . 
    printf("%d %d\n", N, M) . 
-   let N : int in N := 3 . printf("%d %d\n", N, M) endlet . 
+   let N2 : int in N2 := 3 . printf("%d %d\n", N2, M) endlet . 
    printf("%d %d\n", N, M)
 endlet
 

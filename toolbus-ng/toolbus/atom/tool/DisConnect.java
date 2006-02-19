@@ -7,9 +7,9 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 

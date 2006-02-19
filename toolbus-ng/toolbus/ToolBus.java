@@ -18,6 +18,9 @@ import java.util.Random;
 import java.util.Vector;
 
 import toolbus.atom.Atom;
+import toolbus.exceptions.ToolBusError;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.UnconnectedToolException;
 import toolbus.parser.ExternalParser;
 import toolbus.parser.TScriptParser;
 import toolbus.process.ProcessCall;
@@ -59,15 +62,14 @@ public class ToolBus {
 	private HashMap<String,ToolDefinition> tooldefs;
 
 	private HashSet<ATerm> atomSignature; // signature of all atoms in executing processes
-
-	// TODO: should this not be for ALL defined processes? 
+										   // TODO: should this not be for ALL defined processes? 
 	private TScriptParser parser;
 
 	private PrintWriter out;
 
-	private static int nerrrors = 0;
+	private int nerrors = 0;
 
-	private static int nwarnings = 0;
+	private int nwarnings = 0;
 
 	private LinkedList<ToolInstance> connectedTools;
 	
@@ -84,34 +86,38 @@ public class ToolBus {
 	/**
 	 * Execution of ToolBus as a Main program
 	 * @param args command line arguments
+	 * @throws ToolBusError 
 	 */
 	
-	public static void main(String[] args) {
-		ToolBus T = new ToolBus(args);
-		String ws = T.get("workspace.path");
+	public static void main(String[] args){
+		ToolBus T;
 		try {
-			T.parse(
-			  //"/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/toolbus/test.tb");
-				//	"/home/paulk/tmp/software/installed//share/meta/start-meta-pt-dumper.tb");
-			  //ws + "/toolbusNG/toolbus/tool/java/example1.tb");
- 			  //ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
-			  //ws + "/toolbusNG/toolbus/test/Notes.tb");
-			  ws + "/toolbusNG/toolbus/tmp.tb");
-			T.execute();
+			T = new ToolBus(args);
+			String ws = T.get("workspace.path");
+			if(T.parse(
+				  //"/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/toolbus/test.tb");
+					//	"/home/paulk/tmp/software/installed//share/meta/start-meta-pt-dumper.tb");
+				  //ws + "/toolbusNG/toolbus/tool/java/example1.tb");
+	 			  //ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
+				  //ws + "/toolbusNG/toolbus/test/Notes.tb");
+				  ws + "/toolbusNG/toolbus/tmp.tb")) {
+				T.execute();
+				Atom.statistics();
+			} 
+			
 		} catch (ToolBusException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
-		Atom.statistics();
 		
 		//System.err.println(T.getTBTermFactory().statistics());
 	}
 
 	/**
 	 * Constructor with explicit PrintWriter
+	 * @throws ToolBusError 
 	 */
 
-	public ToolBus(String[] args, PrintWriter out) {
+	public ToolBus(String[] args, PrintWriter out) throws ToolBusError {
 		tbfactory = new TBTermFactory();
 		this.out = out;
 		processes = new LinkedList<ProcessInstance>();
@@ -119,9 +125,9 @@ public class ToolBus {
 		tools = new Vector<ToolInstance>();
 		toolsIterator = null;
 		connectedTools = new LinkedList<ToolInstance>();
-		procdefs = new HashMap<String,ProcessDefinition>();
-		tooldefs = new HashMap<String,ToolDefinition>();
-		atomSignature = new HashSet<ATerm>();
+		procdefs = new HashMap<String,ProcessDefinition>(100);
+		tooldefs = new HashMap<String,ToolDefinition>(25);
+		atomSignature = new HashSet<ATerm>(1000);
 		
 		propertyManager = new PropertyManager(args);
 		
@@ -137,17 +143,19 @@ public class ToolBus {
 
 	/**
 	 * Constructor with implicit PrintWriter
+	 * @throws ToolBusError 
 	 */
 
-	public ToolBus(String[] args) {
+	public ToolBus(String[] args) throws ToolBusError {
 		this(args, new PrintWriter(System.out));
 	}
 
 	/**
 	 * Constructor with explicit StringWriter
+	 * @throws ToolBusError 
 	 */
 
-	public ToolBus(String[] args, StringWriter out) {
+	public ToolBus(String[] args, StringWriter out) throws ToolBusError {
 		this(args, new PrintWriter(out));
 	}
 
@@ -160,13 +168,13 @@ public class ToolBus {
 	
 	public String get(String p){
 		String r = propertyManager.get(p);
-		System.err.println("get(" + p + ") => " + r);
+		//System.err.println("get(" + p + ") => " + r);
 		return r;
 	}
 	
 	public String get(String p, String def){
 		String r = propertyManager.get(p,def);
-		System.err.println("get(" + p + ", " + def + ") => " + r);
+		//System.err.println("get(" + p + ", " + def + ") => " + r);
 		return r;
 	}
 
@@ -267,14 +275,18 @@ public class ToolBus {
 		return out;
 	}
 
-	public static void error(String src, String msg) {
-		System.err.println("ToolBus (" + src + "): " + msg);
-		nerrrors++;
+	public void error(String src, String msg) {
+		System.err.println(src + ": " + msg);
+		nerrors++;
 	}
 
-	public static void warning(String src, String msg) {
-		System.err.println("ToolBus (" + src + "): " + msg + " (warning)");
+	public void warning(String src, String msg) {
+		System.err.println(src + ": " + msg + " (warning)");
 		nwarnings++;
+	}
+	
+	public void clearErrorsAndWarnings(){
+		nerrors = nwarnings = 0;
 	}
 
 	/**
@@ -303,8 +315,13 @@ public class ToolBus {
 	 * Parse a Tscript from file and add definitions to this ToolBus.
 	 */
 
-	public void parse(String filename) throws ToolBusException {
-		parser.parse(filename);
+	public boolean parse(String filename) {
+		try {
+			parser.parse(filename);
+		} catch (ToolBusException e) {
+			error(filename, e.getMessage());
+		}
+		return nerrors == 0;
 	}
 
 	/**
@@ -312,10 +329,10 @@ public class ToolBus {
 	 */
 
 	public void addProcessDefinition(ProcessDefinition PD)
-			throws ToolBusException {
+			throws ToolBusError {
 		String name = PD.getName();
 		if(procdefs.containsKey(name)){
-			throw new ToolBusException("duplicate definition of process " + name);
+			throw new ToolBusError("duplicate definition of process " + name);
 		}
 		procdefs.put(name,PD);
 	}
@@ -324,10 +341,10 @@ public class ToolBus {
 	 * Add a tool definition.
 	 */
 
-	public void addToolDefinition(ToolDefinition TD) throws ToolBusException {
+	public void addToolDefinition(ToolDefinition TD) throws ToolBusError {
 		String name = TD.getName();
 		if(tooldefs.containsKey(name)){
-			throw new ToolBusException("duplicate definition of tool " + name);
+			throw new ToolBusError("duplicate definition of tool " + name);
 		} else {
 			tooldefs.put(name, TD);
 			TD.setToolBus(this);
@@ -411,11 +428,11 @@ public class ToolBus {
 	 */
 
 	public ProcessDefinition getProcessDefinition(String name)
-			throws ToolBusException {
+			throws ToolBusError {
 		if(procdefs.containsKey(name)){
 			return procdefs.get(name);
 		} else {
-			throw new ToolBusException("no definition for process " + name);
+			throw new ToolBusError("No definition for process " + name);
 		}
 	}
 
@@ -424,12 +441,12 @@ public class ToolBus {
 	 */
 
 	public ToolDefinition getToolDefinition(String name)
-			throws ToolBusException {
+			throws ToolBusError {
 		//System.err.println("getToolDefinition: " + name);
 		if(tooldefs.containsKey(name)){
 			return tooldefs.get(name);
 		}
-		throw new ToolBusException("no definition for tool " + name);
+		throw new ToolBusError("No tool definition for tool " + name);
 	}
 
 	public void addToSignature(ATerm asig) {
@@ -459,9 +476,10 @@ public class ToolBus {
 
 	/**
 	 * Shutdown of this ToolBus.
+	 * @throws ToolBusException 
 	 */
 
-	synchronized public void shutdown(ATerm msg) {
+	synchronized public void shutdown(ATerm msg) throws ToolBusException {
 
 		for (ProcessInstance pi : processes) {
 			pi.terminate(msg);
@@ -480,13 +498,19 @@ public class ToolBus {
 
 	/**
 	 * Execute all the processes in this ToolBus.
+	 * @throws ToolBusException 
 	 */
 
-	public void execute() {
+	public void execute() throws ToolBusException {
+		if(nerrors > 0){
+			System.err.println("ToolBus cannot continue execution due to errors in Tscript");
+			return;
+		}
+		System.err.println("ToolBus execution starts ...\n");
 		int passes = 0;
 		int noWorkPasses = 0;
 		int toolinputPasses = 0;
-
+		String processName = "";
 		try {
 			boolean work = true;
 			while (true) {
@@ -500,6 +524,7 @@ public class ToolBus {
 			
 					while(processesIterator.hasNext()){
 						ProcessInstance P = processesIterator.next();
+						processName = P.getProcessName();
 						work |= P.step();
 						if (P.isTerminated()) {
 							System.err.println(P.getProcessName() + " terminated, total = " + processes.size());
@@ -533,15 +558,13 @@ public class ToolBus {
 						toolinputPasses += 1;
 					}
 				} else {
-					shutdown(tbfactory.make("ToolBus Halted"));
+					shutdown(tbfactory.make("ToolBus_Halted"));
 					return;
 				}
 			}
 		} catch (ToolBusException e) {
-			System.err.println("Exception in ToolBus.execute");
-			System.err.println(e.getMessage());
-			e.printStackTrace();
+			error("Process " + processName, e.getMessage());
 		}
-		shutdown(tbfactory.make("ToolBus halted"));
+		shutdown(tbfactory.make("ToolBus_Halted"));
 	}
 }

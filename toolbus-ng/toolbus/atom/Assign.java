@@ -5,12 +5,12 @@ package toolbus.atom;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -34,19 +34,21 @@ public class Assign extends Atom {
   
   public void replaceFormals(Environment env) throws ToolBusException {
   	//System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
-  	var.value = tbfactory.resolveVars(var.value, env);
+  	//System.err.println("env = " + env);
+  	var.value = tbfactory.resolveVarTypes(var.value, env);
+ 	env.setAssignable((TBTermVar)var.value);
+
  	//System.err.println("Assign.replaceformals: " + var.value);
   	var.value = tbfactory.replaceAssignableVar((TBTermVar)var.value, env);
-  	env.setAssignable((TBTermVar)var.value);
-  	
-    exp.value = tbfactory.resolveVars(exp.value, env);
+
+    exp.value = tbfactory.resolveVarTypes(exp.value, env);
     exp.value = tbfactory.replaceFormals(exp.value, env);
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
  }
 
   public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
     super.compile(P, calls, env, follow);
-    //System.err.println("Assign.compile: " + this + " env =" + getEnv());
+    //System.err.println("Assign.compile: " + this + " env = " + getEnv());
     if (!tbfactory.isAnyVar(var.value))
       throw new ToolBusException("left-hand side of := should be a variable");
     ATerm vartype = ((TBTermVar)var.value).getVarType();
@@ -58,7 +60,7 @@ public class Assign extends Atom {
     //System.err.println(this + "; exp = " + exp.value + "; exptype = " + exptype);
 
     if (!Functions.compatibleTypes(vartype, exptype) )// lhs = term!
-      throw new ToolBusException(" wrong types in assignment: " + vartype + " := " + exptype);
+      throw new ToolBusException("wrong types in assignment: " + vartype + " := " + exptype);
   }
 
   public boolean execute() throws ToolBusException {

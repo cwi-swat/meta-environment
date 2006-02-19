@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import toolbus.Environment;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.AFun;
 import aterm.ATerm;
 import aterm.ATermAppl;
@@ -69,7 +69,7 @@ public class ToolInstance {
     toolShield = toolDef.makeToolShield(this);
   }
   
-  public void executeTool(){
+  public void executeTool() throws ToolBusException{
 	  toolShield.executeTool();
   }
 

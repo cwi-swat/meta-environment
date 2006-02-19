@@ -7,6 +7,8 @@ import java.util.IdentityHashMap;
 import java.util.Vector;
 
 import toolbus.atom.Atom;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 
 
@@ -48,13 +50,13 @@ public class State {
     }
   }
   
-  public void addPartners(State set){
-	  for(StateElement e : set.getElementsAsVector()){
+  public void addPartners(State set) throws ToolBusException {
+	  for(StateElement e : elements){
 		  e.addPartners(set);
 	  }
   }
   
-  public void delPartners(State set){
+  public void delPartners(State set) throws ToolBusException{
 	  for(StateElement e : set.getElementsAsVector()){
 		  e.delPartners(set);
 	  }
@@ -163,11 +165,7 @@ public class State {
 
       if (a.execute()) {
       	lastElement = index;
- 
-        //if (ToolBus.isVerbose()) {
-           //ProcessInstance pa = a.getProcess();
-          //System.err.println("--- " + pa.getProcessId() + " / " + a.toString());
-       // }
+
         return true;
       }
     }
