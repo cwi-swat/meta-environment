@@ -6,10 +6,11 @@
 package toolbus.atom.note;
 
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
 import aterm.ATerm;
 
 /**
@@ -32,8 +33,11 @@ public class RecNote extends Atom {
 	}
 
 	public boolean execute() throws ToolBusException {
-		if (isEnabled()
-				&& getProcess().getNoteFromQueue(this.msgpat.value, getEnv())) {
+		ProcessInstance pi = getProcess();
+		if(!pi.hasNotes()){
+			return false;
+		}
+		if (isEnabled() && pi.getNoteFromQueue(this.msgpat.value, getEnv())) {
 			return true;
 		} else {
 			return false;

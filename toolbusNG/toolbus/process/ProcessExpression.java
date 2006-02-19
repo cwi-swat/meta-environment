@@ -2,11 +2,11 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 
 /**
  * ProcesssExpression defines the overall behaviour of process expressions.
@@ -32,7 +32,6 @@ abstract public class ProcessExpression {
 	}
 
 	protected void setFirst(State first) {
-		//System.err.println("setFirst: " + first);
 		this.first = first;
 	}
 
@@ -55,16 +54,13 @@ abstract public class ProcessExpression {
 	protected void addToFollow(State set) {
 		follow = follow.union(set);
 	}
-
-//	abstract public void expand(ProcessInstance processInstance, Stack calls)
-//			throws ToolBusException;
 	
 	abstract public void computeFirst();
+	
+	abstract public void replaceFormals(Environment env) throws ToolBusException;
 
 	abstract public void compile(ProcessInstance processInstance, Stack<String> calls, Environment env, State followSet)
 			throws ToolBusException;
-	
-	abstract public void replaceFormals(Environment env) throws ToolBusException;
 
 	abstract public ProcessExpression copy();
 

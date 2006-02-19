@@ -6,10 +6,10 @@
 package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
-import toolbus.UnconnectedToolException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.UnconnectedToolException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;

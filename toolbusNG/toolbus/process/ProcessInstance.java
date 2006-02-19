@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.Stack;
 import java.util.Vector;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -46,6 +46,8 @@ public class ProcessInstance {
 	private LinkedList<ATerm> subscriptions;
 
 	private LinkedList<ATerm> notes;
+	
+	int noteCnt = 0;
 
 	private boolean running = true;
 
@@ -68,14 +70,18 @@ public class ProcessInstance {
 		//   env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
 
 		call.computeFirst();
-		call.compile(this, new Stack(), env, empty);
+		call.compile(this, new Stack<String>(), env, empty);
 		currentState = call.getStartState();
 		currentState.activate();
+		
+		//System.err.println("ProcessInstance: " + env);
 
 		elements = call.getAtoms();
-
+		//System.err.println("Process " + this.getProcessName() + " elements = " + elements);
+		
 		for (ProcessInstance P : TB.getProcesses()) {
 			if (P != this) {
+				//System.err.println("Process " + this.getProcessName() + " adds partners to " + P.getProcessName());
 				P.addPartners(elements);
 			}
 		}
@@ -136,7 +142,7 @@ public class ProcessInstance {
 		return processName;
 	}
 
-	public void terminate(ATerm msg) {
+	public void terminate(ATerm msg) throws ToolBusException {
 		running = false;
 		for (ProcessInstance P : toolbus.getProcesses()) {
 			if (P != this) {
@@ -145,13 +151,14 @@ public class ProcessInstance {
 		}
 	}
 
-	public void addPartners(State a) {
+	public void addPartners(State a) throws ToolBusException {
 		for (StateElement e : elements.getElementsAsVector()) {
+			//System.err.println("ProcessInstance: " + e);
 			e.addPartners(a);
 		}
 	}
 
-	public void delPartners(State a) {
+	public void delPartners(State a) throws ToolBusException {
 		for (StateElement e : elements.getElementsAsVector()) {
 			e.delPartners(a);
 		}
@@ -162,6 +169,7 @@ public class ProcessInstance {
 	 */
 
 	public void subscribe(ATerm pat) {
+		//System.err.println("subscribe: " + pat);
 		subscriptions.add(pat);
 	}
 
@@ -175,6 +183,7 @@ public class ProcessInstance {
 		for (ATerm note : notes) {
 			if (tbfactory.match(note, env, pat, env)) {
 				notes.remove();
+				noteCnt--;
 				return true;
 			}
 		}
@@ -183,6 +192,7 @@ public class ProcessInstance {
 
 	public boolean noNoteInQueue(ATerm pat, Environment env)
 			throws ToolBusException {
+		System.err.println("noNoteinQueue: " + pat);
 		for (ATerm note : notes) {
 			if (tbfactory.match(note, env, pat, env)) {
 				// TODO: What do we do with changes in env???
@@ -193,13 +203,19 @@ public class ProcessInstance {
 	}
 
 	public boolean putNoteInQueue(ATerm note) throws ToolBusException {
+		System.err.println("putNoteinQueue: " + note);
 		for (ATerm sub : subscriptions) {
 			if (tbfactory.mightMatch(sub, note)) {
 				notes.addLast(note);
+				noteCnt++;
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public boolean hasNotes(){
+		return noteCnt > 0;
 	}
 
 	public State getProcessState() {

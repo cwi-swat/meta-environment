@@ -1,7 +1,7 @@
 package toolbus.atom;
 
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 
 /**

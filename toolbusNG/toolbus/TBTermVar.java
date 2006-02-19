@@ -5,7 +5,6 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 
 
-
 public class TBTermVar extends AbstractTBTerm {
 
 	public TBTermVar(TBTermFactory tbfactory) {
@@ -35,6 +34,16 @@ public class TBTermVar extends AbstractTBTerm {
 
 	public String getVarName() {
 		return ((ATermAppl) getArgument(1)).getName();
+	}
+	
+	public String getExternalVarName(){
+		String name = getVarName();
+		int i = name.indexOf('$');
+		if(i > 0){
+			return name.substring(0, i);
+		} else {
+			return name;
+		}
 	}
 
 	public ATerm getVarType() {

@@ -1,6 +1,0 @@
-
-#include "tmp0.tb"
-
-process P is printf("P\n")
-
-toolbus(P, Q)

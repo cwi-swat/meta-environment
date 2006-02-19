@@ -1,4 +1,5 @@
-package toolbus;
+package toolbus.exceptions;
+
 
 /**
  * @author paulk, Aug 7, 2002

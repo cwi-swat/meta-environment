@@ -5,13 +5,13 @@ package toolbus.atom;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -40,7 +40,7 @@ public class Create extends Atom {
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");
-    if (!tbfactory.isResVar(rvar.value))
+    if (!tbfactory.isResultVar(rvar.value))
       throw new ToolBusException("second argument of create should be a result variable");
   }
 

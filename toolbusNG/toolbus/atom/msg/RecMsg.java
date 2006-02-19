@@ -1,8 +1,10 @@
 package toolbus.atom.msg;
 
+import toolbus.State;
+import toolbus.StateElement;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import aterm.ATerm;
 
@@ -16,21 +18,26 @@ public class RecMsg extends MsgAtom {
     super(msg, tbfactory);
   }
   
- //  public RecMsg(ATerm msg, ATerm qual, TBTermFactory tbfactory) {
- //   super(msg, qual, tbfactory);
- // }
-  
   public ProcessExpression copy(){
     Atom a = new RecMsg(getMsg(), tbfactory);
     a.copyAtomAttributes(this);
     return a;
   }
   
-  public boolean canCommunicate(MsgAtom a) {
-		return (getProcess() != a.getProcess() &&
-				a instanceof SndMsg
-				 && tbfactory.mightMatch(getMsg(), a.getMsg()));
+  public boolean canCommunicate(SndMsg a) throws ToolBusException {
+		return tbfactory.mightMatch(getMsg(), a.getMsg());
 	}
+  
+  public void addPartners(State set) throws ToolBusException {
+	for (StateElement b : set.getElementsAsVector()) {
+		if (b instanceof SndMsg) {
+			SndMsg cb = (SndMsg) b;
+			if (this.canCommunicate(cb)) {
+				cb.addMsgPartner(this);
+			}
+		}
+	}
+  }
 	
   public boolean execute() throws ToolBusException {
 	  // Communication is always initiated by the sender,

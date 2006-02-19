@@ -32,17 +32,20 @@ process B is
 	subscribe(nt) . subscribe(nt(<int>)) . subscribe(nt(<int>, <int>)) .
         subscribe(<list(int)>) . subscribe(<list(real)>) .
 	rec-msg(begin) .
+
 	rec-note(nt) .
 	rec-note(nt(1)) .
 	rec-note(nt(1)) .
 	rec-note(nt(2)) .
 	rec-note(nt(20)) .
 	rec-note(nt(10)) .
+
 	X := 30 .
-	rec-note(nt(X, Y?)) . CHK(1, Y, 40) .
+	rec-note(nt(X, Y?)) . CHK(1, Y, 40) .		
 	rec-note(L1?) .
 	rec-note(L2?) .
 	X := 55 .
+
 	no-note(nt(X)) .
 	rec-msg(nt(65)) .
 	( no-note(nt(65)) . printf("No note fails\n")

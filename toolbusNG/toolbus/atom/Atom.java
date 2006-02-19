@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
-import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.AFun;
@@ -128,10 +128,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return getFirst();
   }
 
-  public void setTest(ATerm test, Environment env) throws ToolBusException {
+  public void setTest(ATerm test, Environment e) throws ToolBusException {
   	if(test != null){
-  		env = env.copy();
-	    ATerm rtst = tbfactory.resolveVars(test, env);
+  		env = e.copy();  //TODO OK?
+	    ATerm rtst = tbfactory.resolveVarTypes(test, env);
 	    if (tests == null)
 	    	tests = new Vector<Test>(3);
 	    Test t = new Test(rtst, env);
@@ -216,23 +216,27 @@ abstract public class Atom extends ProcessExpression implements StateElement {
  // public void expand(ProcessInstance P, Stack calls) {}
   
   public void computeFirst() {}
+  
+  public void replaceFormals(Environment e) throws ToolBusException{
+		 this.env = e.copy(); ///////
+		 //System.err.println("Atom.replaceFormals: " + env);
+	  	 for (int i = 0; i < atomArgs.length; i++) {
+	        //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
+	        ATerm arg = tbfactory.resolveVarTypes(atomArgs[i].value, env);
+	        arg = tbfactory.replaceFormals(arg, env);
+	        //System.err.println("atomArg[" + i + "] = " + atomArgs[i].value + " => " + arg + "; env = " + env);
+	        atomArgs[i].value = arg;
+	      }
+	  }
 
   public void compile(ProcessInstance processInstance, Stack<String> calls, Environment env, State follow) throws ToolBusException {
   	this.processInstance = processInstance;
+  	//this.env = env.copy();
+  	//System.err.println("Atom.compile, prev env = " + env);
   	this.env = env.copy();
     setFollow(follow);
-    //System.err.println("Compiling " + this + ";\n env = " + env);
-    replaceFormals(env);
-  }
-  
-  public void replaceFormals(Environment env) throws ToolBusException{
-  	 for (int i = 0; i < atomArgs.length; i++) {
-        //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
-        ATerm arg = tbfactory.resolveVars(atomArgs[i].value, env);
-        arg = tbfactory.replaceFormals(arg, env);
-        //System.err.println("atomArg[" + i + "] = " + atomArgs[i].value + " => " + arg + "; env = " + env);
-        atomArgs[i].value = arg;
-      }
+    //System.err.println("Compiling " + this + ";\n env = " + this.env);
+    //replaceFormals(env);  //TODO redundant?
   }
 
   // Implementation of the StateElement interface
@@ -279,10 +283,10 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return processInstance;
   }
   
-  public void addPartners(State s){
+  public void addPartners(State s) throws ToolBusException{
   }
   
-  public void delPartners(State s){
+  public void delPartners(State s) throws ToolBusException{
   }
 
   public State getNextState(){
@@ -296,7 +300,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	if(this.equals(b)){
   		return getFollow();
   	}
-  	System.err.println("Atom.getNextState2: wrong arg: " + b);
+  	System.err.println("Atom.getNextState2: wrong arg: " + b);  //TODO exception
   	return null;
   }
   

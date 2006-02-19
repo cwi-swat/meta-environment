@@ -6,10 +6,10 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 
 public class Alternative extends ProcessExpression {
   private ProcessExpression left, right;

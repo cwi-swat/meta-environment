@@ -6,15 +6,15 @@ package toolbus.atom.tool;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import toolbus.tool.ToolInstance;
@@ -45,7 +45,7 @@ public class Execute extends Atom {
 	 
 	    if (tool.value.getType() != ATerm.APPL)
 	      throw new ToolBusException("malformed first argument in execute");
-	    if (!tbfactory.isResVar(rvar.value))
+	    if (!tbfactory.isResultVar(rvar.value))
 	      throw new ToolBusException("second argument of execute should be a result variable");
 	    if(!Functions.compatibleTypes(tool.value, rvar.value))
 	      throw new ToolBusException("arguments of execute should have the same (tool) type");

@@ -2,12 +2,12 @@ package toolbus.process;
 
 import java.util.Stack;
 
-import toolbus.Environment;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.ToolBus;
-import toolbus.ToolBusException;
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 
 /**
@@ -209,12 +209,12 @@ public class Merge extends ProcessExpression implements StateElement {
 		return "Merge(" + state[LEFT] + "; " + state[RIGHT] + ")";
 	}
 
-	public void addPartners(State s) {
+	public void addPartners(State s) throws ToolBusException {
 		state[LEFT].addPartners(s);
 		state[RIGHT].addPartners(s);
 	}
 
-	public void delPartners(State s) {
+	public void delPartners(State s) throws ToolBusException {
 		state[LEFT].delPartners(s);
 		state[RIGHT].delPartners(s);
 	}

@@ -1,5 +1,5 @@
 process P is
 let N : int in
-    N := X
-endlet
+   N := "abc"
+   endlet
 toolbus(P)

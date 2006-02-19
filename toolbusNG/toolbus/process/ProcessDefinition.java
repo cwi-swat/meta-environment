@@ -3,9 +3,11 @@
  */
 
 package toolbus.process;
+import toolbus.Functions;
 import toolbus.TBTermFactory;
-import toolbus.ToolBusException;
+import toolbus.TBTermVar;
 import toolbus.atom.EndScope;
+import toolbus.exceptions.ToolBusError;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -36,18 +38,22 @@ public class ProcessDefinition {
   	return formals;
   }
 
-  public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusException {
+  public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusError {
+	  //System.err.println("formals = " + formals + "; actuals = " + actuals);
     if (actuals.getLength() != formals.getLength()) {
-      throw new ToolBusException(name + ": mismatch " + formals + " and " + actuals);
+      throw new ToolBusError("process " + name + ": mismatch between formals " + formals + " and actuals " + actuals);
     }
     for (int i = 0; i < actuals.getLength(); i++) {
-      ATerm formal = (ATerm) formals.getChildAt(i);
+      TBTermVar formal = (TBTermVar) formals.getChildAt(i);
       ATerm actual = (ATerm) actuals.getChildAt(i);
-      if (tbfactory.isResVar(formal) && !tbfactory.isResVar(actual)) {
-        throw new ToolBusException(name + ": mismatch " + formal + " and " + actual);
+      if (tbfactory.isResultVar(formal) && !tbfactory.isResultVar(actual)) {
+        throw new ToolBusError("process " + name + ": mismatch between formal " + formal + " and actual " + actual);
       }
+      if(!Functions.compatibleTypes(formal,actual))
+    	  throw new ToolBusError("argument #" + (i+1) + " of process " + name + " should have type " + formal.getVarType()
+    			                  + " instead of " + actual);
     };
-    ProcessExpression PE1 = new Sequence(PE.copy(), new EndScope(formals, tbfactory), tbfactory);
+    ProcessExpression PE1 = PE.copy();
     return PE1;
   }
 

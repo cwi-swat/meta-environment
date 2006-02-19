@@ -32,8 +32,8 @@ process P(Tid : display, L : int, I : int, R : int, Dstart : real, Estart : real
      ( 
        (  rec-msg(exc(L, I, AL?))        %% receive amplitude of left neighbour
        || rec-msg(exc(R, I, AR?))        %% receive amplitude of right neighbour
-       || snd-msg(exc(I, L, E))         %% send own amplitude to left neighbour
-       || snd-msg(exc(I, R, E))         %% send own amplitude to right neighbour
+       || snd-msg(exc(I, L, E))          %% send own amplitude to left neighbour
+       || snd-msg(exc(I, R, E))          %% send own amplitude to right neighbour
        || snd-do(Tid, update(I, E))      %% update own amplitude on the display
  %%      || printf("update(%t,%t)\n", I, E)
       ) .

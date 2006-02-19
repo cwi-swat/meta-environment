@@ -5,6 +5,9 @@ package toolbus;
 
 import java.util.Vector;
 
+import toolbus.environment.Environment;
+import toolbus.exceptions.ToolBusException;
+
 import aterm.ATerm;
 
 /**
@@ -41,7 +44,7 @@ public class MatchResult {
     deltaRight.assign(rvar, val);
   }
   
-  public void updateEnvs(){
+  public void updateEnvs() throws ToolBusException{
     deltaLeft.update(left,right);
     deltaRight.update(right,left);
   }
@@ -84,18 +87,12 @@ class DeltaEnvironment {
     return true;
   }
 
-  public void update(Environment enva, Environment envb) {
+  public void update(Environment enva, Environment envb) throws ToolBusException {
 	int dsize = dict.size();
     for (int i = 0; i < dsize; i += 2) {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
-      //System.err.println("DeltaEnvironment.update variable " + var + " with value " + val);
-      try {
-		enva.assignVar((TBTermVar)var, tbfactory.substitute(val, envb));
-	} catch (ToolBusException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	  enva.assignVar((TBTermVar)var, tbfactory.substitute(val, envb));
     }
   }
 }

@@ -1,10 +1,10 @@
 package toolbus.atom.tool;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.ToolBusException;
-import toolbus.UnconnectedToolException;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
+import toolbus.exceptions.ToolBusException;
+import toolbus.exceptions.UnconnectedToolException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
 import aterm.ATerm;
@@ -39,7 +39,7 @@ public class RecVal extends Atom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    
+
     if(toolInstance == null){
 		ATerm tid = getEnv().getValue((TBTermVar)toolId.value);
 		if(tid == tbfactory.Undefined)

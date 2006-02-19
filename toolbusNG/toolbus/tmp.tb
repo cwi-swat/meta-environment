@@ -1,9 +1,0 @@
-process P is 
-let S : str
-in S := get-property("include.path") .
-   printf("include.path = %s\n", S) .
-   S := get-property("def") .
-   printf("def = %s\n", S)
-endlet
-
-toolbus(P)

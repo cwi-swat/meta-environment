@@ -3,6 +3,7 @@ package toolbus.tool;
 import java.io.IOException;
 
 import toolbus.TBTermFactory;
+import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -43,8 +44,9 @@ public abstract class ToolShield {
 	
 	/**
 	 * Start the actual execution of the tool
+	 * @throws ToolBusException TODO
 	 */
-	abstract public void executeTool();
+	abstract public void executeTool() throws ToolBusException;
 	
 	/**
 	 * Connect an executing tool
