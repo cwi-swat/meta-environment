@@ -9,6 +9,8 @@
 #include <asfc.idef>
 #include <asfchecker.idef>
 #include <term-utils.tb>
+#include <sdf-utils.tb>
+#include <asfsdfchecker.idef>
 
 #define ASF_TREE_CACHE "asf-annotated-tree"
 
@@ -48,35 +50,34 @@ in
   )
 endlet
 
-process CheckSyntaxSpecification(ModuleId : term) is
+process CheckASFSDFSyntax(ModuleId : term) is
 let
   Syntax    : term,
   ErrorMessage : str,
   Feedback  : term,
-  Id : int,
   Modulename : str,
   Summary: term,
   Errors: list
 in
-  Id := process-id .
-  snd-msg(get-all-syntax-definitions(ModuleId, eqs)) .
-  (
-    rec-msg(syntax(Syntax?)) 
-    . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
+  printf("checking!\n")
+  . GetSyntaxDefinition(ModuleId, Syntax?)
+  .
+  if not-equal(Syntax, UNDEFINED) then
+    MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
     . snd-msg(check-asfsdf(Syntax, Modulename)) 
-    . rec-msg(feedback(Feedback?)) 
+    . rec-msg(checked-asfsdf(Feedback?)) 
     . snd-msg(convert-feedback(Feedback)) 
     . rec-msg(converted-feedback(Summary?)) 
     . snd-msg(get-summary-errors(Summary)) 
     . rec-msg(summary-errors(Errors?)) 
-    . snd-msg(es-make-summary("sdf-checker", Modulename, Errors)) 
+    . snd-msg(es-make-summary("asfsdf-checker", Modulename, Errors)) 
     . rec-msg(es-summary(Summary?)) 
-    . snd-msg(ui-remove-feedback-summary("sdf-checker", Modulename)) 
+    . snd-msg(ui-remove-feedback-summary("asfsdf-checker", Modulename)) 
     . snd-msg(ui-show-feedback-summary(Summary))
     . Syntax := UNDEFINED
-  +
-    rec-msg(no-syntax(ErrorMessage?))
-  )
+  else
+    tau
+  fi
 endlet
 
 process CheckASFModule(ModuleId: term) is
@@ -656,19 +657,6 @@ in
     )
   )
 endlet
-
-process CheckModuleConsistency(Modulename: str) is
-let
-  Directory: str,
-  Path: str,
-  Type: term
-in
-  snd-msg(get-path-from-db(Modulename))
-  . rec-msg(path(Path?))
-  . CheckSyntaxConsistency(Modulename, Path, sdf)
-  . CheckEquationConsistency(Modulename, Path)
-endlet
-
 
 process PrintModule is
 let
