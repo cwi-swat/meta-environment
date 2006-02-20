@@ -14,33 +14,15 @@ import aterm.ATermList;
 
 public class StudioMenuBar extends JMenuBar {
     public void addMenuPath(ATerm menuPath, Action action) {
-
-        ATermList menuItems = (ATermList) ((ATermAppl) menuPath).getArgument(0);
-
-        ATerm menuItem = menuItems.getFirst();
-        String text = ((ATermAppl) menuItem).getName();
-        JMenu menu = addMenu(text);
-
-        menuItems = menuItems.getNext();
-        while (menuItems.getLength() > 1) {
-            text = ((ATermAppl) menuItems.getFirst()).getName();
-            JMenu menuExists = findSubMenu(menu, text);
-            if (menuExists == null) {
-                menuExists = new JMenu(text);
-                menu.add(menuExists);
-            }
-            menu = menuExists;
-            menuItems = menuItems.getNext();
-        }
-
-        text = ((ATermAppl) menuItems.getFirst()).getName();
-        JMenuItem leaf = new JMenuItem(action);
-        leaf.setText(text);
-        menu.add(leaf);
+        createMenu(menuPath, action, null);
     }
 
-    public void addMenuPath(ATerm menuPath, Action action, KeyStroke keyStroke) {
 
+    public void addMenuPath(ATerm menuPath, Action action, KeyStroke keyStroke) {
+        createMenu(menuPath, action, keyStroke);
+    }
+
+    private void createMenu(ATerm menuPath, Action action, KeyStroke keyStroke) {
         ATermList menuItems = (ATermList) ((ATermAppl) menuPath).getArgument(0);
 
         ATerm menuItem = menuItems.getFirst();
@@ -62,7 +44,9 @@ public class StudioMenuBar extends JMenuBar {
         text = ((ATermAppl) menuItems.getFirst()).getName();
         JMenuItem leaf = new JMenuItem(action);
         leaf.setText(text);
-        leaf.setAccelerator(keyStroke);
+	if (keyStroke != null) {
+	    leaf.setAccelerator(keyStroke);
+	}
         menu.add(leaf);
     }
 

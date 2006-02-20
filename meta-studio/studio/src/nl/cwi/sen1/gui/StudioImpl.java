@@ -580,11 +580,9 @@ public class StudioImpl implements Studio, GuiTif {
 
     public void addComponentMenu(StudioComponent component, ATerm menuPath,
             Action action) {
-        List menus = (List) componentMenus.get(component);
-        if (menus == null) {
-            menus = new LinkedList();
-        }
-        menus.add(new MenuItem(menuPath, action));
+	MenuItem item = new MenuItem(menuPath, action);
+	List menus = getMenus(component);
+        menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();
@@ -592,16 +590,21 @@ public class StudioImpl implements Studio, GuiTif {
 
     public void addComponentMenu(StudioComponent component, ATerm menuPath,
             KeyStroke keyStroke, Action action) {
-        List menus = (List) componentMenus.get(component);
-        if (menus == null) {
-            menus = new LinkedList();
-        }
         MenuItem item = new MenuItem(menuPath, action);
         item.setAccelerator(keyStroke);
+	List menus = getMenus(component);
         menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();
+    }
+
+    private List getMenus(StudioComponent component) {
+        List menus = (List) componentMenus.get(component);
+        if (menus == null) {
+            menus = new LinkedList();
+        }
+        return menus;	
     }
 
     public void addComponentStatusBar(StudioComponent component,
