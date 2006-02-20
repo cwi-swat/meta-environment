@@ -154,20 +154,23 @@ process SDFModuleIdentifier is
 let
   Event: attribute-changed-event,
   ModuleId: term,
-  Tree: term
+  Tree: term,
+  Result: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,parsed)
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
-    . SDFIdentifyModule(ModuleId)
+    . SDFIdentifyModule(ModuleId, Result?)
+    . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", Result)
   )
   *
   delta
 endlet
 
 toolbus(SDFModuleIdentifier)
+
 
 
 process SDFSetModuleImports is

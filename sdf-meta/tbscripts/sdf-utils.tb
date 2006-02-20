@@ -344,72 +344,6 @@ in
   . rec-msg(saved-module(Modulename, Status?))
 endlet
 
-process AddImportInDB(Modulename: str, Import: str) is
-  snd-msg(add-import-in-db(Modulename, Import))
-  . rec-msg(add-import-done(Modulename))
-
-process RemoveImportInDB(Modulename: str, Import: str) is
-  snd-msg(remove-import-in-db(Modulename, Import))
-  . rec-msg(remove-import-done)
-
-process CheckSyntaxConsistency(Modulename: str, Path: str, Type: term) is
-let
-  Filename: str,
-  FileText: str,
-  Tree: term,
-  DependingModules: list,
-  Imports: list,
-  Error: term,
-  Extension: str
-in
-  snd-msg(file-extension-hook(Type))
-  . rec-msg(file-extension-hook-result(Extension?))
-  . snd-msg(io-get-filename(Path, Modulename, Extension))
-  . rec-msg(io-filename(Filename?))
-  . snd-msg(io-exists-file(Filename))
-  .
-  (
-    rec-msg(io-file-exists)
-    . snd-msg(io-read-file(Filename))
-    .
-    (
-      rec-msg(io-file-contents(FileText?))
-      . snd-msg(update-module-text-in-db(Modulename, FileText, UNDEFINED, Type))
-      .
-      (
-	rec-msg(no-updating-needed)
-      +
-	rec-msg(updating-succeeded(DependingModules?))
-	. TODO("this bites\n")
-	.
-	if equal(Error, no-errors) then
-	  snd-msg(update-module-in-db(Modulename, Tree, Type))
-	  .
-	  (
-	    rec-msg(updating-succeeded(Imports?))
-	    /*. OpenModules(Imports, Type)*/
-	  +
-	    rec-msg(error-opening(Modulename, name-inconsistent))
-	    . Error("Check consistency: module name %s contains an error",
-		    [Modulename])
-	  )
-	else
-	  printf("TODO: CheckSyntaxConsistency: error ignored: %t\n", Error)
-	fi
-      )
-    +
-      rec-msg(io-error-reading(Error?))
-      . printf("TODO: fix this error message %t\n", Error)
-      . snd-msg(close-module-in-db(Modulename))
-      . rec-msg(module-closed(Modulename))
-    )
-  +
-    rec-msg(io-file-not-exists)
-    . snd-msg(close-module-in-db(Modulename))
-    . rec-msg(module-closed(Modulename))
-  )
-endlet
-
 /* end of dead code */
 
 process IsLibraryModule(ModuleId: term, LibraryModule: bool?) is
@@ -515,7 +449,7 @@ in
   fi
 endlet
 
-process SDFIdentifyModule(ModuleId: term) is
+process SDFIdentifyModule(ModuleId: term, ResultStatus: term?) is
 let
   Tree: term,
   Path: str,
@@ -537,15 +471,16 @@ in
     .
     if equal(File, Path) then
       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename)
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", identified)
+      . ResultStatus := identified
     else
       Error("Module %s should be in a file named %s\n", [Modulename, File])
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", error)
+      . ResultStatus := error
     fi
   else
     tau
   fi
 endlet
+
 
 process GetImportsForRenaming(ModuleId: term, ModuleIds: list, Imports: term?) is
 let
