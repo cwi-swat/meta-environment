@@ -191,10 +191,25 @@ in
     . rec-value(IO, extension(Extension?))
     . snd-msg(io-extension(Path, Extension))
   +
-    rec-msg(io-get-file(Path?))
-    . snd-eval(IO, get-file(Path))
+    rec-msg(io-make-file(Path?))
+    . snd-eval(IO, make-file(Path))
     . rec-value(IO, file(File?))
     . snd-msg(io-file(Path, File))
+  +
+    rec-msg(io-get-file-path(File?))
+    . snd-eval(IO, get-file-path(File))
+    . rec-value(IO, file-path(Path?))
+    . snd-msg(io-file-path(File, Path))
+  +
+    rec-msg(io-get-file-name(File?))
+    . snd-eval(IO, get-file-name(File))
+    . rec-value(IO, file-name(Filename?))
+    . snd-msg(io-file-name(File, Filename))
+  +
+    rec-msg(io-get-file-extension(File?))
+    . snd-eval(IO, get-file-extension(File))
+    . rec-value(IO, file-extension(Extension?))
+    . snd-msg(io-file-extension(File, Extension))
   )
   *
   delta

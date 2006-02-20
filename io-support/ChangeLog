@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 20 12:23:48 CET 2006 <kooiker@cwi.nl>
+ * src/{main.c,in-output.idef}:
+   - Add API functions for File
+
 Fri Feb 17 12:54:24 CET 2006 <kooiker@cwi.nl>
  * lib/*:
    - Add io library for files and paths

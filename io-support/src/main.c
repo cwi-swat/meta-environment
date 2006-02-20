@@ -70,7 +70,7 @@ static char *readFileContents(const char *fnam, size_t *size) {
   }
 
   fclose(fd);
-  buf[*size] = '\0';
+  buf[*size] = EOS;
   return buf ;
 }
 
@@ -499,7 +499,7 @@ ATerm get_path_extension(int conn, const char *path) {
   }
 }
 
-ATerm get_file(int cid, const char *directory) {
+ATerm make_file(int cid, const char *directory) {
   char *copy, *segment, *segment_end;
   char *extension = NULL;
   ATbool absolutePath = ATfalse;
@@ -550,6 +550,43 @@ ATerm get_file(int cid, const char *directory) {
 
   free(copy);
   
+  return ATmake("snd-value(<term>)", result);
+}
+
+ATerm get_file_path(int cid, ATerm file) {
+  char path[BUFSIZ];
+  IO_File io_file = IO_FileFromTerm(file);
+  IO_Path io_path = IO_getFilePath(io_file);
+  ATbool absolute = IO_isPathAbsolute(io_path);
+  IO_SegmentList segments = IO_getPathList(io_path);
+
+  if (absolute) {
+    sprintf(path, "%c", PATH_SEPARATOR);
+  }
+
+  while (!IO_isSegmentListEmpty(segments)) {
+    IO_Segment segment = IO_getSegmentListHead(segments);
+    sprintf(path, "%s%s", path, IO_getSegmentName(segment));
+    sprintf(path, "%s%c", path, PATH_SEPARATOR);
+    segments = IO_getSegmentListTail(segments);
+  }
+
+  ATerm result = ATmake("file-path(<str>)", path);
+
+  return ATmake("snd-value(<term>)", result);
+}
+
+ATerm get_file_name(int cid, ATerm file) {
+  IO_File io_file = IO_FileFromTerm(file);
+  ATerm result = ATmake("file-name(<str>)", IO_getFileName(io_file));
+
+  return ATmake("snd-value(<term>)", result);
+}
+
+ATerm get_file_extension(int cid, ATerm file) {
+  IO_File io_file = IO_FileFromTerm(file);
+  ATerm result = ATmake("file-extension(<str>)", IO_getFileExtension(io_file));
+
   return ATmake("snd-value(<term>)", result);
 }
 
