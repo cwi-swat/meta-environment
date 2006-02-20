@@ -1,0 +1,11 @@
+module basic/Shortcut
+
+imports basic/Keys
+
+exports
+
+context-free start-symbols Shortcut
+
+sorts Shortcut
+context-free syntax
+  "shortcut" "(" Mask "," Key ")" -> Shortcut {cons("shortcut")}
