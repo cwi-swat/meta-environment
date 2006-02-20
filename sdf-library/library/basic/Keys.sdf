@@ -1,0 +1,115 @@
+module basic/Keys
+
+exports
+
+sorts Mask
+context-free syntax
+"ALT_MASK" -> Mask
+"CTRL_MASK" -> Mask
+"SHIFT_MASK" -> Mask
+
+sorts Key
+context-free syntax
+"VK_0" -> Key
+"VK_1" -> Key
+"VK_2" -> Key
+"VK_3" -> Key
+"VK_4" -> Key
+"VK_5" -> Key
+"VK_6" -> Key
+"VK_7" -> Key
+"VK_8" -> Key
+"VK_9" -> Key
+"VK_A" -> Key
+"VK_B" -> Key
+"VK_C" -> Key
+"VK_D" -> Key
+"VK_E" -> Key
+"VK_F" -> Key
+"VK_G" -> Key
+"VK_H" -> Key
+"VK_I" -> Key
+"VK_J" -> Key
+"VK_K" -> Key
+"VK_L" -> Key
+"VK_M" -> Key
+"VK_N" -> Key
+"VK_O" -> Key
+"VK_P" -> Key
+"VK_Q" -> Key
+"VK_R" -> Key
+"VK_S" -> Key
+"VK_T" -> Key
+"VK_U" -> Key
+"VK_V" -> Key
+"VK_W" -> Key
+"VK_X" -> Key
+"VK_Y" -> Key
+"VK_Z" -> Key
+"VK_AMPERSAND" -> Key
+"VK_ASTERISK" -> Key
+"VK_AT" -> Key
+"VK_BACK_QUOTE" -> Key
+"VK_BACK_SLASH" -> Key
+"VK_BACK_SPACE" -> Key
+"VK_BEGIN" -> Key
+"VK_BRACE_LEFT" -> Key
+"VK_BRACE_RIGHT" -> Key
+"VK_CIRCUMFLEX" -> Key
+"VK_CLEAR" -> Key
+"VK_CLOSE_BRACKET" -> Key
+"VK_COLON" -> Key
+"VK_COMMA" -> Key
+"VK_DECIMAL" -> Key
+"VK_DELETE" -> Key
+"VK_DIVIDE" -> Key
+"VK_DOLLAR" -> Key
+"VK_DOWN" -> Key
+"VK_END" -> Key
+"VK_ENTER" -> Key
+"VK_EQUALS" -> Key
+"VK_ESCAPE" -> Key
+"VK_EXCLAMATION_MARK" -> Key
+"VK_F1" -> Key
+"VK_F2" -> Key
+"VK_F3" -> Key
+"VK_F4" -> Key
+"VK_F5" -> Key
+"VK_F6" -> Key
+"VK_F7" -> Key
+"VK_F8" -> Key
+"VK_F9" -> Key
+"VK_F10" -> Key
+"VK_F11" -> Key
+"VK_F12" -> Key
+"VK_GREATER" -> Key
+"VK_HOME" -> Key
+"VK_INSERT" -> Key
+"VK_LEFT" -> Key
+"VK_LEFT_PARENTHESIS" -> Key
+"VK_MINUS" -> Key
+"VK_MULTIPLY" -> Key
+"VK_NUMBER_SIGN" -> Key
+"VK_OPEN_BRACKET" -> Key
+"VK_PAGE_DOWN" -> Key
+"VK_PAGE_UP" -> Key
+"VK_PAUSE" -> Key
+"VK_PERIOD" -> Key
+"VK_PLUS" -> Key
+"VK_PRINTSCREEN" -> Key
+"VK_QUOTE" -> Key
+"VK_QUOTEDBL" -> Key
+"VK_RIGHT" -> Key
+"VK_RIGHT_PARENTHESIS" -> Key
+"VK_SEMICOLON" -> Key
+"VK_SLASH" -> Key
+"VK_SPACE" -> Key
+"VK_SUBTRACT" -> Key
+"VK_TAB" -> Key
+"VK_UNDERSCORE" -> Key
+"VK_UP" -> Key
+
+hiddens
+
+context-free start-symbols
+  Key Mask
