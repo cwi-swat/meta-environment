@@ -1,6 +1,8 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.Event;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.configapi.types.Items;
@@ -139,7 +142,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
         ATerm menuPath = factory.makeEvent_Default(items);
 
-        studio.addComponentMenu(comp, menuPath, new AbstractAction() {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK);
+        
+        studio.addComponentMenu(comp, menuPath, keyStroke, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     ((Editor) editors.get(editorId.toString())).writeContents();
