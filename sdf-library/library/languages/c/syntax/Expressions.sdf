@@ -2,6 +2,7 @@ module languages/c/syntax/Expressions
 
 imports languages/c/syntax/Constants
 imports languages/c/syntax/Identifiers
+imports languages/c/syntax/Declarations
 
 exports 
 
@@ -16,8 +17,8 @@ CharacterConstant 			-> Expression {category("Constant")}
 FloatingPointConstant 			-> Expression {category("Constant")}
 StringConstant 				-> Expression {category("Constant")}
 "(" Expression ")" 			-> Expression {bracket}
-Expression ("["	Expression "]")	 	-> Expression
-Expression ("("  {Expression ","}* ")")	-> Expression
+Expression "["	Expression "]"	 	-> Expression
+Expression "("  {Expression ","}* ")"	-> Expression
 Expression "." Identifier 		-> Expression 
 Expression "->" Identifier 		-> Expression
 Expression "++" 			-> Expression
@@ -68,7 +69,7 @@ Expression "||" Expression 	-> Expression {left}
 
 context-free syntax
 
-Expression ("?" Expression ":") Expression   -> Expression {right}
+Expression "?" Expression ":" Expression   -> Expression {right}
 
 context-free syntax
 
@@ -94,16 +95,9 @@ Expression "." Identifier 	-> Expression
 Expression "->" Identifier 	-> Expression
 Expression "++" 		-> Expression
 Expression "--" 		-> Expression
-Expression ( "(" {Expression ","}* ")" ) -> Expression %% haakjes gezet om prioriteit tot argument 0 te beperken
-Expression ( "[" Expression "]"	       ) -> Expression %% idem
-
-Expression "." Identifier 	-> Expression 
-Expression "->" Identifier 	-> Expression
-Expression "++" 		-> Expression
-Expression "--" 		-> Expression
-Expression ( "(" {Expression ","}* ")" ) -> Expression %% haakjes gezet om prioriteit tot argument 0 te beperken
-Expression ( "[" Expression "]"	       ) -> Expression %% idem
-} %% <0>
+Expression "(" {Expression ","}* ")"  -> Expression 
+Expression "[" Expression "]"	  -> Expression 
+} <0>
 > 
 {
 "++" Expression 		-> Expression
@@ -142,9 +136,9 @@ Expression "!=" Expression -> Expression {left}
 > Expression "|" Expression -> Expression {left}
 > Expression "&&" Expression -> Expression {left}
 > Expression "||" Expression -> Expression {left}
-> Expression ( "?" Expression ":" ) Expression -> Expression {right} %% haakjes gezet om prioriteit tot argumenten 0 en 4 te beperken
-%% <0,4>
-> {right:
+> Expression "?" Expression ":" Expression -> Expression {right}
+<0,4> > 
+{right:
 Expression "=" Expression -> Expression {right}
 Expression "*=" Expression -> Expression {right}
 Expression "/=" Expression -> Expression {right}
@@ -162,8 +156,7 @@ Expression "," Expression -> Expression {left}
 
 
 context-free priorities
-Expression ( "?" Expression ":" ) Expression -> Expression {right} %% haakjes gezet om prioriteit tot argument 0 en 4 te beperken, en {right} toegevoegd.
-%% <0>
->
+Expression "?" Expression ":" Expression -> Expression {right}
+ <0> >
 Expression "?" Expression ":" Expression -> Expression
 

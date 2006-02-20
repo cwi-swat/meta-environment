@@ -2,7 +2,7 @@ module languages/c/syntax/Identifiers
 
 exports
 
-sorts Identifier AnonymousIdentifier
+sorts Identifier AnonymousIdentifier Keyword
 
 lexical syntax
 

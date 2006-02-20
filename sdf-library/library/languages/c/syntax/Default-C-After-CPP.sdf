@@ -12,6 +12,8 @@ context-free start-symbols
 
 exports
 
+sorts Flag LineDirective
+
 context-free syntax
 
 "__builtin_va_arg" "(" Expression "," TypeName ")" -> Expression {prefer}

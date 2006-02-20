@@ -10,7 +10,7 @@ exports
 context-free syntax
   IfPart Body ElifPart[[Body]]* ElsePart[[Body]]? "#" "endif" -> Result
   
-  "#" "if" Condition     -> IfPart
+  "#" "if" Condition      -> IfPart
   "#" "ifdef" Identifier  -> IfPart
   "#" "ifndef" Identifier -> IfPart
   
