@@ -50,7 +50,7 @@ in
     . ACE-GetNewValue(Event, Modulename?)
     . SplitFilename(Modulename, Name?, Prefix?, Extension?)
     . MM-SetModuleGraphAttribute(ModuleId, "label", label(Name))
-    . snd-msg(io-get-file(Modulename))
+    . snd-msg(io-make-file(Modulename))
     . rec-msg(io-file(Modulename, File?))
     . MM-SetModuleGraphAttribute(ModuleId, "file", file(File))
   )
