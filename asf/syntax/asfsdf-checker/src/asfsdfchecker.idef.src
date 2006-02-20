@@ -12,7 +12,7 @@ in
     execute(asfsdfchecker, ASC?) .
     snd-eval(ASC, check-asfsdf(Syntax, ModuleName)) .
     rec-value(ASC, feedback(Feedback?)) .
-    snd-msg(feedback(Feedback)) .
+    snd-msg(checked-asfsdf(Feedback)) .
     Syntax := none .
     snd-terminate(ASC, "done")
   )*
