@@ -477,7 +477,12 @@ ATerm get_path_filename(int conn, const char *path) {
   }
 
   filename = strrchr(copy, PATH_SEPARATOR);
-  result = ATmake("filename(<str>)", ++filename);
+  if (filename != NULL) {
+    result = ATmake("filename(<str>)", ++filename);
+  }
+  else {
+    result = ATmake("filename(<str>)", copy);
+  }
 
   free(copy);
   
