@@ -30,8 +30,10 @@
   constructor(Event, icon, icon(<title(str)>, <path(str)>)),
 
   constructor(Event, default, menu(<items(Items)>)),
-  constructor(Event, shortcut, menu(<items(Items)>, <shortcut(str)>)),
+  constructor(Event, shortcut, menu(<items(Items)>, <shortcut(Shortcut)>)),
   list(Items, str),
+
+  constructor(Shortcut, external, <shortcut(term)>),
 
   constructor(ModuleName, wildcard, "*"),
 
