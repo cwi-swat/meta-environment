@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -21,7 +20,6 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -32,6 +30,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -344,30 +343,6 @@ public class StudioImpl implements Studio, GuiTif {
     }
 
     private JPanel createStatusBar() {
-        // JPanel statusPanel = new JPanel();
-        // statusPanel.setLayout(new GridBagLayout());
-        // GridBagConstraints c = new GridBagConstraints();
-        // c.fill = GridBagConstraints.HORIZONTAL;
-        //
-        // systemLabel = new JLabel(" ");
-        // systemLabel.setPreferredSize(new Dimension(300, 18));
-        // systemLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-        // c.gridx = 0;
-        // statusPanel.add(systemLabel, c);
-        //
-        // JLabel filler = new JLabel(" ");
-        // filler.setBorder(BorderFactory.createLoweredBevelBorder());
-        // c.gridx = 1;
-        // c.weightx = 1.0;
-        // statusPanel.add(filler, c);
-        //
-        // JPanel panel = new JPanel(new CardLayout());
-        // StatusBar statusBar = new StatusBar();
-        // panel.add(statusBar, "system");
-        // c.gridx = 2;
-        // c.weightx = 0;
-        // statusPanel.add(panel, c);
-
         JPanel statusPanel = new JPanel();
         statusPanel.setLayout(new BorderLayout());
 
@@ -418,7 +393,7 @@ public class StudioImpl implements Studio, GuiTif {
                     if (menu instanceof MenuItem) {
                         MenuItem menuItem = (MenuItem) menu;
                         menuBar.addMenuPath(menuItem.getMenuPath(), menuItem
-                                .getAction());
+                                .getAction(), menuItem.getAccelerator());
                     } else {
                         menuBar.add((JMenu) menu);
                     }
@@ -610,6 +585,20 @@ public class StudioImpl implements Studio, GuiTif {
             menus = new LinkedList();
         }
         menus.add(new MenuItem(menuPath, action));
+
+        componentMenus.put(component, menus);
+        updateMenuBar();
+    }
+
+    public void addComponentMenu(StudioComponent component, ATerm menuPath,
+            KeyStroke keyStroke, Action action) {
+        List menus = (List) componentMenus.get(component);
+        if (menus == null) {
+            menus = new LinkedList();
+        }
+        MenuItem item = new MenuItem(menuPath, action);
+        item.setAccelerator(keyStroke);
+        menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();

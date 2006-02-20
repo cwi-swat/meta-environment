@@ -2,6 +2,7 @@ package nl.cwi.sen1.gui;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
+import javax.swing.KeyStroke;
 
 import toolbus.AbstractTool;
 import aterm.ATerm;
@@ -20,6 +21,9 @@ public interface Studio {
 
     public void addComponentMenu(StudioComponent component, ATerm menuPath,
             Action action);
+
+    public void addComponentMenu(StudioComponent component, ATerm menuPath,
+            KeyStroke keyStroke, Action action);
 
     public void addComponentStatusBar(StudioComponent component, StatusBar statusBar);
     

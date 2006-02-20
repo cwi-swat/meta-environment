@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 20 13:51:58 CET 2006 <kooiker@cwi.nl>
+ * {src,studio}/**/*.java:
+   - Possible to add keystroke to menuitem
+
 Wed Feb 15 16:04:49 CET 2006 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/util/*.java:
    - Add system panel to statusbar
