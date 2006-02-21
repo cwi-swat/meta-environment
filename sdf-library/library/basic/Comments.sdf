@@ -5,7 +5,7 @@ imports
 
 exports
   lexical syntax
-    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line")}
-    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested")}
+    "%%" line:~[\n]* "\n"	-> LAYOUT {cons("line"),category("Comments")}
+    "%" content:~[\%\n]+ "%"	-> LAYOUT {cons("nested"),category("Comments")}
   context-free restrictions
     LAYOUT? -/- [\%]
