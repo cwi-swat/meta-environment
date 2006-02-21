@@ -125,18 +125,23 @@ in
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
-      . create(ParseTreeHandler(ModuleId, Path), Pid?)
-      . ParseText(Pid, Text, ParseTable, ASF_TOPSORT, on)
       .
-      (
-        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-        . AnnotateTree(Tree, Path, Result?) 
-        . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
-      +
-        rec-msg(parse-handler-done(Pid))
-        . Result := UNDEFINED
-      )
-    else 
+      if not-equal(ParseTable, UNDEFINED) then
+        create(ParseTreeHandler(ModuleId, Path), Pid?)
+        . ParseText(Pid, Text, ParseTable, ASF_TOPSORT, on)
+        .
+        (
+          rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+          . AnnotateTree(Tree, Path, Result?) 
+          . PutCachedValue(ASF_TREE_CACHE, ModuleId, Result)
+        +
+          rec-msg(parse-handler-done(Pid))
+          . Result := UNDEFINED
+        )
+      else 
+        Result := UNDEFINED
+      fi
+    else
       Result := UNDEFINED
     fi
   else
