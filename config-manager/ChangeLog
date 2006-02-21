@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 21 13:16:13 CET 2006 <kooiker@cwi.nl>
+ * src/configmanager.c:
+   - Use new configuration api
+
 Fri Feb  3 10:17:59 CET 2006 <kooiker@cwi.nl>
  * src/Config.c:
    - Factored out add_configuration_properties so it can be reused to import

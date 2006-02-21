@@ -1,23 +1,15 @@
 /* $Id$ */   
 
-/*{{{  includes */
-
 #include "configuration-manager.tif.h"
 #include <ctype.h>
 #include "Config.h"
 #include <unistd.h> 
 #include <assert.h>
 
-/*}}}  */
-/*{{{  defines */
-
 #define MAX_MESSAGE_LENGTH 133
 #define INITIAL_TABLE_SIZE 100
 #define TABLE_RESIZE_PERCENTAGE 75
 #define MAX_PATH_LENGTH 1024
-
-/*}}}  */
-/*{{{  variables */
 
 static char myversion[] = "5.0";     
 
@@ -33,21 +25,16 @@ static ATermList systemExtensions = NULL;
 static ATermList userTextCategories = NULL;
 static ATermList systemTextCategories = NULL;
 
-static CFG_Properties modulePaths = NULL;
-static CFG_Properties libraryPaths = NULL;
+static CFG_PropertyList modulePaths = NULL;
+static CFG_PropertyList libraryPaths = NULL;
 
 static void add_configuration_properties(ATerm actions);
 
-/*}}}  */
-
-/*{{{  static void addDescription(ATermTable table, CFG_ActionDescription desc) */
-
-static void addDescription(ATermTable table, CFG_ActionDescription desc)
-{
+static void addDescription(ATermTable table, CFG_ActionDescription desc) {
   ATerm type;
   ATermList list;
 
-  type = CFG_ActionTypeToTerm(CFG_getActionDescriptionActionType(desc));
+  type = CFG_getActionDescriptionContext(desc);
 
   list = (ATermList) ATtableGet(table, type);
   if (list == NULL) {
@@ -58,17 +45,11 @@ static void addDescription(ATermTable table, CFG_ActionDescription desc)
   ATtablePut(table, type, (ATerm) list);
 }
 
-/*}}}  */
-/*{{{  static CFG_ActionDescriptionList getDescriptions(CFG_ActionType type) */
-
-static CFG_ActionDescriptionList getDescriptions(CFG_ActionType type)
-{
+static CFG_ActionDescriptionList getDescriptions(ATerm key) {
   CFG_ActionDescriptionList result;
   CFG_ActionDescriptionList list;
-  ATerm key;
   ATerm value;
 
-  key = CFG_ActionTypeToTerm(type);
   result = CFG_makeActionDescriptionListEmpty();
 
   value = ATtableGet(userDescriptionsByType, key);
@@ -86,21 +67,12 @@ static CFG_ActionDescriptionList getDescriptions(CFG_ActionType type)
   return result;
 }
 
-/*}}}  */
-
-/*{{{  static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action) */
-
-static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action)
-{
+static void setAction(ATermTable table, CFG_ActionDescription desc, const char *action) {
   ATerm key = CFG_ActionDescriptionToTerm(desc);
   ATtablePut(table, key, (ATerm) ATmakeAppl0(ATmakeAFun(action, 0, ATtrue)));
 }
 
-/*}}}  */
-/*{{{  static ATermList getActions(CFG_ActionDescription desc) */
-
-static ATermList getActions(CFG_ActionDescription desc)
-{
+static ATermList getActions(CFG_ActionDescription desc) {
   ATerm key;
   ATermList value;
 
@@ -113,21 +85,11 @@ static ATermList getActions(CFG_ActionDescription desc)
   return value;
 }
 
-/*}}}  */
-
-/*{{{  void rec_terminate(int cid, ATerm t) */
-
-void rec_terminate(int cid, ATerm t)
-{
+void rec_terminate(int cid, ATerm t) {
   exit(0);
 }
 
-/*}}}  */
-
-/*{{{  ATerm parse_config_file(int cid, const char *contents) */
-
-ATerm parse_config_file(int cid, const char *contents)
-{
+ATerm parse_config_file(int cid, const char *contents) {
   int i;
   int j = 0;
   int line_number = 0;
@@ -167,37 +129,19 @@ ATerm parse_config_file(int cid, const char *contents)
   return ATmake("snd-value(directories(<term>))", paths);
 }
 
-/*}}}  */
-/*{{{  void register_user_directories(int cid, ATerm paths) */
-
-void register_user_directories(int cid, ATerm paths)
-{
-  modulePaths = CFG_makePropertiesEmpty();
+void register_user_directories(int cid, ATerm paths) {
+  modulePaths = CFG_makePropertyListEmpty();
 }
 
-/*}}}  */
-
-/*{{{  static void addExtension(ATermList extensions, CFG_Property property) */
-
-static ATermList addExtension(ATermList extensions, CFG_Property property)
-{
+static ATermList addExtension(ATermList extensions, CFG_Property property) {
   return ATinsert(extensions, CFG_PropertyToTerm(property));
 }
 
-/*}}}  */
-/*{{{  static void addTextCategory(ATermList categories, CFG_Property property) */
-
-static ATermList addTextCategory(ATermList categories, CFG_Property property)
-{
+static ATermList addTextCategory(ATermList categories, CFG_Property property) {
   return ATinsert(categories, CFG_PropertyToTerm(property));
 }
 
-/*}}}  */
-
-/*{{{  static void addSystemProperty(CFG_Property property) */
-
-static void addSystemProperty(CFG_Property property)
-{
+static void addSystemProperty(CFG_Property property) {
   if (CFG_isPropertyImport(property)) {
     char *path = CFG_getPropertyPath(property);
     ATerm import_contents = ATreadFromNamedFile(path);
@@ -207,14 +151,14 @@ static void addSystemProperty(CFG_Property property)
     systemExtensions = addExtension(systemExtensions, property);
   }
   else if (CFG_isPropertyModulePath(property)) {
-    modulePaths = CFG_makePropertiesMany(property, modulePaths);
+    modulePaths = CFG_makePropertyListMany(property, modulePaths);
   }
   else if (CFG_isPropertyLibraryPath(property)) {
-    libraryPaths = CFG_makePropertiesMany(property, libraryPaths);
+    libraryPaths = CFG_makePropertyListMany(property, libraryPaths);
   }
   else if (CFG_isPropertyAction(property)) {
     const char *action = CFG_getPropertyAction(property);
-    CFG_ActionDescriptionList list = CFG_getPropertyDescriptions(property);
+    CFG_ActionDescriptionList list = CFG_getPropertyList(property);
     while (!CFG_isActionDescriptionListEmpty(list)) {
       CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
       addDescription(systemDescriptionsByType, cur);
@@ -230,26 +174,21 @@ static void addSystemProperty(CFG_Property property)
   }
 }
 
-/*}}}  */
-
 static void add_configuration_properties(ATerm actions) {
   CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
   if (CFG_isValidConfiguration(configuration)) {
-    CFG_Properties properties = CFG_getConfigurationList(configuration);
-    while (!CFG_isPropertiesEmpty(properties)) {
-      CFG_Property property = CFG_getPropertiesHead(properties);
+    CFG_PropertyList properties = CFG_getConfigurationList(configuration);
+    while (!CFG_isPropertyListEmpty(properties)) {
+      CFG_Property property = CFG_getPropertyListHead(properties);
       addSystemProperty(property);
-      properties = CFG_getPropertiesTail(properties);
+      properties = CFG_getPropertyListTail(properties);
     }
-    modulePaths = CFG_reverseProperties(modulePaths);
-    libraryPaths = CFG_reverseProperties(libraryPaths);
+    modulePaths = CFG_reversePropertyList(modulePaths);
+    libraryPaths = CFG_reversePropertyList(libraryPaths);
   }
 }
 
-/*{{{  void add_system_properties(int cid, const char *contents) */
-
-void add_system_properties(int cid, const char *contents)
-{
+void add_system_properties(int cid, const char *contents) {
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
@@ -260,18 +199,13 @@ void add_system_properties(int cid, const char *contents)
   }
 }
 
-/*}}}  */
-
-/*{{{  static void addUserProperty(CFG_Property property) */
-
-static void addUserProperty(CFG_Property property)
-{
+static void addUserProperty(CFG_Property property) {
   if (CFG_isPropertyExtension(property)) {
     userExtensions = addExtension(userExtensions, property);
   }
   else if (CFG_isPropertyAction(property)) {
     const char *action = CFG_getPropertyAction(property);
-    CFG_ActionDescriptionList list = CFG_getPropertyDescriptions(property);
+    CFG_ActionDescriptionList list = CFG_getPropertyList(property);
     while (!CFG_isActionDescriptionListEmpty(list)) {
       CFG_ActionDescription cur = CFG_getActionDescriptionListHead(list);
       addDescription(userDescriptionsByType, cur);
@@ -287,21 +221,17 @@ static void addUserProperty(CFG_Property property)
   }
 }
 
-/*}}}  */
-/*{{{  void add_user_properties(int cid, const char *contents) */
-
-void add_user_properties(int cid, const char *contents)
-{
+void add_user_properties(int cid, const char *contents) {
   ATerm actions = ATreadFromString(contents);
 
   if (actions != NULL) {
     CFG_Configuration configuration = CFG_ConfigurationFromTerm(actions);
     if (CFG_isValidConfiguration(configuration)) {
-      CFG_Properties properties = CFG_getConfigurationList(configuration);
-      while (!CFG_isPropertiesEmpty(properties)) {
-	CFG_Property property = CFG_getPropertiesHead(properties);
+      CFG_PropertyList properties = CFG_getConfigurationList(configuration);
+      while (!CFG_isPropertyListEmpty(properties)) {
+	CFG_Property property = CFG_getPropertyListHead(properties);
 	addUserProperty(property);
-	properties = CFG_getPropertiesTail(properties);
+	properties = CFG_getPropertyListTail(properties);
       }
     }
   }
@@ -309,8 +239,6 @@ void add_user_properties(int cid, const char *contents)
     ATwarning("%s:set_user_properties: parse error in input.\n", __FILE__);
   }
 }
-
-/*}}}  */
 
 static CFG_Property getWorkspace() {
   char curdir[MAX_PATH_LENGTH];
@@ -325,26 +253,17 @@ static CFG_Property getWorkspace() {
   return NULL;
 }
 
-/*{{{  void remove_user_properties(int cid) */
-
-void remove_user_properties(int cid)
-{
+void remove_user_properties(int cid) {
   ATtableReset(userDescriptionsByType);
   ATtableReset(userActionsByDescription);
   userTextCategories = ATempty;
 
-  modulePaths = CFG_makePropertiesSingle(getWorkspace());
+  modulePaths = CFG_makePropertyListSingle(getWorkspace());
 }
 
-/*}}}  */
-
-/*{{{  static ATermList getEvents(ATerm type) */
-
-static ATermList getEvents(ATerm actionType)
-{
+static ATermList getEvents(ATerm actionType) {
   ATermList result = ATempty;
-  CFG_ActionType type = CFG_ActionTypeFromTerm(actionType);
-  CFG_ActionDescriptionList list = getDescriptions(type);
+  CFG_ActionDescriptionList list = getDescriptions(actionType);
 
   if (list != NULL) {
     while (!CFG_isActionDescriptionListEmpty(list)) {
@@ -358,20 +277,12 @@ static ATermList getEvents(ATerm actionType)
   return result;
 }
 
-/*}}}  */
-/*{{{  ATerm get_events(int cid, ATerm type) */
-
-ATerm get_events(int cid, ATerm actionType)
-{
+ATerm get_events(int cid, ATerm actionType) {
   ATermList result = getEvents(actionType);
   return ATmake("snd-value(events(<term>))", result);
 }
 
-/*}}}  */
-/*{{{  ATerm get_module_events(int cid, ATerm type, ATerm moduleId) */
-
-ATerm get_module_events(int cid, ATerm type, ATerm moduleId)
-{
+ATerm get_module_events(int cid, ATerm type, ATerm moduleId) {
   ATerm boundType;
   ATermList result1, result2;
 
@@ -386,27 +297,18 @@ ATerm get_module_events(int cid, ATerm type, ATerm moduleId)
   return ATmake("snd-value(events(<term>))", ATconcat(result1, result2));
 }
 
-/*}}}  */
-
-/*{{{  static ATermList getActions(ATerm type, ATerm event) */
-
-static ATermList getEventActions(ATerm type, ATerm event)
-{
+static ATermList getEventActions(ATerm type, ATerm event) {
   CFG_ActionDescription desc;
   ATermList actions;
 
-  desc = CFG_makeActionDescriptionDefault(CFG_ActionTypeFromTerm(type),
-					 CFG_EventFromTerm(event));
+  desc = CFG_makeActionDescriptionDescription(type,
+					      CFG_EventFromTerm(event));
   actions = getActions(desc);
 
   return actions;
 }
 
-/*}}}  */
-/*{{{  ATerm get_action(int cid, ATerm type, ATerm event) */
-
-ATerm get_action(int cid, ATerm type, ATerm event)
-{
+ATerm get_action(int cid, ATerm type, ATerm event) {
   ATermList actions = getEventActions(type, event);
 
   if (actions == NULL) {
@@ -416,11 +318,7 @@ ATerm get_action(int cid, ATerm type, ATerm event)
   return ATmake("snd-value(action(<term>))", actions);
 }
 
-/*}}}  */
-/*{{{  ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId) */
-
-ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId)
-{
+ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId) {
   ATerm boundType;
   ATermList actions;
 
@@ -439,20 +337,11 @@ ATerm get_module_action(int cid, ATerm type, ATerm event, ATerm moduleId)
   return ATmake("snd-value(action(<term>))", actions);
 }
 
-/*}}}  */
-
-/*{{{  static ATermList getExtensions() */
-
-static ATermList getExtensions()
-{
+static ATermList getExtensions() {
   return ATconcat(userExtensions, systemExtensions);
 }
 
-/*}}}  */
-/*{{{  ATerm get_extension_modulename(int cid, const char *extension) */
-
-ATerm get_extension_modulename(int cid, const char *extension)
-{
+ATerm get_extension_modulename(int cid, const char *extension) {
   ATermList extensions = getExtensions();
   
   while (!ATisEmpty(extensions)) {
@@ -473,11 +362,7 @@ ATerm get_extension_modulename(int cid, const char *extension)
   return ATmake("snd-value(no-modulename)");
 }
 
-/*}}}  */
-/*{{{  ATerm get_modulename_extension(int cid, ATerm moduleId) */
-
-ATerm get_modulename_extension(int cid, ATerm moduleId)
-{
+ATerm get_modulename_extension(int cid, ATerm moduleId) {
   ATermList extensions = getExtensions();
 
   while (!ATisEmpty(extensions)) {
@@ -498,64 +383,38 @@ ATerm get_modulename_extension(int cid, ATerm moduleId)
   return ATmake("snd-value(no-extension)");
 }
 
-/*}}}  */
-
-/*{{{  ATerm get_module_paths(int cid) */
-
-ATerm get_module_paths(int cid)
-{
-  CFG_Properties paths = CFG_concatProperties(modulePaths, libraryPaths);
+ATerm get_module_paths(int cid) {
+  CFG_PropertyList paths = CFG_concatPropertyList(modulePaths, libraryPaths);
   return ATmake("snd-value(module-paths(<term>))", paths);
 }
 
-/*}}}  */
-/*{{{  ATerm get_library_paths(int cid) */
-
-ATerm get_library_paths(int cid)
-{
+ATerm get_library_paths(int cid) {
   return ATmake("snd-value(library-paths(<term>))", libraryPaths);
 }
 
-/*}}}  */
-/*{{{  ATerm get_text_properties(int cid) */
-
-ATerm get_text_categories(int cid)
-{
+ATerm get_text_categories(int cid) {
   ATermList all = ATconcat(userTextCategories, systemTextCategories);
   return ATmake("snd-value(text-categories(<term>))", all);
 }
 
-/*}}}  */
-/*{{{  void usage(char *prg, ATbool is_err) */
-
-void usage(char *prg, ATbool is_err)
-{
+void usage(char *prg, ATbool is_err) {
   ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
   ATwarning("use '%s -at-help' to get more options.\n", prg);
   ATwarning("This program can only be used as a ToolBus tool!\n");
   exit(is_err ? 1 : 0);
 }
 
-/*}}}  */
-/*{{{  void version(const char *msg) */
-
-void version(const char *msg)
-{
+void version(const char *msg) {
   ATwarning("%s v%s\n", msg, myversion);
   exit(1);
 }    
 
-/*}}}  */
-
-/*{{{  static void initConfigurationManager(void) */
-
-static void initConfigurationManager(void)
-{
+static void initConfigurationManager(void) {
   ATprotectList(&modulePaths);
-  modulePaths = CFG_makePropertiesSingle(getWorkspace());
+  modulePaths = CFG_makePropertyListSingle(getWorkspace());
 
   ATprotectList(&libraryPaths);
-  libraryPaths = CFG_makePropertiesEmpty();
+  libraryPaths = CFG_makePropertyListEmpty();
 
   ATprotectList(&userExtensions);
   userExtensions = ATempty;
@@ -580,11 +439,7 @@ static void initConfigurationManager(void)
 					     TABLE_RESIZE_PERCENTAGE);
 }
 
-/*}}}  */
-/*{{{  int main(int argc, char *argv[]) */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   int i, cid;
   ATerm bottomOfStack;
 
@@ -607,5 +462,3 @@ int main(int argc, char *argv[])
 
   return 0;
 }         
-
-/*}}}  */
