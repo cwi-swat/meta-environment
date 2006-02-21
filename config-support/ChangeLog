@@ -1,5 +1,8 @@
 $Id$
 
+Tue Feb 21 13:14:46 CET 2006 <kooiker@cwi.nl>
+ * Generate api from Configuration.sdf
+
 Wed Feb  8 11:53:16 CET 2006 <economop@cwi.nl>
  * Changed |OPT_initialise()| to |OPT_initialized()|.
  
