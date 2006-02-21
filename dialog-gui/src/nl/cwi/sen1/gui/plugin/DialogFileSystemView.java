@@ -2,18 +2,19 @@ package nl.cwi.sen1.gui.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.filechooser.FileSystemView;
-import nl.cwi.sen1.configapi.types.Properties;
+
 import nl.cwi.sen1.configapi.types.Property;
-import java.util.List;
-import java.util.Arrays;
+import nl.cwi.sen1.configapi.types.PropertyList;
 
 public class DialogFileSystemView extends FileSystemView {
     File[] roots;
     String[] labels;
 
-    public DialogFileSystemView(Properties props) {
+    public DialogFileSystemView(PropertyList props) {
       roots = new File[props.getLength()];
       labels = new String[props.getLength()];
 

@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 21 13:16:44 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use new configuration api
+
 Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
  * Initial version
 

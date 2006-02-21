@@ -48,7 +48,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         
         if (!((ATermList) paths).isEmpty()) {
             DialogFileSystemView fsv = new DialogFileSystemView(
-                    factory.PropertiesFromTerm(paths));
+                    factory.PropertyListFromTerm(paths));
             chooser = new JFileChooser(fsv);
             chooser.setFileView(new DialogFileView(fsv));
         }
