@@ -17,98 +17,32 @@ CharacterConstant 			-> Expression {category("Constant")}
 FloatingPointConstant 			-> Expression {category("Constant")}
 StringConstant 				-> Expression {category("Constant")}
 "(" Expression ")" 			-> Expression {bracket}
-Expression "["	Expression "]"	 	-> Expression
-Expression "("  {Expression ","}* ")"	-> Expression
-Expression "." Identifier 		-> Expression 
-Expression "->" Identifier 		-> Expression
-Expression "++" 			-> Expression
-Expression "--" 			-> Expression
-
-context-free syntax
-
-"++" Expression 		-> Expression
-"--" Expression 		-> Expression
-"&" Expression 			-> Expression
-"*" Expression 			-> Expression
-"+" Expression 			-> Expression
-"-" Expression 			-> Expression
-"~" Expression 			-> Expression
-"!" Expression 			-> Expression
-"sizeof" Expression 	  	-> Expression
-"sizeof" "(" TypeName ")"	-> Expression
 
 context-free restrictions
 "&" -/- [\&]
 "-" -/- [\-]
 "+" -/- [\+]
 
-context-free syntax
-
-"(" TypeName ")" Expression -> Expression
-
-context-free syntax
-
-Expression "*" Expression	-> Expression {left}
-Expression "/" Expression	-> Expression {left}
-Expression "%" Expression	-> Expression {left}
-Expression "+" Expression	-> Expression {left}
-Expression "-" Expression 	-> Expression {left}
-Expression "<<" Expression 	-> Expression {left}
-Expression ">>" Expression 	-> Expression {left}
-Expression "<" Expression 	-> Expression {left}
-Expression ">" Expression 	-> Expression {left}
-Expression "<=" Expression 	-> Expression {left}
-Expression ">=" Expression 	-> Expression {left}
-Expression "==" Expression 	-> Expression {left}
-Expression "!=" Expression 	-> Expression {left}
-Expression "&" Expression 	-> Expression {left}
-Expression "^" Expression 	-> Expression {left}
-Expression "|" Expression 	-> Expression {left}
-Expression "&&" Expression 	-> Expression {left}
-Expression "||" Expression 	-> Expression {left}
-
-context-free syntax
-
-Expression "?" Expression ":" Expression   -> Expression {right}
-
-context-free syntax
-
-Expression "=" Expression 	-> Expression {right}
-Expression "*=" Expression 	-> Expression {right}
-Expression "/=" Expression 	-> Expression {right}
-Expression "%=" Expression 	-> Expression {right}
-Expression "+=" Expression 	-> Expression {right}
-Expression "-=" Expression 	-> Expression {right}
-Expression "<<=" Expression 	-> Expression {right}
-Expression ">>=" Expression 	-> Expression {right}
-Expression "&=" Expression 	-> Expression {right}
-Expression "^=" Expression 	-> Expression {right}
-Expression "|=" Expression 	-> Expression {right}
-
-context-free syntax
-
-Expression "," Expression 	-> Expression {left}
-
 context-free priorities
 {
-Expression "." Identifier 	-> Expression 
-Expression "->" Identifier 	-> Expression
-Expression "++" 		-> Expression
-Expression "--" 		-> Expression
-Expression "(" {Expression ","}* ")"  -> Expression 
 Expression "[" Expression "]"	  -> Expression 
+Expression "(" {Expression ","}* ")"  -> Expression 
+Expression "." Identifier 		  -> Expression 
+Expression "->" Identifier 	  -> Expression
+Expression "++" 		           -> Expression
+Expression "--" 		           -> Expression
 } <0>
 > 
 {
-"++" Expression 		-> Expression
-"--" Expression 		-> Expression
-"&" Expression 			-> Expression
-"*" Expression 			-> Expression
-"+" Expression 			-> Expression
-"-" Expression 			-> Expression
-"~" Expression 			-> Expression
-"!" Expression 			-> Expression
-"sizeof" Expression 	  	-> Expression
+"++" Expression 		 -> Expression
+"--" Expression 		 -> Expression
+"&" Expression 		 -> Expression
+"*" Expression 	 	 -> Expression
+"+" Expression 		 -> Expression
+"-" Expression 		 -> Expression
+"~" Expression 		 -> Expression
+"!" Expression 		 -> Expression
+"sizeof" Expression 	 -> Expression
 "(" TypeName ")" Expression -> Expression 
 }
 > { left:
