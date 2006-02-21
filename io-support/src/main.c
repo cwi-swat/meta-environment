@@ -158,18 +158,18 @@ static ATerm createFilesDifferentMessage() {
 }
 
 ATerm relative_to_absolute(int cid, ATerm paths) {
-  CFG_Properties relativePaths = CFG_PropertiesFromTerm(paths);
-  CFG_Properties result = CFG_makePropertiesEmpty();
+  CFG_PropertyList relativePaths = CFG_PropertyListFromTerm(paths);
+  CFG_PropertyList result = CFG_makePropertyListEmpty();
   ERR_Summary summary = NULL;
 
-  while (!CFG_isPropertiesEmpty(relativePaths)) {
-    CFG_Property prop = CFG_getPropertiesHead(relativePaths);
+  while (!CFG_isPropertyListEmpty(relativePaths)) {
+    CFG_Property prop = CFG_getPropertyListHead(relativePaths);
     const char *relativePath = CFG_getPropertyPath(prop);
     char *absolutePath = expandPath(relativePath);
 
     if (absolutePath != NULL) {
       prop = CFG_setPropertyPath(prop, absolutePath);
-      result = CFG_makePropertiesMany(prop, result);
+      result = CFG_makePropertyListMany(prop, result);
     }
     else {
       summary = createSummary("Unable to expand", relativePath);
@@ -179,13 +179,13 @@ ATerm relative_to_absolute(int cid, ATerm paths) {
     free(absolutePath);
     absolutePath = NULL;
 
-    relativePaths = CFG_getPropertiesTail(relativePaths);
+    relativePaths = CFG_getPropertyListTail(relativePaths);
   }
 
   if (summary == NULL) {
     /* Found files should be reported in order of the searchPaths */
     return ATmake("snd-value(absolute-directories(<term>))", 
-		  CFG_reverseProperties(result));
+		  CFG_reversePropertyList(result));
   }
   else {
     return makeResultMessage(summary);
@@ -336,12 +336,12 @@ ATerm exists_file(int cid, const char *path) {
 
 ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
   char filename[PATH_LEN];
-  CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
+  CFG_PropertyList searchPaths = CFG_PropertyListFromTerm(paths);
   ATermList directories = ATempty;
  
-  for ( ; !CFG_isPropertiesEmpty(searchPaths); 
-       searchPaths = CFG_getPropertiesTail(searchPaths)) {
-    CFG_Property path = CFG_getPropertiesHead(searchPaths);
+  for ( ; !CFG_isPropertyListEmpty(searchPaths); 
+       searchPaths = CFG_getPropertyListTail(searchPaths)) {
+    CFG_Property path = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(path);
     sprintf(filename, "%s%c%s%s", pathString, PATH_SEPARATOR, name, extension);
 
@@ -362,12 +362,12 @@ ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
 
 ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *extension) {
   ATerm result = NULL;
-  CFG_Properties searchPaths = CFG_PropertiesFromTerm(paths);
+  CFG_PropertyList searchPaths = CFG_PropertyListFromTerm(paths);
 
   assert(path != NULL);
 
-  while (!CFG_isPropertiesEmpty(searchPaths) && !result) {
-    CFG_Property searchPath = CFG_getPropertiesHead(searchPaths);
+  while (!CFG_isPropertyListEmpty(searchPaths) && !result) {
+    CFG_Property searchPath = CFG_getPropertyListHead(searchPaths);
     const char *pathString = CFG_getPropertyPath(searchPath);
     if (strncmp(pathString, path, strlen(pathString)) == 0) {
       char *copy;
@@ -383,7 +383,7 @@ ATerm get_relative_filename(int cid, ATerm paths, const char *path, const char *
       result = ATmake("filename(<str>,<str>)", pathString, copy);
       free(copy);
     }
-    searchPaths = CFG_getPropertiesTail(searchPaths);
+    searchPaths = CFG_getPropertyListTail(searchPaths);
   }
 
   if (!result) {
