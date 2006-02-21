@@ -376,10 +376,10 @@ public class StudioImpl implements Studio, GuiTif {
         ATermList menuPaths = menuList;
         while (!menuPaths.isEmpty()) {
             final Event menuPath = configFactory.EventFromTerm(menuPaths.getFirst());
-            menuBar.addMenuPath(menuPath, new AbstractAction(menuPath
+            menuBar.addMenuPath(menuPath, new AbstractAction(menuPath.toTerm()
                     .toString()) {
                 public void actionPerformed(ActionEvent e) {
-                    ATerm event = factory.make("menu-event(<term>)", menuPath);
+                    ATerm event = factory.make("menu-event(<term>)", menuPath.toTerm());
                     bridge.postEvent(event);
                 }
             });
