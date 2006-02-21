@@ -130,6 +130,8 @@ int main(int argc, char *argv[])
   initErrorApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
+  ERR_initErrorApi();
+  PERR_initParsedErrorApi();
 
   register_Sdf_Checker();
   resolve_Sdf_Checker();

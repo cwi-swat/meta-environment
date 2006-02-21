@@ -21,3 +21,5 @@ sdfchecker_LDADD = $(ASC_LD_FLAGS)
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
+asfc:
+	asfc -va -i Sdf-Checker.eqs -o Sdf-Checker.c
