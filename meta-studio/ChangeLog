@@ -1,7 +1,11 @@
 $Id$
 
+Tue Feb 21 16:29:45 CET 2006 <kooiker@cwi.nl>
+ * {util,studio}/**/*.java:
+   - Use configuration api for (popup)menus and shortcuts
+
 Mon Feb 20 13:51:58 CET 2006 <kooiker@cwi.nl>
- * {src,studio}/**/*.java:
+ * {utils,studio}/**/*.java:
    - Possible to add keystroke to menuitem
 
 Wed Feb 15 16:04:49 CET 2006 <kooiker@cwi.nl>

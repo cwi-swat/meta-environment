@@ -8,9 +8,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
-import aterm.ATerm;
-import aterm.ATermAppl;
+import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.Event;
+import nl.cwi.sen1.configapi.types.Item;
+import nl.cwi.sen1.configapi.types.ItemList;
 import aterm.ATermList;
+import aterm.pure.PureFactory;
 
 //TODO: 
 //      * apification of button API stuff
@@ -19,117 +22,115 @@ import aterm.ATermList;
 //      * try to get rid of the duplication between JMenu and JPopupMenu...
 
 public class StudioPopupMenu extends JPopupMenu {
-	
-	private PopupHandler handler;
-	
-	public StudioPopupMenu(ATermList menus) {
-		while (!menus.isEmpty()) {
-			ATerm action = menus.getFirst();
-			addItem(action);
-			menus = menus.getNext();
-		}
-	}
+    private Factory factory;
 
-	private void addItem(ATerm action) {
-		addItem(0, action);
-	}
+    private PopupHandler handler;
 
-	private void addItem(int level, ATerm action) {
+    public StudioPopupMenu(ATermList menus) {
+        factory = Factory.getInstance((PureFactory) menus.getFactory());
+        
+        while (!menus.isEmpty()) {
+            Event action = factory.EventFromTerm(menus.getFirst());
+            addItem(action);
+            menus = menus.getNext();
+        }
+    }
 
-		boolean found = addSubMenu(level, action);
+    private void addItem(Event action) {
+        addItem(0, action);
+    }
 
-		if (!found) {
-			ATermList path = getPath(action);
+    private void addItem(int level, Event action) {
 
-			if (path.getLength() - 1 == level) {
-				addLeafAction(getLabel(action, level), action);
-			} else {
-				JMenu subMenu = new JMenu(getLabel(action, level));
-				add(subMenu);
-				addItem(level, action);
-			}
-		}
-	}
+        boolean found = addSubMenu(level, action);
 
-	private void addItem(int level, JMenu menu, ATerm action) {
-		boolean found = addSubMenu(level, action, menu);
+        if (!found) {
+            ItemList path = action.getList();
 
-		if (!found) {
-			ATermList path = getPath(action);
+            if (path.getLength() - 1 == level) {
+                addLeafAction(getLabel(action, level), action);
+            } else {
+                JMenu subMenu = new JMenu(getLabel(action, level));
+                add(subMenu);
+                addItem(level, action);
+            }
+        }
+    }
 
-			if (path.getLength() - 1 == level) {
-				addLeafaction(menu, getLabel(action, level), action);
-			} else {
-				JMenu subMenu = new JMenu(getLabel(action, level));
-				menu.add(subMenu);
-				addItem(level, menu, action);
-			}
-		}
-	}
+    private void addItem(int level, JMenu menu, Event action) {
+        boolean found = addSubMenu(level, action, menu);
 
-	private boolean addSubMenu(int level, ATerm action) {
-		MenuElement[] children = getSubElements();
-		return findSubMenu(level, action, children);
-	}
+        if (!found) {
+            ItemList path = action.getList();
 
-	private boolean addSubMenu(int level, ATerm action, JMenu menu) {
-		MenuElement[] children = menu.getSubElements();
-		return findSubMenu(level, action, children);
-	}
+            if (path.getLength() - 1 == level) {
+                addLeafaction(menu, getLabel(action, level), action);
+            } else {
+                JMenu subMenu = new JMenu(getLabel(action, level));
+                menu.add(subMenu);
+                addItem(level, menu, action);
+            }
+        }
+    }
 
-	private boolean findSubMenu(int level, ATerm action, MenuElement[] children) {
-		boolean found = false;
-		for (int i = 0; !found && i < children.length; i++) {
-			if (children[i] instanceof JMenu) {
-				JMenu subMenu = (JMenu) children[i];
-				if (subMenu.getText().equals(getLabel(action, level))) {
-					found = true;
-					addItem(level + 1, subMenu, action);
-				}
-			}
-		}
-		return found;
-	}
+    private boolean addSubMenu(int level, Event action) {
+        MenuElement[] children = getSubElements();
+        return findSubMenu(level, action, children);
+    }
 
-	private void addLeafAction(final String label, final ATerm action) {
-		JMenuItem item = makeMenuItem(label, action);
-		add(item);
-	}
+    private boolean addSubMenu(int level, Event action, JMenu menu) {
+        MenuElement[] children = menu.getSubElements();
+        return findSubMenu(level, action, children);
+    }
 
-	private void addLeafaction(JMenu menu, final String label,
-			final ATerm action) {
-		JMenuItem item = makeMenuItem(label, action);
-		menu.add(item);
-	}
+    private boolean findSubMenu(int level, Event action, MenuElement[] children) {
+        boolean found = false;
+        for (int i = 0; !found && i < children.length; i++) {
+            if (children[i] instanceof JMenu) {
+                JMenu subMenu = (JMenu) children[i];
+                if (subMenu.getText().equals(getLabel(action, level))) {
+                    found = true;
+                    addItem(level + 1, subMenu, action);
+                }
+            }
+        }
+        return found;
+    }
 
-	private JMenuItem makeMenuItem(final String label, final ATerm action) {
-		JMenuItem item = new JMenuItem(new AbstractAction(label) {
-			public void actionPerformed(ActionEvent e) {
-				firePopupMenuSelected(action);
-			}
-		});
-		return item;
-	}
+    private void addLeafAction(final String label, final Event action) {
+        JMenuItem item = makeMenuItem(label, action);
+        add(item);
+    }
 
-	protected void firePopupMenuSelected(ATerm action) {
-		if (handler != null) {
-			handler.popupSelected(action);
-		}
-	}
+    private void addLeafaction(JMenu menu, final String label,
+            final Event action) {
+        JMenuItem item = makeMenuItem(label, action);
+        menu.add(item);
+    }
 
-	private String getLabel(ATerm action, int level) {
-		ATermList path = getPath(action);
-		ATermAppl label = (ATermAppl) path.elementAt(level);
-		return label.getName();
-	}
+    private JMenuItem makeMenuItem(final String label, final Event action) {
+        JMenuItem item = new JMenuItem(new AbstractAction(label) {
+            public void actionPerformed(ActionEvent e) {
+                firePopupMenuSelected(action);
+            }
+        });
+        return item;
+    }
 
-	private ATermList getPath(ATerm action) {
-		ATermList path = (ATermList) ((ATermAppl) action).getArgument(0);
-		return path;
-	}
+    protected void firePopupMenuSelected(Event action) {
+        if (handler != null) {
+            handler.popupSelected(action);
+        }
+    }
 
-	public void setPopupHandler(PopupHandler handler) {
-		this.handler = handler;
-	}
+    private String getLabel(Event action, int level) {
+        ItemList items = action.getList();
+        Item item = (Item) items.getChildAt(level);
+        return item.getName();
+    }
+
+    public void setPopupHandler(PopupHandler handler) {
+        this.handler = handler;
+    }
 
 }

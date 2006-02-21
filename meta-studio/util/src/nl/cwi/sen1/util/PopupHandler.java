@@ -1,7 +1,7 @@
 package nl.cwi.sen1.util;
 
-import aterm.ATerm;
+import nl.cwi.sen1.configapi.types.Event;
 
 public interface PopupHandler {
-	public void popupSelected(ATerm action);
+	public void popupSelected(Event action);
 }

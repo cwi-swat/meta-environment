@@ -30,7 +30,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
@@ -52,6 +51,8 @@ import net.infonode.docking.theme.SoftBlueIceDockingTheme;
 import net.infonode.docking.util.DockingUtil;
 import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
+import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.util.StudioMenuBar;
 import toolbus.AbstractTool;
 import aterm.ATerm;
@@ -64,6 +65,8 @@ public class StudioImpl implements Studio, GuiTif {
 
     private PureFactory factory;
 
+    private Factory configFactory;
+    
     private GuiBridge bridge;
 
     private ViewMap viewsById;
@@ -143,6 +146,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     private void initialize() {
         factory = new PureFactory();
+        configFactory = Factory.getInstance(factory);
         menuList = factory.getEmpty();
         properties = new RootWindowProperties();
         currentTheme = new ShapedGradientDockingTheme();
@@ -371,7 +375,7 @@ public class StudioImpl implements Studio, GuiTif {
 
         ATermList menuPaths = menuList;
         while (!menuPaths.isEmpty()) {
-            final ATerm menuPath = menuPaths.getFirst();
+            final Event menuPath = configFactory.EventFromTerm(menuPaths.getFirst());
             menuBar.addMenuPath(menuPath, new AbstractAction(menuPath
                     .toString()) {
                 public void actionPerformed(ActionEvent e) {
@@ -392,8 +396,8 @@ public class StudioImpl implements Studio, GuiTif {
 
                     if (menu instanceof MenuItem) {
                         MenuItem menuItem = (MenuItem) menu;
-                        menuBar.addMenuPath(menuItem.getMenuPath(), menuItem
-                                .getAction(), menuItem.getAccelerator());
+                        menuBar.addMenuPath(menuItem.getEvent(), menuItem
+                                .getAction());
                     } else {
                         menuBar.add((JMenu) menu);
                     }
@@ -578,33 +582,36 @@ public class StudioImpl implements Studio, GuiTif {
         startPlugin(new PluginLoader(pluginJar, classPath));
     }
 
-    public void addComponentMenu(StudioComponent component, ATerm menuPath,
+    public void addComponentMenu(StudioComponent component, Event menuPath,
             Action action) {
-	MenuItem item = new MenuItem(menuPath, action);
-	List menus = getMenus(component);
+        MenuItem item = new MenuItem(menuPath, action);
+        List menus = getMenus(component);
         menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();
     }
 
-    public void addComponentMenu(StudioComponent component, ATerm menuPath,
+    /*
+    public void addComponentMenu(StudioComponent component, Event menuPath,
             KeyStroke keyStroke, Action action) {
+        System.err.println("MenuPath: " + menuPath);
         MenuItem item = new MenuItem(menuPath, action);
         item.setAccelerator(keyStroke);
-	List menus = getMenus(component);
+        List menus = getMenus(component);
         menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();
     }
-
+*/
+    
     private List getMenus(StudioComponent component) {
         List menus = (List) componentMenus.get(component);
         if (menus == null) {
             menus = new LinkedList();
         }
-        return menus;	
+        return menus;
     }
 
     public void addComponentStatusBar(StudioComponent component,

@@ -2,10 +2,9 @@ package nl.cwi.sen1.gui;
 
 import javax.swing.Action;
 import javax.swing.JMenu;
-import javax.swing.KeyStroke;
 
+import nl.cwi.sen1.configapi.types.Event;
 import toolbus.AbstractTool;
-import aterm.ATerm;
 import aterm.ATermFactory;
 
 public interface Studio {
@@ -19,13 +18,11 @@ public interface Studio {
 
     public void addComponentMenu(StudioComponent component, JMenu menu);
 
-    public void addComponentMenu(StudioComponent component, ATerm menuPath,
+    public void addComponentMenu(StudioComponent component, Event menu,
             Action action);
 
-    public void addComponentMenu(StudioComponent component, ATerm menuPath,
-            KeyStroke keyStroke, Action action);
+    public void addComponentStatusBar(StudioComponent component,
+            StatusBar statusBar);
 
-    public void addComponentStatusBar(StudioComponent component, StatusBar statusBar);
-    
     public void requestFocus(StudioComponent component);
 }
