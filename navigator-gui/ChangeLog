@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 21 16:31:52 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use configuration api
+
 Fri Feb 17 15:39:13 CET 2006 <kooiker@cwi.nl>
  * Use File attribute of graph to display tree structure
 

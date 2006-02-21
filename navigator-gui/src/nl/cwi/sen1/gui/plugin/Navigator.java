@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Attribute;
 import nl.cwi.sen1.graph.types.AttributeList;
@@ -124,9 +125,9 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
     public void showPopup(final ATerm id, ATerm menu) {
         StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
         popup.setPopupHandler(new PopupHandler() {
-            public void popupSelected(ATerm action) {
+            public void popupSelected(Event action) {
                 bridge.postEvent(studio.getATermFactory().make(
-                        "popup-menu-event(<term>,<term>)", id, action));
+                        "popup-menu-event(<term>,<term>)", id, action.toTerm()));
             }
 
         });
