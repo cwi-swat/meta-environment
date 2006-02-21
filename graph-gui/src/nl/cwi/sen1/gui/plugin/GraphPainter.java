@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
+import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.graph.Factory;
 import nl.cwi.sen1.graph.types.Graph;
 import nl.cwi.sen1.graph.types.NodeId;
@@ -183,7 +184,6 @@ public class GraphPainter extends DefaultStudioPlugin implements
             }
         });
         animation.add(item);
-        item.setSelected(true);
         menu.add(item);
 
         item = new JRadioButtonMenuItem("No animation");
@@ -193,6 +193,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
             }
         });
         animation.add(item);
+        item.setSelected(true);
         menu.add(item);
 
         menu.add(new JSeparator());
@@ -285,10 +286,10 @@ public class GraphPainter extends DefaultStudioPlugin implements
     public void showPopup(final String graphId, final ATerm nodeId, ATerm menu) {
         StudioPopupMenu popup = new StudioPopupMenu((ATermList) menu);
         popup.setPopupHandler(new PopupHandler() {
-            public void popupSelected(ATerm action) {
+            public void popupSelected(Event action) {
                 bridge.postEvent(studio.getATermFactory().make(
                         "popup-menu-event(<str>,<term>,<term>)", graphId,
-                        nodeId, action));
+                        nodeId, action.toTerm()));
             }
         });
         popup.show(popupEvent.getComponent(), popupEvent.getX(), popupEvent

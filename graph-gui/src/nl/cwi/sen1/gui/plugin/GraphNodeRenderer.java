@@ -23,7 +23,7 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		
         nl.cwi.sen1.graph.types.Shape shape = node.getShape();
 		if (shape.isDiamond()) {
-			result = getDiamondShape(item, x, y, width, height);
+			result = getDiamondShape(x, y, width, height);
 		}
 		else if (shape.isBox()) {
 			result = getBoxShape(x, y, width, height);
@@ -54,8 +54,8 @@ public class GraphNodeRenderer extends TextItemRenderer {
 		return new Rectangle2D.Double(x, y, width, height);
 	}
 
-	private Shape getDiamondShape(VisualItem item, double x, double y, double width, double height) {
-		int ix = (int) x;
+	private Shape getDiamondShape(double x, double y, double width, double height) {
+        int ix = (int) x;
 		int iy = (int) y;
 		int iw = (int) width;
 		int ih = (int) height;

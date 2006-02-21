@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 21 16:31:26 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use configuration api for menus and shortcuts
+
 Wed Jan 18 15:31:57 CET 2006 <kooiker@cwi.nl>
  * Initial version
 
