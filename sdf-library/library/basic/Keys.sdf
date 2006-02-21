@@ -2,114 +2,110 @@ module basic/Keys
 
 exports
 
-sorts Mask
+sorts KeyModifier
 context-free syntax
-"ALT_MASK" -> Mask
-"CTRL_MASK" -> Mask
-"SHIFT_MASK" -> Mask
+"ALT" -> KeyModifier {cons("ALT")}
+"CTRL" -> KeyModifier {cons("CTRL")}
+"SHIFT" -> KeyModifier {cons("SHIFT")}
 
-sorts Key
+sorts VirtualKey
 context-free syntax
-"VK_0" -> Key
-"VK_1" -> Key
-"VK_2" -> Key
-"VK_3" -> Key
-"VK_4" -> Key
-"VK_5" -> Key
-"VK_6" -> Key
-"VK_7" -> Key
-"VK_8" -> Key
-"VK_9" -> Key
-"VK_A" -> Key
-"VK_B" -> Key
-"VK_C" -> Key
-"VK_D" -> Key
-"VK_E" -> Key
-"VK_F" -> Key
-"VK_G" -> Key
-"VK_H" -> Key
-"VK_I" -> Key
-"VK_J" -> Key
-"VK_K" -> Key
-"VK_L" -> Key
-"VK_M" -> Key
-"VK_N" -> Key
-"VK_O" -> Key
-"VK_P" -> Key
-"VK_Q" -> Key
-"VK_R" -> Key
-"VK_S" -> Key
-"VK_T" -> Key
-"VK_U" -> Key
-"VK_V" -> Key
-"VK_W" -> Key
-"VK_X" -> Key
-"VK_Y" -> Key
-"VK_Z" -> Key
-"VK_AMPERSAND" -> Key
-"VK_ASTERISK" -> Key
-"VK_AT" -> Key
-"VK_BACK_QUOTE" -> Key
-"VK_BACK_SLASH" -> Key
-"VK_BACK_SPACE" -> Key
-"VK_BEGIN" -> Key
-"VK_BRACE_LEFT" -> Key
-"VK_BRACE_RIGHT" -> Key
-"VK_CIRCUMFLEX" -> Key
-"VK_CLEAR" -> Key
-"VK_CLOSE_BRACKET" -> Key
-"VK_COLON" -> Key
-"VK_COMMA" -> Key
-"VK_DECIMAL" -> Key
-"VK_DELETE" -> Key
-"VK_DIVIDE" -> Key
-"VK_DOLLAR" -> Key
-"VK_DOWN" -> Key
-"VK_END" -> Key
-"VK_ENTER" -> Key
-"VK_EQUALS" -> Key
-"VK_ESCAPE" -> Key
-"VK_EXCLAMATION_MARK" -> Key
-"VK_F1" -> Key
-"VK_F2" -> Key
-"VK_F3" -> Key
-"VK_F4" -> Key
-"VK_F5" -> Key
-"VK_F6" -> Key
-"VK_F7" -> Key
-"VK_F8" -> Key
-"VK_F9" -> Key
-"VK_F10" -> Key
-"VK_F11" -> Key
-"VK_F12" -> Key
-"VK_GREATER" -> Key
-"VK_HOME" -> Key
-"VK_INSERT" -> Key
-"VK_LEFT" -> Key
-"VK_LEFT_PARENTHESIS" -> Key
-"VK_MINUS" -> Key
-"VK_MULTIPLY" -> Key
-"VK_NUMBER_SIGN" -> Key
-"VK_OPEN_BRACKET" -> Key
-"VK_PAGE_DOWN" -> Key
-"VK_PAGE_UP" -> Key
-"VK_PAUSE" -> Key
-"VK_PERIOD" -> Key
-"VK_PLUS" -> Key
-"VK_PRINTSCREEN" -> Key
-"VK_QUOTE" -> Key
-"VK_QUOTEDBL" -> Key
-"VK_RIGHT" -> Key
-"VK_RIGHT_PARENTHESIS" -> Key
-"VK_SEMICOLON" -> Key
-"VK_SLASH" -> Key
-"VK_SPACE" -> Key
-"VK_SUBTRACT" -> Key
-"VK_TAB" -> Key
-"VK_UNDERSCORE" -> Key
-"VK_UP" -> Key
+"0" -> VirtualKey {cons("0")}
+"1" -> VirtualKey {cons("1")}
+"2" -> VirtualKey {cons("2")}
+"3" -> VirtualKey {cons("3")}
+"4" -> VirtualKey {cons("4")}
+"5" -> VirtualKey {cons("5")}
+"6" -> VirtualKey {cons("6")}
+"7" -> VirtualKey {cons("7")}
+"8" -> VirtualKey {cons("8")}
+"9" -> VirtualKey {cons("9")}
+"A" -> VirtualKey {cons("A")}
+"B" -> VirtualKey {cons("B")}
+"C" -> VirtualKey {cons("C")}
+"D" -> VirtualKey {cons("D")}
+"E" -> VirtualKey {cons("E")}
+"F" -> VirtualKey {cons("F")}
+"G" -> VirtualKey {cons("G")}
+"H" -> VirtualKey {cons("H")}
+"I" -> VirtualKey {cons("I")}
+"J" -> VirtualKey {cons("J")}
+"K" -> VirtualKey {cons("K")}
+"L" -> VirtualKey {cons("L")}
+"M" -> VirtualKey {cons("M")}
+"N" -> VirtualKey {cons("N")}
+"O" -> VirtualKey {cons("O")}
+"P" -> VirtualKey {cons("P")}
+"Q" -> VirtualKey {cons("Q")}
+"R" -> VirtualKey {cons("R")}
+"S" -> VirtualKey {cons("S")}
+"T" -> VirtualKey {cons("T")}
+"U" -> VirtualKey {cons("U")}
+"V" -> VirtualKey {cons("V")}
+"W" -> VirtualKey {cons("W")}
+"X" -> VirtualKey {cons("X")}
+"Y" -> VirtualKey {cons("Y")}
+"Z" -> VirtualKey {cons("Z")}
+"AMPERSAND" -> VirtualKey {cons("AMPERSAND")}
+"ASTERISK" -> VirtualKey {cons("ASTERISK")}
+"AT" -> VirtualKey {cons("AT")}
+"BACK_QUOTE" -> VirtualKey {cons("BACK_QUOTE")}
+"BACK_SLASH" -> VirtualKey {cons("BACK_SLASH")}
+"BACK_SPACE" -> VirtualKey {cons("BACK_SPACE")}
+"BEGIN" -> VirtualKey {cons("BEGIN")}
+"BRACE_LEFT" -> VirtualKey {cons("BRACE_LEFT")}
+"BRACE_RIGHT" -> VirtualKey {cons("BRACE_RIGHT")}
+"CIRCUMFLEX" -> VirtualKey {cons("CIRCUMFLEX")}
+"CLEAR" -> VirtualKey {cons("CLEAR")}
+"CLOSE_BRACKET" -> VirtualKey {cons("CLOSE_BRACKET")}
+"COLON" -> VirtualKey {cons("COLON")}
+"COMMA" -> VirtualKey {cons("COMMA")}
+"DECIMAL" -> VirtualKey {cons("DECIMAL")}
+"DELETE" -> VirtualKey {cons("DELETE")}
+"DIVIDE" -> VirtualKey {cons("DIVIDE")}
+"DOLLAR" -> VirtualKey {cons("DOLLAR")}
+"DOWN" -> VirtualKey {cons("DOWN")}
+"END" -> VirtualKey {cons("END")}
+"ENTER" -> VirtualKey {cons("ENTER")}
+"EQUALS" -> VirtualKey {cons("EQUALS")}
+"ESCAPE" -> VirtualKey {cons("ESCAPE")}
+"EXCLAMATION_MARK" -> VirtualKey {cons("EXCLAMATION_MARK")}
+"F1" -> VirtualKey {cons("F1")}
+"F2" -> VirtualKey {cons("F2")}
+"F3" -> VirtualKey {cons("F3")}
+"F4" -> VirtualKey {cons("F4")}
+"F5" -> VirtualKey {cons("F5")}
+"F6" -> VirtualKey {cons("F6")}
+"F7" -> VirtualKey {cons("F7")}
+"F8" -> VirtualKey {cons("F8")}
+"F9" -> VirtualKey {cons("F9")}
+"F10" -> VirtualKey {cons("F10")}
+"F11" -> VirtualKey {cons("F11")}
+"F12" -> VirtualKey {cons("F12")}
+"GREATER" -> VirtualKey {cons("GREATER")}
+"HOME" -> VirtualKey {cons("HOME")}
+"INSERT" -> VirtualKey {cons("INSERT")}
+"LEFT" -> VirtualKey {cons("LEFT")}
+"LEFT_PARENTHESIS" -> VirtualKey {cons("LEFT_PARENTHESIS")}
+"MINUS" -> VirtualKey {cons("MINUS")}
+"MULTIPLY" -> VirtualKey {cons("MULTIPLY")}
+"NUMBER_SIGN" -> VirtualKey {cons("NUMBER_SIGN")}
+"OPEN_BRACKET" -> VirtualKey {cons("OPEN_BRACKET")}
+"PAGE_DOWN" -> VirtualKey {cons("PAGE_DOWN")}
+"PAGE_UP" -> VirtualKey {cons("PAGE_UP")}
+"PAUSE" -> VirtualKey {cons("PAUSE")}
+"PERIOD" -> VirtualKey {cons("PERIOD")}
+"PLUS" -> VirtualKey {cons("PLUS")}
+"PRINTSCREEN" -> VirtualKey {cons("PRINTSCREEN")}
+"QUOTE" -> VirtualKey {cons("QUOTE")}
+"QUOTEDBL" -> VirtualKey {cons("QUOTEDBL")}
+"RIGHT" -> VirtualKey {cons("RIGHT")}
+"RIGHT_PARENTHESIS" -> VirtualKey {cons("RIGHT_PARENTHESIS")}
+"SEMICOLON" -> VirtualKey {cons("SEMICOLON")}
+"SLASH" -> VirtualKey {cons("SLASH")}
+"SPACE" -> VirtualKey {cons("SPACE")}
+"SUBTRACT" -> VirtualKey {cons("SUBTRACT")}
+"TAB" -> VirtualKey {cons("TAB")}
+"UNDERSCORE" -> VirtualKey {cons("UNDERSCORE")}
+"UP" -> VirtualKey {cons("UP")}
 
-hiddens
-
-context-free start-symbols
-  Key Mask

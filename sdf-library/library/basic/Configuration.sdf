@@ -1,0 +1,60 @@
+module basic/Configuration
+
+imports basic/Keys
+imports basic/Colors
+
+exports
+
+context-free start-symbols Configuration
+
+sorts TermCon NatCon StrCon
+
+sorts Configuration
+context-free syntax
+  "configuration" "(" "[" list:{Property ","}* "]" ")" -> Configuration {cons("configuration")} 
+
+sorts Property
+context-free syntax
+  "import" "(" path:StrCon ")" -> Property {cons("import")}
+  "action" "(" "[" list:{ActionDescription ","}* "]" "," action:StrCon ")" -> Property {cons("action")}
+  "extension" "(" language:StrCon "," extension:StrCon ")" -> Property {cons("extension")}
+  "library-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("library-path")}
+  "module-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("module-path")}
+  "text-category" "(" category:TextCategoryName "," "[" list:{TextAttribute ","}* "]" ")" -> Property {cons("text-category")}
+
+sorts ActionDescription
+context-free syntax
+  "description" "(" context:TermCon "," event:Event ")" -> ActionDescription {cons("description")}
+
+sorts Event
+context-free syntax
+  "click" -> Event {cons("click")}
+  "icon" "(" title:StrCon "," path:StrCon ")" -> Event {cons("icon")}
+  "menu" "(" "[" list:{Item ","}* "]" ")" -> Event {cons("menu")}
+  "menu-shortcut" "(" "[" list:{Item ","}* "]" "," shortcut:ShortCut ")" -> Event {cons("menu-shortcut")}
+
+sorts TextCategoryName
+context-free syntax
+  "focus" -> TextCategoryName {cons("focus")}
+  "selection" -> TextCategoryName {cons("selection")}
+  "normal" -> TextCategoryName {cons("normal")}
+  "extern" "(" name:StrCon ")" -> TextCategoryName {cons("extern")}
+
+sorts TextAttribute
+context-free syntax
+  "foreground-color" "(" color:Color ")" -> TextAttribute {cons("foreground-color")}
+  "background-color" "(" color:Color ")" -> TextAttribute {cons("background-color")}
+  "style" "(" style:TextStyle ")" -> TextAttribute {cons("style")}
+  "font" "(" name:StrCon ")" -> TextAttribute {cons("font")}
+  "size" "(" point:NatCon ")" -> TextAttribute {cons("size")}
+
+sorts ShortCut
+context-free syntax
+  "shortcut" "(" modifier:KeyModifier "," key:VirtualKey ")" -> ShortCut {cons("shortcut")}
+
+sorts TextStyle
+context-free syntax
+  "bold" -> TextStyle {cons("bold")}
+  "italics" -> TextStyle {cons("italics")}
+  "underlined" -> TextStyle {cons("underlined")}
+
