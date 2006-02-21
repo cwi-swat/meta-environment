@@ -1,8 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.Event;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -13,11 +11,12 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 
 import nl.cwi.sen1.configapi.Factory;
+import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.configapi.types.ItemList;
 import nl.cwi.sen1.configapi.types.PropertyList;
+import nl.cwi.sen1.configapi.types.shortcut.Shortcut;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.StatusBar;
@@ -36,6 +35,8 @@ import aterm.pure.PureFactory;
 public class EditorPlugin extends DefaultStudioPlugin implements
         EditorPluginTif {
     private static final String TOOL_NAME = "editor-plugin";
+
+    private Factory configFactory;
 
     private Map editors;
 
@@ -119,7 +120,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     private void addEditorMenus(final ATerm editorId, StudioComponent comp,
             ATermList menuList) {
         while (!menuList.isEmpty()) {
-            final ATerm menuPath = menuList.getFirst();
+            final Event menuPath = configFactory.EventFromTerm(menuList
+                    .getFirst());
 
             studio.addComponentMenu(comp, menuPath, new AbstractAction(menuPath
                     .toString()) {
@@ -141,25 +143,23 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
                 factory.makeItem_Label("Save"));
 
-        ATerm menuPath = factory.makeEvent_Menu(items);
+        Shortcut shortcut = factory.makeShortCut_Shortcut(factory
+                .makeKeyModifier_MUnderscoreCTRL(), factory
+                .makeVirtualKey_VKUnderscoreS());
+        Event event = factory.makeEvent_MenuShortcut(items, shortcut);
 
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S,
-                Event.CTRL_MASK);
-
-        studio.addComponentMenu(comp, menuPath, keyStroke,
-                new AbstractAction() {
-                    public void actionPerformed(ActionEvent e) {
-                        try {
-                            ((Editor) editors.get(editorId.toString()))
-                                    .writeContents();
-                            ATerm event = studio.getATermFactory().make(
-                                    "contents-saved(<term>)", editorId);
-                            bridge.postEvent(event);
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
+        studio.addComponentMenu(comp, event, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    ((Editor) editors.get(editorId.toString())).writeContents();
+                    ATerm event = studio.getATermFactory().make(
+                            "contents-saved(<term>)", editorId);
+                    bridge.postEvent(event);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 
     private void createEditMenu(Editor editor, StudioComponent comp) {
@@ -252,6 +252,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
+        configFactory = Factory.getInstance((PureFactory) studio
+                .getATermFactory());
         bridge = new EditorPluginBridge(studio.getATermFactory(), this);
         bridge.setLockObject(this);
         studio.connect(getName(), bridge);
