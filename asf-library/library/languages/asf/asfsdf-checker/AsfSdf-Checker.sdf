@@ -24,6 +24,9 @@ hiddens
     check-asfsdf-specificities(Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
+  context-free start-symbols
+    SymbolsSet
+
   variables
     "Definition"[0-9]*   -> Definition
     "Msgs"[0-9]*         -> {Error ","}*

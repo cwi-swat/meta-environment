@@ -1,5 +1,10 @@
 $Id$
 
+Tue Feb 21 14:20:28 CET 2006 <jurgenv@cwi.nl>
+ * library/asf/asfsdf-checker: moved source of asfsdf-checker here
+ * library/sdf2/checker: moved source of sdf-checker here
+ * library/sdf2/checker: fixed bug 464, add full support for renamings
+
 Mon Feb 13 13:59:27 CET 2006 <jurgenv@cwi.nl>
  * library/**: Moved all syntax definitions to sdf-library!
  * package: set version to 2.0
