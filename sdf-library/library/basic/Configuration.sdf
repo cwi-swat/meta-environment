@@ -20,7 +20,7 @@ context-free syntax
   "extension" "(" language:StrCon "," extension:StrCon ")" -> Property {cons("extension")}
   "library-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("library-path")}
   "module-path" "(" label:StrCon "," path:StrCon ")" -> Property {cons("module-path")}
-  "text-category" "(" category:TextCategoryName "," "[" list:{TextAttribute ","}* "]" ")" -> Property {cons("text-category")}
+  "text-category" "(" category:TextCategoryName "," "[" map:{TextAttribute ","}* "]" ")" -> Property {cons("text-category")}
 
 sorts ActionDescription
 context-free syntax
@@ -32,6 +32,10 @@ context-free syntax
   "icon" "(" title:StrCon "," path:StrCon ")" -> Event {cons("icon")}
   "menu" "(" "[" list:{Item ","}* "]" ")" -> Event {cons("menu")}
   "menu-shortcut" "(" "[" list:{Item ","}* "]" "," shortcut:ShortCut ")" -> Event {cons("menu-shortcut")}
+
+sorts Item
+context-free syntax
+  "label" "(" name:StrCon ")" -> Item {cons("label")}
 
 sorts TextCategoryName
 context-free syntax
