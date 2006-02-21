@@ -124,23 +124,30 @@ endlet
 process GetSyntaxDefinition(ModuleId: term, Syntax: term?) is
 let
   ModuleIds: list,
-  Modules: list
+  Modules: list,
+  Status: term
 in
-  MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
-  . ModuleIds := join([ModuleId], ModuleIds)
-  . GetModules(ModuleIds, Modules?)
-  . 
-  if equal(Modules, []) then
-    Syntax := UNDEFINED
+  MM-GetAttribute(ModuleId, SDF_NAMESPACE, "status", Status?)
+  .
+  if equal(Status, complete) then
+    MM-GetAllModuleDependencies(ModuleId, ModuleIds?)
+    . ModuleIds := join([ModuleId], ModuleIds)
+    . GetModules(ModuleIds, Modules?)
+    . 
+    if equal(Modules, []) then
+      Syntax := UNDEFINED
+    else
+      snd-msg(sm-make-sdf-definition(Modules))
+      .
+      (
+        rec-msg(sm-sdf-definition(Syntax?))
+      +
+        rec-msg(sm-no-sdf-definition)
+        . Syntax := UNDEFINED
+      )
+    fi
   else
-    snd-msg(sm-make-sdf-definition(Modules))
-    .
-    (
-      rec-msg(sm-sdf-definition(Syntax?))
-    +
-      rec-msg(sm-no-sdf-definition)
-      . Syntax := UNDEFINED
-    )
+    Syntax := UNDEFINED
   fi
 endlet
 
@@ -430,17 +437,22 @@ in
     .
     if not-equal(Text, "") then
       GetParseTable(ModuleId, Type, ParseTable?)
-      . create(ParseTreeHandler(ModuleId, Path), Pid?)
-      . ParseText(Pid, Text, ParseTable, SDF_TOPSORT, on)
       .
-      (
-        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-        . AnnotateTree(Tree, Path, Result?)
-        . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
-      +
-        rec-msg(parse-handler-done(Pid))
-        . Result := UNDEFINED
-      )
+      if not-equal(ParseTable, UNDEFINED) then
+        create(ParseTreeHandler(ModuleId, Path), Pid?)
+        . ParseText(Pid, Text, ParseTable, SDF_TOPSORT, on)
+        .
+        (
+          rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+          . AnnotateTree(Tree, Path, Result?)
+          . PutCachedValue(SDF_TREE_CACHE, ModuleId, Result)
+        +
+          rec-msg(parse-handler-done(Pid))
+          . Result := UNDEFINED
+        )
+      else
+        Result := UNDEFINED
+      fi
     else
       Result := UNDEFINED
     fi

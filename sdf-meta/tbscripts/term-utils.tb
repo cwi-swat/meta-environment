@@ -14,19 +14,24 @@ let
 in
   Type := trm
   . GetParseTable(ModuleId, Type, ParseTable?)
-  . ReadFile(Path, Text?)
   .
-  if not-equal(Text, "") then
-    create(ParseTreeHandler(ModuleId, Path), Pid?)
-    . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
+  if not-equal(ParseTable, UNDEFINED) then
+    ReadFile(Path, Text?)
     .
-    (
-      rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
-      . AnnotateTree(Tree, Path, Result?)
-    +
-      rec-msg(parse-handler-done(Pid))
-      . Result := UNDEFINED
-    )  
+    if not-equal(Text, "") then
+      create(ParseTreeHandler(ModuleId, Path), Pid?)
+      . ParseText(Pid, Text, ParseTable, NO_NONTERMINAL, off)
+      .
+      (
+        rec-msg(parse-handler-done(Pid, ModuleId, Tree?))
+        . AnnotateTree(Tree, Path, Result?)
+      +
+        rec-msg(parse-handler-done(Pid))
+        . Result := UNDEFINED
+      )  
+    else
+      Result := UNDEFINED
+    fi
   else
     Result := UNDEFINED
   fi

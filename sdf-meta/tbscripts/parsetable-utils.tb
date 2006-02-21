@@ -52,8 +52,7 @@ in
 	  snd-msg(no-parsetable(ModuleId, Type))
 	fi
       else
-	TODO("error message") 
-	. snd-msg(no-parsetable(ModuleId, Type))
+	snd-msg(no-parsetable(ModuleId, Type))
       fi
     else
       snd-msg(parsetable(ModuleId, Type, Table))
