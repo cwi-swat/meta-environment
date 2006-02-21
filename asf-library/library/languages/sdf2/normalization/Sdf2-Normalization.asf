@@ -33,6 +33,8 @@ equations
 
 %% <PO> rhs was: reachable({<Start>}, _G8)
 
+equations
+
 %% The function \fun{topsorts} adds a special production for the symbol $\Start{}$,
 %% which declares that a text over the grammar is a string of sort $\SymA$ followed
 %% by the character representing the end of file. For each declared sort in the
@@ -41,7 +43,8 @@ equations
 
   [0] topsorts[[ _G ]](_A) = syntax _A [\EOF] -> <Start> S(_A,_G)
 
-%% \subsection{Interaction}
+equations
+
 %%
 %% Several of the normalization functions are underdefined, i.e., the full
 %% \SDFII{} formalism contains more constructors than the extension for
@@ -83,7 +86,8 @@ equations
 %% from symbols. The meaning of $\cfsort{\mfun{Id}*}$ is different from that of
 %% $\lexsort{\mfun{Id}*}$.
 
-%% \paragraph{Basic}
+equations
+
 %%
 %% Literals and character classes do not need the $\lexsort{\_}$ or $\cfsort{\_}$
 %% constructor, because they are lexical by definition
@@ -99,7 +103,8 @@ equations
 %%[0]  <L  -VAR> = L
 
 
-%% \paragraph{Basic + Priorities}
+equations
+
 %%
 %% Equations for the normalization of lexical and context-free priorities
 %% that were added at the level of \SDFII{}.
@@ -107,7 +112,7 @@ equations
   [0]
         context-free priorities pr* := _G1, context-free syntax p* := _G2
         ==================================================================
-        _G1 <> _G2 = <context-free syntax p*, context-free priorities pr*>
+        _G1 <> _G2 = <context-free syntax p* syntax[[pr*]], context-free priorities pr*>
   [0]
         context-free priorities pr* := _G1, lexical syntax p* := _G2
         =============================================================
@@ -134,7 +139,7 @@ equations
        <p1 <n+1>> p2-CFp>         = <p1-CF> <n+2>> <p2-CF>
    [0] <p1 as p2-CFp>           = <p1-CF> as <p2-CF>
 
-%% Similarly for lexical priorities.
+equations
 
    [0] b-aux[[lexical priorities pr*]] = <priorities pr* -LEX>
    [0] <priorities pr*-LEX>     = priorities <norm[[pr*]]-LEXp>
@@ -144,7 +149,7 @@ equations
    [0] <p1 <n+>> p2-LEXp>       = <p1-LEX> <n+>> <p2-LEX>
    [0] <p1 as p2-LEXp>          = <p1-LEX> as <p2-LEX>
 
-%% \paragraph{Basic + Restrictions}
+equations
 
    [0] b-aux[[lexical restrictions restr*]] = restrictions <restr* -LEX>
 
@@ -162,7 +167,7 @@ equations
    [0] <_A      -CFr>  = <_A-CF>
    [0] <'a+ 'b+ -CFr>  = <'a+ -CFr> ++ <'b+ -CFr>
 
-%% \paragraph{Labels}
+equations
 
   [0] r[[ I : _A ]] = r[[ _A ]]
   [0] r[[ L : _A ]] = r[[ _A ]]
@@ -173,14 +178,14 @@ equations
   [0] <I : _A -CF>  = <_A -CF>
   [0] <I : _A -VAR> = <_A -VAR>
 
-%% \paragraph{Hiding Productions}
+equations
 
   [0] hide(M, context-free syntax p*)    = context-free syntax hide(M, p*)
   [0] hide(M, lexical syntax p*)         = lexical syntax hide(M, p*)
   [0] hide(M, variables p*)              = variables hide(M, p*)
   [0] hide(M, lexical variables p*)      = lexical variables hide(M, p*)
 
-%% \paragraph{Aliases}
+equations
 
   [0]
         aliases al* := _G1, sorts 'a := _G2

@@ -10,8 +10,7 @@ equations
   [0]
         pr*1 := Pr(_G), 
         pr*2 := norm[[ pr*1 ]],
-        %% ~Pr(_G) syntax[[ pr*2 ]] = _G'
-        _G' := ~Pr(_G)
+        _G' := ~Pr(_G) syntax[[pr*2]]
         =============
         p[[ _G ]] = _G' priorities pr*2 ++ assoc[[_G']]
 
