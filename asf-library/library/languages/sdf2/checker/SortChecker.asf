@@ -140,6 +140,11 @@ equations
 
 equations
 
+  [grsf-1'1] get-renamed-from-symbols($Symbol1 => $Symbol2, 
+                                SymbolsSet) = add($Symbol1, SymbolsSet)
+
+equations
+
 %% Pre-check one module
 	
   [cm1] $ModuleId := get-module-name($Module),
@@ -152,6 +157,8 @@ equations
                                        symbols()),
 
         RenamedSymbolsSet := get-renamed-symbols($Module, symbols()),
+
+        RenamedSymbolsSet2 := get-renamed-from-symbols($Module, symbols()),
 
         InfoMsgTuple2 := put-messages($ModuleId, $Msgs1, $Msgs2,
                                       InfoMsgTuple1),
@@ -166,7 +173,10 @@ equations
         ModuleInfoTable4 := put-renamed-symbols-info($ModuleId,
                                                      RenamedSymbolsSet,
                                                      ModuleInfoTable3),
-        InfoMsgTuple3 :=  put-module-info(ModuleInfoTable4, InfoMsgTuple2)
+        ModuleInfoTable5 := put-renamed-from-symbols-info($ModuleId,
+					             RenamedSymbolsSet2,
+						    ModuleInfoTable4),
+        InfoMsgTuple3 :=  put-module-info(ModuleInfoTable5, InfoMsgTuple2)
         ====>
         pre-check-module-sorts($Module, InfoMsgTuple1) = InfoMsgTuple3
 

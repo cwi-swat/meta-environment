@@ -120,6 +120,11 @@ hiddens
     get-renamed-symbols(Renaming, SymbolsSet)   -> SymbolsSet {traversal(accu, break, top-down)}
 
   context-free syntax
+    get-renamed-from-symbols(Module, SymbolsSet)    -> SymbolsSet {traversal(accu, break, top-down)}
+    get-renamed-from-symbols(Renaming, SymbolsSet)   -> SymbolsSet {traversal(accu, break, top-down)}
+
+
+  context-free syntax
     add-symbol(Symbol, Symbols-Msg-Tuple, Location, ModuleId) -> Symbols-Msg-Tuple
 
   context-free syntax

@@ -18,6 +18,7 @@ hiddens
 
   context-free syntax
     is-binary-definition(Production)       -> Boolean
+    is-recursive-definition(Production)    -> Boolean
     is-bracket-definition(Production)      -> Boolean
 
 hiddens

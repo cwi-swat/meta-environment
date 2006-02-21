@@ -151,6 +151,7 @@ equations
 equations
 	
   [cm-1'1] $ModuleId := get-module-name(Module),
+
            ModuleInfoTable := get-module-info(InfoMsgTuple),
            module-is-checked($ModuleId, ModuleInfoTable) == true
            ====================================================
@@ -189,14 +190,16 @@ equations
              get-defined-symbols(Import*, get-module-info(InfoMsgTuple1)),
 	  RenamedSymbolPairSet :=
              get-renamed-symbols(Import*, get-module-info(InfoMsgTuple1)),
+           RenamedSymbolPairSet2 :=
+	    get-renamed-from-symbols(Import*, get-module-info(InfoMsgTuple1)),
            SymbolsSet1 := 
              get-used-symbols(Import*, get-module-info(InfoMsgTuple1)),
            SymbolsSet2 := diff(merge(DeclaredSymbolPairSet, 
                                      AliasedSymbolPairSet),
                                SymbolsSet1),
            $Msgs2 := make-symbol-warnings(SymbolsSet2, "unused sort"),
-           SymbolsSet3 := diff(diff(SymbolsSet1,
-                               DefinedSymbolPairSet), RenamedSymbolPairSet),
+           SymbolsSet3 := diff(diff(diff(SymbolsSet1,
+                               DefinedSymbolPairSet), RenamedSymbolPairSet2), RenamedSymbolPairSet),
            $Msgs3 := make-symbol-errors(SymbolsSet3, "use of undefined symbol"),
 
            InfoMsgTuple2 := put-messages($ModuleId, $Msgs2, $Msgs3, InfoMsgTuple1)

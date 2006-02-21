@@ -28,6 +28,7 @@ exports
         defined-symbols:SymbolsSet "," 
         used-symbols:SymbolsSet ","    
         renamed-symbols:SymbolsSet "," 
+        renamed-from-symbols:SymbolsSet ","
         ProductionsSet "," 
         ConstructorSet "]"       -> Module-Info
 
@@ -66,6 +67,14 @@ exports
                              SymbolsSet, 
                              Module-Info-Table)      -> Module-Info-Table
     get-renamed-symbols(Import*, Module-Info-Table)  -> SymbolsSet
+
+ context-free syntax
+    get-renamed-from-symbols(ModuleId, Module-Info-Table) -> SymbolsSet
+    put-renamed-from-symbols-info(ModuleId,
+                             SymbolsSet, 
+                             Module-Info-Table)      -> Module-Info-Table
+    get-renamed-from-symbols(Import*, Module-Info-Table)  -> SymbolsSet
+
 
   context-free syntax
     get-used-symbols(ModuleId, Module-Info-Table)   -> SymbolsSet
