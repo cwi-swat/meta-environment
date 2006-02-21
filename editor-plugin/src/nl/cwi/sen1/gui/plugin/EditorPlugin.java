@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import nl.cwi.sen1.configapi.Factory;
-import nl.cwi.sen1.configapi.types.Items;
-import nl.cwi.sen1.configapi.types.Properties;
+import nl.cwi.sen1.configapi.types.ItemList;
+import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.StatusBar;
@@ -100,8 +100,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     public void registerTextCategories(ATerm editorId, ATerm categories) {
         Editor panel = getPanel(editorId.toString());
 
-        Properties properties = Factory.getInstance(
-                (PureFactory) categories.getFactory()).PropertiesFromTerm(
+        PropertyList properties = Factory.getInstance(
+                (PureFactory) categories.getFactory()).PropertyListFromTerm(
                 categories);
         panel.registerCategories(properties);
     }
@@ -138,24 +138,28 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         Factory factory = Factory.getInstance((PureFactory) studio
                 .getATermFactory());
 
-        Items items = factory.makeItems("File", "Save");
+        ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
+                factory.makeItem_Label("Save"));
 
-        ATerm menuPath = factory.makeEvent_Default(items);
+        ATerm menuPath = factory.makeEvent_Menu(items);
 
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK);
-        
-        studio.addComponentMenu(comp, menuPath, keyStroke, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    ((Editor) editors.get(editorId.toString())).writeContents();
-                    ATerm event = studio.getATermFactory().make(
-                            "contents-saved(<term>)", editorId);
-                    bridge.postEvent(event);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_S,
+                Event.CTRL_MASK);
+
+        studio.addComponentMenu(comp, menuPath, keyStroke,
+                new AbstractAction() {
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            ((Editor) editors.get(editorId.toString()))
+                                    .writeContents();
+                            ATerm event = studio.getATermFactory().make(
+                                    "contents-saved(<term>)", editorId);
+                            bridge.postEvent(event);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
     }
 
     private void createEditMenu(Editor editor, StudioComponent comp) {

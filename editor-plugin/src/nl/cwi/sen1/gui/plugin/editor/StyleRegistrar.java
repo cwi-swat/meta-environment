@@ -4,10 +4,10 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 
 import nl.cwi.sen1.configapi.types.Color;
-import nl.cwi.sen1.configapi.types.Properties;
 import nl.cwi.sen1.configapi.types.Property;
+import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.configapi.types.TextAttribute;
-import nl.cwi.sen1.configapi.types.TextAttributes;
+import nl.cwi.sen1.configapi.types.TextAttributeMap;
 import nl.cwi.sen1.configapi.types.TextCategoryName;
 import nl.cwi.sen1.configapi.types.TextStyle;
 import nl.cwi.sen1.configapi.types.property.TextCategory;
@@ -18,7 +18,7 @@ public class StyleRegistrar {
     private static final String SELECTION_STYLE_NAME = "***selection***";
 
     static public void registerTextCategories(EditorPane editor,
-            Properties categories) {
+            PropertyList categories) {
         editor.unsetStyles();
 
         for (; !categories.isEmpty(); categories = categories.getTail()) {
@@ -33,7 +33,7 @@ public class StyleRegistrar {
     static private void registerTextCategory(EditorPane editor,
             TextCategory category) {
         TextCategoryName type = category.getCategory();
-        TextAttributes attrs = category.getAttributes();
+        TextAttributeMap attrs = category.getMap();
 
         if (type.isExtern()) {
             String name = category.getCategory().getName();
@@ -55,13 +55,13 @@ public class StyleRegistrar {
     }
 
     static private Style registerAttributes(EditorPane editor, String name,
-            TextAttributes attrs) {
+            TextAttributeMap attrs) {
         Style style = editor.addStyle(name, editor.getDefaultStyle());
         setStyleAttributes(editor, attrs, style);
         return style;
     }
 
-private static void setStyleAttributes(EditorPane editor, TextAttributes attrs, Style style) {
+private static void setStyleAttributes(EditorPane editor, TextAttributeMap attrs, Style style) {
         for (; !attrs.isEmpty(); attrs = attrs.getTail()) {
             TextAttribute attr = attrs.getHead();
 
@@ -96,7 +96,7 @@ private static void setStyleAttributes(EditorPane editor, TextAttributes attrs, 
             } else if (attr.isFont()) {
                 StyleConstants.setFontFamily(style, attr.getName());
             } else if (attr.isSize()) {
-                StyleConstants.setFontSize(style, attr.getPoints());
+                StyleConstants.setFontSize(style, attr.getPoint());
             }
         }
     }    static private java.awt.Color convertColor(Color color) {

@@ -12,7 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import nl.cwi.sen1.configapi.types.Properties;
+import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.gui.plugin.Editor;
 import nl.cwi.sen1.gui.plugin.EditorModifiedListener;
 import aterm.ATerm;
@@ -105,7 +105,7 @@ public class SwingEditor extends JPanel implements Editor {
         return editorPane.isModified();
     }
 
-    public void registerCategories(Properties properties) {
+    public void registerCategories(PropertyList properties) {
         StyleRegistrar.registerTextCategories(editorPane, properties);
     }
 

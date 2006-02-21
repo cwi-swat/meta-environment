@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 21 13:17:05 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use new configuration api
+
 Mon Feb 20 13:49:50 CET 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - add shortcut CTRL_S to File->Save menu

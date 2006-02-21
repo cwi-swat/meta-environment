@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import javax.swing.JMenu;
 
-import nl.cwi.sen1.configapi.types.Properties;
+import nl.cwi.sen1.configapi.types.PropertyList;
 import aterm.ATerm;
 import errorapi.types.Area;
 
@@ -31,7 +31,7 @@ public interface Editor {
 
 	public boolean isModified();
 
-	public void registerCategories(Properties properties);
+	public void registerCategories(PropertyList properties);
 
 	public void registerSlices(ATerm slices);
 
