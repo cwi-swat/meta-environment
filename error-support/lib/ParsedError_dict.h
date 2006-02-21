@@ -7,7 +7,6 @@ extern AFun PERR_afun17;
 extern AFun PERR_afun3;
 extern AFun PERR_afun48;
 extern AFun PERR_afun34;
-extern AFun PERR_afun59;
 extern AFun PERR_afun37;
 extern AFun PERR_afun26;
 extern AFun PERR_afun19;

@@ -1,16 +1,10 @@
 #ifndef _PARSEDLOCATION_H
 #define _PARSEDLOCATION_H
 
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
 #include "ParsedLocation_dict.h"
-
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct _PLOC_OptLayout *PLOC_OptLayout;
 typedef struct _PLOC_Layout *PLOC_Layout;
@@ -28,31 +22,38 @@ typedef struct _PLOC_Area *PLOC_Area;
 typedef struct _PLOC_Slice *PLOC_Slice;
 typedef struct _PLOC_AreaAreas *PLOC_AreaAreas;
 
-/*}}}  */
-
 void PLOC_initParsedLocationApi(void);
 
-/*{{{  protect functions */
-
 void PLOC_protectOptLayout(PLOC_OptLayout * arg);
+void PLOC_unprotectOptLayout(PLOC_OptLayout * arg);
 void PLOC_protectLayout(PLOC_Layout * arg);
+void PLOC_unprotectLayout(PLOC_Layout * arg);
 void PLOC_protectLexLayoutList(PLOC_LexLayoutList * arg);
+void PLOC_unprotectLexLayoutList(PLOC_LexLayoutList * arg);
 void PLOC_protectLexStrChar(PLOC_LexStrChar * arg);
+void PLOC_unprotectLexStrChar(PLOC_LexStrChar * arg);
 void PLOC_protectStrChar(PLOC_StrChar * arg);
+void PLOC_unprotectStrChar(PLOC_StrChar * arg);
 void PLOC_protectLexStrCon(PLOC_LexStrCon * arg);
+void PLOC_unprotectLexStrCon(PLOC_LexStrCon * arg);
 void PLOC_protectStrCon(PLOC_StrCon * arg);
+void PLOC_unprotectStrCon(PLOC_StrCon * arg);
 void PLOC_protectLexStrCharChars(PLOC_LexStrCharChars * arg);
+void PLOC_unprotectLexStrCharChars(PLOC_LexStrCharChars * arg);
 void PLOC_protectLexNatCon(PLOC_LexNatCon * arg);
+void PLOC_unprotectLexNatCon(PLOC_LexNatCon * arg);
 void PLOC_protectNatCon(PLOC_NatCon * arg);
+void PLOC_unprotectNatCon(PLOC_NatCon * arg);
 void PLOC_protectLexLayout(PLOC_LexLayout * arg);
+void PLOC_unprotectLexLayout(PLOC_LexLayout * arg);
 void PLOC_protectLocation(PLOC_Location * arg);
+void PLOC_unprotectLocation(PLOC_Location * arg);
 void PLOC_protectArea(PLOC_Area * arg);
+void PLOC_unprotectArea(PLOC_Area * arg);
 void PLOC_protectSlice(PLOC_Slice * arg);
+void PLOC_unprotectSlice(PLOC_Slice * arg);
 void PLOC_protectAreaAreas(PLOC_AreaAreas * arg);
-
-/*}}}  */
-/*{{{  term conversion functions */
-
+void PLOC_unprotectAreaAreas(PLOC_AreaAreas * arg);
 PLOC_OptLayout PLOC_OptLayoutFromTerm(ATerm t);
 ATerm PLOC_OptLayoutToTerm(PLOC_OptLayout arg);
 PLOC_Layout PLOC_LayoutFromTerm(ATerm t);
@@ -83,10 +84,6 @@ PLOC_Slice PLOC_SliceFromTerm(ATerm t);
 ATerm PLOC_SliceToTerm(PLOC_Slice arg);
 PLOC_AreaAreas PLOC_AreaAreasFromTerm(ATerm t);
 ATerm PLOC_AreaAreasToTerm(PLOC_AreaAreas arg);
-
-/*}}}  */
-/*{{{  list functions */
-
 int PLOC_getLexLayoutListLength(PLOC_LexLayoutList arg);
 PLOC_LexLayoutList PLOC_reverseLexLayoutList(PLOC_LexLayoutList arg);
 PLOC_LexLayoutList PLOC_appendLexLayoutList(PLOC_LexLayoutList arg,
@@ -187,10 +184,6 @@ PLOC_AreaAreas PLOC_makeAreaAreas6(PLOC_OptLayout wsAfterHead,
 				   PLOC_Area elem2, PLOC_Area elem3,
 				   PLOC_Area elem4, PLOC_Area elem5,
 				   PLOC_Area elem6);
-
-/*}}}  */
-/*{{{  constructors */
-
 PLOC_OptLayout PLOC_makeOptLayoutAbsent(void);
 PLOC_OptLayout PLOC_makeOptLayoutPresent(PLOC_Layout layout);
 PLOC_Layout PLOC_makeLayoutLexToCf(PLOC_LexLayoutList list);
@@ -259,10 +252,6 @@ PLOC_AreaAreas PLOC_makeAreaAreasMany(PLOC_Area head,
 				      PLOC_OptLayout wsAfterHead,
 				      PLOC_OptLayout wsAfterSep,
 				      PLOC_AreaAreas tail);
-
-/*}}}  */
-/*{{{  equality functions */
-
 ATbool PLOC_isEqualOptLayout(PLOC_OptLayout arg0, PLOC_OptLayout arg1);
 ATbool PLOC_isEqualLayout(PLOC_Layout arg0, PLOC_Layout arg1);
 ATbool PLOC_isEqualLexLayoutList(PLOC_LexLayoutList arg0,
@@ -280,10 +269,6 @@ ATbool PLOC_isEqualLocation(PLOC_Location arg0, PLOC_Location arg1);
 ATbool PLOC_isEqualArea(PLOC_Area arg0, PLOC_Area arg1);
 ATbool PLOC_isEqualSlice(PLOC_Slice arg0, PLOC_Slice arg1);
 ATbool PLOC_isEqualAreaAreas(PLOC_AreaAreas arg0, PLOC_AreaAreas arg1);
-
-/*}}}  */
-/*{{{  PLOC_OptLayout accessors */
-
 ATbool PLOC_isValidOptLayout(PLOC_OptLayout arg);
 inline ATbool PLOC_isOptLayoutAbsent(PLOC_OptLayout arg);
 inline ATbool PLOC_isOptLayoutPresent(PLOC_OptLayout arg);
@@ -291,19 +276,11 @@ ATbool PLOC_hasOptLayoutLayout(PLOC_OptLayout arg);
 PLOC_Layout PLOC_getOptLayoutLayout(PLOC_OptLayout arg);
 PLOC_OptLayout PLOC_setOptLayoutLayout(PLOC_OptLayout arg,
 				       PLOC_Layout layout);
-
-/*}}}  */
-/*{{{  PLOC_Layout accessors */
-
 ATbool PLOC_isValidLayout(PLOC_Layout arg);
 inline ATbool PLOC_isLayoutLexToCf(PLOC_Layout arg);
 ATbool PLOC_hasLayoutList(PLOC_Layout arg);
 PLOC_LexLayoutList PLOC_getLayoutList(PLOC_Layout arg);
 PLOC_Layout PLOC_setLayoutList(PLOC_Layout arg, PLOC_LexLayoutList list);
-
-/*}}}  */
-/*{{{  PLOC_LexLayoutList accessors */
-
 ATbool PLOC_isValidLexLayoutList(PLOC_LexLayoutList arg);
 inline ATbool PLOC_isLexLayoutListEmpty(PLOC_LexLayoutList arg);
 inline ATbool PLOC_isLexLayoutListSingle(PLOC_LexLayoutList arg);
@@ -316,10 +293,6 @@ PLOC_LexLayoutList PLOC_setLexLayoutListHead(PLOC_LexLayoutList arg,
 					     PLOC_LexLayout head);
 PLOC_LexLayoutList PLOC_setLexLayoutListTail(PLOC_LexLayoutList arg,
 					     PLOC_LexLayoutList tail);
-
-/*}}}  */
-/*{{{  PLOC_LexStrChar accessors */
-
 ATbool PLOC_isValidLexStrChar(PLOC_LexStrChar arg);
 inline ATbool PLOC_isLexStrCharNewline(PLOC_LexStrChar arg);
 inline ATbool PLOC_isLexStrCharTab(PLOC_LexStrChar arg);
@@ -339,39 +312,23 @@ PLOC_LexStrChar PLOC_setLexStrCharA(PLOC_LexStrChar arg, char a);
 PLOC_LexStrChar PLOC_setLexStrCharB(PLOC_LexStrChar arg, char b);
 PLOC_LexStrChar PLOC_setLexStrCharC(PLOC_LexStrChar arg, char c);
 PLOC_LexStrChar PLOC_setLexStrCharCh(PLOC_LexStrChar arg, char ch);
-
-/*}}}  */
-/*{{{  PLOC_StrChar accessors */
-
 ATbool PLOC_isValidStrChar(PLOC_StrChar arg);
 inline ATbool PLOC_isStrCharLexToCf(PLOC_StrChar arg);
 ATbool PLOC_hasStrCharStrChar(PLOC_StrChar arg);
 PLOC_LexStrChar PLOC_getStrCharStrChar(PLOC_StrChar arg);
 PLOC_StrChar PLOC_setStrCharStrChar(PLOC_StrChar arg,
 				    PLOC_LexStrChar StrChar);
-
-/*}}}  */
-/*{{{  PLOC_LexStrCon accessors */
-
 ATbool PLOC_isValidLexStrCon(PLOC_LexStrCon arg);
 inline ATbool PLOC_isLexStrConDefault(PLOC_LexStrCon arg);
 ATbool PLOC_hasLexStrConChars(PLOC_LexStrCon arg);
 PLOC_LexStrCharChars PLOC_getLexStrConChars(PLOC_LexStrCon arg);
 PLOC_LexStrCon PLOC_setLexStrConChars(PLOC_LexStrCon arg,
 				      PLOC_LexStrCharChars chars);
-
-/*}}}  */
-/*{{{  PLOC_StrCon accessors */
-
 ATbool PLOC_isValidStrCon(PLOC_StrCon arg);
 inline ATbool PLOC_isStrConLexToCf(PLOC_StrCon arg);
 ATbool PLOC_hasStrConStrCon(PLOC_StrCon arg);
 PLOC_LexStrCon PLOC_getStrConStrCon(PLOC_StrCon arg);
 PLOC_StrCon PLOC_setStrConStrCon(PLOC_StrCon arg, PLOC_LexStrCon StrCon);
-
-/*}}}  */
-/*{{{  PLOC_LexStrCharChars accessors */
-
 ATbool PLOC_isValidLexStrCharChars(PLOC_LexStrCharChars arg);
 inline ATbool PLOC_isLexStrCharCharsEmpty(PLOC_LexStrCharChars arg);
 inline ATbool PLOC_isLexStrCharCharsSingle(PLOC_LexStrCharChars arg);
@@ -384,37 +341,21 @@ PLOC_LexStrCharChars PLOC_setLexStrCharCharsHead(PLOC_LexStrCharChars arg,
 						 PLOC_LexStrChar head);
 PLOC_LexStrCharChars PLOC_setLexStrCharCharsTail(PLOC_LexStrCharChars arg,
 						 PLOC_LexStrCharChars tail);
-
-/*}}}  */
-/*{{{  PLOC_LexNatCon accessors */
-
 ATbool PLOC_isValidLexNatCon(PLOC_LexNatCon arg);
 inline ATbool PLOC_isLexNatConDigits(PLOC_LexNatCon arg);
 ATbool PLOC_hasLexNatConList(PLOC_LexNatCon arg);
 char *PLOC_getLexNatConList(PLOC_LexNatCon arg);
 PLOC_LexNatCon PLOC_setLexNatConList(PLOC_LexNatCon arg, const char *list);
-
-/*}}}  */
-/*{{{  PLOC_NatCon accessors */
-
 ATbool PLOC_isValidNatCon(PLOC_NatCon arg);
 inline ATbool PLOC_isNatConLexToCf(PLOC_NatCon arg);
 ATbool PLOC_hasNatConNatCon(PLOC_NatCon arg);
 PLOC_LexNatCon PLOC_getNatConNatCon(PLOC_NatCon arg);
 PLOC_NatCon PLOC_setNatConNatCon(PLOC_NatCon arg, PLOC_LexNatCon NatCon);
-
-/*}}}  */
-/*{{{  PLOC_LexLayout accessors */
-
 ATbool PLOC_isValidLexLayout(PLOC_LexLayout arg);
 inline ATbool PLOC_isLexLayoutWhitespace(PLOC_LexLayout arg);
 ATbool PLOC_hasLexLayoutCh(PLOC_LexLayout arg);
 char PLOC_getLexLayoutCh(PLOC_LexLayout arg);
 PLOC_LexLayout PLOC_setLexLayoutCh(PLOC_LexLayout arg, char ch);
-
-/*}}}  */
-/*{{{  PLOC_Location accessors */
-
 ATbool PLOC_isValidLocation(PLOC_Location arg);
 inline ATbool PLOC_isLocationFile(PLOC_Location arg);
 inline ATbool PLOC_isLocationArea(PLOC_Location arg);
@@ -456,10 +397,6 @@ PLOC_Location PLOC_setLocationWsAfterAreaInFile(PLOC_Location arg,
 						wsAfterAreaInFile);
 PLOC_Location PLOC_setLocationWsAfterComma(PLOC_Location arg,
 					   PLOC_OptLayout wsAfterComma);
-
-/*}}}  */
-/*{{{  PLOC_Area accessors */
-
 ATbool PLOC_isValidArea(PLOC_Area arg);
 inline ATbool PLOC_isAreaArea(PLOC_Area arg);
 ATbool PLOC_hasAreaWsAfterArea(PLOC_Area arg);
@@ -531,10 +468,6 @@ PLOC_Area PLOC_setAreaWsAfterComma4(PLOC_Area arg,
 PLOC_Area PLOC_setAreaLength(PLOC_Area arg, PLOC_NatCon length);
 PLOC_Area PLOC_setAreaWsAfterLength(PLOC_Area arg,
 				    PLOC_OptLayout wsAfterLength);
-
-/*}}}  */
-/*{{{  PLOC_Slice accessors */
-
 ATbool PLOC_isValidSlice(PLOC_Slice arg);
 inline ATbool PLOC_isSliceSlice(PLOC_Slice arg);
 ATbool PLOC_hasSliceWsAfterSlice(PLOC_Slice arg);
@@ -571,10 +504,6 @@ PLOC_Slice PLOC_setSliceWsAfterAreas(PLOC_Slice arg,
 PLOC_Slice PLOC_setSliceWsAfterBracketClose(PLOC_Slice arg,
 					    PLOC_OptLayout
 					    wsAfterBracketClose);
-
-/*}}}  */
-/*{{{  PLOC_AreaAreas accessors */
-
 ATbool PLOC_isValidAreaAreas(PLOC_AreaAreas arg);
 inline ATbool PLOC_isAreaAreasEmpty(PLOC_AreaAreas arg);
 inline ATbool PLOC_isAreaAreasSingle(PLOC_AreaAreas arg);
@@ -593,10 +522,6 @@ PLOC_AreaAreas PLOC_setAreaAreasWsAfterHead(PLOC_AreaAreas arg,
 PLOC_AreaAreas PLOC_setAreaAreasWsAfterSep(PLOC_AreaAreas arg,
 					   PLOC_OptLayout wsAfterSep);
 PLOC_AreaAreas PLOC_setAreaAreasTail(PLOC_AreaAreas arg, PLOC_AreaAreas tail);
-
-/*}}}  */
-/*{{{  sort visitors */
-
 PLOC_OptLayout PLOC_visitOptLayout(PLOC_OptLayout arg,
 				   PLOC_Layout(*acceptLayout) (PLOC_Layout));
 PLOC_Layout PLOC_visitLayout(PLOC_Layout arg,
@@ -697,7 +622,5 @@ PLOC_AreaAreas PLOC_visitAreaAreas(PLOC_AreaAreas arg,
 				   (PLOC_OptLayout),
 				   PLOC_OptLayout(*acceptWsAfterSep)
 				   (PLOC_OptLayout));
-
-/*}}}  */
 
 #endif /* _PARSEDLOCATION_H */

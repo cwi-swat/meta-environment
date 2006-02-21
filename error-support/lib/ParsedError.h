@@ -1,16 +1,10 @@
 #ifndef _PARSEDERROR_H
 #define _PARSEDERROR_H
 
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
 #include "ParsedError_dict.h"
-
-/*}}}  */
-
-/*{{{  typedefs */
 
 typedef struct _PERR_OptLayout *PERR_OptLayout;
 typedef struct _PERR_Layout *PERR_Layout;
@@ -34,37 +28,50 @@ typedef struct _PERR_Area *PERR_Area;
 typedef struct _PERR_Slice *PERR_Slice;
 typedef struct _PERR_AreaAreas *PERR_AreaAreas;
 
-/*}}}  */
-
 void PERR_initParsedErrorApi(void);
 
-/*{{{  protect functions */
-
 void PERR_protectOptLayout(PERR_OptLayout * arg);
+void PERR_unprotectOptLayout(PERR_OptLayout * arg);
 void PERR_protectLayout(PERR_Layout * arg);
+void PERR_unprotectLayout(PERR_Layout * arg);
 void PERR_protectLexLayoutList(PERR_LexLayoutList * arg);
+void PERR_unprotectLexLayoutList(PERR_LexLayoutList * arg);
 void PERR_protectLexStrChar(PERR_LexStrChar * arg);
+void PERR_unprotectLexStrChar(PERR_LexStrChar * arg);
 void PERR_protectStrChar(PERR_StrChar * arg);
+void PERR_unprotectStrChar(PERR_StrChar * arg);
 void PERR_protectLexStrCon(PERR_LexStrCon * arg);
+void PERR_unprotectLexStrCon(PERR_LexStrCon * arg);
 void PERR_protectStrCon(PERR_StrCon * arg);
+void PERR_unprotectStrCon(PERR_StrCon * arg);
 void PERR_protectLexStrCharChars(PERR_LexStrCharChars * arg);
+void PERR_unprotectLexStrCharChars(PERR_LexStrCharChars * arg);
 void PERR_protectLexNatCon(PERR_LexNatCon * arg);
+void PERR_unprotectLexNatCon(PERR_LexNatCon * arg);
 void PERR_protectNatCon(PERR_NatCon * arg);
+void PERR_unprotectNatCon(PERR_NatCon * arg);
 void PERR_protectLexLayout(PERR_LexLayout * arg);
+void PERR_unprotectLexLayout(PERR_LexLayout * arg);
 void PERR_protectStart(PERR_Start * arg);
+void PERR_unprotectStart(PERR_Start * arg);
 void PERR_protectSubject(PERR_Subject * arg);
+void PERR_unprotectSubject(PERR_Subject * arg);
 void PERR_protectError(PERR_Error * arg);
+void PERR_unprotectError(PERR_Error * arg);
 void PERR_protectSummary(PERR_Summary * arg);
+void PERR_unprotectSummary(PERR_Summary * arg);
 void PERR_protectSubjectList(PERR_SubjectList * arg);
+void PERR_unprotectSubjectList(PERR_SubjectList * arg);
 void PERR_protectErrorList(PERR_ErrorList * arg);
+void PERR_unprotectErrorList(PERR_ErrorList * arg);
 void PERR_protectLocation(PERR_Location * arg);
+void PERR_unprotectLocation(PERR_Location * arg);
 void PERR_protectArea(PERR_Area * arg);
+void PERR_unprotectArea(PERR_Area * arg);
 void PERR_protectSlice(PERR_Slice * arg);
+void PERR_unprotectSlice(PERR_Slice * arg);
 void PERR_protectAreaAreas(PERR_AreaAreas * arg);
-
-/*}}}  */
-/*{{{  term conversion functions */
-
+void PERR_unprotectAreaAreas(PERR_AreaAreas * arg);
 PERR_OptLayout PERR_OptLayoutFromTerm(ATerm t);
 ATerm PERR_OptLayoutToTerm(PERR_OptLayout arg);
 PERR_Layout PERR_LayoutFromTerm(ATerm t);
@@ -107,10 +114,6 @@ PERR_Slice PERR_SliceFromTerm(ATerm t);
 ATerm PERR_SliceToTerm(PERR_Slice arg);
 PERR_AreaAreas PERR_AreaAreasFromTerm(ATerm t);
 ATerm PERR_AreaAreasToTerm(PERR_AreaAreas arg);
-
-/*}}}  */
-/*{{{  list functions */
-
 int PERR_getLexLayoutListLength(PERR_LexLayoutList arg);
 PERR_LexLayoutList PERR_reverseLexLayoutList(PERR_LexLayoutList arg);
 PERR_LexLayoutList PERR_appendLexLayoutList(PERR_LexLayoutList arg,
@@ -286,10 +289,6 @@ PERR_AreaAreas PERR_makeAreaAreas6(PERR_OptLayout wsAfterHead,
 				   PERR_Area elem2, PERR_Area elem3,
 				   PERR_Area elem4, PERR_Area elem5,
 				   PERR_Area elem6);
-
-/*}}}  */
-/*{{{  constructors */
-
 PERR_OptLayout PERR_makeOptLayoutAbsent(void);
 PERR_OptLayout PERR_makeOptLayoutPresent(PERR_Layout layout);
 PERR_Layout PERR_makeLayoutLexToCf(PERR_LexLayoutList list);
@@ -433,10 +432,6 @@ PERR_AreaAreas PERR_makeAreaAreasMany(PERR_Area head,
 				      PERR_OptLayout wsAfterHead,
 				      PERR_OptLayout wsAfterSep,
 				      PERR_AreaAreas tail);
-
-/*}}}  */
-/*{{{  equality functions */
-
 ATbool PERR_isEqualOptLayout(PERR_OptLayout arg0, PERR_OptLayout arg1);
 ATbool PERR_isEqualLayout(PERR_Layout arg0, PERR_Layout arg1);
 ATbool PERR_isEqualLexLayoutList(PERR_LexLayoutList arg0,
@@ -460,10 +455,6 @@ ATbool PERR_isEqualLocation(PERR_Location arg0, PERR_Location arg1);
 ATbool PERR_isEqualArea(PERR_Area arg0, PERR_Area arg1);
 ATbool PERR_isEqualSlice(PERR_Slice arg0, PERR_Slice arg1);
 ATbool PERR_isEqualAreaAreas(PERR_AreaAreas arg0, PERR_AreaAreas arg1);
-
-/*}}}  */
-/*{{{  PERR_OptLayout accessors */
-
 ATbool PERR_isValidOptLayout(PERR_OptLayout arg);
 inline ATbool PERR_isOptLayoutAbsent(PERR_OptLayout arg);
 inline ATbool PERR_isOptLayoutPresent(PERR_OptLayout arg);
@@ -471,19 +462,11 @@ ATbool PERR_hasOptLayoutLayout(PERR_OptLayout arg);
 PERR_Layout PERR_getOptLayoutLayout(PERR_OptLayout arg);
 PERR_OptLayout PERR_setOptLayoutLayout(PERR_OptLayout arg,
 				       PERR_Layout layout);
-
-/*}}}  */
-/*{{{  PERR_Layout accessors */
-
 ATbool PERR_isValidLayout(PERR_Layout arg);
 inline ATbool PERR_isLayoutLexToCf(PERR_Layout arg);
 ATbool PERR_hasLayoutList(PERR_Layout arg);
 PERR_LexLayoutList PERR_getLayoutList(PERR_Layout arg);
 PERR_Layout PERR_setLayoutList(PERR_Layout arg, PERR_LexLayoutList list);
-
-/*}}}  */
-/*{{{  PERR_LexLayoutList accessors */
-
 ATbool PERR_isValidLexLayoutList(PERR_LexLayoutList arg);
 inline ATbool PERR_isLexLayoutListEmpty(PERR_LexLayoutList arg);
 inline ATbool PERR_isLexLayoutListSingle(PERR_LexLayoutList arg);
@@ -496,10 +479,6 @@ PERR_LexLayoutList PERR_setLexLayoutListHead(PERR_LexLayoutList arg,
 					     PERR_LexLayout head);
 PERR_LexLayoutList PERR_setLexLayoutListTail(PERR_LexLayoutList arg,
 					     PERR_LexLayoutList tail);
-
-/*}}}  */
-/*{{{  PERR_LexStrChar accessors */
-
 ATbool PERR_isValidLexStrChar(PERR_LexStrChar arg);
 inline ATbool PERR_isLexStrCharNewline(PERR_LexStrChar arg);
 inline ATbool PERR_isLexStrCharTab(PERR_LexStrChar arg);
@@ -519,39 +498,23 @@ PERR_LexStrChar PERR_setLexStrCharA(PERR_LexStrChar arg, char a);
 PERR_LexStrChar PERR_setLexStrCharB(PERR_LexStrChar arg, char b);
 PERR_LexStrChar PERR_setLexStrCharC(PERR_LexStrChar arg, char c);
 PERR_LexStrChar PERR_setLexStrCharCh(PERR_LexStrChar arg, char ch);
-
-/*}}}  */
-/*{{{  PERR_StrChar accessors */
-
 ATbool PERR_isValidStrChar(PERR_StrChar arg);
 inline ATbool PERR_isStrCharLexToCf(PERR_StrChar arg);
 ATbool PERR_hasStrCharStrChar(PERR_StrChar arg);
 PERR_LexStrChar PERR_getStrCharStrChar(PERR_StrChar arg);
 PERR_StrChar PERR_setStrCharStrChar(PERR_StrChar arg,
 				    PERR_LexStrChar StrChar);
-
-/*}}}  */
-/*{{{  PERR_LexStrCon accessors */
-
 ATbool PERR_isValidLexStrCon(PERR_LexStrCon arg);
 inline ATbool PERR_isLexStrConDefault(PERR_LexStrCon arg);
 ATbool PERR_hasLexStrConChars(PERR_LexStrCon arg);
 PERR_LexStrCharChars PERR_getLexStrConChars(PERR_LexStrCon arg);
 PERR_LexStrCon PERR_setLexStrConChars(PERR_LexStrCon arg,
 				      PERR_LexStrCharChars chars);
-
-/*}}}  */
-/*{{{  PERR_StrCon accessors */
-
 ATbool PERR_isValidStrCon(PERR_StrCon arg);
 inline ATbool PERR_isStrConLexToCf(PERR_StrCon arg);
 ATbool PERR_hasStrConStrCon(PERR_StrCon arg);
 PERR_LexStrCon PERR_getStrConStrCon(PERR_StrCon arg);
 PERR_StrCon PERR_setStrConStrCon(PERR_StrCon arg, PERR_LexStrCon StrCon);
-
-/*}}}  */
-/*{{{  PERR_LexStrCharChars accessors */
-
 ATbool PERR_isValidLexStrCharChars(PERR_LexStrCharChars arg);
 inline ATbool PERR_isLexStrCharCharsEmpty(PERR_LexStrCharChars arg);
 inline ATbool PERR_isLexStrCharCharsSingle(PERR_LexStrCharChars arg);
@@ -564,37 +527,21 @@ PERR_LexStrCharChars PERR_setLexStrCharCharsHead(PERR_LexStrCharChars arg,
 						 PERR_LexStrChar head);
 PERR_LexStrCharChars PERR_setLexStrCharCharsTail(PERR_LexStrCharChars arg,
 						 PERR_LexStrCharChars tail);
-
-/*}}}  */
-/*{{{  PERR_LexNatCon accessors */
-
 ATbool PERR_isValidLexNatCon(PERR_LexNatCon arg);
 inline ATbool PERR_isLexNatConDigits(PERR_LexNatCon arg);
 ATbool PERR_hasLexNatConList(PERR_LexNatCon arg);
 char *PERR_getLexNatConList(PERR_LexNatCon arg);
 PERR_LexNatCon PERR_setLexNatConList(PERR_LexNatCon arg, const char *list);
-
-/*}}}  */
-/*{{{  PERR_NatCon accessors */
-
 ATbool PERR_isValidNatCon(PERR_NatCon arg);
 inline ATbool PERR_isNatConLexToCf(PERR_NatCon arg);
 ATbool PERR_hasNatConNatCon(PERR_NatCon arg);
 PERR_LexNatCon PERR_getNatConNatCon(PERR_NatCon arg);
 PERR_NatCon PERR_setNatConNatCon(PERR_NatCon arg, PERR_LexNatCon NatCon);
-
-/*}}}  */
-/*{{{  PERR_LexLayout accessors */
-
 ATbool PERR_isValidLexLayout(PERR_LexLayout arg);
 inline ATbool PERR_isLexLayoutWhitespace(PERR_LexLayout arg);
 ATbool PERR_hasLexLayoutCh(PERR_LexLayout arg);
 char PERR_getLexLayoutCh(PERR_LexLayout arg);
 PERR_LexLayout PERR_setLexLayoutCh(PERR_LexLayout arg, char ch);
-
-/*}}}  */
-/*{{{  PERR_Start accessors */
-
 ATbool PERR_isValidStart(PERR_Start arg);
 inline ATbool PERR_isStartSummary(PERR_Start arg);
 inline ATbool PERR_isStartError(PERR_Start arg);
@@ -613,10 +560,6 @@ PERR_Start PERR_setStartTopSummary(PERR_Start arg, PERR_Summary topSummary);
 PERR_Start PERR_setStartWsAfter(PERR_Start arg, PERR_OptLayout wsAfter);
 PERR_Start PERR_setStartAmbCnt(PERR_Start arg, int ambCnt);
 PERR_Start PERR_setStartTopError(PERR_Start arg, PERR_Error topError);
-
-/*}}}  */
-/*{{{  PERR_Subject accessors */
-
 ATbool PERR_isValidSubject(PERR_Subject arg);
 inline ATbool PERR_isSubjectSubject(PERR_Subject arg);
 inline ATbool PERR_isSubjectLocalized(PERR_Subject arg);
@@ -653,10 +596,6 @@ PERR_Subject PERR_setSubjectLocation(PERR_Subject arg,
 				     PERR_Location Location);
 PERR_Subject PERR_setSubjectWsAfterLocation(PERR_Subject arg,
 					    PERR_OptLayout wsAfterLocation);
-
-/*}}}  */
-/*{{{  PERR_Error accessors */
-
 ATbool PERR_isValidError(PERR_Error arg);
 inline ATbool PERR_isErrorInfo(PERR_Error arg);
 inline ATbool PERR_isErrorWarning(PERR_Error arg);
@@ -709,10 +648,6 @@ PERR_Error PERR_setErrorWsAfterError(PERR_Error arg,
 				     PERR_OptLayout wsAfterError);
 PERR_Error PERR_setErrorWsAfterFatal(PERR_Error arg,
 				     PERR_OptLayout wsAfterFatal);
-
-/*}}}  */
-/*{{{  PERR_Summary accessors */
-
 ATbool PERR_isValidSummary(PERR_Summary arg);
 inline ATbool PERR_isSummarySummary(PERR_Summary arg);
 ATbool PERR_hasSummaryWsAfterSummary(PERR_Summary arg);
@@ -762,10 +697,6 @@ PERR_Summary PERR_setSummaryWsAfterList(PERR_Summary arg,
 PERR_Summary PERR_setSummaryWsAfterBracketClose(PERR_Summary arg,
 						PERR_OptLayout
 						wsAfterBracketClose);
-
-/*}}}  */
-/*{{{  PERR_SubjectList accessors */
-
 ATbool PERR_isValidSubjectList(PERR_SubjectList arg);
 inline ATbool PERR_isSubjectListEmpty(PERR_SubjectList arg);
 inline ATbool PERR_isSubjectListSingle(PERR_SubjectList arg);
@@ -786,10 +717,6 @@ PERR_SubjectList PERR_setSubjectListWsAfterSep(PERR_SubjectList arg,
 					       PERR_OptLayout wsAfterSep);
 PERR_SubjectList PERR_setSubjectListTail(PERR_SubjectList arg,
 					 PERR_SubjectList tail);
-
-/*}}}  */
-/*{{{  PERR_ErrorList accessors */
-
 ATbool PERR_isValidErrorList(PERR_ErrorList arg);
 inline ATbool PERR_isErrorListEmpty(PERR_ErrorList arg);
 inline ATbool PERR_isErrorListSingle(PERR_ErrorList arg);
@@ -808,10 +735,6 @@ PERR_ErrorList PERR_setErrorListWsAfterHead(PERR_ErrorList arg,
 PERR_ErrorList PERR_setErrorListWsAfterSep(PERR_ErrorList arg,
 					   PERR_OptLayout wsAfterSep);
 PERR_ErrorList PERR_setErrorListTail(PERR_ErrorList arg, PERR_ErrorList tail);
-
-/*}}}  */
-/*{{{  PERR_Location accessors */
-
 ATbool PERR_isValidLocation(PERR_Location arg);
 inline ATbool PERR_isLocationFile(PERR_Location arg);
 inline ATbool PERR_isLocationArea(PERR_Location arg);
@@ -853,10 +776,6 @@ PERR_Location PERR_setLocationWsAfterAreaInFile(PERR_Location arg,
 						wsAfterAreaInFile);
 PERR_Location PERR_setLocationWsAfterComma(PERR_Location arg,
 					   PERR_OptLayout wsAfterComma);
-
-/*}}}  */
-/*{{{  PERR_Area accessors */
-
 ATbool PERR_isValidArea(PERR_Area arg);
 inline ATbool PERR_isAreaArea(PERR_Area arg);
 ATbool PERR_hasAreaWsAfterArea(PERR_Area arg);
@@ -928,10 +847,6 @@ PERR_Area PERR_setAreaWsAfterComma4(PERR_Area arg,
 PERR_Area PERR_setAreaLength(PERR_Area arg, PERR_NatCon length);
 PERR_Area PERR_setAreaWsAfterLength(PERR_Area arg,
 				    PERR_OptLayout wsAfterLength);
-
-/*}}}  */
-/*{{{  PERR_Slice accessors */
-
 ATbool PERR_isValidSlice(PERR_Slice arg);
 inline ATbool PERR_isSliceSlice(PERR_Slice arg);
 ATbool PERR_hasSliceWsAfterSlice(PERR_Slice arg);
@@ -968,10 +883,6 @@ PERR_Slice PERR_setSliceWsAfterAreas(PERR_Slice arg,
 PERR_Slice PERR_setSliceWsAfterBracketClose(PERR_Slice arg,
 					    PERR_OptLayout
 					    wsAfterBracketClose);
-
-/*}}}  */
-/*{{{  PERR_AreaAreas accessors */
-
 ATbool PERR_isValidAreaAreas(PERR_AreaAreas arg);
 inline ATbool PERR_isAreaAreasEmpty(PERR_AreaAreas arg);
 inline ATbool PERR_isAreaAreasSingle(PERR_AreaAreas arg);
@@ -990,10 +901,6 @@ PERR_AreaAreas PERR_setAreaAreasWsAfterHead(PERR_AreaAreas arg,
 PERR_AreaAreas PERR_setAreaAreasWsAfterSep(PERR_AreaAreas arg,
 					   PERR_OptLayout wsAfterSep);
 PERR_AreaAreas PERR_setAreaAreasTail(PERR_AreaAreas arg, PERR_AreaAreas tail);
-
-/*}}}  */
-/*{{{  sort visitors */
-
 PERR_OptLayout PERR_visitOptLayout(PERR_OptLayout arg,
 				   PERR_Layout(*acceptLayout) (PERR_Layout));
 PERR_Layout PERR_visitLayout(PERR_Layout arg,
@@ -1173,7 +1080,5 @@ PERR_AreaAreas PERR_visitAreaAreas(PERR_AreaAreas arg,
 				   (PERR_OptLayout),
 				   PERR_OptLayout(*acceptWsAfterSep)
 				   (PERR_OptLayout));
-
-/*}}}  */
 
 #endif /* _PARSEDERROR_H */

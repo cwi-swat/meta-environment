@@ -38,7 +38,7 @@ libLocationAPI_a_SOURCES = \
 INCLUDES = -I${ATERM}/include
 
 if MAINTAINER_MODE
-#CFLAGS += -DDISABLE_DYNAMIC_CHECKING
+#AM_CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
 BASIC_MODULES = StrCon NatCon Whitespace
 LOCATION_MODULES = Locations Areas Slices
@@ -49,7 +49,7 @@ api: error-api location-api
 ABS_ERROR_MODULES = \
 	$(foreach i, \
 	${BASIC_MODULES} ${ERROR_MODULES} ${LOCATION_MODULES}, \
-	${top_srcdir}/../asf-library/library/basic/$i.sdf)
+	${top_srcdir}/../sdf-library/library/basic/$i.sdf)
 
 MetaErrors.def: Makefile
 	@(echo "definition"; cat ${ABS_ERROR_MODULES}) > $@
@@ -76,7 +76,7 @@ java-error-api: MetaErrors.def Makefile
 ABS_LOCATION_MODULES = \
 	$(foreach i, \
 	${BASIC_MODULES} ${LOCATION_MODULES}, \
-	${top_srcdir}/../asf-library/library/basic/$i.sdf)
+	${top_srcdir}/../sdf-library/library/basic/$i.sdf)
 
 Location.def: Makefile
 	@(echo "definition"; cat ${ABS_LOCATION_MODULES}) > $@

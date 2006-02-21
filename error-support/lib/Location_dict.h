@@ -19,8 +19,7 @@ extern ATerm LOC_patternLocationArea;
 extern ATerm LOC_patternLocationFile;
 extern ATerm LOC_patternNatConNatCon;
 extern ATerm LOC_patternStrConStrCon;
-extern ATerm LOC_patternEscapedEscaped;
-extern ATerm LOC_patternNormalNormal;
+extern ATerm LOC_patternStrCharStrChar;
 
 extern void init_Location_dict();
 

@@ -27,10 +27,10 @@ extern ATerm ERR_patternLocationFile;
 extern ATerm ERR_patternErrorListMany;
 extern ATerm ERR_patternErrorListSingle;
 extern ATerm ERR_patternErrorListEmpty;
-extern ATerm ERR_patternSummarySummary;
 extern ATerm ERR_patternSubjectListMany;
 extern ATerm ERR_patternSubjectListSingle;
 extern ATerm ERR_patternSubjectListEmpty;
+extern ATerm ERR_patternSummarySummary;
 extern ATerm ERR_patternErrorFatal;
 extern ATerm ERR_patternErrorError;
 extern ATerm ERR_patternErrorWarning;
@@ -39,8 +39,7 @@ extern ATerm ERR_patternSubjectLocalized;
 extern ATerm ERR_patternSubjectSubject;
 extern ATerm ERR_patternNatConNatCon;
 extern ATerm ERR_patternStrConStrCon;
-extern ATerm ERR_patternEscapedEscaped;
-extern ATerm ERR_patternNormalNormal;
+extern ATerm ERR_patternStrCharStrChar;
 
 extern void init_Error_dict();
 
