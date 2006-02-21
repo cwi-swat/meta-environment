@@ -69,11 +69,11 @@ in
     . snd-do(T, kill-editor(EditorId))
   +
     rec-event(T, is-modified(EditorId?, Modified?))
-    . snd-msg(te-is-modified(EditorId, Modified))
+    . create(EditorModified(EditorId, Modified), Pid?)
     . snd-ack-event(T, is-modified(EditorId, Modified))
   +
     rec-event(T, contents-written(EditorId?))
-    . snd-msg(te-contents-written(EditorId))
+    . create(EditorContentsWritten(EditorId), Pid?)
     . snd-ack-event(T, contents-written(EditorId))
   +
     rec-event(T, contents-changed(EditorId?))
@@ -97,7 +97,7 @@ in
     . snd-ack-event(T, menu-event(EditorId, MenuEvent))
   +
     rec-event(T, editor-disconnected(EditorId?))
-    . snd-msg(te-text-editor-disconnected(EditorId))
+    . create(EditorHasDisconnected(EditorId), Pid?)
     . snd-ack-event(T, editor-disconnected(EditorId))
   )
   * delta
@@ -118,6 +118,16 @@ process MouseEventOffset(EditorId: term, Offset: int) is
 process MenuEvent(EditorId: term, MenuEvent: term) is    
   snd-msg(te-menu-event(EditorId, MenuEvent))
 
+process EditorHasDisconnected(EditorId: term) is
+    snd-msg(te-text-editor-disconnected(EditorId))
+
+process EditorModified(EditorId: term, Modified: term) is
+    snd-msg(te-is-modified(EditorId, Modified))
+
+process EditorContentsWritten(EditorId: term) is
+    snd-msg(te-contents-written(EditorId))
+
 process StartEditorPanel is
   snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__"))
+
 toolbus(EditorPlugin)
