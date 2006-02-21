@@ -68,10 +68,10 @@ public class PluginLoader extends URLClassLoader {
 			if (attr != null) {
 				pluginMain = attr.getValue(Attributes.Name.MAIN_CLASS);
 			} else {
-				System.err.println("Unable to find a Main-Class in plugin");
+				System.err.println("Unable to find a Main-Class in plugin: " + pluginURL);
 			}
 		} catch (IOException e) {
-			System.err.println("Error trying to find Main-Class in plugin");
+			System.err.println("Error trying to find Main-Class in plugin:" + pluginURL);
 			e.printStackTrace();
 		}
 		return pluginMain;
@@ -87,7 +87,7 @@ public class PluginLoader extends URLClassLoader {
 			Class cl = loadClass(pluginMain);
 			plugin = (StudioPlugin) cl.newInstance();
 		} catch (Exception e) {
-			System.err.println("Failed to instantiate plugin");
+			System.err.println("Failed to instantiate plugin:" + pluginMain);
 			e.printStackTrace();
 		}
 		return plugin;
