@@ -60,6 +60,7 @@ typedef struct ATerm _CFG_PropertyList;
 typedef struct ATerm _CFG_ActionDescriptionList;
 typedef struct ATerm _CFG_TextAttributeMap;
 typedef struct ATerm _CFG_ItemList;
+typedef struct ATerm _CFG_KeyModifierList;
 
 void CFG_initConfigApi(void) {
   init_Config_dict();
@@ -193,6 +194,14 @@ void CFG_unprotectItemList(CFG_ItemList *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
+void CFG_protectKeyModifierList(CFG_KeyModifierList *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void CFG_unprotectKeyModifierList(CFG_KeyModifierList *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
 CFG_KeyModifier CFG_KeyModifierFromTerm(ATerm t) {
   return (CFG_KeyModifier)t;
 }
@@ -318,6 +327,14 @@ CFG_ItemList CFG_ItemListFromTerm(ATerm t) {
 }
 
 ATerm CFG_ItemListToTerm(CFG_ItemList arg) {
+  return (ATerm)arg;
+}
+
+CFG_KeyModifierList CFG_KeyModifierListFromTerm(ATerm t) {
+  return (CFG_KeyModifierList)t;
+}
+
+ATerm CFG_KeyModifierListToTerm(CFG_KeyModifierList arg) {
   return (ATerm)arg;
 }
 
@@ -511,6 +528,54 @@ CFG_ItemList CFG_makeItemList5(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, C
 
 CFG_ItemList CFG_makeItemList6(CFG_Item elem1, CFG_Item elem2, CFG_Item elem3, CFG_Item elem4, CFG_Item elem5, CFG_Item elem6) {
   return (CFG_ItemList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+
+int CFG_getKeyModifierListLength (CFG_KeyModifierList arg) {
+  return ATgetLength((ATermList) arg);
+}
+
+CFG_KeyModifierList CFG_reverseKeyModifierList(CFG_KeyModifierList arg) {
+  return (CFG_KeyModifierList) ATreverse((ATermList) arg);
+}
+
+CFG_KeyModifierList CFG_appendKeyModifierList(CFG_KeyModifierList arg, CFG_KeyModifier elem) {
+  return (CFG_KeyModifierList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+
+CFG_KeyModifierList CFG_concatKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
+  return (CFG_KeyModifierList) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+
+CFG_KeyModifierList CFG_sliceKeyModifierList(CFG_KeyModifierList arg, int start, int end) {
+  return (CFG_KeyModifierList) ATgetSlice((ATermList) arg, start, end);
+}
+
+CFG_KeyModifier CFG_getKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, int index) {
+ return (CFG_KeyModifier)ATelementAt((ATermList) arg,index);
+}
+
+CFG_KeyModifierList CFG_replaceKeyModifierListKeyModifierAt(CFG_KeyModifierList arg, CFG_KeyModifier elem, int index) {
+ return (CFG_KeyModifierList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+
+CFG_KeyModifierList CFG_makeKeyModifierList2(CFG_KeyModifier elem1, CFG_KeyModifier elem2) {
+  return (CFG_KeyModifierList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+
+CFG_KeyModifierList CFG_makeKeyModifierList3(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3) {
+  return (CFG_KeyModifierList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+
+CFG_KeyModifierList CFG_makeKeyModifierList4(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4) {
+  return (CFG_KeyModifierList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+
+CFG_KeyModifierList CFG_makeKeyModifierList5(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5) {
+  return (CFG_KeyModifierList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+
+CFG_KeyModifierList CFG_makeKeyModifierList6(CFG_KeyModifier elem1, CFG_KeyModifier elem2, CFG_KeyModifier elem3, CFG_KeyModifier elem4, CFG_KeyModifier elem5, CFG_KeyModifier elem6) {
+  return (CFG_KeyModifierList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
 CFG_KeyModifier CFG_makeKeyModifierMUnderscoreALT(void) {
@@ -885,8 +950,8 @@ CFG_TextAttribute CFG_makeTextAttributeFont(const char* name) {
 CFG_TextAttribute CFG_makeTextAttributeSize(int point) {
   return (CFG_TextAttribute)(ATerm)ATmakeAppl1(CFG_afun123, (ATerm) (ATerm) ATmakeInt(point));
 }
-CFG_ShortCut CFG_makeShortCutShortcut(CFG_KeyModifier modifier, CFG_VirtualKey key) {
-  return (CFG_ShortCut)(ATerm)ATmakeAppl2(CFG_afun124, (ATerm) modifier, (ATerm) key);
+CFG_ShortCut CFG_makeShortCutShortcut(CFG_KeyModifierList list, CFG_VirtualKey key) {
+  return (CFG_ShortCut)(ATerm)ATmakeAppl2(CFG_afun124, (ATerm) list, (ATerm) key);
 }
 CFG_TextStyle CFG_makeTextStyleBold(void) {
   return (CFG_TextStyle)(ATerm)ATmakeAppl0(CFG_afun125);
@@ -932,6 +997,15 @@ CFG_ItemList CFG_makeItemListSingle(CFG_Item head) {
 }
 CFG_ItemList CFG_makeItemListMany(CFG_Item head, CFG_ItemList tail) {
   return (CFG_ItemList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+CFG_KeyModifierList CFG_makeKeyModifierListEmpty(void) {
+  return (CFG_KeyModifierList)(ATerm)ATempty;
+}
+CFG_KeyModifierList CFG_makeKeyModifierListSingle(CFG_KeyModifier head) {
+  return (CFG_KeyModifierList)(ATerm)ATmakeList1((ATerm) head);
+}
+CFG_KeyModifierList CFG_makeKeyModifierListMany(CFG_KeyModifier head, CFG_KeyModifierList tail) {
+  return (CFG_KeyModifierList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 
 ATbool CFG_isEqualKeyModifier(CFG_KeyModifier arg0, CFG_KeyModifier arg1) {
@@ -995,6 +1069,10 @@ ATbool CFG_isEqualTextAttributeMap(CFG_TextAttributeMap arg0, CFG_TextAttributeM
 }
 
 ATbool CFG_isEqualItemList(CFG_ItemList arg0, CFG_ItemList arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool CFG_isEqualKeyModifierList(CFG_KeyModifierList arg0, CFG_KeyModifierList arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -4166,7 +4244,7 @@ inline ATbool CFG_isShortCutShortcut(CFG_ShortCut arg) {
   return ATtrue;
 }
 
-ATbool CFG_hasShortCutModifier(CFG_ShortCut arg) {
+ATbool CFG_hasShortCutList(CFG_ShortCut arg) {
   if (CFG_isShortCutShortcut(arg)) {
     return ATtrue;
   }
@@ -4180,9 +4258,9 @@ ATbool CFG_hasShortCutKey(CFG_ShortCut arg) {
   return ATfalse;
 }
 
-CFG_KeyModifier CFG_getShortCutModifier(CFG_ShortCut arg) {
+CFG_KeyModifierList CFG_getShortCutList(CFG_ShortCut arg) {
   
-    return (CFG_KeyModifier)ATgetArgument((ATermAppl)arg, 0);
+    return (CFG_KeyModifierList)ATgetArgument((ATermAppl)arg, 0);
 }
 
 CFG_VirtualKey CFG_getShortCutKey(CFG_ShortCut arg) {
@@ -4190,12 +4268,12 @@ CFG_VirtualKey CFG_getShortCutKey(CFG_ShortCut arg) {
     return (CFG_VirtualKey)ATgetArgument((ATermAppl)arg, 1);
 }
 
-CFG_ShortCut CFG_setShortCutModifier(CFG_ShortCut arg, CFG_KeyModifier modifier) {
+CFG_ShortCut CFG_setShortCutList(CFG_ShortCut arg, CFG_KeyModifierList list) {
   if (CFG_isShortCutShortcut(arg)) {
-    return (CFG_ShortCut)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) modifier), 0);
+    return (CFG_ShortCut)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
   }
 
-  ATabort("ShortCut has no Modifier: %t\n", arg);
+  ATabort("ShortCut has no List: %t\n", arg);
   return (CFG_ShortCut)NULL;
 }
 
@@ -4743,6 +4821,123 @@ CFG_ItemList CFG_setItemListTail(CFG_ItemList arg, CFG_ItemList tail) {
   return (CFG_ItemList)NULL;
 }
 
+ATbool CFG_isValidKeyModifierList(CFG_KeyModifierList arg) {
+  if (CFG_isKeyModifierListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isKeyModifierListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isKeyModifierListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+inline ATbool CFG_isKeyModifierListEmpty(CFG_KeyModifierList arg) {
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListEmpty));
+#endif
+  return ATtrue;
+}
+
+inline ATbool CFG_isKeyModifierListSingle(CFG_KeyModifierList arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+inline ATbool CFG_isKeyModifierListMany(CFG_KeyModifierList arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, CFG_patternKeyModifierListMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+ATbool CFG_hasKeyModifierListHead(CFG_KeyModifierList arg) {
+  if (CFG_isKeyModifierListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (CFG_isKeyModifierListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+ATbool CFG_hasKeyModifierListTail(CFG_KeyModifierList arg) {
+  if (CFG_isKeyModifierListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+CFG_KeyModifier CFG_getKeyModifierListHead(CFG_KeyModifierList arg) {
+  if (CFG_isKeyModifierListSingle(arg)) {
+    return (CFG_KeyModifier)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (CFG_KeyModifier)ATgetFirst((ATermList)arg);
+}
+
+CFG_KeyModifierList CFG_getKeyModifierListTail(CFG_KeyModifierList arg) {
+  
+    return (CFG_KeyModifierList)ATgetNext((ATermList)arg);
+}
+
+CFG_KeyModifierList CFG_setKeyModifierListHead(CFG_KeyModifierList arg, CFG_KeyModifier head) {
+  if (CFG_isKeyModifierListSingle(arg)) {
+    return (CFG_KeyModifierList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (CFG_isKeyModifierListMany(arg)) {
+    return (CFG_KeyModifierList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("KeyModifierList has no Head: %t\n", arg);
+  return (CFG_KeyModifierList)NULL;
+}
+
+CFG_KeyModifierList CFG_setKeyModifierListTail(CFG_KeyModifierList arg, CFG_KeyModifierList tail) {
+  if (CFG_isKeyModifierListMany(arg)) {
+    return (CFG_KeyModifierList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("KeyModifierList has no Tail: %t\n", arg);
+  return (CFG_KeyModifierList)NULL;
+}
+
 CFG_KeyModifier CFG_visitKeyModifier(CFG_KeyModifier arg) {
   if (CFG_isKeyModifierMUnderscoreALT(arg)) {
     return CFG_makeKeyModifierMUnderscoreALT();
@@ -5184,10 +5379,10 @@ CFG_TextAttribute CFG_visitTextAttribute(CFG_TextAttribute arg, CFG_Color (*acce
   ATabort("not a TextAttribute: %t\n", arg);
   return (CFG_TextAttribute)NULL;
 }
-CFG_ShortCut CFG_visitShortCut(CFG_ShortCut arg, CFG_KeyModifier (*acceptModifier)(CFG_KeyModifier), CFG_VirtualKey (*acceptKey)(CFG_VirtualKey)) {
+CFG_ShortCut CFG_visitShortCut(CFG_ShortCut arg, CFG_KeyModifierList (*acceptList)(CFG_KeyModifierList), CFG_VirtualKey (*acceptKey)(CFG_VirtualKey)) {
   if (CFG_isShortCutShortcut(arg)) {
     return CFG_makeShortCutShortcut(
-        acceptModifier ? acceptModifier(CFG_getShortCutModifier(arg)) : CFG_getShortCutModifier(arg),
+        acceptList ? acceptList(CFG_getShortCutList(arg)) : CFG_getShortCutList(arg),
         acceptKey ? acceptKey(CFG_getShortCutKey(arg)) : CFG_getShortCutKey(arg));
   }
   ATabort("not a ShortCut: %t\n", arg);
@@ -5269,5 +5464,21 @@ CFG_ItemList CFG_visitItemList(CFG_ItemList arg, CFG_Item (*acceptHead)(CFG_Item
   }
   ATabort("not a ItemList: %t\n", arg);
   return (CFG_ItemList)NULL;
+}
+CFG_KeyModifierList CFG_visitKeyModifierList(CFG_KeyModifierList arg, CFG_KeyModifier (*acceptHead)(CFG_KeyModifier)) {
+  if (CFG_isKeyModifierListEmpty(arg)) {
+    return CFG_makeKeyModifierListEmpty();
+  }
+  if (CFG_isKeyModifierListSingle(arg)) {
+    return CFG_makeKeyModifierListSingle(
+        acceptHead ? acceptHead(CFG_getKeyModifierListHead(arg)) : CFG_getKeyModifierListHead(arg));
+  }
+  if (CFG_isKeyModifierListMany(arg)) {
+    return CFG_makeKeyModifierListMany(
+        acceptHead ? acceptHead(CFG_getKeyModifierListHead(arg)) : CFG_getKeyModifierListHead(arg),
+        CFG_visitKeyModifierList(CFG_getKeyModifierListTail(arg), acceptHead));
+  }
+  ATabort("not a KeyModifierList: %t\n", arg);
+  return (CFG_KeyModifierList)NULL;
 }
 

@@ -132,6 +132,9 @@ extern AFun CFG_afun125;
 extern AFun CFG_afun24;
 extern AFun CFG_afun46;
 
+extern ATerm CFG_patternKeyModifierListMany;
+extern ATerm CFG_patternKeyModifierListSingle;
+extern ATerm CFG_patternKeyModifierListEmpty;
 extern ATerm CFG_patternItemListMany;
 extern ATerm CFG_patternItemListSingle;
 extern ATerm CFG_patternItemListEmpty;
