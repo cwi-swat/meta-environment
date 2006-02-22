@@ -1,12 +1,25 @@
 configuration([
   import("__SDF_META__/share/sdf-meta/standard.sdf.actions"),
   library-path("ASF+SDF Specifiction Library", "__ASF_LIBRARY__"),
-  action([description(term-editor, menu([label("Actions"),label("Reduce")]))],
+  action([description(term-editor, menu-shortcut([label("Actions"), label("Edit Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
+         "EditorEditEquationsAction"),
+  action([description(term-editor, menu-shortcut([label("Actions"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R)))],
          "ReduceAction"),
-  action([description(term-editor, menu([label("Actions"), label("Edit Equations")]))],
+  action([description(syntax-editor, menu-shortcut([label("Actions"), label("Edit Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
-  action([description(syntax-editor, menu([label("Actions"), label("Edit Equations")]))],
-         "EditorEditEquationsAction"),
+
+  action([description(equations-editor, menu-shortcut([label("Actions"), label("View Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],
+         "ShowFullTreeAction"),
+
+  action([description(equations-editor, menu-shortcut([label("Actions"), label("View Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S)))],
+         "ShowSharedTreeAction"),
+
+  action([description(equations-editor, menu-shortcut([label("Actions"), label("Edit Syntax")], shortcut([M_CTRL,M_SHIFT],VK_S)))],
+         "EditorEditSyntaxAction"),
+
+  action([description(equations-editor, menu-shortcut([label("Actions"), label("Edit Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))],
+         "EditorEditTermAction"),
+
   action([description(equations-editor, menu([label("Actions"), label("Run Tests")]))],
          "EditorRunAsfTestsAction"),
   action([description(syntax-editor, menu([label("Actions"), label("Run Tests")]))],
