@@ -270,7 +270,7 @@ static term *parse_term0(void)
   if(isupper(lastc) || (lastc == '_')){     /* variable or formal */
 
     get_char();
-    while(isalnum(lastc) || (lastc == '-') || (lastc == '$')) {
+    while(isalnum(lastc) || (lastc == '-') || (lastc == '_') || (lastc == '$')) {
       get_char();
     }
     id_sym = lookupn(begin, buf_ptr-1);
@@ -491,7 +491,7 @@ list_args_seen:
 	    if(islower(lastc)){            /* application */
 
 	      get_char();
-	      while(isalnum(lastc) || (lastc == '-')) {
+	      while(isalnum(lastc) || (lastc == '-') || (lastc == '_')) {
 		get_char();
 	      }
 	      id_sym = lookupn(begin, buf_ptr-1);

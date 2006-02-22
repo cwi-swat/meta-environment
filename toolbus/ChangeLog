@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb 22 11:11:35 CET 2006 <{jurgenv,kooiker}@cwi.nl>
+ * libtb/utils.c: added underscore as one of the characters acceptible
+   in a function application term and a variable term.
+
 Wed Jan  4 15:21:01 CET 2006 <{jurgenv,kooiker,paulk}@cwi.nl>
  * toolbus/interpreter.c: fixed a bug in expansion of dynamic calls,
    the result variables of a dyncall were not propagated to the
