@@ -143,8 +143,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
                 factory.makeItem_Label("Save"));
 
-        Shortcut shortcut = factory.makeShortCut_Shortcut(factory
-                .makeKeyModifier_MUnderscoreCTRL(), factory
+        Shortcut shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(factory
+                .makeKeyModifier_MUnderscoreCTRL()), factory
                 .makeVirtualKey_VKUnderscoreS());
         Event event = factory.makeEvent_MenuShortcut(items, shortcut);
 
