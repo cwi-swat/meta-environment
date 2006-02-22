@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
-
 import aterm.ATerm;
 
 /**

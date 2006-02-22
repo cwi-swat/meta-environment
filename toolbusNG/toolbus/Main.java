@@ -19,7 +19,7 @@ public class Main {
 					//"/home/paulk/tmp/software/installed//share/meta/meta.tb");
 				  //ws + "/toolbusNG/toolbus/tool/java/example1.tb");
 	 			  ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb")){
-				  //ws + "/toolbusNG/toolbus/test/B2.tb")){
+				  //ws + "/toolbusNG/toolbus/test/Let1.tb")){
 				  //ws + "/toolbusNG/toolbus/testerror/ToolDef5.tb")){
 			T.execute();
 			Atom.statistics();

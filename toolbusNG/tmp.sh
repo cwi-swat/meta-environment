@@ -1,4 +1,4 @@
-JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun-1.5.0_06
+JAVA_HOME=/usr/lib/jvm/java-1.5.0-sun-1.5.0_03
 
 CLASS_PATH=/home/paulk/.eclipse/toolbusNG:/home/paulk/software/source/aterm-java:/home/paulk/software/source/shared-objects/bin:/home/paulk/software/source/shared-objects/shared-objects-1.4.jar:/home/paulk/software/source/JJTraveler/bin:/home/paulk/software/source/JJTraveler/jars/junit.jar:/home/paulk/software/source/JJTraveler/jjtraveler-0.4.3.jar:/home/paulk/.eclipse/toolbusNG/junit.jar::/usr/lib/jvm/java-1.5.0-sun-1.5.0_03/lib/tools.jar:
 

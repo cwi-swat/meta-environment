@@ -98,9 +98,9 @@ public class ToolBus {
 				  //"/home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/adapters/java-adapter/toolbus/test.tb");
 					//	"/home/paulk/tmp/software/installed//share/meta/start-meta-pt-dumper.tb");
 				  //ws + "/toolbusNG/toolbus/tool/java/example1.tb");
-	 			  //ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb");
+	 			  ws + "/toolbusNG/toolbus/tool/classic/pt-dump.tb")){
 				  //ws + "/toolbusNG/toolbus/test/Notes.tb");
-				  ws + "/toolbusNG/toolbus/tmp.tb")) {
+				  //ws + "/toolbusNG/toolbus/tmp.tb")) {
 				T.execute();
 				Atom.statistics();
 			} 

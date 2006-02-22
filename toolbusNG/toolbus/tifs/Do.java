@@ -2,6 +2,8 @@ package toolbus.tifs;
 
 import java.util.Iterator;
 
+import aterm.ATerm;
+
 public class Do extends Communication {
   public Do(ATerm t) {
     super(t);

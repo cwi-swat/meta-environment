@@ -3,9 +3,6 @@
 	<name>toolbusNG</name>
 	<comment></comment>
 	<projects>
-		<project>aterm-java</project>
-		<project>JJTraveler</project>
-		<project>shared-objects</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

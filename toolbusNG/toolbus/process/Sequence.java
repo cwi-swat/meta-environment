@@ -56,10 +56,10 @@ public class Sequence extends ProcessExpression {
 	  	setFirst(left.getFirst());
 	  }	
 
-	public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow)
+	public void compile(ProcessInstance P, Stack<String> calls, State follow)
 			throws ToolBusException {
-		right.compile(P, calls, env, follow);
-		left.compile(P, calls, env, right.getFirst());
+		right.compile(P, calls, follow);
+		left.compile(P, calls, right.getFirst());
 		
 		setFollow(follow);
 	}

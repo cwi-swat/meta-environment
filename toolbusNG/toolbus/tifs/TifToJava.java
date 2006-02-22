@@ -9,6 +9,9 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import aterm.ATerm;
+import aterm.ATermFactory;
+
 public class TifToJava {
   private Tif tif;
   private String outputBaseDir;

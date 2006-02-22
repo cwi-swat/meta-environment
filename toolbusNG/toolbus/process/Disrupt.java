@@ -33,10 +33,15 @@ public class Disrupt extends ProcessExpression {
  	 right.computeFirst();
  	 setFirst(left.getFirst().union(right.getFirst()));
  }
+  
+  public void replaceFormals(Environment env) throws ToolBusException{
+		left.replaceFormals(env);
+		right.replaceFormals(env);
+	  }
 
-  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
-    left.compile(P, calls, env, follow);
-    right.compile(P, calls, env, follow);
+  public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException {
+    left.compile(P, calls, follow);
+    right.compile(P, calls, follow);
     State rightFirst = right.getFirst();
     setFollow(follow);
     Vector atoms = left.getAtoms().getElementsAsVector();
@@ -48,10 +53,7 @@ public class Disrupt extends ProcessExpression {
     }
   }
   
-  public void replaceFormals(Environment env) throws ToolBusException{
-	left.replaceFormals(env);
-	right.replaceFormals(env);
-  }
+  
 
   public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());

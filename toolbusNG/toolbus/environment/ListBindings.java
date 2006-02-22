@@ -31,6 +31,10 @@ class ListBindings implements Bindings {
 		}
 		return null;
 	}
+	
+	public int size(){
+		return bindings.size();
+	}
 
 	public void put(String key, Binding b) {
 		bindings.addFirst(b);
@@ -51,7 +55,7 @@ class ListBindings implements Bindings {
 
 		for (Binding b : bindings) {
 			String op = b.isFormal() ? " :-> " : " : ";
-			res += sep + b.var + op + b.val;
+			res += sep + b;
 			sep = ", ";
 		}
 		return res + "}";

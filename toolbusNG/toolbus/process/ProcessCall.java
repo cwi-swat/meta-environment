@@ -21,6 +21,8 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	protected ATermList actuals;
 
 	private ATermList formals;
+	
+	private Environment env;
 
 	private ProcessDefinition definition;
 
@@ -68,18 +70,20 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		setFirst(firstState);
 	}
 	
-	public void replaceFormals(Environment env) throws ToolBusException {
+	public void replaceFormals(Environment e) throws ToolBusException {
 		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
+		env = e.copy();
+		//env = e;
 		if(isStaticCall){
 			actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
 		}
 	}
 
 	public void compile(ProcessInstance P, Stack<String> calls,
-			Environment env, State follows) throws ToolBusException {
+			State follows) throws ToolBusException {
 
 		processInstance = P;
-		env = env.copy();
+
 		if (env.isDeclaredAsStringVar(name)) { // A dynamic call?
 			System.err.println("yes dynamic!");
 			isStaticCall = false;
@@ -90,7 +94,10 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 			definition = P.getToolBus().getProcessDefinition(name);
 			calls.push(name);
+
+			actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
 			PE = definition.getProcessExpression(actuals);
+			
 			//System.err.println("ProcessCall.compile(" + name + ", " + P + "," + PE + ")");
 			setFollow(follows);
 			formals = definition.getFormals();
@@ -103,14 +110,13 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 			//System.err.println("actuals = " + actuals);
 			PE.computeFirst();
 			PE.replaceFormals(env);
-			PE.compile(P, calls, env, follows);
-			firstState = PE.getStartState();
-			env.removeBindings(formals);
-			calls.pop();			
+			PE.compile(P, calls, follows);
+			firstState = PE.getFirst(); //getStartState();
+			//env.removeBindings(formals);
+			calls.pop();	
+			//System.err.println(name + " expanded as:\n" + PE);
 		}
 	}
-
-
 
 	public State getFirst() {
 		//System.err.println("ProcessCall.getFirst: " + firstState);
@@ -118,9 +124,9 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	}
 
-	public State getStartState() {
-		return firstState;
-	}
+//	public State getStartState() {
+//		return firstState;
+//	}
 
 	public State getFollow() {
 		return PE.getFollow();

@@ -35,9 +35,9 @@ abstract public class ProcessExpression {
 		this.first = first;
 	}
 
-	public State getStartState() {
-		return first;
-	}
+//	public State getStartState() {
+//		return first;
+//	}
 
 	protected void addToFirst(StateElement a) {
 		first.addElement(a);
@@ -57,9 +57,9 @@ abstract public class ProcessExpression {
 	
 	abstract public void computeFirst();
 	
-	abstract public void replaceFormals(Environment env) throws ToolBusException;
+    abstract public void replaceFormals(Environment env) throws ToolBusException;
 
-	abstract public void compile(ProcessInstance processInstance, Stack<String> calls, Environment env, State followSet)
+	abstract public void compile(ProcessInstance processInstance, Stack<String> calls, State followSet)
 			throws ToolBusException;
 
 	abstract public ProcessExpression copy();

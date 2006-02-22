@@ -10,7 +10,6 @@ import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
 import toolbus.ToolBus;
-import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
@@ -35,8 +34,8 @@ public class Create extends Atom {
     return a;
   }
 
-  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
-    super.compile(P, calls, env, follow);
+  public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException {
+    super.compile(P, calls, follow);
  
     if (pcall.value.getType() != ATerm.APPL)
       throw new ToolBusException("malformed first argument in create");

@@ -70,8 +70,9 @@ public class ProcessInstance {
 		//   env.introduceBinding(transactionIdVar, tbfactory.newTransactionId());
 
 		call.computeFirst();
-		call.compile(this, new Stack<String>(), env, empty);
-		currentState = call.getStartState();
+		call.replaceFormals(env);
+		call.compile(this, new Stack<String>(), empty);
+		currentState = call.getFirst(); //getStartState();
 		currentState.activate();
 		
 		//System.err.println("ProcessInstance: " + env);

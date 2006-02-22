@@ -1,7 +1,8 @@
 process CHK(N : int, Given : int, Required : int) is
+%%printf("CHK(%d,%d,%d)\n", N, Given, Required) .
         if equal(Given, Required) then tau
     	else
-	   printf("Test %d: given, but required %d\n", N, Given, Required) .
+	   printf("Test %d: %d given, but required %d\n", N, Given, Required) .
 	   shutdown("ERRORS IN MSG TEST")
         fi
 
@@ -16,7 +17,7 @@ process A is
 	snd-msg(d, X) .
 	snd-msg(e, X, Y) .
 	snd-msg(f, X?) . 	CHK(1, X, 30) .
-	snd-msg(g, X?, 50) . 	CHK(2, X, 40) .
+	snd-msg(g, X?, 50) . CHK(2, X, 40) .
 	snd-msg(h, g(X,Y?)) . 	CHK(3, X, 40) . CHK(4, Y, 50) .
 	snd-msg(done)
   endlet

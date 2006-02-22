@@ -97,21 +97,21 @@ abstract class FunctionDescriptor {
     for (int i = 0; i < argtypes.length; i++) {
       if (argtypes[i] == tbfactory.BoolType) {
         if (!tbfactory.isBoolean(actual[i]))
-          throw new ToolBusError(arg(i) + " of " + name + " should have type boolean");
+          throw new ToolBusError(arg(i) + " of " + name + " should have type boolean, got " + actual[i]);
       } else if (argtypes[i] == tbfactory.IntType) {
         if (!(actual[i] instanceof ATermInt))
-          throw new ToolBusError(arg(i) + " of " + name + " should have type integer");
+          throw new ToolBusError(arg(i) + " of " + name + " should have type integer, got " + actual[i]);
       } else if (argtypes[i] == tbfactory.RealType) {
         if (!(actual[i] instanceof ATermReal))
-          throw new ToolBusError(arg(i) + " of " + name + " should have type real");
+          throw new ToolBusError(arg(i) + " of " + name + " should have type real, got "+ actual[i]);
       } else if (argtypes[i] == tbfactory.StrType){
     	if (!(actual[i] instanceof ATermAppl) || ((ATermAppl)actual[i]).getArity() > 0){
-    	   throw new ToolBusError(arg(i) + " of " + name + " should have type string");  
+    	   throw new ToolBusError(arg(i) + " of " + name + " should have type string, got " + actual[i]);  
     	  }
       } else if (argtypes[i] == tbfactory.TermType) {
       } else if (argtypes[i] == tbfactory.ListType) {
         if (!(actual[i] instanceof ATermList))
-          throw new ToolBusError(arg(i) + " of " + name + " should be a list type");
+          throw new ToolBusError(arg(i) + " of " + name + " should be a list type, got " + actual[i]);
       } else
         throw new ToolBusInternalError("check: wrong type " + argtypes[i]);
     }
