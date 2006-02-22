@@ -54,7 +54,7 @@ context-free syntax
 
 sorts ShortCut
 context-free syntax
-  "shortcut" "(" modifier:KeyModifier "," key:VirtualKey ")" -> ShortCut {cons("shortcut")}
+  "shortcut" "(" "[" list:{KeyModifier ","}* "]" "," key:VirtualKey ")" -> ShortCut {cons("shortcut")}
 
 sorts TextStyle
 context-free syntax
