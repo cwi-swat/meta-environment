@@ -9,11 +9,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuKeyEvent;
 
 import nl.cwi.sen1.configapi.types.Event;
 import nl.cwi.sen1.configapi.types.ItemList;
 import nl.cwi.sen1.configapi.types.KeyModifier;
+import nl.cwi.sen1.configapi.types.KeyModifierList;
 import nl.cwi.sen1.configapi.types.ShortCut;
 
 public class StudioMenuBar extends JMenuBar {
@@ -49,21 +49,25 @@ public class StudioMenuBar extends JMenuBar {
 
     private KeyStroke createKeyStroke(ShortCut shortcut) {
         String key = shortcut.getKey().toString();
-        KeyModifier mod = shortcut.getModifier();
-        int mask;
-        
-        if (mod.isMUnderscoreALT()) {
-            mask = InputEvent.ALT_MASK;
+        KeyModifierList modifiers = shortcut.getList();
+
+        int mask = 0;
+        while (!modifiers.isEmpty()) {
+            KeyModifier mod = modifiers.getHead();
+            modifiers = modifiers.getTail();
+            
+            if (mod.isMUnderscoreALT()) {
+                mask += InputEvent.ALT_MASK;
+            } else if (mod.isMUnderscoreCTRL()) {
+                mask += InputEvent.CTRL_MASK;
+            } else {
+                mask += InputEvent.SHIFT_MASK;
+            }
         }
-        else if (mod.isMUnderscoreCTRL()) {
-            mask = InputEvent.CTRL_MASK;
-        }
-        else {
-            mask = InputEvent.SHIFT_MASK;
-        }
-        
+
         try {
-            return KeyStroke.getKeyStroke(KeyEvent.class.getField(key).getInt(KeyEvent.class),mask);
+            return KeyStroke.getKeyStroke(KeyEvent.class.getField(key).getInt(
+                    KeyEvent.class), mask);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         } catch (SecurityException e) {
@@ -73,7 +77,7 @@ public class StudioMenuBar extends JMenuBar {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
 

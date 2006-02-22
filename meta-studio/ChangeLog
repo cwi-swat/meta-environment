@@ -1,5 +1,9 @@
 $Id$
 
+Wed Feb 22 14:37:04 CET 2006 <kooiker@cwi.nl>
+ * utils/**/StudioMenuBar.java:
+   - Handle multiple modifiers
+
 Tue Feb 21 16:29:45 CET 2006 <kooiker@cwi.nl>
  * {util,studio}/**/*.java:
    - Use configuration api for (popup)menus and shortcuts
