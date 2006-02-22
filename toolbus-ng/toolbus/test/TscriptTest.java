@@ -83,6 +83,7 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Assign5"));
     assertTrue(runTest("Assign6"));
     assertTrue(runTest("Bind"));
+    assertTrue(runTest("Let1"));
   }
 
   public void testIf() {
@@ -113,6 +114,7 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Call1"));
     assertTrue(runTest("Call2"));
     assertTrue(runTest("Call3"));
+    assertTrue(runTest("Call4"));
   }
   
   public void testExpr() {

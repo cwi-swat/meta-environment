@@ -33,6 +33,8 @@ public class Assign extends Atom {
   }
   
   public void replaceFormals(Environment env) throws ToolBusException {
+	//env = env.copy();
+	this.env = env;
   	//System.err.println("Assign.replaceformals: " + var.value + "; " + exp.value);
   	//System.err.println("env = " + env);
   	var.value = tbfactory.resolveVarTypes(var.value, env);
@@ -44,10 +46,11 @@ public class Assign extends Atom {
     exp.value = tbfactory.resolveVarTypes(exp.value, env);
     exp.value = tbfactory.replaceFormals(exp.value, env);
 	//System.err.println("Assign.replaceformals:  => " + var.value + "; " + exp.value);
+	//System.err.println("Assign.replaceformals:  env = "+env);;
  }
 
-  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follow) throws ToolBusException {
-    super.compile(P, calls, env, follow);
+  public void compile(ProcessInstance P, Stack<String> calls, State follow) throws ToolBusException {
+    super.compile(P, calls, follow);
     //System.err.println("Assign.compile: " + this + " env = " + getEnv());
     if (!tbfactory.isAnyVar(var.value))
       throw new ToolBusException("left-hand side of := should be a variable");

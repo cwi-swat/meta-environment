@@ -6,7 +6,6 @@ package toolbus.process;
 import toolbus.Functions;
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
-import toolbus.atom.EndScope;
 import toolbus.exceptions.ToolBusError;
 import aterm.ATerm;
 import aterm.ATermList;

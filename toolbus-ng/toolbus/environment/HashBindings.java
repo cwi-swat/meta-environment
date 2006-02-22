@@ -62,7 +62,7 @@ class HashBindings implements Bindings {
 	   }
    }
 	public String toString() {
-		String res = this.hashCode() + "{", sep = "";
+		String res = "{", sep = "";
 		for(String key : bindings.keySet()){
 			LinkedList<Binding> all = bindings.get(key);
 		

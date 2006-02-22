@@ -8,9 +8,11 @@ package toolbus.environment;
 interface Bindings {
 
 	/**
-	 * @return deep copy of the Bindings object
+	 * @return deep (**** qualify this !!! ****) copy of the Bindings object
 	 */
 	public Bindings clone();
+	
+	public int size();
 
 	/**
 	 * Return the first binding of for a given key value

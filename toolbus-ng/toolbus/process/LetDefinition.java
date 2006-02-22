@@ -7,44 +7,44 @@ import java.util.Stack;
 
 import toolbus.State;
 import toolbus.TBTermFactory;
-import toolbus.atom.EndScope;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATermList;
 
 public class LetDefinition extends ProcessExpression {
-  private ATermList formals;
+  private ATermList locals;
   private ProcessExpression PEinit;
   private ProcessExpression PE;
+  private Environment env;
 
   public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory) {
 	super(tbfactory);
-    this.formals = formals;
+    this.locals = formals;
     PEinit = PE;
     this.PE = PE;  //new Sequence(PE, new EndScope(formals, tbfactory), tbfactory);
     	      
   }
 
   public ProcessExpression copy() {
-    return new LetDefinition(formals, PEinit.copy(), tbfactory);
+    return new LetDefinition(locals, PEinit.copy(), tbfactory);
   }
   
   public void computeFirst(){
  	 PE.computeFirst();
   }
   
-  public void replaceFormals(Environment env) throws ToolBusException {
-	    env.introduceVars(formals);
-		PE.replaceFormals(env);
-		env.removeBindings(formals);
+  public void replaceFormals(Environment e) throws ToolBusException {
+	  env = e.copy();
+	  env.introduceVars(locals);
+	  PE.replaceFormals(env);
+	  //env.removeBindings(formals);
 	  }
 
-  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
-    env = env.copy();
+  public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException {
     //System.err.println("LetDef.compile: " + env);
-    env.introduceVars(formals);
-    PE.compile(P, calls, env, follows);
-    env.removeBindings(formals);
+    env.introduceVars(locals);
+    PE.compile(P, calls, follows);
+    env.removeBindings(locals);
     //System.err.println("LetDef resulting env: " + env);
   }
 
@@ -52,9 +52,9 @@ public class LetDefinition extends ProcessExpression {
     return PE.getFirst();
   }
   
-  public State getStartState(){
-    return PE.getStartState();
-  }
+ // public State getStartState(){
+ //   return PE.getStartState();
+ // }
 
   public State getFollow() {
     return PE.getFollow();
@@ -65,6 +65,6 @@ public class LetDefinition extends ProcessExpression {
   }
 
   public String toString() {
-    return "LetDefinition(" + formals + ", " + PE + ")";
+    return "LetDefinition(" + locals + ", " + PE + ")";
   }
 }

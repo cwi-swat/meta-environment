@@ -1,6 +1,10 @@
 import java.util.HashMap;
 import java.util.Map;
 
+import aterm.ATerm;
+import aterm.ATermFactory;
+import aterm.pure.PureFactory;
+
 public class TBAddressBookService implements AddressBookTif
 {
   private static int id = 0;

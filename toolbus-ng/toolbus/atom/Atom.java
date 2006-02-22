@@ -20,6 +20,7 @@ import toolbus.process.ProcessExpression;
 import toolbus.process.ProcessInstance;
 import aterm.AFun;
 import aterm.ATerm;
+import aterm.ATermList;
 
 class Test {
 	ATerm testExpr;
@@ -36,7 +37,7 @@ class Test {
 
 abstract public class Atom extends ProcessExpression implements StateElement {
   private ProcessInstance processInstance; // process instance to which the atom belongs
-  private Environment env;                 // the environment of this atom
+  protected Environment env;                 // the environment of this atom
   private Vector<Test> tests;             // optional tests that guard this atom
   private Ref[] atomArgs = new Ref[0];
   private int delay = 0;
@@ -49,6 +50,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   static private HashMap<String,Integer> enabled = new HashMap<String,Integer>(40);
   static private HashMap<String,Integer> notEnabled = new HashMap<String,Integer>(40);
   static private HashMap<String,Integer> npartners = new HashMap<String,Integer>(40);
+  static private HashMap<String,Integer> size_env = new HashMap<String,Integer>(40);
+  static private HashMap<String,Integer> size_used_env = new HashMap<String,Integer>(40);
 
   public Atom(TBTermFactory tbfactory) {
     super(tbfactory);
@@ -59,12 +62,16 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   }
   
   protected void incr(HashMap<String,Integer> map){
+	 incr(map, 1);
+  }
+  
+  protected void incr(HashMap<String,Integer> map, int d){
 	  String name = this.getClass().getName();
 	  if(map.containsKey(name)){
 		  int n = map.get(name);
-		  map.put(name,n+1);
+		  map.put(name,n+d);
 	  } else {
-		  map.put(name,1);
+		  map.put(name,d);
 	  }
   }
   
@@ -81,7 +88,11 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 		  System.err.printf("| %30s%8d%8d (+)%8d (-) |\n", name, ins, en, ne);		  			  
 	  }
 	  System.err.printf("| %30s%8d%8d    %8d     |\n", "TOTAL", ninstances, nenabled, nNotEnabled);
-	  System.err.printf("==================================================================\n");	 
+	  System.err.printf("==================================================================\n");
+	  
+	  for(String name : instances.keySet()){
+		  System.err.printf("%s, %d, %d\n", name, size_env.get(name), size_used_env.get(name));
+	  }
   }
   
   public void setAtomArgs(Ref r) {
@@ -130,7 +141,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 
   public void setTest(ATerm test, Environment e) throws ToolBusException {
   	if(test != null){
-  		env = e.copy();  //TODO OK?
+  		//env = e.copy();  //TODO OK?
+  		env = e;
 	    ATerm rtst = tbfactory.resolveVarTypes(test, env);
 	    if (tests == null)
 	    	tests = new Vector<Test>(3);
@@ -218,7 +230,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   public void computeFirst() {}
   
   public void replaceFormals(Environment e) throws ToolBusException{
-		 this.env = e.copy(); ///////
+		 //this.env = e.copy();
+	  this.env = e;
 		 //System.err.println("Atom.replaceFormals: " + env);
 	  	 for (int i = 0; i < atomArgs.length; i++) {
 	        //System.err.println("atomArg[" + i + "] = " + atomArgs[i] + " ; env = " + env);
@@ -229,11 +242,13 @@ abstract public class Atom extends ProcessExpression implements StateElement {
 	      }
 	  }
 
-  public void compile(ProcessInstance processInstance, Stack<String> calls, Environment env, State follow) throws ToolBusException {
-  	this.processInstance = processInstance;
+  public void compile(ProcessInstance processInstance, Stack<String> calls, State follow) throws ToolBusException {
+      //this.env = env.copy();
+	  this.env = env;
+	  this.processInstance = processInstance;
   	//this.env = env.copy();
   	//System.err.println("Atom.compile, prev env = " + env);
-  	this.env = env.copy();
+  	//this.env = env.copy();
     setFollow(follow);
     //System.err.println("Compiling " + this + ";\n env = " + this.env);
     //replaceFormals(env);  //TODO redundant?
@@ -310,6 +325,17 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   		int next = (delay != 0) ? startTime + delay : startTime;
   		getToolBus().setNextTime(next);
   	}
+  	incr(size_env, env.size());
+ 
+  	ATermList collected = tbfactory.EmptyList;
+ 	 for (int i = 0; i < atomArgs.length; i++) {
+ 		    collected = tbfactory.getVariables(atomArgs[i].value, collected);
+	      }
+  	
+  	incr(size_used_env, collected.getLength());
+  	
+  	//System.err.println("used_vars = " + collected);
+  	
   }
 
   abstract public boolean execute() throws ToolBusException;

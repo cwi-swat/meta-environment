@@ -49,12 +49,12 @@ public class Merge extends ProcessExpression implements StateElement {
 	}
 
 	public void compile(ProcessInstance processInstance, Stack<String> calls,
-			Environment env, State followSet) throws ToolBusException {
+			State followSet) throws ToolBusException {
 		this.processInstance = processInstance;
-		expr[LEFT].compile(processInstance, calls, env, followSet);
+		expr[LEFT].compile(processInstance, calls, followSet);
 		initialState[LEFT] = state[LEFT] = expr[LEFT].getFirst();
 
-		expr[RIGHT].compile(processInstance, calls, env, followSet);
+		expr[RIGHT].compile(processInstance, calls, followSet);
 		initialState[RIGHT] = state[RIGHT] = expr[RIGHT].getFirst();
 		setFollow(followSet);
 	}

@@ -4,16 +4,12 @@
 
 package toolbus.atom.msg;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import toolbus.State;
-import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
 import toolbus.atom.Ref;
-import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessInstance;
 import aterm.ATerm;
@@ -54,8 +50,8 @@ public abstract class MsgAtom extends Atom {
 	}
 
 	public void compile(ProcessInstance processInstance, Stack<String> calls,
-			Environment env, State follow) throws ToolBusException {
-		super.compile(processInstance, calls, env, follow);
+			State follow) throws ToolBusException {
+		super.compile(processInstance, calls, follow);
 		// matchPattern = tbfactory.makeList(getMsg(),
 		// tbfactory.makeList(getId()));
 		matchPattern = getMsg();

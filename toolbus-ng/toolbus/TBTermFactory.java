@@ -455,6 +455,46 @@ public class TBTermFactory extends PureFactory {
 		}
 		throw new ToolBusInternalError("illegal ATerm in replaceFormals: " + t);
 	}
+	
+	public ATermList getVariables(ATerm t, ATermList collected){
+		switch (t.getType()) {
+		case ATerm.BLOB:
+		case ATerm.INT:
+		case ATerm.PLACEHOLDER:
+		case ATerm.REAL:
+			return collected;
+
+		case VAR:
+			if(member(t,collected)){
+				return collected;
+			} else {
+				return makeList((TBTermVar) t, collected);
+			}
+			
+		case ATerm.APPL:
+			ATermAppl apt = (ATermAppl) t;
+
+			AFun afun = apt.getAFun();
+			ATerm args[] = apt.getArgumentArray();
+			int nargs = args.length;
+			if (nargs == 0)
+				return collected;
+			for (int i = 0; i < nargs; i++) {
+				collected = (ATermList)join(collected, getVariables(args[i], collected));
+			}
+			return collected;
+
+		case ATerm.LIST:
+
+			ATermList lst = EmptyList;
+			ATermList tlst = (ATermList) t;
+			for (int i = tlst.getLength() - 1; i >= 0; i--) {
+				collected = (ATermList)join(collected, getVariables(tlst.elementAt(i), collected));
+			}
+			return collected;
+		}
+		throw new ToolBusInternalError("illegal ATerm in getVariables: " + t);
+	}
 
 	/**
 	 * Transform a term into a pattern that can be used by tool interfaces.

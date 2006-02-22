@@ -5,7 +5,6 @@ import java.io.IOException;
 import toolbus.TBTermFactory;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
-import aterm.ATermList;
 
 /**
  * @author paulk, Jul 31, 2002

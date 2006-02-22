@@ -228,7 +228,6 @@ public class ToolInstance {
   /**
    * ToolBus receives an event while evaluating the RecEvent atom.
    * 
-   * @see toolbus.tool.ToolInstance#getEventFromTool(ATerm, Environment)
    */
 
   public boolean getEventFromTool(ATermList alist, Environment env) {

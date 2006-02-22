@@ -24,18 +24,23 @@ public class Environment {
 	private TBTermFactory tbfactory;
 
 	public Environment(TBTermFactory tbfactory) {
-		bindings = new HashBindings();
+		bindings = new ListBindings();
 		this.tbfactory = tbfactory;
 	}
 	
 	public Environment copy() {
 		Environment env = new Environment(tbfactory);
 		env.bindings = bindings.clone();
+		//env.bindings = bindings;
 		return env;
 	}
 	
 	public TBTermFactory getTBTermFactory(){
 		return tbfactory;
+	}
+	
+	public int size(){
+		return bindings.size();
 	}
 
 	/**
@@ -50,7 +55,7 @@ public class Environment {
 		//System.err.println(this.hashCode() + " introduceVars: " + vars);
 		for( ; !vars.isEmpty(); vars = vars.getNext()){
 			ATerm t = vars.getFirst();
-			if (tbfactory.isAnyVar(t)) {
+			if (tbfactory.isVar(t)) {
 				TBTermVar var = (TBTermVar) t;
 				bindings.put(var.getVarName(), new Binding(var,tbfactory.Undefined));
 			} else {
@@ -82,7 +87,7 @@ public class Environment {
 		    }
 		}
 		if(formalVar.isResultVar() && !tbfactory.isResultVar(actual)) {
-				throw new ToolBusInternalError("illegal actual: " + actual);
+				throw new ToolBusInternalError("actual: " + actual + " should be a result variable");
 		} else {
 			bindings.put(formalVar.getVarName(), new Binding(formalVar, actual, isFormal));
 		    //System.err.println("introduceBinding => " + this);
@@ -258,10 +263,14 @@ public class Environment {
 		v = v.setVarType(getVarType(v));
 		Binding b = getBinding(v);
 		//System.err.println(b);
-		if (b == null || (b.val == tbfactory.Undefined)) {
-			//System.err.println("1. replaceFormals(" + v + ") => " + v);
+		if (b == null || b.val == tbfactory.Undefined){
 			return v;
-		} else if (b.isFormal()){
+			/*throw new ToolBusError("Undeclared variable " + v.getExternalVarName());*/
+		}
+		if(!b.isFormal()){
+			//System.err.println("local var:. replaceFormals(" + v + ") => " + v);
+			return v;
+		} else {
 			if(b.isAssignable() || tbfactory.isResultVar(b.val)){
 				//System.err.println("2. replaceFormal(" + v + ") => " + v);
 				return v;
@@ -280,7 +289,7 @@ public class Environment {
 			}
 		}
 		//System.err.println("5. replaceFormal(" + v + ") => " + v);
-		return v;
+		/*return v;*/
 	}
 	
 	public String toString() {

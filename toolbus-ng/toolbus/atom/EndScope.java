@@ -29,7 +29,7 @@ public class EndScope extends Atom {
 		 return;
 	 }
 	 
-	 public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
+	 public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException {
 		 env.removeBindings(((ATermList) refformals.value)); 
 	 }
 

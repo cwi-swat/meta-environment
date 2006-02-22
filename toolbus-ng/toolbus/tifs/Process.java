@@ -2,6 +2,10 @@ package toolbus.tifs;
 
 import java.util.Iterator;
 
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
+
 public class Process {
   private ATermAppl representation;
   private CommunicationList communicationList;

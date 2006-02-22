@@ -14,6 +14,8 @@ import toolbus.atom.tool.Event;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import toolbus.exceptions.ToolBusInternalError;
+import aterm.ATerm;
+import aterm.ATermList;
 
 
 /*** Outdated **/
@@ -131,8 +133,8 @@ public class MsgPair extends ProcessExpression implements StateElement {
     System.err.println(atomPatterns);
   }
 
-  public void compile(ProcessInstance P, Stack<String> calls, Environment env, State follows) throws ToolBusException {
-    PE.compile(P, null, env, follows);
+  public void compile(ProcessInstance P, Stack<String> calls, State follows) throws ToolBusException {
+    PE.compile(P, null, follows);
     setFollow(PE.getFollow());
   }
 

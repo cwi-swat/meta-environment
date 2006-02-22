@@ -55,6 +55,9 @@ public class Binding {
 	}
 	
 	public String toString(){
-		return "Binding(" + var + ", " + val + ", formal=" + formal + ", assignable=" + assignable + ")";
+		String op = isFormal() ? ":->":" : ";
+		if(assignable)
+			op += "@";
+		return var + " " + op  + " " + val;
 	}
 }
