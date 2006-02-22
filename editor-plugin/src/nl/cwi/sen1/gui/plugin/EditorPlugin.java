@@ -127,7 +127,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     .toString()) {
                 public void actionPerformed(ActionEvent e) {
                     ATerm event = studio.getATermFactory().make(
-                            "menu-event(<term>,<term>)", editorId, menuPath);
+                            "menu-event(<term>,<term>)", editorId, menuPath.toTerm());
                     bridge.postEvent(event);
                 }
             });
