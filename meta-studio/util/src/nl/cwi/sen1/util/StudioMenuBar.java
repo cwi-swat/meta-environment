@@ -57,11 +57,11 @@ public class StudioMenuBar extends JMenuBar {
             modifiers = modifiers.getTail();
             
             if (mod.isMUnderscoreALT()) {
-                mask += InputEvent.ALT_MASK;
+                mask |= InputEvent.ALT_MASK;
             } else if (mod.isMUnderscoreCTRL()) {
-                mask += InputEvent.CTRL_MASK;
+                mask |= InputEvent.CTRL_MASK;
             } else {
-                mask += InputEvent.SHIFT_MASK;
+                mask |= InputEvent.SHIFT_MASK;
             }
         }
 
