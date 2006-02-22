@@ -255,7 +255,7 @@ term *make_symbol_list(int type)
 
   for(i=0; i<ID; i++)
     if(type == IDT_ALL || idx_table[i]->type == type)
-      list = mk_list(TBmake("%s", idx_table[i]->name), list);
+      list = mk_list(TBmake(TBtrue, "%s", idx_table[i]->name), list);
 
   return list;
 }

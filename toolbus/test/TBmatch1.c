@@ -26,43 +26,43 @@ int nerr = 0;
 #define NL fprintf(stderr, "\n");
 #define TST_OK(n,s)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s); \
+        t = TBmake(TBtrue, s); \
         if(!TBmatch(t, s)) { nerr++; fprintf(stderr, "KO\n"); } else fprintf(stderr, "ok\n");
 
 #define TST_KO(n,s,ser)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s); \
+        t = TBmake(TBtrue, s); \
         if(TBmatch(t, ser)) { nerr++; fprintf(stderr, "KO\n"); } else fprintf(stderr, "ok\n");
 
 #define TST_D(n,s1,s2,v)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s1); \
+        t = TBmake(TBtrue, s1); \
         if(!TBmatch(t, s2, &ival) || ival != v)\
            { nerr++; fprintf(stderr, "KO"); } else fprintf(stderr, "ok");\
-        t = TBmake(s2, v);\
+        t = TBmake(TBtrue, s2, v);\
         if(!TBmatch(t, s1))\
          { nerr++; fprintf(stderr, " ... KO\n"); } else fprintf(stderr, " ... ok\n");
 
 #define TST_S(n,s1,s2,v)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s1); \
+        t = TBmake(TBtrue, s1); \
         if(!TBmatch(t, s2, &sval) || !streq(sval,v))\
           { nerr++;  fprintf(stderr, "KO"); } else fprintf(stderr, "ok");\
-        t = TBmake(s2,v); \
+        t = TBmake(TBtrue, s2,v); \
         if(!TBmatch(t, s1))\
          { nerr++; fprintf(stderr, " ... KO\n"); } else fprintf(stderr, " ... ok\n");
 
 #define TST_T(n,s1,s2,tv)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s1); \
+        t = TBmake(TBtrue, s1); \
         if(!TBmatch(t, s2, &tval) || !TBmatch(tval,tv)) { nerr++; fprintf(stderr, "KO"); } else fprintf(stderr, "ok");\
-        t = TBmake(s2,TBmake(tv)); \
+        t = TBmake(TBtrue, s2,TBmake(TBtrue, tv)); \
         if(!TBmatch(t, s1))\
          { nerr++; fprintf(stderr, " ... KO\n"); } else fprintf(stderr, " ... ok\n");
 
 #define TST_P(n,s1,s2)  \
         fprintf(stderr, "test %d ... ", n); \
-        t = TBmake(s1); \
+        t = TBmake(TBtrue, s1); \
         if(!TBmatch(t, s2)) { nerr++; fprintf(stderr, "KO"); } else fprintf(stderr, "ok");
 
 int main(int argc, char *argv[])
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
   TST_OK(48, "\"a\\\n\\\"c\"");
 
   fprintf(stderr, "test %d ... ", 49);
-  t = TBmake("123");
+  t = TBmake(TBtrue, "123");
   if(TBmatch(t, "%d\"", &ival)){
     nerr++; fprintf(stderr, "KO\n");
   } else fprintf(stderr, "ok\n");

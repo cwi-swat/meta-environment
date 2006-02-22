@@ -579,7 +579,7 @@ rec_monitor(term * e, term ** out)
       TBprintf(to_wish, "}\n");
     }
     TBprintf(to_wish, "} msg] { TBerror $msg }\n");
-    *out = TBmake("snd-continue(%d)", pid1);
+    *out = TBmake(TBfalse, "snd-continue(%d)", pid1);
     return TBtrue;
   }
   else {
@@ -875,7 +875,7 @@ static void
 disconnect()
 {
   if (connected)
-    TBsend(TBmake("snd-disconnect"));
+    TBsend(TBmake(TBfalse, "snd-disconnect"));
   connected = TBfalse;
 }
 

@@ -190,10 +190,10 @@ int TBinit(char *tname, int argc, char *argv[],
 
   TBaddTermPort(fromToolBus, fun);
 
-  Snd_Void = TBmake("snd-void()");
+  Snd_Void = TBmake(TBfalse, "snd-void()");
   TBprotect(&Snd_Void);
 
-  trm = TBread(fromToolBus); /* obtain the tool signature from the ToolBus */
+  trm = TBread(fromToolBus, TBfalse); /* obtain the tool signature from the ToolBus */
 
   if(TBmatch(trm, "rec-do(signature(%t,%t))", &tool_in_sign, &tool_out_sign)){
     TBsend(Snd_Void);
@@ -228,7 +228,7 @@ int TBconnect(char *tname, char *host, int port,
   WellKnownSocketPort = old_port;
 
   TBaddTermPort(from_tb, fun);
-  trm = TBread(from_tb); /* obtain the tool signature from the ToolBus */
+  trm = TBread(from_tb, TBfalse); /* obtain the tool signature from the ToolBus */
 
   if(TBmatch(trm, "rec-do(signature(%t,%t))", &tool_in_sign, &tool_out_sign)){
     TBwrite(to_tb, Snd_Void);
@@ -353,7 +353,7 @@ static term *tool_read_term(void)
       continue;
     }
     if(inp && inp->term_port){
-      if((trm = parse_buffer())){
+      if((trm = parse_buffer(TBfalse))){
 	/*TBmsg("tool_read_term: ***%t***\n", trm);*/
 	if(streq(get_txt(fun_sym(trm)), "rec-do"))
           sndvoid = TBtrue;

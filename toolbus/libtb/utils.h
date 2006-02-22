@@ -61,7 +61,7 @@ typedef term *(*TBsigchk)(term *);
 term *read_term(tool_id **);
 int   read_from_stdin(void);
 term *read_and_parse_from_stdin(term *, term *);
-term *parse_buffer(void);
+term *parse_buffer(TBbool);
 int multi_read(int);
 int mread(int, char *, int);
 
@@ -72,9 +72,9 @@ char * TBvsprintf(char *fmt, va_list);
 void   tbgen_printf(const char *, term_list *);
 char   *TBsprintf(char *, ...);
 TBbool TBmatch(term *, char *, ...);
-term   *TBmake(char *, ...);
+term   *TBmake(TBbool, char *, ...);
 void   TBwrite(int, term *);
-term   *TBread(int);   /* should become FILE * */
+term   *TBread(int, TBbool);   /* should become FILE * */
 term   *TBreadTerm(FILE *);
 
 int  TBsize(term *t);

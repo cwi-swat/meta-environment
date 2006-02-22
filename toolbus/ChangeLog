@@ -3,6 +3,11 @@ $Id$
 Wed Feb 22 11:11:35 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * libtb/utils.c: added underscore as one of the characters acceptible
    in a function application term and a variable term.
+ * libtb/utils.c:
+   - Add parameter to parse_term0() so you can make the choice to parse input 
+     as variable. Only parse a variable when parsing ToolBus scripts. When
+     sending terms using sockets we don't parse variables.
+   - Changed calls to parse_term0() so they use the new choice.
 
 Wed Jan  4 15:21:01 CET 2006 <{jurgenv,kooiker,paulk}@cwi.nl>
  * toolbus/interpreter.c: fixed a bug in expansion of dynamic calls,

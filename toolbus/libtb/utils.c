@@ -144,8 +144,8 @@ static void parse_error(char *s)
 
 va_list mk_term_args;
 
-static term *parse_term0(void);
-static term *parse_anno(term *t);
+static term *parse_term0(TBbool parseVars);
+static term *parse_anno(term *t, TBbool parseVars);
 
 /*{{{  static TBbool is_std_fsym(char *s) */
 
@@ -166,9 +166,9 @@ static TBbool is_std_fsym(char *s)
 }
 
 /*}}}  */
-/*{{{  static type *parse_type(void) */
+/*{{{  static type *parse_type(TBbool parseVars) */
 
-static type *parse_type(void)
+static type *parse_type(TBbool parseVars)
 {
   skip_layout();
   if(lastc != ':')
@@ -176,7 +176,7 @@ static type *parse_type(void)
   else {
     get_char();
     skip_layout();
-    return parse_term0();
+    return parse_term0(parseVars);
   }
 }
 
@@ -196,9 +196,9 @@ static type *parse_type(void)
    --Tobias
    */
 
-/*{{{  static term *parse_anno(term *t) */
+/*{{{  static term *parse_anno(term *t, TBbool parseVars) */
 
-static term *parse_anno(term *t)
+static term *parse_anno(term *t, TBbool parseVars)
 {
   term_list args;
   term *arg;
@@ -226,7 +226,7 @@ static term *parse_anno(term *t)
 	  unget_char();
 	}
       }
-      arg = parse_anno(parse_term0());
+      arg = parse_anno(parse_term0(parseVars), parseVars);
 
       next(&args) = list_concat_term(next(&args), arg);
       skip_layout();
@@ -245,7 +245,7 @@ list_args_seen_anno:
     t2 = mk_anno(anno,t);
     /* Now, we can have _another_ annotation:
        term{anno}{anno'} */
-    res = parse_anno(t2);
+    res = parse_anno(t2, parseVars);
   } else {
     res = t;
   }
@@ -253,9 +253,9 @@ list_args_seen_anno:
 }
 
 /*}}}  */
-/*{{{  static term *parse_term0(void) */
+/*{{{  static term *parse_term0(TBbool parseVars) */
 
-static term *parse_term0(void)
+static term *parse_term0(TBbool parseVars)
 {
   char *begin;
   int close_char;
@@ -267,7 +267,7 @@ static term *parse_term0(void)
   begin = buf_ptr - 1;
 
   /*fprintf(stderr, "parse_term0: %s\n", buf_ptr); */
-  if(isupper(lastc) || (lastc == '_')){     /* variable or formal */
+  if((isupper(lastc) || (lastc == '_')) && parseVars){     /* variable or formal */
 
     get_char();
     while(isalnum(lastc) || (lastc == '-') || (lastc == '_') || (lastc == '$')) {
@@ -275,7 +275,7 @@ static term *parse_term0(void)
     }
     id_sym = lookupn(begin, buf_ptr-1);
     skip_layout();
-    tp = parse_type();
+    tp = parse_type(parseVars);
     if(lastc == '?'){
       get_char();
       return mk_result_var_idx(id_sym, tp);
@@ -465,7 +465,7 @@ make_list:
 		  unget_char();
 		}
 	      }
-	      arg = parse_anno(parse_term0());
+	      arg = parse_anno(parse_term0(parseVars), parseVars);
 
 	      next(&args) = list_concat_term(next(&args), arg);
 	      skip_layout();
@@ -488,7 +488,7 @@ list_args_seen:
 	      return t;
 	    }
 	  } else
-	    if(islower(lastc)){            /* application */
+	    if(islower(lastc) || isupper(lastc)){            /* application */
 
 	      get_char();
 	      while(isalnum(lastc) || (lastc == '-') || (lastc == '_')) {
@@ -542,7 +542,7 @@ make_args:
 	      } else if(lastc == '<'){
 		type *tp;
 		get_char();
-		tp = parse_anno(parse_term0());
+		tp = parse_anno(parse_term0(parseVars), parseVars);
 		if(!tp)
 		  return NULL;
 		skip_layout();
@@ -561,15 +561,15 @@ make_args:
 }
 
 /*}}}  */
-/*{{{  term *parse_term(void) */
+/*{{{  term *parse_term(TBbool parseVars) */
 
-term *parse_term(void)
+term *parse_term(TBbool parseVars)
 {
   term *res;
 
   parse_error_msg = NULL;
   get_char();
-  res = parse_anno(parse_term0());
+  res = parse_anno(parse_term0(parseVars), parseVars);
   skip_layout();
   /* return res; */
   if(lastc){
@@ -584,9 +584,9 @@ term *parse_term(void)
 
 static void extend_buffer();
 
-/*{{{  term *TBmake(char * fmt, ...) */
+/*{{{  term *TBmake(TBbool parseVars, char * fmt, ...) */
 
-term *TBmake(char * fmt, ...)
+term *TBmake(TBbool parseVars, char * fmt, ...)
 {
   term * res;
   int n;
@@ -604,7 +604,7 @@ term *TBmake(char * fmt, ...)
   /* fprintf(stderr, "TBmake %s\n", fmt); */
   parse_error_msg = NULL;
   get_char();
-  res = parse_anno(parse_term0());
+  res = parse_anno(parse_term0(parseVars), parseVars);
   va_end(mk_term_args);
   skip_layout();
   /* return res; */
@@ -619,12 +619,12 @@ term *TBmake(char * fmt, ...)
 
 /*{{{  term *TBread(int fd) */
 
-term *TBread(int fd)
+term *TBread(int fd, TBbool parseVars)
 {
   term *trm;
   if(multi_read(fd) <= 0)
     return NULL;
-  if((trm = parse_buffer()))
+  if((trm = parse_buffer(parseVars)))
     return trm;
   else
     return NULL;
@@ -650,7 +650,7 @@ term *TBreadTerm(FILE *f)
   }
   *ptr++ = '\0';  /* ptr + 2, above, ensures there is room for this \0 */
   if(ptr - &buffer[LENSPEC] > 0){
-    trm = parse_buffer();
+    trm = parse_buffer(TBtrue);
     if(trm)
       return trm;
   }
@@ -701,7 +701,7 @@ term *read_and_parse_from_stdin(term *prompt, term *pat)
        */
     n = read_from_stdin();
     if(n > 0){
-      trm = parse_buffer();
+      trm = parse_buffer(TBtrue);
       if(trm)
 	return trm;
     }
@@ -711,9 +711,9 @@ term *read_and_parse_from_stdin(term *prompt, term *pat)
 
 /*}}}  */
 
-/*{{{  term *parse_buffer(void) */
+/*{{{  term *parse_buffer(TBbool parseVars) */
 
-term *parse_buffer(void)
+term *parse_buffer(TBbool parseVars)
 {
   term * trm;
 
@@ -721,7 +721,7 @@ term *parse_buffer(void)
 
   skip_layout();
 
-  if((trm = parse_term())){
+  if((trm = parse_term(parseVars))){
     if(TBverbose)
       TBmsg("receive: %t\n", trm);
     return trm;
@@ -1440,7 +1440,7 @@ fetch_next:
 
 	get_char();
 	skip_layout();
-	rt = parse_anno(parse_term0());
+	rt = parse_anno(parse_term0(TBtrue), TBtrue);
 	if(lastc != '>' || !rt)
 	  return TBfalse;
 	get_char();

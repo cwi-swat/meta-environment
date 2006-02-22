@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
   else
     err_sys_fatal("Can't open perl script `%s'", script);
 
-  tname = TBmake(name);
+  tname = TBmake(TBfalse, name);
   connect_to_perl(script, handle_input_from_perl);
   TBeventloop();
   unlink_tmp();

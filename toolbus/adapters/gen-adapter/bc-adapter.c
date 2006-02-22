@@ -107,13 +107,13 @@ term *handle_input_from_bc(int fd)
   if(fgets(line, 512, from_bc)){ 
     TBmsg("read from bc: %s (length %d)\n", line, strlen(line));
     if(sscanf(line, "%d", &res))
-      return TBmake("value(calc,%d)", res);
+      return TBmake(TBfalse, "value(calc,%d)", res);
     else  if(sscanf(line, "syntax error on line %d", &res))
-      return TBmake("value(calc,\"14:syntax \"error\"\")");
+      return TBmake(TBfalse, "value(calc,\"14:syntax \"error\"\")");
     else {
       fgets(line2, 512, from_bc);
       TBmsg("skip from bc: %s (length %d)\n", line2, strlen(line2));
-      return TBmake("value(calc,error(%s))", line);
+      return TBmake(TBfalse, "value(calc,error(%s))", line);
     }
   } else {
     TBmsg("Cannot read\n");

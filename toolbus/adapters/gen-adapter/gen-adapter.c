@@ -230,9 +230,9 @@ exec_cmd:
       switch( output_type )
       {
 	case tb_bstring:
-	  return TBmake("snd-value(output(%b))", output, outp-output);
+	  return TBmake(TBfalse, "snd-value(output(%b))", output, outp-output);
 	case tb_string:
-	  return TBmake("snd-value(output(%s))", output);
+	  return TBmake(TBfalse, "snd-value(output(%s))", output);
 	case tb_term:
 	  return NULL;
       }
@@ -247,7 +247,7 @@ exec_cmd:
       term *t;
       t = TBreadTerm( from_cmd );
       fclose(from_cmd );
-      return TBmake( "snd-value(output(%t))", t );
+      return TBmake(TBfalse,  "snd-value(output(%t))", t );
     }
 
   } 

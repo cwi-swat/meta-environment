@@ -721,7 +721,7 @@ tool_id *create_tool(term *creator, term_list *args)
        tried many experiments, but haven't been able to reproduce it in
        a small example yet), so I replaced it with 'TBmake'. <PO> */
     /*inst = mk_tool_inst(creator, n_tool_inst, td_host(td), -1,-1,PHASE1);*/
-    inst = TBmake("tool-inst(%t,%d,%d,%d,%s,%d,[])",
+    inst = TBmake(TBfalse, "tool-inst(%t,%d,%d,%d,%s,%d,[])",
 		  creator, n_tool_inst, -1, -1, td_host(td), PHASE1);
     /*TBprintf(stderr, "Inst = %t\n", inst);*/
     Tools = mk_list(inst, Tools);
@@ -849,9 +849,9 @@ term *read_term(tool_inst **pti)
     if(nelem < 0)
       err_fatal("read_term: cannot find ready input channel");
     if (nelem == 0) {
-      trm = TBmake("snd-disconnect");
+      trm = TBmake(TBfalse, "snd-disconnect");
     } else {
-      trm = parse_buffer();
+      trm = parse_buffer(TBfalse);
     }
 
     if(trm){

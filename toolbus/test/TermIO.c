@@ -52,7 +52,7 @@ void write_read(char *name, term *t1)
     err_sys_fatal("Can't open %s for reading\n", name);
   }
 
-  t2 =TBread(in);
+  t2 =TBread(in, TBtrue);
   close(in);
   /*  unlink(name);*/
 
@@ -83,10 +83,10 @@ int main()
 
   for(i =  9980; i < 10010; i++){
     TBprintf(stderr, "%d ", i);
-    write_read("fbin", TBmake("%b", cbuf, i));
+    write_read("fbin", TBmake(TBtrue, "%b", cbuf, i));
   }
 
-  write_read("blobby", TBmake("%b", "abc", 4));
+  write_read("blobby", TBmake(TBtrue, "%b", "abc", 4));
 
   TBprintf(stderr, "Done\n");
   exit(0);

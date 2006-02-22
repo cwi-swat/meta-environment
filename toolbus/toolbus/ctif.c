@@ -484,7 +484,7 @@ void read_tifs(int tifs, char *the_tool_name)
   /* construct match pattern, e.g. ``%f(<calc>,%l)'' */
   sprintf(pat, "%%f(<%s>, %%l)", the_tool_name);
 
-  while((t = TBread(tifs)) && !TBmatch(t, "end-of-tifs")){
+  while((t = TBread(tifs, TBtrue)) && !TBmatch(t, "end-of-tifs")){
     char *atf;
     term_list *arg;
 

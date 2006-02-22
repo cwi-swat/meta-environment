@@ -852,10 +852,10 @@ int typecheck(char *script, TBbool gen_tifs, char *output)
     } else {
       tool_def *def = find_tool_def(TBlookup("viewer"));
       if(def)
-	TBwrite(tifs, TBmake("rec-monitor(<viewer>,<term>)"));
+	TBwrite(tifs, TBmake(TBtrue, "rec-monitor(<viewer>,<term>)"));
       def = find_tool_def(TBlookup("logger"));
       if(def)
-	TBwrite(tifs, TBmake("rec-monitor(<logger>,<term>)"));
+	TBwrite(tifs, TBmake(TBtrue, "rec-monitor(<logger>,<term>)"));
     }
   }
 
@@ -955,7 +955,7 @@ int typecheck(char *script, TBbool gen_tifs, char *output)
 	TBwrite(tifs, first(sign));
       }
     }
-    TBwrite(tifs, TBmake("end-of-tifs"));
+    TBwrite(tifs, TBmake(TBtrue, "end-of-tifs"));
     if(close(tifs) < 0) {
       err_sys_fatal("Can't close `%s'", tifs_name);
     }

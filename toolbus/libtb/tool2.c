@@ -127,10 +127,10 @@ int TB_connect(int cid)
     TBmsg("TB_connect: connected to ToolBus port %d, tid = %d\n",
 	  connections[cid]->port, connections[cid]->tid);
 
-  trm = TBread(connections[cid]->socket); /* obtain the tool signature from the ToolBus */
+  trm = TBread(connections[cid]->socket, TBfalse); /* obtain the tool signature from the ToolBus */
 
   if(TBmatch(trm, "rec-do(signature(%t,%t))", &in_sign, &out_sign)){
-    TBwrite(connections[cid]->socket, TBmake("snd-void()"));
+    TBwrite(connections[cid]->socket, TBmake(TBfalse, "snd-void()"));
     if(connections[cid]->sigchecker){
       trm = (*connections[cid]->sigchecker)(cid, in_sign);
       if(trm)
@@ -163,7 +163,7 @@ term *TB_receive(int cid)
 {
   assert_valid_cid(cid);
 
-  return TBread(connections[cid]->socket);
+  return TBread(connections[cid]->socket, TBfalse);
 }
 
 /*}}}  */
@@ -235,7 +235,7 @@ int TB_handle_one(int cid)
     return TB_send(cid, result);
   }
   else if(sndvoid) {
-    return TB_send(cid, TBmake("snd-void()"));
+    return TB_send(cid, TBmake(TBfalse, "snd-void()"));
   }
 
   err_fatal("Unhandled case in TB_handle_one!\n");
@@ -443,7 +443,7 @@ int TB_match(term *trm, char *fmt, ...)
 
   va_start(args, fmt);
 
-  template = TBmake(fmt);
+  template = TBmake(TBfalse, fmt);
   result = term_match(trm, template, &args);
 
   va_end(args);
@@ -585,7 +585,7 @@ term *TB_make(char *fmt, ...)
 
   va_start(args, fmt);
 
-  template = TBmake(fmt);
+  template = TBmake(TBfalse, fmt);
   result = term_make(template, &args);
 
   va_end(args);

@@ -103,7 +103,7 @@ atom *mk_snd_monitor(term *monitor, atom *Atom, proc *P, proc_inst *ProcInst1, p
   }
   MonAtom =
     mk_atom(a_snd_monitor,
-	    TBmake("[%t,%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)]",
+	    TBmake(TBtrue, "[%t,%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)]",
 		   monitor,
 		   fun,
 		   int_val(pi_pid(ProcInst1)),
