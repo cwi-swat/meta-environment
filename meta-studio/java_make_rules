@@ -8,6 +8,8 @@ ANT_ENV = \
 if MAINTAINER_MODE
 ${JARFILE}: dummy
 	java -version
+	java -target 1.5
+	java -target 1.6
 	${ANT_ENV} ant dist
 
 dummy:
