@@ -225,11 +225,15 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 e.printStackTrace();
             }
         }
-        studio.removeComponent(comp);
+        cleanupEditor(comp, id);
+    }
+
+	private void cleanupEditor(StudioComponent comp, String id) {
+		studio.removeComponent(comp);
         componentsById.remove(id);
         statusbarsById.remove(id);
         editors.remove(id);
-    }
+	}
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
         Editor panel = getPanel(editorId.toString());
@@ -351,8 +355,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
 
             public void componentClose() {
-                editors.remove(id);
-                componentsById.remove(id);
+            	StudioComponent comp = (StudioComponent) componentsById.get(editorId
+                        .toString());
+                cleanupEditor(comp, editorId.toString());
                 ATerm event = studio.getATermFactory().make(
                         "editor-disconnected(<term>)", editorId);
                 bridge.postEvent(event);
