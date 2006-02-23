@@ -63,8 +63,8 @@ public class EditorPane extends JTextPane {
     private Color backgroundColor = Color.WHITE;
 
     private Rectangle lineHighlight = new Rectangle(0, 0, 0, 0);
-    
-    private List listeners = new LinkedList();
+
+    private List<EditorModifiedListener> listeners = new LinkedList<EditorModifiedListener>();
 
     public EditorPane() {
         setEditorKit(new EditorKit());
@@ -173,7 +173,7 @@ public class EditorPane extends JTextPane {
                     bracketOffset + 1, p);
         }
     }
-    
+
     public void highlight(int offset) {
         try {
             Rectangle r = modelToView(offset);
@@ -260,11 +260,11 @@ public class EditorPane extends JTextPane {
     public Object getFocusTag() {
         return focusTag;
     }
-    
+
     public Color getBackgroundColor() {
         return super.getBackground();
     }
-    
+
     public JMenu getEditorMenu() {
         return menu;
     }
@@ -382,7 +382,7 @@ public class EditorPane extends JTextPane {
             setCaretPosition(index < text.length() ? index : index - 1);
         }
     }
-    
+
     public void addEditorModifiedListener(EditorModifiedListener l) {
         listeners.add(l);
     }
@@ -393,9 +393,9 @@ public class EditorPane extends JTextPane {
 
     public void fireEditorModifiedEvent() {
         EditorModifiedEvent e = new EditorModifiedEvent(this);
-        Iterator iter = listeners.iterator();
+        Iterator<EditorModifiedListener> iter = listeners.iterator();
         while (iter.hasNext()) {
-            ((EditorModifiedListener) iter.next()).editorModified(e);
+            iter.next().editorModified(e);
         }
     }
 }

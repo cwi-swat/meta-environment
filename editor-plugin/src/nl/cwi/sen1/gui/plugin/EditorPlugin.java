@@ -38,24 +38,24 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     private Factory configFactory;
 
-    private Map editors;
+    private Map<String, SwingEditor> editors;
 
-    private Map componentsById;
+    private Map<String, StudioComponentImpl> componentsById;
 
-    private Map statusbarsById;
+    private Map<String, StatusBar> statusbarsById;
 
     private Studio studio;
 
     private EditorPluginBridge bridge;
 
     public EditorPlugin() {
-        editors = new HashMap();
-        componentsById = new HashMap();
-        statusbarsById = new HashMap();
+        editors = new HashMap<String, SwingEditor>();
+        componentsById = new HashMap<String, StudioComponentImpl>();
+        statusbarsById = new HashMap<String, StatusBar>();
     }
 
     public void isModified(ATerm editorId) {
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
         String modified;
 
         if (panel.isModified()) {
@@ -71,7 +71,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void writeContents(ATerm editorId) {
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
 
         if (panel != null) {
             try {
@@ -90,7 +90,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         errorapi.Factory factory = errorapi.Factory
                 .getInstance((PureFactory) studio.getATermFactory());
 
-        Editor panel = (Editor) editors.get(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
 
         panel.setFocus(factory.AreaFromTerm(focus));
     }
@@ -99,7 +99,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void registerTextCategories(ATerm editorId, ATerm categories) {
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
 
         PropertyList properties = Factory.getInstance(
                 (PureFactory) categories.getFactory()).PropertyListFromTerm(
@@ -108,13 +108,12 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void addActions(final ATerm editorId, ATerm menuList) {
-        StudioComponent comp = (StudioComponent) componentsById.get(editorId
-                .toString());
+        StudioComponent comp = componentsById.get(editorId.toString());
 
         addEditorMenus(editorId, comp, (ATermList) menuList);
 
         createFileMenu(editorId, comp);
-        createEditMenu((Editor) editors.get(editorId.toString()), comp);
+        createEditMenu(editors.get(editorId.toString()), comp);
     }
 
     private void addEditorMenus(final ATerm editorId, StudioComponent comp,
@@ -184,8 +183,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        StatusBar statusBar = (StatusBar) statusbarsById.get(editorId
-                .toString());
+        StatusBar statusBar = statusbarsById.get(editorId.toString());
 
         JLabel status = (JLabel) statusBar.getComponent("Status");
         status.setText(message);
@@ -200,13 +198,12 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             edit = false;
         }
 
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
         panel.setEditable(edit);
     }
 
     public void killEditor(ATerm editorId) {
-        StudioComponent comp = (StudioComponent) componentsById.get(editorId
-                .toString());
+        StudioComponent comp = componentsById.get(editorId.toString());
 
         if (comp != null) {
             closeEditor(comp, editorId.toString());
@@ -214,7 +211,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     private void closeEditor(StudioComponent comp, String id) {
-        Editor panel = getPanel(id);
+        Editor panel = editors.get(id);
 
         if (panel.isModified()) {
             studio.requestFocus(comp);
@@ -236,15 +233,14 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 	}
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
         panel.setCursorAtOffset(offset);
     }
 
     public void editFile(ATerm editorId, String filename, String modulename) {
         try {
             createPanel(editorId, filename);
-            StatusBar statusBar = (StatusBar) statusbarsById.get(editorId
-                    .toString());
+            StatusBar statusBar = statusbarsById.get(editorId.toString());
             JLabel label = (JLabel) statusBar.getComponent("Module");
             if (modulename.equals("")) {
                 label.setText(" ");
@@ -257,16 +253,15 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void highlightSlices(ATerm editorId, ATerm slices) {
-        getPanel(editorId.toString()).registerSlices(slices);
+        editors.get(editorId.toString()).registerSlices(slices);
     }
 
     public void editorToFront(ATerm editorId) {
-        studio.requestFocus((StudioComponent) componentsById.get(editorId
-                .toString()));
+        studio.requestFocus(componentsById.get(editorId.toString()));
     }
 
     public void rereadContents(ATerm editorId) {
-        Editor panel = getPanel(editorId.toString());
+        Editor panel = editors.get(editorId.toString());
         panel.rereadContents();
     }
 
@@ -286,7 +281,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     private Editor createPanel(final ATerm editorId, String filename)
             throws IOException {
         final String id = editorId.toString();
-        Editor editorPanel = getPanel(id);
+        Editor editorPanel = editors.get(id);
 
         if (editorPanel == null) {
             final SwingEditor panel = new SwingEditor(id, filename);
@@ -389,20 +384,16 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         }
     }
 
-    private Editor getPanel(String id) {
-        return (Editor) editors.get(id);
-    }
-
     public void recAckEvent(ATerm t0) {
     }
 
     public void recTerminate(ATerm t0) {
-        Iterator iter = editors.values().iterator();
+        Iterator<SwingEditor> iter = editors.values().iterator();
         while (iter.hasNext()) {
-            Editor panel = (Editor) iter.next();
+            SwingEditor panel = iter.next();
             if (panel.isModified()) {
                 String id = panel.getId();
-                StudioComponent comp = getComponentById(id);
+                StudioComponent comp = componentsById.get(id);
                 studio.requestFocus(comp);
                 try {
                     showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
@@ -413,9 +404,5 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         }
         fireStudioPluginClosed();
-    }
-
-    private StudioComponent getComponentById(String id) {
-        return (StudioComponent) componentsById.get(id);
     }
 }

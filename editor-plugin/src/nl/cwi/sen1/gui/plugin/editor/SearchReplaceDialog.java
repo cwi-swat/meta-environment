@@ -366,7 +366,7 @@ public class SearchReplaceDialog extends BaseDialog {
 
 	private void updateComboBox(JComboBox combo, String latestEntry) {
 		int numItems = combo.getItemCount();
-		List items = new ArrayList();
+		List<String> items = new ArrayList<String>();
 		for (int i = 0; i < numItems; i++) {
 			String current = (String) combo.getItemAt(i);
 			if ((current != null) && !current.equals(latestEntry)) {
