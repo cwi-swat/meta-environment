@@ -6,7 +6,9 @@ configuration([
          "EditorEditEquationsAction"),
   action([description(term-editor, menu-shortcut([label("Term"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R)))],
          "ReduceAction"),
-  action([description(syntax-editor, menu-shortcut([label("Module"),label("Edit"),label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
+   action([description(term-editor, menu-shortcut([label("Term"), label("Goto Origin")], shortcut([M_ALT,M_CTRL],VK_O)))],
+         "ShowOriginAction"),
+ action([description(syntax-editor, menu-shortcut([label("Module"),label("Edit"),label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
 
   action([description(equations-editor, menu-shortcut([label("Module"),label("View"),label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],
