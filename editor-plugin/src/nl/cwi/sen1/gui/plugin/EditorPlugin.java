@@ -166,10 +166,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         items = factory.makeItemList(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Close"));
 
-        shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
-                factory.makeKeyModifier_MUnderscoreCTRL(), factory
-                        .makeKeyModifier_MUnderscoreALT()), factory
-                .makeVirtualKey_VKUnderscoreC());
+        shortcut = factory.makeShortCut_Shortcut(
+                factory.makeKeyModifierList(factory
+                        .makeKeyModifier_MUnderscoreCTRL()), factory
+                        .makeVirtualKey_VKUnderscoreW());
         event = factory.makeEvent_MenuShortcut(items, shortcut);
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
