@@ -624,10 +624,21 @@ public class StudioImpl implements Studio, GuiTif {
     }
 
     public void requestFocus(StudioComponent component) {
-        int id = ((Integer) idsByComponent.get(component)).intValue();
-        View view = viewsById.getView(id);
-
-        view.restoreFocus();
+    	Integer id = (Integer) idsByComponent.get(component);
+        
+        if (id != null) {
+          View view = viewsById.getView(id.intValue());
+        
+          if (view != null) {
+            view.restoreFocus();
+          }
+          else {
+        	  System.err.println("No view found for: " + component.getName());
+          }
+        }
+        else {
+        	System.err.println("This component does not have a view: " + component.getName());
+        }
     }
 
     private void tryShutDown() {
