@@ -127,7 +127,8 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     .toString()) {
                 public void actionPerformed(ActionEvent e) {
                     ATerm event = studio.getATermFactory().make(
-                            "menu-event(<term>,<term>)", editorId, menuPath.toTerm());
+                            "menu-event(<term>,<term>)", editorId,
+                            menuPath.toTerm());
                     bridge.postEvent(event);
                 }
             });
@@ -136,16 +137,17 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     }
 
-    private void createFileMenu(final ATerm editorId, StudioComponent comp) {
+    private void createFileMenu(final ATerm editorId, final StudioComponent comp) {
         Factory factory = Factory.getInstance((PureFactory) studio
                 .getATermFactory());
 
         ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
                 factory.makeItem_Label("Save"));
 
-        Shortcut shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(factory
-                .makeKeyModifier_MUnderscoreCTRL()), factory
-                .makeVirtualKey_VKUnderscoreS());
+        Shortcut shortcut = factory.makeShortCut_Shortcut(
+                factory.makeKeyModifierList(factory
+                        .makeKeyModifier_MUnderscoreCTRL()), factory
+                        .makeVirtualKey_VKUnderscoreS());
         Event event = factory.makeEvent_MenuShortcut(items, shortcut);
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
@@ -158,6 +160,21 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+            }
+        });
+
+        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+                .makeItem_Label("Close"));
+
+        shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
+                factory.makeKeyModifier_MUnderscoreCTRL(), factory
+                        .makeKeyModifier_MUnderscoreALT()), factory
+                .makeVirtualKey_VKUnderscoreC());
+        event = factory.makeEvent_MenuShortcut(items, shortcut);
+
+        studio.addComponentMenu(comp, event, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                closeEditor(comp, editorId.toString());
             }
         });
     }
@@ -192,23 +209,26 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 .toString());
 
         if (comp != null) {
-            Editor panel = getPanel(editorId.toString());
-
-            if (panel.isModified()) {
-                studio.requestFocus(comp);
-                try {
-                    showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
-                } catch (CloseAbortedException e) {
-                    // this should never happen (no CANCEL button)
-                    e.printStackTrace();
-                }
-            }
-
-            componentsById.remove(editorId.toString());
-            statusbarsById.remove(editorId.toString());
-            editors.remove(editorId.toString());
-            studio.removeComponent(comp);
+            closeEditor(comp, editorId.toString());
         }
+    }
+
+    private void closeEditor(StudioComponent comp, String id) {
+        Editor panel = getPanel(id);
+
+        if (panel.isModified()) {
+            studio.requestFocus(comp);
+            try {
+                showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
+            } catch (CloseAbortedException e) {
+                // this should never happen (no CANCEL button)
+                e.printStackTrace();
+            }
+        }
+        studio.removeComponent(comp);
+        componentsById.remove(id);
+        statusbarsById.remove(id);
+        editors.remove(id);
     }
 
     public void setCursorAtOffset(ATerm editorId, int offset) {
