@@ -13,6 +13,11 @@
   </path>
 
   <target name="build">
+    <echo message="os.name:          ${os.name}"          />
+    <echo message="basdir:           ${basedir}"          />
+    <echo message="ant.file:         ${ant.file}"         />
+    <echo message="ant.project.name: ${ant.project.name}" />
+    <echo message="ant.java.version: ${ant.java.version}" />
     <mkdir dir="${build}"/>
     <javac destdir="${build}" debug="true" source="1.5" target="1.5">
       <src path="${srcdir}"/>
