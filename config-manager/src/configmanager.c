@@ -145,7 +145,13 @@ static void addSystemProperty(CFG_Property property) {
   if (CFG_isPropertyImport(property)) {
     char *path = CFG_getPropertyPath(property);
     ATerm import_contents = ATreadFromNamedFile(path);
-    add_configuration_properties(import_contents);
+
+    if (import_contents != NULL) {
+      add_configuration_properties(import_contents);
+    }
+    else {
+      ATwarning("Could not import properties from: %s\n", path);
+    }
   }
   else if (CFG_isPropertyExtension(property)) {
     systemExtensions = addExtension(systemExtensions, property);
