@@ -93,8 +93,8 @@ public class StudioMenuBar extends JMenuBar {
         return add(menu);
     }
 
-    private JMenu findSubMenu(JMenuItem parent, String text) {
-        Component[] components = parent.getComponents();
+    private JMenu findSubMenu(JMenu parent, String text) {
+        Component[] components = parent.getMenuComponents();
         for (int i = 0; i < components.length; i++) {
             Component cur = components[i];
             if (cur instanceof JMenu) {
