@@ -31,7 +31,7 @@ public class InheritedAttributeMap {
         return attr;
     }
 
-    public Iterator iterator() {
+    public Iterator<InheritedAttribute> iterator() {
         return map.values().iterator();
     }
 
@@ -66,11 +66,13 @@ public class InheritedAttributeMap {
         return map.size();
     }
 
-    public Set getByChildValue(ATerm namespace, ATerm key, ATerm value) {
+    public Set<InheritedAttribute> getByChildValue(ATerm namespace, ATerm key,
+            ATerm value) {
         Set<InheritedAttribute> attrs = new HashSet<InheritedAttribute>();
 
-        for (Iterator iter = map.values().iterator(); iter.hasNext();) {
-            InheritedAttribute attr = (InheritedAttribute) iter.next();
+        for (Iterator<InheritedAttribute> iter = map.values().iterator(); iter
+                .hasNext();) {
+            InheritedAttribute attr = iter.next();
             if (attr.getNamespace().equals(namespace)
                     && attr.getKey().equals(key)
                     && attr.getChildValue().equals(value)) {

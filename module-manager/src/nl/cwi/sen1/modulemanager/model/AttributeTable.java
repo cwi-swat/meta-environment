@@ -27,7 +27,7 @@ public class AttributeTable {
         return entries.get(key);
     }
 
-    public Map getEntries() {
+    public Map<ATerm, ATerm> getEntries() {
         return entries;
     }
 
@@ -38,8 +38,8 @@ public class AttributeTable {
     public TableEntryTable getTableEntryTable() {
         TableEntryTable table = factory.makeTableEntryTable();
 
-        for (Iterator iter = entries.keySet().iterator(); iter.hasNext();) {
-            ATerm key = (ATerm) iter.next();
+        for (Iterator<ATerm> iter = entries.keySet().iterator(); iter.hasNext();) {
+            ATerm key = iter.next();
             ATerm value = getValue(key);
 
             TableEntry entry = factory.makeTableEntry_TableEntry(key, value);

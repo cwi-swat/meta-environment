@@ -67,24 +67,24 @@ public class ModuleDatabase {
     }
 
     private void triggerAllAttributeOnAllModules() {
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
-            triggerAllInheritedAttributes(moduleId);
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
+            triggerAllInheritedAttributes(iter.next());
         }
     }
 
     private void triggerAllInheritedAttributes(ModuleId id) {
-        for (Iterator iter = inheritedAttributes.iterator(); iter.hasNext();) {
-            InheritedAttribute attr = (InheritedAttribute) iter.next();
-            inherit(attr, id, id);
+        for (Iterator<InheritedAttribute> iter = inheritedAttributes.iterator(); iter
+                .hasNext();) {
+            inherit(iter.next(), id, id);
         }
     }
 
     private void triggerInheritedAttributes(ModuleId root, ModuleId id,
-            Set attrs) {
-        for (Iterator iter = attrs.iterator(); iter.hasNext();) {
-            InheritedAttribute attr = (InheritedAttribute) iter.next();
-            inherit(attr, root, id);
+            Set<InheritedAttribute> attrs) {
+        for (Iterator<InheritedAttribute> iter = attrs.iterator(); iter
+                .hasNext();) {
+            inherit(iter.next(), root, id);
         }
     }
 
@@ -124,8 +124,8 @@ public class ModuleDatabase {
             fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
 
             if (propagate) {
-                Set attrs = inheritedAttributes.getByChildValue(namespace, key,
-                        value);
+                Set<InheritedAttribute> attrs = inheritedAttributes
+                        .getByChildValue(namespace, key, value);
                 if (!attrs.isEmpty()) {
                     propagateToParents(moduleId, attrs);
                 }
@@ -143,12 +143,11 @@ public class ModuleDatabase {
         listener.attributeSet(id, namespace, key, oldValue, newValue);
     }
 
-    private void propagateToParents(ModuleId id, Set attrs) {
-        Set parents = getParents(id);
+    private void propagateToParents(ModuleId id, Set<InheritedAttribute> attrs) {
+        Set<ModuleId> parents = getParents(id);
 
-        for (Iterator iter = parents.iterator(); iter.hasNext();) {
-            ModuleId parent = (ModuleId) iter.next();
-            triggerInheritedAttributes(id, parent, attrs);
+        for (Iterator<ModuleId> iter = parents.iterator(); iter.hasNext();) {
+            triggerInheritedAttributes(id, iter.next(), attrs);
         }
     }
 
@@ -190,9 +189,8 @@ public class ModuleDatabase {
             }
 
             // check all elements of the cycle
-            for (Iterator inner = cycle.iterator(); inner.hasNext();) {
-                ModuleId elem = (ModuleId) inner.next();
-                Module elemModule = modules.get(elem);
+            for (Iterator<ModuleId> iter = cycle.iterator(); iter.hasNext();) {
+                Module elemModule = modules.get(iter.next());
 
                 ATerm elemValue = getValueOfInheritedAttribute(attr, elemModule);
 
@@ -207,10 +205,10 @@ public class ModuleDatabase {
                 setAttributeOnModules(cycle, attr.getNamespace(),
                         attr.getKey(), attr.getNewValue());
 
-                Set parents = getCycleParents(cycle);
-                for (Iterator iter = parents.iterator(); iter.hasNext();) {
-                    ModuleId parent = (ModuleId) iter.next();
-                    inherit(attr, root, parent);
+                Set<ModuleId> parents = getCycleParents(cycle);
+                for (Iterator<ModuleId> iter = parents.iterator(); iter
+                        .hasNext();) {
+                    inherit(attr, root, iter.next());
                 }
             }
         } else { /* not cyclic */
@@ -234,14 +232,12 @@ public class ModuleDatabase {
     }
 
     private boolean checkPreconditionOnChildren(InheritedAttribute attr,
-            Set children) {
+            Set<ModuleId> children) {
         boolean allSet = true;
         boolean oneSet = false;
 
-        for (Iterator iter = children.iterator(); iter.hasNext();) {
-            ModuleId child = (ModuleId) iter.next();
-
-            Module innerModule = modules.get(child);
+        for (Iterator<ModuleId> iter = children.iterator(); iter.hasNext();) {
+            Module innerModule = modules.get(iter.next());
 
             ATerm value = getValueOfInheritedAttribute(attr, innerModule);
 
@@ -256,10 +252,10 @@ public class ModuleDatabase {
                 || (attr.inheritFromOne() && oneSet);
     }
 
-    private void setAttributeOnModules(Set cycle, ATerm namespace, ATerm key,
+    private void setAttributeOnModules(Set<ModuleId> cycle, ATerm namespace, ATerm key,
             ATerm value) {
-        for (Iterator iter = cycle.iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
+        for (Iterator<ModuleId> iter = cycle.iterator(); iter.hasNext();) {
+            ModuleId moduleId = iter.next();
             Module module = modules.get(moduleId);
             ATerm oldValue = module.getAttribute(namespace, key);
 
@@ -272,12 +268,11 @@ public class ModuleDatabase {
     }
 
     private Set<ModuleId> getCycleParents(Set<ModuleId> cycle) {
-        Iterator iter = cycle.iterator();
+        Iterator<ModuleId> iter = cycle.iterator();
         Set<ModuleId> result = new HashSet<ModuleId>();
 
         if (iter.hasNext()) {
-            ModuleId first = (ModuleId) iter.next();
-            Set<ModuleId> parents = getAllParents(first);
+            Set<ModuleId> parents = getAllParents(iter.next());
 
             result.addAll(parents);
             result.removeAll(cycle);
@@ -286,12 +281,11 @@ public class ModuleDatabase {
     }
 
     private Set<ModuleId> getCycleChildren(Set<ModuleId> cycle) {
-        Iterator iter = cycle.iterator();
+        Iterator<ModuleId> iter = cycle.iterator();
         Set<ModuleId> result = new HashSet<ModuleId>();
 
         if (iter.hasNext()) {
-            ModuleId first = (ModuleId) iter.next();
-            Set<ModuleId> children = getAllChildren(first);
+            Set<ModuleId> children = getAllChildren(iter.next());
 
             result.addAll(children);
             result.removeAll(cycle);
@@ -317,10 +311,9 @@ public class ModuleDatabase {
             modules.addAll(path);
         } else {
             path.add(current);
-            for (Iterator iter = getChildren(current).iterator(); iter
+            for (Iterator<ModuleId> iter = getChildren(current).iterator(); iter
                     .hasNext();) {
-                ModuleId child = (ModuleId) iter.next();
-                findCycles(child, modules, path);
+                findCycles(iter.next(), modules, path);
             }
             path.remove(current);
         }
@@ -355,8 +348,9 @@ public class ModuleDatabase {
 
     public ModuleId getModuleIdByAttribute(ATerm namespace, ATerm key,
             ATerm value) {
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
+            ModuleId moduleId = iter.next();
             Module module = modules.get(moduleId);
 
             if (module.getAttribute(namespace, key).equals(value)) {
@@ -367,12 +361,12 @@ public class ModuleDatabase {
         return null;
     }
 
-    public Set getAllModules() {
+    public Set<ModuleId> getAllModules() {
         Set<ModuleId> allModules = new HashSet<ModuleId>();
 
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId moduleId = (ModuleId) iter.next();
-            allModules.add(moduleId);
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
+            allModules.add(iter.next());
         }
 
         return allModules;
@@ -471,7 +465,7 @@ public class ModuleDatabase {
         return dependencies;
     }
 
-    public Set getClosableModules(ModuleId moduleId) {
+    public Set<ModuleId> getClosableModules(ModuleId moduleId) {
         Set<ModuleId> dependencies = getAllChildren(moduleId);
         LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
 
@@ -531,8 +525,9 @@ public class ModuleDatabase {
             return;
         }
 
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId tempId = (ModuleId) iter.next();
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
+            ModuleId tempId = iter.next();
             dependencies = getParents(tempId);
             if (dependencies.contains(moduleId)) {
                 dependencies.remove(moduleId);
@@ -546,9 +541,9 @@ public class ModuleDatabase {
     private void deleteAllDependencies(ModuleId moduleId) {
         deleteDependencies(moduleId);
 
-        for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
-            ModuleId tempId = (ModuleId) iter.next();
-            Set dependencies = getChildren(tempId);
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
+            Set dependencies = getChildren(iter.next());
             if (dependencies.contains(moduleId)) {
                 dependencies.remove(moduleId);
             }
@@ -556,7 +551,7 @@ public class ModuleDatabase {
 
     }
 
-    public Map getDependencies() {
+    public Map<ModuleId, Set<ModuleId>> getDependencies() {
         return children;
     }
 }

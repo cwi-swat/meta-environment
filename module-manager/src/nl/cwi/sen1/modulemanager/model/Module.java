@@ -48,8 +48,8 @@ public class Module {
     public AttributeStore getAttributes() {
         AttributeStore store = factory.makeAttributeStore();
 
-        for (Iterator iter = attributes.keySet().iterator(); iter.hasNext();) {
-            ATerm namespace = (ATerm) iter.next();
+        for (Iterator<ATerm> iter = attributes.keySet().iterator(); iter.hasNext();) {
+            ATerm namespace = iter.next();
             TableEntryTable table = getTable(namespace).getTableEntryTable();
 
             Attribute attribute = factory.makeAttribute_Attribute(namespace,

@@ -71,7 +71,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public ATerm getAllModules() {
-		Set modules = moduleDB.getAllModules();
+		Set<ModuleId> modules = moduleDB.getAllModules();
 
 		return pureFactory.make("snd-value(modules(<list>))",
 				extractATermList(modules));
@@ -122,7 +122,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	public ATerm getChildrenModules(ATerm id) {
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set dependencies = moduleDB.getChildren(moduleId);
+		Set<ModuleId> dependencies = moduleDB.getChildren(moduleId);
 
 		if (dependencies == null) {
 			return pureFactory.parse("snd-value(no-such-module)");
@@ -135,7 +135,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	public ATerm getAllParentModules(ATerm id) {
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set dependencies = moduleDB.getAllParents(moduleId);
+		Set<ModuleId> dependencies = moduleDB.getAllParents(moduleId);
 
 		if (dependencies == null) {
 			return pureFactory.parse("snd-value(no-such-module)");
@@ -149,7 +149,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	public ATerm getParentModules(ATerm id) {
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set dependencies = moduleDB.getParents(moduleId);
+		Set<ModuleId> dependencies = moduleDB.getParents(moduleId);
 
 		if (dependencies == null) {
 			return pureFactory.parse("snd-value(no-such-module)");
@@ -163,7 +163,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	public ATerm getAllChildrenModules(ATerm id) {
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set dependencies = moduleDB.getAllChildren(moduleId);
+		Set<ModuleId> dependencies = moduleDB.getAllChildren(moduleId);
 
 		if (dependencies == null) {
 			return pureFactory.parse("snd-value(no-such-module)");
@@ -176,7 +176,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	public ATerm getClosableModules(ATerm id) {
 		ModuleId moduleId = factory.ModuleIdFromTerm(id);
 
-		Set closableModules = moduleDB.getClosableModules(moduleId);
+		Set<ModuleId> closableModules = moduleDB.getClosableModules(moduleId);
 
 		return pureFactory.make("snd-value(closable-modules(<list>))",
 				extractATermList(closableModules));
@@ -184,16 +184,15 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 
 	public ATerm getDependencies() {
 		DependencyList list = factory.makeDependencyList();
-		Map dependencies = moduleDB.getDependencies();
+		Map<ModuleId, Set<ModuleId>> dependencies = moduleDB.getDependencies();
 
-		for (Iterator iter = dependencies.keySet().iterator(); iter.hasNext();) {
-			ModuleId moduleId = (ModuleId) iter.next();
-			Set deps = (Set) dependencies.get(moduleId);
+		for (Iterator<ModuleId> iter = dependencies.keySet().iterator(); iter.hasNext();) {
+			ModuleId moduleId = iter.next();
+			Set<ModuleId> deps = dependencies.get(moduleId);
 
 			ModuleIdList moduleList = factory.makeModuleIdList();
-			for (Iterator depsIter = deps.iterator(); depsIter.hasNext();) {
-				ModuleId dependencyId = (ModuleId) depsIter.next();
-				moduleList = moduleList.append(dependencyId);
+			for (Iterator<ModuleId> depsIter = deps.iterator(); depsIter.hasNext();) {
+				moduleList = moduleList.append(depsIter.next());
 			}
 
 			Dependency dependency = factory.makeDependency_Dependency(moduleId,
@@ -204,10 +203,10 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 				.toTerm());
 	}
 
-	private ATermList extractATermList(Set dependencies) {
+	private ATermList extractATermList(Set<ModuleId> dependencies) {
 		ATermList list = pureFactory.makeList();
-		for (Iterator iter = dependencies.iterator(); iter.hasNext();) {
-			list = list.append(((ModuleId) iter.next()).toTerm());
+		for (Iterator<ModuleId> iter = dependencies.iterator(); iter.hasNext();) {
+			list = list.append(iter.next().toTerm());
 		}
 		return list;
 	}
