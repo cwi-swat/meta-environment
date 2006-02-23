@@ -4,7 +4,7 @@ configuration([
 
   action([description(term-editor, menu-shortcut([label("Module"), label("Edit"), label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
-  action([description(term-editor, menu-shortcut([label("Module"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R)))],
+  action([description(term-editor, menu-shortcut([label("Term"),label("Reduce")], shortcut([M_ALT,M_CTRL],VK_R)))],
          "ReduceAction"),
   action([description(syntax-editor, menu-shortcut([label("Module"),label("Edit"),label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
@@ -25,7 +25,7 @@ configuration([
          "EditorRunAsfTestsAction"),
   action([description(syntax-editor, menu([label("Module"), label("Run Tests")]))],
          "EditorRunAsfTestsAction"),
-  action([description(term-editor, menu([label("Debug"),label("Reduce")]))],
+  action([description(term-editor, menu([label("Term"),label("Debug Reduce")]))],
          "DebugReduceAction"),
   action([description(module-popup, menu([label("Check"), label("Debug Unit Tests")]))],
          "DebugRunAsfTestsAction"),
