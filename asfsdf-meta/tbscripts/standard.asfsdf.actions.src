@@ -11,10 +11,10 @@ configuration([
  action([description(syntax-editor, menu-shortcut([label("Module"),label("Edit"),label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],
          "EditorEditEquationsAction"),
 
-  action([description(equations-editor, menu-shortcut([label("Module"),label("View"),label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"),label("View"),label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],
          "ShowFullTreeAction"),
 
-  action([description(equations-editor, menu-shortcut([label("Module"),label("View"),label("Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"),label("View"),label("Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S)))],
          "ShowSharedTreeAction"),
 
   action([description(equations-editor, menu-shortcut([label("Module"),label("Edit"),label("Syntax")], shortcut([M_CTRL,M_SHIFT],VK_S)))],
@@ -23,21 +23,21 @@ configuration([
   action([description(equations-editor, menu-shortcut([label("Module"),label("Edit"),label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))],
          "EditorEditTermAction"),
 
-  action([description(equations-editor, menu([label("Module"), label("Run Tests")]))],
+  action([description(equations-editor, menu([label("Module"),label("Equations"), label("Run Tests")]))],
          "EditorRunAsfTestsAction"),
-  action([description(syntax-editor, menu([label("Module"), label("Run Tests")]))],
+  action([description(syntax-editor, menu([label("Module"),label("Equations"), label("Run Tests")]))],
          "EditorRunAsfTestsAction"),
   action([description(term-editor, menu([label("Term"),label("Debug Reduce")]))],
          "DebugReduceAction"),
   action([description(module-popup, menu([label("Check"), label("Debug Unit Tests")]))],
          "DebugRunAsfTestsAction"),
-  action([description(equations-editor, menu-shortcut([label("Syntax"),label("Move"), label("Left")], shortcut([M_ALT,M_CTRL],VK_LEFT)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"),label("Move"), label("Left")], shortcut([M_ALT,M_CTRL],VK_LEFT)))],
          "MoveCursorLeftAction"),
-  action([description(equations-editor, menu-shortcut([label("Syntax"), label("Move"), label("Right")], shortcut([M_ALT,M_CTRL],VK_RIGHT)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"), label("Move"), label("Right")], shortcut([M_ALT,M_CTRL],VK_RIGHT)))],
          "MoveCursorRightAction"),
-  action([description(equations-editor, menu-shortcut([label("Syntax"), label("Move"), label("Up")], shortcut([M_ALT,M_CTRL],VK_UP)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"), label("Move"), label("Up")], shortcut([M_ALT,M_CTRL],VK_UP)))],
          "MoveCursorUpAction"),
-  action([description(equations-editor, menu-shortcut([label("Syntax"), label("Move"), label("Down")], shortcut([M_ALT,M_CTRL],VK_DOWN)))],
+  action([description(equations-editor, menu-shortcut([label("Structure"), label("Move"), label("Down")], shortcut([M_ALT,M_CTRL],VK_DOWN)))],
          "MoveCursorDownAction"),
 
 
