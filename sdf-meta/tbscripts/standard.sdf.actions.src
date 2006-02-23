@@ -22,8 +22,6 @@ configuration([
          "ShowFullTreeAction"),
   action([description(term-editor, menu-shortcut([label("Syntax"), label("View"), label("Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S)))],
          "ShowSharedTreeAction"),
-  action([description(term-editor, menu-shortcut([label("Syntax"), label("Goto Origin")], shortcut([M_ALT,M_CTRL],VK_O)))],
-         "ShowOriginAction"),
   action([description(term-editor, menu-shortcut([label("Module"),label("Edit"), label("Syntax")], shortcut([M_CTRL,M_SHIFT],VK_S)))],
          "EditorEditSyntaxAction"),
   action([description(term-editor, menu-shortcut([label("Module"), label("Edit"),label("Term")], shortcut([M_CTRL,M_SHIFT],VK_T)))],
