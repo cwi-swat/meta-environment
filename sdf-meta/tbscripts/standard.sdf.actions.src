@@ -80,5 +80,5 @@ configuration([
    text-category(extern("Error"),[style(bold),foreground-color(rgb(255,0,0))]),
    text-category(extern("Warning"),[style(bold),foreground-color(rgb(0,0,255))]),
    text-category(extern("Info"),[style(bold),foreground-color(rgb(0,255,0))]),
-   text-category(extern("Fatal"),[style(bold),background-color(rgb(255,0,0))]),
+   text-category(extern("Fatal"),[style(bold),background-color(rgb(255,0,0))])
 ])
