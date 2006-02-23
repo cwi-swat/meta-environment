@@ -10,13 +10,13 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 public class StatusBar extends JPanel {
-    private Map components;
+    private Map<String, JComponent> components;
 
     public StatusBar() {
         super();
         setLayout(new FlowLayout(FlowLayout.LEADING,0,0));
 
-        components = new HashMap();
+        components = new HashMap<String, JComponent>();
     }
 
     public void addComponent(JComponent c, int size) {
@@ -31,6 +31,6 @@ public class StatusBar extends JPanel {
     }
 
     public JComponent getComponent(String name) {
-        return (JComponent) components.get(name);
+        return components.get(name);
     }
 }

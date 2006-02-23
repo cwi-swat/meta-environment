@@ -3,6 +3,8 @@ $Id$
 Thu Feb 23 10:56:28 CET 2006 <kooiker@cwi.nl>
  * utils/**/StudioMenuBar.java:
    - Fix findSubMenu
+ * studio/**/*.java:
+   - Use generics for strong typing
 
 Wed Feb 22 14:37:04 CET 2006 <kooiker@cwi.nl>
  * utils/**/StudioMenuBar.java:
