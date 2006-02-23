@@ -36,7 +36,7 @@ public class ModuleGraph extends ModuleDatabase {
 			ModuleId moduleId = (ModuleId) iter.next();
 			NodeId nodeId = factory.makeNodeId_Default(moduleId.toTerm());
 
-			Module module = (Module) modules.get(moduleId);
+			Module module = modules.get(moduleId);
 			AttributeList attrList = factory.makeAttributeList();
 
 			AttributeTable table = module.getAttributes(namespace);
@@ -77,7 +77,7 @@ public class ModuleGraph extends ModuleDatabase {
 			ModuleId moduleId = (ModuleId) iter.next();
 			NodeId nodeFromId = factory.makeNodeId_Default(moduleId.toTerm());
 
-			Set dependingModules = (Set) children.get(moduleId);
+			Set dependingModules = children.get(moduleId);
 
 			for (Iterator depsIter = dependingModules.iterator(); depsIter
 					.hasNext();) {

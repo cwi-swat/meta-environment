@@ -11,15 +11,15 @@ import nl.cwi.sen1.moduleapi.types.TableEntryTable;
 import aterm.ATerm;
 
 public class Module {
-    private Map attributes;
-    
+    private Map<ATerm, AttributeTable> attributes;
+
     private Factory factory;
 
     public Module(Factory factory) {
         this.factory = factory;
-        attributes = new HashMap();
+        attributes = new HashMap<ATerm, AttributeTable>();
     }
-    
+
     public void setAttribute(ATerm namespace, ATerm key, ATerm value) {
         AttributeTable table = getTable(namespace);
 
@@ -40,25 +40,26 @@ public class Module {
         }
         return null;
     }
-    
+
     public AttributeTable getAttributes(ATerm namespace) {
         return getTable(namespace);
     }
 
     public AttributeStore getAttributes() {
         AttributeStore store = factory.makeAttributeStore();
-        
+
         for (Iterator iter = attributes.keySet().iterator(); iter.hasNext();) {
             ATerm namespace = (ATerm) iter.next();
             TableEntryTable table = getTable(namespace).getTableEntryTable();
-            
-            Attribute attribute = factory.makeAttribute_Attribute(namespace, table);
+
+            Attribute attribute = factory.makeAttribute_Attribute(namespace,
+                    table);
             store = store.append(attribute);
         }
-        
+
         return store;
     }
-    
+
     public void deleteAttribute(ATerm namespace, ATerm key) {
         AttributeTable table = getTable(namespace);
 
@@ -68,7 +69,7 @@ public class Module {
     }
 
     private AttributeTable getTable(ATerm namespace) {
-        AttributeTable table = (AttributeTable) attributes.get(namespace);
+        AttributeTable table = attributes.get(namespace);
         return table;
     }
 }

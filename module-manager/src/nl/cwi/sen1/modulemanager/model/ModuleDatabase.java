@@ -14,13 +14,13 @@ import aterm.ATerm;
 public class ModuleDatabase {
     private int moduleCount;
 
-    protected Map modules;
+    protected Map<ModuleId, Module> modules;
 
-    protected Map children;
+    protected Map<ModuleId, Set<ModuleId>> children;
 
     private InheritedAttributeMap inheritedAttributes;
 
-    private Map parents;
+    private Map<ModuleId, Set<ModuleId>> parents;
 
     private AttributeSetListener listener;
 
@@ -28,9 +28,9 @@ public class ModuleDatabase {
 
     public ModuleDatabase(AttributeSetListener l) {
         moduleCount = 0;
-        modules = new HashMap();
-        children = new HashMap();
-        parents = new HashMap();
+        modules = new HashMap<ModuleId, Module>();
+        children = new HashMap<ModuleId, Set<ModuleId>>();
+        parents = new HashMap<ModuleId, Set<ModuleId>>();
         listener = l;
         inheritedAttributes = new InheritedAttributeMap();
     }
@@ -41,8 +41,8 @@ public class ModuleDatabase {
 
     public void addModule(Module module, ModuleId moduleId) {
         modules.put(moduleId, module);
-        children.put(moduleId, new HashSet());
-        parents.put(moduleId, new HashSet());
+        children.put(moduleId, new HashSet<ModuleId>());
+        parents.put(moduleId, new HashSet<ModuleId>());
     }
 
     public void removeModule(ModuleId moduleId) {
@@ -104,7 +104,7 @@ public class ModuleDatabase {
      */
     public void setAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
             ATerm value, boolean propagate) {
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
 
         // indentedPrint("setAttribute: " + key + " to " + value + " on "
         // + moduleId);
@@ -175,9 +175,9 @@ public class ModuleDatabase {
                 singleModuleInherit(attr, moduleId, false);
             }
 
-            Set cycle = getModulesInCycle(moduleId);
+            Set<ModuleId> cycle = getModulesInCycle(moduleId);
 
-            Set children = getCycleChildren(cycle);
+            Set<ModuleId> children = getCycleChildren(cycle);
 
             boolean cycleContainsRoot = cycle.contains(root);
 
@@ -192,7 +192,7 @@ public class ModuleDatabase {
             // check all elements of the cycle
             for (Iterator inner = cycle.iterator(); inner.hasNext();) {
                 ModuleId elem = (ModuleId) inner.next();
-                Module elemModule = (Module) modules.get(elem);
+                Module elemModule = modules.get(elem);
 
                 ATerm elemValue = getValueOfInheritedAttribute(attr, elemModule);
 
@@ -220,7 +220,7 @@ public class ModuleDatabase {
 
     private void singleModuleInherit(InheritedAttribute attr,
             ModuleId moduleId, boolean propagate) {
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
         ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
 
         if (noMatchForOldValue(attr, comparedValue)) {
@@ -241,7 +241,7 @@ public class ModuleDatabase {
         for (Iterator iter = children.iterator(); iter.hasNext();) {
             ModuleId child = (ModuleId) iter.next();
 
-            Module innerModule = (Module) modules.get(child);
+            Module innerModule = modules.get(child);
 
             ATerm value = getValueOfInheritedAttribute(attr, innerModule);
 
@@ -260,7 +260,7 @@ public class ModuleDatabase {
             ATerm value) {
         for (Iterator iter = cycle.iterator(); iter.hasNext();) {
             ModuleId moduleId = (ModuleId) iter.next();
-            Module module = (Module) modules.get(moduleId);
+            Module module = modules.get(moduleId);
             ATerm oldValue = module.getAttribute(namespace, key);
 
             if (!oldValue.equals(value)) {
@@ -271,13 +271,13 @@ public class ModuleDatabase {
         }
     }
 
-    private Set getCycleParents(Set cycle) {
+    private Set<ModuleId> getCycleParents(Set<ModuleId> cycle) {
         Iterator iter = cycle.iterator();
-        Set result = new HashSet();
+        Set<ModuleId> result = new HashSet<ModuleId>();
 
         if (iter.hasNext()) {
             ModuleId first = (ModuleId) iter.next();
-            Set parents = getAllParents(first);
+            Set<ModuleId> parents = getAllParents(first);
 
             result.addAll(parents);
             result.removeAll(cycle);
@@ -285,13 +285,13 @@ public class ModuleDatabase {
         return result;
     }
 
-    private Set getCycleChildren(Set cycle) {
+    private Set<ModuleId> getCycleChildren(Set<ModuleId> cycle) {
         Iterator iter = cycle.iterator();
-        Set result = new HashSet();
+        Set<ModuleId> result = new HashSet<ModuleId>();
 
         if (iter.hasNext()) {
             ModuleId first = (ModuleId) iter.next();
-            Set children = getAllChildren(first);
+            Set<ModuleId> children = getAllChildren(first);
 
             result.addAll(children);
             result.removeAll(cycle);
@@ -311,7 +311,8 @@ public class ModuleDatabase {
                         .getOldValue().isEqual(comparedValue)));
     }
 
-    private void findCycles(ModuleId current, Set modules, Set path) {
+    private void findCycles(ModuleId current, Set<ModuleId> modules,
+            Set<ModuleId> path) {
         if (path.contains(current)) {
             modules.addAll(path);
         } else {
@@ -325,9 +326,9 @@ public class ModuleDatabase {
         }
     }
 
-    private Set getModulesInCycle(ModuleId moduleId) {
-        Set cycle = new HashSet();
-        findCycles(moduleId, cycle, new HashSet());
+    private Set<ModuleId> getModulesInCycle(ModuleId moduleId) {
+        Set<ModuleId> cycle = new HashSet<ModuleId>();
+        findCycles(moduleId, cycle, new HashSet<ModuleId>());
         return cycle;
     }
 
@@ -339,7 +340,7 @@ public class ModuleDatabase {
 
     public ATerm getModuleAttribute(ModuleId moduleId, ATerm namespace,
             ATerm key) {
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
 
         if (module == null) {
             System.err.println("MM - geModuleAttribute: module [" + moduleId
@@ -356,7 +357,7 @@ public class ModuleDatabase {
             ATerm value) {
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
             ModuleId moduleId = (ModuleId) iter.next();
-            Module module = (Module) modules.get(moduleId);
+            Module module = modules.get(moduleId);
 
             if (module.getAttribute(namespace, key).equals(value)) {
                 return moduleId;
@@ -367,7 +368,7 @@ public class ModuleDatabase {
     }
 
     public Set getAllModules() {
-        Set allModules = new HashSet();
+        Set<ModuleId> allModules = new HashSet<ModuleId>();
 
         for (Iterator iter = modules.keySet().iterator(); iter.hasNext();) {
             ModuleId moduleId = (ModuleId) iter.next();
@@ -379,7 +380,7 @@ public class ModuleDatabase {
 
     public void deleteModuleAttribute(ModuleId moduleId, ATerm namespace,
             ATerm key) {
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
 
         if (module == null) {
             System.err.println("MM - deleteModuleAttribute: module ["
@@ -391,7 +392,7 @@ public class ModuleDatabase {
     }
 
     public AttributeStore getAllAttributes(ModuleId moduleId) {
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
 
         if (module == null) {
             System.err.println("MM - getAllAttributes: module [" + moduleId
@@ -403,9 +404,9 @@ public class ModuleDatabase {
     }
 
     public void addDependency(ModuleId moduleFromId, ModuleId moduleToId) {
-        Set dependencies;
-        Module moduleFrom = (Module) modules.get(moduleFromId);
-        Module moduleTo = (Module) modules.get(moduleToId);
+        Set<ModuleId> dependencies;
+        Module moduleFrom = modules.get(moduleFromId);
+        Module moduleTo = modules.get(moduleToId);
 
         if (moduleFrom == null) {
             System.err.println("MM - addDependency: module [" + moduleFromId
@@ -419,25 +420,25 @@ public class ModuleDatabase {
             return;
         }
 
-        dependencies = (Set) children.get(moduleFromId);
+        dependencies = children.get(moduleFromId);
         dependencies.add(moduleToId);
 
-        dependencies = (Set) parents.get(moduleToId);
+        dependencies = parents.get(moduleToId);
         dependencies.add(moduleFromId);
     }
 
-    public Set getChildren(ModuleId moduleId) {
-        return (Set) children.get(moduleId);
+    public Set<ModuleId> getChildren(ModuleId moduleId) {
+        return children.get(moduleId);
     }
 
-    public Set getAllChildren(ModuleId moduleId) {
-        Set dependencies = new HashSet();
-        LinkedList temp = new LinkedList();
+    public Set<ModuleId> getAllChildren(ModuleId moduleId) {
+        Set<ModuleId> dependencies = new HashSet<ModuleId>();
+        LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
 
         temp.addAll(getChildren(moduleId));
 
         while (!temp.isEmpty()) {
-            ModuleId tempId = (ModuleId) temp.getFirst();
+            ModuleId tempId = temp.getFirst();
             if (!dependencies.contains(tempId)) {
                 dependencies.add(tempId);
                 temp.addAll(getChildren(tempId));
@@ -448,18 +449,18 @@ public class ModuleDatabase {
         return dependencies;
     }
 
-    public Set getParents(ModuleId moduleId) {
-        return (Set) parents.get(moduleId);
+    public Set<ModuleId> getParents(ModuleId moduleId) {
+        return parents.get(moduleId);
     }
 
-    public Set getAllParents(ModuleId moduleId) {
-        Set dependencies = new HashSet();
-        LinkedList temp = new LinkedList();
+    public Set<ModuleId> getAllParents(ModuleId moduleId) {
+        Set<ModuleId> dependencies = new HashSet<ModuleId>();
+        LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
 
         temp.addAll(getParents(moduleId));
 
         while (!temp.isEmpty()) {
-            ModuleId tempId = (ModuleId) temp.getFirst();
+            ModuleId tempId = temp.getFirst();
             if (!dependencies.contains(tempId)) {
                 dependencies.add(tempId);
                 temp.addAll(getParents(tempId));
@@ -471,14 +472,14 @@ public class ModuleDatabase {
     }
 
     public Set getClosableModules(ModuleId moduleId) {
-        Set dependencies = getAllChildren(moduleId);
-        LinkedList temp = new LinkedList();
+        Set<ModuleId> dependencies = getAllChildren(moduleId);
+        LinkedList<ModuleId> temp = new LinkedList<ModuleId>();
 
         dependencies.add(moduleId);
         temp.addAll(dependencies);
 
         while (!temp.isEmpty()) {
-            ModuleId tempId = (ModuleId) temp.getFirst();
+            ModuleId tempId = temp.getFirst();
             Set parents = getParents(tempId);
 
             if (!dependencies.containsAll(parents)) {
@@ -495,7 +496,7 @@ public class ModuleDatabase {
 
     public void deleteDependency(ModuleId moduleFromId, ModuleId moduleToId) {
         LinkedList deps;
-        Module moduleFrom = (Module) modules.get(moduleFromId);
+        Module moduleFrom = modules.get(moduleFromId);
 
         if (moduleFrom == null) {
             System.err.println("MM - deleteDependency: module [" + moduleFromId
@@ -503,7 +504,7 @@ public class ModuleDatabase {
             return;
         }
 
-        Module moduleTo = (Module) modules.get(moduleToId);
+        Module moduleTo = modules.get(moduleToId);
 
         if (moduleTo == null) {
             System.err.println("MM - deleteDependency: module [" + moduleToId
@@ -522,7 +523,7 @@ public class ModuleDatabase {
     public void deleteDependencies(ModuleId moduleId) {
         Set dependencies;
 
-        Module module = (Module) modules.get(moduleId);
+        Module module = modules.get(moduleId);
 
         if (module == null) {
             System.err.println("MM - deleteDependencies: module [" + moduleId
@@ -538,7 +539,7 @@ public class ModuleDatabase {
             }
         }
 
-        dependencies = (Set) children.get(moduleId);
+        dependencies = children.get(moduleId);
         dependencies.clear();
     }
 

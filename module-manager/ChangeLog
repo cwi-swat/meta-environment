@@ -1,5 +1,9 @@
 $Id$
 
+Thu Feb 23 16:52:51 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Use generics to type maps, sets, and lists
+
 Mon Feb  6 18:36:00 CET 2006 <{markvdb,jurgenv}@cwi.nl>
  *  src/**/*.java: added a new element of an inherited attribute:
     the child value in order to make a distinction between the
