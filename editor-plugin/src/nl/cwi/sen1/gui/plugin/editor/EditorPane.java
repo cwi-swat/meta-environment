@@ -27,10 +27,12 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.Highlighter;
 import javax.swing.text.Style;
 import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import javax.swing.text.DefaultHighlighter.DefaultHighlightPainter;
 import javax.swing.text.Highlighter.HighlightPainter;
 
@@ -223,7 +225,13 @@ public class EditorPane extends JTextPane {
 
     public void setStyle(int offset, int length, String name) {
         Style style = getStyle(name);
-        getStyledDocument().setCharacterAttributes(offset, length, style, true);
+        
+        if (style != null) {
+          getStyledDocument().setCharacterAttributes(offset, length, style, true);
+        }
+        else {
+        	System.err.println("No such style available:" + name);
+        }
     }
 
     public void unsetStyles() {
