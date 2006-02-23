@@ -66,7 +66,7 @@ public class StudioImpl implements Studio, GuiTif {
     private PureFactory factory;
 
     private Factory configFactory;
-    
+
     private GuiBridge bridge;
 
     private ViewMap viewsById;
@@ -193,8 +193,13 @@ public class StudioImpl implements Studio, GuiTif {
                     activeView = newView;
                     updateMenuBar();
                     updateStatusBar();
-                    ((StudioComponent) componentsByView.get(activeView))
-                            .receiveFocus();
+                    StudioComponent component = getComponent(activeView);
+                    if (component != null) {
+                        component.receiveFocus();
+                    } else {
+                        System.err
+                                .println("Internal error: no active component found");
+                    }
                 }
             }
 
@@ -375,11 +380,13 @@ public class StudioImpl implements Studio, GuiTif {
 
         ATermList menuPaths = menuList;
         while (!menuPaths.isEmpty()) {
-            final Event menuPath = configFactory.EventFromTerm(menuPaths.getFirst());
+            final Event menuPath = configFactory.EventFromTerm(menuPaths
+                    .getFirst());
             menuBar.addMenuPath(menuPath, new AbstractAction(menuPath.toTerm()
                     .toString()) {
                 public void actionPerformed(ActionEvent e) {
-                    ATerm event = factory.make("menu-event(<term>)", menuPath.toTerm());
+                    ATerm event = factory.make("menu-event(<term>)", menuPath
+                            .toTerm());
                     bridge.postEvent(event);
                 }
             });
@@ -593,19 +600,15 @@ public class StudioImpl implements Studio, GuiTif {
     }
 
     /*
-    public void addComponentMenu(StudioComponent component, Event menuPath,
-            KeyStroke keyStroke, Action action) {
-        System.err.println("MenuPath: " + menuPath);
-        MenuItem item = new MenuItem(menuPath, action);
-        item.setAccelerator(keyStroke);
-        List menus = getMenus(component);
-        menus.add(item);
+     * public void addComponentMenu(StudioComponent component, Event menuPath,
+     * KeyStroke keyStroke, Action action) { System.err.println("MenuPath: " +
+     * menuPath); MenuItem item = new MenuItem(menuPath, action);
+     * item.setAccelerator(keyStroke); List menus = getMenus(component);
+     * menus.add(item);
+     * 
+     * componentMenus.put(component, menus); updateMenuBar(); }
+     */
 
-        componentMenus.put(component, menus);
-        updateMenuBar();
-    }
-*/
-    
     private List getMenus(StudioComponent component) {
         List menus = (List) componentMenus.get(component);
         if (menus == null) {
