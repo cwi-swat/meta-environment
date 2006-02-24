@@ -43,7 +43,7 @@ do
             MODULENAME=$1 ;;
         -V)
             Version ; exit 0 ;;
-	--debug)
+	--viewer)
 	    VIEWER="-viewer" ;;
         --)
            ;;
