@@ -1,0 +1,83 @@
+equations
+
+[] lexical-traversals(Module) = remove-lex-to-cf(Module)
+
+equations
+
+%% A transformer should remove the lex-to-cf injection from both sides of the equation
+%% The reason is that we should be able to visit nodes that are nested deeply inside
+%% of a lexical structure. For those nodes, which are not wrapped by a lex-to-cf injection,
+%% we would otherwise not be able to write down equations that visits them. 
+
+[transformer] 
+
+length(Symbol+1) == length(Tree+1)
+===>
+remove-lex-to-cf(
+appl(prod([Symbol+1,lit("("),Layout,cf(Symbol),Symbol+2],cf(Symbol),attrs([Attr*1,term(traversal(Term*1, trafo, Term*2)),Attr*2])),
+	[Tree+1,LitTree,
+	appl(prod([lex(Symbol)],cf(Symbol),Attrs),[Tree1]) _Ann1
+	, Tree+2]) Ann2 
+= 
+	appl(prod([lex(Symbol)],cf(Symbol),Attrs),[Tree2]) _Ann3
+) = 
+appl(prod([Symbol+1,lit("("),Layout,lex(Symbol),Symbol+2],lex(Symbol),attrs([Attr*1,term(traversal(Term*1,trafo,Term*2)),Attr*2])),
+	[Tree+1,LitTree,
+	Tree1, Tree+2
+	]
+    )
+Ann2 = 
+	Tree2
+
+
+%% With an accumulator, we would like to visit nested lexical nodes too. In this
+%% case we only remove the left-hand lex-to-cf wrapper
+
+[accumulator] 
+
+remove-lex-to-cf(
+appl(prod([Symbol+1,lit("("),Layout1,cf(Symbol),Layout2,lit(","),Layout3,Symbol2,Symbol+2],Symbol2,
+          attrs([Attr*1,term(traversal(Term*1,accu, Term*2)),Attr*2])),
+    [Tree+1,LayoutTree1,LitTree1,LayoutTree2,
+       appl(prod([lex(Symbol)],cf(Symbol),_Attrs), [ Tree ] ) _Ann1,
+     LayoutTree3,LitTree2,LayoutTree4,Tree+2]
+    ) Ann2
+= 
+	Tree2
+) = 
+appl(prod([Symbol+1,lit("("),Layout1,lex(Symbol),Layout2,lit(","),Layout3,Symbol2,Symbol+2],Symbol2,
+          attrs([Attr*1,term(traversal(Term*1,accu, Term*2)),Attr*2])),
+    [Tree+1,LayoutTree1,LitTree1,LayoutTree2,
+       Tree,
+     LayoutTree3,LitTree2,LayoutTree4,Tree+2]
+    ) Ann2
+= 
+	Tree2
+
+[accumulating-transformer] 
+
+%% This is the combination of the above...
+%% Here we have a problem. Is it possible at all to construct a tuple of a lexical symbol
+%% combined with a context-free symbol? So, we leave the right-hand side as-is, and leave
+%% it to the run-time system should coerce tuples to the correct types after traversal.
+
+remove-lex-to-cf(
+appl(prod([Symbol+1,lit("("),Layout1,cf(Symbol),Layout2,lit(","),Layout3,cf(Symbol2),Symbol+2],cf(tuple(Symbol,[Symbol2])),
+          attrs([Attr*1,term(traversal(Term*1,trafo, Term*2)),Attr*2]))
+          , 
+     [ Tree+1, LayoutTree1, LitTree1, LayoutTree2, 
+       appl(prod([lex(Symbol)], cf(Symbol), _Attrs), [ Tree ]) _Ann1,
+       LayoutTree3, LitTree2, LayoutTree4, Tree+2]
+     ) Ann2 
+= 
+	Tree2
+) = 
+appl(prod([Symbol+1,lit("("),Layout1,lex(Symbol),Layout2,lit(","),Layout3,cf(Symbol2),Symbol+2],cf(tuple(Symbol,[Symbol2])),
+          attrs([Attr*1,term(traversal(Term*1,trafo, Term*2)),Attr*2]))
+          , 
+     [ Tree+1, LayoutTree1, LitTree1, LayoutTree2, 
+       Tree,
+       LayoutTree3, LitTree2, LayoutTree4, Tree+2]
+     ) Ann2 
+= 
+	Tree2

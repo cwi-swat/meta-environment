@@ -1,0 +1,48 @@
+module languages/asf/normalization/TraversalFunctions
+
+imports languages/asf/normalization/RenamedASF
+imports languages/asf/normalization/Length
+
+exports
+
+context-free syntax
+
+  lexical-traversals(Module) -> Module
+
+hiddens
+
+context-free start-symbols
+	Equation
+	Module
+
+context-free syntax
+
+  remove-lex-to-cf(Module) -> Module {traversal(trafo,top-down,break)}
+  remove-lex-to-cf(Equation) -> Equation {traversal(trafo,top-down,break)}
+
+variables
+	"Equation" -> Equation {strict}
+	"Rhs"[0-9]* -> P-Tree {strict}
+	"Symbol"[0-9]* -> P-Symbol {strict}
+         "Layout"[0-9]* -> P-Symbol {strict}
+	"Module"[0-9]* -> Module {strict}
+         "Symbol*"[0-9]* -> {P-Symbol ","}* {strict}
+         "Symbol+"[0-9]* -> {P-Symbol ","}+ {strict}
+	"Symbols"[0-9]* -> P-Symbols {strict}
+	"Args"[0-9]* -> P-Args {strict}
+	"Attrs"[0-9]* -> P-Attributes {strict}
+	"Attr*"[0-9]* -> {P-Attr ","}* {strict}
+	"Lit"[0-9]* -> P-Tree {strict}
+	"Lhs"[0-9]* -> P-Tree {strict}
+	"Ann"[0-9]* -> P-Annotation {strict} 
+	"Tree"[0-9]* -> P-Tree {strict}
+	"Tree*"[0-9]* -> {P-Tree ","}* {strict}
+	"Tree+"[0-9]* -> {P-Tree ","}+ {strict}
+         "Term*"[0-9]* -> {ATerm ","}* {strict}
+	"Term+"[0-9]* -> {ATerm ","}+ {strict}
+	"LitTree"[0-9]* -> P-Tree {strict}
+         "LayoutTree"[0-9]* -> P-Tree {strict}
+
+variables
+	"_Ann"[0-9]* -> P-Annotation {wild}
+	"_Attrs"[0-9]* -> P-Attributes {wild}

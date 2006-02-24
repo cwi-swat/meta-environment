@@ -34,3 +34,5 @@ exports sorts
 	NumChar
 	ShortChar
 	Character
+
+sorts	P-Tree

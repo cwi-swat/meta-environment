@@ -4,6 +4,7 @@ imports languages/asf/normalization/Brackets
 imports languages/asf/normalization/Constructors
 imports languages/asf/normalization/ListResults
 imports languages/asf/normalization/Layout
+imports languages/asf/normalization/TraversalFunctions
 
 
 exports
@@ -22,9 +23,9 @@ context-free start-symbols
 hiddens
 
 variables
-	"Module"[0-9\']* -> Module
-	"LiftedModule"[0-9\']* -> Module
-	"LoweredModule" -> Module
-	"Section*"[0-9\']* -> Section*
-	"TestEquation*"[\']* -> TestEquation*
-	"CondEquation*"[\']* -> ConditionalEquation*
+	"Module"[0-9\']* -> Module {strict}
+	"LiftedModule"[0-9\']* -> Module {strict}
+	"LoweredModule" -> Module {strict}
+	"Section*"[0-9\']* -> Section* {strict}
+	"TestEquation*"[\']* -> TestEquation* {strict}
+	"CondEquation*"[\']* -> ConditionalEquation* {strict}
