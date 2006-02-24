@@ -1,5 +1,14 @@
 $Id$
 
+Fri Feb 24 09:53:40 CET 2006 <jurgenv@cwi.nl>
+ * semantics/asf/asf-operations: ASF-Normalization.c: the normalizer
+   fixes a number of problems with traversal of lexicals and sub-lexicals.
+   Currently, what is supported is transformers that visit lexicals,
+   accumulators and even accumulating transformers. The precondition
+   is that the first argument of the function contains a lexical pattern,
+   and with trafo's also the right-hand side of the equation must be
+   a lexical pattern.
+
 Tue Jan 31 18:01:50 CET 2006 <jurgenv@cwi.nl>
  * asf/syntax/removevarsyntax: moved to pgen package
 
