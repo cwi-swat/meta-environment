@@ -33,376 +33,394 @@ import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class EditorPlugin extends DefaultStudioPlugin implements
-        EditorPluginTif {
-    private static final String TOOL_NAME = "editor-plugin";
+		EditorPluginTif {
+	private static final String TOOL_NAME = "editor-plugin";
 
-    private Factory configFactory;
+	private Factory configFactory;
 
-    private Map<String, SwingEditor> editors;
+	private Map<String, SwingEditor> editors;
 
-    private Map<String, StudioComponentImpl> componentsById;
+	private Map<String, StudioComponentImpl> componentsById;
 
-    private Map<String, StatusBar> statusbarsById;
+	private Map<String, StatusBar> statusbarsById;
 
-    private Studio studio;
+	private Studio studio;
 
-    private EditorPluginBridge bridge;
+	private EditorPluginBridge bridge;
 
-    public EditorPlugin() {
-        editors = new HashMap<String, SwingEditor>();
-        componentsById = new HashMap<String, StudioComponentImpl>();
-        statusbarsById = new HashMap<String, StatusBar>();
-    }
+	public EditorPlugin() {
+		editors = new HashMap<String, SwingEditor>();
+		componentsById = new HashMap<String, StudioComponentImpl>();
+		statusbarsById = new HashMap<String, StatusBar>();
+	}
 
-    public void isModified(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
-        String modified;
+	public void isModified(ATerm editorId) {
+		Editor panel = editors.get(editorId.toString());
+		String modified;
 
-        if (panel.isModified()) {
-            modified = "true";
-        } else {
-            modified = "false";
-        }
+		if (panel != null && panel.isModified()) {
+			modified = "true";
+		} else {
+			modified = "false";
+		}
 
-        ATerm term = studio.getATermFactory().parse(modified);
-        ATerm event = studio.getATermFactory().make(
-                "is-modified(<term>,<term>)", editorId, term);
-        bridge.postEvent(event);
-    }
+		ATerm term = studio.getATermFactory().parse(modified);
+		ATerm event = studio.getATermFactory().make(
+				"is-modified(<term>,<term>)", editorId, term);
+		bridge.postEvent(event);
+	}
 
-    public void writeContents(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
+	public void writeContents(ATerm editorId) {
+		Editor panel = editors.get(editorId.toString());
 
-        if (panel != null) {
-            try {
-                panel.writeContents();
-                panel.setModified(false);
-                ATerm event = studio.getATermFactory().make(
-                        "contents-written(<term>)", editorId);
-                bridge.postEvent(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+		if (panel != null) {
+			try {
+				panel.writeContents();
+				panel.setModified(false);
+				ATerm event = studio.getATermFactory().make(
+						"contents-written(<term>)", editorId);
+				bridge.postEvent(event);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public void setFocus(ATerm editorId, ATerm focus) {
-        errorapi.Factory factory = errorapi.Factory
-                .getInstance((PureFactory) studio.getATermFactory());
+	public void setFocus(ATerm editorId, ATerm focus) {
+		errorapi.Factory factory = errorapi.Factory
+				.getInstance((PureFactory) studio.getATermFactory());
 
-        Editor panel = editors.get(editorId.toString());
+		Editor panel = editors.get(editorId.toString());
 
-        panel.setFocus(factory.AreaFromTerm(focus));
-    }
+		if (panel != null) {
+			panel.setFocus(factory.AreaFromTerm(focus));
+		}
+	}
 
-    public void clearFocus(ATerm editorId) {
-    }
+	public void clearFocus(ATerm editorId) {
+	}
 
-    public void registerTextCategories(ATerm editorId, ATerm categories) {
-        Editor panel = editors.get(editorId.toString());
+	public void registerTextCategories(ATerm editorId, ATerm categories) {
+		Editor panel = editors.get(editorId.toString());
 
-        PropertyList properties = Factory.getInstance(
-                (PureFactory) categories.getFactory()).PropertyListFromTerm(
-                categories);
-        panel.registerCategories(properties);
-    }
+		if (panel != null) {
+			PropertyList properties = Factory.getInstance(
+					(PureFactory) categories.getFactory())
+					.PropertyListFromTerm(categories);
+			panel.registerCategories(properties);
+		}
+	}
 
-    public void addActions(final ATerm editorId, ATerm menuList) {
-        StudioComponent comp = componentsById.get(editorId.toString());
+	public void addActions(final ATerm editorId, ATerm menuList) {
+		StudioComponent comp = componentsById.get(editorId.toString());
 
-        addEditorMenus(editorId, comp, (ATermList) menuList);
+		addEditorMenus(editorId, comp, (ATermList) menuList);
 
-        createFileMenu(editorId, comp);
-        createEditMenu(editors.get(editorId.toString()), comp);
-    }
+		createFileMenu(editorId, comp);
+		createEditMenu(editors.get(editorId.toString()), comp);
+	}
 
-    private void addEditorMenus(final ATerm editorId, StudioComponent comp,
-            ATermList menuList) {
-        while (!menuList.isEmpty()) {
-            final Event menuPath = configFactory.EventFromTerm(menuList
-                    .getFirst());
+	private void addEditorMenus(final ATerm editorId, StudioComponent comp,
+			ATermList menuList) {
+		while (!menuList.isEmpty()) {
+			final Event menuPath = configFactory.EventFromTerm(menuList
+					.getFirst());
 
-            studio.addComponentMenu(comp, menuPath, new AbstractAction(menuPath
-                    .toString()) {
-                public void actionPerformed(ActionEvent e) {
-                    ATerm event = studio.getATermFactory().make(
-                            "menu-event(<term>,<term>)", editorId,
-                            menuPath.toTerm());
-                    bridge.postEvent(event);
-                }
-            });
-            menuList = menuList.getNext();
-        }
+			studio.addComponentMenu(comp, menuPath, new AbstractAction(menuPath
+					.toString()) {
+				public void actionPerformed(ActionEvent e) {
+					ATerm event = studio.getATermFactory().make(
+							"menu-event(<term>,<term>)", editorId,
+							menuPath.toTerm());
+					bridge.postEvent(event);
+				}
+			});
+			menuList = menuList.getNext();
+		}
 
-    }
+	}
 
-    private void createFileMenu(final ATerm editorId, final StudioComponent comp) {
-        Factory factory = Factory.getInstance((PureFactory) studio
-                .getATermFactory());
+	private void createFileMenu(final ATerm editorId, final StudioComponent comp) {
+		Factory factory = Factory.getInstance((PureFactory) studio
+				.getATermFactory());
 
-        ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
-                factory.makeItem_Label("Save"));
+		ItemList items = factory.makeItemList(factory.makeItem_Label("File"),
+				factory.makeItem_Label("Save"));
 
-        Shortcut shortcut = factory.makeShortCut_Shortcut(
-                factory.makeKeyModifierList(factory
-                        .makeKeyModifier_MUnderscoreCTRL()), factory
-                        .makeVirtualKey_VKUnderscoreS());
-        Event event = factory.makeEvent_MenuShortcut(items, shortcut);
+		Shortcut shortcut = factory.makeShortCut_Shortcut(
+				factory.makeKeyModifierList(factory
+						.makeKeyModifier_MUnderscoreCTRL()), factory
+						.makeVirtualKey_VKUnderscoreS());
+		Event event = factory.makeEvent_MenuShortcut(items, shortcut);
 
-        studio.addComponentMenu(comp, event, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    ((Editor) editors.get(editorId.toString())).writeContents();
-                    ATerm event = studio.getATermFactory().make(
-                            "contents-saved(<term>)", editorId);
-                    bridge.postEvent(event);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+		studio.addComponentMenu(comp, event, new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					((Editor) editors.get(editorId.toString())).writeContents();
+					ATerm event = studio.getATermFactory().make(
+							"contents-saved(<term>)", editorId);
+					bridge.postEvent(event);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 
-        items = factory.makeItemList(factory.makeItem_Label("File"), factory
-                .makeItem_Label("Close"));
+		items = factory.makeItemList(factory.makeItem_Label("File"), factory
+				.makeItem_Label("Close"));
 
-        shortcut = factory.makeShortCut_Shortcut(
-                factory.makeKeyModifierList(factory
-                        .makeKeyModifier_MUnderscoreCTRL()), factory
-                        .makeVirtualKey_VKUnderscoreW());
-        event = factory.makeEvent_MenuShortcut(items, shortcut);
+		shortcut = factory.makeShortCut_Shortcut(
+				factory.makeKeyModifierList(factory
+						.makeKeyModifier_MUnderscoreCTRL()), factory
+						.makeVirtualKey_VKUnderscoreW());
+		event = factory.makeEvent_MenuShortcut(items, shortcut);
 
-        studio.addComponentMenu(comp, event, new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                closeEditor(comp, editorId.toString());
-            }
-        });
-    }
+		studio.addComponentMenu(comp, event, new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				closeEditor(comp, editorId.toString());
+			}
+		});
+	}
 
-    private void createEditMenu(Editor editor, StudioComponent comp) {
-        studio.addComponentMenu(comp, editor.getEditMenu());
-    }
+	private void createEditMenu(Editor editor, StudioComponent comp) {
+		studio.addComponentMenu(comp, editor.getEditMenu());
+	}
 
-    public void displayMessage(ATerm editorId, String message) {
-        StatusBar statusBar = statusbarsById.get(editorId.toString());
+	public void displayMessage(ATerm editorId, String message) {
+		StatusBar statusBar = statusbarsById.get(editorId.toString());
 
-        JLabel status = (JLabel) statusBar.getComponent("Status");
-        status.setText(message);
-        // comp.setStatusMessage(message);
-    }
+		JLabel status = (JLabel) statusBar.getComponent("Status");
+		status.setText(message);
+		// comp.setStatusMessage(message);
+	}
 
-    public void setEditable(ATerm editorId, ATerm editable) {
-        ATermFactory factory = studio.getATermFactory();
-        boolean edit = true;
+	public void setEditable(ATerm editorId, ATerm editable) {
+		ATermFactory factory = studio.getATermFactory();
+		boolean edit = true;
 
-        if (editable.equals(factory.make("false"))) {
-            edit = false;
-        }
+		if (editable.equals(factory.make("false"))) {
+			edit = false;
+		}
 
-        Editor panel = editors.get(editorId.toString());
-        panel.setEditable(edit);
-    }
+		Editor panel = editors.get(editorId.toString());
+		if (panel != null) {
+			panel.setEditable(edit);
+		}
+	}
 
-    public void killEditor(ATerm editorId) {
-        StudioComponent comp = componentsById.get(editorId.toString());
+	public void killEditor(ATerm editorId) {
+		StudioComponent comp = componentsById.get(editorId.toString());
 
-        if (comp != null) {
-            closeEditor(comp, editorId.toString());
-        }
-    }
+		if (comp != null) {
+			closeEditor(comp, editorId.toString());
+		}
+	}
 
-    private void closeEditor(StudioComponent comp, String id) {
-        Editor panel = editors.get(id);
+	private void closeEditor(StudioComponent comp, String id) {
+		Editor panel = editors.get(id);
 
-        if (panel.isModified()) {
-            studio.requestFocus(comp);
-            try {
-                showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
-            } catch (CloseAbortedException e) {
-                // this should never happen (no CANCEL button)
-                e.printStackTrace();
-            }
-        }
-        cleanupEditor(comp, id);
-    }
+		if (panel != null && panel.isModified()) {
+			studio.requestFocus(comp);
+			try {
+				showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
+			} catch (CloseAbortedException e) {
+				// this should never happen (no CANCEL button)
+				e.printStackTrace();
+			}
+		}
+		cleanupEditor(comp, id);
+	}
 
 	private void cleanupEditor(StudioComponent comp, String id) {
 		studio.removeComponent(comp);
-        componentsById.remove(id);
-        statusbarsById.remove(id);
-        editors.remove(id);
+		componentsById.remove(id);
+		statusbarsById.remove(id);
+		editors.remove(id);
 	}
 
-    public void setCursorAtOffset(ATerm editorId, int offset) {
-        Editor panel = editors.get(editorId.toString());
-        panel.setCursorAtOffset(offset);
-    }
+	public void setCursorAtOffset(ATerm editorId, int offset) {
+		Editor panel = editors.get(editorId.toString());
 
-    public void editFile(ATerm editorId, String filename, String modulename) {
-        try {
-            createPanel(editorId, filename);
-            StatusBar statusBar = statusbarsById.get(editorId.toString());
-            JLabel label = (JLabel) statusBar.getComponent("Module");
-            if (modulename.equals("")) {
-                label.setText(" ");
-            } else {
-                label.setText(modulename);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		if (panel != null) {
+			panel.setCursorAtOffset(offset);
+		}
+	}
 
-    public void highlightSlices(ATerm editorId, ATerm slices) {
-        editors.get(editorId.toString()).registerSlices(slices);
-    }
+	public void editFile(ATerm editorId, String filename, String modulename) {
+		try {
+			createPanel(editorId, filename);
+			StatusBar statusBar = statusbarsById.get(editorId.toString());
+			JLabel label = (JLabel) statusBar.getComponent("Module");
+			if (modulename.equals("")) {
+				label.setText(" ");
+			} else {
+				label.setText(modulename);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public void editorToFront(ATerm editorId) {
-        studio.requestFocus(componentsById.get(editorId.toString()));
-    }
+	public void highlightSlices(ATerm editorId, ATerm slices) {
+		Editor panel = editors.get(editorId.toString());
+		if (panel != null) {
+			panel.registerSlices(slices);
+		}
+	}
 
-    public void rereadContents(ATerm editorId) {
-        Editor panel = editors.get(editorId.toString());
-        panel.rereadContents();
-    }
+	public void editorToFront(ATerm editorId) {
+		StudioComponent comp = componentsById.get(editorId.toString());
 
-    public String getName() {
-        return TOOL_NAME;
-    }
+		if (comp != null) {
+			studio.requestFocus(comp);
+		}
+	}
 
-    public void initStudioPlugin(Studio studio) {
-        this.studio = studio;
-        configFactory = Factory.getInstance((PureFactory) studio
-                .getATermFactory());
-        bridge = new EditorPluginBridge(studio.getATermFactory(), this);
-        bridge.setLockObject(this);
-        studio.connect(getName(), bridge);
-    }
+	public void rereadContents(ATerm editorId) {
+		Editor panel = editors.get(editorId.toString());
+		if (panel != null) {
+			panel.rereadContents();
+		}
+	}
 
-    private Editor createPanel(final ATerm editorId, String filename)
-            throws IOException {
-        final String id = editorId.toString();
-        Editor editorPanel = editors.get(id);
+	public String getName() {
+		return TOOL_NAME;
+	}
 
-        if (editorPanel == null) {
-            final SwingEditor panel = new SwingEditor(id, filename);
-            editorPanel = panel;
+	public void initStudioPlugin(Studio studio) {
+		this.studio = studio;
+		configFactory = Factory.getInstance((PureFactory) studio
+				.getATermFactory());
+		bridge = new EditorPluginBridge(studio.getATermFactory(), this);
+		bridge.setLockObject(this);
+		studio.connect(getName(), bridge);
+	}
 
-            addMouseListener(editorId, panel);
-            addEditorModifiedListener(editorId, panel);
+	private Editor createPanel(final ATerm editorId, String filename)
+			throws IOException {
+		final String id = editorId.toString();
+		Editor editorPanel = editors.get(id);
 
-            int beginIndex = filename.lastIndexOf("/") + 1;
-            String componentName = filename.substring(beginIndex, filename
-                    .length());
-            StudioComponentImpl comp = new StudioComponentImpl(componentName,
-                    panel);
-            addStudioComponentListener(editorId, id, panel, comp);
+		if (editorPanel == null) {
+			final SwingEditor panel = new SwingEditor(id, filename);
+			editorPanel = panel;
 
-            StatusBar statusBar = new StatusBar();
-            statusBar.add(new JLabel(" "), 100, "Status");
-            statusBar.add(new JLabel(" "), 100, "Module");
+			addMouseListener(editorId, panel);
+			addEditorModifiedListener(editorId, panel);
 
-            editors.put(id, panel);
-            componentsById.put(id, comp);
-            statusbarsById.put(id, statusBar);
-            ((StudioWithPredefinedLayout) studio).addComponent(comp,
-                    StudioImplWithPredefinedLayout.TOP_RIGHT);
-            studio.addComponentStatusBar(comp, statusBar);
-        }
+			int beginIndex = filename.lastIndexOf("/") + 1;
+			String componentName = filename.substring(beginIndex, filename
+					.length());
+			StudioComponentImpl comp = new StudioComponentImpl(componentName,
+					panel);
+			addStudioComponentListener(editorId, id, panel, comp);
 
-        return editorPanel;
-    }
+			StatusBar statusBar = new StatusBar();
+			statusBar.add(new JLabel(" "), 100, "Status");
+			statusBar.add(new JLabel(" "), 100, "Module");
 
-    private void addMouseListener(final ATerm editorId, final SwingEditor panel) {
-        // Add mousemotion listener showing sorts in tooltips
-        panel.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                int offset = panel.getMouseOffset(e.getX(), e.getY());
+			editors.put(id, panel);
+			componentsById.put(id, comp);
+			statusbarsById.put(id, statusBar);
+			((StudioWithPredefinedLayout) studio).addComponent(comp,
+					StudioImplWithPredefinedLayout.TOP_RIGHT);
+			studio.addComponentStatusBar(comp, statusBar);
+		}
 
-                if (e.getClickCount() == 1) {
-                    ATerm aoffset = studio.getATermFactory().makeInt(offset);
-                    ATerm event = studio.getATermFactory().make(
-                            "mouse-event(<term>,<term>)", editorId, aoffset);
-                    bridge.postEvent(event);
-                }
-            }
-        });
-    }
+		return editorPanel;
+	}
 
-    private void addEditorModifiedListener(final ATerm editorId,
-            final SwingEditor panel) {
-        panel.addEditorModifiedListener(new EditorModifiedListener() {
-            public void editorModified(EditorModifiedEvent e) {
-                ATerm event = studio.getATermFactory().make(
-                        "contents-changed(<term>)", editorId);
-                bridge.postEvent(event);
-            }
-        });
-    }
+	private void addMouseListener(final ATerm editorId, final SwingEditor panel) {
+		// Add mousemotion listener showing sorts in tooltips
+		panel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				int offset = panel.getMouseOffset(e.getX(), e.getY());
 
-    private void addStudioComponentListener(final ATerm editorId,
-            final String id, final SwingEditor panel, StudioComponentImpl comp) {
-        comp.addStudioComponentListener(new StudioComponentAdapter() {
-            public void componentRequestClose() throws CloseAbortedException {
-                if (panel.isModified()) {
-                    showSaveConfirmDialog(panel,
-                            JOptionPane.YES_NO_CANCEL_OPTION);
-                }
-            }
+				if (e.getClickCount() == 1) {
+					ATerm aoffset = studio.getATermFactory().makeInt(offset);
+					ATerm event = studio.getATermFactory().make(
+							"mouse-event(<term>,<term>)", editorId, aoffset);
+					bridge.postEvent(event);
+				}
+			}
+		});
+	}
 
-            public void componentClose() {
-            	StudioComponent comp = (StudioComponent) componentsById.get(editorId
-                        .toString());
-                cleanupEditor(comp, editorId.toString());
-                ATerm event = studio.getATermFactory().make(
-                        "editor-disconnected(<term>)", editorId);
-                bridge.postEvent(event);
-            }
+	private void addEditorModifiedListener(final ATerm editorId,
+			final SwingEditor panel) {
+		panel.addEditorModifiedListener(new EditorModifiedListener() {
+			public void editorModified(EditorModifiedEvent e) {
+				ATerm event = studio.getATermFactory().make(
+						"contents-changed(<term>)", editorId);
+				bridge.postEvent(event);
+			}
+		});
+	}
 
-            public void componentFocusReceived() {
-                panel.requestFocus();
-            }
-        });
-    }
+	private void addStudioComponentListener(final ATerm editorId,
+			final String id, final SwingEditor panel, StudioComponentImpl comp) {
+		comp.addStudioComponentListener(new StudioComponentAdapter() {
+			public void componentRequestClose() throws CloseAbortedException {
+				if (panel.isModified()) {
+					showSaveConfirmDialog(panel,
+							JOptionPane.YES_NO_CANCEL_OPTION);
+				}
+			}
 
-    private void showSaveConfirmDialog(final Editor panel, int optionType)
-            throws CloseAbortedException {
-        switch (JOptionPane
-                .showConfirmDialog(
-                        null,
-                        panel.getFilename()
-                                + "\n\nThe editor for this file has unsaved changes.\nDo you want to save your changes?",
-                        panel.getFilename(), optionType)) {
-        case JOptionPane.YES_OPTION:
-            try {
-                panel.writeContents();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            break;
-        case JOptionPane.CANCEL_OPTION:
-            throw new CloseAbortedException();
-        }
-    }
+			public void componentClose() {
+				StudioComponent comp = (StudioComponent) componentsById
+						.get(editorId.toString());
+				cleanupEditor(comp, editorId.toString());
+				ATerm event = studio.getATermFactory().make(
+						"editor-disconnected(<term>)", editorId);
+				bridge.postEvent(event);
+			}
 
-    public void recAckEvent(ATerm t0) {
-    }
+			public void componentFocusReceived() {
+				panel.requestFocus();
+			}
+		});
+	}
 
-    public void recTerminate(ATerm t0) {
-        Iterator<SwingEditor> iter = editors.values().iterator();
-        while (iter.hasNext()) {
-            SwingEditor panel = iter.next();
-            if (panel.isModified()) {
-                String id = panel.getId();
-                StudioComponent comp = componentsById.get(id);
-                studio.requestFocus(comp);
-                try {
-                    showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
-                } catch (CloseAbortedException e) {
-                    // this should never happen (no CANCEL button)
-                    e.printStackTrace();
-                }
-            }
-        }
-        fireStudioPluginClosed();
-    }
+	private void showSaveConfirmDialog(final Editor panel, int optionType)
+			throws CloseAbortedException {
+		switch (JOptionPane
+				.showConfirmDialog(
+						null,
+						panel.getFilename()
+								+ "\n\nThe editor for this file has unsaved changes.\nDo you want to save your changes?",
+						panel.getFilename(), optionType)) {
+		case JOptionPane.YES_OPTION:
+			try {
+				panel.writeContents();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case JOptionPane.CANCEL_OPTION:
+			throw new CloseAbortedException();
+		}
+	}
+
+	public void recAckEvent(ATerm t0) {
+	}
+
+	public void recTerminate(ATerm t0) {
+		Iterator<SwingEditor> iter = editors.values().iterator();
+		while (iter.hasNext()) {
+			SwingEditor panel = iter.next();
+			if (panel.isModified()) {
+				String id = panel.getId();
+				StudioComponent comp = componentsById.get(id);
+				studio.requestFocus(comp);
+				try {
+					showSaveConfirmDialog(panel, JOptionPane.YES_NO_OPTION);
+				} catch (CloseAbortedException e) {
+					// this should never happen (no CANCEL button)
+					e.printStackTrace();
+				}
+			}
+		}
+		fireStudioPluginClosed();
+	}
 }
