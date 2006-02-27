@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
 
 import errorapi.types.Error;
 import errorapi.types.ErrorList;
@@ -62,7 +61,7 @@ public class ErrorDecorator {
         Enumeration errors = top.children();
         // the enumeration is broken if we start deleting nodes from the root,
         // so we have to make a worklist first.
-        List toBeRemoved = new LinkedList();
+        List<ErrorNode> toBeRemoved = new LinkedList<ErrorNode>();
 
         while (errors.hasMoreElements()) {
             ErrorNode error = (ErrorNode) errors.nextElement();
@@ -72,9 +71,9 @@ public class ErrorDecorator {
             }
         }
 
-        Iterator iter = toBeRemoved.iterator();
+        Iterator<ErrorNode> iter = toBeRemoved.iterator();
         while (iter.hasNext()) {
-            top.remove((MutableTreeNode) iter.next());
+            top.remove(iter.next());
         }
     }
 
@@ -82,7 +81,7 @@ public class ErrorDecorator {
         Enumeration errors = top.children();
         // the enumeration is broken if we start deleting nodes from the root,
         // so we have to make a worklist first.
-        List toBeRemoved = new LinkedList();
+        List<ErrorNode> toBeRemoved = new LinkedList<ErrorNode>();
 
         while (errors.hasMoreElements()) {
             ErrorNode error = (ErrorNode) errors.nextElement();
@@ -91,9 +90,9 @@ public class ErrorDecorator {
             }
         }
 
-        Iterator iter = toBeRemoved.iterator();
+        Iterator<ErrorNode> iter = toBeRemoved.iterator();
         while (iter.hasNext()) {
-            top.remove((MutableTreeNode) iter.next());
+            top.remove(iter.next());
         }
     }
 
