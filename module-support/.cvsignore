@@ -1,5 +1,7 @@
 .classpath
 .project
+bin
+INSTALL
 Makefile
 Makefile.in
 aclocal.m4
