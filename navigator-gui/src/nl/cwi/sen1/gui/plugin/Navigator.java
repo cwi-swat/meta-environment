@@ -15,6 +15,7 @@ import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.StatusBar;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
@@ -56,7 +57,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
     private MouseEvent popupEvent;
 
-    private StudioComponentImpl navigatorComponent;
+    private StudioComponent navigatorComponent;
 
     public Navigator() {
         String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
