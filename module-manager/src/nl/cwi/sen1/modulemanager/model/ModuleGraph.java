@@ -43,7 +43,6 @@ public class ModuleGraph extends ModuleDatabase {
             AttributeTable table = module.getAttributes(namespace);
             if (table != null) {
                 Map<ATerm, ATerm> entries = table.getEntries();
-                System.err.println("ModuleGraph Entries: " + entries);
                 
                 for (Iterator<ATerm> iterEntries = entries.keySet().iterator(); iterEntries
                         .hasNext();) {
