@@ -3,7 +3,6 @@
 .classpath
 .project
 INSTALL
-COPYING
 Makefile
 Makefile.in
 aclocal.m4
