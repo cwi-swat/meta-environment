@@ -14,14 +14,7 @@ import aterm.ATerm;
 public class Progress extends DefaultStudioPlugin implements ProgressTif {
     private static final String TOOL_NAME = "progress";
 
-//    private static final String RESOURCE_DIR = "/resources";
-
     private ProgressBridge bridge;
-
-    private Studio studio;
-
-    // TODO: use preferences
-//    private Preferences preferences;
 
     private ProgressPanel panel;
     
@@ -30,15 +23,9 @@ public class Progress extends DefaultStudioPlugin implements ProgressTif {
     }
     
     public Progress() {
-//        String propertyPath = new String(RESOURCE_DIR + '/' + TOOL_NAME
-//                + ".properties");
-//        this.preferences = new Preferences(getClass().getResourceAsStream(
-//                propertyPath));
     }
 
     public void initStudioPlugin(Studio studio) {
-        this.studio = studio;
-
         panel = new ProgressPanel();
         
         bridge = new ProgressBridge(studio.getATermFactory(), this);
