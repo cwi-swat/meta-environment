@@ -1,3 +1,5 @@
+.project
+.classpath
 *-*.pkg
 *.tar.gz
 Makefile
@@ -9,3 +11,10 @@ config.h.in
 config.log
 config.status
 configure
+config.guess
+config.sub
+depcomp
+install-sh
+libtool
+ltmain.sh
+missing
