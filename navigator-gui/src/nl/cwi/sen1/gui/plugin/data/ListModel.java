@@ -45,7 +45,7 @@ public class ListModel extends AbstractListModel {
          list.removeAll(c);
      }
     
-     public void addAll(Collection c) {
+     public void addAll(Collection<Object> c) {
         Iterator iter = c.iterator();
         
         while (iter.hasNext()) {

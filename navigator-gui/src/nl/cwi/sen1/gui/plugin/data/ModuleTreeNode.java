@@ -17,7 +17,7 @@ public class ModuleTreeNode {
 
     String prefix;
 
-    ArrayList children;
+    ArrayList<ModuleTreeNode> children;
 
     boolean leaf;
 
@@ -26,7 +26,7 @@ public class ModuleTreeNode {
         this.name = name;
         this.prefix = prefix;
         this.leaf = leaf;
-        children = new ArrayList();
+        children = new ArrayList<ModuleTreeNode>();
     }
 
     public ATerm getId() {
@@ -95,12 +95,12 @@ public class ModuleTreeNode {
             return null;
         }
 
-        return (ModuleTreeNode) children.get(index);
+        return children.get(index);
     }
 
     public int getChild(String n) {
         for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+            ModuleTreeNode curNode = children.get(i);
 
             if (curNode.getName().equals(n)) {
                 return i;
@@ -112,7 +112,7 @@ public class ModuleTreeNode {
 
     public int getLeafChild(String n) {
         for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+            ModuleTreeNode curNode = children.get(i);
 
             if (curNode.getName().equals(n) && curNode.isLeaf()) {
                 return i;
@@ -124,7 +124,7 @@ public class ModuleTreeNode {
 
     public int getNodeChild(String n) {
         for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+            ModuleTreeNode curNode = children.get(i);
 
             if (curNode.getName().equals(n) && !curNode.isLeaf()) {
                 return i;
@@ -136,7 +136,7 @@ public class ModuleTreeNode {
 
     public int getInsertIndex(String n) {
         for (int i = 0; i < children.size(); i++) {
-            ModuleTreeNode curNode = (ModuleTreeNode) children.get(i);
+            ModuleTreeNode curNode = children.get(i);
 
             if (curNode.getName().compareTo(n) > 0) {
                 return i;
@@ -166,7 +166,7 @@ public class ModuleTreeNode {
         return -1;
     }
 
-    public List makePath(StringTokenizer tokens, List result) {
+    public List<ModuleTreeNode> makePath(StringTokenizer tokens, List<ModuleTreeNode> result) {
         result.add(this);
 
         if (isLeaf()) {

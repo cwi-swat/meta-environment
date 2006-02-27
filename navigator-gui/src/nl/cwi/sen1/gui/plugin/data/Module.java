@@ -7,123 +7,125 @@ import java.util.List;
 import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
-
 public class Module implements Comparable {
-	public static final int STATE_NORMAL = 0;
-	public static final int STATE_NEW = 1;
+    public static final int STATE_NORMAL = 0;
+
+    public static final int STATE_NEW = 1;
 
     private ATerm _id;
-    
-	private String _name;
-    
+
+    private String _name;
+
     private File _file;
 
-	private List _parent;
-	private List _child;
+    private List<String> _parent;
 
-	private ListModel childListModel;
-	private ListModel parentListModel;
+    private List<String> _child;
 
-	private int State = STATE_NORMAL;
+    private ListModel childListModel;
 
-	public Module(ATerm id, File file, String name) {
-		setId(id);
+    private ListModel parentListModel;
+
+    private int State = STATE_NORMAL;
+
+    public Module(ATerm id, File file, String name) {
+        setId(id);
         setName(name);
         setFile(file);
         initParentList();
 
-		childListModel = new ListModel(_child);
-		parentListModel = new ListModel(_parent);
-		initChildList();
-	}
+        childListModel = new ListModel(_child);
+        parentListModel = new ListModel(_parent);
+        initChildList();
+    }
 
-	public int compareTo(Object o) {
-		Module peer = (Module) o;
-		return _name.compareTo(peer.getName());
-	}
+    public int compareTo(Object o) {
+        Module peer = (Module) o;
+        return _name.compareTo(peer.getName());
+    }
 
     public ATerm getId() {
         return _id;
     }
-    
-	public String getName() {
-		return _name;
-	}
-	
-	public String getAbbreviation() {
-		return _name.substring(_name.lastIndexOf('/'),-1);
-	}
+
+    public String getName() {
+        return _name;
+    }
+
+    public String getAbbreviation() {
+        return _name.substring(_name.lastIndexOf('/'), -1);
+    }
 
     private void setId(ATerm id) {
         _id = id;
     }
-    
-	private void setName(String name) {
-		_name = name;
-	}
-    
+
+    private void setName(String name) {
+        _name = name;
+    }
+
     private void setFile(File file) {
         _file = file;
     }
 
-	public void addParent(String parent) {
-		_parent.add(parent);
-		parentListModel.elementAdded();
-	}
+    public void addParent(String parent) {
+        _parent.add(parent);
+        parentListModel.elementAdded();
+    }
 
-	private void initParentList() {
-		_parent = new LinkedList();
-	}
+    private void initParentList() {
+        _parent = new LinkedList<String>();
+    }
 
-	public Iterator fetchParentIterator() {
-		return _parent.iterator();
-	}
+    public Iterator fetchParentIterator() {
+        return _parent.iterator();
+    }
 
-	public ListModel fetchParentListModel() {
-		return parentListModel;
-	}
+    public ListModel fetchParentListModel() {
+        return parentListModel;
+    }
 
-	public void addChild(String child) {
-		_child.add(child);
-		childListModel.elementAdded();
-	}
+    public void addChild(String child) {
+        _child.add(child);
+        childListModel.elementAdded();
+    }
 
-	private void initChildList() {
-		_child = new LinkedList();
-		childListModel.setList(_child);
-	}
-	
-	public List getChildren() {
-		return _child;
-	}
+    private void initChildList() {
+        _child = new LinkedList<String>();
+        childListModel.setList(_child);
+    }
 
-	public List getParents() {
-		return _parent;
-	}
-	
-	public Iterator fetchChildIterator() {
-		return _child.iterator();
-	}
+    public List<String> getChildren() {
+        return _child;
+    }
 
-	public ListModel fetchChildListModel() {
-		return childListModel;
-	}
+    public List<String> getParents() {
+        return _parent;
+    }
 
-	public Object[] fetchChildrenArray() {
-		return _child.toArray();
-	}
+    public Iterator<String> fetchChildIterator() {
+        return _child.iterator();
+    }
 
-	public String toString() {
-		return _name;
-	}
+    public ListModel fetchChildListModel() {
+        return childListModel;
+    }
 
-	public int getState() {
-		return State;
-	}
+    public Object[] fetchChildrenArray() {
+        return _child.toArray();
+    }
 
-	public void setState(int State) {
-		this.State = State;
-	}
+    public String toString() {
+        return _name;
+    }
+
+    public int getState() {
+        return State;
+    }
+
+    public void setState(int State) {
+        this.State = State;
+    }
 
     public File getFile() {
         return _file;

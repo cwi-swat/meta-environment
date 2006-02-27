@@ -8,7 +8,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 
 public abstract class AbstractModuleTreeModel {
-	private Set listeners = new HashSet();
+	private Set<TreeModelListener> listeners = new HashSet<TreeModelListener>();
 
 	public void addTreeModelListener(TreeModelListener listener) {
 		listeners.add(listener);
@@ -19,33 +19,33 @@ public abstract class AbstractModuleTreeModel {
 	}
 
 	protected void fireTreeNodesChanged(TreeModelEvent e) {
-		Iterator iter = listeners.iterator();
+		Iterator<TreeModelListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			TreeModelListener listener = (TreeModelListener) iter.next();
+			TreeModelListener listener = iter.next();
 			listener.treeNodesChanged(e);
 		}
 	}
 
 	protected void fireTreeNodesInserted(TreeModelEvent e) {
-		Iterator iter = listeners.iterator();
+		Iterator<TreeModelListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			TreeModelListener listener = (TreeModelListener) iter.next();
+			TreeModelListener listener = iter.next();
 			listener.treeNodesInserted(e);
 		}
 	}
 
 	protected void fireTreeNodesRemoved(TreeModelEvent e) {
-		Iterator iter = listeners.iterator();
+		Iterator<TreeModelListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			TreeModelListener listener = (TreeModelListener) iter.next();
+			TreeModelListener listener = iter.next();
 			listener.treeNodesRemoved(e);
 		}
 	}
 
 	protected void fireTreeStructureChanged(TreeModelEvent e) {
-		Iterator iter = listeners.iterator();
+		Iterator<TreeModelListener> iter = listeners.iterator();
 		while (iter.hasNext()) {
-			TreeModelListener listener = (TreeModelListener) iter.next();
+			TreeModelListener listener = iter.next();
 			listener.treeStructureChanged(e);
 		}
 	}

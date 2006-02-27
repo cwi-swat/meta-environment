@@ -17,103 +17,104 @@ import nl.cwi.sen1.ioapi.types.File;
 import aterm.ATerm;
 
 public class ModuleTreeModel extends AbstractModuleTreeModel implements
-		TreeModel, Serializable {
-	private ModuleTreeNode root;
+        TreeModel, Serializable {
+    private ModuleTreeNode root;
 
-	private List moduleSelectionListeners;
+    private List<ModuleSelectionListener> moduleSelectionListeners;
 
-	private Map moduleTable;
+    private Map<ATerm, Module> moduleTable;
 
-	public ModuleTreeModel() {
-		moduleTable = new HashMap();
-		moduleSelectionListeners = new LinkedList();
-		root = new ModuleTreeNode(null, "", "", false);
-	}
+    public ModuleTreeModel() {
+        moduleTable = new HashMap<ATerm, Module>();
+        moduleSelectionListeners = new LinkedList<ModuleSelectionListener>();
+        root = new ModuleTreeNode(null, "", "", false);
+    }
 
-	public Object getRoot() {
-		return root;
-	}
+    public Object getRoot() {
+        return root;
+    }
 
-	public Object getChild(Object parent, int index) {
-		return ((ModuleTreeNode) parent).getChild(index);
-	}
+    public Object getChild(Object parent, int index) {
+        return ((ModuleTreeNode) parent).getChild(index);
+    }
 
-	public int getChildCount(Object parent) {
-		return ((ModuleTreeNode) parent).getChildCount();
-	}
+    public int getChildCount(Object parent) {
+        return ((ModuleTreeNode) parent).getChildCount();
+    }
 
-	public boolean isLeaf(Object node) {
-		return ((ModuleTreeNode) node).isLeaf();
-	}
+    public boolean isLeaf(Object node) {
+        return ((ModuleTreeNode) node).isLeaf();
+    }
 
-	public void valueForPathChanged(TreePath path, Object newValue) {
-	}
+    public void valueForPathChanged(TreePath path, Object newValue) {
+    }
 
-	public int getIndexOfChild(Object par, Object ch) {
-		ModuleTreeNode parent = (ModuleTreeNode) par;
-		ModuleTreeNode child = (ModuleTreeNode) ch;
+    public int getIndexOfChild(Object par, Object ch) {
+        ModuleTreeNode parent = (ModuleTreeNode) par;
+        ModuleTreeNode child = (ModuleTreeNode) ch;
 
-		if (parent == null)
-			return -1;
+        if (parent == null)
+            return -1;
 
-		return parent.getIndexOfChild(child);
-	}
+        return parent.getIndexOfChild(child);
+    }
 
-	public void addModuleSelectionListener(ModuleSelectionListener listener) {
-		moduleSelectionListeners.add(listener);
-	}
+    public void addModuleSelectionListener(ModuleSelectionListener listener) {
+        moduleSelectionListeners.add(listener);
+    }
 
-	public void selectModule(ATerm moduleId) {
-		selectModule(getModule(moduleId));
-	}
+    public void selectModule(ATerm moduleId) {
+        selectModule(getModule(moduleId));
+    }
 
-	public void selectModule(Module module) {
-		Iterator iter = moduleSelectionListeners.iterator();
-		while (iter.hasNext()) {
-			ModuleSelectionListener l = (ModuleSelectionListener) iter.next();
-			l.moduleSelected(module);
-		}
-	}
+    public void selectModule(Module module) {
+        Iterator iter = moduleSelectionListeners.iterator();
+        while (iter.hasNext()) {
+            ModuleSelectionListener l = (ModuleSelectionListener) iter.next();
+            l.moduleSelected(module);
+        }
+    }
 
-	public Module getModule(ATerm moduleId) {
-		return (Module) moduleTable.get(moduleId);
-	}
+    public Module getModule(ATerm moduleId) {
+        return moduleTable.get(moduleId);
+    }
 
-	public void addModule(Module module) {
-		ATerm moduleId = module.getId();
+    public void addModule(Module module) {
+        ATerm moduleId = module.getId();
         File file = module.getFile();
 
-		if (moduleTable.put(moduleId, module) == null) {
+        if (moduleTable.put(moduleId, module) == null) {
             root.addChild(moduleId, "", file);
-			repaintTree();
-		}
-	}
+            repaintTree();
+        }
+    }
 
-	public void removeModule(ATerm id, String name) {
-		moduleTable.remove(id);
-		root.removeChild(new StringTokenizer(name, "/"));
-		repaintTree();
-	}
+    public void removeModule(ATerm id, String name) {
+        moduleTable.remove(id);
+        root.removeChild(new StringTokenizer(name, "/"));
+        repaintTree();
+    }
 
-	public void clearModules() {
-		moduleTable.clear();
-		root.clearChildren();
-		repaintTree();
-	}
+    public void clearModules() {
+        moduleTable.clear();
+        root.clearChildren();
+        repaintTree();
+    }
 
-	public TreePath makeTreePath(String name) {
-		List l = root.makePath(new StringTokenizer(name, "/"), new ArrayList());
+    public TreePath makeTreePath(String name) {
+        List<ModuleTreeNode> l = root.makePath(new StringTokenizer(name, "/"),
+                new ArrayList<ModuleTreeNode>());
 
-		return new TreePath(l.toArray());
-	}
+        return new TreePath(l.toArray());
+    }
 
-	public void repaintTree() {
-		Object path[] = new Object[1];
-		path[0] = root;
-		fireTreeStructureChanged(new TreeModelEvent(root, path));
-	}
+    public void repaintTree() {
+        Object path[] = new Object[1];
+        path[0] = root;
+        fireTreeStructureChanged(new TreeModelEvent(root, path));
+    }
 
-	public List getModules() {
-		return new LinkedList(moduleTable.values());
-	}
+    public List<Module> getModules() {
+        return new LinkedList<Module>(moduleTable.values());
+    }
 }
