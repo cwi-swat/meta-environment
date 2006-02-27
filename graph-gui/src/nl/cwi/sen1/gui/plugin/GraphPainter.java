@@ -21,6 +21,7 @@ import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
@@ -41,9 +42,9 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
     private Factory graphFactory;
 
-    private Map graphs;
+    private Map<String, GraphPanel> graphs;
 
-    private Map forcePanels;
+    private Map<String, StudioComponent> forcePanels;
 
     private Preferences preferences;
 
@@ -56,11 +57,10 @@ public class GraphPainter extends DefaultStudioPlugin implements
                 + ".properties");
         this.preferences = new Preferences(getClass().getResourceAsStream(
                 propertyPath));
-        this.graphs = new HashMap();
-        this.forcePanels = new HashMap();
+        this.graphs = new HashMap<String, GraphPanel>();
+        this.forcePanels = new HashMap<String, StudioComponent>();
     }
 
-   
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         graphFactory = Factory.getInstance((PureFactory) studio
@@ -85,7 +85,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
         if (panel == null) {
             panel = new GraphPanel(graphId, preferences);
-            StudioComponentImpl comp = new StudioComponentImpl(graphId, panel) {
+            StudioComponent comp = new StudioComponentImpl(graphId, panel) {
                 public void requestClose() throws CloseAbortedException {
                     throw new CloseAbortedException();
                 }
@@ -126,19 +126,19 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
         graph.add(layouts);
         graph.add(toggles);
-        
+
         JMenuItem export = new JMenuItem("Export");
         export.addActionListener(panel.getSaveImageAction());
         graph.add(export);
-        
+
         JMenuItem reset = new JMenuItem("Reset view");
         reset.addActionListener(new AbstractAction() {
-        	public void actionPerformed(ActionEvent e) {
-        		panel.restoreZoomAndPan();
-        	}
+            public void actionPerformed(ActionEvent e) {
+                panel.restoreZoomAndPan();
+            }
         });
         graph.add(reset);
-        
+
         return graph;
     }
 
@@ -217,17 +217,16 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
     protected void showForcePanel(String id, boolean show) {
         if (show) {
-            GraphPanel graphPanel = (GraphPanel) graphs.get(id);
+            GraphPanel graphPanel = graphs.get(id);
             GraphForcePanel forcePanel = new GraphForcePanel(graphPanel
                     .getForceSimulator(), preferences);
-            StudioComponentImpl comp = new StudioComponentImpl("Forces for "
+            StudioComponent comp = new StudioComponentImpl("Forces for "
                     + id, forcePanel);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
             forcePanels.put(id, comp);
         } else {
-            StudioComponentImpl comp = (StudioComponentImpl) forcePanels
-                    .get(id);
+            StudioComponent comp = forcePanels.get(id);
             if (comp != null) {
                 studio.removeComponent(comp);
                 forcePanels.remove(id);
@@ -261,7 +260,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
     }
 
     private GraphPanel getPanel(String id) {
-        return (GraphPanel) graphs.get(id);
+        return graphs.get(id);
     }
 
     public String getName() {

@@ -16,6 +16,7 @@ import nl.cwi.sen1.graph.types.Edge;
 import nl.cwi.sen1.graph.types.EdgeList;
 import nl.cwi.sen1.graph.types.Graph;
 import nl.cwi.sen1.graph.types.Node;
+import nl.cwi.sen1.graph.types.NodeId;
 import nl.cwi.sen1.graph.types.NodeList;
 import nl.cwi.sen1.graph.types.Point;
 import nl.cwi.sen1.graph.types.Polygon;
@@ -29,7 +30,7 @@ import edu.berkeley.guir.prefuse.graph.DefaultNode;
 public class GraphAdapter extends DefaultGraph {
     public GraphAdapter(Graph graph) {
         super(true);
-        Map nodeMap = new HashMap();
+        Map<NodeId, GraphNode> nodeMap = new HashMap<NodeId, GraphNode>();
 
         for (NodeList nodes = graph.getNodes(); !nodes.isEmpty(); nodes = nodes
                 .getTail()) {
@@ -42,7 +43,7 @@ public class GraphAdapter extends DefaultGraph {
             pNode.setDotY(getY(node));
             pNode.setDotWidth(getWidth(node));
             pNode.setDotHeight(getHeight(node));
-	    pNode.setShape(getShape(node));
+            pNode.setShape(getShape(node));
 
             Color fillColor = getFillColorAttribute(node);
 
@@ -65,62 +66,60 @@ public class GraphAdapter extends DefaultGraph {
         for (EdgeList edges = graph.getEdges(); !edges.isEmpty(); edges = edges
                 .getTail()) {
             Edge edge = edges.getHead();
-            DefaultNode fromNode = (DefaultNode) nodeMap.get(edge.getFrom());
-            DefaultNode toNode = (DefaultNode) nodeMap.get(edge.getTo());
+            DefaultNode fromNode = nodeMap.get(edge.getFrom());
+            DefaultNode toNode = nodeMap.get(edge.getTo());
             GraphEdge pEdge = new GraphEdge(fromNode, toNode);
 
-	    pEdge.setDotControlPoints(getControlPoints(edge));
+            pEdge.setDotControlPoints(getControlPoints(edge));
 
             addEdge(pEdge);
         }
     }
 
     private Point2D[] getControlPoints(Edge edge) {
-      Polygon poly = getPolygon(edge);
-      List points = new LinkedList();
+        Polygon poly = getPolygon(edge);
+        List<Point2D> points = new LinkedList<Point2D>();
 
-      for ( ; !poly.isEmpty(); poly = poly.getTail()) {
+        for (; !poly.isEmpty(); poly = poly.getTail()) {
             Point cp1 = poly.getHead();
             points.add(new Point2D.Float(cp1.getX(), cp1.getY()));
         }
-        
+
         Point2D[] result = new Point2D[points.size()];
-        Iterator iter = points.iterator();
-        
+        Iterator<Point2D> iter = points.iterator();
+
         for (int i = 0; iter.hasNext(); i++) {
-        	result[i] = (Point2D) iter.next();
+            result[i] = iter.next();
         }
-        
+
         return result;
-	}
+    }
 
-	private Polygon getPolygon(Edge edge) {
-		AttributeList attrs = edge.getAttributes();
-		while (!attrs.isEmpty()) {
-			Attribute attr = attrs.getHead();
-			if (attr.isCurvePoints()) {
-				return attr.getPoints();
-			}
-			attrs = attrs.getTail();
-		}
+    private Polygon getPolygon(Edge edge) {
+        AttributeList attrs = edge.getAttributes();
+        while (!attrs.isEmpty()) {
+            Attribute attr = attrs.getHead();
+            if (attr.isCurvePoints()) {
+                return attr.getPoints();
+            }
+            attrs = attrs.getTail();
+        }
 
-		return null;
-	}
-	
-	private Shape getShape(Node node) {
-		AttributeList attrs = node.getAttributes();
-		while (!attrs.isEmpty()) {
-			Attribute attr = attrs.getHead();
-			if (attr.isShape()) {
-				return attr.getShape();
-			}
-			attrs = attrs.getTail();
-		}
+        return null;
+    }
 
-		return null;
-	}
+    private Shape getShape(Node node) {
+        AttributeList attrs = node.getAttributes();
+        while (!attrs.isEmpty()) {
+            Attribute attr = attrs.getHead();
+            if (attr.isShape()) {
+                return attr.getShape();
+            }
+            attrs = attrs.getTail();
+        }
 
-
+        return null;
+    }
 
     static private Location getLocationAttribute(Node node) {
         AttributeList attrs = node.getAttributes();
@@ -232,6 +231,6 @@ public class GraphAdapter extends DefaultGraph {
             node = setNodeSize(metrics, prefs, node);
             result = factory.makeNodeList(node, result);
         }
-		return graph.setNodes(result.reverseNodeList());
-	}
+        return graph.setNodes(result.reverseNodeList());
+    }
 }
