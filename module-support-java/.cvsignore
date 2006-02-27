@@ -2,7 +2,7 @@
 .project
 bin
 INSTALL
-install.sh
+install-sh
 missing
 Makefile
 Makefile.in
