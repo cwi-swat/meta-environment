@@ -298,9 +298,7 @@ public class GraphPanel extends JPanel {
 	void setGraph(Graph graph) {
 		setSize(getParent().getWidth(), getParent().getHeight());
 		registry.clear();
-		System.err.println("Set graph to : " + graph);
         registry.setGraph(graph);
-        System.err.println("Get graph: " + registry.getGraph());
 		runNow();
 	}
 
