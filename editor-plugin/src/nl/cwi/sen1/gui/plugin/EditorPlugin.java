@@ -40,7 +40,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     private Map<String, SwingEditor> editors;
 
-    private Map<String, StudioComponentImpl> componentsById;
+    private Map<String, StudioComponent> componentsById;
 
     private Map<String, StatusBar> statusbarsById;
 
@@ -50,7 +50,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     public EditorPlugin() {
         editors = new HashMap<String, SwingEditor>();
-        componentsById = new HashMap<String, StudioComponentImpl>();
+        componentsById = new HashMap<String, StudioComponent>();
         statusbarsById = new HashMap<String, StatusBar>();
     }
 
@@ -311,7 +311,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
-            StudioComponentImpl comp = new StudioComponentImpl(componentName,
+            StudioComponent comp = new StudioComponentImpl(componentName,
                     panel);
             addStudioComponentListener(editorId, panel, comp);
 
@@ -358,7 +358,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     private void addStudioComponentListener(final ATerm editorId,
-            final SwingEditor panel, StudioComponentImpl comp) {
+            final SwingEditor panel, StudioComponent comp) {
         comp.addStudioComponentListener(new StudioComponentAdapter() {
             public void componentRequestClose() throws CloseAbortedException {
                 if (panel.isModified()) {
