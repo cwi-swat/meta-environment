@@ -82,7 +82,7 @@ public class ModuleGraph extends ModuleDatabase {
 
             for (Iterator<ModuleId> depsIter = dependingModules.iterator(); depsIter
                     .hasNext();) {
-                NodeId nodeToId = factory.makeNodeId_Default(iter.next()
+                NodeId nodeToId = factory.makeNodeId_Default(depsIter.next()
                         .toTerm());
 
                 Edge edge = factory.makeEdge_Default(nodeFromId, nodeToId,
