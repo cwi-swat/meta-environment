@@ -2,6 +2,8 @@
 .project
 bin
 INSTALL
+install.sh
+missing
 Makefile
 Makefile.in
 aclocal.m4
