@@ -7,12 +7,11 @@ import javax.swing.table.AbstractTableModel;
 
 public class ModuledetailsTableModel extends AbstractTableModel {
     private String[] columnNames;
-    private LinkedList data;
-    
+    private LinkedList<String[]> data;
     
     public ModuledetailsTableModel(String[] columnNames) {
         this.columnNames = columnNames;
-        data = new LinkedList();
+        data = new LinkedList<String[]>();
     }
     
     public int getRowCount() {
@@ -28,7 +27,7 @@ public class ModuledetailsTableModel extends AbstractTableModel {
     }
     
     public Object getValueAt(int rowIndex, int columnIndex) {
-        String[] row = (String[]) data.get(rowIndex);
+        String[] row = data.get(rowIndex);
         return row[columnIndex];
     }
     
