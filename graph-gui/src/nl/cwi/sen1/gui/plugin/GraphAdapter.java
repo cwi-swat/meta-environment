@@ -179,7 +179,7 @@ public class GraphAdapter extends DefaultGraph {
         return null;
     }
 
-    static private nl.cwi.sen1.graph.types.Color getFillColorAttribute(Node node) {
+    static private Color getFillColorAttribute(Node node) {
         AttributeList attrs = node.getAttributes();
         while (!attrs.isEmpty()) {
             Attribute attr = attrs.getHead();

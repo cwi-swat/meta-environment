@@ -77,7 +77,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
         }
 
         Graph graph = graphFactory.GraphFromTerm(graphTerm);
-        panel.setGraph(new nl.cwi.sen1.gui.plugin.GraphAdapter(graph));
+        panel.setGraph(new GraphAdapter(graph));
     }
 
     private GraphPanel createPanel(final String graphId) {

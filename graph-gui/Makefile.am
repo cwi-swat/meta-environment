@@ -14,6 +14,7 @@ MAIN_CLASS = $(JAVA_PACKAGE).GraphPainter
 
 abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 LOCAL_JARS = $(abstop_srcdir)/lib/prefuse.jar
+INSTALLED_JARS = $(pkgdatadir)/prefuse.jar
 
 pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
 bin_SCRIPTS = $(PACKAGE)-config
@@ -33,7 +34,7 @@ $(PACKAGE)-$(VERSION).pkg: package Makefile
 
 %.idef: %.idef.src Makefile
 	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
-	    -e 's@__LOCAL_JARS__@$(LOCAL_JARS)@g'\
+	    -e 's@__LOCAL_JARS__@$(INSTALLED_JARS)@g'\
 	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
 	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@

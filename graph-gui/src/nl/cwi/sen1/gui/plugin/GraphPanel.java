@@ -53,281 +53,281 @@ import edu.berkeley.guir.prefusex.layout.RandomLayout;
 import edu.berkeley.guir.prefusex.layout.VerticalTreeLayout;
 
 public class GraphPanel extends JPanel {
-	private static final String ID = "id";
+    private static final String ID = "id";
 
     private String id;
 
-	private Display display;
+    private Display display;
 
-	private ItemRegistry registry;
+    private ItemRegistry registry;
 
-	private GraphPanelListener listener;
+    private GraphPanelListener listener;
 
-	private Activity currentLayout;
+    private Activity currentLayout;
 
-	private ActionMap layouts;
+    private ActionMap layouts;
 
-	private ActionList highlighting;
+    private ActionList highlighting;
 
-	private ActionList animation;
+    private ActionList animation;
 
-	private DefaultEdgeRenderer edgeRenderer;
+    private DefaultEdgeRenderer edgeRenderer;
 
-	private ForceSimulator forceSimulator;
+    private ForceSimulator forceSimulator;
 
-	private TextItemRenderer nodeRenderer;
+    private TextItemRenderer nodeRenderer;
 
-	public GraphPanel(String id, Preferences prefs) {
-		this.id = id;
-		setLayout(new BorderLayout());
+    public GraphPanel(String id, Preferences prefs) {
+        this.id = id;
+        setLayout(new BorderLayout());
 
-		registry = new ItemRegistry(new DefaultGraph());
-		
-		display = new Display(registry);
-		display.setHighQuality(true);
+        registry = new ItemRegistry(new DefaultGraph());
 
-		nodeRenderer = new GraphNodeRenderer();
-		nodeRenderer.setTextAttributeName("label");
- 		nodeRenderer.setFont(prefs.getFont("graph.node.font"));
-		nodeRenderer.setHorizontalPadding(prefs
-				.getInt("graph.node.border.width"));
-		nodeRenderer.setVerticalPadding(prefs
-				.getInt("graph.node.border.height"));
+        display = new Display(registry);
+        display.setHighQuality(true);
 
-		edgeRenderer = new GraphEdgeRenderer();
-		edgeRenderer.setRenderType(ShapeRenderer.RENDER_TYPE_DRAW);
-		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
+        nodeRenderer = new GraphNodeRenderer();
+        nodeRenderer.setTextAttributeName("label");
+        nodeRenderer.setFont(prefs.getFont("graph.node.font"));
+        nodeRenderer.setHorizontalPadding(prefs
+                .getInt("graph.node.border.width"));
+        nodeRenderer.setVerticalPadding(prefs
+                .getInt("graph.node.border.height"));
 
-		registry.setRendererFactory(new DefaultRendererFactory(nodeRenderer,
-				edgeRenderer, null));
+        edgeRenderer = new GraphEdgeRenderer();
+        edgeRenderer.setRenderType(ShapeRenderer.RENDER_TYPE_DRAW);
+        edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
 
-		display.addControlListener(new FocusControl(2, highlighting));
-		display.addControlListener(new DragControl(true, true));
-		display.addControlListener(new ZoomControl(true));
-		display.addControlListener(new PanControl(true));
-		display.addControlListener(new ControlAdapter() {
-			public void itemPressed(VisualItem gi, MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					firePopupRequested(gi.getAttribute(ID), e);
-				}
-			}
+        registry.setRendererFactory(new DefaultRendererFactory(nodeRenderer,
+                edgeRenderer, null));
 
-			public void itemReleased(VisualItem gi, MouseEvent e) {
-				itemPressed(gi, e);
-			}
-		});
+        display.addControlListener(new FocusControl(2, highlighting));
+        display.addControlListener(new DragControl(true, true));
+        display.addControlListener(new ZoomControl(true));
+        display.addControlListener(new PanControl(true));
+        display.addControlListener(new ControlAdapter() {
+            public void itemPressed(VisualItem gi, MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    firePopupRequested(gi.getAttribute(ID), e);
+                }
+            }
 
-		registry.getDefaultFocusSet().addFocusListener(new FocusListener() {
-			public void focusChanged(FocusEvent e) {
-				NodeItem n = registry
-						.getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
-								.getFirstAdded());
-				fireNodeSelected(n == null ? null : n.getAttribute(ID));
+            public void itemReleased(VisualItem gi, MouseEvent e) {
+                itemPressed(gi, e);
+            }
+        });
 
-				highlighting.runNow();
-			}
-		});
+        registry.getDefaultFocusSet().addFocusListener(new FocusListener() {
+            public void focusChanged(FocusEvent e) {
+                NodeItem n = registry
+                        .getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
+                                .getFirstAdded());
+                fireNodeSelected(n == null ? null : n.getAttribute(ID));
 
-		createLayouts();
-		createVisualEffects(prefs);
+                highlighting.runNow();
+            }
+        });
 
-		add(display, BorderLayout.CENTER);
-	}
+        createLayouts();
+        createVisualEffects(prefs);
 
-	public AbstractAction getSaveImageAction() {
-		return new ExportDisplayAction(display);
-	}
+        add(display, BorderLayout.CENTER);
+    }
 
-	public void setCurvedEdges() {
-		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_CURVE);
-		runNow();
-	}
+    public AbstractAction getSaveImageAction() {
+        return new ExportDisplayAction(display);
+    }
 
-	public void setStraightEdges() {
-		edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
-		runNow();
-	}
+    public void setCurvedEdges() {
+        edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_CURVE);
+        runNow();
+    }
 
-	public void setNoAnimation() {
-		animation = new ActionList(registry);
-		animation.add(new RepaintAction());
-	}
+    public void setStraightEdges() {
+        edgeRenderer.setEdgeType(DefaultEdgeRenderer.EDGE_TYPE_LINE);
+        runNow();
+    }
 
-	public void setPolarAnimation() {
-		animation = new ActionList(registry, 1500, 20);
-		animation.setPacingFunction(new SlowInSlowOutPacer());
-		animation.add(new PolarLocationAnimator());
-		animation.add(new RepaintAction());
-	}
+    public void setNoAnimation() {
+        animation = new ActionList(registry);
+        animation.add(new RepaintAction());
+    }
 
-	public void setLinearAnimation() {
-		animation = new ActionList(registry, 1500, 20);
-		animation.setPacingFunction(new SlowInSlowOutPacer());
-		animation.add(new LocationAnimator());
-		animation.add(new RepaintAction());
-	}
+    public void setPolarAnimation() {
+        animation = new ActionList(registry, 1500, 20);
+        animation.setPacingFunction(new SlowInSlowOutPacer());
+        animation.add(new PolarLocationAnimator());
+        animation.add(new RepaintAction());
+    }
 
-	private void createVisualEffects(Preferences prefs) {
-		setNoAnimation();
-		createHighlighter(prefs);
-	}
+    public void setLinearAnimation() {
+        animation = new ActionList(registry, 1500, 20);
+        animation.setPacingFunction(new SlowInSlowOutPacer());
+        animation.add(new LocationAnimator());
+        animation.add(new RepaintAction());
+    }
 
-	private void createHighlighter(Preferences prefs) {
-		highlighting = new ActionList(registry);
-		highlighting.add(new GraphColoring(prefs));
-		highlighting.add(new RepaintAction());
-	}
+    private void createVisualEffects(Preferences prefs) {
+        setNoAnimation();
+        createHighlighter(prefs);
+    }
 
-	private class Hierarchy extends VerticalTreeLayout {
-		public Hierarchy() {
-			m_heightInc = 100;
-		}
-	}
+    private void createHighlighter(Preferences prefs) {
+        highlighting = new ActionList(registry);
+        highlighting.add(new GraphColoring(prefs));
+        highlighting.add(new RepaintAction());
+    }
 
-	private void createLayouts() {
-		layouts = new ActionMap();
+    private class Hierarchy extends VerticalTreeLayout {
+        public Hierarchy() {
+            m_heightInc = 100;
+        }
+    }
 
-		ActionList dot = new ActionList(registry);
-		dot.add(new GraphFilter());
-		dot.add(new GraphDotLayout());
-		layouts.put("Dot", dot);
+    private void createLayouts() {
+        layouts = new ActionMap();
 
-		ActionList manual = new ActionList(registry);
-		manual.add(new GraphFilter());
-		layouts.put("Manual", manual);
+        ActionList dot = new ActionList(registry);
+        dot.add(new GraphFilter());
+        dot.add(new GraphDotLayout());
+        layouts.put("Dot", dot);
 
-		ActionList hierarchy = new ActionList(registry);
-		hierarchy.add(new TreeFilter(false, true, false));
-		hierarchy.add(new Hierarchy());
-		layouts.put("Vertical Tree", hierarchy);
+        ActionList manual = new ActionList(registry);
+        manual.add(new GraphFilter());
+        layouts.put("Manual", manual);
 
-		ActionList radial = new ActionList(registry);
-		radial.add(new TreeFilter(false, true, false));
-		radial.add(new RadialTreeLayout());
-		layouts.put("Radial Tree", radial);
+        ActionList hierarchy = new ActionList(registry);
+        hierarchy.add(new TreeFilter(false, true, false));
+        hierarchy.add(new Hierarchy());
+        layouts.put("Vertical Tree", hierarchy);
 
-		ActionList indented = new ActionList(registry);
-		indented.add(new TreeFilter(false, true, false));
-		indented.add(new IndentedTreeLayout());
-		indented.add(new RepaintAction());
-		layouts.put("Indented Tree", indented);
+        ActionList radial = new ActionList(registry);
+        radial.add(new TreeFilter(false, true, false));
+        radial.add(new RadialTreeLayout());
+        layouts.put("Radial Tree", radial);
 
-		forceSimulator = new ForceSimulator();
-		forceSimulator.addForce(new NBodyForce(-.4f, 0f, .1f));
-		forceSimulator.addForce(new SpringForce(4E-5f, 80f));
-		forceSimulator.addForce(new DragForce(-0.005f));
+        ActionList indented = new ActionList(registry);
+        indented.add(new TreeFilter(false, true, false));
+        indented.add(new IndentedTreeLayout());
+        indented.add(new RepaintAction());
+        layouts.put("Indented Tree", indented);
 
-		ActionList contforce = new ActionList(registry, -1, 50);
-		contforce.add(new GraphFilter());
-		contforce.add(new ForceDirectedLayout(forceSimulator, false));
-		contforce.add(new RepaintAction());
-		layouts.put("Force", contforce);
+        forceSimulator = new ForceSimulator();
+        forceSimulator.addForce(new NBodyForce(-.4f, 0f, .1f));
+        forceSimulator.addForce(new SpringForce(4E-5f, 80f));
+        forceSimulator.addForce(new DragForce(-0.005f));
 
-		ActionList random = new ActionList(registry);
-		random.add(new GraphFilter());
-		random.add(new RandomLayout());
-		layouts.put("Random", random);
+        ActionList contforce = new ActionList(registry, -1, 50);
+        contforce.add(new GraphFilter());
+        contforce.add(new ForceDirectedLayout(forceSimulator, false));
+        contforce.add(new RepaintAction());
+        layouts.put("Force", contforce);
 
-		ActionList circle = new ActionList(registry);
-		circle.add(new GraphFilter());
-		circle.add(new CircleLayout());
-		layouts.put("Circle", circle);
+        ActionList random = new ActionList(registry);
+        random.add(new GraphFilter());
+        random.add(new RandomLayout());
+        layouts.put("Random", random);
 
-		ActionList grid = new ActionList(registry);
-		grid.add(new GraphFilter());
-		grid.add(new GridLayout());
-		layouts.put("Grid", grid);
+        ActionList circle = new ActionList(registry);
+        circle.add(new GraphFilter());
+        circle.add(new CircleLayout());
+        layouts.put("Circle", circle);
 
-		ActionList funny = new ActionList(registry);
-		funny.add(new GraphFilter());
-		funny.add(new FruchtermanReingoldLayout());
-		layouts.put("Funny", funny);
-	}
+        ActionList grid = new ActionList(registry);
+        grid.add(new GraphFilter());
+        grid.add(new GridLayout());
+        layouts.put("Grid", grid);
 
-	public ForceSimulator getForceSimulator() {
-		return forceSimulator;
-	}
+        ActionList funny = new ActionList(registry);
+        funny.add(new GraphFilter());
+        funny.add(new FruchtermanReingoldLayout());
+        layouts.put("Funny", funny);
+    }
 
-	public Object[] getLayouts() {
-		return layouts.keys();
-	}
+    public ForceSimulator getForceSimulator() {
+        return forceSimulator;
+    }
 
-	public void setLayout(String name) {
-		ActionList newLayout = (ActionList) layouts.get(name);
+    public Object[] getLayouts() {
+        return layouts.keys();
+    }
 
-		if (newLayout != null) {
-			cancel();
-			currentLayout = newLayout;
-			runNow();
-		} else {
-			throw new UnsupportedOperationException("Layout " + name
-					+ " does not exist");
-		}
-	}
+    public void setLayout(String name) {
+        ActionList newLayout = (ActionList) layouts.get(name);
 
-	private void runNow() {
-		if (currentLayout != null) {
-			currentLayout.runNow();
-			highlighting.runNow();
-			animation.runNow();
-		}
-	}
+        if (newLayout != null) {
+            cancel();
+            currentLayout = newLayout;
+            runNow();
+        } else {
+            throw new UnsupportedOperationException("Layout " + name
+                    + " does not exist");
+        }
+    }
 
-	private void cancel() {
-		if (currentLayout != null) {
-			currentLayout.cancel();
-		}
-	}
+    private void runNow() {
+        if (currentLayout != null) {
+            currentLayout.runNow();
+            highlighting.runNow();
+            animation.runNow();
+        }
+    }
 
-	protected void resize() {
-		setSize(getParent().getWidth(), getParent().getHeight());
-	}
+    private void cancel() {
+        if (currentLayout != null) {
+            currentLayout.cancel();
+        }
+    }
 
-	void setGraphPanelListener(GraphPanelListener l) {
-		this.listener = l;
-	}
+    protected void resize() {
+        setSize(getParent().getWidth(), getParent().getHeight());
+    }
 
-	protected void fireNodeSelected(String selectedNodeId) {
-		listener.nodeSelected(selectedNodeId);
-	}
+    void setGraphPanelListener(GraphPanelListener l) {
+        this.listener = l;
+    }
 
-	protected void firePopupRequested(String nodeId, MouseEvent e) {
+    protected void fireNodeSelected(String selectedNodeId) {
+        listener.nodeSelected(selectedNodeId);
+    }
+
+    protected void firePopupRequested(String nodeId, MouseEvent e) {
         listener.popupRequested(nodeId, e);
-	}
+    }
 
-	void setGraph(Graph graph) {
-		setSize(getParent().getWidth(), getParent().getHeight());
-		registry.clear();
+    void setGraph(Graph graph) {
+        setSize(getParent().getWidth(), getParent().getHeight());
+        registry.clear();
         registry.setGraph(graph);
-		runNow();
-	}
+        runNow();
+    }
 
-	public void setSelectedNode(String nodeId) {
-		Iterator iter = registry.getGraph().getNodes();
-        
-		while (iter.hasNext()) {
-			DefaultNode node = (DefaultNode) iter.next();
-			if (node.getAttribute(ID).equals(nodeId)) {
-				registry.getFocusManager().getDefaultFocusSet().set(node);
-			}
-		}
-	}
-	
-	public void restoreZoomAndPan() {
-		try {
-			display.setTransform(new AffineTransform());
-			display.repaint();
-		} catch (NoninvertibleTransformException e) {
-			// this does not happen
-		}
-	}
+    public void setSelectedNode(String nodeId) {
+        Iterator iter = registry.getGraph().getNodes();
 
-	public String getId() {
-		return id;
-	}
+        while (iter.hasNext()) {
+            DefaultNode node = (DefaultNode) iter.next();
+            if (node.getAttribute(ID).equals(nodeId)) {
+                registry.getFocusManager().getDefaultFocusSet().set(node);
+            }
+        }
+    }
 
-	static public void cleanUp() {
-		ActivityManager.kill();
-	}
+    public void restoreZoomAndPan() {
+        try {
+            display.setTransform(new AffineTransform());
+            display.repaint();
+        } catch (NoninvertibleTransformException e) {
+            // this does not happen
+        }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    static public void cleanUp() {
+        ActivityManager.kill();
+    }
 
 }
