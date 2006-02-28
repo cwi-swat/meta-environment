@@ -34,9 +34,9 @@ BUILT_SOURCES = \
 	Booleans.trm.tbl \
 	Booleans.dict 
 
-distclean: clean
+distclean-local: clean-local
 
-clean:
+clean-local:
 	rm -rf peano
 
 EXTRA_DIST = \

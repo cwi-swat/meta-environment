@@ -1,5 +1,10 @@
 # $Id$
 
+Tue Feb 28 09:14:31 CET 2006 <kooiker@cwi.nl>
+ * test/Makefile.am:
+   - Use clean-local and distclean-local to extend the clean and distclean
+     make targets
+
 Wed Jan 18 17:21:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
  * configure.in,package,spec/Makefile.am: removed transitive
    dependencies of asc-support, using the asc-support-config script.
