@@ -311,18 +311,22 @@ public class StudioImpl implements Studio, GuiTif {
     }
 
     public void removeComponent(StudioComponent component) {
-        int id = getComponentId(component);
+        if (component != null) {
+            int id = getComponentId(component);
 
-        if (id != -1) {
-            final View view = deleteView(id);
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    view.close();
-                }
-            });
+            if (id != -1) {
+                final View view = deleteView(id);
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        view.close();
+                    }
+                });
+            } else {
+                System.err.println("Can not remove non-registered component: "
+                        + component.getName());
+            }
         } else {
-            System.err.println("Can not remove non-registered component: "
-                    + component.getName());
+            System.err.println("Can not remove non-registered component");
         }
     }
 
@@ -454,12 +458,12 @@ public class StudioImpl implements Studio, GuiTif {
         return new JMenu("File");
     }
 
-//    private JToolBar createToolBar() {
-//        JToolBar toolBar = new JToolBar();
-//        JLabel label = new JLabel("Sample action");
-//        toolBar.add(label);
-//        return toolBar;
-//    }
+    // private JToolBar createToolBar() {
+    // JToolBar toolBar = new JToolBar();
+    // JLabel label = new JLabel("Sample action");
+    // toolBar.add(label);
+    // return toolBar;
+    // }
 
     protected void showView(View view) {
         if (rootWindow == null) {
@@ -574,7 +578,7 @@ public class StudioImpl implements Studio, GuiTif {
     public void loadJarClasspath(String pluginJar, String classPath) {
         startPlugin(new PluginLoader(pluginJar, classPath));
     }
-    
+
     public void addMenuEvents(ATerm menus) {
         menuList = menuList.concat((ATermList) menus);
         updateMenuBar();
