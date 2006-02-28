@@ -13,8 +13,6 @@
 #include <asc-support2-me.h>
 #include <SDFME-utils.h>
 
-/*{{{  globals */
-
 static char *name;
 
 ATbool run_verbose;      
@@ -37,18 +35,11 @@ extern void register_Remove_Var_Syntax();
 extern void resolve_Remove_Var_Syntax();
 extern void init_Remove_Var_Syntax();
 
-/*}}}  */
-/*{{{  ATerm *get_name(int cid) */
-
-ATerm get_name(int cid)
-{
+ATerm get_name(int cid) {
   return ATmake("snd-value(name(<str>))", name);
 }
 
-/*}}}  */
-
-static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
-{
+static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree) {
   SDF_ModuleName sdfModuleName = SDF_makeModuleName(name);
   PT_Tree ptModuleName = PT_TreeFromTerm(SDF_ModuleNameToTerm(sdfModuleName));
   PT_Tree newTree = NULL;
@@ -72,8 +63,7 @@ static PT_Tree addRemoveVarsFunction(char *name, PT_ParseTree parseTree)
   return newTree;
 }
 
-static ATerm removeVarSyntax(char *name, ATerm term)
-{
+static ATerm removeVarSyntax(char *name, ATerm term) {
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
   PT_Tree ptApplied = addRemoveVarsFunction(name, parseTree);
   ATerm reduct = innermost(ptApplied);
@@ -82,30 +72,21 @@ static ATerm removeVarSyntax(char *name, ATerm term)
   return PT_ParseTreeToTerm(asfix);
 }
 
-/*{{{  ATerm remove_var_syntax(int cid, char *name, ATerm t) */
-
-ATerm remove_var_syntax(int cid, char *name, ATerm term)
-{
+ATerm remove_var_syntax(int cid, char *name, ATerm term) {
   ATerm  output = removeVarSyntax(name, ATBunpack(term));
 
   return ATmake("snd-value(changed-syntax(<term>))", ATBpack(output));
 }
 
-/*}}}  */
-/*{{{  void rec_terminate(int cid) */
-
-void rec_terminate(int cid, ATerm arg)
-{
+void rec_terminate(int cid, ATerm arg) {
   exit(0);
 }
 
-/*}}}  */
-/*{{{  void usage(void)
+/*
  *     Usage: displays helpful usage information
  */
 
-void usage(void)
-{
+void usage(void) {
     ATwarning(
         "Usage: %s -m file -h -i file -o file -vV . . .\n"
         "Options:\n"
@@ -118,19 +99,11 @@ void usage(void)
         myname, myversion);
 }
 
-/*}}}  */    
-/*{{{  void version(void) */
-
-void version(void)
-{
+void version(void) {
     ATwarning("%s v%s\n", myname, myversion);
 }
 
-/*}}}  */     
-/*{{{  int main(int argc, char *argv[]) */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm syntax = NULL, changed = NULL;
   char *moduleName = "Main";
   char *input = "-";
@@ -172,8 +145,8 @@ int main(int argc, char *argv[])
         case 'o':  output=optarg;                          break;
         case 'V':  version(); exit(0);                     break;
 
-        case 'h':
-        default:   usage(); exit(0);                       break;
+	case 'h':  usage(); exit(0);                       break;
+        default:   usage(); exit(1);                       break;
       }
     } 
     argc -= optind;
@@ -188,4 +161,3 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-/*}}}  */

@@ -1,7 +1,3 @@
-*-*.pkg
-*.tar.gz
-Makefile
-Makefile.in
 aclocal.m4
 autom4*
 config.cache
@@ -9,3 +5,8 @@ config.h.in
 config.log
 config.status
 configure
+libtool
+Makefile
+Makefile.in
+*-*.pkg
+*.tar.gz

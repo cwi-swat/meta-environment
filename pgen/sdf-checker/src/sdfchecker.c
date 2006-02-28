@@ -38,8 +38,7 @@ extern void resolve_Sdf_Checker();
 extern void init_Sdf_Checker();
 
 
-static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
-{
+static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) {
   PT_Tree newTree = NULL;
 
   if (PT_isValidParseTree(parseTree)) {
@@ -55,8 +54,7 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
   return newTree;
 }
 
-static ATerm checkSdf(ATerm term)
-{
+static ATerm checkSdf(ATerm term) {
   PT_ParseTree parseTree;
   PT_Tree ptApplied;
   ATerm reduct;
@@ -71,8 +69,7 @@ static ATerm checkSdf(ATerm term)
   return PT_ParseTreeToTerm(asfix);
 }
 
-static void displayMessages(ATerm term)
-{
+static void displayMessages(ATerm term) {
   PERR_Start pStart;
   PERR_Summary pSummary;
   ERR_Summary summary;
@@ -83,20 +80,17 @@ static void displayMessages(ATerm term)
   ERR_displaySummary(summary);
 }
 
-ATerm check_sdf(int cid, ATerm term)
-{
+ATerm check_sdf(int cid, ATerm term) {
   ATerm  output = checkSdf(ATBunpack(term));
 
   return ATmake("snd-value(feedback(<term>))", output);
 }
 
-void rec_terminate(int cid, ATerm arg)
-{
+void rec_terminate(int cid, ATerm arg) {
   exit(0);
 }
 
-static void usage(void)
-{
+static void usage(void) {
   ATwarning(
     "Usage: %s -h -i file -vV . . .\n"
     "Options:\n"
@@ -107,13 +101,11 @@ static void usage(void)
     myname, myversion);
 }
 
-static void version(void)
-{
+static void version(void) {
   ATwarning("%s v%s\n", myname, myversion);
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm syntax = NULL, msgs = NULL;
   char *input = "-";
   int cid;
@@ -153,8 +145,8 @@ int main(int argc, char *argv[])
         case 'i':  input=optarg;                           break;
         case 'V':  version(); exit(0);                     break;
   
-        case 'h':
-        default:   usage(); exit(0);                       break;
+        case 'h':  usage(); exit(0);                       break;
+        default:   usage(); exit(1);                       break;
       }
     }
     argc -= optind;
