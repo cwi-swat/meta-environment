@@ -62,7 +62,7 @@ CLEANFILES = \
 	sed 's@__BINDIR__@$(bindir)@g;\
              s@__ACTIVATE__@1@g;\
              s@__PREFIX__@${prefix}@g;\
-             s@__CHECKERDIR__@${prefix}@g;\
+             s@__CHECKERDIR__@$(bindir)@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \

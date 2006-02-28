@@ -173,9 +173,15 @@ do
 			Notify "Checking definition: $f"
 			$ADDPOSINFO -i $af1name -o $afposname -p $f
 			if [ "$modulename" = "-" ] ; then
-				$CHECKER -i $afposname
+				if [ !'$CHECKER -i $afposname' ]
+				then
+				  error=1
+				fi
 			else
-				$CHECKER -i $afposname -m $modulename
+				if [ !'$CHECKER -i $afposname -m $modulename' ]
+				then
+				  error=1
+				fi
 			fi
                 fi
 
