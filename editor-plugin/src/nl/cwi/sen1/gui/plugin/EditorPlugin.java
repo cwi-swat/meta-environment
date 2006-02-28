@@ -180,6 +180,27 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 closeEditor(comp, editorId.toString());
             }
         });
+
+        items = factory.makeItemList(factory.makeItem_Label("File"), factory
+                .makeItem_Label("Close All"));
+
+        shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
+                factory.makeKeyModifier_MUnderscoreCTRL(), factory
+                        .makeKeyModifier_MUnderscoreSHIFT()), factory
+                .makeVirtualKey_VKUnderscoreW());
+        event = factory.makeEvent_MenuShortcut(items, shortcut);
+
+        studio.addComponentMenu(comp, event, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                Map<String, StudioComponent> editors = new HashMap<String, StudioComponent>(
+                        componentsById);
+                for (Iterator<String> iter = editors.keySet().iterator(); iter.hasNext();) {
+                    String id = iter.next();
+                    StudioComponent component = componentsById.get(id);
+                    closeEditor(component, id);
+                }
+            }
+        });
     }
 
     private void createEditMenu(Editor editor, StudioComponent comp) {
@@ -311,8 +332,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
-            StudioComponent comp = new StudioComponentImpl(componentName,
-                    panel);
+            StudioComponent comp = new StudioComponentImpl(componentName, panel);
             addStudioComponentListener(editorId, panel, comp);
 
             StatusBar statusBar = new StatusBar();

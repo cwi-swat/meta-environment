@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 28 15:56:29 CET 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add Close All action
+
 Tue Feb 21 13:17:05 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Use new configuration api
