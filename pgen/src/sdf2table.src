@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -x
+
 Revision='$Revision$'
 
 bindir=__BINDIR__
@@ -172,17 +174,7 @@ do
 		then
 			Notify "Checking definition: $f"
 			$ADDPOSINFO -i $af1name -o $afposname -p $f
-			if [ "$modulename" = "-" ] ; then
-				if [ !'$CHECKER -i $afposname' ]
-				then
-				  error=1
-				fi
-			else
-				if [ !'$CHECKER -i $afposname -m $modulename' ]
-				then
-				  error=1
-				fi
-			fi
+			$CHECKER -i $afposname
                 fi
 
 	        Notify "Generating parse table ..."
