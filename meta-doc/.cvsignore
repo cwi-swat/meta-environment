@@ -10,3 +10,4 @@ config.status
 *.tar.gz
 *.pkg
 autom4te.cache
+meta-doc-config
