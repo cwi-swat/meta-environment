@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Sat Mar  4 11:57:14 CET 2006 <jurgenv@cwi.nl>
+ * {configure.in,package}: added dependency on meta-doc
+
+
 Mon Feb 13 10:01:24 CET 2006 <kooiker@cwi.nl>
  * tbscripts/asf-editor-listeners.tb:
    - Add listener to start ASF editor

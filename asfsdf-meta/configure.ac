@@ -24,6 +24,10 @@ AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR       ToolBus is in DIR])
 AC_SUBST(TOOLBUS)
 
+AC_PACKAGE_REQUIRE(meta-doc, meta-doc-config,
+   [  --with-meta-doc=DIR       ASF+SDF Meta-Environment documentation is in DIR])
+AC_SUBST(TOOLBUS)
+
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
   tbscripts/Makefile
