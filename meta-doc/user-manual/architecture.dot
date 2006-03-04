@@ -8,10 +8,10 @@ digraph Architecture {
   Facts [label="Relations"]
  
   node [shape=ellipse] 
-  Parsing [label="Generalized\nParsing" ]
-  Rewriting [label="Term\nRewriting" ]
-  PrettyPrinting [label="Generic Pretty\nPrinting"]
-  RelCal [label="Relation\nCalculus"]
+  Parsing [label="Generalized\nParsing\n(SDF)" ]
+  Rewriting [label="Term\nRewriting\n(ASF)" ]
+  PrettyPrinting [label="Generic Pretty\nPrinting\n(BOX)"]
+  RelCal [label="Relation\nCalculus\n(RScript)"]
 
   String -> Parsing 
   Parsing -> Tree

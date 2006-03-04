@@ -10,7 +10,7 @@ EXTRA_DIST = ${doc_DATA}
 if MAINTAINER_MODE
 MANUAL	= manual.ltx
 
-PSJES = newarch.eps
+PSJES = newarch.eps artefacts.ps architecture.ps
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
 

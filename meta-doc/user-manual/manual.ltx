@@ -1,4 +1,3 @@
-%{{{ LaTeX configuration
 
 % vim:ts=4:sw=4:tw=75
 \documentclass[a4paper,twoside]{article}
@@ -86,8 +85,6 @@
 \newcommand{\traversal}[0]{{\tt traversal}}
 \newcommand{\innerm}[0]{{\tt bottom-up}}
 \newcommand{\outerm}[0]{{\tt top-down}}
-%}}}
-%{{{ Title page and table of contents
 
 %----[ TITLE PAGE ]----           
 \title{\ASmetaenv\ User Manual \\ $Revision$}
@@ -114,10 +111,9 @@
 
 \begin{ifhtml}
 \begin{center}
-This document is also available as both 
-\xlink{postscript}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.ps.gz}
-and \xlink{pdf}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.pdf}
-documents.
+This document is also available as a
+\xlink{pdf}{http://www.meta-environment.org/doc/manual.pdf}
+document.
 \end{center}
 \end{ifhtml}
 
@@ -133,9 +129,7 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 
 \W\htmlmenu{0}
 
-%}}}
 
-%{{{ Overview
 
 %---- [ OVERVIEW ]---- 
 
@@ -143,7 +137,8 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 
 Changes made for 2.x releases:
 \begin{itemize}
-\item Extended the overview
+\item Extended the overview, and introduced some pictures
+\item Added remarks on RScript 
 \end{itemize}
 \hrule
 
@@ -179,6 +174,20 @@ The \ASmetaenv\ is an interactive development environment (IDE) for
 \item source code generators,
 \item and even full blown IDE's.
 \end{itemize}
+Typical applications written using the \ASmetaenv cover several transitions
+from one representation to another (Figure
+\ref{FIG:artefacts})
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:artefacts}
+\T \includegraphics[width=12cm]{artefacts}
+\W \htmlimage{artefacts.gif}
+\caption{Meta programs implement transitions between source code
+representations}
+\end{Label}
+\end{center}
+\end{figure}
+
 
 The generative process is controlled by a syntax definition of a
 (programming) language, and a semantical description of the manipulations
@@ -195,25 +204,40 @@ The \ASmetaenv\ can help you if
 \end{itemize}
 
 The \ASmetaenv\ contains a number of formalisms, or domain specific
-languages, for the definition of several aspects of a programming language.
-For the syntactic aspect, we have \sdf. For semantical analysis and
-transformation, we have \asf. The combination of the two is called \asfsdf.
-For pretty-printing, we use the \boxlanguage language. Finally, for fact analysis
-and elaboration we use \rscript.
+languages, for the definition of several aspects of a programming
+language.  For the syntactic aspect, we have \sdf. For semantical analysis
+and transformation, we have \asf. The combination of the two is called
+\asfsdf.  For pretty-printing, we use the \boxlanguage language. Finally,
+for fact analysis and elaboration we use \rscript. See Figure
+\ref{FIG:architecture} for an overview.
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:artefacts}
+\T \includegraphics[width=12cm]{architecture}
+\W \htmlimage{architecture.gif}
+\caption{Four formalisms for defining languages and meta programs.}
+\end{Label}
+\end{center}
+\end{figure}
 
-The combined \asfsdf\ formalism allows the definition of syntactic as
+The four combined formalisms allows the definition of syntactic as
 well as semantic aspects of a (programming) language.  It can be used for
 the definition of languages. In addition it can be used for the formal
-specification of a wide variety of problems. \asfsdf\ provides you with:
+specification of a wide variety of problems. We provide you with:
 \begin{itemize}
   \item A general-purpose algebraic specification formalism based on
-  equational logic (implemented by conditional term-rewriting)
+  equational logic (\asfsdf)
   \item Modular structuring of specifications.
   \item Integrated definition of lexical, context-free, and abstract syntax. 
   \item User-defined syntax, allowing you to write specifications using
-  your own notation (concrete syntax) 
+  your own notation (\sdf)
 \index{user-defined syntax@user-defined syntax}
-  \item Complete integration of the definition of syntax and semantics.
+  \item Complete integration of the definition of syntax and semantics
+  (\asfsdf)
+ \item High-level definition of pretty printers (\asf and \boxlanguage)
+ \item High-level analysis and fact manipulation. \rscript is a language for the
+manipulation of facts encoded as relations. The \rscript language is
+relatively new, and is not fully integrated into the \ASmetaenv yet.
 \end{itemize}
 
 The \ASmetaenv\ IDE offers: 
@@ -238,7 +262,6 @@ The advantages of creating (interactive) environments in this way are twofold:
   environment from scratch. The reason is that the domain specific
   languages in the \ASmetaenv offer a higher level of abstraction and
   automation for common language design issues.
-
 \end{itemize}
 
 \subsection{Global Structure of the Meta-Environment}
@@ -257,18 +280,18 @@ After each editing operation on a module, its \emph{implementation} is
 updated immediately. It consists of a parser, a pretty printer, and a 
 term rewriting system which are all derived from the module automatically.
 
-A module can be tested by invoking a \emph{term editor} to create and 
-evaluate terms defined by the module. Term editors use the syntax of 
-the module for parsing the textual representation of terms and for 
-converting them to internal format (syntax trees). The equations of 
-the module are then used to reduce the terms into normal form. 
-This result is, in its turn, converted back to textual form by 
-pretty printing it.
+A module can be tested by invoking a \emph{term editor} to create and
+evaluate terms defined by the module. Term editors use the syntax of the
+module for parsing the textual representation of terms and for converting
+them to internal format (syntax trees). Also, terms are immediately
+highlighted in the editor. The equations of the module are then used
+to reduce the terms into normal form.  This result is, in its turn,
+converted back to textual form by pretty printing it.
 
 \subsection{About this Manual}
 
 This manual is intended for those users that want to write \asfsdf\
-specifications.  This manual is still under development and we welcome 
+specifications. This manual is always under development and we welcome
 all feed back and comments.
 
 The focus of this manual will be on how to write \asfsdf\ specifications,
@@ -293,7 +316,7 @@ knows how to use the \ASmetaenv.
 We only give a brief sketch of the underlying 
 technology and architecture of the \ASmetaenv.
 
-\item The stand-alone usage of various parts of the system.
+\item The commandline usage of various parts of the system.
 We only describe the usage of the most important components.
 \end{itemize}
 
@@ -302,7 +325,7 @@ We only describe the usage of the most important components.
 \index{download@download}
 You can download the \ASmetaenv\ from the following location:
 \begin{verbatim}
-   http://www.cwi.nl/projects/MetaEnv/
+   http://www.meta-environment.org
 \end{verbatim}
 
 \noindent It provides links to the software as well as to related 
@@ -352,7 +375,10 @@ We give here a brief overview of selected publications:
 \end{description}
 
 \section*{Acknowledgements}
-Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju, Bas Terwijn.
+
+We thank the following people that have provided helpful feed back and
+comments on this manual: Peter D. Mosses, Albert Hofkamp, Akim Demaille,
+Bas Terwijn.
 
 \section{An Introduction to \asfsdf}
 \label{ASF+SDF}
@@ -381,7 +407,7 @@ Other views on \asfsdf\ are:
 \item an algebraic specification formalism.
 \end{itemize}
 Whatever viewpoint is taken, \asfsdf\ is a powerful formalism for
-the declarative description of programming languages.
+the declarative description of programming languages and meta programs.
 
 \subsection{\ebnf\ and \lexyacc\ versus \sdf}
 
@@ -408,10 +434,17 @@ formalism. Restricted classes, such as LALR(1), are not closed
 under union. Two grammars, both LALR(1) for instance, need not
 result in a LALR(1) grammar if they are combined.
 
+\sdf does not produce only one parse tree (derivation) if there exist more
+derivations. The basic assumption of \sdf is that \emph{all} derivations
+will be produced and presented in a compact manner. This makes sure that
+\emph{no implicit disambiguation} will take place at any time when you
+use \sdf. To disambiguate, the user will apply declarative disambiguation
+constructs from \sdf separately. Examples of disambiguations
+are ``longest-match'' and ''priorities''.
+
 The most striking difference between \sdf\ and \ebnf-like and
 \lexyacc-like formalisms is the way the production rules are written
-in \sdf. 
-In \ebnf\ and \lexyacc\ one writes production rules as
+in \sdf.  In \ebnf\ and \lexyacc\ one writes production rules as
 
 \begin{verbatim}
   P ::= 'b' D S 'e'
@@ -424,18 +457,19 @@ whereas in \sdf\ this is written as
 \end{verbatim}
 So, the left- and right-hand side of the production rules are swapped.
 
-\sdf\ provides an integrated definition of lexical and
-context-free syntax. \ebnf\ does not provide, or only very restrictive,
-support for defining lexical syntax rules. In \lexyacc\ the
-lexical syntax is more or less defined in a separate formalism.
+\sdf\ provides an integrated definition of lexical and context-free
+syntax. \ebnf\ does not provide, or only very restrictive, support for
+defining lexical syntax rules. In \lexyacc\ the lexical syntax is more
+or less defined in a separate formalism.
 
-\sdf\ also allows an integrated way of defining 
-\link{associativity and priorities between production rules}[, see
-Section~\Ref]{Priorities}.
+\sdf\ also allows an integrated way of defining \link{associativity and
+priorities between production rules}[, see Section~\Ref]{Priorities}.
 
 Finally, \sdf\ provides an automatic way of constructing syntax trees.
 In \lexyacc\ the specification writer has to program how syntax trees
 are constructed.
+
+
 \subsection{Modules and Modular Structure}
 \label{modules}
 
@@ -568,7 +602,7 @@ imports basic/Whitespace
 exports
   lexical syntax
     "%%" ~[\n]* "\n" -> LAYOUT
-    "%" ~[\n\%]+ "%" -> LAYOUT
+    "%" ~[\%]+ "%" -> LAYOUT
 
   context-free restrictions
     LAYOUT? -/- [\%]
@@ -764,6 +798,17 @@ The context-free syntax rule describing parameterized sorts is:
    Sort "[[" {Symbol ","}+ "]]" -> Symbol
 \end{verbatim}
 
+\subsubsection{Lifted sorts}
+\label{LiftingOperator}
+\index{lifting operator@lifting operator}
+\index{{\tt `...`}@{\tt `...`}}
+The lifting operator {\tt `...`} translates the name of an arbitrary
+complex symbol to a literal syntax definition of that name. It makes a
+symbol a part of the defined syntax. An example: {\tt `X?`} defines the
+syntax {\tt ("X" "?")}. The lifting operator is typically used in
+combination with parameterized modules, and specifically for applications
+of \sdf that implement concrete syntax.
+
 \subsection{Aliases}
 \label{Aliases}
 
@@ -945,14 +990,22 @@ exports
       
 
 \paragraph{Lexical constructor functions}
-For each sort {\tt L} that appears as result sort in the lexical syntax a lexical
-constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
-added to the context-free syntax of the specification.  Here, `{\tt l}' is the
-name of sort `{\tt L}' written in lower-case letters.  In this way, you can
-get access to the characters of lexical tokens.
+
+For each production in a lexical syntax section, a \emph{lexical
+construction function is automatically added}. Lexical construction
+functions are used to construct and deconstruct lexical syntax using
+patterns.
+
+For each production {\tt A B C -> D} in a lexical syntax section, the
+generated constructor function is of the form: {\tt d "(" A B C ")" -> D}.
+Here, ``{\tt d}'' is the name of the sort `{\tt D}` written in lowercase
+letters only.
 
 The lexical constructor functions will be discussed in more detail
 in the section on \link*{equations}[ see Section~\Ref]{Equations}.
+This part of the manual is severely different from previous versions,
+since before \asfsdf had \emph{flat lexical constructors} and since
+version 2.0 it has \emph{fully structured lexical constructors}.
 
 \subsubsection{Character Classes}
 \label{CharacterClasses}
