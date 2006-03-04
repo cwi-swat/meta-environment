@@ -2,21 +2,15 @@
 
 include $(top_srcdir)/make-rules
 
-if BUILD_MANUAL
-noinst_DATA = asf+sdf-user-manual.pdf
-endif
+docdir = ${prefix}/doc
+doc_DATA = asf+sdf-user-manual.pdf
+noinst_DATA = ${doc_DATA}
+EXTRA_DIST = ${doc_DATA}
 
-EXTRA_DIST = $(wildcard *.ltx) \
-             $(wildcard *.eps) \
-             $(wildcard *.ps) \
-             $(wildcard *.pdf) \
-             $(wildcard *.sty) \
-             $(wildcard *.fig)
-
+if MAINTAINER_MODE
 MANUAL	= manual.ltx
 
 PSJES = newarch.eps
-
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
 
@@ -47,4 +41,6 @@ asf+sdf-user-manual.pdf: $(MANUAL) $(PDFJES)
 	bibtex manual
 	latex manual.ltx
 	latex manual.ltx
-	dvipdf manual.dvi
+	dvipdf manual.dvi $@
+
+endif

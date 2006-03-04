@@ -7,3 +7,6 @@ Makefile.in
 config.log
 config.cache
 config.status
+*.tar.gz
+*.pkg
+autom4te.cache

@@ -12,3 +12,5 @@ Makefile.in
 *.toc
 *.log
 *.pdf
+*.swp
+*.out

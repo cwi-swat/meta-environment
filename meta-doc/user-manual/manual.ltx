@@ -37,15 +37,17 @@
 \htmlpanelfield{Contents}{hlxcontents}
 \htmlpanelfield{Index}{hlxindex}
 
-\newcommand{\ASmetaenv}{{\textsc ASF}+{\textsc SDF} Meta-En\-vir\-on\-ment}
-\newcommand{\sdf}{{\textsc SDF}}
-\newcommand{\asf}{{\textsc ASF}}
-\newcommand{\asfsdf}{{\textsc ASF}+{\textsc SDF}}
+\newcommand{\ASmetaenv}{{\textsc Asf}+{\textsc Sdf} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\textsc Sdf}}
+\newcommand{\asf}{{\textsc Asf}}
+\newcommand{\asfsdf}{{\textsc Asf}+{\textsc Sdf}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 \newcommand{\xemacs}{{\tt XEmacs}}
 \newcommand{\lexyacc}{Lex+Yacc}
 \newcommand{\ebnf}{(E)BNF}
+\newcommand{\boxlanguage}{\textsc{BOX}}
+\newcommand{\rscript}{\textsc{RScript}}
 
 \newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
 \newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
@@ -84,23 +86,21 @@
 \newcommand{\traversal}[0]{{\tt traversal}}
 \newcommand{\innerm}[0]{{\tt bottom-up}}
 \newcommand{\outerm}[0]{{\tt top-down}}
-\newcommand{\suppress}[0]{{\tt suppress-syntax-generation}}
-\newcommand{\generate}[0]{{\tt generate-syntax}}
 %}}}
 %{{{ Title page and table of contents
 
 %----[ TITLE PAGE ]----           
 \title{\ASmetaenv\ User Manual \\ $Revision$}
-\author{M.G.J. van den Brand and P. Klint\\
+\author{M.G.J. van den Brand and P. Klint and J.J. Vinju \\
         {\small Centrum voor Wiskunde en Informatica (CWI),}\\
 {\small Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
 
 \htmltitle{ASF+SDF Meta-Environment\ User Manual \\ $Revision$}
 \htmldirectory{html} 
 \htmlname{user-manual}
-\htmladdress{M.G.J. van den Brand and P. Klint, \today}
+\htmladdress{M.G.J. van den Brand and P. Klint and J.J. Vinju, \today}
 
-\newcommand{\homepage}{http://www.cwi.nl/\~{}markvdb/}
+\newcommand{\homepage}{http://www.meta-environment.org}
 
 \xmlattributes{BODY}{BGCOLOR="#ffffe6"}
 \xmlattributes{TABLE}{BORDER}
@@ -122,7 +122,7 @@ documents.
 \end{ifhtml}
 
 \begin{abstract}
-This is a preliminary user manual for the \ASmetaenv\ Release 1.5.
+This is a preliminary user manual for the \ASmetaenv\ Release 2.0
 This is work under construction.
 
 \end{abstract}
@@ -139,8 +139,15 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 
 %---- [ OVERVIEW ]---- 
 
-\section*{Update with respect to previous version}
+\section*{Changes with respect to previous version}
 
+Changes made for 2.x releases:
+\begin{itemize}
+\item Extended the overview
+\end{itemize}
+\hrule
+
+Changes made for the 1.5.x releases:
 \begin{itemize}
 \item Adapted to version 1.5 of the \ASmetaenv.
 \item Added a description of the unit tests in \asf.
@@ -158,77 +165,79 @@ Section~\Ref)]{SEC:ContextFreeStartSymbols}.
 
 \index{Asf+Sdf Meta-Environment@\ASmetaenv}
 \index{Asf+Sdf formalism@\asfsdf\ formalism}
-The \ASmetaenv\ is an interactive development environment
-for the automatic generation of interactive systems for manipulating
-programs, specifications, or other texts written in a formal
-language. The generation process is controlled by a definition of the
-target language, which typically includes such features as syntax,
-pretty printing, type checking and execution of programs in the target
-language. The \ASmetaenv\ can help you if:
-
+\index{meta programming}
+The \ASmetaenv\ is an interactive development environment (IDE) for
+\emph{meta programming}. It can be used to generate implementations of
 \begin{itemize}
+\item compilers,
+\item interpreters,
+\item source-to-source transformers,
+\item source code analyzers,
+\item pretty printers (formatters),
+\item type-checkers,
+\item syntax highlighters,
+\item source code generators,
+\item and even full blown IDE's.
+\end{itemize}
 
+The generative process is controlled by a syntax definition of a
+(programming) language, and a semantical description of the manipulations
+you want to express on the language.
+
+The \ASmetaenv\ can help you if
+\begin{itemize}
   \item You have to write a formal specification for some problem
   and you need interactive support to do this.
-
   \item You have developed your own (application) language and want to
   create an interactive environment for it.
-
   \item You have programs in some existing programming language and you
    want to analyze or transform them.
 \end{itemize}
 
-The \asfsdf\ formalism allows the definition of syntactic as well as
-semantic aspects of a (programming) language. 
-It can be used for the definition of languages (for
-programming, for writing specifications, for querying databases, for
-text processing, or for dedicated applications). In addition it can be
-used for the formal specification of a wide variety of
-problems. \asfsdf\ provides you with:
+The \ASmetaenv\ contains a number of formalisms, or domain specific
+languages, for the definition of several aspects of a programming language.
+For the syntactic aspect, we have \sdf. For semantical analysis and
+transformation, we have \asf. The combination of the two is called \asfsdf.
+For pretty-printing, we use the \boxlanguage language. Finally, for fact analysis
+and elaboration we use \rscript.
 
+The combined \asfsdf\ formalism allows the definition of syntactic as
+well as semantic aspects of a (programming) language.  It can be used for
+the definition of languages. In addition it can be used for the formal
+specification of a wide variety of problems. \asfsdf\ provides you with:
 \begin{itemize}
-
-  \item A general-purpose algebraic specification formalism based on equational logic. 
-
+  \item A general-purpose algebraic specification formalism based on
+  equational logic (implemented by conditional term-rewriting)
   \item Modular structuring of specifications.
-
   \item Integrated definition of lexical, context-free, and abstract syntax. 
-
-  \item User-defined syntax, allowing you to write specifications using your own notation. 
+  \item User-defined syntax, allowing you to write specifications using
+  your own notation (concrete syntax) 
 \index{user-defined syntax@user-defined syntax}
-
-  \item Complete integration of the definition of syntax and
-  semantics.
-
+  \item Complete integration of the definition of syntax and semantics.
 \end{itemize}
 
-The \ASmetaenv\ offers: 
-
+The \ASmetaenv\ IDE offers: 
 \begin{itemize}
-
   \item Syntax-directed editing of \asfsdf\ specifications.
-
-  \item Testing of specifications by means of interpretation.
-
-  \item Compilation of \asfsdf\ specifications into dedicated
-interactive environments containing various tools such as a parser, 
-a pretty printer, a syntax-directed editor, a
-debugger, and an interpreter or compiler.
-
+  \item Automatic syntax highlighting.
+  \item Testing and interactive debugging of specifications.
+  \item Compilation of \asfsdf\ specifications into dedicated commandline tools.
+  \item A collection of ready-to-use components that can be composed into 
+  your own IDE for any programming language.
 \end{itemize}
 
-The advantages of creating interactive environments in this way are twofold:
-
+The advantages of creating (interactive) environments in this way are twofold:
 \begin{itemize}
-
   \item \emph{Increased uniformity}. Similar tools for different
   languages often suffer from a lack of uniformity.  Generating tools
-  from language definitions will result in a large increase in
+  from language definitions results in a large increase in
   uniformity, with corresponding benefits for the user.
 
   \item \emph{Reduced implementation effort.} Preparing a language
   definition requires significantly less effort than developing an
-  environment from scratch.
+  environment from scratch. The reason is that the domain specific
+  languages in the \ASmetaenv offer a higher level of abstraction and
+  automation for common language design issues.
 
 \end{itemize}
 

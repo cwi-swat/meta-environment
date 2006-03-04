@@ -1,3 +1,5 @@
+
+
 SUFFIXES= .pic .ltx .dvi .bbl .ind .idx .xwd .ps .tex .fig
 
 %.bbl: %.ltx
@@ -50,3 +52,7 @@ SUFFIXES= .pic .ltx .dvi .bbl .ind .idx .xwd .ps .tex .fig
 
 %.tex: %.pic
 	gpic -t $*.pic > $*.tex
+
+%.ps: %.dot
+	dot -Tps < $< > $@
+

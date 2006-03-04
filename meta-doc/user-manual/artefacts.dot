@@ -1,0 +1,40 @@
+digraph Artefacts {
+  graph [rankdir=LR]
+  node [shape=box]
+
+  Machine [shape=point]
+  Source [label="Source Code"]
+  Document [label="Documentation"]
+  Abstractions [label="Abstractions"]
+  Human [shape=point]
+
+  Machine -> Source [dir=back headlabel="Run" labeldistance=3]
+  Source -> Source [label="Transformation"]
+
+  Source -> Abstractions [label="Abstraction" ]
+  Abstractions -> Source [label="Generation" ]
+
+  Abstractions -> Abstractions [label="Analysis"]
+
+  Abstractions -> Document [label="Presentation"]
+  Document     -> Abstractions [label="Formalization"]
+
+  Document -> Document [label="Conversion"]
+  Document -> Human [taillabel="Render" labeldistance=3]
+
+  node [color=white]
+  edge [constraint=false style=dashed dir=none]
+
+  SourceExamples [label="C\nCOBOL\nJava\nAssembler"]
+  AbstractionExamples [label="Abstract syntax trees\nFacts in SQL tables\nGraphXML\nRSF"]
+  DocumentExamples [label="PDF\nHTML\nGUI\nUML"]
+
+  Source -> SourceExamples
+  Abstractions -> AbstractionExamples
+  Document -> DocumentExamples
+
+  {rank=same Source SourceExamples}
+  {rank=same Abstractions AbstractionExamples}
+  {rank=same Document DocumentExamples}
+  
+}

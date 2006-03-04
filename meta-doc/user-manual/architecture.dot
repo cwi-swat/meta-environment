@@ -1,0 +1,28 @@
+digraph Architecture {
+  graph [rankdir=LR ordering=out]
+
+  node [shape=box]
+
+  String [label="Strings"]
+  Tree [label="Trees"]
+  Facts [label="Relations"]
+ 
+  node [shape=ellipse] 
+  Parsing [label="Generalized\nParsing" ]
+  Rewriting [label="Term\nRewriting" ]
+  PrettyPrinting [label="Generic Pretty\nPrinting"]
+  RelCal [label="Relation\nCalculus"]
+
+  String -> Parsing 
+  Parsing -> Tree
+  Tree -> Rewriting
+  Rewriting -> Tree
+  Rewriting -> Facts 
+  Facts     -> RelCal
+  Facts     -> Rewriting
+  RelCal    -> Facts
+  Tree -> PrettyPrinting
+  PrettyPrinting -> String 
+
+  {rank=same Parsing PrettyPrinting}
+}

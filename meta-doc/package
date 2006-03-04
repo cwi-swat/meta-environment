@@ -1,9 +1,9 @@
 package
 identification
-  name=__PACKAGE__
-  version=__VERSION__
-  location=http://www.cwi.nl/projects/MetaEnv/daily-dist
-  info=http://www.cwi.nl/projects/MetaEnv/
+  name=meta-doc
+  version=2.0
+  location=http://www.cwi.nl/projects/MetaEnv/meta-doc
+  info=http://www.meta-environment.org
   description='The ASF+SDF Meta-Environment user manual'
 
   keywords=asf, sdf, manual, asf+sdf, meta-environment
