@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Components</TITLE>
+<META NAME="description" CONTENT="Contents of Components">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node120_mn.html">
+<LINK REL="previous" HREF="node110_mn.html">
+<LINK REL="up" HREF="node109_mn.html">
+<LINK REL="next" HREF="node118_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00082000000000000000">
+Components</A>
+</H2>
+In the previous section we have described the overall architecture and very
+briefly mentioned the main components of the Meta-Environment. In order to
+understand how to build stand-alone environments, it is necessary to 
+understand some of the "flow-of-control" and "data-flow" within the
+Meta-Environment. There are in fact two main scenarios:
+
+<UL>
+<LI>Parsing a term
+</LI>
+<LI>Reducing a term
+</LI>
+</UL>
+
+<P>
+An integrated environment as the Asf+Sdf Meta-Environment takes
+care of a lot of administrative issues when developing your
+specifications. For syntax editors a fixed parse table will
+be used, namely a parse table derived from the SDF grammar.
+But when you invoke an equation or term editor 
+and hit the parse button, the environment will generate a 
+parse table, if necessary, before parsing the equations or 
+term. In order to do that the underlying syntax definition 
+will be checked on completeness and well-formedness, and if 
+this is the case the parse table will be generated and stored 
+in a repository. This storing of the parse table is just for 
+caching.
+
+<P>
+If you select the reduce button in a term editor all relevant
+equations have to be parsed, checked and combined into one list
+in order to be used by the interpreter for rewriting the term.
+
+<P>
+These parse tables and list of equations play an important
+role in the stand-alone setting.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html2061" HREF="node118_ct.html" TARGET="contents"><SMALL>Parse Table Generation</SMALL></A>
+<LI><A NAME="tex2html2062" HREF="node119_mn.html" TARGET="main"><SMALL>Obtaining Equations</SMALL></A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

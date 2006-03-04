@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Imports</TITLE>
+<META NAME="description" CONTENT="Contents of Imports">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node15_mn.html">
+<LINK REL="previous" HREF="node13_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node15_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00054000000000000000"></A>
+<A NAME="Imports"></A>
+<BR>
+Imports
+</H2>
+
+<P>
+<A NAME="2404"></A>
+<A NAME="2405"></A>
+Each <TT>&lt;ImportSection&gt;</TT> starts with the keyword <TT>imports</TT> followed
+by zero or more module names:
+
+<P>
+<PRE>
+imports
+  &lt;ModuleName&gt;*
+</PRE>
+
+<P>
+Modules can be combined by importing one module in another. 
+Imports can occur as <TT>&lt;ImportSection&gt;</TT> at the topmost level of 
+a module or they can occur within an exports or hiddens section.
+
+<P>
+When importing modules at the topmost level of a module or when 
+the import section occurs within the scope of an exports keyword, 
+all exported entities of the imported module (and of all modules 
+that are imported indirectly by it) become available in the importing 
+module. In addition, they are also exported by the importing module.  
+However, if the import section occurs within the scope of a hiddens 
+keyword, the exported entities are only visible in the importing 
+module but they are not exported by the importing module.
+
+<P>
+An imported module can be parameterized or decorated with renamings, 
+see ParametersRenamings[Section&nbsp;]ParametersRenamings
+for more details.
+
+<P>
+The name of the imported module can also be a compound module name.
+In the definition of the Sdf comments[Figure&nbsp;]CODE:sdfcomment
+the imported module <TT>basic/Whitespace</TT> is an example of such a
+compound module name.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Aliases</TITLE>
+<META NAME="description" CONTENT="Contents of Aliases">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node25_mn.html">
+<LINK REL="previous" HREF="node15_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node25_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00056000000000000000"></A>
+<A NAME="Aliases"></A>
+<BR>
+Aliases
+</H2>
+
+<P>
+In ordinary programming it is good practice to use named constants to
+represent literals or constant values.  In Sdf it is good practice 
+to give a name (``alias'') to complicated symbols that occur 
+repeatedly in the specification.  An alias is thus a named 
+abbreviation for a complicated symbol.  For example,
+
+<P>
+<PRE>
+aliases
+  &lt;Bool, Int, Id&gt; -&gt; Tuple3
+</PRE>
+introduces the alias <TT>Tuple3</TT> for the symbol <TT>&lt;Bool, Int, Id&gt;</TT> and
+instead of using <TT>&lt;Bool, Int, Id&gt;</TT> one can use the alias <TT>Tuple3</TT>.
+During parse table generation the alias is replaced by the actual symbol.  
+It is not allowed to give an alias for an alias or to redefine aliases.
+For example, the following definitions are illegal:
+
+<P>
+<PRE>
+aliases
+  Tuple3          -&gt; SuperTuple
+  &lt;Bool, Int, Id&gt; -&gt; Tuple3
+</PRE>
+(An alias is defined for the alias <TT>Tuple3</TT>.)
+
+<P>
+<PRE>
+aliases
+  &lt;Bool, Int, Id&gt; -&gt; Tuple3
+  &lt;Bool, Int&gt;     -&gt; Tuple3
+</PRE>
+(The alias <TT>Tuple3</TT> is redefined.)
+
+<P>
+Note, the aliases are a convenient short hand for more complex symbols,
+but a drawback is that during parse table generation the aliases completely
+disappear. They are replaced by the actual symbols. This can have some
+unexpected behaviour when parsing or reducing terms.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

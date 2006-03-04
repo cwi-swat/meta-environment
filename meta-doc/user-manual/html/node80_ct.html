@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Conditional Equations</TITLE>
+<META NAME="description" CONTENT="Contents of Conditional Equations">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node81_mn.html">
+<LINK REL="previous" HREF="node79_mn.html">
+<LINK REL="up" HREF="node78_mn.html">
+<LINK REL="next" HREF="node81_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000518200000000000000">
+Conditional Equations</A>
+</H3>
+
+<P>
+<A NAME="1620"></A>
+An unconditional equation is a special case of a <SPAN  CLASS="textit">conditional equation</SPAN>,
+i.e., an equality with one or more associated conditions (premises).  The
+equality is sometimes called the <SPAN  CLASS="textit">conclusion</SPAN> of the conditional
+equation.
+
+<P>
+In Asf+Sdf a conditional equation can be written in three (syntactically
+different, but semantically equivalent) ways:
+
+<P>
+<PRE><TT>
+(a) <TT>[<SPAN CLASS="MATH"><IMG
+ WIDTH="49" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img59.png"
+ ALT="$TagId$"></SPAN>]</TT> <TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN> = <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img58.png"
+ ALT="$R$"></SPAN> when <SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img60.png"
+ ALT="$C_1$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img61.png"
+ ALT="$C_2$"></SPAN>, ...</TT> 
+<BR>
+<BR>(b) 		 <TT>[<SPAN CLASS="MATH"><IMG
+ WIDTH="49" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img59.png"
+ ALT="$TagId$"></SPAN>]</TT> 		 <TT><SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img60.png"
+ ALT="$C_1$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img61.png"
+ ALT="$C_2$"></SPAN>, ... ===&gt; <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN> = <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img58.png"
+ ALT="$R$"></SPAN></TT> 
+<BR>(c) 		 <TT>[<SPAN CLASS="MATH"><IMG
+ WIDTH="49" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img59.png"
+ ALT="$TagId$"></SPAN>]</TT> 		 <TT><SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img60.png"
+ ALT="$C_1$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ WIDTH="23" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img61.png"
+ ALT="$C_2$"></SPAN>, ...</TT> 
+<BR><TT>=================</TT> 
+<BR>     <TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN> = <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img58.png"
+ ALT="$R$"></SPAN></TT>
+</TT></PRE>
+
+<P>
+where <SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img62.png"
+ ALT="${\tt C}_1$"></SPAN>, <SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img63.png"
+ ALT="${\tt C}_2$"></SPAN>, ...  are conditions which may be 
+either matching (and have the form `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN> := <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img64.png"
+ ALT="$T$"></SPAN></TT>'),
+negative matching (and have the form `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN> !:= <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img64.png"
+ ALT="$T$"></SPAN></TT>'),
+positive (and have  the form `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN> == <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img64.png"
+ ALT="$T$"></SPAN></TT>'), 
+or negative (and have the form `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN> != <SPAN CLASS="MATH"><IMG
+ WIDTH="16" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img64.png"
+ ALT="$T$"></SPAN></TT>').
+
+<P>
+The conditions of an equation are evaluated from left to right. Let,
+initially, <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN> be the set of variables occurring in the left-hand 
+side <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN> of the conclusion of the equation. 
+For the evaluation of matching conditions we have the following case:
+
+<UL>
+<LI>Left-hand side of a matching condition must contain at least one
+  new or fresh variable not in <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN>.
+  Reduce the right-hand side of the matching condition to a normal form 
+  and the matching condition succeeds if this normal form and the 
+  left-hand side of the condition match. 
+  The new variables resulting from this match are added
+  to <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN>. This kind of condition is called a <SPAN  CLASS="textit">match</SPAN> condition.
+  The variables occurring in both <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN> and the left-hand side must
+  represent the syntactically the same subterm.
+
+<P>
+</LI>
+</UL>
+For the evaluation of each positive condition we
+distinguish the following cases:
+
+<P>
+
+<UL>
+<LI>The condition contains only variables in <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN>. Reduce both sides of the
+  condition to normal form and the condition succeeds if both normal 
+  forms are identical. 
+  Technically, this is called a <SPAN  CLASS="textit">join</SPAN> condition.
+
+<P>
+</LI>
+</UL>
+
+<P>
+The evaluation of negative conditions is described by replacing in the above
+description `identical' and `match' by `not identical' and `do not
+match', respectively.
+
+<P>
+warning.gif
+	<B>Warning</B>:
+
+It is not allowed to introduce new variables in a negative condition.
+
+<P>
+After the successful evaluation of the conditions, all variables occurring in
+the right-hand side of the conclusion of the equation should be in <SPAN CLASS="MATH"><IMG
+ WIDTH="17" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img65.png"
+ ALT="$V$"></SPAN>.
+
+<P>
+New variables (see above) should therefore <B>not</B> occur on <SPAN  CLASS="textit">both</SPAN> 
+sides of a positive condition, in a negative condition, 
+or in the right-hand side of the conclusion.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

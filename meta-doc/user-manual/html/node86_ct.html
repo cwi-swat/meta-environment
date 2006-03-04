@@ -1,0 +1,371 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Traversal Functions</TITLE>
+<META NAME="description" CONTENT="Contents of Traversal Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node87_mn.html">
+<LINK REL="previous" HREF="node85_mn.html">
+<LINK REL="up" HREF="node78_mn.html">
+<LINK REL="next" HREF="node87_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000518800000000000000"></A>
+<A NAME="Traversal"></A>
+<BR>
+Traversal Functions
+</H3>
+
+<P>
+<A NAME="1780"></A>
+<A NAME="1781"></A>
+<A NAME="1782"></A>
+Program analysis and program transformation usually take the syntax
+tree of a program as starting point.  One common
+problem that one encounters is how to express the <SPAN  CLASS="textit">traversal</SPAN> of
+the tree: visit all the nodes of the tree and extract information from
+some nodes or make changes to certain other nodes.
+
+<P>
+The kinds of nodes that may appear in a program's syntax tree are
+determined by the grammar of the language the program is written
+in. Typically, each rule in the grammar corresponds to a node category
+in the syntax tree. Real-life languages are described by grammars which
+can easily contain several hundred, if not thousands of grammar rules.
+This immediately reveals a hurdle for writing tree traversals: a naive
+recursive traversal function should consider many node categories and
+the size of its definition will grow accordingly.  This becomes even
+more dramatic if we realize that the traversal function will only do
+some real work (apart from traversing) for very few node categories.
+
+<P>
+Traversal functions in Asf+Sdf&nbsp;[<A HREF="node129_ct.html#BKV03" TARGET="contents">13</A>] solve this problem.
+We distinguish three kinds of traversal functions, defined as follows.
+
+<P>
+<DL>
+<DT><STRONG>Transformer:</STRONG></DT>
+<DD>a sort-preserving transformation that 
+will traverse its first argument. Possible extra arguments may contain
+additional data that can be used (but not modified) during the traversal.
+A transformer is declared as follows:
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<!-- MATH
+ \begin{displaymath}
+f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt\{traversal(trafo, ...)\}}
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="340" HEIGHT="28" BORDER="0"
+ SRC="img76.png"
+ ALT="\begin{displaymath}f(S_1 , ..., S_n) \rightarrow S_1 \mbox{\tt\{traversal(trafo, ...)\}}\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+
+<P>
+Because a transformer always returns the same sort, it is type-safe. A
+transformer is used to transform a tree.
+
+<P>
+</DD>
+<DT><STRONG>Accumulator:</STRONG></DT>
+<DD>a mapping of all node types to a single type. 
+It will traverse its first argument, while the second
+argument keeps the accumulated value. An accumulator is declared as follows:
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<!-- MATH
+ \begin{displaymath}
+f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt\{traversal(accu, ...)\}}
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="355" HEIGHT="28" BORDER="0"
+ SRC="img77.png"
+ ALT="\begin{displaymath}f(S_1 , S_2 , ..., S_n) \rightarrow S_2 \mbox{\tt\{traversal(accu, ...)\}}\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P> 
+
+<P>
+After each application of an accumulator, the accumulated argument is updated.
+The next application of the accumulator, possibly somewhere else in the term,
+will use the <SPAN  CLASS="textit">new</SPAN> value of the accumulated argument. In other words,
+the accumulator acts as a global, modifiable, state during the traversal.
+
+<P>
+An accumulator function never changes the tree, only its accumulated argument.
+Furthermore, the type of the second argument has to be equal to the result
+type. The end-result of an accumulator is the value of the accumulated
+argument. By these restrictions, an accumulator is also type-safe for every
+instantiation.
+
+<P>
+An accumulator is meant to be used to extract information from a tree.
+
+<P>
+</DD>
+<DT><STRONG>Accumulating transformer:</STRONG></DT>
+<DD>a sort preserving transformation
+that accumulates information while traversing its first argument. The
+second argument maintains the accumulated value. The return value of
+an accumulating transformer is a tuple consisting of the transformed
+first argument and accumulated value. An accumulating transformer
+is declared as follows:
+
+<P>
+<BR><P></P>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<!-- MATH
+ \begin{displaymath}
+f(S_1 , S_2 , ..., S_n) \rightarrow <S_1, S_2> \mbox{\{{\tt
+traversal(accu, trafo, ...)}\}}
+\end{displaymath}
+ -->
+
+<IMG
+ WIDTH="480" HEIGHT="28" BORDER="0"
+ SRC="img78.png"
+ ALT="\begin{displaymath}f(S_1 , S_2 , ..., S_n) \rightarrow &lt;S_1, S_2&gt; \mbox{\{{\tt
+traversal(accu, trafo, ...)}\}}\end{displaymath}">
+</DIV>
+<BR CLEAR="ALL">
+<P></P>
+
+<P>
+An accumulating transformer is used to simultaneously extract information from a
+tree and transform it.
+</DD>
+</DL>
+
+<P>
+Having these three types of traversals, they must be provided with visiting
+strategies. Visiting strategies determine the order of traversal and the
+``depth'' of the traversal. We provide the following two strategies for each
+type of traversal:
+
+<P>
+<DL>
+<DT><STRONG>Bottom-up:</STRONG></DT>
+<DD>the traversal visits <SPAN  CLASS="textit">all</SPAN> the subtrees of a node where
+  the visiting function applies in an <SPAN  CLASS="textit">bottom-up</SPAN> fashion.  The
+  annotation <TT>bottom-up</TT> selects this behavior.  A traversal function without an
+  explicit indication of a visiting strategy also uses the bottom-up strategy.
+
+<P>
+</DD>
+<DT><STRONG>Top-down:</STRONG></DT>
+<DD>the traversal visits the subtrees of a node in an top-down
+  fashion and stops recurring at the first node where the visiting function
+  applies and does not visit the subtrees of that node. The annotation
+  <TT>top-down</TT> selects this behavior.
+</DD>
+</DL>
+
+<P>
+Beside the three types of traversals and the order of visiting, we can also
+influence whether we want to stop or continue at the matching occurrences:
+<DL>
+<DT><STRONG>Break:</STRONG></DT>
+<DD>the traversal stops at matching occurrences.
+</DD>
+<DT><STRONG>Continue:</STRONG></DT>
+<DD>the traversal continues at matching occurrences.
+</DD>
+</DL>
+
+<P>
+The visiting strategies in combination with the continuation strategies
+is visualized in the ``traversal cube''[, see
+Figure&nbsp;]FIG:treetraversals. The current implementation of the
+traversal mechanism only supports the left-to-right visiting strategy.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1807"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 46:</STRONG>
+The ``traversal cube'': principal ways of traversing a tree</CAPTION>
+<TR><TD><IMG
+ WIDTH="363" HEIGHT="245" BORDER="0" SRC="order.gif"
+ SRC="img79.png"
+ ALT="\begin{figure}\begin{center}
+\begin{Label}{FIG:treetraversals}
+\T \includegraphics[width=8cm]{order}
+\W
+\end{Label}\end{center}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+We give two simple examples of traversal functions that are both
+based on the tree language[ defined in
+Figure&nbsp;]FIG:tree-language
+that describes binary prefix expressions with natural numbers as leaves.
+Examples are <TT>f(0,1)</TT> and <TT>f(g(1,2), h(3,4))</TT>.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1822"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 47:</STRONG>
+A simple tree language</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="308" BORDER="0"
+ SRC="img80.png"
+ ALT="\begin{figure}\begin{Label}{FIG:tree-language}\htmlonly{\htmlrule}
+\texonly{\...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Our first example[ (Figure&nbsp;)]FIG:inc 
+transforms a given tree into a new tree in which
+all numbers have been incremented. 
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2435"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 48:</STRONG>
+The transformer <TT>inc</TT> increments all numbers in a tree</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="325" BORDER="0"
+ SRC="img81.png"
+ ALT="\begin{figure}\begin{Label}{FIG:inc}\htmlonly{\htmlrule}
+\texonly{\hrulefill}...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Our second example[ (Figure&nbsp;)]FIG:sum
+computes the sum of all numbers in a tree.
+For more examples and a detailed description of traversal functions
+see&nbsp;[<A HREF="node129_ct.html#BKV01" TARGET="contents">11</A>].
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2436"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 49:</STRONG>
+The accumulator <TT>sum</TT> that sums all numbers in a tree.</CAPTION>
+<TR><TD><IMG
+ WIDTH="607" HEIGHT="308" BORDER="0"
+ SRC="img82.png"
+ ALT="\begin{figure}\begin{Label}{FIG:sum}\htmlonly{\htmlrule}
+\texonly{\hrulefill...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The Sdf definition of a traversal function has to fulfill a number of 
+requirements:
+
+<UL>
+<LI>Traversal functions can only be defined in the context-free syntax
+section.
+</LI>
+<LI>Traversal functions must be prefix functions[, see Section
+]PrefixFunctions.
+</LI>
+<LI>The first argument of the prefix function is always a sort of a node
+of the tree that is traversed, for both accumulating as well as
+transformation functions.
+</LI>
+<LI>In case of a transformation function the result sort should always
+be same as the sort of the first argument.
+<PRE>
+tf(Tree, A_1, ..., A_n) -&gt; Tree {traversal(trafo, ...)}
+</PRE>
+</LI>
+<LI>In case of an accumulating function, the second argument represents
+the accumulator and the result sort should be of the same sort.
+<PRE>
+tf(Tree, Accu, A_1, ..., A_n) -&gt; Accu {traversal(accu, ...)}
+</PRE>
+</LI>
+<LI>In case of an accumulating transformation function, the first
+argument
+represents the tree node, the second the accumulator, and the result sort
+should be a tuple consisting of the tree node sort (first element
+of the tuple) and the accumulator (second element of the tuple).
+<PRE>
+tf(Tree, Accu, A_1, ..., A_n) -&gt; &lt;Tree, Accu&gt; {traversal(accu, trafo, ...)}
+</PRE>
+</LI>
+<LI>The traversal functions may have more arguments, the only restriction
+is that they should be consistent over the various occurrences of the
+same traversal function.
+<PRE>
+tf(Tree1, Accu, A_1, A_2, ..., A_n) -&gt; Tree1 {traversal(trafo, continue, top-down)}
+tf(Tree2, Accu, A_2, A_1, ..., A_n) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</PRE>
+</LI>
+<LI>The order of the traversal attributes is free, but should be used
+consistently, for instance the following definition is not allowed.
+<PRE>
+tf(Tree1, Accu, A_1, ..., A_n) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, ..., A_n) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</PRE>
+</LI>
+<LI>If the number of arguments of the traversal function changes, you
+should introduce a new function name. The following definitions are not
+correct:
+<PRE>
+tf(Tree1, Accu, A_1, A_2) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf(Tree2, Accu, A_1, A_2, A_3) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</PRE>
+but should be:
+<PRE>
+tf1(Tree1, Accu, A_1, A_2) -&gt; Tree1 {traversal(trafo, top-down, continue)}
+tf2(Tree2, Accu, A_1, A_2, A_3) -&gt; Tree2 {traversal(trafo, continue, top-down)}
+</PRE>
+
+<P>
+</LI>
+</UL>
+In the Sdf part of a module it is needed to define traversal functions
+for all sorts which are needed in the equations. 
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

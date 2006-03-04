@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Repetition</TITLE>
+<META NAME="description" CONTENT="Contents of Repetition">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node19_mn.html">
+<LINK REL="previous" HREF="node17_mn.html">
+<LINK REL="up" HREF="node15_mn.html">
+<LINK REL="next" HREF="node19_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION00055300000000000000"></A>
+<A NAME="RepetitionOperator"></A>
+<BR>
+Repetition
+</H3>
+
+<P>
+<A NAME="517"></A>
+<A NAME="518"></A>
+<A NAME="2408"></A>
+<A NAME="2409"></A>
+Repetition operators express that a symbol should occur several times.  
+In this way it is possible to construct flat lists and therefore we 
+usually refer to repetitions as <SPAN  CLASS="textit">lists</SPAN>.
+
+<P>
+Repetition operators come in two flavors, with and without separators.
+Furthermore, it is possible to express the minimal number of 
+repetitions of the symbol: at least zero times (<TT>*</TT>) or at least 
+one time (<TT>+</TT>).
+Examples are:
+
+<P>
+
+<UL>
+<LI><TT>Bool*</TT> (a list of zero or more <TT>Bool</TT>s).
+
+<P>
+</LI>
+<LI><TT>{Bool ","}+</TT> (a list of one or more <TT>Bool</TT>s 
+separated by comma's).
+
+<P>
+</LI>
+</UL>
+
+<P>
+In case of a separated list the element can be an arbitrary symbol, but
+the separator can only be a plain literal.  It is possible to write,
+for instance <TT>{Int Bool}*</TT> or <TT>{Int (","|";")}*</TT>,
+but the <TT>asfsdf-checker</TT>[, see Section&nbsp;]SEC:SDF-checker, 
+will produce a warning indicating that this type of symbol is not 
+supported. 
+Both the interpreter[, see Section&nbsp;,]SEC:interpretationgofterms 
+and the compiler[, see Section&nbsp;,]SEC:reducingofterms do
+not support this type of separated lists.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

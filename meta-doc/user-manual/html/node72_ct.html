@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Parameterization</TITLE>
+<META NAME="description" CONTENT="Contents of Parameterization">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node73_mn.html">
+<LINK REL="previous" HREF="node71_mn.html">
+<LINK REL="up" HREF="node71_mn.html">
+<LINK REL="next" HREF="node73_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000515100000000000000"></A>
+<A NAME="Parameters"></A>
+<BR>
+Parameterization
+</H3>
+
+<P>
+Module parameterization allows the definition of generic modules
+for lists, pairs, sets, etc. The operations defined in these
+modules are independent of a specific type. When importing a
+parameterized module and instantiating the formal by actual
+parameters the operations become "sort" specific.
+
+<P>
+Modules can have formal parameters when defining them. The module name
+is then followed by a list of symbols, representing the formal
+parameters of this module. 
+The specification below[in Figure&nbsp;]CODE:generic-pairs shows 
+an example of a parameterized module. In this example the
+formal parameters are used in the parameterized sorts as well,
+in order to increase readability and to avoid name clashes between
+different instances of the same module.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1499"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 35:</STRONG>
+Definition of generic pairs</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="395" BORDER="0"
+ SRC="img53.png"
+ ALT="\begin{figure}\begin{Label}{CODE:generic-pairs}\htmlonly{\htmlrule}
+\texonly{...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+When importing a parameterized module the formal parameters have
+to be replaced by actual parameters. 
+The specification below[in Figure&nbsp;]CODE:importing-pairs shows 
+an example of a rather complicated import of a parameterized module. 
+The symbols <TT>Pair[[Boolean,Boolean]]</TT> and <TT>Pair[[Integer,Integer]]</TT> are the
+actual parameters of the module <TT>Pair[X Y]</TT> in the last import.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1514"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 36:</STRONG>
+Use of generic pair module</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="185" BORDER="0"
+ SRC="img54.png"
+ ALT="\begin{figure}\begin{Label}{CODE:importing-pairs}\htmlonly{\htmlrule}
+\texonl...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

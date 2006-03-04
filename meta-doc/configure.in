@@ -8,11 +8,9 @@ AC_PREREQ(2.59)
 
 AM_MAINTAINER_MODE
 
-dnl {{{  Which files need updating?
 AC_CONFIG_FILES([Makefile
   guided-tour/Makefile
   user-manual/Makefile
+  user-manual/html/Makefile
 ])
 AC_OUTPUT
-
-dnl }}}

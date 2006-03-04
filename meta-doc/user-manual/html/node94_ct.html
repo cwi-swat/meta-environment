@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Code Generation</TITLE>
+<META NAME="description" CONTENT="Contents of Code Generation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node100_mn.html">
+<LINK REL="previous" HREF="node93_mn.html">
+<LINK REL="up" HREF="node90_mn.html">
+<LINK REL="next" HREF="node95_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00064000000000000000">
+Code Generation</A>
+</H2>
+
+<P>
+Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>push <SPAN CLASS="MATH"><IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img89.png"
+ ALT="$N$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Push the number <SPAN CLASS="MATH"><IMG
+ WIDTH="19" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img89.png"
+ ALT="$N$"></SPAN></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>rvalue <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img90.png"
+ ALT="$I$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Push the contents of data location <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img90.png"
+ ALT="$I$"></SPAN></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>lvalue <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img90.png"
+ ALT="$I$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Push the address of data location <SPAN CLASS="MATH"><IMG
+ WIDTH="12" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img90.png"
+ ALT="$I$"></SPAN></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>pop</TT></TD>
+<TD ALIGN="LEFT">Remove the top of the stack</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>copy</TT></TD>
+<TD ALIGN="LEFT">Push a copy of the top value on the stack</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>assign</TT></TD>
+<TD ALIGN="LEFT">The r-value on top of the stack is stored in the l-value
+  below it and both are popped</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>add, sub, mul</TT></TD>
+<TD ALIGN="LEFT">Replace the two values on top of the stack by their sum (difference,
+product)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>label <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Place a label (target of jumps)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>goto <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Next instruction is taken from statement following label
+  <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>gotrue <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Pop the top value; jump if it is nonzero</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>gofalse <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img10.png"
+ ALT="$L$"></SPAN></TT></TD>
+<TD ALIGN="LEFT">Pop the top value; jump if it is zero</TD>
+</TR>
+</TABLE>
+
+<P>
+The statement:
+<BLOCKQUOTE>
+<TT>while a do a := a - 1; b := a * c od </TT>
+
+</BLOCKQUOTE>
+
+<P>
+will now be translated to the following instruction sequence:
+
+<P>
+<PRE>
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx
+</PRE>
+
+<P>
+1
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><UL>
+<LI><A NAME="tex2html1711" HREF="node95_ct.html" TARGET="contents"><SMALL>Basic notions</SMALL></A>
+<LI><A NAME="tex2html1712" HREF="node96_mn.html" TARGET="main"><SMALL>Expressions and Statements</SMALL></A>
+<LI><A NAME="tex2html1713" HREF="node97_mn.html" TARGET="main"><SMALL>Assembly language</SMALL></A>
+<LI><A NAME="tex2html1714" HREF="node98_mn.html" TARGET="main"><SMALL>Label generation</SMALL></A>
+<LI><A NAME="tex2html1715" HREF="node99_mn.html" TARGET="main"><SMALL>Codegenerator</SMALL></A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

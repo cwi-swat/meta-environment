@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Prefer Literals</TITLE>
+<META NAME="description" CONTENT="Contents of Prefer Literals">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node62_mn.html">
+<LINK REL="previous" HREF="node60_mn.html">
+<LINK REL="up" HREF="node59_mn.html">
+<LINK REL="next" HREF="node62_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H4><A NAME="SECTION000514120000000000000">
+Prefer Literals</A>
+</H4> 
+
+<P>
+In the left-hand side of a context-free syntax rule literals (keywords
+and/or operators) may be used.  If these literals overlap with  more
+general lexical tokens (such as identifier) this causes ambiguities.
+
+<P>
+The strategy <SPAN  CLASS="textit">Prefer Literals</SPAN> gives preference to interpretation
+as a literal, over interpretation as a more general lexical token.
+For instance, the keyword <TT>begin</TT> may be recognized as an identifier
+given the lexical definition below[ in Figure&nbsp;]CODE:restrict-id.
+
+<P>
+There are two approaches to implement Prefer Literals.
+
+<P>
+In the first approach, we can explicitly forbid the recognition of
+literals as tokens of a specific sort using the
+reject mechanism[ (see Section&nbsp;)]PreferAvoidReject.  
+The idea is to define context-free
+grammar rules for all literals with the undesired lexical sort (e.g.,
+<TT>Id</TT>) in the right-hand side followed by the attribute <TT>reject</TT>.
+This is illustrated below[in Figure&nbsp;]CODE:reject-id.
+The <TT>reject</TT> attribute
+indicates here that the recognition of a keyword as a literal of the sort
+<TT>Id</TT> should be rejected. This approach has the major disadvantage
+that the addition of a literal in any context-free rule also requires
+the addition of a new reject rule for that literal.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2428"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 31:</STRONG>
+Using <TT>reject</TT> to implement Prefer Literals</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="343" BORDER="0"
+ SRC="img49.png"
+ ALT="\begin{figure}\begin{Label}{CODE:reject-id}\htmlonly{\htmlrule}
+\texonly{\hru...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The second approach is more attractive. The lexical definition of the general
+notion that interferes with our literals is written in such a way that it is
+only used as a last resort. In other words, it is avoided as much as possible
+and is only used when no alternative exists.  
+The attribute <TT>avoid</TT> defines precisely this behaviour
+(see Preferring, Avoiding or Rejecting Parses[Section&nbsp;]PreferAvoidReject).
+The next example[Figure&nbsp;]CODE:avoid-id shows
+how the lexical definition of <TT>Id</TT> is attributed with <TT>avoid</TT>.
+
+<P>
+Although the first approach is more tedious, it allows more flexibility
+than the second one.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2429"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 32:</STRONG>
+Using <TT>avoid</TT> to implement Prefer Literals</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="290" BORDER="0"
+ SRC="img50.png"
+ ALT="\begin{figure}\begin{Label}{CODE:avoid-id}\htmlonly{\htmlrule}
+\texonly{\hrul...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

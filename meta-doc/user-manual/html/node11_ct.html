@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of (E)BNF and Lex+Yacc versus Sdf</TITLE>
+<META NAME="description" CONTENT="Contents of (E)BNF and Lex+Yacc versus Sdf">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node12_mn.html">
+<LINK REL="previous" HREF="node10_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node12_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00051000000000000000">
+(E)BNF and Lex+Yacc versus Sdf</A>
+</H2>
+
+<P>
+(E)BNF-like and Lex+Yacc-like grammar formalisms are well-known. 
+Although Lex+Yacc is more a domain specific language than a
+grammar formalism, the grammar of a lot of programming languages 
+are presented as Lex+Yacc definition. There a number of differences
+between both (E)BNF-like and Lex+Yacc-like formalisms and Sdf.
+
+<P>
+We assume that the reader of this manual has some experience
+with formalisms like (E)BNF and Lex+Yacc.
+
+<P>
+Sdf allows a modular definition of your syntax
+formalism. This allows re-use of parts of other grammar definitions.
+This is only possible given the fact that the underlying parsing
+technology is based on Generalized LR parsing, see [<A HREF="node129_ct.html#R92" TARGET="contents">33</A>] and 
+[<A HREF="node129_ct.html#Vis97" TARGET="contents">35</A>] for more details.
+
+<P>
+Sdf imposes no restrictions on the grammar. In contrast
+to Lex+Yacc, restricted to the class of LALR(1)-grammars, we
+do not impose these restrictions. The fact that we do not impose
+these restrictions enables us to have this modular grammar definition
+formalism. Restricted classes, such as LALR(1), are not closed
+under union. Two grammars, both LALR(1) for instance, need not
+result in a LALR(1) grammar if they are combined.
+
+<P>
+Sdfdoes not produce only one parse tree (derivation) if there exist more
+derivations. The basic assumption of Sdfis that <SPAN  CLASS="textit">all</SPAN> derivations
+will be produced and presented in a compact manner. This makes sure that
+<SPAN  CLASS="textit">no implicit disambiguation</SPAN> will take place at any time when you
+use Sdf. To disambiguate, the user will apply declarative disambiguation
+constructs from Sdfseparately. Examples of disambiguations
+are ``longest-match'' and ''priorities''.
+
+<P>
+The most striking difference between Sdf and (E)BNF-like and
+Lex+Yacc-like formalisms is the way the production rules are written
+in Sdf.  In (E)BNF and Lex+Yacc one writes production rules as
+
+<P>
+<PRE>
+  P ::= 'b' D S 'e'
+</PRE>
+
+<P>
+whereas in Sdf this is written as
+
+<P>
+<PRE>
+  "b" D S "e" -&gt; P
+</PRE>
+So, the left- and right-hand side of the production rules are swapped.
+
+<P>
+Sdf provides an integrated definition of lexical and context-free
+syntax. (E)BNF does not provide, or only very restrictive, support for
+defining lexical syntax rules. In Lex+Yacc the lexical syntax is more
+or less defined in a separate formalism.
+
+<P>
+Sdf also allows an integrated way of defining associativity and
+priorities between production rules[, see Section&nbsp;]Priorities.
+
+<P>
+Finally, Sdf provides an automatic way of constructing syntax trees.
+In Lex+Yacc the specification writer has to program how syntax trees
+are constructed.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Context-free start-symbols</TITLE>
+<META NAME="description" CONTENT="Contents of Context-free start-symbols">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node27_mn.html">
+<LINK REL="previous" HREF="node25_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node27_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00058000000000000000"></A>
+<A NAME="SEC:ContextFreeStartSymbols"></A>
+<BR>
+Context-free start-symbols
+</H2>
+
+<P>
+Via the context-free start symbols section the symbols are 
+explicitly defined which will serve as start symbols when 
+parsing terms. If no start symbols are defined it is not possible 
+to recognize terms. This has the effect that input sentences 
+corresponding to these symbols can be parsed. 
+So, if we want to recognize booleans terms we have to define 
+explicitly the sort <TT>Boolean</TT> as a start symbol in the 
+module <TT>Booleans</TT>. Any symbol, also lists, tuples, etc., can
+serve as a start-symbol.
+
+<P>
+<PRE>
+context-free start-symbols
+  &lt;Symbol&gt;*
+</PRE>
+
+<P>
+Context-free start-symbol sections can either be hidden or exported. 
+The effect of defined symbols as start symbols for the grammar may lead 
+to an explosion of start states for the parser and thus lead to 
+performance loss. To prevent this it can be advisable to hide 
+start-symbol sections. The symbols defined are only visible in the 
+module containing this hidden start-symbols section, but not in 
+modules importing this module.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

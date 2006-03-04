@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Character Class Operators</TITLE>
+<META NAME="description" CONTENT="Contents of Character Class Operators">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="node31_mn.html">
+<LINK REL="up" HREF="node30_mn.html">
+<LINK REL="next" HREF="node33_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H4><A NAME="SECTION00059220000000000000">
+Character Class Operators</A>
+</H4>
+
+<P>
+The following operators are available for character classes
+
+<UL>
+<LI><TT>~</TT>: complement of character class. Accepts all characters not in the original class.
+</LI>
+<LI><TT>/</TT>: difference of two character classes. Accepts all characters in
+  the first class unless they are in the second class.
+</LI>
+<LI><TT>/<code>\</code></TT>: intersection of two character classes. Accepts all
+  characters that are accepted by both character classes.
+</LI>
+<LI><TT><code>\</code>/</TT>: union of two character classes. Accepts all characters
+  that are accepted by either character class.
+</LI>
+</UL>
+The first operator is a unary operator, whereas the other three are
+left-associative binary operators.
+
+<P>
+The example below[ in Figure&nbsp;]CODE:LettersDigits3 gives
+the definion of a single letter or digit
+using the alternative operator <TT><code>\</code>/</TT>.
+This definition is equivalent to the one given 
+earlier[ in Figure&nbsp;]CODE:LettersDigits2.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="753"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 7:</STRONG>
+Defining a single letter or digit using the alternative operator</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="168" BORDER="0"
+ SRC="img18.png"
+ ALT="\begin{figure}\begin{Label}{CODE:LettersDigits3}\htmlonly{\htmlrule}
+\texonly...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Another example is shown below[in Figure ]CODE:charclasses.
+This definition of characters contains
+all possible characters, either by means of the ordinary representation
+or via their decimal representation.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="765"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 8:</STRONG>
+Example of character classes</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="395" BORDER="0"
+ SRC="img19.png"
+ ALT="\begin{figure}\begin{Label}{CODE:charclasses}\htmlonly{\htmlrule}
+\texonly{\h...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

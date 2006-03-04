@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Bracket Functions</TITLE>
+<META NAME="description" CONTENT="Contents of Bracket Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node53_mn.html">
+<LINK REL="previous" HREF="node51_mn.html">
+<LINK REL="up" HREF="node51_mn.html">
+<LINK REL="next" HREF="node53_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000513100000000000000"></A>
+<A NAME="BracketFunctions"></A>
+<BR>
+Bracket Functions
+</H3>
+
+<P>
+<A NAME="1133"></A>
+A bracket function has the form `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="37" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img34.png"
+ ALT="$open$"></SPAN> <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN> <SPAN CLASS="MATH"><IMG
+ WIDTH="39" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img36.png"
+ ALT="$close$"></SPAN> -&gt; <SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN></TT>' where <SPAN CLASS="MATH"><IMG
+ WIDTH="37" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img34.png"
+ ALT="$open$"></SPAN>
+and <SPAN CLASS="MATH"><IMG
+ WIDTH="39" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img36.png"
+ ALT="$close$"></SPAN> are literals acting as opening and closing parenthesis for sort
+<SPAN CLASS="MATH"><IMG
+ WIDTH="15" HEIGHT="15" ALIGN="BOTTOM" BORDER="0"
+ SRC="img35.png"
+ ALT="$S$"></SPAN>. Examples are `<TT>(</TT>' and `<TT>)</TT>' in arithmetic expressions.
+In most cases, such brackets are only
+introduced for grouping and disambiguation, but have no further meaning. By
+adding the attribute <TT>bracket</TT> to the function declaration, it will not be
+included in the abstract syntax.
+The definition of a bracket function for the sort <TT>Expr</TT> 
+is given
+below[ in Figure&nbsp;]CODE:bracket-expr.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1148"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 23:</STRONG>
+Syntax definition with a bracket function</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="273" BORDER="0"
+ SRC="img37.png"
+ ALT="\begin{figure}\begin{Label}{CODE:bracket-expr}\htmlonly{\htmlrule}
+\texonly{\...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Since brackets are necessary for overruling the priority and associativity of
+functions,  it is required that bracket 
+functions are declared for the argument and result sorts of
+
+<P>
+
+<UL>
+<LI>all functions appearing in priority declarations, and
+
+<P>
+</LI>
+<LI>all functions having one of the attributes <TT>left</TT>, <TT>right</TT>, 
+<TT>assoc</TT>, or <TT>non-assoc</TT>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

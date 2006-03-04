@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Lexical Constructor Functions</TITLE>
+<META NAME="description" CONTENT="Contents of Lexical Constructor Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node84_mn.html">
+<LINK REL="previous" HREF="node82_mn.html">
+<LINK REL="up" HREF="node78_mn.html">
+<LINK REL="next" HREF="node84_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000518500000000000000">
+Lexical Constructor Functions</A>
+</H3>
+
+<P>
+The only way to access the actual characters of a lexical token is
+by means of the so-called <EM>lexical constructor functions</EM>.
+For each lexical sort <SPAN CLASS="MATH"><IMG
+ WIDTH="42" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img69.png"
+ ALT="$LEX$"></SPAN> a lexical constructor function is automatically
+derived, the corresponding syntax definition is:
+<SPAN CLASS="MATH"><IMG
+ WIDTH="26" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img70.png"
+ ALT="$lex$"></SPAN><TT>( CHAR* ) -&gt; </TT><SPAN CLASS="MATH"><IMG
+ WIDTH="42" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img69.png"
+ ALT="$LEX$"></SPAN>.
+The sort <TT>CHAR</TT> is a predefined sort to access the characters.
+
+<P>
+Characters can be directly addressed by the representation or via
+variables which may be of the sorts <TT>CHAR</TT>, <TT>CHAR*</TT>, or
+<TT>CHAR+</TT>.
+The latter two represent lists of characters.
+In the example below[in Figure&nbsp;]CODE:lcfs 
+the lexical constructor function <TT>nat-con</TT> is used to remove the leading
+zeros from a number.
+
+<P>
+warning.gif
+	<B>Warning</B>:
+
+The argument of a lexical constructor may be an
+arbitrary list of characters and there is <SPAN  CLASS="textit">no check that they match
+the lexical definition of the corresponding sort</SPAN>.
+This means that when writing a specification one should be aware that
+it is possible to construct illegal lexical entities, for instance,
+by inserting letters in an integer.
+In the example below[in Figure&nbsp;]CODE:illegallcfs 
+via the lexical constructor function <TT>nat-con</TT> a natural
+number containing the letter <TT>a</TT> is constructed.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1720"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 42:</STRONG>
+Use of lexical constructor functions</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="413" BORDER="0"
+ SRC="img71.png"
+ ALT="\begin{figure}\begin{Label}{CODE:lcfs}\htmlonly{\htmlrule}
+\texonly{\hrulefil...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1730"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 43:</STRONG>
+Illegal use of lexical constructor functions</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="413" BORDER="0"
+ SRC="img72.png"
+ ALT="\begin{figure}\begin{Label}{CODE:illegallcfs}\htmlonly{\htmlrule}
+\texonly{\h...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

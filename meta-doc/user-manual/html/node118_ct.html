@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Parse Table Generation</TITLE>
+<META NAME="description" CONTENT="Contents of Parse Table Generation">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node119_mn.html">
+<LINK REL="previous" HREF="node117_mn.html">
+<LINK REL="up" HREF="node117_mn.html">
+<LINK REL="next" HREF="node119_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION00082100000000000000">
+Parse Table Generation</A>
+</H3>
+
+<P>
+Before you can parse terms over a module <TT>M</TT> outside the
+Asf+Sdf Meta-Environment you have to obtain a parse table for this module.  
+There are currently three ways to achieve this:
+
+<P>
+
+<UL>
+<LI>Interactively using the Asf+Sdf Meta-Environment by selecting module <TT>M</TT> and pushing the <TT>Term ParseTable...</TT> button in 
+the menu <TT>Export</TT> for the module pop-up menu. A window pops up in which
+you can select the directory where the parse table will be saved and in
+which you have to give the desired name for the table.
+
+<P>
+</LI>
+<LI>From the command line using the command <TT>pt-dump</TT>.
+In the background the same actions are performed as in the interactive
+setting, only no user interface is activated. 
+If you want to obtain the parse table for <TT>basic/Booleans</TT> 
+you can do this via <TT>pt-dump -m basic/Booleans -o Booleans.trm.tbl</TT>.
+For further information use <TT>pt-dump -h</TT>.
+
+<P>
+</LI>
+<LI>From the command line using the command <TT>sdf2table</TT>.  You should
+be aware that <TT>sdf2table</TT> needs as input the <SPAN  CLASS="textit">complete</SPAN> grammar
+of <TT>M</TT>. This means in particular that all imports of <TT>M</TT> should
+be expanded before <TT>sdf2table</TT> can be used. Command line tools are
+available to do this, but we will not describe them here.
+
+<P>
+For further information use <TT>sdf2table -h</TT>.
+
+<P>
+</LI>
+</UL>
+
+<P>
+Before a parse table is generated the Sdf definition is checked with
+respect to well-formedness. When using the <TT>sdf2table</TT> only the 
+checks on Sdf are performed, in the other two cases the checks
+on Sdf and on Asf+Sdf specific features are performed as well.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

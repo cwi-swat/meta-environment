@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Attributes of Lexical and Context-free Functions</TITLE>
+<META NAME="description" CONTENT="Contents of Attributes of Lexical and Context-free Functions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node51_mn.html">
+<LINK REL="previous" HREF="node49_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node51_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION000512000000000000000"></A>
+<A NAME="Attributes"></A>
+<BR>
+Attributes of Lexical and Context-free Functions
+</H2>
+
+<P>
+<A NAME="1058"></A>
+The definition of a lexical or context-free functions may be followed by
+<SPAN  CLASS="textit">attributes</SPAN> that define additional (syntactic or semantic) properties of
+that function.  The attributes are written between curly brackets after the
+non-terminal in the right hand side. If a production rule has more than
+one attribute they are separated by commas.
+<PRE>
+context-free syntax
+   "{" {Attribute ","}* "}" -&gt; Attributes {cons("attrs")}
+                            -&gt; Attributes {cons("no-attrs")}
+</PRE>
+The following syntax-related attributes exist:
+
+<P>
+
+<A NAME="1063"></A>
+<UL>
+<LI><TT>bracket</TT> allows the definitions of parenthesis and other
+kinds of brackets that are mostly used for overruling the priorities
+of operators in expressions
+(see Bracket Functions[Section&nbsp;]BracketFunctions).
+
+<P>
+<A NAME="1067"></A>
+<A NAME="1068"></A>
+<A NAME="1069"></A>
+<A NAME="1070"></A>
+</LI>
+<LI><TT>left</TT>, <TT>right</TT>, <TT>non-assoc</TT>, and <TT>assoc</TT>
+are used to define the associativity of functions 
+(see Priorities[Section&nbsp;]Priorities).
+
+<P>
+<A NAME="1077"></A>
+</LI>
+<LI><TT>prefer</TT> is used to indicate that the attributed function should
+always be preferred over other functions (without this attribute)
+in certain cases of syntactic ambiguity
+(see Preferring, Avoiding or Rejecting Parses[Section&nbsp;]PreferAvoidReject).
+
+<P>
+<A NAME="1081"></A>
+</LI>
+<LI><TT>avoid</TT> is used to indicate that a function should
+only be used as a last resort in certain cases of
+syntactic ambiguity
+(see Preferring, Avoiding or Rejecting Parses[Section&nbsp;]PreferAvoidReject).
+
+<P>
+<A NAME="1085"></A>
+</LI>
+<LI><TT>reject</TT> can be used to explicitly forbid certain syntactic
+  constructs
+  (see  Preferring, Avoiding or Rejecting Parses[Section&nbsp;]PreferAvoidReject).
+
+<P>
+</LI>
+</UL>
+
+<P>
+The remaining attributes define semantic properties of a function:
+
+<P>
+
+<A NAME="1091"></A>
+<UL>
+<LI><TT>constructor</TT> declares a function to be a <SPAN  CLASS="textit">constructor
+function</SPAN>, this means that for this function <SPAN  CLASS="textit">no</SPAN> equations
+may be defined with this function as outermost function symbol
+in the left hand side.
+
+<P>
+<A NAME="1095"></A>
+</LI>
+<LI><TT>memo</TT> declares a function to be a <SPAN  CLASS="textit">memo function</SPAN> for
+which all calls and results will be cached during evaluation
+(see Memo Functions[Section&nbsp;]MemoFunctions).
+
+<P>
+<A NAME="1100"></A>
+</LI>
+<LI><TT>traversal</TT> is used to declare so-called traversal functions
+that greatly simply the specification of functions that have to visit
+(parts of) a term 
+(see Traversal Functions[Section&nbsp;]Traversal).
+
+<P>
+<A NAME="1104"></A>
+</LI>
+<LI>arbitrary ATerms may also be used as attributes. In the context-free
+syntax definition of the <TT>Attributes</TT>, the ATerms <TT>cons("attrs")</TT>
+and <TT>cons("no-attrs")</TT> are used. The <TT>cons</TT> attribute is used by
+other tools, such as ApiGen.
+</LI>
+</UL>
+
+<P>
+Not all combinations of attributes make sense. If one uses the attribute
+<TT>left</TT> in combination with <TT>bracket</TT>, <TT>right</TT>, <TT>assoc</TT>
+or <TT>non-assoc</TT>, this will result in an error message. The combination
+of <TT>avoid</TT> and <TT>prefer</TT> does not make sense either.
+Furthermore, the combination of the traversal attributes is also very strict.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

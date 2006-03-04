@@ -2,9 +2,12 @@
 
 include $(top_srcdir)/make-rules
 
+SUBDIRS=. html
+
 docdir = ${prefix}/doc
-doc_DATA = asf+sdf-user-manual.pdf
-noinst_DATA = ${doc_DATA}
+doc_DATA = asfsdf-user-manual.pdf
+
+noinst_DATA = ${doc_DATA} html
 EXTRA_DIST = ${doc_DATA}
 
 if MAINTAINER_MODE
@@ -19,7 +22,7 @@ CLEANFILES = manual.aux manual.bbl manual.blg manual.dvi \
              manual.ps  manual.pdf manual.toc manual.out \
              $(PDFJES)
 
-manual: asf+sdf-user-manual.pdf
+manual: asfsdf-user-manual.pdf
 
 manual.ps: $(MANUAL)
 	pdflatex manual.ltx
@@ -32,15 +35,23 @@ manual.ps: $(MANUAL)
 spell:
 	detex manual.ltx | spell -b +words.txt
 
-asf+sdf-user-manual.ps: manual.dvi $(PSJES)
+asfsdf-user-manual.ps: manual.dvi $(PSJES)
 	dvips -o $@ $<
 
-asf+sdf-user-manual.pdf: $(MANUAL) $(PDFJES)
+asfsdf-user-manual.pdf: $(MANUAL) $(PDFJES)
 	latex manual.ltx
 	makeindex manual.idx
 	bibtex manual
 	latex manual.ltx
 	latex manual.ltx
 	dvipdf manual.dvi $@
+
+html: $(MANUAL)
+	latex2html $(MANUAL) \
+		-t "ASF+SDF Meta-Environment Manual 2.0" \
+		-dir html \
+		-reuse 2 \
+		-top_navigation 
+
 
 endif

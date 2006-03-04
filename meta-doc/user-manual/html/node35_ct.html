@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Alternative</TITLE>
+<META NAME="description" CONTENT="Contents of Alternative">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node36_mn.html">
+<LINK REL="previous" HREF="node34_mn.html">
+<LINK REL="up" HREF="node27_mn.html">
+<LINK REL="next" HREF="node36_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION00059500000000000000">
+Alternative</A>
+</H3>
+
+<P>
+<A NAME="806"></A>
+Functions with the same result sort together define the lexical syntax of
+tokens for that sort. The left-hand sides of these function definitions form
+the alternatives for this function. Sometimes, it is more convenient to list
+these alternatives explicitly in a single left-hand side or to list
+alternative parts inside a left-hand side.  This is precisely the role of the
+alternative operator described in 
+Alternative[ Section&nbsp;]AlternativeOperator.
+
+<P>
+The example below[ in Figure&nbsp;]CODE:alternative1
+shows how this operator can be used.  
+It describes identifiers starting with an upper-case letter
+followed by one of the following:
+
+<UL>
+<LI>zero or more lower-case letters, 
+
+<P>
+</LI>
+<LI>zero or more upper-case letters, or
+
+<P>
+</LI>
+<LI>zero or more digits.
+</LI>
+</UL>
+
+<P>
+According to this definition, 
+<TT>Aap</TT>, <TT>NOOT</TT>, and <TT>B49</TT> are acceptable, but <TT>MiES</TT>, <TT>  B49a</TT> and <TT>007</TT> are not.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2419"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 11:</STRONG>
+Example of alternative operator <TT>|</TT> </CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="290" BORDER="0"
+ SRC="img22.png"
+ ALT="\begin{figure}\begin{Label}{CODE:alternative1}\htmlonly{\htmlrule}
+\texonly{\...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Note that the relation between juxtaposition and alternative operator is best
+understood by looking at the line defining <TT>Id</TT>. A parenthesized
+version of this same line would read as follows:<PRE>
+  UCLetter (LCLetter* | UCLetter* | Digit*) -&gt; Id
+</PRE>
+As an aside, note that moving the <TT>*</TT> outside the parentheses as in<PRE>
+  UCLetter (LCLetter | UCLetter | Digit)* -&gt; Id
+</PRE>
+yields a completely different definition: it describes identifiers starting
+with an uppercase letter followed by zero or more lower-case letters,
+uppercase letters or digits. According to this definition <TT>MiES</TT>, <TT>  B49a</TT> and <TT>Bond007</TT> would, for instance, be acceptable.
+
+<P>
+A slightly more readable definition that is equivalent to the 
+previous one[ in Figure&nbsp;]CODE:alternative1
+is shown below[in Figure&nbsp;]CODE:alternative2.
+In any case, we recommend to use parentheses to make the scope of alternatives
+explicit.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2420"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 12:</STRONG>
+Example of alternative operator <TT>|</TT> </CAPTION>
+<TR><TD><IMG
+ WIDTH="626" HEIGHT="290" BORDER="0"
+ SRC="img23.png"
+ ALT="\begin{figure}\begin{Label}{CODE:alternative2}\htmlonly{\htmlrule}
+\texonly{\...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

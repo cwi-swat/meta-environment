@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Symbol Renaming</TITLE>
+<META NAME="description" CONTENT="Contents of Symbol Renaming">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="previous" HREF="node72_mn.html">
+<LINK REL="up" HREF="node71_mn.html">
+<LINK REL="next" HREF="node74_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000515200000000000000"></A>
+<A NAME="Renamings"></A>
+<BR>
+Symbol Renaming
+</H3>
+
+<P>
+Symbol renaming is in fact very similar to parameterization except
+that it is not necessary to add formal parameters to a module.
+The mechanism of symbol renaming allows the overriding of one
+symbol or a set of symbols by another symbol or symbols, respectively. 
+It allows a flexible and concise way of adapting specifications.
+The specification below[in Figure&nbsp;]CODE:pairs shows 
+an example of the <TT>Pair</TT> module without parameters. 
+The idea is to achieve the same effect as parameterization
+by explicitly renaming <TT>X</TT> and <TT>Y</TT> to the desired
+names when <TT>Pair</TT> is imported.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1532"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 37:</STRONG>
+Definition of generic pairs</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="395" BORDER="0"
+ SRC="img55.png"
+ ALT="\begin{figure}\begin{Label}{CODE:pairs}\htmlonly{\htmlrule}
+\texonly{\hrulefi...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+During import such module symbols can be renamed via symbol renaming.
+The specification below[in Figure&nbsp;]CODE:renaming-pairs shows 
+an example of a rather complicated import of the module <TT>Pair</TT>
+using renamings. Renaming <TT>X</TT> to <TT>Boolean</TT> is, for instance,
+written as <TT>X =&gt; Boolean</TT>.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1548"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 38:</STRONG>
+Use of generic pair module</CAPTION>
+<TR><TD><IMG
+ WIDTH="606" HEIGHT="185" BORDER="0"
+ SRC="img56.png"
+ ALT="\begin{figure}\begin{Label}{CODE:renaming-pairs}\htmlonly{\htmlrule}
+\texonly...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

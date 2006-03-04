@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Character Classes</TITLE>
+<META NAME="description" CONTENT="Contents of Character Classes">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node33_mn.html">
+<LINK REL="previous" HREF="node28_mn.html">
+<LINK REL="up" HREF="node27_mn.html">
+<LINK REL="next" HREF="node31_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION00059200000000000000"></A>
+<A NAME="CharacterClasses"></A>
+<BR>
+Character Classes
+</H3>
+
+<P>
+Enumerations of characters occur frequently in lexical definitions. They can
+be abbreviated by using character classes enclosed by `<TT>[</TT>' and 
+`<TT>]</TT>'. 
+A character class contains a list of zero or more characters (which
+stand for themselves) or character ranges such as, for instance, <TT>[0-9]</TT>
+as an abbreviation for the characters <TT>0</TT>, <TT>1</TT>, ..., <TT>9</TT>. 
+In a character range of the form <TT><SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN>-<SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN></TT> one of the following 
+restrictions should apply:
+
+<P>
+
+<UL>
+<LI><SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> are both lower-case letters and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> follows <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> in
+  the alphabet, or 
+</LI>
+<LI><SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> are both upper-case letters and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> follows <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> in
+  the alphabet, or 
+</LI>
+<LI><SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> are both digits and the numeric value of <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> is
+  greater than that of <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN>, or 
+</LI>
+<LI><SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN> and <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> are both escaped non-printable characters and the 
+character code of <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img13.png"
+ ALT="$c_2$"></SPAN> is greater than that of <SPAN CLASS="MATH"><IMG
+ WIDTH="18" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img12.png"
+ ALT="$c_1$"></SPAN>.
+</LI>
+</UL>
+
+<P>
+Definitions for lower-case letter (<TT>LCLetter</TT>), upper-case letters
+(<TT>UCLetter</TT>), lower-case and upper-case letters (<TT>Letter</TT>) and
+digits (<TT>Digit</TT>) are shown in
+Figure&nbsp;<A HREF="#CODE:LettersDigits1" TARGET="_top">5</A>. 
+in the first example below[]CODE:LettersDigits1. 
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="708"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 5:</STRONG>
+Defining letter (lower-case and upper-case) and digit</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="273" BORDER="0"
+ SRC="img14.png"
+ ALT="\begin{figure}\begin{Label}{CODE:LettersDigits1}\htmlonly{\htmlrule}
+\texonly...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Figure&nbsp;<A HREF="#CODE:LettersDigits2" TARGET="_top">6</A>
+The next example[]CODE:LettersDigits2
+gives
+a definition of the sort <TT>LetterOrDigit</TT> that recognizes a single letter
+(upper-case or lower-case) or digit.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="722"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 6:</STRONG>
+Defining a single letter or digit</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="238" BORDER="0"
+ SRC="img15.png"
+ ALT="\begin{figure}\begin{Label}{CODE:LettersDigits2}\htmlonly{\htmlrule}
+\texonly...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html775" HREF="node31_ct.html" TARGET="contents"><SMALL>Escape Conventions</SMALL></A>
+<LI><A NAME="tex2html776" HREF="node32_mn.html" TARGET="main"><SMALL>Character Class Operators</SMALL></A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

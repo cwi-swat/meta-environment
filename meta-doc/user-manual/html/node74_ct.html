@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Variables</TITLE>
+<META NAME="description" CONTENT="Contents of Variables">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node75_mn.html">
+<LINK REL="previous" HREF="node71_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node75_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION000516000000000000000"></A>
+<A NAME="Variables"></A>
+<BR>
+Variables
+</H2>
+
+<P>
+<A NAME="1553"></A>
+Variables are declared in the `<TT>variables</TT>' section of a module.  Like all
+other entities in a 
+module--except equations--variables may be exported
+(see Modules[Section&nbsp;]modules). 
+A variables section consists of a list of variable
+names followed by a symbol. In fact, a variable declaration can define an
+infinite collection of variables by using a <SPAN  CLASS="textit">naming scheme</SPAN> instead of a
+simple variable name.  A naming scheme is a regular expression like the ones
+allowed in the lexical syntax[ (Section&nbsp;)]lexical-syntax except that sorts
+are not allowed. A variable may represent any symbol. 
+
+<P>
+In the specification below[in Figure&nbsp;]CODE:variables,
+`<TT>Id</TT>', `<TT>Type3</TT>', and `<TT>Id-list</TT>'
+are examples of variables declared by the naming schemes in 
+the <TT>variables</TT> section.
+Strings that occur in the left-hand side of variable declarations
+should <EM>always</EM> be quoted.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1574"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 39:</STRONG>
+Variable declarations using naming schemes</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="448" BORDER="0"
+ SRC="img57.png"
+ ALT="\begin{figure}\begin{Label}{CODE:variables}\htmlonly{\htmlrule}
+\texonly{\hru...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+Declared variables can only be used when defining equations. It is not
+allowed to use them in terms.
+
+<P>
+Ambiguities due to variables are resolved by the <EM>Prefer Variables</EM>
+strategy that was discussed in
+Lexical Ambiguities[Section&nbsp;]lex-ambiguity.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

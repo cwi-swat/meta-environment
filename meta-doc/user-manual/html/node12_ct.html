@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Modules and Modular Structure</TITLE>
+<META NAME="description" CONTENT="Contents of Modules and Modular Structure">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node13_mn.html">
+<LINK REL="previous" HREF="node11_mn.html">
+<LINK REL="up" HREF="node10_mn.html">
+<LINK REL="next" HREF="node13_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00052000000000000000"></A>
+<A NAME="modules"></A>
+<BR>
+Modules and Modular Structure
+</H2>
+
+<P>
+An Asf+Sdf specification consists of a sequence of module declarations. 
+Each module may define syntax rules as well as semantic rules and the 
+notation used in the semantic rules depends on the definition of syntax 
+rules. The entities declared in a module may be visible or invisible 
+to other modules. A module can use another module from the specification 
+by importing it. As a result, all visible names of the imported module 
+become available in the importing module.
+
+<P>
+The overall structure of a module is:
+
+<P>
+<PRE>
+module &lt;ModuleName&gt;
+
+  &lt;ImportSection&gt;*
+ 
+  &lt;ExportOrHiddenSection&gt;*
+
+equations
+  &lt;ConditionalEquation&gt;*
+</PRE>
+
+<P>
+A module consists of a module header, followed by a list of zero or more
+import sections, followed by zero or more hidden or export sections and 
+an optional equations section that defines conditional equations.
+Later[In Section&nbsp;]ParametersRenamings
+we will see that modules can alse be <SPAN  CLASS="textit">parameterized</SPAN> and
+that they can be <SPAN  CLASS="textit">renamed on import</SPAN>.
+
+<P>
+Conceptually, a module is a single unit but for technical reasons the
+syntax sections and the equations section are stored in physically
+separate files.  For each module <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN> in a specification two files
+exist: `<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN>.sdf</TT>' contains the syntax sections of <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN> and 
+`<TT><SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN>.asf</TT>' contains the equations section of <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN>.
+
+<P>
+<A NAME="386"></A>
+A <TT>&lt;ModuleName&gt;</TT> is either a simple <TT>&lt;ModuleId&gt;</TT> or a 
+<TT>&lt;ModuleId&gt;</TT> followed by zero or more parameter symbols, e.g., 
+<TT>&lt;Module&gt;[&lt;Symbol&gt;*]</TT>, the symbols will be explained in 
+Symbols[Section&nbsp;]Symbols. The <TT>&lt;ModuleId&gt;</TT> may be
+compount module name, the <TT>ModuleId</TT> reflects the directory 
+structure. For example <TT>basic/Booleans</TT> means that the module
+<TT>Booleans</TT> is found in the subdirectory <TT>basic</TT>.
+
+<P>
+<A NAME="2402"></A>
+<A NAME="2403"></A>
+An <TT>&lt;ExportOrHiddenSection&gt;</TT> is either an <SPAN  CLASS="textit">export section</SPAN> 
+or a <SPAN  CLASS="textit">hidden section</SPAN>. The former starts with the keyword 
+<TT>exports</TT> and makes all entities in the section visible to 
+other modules. The latter starts with the keyword <TT>hiddens</TT> 
+and makes all entities in the section local to the module.
+
+<P>
+An <TT>&lt;ExportOrHiddenSection&gt;</TT> has thus one of the two forms:
+
+<P>
+<PRE>
+exports 
+  &lt;Grammar&gt;+
+</PRE>
+or
+<PRE>
+hiddens
+  &lt;Grammar&gt;+
+</PRE>
+
+<P>
+A <TT>&lt;Grammar&gt;</TT> can be a definition of one of the following: 
+
+<UL>
+<LI>Imports[ (Section&nbsp;)]Imports.
+</LI>
+<LI>Aliases[ (Section&nbsp;)]Aliases.
+</LI>
+<LI>Sorts[ (Section&nbsp;)]Sorts.
+</LI>
+<LI>Start-symbols[ (Section&nbsp;)]SEC:ContextFreeStartSymbols.
+</LI>
+<LI>Lexical syntax[ (Section&nbsp;)]LexicalSyntax.
+</LI>
+<LI>Context-free syntax[ (Section&nbsp;)]ContexFreeSyntax.
+</LI>
+<LI>Priorities[ (Section&nbsp;)]Priorities.
+</LI>
+<LI>Variables[ (Section&nbsp;)]Variables.
+</LI>
+</UL>
+
+<P>
+Note that it is possible to have hidden imports as well, this means that
+the contents of a hidden imported module in some module <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN> is visible 
+in <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN> but is not exported to modules which import <SPAN CLASS="MATH"><IMG
+ WIDTH="21" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img7.png"
+ ALT="$M$"></SPAN>.
+
+<P>
+There are a number of related properties which have an effect across the
+various grammar items, these items are intermixed with the discussion
+of the grammars:
+
+<UL>
+<LI>Sdf comment convention[ (Section&nbsp;)]SdfComment.
+
+<P>
+</LI>
+<LI>Symbols[ (Section&nbsp;)]Symbols.
+
+<P>
+</LI>
+<LI>Attributes of Lexical and Context-free Functions[
+(Section&nbsp;)]Attributes.
+
+<P>
+</LI>
+<LI>Disambiguation[ (Section&nbsp;)]Disambiguation.
+
+<P>
+</LI>
+<LI>Parameterization and Renamings[ (Section&nbsp;)]ParametersRenamings.
+
+<P>
+</LI>
+<LI>Libraries[ (Section&nbsp;)]Libraries.
+
+<P>
+</LI>
+<LI>Equations[ (Section&nbsp;)]Equations.
+</LI>
+</UL>
+
+<P>
+Each of these entities and properties
+will now be described and illustrated by examples.
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

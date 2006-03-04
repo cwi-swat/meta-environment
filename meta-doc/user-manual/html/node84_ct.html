@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Default Equations</TITLE>
+<META NAME="description" CONTENT="Contents of Default Equations">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node85_mn.html">
+<LINK REL="previous" HREF="node83_mn.html">
+<LINK REL="up" HREF="node78_mn.html">
+<LINK REL="next" HREF="node85_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000518600000000000000"></A>
+<A NAME="DefaultEquations"></A>
+<BR>
+Default Equations
+</H3>
+
+<P>
+<A NAME="1735"></A>
+The evaluation strategy for normalizing terms given the equations is
+based on innermost rewriting. All equations have the same priority.
+Given the outermost function symbol of a redex the set of equations with
+this outermost function symbol in the left-hand side is selected and all
+these rules will be tried.  However, sometimes a specification writer
+would like to write down a rule with a special status ``<EM>try this rule
+if all other rules fail</EM>''.  A kind of default behaviour is needed. Asf offers functionality in order to obtain this behaviour. If the <SPAN CLASS="MATH"><IMG
+ WIDTH="49" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img59.png"
+ ALT="$TagId$"></SPAN>
+of an equation starts with <TT>default-</TT> this equation is considered to
+be a special equation which will only be applied if no other rule matches.
+The specification below[in Figure&nbsp;]CODE:types shows
+an example of the use of a default equation.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1747"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 44:</STRONG>
+Using a default equation</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="553" BORDER="0"
+ SRC="img73.png"
+ ALT="\begin{figure}\begin{Label}{CODE:types}\htmlonly{\htmlrule}
+\texonly{\hrulefi...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

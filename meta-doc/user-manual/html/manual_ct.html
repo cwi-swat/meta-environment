@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Index</TITLE>
+<META NAME="description" CONTENT="Contents of Index">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node1_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H1 ALIGN="CENTER">Asf+Sdf Meta-Environment User Manual 
+<BR><!-- MATH
+ $Revision$
+ -->
+<SPAN CLASS="MATH"><IMG
+ WIDTH="117" HEIGHT="14" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="$Revision$"></SPAN></H1>
+<DIV CLASS="author_info">
+
+<P ALIGN="CENTER"><STRONG>M.G.J. van den Brand and P. Klint and J.J. Vinju</STRONG></P>
+<P ALIGN="CENTER"><I>        <SMALL CLASS="SMALL">Centrum voor Wiskunde en Informatica (CWI),</SMALL></I></P>
+<P ALIGN="CENTER"><STRONG>4 March 2006</STRONG></P>
+<P ALIGN="LEFT"><SMALL><SMALL CLASS="SMALL">Kruislaan 413, 1098 SJ Amsterdam, The Netherlands</SMALL></SMALL></P>
+</DIV>
+
+<P>
+<BR>
+
+<BR>
+
+<P>
+
+<H3>Abstract:</H3>
+<DIV CLASS="ABSTRACT">
+This is a preliminary user manual for the Asf+Sdf Meta-Environment Release 2.0
+This is work under construction.
+
+<P>
+</DIV>
+<P>
+
+<P>
+Some images <SPAN CLASS="MATH"><IMG
+ WIDTH="20" HEIGHT="30" ALIGN="MIDDLE" BORDER="0"
+ SRC="img4.png"
+ ALT="$\copyright$"></SPAN> 2001-2002 www.arttoday.comhttp://www.arttoday.com.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"></A>
+
+<UL CLASS="ChildLinks">
+<LI><A NAME="tex2html70" HREF="node1_ct.html" TARGET="contents"><SMALL>Contents</SMALL></A>
+<LI><A NAME="tex2html71" HREF="node2_mn.html" TARGET="main"><SMALL>Changes with respect to previous version</SMALL></A>
+<LI><A NAME="tex2html72" HREF="node3_mn.html" TARGET="main"><SMALL>Overview</SMALL></A>
+<UL>
+<LI><A NAME="tex2html73" HREF="node4_mn.html" TARGET="main"><SMALL>When to use the Asf+Sdf Meta-Environment?</SMALL></A>
+<LI><A NAME="tex2html74" HREF="node5_mn.html" TARGET="main"><SMALL>Global Structure of the Meta-Environment</SMALL></A>
+<LI><A NAME="tex2html75" HREF="node6_mn.html" TARGET="main"><SMALL>About this Manual</SMALL></A>
+<LI><A NAME="tex2html76" HREF="node7_mn.html" TARGET="main"><SMALL>Downloading the Asf+Sdf Meta-Environment</SMALL></A>
+<LI><A NAME="tex2html77" HREF="node8_mn.html" TARGET="main"><SMALL>Further Reading</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html78" HREF="node9_mn.html" TARGET="main"><SMALL>Acknowledgements</SMALL></A>
+<LI><A NAME="tex2html79" HREF="node10_mn.html" TARGET="main"><SMALL>An Introduction to Asf+Sdf</SMALL></A>
+<UL>
+<LI><A NAME="tex2html80" HREF="node11_mn.html" TARGET="main"><SMALL>(E)BNF and Lex+Yacc versus Sdf</SMALL></A>
+<LI><A NAME="tex2html81" HREF="node12_mn.html" TARGET="main"><SMALL>Modules and Modular Structure</SMALL></A>
+<LI><A NAME="tex2html82" HREF="node13_mn.html" TARGET="main"><SMALL>Sdf comment convention</SMALL></A>
+<LI><A NAME="tex2html83" HREF="node14_mn.html" TARGET="main"><SMALL>Imports</SMALL></A>
+<LI><A NAME="tex2html84" HREF="node15_mn.html" TARGET="main"><SMALL>Symbols</SMALL></A>
+<UL>
+<LI><A NAME="tex2html85" HREF="node16_mn.html" TARGET="main"><SMALL>Option</SMALL></A>
+<LI><A NAME="tex2html86" HREF="node17_mn.html" TARGET="main"><SMALL>Sequence</SMALL></A>
+<LI><A NAME="tex2html87" HREF="node18_mn.html" TARGET="main"><SMALL>Repetition</SMALL></A>
+<LI><A NAME="tex2html88" HREF="node19_mn.html" TARGET="main"><SMALL>Alternative</SMALL></A>
+<LI><A NAME="tex2html89" HREF="node20_mn.html" TARGET="main"><SMALL>Tuple</SMALL></A>
+<LI><A NAME="tex2html90" HREF="node21_mn.html" TARGET="main"><SMALL>Function</SMALL></A>
+<LI><A NAME="tex2html91" HREF="node22_mn.html" TARGET="main"><SMALL>Parameterized Sorts</SMALL></A>
+<LI><A NAME="tex2html92" HREF="node23_mn.html" TARGET="main"><SMALL>Lifted sorts</SMALL></A>
+</UL>
+<LI><A NAME="tex2html93" HREF="node24_mn.html" TARGET="main"><SMALL>Aliases</SMALL></A>
+<LI><A NAME="tex2html94" HREF="node25_mn.html" TARGET="main"><SMALL>Sorts</SMALL></A>
+<LI><A NAME="tex2html95" HREF="node26_mn.html" TARGET="main"><SMALL>Context-free start-symbols</SMALL></A>
+<LI><A NAME="tex2html96" HREF="node27_mn.html" TARGET="main"><SMALL>Lexical Syntax</SMALL></A>
+<UL>
+<LI><A NAME="tex2html97" HREF="node28_mn.html" TARGET="main"><SMALL>Lexical Functions</SMALL></A>
+<UL>
+<LI><A NAME="tex2html98" HREF="node29_mn.html" TARGET="main"><SMALL>Lexical constructor functions</SMALL></A>
+</UL>
+<LI><A NAME="tex2html99" HREF="node30_mn.html" TARGET="main"><SMALL>Character Classes</SMALL></A>
+<UL>
+<LI><A NAME="tex2html100" HREF="node31_mn.html" TARGET="main"><SMALL>Escape Conventions</SMALL></A>
+<LI><A NAME="tex2html101" HREF="node32_mn.html" TARGET="main"><SMALL>Character Class Operators</SMALL></A>
+</UL>
+<LI><A NAME="tex2html102" HREF="node33_mn.html" TARGET="main"><SMALL>Repetition</SMALL></A>
+<LI><A NAME="tex2html103" HREF="node34_mn.html" TARGET="main"><SMALL>Option</SMALL></A>
+<LI><A NAME="tex2html104" HREF="node35_mn.html" TARGET="main"><SMALL>Alternative</SMALL></A>
+<LI><A NAME="tex2html105" HREF="node36_mn.html" TARGET="main"><SMALL>Miscellaneous Operators</SMALL></A>
+<LI><A NAME="tex2html106" HREF="node37_mn.html" TARGET="main"><SMALL>Examples of Lexical Syntax Definitions</SMALL></A>
+<UL>
+<LI><A NAME="tex2html107" HREF="node38_mn.html" TARGET="main"><SMALL>Defining Numbers</SMALL></A>
+<LI><A NAME="tex2html108" HREF="node39_mn.html" TARGET="main"><SMALL>Defining Strings</SMALL></A>
+</UL>
+</UL>
+<LI><A NAME="tex2html109" HREF="node40_mn.html" TARGET="main"><SMALL>Context-free Syntax</SMALL></A>
+<UL>
+<LI><A NAME="tex2html110" HREF="node41_mn.html" TARGET="main"><SMALL>Context-free Functions</SMALL></A>
+<LI><A NAME="tex2html111" HREF="node42_mn.html" TARGET="main"><SMALL>Prefix Functions</SMALL></A>
+<LI><A NAME="tex2html112" HREF="node43_mn.html" TARGET="main"><SMALL>Lists</SMALL></A>
+<LI><A NAME="tex2html113" HREF="node44_mn.html" TARGET="main"><SMALL>Chain Functions</SMALL></A>
+<LI><A NAME="tex2html114" HREF="node45_mn.html" TARGET="main"><SMALL>Miscellaneous Operators</SMALL></A>
+<UL>
+<LI><A NAME="tex2html115" HREF="node46_mn.html" TARGET="main"><SMALL>Definition of lists</SMALL></A>
+<LI><A NAME="tex2html116" HREF="node47_mn.html" TARGET="main"><SMALL>Alternative alternatives</SMALL></A>
+</UL>
+<LI><A NAME="tex2html117" HREF="node48_mn.html" TARGET="main"><SMALL>Lists in combination with optionals or empty producing
+sorts</SMALL></A>
+</UL>
+<LI><A NAME="tex2html118" HREF="node49_mn.html" TARGET="main"><SMALL>Labels in the left-hand side of Functions</SMALL></A>
+<LI><A NAME="tex2html119" HREF="node50_mn.html" TARGET="main"><SMALL>Attributes of Lexical and Context-free Functions</SMALL></A>
+<LI><A NAME="tex2html120" HREF="node51_mn.html" TARGET="main"><SMALL>Priorities</SMALL></A>
+<UL>
+<LI><A NAME="tex2html121" HREF="node52_mn.html" TARGET="main"><SMALL>Bracket Functions</SMALL></A>
+<LI><A NAME="tex2html122" HREF="node53_mn.html" TARGET="main"><SMALL>Relative Priorities</SMALL></A>
+<LI><A NAME="tex2html123" HREF="node54_mn.html" TARGET="main"><SMALL>Associative Functions</SMALL></A>
+<LI><A NAME="tex2html124" HREF="node55_mn.html" TARGET="main"><SMALL>Groups of Associative Functions</SMALL></A>
+<LI><A NAME="tex2html125" HREF="node56_mn.html" TARGET="main"><SMALL>Restrictions</SMALL></A>
+<LI><A NAME="tex2html126" HREF="node57_mn.html" TARGET="main"><SMALL>Preferring, Avoiding or Rejecting Parses</SMALL></A>
+</UL>
+<LI><A NAME="tex2html127" HREF="node58_mn.html" TARGET="main"><SMALL>Disambiguation</SMALL></A>
+<UL>
+<LI><A NAME="tex2html128" HREF="node59_mn.html" TARGET="main"><SMALL>Lexical Ambiguities</SMALL></A>
+<UL>
+<LI><A NAME="tex2html129" HREF="node60_mn.html" TARGET="main"><SMALL>Prefer Longest Match per Sort</SMALL></A>
+<LI><A NAME="tex2html130" HREF="node61_mn.html" TARGET="main"><SMALL>Prefer Literals</SMALL></A>
+<LI><A NAME="tex2html131" HREF="node62_mn.html" TARGET="main"><SMALL>Prefer Non-Layout</SMALL></A>
+<LI><A NAME="tex2html132" HREF="node63_mn.html" TARGET="main"><SMALL>Prefer Variables</SMALL></A>
+</UL>
+<LI><A NAME="tex2html133" HREF="node64_mn.html" TARGET="main"><SMALL>Context-free Ambiguities</SMALL></A>
+<UL>
+<LI><A NAME="tex2html134" HREF="node65_mn.html" TARGET="main"><SMALL>Associativity filtering</SMALL></A>
+<LI><A NAME="tex2html135" HREF="node66_mn.html" TARGET="main"><SMALL>Removing Trees containing Conflicts</SMALL></A>
+<LI><A NAME="tex2html136" HREF="node67_mn.html" TARGET="main"><SMALL>Removing Trees using <TT>prefer</TT>/<TT>avoid</TT> Attributes at the Root</SMALL></A>
+<LI><A NAME="tex2html137" HREF="node68_mn.html" TARGET="main"><SMALL>Removing Trees containing <TT>prefer</TT>/<TT>avoid</TT> Attributes</SMALL></A>
+<LI><A NAME="tex2html138" HREF="node69_mn.html" TARGET="main"><SMALL>Injection count</SMALL></A>
+<LI><A NAME="tex2html139" HREF="node70_mn.html" TARGET="main"><SMALL>Examples</SMALL></A>
+</UL>
+</UL>
+<LI><A NAME="tex2html140" HREF="node71_mn.html" TARGET="main"><SMALL>Parameterization and Renaming</SMALL></A>
+<UL>
+<LI><A NAME="tex2html141" HREF="node72_mn.html" TARGET="main"><SMALL>Parameterization</SMALL></A>
+<LI><A NAME="tex2html142" HREF="node73_mn.html" TARGET="main"><SMALL>Symbol Renaming</SMALL></A>
+</UL>
+<LI><A NAME="tex2html143" HREF="node74_mn.html" TARGET="main"><SMALL>Variables</SMALL></A>
+<LI><A NAME="tex2html144" HREF="node75_mn.html" TARGET="main"><SMALL>Libraries</SMALL></A>
+<UL>
+<LI><A NAME="tex2html145" HREF="node76_mn.html" TARGET="main"><SMALL>Position Information</SMALL></A>
+<LI><A NAME="tex2html146" HREF="node77_mn.html" TARGET="main"><SMALL>Error messages</SMALL></A>
+</UL>
+<LI><A NAME="tex2html147" HREF="node78_mn.html" TARGET="main"><SMALL>Equations</SMALL></A>
+<UL>
+<LI><A NAME="tex2html148" HREF="node79_mn.html" TARGET="main"><SMALL>Unconditional Equations</SMALL></A>
+<LI><A NAME="tex2html149" HREF="node80_mn.html" TARGET="main"><SMALL>Conditional Equations</SMALL></A>
+<LI><A NAME="tex2html150" HREF="node81_mn.html" TARGET="main"><SMALL>Executing Equations</SMALL></A>
+<LI><A NAME="tex2html151" HREF="node82_mn.html" TARGET="main"><SMALL>List Matching</SMALL></A>
+<LI><A NAME="tex2html152" HREF="node83_mn.html" TARGET="main"><SMALL>Lexical Constructor Functions</SMALL></A>
+<LI><A NAME="tex2html153" HREF="node84_mn.html" TARGET="main"><SMALL>Default Equations</SMALL></A>
+<LI><A NAME="tex2html154" HREF="node85_mn.html" TARGET="main"><SMALL>Memo Functions</SMALL></A>
+<LI><A NAME="tex2html155" HREF="node86_mn.html" TARGET="main"><SMALL>Traversal Functions</SMALL></A>
+<LI><A NAME="tex2html156" HREF="node87_mn.html" TARGET="main"><SMALL>Which Specifications are Executable?</SMALL></A>
+<LI><A NAME="tex2html157" HREF="node88_mn.html" TARGET="main"><SMALL>Common Errors when Executing Specifications</SMALL></A>
+</UL>
+<LI><A NAME="tex2html158" HREF="node89_mn.html" TARGET="main"><SMALL>Tests</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html159" HREF="node90_mn.html" TARGET="main"><SMALL>Examples of Asf+Sdf Specifications</SMALL></A>
+<UL>
+<LI><A NAME="tex2html160" HREF="node91_mn.html" TARGET="main"><SMALL>A simple evaluation function</SMALL></A>
+<LI><A NAME="tex2html161" HREF="node92_mn.html" TARGET="main"><SMALL>Symbolic Differentiation</SMALL></A>
+<LI><A NAME="tex2html162" HREF="node93_mn.html" TARGET="main"><SMALL>Sorting</SMALL></A>
+<LI><A NAME="tex2html163" HREF="node94_mn.html" TARGET="main"><SMALL>Code Generation</SMALL></A>
+<UL>
+<LI><A NAME="tex2html164" HREF="node95_mn.html" TARGET="main"><SMALL>Basic notions</SMALL></A>
+<LI><A NAME="tex2html165" HREF="node96_mn.html" TARGET="main"><SMALL>Expressions and Statements</SMALL></A>
+<LI><A NAME="tex2html166" HREF="node97_mn.html" TARGET="main"><SMALL>Assembly language</SMALL></A>
+<LI><A NAME="tex2html167" HREF="node98_mn.html" TARGET="main"><SMALL>Label generation</SMALL></A>
+<LI><A NAME="tex2html168" HREF="node99_mn.html" TARGET="main"><SMALL>Codegenerator</SMALL></A>
+</UL>
+<LI><A NAME="tex2html169" HREF="node100_mn.html" TARGET="main"><SMALL>Large Asf+Sdf Specifications</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html170" HREF="node101_mn.html" TARGET="main"><SMALL>Well-formedness checks on Sdf</SMALL></A>
+<UL>
+<LI><A NAME="tex2html171" HREF="node102_mn.html" TARGET="main"><SMALL>Parse Errors</SMALL></A>
+<LI><A NAME="tex2html172" HREF="node103_mn.html" TARGET="main"><SMALL>Type check warnings for plain SDF</SMALL></A>
+<LI><A NAME="tex2html173" HREF="node104_mn.html" TARGET="main"><SMALL>Type check errors for plain Sdf</SMALL></A>
+<LI><A NAME="tex2html174" HREF="node105_mn.html" TARGET="main"><SMALL>Type check warnings for Asf+Sdf</SMALL></A>
+<LI><A NAME="tex2html175" HREF="node106_mn.html" TARGET="main"><SMALL>Type check errors for Asf+Sdf</SMALL></A>
+<LI><A NAME="tex2html176" HREF="node107_mn.html" TARGET="main"><SMALL>Type check warnings for Asf</SMALL></A>
+<LI><A NAME="tex2html177" HREF="node108_mn.html" TARGET="main"><SMALL>Type check errors for Asf</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html178" HREF="node109_mn.html" TARGET="main"><SMALL>Building stand-alone environments using ASF+SDF 
+Meta-Environment technology</SMALL></A>
+<UL>
+<LI><A NAME="tex2html179" HREF="node110_mn.html" TARGET="main"><SMALL>Technology and Architecture of the Asf+Sdf Meta-Environment</SMALL></A>
+<UL>
+<LI><A NAME="tex2html180" HREF="node111_mn.html" TARGET="main"><SMALL>Technological Background</SMALL></A>
+<UL>
+<LI><A NAME="tex2html181" HREF="node112_mn.html" TARGET="main"><SMALL>ToolBus</SMALL></A>
+<LI><A NAME="tex2html182" HREF="node113_mn.html" TARGET="main"><SMALL>ATerms</SMALL></A>
+<LI><A NAME="tex2html183" HREF="node114_mn.html" TARGET="main"><SMALL>SGLR</SMALL></A>
+<LI><A NAME="tex2html184" HREF="node115_mn.html" TARGET="main"><SMALL>Term rewriting</SMALL></A>
+</UL>
+<LI><A NAME="tex2html185" HREF="node116_mn.html" TARGET="main"><SMALL>Architecture</SMALL></A>
+</UL>
+<LI><A NAME="tex2html186" HREF="node117_mn.html" TARGET="main"><SMALL>Components</SMALL></A>
+<UL>
+<LI><A NAME="tex2html187" HREF="node118_mn.html" TARGET="main"><SMALL>Parse Table Generation</SMALL></A>
+<LI><A NAME="tex2html188" HREF="node119_mn.html" TARGET="main"><SMALL>Obtaining Equations</SMALL></A>
+</UL>
+<LI><A NAME="tex2html189" HREF="node120_mn.html" TARGET="main"><SMALL>Parsing</SMALL></A>
+<LI><A NAME="tex2html190" HREF="node121_mn.html" TARGET="main"><SMALL>Rewriting a Term using the Evaluator</SMALL></A>
+<LI><A NAME="tex2html191" HREF="node122_mn.html" TARGET="main"><SMALL>Compiling a Specification</SMALL></A>
+<LI><A NAME="tex2html192" HREF="node123_mn.html" TARGET="main"><SMALL>Rewriting a Term using a Compiled Specification</SMALL></A>
+<LI><A NAME="tex2html193" HREF="node124_mn.html" TARGET="main"><SMALL>Unparsing a (Parsed/Normalized) Term</SMALL></A>
+<LI><A NAME="tex2html194" HREF="node125_mn.html" TARGET="main"><SMALL>Applying a Function to a Term</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html195" HREF="node126_mn.html" TARGET="main"><SMALL>Examples of Stand-alone Tools</SMALL></A>
+<UL>
+<LI><A NAME="tex2html196" HREF="node127_mn.html" TARGET="main"><SMALL>A Stand-alone Boolean Tool</SMALL></A>
+<LI><A NAME="tex2html197" HREF="node128_mn.html" TARGET="main"><SMALL>A Stand-alone Pico Typechecker</SMALL></A>
+</UL>
+<BR>
+<LI><A NAME="tex2html198" HREF="node129_mn.html" TARGET="main"><SMALL>Bibliography</SMALL></A>
+<LI><A NAME="tex2html199" HREF="node130_mn.html" TARGET="main"><SMALL>Index</SMALL></A>
+<LI><A NAME="tex2html200" HREF="node131_mn.html" TARGET="main"><SMALL>Contents</SMALL></A>
+<LI><A NAME="tex2html201" HREF="node132_mn.html" TARGET="main"><SMALL>About this document ...</SMALL></A>
+</UL>
+<!--End of Table of Child-Links-->
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

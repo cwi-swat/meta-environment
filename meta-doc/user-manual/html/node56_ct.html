@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Restrictions</TITLE>
+<META NAME="description" CONTENT="Contents of Restrictions">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node57_mn.html">
+<LINK REL="previous" HREF="node55_mn.html">
+<LINK REL="up" HREF="node51_mn.html">
+<LINK REL="next" HREF="node57_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H3><A NAME="SECTION000513500000000000000"></A>
+<A NAME="Restrictions"></A><A NAME="ContextFreeRestrictions"></A><A NAME="LexicalRestrictions"></A>
+<BR>
+Restrictions
+</H3>
+
+<P>
+<A NAME="1217"></A>
+<A NAME="1218"></A>
+<A NAME="1219"></A>
+<A NAME="2423"></A>
+<A NAME="2424"></A>
+Lexical syntax can be highly ambiguous.  Consider 
+a simple lexical definition for identifiers
+like the one given earlier[ in Figure&nbsp;]CODE:repetition.
+When recognizing the text <TT>abc</TT>, what should we return: <TT>a</TT>, <TT>ab</TT>
+or, <TT>abc</TT>? 
+We discuss the strategy <SPAN  CLASS="textit">Prefer Longest Match</SPAN> for
+resolving this kind of ambiguity in
+Lexical Ambiguities[ Section&nbsp;]lex-ambiguity.
+
+<P>
+Here, we describe the notion of <SPAN  CLASS="textit">restrictions</SPAN> that enable the formulation
+of this and other lexical disambiguation strategies.
+
+<P>
+A restriction limits the <SPAN  CLASS="textit">lookahead</SPAN> for a given symbol; it indicates
+that a symbol may not be followed by a character from a given character class.
+A lookahead may consist of more than one character class.  Restrictions come
+in two flavors:
+
+<P>
+
+<UL>
+<LI>lexical restrictions;
+</LI>
+<LI>context-free restrictions.
+</LI>
+</UL>
+
+<P>
+The general form of a restriction is 
+
+<P>
+<PRE>
+&lt;Symbol&gt;+ -/- &lt;Lookaheads&gt;
+</PRE>
+
+<P>
+In case of lexical restrictions <TT>&lt;Symbol&gt;</TT> may be   
+either a literal or sort.  
+In case of context-free restrictions only a sort or symbol is allowed.
+The restriction operator <TT>-/-</TT> should be read as ``may not be
+followed by''.
+Before the restriction operator <TT>-/-</TT> a list of symbols
+is given for which the restriction holds.
+
+<P>
+In the example<A NAME="tex2html26" HREF="footnode_mn.html#foot2425" TARGET="footer"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A>below[ in Figure&nbsp;]CODE:functional
+both <TT>let</TT> and <TT>in</TT> may not be followed by a letter.
+This example shows how lexical restrictions can be used to prevent
+the recognition of erroneous expressions in a small functional language.
+The lexical restriction deals with the possible confusion between
+the reserved words <TT>let</TT> and <TT>in</TT> and variables (of sort <TT>Var</TT>).
+It forbids the recognition of, for instance, <TT>let</TT> as part
+of <TT>letter</TT>. Without this restriction <TT>letter</TT> would be recognized
+as the keyword <TT>let</TT> followed by the variable  <TT>ter</TT>.
+The context-free restriction forbids that a variable is directly
+followed by a letter. It does not forbid layout characters between
+the letters, e.g. <TT>a b</TT> is a legal recognizable string.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1263"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 26:</STRONG>
+Using restrictions in the definition of a simple functional language</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="395" BORDER="0"
+ SRC="img44.png"
+ ALT="\begin{figure}\begin{Label}{CODE:functional}\htmlonly{\htmlrule}
+\texonly{\hr...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+<TT>&lt;Lookaheads&gt;</TT> are slightly more complex.  The most compact way is to
+give the Sdf definition of the <TT>&lt;Lookaheads&gt;</TT> and illustrate their use by
+means of some examples.
+
+<P>
+<PRE>
+context-free syntax
+  CharClass                    -&gt; Lookahead
+  CharClass "." Lookaheads     -&gt; Lookahead
+  Lookahead                    -&gt; Lookaheads
+  Lookaheads "|" Lookaheads    -&gt; Lookaheads {right}
+  "(" Lookaheads ")"           -&gt; Lookaheads {bracket}
+  "[[" {Lookahead ","}* "]]"   -&gt; Lookaheads
+</PRE>
+
+<P>
+The next example illustrates the use of restrictions to define a
+`safe' way of layout.  
+Recall[ from Section&nbsp;]LexicalSyntax
+that optional layout, represented by the symbol <TT>LAYOUT?</TT>,
+may be recognized between the 
+members of the left-hand side of a context-free syntax rule.
+
+<P>
+However, if a such a member recognizes the empty string, this gives rise to a
+lexical ambiguity[ (Section&nbsp;)]lex-ambiguity. 
+This problem is avoided by the definition 
+given below[in Figure&nbsp;]CODE:safe-layout:
+it simply forbids that optional layout is followed by layout characters.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="2426"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 27:</STRONG>
+Safe way of defining <TT>LAYOUT</TT></CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="203" BORDER="0"
+ SRC="img45.png"
+ ALT="\begin{figure}\begin{Label}{CODE:safe-layout}\htmlonly{\htmlrule}
+\texonly{\h...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The example shown below[in Figure&nbsp;]CODE:c-comment
+illustrates the
+use of restrictions to extend the previous layout definition with C-style
+comments. For readability we give here <SPAN  CLASS="textit">two</SPAN> restrictions whereas the
+first one is already imported from 
+module <TT>basic/Whitespace</TT>[ (Figure&nbsp;)]CODE:safe-layout.  
+The repetition of this first restriction is
+redundant and could be eliminated.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1299"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 28:</STRONG>
+Definition of C comments</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="343" BORDER="0"
+ SRC="img46.png"
+ ALT="\begin{figure}\begin{Label}{CODE:c-comment}\htmlonly{\htmlrule}
+\texonly{\hru...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+A frequently asked question is when to use <SPAN  CLASS="textit">lexical</SPAN> restrictions
+and when to use <SPAN  CLASS="textit">context-free</SPAN> restrictions. 
+In one of the previous examples[ (Figure )]CODE:functional
+the lexical restrictions on <TT>let</TT> and <TT>in</TT>
+cannot be defined using context-free restrictions
+because these keywords do not "live" at the context-free level.
+Is it possible to put a lexical restriction on <TT>Var</TT>?
+Yes, but it will have no effect, because internally the
+lexical <TT>Var</TT> is injected in the context-free <TT>Var</TT>.
+The general rule is to define the restrictions always on the
+context-free level and not on the lexical level unless a situation 
+as will be discussed in the next paragraph occurs.
+
+<P>
+The specification 
+below[in Figure&nbsp;]CODE:restrictedexpressions is an example of
+an erroneous use of
+context-free expressions, because it prevents the recognition of
+<TT>(abc)def</TT>. If we want to enforce the correct restriction, it
+is necessary to transform this context-free restriction into
+a lexical restriction.
+
+<P>
+
+<DIV ALIGN="CENTER"><A NAME="1321"></A>
+<TABLE>
+<CAPTION ALIGN="BOTTOM"><STRONG>Figure 29:</STRONG>
+Erroneous use of restrictions in the definition of simple expressions</CAPTION>
+<TR><TD><IMG
+ WIDTH="556" HEIGHT="360" BORDER="0"
+ SRC="img47.png"
+ ALT="\begin{figure}\begin{Label}{CODE:restrictedexpressions}\htmlonly{\htmlrule}
+\...
+...\end{small}
+\htmlonly{\htmlrule}
+\texonly{\hrulefill}\end{Label}\end{figure}"></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.70)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Contents of Type check warnings for plain SDF</TITLE>
+<META NAME="description" CONTENT="Contents of Type check warnings for plain SDF">
+<META NAME="keywords" CONTENT="manual">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="manual.css">
+
+<LINK REL="next" HREF="node104_mn.html">
+<LINK REL="previous" HREF="node102_mn.html">
+<LINK REL="up" HREF="node101_mn.html">
+<LINK REL="next" HREF="node104_mn.html">
+</HEAD>
+ 
+<BODY bgcolor="#ffffff" text="#000000" link="#9944EE" vlink="#0000ff" alink="#00ff00">
+
+<H2><A NAME="SECTION00072000000000000000"></A>
+<A NAME="SEC:plainSDFwarnings"></A>
+<BR>
+Type check warnings for plain SDF
+</H2>
+The warnings and error for SDF are separated into 4 sections. First we will
+discuss the type check warnings and errors[ (see
+Section&nbsp;)]SEC:plainSDFerrors for plain SDF. This variant of SDF is
+independent of ASF. Later we will discuss the warnings[ (see
+Section&nbsp;)]SEC:ASFSDFwarnings and errors[ (see
+Section&nbsp;)]SEC:ASFSDFerrors for SDF used in combination with ASF.
+In this case we need to be more strict and every SDF construct is supported
+by ASF.
+
+<P>
+Warnings do not break the specification, but it is advisable to fix
+them anyway. Often they point out some not well-formed part in the
+specification.
+
+<P>
+
+<UL>
+<LI><TT>undeclared sorts</TT> This warning indicates that a sort is used
+which is not explicitly declared, or it is declared but in a hidden
+section.
+</LI>
+<LI><TT>double declared sort</TT> This warning points out that the sort is
+already declared somewhere in this module, or in one of the imported
+modules.
+</LI>
+<LI><TT>double declared start-symbol</TT>
+This warning indicates that
+the start-symbol is previously defined as start-symbol as well. This can
+be in the current module or in one of the imported modules.
+</LI>
+<LI><TT>illegal attribute: {bracket, left, right, assoc, non-assoc}</TT>
+This warning is generated because the syntactic form the production rule
+and the attribute do not match. Given this mismatch the intended behaviour
+will not be effective.
+</LI>
+<LI><TT>used in priorities but undefined</TT>
+This warning is generated whenever a production rule is used in a priority
+section which is not defined in this module or in one of the imported
+modules. It is possible that this production rule will be defined in
+one of the modules which imports this module. Normally, this indicates
+some typo.
+</LI>
+<LI><TT>inconsistent rhs in priorities</TT>
+This warning is caused by a production rule which has not the same
+right-hand side as the other production rules in the priority relation.
+Whenever this occurs the effect of the expressed priority relation will
+be ignored.  This check is performed modulo injections.
+</LI>
+<LI><TT>unknown constructor used in priorities</TT>
+This warning indicates the use of a constructor which is not used in
+the corresponding set of production rules with the same right-hand side.
+This is a very weak check on consistent use of constructor information.
+</LI>
+<LI><TT>sort CHAR used in production rule</TT>
+</LI>
+<LI><TT>deprecated tuple notation</TT>
+</LI>
+<LI><TT>deprecated unquoted symbol notation</TT>
+</LI>
+<LI><TT>deprecated non-plain sort definition</TT>
+</LI>
+<LI><TT>aliased symbol already declared</TT>
+</LI>
+</UL>
+
+<P>
+
+<HR>
+<ADDRESS>
+Jurgen Vinju
+2006-03-04
+</ADDRESS>
+</BODY>
+</HTML>
