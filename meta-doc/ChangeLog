@@ -6,6 +6,7 @@ Sat Mar  4 09:50:06 CET 2006 <jurgenv@cwi.nl
  * user-manual: Work in progress: changing URL's to www.meta-environment.org
  * configure.in: Changed --with-build-doc option to --enable-maintainer-mode
  * package: changed package to standard GLT package interface
+ * Makefile.am: added generation of meta-doc-config script
 
 Fri Apr 23 10:32:06 CEST 2004 <jurgenv@cwi.nl>
   * Upgraded makefiles
