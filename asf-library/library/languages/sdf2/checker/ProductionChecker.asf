@@ -50,13 +50,8 @@ equations
         Msgs2 := check-right-hand-sides(Module, , $ModuleId),
         Msgs3 := check-right-hand-side-lexical-prod(Module, , $ModuleId),
 
-        productions(Prod*7) := diff-modulo-attrs(productions(Prod*3), 
-                                                 productions(Prod*6)),
-
         $String1 := moduleid2str($ModuleId),
-        $String2 := "undefined production used in priorities",
-        Msgs4 := make-production-warnings(Prod*7, $String2), 
-        InfoMsgTuple3 := put-messages($ModuleId, Msgs1, Msgs2, Msgs3, Msgs4, InfoMsgTuple1),
+        InfoMsgTuple3 := put-messages($ModuleId, Msgs1, Msgs2, Msgs3, InfoMsgTuple1),
 
         ModuleInfoTable1 := get-module-info(InfoMsgTuple3),
         ModuleInfoTable2 := put-production-info($ModuleId, 
