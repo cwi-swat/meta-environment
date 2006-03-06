@@ -14,3 +14,6 @@ tifstojava
 toolbus-java-adapter-*.pkg
 toolbus-java-adapter-*.tar.gz
 toolbus-java-adapter-config
+INSTALL
+install-sh
+missing
