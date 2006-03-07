@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Mar  7 11:15:05 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Add process SelectModule that selects a certain module
+
 Mon Feb 13 09:58:11 CET 2006 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - Removed StartEditor and GetEditorType processes

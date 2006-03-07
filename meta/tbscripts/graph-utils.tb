@@ -46,4 +46,8 @@ endlet
 
 toolbus(ImportGraphPainter)
 
+process SelectModule(ModuleId: term) is
+  snd-msg(nav-select-module(ModuleId))
+  . snd-msg(gp-select-node("import-graph", ModuleId))
+
 #endif /*__GRAPH_UTILS__*/
