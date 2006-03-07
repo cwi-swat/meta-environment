@@ -5,10 +5,11 @@
 
 #include "configuration-manager.tif.h"
 
-#define NR_SIG_ENTRIES	11
+#define NR_SIG_ENTRIES	12
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<configuration-manager>,add-system-properties(<str>))",
+  "rec-do(<configuration-manager>,change-workspace(<str>))",
   "rec-eval(<configuration-manager>,get-events(<term>))",
   "rec-eval(<configuration-manager>,get-module-events(<term>,<term>))",
   "rec-eval(<configuration-manager>,get-action(<term>,<term>))",
@@ -32,23 +33,27 @@ ATerm configuration_manager_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(get-module-action(<term>,<term>,<term>))", &t0, &t1, &t2)) {
     return get_module_action(conn, t0, t1, t2);
   }
-  if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
-    return get_extension_modulename(conn, s0);
-  }
   if(ATmatch(term, "rec-eval(get-action(<term>,<term>))", &t0, &t1)) {
     return get_action(conn, t0, t1);
   }
-  if(ATmatch(term, "rec-eval(get-modulename-extension(<term>))", &t0)) {
-    return get_modulename_extension(conn, t0);
+  if(ATmatch(term, "rec-eval(get-extension-modulename(<str>))", &s0)) {
+    return get_extension_modulename(conn, s0);
   }
   if(ATmatch(term, "rec-eval(get-module-events(<term>,<term>))", &t0, &t1)) {
     return get_module_events(conn, t0, t1);
   }
-  if(ATmatch(term, "rec-eval(get-module-paths)")) {
-    return get_module_paths(conn);
+  if(ATmatch(term, "rec-eval(get-modulename-extension(<term>))", &t0)) {
+    return get_modulename_extension(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-events(<term>))", &t0)) {
     return get_events(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-module-paths)")) {
+    return get_module_paths(conn);
+  }
+  if(ATmatch(term, "rec-do(change-workspace(<str>))", &s0)) {
+    change_workspace(conn, s0);
+    return NULL;
   }
   if(ATmatch(term, "rec-eval(get-library-paths)")) {
     return get_library_paths(conn);

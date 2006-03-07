@@ -253,7 +253,7 @@ static CFG_Property getWorkspace() {
     ATerror("__FILE__: could not get current working directory");
   }
   else {
-    return CFG_makePropertyModulePath("Workspace",curdir);
+    return CFG_makePropertyModulePath("Workspace", curdir);
   }
 
   return NULL;
@@ -387,6 +387,28 @@ ATerm get_modulename_extension(int cid, ATerm moduleId) {
   }
 
   return ATmake("snd-value(no-extension)");
+}
+
+void change_workspace(int cid, const char *path) {
+  CFG_Property current = getWorkspace();
+  CFG_PropertyList updated = CFG_makePropertyListEmpty();
+
+  if (chdir(path) != 0) {
+    return;
+  }
+  
+  while (!CFG_isPropertyListEmpty(modulePaths)) {
+    CFG_Property property = CFG_getPropertyListHead(modulePaths);
+    modulePaths = CFG_getPropertyListTail(modulePaths);
+
+    if (CFG_isEqualProperty(current, property)) {
+      property = getWorkspace();
+    }
+
+    updated = CFG_makePropertyListMany(property, updated);
+  }
+
+  modulePaths = updated;
 }
 
 ATerm get_module_paths(int cid) {

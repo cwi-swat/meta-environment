@@ -5,24 +5,27 @@ tool configuration-manager is { command = "__PREFIX__/bin/configmanager" }
 
 process ConfigurationManager is
 let
-  Action: str,
   CM: configuration-manager,
+  Action: str,
+  Categories: term,
   Contents: str,
-  Event: term,
   Events: list,
-  Type: term,
+  Event: term,
+  Extension: str,
   LibraryPaths: list,
   ModuleId: term,
   ModulePaths: list,
-  Extension: str,
-  Categories: term
+  Path: str,
+  Type: term
 in
   execute(configuration-manager, CM?)
   .
   (
     rec-msg(cm-add-system-properties(Contents?))
     . snd-do(CM, add-system-properties(Contents))
-    . snd-msg(cm-system-properties-added)
+  +
+    rec-msg(cm-change-workspace(Path?))
+    . snd-do(CM, change-workspace(Path))
   +
     rec-msg(cm-get-events(Type?))
     . snd-eval(CM, get-events(Type))
