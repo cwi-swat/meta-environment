@@ -67,6 +67,7 @@ in
       .
       if equal(FoundPath, Path) then
         OpenModule(RelativeFilename, ModuleId?)
+        . SelectModule(ModuleId)
       else
         Error("The chosen Module is shadowed by another module in the search path: %t", [FoundPath])
       fi
