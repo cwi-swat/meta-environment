@@ -1,5 +1,12 @@
 $Id$
 
+Tue Mar  7 15:20:06 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - Properly close the connection/streams on rec-terminate and snd-disconnect.
+   - Disallow a connect() when already connected.
+   - Remove old timing calls.
+   - Small refactoring in shakeHands().
+
 Tue Mar  7 10:19:39 CET 2006 <kooiker@cwi.nl>
  * src/toolbus/JavaTif.java:
    - Removed folding markers

@@ -90,8 +90,18 @@ abstract public class AbstractTool implements Tool, Runnable {
         return lockObject;
     }
 
+    private void closeStreams() throws IOException {
+    	connected = false;
+    	inputStream.close();
+    	outputStream.close();
+    }
+
     public void connect() throws IOException {
-        Socket socket = new Socket(address, port);
+    	if (connected) {
+            throw new IOException("already connected to ToolBus");
+        }
+
+    	Socket socket = new Socket(address, port);
         socket.setTcpNoDelay(true);
         inputStream = new BufferedInputStream(socket.getInputStream());
         outputStream = new BufferedOutputStream(socket.getOutputStream());
@@ -118,10 +128,11 @@ abstract public class AbstractTool implements Tool, Runnable {
 
         connect();
     }
-
+    
     public void disconnect() {
         try {
             sendTerm(factory.parse("snd-disconnect"));
+            closeStreams();
         } catch (IOException e) {
             throw new RuntimeException("cannot disconnect: " + e.getMessage());
         }
@@ -178,13 +189,13 @@ abstract public class AbstractTool implements Tool, Runnable {
 
         ATerm term = readTerm();
         List matches = term.match("rec-do(signature([<list>],[<list>]))");
-        if (matches != null) {
-            info("checking input signature...");
-            checkInputSignature((ATermList) matches.get(0));
-            sendTerm(termSndVoid);
-        } else {
+        if (matches == null) {
             throw new RuntimeException("signature information garbled: " + term);
         }
+
+        info("checking input signature...");
+        checkInputSignature((ATermList) matches.get(0));
+        sendTerm(termSndVoid);
     }
 
     void info(String msg) {
@@ -227,24 +238,16 @@ abstract public class AbstractTool implements Tool, Runnable {
                 System.out.println(term);
             }
 
-            System.currentTimeMillis();
-
             outputStream.write(ls);
-
-            System.currentTimeMillis();
-
             term.writeToTextFile(outputStream);
             if (LENSPEC + size < MIN_MSG_SIZE) {
                 info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size))
                         + " zero bytes.");
+                for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
+                    outputStream.write(0);
+                }
             }
-            System.currentTimeMillis();
-            for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
-                outputStream.write(0);
-            }
-            System.currentTimeMillis();
             outputStream.flush();
-            System.currentTimeMillis();
         }
     }
 
@@ -303,16 +306,18 @@ abstract public class AbstractTool implements Tool, Runnable {
     }
 
     public void run() {
-        setRunning(true);
-        try {
-            while (running) {
-                handleIncomingTerm();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("IOException: " + e.getMessage());
-        }
-    }
+		setRunning(true);
+		try {
+			while (running) {
+				handleIncomingTerm();
+			}
+		} catch (IOException e) {
+			if (connected) {
+				e.printStackTrace();
+				throw new RuntimeException("IOException: " + e.getMessage());
+			}
+		}
+	}
 
     public void stopRunning() {
         setRunning(false);
@@ -325,7 +330,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 
         if (t.match("rec-terminate(<term>)") != null) {
             setRunning(false);
-            connected = false;
+            closeStreams();
         }
 
         handleIncomingTerm(t);
