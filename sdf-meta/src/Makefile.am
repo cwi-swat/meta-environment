@@ -3,6 +3,7 @@
 EXTRA_DIST = $(wildcard *.src)
 
 bin_SCRIPTS = \
+	      def-dump \
 	      sdf-meta-config \
 	      sdf-meta \
 	      pt-dump
@@ -14,6 +15,7 @@ TBSCRIPTS = \
 	    `$(META)/bin/meta-config --toolbus-includes`
 
 CLEANFILES = \
+	     def-dump \
 	     sdf-meta-config \
 	     sdf-meta \
 	     pt-dump

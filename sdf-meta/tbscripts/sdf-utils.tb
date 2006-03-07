@@ -193,7 +193,7 @@ in
   .
   if not-equal(Modules, []) then
     ModuleId := first(Modules)
-    . DeleteSessions(ModuleId)
+    //. DeleteSessions(ModuleId)
     . MM-DeleteModule(ModuleId)
     . Modules := next(Modules)
   fi

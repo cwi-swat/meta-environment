@@ -24,6 +24,7 @@ TBSCRIPTS = \
 GENERATED_TBSCRIPTS = \
 		      sdf2-language.tb \
 		      start-meta-studio.tb \
+		      start-def-dump.tb \
 		      start-pt-dump.tb
 
 EXTRA_DIST = \

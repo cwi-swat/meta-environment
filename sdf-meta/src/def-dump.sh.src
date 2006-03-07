@@ -24,7 +24,7 @@ Version() {
 }
 
 # getopt handles command line...
-args=`getopt --options $myarguments --longoptions $options -- $* 2> /dev/null`
+args=`getopt --options $myarguments -- $* 2> /dev/null`
 if test $? != 0
 then
         Usage
@@ -76,4 +76,4 @@ __TOOLBUS__/bin/toolbus \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
   -DOUTPUTFILE=\\\"${OUTPUTFILE}\\\" \
   ${INCLUDES} \
-  __PREFIX__/share/sdf-meta/start-pt-dump.tb $*
+  __PREFIX__/share/sdf-meta/start-def-dump.tb $*
