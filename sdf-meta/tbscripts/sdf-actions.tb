@@ -5,6 +5,20 @@
 #include <sdf-namespace.h>
 #include <gui-utils.tb>
 
+process ChangeWorkspaceAction is
+let
+  Cancel: bool,
+  Path: str
+in
+  PromptForDirectory("Workspace", [], Cancel?, Path?)
+  .
+  if equal(Cancel, true) then
+    tau
+  else
+    snd-msg(cm-change-workspace(Path))
+  fi
+endlet
+
 process CloseAllAction is
 let
   Id: term,

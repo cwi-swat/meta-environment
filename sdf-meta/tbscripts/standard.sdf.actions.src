@@ -6,6 +6,8 @@ configuration([
          "ShowFeedbackLocation"),
   action([description(studio-menubar, menu([label("File"), label("Exit")]))],
          "ExitAction"),
+  action([description(studio-menubar, menu([label("File"), label("Change Workspace...")]))],
+         "ChangeWorkspaceAction"),
   action([description(studio-menubar, menu-shortcut([label("Module"), label("New...")], shortcut([M_ALT,M_SHIFT],VK_N))),
            description(studio-toolbar, icon("New Module", "New24.gif"))],
          "NewModuleAction"),
