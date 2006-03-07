@@ -1,5 +1,10 @@
 $Id$
 
+Tue Mar  7 09:26:35 CET 2006 <{gerco,kooiker}@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - Add TCP_NODELAY option to socket to force small messages to be send
+     immediately
+
 Tue Aug 30 11:16:49 CEST 2005 <kooiker@cwi.nl>
  * script/tifstojava:
    - Generate from source file

@@ -43,7 +43,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 
     private int toolid = -1;
 
-    private Map queueMap;
+    private Map<String, EventQueue> queueMap;
 
     private ATerm termSndVoid;
 
@@ -55,7 +55,7 @@ abstract public class AbstractTool implements Tool, Runnable {
         this.factory = factory;
 
         termSndVoid = factory.parse("snd-void");
-        queueMap = new HashMap();
+        queueMap = new HashMap<String, EventQueue>();
         lockObject = this;
     }
 
@@ -92,6 +92,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 
     public void connect() throws IOException {
         Socket socket = new Socket(address, port);
+        socket.setTcpNoDelay(true);
         inputStream = new BufferedInputStream(socket.getInputStream());
         outputStream = new BufferedOutputStream(socket.getOutputStream());
 
@@ -225,20 +226,30 @@ abstract public class AbstractTool implements Tool, Runnable {
                 System.out.print(new String(ls));
                 System.out.println(term);
             }
+
+            System.currentTimeMillis();
+
             outputStream.write(ls);
+
+            System.currentTimeMillis();
+
             term.writeToTextFile(outputStream);
             if (LENSPEC + size < MIN_MSG_SIZE) {
                 info("padding with " + (MIN_MSG_SIZE - (LENSPEC + size))
                         + " zero bytes.");
             }
+            System.currentTimeMillis();
             for (int i = LENSPEC + size; i < MIN_MSG_SIZE; i++) {
                 outputStream.write(0);
             }
+            System.currentTimeMillis();
             outputStream.flush();
+            System.currentTimeMillis();
         }
     }
 
-    public static ATerm readTerm(InputStream inputStream, ATermFactory factory) throws IOException {
+    public static ATerm readTerm(InputStream inputStream, ATermFactory factory)
+            throws IOException {
         ATerm result;
         byte[] lspecBuf = new byte[LENSPEC];
         int index;
@@ -280,7 +291,7 @@ abstract public class AbstractTool implements Tool, Runnable {
     }
 
     public ATerm readTerm(InputStream inputStream) throws IOException {
-         return readTerm(inputStream, factory);
+        return readTerm(inputStream, factory);
     }
 
     public ATerm readTerm() throws IOException {
@@ -352,7 +363,7 @@ abstract public class AbstractTool implements Tool, Runnable {
     public void postEvent(ATerm term) {
         synchronized (getLockObject()) {
             ATermAppl appl = (ATermAppl) term;
-            EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+            EventQueue queue = queueMap.get(appl.getName());
             if (queue == null) {
                 queue = new EventQueue();
                 queueMap.put(appl.getName(), queue);
@@ -372,7 +383,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 
     private void ackEvent(ATerm event) throws IOException {
         ATermAppl appl = (ATermAppl) event;
-        EventQueue queue = (EventQueue) queueMap.get(appl.getName());
+        EventQueue queue = queueMap.get(appl.getName());
         if (queue != null && queue.ackWaiting()) {
             appl = queue.nextEvent();
             if (appl != null) {
@@ -398,7 +409,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 class EventQueue {
     private boolean ack = false;
 
-    private List events = new Vector();
+    private List<ATermAppl> events = new Vector<ATermAppl>();
 
     public boolean ackWaiting() {
         return ack;
@@ -414,7 +425,7 @@ class EventQueue {
             return null;
         }
 
-        ATermAppl event = (ATermAppl) events.get(0);
+        ATermAppl event = events.get(0);
         events.remove(0);
         return event;
     }
