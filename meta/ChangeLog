@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Mar  7 13:28:29 CET 2006 <kooiker@cwi.nl>
+ * tbscripts/gui-actions.tb:
+   - Add PromptForDirectory process
+
 Tue Mar  7 11:15:05 CET 2006 <kooiker@cwi.nl>
  * tbscripts/graph-utils.tb:
    - Add process SelectModule that selects a certain module

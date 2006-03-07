@@ -9,6 +9,19 @@ process AskQuestion(Question : str, Answer : term?) is
   snd-msg(ask-question(Question))
   . rec-msg(ask-question-result(Answer?))
 
+process PromptForDirectory(Title : str, 
+                      Paths : list, 
+		      Cancel: bool?,
+		      Path : str?) is
+  snd-msg(ask-for-directory(Title, Paths))
+  .
+  (
+    rec-msg(ask-for-directory-result(Path?))
+    . Cancel := false
+  +
+    rec-msg(ask-for-directory-cancel)
+    . Cancel := true
+  )
 
 process PromptForFile(Title : str, 
                       Paths : list, 
