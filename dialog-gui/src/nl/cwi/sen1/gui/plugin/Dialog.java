@@ -38,21 +38,41 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
     public void initStudioPlugin(Studio studio) {
         this.studio = studio;
         DialogBridge bridge = new DialogBridge(studio.getATermFactory(), this);
-	factory = Factory.getInstance((aterm.pure.PureFactory)studio.getATermFactory());
+        factory = Factory.getInstance((aterm.pure.PureFactory) studio
+                .getATermFactory());
         studio.connect(getName(), bridge);
     }
 
-    public ATerm showFileDialog(String title, ATerm paths,
-            final String extension) {
+    public ATerm showDirectoryDialog(String title, ATerm paths) {
         JFileChooser chooser = sharedChooser;
-        
+
         if (!((ATermList) paths).isEmpty()) {
-            DialogFileSystemView fsv = new DialogFileSystemView(
-                    factory.PropertyListFromTerm(paths));
+            DialogFileSystemView fsv = new DialogFileSystemView(factory
+                    .PropertyListFromTerm(paths));
             chooser = new JFileChooser(fsv);
             chooser.setFileView(new DialogFileView(fsv));
         }
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
+        if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
+            String path = chooser.getSelectedFile().getAbsolutePath();
+            return studio.getATermFactory().make(
+                    "snd-value(directory-dialog-approve(<str>))", path);
+        }
+        return studio.getATermFactory().make("snd-value(directory-dialog-cancel)");
+    }
+    
+    public ATerm showFileDialog(String title, ATerm paths,
+            final String extension) {
+        JFileChooser chooser = sharedChooser;
+
+        if (!((ATermList) paths).isEmpty()) {
+            DialogFileSystemView fsv = new DialogFileSystemView(factory
+                    .PropertyListFromTerm(paths));
+            chooser = new JFileChooser(fsv);
+            chooser.setFileView(new DialogFileView(fsv));
+        }
+
         FileFilter filter = new FileFilter() {
             public boolean accept(File file) {
                 if (file.isDirectory()) {
@@ -67,7 +87,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
                 return "*" + extension;
             }
         };
-        
+
         chooser.addChoosableFileFilter(filter);
         if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();

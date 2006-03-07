@@ -1,22 +1,27 @@
 // Java tool interface class DialogTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 6, 2006 2:33:13 PM
+// generation time: Mar 7, 2006 1:21:33 PM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class DialogTool
   extends SwingTool
   implements DialogTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PshowProgressMessage0;
   private ATerm PshowErrorDialogWithArguments0;
   private ATerm PshowProgressList0;
@@ -24,12 +29,9 @@ abstract public class DialogTool
   private ATerm PshowErrorDialog0;
   private ATerm PcloseProgressList0;
   private ATerm PshowQuestionDialog0;
+  private ATerm PshowDirectoryDialog0;
   private ATerm PshowFileDialog0;
   private ATerm PrecTerminate0;
-
-  //}}}
-
-  //{{{  protected DialogTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
   protected DialogTool(ATermFactory factory)
@@ -39,26 +41,21 @@ abstract public class DialogTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<list>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<dialog>,close-progress-list)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<dialog>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<dialog>,show-error-dialog-with-arguments(<str>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<dialog>,show-directory-dialog(<str>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<dialog>,show-file-dialog(<str>,<list>,<str>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<dialog>,show-question-dialog(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-list(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<dialog>,show-progress-message-with-arguments(<str>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<dialog>,close-progress-list)"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<dialog>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
@@ -70,13 +67,10 @@ abstract public class DialogTool
     PshowErrorDialog0 = factory.parse("rec-do(show-error-dialog(<str>))");
     PcloseProgressList0 = factory.parse("rec-do(close-progress-list)");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
+    PshowDirectoryDialog0 = factory.parse("rec-eval(show-directory-dialog(<str>,<term>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<term>,<str>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -117,6 +111,10 @@ abstract public class DialogTool
     if (result != null) {
       return showQuestionDialog((String)result.get(0));
     }
+    result = term.match(PshowDirectoryDialog0);
+    if (result != null) {
+      return showDirectoryDialog((String)result.get(0), (ATerm)result.get(1));
+    }
     result = term.match(PshowFileDialog0);
     if (result != null) {
       return showFileDialog((String)result.get(0), (ATerm)result.get(1), (String)result.get(2));
@@ -127,12 +125,9 @@ abstract public class DialogTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -147,15 +142,10 @@ abstract public class DialogTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }

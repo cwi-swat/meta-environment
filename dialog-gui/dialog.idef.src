@@ -16,6 +16,9 @@ in
   rec-connect(T?)
   .
   (
+    rec-msg(ask-for-directory(DialogTitle?, Paths?))
+    . ShowDirectoryDialog(T, DialogTitle, Paths)
+  +
     rec-msg(ask-for-file(DialogTitle?, Paths?, Extension?))
     . ShowFileDialog(T, DialogTitle, Paths, Extension)
   +
@@ -33,6 +36,21 @@ in
   )
   *
   rec-disconnect(T)
+endlet
+
+process ShowDirectoryDialog(T: dialog, DialogTitle: str, Paths: list) is
+let
+  Path: str
+in
+  snd-eval(T, show-directory-dialog(DialogTitle, Paths))
+  .
+  (
+    rec-value(T, directory-dialog-approve(Path?))
+    . snd-msg(ask-for-directory-result(Path))
+  +
+    rec-value(T, directory-dialog-cancel)
+    . snd-msg(ask-for-directory-cancel)
+  )
 endlet
 
 process ShowFileDialog(T: dialog, DialogTitle: str, Paths: list, Extension: str) is

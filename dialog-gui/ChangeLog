@@ -1,5 +1,9 @@
 $Id$
 
+Tue Mar  7 13:27:51 CET 2006 <kooiker@cwi.nl>
+ * src/**/*.java,dialog.idef.src:
+   - Add directory chooser
+
 Tue Feb 21 13:16:44 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Use new configuration api

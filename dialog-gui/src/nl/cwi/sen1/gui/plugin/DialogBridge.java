@@ -1,6 +1,6 @@
 // Java tool bridge DialogBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 6, 2006 2:33:13 PM
+// generation time: Mar 7, 2006 1:21:33 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -11,17 +11,11 @@ public class DialogBridge
 {
   private DialogTif tool;
 
-  //{{{  public DialogBridge(ATermFactory factory, DialogTif tool)
-
   public DialogBridge(ATermFactory factory, DialogTif tool)
   {
     super(factory);
     this.tool = tool;
   }
-
-  //}}}
-
-  //{{{  public void showProgressMessage(String s0)
 
   public void showProgressMessage(String s0)
   {
@@ -32,10 +26,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `showProgressMessage' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void showErrorDialogWithArguments(String s0, ATerm t1)
-
   public void showErrorDialogWithArguments(String s0, ATerm t1)
   {
     if (tool != null) {
@@ -45,10 +35,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `showErrorDialogWithArguments' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void showProgressList(String s0)
-
   public void showProgressList(String s0)
   {
     if (tool != null) {
@@ -58,10 +44,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `showProgressList' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void showProgressMessageWithArguments(String s0, ATerm t1)
-
   public void showProgressMessageWithArguments(String s0, ATerm t1)
   {
     if (tool != null) {
@@ -71,10 +53,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `showProgressMessageWithArguments' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void showErrorDialog(String s0)
-
   public void showErrorDialog(String s0)
   {
     if (tool != null) {
@@ -84,10 +62,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `showErrorDialog' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void closeProgressList()
-
   public void closeProgressList()
   {
     if (tool != null) {
@@ -97,10 +71,6 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `closeProgressList' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public ATerm showQuestionDialog(String s0)
-
   public ATerm showQuestionDialog(String s0)
   {
     if (tool != null) {
@@ -108,10 +78,13 @@ public class DialogBridge
     }
       throw new UnsupportedOperationException("method `showQuestionDialog' not supported.");
   }
-
-  //}}}
-  //{{{  public ATerm showFileDialog(String s0, ATerm t1, String s2)
-
+  public ATerm showDirectoryDialog(String s0, ATerm t1)
+  {
+    if (tool != null) {
+      return tool.showDirectoryDialog(s0, t1);
+    }
+      throw new UnsupportedOperationException("method `showDirectoryDialog' not supported.");
+  }
   public ATerm showFileDialog(String s0, ATerm t1, String s2)
   {
     if (tool != null) {
@@ -119,10 +92,6 @@ public class DialogBridge
     }
       throw new UnsupportedOperationException("method `showFileDialog' not supported.");
   }
-
-  //}}}
-  //{{{  public void recTerminate(ATerm t0)
-
   public void recTerminate(ATerm t0)
   {
     if (tool != null) {
@@ -132,6 +101,4 @@ public class DialogBridge
       throw new UnsupportedOperationException("method `recTerminate' not supported.");
     }
   }
-
-  //}}}
 }
