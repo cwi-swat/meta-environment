@@ -5,7 +5,7 @@ Tue Mar  7 13:30:09 CET 2006 <kooiker@cwi.nl>
    - Add |Change Workspace...| menu to |File| menu that allows a change of the
      workspace without exiting the environment (closes #163)
  * tbscripts/start-def-dump.tb.src:
-   - Added definition dumper (closes #399)
+   - Added definition dumper (closes #428)
 
 Tue Mar  7 11:14:33 CET 2006 <kooiker@cwi.nl>
  * tbscripts/sdf-actions.tb:
