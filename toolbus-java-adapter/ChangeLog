@@ -1,5 +1,10 @@
 $Id$
 
+Tue Mar  7 16:37:36 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/JavaTif.java:
+   - Support code generation for default package again (fix regression #548).
+   - Import either AbstractTool or SwingTool, depending on -swing flag.
+
 Tue Mar  7 15:20:06 CET 2006 <gerco@cwi.nl>
  * src/toolbus/AbstractTool.java:
    - Properly close the connection/streams on rec-terminate and snd-disconnect.

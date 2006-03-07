@@ -194,9 +194,13 @@ public class JavaTif {
     }
 
     public void genTif() throws IOException {
-        String string = package_name.replaceAll("[.]", "/");
-        File path = new File(string);
-        path.mkdirs();
+        File path;
+        if (package_name != null) {
+        	path = new File(package_name.replaceAll("[.]", File.separator));
+        	path.mkdirs();
+        } else {
+        	path = new File(".");
+        }
         String filename = path + File.separator + tool_interface + ".java";
 
         System.out.println("generating file " + filename);
@@ -227,9 +231,13 @@ public class JavaTif {
     }
 
     public void genTool() throws IOException {
-        String string = package_name.replaceAll("[.]", "/");
-        File path = new File(string);
-        path.mkdirs();
+        File path;
+        if (package_name != null) {
+            path = new File(package_name.replaceAll("[.]", File.separator));
+            path.mkdirs();
+        } else {
+        	path = new File(".");
+        }
         String filename = path + File.separator + tool_class + ".java";
 
         System.out.println("generating file " + filename);
@@ -281,7 +289,12 @@ public class JavaTif {
         out.println("import java.util.List;");
         out.println("import java.util.Map;");
         out.println();
-        out.println("import toolbus.SwingTool;");
+        if (swingTool) {
+			out.println("import toolbus.SwingTool;");
+		} else {
+			out.println("import toolbus.AbstractTool;");
+		}
+        out.println();
         out.println("import aterm.ATerm;");
         out.println("import aterm.ATermAppl;");
         out.println("import aterm.ATermFactory;");
@@ -466,9 +479,13 @@ public class JavaTif {
     }
 
     private void genBridge() throws IOException {
-        String string = package_name.replaceAll("[.]", "/");
-        File path = new File(string);
-        path.mkdirs();
+        File path;
+        if (package_name != null) {
+            path = new File(package_name.replaceAll("[.]", File.separator));
+            path.mkdirs();
+        } else {
+        	path = new File(".");
+        }
         String filename = path + File.separator + tool_bridge + ".java";
 
         System.out.println("generating file " + filename);
