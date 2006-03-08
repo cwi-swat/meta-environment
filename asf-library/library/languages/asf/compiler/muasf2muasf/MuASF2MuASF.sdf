@@ -10,6 +10,7 @@ imports languages/asf/compiler/muasf2muasf/Add-List-Cons
 imports languages/asf/compiler/muasf2muasf/Remove-Lists
 imports languages/asf/compiler/muasf2muasf/Fix-Tupled-Traversals
 imports languages/asf/compiler/muasf2muasf/Add-Type-Checks
+imports languages/asf/compiler/muasf2muasf/Add-Range-Checks
 imports languages/asf/compiler/muasf2muasf/Remove-Types
 imports languages/asf/compiler/muasf2muasf/ReturnsList
 

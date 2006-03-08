@@ -2,11 +2,18 @@ equations
 
 %% This function will:
 %%	* replace all layout on matching positions by a variable
-%%	* replace all layout on building positions by a space
+%%	(* replace all layout on building positions by a space not anymore)
 %%
 %% Except when the layout contains any lexical constructor functions:
 %%	* they are lifted to top level such that they can either be
 %%	  constructed, or matched.
+%%
+%% Lexical variable over LAYOUT, are translated to lexical variables over
+%% <LAYOUT*-LEX>, such that the user can match parts of layout. This can be
+%% done because the flattener flattens layout to <LAYOUT*-LEX> lists. 
+%% TODO: change the SDF2 normalizer to directly generate <LAYOUT*-LEX> lists,
+%% such that user can define his variables over LAYOUT*-LEX, instead of the
+%% magic LAYOUT to <LAYOUT*-LEX> translation that is needed now.
 
 [main]
 	normalize-layout(Module) = fix-layout(Module)
@@ -14,19 +21,34 @@ equations
 equations
 
 [fix-equation]
-	fix-layout(Lhs = Rhs) = match-layout(Lhs) = build-layout(Rhs)
+	<Lhs2,_Int> := match-layout(Lhs, 0),
+	Rhs2 := build-layout(Rhs)
+	===>
+	fix-layout(Lhs = Rhs) = Lhs2 = Rhs2 
 
 [fix-match-condition]
-	fix-layout(Lhs := Rhs) = match-layout(Lhs) := build-layout(Rhs)
+	<Lhs2,_Int> := match-layout(Lhs,0),
+	Rhs2 := build-layout(Rhs)
+	===>
+	fix-layout(Lhs := Rhs) = Lhs2 := Rhs2
 
 [fix-no-match-condition]
-	fix-layout(Lhs !:= Rhs) = match-layout(Lhs) !:= build-layout(Rhs)
+	<Lhs2,_Int> := match-layout(Lhs,0),
+	Rhs2 := build-layout(Rhs)
+	===>
+	fix-layout(Lhs !:= Rhs) = Lhs2 !:= Rhs2
 
-[fix-equality-condition]
-	fix-layout(Lhs == Rhs) = build-layout(Lhs) == build-layout(Rhs)
+[fix-equality-condition-to-matching-condition]
+	Lhs2 := build-layout(Lhs),
+	Rhs2 := build-layout(Rhs)
+	===>
+	fix-layout(Lhs == Rhs) = Lhs2 == Rhs2
 
-[fix-inequality-condition]
-	fix-layout(Lhs != Rhs) = build-layout(Lhs) != build-layout(Rhs)
+[fix-inequality-condition-to-no-match-condition]
+	Lhs2 := build-layout(Lhs),
+	Rhs2 := build-layout(Rhs)
+	===>
+	fix-layout(Lhs != Rhs) = Lhs2 != Rhs2
 
 equations
 
@@ -34,13 +56,7 @@ equations
 	is-layout(Tree) == true,
 	[Tree+] := find-layout(Tree, [])
 	===>
-	build-layout(Tree) = layout([Tree+])
-
-[replace-fixed-layout]
-	is-layout(Tree) == true,
-	[] == find-layout(Tree, [])
-	===>
-	build-layout(Tree) = space()
+	build-layout(Tree) = make-layout([Tree+])
 
 equations
 	
@@ -48,33 +64,40 @@ equations
 	is-layout(Tree) == true,
 	[Tree+] := find-layout(Tree, [])
 	===>
-	match-layout(Tree) = layout([Tree+])
+	match-layout(Tree, Int) = <make-layout([Tree+]), Int>
 
 [replace-without-constructors]
 	is-layout(Tree) == true,
 	[] == find-layout(Tree, [])
 	===>
-	match-layout(Tree) = variable-layout()
+	match-layout(Tree, Int) = <variable-layout(Int), Int + 1>
 
 equations
 
 [found-layout-constructor]
 	is-lexical-constructor(Tree) == true
 	===>
-	find-layout(Tree, [Tree*]) = [Tree, Tree*]
+	find-layout(Tree, [Tree*]) = [Tree*, Tree]
 
 [found-layout-variable]
 	is-layout-variable(Tree) == true
 	===>
-	find-layout(Tree, [Tree*]) = [layout-to-list-variable(Tree), Tree*]
+	find-layout(Tree, [Tree*]) = [Tree*, layout-to-list-variable(Tree)]
 
 equations
 
 [yes]
 	is-lexical-constructor(
 	appl(prod(_Symbols,
-		lex(layout),
+		cf(parameterized-sort("CHARS",[layout])),
 		attrs([_Attr*1,term(lexical-constructor),_Attr*2])),_Args))
+	= true
+
+[yes]
+	is-lexical-constructor(
+	appl(prod(_Symbols,
+		cf(parameterized-sort("CHARS",[layout])),
+		attrs([_Attr*1,term(lexical-constructor),_Attr*2])),_Args) _Ann)
 	= true
 
 [default-no]
@@ -83,11 +106,26 @@ equations
 equations
 
 [annotated]
-	is-layout-variable(Tree _Ann) = is-layout-variable(Tree)
+	is-layout-variable(Tree _Ann) =
+	is-layout-variable(Tree)
 
-[yes]
+[yes-lexical-without-inner-annotation]
 	is-layout-variable(
-	appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs),_Args)) = true
+	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),_Attrs1),[appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs2),_Args)])) = true
+
+[yes-lexical-with-inner-annotation]
+	is-layout-variable(
+	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),_Attrs1),[appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs2),_Args)_Ann])) = true
+
+[yes-context-free-without-inner-annotation]
+	is-layout-variable(
+	appl(prod([varsym(cf(layout))],cf(layout),_Attrs1),[appl(prod(_Symbols,varsym(cf(layout)),_Attrs2),_Args)]))
+	 = true
+
+[yes-context-free-with-inner-annotation]
+	is-layout-variable(
+	appl(prod([varsym(cf(layout))],cf(layout),_Attrs1),[appl(prod(_Symbols,varsym(cf(layout)),_Attrs2),_Args) _Ann]))
+	 = true
 
 [default-no]
 	is-layout-variable(_Tree) = false
@@ -100,8 +138,25 @@ equations
 
 [translate]
 	layout-to-list-variable(
-	appl(prod(Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),Attributes),Args)) =
-	appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes),Args)
+	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),Attributes1),[appl(prod(Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),Attributes2),Args)Ann])) =
+	appl(prod([varsym(iter-star(layout))],lex(iter-star(layout)),Attributes1),[appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes2),Args) Ann])
+
+[translate]
+	layout-to-list-variable(
+	appl(prod([varsym(cf(parameterized-sort("CHARS",[layout])))],cf(parameterized-sort("CHARS",[layout])),Attributes1),[appl(prod(Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),Attributes2),Args)])) =
+	appl(prod([varsym(iter-star(layout))],lex(iter-star(layout)),Attributes1),[appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes2),Args)])
+
+[translate]
+	layout-to-list-variable(
+	appl(prod([varsym(cf(layout))],cf(layout),Attributes1),[appl(prod(Symbols,varsym(cf(layout)),Attributes2),Args)]))
+	=
+	appl(prod([varsym(iter-star(layout))],lex(iter-star(layout)),Attributes1),[appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes2),Args)])
+
+[translate]
+	layout-to-list-variable(
+	appl(prod([varsym(cf(layout))],cf(layout),Attributes1),[appl(prod(Symbols,varsym(cf(layout)),Attributes2),Args)Ann]))
+	=
+	appl(prod([varsym(iter-star(layout))],lex(iter-star(layout)),Attributes1),[appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes2),Args)Ann])
 
 equations
 
@@ -121,10 +176,14 @@ equations
 	appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[appl(prod([lex(iter(layout))],cf(layout),no-attrs),[appl(list(lex(iter(layout))),[appl(prod([char-class([range(9,10),13,32])],lex(layout),attrs([term(cons("whitespace"))])),[32])])])])
 
 [define-layout]
-	layout(Args) = 
+	make-layout(Args) = 
 	appl(prod([cf(layout)],cf(opt(layout)),no-attrs),[appl(prod([lex(iter(layout))],cf(layout),no-attrs),[appl(list(lex(iter(layout))),Args)])])
 
 
 [define-variable-layout]
-	variable-layout() = 
-	appl(prod([varsym(opt(layout))],cf(opt(layout)),no-attrs),[appl(prod([lit("LAYOUT?")],varsym(opt(layout)),no-attrs),[appl(prod([char-class([63])],lit("?"),no-attrs),[63])])])
+	$Var := "$L" || natcon2strcon(Nat),
+	Tree := lift-to-tree($Var)
+	===>
+	variable-layout(Nat) = 
+	appl(prod([varsym(opt(layout))],cf(opt(layout)),no-attrs),[appl(prod([cf(sort("StrCon"))],varsym(opt(layout)),no-attrs),[Tree])])
+

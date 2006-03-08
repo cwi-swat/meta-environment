@@ -1,27 +1,61 @@
 module basic/Bytes
 
-imports basic/Strings
-imports	basic/Integers	
+imports basic/StrCon
 imports basic/BytesCon
+imports basic/Integers	
 
-exports sorts Bytes
+exports sorts Bytes ByteClass
 
 exports
   context-free syntax
-     string-to-bytes(String) -> Bytes 
-     bytes-to-string(Bytes) -> String 
+     string-to-bytes(StrCon) -> Bytes 
+     bytes-to-string(Bytes)  -> StrCon
 
-     num-of-bytes(Bytes)        -> Integer 
+  context-free syntax
+     num-of-bytes(Bytes)     -> Integer 
 
+  context-free syntax
      Bytes "<"  Bytes  -> Boolean
      Bytes "<=" Bytes  -> Boolean
      Bytes ">"  Bytes  -> Boolean
      Bytes ">=" Bytes  -> Boolean
 
-     ascii-compare(Bytes,Bytes) -> Integer 
+  context-free syntax
+     ascii-compare(Bytes,Bytes) -> Integer
+
+  context-free syntax
+
+     is-alnum(Byte) -> Boolean
+     is-alpha(Byte) -> Boolean
+     is-ascii(Byte) -> Boolean
+     is-blank(Byte) -> Boolean
+     is-cntrl(Byte) -> Boolean
+     is-digit(Byte) -> Boolean
+     is-graph(Byte) -> Boolean
+     is-lower(Byte) -> Boolean
+     is-print(Byte) -> Boolean
+     is-punct(Byte) -> Boolean
+     is-space(Byte) -> Boolean
+     is-upper(Byte) -> Boolean
+     is-xdigit(Byte)-> Boolean
+
+  context-free syntax
+     to-upper(Byte)    -> Byte
+     to-lower(Byte)    -> Byte
+
+  context-free syntax
+     capitalize(Bytes)  -> Bytes
+     uncapitalize(Bytes)-> Bytes
 
 hiddens
   imports basic/Comments
+
+  context-free start-symbols
+	Boolean
+	StrCon
+	Bytes
+	Integer
+	Byte
 
   context-free syntax
     strchar-to-byte(StrChar) -> Byte
@@ -29,20 +63,33 @@ hiddens
 
     decimal-to-byte(Integer) -> Byte {memo}
     byte-to-decimal(Byte) -> Integer {memo}
-
+    
   lexical variables
     "char"[0-9]*   -> StrChar		{strict}
     "char*"[0-9]*  -> StrChar*		{strict}
     "byte*"[0-9]*  -> Byte*		{strict}
     "byte"[0-9\']* -> Byte		{strict}
-    "any"[0-9]*    -> ~[]		{strict}
+    "normal"[0-9]* -> ~[\0-\31\n\t\"\\]	{strict}
     "digit"[0-9]*  -> [0-9]		{strict}
-  
+    "lower"[0-9]*  -> [a-z] {strict}  
+    "upper"[0-9]*  -> [A-Z] {strict}  
+
   lexical variables
-    "_byte"[0-9]*  -> Byte		{wild}
+    "_byte"[0-9]* -> Byte		{wild}
+    "_alnum" 	-> [A-Za-z0-9] 	{wild}
+    "_alpha" 	-> [A-Za-z] 	{wild}
+    "_ascii" 	-> [0-127] 	{wild}
+    "_blank" 	-> [\t\ ] 	{wild}
+    "_cntrl" 	-> [\7-\13] 	{wild}
+    "_digit" 	-> [0-9] 	{wild}
+    "_lower" 	-> [a-z] 	{wild}
+    "_punct" 	-> [\!\"\#\%\&\'\(\)\;\<\=\>\?\[\\\]\*\+\,\-\.\/\:\^\_\{\|\}\~] {wild}
+    "_space" 	-> [\9-\13] \/ [\ ] {wild}
+    "_upper" 	-> [A-Z] 	{wild}
+    "_xdigit" 	-> [0-9A-Fa-f] 	{wild}
 
   variables
-    "string"[0-9\']* -> String		{strict}	
+    "string"[0-9\']* -> StrCon		{strict}	
     "bytes"[0-9\']* -> Bytes		{strict}
     "n"[0-9\']* -> Integer		{strict}
 

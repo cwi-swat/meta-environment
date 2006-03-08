@@ -1,0 +1,76 @@
+module Whitespace
+
+%% http://compsoc.dur.ac.uk/whitespace/index.php
+
+exports
+
+sorts Program Command Number Label Tab LF Space
+sorts StackManipulation Arithmetic HeapAccess FlowControl IO
+
+lexical syntax
+
+~[\t\n\ ]                -> LAYOUT   {category("Comment")}
+[\t]                     -> Tab
+[\n\r]                   -> LF
+[\ ]                     -> Space
+
+context-free syntax
+
+(Space | Tab)+ LF -> Number  
+
+(Space | Tab)+ LF -> Label   
+
+context-free start-symbols
+	Program
+
+context-free syntax
+
+Command+ -> Program
+
+context-free syntax
+
+Space      StackManipulation -> Command {cons("stack"), category("Error")}
+Tab Space  Arithmetic        -> Command {cons("arith")}
+Tab Tab    HeapAccess        -> Command {cons("heap")}
+LF         FlowControl       -> Command {cons("flow")}
+Tab LF     IO                -> Command {cons("IO"), category("Warning")}
+
+context-free syntax
+
+Space Number  -> StackManipulation {cons("push")}
+LF Space      -> StackManipulation {cons("dup")}
+Tab Space     -> StackManipulation {cons("copy")}
+LF Tab        -> StackManipulation {cons("swap")}
+LF LF         -> StackManipulation {cons("pop")}
+Tab LF Number -> StackManipulation {cons("slide-n")}
+
+context-free syntax
+
+Space Space -> Arithmetic {cons("add")}
+Space Tab   -> Arithmetic {cons("sub")}
+Space LF    -> Arithmetic {cons("mul")}
+Tab   Space -> Arithmetic {cons("div")}
+Tab   Tab   -> Arithmetic {cons("mod")}
+
+
+context-free syntax
+
+Space  -> HeapAccess {cons("store")}
+Tab    -> HeapAccess {cons("retrieve")}
+
+context-free syntax
+
+Space Space Label -> FlowControl {cons("label")}
+Space Tab   Label -> FlowControl {cons("call")}
+Space LF    Label -> FlowControl {cons("goto")}
+Tab   Space Label -> FlowControl {cons("if")}
+Tab   Tab   Label -> FlowControl {cons("ifnot")}
+Tab   LF    Label -> FlowControl {cons("return")}
+LF    LF          -> FlowControl {cons("end")}
+
+context-free syntax
+
+Space Space -> IO {cons("write-char")}
+Space Tab   -> IO {cons("write-number")}
+Tab   Space -> IO {cons("read-char")}
+Tab   Tab   -> IO {cons("read-number")}

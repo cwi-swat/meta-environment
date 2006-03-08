@@ -171,7 +171,7 @@ equations
 
   [sas-1'1] Aint1 != 1,
             Aint2 := Aint1 - 1,
-	    natcon(d+) := Aint1,
+	    natcon(d+) := Aint2,
             Stat+ := save-args(Aint2)
             ========================
             save-args(Aint1) = 

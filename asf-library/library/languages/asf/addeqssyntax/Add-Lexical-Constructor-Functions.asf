@@ -14,26 +14,33 @@ equations
 
 [copy-and-shadow-lexical-syntax]
 	<Grammar4, Production*2> := wrap(context-free syntax Production*, ),
-        Grammar5 := apply(Grammar4),
-	Grammar6 := inject(Grammar5)
-	======================================================
+         Grammar5 := apply(Grammar4),
+	Production*3 := inject(Grammar5, )
+	===>
 	shadow(lexical syntax Production*) = 
 	lexical syntax 
  		Production*
 	context-free syntax
 		Production*2
 	Grammar5
-	Grammar6
+	context-free syntax Production*3
 
 [transform-lexical-variables]
+	Grammar1 := abstract(variables Production*),
+         Production*2 := inject(Grammar1, )
+	===>
 	shadow(lexical variables Production*) = 
-	abstract(variables Production*)
-	
+	Grammar1 
+	context-free syntax Production*2
+
 equations
+
+%% We need to encode the original type of the variable somewhere...
+%% So, we use another wrapper, and inject CHAR[[CharClass]] into CHAR later:
 
 [cc-variables]
 	abstract(Symbols -> CharClass Attributes) = 
-	Symbols -> CHAR Attributes ++ {prefer}
+	Symbols -> CHAR[[CharClass]] Attributes ++ {prefer}
 
 [default-wrap]
 	<Symbol', Production*> := wrap(Symbol, )
@@ -61,7 +68,7 @@ equations
 
 [replace-cc]
 	wrap(CharClass, Production*) = 
-	<CHARS[[CharClass]], CHAR -> CHARS[[CharClass]] Production*>
+	<CHARS[[CharClass]], CHAR -> CHARS[[CharClass]] {lexical-constructor-character-injection} Production*>
 
 equations
 
@@ -91,12 +98,16 @@ equations
 	inject(variables Production*) = variables
 
 [add-injection-sort]
-	inject(Symbol* -> CHARS[[Sort]] Attributes) = 
-	CHARS[[Sort]] -> Sort 
+	inject(Symbol* -> CHARS[[Sort]] Attributes, Production*) = 
+	CHARS[[Sort]] -> Sort Production*
 
 [add-injection-layout]
-	inject(Symbol* -> CHARS[[LAYOUT]] Attributes) = 
-	CHARS[[LAYOUT]] -> LAYOUT 
+	inject(Symbol* -> CHARS[[LAYOUT]] Attributes, Production*) = 
+	CHARS[[LAYOUT]] -> LAYOUT Production*
+
+[add-injection-charclass]
+	inject(Symbol* -> CHAR[[CharClass]] Attributes, Production*) =
+         CHAR[[CharClass]] -> CHAR {lexical-constructor-character} Production*
 
 equations
   

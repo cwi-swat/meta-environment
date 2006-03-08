@@ -22,6 +22,14 @@ Tue Sep  6 11:49:36 CEST 2005 <kooiker@cwi.nl>
  * library/basic/Modules.sdf:
    - Extract dependencies from module
 
+Tue Aug 23 13:11:02 CEST 2005 <jurgenv@cwi.nl>
+ * library/basic/{Bytes,Strings},{asf,sdf}:
+	- removed circular dependency between Bytes and Strings. Strings
+	  does not imports Bytes anymore, and Bytes imports StrCon instead
+          of Strings.
+	- added implementation of 'ctype' functions for classifying Bytes.
+	- added implementation of to-upper and to-lower 
+
 Fri Aug 19 15:15:10 CEST 2005 <kooiker@cwi.nl>
  * library/basic/Modules.sdf:
    - Describes the syntax of the modules used in the meta-env

@@ -1,12 +1,13 @@
 equations
 
 [module]
-	LiftedModule'' := constructors(LiftedModule'),
-	LiftedModule''' := remove-brackets(LiftedModule''),
-	LiftedModule'''' := list-results(LiftedModule'''),
-	LiftedModule''''' := lexical-traversals(LiftedModule'''')
+         LiftedModule'' 	:= normalize-layout(LiftedModule'),
+	LiftedModule''' 	:= constructors(LiftedModule''),
+	LiftedModule'''' 	:= remove-brackets(LiftedModule'''),
+	LiftedModule''''' := list-results(LiftedModule''''),
+	LiftedModule'''''' := lexical-traversals(LiftedModule''''')
 	===>
-	normalize(LiftedModule') = LiftedModule'''''
+	normalize(LiftedModule') = LiftedModule''''''
 
 [cast]
 	normalize-module(Module) = normalize(Module)

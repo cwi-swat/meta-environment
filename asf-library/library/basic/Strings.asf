@@ -20,13 +20,20 @@ subst(Str1,Str2,Str3) = Str3
 
 equations
 
-[forward-length]	
-length(Str) = num-of-bytes(string-to-bytes(Str))
+[] split(strcon(\" char*1 match char*2 \"), strcon(\" match \")) =
+   strcon(\" char*1 \"); split(strcon(\" char*2 \"), strcon(\" match \"))
+
+[default]
+   split(Str1,Str2) = Str1
+ 
+equations
+
+[fwd] length(Str) = num-of-bytes(string-to-bytes(Str)) 
 
 equations
 
 [forward-less]
-Str1 < Str2 = string-to-bytes(Str1) <string-to-bytes(Str2)
+Str1 < Str2 = string-to-bytes(Str1) < string-to-bytes(Str2)
 
 [forward-less-equal]
 Str1 <= Str2 = string-to-bytes(Str1) <= string-to-bytes(Str2)

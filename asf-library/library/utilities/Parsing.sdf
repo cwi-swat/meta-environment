@@ -1,7 +1,7 @@
 module utilities/Parsing[X]
 
 imports basic/ParsetreeCon[X]
-imports basic/Bytes
+imports basic/Strings
 imports basic/ReadWriteCon
 
 exports

@@ -46,8 +46,8 @@ apply( Grammar ) -> Grammar {traversal(trafo,top-down,break)}
 apply( Production )  -> Production {traversal(trafo,top-down,break)}
 
 %% inject the new shadow syntax into cf syntax
-inject( Grammar ) -> Grammar {traversal(trafo,top-down,break)}
-inject( Production )  -> Production {traversal(trafo,top-down,break)}
+inject( Grammar , Production*) -> Production* {traversal(accu,top-down,break)}
+inject( Production, Production* )  -> Production* {traversal(accu,top-down,break)}
 
 Attributes "++" Attributes -> Attributes {left}
 

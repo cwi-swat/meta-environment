@@ -358,11 +358,11 @@ equations
 
   [isn-1'2] is-special-name(identifier(make\_nf T)) = true
 
-  [isn-1'3] is-special-name(null) = true
+  [isn-1'3] is-special-name(identifier(null)) = true
 
-  [isn-1'3] is-special-name(cons) = true
+  [isn-1'3] is-special-name(identifier(cons)) = true
 
-  [isn-1'4] is-special-name(make-char) = true
+  [isn-1'4] is-special-name(identifier(make\_char)) = true
 
   [default-infn-1'5] is-special-name(CConstant) = false
 

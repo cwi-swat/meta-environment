@@ -16,9 +16,9 @@ equations
 [fwd]   int2identifiersep(Identifier, Nat) = nat2identifiersep(Identifier, Nat)
 
 [fwd]	
-	identifier(X h t) := nat2identifier(X, Nat)
+	identifier(X m t2) := nat2identifier(X, Nat)
 	===>
-	nat2identifiersep(Identifier, Nat) = Identifier +_+ identifier(h t)
+	nat2identifiersep(identifier(h t1), Nat) = identifier(h t1 \_ m t2)
 
 equations
 
@@ -58,7 +58,7 @@ equations
 		when identifier(h t) := funid2identifier(idcon(h T))
 
 [default-normal]
-	funid2identifier(idcon(h h2 T)) = identifier(h h2 t)
+	funid2identifier(idcon(h m T)) = identifier(h m t)
 		when identifier(h t) := funid2identifier(idcon(h T))
  
 

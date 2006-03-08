@@ -38,3 +38,5 @@ equations
    atc(default: Cond* ==> Term1 = Term2,Nametable) = 
      default: term-equal(get-sort(Var),parse-sort(Type)) =: t & Cond* ==> Term1 = Term2
 
+
+

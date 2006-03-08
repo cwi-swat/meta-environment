@@ -279,7 +279,7 @@ equations
                [Fv-path*|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2
 
 equations
-
+ 
   [gfvp-1'1] get-first-vf-path([(Term1,Aint+),Fv-path*|
                                 Cond*|Term2|Cenv1|Cenv2|Funid]; C-rule*1) = (Term1,Aint+)
 

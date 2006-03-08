@@ -14,9 +14,9 @@ definition
               
 Module*4
 
-%% NOTE: copies like this in this module are bad. We should use the
-%% library and find out a way to hide the imported modules from the
-%% import graph!      
+%% TODO NOTE: copies like this in this module are bad. We should use the
+%% TODO library and find out a way to hide the imported modules from the
+%% TODO import graph!      
 module languages/sdf2/syntax/Character
 
 imports basic/Comments

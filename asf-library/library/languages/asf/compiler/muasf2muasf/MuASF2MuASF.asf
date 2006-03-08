@@ -2,13 +2,14 @@ equations
 
 [m2m-1'1]
 module Modid signature Funcdef+ rules Rule+ := Module1,
-Module111 := add-builtin-equations(Module1),
+Module1111 := add-range-checks(Module1),
+Module111 := add-builtin-equations(Module1111),
 Module11 := fix-tupled-traversals(Module111),
 (Module2, Nametable2) := find-constructors(Module11,Nametable),
 Module3 := add-list-cons(Module2),
 Module31 := add-type-checks(Module3,Nametable),
 Module32 := remove-types(Module31),
-%% optimization disabled for bootstrapping and debugging purposes
+%% TODO optimization disabled for bootstrapping and debugging purposes
 %%<Module4, Nametable3> := optimize-muasf(Module32,Nametable2),
 <Module4, Nametable3> := <Module32, Nametable2>,
 Module5 := make-matching-conds(Module4),

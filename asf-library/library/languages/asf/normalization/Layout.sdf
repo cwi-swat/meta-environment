@@ -2,7 +2,11 @@ module languages/asf/normalization/Layout
 
 imports languages/asf/normalization/RenamedTree
 imports languages/asf/normalization/RenamedASF
+imports languages/asf/normalization/RenamedLifting[StrCon]
 imports basic/Booleans
+imports basic/Strings
+imports basic/Integers
+imports basic/Identifiers
 
 %% This module deals with ``Rewriting with Layout''
 %% 
@@ -21,10 +25,12 @@ hiddens
 
 context-free start-symbols
 	P-Tree
+	P-Args
 	Module
 	Equation
 	Condition
 	Boolean
+	
 
 context-free syntax
 
@@ -34,7 +40,7 @@ fix-layout(Condition) -> Condition {traversal(trafo,top-down,break)}
 
 context-free syntax
 
-match-layout(P-Tree) -> P-Tree {traversal(trafo,top-down,break)}
+match-layout(P-Tree, Integer) -> <P-Tree, Integer> {traversal(accu,trafo,top-down,break)}
 build-layout(P-Tree) -> P-Tree {traversal(trafo,top-down,break)}
 
 context-free syntax
@@ -45,8 +51,8 @@ is-layout(P-Tree) -> Boolean
 is-layout-variable(P-Tree) -> Boolean
 layout-to-list-variable(P-Tree) -> P-Tree
 space() -> P-Tree
-layout(P-Args) -> P-Tree
-variable-layout() -> P-Tree
+make-layout(P-Args) -> P-Tree
+variable-layout(Integer) -> P-Tree
 
 variables
 
@@ -65,9 +71,14 @@ variables
 "Lhs"[0-9]* -> P-Tree 		{strict}
 "Rhs"[0-9]* -> P-Tree 		{strict}
 "Ann"[0-9]* -> P-Annotation	{strict}
+"$"?"Var"[0-9]* -> StrCon		{strict}
+"Int"[0-9]* -> Integer              {strict}
+"Nat"[0-9]* -> NatCon               {strict}
 
 variables
 
+"_Nat"[0-9]* -> NatCon              {wild}
+"_Int"[0-9]* -> Integer             {wild}
 "_Symbols"[0-9]* -> P-Symbols	{wild}
 "_Symbol"[0-9]*  -> P-Symbol	{wild}
 "_Attr*"[0-9]* -> {P-Attr ","}*	{wild}

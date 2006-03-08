@@ -11,8 +11,8 @@ equations
 
 equations
 
-[default-normal]
-	strchar-to-byte(strchar(any)) = byte(any)
+[normal]
+	strchar-to-byte(strchar(normal)) = byte(normal)
 
 [octal]
 	strchar-to-byte(strchar(\ digit1 digit2 digit3)) = 
@@ -41,6 +41,11 @@ equations
 	===
 	bytes-to-string(bytes(byte byte*)) = strcon(\" char char* \")
 
+equations
+
+[normal]
+	byte-to-strchar(byte(normal)) = strchar(normal)
+
 [newline]
 	byte-to-strchar(byte(\n)) = strchar(\n)
 
@@ -53,43 +58,20 @@ equations
 [quote]
 	byte-to-strchar(byte(\")) = strchar(\")
 
-[octal]
-	n := byte-to-decimal(byte),
-	n < 10 == true,
-	natcon(digit) := n
+[default-octal-one]
+	natcon(digit1 digit2) := byte-to-decimal(byte)
+	===>
+	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
+
+[default-octal-two]
+	natcon(digit) := byte-to-decimal(byte)
 	===>
 	byte-to-strchar(byte) = strchar(\ 0 0 digit)
 
-[octal]
-	n := byte-to-decimal(byte),
-	n >= 10 & n < 32 == true,
-	natcon(digit1 digit2) := n
-	===>
-	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
-
-[octal]
-	n := byte-to-decimal(byte),
-	n >= 10 & n < 32 == true,
-	natcon(digit1 digit2) := n
-	===>
-	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
-
-[octal]
-	n := byte-to-decimal(byte),
-	n > 32 & n < 40 == true,
-	natcon(digit1 digit2) := n
-	===>
-	byte-to-strchar(byte) = strchar(\ 0 digit1 digit2)
-
-[octal]
-	n := byte-to-decimal(byte),
-	n > 176 == true,
-	natcon(digit1 digit2 digit3) := n
+[default-octal-three]
+	natcon(digit1 digit2 digit3) := byte-to-decimal(byte)
 	===>
 	byte-to-strchar(byte) = strchar(\ digit1 digit2 digit3)
-
-[default-normal]
-	byte-to-strchar(byte(any)) = strchar(any)
 
 equations
 
@@ -634,9 +616,76 @@ equations
 [254]	byte-to-decimal(byte(\254)) = 254
 [255]   byte-to-decimal(byte(\255)) = 255
 
+equations
+
+[] is-alnum(byte(_alnum)) = true
+[default] is-alnum(_byte) = false
+
+[] is-alpha(byte(_alpha)) = true
+[default] is-alpha(_byte) = false
+
+[] is-ascii(byte(_ascii)) = true
+[default] is-ascii(_byte) = false
+
+[] is-blank(byte(_blank)) = true
+[default] is-blank(_byte) = false
+
+[] is-cntrl(byte(_cntrl)) = true
+[default] is-cntrl(_byte) = false
+
+[] is-digit(byte(_digit)) = true
+[default] is-digit(_byte) = false
+
+[] is-graph(byte(_punct)) = true
+[] is-graph(byte(_alnum)) = true
+[default] is-graph(_byte) = false
+
+[] is-lower(byte(_lower)) = true
+[default] is-lower(_byte) = false
+
+[] is-print(byte(_punct)) = true
+[] is-print(byte(_alnum)) = true
+[] is-print(byte(\ ))     = true
+[default] is-print(_byte) = false
+
+[] is-punct(byte(_punct)) = true
+[default] is-punct(_byte) = false
+
+[] is-space(byte(_space)) = true
+[default] is-space(_byte) = false
+
+[] is-upper(byte(_upper)) = true
+[default] is-upper(_byte) = false
+
+[] is-xdigit(byte(_xdigit)) = true
+[default] is-xdigit(_byte)= false
+
+equations
+
+[] to-upper(byte(lower)) = decimal-to-byte(byte-to-decimal(byte(lower)) - 32)
+[default] to-upper(byte) = byte
+
+[] to-lower(byte(upper)) = decimal-to-byte(byte-to-decimal(byte(upper)) + 32)
+[default] to-lower(byte) = byte
+
+equations
+
+[] 
+	byte2 := to-upper(byte)
+	===>
+	capitalize(bytes(byte byte*)) = bytes(byte2 byte*)
+
+[]
+	byte2 := to-lower(byte)
+	===>
+	uncapitalize(bytes(byte byte*)) = bytes(byte2 byte*)
+
 tests
 
-[concat] "aaa" || "aaa" == "aaaaaa"
-[len] length("aaa") + length("aaa") == length("aaaaaa")
+[a] to-lower(byte(A)) == byte(a)
+[A] to-upper(byte(a)) == byte(A)
+[c] uncapitalize(bytes(byte(F) byte(o) byte(o))) == bytes(byte(f)byte(o)byte(o))
+[C] capitalize(bytes(byte(f) byte(o) byte(o))) == bytes(byte(F)byte(o)byte(o))
+
 [bytes-test]  
 	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) == "a\n\t\\\"b\007"

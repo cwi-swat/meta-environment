@@ -1,6 +1,13 @@
 ; Loadfile for origin functions.
 ; ---------------------------------------------------------------------------- ;
 ; $Log$
+; Revision 1.3  2006/03/08 13:24:28  jurgenv
+; * merged first-class layout
+; * added definition of whitespace language
+;
+; Revision 1.1.12.1  2006/03/06 12:39:12  jurgenv
+; * imported changes from trunk on the first-class-layout branch
+;
 ; Revision 1.2  2005/12/15 12:16:04  kooiker
 ;  * library/sandbox/archeology/clax/{old,origins}/aux.ll
 ;    - renamed to auxiliary.ll because on Windows and thus Cygwin filenames are
