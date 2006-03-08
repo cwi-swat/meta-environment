@@ -1,0 +1,14 @@
+module ConstructedWhitespace
+
+imports Whitespace
+imports Whitespace[
+	[\ ]   => "[SPACE]"
+	[\t]   => "[TAB]"
+	[\n\r] => "[LF]"
+]
+
+hiddens
+
+lexical syntax
+
+".\n" -> LAYOUT

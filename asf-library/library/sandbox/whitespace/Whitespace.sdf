@@ -29,11 +29,11 @@ Command+ -> Program
 
 context-free syntax
 
-Space      StackManipulation -> Command {cons("stack"), category("Error")}
+Space      StackManipulation -> Command {cons("stack")}
 Tab Space  Arithmetic        -> Command {cons("arith")}
 Tab Tab    HeapAccess        -> Command {cons("heap")}
 LF         FlowControl       -> Command {cons("flow")}
-Tab LF     IO                -> Command {cons("IO"), category("Warning")}
+Tab LF     IO                -> Command {cons("IO")}
 
 context-free syntax
 
