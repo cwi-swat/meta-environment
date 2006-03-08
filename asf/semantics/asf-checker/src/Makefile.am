@@ -22,6 +22,9 @@ asfchecker_SOURCES = \
 	asfchecker.tif.c \
 	statistics.c
 
+asfchecker_DEPENDENCIES = \
+	$(top_builddir)/semantics/asf-operations/src/libasfnormalization.a 
+
 asfchecker_LDADD   = \
 	-L$(top_builddir)/semantics/asf-operations/src -lasfnormalization \
 	$(ASC_LD_FLAGS) \
