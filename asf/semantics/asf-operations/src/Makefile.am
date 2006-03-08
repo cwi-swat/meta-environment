@@ -5,6 +5,7 @@ include ${top_srcdir}/make_rules
 INCLUDES = $(ASC_INCLUDES)
 
 bin_PROGRAMS = asfoperations
+noinst_LIBRARIES = libasfnormalization.a
 
 pkgdata_DATA    = asfoperations.idef
 
@@ -23,6 +24,10 @@ asfoperations_SOURCES = \
 	ASF-Normalization.c
 
 asfoperations_LDADD = $(ASC_LD_FLAGS)
+
+libasfnormalization_a_SOURCES = \
+			  asfnormalization.c \
+			  ASF-Normalization.c 
 
 # NOTE: the -a option to asfc activates rewriting with annotations,
 #       which is essential here.
