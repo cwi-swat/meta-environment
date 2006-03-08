@@ -528,7 +528,7 @@ static ERR_ErrorList checkTree(PT_Tree tree)
   }
 
   /* we check if star variables are surrounded by layout patterns */
-  if (PT_isTreeApplList(tree)) {
+  if (PT_isTreeApplList(tree) && !isLexicalTree(tree)) {
     messages = ERR_concatErrorList(checkIgnoredLayout(tree), messages);
   }
 

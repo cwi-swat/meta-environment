@@ -3,11 +3,8 @@
 include ${top_srcdir}/make_rules
 
 INCLUDES = \
-	-I$(PT_SUPPORT)/include \
-	-I$(ASF_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ATERM)/include \
-	-I$(ERROR_SUPPORT)/include
+	-I$(top_srcdir)/semantics/asf-operations/src \
+	$(ASC_INCLUDES)
 
 bin_PROGRAMS = asfchecker
 
@@ -26,12 +23,9 @@ asfchecker_SOURCES = \
 	statistics.c
 
 asfchecker_LDADD   = \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ASF_SUPPORT)/lib -lASFME \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
-        -L$(TOOLBUSLIB)/lib -lATB \
-        -L$(ATERM)/lib -lATerm \
+	-L$(top_builddir)/semantics/asf-operations/src -lasfnormalization \
+	$(ASC_LD_FLAGS) \
+	-L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	$(SOCKLIBS)
 
 %.idef: %.idef.src Makefile
