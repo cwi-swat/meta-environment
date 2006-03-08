@@ -17,16 +17,22 @@ in
     . snd-eval(SGLR, parse(Input, ParseTable, TopSort, Heuristics))
     .
     (
-      rec-value(SGLR, parse-tree(ParseTree?))
-      . snd-msg(sglr-parse-tree(ParseTree))
+      (
+        rec-value(SGLR, parse-tree(ParseTree?))
+        . snd-msg(sglr-parse-tree(ParseTree))
+      +
+        rec-value(SGLR, parse-forest(ParseForest?, Error?))
+        . snd-msg(sglr-parse-forest(ParseForest, Error))
+      +
+        rec-value(SGLR, parse-error(Error?))
+        . printf("%t\n", Error)
+        . snd-msg(sglr-parse-error(Error))
+      )
+      . snd-terminate(SGLR, "done")
     +
-      rec-value(SGLR, parse-forest(ParseForest?, Error?))
-      . snd-msg(sglr-parse-forest(ParseForest, Error))
-    +
-      rec-value(SGLR, parse-error(Error?))
-      . snd-msg(sglr-parse-error(Error))
+      rec-disconnect(SGLR)
+      . snd-msg(sglr-parse-error(error("SGLR was aborted",[])))
     )
-    . snd-terminate(SGLR, "done")
   ) * delta
 endlet
 
