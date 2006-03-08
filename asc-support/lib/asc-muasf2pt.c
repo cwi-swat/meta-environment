@@ -36,7 +36,7 @@ static size_t term_store_end;
 static size_t term_store_size;
 static PT_Tree* term_store = NULL;
 static PT_Tree defaultLayout  = NULL;
-
+extern ATbool keep_layout;
 /*}}}  */
 
 /*{{{  local functions */
@@ -169,6 +169,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
   PT_Symbol rhs;
   PT_Args args = PT_makeArgsEmpty();
   ATbool contextfree;
+  int sepLength = 0;
   int i;
   size_t index;
   
@@ -188,6 +189,7 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     PT_Symbol sepSym = PT_getSymbolSeparator(rhs);
     assert(PT_isSymbolLit(sepSym));
     sepTree = PT_makeTreeLit(PT_getSymbolString(sepSym));
+    sepLength = contextfree ? 3 : 1;
   }
 
   if (!ATisEmpty(elems)) {
@@ -204,13 +206,16 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
 
       if (i != 0) {
         if (sepTree) {
-	  if (contextfree) {
+	  if (!keep_layout && contextfree) {
 	    args = PT_makeArgsMany(layout, args);
 	  }
-	  args = PT_makeArgsMany(sepTree, args);
+
+	  if (!keep_layout || (sepLength != 0 && (i % sepLength == 1))) {
+	    args = PT_makeArgsMany(sepTree, args);
+	  }
         }
 
-        if (contextfree) {
+        if (!keep_layout && contextfree) {
 	  args = PT_makeArgsMany(layout, args);
         }
       }
@@ -240,7 +245,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     PT_Tree tree = NULL;
 
 
-    if (PT_isOptLayoutSymbol(symbol)) {
+    if (!keep_layout && PT_isOptLayoutSymbol(symbol)) {
       tree = defaultLayout;
     }
     else if (PT_isSymbolLit(symbol)) {
@@ -328,6 +333,8 @@ static PT_Tree termToTree(ATerm tree)
 PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
 {
   PT_Tree result;
+
+  assert(tree != NULL && layout != NULL && "parameter check");
 
   treeTable = ATtableCreate(TREE_TABLE_INITIAL_SIZE,
 			    TREE_TABLE_MAX_LOAD_PERCENTAGE);

@@ -67,6 +67,7 @@ Symbol make_listsym;
 Symbol concsym;    
 
 ATbool keep_annotations = ATfalse;
+ATbool keep_layout = ATfalse;
 
 /*}}}  */
 /*{{{  declarations for memotables */
@@ -118,6 +119,22 @@ void print_memo_table_sizes()
 
 /*}}}  */
 
+//*{{{  void setKeepLayout(ATbool on)  */
+
+void setKeepLayout(ATbool on) 
+{
+  keep_layout = on;
+}
+
+/*}}}  */
+/*{{{  ATbool getKeepLayout()  */
+
+ATbool getKeepLayout(ATbool on) 
+{
+  return keep_layout;
+}
+
+/*}}}  */
 /*{{{  void setKeepAnnotations(ATbool on)  */
 
 void setKeepAnnotations(ATbool on) 
@@ -140,7 +157,7 @@ ATerm innermost(PT_Tree tree)
   ATerm result = (ATerm) tree;
   ATerm annos = keep_annotations ? PT_getTreeAnnotations(tree) : NULL;
 
-  if (PT_isTreeLayout(tree)) {
+  if (!keep_layout && PT_isTreeLayout(tree)) {
     result = NULL;
   }
   else if (PT_isTreeLit(tree)) {
@@ -1388,6 +1405,8 @@ PT_ParseTree toasfix(ATerm term)
 {
   PT_Tree tree;
   PT_ParseTree pt;
+
+  assert(term != NULL && "parameter check");
 
   tree = muASFToTree(term);
 

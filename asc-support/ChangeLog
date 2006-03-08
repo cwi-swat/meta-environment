@@ -1,5 +1,10 @@
 $Id$
 
+Wed Mar  8 14:03:38 CET 2006 <jurgenv@cwi.nl>
+ * lib/*: added rudimentary support for rewriting with layout by
+   compiled specifications. Currently, this only works for rewriting
+   parse trees that do not contain lists.
+
 Wed Jan 18 16:27:48 CET 2006 <{kooiker,jurgenv}@cwi.nl>
  * utils/asc-support-config.src: added options --ldflags --includes
    and --prefix to config script, such that transitive dependencies

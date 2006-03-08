@@ -361,6 +361,7 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 /*}}}  */
 
 
+void setKeepLayout(ATbool on) ;
 ATerm callLiteralConstructor(PT_Symbol symbol);
 ATerm innermost(PT_Tree tree);
 ATerm getParseTable();
