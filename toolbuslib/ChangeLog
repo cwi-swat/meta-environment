@@ -1,5 +1,9 @@
 $Id$
 
+Wed Mar  8 17:13:27 CET 2006 <jurgenv@cwi.nl>
+ * aterm: a tool listens for QUIT and TERM signals and disconnects
+   from the ToolBus first before exiting.
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support

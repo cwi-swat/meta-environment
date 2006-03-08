@@ -14,6 +14,7 @@
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
+#include <signal.h>
 
 #include <aterm2.h>
 #include "atb-tool.h"
@@ -107,13 +108,28 @@ int ATBinitialize(int argc, char *argv[])
 }
 
 /*}}}  */
-/*{{{  int ATBinit(int argc, char *argv[], ATerm *stack_bottom) */
+
+/*{{{  void disconnectHandler(int sig) */
+
+void disconnectHandler(int sig)
+{
+  int i;
+
+  for (i = 0; connections[i] != NULL; i++) {
+    ATBdisconnect(connections[i]->fd);
+  }
+
+  exit(0);
+}
+
+/*}}}  */
 
 /**
  * Initialize the ToolBus layer.
  *
  */
 
+/*{{{  int ATBinit(int argc, char *argv[], ATerm *stack_bottom) */
 int
 ATBinit(int argc, char *argv[], ATerm *stack_bottom)
 {
@@ -174,11 +190,22 @@ ATBinit(int argc, char *argv[], ATerm *stack_bottom)
   for (lcv=0; lcv<MAX_NR_QUEUES; lcv++)
     event_queues[lcv].afun = -1;
 
+  /* Initialize handlers for OS signals */
+  {
+    struct sigaction disconnect;
+    disconnect.sa_handler = disconnectHandler;
+    sigemptyset(&disconnect.sa_mask);
+
+    sigaction(SIGTERM, &disconnect, NULL);
+    sigaction(SIGQUIT, &disconnect, NULL);
+  }
+
   /* Get hostname of machine that runs this particular tool */
   return gethostname(this_host, MAXHOSTNAMELEN);
 }
 
 /*}}}  */
+
 /*{{{  int ATBconnect(char *tool, char *host, int port, handler) */
 
 /**
@@ -255,6 +282,8 @@ ATBdisconnect(int fd)
 {
   /* Abort on illegal filedescriptors */
   assert(fd >= 0 && fd < FD_SETSIZE);
+
+  /* Send the disconnect term */
 
   /* Close the actual filedescriptor */
   fclose(connections[fd]->stream);
