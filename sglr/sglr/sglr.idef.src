@@ -31,7 +31,7 @@ in
       . snd-terminate(SGLR, "done")
     +
       rec-disconnect(SGLR)
-      . snd-msg(sglr-parse-error(error("SGLR was aborted",[])))
+      . snd-msg(sglr-parse-error(error("the SGLR parser was aborted",[])))
     )
   ) * delta
 endlet
