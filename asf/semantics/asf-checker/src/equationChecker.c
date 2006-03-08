@@ -354,7 +354,6 @@ static void normalizeSortname(char *name)
 static ATbool isIgnored(PT_Tree tree)
 {
   if (PT_isTreeVar(tree)) {
-    ATwarning("layout var\n");
     return ATfalse;
   }
 
