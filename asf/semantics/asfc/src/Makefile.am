@@ -1,7 +1,7 @@
 include $(top_srcdir)/make_rules
 
-SUBDIRS = muasf
-
+SUBDIRS = muasf .
+ 
 bin_PROGRAMS     = asfc
 pkgdata_DATA     = asfc.idef
 
@@ -43,6 +43,9 @@ DEFINES = -DASC_INCLUDES="\"$(ASC_INCLUDES)\"" \
 INCLUDES  = $(DEFINES) \
 	    $(ASC_INCLUDES) \
             -I$(srcdir)/muasf 
+
+bootstrap: 
+	asfc -i Compiler.eqs -o Compiler.c -v
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

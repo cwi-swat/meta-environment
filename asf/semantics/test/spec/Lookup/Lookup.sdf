@@ -21,12 +21,16 @@ exports
     "natural"     -> TYPE
     "string"      -> TYPE
 
-  sorts TENV PAIR {PAIR ","}*
+  sorts TENV PAIR 
   context-free syntax
     "(" PICO-ID ":" TYPE ")" -> PAIR
     "[" {PAIR ","}* "]"            -> TENV
 
     "lookup" "(" PICO-ID "," TENV ")"           -> TYPE
+
+  hiddens
+  context-free start-symbols
+     {PAIR ","}*
 
   variables
     "Pair" [0-9\']*  -> PAIR

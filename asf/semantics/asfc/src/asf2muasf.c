@@ -203,7 +203,7 @@ static int getProdArity(PT_Production prod, LayoutOption layout)
     for (; PT_hasSymbolsHead(symbols); symbols = PT_getSymbolsTail(symbols)) {
       PT_Symbol symbol = PT_getSymbolsHead(symbols);
 
-      if (!PT_isSymbolLit(symbol) 
+      if (!PT_isSymbolLit(symbol) && !PT_isSymbolCilit(symbol)
 	  && (layout == WITH_LAYOUT || !PT_isOptLayoutSymbol(symbol))) {
 	arity++;
       }
@@ -460,7 +460,7 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd, MA_Term type)
   MA_SigArgArgs maSigArgElems;
   MA_FuncDef maFuncdef;
 
-  arity = getProdArity(ptProd, WITHOUT_LAYOUT);
+  arity = getProdArity(ptProd, layout);
 
   if (PT_isProductionDefault(ptProd)) {
     MA_TermElems maAnnos = NULL;
@@ -861,7 +861,8 @@ static MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs)
 
 /*{{{  MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations) */
 
-MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations)
+MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations,
+		ATbool keep_layout)
 {
   MA_SignatureOpt maSignature;
   MA_RulesOpt maRules;
@@ -870,7 +871,13 @@ MA_Module asfToMuASF(char *name, ASF_ASFConditionalEquationList equations)
   initLayoutAbbreviations();
 
   /* globals */
-  layout = WITHOUT_LAYOUT;
+  if (keep_layout) {
+	  layout = WITH_LAYOUT;
+  }
+  else {
+	  layout = WITHOUT_LAYOUT;
+  }
+
   funcdefs = ATindexedSetCreate(1024, 70);
 
   if (ASF_isASFConditionalEquationListEmpty(equations)) {

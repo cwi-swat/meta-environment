@@ -26,10 +26,11 @@ static char *name;
 
 ATbool run_verbose;
 ATbool statistics;
+ATbool termOutput;
 
 static char myname[] = "asfchecker";
-static char myversion[] = "0.1";
-static char myarguments[] = "hi:svV";
+static char myversion[] = "1.0";
+static char myarguments[] = "hi:stvV";
 
 /*}}}  */
 
@@ -130,6 +131,7 @@ int main(int argc, char *argv[])
 
   statistics = ATfalse;
   run_verbose = ATfalse;
+  termOutput = ATfalse;
 
   /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
@@ -156,6 +158,7 @@ int main(int argc, char *argv[])
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
 	case 's':  statistics=ATtrue;                      break;
+        case 't':  termOutput=ATtrue;                      break;
         case 'V':  version(); exit(0);                     break;
   
         case 'h':
@@ -171,8 +174,13 @@ int main(int argc, char *argv[])
 
     if (!ATisEmpty(msgs)) {
       ERR_Summary sum = ERR_makeSummarySummary("asfchecker",input,msgs);
-      ERR_displaySummary(sum);
-      ATwarning("%t\n", sum);
+
+      if (!termOutput) {
+	ERR_displaySummary(sum);
+      }
+      else {
+	ATprintf("%t\n", sum);
+      }
       return 1;
     }
   }

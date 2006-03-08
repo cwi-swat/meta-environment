@@ -12,6 +12,7 @@ exports
     PAIR "+" TENV                               -> TENV
     "lookup" "(" PICO-ID "," TENV ")"           -> TYPE {memo}
     "add-to" "(" PICO-ID "," TYPE "," TENV ")"  -> TENV
+  hiddens
   variables
     "Pair" [0-9\']*  -> PAIR
     "Pair*" [0-9\']* -> {PAIR ","}*

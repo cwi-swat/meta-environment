@@ -592,41 +592,35 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
   PT_Tree reduct = FAIL;
   PT_Tree save = trm;
 
-  if (PT_isTreeLayout(trm)) {
-    reduct = trm;
+  ASF_ASFTag tag = tagCurrentRule;
+
+  if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
+    reduct = rewriteVariableAppl(trm, env, depth, extra);
+    tagCurrentRule = innermostTag;
+    TIDE_STEP(save, putVariableValue(env, innermostSubject, reduct), depth);
+    tagCurrentRule = tag;
   }
-  else {
-    ASF_ASFTag tag = tagCurrentRule;
+  else if (PT_hasTreeArgs(trm)) {
+    /* first the kids */    
+    reduct = rewriteArgs(trm, env, depth, extra);
 
-    if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
-      reduct = rewriteVariableAppl(trm, env, depth, extra);
+    if (reduct != FAIL) {
+      trm = reduct;
+    }
+
+    if (trm) {
+      /* Then the parent */
+
       tagCurrentRule = innermostTag;
-      TIDE_STEP(save, putVariableValue(env, innermostSubject, reduct), depth);
+      TIDE_STEP(save, putVariableValue(env, innermostSubject, trm), depth);
       tagCurrentRule = tag;
-    }
-    else if (PT_hasTreeArgs(trm)) {
-      /* first the kids */    
-      reduct = rewriteArgs(trm, env, depth, extra);
 
-      if (reduct != FAIL) {
-	trm = reduct;
-      }
+      reduct = rewriteTop(trm, env, depth+1, extra);
 
-      if (trm) {
-	/* Then the parent */
-
-	tagCurrentRule = innermostTag;
-	TIDE_STEP(save, putVariableValue(env, innermostSubject, trm), depth);
-	tagCurrentRule = tag;
-
-	reduct = rewriteTop(trm, env, depth+1, extra);
-
-	if (reduct == FAIL) {
-	  reduct = trm;
-	}
+      if (reduct == FAIL) {
+	reduct = trm;
       }
     }
-
   }
 
   return reduct;

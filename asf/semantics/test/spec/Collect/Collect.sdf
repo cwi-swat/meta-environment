@@ -17,8 +17,8 @@ context-free start-symbols
 	COLLECTION
 
 context-free syntax
-"collect" "(" PROGRAM "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up, continue)}
-"collect" "(" StrCon "," COLLECTION ")" -> COLLECTION {traversal(accu, bottom-up, continue)}
+collect( PROGRAM , COLLECTION ) -> COLLECTION {traversal(accu, bottom-up, continue)}
+collect( StrCon , COLLECTION ) -> COLLECTION {traversal(accu, bottom-up, continue)}
 
 variables
   "Program" -> PROGRAM

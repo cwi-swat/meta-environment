@@ -6,6 +6,8 @@ INCLUDES = $(ASC_INCLUDES)
 
 bin_PROGRAMS = asfoperations
 
+lib_LIBRARIES = libasfnormalization.a
+
 pkgdata_DATA    = asfoperations.idef
 
 EXTRA_DIST   = asfoperations.idef.src 
@@ -18,11 +20,18 @@ noinst_HEADERS 	= \
 
 asfoperations_SOURCES = \
 	asfoperations.c \
-	asfoperations.tif.c \
+	asfoperations.tif.c 
+
+libasfnormalization_a_SOURCES = \
 	asfnormalization.c \
 	ASF-Normalization.c
 
-asfoperations_LDADD = $(ASC_LD_FLAGS)
+asfoperations_DEPENDENCIES=\
+	libasfnormalization.a
+
+asfoperations_LDADD = \
+	${asfoperations_DEPENDENCIES} \
+	$(ASC_LD_FLAGS) 
 
 # NOTE: the -a option to asfc activates rewriting with annotations,
 #       which is essential here.

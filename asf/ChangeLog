@@ -1,5 +1,17 @@
 $Id$
 
+Wed Mar  8 10:54:42 CET 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/matching: the matcher will ignore all layout that
+   surrounds a star variable in a list. The reason is that if the 
+   variable is bound to an empty list, the surrounding layout and separators
+   do not exist. This may lead to unbound variables, which leads to
+   general mayhem. 
+ * semantics/asf-checker: asf-checker warns when interest is shown in layout
+   next to a star variable. The 'quickfix' is to change the star variable
+   to a plus variable.
+ * semantics/*: layout is now first-class in ASF. This means we can
+   match and construct layout like any other tree. 
+
 Fri Feb 24 09:53:40 CET 2006 <jurgenv@cwi.nl>
  * semantics/asf/asf-operations: ASF-Normalization.c: the normalizer
    fixes a number of problems with traversal of lexicals and sub-lexicals.
@@ -29,6 +41,25 @@ Thu Jan  5 09:10:08 CET 2006 <jurgenv@cwi.nl>
 
 Sat Aug 27 09:04:30 CEST 2005 <kooiker@cwi.nl>
  * semantics/test/Makefile.am: remove trailing backslash
+
+Mon Aug 22 17:42:23 CEST 2005 <{jurgenv,storm}@cwi.nl>
+ * semantics/asfc/src/Compiler.c: fixed major bug in ASF compiler,
+   tail recursion elimination generated completely buggy code.
+
+Mon Aug 22 15:27:27 CEST 2005 <jurgenv@cwi.nl>
+ * semantics/asfc/src/Compiler.c: compiler now generates tests
+   for character class inclusion.
+ * semantics/asfe/src/matching.c: interpreter checks character
+   class inclusion for variables that range over character classes.
+
+Thu Aug 18 14:06:20 CEST 2005 <jurgenv@cwi.nl>
+ * syntax/addeqssyntax/*: Added extra injection around lexical variables
+   that range over a character class. The result of the injection encodes
+   the original character class (surrounded by CHAR[[cc]]), such that
+   the normalizer can retrieve the original type.
+ * semantics/asfoperations/*: The ASF-Normalizer uses the information
+   stored in the extra injection to retrieve the correct type of 
+   a lexical variable.
 
 Tue Aug 16 16:42:06 CEST 2005 <jurgenv@cwi.nl>
  *  asf/syntax/asfsdf-checker/spec/*.asf: The checker accumulates the

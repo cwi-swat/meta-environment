@@ -44,14 +44,15 @@ ATbool output_muasf;
 ATbool input_muasf;
 ATbool use_c_compiler;
 ATbool keep_annos;
+ATbool keep_layout;
 ATbool parse_io;
 
 int toolbus_id;
 
 char myname[] = "asfc";
-char myversion[] = "2.5";
+char myversion[] = "3.0";
 
-static char myarguments[] = "achi:lmn:o:p:stvV";
+static char myarguments[] = "achi:lLmn:o:p:stvV";
 
 
 /*}}}  */
@@ -81,6 +82,7 @@ static void usage(void)
 	    "\t-c              toggle compilation to a binary(%s)   \n"
 	    "\t-h              display this message                           \n"
 	    "\t-i filename     input equations from file     (default stdin) \n"
+	    "\t-L              rewriting with layout         (%s)\n"
 	    "\t-l              input muasf code              (%s)    \n"
 	    "\t-m              output muasf code             (%s)    \n"
 	    "\t-n name         name of the tool              (default <basename>)\n"
@@ -93,6 +95,7 @@ static void usage(void)
 	    myname, 
 	    keep_annos ? "on" : "off",
 	    use_c_compiler ? "on" : "off",
+	    keep_layout ? "on" : "off",
 	    input_muasf ? "on" : "off", 
 	    output_muasf ? "on" : "off", 
 	    parse_io ? "on" : "off",
@@ -169,7 +172,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
   } else {
     VERBOSE("transforming ASF to MuASF");
 
-    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs));
+    muasf = asfToMuASF(saveName, ASF_ASFConditionalEquationListFromTerm(eqs), keep_layout);
   }
 
   if (muasf == NULL) {
@@ -207,7 +210,8 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
     }
 
     VERBOSE("pretty printing C code");
-    ToC_code(parse_io, keep_annos, saveName, c_code, parseTable, fp , 
+    ToC_code(parse_io, keep_annos, keep_layout, 
+		    saveName, c_code, parseTable, fp , 
 	     myversion);
     fclose(fp);
 
@@ -288,6 +292,7 @@ int main(int argc, char *argv[])
   ATerm parseTable = NULL;
 
   keep_annos = ATfalse;
+  keep_layout = ATfalse;
   run_verbose = ATfalse;
   input_muasf = ATfalse;
   output_muasf = ATfalse;
@@ -305,7 +310,6 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottom);
-  /*ATsetChecking(ATtrue);*/
   PT_initMEPTApi();
   ASF_initASFMEApi();
   MA_initMuASFApi();
@@ -325,6 +329,7 @@ int main(int argc, char *argv[])
       case 'v':  run_verbose = ATtrue;  break;
       case 'i':  equations=optarg;      break;
       case 'l':  input_muasf=ATtrue;    break;
+      case 'L':  keep_layout=ATtrue;    break;
       case 'm':  output_muasf=ATtrue;   break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;

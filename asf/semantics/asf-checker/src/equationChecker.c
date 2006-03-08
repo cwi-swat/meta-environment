@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /* TODO: Aren't error messages slightly off-topic in this file?
-** TODO: Refactor locatePossibleVariables() away?
+** TODO: Refactor checkTree() away?
 **       (by makinbg it part of checkVariables())
 ** TODO: See whether we can eliminate some other *Variables() functions?
 ** TODO: checkVariables() delivers a listof newly introduced variables
@@ -18,8 +18,113 @@
 #include <assert.h>
 
 #include <Error.h>
+#include <asfnormalization.h>
 #include "equationChecker.h"
 #include "statistics.h"
+
+/*{{{  static ATbool isCHARinjection(PT_Tree tree) */
+
+static ATbool isCHARinjection(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+      PT_Attr attr = 
+	PT_makeAttrTerm(ATparse("lexical-constructor-character-injection"));
+
+    return PT_hasProductionCertainAttr(prod, attr) ? ATtrue : ATfalse;
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  static PT_Symbol getOuterCharacterClass(PT_Production prod) */
+
+static PT_Symbol getOuterCharacterClass(PT_Production prod)
+{
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Symbol cf = PT_getSymbolSymbol(rhs);
+  PT_Symbol param = PT_getSymbolsHead(PT_getSymbolParameters(cf));
+
+  return param;
+}
+
+/*}}}  */
+/*{{{  static PT_Symbol getInnerCharacterClass(PT_Production prod) */
+
+static PT_Symbol getInnerCharacterClass(PT_Production prod)
+{
+  PT_Symbol lhs = PT_getSymbolsHead(PT_getProductionLhs(prod));
+  PT_Symbol cf = PT_getSymbolSymbol(lhs);
+  PT_Symbol param = PT_getSymbolsHead(PT_getSymbolParameters(cf));
+
+  return param;
+}
+
+/*}}}  */
+
+/*{{{  static ERR_ErrorList checkCHARinjection(PT_Tree tree) */
+
+static ERR_ErrorList checkCHARinjection(PT_Tree tree)
+{
+  PT_Production outerProd = PT_getTreeProd(tree);
+  PT_Symbol outerCC = getOuterCharacterClass(outerProd);
+  PT_Tree inner = PT_getArgsHead(PT_getTreeArgs(tree));
+
+  if (PT_isTreeAppl(inner)) {
+    PT_Production innerProd = PT_getTreeProd(inner);
+    PT_Attr varAttr = 
+      PT_makeAttrTerm(ATparse("lexical-constructor-character"));
+
+    if (PT_hasProductionCertainAttr(innerProd, varAttr)) {
+      /* A variable that ranges over a lexical */
+      PT_Symbol innerCC = getInnerCharacterClass(innerProd);
+
+      assert(PT_isSymbolCharClass(innerCC));
+      assert(PT_isSymbolCharClass(outerCC));
+
+      if (!PT_subsetOfCharClass(innerCC, outerCC)) {
+	const char* innerCCstr = PT_yieldSymbol(innerCC);
+	ERR_Subject innerSub = ERR_makeSubjectSubject(innerCCstr);
+	const char* outerCCstr = PT_yieldSymbol(outerCC);
+	ERR_Subject outerSub = ERR_makeSubjectSubject(outerCCstr);
+	ERR_Error error = makeMessage(
+	   "lexical variable accepts more characters than allowed in this context"
+	   , (ATerm) tree);
+	ERR_SubjectList subjects = ERR_getErrorList(error);
+	subjects = ERR_makeSubjectListMany(innerSub, subjects);
+	subjects = ERR_makeSubjectListMany(outerSub, subjects);
+	error = ERR_setErrorList(error, subjects);
+	return ERR_makeErrorListSingle(error);
+      }
+    }
+    else {
+      /* We do not have a variable, but a character, encoded in
+       * the SDF character class style
+       */
+      PT_Tree normalized = normalizeCharacter(tree);
+
+      assert(PT_isTreeChar(normalized));
+
+      if (!PT_elementOfCharClass(normalized, outerCC)) {
+	const char* outerCCstr = PT_yieldSymbol(outerCC);
+	ERR_Subject outerSub = ERR_makeSubjectSubject(outerCCstr);
+	ERR_Error error = makeMessage(
+	   "character is not allowed in this context", (ATerm) tree);
+	ERR_SubjectList subjects = ERR_getErrorList(error);
+	subjects = ERR_makeSubjectListMany(outerSub, subjects);
+	error = ERR_setErrorList(error, subjects);
+	return ERR_makeErrorListSingle(error);
+      }
+    }
+  }
+
+  return ERR_makeErrorListEmpty();
+
+}
+
+/*}}}  */
 
 /*{{{  static int ASF_getASFConditionsListLength(ASF_ASFConditionsList l) */
 
@@ -53,6 +158,30 @@ static ERR_SubjectList treeToSubjectList(PT_Tree tree)
 ERR_Error makeMessage(const char *msg, ATerm subject)
 {
   return ERR_makeErrorError(msg, treeToSubjectList(PT_TreeFromTerm(subject)));
+}
+
+/*}}}  */
+/*{{{  ERR_Error makeMessage2(const char *msg, ATerm subject1, ATerm subject2) */
+
+ERR_Error makeMessage2(const char *msg, ATerm subject1, ATerm subject2)
+{
+  ERR_SubjectList l1 = treeToSubjectList(PT_TreeFromTerm(subject1));
+  ERR_SubjectList l2 = treeToSubjectList(PT_TreeFromTerm(subject2));
+
+  return ERR_makeErrorError(msg, ERR_concatSubjectList(l1, l2));
+}
+
+/*}}}  */
+/*{{{  ERR_Error makeMessage3(const char *msg, ATerm subject1, ATerm subject2, ATerm subject3) */
+
+ERR_Error makeMessage3(const char *msg, ATerm subject1, ATerm subject2, ATerm subject3)
+{
+  ERR_SubjectList l1 = treeToSubjectList(PT_TreeFromTerm(subject1));
+  ERR_SubjectList l2 = treeToSubjectList(PT_TreeFromTerm(subject2));
+  ERR_SubjectList l3 = treeToSubjectList(PT_TreeFromTerm(subject2));
+
+  return ERR_makeErrorError(msg, 
+	    ERR_concatSubjectList(ERR_concatSubjectList(l1, l2), l3));
 }
 
 /*}}}  */
@@ -220,37 +349,45 @@ static void normalizeSortname(char *name)
 
 /*}}}  */
 
-/*{{{  static PT_Args checkCharClass(PT_Tree tree) */
-#if 0
-static PT_Args checkCharClass(PT_Tree tree)
+/*{{{  static ATbool isIgnored(PT_Tree tree) */
+
+static ATbool isIgnored(PT_Tree tree)
 {
-  PT_Args result = PT_makeArgsEmpty();
+  if (PT_isTreeVar(tree)) {
+    ATwarning("layout var\n");
+    return ATfalse;
+  }
 
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    PT_Symbol rhs = PT_getProductionRhs(prod);
+    PT_Attr lexcons = PT_makeAttrTerm(ATparse("lexical-constructor"));
+    PT_Attr bracket = PT_makeAttrTerm(ATparse("layout-bracket"));
 
-    if (PT_isSymbolCf(rhs)) {
-      rhs = PT_getSymbolSymbol(rhs);
+    if (PT_hasProductionCertainAttr(prod, lexcons)) {
+      return ATfalse;
+    }
+    if (PT_hasProductionCertainAttr(prod, bracket)) {
+      return ATfalse;
+    }
+  }
 
-      if (PT_isSymbolParameterizedSort(rhs)) {
-	if (!strcmp(PT_getSymbolSort(rhs), "CHARS")) {
-	  PT_Symbols symbols = PT_getSymbolParameters(rhs);
-	  PT_Symbol cc = PT_getSymbolsHead(symbols);
+  if (PT_hasTreeArgs(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
 
+    for ( ;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
 
-	  if (PT_isSymbolCharClass(cc)) {
-	    ATwarning("TODO: implement charchecking character!\n");
-	  }
-	}
+      if (!isIgnored(arg)) {
+	return ATfalse;
       }
     }
   }
 
-  return result;
+  return ATtrue;
 }
-#endif
+
 /*}}}  */
+
 /*{{{  static ATbool isLexicalTree(PT_Tree tree) */
 
 static ATbool isLexicalTree(PT_Tree tree)
@@ -265,6 +402,74 @@ static ATbool isLexicalTree(PT_Tree tree)
   else {
     return ATfalse;
   }
+}
+
+/*}}}  */
+/*{{{  static ERR_ErrorList checkIgnoredLayout(PT_Tree tree) */
+
+static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
+{
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  PT_Production prod = PT_getTreeProd(tree);
+  PT_Args args = PT_getTreeArgs(tree);
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  ATbool separated = PT_isIterSepSymbol(rhs);
+  ERR_Error message;
+
+  if (!PT_isSymbolCf(rhs)) {
+    return messages;
+  }
+
+  while (!PT_isArgsEmpty(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+    PT_Tree next = NULL;
+    const char *msg = "layout surrounding a star variable "
+      "is always ignored, use a plus variable";
+    ATbool nextIsStarVar = ATfalse;
+
+    if (PT_getArgsLength(args) >= (separated ? 4 : 2)) {
+      next = PT_getArgsTreeAt(args, separated ? 3 : 1);
+      if (PT_isTreeVarListStar(next)) {
+	nextIsStarVar = ATtrue;
+      }
+    }
+
+    if (nextIsStarVar || PT_isTreeVarListStar(arg)) {
+      if (!separated) {
+	if (PT_getArgsLength(args) >= 2) {
+	  PT_Tree layout;
+	  args = PT_getArgsTail(args);
+	  layout = PT_getArgsHead(args);
+
+	  if (!isIgnored(layout)) {
+	    message = makeWarning(msg, 
+				  PT_TreeToTerm(nextIsStarVar ? next : arg ));
+	    messages = ERR_concatErrorList(messages,
+					   ERR_makeErrorListSingle(message));
+	  }
+	}
+      }
+      else {
+	if (PT_getArgsLength(args) >= 4) {
+	  PT_Tree layoutBeforeSep = PT_getArgsTreeAt(args, 1);
+	  PT_Tree layoutAfterSep = PT_getArgsTreeAt(args, 3);
+	  args = PT_getArgsTail(PT_getArgsTail(PT_getArgsTail(args)));
+
+	  if (!isIgnored(layoutBeforeSep) || 
+	      !isIgnored(layoutAfterSep)) {
+	    message = makeWarning(msg, 
+				  PT_TreeToTerm(nextIsStarVar ? next : arg));
+	    messages = ERR_concatErrorList(messages,
+					   ERR_makeErrorListSingle(message));
+	  }
+	}
+      }
+    }
+
+    args = PT_getArgsTail(args);
+  }
+
+  return messages;
 }
 
 /*}}}  */
@@ -296,14 +501,18 @@ static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
 }
 
 /*}}}  */
-/*{{{  static ERR_ErrorList locatePossibleVariables(PT_Tree tree) */
+/*{{{  static ERR_ErrorList checkTree(PT_Tree tree) */
 
-static ERR_ErrorList locatePossibleVariables(PT_Tree tree)
+static ERR_ErrorList checkTree(PT_Tree tree)
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
   if (isLexicalTree(tree)) {
-    return checkForPossibleVariables(tree);
+    messages = checkForPossibleVariables(tree);
+  }
+
+  if (isCHARinjection(tree)) {
+    messages = checkCHARinjection(tree);
   }
 
   if (PT_isTreeAppl(tree)) {
@@ -312,10 +521,15 @@ static ERR_ErrorList locatePossibleVariables(PT_Tree tree)
     while (!PT_isArgsEmpty(args)) {
       PT_Tree arg = PT_getArgsHead(args);
 
-      messages = ERR_concatErrorList(messages, locatePossibleVariables(arg));
+      messages = ERR_concatErrorList(messages, checkTree(arg));
 
       args = PT_getArgsTail(args);
     }
+  }
+
+  /* we check if star variables are surrounded by layout patterns */
+  if (PT_isTreeApplList(tree)) {
+    messages = ERR_concatErrorList(checkIgnoredLayout(tree), messages);
   }
 
   return messages;
@@ -415,8 +629,9 @@ static ATbool isConstant(PT_Tree tree)
 
 /*}}}  */
 
-/* 1. The call to locatePossibleVariables() is not needed in the function
- *    (after each call to checkTreeGivenVariables, locatePossibleVariables 
+
+/* 1. The call to checkTree() is not needed in the function
+ *    (after each call to checkTreeGivenVariables, checkTree 
  *    is also called, and the latter also recursively descends the tree)
  * 2. 'tag' is not used here
  */
@@ -533,9 +748,9 @@ static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition con
   PT_Args lhsNewVars;
   PT_Args rhsNewVars;
 
-  messages = locatePossibleVariables((PT_Tree) lhsCond);
+  messages = checkTree((PT_Tree) lhsCond);
   messages = ERR_concatErrorList(messages,
-				 locatePossibleVariables((PT_Tree) rhsCond));
+				 checkTree((PT_Tree) rhsCond));
 
   lhsNewVars = checkVariables((PT_Tree) lhsCond, pDefVars, pUsedVars);
 			      
@@ -585,7 +800,7 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
   else {
     /* variables already collected */
     messages = ERR_concatErrorList(messages, 
-				   locatePossibleVariables((PT_Tree) lhsCond));
+				   checkTree((PT_Tree) lhsCond));
   }
 
   return messages;
@@ -723,18 +938,22 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     SADD(outermostFunctions, PT_getTreeProd(ptTree));
 
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
-      ERR_Error message = makeWarning("constructor not expected as "
-						  "outermost function symbol of left hand side", 
-						  PT_TreeToTerm(ptTree));
+      ERR_Error message = makeWarning("unexpected constructor as "
+				      "outermost function symbol "
+				      "of left-hand side", 
+				      PT_TreeToTerm(ptTree));
       return ERR_makeErrorListSingle(message);
     }
     else if (isContextFreeSingleton(ptTree)) {
       ERR_Error message = 
           makeMessage(
-          "Left hand side is contained in a list", PT_TreeToTerm(ptTree));
+          "rewrite rule will only match singleton lists "
+	  "(the left-hand side is a function that does not return a list, "
+	  "but the right-hand side is a list.)", PT_TreeToTerm(ptTree));
       return ERR_makeErrorListSingle(message);
     }
     else {
+
       return ERR_makeErrorListEmpty();
     }
   }
@@ -775,8 +994,10 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
       checkVariables((PT_Tree)lhsEq, &definedVars, &usedVars);
 
       messages = ERR_concatErrorList(messages, checkLhs(tag, lhsEq));
+
+      /*ATwarning("locating possible variables\n");*/
       messages = ERR_concatErrorList(messages, 
-				     locatePossibleVariables((PT_Tree)lhsEq));
+				     checkTree((PT_Tree)lhsEq));
 
       if (ASF_hasASFConditionalEquationASFConditions(condEquation)) {
 	SCOUNT(nrEquationsWithConditions);
@@ -790,7 +1011,7 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
 		          checkTreeGivenVariables(tag, (PT_Tree)rhsEq, 
 					&definedVars, &usedVars));
       messages = ERR_concatErrorList(messages, 
-			  locatePossibleVariables((PT_Tree) rhsEq));
+			  checkTree((PT_Tree) rhsEq));
 
       /* for variables defined and not used, report an error */
       messages = ERR_concatErrorList(messages,
@@ -831,8 +1052,9 @@ static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)
       checkVariables((PT_Tree)lhsCond, &definedVars, &usedVars);
 
       if (!PT_isArgsEmpty(definedVars) || !PT_isArgsEmpty(usedVars)) {
-	message = makeMessage("no variables may be introduced in left hand side "
-                              "of test", ASF_TreeToTerm(lhsCond));
+	message = makeMessage("no variables may be introduced in "
+			      "left-hand side of test", 
+			      ASF_TreeToTerm(lhsCond));
 	messages = ERR_makeErrorListMany(message, messages);
         definedVars=PT_makeArgsEmpty();
         usedVars=PT_makeArgsEmpty();
@@ -849,7 +1071,7 @@ static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)
 		          checkTreeGivenVariables(tag, (PT_Tree)rhsCond, 
 						  &definedVars, &usedVars));
       messages = ERR_concatErrorList(messages, 
-				     locatePossibleVariables((PT_Tree)rhsCond));
+				     checkTree((PT_Tree)rhsCond));
 
       /* for variables defined and not used, report an error */
       messages = ERR_concatErrorList(messages,
@@ -914,6 +1136,7 @@ ERR_ErrorList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationL
 
 ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
+  /*ATwarning("checking equations\n");*/
 
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
     return makeAmbiguityMessage(equations);

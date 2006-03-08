@@ -4,7 +4,7 @@ imports languages/pico/syntax/Pico-Identifiers
 imports basic/Integers
 
 exports
-  sorts TUPLE
+  sorts TUPLE TUPLE3
   context-free start-symbols
 	Boolean
 	TUPLE
@@ -19,6 +19,7 @@ exports
     TUPLE             -> TUPLE3
     <PICO-ID ,Integer , Boolean> -> TUPLE
 
+  hiddens
   variables
   "Id"[0-9]* -> PICO-ID
   "Int"[0-9]* -> Integer

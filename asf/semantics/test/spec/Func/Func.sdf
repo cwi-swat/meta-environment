@@ -18,6 +18,7 @@ exports
   aliases
     (Boolean Integer => Integer) -> Pico-Func
 
+  hiddens
   variables
     "vf"[0-9]* -> Pico-Func
     "Int" -> Integer

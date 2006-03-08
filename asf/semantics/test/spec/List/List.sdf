@@ -2,7 +2,6 @@ module List
 
 exports
 
-sorts ("a" | "b" | "c")*
 
 lexical syntax
 
@@ -17,6 +16,7 @@ LAYOUT? -/- [\ \t\n]
 
 context-free syntax
 
+hiddens
 variables
 
 "abc*"[0-9]* ->  ("a" | "b" | "c")*

@@ -1,9 +1,10 @@
 module Pico-Xml
 
 imports languages/pico/syntax/Pico-Syntax
+imports basic/Integers
 
 exports
-sorts <PROGRAM , Integer>
+
 
 context-free start-symbols
 	PROGRAM
@@ -19,6 +20,7 @@ xml(PROGRAM) -> PROGRAM
 xml(PROGRAM      , Integer) -> <PROGRAM      , Integer> {traversal(trafo,accu,bottom-up, continue)}
 xml(StrCon , Integer) -> <StrCon , Integer> {traversal(trafo,accu,bottom-up, continue)}
 
+hiddens
 variables
 "Str-con" -> StrCon
 "Int" -> Integer

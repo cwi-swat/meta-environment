@@ -22,7 +22,6 @@ TEST_MODULES=\
 	Pico-typecheck \
 	Pico-Xml \
 	PlusStarVar \
-	RelationsTest \
 	ReturnsList \
 	SetAndElem \
 	Specificity \
@@ -56,7 +55,7 @@ ASFC=${top_builddir}/semantics/asfc/src/asfc
 ASFE=${top_builddir}/semantics/asfe/src/asfe
 ASFCHECKER=${top_builddir}/semantics/asf-checker/src/asfchecker
 ATRMANNOS=${ATERM}/bin/atrmannos
-ATDIFF=${ATERM}/bin/atdiff
+ATDIFF=${ATERM}/bin/atdiff 
 EQS=${srcdir}/eqs
 IN=${srcdir}/input
 OUT=${srcdir}/output
@@ -65,7 +64,7 @@ CODE=${srcdir}/c-code
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh .cvsignore
 
 TESTS = \
-	$(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh ) \
+	$(foreach f, ${TEST_MODULES}, $f.asfe.sh ) \
 	$(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.asfe.sh) 
 
 %.asfc.sh: 

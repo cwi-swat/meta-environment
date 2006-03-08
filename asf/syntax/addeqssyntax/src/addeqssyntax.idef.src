@@ -9,11 +9,13 @@ let
 in  
   (
     rec-msg(add-eqs-syntax(ModuleName?, Syntax?)).
+    printf("adding eqs syntax\n").
     execute(addeqssyntax,AES?).
     snd-eval(AES,add-eqs-syntax(ModuleName, Syntax)).
     rec-value(AES,extended-syntax(NewSyntax?)). 
     snd-msg(extended-syntax(NewSyntax)).
     snd-terminate(AES,"done").
+    printf("eqs syntax added\n").
     Syntax := none.
     NewSyntax := none
   )*

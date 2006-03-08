@@ -1,4 +1,5 @@
 #include <MEPT-utils.h>
+#include <PTMEPT-utils.h>
 #include <ASFME-utils.h>
 #include <asc-support-me.h>
 #include <asc-support2-me.h>
@@ -8,7 +9,10 @@ extern void register_ASF_Normalization();
 extern void resolve_ASF_Normalization();
 extern void init_ASF_Normalization();
 
-static void initialize() {
+/*{{{  static void initialize()  */
+
+static void initialize() 
+{
   static ATbool initialized = ATfalse;
 
   if (!initialized) {
@@ -25,6 +29,36 @@ static void initialize() {
 
   initialized = ATtrue;
 }
+
+/*}}}  */
+
+/*{{{  PT_Tree normalizeCharacter(PT_Tree tree) */
+
+PT_Tree normalizeCharacter(PT_Tree tree)
+{
+  PT_ParseTree resultParsetree;
+  PT_Tree resultTree;
+
+  initialize();
+
+  tree = (PT_Tree) PTPT_liftTree(tree);
+
+  tree = PT_applyFunctionToTree("constructors", 
+				"Tree",
+				1,
+				(PT_Tree) tree);
+
+  resultParsetree = toasfix(innermost(tree));
+  resultTree = PTPT_lowerTree((PTPT_Tree)
+			      PT_getParseTreeTree(resultParsetree));
+
+  return resultTree;
+
+}
+
+/*}}}  */
+
+/*{{{  ASF_ASFModule normalize(ASF_ASFModule input) */
 
 ASF_ASFModule normalize(ASF_ASFModule input)
 {
@@ -57,3 +91,4 @@ ASF_ASFModule normalize(ASF_ASFModule input)
   return lowered;
 }
 
+/*}}}  */

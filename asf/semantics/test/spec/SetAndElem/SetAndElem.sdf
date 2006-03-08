@@ -4,7 +4,7 @@ imports basic/Whitespace
 
 exports
 
-sorts ID BOOL {ID ";"}* ID*
+sorts ID BOOL 
 
 context-free start-symbols
 	ID* {ID ";"}*
@@ -31,6 +31,7 @@ set( ID*  )    -> ID*              {cons("set")}
 elem(  ID  ,  ID*  ) -> BOOL       {cons("elem")}
 elem(  ID  ,  {ID ";"}*  ) -> BOOL {cons("sepelem")}
 
+hiddens
 variables
 
 "Id"[0-9]* -> ID

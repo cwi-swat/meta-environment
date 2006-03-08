@@ -209,7 +209,14 @@ PT_Tree getFirstArgument(PT_Tree trm)
 }
 
 /*}}}  */
+/*{{{  ATbool isSliceEmpty(Slice slice) */
 
+ATbool isSliceEmpty(Slice slice)
+{
+  return PT_isEqualArgs(getSliceFirst(slice),getSliceLast(slice));
+}
+
+/*}}}  */
 
 /*{{{  ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2) */
 

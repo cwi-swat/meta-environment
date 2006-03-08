@@ -39,6 +39,7 @@ static ATerm matchListVariable(ATerm env, PT_Tree listvar,
 		  PT_Args args1, PT_Args args2,
 		  ATerm lhs_posinfo, int depth);
 static ATerm matchList(ATerm env, PT_Production listProd,
+		       ATbool skipLayout,
 		       PT_Args elems1, PT_Args elems2,
 		       ASF_ASFConditionList conds, 
 		       PT_Args args1, PT_Args args2,
@@ -243,6 +244,7 @@ ATerm matchConditions(ASF_ASFConditionList conds, ATerm env, int depth)
 /*{{{  static ATerm matchList(ATerm env, PT_Production listProd, */
 
 static ATerm matchList(ATerm env, PT_Production listProd,
+		       ATbool skipWhitespace,
 		       PT_Args elems1, PT_Args elems2,
 		       ASF_ASFConditionList conds, 
 		       PT_Args args1, PT_Args args2,
@@ -251,9 +253,10 @@ static ATerm matchList(ATerm env, PT_Production listProd,
   PT_Tree elem1;
   ATerm newenv = fail_env;
 
-
-  elems1 = skipWhitespaceAndSeparator(elems1,listProd);
-  elems2 = skipWhitespaceAndSeparator(elems2,listProd);
+  if (skipWhitespace || PT_isArgsEmpty(elems2)) {
+    elems1 = skipWhitespaceAndSeparator(elems1,listProd);
+    elems2 = skipWhitespaceAndSeparator(elems2,listProd);
+  }
 
   if (PT_isArgsEmpty(elems1) && PT_isArgsEmpty(elems2)) {
     newenv = matchArguments(env, conds, args1, args2, lhs_posinfo, depth);
@@ -262,11 +265,12 @@ static ATerm matchList(ATerm env, PT_Production listProd,
     if (PT_hasArgsHead(elems1)) {
       elem1 = PT_getArgsHead(elems1);
       elems1 = PT_getArgsTail(elems1);
-
+      
       if (PT_isTreeVarList(elem1)) {
 	Slice slice = getListVariableValue(env, elem1);
 	if (slice != NULL) {
 	  newenv = matchList(env, listProd, 
+			     PT_isTreeVarListStar(elem1),
 			     prependSlice(slice, elems1), 
 			     elems2, conds,
 			     args1, args2,
@@ -313,8 +317,10 @@ static ATerm matchListVariable(ATerm env, PT_Tree listvar,
 {
   ATerm newenv = fail_env;
   PT_Args last;
+  ATbool skipLayout = ATfalse;
 
   if (PT_isTreeVarListStar(listvar)) {
+    skipLayout = ATtrue;
     last = elems2;
   }
   else {
@@ -329,7 +335,8 @@ static ATerm matchListVariable(ATerm env, PT_Tree listvar,
   while (is_fail_env(newenv)) {
     newenv = putListVariableValue(env, listvar, elems2, last);
 
-    newenv = matchList(newenv, listProd, elems1, last,
+    newenv = matchList(newenv, listProd, skipLayout,
+		       elems1, last,
 		       conds, args1, args2,
 		       lhs_posinfo, depth);
 
@@ -393,6 +400,7 @@ static ATerm matchVariable(ATerm env,
   PT_Tree trm = getVariableValue(env, var);
   ATerm newenv = fail_env;
 
+
   if (trm != NULL) {
     if (isAsFixEqual(arg2, trm)) {
       newenv = matchArguments(env, conds, orgargs1, orgargs2,
@@ -403,6 +411,20 @@ static ATerm matchVariable(ATerm env,
     }
   }
   else {
+    if (PT_isTreeChar(arg2)) {
+      PT_Production prod = PT_getTreeProd(var);
+      PT_Symbol type = PT_getProductionRhs(prod);
+
+      if (PT_isSymbolCharClass(type)) {
+	if (!PT_elementOfCharClass(arg2, type)) {
+	  return fail_env;
+	}
+      }
+      else {
+	return fail_env;
+      }
+    }
+
     newenv = putVariableValue(env, var, arg2);
     newenv = matchArguments(newenv, conds, orgargs1, orgargs2, lhs_posinfo, 
 			    depth);
@@ -425,16 +447,20 @@ static ATerm matchAppl(ATerm env,
   PT_Production prod2 = PT_getTreeProd(arg2);
   ATerm newenv;
 
+  /*ATwarning("MATCH?:\n\t%t\n\t\%t\n", prod1, prod2);*/
+
     if (PT_isEqualProduction(prod1, prod2)) {
       PT_Args args1 = PT_getTreeArgs(arg1);
       PT_Args args2 = PT_getTreeArgs(arg2);
 
+      /*ATwarning("RECURRING\n");*/
       newenv = matchArguments(env, conds, 
 			      PT_concatArgs(args1, orgargs1),
 			      PT_concatArgs(args2, orgargs2),
 			      lhs_posinfo, depth);
     }
     else {
+      /*ATwarning("NO MATCH!:\n\t%t\n\t\%t\n", prod1, prod2);*/
       newenv = fail_env;
     }
 
@@ -452,6 +478,7 @@ static ATerm matchArgument(ATerm env,
 {
   ATerm newenv = fail_env;
 
+    /*TIDE_STEP(arg1, env, depth);*/
 
   if (depth > MAX_DEPTH / 2) {
     char tmp[256];
@@ -468,8 +495,8 @@ static ATerm matchArgument(ATerm env,
 		     PT_removeTreeAnnotations(arg2))) {
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
-  else if (PT_isTreeLayout(arg1) || PT_isTreeLit(arg1) || PT_isTreeCilit(arg1)) {
-    /* Literals and layout always match */
+  else if (PT_isTreeLit(arg1) || PT_isTreeCilit(arg1)) {
+    /* Literals always match */
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
   else if (PT_isTreeCycle(arg1)) {
@@ -490,7 +517,8 @@ static ATerm matchArgument(ATerm env,
     PT_Args elems2 = PT_getTreeArgs(arg2);
     PT_Production prod1 = PT_getTreeProd(arg1);
 
-    newenv = matchList(env, prod1, elems1, elems2, conds, orgargs1, orgargs2, 
+    newenv = matchList(env, prod1, ATfalse,
+		       elems1, elems2, conds, orgargs1, orgargs2, 
 		       lhs_posinfo, depth);
   }
   else if (PT_isTreeVar(arg1)) {
@@ -512,6 +540,7 @@ static ATerm matchArgument(ATerm env,
 
 ATerm matchEquation(equation_entry *entry, PT_Tree trm, int depth)
 {
+  /*ATwarning("trying %s\n", PT_yieldTree(entry->equation));*/
   return matchArgument((ATerm) ATempty, entry->lhs, trm, entry->conds,
 		       PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 		       PT_TreeToTerm(entry->lhs), depth);

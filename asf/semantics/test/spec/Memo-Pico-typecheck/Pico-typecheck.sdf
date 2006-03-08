@@ -18,6 +18,7 @@ exports
     "tcst" "(" STATEMENT "," TENV ")"        -> Boolean
     "tce" "(" EXP "," TENV ")"               -> TYPE
 
+  hiddens
   variables
     "Decls" -> DECLS
     "Series"[0-9]* -> {STATEMENT ";"}*
@@ -27,3 +28,8 @@ exports
     "Exp"[0-9]* -> EXP
     "Nat-con"[0-9]* -> NatCon
     "Str-con"[0-9]* -> StrCon
+    "Type"[0-9]* -> TYPE
+    "Id"[0-9]* -> PICO-ID
+    "Pair" [0-9\']*  -> PAIR
+    "Pair*" [0-9\']* -> {PAIR ","}*
+    "Tenv" [0-9\']*  -> TENV

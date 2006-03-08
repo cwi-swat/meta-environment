@@ -22,7 +22,8 @@ static void make_header(FILE *file, const char* compiler_version)
 /*}}}  */
 /*{{{  static void make_main(ATbool keep_annos, const char *name, ATbool parseTable, FILE *file) */
 
-static void make_main(ATbool parse_io, ATbool keep_annos, const char *name, 
+static void make_main(ATbool parse_io, ATbool keep_annos, 
+		      ATbool keep_layout, const char *name, 
 		      ATbool parseTable, FILE *file)
 {
 
@@ -39,11 +40,13 @@ static void make_main(ATbool parse_io, ATbool keep_annos, const char *name,
 	    "{                                                        \n"
 	    "  ATerm bottom;\n"
 	    "  setKeepAnnotations(%s);\n"
+	    "  setKeepLayout(%s);\n"
 	    "  return asc_support_main(&bottom, argc, argv,           \n"
 	    "                          register_%s,                   \n"
             "                          resolve_%s,                    \n"
 	    "                          init_%s",
 	    keep_annos ? "ATtrue" : "ATfalse",
+	    keep_layout ? "ATtrue" : "ATfalse",
 	    name, name, 
 	    name);
 
@@ -109,6 +112,7 @@ static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 
 void ToC_code(ATbool parse_io,
 	      ATbool keep_annos,
+	      ATbool keep_layout,
 	      const char *name, PT_ParseTree ptCcode, ATerm parsetable,
 	      FILE *file, const char* compiler_version)
 {
@@ -191,7 +195,8 @@ void ToC_code(ATbool parse_io,
   } while(size3 != size);
 
   tableSize = make_parsetable(name, file, parsetable);
-  make_main(parse_io, keep_annos, name, parsetable != NULL ? ATtrue : ATfalse, file);
+  make_main(parse_io, keep_annos, keep_layout,
+		  name, parsetable != NULL ? ATtrue : ATfalse, file);
 }        
 
 /*}}}  */

@@ -4,7 +4,7 @@ imports basic/Whitespace
 
 exports
 
-sorts B {B ";"}*
+sorts B 
 
 context-free start-symbols
 	{B ";"}*
@@ -16,6 +16,7 @@ context-free syntax
 
 f({B ";"}*) -> {B ";"}*
 
+hiddens
 variables
 
 "B"[0-9]* -> B
