@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Mar  8 15:20:55 CET 2006 <{jurgenv,dzebric}@cwi.nl>
+ * scripts/tide-gdb.src: changed location of DbgAdapter class to
+   fix a bug.
+
 Fri Jan 13 11:53:02 CET 2006 <jurgenv@cwi.nl>
  * Updated to new StudioPlugin interface (added getStatusBar)
 

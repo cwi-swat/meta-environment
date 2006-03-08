@@ -1,7 +1,7 @@
 
 EXTRA_DIST	= tide-test.src tide-passive.src tide-control.src tide.src
 
-bin_SCRIPTS	= tide
+bin_SCRIPTS	= tide tide-gdb
 
 noinst_SCRIPTS	= tide-test tide-passive tide-control
 
