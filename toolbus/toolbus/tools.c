@@ -350,10 +350,12 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
 				   } else
 				     return -1;
 
+	case a_snd_disconnect:
+				   return_phase(PHASE1);
+
 	case a_rec_eval:
 	case a_rec_do:
 	case a_snd_connect:
-	case a_snd_disconnect:
 	case a_snd_attach_monitor:
 	case a_snd_detach_monitor:
 				   return -1;

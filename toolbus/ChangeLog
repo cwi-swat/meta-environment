@@ -1,5 +1,10 @@
 $Id$
 
+Wed Mar  8 17:32:28 CET 2006 <jurgenv@cwi.nl>
+ * toolbus/tools.c: changed the tool protocol. A tool may send
+   a disconnect even when in waiting on a result from the
+   snd-eval or snd-do.
+
 Wed Feb 22 11:11:35 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * libtb/utils.c: added underscore as one of the characters acceptible
    in a function application term and a variable term.
