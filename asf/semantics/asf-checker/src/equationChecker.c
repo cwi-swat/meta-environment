@@ -391,13 +391,17 @@ static void normalizeSortname(char *name)
 
 static ATbool isIgnored(PT_Tree tree)
 {
+  ATwarning("is ignored? [%s]\n", PT_yieldTree(tree));
   if (PT_isTreeVar(tree)) {
+  ATwarning("\no: var\n");
     return ATfalse;
   }
   else if (isLexicalConstructor(tree)) {
+  ATwarning("\no: cons\n");
     return ATfalse;
   }
   else if (isLayoutBracket(tree)) { 
+  ATwarning("\no: bracket\n");
     return ATfalse;
   }
 
@@ -413,6 +417,7 @@ static ATbool isIgnored(PT_Tree tree)
     }
   }
 
+  ATwarning("yes");
   return ATtrue;
 }
 
@@ -458,11 +463,13 @@ static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
     ATbool nextIsStarVar = ATfalse;
 
     if (PT_getArgsLength(args) >= (separated ? 4 : 2)) {
-      next = PT_getArgsTreeAt(args, separated ? 3 : 1);
+      next = PT_getArgsTreeAt(args, separated ? 4 : 2);
       if (PT_isTreeVarListStar(next)) {
 	nextIsStarVar = ATtrue;
       }
     }
+
+    ATwarning("nextissb: %d\n", nextIsStarVar);
 
     if (nextIsStarVar || PT_isTreeVarListStar(arg)) {
       if (!separated) {
@@ -472,8 +479,9 @@ static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
 	  assert(PT_isTreeLayout(layout));
 
 	  if (!isIgnored(layout)) {
-	    message = makeWarning(msg, 
-				  PT_TreeToTerm(nextIsStarVar ? next : arg ));
+	    message = makeMessage2(msg, 
+				  PT_TreeToTerm(nextIsStarVar ? next : arg ),
+				  PT_TreeToTerm(layout));
 	    messages = ERR_concatErrorList(messages,
 					   ERR_makeErrorListSingle(message));
 	  }
@@ -487,11 +495,18 @@ static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
 	  assert(PT_isTreeLayout(layoutAfterSep));
 	  assert(PT_isTreeLayout(layoutBeforeSep));
 
-	  if (!isIgnored(layoutBeforeSep) || 
-	      !isIgnored(layoutAfterSep)) {
+	  if (!isIgnored(layoutBeforeSep)) {
 
-	    message = makeWarning(msg, 
-				  PT_TreeToTerm(nextIsStarVar ? next : arg));
+	    message = makeMessage2(msg, 
+				  PT_TreeToTerm(nextIsStarVar ? next : arg),
+				  PT_TreeToTerm(layoutBeforeSep));
+	    messages = ERR_concatErrorList(messages,
+					   ERR_makeErrorListSingle(message));
+	  }
+	  if (!isIgnored(layoutAfterSep)) {
+	    message = makeMessage2(msg, 
+				  PT_TreeToTerm(nextIsStarVar ? next : arg),
+				  PT_TreeToTerm(layoutAfterSep));
 	    messages = ERR_concatErrorList(messages,
 					   ERR_makeErrorListSingle(message));
 	  }
