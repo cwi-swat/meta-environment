@@ -91,7 +91,6 @@ abstract public class AbstractTool implements Tool, Runnable {
     }
 
     private void closeStreams() throws IOException {
-    	connected = false;
     	inputStream.close();
     	outputStream.close();
     }
@@ -131,6 +130,7 @@ abstract public class AbstractTool implements Tool, Runnable {
     
     public void disconnect() {
         try {
+            connected = false;
             sendTerm(factory.parse("snd-disconnect"));
             closeStreams();
         } catch (IOException e) {
@@ -329,6 +329,7 @@ abstract public class AbstractTool implements Tool, Runnable {
         info("tool " + toolname + " handling term from toolbus: " + t);
 
         if (t.match("rec-terminate(<term>)") != null) {
+            connected = false;
             setRunning(false);
             closeStreams();
         }

@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar  9 13:55:30 CET 2006 <gerco@cwi.nl>
+ * src/toolbus/AbstractTool.java:
+   - To avoid a race condition, clear the variable connected earlier.
+
 Tue Mar  7 16:37:36 CET 2006 <gerco@cwi.nl>
  * src/toolbus/JavaTif.java:
    - Support code generation for default package again (fix regression #548).
