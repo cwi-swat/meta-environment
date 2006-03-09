@@ -223,7 +223,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
             StudioComponent comp = new StudioComponentImpl("Forces for "
                     + id, forcePanel);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
-                    StudioImplWithPredefinedLayout.TOP_RIGHT);
+                    StudioImplWithPredefinedLayout.BOTTOM_LEFT);
             forcePanels.put(id, comp);
         } else {
             StudioComponent comp = forcePanels.get(id);
