@@ -1,7 +1,0 @@
-module ElemCompare
-
-imports utilities/TermCompare[Elem]
-
-exports
-  context-free syntax
-      elem-compare(Elem, Elem)	-> measure
