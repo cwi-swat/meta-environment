@@ -1,7 +1,5 @@
 /* $Id$ */
 
-/*{{{  includes */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -15,46 +13,26 @@
 
 #include "structure-editor.tif.h"
 
-/*}}}  */
-/*{{{  defines */
-
 #define SORT_AMBIGUOUS "<ambiguous>"
 #define SORT_CYCLE "<cycle>"
 #define SORT_UNKNOWN "<unknown>"
 
-/*}}}  */
-/*{{{  variables */
-
 static ATermTable editors = NULL;
 
-/*}}}  */
-
-/*{{{  static SE_StructureEditor getEditor(ATerm editorId) */
-
-static SE_StructureEditor getEditor(ATerm editorId)
-{
+static SE_StructureEditor getEditor(ATerm editorId) {
   assert(editorId != NULL);
 
   return SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
 }
 
-/*}}}  */
-/*{{{  static void setEditor(ATerm editorId, SE_StructureEditor editor) */
-
-static void setEditor(ATerm editorId, SE_StructureEditor editor)
-{
+static void setEditor(ATerm editorId, SE_StructureEditor editor) {
   assert(editorId != NULL);
   assert(editor != NULL);
 
   ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
 }
 
-/*}}}  */
-
-/*{{{  static void assertParseTreeHasPosInfo(PT_ParseTree parseTree) */
-
-static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
-{
+static void assertParseTreeHasPosInfo(PT_ParseTree parseTree) {
   PT_Tree tree;
 
   assert(parseTree != NULL);
@@ -69,12 +47,7 @@ static void assertParseTreeHasPosInfo(PT_ParseTree parseTree)
   }
 }
 
-/*}}}  */
-
-/*{{{  static SE_StructureEditor moveCursorUp(SE_StructureEditor editor) */
-
-static SE_StructureEditor moveCursorUp(SE_StructureEditor editor)
-{
+static SE_StructureEditor moveCursorUp(SE_StructureEditor editor) {
   PT_ParseTree parseTree;
   PT_Tree tree;
 
@@ -94,11 +67,7 @@ static SE_StructureEditor moveCursorUp(SE_StructureEditor editor)
   return editor;
 }
 
-/*}}}  */
-/*{{{  static SE_StructureEditor moveCursorDown(SE_StructureEditor editor) */
-
-static SE_StructureEditor moveCursorDown(SE_StructureEditor editor)
-{
+static SE_StructureEditor moveCursorDown(SE_StructureEditor editor) {
   PT_ParseTree parseTree;
   PT_Tree tree;
 
@@ -120,11 +89,7 @@ static SE_StructureEditor moveCursorDown(SE_StructureEditor editor)
   return editor;
 }
 
-/*}}}  */
-/*{{{  static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor) */
-
-static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor)
-{
+static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor) {
   PT_ParseTree parseTree;
   PT_Tree tree;
 
@@ -156,11 +121,7 @@ static SE_StructureEditor moveCursorLeft(SE_StructureEditor editor)
   return editor;
 }
 
-/*}}}  */
-/*{{{  static SE_StructureEditor moveCursorRight(SE_StructureEditor editor) */
-
-static SE_StructureEditor moveCursorRight(SE_StructureEditor editor)
-{
+static SE_StructureEditor moveCursorRight(SE_StructureEditor editor) {
   PT_ParseTree parseTree;
   PT_Tree tree;
   PT_Args siblings;
@@ -190,12 +151,7 @@ static SE_StructureEditor moveCursorRight(SE_StructureEditor editor)
   return moveCursorUp(editor);
 }
 
-/*}}}  */
-
-/*{{{  static PT_Symbol getTreeSort(PT_Tree tree) */
-
-static PT_Symbol getTreeSort(PT_Tree tree)
-{
+static PT_Symbol getTreeSort(PT_Tree tree) {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     return PT_getProductionRhs(prod);
@@ -217,12 +173,7 @@ static PT_Symbol getTreeSort(PT_Tree tree)
   }
 }
 
-/*}}}  */
-
-/*{{{  void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
-
-void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
-{
+static void create_structure_editor(ATerm editorId, ATerm parseTreeTerm) {
   PT_ParseTree parseTree;
   SE_StructureEditor editor;
 
@@ -230,30 +181,18 @@ void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
   assertParseTreeHasPosInfo(parseTree);
 
   editor = SE_makeStructureEditorUnedited(parseTree);
-  ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
+  setEditor(editorId, editor);
 }
 
-/*}}}  */
-/*{{{  void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm) */
-
-void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
-{
-  SE_StructureEditor editor;
-
-  editor = getEditor(editorId);
-  if (editor != NULL) {
-    PT_ParseTree parseTree = PT_ParseTreeFromTerm(ATBunpack(parseTreeTerm));
-    assertParseTreeHasPosInfo(parseTree);
-    editor = SE_setStructureEditorParseTree(editor, parseTree);
-    ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
-  }
+void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm) {
+  create_structure_editor(editorId, parseTreeTerm);
 }
 
-/*}}}  */
-/*{{{  void delete_editor(int cid, ATerm editorId) */
+void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm) {
+  create_structure_editor(editorId, parseTreeTerm);
+}
 
-void delete_editor(int cid, ATerm editorId)
-{
+void delete_editor(int cid, ATerm editorId) {
   ATerm editor;
 
   editor = ATtableGet(editors, editorId);
@@ -262,11 +201,7 @@ void delete_editor(int cid, ATerm editorId)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm get_parse_tree(int cid, ATerm editorId) */
-
-ATerm get_parse_tree(int cid, ATerm editorId)
-{
+ATerm get_parse_tree(int cid, ATerm editorId) {
   SE_StructureEditor editor = getEditor(editorId);
 
   if (editor != NULL) {
@@ -278,11 +213,7 @@ ATerm get_parse_tree(int cid, ATerm editorId)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  void set_cursor_at_offset(int cid, ATerm editorId, int offset) */
-
-void set_cursor_at_offset(int cid, ATerm editorId, int offset)
-{
+void set_cursor_at_offset(int cid, ATerm editorId, int offset) {
   SE_StructureEditor editor;
 
   editor = getEditor(editorId);
@@ -314,11 +245,7 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
   }
 }
 
-/*}}}  */
-/*{{{  void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col) */
-
-void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col)
-{
+void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col) {
   SE_StructureEditor editor;
 
   editor = getEditor(editorId);
@@ -350,11 +277,7 @@ void set_cursor_at_line_column(int cid, ATerm editorId, int line, int col)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm get_cursor(int cid, ATerm editorId) */
-
-ATerm get_cursor(int cid, ATerm editorId)
-{
+ATerm get_cursor(int cid, ATerm editorId) {
   SE_StructureEditor editor = getEditor(editorId);
 
   if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
@@ -365,11 +288,7 @@ ATerm get_cursor(int cid, ATerm editorId)
   return ATparse("snd-value(no-cursor)");
 }
 
-/*}}}  */
-/*{{{  ATerm get_focus_at_cursor(int cid, ATerm editorId) */
-
-ATerm get_focus_at_cursor(int cid, ATerm editorId)
-{
+ATerm get_focus_at_cursor(int cid, ATerm editorId) {
   SE_StructureEditor editor = getEditor(editorId);
 
   if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
@@ -383,11 +302,7 @@ ATerm get_focus_at_cursor(int cid, ATerm editorId)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  ATerm get_sort_at_cursor(int cid, ATerm editorId) */
-
-ATerm get_sort_at_cursor(int cid, ATerm editorId)
-{
+ATerm get_sort_at_cursor(int cid, ATerm editorId) {
   SE_StructureEditor editor = getEditor(editorId);
 
   if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
@@ -399,11 +314,7 @@ ATerm get_sort_at_cursor(int cid, ATerm editorId)
   return ATparse("snd-value(no-cursor)");
 }
 
-/*}}}  */
-/*{{{  void move_cursor(int cid, ATerm editorId, ATerm move) */
-
-void move_cursor(int cid, ATerm editorId, ATerm move)
-{
+void move_cursor(int cid, ATerm editorId, ATerm move) {
   SE_Direction direction = SE_DirectionFromTerm(move);
   SE_StructureEditor editor = getEditor(editorId);
 
@@ -427,11 +338,7 @@ void move_cursor(int cid, ATerm editorId, ATerm move)
   setEditor(editorId, editor);
 }
 
-/*}}}  */
-/*{{{  ATerm get_syntax_slices(int cid, ATerm editorId)  */
-
-ATerm get_tree_slices(int cid, ATerm editorId) 
-{
+ATerm get_tree_slices(int cid, ATerm editorId) {
   SE_StructureEditor editor;
 
   editor = getEditor(editorId);
@@ -454,21 +361,11 @@ ATerm get_tree_slices(int cid, ATerm editorId)
   return ATmake("snd-value(no-tree-slices)"); 
 }
 
-/*}}}  */
-
-/*{{{  void rec_terminate(int cid, ATerm message) */
-
-void rec_terminate(int cid, ATerm message)
-{
+void rec_terminate(int cid, ATerm message) {
   exit(0);
 }
 
-/*}}}  */
-
-/*{{{  int main(int argc, char *argv[]) */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm bottomOfStack;
   int cid;
 
@@ -483,4 +380,3 @@ int main(int argc, char *argv[])
   return ATBeventloop();
 }
 
-/*}}}  */
