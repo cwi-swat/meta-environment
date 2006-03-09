@@ -1,5 +1,16 @@
 
 
+Thu Mar  9 15:38:10 CET 2006 <jurgenv@cwi.nl>
+ * *: working on making relation-calculus an ASF+SDF library that can
+   be included in the distribution:
+     - tbscripts: contains .tb scripts and configuration files for the
+       Meta-Environment. This replaces the old button scripts.
+     - spec: contains the implementation of RScript, which will be 
+       made available as a separate ASF+SDF library in the GUI
+ * Currently, no tools are compiled or generated anymore. 
+ * rviz: is currently disabled too
+ * TODO: fix generation and compilation of commandline tools
+
 Tue Oct 11 11:56:00 CEST 2005 <jurgenv@cwi.nl>
  * Bumped version to 0.3 (since 0.1 and 0.2 have been released
    previously for a Software Evolution lab).

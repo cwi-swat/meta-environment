@@ -1,6 +1,5 @@
 dnl $Id$
 
-dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
 GLT_INIT_PACKAGE
@@ -8,11 +7,10 @@ AC_PREREQ(2.59)
 
 AM_MAINTAINER_MODE
 
-dnl {{{  Which compiler to use?
+AC_AIX
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
-dnl }}}
-dnl {{{  Handle --with-cflags option
 AC_ARG_WITH(cflags,
 [  --with-cflags=CFLAGS    standard options of c compiler],
 CFLAGS=${withval},
@@ -22,61 +20,6 @@ fi;
 )
 AC_SUBST(CFLAGS)
 
-dnl }}}
-
-dnl {{{  Our own version of libdir whose value is set dynamically
-AC_SUBST(INSTLIBDIR)
-INSTLIBDIR="$libdir"
-
-dnl }}}
-dnl {{{  Is ranlib needed on this system?
-
-AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,/usr/bin/ar)
-
-dnl }}}
-dnl {{{  What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
-
-dnl }}}
-
-dnl {{{ Ranlib stuff
-
-AC_PROG_RANLIB
-AR=ar
-AC_SUBST(AR)
-
-dnl }}}
-
-dnl {{{ Handle --with-aterm
-
-AC_PACKAGE_REQUIRE(aterm, baffle,
-[  --with-aterm=DIR        ATerm-library is in DIR])
-AC_SUBST(ATERM)
-
-ATERMINC="${ATERM}/include"
-AC_SUBST(ATERMINC)
-
-ATERMLIB="${ATERM}/lib"
-AC_SUBST(ATERMLIB)
-
-ATERMBIN="${ATERM}/bin"
-AC_SUBST(ATERMBIN)
-
-dnl }}}
-dnl {{{ Handle --with-aterm-java
-
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-[  --with-aterm-java=DIR  ATerm-Java-library is in DIR])
-JAVA_ATERM=`${ATERM_JAVA}/bin/aterm-java-config`
-AC_SUBST(JAVA_ATERM)
-dnl }}}
-
-EXTERNAL_JARS=${JAVA_ATERM}
-AC_SUBST(EXTERNAL_JARS)
-
-dnl {{{ Handle --with-asc-support
-
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
 [  --with-asc-support=DIR  asc-support is in DIR])
 
@@ -85,121 +28,26 @@ AC_SUBST(ASC_LD_FLAGS_SCRIPT)
 ASC_INCLUDES_SCRIPT="${ASC_SUPPORT}/bin/asc-support-config --includes"
 AC_SUBST(ASC_INCLUDES_SCRIPT)
 
-dnl }}}
-dnl {{{ Handle --with-pgen
-
-AC_PACKAGE_REQUIRE(pgen, sdf2table,
-[  --with-pgen=DIR         pgen is in DIR (developers only)])
-AC_SUBST(PGEN)
-
-PGENBIN=${PGEN}/bin
-AC_SUBST(PGENBIN)
-
-dnl }}}
-dnl {{{ Handle --with-pt-support
-
-AC_PACKAGE_REQUIRE(pt-support, unparsePT,
-[  --with-pt-support=DIR   pt-support is in DIR])
-AC_SUBST(PT_SUPPORT)
-
-PTBIN=${PT_SUPPORT}/bin
-AC_SUBST(PTBIN)
-
-dnl }}}
-
-dnl {{{ Handle --with-sdf-support
-
-AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
-[  --with-sdf-support=DIR   sdf-support is in DIR])
-AC_SUBST(SDF_SUPPORT)
-
-PTBIN=${PT_SUPPORT}/bin
-AC_SUBST(PTBIN)
-
-dnl }}}
-
-dnl {{{ Handle --with-error-support
-
-AC_PACKAGE_REQUIRE(error-support, error-support-config,
-[  --with-error-support=DIR   error-support is in DIR])
-AC_SUBST(ERROR_SUPPORT)
-
-dnl }}}
-dnl {{{ Handle --with-asf-support
-
-AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
-[  --with-asf-support=DIR  asf-support is in DIR])
-AC_SUBST(ASF_SUPPORT)
-
-dnl }}}
-
-dnl {{{ Handle --with-asf-support
-
-AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
-[  --with-asf-library=DIR  asf-support is in DIR])
-AC_SUBST(ASF_LIBRARY)
-
-dnl }}}
-
-dnl {{{ Handle --with-sglr
-
-AC_PACKAGE_REQUIRE(sglr, sglr,
-[  --with-sglr=DIR         sglr is in DIR])
-AC_SUBST(SGLR)
-
-SGLRBIN=${SGLR}/bin
-AC_SUBST(SGLRBIN)
-
-dnl }}}
-dnl {{{ Handle --with-asfe
-
-AC_PACKAGE_REQUIRE(asf, asfe,
-[  --with-asf=DIR         asf is in DIR])
-AC_SUBST(ASF)
-
-dnl }}}
-
-dnl {{{ Handle --with-tide-support
-
-AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
-[  --with-tide-support=DIR tide-support is in DIR])
-AC_SUBST(TIDE_SUPPORT)
-
-dnl }}}
-
-dnl {{{ Handle --with-asfsdf-meta
-
-AC_PACKAGE_REQUIRE(asfsdf-meta, eqs-dump,
-[  --with-asfsdf-meta=DIR asfsdf-meta is in DIR])
-AC_SUBST(ASFSDF_META)
-
-dnl }}}
-
-
-
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish 8.3, wish8.2 or wish8.1, we'll
 dnl assume that "wish" is at version 8 or higher.
 
-AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
+dnl AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
 
-dnl {{{  Which files need updating?
 AC_CONFIG_FILES(
 Makefile
   spec/Makefile
   spec/relation-calculus/Makefile
   tbscripts/Makefile
-  util/Makefile
+dnl  util/Makefile
   rscripts/Makefile
-  rviz/Makefile
-  demo/Makefile
-  demo/pico/Makefile
-  demo/java/Makefile
-  demo/java/extraction/Makefile
-  demo/java/grammar/Makefile
-  demo/java/rscripts/Makefile
+dnl  rviz/Makefile
+dnl  demo/Makefile
+dnl  demo/pico/Makefile
+dnl  demo/java/Makefile
+dnl  demo/java/extraction/Makefile
+dnl  demo/java/grammar/Makefile
+dnl  demo/java/rscripts/Makefile
 )
-
 AC_OUTPUT
 
-dnl }}}
