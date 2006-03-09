@@ -1,7 +1,7 @@
 package 
 identification
    name=relation-calculus
-   version=0.3
+   version=0.4
    location=http://www.cwi.nl/projects/MetaEnv/relation-calculus
    info=http://www.cwi.nl/projects/MetaEnv/relation-calculus
    description='A calculator for relational expressions'
@@ -12,30 +12,6 @@ identification
 configuration interface
 
 requires
-   aterm 2.3.1
-
-asf-library 1.0
-
-aterm-java 1.6
-
-shared-objects 1.4
-
-sglr 3.13
-
-pgen 2.2
-
-asf 1.9
-
-pt-support 2.0
-
-error-support 1.1
-
-tide-support 1.1
-
-sdf-support 2.2
-
-asf-support 1.4
 
 asc-support 2.1
 
-asfsdf-meta 1.7

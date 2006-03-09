@@ -1,12 +1,12 @@
 include make_rules
 
-SUBDIRS		= util spec rscripts tbscripts # demo rviz
+SUBDIRS		= spec rscripts tbscripts # demo rviz util
 
 ACLOCAL_FLAGS 	= -I .
 
 CLEANFILES 	= ${PACKAGE}-${VERSION}.pkg
 
-DIST_SUBDIRS	= util spec rscripts demo rviz
+DIST_SUBDIRS	= spec rscripts tbscripts # demo rviz util
 
 EXTRA_DIST	= $(wildcard *.pkg) make_rules reconf package
 
