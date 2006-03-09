@@ -1,0 +1,20 @@
+module relation-calculus/TestFast
+imports basic/Whitespace
+
+imports relation-calculus/FastBagsNC[Integer]
+imports basic/Booleans basic/Integers
+
+exports
+	sorts Bag[[Integer]] Integer*
+context-free syntax
+	run(Integer, Bag[[Integer]], Bag[[Integer]])	-> Boolean
+	Integer ":" Bag[[Integer]] "," Bag[[Integer]] ";"	-> TEST
+	run-test(TEST*)		      -> Integer*
+
+  imports basic/Comments
+variables
+	"$Bag" [0-9\']*		-> Bag[[Integer]]
+	"$N" [0-9\']*		-> Integer
+	"$Bool" [0-9\']*	-> Boolean
+	"$Test*"[0-9\']*	-> TEST*
+	

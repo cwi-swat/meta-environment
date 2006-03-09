@@ -1,0 +1,202 @@
+equations
+
+[empty]	empty-set = {}
+
+%% --- insert($Elem, $Set)
+
+%%%%[ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
+
+[ins-1]  
+	in($Elem, $Set) == true					
+	============================================
+	insert($Elem, $Set) = $Set
+
+[default-ins-2]
+	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
+
+%% --- delete($Elem, $Set)
+
+[del1]	elem-equal($Elem1, $Elem2) == true				%% sb elem-equal
+	============================================
+	delete($Elem1, {$Elem*1, $Elem2, $Elem*2}) = {$Elem*1, $Elem*2}
+
+[default-del]
+	delete($Elem, $Set) = $Set
+
+%% ----	sort
+
+[sort1]	sort({}) = {}
+
+[sort2]	sort({$Elem}) = {$Elem}
+
+[default-sort] 
+	 <{$Elem*1}, {$Elem*2}> := divide(true, {$Elem+})
+	 ================================
+	sort({$Elem+}) = merge(sort({$Elem*1}), sort({$Elem*2}))
+
+[mrg1]	merge({}, $Set) = $Set
+
+[mrg2]	merge($Set, {}) = $Set
+
+[mrg3]	elem-greater($Elem1, $Elem2) == true,
+	{$Elem*} := merge({$Elem1, $Elem*1}, {$Elem*2})
+	==================================
+	merge({$Elem1, $Elem*1}, {$Elem2, $Elem*2}) = {$Elem2, $Elem*}
+
+[default-mrg]	
+	{$Elem*} := merge({$Elem*1}, {$Elem2, $Elem*2})
+	==================================
+	merge({$Elem1, $Elem*1}, {$Elem2, $Elem*2}) = {$Elem1, $Elem*}
+
+%% ---- divide
+
+[div1]  <{$Elem*1}, {$Elem*2}> := divide(false, {$Elem*})
+	=================================
+	divide(true, {$Elem, $Elem*}) = <{$Elem, $Elem*1}, {$Elem*2}>
+
+[div1]  <{$Elem*1}, {$Elem*2}> := divide(false, {$Elem*})
+	=================================
+	divide(false, {$Elem, $Elem*}) = <{$Elem*1}, {$Elem, $Elem*2}>
+
+[div3]	divide($Bool, {}) = < {}, {} >
+
+	
+%% ---- mk-iterator
+
+[mki]	mk-iterator($Set) = $Set
+
+%% ---- is-empty-iter
+
+[is-ei1]
+	is-empty-iter({}) = true
+[default-is-ei]
+	is-empty-iter($Set) = false
+
+%% ---- head
+
+[head1]	head({$Elem, $Elem*}) = $Elem
+
+%% ---- tail
+
+[tail1]	tail ({$Elem, $Elem*}) = {$Elem*}
+
+[tail2]	tail({}) = {}
+
+%% --- equal(Rel1, Rel2)
+
+%%[eq-1] equal($Set, $Set) = true
+%%[default-eq]	   
+%%       equal($Set1, $Set2) = false
+
+[eq-1]       elem-equal($Elem1, $Elem2) == true
+	     ====================================================
+	     equal({$Elem1, $Elem*}, {$Elem*1, $Elem2, $Elem*2}) = 
+	     equal({$Elem*}, {$Elem*1, $Elem*2})
+
+[eq-2]       equal({$Elem+}, {})               = false
+[eq-3]       equal({}, {$Elem+})               = false
+[eq-4]       equal({}, {})                 = true
+[default-eq] 
+             equal({$Elem+1}, {$Elem+2})           = false
+
+%% --- subset(Rel1, Rel2)
+
+[sub-1]      subset({$Elem, $Elem*}, {$Elem*1, $Elem, $Elem*2})  = subset({$Elem*}, {$Elem*1, $Elem*2})
+[sub-2]      subset({$Elem+}, {})                = false
+[sub-3]      subset({}, {$Elem+})                = true
+[sub-4]      subset({}, {})                  = true
+[default-sub]
+             subset({$Elem+1},{$Elem+2})             = false
+
+%% --- ssubset(Rel1, Rel2)
+
+[ssub-1] strict-subset($Set1, $Set2) = subset($Set1, $Set2) & not(equal($Set1, $Set2))
+
+%% --- superset(Rel1, Rel2)
+
+[sup-1] superset($Set1, $Set2) = subset($Set2, $Set1)
+
+%% --- strict-superset(Rel1, Rel2)
+
+[ssup-1] strict-superset($Set1, $Set2) = strict-subset($Set2, $Set1)
+
+%% --- union1($Elem, Rel)
+
+[un1-1]	in($Elem, {$Elem*}) == true	
+	=============================	
+	union1($Elem, {$Elem*}) = {$Elem*}
+
+[default-un1-2]
+	union1($Elem, {$Elem*}) = insert($Elem, {$Elem*})
+
+%% --- union2($Set, $Elem)
+
+[un2-1]	in($Elem, {$Elem*}) == true
+	=============================
+	union2({$Elem*}, $Elem) = {$Elem*}
+
+[default-un2-2]
+	union2({$Elem*}, $Elem) = insert($Elem, {$Elem*})
+
+%% --- union($Set1, $Set2)
+
+[un-1] 	union({}, {$Elem*}) = {$Elem*}
+[un-2] 	union({$Elem*}, {}) = {$Elem*}
+
+[un-3] {$Elem*4} := union({$Elem*1}, {$Elem*2, $Elem*3})
+       ==============================
+       union({$Elem, $Elem*1}, {$Elem*2, $Elem, $Elem*3}) = insert($Elem, {$Elem*4})
+
+[default-un]
+       {$Elem*3} := union({$Elem*1}, {$Elem*2})
+       ==============================
+       union({$Elem, $Elem*1}, {$Elem*2}) = insert($Elem, {$Elem*3})
+
+[iun-1] $Set1 union $Set2 = union($Set1, $Set2)
+
+%% --- diff($Set1, $Set2)
+
+[df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
+
+[default-df-2] diff({$Elem*1}, {$Elem*2}) = {$Elem*1}
+
+%% --- $Set1 inter $Set2
+
+[in-1] elem-equal($Elem1, $Elem2) == true,
+       {$Elem*'} := inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
+       ===============================================================
+       inter({$Elem*1, $Elem1, $Elem*2}, {$Elem*3, $Elem2, $Elem*4}) = insert($Elem1, {$Elem*'})
+
+[default-in2] 
+       inter({$Elem*1}, {$Elem*2}) = {}
+
+%% --- size($Set)
+
+[sz-1] size({}) = 0
+[sz-2] size({$Elem, $Elem*}) = 1 + size({$Elem*})
+
+%% --- in($Elem, $Set)
+
+[in-1]  elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal
+	============================================
+	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
+
+[default-in-2]
+	in($Elem, {$Elem*}) = false
+
+[unique1]
+	elem-equal($Elem1, $Elem2) == true			%% Should be elem-equal
+	============================================
+	unique({$Elem*1, $Elem1, $Elem*2, $Elem2, $Elem*3}) = 
+	unique({$Elem*1, $Elem1, $Elem*2, $Elem*3})
+
+[default-unique]
+	unique($Set) = $Set
+
+%% if
+
+[if-1] if true then $Set1 else $Set2 fi = $Set1
+[if-2] if false then $Set1 else $Set2 fi = $Set2
+
+
+

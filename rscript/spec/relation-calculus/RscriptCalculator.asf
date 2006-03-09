@@ -1,0 +1,895 @@
+ equations
+
+%% ---- Equality on RVALUEs
+
+[er1]	equal-rval($Set1, $Set2) = equal($Set1, $Set2)
+[er2]	equal-rval($Rel1, $Rel2) = equal($Rel1, $Rel2)
+[er3]	equal-rval($Val, $Val)  = true
+[default-er] 
+	equal-rval($Val1, $Val2) = false
+
+%% ---- Extract a list of variables from a declaration list
+
+[erv1]	$Var+ := extract-rvars($DclRvar+)
+	===================================================
+	extract-rvars($Etype $Var, $DclRvar+) = $Var, $Var+
+
+[erv2]	extract-rvars($Etype $Var ) = $Var
+
+%% ---- Eval a complete Rscript
+
+[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
+	$Set := value(YIELD, $Rstore)
+	===============================================================
+	eval-rscript($Stat*) = filter($Rstore, $Set)
+
+%% ---- Eval a complete Rscript and return value of specific variable (as string)
+
+[ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
+	$Var := str2rvar($StrCon),
+	$Elem := value($Var, $Rstore)
+	===============================================================
+	eval-rscript-and-yield($Stat*, $StrCon) = $Elem
+
+
+%% ---- Eval a complete Rscript and return value of specific variable
+
+[ERS2]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, set[str], empty-set>)),
+	$Elem := value($Var, $Rstore)
+	===============================================================
+	eval-rscript-and-yield($Stat*, $Var) = $Elem
+
+%% ---- Eval a complete Rscript with given Rstore
+
+[ERS3]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
+	$Rstore'' := eval-rstats($Stat*, $Rstore'),
+	$Set := value(YIELD, $Rstore'')
+	===============================================================
+	eval-rscript-with-rstore($Stat*, $Rstore) = filter($Rstore'', $Set)
+
+%% ---- Eval complete script with given Rstore and yield value of a variable (as string constant
+
+[ERS4]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
+	$Var := str2rvar($StrCon),
+	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
+	===================================================
+	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $StrCon) = $Elem
+
+%% ---- Eval complete script with given Rstore and yield value of a variable
+
+[ERS5]	$Rstore' := assign-when-undef(YIELD, set[str], empty-set, $Rstore),
+	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
+	===================================================
+	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $Var) = $Elem
+
+%% ---- Execute Rscript for given Rstore
+
+[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
+
+%% ---- Execute Rscript for empty Rstore
+
+[EX]	[| $Stat* |] = eval-rstats($Stat*, rstore())
+
+%% ---- Execute Rscript for empty Rstore and yield value of a var
+
+[EX2]   $Summary := check-rscript($Stat*),
+	is-type-correct($Summary) == false
+	===============================================================
+	[| $Stat* |] yield $Var = $Summary
+
+[default-EX3]   
+	[| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
+
+%% ---- Execute given Rexp
+
+[EXX1]	[| $Exp |] = evalx($Exp, rstore())
+
+%% ---- Eval statements
+
+[ES2]	eval-rstats($Stat $Stat*, $Rstore) = eval-rstats($Stat*, eval-rstat($Stat, $Rstore))
+[ES3]	eval-rstats( , $Rstore) = $Rstore
+
+%% ---- Eval one statement
+
+[S0]	eval-rstat(yield $Etype $Var, $Rstore)	=  eval-rstat($Etype $Var, add-elem(YIELD, rvar2str($Var), $Rstore))
+[S1]	eval-rstat(bool $Var, $Rstore) 		= assign-when-undef($Var, bool, true, $Rstore)
+[S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, int, 0, $Rstore)
+[S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, str, "", $Rstore)
+[S4]	eval-rstat(loc $Var, $Rstore)		= assign-when-undef($Var, loc, file(""), $Rstore)
+[S5]	eval-rstat(set[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, set[$Etype], empty-set, $Rstore)
+	
+[S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Rstore) 
+						= assign-when-undef($Var, rel[$Etype1, $Etype2], empty-set, $Rstore)
+[S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
+
+[S8a]   eval-rstat(yield $Etype $Var = $Exp, $Rstore) = 
+						      eval-rstat($Etype $Var = $Exp, add-elem(YIELD, rvar2str($Var), $Rstore))
+
+[S8a]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, $Etype,
+evalx($Exp, $Rstore), $Rstore)
+
+[S8a]   eval-rstat(yield $Etype $Var += $Exp, $Rstore) = 
+						      eval-rstat($Etype $Var += $Exp, add-elem(YIELD, rvar2str($Var), $Rstore))
+
+[S8b]	eval-rstat(rel[$Etype+] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, rel[$Etype+], evalr($Exp, $Rstore), $Rstore)
+
+[S8c]	eval-rstat(set[$Etype] $Var += $Exp, $Rstore)  
+						= add-tuples($Var, set[$Etype], evalb($Exp, $Rstore), $Rstore)
+
+[S8d]	eval-rstat($Etype $Var() = $Exp, $Rstore)   = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+
+[S9]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+
+[S10]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 
+						= assign($Var1, $Etype1,
+						<extract-rvars($DclRvar+),
+						$Exp>, $Rstore)
+
+[S11]  eval-rstat(type $Var = < $DclRvar+ >, $Rstore) = eval-fields($DclRvar+, $Rstore, 1)
+[S12]  eval-rstat(type $Var = $Etype, $Rstore) = $Rstore
+
+[default-assert]	
+	eval-rstat(assert $String : $Exp, $Rstore) = $Rstore
+
+[S13]%%	$Elem :=  value($Var, $Rstore)
+     %%	=======================================================
+	eval-rstat(yield $Var, $Rstore) = add-elem(YIELD, rvar2str($Var), $Rstore)
+
+%% ----	eval-fields
+
+[ef1]	$Rstore' := assign-when-undef($Var, int, $Integer, $Rstore)
+	======================================================
+	eval-fields($Etype $Var, $DclRvar*, $Rstore, $Integer) =
+	eval-fields($DclRvar*, $Rstore', $Integer + 1)
+
+[ef2]	eval-fields( , $Rstore, $Integer) = $Rstore
+
+%% ---- Variable initialization in solve statement
+
+[eiv]	$Rstore' :=  assign($Var, $Etype, evalx($Exp, $Rstore), $Rstore)
+	========================================================
+	eval-initvar($Etype $Var init $Exp $InitVar*, $Rstore) =
+	eval-initvar($InitVar*, $Rstore')
+
+[eiv2]	eval-initvar( , $Rstore) = $Rstore
+	
+%% --- Solve Sets of equations
+
+[SL1]	$Rstore' := eval-initvar( $InitVar+, $Rstore)
+	=======================================================
+	eval-rstat(equations initial $InitVar+ satisfy $Var1 = $Exp1 end equations, $Rstore) = 
+	solve1(1000, $Var1, $Exp1, $Rstore')
+
+[SL2]	$Rstore' := eval-initvar( $InitVar+, $Rstore)
+	=======================================================	
+	eval-rstat(equations (limit $Integer) initial $InitVar+ satisfy $Var1 = $Exp1 end equations, $Rstore) = 
+	solve1($Integer, $Var1, $Exp1, $Rstore')
+
+[SL3]	$Rstore' := eval-initvar( $InitVar+, $Rstore)
+	=======================================================	
+	eval-rstat(equations initial  $InitVar+ satisfy $Var1 = $Exp1 $Var2 = $Exp2 end equations, $Rstore) = 
+	solve2(1000, $Var1, $Exp1, $Var2, $Exp2, $Rstore')
+
+[SL4]	$Rstore' := eval-initvar( $InitVar+, $Rstore)
+	=======================================================	
+	eval-rstat(equations (limit $Integer) initial $InitVar+ satisfy $Var1 = $Exp1 $Var2 = $Exp2 end equations, $Rstore) = 
+	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Rstore')
+
+[SL1-1]	$Integer > 0 == true,
+	$Val1 := value($Var1, $Rstore),
+	$Val1' := evalx($Exp1, $Rstore),
+	$Rstore' := assign($Var1, $Val1', $Rstore),
+	equal-rval($Val1, $Val1') == false
+	===========================================
+	solve1($Integer, $Var1, $Exp1, $Rstore) =
+	solve1($Integer - 1, $Var1, $Exp1, $Rstore')
+
+[default-SL1-2]	
+	solve1($Integer, $Var1, $Exp1, $Rstore) = $Rstore
+
+[SL2-1]	$Integer > 0 == true,
+	$Val1 := value($Var1, $Rstore),
+	$Val1' := evalx($Exp1, $Rstore),
+	$Val2 := value($Var2, $Rstore),
+	$Val2' := evalx($Exp2, $Rstore),
+	$Rstore' := assign($Var1, $Val1', $Rstore),
+	$Rstore'' := assign($Var2, $Val2', $Rstore'),
+	equal-rval($Val1, $Val1') & equal-rval($Val2, $Val2') == false
+	===========================================
+	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Rstore) =
+	solve2($Integer - 1, $Var1, $Exp1, $Var2, $Exp2, $Rstore'')
+
+[default-SL2-2]	
+	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Rstore) = $Rstore
+
+%% ---- Eval one REXP
+
+%% ---- Specialized versions of evalx that return value of required type
+
+[EVP]	$BoolCon := evalx($Exp, $Rstore) ===> evalp($Exp, $Rstore) = $BoolCon
+[EVI]	$Integer := evalx($Exp, $Rstore) ===> evali($Exp, $Rstore) = $Integer
+[EVE1]	$Elem    := evalx($Exp, $Rstore) ===> evale($Exp, $Rstore) = $Elem
+[EVE2]	$Tuple   := evalx($Exp, $Rstore) ===> evalt($Exp, $Rstore) = $Tuple
+[EVB1]	$Set     := evalx($Exp, $Rstore) ===> evalb($Exp, $Rstore) = $Set
+[EVR1]	$Rel     := evalx($Exp, $Rstore) ===> evalr($Exp, $Rstore) = $Rel
+[EVA1]	$Loc     := evalx($Exp, $Rstore) ===> evall($Exp, $Rstore) = $Loc
+
+%% ---- The main evaluation function evalx
+
+%% ---- Eval elements, tuples and variables
+
+%%[ELM]	evalx($Elem, $Rstore) = $Elem
+
+[Bool]	evalx($BoolCon, $Rstore) = $BoolCon
+
+[int]	evalx($Integer, $Rstore) = $Integer
+
+[st1r]	evalx($String, $Rstore) = $String
+
+[loc1]	evalx($Loc, $Rstore) = $Loc
+
+[tup1]	evalx($Tuple, $Rstore) = $Tuple
+
+%%[set1]	evalx($Set, $Rstore) = sort($Set)
+
+[set1]	evalx($Set, $Rstore) = unique($Set)     %% bags as sets!
+
+[VAR1]	$Elem := value($Var, $Rstore)
+	=================================================
+	 evalx($Var, $Rstore)  = $Elem
+
+%% ---- Eval tuples
+
+[ET1]	$Elem1 := evale($Exp1, $Rstore),
+	$Elem2 := evale($Exp2, $Rstore)
+	==================================================
+	evalx(<$Exp1, $Exp2>, $Rstore) = <$Elem1, $Elem2>
+
+[ET2]	$Elem := evale($Exp1, $Rstore),
+	<$Elem+> := evale(<$Exp2, $Exp+>, $Rstore)
+	==================================================
+	evalx(<$Exp1, $Exp2, $Exp+>, $Rstore) = <$Elem, $Elem+>
+
+[ET3]	$Elem := evale($Exp, $Rstore)
+	==================================================
+	evalx(<$Exp>, $Rstore) = <$Elem>
+
+%% ---- Eval sets
+
+[EB2]   $Elem := evale($Exp, $Rstore),
+	$Set := evalb({$Exp+}, $Rstore)				%%XXX
+	===================================================
+	evalx({$Exp, $Exp+}, $Rstore) = union1($Elem, $Set)
+
+[EB2]   $Elem := evale($Exp, $Rstore)					%%XXX
+	===================================================
+	evalx({$Exp}, $Rstore) = insert($Elem, empty-set)
+
+[EB3]	evalx({}, $Rstore) = empty-set
+
+%% ---- Eval binary operators
+
+[PAR]	evalx(( $Exp ), $Rstore) = evalx($Exp, $Rstore)
+
+[AND1]	$BoolCon := evalp($Exp1, $Rstore) & evalp($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 and $Exp2, $Rstore) = $BoolCon
+
+[OR1]	$BoolCon := evalp($Exp1, $Rstore) | evalp($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 or $Exp2, $Rstore) 	= $BoolCon
+
+[IMP1]	$BoolCon := not(evalp($Exp1, $Rstore) & not(evalp($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 implies $Exp2, $Rstore) = $BoolCon
+
+[NOT1]	$BoolCon := not(evalp($Exp, $Rstore))
+	====================================================
+	evalx(not $Exp, $Rstore) = $BoolCon
+
+[IN1]	$BoolCon := in(evale($Exp1, $Rstore), evalb($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 in $Exp2, $Rstore) = $BoolCon
+
+[NI1]	$BoolCon := not(in(evale($Exp1, $Rstore), evalb($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 notin $Exp2, $Rstore) = $BoolCon
+
+[EQ1]	$BoolCon := elem-equal(evale($Exp1, $Rstore), evale($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 == $Exp2, $Rstore) 	= $BoolCon
+
+[NE1]	$BoolCon := not(elem-equal(evale($Exp1, $Rstore), evale($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 != $Exp2, $Rstore) 	=  $BoolCon
+
+%% ---- aux functions for evaluating comparison operators
+
+[LE1]	eval-le($Set1, $Set2)			= subset($Set1, $Set2)
+[LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
+[LE3]	eval-le($String1, $String2)		= less-equal($String1, $String2)
+[LE4]	eval-le($Loc1, $Loc2)			= less-equal($Loc1, $Loc2)
+
+[LT1]	eval-lt($Set1, $Set2) 			= strict-subset($Set1,  $Set2)
+[LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
+[LT3]	eval-lt($String1, $String2)		= less($String1, $String2)
+[LT4]	eval-lt($Loc1, $Loc2)			= less($Loc1, $Loc2)
+
+[LE1]	$BoolCon := eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 <= $Exp2, $Rstore) 	= $BoolCon
+
+[LT1]	$BoolCon := eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 < $Exp2, $Rstore) = $BoolCon
+
+[GE1]	$BoolCon := not(eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))	   %% Not ok for area's!
+	====================================================
+	evalx($Exp1 >= $Exp2, $Rstore) 	= $BoolCon
+
+[GT1]	$BoolCon := not(eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 > $Exp2, $Rstore) = $BoolCon
+
+[ADD1]	evalx($Exp1 + $Exp2, $Rstore) 		= evali($Exp1, $Rstore) + evali($Exp2, $Rstore)
+
+[SUB1]	evalx($Exp1 - $Exp2, $Rstore) 		= evali($Exp1, $Rstore) - evali($Exp2, $Rstore)
+
+[MUL1]	evalx($Exp1 * $Exp2, $Rstore) 		= evali($Exp1, $Rstore) * evali($Exp2, $Rstore)
+
+[DIV1]	evalx($Exp1 / $Exp2, $Rstore) 		= evali($Exp1, $Rstore) / evali($Exp2, $Rstore)
+
+[UN1]	evalx($Exp1 union $Exp2, $Rstore)	= union(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
+
+[IN1]	evalx($Exp1 inter $Exp2, $Rstore)	= inter(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
+
+[DF1]	evalx($Exp1 \ $Exp2, $Rstore)		= diff(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
+
+[CM1]	evalx($Exp1 o $Exp2, $Rstore)		= compose(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
+
+[CP1]	evalx($Exp1 x $Exp2, $Rstore)		= product(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
+
+[FLd1]	evalx($Exp . $Var, $Rstore)		= select-field(evalt($Exp, $Rstore), evali($Var, $Rstore))
+
+%% ---- aux function for field selection
+
+[sel1]	select-field(<$Elem1, $Elem*>, 1) = $Elem1
+
+[sel2]	select-field(<$Elem1, $Elem2, $Elem*>, 2) = $Elem2
+
+[sel2]	$Integer > 2 == true
+	===================================================
+	select-field(<$Elem1, $Elem2, $Elem+>, $Integer) =
+	select-field(<$Elem2, $Elem+>, $Integer - 1)
+
+%% ---- aux functions for evaluating image operator  [ ]
+
+[elim1]	eval-lim($Rel, $Elem)			= limage($Rel, $Elem)%% when is-rel($Rel) = true
+[elim2]	eval-lim($Rel, $Set)			= limage($Rel,  $Set)%% when is-rel($Rel) = true
+
+[erim1]	eval-rim($Rel, $Elem)			= rimage($Rel, $Elem)%% when is-rel($Rel) = true
+[erim2]	eval-rim($Rel, $Set)			= rimage($Rel, $Set) %% when is-rel($Rel) = true
+
+[IM1]	evalx($Exp0 [ -, $Exp1], $Rstore)	= eval-lim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
+
+[IM2]	evalx($Exp0 [ $Exp1, - ], $Rstore)	= eval-rim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
+
+[IM3]	evalx($Exp0 [ $Exp1 ], $Rstore)		= eval-rim(evalx($Exp0, $Rstore), evalx($Exp1, $Rstore))
+
+%% ---- Closures
+
+[TC1]	evalx($Exp +, $Rstore)			= trans-closure(evalb($Exp, $Rstore))
+
+[RTC1]	evalx($Exp *, $Rstore)			= rtrans-closure(evalb($Exp, $Rstore))
+
+%% ---- Size
+
+[SZ1]	evalx(# $Exp, $Rstore)			= size(evalb($Exp, $Rstore))
+
+%% ---- Eval comprehensions
+
+%% ---- Simplify multiple generators
+
+[sg-1]	simplify({$Exp+ | $Gen+})  =  simplify1({$Gen+ :: {$Exp+}})
+
+[sg-2] 	simplify1({$Gen :: $Exp }) = { $Gen :: $Exp }
+[sg-2] 	simplify1({$Gen, $Gen+ :: $Exp }) = { $Gen :: simplify1({$Gen+ :: $Exp})}
+
+[ec-0]  evalx({$Exp+ | $Gen+}, $Rstore) = 
+	evalx(simplify(	{$Exp+ | $Gen+} ),  $Rstore)
+
+[ec-1]	$Elem := evalc({$Gen :: $Exp}, $Rstore)
+	====================================================================
+	evalx({$Gen :: $Exp}, $Rstore) = $Elem
+
+[default-ec]
+	evalx({$Gen :: $Exp}, $Rstore) = {}
+
+%% ---- evalc-test
+
+[evc1]	evalc-test(true, $Exp, $Rstore) = evalc($Exp, $Rstore)
+
+[evc2]	evalc-test(false, $Exp, $Rstore)  = *undefined*
+
+%% ---- evalc: evaluate comprehensions
+
+%% ---- Generator: test
+
+[ec-1]	$Bool := evalp($Test, $Rstore)
+	==================================================================
+	evalc({$Test :: $Exp} , $Rstore) = evalc-test($Bool, $Exp,$Rstore)
+
+%% ---- Generator: assignment,  one target T <- E
+
+[ec-2]	$Val := evalx($Exp1, $Rstore),
+	$Val' := match-rvars($Target, $Val, $Exp2, $Rstore)
+	=================================================================
+	evalc({ $Target <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
+
+%% ---- Generator: assignment, N targets: <T1, T2, ..., Tn> <- E
+
+[ec-3]	
+	$Val := evalx($Exp1, $Rstore),
+	$Val' :=  match-rvars($Target+, $Val, $Exp2, $Rstore)
+	=================================================================
+	evalc({ <$Target+> <- $Exp1 :: $Exp2 }, $Rstore) = $Val'
+
+%% ---- Simple generator, match and extract one target  T : E
+
+[ec-4]	$Set := evalx($Exp1, $Rstore)
+	=================================================================
+	evalc({ $Target : $Exp1 :: $Exp2 }, $Rstore) = 
+	eval-itern($Target, mk-iterator($Set), empty-set, $Exp2, $Rstore)
+
+%% ---- Simple generator, match and extract N targets <T1, T2, ...> : E
+
+[ec-5]	$Set := evalx($Exp1, $Rstore)
+	=================================================================
+	evalc({ <$Target+> : $Exp1 :: $Exp2 }, $Rstore) = 
+	eval-itern($Target+, mk-iterator($Set), empty-set, $Exp2, $Rstore)
+
+%% ---- Ordinary expression as in { E | ... }
+
+[ec-6]	evalc($Exp, $Rstore) = evalx($Exp, $Rstore)
+
+%% ---- eval-itern: the workhorse for comprehensions
+
+[ei-1]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
+	$Val := match-rvars($Target+, $Elem, $Exp, $Rstore),
+	$Set' := append-rval($Set, $Val)
+	======================================================
+	eval-itern($Target+, $SetIter, $Set, $Exp, $Rstore) =
+	eval-itern($Target+, tail($SetIter), $Set', $Exp, $Rstore)
+
+[ei-2]	is-empty-iter($SetIter) == true
+	======================================================
+	eval-itern($Target+, $SetIter, $Set, $Exp, $Rstore) = $Set
+
+%% ---- Auxiliary functions for evaluating comprehensions
+
+%% ---- Assign to list of variables
+
+[mv1]	$Rstore' := assign($Var, $Elem, $Rstore) 
+	=====================================================
+	match-rvars($Etype $Var, $Target+, <$Elem, $Elem+>, $Exp, $Rstore) =
+	match-rvars($Target+, <$Elem+>, $Exp, $Rstore')
+
+[mv2]	$Val := evalx($Exp1, $Rstore),	
+	equal-rval($Val, $Elem) == true
+	=====================================================
+	match-rvars($Exp1, $Target+, <$Elem, $Elem+>, $Exp2, $Rstore) =
+	match-rvars($Target+, <$Elem+>, $Exp2, $Rstore)
+
+[mv3]	$Rstore' := assign($Var, $Elem, $Rstore) 
+	=====================================================
+	match-rvars($Etype $Var, <$Elem>, $Exp, $Rstore) = evalc($Exp,$Rstore')
+
+[mv4]	$Val := evalx($Exp1, $Rstore),	
+	equal-rval($Val, $Elem) == true
+	=====================================================
+	match-rvars($Exp1, <$Elem>, $Exp2, $Rstore) = evalc($Exp2, $Rstore)
+
+[mv5]	$Rstore' := assign($Var, $Elem, $Rstore) 
+	=====================================================
+	match-rvars($Etype $Var, $Elem, $Exp, $Rstore) = evalc($Exp,$Rstore')
+
+[mv6]	$Val := evalx($Exp1, $Rstore),	
+	equal-rval($Val, $Elem) == true
+	=====================================================
+	match-rvars($Exp1, $Elem, $Exp2, $Rstore) = evalc($Exp2, $Rstore)
+
+[default-mv]
+	match-rvars($Target+, $Elem, $Exp, $Rstore) = *undefined* 
+
+%% --- Append-rval
+
+[AP0]	append-rval($Set, *undefined*) = $Set
+
+[AP1]	append-rval($Set1, {$Elem}) = union2($Set1, $Elem)
+
+[default-AP]
+	append-rval($Set1, $Set2) = union($Set1, $Set2)
+
+%% ---- Exists
+
+[EXB1]	$Set := evalb($Exp, $Rstore),
+	$BoolCon := exists($Target, mk-iterator($Set), $Test, $Rstore)
+	=========================================
+	evalx(exists($Target : $Exp | $Test), $Rstore) = $BoolCon
+
+[EXB3]	$Set := evalb($Exp, $Rstore),
+	$BoolCon := exists($Target+, mk-iterator($Set), $Test, $Rstore)
+	=========================================
+	evalx(exists(<$Target+> : $Exp | $Test), $Rstore) = $BoolCon
+
+[ex1]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
+	match-rvars($Target+, $Elem, $Test, $Rstore) == true
+	======================================================
+	exists($Target+, $SetIter, $Test, $Rstore) = true
+
+[ex2]	is-empty-iter($SetIter) == true
+	======================================================
+	exists($Target+, $SetIter, $Test, $Rstore) = false
+
+[default-ex]
+	exists($Target+, $SetIter, $Test, $Rstore) = exists($Target+, tail($SetIter), $Test, $Rstore)
+
+%% ---- Forall
+
+[AL1]	$Bool := evalp(exists($SimpleGen | not $Test), $Rstore),
+	$BoolCon :=  not($Bool)
+	==========================================
+	evalx(forall($SimpleGen | $Test), $Rstore) = $BoolCon
+
+%% ---- Where expressions
+
+[WH1]	$Rstore' := eval-rstats($Stat+, $Rstore)
+	=================================================
+	evalx($Exp where $Stat+ endwhere, $Rstore) =  evalx($Exp, $Rstore')	
+
+%% ---- Function calls
+
+%% ---- Bind formals
+
+[bf1]	$Val := evalx($Exp, $Rstore),
+	$Rstore' := assign($Var, $Val, $Rstore)
+	====================================================
+	bind-formals($Var, $Var+, $Exp, $Exp+, $Rstore) =
+	bind-formals($Var+, $Exp+, $Rstore')
+
+[bf1]	$Val := evalx($Exp, $Rstore),
+	$Rstore' := assign($Var, $Val, $Rstore)
+	====================================================
+	bind-formals($Var, $Exp, $Rstore) = $Rstore'
+
+%% ---- General case for function application
+
+[default-fun]
+	<$Var+, $Exp2> := value($Var1, $Rstore),
+	$Rstore' := bind-formals($Var+, $Exp+, $Rstore)
+	====================================================
+	evalx($Var1($Exp+), $Rstore) = evalx($Exp2, $Rstore')
+
+%% ---- Special cases for all built-in functions
+
+[Fid]	$Set  := evalb($Exp, $Rstore)
+	====================================================
+	evalx(id($Exp), $Rstore) = id($Set)
+
+[Fdom]	$Rel := evalr($Exp, $Rstore)
+	====================================================
+	evalx(domain($Exp), $Rstore) = domain($Rel)
+
+[Fran]	$Rel := evalr($Exp, $Rstore)
+	====================================================
+	evalx(range($Exp), $Rstore) = range($Rel)
+
+[Fcar]	$Rel := evalr($Exp, $Rstore)
+	====================================================
+	evalx(carrier($Exp), $Rstore) = carrier($Rel)
+	
+[Ftop]	$Rel := evalr($Exp, $Rstore)
+	====================================================
+	evalx(top($Exp), $Rstore) = top($Rel)
+
+[Fbot]	$Rel := evalr($Exp, $Rstore)
+	====================================================
+	evalx(bottom($Exp), $Rstore) = bottom($Rel)
+
+[Funq]	$Set := evalb($Exp, $Rstore)
+	====================================================
+	evalx(unique($Exp), $Rstore) = unique($Set)
+
+[Finv]	$Rel := evalr($Exp, $Rstore)
+	===================================================
+	evalx(inv($Exp), $Rstore) = inv($Rel)
+
+[Fcmp]	$Rel := evalr($Exp, $Rstore)
+	===================================================
+	evalx(compl($Exp), $Rstore) = compl($Rel)
+
+[Ffst]	<$Elem1, $Elem2> := evalx($Exp, $Rstore)
+	===================================================
+	evalx(first($Exp), $Rstore) = $Elem1
+
+[Fsec]	<$Elem1, $Elem2> := evalx($Exp, $Rstore)
+	===================================================
+	evalx(second($Exp), $Rstore) = $Elem2
+
+[Fpower0]	
+	$Set  := evalb($Exp, $Rstore)
+	====================================================
+	evalx(power0($Exp), $Rstore) = power0(mk-iterator($Set))
+
+[Fpower1]	
+	$Set  := evalb($Exp, $Rstore)
+	====================================================
+	evalx(power1($Exp), $Rstore) = power1(mk-iterator($Set))
+
+[Fallpaths]
+	$Rel := evalr($Exp1, $Rstore),
+	$Set := evalb($Exp2, $Rstore)
+	=============================
+	evalx(all-paths-from($Exp1, $Exp2), $Rstore) = 
+		all-paths-from($Rel, $Set)
+	
+[RdomR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	===================================================
+	evalx(domainR($Exp1, $Exp2), $Rstore) = domainR($Rel, $Set)
+
+[FranR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	===================================================
+	evalx(rangeR($Exp1, $Exp2), $Rstore) = rangeR($Rel, $Set)
+
+[FcarR]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	====================================================
+	evalx(carrierR($Exp1, $Exp2), $Rstore) = carrierR($Rel, $Set)
+
+[FdomX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	====================================================
+	evalx(domainX($Exp1, $Exp2), $Rstore) = domainX($Rel, $Set)
+
+[FranX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	====================================================
+	evalx(rangeX($Exp1, $Exp2), $Rstore) = rangeX($Rel, $Set)
+
+[FcarX]	$Rel := evalr($Exp1, $Rstore), $Set := evalb($Exp2, $Rstore)
+	====================================================
+	evalx(carrierX($Exp1, $Exp2), $Rstore) = carrierX($Rel, $Set)
+
+[FrX]	$Set1 := evalb($Exp1, $Rstore),
+	$Set2 := evalb($Exp2, $Rstore),
+	$Rel  := evalr($Exp3, $Rstore)
+	================================================= 
+	evalx(reachX($Exp1, $Exp2, $Exp3), $Rstore) =
+	reachX($Set1, $Set2, $Rel)	
+
+[FrR]	$Set1 := evalb($Exp1, $Rstore),
+        $Set2 := evalb($Exp2, $Rstore),
+        $Rel  := evalr($Exp3, $Rstore)
+        ================================================= 
+        evalx(reachR($Exp1, $Exp2, $Exp3), $Rstore) =
+        reachR($Set1, $Set2, $Rel)
+
+%% ---- Auxiliary functions for powerset
+
+[ae1]	is-empty-iter($SetIter) == false,
+	$Set := head($SetIter),
+	$Set' := insert($Elem, $Set)
+	==================================================
+	add-element($Elem, $SetIter) = union1($Set', add-element($Elem, tail($SetIter)))
+
+[ae2]	is-empty-iter($SetIter) == true
+	===================================================
+	add-element($Elem, $SetIter) = empty-set
+
+[pw01]	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter),
+	$Set1 := power0(tail($SetIter)),
+	$Set2 := add-element($Elem, mk-iterator($Set1))
+	====================================================
+	power0($SetIter) = union($Set1, $Set2)
+
+[pw02]	is-empty-iter($SetIter) == true
+	====================================================
+	power0($SetIter) = insert(empty-set, empty-set)
+
+[pw11]	power1($SetIter) = diff(power0($SetIter), insert(empty-set, empty-set))	
+
+%% ---- all-nodes-from
+
+[chain-set-1]
+	chain-set({}) = {}
+
+[chain-set-2]
+	chain-set({$Elem}) = {}
+
+[chain-set-3]
+	chain-set({$Elem1, $Elem2, $Elem*}) =
+		union({<$Elem1, $Elem2>}, chain-set({$Elem2,$Elem*}))
+
+[chain-each-nil]
+	chain-each({}) = {}
+
+[chain-each-cons]
+	chain-each({{$Elem*1}, $Elem*2}) = 
+		union({chain-set({$Elem*1})}, chain-each({$Elem*2}))
+[all-nodes-nil]
+	all-nodes-from($Set, {}) = {{}}
+
+[all-nodes-cons]
+	$Set0 := domR($Set, {$Elem}),
+	$Set1 := range($Set0),
+	$Set2 := add-element($Elem, all-nodes-from($Set, $Set1))
+	===	
+	all-nodes-from($Set, {$Elem, $Elem*}) =
+		union($Set2, all-nodes-from($Set, {$Elem*}))
+
+[all-paths-top]
+	all-paths-from($Set1, $Set2) = chain-each(all-nodes-from($Set1, $Set2))
+
+%% ---- Access functions for locations
+
+[fn]	evalx(filename($Exp), $Rstore)	= get-filename(evall($Exp, $Rstore))
+
+[bl]	evalx(beginline($Exp), $Rstore) = get-begin-line(evall($Exp, $Rstore))
+
+[bc]	evalx(begincol($Exp), $Rstore) 	= get-begin-column(evall($Exp, $Rstore))
+
+[el]	evalx(endline($Exp), $Rstore) 	= get-end-line(evall($Exp, $Rstore))
+
+[ec]	evalx(endcol($Exp), $Rstore) 	= get-end-column(evall($Exp, $Rstore))
+
+%% ---- sum
+
+[sumx1] is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter)
+	=======================================	
+	sumx($SetIter, $Integer2) = sumx(tail($SetIter), $Integer1 + $Integer2)
+
+[sumx2]	is-empty-iter($SetIter) == true
+	======================================
+	sumx($SetIter, $Integer) = $Integer
+
+[sum1]	$Set := evalx($Exp, $Rstore)
+	========================================
+	evalx(sum($Exp), $Rstore) = sumx(mk-iterator($Set), 0)
+
+%% ---- sum-domain
+
+[sumdx1] is-empty-iter($SetIter) == false,
+	<$Integer1,$Elem> := head($SetIter)
+	=======================================	
+	sum-domainx($SetIter, $Integer2) = sum-domainx(tail($SetIter), $Integer1 + $Integer2)
+
+[sumdx2]	is-empty-iter($SetIter) == true
+	======================================
+	sum-domainx($SetIter, $Integer) = $Integer
+
+[sumd1]	$Set := evalx($Exp, $Rstore)
+	========================================
+	evalx(sum-domain($Exp), $Rstore) = sum-domainx(mk-iterator($Set), 0)
+
+%% ---- sum-range
+
+[sumdx1] is-empty-iter($SetIter) == false,
+	<$Elem,$Integer1> := head($SetIter)
+	=======================================	
+	sum-rangex($SetIter, $Integer2) = sum-rangex(tail($SetIter), $Integer1 + $Integer2)
+
+[sumdx2]	is-empty-iter($SetIter) == true
+	======================================
+	sum-rangex($SetIter, $Integer) = $Integer
+
+[sumd1]	$Set := evalx($Exp, $Rstore)
+	========================================
+	evalx(sum-range($Exp), $Rstore) = sum-rangex(mk-iterator($Set), 0)
+
+%%% --- average
+
+[avg1]	$Set := evalx($Exp, $Rstore),
+	$Integer1 := sumx(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
+	$Integer2 > 0 == true
+	========================================
+	evalx(average($Exp), $Rstore) = $Integer1 / $Integer2
+
+[default-avg2]	evalx(average($Exp), $Rstore) = 0
+
+%%% --- average-domain
+
+[avgd1] $Set := evalx($Exp, $Rstore),
+	$Integer1 := sum-domainx(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
+	$Integer2 > 0 == true
+	========================================
+	evalx(average-domain($Exp), $Rstore) = $Integer1 / $Integer2
+
+[default-avgd]	evalx(average-domain($Exp), $Rstore) = 0
+
+%%% --- average-range
+
+[avgr1]	$Set := evalx($Exp, $Rstore),
+	$Integer1 := sum-rangex(mk-iterator($Set), 0),
+	$Integer2 := size($Set),
+	$Integer2 > 0 == true
+	========================================
+	evalx(average-range($Exp), $Rstore) = $Integer1 / $Integer2
+
+[default-avgr]	evalx(average-range($Exp), $Rstore) = 0
+
+%% ---- max
+
+[max11] is-empty-iter($SetIter) == false,
+	$Integer := head($SetIter)
+	========================================
+	max1($SetIter) = max2(tail($SetIter), $Integer)
+
+[max12]	is-empty-iter($SetIter) == true
+	======================================
+	max1($SetIter) = 0
+
+[default-max1]
+	max1($SetIter) = max1(tail($SetIter))
+
+
+[max21]	is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter),
+	$Integer1 > $Integer2 == true
+	===========================================================================
+	max2($SetIter, $Integer2) = max2(tail($SetIter), $Integer1)
+
+[max22]	is-empty-iter($SetIter) == true
+	======================================
+	max2($SetIter, $Integer) = $Integer
+
+[default-max2]
+	max2($SetIter, $Integer2) = max2(tail($SetIter), $Integer2)
+
+[max-1]	$Set := evalx($Exp, $Rstore)
+	========================================
+	evalx(max($Exp), $Rstore) = max1(mk-iterator($Set))
+
+%% ---- min
+
+[min11]	is-empty-iter($SetIter) == false,
+	$Integer := head($SetIter)
+	========================================
+	min1($SetIter) = min2(tail($SetIter), $Integer)
+
+[min12]	is-empty-iter($SetIter) == true
+	========================================
+	min1($SetIter) = 0
+
+[default-min1]
+	min1($SetIter) = min1(tail($SetIter))
+
+[min21]	is-empty-iter($SetIter) == false,
+	$Integer1 := head($SetIter),
+	$Integer1 < $Integer2 == true
+	===========================================================================
+	min2($SetIter, $Integer2) = min2(tail($SetIter), $Integer1)
+
+[min22]	is-empty-iter($SetIter) == true
+	========================================
+	min2($SetIter, $Integer) = $Integer
+
+[default-min2]
+	min2($SetIter, $Integer2) = min2(tail($SetIter), $Integer2)
+
+[min-1]	$Set := evalx($Exp, $Rstore)
+	========================================
+	evalx(min($Exp), $Rstore) = min1(mk-iterator($Set))
+
+%% Misc
+
+[sv1] str2rvar(strcon("""  $Char* """)) = rvar($Char*)
+
+
+
+
+
+
