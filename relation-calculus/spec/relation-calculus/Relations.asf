@@ -1,0 +1,400 @@
+equations
+
+%% ---- Reduce tuples of one element to that element
+
+[st]	<$Elem> = $Elem
+
+%% ---- is-rel
+
+%%[ir1]	is-rel(bag($C, $Set1, <$Elem1, $Elem2>, $Set2)) = true
+
+[ir1]	is-rel({<$Elem1, $Elem2>, $Elem*}) = true
+
+[default-ir]
+	is-rel($Set) = false
+
+%% ---- is-tuple
+
+[it1]	is-tuple(<$Elem+>) = true
+
+[default-it]
+	is-tuple($Elem) = false
+
+%% ----	compose
+
+[comp-0] compose($Set1, $Set2) = compose1(mk-iterator($Set1), $Set2)
+
+[comp1-1]
+	is-empty-iter($SetIter) == false,
+	<$Elem, $Elem'> := head($SetIter)
+	=======================================================
+	compose1($SetIter, $Set) = union(product($Elem, rimage($Set, $Elem')), compose1(tail($SetIter), $Set))
+
+[com1p-2]   
+	is-empty-iter($SetIter) == true
+	=============================================
+	compose1($SetIter, $Set) = empty-set
+
+%% ----	product
+
+[prode-0]
+	product($Elem, $Set) = product1($Elem, mk-iterator($Set))
+
+[prode1-1]   
+	is-empty-iter($SetIter) == false,
+	$Elem' := head($SetIter)
+	=============================================
+	product1($Elem, $SetIter) = union1(<$Elem, $Elem'>, product1($Elem, tail($SetIter)))
+
+[prode1-2]
+	is-empty-iter($SetIter) == true
+	=============================================
+	product1($Elem, $SetIter) = empty-set
+
+[prodb-0]
+	product($Set1, $Set2) = product1(mk-iterator($Set1), $Set2)
+
+[prodb1-1] 
+	is-empty-iter($SetIter) == false,
+	$Elem := head($SetIter)
+	===============================================
+	product1($SetIter, $Set) = union(product1($Elem, $Set), product1(tail($SetIter), $Set))
+
+[prodb1-2] 
+	is-empty-iter($SetIter) == true
+	================================================
+	product1($SetIter, $Set) = empty-set
+
+[iprod] $Set1 x $Set2 = product($Set1, $Set2)
+
+%% ----	domain
+
+[dom-0]	 domain($Set) = domain1(mk-iterator($Set))
+
+[dom1-1] is-empty-iter($SetIter) == false,
+	 <$Elem,$Elem+> := head($SetIter)
+	 =================================================
+	 domain1($SetIter) = insert($Elem, domain1(tail($SetIter)))
+
+[dom1-2] is-empty-iter($SetIter) == true
+	 =================================================
+	 domain1($SetIter) = empty-set
+
+%% ---- range
+
+[ran-0]	 range($Set) = range1(mk-iterator($Set))
+
+[ran1-1]  is-empty-iter($SetIter) == false, 
+	 <$Elem,$Elem+> := head($SetIter)
+	 =================================================
+	 range1($SetIter) = insert(<$Elem+>, range1(tail($SetIter)))
+
+[ran1-2]  is-empty-iter($SetIter) == true
+	 =================================================
+	 range1($SetIter) = empty-set
+
+%% ----	 carrier
+
+[car-0]	 carrier($Set) = carrier1(mk-iterator($Set))
+
+[car1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter)
+	 ==============================================
+	 carrier1($SetIter) = insert($Elem, insert(<$Elem+>, carrier1(tail($SetIter))))
+
+[car1-2]	is-empty-iter($SetIter) == true
+	================================================
+	carrier1($SetIter) = empty-set
+
+%% ----	domainR
+
+[domR-0] domainR($Set1, $Set2) = domainR1(mk-iterator($Set1), $Set2)
+
+[domR1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) == false
+	 ===================================================
+	 domainR1($SetIter, $Set) = domainR1(tail($SetIter), $Set)
+
+[domR1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) == true
+	 ===================================================
+	 domainR1($SetIter, $Set) = union1(<$Elem, $Elem+>, domainR1(tail($SetIter),
+	 $Set))
+
+[domR1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 domainR1($SetIter, $Set) = empty-set
+
+%% ----	 domainX
+
+[domX-0] domainX($Set1, $Set2) = domainX1(mk-iterator($Set1), $Set2)
+
+[domX1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) == true
+	 ===================================================
+	 domainX1($SetIter, $Set) = domainX1(tail($SetIter), $Set)
+
+[domX1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) == false
+	 ===================================================
+	 domainX1($SetIter, $Set) = union1(<$Elem, $Elem+>, domainX1(tail($SetIter), $Set))
+
+[domX1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 domainX1($SetIter, $Set) = empty-set
+	
+%% ----	rangeR
+
+[ranR-0] rangeR($Set1, $Set2) = rangeR1(mk-iterator($Set1), $Set2)
+
+[ranR1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in(<$Elem+>, $Set) == false
+	 ===================================================
+	 rangeR1($SetIter, $Set) = rangeR1(tail($SetIter), $Set)
+
+[ranR1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in(<$Elem+>, $Set) == true
+	 ===================================================
+	 rangeR1($SetIter, $Set) = union1(<$Elem, $Elem+>, rangeR1(tail($SetIter), $Set))
+
+[ranR1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 rangeR1($SetIter, $Set) = empty-set
+
+%% ----	 rangeX
+
+[ranX-0] rangeX($Set1, $Set2) = rangeX1(mk-iterator($Set1), $Set2)
+
+[ranX1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in(<$Elem+>, $Set) == true
+	 ===================================================
+	 rangeX1($SetIter, $Set) = rangeX1(tail($SetIter), $Set)
+
+[ranX1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in(<$Elem+>, $Set) == false
+	 ===================================================
+	 rangeX1($SetIter, $Set) = union1(<$Elem, $Elem+>, rangeX1(tail($SetIter), $Set))
+
+[ranX1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 rangeX1($SetIter, $Set) = empty-set
+
+%% ----	 carrierR
+
+[carR-0] carrierR($Set1, $Set2) = carrierR1(mk-iterator($Set1), $Set2)
+
+[carR1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) & in(<$Elem+>, $Set) == false
+	 ===================================================
+	 carrierR1($SetIter, $Set) = carrierR1(tail($SetIter), $Set)
+
+[carR1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) & in(<$Elem+>, $Set) == true	 
+	 ===================================================
+	 carrierR1($SetIter, $Set) = union1(<$Elem, $Elem+>, carrierR1(tail($SetIter), $Set))
+
+[carR1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 carrierR1($SetIter, $Set) = empty-set
+
+%% ----	 carrierX
+
+[carX-0] carrierX($Set1, $Set2) = carrierX1(mk-iterator($Set1), $Set2)
+
+[carX1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) | in(<$Elem+>, $Set) == true
+	 ===================================================
+	 carrierX1($SetIter, $Set) = carrierX1(tail($SetIter), $Set)
+
+[carX1-2] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter),
+	 in($Elem, $Set) | in(<$Elem+>, $Set) == false	 
+	 ===================================================
+	 carrierX1($SetIter, $Set) = union1(<$Elem, $Elem+>, carrierX1(tail($SetIter), $Set))
+
+[carX1-3] is-empty-iter($SetIter) == true
+	 ===================================================
+	 carrierX1($SetIter, $Set) = empty-set
+
+%% ---- bottom
+
+%%[top-1]  top($Rel) = diff(unique(domain($Rel)), range($Rel))
+[top-1]  top($Rel) = diff(domain($Rel), range($Rel))
+
+%% ----	 bottom
+
+%%[bot-1]  bottom($Rel) = diff(unique(range($Rel)), domain($Rel))
+[bot-1]  bottom($Rel) = diff(range($Rel), domain($Rel))
+
+%% ----	 rimage
+
+[rim-0]	 rimage($Set, $Elem) = rimage1(mk-iterator($Set), $Elem)
+
+[rim1-1] is-empty-iter($SetIter) == false,
+	 <$Elem1, $Elem+> := head($SetIter),
+	 elem-equal($Elem, $Elem1) == true					%% sb elem-equal
+	 ==================================================
+	 rimage1($SetIter, $Elem) = union1(<$Elem+>, rimage1(tail($SetIter), $Elem))
+
+[rim1-2] is-empty-iter($SetIter) == false,
+	 <$Elem1, $Elem+> := head($SetIter),
+	 elem-equal($Elem, $Elem1) == false					%% sb not elem-equal
+	 ==================================================
+	 rimage1($SetIter, $Elem) = rimage1(tail($SetIter), $Elem)
+
+[rim1-2]	 is-empty-iter($SetIter) == true
+	 ==================================================
+	 rimage1($SetIter, $Elem) = empty-set
+
+[brim-0] rimage($Set1, $Set2) = rimage1($Set1, mk-iterator($Set2))
+
+[brim1-1] is-empty-iter($SetIter) == false,
+	 $Elem := head($SetIter)
+	 ===================================================
+	 rimage1($Set, $SetIter) = union(rimage($Set, $Elem), rimage1($Set, tail($SetIter)))
+
+[brim1-2] is-empty-iter($SetIter) == true
+	 ====================================================
+	 rimage1($Set, $SetIter) = empty-set
+
+%% ----	 limage
+
+[lim-0]	 limage($Set, $Elem) = limage1(mk-iterator($Set), $Elem)
+
+[lim1-1] is-empty-iter($SetIter) == false,
+	 <$Elem1, $Elem1'> := head($SetIter),
+	 elem-equal($Elem, $Elem1') == true				%% sb elem-equal
+	 ==================================================
+	 limage1($SetIter, $Elem) = union1($Elem1, limage1(tail($SetIter), $Elem))
+
+[lim1-2] is-empty-iter($SetIter) == false,
+	 <$Elem1, $Elem1'> := head($SetIter),
+	 elem-equal($Elem, $Elem1') == false				%% sb not elem-equal
+	 ==================================================
+	 limage1($SetIter, $Elem) = limage1(tail($SetIter), $Elem)
+
+[lim1-2]	 is-empty-iter($SetIter) == true
+	 ==================================================
+	 limage1($SetIter, $Elem) = empty-set
+
+[blim-0] limage($Set1, $Set2) = limage1($Set1, mk-iterator($Set2))
+
+[blim1-1] is-empty-iter($SetIter) == false,
+	 $Elem := head($SetIter)
+	 ===================================================
+	 limage1($Set, $SetIter) = union(limage($Set, $Elem), limage1($Set, tail($SetIter)))
+
+[blim1-2] is-empty-iter($SetIter) == true
+	 ====================================================
+	 limage1($Set, $SetIter) = empty-set
+
+%% ----	 inv
+
+[inv-0]	 inv($Set) = inv1(mk-iterator($Set))
+
+[inv1-1] is-empty-iter($SetIter) == false,
+	 <$Elem, $Elem+> := head($SetIter)
+	 ====================================================
+	 inv1($SetIter) = union1(<$Elem+, $Elem>, inv1(tail($SetIter)))
+
+[inv1-2] is-empty-iter($SetIter) == true
+	 ===================================================
+	 inv1($SetIter) = empty-set
+
+%% ----	 compl
+
+[cmp-1]  $Set := carrier($Rel)
+         =====================================
+         compl($Rel) = diff(product($Set, $Set), $Rel)
+
+%% ---- id
+
+[id-0]	 id($Set) = id1(mk-iterator($Set))
+
+[id1-1]	 is-empty-iter($SetIter) == false,
+	 $Elem := head($SetIter)
+	 ==================================================
+	 id1($SetIter) = union1(<$Elem, $Elem>, id1(tail($SetIter)))
+
+[id1-2]	 is-empty-iter($SetIter) == true
+	 ==================================================
+	 id1($SetIter) = empty-set
+
+%% ---- closure
+
+%%[cl-1] equal($Rel1, $Rel2) = false
+%%       =========================================
+%%       closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, union($Rel2, compose($Rel2, $Rel)))
+
+%%[default-cl]
+%%	closure($Rel, $Rel1, $Rel2) = $Rel1
+
+[cl-1]	$Rel1 != $Rel2,
+	$Rel2' := closure1(mk-iterator($Rel2), $Rel, $Rel2) 
+	==============================================	
+	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, $Rel2')
+
+[default-cl]
+	closure($Rel, $Rel1, $Rel2) = $Rel2
+
+[cl1-1]	is-empty-iter($SetIter) == false,
+	<$Elem1, $Elem1'> := head($SetIter),
+	$Rel2' := closure-comp(mk-iterator($Rel1), $Elem1, $Elem1', $Rel2)
+	==============================================================
+	closure1($SetIter, $Rel1, $Rel2) = closure1(tail($SetIter), $Rel1, $Rel2')
+
+[cl1-2]	is-empty-iter($SetIter) == true
+	==============================================================
+	closure1($SetIter, $Rel1, $Rel2) = $Rel2
+
+[cc-1]	is-empty-iter($SetIter) == false,
+	<$Elem2, $Elem2'> := head($SetIter),
+	$Elem1' == $Elem2							%% sb elem-equal
+	=======================================================
+	closure-comp($SetIter, $Elem1, $Elem1', $Set) = 
+	closure-comp(tail($SetIter), $Elem1, $Elem1', union1(<$Elem1, $Elem2'>, $Set))
+
+[cc-2]	is-empty-iter($SetIter) == false,
+	<$Elem2, $Elem2'> := head($SetIter),
+	$Elem1' != $Elem2							%% sb not elem-equal
+	=======================================================
+	closure-comp($SetIter, $Elem1, $Elem1', $Set) = 
+	closure-comp(tail($SetIter), $Elem1, $Elem1', $Set)
+
+[cc-3] 	is-empty-iter($SetIter) == true
+	=============================================
+	closure-comp($SetIter, $Elem1, $Elem1', $Set) = $Set
+
+%% ---- trans-closure
+
+[tcl-1]  trans-closure($Rel) = closure($Rel, empty-set, $Rel)
+
+%% ---- rtrans-closure
+
+[rtcl-1] rtrans-closure($Rel) = union(trans-closure($Rel), id(carrier($Rel)))
+
+%% ---- reachX
+
+[rX-3]	$Rel' := carrierX($Rel, $Set2),
+	$Rel'':= domainR($Rel', $Set1)
+	=========================================
+	reachX($Set1, $Set2, $Rel) = range(closure($Rel', empty-set, $Rel''))
+
+%% ---- reachR
+
+[rX-3]	$Rel' := carrierR($Rel, $Set2),
+	$Rel'':= domainR($Rel', $Set1)
+	=========================================
+	reachR($Set1, $Set2, $Rel) = range(closure($Rel', empty-set, $Rel''))
+

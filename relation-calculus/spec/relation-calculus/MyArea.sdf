@@ -1,0 +1,50 @@
+module relation-calculus/MyArea
+
+imports relation-calculus/ExtendedIntegers
+imports basic/LocationOperations
+imports basic/AreaOperations
+imports basic/Strings
+imports languages/aterm/syntax/IntCon 
+imports languages/aterm/syntax/Literals
+
+exports
+
+context-free syntax
+  equal(Area, Area) 			-> Boolean
+
+  less(Area, Area) 			-> Boolean
+  less-equal(Area, Area) 		-> Boolean
+
+  greater(Area, Area) 			-> Boolean
+  greater-equal(Area, Area) 		-> Boolean	
+
+  less(Location, Location)		-> Boolean
+  less-equal(Location, Location)	-> Boolean
+  greater(Location, Location)		-> Boolean
+  greater-equal(Location, Location)	-> Boolean
+
+  get-begin-line(Location) 		-> NatCon
+  get-begin-column(Location) 		-> NatCon
+  get-end-line(Location) 		-> NatCon
+  get-end-column(Location) 		-> NatCon
+  get-offset(Location) 			-> NatCon
+  get-length(Location) 			-> NatCon
+		
+
+context-free syntax
+  lit2str(Literal) -> String
+
+hiddens
+  imports basic/Comments
+  variables
+    "$Literal" [0-9\']* -> Literal
+    "$StrCon" [0-9\']* -> StrCon
+    "$Char*" [0-9\']* -> CHAR*
+    "$Area" [0-9\']* -> Area
+    "$Loc" [0-9\']* -> Location
+    "$BeginLine"[0-9\']* -> NatCon
+    "$BeginColumn"[0-9\']* -> NatCon
+    "$EndLine"[0-9\']* -> NatCon
+    "$EndColumn"[0-9\']* -> NatCon
+    "$Offset"[0-9\']* -> NatCon
+    "$Length"[0-9\']* -> NatCon

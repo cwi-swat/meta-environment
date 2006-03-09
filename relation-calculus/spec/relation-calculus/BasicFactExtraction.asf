@@ -1,0 +1,85 @@
+equations
+
+[main]
+extract-basic-facts(X) = extract-facts(lift-to-tree(X), rstore())
+
+[cf-appl]
+extract-facts(appl(prod([Symbol*],cf(sort(qliteral("""Char*"""))),Attributes),
+                   [Tree*])
+                {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
+when
+  [lex(cf(sort(qliteral("""Char*3"""))))] !:= [Symbol*],
+  Location := posinfo-to-location(ATerm),
+  RSTORE2 := add-elem(TREES,Location, RSTORE),
+  RSTORE3 := 
+  add-elem(rvar(Char* "_" "O""C""C""U""R""R""E""N""C""E""S"),Location,RSTORE2),
+  RSTORE4 := add-tuple(TREE_TYPES,<Location,strcon("""Char*""")>, RSTORE3),
+  RSTORE5 := add-constructor(Location, Attributes, RSTORE4),
+  RSTORE6 := add-children(Location, Tree*, RSTORE5),
+  RSTORE7 := store-lexical-value(Location,Symbol*,Tree*,RSTORE6),
+  RSTORE' := RSTORE7
+
+[default-non-cf-appl-without-cons]
+extract-facts(appl(prod([Symbol*],Symbol,Attributes),[Tree*])
+                {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
+when
+  Location := posinfo-to-location(ATerm),
+  RSTORE2 := add-elem(TREES,Location, RSTORE),
+  RSTORE3 := add-children(Location, Tree*, RSTORE2),
+  RSTORE' := RSTORE3
+
+[list-with-cons]
+extract-facts(appl(list(Symbol),[Tree*])
+                {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
+when
+  Location := posinfo-to-location(ATerm),
+  RSTORE2 := add-elem(LISTS, Location, RSTORE),
+  RSTORE3 := add-children(Location, Tree*, RSTORE2),
+  RSTORE' := RSTORE3
+
+
+equations
+
+[children-empty]
+add-children(Location, , RSTORE) = RSTORE
+
+[children-many-with-posinfo]
+add-children(Location, Tree {ATerm*1,[pos-info,ATerm],ATerm*2}, Tree*, RSTORE)=
+add-children(Location, Tree*, RSTORE')
+when
+  RSTORE' :=  
+   add-tuple(TREE_CHILDREN,<Location, posinfo-to-location(ATerm)>,RSTORE)
+
+[default-many-no-posinfo]
+add-children(Location, Tree, Tree*, RSTORE) =
+add-children(Location, Tree*, RSTORE)
+
+equations
+
+[cons]
+add-constructor(Location, 
+     attrs([Attr*1,term(cons(qliteral(Char*))),Attr*2]), RSTORE) =
+  add-tuple(TREE_CONSTRUCTORS,<Location, strcon(Char*)>, RSTORE)
+
+[default-no-cons]
+add-constructor(Location, Attributes, RSTORE) = RSTORE 
+
+equations
+
+[] posinfo-to-location(area-in-file(qliteral(Char*),area(N1,N2,N3,N4,N5,N6)))=
+     area-in-file(strcon(Char*),area(N1,N2,N3,N4,N5,N6))
+
+equations
+
+[] 
+store-lexical-value(Location, lex(sort(qliteral("""Char*"""))), Tree*, RSTORE) =
+RSTORE3
+when
+  Tree := appl(list(sort("dummy")),[Tree*]),
+  String := tree-to-string(Tree),
+  RSTORE2 := add-tuple(LEXICALS, <Location, String>,RSTORE),
+  RSTORE3 := add-tuple(rvar("""Char*"_""V""A""L""U""E""S""""),
+               <Location,String>,RSTORE2)
+
+[default]
+store-lexical-value(Location, Symbol*, Tree*, RSTORE) = RSTORE
