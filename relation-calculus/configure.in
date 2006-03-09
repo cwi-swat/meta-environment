@@ -6,11 +6,7 @@ AC_CONFIG_SRCDIR([configure.in])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
-dnl AC_CANONICAL_TARGET([])
-
-
-
-dnl ACLOCAL="${ACLOCAL} -I ."
+AM_MAINTAINER_MODE
 
 dnl {{{  Which compiler to use?
 AC_PROG_CC
@@ -84,11 +80,10 @@ dnl {{{ Handle --with-asc-support
 AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
 [  --with-asc-support=DIR  asc-support is in DIR])
 
-ASCINC=${ASC_SUPPORT}/include
-AC_SUBST(ASCINC)
-
-ASCLIB=${ASC_SUPPORT}/lib
-AC_SUBST(ASCLIB)
+ASC_LD_FLAGS_SCRIPT="${ASC_SUPPORT}/bin/asc-support-config --ldflags"
+AC_SUBST(ASC_LD_FLAGS_SCRIPT)
+ASC_INCLUDES_SCRIPT="${ASC_SUPPORT}/bin/asc-support-config --includes"
+AC_SUBST(ASC_INCLUDES_SCRIPT)
 
 dnl }}}
 dnl {{{ Handle --with-pgen
@@ -191,15 +186,15 @@ AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
 dnl {{{  Which files need updating?
 AC_CONFIG_FILES(
 Makefile
-dnl  doc/Makefile
-spec/Makefile
+  spec/Makefile
+  spec/relation-calculus/Makefile
+  tbscripts/Makefile
   util/Makefile
   rscripts/Makefile
   rviz/Makefile
   demo/Makefile
   demo/pico/Makefile
   demo/java/Makefile
-dnl  demo/java/example-hotdraw/Makefile
   demo/java/extraction/Makefile
   demo/java/grammar/Makefile
   demo/java/rscripts/Makefile
