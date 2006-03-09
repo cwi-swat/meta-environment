@@ -197,10 +197,7 @@ equations
 
   [atc-1'64] are-tagid-chars("-") = true
 
-  [atc-1'65] are-tagid-chars(strcon(\" C+1 \"))  == true,
-             are-tagid-chars(strcon(\" C+2 \")) == true
-             =======================================
-             are-tagid-chars(strcon(\" C+1 C+2 \")) = true
+  [atc-1'65] are-tagid-chars(strcon(\" C C+2 \")) = are-tagid-chars(strcon(\" C \")) & are-tagid-chars(strcon(\" C+2 \"))
 
   [done] are-tagid-chars("") = true
 

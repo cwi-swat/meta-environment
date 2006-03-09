@@ -13,3 +13,28 @@ equations
 			attrs([_Attr*1,bracket,_Attr*2])),
 		[Tree*1,Tree,_Tree*2]) _Ann) = Tree
 
+%% Layout brackets are much more aggresive, they change the type
+%% of the production that surrounds the application of the bracket!
+
+%% equations
+%% 
+%% [remove-layout-bracket]
+%%         length(Symbol*3) == length(Tree*3)
+%%         ===>
+%%         brackets(appl(prod([Symbol*3,cf(opt(layout)),_Symbol*4],_Symbol,attrs([_Attr*1,term(layout-bracket),_Attr*2])),[Tree*3,Tree,_Tree*4]) _Ann1) =
+%%         Tree
+%% 
+%% equations
+
+%% After removing the bracket, we adapt the types of surrounding productions:
+%%
+%% We recurse because one application can contain more than one
+%% layout-brackets as children (consider the equation that has a
+%% layout-bracket on both sides.
+
+%% [default-adapt-layout-wrapper]
+%%         Symbol != cf(opt(layout)),
+%%         length(Symbol*1) == length(Tree*1)
+%%         ===>
+%%         brackets(appl(prod([Symbol*1,Symbol,Symbol*2],Symbol2,Attributes1),[Tree*1,appl(prod([Symbol*3],cf(opt(layout)),Attributes2),[Tree*3]), Tree*2]) Ann2) =        
+%%         brackets(appl(prod([Symbol*1,cf(opt(layout)),Symbol*2],Symbol2,Attributes1),[Tree*1,appl(prod([Symbol*3],cf(opt(layout)),Attributes2),[Tree*3]), Tree*2]) Ann2)

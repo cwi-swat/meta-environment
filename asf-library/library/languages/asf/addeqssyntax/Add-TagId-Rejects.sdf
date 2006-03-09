@@ -20,6 +20,8 @@ hiddens
 hiddens
   context-free syntax
     "are-tagid-chars" "(" StrCon ")" -> Boolean
+  context-free start-symbols
+    Boolean Productions
 
 hiddens
   variables

@@ -1,6 +1,6 @@
 module languages/asf/addeqssyntax/Add-Eqs-Syntax
 
-imports languages/asf/addeqssyntax/Add-Lexical-Constructor-Functions
+imports  languages/asf/addeqssyntax/Add-Lexical-Constructor-Functions
 	languages/asf/addeqssyntax/Add-Eqs-Conds 
 	languages/asf/addeqssyntax/Add-Prefer-Variables 
 	languages/asf/addeqssyntax/Add-TagId-Rejects

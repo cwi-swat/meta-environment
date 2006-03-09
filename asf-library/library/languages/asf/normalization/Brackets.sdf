@@ -21,6 +21,10 @@ variables
 	"Tree*"[0-9]* -> {P-Tree ","}* {strict}
 	"Symbol*"[0-9]* -> {P-Symbol ","}* {strict}
 	"Symbol"[0-9]* -> P-Symbol {strict}
+         "Attributes"[0-9]* -> P-Attributes {strict}
+         "Attr*"[0-9]* -> {P-Attr ","}* {strict}
+         "Ann"[0-9]* -> P-Annotation {strict}
+         "Term*"[0-9]* -> {P-ATerm ","}* {strict}
 
 variables
 	"_Tree*"[0-9]* -> {P-Tree ","}* {wild}

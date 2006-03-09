@@ -91,11 +91,11 @@ equations
 %% The wrapped syntax must be acceptable where the normal lexical
 %% is accepted too:
 
-[ignore-lexical-variable-sections]
-	inject(lexical variables Production*) = lexical variables
+%%[ignore-lexical-variable-sections]
+%%	inject(lexical variables Production*, Production*2) = Production*2
 
-[ignore-variable-sections]
-	inject(variables Production*) = variables
+%%[ignore-variable-sections]
+%%	inject(variables Production*, Production*2) = Production*2
 
 [add-injection-sort]
 	inject(Symbol* -> CHARS[[Sort]] Attributes, Production*) = 

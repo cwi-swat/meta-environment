@@ -185,5 +185,5 @@ equations
 	Tree := lift-to-tree($Var)
 	===>
 	variable-layout(Nat) = 
-	appl(prod([varsym(opt(layout))],cf(opt(layout)),no-attrs),[appl(prod([cf(sort("StrCon"))],varsym(opt(layout)),no-attrs),[Tree])])
+	appl(prod([varsym(opt(layout))],cf(opt(layout)),attrs([term(layout-abstraction)])),[appl(prod([cf(sort("StrCon"))],varsym(opt(layout)),no-attrs),[Tree])])
 
