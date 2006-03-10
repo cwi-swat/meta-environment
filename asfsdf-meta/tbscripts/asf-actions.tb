@@ -117,7 +117,7 @@ let
   Cancel: bool,
   Path : str
 in
-  PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
+  PromptForFileWithExtension("Export Equations ParseTable", [], ".asf.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
@@ -133,7 +133,7 @@ let
   ModuleId : term
 in
   GetModuleId(EditorId, ModuleId?)
-  . PromptForFileWithExtension("Export Equations ParseTable", [], ".eqs.tbl", Cancel?, Path?)
+  . PromptForFileWithExtension("Export Equations ParseTable", [], ".asf.tbl", Cancel?, Path?)
   .
   if equal(Cancel, true) then
     tau
