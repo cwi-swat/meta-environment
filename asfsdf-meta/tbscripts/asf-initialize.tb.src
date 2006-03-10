@@ -10,7 +10,6 @@ in
   (
     rec-msg(io-file-contents(Contents?))
     . snd-msg(cm-add-system-properties(Contents))
-    . rec-msg(cm-system-properties-added)
   +
     rec-msg(io-error-reading(Error?))
     . printf("AddAsfProperties: %t\n", Error)

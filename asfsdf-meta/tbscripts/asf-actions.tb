@@ -2,7 +2,6 @@
 #define __ASF_ACTIONS__
 
 #include <asf-utils.tb>
-/*#include <ASFSDFApigen.idef>*/
 #include <term-utils.tb>
 #include <undefined.h>
 
@@ -10,11 +9,20 @@ process ReduceAction(EditorId : term) is
 let
   ModuleId : term,
   Path: str,
-  ResultTree: term
+  ResultTree: term,
+  Sid: term
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
   . Reduce(ModuleId, Path, off, ResultTree?)
+  . snd-msg(em-get-session-by-path("reduct.out"))
+  .
+  (
+    rec-msg(em-session("reduct.out", Sid?))
+    . DeleteSession(Sid)
+  +
+    rec-msg(em-no-such-session("reduct.out"))
+  )
   . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
 endlet
 
