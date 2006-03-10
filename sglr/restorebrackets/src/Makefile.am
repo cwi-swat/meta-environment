@@ -18,11 +18,18 @@ pkgdata_DATA		= restorebrackets.idef
 bin_PROGRAMS		= restorebrackets 
 
 restorebrackets_SOURCES	= restorebrackets.tif.c restorebrackets.tif.h restorebrackets-main.c
+
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 restorebrackets_LDADD	= -L$(top_builddir)/libsglr -lsglr \
 			-L$(PT_SUPPORT)/lib -lmept \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm \
+			-L$(ATERM)/lib -l$(ATERM_LIB) \
 			$(SOCKLIBS)
 
 %.idef: %.idef.src Makefile

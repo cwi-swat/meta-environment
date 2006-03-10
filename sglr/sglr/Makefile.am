@@ -19,12 +19,19 @@ noinst_HEADERS = getopt.h sglr.tif.h
 bin_PROGRAMS = sglr 
 
 sglr_SOURCES = sglr.tif.c sglr-main.c getopt.c getopt1.c
+
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 sglr_LDADD = \
 	-L$(top_builddir)/libsglr -lsglr \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm-dbg \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 %.idef: %.idef.src Makefile

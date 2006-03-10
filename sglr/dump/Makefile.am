@@ -19,10 +19,15 @@ dump_priorities_SOURCES		= dump-priorities.c dump-skel.c dump-skel.h
 
 dump_productions_SOURCES	= dump-productions.c dump-skel.c dump-skel.h
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
 
 LDADD     = -L$(top_builddir)/libsglr -lsglr \
             -L$(PT_SUPPORT)/lib -lmept \
             -L$(TOOLBUSLIB)/lib -lATB \
             -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-            -L$(ATERM)/lib -lATerm \
+            -L$(ATERM)/lib -l$(ATERM_LIB) \
             $(SOCKLIBS)

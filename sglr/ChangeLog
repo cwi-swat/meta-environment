@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:27:36 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Thu Feb 16 18:15:40 CET 2006 <jurgenv@cwi.nl>
  * sglr/{sglr.idef,sglr-main.c}: added quick workaround to be able to
    toggle the heuristics filters from the ToolBus interface.
