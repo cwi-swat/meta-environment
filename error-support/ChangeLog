@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:50:22 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Tue Jan  3 08:18:25 CET 2006 <kooiker@cwi.nl>
  * lib/Makefile.am:
    - remove INCLUDES from MAINTAINER_MODE section

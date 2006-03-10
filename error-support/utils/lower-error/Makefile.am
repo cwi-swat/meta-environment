@@ -5,12 +5,18 @@ INCLUDES=\
 	-I${top_srcdir}/lib \
 	-I${ATERM}/include
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 lower_error_SOURCES=\
 	lower-error.c
 
 lower_error_LDADD=\
 	-L${top_builddir}/lib -lErrorAPI \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 ERRORS=example
 EXTRA_DIST=$(wildcard *.ref) $(wildcard *.tree)

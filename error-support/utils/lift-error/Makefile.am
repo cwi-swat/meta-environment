@@ -6,11 +6,17 @@ INCLUDES= \
 	-I${top_srcdir}/lib \
 	-I${ATERM}/include
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 lift_error_SOURCES=\
 	lift-error.c
 
 lift_error_LDADD=\
-	-L${ATERM}/lib -lATerm\
+	-L${ATERM}/lib -l$(ATERM_LIB)\
 	-L${top_builddir}/lib -lErrorAPI
 
 ERRORS=example

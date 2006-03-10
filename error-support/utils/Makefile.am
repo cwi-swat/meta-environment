@@ -19,6 +19,12 @@ INCLUDES = \
 	-I${ATERM}/include \
 	-I${TOOLBUSLIB}/include 
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 error_support_SOURCES = \
 	error-support.tif.c \
 	error-support.c
@@ -26,7 +32,7 @@ error_support_SOURCES = \
 error_support_LDADD = \
 	-L../lib -lErrorAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib -l$(ATERM_LIB) \
 	${SOCKLIBS}
 
 CLEANFILES=${bin_SCRIPTS} error-support.idef
