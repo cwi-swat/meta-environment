@@ -30,8 +30,14 @@ HDRS         = parsetablegen.tif.h atsets.h ksdf2table.h statistics.h \
 		characters.h item.h first.h priorities.h itemset.h \
 		pgen-symbol.h
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
-test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
+test_chars_LDADD	= -L$(ATERM)/lib -l$(ATERM_LIB) \
                         $(SOCKLIBS)
 
 

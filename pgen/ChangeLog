@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:36:53 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Tue Feb 28 11:13:30 CET 2006 <kooiker@cwi.nl>
  * {removevarsyntax/src/removevarsyntax, sdf-checker/src/sdfchecker}.c:
    - printing default usage exits with exit value 1
