@@ -95,7 +95,6 @@ process GetPath(Sid: term, Path: str?) is
   snd-msg(em-get-path(Sid))
   . rec-msg(em-path(Sid, Path?))
 
-
 process Edit(Path: str, Sid: term?) is
   snd-msg(em-create-session(Path))
   . rec-msg(em-session(Path, Sid?))
@@ -289,21 +288,29 @@ process DeleteSession(Sid: term) is
 let
   Registered: bool
 in
-  IsTextEditorRegistered(Sid, Registered?)
+  snd-msg(em-request-transaction(Sid))
   .
-  if equal(Registered, true) then
-    DeleteTextEditor(Sid)
-  else
-    tau
-  fi
-  . IsStructureEditorRegistered(Sid, Registered?)
-  .
-  if equal(Registered, true) then
-    DeleteStructureEditor(Sid)
-  else
-    tau
-  fi
-  . snd-msg(em-delete-session(Sid))
+  (
+    rec-msg(em-no-transaction(Sid))
+  +
+    rec-msg(em-transaction-started(Sid))
+    . IsTextEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      DeleteTextEditor(Sid)
+    else
+      tau
+    fi
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true) then
+      DeleteStructureEditor(Sid)
+    else
+      tau
+    fi
+    . snd-msg(em-delete-session(Sid))
+    . snd-msg(em-end-transaction(Sid))
+  )
 endlet
 
 process DeleteSessions(ModuleId: term) is
