@@ -28,6 +28,7 @@ lexical variables
 "digit"[0-9]* -> [0-9]
 "digit+"[0-9]* -> [0-9]+
 "head"[0-9]* -> [A-Za-z]
+"middle"[0-9]* -> [A-Za-z0-9\-]
 "tail"[0-9]* -> [A-Za-z0-9\-]*
 "char*"[0-9]* -> StrChar*
 "char+"[0-9]* -> StrChar+

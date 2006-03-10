@@ -15,10 +15,10 @@ equations
 	strcon2idcon(strcon(\" strchar(head) \")) = idcon(head)
 
 [loop]
-	idcon(head2 tail) := strcon2idcon(strcon(\" char* \"))
+	idcon(head tail) := strcon2idcon(strcon(\" strchar(head) char* \"))
 	===>
-	strcon2idcon(strcon(\" strchar(head1) char* \")) =
-	idcon(head1 head2 tail)
+	strcon2idcon(strcon(\" strchar(head) strchar(middle) char* \")) =
+	idcon(head middle tail)
 
 equations
 
