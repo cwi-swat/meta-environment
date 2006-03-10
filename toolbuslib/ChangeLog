@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:51:51 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Wed Mar  8 17:13:27 CET 2006 <jurgenv@cwi.nl>
  * aterm: a tool listens for QUIT and TERM signals and disconnects
    from the ToolBus first before exiting.
