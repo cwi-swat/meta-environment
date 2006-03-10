@@ -1,5 +1,3 @@
-/*{{{  includes */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -7,57 +5,33 @@
 #include "EditorManager.h"
 #include "editor-manager.tif.h"
 
-/*}}}  */
-/*{{{  defines */
-
 #define INITIAL_TABLE_SIZE 100
 #define TABLE_RESIZE_PERCENTAGE 75
-
-/*}}}  */
-/*{{{  variables */
 
 char editor_manager_id[] = "$Id$";
 
 static ATermTable sessions = NULL;
 static ATermTable bindings = NULL;
 
-/*}}}  */
-
-/*{{{  static EM_Sid makeUniqueSessionId() */
-
-static EM_Sid makeUniqueSessionId()
-{
+static EM_Sid makeUniqueSessionId() {
   static int id = 0;
 
   return EM_makeSidDefault(id++);
 }
 
-/*}}}  */
-/*{{{  static ATerm sndValue(ATerm result) */
-
-static ATerm sndValue(ATerm result)
-{
+static ATerm sndValue(ATerm result) {
   assert(result != NULL);
 
   return ATmake("snd-value(<term>)", result);
 }
 
-/*}}}  */
-
-/*{{{  static EM_Session getSession(ATerm sid) */
-
-static EM_Session getSession(ATerm sid)
-{
+static EM_Session getSession(ATerm sid) {
   assert(sid != NULL);
 
   return EM_SessionFromTerm(ATtableGet(sessions, sid));
 }
 
-/*}}}  */
-/*{{{  static void putSession(EM_Session session) */
-
-static void putSession(EM_Session session)
-{
+static void putSession(EM_Session session) {
   EM_Sid sid;
 
   assert(session != NULL);
@@ -66,11 +40,7 @@ static void putSession(EM_Session session)
   ATtablePut(sessions, EM_SidToTerm(sid), EM_SessionToTerm(session));
 }
 
-/*}}}  */
-/*{{{  static EM_Session findSession(const char *path) */
-
-static EM_Session findSession(const char *path)
-{
+static EM_Session findSession(const char *path) {
   ATermList sessionList;
 
   assert(path != NULL);
@@ -88,11 +58,7 @@ static EM_Session findSession(const char *path)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  static ATermList findSessions(const char *moduleId) */
-
-static ATermList findSessions(ATerm moduleId)
-{
+static ATermList findSessions(ATerm moduleId) {
   ATermList result;
   ATermList bindingList;
   EM_ModuleId needle;
@@ -115,34 +81,20 @@ static ATermList findSessions(ATerm moduleId)
   return result;
 }
 
-/*}}}  */
-
-/*{{{  static EM_ModuleId getModuleId(ATerm sid) */
-
-static EM_ModuleId getModuleId(ATerm sid)
-{
+static EM_ModuleId getModuleId(ATerm sid) {
   assert(sid != NULL);
 
   return EM_ModuleIdFromTerm(ATtableGet(bindings, sid));
 }
 
-/*}}}  */
-/*{{{  static void putModuleId(ATerm sid, EM_ModuleId moduleId) */
-
-static void putModuleId(ATerm sid, EM_ModuleId moduleId)
-{
+static void putModuleId(ATerm sid, EM_ModuleId moduleId) {
   assert(sid != NULL);
   assert(moduleId != NULL);
 
   ATtablePut(bindings, sid, EM_ModuleIdToTerm(moduleId));
 }
 
-/*}}}  */
-
-/*{{{  ATerm create_session(int cid, const char *path) */
-
-ATerm create_session(int cid, const char *path)
-{
+ATerm create_session(int cid, const char *path) {
   EM_Session session;
 
   assert(path != NULL);
@@ -159,11 +111,7 @@ ATerm create_session(int cid, const char *path)
   return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
 }
 
-/*}}}  */
-/*{{{  ATerm bind_session(int cid, ATerm sid, ATerm moduleId) */
-
-ATerm bind_session(int cid, ATerm sid, ATerm moduleId)
-{
+ATerm bind_session(int cid, ATerm sid, ATerm moduleId) {
   assert(sid != NULL);
   assert(moduleId != NULL);
 
@@ -183,11 +131,7 @@ ATerm bind_session(int cid, ATerm sid, ATerm moduleId)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm get_session_by_path(int cid, const char *path) */
-
-ATerm get_session_by_path(int cid, const char *path)
-{
+ATerm get_session_by_path(int cid, const char *path) {
   EM_Session session;
   EM_Sid sid;
 
@@ -202,20 +146,12 @@ ATerm get_session_by_path(int cid, const char *path)
   return sndValue(ATmake("session(<term>)", EM_SidToTerm(sid)));
 }
 
-/*}}}  */
-/*{{{  ATerm get_sessions_by_moduleid(int cid, ATerm moduleId) */
-
-ATerm get_sessions_by_moduleid(int cid, ATerm moduleId)
-{
+ATerm get_sessions_by_moduleid(int cid, ATerm moduleId) {
   ATermList sessions = findSessions(moduleId);
   return sndValue(ATmake("sessions(<term>)", sessions));
 }
 
-/*}}}  */
-/*{{{  void delete_session(int cid, ATerm sid) */
-
-void delete_session(int cid, ATerm sid)
-{
+void delete_session(int cid, ATerm sid) {
   EM_Session session = getSession(sid);
 
   if (session != NULL) {
@@ -233,12 +169,7 @@ void delete_session(int cid, ATerm sid)
   }
 }
 
-/*}}}  */
-
-/*{{{  ATerm get_path(int cid, ATerm sid) */
-
-ATerm get_path(int cid, ATerm sid)
-{
+ATerm get_path(int cid, ATerm sid) {
   EM_Session session;
   const char *path;
 
@@ -251,11 +182,7 @@ ATerm get_path(int cid, ATerm sid)
   return sndValue(ATmake("path(<str>)", path));
 }
 
-/*}}}  */
-/*{{{  ATerm get_moduleid(int cid, ATerm sid) */
-
-ATerm get_moduleid(int cid, ATerm sid)
-{
+ATerm get_moduleid(int cid, ATerm sid) {
   EM_Session session;
   EM_ModuleId moduleId;
 
@@ -273,12 +200,7 @@ ATerm get_moduleid(int cid, ATerm sid)
   }
 }
 
-/*}}}  */
-
-/*{{{  void register_editor(int cid, ATerm sid, ATerm editorType) */
-
-void register_editor(int cid, ATerm sid, ATerm editorType)
-{
+void register_editor(int cid, ATerm sid, ATerm editorType) {
   EM_Session session;
 
   session = getSession(sid);
@@ -297,11 +219,7 @@ void register_editor(int cid, ATerm sid, ATerm editorType)
   }
 }
 
-/*}}}  */
-/*{{{  ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType) */
-
-ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType)
-{
+ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType) {
   EM_Session session;
 
   session = getSession(sid);
@@ -320,11 +238,7 @@ ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType)
   return sndValue(ATmake("no-such-session"));
 }
 
-/*}}}  */
-/*{{{  void unregister_editor(int cid, ATerm sid, ATerm editorType) */
-
-void unregister_editor(int cid, ATerm sid, ATerm editorType)
-{
+void unregister_editor(int cid, ATerm sid, ATerm editorType) {
   EM_Session session;
 
   session = getSession(sid);
@@ -346,12 +260,7 @@ void unregister_editor(int cid, ATerm sid, ATerm editorType)
   }
 }
 
-/*}}}  */
-
-/*{{{  ATerm request_transaction(int cid, ATerm sid) */
-
-ATerm request_transaction(int cid, ATerm sid)
-{
+ATerm request_transaction(int cid, ATerm sid) {
   EM_Session session = getSession(sid);
 
   if (session != NULL) {
@@ -370,11 +279,7 @@ ATerm request_transaction(int cid, ATerm sid)
   return sndValue(ATparse("no-transaction"));
 }
 
-/*}}}  */
-/*{{{  void end_transaction(int cid, ATerm) */
-
-void end_transaction(int cid, ATerm sid)
-{
+void end_transaction(int cid, ATerm sid) {
   EM_Session session = getSession(sid);
 
   if (session != NULL) {
@@ -397,21 +302,11 @@ void end_transaction(int cid, ATerm sid)
   }
 }
 
-/*}}}  */
-
-/*{{{  void rec_terminate(int cid, ATerm msg) */
-
-void rec_terminate(int cid, ATerm msg)
-{
+void rec_terminate(int cid, ATerm msg) {
   exit(0);
 }
 
-/*}}}  */
-
-/*{{{  int main(int argc, char *argv[]) */
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ATerm bottomOfStack;
   int cid;
 
@@ -425,5 +320,3 @@ int main(int argc, char *argv[])
 
   return ATBeventloop();
 }
-
-/*}}}  */
