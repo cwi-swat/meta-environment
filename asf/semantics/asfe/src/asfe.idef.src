@@ -29,13 +29,18 @@ in
     . snd-eval(Eval, interpret(ModuleName, Equations, ParseTable, Term, Tide))
     .
     (
-      rec-value(Eval, rewrite-result(NormalForm?)) 
-      . snd-msg(asfe-rewrite-result(NormalForm))
+      (
+        rec-value(Eval, rewrite-result(NormalForm?)) 
+        . snd-msg(asfe-rewrite-result(NormalForm))
+      +
+        rec-value(Eval, rewrite-errors(ErrorList?))
+        . snd-msg(asfe-rewrite-errors(ErrorList))
+      )
+      . snd-terminate(Eval,"done")
     +
-      rec-value(Eval, rewrite-errors(ErrorList?))
-      . snd-msg(asfe-rewrite-errors(ErrorList))
+      rec-disconnect(Eval)
+      . snd-msg(asfe-rewrite-errors([error("the ASFE reducer was aborted",[])]))
     )
-    . snd-terminate(Eval,"done")
     /* Equations and terms can be big, so we clear the variables here */
     . Equations := none
     . Term := none 
@@ -45,11 +50,16 @@ in
     . snd-eval(Eval, run-tests(Equations, Tests, Tide)) 
     .
     (
-      rec-value(Eval, test-results(ErrorList?)) 
-      . snd-msg(asfe-test-results(ErrorList))
+      (
+        rec-value(Eval, test-results(ErrorList?)) 
+        . snd-msg(asfe-test-results(ErrorList))
+      +
+        rec-value(Eval, rewrite-errors(ErrorList?)) 
+        . snd-msg(asfe-rewrite-errors(ErrorList))
+      )
     +
-      rec-value(Eval, rewrite-errors(ErrorList?)) 
-      . snd-msg(asfe-rewrite-errors(ErrorList))
+      rec-disconnect(Eval)
+      . snd-msg(asfe-rewrite-errors([error("the ASFE reducer was aborted",[])]))
     ) 
     . Equations := none 
     . Tests := none

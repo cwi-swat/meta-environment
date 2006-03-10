@@ -457,7 +457,7 @@ static ERR_ErrorList checkIgnoredLayout(PT_Tree tree)
       "is always ignored, use a plus variable";
     ATbool nextIsStarVar = ATfalse;
 
-    if (PT_getArgsLength(args) >= (separated ? 4 : 2)) {
+    if (PT_getArgsLength(args) >= (separated ? 5 : 3)) {
       next = PT_getArgsTreeAt(args, separated ? 4 : 2);
       if (PT_isTreeVarListStar(next)) {
 	nextIsStarVar = ATtrue;
