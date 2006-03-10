@@ -12,3 +12,9 @@ configure
 libtool
 config-support-*.pkg
 config-support-*.tar.gz
+config.guess
+config.sub
+depcomp
+install-sh
+ltmain.sh
+missing
