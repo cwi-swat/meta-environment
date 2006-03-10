@@ -1,6 +1,6 @@
 // Java tool bridge NavigatorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:30 AM
+// generation time: Mar 7, 2006 10:13:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -11,17 +11,11 @@ public class NavigatorBridge
 {
   private NavigatorTif tool;
 
-  //{{{  public NavigatorBridge(ATermFactory factory, NavigatorTif tool)
-
   public NavigatorBridge(ATermFactory factory, NavigatorTif tool)
   {
     super(factory);
     this.tool = tool;
   }
-
-  //}}}
-
-  //{{{  public void selectModule(ATerm t0)
 
   public void selectModule(ATerm t0)
   {
@@ -32,10 +26,6 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `selectModule' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void setModules(ATerm t0)
-
   public void setModules(ATerm t0)
   {
     if (tool != null) {
@@ -45,10 +35,6 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `setModules' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void showPopup(ATerm t0, ATerm t1)
-
   public void showPopup(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -58,10 +44,6 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `showPopup' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void recAckEvent(ATerm t0)
-
   public void recAckEvent(ATerm t0)
   {
     if (tool != null) {
@@ -71,10 +53,6 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `recAckEvent' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void recTerminate(ATerm t0)
-
   public void recTerminate(ATerm t0)
   {
     if (tool != null) {
@@ -84,6 +62,4 @@ public class NavigatorBridge
       throw new UnsupportedOperationException("method `recTerminate' not supported.");
     }
   }
-
-  //}}}
 }

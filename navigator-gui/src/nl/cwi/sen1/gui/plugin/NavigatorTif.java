@@ -1,6 +1,6 @@
 // Java tool interface NavigatorTif
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:30 AM
+// generation time: Mar 7, 2006 10:13:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 

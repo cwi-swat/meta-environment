@@ -68,9 +68,9 @@ public class ModuleTreeModel extends AbstractModuleTreeModel implements
     }
 
     public void selectModule(Module module) {
-        Iterator iter = moduleSelectionListeners.iterator();
+        Iterator<ModuleSelectionListener> iter = moduleSelectionListeners.iterator();
         while (iter.hasNext()) {
-            ModuleSelectionListener l = (ModuleSelectionListener) iter.next();
+            ModuleSelectionListener l = iter.next();
             l.moduleSelected(module);
         }
     }

@@ -1,31 +1,34 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:30 AM
+// generation time: Mar 7, 2006 10:13:27 AM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class NavigatorTool
   extends SwingTool
   implements NavigatorTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PselectModule0;
   private ATerm PsetModules0;
   private ATerm PshowPopup0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
-
-  //}}}
-
-  //{{{  protected NavigatorTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
   protected NavigatorTool(ATermFactory factory)
@@ -35,22 +38,16 @@ abstract public class NavigatorTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<navigator>,set-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<navigator>,select-module(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<navigator>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<navigator>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-do(<navigator>,set-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<navigator>,select-module(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<navigator>,show-popup(<term>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-ack-event(<navigator>,<term>)"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<navigator>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
@@ -61,10 +58,6 @@ abstract public class NavigatorTool
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -97,12 +90,9 @@ abstract public class NavigatorTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -117,15 +107,10 @@ abstract public class NavigatorTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }
