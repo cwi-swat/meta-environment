@@ -1,0 +1,73 @@
+%% Range checks are added for variables that range over character classes.
+%% The check is whether the character that is matched actually fits in the
+%% range of the variable.
+
+equations
+
+[main]
+	add-range-checks(Module) = Module2
+	when <Module2, > := add-range-checks(Module, )
+
+equations
+
+%% This is a top-down breaking traversal that collects conditions for 
+%% each use of a variable that ranges over a character class.
+%% The collected conditions are used, if part of a matching
+%% side of a rewrite rule, or a matching side of a condition,
+%% and immediately spliced in as the next condition after a match.
+
+[matching-cond]
+	<Rhs, Cond*> := add-range-checks(Rhs, )
+	===>
+	add-range-checks(Lhs =: Rhs, ) = 
+	<Lhs =: Rhs & Cond*, >
+
+[rule]
+	<Lhs, Cond+> := add-range-checks(Lhs, )
+	===>
+	add-range-checks(Lhs = Rhs, ) = 
+	<Cond+ ==> Lhs = Rhs,> 
+
+[cond-rule]
+	<Lhs, Cond+1> := add-range-checks(Lhs, ),
+	<Cond+2, Cond*> := add-range-checks(Cond+, )
+	===>
+	add-range-checks(Cond+ ==> Lhs = Rhs, ) =
+	<Cond+1 & Cond+2 & Cond* ==> Lhs = Rhs, >
+	
+[def-rule]
+	<Cond+ ==> Lhs = Rhs, > := add-range-checks(Lhs = Rhs, )
+	===> 
+	add-range-checks(default: Lhs = Rhs, ) = 
+	<default: Cond+ ==> Lhs = Rhs, >
+
+[def-cond-rule]
+	<Cond+2 ==> Lhs = Rhs, > := add-range-checks(Cond+ ==> Lhs = Rhs, )
+	===> 
+	add-range-checks(default: Cond+ ==> Lhs = Rhs, ) = 
+	<default: Cond+2 ==> Lhs = Rhs, >
+
+[collect-char-var-condition]
+	is-char-class(Type) == true
+	===>
+	add-range-checks($ VarId : Type, Cond*) = 
+	<$ VarId : Type, Cond* & is-elem($ VarId , parse-cc(Type)) =: t>
+
+equations
+
+%% TODO: find another solution to this slight detection hack
+
+[is-char-class-true]
+	is-char-class(strcon(\" strchar(c) strchar(h) strchar(a) strchar(r) StrChar* \")) = true
+
+[default-is-char-class-false]
+	is-char-class(_Type) = false
+
+equations
+
+[splice] Cond*1 & < Cond*2 > & Cond*3 = Cond*1 & Cond*2 & Cond*3
+
+tests
+
+
+

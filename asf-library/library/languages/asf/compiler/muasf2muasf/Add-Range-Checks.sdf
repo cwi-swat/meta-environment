@@ -1,0 +1,46 @@
+module languages/asf/compiler/muasf2muasf/Add-Range-Checks
+
+imports languages/asf/compiler/muasf/MuASF-Equations-Ops
+
+exports
+
+context-free syntax
+ 
+  add-range-checks(Module) -> Module
+
+hiddens
+
+  context-free start-symbols
+	Module
+
+  context-free syntax
+    "<" {Cond "&"}* ">" -> Cond
+
+  context-free syntax
+  add-range-checks(Module, {Cond "&"}*) -> <Module, {Cond "&"}*> {traversal(accu, trafo, top-down, break)}
+  add-range-checks({Cond "&"}+, {Cond "&"}*) -> <{Cond "&"}+, {Cond "&"}*> {traversal(accu, trafo, top-down, break)}
+  add-range-checks(Cond, {Cond "&"}*) -> <Cond, {Cond "&"}*> {traversal(accu, trafo, top-down, break)}
+  add-range-checks(Term,   {Cond "&"}*) -> <Term, {Cond "&"}*> {traversal(accu, trafo, top-down, break)}
+  add-range-checks(Rule,   {Cond "&"}*) -> <Rule, {Cond "&"}*> {traversal(accu, trafo, top-down, break)}
+
+  context-free syntax
+  is-char-class(StrCon) -> Boolean
+
+  variables
+   "Cond"[0-9]* -> Cond {strict}
+   "Cond*"[0-9]* -> {Cond "&"}* {strict}
+   "Cond+"[0-9]* -> {Cond "&"}+ {strict}
+   "VarId"[0-9]* -> FunId {strict}
+   "Type"[0-9]* -> StrCon {strict}
+   "Lhs"[0-9]* -> Term {strict}
+   "Rhs"[0-9]* -> Term {strict}
+   "Module"[0-9]* -> Module {strict}
+
+   variables
+    "_Cond*"[0-9]* -> {Cond "&"}* {wild}
+    "_Type"[0-9]*  -> StrCon {wild}
+
+  lexical variables
+   "StrChar*" -> StrChar* {wild}
+
+
