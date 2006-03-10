@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:25:00 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Mainainers use ATerm-dbg library
+
 Mon Jan 30 09:04:06 CET 2006 <kooiker@cwi.nl>
  * utils/sdf-modules/src/sdf-modules.c:
    - get_new_module_name handles searchpaths correct

@@ -11,3 +11,11 @@ config.status
 configure
 *.classpath
 *.project
+config.guess
+config.sub
+depcomp
+INSTALL
+install-sh
+libtool
+ltmain.sh
+missing

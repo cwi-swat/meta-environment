@@ -20,16 +20,23 @@ INCLUDES = \
 	-DSRC_DIR=\"${srcdir}\"
 
 pt2sdf_SOURCES = pt2sdf-test.c
+
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 pt2sdf_LDADD = \
 	-L${top_builddir}/lib -lPT2SDF -lSDFME \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(ATERM)/lib -lATerm
+	-L$(ATERM)/lib -l$(ATERM_LIB)
 
 LDLIBS = \
 	-L../lib -lSDFME \
 	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ATERM)/lib -lATerm
+	-L$(ATERM)/lib -l$(ATERM_LIB)
 
 grammars_SOURCES = grammars.c
 grammars_LDADD = $(LDLIBS)

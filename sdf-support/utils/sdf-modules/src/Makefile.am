@@ -14,12 +14,18 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	module-table.c \
 	sdf-imports.c
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 sdf_modules_LDADD = \
 	-L$(top_builddir)/lib -lSDFME  \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 noinst_HEADERS = \

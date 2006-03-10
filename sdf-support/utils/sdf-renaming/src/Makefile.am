@@ -10,11 +10,17 @@ pkgdata_DATA = sdf-renaming.idef
 
 bin_PROGRAMS = sdf-renaming
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 sdf_renaming_SOURCES = sdf-renaming.c sdf-renaming.tif.c
 sdf_renaming_LDADD = -L$(top_builddir)/lib -lSDFME -lSDF2PT \
 		 -L$(PT_SUPPORT)/lib -lmept \
 		 -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-                 -L$(ATERM)/lib -lATerm \
+                 -L$(ATERM)/lib -li$(ATERM_LIB) \
                  -L$(TOOLBUSLIB)/lib -lATB \
                  $(SOCKLIBS)
 
