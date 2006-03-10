@@ -40,6 +40,7 @@ in
         rec-msg(te-contents-changed(Sid))
       +
         rec-msg(te-contents-saved(Sid))
+	. printf("term-editor-utils.tb: Contents Saved\n")
         . UpdateTermStructure(Sid)
       +
         rec-note(mm-attribute-changed(Event?))
@@ -60,7 +61,6 @@ endlet
 
 process UpdateTermStructure(Sid: term) is
 let
-  Event: attribute-changed-event,
   ModuleId: term,
   Slices: term,
   Tree: term,
