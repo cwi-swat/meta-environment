@@ -12,3 +12,11 @@ autom*.cache
 error-support-*.tar.gz
 .classpath
 .project
+config.guess
+config.sub
+depcomp
+INSTALL
+install-sh
+libtool
+ltmain.sh
+missing
