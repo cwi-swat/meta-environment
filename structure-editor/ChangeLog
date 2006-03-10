@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:55:57 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Thu Mar  9 15:12:25 CET 2006 <kooiker@cwi.nl>
  * src/structure-editor.c:
    - Remove cursor when updating parsetree

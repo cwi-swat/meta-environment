@@ -19,6 +19,12 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 structure_editor_SOURCES = \
 	structure-editor.c \
 	structure-editor.tif.c \
@@ -29,7 +35,7 @@ structure_editor_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 libStructureEditor_a_SOURCES = \
