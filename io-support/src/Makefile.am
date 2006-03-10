@@ -20,12 +20,18 @@ in_output_SOURCES = \
 	in-output.tif.c \
 	main.c
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 in_output_LDADD = \
 	-L$(top_builddir)/lib -lIOAPI \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(CONFIG_SUPPORT)/lib -lConfigAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 %.idef: %.idef.src Makefile

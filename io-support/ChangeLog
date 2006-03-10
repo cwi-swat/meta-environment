@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 08:54:27 CET 2006 <kooiker@cwi.nl>
+ * src/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Mon Feb 20 12:23:48 CET 2006 <kooiker@cwi.nl>
  * src/{main.c,in-output.idef}:
    - Add API functions for File
