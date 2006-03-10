@@ -14,4 +14,4 @@ apply-function
 comparePT
 apply-function.idef
 unparser.idef
-position-annotater.idef
+position-annotator.idef
