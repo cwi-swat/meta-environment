@@ -20,7 +20,7 @@ sdf_renaming_SOURCES = sdf-renaming.c sdf-renaming.tif.c
 sdf_renaming_LDADD = -L$(top_builddir)/lib -lSDFME -lSDF2PT \
 		 -L$(PT_SUPPORT)/lib -lmept \
 		 -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-                 -L$(ATERM)/lib -li$(ATERM_LIB) \
+                 -L$(ATERM)/lib -l$(ATERM_LIB) \
                  -L$(TOOLBUSLIB)/lib -lATB \
                  $(SOCKLIBS)
 
