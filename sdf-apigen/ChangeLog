@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Mar 10 11:38:23 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Tue Feb 28 09:14:31 CET 2006 <kooiker@cwi.nl>
  * test/Makefile.am:
    - Use clean-local and distclean-local to extend the clean and distclean

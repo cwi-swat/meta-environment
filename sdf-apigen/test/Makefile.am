@@ -13,8 +13,15 @@ Peano_Main = PeanoTest
 
 # C programs
 INCLUDES                = -I${ATERM}/include
+
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 booltest_SOURCES	= Booleans.c Booleans_dict.c booltest.c
-booltest_LDADD		= -L$(ATERM)/lib -lATerm
+booltest_LDADD		= -L$(ATERM)/lib -l$(ATERM_LIB)
 booltest_DEPENDENCIES	= booltest.pt
 
 # Java programs
