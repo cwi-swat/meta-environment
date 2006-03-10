@@ -30,12 +30,18 @@ INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
 			-I${top_srcdir}/libtb \
 			-I$(ATERM)/include 
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 toolbus_adapter_SOURCES = toolbus-adapter.tif.c toolbus-adapter.tif.h \
 			toolbus-adapter.c
 
 toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb \
                          -L${TOOLBUSLIB}/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+			 -L$(ATERM)/lib -l$(ATERM_LIB)
 
 %.tif.c %.tif.h: %.tifs
 	$(top_builddir)/aterm/tifstoc -tool $* $<
