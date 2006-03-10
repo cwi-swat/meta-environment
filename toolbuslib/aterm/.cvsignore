@@ -3,6 +3,7 @@ Makefile
 tifstoc
 tblog
 tblog-interface.tifs
+tbunpack
 .deps
 *.tif.[ch]
 *_dict.[ch]
