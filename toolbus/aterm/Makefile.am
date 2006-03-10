@@ -21,20 +21,26 @@ INCLUDES = \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATINC)
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 tblog_SOURCES = tblog_dict.c logger.tif.c tblog.c
 tblog_LDADD = \
 	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -lATerm
+	-L$(ATLIB) -l$(ATERM_LIB)
 
 tifstoc_SOURCES = tifs.c tifstoc.c
 tifstoc_LDADD = \
 	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -lATerm
+	-L$(ATLIB) -l$(ATERM_LIB)
 
 merge_tifs_SOURCES = tifs.c merge-tifs.c
 merge_tifs_LDADD = \
 	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -lATerm
+	-L$(ATLIB) -l$(ATERM_LIB)
 
 noinst_HEADERS = logger.tif.h  tblog_dict.h  tifs.h
 

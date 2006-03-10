@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:54:34 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Wed Mar  8 17:32:28 CET 2006 <jurgenv@cwi.nl>
  * toolbus/tools.c: changed the tool protocol. A tool may send
    a disconnect even when in waiting on a result from the
