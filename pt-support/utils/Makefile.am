@@ -43,6 +43,12 @@ noinst_HEADERS = \
 	apply-function.tif.h \
 	position-annotator.tif.h 
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 apply_function_SOURCES = \
 	apply-function.tif.c \
 	apply-function.c
@@ -50,7 +56,7 @@ apply_function_SOURCES = \
 apply_function_LDADD = \
 	-L../libmept -lmept \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib $(ATERM_LIB) \
 	${SOCKLIBS}
 
 addPosInfo_SOURCES = \
@@ -61,21 +67,21 @@ addPosInfo_LDADD = \
 	-L../libmept -lmept \
 	-L${ERROR_SUPPORT}/lib -lLocationAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib $(ATERM_LIB) \
 	${SOCKLIBS}
 
 flattenPT_SOURCES = flattenPT-main.c
 
 flattenPT_LDADD	= \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib $(ATERM_LIB)
 
 liftPT_SOURCES	= liftPT-main.c
 
 liftPT_LDADD = \
 	-L../libptmept -lPTMEPT \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib $(ATERM_LIB)
 
 unparsePT_SOURCES = \
 	unparser.tif.c \
@@ -84,7 +90,7 @@ unparsePT_SOURCES = \
 unparsePT_LDADD = \
 	../libmept/libmept.a \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib $(ATERM_LIB) \
 	${SOCKLIBS}
 
 comparePT_SOURCES = \
@@ -92,20 +98,20 @@ comparePT_SOURCES = \
 
 comparePT_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -lATerm 
+	-L${ATERM}/lib $(ATERM_LIB) 
 
 unparseProd_SOURCES = unparseProd-main.c
 
 unparseProd_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib $(ATERM_LIB)
 
 ambtracker_SOURCES = ambtracker-main.c
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib $(ATERM_LIB)
 
 IDEF = idef2tif
 TIFS = tifstoc
