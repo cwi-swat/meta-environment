@@ -29,6 +29,12 @@ CLEANFILES = \
 	${noinst_SCRIPTS} \
 	${bin_SCRIPTS}
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 configmanager_SOURCES = \
 	configmanager.c \
 	configuration-manager.tif.c
@@ -36,7 +42,7 @@ configmanager_SOURCES = \
 configmanager_LDADD = \
 	-L$(CONFIG_SUPPORT)/lib -lConfigAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 absolute_srcdir=$(shell cd ${srcdir}; pwd)
