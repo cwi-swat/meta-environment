@@ -102,6 +102,13 @@ EXTRA_DIST = Library.def
 # generate a program that calls all builtins and try to compile and link 
 # it:
 check_PROGRAMS=builtin-link-test
+
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD = \
 	-L. -lasc-support-me \
@@ -111,7 +118,7 @@ builtin_link_test_LDADD = \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -lATerm \
+	-L${ATERM}/lib -l$(ATERM_LIB) \
 	${SOCKLIBS}
 
 UTILS=${top_srcdir}/utils

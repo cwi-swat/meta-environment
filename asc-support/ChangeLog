@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:53:37 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainters use ATerm-dbg library
+
 Wed Mar  8 14:03:38 CET 2006 <jurgenv@cwi.nl>
  * lib/*: added rudimentary support for rewriting with layout by
    compiled specifications. Currently, this only works for rewriting
