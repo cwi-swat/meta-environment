@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:48:07 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
 Wed Feb  1 14:29:46 CET 2006 <kooiker@cwi.nl>
  * configure.ac:
    - use libtool

@@ -16,6 +16,12 @@ INCLUDES = \
 	-I$(ATERM)/include \
 	-I$(TOOLBUSLIB)/include
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 editor_manager_SOURCES = \
 	editor-manager.tif.c \
 	editor-manager.c
@@ -23,7 +29,7 @@ editor_manager_SOURCES = \
 editor_manager_LDADD = \
 	-L$(top_builddir)/src -lEditorManager \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -l$(ATERM_LIB) \
 	$(SOCKLIBS)
 
 libEditorManager_a_SOURCES = \
