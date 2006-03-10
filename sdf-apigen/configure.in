@@ -16,6 +16,8 @@ AC_AIX
 AC_PROG_CC
 AC_PROG_LIBTOOL
 
+AM_MAINTAINER_MODE
+
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_PROG_MAKE_SET([])
 
