@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 10 11:32:29 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   Maintainers use ATerm-dbg library
+
 Wed Mar  8 10:54:42 CET 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/matching: the matcher will ignore all layout that
    surrounds a star variable in a list. The reason is that if the 

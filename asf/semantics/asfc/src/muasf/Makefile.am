@@ -9,9 +9,17 @@ EXTRA_DIST		= MuASF.label.def
 
 AM_CFLAGS		= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include
-LDADD			= -lATerm
 
-# Developers only:
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
+LDADD = -l$(ATERM_LIB)
+
+if MAINTAINER_MODE
+
 LIBRARY=../../../../../asf-library/library
 SPEC=${LIBRARY}/languages/asf/compiler/
 
@@ -31,3 +39,5 @@ api: MuASF.label.def
 
 api-clean:
 	rm -f MuASF.[ch] MuASF_dict.* MuASF.adt
+
+endif
