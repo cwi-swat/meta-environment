@@ -18,6 +18,12 @@ INCLUDES = \
 
 noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 layoutgraph_SOURCES = \
 	layoutgraph.c \
 	layoutgraph.tif.c \
@@ -30,7 +36,7 @@ layoutgraph_LDADD = \
 	-L${top_builddir}/lib \
 	-L$(ATERM)/lib \
 	-L${TOOLBUSLIB}/lib \
-	-lATerm \
+	-l$(ATERM_LIB) \
 	-lATB \
 	-lGraph \
         ${SOCKLIBS}
@@ -41,7 +47,7 @@ graph2dot_SOURCES = \
 
 graph2dot_LDADD = \
 	-L${top_builddir}/lib -lGraph \
-	-L${ATERM}/lib -lATerm
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 y.tab.c y.tab.h: dot.y
 	$(YACC) -v $(AM_YFLAGS) $(YFLAGS) $<

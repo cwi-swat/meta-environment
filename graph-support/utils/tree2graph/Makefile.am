@@ -21,6 +21,12 @@ noinst_HEADERS = \
 	graph-converter.tif.h \
 	PT2graph.h
 
+if MAINTAINER_MODE
+ATERM_LIB = ATerm-dbg
+else
+ATERM_LIB = ATerm
+endif
+
 tree2graph_SOURCES = \
 	PT2graph.c \
 	graph-converter.tif.c \
@@ -32,7 +38,7 @@ tree2graph_LDADD = \
    -L${TOOLBUSLIB}/lib -lATB \
    -L$(ERROR_SUPPORT)/lib -lLocationAPI \
    -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-   -L${ATERM}/lib -lATerm \
+   -L${ATERM}/lib -l$(ATERM_LIB) \
    ${SOCKLIBS}
 
 %.idef: %.idef.src Makefile

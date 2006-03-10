@@ -3,8 +3,7 @@
 lib_LIBRARIES = libGraph.a
 include_HEADERS = Graph.h Graph_dict.h
 noinst_HEADERS = Graph.h Graph_dict.h
-pkgdata_DATA = Graph.adt
-data_DATA = ${JARFILE}
+pkgdata_DATA = Graph.adt ${JARFILE}
 
 EXTRA_DIST = Graph.adt graph-${VERSION}.jar
 

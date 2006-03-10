@@ -1,5 +1,15 @@
 $Id$
 
+Fri Mar 10 11:41:38 CET 2006 <kooiker@cwi.nl>
+ * **/Makefile.am:
+   - Maintainers use ATerm-dbg library
+
+Mon Mar  6 10:30:32 CET 2006 <kooiker@cwi.nl>
+ * lib/Makefile.am:
+   - Add jar file to pkgdata_DATA
+ * utils/graph-support-config.sh.src:
+   - Adapt installation directory
+
 Tue Jan  3 08:18:25 CET 2006 <kooiker@cwi.nl>
  * lib/Makefile.am:
    - remove INCLUDES from MAINTAINER_MODE section

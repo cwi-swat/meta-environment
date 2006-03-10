@@ -1,7 +1,8 @@
 .deps
 Graph.adt
+graph-converter.idef
+graph-converter.tifs
+.libs
 Makefile
 Makefile.in
 tree2graph
-graph-converter.tifs
-graph-converter.idef
