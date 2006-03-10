@@ -56,7 +56,7 @@ apply_function_SOURCES = \
 apply_function_LDADD = \
 	-L../libmept -lmept \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib $(ATERM_LIB) \
+	-L${ATERM}/lib -l$(ATERM_LIB) \
 	${SOCKLIBS}
 
 addPosInfo_SOURCES = \
@@ -67,21 +67,21 @@ addPosInfo_LDADD = \
 	-L../libmept -lmept \
 	-L${ERROR_SUPPORT}/lib -lLocationAPI \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib $(ATERM_LIB) \
+	-L${ATERM}/lib -l$(ATERM_LIB) \
 	${SOCKLIBS}
 
 flattenPT_SOURCES = flattenPT-main.c
 
 flattenPT_LDADD	= \
 	-L../libmept -lmept \
-	-L${ATERM}/lib $(ATERM_LIB)
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 liftPT_SOURCES	= liftPT-main.c
 
 liftPT_LDADD = \
 	-L../libptmept -lPTMEPT \
 	-L../libmept -lmept \
-	-L${ATERM}/lib $(ATERM_LIB)
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 unparsePT_SOURCES = \
 	unparser.tif.c \
@@ -90,7 +90,7 @@ unparsePT_SOURCES = \
 unparsePT_LDADD = \
 	../libmept/libmept.a \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib $(ATERM_LIB) \
+	-L${ATERM}/lib -l$(ATERM_LIB) \
 	${SOCKLIBS}
 
 comparePT_SOURCES = \
@@ -98,20 +98,20 @@ comparePT_SOURCES = \
 
 comparePT_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib $(ATERM_LIB) 
+	-L${ATERM}/lib -l$(ATERM_LIB) 
 
 unparseProd_SOURCES = unparseProd-main.c
 
 unparseProd_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib $(ATERM_LIB)
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 ambtracker_SOURCES = ambtracker-main.c
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib $(ATERM_LIB)
+	-L${ATERM}/lib -l$(ATERM_LIB)
 
 IDEF = idef2tif
 TIFS = tifstoc

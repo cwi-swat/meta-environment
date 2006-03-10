@@ -17,7 +17,7 @@ mept_test_LDADD=\
 	-L$(top_builddir)/libmept -lmept\
 	-L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(top_builddir)/test/terms -ltestTerms \
-	-L$(ATERM)/lib $(ATERM_LIB)
+	-L$(ATERM)/lib -l$(ATERM_LIB)
 
 INCLUDES =\
 	-I${top_srcdir}/libmept\
