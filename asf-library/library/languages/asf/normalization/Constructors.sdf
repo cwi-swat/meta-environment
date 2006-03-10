@@ -78,10 +78,11 @@ variables
 	"Ann"[0-9]* -> P-Annotation {strict}
 
 variables
+	"_Attr+"[0-9]* -> {P-Attr ","}+ {wild}
 	"_QLit" -> StrCon {wild}
 	"_Args" -> P-Args {wild}
 	"_Symbols" -> P-Symbols {wild}
-	"_Attributes" -> P-Attributes {wild}
+	"_Attributes"[0-9]* -> P-Attributes {wild}
 	"_Name"[0-9]* -> P-Tree {wild}
 	"_" "BO"|"BC" -> P-Tree {wild}
 	"_L"[0-9]* -> P-Tree {wild}

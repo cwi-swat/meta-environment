@@ -7,7 +7,6 @@ equations
 	constructors(Module) = deconstruct(Module)
 
 equations
-
 %% This function maps lexical constructor syntax back to normal syntax.
 %% The resulting tree are ``as if the parser produced them''.
 
@@ -29,7 +28,7 @@ equations
 [deconstruct-injection]
 	deconstruct(
 	appl(prod([cf(parameterized-sort("CHARS",[Symbol]))],cf(Symbol),
-		no-attrs),
+		_Attributes),
 	[Tree]) Ann) = 
 	appl(prod([lex(Symbol)],cf(Symbol),no-attrs),[Tree]) Ann
 
@@ -55,6 +54,11 @@ equations
  [deconstruct-escaped-char-to-real-char]
 	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort("ASF-ShortChar")),attrs([term(cons("escaped"))])),[92,Tree])_Ann4])_Ann3])_Ann2])_Ann1) = 
 	reserved-chars(Tree)
+
+[test]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),_Attributes),[appl(prod([cf(parameterized-sort("CHAR",[Symbol2]))],cf(sort("CHAR")),_Attributes2),[appl(prod([varsym(cf(parameterized-sort("CHAR",[Symbol2])))],cf(parameterized-sort("CHAR",[Symbol2])),no-attrs),[appl(prod(Symbols,varsym(cf(parameterized-sort("CHAR",[Symbol2]))),Attributes),Args)Ann1])_Ann2])_Ann3])_Ann4)
+	= 
+	appl(prod([varsym(lex(Symbol2))],lex(Symbol2),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol2)),Attributes),Args)]) Ann1
 
 [deconstruct-CHAR-variable-to-lexical-variable]
 	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),no-attrs),[appl(prod([varsym(cf(sort("CHAR")))],cf(sort("CHAR")),no-attrs),[appl(prod(Symbols,varsym(cf(sort("CHAR"))),Attributes),Args)_Ann3])_Ann2]) Ann1)
