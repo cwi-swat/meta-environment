@@ -93,6 +93,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
             panel.setGraphPanelListener(new GraphPanelListener() {
                 public void nodeSelected(String id) {
+                    System.err.println("GraphPainter: Node: " + id + ", GraphId: " + graphId);
                     NodeId nodeId = graphFactory.NodeIdFromString(id);
                     bridge.postEvent(studio.getATermFactory().make(
                             "node-selected(<str>,<term>)", graphId,

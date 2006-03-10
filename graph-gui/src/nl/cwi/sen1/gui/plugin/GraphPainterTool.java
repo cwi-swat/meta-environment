@@ -5,8 +5,10 @@
 package nl.cwi.sen1.gui.plugin;
 
 import aterm.*;
-import toolbus.*;
 import java.util.*;
+
+import toolbus.*;
+
 
 abstract public class GraphPainterTool
   extends SwingTool

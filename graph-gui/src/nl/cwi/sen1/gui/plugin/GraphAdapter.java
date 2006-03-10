@@ -74,6 +74,8 @@ public class GraphAdapter extends DefaultGraph {
 
             addEdge(pEdge);
         }
+        
+        System.err.println("GraphAdapter: " + toString());
     }
 
     private Point2D[] getControlPoints(Edge edge) {

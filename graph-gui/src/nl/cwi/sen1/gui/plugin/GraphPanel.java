@@ -119,9 +119,11 @@ public class GraphPanel extends JPanel {
 
         registry.getDefaultFocusSet().addFocusListener(new FocusListener() {
             public void focusChanged(FocusEvent e) {
+                System.err.println("GraphPanel: Registry: " + registry.toString());
                 NodeItem n = registry
                         .getNodeItem((edu.berkeley.guir.prefuse.graph.Node) e
                                 .getFirstAdded());
+                System.err.println("GraphPanel: NodeItem: " + n);
                 fireNodeSelected(n == null ? null : n.getAttribute(ID));
 
                 highlighting.runNow();
@@ -288,6 +290,7 @@ public class GraphPanel extends JPanel {
     }
 
     protected void fireNodeSelected(String selectedNodeId) {
+        System.err.println("GraphPanel: Selected Node: " + selectedNodeId);
         listener.nodeSelected(selectedNodeId);
     }
 
