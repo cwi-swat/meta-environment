@@ -1,5 +1,9 @@
 $Id$
 
+Mon Mar 13 19:13:42 CET 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - change JRadioButtonMenuItem to JMenuItem (closes #559)
+
 Thu Feb 23 10:56:28 CET 2006 <kooiker@cwi.nl>
  * utils/**/StudioMenuBar.java:
    - Fix findSubMenu

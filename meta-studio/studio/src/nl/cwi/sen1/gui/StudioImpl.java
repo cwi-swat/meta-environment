@@ -487,18 +487,18 @@ public class StudioImpl implements Studio, GuiTif {
         for (int i = 0; i < themes.length; i++) {
             final DockingWindowsTheme theme = themes[i];
 
-            JRadioButtonMenuItem item = new JRadioButtonMenuItem(theme
+            JMenuItem item = new JRadioButtonMenuItem(theme
                     .getName());
             item.setSelected(i == 4);
-            group.add(item);
-
-            themesMenu.add(item).addActionListener(new ActionListener() {
+            item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Clear the modified properties values
                     properties.getMap().clear(true);
                     setTheme(theme);
                 }
             });
+            group.add(item);
+	    themesMenu.add(item);
         }
 
         return themesMenu;
