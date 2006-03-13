@@ -31,4 +31,8 @@ public class ProgressTableModel extends DefaultTableModel {
         }
         fireTableDataChanged();
     }
+
+    public boolean isCellEditable(int row, int col) {
+      return false;
+    }
 }

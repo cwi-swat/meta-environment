@@ -1,4 +1,8 @@
 $Id$
 
+Mon Mar 13 18:50:43 CET 2006 <kooiker@cwi.nl>
+ * **/data/ProgressTableModel.java:
+   - override isCellEditable returning false
+
 Mon Jan 30 10:55:40 CET 2006 <kooiker@cwi.nl>
  * Initial version 
