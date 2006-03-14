@@ -2,7 +2,12 @@
 pkgdata_DATA	= $(wildcard *.tb) control.tb tide.tifs
 noinst_SCRIPTS  = tide.tifs
 
-EXTRA_DIST	= $(wildcard *.tb) control.tb.src tide.tifs
+EXTRA_DIST	= \
+		  adapter.tb  \
+		  tide.tb  \
+		  tool.tb \
+		  control.tb.src \
+		  tide.tifs
 
 CLEANFILES = control.tb
 
