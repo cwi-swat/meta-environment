@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Tue Mar 14 15:49:54 CET 2006 <kooiker@cwi.nl>
+ * {configure.in,package}: remove dependency on meta-doc
+
 Sat Mar  4 11:57:14 CET 2006 <jurgenv@cwi.nl>
  * {configure.in,package}: added dependency on meta-doc
 
