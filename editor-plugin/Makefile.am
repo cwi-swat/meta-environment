@@ -16,7 +16,7 @@ pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
 bin_SCRIPTS = $(TOOLNAME)-config
 noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
 
-EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef
+EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef.src
 
 CLEANFILES = $(TOOLNAME)-config $(TOOLNAME)-$(VERSION).pkg
 
