@@ -9,7 +9,6 @@ TBSCRIPTS = \
 	    sdf-editor-actions.tb \
 	    sdf-editor-listeners.tb \
 	    sdf-editor-utils.tb \
-	    sdf-initialize.tb \
 	    sdf-listeners.tb \
 	    sdf-meta.tb \
 	    sdf-namespace.h \
@@ -23,6 +22,7 @@ TBSCRIPTS = \
   
 GENERATED_TBSCRIPTS = \
 		      sdf2-language.tb \
+		      sdf-initialize.tb \
 		      start-meta-studio.tb \
 		      start-def-dump.tb \
 		      start-pt-dump.tb
