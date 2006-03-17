@@ -1,0 +1,13 @@
+package 
+identification
+   name=c-library
+   version=1.0
+   location=http://www.cwi.nl/projects/MetaEnv/c-library
+   info=http://www.cwi.nl/projects/MetaEnv/c-library
+   description='A collection of useful C functions.'
+
+   keywords=c-library
+
+configuration interface
+
+requires

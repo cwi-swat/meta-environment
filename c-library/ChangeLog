@@ -1,0 +1,5 @@
+$Id$
+
+Fri Mar 17 15:04:10 CET 2006 <economop@cwi.nl>
+ * Initial version of c-library package. This library should only contain 
+   library functions and no executables. 
