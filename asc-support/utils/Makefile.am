@@ -30,7 +30,7 @@ ASC_LD_FLAGS=\
 
 
 % : %.src Makefile
-	sed 's@__PREFIX__@$(prefix)@g;\
+	sed "s@__PREFIX__@$(prefix)@g;\
              s@__LDFLAGS__@$(ASC_LD_FLAGS)@g;\
-             s@__INCLUDES__@$(ASC_INCLUDES)@g' < $< > $@ && \
+             s@__INCLUDES__@$(ASC_INCLUDES)@g" < $< > $@ && \
 	chmod +x $@
