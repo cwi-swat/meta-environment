@@ -32,5 +32,5 @@ TBSCRIPTS = \
 CLEANFILES  = meta-config
 
 % : %.sh.src Makefile
-	sed 's@__PREFIX__@$(prefix)@g;\
-	     s@__TBSCRIPTS__@$(TBSCRIPTS)@g;' < $< > $@ && chmod +x $@
+	sed "s@__PREFIX__@$(prefix)@g;\
+	     s@__TBSCRIPTS__@$(TBSCRIPTS)@g;" < $< > $@ && chmod +x $@
