@@ -45,10 +45,10 @@ LIBRARY_LOCATION = \
 		   ${SDF_LIBRARY}/share/sdf-library/library
 
 %.tb: %.tb.src Makefile
-	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
-             s@__SDF_META__@$(prefix)/share/sdf-meta@g;' \
+	sed "s@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
+             s@__SDF_META__@$(prefix)/share/sdf-meta@g;" \
 	    < $< > $@ 
 
 standard.sdf.actions:  standard.sdf.actions.src Makefile
-	sed 's@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g;' < $< > $@
+	sed "s@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g;" < $< > $@
 
