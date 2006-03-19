@@ -33,14 +33,14 @@ pkgdata_DATA = \
 	standard.asfsdf.actions
 
 %.tb : %.tb.src Makefile
-	sed 's@__ASF__@${ASF}@g; \
+	sed "s@__ASF__@${ASF}@g; \
 	     s@__ASFSDF_META__@${prefix}/share/asfsdf-meta/@g; \
 	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library/library@g; \
 	     s@__META__@${META}@g; \
-	     s@__VERSION__@${VERSION}@g;' \
+	     s@__VERSION__@${VERSION}@g;" \
 	     < $< \
 	     > $@
 
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
-	sed 's@__SDF_META__@${SDF_META}@g; \
-	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library/library@g' < $< > $@
+	sed "s@__SDF_META__@${SDF_META}@g; \
+	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library/library@g" < $< > $@
