@@ -55,23 +55,23 @@ CLEANFILES = \
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
 %.test: %.src Makefile
-	sed 's@__BINDIR__@$(top_builddir)/src@g;\
+	sed "s@__BINDIR__@$(top_builddir)/src@g;\
              s@__ACTIVATE__@0@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__CHECKERDIR__@${top_builddir}/sdf-checker/src@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
-             s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
+             s@__DATADIR__@$(top_srcdir)/grammar@g;" < $< > $@ && \
 	chmod +x $@
 
 # and one sdf2table for installed binaries and data
 % : %.src Makefile
-	sed 's@__BINDIR__@$(bindir)@g;\
+	sed "s@__BINDIR__@$(bindir)@g;\
              s@__ACTIVATE__@1@g;\
              s@__PREFIX__@${prefix}@g;\
              s@__CHECKERDIR__@$(bindir)@g;\
              s@__SGLR__@$(SGLR)@g;\
              s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
-             s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
+             s@__DATADIR__@$(pkgdatadir)@g;" < $< > $@ && \
 	chmod +x $@
 
 asfc: Sdf2-Normalization.eqs
