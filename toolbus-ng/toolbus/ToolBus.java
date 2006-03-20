@@ -387,18 +387,21 @@ public class ToolBus {
 	/** addToolInstance adds a new tool instance
 	 * 
 	 * @param toolName name of the tool
+	 * @param alreadyExecuting TODO
 	 * @return the tool instance
 	 * @throws ToolBusException
 	 */
 
-	synchronized public ToolInstance addToolInstance(String toolName) throws ToolBusException {
+	synchronized public ToolInstance addToolInstance(String toolName, boolean alreadyExecuting) throws ToolBusException {
 		ATermList sig = getSignature();
 		//System.err.println("addToolInstance: " + toolName + ", " + sig);
 		ToolDefinition TD = getToolDefinition(toolName);
 		TD.setToolSignatures(sig);
 		ToolInstance ti = new ToolInstance(TD, this, tools.size(), tbfactory);
 		tools.addElement(ti);
-		ti.executeTool();
+		if(!alreadyExecuting){
+			ti.executeTool();
+		}
 		return ti;
 	}
 

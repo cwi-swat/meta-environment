@@ -2,6 +2,7 @@ package toolbus.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -487,13 +488,13 @@ protected static void defineBuilders() {
         }
     });
     /*
-     * Include directive
+     * #include <file>
      */
     
     define(new NodeBuilder("ttt-Include") {
         public Object build(Object args[]) {
         	String filename = ((ATermAppl) args[0]).getName();
-        	
+        	filename = filename.substring(1,filename.length()-1); // strip < and >
           return new Include(filename);
         }
       });
@@ -547,7 +548,6 @@ protected static void defineBuilders() {
 				for (int i = 0; i < argslength; i++)
 					oargs[i] = build(args[i]);
 				Object res = nd.build(oargs);
-				//System.err.println("build: " + res);
 				return res;
 			}
 
@@ -558,6 +558,7 @@ protected static void defineBuilders() {
 				lst2 = tbfactory.makeList((ATerm) build(lst1.elementAt(i)), lst2);
 			}
 			return lst2;
+			
 		default:
 			return t;
 		}
@@ -569,6 +570,8 @@ public class TScriptParser {
   private static TBTermFactory tbfactory;
   private ExternalParser externalparser;
   private HashSet<String> includedFiles;
+  private HashSet<ATerm> definedConstants;
+  private HashMap<ATerm,ATerm> valuedConstants;
   private ToolBus toolbus;
 
   public TScriptParser(ExternalParser ep, ToolBus tb) {
@@ -576,6 +579,8 @@ public class TScriptParser {
     toolbus = tb;
     tbfactory = toolbus.getTBTermFactory();
     includedFiles = new HashSet<String>();
+    definedConstants = new HashSet<ATerm>();
+    valuedConstants = new HashMap<ATerm,ATerm>();
     TScriptNodeBuilders.init(tbfactory, this);
   }
   private LinkedList<ATerm> calls;
@@ -603,39 +608,87 @@ public class TScriptParser {
     }
 
     ATerm args[] = ((ATermAppl) interm).getArgumentArray();
-
-    ATermList decls = (ATermList) args[0];
  
-    for (int i = 0; i < decls.getLength(); i++) {
-      //System.err.println(decls.elementAt(i));
-      Object elm = decls.elementAt(i);
-      if(elm instanceof ATermList){
-      	 ATermList toolbusArgs = (ATermList) elm; 
-      	 for(int j = 0; j < toolbusArgs.getLength(); j++){
-      	 	calls.addLast(toolbusArgs.elementAt(j));
-      	 }
-      } else {
-    	  try {
-	      	Object def = TScriptNodeBuilders.build((ATerm) elm);
-	
-	      	if(def instanceof ProcessDefinition){
-	      		String processName = ((ProcessDefinition) def).getName();
-	      		TScriptNodeBuilders.processName = processName;
-	      		// We have already parsed def as a ProcessDefinition and extracted its process name,
-	      		// next we parse it again! so that we qualify all variables with that name.
-	      		// TODO: replace by a simple scan that replaces the variables.
-	      		toolbus.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders.build((ATerm) elm));
-	      	} else if(def instanceof ToolDefinition) {
-	    	    toolbus.addToolDefinition((ToolDefinition) def);
-	      	} else if(def instanceof Include){
-	      		doParseInclude(((Include) def).getFilename());
-	      	} else
-	      		toolbus.error(filename, "Process or Tool definition expected");
-    	  } catch(ToolBusError e){
-    		  toolbus.error(filename, e.getMessage());
-    	  }
-      }
-    }
+    handleDeclarations(filename, (ATermList) args[0]);
+  }
+  
+  public void handleDeclarations(String filename, ATermList decls)
+			throws ToolBusException {
+		for (int i = 0; i < decls.getLength(); i++) {
+			Object decl = decls.elementAt(i);
+			if (decl instanceof ATermList) {
+				ATermList toolbusArgs = (ATermList) decl;
+				for (int j = 0; j < toolbusArgs.getLength(); j++) {
+					calls.addLast(toolbusArgs.elementAt(j));
+				}
+			} else {
+				try {
+					if (((ATermAppl) decl).getName() == "ttt-Ifndef") {
+						handleIfndef(filename, (ATermAppl) decl);
+					} else if (((ATermAppl) decl).getName() == "ttt-Ifdef") {
+							handleIfdef(filename, (ATermAppl) decl);
+					} else if (((ATermAppl) decl).getName() == "ttt-Define") {
+							handleDefine(filename, (ATermAppl) decl);
+					} else {
+
+						Object def = TScriptNodeBuilders.build((ATerm) decl);
+
+						if (def instanceof ProcessDefinition) {
+							String processName = ((ProcessDefinition) def)
+									.getName();
+							TScriptNodeBuilders.processName = processName;
+							// We have already parsed def as a ProcessDefinition
+							// and extracted its process name,
+							// next we parse it again! so that we qualify all
+							// variables with that name.
+							// TODO: replace by a simple scan that replaces the
+							// variables.
+							toolbus
+									.addProcessDefinition((ProcessDefinition) TScriptNodeBuilders
+											.build((ATerm) decl));
+						} else if (def instanceof ToolDefinition) {
+							toolbus.addToolDefinition((ToolDefinition) def);
+						} else if (def instanceof Include) {
+							doParseInclude(((Include) def).getFilename());
+						} else
+							toolbus.error(filename,
+									"Process or Tool definition expected");
+					}
+				} catch (ToolBusError e) {
+					toolbus.error(filename, e.getMessage());
+				}
+			}
+		}
+	}
+  
+  public void handleDefine(String filename, ATermAppl decl)  throws ToolBusException {
+	  ATerm var = decl.getArgument(0);
+	  ATerm val = decl.getArgument(1);
+	  valuedConstants.put(var,val);
+	  System.err.println("define " + var + " = " + val);
+  }
+  
+  public void handleIfdef(String filename, ATermAppl decl)
+			throws ToolBusException {
+		ATerm var = decl.getArgument(0);
+		ATermList decls = (ATermList) decl.getArgument(1);
+		if (definedConstants.contains(var)) {
+			handleDeclarations(filename, decls);
+		}
+	}
+  
+  public void handleIfndef(String filename, ATermAppl decl)  throws ToolBusException {
+	  ATerm var1 = decl.getArgument(0);
+	  ATerm var2 = decl.getArgument(1);
+	  ATermList decls = (ATermList) decl.getArgument(2);
+	  if(!var1.equals(var2)){
+		  toolbus.error(filename, "Names " + var1 + " and " + var2 + " should be equal");
+	  } else {
+		  if(!definedConstants.contains(var1)){
+			  definedConstants.add(var1);
+			  handleDeclarations(filename, decls);
+		  }
+	  }
   }
   
   public void doParseInclude(String filename) throws ToolBusException{

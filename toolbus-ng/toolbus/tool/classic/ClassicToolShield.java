@@ -102,6 +102,7 @@ public class ClassicToolShield extends ToolShield {
 			SocketChannel client = (SocketChannel) connection;
 			this.client = client;
 			client.configureBlocking(false);
+			client.socket().setTcpNoDelay(true);
 			clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
 			info("checking input signature...");
 			toolStatus = sendingSignature;
@@ -297,8 +298,8 @@ public class ClassicToolShield extends ToolShield {
 				int bytes_read = client.read(receiveTermLengthSpec);  //TODO: hier zit ook een wachtloop!
 				info(bytes_read + " bytes read");
 				if (bytes_read == -1) {
-					return null;
-					//throw new IOException("Tool connection terminated (1)");
+					//return null
+					throw new IOException("Tool connection terminated (1)");
 				}
 				index += bytes_read;
 			}

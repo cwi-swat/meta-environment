@@ -5,16 +5,17 @@ imports basic/Comments
 exports
 
   sorts  NatCon Nat Int Real Id Vname  TBTerm TBTermList Var GenVar
-  sorts StrCon String  L-Char EscChar
+  sorts StrCon String  L-Char EscChar FileName
 
   lexical syntax
     [0-9]+ 		            -> NatCon
-    [a-z] [a-zA-Z0-9\-]* 	-> Id
+    [a-z] [a-zA-Z0-9\-\_]* 	-> Id
     "\\" ~[] 			    -> EscChar {avoid}
     ~[\0-\31\"\\] \/ [\t\n] -> L-Char
     EscChar 			    -> L-Char
     "\"" L-Char* "\"" 		-> StrCon
-    [A-Z] [a-zA-Z0-9]* 		-> Vname
+    "<" L-Char* ">"         -> FileName
+    [A-Z\_] [a-zA-Z0-9\_]* 	-> Vname
     
     "/*" ( ~[\*] | Asterisk )* "*/" -> LAYOUT
     [\*] -> Asterisk
