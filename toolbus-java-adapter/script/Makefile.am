@@ -1,8 +1,8 @@
 # $Id$
 
-EXTRA_DIST = java-adapter tifstojava
+EXTRA_DIST = java-adapter tifstojava.src
 
-CLEANFILES = tifstojava
+CLEANFILES = tifstojava 
 
 bin_SCRIPTS = java-adapter tifstojava
 
