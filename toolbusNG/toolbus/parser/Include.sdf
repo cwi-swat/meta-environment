@@ -5,5 +5,6 @@ exports
    sorts Include Define
    
    context-free syntax
-     "#include" StrCon		-> Include {cons("ttt-Include")}
-     "#define"  Vname StrCon    -> Define  {cons("ttt-Define")}
+     "#include" FileName		-> Include {cons("ttt-Include")}
+     "#define" Vname TBTerm 	-> Define  {cons("ttt-Define")}
+   

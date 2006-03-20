@@ -102,7 +102,7 @@ public class ToolInstance {
    * @param t 
    */
   public void handleTermFromTool(ATerm t) {	
-		//System.err.println("tool " + toolId + " handling term from tool: " + t);
+		System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t == termSndVoid){
 			TCP_goConnected();
@@ -135,7 +135,13 @@ public class ToolInstance {
 			toolbus.addConnectedTool(this);
 			return;
 		}
-		// disconnect
+		
+		matches = t.match("snd-disconnect");
+		if(matches != null){
+			TCP_goDisConnected();
+			toolbus.removeToolInstance(this);
+			return;
+		}
 		System.err.println("tool " + toolId + ": " + t + "  not handled!");
 }
   /*

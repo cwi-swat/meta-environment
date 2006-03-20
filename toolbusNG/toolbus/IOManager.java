@@ -19,7 +19,7 @@ import aterm.ATerm;
 
 public class IOManager {
 	
-	private static final boolean verbose = false;
+	private static final boolean verbose = true;
 	
 	private final static int MAX_HANDSHAKE = 512; // Do not change since they correspond with
 
@@ -53,6 +53,7 @@ public class IOManager {
 			WellKnownSocket = WellKnownSocketChannel.socket();
 			WellKnownSocket.bind(new InetSocketAddress(WellKnownSocketPort));
 			WellKnownSocketChannel.configureBlocking(false);
+			WellKnownSocket.setPerformancePreferences(0,2,1);
 			selector = Selector.open();
 			WellKnownSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
@@ -114,7 +115,7 @@ public class IOManager {
 						ts.sndTermFromToolToToolBus(term);
 					}
 				} else if (key.isWritable()) {
-					info("case readable");
+					info("case writable");
 					client = (SocketChannel) key.channel();
 					ClassicToolShield ts = (ClassicToolShield) key.attachment();
 					ts.sendTerm();
@@ -192,7 +193,7 @@ public class IOManager {
 			if (toolid >= 0) {
 				ti = toolbus.getToolInstance(toolid);
 			} else {
-				ti = toolbus.addToolInstance(toolname);
+				ti = toolbus.addToolInstance(toolname, true);
 				toolid = ti.getToolCount();			
 			}
 			writeInt(toolid);                     // <=== write

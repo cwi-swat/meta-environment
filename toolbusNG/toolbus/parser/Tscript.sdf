@@ -2,12 +2,24 @@ module Tscript
 imports ProcessDef ToolDef Include
 
 exports
-  sorts Tscript ToolBusConfig 
+  sorts Tscript ToolBusConfig Ifndef Ifdef
 
   context-free start-symbols
         Tscript
 
   context-free syntax
     "toolbus" "(" {ProcessCall ","}+ ")"      -> ToolBusConfig
+    
+     "#ifdef" Vname
+     (ProcessDef | ToolDef | ToolBusConfig | Include | Define)* 
+     "#endif"                                 -> Ifdef {cons("ttt-Ifdef")}
+    
+    "#ifndef" Vname 
+    "#define" Vname  
+    (ProcessDef | ToolDef | ToolBusConfig | Include | Define)* 
+    "#endif"                                  -> Ifndef {cons("ttt-Ifndef")}
+    
     (ProcessDef | ToolDef | 
-     ToolBusConfig | Include)*                -> Tscript {cons("ttt-Tscript")}
+     ToolBusConfig | Include | Define | Ifdef | Ifndef)*  -> Tscript {cons("ttt-Tscript")}
+     
+ 
