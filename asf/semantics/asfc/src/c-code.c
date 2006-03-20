@@ -78,7 +78,7 @@ static void make_main(ATbool parse_io, ATbool keep_annos,
 static size_t make_parsetable(const char *name, FILE *file, ATerm parsetable)
 {
   int size;
-  unsigned char *data;
+  char *data;
   int rowlength = 8;
   int i;
 
