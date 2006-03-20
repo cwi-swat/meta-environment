@@ -193,8 +193,6 @@ AC_CONFIG_FILES([Makefile
   adapters/emacs-adapter/Makefile
   adapters/python-adapter/Makefile
   tbviz/Makefile
-  doc/Makefile
-  doc/src/Makefile
   demos/Makefile 
   demos/auction/Makefile 
   demos/calc/Makefile
