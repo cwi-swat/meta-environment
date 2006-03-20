@@ -43,9 +43,6 @@ configuration([
           description(term-editor, menu-shortcut([label("Structure"), label("Move"), label("Down")], shortcut([M_ALT,M_CTRL],VK_DOWN)))],
          "MoveCursorDownAction"),
 
-
-  action([description(module-popup, menu([label("Reopen")]))],
-         "RevertModule"),
   action([description(module-popup, menu([label("Close...")]))],
          "CloseModuleAction"),
   action([description(module-popup, menu([label("Edit"), label("Syntax")]))],
