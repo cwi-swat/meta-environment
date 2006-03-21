@@ -212,8 +212,6 @@ protected static void defineBuilders() {
 
     define(new NodeBuilder("ttt-Sequence") {
       public Object build(Object args[]) {
-      	//System.err.println("Sequence[0]: " + args[0]);
-     	//System.err.println("Sequence[1]: " + args[1]);
         return new Sequence((ProcessExpression) args[0], (ProcessExpression) args[1], tbfactory);
       }
     });
@@ -374,11 +372,6 @@ protected static void defineBuilders() {
     
     define(new NodeBuilder("ttt-ToolDef") {
         public Object build(Object args[]) {
- 
-          //System.err.println("ToolDef 0: " + ((ATermAppl) args[0]).getName());
-          //System.err.println("ToolDef 1: " + ((ATermAppl) args[1]).getName());
-          //System.err.println("ToolDef 2: " + ((ATermAppl) args[2]).getName());
-          //System.err.println("ToolDef 3: " + ((ATermAppl) args[3]).getName());
           
           String name = ((ATermAppl) args[0]).getName();
           
@@ -570,8 +563,7 @@ public class TScriptParser {
   private static TBTermFactory tbfactory;
   private ExternalParser externalparser;
   private HashSet<String> includedFiles;
-  private HashSet<ATerm> definedConstants;
-  private HashMap<ATerm,ATerm> valuedConstants;
+  private HashMap<ATerm,ATerm> definedConstants;
   private ToolBus toolbus;
 
   public TScriptParser(ExternalParser ep, ToolBus tb) {
@@ -579,8 +571,7 @@ public class TScriptParser {
     toolbus = tb;
     tbfactory = toolbus.getTBTermFactory();
     includedFiles = new HashSet<String>();
-    definedConstants = new HashSet<ATerm>();
-    valuedConstants = new HashMap<ATerm,ATerm>();
+    definedConstants = new HashMap<ATerm,ATerm>();
     TScriptNodeBuilders.init(tbfactory, this);
   }
   private LinkedList<ATerm> calls;
@@ -627,8 +618,10 @@ public class TScriptParser {
 						handleIfndef(filename, (ATermAppl) decl);
 					} else if (((ATermAppl) decl).getName() == "ttt-Ifdef") {
 							handleIfdef(filename, (ATermAppl) decl);
-					} else if (((ATermAppl) decl).getName() == "ttt-Define") {
-							handleDefine(filename, (ATermAppl) decl);
+					} else if (((ATermAppl) decl).getName() == "ttt-Define0") {
+							handleDefine(filename, (ATermAppl) decl, 0);
+					} else if (((ATermAppl) decl).getName() == "ttt-Define1") {
+						handleDefine(filename, (ATermAppl) decl, 1);
 					} else {
 
 						Object def = TScriptNodeBuilders.build((ATerm) decl);
@@ -661,10 +654,10 @@ public class TScriptParser {
 		}
 	}
   
-  public void handleDefine(String filename, ATermAppl decl)  throws ToolBusException {
+  public void handleDefine(String filename, ATermAppl decl, int nargs)  throws ToolBusException {
 	  ATerm var = decl.getArgument(0);
-	  ATerm val = decl.getArgument(1);
-	  valuedConstants.put(var,val);
+	  ATerm val = (nargs == 1) ? decl.getArgument(1) : tbfactory.make("\"\"");
+	  definedConstants.put(var,val);
 	  System.err.println("define " + var + " = " + val);
   }
   
@@ -672,22 +665,16 @@ public class TScriptParser {
 			throws ToolBusException {
 		ATerm var = decl.getArgument(0);
 		ATermList decls = (ATermList) decl.getArgument(1);
-		if (definedConstants.contains(var)) {
+		if (definedConstants.get(var) != null) {
 			handleDeclarations(filename, decls);
 		}
 	}
   
   public void handleIfndef(String filename, ATermAppl decl)  throws ToolBusException {
-	  ATerm var1 = decl.getArgument(0);
-	  ATerm var2 = decl.getArgument(1);
-	  ATermList decls = (ATermList) decl.getArgument(2);
-	  if(!var1.equals(var2)){
-		  toolbus.error(filename, "Names " + var1 + " and " + var2 + " should be equal");
-	  } else {
-		  if(!definedConstants.contains(var1)){
-			  definedConstants.add(var1);
-			  handleDeclarations(filename, decls);
-		  }
+	  ATerm var = decl.getArgument(0);
+	  ATermList decls = (ATermList) decl.getArgument(1);
+	  if(definedConstants.get(var) == null){
+		  handleDeclarations(filename, decls);
 	  }
   }
   

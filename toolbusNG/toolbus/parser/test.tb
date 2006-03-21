@@ -3,8 +3,8 @@
 process A is printf("A\n")
 #endif
 
-#ifndef B
-#define B
+#ifndef A
+#define A
 process A is printf("A\n")
 #endif
 

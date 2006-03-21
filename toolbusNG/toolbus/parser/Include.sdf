@@ -6,5 +6,6 @@ exports
    
    context-free syntax
      "#include" FileName		-> Include {cons("ttt-Include")}
-     "#define" Vname TBTerm 	-> Define  {cons("ttt-Define")}
+     "#define" Vname 			-> Define  {cons("ttt-Define0")}
+     "#define" Vname TBTerm 	-> Define  {cons("ttt-Define1")}
    
