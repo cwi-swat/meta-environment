@@ -1,11 +1,7 @@
 #ifndef A
-#define A
-process A is printf("A\n")
+#define B abc
+process A is printf(B)
 #endif
 
-#ifndef A
-#define A
-process A is printf("A\n")
-#endif
 
 toolbus(A)
