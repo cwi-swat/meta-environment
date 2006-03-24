@@ -102,7 +102,7 @@ public class ToolInstance {
    * @param t 
    */
   public void handleTermFromTool(ATerm t) {	
-		System.err.println("tool " + toolId + " handling term from tool: " + t);
+		//System.err.println("tool " + toolId + " handling term from tool: " + t);
 		
 		if(t == termSndVoid){
 			TCP_goConnected();

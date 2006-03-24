@@ -159,6 +159,7 @@ protected static void defineBuilders() {
 
     define(new NodeBuilder("ttt-apply") {
 		public Object build(Object args[]) throws ToolBusException {
+			System.err.println("ttt-apply: " + args[0]);
 			int length = args.length;
 			if (length == 0 || length > 2){
 				for(int i = 0; i < length; i++){

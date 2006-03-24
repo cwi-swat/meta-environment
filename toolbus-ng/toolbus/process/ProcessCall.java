@@ -9,6 +9,7 @@ import java.util.Stack;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
+import toolbus.TBTermVar;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
@@ -17,6 +18,8 @@ import aterm.ATermList;
 
 public class ProcessCall extends ProcessExpression implements StateElement {
 	private String name;
+
+	private TBTermVar nameAsVar;;
 
 	protected ATermList actuals;
 
@@ -34,9 +37,13 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	private State firstState;
 
-	private boolean uninitialized = true;
+	private boolean initializedDynamicCall = false;
 
 	private boolean isStaticCall = true;
+	
+	private Stack<String> calls;
+	
+	private State follows;
 
 	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory) {
 		super(tbfactory);
@@ -66,25 +73,26 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void computeFirst() {
-		//System.err.println("ProcessCall.computeFirst: " + firstState);
+		System.err.println("ProcessCall.computeFirst: " + firstState);
 		setFirst(firstState);
 	}
 	
 	public void replaceFormals(Environment e) throws ToolBusException {
-		//System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
+		System.err.println("ProcessCall.replaceFormals(" + name + "): " + env);
 		env = e.copy();
 		//env = e;
-		if(isStaticCall){
-			actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
-		}
+		actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
 	}
 
 	public void compile(ProcessInstance P, Stack<String> calls,
 			State follows) throws ToolBusException {
-
+		System.err.println("compile");
 		processInstance = P;
+		this.calls = calls;
+		this.follows = follows;
+		nameAsVar = tbfactory.mkVar(tbfactory.make(name), calls.peek(), tbfactory.StrType);
 
-		if (env.isDeclaredAsStringVar(name)) { // A dynamic call?
+		if (env.isDeclaredAsStringVar(nameAsVar)) { // A dynamic call?
 			System.err.println("yes dynamic!");
 			isStaticCall = false;
 		} else {
@@ -117,23 +125,54 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 			//System.err.println(name + " expanded as:\n" + PE);
 		}
 	}
+	
+	private void initDynamicCall() throws ToolBusException {
+		ATermAppl dynprocessname = (ATermAppl) env.getValue(nameAsVar);
+		String dname = dynprocessname.getName();
+		
+		if (calls.contains(dname)) {
+			throw new ToolBusException("recursive (dynamic) call of " + dname);
+		}
 
-	public State getFirst() {
-		//System.err.println("ProcessCall.getFirst: " + firstState);
-		return firstState; //PE.getFirst();
+		definition = processInstance.getToolBus().getProcessDefinition(dname);
+		calls.push(dname);
+		System.err.println("dname = " + dname);
+		System.err.println("definition = " + definition);
 
+		actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
+		PE = definition.getProcessExpression(actuals);
+		
+		System.err.println("ProcessCall.compile(" + dname + ", " + processInstance + "," + PE + ")");
+		setFollow(follows);
+		formals = definition.getFormals();
+		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
+		
+		env.introduceBindings(formals, actuals, evalArgs);
+		actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
+
+		//System.err.println("ProcessCall.compile(" + name + "): " + env);
+		//System.err.println("actuals = " + actuals);
+		PE.computeFirst();
+		PE.replaceFormals(env);
+		PE.compile(processInstance, calls, follows);
+		firstState = PE.getFirst(); //getStartState();
+		//env.removeBindings(formals);
+		calls.pop();	
+		System.err.println(name + " expanded as:\n" + PE);
+		initializedDynamicCall = true;
 	}
 
-//	public State getStartState() {
-//		return firstState;
-//	}
+	public State getFirst() {
+		System.err.println("ProcessCall.getFirst: " + firstState);
+		return firstState; //PE.getFirst();
+	}
 
 	public State getFollow() {
-		return PE.getFollow();
+		return isStaticCall || initializedDynamicCall ? PE.getFollow() : new State();
 	}
 
 	public State getAtoms() {
-		return PE.getAtoms();
+		return isStaticCall || initializedDynamicCall ? PE.getAtoms() : new State();
 	}
 
 	public String getName() {
@@ -144,29 +183,10 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		return "ProcessCall(" + name + ", " + actuals + ")";
 	}
 
-	private void initDynamicCall() {
-		if (uninitialized) {
-			uninitialized = false;
-			//try {
-			//	//expand(processInstance, new Stack());
-			//	super.compile(processInstance,null,env, follows);
-			//} catch (ToolBusException e) {
-			//	// TODO Auto-generated catch block
-			//	e.printStackTrace();
-			//}		
-		}
-	}
-
 	// Implementation of the StateElement interface
 
 	public boolean contains(StateElement a) {
-		if (isStaticCall) {
-			return getFirst().contains(a);
-		} else {
-			initDynamicCall();
-			return false;
-		}
-
+		return getFirst().contains(a);
 	}
 
 	public ProcessInstance getProcess() {
@@ -175,24 +195,18 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	public void setTest(ATerm test, Environment env) throws ToolBusException {
 		//System.err.println("ProcessCall.setTest" + test);
-		if (isStaticCall) {
-			firstState.setTest(test, env);
-		}
+		firstState.setTest(test, env);
 	}
 
 	public boolean isEnabled() {
-		if (isStaticCall) {
-			return getFirst().isEnabled();
-		} else {
-			return false;
-		}
+		return getFirst().isEnabled();
 	}
 
 	public State getNextState() {
 		if (isStaticCall) {
 			return getFirst().getNextState();
 		} else {
-			return firstState;
+			return firstState.getNextState();
 		}
 	}
 
@@ -200,7 +214,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		if (isStaticCall) {
 			return getFirst().getNextState(se);
 		} else {
-			return firstState;
+			return firstState.getNextState(se);
 		}
 	}
 
@@ -208,11 +222,9 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void delPartners(State s) throws ToolBusException {
-
 	}
 
 	public void addNotePartners(State s) {
-
 	}
 
 	public void delNotePartners(State s) {
@@ -220,20 +232,20 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void activate() {
-		if (isStaticCall) {
-			//System.err.println("ProcessCall.activate");
-			firstState = PE.getFirst();
-			firstState.activate();
-		} else {
+		if(!isStaticCall && !initializedDynamicCall){
+			try {
+				initDynamicCall();
+			} catch (ToolBusException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		firstState = PE.getFirst();
+		firstState.activate();	
 	}
 
 	public boolean execute() throws ToolBusException {
-		if (isStaticCall) {
-			//System.err.println("ProcessCall.execute");
-			return PE.getFirst().execute();
-		} else {
-			return false;
-		}
+		System.err.println("ProcessCall.execute");
+		return PE.getFirst().execute();
 	}
 }

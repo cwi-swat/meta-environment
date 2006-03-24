@@ -211,8 +211,10 @@ public class Environment {
 		return bindings.get(name);
 	}
 	
-	public boolean isDeclaredAsStringVar(String name){
+	public boolean isDeclaredAsStringVar(TBTermVar var){
+		String name = var.getVarName();
 		Binding b = bindings.get(name);
+		System.err.println("isDeclaredAsStringVar: " + var + "; " + b + "; " + this);
 		if(b == null){
 			return false;
 		}

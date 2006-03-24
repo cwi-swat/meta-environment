@@ -19,7 +19,7 @@ import aterm.ATerm;
 
 public class IOManager {
 	
-	private static final boolean verbose = true;
+	private static final boolean verbose = false;
 	
 	private final static int MAX_HANDSHAKE = 512; // Do not change since they correspond with
 

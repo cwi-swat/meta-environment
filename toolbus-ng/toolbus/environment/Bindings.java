@@ -20,6 +20,13 @@ interface Bindings {
 	 * @return its binding or null
 	 */
 	public Binding get(String key);
+	
+	/**
+	 * Return the first binding of for a given key value
+	 * @param key
+	 * @return its binding or null
+	 */
+	public Binding getWithPrefix(String key);
 
 	/**
 	 * Introduce a new (key, binding) pair
