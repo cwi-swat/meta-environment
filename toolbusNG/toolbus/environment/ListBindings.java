@@ -32,6 +32,15 @@ class ListBindings implements Bindings {
 		return null;
 	}
 	
+	public Binding getWithPrefix(String key) {
+		for (Binding b : bindings) {
+			if (b.getName().contains(key)){
+				return b;
+			}
+		}
+		return null;
+	}
+	
 	public int size(){
 		return bindings.size();
 	}

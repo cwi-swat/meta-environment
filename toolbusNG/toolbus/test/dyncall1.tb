@@ -2,11 +2,16 @@ process A(S : str) is printf("%s A\n", S)
 
 process B(S : str) is printf("%s B\n", S)
 
-process Main is 
+process Main1 is 
 let B : str
 in
-    B := "A" .
-    B("abc") 
+    B := "B" .
+    printf("Before call\n") .
+    B("via Main1") .
+    printf("After call\n")
 endlet
 
-toolbus(Main)
+process Main2(B : str) is 
+    B("via Main2") 
+
+toolbus(Main1, Main2("A"))

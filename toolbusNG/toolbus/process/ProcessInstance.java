@@ -71,7 +71,9 @@ public class ProcessInstance {
 
 		call.computeFirst();
 		call.replaceFormals(env);
-		call.compile(this, new Stack<String>(), empty);
+		Stack<String> stack = new Stack<String>();
+		stack.push("TOPLEVEL");
+		call.compile(this, stack, empty);
 		currentState = call.getFirst(); //getStartState();
 		currentState.activate();
 		
