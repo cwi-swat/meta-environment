@@ -39,7 +39,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 
-	private static final boolean verbose = false;
+	private static final boolean verbose = true;
 
 	private static Random rand = new Random();
 	
@@ -177,12 +177,15 @@ public class ToolBus {
 		//System.err.println("get(" + p + ", " + def + ") => " + r);
 		return r;
 	}
-
+	
+	public void set(String p, String def){
+		propertyManager.set(p,def);
+		//System.err.println("get(" + p + ", " + def + ") => " + r);
+	}
 	
 	public void wakeup(){
 		iomanager.wakeup();
 	}
-
 	
 	synchronized public void addConnectedTool(ToolInstance ti){
 		connectedTools.addLast(ti);

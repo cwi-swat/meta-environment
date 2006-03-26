@@ -86,15 +86,16 @@ abstract class NodeBuilder {
 class TScriptNodeBuilders {
   private static Hashtable<String,NodeBuilder> Builders;
   private static TBTermFactory tbfactory;
+  private static ToolBus toolbus;
   private static TScriptParser tsparser;
   protected static String processName = "";
-  private static HashMap<String,ATerm> definedConstants;
+ // private static HashMap<String,ATerm> definedConstants;
 
-  public static void init(TBTermFactory tbfac, TScriptParser tp, HashMap<String,ATerm> defConstants) {
+  public static void init(TBTermFactory tbfac, TScriptParser tp, ToolBus tb) {
     tbfactory = tbfac;
     tsparser = tp;
     Builders = new Hashtable<String,NodeBuilder>();
-    definedConstants = defConstants;
+    toolbus = tb;
     defineBuilders();
   }
 
@@ -135,10 +136,14 @@ protected static void defineBuilders() {
 
     define(new NodeBuilder("ttt-var") {
       public Object build(Object args[]) {
-    	  ATerm replacement = definedConstants.get(args[0].toString());
-    	  //System.err.println(args[0] + " => " + replacement);
+    	  String replacement = toolbus.get(args[0].toString());
+ 
     	  if(replacement != null){
-    		  return replacement;
+    		  if(replacement.charAt(0) != '"'){
+    			  replacement = '"' + replacement + '"';
+    		  }
+    	   	  System.err.println(args[0] + " => " + replacement);
+    		  return tbfactory.make(replacement);
     	  } else {
     		  return tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none"));
     	  }
@@ -159,7 +164,6 @@ protected static void defineBuilders() {
 
     define(new NodeBuilder("ttt-apply") {
 		public Object build(Object args[]) throws ToolBusException {
-			System.err.println("ttt-apply: " + args[0]);
 			int length = args.length;
 			if (length == 0 || length > 2){
 				for(int i = 0; i < length; i++){
@@ -572,7 +576,7 @@ public class TScriptParser {
   private static TBTermFactory tbfactory;
   private ExternalParser externalparser;
   private HashSet<String> includedFiles;
-  private HashMap<String,ATerm> definedConstants;
+ // private HashMap<String,ATerm> definedConstants;
   private ToolBus toolbus;
 
   public TScriptParser(ExternalParser ep, ToolBus tb) {
@@ -580,8 +584,8 @@ public class TScriptParser {
     toolbus = tb;
     tbfactory = toolbus.getTBTermFactory();
     includedFiles = new HashSet<String>();
-    definedConstants = new HashMap<String,ATerm>();
-    TScriptNodeBuilders.init(tbfactory, this, definedConstants);
+ //   definedConstants = new HashMap<String,ATerm>();
+    TScriptNodeBuilders.init(tbfactory, this, toolbus);
   }
   private LinkedList<ATerm> calls;
 
@@ -674,17 +678,18 @@ public class TScriptParser {
 	  if(nargs == 1){
 		  val = (ATerm) TScriptNodeBuilders.build(decl.getArgument(1));
 	  } else {
-		  val = (nargs == 1) ? decl.getArgument(1) : tbfactory.make("\"\"");
+		  val = tbfactory.make("\"\"");
 	  }
-	  definedConstants.put(var,val);
-	  //System.err.println("define " + var + " = " + val);
+	  
+	  toolbus.set(var,val.toString());
+	  System.err.println("define " + var + " = " + val);
   }
   
   public void handleIfdef(String filename, ATermAppl decl)
 			throws ToolBusException {
 		String var = stripQuotes(decl.getArgument(0));
 		ATermList decls = (ATermList) decl.getArgument(1);
-		if (definedConstants.get(var) != null) {
+		if (toolbus.get(var) != null) {
 			handleDeclarations(filename, decls);
 		}
 	}
@@ -692,7 +697,7 @@ public class TScriptParser {
   public void handleIfndef(String filename, ATermAppl decl)  throws ToolBusException {
 	  String var = stripQuotes(decl.getArgument(0));
 	  ATermList decls = (ATermList) decl.getArgument(1);
-	  if(definedConstants.get(var) == null){
+	  if(toolbus.get(var) == null){
 		  handleDeclarations(filename, decls);
 	  }
   }
