@@ -195,7 +195,7 @@ public class ProcessInstance {
 
 	public boolean noNoteInQueue(ATerm pat, Environment env)
 			throws ToolBusException {
-		System.err.println("noNoteinQueue: " + pat);
+		//System.err.println("noNoteinQueue: " + pat);
 		for (ATerm note : notes) {
 			if (tbfactory.match(note, env, pat, env)) {
 				// TODO: What do we do with changes in env???
@@ -206,7 +206,7 @@ public class ProcessInstance {
 	}
 
 	public boolean putNoteInQueue(ATerm note) throws ToolBusException {
-		System.err.println("putNoteinQueue: " + note);
+		//System.err.println("putNoteinQueue: " + note);
 		for (ATerm sub : subscriptions) {
 			if (tbfactory.mightMatch(sub, note)) {
 				notes.addLast(note);

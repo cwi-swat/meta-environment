@@ -1,0 +1,9 @@
+process A(S : str) is rec-msg(a) . printf("A has received message from %s\n", S)
+
+process B(S : str) is rec-msg(b) . printf("B has received message from %s\n", S)
+
+process Main(B : str) is B("Main") . printf("Main completed\n")
+
+process Sender(Msg : term) is snd-msg(Msg)
+ 
+toolbus(Main("B"), Sender(a), Sender(b))

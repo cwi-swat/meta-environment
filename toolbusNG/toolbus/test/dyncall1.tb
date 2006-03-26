@@ -6,9 +6,8 @@ process Main1 is
 let B : str
 in
     B := "B" .
-    printf("Before call\n") .
-    B("via Main1") .
-    printf("After call\n")
+    B("Main1") .
+    if false then B("Main1: true case") else B("Main1: false case") fi
 endlet
 
 process Main2(B : str) is 

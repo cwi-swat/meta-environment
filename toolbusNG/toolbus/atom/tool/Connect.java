@@ -43,7 +43,7 @@ public class Connect extends Atom {
 	public boolean execute() throws ToolBusException {
 		if (!isEnabled())
 		      return false;
-		System.err.println("Connect.execute called; toolname = " + toolId.value);
+		//System.err.println("Connect.execute called; toolname = " + toolId.value);
 		ATerm id = getEnv().getValue((TBTermVar)toolId.value);
 		ToolInstance ti;
 		String toolname = ((ATermAppl)((TBTermVar)toolId.value).getVarType()).getName();
@@ -53,7 +53,7 @@ public class Connect extends Atom {
 			ti = getToolBus().getConnectedToolById(toolname, id);
 		}
 		
-		System.err.println(getProcess().getProcessName() +  ": id = " + id);
+		//System.err.println(getProcess().getProcessName() +  ": id = " + id);
 		if(ti == null){
 			return false;
 		} else {
