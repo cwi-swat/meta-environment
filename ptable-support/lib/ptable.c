@@ -45,6 +45,7 @@ char PTBL_charToByte(ATerm arg) {
 
 
 typedef struct ATerm _PTBL_Production;
+typedef struct ATerm _PTBL_CharClass;
 typedef struct ATerm _PTBL_CharRanges;
 typedef struct ATerm _PTBL_Version;
 typedef struct ATerm _PTBL_ParseTable;
@@ -59,9 +60,9 @@ typedef struct ATerm _PTBL_Choice;
 typedef struct ATerm _PTBL_Actions;
 typedef struct ATerm _PTBL_Action;
 typedef struct ATerm _PTBL_SpecialAttr;
-typedef struct ATerm _PTBL_LookAheads;
-typedef struct ATerm _PTBL_LookAhead;
-typedef struct ATerm _PTBL_CharClass;
+typedef struct ATerm _PTBL_Restrictions;
+typedef struct ATerm _PTBL_Restriction;
+typedef struct ATerm _PTBL_CharClasses;
 typedef struct ATerm _PTBL_Priorities;
 typedef struct ATerm _PTBL_Priority;
 
@@ -74,6 +75,14 @@ void PTBL_protectProduction(PTBL_Production *arg) {
 }
 
 void PTBL_unprotectProduction(PTBL_Production *arg) {
+  ATunprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_protectCharClass(PTBL_CharClass *arg) {
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void PTBL_unprotectCharClass(PTBL_CharClass *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -189,27 +198,27 @@ void PTBL_unprotectSpecialAttr(PTBL_SpecialAttr *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_protectLookAheads(PTBL_LookAheads *arg) {
+void PTBL_protectRestrictions(PTBL_Restrictions *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_unprotectLookAheads(PTBL_LookAheads *arg) {
+void PTBL_unprotectRestrictions(PTBL_Restrictions *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_protectLookAhead(PTBL_LookAhead *arg) {
+void PTBL_protectRestriction(PTBL_Restriction *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_unprotectLookAhead(PTBL_LookAhead *arg) {
+void PTBL_unprotectRestriction(PTBL_Restriction *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_protectCharClass(PTBL_CharClass *arg) {
+void PTBL_protectCharClasses(PTBL_CharClasses *arg) {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void PTBL_unprotectCharClass(PTBL_CharClass *arg) {
+void PTBL_unprotectCharClasses(PTBL_CharClasses *arg) {
   ATunprotect((ATerm*)((void*) arg));
 }
 
@@ -234,6 +243,14 @@ PTBL_Production PTBL_ProductionFromTerm(ATerm t) {
 }
 
 ATerm PTBL_ProductionToTerm(PTBL_Production arg) {
+  return (ATerm)arg;
+}
+
+PTBL_CharClass PTBL_CharClassFromTerm(ATerm t) {
+  return (PTBL_CharClass)t;
+}
+
+ATerm PTBL_CharClassToTerm(PTBL_CharClass arg) {
   return (ATerm)arg;
 }
 
@@ -349,27 +366,27 @@ ATerm PTBL_SpecialAttrToTerm(PTBL_SpecialAttr arg) {
   return (ATerm)arg;
 }
 
-PTBL_LookAheads PTBL_LookAheadsFromTerm(ATerm t) {
-  return (PTBL_LookAheads)t;
+PTBL_Restrictions PTBL_RestrictionsFromTerm(ATerm t) {
+  return (PTBL_Restrictions)t;
 }
 
-ATerm PTBL_LookAheadsToTerm(PTBL_LookAheads arg) {
+ATerm PTBL_RestrictionsToTerm(PTBL_Restrictions arg) {
   return (ATerm)arg;
 }
 
-PTBL_LookAhead PTBL_LookAheadFromTerm(ATerm t) {
-  return (PTBL_LookAhead)t;
+PTBL_Restriction PTBL_RestrictionFromTerm(ATerm t) {
+  return (PTBL_Restriction)t;
 }
 
-ATerm PTBL_LookAheadToTerm(PTBL_LookAhead arg) {
+ATerm PTBL_RestrictionToTerm(PTBL_Restriction arg) {
   return (ATerm)arg;
 }
 
-PTBL_CharClass PTBL_CharClassFromTerm(ATerm t) {
-  return (PTBL_CharClass)t;
+PTBL_CharClasses PTBL_CharClassesFromTerm(ATerm t) {
+  return (PTBL_CharClasses)t;
 }
 
-ATerm PTBL_CharClassToTerm(PTBL_CharClass arg) {
+ATerm PTBL_CharClassesToTerm(PTBL_CharClasses arg) {
   return (ATerm)arg;
 }
 
@@ -629,52 +646,100 @@ PTBL_Actions PTBL_makeActions6(PTBL_Action elem1, PTBL_Action elem2, PTBL_Action
   return (PTBL_Actions) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
-int PTBL_getLookAheadsLength (PTBL_LookAheads arg) {
+int PTBL_getRestrictionsLength (PTBL_Restrictions arg) {
   return ATgetLength((ATermList) arg);
 }
 
-PTBL_LookAheads PTBL_reverseLookAheads(PTBL_LookAheads arg) {
-  return (PTBL_LookAheads) ATreverse((ATermList) arg);
+PTBL_Restrictions PTBL_reverseRestrictions(PTBL_Restrictions arg) {
+  return (PTBL_Restrictions) ATreverse((ATermList) arg);
 }
 
-PTBL_LookAheads PTBL_appendLookAheads(PTBL_LookAheads arg, PTBL_LookAhead elem) {
-  return (PTBL_LookAheads) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+PTBL_Restrictions PTBL_appendRestrictions(PTBL_Restrictions arg, PTBL_Restriction elem) {
+  return (PTBL_Restrictions) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
 
-PTBL_LookAheads PTBL_concatLookAheads(PTBL_LookAheads arg0, PTBL_LookAheads arg1) {
-  return (PTBL_LookAheads) ATconcat((ATermList) arg0, (ATermList) arg1);
+PTBL_Restrictions PTBL_concatRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
+  return (PTBL_Restrictions) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
 
-PTBL_LookAheads PTBL_sliceLookAheads(PTBL_LookAheads arg, int start, int end) {
-  return (PTBL_LookAheads) ATgetSlice((ATermList) arg, start, end);
+PTBL_Restrictions PTBL_sliceRestrictions(PTBL_Restrictions arg, int start, int end) {
+  return (PTBL_Restrictions) ATgetSlice((ATermList) arg, start, end);
 }
 
-PTBL_LookAhead PTBL_getLookAheadsLookAheadAt(PTBL_LookAheads arg, int index) {
- return (PTBL_LookAhead)ATelementAt((ATermList) arg,index);
+PTBL_Restriction PTBL_getRestrictionsRestrictionAt(PTBL_Restrictions arg, int index) {
+ return (PTBL_Restriction)ATelementAt((ATermList) arg,index);
 }
 
-PTBL_LookAheads PTBL_replaceLookAheadsLookAheadAt(PTBL_LookAheads arg, PTBL_LookAhead elem, int index) {
- return (PTBL_LookAheads) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+PTBL_Restrictions PTBL_replaceRestrictionsRestrictionAt(PTBL_Restrictions arg, PTBL_Restriction elem, int index) {
+ return (PTBL_Restrictions) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
 }
 
-PTBL_LookAheads PTBL_makeLookAheads2(PTBL_LookAhead elem1, PTBL_LookAhead elem2) {
-  return (PTBL_LookAheads) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+PTBL_Restrictions PTBL_makeRestrictions2(PTBL_Restriction elem1, PTBL_Restriction elem2) {
+  return (PTBL_Restrictions) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
 }
 
-PTBL_LookAheads PTBL_makeLookAheads3(PTBL_LookAhead elem1, PTBL_LookAhead elem2, PTBL_LookAhead elem3) {
-  return (PTBL_LookAheads) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+PTBL_Restrictions PTBL_makeRestrictions3(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3) {
+  return (PTBL_Restrictions) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
 }
 
-PTBL_LookAheads PTBL_makeLookAheads4(PTBL_LookAhead elem1, PTBL_LookAhead elem2, PTBL_LookAhead elem3, PTBL_LookAhead elem4) {
-  return (PTBL_LookAheads) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+PTBL_Restrictions PTBL_makeRestrictions4(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4) {
+  return (PTBL_Restrictions) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
 }
 
-PTBL_LookAheads PTBL_makeLookAheads5(PTBL_LookAhead elem1, PTBL_LookAhead elem2, PTBL_LookAhead elem3, PTBL_LookAhead elem4, PTBL_LookAhead elem5) {
-  return (PTBL_LookAheads) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+PTBL_Restrictions PTBL_makeRestrictions5(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5) {
+  return (PTBL_Restrictions) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
 }
 
-PTBL_LookAheads PTBL_makeLookAheads6(PTBL_LookAhead elem1, PTBL_LookAhead elem2, PTBL_LookAhead elem3, PTBL_LookAhead elem4, PTBL_LookAhead elem5, PTBL_LookAhead elem6) {
-  return (PTBL_LookAheads) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+PTBL_Restrictions PTBL_makeRestrictions6(PTBL_Restriction elem1, PTBL_Restriction elem2, PTBL_Restriction elem3, PTBL_Restriction elem4, PTBL_Restriction elem5, PTBL_Restriction elem6) {
+  return (PTBL_Restrictions) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+
+int PTBL_getCharClassesLength (PTBL_CharClasses arg) {
+  return ATgetLength((ATermList) arg);
+}
+
+PTBL_CharClasses PTBL_reverseCharClasses(PTBL_CharClasses arg) {
+  return (PTBL_CharClasses) ATreverse((ATermList) arg);
+}
+
+PTBL_CharClasses PTBL_appendCharClasses(PTBL_CharClasses arg, PTBL_CharClass elem) {
+  return (PTBL_CharClasses) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+
+PTBL_CharClasses PTBL_concatCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
+  return (PTBL_CharClasses) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+
+PTBL_CharClasses PTBL_sliceCharClasses(PTBL_CharClasses arg, int start, int end) {
+  return (PTBL_CharClasses) ATgetSlice((ATermList) arg, start, end);
+}
+
+PTBL_CharClass PTBL_getCharClassesCharClassAt(PTBL_CharClasses arg, int index) {
+ return (PTBL_CharClass)ATelementAt((ATermList) arg,index);
+}
+
+PTBL_CharClasses PTBL_replaceCharClassesCharClassAt(PTBL_CharClasses arg, PTBL_CharClass elem, int index) {
+ return (PTBL_CharClasses) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+
+PTBL_CharClasses PTBL_makeCharClasses2(PTBL_CharClass elem1, PTBL_CharClass elem2) {
+  return (PTBL_CharClasses) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+
+PTBL_CharClasses PTBL_makeCharClasses3(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3) {
+  return (PTBL_CharClasses) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+
+PTBL_CharClasses PTBL_makeCharClasses4(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4) {
+  return (PTBL_CharClasses) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+
+PTBL_CharClasses PTBL_makeCharClasses5(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5) {
+  return (PTBL_CharClasses) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+
+PTBL_CharClasses PTBL_makeCharClasses6(PTBL_CharClass elem1, PTBL_CharClass elem2, PTBL_CharClass elem3, PTBL_CharClass elem4, PTBL_CharClass elem5, PTBL_CharClass elem6) {
+  return (PTBL_CharClasses) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
 
 int PTBL_getPrioritiesLength (PTBL_Priorities arg) {
@@ -727,6 +792,9 @@ PTBL_Priorities PTBL_makePriorities6(PTBL_Priority elem1, PTBL_Priority elem2, P
 
 PTBL_Production PTBL_makeProductionExternal(ATerm prod) {
   return (PTBL_Production)(ATerm) prod;
+}
+PTBL_CharClass PTBL_makeCharClassExternal(ATerm charClass) {
+  return (PTBL_CharClass)(ATerm) charClass;
 }
 PTBL_CharRanges PTBL_makeCharRangesExternal(ATerm ranges) {
   return (PTBL_CharRanges)(ATerm) ranges;
@@ -797,8 +865,8 @@ PTBL_Actions PTBL_makeActionsMany(PTBL_Action head, PTBL_Actions tail) {
 PTBL_Action PTBL_makeActionReduce(int length, int label, PTBL_SpecialAttr specialAttr) {
   return (PTBL_Action)(ATerm)ATmakeAppl3(PTBL_afun7, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr);
 }
-PTBL_Action PTBL_makeActionLookaheadReduce(int length, int label, PTBL_SpecialAttr specialAttr, PTBL_LookAheads lookaheads) {
-  return (PTBL_Action)(ATerm)ATmakeAppl4(PTBL_afun8, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr, (ATerm) lookaheads);
+PTBL_Action PTBL_makeActionLookaheadReduce(int length, int label, PTBL_SpecialAttr specialAttr, PTBL_Restrictions restrictions) {
+  return (PTBL_Action)(ATerm)ATmakeAppl4(PTBL_afun8, (ATerm) (ATerm) ATmakeInt(length), (ATerm) (ATerm) ATmakeInt(label), (ATerm) specialAttr, (ATerm) restrictions);
 }
 PTBL_Action PTBL_makeActionShift(int stateNumber) {
   return (PTBL_Action)(ATerm)ATmakeAppl1(PTBL_afun9, (ATerm) (ATerm) ATmakeInt(stateNumber));
@@ -818,20 +886,26 @@ PTBL_SpecialAttr PTBL_makeSpecialAttrPrefer(void) {
 PTBL_SpecialAttr PTBL_makeSpecialAttrAvoid(void) {
   return (PTBL_SpecialAttr)(ATerm)ATmakeInt(4);
 }
-PTBL_LookAheads PTBL_makeLookAheadsEmpty(void) {
-  return (PTBL_LookAheads)(ATerm)ATempty;
+PTBL_Restrictions PTBL_makeRestrictionsEmpty(void) {
+  return (PTBL_Restrictions)(ATerm)ATempty;
 }
-PTBL_LookAheads PTBL_makeLookAheadsSingle(PTBL_LookAhead head) {
-  return (PTBL_LookAheads)(ATerm)ATmakeList1((ATerm) head);
+PTBL_Restrictions PTBL_makeRestrictionsSingle(PTBL_Restriction head) {
+  return (PTBL_Restrictions)(ATerm)ATmakeList1((ATerm) head);
 }
-PTBL_LookAheads PTBL_makeLookAheadsMany(PTBL_LookAhead head, PTBL_LookAheads tail) {
-  return (PTBL_LookAheads)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+PTBL_Restrictions PTBL_makeRestrictionsMany(PTBL_Restriction head, PTBL_Restrictions tail) {
+  return (PTBL_Restrictions)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
-PTBL_LookAhead PTBL_makeLookAheadDefault(PTBL_CharClass charClass, PTBL_LookAheads lookaheads) {
-  return (PTBL_LookAhead)(ATerm)ATmakeAppl2(PTBL_afun11, (ATerm) charClass, (ATerm) lookaheads);
+PTBL_Restriction PTBL_makeRestrictionFollow(PTBL_CharClasses charClasses) {
+  return (PTBL_Restriction)(ATerm)ATmakeAppl1(PTBL_afun11, (ATerm) charClasses);
 }
-PTBL_CharClass PTBL_makeCharClassDefault(PTBL_CharRanges ranges) {
-  return (PTBL_CharClass)(ATerm)ATmakeAppl1(PTBL_afun12, (ATerm) ranges);
+PTBL_CharClasses PTBL_makeCharClassesEmpty(void) {
+  return (PTBL_CharClasses)(ATerm)ATempty;
+}
+PTBL_CharClasses PTBL_makeCharClassesSingle(PTBL_CharClass head) {
+  return (PTBL_CharClasses)(ATerm)ATmakeList1((ATerm) head);
+}
+PTBL_CharClasses PTBL_makeCharClassesMany(PTBL_CharClass head, PTBL_CharClasses tail) {
+  return (PTBL_CharClasses)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 PTBL_Priorities PTBL_makePrioritiesEmpty(void) {
   return (PTBL_Priorities)(ATerm)ATempty;
@@ -843,13 +917,17 @@ PTBL_Priorities PTBL_makePrioritiesMany(PTBL_Priority head, PTBL_Priorities tail
   return (PTBL_Priorities)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 PTBL_Priority PTBL_makePriorityGreater(int label1, int label2) {
-  return (PTBL_Priority)(ATerm)ATmakeAppl2(PTBL_afun13, (ATerm) (ATerm) ATmakeInt(label1), (ATerm) (ATerm) ATmakeInt(label2));
+  return (PTBL_Priority)(ATerm)ATmakeAppl2(PTBL_afun12, (ATerm) (ATerm) ATmakeInt(label1), (ATerm) (ATerm) ATmakeInt(label2));
 }
 PTBL_Priority PTBL_makePriorityArgGreater(int label1, int argumentNumber, int label2) {
-  return (PTBL_Priority)(ATerm)ATmakeAppl3(PTBL_afun14, (ATerm) (ATerm) ATmakeInt(label1), (ATerm) (ATerm) ATmakeInt(argumentNumber), (ATerm) (ATerm) ATmakeInt(label2));
+  return (PTBL_Priority)(ATerm)ATmakeAppl3(PTBL_afun13, (ATerm) (ATerm) ATmakeInt(label1), (ATerm) (ATerm) ATmakeInt(argumentNumber), (ATerm) (ATerm) ATmakeInt(label2));
 }
 
 ATbool PTBL_isEqualProduction(PTBL_Production arg0, PTBL_Production arg1) {
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -909,15 +987,15 @@ ATbool PTBL_isEqualSpecialAttr(PTBL_SpecialAttr arg0, PTBL_SpecialAttr arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTBL_isEqualLookAheads(PTBL_LookAheads arg0, PTBL_LookAheads arg1) {
+ATbool PTBL_isEqualRestrictions(PTBL_Restrictions arg0, PTBL_Restrictions arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTBL_isEqualLookAhead(PTBL_LookAhead arg0, PTBL_LookAhead arg1) {
+ATbool PTBL_isEqualRestriction(PTBL_Restriction arg0, PTBL_Restriction arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool PTBL_isEqualCharClass(PTBL_CharClass arg0, PTBL_CharClass arg1) {
+ATbool PTBL_isEqualCharClasses(PTBL_CharClasses arg0, PTBL_CharClasses arg1) {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
@@ -963,6 +1041,42 @@ PTBL_Production PTBL_setProductionProd(PTBL_Production arg, ATerm prod) {
 
   ATabort("Production has no Prod: %t\n", arg);
   return (PTBL_Production)NULL;
+}
+
+ATbool PTBL_isValidCharClass(PTBL_CharClass arg) {
+  if (PTBL_isCharClassExternal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+inline ATbool PTBL_isCharClassExternal(PTBL_CharClass arg) {
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternCharClassExternal, NULL));
+#endif
+  return ATtrue;
+}
+
+ATbool PTBL_hasCharClassCharClass(PTBL_CharClass arg) {
+  if (PTBL_isCharClassExternal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+ATerm PTBL_getCharClassCharClass(PTBL_CharClass arg) {
+  
+    return (ATerm)arg;
+}
+
+PTBL_CharClass PTBL_setCharClassCharClass(PTBL_CharClass arg, ATerm charClass) {
+  if (PTBL_isCharClassExternal(arg)) {
+    return (PTBL_CharClass)((ATerm) charClass);
+  }
+
+  ATabort("CharClass has no CharClass: %t\n", arg);
+  return (PTBL_CharClass)NULL;
 }
 
 ATbool PTBL_isValidCharRanges(PTBL_CharRanges arg) {
@@ -2088,7 +2202,7 @@ ATbool PTBL_hasActionSpecialAttr(PTBL_Action arg) {
   return ATfalse;
 }
 
-ATbool PTBL_hasActionLookaheads(PTBL_Action arg) {
+ATbool PTBL_hasActionRestrictions(PTBL_Action arg) {
   if (PTBL_isActionLookaheadReduce(arg)) {
     return ATtrue;
   }
@@ -2126,9 +2240,9 @@ PTBL_SpecialAttr PTBL_getActionSpecialAttr(PTBL_Action arg) {
     return (PTBL_SpecialAttr)ATgetArgument((ATermAppl)arg, 2);
 }
 
-PTBL_LookAheads PTBL_getActionLookaheads(PTBL_Action arg) {
+PTBL_Restrictions PTBL_getActionRestrictions(PTBL_Action arg) {
   
-    return (PTBL_LookAheads)ATgetArgument((ATermAppl)arg, 3);
+    return (PTBL_Restrictions)ATgetArgument((ATermAppl)arg, 3);
 }
 
 int PTBL_getActionStateNumber(PTBL_Action arg) {
@@ -2172,12 +2286,12 @@ PTBL_Action PTBL_setActionSpecialAttr(PTBL_Action arg, PTBL_SpecialAttr specialA
   return (PTBL_Action)NULL;
 }
 
-PTBL_Action PTBL_setActionLookaheads(PTBL_Action arg, PTBL_LookAheads lookaheads) {
+PTBL_Action PTBL_setActionRestrictions(PTBL_Action arg, PTBL_Restrictions restrictions) {
   if (PTBL_isActionLookaheadReduce(arg)) {
-    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) lookaheads), 3);
+    return (PTBL_Action)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) restrictions), 3);
   }
 
-  ATabort("Action has no Lookaheads: %t\n", arg);
+  ATabort("Action has no Restrictions: %t\n", arg);
   return (PTBL_Action)NULL;
 }
 
@@ -2278,31 +2392,31 @@ inline ATbool PTBL_isSpecialAttrAvoid(PTBL_SpecialAttr arg) {
   }
 }
 
-ATbool PTBL_isValidLookAheads(PTBL_LookAheads arg) {
-  if (PTBL_isLookAheadsEmpty(arg)) {
+ATbool PTBL_isValidRestrictions(PTBL_Restrictions arg) {
+  if (PTBL_isRestrictionsEmpty(arg)) {
     return ATtrue;
   }
-  else if (PTBL_isLookAheadsSingle(arg)) {
+  else if (PTBL_isRestrictionsSingle(arg)) {
     return ATtrue;
   }
-  else if (PTBL_isLookAheadsMany(arg)) {
+  else if (PTBL_isRestrictionsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-inline ATbool PTBL_isLookAheadsEmpty(PTBL_LookAheads arg) {
+inline ATbool PTBL_isRestrictionsEmpty(PTBL_Restrictions arg) {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTBL_patternLookAheadsEmpty));
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternRestrictionsEmpty));
 #endif
   return ATtrue;
 }
 
-inline ATbool PTBL_isLookAheadsSingle(PTBL_LookAheads arg) {
+inline ATbool PTBL_isRestrictionsSingle(PTBL_Restrictions arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -2315,7 +2429,7 @@ inline ATbool PTBL_isLookAheadsSingle(PTBL_LookAheads arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternLookAheadsSingle, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternRestrictionsSingle, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2323,7 +2437,7 @@ inline ATbool PTBL_isLookAheadsSingle(PTBL_LookAheads arg) {
   }
 }
 
-inline ATbool PTBL_isLookAheadsMany(PTBL_LookAheads arg) {
+inline ATbool PTBL_isRestrictionsMany(PTBL_Restrictions arg) {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
@@ -2336,7 +2450,7 @@ inline ATbool PTBL_isLookAheadsMany(PTBL_LookAheads arg) {
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PTBL_patternLookAheadsMany, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternRestrictionsMany, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -2344,148 +2458,208 @@ inline ATbool PTBL_isLookAheadsMany(PTBL_LookAheads arg) {
   }
 }
 
-ATbool PTBL_hasLookAheadsHead(PTBL_LookAheads arg) {
-  if (PTBL_isLookAheadsSingle(arg)) {
+ATbool PTBL_hasRestrictionsHead(PTBL_Restrictions arg) {
+  if (PTBL_isRestrictionsSingle(arg)) {
     return ATtrue;
   }
-  else if (PTBL_isLookAheadsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-ATbool PTBL_hasLookAheadsTail(PTBL_LookAheads arg) {
-  if (PTBL_isLookAheadsMany(arg)) {
+  else if (PTBL_isRestrictionsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-PTBL_LookAhead PTBL_getLookAheadsHead(PTBL_LookAheads arg) {
-  if (PTBL_isLookAheadsSingle(arg)) {
-    return (PTBL_LookAhead)ATgetFirst((ATermList)arg);
+ATbool PTBL_hasRestrictionsTail(PTBL_Restrictions arg) {
+  if (PTBL_isRestrictionsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+PTBL_Restriction PTBL_getRestrictionsHead(PTBL_Restrictions arg) {
+  if (PTBL_isRestrictionsSingle(arg)) {
+    return (PTBL_Restriction)ATgetFirst((ATermList)arg);
   }
   else 
-    return (PTBL_LookAhead)ATgetFirst((ATermList)arg);
+    return (PTBL_Restriction)ATgetFirst((ATermList)arg);
 }
 
-PTBL_LookAheads PTBL_getLookAheadsTail(PTBL_LookAheads arg) {
+PTBL_Restrictions PTBL_getRestrictionsTail(PTBL_Restrictions arg) {
   
-    return (PTBL_LookAheads)ATgetNext((ATermList)arg);
+    return (PTBL_Restrictions)ATgetNext((ATermList)arg);
 }
 
-PTBL_LookAheads PTBL_setLookAheadsHead(PTBL_LookAheads arg, PTBL_LookAhead head) {
-  if (PTBL_isLookAheadsSingle(arg)) {
-    return (PTBL_LookAheads)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+PTBL_Restrictions PTBL_setRestrictionsHead(PTBL_Restrictions arg, PTBL_Restriction head) {
+  if (PTBL_isRestrictionsSingle(arg)) {
+    return (PTBL_Restrictions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
-  else if (PTBL_isLookAheadsMany(arg)) {
-    return (PTBL_LookAheads)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  else if (PTBL_isRestrictionsMany(arg)) {
+    return (PTBL_Restrictions)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
-  ATabort("LookAheads has no Head: %t\n", arg);
-  return (PTBL_LookAheads)NULL;
+  ATabort("Restrictions has no Head: %t\n", arg);
+  return (PTBL_Restrictions)NULL;
 }
 
-PTBL_LookAheads PTBL_setLookAheadsTail(PTBL_LookAheads arg, PTBL_LookAheads tail) {
-  if (PTBL_isLookAheadsMany(arg)) {
-    return (PTBL_LookAheads)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+PTBL_Restrictions PTBL_setRestrictionsTail(PTBL_Restrictions arg, PTBL_Restrictions tail) {
+  if (PTBL_isRestrictionsMany(arg)) {
+    return (PTBL_Restrictions)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
 
-  ATabort("LookAheads has no Tail: %t\n", arg);
-  return (PTBL_LookAheads)NULL;
+  ATabort("Restrictions has no Tail: %t\n", arg);
+  return (PTBL_Restrictions)NULL;
 }
 
-ATbool PTBL_isValidLookAhead(PTBL_LookAhead arg) {
-  if (PTBL_isLookAheadDefault(arg)) {
+ATbool PTBL_isValidRestriction(PTBL_Restriction arg) {
+  if (PTBL_isRestrictionFollow(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-inline ATbool PTBL_isLookAheadDefault(PTBL_LookAhead arg) {
+inline ATbool PTBL_isRestrictionFollow(PTBL_Restriction arg) {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTBL_patternLookAheadDefault, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternRestrictionFollow, NULL));
 #endif
   return ATtrue;
 }
 
-ATbool PTBL_hasLookAheadCharClass(PTBL_LookAhead arg) {
-  if (PTBL_isLookAheadDefault(arg)) {
+ATbool PTBL_hasRestrictionCharClasses(PTBL_Restriction arg) {
+  if (PTBL_isRestrictionFollow(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-ATbool PTBL_hasLookAheadLookaheads(PTBL_LookAhead arg) {
-  if (PTBL_isLookAheadDefault(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-PTBL_CharClass PTBL_getLookAheadCharClass(PTBL_LookAhead arg) {
+PTBL_CharClasses PTBL_getRestrictionCharClasses(PTBL_Restriction arg) {
   
-    return (PTBL_CharClass)ATgetArgument((ATermAppl)arg, 0);
+    return (PTBL_CharClasses)ATgetArgument((ATermAppl)arg, 0);
 }
 
-PTBL_LookAheads PTBL_getLookAheadLookaheads(PTBL_LookAhead arg) {
-  
-    return (PTBL_LookAheads)ATgetArgument((ATermAppl)arg, 1);
-}
-
-PTBL_LookAhead PTBL_setLookAheadCharClass(PTBL_LookAhead arg, PTBL_CharClass charClass) {
-  if (PTBL_isLookAheadDefault(arg)) {
-    return (PTBL_LookAhead)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) charClass), 0);
+PTBL_Restriction PTBL_setRestrictionCharClasses(PTBL_Restriction arg, PTBL_CharClasses charClasses) {
+  if (PTBL_isRestrictionFollow(arg)) {
+    return (PTBL_Restriction)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) charClasses), 0);
   }
 
-  ATabort("LookAhead has no CharClass: %t\n", arg);
-  return (PTBL_LookAhead)NULL;
+  ATabort("Restriction has no CharClasses: %t\n", arg);
+  return (PTBL_Restriction)NULL;
 }
 
-PTBL_LookAhead PTBL_setLookAheadLookaheads(PTBL_LookAhead arg, PTBL_LookAheads lookaheads) {
-  if (PTBL_isLookAheadDefault(arg)) {
-    return (PTBL_LookAhead)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) lookaheads), 1);
+ATbool PTBL_isValidCharClasses(PTBL_CharClasses arg) {
+  if (PTBL_isCharClassesEmpty(arg)) {
+    return ATtrue;
   }
-
-  ATabort("LookAhead has no Lookaheads: %t\n", arg);
-  return (PTBL_LookAhead)NULL;
-}
-
-ATbool PTBL_isValidCharClass(PTBL_CharClass arg) {
-  if (PTBL_isCharClassDefault(arg)) {
+  else if (PTBL_isCharClassesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isCharClassesMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-inline ATbool PTBL_isCharClassDefault(PTBL_CharClass arg) {
+inline ATbool PTBL_isCharClassesEmpty(PTBL_CharClasses arg) {
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PTBL_patternCharClassDefault, NULL));
+  assert(ATmatchTerm((ATerm)arg, PTBL_patternCharClassesEmpty));
 #endif
   return ATtrue;
 }
 
-ATbool PTBL_hasCharClassRanges(PTBL_CharClass arg) {
-  if (PTBL_isCharClassDefault(arg)) {
+inline ATbool PTBL_isCharClassesSingle(PTBL_CharClasses arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternCharClassesSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+inline ATbool PTBL_isCharClassesMany(PTBL_CharClasses arg) {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PTBL_patternCharClassesMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+ATbool PTBL_hasCharClassesHead(PTBL_CharClasses arg) {
+  if (PTBL_isCharClassesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PTBL_isCharClassesMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
-PTBL_CharRanges PTBL_getCharClassRanges(PTBL_CharClass arg) {
-  
-    return (PTBL_CharRanges)ATgetArgument((ATermAppl)arg, 0);
+ATbool PTBL_hasCharClassesTail(PTBL_CharClasses arg) {
+  if (PTBL_isCharClassesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
 }
 
-PTBL_CharClass PTBL_setCharClassRanges(PTBL_CharClass arg, PTBL_CharRanges ranges) {
-  if (PTBL_isCharClassDefault(arg)) {
-    return (PTBL_CharClass)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) ranges), 0);
+PTBL_CharClass PTBL_getCharClassesHead(PTBL_CharClasses arg) {
+  if (PTBL_isCharClassesSingle(arg)) {
+    return (PTBL_CharClass)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (PTBL_CharClass)ATgetFirst((ATermList)arg);
+}
+
+PTBL_CharClasses PTBL_getCharClassesTail(PTBL_CharClasses arg) {
+  
+    return (PTBL_CharClasses)ATgetNext((ATermList)arg);
+}
+
+PTBL_CharClasses PTBL_setCharClassesHead(PTBL_CharClasses arg, PTBL_CharClass head) {
+  if (PTBL_isCharClassesSingle(arg)) {
+    return (PTBL_CharClasses)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PTBL_isCharClassesMany(arg)) {
+    return (PTBL_CharClasses)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
-  ATabort("CharClass has no Ranges: %t\n", arg);
-  return (PTBL_CharClass)NULL;
+  ATabort("CharClasses has no Head: %t\n", arg);
+  return (PTBL_CharClasses)NULL;
+}
+
+PTBL_CharClasses PTBL_setCharClassesTail(PTBL_CharClasses arg, PTBL_CharClasses tail) {
+  if (PTBL_isCharClassesMany(arg)) {
+    return (PTBL_CharClasses)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("CharClasses has no Tail: %t\n", arg);
+  return (PTBL_CharClasses)NULL;
 }
 
 ATbool PTBL_isValidPriorities(PTBL_Priorities arg) {
@@ -2740,6 +2914,14 @@ PTBL_Production PTBL_visitProduction(PTBL_Production arg, ATerm (*acceptProd)(AT
   ATabort("not a Production: %t\n", arg);
   return (PTBL_Production)NULL;
 }
+PTBL_CharClass PTBL_visitCharClass(PTBL_CharClass arg, ATerm (*acceptCharClass)(ATerm)) {
+  if (PTBL_isCharClassExternal(arg)) {
+    return PTBL_makeCharClassExternal(
+        acceptCharClass ? acceptCharClass(PTBL_getCharClassCharClass(arg)) : PTBL_getCharClassCharClass(arg));
+  }
+  ATabort("not a CharClass: %t\n", arg);
+  return (PTBL_CharClass)NULL;
+}
 PTBL_CharRanges PTBL_visitCharRanges(PTBL_CharRanges arg, ATerm (*acceptRanges)(ATerm)) {
   if (PTBL_isCharRangesExternal(arg)) {
     return PTBL_makeCharRangesExternal(
@@ -2884,7 +3066,7 @@ PTBL_Actions PTBL_visitActions(PTBL_Actions arg, PTBL_Action (*acceptHead)(PTBL_
   ATabort("not a Actions: %t\n", arg);
   return (PTBL_Actions)NULL;
 }
-PTBL_Action PTBL_visitAction(PTBL_Action arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTBL_SpecialAttr (*acceptSpecialAttr)(PTBL_SpecialAttr), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads), int (*acceptStateNumber)(int)) {
+PTBL_Action PTBL_visitAction(PTBL_Action arg, int (*acceptLength)(int), int (*acceptLabel)(int), PTBL_SpecialAttr (*acceptSpecialAttr)(PTBL_SpecialAttr), PTBL_Restrictions (*acceptRestrictions)(PTBL_Restrictions), int (*acceptStateNumber)(int)) {
   if (PTBL_isActionReduce(arg)) {
     return PTBL_makeActionReduce(
         acceptLength ? acceptLength(PTBL_getActionLength(arg)) : PTBL_getActionLength(arg),
@@ -2896,7 +3078,7 @@ PTBL_Action PTBL_visitAction(PTBL_Action arg, int (*acceptLength)(int), int (*ac
         acceptLength ? acceptLength(PTBL_getActionLength(arg)) : PTBL_getActionLength(arg),
         acceptLabel ? acceptLabel(PTBL_getActionLabel(arg)) : PTBL_getActionLabel(arg),
         acceptSpecialAttr ? acceptSpecialAttr(PTBL_getActionSpecialAttr(arg)) : PTBL_getActionSpecialAttr(arg),
-        acceptLookaheads ? acceptLookaheads(PTBL_getActionLookaheads(arg)) : PTBL_getActionLookaheads(arg));
+        acceptRestrictions ? acceptRestrictions(PTBL_getActionRestrictions(arg)) : PTBL_getActionRestrictions(arg));
   }
   if (PTBL_isActionShift(arg)) {
     return PTBL_makeActionShift(
@@ -2924,38 +3106,45 @@ PTBL_SpecialAttr PTBL_visitSpecialAttr(PTBL_SpecialAttr arg) {
   ATabort("not a SpecialAttr: %t\n", arg);
   return (PTBL_SpecialAttr)NULL;
 }
-PTBL_LookAheads PTBL_visitLookAheads(PTBL_LookAheads arg, PTBL_LookAhead (*acceptHead)(PTBL_LookAhead)) {
-  if (PTBL_isLookAheadsEmpty(arg)) {
-    return PTBL_makeLookAheadsEmpty();
+PTBL_Restrictions PTBL_visitRestrictions(PTBL_Restrictions arg, PTBL_Restriction (*acceptHead)(PTBL_Restriction)) {
+  if (PTBL_isRestrictionsEmpty(arg)) {
+    return PTBL_makeRestrictionsEmpty();
   }
-  if (PTBL_isLookAheadsSingle(arg)) {
-    return PTBL_makeLookAheadsSingle(
-        acceptHead ? acceptHead(PTBL_getLookAheadsHead(arg)) : PTBL_getLookAheadsHead(arg));
+  if (PTBL_isRestrictionsSingle(arg)) {
+    return PTBL_makeRestrictionsSingle(
+        acceptHead ? acceptHead(PTBL_getRestrictionsHead(arg)) : PTBL_getRestrictionsHead(arg));
   }
-  if (PTBL_isLookAheadsMany(arg)) {
-    return PTBL_makeLookAheadsMany(
-        acceptHead ? acceptHead(PTBL_getLookAheadsHead(arg)) : PTBL_getLookAheadsHead(arg),
-        PTBL_visitLookAheads(PTBL_getLookAheadsTail(arg), acceptHead));
+  if (PTBL_isRestrictionsMany(arg)) {
+    return PTBL_makeRestrictionsMany(
+        acceptHead ? acceptHead(PTBL_getRestrictionsHead(arg)) : PTBL_getRestrictionsHead(arg),
+        PTBL_visitRestrictions(PTBL_getRestrictionsTail(arg), acceptHead));
   }
-  ATabort("not a LookAheads: %t\n", arg);
-  return (PTBL_LookAheads)NULL;
+  ATabort("not a Restrictions: %t\n", arg);
+  return (PTBL_Restrictions)NULL;
 }
-PTBL_LookAhead PTBL_visitLookAhead(PTBL_LookAhead arg, PTBL_CharClass (*acceptCharClass)(PTBL_CharClass), PTBL_LookAheads (*acceptLookaheads)(PTBL_LookAheads)) {
-  if (PTBL_isLookAheadDefault(arg)) {
-    return PTBL_makeLookAheadDefault(
-        acceptCharClass ? acceptCharClass(PTBL_getLookAheadCharClass(arg)) : PTBL_getLookAheadCharClass(arg),
-        acceptLookaheads ? acceptLookaheads(PTBL_getLookAheadLookaheads(arg)) : PTBL_getLookAheadLookaheads(arg));
+PTBL_Restriction PTBL_visitRestriction(PTBL_Restriction arg, PTBL_CharClasses (*acceptCharClasses)(PTBL_CharClasses)) {
+  if (PTBL_isRestrictionFollow(arg)) {
+    return PTBL_makeRestrictionFollow(
+        acceptCharClasses ? acceptCharClasses(PTBL_getRestrictionCharClasses(arg)) : PTBL_getRestrictionCharClasses(arg));
   }
-  ATabort("not a LookAhead: %t\n", arg);
-  return (PTBL_LookAhead)NULL;
+  ATabort("not a Restriction: %t\n", arg);
+  return (PTBL_Restriction)NULL;
 }
-PTBL_CharClass PTBL_visitCharClass(PTBL_CharClass arg, PTBL_CharRanges (*acceptRanges)(PTBL_CharRanges)) {
-  if (PTBL_isCharClassDefault(arg)) {
-    return PTBL_makeCharClassDefault(
-        acceptRanges ? acceptRanges(PTBL_getCharClassRanges(arg)) : PTBL_getCharClassRanges(arg));
+PTBL_CharClasses PTBL_visitCharClasses(PTBL_CharClasses arg, PTBL_CharClass (*acceptHead)(PTBL_CharClass)) {
+  if (PTBL_isCharClassesEmpty(arg)) {
+    return PTBL_makeCharClassesEmpty();
   }
-  ATabort("not a CharClass: %t\n", arg);
-  return (PTBL_CharClass)NULL;
+  if (PTBL_isCharClassesSingle(arg)) {
+    return PTBL_makeCharClassesSingle(
+        acceptHead ? acceptHead(PTBL_getCharClassesHead(arg)) : PTBL_getCharClassesHead(arg));
+  }
+  if (PTBL_isCharClassesMany(arg)) {
+    return PTBL_makeCharClassesMany(
+        acceptHead ? acceptHead(PTBL_getCharClassesHead(arg)) : PTBL_getCharClassesHead(arg),
+        PTBL_visitCharClasses(PTBL_getCharClassesTail(arg), acceptHead));
+  }
+  ATabort("not a CharClasses: %t\n", arg);
+  return (PTBL_CharClasses)NULL;
 }
 PTBL_Priorities PTBL_visitPriorities(PTBL_Priorities arg, PTBL_Priority (*acceptHead)(PTBL_Priority)) {
   if (PTBL_isPrioritiesEmpty(arg)) {

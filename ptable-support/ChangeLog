@@ -1,5 +1,8 @@
 $Id$
 
+Mon Mar 27 16:52:42 CEST 2006 <economop@cwi.nl>
+ * Changed the definition of follow restrictions and lookahead reduces.
+
 Fri Feb 17 16:18:48 CET 2006 <economop@cwi.nl>
  * Changed the names of the functions in the API without changing the
    structure of the parse table. Intermediate commit before complete

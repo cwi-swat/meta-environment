@@ -1,5 +1,6 @@
 [
 constructor(Production, external, <prod(term)>),
+constructor(CharClass, external, <char-class(term)>),
 constructor(CharRanges, external, <ranges(term)>),
 
 
@@ -21,7 +22,7 @@ constructor(Choice,Default,action(<ranges(CharRanges)>,<actions(Actions)>)),
 
 list(Actions,Action),
 constructor(Action,reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>)),
-constructor(Action,lookahead-reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>,<lookaheads(LookAheads)>)),
+constructor(Action,lookahead-reduce,reduce(<length(int)>,<label(int)>,<special-attr(SpecialAttr)>,<restrictions(Restrictions)>)),
 constructor(Action,shift,shift(<state-number(int)>)),
 constructor(Action,accept,accept),
 
@@ -30,10 +31,10 @@ constructor(SpecialAttr,reject,1),
 constructor(SpecialAttr,prefer,2),
 constructor(SpecialAttr,avoid,4),
 
-list(LookAheads,LookAhead),
-constructor(LookAhead,default,look(<char-class(CharClass)>,<lookaheads(LookAheads)>)),
+list(Restrictions,Restriction),
+constructor(Restriction,follow,follow-restriction(<char-classes(CharClasses)>)),
 
-constructor(CharClass,default,char-class(<ranges(CharRanges)>)),
+list(CharClasses,CharClass),
 
 list(Priorities,Priority),
 constructor(Priority,greater,gtr-prio(<label1(int)>,<label2(int)>)),
