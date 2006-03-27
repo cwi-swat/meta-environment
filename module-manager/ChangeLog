@@ -1,5 +1,9 @@
 $Id$
 
+Mon Mar 27 16:55:46 CEST 2006 <kooiker@cwi.nl>
+ * toolbus_make_rules:
+   - remove -swing from tiftojava
+
 Thu Feb 23 16:52:51 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Use generics to type maps, sets, and lists
