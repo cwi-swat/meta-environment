@@ -1,5 +1,11 @@
 $Id$
 
+Thu Mar 30 17:53:58 CEST 2006 <economop@cwi.nl>
+ * Updated parse tables. Pgen now treats priorities slightly differently which
+   causes SGLR to create different parse trees. It still accepts the same
+   strings, but may produce different derivations, as is the case for 
+   |booleans.lst|.
+
 Fri Mar 10 11:27:36 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library
