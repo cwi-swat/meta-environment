@@ -1,37 +1,38 @@
 package nl.cwi.sen1.gui.plugin;
 
-import java.awt.Color;
 import java.util.Iterator;
 
-import edu.berkeley.guir.prefuse.EdgeItem;
-import edu.berkeley.guir.prefuse.ItemRegistry;
-import edu.berkeley.guir.prefuse.NodeItem;
-import edu.berkeley.guir.prefuse.action.assignment.Layout;
-import edu.berkeley.guir.prefuse.graph.Graph;
+import prefuse.action.layout.Layout;
+import prefuse.data.Graph;
+import prefuse.visual.VisualItem;
 
 public class GraphDotLayout extends Layout {
-	public static final String CURVE_POINTS = "curve-points";
-	
-	public void run(ItemRegistry registry, double frac) {
-		Graph g = registry.getFilteredGraph();
-		Iterator nodeIter = g.getNodes();
-		while (nodeIter.hasNext()) {
-			NodeItem item = (NodeItem) nodeIter.next();
-			GraphNode node = (GraphNode) item.getEntity();
-			double x = node.getDotX();
-			double y = node.getDotY();
+    public static final String CURVE_POINTS = "curve-points";
 
-			item.setFillColor(node.getFillColor());
-			this.setLocation(item, null, x, y);
-		}
-		
-		Iterator edgeIter = g.getEdges();
-		while  (edgeIter.hasNext()) {
-			EdgeItem item = (EdgeItem) edgeIter.next();
-			GraphEdge edge = (GraphEdge) item.getEntity();
-			
-			item.setFillColor(Color.BLACK);
-			item.setVizAttribute(CURVE_POINTS, edge.getDotControlPoints());
-		} 
-	}
+    public static final String DOT_X = "dotX";
+
+    public static final String DOT_Y = "dotY";
+
+    public static final String DOT_WIDTH = "dotWidth";
+
+    public static final String DOT_HEIGHT = "dotHeight";
+
+    public GraphDotLayout(String group) {
+        super(group);
+    }
+
+    public void run(double frac) {
+        Graph g = (Graph) m_vis.getGroup(m_group);
+        if (g != null) {
+            Iterator nodeIter = g.nodes();
+            while (nodeIter.hasNext()) {
+                VisualItem node = (VisualItem) nodeIter.next();
+                double x = node.getInt(DOT_X);
+                double y = node.getInt(DOT_Y);
+
+                setX(node, null, x);
+                setY(node, null, y);
+            }
+        }
+    }
 }

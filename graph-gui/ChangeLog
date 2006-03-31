@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 31 15:04:56 CEST 2006 <kooiker@cwi.nl>
+ * src/**/*.java,lib/prefuse.jar:
+   - Update prefuse to beta 20060320
+
 Tue Feb 21 16:31:26 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Use configuration api for menus and shortcuts

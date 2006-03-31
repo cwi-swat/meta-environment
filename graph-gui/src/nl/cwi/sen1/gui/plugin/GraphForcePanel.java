@@ -15,8 +15,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import nl.cwi.sen1.util.Preferences;
-import edu.berkeley.guir.prefusex.force.Force;
-import edu.berkeley.guir.prefusex.force.ForceSimulator;
+import prefuse.util.force.Force;
+import prefuse.util.force.ForceSimulator;
 
 /* A panel with sliders to configure a ForceSimulator. Adapted from
  * the prefuse implementation. 

@@ -93,7 +93,6 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
             panel.setGraphPanelListener(new GraphPanelListener() {
                 public void nodeSelected(String id) {
-                    System.err.println("GraphPainter: Node: " + id + ", GraphId: " + graphId);
                     NodeId nodeId = graphFactory.NodeIdFromString(id);
                     bridge.postEvent(studio.getATermFactory().make(
                             "node-selected(<str>,<term>)", graphId,
@@ -199,19 +198,19 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
         menu.add(new JSeparator());
 
-        item = new JCheckBoxMenuItem("Show force panel");
-        item.addActionListener(new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-                if (item.isSelected()) {
-                    showForcePanel(panel.getId(), true);
-                } else {
-                    showForcePanel(panel.getId(), false);
-                }
-            }
-        });
-        item.setSelected(false);
-        menu.add(item);
+//        item = new JCheckBoxMenuItem("Show force panel");
+//        item.addActionListener(new AbstractAction() {
+//            public void actionPerformed(ActionEvent e) {
+//                JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+//                if (item.isSelected()) {
+//                    showForcePanel(panel.getId(), true);
+//                } else {
+//                    showForcePanel(panel.getId(), false);
+//                }
+//            }
+//        });
+//        item.setSelected(false);
+//        menu.add(item);
 
         return menu;
     }
@@ -219,8 +218,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
     protected void showForcePanel(String id, boolean show) {
         if (show) {
             GraphPanel graphPanel = graphs.get(id);
-            GraphForcePanel forcePanel = new GraphForcePanel(graphPanel
-                    .getForceSimulator(), preferences);
+            GraphForcePanel forcePanel = new GraphForcePanel(graphPanel.getForceSimulator(), preferences);
             StudioComponent comp = new StudioComponentImpl("Forces for "
                     + id, forcePanel);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
@@ -269,7 +267,6 @@ public class GraphPainter extends DefaultStudioPlugin implements
     }
 
     public void recTerminate(ATerm t0) {
-        GraphPanel.cleanUp();
         fireStudioPluginClosed();
     }
 
@@ -300,7 +297,7 @@ public class GraphPainter extends DefaultStudioPlugin implements
         GraphPanel panel = createPanel(id);
         Graph graph = graphFactory.GraphFromTerm(graphTerm);
         FontMetrics metrics = panel.getFontMetrics(preferences
-                .getFont("graph.node.font"));
+                .getFont(GraphConstants.NODE_FONT));
         graph = GraphAdapter.sizeGraph(metrics, preferences, graph);
         return graphFactory.getPureFactory().make(
                 "snd-value(sized-graph(<term>))", graph.toTerm());

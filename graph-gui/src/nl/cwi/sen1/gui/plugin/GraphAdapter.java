@@ -24,58 +24,64 @@ import nl.cwi.sen1.graph.types.Shape;
 import nl.cwi.sen1.graph.types.attribute.Location;
 import nl.cwi.sen1.graph.types.attribute.Size;
 import nl.cwi.sen1.util.Preferences;
-import edu.berkeley.guir.prefuse.graph.DefaultGraph;
-import edu.berkeley.guir.prefuse.graph.DefaultNode;
+import prefuse.util.ColorLib;
 
-public class GraphAdapter extends DefaultGraph {
-    public GraphAdapter(Graph graph) {
+public class GraphAdapter extends prefuse.data.Graph {
+    public GraphAdapter(nl.cwi.sen1.graph.types.Graph graph) {
         super(true);
-        Map<NodeId, GraphNode> nodeMap = new HashMap<NodeId, GraphNode>();
+        
+        Map<NodeId, prefuse.data.Node> nodeMap = new HashMap<NodeId, prefuse.data.Node>();
 
+        addColumn(GraphConstants.ID, String.class);
+        addColumn(GraphConstants.LABEL, String.class);
+        addColumn(GraphDotLayout.DOT_X, int.class);
+        addColumn(GraphDotLayout.DOT_Y, int.class);
+        addColumn(GraphDotLayout.DOT_WIDTH, int.class);
+        addColumn(GraphDotLayout.DOT_HEIGHT, int.class);
+        addColumn(GraphConstants.SHAPE, Shape.class);
+        addColumn(GraphDotLayout.CURVE_POINTS, Point2D[].class);
+        addColumn(GraphConstants.COLOR, int.class);
+        addColumn(GraphConstants.FILLCOLOR, int.class);
+        
         for (NodeList nodes = graph.getNodes(); !nodes.isEmpty(); nodes = nodes
                 .getTail()) {
             Node node = nodes.getHead();
-            GraphNode pNode = new GraphNode();
 
-            pNode.setId(node.getId().getId().toString());
-            pNode.setLabel(getNodeLabel(node));
-            pNode.setDotX(getX(node));
-            pNode.setDotY(getY(node));
-            pNode.setDotWidth(getWidth(node));
-            pNode.setDotHeight(getHeight(node));
-            pNode.setShape(getShape(node));
-
+            prefuse.data.Node pNode = addNode();
+            pNode.setString(GraphConstants.ID, node.getId().getId().toString());
+            pNode.setString(GraphConstants.LABEL, getNodeLabel(node));
+            pNode.setInt(GraphDotLayout.DOT_X, getX(node));
+            pNode.setInt(GraphDotLayout.DOT_Y, getY(node));
+            pNode.setInt(GraphDotLayout.DOT_WIDTH, getWidth(node));
+            pNode.setInt(GraphDotLayout.DOT_HEIGHT, getHeight(node));
+            pNode.set(GraphConstants.SHAPE, getShape(node));
+            
             Color fillColor = getFillColorAttribute(node);
-
+            
             if (fillColor != null) {
-                pNode.setFillColor(new java.awt.Color(fillColor.getRed(),
+                pNode.setInt(GraphConstants.FILLCOLOR, ColorLib.rgb(fillColor.getRed(),
                         fillColor.getGreen(), fillColor.getBlue()));
             }
-
+            
             Color color = getFillColorAttribute(node);
-
+            
             if (color != null) {
-                pNode.setColor(new java.awt.Color(color.getRed(), color
+                pNode.setInt(GraphConstants.COLOR, ColorLib.rgb(color.getRed(), color
                         .getGreen(), color.getBlue()));
             }
 
             nodeMap.put(node.getId(), pNode);
-            addNode(pNode);
         }
 
         for (EdgeList edges = graph.getEdges(); !edges.isEmpty(); edges = edges
                 .getTail()) {
             Edge edge = edges.getHead();
-            DefaultNode fromNode = nodeMap.get(edge.getFrom());
-            DefaultNode toNode = nodeMap.get(edge.getTo());
-            GraphEdge pEdge = new GraphEdge(fromNode, toNode);
+            prefuse.data.Node fromNode = nodeMap.get(edge.getFrom());
+            prefuse.data.Node toNode = nodeMap.get(edge.getTo());
+            prefuse.data.Edge pEdge = addEdge(fromNode, toNode);
 
-            pEdge.setDotControlPoints(getControlPoints(edge));
-
-            addEdge(pEdge);
+            pEdge.set(GraphDotLayout.CURVE_POINTS, getControlPoints(edge));
         }
-        
-        System.err.println("GraphAdapter: " + toString());
     }
 
     private Point2D[] getControlPoints(Edge edge) {
@@ -136,6 +142,19 @@ public class GraphAdapter extends DefaultGraph {
         return null;
     }
 
+    static private Color getFillColorAttribute(Node node) {
+        AttributeList attrs = node.getAttributes();
+        while (!attrs.isEmpty()) {
+            Attribute attr = attrs.getHead();
+            if (attr.isFillColor()) {
+                return attr.getColor();
+            }
+            attrs = attrs.getTail();
+        }
+
+        return null;
+    }
+
     static public int getX(Node node) {
         Location location = getLocationAttribute(node);
         return location.getX();
@@ -181,19 +200,6 @@ public class GraphAdapter extends DefaultGraph {
         return null;
     }
 
-    static private Color getFillColorAttribute(Node node) {
-        AttributeList attrs = node.getAttributes();
-        while (!attrs.isEmpty()) {
-            Attribute attr = attrs.getHead();
-            if (attr.isFillColor()) {
-                return attr.getColor();
-            }
-            attrs = attrs.getTail();
-        }
-
-        return null;
-    }
-
     static private Node setSizeAttribute(Node node, Size sizeAttr) {
         Factory factory = node.getGraphFactory();
         AttributeList result = factory.makeAttributeList();
@@ -213,8 +219,8 @@ public class GraphAdapter extends DefaultGraph {
     static private Node setNodeSize(FontMetrics metrics, Preferences prefs,
             Node node) {
         Factory factory = node.getGraphFactory();
-        int borderWidth = prefs.getInt("graph.node.border.width");
-        int borderHeight = prefs.getInt("graph.node.border.height");
+        int borderWidth = prefs.getInt(GraphConstants.NODE_BORDER_WIDTH);
+        int borderHeight = prefs.getInt(GraphConstants.NODE_BORDER_HEIGHT);
         String label = getNodeLabel(node);
         int width = metrics.stringWidth(label) + borderWidth * 2;
         int height = metrics.getHeight() + borderHeight * 2;
