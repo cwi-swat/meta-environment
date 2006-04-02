@@ -53,8 +53,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   static private HashMap<String,Integer> size_env = new HashMap<String,Integer>(40);
   static private HashMap<String,Integer> size_used_env = new HashMap<String,Integer>(40);
 
-  public Atom(TBTermFactory tbfactory) {
-    super(tbfactory);
+  public Atom(TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
     assert tbfactory != null;
     addToFirst(this);
     externalNameAsReceivedByTool = shortName();

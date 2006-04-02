@@ -15,14 +15,14 @@ import aterm.ATermList;
 public class Print extends Atom {
   private Ref arg;
 
-  public Print(ATerm a, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public Print(ATerm a, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
     arg = new Ref(a);
     setAtomArgs(arg);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Print(arg.value, tbfactory);
+    Atom a = new Print(arg.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

@@ -21,12 +21,12 @@ public class SndMsg extends MsgAtom {
 	private LinkedList<RecMsg> msgPartners = new LinkedList<RecMsg>();
 	// The RecMsgs in other processes with this SndMsg can communicate
 
-	public SndMsg(ATerm msg, TBTermFactory tbfactory) {
-		super(msg, tbfactory);
+	public SndMsg(ATerm msg, TBTermFactory tbfactory, ATerm posInfo) {
+		super(msg, tbfactory, posInfo);
 	}
 
 	public ProcessExpression copy() {
-		Atom a = new SndMsg(getMsg(), tbfactory);
+		Atom a = new SndMsg(getMsg(), tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

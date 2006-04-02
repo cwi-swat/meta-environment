@@ -1,5 +1,6 @@
 package toolbus.atom;
 
+import aterm.ATerm;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.process.ProcessExpression;
@@ -10,12 +11,12 @@ import toolbus.process.ProcessExpression;
 
 public class Delta extends Atom {
   
-  public Delta(TBTermFactory tbfactory){
-    super(tbfactory);
+  public Delta(TBTermFactory tbfactory, ATerm posInfo){
+    super(tbfactory, posInfo);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Delta(tbfactory);
+    Atom a = new Delta(tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

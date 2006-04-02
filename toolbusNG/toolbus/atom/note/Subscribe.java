@@ -19,14 +19,14 @@ import aterm.ATerm;
 public class Subscribe extends Atom {
 	private Ref msgpat;
 	
-	public Subscribe(ATerm msgpat, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public Subscribe(ATerm msgpat, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);
 	}
 	
 	public ProcessExpression copy() {
-		Atom a = new Subscribe(msgpat.value, tbfactory);
+		Atom a = new Subscribe(msgpat.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

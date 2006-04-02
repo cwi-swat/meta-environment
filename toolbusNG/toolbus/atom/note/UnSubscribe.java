@@ -18,14 +18,14 @@ import aterm.ATerm;
 public class UnSubscribe extends Atom {
 	private Ref msgpat;
 	
-	public UnSubscribe(ATerm msgpat, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public UnSubscribe(ATerm msgpat, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);
 	}
 	
 	public ProcessExpression copy() {
-		Atom a = new UnSubscribe(msgpat.value, tbfactory);
+		Atom a = new UnSubscribe(msgpat.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

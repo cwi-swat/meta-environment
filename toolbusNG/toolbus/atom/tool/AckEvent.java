@@ -17,8 +17,8 @@ public class AckEvent extends Atom {
 	private Ref event;
 	private ToolInstance toolInstance;
 
-  public AckEvent(ATerm toolId, ATerm event, TBTermFactory tbfactory) {
- 	super(tbfactory);
+  public AckEvent(ATerm toolId, ATerm event, TBTermFactory tbfactory, ATerm posInfo) {
+ 	super(tbfactory, posInfo);
 	this.toolId = new Ref(toolId);
 	this.event = new Ref(event);
 	setAtomArgs(this.toolId, this.event);
@@ -26,7 +26,7 @@ public class AckEvent extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new AckEvent(this.toolId.value, this.event.value, tbfactory);
+    Atom a = new AckEvent(this.toolId.value, this.event.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

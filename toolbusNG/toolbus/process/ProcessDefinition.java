@@ -21,12 +21,14 @@ public class ProcessDefinition {
   private ATermList formals;
   private ProcessExpression PE;
   private TBTermFactory tbfactory;
+  private ATerm posInfo;
 
-  public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory) {
+  public ProcessDefinition(String name, ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, ATerm posInfo) {
     this.name = name;
     this.formals = formals;
     this.PE = PE;
     this.tbfactory = tbfactory;
+    this.posInfo = posInfo;
   }
 
   public String getName() {
@@ -35,6 +37,10 @@ public class ProcessDefinition {
 
   public ATermList getFormals() {
   	return formals;
+  }
+  
+  public ATerm getPosInfo(){
+	  return posInfo;
   }
 
   public ProcessExpression getProcessExpression(ATermList actuals) throws ToolBusError {

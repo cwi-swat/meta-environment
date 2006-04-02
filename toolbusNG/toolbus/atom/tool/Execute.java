@@ -27,14 +27,14 @@ public class Execute extends Atom {
 	private Ref tool;
 	private Ref rvar;
 
-	public Execute(ATerm tool, ATerm rvar, TBTermFactory tbfactory){
-		super(tbfactory);
+	public Execute(ATerm tool, ATerm rvar, TBTermFactory tbfactory, ATerm posInfo){
+		super(tbfactory, posInfo);
 		this.tool = new Ref(tool);
 		this.rvar = new Ref(rvar);
 		setAtomArgs(this.tool, this.rvar);
 	}
 	public ProcessExpression copy() {
-		Atom a = new Execute(tool.value, rvar.value, tbfactory);
+		Atom a = new Execute(tool.value, rvar.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

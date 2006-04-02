@@ -7,6 +7,7 @@ import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import aterm.ATerm;
 
 /**
  * ProcesssExpression defines the overall behaviour of process expressions.
@@ -20,9 +21,12 @@ abstract public class ProcessExpression {
 	private State first;
 
 	private State follow;
+	
+	protected ATerm posInfo = null;
 
-	public ProcessExpression(TBTermFactory tbfactory) {
+	public ProcessExpression(TBTermFactory tbfactory, ATerm posInfo) {
 		this.tbfactory = tbfactory;
+		this.posInfo = posInfo;
 		assert tbfactory != null;
 		first = new State();
 	}
@@ -33,6 +37,10 @@ abstract public class ProcessExpression {
 
 	protected void setFirst(State first) {
 		this.first = first;
+	}
+	
+	public ATerm getPosInfo(){
+		return posInfo;
 	}
 
 //	public State getStartState() {

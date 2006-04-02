@@ -31,7 +31,7 @@ public class DynamicProcessCall extends ProcessCall implements StateElement {
 	private boolean uninitialized = true;
 	
 	public DynamicProcessCall(ATerm name, ATermList actuals, TBTermFactory tbfactory) {
-		super("", actuals, tbfactory);
+		super("", actuals, tbfactory, null);
 		this.name = name;
 		super.actuals = actuals;
 		firstState = new State();

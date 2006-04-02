@@ -1,7 +1,9 @@
-package toolbus.atom;
+package toolbus.atom.tool;
 
 import toolbus.TBTermFactory;
 import toolbus.TBTermVar;
+import toolbus.atom.Atom;
+import toolbus.atom.Ref;
 import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
 import toolbus.tool.ToolInstance;
@@ -16,8 +18,8 @@ public class Do extends Atom {
 	private Ref request;
 	private ToolInstance toolInstance;
   
-  public  Do(ATerm toolId, ATerm request, TBTermFactory tbfactory){
-    super(tbfactory);
+  public  Do(ATerm toolId, ATerm request, TBTermFactory tbfactory, ATerm posInfo){
+    super(tbfactory, posInfo);
 	this.toolId = new Ref(toolId);
 	this.request = new Ref(request);
 	setAtomArgs(this.toolId, this.request);
@@ -25,7 +27,7 @@ public class Do extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new Do(toolId.value, request.value, tbfactory);
+    Atom a = new Do(toolId.value, request.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

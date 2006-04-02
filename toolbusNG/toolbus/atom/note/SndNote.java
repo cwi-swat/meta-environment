@@ -26,14 +26,14 @@ public class SndNote extends Atom {
 
 	private Vector<ProcessInstance> notePartners = new Vector<ProcessInstance>();
 
-	public SndNote(ATerm note, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public SndNote(ATerm note, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.note = new Ref(note);
 		setAtomArgs(this.note);
 	}
 
 	public ProcessExpression copy() {
-		Atom a = new SndNote(note.value, tbfactory);
+		Atom a = new SndNote(note.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

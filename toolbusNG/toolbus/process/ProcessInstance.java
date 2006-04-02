@@ -105,7 +105,7 @@ public class ProcessInstance {
 
 	public ProcessInstance(ToolBus TB, String name, ATermList actuals,
 			int processId) throws ToolBusException {
-		this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory()),
+		this(TB, new ProcessCall(name, actuals, false, TB.getTBTermFactory(), null),
 				processId);
 	}
 

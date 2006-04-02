@@ -49,22 +49,22 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	
 	private Environment testEnv;
 
-	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public ProcessCall(String name, ATermList actuals, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.name = name;
 		this.actuals = actuals;
 		firstState = new State();
 		firstState.addElement(this);
 	}
 
-	public ProcessCall(ATerm call, TBTermFactory tbfactory) {
+	public ProcessCall(ATerm call, TBTermFactory tbfactory, ATerm posInfo) {
 		this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments(),
-				tbfactory);
+				tbfactory, posInfo);
 	}
 
 	public ProcessCall(String name, ATermList actuals, boolean evalArgs,
-			TBTermFactory tbfactory) {
-		this(name, actuals, tbfactory);
+			TBTermFactory tbfactory, ATerm posInfo) {
+		this(name, actuals, tbfactory, posInfo);
 		this.evalArgs = evalArgs;
 	}
 
@@ -73,7 +73,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public ProcessExpression copy() {
-		return new ProcessCall(name, actuals, evalArgs, tbfactory);
+		return new ProcessCall(name, actuals, evalArgs, tbfactory, getPosInfo());
 	}
 
 	public void computeFirst() {

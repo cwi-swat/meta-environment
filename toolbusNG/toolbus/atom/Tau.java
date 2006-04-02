@@ -1,5 +1,6 @@
 package toolbus.atom;
 
+import aterm.ATerm;
 import toolbus.TBTermFactory;
 import toolbus.exceptions.ToolBusException;
 import toolbus.process.ProcessExpression;
@@ -10,12 +11,12 @@ import toolbus.process.ProcessExpression;
 
 public class Tau extends Atom {
   
-  public Tau(TBTermFactory tbfactory){
-    super(tbfactory);
+  public Tau(TBTermFactory tbfactory, ATerm posInfo){
+    super(tbfactory, posInfo);
   }
 
   public ProcessExpression copy() {
-    Atom a = new Tau(tbfactory);
+    Atom a = new Tau(tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

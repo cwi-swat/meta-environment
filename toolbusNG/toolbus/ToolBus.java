@@ -131,12 +131,7 @@ public class ToolBus {
 		
 		propertyManager = new PropertyManager(args);
 		
-		parser = new TScriptParser(
-					new ExternalParser(
-							get("sglr.path"), 
-							get("parsetable.path"), 
-							get("implodePT.path")), 
-					this);
+		parser = new TScriptParser(new ExternalParser(this), this);
 		iomanager = new IOManager(this);
 		startTime = System.currentTimeMillis();
 	}

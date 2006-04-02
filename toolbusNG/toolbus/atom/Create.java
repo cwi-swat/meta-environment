@@ -21,15 +21,15 @@ public class Create extends Atom {
   private Ref pcall;
   private Ref rvar;
 
-  public Create(ATerm c, ATerm v, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public Create(ATerm c, ATerm v, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
     pcall = new Ref(c);
     rvar = new Ref(v);
     setAtomArgs(pcall, rvar);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Create(pcall.value, rvar.value, tbfactory);
+    Atom a = new Create(pcall.value, rvar.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

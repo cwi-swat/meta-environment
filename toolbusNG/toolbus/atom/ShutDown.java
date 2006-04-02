@@ -11,14 +11,14 @@ import aterm.ATerm;
 public class ShutDown extends Atom {
   private Ref arg;
 
-  public ShutDown(ATerm trm, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public ShutDown(ATerm trm, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
     arg = new Ref(trm);
     setAtomArgs(arg);
   }
 
   public ProcessExpression copy() {
-    Atom a = new ShutDown(arg.value, tbfactory);
+    Atom a = new ShutDown(arg.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

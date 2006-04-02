@@ -14,12 +14,12 @@ import aterm.ATerm;
 
 public class RecMsg extends MsgAtom {
 
-  public RecMsg(ATerm msg, TBTermFactory tbfactory) {
-    super(msg, tbfactory);
+  public RecMsg(ATerm msg, TBTermFactory tbfactory, ATerm posInfo) {
+    super(msg, tbfactory, posInfo);
   }
   
   public ProcessExpression copy(){
-    Atom a = new RecMsg(getMsg(), tbfactory);
+    Atom a = new RecMsg(getMsg(), tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

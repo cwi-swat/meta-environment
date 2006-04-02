@@ -22,8 +22,8 @@ public abstract class MsgAtom extends Atom {
 
 	private ATerm matchPattern;
 
-	public MsgAtom(ATerm msg, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public MsgAtom(ATerm msg, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.msg = new Ref(msg);
 		// this.id = new Ref(this instanceof RecMsg ?
 		// tbfactory.TransactionIdResVar

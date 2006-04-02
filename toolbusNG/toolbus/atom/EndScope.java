@@ -14,7 +14,7 @@ public class EndScope extends Atom {
 	private Ref refformals;
 
 	public EndScope(ATermList formals, TBTermFactory tbfactory) {
-		super(tbfactory);
+		super(tbfactory, null);
 		refformals = new Ref(formals);
 		setAtomArgs(this.refformals);
 	}

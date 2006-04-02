@@ -19,14 +19,14 @@ import aterm.ATerm;
 public class NoNote extends Atom {
 	private Ref msgpat;
 	
-	public NoNote(ATerm msgpat, TBTermFactory tbfactory){
-		super(tbfactory);
+	public NoNote(ATerm msgpat, TBTermFactory tbfactory, ATerm posInfo){
+		super(tbfactory, posInfo);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);
 	}
 
 	public ProcessExpression copy() {
-		Atom a = new NoNote(msgpat.value, tbfactory);
+		Atom a = new NoNote(msgpat.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}

@@ -5,6 +5,8 @@ package toolbus.process;
 
 import java.util.Stack;
 
+import aterm.ATerm;
+
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
@@ -13,14 +15,14 @@ import toolbus.exceptions.ToolBusException;
 public class Iteration extends ProcessExpression {
   private ProcessExpression left, right;
 
-  public Iteration(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory) {
-	super(tbfactory);
+  public Iteration(ProcessExpression left, ProcessExpression right, TBTermFactory tbfactory, ATerm posInfo) {
+	super(tbfactory, posInfo);
     this.left = left;
     this.right = right;
   }
 
   public ProcessExpression copy() {
-    return new Iteration(left.copy(), right.copy(), tbfactory);
+    return new Iteration(left.copy(), right.copy(), tbfactory, getPosInfo());
   }
 
   public String toString() {
