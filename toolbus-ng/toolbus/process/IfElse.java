@@ -17,15 +17,15 @@ public class IfElse extends ProcessExpression {
   private ProcessExpression right;
   private Environment env;
 
-  public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse, TBTermFactory tbfactory) {
-	super(tbfactory);
+  public IfElse(ATerm test, ProcessExpression Pthen, ProcessExpression Pelse, TBTermFactory tbfactory, ATerm posInfo) {
+	super(tbfactory, posInfo);
     this.test = test;
     this.left = Pthen;
     this.right = Pelse;
   }
 
   public ProcessExpression copy() {
-    return new IfElse(test, left.copy(), right.copy(), tbfactory);
+    return new IfElse(test, left.copy(), right.copy(), tbfactory, getPosInfo());
   }
   
   public void computeFirst() {

@@ -19,15 +19,15 @@ public class Assign extends Atom {
   private Ref var;
   private Ref exp;
 
-  public Assign(ATerm v, ATerm e, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public Assign(ATerm v, ATerm e, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
     var = new Ref(v);
     exp = new Ref(e);
     setAtomArgs(var, exp);
   }
   
   public ProcessExpression copy(){
-    Atom a = new Assign(var.value,  exp.value, tbfactory);
+    Atom a = new Assign(var.value,  exp.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

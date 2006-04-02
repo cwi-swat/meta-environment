@@ -9,6 +9,7 @@ import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
+import aterm.ATerm;
 import aterm.ATermList;
 
 public class LetDefinition extends ProcessExpression {
@@ -17,8 +18,8 @@ public class LetDefinition extends ProcessExpression {
   private ProcessExpression PE;
   private Environment env;
 
-  public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory) {
-	super(tbfactory);
+  public LetDefinition(ATermList formals, ProcessExpression PE, TBTermFactory tbfactory, ATerm posInfo) {
+	super(tbfactory, posInfo);
     this.locals = formals;
     PEinit = PE;
     this.PE = PE;  //new Sequence(PE, new EndScope(formals, tbfactory), tbfactory);
@@ -26,7 +27,7 @@ public class LetDefinition extends ProcessExpression {
   }
 
   public ProcessExpression copy() {
-    return new LetDefinition(locals, PEinit.copy(), tbfactory);
+    return new LetDefinition(locals, PEinit.copy(), tbfactory, getPosInfo());
   }
   
   public void computeFirst(){

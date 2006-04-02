@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import toolbus.TBTermFactory;
+import toolbus.ToolBus;
 import aterm.ATerm;
 
 /**
@@ -17,6 +18,8 @@ public class ExternalParser {
   String parseCommand;
   String implodeCommand;
   String implodeOptions = "-tlILXpcO";
+  String addPosInfoCommand;
+  String addPosInfoOptions;
 
   /**
    * Construct an ExternalParser object without specifying a start symbol
@@ -54,24 +57,33 @@ public class ExternalParser {
     this.parseCommand = parseCommand + " -p " + parseTable;
     this.implodeCommand = implodeCommand + " " + implodeOptions;
   }
+  
+  public ExternalParser(ToolBus toolbus) {
+	    this.parseCommand = toolbus.get("sglr.path") + " -p " + toolbus.get("parsetable.path");
+	    this.implodeCommand = toolbus.get("implodePT.path") + " " + implodeOptions;
+	    this.addPosInfoCommand = toolbus.get("addPosInfo.path");
+	  }
 
   /**
-   * Parse the source file with the given name int an ATerm that represents
+   * Parse the source file with the given name in an ATerm that represents
    * its abstract syntax tree.
  * @param tbfactory TODO
    */
   public ATerm parse(String sourceFileName, TBTermFactory tbfactory) throws ExternalProcessException {
     ATerm result = null;
-    String asfixFileName = getNewFileName("asfix");
-    execute(parseCommand, sourceFileName, asfixFileName, "parse");
-    InputStream in = execute(implodeCommand, asfixFileName, "implode");
+    String asfixFileName1 = getNewFileName("asfix");
+    String asfixFileName2 = getNewFileName("asfix");
+    execute(parseCommand, sourceFileName, asfixFileName1, "parse");
+    execute(addPosInfoCommand + " -p " + sourceFileName, asfixFileName1, asfixFileName2, "parse");
+    InputStream in = execute(implodeCommand, asfixFileName2, "implode");
     try {
     	InputStreamReader reader = new InputStreamReader(in);
       result = tbfactory.readFromTextFile(reader);
     } catch (IOException e) {
       throw new ExternalProcessException(e.getMessage(), "read ATerm from file");
     }
-    delete(asfixFileName);
+    //delete(asfixFileName1);
+    //delete(asfixFileName2);
     return result;
   }
 
@@ -87,7 +99,7 @@ public class ExternalParser {
   }
 
   /**
-   * Execute the given command where the given file is suppliedas input, and
+   * Execute the given command where the given file is supplied as input, and
    * the output is connected to the InputStream that is returned.
    */
   public static InputStream execute(String command, String inFileName, String processType)

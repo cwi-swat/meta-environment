@@ -20,8 +20,8 @@ public class Terminate extends Atom {
 	private Ref request;
 	private ToolInstance toolInstance;
 	
-	public Terminate(ATerm toolId, ATerm request, TBTermFactory tbfactory){
-		super(tbfactory);
+	public Terminate(ATerm toolId, ATerm request, TBTermFactory tbfactory, ATerm posInfo){
+		super(tbfactory, posInfo);
 		this.toolId = new Ref(toolId);
 		this.request = new Ref(request);
 		setAtomArgs(this.toolId);
@@ -32,7 +32,7 @@ public class Terminate extends Atom {
 	 * @see toolbus.process.ProcessExpression#copy()
 	 */
 	public ProcessExpression copy() {
-		 Atom a = new Terminate(toolId.value, request.value, tbfactory);
+		 Atom a = new Terminate(toolId.value, request.value, tbfactory, getPosInfo());
 		 a.copyAtomAttributes(this);
 		 return a;
 	}

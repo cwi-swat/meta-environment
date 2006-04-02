@@ -65,16 +65,16 @@ public class MsgPair extends ProcessExpression implements StateElement {
 
     if (sndThenRec) {
       if (inTool) {
-        prelude = new Sequence(new Event(msg), new SndMsg(msg, tbfactory), tbfactory);
+        prelude = new Sequence(new Event(msg), new SndMsg(msg, tbfactory, null), tbfactory, null);
       } else {
-        prelude = new SndMsg(msg, tbfactory);
+        prelude = new SndMsg(msg, tbfactory, null);
       }
     } else {
       if (inTool) {
         toolAtom = new Eval(msg);
-        prelude = new Sequence(new RecMsg(msg, tbfactory), toolAtom, tbfactory);
+        prelude = new Sequence(new RecMsg(msg, tbfactory, null), toolAtom, tbfactory, null);
       } else {
-        prelude = new RecMsg(msg, tbfactory);
+        prelude = new RecMsg(msg, tbfactory, null);
       }
     }
     Constructor cons;
@@ -97,7 +97,7 @@ public class MsgPair extends ProcessExpression implements StateElement {
       }
     }
 
-    PE = new Sequence(prelude, rest, tbfactory);
+    PE = new Sequence(prelude, rest, tbfactory, null);
     System.err.println("prelude   = " + prelude);
     System.err.println("inbetween = " + inbetween);
     System.err.println("postlude  = " + postlude);

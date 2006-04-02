@@ -25,14 +25,14 @@ import aterm.ATermAppl;
 public class Connect extends Atom {
 	private Ref toolId;
 	
-	public  Connect(ATerm toolId, TBTermFactory tbfactory){
-	    super(tbfactory);
+	public  Connect(ATerm toolId, TBTermFactory tbfactory, ATerm posInfo){
+	    super(tbfactory, posInfo);
 		this.toolId = new Ref(toolId);
 		setAtomArgs(this.toolId);
 	  }
 	  
 	  public ProcessExpression copy(){
-	    Atom a = new Connect(toolId.value, tbfactory);
+	    Atom a = new Connect(toolId.value, tbfactory, getPosInfo());
 	    a.copyAtomAttributes(this);
 	    return a;
 	  }

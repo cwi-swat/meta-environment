@@ -35,8 +35,8 @@ public class Merge extends ProcessExpression implements StateElement {
 	private boolean leftLast = false;
 
 	public Merge(ProcessExpression left, ProcessExpression right,
-			TBTermFactory tbfactory) {
-		super(tbfactory);
+			TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		expr[LEFT] = left;
 		expr[RIGHT] = right;
 		mergeState = new State();
@@ -65,7 +65,7 @@ public class Merge extends ProcessExpression implements StateElement {
 	}
 
 	public ProcessExpression copy() {
-		return new Merge(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory);
+		return new Merge(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory, getPosInfo());
 	}
 
 	public State getAtoms() {

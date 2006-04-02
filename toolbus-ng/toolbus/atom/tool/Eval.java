@@ -17,8 +17,8 @@ public class Eval extends Atom {
 	private Ref request;
 	private ToolInstance toolInstance;
 
-  public Eval(ATerm toolId, ATerm request, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public Eval(ATerm toolId, ATerm request, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
 	this.toolId = new Ref(toolId);
 	this.request = new Ref(request);
 	setAtomArgs(this.toolId, this.request);
@@ -26,7 +26,7 @@ public class Eval extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new Eval(toolId.value, request.value, tbfactory);
+    Atom a = new Eval(toolId.value, request.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

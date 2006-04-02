@@ -22,14 +22,14 @@ import aterm.ATerm;
 public class DisConnect extends Atom {
 	private Ref toolId;
 	
-	public  DisConnect(ATerm toolId, TBTermFactory tbfactory){
-	    super(tbfactory);
+	public  DisConnect(ATerm toolId, TBTermFactory tbfactory, ATerm posInfo){
+	    super(tbfactory, posInfo);
 		this.toolId = new Ref(toolId);
 		setAtomArgs(this.toolId);
 	  }
 	  
 	  public ProcessExpression copy(){
-	    Atom a = new DisConnect(toolId.value, tbfactory);
+	    Atom a = new DisConnect(toolId.value, tbfactory, getPosInfo());
 	    a.copyAtomAttributes(this);
 	    return a;
 	  }

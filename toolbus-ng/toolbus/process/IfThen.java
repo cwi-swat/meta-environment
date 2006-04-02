@@ -7,8 +7,8 @@ import toolbus.TBTermFactory;
 import toolbus.atom.Delta;
 import aterm.ATerm;
 public class IfThen extends IfElse {
-  public IfThen(ATerm test, ProcessExpression Pthen, TBTermFactory tbfactory) {
-    super(test, Pthen, new Delta(tbfactory), tbfactory);
+  public IfThen(ATerm test, ProcessExpression Pthen, TBTermFactory tbfactory, ATerm posInfo) {
+    super(test, Pthen, new Delta(tbfactory, posInfo), tbfactory, posInfo);
   }
 
 }

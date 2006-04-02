@@ -18,15 +18,15 @@ public class RecVal extends Atom {
 	private Ref result;
 	private ToolInstance toolInstance;
 
-  public RecVal(ATerm toolId, ATerm result, TBTermFactory tbfactory) {
-    super(tbfactory);
+  public RecVal(ATerm toolId, ATerm result, TBTermFactory tbfactory, ATerm posInfo) {
+    super(tbfactory, posInfo);
 	this.toolId = new Ref(toolId);
 	this.result = new Ref(result);
 	setAtomArgs(this.toolId, this.result);
   }
   
   public ProcessExpression copy(){
-    Atom a = new RecVal(this.toolId.value, this.result.value, tbfactory);
+    Atom a = new RecVal(this.toolId.value, this.result.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

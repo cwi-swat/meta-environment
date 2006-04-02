@@ -34,15 +34,18 @@ public class ToolDefinition {
 	private ATermList outputSignature;
 
 	private TBTermFactory tbfactory;
+	
+	private ATerm posInfo = null;
 
 	public ToolDefinition(String toolName, String host, String kind,
-			String command, TBTermFactory tbfactory) {
+			String command, TBTermFactory tbfactory, ATerm posInfo) {
 		this.toolName = toolName;
 		this.hostName = host;
 		this.kind = kind;
 		this.command = command;
 		this.className = command;
 		this.tbfactory = tbfactory;
+		this.posInfo = posInfo;
 		inputSignature = tbfactory.EmptyList;
 		outputSignature = tbfactory.EmptyList;
 	}
@@ -116,6 +119,10 @@ public class ToolDefinition {
 	
 	public String getClassName(){
 		return toolbus.get(toolName + ".class", className);
+	}
+	
+	public ATerm getPosInfo(){
+		return posInfo;
 	}
 
 	public ATermList getInputSignature() {

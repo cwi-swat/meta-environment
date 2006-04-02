@@ -1,22 +1,8 @@
 sglr.path=/home/paulk/software/installed/sglr/bin/sglr
 parsetable.path=/home/paulk/.eclipse/toolbusNG/toolbus/parser/Tscript.trm.tbl
 implodePT.path=/home/paulk/software/installed/pt-support/bin/implodePT
+addPosInfo.path=/home/paulk/software/installed/pt-support/bin/addPosInfo
 workspace.path=/home/paulk/.eclipse
-include.pathold=/home/paulk/.eclipse/toolbusNG/toolbus/parser, \
-/home/paulk/tmp/software/installed/share/toolbus, \
-/home/paulk/tmp/software/installed/share/meta, \
-/home/paulk/tmp/software/installed/share, \
-/home/paulk/tmp/software/installed/share/error-support, \
-/home/paulk/tmp/software/installed/share/pt-support, \
-/home/paulk/tmp/software/installed/share/sdf-support, \
-/home/paulk/tmp/software/installed/share/asf, \
-/home/paulk/tmp/software/installed/share/asfsdf-meta, \
-/home/paulk/tmp/software/installed/share/graph-support, \
-/home/paulk/tmp/software/installed/share/sglr, \
-/home/paulk/tmp/software/installed/share/tide, \
-/home/paulk/tmp/software/installed/share/tide-support, \
-/home/paulk/tmp/software/installed/share/pandora, \
-/home/paulk/tmp/software/installed/share/pgen	 
 
 include.path=/home/paulk/software/installed/sdf-meta/share/sdf-meta, \
 /home/paulk/software/installed/pgen/share/pgen, \

@@ -1,1 +1,5 @@
-sglr -p Tscript.trm.tbl -i $1 | implodePT -tlILXpcO
+SGLR=/home/paulk/software/installed/sglr/bin/sglr
+PTSUPPORT=/home/paulk/software/installed/pt-support/bin
+IMPLODEPT=$PTSUPPORT/implodePT
+ADDPOSINFO=$PTSUPPORT/addPosInfo
+$SGLR -p Tscript.trm.tbl -i $1  | $ADDPOSINFO -p $1 | $IMPLODEPT -tlILXpcO

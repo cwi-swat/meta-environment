@@ -20,8 +20,8 @@ public class Event extends Atom {
 	private Ref result;
 	private ToolInstance toolInstance;
 	
-  public Event(ATerm toolId, ATermList result, TBTermFactory tbfactory) {
-  	super(tbfactory);
+  public Event(ATerm toolId, ATermList result, TBTermFactory tbfactory, ATerm posInfo) {
+  	super(tbfactory, posInfo);
 	this.toolId = new Ref(toolId);
 	this.result = new Ref(result);
 	setAtomArgs(this.toolId, this.result);
@@ -29,7 +29,7 @@ public class Event extends Atom {
   }
   
   public ProcessExpression copy(){
-    Atom a = new Event(this.toolId.value, (ATermList) this.result.value, tbfactory);
+    Atom a = new Event(this.toolId.value, (ATermList) this.result.value, tbfactory, getPosInfo());
     a.copyAtomAttributes(this);
     return a;
   }

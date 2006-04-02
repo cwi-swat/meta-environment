@@ -20,14 +20,14 @@ import aterm.ATerm;
 public class RecNote extends Atom {
 	private Ref msgpat;
 
-	public RecNote(ATerm msgpat, TBTermFactory tbfactory) {
-		super(tbfactory);
+	public RecNote(ATerm msgpat, TBTermFactory tbfactory, ATerm posInfo) {
+		super(tbfactory, posInfo);
 		this.msgpat = new Ref(msgpat);
 		setAtomArgs(this.msgpat);
 	}
 
 	public ProcessExpression copy() {
-		Atom a = new RecNote(msgpat.value, tbfactory);
+		Atom a = new RecNote(msgpat.value, tbfactory, getPosInfo());
 		a.copyAtomAttributes(this);
 		return a;
 	}
