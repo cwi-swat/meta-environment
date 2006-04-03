@@ -1,5 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -19,7 +21,6 @@ import nl.cwi.sen1.configapi.types.PropertyList;
 import nl.cwi.sen1.configapi.types.shortcut.Shortcut;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
-import nl.cwi.sen1.gui.StatusBar;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentAdapter;
@@ -42,7 +43,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     private Map<String, StudioComponent> componentsById;
 
-    private Map<String, StatusBar> statusbarsById;
+    private Map<String, Map<String, JComponent>> statusbarsById;
 
     private Studio studio;
 
@@ -51,7 +52,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     public EditorPlugin() {
         editors = new HashMap<String, SwingEditor>();
         componentsById = new HashMap<String, StudioComponent>();
-        statusbarsById = new HashMap<String, StatusBar>();
+        statusbarsById = new HashMap<String, Map<String, JComponent>>();
     }
 
     public void isModified(ATerm editorId) {
@@ -194,8 +195,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             public void actionPerformed(ActionEvent e) {
                 Map<String, StudioComponent> editors = new HashMap<String, StudioComponent>(
                         componentsById);
-                for (Iterator<String> iter = editors.keySet().iterator(); iter.hasNext();) {
-                    String id = iter.next();
+                for (String id : editors.keySet()) {
                     StudioComponent component = componentsById.get(id);
                     closeEditor(component, id);
                 }
@@ -208,9 +208,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void displayMessage(ATerm editorId, String message) {
-        StatusBar statusBar = statusbarsById.get(editorId.toString());
+        Map<String, JComponent> statusBarComponents = statusbarsById
+                .get(editorId.toString());
 
-        JLabel status = (JLabel) statusBar.getComponent("Status");
+        JLabel status = (JLabel) statusBarComponents.get("Status");
         status.setText(message);
         // comp.setStatusMessage(message);
     }
@@ -270,8 +271,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     public void editFile(ATerm editorId, String filename, String modulename) {
         try {
             createPanel(editorId, filename);
-            StatusBar statusBar = statusbarsById.get(editorId.toString());
-            JLabel label = (JLabel) statusBar.getComponent("Module");
+            Map<String, JComponent> statusBar = statusbarsById.get(editorId
+                    .toString());
+            JLabel label = (JLabel) statusBar.get("Module");
             if (modulename.equals("")) {
                 label.setText(" ");
             } else {
@@ -329,22 +331,33 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             addMouseListener(editorId, panel);
             addEditorModifiedListener(editorId, panel);
 
+            final JLabel status = new JLabel(" ");
+            status.setPreferredSize(new Dimension(100, 18));
+
+            final JLabel module = new JLabel(" ");
+            module.setPreferredSize(new Dimension(100, 18));
+
+            Map<String, JComponent> statusBarComponents = new HashMap<String, JComponent>();
+            statusBarComponents.put("Status", status);
+            statusBarComponents.put("Module", module);
+
             int beginIndex = filename.lastIndexOf("/") + 1;
             String componentName = filename.substring(beginIndex, filename
                     .length());
-            StudioComponent comp = new StudioComponentImpl(componentName, panel);
+            StudioComponent comp = new StudioComponentImpl(componentName, panel) {
+                public JComponent[] getStatusBarComponents() {
+                    return new JComponent[] {status, module};
+                }
+            };
             addStudioComponentListener(editorId, panel, comp);
 
-            StatusBar statusBar = new StatusBar();
-            statusBar.add(new JLabel(" "), 100, "Status");
-            statusBar.add(new JLabel(" "), 100, "Module");
 
             editors.put(id, panel);
             componentsById.put(id, comp);
-            statusbarsById.put(id, statusBar);
+            statusbarsById.put(id, statusBarComponents);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
-            studio.addComponentStatusBar(comp, statusBar);
+//            studio.addComponentStatusBar(comp, statusBarComponents);
         }
 
         return editorPanel;
