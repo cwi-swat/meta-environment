@@ -1,4 +1,6 @@
-#define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m)
+/* #define TODO(m) printf("%s:%d - TODO: %s\n", __FILE__, __LINE__, m) */
+
+process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 
 /* meta-kernel */
 #include <module-utils.tb>
