@@ -1,7 +1,11 @@
 package nl.cwi.sen1.gui.plugin;
 
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import nl.cwi.sen1.configapi.types.Event;
@@ -13,7 +17,6 @@ import nl.cwi.sen1.graph.types.Node;
 import nl.cwi.sen1.graph.types.NodeList;
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
-import nl.cwi.sen1.gui.StatusBar;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioComponent;
 import nl.cwi.sen1.gui.StudioComponentImpl;
@@ -42,7 +45,7 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
 
     private Studio studio;
 
-    private StatusBar statusBar;
+    private Map<String, JComponent> statusBarComponents;
 
     private JLabel status;
 
@@ -65,9 +68,11 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
         this.preferences = new Preferences(getClass().getResourceAsStream(
                 propertyPath));
 
-        statusBar = new StatusBar();
+        statusBarComponents = new HashMap<String, JComponent>();
         status = new JLabel(" ");
-        statusBar.addComponent(status, 100);
+        status.setPreferredSize(new Dimension(100, 18));
+
+        statusBarComponents.put("Status", status);
     }
 
     private void setModules(Graph graph) {
@@ -183,10 +188,13 @@ public class Navigator extends DefaultStudioPlugin implements NavigatorTif {
             public void requestClose() throws CloseAbortedException {
                 throw new CloseAbortedException();
             }
+            
+            public JComponent[] getStatusBarComponents() {
+                return new JComponent[] {status};
+            }
         };
         ((StudioWithPredefinedLayout) studio).addComponent(navigatorComponent,
                 StudioImplWithPredefinedLayout.TOP_LEFT);
-        studio.addComponentStatusBar(navigatorComponent, statusBar);
         // studio.addComponentMenu(navigatorComponent, new JMenu("Navigate"));
     }
 
