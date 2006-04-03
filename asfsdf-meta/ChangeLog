@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon Apr  3 10:45:58 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/asf-{utils,actions}.tb:
+   - Add jobcontrol messages when starting and ending a job
+
 Tue Mar 14 15:49:54 CET 2006 <kooiker@cwi.nl>
  * {configure.in,package}: remove dependency on meta-doc
 

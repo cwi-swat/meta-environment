@@ -14,6 +14,7 @@ let
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
+  . AddJob(Path)
   . Reduce(ModuleId, Path, off, ResultTree?)
   . snd-msg(em-get-session-by-path("reduct.out"))
   .
@@ -24,6 +25,7 @@ in
     rec-msg(em-no-such-session("reduct.out"))
   )
   . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+  . JobDone(Path)
 endlet
 
 process DebugReduceAction(EditorId : term) is

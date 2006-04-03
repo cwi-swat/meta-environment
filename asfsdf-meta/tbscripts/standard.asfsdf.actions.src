@@ -49,8 +49,6 @@ configuration([
          "DumpEquationsAction"),
   action([description(module-popup, menu([label("Export"),label("ASF ParseTable...")]))],
          "DumpEquationsParseTableAction"),
-  action([description(module-popup, menu([label("Export"),label("ASF+SDF Module Text...")]))],
-         "PrintModuleAction"),
   action([description(module-popup, menu([label("Tools"), label("Compile Equations...")]))],
          "CompileModuleAction"),
   action([description(module-popup, menu([label("Tools"), label("Generate ASF+SDF API...")]))],
