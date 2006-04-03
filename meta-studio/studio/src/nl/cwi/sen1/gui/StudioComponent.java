@@ -10,8 +10,6 @@ public interface StudioComponent {
 	
 	public JComponent getViewComponent();
 
-	public StatusBar getStatusBar();
-
 	public void addStudioComponentListener(StudioComponentListener l);
 
 	public void removeStudioComponentListener(StudioComponentListener l);
@@ -21,4 +19,6 @@ public interface StudioComponent {
     public void close();
     
     public void receiveFocus();
+
+    public JComponent[] getStatusBarComponents();
 }

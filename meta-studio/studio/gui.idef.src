@@ -33,6 +33,12 @@ in
     rec-msg(gui-set-status(Message?))
     . snd-do(GUI, set-status(Message))
   +
+    rec-msg(gui-add-job(Message?))
+    . snd-do(GUI, add-job(Message))
+  +
+    rec-msg(gui-job-done(Message?))
+    . snd-do(GUI, job-done(Message))
+  +
     rec-msg(gui-add-menu-events(MenuEventList?))
     . snd-do(GUI, add-menu-events(MenuEventList))
   +

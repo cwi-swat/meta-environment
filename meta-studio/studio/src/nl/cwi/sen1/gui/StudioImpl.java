@@ -1,7 +1,6 @@
 package nl.cwi.sen1.gui;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -12,14 +11,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -27,7 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
@@ -52,7 +52,9 @@ import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.configapi.types.Event;
+import nl.cwi.sen1.util.StudioStatusBarConstraints;
 import nl.cwi.sen1.util.StudioMenuBar;
+import nl.cwi.sen1.util.StudioStatusBar;
 import toolbus.AbstractTool;
 import aterm.ATerm;
 import aterm.ATermFactory;
@@ -83,18 +85,20 @@ public class StudioImpl implements Studio, GuiTif {
     private JFrame frame;
 
     private JLabel systemLabel;
-
+    JProgressBar progressBar;
     private ATermList menuList;
 
     private DockingWindowsTheme currentTheme;
 
     private View activeView;
 
-    private JPanel statusPanel;
+    private StudioStatusBar statusBar;
 
     private boolean menuBarUpdatePending;
 
     private List<StudioPlugin> plugins;
+    
+    private Set<String> jobQueue;
 
     protected boolean studioShuttingDown;
 
@@ -107,7 +111,7 @@ public class StudioImpl implements Studio, GuiTif {
 
         rootWindow = createRootWindow();
 
-        statusPanel = createStatusBar();
+        statusBar = createStatusBar();
 
         startFrameThread();
 
@@ -155,6 +159,9 @@ public class StudioImpl implements Studio, GuiTif {
         viewsById = new ViewMap();
         plugins = new LinkedList<StudioPlugin>();
         studioShuttingDown = false;
+        progressBar = new JProgressBar();
+        systemLabel = new JLabel();
+        jobQueue = new HashSet<String>();
     }
 
     synchronized private static int nextComponentID() {
@@ -246,16 +253,17 @@ public class StudioImpl implements Studio, GuiTif {
             StudioComponent active = getComponent(activeView);
 
             if (active != null) {
-                String componentName = active.getName();
-                JPanel panel = (JPanel) statusPanel.getComponent(2);
-                CardLayout cl = (CardLayout) panel.getLayout();
-
-                if (cl != null) {
-                    cl.show(panel, componentName);
-                } else {
-                    System.err
-                            .println("Internal error: no status panel available");
+                JComponent[] components = active.getStatusBarComponents();
+                
+                for (int i = statusBar.getComponentCount(); i > 5; i--) {
+                    statusBar.remove(i - 1);
                 }
+                
+                for (JComponent cur : components) {
+                    statusBar.addSeparator();
+                    statusBar.add(cur);
+                }
+                statusBar.repaint();
             } else {
                 System.err.println("Internal error: no active component found");
             }
@@ -349,7 +357,7 @@ public class StudioImpl implements Studio, GuiTif {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         // frame.getContentPane().add(createToolBar(), BorderLayout.NORTH);
-        frame.getContentPane().add(statusPanel, BorderLayout.SOUTH);
+        frame.getContentPane().add(statusBar, BorderLayout.SOUTH);
         frame.getContentPane().add(rootWindow, BorderLayout.CENTER);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -361,24 +369,22 @@ public class StudioImpl implements Studio, GuiTif {
         frame.setVisible(true);
     }
 
-    private JPanel createStatusBar() {
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BorderLayout());
+    private StudioStatusBar createStatusBar() {
+        StudioStatusBar statusPanel = new StudioStatusBar();
 
-        systemLabel = new JLabel(" ");
         systemLabel.setPreferredSize(new Dimension(300, 18));
-        systemLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-        statusPanel.add(systemLabel, BorderLayout.LINE_START);
-
-        JLabel filler = new JLabel(" ");
-        filler.setBorder(BorderFactory.createLoweredBevelBorder());
-        statusPanel.add(filler, BorderLayout.CENTER);
-
-        JPanel panel = new JPanel(new CardLayout());
-        StatusBar statusBar = new StatusBar();
-        panel.add(statusBar, "system");
-        statusPanel.add(panel, BorderLayout.LINE_END);
-
+        statusPanel.add(systemLabel);
+        statusPanel.addSeparator();
+        
+        statusPanel.add(progressBar);
+        statusPanel.addSeparator();
+        
+        JLabel filler = new JLabel();
+        statusPanel.add(filler, new StudioStatusBarConstraints(1.0));
+        
+//        JButton cancel = new JButton("Cancel");
+//        statusPanel.add(cancel);
+        
         return statusPanel;
     }
 
@@ -458,13 +464,6 @@ public class StudioImpl implements Studio, GuiTif {
         return new JMenu("File");
     }
 
-    // private JToolBar createToolBar() {
-    // JToolBar toolBar = new JToolBar();
-    // JLabel label = new JLabel("Sample action");
-    // toolBar.add(label);
-    // return toolBar;
-    // }
-
     protected void showView(View view) {
         if (rootWindow == null) {
             rootWindow = createRootWindow();
@@ -484,12 +483,9 @@ public class StudioImpl implements Studio, GuiTif {
 
         ButtonGroup group = new ButtonGroup();
 
-        for (int i = 0; i < themes.length; i++) {
-            final DockingWindowsTheme theme = themes[i];
-
+        for (final DockingWindowsTheme theme : themes) {
             JMenuItem item = new JRadioButtonMenuItem(theme
                     .getName());
-            item.setSelected(i == 4);
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Clear the modified properties values
@@ -617,12 +613,6 @@ public class StudioImpl implements Studio, GuiTif {
         return menus;
     }
 
-    public void addComponentStatusBar(StudioComponent component,
-            StatusBar statusBar) {
-        JPanel panel = (JPanel) statusPanel.getComponent(2);
-        panel.add(statusBar, component.getName());
-    }
-
     public void requestFocus(StudioComponent component) {
         Integer id = idsByComponent.get(component);
 
@@ -648,5 +638,18 @@ public class StudioImpl implements Studio, GuiTif {
 
     public void setStatus(String message) {
         systemLabel.setText(message);
+    }
+
+    public void jobDone(String message) {
+        jobQueue.remove(message);
+        if (jobQueue.isEmpty()) {
+            progressBar.setIndeterminate(false);
+        }
+    
+    }
+
+    public void addJob(String message) {
+        jobQueue.add(message);
+        progressBar.setIndeterminate(true);
     }
 }

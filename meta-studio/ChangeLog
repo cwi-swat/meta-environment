@@ -1,5 +1,11 @@
 $Id$
 
+Mon Apr  3 10:40:07 CEST 2006 <kooiker@cwi.nl>
+ * util/**/*.java:
+   - Add new statusbar
+ * studio/**/StudioImpl.java:
+   - use new StudioStatusBar
+
 Mon Mar 13 19:13:42 CET 2006 <kooiker@cwi.nl>
  * studio/**/StudioImpl.java:
    - change JRadioButtonMenuItem to JMenuItem (closes #559)
