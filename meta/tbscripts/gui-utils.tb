@@ -9,6 +9,12 @@
 #include <moduledetails.idef>
 #include <error-viewer.idef>
 
+process AddJob(Message: str) is
+  snd-msg(gui-add-job(Message))
+
+process JobDone(Message: str) is
+  snd-msg(gui-job-done(Message))
+
 process Error(Message: str, MessageArgs: list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Mon Apr  3 10:43:44 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/{error-output,gui-utils}.tb:
+   - Add processes for job control
+
 Fri Mar 10 15:01:47 CET 2006 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - Removed race condition using transactions in DeleteSession
