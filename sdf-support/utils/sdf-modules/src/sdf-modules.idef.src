@@ -75,7 +75,7 @@ in
     ) 
   +
     rec-msg(sm-rename-import-in-module(Module?, From?, To?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    printf("not yet implemented in sdf-modules.idef: sm-rename-import-in-module\n") .
     snd-msg(sm-import-renamed-in-module(Module))
   +
     rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
