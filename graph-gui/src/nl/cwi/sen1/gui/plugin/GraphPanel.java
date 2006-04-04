@@ -24,6 +24,7 @@ import prefuse.action.animate.PolarLocationAnimator;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
 import prefuse.action.layout.CircleLayout;
+import prefuse.action.layout.GridLayout;
 import prefuse.action.layout.RandomLayout;
 import prefuse.action.layout.graph.FruchtermanReingoldLayout;
 import prefuse.activity.Activity;
@@ -33,6 +34,7 @@ import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
 import prefuse.controls.PanControl;
 import prefuse.controls.ZoomControl;
+import prefuse.controls.ZoomToFitControl;
 import prefuse.data.Graph;
 import prefuse.data.Tuple;
 import prefuse.data.event.TupleSetListener;
@@ -65,7 +67,7 @@ public class GraphPanel extends JPanel {
 
     private ForceSimulator forceSimulator;
 
-    public GraphPanel(String id, Preferences prefs) {
+    public GraphPanel(String id, final Preferences prefs) {
         this.id = id;
         setLayout(new BorderLayout());
 
@@ -82,19 +84,15 @@ public class GraphPanel extends JPanel {
                 VisualItem.STROKECOLOR);
         nStroke.setDefaultColor(prefs.getColor(GraphConstants.NODE_FOREGROUND)
                 .getRGB());
-        nStroke.add("_hover", prefs.getColor(
-                GraphConstants.NODE_HOVERED_FOREGROUND).getRGB());
-        nStroke.add(new InGroupPredicate("_focus_"), prefs.getColor(
-                GraphConstants.NODE_SELECTED_FOREGROUND).getRGB());
+        nStroke.add(new InGroupPredicate(Visualization.FOCUS_ITEMS), prefs
+                .getColor(GraphConstants.NODE_SELECTED_FOREGROUND).getRGB());
 
         ColorAction nFill = new GraphColorAction(GraphConstants.NODES,
                 GraphConstants.FILLCOLOR, VisualItem.FILLCOLOR);
         nFill.setDefaultColor(prefs.getColor(GraphConstants.NODE_BACKGROUND)
                 .getRGB());
-        nFill.add("_hover", prefs.getColor(
-                GraphConstants.NODE_HOVERED_BACKGROUND).getRGB());
-        nFill.add(new InGroupPredicate("_focus_"), prefs.getColor(
-                GraphConstants.NODE_SELECTED_BACKGROUND).getRGB());
+        nFill.add(new InGroupPredicate(Visualization.FOCUS_ITEMS), prefs
+                .getColor(GraphConstants.NODE_SELECTED_BACKGROUND).getRGB());
 
         ColorAction eStroke = new ColorAction(GraphConstants.EDGES,
                 VisualItem.STROKECOLOR);
@@ -111,7 +109,7 @@ public class GraphPanel extends JPanel {
         FontAction font = new FontAction(GraphConstants.NODES, prefs
                 .getFont(GraphConstants.NODE_FONT));
 
-        ActionList draw = new ActionList(Activity.INFINITY);
+        ActionList draw = new ActionList();
         draw.add(text);
         draw.add(nStroke);
         draw.add(nFill);
@@ -122,18 +120,33 @@ public class GraphPanel extends JPanel {
 
         vis.putAction("draw", draw);
 
-        ActionList repaint = new ActionList();
-        repaint.add(new RepaintAction());
-
-        vis.putAction("repaint", repaint);
-
         display = new Display(vis);
         display.setHighQuality(true);
         display.addControlListener(new DragControl());
         display.addControlListener(new ZoomControl());
+        display.addControlListener(new ZoomToFitControl());
         display.addControlListener(new PanControl());
         display.addControlListener(new FocusControl(2));
         display.addControlListener(new ControlAdapter() {
+            public void itemEntered(VisualItem item, MouseEvent e) {
+                if (item.isInGroup(GraphConstants.NODES)) {
+                    item.setFillColor(prefs.getColor(
+                            GraphConstants.NODE_HOVERED_BACKGROUND).getRGB());
+                    item.setStrokeColor(prefs.getColor(
+                            GraphConstants.NODE_HOVERED_FOREGROUND).getRGB());
+                    item.getVisualization().repaint();
+                }
+            }
+
+            public void itemExited(VisualItem item, MouseEvent e) {
+                if (item.isInGroup(GraphConstants.NODES)) {
+                    item.setFillColor(item.getInt(GraphConstants.FILLCOLOR));
+                    item.setStrokeColor(prefs.getColor(GraphConstants.NODE_FOREGROUND)
+                            .getRGB());
+                    item.getVisualization().repaint();
+                }
+            }
+
             public void itemPressed(VisualItem item, MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     firePopupRequested(item.getString(GraphConstants.ID), e);
@@ -259,7 +272,7 @@ public class GraphPanel extends JPanel {
         // ActionList grid = new ActionList();
         // grid.add(new GridLayout(GraphConstants.NODES));
         // vis.putAction("Grid", grid);
-        // layouts.add("Grid");
+        //        layouts.add("Grid");
 
         ActionList funny = new ActionList();
         funny.add(new FruchtermanReingoldLayout(GraphConstants.GRAPH));
@@ -292,7 +305,7 @@ public class GraphPanel extends JPanel {
         if (currentLayout != null) {
             vis.run("draw");
             currentLayout.run();
-            vis.run("repaint");
+            vis.repaint();
             currentAnimation.run();
         } else {
             System.err.println("No current layout!");

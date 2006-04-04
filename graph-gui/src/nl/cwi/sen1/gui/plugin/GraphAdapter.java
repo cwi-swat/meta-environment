@@ -30,6 +30,13 @@ public class GraphAdapter extends prefuse.data.Graph {
     public GraphAdapter(nl.cwi.sen1.graph.types.Graph graph) {
         super(true);
         
+//        try {
+//            ATerm term = graph.toTerm();
+//            term.writeToTextFile(new FileOutputStream(new File("/ufs/kooiker/graph2.trm")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+            
         Map<NodeId, prefuse.data.Node> nodeMap = new HashMap<NodeId, prefuse.data.Node>();
 
         addColumn(GraphConstants.ID, String.class);
