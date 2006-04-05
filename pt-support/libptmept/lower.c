@@ -350,11 +350,10 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
     result = PT_makeSymbolEmpty();
   }
   else if (PTPT_isSymbolSeq(symbol)) {
-    PT_Symbol lhs = PTPT_lowerSymbol(PTPT_getSymbolLhs(symbol));
-    PT_Symbol rhs = PTPT_lowerSymbol(PTPT_getSymbolRhs(symbol));
+    PT_Symbols syms = PTPT_lowerSymbols(PTPT_getSymbolSymbols(symbol));
 
     result
-      = PT_makeSymbolSeq(PT_makeSymbolsMany(lhs, PT_makeSymbolsSingle(rhs)));
+      = PT_makeSymbolSeq(syms);
 
   }
   else if (PTPT_isSymbolOpt(symbol)) {

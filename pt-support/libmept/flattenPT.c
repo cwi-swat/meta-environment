@@ -18,6 +18,7 @@ static ATerm asfix2_literal = NULL;
 
 /* Pattern for layout cons */
 static ATerm asfix2_layout_layout_to_layout = NULL;
+static ATerm asfix2_layout_to_opt_layout = NULL;
 static ATerm asfix2_lex_layout_to_cf_layout = NULL;
 static ATerm asfix3_lex_iter_layout_to_cf_layout = NULL;
 
@@ -140,6 +141,10 @@ static void init_asfix_patterns()
   ATprotect(&asfix2_layout_layout_to_layout);
   asfix2_layout_layout_to_layout = 
     ATparse("prod([cf(layout),cf(layout)],cf(layout),attrs([assoc(left)]))");
+
+  ATprotect(&asfix2_layout_to_opt_layout);
+  asfix2_layout_to_opt_layout = 
+    ATparse("prod([cf(layout)],cf(opt(layout)),no-attrs)");
 
   ATprotect(&asfix2_lex_layout_to_cf_layout);
   asfix2_lex_layout_to_cf_layout = 
@@ -567,6 +572,28 @@ static PT_Tree flattenLayout(PT_Tree tree)
 }
 
 /*}}}  */
+
+static PT_Tree flatEmptyLayout() {
+	PT_Production prodOptLayout;
+	PT_Production lexIterToCf;
+	PT_Production list;
+	PT_Tree empty;
+	PT_Tree lexToCf;
+	PT_Tree layout;
+
+  lexIterToCf = (PT_Production) asfix3_lex_iter_layout_to_cf_layout;
+
+	list = PT_makeProductionList(PT_getSymbolsHead(PT_getProductionLhs(lexIterToCf)));
+	empty = PT_makeTreeAppl(list, PT_makeArgsEmpty());
+
+  lexToCf = PT_makeTreeAppl(lexIterToCf, PT_makeArgsSingle(empty));
+
+	prodOptLayout = (PT_Production) asfix2_layout_to_opt_layout;
+	layout = PT_makeTreeAppl(prodOptLayout, PT_makeArgsSingle(lexToCf));
+
+	return layout;
+}
+
 /*{{{  static PT_Tree flattenTreeRec(PT_Tree tree) */
 
 static PT_Tree flattenTreeRec(PT_Tree tree)
@@ -597,6 +624,13 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
     } 
     else if (PT_prodHasCfLayoutAsRhs(prod)) { 
       result = flattenLayout(tree);
+    }
+    else if (PT_isTreeLayout(tree) && PT_isArgsEmpty(PT_getTreeArgs(tree))) {
+    /* there are two forms of empty layout, an empty lexical list,
+     * and an empty optional layout.
+     * We normalize the latter to the first here.
+     */
+      result = flatEmptyLayout();	    
     }
     else {
       result = PT_makeTreeAppl(prod, flattenArgs(args));
