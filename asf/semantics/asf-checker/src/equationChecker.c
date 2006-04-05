@@ -537,7 +537,8 @@ static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
   normalizeSortname(treeString); 
   normalizeSortname(symbolString);
 
-  if (strcmp(treeString, symbolString) == 0) {
+  if (strlen(treeString) > 0
+      && strcmp(treeString, symbolString) == 0) {
     sprintf(message, "Lexical probably intended to be a variable: %s",
 	    PT_yieldTreeToString(lexical, ATfalse));
     messages = ERR_makeErrorListSingle(
