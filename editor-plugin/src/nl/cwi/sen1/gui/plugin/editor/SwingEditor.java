@@ -25,7 +25,7 @@ public class SwingEditor extends JPanel implements Editor {
     private String filename;
 
     private EditorPane editorPane;
-    
+
     public SwingEditor(String id, String filename) throws IOException {
         this.id = id;
         this.filename = filename;
@@ -69,9 +69,10 @@ public class SwingEditor extends JPanel implements Editor {
     public void writeContents() throws IOException {
         String text = editorPane.getText();
 
-        FileOutputStream fos = new FileOutputStream(filename);
+        FileOutputStream fos;
+        fos = new FileOutputStream(filename);
         fos.write(text.getBytes());
-        
+
         editorPane.setModified(false);
     }
 
@@ -132,7 +133,7 @@ public class SwingEditor extends JPanel implements Editor {
     public void removeMouseListener(MouseListener l) {
         editorPane.removeMouseListener(l);
     }
-    
+
     public void addEditorModifiedListener(EditorModifiedListener l) {
         editorPane.addEditorModifiedListener(l);
     }
@@ -145,4 +146,3 @@ public class SwingEditor extends JPanel implements Editor {
         editorPane.setEditable(b);
     }
 }
-

@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Apr  5 11:35:46 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Show error dialog when saving file failed (closes #576)
+
 Tue Feb 28 15:56:29 CET 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add Close All action

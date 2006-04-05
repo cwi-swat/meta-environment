@@ -39,7 +39,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     private Factory configFactory;
 
-    private Map<String, SwingEditor> editors;
+    private Map<String, Editor> editors;
 
     private Map<String, StudioComponent> componentsById;
 
@@ -50,7 +50,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     private EditorPluginBridge bridge;
 
     public EditorPlugin() {
-        editors = new HashMap<String, SwingEditor>();
+        editors = new HashMap<String, Editor>();
         componentsById = new HashMap<String, StudioComponent>();
         statusbarsById = new HashMap<String, Map<String, JComponent>>();
     }
@@ -82,7 +82,11 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                         "contents-written(<term>)", editorId);
                 bridge.postEvent(event);
             } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    showErrorDialog(panel, JOptionPane.OK_OPTION,
+                            "\n\nError saving changes.");
+                } catch (CloseAbortedException e1) {
+                }
             }
         }
     }
@@ -156,13 +160,18 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
         studio.addComponentMenu(comp, event, new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+                Editor editor = editors.get(editorId.toString());
                 try {
-                    ((Editor) editors.get(editorId.toString())).writeContents();
+                    editor.writeContents();
                     ATerm event = studio.getATermFactory().make(
                             "contents-saved(<term>)", editorId);
                     bridge.postEvent(event);
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    try {
+                        showErrorDialog(editor, JOptionPane.OK_OPTION,
+                                "\n\nError saving changes.");
+                    } catch (CloseAbortedException e2) {
+                    }
                 }
             }
         });
@@ -346,24 +355,23 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     .length());
             StudioComponent comp = new StudioComponentImpl(componentName, panel) {
                 public JComponent[] getStatusBarComponents() {
-                    return new JComponent[] {status, module};
+                    return new JComponent[] { status, module };
                 }
             };
             addStudioComponentListener(editorId, panel, comp);
-
 
             editors.put(id, panel);
             componentsById.put(id, comp);
             statusbarsById.put(id, statusBarComponents);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.TOP_RIGHT);
-//            studio.addComponentStatusBar(comp, statusBarComponents);
+            // studio.addComponentStatusBar(comp, statusBarComponents);
         }
 
         return editorPanel;
     }
 
-    private void addMouseListener(final ATerm editorId, final SwingEditor panel) {
+    private void addMouseListener(final ATerm editorId, final Editor panel) {
         // Add mousemotion listener showing sorts in tooltips
         panel.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -380,7 +388,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     private void addEditorModifiedListener(final ATerm editorId,
-            final SwingEditor panel) {
+            final Editor panel) {
         panel.addEditorModifiedListener(new EditorModifiedListener() {
             public void editorModified(EditorModifiedEvent e) {
                 ATerm event = studio.getATermFactory().make(
@@ -426,7 +434,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             try {
                 panel.writeContents();
             } catch (IOException e) {
-                e.printStackTrace();
+                showErrorDialog(
+                        panel,
+                        JOptionPane.OK_CANCEL_OPTION,
+                        "\n\nError saving changes.\nClosing this editor will result in loosing your changes.");
             }
             break;
         case JOptionPane.CANCEL_OPTION:
@@ -438,9 +449,9 @@ public class EditorPlugin extends DefaultStudioPlugin implements
     }
 
     public void recTerminate(ATerm t0) {
-        Iterator<SwingEditor> iter = editors.values().iterator();
+        Iterator<Editor> iter = editors.values().iterator();
         while (iter.hasNext()) {
-            SwingEditor panel = iter.next();
+            Editor panel = iter.next();
             if (panel.isModified()) {
                 String id = panel.getId();
                 StudioComponent comp = componentsById.get(id);
@@ -454,5 +465,24 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             }
         }
         fireStudioPluginClosed();
+    }
+
+    public void showErrorDialog(final Editor panel, int optionType, String error)
+            throws CloseAbortedException {
+        int option;
+        if (optionType == JOptionPane.OK_OPTION) {
+            JOptionPane.showMessageDialog(null, panel.getFilename() + error,
+                    panel.getFilename(), JOptionPane.ERROR_MESSAGE);
+        } else {
+            option = JOptionPane.showConfirmDialog(null, panel.getFilename()
+                    + error, panel.getFilename(), optionType,
+                    JOptionPane.ERROR_MESSAGE);
+            switch (option) {
+            case JOptionPane.OK_OPTION:
+                break;
+            case JOptionPane.CANCEL_OPTION:
+                throw new CloseAbortedException();
+            }
+        }
     }
 }
