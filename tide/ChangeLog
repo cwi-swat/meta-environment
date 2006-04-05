@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Apr  5 17:00:29 EDT 2006 <jurgenv@cwi.nl	>
+ * src/**: fixed StatusBar interface problem with Studio.
+
 Wed Mar  8 15:20:55 CET 2006 <{jurgenv,dzebric}@cwi.nl>
  * scripts/tide-gdb.src: changed location of DbgAdapter class to
    fix a bug.
