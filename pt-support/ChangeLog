@@ -1,5 +1,8 @@
 $Id$
 
+Thu Apr  6 17:14:44 EDT 2006 <jurgenv@cwi.nl>
+ * libmept/reportAmbs.c: added stack overflow protection.
+
 Tue Apr  4 20:20:20 CEST 2006 <jurgenv@cwi.nl>
  * libptmept/lower.c: fixed major error in lowering sequence symbols.
  * libmept.c/flatten.c: fixed bug in layout flattener. Existing layout
