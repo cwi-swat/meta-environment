@@ -25,6 +25,7 @@ let
   ParseResult: term
 in
   snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
+  . AddJob("Parsing")
   .
   (
     rec-msg(sglr-parse-tree(ParseResult?))
@@ -36,6 +37,7 @@ in
     rec-msg(sglr-parse-error(Error?))
     . snd-msg(parse-error(Pid, Error))
   )
+  . JobDone("Parsing")
 endlet
 
 process ParseTreeHandler(ModuleId: term, Path: str) is

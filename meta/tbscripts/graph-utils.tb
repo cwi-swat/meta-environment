@@ -9,10 +9,12 @@
 #include <graph-painter.idef>
 
 process RenderGraph(GraphPanelId: str, Graph: term?) is
-  snd-msg(gp-render-graph(GraphPanelId, Graph))
+  AddJob("Rendering")
+  . snd-msg(gp-render-graph(GraphPanelId, Graph))
   . rec-msg(gp-rendered-graph(GraphPanelId, Graph?))
   . snd-msg(gl-layout-graph(Graph))
   . rec-msg(gl-graph(Graph?))
+  . JobDone("Rendering")
 
 process ShowTree(Tree: term, ShowLeafs: term, 
                  SharingOn: term) is

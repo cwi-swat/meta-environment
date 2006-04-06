@@ -11,7 +11,7 @@ let
   Feedback: term
 in
   Id := process-id
-  . snd-note(ui-status(stat(Id, "Pretty printing...")))
+  . AddJob("Pretty printing")
   . snd-msg(pretty-print(Tree))
   .
   (
@@ -21,7 +21,7 @@ in
     rec-msg(pretty-print-error(Feedback?))
     . Result := UNDEFINED
   )
-  . snd-note(ui-status(endstat(Id)))
+  . JobDone("Pretty printing")
 endlet
 
 #endif /* __PRETTY_PRINT_UTILS__ */
