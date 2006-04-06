@@ -2,6 +2,7 @@ $Id$
 
 Thu Apr  6 17:14:44 EDT 2006 <jurgenv@cwi.nl>
  * libmept/reportAmbs.c: added stack overflow protection.
+ * libmept/reportAmbs.c: fixed a major recursion bug in it too.
 
 Tue Apr  4 20:20:20 CEST 2006 <jurgenv@cwi.nl>
  * libptmept/lower.c: fixed major error in lowering sequence symbols.
