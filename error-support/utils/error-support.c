@@ -236,14 +236,10 @@ ATerm lower_summary(int cid, ATerm t)
   PERR_Start startSummary = PERR_StartFromTerm(ATBunpack(t));
   PERR_Summary pSummary;
 
-  ATwarning("error-support: FIXME, ApiGen generated start injections are wrong\n");
-  /* FIX ME in APIGEN! */
-  /* if (PERR_isStartSummary(startSummary)) { */
+  if (PERR_isStartSummary(startSummary)) { 
     pSummary = PERR_getStartTopSummary(startSummary);
     t = ERR_SummaryToTerm(PERR_lowerSummary(pSummary));
-  /*
   }
-  */
   return ATmake("snd-value(lowered-summary(<term>))", t);
 }
 
