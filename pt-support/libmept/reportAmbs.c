@@ -72,6 +72,7 @@ static ERR_SubjectList getAmbiguities(const char *path,
       current->offset++;
     }
 
+    return ambSubjects;
   /*}}}  */
   }
   else if (PT_isTreeCycle(tree)) {
@@ -83,13 +84,12 @@ static ERR_SubjectList getAmbiguities(const char *path,
     PT_Args args = PT_getTreeArgs(tree);
 
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
-      ambSubjects = ERR_concatSubjectList(getAmbiguities(path,
-                                                         PT_getArgsHead(args),
-							 depth + 1,
-							 current), 
-					  ambSubjects);
+      PT_Tree arg = PT_getArgsHead(args);
+      ERR_SubjectList argSubjects = getAmbiguities(path, arg, depth+1, current);
+      ambSubjects = ERR_concatSubjectList(argSubjects, ambSubjects);
     }
 
+    return ambSubjects;
   /*}}}  */
   }
   else if (PT_isTreeAmb(tree)) {
