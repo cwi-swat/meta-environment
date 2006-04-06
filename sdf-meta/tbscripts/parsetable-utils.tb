@@ -38,7 +38,8 @@ in
     . GetCachedValue(TableName, ModuleId, Table?)
     .
     if equal(Table, UNDEFINED) then
-      GetSyntaxDefinition(ModuleId, Syntax?)
+      AddJob("Generating parser")
+      . GetSyntaxDefinition(ModuleId, Syntax?)
       . 
       if not-equal(Syntax, UNDEFINED) then
 	MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
@@ -54,6 +55,7 @@ in
       else
 	snd-msg(no-parsetable(ModuleId, Type))
       fi
+      . JobDone("Generating parser")
     else
       snd-msg(parsetable(ModuleId, Type, Table))
     fi
