@@ -59,7 +59,7 @@ let
   Summary: term,
   Errors: list
 in
-  printf("checking!\n")
+  AddJob("Checking syntax definition") 
   . GetSyntaxDefinition(ModuleId, Syntax?)
   .
   if not-equal(Syntax, UNDEFINED) then
@@ -78,6 +78,7 @@ in
   else
     tau
   fi
+  . JobDone("Checking syntax definition") 
 endlet
 
 process CheckASFModule(ModuleId: term) is
