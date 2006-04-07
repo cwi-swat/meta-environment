@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr  7 05:13:44 CEST 2006 <jurgenv@cwi.nl>
+ * Coupled jobs and status bar with each other
+
 Mon Apr  3 10:40:07 CEST 2006 <kooiker@cwi.nl>
  * util/**/*.java:
    - Add new statusbar

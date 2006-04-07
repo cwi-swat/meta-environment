@@ -76,7 +76,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     protected Map<View, StudioComponent> componentsByView;
 
-    private Map<StudioComponent, List> componentMenus;
+    private Map<StudioComponent, List<JMenuItem>> componentMenus;
 
     protected RootWindow rootWindow;
 
@@ -98,7 +98,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     private List<StudioPlugin> plugins;
     
-    private Set<String> jobQueue;
+    private List<String> jobQueue;
 
     protected boolean studioShuttingDown;
 
@@ -155,13 +155,13 @@ public class StudioImpl implements Studio, GuiTif {
         currentTheme = new ShapedGradientDockingTheme();
         idsByComponent = new HashMap<StudioComponent, Integer>();
         componentsByView = new HashMap<View, StudioComponent>();
-        componentMenus = new HashMap<StudioComponent, List>();
+        componentMenus = new HashMap<StudioComponent, List<JMenuItem>>();
         viewsById = new ViewMap();
         plugins = new LinkedList<StudioPlugin>();
         studioShuttingDown = false;
         progressBar = new JProgressBar();
         systemLabel = new JLabel();
-        jobQueue = new HashSet<String>();
+        jobQueue = new LinkedList<String>();
     }
 
     synchronized private static int nextComponentID() {
@@ -582,12 +582,12 @@ public class StudioImpl implements Studio, GuiTif {
 
     public void addComponentMenu(StudioComponent component, JMenu menu) {
         if (componentMenus == null) {
-            componentMenus = new HashMap<StudioComponent, List>();
+            componentMenus = new HashMap<StudioComponent, List<JMenuItem>>();
         }
 
-        List menus = componentMenus.get(component);
+        List<JMenuItem> menus = componentMenus.get(component);
         if (menus == null) {
-            menus = new LinkedList();
+            menus = new LinkedList<JMenuItem>();
         }
         menus.add(menu);
 
@@ -598,17 +598,17 @@ public class StudioImpl implements Studio, GuiTif {
     public void addComponentMenu(StudioComponent component, Event menuPath,
             Action action) {
         MenuItem item = new MenuItem(menuPath, action);
-        List menus = getMenus(component);
+        List<JMenuItem> menus = getMenus(component);
         menus.add(item);
 
         componentMenus.put(component, menus);
         updateMenuBar();
     }
 
-    private List getMenus(StudioComponent component) {
-        List menus = componentMenus.get(component);
+    private List<JMenuItem> getMenus(StudioComponent component) {
+        List<JMenuItem> menus = componentMenus.get(component);
         if (menus == null) {
-            menus = new LinkedList();
+            menus = new LinkedList<JMenuItem>();
         }
         return menus;
     }
@@ -644,12 +644,17 @@ public class StudioImpl implements Studio, GuiTif {
         jobQueue.remove(message);
         if (jobQueue.isEmpty()) {
             progressBar.setIndeterminate(false);
+            setStatus("Idle");
+        }
+        else {
+        	setStatus(jobQueue.get(0));
         }
     
     }
 
     public void addJob(String message) {
         jobQueue.add(message);
+        setStatus(message);
         progressBar.setIndeterminate(true);
     }
 }

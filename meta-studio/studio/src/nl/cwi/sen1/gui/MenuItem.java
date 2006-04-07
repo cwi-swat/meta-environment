@@ -1,10 +1,11 @@
 package nl.cwi.sen1.gui;
 
 import javax.swing.Action;
+import javax.swing.JMenuItem;
 
 import nl.cwi.sen1.configapi.types.Event;
 
-public class MenuItem {
+public class MenuItem extends JMenuItem {
     private Event event;
 
     private Action action;
