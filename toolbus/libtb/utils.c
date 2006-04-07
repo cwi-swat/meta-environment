@@ -821,15 +821,18 @@ ret:
 int mread(int fd, char *buf, int len)
 {
   int cnt = 0, n;
-  /* TBmsg("mread(%d, %d)\n", fd, len); */
 
-  while(cnt < len){
+  while (cnt < len) {
     if((n = read(fd, &buf[cnt], len - cnt)) <= 0) {
-      if(errno != EINTR)
+      if (errno == EIO) {
+	return -1;
+      }
+      else if(errno != EINTR) {
 	return n;
-    } else
+      }
+    } else {
       cnt += n;
-    /* TBmsg("mread: cnt := %d\n", cnt); */
+    }
   }
 
   assert(cnt == len);

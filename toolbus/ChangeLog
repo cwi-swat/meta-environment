@@ -1,5 +1,13 @@
 $Id$
 
+Fri Apr  7 10:06:27 EDT 2006 <jurgenv@cwi.nl>
+ * libtb/utils.c: adapted mread, the while loop was implemented for
+   non-blocking sockets, but it did not detect IO errors. Only on
+   a process interrupt it would fall from the read. Now when somebody 
+   kills a ToolBus tool, it might be during an mread and the loop will
+   not terminate until somebody signals ToolBus with CTRL+Z or CTRL+\.
+   Added a test for EIO to fix this problem.
+
 Mon Mar 20 17:05:00 CET 2006 <jurgenv@cwi.nl>
  * Makefile.am, configure.in: removed doc subdir from SUBDIRS, to
    increase portability to different platforms (this works because
