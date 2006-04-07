@@ -254,6 +254,7 @@ let
 in
   Id := process-id
   . snd-note(ui-status(start(Id, "Get Specification")))
+  . AddJob("Collecting and normalizing specification")
   . MM-GetAllModuleDependencies(ModuleId, Modules?)
   . Modules := join([ModuleId], Modules)
   . GetImportsForRenaming(ModuleId, Modules, Imports?)
@@ -274,11 +275,9 @@ in
      */
       MM-GetAttribute(CurModule, ASF_NAMESPACE, "name", Modulename?)
       . SetStatus("Normalizing ...")
-      /*. snd-note(ui-status(statf(Id, "Normalizing %s",[Modulename])))*/
       . snd-msg(normalize-module(Equations)) 
       . rec-msg(normalize-module-result(Equations?))
       . SetStatus("Renaming ...")
-      /*. snd-note(ui-status(statf(Id, "Renaming %s",[Modulename])))*/
       . snd-msg(sr-rename-module(Imports, Modulename, Equations))
       . rec-msg(sr-renamed-module(Equations?))
       . SetStatus("")
@@ -286,7 +285,7 @@ in
     fi
     . Modules := next(Modules)
     . Done := sub(Count, size(Modules))
-    /*. snd-note(ui-status(statf(Id, "Done %d of %d modules\n", [Done, Count])))*/
+    . JobDone("Collecting and normalizing specification")
   fi
   *
   (
