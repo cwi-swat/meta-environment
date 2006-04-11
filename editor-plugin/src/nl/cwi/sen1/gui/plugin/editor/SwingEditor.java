@@ -26,7 +26,7 @@ public class SwingEditor extends JPanel implements Editor {
 
     private EditorPane editorPane;
 
-    public SwingEditor(String id, String filename) throws IOException {
+    public SwingEditor(String id, String filename) throws IOException, FileToBigException {
         this.id = id;
         this.filename = filename;
 
@@ -46,17 +46,24 @@ public class SwingEditor extends JPanel implements Editor {
             readFileContents(filename);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (FileToBigException e) {
+        	e.printStackTrace();
         }
     }
 
-    private void readFileContents(String filename) throws IOException {
-        editorPane.setText(readContents(filename));
+    private void readFileContents(String filename) throws IOException, FileToBigException {
+          editorPane.setText(readContents(filename));
     }
 
-    private String readContents(String filename) throws IOException {
+    private String readContents(String filename) throws IOException, FileToBigException {
         try {
             FileInputStream fis = new FileInputStream(filename);
             int x = fis.available();
+            
+            if (x > 1000*1000 /* 1000 kbyte */) {
+            	throw new FileToBigException(filename);
+            }
+            
             byte b[] = new byte[x];
             fis.read(b);
             String content = new String(b);
@@ -111,7 +118,12 @@ public class SwingEditor extends JPanel implements Editor {
     }
 
     public void registerSlices(ATerm slices) {
-        SliceRegistrar.registerSlices(editorPane, (ATermList) slices);
+    	if (((ATermList) slices).getLength() < 10000) {
+    		SliceRegistrar.registerSlices(editorPane, (ATermList) slices);	
+    	}
+    	else {
+    		System.err.println("Ignoring syntax highlighting for safety (too big)");
+    	}
     }
 
     public int getMouseOffset(int x, int y) {

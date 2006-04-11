@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Apr  5 11:35:46 CEST 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: made editor robust against IO Errors and to big
+   files. I tried, and the limit seems to be about 1MB. So, I throw
+   a FileToBigException at >1MB. 
+
 Wed Apr  5 11:35:46 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Show error dialog when saving file failed (closes #576)
