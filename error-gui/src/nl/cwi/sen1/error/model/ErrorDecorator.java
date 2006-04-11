@@ -52,7 +52,7 @@ public class ErrorDecorator {
         for (ErrorList errorList = summary.getList(); !errorList.isEmpty(); errorList = errorList
                 .getTail()) {
             Error head = errorList.getHead();
-            top.add(decorateError(head, producer, id));
+            top.insert(decorateError(head, producer, id), 0);
         }
     }
 

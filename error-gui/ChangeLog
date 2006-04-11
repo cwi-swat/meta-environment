@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Apr 13 10:29:17 CET 2006 <jurgenv@cwi.nl>
+ * src/**/*.java: new errors arrive at the top of the list now
+
 Mon Feb 13 10:29:17 CET 2006 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/error/viewer/ErrorPanel.java:
    - Add remove summary on path
