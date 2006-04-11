@@ -25,7 +25,6 @@ in
         . snd-msg(sglr-parse-forest(ParseForest, Error))
       +
         rec-value(SGLR, parse-error(Error?))
-        . printf("%t\n", Error)
         . snd-msg(sglr-parse-error(Error))
       )
       . snd-terminate(SGLR, "done")
