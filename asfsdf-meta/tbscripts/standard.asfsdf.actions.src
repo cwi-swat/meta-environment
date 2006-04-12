@@ -13,6 +13,8 @@ configuration([
 
   action([description(equations-editor, menu-shortcut([label("Structure"),label("View"),label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],
          "ShowFullTreeAction"),
+  action([description(equations-editor, menu-shortcut([label("Structure"),label("View"),label("Tree")], shortcut([M_ALT,M_CTRL],VK_V)))],
+         "ShowTreeAction"),
 
   action([description(equations-editor, menu-shortcut([label("Structure"),label("View"),label("Shared Tree")], shortcut([M_ALT,M_CTRL],VK_S)))],
          "ShowSharedTreeAction"),
