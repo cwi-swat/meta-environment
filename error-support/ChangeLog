@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 13 11:50:22 CET 2006 <kooiker@cwi.nl>
+ * lib/display.c: added display to a chosen FILE*.
+
 Fri Mar 10 11:50:22 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library
