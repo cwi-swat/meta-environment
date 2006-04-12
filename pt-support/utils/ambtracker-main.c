@@ -41,54 +41,6 @@ void usage(void)
 
 /*}}}  */
 
-/*{{{  static void prettyPrint(ATerm t, FILE *fp) */
-
-static void prettyPrint(ATerm t, FILE *fp)
-{
-  int count;
-  int i;
-  ERR_Error error = ERR_ErrorFromTerm(t);
-
-  if (ERR_isErrorError(error)) {
-    ERR_SubjectList subjects = ERR_getErrorList(error);
-    if (ERR_isSubjectListEmpty(subjects)) {
-      ATfprintf(fp,"No ambiguities\n");
-    }
-    else {
-      count = ERR_getSubjectListLength(subjects);
-      ATfprintf(fp, "%d ambiguity cluster%s:\n\n",count,count > 1 ? "s" : "");
-      
-      for (i = 1;!ERR_isSubjectListEmpty(subjects); subjects = ERR_getSubjectListTail(subjects), i++) {
-	ERR_Subject subject = ERR_getSubjectListHead(subjects);
-        ERR_Location location = ERR_getSubjectLocation(subject);
-        ERR_Area area = ERR_getLocationArea(location);
-        int line = ERR_getAreaBeginLine(area);
-        int col = ERR_getAreaBeginColumn(area);
-/*
-	ATermList productions;
-*/
-
-	ATfprintf(fp,"[%d/%d] at (%d:%d):\n", i, count, line, col);
-/*
-	  for(;!ATisEmpty(productions); productions = ATgetNext(productions)) {
-	    char *str = deslash(ATgetFirst(productions));
-	    ATfprintf(fp,"  %s\n", str);
-	    free(str);
-	  }
-*/
-
-        ATfprintf(fp,"\n");
-      }
-    }
-  }
-  else {
-    ATerror("%s: Unexpected term: %t\n", myname,t);
-    return;
-  }
-}
-
-/*}}}  */
-
 /*{{{  int main (int argc, char **argv) */
 
 int main (int argc, char **argv)
@@ -115,6 +67,7 @@ int main (int argc, char **argv)
   ATinit(argc, argv, &bottomOfStack);
   initErrorApi();
   PT_initMEPTApi();
+  ERR_initErrorApi();
 
   parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
 
@@ -127,7 +80,7 @@ int main (int argc, char **argv)
 
   if (ambiguities) {
     if (!atermformat) {
-      FILE *fp = NULL;
+      FILE *fp = stdout;
 
       if (!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
         fp = stdout;
@@ -136,7 +89,7 @@ int main (int argc, char **argv)
         return 1;
       }
 
-      prettyPrint(ambiguities,fp);
+      ERR_fdisplayError(fp, (ERR_Error) ambiguities, "ambtracker");
 
       fclose(fp);
     } else {

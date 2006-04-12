@@ -612,12 +612,18 @@ PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree)
 
 /*{{{  PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack) */
 
-PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
+static ATermTable findParentCache = NULL;
+static ATerm NeedleNotHere = NULL;
+
+PT_Tree PT_findTreeParentRecursive(PT_Tree needle, PT_Tree haystack)
 {
   assert(needle != NULL);
   assert(haystack != NULL);
-
   assert(needle != haystack);
+
+  if (ATtableGet(findParentCache, (ATerm) haystack) != NULL) {
+	  return NULL;
+  }
 
   if (PT_hasTreeArgs(haystack)) {
     PT_Args children = PT_getTreeArgs(haystack);
@@ -627,7 +633,7 @@ PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
 	return haystack;
       }
       else {
-	PT_Tree suspect = PT_findTreeParent(needle, child);
+	PT_Tree suspect = PT_findTreeParentRecursive(needle, child);
 	if (suspect != NULL) {
 	  return suspect;
 	}
@@ -636,8 +642,23 @@ PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack)
     }
   }
 
+  ATtablePut(findParentCache, (ATerm) haystack, (ATerm) NeedleNotHere);
   return NULL;
 }
+
+PT_Tree PT_findTreeParent(PT_Tree needle, PT_Tree haystack) 
+{
+	PT_Tree result;
+	if (findParentCache == NULL) {
+		findParentCache = ATtableCreate(1024, 75);
+		NeedleNotHere = ATparse("needle-not-here");
+		ATprotect(&NeedleNotHere);
+	}
+	result = PT_findTreeParentRecursive(needle, haystack);
+	ATtableReset(findParentCache);
+	return result;
+}
+
 
 /*}}}  */
 

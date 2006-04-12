@@ -21,6 +21,8 @@ typedef struct PT_Amb_Position_Tag {
 
 /*}}}  */
 
+static ATermTable visited = NULL;
+
 /*{{{  static ERR_SubjectList getAmbiguities(const char *path, */
 
 static ERR_Location makeLocation(PT_Amb_Position from, PT_Amb_Position to,
@@ -47,7 +49,20 @@ static ERR_SubjectList getAmbiguities(const char *path,
                                       PT_Amb_Position *current)
 {
   ERR_SubjectList ambSubjects = ERR_makeSubjectListEmpty();
- 
+  ERR_Location end = (ERR_Location) ATtableGet(visited, (ATerm) tree);
+  PT_Amb_Position here = *current;
+
+  if (end != NULL) {
+	  /* found in cache, so advance current and go on with the
+	   * rest
+	   */
+	  ERR_Area area = ERR_getLocationArea(end);
+	  current->col = ERR_getAreaEndColumn(area);
+	  current->line = ERR_getAreaEndLine(area);
+	  current->offset += ERR_getAreaLength(area);
+	  return ambSubjects;
+  }
+
   if (depth >= RECURSION_UPPERBOUND) {
     ERR_Subject subject = ERR_makeSubjectLocalized(
             "Tree is too deep to completely search for ambiguities."
@@ -56,27 +71,23 @@ static ERR_SubjectList getAmbiguities(const char *path,
 	    makeLocation(*current,*current,path));
 
       ambSubjects = ERR_makeSubjectListMany(subject, ambSubjects);
-    return ambSubjects;
   }
-
-  if (PT_isTreeChar(tree)) {
+  else if (PT_isTreeChar(tree)) {
   /*{{{  handle single char */
 
+	  
     if (PT_getTreeCharacter(tree) == '\n') {
+	    ATwarning("NEWLINE\n");
       current->col = 0;
-      current->line++;
-      current->offset++;
+      (current->line)++;
+      (current->offset)++;
     }
     else {
-      current->col++;
-      current->offset++;
+      (current->col)++;
+      (current->offset)++;
     }
 
-    return ambSubjects;
   /*}}}  */
-  }
-  else if (PT_isTreeCycle(tree)) {
-    return ambSubjects;
   }
   else if (PT_isTreeAppl(tree)) {
   /*{{{  handle normal application */
@@ -89,7 +100,6 @@ static ERR_SubjectList getAmbiguities(const char *path,
       ambSubjects = ERR_concatSubjectList(argSubjects, ambSubjects);
     }
 
-    return ambSubjects;
   /*}}}  */
   }
   else if (PT_isTreeAmb(tree)) {
@@ -97,10 +107,8 @@ static ERR_SubjectList getAmbiguities(const char *path,
 
     PT_Args args = PT_getTreeArgs(tree); 
     PT_Args ambs = args;
-    char *str;
-    char ambString[1024];
-    int ambStringCnt;
-    PT_Amb_Position here = *current;
+    const char *ambString;
+    char ambCount[1024] = "#alternatives: ";
     ERR_Location ambLocation;
     ERR_Subject ambSubject;
 
@@ -114,37 +122,31 @@ static ERR_SubjectList getAmbiguities(const char *path,
 			                  ambSubjects);
     }
 
-    ambStringCnt = 0;
-    ambString[0] = '\0';
-    for (;PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
-      PT_Tree amb = PT_getArgsHead(ambs);
-      PT_Production prod;
-
-      assert(PT_hasTreeProd(amb));
-
-      prod = PT_getTreeProd(amb);
-      str = PT_yieldProduction(prod);
- 
-      if (ambStringCnt + strlen(str) + 1 <= 1024) {
-        if (ambStringCnt > 0) {
-          strcpy(ambString + ambStringCnt, ";");
-          ambStringCnt++;
-        }
-        strcpy(ambString + ambStringCnt, str);
-        ambStringCnt = ambStringCnt + strlen(str);
-      }
+    PT_Tree amb = PT_getArgsHead(ambs);
+    if (PT_hasTreeProd(amb)) {
+	    ambString = PT_yieldSymbol(
+			    PT_getProductionRhs(PT_getTreeProd(amb)));
     }
+    else {
+	    ambString = PT_yieldTree(amb);
+    }
+
+    sprintf(ambCount + strlen(ambCount),"%d", PT_getArgsLength(ambs));
 
     ambLocation = makeLocation(here, *current, path);
     ambSubject = ERR_makeSubjectLocalized(ambString, ambLocation);
+    ambSubjects = ERR_makeSubjectListMany(ambSubject,ambSubjects);
+    ambSubject = ERR_makeSubjectLocalized(ambCount, ambLocation);
+    ambSubjects = ERR_makeSubjectListMany(ambSubject, ambSubjects);
 
-    ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
   /*}}}  */
   } 
-  else {
-    ATerror("getAmbiguities: unable to handle tree: %t\n", tree);
-  }
 
+  {
+	  /* TODO: serious bug here cause line numbers not to increase! */
+	  ERR_Location loc = makeLocation(here, *current, path);
+	  ATtablePut(visited, (ATerm) tree, (ATerm) loc);
+  }
   return ambSubjects;
 }
 
@@ -155,15 +157,20 @@ static ERR_SubjectList getAmbiguities(const char *path,
 ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
 {
   PT_Amb_Position pos = {1, 0, 0}; 
+  ERR_Error result = NULL;
+
+  visited = ATtableCreate(1024, 75);
+
   ERR_SubjectList ambs = getAmbiguities(path, tree, 0, &pos);
+
   if (!ERR_isSubjectListEmpty(ambs)) {
     ERR_Error ambError = ERR_makeErrorError("Ambiguity", ambs);
 
-    return ERR_ErrorToTerm(ambError);
+    result = ambError;
   }
-  else {
-    return NULL;
-  }
+
+  ATtableDestroy(visited);
+  return (ATerm) result;
 }
 
 /*}}}  */

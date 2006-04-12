@@ -20,9 +20,37 @@
 static ATbool label_layout = ATfalse;
 static ATbool label_literals = ATfalse;
 static ATbool in_layout = ATfalse;
+static ATermTable cache = NULL;
 
 /*}}}  */
 
+static ATerm makeKey(int offset, PT_Tree tree)
+{
+	return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), (ATerm) tree, 
+			(ATerm) ATmakeInt(offset));
+}
+
+static void initCache() 
+{
+	cache = ATtableCreate(1024, 75);
+}
+
+static void cleanupCache()
+{
+	ATtableDestroy(cache);
+}
+
+static void cacheTree(int offset, PT_Tree tree, PT_Tree annotated)
+{
+	ATtablePut(cache, makeKey(offset, tree), (ATerm) annotated);
+}
+
+static PT_Tree getCachedTree(int offset, PT_Tree tree)
+{
+	return (PT_Tree) ATtableGet(cache, makeKey(offset, tree));
+}
+
+	
 /*{{{  typedef struct PT_Position_Tag */
 
 typedef struct PT_Position_Tag {
@@ -157,11 +185,20 @@ static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
 
 static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 {
+  PT_Tree input = tree;
   int start_line = current->line;
   int start_col  = current->col;
   int start_offset  = current->offset;
+  PT_Tree result = getCachedTree(current->offset, tree);
 
-  /*ATwarning("adding pos-info at depth %d to %t\n", current->curDepth, tree);*/
+  if (result != NULL) {
+	  LOC_Location loc = PT_getTreeLocation(result);
+	  LOC_Area area = LOC_getLocationArea(loc);
+	  current->col = LOC_getAreaEndColumn(area);
+	  current->line = LOC_getAreaEndLine(area);
+	  current->offset += LOC_getAreaLength(area);
+	  return result;
+  }
 
   if (current->maxDepth == current->curDepth) {
     PT_calcTreePosInfo(tree, &current->line, &current->col, &current->offset);
@@ -234,9 +271,14 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 	      tree);
   }
 
-  return PT_setTreePosInfo(tree, current->path, start_line, start_col,
+  result = PT_setTreePosInfo(tree, current->path, start_line, start_col,
 			   current->line, current->col, 
                             start_offset, (current->offset - start_offset));
+
+  assert(PT_getTreeLocation(result) != NULL);
+  cacheTree(start_offset, input, result);
+
+  return result;
 }
 
 /*}}}  */
@@ -254,6 +296,8 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path,
 
   tree = PT_getParseTreeTop(parseTree);
 
+  initCache();
+
   current.path = path;
   current.line = 1;
   current.col  = 0;
@@ -263,6 +307,7 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path,
 
   parseTree = PT_setParseTreeTop(parseTree, PT_addTreePosInfo(tree, &current));
 
+  cleanupCache();
 
   return parseTree;
 }
@@ -274,8 +319,11 @@ PT_Tree PT_addTreePosInfoToDepth(const char* path, PT_Tree tree,
 				 int maxDepth, int start_line, int start_col) 
 {
   PT_Position current;
+  PT_Tree result;
  
   assert(maxDepth >= 0 || maxDepth == UNLIMITED_DEPTH);
+
+  initCache();
 
   current.path = path;
   current.line = start_line;
@@ -284,7 +332,10 @@ PT_Tree PT_addTreePosInfoToDepth(const char* path, PT_Tree tree,
   current.maxDepth = maxDepth;
   current.curDepth = 0;
 
-  return PT_addTreePosInfo(tree, &current);
+
+  result = PT_addTreePosInfo(tree, &current);
+  cleanupCache();
+  return result;
 }
 
 /*}}}  */
