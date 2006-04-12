@@ -8,8 +8,10 @@
 #include <restorebrackets.idef>
 
 process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
-  snd-msg(add-posinfo-packed(File, Tree))
+  AddJob("Adding position information")
+  . snd-msg(add-posinfo-packed(File, Tree))
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
+  . JobDone("Adding position information")
 
 process HasTextChanged(Sid: term, TextChanged: bool?) is
   snd-msg(te-is-modified(Sid))
@@ -102,6 +104,20 @@ in
   if not-equal(Table, UNDEFINED) then
     snd-msg(restore-brackets(Tree, Table))
     . rec-msg(brackets-restored(Result?))
+  else
+    Result := UNDEFINED
+  fi
+endlet
+
+process AddTermBrackets(ModuleId: term, Tree: term, Result: term?) is
+let
+  Table: term
+in
+  GetParseTable(ModuleId, trm, Table?)
+  . 
+  if not-equal(Table, UNDEFINED) then
+    snd-msg(add-brackets(Tree, Table))
+    . rec-msg(brackets-added(Result?))
   else
     Result := UNDEFINED
   fi
