@@ -18,6 +18,8 @@ configuration([
          "CloseAllAction"),
   action([description(term-editor, menu-shortcut([label("Structure"),label("Pretty Print")], shortcut([M_ALT,M_CTRL],VK_P)))],
          "PrettyPrintAction"),
+  action([description(term-editor, menu-shortcut([label("Structure"),label("Add Brackets")], shortcut([M_ALT,M_CTRL],VK_B)))],
+         "AddBracketsAction"),
   action([description(term-editor, menu-shortcut([label("Structure"), label("View"),label("Tree")], shortcut([M_ALT,M_CTRL],VK_V)))],
          "ShowTreeAction"),
   action([description(term-editor, menu-shortcut([label("Structure"), label("View"), label("Full Tree")], shortcut([M_ALT,M_CTRL],VK_F)))],

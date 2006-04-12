@@ -4,6 +4,9 @@
 #include <undefined.h>
 #define NO_NONTERMINAL ""
 
+process GetTermParseTable(ModuleId: term, Table: term?) is
+  GetParseTable(ModuleId, trm, Table?)
+
 process GetTermParsetree(ModuleId: term, Path: str, Result: term?) is
 let
   ParseTable: term,
@@ -13,7 +16,7 @@ let
   Tree: term
 in
   Type := trm
-  . GetParseTable(ModuleId, Type, ParseTable?)
+  . GetTermParseTable(ModuleId, ParseTable?)
   .
   if not-equal(ParseTable, UNDEFINED) then
     ReadFile(Path, Text?)

@@ -68,4 +68,28 @@ in
   fi
 endlet
 
+process AddBracketsAction(EditorId : term) is
+let
+  Tree : term,
+  RTree : term,
+  ModuleId: term,
+  Path: str,
+  Table: term
+in
+  GetModuleId(EditorId, ModuleId?)
+  . GetPath(EditorId, Path?)
+  . GetTermParsetree(ModuleId, Path, Tree?)
+  .
+  if not-equal(Tree, UNDEFINED) then
+    AddTermBrackets(ModuleId, Tree, RTree?)
+    . 
+    if not-equal(RTree, UNDEFINED) then
+      ReplaceFocus(EditorId, RTree)
+    else 
+      tau
+    fi
+  else tau
+  fi
+endlet
+
 #endif /*__TERM_ACTIONS__*/
