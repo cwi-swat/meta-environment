@@ -1,6 +1,14 @@
 $Id$
 
 
+Mon Apr 11 17:05:00 CET 2006 <jurgenv@cwi.nl>
+ * libtb/term.c: increased mark stack by a factor of 4 to be able to
+   deal with 1MB size files in the Meta-Environment editor and the
+   highlighting slices that come with that size of terms. The
+   trick of packing the slice does not work here, since the slice is
+   transported to a Java tool. The java adapter does not support
+   packed terms.
+
 Mon Mar 20 17:05:00 CET 2006 <jurgenv@cwi.nl>
  * Makefile.am, configure.in: removed doc subdir from SUBDIRS, to
    increase portability to different platforms (this works because
