@@ -7,6 +7,7 @@
 #include <Location.h>
 
 static ATermTable slices;
+static ATermTable visited;
 
 static void treeToSlices(PT_Tree tree);
 static ATerm category = NULL;
@@ -93,7 +94,6 @@ static void storeTree(PT_Tree tree, const char *category)
   location = PT_getTreeLocation(tree);
   if (location != NULL && LOC_hasLocationArea(location)) {
     LOC_Area area = LOC_getLocationArea(location);
-
     slice = LOC_makeAreaAreasMany((LOC_Area) area, slice);
     ATtablePut(slices, key, LOC_AreaAreasToTerm(slice));
   }
@@ -117,23 +117,26 @@ static void argsToSlices(PT_Args args)
 static void treeToSlices(PT_Tree tree)
 {
   ATerm categoryAnno = NULL;
+  ATerm cached = ATtableGet(visited, (ATerm) tree);
 
-  if (PT_isTreeAmb(tree)) {
-    storeTree(tree, "MetaAmbiguity");
-    return;
+  if (cached != NULL) {
+	  return;
   }
 
   /* We have three levels: default, production attribute, term annotation.
    * Annotations have preference, then production attributes, then the
-   * default highlighting kicks in.
+   * default highlighting kicks in. However, the fourth level is 
+   * the ambiguity (level 0), which has preference above all and
+   * stops the recursion immediately.
    */
-  if ((categoryAnno = getAnnotationCategory(tree)) != NULL) {
+  if (PT_isTreeAmb(tree)) {
+    storeTree(tree, "MetaAmbiguity");
+  }
+  else if ((categoryAnno = getAnnotationCategory(tree)) != NULL) {
     storeTree(tree, ATwriteToString(categoryAnno)); 
-    return;
   }
   else if ((categoryAnno = getProductionCategory(tree)) != NULL) {
     storeTree(tree, ATwriteToString(categoryAnno)); 
-    return;
   }
   else {
     if (PT_isTreeLit(tree) || PT_isTreeCilit(tree)) {
@@ -141,18 +144,18 @@ static void treeToSlices(PT_Tree tree)
 
       if (hasAlphanumericChars(chars)) {
 	storeTree(tree, "MetaKeyword"); 
-	return;
       }
     }
     else if (PT_isTreeVar(tree)) {
       storeTree(tree, "MetaVariable");
-      return;
     }
   }
 
   if (PT_isTreeAppl(tree)) {
     argsToSlices(PT_getTreeArgs(tree));
   }
+
+  ATtablePut(visited, (ATerm) tree, (ATerm) tree);
 }
 
 /*}}}  */
@@ -165,7 +168,8 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
   ATermList keys;
 
   slices = ATtableCreate(1024, 75);
-  
+  visited = ATtableCreate(1024, 75);
+
   ATprotect(&category);
   category = ATparse("category");
 
@@ -192,6 +196,7 @@ ATermList TreeToSyntaxSlices(PT_Tree tree)
   }
 
   ATtableDestroy(slices);
+  ATtableDestroy(visited);
   slices = NULL;
 
   return result;

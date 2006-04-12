@@ -1,5 +1,9 @@
 $Id$
 
+Fri Apr 11 11:55:57 CET 2006 <jurgenv@cwi.nl>
+ * src/slice-tree.c: added memoization to scale up to highly
+   ambiguous languages.
+
 Fri Mar 10 11:55:57 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library
