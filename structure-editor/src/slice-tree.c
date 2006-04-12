@@ -144,10 +144,14 @@ static void treeToSlices(PT_Tree tree)
 
       if (hasAlphanumericChars(chars)) {
 	storeTree(tree, "MetaKeyword"); 
+	ATtablePut(visited, (ATerm) tree, (ATerm) tree);
+	return;
       }
     }
     else if (PT_isTreeVar(tree)) {
       storeTree(tree, "MetaVariable");
+      ATtablePut(visited, (ATerm) tree, (ATerm) tree);
+      return;
     }
   }
 
