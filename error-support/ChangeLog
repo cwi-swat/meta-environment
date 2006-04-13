@@ -1,5 +1,10 @@
 $Id$
 
+Thu Apr 13 21:23:30 CEST 2006 <jurgenv@cwi.nl>
+ * lib/display.c: severely changed layout of displayed summaries.
+   Also some debugging, and more support for less frequently used
+   forms of errors in the error data-structure.
+
 Fri Apr 13 11:50:22 CET 2006 <kooiker@cwi.nl>
  * lib/display.c: added display to a chosen FILE*.
 

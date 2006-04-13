@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
     ATBeventloop();
   }
   else {
-    ATwarning("This is a ToolBus tool\n");
+    ATwarning("This is a ToolBus Tool!\n");
     return 1;
   }
 
