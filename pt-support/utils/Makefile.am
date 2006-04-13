@@ -7,12 +7,14 @@ AM_CFLAGS = -Wall -Werror -g -O2
 EXTRA_DIST = \
 	unparser.idef.src \
 	position-annotator.idef.src \
-	apply-function.idef.src
+	apply-function.idef.src \
+	ambiguity-reporter.idef.src
 
 CLEANFILES = \
 	     unparser.idef \
 	     position-annotator.idef \
-	     apply-function.idef
+	     apply-function.idef \
+	     ambiguity-reporter.idef
 
 bin_PROGRAMS = \
 	flattenPT \
@@ -36,12 +38,14 @@ INCLUDES = \
 pkgdata_DATA = \
 	unparser.idef \
 	position-annotator.idef \
-	apply-function.idef
+	apply-function.idef \
+	ambiguity-reporter.idef 
 
 noinst_HEADERS = \
 	unparser.tif.h \
 	apply-function.tif.h \
-	position-annotator.tif.h 
+	position-annotator.tif.h  \
+	ambiguity-reporter.tif.h 
 
 if MAINTAINER_MODE
 ATERM_LIB = ATerm-dbg
@@ -106,12 +110,16 @@ unparseProd_LDADD = \
 	-L../libmept -lmept \
 	-L${ATERM}/lib -l$(ATERM_LIB)
 
-ambtracker_SOURCES = ambtracker-main.c
+ambtracker_SOURCES = \
+	ambtracker-main.c \
+	ambiguity-reporter.tif.c
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
+	-L${TOOLBUSLIB}/lib -lATB \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -l$(ATERM_LIB)
+	-L${ATERM}/lib -lATerm-dbg \
+	${SOCKLIBS}
 
 IDEF = idef2tif
 TIFS = tifstoc

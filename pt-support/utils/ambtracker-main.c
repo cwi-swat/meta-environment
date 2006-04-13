@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 /*}}}  */
 /*{{{  meta includes */
@@ -13,7 +14,7 @@
 #include <aterm2.h>
 #include "MEPT-utils.h"
 #include <Error-utils.h>
-
+#include <ambiguity-reporter.tif.h>
 
 /*}}}  */
 /*{{{  globals */
@@ -41,6 +42,23 @@ void usage(void)
 
 /*}}}  */
 
+void rec_terminate(int cid, ATerm message) {
+  exit(0);
+}
+
+/*{{{  ATerm report_ambiguities(int cid, ATerm parseTree, const char* path) */
+
+ATerm report_ambiguities(int cid, ATerm parseTree, const char* path)
+{
+  ERR_Summary summary = (ERR_Summary) PT_reportParseTreeAmbiguities(path,
+			      PT_ParseTreeFromTerm(ATBunpack(parseTree)));
+
+  assert(summary != NULL);
+  return ATmake("snd-value(ambiguity-report(<term>))", summary);
+}
+
+/*}}}  */
+
 /*{{{  int main (int argc, char **argv) */
 
 int main (int argc, char **argv)
@@ -52,48 +70,64 @@ int main (int argc, char **argv)
   ATbool atermformat = ATfalse;
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
-  
-  while ((c = getopt(argc, argv, myarguments)) != EOF)
-    switch (c) {
-      case 'a':  atermformat = ATtrue;         break;
-      case 'h':  usage();                      exit(0);
-      case 'i':  input_file_name  = optarg;    break;
-      case 'o':  output_file_name = optarg;    break;
-      case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
-                                               exit(0);
-      default :  usage();                      exit(1);
+  ATbool use_toolbus = ATfalse;
+  int i;
+
+  for (i=1; !use_toolbus && i < argc; i++) {
+    use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
 
-  ATinit(argc, argv, &bottomOfStack);
-  initErrorApi();
-  PT_initMEPTApi();
-  ERR_initErrorApi();
+  if (use_toolbus) {
+    int cid;
+    ATBinit(argc, argv, &bottomOfStack);
+    initErrorApi();
+    PT_initMEPTApi();
 
-  parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
-
-  if (parsetree == NULL) {
-    ATerror("%s: could not read term from input file %s\n", 
-	    myname, input_file_name);
+    cid = ATBconnect(NULL, NULL, -1, ambiguity_reporter_handler);
+    ATBeventloop();
   }
-
-  ambiguities = PT_reportParseTreeAmbiguities("Unknown", parsetree);
-
-  if (ambiguities) {
-    if (!atermformat) {
-      FILE *fp = stdout;
-
-      if (!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
-        fp = stdout;
-      } else if (!(fp = fopen(output_file_name, "wb"))) {
-        ATerror("%s: could not open %s for output.\n", myname, output_file_name);
-        return 1;
+  else { 
+    while ((c = getopt(argc, argv, myarguments)) != EOF)
+      switch (c) {
+	case 'a':  atermformat = ATtrue;         break;
+	case 'h':  usage();                      exit(0);
+	case 'i':  input_file_name  = optarg;    break;
+	case 'o':  output_file_name = optarg;    break;
+	case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
+		   exit(0);
+	default :  usage();                      exit(1);
       }
 
-      ERR_fdisplayError(fp, (ERR_Error) ambiguities, "ambtracker");
+    ATinit(argc, argv, &bottomOfStack);
+    initErrorApi();
+    PT_initMEPTApi();
 
-      fclose(fp);
-    } else {
-      ATwriteToNamedTextFile(ambiguities, output_file_name);
+    parsetree = PT_ParseTreeFromTerm(ATreadFromNamedFile(input_file_name));
+
+    if (parsetree == NULL) {
+      ATerror("%s: could not read term from input file %s\n", 
+	      myname, input_file_name);
+    }
+
+    ambiguities = PT_reportParseTreeAmbiguities(input_file_name, parsetree);
+
+    if (ambiguities) {
+      if (!atermformat) {
+	FILE *fp = stdout;
+
+	if (!strcmp(output_file_name, "") || !strcmp(output_file_name,"-")) {
+	  fp = stdout;
+	} else if (!(fp = fopen(output_file_name, "wb"))) {
+	  ATerror("%s: could not open %s for output.\n", myname, output_file_name);
+	  return 1;
+	}
+
+	ERR_fdisplaySummary(fp, (ERR_Summary) ambiguities);
+
+	fclose(fp);
+      } else {
+	ATwriteToNamedTextFile(ambiguities, output_file_name);
+      }
     }
   }
 
