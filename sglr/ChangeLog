@@ -1,5 +1,13 @@
 $Id$
 
+Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
+ * libsglr/forest.c: YieldTree was exponential in the number of ambiguities.
+   <sigh>. Added memoization.
+
+Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
+ * Added -a option to restore brackets (adds all possible brackets,
+   not just the necessary ones).
+
 Thu Mar 30 17:53:58 CEST 2006 <economop@cwi.nl>
  * Updated parse tables. Pgen now treats priorities slightly differently which
    causes SGLR to create different parse trees. It still accepts the same

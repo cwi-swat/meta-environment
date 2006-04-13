@@ -284,9 +284,9 @@ label SG_GetRejectProdLabel(tree appl)
 /*}}}  */
 
 /* Yield converts aprods to AsFix */
-/*{{{  tree SG_YieldTree(parse_table *pt, tree t) */
-
-tree SG_YieldTree(parse_table *pt, tree t)
+/*{{{  tree yieldTreeRecursive(parse_table *pt, tree t) */
+static ATermTable yieldCache = NULL;
+tree yieldTreeRecursive(parse_table *pt, tree t)
 {
   tree      arg, res, newarg;
   ATermList args, newargs, ambs, tail;
@@ -296,6 +296,11 @@ tree SG_YieldTree(parse_table *pt, tree t)
   if (!t) {
     return NULL;
   }
+
+	res = (tree) ATtableGet(yieldCache, (ATerm) t);
+	if (res != NULL) {
+					return res;
+	}
 
   switch(ATgetType(t)) {
   case AT_LIST:
@@ -308,19 +313,19 @@ tree SG_YieldTree(parse_table *pt, tree t)
       if (ATisEmpty(tail)) {
         newargs = ATempty;
       } else {
-        newargs = (ATermList)SG_YieldTree(pt, (tree) tail);
+        newargs = (ATermList)yieldTreeRecursive(pt, (tree) tail);
       }
     
-      newarg = (tree) SG_YieldTree(pt, arg);
+      newarg = (tree) yieldTreeRecursive(pt, arg);
       if (newarg) {
         if (ATisEqual(newarg, arg) && ATisEqual(newargs, tail)) {
-	  newargs = args;
+								newargs = args;
         } else {
-	  newargs = ATinsert(newargs, (ATerm)newarg); 
+								newargs = ATinsert(newargs, (ATerm)newarg); 
         }
       }
       else {
-	return NULL;
+							return NULL;
       }
     }
     else {
@@ -339,7 +344,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
        ambs = (ATermList) ATgetArgument((ATerm) t, 0); /* get the ambs */
        if (ATgetLength(ambs) > 1) {
          SGnrAmb(SG_NR_INC);
-         ambs = (ATermList) SG_YieldTree(pt, (tree) ambs);
+         ambs = (ATermList) yieldTreeRecursive(pt, (tree) ambs);
 	 if (ambs) {
            res  = ATsetArgument((ATermAppl) t, (ATerm) ambs, 0);
 	 }
@@ -348,7 +353,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
 	 }
        }
        else {
-         res = SG_YieldTree(pt, (tree)ATgetFirst(ambs));
+         res = yieldTreeRecursive(pt, (tree)ATgetFirst(ambs));
        }
     }
     else if (fun == SG_Cycle_AFun) {
@@ -357,7 +362,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
     else {
       prod = ATgetArgument((ATerm) t, 0); /* get the prod */
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the args */
-      args = (ATermList) SG_YieldTree(pt, (tree) args);
+      args = (ATermList) yieldTreeRecursive(pt, (tree) args);
       if (args) {
         prod = (ATerm) SG_LookupProduction(pt, SG_GetProdLabel((tree) prod));
  
@@ -367,6 +372,8 @@ tree SG_YieldTree(parse_table *pt, tree t)
         res = NULL;
       }
     }
+
+		ATtablePut(yieldCache, (ATerm) t, (ATerm) res);
     return res;
   }
 
@@ -374,6 +381,27 @@ tree SG_YieldTree(parse_table *pt, tree t)
 }
 
 /*}}}  */
+
+tree SG_YieldTree(parse_table *pt, tree t) 
+{
+				tree result = t; 
+	/* without memoization, this algorithm would be
+	 * exponential in the amount of ambiguities
+	 */
+  yieldCache = ATtableCreate(1024, 75);
+  if (yieldCache == NULL) {
+					ATwarning("Not enough memory for yielding\n");
+				return NULL;
+	}
+
+
+	result = yieldTreeRecursive(pt, t);
+
+	ATtableDestroy(yieldCache);
+
+	return result;
+}
+
 
 /*
  SG_GtrPriority(l0, l1) returns true iff priority(l0) > priority(l0)

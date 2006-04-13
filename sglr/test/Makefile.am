@@ -9,7 +9,6 @@ TESTS      = regress-terms
 CLEANFILES = regress-terms
 
 % : %.sh.src 
-	sed 's@__ATERM__@$(ATERM)@g;\
+	sed "s@__ATERM__@$(ATERM)@g;\
 	     s@__ERROR_SUPPORT__@$(ERROR_SUPPORT)@g;\
-	     s@__SRCDIR__@$(srcdir)@g' < $< > $@ && \
-	chmod +x $@
+	     s@__SRCDIR__@$(srcdir)@g" < $< > $@ && chmod +x $@
