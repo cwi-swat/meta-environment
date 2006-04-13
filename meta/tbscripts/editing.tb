@@ -166,6 +166,7 @@ in
       snd-msg(em-register-editor(Sid, structure))
       . snd-msg(se-create(Sid, Tree))
     fi
+    . AddJob("Highlighting")
     . snd-msg(se-get-tree-slices(Sid))
     .
     (
@@ -174,6 +175,7 @@ in
     +
       rec-msg(se-no-tree-slices(Sid))
     )
+    . JobDone("Highlighting")
   else
     tau 
   fi
