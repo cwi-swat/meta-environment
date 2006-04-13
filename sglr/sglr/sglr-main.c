@@ -363,10 +363,7 @@ int SG_Batch (int argc, char **argv)
   }
 
   if (ERR_isValidError(ERR_ErrorFromTerm(parse_tree))) {
-    /*SGisParseError(parse_tree)) {*/
-    ERR_Error error = ERR_ErrorFromTerm(parse_tree);
-    ATwarning("todo: display error: %t\n", error);
-    /*ERR_displaySummary(summary);*/
+    ERR_fdisplayError(stderr, ERR_ErrorFromTerm(parse_tree),"sglr");
     return 1;
   }
   else if(!SGisParseTree(parse_tree)) {

@@ -22,6 +22,7 @@ in
         . snd-msg(sglr-parse-tree(ParseTree))
       +
         rec-value(SGLR, parse-forest(ParseForest?, Error?))
+ 	. shutdown("THIS CODE IS DEAD\n")
         . snd-msg(sglr-parse-forest(ParseForest, Error))
       +
         rec-value(SGLR, parse-error(Error?))

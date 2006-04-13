@@ -83,7 +83,6 @@ void    SG_Reducer(stack *st0, state s, label prodl,
                    int attr);
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak);
 static tree SG_ParseResult(const char *path, const char *sort);
 
 /*
@@ -1003,53 +1002,35 @@ static ERR_Location SG_CurrentPosInfo(const char *fileName)
   return location;
 }
 
-static int SG_CountAmbiguities(ERR_Error error)
+static forest SG_AmbError(const char *path)
 {
-  if (ERR_isErrorError(error)) {
-    return ERR_getSubjectListLength(ERR_getErrorList(error));
-  } 
+  ERR_Subject subject;
+  ERR_Error error;
+  ERR_Location posinfo;
+  static char contentDescription[] = "input sentence";
+  static char errorDescription[1024];
 
-  return 0;
+  sprintf(errorDescription, "%d ambiguous subsentences found", 
+	  SGnrAmb(SG_NR_ASK));
+
+  posinfo = ERR_makeLocationFile(path);
+  subject = ERR_makeSubjectLocalized(contentDescription, posinfo);
+  error = ERR_makeErrorError(errorDescription, 
+			     ERR_makeSubjectListSingle(subject));
+
+  return (forest)error;
 }
-
-static forest SG_ParseError(const char *path, ATermList cycle, int excess_ambs, ATerm ambtrak)
+static forest SG_ParseError(const char *path)
 {
   ERR_Subject subject;
   ERR_Error error;
   ERR_Location posinfo;
   static char contentDescription[1024];
   static char errorDescription[1024];
-  int descCnt;
 
   SG_ERROR_ON();
 
-  if (!ATisEmpty(cycle)) {
-    descCnt = 0;
-    contentDescription[0] = '\0';
-    while (!ATisEmpty(cycle)) {
-      ATerm first = ATgetFirst(cycle);
-      char *str = PT_yieldProduction(PT_ProductionFromTerm(first));
-
-      if (descCnt + strlen(str) + 1 <= 1024) {
-        if (descCnt > 0) {
-          strcpy(contentDescription + descCnt, ";");
-          descCnt++;
-        }
-        strcpy(contentDescription + descCnt, str);
-        descCnt = descCnt + strlen(str);
-      }
-      
-      cycle = ATgetNext(cycle);
-    }
-    sprintf(errorDescription, "Cycle");
-  }
-  else if (excess_ambs) {
-    if (!ambtrak) {
-      sprintf(errorDescription, "Ambiguity");
-      sprintf(contentDescription, "too-many-ambiguities");
-    }
-  }
-  else if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
+  if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
     sprintf(errorDescription, "Parse error");
     sprintf(contentDescription, "eof unexpected");
   }
@@ -1058,36 +1039,12 @@ static forest SG_ParseError(const char *path, ATermList cycle, int excess_ambs, 
     sprintf(contentDescription, "character '%c' unexpected", current_token);
   }
 
-  if (excess_ambs && ambtrak) {
-    error = ERR_ErrorFromTerm(ambtrak);
-  }
-  else {
-    posinfo = SG_CurrentPosInfo(path);
-    subject = ERR_makeSubjectLocalized(contentDescription, posinfo);
-    error = ERR_makeErrorError(errorDescription, 
-			       ERR_makeSubjectListSingle(subject));
-  }
+  posinfo = SG_CurrentPosInfo(path);
+  subject = ERR_makeSubjectLocalized(contentDescription, posinfo);
+  error = ERR_makeErrorError(errorDescription, 
+			     ERR_makeSubjectListSingle(subject));
 
   return (forest)error;
-}
-
-static forest SG_AmbiguousParse(const char *path, tree t, ATerm ambtrak)
-{
-  ERR_Error ambiguities = ERR_ErrorFromTerm(ambtrak);
-  int nrOfAmbs = SG_CountAmbiguities(ambiguities);
-  ATerm result;
-
-  SG_ERROR_ON();
-
-  t = (tree) ATmakeAppl2(SG_ParseTree_AFun,
-			 (ATerm) t, 
-                         (ATerm) SG_GetATint(nrOfAmbs, 0));
-
-  result = (ATerm) ATmakeAppl2(SG_AmbiguousTree_AFun, 
-			       (ATerm) t,
-			       ERR_ErrorToTerm(ambiguities));
-
-  return (forest)result;
 }
 
 tree SG_ConvertA2ToA2ME(tree t)
@@ -1121,7 +1078,7 @@ static tree SG_ParseResult(const char *path, const char *sort)
         if (!t) {
           /*  Flag this error at start, not end, of file  */
           SG_ResetCoordinates();
-          return SG_ParseError(path, ATempty, 0, NULL);
+          return SG_ParseError(path);
         }
       }
 
@@ -1146,21 +1103,6 @@ static tree SG_ParseResult(const char *path, const char *sort)
 
           SGsort(SG_SET, t);     
 
-          if (SG_TOOLBUS || SG_AMBIGUITY_ERROR) {
-	    ATerm ambtrak = NULL;
-	  
-            ambtrak = PT_reportTreeAmbiguities(path, (PT_Tree) t);
-            if (ambtrak) {
-              if (SG_AMBIGUITY_ERROR) {  
-                return SG_ParseError(path, ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
-              }
-              if (SG_ASFIX2ME) {
-                t = SG_ConvertA2ToA2ME(t);
-              }
-              return SG_AmbiguousParse(path, t, ambtrak);
-            }
-          }
-
           if (SG_ASFIX2ME) {
             t = SG_ConvertA2ToA2ME(t);
           }
@@ -1168,12 +1110,16 @@ static tree SG_ParseResult(const char *path, const char *sort)
           t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
                                  (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
 
+	  if (SG_AMBIGUITY_ERROR && SGnrAmb(SG_NR_ASK) > 0) {
+	    return SG_AmbError(path);
+	  }
+
           return t;
         }
       }
     }
   }
-  return SG_ParseError(path, ATempty, 0, NULL);
+  return SG_ParseError(path);
 }
 
 /* a function to print a status bar on a tty */

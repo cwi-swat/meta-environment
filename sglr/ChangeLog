@@ -1,5 +1,11 @@
 $Id$
 
+Thu Apr 13 16:35:17 CEST 2006 <jurgenv@cwi.nl>
+ * libsglr/parser.c: removed ambiguity tracking from sglr. This
+   is very expensive, and makes the whole error handling thing
+   more complex. With the -a flag I now return a simple error message
+   about the fact that more than zero ambiguities occur in the term.:
+
 Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
  * test/terms/bi.cycle: replaced test by previous version
  * test/terms/bi.asfix2.org: replaced by newer test, due to sharing
