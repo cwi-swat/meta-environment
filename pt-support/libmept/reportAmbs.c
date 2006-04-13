@@ -117,7 +117,6 @@ static ERR_ErrorList getAmbiguities(const char *path,
 
 	  
     if (PT_getTreeCharacter(tree) == '\n') {
-	    ATwarning("NEWLINE\n");
       current->col = 0;
       (current->line)++;
       (current->offset)++;
