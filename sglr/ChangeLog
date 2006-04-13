@@ -1,6 +1,13 @@
 $Id$
 
 Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
+ * test/terms/bi.cycle: replaced test by previous version
+ * test/terms/bi.asfix2.org: replaced by newer test, due to sharing
+   the number of ambiguities has gone down from 9 to 3. Not really of
+   course, but that was the ambiguity counting mechanism thinks. Which
+   has never been trustworthy.
+
+Thu Apr 13 17:53:58 CEST 2006 <jurgenv@cwi.nl>
  * libsglr/forest.c: YieldTree was exponential in the number of ambiguities.
    <sigh>. Added memoization.
 
