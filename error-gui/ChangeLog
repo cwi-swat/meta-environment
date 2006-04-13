@@ -2,6 +2,9 @@
 
 Mon Apr 13 10:29:17 CET 2006 <jurgenv@cwi.nl>
  * src/**/*.java: new errors arrive at the top of the list now
+ * src/**/*.java: added grouping of errors on files or on error message.
+   With HUGE amounts of errors in a grammar, the list just became too
+   longe to do anything useful with.
 
 Mon Feb 13 10:29:17 CET 2006 <kooiker@cwi.nl>
  * src/nl/cwi/sen1/error/viewer/ErrorPanel.java:

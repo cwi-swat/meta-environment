@@ -32,6 +32,7 @@ public class ErrorPanel extends JPanel {
     private DefaultMutableTreeNode top;
 
 	private DefaultTreeModel treeModel;
+	
 
     public ErrorPanel() {
         super(new BorderLayout());
@@ -108,30 +109,61 @@ public class ErrorPanel extends JPanel {
     }
 
     private void addButtons(JToolBar toolBar) {
-        URL url = getClass().getResource(
+        URL zoomInUrl = getClass().getResource(
                 "/toolbarButtonGraphics/general/ZoomIn16.gif");
-        Action action = new AbstractAction("Expand All", new ImageIcon(url)) {
+        Action expandAction = new AbstractAction("Expand All", new ImageIcon(zoomInUrl)) {
             public void actionPerformed(ActionEvent e) {
                 expandAll(tree, true);
             }
         };
-        toolBar.add(action);
-        url = getClass().getResource(
+        toolBar.add(expandAction);
+        URL zoomOutUrl = getClass().getResource(
                 "/toolbarButtonGraphics/general/ZoomOut16.gif");
-        action = new AbstractAction("Collapse All", new ImageIcon(url)) {
+        Action collapseAction = new AbstractAction("Collapse All", new ImageIcon(zoomOutUrl)) {
             public void actionPerformed(ActionEvent e) {
                 expandAll(tree, false);
                 tree.expandPath(new TreePath(tree.getModel().getRoot()));
             }
         };
-        toolBar.add(action);
+        toolBar.add(collapseAction);
+     
+        URL errorGroupUrl = getClass().getResource(
+        "/toolbarButtonGraphics/general/Stop16.gif");
+        Action groupAction = new AbstractAction("Group by error", new ImageIcon(errorGroupUrl)) {
+        	public void actionPerformed(ActionEvent e) {
+        		errorDecorator.groupOnDescription((DefaultMutableTreeNode) tree.getModel().getRoot());
+        		((DefaultTreeModel) tree.getModel()).reload();
+                tree.expandPath(new TreePath(top));
+        	}
+        };
+        toolBar.add(groupAction);
+        
+        URL fileGroupUrl = getClass().getResource(
+        "/toolbarButtonGraphics/general/Edit16.gif");
+        Action fileGroupAction = new AbstractAction("Group by file", new ImageIcon(fileGroupUrl)) {
+        	public void actionPerformed(ActionEvent e) {
+        		errorDecorator.groupOnFile((DefaultMutableTreeNode) tree.getModel().getRoot());
+        		((DefaultTreeModel) tree.getModel()).reload();
+                tree.expandPath(new TreePath(top));
+        	}
+        };
+        toolBar.add(fileGroupAction);
+        
+        URL unGroupUrl = getClass().getResource(
+        "/toolbarButtonGraphics/general/Undo16.gif");
+        Action unGroupAction = new AbstractAction("Ungroup", new ImageIcon(unGroupUrl)) {
+        	public void actionPerformed(ActionEvent e) {
+        		errorDecorator.unGroup((DefaultMutableTreeNode) tree.getModel().getRoot());
+        		((DefaultTreeModel) tree.getModel()).reload();
+                tree.expandPath(new TreePath(top));
+        	}
+        };
+        toolBar.add(unGroupAction);
     }
-
+    
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Error Viewer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // errorapi.Factory factory = new errorapi.Factory(new PureFactory());
 
         ErrorPanel newContentPane = new ErrorPanel();
         newContentPane.setOpaque(true); // content panes must be opaque
