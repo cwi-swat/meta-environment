@@ -3,6 +3,7 @@ $Id$
 Thu Apr 13 21:22:47 CEST 2006 <jurgenv@cwi.nl>
  * utils/ambtracker-main.c: ambtracker is now a ToolBus tool
  * utils/ambtracker-main.c: changed use of error display
+ * libmept/reportAmbs.c: fixed several issues in report ambs.
 
 Thu Apr  13 17:14:44 EDT 2006 <jurgenv@cwi.nl>
  * libmept/reportAmbs.c: fixed to use memoization, was exponential
