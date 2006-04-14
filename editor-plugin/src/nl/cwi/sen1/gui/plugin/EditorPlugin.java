@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -77,7 +78,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
 		if (panel != null) {
 			try {
-				panel.writeContents();
+				panel.writeContents(panel.getFilename());
 				panel.setModified(false);
 				ATerm event = studio.getATermFactory().make(
 						"contents-written(<term>)", editorId);
@@ -165,7 +166,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			public void actionPerformed(ActionEvent e) {
 				Editor editor = editors.get(editorId.toString());
 				try {
-					editor.writeContents();
+					editor.writeContents(editor.getFilename());
 					ATerm event = studio.getATermFactory().make(
 							"contents-saved(<term>)", editorId);
 					bridge.postEvent(event);
@@ -174,6 +175,37 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						showErrorDialog(editor, JOptionPane.OK_OPTION,
 								"\n\nError saving changes.");
 					} catch (CloseAbortedException e2) {
+					}
+				}
+			}
+		});
+
+		items = factory.makeItemList(factory.makeItem_Label("File"), factory
+				.makeItem_Label("Save a copy"));
+
+		event = factory.makeEvent_Menu(items);
+
+		studio.addComponentMenu(comp, event, new AbstractAction() {
+			Editor editor = editors.get(editorId.toString());
+
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				if (chooser.showDialog(null, "Save Copy") == JFileChooser.APPROVE_OPTION) {
+					String path = chooser.getSelectedFile().getAbsolutePath();
+					String filename = editor.getFilename();
+					int beginIndex = filename.lastIndexOf("/");
+					String componentName = filename.substring(beginIndex, filename
+							.length());
+					System.err.println("Writing " + path + ", " + componentName);
+					try {
+						editor.writeContents(path + componentName);
+					} catch (IOException e1) {
+						try {
+							showErrorDialog(editor, JOptionPane.OK_OPTION,
+									"\n\nError saving copy.");
+						} catch (CloseAbortedException e2) {
+						}
 					}
 				}
 			}
@@ -415,7 +447,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 				"editor-disconnected(<term>)", editorId);
 		bridge.postEvent(event);
 	}
-	
+
 	private void addStudioComponentListener(final ATerm editorId,
 			final SwingEditor panel, StudioComponent comp) {
 		comp.addStudioComponentListener(new StudioComponentAdapter() {
@@ -429,8 +461,6 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			public void componentClose() {
 				editorDisconnected(editorId);
 			}
-
-			
 
 			public void componentFocusReceived() {
 				panel.requestFocus();
@@ -448,7 +478,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 						panel.getFilename(), optionType)) {
 		case JOptionPane.YES_OPTION:
 			try {
-				panel.writeContents();
+				panel.writeContents(panel.getFilename());
 			} catch (IOException e) {
 				showErrorDialog(
 						panel,

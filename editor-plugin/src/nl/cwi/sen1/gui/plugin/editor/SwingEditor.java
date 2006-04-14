@@ -73,7 +73,7 @@ public class SwingEditor extends JPanel implements Editor {
         }
     }
 
-    public void writeContents() throws IOException {
+    public void writeContents(String filename) throws IOException {
         String text = editorPane.getText();
 
         FileOutputStream fos;
@@ -83,6 +83,14 @@ public class SwingEditor extends JPanel implements Editor {
         editorPane.setModified(false);
     }
 
+    public void writeCopy(String filename) throws IOException {
+    	String text = editorPane.getText();
+    	
+    	FileOutputStream fos;
+    	fos = new FileOutputStream(filename);
+    	fos.write(text.getBytes());
+    }
+    
     public void setCursorAtOffset(int offset) {
         try {
             editorPane.setCaretPosition(offset);

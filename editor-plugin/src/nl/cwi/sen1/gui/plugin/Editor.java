@@ -17,8 +17,8 @@ public interface Editor {
     
     public void removeEditorModifiedListener(EditorModifiedListener l);
 
-	public void writeContents() throws IOException;
-
+	public void writeContents(String filename) throws IOException;
+	
 	public void setCursorAtOffset(int offset);
 
 	public void setFocus(Area focus);
