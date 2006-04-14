@@ -1,0 +1,22 @@
+tool ambiguity-reporter is { command = "__PREFIX__/bin/ambtracker" }  
+
+process AmbiguityReporter is
+let
+  AT       : ambiguity-reporter,
+  Tree     : term,
+  Path     : str,
+  Summary  : term
+in
+  (
+    rec-msg(ar-report-ambiguities(Tree?, Path?)).
+    execute(ambiguity-reporter, AT?).
+    snd-eval(AT, report-ambiguities(Tree, Path)).
+    rec-value(AT, ambiguity-report(Summary?)).
+    snd-terminate(AT, "done") .
+    snd-msg(ar-ambiguity-report(Summary, Path))
+  ) *
+  delta
+endlet
+
+
+toolbus(AmbiguityReporter)
