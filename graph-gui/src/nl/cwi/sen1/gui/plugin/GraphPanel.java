@@ -24,11 +24,11 @@ import prefuse.action.animate.PolarLocationAnimator;
 import prefuse.action.assignment.ColorAction;
 import prefuse.action.assignment.FontAction;
 import prefuse.action.layout.CircleLayout;
-import prefuse.action.layout.GridLayout;
 import prefuse.action.layout.RandomLayout;
 import prefuse.action.layout.graph.FruchtermanReingoldLayout;
 import prefuse.activity.Activity;
 import prefuse.activity.SlowInSlowOutPacer;
+import prefuse.controls.Control;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
@@ -124,9 +124,11 @@ public class GraphPanel extends JPanel {
         display.setHighQuality(true);
         display.addControlListener(new DragControl());
         display.addControlListener(new ZoomControl());
-        display.addControlListener(new ZoomToFitControl());
+        ZoomToFitControl ztf = new ZoomToFitControl();
+        ztf.setZoomOverItem(false);
+        display.addControlListener(ztf);
         display.addControlListener(new PanControl());
-        display.addControlListener(new FocusControl(2));
+        display.addControlListener(new FocusControl());
         display.addControlListener(new ControlAdapter() {
             public void itemEntered(VisualItem item, MouseEvent e) {
                 if (item.isInGroup(GraphConstants.NODES)) {

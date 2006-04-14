@@ -1,5 +1,14 @@
 $Id$
 
+Fri Apr 14 12:56:03 CEST 2006 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Update use of mousebuttons: 
+     - Button 1 single click on module selects module
+     - Button 2 single click on module shows popup
+     - Button 2 single click on background zooms to fit
+     - Button 1 click and drag moves graph
+     - Button 2 click and drag zooms in/out
+
 Fri Mar 31 15:04:56 CEST 2006 <kooiker@cwi.nl>
  * src/**/*.java,lib/prefuse.jar:
    - Update prefuse to beta 20060320
