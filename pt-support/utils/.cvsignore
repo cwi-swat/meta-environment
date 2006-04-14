@@ -16,3 +16,4 @@ comparePT
 apply-function.idef
 unparser.idef
 position-annotator.idef
+ambiguity-reporter.idef
