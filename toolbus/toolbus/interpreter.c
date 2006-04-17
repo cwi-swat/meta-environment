@@ -1423,7 +1423,7 @@ static void atomic_steps(void)
       for(all_alts = alts = pi_alts(current_ProcInst); alts; alts = next(alts)){
 	assert(is_list(alts));
 	alt = first(alts);
-
+        assert(alt != NULL);
 	/* TBmsg("\nalt: %t\n", alt); */
 
 	if(is_delta(alt)){
@@ -1810,7 +1810,7 @@ static TBbool pending_events(void)
     term *ev1;
     int next_phase;
 
-    assert(is_list(ev_pair));
+    assert(ev_pair != NULL && is_list(ev_pair));
     ti1 = first(ev_pair);
     ev1 = first(next(ev_pair));
     next_phase = TCP_transition(ti1, ev1, TBfalse);

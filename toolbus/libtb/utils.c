@@ -1026,7 +1026,7 @@ void tbgen_printf(const char *fmt, term_list *args)
     err_warn("Too few in arguments in printf: `%s'\n", fmt); \
       return; \
   } \
-  arg = first(args); args = next(args); 
+  arg = first(args); assert(arg != NULL); args = next(args); 
 
 #define NEXT_ARG(f,t) \
   NXT_ARG \

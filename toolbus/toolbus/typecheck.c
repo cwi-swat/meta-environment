@@ -109,7 +109,7 @@ void tc_execute(proc *p)
 
 void pr_coords(coords *c)
 { 
-  assert(is_coords(c));
+  assert(is_coords(c) && c != NULL);
   TBprintf(stderr, "%t, line %t: ", elm1(c), elm2(c));
 }
 

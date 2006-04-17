@@ -150,6 +150,7 @@ void TBunprotect(term **pt)
 			   err_fatal("new_term: cannot add a segment");\
 		     }\
                      t = free_list;\
+		     assert(t != NULL); \
                      free_list = next(free_list);\
                      nfree--;
 
@@ -1399,7 +1400,7 @@ term *get_list_as_env(register var *v, term_list *e)
 
   for(e1 = e; e1; e1 = next(e1)){
     entry = first(e1);
-    assert(is_list(entry) && (list_length(entry) == 2));
+    assert(entry != NULL && is_list(entry) && (list_length(entry) == 2));
     entry_var = elm1(entry);
     if(sym == var_sym(entry_var)){
       register term *val = elm2(entry);

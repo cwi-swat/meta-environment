@@ -224,7 +224,7 @@ sym_idx register_func3(char *name, sym_idx module, type *restype, TBbool eval,
 		       type *a1, type *a2, type *a3, 
 		       term *(*fn)(int, term **, term *), char *descr)
 {
-  type *arg[2];
+  type *arg[3];
 
   arg[0] = a1;
   arg[1] = a2;
