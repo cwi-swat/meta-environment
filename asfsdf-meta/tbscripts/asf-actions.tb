@@ -16,15 +16,20 @@ in
   . GetPath(EditorId, Path?)
   . AddJob(Path)
   . Reduce(ModuleId, Path, off, ResultTree?)
-  . snd-msg(em-get-session-by-path("reduct.out"))
-  .
-  (
-    rec-msg(em-session("reduct.out", Sid?))
-    . DeleteSession(Sid)
-  +
-    rec-msg(em-no-such-session("reduct.out"))
-  )
-  . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+  . 
+  if not-equal(ResultTree, UNDEFINED) then
+    snd-msg(em-get-session-by-path("reduct.out"))
+    .
+    (
+      rec-msg(em-session("reduct.out", Sid?))
+      . DeleteSession(Sid)
+    +
+      rec-msg(em-no-such-session("reduct.out"))
+    )
+    . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+  else
+    tau
+  fi
   . JobDone(Path)
 endlet
 

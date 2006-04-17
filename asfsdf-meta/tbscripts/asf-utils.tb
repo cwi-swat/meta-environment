@@ -397,6 +397,7 @@ let
   ResultTree: term
 in
   GetTermParsetree(ModuleId, Path, Parsetree?)
+  . Tree := UNDEFINED
   .
   if not-equal(Parsetree, UNDEFINED) then
     ReduceTerm(Parsetree, ModuleId, Debugging, ResultTree?)
