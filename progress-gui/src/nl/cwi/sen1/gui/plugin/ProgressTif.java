@@ -1,6 +1,6 @@
 // Java tool interface ProgressTif
 // This file is generated automatically, please do not edit!
-// generation time: Jan 30, 2006 11:09:21 AM
+// generation time: Apr 19, 2006 10:00:36 AM
 
 package nl.cwi.sen1.gui.plugin;
 

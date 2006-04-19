@@ -1,29 +1,31 @@
 // Java tool interface class ProgressTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 30, 2006 11:09:21 AM
+// generation time: Apr 19, 2006 10:00:36 AM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class ProgressTool
   extends SwingTool
   implements ProgressTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PclearStatusWindow0;
   private ATerm PsetStatus0;
   private ATerm PrecTerminate0;
-
-  //}}}
-
-  //{{{  protected ProgressTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
   protected ProgressTool(ATermFactory factory)
@@ -33,20 +35,14 @@ abstract public class ProgressTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<progress>,clear-status-window)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<progress>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<progress>,clear-status-window)"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<progress>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
@@ -55,10 +51,6 @@ abstract public class ProgressTool
     PsetStatus0 = factory.parse("rec-do(set-status(<str>,<str>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -81,12 +73,9 @@ abstract public class ProgressTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -101,15 +90,10 @@ abstract public class ProgressTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }
