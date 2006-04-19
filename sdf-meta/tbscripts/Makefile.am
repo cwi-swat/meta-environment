@@ -22,7 +22,6 @@ TBSCRIPTS = \
   
 GENERATED_TBSCRIPTS = \
 		      sdf2-language.tb \
-		      sdf-initialize.tb \
 		      start-meta-studio.tb \
 		      start-def-dump.tb \
 		      start-pt-dump.tb
@@ -38,8 +37,7 @@ CLEANFILES = \
 
 pkgdata_DATA = \
 	       $(TBSCRIPTS) \
-	       $(GENERATED_TBSCRIPTS) \
-	       standard.sdf.actions
+	       $(GENERATED_TBSCRIPTS)
 
 LIBRARY_LOCATION = \
 		   ${SDF_LIBRARY}/share/sdf-library/library
@@ -52,3 +50,8 @@ LIBRARY_LOCATION = \
 standard.sdf.actions:  standard.sdf.actions.src Makefile
 	sed "s@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g;" < $< > $@
 
+install-data-hook: standard.sdf.actions
+	cp standard.sdf.actions ${HOME}/.metaenv  
+
+uninstall-hook:
+	rm standard.sdf.actions ${HOME}/.metaenv  

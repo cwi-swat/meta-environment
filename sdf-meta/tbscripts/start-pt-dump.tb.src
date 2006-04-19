@@ -6,9 +6,9 @@ process TODO(Msg : str) is printf("TODO: %s\n", Msg)
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
+#include <initialize-plugins.tb>
 
 /* sdf-meta */
-#include <sdf-initialize.tb>
 #include <sdf-module-actions.tb>
 #include <sdf-listeners.tb>
 #include <sdf-utils.tb>

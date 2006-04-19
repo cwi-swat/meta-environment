@@ -6,4 +6,5 @@ sdf2-language.tb
 sdf-initialize.tb
 start-meta-studio.tb
 start-pt-dump.tb
+start-def-dump.tb
 standard.sdf.actions
