@@ -75,11 +75,8 @@ in
   +
     rec-msg(io-list-files(Path?, Extension?))
     . snd-eval(IO, list-files(Path, Extension))
-    . printf("Asked: %t,%t\n", Path, Extension)
     . rec-value(IO, file-list(Files?))
-    . printf("Received: %t\n", Files)
     . snd-msg(io-file-list(Files))
-    . printf("Sent: %t\n", Files)
   +
     rec-msg(io-pack-term(Term?))
     . snd-eval(IO, pack-term(Term))
