@@ -177,3 +177,10 @@ equations
             save-args(Aint1) = 
 		Stat+ ltmp[integer-constant(d+)] = 
 		int2identifier(arg, Aint2);
+
+tests
+
+  [] save-args(1) == ltmp[0] = arg0;
+  [] save-args(2) == ltmp[0] = arg0; ltmp[1] = arg1;
+  [] save-args(3) == ltmp[0] = arg0; ltmp[1] = arg1; ltmp[2] = arg2;
+

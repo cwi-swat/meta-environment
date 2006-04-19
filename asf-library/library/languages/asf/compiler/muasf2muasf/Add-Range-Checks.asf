@@ -67,6 +67,13 @@ equations
 
 [splice] Cond*1 & < Cond*2 > & Cond*3 = Cond*1 & Cond*2 & Cond*3
 
+equations
+
+%% the above may introduce double tests
+
+[dub] Cond*1 & Cond & Cond*2 & Cond & Cond*3 = Cond*1 & Cond & Cond*2 & Cond*3
+
+
 tests
 
 
