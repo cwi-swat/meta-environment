@@ -58,27 +58,40 @@ equations
 %% A group is an abbreviation for a pointwise extension of the declared
 %% relation to the members of the group.
 
+  
+  [0] norm[[{p}]]              =
+  
+  [0] norm[[{} > g]]             =
+  [0] norm[[{} <n+> > g]]        =
+  [0] norm[[g > {}]]             =
+  
+  [0] norm[[{p+1 p+2}     > g]]  = norm[[{p+1} > g, {p+2} > g]]
+  [0] norm[[{p+1 p+2} <n+>> g]]  = norm[[{p+1} <n+>> g, {p+2} <n+>> g]]
+  
+  [0] norm[[g > {p+1 p+2}]]      = norm[[g > {p+1}, g > {p+2}]]
+  
+  [0] norm[[{p}     > g]]        = norm[[p > g]]
+  [0] norm[[{p} <n+>> g]]        = norm[[p <n+>> g]]
+  
+  [0] norm[[g      > {p}]]       = norm[[g      > p ]]
+
+  [0] norm[[{as: p*} > g]]       = norm[[{as: p*}, {p*} > g]]
+  [0] norm[[{as: p*} <n+> > g]]    = norm[[{as: p*}, {p*} <n+> > g]]
+
+  [0] norm[[g     > {as: p*}]]   = norm[[{as: p*}, g     > {p*}]]
+
+%% Distribution of arguments and useless argument selection
   [0] norm[[g <n+>]]             = norm[[g]]
   [0] norm[[g1 > g2 <n+>]]       = norm[[g1 > g2]]
-  [0] norm[[{p} <n+>> g]]        = norm[[p <n+>> g]]
-  [0] norm[[{p+1 p+2} <n+>> g]]  = norm[[{p+1} <n+>> g, {p+2} <n+>> g]]
-  [0] norm[[{p}]]                =
-  [0] norm[[{} > g]]             =
-  [0] norm[[g > {}]]             =
-  [0] norm[[{p+1 p+2} > g]]      = norm[[{p+1} > g, {p+2} > g]]
-  [0] norm[[g > {p+1 p+2}]]      = norm[[g > {p+1}, g > {p+2}]]
-  [0] norm[[{p} > g]]            = norm[[p > g]]
-  [0] norm[[g > {p}]]            = norm[[g > p]]
-  [0] norm[[{as: p*} > g]]       = norm[[{as: p*}, {p*} > g]]
-  [0] norm[[g > {as: p*}]]       = norm[[{as: p*}, g > {p*}]]
-  [0] norm[[p <n+>> {as: p*}]]   = norm[[{as: p*}, p <n+>> {p*}]]
-  [0] norm[[p <n+>> {p+1 p+2}]]  = norm[[p <n+>> {p+1}, p <n+>> {p+2}]]
-  [0] norm[[p1 <n+>> {p2}]]      = norm[[p1 <n+>> p2]]
-  [0] norm[[p1 <n, n+>> p2]]     = norm[[p1 <n>> p2, p1 <n+>> p2]]
+  [0] norm[[g1 <n, n+>> g2]]     = norm[[g1 <n>> g2, g1 <n+>> g2]]
 
 %% Groups and associativity.
 
   [0] norm[[{} as g]]           = norm[[g]]
+
+  [0] norm[[g1 <n+> as g2]]     = norm[[g1 as g2]]
+  [0] norm[[g1 as g2 <n+>]]     = norm[[g1 as g2]]
+
   [0] norm[[{p p*} as g]]       = norm[[p as g, {p*} as g]]
   [0] norm[[g as {}]]           = norm[[g]]
   [0] norm[[g as {p p*}]]       = norm[[g as p, g as {p*}]]
@@ -182,7 +195,7 @@ equations
 %% productions referred to in that declaration.
 
   [0] syntax[[ ]]             = (/)
-  [0] syntax[[ pr+1, pr+2 ]]  = syntax[[ pr+1 ]] syntax[[ pr+2 ]]
+  [0] syntax[[ pr, pr+2 ]]  = syntax[[ pr ]] syntax[[ pr+2 ]]
   [0] syntax[[ p1 > p2  ]]    = syntax p1 p2
   [0] syntax[[ p1 <n+>> p2 ]] = syntax p1 p2
   [0] syntax[[ p1 as p2 ]]    = syntax p1 p2

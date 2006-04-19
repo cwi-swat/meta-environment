@@ -41,8 +41,8 @@ equations
    [0] <'a -> _A! -LEX>   = <'a -LEXs> -> <_A-LEX> !
 
 %% Do not introduce the injection if it causes a cc cycle 
-   [0] <'a -> _A! -LEXs> = <'a -> _A! -LEX> when cc -> cc
-   := <_A -LEXs> -> <_A-CF> [default] <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF>
+   [0] <'a -> _A! -LEXs> = <'a -> _A! -LEX> when cc -> cc := <_A -LEXs> -> <_A-CF> 
+   [default] <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF>
    [0] <p*        -LEXs> =   when p* ==
    [0] <p+1 p+2   -LEXs> = <p+1 -LEXs> ++ <p+2 -LEXs>
    [0] <syntax p* -LEX>  = syntax <p* -LEXs>

@@ -4,7 +4,7 @@ equations
 
    [0] lift(`_A`) = sym2syntax(_A)
 
-   [0] sym2syntax(())      = ""
+   [0] sym2syntax(())      = ("(" ")")
    [0] sym2syntax((_A _B)) = ("(" sym2syntax(_A) sym2syntax(_B) ")")
    [0] sym2syntax((_A _B 'a+)) = ("(" _A'  _B' 'a+' ")")
           when _A' := sym2syntax(_A),
@@ -48,3 +48,4 @@ equations
  [0]
 	sort2str(sort(h1 h2 m* t)) = strcon(\" strchar(h1) C* strchar(t) \")
 		when strcon(\" C* strchar(t) \") := sort2str(sort(h2 m* t))
+

@@ -21,7 +21,7 @@ hiddens
     "extend"        -> IdCon {reject}
 
   context-free start-symbols
-	Symbols Grammar
+	Symbols Grammar NatCon
 
 hiddens
   lexical variables
@@ -33,9 +33,19 @@ hiddens
     "S"  -> SingleQuotedStrChar
     "d"[0-9]*  -> [0-9]
     "d+" -> [0-9]+
-    "h"[0-9]*  -> [A-Za-z] 
+    "h"[0-9]*  -> [A-Za-z]
+    "m"[0-9]*  -> [A-Za-z\-0-9]
     "t"  -> [A-Za-z\-0-9]*
     "normal"  -> ~[\0-\31\n\t\'\\]
+    "notquote" -> ~[\0-\31\n\t\'\\\"]
+    
+  %% The translation between string characters and character classes is quite
+  %% involved. All characters in StrCon fit either into regular or into
+  %% escaped ShortChars, or into both (checked this manually), so we can
+  %% do with two intersections:
+  lexical variables
+    "normal&escaped" -> (~[\0-\31\n\t\"\\] /\ ~[\0-\31A-Za-mo-qsu-z0-9]) / [a-zA-Z0-9] 
+    "normal&regular" -> ~[\0-\31\n\t\"\\] /\ [a-zA-Z0-9]
 
   variables
     "$"?"L"             -> StrCon

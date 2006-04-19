@@ -17,58 +17,34 @@ equations
 
 %% The function \fun{chars} scans the characters in the literal string,
 %% translating them to short characters. These are then normalized to
-%% numeric character codes by character normalization. The third equation
-%% tries if the first character of the string is a short-character by
-%% normalizing it and then testing whether it has reduced to a numeric
-%% character. This works for letters and digits.
-%% If this fails, the fourth equation translates the character
-%% to an escaped short-character, which succeeds for all other characters.
-%% Characters that are already escaped are handled by the second equation.
+%% numeric character codes by character normalization. 
 
-  [empty]
-        chars("")  =
+equations
+  [empty]   chars("")  =
 
-  [newline]
-        cc := [shortchar(\\ n)]
-        ===========================================
-        chars(strcon(\" strchar(\n) C* \")) = 
-	cc ++ chars( strcon(\" C* \") )
+  [loop]    chars(strcon(\" C C+ \")) = chars(strcon(\" C \")) ++ chars(strcon(\" C+ \"))
 
-  [tab]
-        cc := [shortchar(\\ t)]
-        ===========================================
-        chars(strcon(\" strchar(\t) C* \")) = 
-	cc ++ chars( strcon(\" C* \") )
+equations
 
-  [quote]
-        cc := [shortchar(\\ \")]
-        ===========================================
-        chars(strcon(\" strchar(\") C* \")) = 
-	cc ++ chars( strcon(\" C* \") )
+  [newline] chars(strcon(\" strchar(\n) \")) = [shortchar(\\ n)]
+  [tab]     chars(strcon(\" strchar(\t) \")) = [shortchar(\\ t)]
 
-  [backslash]
-        cc := [shortchar(\\ \\)]
-        ===========================================
-        chars(strcon(\" strchar(\\) C* \")) = 
-	cc ++ chars( strcon(\" C* \") )
+  [quote]   chars(strcon(\" strchar(\") \"))   = [shortchar(\\ \")] 
+  [backslash] chars(strcon(\" strchar(\\) \")) = [shortchar(\\ \\)]
 
-  [normal]
-        cc := [shortchar(h)], [numchar(\\ d+)] := cc
-        ====================================================================
-        chars(strcon(\" strchar(h) C* \") ) = 
-	cc ++ chars( strcon(\" C* \") )
+  [numbered] chars( strcon(\" strchar(\ d1 d2 d3) \") ) = [numchar(\\ d1 d2 d3)]
 
-  [default-special]
-        cc := [shortchar(\\ h)], [numchar(\\ d+)] := cc
-        ====================================================================
-        chars(strcon(\" strchar(h) C* \") ) = 
-	cc ++ chars( strcon(\" C* \") )
+  [regular] chars(strcon(\" strchar(normal&regular) \")) = [shortchar(normal&regular)]
+  [escaped] chars(strcon(\" strchar(normal&escaped) \")) = [shortchar(\\ normal&escaped)]
 
-  [octal]
-        cc := [numchar(\\ d1 d2 d3 )]
-        =========================================
-        chars( strcon(\" strchar(\ d1 d2 d3) C* \") ) = 
-	cc ++ chars(strcon(\" C* \"))
+tests
+
+%% The [regular] and [escaped] equations depend on the following fact:
+
+[completeness]
+	((~[\0-\31\n\t\"\\] /\ ~[\0-\31A-Za-mo-qsu-z0-9]) / [a-zA-Z0-9]) \/ (~[\0-\31\n\t\"\\] /\ [a-zA-Z0-9]) 
+	== ~[\0-\31\n\t\"\\]
+
 
 equations
 
@@ -113,7 +89,7 @@ equations
 [tab]     convert-chars('\t')  = "\t"
 [back]    convert-chars('\\')  = "\\"
 [ddd]     convert-chars(singlequotedstrcon(\' singlequotedstrchar(\d1 d2 d3) \')) = strcon(\" strchar(\d1 d2 d3) \")
-[normal]  convert-chars(singlequotedstrcon(\' singlequotedstrchar(normal) \')) = strcon(\" strchar(normal) \")
+[normal]  convert-chars(singlequotedstrcon(\' singlequotedstrchar(notquote) \')) = strcon(\" strchar(notquote) \")
 
 [done] 
 	convert-chars('') = ""
@@ -143,6 +119,8 @@ equations
   [0] symbols(_A)         = _A
   [0] symbols('g+1, 'g+2) = symbols('g+1) ++ "," ++ symbols('g+2)
 
+equations
+
   [0] id2str(idcon(h)) = strcon(\" strchar(h) \")
-  [0] id2str(idcon(h1 h2 t)) = strcon(\" strchar(h1) C* \")
-	when strcon(\" C* \") := id2str(idcon(h2 t))
+  [0] id2str(idcon(h m t)) = strcon(\" strchar(h) strchar(m) C* \")
+	when strcon(\" strchar(h) C* \") := id2str(idcon(h t))

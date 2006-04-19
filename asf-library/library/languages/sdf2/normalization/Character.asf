@@ -8,98 +8,259 @@ equations
 %% setting we define top to be \Char{255} such that all byte represented
 %% characters can be handled.
 
+equations
+
   [botch] \BOT = \0
   [topch] \TOP = \255
   [EOFch] \EOF = \256
   [LABch] \LABEL_START = \257
 
-%% All \ASCII{} symbols preceded by a backslash are translated to
-%% their corresponding \ASCII{} code. Digits and letters have
-%% the usual encoding except for \verb|\t| and \verb|\n|, which
-%% conventionally denote tab and newline.
+%% We have three special escaped, the rest of the escaped are just
+%% the literal characters behind the escape:
 
-   [sc009] \t = \9  [sc010] \n = \10 [sc013] \r = \13
+equations
 
-   [sc032] \  = \32 [sc033] \! = \33 [sc034] \" = \34
-   [sc035] \# = \35 [sc036] \$ = \36 [sc037] \% = \37
-   [sc038] \& = \38 [sc039] \' = \39 [sc040] \( = \40
-   [sc041] \) = \41 [sc042] \* = \42 [sc043] \+ = \43
-   [sc044] \, = \44 [sc045] \- = \45 [sc046] \. = \46
-   [sc047] \/ = \47
+  [tab] \t = \9  
+  [nl]  \n = \10 
+  [cr]  \r = \13
 
-   [ac048] 0 = \48 [ac049] 1 = \49 [ac050] 2 = \50
-   [ac051] 3 = \51 [ac052] 4 = \52 [ac053] 5 = \53
-   [ac054] 6 = \54 [ac055] 7 = \55 [ac056] 8 = \56
-   [ac057] 9 = \57
 
-   [sc058] \: = \58 [sc059] \; = \59 [sc060] \< = \60
-   [sc061] \= = \61 [sc059] \> = \62 [sc063] \? = \63
-   [sc064] \@ = \64
+%% First we translate normal characters to their ASCII value: 
+equations
 
-   [ac065] A = \65 [ac066] B = \66 [ac067] C = \67
-   [ac065] D = \68 [ac069] E = \69 [ac070] F = \70
-   [ac071] G = \71 [ac072] H = \72 [ac073] I = \73
-   [ac074] J = \74 [ac075] K = \75 [ac073] L = \76
-   [ac074] M = \77 [ac078] N = \78 [ac079] O = \79
-   [ac080] P = \80 [ac081] Q = \81 [ac082] R = \82
-   [ac083] S = \83 [ac081] T = \84 [ac082] U = \85
-   [ac086] V = \86 [ac087] W = \87 [ac088] X = \88
-   [ac089] Y = \89 [ac090] Z = \90
+[regular-a] shortchar(a) = numchar(\\ 97)
+[regular-b] shortchar(b) = numchar(\\ 98)
+[regular-c] shortchar(c) = numchar(\\ 99)
+[regular-d] shortchar(d) = numchar(\\ 100)
+[regular-e] shortchar(e) = numchar(\\ 101)
+[regular-f] shortchar(f) = numchar(\\ 102)
+[regular-g] shortchar(g) = numchar(\\ 103)
+[regular-h] shortchar(h) = numchar(\\ 104)
+[regular-i] shortchar(i) = numchar(\\ 105)
+[regular-j] shortchar(j) = numchar(\\ 106)
+[regular-k] shortchar(k) = numchar(\\ 107)
+[regular-l] shortchar(l) = numchar(\\ 108)
+[regular-m] shortchar(m) = numchar(\\ 109)
+[regular-n] shortchar(n) = numchar(\\ 110)
+[regular-o] shortchar(o) = numchar(\\ 111)
+[regular-p] shortchar(p) = numchar(\\ 112)
+[regular-q] shortchar(q) = numchar(\\ 113)
+[regular-r] shortchar(r) = numchar(\\ 114)
+[regular-s] shortchar(s) = numchar(\\ 115)
+[regular-t] shortchar(t) = numchar(\\ 116)
+[regular-u] shortchar(u) = numchar(\\ 117)
+[regular-v] shortchar(v) = numchar(\\ 118)
+[regular-w] shortchar(w) = numchar(\\ 119)
+[regular-x] shortchar(x) = numchar(\\ 120)
+[regular-y] shortchar(y) = numchar(\\ 121)
+[regular-z] shortchar(z) = numchar(\\ 122)
 
-   [sc091] \[ = \91 [sc092] \\ = \92 [sc093] \] = \93
-   [sc094] \^ = \94 [sc095] \_ = \95 [sc096] \` = \96
+equations
 
-   [ac097] a = \97 [ac098] b = \98 [ac099] c = \99
-   [ac100] d = \100 [ac101] e = \101 [ac102] f = \102
-   [ac103] g = \103 [ac104] h = \104 [ac105] i = \105
-   [ac106] j = \106 [ac107] k = \107 [ac108] l = \108
-   [ac109] m = \109 [ac110] n = \110 [ac111] o = \111
-   [ac112] p = \112 [ac113] q = \113 [ac114] r = \114
-   [ac115] s = \115 [ac116] t = \116 [ac117] u = \117
-   [ac118] v = \118 [ac119] w = \119 [ac120] x = \120
-   [ac121] y = \121 [ac122] z = \122
+[regular-A] shortchar(A) = numchar(\\ 65)
+[regular-B] shortchar(B) = numchar(\\ 66)
+[regular-C] shortchar(C) = numchar(\\ 67)
+[regular-D] shortchar(D) = numchar(\\ 68)
+[regular-E] shortchar(E) = numchar(\\ 69)
+[regular-F] shortchar(F) = numchar(\\ 70)
+[regular-G] shortchar(G) = numchar(\\ 71)
+[regular-H] shortchar(H) = numchar(\\ 72)
+[regular-I] shortchar(I) = numchar(\\ 73)
+[regular-J] shortchar(J) = numchar(\\ 74)
+[regular-K] shortchar(K) = numchar(\\ 75)
+[regular-L] shortchar(L) = numchar(\\ 76)
+[regular-M] shortchar(M) = numchar(\\ 77)
+[regular-N] shortchar(N) = numchar(\\ 78)
+[regular-O] shortchar(O) = numchar(\\ 79)
+[regular-P] shortchar(P) = numchar(\\ 80)
+[regular-Q] shortchar(Q) = numchar(\\ 81)
+[regular-R] shortchar(R) = numchar(\\ 82)
+[regular-S] shortchar(S) = numchar(\\ 83)
+[regular-T] shortchar(T) = numchar(\\ 84)
+[regular-U] shortchar(U) = numchar(\\ 85)
+[regular-V] shortchar(V) = numchar(\\ 86)
+[regular-W] shortchar(W) = numchar(\\ 87)
+[regular-X] shortchar(X) = numchar(\\ 88)
+[regular-Y] shortchar(Y) = numchar(\\ 89)
+[regular-Z] shortchar(Z) = numchar(\\ 90)
 
-   [sc123] \{ = \123 [sc124] \| = \124 [sc125] \} = \125
-   [sc126] \~ = \126
+equations
 
-   [lc161] \¡ = \161 [lc162] \¢ = \162  [lc163] \£ = \163
-   [lc164] \¤ = \164  [lc165] \¥ = \165  [lc166] \¦ = \166
-   [lc167] \§ = \167
-   [lc168] \¨ = \168  [lc169] \© = \169  [lc170] \ª = \170
-   [lc171] \« = \171  [lc172] \¬ = \172  [lc173] \­ = \173
-   [lc174] \® = \174
-   [lc175] \¯ = \175  [lc176] \° = \176  [lc177] \± = \177
-   [lc178] \² = \178  [lc179] \³ = \179  [lc180] \´ = \180
-   [lc181] \µ = \181
-   [lc182] \¶ = \182  [lc183] \· = \183  [lc184] \¸ = \184
-   [lc185] \¹ = \185  [lc186] \º = \186  [lc187] \» = \187
-   [lc188] \¼ = \188
-   [lc189] \½ = \189  [lc190] \¾ = \190  [lc191] \¿ = \191
-   [lc192] \À = \192  [lc193] \Á = \193  [lc194] \Â = \194 
-   [lc195] \Ã = \195
-   [lc196] \Ä = \196  [lc197] \Å = \197  [lc197] \Å = \197
-   [lc198] \Æ = \198  [lc199] \Ç = \199  [lc200] \È = \200
-   [lc201] \É = \201
-   [lc202] \Ê = \202  [lc203] \Ë = \203  [lc204] \Ì = \204
-   [lc205] \Í = \205  [lc206] \Î = \206  [lc207] \Ï = \207
-   [lc208] \Ð = \208
-   [lc209] \Ñ = \209  [lc210] \Ò = \210  [lc211] \Ó = \211
-   [lc212] \Ô = \212  [lc213] \Õ = \213  [lc214] \Ö = \214
-   [lc215] \× = \215
-   [lc216] \Ø = \216  [lc217] \Ù = \217  [lc218] \Ú = \218
-   [lc219] \Û = \219  [lc220] \Ü = \220  [lc221] \Ý = \221
-   [lc222] \Þ = \222
-   [lc223] \ß = \223  [lc224] \à = \224  [lc225] \á = \225
-   [lc226] \â = \226  [lc227] \ã = \227  [lc228] \ä = \228
-   [lc229] \å = \229
-   [lc229] \å = \229  [lc230] \æ = \230  [lc231] \ç = \231
-   [lc232] \è = \232  [lc233] \é = \233  [lc234] \ê = \234 
-   [lc235] \ë = \235
-   [lc236] \ì = \236  [lc237] \í = \237  [lc238] \î = \238
-   [lc239] \ï = \239  [lc240] \ð = \240  [lc241] \ñ = \241 
-   [lc242] \ò = \242
-   [lc243] \ó = \243  [lc244] \ô = \244  [lc245] \õ = \245
-   [lc246] \ö = \246  [lc247] \÷ = \247  [lc248] \ø = \248
-   [lc249] \ù = \249
-   [lc250] \ú = \250  [lc251] \û = \251  [lc252] \ü = \252
-   [lc253] \ý = \253  [lc254] \þ = \254  [lc255] \ÿ = \255   
+[regular-0] shortchar(0) = numchar(\\ 48)
+[regular-1] shortchar(1) = numchar(\\ 49)
+[regular-2] shortchar(2) = numchar(\\ 50)
+[regular-3] shortchar(3) = numchar(\\ 51)
+[regular-4] shortchar(4) = numchar(\\ 52)
+[regular-5] shortchar(5) = numchar(\\ 53)
+[regular-6] shortchar(6) = numchar(\\ 54)
+[regular-7] shortchar(7) = numchar(\\ 55)
+[regular-8] shortchar(8) = numchar(\\ 56)
+[regular-9] shortchar(9) = numchar(\\ 57)
+
+%% Here are the escaped values, since not all of them are printable,
+%% we use a lexical constructor function:
+
+equations
+
+[escaped-32] shortchar(\\ \32) = numchar(\\ 32)
+[escaped-33] shortchar(\\ \33) = numchar(\\ 33)
+[escaped-34] shortchar(\\ \34) = numchar(\\ 34)
+[escaped-35] shortchar(\\ \35) = numchar(\\ 35)
+[escaped-36] shortchar(\\ \36) = numchar(\\ 36)
+[escaped-37] shortchar(\\ \37) = numchar(\\ 37)
+[escaped-38] shortchar(\\ \38) = numchar(\\ 38)
+[escaped-39] shortchar(\\ \39) = numchar(\\ 39)
+[escaped-40] shortchar(\\ \40) = numchar(\\ 40)
+[escaped-41] shortchar(\\ \41) = numchar(\\ 41)
+[escaped-42] shortchar(\\ \42) = numchar(\\ 42)
+[escaped-43] shortchar(\\ \43) = numchar(\\ 43)
+[escaped-44] shortchar(\\ \44) = numchar(\\ 44)
+[escaped-45] shortchar(\\ \45) = numchar(\\ 45)
+[escaped-46] shortchar(\\ \46) = numchar(\\ 46)
+[escaped-47] shortchar(\\ \47) = numchar(\\ 47)
+[escaped-58] shortchar(\\ \58) = numchar(\\ 58)
+[escaped-59] shortchar(\\ \59) = numchar(\\ 59)
+[escaped-60] shortchar(\\ \60) = numchar(\\ 60)
+[escaped-61] shortchar(\\ \61) = numchar(\\ 61)
+[escaped-62] shortchar(\\ \62) = numchar(\\ 62)
+[escaped-63] shortchar(\\ \63) = numchar(\\ 63)
+[escaped-64] shortchar(\\ \64) = numchar(\\ 64)
+[escaped-91] shortchar(\\ \91) = numchar(\\ 91)
+[escaped-92] shortchar(\\ \92) = numchar(\\ 92)
+[escaped-93] shortchar(\\ \93) = numchar(\\ 93)
+[escaped-94] shortchar(\\ \94) = numchar(\\ 94)
+[escaped-95] shortchar(\\ \95) = numchar(\\ 95)
+[escaped-96] shortchar(\\ \96) = numchar(\\ 96)
+[escaped-123] shortchar(\\ \123) = numchar(\\ 123)
+[escaped-124] shortchar(\\ \124) = numchar(\\ 124)
+[escaped-125] shortchar(\\ \125) = numchar(\\ 125)
+[escaped-126] shortchar(\\ \126) = numchar(\\ 126)
+[escaped-127] shortchar(\\ \127) = numchar(\\ 127)
+[escaped-128] shortchar(\\ \128) = numchar(\\ 128)
+[escaped-129] shortchar(\\ \129) = numchar(\\ 129)
+[escaped-130] shortchar(\\ \130) = numchar(\\ 130)
+[escaped-131] shortchar(\\ \131) = numchar(\\ 131)
+[escaped-132] shortchar(\\ \132) = numchar(\\ 132)
+[escaped-133] shortchar(\\ \133) = numchar(\\ 133)
+[escaped-134] shortchar(\\ \134) = numchar(\\ 134)
+[escaped-135] shortchar(\\ \135) = numchar(\\ 135)
+[escaped-136] shortchar(\\ \136) = numchar(\\ 136)
+[escaped-137] shortchar(\\ \137) = numchar(\\ 137)
+[escaped-138] shortchar(\\ \138) = numchar(\\ 138)
+[escaped-139] shortchar(\\ \139) = numchar(\\ 139)
+[escaped-140] shortchar(\\ \140) = numchar(\\ 140)
+[escaped-141] shortchar(\\ \141) = numchar(\\ 141)
+[escaped-142] shortchar(\\ \142) = numchar(\\ 142)
+[escaped-143] shortchar(\\ \143) = numchar(\\ 143)
+[escaped-144] shortchar(\\ \144) = numchar(\\ 144)
+[escaped-145] shortchar(\\ \145) = numchar(\\ 145)
+[escaped-146] shortchar(\\ \146) = numchar(\\ 146)
+[escaped-147] shortchar(\\ \147) = numchar(\\ 147)
+[escaped-148] shortchar(\\ \148) = numchar(\\ 148)
+[escaped-149] shortchar(\\ \149) = numchar(\\ 149)
+[escaped-150] shortchar(\\ \150) = numchar(\\ 150)
+[escaped-151] shortchar(\\ \151) = numchar(\\ 151)
+[escaped-152] shortchar(\\ \152) = numchar(\\ 152)
+[escaped-153] shortchar(\\ \153) = numchar(\\ 153)
+[escaped-154] shortchar(\\ \154) = numchar(\\ 154)
+[escaped-155] shortchar(\\ \155) = numchar(\\ 155)
+[escaped-156] shortchar(\\ \156) = numchar(\\ 156)
+[escaped-157] shortchar(\\ \157) = numchar(\\ 157)
+[escaped-158] shortchar(\\ \158) = numchar(\\ 158)
+[escaped-159] shortchar(\\ \159) = numchar(\\ 159)
+[escaped-160] shortchar(\\ \160) = numchar(\\ 160)
+[escaped-161] shortchar(\\ \161) = numchar(\\ 161)
+[escaped-162] shortchar(\\ \162) = numchar(\\ 162)
+[escaped-163] shortchar(\\ \163) = numchar(\\ 163)
+[escaped-164] shortchar(\\ \164) = numchar(\\ 164)
+[escaped-165] shortchar(\\ \165) = numchar(\\ 165)
+[escaped-166] shortchar(\\ \166) = numchar(\\ 166)
+[escaped-167] shortchar(\\ \167) = numchar(\\ 167)
+[escaped-168] shortchar(\\ \168) = numchar(\\ 168)
+[escaped-169] shortchar(\\ \169) = numchar(\\ 169)
+[escaped-170] shortchar(\\ \170) = numchar(\\ 170)
+[escaped-171] shortchar(\\ \171) = numchar(\\ 171)
+[escaped-172] shortchar(\\ \172) = numchar(\\ 172)
+[escaped-173] shortchar(\\ \173) = numchar(\\ 173)
+[escaped-174] shortchar(\\ \174) = numchar(\\ 174)
+[escaped-175] shortchar(\\ \175) = numchar(\\ 175)
+[escaped-176] shortchar(\\ \176) = numchar(\\ 176)
+[escaped-177] shortchar(\\ \177) = numchar(\\ 177)
+[escaped-178] shortchar(\\ \178) = numchar(\\ 178)
+[escaped-179] shortchar(\\ \179) = numchar(\\ 179)
+[escaped-180] shortchar(\\ \180) = numchar(\\ 180)
+[escaped-181] shortchar(\\ \181) = numchar(\\ 181)
+[escaped-182] shortchar(\\ \182) = numchar(\\ 182)
+[escaped-183] shortchar(\\ \183) = numchar(\\ 183)
+[escaped-184] shortchar(\\ \184) = numchar(\\ 184)
+[escaped-185] shortchar(\\ \185) = numchar(\\ 185)
+[escaped-186] shortchar(\\ \186) = numchar(\\ 186)
+[escaped-187] shortchar(\\ \187) = numchar(\\ 187)
+[escaped-188] shortchar(\\ \188) = numchar(\\ 188)
+[escaped-189] shortchar(\\ \189) = numchar(\\ 189)
+[escaped-190] shortchar(\\ \190) = numchar(\\ 190)
+[escaped-191] shortchar(\\ \191) = numchar(\\ 191)
+[escaped-192] shortchar(\\ \192) = numchar(\\ 192)
+[escaped-193] shortchar(\\ \193) = numchar(\\ 193)
+[escaped-194] shortchar(\\ \194) = numchar(\\ 194)
+[escaped-195] shortchar(\\ \195) = numchar(\\ 195)
+[escaped-196] shortchar(\\ \196) = numchar(\\ 196)
+[escaped-197] shortchar(\\ \197) = numchar(\\ 197)
+[escaped-198] shortchar(\\ \198) = numchar(\\ 198)
+[escaped-199] shortchar(\\ \199) = numchar(\\ 199)
+[escaped-200] shortchar(\\ \200) = numchar(\\ 200)
+[escaped-201] shortchar(\\ \201) = numchar(\\ 201)
+[escaped-202] shortchar(\\ \202) = numchar(\\ 202)
+[escaped-203] shortchar(\\ \203) = numchar(\\ 203)
+[escaped-204] shortchar(\\ \204) = numchar(\\ 204)
+[escaped-205] shortchar(\\ \205) = numchar(\\ 205)
+[escaped-206] shortchar(\\ \206) = numchar(\\ 206)
+[escaped-207] shortchar(\\ \207) = numchar(\\ 207)
+[escaped-208] shortchar(\\ \208) = numchar(\\ 208)
+[escaped-209] shortchar(\\ \209) = numchar(\\ 209)
+[escaped-210] shortchar(\\ \210) = numchar(\\ 210)
+[escaped-211] shortchar(\\ \211) = numchar(\\ 211)
+[escaped-212] shortchar(\\ \212) = numchar(\\ 212)
+[escaped-213] shortchar(\\ \213) = numchar(\\ 213)
+[escaped-214] shortchar(\\ \214) = numchar(\\ 214)
+[escaped-215] shortchar(\\ \215) = numchar(\\ 215)
+[escaped-216] shortchar(\\ \216) = numchar(\\ 216)
+[escaped-217] shortchar(\\ \217) = numchar(\\ 217)
+[escaped-218] shortchar(\\ \218) = numchar(\\ 218)
+[escaped-219] shortchar(\\ \219) = numchar(\\ 219)
+[escaped-220] shortchar(\\ \220) = numchar(\\ 220)
+[escaped-221] shortchar(\\ \221) = numchar(\\ 221)
+[escaped-222] shortchar(\\ \222) = numchar(\\ 222)
+[escaped-223] shortchar(\\ \223) = numchar(\\ 223)
+[escaped-224] shortchar(\\ \224) = numchar(\\ 224)
+[escaped-225] shortchar(\\ \225) = numchar(\\ 225)
+[escaped-226] shortchar(\\ \226) = numchar(\\ 226)
+[escaped-227] shortchar(\\ \227) = numchar(\\ 227)
+[escaped-228] shortchar(\\ \228) = numchar(\\ 228)
+[escaped-229] shortchar(\\ \229) = numchar(\\ 229)
+[escaped-230] shortchar(\\ \230) = numchar(\\ 230)
+[escaped-231] shortchar(\\ \231) = numchar(\\ 231)
+[escaped-232] shortchar(\\ \232) = numchar(\\ 232)
+[escaped-233] shortchar(\\ \233) = numchar(\\ 233)
+[escaped-234] shortchar(\\ \234) = numchar(\\ 234)
+[escaped-235] shortchar(\\ \235) = numchar(\\ 235)
+[escaped-236] shortchar(\\ \236) = numchar(\\ 236)
+[escaped-237] shortchar(\\ \237) = numchar(\\ 237)
+[escaped-238] shortchar(\\ \238) = numchar(\\ 238)
+[escaped-239] shortchar(\\ \239) = numchar(\\ 239)
+[escaped-240] shortchar(\\ \240) = numchar(\\ 240)
+[escaped-241] shortchar(\\ \241) = numchar(\\ 241)
+[escaped-242] shortchar(\\ \242) = numchar(\\ 242)
+[escaped-243] shortchar(\\ \243) = numchar(\\ 243)
+[escaped-244] shortchar(\\ \244) = numchar(\\ 244)
+[escaped-245] shortchar(\\ \245) = numchar(\\ 245)
+[escaped-246] shortchar(\\ \246) = numchar(\\ 246)
+[escaped-247] shortchar(\\ \247) = numchar(\\ 247)
+[escaped-248] shortchar(\\ \248) = numchar(\\ 248)
+[escaped-249] shortchar(\\ \249) = numchar(\\ 249)
+[escaped-250] shortchar(\\ \250) = numchar(\\ 250)
+[escaped-251] shortchar(\\ \251) = numchar(\\ 251)
+[escaped-252] shortchar(\\ \252) = numchar(\\ 252)
+[escaped-253] shortchar(\\ \253) = numchar(\\ 253)
+[escaped-254] shortchar(\\ \254) = numchar(\\ 254)
+[escaped-255] shortchar(\\ \255) = numchar(\\ 255)

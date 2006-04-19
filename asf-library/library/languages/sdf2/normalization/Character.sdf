@@ -3,6 +3,7 @@ imports languages/sdf2/syntax/Character
 
 hiddens
   imports basic/Comments basic/Whitespace
-
+  context-free start-symbols
+	Character
   lexical variables
     "c+"[0-9\']* -> [0-9]+
