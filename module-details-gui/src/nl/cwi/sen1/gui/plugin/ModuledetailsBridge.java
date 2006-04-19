@@ -1,6 +1,6 @@
 // Java tool bridge ModuledetailsBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:54 AM
+// generation time: Apr 19, 2006 9:59:03 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -11,17 +11,11 @@ public class ModuledetailsBridge
 {
   private ModuledetailsTif tool;
 
-  //{{{  public ModuledetailsBridge(ATermFactory factory, ModuledetailsTif tool)
-
   public ModuledetailsBridge(ATermFactory factory, ModuledetailsTif tool)
   {
     super(factory);
     this.tool = tool;
   }
-
-  //}}}
-
-  //{{{  public void setDetails(ATerm t0)
 
   public void setDetails(ATerm t0)
   {
@@ -32,10 +26,6 @@ public class ModuledetailsBridge
       throw new UnsupportedOperationException("method `setDetails' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void recTerminate(ATerm t0)
-
   public void recTerminate(ATerm t0)
   {
     if (tool != null) {
@@ -45,6 +35,4 @@ public class ModuledetailsBridge
       throw new UnsupportedOperationException("method `recTerminate' not supported.");
     }
   }
-
-  //}}}
 }

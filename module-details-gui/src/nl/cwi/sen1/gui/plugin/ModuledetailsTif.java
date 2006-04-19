@@ -1,6 +1,6 @@
 // Java tool interface ModuledetailsTif
 // This file is generated automatically, please do not edit!
-// generation time: Jan 13, 2006 9:21:54 AM
+// generation time: Apr 19, 2006 9:59:03 AM
 
 package nl.cwi.sen1.gui.plugin;
 
