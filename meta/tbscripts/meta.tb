@@ -9,6 +9,6 @@
 #include <gui-utils.tb>
 #include <editing.tb>
 #include <graph-utils.tb>
-#include <initialize-plugin.tb>
+#include <initialize-plugins.tb>
 
 #endif /* __META__ */
