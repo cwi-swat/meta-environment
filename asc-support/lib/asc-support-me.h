@@ -88,6 +88,8 @@ extern Symbol record_sym;
 #define check_sym(t,s) (get_sym(t) == (s))
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
 #define parse_sort(s)  (ATparse(s))
+#define parse_cc(s) (ATparse(s))
+#define is_elem(a,b) (PT_elementOfCharClass((PT_Tree) (a), (PT_Symbol) (b)))
 
 #define accutrafo_tuple_first(t)    (ATgetArgument((ATermAppl) t,0))
 #define accutrafo_tuple_second(t)   (ATgetArgument((ATermAppl) t,1))
