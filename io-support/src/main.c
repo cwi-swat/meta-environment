@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <ctype.h>
+#include <dirent.h>
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
@@ -332,6 +333,28 @@ ATerm exists_file(int cid, const char *path) {
   }
   
   return makeResultMessage(summary);
+}
+
+ATerm list_files(int cid, const char *path, const char *extension) {
+  char filename[PATH_LEN];
+  DIR* dir;
+  struct dirent* entry;
+  ATermList files = ATempty;
+
+  dir = opendir(path);
+  if (dir != NULL) {
+    while ((entry = readdir(dir))) {
+      int length = strlen(entry->d_name) - strlen(extension);
+      if (entry->d_name && strcmp(&(entry->d_name)[length], extension) == 0) {
+	sprintf(filename, "%s%c%s", path, PATH_SEPARATOR, entry->d_name);
+	files = ATinsert(files, 
+			 (ATerm) 
+			 ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)));
+      }
+    }  
+  }
+
+  return ATmake("snd-value(file-list(<term>))", files);
 }
 
 ATerm find_file(int cid, ATerm paths, const char *name, const char *extension) {
