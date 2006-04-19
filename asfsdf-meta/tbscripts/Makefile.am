@@ -47,4 +47,4 @@ install-data-hook: standard.asfsdf.actions
 	cp standard.asfsdf.actions ${HOME}/.metaenv  
 
 uninstall-hook:
-	rm standard.asfsdf.actions ${HOME}/.metaenv  
+	rm ${HOME}/.metaenv/standard.asfsdf.actions
