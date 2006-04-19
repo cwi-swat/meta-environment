@@ -11,12 +11,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -52,9 +50,9 @@ import net.infonode.docking.util.ViewMap;
 import net.infonode.util.Direction;
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.configapi.types.Event;
-import nl.cwi.sen1.util.StudioStatusBarConstraints;
 import nl.cwi.sen1.util.StudioMenuBar;
 import nl.cwi.sen1.util.StudioStatusBar;
+import nl.cwi.sen1.util.StudioStatusBarConstraints;
 import toolbus.AbstractTool;
 import aterm.ATerm;
 import aterm.ATermFactory;
@@ -85,7 +83,9 @@ public class StudioImpl implements Studio, GuiTif {
     private JFrame frame;
 
     private JLabel systemLabel;
+
     JProgressBar progressBar;
+
     private ATermList menuList;
 
     private DockingWindowsTheme currentTheme;
@@ -97,7 +97,7 @@ public class StudioImpl implements Studio, GuiTif {
     private boolean menuBarUpdatePending;
 
     private List<StudioPlugin> plugins;
-    
+
     private List<String> jobQueue;
 
     protected boolean studioShuttingDown;
@@ -254,17 +254,17 @@ public class StudioImpl implements Studio, GuiTif {
 
             if (active != null) {
                 JComponent[] components = active.getStatusBarComponents();
-                
+
                 for (int i = statusBar.getComponentCount(); i > 5; i--) {
                     statusBar.remove(i - 1);
                 }
-               
-	        if (components != null) {	
-		  for (JComponent cur : components) {
-		    statusBar.addSeparator();
-		    statusBar.add(cur);
-		  }
-		}
+                
+                if (components != null) {
+                    for (JComponent cur : components) {
+                        statusBar.addSeparator();
+                        statusBar.add(cur);
+                    }
+                }
                 statusBar.repaint();
             } else {
                 System.err.println("Internal error: no active component found");
@@ -377,16 +377,16 @@ public class StudioImpl implements Studio, GuiTif {
         systemLabel.setPreferredSize(new Dimension(300, 18));
         statusPanel.add(systemLabel);
         statusPanel.addSeparator();
-        
+
         statusPanel.add(progressBar);
         statusPanel.addSeparator();
-        
+
         JLabel filler = new JLabel();
         statusPanel.add(filler, new StudioStatusBarConstraints(1.0));
-        
-//        JButton cancel = new JButton("Cancel");
-//        statusPanel.add(cancel);
-        
+
+        // JButton cancel = new JButton("Cancel");
+        // statusPanel.add(cancel);
+
         return statusPanel;
     }
 
@@ -486,8 +486,7 @@ public class StudioImpl implements Studio, GuiTif {
         ButtonGroup group = new ButtonGroup();
 
         for (final DockingWindowsTheme theme : themes) {
-            JMenuItem item = new JRadioButtonMenuItem(theme
-                    .getName());
+            JMenuItem item = new JRadioButtonMenuItem(theme.getName());
             item.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     // Clear the modified properties values
@@ -496,7 +495,7 @@ public class StudioImpl implements Studio, GuiTif {
                 }
             });
             group.add(item);
-	    themesMenu.add(item);
+            themesMenu.add(item);
         }
 
         return themesMenu;
@@ -647,11 +646,10 @@ public class StudioImpl implements Studio, GuiTif {
         if (jobQueue.isEmpty()) {
             progressBar.setIndeterminate(false);
             setStatus("Idle");
+        } else {
+            setStatus(jobQueue.get(0));
         }
-        else {
-        	setStatus(jobQueue.get(0));
-        }
-    
+
     }
 
     public void addJob(String message) {
