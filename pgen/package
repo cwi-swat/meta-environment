@@ -24,3 +24,5 @@ sglr 3.14
 aterm 2.4.2
 
 toolbuslib 0.8
+
+error-support 1.0
