@@ -1,7 +1,6 @@
 package nl.cwi.sen1.gui.plugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class DialogFileSystemView extends FileSystemView {
       }
     }
 
-    public File createNewFolder(File containingDir) throws IOException {
+    public File createNewFolder(File containingDir) {
         return null;
     }
 
