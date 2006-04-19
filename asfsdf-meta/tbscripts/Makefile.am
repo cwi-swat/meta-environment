@@ -1,7 +1,6 @@
 # $Id$
 
 GENERATED_TBSCRIPTS = \
-	asf-initialize.tb \
 	start-meta-studio.tb \
 	start-eqs-dump.tb
 
@@ -29,8 +28,7 @@ CLEANFILES = \
 pkgdata_DATA = \
 	$(TBSCRIPTS) \
 	$(GENERATED_TBSCRIPTS) \
-	asf-namespace.h \
-	standard.asfsdf.actions
+	asf-namespace.h
 
 %.tb : %.tb.src Makefile
 	sed "s@__ASF__@${ASF}@g; \
@@ -44,3 +42,9 @@ pkgdata_DATA = \
 standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
 	sed "s@__SDF_META__@${SDF_META}@g; \
 	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library/library@g" < $< > $@
+
+install-data-hook: standard.asfsdf.actions
+	cp standard.asfsdf.actions ${HOME}/.metaenv  
+
+uninstall-hook:
+	rm standard.asfsdf.actions ${HOME}/.metaenv  

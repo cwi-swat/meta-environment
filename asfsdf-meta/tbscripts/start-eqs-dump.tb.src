@@ -4,6 +4,7 @@
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
+#include <initialize-plugins.tb>
 
 /* sdf-meta */
 #include <sdf-module-actions.tb>
@@ -15,7 +16,6 @@
 /* asf-sdf-meta */
 #include <asf-language.tb>
 #include <asf-utils.tb>
-#include <asf-initialize.tb>
 #include <asf-listeners.tb>
 
 process StartEqsDumper is

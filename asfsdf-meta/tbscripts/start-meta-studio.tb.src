@@ -8,7 +8,6 @@
 
 /* asf-sdf-meta */
 #include <asfsdf-meta.tb>
-#include <asf-initialize.tb>
 
 process InitializeASFSDFMetaEnvironment is
 let

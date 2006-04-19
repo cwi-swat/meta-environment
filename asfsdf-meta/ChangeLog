@@ -1,5 +1,11 @@
 /* $Id$ */
 
+Wed Apr 19 16:24:30 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+    - install standard.asfsdf.actions in ${HOME}/.metaenv
+ * tbscripts/start-*.tb.src:
+    - Include generic initialize-plugins.tb
+
 Mon Apr 17 23:46:17 CEST 2006 <jurgenv@cwi.nl>
  * tbscripts/asf-utils.tb: made Reduce action deal with rewriting
    that produces errors but not a normal form. This may happen when
