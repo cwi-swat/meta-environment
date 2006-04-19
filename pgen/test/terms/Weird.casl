@@ -1,0 +1,9 @@
+spec
+     Set1 [Elem] =
+free
+{
+     type
+         Set[Elem] ::= {} | {|__|}(Elem) | __ u __(Set[Elem]; Set[Elem])
+     op
+         __ u __ : Set[Elem]*Set[Elem] -> Set[Elem], assoc, unit {}
+}

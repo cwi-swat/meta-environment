@@ -1,0 +1,204 @@
+#!/bin/sh
+# $Id$
+Revision='$Revision$'
+
+###
+#  Some global variables, that might require occasional modification
+###
+
+#set -x
+verbose=0
+update=0
+
+cd `dirname $0`;
+mydir=`pwd`
+
+MV=mv
+RM=rm
+SGLR="__SGLR__/bin/sglr"
+COMPARE="__ATERM__/bin/atdiff"
+ERRORCOMPARE="__ERROR_SUPPORT__/bin/error-diff"
+
+languages=$mydir/lang-types
+tables=$mydir/tables
+terms=$mydir/terms
+errterms=$mydir/erroneous
+
+extensions=`egrep -v '^#' $languages |cut -f1`
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="hvUV"
+
+if [ $myarguments ] ; then
+    myargsexplained=$myarguments
+    # Add ' -' before, and add ' ' after, all options that have an argument
+    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
+    # Add '-' where necessary
+    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
+    # Replace argument position indicator ':' by ' arg'
+    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
+
+    myargsexplained=" -$myargsexplained"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -h              display help information (usage)
+    -v              verbose mode
+    -U              update outdated ".org" files
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage; exit 0;;
+        -v)
+            verbose=1; shift;;
+        -U)
+            update=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
+}
+
+Error () {
+	Warn $*
+	error=1
+}
+
+Abort () {
+	Error $*
+	exit 2
+}
+
+Notify () {
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
+        else
+	        printf "."
+	fi
+}
+
+
+#
+## Main bit...
+#
+
+if [ $verbose -gt 0 ] ; then
+	VERBOSE="-v"
+else
+	VERBOSE=""
+fi
+
+error=0
+for ext in $extensions
+do
+	files=`ls $terms/*.$ext 2>/dev/null`
+	errfiles=`ls $errterms/*.$ext 2>/dev/null`
+	lang=`egrep "^$ext( |	)" $languages | cut -f2`
+	ptbl=$tables/$lang.tbl
+
+        for file in $files
+        do
+		base=`basename $file`
+		dir=`dirname $file`
+		asfile=`basename $base .$ext`.asfix2
+		org=$dir/$asfile.org
+		out=${TMPDIR:-/var/tmp}/$asfile.$$
+		if [ ! -f $org ] ; then
+			Error "No reference term for $base"
+		fi
+		if $SGLR $VERBOSE -2 -p $ptbl -i $file -o $out
+		then
+	                if $COMPARE $VERBOSE $out $org	> /dev/null
+	                then
+				Notify "Regression test for valid term $base succeeded"
+			else
+				Error "Regression test for valid term $base failed"
+	                fi
+			if [ $update -eq 0 ] ; then
+				if [ $error -eq 0 ] ; then
+	                		${RM} -f $out
+				fi
+			else
+				${MV} $out $org
+			fi
+		else
+			echo "Error parsing $file"	>&2
+			error=1
+		fi
+	done
+
+        for file in $errfiles
+        do
+		base=`basename $file`
+		dir=`dirname $file`
+		asfile=`basename $base .$ext`.asfix2
+		org=$dir/$asfile.org
+		out=${TMPDIR:-/var/tmp}/$asfile.$$
+		$SGLR $VERBOSE -2 -p $ptbl -i $file -o $out	2>/dev/null
+	        if $COMPARE $VERBOSE $out $org	> /dev/null
+	        then
+			Notify "Regression test for error term $base succeeded"
+		else
+	        	if $ERRORCOMPARE $out $org		> /dev/null
+	        	then
+				if [ $update -eq 0 ] ; then
+	                		${RM} -f $out
+				else
+					${MV} $out $org
+				fi
+	        	else
+				Error "Regression test for error term $base failed"
+			fi
+	        fi
+	done
+done
+printf "\n"
+
+exit $error

@@ -18,8 +18,6 @@
 #
 # Extensions mapping
 # Ext	Lang         (use TABS between extension and language!!!)
-sdf	Sdf2
-sdf2	Sdf2
 amb	Ambi
 casl	Casl
 cycle	Cyclops
