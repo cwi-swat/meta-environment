@@ -1,6 +1,6 @@
 // Java tool bridge EditorPluginBridge
 // This file is generated automatically, please do not edit!
-// generation time: Dec 12, 2005 9:36:35 AM
+// generation time: Apr 19, 2006 9:54:18 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -11,17 +11,11 @@ public class EditorPluginBridge
 {
   private EditorPluginTif tool;
 
-  //{{{  public EditorPluginBridge(ATermFactory factory, EditorPluginTif tool)
-
   public EditorPluginBridge(ATermFactory factory, EditorPluginTif tool)
   {
     super(factory);
     this.tool = tool;
   }
-
-  //}}}
-
-  //{{{  public void isModified(ATerm t0)
 
   public void isModified(ATerm t0)
   {
@@ -32,10 +26,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `isModified' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void writeContents(ATerm t0)
-
   public void writeContents(ATerm t0)
   {
     if (tool != null) {
@@ -45,10 +35,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `writeContents' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void setFocus(ATerm t0, ATerm t1)
-
   public void setFocus(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -58,10 +44,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `setFocus' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void registerTextCategories(ATerm t0, ATerm t1)
-
   public void registerTextCategories(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -71,10 +53,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `registerTextCategories' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void clearFocus(ATerm t0)
-
   public void clearFocus(ATerm t0)
   {
     if (tool != null) {
@@ -84,10 +62,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `clearFocus' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void addActions(ATerm t0, ATerm t1)
-
   public void addActions(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -97,10 +71,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `addActions' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void displayMessage(ATerm t0, String s1)
-
   public void displayMessage(ATerm t0, String s1)
   {
     if (tool != null) {
@@ -110,10 +80,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `displayMessage' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void killEditor(ATerm t0)
-
   public void killEditor(ATerm t0)
   {
     if (tool != null) {
@@ -123,10 +89,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `killEditor' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void setCursorAtOffset(ATerm t0, int i1)
-
   public void setCursorAtOffset(ATerm t0, int i1)
   {
     if (tool != null) {
@@ -136,10 +98,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `setCursorAtOffset' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void editFile(ATerm t0, String s1, String s2)
-
   public void editFile(ATerm t0, String s1, String s2)
   {
     if (tool != null) {
@@ -149,10 +107,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `editFile' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void setEditable(ATerm t0, ATerm t1)
-
   public void setEditable(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -162,10 +116,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `setEditable' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void highlightSlices(ATerm t0, ATerm t1)
-
   public void highlightSlices(ATerm t0, ATerm t1)
   {
     if (tool != null) {
@@ -175,10 +125,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `highlightSlices' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void editorToFront(ATerm t0)
-
   public void editorToFront(ATerm t0)
   {
     if (tool != null) {
@@ -188,10 +134,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `editorToFront' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void rereadContents(ATerm t0)
-
   public void rereadContents(ATerm t0)
   {
     if (tool != null) {
@@ -201,10 +143,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `rereadContents' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void recAckEvent(ATerm t0)
-
   public void recAckEvent(ATerm t0)
   {
     if (tool != null) {
@@ -214,10 +152,6 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `recAckEvent' not supported.");
     }
   }
-
-  //}}}
-  //{{{  public void recTerminate(ATerm t0)
-
   public void recTerminate(ATerm t0)
   {
     if (tool != null) {
@@ -227,6 +161,4 @@ public class EditorPluginBridge
       throw new UnsupportedOperationException("method `recTerminate' not supported.");
     }
   }
-
-  //}}}
 }

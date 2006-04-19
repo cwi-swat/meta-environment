@@ -60,7 +60,7 @@ public class SwingEditor extends JPanel implements Editor {
             FileInputStream fis = new FileInputStream(filename);
             int x = fis.available();
             
-            if (x > 1000*1000 /* 1000 kbyte */) {
+            if (x > 1024*1024 /* 1 Mbyte */) {
             	throw new FileToBigException(filename);
             }
             
