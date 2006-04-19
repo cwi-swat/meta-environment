@@ -54,4 +54,4 @@ install-data-hook: standard.sdf.actions
 	cp standard.sdf.actions ${HOME}/.metaenv  
 
 uninstall-hook:
-	rm standard.sdf.actions ${HOME}/.metaenv  
+	rm ${HOME}/.metaenv/standard.sdf.actions
