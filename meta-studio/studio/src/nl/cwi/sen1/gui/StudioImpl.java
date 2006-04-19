@@ -258,11 +258,13 @@ public class StudioImpl implements Studio, GuiTif {
                 for (int i = statusBar.getComponentCount(); i > 5; i--) {
                     statusBar.remove(i - 1);
                 }
-                
-                for (JComponent cur : components) {
-                    statusBar.addSeparator();
-                    statusBar.add(cur);
-                }
+               
+	        if (components != null) {	
+		  for (JComponent cur : components) {
+		    statusBar.addSeparator();
+		    statusBar.add(cur);
+		  }
+		}
                 statusBar.repaint();
             } else {
                 System.err.println("Internal error: no active component found");

@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 19 04:23:08 CEST 2006 <jurgenv@cwi.nl>
+ * studio/**/StudioImpl.java: added null pointer check on status
+   bar elements retrieved from a plugin.
+
 Fri Apr  7 05:13:44 CEST 2006 <jurgenv@cwi.nl>
  * Coupled jobs and status bar with each other
 
