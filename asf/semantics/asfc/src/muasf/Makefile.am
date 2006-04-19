@@ -20,8 +20,8 @@ LDADD = -l$(ATERM_LIB)
 
 if MAINTAINER_MODE
 
-LIBRARY=../../../../../asf-library/library
-SPEC=${LIBRARY}/languages/asf/compiler/
+LIBRARY=../../../../../sdf-library/library
+SPEC=../../../../../asf-library/library/languages/asf/compiler
 
 MuASF.label.def:
 	(echo "definition"; \

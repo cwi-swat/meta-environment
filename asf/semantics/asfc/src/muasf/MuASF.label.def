@@ -35,11 +35,11 @@ exports
   %% annotation gives a different semantics to a class of function
   %% symbols that can occur in ASF+SDF:
 
-    "[" FunId "]" 		-> FunId  {cons("returns-list")}
-    "{" FunId "}"		-> FunId  {cons("list")}
+    "RETURNS" "LIST" "[" FunId "]" 		-> FunId  {cons("returns-list")}
+    "LIST" "{" FunId NatCon "}"		-> FunId  {cons("list")}
     "IGNORE" "[" FunId "]" 	-> FunId  {cons("ignored")}
     "TRANSLATE" "[" FunId "]"   -> FunId  {cons("translate")}
-    "|" FunId TraversalType TraversalStrategy TraversalContinuation "|"
+    "TRAVERSAL" "|" FunId TraversalType TraversalStrategy TraversalContinuation "|"
 				-> FunId  {cons("traversal")}
 
   context-free syntax
@@ -48,6 +48,8 @@ exports
 exports
   context-free syntax
     lhs:FunId "++" rhs:FunId -> FunId {left, cons("concat")}
+    lhs:FunId minusplus:"+-+" rhs:FunId -> FunId {left, cons("concat-dash")}
+    
 
 hiddens
 
