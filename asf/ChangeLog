@@ -1,5 +1,12 @@
 $Id$
 
+Wed Apr 19 17:35:39 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfc/src/Compiler.c: fixed two major bugs in the compiler:
+   - it did not add range checks, which can lead to illegal terms
+     being constructed, and then matches not succeeding, and them mayhem.
+   - it generated array indexes that could run out of bounds in the
+     context of tail recursion elimination.
+
 Fri Mar 10 11:32:29 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    Maintainers use ATerm-dbg library
