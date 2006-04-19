@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Apr 19 16:20:39 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/initialize-plugins.tb.src:
+   - Initalization of the config-manager using files listed in
+   ${HOME}/.metaenv
+
 Mon Apr  3 10:43:44 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/{error-output,gui-utils}.tb:
    - Add processes for job control

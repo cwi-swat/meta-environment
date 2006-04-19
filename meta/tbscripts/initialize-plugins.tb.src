@@ -1,0 +1,35 @@
+#ifndef __INITIALIZE_PLUGIN__
+#define __INITIALIZE_PLUGIN__
+
+process AddProperties is
+let
+  Contents: str,
+  Error: term,
+  File: str,
+  Files: list
+in
+  snd-msg(io-list-files("__HOME__/.metaenv", ".actions")) 
+  . rec-msg(io-file-list(Files?))
+  .
+  if not-equal(Files, []) then
+    File := first(Files)
+    . Files := next(Files)
+    . snd-msg(io-read-file(File))
+    .
+    (
+      rec-msg(io-file-contents(Contents?))
+      . snd-msg(cm-add-system-properties(Contents))
+    +
+      rec-msg(io-error-reading(Error?))
+      . printf("AddProperties: %t in %s\n", Error, File)
+    )
+  fi
+  *
+  if equal(Files, []) then
+    tau
+  fi
+endlet
+
+toolbus(AddProperties)
+
+#endif /* __INITIALIZE_PLUGIN__ */

@@ -13,6 +13,7 @@ TBSCRIPTS = \
 	    graph-utils.tb \
 	    gui-actions.tb \
 	    gui-utils.tb \
+	    initialize-plugins.tb \
 	    io-utils.tb \
 	    meta.tb \
 	    module-manager.tb \
@@ -26,3 +27,6 @@ TBSCRIPTS = \
 EXTRA_DIST = $(TBSCRIPTS)
 
 pkgdata_DATA = $(TBSCRIPTS)
+
+% : %.src Makefile
+	sed "s@__HOME__@${HOME}@g;" < $< > $@
