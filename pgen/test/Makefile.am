@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS    = grammars tables
+SUBDIRS    = grammars tables terms erroneous
 
 EXTRA_DIST = lang-types regress-lang.sh.src regress-terms.sh.src
 
