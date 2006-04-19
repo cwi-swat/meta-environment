@@ -1,31 +1,33 @@
 // Java tool interface class ErrorViewerTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 13, 2006 10:27:06 AM
+// generation time: Apr 19, 2006 9:56:30 AM
 
 package nl.cwi.sen1.error.viewer;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.SwingTool;
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class ErrorViewerTool
   extends SwingTool
   implements ErrorViewerTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PshowFeedbackSummary0;
   private ATerm PremoveFeedbackSummary0;
   private ATerm PremoveFeedbackSummary1;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
-
-  //}}}
-
-  //{{{  protected ErrorViewerTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
   protected ErrorViewerTool(ATermFactory factory)
@@ -35,22 +37,16 @@ abstract public class ErrorViewerTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<error-viewer>,show-feedback-summary(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<error-viewer>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<error-viewer>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-do(<error-viewer>,show-feedback-summary(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>,<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<error-viewer>,remove-feedback-summary(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-ack-event(<error-viewer>,<term>)"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<error-viewer>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
@@ -61,10 +57,6 @@ abstract public class ErrorViewerTool
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -97,12 +89,9 @@ abstract public class ErrorViewerTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -117,15 +106,10 @@ abstract public class ErrorViewerTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }

@@ -1,6 +1,6 @@
 // Java tool interface ErrorViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: Feb 13, 2006 10:27:06 AM
+// generation time: Apr 19, 2006 9:56:30 AM
 
 package nl.cwi.sen1.error.viewer;
 
