@@ -1,6 +1,6 @@
 // Java tool interface class NavigatorTool
 // This file is generated automatically, please do not edit!
-// generation time: Mar 7, 2006 10:13:27 AM
+// generation time: Apr 19, 2006 9:59:25 AM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import toolbus.SwingTool;
-
 
 import aterm.ATerm;
 import aterm.ATermAppl;
