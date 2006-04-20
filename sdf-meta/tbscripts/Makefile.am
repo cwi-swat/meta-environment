@@ -53,5 +53,5 @@ standard.sdf.actions:  standard.sdf.actions.src Makefile
 	sed "s@__SDF_LIBRARY__@${LIBRARY_LOCATION}@g;" < $< > $@
 
 install-data-hook:
-	plugin-config -add $(pkgdatadir)/sdf-initialize.tb
-	plugin-config -generate
+	$(META)/bin/plugin-config -add $(pkgdatadir)/sdf-initialize.tb
+	$(META)/bin/plugin-config -generate
