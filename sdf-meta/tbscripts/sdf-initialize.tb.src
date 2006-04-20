@@ -1,0 +1,21 @@
+#ifndef __SDF_INITIALIZE__
+#define __SDF_INITIALIZE__
+
+process AddSdfProperties is
+let
+  Contents: str,
+  Error: term
+in
+  snd-msg(io-read-file("__SDF_META__/standard.sdf.actions")) .
+  (
+    rec-msg(io-file-contents(Contents?))
+    . snd-msg(cm-add-system-properties(Contents))
+  +
+    rec-msg(io-error-reading(Error?))
+    . printf("AddSdfProperties: %t\n", Error)
+  )
+endlet
+
+toolbus(AddSdfProperties)
+
+#endif /* __SDF_INITIALIZE__ */

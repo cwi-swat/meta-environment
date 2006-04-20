@@ -1,5 +1,9 @@
 $Id$
 
+Thu Apr 20 12:00:10 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/Makefile.am:
+   - Register plugin
+
 Wed Apr 19 16:22:51 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/Makefile.am:
    - install standard.sdf.actions in ${HOME}/.metaenv
