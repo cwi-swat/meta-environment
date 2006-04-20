@@ -94,8 +94,6 @@ void ERR_fdisplaySummary(FILE *fp, ERR_Summary summary)
   ERR_ErrorList errors = ERR_getSummaryList(summary);
   char *producer = ERR_getSummaryProducer(summary);
   
-  ATwarning("errors: %t\n", errors);
-
   while (!ERR_isErrorListEmpty(errors)) {
     ERR_Error error = ERR_getErrorListHead(errors);
 
