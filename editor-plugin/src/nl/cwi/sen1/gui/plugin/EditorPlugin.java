@@ -382,10 +382,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 			addEditorModifiedListener(editorId, panel);
 
 			final JLabel status = new JLabel(" ");
-			status.setPreferredSize(new Dimension(100, 18));
+			status.setPreferredSize(new Dimension(250, 18));
 
 			final JLabel module = new JLabel(" ");
-			module.setPreferredSize(new Dimension(100, 18));
+			module.setPreferredSize(new Dimension(250, 18));
 
 			Map<String, JComponent> statusBarComponents = new HashMap<String, JComponent>();
 			statusBarComponents.put("Status", status);
