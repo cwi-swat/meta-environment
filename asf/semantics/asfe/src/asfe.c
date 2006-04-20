@@ -307,6 +307,11 @@ int main(int argc, char *argv[])
     }
 
     term = ATreadFromFile(iofile);
+
+    if (term == NULL) {
+      ATerror("%s: input file %s is not an ATerm\n", myname, input);
+    }
+
     parseTree = PT_ParseTreeFromTerm(term);
 
 
