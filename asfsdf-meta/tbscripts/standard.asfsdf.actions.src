@@ -1,5 +1,4 @@
 configuration([
-  import("__SDF_META__/share/sdf-meta/standard.sdf.actions"),
   library-path("ASF+SDF Specification Library", "__ASF_LIBRARY__"),
 
   action([description(term-editor, menu-shortcut([label("Module"), label("Edit"), label("Equations")], shortcut([M_CTRL,M_SHIFT],VK_E)))],

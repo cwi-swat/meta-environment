@@ -3,6 +3,8 @@
 Thu Apr 20 12:00:33 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/Makefile.am:
    - Register plugin
+ * tbscripts/standard.asfsdfactions:
+   - Remove now redundant import of sdf actions
 
 Wed Apr 19 16:24:30 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/Makefile.am:
