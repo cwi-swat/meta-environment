@@ -18,7 +18,7 @@
 
 static char myname[] = "unparsePT";
 static char myversion[] = "1.4";
-static char myarguments[] = "ahi:o:vV";
+static char myarguments[] = "hi:o:vV";
 
 /*}}}  */
 
@@ -32,7 +32,6 @@ void usage(void)
 	  "This is *not* a pretty-printer, just an unparser.\n\n" 
 	  "Usage: %s [%s]\n"
 	  "Options:\n"
-	  "\t-a              visualize ambiguity clusters\n"
 	  "\t-h              display help information (usage)\n"
 	  "\t-i filename     input from file (default stdin)\n"
 	  "\t-o filename     output to file (default stdout)\n"
