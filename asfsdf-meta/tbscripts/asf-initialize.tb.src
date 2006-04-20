@@ -1,0 +1,21 @@
+#ifndef __ASF_INITIALIZE__
+#define __ASF_INITIALIZE__
+
+process AddAsfProperties is
+let
+  Contents: str,
+  Error: term
+in
+  snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.actions")) .
+  (
+    rec-msg(io-file-contents(Contents?))
+    . snd-msg(cm-add-system-properties(Contents))
+  +
+    rec-msg(io-error-reading(Error?))
+    . printf("AddAsfProperties: %t\n", Error)
+  )
+endlet
+
+toolbus(AddAsfProperties)
+
+#endif /* __ASF_INITIALIZE__ */

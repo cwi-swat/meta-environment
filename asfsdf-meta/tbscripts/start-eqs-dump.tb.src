@@ -4,7 +4,7 @@
 #include <module-utils.tb>
 #include <error-utils.tb>
 #include <error-output.tb>
-#include <initialize-plugins.tb>
+#include <initialize-config.tb>
 
 /* sdf-meta */
 #include <sdf-module-actions.tb>
