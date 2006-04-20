@@ -8,6 +8,11 @@ AC_PREREQ(2.59)
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_PROG_MAKE_SET([])
 
+dnl Require meta package
+AC_PACKAGE_REQUIRE(meta, meta-config,
+  [  --with-meta=DIR         Meta-Environment is in DIR])
+AC_SUBST(META)
+
 AC_PACKAGE_REQUIRE(sdf-meta, sdf-meta-config,
    [  --with-sdf-meta=DIR          sdf-meta is in DIR])
 AC_SUBST(SDF_META)
