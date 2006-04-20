@@ -33,6 +33,3 @@ pkgdata_DATA = \
 
 % : %.src Makefile
 	sed "s@__HOME__@${HOME}@g;" < $< > $@
-
-install-data-hook:
-	$(prefix)/bin/plugin-config -generate
