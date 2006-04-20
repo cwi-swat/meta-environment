@@ -20,6 +20,3 @@ CLEANFILES = $(TOOLNAME)
 	    -e 's@__JARFILE__@$(pkgdatadir)/$(JARFILE)@g'\
 	    -e 's@__PKGDATADIR__@$(pkgdatadir)@g'\
             < $< > $@ && chmod +x $@
-
-install-data-hook:
-	plugin-config -generate
