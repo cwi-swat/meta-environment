@@ -1,0 +1,2 @@
+#! /bin/sh
+java -classpath __EXTERNAL_JARS__:__JARFILE__ nl.cwi.sen1.meta.pluginconfiguration.PluginConfiguration plugin-config -config-file __PKGDATADIR__/meta.actions -toolbus-script __PKGDATADIR__/initialize-config.tb $@

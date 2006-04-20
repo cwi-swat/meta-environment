@@ -13,7 +13,6 @@ TBSCRIPTS = \
 	    graph-utils.tb \
 	    gui-actions.tb \
 	    gui-utils.tb \
-	    initialize-plugins.tb \
 	    io-utils.tb \
 	    meta.tb \
 	    module-manager.tb \
@@ -24,9 +23,16 @@ TBSCRIPTS = \
 	    serialization-utils.tb \
 	    undefined.h
   
-EXTRA_DIST = $(TBSCRIPTS)
+EXTRA_DIST = \
+	$(TBSCRIPTS) \
+	meta.actions
 
-pkgdata_DATA = $(TBSCRIPTS)
+pkgdata_DATA = \
+	$(TBSCRIPTS) \
+	meta.actions
 
 % : %.src Makefile
 	sed "s@__HOME__@${HOME}@g;" < $< > $@
+
+install-data-hook:
+	$(prefix)/bin/plugin-config -generate

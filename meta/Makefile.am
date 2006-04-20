@@ -2,14 +2,15 @@
 
 ACLOCAL_FLAGS = -I .
 
-EXTRA_DIST = package
-
 CLEANFILES = \
 	${PACKAGE}-${VERSION}.pkg
 
+EXTRA_DIST = package
+
 SUBDIRS = \
 	src \
-	tbscripts
+	tbscripts \
+	config
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
