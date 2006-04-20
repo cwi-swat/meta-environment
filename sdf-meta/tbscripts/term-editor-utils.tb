@@ -4,7 +4,7 @@
 #include <editing.tb>
 #include <term-utils.tb>
 
-process EditTerm(Path: str, ModuleId: term) is
+process EditTerm(Path: str, ModuleId: term, GetTree: term) is
 let
   Event: attribute-changed-event,
   AlreadyExists: bool,
@@ -28,8 +28,13 @@ in
     if equal(AlreadyExists, false) then
       snd-msg(em-bind-session(Sid, ModuleId))
       . rec-msg(em-session-bound(Sid, ModuleId))
-      . GetTermParsetree(ModuleId, Path, Tree?)
-      . SE-UpdateTree(Sid, Tree)
+      . 
+      if equal(GetTree, true) then
+        GetTermParsetree(ModuleId, Path, Tree?)
+        . SE-UpdateTree(Sid, Tree)
+      else
+        tau
+      fi
       . MM-Subscribe-Attribute-Changed(ModuleId, SDF_NAMESPACE,"status",<term>,complete)
       .
       (
@@ -40,7 +45,6 @@ in
         rec-msg(te-contents-changed(Sid))
       +
         rec-msg(te-contents-saved(Sid))
-	. printf("term-editor-utils.tb: Contents Saved\n")
         . UpdateTermStructure(Sid)
       +
         rec-note(mm-attribute-changed(Event?))
@@ -92,10 +96,11 @@ in
     .
     (
       rec-msg(io-file-written)
-      . create(EditTerm(Filename, ModuleId), Pid?)
+      . create(EditTerm(Filename, ModuleId, false), Pid?)
       .
       (
         rec-msg(term-editor-started(Filename, ModuleId, Sid?))
+        . SE-UpdateTree(Sid, Tree)
       +
         rec-msg(term-editor-not-started(Filename, ModuleId, ErrorMessage?))
         . Error(ErrorMessage, [])

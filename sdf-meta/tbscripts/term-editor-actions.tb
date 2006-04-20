@@ -28,7 +28,7 @@ in
   if equal(Cancel, true) then
     tau
   else
-    create(EditTerm(Filename, ModuleId), Pid?)
+    create(EditTerm(Filename, ModuleId, true), Pid?)
     .
     (
       rec-msg(term-editor-started(Filename, ModuleId, Sid?))

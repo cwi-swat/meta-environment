@@ -18,7 +18,7 @@ in
   .
   (
     rec-msg(get-module-contents(Pid, ModuleId?))
-    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
+    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n\nexports\n  sorts\n\n  lexical syntax\n\n  context-free syntax\n\nhiddens\n  context-free start-symbols\n\n  lexical variables\n\n  variables\n\n"]))
   +
     rec-msg(cancel-content-handler(Pid))
   )
