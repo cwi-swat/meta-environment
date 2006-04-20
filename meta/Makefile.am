@@ -9,8 +9,8 @@ EXTRA_DIST = package
 
 SUBDIRS = \
 	src \
-	tbscripts \
-	config
+	config \
+	tbscripts
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
