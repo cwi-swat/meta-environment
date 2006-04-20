@@ -119,7 +119,6 @@ public class PluginConfiguration {
 
         config = factory.make("<str>", configfile);
         if (add == true) {
-            System.err.println("Add " + config);
             configuration = configuration.append(config);
         }
     }
