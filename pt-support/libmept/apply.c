@@ -28,10 +28,9 @@ PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function, const char *s
 
 /*}}}  */
 
-
 /*{{{  PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args) */
 
-PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args)
+PT_Tree PT_applyFunction(const char* function, PT_Symbol rhs, PT_Args args)
 {
   PT_Tree   layoutTree   = PT_makeTreeLayoutEmpty();
   PT_Symbol layoutSymbol = PT_makeOptLayoutSymbol();
@@ -43,7 +42,6 @@ PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args a
   PT_Symbol bcSymbol = PT_makeSymbolLit(")");
   PT_Tree   functionTree   = PT_makeTreeLit((char*) function);
   PT_Symbol functionSymbol = PT_makeSymbolLit((char*) function);
-  PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort((char*) sort));
   PT_Production prod;
   PT_Attributes attributes = PT_makeAttributesNoAttrs();
   int arity = PT_getArgsLength(args);
@@ -98,6 +96,16 @@ PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args a
   prod = PT_makeProductionDefault(symbolList, rhs, attributes);
 
   return PT_makeTreeAppl(prod, argList);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args)  */
+
+PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args) 
+{
+  PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort((char*) sort));
+
+  return PT_applyFunction(function, rhs, args);
 }
 
 /*}}}  */

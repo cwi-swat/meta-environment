@@ -1,5 +1,9 @@
 $Id$
 
+Thu Apr 20 05:48:54 CEST 2006 <jurgenv@cwi.nl>
+ * libmept/apply.c: added a new API function for applying functions
+   that returns a more complex non-terminal than just a sort.
+
 Thu Apr 13 21:22:47 CEST 2006 <jurgenv@cwi.nl>
  * utils/ambtracker-main.c: ambtracker is now a ToolBus tool
  * utils/ambtracker-main.c: changed use of error display

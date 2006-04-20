@@ -17,6 +17,7 @@ PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function,
 					     const char *sort, PT_Args args);
 PT_Tree PT_applyFunctionToTree(const char *function, const char *sort,
 			       int nArgs, ...);
+PT_Tree PT_applyFunction(const char* function, PT_Symbol rhs, PT_Args args);
 
 PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree);
 PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,
