@@ -1,5 +1,9 @@
 $Id$
 
+Thu Apr 20 06:05:35 CEST 2006 <jurgenv@cwi.nl>
+ * lib/asc-ambiguity.c: added functionality to make ambiguity
+   clusters explicit to the runtime environment
+
 Fri Mar 10 11:53:37 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainters use ATerm-dbg library

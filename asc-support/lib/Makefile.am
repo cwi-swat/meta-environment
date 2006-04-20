@@ -59,6 +59,7 @@ include_HEADERS = \
 	asc-builtins.h \
 	asc-client.h \
 	asc-muasf2pt.h \
+	asc-ambiguity.h \
 	builtin-common.h
 
 libasc_support_me_a_SOURCES = \
@@ -74,6 +75,7 @@ libasc_support_me_a_SOURCES = \
 	asc-parsetable.c\
 	asc-client.c\
 	asc-tide.c\
+	asc-ambiguity.c\
 	builtin-forward.c\
 	builtin-common.c \
 	Library.c\
