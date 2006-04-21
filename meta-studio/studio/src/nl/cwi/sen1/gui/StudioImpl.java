@@ -232,7 +232,6 @@ public class StudioImpl implements Studio, GuiTif {
 
                     // statusPanel.remove(statusBar);
                     componentsByView.remove(window);
-                    idsByComponent.remove(component);
                     componentMenus.remove(component);
 
                     component.close();
@@ -331,6 +330,7 @@ public class StudioImpl implements Studio, GuiTif {
                         view.close();
                     }
                 });
+                idsByComponent.remove(component);
             } else {
                 System.err.println("Can not remove non-registered component: "
                         + component.getName());

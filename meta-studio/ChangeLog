@@ -1,5 +1,12 @@
 $Id$
 
+Fri Apr 21 13:03:17 CEST 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Remove componentId from idsByComponent when removing the component. 
+     Removing it when closing the window is to early and prevents editors from 
+     being closed (editors were still open, which was visible due to the
+     editor windows listed in the Views menu).
+
 Wed Apr 19 04:23:08 CEST 2006 <jurgenv@cwi.nl>
  * studio/**/StudioImpl.java: added null pointer check on status
    bar elements retrieved from a plugin.
