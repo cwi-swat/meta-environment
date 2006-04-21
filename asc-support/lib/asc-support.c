@@ -21,6 +21,7 @@
 #include "asc-traversals.h"
 #include "asc-muasf2pt.h"
 #include "asc-prod2str.h"
+#include "asc-ambiguity.h"
 
 /*}}}  */
 
@@ -65,6 +66,11 @@ Symbol sym_quote7;
 Symbol tuplesym;
 Symbol make_listsym;
 Symbol concsym;    
+
+/* The ambiguity cache is needed to prevent exponential 
+ * behavior in case of nested ambiguities.
+ */
+ATermTable ambiguityCache = NULL;
 
 ATbool keep_annotations = ATfalse;
 ATbool keep_layout = ATfalse;
@@ -187,8 +193,16 @@ ATerm innermost(PT_Tree tree)
       result = call(prod, innermost_list(args));
     }
   } else if (PT_isTreeAmb(tree)) {
-    ATerror("Ambiguous parse tree not supported\n");
-    return NULL;
+    ATerm memo = ATtableGet(ambiguityCache, (ATerm) tree);
+
+    if (memo == NULL) {
+      PT_Tree constructor = ASC_ambToConstructor(tree);
+      result = innermost(constructor);
+      ATtablePut(ambiguityCache, (ATerm) tree, result);
+    }
+    else {
+      result = memo;
+    }
   }
 
   if (annos != NULL && result != NULL) {
@@ -1395,6 +1409,7 @@ void ASC_initRunTime(int tableSize)
   ASF_initASFMEApi();
   initBuiltins();
 
+  ambiguityCache = ATtableCreate(1024, 75);
   c_rehash(tableSize);
 }
 

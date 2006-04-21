@@ -1,5 +1,13 @@
 $Id$
 
+Fri Apr 21 16:44:01 CEST 2006 <jurgenv@cwi.nl>
+ * lib/asc-support.c: first support for rewriting ambiguities
+   with a compiled specification. All clusters are lifted to
+   constructors.
+ * TODO: lower ambiguity constructors back to normal amb nodes.
+ * amb clusters are memoized to prevent exponential behavior for
+   nested clusters. An absolute necessity!
+
 Thu Apr 20 06:05:35 CEST 2006 <jurgenv@cwi.nl>
  * lib/asc-ambiguity.c: added functionality to make ambiguity
    clusters explicit to the runtime environment

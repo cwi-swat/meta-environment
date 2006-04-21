@@ -1,7 +1,7 @@
 #include <MEPT-utils.h>
 #include <assert.h>
 
-#define AMB_CONSTRUCTOR_ATTR "ambiguity-constructor"
+#define AMB_CONSTRUCTOR_ATTR "cons(\"ambiguity-constructor\")"
 
 PT_Tree ASC_ambToConstructor(PT_Tree amb) 
 {
