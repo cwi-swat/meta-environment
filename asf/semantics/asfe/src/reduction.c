@@ -3,6 +3,7 @@
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
 #include <asc-builtins.h>
+#include <asc-ambiguity.h>
 
 #include "reduction.h"
 #include "memotable.h"
@@ -25,6 +26,7 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth);
 static PT_Tree reduce(PT_Tree trm, int depth);
 static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra);
 static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void *extra);
+static PT_Tree rewriteAmb(PT_Tree trm, ATerm env, int depth, void *extra);
 static PT_Args rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, 
 			    int depth, void *extra);
 static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth, 
@@ -79,8 +81,6 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
   currentRule = entry;
 
   print_short_equation(depth, "try", entry);
-
-  /*ATwarning("%s\n\n", PT_yieldTree(trm));*/
 
   env = matchEquation(entry, trm, depth);
 
@@ -204,6 +204,9 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
   else if (PT_isTreeAppl(trm)) {
     reduct = rewriteNormalAppl(trm, env, depth, extra);
   }
+  else if (PT_isTreeAmb(trm)) {
+    reduct = rewriteAmb(trm, env, depth, extra);
+  }
 
   if (PT_isEqualTree(reduct,trm)) {
     reduct = FAIL;
@@ -315,6 +318,52 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
 
 /*}}}  */
 
+/*{{{  static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra) */
+
+static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra)
+{
+  PT_Tree trm = NULL;
+  PT_Tree reduct = FAIL;
+  PT_Tree memo = MemoTableLookup(memo_table, amb);
+
+  /* Memoization is needed here to prevent exponential 
+   * behavior in case of nested ambiguity.
+   */ 
+  if (memo != NULL) {
+    return memo;
+  }
+
+  if (runVerbose) {
+    ATwarning("Lifting ambiguity to constructor\n");
+  }
+
+  trm = ASC_ambToConstructor(amb);
+
+  assert(trm != NULL);
+
+  if (runVerbose) {
+    ATwarning("Rewriting ambiguity\n");
+  }
+
+  reduct = rewriteNormalAppl(trm, env, depth, extra);
+
+  if (runVerbose) {
+    ATwarning("Done rewriting ambiguity\n");
+  }
+
+  /* we also convert to constructor, in case somebody want to
+   * match an ambiguity constructor in a context.
+   */
+  if (reduct == FAIL) {
+    reduct = trm;
+  }
+
+  memo_table = MemoTableAdd(memo_table, amb, reduct);
+
+  return reduct;
+}
+
+/*}}}  */
 /*{{{  static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra)  */
 
 static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra) 
@@ -364,8 +413,14 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
   PT_Tree reduct;
   ATbool isMemoFunction = ATfalse;
 
-  /* retrieve possible memoized reduct */
-  if (PT_hasProductionMemoAttr(prod)) {
+  /* retrieve possible memoized reduct, ambiguity constructors are
+   * memoized by default to try and prevent exponential behavior
+   * in the context of nested ambiguity. See also rewriteAmb, which
+   * also has to memoize its output.
+  */
+  if (PT_hasProductionMemoAttr(prod) ||
+      PT_hasProductionCertainAttr(prod, 
+				  PT_makeAttrTerm(ATparse("cons(\"ambiguity-constructor\")")))) {
     PT_Tree memo = MemoTableLookup(memo_table, appl);
     isMemoFunction = ATtrue;
  
@@ -490,7 +545,9 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
       travtrm = makeTraversalAppl(reduct_args == FAIL ?
 				  trm : reduct_args, *traversal);
 
-      reduct = rewriteTop(travtrm, env, depth, traversal);
+      if (travtrm != NULL) {
+	reduct = rewriteTop(travtrm, env, depth, traversal);
+      }
     }
 
     if (reduct == FAIL) {

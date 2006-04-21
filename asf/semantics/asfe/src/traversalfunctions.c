@@ -362,6 +362,26 @@ Traversal createTraversalPattern(PT_Tree term)
 }
 
 /*}}}  */
+
+/*{{{  static PT_Symbol getTreeType(PT_Tree tree) */
+
+static PT_Symbol getTreeType(PT_Tree tree)
+{
+  if (PT_hasTreeProd(tree)) {
+    return PT_getProductionRhs(PT_getTreeProd(tree));
+  }
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    if (PT_hasArgsHead(args)) {
+      return getTreeType(PT_getArgsHead(args));
+    }
+  }
+
+  return NULL;
+}
+
+/*}}}  */
+
 /*{{{  PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal) */
 
 /* make_traversal_appl
@@ -381,7 +401,11 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
   PositionSymbolTuple symbolVisitorData;
   PositionTreeTuple treeVisitorData;
 
-  symbol = PT_getProductionRhs(PT_getTreeProd(appl));
+  symbol = getTreeType(appl);
+
+  if (symbol == NULL) {
+    return NULL;
+  }
 
   symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
   symbolVisitorData.symbol = symbol;
@@ -413,8 +437,7 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
     break;
   }
 
-  newappl = PT_setTreeProd(appl, prod);
-  newappl = PT_setTreeArgs(newappl, args);
+  newappl = PT_makeTreeAppl(prod, args);
 
   return newappl;
 }

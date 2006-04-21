@@ -6,7 +6,7 @@
 
 #include <aterm2.h>
 #include <MEPT-utils.h>
-#include <Error.h>
+#include <Error-utils.h>
 
 ERR_ErrorList errors = NULL;
 
@@ -94,14 +94,9 @@ void RWaddDoubleLocatedError(char *msg, char *subject1, LOC_Location loc1,
 void printErrors(void)
 {
   ERR_ErrorList runner = errors;
+  ERR_Summary summary = ERR_makeSummarySummary("asfe","cmdline", runner);
 
-  while (!ERR_isErrorListEmpty(runner)) {
-    ERR_Error error = ERR_getErrorListHead(runner);
-
-    ATwarning("error: %t\n", error);
-    runner = ERR_getErrorListTail(runner);
-  }
-
+  ERR_fdisplaySummary(stderr, summary);
 }
 
 /*}}}  */

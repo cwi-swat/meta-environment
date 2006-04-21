@@ -22,4 +22,4 @@ extern PT_Tree innermostSubject;
 extern MemoTable memo_table;
 extern unsigned int asfe_rewrite_steps;
 
-#define MAX_DEPTH 2000
+#define MAX_DEPTH 5000
