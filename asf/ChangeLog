@@ -1,5 +1,13 @@
 $Id$
 
+Fri Apr 21 16:47:56 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/reduction.c: re-introduced rewriting with ambiguities.
+   The basic functionality is to lift ambiguity nodes to amb constructors.
+ * rewriting of ambiguities is memoized to prevent exponential behavior
+   when rewriting nested ambiguities. This is a hard necessity, without
+   it a reasonably small file does not reduce in a reasonable time.
+ * TODO: lower ambiguity constructors back to ambiguity nodes.
+
 Wed Apr 19 17:35:39 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfc/src/Compiler.c: fixed two major bugs in the compiler:
    - it did not add range checks, which can lead to illegal terms
