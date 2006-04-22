@@ -1,5 +1,14 @@
 $Id$
 
+Sat Apr 22 19:12:02 CEST 2006 <jurgenv@cwi.nl>
+ * src/Sdf2-Normalization.c: And yes indeed, see previous logmessage, there was 
+   a mistake in the last bugfix and I should have seen this from the
+   tables. Fixed the bug now, after regular, priorities are generated
+   that need to be normalized. So in fact, priorities depend on regular.
+   Added the dependency and the call from r[[.]] to p[[. ]].
+ * test/grammars/List.sdf: a test designed to test the dependency between
+   r[[.]] and p[[.]]
+
 Wed Apr 19 20:41:30 CEST 2006 <jurgenv@cwi.nl>
  * src/Sdf2-Normalization.c: regenerated again. There were serious
    errors in a number of locations:

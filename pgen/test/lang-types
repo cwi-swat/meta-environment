@@ -18,6 +18,7 @@
 #
 # Extensions mapping
 # Ext	Lang         (use TABS between extension and language!!!)
+list	List
 amb	Ambi
 casl	Casl
 cycle	Cyclops
