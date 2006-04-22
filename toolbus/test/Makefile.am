@@ -79,7 +79,7 @@ INCLUDES        = -I$(top_srcdir)/libtb
 	chmod +x $@
 
 % : %.src Makefile
-	sed 's@__TOP_BUILDDIR__@$(top_builddir)@g;\
-             s@__SRCDIR__@$(srcdir)@g' <$< > $@
+	sed "s@__TOP_BUILDDIR__@$(top_builddir)@g;\
+             s@__SRCDIR__@$(srcdir)@g" <$< > $@
 	chmod +x $@
 
