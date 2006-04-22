@@ -1,14 +1,16 @@
 $Id$
 
+Sat Apr 22 18:36:50 CEST 2006 <jurgenv@cwi.nl>
+ * package: bumped to version 1.4
+
 Mon Apr 17 15:54:34 EDT 2006 <jurgenv@cwi.nl,dennis@lucent.com>
  * libtb/symbol.c: fixed serious array out of bounds error, that 
    would only not make the system crash because of lucky alignment.
  * {libtb,toolbus}/*.c: fixed several NULL pointer dereference warnings
-   of Orion by adding asserts. Implicitly these pointers could not
-   be NULL (by construction properties of term_lists mostly), but
-   explicitly asserting this is not wrong. This happens mostly in 
-   code that expects non-empty lists.
-
+   of Orion (a static analysis tool) by adding asserts. Implicitly 
+   these pointers could not be NULL (by construction properties of 
+   term_lists mostly), but explicitly asserting this is not wrong. 
+   This happens mostly in code that expects non-empty lists.
 
 Mon Apr 11 17:05:00 CET 2006 <jurgenv@cwi.nl>
  * libtb/term.c: increased mark stack by a factor of 4 to be able to
