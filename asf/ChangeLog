@@ -1,5 +1,13 @@
 $Id$
 
+Mon Apr 24 22:30:02 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/{reduction.c,matching.c}: amb nodes are now lifted
+   to constructors lazily (when needed). Innermost takes care to lower
+   any ambiguity node that occurs in a normal form, such that the normal
+   form will never contain an amb constructor. If an empty amb constructor
+   is created, innermost will fail with an error message, and NOT return
+   a reduced normal form.
+
 Mon Apr 24 18:38:48 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/reduction.c: introduced full memoization on level
    0, but only when nothing was rewritten. Rewriting constants was still
