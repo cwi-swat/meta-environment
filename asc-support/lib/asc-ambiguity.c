@@ -89,6 +89,7 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
     return tree;
   }
 
+  ATwarning("%t\n", tree);
   list = PT_getArgsTreeAt(PT_getTreeArgs(tree), 4);
   args = PT_getTreeArgs(list);
 
@@ -100,8 +101,8 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
     args = PT_getArgsTail(args);
     ambs = PT_makeArgsMany(head, ambs);
 
-    assert(PT_getArgsLength(args) >= 3);
     if (PT_hasArgsHead(args)) {
+      assert(PT_getArgsLength(args) >= 3);
       args = PT_getArgsTail(args);
       args = PT_getArgsTail(args);
       args = PT_getArgsTail(args);
