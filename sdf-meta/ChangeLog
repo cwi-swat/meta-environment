@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 25 00:26:23 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/sdf-progress-listeners.tb: added functionality to remove
+   a closed module from the progress display.
+
 Thu Apr 20 12:00:10 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/Makefile.am:
    - Register plugin
