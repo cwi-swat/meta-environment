@@ -15,7 +15,7 @@ in
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-GetAttribute(ModuleId, ASF_NAMESPACE, "name", Name?)
     . ACE-GetNewValue(Event, Value?)
-    . snd-msg(pro-set-status(Name, ASF_NAMESPACE, Value))
+    . snd-msg(pro-set-status(ModuleId, Name, ASF_NAMESPACE, Value))
   ) * delta
 endlet
 

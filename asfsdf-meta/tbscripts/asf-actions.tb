@@ -10,7 +10,8 @@ let
   ModuleId : term,
   Path: str,
   ResultTree: term,
-  Sid: term
+  Sid: term,
+  Pid: int
 in
   GetModuleId(EditorId, ModuleId?)
   . GetPath(EditorId, Path?)
@@ -27,6 +28,7 @@ in
       rec-msg(em-no-such-session("reduct.out"))
     )
     . ActivateEditorWithTree(ResultTree, ModuleId, "reduct.out")
+    . create(AmbiguityHandler(ResultTree, "reduct.out"), Pid?)
   else
     tau
   fi
