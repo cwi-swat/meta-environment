@@ -87,6 +87,7 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
 
     ambs = PT_makeArgsMany(head, ambs);
 
+    assert(PT_getArgsLength(args) >= 3);
     if (PT_hasArgsHead(args)) {
       args = PT_getArgsTail(args);
       args = PT_getArgsTail(args);
