@@ -1,5 +1,11 @@
 $Id$
 
+Mon Apr 24 18:38:48 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/reduction.c: introduced full memoization on level
+   0, but only when nothing was rewritten. Rewriting constants was still
+   too expensive, especially in the context of ambiguities.
+   
+
 Fri Apr 21 16:47:56 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/reduction.c: re-introduced rewriting with ambiguities.
    The basic functionality is to lift ambiguity nodes to amb constructors.
