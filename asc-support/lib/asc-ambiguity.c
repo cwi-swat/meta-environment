@@ -13,17 +13,17 @@ PT_Tree ASC_ambToConstructor(PT_Tree amb)
   PT_Symbol listSymbol;
   PT_Tree list;
   PT_Attributes attributes;
+  PT_Tree result;
+  ATerm annos;
 
   assert(PT_isTreeAmb(amb));
+
+  annos = PT_getTreeAnnotations(amb);
 
   ambs = PT_getTreeArgs(amb);
   elems = PT_makeArgsEmpty();
   l = PT_makeTreeLayoutEmpty();
   c = PT_makeTreeLit(",");
-
-  if (PT_isArgsEmpty(ambs)) {
-    return amb;
-  }
 
   while (PT_hasArgsHead(ambs)) {
     PT_Tree alt = PT_getArgsHead(ambs);
@@ -54,8 +54,15 @@ PT_Tree ASC_ambToConstructor(PT_Tree amb)
  
   attributes = PT_makeAttributesAttrs(PT_makeAttrsSingle(
 			 PT_makeAttrTerm(ATparse(AMB_CONSTRUCTOR_ATTR))));
-  return PT_applyFunction("amb", symbol, PT_makeArgsSingle(list),
+
+  result =  PT_applyFunction("amb", symbol, PT_makeArgsSingle(list),
 			  attributes);
+
+  if (annos != NULL) {
+    result = PT_setTreeAnnotations(result, annos);
+  }
+
+  return result;
 }
 
 ATbool ASC_isAmbiguityConstructor(PT_Tree tree) 
@@ -73,8 +80,14 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
   PT_Tree list;
   PT_Args args;
   PT_Args ambs;
+  ATerm annos;
+  PT_Tree result;
 
-  assert(ASC_isAmbiguityConstructor(tree));
+  annos = PT_getTreeAnnotations(tree);
+
+  if(!ASC_isAmbiguityConstructor(tree)) {
+    return tree;
+  }
 
   list = PT_getArgsTreeAt(PT_getTreeArgs(tree), 4);
   args = PT_getTreeArgs(list);
@@ -83,8 +96,8 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
 
   while (PT_hasArgsHead(args)) {
     PT_Tree head = PT_getArgsHead(args);
-    args = PT_getArgsTail(args);
 
+    args = PT_getArgsTail(args);
     ambs = PT_makeArgsMany(head, ambs);
 
     assert(PT_getArgsLength(args) >= 3);
@@ -95,5 +108,11 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
     }
   }
 
-  return PT_makeTreeAmb(ambs);
+  result = PT_makeTreeAmb(ambs);
+
+  if (annos != NULL) {
+    result = PT_setTreeAnnotations(result, annos);
+  }
+
+  return result;
 }
