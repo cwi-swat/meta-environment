@@ -9,13 +9,17 @@ let
   Value: term
 in
   MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,<term>)
+  . subscribe(mm-module-deleted(<term>))
   .
   (
     rec-note(mm-attribute-changed(Event?))
     . ACE-GetModuleId(Event, ModuleId?)
     . MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Name?)
     . ACE-GetNewValue(Event, Value?)
-    . snd-msg(pro-set-status(Name, SDF_NAMESPACE, Value))
+    . snd-msg(pro-set-status(ModuleId, Name, SDF_NAMESPACE, Value))
+  +
+    rec-note(mm-module-deleted(ModuleId?)) 
+    . snd-msg(pro-remove-status(ModuleId))
   ) * delta 
 endlet
 
