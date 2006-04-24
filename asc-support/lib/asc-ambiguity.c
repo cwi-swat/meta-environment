@@ -89,7 +89,6 @@ PT_Tree ASC_constructorToAmb(PT_Tree tree)
     return tree;
   }
 
-  ATwarning("%t\n", tree);
   list = PT_getArgsTreeAt(PT_getTreeArgs(tree), 4);
   args = PT_getTreeArgs(list);
 
