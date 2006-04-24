@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include <asc-ambiguity.h>
+
 #include "evaluator.h"
 #include "matching.h"
 #include "reduction.h" 
@@ -449,23 +451,23 @@ static ATerm matchAppl(ATerm env,
 
   /*ATwarning("MATCH?:\n\t%t\n\t\%t\n", prod1, prod2);*/
 
-    if (PT_isEqualProduction(prod1, prod2)) {
-      PT_Args args1 = PT_getTreeArgs(arg1);
-      PT_Args args2 = PT_getTreeArgs(arg2);
+  if (PT_isEqualProduction(prod1, prod2)) {
+    PT_Args args1 = PT_getTreeArgs(arg1);
+    PT_Args args2 = PT_getTreeArgs(arg2);
 
-      /*ATwarning("RECURRING\n");*/
-      newenv = matchArguments(env, conds, 
-			      PT_concatArgs(args1, orgargs1),
-			      PT_concatArgs(args2, orgargs2),
-			      lhs_posinfo, depth);
-    }
-    else {
-      /*ATwarning("NO MATCH!:\n\t%t\n\t\%t\n", prod1, prod2);*/
-      newenv = fail_env;
-    }
-
-    return newenv;
+    /*ATwarning("RECURRING\n");*/
+    newenv = matchArguments(env, conds, 
+			    PT_concatArgs(args1, orgargs1),
+			    PT_concatArgs(args2, orgargs2),
+			    lhs_posinfo, depth);
   }
+  else {
+    /*ATwarning("NO MATCH!:\n\t%t\n\t\%t\n", prod1, prod2);*/
+    newenv = fail_env;
+  }
+
+  return newenv;
+}
 
   /*}}}  */
   /*{{{  static ATerm matchArgument(ATerm env,  */
@@ -527,6 +529,11 @@ static ATerm matchArgument(ATerm env,
   }
   else if (PT_isTreeAppl(arg1)) {
     assert(!PT_isTreeLit(arg1));
+
+    if (PT_isTreeAmb(arg2)) {
+      arg2 = ASC_ambToConstructor(arg2);
+    }
+
     newenv = matchAppl(env, arg1, arg2, conds, orgargs1, orgargs2,
 		       lhs_posinfo, depth);
   }

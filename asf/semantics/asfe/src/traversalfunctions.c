@@ -403,10 +403,6 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
 
   symbol = getTreeType(appl);
 
-  if (symbol == NULL) {
-    return NULL;
-  }
-
   symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
   symbolVisitorData.symbol = symbol;
   symbols = PT_foreachSymbolInSymbols(traversal.symbols, 

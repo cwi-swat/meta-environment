@@ -329,7 +329,10 @@ static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra)
   /* Memoization is needed here to prevent exponential 
    * behavior in case of nested ambiguity.
    */ 
-  if (memo != NULL) {
+  if (memo == (PT_Tree) ATempty) {
+    return FAIL;
+  }
+  else if (memo != NULL) {
     return memo;
   }
 
@@ -351,14 +354,10 @@ static PT_Tree rewriteAmb(PT_Tree amb, ATerm env, int depth, void* extra)
     ATwarning("Done rewriting ambiguity\n");
   }
 
-  /* we also convert to constructor, in case somebody want to
-   * match an ambiguity constructor in a context.
-   */
-  if (reduct == FAIL) {
-    reduct = trm;
-  }
 
-  memo_table = MemoTableAdd(memo_table, amb, reduct);
+  memo_table = MemoTableAdd(memo_table, amb, reduct ? reduct : (PT_Tree) ATempty);
+
+
 
   return reduct;
 }
@@ -697,7 +696,25 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
     }
   }
 
+  if (reduct != FAIL && ASC_isAmbiguityConstructor(reduct)) {
+    if (runVerbose) {
+      ATwarning("Lowering ambiguity to constructor\n");
+    }
+    reduct = ASC_constructorToAmb(reduct);
 
+    if (PT_isArgsEmpty(PT_getTreeArgs(reduct))) {
+      LOC_Location loc = PT_getTreeLocation(reduct);
+
+      if (loc == NULL) {
+	RWaddError("Rewriting failed: empty ambiguity cluster returned", "");
+      }
+      else {
+	RWaddLocatedError("Rewriting failed: empty ambiguity cluster returned", "pattern", loc);
+      }
+      reduct = FAIL;
+    }
+  }
+ 
   return reduct;
 }
 
