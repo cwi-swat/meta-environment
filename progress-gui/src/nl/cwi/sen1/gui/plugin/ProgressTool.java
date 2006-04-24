@@ -1,6 +1,6 @@
 // Java tool interface class ProgressTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 24, 2006 11:34:29 PM
+// generation time: Apr 24, 2006 11:58:11 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -40,8 +40,8 @@ abstract public class ProgressTool
   private void initSigTable()
   {
     Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<str>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<progress>,remove-status(<str>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<progress>,set-status(<term>,<str>,<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<progress>,remove-status(<term>))"), btrue);
     sigTable.put(factory.parse("rec-do(<progress>,clear-status-window)"), btrue);
     sigTable.put(factory.parse("rec-terminate(<progress>,<term>)"), btrue);
   }
@@ -49,9 +49,9 @@ abstract public class ProgressTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PremoveStatus0 = factory.parse("rec-do(remove-status(<str>))");
+    PremoveStatus0 = factory.parse("rec-do(remove-status(<term>))");
     PclearStatusWindow0 = factory.parse("rec-do(clear-status-window)");
-    PsetStatus0 = factory.parse("rec-do(set-status(<str>,<str>,<term>))");
+    PsetStatus0 = factory.parse("rec-do(set-status(<term>,<str>,<str>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -62,7 +62,7 @@ abstract public class ProgressTool
 
     result = term.match(PremoveStatus0);
     if (result != null) {
-      removeStatus((String)result.get(0));
+      removeStatus((ATerm)result.get(0));
       return null;
     }
     result = term.match(PclearStatusWindow0);
@@ -72,7 +72,7 @@ abstract public class ProgressTool
     }
     result = term.match(PsetStatus0);
     if (result != null) {
-      setStatus((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      setStatus((ATerm)result.get(0), (String)result.get(1), (String)result.get(2), (ATerm)result.get(3));
       return null;
     }
     result = term.match(PrecTerminate0);

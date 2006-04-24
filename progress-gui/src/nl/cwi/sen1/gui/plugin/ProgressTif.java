@@ -1,6 +1,6 @@
 // Java tool interface ProgressTif
 // This file is generated automatically, please do not edit!
-// generation time: Apr 24, 2006 11:34:29 PM
+// generation time: Apr 24, 2006 11:58:11 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -8,8 +8,8 @@ import aterm.*;
 
 public interface ProgressTif
 {
-  public void removeStatus(String s0);
+  public void removeStatus(ATerm t0);
   public void clearStatusWindow();
-  public void setStatus(String s0, String s1, ATerm t2);
+  public void setStatus(ATerm t0, String s1, String s2, ATerm t3);
   public void recTerminate(ATerm t0);
 }

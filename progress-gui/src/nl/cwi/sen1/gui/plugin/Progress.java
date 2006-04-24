@@ -41,12 +41,12 @@ public class Progress extends DefaultStudioPlugin implements ProgressTif {
                 StudioImplWithPredefinedLayout.TOP_LEFT);
     }
     
-    public void setStatus(String message, String column, ATerm value) {
-        panel.setStatus(message, column, value.toString());
+    public void setStatus(ATerm id, String message, String column, ATerm value) {
+        panel.setStatus(id, message, column, value.toString());
     }
 
-    public void removeStatus(String message) {
-        panel.removeStatus(message);
+    public void removeStatus(ATerm id) {
+        panel.removeStatus(id);
     }
     
     public void clearStatusWindow() {

@@ -8,16 +8,17 @@ let
   Columnname: str,
   Message: str,
   Status: term,
-  T: progress
+  T: progress,
+  Id: term
 in
   rec-connect(T?)
   .
   (
-    rec-msg(pro-set-status(Message?, Columnname?, Status?))
-    . snd-do(T, set-status(Message, Columnname, Status))
+    rec-msg(pro-set-status(Id?, Message?, Columnname?, Status?))
+    . snd-do(T, set-status(Id, Message, Columnname, Status))
   +
-    rec-msg(pro-remove-status(Message?))
-    . snd-do(T, remove-status(Message))
+    rec-msg(pro-remove-status(Id?))
+    . snd-do(T, remove-status(Id))
   +
     rec-msg(clear-status-window)
     . snd-do(T, clear-status-window)

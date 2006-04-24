@@ -1,6 +1,6 @@
 // Java tool bridge ProgressBridge
 // This file is generated automatically, please do not edit!
-// generation time: Apr 24, 2006 11:34:29 PM
+// generation time: Apr 24, 2006 11:58:11 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -17,10 +17,10 @@ public class ProgressBridge
     this.tool = tool;
   }
 
-  public void removeStatus(String s0)
+  public void removeStatus(ATerm t0)
   {
     if (tool != null) {
-      tool.removeStatus(s0);
+      tool.removeStatus(t0);
     }
     else {
       throw new UnsupportedOperationException("method `removeStatus' not supported.");
@@ -35,10 +35,10 @@ public class ProgressBridge
       throw new UnsupportedOperationException("method `clearStatusWindow' not supported.");
     }
   }
-  public void setStatus(String s0, String s1, ATerm t2)
+  public void setStatus(ATerm t0, String s1, String s2, ATerm t3)
   {
     if (tool != null) {
-      tool.setStatus(s0, s1, t2);
+      tool.setStatus(t0, s1, s2, t3);
     }
     else {
       throw new UnsupportedOperationException("method `setStatus' not supported.");

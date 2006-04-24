@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import aterm.ATerm;
+
 import nl.cwi.sen1.gui.plugin.data.ProgressTableModel;
 
 public class ProgressPanel extends JPanel {
@@ -29,11 +31,12 @@ public class ProgressPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void removeStatus(String message) {
-      model.removeStatus(message);
+    public void removeStatus(ATerm id) {
+      model.removeStatus(id);
+      repaint();
     }
 
-    public void setStatus(String message, String columnName, String value) {
-        model.setStatus(message, columnName, value);
+    public void setStatus(ATerm id, String message, String columnName, String value) {
+        model.setStatus(id, message, columnName, value);
     }
 }
