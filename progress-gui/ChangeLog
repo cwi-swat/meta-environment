@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr 24 23:34:43 CEST 2006 <jurgenv@cwi.nl>
+ * **/*.java: added functionality to remove a status row
+
 Mon Mar 13 18:50:43 CET 2006 <kooiker@cwi.nl>
  * **/data/ProgressTableModel.java:
    - override isCellEditable returning false

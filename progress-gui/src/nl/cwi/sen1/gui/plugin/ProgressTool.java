@@ -1,6 +1,6 @@
 // Java tool interface class ProgressTool
 // This file is generated automatically, please do not edit!
-// generation time: Apr 19, 2006 10:00:36 AM
+// generation time: Apr 24, 2006 11:34:29 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -23,6 +23,7 @@ abstract public class ProgressTool
   private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
   // Patterns that are used to match against incoming terms
+  private ATerm PremoveStatus0;
   private ATerm PclearStatusWindow0;
   private ATerm PsetStatus0;
   private ATerm PrecTerminate0;
@@ -40,6 +41,7 @@ abstract public class ProgressTool
   {
     Boolean btrue = new Boolean(true);
     sigTable.put(factory.parse("rec-do(<progress>,set-status(<str>,<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<progress>,remove-status(<str>))"), btrue);
     sigTable.put(factory.parse("rec-do(<progress>,clear-status-window)"), btrue);
     sigTable.put(factory.parse("rec-terminate(<progress>,<term>)"), btrue);
   }
@@ -47,6 +49,7 @@ abstract public class ProgressTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
+    PremoveStatus0 = factory.parse("rec-do(remove-status(<str>))");
     PclearStatusWindow0 = factory.parse("rec-do(clear-status-window)");
     PsetStatus0 = factory.parse("rec-do(set-status(<str>,<str>,<term>))");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
@@ -57,6 +60,11 @@ abstract public class ProgressTool
   {
     List result;
 
+    result = term.match(PremoveStatus0);
+    if (result != null) {
+      removeStatus((String)result.get(0));
+      return null;
+    }
     result = term.match(PclearStatusWindow0);
     if (result != null) {
       clearStatusWindow();

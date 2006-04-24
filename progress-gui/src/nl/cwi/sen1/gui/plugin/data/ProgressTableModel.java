@@ -6,6 +6,15 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 public class ProgressTableModel extends DefaultTableModel {
+    public void removeStatus(String message) {
+        for (Iterator iter = dataVector.iterator(); iter.hasNext();) {
+            Vector row = (Vector) iter.next(); 
+            if (row.elementAt(0).equals(message)) {
+                iter.remove();
+            }
+        }
+    }
+
     public void setStatus(String message, String columnName, String status) {
         Vector found = null;
         for (Iterator iter = dataVector.iterator(); iter.hasNext();) {

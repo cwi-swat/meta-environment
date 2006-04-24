@@ -29,6 +29,10 @@ public class ProgressPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
+    public void removeStatus(String message) {
+      model.removeStatus(message);
+    }
+
     public void setStatus(String message, String columnName, String value) {
         model.setStatus(message, columnName, value);
     }
