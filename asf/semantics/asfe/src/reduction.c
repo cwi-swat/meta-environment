@@ -423,8 +423,11 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
 				  PT_makeAttrTerm(ATparse("cons(\"ambiguity-constructor\")")))) {
     PT_Tree memo = MemoTableLookup(memo_table, appl);
     isMemoFunction = ATtrue;
- 
-    if (memo != NULL) {
+
+    if (memo == (PT_Tree) ATempty) {
+      return FAIL;
+    }
+    else if (memo != NULL) {
       return memo;
     }
   }
@@ -436,7 +439,7 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
   }
 
   if (isMemoFunction) {
-    memo_table = MemoTableAdd(memo_table, appl, reduct);
+    memo_table = MemoTableAdd(memo_table, appl, reduct ? reduct : (PT_Tree) ATempty);
   }
 
   return reduct;
@@ -649,9 +652,19 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
   PT_Tree reduct = FAIL;
   PT_Tree save = trm;
 
+  if (depth == 0) {
+    PT_Tree memo = MemoTableLookup(memo_table, trm);
+    if (memo != NULL) {
+      return memo;
+    }
+  }
+
   ASF_ASFTag tag = tagCurrentRule;
 
   if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
+    /* Note that depth is not the depth of the tree, but the depth
+     * of the ASF call stack.
+     */
     reduct = rewriteVariableAppl(trm, env, depth, extra);
     tagCurrentRule = innermostTag;
     TIDE_STEP(save, putVariableValue(env, innermostSubject, reduct), depth);
@@ -672,13 +685,18 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
       TIDE_STEP(save, putVariableValue(env, innermostSubject, trm), depth);
       tagCurrentRule = tag;
 
-      reduct = rewriteTop(trm, env, depth+1, extra);
+      reduct = rewriteTop(trm, env, depth, extra);
 
       if (reduct == FAIL) {
 	reduct = trm;
+	if (depth == 0) {
+	  /* we cache rewriting of constants on level 0 */
+	  memo_table = MemoTableAdd(memo_table, trm, reduct);
+	}
       }
     }
   }
+
 
   return reduct;
 }
