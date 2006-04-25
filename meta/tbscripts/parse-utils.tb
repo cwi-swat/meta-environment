@@ -6,12 +6,19 @@
 #include <position-annotator.idef>
 #include <error-support.idef>
 #include <restorebrackets.idef>
+#include <ambiguity-reporter.idef>
 
 process AnnotateTree(Tree: term, File: str, AnnotatedTree: term?) is
   AddJob("Adding position information")
   . snd-msg(add-posinfo-packed(File, Tree))
   . rec-msg(tree-with-pos-info(AnnotatedTree?))
   . JobDone("Adding position information")
+
+process ReportAmbs(Tree: term, File: str, Summary: term?) is
+  AddJob("Computing ambiguity report")
+  . snd-msg(ar-report-ambiguities(Tree, File))
+  . rec-msg(ar-ambiguity-report(Summary?, File))
+  . JobDone("Computing ambiguity report")
 
 process HasTextChanged(Sid: term, TextChanged: bool?) is
   snd-msg(te-is-modified(Sid))
@@ -27,6 +34,7 @@ let
   ParseResult: term
 in
   snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
+  . printf("parsing\n")
   . AddJob("Parsing")
   .
   (
@@ -42,28 +50,30 @@ in
   . JobDone("Parsing")
 endlet
 
+process AmbiguityHandler(ParseResult: term, Path: str) is
+let
+  Summary : term
+in
+    RemoveSummary("ambtracker", Path)
+    . ReportAmbs(ParseResult, Path, Summary?)
+    . DisplaySummary(Summary)
+endlet
+
 process ParseTreeHandler(ModuleId: term, Path: str) is
 let
   ErrorMessage: term,
   ParseError: term,
   ParseResult: term,
   Pid: int,
-  Summary: term
+  Summary: term,
+  P : int
 in
   Pid := process-id
   .
   (
-    (
-      rec-msg(parse-tree(Pid, ParseResult?))
-      . RemoveSummary("sglr", Path)
-    +
-      rec-msg(parse-forest(Pid, ParseResult?, ErrorMessage?))
-      . AddFilenameToParseError(ErrorMessage, Path, ParseError?)
-      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
-      . rec-msg(es-summary(Summary?))
-      . RemoveSummary("sglr", Path)
-      . DisplaySummary(Summary)
-    )
+    rec-msg(parse-tree(Pid, ParseResult?))
+    . RemoveSummary("sglr", Path)
+    . create(AmbiguityHandler(ParseResult, Path), P?)
     . snd-msg(parse-handler-done(Pid, ModuleId, ParseResult))
   +
     rec-msg(parse-error(Pid, ErrorMessage?))
@@ -71,6 +81,7 @@ in
     . snd-msg(es-make-summary("sglr", Path, [ParseError]))
     . rec-msg(es-summary(Summary?))
     . RemoveSummary("sglr", Path)
+    . RemoveSummary("ambtracker", Path)
     . DisplaySummary(Summary)
     . snd-msg(parse-handler-done(Pid))
   )
