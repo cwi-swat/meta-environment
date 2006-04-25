@@ -53,13 +53,16 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
    */
   if (PT_isTreeVar(tree)) {
     LOC_Location loc = PT_getTreeLocation(tree);
-    LOC_Area area = LOC_getLocationArea(loc);
 
-    if (LOC_getAreaBeginLine(area) <= target_line 
-	&& LOC_getAreaEndLine(area) >= target_line 
-	&& LOC_getAreaBeginColumn(area) <= target_col
-	&& LOC_getAreaEndColumn(area) >= target_col) {
-      return tree;
+    if (loc != NULL) {
+      LOC_Area area = LOC_getLocationArea(loc);
+
+      if (LOC_getAreaBeginLine(area) <= target_line 
+	  && LOC_getAreaEndLine(area) >= target_line 
+	  && LOC_getAreaBeginColumn(area) <= target_col
+	  && LOC_getAreaEndColumn(area) >= target_col) {
+	return tree;
+      }
     }
 
     return NULL;
