@@ -1,5 +1,9 @@
 $Id$
 
+Tue Apr 25 16:39:22 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/debug.c: fixed small bug in TIDE interface
+   concerning lookup of variables.
+
 Mon Apr 24 22:30:02 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/{reduction.c,matching.c}: amb nodes are now lifted
    to constructors lazily (when needed). Innermost takes care to lower
