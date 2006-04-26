@@ -31,7 +31,6 @@ import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
 import nl.cwi.sen1.gui.plugin.editor.FileToBigException;
 import nl.cwi.sen1.gui.plugin.editor.SwingEditor;
-import nl.cwi.sen1.util.StudioUtils;
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.ATermList;
@@ -339,7 +338,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
 
     public void highlightSlices(ATerm editorId, ATerm slices) {
         Editor panel = editors.get(editorId.toString());
-        if (panel != null) {
+        if (panel != null && !panel.isModified()) {
             panel.registerSlices(slices);
         }
     }
