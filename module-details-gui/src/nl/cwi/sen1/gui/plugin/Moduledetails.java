@@ -1,12 +1,11 @@
 package nl.cwi.sen1.gui.plugin;
 
 import nl.cwi.sen1.gui.CloseAbortedException;
-import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponent;
-import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
+import nl.cwi.sen1.gui.component.StudioComponent;
+import nl.cwi.sen1.gui.component.StudioComponentImpl;
 import nl.cwi.sen1.moduleapi.Factory;
 import nl.cwi.sen1.moduleapi.types.Attribute;
 import nl.cwi.sen1.moduleapi.types.AttributeStore;
