@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 26 09:54:54 CEST 2006 <kooiker@cwi.nl>
+ * studio/**/StudioImpl.java:
+   - Add static method that gets the Studio frame
+
 Fri Apr 21 13:03:17 CEST 2006 <kooiker@cwi.nl>
  * studio/**/StudioImpl.java:
    - Remove componentId from idsByComponent when removing the component. 

@@ -80,7 +80,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     private RootWindowProperties properties;
 
-    private JFrame frame;
+    static private JFrame frame;
 
     private JLabel systemLabel;
 
@@ -106,6 +106,10 @@ public class StudioImpl implements Studio, GuiTif {
         new StudioImpl(args);
     }
 
+    static public Frame getFrame() {
+        return frame;
+    }
+    
     public StudioImpl(String[] args) {
         initialize();
 
