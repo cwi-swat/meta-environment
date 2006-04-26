@@ -7,6 +7,7 @@ import net.infonode.docking.RootWindow;
 import net.infonode.docking.SplitWindow;
 import net.infonode.docking.TabWindow;
 import net.infonode.docking.View;
+import nl.cwi.sen1.gui.component.StudioComponent;
 
 public class StudioImplWithPredefinedLayout extends StudioImpl implements
         StudioWithPredefinedLayout {

@@ -1,4 +1,4 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.plugin;
 
 import java.io.IOException;
 import java.net.JarURLConnection;
@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.StringTokenizer;
 import java.util.jar.Attributes;
+
 
 import aterm.ATermAppl;
 import aterm.ATermList;

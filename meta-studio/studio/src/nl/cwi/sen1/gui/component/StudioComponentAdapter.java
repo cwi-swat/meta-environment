@@ -1,4 +1,6 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.component;
+
+import nl.cwi.sen1.gui.CloseAbortedException;
 
 public abstract class StudioComponentAdapter implements StudioComponentListener {
     public StudioComponentAdapter() {

@@ -1,6 +1,8 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.component;
 
 import java.util.EventListener;
+
+import nl.cwi.sen1.gui.CloseAbortedException;
 
 public interface StudioComponentListener extends EventListener {
     public void componentRequestClose() throws CloseAbortedException;

@@ -1,6 +1,7 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.plugin;
 
 import javax.swing.event.EventListenerList;
+
 
 public abstract class DefaultStudioPlugin implements StudioPlugin {
 	private EventListenerList listenerList = new EventListenerList();

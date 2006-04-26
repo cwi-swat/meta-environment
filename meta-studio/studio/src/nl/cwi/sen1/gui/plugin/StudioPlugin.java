@@ -1,4 +1,6 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.plugin;
+
+import nl.cwi.sen1.gui.Studio;
 
 public interface StudioPlugin {
 	public String getName();

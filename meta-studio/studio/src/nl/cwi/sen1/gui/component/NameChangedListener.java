@@ -1,4 +1,4 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.component;
 
 import java.util.EventListener;
 

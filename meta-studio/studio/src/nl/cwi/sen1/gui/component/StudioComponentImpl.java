@@ -1,8 +1,10 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.component;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.event.EventListenerList;
+
+import nl.cwi.sen1.gui.CloseAbortedException;
 
 public class StudioComponentImpl implements StudioComponent {
     private Icon icon;

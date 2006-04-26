@@ -1,5 +1,7 @@
 package nl.cwi.sen1.gui;
 
+import nl.cwi.sen1.gui.component.StudioComponent;
+
 public class StatusMessageEvent extends StudioEvent {
 	private String oldMessage;
 

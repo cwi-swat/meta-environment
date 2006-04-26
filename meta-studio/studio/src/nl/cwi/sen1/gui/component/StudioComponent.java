@@ -1,7 +1,9 @@
-package nl.cwi.sen1.gui;
+package nl.cwi.sen1.gui.component;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
+
+import nl.cwi.sen1.gui.CloseAbortedException;
 
 public interface StudioComponent {
 	public String getName();

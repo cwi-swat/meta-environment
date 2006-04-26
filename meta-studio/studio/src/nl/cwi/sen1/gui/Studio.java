@@ -4,6 +4,7 @@ import javax.swing.Action;
 import javax.swing.JMenu;
 
 import nl.cwi.sen1.configapi.types.Event;
+import nl.cwi.sen1.gui.component.StudioComponent;
 import toolbus.AbstractTool;
 import aterm.ATermFactory;
 
