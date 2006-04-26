@@ -1,5 +1,9 @@
 $Id$
 
+Wed Apr 26 12:01:21 CEST 2006 <kooiker@cwi.nl>
+ * src/**/GraphPanel.java:
+   - Updating graph clears old one (closes #580)
+
 Fri Apr 14 12:56:03 CEST 2006 <kooiker@cwi.nl>
  * src/**/GraphPanel.java:
    - Update use of mousebuttons: 

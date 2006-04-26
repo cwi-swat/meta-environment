@@ -28,7 +28,6 @@ import prefuse.action.layout.RandomLayout;
 import prefuse.action.layout.graph.FruchtermanReingoldLayout;
 import prefuse.activity.Activity;
 import prefuse.activity.SlowInSlowOutPacer;
-import prefuse.controls.Control;
 import prefuse.controls.ControlAdapter;
 import prefuse.controls.DragControl;
 import prefuse.controls.FocusControl;
@@ -337,8 +336,7 @@ public class GraphPanel extends JPanel {
     }
 
     void setGraph(Graph g) {
-        setSize(getParent().getWidth(), getParent().getHeight());
-        vis.reset();
+        vis.removeGroup(GraphConstants.GRAPH);
         vis.addGraph(GraphConstants.GRAPH, g);
         Activity oldAnimation = currentAnimation;
         setNoAnimation();
