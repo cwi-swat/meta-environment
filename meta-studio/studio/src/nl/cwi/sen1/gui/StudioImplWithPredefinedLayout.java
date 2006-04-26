@@ -57,6 +57,7 @@ public class StudioImplWithPredefinedLayout extends StudioImpl implements
                 showView(view, viewPosition);
             }
         });
+        addStudioComponentNameChangedListener(component);
     }
 
     private void showView(View view, String viewPosition) {

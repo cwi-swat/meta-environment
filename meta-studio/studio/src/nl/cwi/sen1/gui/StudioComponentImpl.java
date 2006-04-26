@@ -22,6 +22,11 @@ public class StudioComponentImpl implements StudioComponent {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+        fireNameChangedEvent();
+    }
+
     public JComponent getViewComponent() {
         return viewComponent;
     }
@@ -35,18 +40,6 @@ public class StudioComponentImpl implements StudioComponent {
     }
 
     // Take from javax.swing.event.EventListenerList example
-    protected void fireStatusMessageChanged(String oldMessage, String newMessage) {
-        StatusMessageEvent event = new StatusMessageEvent(this, oldMessage,
-                newMessage);
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = listeners.length - 2; i >= 0; i -= 2) {
-            if (listeners[i] == StudioComponentListener.class) {
-                ((StudioComponentListener) listeners[i + 1])
-                        .statusMessageChanged(event);
-            }
-        }
-    }
-
     protected void fireComponentRequestClose() throws CloseAbortedException {
         Object[] listeners = listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -61,12 +54,11 @@ public class StudioComponentImpl implements StudioComponent {
         Object[] listeners = listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
             if (listeners[i] == StudioComponentListener.class) {
-                ((StudioComponentListener) listeners[i + 1])
-                        .componentClose();
+                ((StudioComponentListener) listeners[i + 1]).componentClose();
             }
         }
     }
-    
+
     protected void fireComponentFocusReceived() {
         Object[] listeners = listenerList.getListenerList();
         for (int i = listeners.length - 2; i >= 0; i -= 2) {
@@ -76,7 +68,7 @@ public class StudioComponentImpl implements StudioComponent {
             }
         }
     }
-    
+
     public Icon getIcon() {
         return icon;
     }
@@ -88,16 +80,35 @@ public class StudioComponentImpl implements StudioComponent {
     public void requestClose() throws CloseAbortedException {
         fireComponentRequestClose();
     }
-    
+
     public void close() {
         fireComponentClose();
     }
-    
+
     public void receiveFocus() {
-    	fireComponentFocusReceived();
+        fireComponentFocusReceived();
     }
 
     public JComponent[] getStatusBarComponents() {
         return new JComponent[] {};
     }
+
+    public void addNameChangedListener(NameChangedListener l) {
+        listenerList.add(NameChangedListener.class, l);
+    }
+
+    public void removeNameChangedListener(NameChangedListener l) {
+        listenerList.remove(NameChangedListener.class, l);
+    }
+
+    public void fireNameChangedEvent() {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == NameChangedListener.class) {
+                ((NameChangedListener) listeners[i + 1])
+                        .componentNameChanged();
+            }
+        }
+    }
+
 }

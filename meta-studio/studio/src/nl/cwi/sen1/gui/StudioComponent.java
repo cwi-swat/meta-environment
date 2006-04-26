@@ -6,6 +6,8 @@ import javax.swing.JComponent;
 public interface StudioComponent {
 	public String getName();
 
+    public void setName(String name);
+    
 	public Icon getIcon();
 	
 	public JComponent getViewComponent();
@@ -21,4 +23,8 @@ public interface StudioComponent {
     public void receiveFocus();
 
     public JComponent[] getStatusBarComponents();
+
+    public void addNameChangedListener(NameChangedListener l);
+
+    public void removeNameChangedListener(NameChangedListener l);
 }

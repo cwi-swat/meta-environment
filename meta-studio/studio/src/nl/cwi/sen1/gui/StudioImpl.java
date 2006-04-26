@@ -109,7 +109,7 @@ public class StudioImpl implements Studio, GuiTif {
     static public Frame getFrame() {
         return frame;
     }
-    
+
     public StudioImpl(String[] args) {
         initialize();
 
@@ -261,7 +261,7 @@ public class StudioImpl implements Studio, GuiTif {
                 for (int i = statusBar.getComponentCount(); i > 5; i--) {
                     statusBar.remove(i - 1);
                 }
-                
+
                 if (components != null) {
                     for (JComponent cur : components) {
                         statusBar.addSeparator();
@@ -296,7 +296,7 @@ public class StudioImpl implements Studio, GuiTif {
         return factory;
     }
 
-    protected View createView(StudioComponent component, int id) {
+    protected View createView(final StudioComponent component, int id) {
         final String name = component.getName();
         Icon icon = component.getIcon();
         JComponent viewComponent = component.getViewComponent();
@@ -321,6 +321,7 @@ public class StudioImpl implements Studio, GuiTif {
                 showView(view);
             }
         });
+        addStudioComponentNameChangedListener(component);
     }
 
     public void removeComponent(StudioComponent component) {
@@ -660,5 +661,20 @@ public class StudioImpl implements Studio, GuiTif {
         jobQueue.add(message);
         setStatus(message);
         progressBar.setIndeterminate(true);
+    }
+
+    protected void addStudioComponentNameChangedListener(
+            final StudioComponent component) {
+        component.addNameChangedListener(new NameChangedListener() {
+            public void componentNameChanged() {
+                int id = getComponentId(component);
+                if (id != -1) {
+                    View view = viewsById.getView(id);
+                    if (view != null) {
+                        view.getViewProperties().setTitle(component.getName());
+                    }
+                }
+            }
+        });
     }
 }
