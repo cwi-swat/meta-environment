@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 
 import nl.cwi.sen1.gui.CloseAbortedException;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
+import nl.cwi.sen1.gui.component.StudioComponentImpl;
 import nl.cwi.sen1.tide.tool.ToolManager;
 import nl.cwi.sen1.tide.tool.prefeditor.PreferencesEditorFactory;
 import nl.cwi.sen1.tide.tool.proclist.ProcessList;

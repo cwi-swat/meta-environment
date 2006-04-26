@@ -1,7 +1,7 @@
 package nl.cwi.sen1.tide;
 
-import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 
 public class TideMainFrame extends DefaultStudioPlugin {
 	
