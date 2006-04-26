@@ -8,7 +8,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
 import nl.cwi.sen1.configapi.Factory;
-import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
 import nl.cwi.sen1.gui.StudioImpl;
 import aterm.ATerm;
