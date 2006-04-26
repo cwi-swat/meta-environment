@@ -171,6 +171,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                     ATerm event = studio.getATermFactory().make(
                             "contents-saved(<term>)", editorId);
                     bridge.postEvent(event);
+                    if (comp.getName().endsWith("*")) {
+                        comp.setName(comp.getName().substring(0,
+                                comp.getName().length() - 1));
+                    }
                 } catch (IOException e1) {
                     try {
                         showErrorDialog(editor, JOptionPane.OK_OPTION,
@@ -435,6 +439,10 @@ public class EditorPlugin extends DefaultStudioPlugin implements
             final Editor panel) {
         panel.addEditorModifiedListener(new EditorModifiedListener() {
             public void editorModified(EditorModifiedEvent e) {
+                StudioComponent comp = componentsById.get(editorId.toString());
+                if (!comp.getName().endsWith("*")) {
+                    comp.setName(comp.getName() + "*");
+                }
                 ATerm event = studio.getATermFactory().make(
                         "contents-changed(<term>)", editorId);
                 bridge.postEvent(event);

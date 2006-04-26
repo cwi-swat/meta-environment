@@ -4,6 +4,7 @@ Wed Apr 26 10:02:53 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Show dialogs using the Studio frame as parent (closes #590)
    - Don't highlight when editor is already modified (closes #589)
+   - Add * to name of component when editor is modified
 
 Fri Apr 14 15:33:02 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
