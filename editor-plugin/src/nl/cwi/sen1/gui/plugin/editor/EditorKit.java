@@ -15,6 +15,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import nl.cwi.sen1.gui.StudioImpl;
+
 public class EditorKit extends StyledEditorKit {
     private static final int UNDO_LIMIT = 1000;
 
@@ -178,7 +180,8 @@ public class EditorKit extends StyledEditorKit {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
                 if (searchReplaceDialog == null) {
-                    searchReplaceDialog = new SearchReplaceDialog(editor);
+                    searchReplaceDialog = new SearchReplaceDialog(editor,
+                            StudioImpl.getFrame());
                 }
                 searchReplaceDialog.setVisible(true);
             }

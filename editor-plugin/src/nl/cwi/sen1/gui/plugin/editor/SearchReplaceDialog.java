@@ -1,5 +1,6 @@
 package nl.cwi.sen1.gui.plugin.editor;
 
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -89,8 +90,8 @@ public class SearchReplaceDialog extends BaseDialog {
 		super.setVisible(b);
 	}
 
-	public SearchReplaceDialog(EditorPane editor) {
-		super();
+	public SearchReplaceDialog(EditorPane editor, Frame frame) {
+		super(frame);
 		setTitle("Find/Replace");
 		this.editor = editor;
 		initComponents();

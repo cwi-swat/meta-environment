@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Apr 26 10:02:53 CEST 2006 <kooiker@cwi.nl>
+ * src/**/*.java:
+   - Show dialogs using the Studio frame as parent
+
 Fri Apr 14 15:33:02 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add File->Save a copy that save a copy without fiddling with the undo and
