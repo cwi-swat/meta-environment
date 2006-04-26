@@ -2,7 +2,7 @@ $Id$
 
 Wed Apr 26 10:03:32 CEST 2006 <kooiker@cwi.nl>
  * src/**/*.java:
-   - Show dialogs using Studio frame as parent
+   - Show dialogs using Studio frame as parent (closes #590)
 
 Tue Mar  7 13:27:51 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java,dialog.idef.src:
