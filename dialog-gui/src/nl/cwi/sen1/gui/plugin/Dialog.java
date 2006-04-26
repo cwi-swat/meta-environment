@@ -3,7 +3,6 @@ package nl.cwi.sen1.gui.plugin;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
@@ -11,6 +10,7 @@ import javax.swing.filechooser.FileFilter;
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
+import nl.cwi.sen1.gui.StudioImpl;
 import aterm.ATerm;
 import aterm.ATermList;
 
@@ -53,15 +53,16 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
             chooser.setFileView(new DialogFileView(fsv));
         }
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
-        if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
+
+        if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();
             return studio.getATermFactory().make(
                     "snd-value(directory-dialog-approve(<str>))", path);
         }
-        return studio.getATermFactory().make("snd-value(directory-dialog-cancel)");
+        return studio.getATermFactory().make(
+                "snd-value(directory-dialog-cancel)");
     }
-    
+
     public ATerm showFileDialog(String title, ATerm paths,
             final String extension) {
         JFileChooser chooser = sharedChooser;
@@ -89,7 +90,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         };
 
         chooser.addChoosableFileFilter(filter);
-        if (chooser.showDialog(null, title) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showDialog(StudioImpl.getFrame(), title) == JFileChooser.APPROVE_OPTION) {
             String path = chooser.getSelectedFile().getAbsolutePath();
             return studio.getATermFactory().make(
                     "snd-value(file-dialog-approve(<str>))", path);
@@ -108,7 +109,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
     }
 
     public void showProgressList(final String title) {
-        progressList = new ProgressList((JFrame) null, title, true);
+        progressList = new ProgressList(StudioImpl.getFrame(), title, true);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 progressList.setVisible(true);
@@ -130,7 +131,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
     }
 
     public ATerm showQuestionDialog(String question) {
-        int choice = JOptionPane.showConfirmDialog(null, question);
+        int choice = JOptionPane.showConfirmDialog(StudioImpl.getFrame(), question);
 
         if (choice == JOptionPane.YES_OPTION) {
             return studio.getATermFactory().make("snd-value(answer(yes))");
@@ -146,7 +147,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         if (progressList != null) {
             progressList.dispose();
         }
-        JOptionPane.showMessageDialog(null, errorMessage, "Error",
+        JOptionPane.showMessageDialog(StudioImpl.getFrame(), errorMessage, "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 
@@ -155,7 +156,7 @@ public class Dialog extends DefaultStudioPlugin implements DialogTif {
         if (progressList != null) {
             progressList.dispose();
         }
-        JOptionPane.showMessageDialog(null, message, "Error",
+        JOptionPane.showMessageDialog(StudioImpl.getFrame(), message, "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
 }
