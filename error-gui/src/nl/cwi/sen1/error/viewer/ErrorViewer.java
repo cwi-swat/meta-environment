@@ -7,12 +7,12 @@ import javax.swing.tree.TreePath;
 
 import nl.cwi.sen1.error.model.SelectableNode;
 import nl.cwi.sen1.gui.CloseAbortedException;
-import nl.cwi.sen1.gui.DefaultStudioPlugin;
 import nl.cwi.sen1.gui.Studio;
-import nl.cwi.sen1.gui.StudioComponent;
-import nl.cwi.sen1.gui.StudioComponentImpl;
 import nl.cwi.sen1.gui.StudioImplWithPredefinedLayout;
 import nl.cwi.sen1.gui.StudioWithPredefinedLayout;
+import nl.cwi.sen1.gui.component.StudioComponent;
+import nl.cwi.sen1.gui.component.StudioComponentImpl;
+import nl.cwi.sen1.gui.plugin.DefaultStudioPlugin;
 import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
