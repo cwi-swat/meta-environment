@@ -9,5 +9,5 @@ CLASSPATH=$CLASSPATH:__JARDIR__/swingx.jar
 CLASSPATH=$CLASSPATH:__JARDIR__/gui-util.jar
 CLASSPATH=$CLASSPATH:__JARDIR__/gui.jar
 
-#__JAVA__ -Xmx256m -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@
-__JAVA__ -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@
+__JAVA__ -Xmx256m -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@
+#__JAVA__ -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@

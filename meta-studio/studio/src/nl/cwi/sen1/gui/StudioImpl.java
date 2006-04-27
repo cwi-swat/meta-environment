@@ -553,6 +553,7 @@ public class StudioImpl implements Studio, GuiTif {
 
     private void startPlugin(PluginLoader loader) {
         final StudioPlugin plugin = loader.instantiatePlugin();
+	assert plugin != null;
         registerPlugin(plugin);
         Thread thread = new Thread(new Runnable() {
             public void run() {
