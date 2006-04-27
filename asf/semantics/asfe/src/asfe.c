@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
       Tide_connect(tide_port);
     }
 
-    ATsetChecking(ATtrue);
+    /*ATsetChecking(ATtrue);*/
     /* Rewrite the term */
     result = evaluator(name, parseTree, eqsList, use_tide, 
 		       remove_layout, mark_new_layout, allow_ambs);
