@@ -34,7 +34,6 @@ let
   ParseResult: term
 in
   snd-msg(sglr-parse(Text, Table, Nonterminal, Heuristics))
-  . printf("parsing\n")
   . AddJob("Parsing")
   .
   (

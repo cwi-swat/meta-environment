@@ -171,11 +171,11 @@ in
     .
     (
       rec-msg(se-tree-slices(Sid, Slices?))
+      . JobDone("Highlighting")
       . snd-msg(te-highlight-slices(Sid, Slices))
     +
       rec-msg(se-no-tree-slices(Sid))
     )
-    . JobDone("Highlighting")
   else
     tau 
   fi
