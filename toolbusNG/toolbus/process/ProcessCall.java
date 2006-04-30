@@ -176,7 +176,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void setTest(ATerm test, Environment env) throws ToolBusException {
-		System.err.println("ProcessCall.setTest: " + test);
+		//System.err.println("ProcessCall.setTest: " + test);
 		if (isStaticCall) {
 			getFirst().setTest(test, env);
 		} else {

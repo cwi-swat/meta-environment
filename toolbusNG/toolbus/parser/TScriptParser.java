@@ -600,10 +600,13 @@ public class TScriptParser {
   public void doParse(String filename) throws ToolBusException {
     ATerm interm;
     if(includedFiles.contains(filename)){
+    	System.err.println("skipping include of " + filename);
     	return;
     }
+
     includedFiles.add(filename);
     try {
+      System.err.println("parsing " + filename);
       interm = externalparser.parse(filename, tbfactory);
     } catch (IOException e) {
       throw new ToolBusException(e.getMessage());
@@ -637,9 +640,13 @@ public class TScriptParser {
 							handleDefine(filename, (ATermAppl) decl, 0);
 					} else if (((ATermAppl) decl).getName() == "ttt-Define1") {
 						handleDefine(filename, (ATermAppl) decl, 1);
+					} else if (((ATermAppl) decl).getName() == "ttt-Include"){
+						System.err.println("case ttt-Include");
+						handleInclude(filename, (ATermAppl) decl);
 					} else {
 
 						Object def = TScriptNodeBuilders.build((ATerm) decl);
+						System.err.println("def = " + def.getClass().getCanonicalName());
 
 						if (def instanceof ProcessDefinition) {
 							String processName = ((ProcessDefinition) def)
@@ -657,6 +664,7 @@ public class TScriptParser {
 						} else if (def instanceof ToolDefinition) {
 							toolbus.addToolDefinition((ToolDefinition) def);
 						} else if (def instanceof Include) {
+							System.err.println("case Include");
 							doParseInclude(((Include) def).getFilename());
 						} else
 							toolbus.error(filename,
@@ -684,7 +692,7 @@ public class TScriptParser {
 	  }
 	  
 	  toolbus.set(var,val.toString());
-	  System.err.println("define " + var + " = " + val);
+	  System.err.println(filename + ": define " + var + " = " + val);
   }
   
   public void handleIfdef(String filename, ATermAppl decl)
@@ -702,6 +710,14 @@ public class TScriptParser {
 	  if(toolbus.get(var) == null){
 		  handleDeclarations(filename, decls);
 	  }
+  }
+  
+  public void handleInclude(String Filename, ATermAppl decl) throws ToolBusException {
+	  
+	  String incFilename = stripQuotes(decl.getArgument(0).removeAnnotations());
+  	  incFilename = incFilename.substring(1,incFilename.length()-1); // strip < and >
+	  
+	  doParseInclude(incFilename);
   }
   
   public void doParseInclude(String filename) throws ToolBusException{

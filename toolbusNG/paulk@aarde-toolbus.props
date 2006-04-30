@@ -7,6 +7,9 @@ workspace.path=/home/paulk/.eclipse
 include.path=/home/paulk/software/installed/sdf-meta/share/sdf-meta, \
 /home/paulk/software/installed/pgen/share/pgen, \
 /home/paulk/software/installed/sdf-support/share/sdf-support, \
+/home/paulk/software/installed/asf/share/asf, \
+/home/paulk/software/installed/asf/share/asf-library, \
+/home/paulk/software/installed/asfsdf-meta/share/asfsdf-meta, \
 /home/paulk/software/installed/meta/share/meta, \
 /home/paulk/software/installed/term-store/share/term-store, \
 /home/paulk/software/installed/editor-manager/share/editor-manager, \
@@ -44,3 +47,4 @@ tide-control.classpath=/home/paulk/software/installed//share/meta/meta-studio.ja
 			/home/paulk/software/installed//share/error-support/errorapi-1.0.1.jar, \
 			/home/paulk/software/installed//share/error-support/locationapi-1.0.1.jar, \
 			/home/paulk/software/installed//share/tide/tide.jar
+xxxdisplay.command=/home/paulk/software/installed/toolbus/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl

@@ -78,8 +78,8 @@ process MakeWave(N : int) is
 
 %% Define the {\tt display} tool.
 
-tool display is {
-                  command = "wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
+tool display is {command = "/home/paulk/software/installed/toolbus/bin/wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
+                  %%command = "wish-adapter -script /home/paulk/software/source/asfsdf-meta-asf-sdf-meta_1-5-bundle-1.5.3/toolbus/demos/wave/ui-wave.tcl"
                 }
 
 %% Define the initial \TB\ configuration.

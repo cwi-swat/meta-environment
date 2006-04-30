@@ -28,7 +28,7 @@ import aterm.ATermAppl;
 
 public class ClassicToolShield extends ToolShield {
 	
-	private final boolean verbose = false;
+	private final boolean verbose = true;
 
 	private final static int LENSPEC = 12; // ToolBus dependent parameters
 
@@ -87,7 +87,7 @@ public class ClassicToolShield extends ToolShield {
 				+ toolbus.getLocalHost().getHostName() + " -TB_TOOL_NAME "
 				+ toolname + " -TB_TOOL_ID " + toolCount + " -TB_PORT "
 				+ toolbus.getWellKnownSocketPort();
-		System.err.println("executeTool:" + cmd);
+		System.err.println("executeTool: " + cmd);
 
 		try {
 			Runtime.getRuntime().exec(cmd);

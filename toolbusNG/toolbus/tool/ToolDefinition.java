@@ -114,7 +114,7 @@ public class ToolDefinition {
 	}
 
 	public String getCommand() {
-		return (command);
+		return toolbus.get(toolName + ".command", command);
 	}
 	
 	public String getClassName(){
