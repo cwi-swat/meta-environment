@@ -1,6 +1,8 @@
 #ifndef A
 #define B abc
-process A is printf(B)
+#include </home/paulk/.eclipse/toolbusNG/toolbus/parser/I1.tb>
+#include </home/paulk/.eclipse/toolbusNG/toolbus/parser/I2.tb>
+process A is printf(B) . printf(I1) . printf(I2)
 #endif
 
 

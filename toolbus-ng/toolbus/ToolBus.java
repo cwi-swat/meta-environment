@@ -39,7 +39,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 
-	private static final boolean verbose = true;
+	private static final boolean verbose = false;
 
 	private static Random rand = new Random();
 	
@@ -187,7 +187,7 @@ public class ToolBus {
 	}
 
 	synchronized public ToolInstance getConnectedTool(String toolname) {
-	    info("getConnectedTool: " + toolname + " length = " + connectedTools.size());
+	    info("getConnectedTool: " + toolname + " # connected tools = " + connectedTools.size());
 	    ListIterator<ToolInstance> cti = connectedTools.listIterator();
 		while(cti.hasNext()){
 			ToolInstance ti = cti.next();
@@ -207,7 +207,7 @@ public class ToolBus {
 	    ListIterator<ToolInstance> cti = connectedTools.listIterator();
 		while(cti.hasNext()){
 			ToolInstance ti = cti.next();
-			 info("getConnectedTool: considering: " + ti.getToolName() + "; " + ti.getToolId());
+			 info("getConnectedToolById: considering: " + ti.getToolName() + "; " + ti.getToolId());
 			if (ti.getToolName().equals(toolname) && ti.getToolId() == tid) {
 				cti.remove();
 				info("getConnectedToolById: " + toolname + " ==> " + ti + "(" + ti.getToolId() + ")");

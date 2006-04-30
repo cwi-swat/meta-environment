@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path=""/>
+	<classpathentry excluding="casestudy/|doc/|toolbus/tifs/" kind="src" path=""/>
 	<classpathentry exported="true" kind="var" path="JRE_LIB"/>
 	<classpathentry kind="lib" path="junit.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/shared-objects"/>

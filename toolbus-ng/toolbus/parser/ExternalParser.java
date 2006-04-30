@@ -114,8 +114,8 @@ public class ExternalParser {
    * it.
    */
   public static Process execute(String command, String processType) throws ExternalProcessException {
-    System.err.println("ToolBus: executing external command:");
-    System.err.println("  " + command);
+    //System.err.println("ToolBus: executing external command:");
+    //System.err.println("  " + command);
     try {
       return Runtime.getRuntime().exec(command);
     } catch (java.io.IOException e) {
