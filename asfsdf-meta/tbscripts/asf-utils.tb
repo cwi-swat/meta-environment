@@ -378,12 +378,12 @@ in
       . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
       . snd-msg(ui-remove-feedback-summary("asfe", "all"))
     +
-      rec-msg(asfe-rewrite-errors(Errors?))
+      rec-msg(asfe-rewrite-result-with-errors(NormalFormWithoutBrackets?,Errors?))
       . snd-msg(ui-remove-feedback-summary("asfe", "all")) 
       . snd-msg(es-make-summary("asfe", "all", Errors)) 
       . rec-msg(es-summary(Summary?)) 
       . snd-msg(ui-show-feedback-summary(Summary))
-      . NormalForm := UNDEFINED
+      . RestoreTermBrackets(ModuleId, NormalFormWithoutBrackets, NormalForm?)
     )
     . SetStatus("")
   else
