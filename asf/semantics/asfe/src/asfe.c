@@ -152,7 +152,8 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   }
   else {
-    return ATmake("snd-value(rewrite-errors(<term>))", RWgetErrors());
+    return ATmake("snd-value(rewrite-result-with-errors(<term>,<term>))",
+		  ATBpack(result), RWgetErrors());
   }
 }
 
