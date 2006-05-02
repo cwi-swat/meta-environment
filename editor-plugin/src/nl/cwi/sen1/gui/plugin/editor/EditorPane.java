@@ -321,6 +321,10 @@ public class EditorPane extends JTextPane {
     private int findFromInText(String text, String toBeFound, int from,
             boolean forward) {
         int index = -1;
+        
+        if (toBeFound.length() == 0) {
+            return index;
+        }
 
         if (forward) {
             index = text.indexOf(toBeFound, from);

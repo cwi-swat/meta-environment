@@ -1,5 +1,13 @@
 # $Id$
 
+Tue May  2 11:59:49 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPane.java:
+   - return error when find is called with string of length 0
+ * src/**/SearchReplaceDialog.java:
+   - Register enter in comboboxes and select find string when opening a new
+     find dialog (closes #597)
+   - Don't use package prefixes in types
+
 Wed Apr 26 10:02:53 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Show dialogs using the Studio frame as parent (closes #590)
