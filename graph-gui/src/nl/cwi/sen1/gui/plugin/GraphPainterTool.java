@@ -1,34 +1,35 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: Sep 22, 2005 3:23:47 PM
+// generation time: May 2, 2006 10:49:15 AM
 
 package nl.cwi.sen1.gui.plugin;
 
-import aterm.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import toolbus.*;
+import toolbus.SwingTool;
 
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class GraphPainterTool
   extends SwingTool
   implements GraphPainterTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PdisplayGraph0;
+  private ATerm PdisplayGraph1;
   private ATerm PselectNode0;
   private ATerm PshowPopup0;
   private ATerm PsizeGraph0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
-
-  //}}}
-
-  //{{{  protected GraphPainterTool(ATermFactory factory)
 
   // Mimic the constructor from the AbstractTool class
   protected GraphPainterTool(ATermFactory factory)
@@ -38,38 +39,30 @@ abstract public class GraphPainterTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<graph-painter>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<graph-painter>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<bool>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-ack-event(<graph-painter>,<term>)"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<graph-painter>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
+    PdisplayGraph1 = factory.parse("rec-do(display-graph(<str>,<term>,<term>))");
     PselectNode0 = factory.parse("rec-do(select-node(<str>,<term>))");
     PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>,<term>))");
     PsizeGraph0 = factory.parse("rec-eval(size-graph(<str>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -79,6 +72,11 @@ abstract public class GraphPainterTool
     result = term.match(PdisplayGraph0);
     if (result != null) {
       displayGraph((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PdisplayGraph1);
+    if (result != null) {
+      displayGraph((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PselectNode0);
@@ -106,12 +104,9 @@ abstract public class GraphPainterTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -126,15 +121,10 @@ abstract public class GraphPainterTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }

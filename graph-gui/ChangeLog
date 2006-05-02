@@ -1,5 +1,9 @@
 $Id$
 
+Tue May  2 11:01:53 CEST 2006 <kooiker@cwi.nl>
+ * graph-painter.idef.src:
+   - Add boolean that indicates if panel can be closed
+
 Wed Apr 26 12:01:21 CEST 2006 <kooiker@cwi.nl>
  * src/**/GraphPanel.java:
    - Updating graph clears old one (closes #580)

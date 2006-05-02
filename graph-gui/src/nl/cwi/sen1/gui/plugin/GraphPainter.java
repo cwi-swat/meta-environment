@@ -27,6 +27,7 @@ import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
 import nl.cwi.sen1.util.StudioPopupMenu;
 import aterm.ATerm;
+import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
@@ -68,6 +69,24 @@ public class GraphPainter extends DefaultStudioPlugin implements
         studio.connect(getName(), bridge);
     }
 
+    public void displayGraph(String id, ATerm graphTerm, ATerm closable) {
+        ATermFactory factory = studio.getATermFactory();
+        boolean close = true;
+
+        if (closable.equals(factory.make("false"))) {
+            close = false;
+        }
+
+        GraphPanel panel = getPanel(id);
+        if (panel == null) {
+            panel = createPanel(id);
+        }
+
+        Graph graph = graphFactory.GraphFromTerm(graphTerm);
+        panel.setGraph(new GraphAdapter(graph));
+        panel.setClosable(close);
+    }
+
     public void displayGraph(String id, ATerm graphTerm) {
         GraphPanel panel = getPanel(id);
         if (panel == null) {
@@ -83,9 +102,12 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
         if (panel == null) {
             panel = new GraphPanel(graphId, preferences);
+            final GraphPanel graphPanel = panel;
             StudioComponent comp = new StudioComponentImpl(graphId, panel) {
                 public void requestClose() throws CloseAbortedException {
-                    throw new CloseAbortedException();
+                    if (!graphPanel.isClosable()) {
+                        throw new CloseAbortedException();
+                    }
                 }
             };
 
@@ -196,19 +218,19 @@ public class GraphPainter extends DefaultStudioPlugin implements
 
         menu.add(new JSeparator());
 
-//        item = new JCheckBoxMenuItem("Show force panel");
-//        item.addActionListener(new AbstractAction() {
-//            public void actionPerformed(ActionEvent e) {
-//                JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-//                if (item.isSelected()) {
-//                    showForcePanel(panel.getId(), true);
-//                } else {
-//                    showForcePanel(panel.getId(), false);
-//                }
-//            }
-//        });
-//        item.setSelected(false);
-//        menu.add(item);
+        // item = new JCheckBoxMenuItem("Show force panel");
+        // item.addActionListener(new AbstractAction() {
+        // public void actionPerformed(ActionEvent e) {
+        // JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+        // if (item.isSelected()) {
+        // showForcePanel(panel.getId(), true);
+        // } else {
+        // showForcePanel(panel.getId(), false);
+        // }
+        // }
+        // });
+        // item.setSelected(false);
+        // menu.add(item);
 
         return menu;
     }
@@ -216,9 +238,10 @@ public class GraphPainter extends DefaultStudioPlugin implements
     protected void showForcePanel(String id, boolean show) {
         if (show) {
             GraphPanel graphPanel = graphs.get(id);
-            GraphForcePanel forcePanel = new GraphForcePanel(graphPanel.getForceSimulator(), preferences);
-            StudioComponent comp = new StudioComponentImpl("Forces for "
-                    + id, forcePanel);
+            GraphForcePanel forcePanel = new GraphForcePanel(graphPanel
+                    .getForceSimulator(), preferences);
+            StudioComponent comp = new StudioComponentImpl("Forces for " + id,
+                    forcePanel);
             ((StudioWithPredefinedLayout) studio).addComponent(comp,
                     StudioImplWithPredefinedLayout.BOTTOM_LEFT);
             forcePanels.put(id, comp);

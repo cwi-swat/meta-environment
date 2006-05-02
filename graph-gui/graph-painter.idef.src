@@ -6,6 +6,7 @@ tool graph-painter is { }
 process GraphPainter is
 let
   T: graph-painter,
+  Closable: bool,
   Graph: term,
   GraphId: str,
   Menu: term,
@@ -17,6 +18,9 @@ in
   (
     rec-msg(gp-display-graph(GraphId?, Graph?))
     . snd-do(T, display-graph(GraphId, Graph))
+  +
+    rec-msg(gp-display-graph(GraphId?, Graph?, Closable?))
+    . snd-do(T, display-graph(GraphId, Graph, Closable))
   +
     rec-msg(gp-render-graph(GraphId?, Graph?))
     . snd-eval(T, size-graph(GraphId, Graph))

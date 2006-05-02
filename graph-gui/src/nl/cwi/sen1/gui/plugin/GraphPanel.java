@@ -66,8 +66,19 @@ public class GraphPanel extends JPanel {
 
     private ForceSimulator forceSimulator;
 
+    private Boolean closable;
+    
+    public void setClosable(Boolean closable) {
+        this.closable = closable;
+    }
+    
+    public Boolean isClosable() {
+        return closable;
+    }
+    
     public GraphPanel(String id, final Preferences prefs) {
         this.id = id;
+        this.closable = true;
         setLayout(new BorderLayout());
 
         vis = new Visualization();
