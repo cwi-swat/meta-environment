@@ -156,7 +156,10 @@ static PT_Tree reduce(PT_Tree trm, int depth)
   }
 
   if (hasProductionCompleteAttribute(top_ofs)) {
-    RWaddError("complete function not reduced:", PT_yieldProduction(top_ofs));
+    RWaddLocatedError("complete function not reduced:", 
+		      term_prefix(trm),
+		      PT_getTreeLocation(trm)
+		      );
     return FAIL;
   }
   return trm;
