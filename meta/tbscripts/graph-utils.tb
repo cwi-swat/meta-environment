@@ -40,7 +40,7 @@ in
     . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
     . snd-msg(nav-set-modules(ImportGraph))
     . RenderGraph("import-graph", ImportGraph?)
-    . snd-msg(gp-display-graph("import-graph", ImportGraph))
+    . snd-msg(gp-display-graph("import-graph", ImportGraph, false))
   )
   *
   delta

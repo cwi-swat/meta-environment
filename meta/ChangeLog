@@ -1,5 +1,9 @@
 # $Id$
 
+Tue May  2 11:02:54 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/graph-utils.tb:
+   - Import Graph is non closable, others are
+
 Thu Apr 20 11:57:15 CEST 2006 <kooiker@cwi.nl>
  * config/*:
    - Add plugin configuration tool that generates a toolbusscript using an
