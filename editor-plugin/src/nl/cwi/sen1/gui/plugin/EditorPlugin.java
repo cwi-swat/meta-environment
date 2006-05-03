@@ -217,6 +217,27 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         });
 
         items = factory.makeItemList(factory.makeItem_Label("File"), factory
+                .makeItem_Label("Refresh"));
+
+        event = factory.makeEvent_Menu(items);
+
+        studio.addComponentMenu(comp, event, new AbstractAction() {
+            Editor editor = editors.get(editorId.toString());
+
+            public void actionPerformed(ActionEvent e) {
+                editor.rereadContents();
+                editor.setModified(false);
+                ATerm event = studio.getATermFactory().make(
+                        "contents-saved(<term>)", editorId);
+                bridge.postEvent(event);
+                if (comp.getName().endsWith("*")) {
+                    comp.setName(comp.getName().substring(0,
+                            comp.getName().length() - 1));
+                }
+            }
+        });
+
+        items = factory.makeItemList(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Close"));
 
         shortcut = factory.makeShortCut_Shortcut(

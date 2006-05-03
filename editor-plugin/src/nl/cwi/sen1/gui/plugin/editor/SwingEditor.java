@@ -26,7 +26,8 @@ public class SwingEditor extends JPanel implements Editor {
 
     private EditorPane editorPane;
 
-    public SwingEditor(String id, String filename) throws IOException, FileToBigException {
+    public SwingEditor(String id, String filename) throws IOException,
+            FileToBigException {
         this.id = id;
         this.filename = filename;
 
@@ -44,26 +45,30 @@ public class SwingEditor extends JPanel implements Editor {
     public void rereadContents() {
         try {
             readFileContents(filename);
+            ((EditorKit) editorPane.getEditorKit()).getUndoManager()
+                    .discardAllEdits();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (FileToBigException e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
-    private void readFileContents(String filename) throws IOException, FileToBigException {
-          editorPane.setText(readContents(filename));
+    private void readFileContents(String filename) throws IOException,
+            FileToBigException {
+        editorPane.setText(readContents(filename));
     }
 
-    private String readContents(String filename) throws IOException, FileToBigException {
+    private String readContents(String filename) throws IOException,
+            FileToBigException {
         try {
             FileInputStream fis = new FileInputStream(filename);
             int x = fis.available();
-            
-            if (x > 1024*1024 /* 1 Mbyte */) {
-            	throw new FileToBigException(filename);
+
+            if (x > 1024 * 1024 /* 1 Mbyte */) {
+                throw new FileToBigException(filename);
             }
-            
+
             byte b[] = new byte[x];
             fis.read(b);
             String content = new String(b);
@@ -84,13 +89,13 @@ public class SwingEditor extends JPanel implements Editor {
     }
 
     public void writeCopy(String filename) throws IOException {
-    	String text = editorPane.getText();
-    	
-    	FileOutputStream fos;
-    	fos = new FileOutputStream(filename);
-    	fos.write(text.getBytes());
+        String text = editorPane.getText();
+
+        FileOutputStream fos;
+        fos = new FileOutputStream(filename);
+        fos.write(text.getBytes());
     }
-    
+
     public void setCursorAtOffset(int offset) {
         try {
             editorPane.setCaretPosition(offset);
@@ -126,12 +131,12 @@ public class SwingEditor extends JPanel implements Editor {
     }
 
     public void registerSlices(ATerm slices) {
-    	if (((ATermList) slices).getLength() < 10000) {
-    		SliceRegistrar.registerSlices(editorPane, (ATermList) slices);	
-    	}
-    	else {
-    		System.err.println("Ignoring syntax highlighting for safety (too big)");
-    	}
+        if (((ATermList) slices).getLength() < 10000) {
+            SliceRegistrar.registerSlices(editorPane, (ATermList) slices);
+        } else {
+            System.err
+                    .println("Ignoring syntax highlighting for safety (too big)");
+        }
     }
 
     public int getMouseOffset(int x, int y) {

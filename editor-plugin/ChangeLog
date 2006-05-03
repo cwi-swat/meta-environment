@@ -1,5 +1,11 @@
 # $Id$
 
+Wed May  3 09:26:47 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add |File|->|Refresh| menuaction that reloads the file from disk
+ * src/**/EditorKit.java:
+   - Add getter method for the UndoManager
+
 Tue May  2 11:59:49 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPane.java:
    - return error when find is called with string of length 0

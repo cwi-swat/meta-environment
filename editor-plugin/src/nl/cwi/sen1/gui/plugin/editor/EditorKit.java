@@ -65,6 +65,10 @@ public class EditorKit extends StyledEditorKit {
         createActions();
     }
 
+    public UndoManager getUndoManager() {
+        return undoManager;
+    }
+    
     public UndoableEditListener getUndoListener() {
         return undoListener;
     }
