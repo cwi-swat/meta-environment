@@ -1,5 +1,8 @@
 $Id$
 
+Wed May  3 14:02:25 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 3.16
+
 Thu Apr 13 16:35:17 CEST 2006 <jurgenv@cwi.nl>
  * libsglr/parser.c: removed ambiguity tracking from sglr. This
    is very expensive, and makes the whole error handling thing
