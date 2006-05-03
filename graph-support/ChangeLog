@@ -1,5 +1,8 @@
 $Id$
 
+Wed May  3 14:54:21 CEST 2006 <jurgenv@cwi.nl>
+ * removed version number from jar file
+
 Wed May  3 13:55:13 CEST 2006 <jurgenv@cwi.nl>
  * Bumped to 1.0
 

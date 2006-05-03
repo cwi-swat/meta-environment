@@ -5,11 +5,11 @@ include_HEADERS = Graph.h Graph_dict.h
 noinst_HEADERS = Graph.h Graph_dict.h
 pkgdata_DATA = Graph.adt ${JARFILE}
 
-EXTRA_DIST = Graph.adt graph-${VERSION}.jar
+EXTRA_DIST = Graph.adt graph.jar
 
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 
-JARFILE = ${top_srcdir}/lib/graph-${VERSION}.jar
+JARFILE = ${top_srcdir}/lib/graph.jar
 INCLUDES = -I${ATERM}/include 
 
 if MAINTAINER_MODE
@@ -23,4 +23,5 @@ java-api: Graph.adt
 		--name graph \
 		--import 'aterm.*' \
 		--version ${VERSION}
+	mv graph-${VERSION}.jar graph.jar
 endif
