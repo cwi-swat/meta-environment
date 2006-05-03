@@ -1,5 +1,8 @@
 # $Id$
 
+Wed May  3 13:44:09 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 1.5
+
 Mon Aug 15 15:08:29 CEST 2005 <jong@cwi.nl>
  * configure.in:
    - add libtool support
@@ -10,7 +13,7 @@ Mon Feb  7 16:38:15 CET 2005 <jurgenv@cwi.nl>
    AsFix trees.
 
 Thu Jan 27 11:35:06 CET 2005 <jurgenv@cwi.nl>
- * Bumped to 1.4
+ * Bumped to 1.4.3
 
 Wed Jan 26 11:10:55 CET 2005 <jurgenv@cwi.nl>
  * YES! Threw away subs-eqs tool because Apigen now supports enough
