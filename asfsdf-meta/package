@@ -16,12 +16,12 @@ configuration interface
 
 requires
 
-sdf-meta 1.0
+sdf-meta 0.0
 
-meta 2.0
+meta 0.0
 
-asf 1.9
+asf 0.0
 
-toolbus 1.3.2
+toolbus 0.0
 
-asf-library 2.0
+asf-library 0.0
