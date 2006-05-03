@@ -1,7 +1,10 @@
 package toolbus.tool.classic;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -41,6 +44,8 @@ public class ClassicToolShield extends ToolShield {
 	private Selector selector;
 
 	private SelectionKey clientKey;
+	
+	private Process runningProcess;
 
 	private ToolDefinition toolDef;
 
@@ -90,7 +95,12 @@ public class ClassicToolShield extends ToolShield {
 		System.err.println("executeTool: " + cmd);
 
 		try {
-			Runtime.getRuntime().exec(cmd);
+			ProcessBuilder PB = new ProcessBuilder(cmd.split(" "));
+			PB.redirectErrorStream(true);
+			
+			runningProcess = PB.start();
+			new StreamGobbler(runningProcess.getInputStream(), "[" + toolname + "]").start();
+			//Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			throw new ToolBusError(("while starting tool " + toolname + ": " + e.getMessage()));
 		}
@@ -104,6 +114,7 @@ public class ClassicToolShield extends ToolShield {
 			client.configureBlocking(false);
 			client.socket().setTcpNoDelay(true);
 			clientKey = client.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
+	
 			info("checking input signature...");
 			toolStatus = sendingSignature;
 			checkToolSignature();
@@ -216,7 +227,7 @@ public class ClassicToolShield extends ToolShield {
 			System.out.print("toolshield " + toolname + " writes term:\n");
 			//System.out.print(new String(ls));
 			String s = term.toString();
-			for (int i = 0; i < s.length() && i < 100; i++) {
+			for (int i = 0; i < s.length() && i < 150; i++) {
 				if (s.charAt(i) != 0) {
 					System.out.print(s.charAt(i));
 				}
@@ -296,7 +307,7 @@ public class ClassicToolShield extends ToolShield {
 
 			while (index != LENSPEC) {
 				int bytes_read = client.read(receiveTermLengthSpec);  //TODO: hier zit ook een wachtloop!
-				info(bytes_read + " bytes read");
+				info(bytes_read + " bytes read (lenspec)");
 				if (bytes_read == -1) {
 					//return null
 					throw new IOException("Tool connection terminated (1)");
@@ -327,7 +338,7 @@ public class ClassicToolShield extends ToolShield {
 			receiveTermIndex = 0;
 		}
 		int bytes_read = client.read(receiveTermData);
-		info("bytes_read = " + bytes_read);
+		info("bytes_read (data) = " + bytes_read);
 		if (bytes_read == -1) {
 			throw new IOException("Tool connection terminated (2)");
 		}
@@ -338,6 +349,7 @@ public class ClassicToolShield extends ToolShield {
 		}
 		receiveTermData.flip();
 		ATerm result = tbfactory.readFromByteBuffer(receiveTermData);
+		info("receiveTerm: result = " + result);
 		receiveTermBytesLeft = 0;
 		toolbus.settoolActionCompleted();
 		if(isConnected()){
@@ -351,3 +363,31 @@ public class ClassicToolShield extends ToolShield {
 		}
 	}
 }
+
+class StreamGobbler extends Thread
+{
+    InputStream is;
+    String type;
+    
+    StreamGobbler(InputStream is, String type)
+    {
+        this.is = is;
+        this.type = type;
+    }
+    
+    public void run()
+    {
+        try
+        {
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line=null;
+            while ( (line = br.readLine()) != null)
+                System.out.println(type + ">>> " + line);    
+            } catch (IOException ioe)
+              {
+                ioe.printStackTrace();  
+              }
+    }
+}
+

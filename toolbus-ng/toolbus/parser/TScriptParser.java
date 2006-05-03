@@ -143,7 +143,7 @@ protected static void defineBuilders() {
     		  if(replacement.charAt(0) != '"'){
     			  replacement = '"' + replacement + '"';
     		  }
-    	   	  System.err.println(args[0] + " => " + replacement);
+    	   	  System.err.println(processName + ": " + args[0] + " => " + replacement);
     		  return tbfactory.make(replacement);
     	  } else {
     		  return tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none"));
@@ -502,10 +502,10 @@ protected static void defineBuilders() {
         public Object build(Object args[], ATerm posInfo) {
         	String filename = ((ATermAppl) args[0]).getName();
         	filename = filename.substring(1,filename.length()-1); // strip < and >
+        	System.err.println("Building object for Include " + filename);
           return new Include(filename, posInfo);
         }
       });
-      
   }
 
   /**
@@ -641,17 +641,18 @@ public class TScriptParser {
 					} else if (((ATermAppl) decl).getName() == "ttt-Define1") {
 						handleDefine(filename, (ATermAppl) decl, 1);
 					} else if (((ATermAppl) decl).getName() == "ttt-Include"){
-						System.err.println("case ttt-Include");
+						System.err.println(filename + "; case ttt-Include");
 						handleInclude(filename, (ATermAppl) decl);
 					} else {
 
 						Object def = TScriptNodeBuilders.build((ATerm) decl);
-						System.err.println("def = " + def.getClass().getCanonicalName());
+						//System.err.println(filename + "; def = " + def.getClass().getCanonicalName());
 
 						if (def instanceof ProcessDefinition) {
 							String processName = ((ProcessDefinition) def)
 									.getName();
 							TScriptNodeBuilders.processName = processName;
+							System.err.println(filename + "; ProcessDefinition for " + processName);
 							// We have already parsed def as a ProcessDefinition
 							// and extracted its process name,
 							// next we parse it again! so that we qualify all
@@ -701,6 +702,8 @@ public class TScriptParser {
 		ATermList decls = (ATermList) decl.getArgument(1);
 		if (toolbus.get(var) != null) {
 			handleDeclarations(filename, decls);
+		} else {
+			System.err.println(filename + ": skipping declarations after ifdef");
 		}
 	}
   
@@ -709,14 +712,16 @@ public class TScriptParser {
 	  ATermList decls = (ATermList) decl.getArgument(1);
 	  if(toolbus.get(var) == null){
 		  handleDeclarations(filename, decls);
+	  } else {
+		System.err.println(filename + ": skipping declarations after ifndef");
 	  }
-  }
+	}
   
   public void handleInclude(String Filename, ATermAppl decl) throws ToolBusException {
 	  
 	  String incFilename = stripQuotes(decl.getArgument(0).removeAnnotations());
   	  incFilename = incFilename.substring(1,incFilename.length()-1); // strip < and >
-	  
+	  System.err.println(Filename + " includes " + incFilename);
 	  doParseInclude(incFilename);
   }
   

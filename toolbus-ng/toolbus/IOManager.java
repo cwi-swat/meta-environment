@@ -1,6 +1,9 @@
 package toolbus;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -108,11 +111,34 @@ public class IOManager {
 				} else if (key.isReadable()) {
 					info("case readable");
 					client = (SocketChannel) key.channel();
-					ClassicToolShield ts = (ClassicToolShield) key.attachment();
-					ATerm term = ts.receiveTerm();
-					if (term != null) {
-						info("TERM READ: " + term);
-						ts.sndTermFromToolToToolBus(term);
+					if(key.attachment() instanceof  ClassicToolShield){
+						ClassicToolShield ts = (ClassicToolShield) key.attachment();
+						ATerm term = ts.receiveTerm();
+						if (term != null) {
+							info("TERM READ: " + term);
+							ts.sndTermFromToolToToolBus(term);
+						}
+				/*	} else if(key.attachment() instanceof InputStream){	
+						info("case InputStream");
+						InputStream is = (InputStream) key.attachment();
+						if(is.available() > 0){
+							InputStreamReader isr = new InputStreamReader(is);
+				            //BufferedReader br = new BufferedReader(isr);
+				           // String line = null;
+				            // while ( (line = br.readLine()) != null)
+				            //     System.out.println(">>> " + line); 
+							char[]  cbuf  = new char[100];
+							int n;
+							while((n = isr.read(cbuf)) > 0){
+								info(n + " bytes read");
+								for(int j = 0; j < n; j++)
+									System.out.print(cbuf[j]);
+							}
+						}
+                        info("seen all output"); */
+					} else {
+						System.err
+						.println("Unrecognized attachment in key: " + key.attachment());
 					}
 				} else if (key.isWritable()) {
 					info("case writable");
