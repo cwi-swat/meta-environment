@@ -13,4 +13,4 @@ configuration interface
 
 requires
 
-   sdf-library 1.0
+   sdf-library 0.0
