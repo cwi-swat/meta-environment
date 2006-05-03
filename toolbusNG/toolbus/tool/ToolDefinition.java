@@ -99,7 +99,7 @@ public class ToolDefinition {
 	}
 	
 	private boolean usesJavaAdapter(){
-		if(command.matches(".*java-adapter.*")){
+		if(command != null && command.matches(".*java-adapter.*")){
 			String[] words = command.split("[ \t\n\r]+");
 			for(int i = 0; i < words.length; i++){
 				String word = words[i];
