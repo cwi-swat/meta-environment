@@ -1,5 +1,8 @@
 $Id$
 
+Wed May  3 13:45:50 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 2.0
+
 Tue Apr 25 16:39:22 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/debug.c: fixed small bug in TIDE interface
    concerning lookup of variables.
