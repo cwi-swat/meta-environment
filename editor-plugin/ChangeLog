@@ -2,7 +2,8 @@
 
 Wed May  3 09:26:47 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
-   - Add |File|->|Refresh| menuaction that reloads the file from disk
+   - Add |File|->|Refresh| menuaction that reloads the file from disk 
+     (closes #593)
  * src/**/EditorKit.java:
    - Add getter method for the UndoManager
 
