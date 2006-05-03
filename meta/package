@@ -16,46 +16,46 @@ configuration interface
 
 requires
 
-meta-studio 1.0
+meta-studio 0.0
 
-error-support 1.3
+error-support 0.0
 
-error-gui 1.0
+error-gui 0.0
 
-editor-plugin 1.0
+editor-plugin 0.0
 
-sglr 3.14
+sglr 0.0
 
-pandora 1.1
+pandora 0.0
 
-pt-support 2.0
+pt-support 0.0
 
-graph-support 0.2
+graph-support 0.0
 
-tide 1.1
+tide 0.0
 
-tide-support 1.1
+tide-support 0.0
 
-config-manager 1.0
+config-manager 0.0
 
-module-manager 1.0
+module-manager 0.0
 
-editor-manager 1.0
+editor-manager 0.0
 
-graph-gui 1.0
+graph-gui 0.0
 
-progress-gui 1.0
+progress-gui 0.0
 
-dialog-gui 1.0
+dialog-gui 0.0
 
-module-details-gui 1.0
+module-details-gui 0.0
 
-navigator-gui 1.0
+navigator-gui 0.0
 
-term-store 1.0
+term-store 0.0
 
-io-support 1.0
+io-support 0.0
 
-structure-editor 1.0
+structure-editor 0.0
 
-aterm-java 1.6
+aterm-java 0.0
