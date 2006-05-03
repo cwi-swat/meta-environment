@@ -1,5 +1,8 @@
 $Id$
 
+Wed May  3 14:00:05 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped to 2.4
+
 Sat Apr 22 19:12:02 CEST 2006 <jurgenv@cwi.nl>
  * src/Sdf2-Normalization.c: And yes indeed, see previous logmessage, there was 
    a mistake in the last bugfix and I should have seen this from the
