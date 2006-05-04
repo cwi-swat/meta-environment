@@ -2,7 +2,6 @@ package toolbus.parser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -88,13 +87,13 @@ class TScriptNodeBuilders {
   private static Hashtable<String,NodeBuilder> Builders;
   private static TBTermFactory tbfactory;
   private static ToolBus toolbus;
-  private static TScriptParser tsparser;
+  //private static TScriptParser tsparser;
   protected static String processName = "";
  // private static HashMap<String,ATerm> definedConstants;
 
   public static void init(TBTermFactory tbfac, TScriptParser tp, ToolBus tb) {
     tbfactory = tbfac;
-    tsparser = tp;
+    //tsparser = tp;
     Builders = new Hashtable<String,NodeBuilder>();
     toolbus = tb;
     defineBuilders();
@@ -140,14 +139,13 @@ protected static void defineBuilders() {
     	  String replacement = toolbus.get(args[0].toString());
  
     	  if(replacement != null){
-    		  if(replacement.charAt(0) != '"'){
+    		  if(replacement.length() == 0 || replacement.charAt(0) != '"'){
     			  replacement = '"' + replacement + '"';
     		  }
     	   	  System.err.println(processName + ": " + args[0] + " => " + replacement);
     		  return tbfactory.make(replacement);
-    	  } else {
-    		  return tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none"));
     	  }
+    	  return tbfactory.mkVar((ATerm) args[0], processName, tbfactory.make("none"));
       }
     });
 
@@ -308,11 +306,10 @@ protected static void defineBuilders() {
       public Object build(Object args[], ATerm posInfo) {
         if (args.length == 1) {
           return new RecMsg((ATerm) args[0], tbfactory, posInfo);
-        } else {
-           	System.err.println("ttt-RecMsg: too many arguments");
-           	return null;
-          //return new RecMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
         }
+        System.err.println("ttt-RecMsg: too many arguments");
+        return null;
+        //return new RecMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
       }
     });
 
@@ -320,11 +317,10 @@ protected static void defineBuilders() {
       public Object build(Object args[], ATerm posInfo) {
         if (args.length == 1) {
           return new SndMsg((ATerm) args[0], tbfactory, posInfo);
-        } else {
-        	System.err.println("ttt-SndMsg: too many arguments");
-        	return null;
-          //return new SndMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
         }
+        System.err.println("ttt-SndMsg: too many arguments");
+        return null;
+        //return new SndMsg((ATerm) args[0], (ATerm) args[1], tbfactory);
       }
     });
     
@@ -542,22 +538,21 @@ protected static void defineBuilders() {
 					}
 					AFun afun = tbfactory.makeAFun(name, 0, isquoted);
 					return tbfactory.makeAppl(afun);
-				} else { 
-					AFun afun = tbfactory.makeAFun(name, argslength, false);
-					ATerm vargs[] = new ATerm[argslength];
-					for (int i = 0; i < argslength; i++) {
-						vargs[i] = (ATerm) build(args[i]);
-					}
-					return tbfactory.makeAppl(afun, vargs);
 				}
-			} else {
-				Object[] oargs = new Object[argslength];
-
-				for (int i = 0; i < argslength; i++)
-					oargs[i] = build(args[i]);
-				Object res = nd.build(oargs, posInfo);
-				return res;
+				AFun afun = tbfactory.makeAFun(name, argslength, false);
+				ATerm vargs[] = new ATerm[argslength];
+				for (int i = 0; i < argslength; i++) {
+					vargs[i] = (ATerm) build(args[i]);
+				}
+				return tbfactory.makeAppl(afun, vargs);
 			}
+			Object[] oargs = new Object[argslength];
+
+			for (int i = 0; i < argslength; i++)
+				oargs[i] = build(args[i]);
+			Object res = nd.build(oargs, posInfo);
+			return res;
+			
 
 		case ATerm.LIST:
 			ATermList lst1 = (ATermList) t;
@@ -753,16 +748,20 @@ public class TScriptParser {
 	if(calls.size() == 0){
 		throw new ToolBusError("Initial configuration of ToolBus processes is missing");
 	}
+
+	String allCalls = "";
     for (ATerm acall : calls){
     	String pname = "";
     	try {
     		pname = "<unknown>";
     		ProcessCall call = (ProcessCall) TScriptNodeBuilders.build(acall);
+    		allCalls += call + "\n";
     		pname = call.getName();
     		toolbus.addProcess(call);
     	} catch (ToolBusException e){
     		toolbus.error("process " + pname, e.getMessage());
     	}
       }
+	System.err.println("=======\nInitial ToolBus configuration:" + allCalls + "=======\n"); 
   }
 }

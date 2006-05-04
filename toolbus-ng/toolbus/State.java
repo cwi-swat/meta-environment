@@ -147,6 +147,7 @@ public class State {
   }
   
   public void activate(){
+	System.err.println("State.activate: " + this);
   	for (StateElement e : elements){
   		e.activate();
   	}

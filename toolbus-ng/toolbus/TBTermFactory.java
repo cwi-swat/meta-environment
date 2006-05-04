@@ -208,16 +208,16 @@ public class TBTermFactory extends PureFactory {
 		if (!lst.isEmpty()) {
 			return lst.elementAt(0);
 		}
-		throw new ToolBusError("function first cannot be applied to  empty list");
+		return Undefined;
+		//throw new ToolBusError("function first cannot be applied to  empty list");
 	}
 
 	public ATerm next(ATerm l) {
 		ATermList lst = (ATermList) l;
 		if (lst.isEmpty()) {
 			return lst;
-		} else {
-			return lst.getNext();
 		}
+		return lst.getNext();
 	}
 
 	public boolean member(ATerm e, ATerm l) {

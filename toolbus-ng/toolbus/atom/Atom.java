@@ -313,7 +313,9 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   
   public State getNextState(StateElement b){
   	if(this.equals(b)){
-  		return getFollow();
+  		State s = getFollow();
+  		s.activate();
+  		return s;
   	}
   	System.err.println("Atom.getNextState2: wrong arg: " + b);  //TODO exception
   	return null;
@@ -335,6 +337,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	incr(size_used_env, collected.getLength());
   	
   	//System.err.println("used_vars = " + collected);
+  	System.err.println("Atom.activate: " + this);
   	
   }
 
