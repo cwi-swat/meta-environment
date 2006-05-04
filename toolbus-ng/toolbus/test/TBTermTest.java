@@ -140,6 +140,15 @@ public class TBTermTest extends TestCase {
     
     assertTrue(!doMatch("<list(int,str,real)>", "[1,\"two\",3]"));
     assertTrue(!doMatch("[1,\"two\",3]", "<list(int,str,real)>"));
+    
+    assertTrue(doMatch("<list>", "[1,\"two\",3]"));
+    assertTrue(doMatch("[1,\"two\",3]", "<list>"));
+ 
+    assertTrue(!doMatch("<list>", "two"));
+    assertTrue(!doMatch("one", "<list>"));
+    
+    assertTrue(!doMatch("<list>", "\"two\""));
+    assertTrue(!doMatch("\"two\"", "<list>"));
   }
   
   boolean doMatch(String s1, Environment e1, String s2, Environment e2) {

@@ -165,6 +165,7 @@ public class State {
 
       if (a.execute()) {
       	lastElement = index;
+      	System.err.println("State.execute: " + a);
 
         return true;
       }

@@ -179,8 +179,8 @@ public class TBTermFactory extends PureFactory {
 		if (isAppl(t)) {
 			return (((ATermAppl) t).isQuoted())
 					&& ((ATermAppl) t).getArity() == 0;
-		} else
-			return false;
+		}
+		return false;
 	}
 
 	public boolean isReal(ATerm t) {
@@ -207,9 +207,8 @@ public class TBTermFactory extends PureFactory {
 		ATermList lst = (ATermList) l;
 		if (!lst.isEmpty()) {
 			return lst.elementAt(0);
-		} else {
-			throw new ToolBusError("function first cannot be applied to  empty list");
 		}
+		throw new ToolBusError("function first cannot be applied to  empty list");
 	}
 
 	public ATerm next(ATerm l) {
@@ -236,10 +235,10 @@ public class TBTermFactory extends PureFactory {
 		int length1 = lst1.getLength();
 		for (int i = 0; i < length1; i++) {
 			ATerm e = lst1.elementAt(i);
-			if (!member(e, l2))
+			if (!member(e, l2)){
 				return false;
-			else
-				l2 = delete(l2, e);
+			}
+			l2 = delete(l2, e);
 		}
 		return true;
 	}
@@ -467,14 +466,12 @@ public class TBTermFactory extends PureFactory {
 		case VAR:
 			if(member(t,collected)){
 				return collected;
-			} else {
-				return makeList((TBTermVar) t, collected);
 			}
+			return makeList((TBTermVar) t, collected);
 			
 		case ATerm.APPL:
 			ATermAppl apt = (ATermAppl) t;
 
-			AFun afun = apt.getAFun();
 			ATerm args[] = apt.getArgumentArray();
 			int nargs = args.length;
 			if (nargs == 0)
@@ -486,7 +483,6 @@ public class TBTermFactory extends PureFactory {
 
 		case ATerm.LIST:
 
-			ATermList lst = EmptyList;
 			ATermList tlst = (ATermList) t;
 			for (int i = tlst.getLength() - 1; i >= 0; i--) {
 				collected = (ATermList)join(collected, getVariables(tlst.elementAt(i), collected));
@@ -534,10 +530,10 @@ public class TBTermFactory extends PureFactory {
 			ATerm args[] = apt.getArgumentArray();
 			int nargs = args.length;
 			if (nargs == 0) {
-				if (fun.isQuoted())
+				if (fun.isQuoted()){
 					return StrPlaceholder;
-				else
-					return apt;
+				}
+				return apt;
 			}
 			//if (!recurring)
 			//   return makePlaceholder(apt);
@@ -632,8 +628,8 @@ public class TBTermFactory extends PureFactory {
 
 	public boolean match(ATerm ta, Environment enva, ATerm tb, Environment envb)
 			throws ToolBusException {
-		// System.err.println("match: ta = " + ta + " ; " + "enva = " + enva);
-		// System.err.println(" tb = " + ta + " ; " + "envb = " + envb);
+		//System.err.println("match: ta = " + ta + " ; " + "enva = " + enva);
+		//System.err.println(" tb = " + tb + " ; " + "envb = " + envb);
 
 		mr.reset(enva, envb);
 		TBTermFactory.enva = enva;
@@ -651,11 +647,12 @@ public class TBTermFactory extends PureFactory {
 		if (performMatch(ta, tb)){
 //			nTrueMatches++;
 			mr.updateEnvs();
+//			System.err.println("return true");
 			return true;
-		} else {
-//			nFalseMatches++;
-			return false;
 		}
+//		nFalseMatches++;
+//		System.err.println("return false");
+		return false;
 	}
 	
 	public boolean mightMatch(ATerm ta, ATerm tb) throws ToolBusException {
@@ -677,11 +674,14 @@ public class TBTermFactory extends PureFactory {
 				if (isResultVar(tb)) {
 					return false;
 				}
-				if (isVar(tb)) {
+				if (isVar(tb)){
 					tb = envb.getValue((TBTermVar) tb);
 				}
-				mr.assignLeft(varta, tb); // TODO check var type!
-				return true;
+				if(Functions.compatibleTypes(varta.getVarType(), tb)){
+					mr.assignLeft(varta, tb);
+					return true;
+				}
+				return false;
 			}
 
 			ta = enva.getValue(varta);
@@ -693,9 +693,12 @@ public class TBTermFactory extends PureFactory {
 					return true;
 				}
 				TBTermVar vartb = (TBTermVar) tb;
-				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta); // TODO check var type!
-					return true;
+				if (vartb.isResultVar()){
+					if(Functions.compatibleTypes(ta, vartb.getVarType())){
+						mr.assignRight(vartb, ta);
+						return true;
+					}
+					return false;
 				}
 				tb = envb.getValue(vartb);
 			}
@@ -711,9 +714,8 @@ public class TBTermFactory extends PureFactory {
 					if(vartb.getVarType() == IntType || vartb.getVarType() == TermType) {
 						mr.assignRight(vartb, ta);
 						return true;
-					} else {
-						return false;
 					}
+					return false;
 				}
 				tb = envb.getValue(vartb);
 			}
@@ -729,9 +731,8 @@ public class TBTermFactory extends PureFactory {
 					if(vartb.getVarType() == RealType || vartb.getVarType() == TermType) {
 						mr.assignRight(vartb, ta);
 						return true;
-					} else {
-						return false;
 					}
+					return false;
 				}
 				tb = envb.getValue(vartb);
 			}
@@ -764,9 +765,8 @@ public class TBTermFactory extends PureFactory {
 			case ATerm.LIST:
 				if(ta == ListPlaceholder){
 					return true;
-				} else {
-					return matchListPlaceholder((ATermList) tb, (ATermPlaceholder)ta, true); 
 				}
+				return matchListPlaceholder((ATermList) tb, (ATermPlaceholder)ta, true); 
 			}
 			return false;
 
@@ -777,8 +777,11 @@ public class TBTermFactory extends PureFactory {
 				}
 				TBTermVar vartb = (TBTermVar) tb;
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta); // TODO check var type!
-					return true;
+					if(Functions.compatibleTypes(ta, vartb.getVarType())){
+						mr.assignRight(vartb, ta);
+						return true;
+					}
+					return false;
 				}
 				tb = envb.getValue(vartb);
 			}
@@ -792,18 +795,17 @@ public class TBTermFactory extends PureFactory {
 			case ATerm.APPL:
 				ATermAppl aptb = (ATermAppl) tb;
 				if ((apta.getArity() != aptb.getArity())
-						|| (apta.getName() != aptb.getName()))
+						|| (apta.getName() != aptb.getName())){
 					return false;
-				else {
-					ATerm a_args[] = apta.getArgumentArray();
-					ATerm b_args[] = aptb.getArgumentArray();
-					int nargs = a_args.length;
-					for (int i = 0; i < nargs; i++) {
-						if (!performMatch(a_args[i], b_args[i]))
-							return false;
-					}
-					return true;
 				}
+				ATerm a_args[] = apta.getArgumentArray();
+				ATerm b_args[] = aptb.getArgumentArray();
+				int nargs = a_args.length;
+				for (int i = 0; i < nargs; i++) {
+					if (!performMatch(a_args[i], b_args[i]))
+						return false;
+				}
+				return true;
 			default:
 					return false;
 			}
@@ -816,8 +818,11 @@ public class TBTermFactory extends PureFactory {
 				TBTermVar vartb = (TBTermVar) tb;
 
 				if (vartb.isResultVar()) {
-					mr.assignRight(vartb, ta); // TODO check var type!
-					return true;
+					if(Functions.compatibleTypes(ta, vartb.getVarType())){
+						mr.assignRight(vartb, ta);
+						return true;
+					}
+					return false;
 				}
 				tb = envb.getValue(vartb);
 			}
@@ -829,17 +834,16 @@ public class TBTermFactory extends PureFactory {
 				
 			case ATerm.LIST:
 				ATermList lstb = (ATermList) tb;
-				if (lsta.getLength() != lstb.getLength())
+				if (lsta.getLength() != lstb.getLength()){
 					return false;
-				else {
-					while (!lsta.isEmpty()) {
-						if (!performMatch(lsta.getFirst(), lstb.getFirst()))
-							return false;
-						lsta = lsta.getNext();
-						lstb = lstb.getNext();
-					}
-					return true;
+				} 
+				while (!lsta.isEmpty()) {
+					if (!performMatch(lsta.getFirst(), lstb.getFirst()))
+						return false;
+					lsta = lsta.getNext();
+					lstb = lstb.getNext();
 				}
+				return true;
 			default:
 					return false;
 			}
@@ -871,23 +875,22 @@ public class TBTermFactory extends PureFactory {
 					ta = ta.getNext();
 				}
 				return true;
-			} else {
-				if(aplPlaceholder.getArity() != ta.getLength()){
+			}
+			if(aplPlaceholder.getArity() != ta.getLength()){
+				return false;
+			}
+			int n = aplPlaceholder.getArity();
+			for(int i = 0; i < n; i++){
+				ATerm elemtype = aplPlaceholder.getArgument(i);
+				ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
+				
+				if(!swapMatch(elemPlaceholder, ta.getFirst(), swapargs)){
 					return false;
 				}
-				int n = aplPlaceholder.getArity();
-				for(int i = 0; i < n; i++){
-					ATerm elemtype = aplPlaceholder.getArgument(i);
-					ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
-					
-					if(!swapMatch(elemPlaceholder, ta.getFirst(), swapargs)){
-						return false;
-					}
 
-					ta = ta.getNext();
-				}
-				return true;
+				ta = ta.getNext();
 			}
+			return true;
 		}
 		return swapMatch(ta, placeholder, swapargs);
 	}
@@ -902,21 +905,21 @@ public class TBTermFactory extends PureFactory {
 			ATermAppl aplPlaceholder = (ATermAppl) placeholder;
 			if(aplPlaceholder.getArity() == 0){
 				return ta.getName() == aplPlaceholder.getName();
-			} else {
-				if(aplPlaceholder.getArity() != ta.getArity()){
+			}
+			if(aplPlaceholder.getArity() != ta.getArity()){
+				return false;
+			}
+			int n = aplPlaceholder.getArity();
+			for(int i = 0; i < n; i++){
+				ATerm elemtype = aplPlaceholder.getArgument(i);
+				ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
+				
+				if(!swapMatch(elemPlaceholder, ta.getArgument(i), swapargs)){
 					return false;
 				}
-				int n = aplPlaceholder.getArity();
-				for(int i = 0; i < n; i++){
-					ATerm elemtype = aplPlaceholder.getArgument(i);
-					ATermPlaceholder elemPlaceholder = makePlaceholder(elemtype);
-					
-					if(!swapMatch(elemPlaceholder, ta.getArgument(i), swapargs)){
-						return false;
-					}
-				}
-				return true;
 			}
+			return true;
+		
 		}	
 		return swapMatch(ta, placeholder, swapargs);
 	}

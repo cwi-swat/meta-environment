@@ -39,7 +39,7 @@ import aterm.ATermList;
 
 public class ToolBus {
 
-	private static final boolean verbose = false;
+	private static final boolean verbose = true;
 
 	private static Random rand = new Random();
 	
