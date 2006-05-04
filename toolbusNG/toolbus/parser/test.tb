@@ -1,11 +1,22 @@
-#include </home/paulk/.eclipse/toolbusNG/toolbus/parser/I1.tb>
+process GUI is
+let
+  ClassPath: str,
+  URLs: list,
+  JarName: str,
+  ClassName: str
+in
+  (
+    rec-msg(load-jar(JarName?))
+    . printf("1: load-jar(%s)", JarName)
+  +
+    rec-msg(load-jar(JarName?, ClassPath?))
+    . printf("2: load-jar2(%s, %s)", JarName, ClassPath)
+  +
+    rec-msg(load-jar(JarName?, URLs?))
+    . printf("3: load-jar(%s, %t)", JarName, URLs)
+    )
+endlet
 
-#ifndef A
-#define B abc
-#include </home/paulk/.eclipse/toolbusNG/toolbus/parser/I1.tb>
-#include </home/paulk/.eclipse/toolbusNG/toolbus/parser/I2.tb>
-process A is printf(B) . printf(I1) . printf(I2)
-#endif
+process A is snd-msg(load-jar("abc", ["def"]))
 
-
-toolbus(A)
+toolbus(GUI, A)
