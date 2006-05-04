@@ -19,7 +19,7 @@ import aterm.ATermList;
 public class ProcessCall extends ProcessExpression implements StateElement {
 	private String name;
 
-	private TBTermVar nameAsVar;;
+	private TBTermVar nameAsVar;
 
 	protected ATermList actuals;
 
@@ -96,7 +96,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		nameAsVar = tbfactory.mkVar(tbfactory.make(name), calls.peek(), tbfactory.StrType);
 
 		if (env.isDeclaredAsStringVar(nameAsVar)) { // A dynamic call?
-			System.err.println("yes dynamic!");
+			System.err.println("Dynamic call: " + name);
 			isStaticCall = false;
 		} else {
 			compileStaticOrDynamicCall(name);
@@ -133,7 +133,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		//env.removeBindings(formals);
 		calls.pop();	
 		//System.err.println(name + " expanded as:\n" + PE);
-		initializedDynamicCall = true;
+		initializedDynamicCall = false;
 	}
 	
 	private void initDynamicCall() throws ToolBusException {
@@ -142,6 +142,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		compileStaticOrDynamicCall(dname);
 		firstState.setTest(test, testEnv);
 		initializedDynamicCall = true;
+		System.err.println("Dynamic process name " + name + " => " + dynprocessname);
 	}
 
 	public State getFirst() {
@@ -182,7 +183,6 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		} else {
 			this.test = test;
 			this.testEnv =env;
-			
 		}	
 	}
 
@@ -193,17 +193,15 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	public State getNextState() {
 		if (isStaticCall) {
 			return getFirst().getNextState();
-		} else {
-			return firstState.getNextState();
 		}
+		return firstState.getNextState();
 	}
 
 	public State getNextState(StateElement se) {
 		if (isStaticCall) {
 			return getFirst().getNextState(se);
-		} else {
-			return firstState.getNextState(se);
 		}
+		return firstState.getNextState(se);
 	}
 
 	public void addPartners(State s) throws ToolBusException {
@@ -221,6 +219,8 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void activate() {
+		System.err.println("ProcCall.activate: " + this);
+		System.err.println("isStaticCall = " + isStaticCall + "; initializedDynamicCall = " + initializedDynamicCall);
 		if(!isStaticCall && !initializedDynamicCall){
 			try {
 				initDynamicCall();
@@ -234,7 +234,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public boolean execute() throws ToolBusException {
-		//System.err.println("ProcessCall.execute");
+		System.err.println("ProcessCall.execute " + this);
 		return PE.getFirst().execute();
 	}
 }

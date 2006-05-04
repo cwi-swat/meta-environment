@@ -224,15 +224,15 @@ public class ClassicToolShield extends ToolShield {
 		}
 
 		if (verbose) {
-			System.out.print("toolshield " + toolname + " writes term:\n");
+			System.err.print("toolshield " + toolname + " writes term:\n");
 			//System.out.print(new String(ls));
 			String s = term.toString();
 			for (int i = 0; i < s.length() && i < 150; i++) {
 				if (s.charAt(i) != 0) {
-					System.out.print(s.charAt(i));
+					System.err.print(s.charAt(i));
 				}
 			}
-			System.out.println("");
+			System.err.println("");
 		}
 		sendTermLengthSpec.flip();
 		int n = 0;
@@ -383,7 +383,7 @@ class StreamGobbler extends Thread
             BufferedReader br = new BufferedReader(isr);
             String line=null;
             while ( (line = br.readLine()) != null)
-                System.out.println(type + ">>> " + line);    
+                System.err.println(type + ">>> " + line);    
             } catch (IOException ioe)
               {
                 ioe.printStackTrace();  
