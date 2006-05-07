@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import aterm.ATerm;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.environment.Environment;
@@ -53,7 +54,7 @@ public class Alternative extends ProcessExpression {
 	right.replaceFormals(env);
   }
   
-  public State getAtoms() {
+  public AtomSet getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 }

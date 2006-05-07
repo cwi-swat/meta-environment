@@ -8,7 +8,7 @@ import aterm.ATerm;
 /**
  * The interface StateElement captures all operations that can be performed on
  * an element of a State. Recall that all proces expressions are compiled to a
- * finite automaton consisting of of States and transitions.
+ * finite automaton consisting of States and transitions.
  * 
  * The most typical example of a StateElement is an Atom.
  * 
@@ -42,21 +42,22 @@ public interface StateElement {
 	 * Typical examples: partnering SndMsg with RecMsg, and SndNote with
 	 * Subscribe
 	 * 
-	 * @param state
+	 * @param atoms
 	 *            containing the potential partners
 	 * @throws ToolBusException
 	 */
-	public void addPartners(State state) throws ToolBusException;
+	
+	//public void addPartners(AtomSet atoms) throws ToolBusException;
 
 	/**
 	 * Delete partners from this StateElement. This is necessary when processes
 	 * die and partners are no longer available.
 	 * 
-	 * @param state
+	 * @param atoms
 	 *            containing the partners
 	 * @throws ToolBusException
 	 */
-	public void delPartners(State state) throws ToolBusException;
+	//public void delPartners(AtomSet atoms) throws ToolBusException;
 
 	/**
 	 * Is this StateElelement enabled for execution, i.e., are its associated
@@ -66,6 +67,7 @@ public interface StateElement {
 	 * @throws ToolBusException
 	 */
 	public boolean isEnabled() throws ToolBusException;
+	
 
 	/**
 	 * 
@@ -90,7 +92,7 @@ public interface StateElement {
 	/**
 	 * @return the successor State of the StateElement
 	 */
-	public State getNextState();
+	public State gotoNextStateAndActivate();
 
 	/**
 	 * Get the successor of the StateElement for a given other StateElement
@@ -100,5 +102,5 @@ public interface StateElement {
 	 * @param elem
 	 * @return
 	 */
-	public State getNextState(StateElement elem);
+	public State gotoNextStateAndActivate(StateElement elem);
 }

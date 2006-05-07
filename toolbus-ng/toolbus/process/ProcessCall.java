@@ -6,6 +6,7 @@ package toolbus.process;
 
 import java.util.Stack;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -37,9 +38,11 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	private State firstState;
 
-	private boolean initializedDynamicCall = false;
+	private boolean executing = false;
 
 	private boolean isStaticCall = true;
+	
+	private boolean activated = false;
 	
 	private Stack<String> calls;
 	
@@ -77,7 +80,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void computeFirst() {
-		//System.err.println("ProcessCall.computeFirst: " + firstState);
+		System.err.println("ProcessCall.computeFirst: " + firstState);
 		setFirst(firstState);
 	}
 	
@@ -93,6 +96,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		processInstance = P;
 		this.calls = calls;
 		this.follows = follows;
+		setFollow(follows);
 		nameAsVar = tbfactory.mkVar(tbfactory.make(name), calls.peek(), tbfactory.StrType);
 
 		if (env.isDeclaredAsStringVar(nameAsVar)) { // A dynamic call?
@@ -110,14 +114,13 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 		definition = processInstance.getToolBus().getProcessDefinition(name);
 		calls.push(name);
-		//System.err.println("name = " + name);
-		//System.err.println("definition = " + definition);
+		System.err.println("name = " + name);
+		System.err.println("definition = " + definition);
 
 		actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
 		PE = definition.getProcessExpression(actuals);
 		
-		//System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
-		setFollow(follows);
+		System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
 		formals = definition.getFormals();
 		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
@@ -128,12 +131,11 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		//System.err.println("actuals = " + actuals);
 		PE.computeFirst();
 		PE.replaceFormals(env);
-		PE.compile(processInstance, calls, follows);
-		firstState = PE.getFirst(); //getStartState();
+		PE.compile(processInstance, calls, firstState); // follows);
+		//firstState = PE.getFirst(); //getStartState(); <====
 		//env.removeBindings(formals);
 		calls.pop();	
 		//System.err.println(name + " expanded as:\n" + PE);
-		initializedDynamicCall = false;
 	}
 	
 	private void initDynamicCall() throws ToolBusException {
@@ -141,21 +143,23 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		String dname = dynprocessname.getName();
 		compileStaticOrDynamicCall(dname);
 		firstState.setTest(test, testEnv);
-		initializedDynamicCall = true;
+		processInstance.addToAtomSignature(PE.getAtoms());
 		System.err.println("Dynamic process name " + name + " => " + dynprocessname);
 	}
 
 	public State getFirst() {
-		//System.err.println("ProcessCall.getFirst: " + firstState);
-		return firstState; //PE.getFirst();
+		System.err.println("ProcessCall.getFirst: " + firstState);
+		return firstState;
 	}
 
 	public State getFollow() {
-		return isStaticCall || initializedDynamicCall ? PE.getFollow() : new State();
+		System.err.println("ProcessCall.getFollow [" + name + "] " + follows);
+		//return isStaticCall || initializedDynamicCall ? PE.getFollow() : new State();
+		return follows;
 	}
 
-	public State getAtoms() {
-		return isStaticCall || initializedDynamicCall ? PE.getAtoms() : new State();
+	public AtomSet getAtoms() {
+		return isStaticCall || activated ? PE.getAtoms() : new AtomSet(); //TODO ?
 	}
 
 	public String getName() {
@@ -169,7 +173,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	// Implementation of the StateElement interface
 
 	public boolean contains(StateElement a) {
-		return getFirst().contains(a);
+		return isStaticCall || activated ? PE.getFirst().contains(a) : false ; // TODO?
 	}
 
 	public ProcessInstance getProcess() {
@@ -182,59 +186,70 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 			getFirst().setTest(test, env);
 		} else {
 			this.test = test;
-			this.testEnv =env;
+			this.testEnv = env; //TODO attach to actual PE!
 		}	
 	}
 
 	public boolean isEnabled() {
+		System.err.println("ProcessCall.isEnabled");
 		return getFirst().isEnabled();
 	}
 
-	public State getNextState() {
-		if (isStaticCall) {
-			return getFirst().getNextState();
+	public State gotoNextStateAndActivate() {
+		if(!(activated || executing)){
+			return follows.gotoNextStateAndActivate();
 		}
-		return firstState.getNextState();
+		return PE.getFirst().gotoNextStateAndActivate();
 	}
 
-	public State getNextState(StateElement se) {
-		if (isStaticCall) {
-			return getFirst().getNextState(se);
+	public State gotoNextStateAndActivate(StateElement se) {
+		if(!(activated || executing)){
+			return follows.gotoNextStateAndActivate(se);
 		}
-		return firstState.getNextState(se);
-	}
-
-	public void addPartners(State s) throws ToolBusException {
-		System.err.println("addPartners: " + s);
-	}
-
-	public void delPartners(State s) throws ToolBusException {
-	}
-
-	public void addNotePartners(State s) {
-	}
-
-	public void delNotePartners(State s) {
-
+		return PE.getFirst().gotoNextStateAndActivate(se);
 	}
 
 	public void activate() {
-		System.err.println("ProcCall.activate: " + this);
-		System.err.println("isStaticCall = " + isStaticCall + "; initializedDynamicCall = " + initializedDynamicCall);
-		if(!isStaticCall && !initializedDynamicCall){
+		if(activated && !executing){
+			return;
+		}
+		if(activated && executing){
+			// execution of the PE is completed
+			System.err.println("activated && executing, previous call done!");
+			follows.activate();
+			return;
+		}
+		System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
+		System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated);
+		if(!isStaticCall){ //&& !initializedDynamicCall){
 			try {
 				initDynamicCall();
+				ProcessInstance P = getProcess();
+				P.addToAtomSignature(PE.getAtoms());
+				//System.err.println("ProcessCall.activate: addPartners" + PE.getAtoms());
+				P.addPartnersToAllProcesses(PE.getAtoms());
 			} catch (ToolBusException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		firstState = PE.getFirst();
-		firstState.activate();	
+		PE.getFirst().activate();	
+		activated = true;
+		executing = false;
 	}
 
 	public boolean execute() throws ToolBusException {
-		System.err.println("ProcessCall.execute " + this);
-		return PE.getFirst().execute();
+		System.err.println("ProcessCall.execute: [" + getProcess().getProcessId() + "]"  + this);
+		System.err.println("activated = " + activated + "; executing = " + executing);
+		if(activated && !executing){
+			executing = PE.getFirst().execute();
+			return executing;
+		}
+		System.err.println("execute: moving on to: " + follows);
+		if(follows.execute()){	
+			activated = executing = false;
+			return true;
+		}
+		return false;
 	}
 }

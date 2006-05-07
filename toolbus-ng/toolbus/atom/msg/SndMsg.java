@@ -7,7 +7,7 @@ package toolbus.atom.msg;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import toolbus.State;
+import toolbus.AtomSet;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -44,8 +44,8 @@ public class SndMsg extends MsgAtom {
 		msgPartners.remove(a);
 	}
 
-	public void addPartners(State set) throws ToolBusException {
-		for (StateElement b : set.getElementsAsVector()) {
+	public void addPartners(AtomSet atoms) throws ToolBusException {
+		for (Atom b : atoms.getSet()) {
 			if (b instanceof RecMsg) {
 				RecMsg cb = (RecMsg) b;
 				if (this.canCommunicate(cb)) {

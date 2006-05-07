@@ -7,7 +7,7 @@ package toolbus.atom.note;
 
 import java.util.Vector;
 
-import toolbus.State;
+import toolbus.AtomSet;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -38,8 +38,8 @@ public class SndNote extends Atom {
 		return a;
 	}
 
-	public void addPartners(State set) throws ToolBusException {
-		for (StateElement b : set.getElementsAsVector()) {
+	public void addPartners(AtomSet atoms) throws ToolBusException {
+		for (Atom b : atoms.getSet()) {
 			if (!(b instanceof Subscribe)) {
 				continue;
 			}
@@ -60,8 +60,7 @@ public class SndNote extends Atom {
 				pi.putNoteInQueue(theNote);
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 }

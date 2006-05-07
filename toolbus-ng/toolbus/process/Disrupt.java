@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import aterm.ATerm;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -46,18 +47,17 @@ public class Disrupt extends ProcessExpression {
     right.compile(P, calls, follow);
     State rightFirst = right.getFirst();
     setFollow(follow);
-    Vector atoms = left.getAtoms().getElementsAsVector();
-    for (int i = 0; i < atoms.size(); i++) {
-      Atom at = (Atom) atoms.get(i);
+   // Vector atoms = left.getAtoms().getElementsAsVector();
+   // for (int i = 0; i < atoms.size(); i++) {
+   //   Atom at = (Atom) atoms.get(i);
+      
+    for(Atom at : left.getAtoms().getSet())
       if (at.getFollow().size() != 0) {
         at.addToFollow(rightFirst);
       }
-    }
   }
-  
-  
 
-  public State getAtoms() {
+  public AtomSet getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 }

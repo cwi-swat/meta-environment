@@ -6,6 +6,7 @@ package toolbus.atom.msg;
 
 import java.util.Stack;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -41,7 +42,7 @@ public abstract class MsgAtom extends Atom {
 
 //	abstract public boolean canCommunicate(MsgAtom a) throws ToolBusException;
 	
-	public void addPartners(State set) throws ToolBusException {
+	public void addPartners(AtomSet set) throws ToolBusException {
 	}
 
 	public boolean matchesPartner(MsgAtom b) throws ToolBusException {

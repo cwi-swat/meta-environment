@@ -49,18 +49,19 @@ public class State {
       nElements -= 1;
     }
   }
-  
-  public void addPartners(State set) throws ToolBusException {
+ /* 
+  public void addPartners(AtomSet atoms) throws ToolBusException {
 	  for(StateElement e : elements){
-		  e.addPartners(set);
+		  e.addPartners(atoms);
 	  }
   }
   
-  public void delPartners(State set) throws ToolBusException{
-	  for(StateElement e : set.getElementsAsVector()){
-		  e.delPartners(set);
+  public void delPartners(AtomSet atoms) throws ToolBusException{
+	  for(StateElement e : atoms.getSet()){
+		  e.delPartners(atoms);
 	  }
   }
+  */
 
   public State union(State b) {
     State c = new State();
@@ -131,15 +132,15 @@ public class State {
     return false;
   }
   
-  public State getNextState(){
-  return elements.elementAt(lastElement).getNextState();
+  public State gotoNextStateAndActivate(){
+	  return elements.elementAt(lastElement).gotoNextStateAndActivate();
   }
   
-  public State getNextState(StateElement a){
+  public State gotoNextStateAndActivate(StateElement a){
 	 for (StateElement b : elements) {
 	      //System.err.println("State.getNextState2: trying " + b);
 	      if(b.equals(a) || b.contains(a)){
-	      	return b.getNextState(a);
+	      	return b.gotoNextStateAndActivate(a);
 	      }
 	 }
      System.err.println("State.GetNextState2: no element " + a);

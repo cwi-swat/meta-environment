@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Stack;
 import java.util.Vector;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -34,7 +35,7 @@ public class ProcessInstance {
 
 	private int processId;
 
-	private State elements;
+	private AtomSet elements;
 
 	private State currentState;
 
@@ -81,21 +82,21 @@ public class ProcessInstance {
 
 		elements = call.getAtoms();
 		//System.err.println("Process " + this.getProcessName() + " elements = " + elements);
-		
+	/*	
 		for (ProcessInstance P : TB.getProcesses()) {
 			if (P != this) {
 				//System.err.println("Process " + this.getProcessName() + " adds partners to " + P.getProcessName());
 				P.addPartners(elements);
 			}
 		}
-		addAtomSignature();
-		if (false) {
+	*/
+		addPartnersToAllProcesses(elements);
+		addToAtomSignature(elements);
+		if (true) {
 			System.err.println(processId + ": " + call);
 			System.err.println(processId + ": atoms: =" + elements);
-			System.err.println(processId + ": prefix = " + currentState);
-			for (Iterator it = elements.getElementsAsVector().iterator(); it
-					.hasNext();) {
-				Atom a = (Atom) it.next();
+			System.err.println(processId + ": currentState = " + currentState);
+			for (Atom a : elements.getSet()){
 				System.err.println(processId + ": " + a + " --> "
 						+ a.getFollow());
 				//System.err.println("env = " + a.getEnv());
@@ -120,12 +121,19 @@ public class ProcessInstance {
 	}
 
 	//TODO: delAtomSignature
-
+/*
 	private void addAtomSignature() throws ToolBusException {
 		Vector<StateElement> atoms = call.getAtoms().getElementsAsVector();
 		for (int i = 0; i < atoms.size(); i++) {
 			ATerm pat = ((Atom) atoms.get(i)).toATerm();
 			toolbus.addToSignature(pat);
+		}
+	}
+*/
+	
+	public void addToAtomSignature(AtomSet atoms)throws ToolBusException {
+		for(Atom a : atoms.getSet()){
+			toolbus.addToSignature(a.toATerm());
 		}
 	}
 
@@ -154,16 +162,33 @@ public class ProcessInstance {
 		}
 	}
 
-	public void addPartners(State a) throws ToolBusException {
-		for (StateElement e : elements.getElementsAsVector()) {
-			//System.err.println("ProcessInstance: " + e);
-			e.addPartners(a);
+	public void addPartners(AtomSet atoms) throws ToolBusException {
+		for (Atom e : elements.getSet()) {
+			//System.err.println("ProcessInstance: " + e + " addPartners " + atoms);
+			e.addPartners(atoms);
 		}
 	}
 
-	public void delPartners(State a) throws ToolBusException {
-		for (StateElement e : elements.getElementsAsVector()) {
-			e.delPartners(a);
+	public void delPartners(AtomSet atoms) throws ToolBusException {
+		for (Atom e : elements.getSet()) {
+			e.delPartners(atoms);
+		}
+	}
+	
+	public void addPartnersToAllProcesses(AtomSet atoms) throws ToolBusException{
+		for (ProcessInstance P : toolbus.getProcesses()) {
+			if (P != this) {
+				//System.err.println("Process " + this.getProcessName() + " adds partners to " + P.getProcessName());
+				P.addPartners(atoms);
+			}
+		}
+	}
+	
+	public void delPartnersFromAllProcesses(AtomSet atoms) throws ToolBusException{
+		for (ProcessInstance P : toolbus.getProcesses()) {
+			if (P != this) {
+				P.delPartners(atoms);
+			}
 		}
 	}
 
@@ -237,20 +262,11 @@ public class ProcessInstance {
 		currentState = s;
 	}
 
-	public boolean nextState() {
-		currentState = currentState.getNextState();
-		return true;
-	}
-
-	public boolean nextState(StateElement a) {
-		currentState = currentState.getNextState(a);
-		return true;
-	}
-
 	public boolean step() throws ToolBusException {
 		//System.err.println("step: " + this);
 		if (running && currentState.execute()) {
-			return nextState();
+			currentState = currentState.gotoNextStateAndActivate();
+			return true;
 		}
 		return false;
 	}
