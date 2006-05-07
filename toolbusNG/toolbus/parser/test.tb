@@ -1,22 +1,32 @@
-process GUI is
-let
-  ClassPath: str,
-  URLs: list,
-  JarName: str,
-  ClassName: str
-in
-  (
-    rec-msg(load-jar(JarName?))
-    . printf("1: load-jar(%s)", JarName)
-  +
-    rec-msg(load-jar(JarName?, ClassPath?))
-    . printf("2: load-jar2(%s, %s)", JarName, ClassPath)
-  +
-    rec-msg(load-jar(JarName?, URLs?))
-    . printf("3: load-jar(%s, %t)", JarName, URLs)
-    )
+/*process A is rec-msg("A")
+
+process B is rec-msg("B")
+
+process P(Name : str) is Name()
+
+process Y is snd-msg("A") . snd-msg("B")
+process Z is printf("start ") . P("A") . printf(" XXX ") . P("B") . printf("done\n")
+*/
+
+
+process PA is printf("A") . printf("A\n")
+/*
+process PB is printf("B") .printf("B\n")
+process PC is printf("C") . printf("C\n")
+*/
+process P is PA . printf("end")
+
+/*
+process GO is snd-msg("go1") . snd-msg("go2") . snd-msg("go1") . snd-msg("go2") .snd-msg("end")
+
+process LOOP is
+let Name : str in
+    Name := "PA" .
+    ( rec-msg("go1") . Name() . Name := "PB"
+    + rec-msg("go2") . PC()
+    
+    ) * rec-msg("end")
 endlet
+*/
 
-process A is snd-msg(load-jar("abc", ["def"]))
-
-toolbus(GUI, A)
+toolbus(P)

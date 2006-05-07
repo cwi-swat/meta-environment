@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.Stack;
 import java.util.Vector;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.atom.Atom;
@@ -138,7 +139,7 @@ public class MsgPair extends ProcessExpression implements StateElement {
     setFollow(PE.getFollow());
   }
 
-  public State getAtoms() {
+  public AtomSet getAtoms() {
     return PE.getAtoms();
   }
 

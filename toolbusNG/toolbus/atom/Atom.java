@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
+import toolbus.AtomSet;
 import toolbus.Functions;
 import toolbus.State;
 import toolbus.StateElement;
@@ -183,8 +184,8 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return processInstance.getToolBus();
   }
 
-  public State getAtoms() {
-    return getFirst();
+  public AtomSet getAtoms() {
+    return new AtomSet(this);
   }
 
   private String shortName() {
@@ -276,7 +277,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     if (tests != null){
     	//System.err.println("Atom.isEnabled: " + this.getProcess().getProcessId() + ": " + this);
     	for(int i = 0; i < tests.size(); i++){
-    		Test t = (Test) tests.elementAt(i);
+    		Test t = tests.elementAt(i);
     		//System.err.println("evaluate: " + t);
     		boolean res = tbfactory.isTrue(Functions.eval(t.testExpr, getProcess(), t.testEnv));
     		//System.err.println("==> " + res);
@@ -298,20 +299,20 @@ abstract public class Atom extends ProcessExpression implements StateElement {
     return processInstance;
   }
   
-  public void addPartners(State s) throws ToolBusException{
+  public void addPartners(AtomSet s) throws ToolBusException{
   }
   
-  public void delPartners(State s) throws ToolBusException{
+  public void delPartners(AtomSet s) throws ToolBusException{
   }
 
-  public State getNextState(){
+  public State gotoNextStateAndActivate(){
   	//System.err.println(this + "getNextState ==> " + getFollow());
   	State s = getFollow();
   	s.activate();
   	return s;
   }
   
-  public State getNextState(StateElement b){
+  public State gotoNextStateAndActivate(StateElement b){
   	if(this.equals(b)){
   		State s = getFollow();
   		s.activate();

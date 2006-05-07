@@ -1,6 +1,6 @@
 package toolbus.atom.msg;
 
-import toolbus.State;
+import toolbus.AtomSet;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
 import toolbus.atom.Atom;
@@ -28,8 +28,9 @@ public class RecMsg extends MsgAtom {
 		return tbfactory.mightMatch(getMsg(), a.getMsg());
 	}
   
-  public void addPartners(State set) throws ToolBusException {
-	for (StateElement b : set.getElementsAsVector()) {
+  public void addPartners(AtomSet atoms) throws ToolBusException {
+	//System.err.println(this + " addPartners: " + atoms);
+	for (Atom b : atoms.getSet()) {
 		if (b instanceof SndMsg) {
 			SndMsg cb = (SndMsg) b;
 			if (this.canCommunicate(cb)) {

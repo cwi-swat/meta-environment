@@ -2,6 +2,7 @@ package toolbus.process;
 
 import java.util.Stack;
 
+import toolbus.AtomSet;
 import toolbus.State;
 import toolbus.StateElement;
 import toolbus.TBTermFactory;
@@ -49,14 +50,14 @@ public class Merge extends ProcessExpression implements StateElement {
 	}
 
 	public void compile(ProcessInstance processInstance, Stack<String> calls,
-			State followSet) throws ToolBusException {
+			State follows) throws ToolBusException {
 		this.processInstance = processInstance;
-		expr[LEFT].compile(processInstance, calls, followSet);
+		expr[LEFT].compile(processInstance, calls, follows);
 		initialState[LEFT] = state[LEFT] = expr[LEFT].getFirst();
 
-		expr[RIGHT].compile(processInstance, calls, followSet);
+		expr[RIGHT].compile(processInstance, calls, follows);
 		initialState[RIGHT] = state[RIGHT] = expr[RIGHT].getFirst();
-		setFollow(followSet);
+		setFollow(follows);
 	}
 
 	public void replaceFormals(Environment env) throws ToolBusException {
@@ -68,7 +69,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		return new Merge(expr[LEFT].copy(), expr[RIGHT].copy(), tbfactory, getPosInfo());
 	}
 
-	public State getAtoms() {
+	public AtomSet getAtoms() {
 		return expr[LEFT].getAtoms().union(expr[RIGHT].getAtoms());
 	}
 
@@ -100,7 +101,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		state[RIGHT] = initialState[RIGHT];
 	}
 
-	public State getNextState() {
+	public State gotoNextStateAndActivate() {
 		State follow = getFollow();
 
 		//System.err.println("Merge.getNextState: " + leftLast + " ; follow = " + follow);
@@ -112,7 +113,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		}
 
 		if (leftLast) {
-			State ns = state[LEFT].getNextState();
+			State ns = state[LEFT].gotoNextStateAndActivate();
 			if (ns == follow) {
 				State r = state[RIGHT];
 				//System.err.println("state[LEFT] == follow");
@@ -125,7 +126,7 @@ public class Merge extends ProcessExpression implements StateElement {
 				return mergeState;
 			}
 		} else {
-			State ns = state[RIGHT].getNextState();
+			State ns = state[RIGHT].gotoNextStateAndActivate();
 			if (ns == follow) {
 				State l = state[LEFT];
 				//System.err.println("state[RIGHT] == follow");
@@ -140,7 +141,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		}
 	}
 
-	public State getNextState(StateElement se) {
+	public State gotoNextStateAndActivate(StateElement se) {
 		State follow = getFollow();
 
 		//System.err.println("Merge.getNextState2: " + leftLast + "; " + se + " ; follow = " + follow);
@@ -148,7 +149,7 @@ public class Merge extends ProcessExpression implements StateElement {
 		//System.err.println("state[RIGHT] =" +  state[RIGHT]);
 
 		if (state[LEFT].contains(se)) {
-			State ns = state[LEFT].getNextState(se);
+			State ns = state[LEFT].gotoNextStateAndActivate(se);
 			if (ns == follow) {
 				State r = state[RIGHT];
 				//System.err.println("state[LEFT] == follow");
@@ -162,7 +163,7 @@ public class Merge extends ProcessExpression implements StateElement {
 			}
 
 		} else if (state[RIGHT].contains(se)) {
-			State ns = state[RIGHT].getNextState(se);
+			State ns = state[RIGHT].gotoNextStateAndActivate(se);
 			if (ns == follow) {
 				State l = state[LEFT];
 				//System.err.println("state[RIGHT] == follow");
@@ -208,15 +209,16 @@ public class Merge extends ProcessExpression implements StateElement {
 	public String toString() {
 		return "Merge(" + state[LEFT] + "; " + state[RIGHT] + ")";
 	}
-
-	public void addPartners(State s) throws ToolBusException {
+/*
+	public void addPartners(AtomSet s) throws ToolBusException {
 		state[LEFT].addPartners(s);
 		state[RIGHT].addPartners(s);
 	}
 
-	public void delPartners(State s) throws ToolBusException {
+	public void delPartners(AtomSet s) throws ToolBusException {
 		state[LEFT].delPartners(s);
 		state[RIGHT].delPartners(s);
 	}
+	*/
 
 }
