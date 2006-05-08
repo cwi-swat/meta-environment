@@ -28,7 +28,7 @@ static PT_Tree rightSubject;
 
 /*{{{  static ERR_Subject makeSubject(PT_Tree trm) */
 
-static ERR_Subject makeSubject(PT_Tree trm, ERR_Location loc)
+static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc)
 {
   if (loc != NULL) {
     return ERR_makeSubjectLocalized(term_prefix(trm), (ERR_Location) loc);
