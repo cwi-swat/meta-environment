@@ -28,10 +28,8 @@ static PT_Tree rightSubject;
 
 /*{{{  static ERR_Subject makeSubject(PT_Tree trm) */
 
-static ERR_Subject makeSubject(PT_Tree trm)
+static ERR_Subject makeSubject(PT_Tree trm, ERR_Location loc)
 {
-  LOC_Location loc = PT_getTreeLocation(trm);
-
   if (loc != NULL) {
     return ERR_makeSubjectLocalized(term_prefix(trm), (ERR_Location) loc);
   }
@@ -76,8 +74,10 @@ static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
     environment = matchConditions(condList, environment, 1);
 
     if (is_fail_env(environment)) {
-      *location = lhsLocation;
-      return ATfalse;
+      ERR_Subject lhsSubject = makeSubject(lhs, lhsLocation); 
+
+      return ERR_makeErrorError("condition of test failed", 
+				ERR_makeSubjectListSingle(lhsSubject));
     }
   }
 
@@ -87,14 +87,12 @@ static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
   if (!no_new_vars(lhs, environment)) {
     RWaddError("Left side of test introduces a variable", 
 	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
-    *location = lhsLocation;
-    return ATfalse;
+    return NULL;
   }
   if (!no_new_vars(rhs, environment)) {
     RWaddError("Right side of test introduces a variable", 
 	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
-    *location = rhsLocation;
-    return ATfalse;
+    return NULL;
   }
 
   equal = isAsFixEqual(lhs, rhs);
@@ -117,8 +115,8 @@ static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
     /* this subject is the subject of the error message, not
      * the currently rewritten term
      */
-    ERR_Subject lhsSubject = makeSubject(lhs);
-    ERR_Subject rhsSubject = makeSubject(rhs); 
+    ERR_Subject lhsSubject = makeSubject(lhs, lhsLocation);
+    ERR_Subject rhsSubject = makeSubject(rhs, rhsLocation); 
     return ERR_makeErrorError("test failed", ERR_makeSubjectList2(lhsSubject,
 								  rhsSubject));
   }
