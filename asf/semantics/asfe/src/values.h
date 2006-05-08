@@ -19,5 +19,6 @@ PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args);
 PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem);
 PT_Args skipWhitespace(PT_Args list);
 ATbool  isSliceEmpty(Slice slice);
+char* term_prefix(PT_Tree trm);
 
 #endif

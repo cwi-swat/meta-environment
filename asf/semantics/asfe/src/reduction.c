@@ -18,7 +18,6 @@
 #include <string.h>
 
 #define FAIL NULL
-#define TERM_PREFIX_LENGTH 50
 
 /*{{{  local function declarations */
 
@@ -50,24 +49,6 @@ static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env,
 				  int depth, void* extra);
 /*}}}  */
 
-/* Printing a term for verbose messages */
-/*{{{  static char* term_prefix(PT_Tree trm) */
-
-static char* term_prefix(PT_Tree trm)
-{
-  static const char abbreviated[] = " ... (etc.)";
-  char *tmp;
-
-  tmp = PT_yieldTreeToString(trm, ATfalse);
-
-  if (strlen(tmp) > TERM_PREFIX_LENGTH - strlen(abbreviated)) {
-    sprintf(tmp+TERM_PREFIX_LENGTH-strlen(abbreviated),abbreviated);
-  }
-
-  return tmp;
-}
-
-/*}}}  */
 
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */

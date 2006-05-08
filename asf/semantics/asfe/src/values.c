@@ -5,6 +5,8 @@
 #include <MEPT-utils.h>
 #include "values.h"
 
+#define TERM_PREFIX_LENGTH 50
+
 /* The values for the asf rewriter are parse trees. The AsFix formalism is
  * extended with Slices here to tailor for efficient access to sublists
  * of AsFix lists
@@ -428,6 +430,25 @@ ATbool isValidSlice(PT_Args begin, PT_Args end)
   }
 
   return ATtrue;
+}
+
+/*}}}  */
+
+/* Printing a term for verbose messages */
+/*{{{  char* term_prefix(PT_Tree trm) */
+
+char* term_prefix(PT_Tree trm)
+{
+  static const char abbreviated[] = " ... (etc.)";
+  char *tmp;
+
+  tmp = PT_yieldTreeToString(trm, ATfalse);
+
+  if (strlen(tmp) > TERM_PREFIX_LENGTH - strlen(abbreviated)) {
+    sprintf(tmp+TERM_PREFIX_LENGTH-strlen(abbreviated),abbreviated);
+  }
+
+  return tmp;
 }
 
 /*}}}  */

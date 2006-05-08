@@ -25,35 +25,26 @@
 static PT_Tree leftSubject;
 static PT_Tree rightSubject;
 
-/*{{{  static ERR_Error prettyTag(ASF_ASFTag tag, LOC_Location location) */
 
-static ERR_Error prettyTag(ASF_ASFTag tag, LOC_Location location)
+/*{{{  static ERR_Subject makeSubject(PT_Tree trm) */
+
+static ERR_Subject makeSubject(PT_Tree trm)
 {
-  char *description;
-  ERR_Subject subject;
+  LOC_Location loc = PT_getTreeLocation(trm);
 
-  if (!ASF_isASFTagEmpty(tag)) {
-    ASF_ASFTagId id = ASF_getASFTagASFTagId(tag);
-    description = PT_yieldTreeToString((PT_Tree) id, ATfalse);
+  if (loc != NULL) {
+    return ERR_makeSubjectLocalized(term_prefix(trm), (ERR_Location) loc);
   }
   else {
-    description = "unnamed test";
+    return ERR_makeSubjectSubject(term_prefix(trm));
   }
-
-  if (location == NULL) {
-    subject = ERR_makeSubjectSubject(description);
-  } else {
-    subject = ERR_makeSubjectLocalized(description, (ERR_Location) location);
-  }
-
-  return ERR_makeErrorError("failed test", ERR_makeSubjectListSingle(subject));
 }
 
 /*}}}  */
 
 /*{{{  static ATbool testOne(ASF_ASFTestEquation test, LOC_Location *location) */
 
-static ATbool testOne(ASF_ASFTestEquation test, LOC_Location *location)
+static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
 {
   ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
   ASF_ASFCondition tobetested = ASF_getASFTestEquationASFCondition(test);
@@ -119,11 +110,17 @@ static ATbool testOne(ASF_ASFTestEquation test, LOC_Location *location)
   }
 
   if (equal) {
-    return ATtrue;
+    return NULL;
   }
   else {
     *location = lhsLocation;
-    return ATfalse;
+    /* this subject is the subject of the error message, not
+     * the currently rewritten term
+     */
+    ERR_Subject lhsSubject = makeSubject(lhs);
+    ERR_Subject rhsSubject = makeSubject(rhs); 
+    return ERR_makeErrorError("test failed", ERR_makeSubjectList2(lhsSubject,
+								  rhsSubject));
   }
 }
 
@@ -135,12 +132,11 @@ static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,
 {
   while (!ASF_isASFTestEquationTestListEmpty(tests)) {
     ASF_ASFTestEquation test = ASF_getASFTestEquationTestListHead(tests);
-    ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
     LOC_Location location;
-    ATbool result = testOne(test, &location);
+    ERR_Error result = testOne(test, &location);
 
-    if (result == ATfalse) {
-      failed = ERR_makeErrorListMany(prettyTag(tag, location), failed);
+    if (result != NULL) {
+      failed = ERR_makeErrorListMany(result, failed);
     }
 
     if (!ASF_hasASFTestEquationTestListTail(tests)) {
