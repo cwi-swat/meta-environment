@@ -1,9 +1,7 @@
 package toolbus.process;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
-import java.util.Vector;
 
 import toolbus.AtomSet;
 import toolbus.State;
@@ -92,7 +90,7 @@ public class ProcessInstance {
 	*/
 		addPartnersToAllProcesses(elements);
 		addToAtomSignature(elements);
-		if (true) {
+		if (false) {
 			System.err.println(processId + ": " + call);
 			System.err.println(processId + ": atoms: =" + elements);
 			System.err.println(processId + ": currentState = " + currentState);
@@ -261,11 +259,19 @@ public class ProcessInstance {
 	public void setCurrentState(State s) {
 		currentState = s;
 	}
+	
+	public void gotoNextStateAndActivate(){
+		currentState = currentState.gotoNextStateAndActivate();
+	}
+	
+	public void gotoNextStateAndActivate(StateElement se){
+		currentState = currentState.gotoNextStateAndActivate(se);
+	}
 
 	public boolean step() throws ToolBusException {
 		//System.err.println("step: " + this);
 		if (running && currentState.execute()) {
-			currentState = currentState.gotoNextStateAndActivate();
+			gotoNextStateAndActivate();
 			return true;
 		}
 		return false;

@@ -115,6 +115,10 @@ public class TscriptTest extends TestCase {
     assertTrue(runTest("Call2"));
     assertTrue(runTest("Call3"));
     assertTrue(runTest("Call4"));
+    assertTrue(runTest("Call5"));
+    assertTrue(runTest("Call6"));
+    assertTrue(runTest("Call7"));
+    assertTrue(runTest("Call8"));
   }
   
   public void testExpr() {

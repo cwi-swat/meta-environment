@@ -6,4 +6,4 @@ process Main(B : str) is B("Main") . printf("Main completed\n")
 
 process Sender(Msg : term) is snd-msg(Msg)
  
-toolbus(Main("B"), Sender(a), Sender(b))
+toolbus(Main("B"), Sender(a), Sender(b), A("toolbus"))
