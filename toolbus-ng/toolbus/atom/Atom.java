@@ -338,7 +338,7 @@ abstract public class Atom extends ProcessExpression implements StateElement {
   	incr(size_used_env, collected.getLength());
   	
   	//System.err.println("used_vars = " + collected);
-  	System.err.println("Atom.activate: " + this);
+  	//System.err.println("Atom.activate: " + this);
   	
   }
 

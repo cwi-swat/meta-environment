@@ -80,8 +80,19 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public void computeFirst() {
-		System.err.println("ProcessCall.computeFirst: " + firstState);
+		//System.err.println("ProcessCall.computeFirst: " + firstState);
 		setFirst(firstState);
+	}
+	
+	public State getFirst() {
+		//System.err.println("ProcessCall.getFirst: " + firstState);
+		return firstState;
+	}
+
+	public State getFollow() {
+		//System.err.println("ProcessCall.getFollow [" + name + "] " + follows);
+		//return isStaticCall || initializedDynamicCall ? PE.getFollow() : new State();
+		return follows;
 	}
 	
 	public void replaceFormals(Environment e) throws ToolBusException {
@@ -114,13 +125,13 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 		definition = processInstance.getToolBus().getProcessDefinition(name);
 		calls.push(name);
-		System.err.println("name = " + name);
-		System.err.println("definition = " + definition);
+		//System.err.println("name = " + name);
+		//System.err.println("definition = " + definition);
 
 		actuals = (ATermList) tbfactory.replaceFormals(actuals,env);
 		PE = definition.getProcessExpression(actuals);
 		
-		System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
+		//System.err.println("ProcessCall.compile(" + name + ", " + processInstance + "," + PE + ")");
 		formals = definition.getFormals();
 		actuals = (ATermList) tbfactory.resolveVarTypes(actuals, env);
 		
@@ -132,6 +143,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		PE.computeFirst();
 		PE.replaceFormals(env);
 		PE.compile(processInstance, calls, firstState); // follows);
+		PE.getFirst().setTest(test, testEnv);
 		//firstState = PE.getFirst(); //getStartState(); <====
 		//env.removeBindings(formals);
 		calls.pop();	
@@ -142,22 +154,10 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 		ATermAppl dynprocessname = (ATermAppl) env.getValue(nameAsVar);
 		String dname = dynprocessname.getName();
 		compileStaticOrDynamicCall(dname);
-		firstState.setTest(test, testEnv);
 		processInstance.addToAtomSignature(PE.getAtoms());
-		System.err.println("Dynamic process name " + name + " => " + dynprocessname);
+		//System.err.println("Dynamic process name " + name + " => " + dynprocessname);
 	}
-
-	public State getFirst() {
-		System.err.println("ProcessCall.getFirst: " + firstState);
-		return firstState;
-	}
-
-	public State getFollow() {
-		System.err.println("ProcessCall.getFollow [" + name + "] " + follows);
-		//return isStaticCall || initializedDynamicCall ? PE.getFollow() : new State();
-		return follows;
-	}
-
+	
 	public AtomSet getAtoms() {
 		return isStaticCall || activated ? PE.getAtoms() : new AtomSet(); //TODO ?
 	}
@@ -183,7 +183,7 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	public void setTest(ATerm test, Environment env) throws ToolBusException {
 		//System.err.println("ProcessCall.setTest: " + test);
 		if (isStaticCall) {
-			getFirst().setTest(test, env);
+			PE.getFirst().setTest(test, env);
 		} else {
 			this.test = test;
 			this.testEnv = env; //TODO attach to actual PE!
@@ -192,36 +192,42 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 
 	public boolean isEnabled() {
 		System.err.println("ProcessCall.isEnabled");
-		return getFirst().isEnabled();
+		return PE.getFirst().isEnabled();
 	}
 
 	public State gotoNextStateAndActivate() {
 		if(!(activated || executing)){
-			return follows.gotoNextStateAndActivate();
-		}
+			follows.activate();
+			return follows;
+		} 
+		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate();
 	}
 
 	public State gotoNextStateAndActivate(StateElement se) {
 		if(!(activated || executing)){
-			return follows.gotoNextStateAndActivate(se);
-		}
+			follows.activate();
+			return follows;
+		} 
+		executing = true;
 		return PE.getFirst().gotoNextStateAndActivate(se);
 	}
 
 	public void activate() {
+		//System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
+		//System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated + "; executing = " + executing);
 		if(activated && !executing){
 			return;
 		}
 		if(activated && executing){
 			// execution of the PE is completed
-			System.err.println("activated && executing, previous call done!");
+			//System.err.println("activated && executing, current call is completed! Follows = " + follows);
 			follows.activate();
 			return;
 		}
-		System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
-		System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated);
-		if(!isStaticCall){ //&& !initializedDynamicCall){
+		//System.err.println("ProcessCall.activate: [" + getProcess().getProcessId() + "]" + this);
+		//System.err.println("isStaticCall = " + isStaticCall + "; activated = " + activated);
+		if(!isStaticCall){
 			try {
 				initDynamicCall();
 				ProcessInstance P = getProcess();
@@ -239,17 +245,21 @@ public class ProcessCall extends ProcessExpression implements StateElement {
 	}
 
 	public boolean execute() throws ToolBusException {
-		System.err.println("ProcessCall.execute: [" + getProcess().getProcessId() + "]"  + this);
-		System.err.println("activated = " + activated + "; executing = " + executing);
+		//System.err.println("ProcessCall.execute: [" + getProcess().getProcessId() + "]"  + this);
+		//System.err.println("activated = " + activated + "; executing = " + executing + "; first = " + PE.getFirst());
 		if(activated && !executing){
+			if(PE.getFirst().size() == 0){
+				//System.err.println("case size = 0");
+				executing = true;
+				return true;
+			}
+			//System.err.println("case size != 0");
 			executing = PE.getFirst().execute();
+			//System.err.println("executing => " + executing);
 			return executing;
 		}
-		System.err.println("execute: moving on to: " + follows);
-		if(follows.execute()){	
-			activated = executing = false;
-			return true;
-		}
-		return false;
+		//System.err.println("execute: moving on to: " + follows);
+		activated = executing = false;
+		return true;
 	}
 }

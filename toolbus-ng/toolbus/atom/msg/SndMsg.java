@@ -62,7 +62,7 @@ public class SndMsg extends MsgAtom {
 				ProcessInstance pb = b.getProcess();
 
 				if (pb.contains(b) && b.isEnabled() && matchesPartner(b)) {
-					pb.nextState(b);
+					pb.gotoNextStateAndActivate(b);
 					return true;
 				}
 			}

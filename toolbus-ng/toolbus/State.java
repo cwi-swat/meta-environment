@@ -7,6 +7,7 @@ import java.util.IdentityHashMap;
 import java.util.Vector;
 
 import toolbus.atom.Atom;
+import toolbus.atom.Delta;
 import toolbus.environment.Environment;
 import toolbus.exceptions.ToolBusException;
 import aterm.ATerm;
@@ -49,19 +50,6 @@ public class State {
       nElements -= 1;
     }
   }
- /* 
-  public void addPartners(AtomSet atoms) throws ToolBusException {
-	  for(StateElement e : elements){
-		  e.addPartners(atoms);
-	  }
-  }
-  
-  public void delPartners(AtomSet atoms) throws ToolBusException{
-	  for(StateElement e : atoms.getSet()){
-		  e.delPartners(atoms);
-	  }
-  }
-  */
 
   public State union(State b) {
     State c = new State();
@@ -132,9 +120,12 @@ public class State {
     return false;
   }
   
-  public State gotoNextStateAndActivate(){
-	  return elements.elementAt(lastElement).gotoNextStateAndActivate();
-  }
+  public State gotoNextStateAndActivate() {
+		if (nElements > 0) {
+			return elements.elementAt(lastElement).gotoNextStateAndActivate();
+		}
+		return this;
+	}
   
   public State gotoNextStateAndActivate(StateElement a){
 	 for (StateElement b : elements) {
@@ -148,7 +139,7 @@ public class State {
   }
   
   public void activate(){
-	System.err.println("State.activate: " + this);
+	//System.err.println("State.activate: " + this);
   	for (StateElement e : elements){
   		e.activate();
   	}
@@ -167,7 +158,7 @@ public class State {
 
       if (a.execute()) {
       	lastElement = index;
-      	System.err.println("State.execute: " + a);
+      	//System.err.println("State.execute: " + a);
 
         return true;
       }

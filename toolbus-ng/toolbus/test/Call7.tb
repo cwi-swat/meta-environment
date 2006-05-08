@@ -1,0 +1,11 @@
+process A is rec-msg("A")
+
+process B is rec-msg("B")
+
+process P(Name : str) is Name()
+
+process Y is snd-msg("A") . snd-msg("B")
+
+process Z is printf("start ") . P("A") . printf(" XXX ") . P("B") . printf("done\n")
+
+toolbus(Y, Z)
