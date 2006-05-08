@@ -40,15 +40,17 @@ static ERR_Subject makeSubject(PT_Tree trm, LOC_Location loc)
 
 /*}}}  */
 
-/*{{{  static ATbool testOne(ASF_ASFTestEquation test, LOC_Location *location) */
+/*{{{  static ATbool testOne(ASF_ASFTestEquation test) */
 
-static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
+static ERR_Error testOne(ASF_ASFTestEquation test)
 {
   ASF_ASFTag tag = ASF_getASFTestEquationASFTag(test);
   ASF_ASFCondition tobetested = ASF_getASFTestEquationASFCondition(test);
   ATerm environment = (ATerm) ATempty;
   PT_Tree lhs = (PT_Tree) ASF_getASFConditionLhs(tobetested);
   PT_Tree rhs = (PT_Tree) ASF_getASFConditionRhs(tobetested);
+  PT_Tree lhsResult;
+  PT_Tree rhsResult;
   LOC_Location lhsLocation = NULL;
   LOC_Location rhsLocation = NULL;
   ATbool equal = ATfalse;
@@ -81,24 +83,29 @@ static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
     }
   }
 
-  lhs = rewriteInnermost(lhs, environment, 1, NO_TRAVERSAL);
-  rhs = rewriteInnermost(rhs, environment, 1, NO_TRAVERSAL); 
 
-  if (!no_new_vars(lhs, environment)) {
+
+   lhsResult = rewriteInnermost(lhs, environment, 1, NO_TRAVERSAL);
+   rhsResult = rewriteInnermost(rhs, environment, 1, NO_TRAVERSAL); 
+
+
+ 
+
+  if (!no_new_vars(lhsResult, environment)) {
     RWaddError("Left side of test introduces a variable", 
 	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
     return NULL;
   }
-  if (!no_new_vars(rhs, environment)) {
+  if (!no_new_vars(rhsResult, environment)) {
     RWaddError("Right side of test introduces a variable", 
 	       PT_yieldTreeToString((PT_Tree) tag, ATfalse));
     return NULL;
   }
 
-  equal = isAsFixEqual(lhs, rhs);
+  equal = isAsFixEqual(lhsResult, rhsResult);
 
-  environment = putVariableValue(environment, leftSubject, lhs);
-  environment = putVariableValue(environment, rightSubject, rhs);
+  environment = putVariableValue(environment, leftSubject, lhsResult);
+  environment = putVariableValue(environment, rightSubject, rhsResult);
 
   tagCurrentRule = testRunnerTag;
   TIDE_STEP(tobetested, environment, 0);
@@ -111,14 +118,14 @@ static ERR_Error testOne(ASF_ASFTestEquation test, LOC_Location *location)
     return NULL;
   }
   else {
-    *location = lhsLocation;
     /* this subject is the subject of the error message, not
      * the currently rewritten term
      */
-    ERR_Subject lhsSubject = makeSubject(lhs, lhsLocation);
-    ERR_Subject rhsSubject = makeSubject(rhs, rhsLocation); 
-    return ERR_makeErrorError("test failed", ERR_makeSubjectList2(lhsSubject,
-								  rhsSubject));
+    ERR_Subject lhsSubject = makeSubject(lhsResult, lhsLocation);
+    ERR_Subject rhsSubject = makeSubject(rhsResult, rhsLocation); 
+
+    return ERR_makeErrorError("test failed", ERR_makeSubjectListMany(lhsSubject,
+								     ERR_makeSubjectListSingle(rhsSubject)));
   }
 }
 
@@ -130,8 +137,7 @@ static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,
 {
   while (!ASF_isASFTestEquationTestListEmpty(tests)) {
     ASF_ASFTestEquation test = ASF_getASFTestEquationTestListHead(tests);
-    LOC_Location location;
-    ERR_Error result = testOne(test, &location);
+    ERR_Error result = testOne(test);
 
     if (result != NULL) {
       failed = ERR_makeErrorListMany(result, failed);
