@@ -296,6 +296,23 @@ static SDF_SymbolTail renameSymbolTail(SDF_Symbol from,
 }
 
 /*}}}  */
+
+static SDF_SymbolRest renameSymbolRest(SDF_Symbol from,
+				       SDF_Symbol into,
+                                       SDF_SymbolRest symbols)
+{
+  if (SDF_hasSymbolRestHead(symbols)) {
+    SDF_Symbol head = SDF_getSymbolRestHead(symbols);
+    SDF_Symbol newHead = renameSymbol(from, into, head);
+    symbols = SDF_setSymbolRestHead(symbols, newHead);
+  }
+  if (SDF_hasSymbolRestTail(symbols)) {
+    SDF_SymbolRest tail = SDF_getSymbolRestTail(symbols);
+    SDF_SymbolRest newTail = renameSymbolRest(from, into, tail);
+    symbols = SDF_setSymbolRestTail(symbols, newTail);
+  }
+  return symbols;
+}
 /*{{{  static SDF_SymbolList renameSymbolList(SDF_Symbol from, */
 
 static SDF_SymbolList renameSymbolList(SDF_Symbol from,
@@ -367,6 +384,11 @@ static SDF_Symbol renameSymbol(SDF_Symbol from, SDF_Symbol into,
     argSymbol = SDF_getSymbolHead(symbol);
     newArgSymbol = renameSymbol(from, into, argSymbol);
     symbol = SDF_setSymbolHead(symbol, newArgSymbol);
+  }
+  if (SDF_hasSymbolRest(symbol)) {
+    SDF_SymbolRest rest = SDF_getSymbolRest(symbol);
+    SDF_SymbolRest result = renameSymbolRest(from, into, rest);
+    symbol = SDF_setSymbolRest(symbol, result);  
   }
   if (SDF_hasSymbolTail(symbol)) {
     SDF_SymbolTail argSymbols = SDF_getSymbolTail(symbol);

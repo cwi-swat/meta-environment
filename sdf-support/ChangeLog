@@ -1,5 +1,9 @@
 $Id$
 
+Tue May  9 16:50:47 CEST 2006 <{jurgenv,storm}@cwi.nl>
+ * utils/sdf-modules/sdf-imports.c: fixed a funny bug. Renamings and
+   module parameters did not support tuples! 
+
 Fri Mar 10 11:25:00 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Mainainers use ATerm-dbg library
