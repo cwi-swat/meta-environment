@@ -201,9 +201,17 @@ public class TBTermTest extends TestCase {
   	Environment env2 = new Environment(tbfactory);
   	
     TBTermVar varX = tbfactory.makeTBTermVar("X", tbfactory.make("int"));	
-    TBTermVar rvarX = tbfactory.makeTBTermResVar("X", tbfactory.make("int"));	
+    TBTermVar rvarX = tbfactory.makeTBTermResVar("X", tbfactory.make("int"));
+
+    TBTermVar varXX = tbfactory.makeTBTermVar("XX", tbfactory.make("term"));	  
+    TBTermVar rvarXX = tbfactory.makeTBTermResVar("XX", tbfactory.make("term"));
+    
     TBTermVar varY = tbfactory.makeTBTermVar("Y", tbfactory.make("int"));
     TBTermVar rvarY = tbfactory.makeTBTermResVar("Y", tbfactory.make("int"));
+    
+    TBTermVar varYY = tbfactory.makeTBTermVar("YY", tbfactory.make("term"));   
+    TBTermVar rvarYY = tbfactory.makeTBTermResVar("YY", tbfactory.make("term"));  
+    
     TBTermVar varB = tbfactory.makeTBTermVar("B", tbfactory.make("str"));	
   
     ATerm int3 = tbfactory.make("3");
@@ -228,6 +236,7 @@ public class TBTermTest extends TestCase {
     ATerm f4 = tbfactory.make("f(4)");
     ATerm f6 = tbfactory.make("f(6)");
     ATerm gf6 = tbfactory.make("g(f(6))");
+    ATerm g5 = tbfactory.make("g(5)");
     ATerm fvarX = tbfactory.make("f(<term>)", varX);
     ATerm fvarY = tbfactory.make("f(<term>)", varY);
     ATerm frvarX = tbfactory.make("f(<term>)", rvarX);
@@ -246,16 +255,20 @@ public class TBTermTest extends TestCase {
     assertEquals(env2.getValue(varY), int6);
     assertTrue(doMatch(int6, env1, varY, env2)); 
     
-    assertTrue(doMatch(rvarX, env1, fvarY, env2));
-    assertEquals(env1.getValue(varX), f6);
+    assertTrue(doMatch(rvarXX, env1, fvarY, env2));
+    assertEquals(env1.getValue(varXX), f6);
     
-    assertTrue(doMatch(gvarX, env1, rvarY, env2));
-    assertEquals(env2.getValue(varY), gf6);
-/*    
-    ATermBlob b1 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
-    ATermBlob b2 = factory.makeBlob(new byte[]{'a', 'b', 'c'});
+    assertTrue(!doMatch(rvarX, env1, fvarY, env2)); 
     
-    ATermList declB = factory.makeList(varB);
+    assertTrue(!doMatch(gvarX, env1, rvarY, env2));
+    
+    assertTrue(doMatch(gvarX, env1, rvarYY, env2)); 
+    assertEquals(env2.getValue(varYY), g5);
+    
+    ATermBlob b1 = tbfactory.makeBlob(new byte[]{'a', 'b', 'c'});
+    ATermBlob b2 = tbfactory.makeBlob(new byte[]{'a', 'b', 'c'});
+    
+    ATermList declB = tbfactory.makeList(varB);
     env1.introduceVars(declB);
     env1.assignVar(varB, b1);  
     
@@ -264,8 +277,8 @@ public class TBTermTest extends TestCase {
     assertTrue(doMatch(b1.toString(), env1, "<str>", env2));
     assertTrue(doMatch("<str>", env1, b1.toString(), env2));
     
-    assertTrue(doMatch("var(str,B)", env1, b1.toString(), env2));
-    */
+//    assertTrue(doMatch(varB, env1, b1.toString(), env2));
+    
   }
 
   public ATerm check(String s) throws ToolBusException {
