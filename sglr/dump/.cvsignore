@@ -1,7 +1,0 @@
-Makefile.in
-Makefile
-.deps
-dump-actions
-dump-gotos
-dump-priorities
-dump-productions
