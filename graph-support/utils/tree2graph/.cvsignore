@@ -1,8 +1,0 @@
-.deps
-Graph.adt
-graph-converter.idef
-graph-converter.tifs
-.libs
-Makefile
-Makefile.in
-tree2graph
