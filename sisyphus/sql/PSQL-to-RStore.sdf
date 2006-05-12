@@ -1,0 +1,61 @@
+module PSQL-to-RStore
+
+imports 
+	Rstore
+	PSQL-Output
+
+hiddens
+context-free start-symbols
+	RSTORE
+
+exports
+
+context-free syntax
+	psql-to-rstore(PSQL-Output) -> RSTORE
+
+hiddens
+context-free syntax
+	tables-to-rstore-elements(Table*) -> {<RVAR, REXPTYPE, RVALUE> ","}*
+	table-to-rstore-element(Table) -> <RVAR, REXPTYPE, RVALUE>
+	table-to-rvalue(Table) -> RVALUE
+	header-to-rvar(Header) -> RVAR
+	records-to-elem(Record*) -> Elem
+	records-to-rexptype(Record*) -> REXPTYPE
+	record-to-elem(Record) -> Elem
+	field-value-to-elem(FieldValue) -> Elem
+	field-value-to-rexptype(FieldValue) -> REXPTYPE
+
+variables
+	"$fieldvalue"[0-9\']* -> FieldValue
+	"$fieldvalue*"[0-9\']* -> {FieldValue ","}*
+	"$fieldvalue+"[0-9\']* -> {FieldValue ","}+
+	"$fieldname"[0-9\']* -> FieldName
+	"$fieldname*"[0-9\']* -> {FieldName ","}*
+	"$fieldname+"[0-9\']* -> {FieldName ","}+
+	"$table"[0-9\']* -> Table
+	"$table*"[0-9\']* -> Table*
+	"$rvar"[0-9\']* -> RVAR
+	"$elem"[0-9\']* -> Elem
+	"$elem*"[0-9\']* -> {Elem ","}*
+	"$elem+"[0-9\']* -> {Elem ","}+
+	"$record"[0-9\']* -> Record
+	"$record*"[0-9\']* -> Record*
+	"$record+"[0-9\']* -> Record+
+
+	"$rexptype"[0-9\']* -> REXPTYPE	
+	
+	"$header"[0-9\']* -> Header
+	"$footer"[0-9\']* -> Footer
+
+	"$rstore-element*"[0-9\']* -> {<RVAR, REXPTYPE, RVALUE> ","}*
+	"$rstore-element"[0-9\']*-> <RVAR, REXPTYPE, RVALUE>
+
+	"$text"[0-9\']* -> Text
+	"$date"[0-9\']* -> Date
+	"$natcon"[0-9\']* -> NatCon
+	"$char+"[0-9\']* -> CHAR+
+	"$char*"[0-9\']* -> CHAR*
+	"$char"[0-9\']* -> CHAR
+
+
+

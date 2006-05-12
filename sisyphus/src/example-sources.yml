@@ -1,0 +1,59 @@
+repositories:
+  -
+   type: subversion
+   protocol: file
+   location: /ufs/storm/svnroot
+   components:
+    - sisyphus
+  -
+   type: subversion
+   protocol: svn+ssh
+   location: tabla.sen.cwi.nl/export/scratch1/gerco/migration/repo-b
+   components:
+    - asc-support
+    - asf
+    - asf-library
+    - asfsdf-meta
+    - asf-support
+    - aterm
+    - balanced-binary-aterms
+    - config-manager
+    - config-support
+    - dialog-gui
+    - editor-manager
+    - editor-plugin
+    - error-gui
+    - graph-gui
+    - graph-support
+    - io-support
+    - meta
+    - meta-studio
+    - module-details-gui
+    - module-manager
+    - module-support
+    - navigator-gui
+    - pandora
+    - pgen
+    - progress-gui
+    - pt-support
+    - relational-aterms
+    - sdf-apigen
+    - sdf-meta
+    - sdf-support
+    - sdf-library
+    - sglr
+    - structure-editor
+    - term-store
+    - tide
+    - tide-support
+    - toolbus
+    - toolbus-java-adapter
+    - toolbuslib
+    - toolbusNG
+    - meta-doc
+    - error-support
+    - aterm-java
+    - JJTraveler
+    - shared-objects
+    - apigen
+externals: [graphviz, ruby, rubygems, subversion]

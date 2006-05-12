@@ -1,0 +1,9 @@
+Configuration checkout:
+
+/profiles
+	/batatrom.yml
+	...
+/config
+	/sources.yml
+	/script.yml
+

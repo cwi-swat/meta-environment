@@ -1,0 +1,29 @@
+#! /bin/sh
+
+#set -x
+
+# This file is to test (most of) the commandline options
+
+PREFIX=__PREFIX__
+SICLI=$PREFIX/bin/si-cli
+
+$SICLI \
+    --root asfsdf-meta \
+    --profile batatrom \
+    --interval 120 \
+    --weekday Mon \
+    --weekday Tue \
+    --weekday Wed \
+    --weekday Thu \
+    --weekday Fri \
+    --after 00:01 \
+    --before 23:59 \
+    --mail meta-devel-list@cwi.nl \
+    --from daybuild@cwi.nl \
+    --smtp smtp.cwi.nl:25 \
+    --config svn://sjofar.sen.cwi.nl/sisyphus-configuration \
+    --User daybuild \
+    --Password daybuild \
+    --dbconf dbconf.yml \
+    --no-quiet \
+    --verbose

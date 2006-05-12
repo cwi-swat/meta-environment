@@ -1,0 +1,13 @@
+order: 
+ - reconf
+ - configure
+ - make
+ - install
+templates:
+ reconf: ./reconf
+ configure: ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%>
+ make: make
+ install: make install
+
+
+

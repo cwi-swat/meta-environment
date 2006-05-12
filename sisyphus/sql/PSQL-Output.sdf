@@ -1,0 +1,45 @@
+module PSQL-Output
+
+imports 
+	basic/NatCon
+	basic/Whitespace
+
+
+hiddens
+context-free start-symbols PSQL-Output
+
+exports
+
+sorts	Text Date Year Month Day Time FieldValue FieldName Table Record PSQL-Output Header Footer
+
+lexical syntax
+	[a-zA-Z][a-zA-Z\-\_0-9]* -> Text
+	[\_][a-zA-Z\-\_0-9]* -> FieldName
+	[0-9][0-9][0-9][0-9] -> Year
+	[0-9][0-9] -> Month
+	[0-9][0-9] -> Day
+	[0-9][0-9] ":" [0-9][0-9] ":" [0-9][0-9] -> Time
+	Year "-" Month "-" Day " " Time -> Date
+
+lexical restrictions
+	FieldName -/- [a-zA-Z\-\_0-9]
+	Text -/- [a-zA-Z\-\_0-9]
+
+context-free syntax
+	Text -> FieldValue
+	NatCon -> FieldValue
+	Date -> FieldValue
+
+	{FieldValue ","}+ -> Record
+	{FieldName ","}+ -> Header 
+	"(" NatCon "rows" ")" -> Footer
+	Header Record+ Footer -> Table
+
+
+	Table* -> PSQL-Output
+
+
+
+
+
+

@@ -1,0 +1,220 @@
+2006-03-21    <storm@cwi.nl>
+
+	* Bumped to 0.32
+
+	* Feature: transitive deps (tr_deps) are now available in
+	templates
+
+	* Feature: client now reloads if ruby files are changed.
+	
+
+2006-03-20    <storm@cwi.nl>
+
+	
+	* Feature: if a script (e.g. templates) are found in the profile,
+	those are taken, otherwise the global script is used.
+
+	* Bumped to 0.31
+
+	* Fix: there appeared to be \0 bytes in changelogs which cause
+	PostgreSQL to crash. They are now replaced by spaces.
+
+	* Feature: preliminary support for making binary
+	distributions. Disabled by default.
+
+	* Feature: added options to roll for building the "current"
+	package; an option to ignore action errors and options to make
+	--above and --below exclusive.
+
+	* Fix: there was a bug in --before/after. The time string was
+	parsed at startup time instead of iteration
+
+	* Fix: copying of backups filled up /tmp. No only one copy per pkg
+	is saved.
+
+2006-03-10    <storm@cwi.nl>
+
+	* Bumped to 0.30.
+
+	* Fix: config checkouts are now removed after finishing an
+	iteration.
+
+	* Feature: roll tool to perform builds on the commandline.
+
+2006-03-08    <storm@cwi.nl>
+
+	* Bumped to 0.29
+
+	* Fix: mail was sent when nothing happened. Now mail is sent when
+	there are one more failures.
+
+2006-03-07    <storm@cwi.nl>
+
+	* Bumped to 0.28
+
+	* Feature: only do iterations on certain days of the week between
+	certain times. Example: --weekday Wed --after 17:00 --before
+	00:00. NB: --weekday must be specified multiple times if builds
+	must occur on more days.
+
+	* Feature: clients can now send email; specify mail addresses on
+	command line with --mail. Config: --smtp smtp.cwi.nl:25. And
+	--from <address>.
+	
+
+2006-02-17    <storm@cwi.nl>
+
+	* Bumped 0.27
+
+	* Feature: source distributions now use build-ids in versions.
+
+2006-02-08    <storm@cwi.nl>
+
+	* Bumped to 0.26.
+
+	* Fix: Stale build items are now handled correctly
+	
+	* Fix: progress wasn't set to false when an build is not tried. 
+
+
+2006-02-06    <storm@cwi.nl>
+
+	* Bumped to 0.25
+
+	* Fixed generation of source distributions for bundling. The
+	versions in directory names in distributions (e.g. aterm-2.4) must
+	correspond with the versions in the tar-ball name. 
+
+	* Bumped to 0.24.
+
+	* Feature: bundleable tar balls are now produced in a public
+	download directory of Web of Sisyphus. A client only does this if
+	  distributes: true
+	  source_dist_dir: /path
+	  collect_url: http://url
+	is added to its profile (NB: path and url should point to the same
+	location). 
+	
+2006-02-03    <storm@cwi.nl>
+
+	* Bumped to 0.23.
+
+	* Fixed another reason for crashing after each cylce; was: closing
+	stderr.
+
+2006-02-02    <storm@cwi.nl>
+
+	* Bumped to 0.22
+
+	* Fixed not storing of dependencies in the database.
+	
+	* Fixed crashing after each cycle (appeared only porter and
+	batatrom); was: writing to a closed file.
+
+2006-01-27    <storm@cwi.nl>
+
+	* Bumped to 0.21
+
+	* Added column to si_results table to be able to view build
+	activitity before finishing.
+
+	* Added saving log files to /tmp *per* build so that (some)
+	history is retained. Specified by -q (quiet) on the commandline.
+
+2006-01-20    <storm@cwi.nl>
+
+	* Bumped to 0.20.
+
+	* Fixed tentatively the fact that some builds may not be tried
+	when they actually should have been. The fix is that there was a
+	mistake about in how database queries were ordered (asc or desc).
+
+2006-01-11    <storm@cwi.nl>
+
+	* Bumped to 0.19.
+
+	* Fixed not closing of opened tempfiles when capturing output from
+	shell commands that are running.
+
+	* Fixed duplicate key violation due to the fact that build items
+	are stored after results are stored...
+
+	* Bumped to 0.18.
+
+	* Added more and more informative logging to the console.
+
+	* Fixed duplicate dependency extraction; this resulted in
+	duplicate key violations in the database.
+
+2006-01-09    <storm@cwi.nl>
+
+	* Bumped to 0.17.
+
+2006-01-09    <{jong,storm}@cwi.nl>
+
+	* Fixed arbitrary deadlocking emerging from the use of open4. Now
+	simple temporary files are used when executing shell commands.
+
+2006-01-06    <storm@cwi.nl>
+
+	* Bumped to 0.16
+
+	* Fixed double slash problem in install data hook; this didn't
+	work on cygwin. 
+
+2006-01-04    <storm@cwi.nl>
+
+	* Renamed errors field in database to error_output because Rails does
+	not like it (i.e. uses it for a special purpose).
+
+	* Bumped to 0.15
+
+	* Added fields for errors and environment to the si_result
+	table. One can now see what really is executed for a build action.
+
+	* Bumped to 0.14.
+
+	* Fixed the fact that shell commands (build actions) weren't
+	executed in isolated shells. Now every command is executed in
+	environment that is explicitly declared in the profile. Commands
+	that Sisyphus itselfs executes (e.g. svn and cvs) are executed in
+	an environment determined by ./configure.
+
+2006-01-03    <storm@cwi.nl>
+
+	* Bumped to version 0.13.
+
+	* Reverted change of building builds that are "in_progress"
+	because of a crash; this had the effect that every package was 
+	always rebuilt.
+
+	* Fixed empty environment evaluation when build commands are executed. 
+	This resulted in sh syntax errors.
+
+	* Fixed single quote problem in script/Makefile.am
+	
+
+2006-01-02    <storm@cwi.nl>
+
+	* Fixed passing of RUBYLIB environment variable to gem commando in
+	Makefile.am
+
+	* Fixed bug in environment handling in profiles. An empty environment
+	is now valid and doesn't raise an exception.
+
+2005-12-21    <storm@cwi.nl>
+
+	* Refactored execute in env to not use waitpid myself. 
+	* Stale build results (in progress) because of a crash are now
+	rebuild	 
+
+	* Finally the environment entry from the profile is executed in
+	the same shell as the build commands are. It should be used to
+	make builds isolated; i.e. set the path to appropriate
+	identifiable compilers etc.
+
+Tue Dec 20 17:08:40 CET 2005	<{storm,jurgenv}@cwi.nl>
+  * Version is 0.8 now
+  * Started a ChangeLog ;-)
+  * distcheck target runs smoothly now
+

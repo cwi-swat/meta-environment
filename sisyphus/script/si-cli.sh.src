@@ -1,0 +1,19 @@
+#! /bin/sh
+
+RUBY_INTERPRETER=__RUBY__
+
+DATA_DIR=__DATA_DIR__
+CLIENT=si-cli.rb
+
+GEM_DIRS=`ls -d ${DATA_DIR}/gems/*`
+
+INCLUDE_FLAGS=
+for dir in ${GEM_DIRS}; do
+    INCLUDE_FLAGS="${INCLUDE_FLAGS} -I ${dir}/lib";
+done
+
+CMD="${RUBY_INTERPRETER} ${INCLUDE_FLAGS} -I ${DATA_DIR} ${DATA_DIR}/${CLIENT} $@"
+
+${CMD} --COMMAND_LINE "${CMD}"
+
+

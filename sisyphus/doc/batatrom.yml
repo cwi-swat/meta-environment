@@ -1,0 +1,4 @@
+user: storm
+build_dir: /ufs/storm/sisyphus/sisyphus/v2/build
+install_dir: /ufs/storm/sisyphus/sisyphus/v2/install
+environment:

@@ -1,0 +1,14 @@
+#! /bin/sh
+
+ENV=__ENV_BINDIR__/env
+CUT=__CUT_BINDIR__/cut
+
+RUBY_INTERPRETER=__RUBY__
+
+BINDIR=__BINDIR__
+DATA_DIR=__DATA_DIR__
+
+EMPTY_SHELL=empty-shell.rb
+
+${RUBY_INTERPRETER} -I ${RUBYGEMS_PATH} -rrubygems  -I ${DATA_DIR} ${DATA_DIR}/${EMPTY_SHELL}
+

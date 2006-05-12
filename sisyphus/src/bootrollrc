@@ -1,0 +1,25 @@
+boot_roll: 
+  build_dir: ./bla
+  install_dir: /tmp
+  vcs_user: storm
+sisyphus:
+  protocol: svn
+  host: sjofar.sen.cwi.nl
+  port: 3960
+  url: sisyphus-configuration
+  user: daybuild
+  password: daybuild
+  tunnel:
+    host: ssh.cwi.nl
+    port: 3960
+    user: storm
+templates:
+ reconf: ./reconf
+ configure: ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%> --enable-maintainer-mode --with-cflags="-Wall -Werror -g -O2"
+ make: make
+ install: make install
+ check: make check
+ distcheck: DISTCHECK_CONFIGURE_FLAGS="<%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%>" make distcheck
+ uninstall: make uninstall
+ update: cvs update
+ uninst_update: make uninstall; cvs update

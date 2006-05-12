@@ -1,0 +1,27 @@
+identification:
+ name: batatrom
+ host: batatrom.sen.cwi.nl
+ world: 1
+configuration:
+ user: storm
+ build_dir: /ufs/storm/sisyphus/sisyphus/v2/build
+ install_dir: /ufs/storm/sisyphus/sisyphus/v2/install
+ softpkgs:
+  gmake:
+   bin: /usr/bin
+  gcc:
+   bin: /ufs/sen1/software/installed/gcc-3.4.4/linux/i386/bin
+script:
+ order:
+  - reconf
+  - configure
+  - make
+  - install
+ templates:
+  reconf: ./reconf
+  configure: ./configure --prefix=<%= prefix%> <%deps.each do |d|%>--with-<%= d.name%>=<%= d.prefix%> <%end%>
+  make: make
+  install: make install
+externals:
+ grahviz: /ufs/sen1/software/installed/graphviz-1.12/linux/i386
+

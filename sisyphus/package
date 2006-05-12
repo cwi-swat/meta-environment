@@ -1,0 +1,13 @@
+package 
+identification
+  name=sisyphus
+  version=0.32
+  location=http://www.cwi.nl/projects/MetaEnv/sisyphus
+  info=http://www.cwi.nl/~storm
+  description='Continuous integration system'
+  keywords=software building
+configuration interface
+requires
+  ruby 1.8.2
+  rubygems 0.8.10
+  subversion 1.2.3

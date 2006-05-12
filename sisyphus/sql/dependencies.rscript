@@ -1,0 +1,37 @@
+
+type Component = str
+type Revision = <str name, int version>
+type Build = <int id, Revision revision>
+type Session = str
+
+set[Component] components
+set[Revision] revisions
+set[Build] builds
+rel[Session,Build] sessions
+set[Build] successful_builds
+rel[Build, Build] bom
+rel[Revision, Component] requires
+
+
+set[Component] participants(set[Build] bs) = domain(range(bs))
+
+bool isomorphic(set[Build] bs, set[Component] cs) =
+	participants(bs) == cs
+
+bool homogenous(set[Build] bs) =
+	#participants(bs) == #bs
+
+set[set[Build]] against_sets(Revision r) = 
+	{ S | 
+		set[Component] deps <- requires[r],
+		set[Revision] revs <- { <n, v> | <str n, int v> : revisions, n in deps },
+		set[Build] my_builds <- rangeR(successful_builds, revs),
+		set[Build] S : power0(my_builds), 
+		isomorphic(S, deps)
+	}
+
+set[Revision] toolbus_revisions = domainR(revisions, {"toolbus"})
+
+yield toolbus_revisions
+
+set[set[Build]] toolbus_against_sets = against_sets( < "toolbus" , 1136390389 >)

@@ -1,0 +1,11 @@
+#! /bin/sh
+
+RUBY_INTERPRETER=__RUBY__
+
+DATA_DIR=__DATA_DIR__
+BOOTROLL=boot-roll.rb
+
+
+${RUBY_INTERPRETER} -I ${DATA_DIR} ${DATA_DIR}/${BOOTROLL} $@
+
+
