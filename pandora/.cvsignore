@@ -1,9 +1,0 @@
-.*.swp
-Makefile
-Makefile.in
-aclocal.m4
-autom4te-2.53.cache
-autom4te.cache
-config.*
-configure
-pandora-*.pkg

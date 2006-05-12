@@ -1,8 +1,0 @@
-.deps
-Makefile
-Makefile.in
-pandora
-pandora.idef
-*.trm.tbl
-*.tifs
-*.adt
