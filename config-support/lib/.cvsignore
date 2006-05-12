@@ -1,8 +1,0 @@
-*.dict
-*.adt
-.deps
-Makefile
-Makefile.in
-configapi
-nl
-MetaConfig.def
