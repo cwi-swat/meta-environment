@@ -46,7 +46,7 @@ class Repository
           raise "Invalid dirname: #{dirname}"
         end 
         backup_path = File.join(Dir.tmpdir, dirname)
-        $stderr << "WARNING: checkout exists: #{path} moved to #{backup_path}.\n"
+        # $stderr << "WARNING: checkout exists: #{path} moved to #{backup_path}.\n"
         `chmod -R 0700 #{dirname}`
         #`cp -r -f #{dirname} #{backup_path}`
         `rm -r #{dirname}`
