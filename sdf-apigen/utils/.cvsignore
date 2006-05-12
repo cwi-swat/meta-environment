@@ -1,7 +1,0 @@
-.deps
-Makefile
-Makefile.in
-sdf2-to-adt
-sdf2-to-java
-sdf2-to-c
-*.test
