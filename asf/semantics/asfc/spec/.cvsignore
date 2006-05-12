@@ -1,7 +1,0 @@
-*.baf
-*.tbl
-Makefile
-Makefile.in
-*.eqs
-*.c
-Compiler
