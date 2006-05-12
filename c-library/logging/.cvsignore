@@ -1,6 +1,0 @@
-.deps
-libLogging.la
-.libs
-logging.lo
-Makefile
-Makefile.in
