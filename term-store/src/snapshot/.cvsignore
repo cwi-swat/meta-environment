@@ -1,6 +1,0 @@
-*.dict
-.deps
-Makefile
-Makefile.in
-
-libsnapshot.a
