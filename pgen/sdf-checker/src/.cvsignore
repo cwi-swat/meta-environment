@@ -1,7 +1,0 @@
-Makefile.in
-Makefile
-.deps
-sdfchecker
-sdfchecker.idef
-.libs
-*.tifs
