@@ -1,8 +1,0 @@
-*.adt
-*.def
-*.dict
-.deps
-Makefile
-Makefile.in
-errorapi
-locationapi

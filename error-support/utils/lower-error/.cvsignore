@@ -1,7 +1,0 @@
-*.sh
-*.tree
-.deps
-Makefile
-Makefile.in
-example.trm
-lower-error
