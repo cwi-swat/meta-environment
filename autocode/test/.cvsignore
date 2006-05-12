@@ -1,8 +1,0 @@
-*.class
-*.sh
-*.sh.log
-Makefile
-Makefile.in
-classjava.stamp
-org
-html
