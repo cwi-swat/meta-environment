@@ -1,6 +1,0 @@
-Makefile
-Makefile.in
-*.sh
-.deps
-*.[ch]
-*.dict

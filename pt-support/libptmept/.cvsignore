@@ -1,8 +1,0 @@
-Makefile
-Makefile.in
-.deps
-*.o
-*.adt
-*.pro
-*.dict
-
