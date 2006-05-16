@@ -14,6 +14,7 @@
 
 #include <MEPT.h>
 #include <ASFME-utils.h>
+#include <asc-ambiguity.h>
 
 /*}}}  */
 /*{{{  defines */
@@ -347,7 +348,11 @@ void enter_equation(equation_table * table, ASF_ASFConditionalEquation equation)
   }
   else {
     PT_Tree firstArg = PT_getArgsHead(lhsargs);
-    if (PT_isTreeVar(firstArg)) {
+
+    if (ASC_isAmbiguityConstructor(firstArg)) {
+      first_ofs = (PT_Production) NULL;
+    }
+    else if (PT_isTreeVar(firstArg)) {
       first_ofs = (PT_Production) NULL;
     }
     else {
