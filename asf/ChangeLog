@@ -1,5 +1,11 @@
 $Id$
 
+Tue May 16 14:25:39 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfe/src/equations.c: fixed a bug in dealing
+   with ambiguities. When the first argument of the outermost function
+   of the left-hand side of a rule was an ambiguity constructor, this
+   rule would never match.
+
 Wed May  3 13:45:50 CEST 2006 <jurgenv@cwi.nl>
  * Bumped to 2.0
 
