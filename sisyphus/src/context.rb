@@ -44,7 +44,8 @@ class ContextItem
     path = @item.prefix(@config.install_dir)
     make_dir_if_needed(path)
     #end
-    path = enlarge_path(path)
+    # jurgenv: turned off to prevent bugs in automake generated makefiles 
+    #path = enlarge_path(path)
     return path
   end
 
