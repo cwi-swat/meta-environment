@@ -1,6 +1,6 @@
 
     ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 1998-2006  Stichting Mathematisch Centrum, Amsterdam, 
                              The  Netherlands.
 
     This program is free software; you can redistribute it and/or modify
@@ -17,19 +17,3 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
-The build process of the ToolBus is controlled by autoconf and
-automake (see www.gnu.org).
-
-Before running ./configure to configure the system and to create
-Makefiles from Makefile.in's, you should first run ./reconf which
-generates among others Makefile.in's from Makefile.am's.
-
-Running ./reconf might give several warnings about non-existent files
-which can safely be ignored because automake will install these
-missing files for you.
-
-It is essential that you have an up-to-date version of automake
-(version 1.4 or above is required).
-
-Note for CWI developers. Add "automake" to your ~/.pkgrc file in
-order to use an up-to-date version of automake.
