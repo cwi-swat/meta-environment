@@ -25,6 +25,7 @@ FILE *LOG_OpenFile(const char *std_error, const char *FN) {
   }
 
   if (!(file = fopen(FN, "rb"))) {
+    ATwarning("Can't open file: %s\n", FN);
     return NULL;
   }
   return file;

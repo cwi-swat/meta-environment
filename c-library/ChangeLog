@@ -1,5 +1,8 @@
 $Id$
 
+Thu May 18 14:42:01 CEST 2006 <economop@cwi.nl>
+ * Added a warning for failure to open logging file. 
+
 Fri Mar 17 15:04:10 CET 2006 <economop@cwi.nl>
  * Initial version of c-library package. This library should only contain 
    library functions and no executables. 
