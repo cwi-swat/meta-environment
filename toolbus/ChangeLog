@@ -1,5 +1,10 @@
 $Id$
 
+Thu May 18 13:38:27 CEST 2006 <jurgenv@cwi.nl>
+ * test/*.out: renamed .out files to .ref, because .out may
+   trigger a GNU make implicit rule which simply copies the
+   stem to stem.out. 
+
 Sat Apr 22 18:36:50 CEST 2006 <jurgenv@cwi.nl>
  * package: bumped to version 1.4
 
