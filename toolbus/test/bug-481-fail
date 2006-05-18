@@ -2,4 +2,4 @@
 trap "rm -f tmp" 0
 ../toolbus/toolbus -TB_PORT 9999 bug-481.tb 2>&1 >/dev/null \
 | sed 's/^[^,]*, //' > tmp
-diff bug-481.tb.out tmp
+diff bug-481.tb.ref tmp

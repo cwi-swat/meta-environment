@@ -23,9 +23,9 @@ noinst_PROGRAMS = TBmatch1 TermIO
 
 EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
-                  expr-errors.tb.out scope.tb.out tc-errors.tb.out \
+                  expr-errors.tb.ref scope.tb.ref tc-errors.tb.ref \
                   test-removesocket.src anno.tb test-annos.src read.src \
-		  read.tb bug-481.tb bug-481.tb.out dyncall.tb dyncall.src
+		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src
 
 OK_TESTS = \
 	if-ok \
@@ -50,7 +50,7 @@ GENERATED_BY_TESTS = \
 	fe \
 	ff \
 	fbin \
-	test.out \
+	test.ref \
 	blobby
 
 CLEANFILES = \
@@ -75,7 +75,7 @@ INCLUDES        = -I$(top_srcdir)/libtb
 	echo 'trap "rm -f tmp" 0' >> $@
 	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>&1 >/dev/null \' >> $@
 	echo "| sed 's/^[^,]*, //' > tmp" >> $@
-	echo 'diff $<.out tmp' >> $@
+	echo 'diff $<.ref tmp' >> $@
 	chmod +x $@
 
 % : %.src Makefile

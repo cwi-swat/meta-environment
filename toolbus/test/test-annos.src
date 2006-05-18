@@ -26,17 +26,17 @@ srcdir=__SRCDIR__
 ulimit -t 25
 
 TERM="f(a{[b,c]})"
-(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/anno.tb) > test.out 2>&1
-fgrep "result:$TERM,$TERM" test.out > /dev/null 2>&1
+(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/anno.tb) > test.ref 2>&1
+fgrep "result:$TERM,$TERM" test.ref > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   exit 1
 fi
  
 TERM="f(a{[b,c]}){[an,no]}"
-(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/anno.tb) > test.out 2>&1
-fgrep "result:$TERM,$TERM" test.out > /dev/null 2>&1
+(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/anno.tb) > test.ref 2>&1
+fgrep "result:$TERM,$TERM" test.ref > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-  rm -f test.out
+  rm -f test.ref
   exit 1
 fi
 

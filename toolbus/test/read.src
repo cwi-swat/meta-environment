@@ -27,10 +27,10 @@ srcdir=__SRCDIR__
 ulimit -t 25
 
 TERM="f(a,b)"
-(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/read.tb) > test.out 2>&1
+(echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/read.tb) > test.ref 2>&1
 failed=$?
 
-rm test.out
+rm test.ref
 
 exit $failed
 
