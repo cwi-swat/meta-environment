@@ -1,2 +1,2 @@
-EXTRA_DIST=$(wildcard *.out)
+EXTRA_DIST=$(wildcard *.ref)
 
