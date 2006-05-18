@@ -1,5 +1,8 @@
 $Id$
 
+Thu May 18 13:44:45 CEST 2006 <jurgenv@cwi.nl>
+ * Bumped version to 2.1
+
 Tue May 16 14:25:39 CEST 2006 <jurgenv@cwi.nl>
  * semantics/asfe/src/equations.c: fixed a bug in dealing
    with ambiguities. When the first argument of the outermost function
