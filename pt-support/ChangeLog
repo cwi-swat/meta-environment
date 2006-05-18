@@ -1,5 +1,10 @@
 $Id$
 
+Thu May 18 13:42:56 CEST 2006 <jurgenv@cwi.nl>
+ * utils/implodePT/test/out/*.out: changed .out suffixes to .ref
+   to prevent triggering a GNU make implicit rule (which copies
+   <stem> to <stem>.out when <stem>.out is older than <stem>.
+
 Thu Apr 20 05:48:54 CEST 2006 <jurgenv@cwi.nl>
  * libmept/apply.c: added a new API function for applying functions
    that returns a more complex non-terminal than just a sort.
