@@ -1,5 +1,10 @@
 $Id$
 
+Fri May 19 14:26:51 CEST 2006 <jurgenv@cwi.nl>
+ * toolbus/script.l: changed the maximum length of a string
+   from BUFSIZ (??) to 5000. BUFSIZ is OS dependent and is 
+   apparently much smaller on MacOSX than on Linux.
+
 Thu May 18 13:38:27 CEST 2006 <jurgenv@cwi.nl>
  * test/*.out: renamed .out files to .ref, because .out may
    trigger a GNU make implicit rule which simply copies the

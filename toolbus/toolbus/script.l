@@ -29,6 +29,8 @@ void ll_inc_pos(int);
 void ll_coords(int,int);
 
 void switch_source(char *name, int n);
+
+#define MAX_STRING_LENGTH 5000
 %}
 
 layout        [ \t\r]
@@ -94,14 +96,14 @@ abs-timeout   { ll_inc_pos(11);return(ABS_TIMEOUT); }
 let           { ll_inc_pos(3);return(LET); }
 in            { ll_inc_pos(2);return(IN); }
 endlet        { ll_inc_pos(6);return(ENDLET); }
-"\""          { char strbuf[BUFSIZ], *ptr = strbuf;
+"\""          { char strbuf[MAX_STRING_LENGTH], *ptr = strbuf;
 		int c, blino = lino, bpos = pos;
 
 		pos++; /* initial quote */
 		while((c = input()) != '"'){
 		  if(c <= 0)
 		    yyerror("String constant not terminated at eof");
-		  if(ptr == &strbuf[BUFSIZ]){
+		  if(ptr == &strbuf[MAX_STRING_LENGTH]){
 		    yyerror("String constant too long");
 		  }
 		  if(c == '\\'){
