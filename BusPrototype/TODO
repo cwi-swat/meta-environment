@@ -1,0 +1,16 @@
+Bugs:
+Connection reset / broken pipe problem.
+
+
+TODO:
+Close connection after sending a END message.
+
+
+Features:
+Handle firewall issues (alternate way of communication).
+
+
+Future work:
+Use streams.
+
+Handle crashing clients (recovery).
