@@ -215,13 +215,13 @@ public class Multiplexer extends Thread{
 	 */
 	public static void closeConnection(SelectionKey key){
 		key.cancel();
-
+		
 		// Remove the attachment
 		key.attach(null);
 
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 		Socket socket = socketChannel.socket();
-		Logger.getInstance().log("Closed connection for: " + socket.getInetAddress().getHostName() + ":" + socket.getPort() + ".", Logger.INFO);
+		Logger.getInstance().log("Closing connection for: " + socket.getInetAddress().getHostName() + ":" + socket.getPort() + ".", Logger.INFO);
 
 		try{
 			socketChannel.close();

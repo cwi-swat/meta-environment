@@ -203,7 +203,6 @@ public class Variable{
 
 			// Disconnect
 			ioHandler.send(new EndOperation());
-			ioHandler.terminate();
 
 			Variable variable = requestedVariables.get(variableKey);
 			data = variable.getData();

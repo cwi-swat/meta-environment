@@ -37,15 +37,19 @@ public class SocketIOHandler implements IIOHandler{
 	private ByteBuffer lengthReadBuffer = null;
 	private int messageLength = -1;
 	private int bytesLeftToRead = -1;
-	
+
 	private ByteBuffer opReadBuffer = null;
 	private String operationID = null;
 	private AbstractOperation operationBeingReceived = null;
-	
+
 	private ByteBuffer dataReadBuffer = null;
 	private ByteBuffer leftOverDataReadBuffer = null;
-	
+
 	private ByteBuffer writeBuffer = null;
+
+	// Will be set to true when we send an END message. This way we can
+	// anticipate the incoming disconnect.
+	private boolean expectingDisconnect = false;
 
 	/**
 	 * Constructor
@@ -71,7 +75,7 @@ public class SocketIOHandler implements IIOHandler{
 		opReadBuffer = ByteBuffer.allocate(AbstractOperation.OPFIELDLENGTH);
 		dataReadBuffer = ByteBuffer.allocateDirect(READBUFFERSIZE);
 		leftOverDataReadBuffer = null;
-		
+
 		writeBuffer = ByteBuffer.allocateDirect(WRITEBUFFERSIZE);
 	}
 
@@ -94,7 +98,8 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The operation that was received
 	 */
 	public void receive(AbstractOperation operation){
-		System.out.println("REC "+operation.getOperation());
+		// Temp
+		// System.out.println("REC "+operation.getOperation());
 		dataHandler.receive(operation);
 	}
 
@@ -143,9 +148,9 @@ public class SocketIOHandler implements IIOHandler{
 
 			// Resize the data buffer is nessacary.
 			if(dataReadBuffer.capacity() != messageLength) dataReadBuffer = ByteBuffer.allocate(messageLength);
-			
+
 			lengthReadBuffer.clear();
-			
+
 			bytesLeftToRead = messageLength;
 		}
 
@@ -174,7 +179,7 @@ public class SocketIOHandler implements IIOHandler{
 			opReadBuffer.clear();
 		}
 		// Temp
-		//System.out.println("REC OP: "+operationID);
+		// System.out.println("REC OP: "+operationID);
 
 		return connected;
 	}
@@ -186,31 +191,31 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The with the socketchannel associated key
 	 */
 	private void readData(SelectionKey key){
-		//NOTE: This method contains some duplicate code, but who cares.
+		// NOTE: This method contains some duplicate code, but who cares.
 		boolean connected = false;
 		if(messageLength < READBUFFERSIZE){
 			leftOverDataReadBuffer = ByteBuffer.allocate(messageLength);
-			
+
 			connected = read(leftOverDataReadBuffer);
-			
+
 			leftOverDataReadBuffer.flip();
 			byte[] data = new byte[leftOverDataReadBuffer.limit()];
 			leftOverDataReadBuffer.get(data);
 			operationBeingReceived.put(data);
-			
+
 			bytesLeftToRead -= data.length;
-			
+
 			leftOverDataReadBuffer = null;
 		}else{
 			connected = read(dataReadBuffer);
-			
+
 			dataReadBuffer.flip();
 			byte[] data = new byte[dataReadBuffer.limit()];
 			dataReadBuffer.get(data);
 			operationBeingReceived.put(data);
-			
+
 			bytesLeftToRead -= data.length;
-			
+
 			dataReadBuffer.clear();
 		}
 
@@ -220,11 +225,10 @@ public class SocketIOHandler implements IIOHandler{
 		}else if(bytesLeftToRead == 0){
 			if(operationBeingReceived.getOperation() == AbstractOperation.END){
 				terminate();
-				Multiplexer.closeConnection(key);
 			}else{
 				receive(operationBeingReceived);
 			}
-			
+
 			// Reset everything
 			messageLength = -1;
 			operationID = null;
@@ -282,7 +286,12 @@ public class SocketIOHandler implements IIOHandler{
 	 *            was closed.
 	 */
 	private void disconnected(SelectionKey key){
-		Multiplexer.closeDueToDisconnect(key);
+		// Check if the disconnect was expected.
+		if(expectingDisconnect){
+			Multiplexer.closeConnection(key);
+		}else{
+			Multiplexer.closeDueToDisconnect(key);
+		}
 
 		lengthReadBuffer.clear();
 		dataReadBuffer.clear();
@@ -296,7 +305,8 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The operation that will be send.
 	 */
 	public void send(AbstractOperation operation){
-		System.out.println("SND "+operation.getOperation());
+		// Temp
+		//System.out.println("SND " + operation.getOperation());
 		addJob(new Job(operation));
 	}
 
@@ -411,8 +421,12 @@ public class SocketIOHandler implements IIOHandler{
 			}
 
 			// Write operation
-			byte[] operationIDBytes = operation.getOperation().getBytes();
+			String operationIdentifier = operation.getOperation();
+			byte[] operationIDBytes = operationIdentifier.getBytes();
 			ByteBuffer opWriteBuffer = ByteBuffer.wrap(operationIDBytes);
+			
+			// If an end message is send, we can expect a disconnect
+			if(operationIdentifier == AbstractOperation.END) expectingDisconnect = true;
 
 			try{
 				socketChannel.write(opWriteBuffer);
@@ -449,7 +463,8 @@ public class SocketIOHandler implements IIOHandler{
 				Thread.yield();
 			}
 			// Temp
-			//System.out.println("SND done with OP: "+operation.getOperation());
+			// System.out.println("SND done with OP:
+			// "+operation.getOperation());
 		}
 	}
 }

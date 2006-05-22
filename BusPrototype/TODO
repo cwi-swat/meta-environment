@@ -3,7 +3,7 @@ Connection reset / broken pipe problem.
 
 
 TODO:
-Close connection after sending a END message.
+Nothing atm.
 
 
 Features:
