@@ -5,7 +5,7 @@ Bugs:
 		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
 
 TODO:
-	Rearrange the multithreaded multiplexer for improved performance.
+	Nothing atm.
 
 
 Features:
