@@ -13,11 +13,13 @@ public class SerializedTermTest extends SerializableTerm{
 
 	public SerializedTermTest(boolean filled){
 		super();
-		if(filled){
-			longByteArray = new byte[NativeTypeBuilder.LONGBYTES];
+		
+		longByteArray = new byte[NativeTypeBuilder.LONGBYTES];
+		intByteArray = new byte[NativeTypeBuilder.INTBYTES];
+		
+		if(filled){	
 			fillRandom(longByteArray);
-
-			intByteArray = new byte[NativeTypeBuilder.INTBYTES];
+			
 			fillRandom(intByteArray);
 
 			// string = new FlexibleLengthTerm("testing".getBytes());
