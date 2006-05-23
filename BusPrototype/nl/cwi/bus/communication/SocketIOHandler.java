@@ -247,6 +247,7 @@ public class SocketIOHandler implements IIOHandler{
 			if(bytesRead == -1) connected = false;
 		}catch(IOException ioex){
 			Logger.getInstance().log("An IOException occured while reading from a socket channel.", Logger.ERROR, ioex);
+			throw new RuntimeException(ioex);
 		}
 
 		return connected;
@@ -359,6 +360,7 @@ public class SocketIOHandler implements IIOHandler{
 						socketChannel.write(lengthWriteBuffer);
 					}catch(IOException ioex){
 						Logger.getInstance().log("Writing length to the channel failed.", Logger.ERROR, ioex);
+						throw new RuntimeException(ioex);
 					}
 				}
 	
@@ -375,6 +377,7 @@ public class SocketIOHandler implements IIOHandler{
 						socketChannel.write(opWriteBuffer);
 					}catch(IOException ioex){
 						Logger.getInstance().log("Writing operation to the channel failed.", Logger.ERROR, ioex);
+						throw new RuntimeException(ioex);
 					}
 				}
 	
@@ -404,6 +407,7 @@ public class SocketIOHandler implements IIOHandler{
 							socketChannel.write(writeBuffer);
 						}catch(IOException ioex){
 							Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
+							throw new RuntimeException(ioex);
 						}
 					}
 	
