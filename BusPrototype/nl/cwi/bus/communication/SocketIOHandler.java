@@ -414,10 +414,12 @@ public class SocketIOHandler implements IIOHandler{
 			byte[] lengthBytes = NativeTypeBuilder.makeBytesFromInt(dataLength);
 			ByteBuffer lengthWriteBuffer = ByteBuffer.wrap(lengthBytes);
 
-			try{
-				socketChannel.write(lengthWriteBuffer);
-			}catch(IOException ioex){
-				Logger.getInstance().log("Writing length to the channel failed.", Logger.ERROR, ioex);
+			while(lengthWriteBuffer.hasRemaining()){
+				try{
+					socketChannel.write(lengthWriteBuffer);
+				}catch(IOException ioex){
+					Logger.getInstance().log("Writing length to the channel failed.", Logger.ERROR, ioex);
+				}
 			}
 
 			// Write operation
@@ -428,10 +430,12 @@ public class SocketIOHandler implements IIOHandler{
 			// If an end message is send, we can expect a disconnect
 			if(operationIdentifier == AbstractOperation.END) expectingDisconnect = true;
 
-			try{
-				socketChannel.write(opWriteBuffer);
-			}catch(IOException ioex){
-				Logger.getInstance().log("Writing operation to the channel failed.", Logger.ERROR, ioex);
+			while(opWriteBuffer.hasRemaining()){
+				try{
+					socketChannel.write(opWriteBuffer);
+				}catch(IOException ioex){
+					Logger.getInstance().log("Writing operation to the channel failed.", Logger.ERROR, ioex);
+				}
 			}
 
 			// Write data
