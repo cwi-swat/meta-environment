@@ -60,18 +60,15 @@ public class MultiThreadedMultiplexer extends Multiplexer{
 				final SelectionKey key = (SelectionKey) iterator.next();
 				iterator.remove();
 
+				// Acception a connection is a relatively fast operation, so there is no need to do this concurrently.
 				if(getMode() == SERVERMODE && key.isAcceptable()){
-					threadPool.addJob(new Runnable(){
-						public void run(){
-							try{
-								accept(key);
-							}catch(IOException ioex){
-								Logger.getInstance().log("An exception occured during the exection of the multiplexer (read()). The connection on which the exception occurred will be closed.", Logger.ERROR, ioex);
+					try{
+						accept(key);
+					}catch(IOException ioex){
+						Logger.getInstance().log("An exception occured during the exection of the multiplexer (read()). The connection on which the exception occurred will be closed.", Logger.ERROR, ioex);
 
-								closeDueToDisconnect(key);
-							}
-						}
-					});
+						closeDueToDisconnect(key);
+					}
 				}
 				if(key.isReadable()){
 					threadPool.addJob(new Runnable(){
