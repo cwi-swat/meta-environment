@@ -24,6 +24,7 @@ public class SocketIOHandler implements IIOHandler{
 	
 	private final static BlockingThreadPool writeThreadPool = new BlockingThreadPool(Config.getNrOfConcurrentThreads(), true);
 
+	private final Object WRITELOCK = new Object();
 	private final Object READLOCK = new Object();
 	
 	private Selector selector = null;
@@ -347,71 +348,73 @@ public class SocketIOHandler implements IIOHandler{
 		 * Writes the data to the channel.
 		 */
 		public void run(){
-			// Write length
-			int dataLength = operation.length();
-			byte[] lengthBytes = NativeTypeBuilder.makeBytesFromInt(dataLength);
-			ByteBuffer lengthWriteBuffer = ByteBuffer.wrap(lengthBytes);
-
-			while(lengthWriteBuffer.hasRemaining()){
-				try{
-					socketChannel.write(lengthWriteBuffer);
-				}catch(IOException ioex){
-					Logger.getInstance().log("Writing length to the channel failed.", Logger.ERROR, ioex);
-				}
-			}
-
-			// Write operation
-			String operationIdentifier = operation.getOperation();
-			byte[] operationIDBytes = operationIdentifier.getBytes();
-			ByteBuffer opWriteBuffer = ByteBuffer.wrap(operationIDBytes);
-
-			// If an end message is send, we can expect a disconnect
-			if(operationIdentifier == AbstractOperation.END) expectingDisconnect = true;
-
-			while(opWriteBuffer.hasRemaining()){
-				try{
-					socketChannel.write(opWriteBuffer);
-				}catch(IOException ioex){
-					Logger.getInstance().log("Writing operation to the channel failed.", Logger.ERROR, ioex);
-				}
-			}
-
-			// Write data
-			int offset = 0;
-			// Don't stop writing till all bytes are send.
-			while(offset < dataLength){
-				int bytesToWrite = 0;
-
-				int bytesLeft = dataLength - offset;
-				if(bytesLeft < WRITEBUFFERSIZE){
-					bytesToWrite = bytesLeft;
-				}else{
-					bytesToWrite = WRITEBUFFERSIZE;
-				}
-
-				writeBuffer.clear();
-				byte[] data = operation.get(offset, bytesToWrite);
-				writeBuffer.put(data, 0, data.length);
-				writeBuffer.flip();
-
-				// Write all the bytes in the buffer; depending on the space
-				// left in the output buffer only a part (or even nothing) may
-				// be written.
-				while(writeBuffer.hasRemaining()){
+			synchronized(WRITELOCK){
+				// Write length
+				int dataLength = operation.length();
+				byte[] lengthBytes = NativeTypeBuilder.makeBytesFromInt(dataLength);
+				ByteBuffer lengthWriteBuffer = ByteBuffer.wrap(lengthBytes);
+	
+				while(lengthWriteBuffer.hasRemaining()){
 					try{
-						socketChannel.write(writeBuffer);
+						socketChannel.write(lengthWriteBuffer);
 					}catch(IOException ioex){
-						Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
+						Logger.getInstance().log("Writing length to the channel failed.", Logger.ERROR, ioex);
 					}
 				}
-
-				offset += bytesToWrite;
-
-				Thread.yield();
+	
+				// Write operation
+				String operationIdentifier = operation.getOperation();
+				byte[] operationIDBytes = operationIdentifier.getBytes();
+				ByteBuffer opWriteBuffer = ByteBuffer.wrap(operationIDBytes);
+	
+				// If an end message is send, we can expect a disconnect
+				if(operationIdentifier == AbstractOperation.END) expectingDisconnect = true;
+	
+				while(opWriteBuffer.hasRemaining()){
+					try{
+						socketChannel.write(opWriteBuffer);
+					}catch(IOException ioex){
+						Logger.getInstance().log("Writing operation to the channel failed.", Logger.ERROR, ioex);
+					}
+				}
+	
+				// Write data
+				int offset = 0;
+				// Don't stop writing till all bytes are send.
+				while(offset < dataLength){
+					int bytesToWrite = 0;
+	
+					int bytesLeft = dataLength - offset;
+					if(bytesLeft < WRITEBUFFERSIZE){
+						bytesToWrite = bytesLeft;
+					}else{
+						bytesToWrite = WRITEBUFFERSIZE;
+					}
+	
+					writeBuffer.clear();
+					byte[] data = operation.get(offset, bytesToWrite);
+					writeBuffer.put(data, 0, data.length);
+					writeBuffer.flip();
+	
+					// Write all the bytes in the buffer; depending on the space
+					// left in the output buffer only a part (or even nothing) may
+					// be written.
+					while(writeBuffer.hasRemaining()){
+						try{
+							socketChannel.write(writeBuffer);
+						}catch(IOException ioex){
+							Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
+						}
+					}
+	
+					offset += bytesToWrite;
+	
+					Thread.yield();
+				}
+				// Temp
+				// System.out.println("SND done with OP: " +
+				// operation.getOperation());
 			}
-			// Temp
-			// System.out.println("SND done with OP: " +
-			// operation.getOperation());
 		}
 	}
 }
