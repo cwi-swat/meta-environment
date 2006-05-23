@@ -2,7 +2,6 @@ package nl.cwi.bus.communication;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -120,9 +119,6 @@ public class Multiplexer extends Thread{
 					if(getMode() == SERVERMODE && key.isAcceptable()){
 						accept(key);
 					}
-					if(key.isWritable()){
-						write(key);
-					}
 					if(key.isReadable()){
 						read(key);
 					}
@@ -168,18 +164,6 @@ public class Multiplexer extends Thread{
 		socketChannel.register(selectorCreator.getSelector(), SelectionKey.OP_READ, ioHandler);
 		IDataHandler dataHandler = toolDataHandlerFactory.createToolDataHandler(ioHandler);
 		ioHandler.setDataHandler(dataHandler);
-	}
-
-	/**
-	 * Writes to a channel
-	 * 
-	 * @param key
-	 *            The selectionkey
-	 * @throws ClosedChannelException
-	 */
-	protected void write(SelectionKey key) throws ClosedChannelException{
-		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
-		ioHandler.write();
 	}
 
 	/**

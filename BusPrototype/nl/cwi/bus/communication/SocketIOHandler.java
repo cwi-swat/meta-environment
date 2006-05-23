@@ -2,14 +2,13 @@ package nl.cwi.bus.communication;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
-import java.util.List;
 
 import nl.cwi.bus.communication.operations.AbstractOperation;
+import nl.cwi.bus.config.Config;
+import nl.cwi.util.BlockingThreadPool;
 import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.logging.Logger;
 
@@ -22,15 +21,13 @@ import nl.cwi.util.logging.Logger;
 public class SocketIOHandler implements IIOHandler{
 	private final static int READBUFFERSIZE = 7500;
 	private final static int WRITEBUFFERSIZE = 7500;
+	
+	private final static BlockingThreadPool writeThreadPool = new BlockingThreadPool(Config.getNrOfConcurrentThreads(), true);
 
 	private final Object READLOCK = new Object();
-	private final Object WRITELOCK = new Object();
-
+	
 	private Selector selector = null;
-	private Object selectionPreventionLock = null;
 	private SocketChannel socketChannel = null;
-
-	private List jobs = null;
 
 	private IDataHandler dataHandler = null;
 
@@ -63,10 +60,7 @@ public class SocketIOHandler implements IIOHandler{
 		super();
 
 		this.selector = selectorCreator.getSelector();
-		this.selectionPreventionLock = selectorCreator.getSelectionPreventionLock();
 		this.socketChannel = socketChannel;
-
-		jobs = new ArrayList();
 
 		// Allocate the buffers.
 		// All large buffers that will be reused are allocated to be direct, for
@@ -258,27 +252,6 @@ public class SocketIOHandler implements IIOHandler{
 	}
 
 	/**
-	 * Writes the queued messages to the channel.
-	 * 
-	 * @throws ClosedChannelException
-	 *             Thrown when the channel is closed while writing to it.
-	 */
-	public void write() throws ClosedChannelException{
-		synchronized(WRITELOCK){
-			// Start at the back of the list because we're also removing stuff,
-			// otherwise we might skip something.
-			for(int i = jobs.size() - 1; i >= 0; i--){
-				Job job = (Job) jobs.get(i);
-				jobs.remove(i);
-
-				job.run();
-			}
-
-			socketChannel.register(selector, SelectionKey.OP_READ, this);
-		}
-	}
-
-	/**
 	 * Handles disconnects.
 	 * 
 	 * @param key
@@ -338,42 +311,7 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The job that should be added.
 	 */
 	private void addJob(Job job){
-		synchronized(WRITELOCK){
-			jobs.add(job);
-
-			synchronized(selectionPreventionLock){
-				selector.wakeup();
-				synchronized(selector){
-					try{
-						// Register for writing
-						socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE, this);
-					}catch(ClosedChannelException ccex){
-						Logger.getInstance().log("Failed to register for writing (the channel was closed).", Logger.ERROR, ccex);
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Removes a job from the pool.
-	 * 
-	 * @param job
-	 *            The job to remove.
-	 */
-	public void removeJob(Job job){
-		synchronized(WRITELOCK){
-			jobs.remove(job);
-		}
-	}
-
-	/**
-	 * Returns the write lock for the channel.
-	 * 
-	 * @return The write lock for the channel.
-	 */
-	public Object getWriteLock(){
-		return WRITELOCK;
+		writeThreadPool.addJob(job);
 	}
 
 	/**

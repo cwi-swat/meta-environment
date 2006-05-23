@@ -73,19 +73,6 @@ public class MultiThreadedMultiplexer extends Multiplexer{
 						}
 					});
 				}
-				if(key.isWritable()){
-					threadPool.addJob(new Runnable(){
-						public void run(){
-							try{
-								write(key);
-							}catch(IOException ioex){
-								Logger.getInstance().log("An exception occured during the exection of the multiplexer (write()). The connection on which the exception occurred will be closed.", Logger.ERROR, ioex);
-
-								closeDueToDisconnect(key);
-							}
-						}
-					});
-				}
 				if(key.isReadable()){
 					threadPool.addJob(new Runnable(){
 						public void run(){
