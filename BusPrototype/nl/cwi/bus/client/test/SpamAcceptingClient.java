@@ -21,10 +21,12 @@ public class SpamAcceptingClient implements ITool{
 		toolBridge = ToolRegistery.getInstance().createBridge(this);
 		toolBridge.start();
 	}
-
+	long total = 0;
 	public void string(SerializableStringTerm string){
 		// Print timestamp
 		//System.out.println("Received: "+System.currentTimeMillis());
+		total += System.currentTimeMillis();
+		System.out.println(total);
 	}
 
 	/**

@@ -59,11 +59,11 @@ public class ProcessManager{
 			try{
 				// Temp
 				// Only send something to the first process / (tool)
-				 int i = 0;
-				//for(int i = 0; i < processes.size(); i++){
+				// int i = 0;
+				for(int i = 0; i < processes.size(); i++){
 					AbstractProcessInstance processInstance = (AbstractProcessInstance) processes.get(i);
 					processInstance.step(variable);
-				//}
+				}
 				// End temp
 			}catch(RuntimeException rex){
 				Logger.getInstance().log("A RuntimeException occurred while executing the process instances", Logger.ERROR, rex);

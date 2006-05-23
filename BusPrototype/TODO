@@ -1,16 +1,27 @@
 Bugs:
-Connection reset / broken pipe problem.
-
+	Connection reset / broken pipe problem.
+		This occured very rarely and at random.
+		It might have been fixed already, because it may have been associated with a bug that was fixed recently.
+		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
 
 TODO:
-Nothing atm.
+	Rearrange the multithreaded multiplexer for improved performance.
 
 
 Features:
-Handle firewall issues (alternate way of communication).
+	Handle firewall issues (alternate way of communication).
+
+
+Stuff that might be nice:
+	An intergrated tool for diagnostics.
+	Should support:
+		-Memory stats
+		-Runtime stats
+		-Thread stats
+		-Ability to generate Java code runtime at the Toolbus, for advanced debugging (possible security hole though, so it should be disableable).
 
 
 Future work:
-Use streams.
+	Use streams.
 
-Handle crashing clients (recovery).
+	Handle crashing clients (recovery).

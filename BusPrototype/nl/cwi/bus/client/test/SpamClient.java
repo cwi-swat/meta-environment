@@ -40,9 +40,10 @@ public class SpamClient implements ITool{
 		
 		return randomStringBuilder.toString();
 	}
-	
+	long total = 0;
 	public void startSpamming(){
-		while(true){
+		//while(true){
+		for(int i = 0; i < 10; i++){
 			try{
 				String text = generateRandomString();
 				
@@ -50,15 +51,17 @@ public class SpamClient implements ITool{
 				
 				PutOperation putOperation = PutOperation.createStripped(variable);
 				
+				total += System.currentTimeMillis();
 				//System.out.println("Sending: "+variable.getVariableID()+" @ "+System.currentTimeMillis());
 				toolBridge.send(putOperation);
 				
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 				Thread.yield();
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
 		}
+		System.out.println(total);
 	}
 
 	public void string(SerializableStringTerm message){

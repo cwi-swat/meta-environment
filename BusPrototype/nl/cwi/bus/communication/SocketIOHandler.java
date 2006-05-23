@@ -99,7 +99,7 @@ public class SocketIOHandler implements IIOHandler{
 	 */
 	public void receive(AbstractOperation operation){
 		// Temp
-		// System.out.println("REC "+operation.getOperation());
+		// System.out.println("REC " + operation.getOperation());
 		dataHandler.receive(operation);
 	}
 
@@ -179,7 +179,7 @@ public class SocketIOHandler implements IIOHandler{
 			opReadBuffer.clear();
 		}
 		// Temp
-		// System.out.println("REC OP: "+operationID);
+		// System.out.println("REC OP: " + operationID);
 
 		return connected;
 	}
@@ -306,7 +306,7 @@ public class SocketIOHandler implements IIOHandler{
 	 */
 	public void send(AbstractOperation operation){
 		// Temp
-		//System.out.println("SND " + operation.getOperation());
+		// System.out.println("SND " + operation.getOperation());
 		addJob(new Job(operation));
 	}
 
@@ -424,7 +424,7 @@ public class SocketIOHandler implements IIOHandler{
 			String operationIdentifier = operation.getOperation();
 			byte[] operationIDBytes = operationIdentifier.getBytes();
 			ByteBuffer opWriteBuffer = ByteBuffer.wrap(operationIDBytes);
-			
+
 			// If an end message is send, we can expect a disconnect
 			if(operationIdentifier == AbstractOperation.END) expectingDisconnect = true;
 
@@ -452,19 +452,24 @@ public class SocketIOHandler implements IIOHandler{
 				writeBuffer.put(data, 0, data.length);
 				writeBuffer.flip();
 
-				offset += bytesToWrite;
-
-				try{
-					socketChannel.write(writeBuffer);
-				}catch(IOException ioex){
-					Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
+				// Write all the bytes in the buffer; depending on the space
+				// left in the output buffer only a part (or even nothing) may
+				// be written.
+				while(writeBuffer.hasRemaining()){
+					try{
+						socketChannel.write(writeBuffer);
+					}catch(IOException ioex){
+						Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
+					}
 				}
+
+				offset += bytesToWrite;
 
 				Thread.yield();
 			}
 			// Temp
-			// System.out.println("SND done with OP:
-			// "+operation.getOperation());
+			// System.out.println("SND done with OP: " +
+			// operation.getOperation());
 		}
 	}
 }
