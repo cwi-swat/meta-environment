@@ -19,7 +19,7 @@ public class BlockingThreadPool{
 	private List knownWorkers = null;
 	private List workers = null;
 
-	private volatile int unCompletedJobs = -1;
+	private int unCompletedJobs = -1;
 
 	/**
 	 * Constructor
@@ -71,9 +71,9 @@ public class BlockingThreadPool{
 	 *            The job that needs to be handled.
 	 */
 	public void addJob(Runnable job){
-		unCompletedJobs++;
-
 		synchronized(lock){
+			unCompletedJobs++;
+
 			if(!workers.isEmpty()){
 				startJob(job);
 			}else{
@@ -149,15 +149,14 @@ public class BlockingThreadPool{
 		synchronized(waitLock){
 			while(!isIdle()){
 				try{
-					// Wait 500ms maximum before checking again, since the read
-					// and write to the unCompletedJobs field could occur out of
-					// order, ultimately causing the calling thread to block
-					// indefinately. This erroneus behavior should be fixed in
-					// JDK1.5 (but they'll undoubtably fuck that up in some
-					// horrably stupid way aswell).
+					// Wait 500ms maximum, this is nessacary since we cannot
+					// obtain the monitor on the lock object; the reason for
+					// this is that if wait() is called it will not release the
+					// monitor on lock, probably blocking the execution of this
+					// threadpool indefinately.
 					waitLock.wait(500);
 				}catch(InterruptedException irex){
-					throw new RuntimeException("Thread " + Thread.currentThread().getName() + " interrupted. Some stupid ass killed this thread.");
+					throw new RuntimeException("Thread " + Thread.currentThread().getName() + " interrupted. Some stupid ass killed this thread (or the threadpool got destroyed).");
 				}
 			}
 
@@ -219,9 +218,9 @@ public class BlockingThreadPool{
 						workers.add(this);
 
 						lock.notify();
-					}
 
-					unCompletedJobs--;
+						unCompletedJobs--;
+					}
 
 					if(isIdle()){
 						synchronized(waitLock){
