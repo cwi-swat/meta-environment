@@ -150,10 +150,11 @@ public class BlockingThreadPool{
 			while(!isIdle()){
 				try{
 					// Wait 500ms maximum, this is nessacary since we cannot
-					// obtain the monitor on the lock object; the reason for
-					// this is that if wait() is called it will not release the
-					// monitor on lock, probably blocking the execution of this
-					// threadpool indefinately.
+					// obtain the monitor on the 'lock' object (which we need to
+					// ensure we see the proper value of the unCompletedJobs
+					// field); the reason for this is that if wait() is called
+					// it will not release the monitor on 'lock', probably
+					// blocking the execution of this threadpool indefinately.
 					waitLock.wait(500);
 				}catch(InterruptedException irex){
 					throw new RuntimeException("Thread " + Thread.currentThread().getName() + " interrupted. Some stupid ass killed this thread (or the threadpool got destroyed).");
