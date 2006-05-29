@@ -5,13 +5,10 @@ Bugs:
 		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
 	
 	Ensure 100% compatibility with multiprocessor / core systems.
-		-Make all fields in immutable objects final.
 		-Check if everything is properly synchronized.
 
 
 TODO:
-	Enable better read concurrency.
-	
 	Lower CPU usage while writing.
 	
 	Add support for notes.

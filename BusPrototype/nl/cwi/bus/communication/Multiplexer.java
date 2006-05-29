@@ -2,6 +2,7 @@ package nl.cwi.bus.communication;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -161,7 +162,7 @@ public class Multiplexer extends Thread{
 		// However the datahandler may register this channel for different
 		// operations and thus should be created last.
 		SocketIOHandler ioHandler = new SocketIOHandler(selectorCreator, socketChannel);
-		socketChannel.register(selectorCreator.getSelector(), SelectionKey.OP_READ, ioHandler);
+		register(socketChannel, SelectionKey.OP_READ, ioHandler);
 		IDataHandler dataHandler = toolDataHandlerFactory.createToolDataHandler(ioHandler);
 		ioHandler.setDataHandler(dataHandler);
 	}
@@ -175,6 +176,24 @@ public class Multiplexer extends Thread{
 	protected void read(SelectionKey key){
 		SocketIOHandler ioHandler = (SocketIOHandler) key.attachment();
 		ioHandler.receive(key);
+	}
+	
+	/**
+	 * Registers the channel for the given operations.
+	 * @param channel The channel that needs to be registered.
+	 * @param operations The operations the channel will be registered for.
+	 * @param ioHandler The io handler that needs to be associated with the channel.
+	 */
+	protected void register(SelectableChannel channel, int operations, Object ioHandler){
+		synchronized(selectorCreator.getSelectionPreventionLock()){
+			Selector selector = getSelector();
+			try{
+				channel.register(selector, operations, ioHandler);
+			}catch(IOException ioex){
+				Logger.getInstance().log("Registering a channel of reading failed", Logger.ERROR, ioex);
+			}
+			selector.wakeup();
+		}
 	}
 
 	/**

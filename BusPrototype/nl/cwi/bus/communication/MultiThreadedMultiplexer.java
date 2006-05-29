@@ -71,14 +71,17 @@ public class MultiThreadedMultiplexer extends Multiplexer{
 					}
 				}
 				if(key.isReadable()){
+					register(key.channel(), 0, key.attachment());
+					
 					threadPool.addJob(new Runnable(){
 						public void run(){
 							read(key);
+							
+							register(key.channel(), SelectionKey.OP_READ, key.attachment());
 						}
 					});
 				}
 			}
-			threadPool.waitTillIdle();
 
 			synchronized(selectorCreator.getSelectionPreventionLock()){
 				// This is just a barrier, hopefully the compiler doesn't remove
