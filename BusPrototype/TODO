@@ -3,9 +3,20 @@ Bugs:
 		This occured very rarely and at random.
 		It might have been fixed already, because it may have been associated with a bug that was fixed recently.
 		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
+	
+	Ensure 100% compatibility with multiprocessor / core systems.
+		-Make all fields in immutable objects final.
+		-Check if everything is properly synchronized.
+
 
 TODO:
-	Nothing atm.
+	Enable better read concurrency.
+	
+	Lower CPU usage while writing.
+	
+	Add support for notes.
+	
+	Add support for snd-eval.
 
 
 Features:
