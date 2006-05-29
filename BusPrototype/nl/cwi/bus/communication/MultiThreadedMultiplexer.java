@@ -77,7 +77,8 @@ public class MultiThreadedMultiplexer extends Multiplexer{
 						public void run(){
 							read(key);
 							
-							register(key.channel(), SelectionKey.OP_READ, key.attachment());
+							// Only re-register when the key is still valid (not cancelled).
+							if(key.isValid()) register(key.channel(), SelectionKey.OP_READ, key.attachment());
 						}
 					});
 				}
