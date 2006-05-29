@@ -6,7 +6,7 @@ package nl.cwi.term.serializable;
  * 
  * @author Arnold Lankamp
  */
-public class SerializableStringTerm extends AbstractFlexibleLengthTerm{
+public class SerializableStringTerm extends AbstractTerm{
 	private final static String SIGNATURE = "string()";
 	private final static String TYPE = "string";
 
@@ -36,15 +36,6 @@ public class SerializableStringTerm extends AbstractFlexibleLengthTerm{
 		
 		return content;
 	}
-	
-	/**
-	 * Checks if this term has content.
-	 * @return True if it does; false if it is 'null'.
-	 */
-	public boolean hasContent(){
-		return (!isEmpty());
-	}
-	
 	/**
 	 * Returns the signature of this term.
 	 * @return The signature of this term.

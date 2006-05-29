@@ -179,4 +179,12 @@ public class FlexibleLengthObject extends SerializableObject{
 	public boolean isEmpty(){
 		return NativeTypeBuilder.makeBoolean(isEmpty);
 	}
+	
+	/**
+	 * Checks if this term has content.
+	 * @return True if it does; false if it is 'null'.
+	 */
+	public boolean hasContent(){
+		return (!isEmpty());
+	}
 }

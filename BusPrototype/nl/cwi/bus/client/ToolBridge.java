@@ -14,7 +14,7 @@ import nl.cwi.bus.communication.operations.RegOperation;
 import nl.cwi.bus.variable.Variable;
 import nl.cwi.bus.variable.VariableConstantPool;
 import nl.cwi.bus.variable.VariableHandler;
-import nl.cwi.term.serializable.SerializableStringTerm;
+import nl.cwi.term.serializable.AbstractTerm;
 import nl.cwi.util.logging.Logger;
 
 /**
@@ -83,7 +83,7 @@ public class ToolBridge extends Thread implements IBusDataHandler{
 			// Check if it is present in the constant pool if not add it.
 			VariableConstantPool variableConstantPool = ToolRegistery.getInstance().getVariableConstantPool();
 			Variable constantVariable = variableConstantPool.add(variable);
-			SerializableStringTerm term = constantVariable.getData();
+			AbstractTerm term = constantVariable.getData();
 			
 			send(new AckOperation(putOperation.getTransactionID()));
 

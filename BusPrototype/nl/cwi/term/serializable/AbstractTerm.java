@@ -5,12 +5,12 @@ package nl.cwi.term.serializable;
  * 
  * @author Arnold Lankamp
  */
-public abstract class AbstractFlexibleLengthTerm extends FlexibleLengthObject{
+public abstract class AbstractTerm extends FlexibleLengthObject{
 	
 	/**
 	 * Default constructor.
 	 */
-	public AbstractFlexibleLengthTerm(){
+	public AbstractTerm(){
 		super();
 	}
 	
@@ -20,7 +20,11 @@ public abstract class AbstractFlexibleLengthTerm extends FlexibleLengthObject{
 	 * @param term
 	 *            The term that should be stored in this serializable object.
 	 */
-	public AbstractFlexibleLengthTerm(String term){
+	public AbstractTerm(String term){
 		super(term);
 	}
+	
+	public abstract String getType();
+	
+	public abstract String getSignature();
 }

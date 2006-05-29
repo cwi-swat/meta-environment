@@ -14,7 +14,7 @@ import nl.cwi.bus.communication.operations.AbstractOperation;
 import nl.cwi.bus.communication.operations.EndOperation;
 import nl.cwi.bus.communication.operations.GetOperation;
 import nl.cwi.bus.config.Config;
-import nl.cwi.term.serializable.SerializableStringTerm;
+import nl.cwi.term.serializable.AbstractTerm;
 import nl.cwi.util.IDGenerator;
 import nl.cwi.util.logging.Logger;
 
@@ -33,7 +33,7 @@ public class Variable{
 	private long variableID = -1;
 	private String signature = null;
 
-	private SerializableStringTerm data = null;
+	private AbstractTerm data = null;
 
 	private InetSocketAddress sourceToolAdress = null;
 	private long sourceToolID = -1;
@@ -48,7 +48,7 @@ public class Variable{
 	 * @param sourceToolID
 	 *            The id of the tool containing the value.
 	 */
-	public Variable(SerializableStringTerm term, InetSocketAddress sourceToolAdress, long sourceToolID){
+	public Variable(AbstractTerm term, InetSocketAddress sourceToolAdress, long sourceToolID){
 		super();
 
 		variableID = IDGenerator.generate();
@@ -75,7 +75,7 @@ public class Variable{
 	 * @param sourceToolID
 	 *            The id of the tool.
 	 */
-	public Variable(long variableID, String signature, SerializableStringTerm data, InetSocketAddress sourceToolAdress, long sourceToolID){
+	public Variable(long variableID, String signature, AbstractTerm data, InetSocketAddress sourceToolAdress, long sourceToolID){
 		super();
 
 		this.variableID = variableID;
@@ -150,7 +150,7 @@ public class Variable{
 	 * 
 	 * @return The data this variable contains.
 	 */
-	public SerializableStringTerm getData(){
+	public AbstractTerm getData(){
 		if(!data.hasContent()) retrieve();
 
 		return data;

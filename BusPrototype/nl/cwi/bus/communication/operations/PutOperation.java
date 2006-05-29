@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import nl.cwi.bus.client.ToolRegistery;
 import nl.cwi.bus.variable.Variable;
 import nl.cwi.bus.variable.VariableHandler;
-import nl.cwi.term.serializable.AbstractFlexibleLengthTerm;
+import nl.cwi.term.serializable.AbstractTerm;
 import nl.cwi.term.serializable.SerializableStringTerm;
 import nl.cwi.util.IDGenerator;
 import nl.cwi.util.NativeTypeBuilder;
@@ -27,8 +27,8 @@ public class PutOperation extends AbstractOperation{
 	private byte[] sourceToolIPBytes = null;
 	private byte[] sourceToolPortBytes = null;
 	private byte[] variableIDBytes = null;
-	private AbstractFlexibleLengthTerm signatureTerm = null;
-	private SerializableStringTerm dataTerm = null;
+	private AbstractTerm signatureTerm = null;
+	private AbstractTerm dataTerm = null;
 
 	/**
 	 * Default constructor.
@@ -64,7 +64,7 @@ public class PutOperation extends AbstractOperation{
 	 *            The value of the variable (this is optional. Set to null if
 	 *            this is a reference).
 	 */
-	public PutOperation(long sourceToolID, InetSocketAddress sourceToolAdress, long variableID, String signature, SerializableStringTerm data){
+	public PutOperation(long sourceToolID, InetSocketAddress sourceToolAdress, long variableID, String signature, AbstractTerm data){
 		super();
 
 		setState(sourceToolID, sourceToolAdress, variableID, signature, data);
@@ -86,7 +86,7 @@ public class PutOperation extends AbstractOperation{
 		long sourceToolID = variable.getSourceToolID();
 		InetSocketAddress sourceToolAdress = variable.getSourceToolAdress();
 		String signature = variable.getSignature();
-		SerializableStringTerm data = null;
+		AbstractTerm data = null;
 		if(!variable.acceedsThreshold()) data = variable.getData();
 
 		setState(sourceToolID, sourceToolAdress, variableID, signature, data);
@@ -110,7 +110,7 @@ public class PutOperation extends AbstractOperation{
 	 *            The value of the variable (this is optional. Set to null if
 	 *            this is a reference).
 	 */
-	private void setState(long sourceToolID, InetSocketAddress sourceToolAdress, long variableID, String signature, SerializableStringTerm data){
+	private void setState(long sourceToolID, InetSocketAddress sourceToolAdress, long variableID, String signature, AbstractTerm data){
 		transactionID = NativeTypeBuilder.makeBytesFromLong(IDGenerator.generate());
 		
 		sourceToolIDBytes = NativeTypeBuilder.makeBytesFromLong(sourceToolID);
@@ -217,7 +217,7 @@ public class PutOperation extends AbstractOperation{
 	 * 
 	 * @return The value of the variable.
 	 */
-	public SerializableStringTerm getData(){
+	public AbstractTerm getData(){
 		return dataTerm;
 	}
 
@@ -229,7 +229,7 @@ public class PutOperation extends AbstractOperation{
 	public Variable createVariable(){
 		long variableID = getVariableID();
 		String signature = getSignature();
-		SerializableStringTerm data = getData();
+		AbstractTerm data = getData();
 		InetSocketAddress sourceToolAdress = new InetSocketAddress(getSourceToolHost(), getSourceToolPort());
 		long sourceToolID = getSourceToolID();
 
@@ -248,7 +248,7 @@ public class PutOperation extends AbstractOperation{
 		long variableID = variable.getVariableID();
 		InetSocketAddress sourceToolAdress = variable.getSourceToolAdress();
 		String signature = variable.getSignature();
-		SerializableStringTerm data = variable.getData();
+		AbstractTerm data = variable.getData();
 
 		return new PutOperation(sourceToolID, sourceToolAdress, variableID, signature, data);
 	}
@@ -266,7 +266,7 @@ public class PutOperation extends AbstractOperation{
 		long variableID = variable.getVariableID();
 		InetSocketAddress sourceToolAdress = variable.getSourceToolAdress();
 		String signature = variable.getSignature();
-		SerializableStringTerm data = null;
+		AbstractTerm data = null;
 		if(variable.acceedsThreshold()){
 			VariableHandler variableHandler = ToolRegistery.getInstance().getVariableHandler();
 			variableHandler.add(variable);
