@@ -1,14 +1,8 @@
 package nl.cwi.bus.client.test;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-
 import nl.cwi.bus.client.ITool;
 import nl.cwi.bus.client.ToolBridge;
 import nl.cwi.bus.client.ToolRegistery;
-import nl.cwi.bus.communication.operations.PutOperation;
-import nl.cwi.bus.config.Config;
-import nl.cwi.bus.variable.Variable;
 import nl.cwi.term.serializable.SerializableStringTerm;
 
 /**
@@ -41,9 +35,7 @@ public class Client extends Thread implements ITool{
 	 */
 	public void run(){
 		try{
-			Variable v = new Variable(new SerializableStringTerm("string(test)"), new InetSocketAddress(InetAddress.getLocalHost(), Config.getUsingPort()), 1);
-			PutOperation po = PutOperation.create(v);
-			toolBridge.send(po);
+			toolBridge.send(new SerializableStringTerm("string(test)"));
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
