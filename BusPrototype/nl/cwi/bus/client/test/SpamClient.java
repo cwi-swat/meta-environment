@@ -52,6 +52,8 @@ public class SpamClient implements ITool{
 			}
 		}
 		System.out.println(total);
+		
+		terminate();
 	}
 
 	public void string(SerializableStringTerm message){

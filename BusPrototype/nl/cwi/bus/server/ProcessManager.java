@@ -66,7 +66,8 @@ public class ProcessManager{
 				}
 				
 				if(!handled){
-					Logger.getInstance().log("Received an message with a signature that can't be handled by any process instance: "+variable.getVariable().getSignature(), Logger.WARNING);
+					Logger.getInstance().log("Received a message with a signature that can't be handled by any process instance (at the moment): "+variable.getVariable().getSignature()+". This message will be requeued.", Logger.WARNING);
+					messageQueue.add(variable);
 				}
 			}catch(RuntimeException rex){
 				Logger.getInstance().log("A RuntimeException occurred while executing the process instances", Logger.ERROR, rex);

@@ -12,11 +12,12 @@ TODO:
 	Lower CPU usage while writing (20% done).
 		-Yields properly to ensure we don't take away scheduling time from other processes / threads (DONE).
 		-Only iterates when the network output buffer has space.
-	
-	Add support for snd-eval.
-		-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
-		-Add support for return messages in the ToolBridge.
-	
+
+	Create appropriate terms for sending and receiving messages (DO / EVAL / MSG / NOTE).	
+		Add support for EVAL.
+			-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
+			-Add support for return messages in the ToolBridge.
+
 	Add tool identification support.
 
 

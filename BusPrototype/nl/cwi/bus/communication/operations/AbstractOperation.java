@@ -1,7 +1,7 @@
 package nl.cwi.bus.communication.operations;
 
-import nl.cwi.term.serializable.SerializableObject;
 import nl.cwi.util.NativeTypeBuilder;
+import nl.cwi.util.serializable.SerializableObject;
 
 /**
  * Respresents a serializable operation.

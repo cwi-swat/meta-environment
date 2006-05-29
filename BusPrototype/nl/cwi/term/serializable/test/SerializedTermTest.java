@@ -2,9 +2,9 @@ package nl.cwi.term.serializable.test;
 
 import java.lang.management.ManagementFactory;
 
-import nl.cwi.term.serializable.FlexibleLengthObject;
-import nl.cwi.term.serializable.SerializableObject;
 import nl.cwi.util.NativeTypeBuilder;
+import nl.cwi.util.serializable.FlexibleLengthObject;
+import nl.cwi.util.serializable.SerializableObject;
 
 public class SerializedTermTest extends SerializableObject{
 	private byte[] longByteArray = null;

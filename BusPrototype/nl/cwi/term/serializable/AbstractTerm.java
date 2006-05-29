@@ -1,5 +1,7 @@
 package nl.cwi.term.serializable;
 
+import nl.cwi.util.serializable.FlexibleLengthObject;
+
 /**
  * Represents a term with a flexible length.
  * 
@@ -35,4 +37,13 @@ public abstract class AbstractTerm extends FlexibleLengthObject{
 	 * @return The signature of the term.
 	 */
 	public abstract String getSignature();
+	
+	/**
+	 * Checks if the term matches the given signature.
+	 * 
+	 * @param signature
+	 *            The signature that will be matched on.
+	 * @return True if the term matches the signature; false otherwise.
+	 */
+	public abstract boolean match(String signature);
 }

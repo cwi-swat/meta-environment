@@ -1,9 +1,10 @@
-package nl.cwi.term.serializable;
+package nl.cwi.util.serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Object that handles serializing and deserializing of the internal state of an

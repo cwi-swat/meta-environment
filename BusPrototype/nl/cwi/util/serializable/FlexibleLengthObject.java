@@ -1,4 +1,4 @@
-package nl.cwi.term.serializable;
+package nl.cwi.util.serializable;
 
 import nl.cwi.util.NativeTypeBuilder;
 

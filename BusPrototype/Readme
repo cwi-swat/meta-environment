@@ -13,6 +13,8 @@ A couple of example tools are present in the nl.cwi.client.test package.
 If you want a demo, just start the StartTest class the nl.cwi.client.test package.
 It will start the bus including several tools (2x receiving, 1x direct receiving and 1x sending).
 Just type something in the sending tools textfield and press the button, it will be broadcasted to all the other tools.
+NOTE: This test will not use intertool communication to it's full effect, since all the tools are running in the same VM.
+If you want to test intertool communication you will have to start the Bus and every tool separately (Bus, ReceivingClient, DirectClient, SendingClient).
 
 The way of communication can be altered by setting the threshold in the nl.cwi.config.Config class.
 This threshold will determine whether it will be send directly or through tool intercommunication.

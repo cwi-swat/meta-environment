@@ -1,6 +1,5 @@
 package nl.cwi.term.serializable;
 
-
 /**
  * Represents a serializable string term.
  * 
@@ -37,27 +36,21 @@ public class SerializableStringTerm extends AbstractTerm{
 		return content;
 	}
 	/**
-	 * Returns the signature of this term.
-	 * @return The signature of this term.
+	 * @see AbstractTerm#getSignature()
 	 */
 	public String getSignature(){
 		return SIGNATURE;
 	}
 	
 	/**
-	 * Returns the type of this term.
-	 * @return The type of this term.
+	 * @see AbstractTerm#getType()
 	 */
 	public String getType(){
 		return TYPE;
 	}
 	
 	/**
-	 * Checks if this term matches the given signature.
-	 * 
-	 * @param signature
-	 *            The signature that will be matched on.
-	 * @return True if this term matches the signature; false otherwise.
+	 * @see AbstractTerm#match(String)
 	 */
 	public boolean match(String signature){
 		return signature.equals(getSignature());
