@@ -21,7 +21,7 @@ public class SerializableStringTerm extends AbstractTerm{
 	 * @param content The content of this term (String).
 	 */
 	public SerializableStringTerm(String content){
-		super(content);
+		super(content, TYPE);
 	}
 	
 	/**
