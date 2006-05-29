@@ -2,6 +2,9 @@ package nl.cwi.bus.client;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 
 import nl.cwi.bus.communication.IBusDataHandler;
 import nl.cwi.bus.communication.IIOHandler;
@@ -11,6 +14,7 @@ import nl.cwi.bus.communication.operations.EndOperation;
 import nl.cwi.bus.communication.operations.FinOperation;
 import nl.cwi.bus.communication.operations.PutOperation;
 import nl.cwi.bus.communication.operations.RegOperation;
+import nl.cwi.bus.config.Config;
 import nl.cwi.bus.variable.Variable;
 import nl.cwi.bus.variable.VariableConstantPool;
 import nl.cwi.bus.variable.VariableHandler;
@@ -134,6 +138,23 @@ public class ToolBridge extends Thread implements IBusDataHandler{
 	 */
 	public void send(AbstractOperation operation){
 		ioHandler.send(operation);
+	}
+	
+	/**
+	 * Sends the given term to the toolbus.
+	 * @param term The term that needs to be send.
+	 */
+	public void send(AbstractTerm term){
+		Variable variable = null;
+		try{
+			variable = new Variable(term, new InetSocketAddress(InetAddress.getLocalHost(), Config.getUsingPort()), toolID);
+		}catch(UnknownHostException uhex){
+			Logger.getInstance().log("Could not identify the localhost for some reason.", Logger.ERROR, uhex);
+			throw new RuntimeException(uhex);
+		}
+		
+		PutOperation putOperation = PutOperation.createStripped(variable);
+		ioHandler.send(putOperation);
 	}
 
 	/**

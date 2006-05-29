@@ -12,8 +12,6 @@ TODO:
 	Lower CPU usage while writing.
 	
 	Add support for snd-eval.
-	
-	Simplify the interface to the ToolBridge.
 
 
 Features:

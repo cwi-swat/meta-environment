@@ -1,14 +1,8 @@
 package nl.cwi.bus.client.test;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-
 import nl.cwi.bus.client.ITool;
 import nl.cwi.bus.client.ToolBridge;
 import nl.cwi.bus.client.ToolRegistery;
-import nl.cwi.bus.communication.operations.PutOperation;
-import nl.cwi.bus.config.Config;
-import nl.cwi.bus.variable.Variable;
 import nl.cwi.term.serializable.SerializableStringTerm;
 
 public class SpamClient implements ITool{
@@ -47,13 +41,9 @@ public class SpamClient implements ITool{
 			try{
 				String text = generateRandomString();
 				
-				Variable variable = new Variable(new SerializableStringTerm(text), new InetSocketAddress(InetAddress.getLocalHost(), Config.getUsingPort()), toolBridge.getToolID());
-				
-				PutOperation putOperation = PutOperation.createStripped(variable);
-				
 				total += System.currentTimeMillis();
 				//System.out.println("Sending: "+variable.getVariableID()+" @ "+System.currentTimeMillis());
-				toolBridge.send(putOperation);
+				toolBridge.send(new SerializableStringTerm(text));
 				
 				Thread.sleep(5000);
 				Thread.yield();

@@ -5,8 +5,6 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -16,9 +14,6 @@ import javax.swing.JTextArea;
 import nl.cwi.bus.client.ITool;
 import nl.cwi.bus.client.ToolBridge;
 import nl.cwi.bus.client.ToolRegistery;
-import nl.cwi.bus.communication.operations.PutOperation;
-import nl.cwi.bus.config.Config;
-import nl.cwi.bus.variable.Variable;
 import nl.cwi.term.serializable.SerializableStringTerm;
 
 /**
@@ -86,10 +81,8 @@ public class SendingClient implements ITool{
 			try{
 				String text = textArea.getText();
 				textArea.setText("");
-				Variable variable = new Variable(new SerializableStringTerm(text), new InetSocketAddress(InetAddress.getLocalHost(), Config.getUsingPort()), toolBridge.getToolID());
 				
-				PutOperation putOperation = PutOperation.createStripped(variable);
-				toolBridge.send(putOperation);
+				toolBridge.send(new SerializableStringTerm(text));
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
