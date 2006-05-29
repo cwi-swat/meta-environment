@@ -1,7 +1,9 @@
 package nl.cwi.bus.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.cwi.bus.variable.FinalizableVariable;
 import nl.cwi.util.logging.Logger;
@@ -16,6 +18,8 @@ public class MessageQueue{
 	
 	private List messages = null;
 	
+	private Map subscriptions = null;
+	
 	/**
 	 * Default constructor.
 	 */
@@ -23,6 +27,8 @@ public class MessageQueue{
 		super();
 		
 		messages = new ArrayList();
+		
+		subscriptions = new HashMap();
 	}
 	
 	/**
@@ -65,5 +71,56 @@ public class MessageQueue{
 		}
 		
 		return variable;
+	}
+	
+	/**
+	 * Subscribes the process instance for notes with the given signature.
+	 * @param processInstance The process instance that needs to be subscribed.
+	 * @param signature The signature of the note.
+	 */
+	public void subscribe(AbstractProcessInstance processInstance, String signature){
+		synchronized(subscriptions){
+			List registeredProcessInstances = null;
+			if(subscriptions.containsKey(signature)){
+				registeredProcessInstances = (List)subscriptions.get(signature);
+				
+				registeredProcessInstances.add(processInstance);
+			}else{
+				registeredProcessInstances = new ArrayList();
+				
+				registeredProcessInstances.add(processInstance);
+				subscriptions.put(signature, registeredProcessInstances);
+			}
+		}
+	}
+	
+	/**
+	 * Unsubscribes the process instance for notes with the given signature.
+	 * @param processInstance The process instance that needs to be unsubscribed.
+	 * @param signature The signature of the note.
+	 */
+	public void unsubscribe(AbstractProcessInstance processInstance, String signature){
+		synchronized(subscriptions){
+			List registeredProcessInstances = (List)subscriptions.get(signature);
+			if(registeredProcessInstances != null){
+				registeredProcessInstances.remove(processInstance);
+			}
+		}
+	}
+	
+	/**
+	 * Broadcasts the given note to all the subscribed process instances.
+	 * @param note The note that needs to be broadcast.
+	 */
+	public void sendNote(FinalizableVariable note){
+		String signature = note.getVariable().getSignature();
+		
+		if(subscriptions.containsKey(signature)){
+			List registeredProcessInstances = (List)subscriptions.get(signature);
+			for(int i = 0; i < registeredProcessInstances.size(); i++){
+				AbstractProcessInstance processInstance = (AbstractProcessInstance)registeredProcessInstances.get(i);
+				processInstance.receiveNote(note);
+			}
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package nl.cwi.bus.server.test;
 
 import nl.cwi.bus.server.AbstractProcessInstance;
+import nl.cwi.bus.server.Bus;
 import nl.cwi.bus.server.ToolInstance;
 import nl.cwi.bus.variable.FinalizableVariable;
 import nl.cwi.term.serializable.SerializableStringTerm;
@@ -21,17 +22,23 @@ public class TestProcess extends AbstractProcessInstance{
 		this.toolInstance = toolInstance;
 
 		signatureMatcher = new SerializableStringTerm("");
+		
+		Bus.getInstance().getMessageQueue().subscribe(this, signatureMatcher.getSignature());
 	}
 
-	public synchronized void step(FinalizableVariable message){
-		//If it's a string term, receive it and send it to the tool.
+	public synchronized boolean step(FinalizableVariable message){
+		boolean handled = false;
+		// If it's a string term, receive it and send it to the tool.
 		if(signatureMatcher.match(message.getVariable().getSignature())){
-			recMessage(message);
-			showMessage();
+			Bus.getInstance().getMessageQueue().sendNote(message);
+			
+			handled = true;
 		}
+		
+		return handled;
 	}
 
-	public void recMessage(FinalizableVariable receivedMessage){
+	public void receiveMessage(FinalizableVariable receivedMessage){
 		textMessage = setVariable(textMessage, receivedMessage);
 	}
 
@@ -41,5 +48,13 @@ public class TestProcess extends AbstractProcessInstance{
 	
 	public void terminate(){
 		textMessage = setVariable(textMessage, null);
+	}
+	
+	public void receiveNote(FinalizableVariable note){
+		// If it's a string term, receive it and send it to the tool.
+		if(signatureMatcher.match(note.getVariable().getSignature())){
+			receiveMessage(note);
+			showMessage();
+		}
 	}
 }

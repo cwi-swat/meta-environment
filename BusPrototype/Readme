@@ -13,9 +13,6 @@ A couple of example tools are present in the nl.cwi.client.test package.
 If you want a demo, just start the StartTest class the nl.cwi.client.test package.
 It will start the bus including several tools (2x receiving, 1x direct receiving and 1x sending).
 Just type something in the sending tools textfield and press the button, it will be broadcasted to all the other tools.
-The message that you type in the sending tool must however be in the format: string(<content>).
-
-The bus itself does not have any process logic, so it just broadcasts stuff.
 
 The way of communication can be altered by setting the threshold in the nl.cwi.config.Config class.
 This threshold will determine whether it will be send directly or through tool intercommunication.

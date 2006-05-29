@@ -88,10 +88,7 @@ public class SendingClient implements ITool{
 				String text = textArea.getText();
 				textArea.setText("");
 				Variable variable = new Variable(new SerializableStringTerm(text), new InetSocketAddress(InetAddress.getLocalHost(), Config.getUsingPort()), toolBridge.getToolID());
-
-				VariableHandler variableHandler = ToolRegistery.getInstance().getVariableHandler();
-				variableHandler.add(variable);
-
+				
 				PutOperation putOperation = PutOperation.createStripped(variable);
 				toolBridge.send(putOperation);
 			}catch(Exception ex){

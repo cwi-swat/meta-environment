@@ -57,14 +57,17 @@ public class ProcessManager{
 
 		if(variable != null){
 			try{
-				// Temp
-				// Only send something to the first process / (tool)
-				// int i = 0;
+				boolean handled = false;
 				for(int i = 0; i < processes.size(); i++){
 					AbstractProcessInstance processInstance = (AbstractProcessInstance) processes.get(i);
-					processInstance.step(variable);
+					
+					handled = processInstance.step(variable);
+					if(handled) break;
 				}
-				// End temp
+				
+				if(!handled){
+					Logger.getInstance().log("Received an message with a signature that can't be handled by any process instance: "+variable.getVariable().getSignature(), Logger.WARNING);
+				}
 			}catch(RuntimeException rex){
 				Logger.getInstance().log("A RuntimeException occurred while executing the process instances", Logger.ERROR, rex);
 			}

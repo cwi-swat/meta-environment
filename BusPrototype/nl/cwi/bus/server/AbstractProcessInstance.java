@@ -18,8 +18,10 @@ public abstract class AbstractProcessInstance{
 	 * 
 	 * @param message
 	 *            The message to handle.
+	 * @return True if the process instance was able to handle the message;
+	 *         false otherwise.
 	 */
-	public abstract void step(FinalizableVariable message);
+	public abstract boolean step(FinalizableVariable message);
 
 	/**
 	 * Handles the setting of variables in process instances.
@@ -73,6 +75,14 @@ public abstract class AbstractProcessInstance{
 			}
 		}
 	}
+
+	/**
+	 * Receives a note.
+	 * 
+	 * @param note
+	 *            the note that will be received.
+	 */
+	public abstract void receiveNote(FinalizableVariable note);
 
 	/**
 	 * Terminates this process instance.

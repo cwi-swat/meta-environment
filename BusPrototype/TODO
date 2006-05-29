@@ -11,8 +11,6 @@ Bugs:
 TODO:
 	Lower CPU usage while writing.
 	
-	Add support for notes.
-	
 	Add support for snd-eval.
 
 
