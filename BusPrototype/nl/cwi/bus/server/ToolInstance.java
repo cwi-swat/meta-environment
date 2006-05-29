@@ -45,6 +45,7 @@ public class ToolInstance implements IToolDataHandler{
 		processInstance = new TestProcess(this);
 		ProcessManager processManager = Bus.getInstance().getProcesses();
 		processManager.register(processInstance);
+		// End temp
 	}
 
 	/**
@@ -84,8 +85,6 @@ public class ToolInstance implements IToolDataHandler{
 			FinalizableVariable variable = new FinalizableVariable(putOperation.createVariable());
 			variable.incrementReferenceCount();
 			messageQueue.add(variable);
-
-			// End temp
 		}else if(operationID == AbstractOperation.ACK){
 			AckOperation ackOperation = (AckOperation) operation;
 			long tranactionID = ackOperation.getTransactionID();
@@ -99,14 +98,14 @@ public class ToolInstance implements IToolDataHandler{
 	 * Reinstalls the ioHandler for the tool
 	 */
 	public void reconnect(){
-		// TODO
+		// TODO support can be added somewhere in the future
 	}
 
 	/**
 	 * Called when the the associated tool has become disconnected.
 	 */
 	public void disconnected(){
-		// TODO
+		// TODO support can be added somewhere in the future
 	}
 
 	/**

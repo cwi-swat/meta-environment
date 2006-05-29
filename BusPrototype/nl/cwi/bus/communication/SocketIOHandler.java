@@ -93,8 +93,6 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The operation that was received
 	 */
 	public void receive(AbstractOperation operation){
-		// Temp
-		// System.out.println("REC " + operation.getOperation());
 		dataHandler.receive(operation);
 	}
 
@@ -173,8 +171,6 @@ public class SocketIOHandler implements IIOHandler{
 
 			opReadBuffer.clear();
 		}
-		// Temp
-		// System.out.println("REC OP: " + operationID);
 
 		return connected;
 	}
@@ -280,8 +276,6 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The operation that will be send.
 	 */
 	public void send(AbstractOperation operation){
-		// Temp
-		// System.out.println("SND " + operation.getOperation());
 		addJob(new Job(operation));
 	}
 
@@ -409,15 +403,11 @@ public class SocketIOHandler implements IIOHandler{
 							Logger.getInstance().log("Writing data to the channel failed.", Logger.ERROR, ioex);
 							throw new RuntimeException(ioex);
 						}
+						Thread.yield(); 
 					}
 	
 					offset += bytesToWrite;
-	
-					Thread.yield();
 				}
-				// Temp
-				// System.out.println("SND done with OP: " +
-				// operation.getOperation());
 			}
 		}
 	}

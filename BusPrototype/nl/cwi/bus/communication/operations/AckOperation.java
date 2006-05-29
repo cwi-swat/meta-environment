@@ -49,6 +49,10 @@ public class AckOperation extends AbstractOperation{
 		return OPERATION;
 	}
 	
+	/**
+	 * Returns the transaction identifier.
+	 * @return The transaction identifier.
+	 */
 	public long getTransactionID(){
 		return NativeTypeBuilder.makeLong(transactionID);
 	}
