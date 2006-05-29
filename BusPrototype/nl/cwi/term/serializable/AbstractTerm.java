@@ -24,7 +24,15 @@ public abstract class AbstractTerm extends FlexibleLengthObject{
 		super(term);
 	}
 	
+	/**
+	 * Returns the type of the term.
+	 * @return The type of the term.
+	 */
 	public abstract String getType();
 	
+	/**
+	 * Returns the signature of the term.
+	 * @return The signature of the term.
+	 */
 	public abstract String getSignature();
 }
