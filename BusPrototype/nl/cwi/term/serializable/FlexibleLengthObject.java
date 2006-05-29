@@ -3,14 +3,14 @@ package nl.cwi.term.serializable;
 import nl.cwi.util.NativeTypeBuilder;
 
 /**
- * Represents a term with a flexible length.
+ * Represents an object with a flexible length.
  * 
  * @author Arnold Lankamp
  */
-public class FlexibleLengthTerm extends SerializableTerm{
+public class FlexibleLengthObject extends SerializableObject{
 	private byte[] isEmpty = null;
 	private byte[] lengthField = null;
-	private byte[] term = null;
+	private byte[] object = null;
 
 	private Integer key = null;
 
@@ -21,7 +21,7 @@ public class FlexibleLengthTerm extends SerializableTerm{
 	/**
 	 * Default constructor.
 	 */
-	public FlexibleLengthTerm(){
+	public FlexibleLengthObject(){
 		super();
 		
 		isEmpty = new byte[NativeTypeBuilder.BOOLBITS];
@@ -37,14 +37,14 @@ public class FlexibleLengthTerm extends SerializableTerm{
 	/**
 	 * Constructor.
 	 * 
-	 * @param term
-	 *            The term that should be stored in this serializable object.
+	 * @param object
+	 *            The object that should be stored in this serializable object.
 	 */
-	public FlexibleLengthTerm(String term){
+	public FlexibleLengthObject(String object){
 		super();
 
-		if(term != null){
-			setState(term.getBytes());
+		if(object != null){
+			setState(object.getBytes());
 		}else{
 			setState(null);
 		}
@@ -53,33 +53,33 @@ public class FlexibleLengthTerm extends SerializableTerm{
 	/**
 	 * Constructor.
 	 * 
-	 * @param term
-	 *            The term that should be stored in this serializable object.
+	 * @param object
+	 *            The object that should be stored in this serializable object.
 	 */
-	public FlexibleLengthTerm(byte[] term){
+	public FlexibleLengthObject(byte[] object){
 		super();
 
-		setState(term);
+		setState(object);
 	}
 	
-	private void setState(byte[] term){
-		this.term = term;
+	private void setState(byte[] object){
+		this.object = object;
 		
-		int termLength = 0;
+		int objectLength = 0;
 		
-		if(term != null){
-			termLength = term.length;
+		if(object != null){
+			objectLength = object.length;
 		}
 		
-		isEmpty = new byte[]{NativeTypeBuilder.makeBytesFromBoolean(termLength == 0)};
-		lengthField = NativeTypeBuilder.makeBytesFromInt(termLength);
+		isEmpty = new byte[]{NativeTypeBuilder.makeBytesFromBoolean(objectLength == 0)};
+		lengthField = NativeTypeBuilder.makeBytesFromInt(objectLength);
 		
 		init();
-		key = registerNativeType(termLength, term);
+		key = registerNativeType(objectLength, object);
 
 		emptyPutIndex = isEmpty.length;
 		lengthPutIndex = lengthField.length;
-		putIndex = termLength;
+		putIndex = objectLength;
 	}
 	
 	/**
@@ -126,7 +126,7 @@ public class FlexibleLengthTerm extends SerializableTerm{
 	}
 
 	/**
-	 * @see SerializableTerm#put(byte[])
+	 * @see SerializableObject#put(byte[])
 	 */
 	public synchronized void put(byte[] bytes){
 		int index = 0;
@@ -150,13 +150,13 @@ public class FlexibleLengthTerm extends SerializableTerm{
 			lengthPutIndex += nrOfBytesToWrite;
 
 			if(lengthPutIndex == NativeTypeBuilder.INTBYTES){
-				term = new byte[NativeTypeBuilder.makeInt(lengthField)];
-				key = registerNativeType(term.length, term);
+				object = new byte[NativeTypeBuilder.makeInt(lengthField)];
+				key = registerNativeType(object.length, object);
 			}
 		}
 
 		if(index < bytes.length){
-			System.arraycopy(bytes, index, term, putIndex, bytes.length - index);
+			System.arraycopy(bytes, index, object, putIndex, bytes.length - index);
 
 			putIndex += (bytes.length - index);
 		}

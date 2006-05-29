@@ -11,7 +11,7 @@ import java.util.Map;
  * 
  * @author Arnold Lankamp
  */
-public class SerializableTerm implements ISerializable{
+public class SerializableObject implements ISerializable{
 	public final static int UNDEFINED = -1;
 	public final static Integer ISERIALIZABLELENGTHVALUE = new Integer(0);
 
@@ -23,7 +23,7 @@ public class SerializableTerm implements ISerializable{
 	/**
 	 * Default constructor.
 	 */
-	public SerializableTerm(){
+	public SerializableObject(){
 		super();
 
 		putIndex = 0;

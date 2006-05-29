@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import nl.cwi.bus.client.ToolRegistery;
 import nl.cwi.bus.variable.Variable;
 import nl.cwi.bus.variable.VariableHandler;
-import nl.cwi.term.serializable.FlexibleLengthTerm;
+import nl.cwi.term.serializable.AbstractFlexibleLengthTerm;
 import nl.cwi.term.serializable.SerializableStringTerm;
 import nl.cwi.util.IDGenerator;
 import nl.cwi.util.NativeTypeBuilder;
@@ -27,7 +27,7 @@ public class PutOperation extends AbstractOperation{
 	private byte[] sourceToolIPBytes = null;
 	private byte[] sourceToolPortBytes = null;
 	private byte[] variableIDBytes = null;
-	private FlexibleLengthTerm signatureTerm = null;
+	private AbstractFlexibleLengthTerm signatureTerm = null;
 	private SerializableStringTerm dataTerm = null;
 
 	/**
@@ -42,7 +42,7 @@ public class PutOperation extends AbstractOperation{
 		sourceToolIPBytes = new byte[NativeTypeBuilder.INTBYTES];
 		sourceToolPortBytes = new byte[NativeTypeBuilder.INTBYTES];
 		variableIDBytes = new byte[NativeTypeBuilder.LONGBYTES];
-		signatureTerm = new FlexibleLengthTerm();
+		signatureTerm = new SerializableStringTerm();
 		dataTerm = new SerializableStringTerm();
 		
 		init();
@@ -117,7 +117,7 @@ public class PutOperation extends AbstractOperation{
 		sourceToolIPBytes = sourceToolAdress.getAddress().getAddress();
 		sourceToolPortBytes = NativeTypeBuilder.makeBytesFromInt(sourceToolAdress.getPort());
 		variableIDBytes = NativeTypeBuilder.makeBytesFromLong(variableID);
-		signatureTerm = new FlexibleLengthTerm(signature.getBytes());
+		signatureTerm = new SerializableStringTerm(signature);
 		if(data != null){
 			dataTerm = data;
 		}else{

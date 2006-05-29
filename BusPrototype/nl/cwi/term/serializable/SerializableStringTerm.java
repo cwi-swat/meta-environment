@@ -6,7 +6,7 @@ package nl.cwi.term.serializable;
  * 
  * @author Arnold Lankamp
  */
-public class SerializableStringTerm extends FlexibleLengthTerm{
+public class SerializableStringTerm extends AbstractFlexibleLengthTerm{
 	private final static String SIGNATURE = "string()";
 	private final static String TYPE = "string";
 
