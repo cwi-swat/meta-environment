@@ -2,14 +2,14 @@ package nl.cwi.term.serializable.test;
 
 import java.lang.management.ManagementFactory;
 
-import nl.cwi.term.serializable.FlexibleLengthTerm;
-import nl.cwi.term.serializable.SerializableTerm;
+import nl.cwi.term.serializable.FlexibleLengthObject;
+import nl.cwi.term.serializable.SerializableObject;
 import nl.cwi.util.NativeTypeBuilder;
 
-public class SerializedTermTest extends SerializableTerm{
+public class SerializedTermTest extends SerializableObject{
 	private byte[] longByteArray = null;
 	private byte[] intByteArray = null;
-	private FlexibleLengthTerm string = null;
+	private FlexibleLengthObject string = null;
 
 	public SerializedTermTest(boolean filled){
 		super();
@@ -26,10 +26,10 @@ public class SerializedTermTest extends SerializableTerm{
 
 			// Temp
 			byte[] bytes = new byte[5 * 1024 * 1024];
-			string = new FlexibleLengthTerm(bytes);
+			string = new FlexibleLengthObject(bytes);
 			// End temp
 		}else{
-			string = new FlexibleLengthTerm();
+			string = new FlexibleLengthObject();
 		}
 
 		init();

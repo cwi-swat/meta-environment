@@ -1,6 +1,6 @@
 package nl.cwi.bus.communication.operations;
 
-import nl.cwi.term.serializable.SerializableTerm;
+import nl.cwi.term.serializable.SerializableObject;
 import nl.cwi.util.NativeTypeBuilder;
 
 /**
@@ -8,7 +8,7 @@ import nl.cwi.util.NativeTypeBuilder;
  * 
  * @author Arnold Lankamp
  */
-public abstract class AbstractOperation extends SerializableTerm{
+public abstract class AbstractOperation extends SerializableObject{
 	/**
 	 * Operation id for sending variables.
 	 */

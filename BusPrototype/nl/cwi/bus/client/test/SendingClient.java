@@ -19,7 +19,6 @@ import nl.cwi.bus.client.ToolRegistery;
 import nl.cwi.bus.communication.operations.PutOperation;
 import nl.cwi.bus.config.Config;
 import nl.cwi.bus.variable.Variable;
-import nl.cwi.bus.variable.VariableHandler;
 import nl.cwi.term.serializable.SerializableStringTerm;
 
 /**
