@@ -56,7 +56,7 @@ public abstract class AbstractTransmission extends AbstractTerm{
 	 * @see AbstractTerm#match(String)
 	 */
 	public boolean match(String signature){
-		return (signature.intern() == getType());
+		return (signature.intern() == getSignature());
 	}
 
 	/**

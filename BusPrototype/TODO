@@ -14,6 +14,9 @@ TODO:
 		Add support for EVAL.
 			-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
 			-Add support for return messages in the ToolBridge.
+	
+	Add a more advanced method of matching for terms.
+		-Enable matches on generic types.
 
 	Add tool identification support.
 
