@@ -1,0 +1,12 @@
+toolbus-recorder.jar
+Makefile.in
+aclocal.m4
+autom4te.cache
+configure
+Makefile
+config.log
+config.status
+toolbus-recorder-*.pkg
+build
+dist
+
