@@ -30,7 +30,9 @@ public class ProcessManager{
 	 *            The process instance to register
 	 */
 	public void register(AbstractProcessInstance processInstance){
-		processes.add(processInstance);
+		synchronized(processes){
+			processes.add(processInstance);
+		}
 	}
 
 	/**
@@ -42,7 +44,9 @@ public class ProcessManager{
 	 *            The process instance to deregister
 	 */
 	public void deregister(AbstractProcessInstance processInstance){
-		processes.remove(processInstance);
+		synchronized(processes){
+			processes.remove(processInstance);
+		}
 
 		// Terminate the process
 		processInstance.terminate();

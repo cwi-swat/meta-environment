@@ -3,9 +3,6 @@ Bugs:
 		This occured very rarely and at random.
 		It might have been fixed already, because it may have been associated with a bug that was fixed recently.
 		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
-	
-	Ensure 100% compatibility with multiprocessor / core systems.
-		-Check if everything is properly synchronized (especially when passing items between threads).
 
 
 TODO:
