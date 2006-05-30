@@ -13,7 +13,7 @@ TODO:
 		-Yields properly to ensure we don't take away scheduling time from other processes / threads (DONE).
 		-Only iterates when the network output buffer has space.
 
-	Create appropriate terms for sending and receiving messages (DO / EVAL / MSG / NOTE).	
+	Create appropriate terms for sending and receiving messages (DO / EVAL / EVENT).	
 		Add support for EVAL.
 			-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
 			-Add support for return messages in the ToolBridge.

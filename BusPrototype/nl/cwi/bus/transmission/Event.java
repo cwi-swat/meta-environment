@@ -3,17 +3,17 @@ package nl.cwi.bus.transmission;
 import nl.cwi.term.serializable.AbstractTerm;
 
 /**
- * Represents a message.
+ * Represents an event.
  * 
  * @author Arnold Lankamp
  */
-public class Message extends AbstractTerm{
-	private final static String TYPE = "MESSAGE";
+public class Event extends AbstractTerm{
+	private final static String TYPE = "EVENT";
 
 	/**
 	 * Default constructor.
 	 */
-	public Message(){
+	public Event(){
 		super();
 	}
 	
