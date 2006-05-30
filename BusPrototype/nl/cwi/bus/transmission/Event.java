@@ -7,8 +7,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * 
  * @author Arnold Lankamp
  */
-public class Event extends AbstractTerm{
-	private final static String TYPE = "EVENT";
+public class Event extends AbstractTransmission{
+	private final static String SIGNATUREOPENTOKEN = "event(";
+	private final static String SIGNATURECLOSETOKEN = ")";
+	private final static String TYPE = "event";
 
 	/**
 	 * Default constructor.
@@ -18,21 +20,13 @@ public class Event extends AbstractTerm{
 	}
 
 	/**
-	 * @see AbstractTerm#match(String)
+	 * Constructor.
+	 * 
+	 * @param term
+	 *            The term that needs to be send in this event.
 	 */
-	public boolean match(String signature){
-
-		// temp
-		return false;
-	}
-
-	/**
-	 * @see AbstractTerm#getSignature()
-	 */
-	public String getSignature(){
-
-		// Temp
-		return null;
+	public Event(AbstractTerm term){
+		super(term);
 	}
 
 	/**
@@ -40,5 +34,12 @@ public class Event extends AbstractTerm{
 	 */
 	public String getType(){
 		return TYPE;
+	}
+
+	/**
+	 * @see AbstractTerm#getSignature()
+	 */
+	public String getSignature(){
+		return createSignature(SIGNATUREOPENTOKEN, SIGNATURECLOSETOKEN);
 	}
 }

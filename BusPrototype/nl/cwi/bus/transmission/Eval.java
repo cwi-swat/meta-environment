@@ -7,8 +7,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * 
  * @author Arnold Lankamp
  */
-public class Eval extends AbstractTerm{
-	private final static String TYPE = "EVAL";
+public class Eval extends AbstractTransmission{
+	private final static String SIGNATUREOPENTOKEN = "eval(";
+	private final static String SIGNATURECLOSETOKEN = ")";
+	private final static String TYPE = "eval";
 
 	/**
 	 * Default constructor.
@@ -18,21 +20,20 @@ public class Eval extends AbstractTerm{
 	}
 
 	/**
-	 * @see AbstractTerm#match(String)
+	 * Constructor.
+	 * 
+	 * @param term
+	 *            The term that needs to be send in a eval request.
 	 */
-	public boolean match(String signature){
-
-		// temp
-		return false;
+	public Eval(AbstractTerm term){
+		super(term);
 	}
 
 	/**
 	 * @see AbstractTerm#getSignature()
 	 */
 	public String getSignature(){
-
-		// Temp
-		return null;
+		return createSignature(SIGNATUREOPENTOKEN, SIGNATURECLOSETOKEN);
 	}
 
 	/**

@@ -7,8 +7,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * 
  * @author Arnold Lankamp
  */
-public class Do extends AbstractTerm{
-	private final static String TYPE = "DO";
+public class Do extends AbstractTransmission{
+	private final static String SIGNATUREOPENTOKEN = "do(";
+	private final static String SIGNATURECLOSETOKEN = ")";
+	private final static String TYPE = "do";
 
 	/**
 	 * Default constructor.
@@ -18,21 +20,13 @@ public class Do extends AbstractTerm{
 	}
 
 	/**
-	 * @see AbstractTerm#match(String)
+	 * Constructor.
+	 * 
+	 * @param term
+	 *            The term that needs to be send in a do request.
 	 */
-	public boolean match(String signature){
-
-		// temp
-		return false;
-	}
-
-	/**
-	 * @see AbstractTerm#getSignature()
-	 */
-	public String getSignature(){
-
-		// Temp
-		return null;
+	public Do(AbstractTerm term){
+		super(term);
 	}
 
 	/**
@@ -40,5 +34,12 @@ public class Do extends AbstractTerm{
 	 */
 	public String getType(){
 		return TYPE;
+	}
+
+	/**
+	 * @see AbstractTerm#getSignature()
+	 */
+	public String getSignature(){
+		return createSignature(SIGNATUREOPENTOKEN, SIGNATURECLOSETOKEN);
 	}
 }
