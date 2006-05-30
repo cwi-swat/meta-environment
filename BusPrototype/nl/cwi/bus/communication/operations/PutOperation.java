@@ -9,6 +9,7 @@ import nl.cwi.bus.variable.Variable;
 import nl.cwi.bus.variable.VariableHandler;
 import nl.cwi.term.serializable.AbstractTerm;
 import nl.cwi.term.serializable.SerializableStringTerm;
+import nl.cwi.term.serializable.TermConverter;
 import nl.cwi.util.IDGenerator;
 import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.logging.Logger;
@@ -28,7 +29,7 @@ public class PutOperation extends AbstractOperation{
 	private byte[] sourceToolPortBytes = null;
 	private byte[] variableIDBytes = null;
 	private AbstractTerm signatureTerm = null;
-	private AbstractTerm dataTerm = null;
+	private TermConverter dataTermConverter = null;
 
 	/**
 	 * Default constructor.
@@ -43,7 +44,7 @@ public class PutOperation extends AbstractOperation{
 		sourceToolPortBytes = new byte[NativeTypeBuilder.INTBYTES];
 		variableIDBytes = new byte[NativeTypeBuilder.LONGBYTES];
 		signatureTerm = new SerializableStringTerm();
-		dataTerm = new SerializableStringTerm();
+		dataTermConverter = new TermConverter();
 		
 		init();
 	}
@@ -119,9 +120,9 @@ public class PutOperation extends AbstractOperation{
 		variableIDBytes = NativeTypeBuilder.makeBytesFromLong(variableID);
 		signatureTerm = new SerializableStringTerm(signature);
 		if(data != null){
-			dataTerm = data;
+			dataTermConverter = new TermConverter(data);
 		}else{
-			dataTerm = new SerializableStringTerm(null);
+			dataTermConverter = new TermConverter(new SerializableStringTerm(null));
 		}
 	}
 	
@@ -136,7 +137,7 @@ public class PutOperation extends AbstractOperation{
 		registerNativeType(sourceToolPortBytes.length, sourceToolPortBytes);
 		registerNativeType(variableIDBytes.length, variableIDBytes);
 		register(signatureTerm);
-		register(dataTerm);
+		register(dataTermConverter);
 	}
 
 	/**
@@ -218,7 +219,7 @@ public class PutOperation extends AbstractOperation{
 	 * @return The value of the variable.
 	 */
 	public AbstractTerm getData(){
-		return dataTerm;
+		return dataTermConverter.getTerm();
 	}
 
 	/**

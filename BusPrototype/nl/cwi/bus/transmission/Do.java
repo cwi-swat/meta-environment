@@ -16,25 +16,25 @@ public class Do extends AbstractTerm{
 	public Do(){
 		super();
 	}
-	
+
 	/**
 	 * @see AbstractTerm#match(String)
 	 */
 	public boolean match(String signature){
-		
+
 		// temp
 		return false;
 	}
-	
+
 	/**
 	 * @see AbstractTerm#getSignature()
 	 */
 	public String getSignature(){
-		
-		//Temp
+
+		// Temp
 		return null;
 	}
-	
+
 	/**
 	 * @see AbstractTerm#getType()
 	 */

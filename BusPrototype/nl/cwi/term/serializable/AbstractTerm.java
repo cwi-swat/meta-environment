@@ -8,17 +8,12 @@ import nl.cwi.util.serializable.FlexibleLengthObject;
  * @author Arnold Lankamp
  */
 public abstract class AbstractTerm extends FlexibleLengthObject{
-	private FlexibleLengthObject typeField = null;
 
 	/**
 	 * Default constructor.
 	 */
 	public AbstractTerm(){
 		super();
-
-		typeField = new FlexibleLengthObject();
-
-		init();
 	}
 
 	/**
@@ -26,19 +21,9 @@ public abstract class AbstractTerm extends FlexibleLengthObject{
 	 * 
 	 * @param term
 	 *            The term that should be stored in this serializable object.
-	 * @param type
-	 *            The type of the term.
 	 */
-	public AbstractTerm(String term, String type){
+	public AbstractTerm(String term){
 		super(term);
-
-		typeField = new FlexibleLengthObject(type);
-
-		init();
-	}
-
-	private void init(){
-		register(typeField);
 	}
 
 	/**

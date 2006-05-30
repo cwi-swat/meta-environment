@@ -15,40 +15,44 @@ public class SerializableStringTerm extends AbstractTerm{
 	public SerializableStringTerm(){
 		super();
 	}
-	
+
 	/**
 	 * Constructor.
-	 * @param content The content of this term (String).
+	 * 
+	 * @param content
+	 *            The content of this term (String).
 	 */
 	public SerializableStringTerm(String content){
-		super(content, TYPE);
+		super(content);
 	}
-	
+
 	/**
 	 * Returns the content of this serializable string term.
+	 * 
 	 * @return The content of this serializable string term.
 	 */
 	public String getContent(){
 		String content = new String(getContent(getKey()));
-		//If there is no content, set it to null.
+		// If there is no content, set it to null.
 		if(!hasContent()) content = null;
-		
+
 		return content;
 	}
+
 	/**
 	 * @see AbstractTerm#getSignature()
 	 */
 	public String getSignature(){
 		return SIGNATURE;
 	}
-	
+
 	/**
 	 * @see AbstractTerm#getType()
 	 */
 	public String getType(){
 		return TYPE;
 	}
-	
+
 	/**
 	 * @see AbstractTerm#match(String)
 	 */

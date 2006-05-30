@@ -24,10 +24,13 @@ public interface ISerializable{
 	 * @return The length of the byte representation of this object.
 	 */
 	public int length();
-	
+
 	/**
-	 * Returns the number of bytes that can maximally be handled at this moment of time.
-	 * @return The number of bytes that can maximally be handled at this moment of time.
+	 * Returns the number of bytes that can maximally be handled at this moment
+	 * of time.
+	 * 
+	 * @return The number of bytes that can maximally be handled at this moment
+	 *         of time.
 	 */
 	public int expectingBytes();
 
@@ -46,7 +49,7 @@ public interface ISerializable{
 	 * @return True if the object has been completely build; false otherwise.
 	 */
 	public boolean isValid();
-	
+
 	/**
 	 * Returns the content of the object associated with the given key as byte
 	 * array. Use the NativeTypeBuilder class to convert it to the required

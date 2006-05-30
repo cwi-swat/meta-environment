@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Object that handles serializing and deserializing of the internal state of an
  * object.
@@ -186,7 +185,7 @@ public class SerializableObject implements ISerializable{
 	public synchronized void put(byte[] bytes){
 		// Refuse to do something useless.
 		if(bytes.length == 0) return;
-		
+
 		// Find the object and the position associated with the object.
 		int position = 0;
 		Object o = null;
@@ -222,7 +221,7 @@ public class SerializableObject implements ISerializable{
 
 			bytesToWrite = serialiazableObject.expectingBytes();
 			if(bytesToWrite > bytes.length) bytesToWrite = bytes.length;
-			
+
 			byte[] byteArray = new byte[bytesToWrite];
 			System.arraycopy(bytes, 0, byteArray, 0, bytesToWrite);
 			serialiazableObject.put(byteArray);
@@ -243,7 +242,7 @@ public class SerializableObject implements ISerializable{
 
 			mappings.put(key, byteArray);
 		}
-		
+
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
 
 		putIndex += bytesToWrite;

@@ -1,4 +1,4 @@
-package nl.cwi.term.serializable.test;
+package nl.cwi.util.serializable.test;
 
 import java.lang.management.ManagementFactory;
 
@@ -6,12 +6,12 @@ import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.serializable.FlexibleLengthObject;
 import nl.cwi.util.serializable.SerializableObject;
 
-public class SerializedTermTest extends SerializableObject{
+public class SerializedObjectTest extends SerializableObject{
 	private byte[] longByteArray = null;
 	private byte[] intByteArray = null;
 	private FlexibleLengthObject string = null;
 
-	public SerializedTermTest(boolean filled){
+	public SerializedObjectTest(boolean filled){
 		super();
 		
 		longByteArray = new byte[NativeTypeBuilder.LONGBYTES];
@@ -62,7 +62,7 @@ public class SerializedTermTest extends SerializableObject{
 			System.out.print("\n");
 		}
 
-		SerializedTermTest serializedTermTestEmpty = new SerializedTermTest(false);
+		SerializedObjectTest serializedTermTestEmpty = new SerializedObjectTest(false);
 		serializedTermTestEmpty.put(firstBytes);
 		serializedTermTestEmpty.put(lastBytes);
 
@@ -104,7 +104,7 @@ public class SerializedTermTest extends SerializableObject{
 		}
 
 		System.out.println("Started deserializing: " + System.currentTimeMillis() + " mem: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
-		SerializedTermTest serializedTermTestEmpty = new SerializedTermTest(false);
+		SerializedObjectTest serializedTermTestEmpty = new SerializedObjectTest(false);
 		serializedTermTestEmpty.put(bytes);
 		System.out.println("Done deserializing: " + System.currentTimeMillis() + " mem: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
 
@@ -123,7 +123,7 @@ public class SerializedTermTest extends SerializableObject{
 	}
 
 	public void testEfficientMem(){
-		SerializedTermTest serializedTermTestEmpty = new SerializedTermTest(false);
+		SerializedObjectTest serializedTermTestEmpty = new SerializedObjectTest(false);
 
 		System.gc();
 		System.out.println("Start Mem: " + ManagementFactory.getMemoryMXBean().getHeapMemoryUsage());
@@ -149,7 +149,7 @@ public class SerializedTermTest extends SerializableObject{
 	}
 
 	public static void main(String[] args){
-		SerializedTermTest serializedTermTest = new SerializedTermTest(true);
+		SerializedObjectTest serializedTermTest = new SerializedObjectTest(true);
 		// serializedTermTest.test();
 		serializedTermTest.testEfficientMem();
 	}
