@@ -3,7 +3,6 @@ package nl.cwi.term.serializable.test;
 import nl.cwi.bus.transmission.Do;
 import nl.cwi.term.serializable.SerializableStringTerm;
 import nl.cwi.term.serializable.TermConverter;
-import nl.cwi.util.NativeTypeBuilder;
 
 public class ConvertionTest{
 

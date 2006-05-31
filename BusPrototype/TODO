@@ -3,15 +3,13 @@ Bugs:
 		This occured very rarely and at random.
 		It might have been fixed already, because it may have been associated with a bug that was fixed recently.
 		Data could have become lost when the Toolbus was overloaded, causing the wrong data to be seen as a length specification, messing up the operation that we wanted to receive and ultimately causing the connection to be aborted (connection reset).
-	
-	Fix the transmissions (work in progress, not really a bug).
 
 TODO:
 	Lower CPU usage while writing (20% done).
 		-Yields properly to ensure we don't take away scheduling time from other processes / threads (DONE).
 		-Only iterates when the network output buffer has space.
 
-	Create appropriate terms for sending and receiving messages (DO / EVAL / EVENT).	
+	Create appropriate terms for sending and receiving messages (DO / EVAL / EVENT) (30% done).	
 		Add support for EVAL.
 			-Enable the encapsulation of a optional put message inside the ack message, to serve as a response holder.
 			-Add support for return messages in the ToolBridge.

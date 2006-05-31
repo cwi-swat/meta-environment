@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import nl.cwi.util.NativeTypeBuilder;
-
 /**
  * Object that handles serializing and deserializing of the internal state of an
  * object.
