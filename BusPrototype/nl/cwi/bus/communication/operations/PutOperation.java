@@ -210,7 +210,7 @@ public class PutOperation extends AbstractOperation{
 	 * @return The (ATerm) signature.
 	 */
 	public String getSignature(){
-		return new String(signatureTerm.getContent(signatureTerm.getKey()));
+		return new String(signatureTerm.getContent());
 	}
 	
 	/**

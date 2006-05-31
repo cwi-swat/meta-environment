@@ -1,29 +1,64 @@
 package nl.cwi.term.serializable;
 
 import nl.cwi.util.serializable.FlexibleLengthObject;
+import nl.cwi.util.serializable.SerializableObject;
 
 /**
  * Represents a term with a flexible length.
  * 
  * @author Arnold Lankamp
  */
-public abstract class AbstractTerm extends FlexibleLengthObject{
+public abstract class AbstractTerm extends SerializableObject{
+	private FlexibleLengthObject term = null;
 
 	/**
 	 * Default constructor.
 	 */
 	public AbstractTerm(){
 		super();
+
+		term = new FlexibleLengthObject();
+		
+		init();
 	}
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param term
-	 *            The term that should be stored in this serializable object.
+	 * @param value
+	 *            The value of the term that should be stored in this serializable object.
 	 */
-	public AbstractTerm(String term){
-		super(term);
+	public AbstractTerm(String value){
+		super();
+
+		this.term = new FlexibleLengthObject(value);
+		
+		init();
+	}
+	
+	/**
+	 * Initializes this term.
+	 */
+	private void init(){
+		register(term);
+	}
+
+	/**
+	 * Checks if this term has content.
+	 * 
+	 * @return True if it does; false if it is 'null'.
+	 */
+	public boolean hasContent(){
+		return term.hasContent();
+	}
+
+	/**
+	 * Returns the content of this term.
+	 * 
+	 * @return The requested value, represented as byte array.
+	 */
+	public byte[] getContent(){
+		return term.getContent(term.getKey());
 	}
 
 	/**

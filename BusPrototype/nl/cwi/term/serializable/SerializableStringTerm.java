@@ -27,12 +27,12 @@ public class SerializableStringTerm extends AbstractTerm{
 	}
 
 	/**
-	 * Returns the content of this serializable string term.
+	 * Returns the value of this serializable string term.
 	 * 
-	 * @return The content of this serializable string term.
+	 * @return The value of this serializable string term.
 	 */
-	public String getContent(){
-		String content = new String(getContent(getKey()));
+	public String getValue(){
+		String content = new String(getContent());
 		// If there is no content, set it to null.
 		if(!hasContent()) content = null;
 

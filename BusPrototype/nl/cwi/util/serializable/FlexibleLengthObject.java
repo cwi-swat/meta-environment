@@ -7,7 +7,7 @@ import nl.cwi.util.NativeTypeBuilder;
  * 
  * @author Arnold Lankamp
  */
-public class FlexibleLengthObject extends SerializableObject{
+public final class FlexibleLengthObject extends SerializableObject{
 	// This empty field is a flag that can be set to false if we are
 	// transferring a NULL object instead of an empty one.
 	private byte[] isEmpty = null;

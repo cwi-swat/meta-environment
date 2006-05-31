@@ -37,7 +37,7 @@ public abstract class AbstractTransmission extends AbstractTerm{
 	}
 
 	/**
-	 * Initializes this do request.
+	 * Initializes this transmission.
 	 */
 	private void init(){
 		register(termConverter);

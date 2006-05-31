@@ -66,7 +66,7 @@ public class DirectClient implements ITool{
 	}
 
 	public void string(SerializableStringTerm string){
-		textArea.setText(string.getContent());
+		textArea.setText(string.getValue());
 	}
 
 	/**
