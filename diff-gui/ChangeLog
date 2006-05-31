@@ -1,0 +1,7 @@
+# $Id: ChangeLog 18306 2006-04-13 03:33:06Z jurgenv $
+
+Wed May 31 17:31:42 CEST 2006 <{cleve,jurgenv}@cwi.nl>
+ * ./package,etc: initial files for a package that will contain
+   an implementation of a generic diff visualization and browsing
+   plugin for the Meta-Environment
+
