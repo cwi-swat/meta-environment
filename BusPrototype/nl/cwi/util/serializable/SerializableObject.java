@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class SerializableObject implements ISerializable{
 	public final static int UNDEFINED = -1;
-	public final static Integer ISERIALIZABLELENGTHVALUE = new Integer(0);
+	public final static Integer ISERIALIZABLELENGTHVALUE = new Integer(-1);
 
 	private int putIndex = -1;
 
@@ -217,7 +217,7 @@ public class SerializableObject implements ISerializable{
 		// Write the bytes.
 		int bytesToWrite = 0;
 		if(o instanceof ISerializable){
-			ISerializable serialiazableObject = ((ISerializable) o);
+			SerializableObject serialiazableObject = ((SerializableObject) o);
 
 			bytesToWrite = serialiazableObject.expectingBytes();
 			if(bytesToWrite > bytes.length) bytesToWrite = bytes.length;
@@ -225,8 +225,8 @@ public class SerializableObject implements ISerializable{
 			byte[] byteArray = new byte[bytesToWrite];
 			System.arraycopy(bytes, 0, byteArray, 0, bytesToWrite);
 			serialiazableObject.put(byteArray);
-
-			mappings.put(key, serialiazableObject);
+			
+			serialiazableObject.update();
 		}else{
 			byte[] byteArray = null;
 			if(o == null){
@@ -242,6 +242,8 @@ public class SerializableObject implements ISerializable{
 
 			mappings.put(key, byteArray);
 		}
+		
+		update();
 
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
 
@@ -259,5 +261,52 @@ public class SerializableObject implements ISerializable{
 	 */
 	public byte[] getContent(Integer key){
 		return (byte[]) mappings.get(key);
+	}
+
+	/**
+	 * Checks if the given bytes array has been build or not.
+	 * 
+	 * @param bytes
+	 *            The byte array for which we need to check if it's build/
+	 * @return True if the byte array has been build; false otherwise.
+	 */
+	protected boolean isBuild(byte[] bytes){
+		boolean build = false;
+
+		int position = 0;
+		for(int i = 0; i < sizes.size(); i++){
+			int size = ((Integer) sizes.get(i)).intValue();
+
+			Integer key = new Integer(i);
+			Object o = mappings.get(key);
+
+			int objectLength = 0;
+			if(o instanceof ISerializable){
+				objectLength = ((ISerializable) o).length();
+			}else{
+				objectLength = size;
+			}
+
+			position = position + objectLength;
+
+			if(bytes == o){
+				if(position <= putIndex){
+					build = true;
+				}else{
+					build = false;
+				}
+			}
+		}
+
+		return build;
+	}
+
+	/**
+	 * Updates the serializable object. Override this method in a subclass if
+	 * needed. This method is called after new data has been added through a
+	 * call to the put method.
+	 */
+	protected void update(){
+		// This method can be overridden in a subclass
 	}
 }

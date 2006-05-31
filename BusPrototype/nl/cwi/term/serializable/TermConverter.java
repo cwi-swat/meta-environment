@@ -1,6 +1,5 @@
 package nl.cwi.term.serializable;
 
-import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.logging.Logger;
 import nl.cwi.util.serializable.FlexibleLengthObject;
 import nl.cwi.util.serializable.SerializableObject;
@@ -41,27 +40,13 @@ public class TermConverter extends SerializableObject{
 	}
 
 	/**
-	 * @see nl.cwi.util.serializable.ISerializable#expectingBytes()
+	 * Updates the serializable object
 	 */
-	public int expectingBytes(){
-		int expecting = super.expectingBytes();
-
-		// If the term has not been initialized yet, we do expect more bytes, so
-		// return NativeTypeBuilder.INTBYTES (size of the length field of the
-		// term).
-		if(expecting == 0 && term == null) expecting = NativeTypeBuilder.INTBYTES;
-
-		return expecting;
-	}
-
-	/**
-	 * @see nl.cwi.util.serializable.ISerializable#put(byte[])
-	 */
-	public void put(byte[] bytes){
+	protected void update(){
 		// Construct the term if we know which one it is.
 		if(term == null && typeField.isValid()){
 			// Resolve it.
-			byte[] typeFieldContent = typeField.getContent(typeField.getKey());
+			byte[] typeFieldContent = typeField.getContent();
 			String termClassName = new String(typeFieldContent);
 
 			// Instantiate it.
@@ -82,8 +67,6 @@ public class TermConverter extends SerializableObject{
 			// Register it.
 			register(term);
 		}
-		
-		super.put(bytes);
 	}
 
 	/**

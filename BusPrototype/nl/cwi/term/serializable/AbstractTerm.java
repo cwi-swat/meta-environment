@@ -37,6 +37,13 @@ public abstract class AbstractTerm extends SerializableObject{
 	}
 	
 	/**
+	 * @see nl.cwi.util.serializable.ISerializable#expectingBytes()
+	 */
+	public int expectingBytes(){
+		return term.expectingBytes();
+	}
+	
+	/**
 	 * Initializes this term.
 	 */
 	private void init(){
@@ -44,12 +51,12 @@ public abstract class AbstractTerm extends SerializableObject{
 	}
 
 	/**
-	 * Checks if this term has content.
+	 * Checks if this term is null or not.
 	 * 
-	 * @return True if it does; false if it is 'null'.
+	 * @return True if it is; false otherwise.
 	 */
-	public boolean hasContent(){
-		return term.hasContent();
+	public boolean isNull(){
+		return term.isNull();
 	}
 
 	/**
@@ -58,7 +65,7 @@ public abstract class AbstractTerm extends SerializableObject{
 	 * @return The requested value, represented as byte array.
 	 */
 	public byte[] getContent(){
-		return term.getContent(term.getKey());
+		return term.getContent();
 	}
 
 	/**

@@ -34,7 +34,7 @@ public class SerializableStringTerm extends AbstractTerm{
 	public String getValue(){
 		String content = new String(getContent());
 		// If there is no content, set it to null.
-		if(!hasContent()) content = null;
+		if(isNull()) content = null;
 
 		return content;
 	}

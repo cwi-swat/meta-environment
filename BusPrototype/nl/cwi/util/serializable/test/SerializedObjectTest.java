@@ -22,17 +22,21 @@ public class SerializedObjectTest extends SerializableObject{
 			
 			fillRandom(intByteArray);
 
-			// string = new FlexibleLengthTerm("testing".getBytes());
+			 string = new FlexibleLengthObject("testing".getBytes());
 
 			// Temp
-			byte[] bytes = new byte[5 * 1024 * 1024];
-			string = new FlexibleLengthObject(bytes);
+		/*	byte[] bytes = new byte[5 * 1024 * 1024];
+			string = new FlexibleLengthObject(bytes);*/
 			// End temp
 		}else{
 			string = new FlexibleLengthObject();
 		}
 
 		init();
+	}
+	
+	public FlexibleLengthObject getString(){
+		return string;
 	}
 
 	public void init(){
@@ -76,6 +80,8 @@ public class SerializedObjectTest extends SerializableObject{
 			NativeTypeBuilder.printBits(bytes[i]);
 			System.out.print("\n");
 		}
+		
+		System.out.println(new String(serializedTermTestEmpty.getString().getContent()));
 	}
 
 	public void testMemoryUsage(){
@@ -150,7 +156,7 @@ public class SerializedObjectTest extends SerializableObject{
 
 	public static void main(String[] args){
 		SerializedObjectTest serializedTermTest = new SerializedObjectTest(true);
-		// serializedTermTest.test();
-		serializedTermTest.testEfficientMem();
+		 serializedTermTest.test();
+		//serializedTermTest.testEfficientMem();
 	}
 }

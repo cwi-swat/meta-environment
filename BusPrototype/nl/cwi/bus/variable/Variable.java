@@ -140,7 +140,7 @@ public class Variable{
 	 * @return True if this variable is a value; false if it is a reference.
 	 */
 	public boolean isValue(){
-		return data.hasContent();
+		return !data.isNull();
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class Variable{
 	 * @return The data this variable contains.
 	 */
 	public AbstractTerm getData(){
-		if(!data.hasContent()) retrieve();
+		if(data.isNull()) retrieve();
 
 		return data;
 	}
@@ -162,7 +162,7 @@ public class Variable{
 	 * retrieving values (because this is unwanted behavior).
 	 */
 	private synchronized void retrieve(){
-		if(!data.hasContent()){
+		if(data.isNull()){
 			// Initialize
 			SocketChannel socketChannel = null;
 			try{
