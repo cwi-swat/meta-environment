@@ -2,8 +2,12 @@ package nl.cwi.util.serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import nl.cwi.util.NativeTypeBuilder;
 
 /**
  * Object that handles serializing and deserializing of the internal state of an
@@ -39,7 +43,7 @@ public class SerializableObject implements ISerializable{
 	 *            The object that is part of the state of the object.
 	 * @return The key associated with the serializable object.
 	 */
-	protected Integer register(ISerializable serializableObject){
+	protected Integer register(SerializableObject serializableObject){
 		int index = -1;
 		synchronized(sizes){
 			index = sizes.size();
@@ -287,7 +291,7 @@ public class SerializableObject implements ISerializable{
 				objectLength = size;
 			}
 
-			position = position + objectLength;
+			position += objectLength;
 
 			if(bytes == o){
 				if(position <= putIndex){
@@ -302,11 +306,28 @@ public class SerializableObject implements ISerializable{
 	}
 
 	/**
-	 * Updates the serializable object. Override this method in a subclass if
-	 * needed. This method is called after new data has been added through a
+	 * Propagates the update to all the registered serializable objects.
+	 * This method is called after new data has been added through a
 	 * call to the put method.
 	 */
+	private void updateChildren(){
+		Set keys = mappings.keySet();
+		Iterator mappingIterator = keys.iterator();
+		while(mappingIterator.hasNext()){
+			Object key = mappingIterator.next();
+			Object value = mappings.get(key);
+			if(value instanceof SerializableObject){
+				SerializableObject so = (SerializableObject)value;
+				so.update();
+			}
+		}
+	}
+	
+	/**
+	 * Updated this serialized object.
+	 * This method may be overridden in a subclass.
+	 */
 	protected void update(){
-		// This method can be overridden in a subclass
+		updateChildren();
 	}
 }

@@ -37,13 +37,6 @@ public abstract class AbstractTerm extends SerializableObject{
 	}
 	
 	/**
-	 * @see nl.cwi.util.serializable.ISerializable#expectingBytes()
-	 */
-	public int expectingBytes(){
-		return term.expectingBytes();
-	}
-	
-	/**
 	 * Initializes this term.
 	 */
 	private void init(){

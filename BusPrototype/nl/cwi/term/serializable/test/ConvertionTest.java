@@ -1,7 +1,9 @@
 package nl.cwi.term.serializable.test;
 
+import nl.cwi.bus.transmission.Do;
 import nl.cwi.term.serializable.SerializableStringTerm;
 import nl.cwi.term.serializable.TermConverter;
+import nl.cwi.util.NativeTypeBuilder;
 
 public class ConvertionTest{
 
@@ -10,15 +12,15 @@ public class ConvertionTest{
 	}
 	
 	public void test(){
-		TermConverter getter = new TermConverter(new SerializableStringTerm("test"));
+		/*TermConverter getter = new TermConverter(new SerializableStringTerm("test"));
 		byte[] bytes = getter.get(0, getter.length());
 		
 		TermConverter putter = new TermConverter();
 		putter.put(bytes);
 		
 		System.out.println(((SerializableStringTerm)putter.getTerm()).getValue());
+		*/
 		/*
-		
 		SerializableStringTerm sstg = new SerializableStringTerm("testtesttest");
 		byte[] bytes = sstg.get(0, sstg.length());
 		SerializableStringTerm sstp = new SerializableStringTerm();
@@ -26,10 +28,10 @@ public class ConvertionTest{
 		
 		System.out.println(sstp.getValue());*/
 		
-		/*Do d = new Do(new SerializableStringTerm("test"));
-		TermConverter tc = new TermConverter(d);
-		byte[] bytes = tc.get(0, tc.length());
-		
+		Do d1 = new Do(new SerializableStringTerm("test"));
+		TermConverter tc1 = new TermConverter(d1);
+		byte[] bytes = tc1.get(0, tc1.length());
+		/*
 		for(int i = 0; i < bytes.length; i++){
 			NativeTypeBuilder.printBits(bytes[i]);
 			System.out.println();
@@ -38,13 +40,13 @@ public class ConvertionTest{
 		for(int i = 0; i < bytes.length; i++){
 			if(bytes[i] != 0) System.out.print(new String(new byte[]{bytes[i]}));
 		}
+		*/
 		
-		/*
 		TermConverter tc2 = new TermConverter();
 		tc2.put(bytes);
 		Do d2 = (Do)tc2.getTerm();
 		SerializableStringTerm s = (SerializableStringTerm)d2.getTerm();
-		System.out.println(s.getValue());*/
+		System.out.println(s.getValue());
 	}
 	
 	public static void main(String[] args){

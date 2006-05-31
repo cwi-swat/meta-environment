@@ -8,8 +8,8 @@ import nl.cwi.util.NativeTypeBuilder;
  * @author Arnold Lankamp
  */
 public final class FlexibleLengthObject extends SerializableObject{
-	// This empty field is a flag that can be set to false if we are
-	// transferring a NULL object instead of an empty one.
+	// This empty field is a flag that can be set to true if we are
+	// transferring a NULL object.
 	private byte[] isNull = null;
 	private byte[] lengthField = null;
 	private byte[] object = null;
@@ -81,6 +81,9 @@ public final class FlexibleLengthObject extends SerializableObject{
 		registerNativeType(lengthField.length, lengthField);
 	}
 
+	/**
+	 * Updates this term.
+	 */
 	protected void update(){
 		if(object == null && isBuild(lengthField)){
 			object = new byte[NativeTypeBuilder.makeInt(lengthField)];

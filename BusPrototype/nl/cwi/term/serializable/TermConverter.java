@@ -67,6 +67,8 @@ public class TermConverter extends SerializableObject{
 			// Register it.
 			register(term);
 		}
+		
+		super.update();
 	}
 
 	/**
