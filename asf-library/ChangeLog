@@ -1,5 +1,9 @@
 $Id$
 
+Wed May 31 14:57:04 CEST 2006 <kooiker@cwi.nl>
+ * library/containers/Set.{sdf,asf}:
+   - Fixed merge error
+
 Wed Apr 19 20:51:40 CEST 2006 <jurgenv@cwi.nl>
  * library/languages/sdf2/normalization:
    There were serious errors in a number of locations:

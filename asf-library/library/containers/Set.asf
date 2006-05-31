@@ -15,7 +15,7 @@ equations
  
   [is-1] elem(X, Set) == true
           ====>
-          intersection({X,X*1},Set) = {X} + intersection({X*1},Set)
+          intersection({X,X*1},Set) = {X} \/ intersection({X*1},Set)
 
   [is-2] elem(X, Set) == false
           ====>
@@ -26,7 +26,7 @@ equations
   [df] Set1 \ Set2 = difference(Set1, Set2)
 
   [df-0] difference({X*1, X, X*2}, {X*3, X, X*4}) =
-         difference({X*1, X*2}, {X*3, X*4}
+         difference({X*1, X*2}, {X*3, X*4})
   
   [default-df-1] difference(Set1, Set2) = Set1 
  
