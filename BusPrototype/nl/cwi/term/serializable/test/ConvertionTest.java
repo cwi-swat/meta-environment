@@ -8,7 +8,6 @@ import nl.cwi.bus.transmission.Do;
 import nl.cwi.term.serializable.SerializableStringTerm;
 import nl.cwi.term.serializable.TermCollection;
 import nl.cwi.term.serializable.TermConverter;
-import nl.cwi.util.NativeTypeBuilder;
 
 public class ConvertionTest extends TestCase{
 
@@ -47,18 +46,17 @@ public class ConvertionTest extends TestCase{
 	
 	public void testCollection(){
 		String string = "testtesttest";
-		TermConverter tc = new TermConverter(new SerializableStringTerm(string));
-		TermConverter tc2 = new TermConverter(new SerializableStringTerm(string));
+		SerializableStringTerm sst1 = new SerializableStringTerm(string);
+		SerializableStringTerm sst2 = new SerializableStringTerm(string);
 		
-		TermCollection termCollection = new TermCollection(new TermConverter[]{tc, tc2});
+		TermCollection termCollection = new TermCollection(new SerializableStringTerm[]{sst1, sst2});
 		byte[] bytes = termCollection.get(0, termCollection.length());
 		
 		TermCollection termCollection2 = new TermCollection();
 		termCollection2.put(bytes);
 		
 		for(int i = 0; i < termCollection2.size(); i++){
-			TermConverter tc_ = termCollection2.getValue(i);
-			SerializableStringTerm sst = (SerializableStringTerm)tc_.getTerm();
+			SerializableStringTerm sst = (SerializableStringTerm)termCollection2.getValue(i);
 			if(!sst.getValue().equals(string)) fail("Collection didn't match: "+sst.getValue()+" != "+string);
 		}
 	}
