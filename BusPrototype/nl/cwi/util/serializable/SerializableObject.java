@@ -17,7 +17,7 @@ public class SerializableObject implements ISerializable{
 	private int putIndex = -1;
 
 	private List order = null;
-	private Map mappings = null;
+	private Map sizeMapping = null;
 
 	/**
 	 * Default constructor.
@@ -28,7 +28,7 @@ public class SerializableObject implements ISerializable{
 		putIndex = 0;
 
 		order = new ArrayList();
-		mappings = new HashMap();
+		sizeMapping = new HashMap();
 	}
 
 	/**
@@ -40,6 +40,21 @@ public class SerializableObject implements ISerializable{
 	protected void register(SerializableObject serializableObject){
 		synchronized(order){
 			order.add(serializableObject);
+		}
+	}
+
+	/**
+	 * Deregisters the given object (it will remove it's first occurence in case
+	 * it has been added multiple times). NOTE: This method should not be called
+	 * during the serialization or deserialization of this object, it might
+	 * cause corruption.
+	 * 
+	 * @param serializableObject
+	 *            The object that should be deregistered.
+	 */
+	protected void deregister(SerializableObject serializableObject){
+		synchronized(order){
+			order.remove(serializableObject);
 		}
 	}
 
@@ -58,7 +73,7 @@ public class SerializableObject implements ISerializable{
 			order.add(o);
 		}
 
-		mappings.put(o, new Integer(length));
+		sizeMapping.put(o, new Integer(length));
 	}
 
 	/**
@@ -74,7 +89,7 @@ public class SerializableObject implements ISerializable{
 		Object o = null;
 		for(int i = 0; i < order.size(); i++){
 			o = order.get(i);
-			
+
 			if(position == offset){
 				break;
 			}
@@ -83,7 +98,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) mappings.get(o)).intValue();
+				objectLength = ((Integer) sizeMapping.get(o)).intValue();
 			}
 
 			int newPosition = position + objectLength;
@@ -141,7 +156,7 @@ public class SerializableObject implements ISerializable{
 				SerializableObject serializableObject = (SerializableObject) o;
 				length += serializableObject.length();
 			}else{
-				int size = ((Integer) mappings.get(o)).intValue();
+				int size = ((Integer) sizeMapping.get(o)).intValue();
 				length += size;
 			}
 		}
@@ -175,14 +190,14 @@ public class SerializableObject implements ISerializable{
 		Object o = null;
 		for(int i = 0; i < order.size(); i++){
 			o = order.get(i);
-			
+
 			if(position == putIndex) break;
 
 			int objectLength = 0;
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) mappings.get(o)).intValue();
+				objectLength = ((Integer) sizeMapping.get(o)).intValue();
 			}
 
 			int newPosition = position + objectLength;
@@ -217,7 +232,7 @@ public class SerializableObject implements ISerializable{
 
 		putIndex += bytesToWrite;
 
-		update();
+		updateTree();
 
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
 
@@ -241,12 +256,12 @@ public class SerializableObject implements ISerializable{
 		int position = 0;
 		for(int i = 0; i < order.size(); i++){
 			Object o = order.get(i);
-			
+
 			int objectLength = 0;
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) mappings.get(o)).intValue();
+				objectLength = ((Integer) sizeMapping.get(o)).intValue();
 			}
 
 			position += objectLength;
@@ -273,9 +288,17 @@ public class SerializableObject implements ISerializable{
 			Object value = order.get(i);
 			if(value instanceof SerializableObject){
 				SerializableObject so = (SerializableObject) value;
-				so.update();
+				so.updateTree();
 			}
 		}
+	}
+
+	/**
+	 * Recursively updates all the subnodes of this serializable object.
+	 */
+	private void updateTree(){
+		update();
+		updateChildren();
 	}
 
 	/**
@@ -283,6 +306,6 @@ public class SerializableObject implements ISerializable{
 	 * subclass.
 	 */
 	protected void update(){
-		updateChildren();
+	// Intentionally left blank, this is intented by design.
 	}
 }

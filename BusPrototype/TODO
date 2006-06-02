@@ -25,7 +25,6 @@ TODO:
 	Add support for serializable object collections.
 		-Immutable one (done)
 		-Mutable one
-			-Enable deregistering serializable objects.
 	
 	Add a more advanced method of matching for terms.
 		-Enable matches on generic types.

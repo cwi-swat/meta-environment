@@ -74,7 +74,5 @@ public class TermCollection extends SerializableObject{
 				register(termConverters[i]);
 			}
 		}
-
-		super.update();
 	}
 }
