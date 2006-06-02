@@ -16,7 +16,13 @@ TODO:
 	
 	Add tree preservation support to the variables; the variable will contain the entire tree and offer access to a node in that tree.
 	This is needed on the level of the Toolbus.
-	We want to be able to access a specific node, without messing up the GC and without retrieving the value.
+	We want to be able to access a specific node, without messing up the GC or retrieving the value.
+	
+	Add serializable object sharing.
+		-Every (non native) node should be uniquely identifiable (this identifier should not be serialized, but has to be reconstructable during deserialization).
+		-Create a support for LZW like compression for serialization (if a node has been serialized before, adding only the identifier to the bytestream should be enough; there is no need to re-serialize the entire object).
+	
+	Add support for serializable object collections.
 	
 	Add a more advanced method of matching for terms.
 		-Enable matches on generic types.
@@ -25,7 +31,11 @@ TODO:
 
 
 Features:
-	Handle firewall issues (alternate way of communication).
+	Handle firewall issues.
+		-Detect passiveness.
+		-Create an alternate way of communication
+			-active -> passive (get through the bus).
+			-passive -> passive (both get and put(val) through the bus).
 
 
 Stuff that might be nice:
