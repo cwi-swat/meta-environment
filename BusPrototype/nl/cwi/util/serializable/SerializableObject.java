@@ -223,7 +223,7 @@ public class SerializableObject implements ISerializable{
 			serialiazableObject.update();
 		}else{
 			byte[] byteArray = (byte[]) o;
-
+			
 			bytesToWrite = (byteArray.length - startIndex);
 			if(bytesToWrite > bytes.length) bytesToWrite = bytes.length;
 
