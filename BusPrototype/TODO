@@ -23,6 +23,10 @@ TODO:
 		-Create a support for LZW like compression for serialization (if a node has been serialized before, adding only the identifier to the bytestream should be enough; there is no need to re-serialize the entire object).
 	
 	Add support for serializable object collections.
+		-Immutable one (done)
+		-Mutable one
+			-Enable deregistering serializable objects.
+				-Use different identifiers as keys, don't let them depends on the size of the list.
 	
 	Add a more advanced method of matching for terms.
 		-Enable matches on generic types.

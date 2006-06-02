@@ -245,12 +245,12 @@ public class SerializableObject implements ISerializable{
 			mappings.put(key, byteArray);
 		}
 		
+		putIndex += bytesToWrite;
+		
 		update();
 
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
-
-		putIndex += bytesToWrite;
-
+		
 		if(bytesToWrite < bytes.length){
 			byte[] additionalBytes = new byte[bytes.length - bytesToWrite];
 			System.arraycopy(bytes, bytesToWrite, additionalBytes, 0, additionalBytes.length);
