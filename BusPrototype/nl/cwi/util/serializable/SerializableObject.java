@@ -2,10 +2,8 @@ package nl.cwi.util.serializable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Object that handles serializing and deserializing of the internal state of an
@@ -19,7 +17,7 @@ public class SerializableObject implements ISerializable{
 
 	private int putIndex = -1;
 
-	private List sizes = null;
+	private List order = null;
 	private Map mappings = null;
 
 	/**
@@ -30,7 +28,7 @@ public class SerializableObject implements ISerializable{
 
 		putIndex = 0;
 
-		sizes = new ArrayList();
+		order = new ArrayList();
 		mappings = new HashMap();
 	}
 
@@ -39,19 +37,13 @@ public class SerializableObject implements ISerializable{
 	 * 
 	 * @param serializableObject
 	 *            The object that is part of the state of the object.
-	 * @return The key associated with the serializable object.
 	 */
-	protected Integer register(SerializableObject serializableObject){
-		int index = -1;
-		synchronized(sizes){
-			index = sizes.size();
-			sizes.add(ISERIALIZABLELENGTHVALUE);
+	protected void register(SerializableObject serializableObject){
+		synchronized(order){
+			order.add(serializableObject);
 		}
 
-		Integer key = new Integer(index);
-		mappings.put(key, serializableObject);
-
-		return key;
+		mappings.put(serializableObject, ISERIALIZABLELENGTHVALUE);
 	}
 
 	/**
@@ -62,20 +54,14 @@ public class SerializableObject implements ISerializable{
 	 *            The length of the byte array.
 	 * @param o
 	 *            The byte array, including content; or null in case the object
-	 *            hasn't been builded yet.
-	 * @return The key associated with the serializable object.
+	 *            hasn't been builded yet. May not be null.
 	 */
-	protected Integer registerNativeType(int length, byte[] o){
-		int index = -1;
-		synchronized(sizes){
-			index = sizes.size();
-			sizes.add(new Integer(length));
+	protected void registerNativeType(int length, byte[] o){
+		synchronized(order){
+			order.add(o);
 		}
 
-		Integer key = new Integer(index);
-		mappings.put(key, o);
-
-		return key;
+		mappings.put(o, new Integer(length));
 	}
 
 	/**
@@ -89,10 +75,10 @@ public class SerializableObject implements ISerializable{
 		// Find the object and the position associated with the object
 		int position = 0;
 		Object o = null;
-		for(int i = 0; i < sizes.size(); i++){
-			Integer size = ((Integer) sizes.get(i));
+		for(int i = 0; i < order.size(); i++){
+			o = order.get(i);
 
-			o = mappings.get(new Integer(i));
+			int size = ((Integer) mappings.get(o)).intValue();
 
 			if(position == offset){
 				break;
@@ -102,7 +88,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = size.intValue();
+				objectLength = size;
 			}
 
 			int newPosition = position + objectLength;
@@ -153,14 +139,15 @@ public class SerializableObject implements ISerializable{
 	 */
 	public int length(){
 		int length = 0;
-		for(int i = 0; i < sizes.size(); i++){
-			Integer size = ((Integer) sizes.get(i));
+		for(int i = 0; i < order.size(); i++){
+			Object o = order.get(i);
 
-			if(size.intValue() == ISERIALIZABLELENGTHVALUE.intValue()){
-				ISerializable serializableObject = (ISerializable) mappings.get(new Integer(i));
+			if(o instanceof SerializableObject){
+				SerializableObject serializableObject = (SerializableObject) o;
 				length += serializableObject.length();
 			}else{
-				length += size.intValue();
+				int size = ((Integer) mappings.get(o)).intValue();
+				length += size;
 			}
 		}
 
@@ -192,12 +179,10 @@ public class SerializableObject implements ISerializable{
 		int position = 0;
 		Object o = null;
 		int size = 0;
-		Integer key = null;
-		for(int i = 0; i < sizes.size(); i++){
-			size = ((Integer) sizes.get(i)).intValue();
+		for(int i = 0; i < order.size(); i++){
+			o = order.get(i);
 
-			key = new Integer(i);
-			o = mappings.get(key);
+			size = ((Integer) mappings.get(o)).intValue();
 
 			if(position == putIndex) break;
 
@@ -227,42 +212,28 @@ public class SerializableObject implements ISerializable{
 			byte[] byteArray = new byte[bytesToWrite];
 			System.arraycopy(bytes, 0, byteArray, 0, bytesToWrite);
 			serialiazableObject.put(byteArray);
-			
+
 			serialiazableObject.update();
 		}else{
-			byte[] byteArray = null;
-			if(o == null){
-				byteArray = new byte[size];
-			}else{
-				byteArray = (byte[]) o;
-			}
+			byte[] byteArray = (byte[]) o;
 
 			bytesToWrite = (byteArray.length - startIndex);
 			if(bytesToWrite > bytes.length) bytesToWrite = bytes.length;
 
 			System.arraycopy(bytes, 0, byteArray, startIndex, bytesToWrite);
-
-			mappings.put(key, byteArray);
 		}
-		
+
 		putIndex += bytesToWrite;
-		
+
 		update();
 
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
-		
+
 		if(bytesToWrite < bytes.length){
 			byte[] additionalBytes = new byte[bytes.length - bytesToWrite];
 			System.arraycopy(bytes, bytesToWrite, additionalBytes, 0, additionalBytes.length);
 			put(additionalBytes);
 		}
-	}
-
-	/**
-	 * @see ISerializable#getContent(Integer)
-	 */
-	public byte[] getContent(Integer key){
-		return (byte[]) mappings.get(key);
 	}
 
 	/**
@@ -276,11 +247,9 @@ public class SerializableObject implements ISerializable{
 		boolean build = false;
 
 		int position = 0;
-		for(int i = 0; i < sizes.size(); i++){
-			int size = ((Integer) sizes.get(i)).intValue();
-
-			Integer key = new Integer(i);
-			Object o = mappings.get(key);
+		for(int i = 0; i < order.size(); i++){
+			Object o = order.get(i);
+			int size = ((Integer) mappings.get(o)).intValue();
 
 			int objectLength = 0;
 			if(o instanceof ISerializable){
@@ -304,26 +273,23 @@ public class SerializableObject implements ISerializable{
 	}
 
 	/**
-	 * Propagates the update to all the registered serializable objects.
-	 * This method is called after new data has been added through a
-	 * call to the put method.
+	 * Propagates the update to all the registered serializable objects. This
+	 * method is called after new data has been added through a call to the put
+	 * method.
 	 */
 	private void updateChildren(){
-		Set keys = mappings.keySet();
-		Iterator mappingIterator = keys.iterator();
-		while(mappingIterator.hasNext()){
-			Object key = mappingIterator.next();
-			Object value = mappings.get(key);
+		for(int i = 0; i < order.size(); i++){
+			Object value = order.get(i);
 			if(value instanceof SerializableObject){
-				SerializableObject so = (SerializableObject)value;
+				SerializableObject so = (SerializableObject) value;
 				so.update();
 			}
 		}
 	}
-	
+
 	/**
-	 * Updated this serialized object.
-	 * This method may be overridden in a subclass.
+	 * Updated this serialized object. This method may be overridden in a
+	 * subclass.
 	 */
 	protected void update(){
 		updateChildren();

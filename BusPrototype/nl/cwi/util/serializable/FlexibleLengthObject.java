@@ -60,11 +60,11 @@ public final class FlexibleLengthObject extends SerializableObject{
 			objectLength = object.length;
 		}
 
-		isNull = new byte[]{NativeTypeBuilder.makeBytesFromBoolean(object == null)};
+		isNull = new byte[] {NativeTypeBuilder.makeBytesFromBoolean(object == null)};
 		lengthField = NativeTypeBuilder.makeBytesFromInt(objectLength);
 
 		init();
-		
+
 		if(object != null){
 			this.object = object;
 		}else{
@@ -93,6 +93,7 @@ public final class FlexibleLengthObject extends SerializableObject{
 
 	/**
 	 * Returns The content of this object represented as byte array.
+	 * 
 	 * @return The content of this object represented as byte array.
 	 */
 	public byte[] getContent(){
@@ -107,7 +108,7 @@ public final class FlexibleLengthObject extends SerializableObject{
 	public boolean isNull(){
 		return NativeTypeBuilder.makeBoolean(isNull);
 	}
-	
+
 	/**
 	 * @see ISerializable#isValid()
 	 */

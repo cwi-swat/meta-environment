@@ -49,15 +49,4 @@ public interface ISerializable{
 	 * @return True if the object has been completely build; false otherwise.
 	 */
 	public boolean isValid();
-
-	/**
-	 * Returns the content of the object associated with the given key as byte
-	 * array. Use the NativeTypeBuilder class to convert it to the required
-	 * type.
-	 * 
-	 * @param key
-	 *            The key identifying the value you wish to retreive.
-	 * @return The requested value, represented as byte array.
-	 */
-	byte[] getContent(Integer key);
 }
