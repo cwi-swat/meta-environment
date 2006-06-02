@@ -18,7 +18,7 @@ TODO:
 	This is needed on the level of the Toolbus.
 	We want to be able to access a specific node, without messing up the GC or retrieving the value.
 	
-	Add serializable object sharing.
+	Add serializable object compression.
 		-Every (non native) node should be uniquely identifiable (this identifier should not be serialized, but has to be reconstructable during deserialization).
 		-Create a support for LZW like compression for serialization (if a node has been serialized before, adding only the identifier to the bytestream should be enough; there is no need to re-serialize the entire object).
 	

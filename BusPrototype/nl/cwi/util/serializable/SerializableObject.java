@@ -13,7 +13,6 @@ import java.util.Map;
  */
 public class SerializableObject implements ISerializable{
 	public final static int UNDEFINED = -1;
-	public final static Integer ISERIALIZABLELENGTHVALUE = new Integer(-1);
 
 	private int putIndex = -1;
 
@@ -42,8 +41,6 @@ public class SerializableObject implements ISerializable{
 		synchronized(order){
 			order.add(serializableObject);
 		}
-
-		mappings.put(serializableObject, ISERIALIZABLELENGTHVALUE);
 	}
 
 	/**
@@ -77,9 +74,7 @@ public class SerializableObject implements ISerializable{
 		Object o = null;
 		for(int i = 0; i < order.size(); i++){
 			o = order.get(i);
-
-			int size = ((Integer) mappings.get(o)).intValue();
-
+			
 			if(position == offset){
 				break;
 			}
@@ -88,7 +83,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = size;
+				objectLength = ((Integer) mappings.get(o)).intValue();
 			}
 
 			int newPosition = position + objectLength;
@@ -178,19 +173,16 @@ public class SerializableObject implements ISerializable{
 		// Find the object and the position associated with the object.
 		int position = 0;
 		Object o = null;
-		int size = 0;
 		for(int i = 0; i < order.size(); i++){
 			o = order.get(i);
-
-			size = ((Integer) mappings.get(o)).intValue();
-
+			
 			if(position == putIndex) break;
 
 			int objectLength = 0;
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = size;
+				objectLength = ((Integer) mappings.get(o)).intValue();
 			}
 
 			int newPosition = position + objectLength;
@@ -249,13 +241,12 @@ public class SerializableObject implements ISerializable{
 		int position = 0;
 		for(int i = 0; i < order.size(); i++){
 			Object o = order.get(i);
-			int size = ((Integer) mappings.get(o)).intValue();
-
+			
 			int objectLength = 0;
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = size;
+				objectLength = ((Integer) mappings.get(o)).intValue();
 			}
 
 			position += objectLength;
