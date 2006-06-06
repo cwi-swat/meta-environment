@@ -7,7 +7,7 @@ import junit.textui.TestRunner;
 import nl.cwi.bus.transmission.Do;
 import nl.cwi.term.serializable.MutableTermCollection;
 import nl.cwi.term.serializable.SerializableStringTerm;
-import nl.cwi.term.serializable.TermCollection;
+import nl.cwi.term.serializable.ImmutableTermCollection;
 import nl.cwi.term.serializable.TermConverter;
 
 public class ConvertionTest extends TestCase{
@@ -50,10 +50,10 @@ public class ConvertionTest extends TestCase{
 		SerializableStringTerm sst1 = new SerializableStringTerm(string);
 		SerializableStringTerm sst2 = new SerializableStringTerm(string);
 		
-		TermCollection termCollection = new TermCollection(new SerializableStringTerm[]{sst1, sst2});
+		ImmutableTermCollection termCollection = new ImmutableTermCollection(new SerializableStringTerm[]{sst1, sst2});
 		byte[] bytes = termCollection.get(0, termCollection.length());
 		
-		TermCollection termCollection2 = new TermCollection();
+		ImmutableTermCollection termCollection2 = new ImmutableTermCollection();
 		termCollection2.put(bytes);
 		
 		for(int i = 0; i < termCollection2.size(); i++){
