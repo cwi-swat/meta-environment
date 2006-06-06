@@ -42,6 +42,25 @@ public class SerializableObject implements ISerializable{
 			order.add(serializableObject);
 		}
 	}
+	
+	/**
+	 * Returns an array containing all the registered serializable objects.
+	 * @return An array containing all the registered serializable objects.
+	 */
+	public SerializableObject[] getChildren(){
+		List childrenList = new ArrayList();
+		for(int i = 0; i < order.size(); i++){
+			 Object o = order.get(i);
+			 if(o instanceof SerializableObject){
+				 childrenList.add(o);
+			 }
+		}
+		Object[] childrenArray = childrenList.toArray();
+		SerializableObject[] children = new SerializableObject[childrenList.size()];
+		System.arraycopy(childrenArray, 0, children, 0, children.length);
+		
+		return children;
+	}
 
 	/**
 	 * Deregisters the given object (it will remove it's first occurence in case
@@ -219,8 +238,6 @@ public class SerializableObject implements ISerializable{
 			byte[] byteArray = new byte[bytesToWrite];
 			System.arraycopy(bytes, 0, byteArray, 0, bytesToWrite);
 			serialiazableObject.put(byteArray);
-
-			serialiazableObject.update();
 		}else{
 			byte[] byteArray = (byte[]) o;
 			
@@ -306,6 +323,6 @@ public class SerializableObject implements ISerializable{
 	 * subclass.
 	 */
 	protected void update(){
-	// Intentionally left blank, this is intented by design.
+	// Intentionally left blank; this is intented by design.
 	}
 }
