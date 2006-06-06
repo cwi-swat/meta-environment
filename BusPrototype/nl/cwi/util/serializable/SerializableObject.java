@@ -42,23 +42,24 @@ public class SerializableObject implements ISerializable{
 			order.add(serializableObject);
 		}
 	}
-	
+
 	/**
 	 * Returns an array containing all the registered serializable objects.
+	 * 
 	 * @return An array containing all the registered serializable objects.
 	 */
 	public SerializableObject[] getChildren(){
 		List childrenList = new ArrayList();
 		for(int i = 0; i < order.size(); i++){
-			 Object o = order.get(i);
-			 if(o instanceof SerializableObject){
-				 childrenList.add(o);
-			 }
+			Object o = order.get(i);
+			if(o instanceof SerializableObject){
+				childrenList.add(o);
+			}
 		}
 		Object[] childrenArray = childrenList.toArray();
 		SerializableObject[] children = new SerializableObject[childrenList.size()];
 		System.arraycopy(childrenArray, 0, children, 0, children.length);
-		
+
 		return children;
 	}
 
@@ -94,7 +95,7 @@ public class SerializableObject implements ISerializable{
 
 		sizeMapping.put(o, new Integer(length));
 	}
-
+	
 	/**
 	 * @see ISerializable#get(int, int)
 	 */
@@ -240,7 +241,7 @@ public class SerializableObject implements ISerializable{
 			serialiazableObject.put(byteArray);
 		}else{
 			byte[] byteArray = (byte[]) o;
-			
+
 			bytesToWrite = (byteArray.length - startIndex);
 			if(bytesToWrite > bytes.length) bytesToWrite = bytes.length;
 
@@ -249,7 +250,7 @@ public class SerializableObject implements ISerializable{
 
 		putIndex += bytesToWrite;
 
-		updateTree();
+		update();
 
 		if(bytesToWrite == 0) throw new RuntimeException("Bytenumber overflow");
 
@@ -296,31 +297,9 @@ public class SerializableObject implements ISerializable{
 	}
 
 	/**
-	 * Propagates the update to all the registered serializable objects. This
-	 * method is called after new data has been added through a call to the put
-	 * method.
-	 */
-	private void updateChildren(){
-		for(int i = 0; i < order.size(); i++){
-			Object value = order.get(i);
-			if(value instanceof SerializableObject){
-				SerializableObject so = (SerializableObject) value;
-				so.updateTree();
-			}
-		}
-	}
-
-	/**
-	 * Recursively updates all the subnodes of this serializable object.
-	 */
-	private void updateTree(){
-		update();
-		updateChildren();
-	}
-
-	/**
-	 * Updated this serialized object. This method may be overridden in a
-	 * subclass.
+	 * Updated this serialized object. This method is called after new data has
+	 * been added through a call to the put method. This method may be
+	 * overridden in a subclass.
 	 */
 	protected void update(){
 	// Intentionally left blank; this is intented by design.
