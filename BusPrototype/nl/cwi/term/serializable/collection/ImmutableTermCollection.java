@@ -1,5 +1,7 @@
-package nl.cwi.term.serializable;
+package nl.cwi.term.serializable.collection;
 
+import nl.cwi.term.serializable.AbstractTerm;
+import nl.cwi.term.serializable.TermConverter;
 import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.serializable.SerializableObject;
 

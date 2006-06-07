@@ -5,10 +5,10 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 import nl.cwi.bus.transmission.Do;
-import nl.cwi.term.serializable.MutableTermCollection;
 import nl.cwi.term.serializable.SerializableStringTerm;
-import nl.cwi.term.serializable.ImmutableTermCollection;
 import nl.cwi.term.serializable.TermConverter;
+import nl.cwi.term.serializable.collection.ImmutableTermCollection;
+import nl.cwi.term.serializable.collection.MutableTermCollection;
 
 public class ConvertionTest extends TestCase{
 
