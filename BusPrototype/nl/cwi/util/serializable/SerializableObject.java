@@ -1,9 +1,7 @@
 package nl.cwi.util.serializable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Object that handles serializing and deserializing of the internal state of an
@@ -19,7 +17,6 @@ public class SerializableObject implements ISerializable{
 	private int putIndex = -1;
 
 	private List order = null;
-	private Map sizeMapping = null;
 
 	/**
 	 * Default constructor.
@@ -30,7 +27,6 @@ public class SerializableObject implements ISerializable{
 		putIndex = 0;
 
 		order = new ArrayList();
-		sizeMapping = new HashMap();
 	}
 
 	/**
@@ -111,8 +107,6 @@ public class SerializableObject implements ISerializable{
 		synchronized(order){
 			order.add(o);
 		}
-
-		sizeMapping.put(o, new Integer(o.length));
 	}
 
 	/**
@@ -135,7 +129,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) sizeMapping.get(o)).intValue();
+				objectLength = ((byte[])o).length;
 			}
 
 			int newPosition = position + objectLength;
@@ -195,7 +189,7 @@ public class SerializableObject implements ISerializable{
 				SerializableObject serializableObject = (SerializableObject) o;
 				length += serializableObject.length();
 			}else{
-				int size = ((Integer) sizeMapping.get(o)).intValue();
+				int size = ((byte[]) o).length;
 				length += size;
 			}
 		}
@@ -236,7 +230,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) sizeMapping.get(o)).intValue();
+				objectLength = ((byte[]) o).length;
 			}
 
 			int newPosition = position + objectLength;
@@ -298,7 +292,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((Integer) sizeMapping.get(o)).intValue();
+				objectLength = ((byte[]) o).length;
 			}
 
 			position += objectLength;
