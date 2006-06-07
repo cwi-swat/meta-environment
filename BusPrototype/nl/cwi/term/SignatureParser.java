@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import nl.cwi.term.serializable.AbstractTerm;
+
 /**
  * This is a parser for signatures. The signature will be converted to a
  * hierarchy of uniquely idenifiable nodes.
@@ -11,6 +13,7 @@ import java.util.StringTokenizer;
  * @author Arnold Lankamp
  */
 public class SignatureParser{
+	private final static String DELIMS = AbstractTerm.SIGNATUREOPEN + AbstractTerm.SIGNATURECLOSE + AbstractTerm.SIGNATURESEPARATOR;
 
 	/**
 	 * Default constructor. Private to prevent needless instantiation.
@@ -30,12 +33,12 @@ public class SignatureParser{
 		Node rootNode = new Node(null, null);
 		Node node = rootNode;
 
-		StringTokenizer sigTokenizer = new StringTokenizer(signature, "(,)<>", true);
+		StringTokenizer sigTokenizer = new StringTokenizer(signature, DELIMS, true);
 		while(sigTokenizer.hasMoreTokens()){
 			String token = sigTokenizer.nextToken().intern();
-			if(token == ")"){
+			if(token == AbstractTerm.SIGNATURECLOSE){
 				node = node.getParent();
-			}else if(token == "(" || token == "," || token == "<" || token == ">"){
+			}else if(token == AbstractTerm.SIGNATUREOPEN || token == AbstractTerm.SIGNATURESEPARATOR){
 				// Do nothing
 			}else{
 				node = new Node(token, node);
