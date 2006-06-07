@@ -120,9 +120,7 @@ public class SerializableObject implements ISerializable{
 	 */
 	public byte[] get(int offset, int length){
 		if((offset + length) > length()) throw new IllegalArgumentException("Buffer underflow exception; (offset + length) > The size of the serialized representation of the object.");
-
-		byte[] bytes = new byte[length];
-
+		
 		// Find the object and the position associated with the object
 		int position = 0;
 		Object o = null;
@@ -171,6 +169,8 @@ public class SerializableObject implements ISerializable{
 				System.arraycopy(byteArray, startIndex, bytesGotten, 0, bytesGotten.length);
 			}
 		}
+		
+		byte[] bytes = new byte[length];
 		System.arraycopy(bytesGotten, 0, bytes, 0, bytesGotten.length);
 
 		// If we need to read more data, do it.
