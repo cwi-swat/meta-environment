@@ -40,8 +40,8 @@ public class SerializedObjectTest extends SerializableObject{
 	}
 
 	public void init(){
-		registerNativeType(NativeTypeBuilder.LONGBYTES, longByteArray);
-		registerNativeType(NativeTypeBuilder.INTBYTES, intByteArray);
+		registerNativeType(longByteArray);
+		registerNativeType(intByteArray);
 		register(string);
 	}
 

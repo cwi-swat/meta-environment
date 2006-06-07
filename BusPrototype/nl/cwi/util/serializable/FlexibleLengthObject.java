@@ -70,15 +70,15 @@ public final class FlexibleLengthObject extends SerializableObject{
 		}else{
 			this.object = new byte[0];
 		}
-		registerNativeType(this.object.length, this.object);
+		registerNativeType(this.object);
 	}
 
 	/**
 	 * Initialized this term.
 	 */
 	private void init(){
-		registerNativeType(isNull.length, isNull);
-		registerNativeType(lengthField.length, lengthField);
+		registerNativeType(isNull);
+		registerNativeType(lengthField);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public final class FlexibleLengthObject extends SerializableObject{
 	protected void update(){
 		if(object == null && isBuild(lengthField)){
 			object = new byte[NativeTypeBuilder.makeInt(lengthField)];
-			registerNativeType(object.length, object);
+			registerNativeType(object);
 		}
 	}
 

@@ -41,7 +41,7 @@ public class FinOperation extends AbstractOperation{
 	 * Initializes this operation.
 	 */
 	private void init(){
-		registerNativeType(variableIDBytes.length, variableIDBytes);
+		registerNativeType(variableIDBytes);
 	}
 
 	/**

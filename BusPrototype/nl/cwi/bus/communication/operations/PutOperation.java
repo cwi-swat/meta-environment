@@ -130,12 +130,12 @@ public class PutOperation extends AbstractOperation{
 	 * Initializes this operation.
 	 */
 	private void init(){
-		registerNativeType(transactionID.length, transactionID);
+		registerNativeType(transactionID);
 		
-		registerNativeType(sourceToolIDBytes.length, sourceToolIDBytes);
-		registerNativeType(sourceToolIPBytes.length, sourceToolIPBytes);
-		registerNativeType(sourceToolPortBytes.length, sourceToolPortBytes);
-		registerNativeType(variableIDBytes.length, variableIDBytes);
+		registerNativeType(sourceToolIDBytes);
+		registerNativeType(sourceToolIPBytes);
+		registerNativeType(sourceToolPortBytes);
+		registerNativeType(variableIDBytes);
 		register(signatureTerm);
 		register(dataTermConverter);
 	}

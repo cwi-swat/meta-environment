@@ -14,6 +14,8 @@ import java.util.Map;
 public class SerializableObject implements ISerializable{
 	public final static int UNDEFINED = -1;
 
+	private SerializableObject parent = null;
+
 	private int putIndex = -1;
 
 	private List order = null;
@@ -26,9 +28,48 @@ public class SerializableObject implements ISerializable{
 		super();
 
 		putIndex = 0;
-
+		
 		order = new ArrayList();
 		sizeMapping = new HashMap();
+	}
+
+	/**
+	 * Sets the parent of this serializable object.
+	 * 
+	 * @param parent
+	 *            The parent of this serializable object.
+	 */
+	private void setParent(SerializableObject parent){
+		this.parent = parent;
+	}
+
+	/**
+	 * Returns the parent of this serializable object.
+	 * 
+	 * @return The parent of this serializable object.
+	 */
+	protected SerializableObject getParent(){
+		return parent;
+	}
+
+	/**
+	 * Replaces the first occurence of the old object by the new object.
+	 * 
+	 * @param oldObject
+	 *            The object that needs to be replaced.
+	 * @param newObject
+	 *            The object to replace it with.
+	 */
+	protected void replace(SerializableObject oldObject, SerializableObject newObject){
+		synchronized(order){
+			for(int i = 0; i < order.size(); i++){
+				Object o = order.get(i);
+				if(o == oldObject){
+					order.set(i, newObject);
+					break;
+				}
+			}
+		}
 	}
 
 	/**
@@ -39,28 +80,9 @@ public class SerializableObject implements ISerializable{
 	 */
 	protected void register(SerializableObject serializableObject){
 		synchronized(order){
+			serializableObject.setParent(this);
 			order.add(serializableObject);
 		}
-	}
-
-	/**
-	 * Returns an array containing all the registered serializable objects.
-	 * 
-	 * @return An array containing all the registered serializable objects.
-	 */
-	public SerializableObject[] getChildren(){
-		List childrenList = new ArrayList();
-		for(int i = 0; i < order.size(); i++){
-			Object o = order.get(i);
-			if(o instanceof SerializableObject){
-				childrenList.add(o);
-			}
-		}
-		Object[] childrenArray = childrenList.toArray();
-		SerializableObject[] children = new SerializableObject[childrenList.size()];
-		System.arraycopy(childrenArray, 0, children, 0, children.length);
-
-		return children;
 	}
 
 	/**
@@ -81,21 +103,17 @@ public class SerializableObject implements ISerializable{
 	/**
 	 * Registers a native type that is part of the state of the object. Native
 	 * types are registered as byte arrays.
-	 * 
-	 * @param length
-	 *            The length of the byte array.
 	 * @param o
-	 *            The byte array, including content; or null in case the object
-	 *            hasn't been builded yet. May not be null.
+	 *            The byte array, including content. May not be null.
 	 */
-	protected void registerNativeType(int length, byte[] o){
+	protected void registerNativeType(byte[] o){
 		synchronized(order){
 			order.add(o);
 		}
 
-		sizeMapping.put(o, new Integer(length));
+		sizeMapping.put(o, new Integer(o.length));
 	}
-	
+
 	/**
 	 * @see ISerializable#get(int, int)
 	 */

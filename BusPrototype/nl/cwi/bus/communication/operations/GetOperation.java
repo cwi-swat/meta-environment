@@ -61,10 +61,10 @@ public class GetOperation extends AbstractOperation{
 	 * Initializes this operation.
 	 */
 	private void init(){
-		registerNativeType(sourceToolIDBytes.length, sourceToolIDBytes);
-		registerNativeType(variableIDBytes.length, variableIDBytes);
-		registerNativeType(targetToolIPBytes.length, targetToolIPBytes);
-		registerNativeType(targetToolPortBytes.length, targetToolPortBytes);
+		registerNativeType(sourceToolIDBytes);
+		registerNativeType(variableIDBytes);
+		registerNativeType(targetToolIPBytes);
+		registerNativeType(targetToolPortBytes);
 	}
 
 	/**

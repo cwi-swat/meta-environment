@@ -36,7 +36,7 @@ public class AckOperation extends AbstractOperation{
 	 * Initializes this operation.
 	 */
 	private void init(){
-		registerNativeType(transactionID.length, transactionID);
+		registerNativeType(transactionID);
 	}
 
 	/**

@@ -1,5 +1,7 @@
 package nl.cwi.term.serializable;
 
+import nl.cwi.util.IDGenerator;
+import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.serializable.FlexibleLengthObject;
 import nl.cwi.util.serializable.SerializableObject;
 
@@ -9,6 +11,7 @@ import nl.cwi.util.serializable.SerializableObject;
  * @author Arnold Lankamp
  */
 public abstract class AbstractTerm extends SerializableObject{
+	private byte[] identifier = null;
 	private FlexibleLengthObject term = null;
 
 	/**
@@ -17,8 +20,9 @@ public abstract class AbstractTerm extends SerializableObject{
 	public AbstractTerm(){
 		super();
 
+		identifier = new byte[NativeTypeBuilder.LONGBYTES];
 		term = new FlexibleLengthObject();
-		
+
 		init();
 	}
 
@@ -26,21 +30,33 @@ public abstract class AbstractTerm extends SerializableObject{
 	 * Constructor.
 	 * 
 	 * @param value
-	 *            The value of the term that should be stored in this serializable object.
+	 *            The value of the term that should be stored in this
+	 *            serializable object.
 	 */
 	public AbstractTerm(String value){
 		super();
 
-		this.term = new FlexibleLengthObject(value);
-		
+		identifier = NativeTypeBuilder.makeBytesFromLong(IDGenerator.generate());
+		term = new FlexibleLengthObject(value);
+
 		init();
 	}
-	
+
 	/**
 	 * Initializes this term.
 	 */
 	private void init(){
+		registerNativeType(identifier);
 		register(term);
+	}
+
+	/**
+	 * Returns the identifier of this term (unique in every tree).
+	 * 
+	 * @return The identifier of this term.
+	 */
+	public long getID(){
+		return NativeTypeBuilder.makeLong(identifier);
 	}
 
 	/**

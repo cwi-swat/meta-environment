@@ -37,7 +37,7 @@ public class RegOperation extends AbstractOperation{
 	 * Initializes this operation.
 	 */
 	private void init(){
-		registerNativeType(toolIDBytes.length, toolIDBytes);
+		registerNativeType(toolIDBytes);
 	}
 
 	/**

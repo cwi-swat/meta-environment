@@ -20,7 +20,7 @@ public class ImmutableTermCollection extends SerializableObject{
 
 		this.size = new byte[NativeTypeBuilder.INTBYTES];
 
-		registerNativeType(size.length, size);
+		registerNativeType(size);
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class ImmutableTermCollection extends SerializableObject{
 		this.size = NativeTypeBuilder.makeBytesFromInt(terms.length);
 		this.termConverters = new TermConverter[terms.length];
 
-		registerNativeType(size.length, size);
+		registerNativeType(size);
 		for(int i = 0; i < termConverters.length; i++){
 			termConverters[i] = new TermConverter(terms[i]);
 			register(termConverters[i]);

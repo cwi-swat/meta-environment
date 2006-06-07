@@ -29,7 +29,7 @@ public class MutableTermCollection extends SerializableObject{
 		size = new byte[NativeTypeBuilder.INTBYTES];
 		if(construct) terms = new ArrayList();
 
-		registerNativeType(size.length, size);
+		registerNativeType(size);
 	}
 
 	/**
