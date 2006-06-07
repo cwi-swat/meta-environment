@@ -6,8 +6,8 @@ package nl.cwi.term.serializable;
  * @author Arnold Lankamp
  */
 public class SerializableStringTerm extends AbstractTerm{
-	private final static String SIGNATURE = "string()";
 	private final static String TYPE = "string";
+	private final static String SIGNATURE = TYPE+SIGNATUREOPEN+SIGNATURECLOSE;
 
 	/**
 	 * Default constructor.

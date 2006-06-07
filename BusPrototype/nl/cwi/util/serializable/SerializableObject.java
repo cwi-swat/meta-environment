@@ -97,6 +97,28 @@ public class SerializableObject implements ISerializable{
 	}
 
 	/**
+	 * Returns an array containing all the child nodes of this serializable
+	 * object.
+	 * 
+	 * @return An array containing all the child nodes of this serializable
+	 *         object.
+	 */
+	protected SerializableObject[] getChildren(){
+		List childrenCollection = new ArrayList();
+		for(int i = 0; i < order.size(); i++){
+			Object o = order.get(i);
+			if(o instanceof SerializableObject){
+				childrenCollection.add(o);
+			}
+		}
+		Object[] objs = childrenCollection.toArray();
+		SerializableObject[] children = new SerializableObject[objs.length];
+		System.arraycopy(objs, 0, children, 0, children.length);
+
+		return children;
+	}
+
+	/**
 	 * Registers a native type that is part of the state of the object. Native
 	 * types are registered as byte arrays.
 	 * 
@@ -114,7 +136,7 @@ public class SerializableObject implements ISerializable{
 	 */
 	public byte[] get(int offset, int length){
 		if((offset + length) > length()) throw new IllegalArgumentException("Buffer underflow exception; (offset + length) > The size of the serialized representation of the object.");
-		
+
 		// Find the object and the position associated with the object
 		int position = 0;
 		Object o = null;
@@ -129,7 +151,7 @@ public class SerializableObject implements ISerializable{
 			if(o instanceof ISerializable){
 				objectLength = ((ISerializable) o).length();
 			}else{
-				objectLength = ((byte[])o).length;
+				objectLength = ((byte[]) o).length;
 			}
 
 			int newPosition = position + objectLength;
@@ -163,7 +185,7 @@ public class SerializableObject implements ISerializable{
 				System.arraycopy(byteArray, startIndex, bytesGotten, 0, bytesGotten.length);
 			}
 		}
-		
+
 		byte[] bytes = new byte[length];
 		System.arraycopy(bytesGotten, 0, bytes, 0, bytesGotten.length);
 

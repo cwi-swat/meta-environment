@@ -50,11 +50,12 @@ public class ConvertionTest extends TestCase{
 		SerializableStringTerm sst1 = new SerializableStringTerm(string);
 		SerializableStringTerm sst2 = new SerializableStringTerm(string);
 		
-		ImmutableTermCollection termCollection = new ImmutableTermCollection(new SerializableStringTerm[]{sst1, sst2});
-		byte[] bytes = termCollection.get(0, termCollection.length());
+		TermConverter tc = new TermConverter(new ImmutableTermCollection(new SerializableStringTerm[]{sst1, sst2}));
+		byte[] bytes = tc.get(0, tc.length());
 		
-		ImmutableTermCollection termCollection2 = new ImmutableTermCollection();
-		termCollection2.put(bytes);
+		TermConverter tc2 = new TermConverter();
+		tc2.put(bytes);
+		ImmutableTermCollection termCollection2 = (ImmutableTermCollection)tc2.getTerm();
 		
 		for(int i = 0; i < termCollection2.size(); i++){
 			SerializableStringTerm sst = (SerializableStringTerm)termCollection2.getValue(i);
@@ -72,10 +73,14 @@ public class ConvertionTest extends TestCase{
 		collection.add(sst1);
 		collection.add(sst2);
 		collection.remove(sst1);
-		byte[] bytes = collection.get(0, collection.length());
 		
-		MutableTermCollection collection2 = new MutableTermCollection(false);
-		collection2.put(bytes);
+		TermConverter tc = new TermConverter(collection);
+		
+		byte[] bytes = tc.get(0, tc.length());
+		
+		TermConverter tc2 = new TermConverter();
+		tc2.put(bytes);
+		MutableTermCollection collection2 = (MutableTermCollection)tc2.getTerm();
 		
 		SerializableStringTerm sst = (SerializableStringTerm)collection2.getValue(0);
 		if(!sst.getValue().equals(string2)) fail("Collection didn't match: "+sst.getValue()+" != "+string2);

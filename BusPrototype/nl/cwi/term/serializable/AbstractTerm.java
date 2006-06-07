@@ -6,11 +6,15 @@ import nl.cwi.util.serializable.FlexibleLengthObject;
 import nl.cwi.util.serializable.SerializableObject;
 
 /**
- * Represents a term with a flexible length.
+ * Represents a term.
  * 
  * @author Arnold Lankamp
  */
 public abstract class AbstractTerm extends SerializableObject{
+	protected final static String SIGNATUREOPEN = "(";
+	protected final static String SIGNATURECLOSE = ")";
+	protected final static String SIGNATURESEPARATOR = ",";
+	
 	private byte[] identifier = null;
 	private FlexibleLengthObject term = null;
 

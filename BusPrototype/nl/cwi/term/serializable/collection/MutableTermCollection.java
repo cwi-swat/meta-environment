@@ -14,10 +14,24 @@ import nl.cwi.util.serializable.SerializableObject;
  * 
  * @author Arnold Lankamp
  */
-public class MutableTermCollection extends SerializableObject{
+public class MutableTermCollection extends AbstractTerm{
+	private final static String TYPE = "mlist";
+	
 	private byte[] size = null;
 	private List terms = null;
+	
+	/**
+	 * Default constructor.
+	 * Same as MutableTermCollection(false).
+	 */
+	public MutableTermCollection(){
+		super();
 
+		size = new byte[NativeTypeBuilder.INTBYTES];
+
+		registerNativeType(size);
+	}
+	
 	/**
 	 * Constructor.
 	 * 
@@ -135,5 +149,39 @@ public class MutableTermCollection extends SerializableObject{
 			}
 		}
 		super.update();
+	}
+
+	/**
+	 * @see AbstractTerm#getSignature()
+	 */
+	public String getSignature(){
+		StringBuilder signatureBuilder = new StringBuilder();
+		signatureBuilder.append(TYPE);
+		signatureBuilder.append(SIGNATUREOPEN);
+		
+		for(int i = 0; i < terms.size(); i++){
+			TermConverter termConverter = (TermConverter)terms.get(i);
+			signatureBuilder.append(termConverter.getTerm().getSignature());
+			// Don't add the separator after the last element.
+			if((i + 1) != terms.size()) signatureBuilder.append(SIGNATURESEPARATOR);
+		}
+		
+		signatureBuilder.append(SIGNATURECLOSE);
+		
+		return signatureBuilder.toString();
+	}
+
+	/**
+	 * @see AbstractTerm#getType()
+	 */
+	public String getType(){
+		return TYPE;
+	}
+	
+	/**
+	 * @see AbstractTerm#match(String)
+	 */
+	public boolean match(String signature){
+		return getSignature().equals(signature);
 	}
 }
