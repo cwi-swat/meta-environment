@@ -132,5 +132,6 @@ public class MutableTermCollection extends SerializableObject{
 				register(tc);
 			}
 		}
+		super.update();
 	}
 }

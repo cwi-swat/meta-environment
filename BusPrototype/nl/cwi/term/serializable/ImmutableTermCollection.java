@@ -74,5 +74,6 @@ public class ImmutableTermCollection extends SerializableObject{
 				register(termConverters[i]);
 			}
 		}
+		super.update();
 	}
 }

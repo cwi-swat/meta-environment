@@ -28,7 +28,7 @@ public class SerializableObject implements ISerializable{
 		super();
 
 		putIndex = 0;
-		
+
 		order = new ArrayList();
 		sizeMapping = new HashMap();
 	}
@@ -103,6 +103,7 @@ public class SerializableObject implements ISerializable{
 	/**
 	 * Registers a native type that is part of the state of the object. Native
 	 * types are registered as byte arrays.
+	 * 
 	 * @param o
 	 *            The byte array, including content. May not be null.
 	 */
@@ -317,7 +318,7 @@ public class SerializableObject implements ISerializable{
 	/**
 	 * Updated this serialized object. This method is called after new data has
 	 * been added through a call to the put method. This method may be
-	 * overridden in a subclass.
+	 * overridden in a subclass, but should always call super.update().
 	 */
 	protected void update(){
 	// Intentionally left blank; this is intented by design.

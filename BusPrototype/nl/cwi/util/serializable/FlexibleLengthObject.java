@@ -89,6 +89,7 @@ public final class FlexibleLengthObject extends SerializableObject{
 			object = new byte[NativeTypeBuilder.makeInt(lengthField)];
 			registerNativeType(object);
 		}
+		super.update();
 	}
 
 	/**
