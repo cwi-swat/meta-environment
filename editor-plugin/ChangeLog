@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Jun  9 14:56:04 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Add |File|->|Save All| menuaction (closes #611)
+
 Wed May  3 09:26:47 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add |File|->|Refresh| menuaction that reloads the file from disk 

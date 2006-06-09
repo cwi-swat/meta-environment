@@ -217,6 +217,43 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         });
 
         items = factory.makeItemList(factory.makeItem_Label("File"), factory
+                .makeItem_Label("Save All"));
+
+        shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
+                factory.makeKeyModifier_MUnderscoreCTRL(), factory
+                        .makeKeyModifier_MUnderscoreSHIFT()), factory
+                .makeVirtualKey_VKUnderscoreS());
+
+        event = factory.makeEvent_MenuShortcut(items, shortcut);
+
+        studio.addComponentMenu(comp, event, new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                for (String id : editors.keySet()) {
+                    Editor editor = editors.get(id);
+                    ATerm term = studio.getATermFactory().parse(id);
+                    StudioComponent comp = componentsById.get(id);
+
+                    try {
+                        editor.writeContents(editor.getFilename());
+                        ATerm event = studio.getATermFactory().make(
+                                "contents-saved(<term>)", term);
+                        bridge.postEvent(event);
+                        if (comp.getName().endsWith("*")) {
+                            comp.setName(comp.getName().substring(0,
+                                    comp.getName().length() - 1));
+                        }
+                    } catch (IOException e1) {
+                        try {
+                            showErrorDialog(editor, JOptionPane.OK_OPTION,
+                                    "\n\nError saving changes.");
+                        } catch (CloseAbortedException e2) {
+                        }
+                    }
+                }
+            }
+        });
+
+        items = factory.makeItemList(factory.makeItem_Label("File"), factory
                 .makeItem_Label("Refresh"));
 
         event = factory.makeEvent_Menu(items);
