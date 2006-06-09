@@ -1,5 +1,14 @@
 /* $Id$ */
 
+Fri Jun  9 13:40:30 CEST 2006 <kooiker@cwi.nl>
+ * asf-listeners.tb:
+   - Add ASFModuleRegistrar listener that listens for SDF modules to be
+     available. Registers the ASF module path when the SDF module is known
+     (closes #614).
+ * asf-utils.tb:
+   - Split OpenASFModule into RegisterASFModule and OpenASFModule
+   - Clean up of unused variables
+
 Tue Apr 25 00:25:52 CEST 2006 <jurgenv@cwi.nl>
  * Compute ambiguities of reduct.out, in case we filtered something we
    would like to see the effect.

@@ -4,6 +4,27 @@
 #include <asf-namespace.h>
 #include <asf-utils.tb>
 
+process ASFModuleRegistrar is
+let
+  Event: attribute-changed-event,
+  ModuleId: term,
+  NewPath: term,
+  Idle: term
+in
+  Idle := no
+  . MM-Subscribe-Attribute-Changed(<term>,SDF_NAMESPACE,"status",<term>,available) 
+  .
+  (
+    rec-note(mm-attribute-changed(Event?))
+    . ACE-GetModuleId(Event, ModuleId?)
+    . RegisterASFModule(ModuleId)
+  )
+  *
+  delta
+endlet
+
+toolbus(ASFModuleRegistrar)
+
 process ASFModuleOpener is
 let
   Event: attribute-changed-event,

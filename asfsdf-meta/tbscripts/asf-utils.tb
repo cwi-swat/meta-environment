@@ -14,20 +14,14 @@
 
 #define ASF_TREE_CACHE "asf-annotated-tree"
 
-/* OpenASFModule forges the link between an ASF and an SDF module.
+/* RegisterASFModule forges the link between an ASF and an SDF module.
  * It reuses the same module Id, and constructs an ASF path from
- * and SDF path.
+ * a SDF path.
  */
-process OpenASFModule(ModuleId: term) is
+process RegisterASFModule(ModuleId: term) is
 let
-  AsfExt: str,
   AsfPath: str,
-  Editable: bool,
-  LibraryModule: bool,
   Modulename: str,
-  Path: str,
-  Present: bool,
-  Registered: bool,
   SdfPath: str
 in
   MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
@@ -36,6 +30,15 @@ in
   . ReplaceExtension(SdfPath, ASF_EXTENSION, AsfPath?)
   . SetModulePath(ModuleId, ASF_NAMESPACE, AsfPath)
   . MM-SetAttribute(ModuleId, ASF_NAMESPACE, "status", unknown)
+endlet
+
+process OpenASFModule(ModuleId: term) is
+let
+  AsfPath: str,
+  Editable: bool,
+  LibraryModule: bool
+in
+  GetModulePath(ModuleId, ASF_NAMESPACE, AsfPath?)
   . snd-msg(io-exists-file(AsfPath))
   .
   (
@@ -52,10 +55,9 @@ endlet
 
 process CheckASFSDFSyntax(ModuleId : term) is
 let
-  Syntax    : term,
-  ErrorMessage : str,
-  Feedback  : term,
-  Modulename : str,
+  Syntax: term,
+  Feedback: term,
+  Modulename: str,
   Summary: term,
   Errors: list
 in
