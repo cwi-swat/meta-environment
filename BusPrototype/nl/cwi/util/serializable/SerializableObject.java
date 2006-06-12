@@ -135,6 +135,8 @@ public class SerializableObject implements ISerializable{
 	 * @see ISerializable#get(int, int)
 	 */
 	public byte[] get(int offset, int length){
+		if((offset + length) > length()) throw new IllegalArgumentException("Buffer underflow exception; "+(offset + length)+" (offset + length) > The size of the serialized representation of the object.");
+	
 		byte[] bytes = new byte[length];
 
 		fill(offset, length, bytes, 0);
@@ -156,8 +158,6 @@ public class SerializableObject implements ISerializable{
 	 * @return The number of bytes that was written into the array.
 	 */
 	private int fill(int offset, int length, byte[] target, int index){
-		if((offset + length) > length()) throw new IllegalArgumentException("Buffer underflow exception; (offset + length) > The size of the serialized representation of the object.");
-
 		// Find the object and the position associated with the object
 		int position = 0;
 		Object o = null;
@@ -191,10 +191,10 @@ public class SerializableObject implements ISerializable{
 			SerializableObject serialiazableObject = ((SerializableObject) o);
 			int objectLength = serialiazableObject.length();
 
-			if(objectLength < length){
-				gotten = serialiazableObject.fill(startIndex, objectLength, target, index);
-			}else{
+			if((startIndex + length) < objectLength){
 				gotten = serialiazableObject.fill(startIndex, length, target, index);
+			}else{
+				gotten = serialiazableObject.fill(startIndex, serialiazableObject.length() - startIndex, target, index);
 			}
 		}else{
 			byte[] byteArray = (byte[]) o;
