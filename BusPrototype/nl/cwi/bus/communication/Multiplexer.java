@@ -159,7 +159,7 @@ public class Multiplexer extends Thread{
 		socket.setTcpNoDelay(true);
 
 		// Initialize the handlers and register it for readin incoming data.
-		SocketIOHandler ioHandler = new SocketIOHandler(selectorCreator, socketChannel);
+		SocketIOHandler ioHandler = new SocketIOHandler(selectorCreator.getSelector(), socketChannel);
 		IDataHandler dataHandler = toolDataHandlerFactory.createToolDataHandler(ioHandler);
 		ioHandler.setDataHandler(dataHandler);
 		

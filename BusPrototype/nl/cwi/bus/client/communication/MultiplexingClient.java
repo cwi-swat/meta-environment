@@ -54,7 +54,7 @@ public class MultiplexingClient{
 			socketChannel.configureBlocking(false);
 
 			SelectorCreator selectorContainer = new SelectorCreator();
-			ioHandler = new SocketIOHandler(selectorContainer, socketChannel);
+			ioHandler = new SocketIOHandler(selectorContainer.getSelector(), socketChannel);
 			ioHandler.setDataHandler(dataHandler);
 
 			selector = selectorContainer.getSelector();

@@ -41,7 +41,6 @@ public class SocketIOHandler implements IIOHandler{
 	private AbstractOperation operationBeingReceived = null;
 
 	private ByteBuffer dataReadBuffer = null;
-	private ByteBuffer leftOverDataReadBuffer = null;
 
 	private ByteBuffer writeBuffer = null;
 
@@ -52,15 +51,15 @@ public class SocketIOHandler implements IIOHandler{
 	/**
 	 * Constructor
 	 * 
-	 * @param selectorCreator
-	 *            contains the selector the multiplexer is using
+	 * @param selector
+	 *            The selector the multiplexer is using
 	 * @param socketChannel
 	 *            The channel to read and write to/from
 	 */
-	public SocketIOHandler(SelectorCreator selectorCreator, SocketChannel socketChannel){
+	public SocketIOHandler(Selector selector, SocketChannel socketChannel){
 		super();
 
-		this.selector = selectorCreator.getSelector();
+		this.selector = selector;
 		this.socketChannel = socketChannel;
 
 		// Allocate the buffers.
@@ -69,7 +68,6 @@ public class SocketIOHandler implements IIOHandler{
 		lengthReadBuffer = ByteBuffer.allocate(AbstractOperation.LENGTHBYTES);
 		opReadBuffer = ByteBuffer.allocate(AbstractOperation.OPFIELDLENGTH);
 		dataReadBuffer = ByteBuffer.allocateDirect(READBUFFERSIZE);
-		leftOverDataReadBuffer = null;
 
 		writeBuffer = ByteBuffer.allocateDirect(WRITEBUFFERSIZE);
 	}
@@ -182,33 +180,16 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The with the socketchannel associated key
 	 */
 	private void readData(SelectionKey key){
-		// NOTE: This method contains some duplicate code, but who cares.
-		boolean connected = false;
-		if(messageLength < READBUFFERSIZE){
-			leftOverDataReadBuffer = ByteBuffer.allocate(messageLength);
+		 boolean connected = read(dataReadBuffer);
 
-			connected = read(leftOverDataReadBuffer);
+		dataReadBuffer.flip();
+		byte[] data = new byte[dataReadBuffer.limit()];
+		dataReadBuffer.get(data);
+		operationBeingReceived.put(data);
 
-			leftOverDataReadBuffer.flip();
-			byte[] data = new byte[leftOverDataReadBuffer.limit()];
-			leftOverDataReadBuffer.get(data);
-			operationBeingReceived.put(data);
+		bytesLeftToRead -= data.length;
 
-			bytesLeftToRead -= data.length;
-
-			leftOverDataReadBuffer = null;
-		}else{
-			connected = read(dataReadBuffer);
-
-			dataReadBuffer.flip();
-			byte[] data = new byte[dataReadBuffer.limit()];
-			dataReadBuffer.get(data);
-			operationBeingReceived.put(data);
-
-			bytesLeftToRead -= data.length;
-
-			dataReadBuffer.clear();
-		}
+		dataReadBuffer.clear();
 
 		// If disconnected, handle it.
 		if(!connected){

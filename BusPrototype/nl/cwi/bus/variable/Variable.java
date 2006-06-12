@@ -174,7 +174,7 @@ public class Variable{
 			}
 
 			SelectorCreator selectorCreator = ToolRegistery.getInstance().getSelectorCreator();
-			SocketIOHandler ioHandler = new SocketIOHandler(selectorCreator, socketChannel);
+			SocketIOHandler ioHandler = new SocketIOHandler(selectorCreator.getSelector(), socketChannel);
 			ioHandler.setDataHandler(new InterToolDataHandler(ioHandler));
 
 			Selector selector = selectorCreator.getSelector();
@@ -182,9 +182,7 @@ public class Variable{
 			try{
 				synchronized(selectionPreventionLock){
 					selector.wakeup();
-					synchronized(selector){
-						socketChannel.register(selector, SelectionKey.OP_READ, ioHandler);
-					}
+					socketChannel.register(selector, SelectionKey.OP_READ, ioHandler);
 				}
 			}catch(IOException ioex){
 				Logger.getInstance().log("An IOException occured during the registration for op_read.", Logger.ERROR, ioex);
