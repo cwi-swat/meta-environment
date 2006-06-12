@@ -28,7 +28,7 @@ public class PutOperation extends AbstractOperation{
 	private byte[] sourceToolIPBytes = null;
 	private byte[] sourceToolPortBytes = null;
 	private byte[] variableIDBytes = null;
-	private AbstractTerm signatureTerm = null;
+	private AbstractTerm signatureTerm = null;//TODO add node id
 	private TermConverter dataTermConverter = null;
 
 	/**

@@ -135,6 +135,27 @@ public class SerializableObject implements ISerializable{
 	 * @see ISerializable#get(int, int)
 	 */
 	public byte[] get(int offset, int length){
+		byte[] bytes = new byte[length];
+
+		fill(offset, length, bytes, 0);
+
+		return bytes;
+	}
+
+	/**
+	 * Fills the given bytes array with content.
+	 * 
+	 * @param offset
+	 *            The point at with to start serializing.
+	 * @param length
+	 *            The number of bytes to serialize.
+	 * @param target
+	 *            The byte array to put the bytes in.
+	 * @param index
+	 *            The index we are currently at in the byte array.
+	 * @return The number of bytes that was written into the array.
+	 */
+	private int fill(int offset, int length, byte[] target, int index){
 		if((offset + length) > length()) throw new IllegalArgumentException("Buffer underflow exception; (offset + length) > The size of the serialized representation of the object.");
 
 		// Find the object and the position associated with the object
@@ -165,18 +186,19 @@ public class SerializableObject implements ISerializable{
 		int startIndex = offset - position;
 
 		// Get the data from the object
-		byte[] bytesGotten = null;
-		if(o instanceof ISerializable){
-			ISerializable serialiazableObject = ((ISerializable) o);
+		int gotten = 0;
+		if(o instanceof SerializableObject){
+			SerializableObject serialiazableObject = ((SerializableObject) o);
 			int objectLength = serialiazableObject.length();
 
 			if(objectLength < length){
-				bytesGotten = serialiazableObject.get(startIndex, objectLength);
+				gotten = serialiazableObject.fill(startIndex, objectLength, target, index);
 			}else{
-				bytesGotten = serialiazableObject.get(startIndex, length);
+				gotten = serialiazableObject.fill(startIndex, length, target, index);
 			}
 		}else{
 			byte[] byteArray = (byte[]) o;
+			byte[] bytesGotten = null;
 			if(byteArray.length < (startIndex + length)){
 				bytesGotten = new byte[byteArray.length - startIndex];
 				System.arraycopy(byteArray, startIndex, bytesGotten, 0, bytesGotten.length);
@@ -184,19 +206,19 @@ public class SerializableObject implements ISerializable{
 				bytesGotten = new byte[length];
 				System.arraycopy(byteArray, startIndex, bytesGotten, 0, bytesGotten.length);
 			}
+			System.arraycopy(bytesGotten, 0, target, index, bytesGotten.length);
+			gotten = bytesGotten.length;
 		}
 
-		byte[] bytes = new byte[length];
-		System.arraycopy(bytesGotten, 0, bytes, 0, bytesGotten.length);
+		int newIndex = index + gotten;
 
 		// If we need to read more data, do it.
-		int bytesLeft = length - bytesGotten.length;
+		int bytesLeft = length - gotten;
 		if(bytesLeft > 0){
-			byte[] additionalBytes = get(offset + bytesGotten.length, bytesLeft);
-			System.arraycopy(additionalBytes, 0, bytes, bytesGotten.length, additionalBytes.length);
+			gotten += fill(offset + gotten, bytesLeft, target, newIndex);
 		}
 
-		return bytes;
+		return gotten;
 	}
 
 	/**

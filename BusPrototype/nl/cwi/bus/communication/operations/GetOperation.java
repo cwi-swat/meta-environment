@@ -18,7 +18,7 @@ public class GetOperation extends AbstractOperation{
 	private final static String OPERATION = AbstractOperation.GET;
 	
 	private byte[] sourceToolIDBytes = null;
-	private byte[] variableIDBytes = null;
+	private byte[] variableIDBytes = null;//TODO add node id
 	private byte[] targetToolIPBytes = null;
 	private byte[] targetToolPortBytes = null;
 	
