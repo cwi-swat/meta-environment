@@ -8,9 +8,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * @author Arnold Lankamp
  */
 public class Eval extends AbstractTransmission{
-	private final static String SIGNATUREOPENTOKEN = "eval(";
-	private final static String SIGNATURECLOSETOKEN = ")";
-	private final static String TYPE = "eval";
+	public final static String TYPE = "eval";
+	
+	private final static String SIGNATUREOPENTOKEN = "eval"+SIGNATUREOPEN;
+	private final static String SIGNATURECLOSETOKEN = SIGNATURECLOSE;
 
 	/**
 	 * Default constructor.

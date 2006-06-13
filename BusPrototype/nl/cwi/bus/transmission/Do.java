@@ -8,9 +8,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * @author Arnold Lankamp
  */
 public class Do extends AbstractTransmission{
-	private final static String SIGNATUREOPENTOKEN = "do(";
-	private final static String SIGNATURECLOSETOKEN = ")";
-	private final static String TYPE = "do";
+	public final static String TYPE = "do";
+	
+	private final static String SIGNATUREOPENTOKEN = "do"+SIGNATUREOPEN;
+	private final static String SIGNATURECLOSETOKEN = SIGNATURECLOSE;
 
 	/**
 	 * Default constructor.

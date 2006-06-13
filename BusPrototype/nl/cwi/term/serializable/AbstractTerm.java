@@ -1,7 +1,5 @@
 package nl.cwi.term.serializable;
 
-import nl.cwi.util.IDGenerator;
-import nl.cwi.util.NativeTypeBuilder;
 import nl.cwi.util.serializable.FlexibleLengthObject;
 import nl.cwi.util.serializable.SerializableObject;
 
@@ -15,7 +13,6 @@ public abstract class AbstractTerm extends SerializableObject{
 	public final static String SIGNATURECLOSE = ")";
 	public final static String SIGNATURESEPARATOR = ",";
 
-	private byte[] identifier = null;
 	private FlexibleLengthObject term = null;
 
 	/**
@@ -24,7 +21,6 @@ public abstract class AbstractTerm extends SerializableObject{
 	public AbstractTerm(){
 		super();
 
-		identifier = new byte[NativeTypeBuilder.LONGBYTES];
 		term = new FlexibleLengthObject();
 
 		init();
@@ -40,7 +36,6 @@ public abstract class AbstractTerm extends SerializableObject{
 	public AbstractTerm(String value){
 		super();
 
-		identifier = NativeTypeBuilder.makeBytesFromLong(IDGenerator.generate());
 		term = new FlexibleLengthObject(value);
 
 		init();
@@ -50,17 +45,7 @@ public abstract class AbstractTerm extends SerializableObject{
 	 * Initializes this term.
 	 */
 	private void init(){
-		registerNativeType(identifier);
 		register(term);
-	}
-
-	/**
-	 * Returns the identifier of this term (unique in every tree).
-	 * 
-	 * @return The identifier of this term.
-	 */
-	public long getID(){
-		return NativeTypeBuilder.makeLong(identifier);
 	}
 
 	/**

@@ -15,7 +15,7 @@ import nl.cwi.util.serializable.SerializableObject;
  * @author Arnold Lankamp
  */
 public class MutableTermCollection extends AbstractTerm{
-	private final static String TYPE = "mlist";
+	public final static String TYPE = "mlist";
 	
 	private byte[] size = null;
 	private List terms = null;

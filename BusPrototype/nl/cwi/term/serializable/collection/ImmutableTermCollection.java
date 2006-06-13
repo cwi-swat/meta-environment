@@ -11,7 +11,7 @@ import nl.cwi.util.serializable.SerializableObject;
  * @author Arnold Lankamp
  */
 public class ImmutableTermCollection extends AbstractTerm{
-	private final static String TYPE = "ilist";
+	public final static String TYPE = "ilist";
 	
 	private byte[] size = null;
 	private TermConverter[] termConverters = null;

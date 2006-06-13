@@ -8,9 +8,10 @@ import nl.cwi.term.serializable.AbstractTerm;
  * @author Arnold Lankamp
  */
 public class Event extends AbstractTransmission{
-	private final static String SIGNATUREOPENTOKEN = "event(";
-	private final static String SIGNATURECLOSETOKEN = ")";
-	private final static String TYPE = "event";
+	public final static String TYPE = "event";
+	
+	private final static String SIGNATUREOPENTOKEN = "event"+SIGNATUREOPEN;
+	private final static String SIGNATURECLOSETOKEN = SIGNATURECLOSE;
 
 	/**
 	 * Default constructor.
