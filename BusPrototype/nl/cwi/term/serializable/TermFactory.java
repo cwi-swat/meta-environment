@@ -43,7 +43,8 @@ public class TermFactory{
 	 * Creates a empty terms based on the given type.
 	 * 
 	 * @param termType
-	 *            The type of the term that should be created.
+	 *            The type of the term that should be created. Must be an
+	 *            existing term type.
 	 * @return The created term.
 	 */
 	public AbstractTerm createEmptyTerm(String termType){

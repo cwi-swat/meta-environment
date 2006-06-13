@@ -54,6 +54,12 @@ public final class FlexibleLengthObject extends SerializableObject{
 		setState(object);
 	}
 
+	/**
+	 * Sets the state of this object.
+	 * 
+	 * @param object
+	 *            The objects that has a varible length. May be null.
+	 */
 	private void setState(byte[] object){
 		int objectLength = 0;
 		if(object != null){
