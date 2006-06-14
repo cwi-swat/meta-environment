@@ -587,6 +587,7 @@ ATerm get_file_path(int cid, ATerm file) {
   IO_Path io_path = IO_getFilePath(io_file);
   ATbool absolute = IO_isPathAbsolute(io_path);
   IO_SegmentList segments = IO_getPathList(io_path);
+  ATerm result;
 
   if (absolute) {
     sprintf(path, "%c", PATH_SEPARATOR);
@@ -599,7 +600,7 @@ ATerm get_file_path(int cid, ATerm file) {
     segments = IO_getSegmentListTail(segments);
   }
 
-  ATerm result = ATmake("file-path(<str>)", path);
+  result = ATmake("file-path(<str>)", path);
 
   return ATmake("snd-value(<term>)", result);
 }

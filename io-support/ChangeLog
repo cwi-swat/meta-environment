@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun 14 16:02:12 CEST 2006 <kooiker@cwi.nl>
+ * src/main.c:
+   - Fixed declaration after statement
+
 Wed Apr 19 16:18:09 CEST 2006 <kooiker@cwi.nl>
  * src/{in-output.idef.src,main.c}:
    - Add functionality to return a list of files depending on a filter
