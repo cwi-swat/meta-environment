@@ -146,6 +146,7 @@ static ERR_ErrorList getAmbiguities(const char *path,
 
     PT_Args args = PT_getTreeArgs(tree); 
     PT_Args ambs = args;
+    PT_Tree amb;
     const char *ambString;
     char ambCount[1024] = "#alternatives: ";
     ERR_Location ambLocation;
@@ -163,7 +164,7 @@ static ERR_ErrorList getAmbiguities(const char *path,
 		      ambErrors);
     }
 
-    PT_Tree amb = PT_getArgsHead(ambs);
+    amb = PT_getArgsHead(ambs);
     if (PT_hasTreeProd(amb)) {
 	    ambString = PT_yieldSymbol(
 			    PT_getProductionRhs(PT_getTreeProd(amb)));

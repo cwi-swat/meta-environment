@@ -1,5 +1,9 @@
 $Id$
 
+Wed Jun 14 09:45:43 CEST 2006 <kooiker@cwi.nl>
+ * libmept/reportAmbs.c:
+   - fixed declaration after statement
+
 Thu May 18 13:42:56 CEST 2006 <jurgenv@cwi.nl>
  * utils/implodePT/test/out/*.out: changed .out suffixes to .ref
    to prevent triggering a GNU make implicit rule (which copies
