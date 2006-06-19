@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jun 19 07:48:56 CEST 2006 <kooiker@cwi.nl>
+ * semantics/asfe/src/reduction.c:
+   - Fix declaration after statement
+
 Thu May 18 13:44:45 CEST 2006 <jurgenv@cwi.nl>
  * Bumped version to 2.1
 

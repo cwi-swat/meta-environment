@@ -634,6 +634,7 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
   PT_Tree save = trm;
+  ASF_ASFTag tag = tagCurrentRule;
 
   if (depth == 0) {
     PT_Tree memo = MemoTableLookup(memo_table, trm);
@@ -641,8 +642,6 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
       return memo;
     }
   }
-
-  ASF_ASFTag tag = tagCurrentRule;
 
   if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
     /* Note that depth is not the depth of the tree, but the depth
