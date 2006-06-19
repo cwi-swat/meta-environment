@@ -9,7 +9,7 @@ exports
 %% generated production is repeated here:
 
 context-free syntax
-  amb({X ","}*) -> X
+  amb({X ","}*) -> X {cons("ambiguity-constructor")}
 
 hiddens
 
