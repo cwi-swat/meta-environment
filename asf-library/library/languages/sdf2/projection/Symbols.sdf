@@ -5,6 +5,9 @@ exports
     Symbols "++" Symbols -> Symbols {assoc}
     "|" Symbols "|"      -> Integer
     Symbol "(-" Symbols  -> Boolean
+  
+  lexical restrictions
+    "+" -/- [\+]
 
 hiddens
   variables

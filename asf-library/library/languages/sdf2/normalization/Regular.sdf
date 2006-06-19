@@ -1,6 +1,6 @@
 module languages/sdf2/normalization/Regular
 imports languages/sdf2/syntax/Regular
-        languages/sdf2/syntax/Priority
+        languages/sdf2/normalization/Priority
         languages/sdf2/syntax/Literals
         languages/sdf2/normalization/Kernel
 exports
