@@ -65,8 +65,8 @@ public class SocketIOHandler implements IIOHandler{
 		// Allocate the buffers.
 		// All large buffers that will be reused are allocated to be direct, for
 		// improved efficiency.
-		lengthReadBuffer = ByteBuffer.allocate(AbstractOperation.LENGTHBYTES);
-		opReadBuffer = ByteBuffer.allocate(AbstractOperation.OPFIELDLENGTH);
+		lengthReadBuffer = ByteBuffer.allocateDirect(AbstractOperation.LENGTHBYTES);
+		opReadBuffer = ByteBuffer.allocateDirect(AbstractOperation.OPFIELDLENGTH);
 		dataReadBuffer = ByteBuffer.allocateDirect(READBUFFERSIZE);
 
 		writeBuffer = ByteBuffer.allocateDirect(WRITEBUFFERSIZE);
@@ -133,15 +133,11 @@ public class SocketIOHandler implements IIOHandler{
 
 		if(connected){
 			lengthReadBuffer.flip();
-			byte[] lengthBufferContent = lengthReadBuffer.array();
-
-			messageLength = NativeTypeBuilder.makeInt(lengthBufferContent);
-
-			// Resize the data buffer is nessacary.
-			if(dataReadBuffer.capacity() != messageLength) dataReadBuffer = ByteBuffer.allocate(messageLength);
-
+			byte[] lengthBufferContent = new byte[lengthReadBuffer.limit()];
+			lengthReadBuffer.get(lengthBufferContent);
 			lengthReadBuffer.clear();
 
+			messageLength = NativeTypeBuilder.makeInt(lengthBufferContent);
 			bytesLeftToRead = messageLength;
 		}
 
@@ -162,12 +158,12 @@ public class SocketIOHandler implements IIOHandler{
 
 		if(connected){
 			opReadBuffer.flip();
-			byte[] opReadBufferContent = opReadBuffer.array();
+			byte[] opReadBufferContent = new byte[opReadBuffer.limit()];
+			opReadBuffer.get(opReadBufferContent);
+			opReadBuffer.clear();
 
 			operationID = new String(opReadBufferContent).intern();
 			operationBeingReceived = AbstractOperation.createEmptyOperation(operationID);
-
-			opReadBuffer.clear();
 		}
 
 		return connected;
@@ -180,16 +176,20 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The with the socketchannel associated key
 	 */
 	private void readData(SelectionKey key){
-		 boolean connected = read(dataReadBuffer);
+		if(bytesLeftToRead < READBUFFERSIZE){
+			dataReadBuffer.limit(bytesLeftToRead);
+		}
+		
+		boolean connected = read(dataReadBuffer);
 
 		dataReadBuffer.flip();
 		byte[] data = new byte[dataReadBuffer.limit()];
 		dataReadBuffer.get(data);
-		operationBeingReceived.put(data);
-
-		bytesLeftToRead -= data.length;
-
 		dataReadBuffer.clear();
+		
+		bytesLeftToRead -= data.length;
+		
+		operationBeingReceived.put(data);
 
 		// If disconnected, handle it.
 		if(!connected){

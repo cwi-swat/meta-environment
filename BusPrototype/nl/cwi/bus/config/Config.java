@@ -39,7 +39,7 @@ public class Config{
 	}
 
 	/**
-	 * Returns the Portnumber the server is / should be running on
+	 * Returns the port number the server is / should be running on
 	 * 
 	 * @return The port number
 	 */
