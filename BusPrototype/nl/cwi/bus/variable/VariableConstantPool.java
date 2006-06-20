@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.cwi.bus.client.ToolRegistery;
+import nl.cwi.bus.config.Config;
 import nl.cwi.bus.variable.Variable.VariableKey;
 
 /**
@@ -27,32 +28,18 @@ public class VariableConstantPool{
 	 * the default.
 	 */
 	public final static int WEAK = 2;
-	
-	private int strength = WEAK;
+
+	private int strength = -1;
 
 	private Map variables = null;
-	
+
 	/**
 	 * Default constructor.
 	 */
 	public VariableConstantPool(){
 		super();
 
-		variables = new HashMap();
-	}
-
-	/**
-	 * Constructor.
-	 * Allows you to specify a custom strength for the references in this pool.
-	 * 
-	 * @param strength
-	 *            Defines the strength of the references that will be used to
-	 *            store data in this constant pool.
-	 */
-	public VariableConstantPool(int strength){
-		super();
-
-		this.strength = strength;
+		this.strength = Config.getConstantPoolReferenceType();
 
 		variables = new HashMap();
 	}

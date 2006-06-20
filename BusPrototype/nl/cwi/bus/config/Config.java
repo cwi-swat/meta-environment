@@ -3,6 +3,8 @@ package nl.cwi.bus.config;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 
+import nl.cwi.bus.variable.VariableConstantPool;
+
 /**
  * Class containing configuration properties
  * 
@@ -16,10 +18,12 @@ public class Config{
 	private final static int NROFCONCURRENTTHREADS = ManagementFactory.getOperatingSystemMXBean().getAvailableProcessors() * 3;
 
 	private static int port = -1;
-	
+
 	private final static File LOGFILE = new File("bus.log");
-	
-	private final static int THRESHOLD = 0;//Integer.MAX_VALUE;
+
+	private final static int THRESHOLD = 0;// Integer.MAX_VALUE;
+
+	private final static int CONSTANTPOOLREFERENCETYPE = VariableConstantPool.WEAK;
 
 	/**
 	 * Default constructor. Private to prevent needless instantiation of this
@@ -76,20 +80,33 @@ public class Config{
 	public static int getNrOfConcurrentThreads(){
 		return NROFCONCURRENTTHREADS;
 	}
-	
+
 	/**
 	 * Returns the file that will be used for logging.
+	 * 
 	 * @return The file that will be used for logging.
 	 */
 	public static File getLogFile(){
 		return LOGFILE;
 	}
-	
+
 	/**
-	 * Returns the threshold which is used to determain how to send data between tools.
+	 * Returns the threshold which is used to determain how to send data between
+	 * tools.
+	 * 
 	 * @return The threshold value.
 	 */
 	public static int getThreshold(){
 		return THRESHOLD;
+	}
+
+	/**
+	 * Returns what type of references to use in the constant pool. These can
+	 * either be SOFT of WEAK.
+	 * 
+	 * @return The type of references to use in the constant pool.
+	 */
+	public static int getConstantPoolReferenceType(){
+		return CONSTANTPOOLREFERENCETYPE;
 	}
 }
