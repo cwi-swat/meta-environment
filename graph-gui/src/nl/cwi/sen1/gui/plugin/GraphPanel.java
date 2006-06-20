@@ -48,6 +48,7 @@ import prefuse.visual.VisualItem;
 import prefuse.visual.expression.InGroupPredicate;
 
 public class GraphPanel extends JPanel {
+    private String type;
     private String id;
 
     private Display display;
@@ -76,9 +77,10 @@ public class GraphPanel extends JPanel {
         return closable;
     }
     
-    public GraphPanel(String id, final Preferences prefs) {
+    public GraphPanel(String type, String id, final Preferences prefs, boolean closable) {
         this.id = id;
-        this.closable = true;
+        this.type = type;
+        this.closable = closable;
         setLayout(new BorderLayout());
 
         vis = new Visualization();
@@ -378,5 +380,9 @@ public class GraphPanel extends JPanel {
 
     public String getId() {
         return id;
+    }
+    
+    public String getType() {
+    	return type;
     }
 }

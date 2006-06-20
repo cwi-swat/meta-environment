@@ -1,6 +1,6 @@
 // Java tool interface class GraphPainterTool
 // This file is generated automatically, please do not edit!
-// generation time: May 2, 2006 10:49:15 AM
+// generation time: Jun 20, 2006 12:59:46 PM
 
 package nl.cwi.sen1.gui.plugin;
 
@@ -24,9 +24,9 @@ abstract public class GraphPainterTool
 
   // Patterns that are used to match against incoming terms
   private ATerm PdisplayGraph0;
-  private ATerm PdisplayGraph1;
   private ATerm PselectNode0;
   private ATerm PshowPopup0;
+  private ATerm PcreatePanel0;
   private ATerm PsizeGraph0;
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
@@ -43,11 +43,11 @@ abstract public class GraphPainterTool
   private void initSigTable()
   {
     Boolean btrue = new Boolean(true);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<bool>))"), btrue);
-    sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>))"), btrue);
-    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<list>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,display-graph(<str>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<graph-painter>,create-panel(<str>,<term>,<bool>,<bool>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<graph-painter>,size-graph(<str>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,select-node(<str>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<graph-painter>,show-popup(<str>,<term>,<term>,<list>))"), btrue);
     sigTable.put(factory.parse("rec-ack-event(<graph-painter>,<term>)"), btrue);
     sigTable.put(factory.parse("rec-terminate(<graph-painter>,<term>)"), btrue);
   }
@@ -55,11 +55,11 @@ abstract public class GraphPainterTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
-    PdisplayGraph1 = factory.parse("rec-do(display-graph(<str>,<term>,<term>))");
-    PselectNode0 = factory.parse("rec-do(select-node(<str>,<term>))");
-    PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>,<term>))");
-    PsizeGraph0 = factory.parse("rec-eval(size-graph(<str>,<term>))");
+    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>,<term>))");
+    PselectNode0 = factory.parse("rec-do(select-node(<str>,<term>,<term>))");
+    PshowPopup0 = factory.parse("rec-do(show-popup(<str>,<term>,<term>,<term>))");
+    PcreatePanel0 = factory.parse("rec-eval(create-panel(<str>,<term>,<term>,<term>))");
+    PsizeGraph0 = factory.parse("rec-eval(size-graph(<str>,<term>,<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
@@ -71,27 +71,26 @@ abstract public class GraphPainterTool
 
     result = term.match(PdisplayGraph0);
     if (result != null) {
-      displayGraph((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PdisplayGraph1);
-    if (result != null) {
       displayGraph((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PselectNode0);
     if (result != null) {
-      selectNode((String)result.get(0), (ATerm)result.get(1));
+      selectNode((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PshowPopup0);
     if (result != null) {
-      showPopup((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
+      showPopup((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
       return null;
+    }
+    result = term.match(PcreatePanel0);
+    if (result != null) {
+      return createPanel((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2), (ATerm)result.get(3));
     }
     result = term.match(PsizeGraph0);
     if (result != null) {
-      return sizeGraph((String)result.get(0), (ATerm)result.get(1));
+      return sizeGraph((String)result.get(0), (ATerm)result.get(1), (ATerm)result.get(2));
     }
     result = term.match(PrecAckEvent0);
     if (result != null) {

@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jun 20 13:35:38 CEST 2006 <jurgenv@cwi.nl>
+ * graph-painter.idef.src,**/GraphPainter.java: split GraphId 
+   into graphType (str) and graphId (term), such that several
+   graphs of the same type can be shown in different tabs.
+
 Tue May  2 11:01:53 CEST 2006 <kooiker@cwi.nl>
  * graph-painter.idef.src:
    - Add boolean that indicates if panel can be closed

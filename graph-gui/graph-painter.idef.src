@@ -7,59 +7,70 @@ process GraphPainter is
 let
   T: graph-painter,
   Closable: bool,
+  Shared: bool,
   Graph: term,
-  GraphId: str,
+  GraphType: str,
   Menu: term,
   PopupMenu: list,
-  NodeId: term
+  NodeId: term,
+  GraphId: term
 in
   rec-connect(T?)
   .
   (
-    rec-msg(gp-display-graph(GraphId?, Graph?))
-    . snd-do(T, display-graph(GraphId, Graph))
+    rec-msg(gp-display-graph(GraphType?, GraphId?, Graph?))
+    . snd-do(T, display-graph(GraphType, GraphId, Graph))
   +
-    rec-msg(gp-display-graph(GraphId?, Graph?, Closable?))
-    . snd-do(T, display-graph(GraphId, Graph, Closable))
+    rec-msg(gp-create-panel(GraphType?, GraphId?, Shared?, Closable?))
+    . snd-eval(T, create-panel(GraphType, GraphId, Shared, Closable))
+    . rec-value(T, panel-created)
+    . snd-msg(gp-panel-created(GraphType, GraphId))
   +
-    rec-msg(gp-render-graph(GraphId?, Graph?))
-    . snd-eval(T, size-graph(GraphId, Graph))
+    rec-msg(gp-render-graph(GraphType?, GraphId?, Graph?))
+    . snd-eval(T, size-graph(GraphType, GraphId, Graph))
     . rec-value(T, sized-graph(Graph?))
-    . snd-msg(gp-rendered-graph(GraphId, Graph))
+    . snd-msg(gp-rendered-graph(GraphType, GraphId, Graph))
   +
-    rec-msg(gp-select-node(GraphId?, NodeId?))
-    . snd-do(T, select-node(GraphId, NodeId))
+    rec-msg(gp-select-node(GraphType?, GraphId?, NodeId?))
+    . snd-do(T, select-node(GraphType, GraphId, NodeId))
   +
-    rec-event(T, node-selected(GraphId?, NodeId?))
-    . snd-note(gp-node-selected(GraphId, NodeId))
-    . snd-ack-event(T, node-selected(GraphId, NodeId))
+    rec-event(T, node-selected(GraphType?, GraphId?, NodeId?))
+    . snd-note(gp-node-selected(GraphType, GraphId?, NodeId))
+    . snd-ack-event(T, node-selected(GraphType, GraphId, NodeId))
   +
-    rec-event(T, request-popup-event(GraphId?, NodeId?))
-    . snd-msg(gp-request-popup-event(GraphId, NodeId))
-    . snd-ack-event(T, request-popup-event(GraphId, NodeId))
+    rec-event(T, request-popup-event(GraphType?, GraphId?, NodeId?))
+    . snd-msg(gp-request-popup-event(GraphType, GraphId, NodeId))
+    . snd-ack-event(T, request-popup-event(GraphType, GraphId, NodeId))
   +
-    rec-msg(gp-show-popup(GraphId?, NodeId?, PopupMenu?))
-    . snd-do(T, show-popup(GraphId, NodeId, PopupMenu))
+    rec-event(T, panel-closed(GraphType?, GraphId?))
+    . snd-note(gp-panel-closed(GraphType, GraphId))
+    . snd-ack-event(T, panel-closed(GraphType, GraphId))
   +
-    rec-event(T, popup-menu-event(GraphId?, NodeId?, Menu?))
-    . snd-msg(gp-menu-selected(GraphId, NodeId, Menu))
-    . snd-ack-event(T, popup-menu-event(GraphId, NodeId, Menu))
+    rec-msg(gp-show-popup(GraphType?, GraphId, NodeId?, PopupMenu?))
+    . snd-do(T, show-popup(GraphType, GraphId, NodeId, PopupMenu))
+  +
+    rec-event(T, popup-menu-event(GraphType?, GraphId?, NodeId?, Menu?))
+    . snd-msg(gp-menu-selected(GraphType, GraphId, NodeId, Menu))
+    . snd-ack-event(T, popup-menu-event(GraphType, GraphId, NodeId, Menu))
   )
   *
   rec-disconnect(T)
 endlet
 
 process GP-AddListener is
-  subscribe(gp-node-selected(<str>,<term>))
+  subscribe(gp-node-selected(<str>,<term>,<term>))
+ 
+process GP-AddCloseListener is
+  subscribe(gp-panel-closed(<str>,<term>))
 
-process GP-RequestPopup(GraphId: str?, NodeId: term?) is
-  rec-msg(gp-request-popup-event(GraphId?, NodeId?))
+process GP-RequestPopup(GraphType: str?, GraphId: str?, NodeId: term?) is
+  rec-msg(gp-request-popup-event(GraphType?, GraphId?, NodeId?))
 
-process GP-ShowPopup(GraphId: str, NodeId: term, PopupMenu: list) is
-  snd-msg(gp-show-popup(GraphId, NodeId, PopupMenu))
+process GP-ShowPopup(GraphType: str, GraphId: str, NodeId: term, PopupMenu: list) is
+  snd-msg(gp-show-popup(GraphType, GraphId, NodeId, PopupMenu))
 
-process GP-PopupEvent(GraphId: str?, NodeId: term?, MenuItem: term?) is
-  rec-msg(gp-menu-selected(GraphId?, NodeId?, MenuItem?))
+process GP-PopupEvent(GraphType: str?, GraphId: str?, NodeId: term?, MenuItem: term?) is
+  rec-msg(gp-menu-selected(GraphType?, GraphId?, NodeId?, MenuItem?))
 
 process StartGraphPanel is
   snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
