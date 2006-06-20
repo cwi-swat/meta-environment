@@ -1,6 +1,6 @@
 // Java tool interface ModuleManagerTif
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2006 3:32:05 PM
+// generation time: Jun 20, 2006 10:55:43 AM
 
 package nl.cwi.sen1.modulemanager;
 

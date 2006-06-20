@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/{ModuleDatabase,SCC}.java:
+   - Applied Tarjan's algorithm to construct a SCC graph
+   - SCC graph used to propagate inherited attributes
+
 Mon Mar 27 16:55:46 CEST 2006 <kooiker@cwi.nl>
  * toolbus_make_rules:
    - remove -swing from tiftojava

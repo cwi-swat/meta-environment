@@ -1,22 +1,28 @@
 // Java tool interface class ModuleManagerTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 8, 2006 3:32:05 PM
+// generation time: Jun 20, 2006 10:55:43 AM
 
 package nl.cwi.sen1.modulemanager;
 
-import aterm.*;
-import toolbus.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import toolbus.AbstractTool;
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermFactory;
+import aterm.ATermList;
 
 abstract public class ModuleManagerTool
-  extends SwingTool
+  extends AbstractTool
   implements ModuleManagerTif
 {
   // This table will hold the complete input signature
-  private Map sigTable = new HashMap();
+  private Map<ATerm, Boolean> sigTable = new HashMap<ATerm, Boolean>();
 
-  //{{{  Patterns that are used to match against incoming terms
-
+  // Patterns that are used to match against incoming terms
   private ATerm PdeleteDependencies0;
   private ATerm PaddDependency0;
   private ATerm PdeleteModule0;
@@ -39,10 +45,6 @@ abstract public class ModuleManagerTool
   private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
-  //}}}
-
-  //{{{  protected ModuleManagerTool(ATermFactory factory)
-
   // Mimic the constructor from the AbstractTool class
   protected ModuleManagerTool(ATermFactory factory)
   {
@@ -51,38 +53,32 @@ abstract public class ModuleManagerTool
     initPatterns();
   }
 
-  //}}}
-
-  //{{{  private void initSigTable()
-
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), new Boolean(true));
+    Boolean btrue = new Boolean(true);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,create-module)"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-id-by-attribute(<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-modules)"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-module(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,register-inherited-attribute(<term>,<term>,<term>,<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,add-attribute(<term>,<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-ack-event(<module-manager>,<term>)"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-attribute(<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-attributes(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-attribute(<term>,<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,add-dependency(<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-children-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-children-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-all-parent-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-parent-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-closable-modules(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependency(<term>,<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-dependencies)"), btrue);
+    sigTable.put(factory.parse("rec-do(<module-manager>,delete-dependencies(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-eval(<module-manager>,get-module-graph(<term>))"), btrue);
+    sigTable.put(factory.parse("rec-terminate(<module-manager>,<term>)"), btrue);
   }
-
-  //}}}
-  //{{{  private void initPatterns()
 
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
@@ -109,10 +105,6 @@ abstract public class ModuleManagerTool
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
-
-  //}}}
-
-  //{{{  public ATerm handler(ATerm term)
 
   // The generic handler calls the specific handlers
   public ATerm handler(ATerm term)
@@ -213,12 +205,9 @@ abstract public class ModuleManagerTool
       return null;
     }
 
-      notInInputSignature(term);
+    notInInputSignature(term);
     return null;
   }
-
-  //}}}
-  //{{{  public void checkInputSignature(ATermList sigs)
 
   // Check the input signature
   public void checkInputSignature(ATermList sigs)
@@ -233,15 +222,10 @@ abstract public class ModuleManagerTool
     }
   }
 
-  //}}}
-  //{{{  void notInInputSignature(ATerm t)
-
   // This function is called when an input term
   // was not in the input signature.
   void notInInputSignature(ATerm t)
   {
-    throw new RuntimeException("term not in input signature: "+t);
+    throw new RuntimeException("term not in input signature: " + t);
   }
-
-  //}}}
 }
