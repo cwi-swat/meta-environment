@@ -318,7 +318,11 @@ static PT_Tree transformBox(PT_Tree tree, ATbool isLex)
       } else {
         boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
       }
-    } else {
+    }
+    else if (PT_isTreeAmb(arg)) {
+      return transformBox(PT_getArgsHead(PT_getTreeArgs(arg)), isLex);
+    }
+    else {
       boxArgs = PT_appendArgs(boxArgs, transformBox(arg, isLex));
     }
     args = PT_getArgsTail(args);

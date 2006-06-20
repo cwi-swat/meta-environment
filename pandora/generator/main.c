@@ -147,7 +147,6 @@ int main(int argc, char *argv[])
   char *ATlibArgv[] = {"pandora", "-at-termtable", "21"};
   PT_ParseTree tree, ptText;
   BOX_Start box;
-  ATbool textmode = ATfalse;
   char *input = "-";
   char *output = "-";
   ATbool boxOutput = ATfalse;
@@ -182,7 +181,6 @@ int main(int argc, char *argv[])
 	case 'b':  boxOutput=ATtrue; break;
 	case 'i':  input=optarg; break;
 	case 'o':  output=optarg; break;
-	case 't':  textmode=ATtrue; break;
 	case 'v':  run_verbose = ATtrue; break;
 	case 'V':  version(); exit(0);
 	case 'h':  usage(); exit(0);
@@ -194,20 +192,41 @@ int main(int argc, char *argv[])
 
     if (at_tree != NULL) {
       tree = PT_ParseTreeFromTerm(at_tree);
+
+      if (run_verbose) {
+	ATwarning("pandora: mapping parse trees to "
+		  "BOX using default rules\n");
+      }
+
       box = pandora(tree);
 
       if (!boxOutput) {      
+	if (run_verbose) {
+	  ATwarning("pandora: rendering BOX to list of characters\n");
+	}
+
 	ptText = toText(PT_ParseTreeFromTerm(BOX_StartToTerm(box)));
+
+	if (run_verbose) {
+	  ATwarning("pandora: yielding characters to output\n");
+	}
+
+	if (!strcmp(output, "-")) {
+	  PT_yieldTreeToFile(PT_getParseTreeTop(ptText), stdout, ATfalse);
+	}
+	else {
+	  FILE *fp = fopen(output, "wb");
+	  if (fp != NULL) {
+	    PT_yieldTreeToFile(PT_getParseTreeTop(ptText), fp, ATfalse);
+	  }
+	  else {
+	    ATerror("Could not open %s for writing.\n", output);
+	  }
+	}
       }
       else {
 	ptText = PT_ParseTreeFromTerm(BOX_StartToTerm(box));
-      }
-
-      if (textmode) {
-	ATwriteToNamedTextFile(PT_ParseTreeToTerm(ptText), output);
-      }
-      else {
-	ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(ptText), output);
+	ATwriteToNamedSharedTextFile((ATerm) ptText, output);
       }
     }
     else {

@@ -1,5 +1,13 @@
 /* $Id$ */
 
+Tue Jun 20 15:48:04 CEST 2006 <jurgenv@cwi.nl>
+ * generator/main.c: removed use of binary ATerms, because they do
+   not scale to very long ATerm lists (As box2text generally produces).
+   Also, changed the output format to strings of characters instead of
+   of parse tree of Bytes, to improve general efficiency of pretty printing.
+   Also, added verbose messages to see in which of the three phases
+   pandora is: mapping to BOX, rendering BOX to Bytes, yielding Bytes.
+
 Wed Jan 18 16:29:16 CET 2006 <{jurgenv,kooiker}@cwi.nl>
  * src/Makefile.am,package,configure.in: got rid of transitive
    dependencies of asc-support by using asc-support-config script
