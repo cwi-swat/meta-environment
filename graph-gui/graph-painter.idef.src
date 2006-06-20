@@ -63,13 +63,13 @@ process GP-AddListener is
 process GP-AddCloseListener is
   subscribe(gp-panel-closed(<str>,<term>))
 
-process GP-RequestPopup(GraphType: str?, GraphId: str?, NodeId: term?) is
+process GP-RequestPopup(GraphType: str?, GraphId: term?, NodeId: term?) is
   rec-msg(gp-request-popup-event(GraphType?, GraphId?, NodeId?))
 
-process GP-ShowPopup(GraphType: str, GraphId: str, NodeId: term, PopupMenu: list) is
+process GP-ShowPopup(GraphType: str, GraphId: term, NodeId: term, PopupMenu: list) is
   snd-msg(gp-show-popup(GraphType, GraphId, NodeId, PopupMenu))
 
-process GP-PopupEvent(GraphType: str?, GraphId: str?, NodeId: term?, MenuItem: term?) is
+process GP-PopupEvent(GraphType: str?, GraphId: term?, NodeId: term?, MenuItem: term?) is
   rec-msg(gp-menu-selected(GraphType?, GraphId?, NodeId?, MenuItem?))
 
 process StartGraphPanel is
