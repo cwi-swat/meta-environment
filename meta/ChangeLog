@@ -1,5 +1,13 @@
 # $Id$
 
+Tue Jun 20 13:36:47 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/graph-utils.tb: creating an editor session for
+   each parse tree that is viewed, such that viewers with
+   unique id's can be started. Now we can view several trees
+   next to eachother.
+ * tbscripts/graph-utils.tb: removed SDF specific import graph
+   vizualization processes.
+
 Tue May  2 11:02:54 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/graph-utils.tb:
    - Import Graph is non closable, others graph panels are (closes #600)
