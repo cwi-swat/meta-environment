@@ -111,6 +111,16 @@ ATerm create_session(int cid, const char *path) {
   return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
 }
 
+ATerm create_empty_session(int cid) {
+  EM_Sid sid = makeUniqueSessionId();
+  EM_EditorTypeList list = EM_makeEditorTypeListEmpty();
+  EM_SessionStatus status = EM_makeSessionStatusRunning();
+  EM_Session session = EM_makeSessionDefault(sid, "", status, 0, list);
+  putSession(session);
+
+  return sndValue(ATmake("session(<term>)", EM_getSessionId(session)));
+}
+
 ATerm bind_session(int cid, ATerm sid, ATerm moduleId) {
   assert(sid != NULL);
   assert(moduleId != NULL);

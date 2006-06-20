@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jun 20 13:34:52 CEST 2006 <jurgenv@cwi.nl>
+ * src/editor-manager.*: added session creation without a path
+   associated.
+
 Fri Mar 10 11:48:07 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library

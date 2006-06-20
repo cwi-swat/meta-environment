@@ -10,14 +10,15 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm is_editor_registered(int conn, ATerm, ATerm);
-void unregister_editor(int conn, ATerm, ATerm);
 void register_editor(int conn, ATerm, ATerm);
-ATerm get_sessions_by_moduleid(int conn, ATerm);
+void unregister_editor(int conn, ATerm, ATerm);
 ATerm get_moduleid(int conn, ATerm);
-ATerm get_session_by_path(int conn, const char *);
+ATerm get_sessions_by_moduleid(int conn, ATerm);
 ATerm bind_session(int conn, ATerm, ATerm);
-void delete_session(int conn, ATerm);
+ATerm get_session_by_path(int conn, const char *);
 ATerm get_path(int conn, ATerm);
+void delete_session(int conn, ATerm);
+ATerm create_empty_session(int conn);
 ATerm request_transaction(int conn, ATerm);
 ATerm create_session(int conn, const char *);
 void end_transaction(int conn, ATerm);

@@ -17,6 +17,11 @@ in
     . rec-value(EM, session(Sid?))
     . snd-msg(em-session(Path, Sid))
   +
+    rec-msg(em-create-session)
+    . snd-eval(EM, create-empty-session)
+    . rec-value(EM, session(Sid?))
+    . snd-msg(em-session(Sid))
+  +
     rec-msg(em-get-path(Sid?))
     . snd-eval(EM, get-path(Sid))
     .
