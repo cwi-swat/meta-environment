@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jun 20 13:38:33 CEST 2006 <jurgenv@cwi.nl>
+ * tbscripts/sdf-module-utils.tb: adapted parse tree viewing
+   functionality to new interface. Now we can watch several
+   parse trees next to eachother.
+
 Tue Apr 25 00:26:23 CEST 2006 <jurgenv@cwi.nl>
  * tbscripts/sdf-progress-listeners.tb: added functionality to remove
    a closed module from the progress display.

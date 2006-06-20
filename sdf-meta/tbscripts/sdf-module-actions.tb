@@ -6,6 +6,30 @@
 #include <graph-painter.idef>
 #include <configuration-manager.idef>
 
+process ImportGraphPainter is
+let
+  Event: attribute-changed-event,
+  ImportGraph: term,
+  ImportRelations: term
+in
+  subscribe(is-state(<term>))
+  .
+  (
+    rec-note(is-state(idle))
+    . MM-GetModuleGraph(GRAPH_NAMESPACE, ImportGraph?)
+    . snd-msg(nav-set-modules(ImportGraph))
+    . RenderGraph("import-graph", SDF_NAMESPACE, true, false, ImportGraph?)
+  )
+  *
+  delta
+endlet
+
+toolbus(ImportGraphPainter)
+
+process SelectModule(ModuleId: term) is
+  snd-msg(nav-select-module(ModuleId))
+  . snd-msg(gp-select-node("import-graph", SDF_NAMESPACE, ModuleId))
+
 process HandleModuleEvent(Type: term, Event: term, ModuleId: term) is
 let
   Action: str,
@@ -20,6 +44,7 @@ endlet
 process HandleModulePopup is
 let
   GraphId: str,
+  GraphType: str,
   ModuleId: term,
   Modulename: str,
   Menu: term,
@@ -36,20 +61,20 @@ in
     NAV-PopupEvent(ModuleId?, Menu?)
     . HandleModuleEvent(module-popup, Menu, ModuleId)
   +
-    GP-RequestPopup(GraphId?, ModuleId?)
+    GP-RequestPopup(GraphType?, GraphId?, ModuleId?)
     .
-    if equal(GraphId, "import-graph") then
+    if equal(GraphType, "import-graph") then
       MM-GetAttribute(ModuleId, SDF_NAMESPACE, "name", Modulename?)
       . snd-msg(cm-get-module-events(module-popup, Modulename))
       . rec-msg(cm-module-events(PopupMenu?))
-      . GP-ShowPopup("import-graph", ModuleId, PopupMenu)
+      . GP-ShowPopup("import-graph", SDF_NAMESPACE, ModuleId, PopupMenu)
     else
       tau
     fi
   +
-    GP-PopupEvent(GraphId?, ModuleId?, Menu?)
+    GP-PopupEvent(GraphType?, GraphId?, ModuleId?, Menu?)
     .
-    if equal(GraphId, "import-graph") then
+    if equal(GraphType, "import-graph") then
       HandleModuleEvent(module-popup, Menu, ModuleId)
     else
       tau
