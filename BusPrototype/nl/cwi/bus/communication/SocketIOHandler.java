@@ -24,8 +24,8 @@ public class SocketIOHandler implements IIOHandler{
 	
 	private final static BlockingThreadPool writeThreadPool = new BlockingThreadPool(Config.getNrOfConcurrentThreads(), true);
 
-	private final Object WRITELOCK = new Object();
-	private final Object READLOCK = new Object();
+	private final Object writeLock = new Object();
+	private final Object readLock = new Object();
 	
 	private Selector selector = null;
 	private SocketChannel socketChannel = null;
@@ -102,7 +102,7 @@ public class SocketIOHandler implements IIOHandler{
 	 *            The with the socketchannel associated key
 	 */
 	public void receive(SelectionKey key){
-		synchronized(READLOCK){
+		synchronized(readLock){
 			boolean connected = true;
 			if(messageLength == -1){
 				connected = readLength();
@@ -297,7 +297,7 @@ public class SocketIOHandler implements IIOHandler{
 	 * @return The read lock for the channel.
 	 */
 	public Object getReadLock(){
-		return READLOCK;
+		return readLock;
 	}
 
 	/**
@@ -324,7 +324,7 @@ public class SocketIOHandler implements IIOHandler{
 		 * Writes the data to the channel.
 		 */
 		public void run(){
-			synchronized(WRITELOCK){
+			synchronized(writeLock){
 				// Write length
 				int dataLength = operation.length();
 				byte[] lengthBytes = NativeTypeBuilder.makeBytesFromInt(dataLength);
