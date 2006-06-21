@@ -380,6 +380,20 @@ static BOX_Box treeToBox(PT_Tree tree, ATbool isLex)
   else if (PT_isTreeAppl(tree)) {
     return applToBox(tree, isLex);
   } 
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args ambs;
+
+    ambs = PT_getTreeArgs(tree);
+
+    if (PT_getArgsLength(ambs) > 0) {
+      ATwarning("pandora: warning: choosing first alternative of ambiguity node\n");
+      return treeToBox(PT_getArgsHead(ambs),isLex);
+    }
+    else {
+      ATwarning("pandora: ignoring empty ambiguity cluster\n");
+      return NULL;
+    }
+  }
   else {
     ATwarning("Unhandled parsetree type: %t\n", tree);
     return NULL;

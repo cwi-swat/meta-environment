@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Wed Jun 21 10:02:54 CEST 2006 <jurgenv@cwi.nl>
+ * generator/pandora.c: choosing first alternative of an ambiguity
+   cluster while emiting a warning message.
+
 Tue Jun 20 15:48:04 CEST 2006 <jurgenv@cwi.nl>
  * generator/main.c: removed use of binary ATerms, because they do
    not scale to very long ATerm lists (As box2text generally produces).
