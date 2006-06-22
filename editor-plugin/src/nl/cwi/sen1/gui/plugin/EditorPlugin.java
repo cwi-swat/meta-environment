@@ -222,7 +222,7 @@ public class EditorPlugin extends DefaultStudioPlugin implements
         shortcut = factory.makeShortCut_Shortcut(factory.makeKeyModifierList(
                 factory.makeKeyModifier_MUnderscoreCTRL(), factory
                         .makeKeyModifier_MUnderscoreSHIFT()), factory
-                .makeVirtualKey_VKUnderscoreS());
+                .makeVirtualKey_VKUnderscoreA());
 
         event = factory.makeEvent_MenuShortcut(items, shortcut);
 

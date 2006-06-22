@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jun 22 13:42:41 CEST 2006 <kooiker@cwi.nl>
+ * src/**/EditorPlugin.java:
+   - Change CTRL-Shift-S to CTRL-Shift-A for |File|->|Save All|
+
 Fri Jun  9 14:56:04 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
    - Add |File|->|Save All| menuaction (closes #611)
