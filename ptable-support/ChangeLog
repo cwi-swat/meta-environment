@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jun 22 17:54:47 CEST 2006 <economop@cwi.nl>
+ * Corrected the function declaration in ptable-utils.
+ * Included header in |ptable-utils.c|.
+
 Mon Mar 27 16:52:42 CEST 2006 <economop@cwi.nl>
  * Changed the definition of follow restrictions and lookahead reduces.
 

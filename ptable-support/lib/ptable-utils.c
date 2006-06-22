@@ -1,11 +1,8 @@
-
-
 /* $Id$ */
 
-#include <ptable.h>
+#include <ptable-utils.h>
 
-PTBL_Production PTBL_LookUpProduction(PTBL_ParseTable pt, int label)
-{
+PTBL_Production PTBL_LookUpProduction(PTBL_ParseTable pt, int label) {
   PTBL_Labels labels = PTBL_getParseTableLabels(pt);
   ATermInt num = ATmakeInt(label);
   PTBL_Label head;
