@@ -38,7 +38,20 @@ in
   . rec-msg(gl-graph(Graph?))
   . snd-msg(gp-display-graph(GraphType, PanelId, Graph))
   . JobDone("Rendering")
+  . printf("TODO: implement UpdateGraphAttributes\n")
 endlet
+
+/**
+ * Merges the attributes of a new graph with an already displayed graph.
+ *
+ * \param GraphType type of the graph
+ * \param GraphId   unique graph identification
+ * \param Graph     a graph that is the same as an already displayed graph
+ *                  modulo the node attributes.
+ */
+process UpdateGraphAttributes(GraphType: str, GraphId: term, Graph: term) is
+  snd-msg(gp-update-graph(GraphType, GraphId, Graph))
+
 
 process ShowTree(Tree: term, ShowLeafs: term, 
                  SharingOn: term) is
