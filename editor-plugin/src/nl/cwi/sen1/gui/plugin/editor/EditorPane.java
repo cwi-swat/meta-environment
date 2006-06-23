@@ -94,11 +94,11 @@ public class EditorPane extends JTextPane {
         addBinding(menu, KeyEvent.VK_C, DefaultEditorKit.copyAction);
         addBinding(menu, KeyEvent.VK_X, DefaultEditorKit.cutAction);
         addBinding(menu, KeyEvent.VK_V, DefaultEditorKit.pasteAction);
-        addBinding(menu, KeyEvent.VK_D, EditorKit.deleteLineAction);
+        addBinding(KeyEvent.VK_D, EditorKit.deleteLineAction);
         addBinding(menu, KeyEvent.VK_5, EditorKit.gotoMatchingBracketAction);
         addBinding(menu, KeyEvent.VK_J, EditorKit.selectFocusAction);
-        addBinding(menu, KeyEvent.VK_BACK_SPACE, EditorKit.deletePreviousWordAction);
-        addBinding(menu, KeyEvent.VK_DELETE, EditorKit.deleteNextWordAction);
+        addBinding(KeyEvent.VK_BACK_SPACE, EditorKit.deletePreviousWordAction);
+        addBinding(KeyEvent.VK_DELETE, EditorKit.deleteNextWordAction);
     }
 
     protected void addBinding(int key, String name) {
