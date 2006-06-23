@@ -31,11 +31,15 @@ in
       Worklist := join(Worklist, [ModuleId])
     else
       if or(equal(Value, complete),equal(Value,opened)) then
-	Worklist := diff(Worklist, [ModuleId])
-	.
-	if equal(Worklist, []) then
-	  snd-note(is-state(idle))
-	else
+	if not(equal(Worklist, [])) then
+	  Worklist := diff(Worklist, [ModuleId])
+	  .
+	  if equal(Worklist, []) then
+	    snd-note(is-state(idle))
+	  else
+	    tau
+	  fi
+        else
 	  tau
 	fi
       else 

@@ -1,5 +1,11 @@
 $Id$
 
+Fri Jun 23 16:09:43 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/idle-state.tb:
+   - Don't send idle when the system is already idle (when the worklist is
+   already empty you don't have to check if it's empty and send the idle
+   message again).
+
 Tue Jun 20 13:38:33 CEST 2006 <jurgenv@cwi.nl>
  * tbscripts/sdf-module-utils.tb: adapted parse tree viewing
    functionality to new interface. Now we can watch several
