@@ -97,14 +97,20 @@ public class EditorPane extends JTextPane {
         addBinding(menu, KeyEvent.VK_D, EditorKit.deleteLineAction);
         addBinding(menu, KeyEvent.VK_5, EditorKit.gotoMatchingBracketAction);
         addBinding(menu, KeyEvent.VK_J, EditorKit.selectFocusAction);
-        addBinding(menu, KeyEvent.VK_BACK_SPACE, EditorKit.deleteWordAction);
+        addBinding(menu, KeyEvent.VK_BACK_SPACE, EditorKit.deletePreviousWordAction);
+        addBinding(menu, KeyEvent.VK_DELETE, EditorKit.deleteNextWordAction);
     }
 
-    protected void addBinding(JMenu menu, int key, String name) {
-        Action action = ((EditorKit) getEditorKit()).getAction(name);
+    protected void addBinding(int key, String name) {
         KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
-
         getInputMap().put(keyStroke, name);
+    }
+    
+    protected void addBinding(JMenu menu, int key, String name) {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(key, Event.CTRL_MASK);
+        getInputMap().put(keyStroke, name);
+
+        Action action = ((EditorKit) getEditorKit()).getAction(name);
         JMenuItem item = new JMenuItem(action);
         item.setAccelerator(keyStroke);
         menu.add(item);

@@ -36,7 +36,9 @@ public class EditorKit extends StyledEditorKit {
 
     private SelectFocusAction selectFocus;
 
-    private DeleteWordAction deleteWord;
+    private DeletePreviousWordAction deletePreviousWord;
+
+    private DeleteNextWordAction deleteNextWord;
 
     public static final String undoAction = "undo";
 
@@ -52,7 +54,9 @@ public class EditorKit extends StyledEditorKit {
 
     public static final String selectFocusAction = "select-focus";
 
-    public static final String deleteWordAction = "delete-word";
+    public static final String deletePreviousWordAction = "delete-previous-word";
+    
+    public static final String deleteNextWordAction = "delete-next-word";
 
     private UndoableEditListener undoListener;
 
@@ -85,13 +89,14 @@ public class EditorKit extends StyledEditorKit {
         gotoMatchingBracket = new GotoMatchingBracketAction();
         deleteLine = new DeleteLineAction();
         selectFocus = new SelectFocusAction();
-        deleteWord = new DeleteWordAction();
+        deletePreviousWord = new DeletePreviousWordAction();
+        deleteNextWord = new DeleteNextWordAction();
     }
 
     public Action[] getActions() {
         return TextAction.augmentList(super.getActions(), new Action[] { undo,
                 redo, find, gotoLine, deleteLine, gotoMatchingBracket,
-                selectFocus, deleteWord });
+                selectFocus, deletePreviousWord, deleteNextWord});
     }
 
     public Action getAction(String name) {
@@ -281,15 +286,38 @@ public class EditorKit extends StyledEditorKit {
         }
     }
 
-    public class DeleteWordAction extends EditorTextAction {
-        public DeleteWordAction() {
-            super(deleteWordAction);
+    public class DeletePreviousWordAction extends EditorTextAction {
+        public DeletePreviousWordAction() {
+            super(deletePreviousWordAction);
         }
 
         public void actionPerformed(ActionEvent e) {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
                 getAction(selectionPreviousWordAction).actionPerformed(e);
+                int selectionStart = editor.getSelectionStart();
+                int selectionEnd = editor.getSelectionEnd();
+                int offset = selectionStart;
+                int length = selectionEnd - selectionStart;
+
+                try {
+                    editor.getDocument().remove(offset, length);
+                } catch (BadLocationException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public class DeleteNextWordAction extends EditorTextAction {
+        public DeleteNextWordAction() {
+            super(deleteNextWordAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                getAction(selectionNextWordAction).actionPerformed(e);
                 int selectionStart = editor.getSelectionStart();
                 int selectionEnd = editor.getSelectionEnd();
                 int offset = selectionStart;

@@ -3,6 +3,7 @@
 Fri Jun 23 13:33:03 CEST 2006 <kooiker@cwi.nl>
  * src/**/Editor{Kit,Pane}.java:
    - Add support for CTRL-Backspace (delete previous word)
+   - Add support for CTRL-Delete (delte next word)
 
 Thu Jun 22 13:42:41 CEST 2006 <kooiker@cwi.nl>
  * src/**/EditorPlugin.java:
