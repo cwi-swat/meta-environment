@@ -12,8 +12,10 @@ import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import nl.cwi.sen1.configapi.Factory;
 import nl.cwi.sen1.configapi.types.Event;
@@ -599,5 +601,20 @@ public class EditorPlugin extends DefaultStudioPlugin implements
                 throw new CloseAbortedException();
             }
         }
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JFrame frame = new JFrame("S w i n g E d i t o r D E M O");
+                try {
+                    frame.add(new SwingEditor("", ""));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                frame.setSize(640,480);
+                frame.setVisible(true);
+            }
+        });
     }
 }

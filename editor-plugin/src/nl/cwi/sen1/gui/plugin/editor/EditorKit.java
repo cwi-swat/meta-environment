@@ -36,6 +36,8 @@ public class EditorKit extends StyledEditorKit {
 
     private SelectFocusAction selectFocus;
 
+    private DeleteWordAction deleteWord;
+
     public static final String undoAction = "undo";
 
     public static final String redoAction = "redo";
@@ -49,6 +51,8 @@ public class EditorKit extends StyledEditorKit {
     public static final String gotoMatchingBracketAction = "goto-matching-bracket";
 
     public static final String selectFocusAction = "select-focus";
+
+    public static final String deleteWordAction = "delete-word";
 
     private UndoableEditListener undoListener;
 
@@ -68,7 +72,7 @@ public class EditorKit extends StyledEditorKit {
     public UndoManager getUndoManager() {
         return undoManager;
     }
-    
+
     public UndoableEditListener getUndoListener() {
         return undoListener;
     }
@@ -81,12 +85,13 @@ public class EditorKit extends StyledEditorKit {
         gotoMatchingBracket = new GotoMatchingBracketAction();
         deleteLine = new DeleteLineAction();
         selectFocus = new SelectFocusAction();
+        deleteWord = new DeleteWordAction();
     }
 
     public Action[] getActions() {
         return TextAction.augmentList(super.getActions(), new Action[] { undo,
                 redo, find, gotoLine, deleteLine, gotoMatchingBracket,
-                selectFocus });
+                selectFocus, deleteWord });
     }
 
     public Action getAction(String name) {
@@ -235,28 +240,26 @@ public class EditorKit extends StyledEditorKit {
         public void actionPerformed(ActionEvent e) {
             EditorPane editor = getEditorPane(e);
             if (editor != null) {
-                try {
-                    getAction(selectLineAction).actionPerformed(e);
+                getAction(selectLineAction).actionPerformed(e);
+                int selectionStart = editor.getSelectionStart();
+                int selectionEnd = editor.getSelectionEnd();
+                int offset = selectionStart;
+                int length = selectionEnd - selectionStart;
 
-                    int selectionStart = editor.getSelectionStart();
-                    int selectionEnd = editor.getSelectionEnd();
-                    int offset = selectionStart;
-                    int length = selectionEnd - selectionStart;
-
-                    if ((selectionEnd + 1) < editor.getDocument().getLength()) {
+                if ((selectionEnd + 1) < editor.getDocument().getLength()) {
+                    length++;
+                } else {
+                    if (selectionStart - 1 > 0) {
+                        offset = selectionStart - 1;
                         length++;
-                    } else {
-                        if (selectionStart - 1 > 0) {
-                            offset = selectionStart - 1;
-                            length++;
-                        }
                     }
+                }
 
+                try {
                     editor.getDocument().remove(offset, length);
                 } catch (BadLocationException e1) {
                     e1.printStackTrace();
                 }
-
             }
         }
     }
@@ -274,6 +277,29 @@ public class EditorKit extends StyledEditorKit {
                 editor.clearFocus();
                 editor.setSelectionStart(highlight.getStartOffset());
                 editor.setSelectionEnd(highlight.getEndOffset());
+            }
+        }
+    }
+
+    public class DeleteWordAction extends EditorTextAction {
+        public DeleteWordAction() {
+            super(deleteWordAction);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            EditorPane editor = getEditorPane(e);
+            if (editor != null) {
+                getAction(selectionPreviousWordAction).actionPerformed(e);
+                int selectionStart = editor.getSelectionStart();
+                int selectionEnd = editor.getSelectionEnd();
+                int offset = selectionStart;
+                int length = selectionEnd - selectionStart;
+
+                try {
+                    editor.getDocument().remove(offset, length);
+                } catch (BadLocationException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
