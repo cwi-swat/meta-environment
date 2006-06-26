@@ -27,7 +27,6 @@ import nl.cwi.sen1.util.PopupHandler;
 import nl.cwi.sen1.util.Preferences;
 import nl.cwi.sen1.util.StudioPopupMenu;
 import aterm.ATerm;
-import aterm.ATermFactory;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
 
@@ -115,12 +114,10 @@ public class GraphPainter extends DefaultStudioPlugin implements
 					if (!graphPanel.isClosable()) {
 						throw new CloseAbortedException();
 					}
-					else {
-						removePanel(graphType, graphId.toString());
-						studio.removeComponent(this);
-						bridge.postEvent(studio.getATermFactory().make(
-								"panel-closed(<str>,<term>)", graphType, graphId));
-					}
+                    removePanel(graphType, graphId.toString());
+                    studio.removeComponent(this);
+                    bridge.postEvent(studio.getATermFactory().make(
+                    		"panel-closed(<str>,<term>)", graphType, graphId));
 				}
 			};
 
@@ -357,10 +354,8 @@ public class GraphPainter extends DefaultStudioPlugin implements
 		return graphFactory.getPureFactory().make(
 				"snd-value(sized-graph(<term>))", graph.toTerm());
 		}
-		else {
-			System.err.println("graph not sized, because a panel was not created yet");
-			return graphFactory.getPureFactory().make(
-					"snd-value(sized-graph(<term>))", graphTerm);
-		}
+        System.err.println("graph not sized, because a panel was not created yet");
+        return graphFactory.getPureFactory().make(
+        		"snd-value(sized-graph(<term>))", graphTerm);
 	}
 }
