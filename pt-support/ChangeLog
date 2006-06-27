@@ -2,6 +2,10 @@ $Id$
 
 Tue Jun 27 15:55:04 CEST 2006 <jurgenv@cwi.nl>
  * doc: added generation of doxygen site in MAINTAINER_MODE
+ * libmept/flattenPT.c: changed flattening of ambiguous star lists,
+   before it would contain nested PLUS lists if they were children
+   of an ambiguity node. Changed this to STAR lists for type consistency
+   after flattening.
 
 Wed Jun 14 09:45:43 CEST 2006 <kooiker@cwi.nl>
  * libmept/reportAmbs.c:
