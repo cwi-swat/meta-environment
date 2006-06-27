@@ -422,6 +422,29 @@ void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star)
 
 /*}}}  */
 
+PT_Tree distributeTopTypeOverCluster(PT_Tree cluster, PT_Symbol topType)
+{
+  PT_Args kids = PT_getTreeArgs(cluster);
+  PT_Args newKids = PT_makeArgsEmpty();
+
+  for ( ; !PT_isArgsEmpty(kids); kids = PT_getArgsTail(kids)) {
+    PT_Tree kid;
+    PT_Production prod;
+
+    kid = PT_getArgsHead(kids);
+    assert(PT_isTreeAppl(kid) && "not possible to be anything else (by GLR)!");
+    prod = PT_getTreeProd(kid);
+    if (PT_isProductionList(prod)) {
+      prod = PT_setProductionRhs(prod, topType);
+      kid = PT_setTreeProd(kid, prod);
+    }
+    newKids = PT_makeArgsMany(kid, newKids);
+  }
+
+  /* NOTE: the order of the elements in the cluster is reversed now */
+  return PT_setTreeArgs(cluster, newKids);
+}
+
 /*{{{  void PT_initAsFix2Api() */
 
 void PT_initAsFix2Api()
@@ -451,6 +474,7 @@ static PT_Args flattenArgs(PT_Args args)
 /*{{{  static void flattenListRec(PT_Symbol plus, PT_Symbol star, PT_Tree tree,  */
 
 static void flattenListRec(PT_Tree tree, 
+                           PT_Symbol topType,
 			   PT_Symbol plus, PT_Symbol star, 
 			   PT_Args *tail)
 {
@@ -461,7 +485,13 @@ static void flattenListRec(PT_Tree tree,
   int i;
 
   /* characters and ambiguities are not flattened into the list */
-  if (!PT_hasTreeProd(tree)) {
+  if (PT_isTreeAmb(tree)) {
+    PT_Tree cluster = flattenTreeRec(tree);
+    cluster = distributeTopTypeOverCluster(cluster, topType);
+    *tail =  PT_makeArgsMany(cluster, *tail);
+    return;
+  }
+  else if (!PT_hasTreeProd(tree)) {
     *tail = PT_makeArgsMany(flattenTreeRec(tree), *tail);
     return;
   }
@@ -500,7 +530,7 @@ static void flattenListRec(PT_Tree tree,
 
     /* The elements of the children are inserted in the tail */
     for (i--; i >= 0; i--) {
-      flattenListRec(cache[i], plus, star, tail);
+      flattenListRec(cache[i], topType, plus, star, tail);
     }
   }
   else if (PT_isTreeCycle(tree)) {
@@ -527,7 +557,7 @@ static PT_Tree flattenList(PT_Tree tree)
     prepareListSymbols(symbol, &plus, &star);
 
     tail = PT_makeArgsEmpty();
-    flattenListRec(tree, plus, star, &tail);
+    flattenListRec(tree, symbol, plus, star, &tail);
   }
   else {
     PT_Args args = PT_getTreeArgs(tree);

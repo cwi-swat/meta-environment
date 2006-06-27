@@ -1,6 +1,6 @@
 # $Id$
 
-SUBDIRS = libmept libptmept utils  test
+SUBDIRS = libmept libptmept utils  test doc
 
 ACLOCAL_FLAGS = -I .
 
@@ -13,3 +13,7 @@ noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 ${PACKAGE}-${VERSION}.pkg: package Makefile
 	cp $< $@
 
+.PHONY: doc
+
+doc:
+	cd doc && $(MAKE) $(AM_MAKE_FLAGS) doc

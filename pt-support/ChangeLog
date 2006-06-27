@@ -1,5 +1,8 @@
 $Id$
 
+Tue Jun 27 15:55:04 CEST 2006 <jurgenv@cwi.nl>
+ * doc: added generation of doxygen site in MAINTAINER_MODE
+
 Wed Jun 14 09:45:43 CEST 2006 <kooiker@cwi.nl>
  * libmept/reportAmbs.c:
    - fixed declaration after statement
