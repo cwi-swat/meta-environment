@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+  <title>Documentation Plan for the OpenMetaEnvironment</title>
+
+  <authorblurb>
+    <para><authorinitials>Paul</authorinitials>
+    <authorinitials>Klint</authorinitials>, <orgname>Centrum voor Wiskunde en
+    Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="/ufs/paulk/GIF/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
+  </authorblurb>
+
+  <section>
+    <title>Background</title>
+
+    <para>The ASF+SDF Meta-Environment is an interactive development
+    environment for</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>defining domain-specific languages and the tools to support
+          them, and</para>
+        </listitem>
+
+        <listitem>
+          <para>performing analysis and transformation existing
+          software.</para>
+        </listitem>
+      </itemizedlist>See <uri>www.meta-environment.org</uri> for further
+    details. We are planning to organize the development of this system in the
+    fashion of an open source project. First of all, we will relabel the
+    project as "OpenMetaEnvironment" <remark>(Is this the best
+    name?)</remark>. Next we need to present our documentation in a coherent
+    fashion. The purpose of the current document is twofold:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>to describe a general documentation policy for the
+        OpenMetaEnvironment, and</para>
+      </listitem>
+
+      <listitem>
+        <para>to make a selection of tools and techniques that can be used to
+        implement this policy.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Current situation</title>
+
+    <para>Currently, we use the following mechanisms to document (parts of)
+    the system:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Scientific papers that describe specific techniques or case
+        studies.</para>
+      </listitem>
+
+      <listitem>
+        <para>LaTex documents to describe either the whole system
+        (<emphasis>e.g</emphasis>. user manual) or specific tools or libraries
+        (<emphasis>e.g</emphasis>., <productname>aterm library</productname>,
+        <productname>toolbus</productname>). HyperLatex is being used for
+        generating web pages from LaTex files.</para>
+      </listitem>
+
+      <listitem>
+        <para>POD files for manual pages.</para>
+      </listitem>
+
+      <listitem>
+        <para>API documentation generated with
+        <application>javadoc</application>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Web pages in our SEN1 twiki.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>The ideal situation</title>
+
+    <para>Ideally, we want to present all information about our system in a
+    unified manner. This includes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>High-level descriptions of purpose and architecture</para>
+      </listitem>
+
+      <listitem>
+        <para>For each package we need:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A global description of purpose and main use cases.</para>
+          </listitem>
+
+          <listitem>
+            <para>A manpage-like description of command-line use of that
+            package.</para>
+          </listitem>
+
+          <listitem>
+            <para>Description of the APIs provided by the package.</para>
+          </listitem>
+
+          <listitem>
+            <para>A User manual that describes user-interface and common
+            tasks.</para>
+          </listitem>
+
+          <listitem>
+            <para>An implementors manual.</para>
+          </listitem>
+
+          <listitem>
+            <para>Helpfiles.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Download area with instructions.</para>
+      </listitem>
+
+      <listitem>
+        <para>Description of the licenses we are using.</para>
+      </listitem>
+
+      <listitem>
+        <para>Access to bugtracker.</para>
+      </listitem>
+
+      <listitem>
+        <para>Access to SVN repository.</para>
+      </listitem>
+
+      <listitem>
+        <para>Access to mailing lists.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>How to get there?</title>
+
+    <para>It seems that the most widely used technology for documenting
+    software projects is DocBook (see, <ulink
+    url="http://www.docbook.org">www.docbook.org</ulink>). Docbook is an
+    XML-based standard for the semantic mark-up of text and can be used to
+    generate a wide variety of output formats including HTML, PDF, man pages,
+    javahelp, and eclipsehelp. This means that we can use a single source for
+    our webpages, interactive help and printed documentation.</para>
+
+    <para>The downside of using DocBook is that we have to learn yet another
+    text processing technology. The number of predefined tags in DocBook is
+    large (400) and the markup is more verbose than, for instance,
+    LaTex.</para>
+
+    <para>I have tried a number of DocBook editors including:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The <application>xxe</application> editor by XMLMind (<ulink
+        url="???">www.xmlmind.com/xmleditor</ulink>). The standard edition of
+        <application>xxe</application> is freely available.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Eclipse-based editor Vex (<ulink
+        url="http://vex.sourceforge.net">vex.sourceforge.net</ulink>).</para>
+      </listitem>
+
+      <listitem>
+        <para>The conglomerate editor (<ulink
+        url="http://www.conglomerate.org">www.conglomerate.org</ulink>).</para>
+      </listitem>
+
+      <listitem>
+        <para>The nXML extention of <application>emacs</application>
+        (http://hacks.oreilly.com/pub/h/2044</para>
+      </listitem>
+
+      <listitem>
+        <para>The DocBook extension of <application>openoffice</application>
+        (<ulink
+        url="http://xml.openoffice.org/xmerge/docbook/index.html">xml.openoffice.org/xmerge/docbook/index.html</ulink>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Based on this experience I recommend to use
+    <application>xxe</application> for wysiwyg editing and
+    <application>emacs</application> for editing of the XML source.</para>
+  </section>
+
+  <section>
+    <title>DocBook resources</title>
+
+    <para>Useful links related to DocBook:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><ulink url="http://www.docbook.org">www.docbook.org</ulink> (see
+        in particular the DocBook wiki at <ulink
+        url="http://wiki.docbook.org">wiki.docbook.org</ulink> with many
+        tutorials, tools and examples)</para>
+      </listitem>
+
+      <listitem>
+        <para>The DocBook project (<ulink
+        url="http://docbook.sourceforge.net">docbook.sourceforge.net</ulink>)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Usefull books related to DocBook are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill,
+        2005.</para>
+      </listitem>
+
+      <listitem>
+        <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
+        Guide</emphasis>, O'Reilly, 1999. See also <ulink
+        url="http://docbook.org/tdg">docbook.org/tdg</ulink>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Plan</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Switch to DocBook for writing all documentation.</para>
+      </listitem>
+
+      <listitem>
+        <para>Existing documentation will be converted to DocBook.</para>
+      </listitem>
+
+      <listitem>
+        <para>Existing javadoc documentation in Java will be rendered by
+        Doxygen and included in the Twiki pages.</para>
+      </listitem>
+
+      <listitem>
+        <para>For all non-java documentation, we will start to write Doxygen
+        comments.</para>
+      </listitem>
+
+      <listitem>
+        <para>Add a <emphasis>doc</emphasis> target to all our packages and
+        include the documentation in the website.</para>
+      </listitem>
+
+      <listitem>
+        <para>Man pages and API documentation will be included in each
+        package.</para>
+      </listitem>
+
+      <listitem>
+        <para>More global documents will be included in the meta-doc
+        package.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
