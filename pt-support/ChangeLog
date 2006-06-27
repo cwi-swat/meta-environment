@@ -1,5 +1,9 @@
 $Id$
 
+Tue Jun 27 22:26:54 CEST 2006 <jurgenv@cwi.nl>
+ * libmept/MEPT.[ch]: regenerated the API, with new doxygen markup
+   automatically added in.
+
 Tue Jun 27 15:55:04 CEST 2006 <jurgenv@cwi.nl>
  * doc: added generation of doxygen site in MAINTAINER_MODE
  * libmept/flattenPT.c: changed flattening of ambiguous star lists,
