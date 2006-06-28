@@ -7,25 +7,25 @@ ACLOCAL_FLAGS = -I .
 
 SUBDIRS = 
 
-#TOOLNAME = error-viewer
-#JAVA_PACKAGE = nl.cwi.sen1.error.viewer
-#JARFILE = $(TOOLNAME)-$(VERSION).jar
-#MAIN_CLASS = $(JAVA_PACKAGE).ErrorViewer
-#
-#abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
-#LOCAL_JARS = $(pkgdatadir)/lib/jlfgr-1_0.jar
-#INSTALLED_JARS = $(pkgdatadir)/jlfgr-1_0.jar
-#
-#pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
-#bin_SCRIPTS = $(PACKAGE)-config
-#noinst_SCRIPTS = $(PACKAGE)-$(VERSION).pkg
+TOOLNAME = diff-gui
+JAVA_PACKAGE = nl.cwi.sen.diff
+JARFILE = $(TOOLNAME)-$(VERSION).jar
+MAIN_CLASS = $(JAVA_PACKAGE).DiffViewer
+LOCAL_JARS = ${top_srcdir}/diffapi-0.1.jar
+INSTALLED_JARS = ${pkgdatadir}/diffapi-0.1.jar
 
-#EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef.src
+abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
 
-#CLEANFILES = \
-#	     $(PACKAGE)-config \
-#	     $(PACKAGE)-$(VERSION).pkg \
-#	     $(TOOLNAME).idef
+pkgdata_DATA = $(JARFILE) $(LOCAL_JARS) $(TOOLNAME).idef
+bin_SCRIPTS = $(PACKAGE)-config
+noinst_SCRIPTS = $(PACKAGE)-$(VERSION).pkg
+
+EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef.src
+
+CLEANFILES = \
+	     $(PACKAGE)-config \
+	     $(PACKAGE)-$(VERSION).pkg \
+	     $(TOOLNAME).idef
 
 $(PACKAGE)-config: Makefile
 	@(	echo "#! /bin/sh";\
@@ -35,9 +35,9 @@ $(PACKAGE)-config: Makefile
 $(PACKAGE)-$(VERSION).pkg: package Makefile
 	cp $< $@
 
-#%.idef: %.idef.src Makefile
-#	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
-#	    -e 's@__LOCAL_JARS__@$(INSTALLED_JARS)@g'\
-#	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
-#	    -e 's@__JARFILE__@$(JARFILE)@g'\
-#	     < $< > $@
+%.idef: %.idef.src Makefile
+	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
+	    -e 's@__LOCAL_JARS__@$(INSTALLED_JARS)@g'\
+	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
+	    -e 's@__JARFILE__@$(JARFILE)@g'\
+	     < $< > $@

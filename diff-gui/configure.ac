@@ -33,8 +33,13 @@ AC_PACKAGE_REQUIRE(error-support, error-support-config,
    [  --with-error-support=DIR error-support is in DIR])
 AC_SUBST(ERROR_SUPPORT)
 
+dnl Require editor-plugin 
+AC_PACKAGE_REQUIRE(editor-plugin, editor-plugin-config,
+   [  --with-editor-plugin=DIR error-plugin is in DIR])
+AC_SUBST(EDITOR_PLUGIN)
+
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${META_STUDIO}/bin/gui-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${META_STUDIO}/bin/gui-config\`:\`${EDITOR_PLUGIN}/bin/editor-plugin-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 AC_PATH_PROG(JAVA, java)
