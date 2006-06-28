@@ -37,3 +37,6 @@ uninstall-hook:
 	rm -rf $$install_dir
 
 
+.PHONY: doc
+doc:
+	(cd doc && $(MAKE) $(AM_MAKE_FLAGS) doc)
