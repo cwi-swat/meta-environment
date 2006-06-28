@@ -1,5 +1,10 @@
 # $Id: ChangeLog 18306 2006-04-13 03:33:06Z jurgenv $
 
+Wed Jun 28 14:41:07 CEST 2006 <{cleve,jurgenv}@cwi.nl>
+ * error-gui.idef.src: added connection to ToolBus
+ * **/*.java: adapted code to deal with ToolBus connection
+ * package,configure.ac: added dependency on editor-plugin package
+
 Wed May 31 17:31:42 CEST 2006 <{cleve,jurgenv}@cwi.nl>
  * ./package,etc: initial files for a package that will contain
    an implementation of a generic diff visualization and browsing
