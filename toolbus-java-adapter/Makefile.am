@@ -28,3 +28,4 @@ $(TOOLNAME)-config: Makefile
 	echo "#! /bin/sh" > $@
 	echo "echo $(pkgdatadir)/$(JARFILE):$(EXTERNAL_JARS)" >> $@
 	chmod +x $@
+JAVA_PACKAGES=toolbus
