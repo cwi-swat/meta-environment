@@ -1,7 +1,61 @@
 /* $Id$ */
 
+/** 
+ * \mainpage 
+ *
+ * pt-support contains data-structures for parse tree and parse forest
+ * manipulations. 
+ *
+ * \section Usage Usage
+ *
+ * SGLR produces parse trees using \ref MEPT.h "MEPT.h". You can use the 
+ * API to traverse these trees. The API can also be used to produce trees
+ * that look exactly like they have been constructed by SGLR. Tools that
+ * use this API are rewriters, structure editors, parse tree visualizers,
+ * fact extractors, etc.
+ *
+ * The parse tree format is constructed from:
+ * 1. An abstract representation of SDF productions.
+ * 2. Tree and forest construction nodes (with productions in each node).
+ * 3. ASCII character values as leafs.
+ *
+ * \section Files Important files
+ * \ref MEPT.h 
+ *
+ * \ref MEPT-utils.h 
+ *
+ * \ref PTMEPT.h 
+ *
+ * \ref PTMEPT-utils.h 
+ *
+ * \section Tools Tools
+ *
+ * A number of important ToolBus and commandline tools are located in
+ * \ref utils:
+ *
+ * unparsePT: yields the characters of a parse tree
+ *
+ * liftPT: lifts a parse tree to a parse tree of a parse tree, or vice versa
+ *
+ * implodePT: maps a parse tree to a more abstract ATerm (abstract syntax tree)
+ *
+ * addPosInfo: add position annotations to each sub-tree
+ *
+ * ambtracker: prints a report of all ambiguities in a parse forest
+ *
+ * unparseProd: maps the AsFix representation of a production to the SDF presentation.
+ */
+
 #ifndef _ME_PT_H
 #define _ME_PT_H
+
+/**
+ * \file 
+ * Contains all reusable high level operations on parse trees and forests.
+ * The mostly used function is PT_yieldTree() for yielding the characters
+ * of a parse tree to a string.
+ *
+ */
 
 #include <aterm2.h>
 #include <deprecated.h>

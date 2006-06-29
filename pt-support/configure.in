@@ -83,7 +83,6 @@ dnl }}}
 
 dnl {{{  Which files need updating?
 AC_CONFIG_FILES([Makefile
-  doc/Makefile
   libmept/Makefile
   libptmept/Makefile
   test/Makefile

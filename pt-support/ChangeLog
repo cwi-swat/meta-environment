@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jun 29 15:12:34 CEST 2006 <jurgenv@cwi.nl>
+ * doc: removed doc directory and moved generation of Doxygen 
+   documentation to toplevel. Will copy this design to all
+   other C based packages.
+
 Tue Jun 27 22:26:54 CEST 2006 <jurgenv@cwi.nl>
  * libmept/MEPT.[ch]: regenerated the API, with new doxygen markup
    automatically added in.
