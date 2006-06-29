@@ -25,7 +25,7 @@ ASC_LD_FLAGS=\
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	${ATERM}/lib/libATerm.a \
+	${ATERM}/lib/libATerm-dbg.a \
 	${SOCKLIBS}
 
 
