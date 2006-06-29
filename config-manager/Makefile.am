@@ -22,3 +22,18 @@ ${PACKAGE}-config: Makefile
 		echo "echo ${prefix}/share/${PACKAGE}/metaconfig-${VERSION}.jar" \
 	) > $@ && chmod +x $@
 
+EXTRA_DIST+=Doxyfile.src  
+
+if MAINTAINER_MODE
+
+CLEANFILES+=Doxyfile
+
+.PHONY: doc
+
+doc: Doxyfile 
+	doxygen
+
+Doxyfile: Doxyfile.src
+	sed 's@__PACKAGE__@${PACKAGE}@g' < $< > $@
+
+endif
