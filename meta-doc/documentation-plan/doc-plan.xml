@@ -187,8 +187,8 @@
       </listitem>
 
       <listitem>
-        <para>The nXML extention of <application>emacs</application>
-        (http://hacks.oreilly.com/pub/h/2044</para>
+        <para>The nXML extention of <application>emacs</application> (<ulink
+        url="http://hack.oreilly.com/pub/h/2044">hacks.oreilly.com/pub/h/2044</ulink>).</para>
       </listitem>
 
       <listitem>
@@ -222,18 +222,19 @@
       </listitem>
     </itemizedlist>
 
-    <para>Usefull books related to DocBook are:</para>
+    <para>Useful books related to DocBook are:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill,
-        2005.</para>
+        <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
+        Guide</emphasis>, O'Reilly, 1999. See also <ulink
+        url="http://docbook.org/tdg">www.docbook.org/tdg</ulink>.</para>
       </listitem>
 
       <listitem>
-        <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
-        Guide</emphasis>, O'Reilly, 1999. See also <ulink
-        url="http://docbook.org/tdg">docbook.org/tdg</ulink>.</para>
+        <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill, 2005.
+        See also <ulink
+        url="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</ulink>.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -273,6 +274,11 @@
       <listitem>
         <para>More global documents will be included in the meta-doc
         package.</para>
+      </listitem>
+
+      <listitem>
+        <para>Extend meta-studio with a java help browser. See http <ulink
+        url="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</ulink></para>
       </listitem>
     </itemizedlist>
   </section>
