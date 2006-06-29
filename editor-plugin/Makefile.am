@@ -37,3 +37,4 @@ $(TOOLNAME)-$(VERSION).pkg: package Makefile
 	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
 	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@
+JAVA_PACKAGES=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
