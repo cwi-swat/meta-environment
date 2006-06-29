@@ -20,3 +20,4 @@ ${PACKAGE}-${VERSION}.pkg: package Makefile
 	cp $< $@
 
 CLEANFILES = tide.jar ${PACKAGE}-${VERSION}.pkg
+JAVA_PACKAGES=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.tide,nl.cwi.sen1.tide.adapters,nl.cwi.sen1.tide.adapters.gdb,nl.cwi.sen1.tide.tool,nl.cwi.sen1.tide.tool.proclist,nl.cwi.sen1.tide.tool.prefeditor,nl.cwi.sen1.tide.tool.stackviewer,nl.cwi.sen1.tide.tool.srcviewer,nl.cwi.sen1.tide.tool.support,nl.cwi.sen1.tide.tool.ruleinspector
