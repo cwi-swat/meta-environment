@@ -40,3 +40,18 @@ $(TOOLNAME)-$(VERSION).pkg: package Makefile
 	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
 	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@
+EXTRA_DIST+=Doxyfile.src  
+
+if MAINTAINER_MODE
+
+CLEANFILES+=Doxyfile
+
+.PHONY: doc
+
+doc: Doxyfile 
+	doxygen
+
+Doxyfile: Doxyfile.src
+	sed 's@__PACKAGE__@${PACKAGE}@g' < $< > $@
+
+endif
