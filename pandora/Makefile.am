@@ -12,3 +12,18 @@ ${PACKAGE}-${VERSION}.pkg: package Makefile
 	cp $< $@
 
 
+EXTRA_DIST+=Doxyfile.src  
+
+if MAINTAINER_MODE
+
+CLEANFILES+=Doxyfile
+
+.PHONY: doc
+
+doc: Doxyfile 
+	doxygen
+
+Doxyfile: Doxyfile.src
+	sed 's@__PACKAGE__@${PACKAGE}@g' < $< > $@
+
+endif
