@@ -127,7 +127,11 @@
           </listitem>
         </itemizedlist>
       </listitem>
+    </itemizedlist>
 
+    <para>Other information that is primarily relevant for the website:</para>
+
+    <itemizedlist>
       <listitem>
         <para>Download area with instructions.</para>
       </listitem>
@@ -148,6 +152,125 @@
         <para>Access to mailing lists.</para>
       </listitem>
     </itemizedlist>
+
+    <para>Documentation can be organized in various manners, e.g.
+    task-oriented, technology-oriented, user-oriented, developer-oriented,
+    etc. Another critical decision is to use large, integrated, manuals or
+    more loosely coupled information. In the following subsections a more
+    loosely coupled is proposed based on <emphasis>articles</emphasis> that
+    fall a number of categoteries and follow common presentation
+    styles.</para>
+
+    <section>
+      <title>Getting started ...</title>
+
+      <para><emphasis>Getting started</emphasis> articles describe howto
+      download, install and run our software. They also provide pointers to
+      other articles and online resources. Typical issues:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Downloading</para>
+        </listitem>
+
+        <listitem>
+          <para>Installing on Linux</para>
+        </listitem>
+
+        <listitem>
+          <para>Installing on MacOS</para>
+        </listitem>
+
+        <listitem>
+          <para>Installing on Windows</para>
+        </listitem>
+
+        <listitem>
+          <para>Executing commands</para>
+        </listitem>
+
+        <listitem>
+          <para>Further reading</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Characterization of <emphasis>Getting started</emphasis>
+      articles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Targeted at users with a modest technical background.</para>
+        </listitem>
+
+        <listitem>
+          <para>Short: 1-2 pages.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Learning ...</title>
+
+      <para><emphasis>Learning</emphasis> articles provide tutorials for
+      various aspects of the software. Typical examples:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Learning about SDF grammars</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about ASF transformation rules</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning about Tscript coordination scenarios.</para>
+        </listitem>
+
+        <listitem>
+          <para></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Understanding ...</title>
+
+      <para>Articles in the category <emphasis>understanding</emphasis>
+      explain a fundamental concept, such as:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The architecture of the MetaEnvironment</para>
+        </listitem>
+
+        <listitem>
+          <para>Technologies used in the MetaEnvironment</para>
+        </listitem>
+
+        <listitem>
+          <para>Syntax analysis.</para>
+        </listitem>
+
+        <listitem>
+          <para>Term rewriting</para>
+        </listitem>
+
+        <listitem>
+          <para>Relational Calculus</para>
+        </listitem>
+
+        <listitem>
+          <para></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Howto ...</title>
+
+      <para></para>
+    </section>
   </section>
 
   <section>
