@@ -59,9 +59,7 @@ module Roll
       package = nil
       map.each do |pkg, path|
         pattern = Regexp.quote(path)
-        # Todo: fix longest match problem
-        # if wd.match(/^#{pattern}\//) then
-        if wd.match(/^#{pattern}/) then
+        if wd.match(/^#{pattern}\//) then
           package = pkg
         end
       end
