@@ -1,4 +1,5 @@
-/** \file
+/** 
+ * \file
  * Deals with the length annotation, a length annotation for a tree
  * contains the exact number of characters that a node would yield.
  */

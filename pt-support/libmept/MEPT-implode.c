@@ -1,6 +1,7 @@
 /* $Id: implodePT.c 16971 2005-11-10 12:28:32Z jurgenv $  */
 
 /**
+ * \file
  * Parse tree implosion is a collection of homomorphisms from parse forests
  * to arbitrary less verbose, less informative ATerm representations.
  * The main function has a lot of boolean flags to tweak which information

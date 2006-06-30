@@ -1,5 +1,6 @@
 
-/** \file
+/** 
+ * \file
  * File that deals with issues regarding the special LAYOUT symbol.
  */
 #include <MEPT-layout.h>

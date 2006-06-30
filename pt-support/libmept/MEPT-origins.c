@@ -7,6 +7,7 @@
 #define ORIGIN ATparse("origin")
 
 /**
+ * \file
  * Deals with the origin annotation. If position information is kept
  * during transformation of a parse tree, the pos-info annotations correspond
  * to the PREVIOUS locations of nodes. Before re-annotating a tree with

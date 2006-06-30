@@ -1,6 +1,7 @@
 /* $Id: yieldProd.c 17026 2005-11-17 09:12:07Z jurgenv $ */
 
-/** \file
+/** 
+ * \file
  * Contains a mapping from abstract PT_Productions and PT_Symbols to
  * a concrete string representation of SDF productions and SDF Symbols.
  *

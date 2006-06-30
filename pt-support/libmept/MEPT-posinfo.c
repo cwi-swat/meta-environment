@@ -1,6 +1,7 @@
 /* $Id: posInfo.c 18292 2006-04-12 02:08:09Z jurgenv $ */
 
 /**
+ * \file
  * Position information is an important feature in software analysis,
  * transformation and visualization. The Location data-structure standardizes
  * this in Location.h. This file contains algorithms to annotate parse forests
