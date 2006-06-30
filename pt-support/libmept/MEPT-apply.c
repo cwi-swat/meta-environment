@@ -1,6 +1,17 @@
-#include <MEPT-utils.h>
-
-/*{{{  static PT_Symbols makeNewLhs(const char *sort) */
+/**
+ * \file
+ * applyFunction constructs a fresh production on-the-fly and applies
+ * is to a number of children. The types of the children are used to 
+ * construct the symbols of the left-hand side of the production.
+ *
+ * This functionality is needed to apply a function to a parse tree without
+ * the overhead of reparsing an entire input string.
+ */
+#include <MEPT-apply.h>
+#include <MEPT-symbols.h>
+#include <MEPT-start.h>
+#include <MEPT-layout.h>
+#include <MEPT-tree.h>
 
 static PT_Symbols makeNewLhs(const char *sort)
 {
@@ -10,9 +21,7 @@ static PT_Symbols makeNewLhs(const char *sort)
               PT_makeSymbolsSingle(PT_makeOptLayoutSymbol())));
 }
 
-/*}}}  */
 
-/*{{{  PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function, const char *sort,  */
 
 PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function, const char *sort, 
 					     PT_Args args)
@@ -26,9 +35,7 @@ PT_ParseTree PT_applyFunctionToArgsParseTree(const char *function, const char *s
 			      PT_makeTreeLayoutEmpty(), 0);
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args) */
 
 PT_Tree PT_applyFunction(const char* function, PT_Symbol rhs, PT_Args args,
 			 PT_Attributes attributes)
@@ -98,8 +105,6 @@ PT_Tree PT_applyFunction(const char* function, PT_Symbol rhs, PT_Args args,
   return PT_makeTreeAppl(prod, argList);
 }
 
-/*}}}  */
-/*{{{  PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args)  */
 
 PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args args) 
 {
@@ -109,9 +114,7 @@ PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args a
   return PT_applyFunction(function, rhs, args, attributes);
 }
 
-/*}}}  */
 
-/*{{{  PT_applyFunctionToTree(char *function, char* sort, int nArgs, ...) */
 
 PT_Tree
 PT_applyFunctionToTree(const char *function, const char* sort, int nArgs, ...)
@@ -131,6 +134,5 @@ PT_applyFunctionToTree(const char *function, const char* sort, int nArgs, ...)
   return PT_applyFunctionToArgs(function, sort, ptArgs);
 }
 
-/*}}}  */
 
 

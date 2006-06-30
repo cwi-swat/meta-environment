@@ -1,4 +1,6 @@
-#include <MEPT-utils.h>
+#include <MEPT-renaming.h>
+#include <MEPT-tree.h>
+#include <MEPT-symbols.h>
 #include <string.h>
 
 static
@@ -6,7 +8,6 @@ PT_Symbol renameInSymbol(PT_Symbol symbol,
                          PT_Symbol formalParam,
                          PT_Symbol actualParam);
 
-/*{{{  PT_Symbols renameInSymbols(PT_Symbols symbols, */
 
 static
 PT_Symbols renameInSymbols(PT_Symbols symbols,
@@ -26,8 +27,6 @@ PT_Symbols renameInSymbols(PT_Symbols symbols,
   }
 }
 
-/*}}}  */
-/*{{{  PT_Symbol renameInSymbol(PT_Symbol symbol, */
 
 static 
 PT_Symbol renameInSymbol(PT_Symbol symbol,
@@ -96,8 +95,6 @@ PT_Symbol renameInSymbol(PT_Symbol symbol,
   return symbol;
 }
 
-/*}}}  */
-/*{{{  PT_Args renameInArgs(PT_Args trees, */
 
 static
 PT_Args renameInArgs(PT_Args trees,
@@ -120,8 +117,6 @@ PT_Args renameInArgs(PT_Args trees,
   }
 }
 
-/*}}}  */
-/*{{{  PT_Production renameInProduction(PT_Production prod, */
 
 static
 PT_Production renameInProduction(PT_Production prod,
@@ -146,8 +141,6 @@ PT_Production renameInProduction(PT_Production prod,
   }
 }
 
-/*}}}  */
-/*{{{  PT_Tree PT_renameInTree(PT_Tree tree, */
 
 
 PT_Tree PT_renameInTree(PT_Tree tree,
@@ -194,8 +187,6 @@ PT_Tree PT_renameInTree(PT_Tree tree,
   }
 }
 
-/*}}}  */
-/*{{{  PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree, PT_Symbol formalParam, */
 
 PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree, PT_Symbol formalParam,
                                   PT_Symbol actualParam)
@@ -207,4 +198,3 @@ PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree, PT_Symbol formalParam,
   return PT_setParseTreeTop(parsetree, tree);
 }
 
-/*}}}  */

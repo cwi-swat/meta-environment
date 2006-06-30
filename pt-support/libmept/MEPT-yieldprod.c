@@ -1,11 +1,26 @@
-/* $Id$ */
+/* $Id: yieldProd.c 17026 2005-11-17 09:12:07Z jurgenv $ */
 
+/** \file
+ * Contains a mapping from abstract PT_Productions and PT_Symbols to
+ * a concrete string representation of SDF productions and SDF Symbols.
+ *
+ * Note: not only a one-to-one mapping from an abstract to a concrete
+ * representation is done. This functionality also entails some magic
+ * that undoes the effects of the SDF2 normalization phase.
+ *
+ * \todo: split the normalization undo functionality from the pt2sdf
+ * mapping functionality. Use the SDFME Api to construct a valid SDF
+ * production, then use an ASF+SDF specification to implement the inverse
+ * of normalization to a production, then use PT_yieldTree() to 
+ * finally yield a string.
+ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
 
-#include "MEPT-utils.h"
+#include "MEPT-yieldprod.h"
+#include "MEPT-symbols.h"
 
 #define VARIABLE "*variable*"
 
@@ -606,8 +621,7 @@ yieldProd(PT_Production prod, int idx, char *buf, int bufSize)
   return idx;
 }
 
-char *PT_yieldProduction(PT_Production prod)
-{
+char *PT_yieldProduction(PT_Production prod) {
   static char *buffer = NULL;
   static int   bufferSize = 0;
   int          idx = 0;
@@ -627,8 +641,7 @@ char *PT_yieldProduction(PT_Production prod)
   return buffer;
 }
 
-char *PT_yieldSymbol(PT_Symbol symbol) 
-{
+char *PT_yieldSymbol(PT_Symbol symbol) {
   static char *buffer = NULL;
   static int   bufferSize = 0;
   int          idx = 0;
@@ -649,8 +662,7 @@ char *PT_yieldSymbol(PT_Symbol symbol)
   return buffer;
 }
 
-char *PT_yieldSymbolVisualVariables(PT_Symbol symbol)
-{
+char *PT_yieldSymbolVisualVariables(PT_Symbol symbol) {
   static char *buffer = NULL;
   static int   bufferSize = 0;
   int          idx = 0;

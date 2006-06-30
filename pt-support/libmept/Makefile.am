@@ -5,23 +5,53 @@ lib_LIBRARIES = libmept.a
 include_HEADERS = \
 	MEPT.h \
 	MEPT-utils.h \
-	MEPT_dict.h
+	MEPT_dict.h \
+	MEPT-ambtracker.h \
+	MEPT-annotations.h \
+	MEPT-apply.h \
+	MEPT-args.h \
+	MEPT-characters.h \
+	MEPT-flatten.h \
+	MEPT-implode.h \
+	MEPT-layout.h \
+	MEPT-length.h \
+	MEPT-ordering.h \
+	MEPT-origins.h \
+	MEPT-posinfo.h \
+	MEPT-productions.h \
+	MEPT-renaming.h \
+	MEPT-start.h \
+	MEPT-symbols.h \
+	MEPT-tree.h \
+	MEPT-utils.h \
+	MEPT-visitors.h \
+	MEPT-yield.h \
+	MEPT-yieldprod.h
 
 libmept_a_SOURCES = \
-	MEPT-utils.c  \
-	MEPT.c \
-	MEPT_dict.c \
-	apply.c \
-	flattenPT.c \
-	implodePT.c \
-	ordering.c \
-	origin.c \
-	posInfo.c \
-	reportAmbs.c \
-	symbol-renaming.c \
-	yieldPT.c \
-	yieldProd.c \
-	character-classes.c
+		    MEPT.c \
+		    MEPT_dict.c \
+		    MEPT-ambtracker.c \
+		    MEPT-annotations.c \
+		    MEPT-apply.c \
+		    MEPT-args.c \
+		    MEPT-characters.c \
+		    MEPT-flatten.c \
+		    MEPT-implode.c \
+		    MEPT-layout.c \
+		    MEPT-length.c \
+		    MEPT-ordering.c \
+		    MEPT-origins.c \
+		    MEPT-posinfo.c \
+		    MEPT-productions.c \
+		    MEPT-renaming.c \
+		    MEPT-start.c \
+		    MEPT-symbols.c \
+		    MEPT-tree.c \
+		    MEPT-utils.c \
+		    MEPT-visitors.c \
+		    MEPT-yield.c \
+		    MEPT-yieldprod.c
 
 AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
 

@@ -1,17 +1,14 @@
-/*{{{  includes */
-
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include <MEPT-utils.h>
-#include <Error-utils.h>
-
-/*}}}  */
+#include <Error.h>
+#include <aterm2.h>
+#include <MEPT.h>
+#include <MEPT-yield.h>
+#include <MEPT-yieldprod.h>
 
 #define RECURSION_UPPERBOUND 5000
-
-/*{{{  typedef struct PT_Amb_Position_Tag */
 
 typedef struct PT_Amb_Position_Tag {
   int line;
@@ -19,57 +16,32 @@ typedef struct PT_Amb_Position_Tag {
   int offset;
 } PT_Amb_Position;
 
-/*}}}  */
-
 static ATermTable visited = NULL;
 
-/*{{{  static ATerm makeKey(int offset, PT_Tree tree) */
-
-static ATerm makeKey(int offset, PT_Tree tree)
-{
+static ATerm makeKey(int offset, PT_Tree tree) {
   return (ATerm) ATmakeAppl2(ATmakeAFun("key",2,ATfalse), (ATerm) tree, 
 			     (ATerm) ATmakeInt(offset));
 }
 
-/*}}}  */
-/*{{{  static void initCache()  */
-
-static void initCache() 
-{
+static void initCache() {
   visited = ATtableCreate(1024, 75);
 }
 
-/*}}}  */
-/*{{{  static void cleanupCache() */
-
-static void cleanupCache()
-{
+static void cleanupCache() {
   ATtableDestroy(visited);
 }
 
-/*}}}  */
-/*{{{  static void cacheLocation(int offset, PT_Tree tree, ERR_Location location) */
-
-static void cacheLocation(int offset, PT_Tree tree, ERR_Location location)
-{
+static void cacheLocation(int offset, PT_Tree tree, ERR_Location location) {
   ATtablePut(visited, makeKey(offset, tree), (ATerm) location);
 }
 
-/*}}}  */
-
-/*{{{  static ERR_Location getCachedLocation(int offset, PT_Tree tree) */
-
-static ERR_Location getCachedLocation(int offset, PT_Tree tree)
-{
+static ERR_Location getCachedLocation(int offset, PT_Tree tree) {
   return (ERR_Location) ATtableGet(visited, makeKey(offset, tree));
 }
 
-/*}}}  */
-/*{{{  static ERR_SubjectList getAmbiguities(const char *path, */
 
 static ERR_Location makeLocation(PT_Amb_Position from, PT_Amb_Position to,
-				 const char* path)
-{
+				 const char* path) {
   ERR_Area area;
   ERR_Location location;
 
@@ -88,34 +60,32 @@ static ERR_Location makeLocation(PT_Amb_Position from, PT_Amb_Position to,
 static ERR_ErrorList getAmbiguities(const char *path,
                                       PT_Tree tree, 
 				      int depth,
-                                      PT_Amb_Position *current)
-{
+                                      PT_Amb_Position *current) {
   ERR_ErrorList ambErrors = ERR_makeErrorListEmpty();
   ERR_Location end = getCachedLocation(current->offset, tree);
   PT_Amb_Position here = *current;
 
   if (end != NULL) {
-	  /* found in cache, so advance current and go on with the
-	   * rest
-	   */
-	  ERR_Area area = ERR_getLocationArea(end);
-	  current->col = ERR_getAreaEndColumn(area);
-	  current->line = ERR_getAreaEndLine(area);
-	  current->offset += ERR_getAreaLength(area);
-	  return ambErrors;
+    /* found in cache, so advance current and go on with the
+     * rest
+     */
+    ERR_Area area = ERR_getLocationArea(end);
+    current->col = ERR_getAreaEndColumn(area);
+    current->line = ERR_getAreaEndLine(area);
+    current->offset += ERR_getAreaLength(area);
+    return ambErrors;
   }
 
   if (depth >= RECURSION_UPPERBOUND) {
     ERR_Subject subject = ERR_makeSubjectLocalized( "tree",
-	    makeLocation(*current,*current,path));
+						    makeLocation(*current,*current,path));
     ERR_Error deep = ERR_makeErrorWarning("Tree is too deep to search for "
-		    "ambiguities.", ERR_makeSubjectListSingle(subject));
-      ambErrors = ERR_makeErrorListMany(deep, ambErrors);
+					  "ambiguities.", ERR_makeSubjectListSingle(subject));
+    ambErrors = ERR_makeErrorListMany(deep, ambErrors);
   }
   else if (PT_isTreeChar(tree)) {
-  /*{{{  handle single char */
 
-	  
+
     if (PT_getTreeCharacter(tree) == '\n') {
       current->col = 0;
       (current->line)++;
@@ -126,10 +96,8 @@ static ERR_ErrorList getAmbiguities(const char *path,
       (current->offset)++;
     }
 
-  /*}}}  */
   }
   else if (PT_isTreeAppl(tree)) {
-  /*{{{  handle normal application */
 
     PT_Args args = PT_getTreeArgs(tree);
 
@@ -139,10 +107,8 @@ static ERR_ErrorList getAmbiguities(const char *path,
       ambErrors = ERR_concatErrorList(argErrors, ambErrors);
     }
 
-  /*}}}  */
   }
   else if (PT_isTreeAmb(tree)) {
-  /*{{{  handle ambiguity cluster */
 
     PT_Args args = PT_getTreeArgs(tree); 
     PT_Args ambs = args;
@@ -158,19 +124,19 @@ static ERR_ErrorList getAmbiguities(const char *path,
     for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       *current = here;
       ambErrors = ERR_concatErrorList(getAmbiguities(path,
-			      PT_getArgsHead(args),
-			      depth + 1,
-			      current), 
-		      ambErrors);
+						     PT_getArgsHead(args),
+						     depth + 1,
+						     current), 
+				      ambErrors);
     }
 
     amb = PT_getArgsHead(ambs);
     if (PT_hasTreeProd(amb)) {
-	    ambString = PT_yieldSymbol(
-			    PT_getProductionRhs(PT_getTreeProd(amb)));
+      ambString = PT_yieldSymbol(
+				 PT_getProductionRhs(PT_getTreeProd(amb)));
     }
     else {
-	    ambString = PT_yieldTree(amb);
+      ambString = PT_yieldTree(amb);
     }
 
     sprintf(ambCount + strlen(ambCount),"%d", PT_getArgsLength(ambs));
@@ -184,23 +150,17 @@ static ERR_ErrorList getAmbiguities(const char *path,
     ambError = ERR_makeErrorWarning("ambiguity", ambSubjects);
     ambErrors = ERR_makeErrorListMany(ambError, ambErrors);
 
-  /*}}}  */
   } 
 
   {
-	  /* TODO: serious bug here cause line numbers not to increase! */
-	  ERR_Location loc = makeLocation(here, *current, path);
-	  cacheLocation(here.offset, tree, loc);
+    /* TODO: serious bug here cause line numbers not to increase! */
+    ERR_Location loc = makeLocation(here, *current, path);
+    cacheLocation(here.offset, tree, loc);
   }
   return ambErrors;
 }
 
-/*}}}  */
-
-/*{{{  ATerm PT_reportTreeAmbiguities(PT_Tree tree) */
-
-ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
-{
+ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree) {
   PT_Amb_Position pos = {1, 0, 0}; 
   ERR_ErrorList ambs;
   ERR_Summary result;
@@ -215,20 +175,11 @@ ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
   return (ATerm) result;
 }
 
-/*}}}  */
-/*{{{  ATerm PT_reportParseTreeAmbiguities(PT_ParseTree parsetree) */
-
-ATerm PT_reportParseTreeAmbiguities(const char *path, PT_ParseTree parsetree)
-{
+ATerm PT_reportParseTreeAmbiguities(const char *path, PT_ParseTree parsetree) {
   return PT_reportTreeAmbiguities(path, PT_getParseTreeTop(parsetree));
 }
 
-/*}}}  */
-
-/*{{{  PT_Tree PT_findTopAmbiguity(PT_Tree tree) */
-
-PT_Tree PT_findTopAmbiguity(PT_Tree tree)
-{
+PT_Tree PT_findTopAmbiguity(PT_Tree tree) {
   assert(tree != NULL);
 
   if (PT_isTreeAmb(tree)) {
@@ -249,5 +200,3 @@ PT_Tree PT_findTopAmbiguity(PT_Tree tree)
 
   return NULL;
 }
-
-/*}}}  */

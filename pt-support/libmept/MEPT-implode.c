@@ -1,12 +1,17 @@
 /*
-    $Id$  
+    $Id: implodePT.c 16971 2005-11-10 12:28:32Z jurgenv $  
 */
 
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include "MEPT-utils.h"
+#include <MEPT-layout.h>
+#include <MEPT-symbols.h>
+#include <MEPT-productions.h>
+#include <MEPT-annotations.h>
+#include <MEPT-yield.h>
+#include <MEPT-tree.h>
 
 static ATbool interpret_cons = ATfalse;
 static ATbool remove_layout = ATfalse;
@@ -27,7 +32,6 @@ static ATerm implodeLayout(PT_Tree t);
 static ATerm implodeVar(PT_Tree t);
 static ATerm implodeProd(PT_Production prod, ATermList args);
 
-/*{{{  static ATermList implodeArgs(PT_Args args) */
 
 static ATermList implodeArgs(PT_Args args)
 {
@@ -46,9 +50,7 @@ static ATermList implodeArgs(PT_Args args)
   }
 }
 
-/*}}}  */
 
-/*{{{  static PT_Production removeLayoutFromProd(PT_Production prod) */
 
 static PT_Production removeLayoutFromProd(PT_Production prod)
 {
@@ -70,8 +72,6 @@ static PT_Production removeLayoutFromProd(PT_Production prod)
   return prod;
 }
 
-/*}}}  */
-/*{{{  static PT_Production removeLiteralsFromProd(PT_Production prod) */
 
 static PT_Production removeLiteralsFromProd(PT_Production prod)
 {
@@ -93,8 +93,6 @@ static PT_Production removeLiteralsFromProd(PT_Production prod)
   return prod;
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeProd(PT_Production prod, ATermList args) */
 
 static ATerm implodeProd(PT_Production prod, ATermList args)
 {
@@ -139,9 +137,7 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
 		PT_ProductionToTerm(prod), args);
 }
 
-/*}}}  */
 
-/*{{{  static ATerm implodeLayout(PT_Tree tree) */
 
 static ATerm implodeLayout(PT_Tree tree)
 {
@@ -167,8 +163,6 @@ static ATerm implodeLayout(PT_Tree tree)
   }
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeFlatList(PT_Tree tree) */
 
 static ATerm implodeFlatList(PT_Tree tree)
 {
@@ -178,8 +172,6 @@ static ATerm implodeFlatList(PT_Tree tree)
   return ATmake("<term>", newList);
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeLexical(PT_Tree tree) */
 
 static ATerm implodeLexical(PT_Tree tree)
 {
@@ -190,8 +182,6 @@ static ATerm implodeLexical(PT_Tree tree)
   return PT_TreeToTerm(tree);
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeLiteral(PT_Tree tree) */
 
 static ATerm implodeLiteral(PT_Tree tree)
 {
@@ -202,8 +192,6 @@ static ATerm implodeLiteral(PT_Tree tree)
   return PT_TreeToTerm(tree);
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeAlt(PT_Tree tree) */
 
 static ATerm implodeAlt(PT_Tree tree)
 {
@@ -239,8 +227,6 @@ static ATerm implodeAlt(PT_Tree tree)
   return PT_TreeToTerm(tree);
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeSeqRecursive(PT_Args args) */
 
 static ATerm implodeSeqRecursive(PT_Args args)
 {
@@ -267,8 +253,6 @@ static ATerm implodeSeqRecursive(PT_Args args)
 		implodeSeqRecursive(PT_getArgsTail(args)));
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeSeq(PT_Tree tree) */
 
 static ATerm implodeSeq(PT_Tree tree)
 {
@@ -277,8 +261,6 @@ static ATerm implodeSeq(PT_Tree tree)
   return seq;
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeOpt(PT_Tree tree) */
 
 static ATerm implodeOpt(PT_Tree tree)
 {
@@ -303,8 +285,6 @@ static ATerm implodeOpt(PT_Tree tree)
   }
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeVar(PT_Tree tree) */
 
 static ATerm implodeVar(PT_Tree tree)
 {
@@ -316,8 +296,6 @@ static ATerm implodeVar(PT_Tree tree)
   return PT_TreeToTerm(tree);
 }
 
-/*}}}  */
-/*{{{  static ATerm implodeApplication(PT_Tree tree) */
 
 static ATerm implodeApplication(PT_Tree tree)
 {
@@ -341,9 +319,7 @@ static ATerm implodeApplication(PT_Tree tree)
   return implodeProd(prod, newList);
 }
 
-/*}}}  */
 
-/*{{{  static ATerm implodeTerm(PT_Tree tree) */
 
 static ATerm implodeTerm(PT_Tree tree)
 {
@@ -389,9 +365,7 @@ static ATerm implodeTerm(PT_Tree tree)
   return result;
 }
 
-/*}}}  */
 
-/*{{{  ATerm implodeParseTree(PT_ParseTree tree) */
 
 ATerm PT_implodeParseTree(PT_ParseTree tree,
 			  ATbool _interpret_cons ,
@@ -444,4 +418,3 @@ ATerm PT_implodeParseTree(PT_ParseTree tree,
   return NULL;
 }
 
-/*}}}  */

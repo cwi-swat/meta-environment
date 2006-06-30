@@ -1,15 +1,11 @@
-/* $Id$ */
+/* $Id: yieldPT.c 16971 2005-11-10 12:28:32Z jurgenv $ */
 
-/*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h> 
 
-#include "MEPT-utils.h"
-
-/*}}}  */
-/*{{{  defines */
+#include <MEPT-yield.h>
 
 #define INITIAL_BUFFER_SIZE 4*1024
 
@@ -17,8 +13,6 @@
 #define AMB_CLUSTER_SEP   "\n==========\n"
 #define AMB_CLUSTER_END   "\n>>>>>>>>>>\n"
 
-/*}}}  */
-/*{{{  structures and types */
 
 typedef void (*charYielder)(char c);
 typedef void (*ambiguityAcceptor)(PT_Args ambiguities);
@@ -29,16 +23,12 @@ typedef struct _TreeYielder
   ambiguityAcceptor acceptAmbiguities;
 } *TreeYielder;
 
-/*}}}  */
-/*{{{  function declarations */
 
 static void countChar(char c);
 static void yieldCharToFile(char c);
 static void yieldCharToString(char c);
 static void visitArgs(PT_Args args, TreeYielder yielder);
 
-/*}}}  */
-/*{{{  variables */
 
 static unsigned long treeCount = 0;
 static struct _TreeYielder yielder = { countChar, NULL };
@@ -51,9 +41,7 @@ static char *stringCur = NULL;
 static unsigned int stringCapacity = 0;
 static struct _TreeYielder treeToString = { yieldCharToString, NULL };
 
-/*}}}  */
 
-/*{{{  static void visitTree(PT_Tree tree, TreeYielder yielder) */
 
 static void visitTree(PT_Tree tree, TreeYielder yielder)
 {
@@ -79,8 +67,6 @@ static void visitTree(PT_Tree tree, TreeYielder yielder)
   }
 }
 
-/*}}}  */
-/*{{{  static void visitArgs(PT_Args args, TreeYielder yielder) */
 
 static void visitArgs(PT_Args args, TreeYielder yielder)
 {
@@ -90,9 +76,7 @@ static void visitArgs(PT_Args args, TreeYielder yielder)
   }
 }
 
-/*}}}  */
 
-/*{{{  static void countChar(char c) */
 
 static void countChar(char c)
 {
@@ -102,8 +86,6 @@ static void countChar(char c)
   }
 }
 
-/*}}}  */
-/*{{{  unsigned long PT_getTreeLength(PT_Tree tree) */
 
 unsigned long PT_getTreeLength(PT_Tree tree)
 {
@@ -113,17 +95,13 @@ unsigned long PT_getTreeLength(PT_Tree tree)
   return treeCount;
 }
 
-/*}}}  */
 
-/*{{{  static void yieldCharToFile(char c) */
 
 static void yieldCharToFile(char c)
 {
   fputc((int)c, outputFile);
 }
 
-/*}}}  */
-/*{{{  void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities) */
 
 void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities)
 {
@@ -139,8 +117,6 @@ void PT_yieldTreeToFile(PT_Tree tree, FILE *f, ATbool yieldAllAmbiguities)
   treeToFile.acceptAmbiguities = NULL;
 }
 
-/*}}}  */
-/*{{{  void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities) */
 
 void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities)
 {
@@ -156,16 +132,12 @@ void PT_yieldArgsToFile(PT_Args args, FILE *f, ATbool yieldAllAmbiguities)
   treeToFile.acceptAmbiguities = NULL;
 }
 
-/*}}}  */
-/*{{{  void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities) */
 
 void PT_yieldParseTreeToFile(PT_ParseTree pt, FILE *f, ATbool yieldAllAmbiguities)
 {
   return PT_yieldTreeToFile(PT_getParseTreeTop(pt), f, yieldAllAmbiguities);
 }
 
-/*}}}  */
-/*{{{  void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities) */
 
 void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities)
 {
@@ -185,9 +157,7 @@ void PT_yieldAnyToFile(ATerm t, FILE *f, ATbool yieldAllAmbiguities)
   }
 }
 
-/*}}}  */
 
-/*{{{  static void yieldCharToString(char c) */
 
 static void yieldCharToString(char c)
 {
@@ -214,16 +184,12 @@ static void yieldCharToString(char c)
   *stringCur++ = c;
 }
 
-/*}}}  */
-/*{{{  char *PT_yieldTree(PT_Tree tree) */
 
 char *PT_yieldTree(PT_Tree tree)
 {
   return PT_yieldTreeToString(tree, ATfalse);
 }
 
-/*}}}  */
-/*{{{  char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities) */
 
 char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities)
 {
@@ -239,8 +205,6 @@ char *PT_yieldTreeToString(PT_Tree tree, ATbool yieldAllAmbiguities)
   return stringStart;
 }
 
-/*}}}  */
-/*{{{  char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities) */
 
 char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities)
 {
@@ -257,16 +221,12 @@ char *PT_yieldArgsToString(PT_Args args, ATbool yieldAllAmbiguities)
   return stringStart;
 }
 
-/*}}}  */
-/*{{{  char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities) */
 
 char *PT_yieldParseTreeToString(PT_ParseTree pt, ATbool yieldAllAmbiguities)
 {
   return PT_yieldTreeToString(PT_getParseTreeTop(pt), yieldAllAmbiguities);
 }
 
-/*}}}  */
-/*{{{  char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities) */
 
 char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities)
 {
@@ -291,4 +251,3 @@ char *PT_yieldAnyToString(ATerm t, ATbool yieldAllAmbiguities)
   return NULL;
 }
 
-/*}}}  */

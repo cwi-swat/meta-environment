@@ -1,17 +1,17 @@
 /*
-    $Id$  
+    $Id: flattenPT.c 18894 2006-06-27 14:13:19Z jurgenv $  
 */
 
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include <MEPT-utils.h>
+#include <MEPT-layout.h>
+#include <MEPT-productions.h>
 
 static ATermTable memotable = NULL;
 static PT_Tree flattenTreeRec(PT_Tree tree);
 
-/*{{{  patterns for matching SDF2 regular syntax in AsFix2 trees */
 
 /* Pattern for literal */
 static ATerm asfix2_literal = NULL;
@@ -58,8 +58,6 @@ static ATerm asfix2_star_sep_star_sep_to_star_sep = NULL;
 static ATerm asfix2_star_sep_plus_sep_to_plus_sep = NULL;
 static ATerm asfix2_plus_sep_star_sep_to_plus_sep = NULL; 
 
-/*}}}  */
-/*{{{  static void init_asfix_patterns() */
 
 static void init_asfix_patterns()
 {
@@ -223,8 +221,6 @@ static void init_asfix_patterns()
 
 }
 
-/*}}}  */
-/*{{{  static void init_patterns(void) */
 
 static void init_patterns(void)
 {
@@ -238,9 +234,7 @@ static void init_patterns(void)
   init_asfix_patterns();
 }
 
-/*}}}  */
 
-/*{{{  ATbool isListProd(PT_Production prod) */
 
 ATbool isListProd(PT_Production prod)
 {
@@ -366,8 +360,6 @@ ATbool isListProd(PT_Production prod)
   return ATfalse;
 }
 
-/*}}}  */
-/*{{{  void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star) */
 
 void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star)
 {
@@ -420,7 +412,6 @@ void prepareListSymbols(PT_Symbol symbol, PT_Symbol *plus, PT_Symbol *star)
   }
 }
 
-/*}}}  */
 
 PT_Tree distributeTopTypeOverCluster(PT_Tree cluster, PT_Symbol topType)
 {
@@ -445,16 +436,13 @@ PT_Tree distributeTopTypeOverCluster(PT_Tree cluster, PT_Symbol topType)
   return PT_setTreeArgs(cluster, newKids);
 }
 
-/*{{{  void PT_initAsFix2Api() */
 
 void PT_initAsFix2Api()
 {
   init_patterns();
 }
 
-/*}}}  */
 
-/*{{{  static PT_Args flattenArgs(PT_Args tl) */
 
 static PT_Args flattenArgs(PT_Args args)
 {
@@ -470,8 +458,6 @@ static PT_Args flattenArgs(PT_Args args)
   return PT_makeArgsMany(arg, flattenArgs(PT_getArgsTail(args)));
 }
 
-/*}}}  */
-/*{{{  static void flattenListRec(PT_Symbol plus, PT_Symbol star, PT_Tree tree,  */
 
 static void flattenListRec(PT_Tree tree, 
                            PT_Symbol topType,
@@ -540,8 +526,6 @@ static void flattenListRec(PT_Tree tree,
   return;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree flattenList(PT_Tree tree) */
 
 static PT_Tree flattenList(PT_Tree tree)
 {
@@ -571,8 +555,6 @@ static PT_Tree flattenList(PT_Tree tree)
   return PT_makeTreeAppl(list, tail);
 }
 
-/*}}}  */
-/*{{{  static PT_Tree flattenLayout(PT_Tree tree) */
 
 static PT_Tree flattenLayout(PT_Tree tree)
 {
@@ -601,7 +583,6 @@ static PT_Tree flattenLayout(PT_Tree tree)
   return PT_makeTreeAppl(lexIterToCf, PT_makeArgsSingle(flat));
 }
 
-/*}}}  */
 
 static PT_Tree flatEmptyLayout() {
 	PT_Production prodOptLayout;
@@ -624,7 +605,6 @@ static PT_Tree flatEmptyLayout() {
 	return layout;
 }
 
-/*{{{  static PT_Tree flattenTreeRec(PT_Tree tree) */
 
 static PT_Tree flattenTreeRec(PT_Tree tree)
 {
@@ -672,8 +652,6 @@ static PT_Tree flattenTreeRec(PT_Tree tree)
   return result;
 }
 
-/*}}}  */
-/*{{{  PT_Tree flattenTree(PT_Tree tree) */
 
 PT_Tree flattenTree(PT_Tree tree)
 {
@@ -691,9 +669,7 @@ PT_Tree flattenTree(PT_Tree tree)
   return result;
 }
 
-/*}}}  */
 
-/*{{{  PT_ParseTree flattenPT(PT_ParseTree tree) */
 
 PT_ParseTree flattenPT(PT_ParseTree tree)
 {
@@ -707,4 +683,3 @@ PT_ParseTree flattenPT(PT_ParseTree tree)
   return NULL;
 }
 
-/*}}}  */

@@ -1,12 +1,12 @@
 #include <assert.h>
-#include "MEPT-utils.h"
+#include <MEPT-ordering.h>
+#include <MEPT-layout.h>
 
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2);
 
 static ATbool moduloAmbOrdering;
 static ATbool moduloLayout;
 
-/*{{{  static int PT_compareArgs(PT_Args args1, PT_Args args2) */
 
 static int PT_compareArgs(PT_Args args1, PT_Args args2)
 {
@@ -44,8 +44,6 @@ static int PT_compareArgs(PT_Args args1, PT_Args args2)
   return result;
 }
 
-/*}}}  */
-/*{{{  static int PT_compareProduction(PT_Production prod1, PT_Production prod2) */
 
 static int PT_compareProduction(PT_Production prod1, PT_Production prod2)
 {
@@ -78,9 +76,7 @@ static int PT_compareProduction(PT_Production prod1, PT_Production prod2)
   return 0;
 }
 
-/*}}}  */
 
-/*{{{  static int ambiguityOrdering(const ATerm t1, const ATerm t2)  */
 
 static int ambiguityOrdering(const ATerm t1, const ATerm t2) 
 {
@@ -93,9 +89,7 @@ static int ambiguityOrdering(const ATerm t1, const ATerm t2)
   return 0;
 }
 
-/*}}}  */
 
-/*{{{  static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2) */
 
 static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2)
 {
@@ -133,8 +127,6 @@ static int PT_compareAmbs(PT_Args ambs1, PT_Args ambs2)
   return result;
 }
 
-/*}}}  */
-/*{{{  static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2) */
 
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
 {
@@ -205,9 +197,7 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
    return 0;
 }
 
-/*}}}  */
 
-/*{{{  int PT_compareTree(PT_Tree tree1, PT_Tree tree2)  */
 
 int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool modLayout) 
 {
@@ -220,4 +210,3 @@ int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool m
   return PT_compareTreeRec(tree1, tree2);
 }
 
-/*}}}  */

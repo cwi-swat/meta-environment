@@ -1,18 +1,12 @@
-/*{{{  includes */
 
 #include <stdio.h>
 #include <assert.h>
-
-#include "MEPT-utils.h"
-
-/*}}}  */
-/*{{{  defines */
+#include <MEPT-origins.h>
+#include <MEPT-posinfo.h>
 
 #define ORIGIN ATparse("origin")
 
-/*}}}  */
 
-/*{{{  PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree) */
 
 PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
 {
@@ -36,8 +30,6 @@ PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
   return tree;
 }
 
-/*}}}  */
-/*{{{  LOC_Location PT_getTreeOrigin(PT_Tree tree) */
 
 LOC_Location PT_getTreeOrigin(PT_Tree tree)
 {
@@ -57,4 +49,3 @@ LOC_Location PT_getTreeOrigin(PT_Tree tree)
   }
 }
 
-/*}}}  */

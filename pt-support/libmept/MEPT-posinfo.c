@@ -1,28 +1,25 @@
-/* $Id$ */
+/* $Id: posInfo.c 18292 2006-04-12 02:08:09Z jurgenv $ */
 
-/*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
-#include <MEPT-utils.h>
-/*}}}  */
-/*{{{  defines*/
+#include <MEPT-posinfo.h>
+#include <MEPT-layout.h>
+#include <MEPT-visitors.h>
+#include <MEPT-yield.h>
 
 #define POS_INFO_ANNO "pos-info"
 #define UNLIMITED_DEPTH -1
 
-/*}}}  */
 
-/*{{{ globals  */
 
 static ATbool label_layout = ATfalse;
 static ATbool label_literals = ATfalse;
 static ATbool in_layout = ATfalse;
 static ATermTable cache = NULL;
 
-/*}}}  */
 
 static ATerm makeKey(int offset, PT_Tree tree)
 {
@@ -51,7 +48,6 @@ static PT_Tree getCachedTree(int offset, PT_Tree tree)
 }
 
 	
-/*{{{  typedef struct PT_Position_Tag */
 
 typedef struct PT_Position_Tag {
   const char* path;
@@ -63,8 +59,6 @@ typedef struct PT_Position_Tag {
   int curDepth;
 } PT_Position;
 
-/*}}}  */
-/*{{{  typedef struct PT_PosInFile */
 
 typedef struct PT_PosInFile {
   int line;
@@ -72,17 +66,13 @@ typedef struct PT_PosInFile {
   int offset;
 } PT_PosInFile;
 
-/*}}}  */
 
-/*{{{  ATbool PT_hasTreeLocation(PT_Tree tree) */
 
 ATbool PT_hasTreeLocation(PT_Tree tree)
 {
   return ATgetAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)) != NULL;
 }
 
-/*}}}  */
-/*{{{  LOC_Location PT_getTreeLocation(PT_Tree tree) */
 
 LOC_Location PT_getTreeLocation(PT_Tree tree)
 {
@@ -90,17 +80,13 @@ LOC_Location PT_getTreeLocation(PT_Tree tree)
            ATgetAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)));
 }
 
-/*}}}  */
-/*{{{  PT_Tree PT_removeTreeLocation(PT_Tree tree) */
 
 PT_Tree PT_removeTreeLocation(PT_Tree tree)
 {
   return PT_TreeFromTerm(ATremoveAnnotation(PT_TreeToTerm(tree), ATparse(POS_INFO_ANNO)));
 }
 
-/*}}}  */
 
-/*{{{  ATbool PT_getTreePosInfo(tree,path,start_line,start_col,end_line,end_col) */
 
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col)
@@ -122,8 +108,6 @@ ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start
   return ATtrue;
 }
 
-/*}}}  */
-/*{{{  static ATerm PT_makePosInfo(path, line1, int col1, line2, col2) */
 
 static ATerm PT_makePosInfo(const char *path, int line1, int col1, 
                                               int line2, int col2,
@@ -135,8 +119,6 @@ static ATerm PT_makePosInfo(const char *path, int line1, int col1,
   return (ATerm) location;
 }
 
-/*}}}  */
-/*{{{  static PT_Tree PT_setTreePosInfo(tree, path, from_line, from_col, to_line, to_col) */
 
 static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path, 
 			  int start_line, int start_col, 
@@ -153,8 +135,6 @@ static PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
   return PT_TreeFromTerm(t);
 }
 
-/*}}}  */
-/*{{{  static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset) */
 
 static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
 {
@@ -180,8 +160,6 @@ static void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols, int *offset)
   }
 }
 
-/*}}}  */
-/*{{{  static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current) */
 
 static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 {
@@ -281,8 +259,6 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   return result;
 }
 
-/*}}}  */
-/*{{{  PT_ParseTree PT_addParseTreePosInfoToDepth(path, parsetree, maxDepth)  */
 
 PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path,
 					   PT_ParseTree parseTree,
@@ -312,8 +288,6 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path,
   return parseTree;
 }
 
-/*}}}  */
-/*{{{  PT_ParseTree PT_addTreePosInfoToDepth(path, tree, maxDepth, start_l, start_c) */
 
 PT_Tree PT_addTreePosInfoToDepth(const char* path, PT_Tree tree,
 				 int maxDepth, int start_line, int start_col) 
@@ -338,8 +312,6 @@ PT_Tree PT_addTreePosInfoToDepth(const char* path, PT_Tree tree,
   return result;
 }
 
-/*}}}  */
-/*{{{  PT_Tree PT_addTreePosInfoSome(path, tree, dep, lay, lit, sl, sc) */
 
 PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree,
 			      int depth, ATbool layout, ATbool literals,
@@ -357,16 +329,12 @@ PT_Tree PT_addTreePosInfoSome(const char *path, PT_Tree tree,
   return result;
 }
 
-/*}}}  */
-/*{{{  PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree) */
 
 PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree)
 {
   return  PT_addParseTreePosInfoToDepth(path, parsetree, UNLIMITED_DEPTH);
 }
 
-/*}}}  */
-/*{{{  PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree, */
 
 PT_ParseTree PT_addParseTreePosInfoSome(const char *path,
 					PT_ParseTree parsetree,
@@ -386,9 +354,7 @@ PT_ParseTree PT_addParseTreePosInfoSome(const char *path,
   return result;
 }
 
-/*}}}  */
 
-/*{{{  static ATbool PT_containsAreaOffset(LOC_Area haystack, PT_PosInFile *needle) */
 
 static ATbool PT_containsAreaOffset(LOC_Area haystack, PT_PosInFile *needle)
 {
@@ -398,8 +364,6 @@ static ATbool PT_containsAreaOffset(LOC_Area haystack, PT_PosInFile *needle)
   return (start < needle->offset) && (needle->offset <= end);
 }
 
-/*}}}  */
-/*{{{  static ATbool PT_containsAreaLineColumn(LOC_Area haystack, PT_PosInFile *needle) */
 
 static ATbool PT_containsAreaLineColumn(LOC_Area haystack, PT_PosInFile *needle)
 {
@@ -426,9 +390,7 @@ static ATbool PT_containsAreaLineColumn(LOC_Area haystack, PT_PosInFile *needle)
   return ATfalse;
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree PT_findTreeAtPosition(PT_Tree tree, ATbool (*contain)(LOC_Area haystack, PT_PosInFile needle), PT_PosInFile pos) */
 
 PT_Tree PT_findTreeAtPosition(PT_Tree tree, ATbool (*contain)(LOC_Area area, PT_PosInFile *position), PT_PosInFile pos)
 {
@@ -462,9 +424,7 @@ PT_Tree PT_findTreeAtPosition(PT_Tree tree, ATbool (*contain)(LOC_Area area, PT_
   return tree;
 }
 
-/*}}}  */
 
-/*{{{  PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset) */
 
 PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
 {
@@ -475,8 +435,6 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
   return PT_findTreeAtPosition(tree, PT_containsAreaOffset, pos);
 }
 
-/*}}}  */
-/*{{{  PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int col) */
 
 PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int col)
 {
@@ -488,9 +446,7 @@ PT_Tree PT_findTreeAtLineColumn(PT_Tree tree, int line, int col)
   return PT_findTreeAtPosition(tree, PT_containsAreaLineColumn, pos);
 }
 
-/*}}}  */
 
-/*{{{  PT_Args PT_findArgsWithLocation(PT_Args args) */
 
 PT_Args PT_findArgsWithLocation(PT_Args args)
 {
@@ -506,4 +462,3 @@ PT_Args PT_findArgsWithLocation(PT_Args args)
   return args;
 }
 
-/*}}}  */
