@@ -35,6 +35,12 @@ AC_SUBST(SSH)
 AC_CONFIG_FILES([
    Makefile
    src/Makefile
+   src/building/Makefile
+   src/distribution/Makefile
+   src/model/Makefile
+   src/updating/Makefile
+   src/utils/Makefile
+   src/versioning/Makefile
    doc/Makefile
    script/Makefile
 ])

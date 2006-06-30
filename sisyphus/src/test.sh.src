@@ -24,6 +24,6 @@ $SICLI \
     --config svn://sjofar.sen.cwi.nl/sisyphus-configuration \
     --User daybuild \
     --Password daybuild \
-    --dbconf dbconf.yml \
+    --dbconf ../doc/dbconf.yml \
     --no-quiet \
     --verbose

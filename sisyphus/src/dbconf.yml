@@ -1,5 +1,0 @@
-adapter: postgresql
-database: sisyphusdev
-host: sjofar.sen.cwi.nl
-username: sisyphusdev
-password: tantalu5
