@@ -39,4 +39,4 @@ uninstall-hook:
 
 .PHONY: doc
 doc:
-	(cd doc && $(MAKE) $(AM_MAKE_FLAGS) doc)
+	(cd src && $(MAKE) $(AM_MAKE_FLAGS) doc)

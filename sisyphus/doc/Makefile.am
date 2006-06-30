@@ -6,7 +6,7 @@ if MAINTAINER_MODE
 .PHONY: doc
 
 doc:
-	rdoc --op html --inline --diagram ../src
+	(cd ../src && rdoc --op ../doc/html --inline --diagram )
 
 endif
 
