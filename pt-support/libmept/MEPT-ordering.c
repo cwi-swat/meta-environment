@@ -2,6 +2,10 @@
 #include <MEPT-ordering.h>
 #include <MEPT-layout.h>
 
+/** 
+ * \file
+ * Contains the implementation of a generic full ordering on parse trees.
+ */
 static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2);
 
 static ATbool moduloAmbOrdering;
@@ -198,7 +202,19 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
 }
 
 
-
+/**
+ * Compares two trees according to an arbitrary ordering on parse trees.
+ * The algorithm is equivalent to a lexicographic ordering on the prefix 
+ * representation of the tree, with an arbitrary order on the four types of
+ * tree nodes. Depending on the arguments the ordering is either partial
+ * or full.
+ *
+ * \param tree1 first tree
+ * \param tree2 second tree
+ * \param modAmbOrdering order ambiguity clusters first before comparing.
+ * \param modLayout ignore layout during the comparision (results in partial order)
+ * \returns 0 if trees are equal, -1 of tree1 < tree2, 1 if tree1 > tree2
+ */
 int PT_compareTree(PT_Tree tree1, PT_Tree tree2, ATbool modAmbOrdering, ATbool modLayout) 
 {
   moduloAmbOrdering = modAmbOrdering;

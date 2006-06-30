@@ -90,7 +90,11 @@ PT_Tree PT_annotateTreeWithLength(PT_Tree tree)
   return annotateTreeWithLength(tree, &length);
 }
 
-
+/**
+ * Adds an annotation to each sub-tree of a derivation, indicating
+ * the total amount of characters that each tree would yield. This
+ * functionality is nice in structure editors.
+ */
 PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree)
 {
   int length;

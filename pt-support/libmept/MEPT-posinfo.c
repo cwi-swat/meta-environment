@@ -1,6 +1,18 @@
 /* $Id: posInfo.c 18292 2006-04-12 02:08:09Z jurgenv $ */
 
-
+/**
+ * Position information is an important feature in software analysis,
+ * transformation and visualization. The Location data-structure standardizes
+ * this in Location.h. This file contains algorithms to annotate parse forests
+ * with the absolute locations of each node. The benefit is that each node,
+ * individually carries the information where it came from. This is useful
+ * in source code analysis, and in error reporting etc. See also MEPT-origins.h.
+ *
+ * The drawback of this distribution of location information is that it
+ * makes each node unique: effectively killing the maximal sharing of parse
+ * tree nodes. Note that it does NOT have an effect on the sharing of the
+ * (redundant) representation of productions and symbols. 
+ */
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>

@@ -1,7 +1,7 @@
 #include <MEPT.h>
 
 /** \file
- * Functions that manipulate generic ATerm annotations on parse trees
+ * Functions that manipulate generic ATerm annotations on parse trees.
  */
 
 

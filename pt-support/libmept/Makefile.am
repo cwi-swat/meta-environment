@@ -48,7 +48,6 @@ libmept_a_SOURCES = \
 		    MEPT-start.c \
 		    MEPT-symbols.c \
 		    MEPT-tree.c \
-		    MEPT-utils.c \
 		    MEPT-visitors.c \
 		    MEPT-yield.c \
 		    MEPT-yieldprod.c

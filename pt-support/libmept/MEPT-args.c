@@ -1,6 +1,17 @@
 #include <MEPT.h>
 #include <MEPT-tree.h>
 
+/**
+ * \file
+ *
+ * This file contains functionality for lists of trees
+ */
+
+/**
+ * Removes all literal trees from a list of arguments
+ * \param args list of arguments
+ * \return a new list of arguments without any literals
+ */
 PT_Args PT_removeArgsLiterals(PT_Args args)
 {
   /* This function removes any elements that are literal trees

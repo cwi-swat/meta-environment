@@ -8,6 +8,15 @@
 #include <MEPT-yield.h>
 #include <MEPT-yieldprod.h>
 
+/**
+ * \file
+ *
+ * Contains an algorithm for locating the position of ambiguity clusters
+ * in a parse forest, and reporting a summary with some details.
+ *
+ * \todo extend this algorithm with more sophisticated diagnostics and
+ * reporting functionality.
+ */
 #define RECURSION_UPPERBOUND 5000
 
 typedef struct PT_Amb_Position_Tag {

@@ -3,11 +3,11 @@
 /** 
  * \mainpage 
  *
- * pt-support contains data-structures for parse tree and parse forest
- * manipulations. 
+ * pt-support contains the definition and implementation of UPTR:
+ * A universal parse tree representation and manipulation format. 
  *
- * The parse tree format is constructed from:
- *    - An abstract representation of SDF productions.
+ * UPTR is constructed from:
+ *    - An abstract representation of productions.
  *    - Tree and forest construction nodes (with productions in each node).
  *    - ASCII character values as leafs.
  *

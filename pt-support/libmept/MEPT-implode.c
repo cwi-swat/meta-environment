@@ -1,7 +1,21 @@
-/*
-    $Id: implodePT.c 16971 2005-11-10 12:28:32Z jurgenv $  
-*/
+/* $Id: implodePT.c 16971 2005-11-10 12:28:32Z jurgenv $  */
 
+/**
+ * Parse tree implosion is a collection of homomorphisms from parse forests
+ * to arbitrary less verbose, less informative ATerm representations.
+ * The main function has a lot of boolean flags to tweak which information
+ * is thrown away, and which is kept. This implementation is originally
+ * a mirror of the tool implode-asfix from the StrategoXT toolkit.
+ *
+ * The decision to copy this implementation was to eventually remove the need 
+ * for the implode-asfix tool. This effectively shields of other systems
+ * that use imploded ATerms from evolution of the parse tree formalism.
+ *
+ * \todo: investigate whether implosion can be part of the parser algorithm
+ * by making the tree construction functionality a parameter of the parser.
+ * All the transformation/normalization phases after parsing introduce
+ * a significant overhead that seems unnecessary.
+ */
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -366,7 +380,25 @@ static ATerm implodeTerm(PT_Tree tree)
 }
 
 
-
+/**
+ * Maps a parse tree to an ATerm, leaving out arbitrary information,
+ * and replacing applications of productions by direct ATerms. The
+ * 'cons' attribute of productions is used to construct AFun names of 
+ * new AST nodes.
+ *
+ * \param tree input tree
+ * \param _interpret_cons if a production has a cons attribute, replace that node by an ATerm that has the cons name as AFun, and the children of the node as arguments of an ATermAppl.
+ * \param _remove_layout remove all layout nodes, effectively dividing the arity of all context-free nodes by two.
+ * \param _remove_literals remove all literal children, dimishing the arity of all nodes by the number of literals present.
+ * \param _remove_injections remove nodes of injection productions (chain rules), simplifying the structure of the resulting tree.
+ * \param _remove_parsetree removes the outermost parsetree constructor
+ * \param _implode_lexials replace lexical structure by a flat string representation of the character leafs of a lexical derivation.
+ * \param _keep_annotations tranplant ATerm annotations of nodes to the newly constructed nodes. This can be used to retain position information on AST nodes.
+ * \param _interpret_alt Run special code for the alternative constructor, which is sometimes necessary in order to retain the exact structure. The generic pretty printer gpp uses this for example.
+ * \param _interpret_opt Similar as interpret_alt.
+ * \param _interpret_layout_place_holder Used to separate nodes in the resulting AST that need pretty printing (dirty) from nodes that actually have not changed. This can be used by a conservative pretty printer, merging a pretty-printed form of the new nodes in an existing static piece of source code.
+ * \return An ATerm with different properties depending on the input flags.
+ */
 ATerm PT_implodeParseTree(PT_ParseTree tree,
 			  ATbool _interpret_cons ,
 			  ATbool _remove_layout ,

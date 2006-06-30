@@ -5,6 +5,13 @@
 #include <MEPT-layout.h>
 #include <MEPT-annotations.h>
 
+/**
+ * Replaces, recursively, all layout of a list of trees by a certain
+ * fixed layout node.
+ * \param args input tree list
+ * \param layout the new layout node
+ * \return a list of args with ALL layout nodes replace by #layout
+ */
 PT_Args PT_replaceArgsLayout(PT_Args args, PT_Tree layout)
 {
   PT_Args result = PT_makeArgsEmpty();
@@ -27,7 +34,13 @@ PT_Args PT_replaceArgsLayout(PT_Args args, PT_Tree layout)
   return PT_reverseArgs(result);
 }
 
-
+/**
+ * Replaces, recursively, all layout of a tree by a certain
+ * fixed layout node.
+ * \param tree input tree 
+ * \param layout the new layout node
+ * \return a list of args with ALL layout nodes replace by #layout
+ */
 PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout)
 {
   if (PT_hasTreeArgs(tree)) {
@@ -42,6 +55,13 @@ PT_Tree PT_replaceTreeLayout(PT_Tree tree, PT_Tree layout)
 }
 
 
+/**
+ * Replaces, recursively, all layout of a parse tree by a certain
+ * fixed layout node.
+ * \param tree input parse tree 
+ * \param layout the new layout node
+ * \return a list of args with ALL layout nodes replace by #layout
+ */
 PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout)
 {
   PT_Tree top = PT_getParseTreeTop(tree);
@@ -51,6 +71,11 @@ PT_ParseTree PT_replaceParseTreeLayout(PT_ParseTree tree, PT_Tree layout)
   return PT_setParseTreeTop(tree, top);
 }
 
+/**
+ * Constructs a derivation for an empty layout tree. This is possible since 
+ * there is a unique LAYOUT non-terminal in SDF. In the future we intend
+ * to parameterize this, and this function may become more complex.
+ */
 PT_Tree PT_makeTreeLayoutEmpty()
 {
   PT_Symbol layoutSymbol = PT_makeSymbolCf(
@@ -62,7 +87,11 @@ PT_Tree PT_makeTreeLayoutEmpty()
   return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
 }
 
-
+/**
+ * Constructs a derivation of a layout tree, with the proper outermost
+ * productions, effectively mimicking the effect of the SDF normalizer.
+ * \todo I doubt this currently constructs a correct tree.
+ */
 PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
 {
   PT_Symbol layoutSymbolRhs = PT_makeSymbolCf(
@@ -76,7 +105,10 @@ PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
   return PT_makeTreeAppl(optLayoutProd, args);
 }
 
-
+/**
+ * Constructs a derivation of a layout string from an input string. 
+ * \todo I doubt that this actually constructs a correct tree.
+ */
 PT_Tree PT_makeTreeLayoutFromString(const char *str)
 {
   PT_Args args = PT_makeArgsEmpty();
@@ -102,7 +134,14 @@ PT_Args PT_removeArgsAllLayoutAndAnnotations(PT_Args args)
   return PT_reverseArgs(new);
 }
 
-
+/** 
+ * Removes all layout nodes and annotations from a tree. This is an
+ * operation that normally precedes testing for equality, after removing
+ * the layout and annotations, 'structural equivalence modulo layout
+ * and annotations' may be tested by pointer equality. This is obviously
+ * NOT an efficient implementation. It needs memory allocation for one
+ * thing, and grows with the number of nodes in a tree.
+ */
 PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree)
 {
   if (PT_isTreeLayout(tree)) {

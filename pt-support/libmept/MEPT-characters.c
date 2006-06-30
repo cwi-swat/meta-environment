@@ -1,6 +1,18 @@
 #include <MEPT.h>
 #include <assert.h>
 
+/**
+ * \file
+ * Functions for dealing with the leaf level of trees: characters
+ * and character classes
+ */
+
+/** 
+ * Tests if an element is included in a character class
+ * \param character character to be searched for
+ * \param charClass an ordered character class
+ * \return ATtrue if #character is in #charClass, ATfalse otherwise
+ */
 ATbool PT_elementOfCharClass(PT_Tree character, PT_Symbol charClass)
 {
   int ch = PT_getTreeCharacter(character);
@@ -35,7 +47,12 @@ ATbool PT_elementOfCharClass(PT_Tree character, PT_Symbol charClass)
   return ATfalse;
 }
 
-/* returns true if all charactars of c1 are included in c2 */
+/**
+ * Tests if a characters class is a subset of another.
+ * \param c1 first character class
+ * \param c2 second character class
+ * \return ATtrue if all characters of #c1 are in #c2, ATfalse otherwise
+ */
 ATbool PT_subsetOfCharClass(PT_Symbol c1, PT_Symbol c2)
 {
   PT_CharRanges ranges1 = PT_getSymbolRanges(c1);

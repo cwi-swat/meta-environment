@@ -6,8 +6,21 @@
 
 #define ORIGIN ATparse("origin")
 
+/**
+ * Deals with the origin annotation. If position information is kept
+ * during transformation of a parse tree, the pos-info annotations correspond
+ * to the PREVIOUS locations of nodes. Before re-annotating a tree with
+ * new pos-info, we can store this information under the 'origin' annotation.
+ * After this, each node effectively contains a mapping from the new location
+ * to the old location, which can be used to visualize what happened during
+ * a transformation.
+ */
 
-
+/**
+ * Moves, recursively, all pos-info attribute information to origin information.
+ * \param tree input tree
+ * \return a new tree without pos-info information, and with origin information.
+ */
 PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
 {
   assert(tree != NULL);
@@ -30,7 +43,11 @@ PT_Tree PT_promotePosInfoToOrigin(PT_Tree tree)
   return tree;
 }
 
-
+/**
+ * Returns the origin location of a tree.
+ * \param tree input tree
+ * \returns origin information encoded as a standard location.
+ */
 LOC_Location PT_getTreeOrigin(PT_Tree tree)
 {
   ATerm term;
