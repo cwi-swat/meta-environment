@@ -3,6 +3,7 @@ $Id$
 Fri Jun 30 21:43:04 CEST 2006 <jurgenv@cwi.nl>
  * libmept/MEPT-utils.[ch]: reorganized this long file into a number
    of smaller files that each deal with a specific topic.
+ * libmept/*.c: added much documentation.
 
 Thu Jun 29 15:12:34 CEST 2006 <jurgenv@cwi.nl>
  * doc: removed doc directory and moved generation of Doxygen 
