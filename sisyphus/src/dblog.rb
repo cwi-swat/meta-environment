@@ -1,9 +1,11 @@
 
-require 'active_record'
+module Model
 
-class SiLog < ActiveRecord::Base
-  # fields: line, created_on 
-  belongs_to :si_host
+  require 'active_record'
+
+  class SiLog < ActiveRecord::Base
+    # fields: line, created_on 
+    belongs_to :si_host
+  end
+
 end
-
-

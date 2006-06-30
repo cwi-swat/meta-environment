@@ -24,3 +24,13 @@ CLEANFILES	= environment.conf test
 		s@__SUBVERSION__@$(SUBVERSION)@g;" < $< > $@
 
 
+if MAINTAINER_MODE
+
+.PHONY: doc
+
+doc:
+	rdoc --op ../doc/html --inline --diagram 
+
+endif
+
+

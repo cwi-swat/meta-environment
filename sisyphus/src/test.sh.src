@@ -8,8 +8,8 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root asfsdf-meta \
-    --profile batatrom \
+    --root aterm-java \
+    --profile verfrol \
     --interval 120 \
     --weekday Mon \
     --weekday Tue \

@@ -1,21 +1,25 @@
 
-module SimpleDiff
+module Utils
 
-  def simple_diff(newer, older)
-    if newer =~ /^(.*)#{older}$/m then
-      return $1
+  module SimpleDiff
+
+    def simple_diff(newer, older)
+      if newer =~ /^(.*)#{older}$/m then
+        return $1
+      end
+      raise "#{older} is not a suffix of #{newer}"
     end
-    raise "#{older} is not a suffix of #{newer}"
-  end
-  
-  def diff_diff(newer, diff)
-    if newer =~ /^(.*)#{diff}/m then
-      return $1
+    
+    def diff_diff(newer, diff)
+      if newer =~ /^(.*)#{diff}/m then
+        return $1
+      end
+      puts "Newer #{newer}"
+      puts "Diff: #{diff}"
+      #exit 0
+      raise "#{diff} is not a suffix of #{newer}"
     end
-    puts "Newer #{newer}"
-    puts "Diff: #{diff}"
-    #exit 0
-    raise "#{diff} is not a suffix of #{newer}"
+
   end
 
 end
