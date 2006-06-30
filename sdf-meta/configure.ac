@@ -3,6 +3,8 @@ AC_CONFIG_SRCDIR([configure.ac])
 GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
+AM_MAINTAINER_MODE
+
 AC_PROG_MAKE_SET([])
 
 dnl Require pgen package
