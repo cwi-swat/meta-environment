@@ -3,7 +3,8 @@ module Building
   require 'yaml'
   require 'fileutils'
   require 'logger'
-  require 'empty-shell'
+
+  require 'utils/empty-shell'
 
   class ConfigurationManager
     include FileUtils

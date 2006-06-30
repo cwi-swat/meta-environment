@@ -4,8 +4,9 @@ module Updating
   require 'optparse'
   require 'ostruct'
   require 'yaml'
-  require 'distconf'
-  require 'updater'
+
+  require 'distribution/distconf'
+  require 'updating/updater'
 
   class MyLog
     alias :info :warn

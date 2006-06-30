@@ -1,15 +1,17 @@
 
-bin_SCRIPTS	= test
+SUBDIRS = building distribution model updating utils versioning
 
-RUBY_FILES	= $(wildcard *.rb)
+bin_SCRIPTS = test
 
-pkgdata_DATA    = $(RUBY_FILES) environment.conf
+RUBY_FILES = $(wildcard *.rb)
 
-EXTRA_DIST	= $(RUBY_FILES) environment.conf.src test.sh.src
+srcdir = $(pkgdatadir)
 
-CLEANFILES	= environment.conf test
+src_DATA = $(RUBY_FILES)
 
+EXTRA_DIST = $(RUBY_FILES) test.sh.src
 
+CLEANFILES = test
 
 
 % : %.sh.src 
@@ -17,11 +19,6 @@ CLEANFILES	= environment.conf test
 
 
 
-
-%.conf : %.conf.src 
-	sed "s@__CVS__@$(CVS)@g;\
-		s@__SSH__@$(SSH)@g; \
-		s@__SUBVERSION__@$(SUBVERSION)@g;" < $< > $@
 
 
 if MAINTAINER_MODE

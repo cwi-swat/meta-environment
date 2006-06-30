@@ -1,10 +1,11 @@
 module Building
 
-  require 'sourcedist'
+  require 'distribution/sourcedist'
+  require 'utils/empty-shell'
+  require 'utils/udir'
+  require 'building/context'
+
   require 'fileutils'
-  require 'empty-shell'
-  require 'context'
-  require 'udir'
 
   class ActionResult
     attr_accessor :errors, :output, :success, :environment

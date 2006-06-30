@@ -1,14 +1,15 @@
 module BootRoll
 
-  require 'config'
-  require 'vcs'
-  require 'component'
-  require 'revision'
+  require 'building/config'
+  require 'versioning/vcs'
+  require 'versioning/component'
+  require 'verisioning/revision'
+
   require 'yaml'
   require 'ostruct'
   require 'optparse'
 
-  require 'rcfiles'
+  require 'utils/rcfiles'
 
   $bootrc_example = """
 boot_roll: 
@@ -205,14 +206,14 @@ Note: the tunnel section is optional.
       exit(1)
     end
 
-    if not File.exists?(Roll::boot_roll_rcfile) then
+    if not File.exists?(Utils::Roll::boot_roll_rcfile) then
       $stderr << "File #{boot_roll_rcfile} does not exist.\n"
       $stderr << "Create it, like this:\n"
       $stderr << $bootrc_example
       exit(1)
     end
     boot_conf = nil
-    File.open(Roll::boot_roll_rcfile) do |f|
+    File.open(Utils::Roll::boot_roll_rcfile) do |f|
       boot_conf = YAML.load(f)
     end
 
@@ -222,7 +223,7 @@ Note: the tunnel section is optional.
     end
 
 
-    rcfile = Roll::roll_rcfile()
+    rcfile = Utils::Roll::roll_rcfile()
     if File.exists?(rcfile) then
       $stderr << "File #{rcfile} exists; overwrite? [Yn] "
       answer = $stdin.gets.chomp

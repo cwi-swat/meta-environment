@@ -1,7 +1,7 @@
 module Building
 
-  require 'component'
-  require 'revision'
+  require 'versioning/component'
+  require 'versioning/revision'
 
   class CheckoutVisitor
     def initialize(target_factory, checkout_factory, builder, log)

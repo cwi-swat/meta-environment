@@ -1,6 +1,6 @@
 module Updating
 
-  require 'distconf'
+  require 'distribution/distconf'
 
   require 'yaml'
   require 'logger'

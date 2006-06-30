@@ -1,6 +1,6 @@
 module Building
 
-  require 'db'
+  require 'model/db'
 
   class Builder
     def initialize(store, log)

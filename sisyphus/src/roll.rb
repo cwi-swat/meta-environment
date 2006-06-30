@@ -17,18 +17,18 @@ module Roll
   require 'yaml'
   require 'erb'
 
-  require 'rcfiles'
+  require 'utils/rcfiles'
   require 'boot-roll'
 
 
   class CommandlineParser
     def self.read_roll_conf
-      if not File.exists?(Roll::roll_rcfile) then
-        $stderr << "File #{Roll::roll_rcfile} does not exist. Run boot-roll first.\n"
+      if not File.exists?(Utils::Roll::roll_rcfile) then
+        $stderr << "File #{Utils::Roll::roll_rcfile} does not exist. Run boot-roll first.\n"
         exit(1)
       end
       conf = nil
-      File.open(Roll::roll_rcfile) do |f|
+      File.open(Utils::Roll::roll_rcfile) do |f|
         conf = YAML.load(f)
       end
       return conf
@@ -36,7 +36,7 @@ module Roll
     
 
     def self.update_roll_conf(conf)
-      $stderr << "File #{Roll::boot_roll_rcfile} is newer than #{Roll::roll_rcfile}; run boot-roll? [Yn] "
+      $stderr << "File #{Utils::Roll::boot_roll_rcfile} is newer than #{Utils::Roll::roll_rcfile}; run boot-roll? [Yn] "
       answer = $stdin.gets.chomp
       if answer != 'n' then
         boot_roll(conf['config']['roots'])
@@ -75,7 +75,7 @@ module Roll
       if conf['locations'].include?(package)
         return package
       else
-        $stderr << "Unknown package #{package}; see #{Roll::roll_rcfile}.\n"
+        $stderr << "Unknown package #{package}; see #{Utils::Roll::roll_rcfile}.\n"
         exit(1)
       end
     end
@@ -84,8 +84,8 @@ module Roll
       if not @conf then
         @conf = read_roll_conf
       end
-      if File.exists?(Roll::boot_roll_rcfile) and
-          File.ctime(Roll::boot_roll_rcfile) > File.ctime(Roll::roll_rcfile) then
+      if File.exists?(Utils::Roll::boot_roll_rcfile) and
+          File.ctime(Utils::Roll::boot_roll_rcfile) > File.ctime(Utils::Roll::roll_rcfile) then
         @conf = update_roll_conf(@conf)
       end
       return @conf

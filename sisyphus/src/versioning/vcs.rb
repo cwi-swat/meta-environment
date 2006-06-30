@@ -3,8 +3,9 @@ module Versioning
   require 'fileutils'
   require 'tempfile'
   require 'time'
-  require 'empty-shell'
   require 'tmpdir'
+
+  require 'utils/empty-shell'
 
 
 

@@ -1,8 +1,8 @@
 module Model
 
   require 'active_record'
-  require 'diff'
-  require 'udir'
+  require 'utils/diff'
+  require 'utils/udir'
 
   class SiPlatform < ActiveRecord::Base
     # Fields:

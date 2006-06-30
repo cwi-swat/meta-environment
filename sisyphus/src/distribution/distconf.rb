@@ -1,6 +1,6 @@
 module Distribution
 
-  require 'udir'
+  require 'utils/udir'
 
   NUM_OF_SLASHES = 256
 

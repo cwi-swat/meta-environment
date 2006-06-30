@@ -1,18 +1,18 @@
 module Sisyphus
 
-  require 'vcs'
-  require 'db'
-  require 'dblog'
+  require 'model/db'
+  require 'model/dblog'
 
-  require 'revision'
-  require 'target'
-  require 'config'
-  require 'visitor'
-  require 'session'
-  require 'builder'
-  require 'ilogger'
-  require 'options'
-  require 'mailer'
+  require 'versioning/vcs'
+  require 'versioning/revision'
+  require 'building/target'
+  require 'building/config'
+  require 'building/visitor'
+  require 'building/session'
+  require 'building/builder'
+  require 'utils/ilogger'
+  require 'utils/options'
+  require 'utils/mailer'
 
   require 'tmpdir'
   require 'time'
@@ -172,7 +172,7 @@ end
 
 
 if __FILE__ == $0 then
-  options = Sisyphus::SisyphusClientCommandlineParser.parse(ARGV)
+  options = Utils::Sisyphus::SisyphusClientCommandlineParser.parse(ARGV)
   uname = `uname -n`.chomp
 
   svn_host = ''

@@ -1,6 +1,7 @@
 module Building
 
-  require 'distconf'
+  require 'distribution/distconf'
+
   require 'fileutils'
   require 'erb'
 
