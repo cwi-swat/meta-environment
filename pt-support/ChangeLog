@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jun 30 21:43:04 CEST 2006 <jurgenv@cwi.nl>
+ * libmept/MEPT-utils.[ch]: reorganized this long file into a number
+   of smaller files that each deal with a specific topic.
+
 Thu Jun 29 15:12:34 CEST 2006 <jurgenv@cwi.nl>
  * doc: removed doc directory and moved generation of Doxygen 
    documentation to toplevel. Will copy this design to all
