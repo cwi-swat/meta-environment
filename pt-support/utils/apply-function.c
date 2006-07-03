@@ -65,7 +65,7 @@ ATerm get_argument_given_nr(int cid, ATerm tree, int argNr)
 
   parseTree = PT_ParseTreeFromTerm(tree);
   args = PT_getTreeArgs(PT_getParseTreeTree(parseTree));
-  argTree = PT_getArgsArgumentAt(args, argNr);
+  argTree = PT_getArgsTreeAt(args, argNr);
   newParseTree = PT_makeValidParseTreeFromTree(argTree);
 
   return ATmake("snd-value(tree(<term>))", 
