@@ -97,35 +97,8 @@
       </listitem>
 
       <listitem>
-        <para>For each package we need:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>A global description of purpose and main use cases.</para>
-          </listitem>
-
-          <listitem>
-            <para>A manpage-like description of command-line use of that
-            package.</para>
-          </listitem>
-
-          <listitem>
-            <para>Description of the APIs provided by the package.</para>
-          </listitem>
-
-          <listitem>
-            <para>A User manual that describes user-interface and common
-            tasks.</para>
-          </listitem>
-
-          <listitem>
-            <para>An implementors manual.</para>
-          </listitem>
-
-          <listitem>
-            <para>Helpfiles.</para>
-          </listitem>
-        </itemizedlist>
+        <para>User documentation (how-to's, demonstrations, frequently asked
+        questions)</para>
       </listitem>
     </itemizedlist>
 
@@ -170,27 +143,21 @@
 
       <itemizedlist>
         <listitem>
-          <para>Downloading</para>
+          <para>Getting started: Downloading and installing SDF (on linux,
+          maxos, windows)</para>
         </listitem>
 
         <listitem>
-          <para>Installing on Linux</para>
+          <para>Getting started: Downloading and installing the ASF+SDF
+          Meta-Environment</para>
         </listitem>
 
         <listitem>
-          <para>Installing on MacOS</para>
+          <para>Starting the ASF+SDF Meta-Environment</para>
         </listitem>
 
         <listitem>
-          <para>Installing on Windows</para>
-        </listitem>
-
-        <listitem>
-          <para>Executing commands</para>
-        </listitem>
-
-        <listitem>
-          <para>Further reading</para>
+          <para>The basic two SDF commandline tools</para>
         </listitem>
       </itemizedlist>
 
@@ -205,6 +172,11 @@
         <listitem>
           <para>Short: 1-2 pages.</para>
         </listitem>
+
+        <listitem>
+          <para>Reference immediately to <emphasis>How to</emphasis>
+          documents</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -217,12 +189,11 @@
 
       <para><emphasis>How to</emphasis> articles provide tutorials for various
       aspects of the software. These articles are written with a particular
-      use-case in mind. At least the following articles should be
-      present:</para>
+      use-case in mind.</para>
 
       <itemizedlist>
         <listitem>
-          <para>How to write a grammar in SDF</para>
+          <para>Learning: How to write a grammar in SDF</para>
         </listitem>
 
         <listitem>
@@ -296,16 +267,74 @@
 
         <listitem>
           <para>Reference <emphasis>Understanding</emphasis> documents where
-          the information would become to technical</para>
+          the information would become to technical (example: explain how to
+          use SDF priorities and what for, but not how they work)</para>
         </listitem>
 
         <listitem>
-          <para>Avoid the use of screen-shots (provide a reference to a <link
-          linkend="???">Demonstration</link>)</para>
+          <para>Avoid the use of screen-shots (provide a reference to a
+          <emphasis>Demonstration</emphasis>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Medium sized (up to 10 pages, average 5)</para>
+        </listitem>
+
+        <listitem>
+          <para>Targeted at users with modest technical background</para>
         </listitem>
       </itemizedlist>
+    </section>
 
-      <para></para>
+    <section>
+      <title>Applications ...</title>
+
+      <para>Contains summaries of successful applications of the software.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Short (1-3) pages</para>
+        </listitem>
+
+        <listitem>
+          <para>Written by the users </para>
+        </listitem>
+
+        <listitem>
+          <para>References to relevant websites and scientific
+          publications</para>
+        </listitem>
+
+        <listitem>
+          <para>Mentions domain (application area)</para>
+        </listitem>
+
+        <listitem>
+          <para>Mentions software used</para>
+        </listitem>
+
+        <listitem>
+          <para>Mentions future work</para>
+        </listitem>
+
+        <listitem>
+          <para>Mentions all scientific and industrial partners</para>
+        </listitem>
+
+        <listitem>
+          <para>Mentions all people involved</para>
+        </listitem>
+
+        <listitem>
+          <para>The list itself is worth publishing first-class on the website
+          (including the names of the authors)</para>
+        </listitem>
+
+        <listitem>
+          <para>Each application is one docbook file</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
@@ -343,7 +372,7 @@
       <title>Understanding ...</title>
 
       <para>Articles in the category <emphasis>understanding</emphasis>
-      explain a fundamental concept. </para>
+      explain a fundamental concept.</para>
 
       <itemizedlist>
         <listitem>
@@ -417,6 +446,18 @@
           toolkit</para>
         </listitem>
       </itemizedlist>
+
+      <para>Typically these documents have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Written for a specialized audience</para>
+        </listitem>
+
+        <listitem>
+          <para>Provide references to scientific publications</para>
+        </listitem>
+      </itemizedlist>
     </section>
 
     <section>
@@ -458,7 +499,79 @@
           <listitem>
             <para>Testing</para>
           </listitem>
+
+          <listitem>
+            <para>Source code distribution and source code composition</para>
+          </listitem>
         </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Source code documentation</title>
+
+      <para>This is the documentation located with and inside the source
+      code:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>The documentation is organized per package</para>
+          </listitem>
+
+          <listitem>
+            <para>Every package will have a 'make doc' target</para>
+          </listitem>
+
+          <listitem>
+            <para>The documentation resides mainly <emphasis>inside</emphasis>
+            the source code (such that it can migrate with it)</para>
+          </listitem>
+
+          <listitem>
+            <para>Only one API, or one tool in one package, such that
+            documentation is easier (work in progress)</para>
+          </listitem>
+
+          <listitem>
+            <para>For C packages we use doxygen</para>
+          </listitem>
+
+          <listitem>
+            <para>Fox Java packages we use javadoc</para>
+          </listitem>
+
+          <listitem>
+            <para>For other languages we will extend doxygen with a DSL plugin
+            (e.g. ToolBus, SDF)</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>For each package we need:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A global description of purpose and main use cases (to be
+          located in the MAIN HEADER FILE of a tool/library, using the
+          <code>\mainpage</code> command of doxygen). This should reference to
+          other documentation sources such as <emphasis>How to's</emphasis>,
+          <emphasis>Understanding</emphasis> and
+          <emphasis>Demonstrations</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>A manpage-like description of command-line use of that package
+          (to be located in the directory that contains the
+          <function>main()</function> function of the tool, and written using
+          <productname>docbook</productname>)</para>
+        </listitem>
+
+        <listitem>
+          <para>Description of the APIs provided by the package (using the
+          doxygen <code>\groupdef</code> command (although we strive to have
+          only on API in one package)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
     </section>
   </section>
 
@@ -611,6 +724,10 @@
       <listitem>
         <para>Start write 'learning' and 'understanding' articles, after
         prioritizing them, reusing parts of the old documentation</para>
+      </listitem>
+
+      <listitem>
+        <para>Make packages smaller (one tool/library, one package)</para>
       </listitem>
     </itemizedlist>
   </section>
