@@ -6,8 +6,9 @@
 
   <authorblurb>
     <para><authorinitials>Paul</authorinitials> <authorinitials>Klint and
-    Jurgen Vinju</authorinitials>, <orgname>Centrum voor Wiskunde en
-    Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+    Jurgen Vinju</authorinitials>, </para>
+
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
           <imagedata fileref="./cwi.gif" />
         </imageobject>
@@ -27,7 +28,7 @@
         </listitem>
 
         <listitem>
-          <para>performing analysis and transformation existing
+          <para>performing analysis and transformation of existing
           software.</para>
         </listitem>
       </itemizedlist>See <uri>www.meta-environment.org</uri> for further
@@ -134,7 +135,7 @@
 
       <listitem>
         <para>Detailed technical explanations of the design, algorithms and
-        engineering trade-offs </para>
+        engineering trade-offs</para>
       </listitem>
 
       <listitem>
@@ -186,7 +187,7 @@
 
     <para>The general idea is that loosely coupled articles present well in a
     web site, and they can be easily ordered and collected in a more
-    book-style oriented PDF format. </para>
+    book-style oriented PDF format.</para>
 
     <para>We have contact with the following groups of people:</para>
 
@@ -221,6 +222,15 @@
 
       <listitem>
         <para>Project managers</para>
+      </listitem>
+
+      <listitem>
+        <para>Scientific colleagues working on related topics</para>
+      </listitem>
+
+      <listitem>
+        <para>Scientific colleagues working on topics that could be
+        applications of the Meta-Environment</para>
       </listitem>
     </itemizedlist>
 
@@ -336,7 +346,7 @@
       aspects of the software. These articles are written with a particular
       use-case in mind, and provide a domain specific view of the technology.
       The focus is on what you can do with it, and not on how it actually
-      works. </para>
+      works.</para>
 
       <itemizedlist>
         <listitem>
@@ -546,7 +556,7 @@
       <title>Understanding ...</title>
 
       <para>Articles in the category <emphasis>understanding</emphasis>
-      explain a fundamental concept. </para>
+      explain a fundamental concept.</para>
 
       <itemizedlist>
         <listitem>
@@ -648,6 +658,15 @@
           software</para>
         </listitem>
       </itemizedlist>
+    </section>
+
+    <section>
+      <title>Scientific Publications</title>
+
+      <para>This category is targeted at the scientific audience, it is a
+      bibliography of our scientific papers, including literal pdf or
+      reference to online resource. This can be organized as one docbook
+      bibliography file.</para>
     </section>
 
     <section>
@@ -868,6 +887,12 @@
       </listitem>
 
       <listitem>
+        <para>Split up ATerm manual into pieces: transform API to doxygen,
+        ToolBus howto for connection tools, and Understanding ATerms for the
+        rest, maybe a small 'How to program ATerms'</para>
+      </listitem>
+
+      <listitem>
         <para>Existing javadoc documentation in Java will be rendered by
         javadoc Doxygen and included in the Twiki pages.</para>
       </listitem>
@@ -879,7 +904,7 @@
 
       <listitem>
         <para>Use Doxygen to generate documentation for all non-java packages,
-        and include in the Twiki pages.</para>
+        and include in the Twiki pages. (DONE)</para>
       </listitem>
 
       <listitem>
@@ -913,8 +938,14 @@
       </listitem>
 
       <listitem>
-        <para>Start write 'learning' and 'understanding' articles, after
-        prioritizing them, reusing parts of the old documentation</para>
+        <para>Start write <emphasis>How to</emphasis> and
+        <emphasis>Understanding</emphasis> articles, after prioritizing them,
+        reusing parts of the old documentation</para>
+      </listitem>
+
+      <listitem>
+        <para>Replace Pico guided tour by interactive
+        <emphasis>Demonstration</emphasis></para>
       </listitem>
 
       <listitem>
