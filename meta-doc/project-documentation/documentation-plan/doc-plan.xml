@@ -5,8 +5,8 @@
   <title>Documentation Plan for the Meta-Environment</title>
 
   <authorblurb>
-    <para><authorinitials>Paul</authorinitials>
-    <authorinitials>Klint</authorinitials>, <orgname>Centrum voor Wiskunde en
+    <para><authorinitials>Paul</authorinitials> <authorinitials>Klint and
+    Jurgen Vinju</authorinitials>, <orgname>Centrum voor Wiskunde en
     Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
           <imagedata fileref="/ufs/paulk/GIF/cwi.gif" />
@@ -209,81 +209,128 @@
     </section>
 
     <section>
-      <title>Learning ...</title>
+      <para />
+    </section>
 
-      <para><emphasis>Learning</emphasis> articles provide tutorials for
-      various aspects of the software. These articles are written with a
-      particular use-case in mind. Typical examples:</para>
+    <section>
+      <title>How to ...</title>
+
+      <para><emphasis>How to</emphasis> articles provide tutorials for various
+      aspects of the software. These articles are written with a particular
+      use-case in mind. At least the following articles should be
+      present:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Learning how to write a grammar in SDF</para>
+          <para>How to write a grammar in SDF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to write equations and functions in ASF</para>
+          <para>How to write equations and functions in ASF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to fix a parse error</para>
+          <para>How to fix a parse error</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to fix an ambiguity</para>
+          <para>How to fix an ambiguity</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to analyse source code in ASF</para>
+          <para>How to analyse source code in ASF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to transform source code in ASF</para>
+          <para>How to transform source code in ASF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to specify language semantics in ASF</para>
+          <para>How to specify language semantics in ASF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to write ToolBus scripts</para>
+          <para>How to write ToolBus scripts</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to extend the Meta-Environment</para>
+          <para>How to extend the Meta-Environment</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to use the SDF commandline tools</para>
+          <para>How to use the SDF commandline tools</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to use the ASF commandline tools</para>
+          <para>How to use the ASF commandline tools</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to prototype a domain specific language in
-          ASF+SDF</para>
+          <para>How to prototype a domain specific language in ASF+SDF</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to use the generic debugger TIDE</para>
+          <para>How to use the generic debugger TIDE</para>
         </listitem>
 
         <listitem>
-          <para>Learning how to write parameterized ASF+SDF modules</para>
-
-          <para>The above articles may be cross-linked. Especially if there is
-          a hierarchical dependency such as: how to analyse source code, which
-          depends on how to write a grammar.</para>
+          <para>How to write parameterized ASF+SDF modules</para>
         </listitem>
       </itemizedlist>
+
+      <para>The above articles may be cross-linked. Especially if there is a
+      hierarchical dependency such as: 'How to analyse source code in ASF',
+      which references 'How to write a grammar in SDF'. We formulate a number
+      of requirements for each of these <emphasis>How to's:</emphasis></para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Start with a summary of tasks, including a work-flow
+          diagram</para>
+        </listitem>
+
+        <listitem>
+          <para>Mention the necessary knowledge and experience of the
+          user</para>
+        </listitem>
+
+        <listitem>
+          <para>Reference <emphasis>Understanding</emphasis> documents where
+          the information would become to technical</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid the use of screen-shots (provide a reference to a <link
+          linkend="???">Demonstration</link>)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Demonstrations</title>
+
+      <para>We will use interactive demonstrations (using Flash?) to
+      demonstrate GUI related features. A demonstration can:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>Provide an overview of an How to document</para>
+          </listitem>
+
+          <listitem>
+            <para>Detail typical GUI related stuff (that is likely to be hard
+            to guess, but also highly volatile)</para>
+          </listitem>
+        </itemizedlist></para>
     </section>
 
     <section>
       <title>Understanding ...</title>
 
       <para>Articles in the category <emphasis>understanding</emphasis>
-      explain a fundamental concept, such as:</para>
+      explain a fundamental concept. </para>
 
       <itemizedlist>
         <listitem>
@@ -353,7 +400,7 @@
         </listitem>
 
         <listitem>
-          <para>Understanding Sisyphys modular continuous integration
+          <para>Understanding Sisyphus modular continuous integration
           toolkit</para>
         </listitem>
       </itemizedlist>
@@ -363,6 +410,9 @@
       <title>Project managament ...</title>
 
       <para><itemizedlist>
+          <para>The project management category contains information for
+          developers</para>
+
           <listitem>
             <para>Documentation plan</para>
           </listitem>
@@ -376,7 +426,7 @@
           </listitem>
 
           <listitem>
-            <para>How to document source code </para>
+            <para>How to document source code</para>
           </listitem>
 
           <listitem>
