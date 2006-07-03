@@ -457,6 +457,34 @@
       <listitem>
         <para>Web pages with references to users</para>
       </listitem>
+
+      <listitem>
+        <para>Developer/Tester/Debugger/Documenter motivation plan
+        (prices,acknowledgements)</para>
+      </listitem>
+
+      <listitem>
+        <para>Events: ASF+SDF Users Day</para>
+      </listitem>
+
+      <listitem>
+        <para>Contact Management: extend and update meta-users-list, and
+        meta-devel-list</para>
+      </listitem>
+
+      <listitem>
+        <para>Extend ASF+SDF library with functionality for popular subjects
+        (XML, Java analysis, MDE, embedded languages)</para>
+      </listitem>
+
+      <listitem>
+        <para>Use CWI's communication department</para>
+      </listitem>
+
+      <listitem>
+        <para>Provide (optional) online user/developer registration system:
+        mailing lists, name, usage category, ...</para>
+      </listitem>
     </itemizedlist>
   </section>
 
