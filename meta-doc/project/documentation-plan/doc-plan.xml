@@ -80,7 +80,38 @@
       </listitem>
 
       <listitem>
-        <para>Web pages in our SEN1 twiki.</para>
+        <para>Web pages in our SEN1 twiki (with frequently asked
+        questions)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The bad thing about the current situation is that it does not
+    provide:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Documentation on how to perform any specific task with the
+        software</para>
+      </listitem>
+
+      <listitem>
+        <para>Technical documentation on how it works on an engineering level
+        (only on a scientific level)</para>
+      </listitem>
+
+      <listitem>
+        <para>Community support (the only help can be provided by the
+        developers, who do not always have the time)</para>
+      </listitem>
+
+      <listitem>
+        <para>Up-to-date documentation with respect to user-interface and
+        syntax issues</para>
+      </listitem>
+
+      <listitem>
+        <para>An indexable overview of all documentation on the
+        Meta-Environment</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -99,6 +130,25 @@
       <listitem>
         <para>User documentation (how-to's, demonstrations, frequently asked
         questions)</para>
+      </listitem>
+
+      <listitem>
+        <para>Detailed technical explanations of the design, algorithms and
+        engineering trade-offs </para>
+      </listitem>
+
+      <listitem>
+        <para>Interactive online demonstrations</para>
+      </listitem>
+
+      <listitem>
+        <para>Descriptions of successful applications and application
+        areas</para>
+      </listitem>
+
+      <listitem>
+        <para>Open source project management issues (coding conventions,
+        roadmaps)</para>
       </listitem>
     </itemizedlist>
 
@@ -122,7 +172,7 @@
       </listitem>
 
       <listitem>
-        <para>Access to mailing lists.</para>
+        <para>Access to (archived) mailing lists.</para>
       </listitem>
     </itemizedlist>
 
@@ -134,22 +184,112 @@
     fall a number of categoteries and follow common presentation
     styles.</para>
 
+    <para>The general idea is that loosely coupled articles present well in a
+    web site, and they can be easily ordered and collected in a more
+    book-style oriented PDF format. </para>
+
+    <para>We have contact with the following groups of people:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Users of the ASF+SDF Meta-Environment</para>
+      </listitem>
+
+      <listitem>
+        <para>ASF+SDF Meta-Environment newbies</para>
+      </listitem>
+
+      <listitem>
+        <para>Users of SDF</para>
+      </listitem>
+
+      <listitem>
+        <para>Users of the ATerm library and ApiGen</para>
+      </listitem>
+
+      <listitem>
+        <para>Bachelor and master students</para>
+      </listitem>
+
+      <listitem>
+        <para>Developers of any of the components</para>
+      </listitem>
+
+      <listitem>
+        <para>Advanced users (contributors of applications)</para>
+      </listitem>
+
+      <listitem>
+        <para>Project managers</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>To simplify this complex situation, we split these groups into two
+    main groups: <emphasis role="bold">Users</emphasis> and <emphasis
+    role="bold">Developers</emphasis>. Users are people that are not
+    interested in the source code level of the software: they deal with the
+    commandline and GUI interfaces, and nothing else. Developers are all other
+    people. Documentation can be targets at <emphasis>Users</emphasis>, or at
+    <emphasis>Developers</emphasis>, or at both at the same time. Then, we
+    classify members of each group into maturarity levels:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis role="bold">Newbie</emphasis>: has expressed the
+        intention of participating, does not know where to start, or where to
+        end. Does not have an idea of scope. Has to deal with a new
+        paradigm.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Professional</emphasis>: has adequate
+        experience, has a certain overview of the system, knows the scope and
+        limitations, can provide feedback to
+        <emphasis>Newbies</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Specialist</emphasis>: has in-depth
+        understanding of one or more particular products, can provide feedback
+        to <emphasis>Professionals</emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis role="bold">Owner</emphasis>: is the representative of
+        one or more particular products or applications, can provide feedback
+        to and stimulate <emphasis>Specialists</emphasis></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This classification helps us to think about the audience of a
+    certain document. Each document should make clear at the beginning what
+    the expected audience is.</para>
+
+    <para>The following sections describe the top-level document categories
+    that we have in mind.</para>
+
     <section>
       <title>Getting started ...</title>
 
       <para><emphasis>Getting started</emphasis> articles describe howto
-      download, install and run our software. They also provide pointers to
-      other articles and online resources. Typical issues:</para>
+      download, install and run our software. This is a separate category
+      because these articles need to be found easily online (i.e. at the top
+      of a page).The idea is of course to make the technology as accessible as
+      possible. These articles provide pointers to other articles and online
+      resources. Typical issues:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Getting started: Downloading and installing SDF (on linux,
-          maxos, windows)</para>
+          <para>Downloading and installing SDF (on linux, maxos,
+          windows)</para>
         </listitem>
 
         <listitem>
-          <para>Getting started: Downloading and installing the ASF+SDF
-          Meta-Environment</para>
+          <para>Downloading and installing the ASF+SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Downloading and installing the ToolBus</para>
         </listitem>
 
         <listitem>
@@ -157,7 +297,15 @@
         </listitem>
 
         <listitem>
-          <para>The basic two SDF commandline tools</para>
+          <para>Starting the SDF Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>The basic SDF commandline</para>
+        </listitem>
+
+        <listitem>
+          <para>The basic ASF commandline</para>
         </listitem>
       </itemizedlist>
 
@@ -174,14 +322,11 @@
         </listitem>
 
         <listitem>
-          <para>Reference immediately to <emphasis>How to</emphasis>
-          documents</para>
+          <para>Reference immediately to both <emphasis>How to</emphasis>
+          documents, <emphasis>Demonstrations</emphasis> and
+          <emphasis>Understanding</emphasis> documents</para>
         </listitem>
       </itemizedlist>
-    </section>
-
-    <section>
-      <para />
     </section>
 
     <section>
@@ -189,11 +334,13 @@
 
       <para><emphasis>How to</emphasis> articles provide tutorials for various
       aspects of the software. These articles are written with a particular
-      use-case in mind.</para>
+      use-case in mind, and provide a domain specific view of the technology.
+      The focus is on what you can do with it, and not on how it actually
+      works. </para>
 
       <itemizedlist>
         <listitem>
-          <para>Learning: How to write a grammar in SDF</para>
+          <para>How to write a grammar in SDF</para>
         </listitem>
 
         <listitem>
@@ -251,7 +398,7 @@
 
       <para>The above articles may be cross-linked. Especially if there is a
       hierarchical dependency such as: 'How to analyse source code in ASF',
-      which references 'How to write a grammar in SDF'. </para>
+      which references 'How to write a grammar in SDF'.</para>
 
       <para>We formulate a number of requirements for each of these
       <emphasis>How to's:</emphasis></para>
@@ -263,8 +410,20 @@
         </listitem>
 
         <listitem>
+          <para>Targeted at either <emphasis role="bold">Newbie
+          Users</emphasis> or <emphasis role="bold">Professional
+          Users</emphasis></para>
+        </listitem>
+
+        <listitem>
           <para>Mention the necessary knowledge and experience of the
           user</para>
+        </listitem>
+
+        <listitem>
+          <para>Written by either <emphasis role="bold">Specialist
+          Users</emphasis> or <emphasis
+          role="bold">Developers</emphasis></para>
         </listitem>
 
         <listitem>
@@ -274,8 +433,8 @@
         </listitem>
 
         <listitem>
-          <para>Avoid the use of screen-shots (provide a reference to a
-          <emphasis>Demonstration</emphasis>)</para>
+          <para>Avoid the use of screen-shots, and other volatile details
+          (provide a reference to a <emphasis>Demonstration</emphasis>)</para>
         </listitem>
 
         <listitem>
@@ -291,8 +450,9 @@
     <section>
       <title>Applications ...</title>
 
-      <para>Contains summaries of successful applications of the
-      software.</para>
+      <para>Contains summaries of successful applications of the software. We
+      will invite our main users to write a few pages on their particular
+      subject.</para>
 
       <itemizedlist>
         <listitem>
@@ -300,7 +460,12 @@
         </listitem>
 
         <listitem>
-          <para>Written by the users</para>
+          <para>Written by <emphasis role="bold">Professional Users</emphasis>
+          or <emphasis role="bold">Developers</emphasis></para>
+        </listitem>
+
+        <listitem>
+          <para>Targeted at <emphasis role="bold">Users</emphasis></para>
         </listitem>
 
         <listitem>
@@ -336,6 +501,11 @@
         <listitem>
           <para>Each application is one docbook file</para>
         </listitem>
+
+        <listitem>
+          <para>If possible, each application has a correspondong
+          <emphasis>Demonstration</emphasis></para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -343,7 +513,7 @@
       <title>Demonstrations</title>
 
       <para>We will use interactive demonstrations (using Flash?) to
-      demonstrate GUI related features. A demonstration can:</para>
+      demonstrate GUI related features. These demonstrations:</para>
 
       <para><itemizedlist>
           <listitem>
@@ -358,7 +528,7 @@
 
           <listitem>
             <para>Typical applications (demonstrations of COBOL
-            transformations, e.g. For use in presentations</para>
+            transformations, e.g. For use in presentations)</para>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -376,7 +546,7 @@
       <title>Understanding ...</title>
 
       <para>Articles in the category <emphasis>understanding</emphasis>
-      explain a fundamental concept.</para>
+      explain a fundamental concept. </para>
 
       <itemizedlist>
         <listitem>
@@ -455,7 +625,8 @@
 
       <itemizedlist>
         <listitem>
-          <para>Written for a more specialized audience</para>
+          <para>Written for a more specialized audience (both developers and
+          users)</para>
         </listitem>
 
         <listitem>
@@ -516,11 +687,12 @@
           </listitem>
 
           <listitem>
-            <para>Testing</para>
+            <para>Testing plans</para>
           </listitem>
 
           <listitem>
-            <para>Source code distribution and source code composition</para>
+            <para>Source code distribution and source code composition
+            manual</para>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -537,7 +709,9 @@
           </listitem>
 
           <listitem>
-            <para>Every package will have a 'make doc' target</para>
+            <para>Every package will have a 'make doc' target, that will
+            generate a web page with in <filename>index.html</filename> file
+            in <filename>./doc/html</filename></para>
           </listitem>
 
           <listitem>
@@ -589,8 +763,6 @@
           only on API in one package)</para>
         </listitem>
       </itemizedlist>
-
-      <para></para>
     </section>
   </section>
 
@@ -747,6 +919,14 @@
 
       <listitem>
         <para>Make packages smaller (one tool/library, one package)</para>
+      </listitem>
+
+      <listitem>
+        <para>Invite people to write <emphasis>Applications</emphasis>
+        documents: Ralph Oudejans (First result), Mark van den Brand (Risla,
+        Elan4), Albert Hofkamp (Chi), Eelco Visser (StrategoXT),
+        Pierre-Etienne Moreau (Tom), Peter Mosses (Action Notation), Jan-Friso
+        Groote/Jaco van der Pol (muCRL)</para>
       </listitem>
     </itemizedlist>
   </section>
