@@ -9,7 +9,7 @@
     Jurgen Vinju</authorinitials>, <orgname>Centrum voor Wiskunde en
     Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
-          <imagedata fileref="/ufs/paulk/GIF/cwi.gif" />
+          <imagedata fileref="./cwi.gif" />
         </imageobject>
       </mediaobject></para>
   </authorblurb>
@@ -323,7 +323,20 @@
             <para>Detail typical GUI related stuff (that is likely to be hard
             to guess, but also highly volatile)</para>
           </listitem>
+
+          <listitem>
+            <para>Typical applications (demonstrations of COBOL
+            transformations, e.g. For use in presentations</para>
+          </listitem>
         </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Courses</title>
+
+      <para>The courses section of the documentation contains slides and
+      hand-outs for use in bachelor and master level courses on
+      Meta-Environment related subjects.</para>
     </section>
 
     <section>
