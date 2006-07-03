@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <article>
-  <title>Documentation Plan for the OpenMetaEnvironment</title>
+  <title>Documentation Plan for the Meta-Environment</title>
 
   <authorblurb>
     <para><authorinitials>Paul</authorinitials>
@@ -33,14 +33,14 @@
       </itemizedlist>See <uri>www.meta-environment.org</uri> for further
     details. We are planning to organize the development of this system in the
     fashion of an open source project. First of all, we will relabel the
-    project as "OpenMetaEnvironment" <remark>(Is this the best
-    name?)</remark>. Next we need to present our documentation in a coherent
-    fashion. The purpose of the current document is twofold:</para>
+    project as "Meta-Environment" <remark>(Is this the best name?)</remark>.
+    Next we need to present our documentation in a coherent fashion. The
+    purpose of the current document is twofold:</para>
 
     <itemizedlist>
       <listitem>
         <para>to describe a general documentation policy for the
-        OpenMetaEnvironment, and</para>
+        Meta-Environment, and</para>
       </listitem>
 
       <listitem>
@@ -212,23 +212,69 @@
       <title>Learning ...</title>
 
       <para><emphasis>Learning</emphasis> articles provide tutorials for
-      various aspects of the software. Typical examples:</para>
+      various aspects of the software. These articles are written with a
+      particular use-case in mind. Typical examples:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Learning about SDF grammars</para>
+          <para>Learning how to write a grammar in SDF</para>
         </listitem>
 
         <listitem>
-          <para>Learning about ASF transformation rules</para>
+          <para>Learning how to write equations and functions in ASF</para>
         </listitem>
 
         <listitem>
-          <para>Learning about Tscript coordination scenarios.</para>
+          <para>Learning how to fix a parse error</para>
         </listitem>
 
         <listitem>
-          <para></para>
+          <para>Learning how to fix an ambiguity</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to analyse source code in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to transform source code in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to specify language semantics in ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to write ToolBus scripts</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to extend the Meta-Environment</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to use the SDF commandline tools</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to use the ASF commandline tools</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to prototype a domain specific language in
+          ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to use the generic debugger TIDE</para>
+        </listitem>
+
+        <listitem>
+          <para>Learning how to write parameterized ASF+SDF modules</para>
+
+          <para>The above articles may be cross-linked. Especially if there is
+          a hierarchical dependency such as: how to analyse source code, which
+          depends on how to write a grammar.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -241,35 +287,115 @@
 
       <itemizedlist>
         <listitem>
-          <para>The architecture of the MetaEnvironment</para>
+          <para>Understanding the architecture of the Meta-Environment</para>
         </listitem>
 
         <listitem>
-          <para>Technologies used in the MetaEnvironment</para>
+          <para>Understanding ATerm data representation and
+          manipulation</para>
         </listitem>
 
         <listitem>
-          <para>Syntax analysis.</para>
+          <para>Understanding SDF disambiguation and filtering</para>
         </listitem>
 
         <listitem>
-          <para>Term rewriting</para>
+          <para>Understanding ASF traversal functions</para>
         </listitem>
 
         <listitem>
-          <para>Relational Calculus</para>
+          <para>Understanding ASF conditional term rewriting</para>
         </listitem>
 
         <listitem>
-          <para></para>
+          <para>Understanding SDF grammar normalization</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding source code locations</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF scannerless generalized LR parsing</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ToolBus coordination middleware</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding the Relational Calculus</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding TIDE, the language independent debugging
+          interface</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding the connection between ASF and SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF parse trees</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding ATerm API generation</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding SDF API generation</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding Autobundle source code composition tool</para>
+        </listitem>
+
+        <listitem>
+          <para>Understanding Sisyphys modular continuous integration
+          toolkit</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Howto ...</title>
+      <title>Project managament ...</title>
 
-      <para></para>
+      <para><itemizedlist>
+          <listitem>
+            <para>Documentation plan</para>
+          </listitem>
+
+          <listitem>
+            <para>Communication plan</para>
+          </listitem>
+
+          <listitem>
+            <para>Software process standard</para>
+          </listitem>
+
+          <listitem>
+            <para>How to document source code </para>
+          </listitem>
+
+          <listitem>
+            <para>How to use version control</para>
+          </listitem>
+
+          <listitem>
+            <para>Coding standards</para>
+          </listitem>
+
+          <listitem>
+            <para>Roadmaps (per main topic such as SDF, ASF, ToolBus, ATerms,
+            Sisyphus)</para>
+          </listitem>
+
+          <listitem>
+            <para>Testing</para>
+          </listitem>
+        </itemizedlist></para>
     </section>
   </section>
 
@@ -376,12 +502,17 @@
 
       <listitem>
         <para>Existing javadoc documentation in Java will be rendered by
-        Doxygen and included in the Twiki pages.</para>
+        javadoc Doxygen and included in the Twiki pages.</para>
       </listitem>
 
       <listitem>
         <para>For all non-java documentation, we will start to write Doxygen
-        comments.</para>
+        comment</para>
+      </listitem>
+
+      <listitem>
+        <para>Use Doxygen to generate documentation for all non-java packages,
+        and include in the Twiki pages.</para>
       </listitem>
 
       <listitem>
@@ -395,13 +526,28 @@
       </listitem>
 
       <listitem>
+        <para>Write manpages in docbook format (in the directory that contains
+        the main() of the tool).</para>
+      </listitem>
+
+      <listitem>
         <para>More global documents will be included in the meta-doc
         package.</para>
       </listitem>
 
       <listitem>
+        <para>Publish meta-doc documentation in the Twiki pages
+        (continuously)</para>
+      </listitem>
+
+      <listitem>
         <para>Extend meta-studio with a java help browser. See http <ulink
         url="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</ulink></para>
+      </listitem>
+
+      <listitem>
+        <para>Start write 'learning' and 'understanding' articles, after
+        prioritizing them, reusing parts of the old documentation</para>
       </listitem>
     </itemizedlist>
   </section>
