@@ -1,5 +1,12 @@
 
 
+Mon Jul  3 08:54:52 CEST 2006 <jurgenv@cwi.nl>
+ * added: user-documentation, developer-documentation and
+   project-documentation to store new docbook based documentation
+   files in. Each docbook file will have its own directory, under one
+   of the above directories.
+ * moved: all old documentation to 'to-be-converted'.
+
 Sat Mar  4 09:50:06 CET 2006 <jurgenv@cwi.nl
  * user-manual: Worked on overview of user-manual for version 2.0 of the
    ASF+SDF Meta-Environment

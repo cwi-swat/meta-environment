@@ -1,4 +1,4 @@
-SUBDIRS = guided-tour user-manual
+SUBDIRS = 
 
 EXTRA_DIST = make-rules package
 
