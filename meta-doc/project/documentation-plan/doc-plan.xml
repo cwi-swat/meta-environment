@@ -251,8 +251,10 @@
 
       <para>The above articles may be cross-linked. Especially if there is a
       hierarchical dependency such as: 'How to analyse source code in ASF',
-      which references 'How to write a grammar in SDF'. We formulate a number
-      of requirements for each of these <emphasis>How to's:</emphasis></para>
+      which references 'How to write a grammar in SDF'. </para>
+
+      <para>We formulate a number of requirements for each of these
+      <emphasis>How to's:</emphasis></para>
 
       <itemizedlist>
         <listitem>
@@ -289,8 +291,8 @@
     <section>
       <title>Applications ...</title>
 
-      <para>Contains summaries of successful applications of the software.
-      </para>
+      <para>Contains summaries of successful applications of the
+      software.</para>
 
       <itemizedlist>
         <listitem>
@@ -298,7 +300,7 @@
         </listitem>
 
         <listitem>
-          <para>Written by the users </para>
+          <para>Written by the users</para>
         </listitem>
 
         <listitem>
@@ -345,7 +347,8 @@
 
       <para><itemizedlist>
           <listitem>
-            <para>Provide an overview of an How to document</para>
+            <para>Provide an overview of an <emphasis>How to</emphasis>
+            document</para>
           </listitem>
 
           <listitem>
@@ -365,7 +368,8 @@
 
       <para>The courses section of the documentation contains slides and
       hand-outs for use in bachelor and master level courses on
-      Meta-Environment related subjects.</para>
+      Meta-Environment related subjects. Since layout is very important for
+      slides, we allow powerpoint, open-office and latex documents.</para>
     </section>
 
     <section>
@@ -451,11 +455,26 @@
 
       <itemizedlist>
         <listitem>
-          <para>Written for a specialized audience</para>
+          <para>Written for a more specialized audience</para>
         </listitem>
 
         <listitem>
           <para>Provide references to scientific publications</para>
+        </listitem>
+
+        <listitem>
+          <para>Arbitrary length (average 10-15 pages), but shorter is
+          better!</para>
+        </listitem>
+
+        <listitem>
+          <para>Starts with explaining it's position relative to the rest of
+          the software</para>
+        </listitem>
+
+        <listitem>
+          <para>Provides plenty links to related work and related
+          software</para>
         </listitem>
       </itemizedlist>
     </section>
