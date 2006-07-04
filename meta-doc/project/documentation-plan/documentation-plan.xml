@@ -6,7 +6,7 @@
 
   <authorblurb>
     <para><authorinitials>Paul</authorinitials> <authorinitials>Klint and
-    Jurgen Vinju</authorinitials>, </para>
+    Jurgen Vinju</authorinitials>,</para>
 
     <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
@@ -181,56 +181,56 @@
     task-oriented, technology-oriented, user-oriented, developer-oriented,
     etc. Another critical decision is to use large, integrated, manuals or
     more loosely coupled information. In the following subsections a more
-    loosely coupled is proposed based on <emphasis>articles</emphasis> that
-    fall a number of categoteries and follow common presentation
-    styles.</para>
+    loosely coupled organization is proposed based on
+    <emphasis>articles</emphasis> that fall in a number of categories and
+    follow common presentation styles.</para>
 
     <para>The general idea is that loosely coupled articles present well in a
     web site, and they can be easily ordered and collected in a more
     book-style oriented PDF format.</para>
 
-    <para>We have contact with the following groups of people:</para>
+    <para>Our audience consists of the following groups of people:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Users of the ASF+SDF Meta-Environment</para>
+        <para>Users of the ASF+SDF Meta-Environment.</para>
       </listitem>
 
       <listitem>
-        <para>ASF+SDF Meta-Environment newbies</para>
+        <para>ASF+SDF Meta-Environment newbies.</para>
       </listitem>
 
       <listitem>
-        <para>Users of SDF</para>
+        <para>Users of SDF.</para>
       </listitem>
 
       <listitem>
-        <para>Users of the ATerm library and ApiGen</para>
+        <para>Users of the ATerm library and ApiGen.</para>
       </listitem>
 
       <listitem>
-        <para>Bachelor and master students</para>
+        <para>Bachelor and master students.</para>
       </listitem>
 
       <listitem>
-        <para>Developers of any of the components</para>
+        <para>Developers of any of the components.</para>
       </listitem>
 
       <listitem>
-        <para>Advanced users (contributors of applications)</para>
+        <para>Advanced users (contributors of applications).</para>
       </listitem>
 
       <listitem>
-        <para>Project managers</para>
+        <para>Project managers.</para>
       </listitem>
 
       <listitem>
-        <para>Scientific colleagues working on related topics</para>
+        <para>Scientific colleagues working on related topics.</para>
       </listitem>
 
       <listitem>
         <para>Scientific colleagues working on topics that could be
-        applications of the Meta-Environment</para>
+        applications of the Meta-Environment.</para>
       </listitem>
     </itemizedlist>
 
@@ -239,9 +239,9 @@
     role="bold">Developers</emphasis>. Users are people that are not
     interested in the source code level of the software: they deal with the
     commandline and GUI interfaces, and nothing else. Developers are all other
-    people. Documentation can be targets at <emphasis>Users</emphasis>, or at
+    people. Documentation can be targeted at <emphasis>Users</emphasis>, or at
     <emphasis>Developers</emphasis>, or at both at the same time. Then, we
-    classify members of each group into maturarity levels:</para>
+    classify members of each group into maturity levels:</para>
 
     <itemizedlist>
       <listitem>
@@ -255,19 +255,19 @@
         <para><emphasis role="bold">Professional</emphasis>: has adequate
         experience, has a certain overview of the system, knows the scope and
         limitations, can provide feedback to
-        <emphasis>Newbies</emphasis></para>
+        <emphasis>Newbies.</emphasis></para>
       </listitem>
 
       <listitem>
         <para><emphasis role="bold">Specialist</emphasis>: has in-depth
         understanding of one or more particular products, can provide feedback
-        to <emphasis>Professionals</emphasis></para>
+        to <emphasis>Professionals.</emphasis></para>
       </listitem>
 
       <listitem>
         <para><emphasis role="bold">Owner</emphasis>: is the representative of
         one or more particular products or applications, can provide feedback
-        to and stimulate <emphasis>Specialists</emphasis></para>
+        to and stimulate <emphasis>Specialists.</emphasis></para>
       </listitem>
     </itemizedlist>
 
@@ -290,7 +290,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Downloading and installing SDF (on linux, maxos,
+          <para>Downloading and installing SDF (on linux, macos,
           windows)</para>
         </listitem>
 
