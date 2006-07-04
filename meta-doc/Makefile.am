@@ -15,3 +15,8 @@ ${PACKAGE}-${VERSION}.pkg: package
 ${PACKAGE}-config: Makefile
 	(echo "#! /bin/sh" ; \
 	 echo "echo \"${prefix}\"" ) > $@ && chmod +x $@
+
+doc: dummy
+	./website.sh 
+
+dummy:

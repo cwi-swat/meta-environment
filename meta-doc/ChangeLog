@@ -1,5 +1,9 @@
 
 
+Tue Jul  4 09:11:09 CEST 2006 <jurgenv@cwi.nl>
+ * website.sh: generates a website containing all docbooks.
+ * Makefile.am: doc target calls website.sh
+
 Mon Jul  3 08:54:52 CEST 2006 <jurgenv@cwi.nl>
  * added: user-documentation, developer-documentation and
    project-documentation to store new docbook based documentation
