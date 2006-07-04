@@ -1,6 +1,6 @@
 SUBDIRS = 
 
-EXTRA_DIST = make-rules package
+EXTRA_DIST = make-rules package website.sh
 
 ACLOCAL_FLAGS = -I .
 
