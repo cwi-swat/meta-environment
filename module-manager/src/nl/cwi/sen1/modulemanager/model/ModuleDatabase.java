@@ -17,13 +17,13 @@ public class ModuleDatabase {
 
     protected Map<ModuleId, Module> modules;
 
-    protected Map<ModuleId, Set<ModuleId>> children;
+    protected Map<ModuleId, Set<ModuleId>> descendants;
 
     private InheritedAttributeMap inheritedAttributes;
 
-    private Map<ModuleId, Set<ModuleId>> parents;
+    private Map<ModuleId, Set<ModuleId>> ascendants;
 
-    private Map<SCC, Set<SCC>> sccGraph;
+    private SCCGraph sccGraph;
 
     private Map<ModuleId, SCC> moduleSCCMap = new HashMap<ModuleId, SCC>();
 
@@ -32,9 +32,9 @@ public class ModuleDatabase {
     public ModuleDatabase(AttributeSetListener l) {
         moduleCount = 0;
         modules = new HashMap<ModuleId, Module>();
-        children = new HashMap<ModuleId, Set<ModuleId>>();
-        parents = new HashMap<ModuleId, Set<ModuleId>>();
-        sccGraph = new HashMap<SCC, Set<SCC>>();
+        descendants = new HashMap<ModuleId, Set<ModuleId>>();
+        ascendants = new HashMap<ModuleId, Set<ModuleId>>();
+        sccGraph = new SCCGraph();
         listener = l;
         inheritedAttributes = new InheritedAttributeMap();
     }
@@ -45,23 +45,22 @@ public class ModuleDatabase {
 
     public void addModule(Module module, ModuleId moduleId) {
         modules.put(moduleId, module);
-        children.put(moduleId, new HashSet<ModuleId>());
-        parents.put(moduleId, new HashSet<ModuleId>());
+        descendants.put(moduleId, new HashSet<ModuleId>());
+        ascendants.put(moduleId, new HashSet<ModuleId>());
         computeSCCGraph();
     }
 
     public void removeModule(ModuleId moduleId) {
         deleteAllDependencies(moduleId);
         modules.remove(moduleId);
-        children.remove(moduleId);
-        parents.remove(moduleId);
+        descendants.remove(moduleId);
+        ascendants.remove(moduleId);
     }
 
     public void registerInheritedAttribute(ATerm namespace, ATerm key,
             ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
         inheritedAttributes.put(namespace, key, oldValue, childValue, newValue,
                 type);
-        // TODO: needs only to be done for bottom modules??
         triggerAllAttributeOnAllModules();
     }
 
@@ -72,7 +71,7 @@ public class ModuleDatabase {
     }
 
     private void triggerAllAttributeOnAllModules() {
-        for (Iterator<SCC> iter = sccGraph.keySet().iterator(); iter.hasNext();) {
+        for (Iterator<SCC> iter = sccGraph.keyIterator(); iter.hasNext();) {
             triggerAllInheritedAttributes(iter.next());
         }
     }
@@ -106,19 +105,11 @@ public class ModuleDatabase {
 
         Set<InheritedAttribute> attrs = inheritedAttributes.getByChildValue(
                 namespace, key, value);
+
         if (!attrs.isEmpty()) {
             setAttribute(scc, namespace, key, value);
         } else {
-            ATerm oldValue = module.getAttribute(namespace, key);
-
-            if (oldValue == null || !oldValue.isEqual(value)) {
-                module = modules.get(moduleId);
-                oldValue = module.getAttribute(namespace, key);
-                module.setAttribute(namespace, key, value);
-
-                fireAttributeSetListener(moduleId, namespace, key, oldValue,
-                        value);
-            }
+            updateAttribute(moduleId, namespace, key, value);
 
             // maybe this module now matches the preconditions for an
             // inherited attribute
@@ -130,17 +121,7 @@ public class ModuleDatabase {
         for (Iterator<ModuleId> iter = scc.getModules().iterator(); iter
                 .hasNext();) {
             ModuleId moduleId = iter.next();
-            Module module = modules.get(moduleId);
-            ATerm oldValue = module.getAttribute(namespace, key);
-
-            if (oldValue == null || !oldValue.isEqual(value)) {
-                module = modules.get(moduleId);
-                oldValue = module.getAttribute(namespace, key);
-                module.setAttribute(namespace, key, value);
-
-                fireAttributeSetListener(moduleId, namespace, key, oldValue,
-                        value);
-            }
+            updateAttribute(moduleId, namespace, key, value);
         }
         Set<InheritedAttribute> attrs = inheritedAttributes.getByChildValue(
                 namespace, key, value);
@@ -148,9 +129,20 @@ public class ModuleDatabase {
             propagateToParents(scc, attrs);
         }
 
-        // maybe this module now matches the preconditions for an
+        // maybe this scc now matches the preconditions for an
         // inherited attribute
         triggerAllInheritedAttributes(scc);
+    }
+
+    private void updateAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
+            ATerm value) {
+        Module module = modules.get(moduleId);
+        ATerm oldValue = module.getAttribute(namespace, key);
+
+        if (oldValue == null || !oldValue.isEqual(value)) {
+            module.setAttribute(namespace, key, value);
+            fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
+        }
     }
 
     private void fireAttributeSetListener(ModuleId id, ATerm namespace,
@@ -159,7 +151,7 @@ public class ModuleDatabase {
     }
 
     private void propagateToParents(SCC scc, Set<InheritedAttribute> attrs) {
-        for (Iterator<SCC> iter = sccGraph.keySet().iterator(); iter.hasNext();) {
+        for (Iterator<SCC> iter = sccGraph.keyIterator(); iter.hasNext();) {
             SCC parent = iter.next();
             Set<SCC> children = sccGraph.get(parent);
             if (children.contains(scc)) {
@@ -322,17 +314,17 @@ public class ModuleDatabase {
             return;
         }
 
-        dependencies = children.get(moduleFromId);
+        dependencies = descendants.get(moduleFromId);
         dependencies.add(moduleToId);
 
-        dependencies = parents.get(moduleToId);
+        dependencies = ascendants.get(moduleToId);
         dependencies.add(moduleFromId);
 
         computeSCCGraph();
     }
 
     public Set<ModuleId> getChildren(ModuleId moduleId) {
-        return children.get(moduleId);
+        return descendants.get(moduleId);
     }
 
     public Set<ModuleId> getAllChildren(ModuleId moduleId) {
@@ -354,7 +346,7 @@ public class ModuleDatabase {
     }
 
     public Set<ModuleId> getParents(ModuleId moduleId) {
-        return parents.get(moduleId);
+        return ascendants.get(moduleId);
     }
 
     public Set<ModuleId> getAllParents(ModuleId moduleId) {
@@ -416,10 +408,10 @@ public class ModuleDatabase {
             return;
         }
 
-        deps = (LinkedList) children.get(moduleFromId);
+        deps = (LinkedList) descendants.get(moduleFromId);
         deps.remove(moduleToId);
 
-        deps = (LinkedList) parents.get(moduleToId);
+        deps = (LinkedList) ascendants.get(moduleToId);
         deps.remove(moduleFromId);
 
         computeSCCGraph();
@@ -445,7 +437,7 @@ public class ModuleDatabase {
             }
         }
 
-        dependencies = children.get(moduleId);
+        dependencies = descendants.get(moduleId);
         dependencies.clear();
 
         computeSCCGraph();
@@ -466,7 +458,7 @@ public class ModuleDatabase {
     }
 
     public Map<ModuleId, Set<ModuleId>> getDependencies() {
-        return children;
+        return descendants;
     }
 
     /*
@@ -512,18 +504,6 @@ public class ModuleDatabase {
             }
 
             sccGraph.put(moduleSCCMap.get(id), sccChildren);
-        }
-    }
-
-    private void printSCCGraph() {
-        for (Iterator<SCC> iter = sccGraph.keySet().iterator(); iter.hasNext();) {
-            SCC scc = iter.next();
-            System.err.println("Root: " + scc.getModules());
-            Set<SCC> sccs = sccGraph.get(scc);
-            for (Iterator<SCC> childScc = sccs.iterator(); childScc.hasNext();) {
-                SCC child = childScc.next();
-                System.err.println("+- " + child.getModules());
-            }
         }
     }
 

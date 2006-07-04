@@ -73,12 +73,12 @@ public class ModuleGraph extends ModuleDatabase {
     }
 
     private void setEdges() {
-        for (Iterator<ModuleId> iter = children.keySet().iterator(); iter
+        for (Iterator<ModuleId> iter = descendants.keySet().iterator(); iter
                 .hasNext();) {
             ModuleId moduleId = iter.next();
             NodeId nodeFromId = factory.makeNodeId_Default(moduleId.toTerm());
 
-            Set<ModuleId> dependingModules = children.get(moduleId);
+            Set<ModuleId> dependingModules = descendants.get(moduleId);
 
             for (Iterator<ModuleId> depsIter = dependingModules.iterator(); depsIter
                     .hasNext();) {
