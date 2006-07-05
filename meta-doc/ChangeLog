@@ -1,5 +1,11 @@
 
 
+Wed Jul  5 12:56:17 CEST 2006 <jurgenv@cwi.nl>
+ * applications: added directory to contain testimonials and
+   other reports on applications of Meta-Environment software.
+ * sandbox/applications/database-reverse-engineering.xml: added
+   copy of Anthony Cleve's email report.
+
 Wed Jul  5 10:04:57 CEST 2006 <jurgenv@cwi.nl>
  * sandbox: added directory for documents that are in progress and
    need to be kept off-line for now.
