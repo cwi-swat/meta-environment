@@ -1,5 +1,9 @@
 
 
+Wed Jul  5 10:04:57 CEST 2006 <jurgenv@cwi.nl>
+ * sandbox: added directory for documents that are in progress and
+   need to be kept off-line for now.
+
 Tue Jul  4 09:11:09 CEST 2006 <jurgenv@cwi.nl>
  * website.sh: generates a website containing all docbooks.
  * Makefile.am: doc target calls website.sh

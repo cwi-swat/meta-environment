@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<article>
+  <title>Rascal Requirements and Design Document</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Rascal is the working name for a new version of the Algebraic
+    Specification Formalism, which will be extended with an efficient built-in
+    set and relation data-type. This basically means that we include most
+    features of the RScript language into ASF. The goals of this language
+    are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Easy syntax-directed analysis of programming languages</para>
+      </listitem>
+
+      <listitem>
+        <para>Easy fact extraction</para>
+      </listitem>
+
+      <listitem>
+        <para>Easy connection of fact extraction with fact manipulation and
+        reasoning</para>
+      </listitem>
+
+      <listitem>
+        <para>Easy feedback of analysis results in source code
+        transformation</para>
+      </listitem>
+
+      <listitem>
+        <para>Efficient</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The above goals are all but one already met in the current design of
+    ASF, and the current design of RScript. What is missing is the
+    <emphasis>connection.</emphasis> Alas, any bridge between the two
+    languages is both complex to manage and an efficiency bottleneck. This
+    work is an attempt to consolidate this engineering trade-off.</para>
+  </section>
+
+  <section>
+    <title>Requirements</title>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>R1: Runtime speed: large-scale analysis of facts is expensive
+          (frequently high-polynominal and exponential algorithms). A factor
+          speedup can mean the difference between a feasible and an unfeasible
+          case.</para>
+        </listitem>
+
+        <listitem>
+          <para>R2: Backward compatible with ASF</para>
+        </listitem>
+
+        <listitem>
+          <para>R3: Compilation speed: parsetable generation is a major
+          bottleneck in current ASF. This needs to be fixed.</para>
+        </listitem>
+
+        <listitem>
+          <para>R4: Concrete syntax: for readability</para>
+        </listitem>
+
+        <listitem>
+          <para>R5: functional (no side-effects)</para>
+        </listitem>
+
+        <listitem>
+          <para>R6: file I/O (contradicts R5)</para>
+        </listitem>
+
+        <listitem>
+          <para>R7: Easily accessible fact storage (similar to a heap, but
+          remember R5 and the details of backtracking)</para>
+        </listitem>
+
+        <listitem>
+          <para>R8: List matching (because of R2, influences R7)</para>
+        </listitem>
+
+        <listitem>
+          <para>R9: Nesting of data-structures: relations can be nested to
+          model nested features of programming languages (such as
+          scoping)</para>
+        </listitem>
+
+        <listitem>
+          <para>R10: Syntax trees can be elements of the builtin
+          data-structures (maybe syntax trees ARE the only leafs in these
+          structures??)</para>
+        </listitem>
+      </itemizedlist></para>
+  </section>
+
+  <section>
+    <title>Mapping features to datatypes</title>
+
+    <para>Emphasized cells indicate a new datatype/feature combination that
+    needs to be thought out.</para>
+
+    <informaltable border="1">
+      <tr>
+        <th>Which features work on which datatypes?</th>
+
+        <th>Context-free syntax trees</th>
+
+        <th>Context-free syntax lists</th>
+
+        <th>Lexical syntax trees</th>
+
+        <th>Lexical syntax lists</th>
+
+        <th>Lists</th>
+
+        <th>Sets</th>
+
+        <th>Relations</th>
+
+        <th>Tuples</th>
+      </tr>
+
+      <tr>
+        <th>Pattern matching</th>
+
+        <td>Yes, Concrete syntax</td>
+
+        <td>Yes, Concrete syntax, List matching</td>
+
+        <td>Yes, refix syntax</td>
+
+        <td>Yes, Prefix syntax, List matching</td>
+
+        <td><emphasis>Yes, list matching</emphasis></td>
+
+        <td><emphasis>Yes, set matching/AC matching?</emphasis></td>
+
+        <td><emphasis>Yes, relation matching/AC matching?</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+      </tr>
+
+      <tr>
+        <th>Pattern construction</th>
+
+        <td>Yes, Concrete syntax</td>
+
+        <td>Yes, Prefix syntax</td>
+
+        <td>Yes, Prefix syntax</td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+      </tr>
+
+      <tr>
+        <th>Generator/Comprehension</th>
+
+        <td>Could be, how? What is the connection with traversal functions,
+        traversal orders?</td>
+
+        <td><emphasis>Separated list comprehesion</emphasis></td>
+
+        <td>See context-free syntax trees...</td>
+
+        <td><emphasis>Lexical list comprehension</emphasis></td>
+
+        <td>List comprehesion</td>
+
+        <td>Set comprehensions</td>
+
+        <td>Set comprehension</td>
+
+        <td><emphasis role="bold">No</emphasis></td>
+      </tr>
+
+      <tr>
+        <th>Complete Functions</th>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+      </tr>
+
+      <tr>
+        <th>Equations</th>
+
+        <td>Yes, backward compatible</td>
+
+        <td>Yes, backward compatible</td>
+
+        <td>Yes, backward compatible</td>
+
+        <td>Yes, backward compatible</td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+      </tr>
+
+      <tr>
+        <th>Polymorphism</th>
+
+        <td><emphasis role="bold">No</emphasis></td>
+
+        <td><emphasis role="bold">No</emphasis></td>
+
+        <td><emphasis role="bold">No</emphasis></td>
+
+        <td><emphasis role="bold">No</emphasis></td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+      </tr>
+
+      <tr>
+        <th>Serialization</th>
+
+        <td>AsFix</td>
+
+        <td>AsFix</td>
+
+        <td>AsFix</td>
+
+        <td>AsFix</td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td>Yes</td>
+      </tr>
+
+      <tr>
+        <th>Traversal Functions</th>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+
+        <td>Yes</td>
+      </tr>
+
+      <tr>
+        <th>Subtyping</th>
+
+        <td>No</td>
+
+        <td>No</td>
+
+        <td>No, except character class inclusion</td>
+
+        <td>No</td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+
+        <td><emphasis>Yes</emphasis></td>
+      </tr>
+    </informaltable>
+  </section>
+
+  <section>
+    <title>Questions</title>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Q1: What about the overlap between sets of tuples and
+          relations? We should build relations in for efficiency. Is there
+          going to be a type equivalence. Are tuples going to be first class
+          datatypes?</para>
+        </listitem>
+
+        <listitem>
+          <para>Q2: Do we need to introduce the basic datatypes Integer and
+          Boolean because sets and relations have typical builtin functions
+          for that? Or can we put these things in a library? How about
+          Locations? We need to introduce as feq builtin syntax as possible to
+          prevent ambiguity and confusion... Can we offer efficient relations
+          without introducing a dependency on a fixed Integer/Boolean
+          syntax??? It would be SIMPLE if only syntax trees are the leafs of
+          nested lists/sets/relations/tuples.</para>
+        </listitem>
+
+        <listitem>
+          <para>Q3: Concrete syntax will introduce problems with the new fixed
+          syntax builtin datatypes (prefix functions, lists, sets, relations,
+          tuples). Efficiently make a type-checker that can resolve most of
+          the ambiguities.</para>
+        </listitem>
+
+        <listitem>
+          <para>Q4: We should allow (optionally) quoting/escaping concrete
+          syntax parts. If Q3 results in error or undecidable disambiguation,
+          the user must be able to clarify precisely.</para>
+        </listitem>
+      </itemizedlist> </para>
+
+    <para></para>
+  </section>
+</article>
