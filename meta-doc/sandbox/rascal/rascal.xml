@@ -93,8 +93,12 @@
 
         <listitem>
           <para>R10: Syntax trees can be elements of the builtin
-          data-structures (maybe syntax trees ARE the only leafs in these
-          structures??)</para>
+          data-structures (but not vice versa)</para>
+        </listitem>
+
+        <listitem>
+          <para>R11: Features are orthogonal: try to keep the number of ways
+          to write down a program minimal</para>
         </listitem>
       </itemizedlist></para>
   </section>
@@ -133,15 +137,15 @@
 
         <td>Yes, Concrete syntax, List matching</td>
 
-        <td>Yes, refix syntax</td>
+        <td>Yes, prefix syntax</td>
 
         <td>Yes, Prefix syntax, List matching</td>
 
-        <td><emphasis>Yes, list matching</emphasis></td>
+        <td><emphasis>Yes, only head/tail matching</emphasis></td>
 
-        <td><emphasis>Yes, set matching/AC matching?</emphasis></td>
+        <td><emphasis>Yes, head/tail matching</emphasis></td>
 
-        <td><emphasis>Yes, relation matching/AC matching?</emphasis></td>
+        <td><emphasis>Yes, head/tail matching</emphasis></td>
 
         <td><emphasis>Yes</emphasis></td>
       </tr>
@@ -157,11 +161,11 @@
 
         <td><emphasis>Yes</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Yes, only head/tail</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Yes, only head/tail</emphasis></td>
 
-        <td><emphasis>Yes</emphasis></td>
+        <td><emphasis>Yes, head/tail</emphasis></td>
 
         <td><emphasis>Yes</emphasis></td>
       </tr>
@@ -169,14 +173,13 @@
       <tr>
         <th>Generator/Comprehension</th>
 
-        <td>Could be, how? What is the connection with traversal functions,
-        traversal orders?</td>
+        <td>NO</td>
 
-        <td><emphasis>Separated list comprehesion</emphasis></td>
+        <td><emphasis>NO</emphasis></td>
 
-        <td>See context-free syntax trees...</td>
+        <td>NO</td>
 
-        <td><emphasis>Lexical list comprehension</emphasis></td>
+        <td><emphasis>NO</emphasis></td>
 
         <td>List comprehesion</td>
 
@@ -355,90 +358,365 @@
     features.</para>
 
     <section>
-      <title>Deep tree matching instead of tree traversal </title>
+      <title>Deep tree matching instead of tree traversal</title>
 
-      <para><code>module Tree-syntax imports Naturals exports TREE
-      context-free syntax NAT -&gt; TREE f(TREE,TREE) -&gt; TREE g(TREE,TREE)
-      -&gt; TREE h(TREE,TREE) -&gt; TREE i(TREE,TREE) -&gt; TREE module
-      Examples imports Tree-syntax %% Ex1: Count leaves in a TREE function
-      cnt(TREE) -&gt; INT [] cnt(T) = #{N | INT N : T} %% Idee: INT N : T
-      genereert alle INT leaves uit de boom %% # is de built-in length-of
-      operator %% Ex2: Sum all leaves in a TREE function sum_tree(TREE) -&gt;
-      INT [] sum_tree(T) = sum({N | INT N : T}) %% NB sum is een built-in die
-      de elementen van een set sommeert. %% Ex3: Increment all leaves in a
-      TREE function inc(TREE) -&gt; TREE [] inc(T) = INT N : T =&gt; N+1 %%
-      Idee: INT N : T genereert alle INT leaves uit de boom %% INT N : T =&gt;
-      N+1 vervangt elke N door N+1 %% De expressie als geheel levert de
-      gemodificeerde term op. %% Dit is een super compacte notatie voor
-      transformers! %% Ex4: full replacement of g by i function frepl(TREE)
-      -&gt; TREE [] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2)) %%
-      Ex5: deep replacement of g by i function drepl(TREE) -&gt; TREE []
-      drepl(T) = g(T1, T2) : T =&gt; i(T1, T2) when T1 == drepl(T1), T2 ==
-      drepl(T2) %% Ex6: shallow replacement of g by i function srepl(TREE)
-      -&gt; TREE [] srepl(T) = g(T1, T2) : T =&gt; i(T1, T2)</code></para>
+      <para><programlisting>module Tree-syntax
+
+imports Naturals
+
+exports TREE
+
+  context-free syntax
+    NAT        -&gt; TREE
+    f(TREE,TREE)    -&gt; TREE
+    g(TREE,TREE)    -&gt; TREE
+    h(TREE,TREE)    -&gt; TREE
+       i(TREE,TREE)    -&gt; TREE
+
+module Examples
+imports Tree-syntax
+
+%% Ex1: Count leaves in a TREE
+
+function cnt(TREE)       -&gt; INT
+[] cnt(T) = #{N | INT N : T}
+
+%% Idee: INT N : T genereert alle INT leaves uit de boom
+%% # is de built-in length-of operator
+
+%% Ex2: Sum all leaves in a TREE
+
+function sum_tree(TREE)       -&gt; INT
+[] sum_tree(T) = sum({N | INT N : T})
+
+%% NB sum is een built-in die de elementen van een set sommeert.
+
+%% Ex3: Increment all leaves in a TREE
+
+function inc(TREE)        -&gt; TREE
+[] inc(T) = INT N : T =&gt; N+1
+
+%% Idee: INT N : T genereert alle INT leaves uit de boom
+%% INT N : T =&gt; N+1 vervangt elke N door N+1
+%% De expressie als geheel levert de gemodificeerde term op.
+%% Dit is een super compacte notatie voor transformers!
+
+
+%% Ex4: full replacement of g by i
+
+function frepl(TREE)  -&gt; TREE
+[] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2))
+
+%% Ex5: deep replacement of g by i
+
+function drepl(TREE)  -&gt; TREE
+[] drepl(T) = g(T1, T2) : T =&gt; i(T1, T2)
+  when T1 == drepl(T1),
+    T2 == drepl(T2)
+
+%% Ex6: shallow replacement of g by i
+
+function srepl(TREE)  -&gt; TREE
+[] srepl(T) = g(T1, T2) : T =&gt; i(T1, T2) </programlisting></para>
     </section>
 
     <section>
-      <title>Lambda Substitutie </title>
+      <title>Lambda Substitutie</title>
 
       <para>hieronder een definitie van substitutie in lambda expressies. Het
       zou goed zijn om dit zo simpel mogelijk te krijgen omdat het model staat
       voor heel veel bindingsmechanismen. Het is ook een uitdaging om een
       generieke substitutiefunctie te schrijven (die alleen van de syntax van
-      variabelen en argumentbinding afhangt). <code>module Lambda sorts Var %%
-      variables Exp %% expressions context-free functions "prime" "(" Var ")"
-      -&gt; Var %% generate unique name Var -&gt; Exp %% single variable "fn"
-      Var "=&gt;" Exp -&gt; Exp %% function abstraction Exp Exp -&gt; Exp %%
-      function application function allVars(Exp) -&gt; set[Var] [] allVars(E)
-      = {V | &lt;&lt;Var V&gt;&gt; : E} function boundVars(Exp) -&gt; set[Var]
-      [] boundVars(E) = {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
-      function freeVars(Exp) -&gt; set[Var] [] freeVars(E) = allVars(E) \
-      boundVars(E) %% Genereer een verse variabele als V niet in gegeven set
-      voorkomt. function fresh(Var, set[V]) [] fresh(V, S) = if V in S then
-      prime(V) else V fi %% Substitution: replace all occurrences of V in E2
-      by E1 function subst(Var, Exp, Exp) -&gt; Exp [1] subst(V1, E, V2) = V2
-      when V1 != V2 [2] subst(V, E, V) = E [3] subst(V, E, E1 E2) = subst(V,
-      E, E1) subst(V, E, E2) [4] subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
-      [5] subst(V1, E1, fn V2 =&gt; E2) = fn V2 =&gt; subst(V1, E1, E2) when
-      V1 != V2, not(V1 in freeVars(E2) and V2 in freeVars(E1)) [6] subst(V1,
-      E1, fn V2 =&gt; E2) = fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2)) when
-      V1 != V2, V1 in freeVars(E2) and V2 in freeVars(E1), V3 := fresh(V2,
-      freeVars(E2) union freeVars(E1)) </code></para>
+      variabelen en argumentbinding afhangt). <programlisting>module Lambda
+
+sorts Var %% variables
+     Exp %% expressions
+
+context-free functions
+     "prime" "(" Var ")"  -&gt; Var              %% generate unique name
+     Var                  -&gt; Exp              %% single variable
+     "fn" Var "=&gt;" Exp    -&gt; Exp              %% function abstraction
+     Exp Exp              -&gt; Exp              %% function application
+
+function allVars(Exp) -&gt; set[Var]
+[] allVars(E) = {V | &lt;&lt;Var V&gt;&gt; : E}
+
+
+function boundVars(Exp) -&gt; set[Var]
+[] boundVars(E) = {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
+
+function freeVars(Exp) -&gt; set[Var]
+[] freeVars(E) = allVars(E) \ boundVars(E)
+
+%% Genereer een verse variabele als V niet in gegeven set voorkomt.
+function fresh(Var, set[V])
+[] fresh(V, S) = if V in S then prime(V) else V fi
+
+%% Substitution: replace all occurrences of V in E2 by E1
+
+function subst(Var, Exp, Exp)  -&gt; Exp
+
+[1] subst(V1, E, V2) = V2 when V1 != V2
+
+[2] subst(V, E, V) = E
+
+[3] subst(V, E, E1 E2) = subst(V, E, E1) subst(V, E, E2)
+
+[4] subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
+[5] subst(V1, E1, fn V2 =&gt; E2) = fn V2 =&gt; subst(V1, E1, E2)
+   when V1 != V2,
+        not(V1 in freeVars(E2) and V2 in freeVars(E1))
+
+[6] subst(V1, E1, fn V2 =&gt; E2) = fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2))
+   when
+        V1 != V2,
+        V1 in freeVars(E2) and V2 in freeVars(E1),
+        V3 := fresh(V2,  freeVars(E2) union freeVars(E1)) </programlisting></para>
     </section>
 
     <section>
       <title>Renaming</title>
 
-      <para><code>module Renaming sorts Var %% variables Exp %% expressions
-      context-free functions Var -&gt; Exp %% single variable "let" Var "="
-      Exp "in Exp "end" -&gt; Exp %% function abstraction %% Rename all bound
-      variables in an Exp %% Version 1: puur functioneel %% Exp: gegeven
-      expressie %% rel[Var,Var]: renaming table %% Int: counter om globale
-      varaibelen te genereren function rename(Exp, rel[Var,Var], Int) -&gt;
-      Exp [] rename(let V = E1 in E2 end, Rn, Cnt) = let Y = rename(E1, Rn,
-      Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end when Y := "x" +
-      Cnt, %% deze + concateneert (na conversie) Cnt' := Cnt + 1 [] rename(V,
-      Rn, Cnt) = V1 when { V1 } = Rn[V] [default] rename(E, Rn, Cnt) = E %%
-      Rename all bound variables in an Exp %% Version 2: met globale variabele
-      om nieuwe variabelen te genereren global variable Cnt -&gt; int := 0 %%
-      Globale moet ergens geinitialiseerd worden function newVar() -&gt; Var
-      [] newVar() = "x" + Cnt %% deze + concateneert (na conversie) when Cnt
-      := Cnt + 1 %% Rename -- Version 2 function rename(Exp, rel[Var,Var]) []
-      rename(let V = E1 in E2 end, Rn) = let Y = rename(E1, Rn) in rename(E2,
-      {&lt;V, Y&gt;} union Rn) end when Y := newVar [] rename(V, Rn) = V1 when
-      { V1 } = Rn[V] [default] rename(E, Rn) = E %% Rename -- Version 3, met
-      Rn ook als globale variabele global variable Rn -&gt; rel[Var, Var]
-      function rename(Exp) [] rename(let V = E1 in E2 end) = let Y =
-      rename(E1) in rename(E2) end when Y := newVar, Rn := {&lt;V, Y&gt;}
-      union Rn [] rename(V) = V1 when { V1 } = Rn[V] [default] rename(E) = E
-      </code></para>
+      <para><programlisting>module Renaming
+
+sorts Var %% variables
+
+     Exp %% expressions
+
+context-free functions
+
+     Var                                -&gt; Exp   %% single variable
+
+     "let" Var "=" Exp "in Exp "end"    -&gt; Exp   %% function
+
+     abstraction
+
+%% Rename all bound variables in an Exp
+
+%% Version 1: puur functioneel
+
+%% Exp: gegeven expressie
+
+%% rel[Var,Var]: renaming table
+
+%% Int: counter om globale varaibelen te genereren
+
+function rename(Exp, rel[Var,Var], Int) -&gt; Exp
+
+[] rename(let V = E1 in E2 end, Rn, Cnt) =
+  let Y = rename(E1, Rn, Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end
+
+  when
+    Y := "x" + Cnt,                             %% deze + concateneert (na conversie)
+
+    Cnt' := Cnt + 1
+
+[] rename(V, Rn, Cnt) = V1
+
+  when
+
+    { V1 } = Rn[V]
+
+[default]
+
+  rename(E, Rn, Cnt) = E
+
+%% Rename all bound variables in an Exp
+
+%% Version 2: met globale variabele om nieuwe variabelen te genereren
+
+global variable
+
+      Cnt -&gt; int := 0                           %% Globale moet ergens geinitialiseerd worden
+
+function newVar() -&gt; Var
+
+[] newVar() = "x" + Cnt                           %% deze + concateneert (na conversie)
+
+  when Cnt := Cnt + 1
+
+%% Rename -- Version 2
+
+function rename(Exp, rel[Var,Var])
+
+[] rename(let V = E1 in E2 end, Rn) =
+  let Y = rename(E1, Rn) in rename(E2, {&lt;V, Y&gt;} union Rn) end
+
+  when
+    Y := newVar
+
+[] rename(V, Rn) = V1
+
+  when
+
+    { V1 } = Rn[V]
+
+[default]
+
+  rename(E, Rn) = E
+
+%% Rename -- Version 3, met Rn ook als globale variabele
+
+global variable
+
+      Rn -&gt; rel[Var, Var]
+
+function rename(Exp)
+
+[] rename(let V = E1 in E2 end) =
+  let Y = rename(E1) in rename(E2) end
+
+  when
+    Y := newVar,
+
+    Rn :=  {&lt;V, Y&gt;} union Rn
+
+[] rename(V) = V1
+
+  when
+
+    { V1 } = Rn[V]
+
+[default]
+
+  rename(E) = E </programlisting></para>
     </section>
 
     <section>
-      <title>Dynamically scoped variables and inline comprehension in
-      Pico-typecheck</title>
+      <title>Dynamically scoped variables</title>
 
-      <para><code></code></para>
+      <para>The following example details the use of a dynscope global
+      variable for building up and using an environment. Notice that we
+      introduce <emphasis>void</emphasis> functions as a
+      result.<programlisting>module Typecheck
+
+imports Pico-syntax
+
+hiddens
+
+types
+ rel[PICO-ID,TYPE] -&gt; Environment
+
+variables
+ "Decls" -&gt; Decl*
+ "Stats"[0-9]* -&gt; Stat*
+ "Bool"  -&gt; bool
+ "Exp"   -&gt; EXP
+ "Nat"   -&gt; NatCon
+ "Str"   -&gt; StrCon
+global variables
+ "Env"   -&gt; Environment
+
+exports
+
+function tc(PROGRAM)     -&gt; bool
+[] tc(begin Decls Stats end) = tcs(Stats)
+  when Env := tcd(Decls)
+
+traversal function(Decls) -&gt; void
+[] tcd(Id : Type) = void
+   when Env := Env union {&lt;Id,Type&gt;}
+
+function tcs(Stats) -&gt; bool
+[] tcs( ) = true
+[] tcs(Stat; Stats) = tcst(Stat) &amp;&amp; tcst(Stats)
+
+function tcst(Stat) -&gt; bool
+[] tcst(Id := Exp) = type-of(Exp) in Env[Id]
+[] tcst(if Exp then Stats1 else Stats2) =
+    type-of(Exp) == natural &amp;&amp; tcs(Stats1) &amp;&amp; tcs(Stats2)
+[] tcst(while Exp do Stats od) = type-of(Exp) == natural &amp;&amp; tcs(Stats)
+
+function type-of(Exp) -&gt; PICO-TYPE
+[] type-of(NatCon) = natural
+[] type-of(StrCon) = string
+[] type-of(Id) = Type when {&lt;Id,Type&gt;} := Env[Id] </programlisting></para>
     </section>
+  </section>
+
+  <section>
+    <title>Syntax Definition</title>
+
+    <para><programlisting>lexical syntax
+  [0-9]+    -&gt; NatCon
+  "true"    -&gt; BoolCon
+  "false"   -&gt; BoolCon
+  [\0-\255] -&gt; ByteCon
+
+context-free syntax
+  %% foreach symbol S in the user-defined grammar:
+  S                                 -&gt; Term {cons("to-term")}
+  Term                              -&gt; S    {cons("from-term")}
+  Type "(" Term ")"                 -&gt; Term {cons("cast")}
+  Name "(" {Term ","}* ")"          -&gt; Term {cons("function")}
+  "[" {Term ","}* "]"               -&gt; Term {cons("list")}
+  "{" {Term ","}* "}"               -&gt; Term {cons("set")}
+  "[" Term "|" {Generator ","}+ "]" -&gt; Term {cons("list-comprehension")}
+  "{" Term "|" {Generator ","}+ "}" -&gt; Term {cons("set-comprehension")}
+  "&lt;" {Term ","}* "&gt;"               -&gt; Term {cons("tuple")}
+  "[" Term ":" Term "]"             -&gt; Term {cons("list-construction")}
+  "{" Term ":" Term "}"             -&gt; Term {cons("set-construction")}
+  BoolCon                           -&gt; Term {cons("boolean")}
+  NatCon                            -&gt; Term {cons("number")}
+  ByteCon                           -&gt; Term {cons("blob")}
+
+context-free syntax
+  Term "in" Term    -&gt; Term
+  Term "union" Term -&gt; Term
+  "#" Term          -&gt; Term
+  %% etcetera
+
+context-free syntax
+  "module" ModuleName Section*    -&gt; Module
+
+context-free syntax
+  "variables" VariableDefinition* -&gt; Section
+  Definition Rule*                -&gt; Section
+  "equations" Rule*               -&gt; Section
+  "tests" Test*                   -&gt; Section
+  Modifier+ Section               -&gt; Section {non-assoc} %% to distribute modifiers over all elements of a section
+
+  Modifier* Name "(" {Type ","}* ")" "-&gt;" Type -&gt; Definition
+  Modifier* {Name ","}+ "-&gt;" Type              -&gt; VariableDefinition 
+  "bottom-up"                                  -&gt; Modifier
+  "top-down"                                   -&gt; Modifier
+  "break"                                      -&gt; Modifier
+  "continue"                                   -&gt; Modifier
+  "loop"                                       -&gt; Modifier
+  "strict"                                     -&gt; Modifier
+  "wild"                                       -&gt; Modifier
+  "exports"                                    -&gt; Modifier
+  "hiddens"                                    -&gt; Modifier
+
+context-free syntax
+  Term "=" Term                         -&gt; Rule %% type preserving
+  Term "=" Term "when" {Condition ","}+ -&gt; Rule
+  {Condition ","}+ "===&gt;" Term "=" Term -&gt; Rule
+
+context-free syntax
+  Condition                             -&gt; Test
+  {Condition ","}+ "===&gt;" Condition     -&gt; Test
+  Condition "when" {Condition ","}+     -&gt; Test
+
+context-free syntax
+  Term ":=" Term  -&gt; Condition {cons("match")}     
+  Term "!:=" Term -&gt; Condition {cons("not-match")}
+  Term "==" Term  -&gt; Condition {cons("equals")}
+  Term "!=" Term  -&gt; Condition {cons("not-equals")}
+  Term "::" Term  -&gt; Condition {cons("generator")}  %% only applicable in comprehensions for now, not rules (although a semantics similar to list matching might apply, i.e. find the first element that satisfies the following conditions)
+
+context-free syntax
+  %% Symbol from the Sdf definition of Sdf:
+  Symbol              -&gt; Type
+  "&amp;" Type            -&gt; Type
+  TypeName            -&gt; Type
+  "set" "[" Type "]"  -&gt; Type
+  "list" "[" Type "]" -&gt; Type
+  "&lt;" {Type","}* "&gt;"  -&gt; Type
+  "void"              -&gt; Type
+  "natural"           -&gt; Type
+  "boolean"           -&gt; Type
+
+</programlisting></para>
   </section>
 </article>
