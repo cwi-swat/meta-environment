@@ -343,8 +343,102 @@
           syntax parts. If Q3 results in error or undecidable disambiguation,
           the user must be able to clarify precisely.</para>
         </listitem>
-      </itemizedlist> </para>
+      </itemizedlist></para>
 
     <para></para>
+  </section>
+
+  <section>
+    <title>Example</title>
+
+    <para>Here we list experimental example Rascal code to try out new and old
+    features.</para>
+
+    <section>
+      <title>Deep tree matching instead of tree traversal </title>
+
+      <para><code>module Tree-syntax imports Naturals exports TREE
+      context-free syntax NAT -&gt; TREE f(TREE,TREE) -&gt; TREE g(TREE,TREE)
+      -&gt; TREE h(TREE,TREE) -&gt; TREE i(TREE,TREE) -&gt; TREE module
+      Examples imports Tree-syntax %% Ex1: Count leaves in a TREE function
+      cnt(TREE) -&gt; INT [] cnt(T) = #{N | INT N : T} %% Idee: INT N : T
+      genereert alle INT leaves uit de boom %% # is de built-in length-of
+      operator %% Ex2: Sum all leaves in a TREE function sum_tree(TREE) -&gt;
+      INT [] sum_tree(T) = sum({N | INT N : T}) %% NB sum is een built-in die
+      de elementen van een set sommeert. %% Ex3: Increment all leaves in a
+      TREE function inc(TREE) -&gt; TREE [] inc(T) = INT N : T =&gt; N+1 %%
+      Idee: INT N : T genereert alle INT leaves uit de boom %% INT N : T =&gt;
+      N+1 vervangt elke N door N+1 %% De expressie als geheel levert de
+      gemodificeerde term op. %% Dit is een super compacte notatie voor
+      transformers! %% Ex4: full replacement of g by i function frepl(TREE)
+      -&gt; TREE [] frepl(T) = g(T1, T2) : T =&gt; i(frepl(T1), frepl(T2)) %%
+      Ex5: deep replacement of g by i function drepl(TREE) -&gt; TREE []
+      drepl(T) = g(T1, T2) : T =&gt; i(T1, T2) when T1 == drepl(T1), T2 ==
+      drepl(T2) %% Ex6: shallow replacement of g by i function srepl(TREE)
+      -&gt; TREE [] srepl(T) = g(T1, T2) : T =&gt; i(T1, T2)</code></para>
+    </section>
+
+    <section>
+      <title>Lambda Substitutie </title>
+
+      <para>hieronder een definitie van substitutie in lambda expressies. Het
+      zou goed zijn om dit zo simpel mogelijk te krijgen omdat het model staat
+      voor heel veel bindingsmechanismen. Het is ook een uitdaging om een
+      generieke substitutiefunctie te schrijven (die alleen van de syntax van
+      variabelen en argumentbinding afhangt). <code>module Lambda sorts Var %%
+      variables Exp %% expressions context-free functions "prime" "(" Var ")"
+      -&gt; Var %% generate unique name Var -&gt; Exp %% single variable "fn"
+      Var "=&gt;" Exp -&gt; Exp %% function abstraction Exp Exp -&gt; Exp %%
+      function application function allVars(Exp) -&gt; set[Var] [] allVars(E)
+      = {V | &lt;&lt;Var V&gt;&gt; : E} function boundVars(Exp) -&gt; set[Var]
+      [] boundVars(E) = {V | &lt;&lt;fn Var V =&gt; Exp E1&gt;&gt; : E}
+      function freeVars(Exp) -&gt; set[Var] [] freeVars(E) = allVars(E) \
+      boundVars(E) %% Genereer een verse variabele als V niet in gegeven set
+      voorkomt. function fresh(Var, set[V]) [] fresh(V, S) = if V in S then
+      prime(V) else V fi %% Substitution: replace all occurrences of V in E2
+      by E1 function subst(Var, Exp, Exp) -&gt; Exp [1] subst(V1, E, V2) = V2
+      when V1 != V2 [2] subst(V, E, V) = E [3] subst(V, E, E1 E2) = subst(V,
+      E, E1) subst(V, E, E2) [4] subst(V, E1, fn V =&gt; E2) = fn V =&gt; E2
+      [5] subst(V1, E1, fn V2 =&gt; E2) = fn V2 =&gt; subst(V1, E1, E2) when
+      V1 != V2, not(V1 in freeVars(E2) and V2 in freeVars(E1)) [6] subst(V1,
+      E1, fn V2 =&gt; E2) = fn V3 =&gt; subst(V1, E1, subst(V2, V3, E2)) when
+      V1 != V2, V1 in freeVars(E2) and V2 in freeVars(E1), V3 := fresh(V2,
+      freeVars(E2) union freeVars(E1)) </code></para>
+    </section>
+
+    <section>
+      <title>Renaming</title>
+
+      <para><code>module Renaming sorts Var %% variables Exp %% expressions
+      context-free functions Var -&gt; Exp %% single variable "let" Var "="
+      Exp "in Exp "end" -&gt; Exp %% function abstraction %% Rename all bound
+      variables in an Exp %% Version 1: puur functioneel %% Exp: gegeven
+      expressie %% rel[Var,Var]: renaming table %% Int: counter om globale
+      varaibelen te genereren function rename(Exp, rel[Var,Var], Int) -&gt;
+      Exp [] rename(let V = E1 in E2 end, Rn, Cnt) = let Y = rename(E1, Rn,
+      Cnt) in rename(E2, {&lt;V, Y&gt;} union Rn, Cnt') end when Y := "x" +
+      Cnt, %% deze + concateneert (na conversie) Cnt' := Cnt + 1 [] rename(V,
+      Rn, Cnt) = V1 when { V1 } = Rn[V] [default] rename(E, Rn, Cnt) = E %%
+      Rename all bound variables in an Exp %% Version 2: met globale variabele
+      om nieuwe variabelen te genereren global variable Cnt -&gt; int := 0 %%
+      Globale moet ergens geinitialiseerd worden function newVar() -&gt; Var
+      [] newVar() = "x" + Cnt %% deze + concateneert (na conversie) when Cnt
+      := Cnt + 1 %% Rename -- Version 2 function rename(Exp, rel[Var,Var]) []
+      rename(let V = E1 in E2 end, Rn) = let Y = rename(E1, Rn) in rename(E2,
+      {&lt;V, Y&gt;} union Rn) end when Y := newVar [] rename(V, Rn) = V1 when
+      { V1 } = Rn[V] [default] rename(E, Rn) = E %% Rename -- Version 3, met
+      Rn ook als globale variabele global variable Rn -&gt; rel[Var, Var]
+      function rename(Exp) [] rename(let V = E1 in E2 end) = let Y =
+      rename(E1) in rename(E2) end when Y := newVar, Rn := {&lt;V, Y&gt;}
+      union Rn [] rename(V) = V1 when { V1 } = Rn[V] [default] rename(E) = E
+      </code></para>
+    </section>
+
+    <section>
+      <title>Dynamically scoped variables and inline comprehension in
+      Pico-typecheck</title>
+
+      <para><code></code></para>
+    </section>
   </section>
 </article>
