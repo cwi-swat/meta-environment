@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jul  7 15:38:05 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/**/*.c: replaced PT_getArgsArgumentAt by PT_getArgsTreeAt
+
 Mon Jun 19 07:48:56 CEST 2006 <kooiker@cwi.nl>
  * semantics/asfe/src/reduction.c:
    - Fix declaration after statement
