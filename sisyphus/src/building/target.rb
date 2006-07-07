@@ -257,9 +257,9 @@ module Building
         dest_path = File.join(latest_checkout, file)
         @log.info("cp #{src_path} #{dest_path}")
         if not File.exists?(dest_path) then
-          @log.info("Apparently a file did not exist where it should have been overwritten.")
-          @log.info("I'm copying #{src_path} to #{dest_path} and adding it to svn.")
-          @log.info("This may be the result of a corrupted bom file.")
+          @log.warn("Apparently a file did not exist where it should have been overwritten.")
+          @log.warn("I'm copying #{src_path} to #{dest_path} and adding it to svn.")
+          @log.warn("This may be the result of a corrupted bom file.")
           `cp #{src_path} #{dest_path}`
           `svn add #{dest_path}`
         else
@@ -278,7 +278,7 @@ module Building
         bom['checksums'].delete(file)
       end
 
-      # User inverted sort on length
+      # Use inverted sort on length
       # so that children of a dir
       # are removed before their parents.
       removed_dirs.each do |dir|

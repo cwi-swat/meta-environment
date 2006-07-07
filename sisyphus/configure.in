@@ -38,6 +38,7 @@ AC_CONFIG_FILES([
    src/building/Makefile
    src/distribution/Makefile
    src/model/Makefile
+   src/release/Makefile
    src/updating/Makefile
    src/utils/Makefile
    src/versioning/Makefile

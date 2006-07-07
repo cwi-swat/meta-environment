@@ -42,7 +42,7 @@ module Model
     end
 
     def to_s
-      return "#{name}:#{version}"
+      return "#{name}-#{informative_version.strip}:#{version}"
     end
   end
 

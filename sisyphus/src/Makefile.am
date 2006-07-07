@@ -1,5 +1,5 @@
 
-SUBDIRS = building distribution model updating utils versioning
+SUBDIRS = building distribution model release updating utils versioning
 
 noinst_SCRIPTS = test
 
