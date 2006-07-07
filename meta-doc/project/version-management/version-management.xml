@@ -5,9 +5,14 @@
   <title>Version management in the Meta-Environment</title>
 
   <authorblurb>
-    <para>Gerco Ballintijn</para>
+    <para><authorinitials>Gerco Ballintijn and Jurgen
+    Vinju</authorinitials>,</para>
 
-    <para>Jurgen Vinju</para>
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="../../logos/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
   </authorblurb>
 
   <section>

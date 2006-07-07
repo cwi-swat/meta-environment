@@ -4,6 +4,17 @@
 <article>
   <title>Rascal Requirements and Design Document</title>
 
+  <authorblurb>
+    <para><authorinitials>Paul</authorinitials> <authorinitials>Klint, Tijs
+    van der Storm Jurgen Vinju</authorinitials>,</para>
+
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="../../logos/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
+  </authorblurb>
+
   <section>
     <title>Introduction</title>
 
