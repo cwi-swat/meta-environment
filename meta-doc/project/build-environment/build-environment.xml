@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Build environment of the Meta-Environment</title>
+
+  <authorblurb>
+    <para><authorinitials>Gerco Ballintijn, Tijs van der Storm, and Jurgen
+    Vinju</authorinitials>,</para>
+
+    <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
+        <imageobject>
+          <imagedata fileref="../../logos/cwi.gif" />
+        </imageobject>
+      </mediaobject></para>
+  </authorblurb>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>All packages use the following tools as a build environment:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>GNU make, automake, autoconf, libtool, autoreconf</para>
+      </listitem>
+
+      <listitem>
+        <para>For C projects we use GCC</para>
+      </listitem>
+
+      <listitem>
+        <para>For Java projects we use Sun SDK</para>
+      </listitem>
+
+      <listitem>
+        <para>For Java projects we use ant (called by make)</para>
+      </listitem>
+
+      <listitem>
+        <para>Sisyphus for combining Subversion checkouts, and calling build
+        commands in the correct order according to the package import
+        structure</para>
+      </listitem>
+
+      <listitem>
+        <para>Autobundle for composing distributable source packages (composed
+        from individual packages automatically by autobundle)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This document is incomplete, please help.</para>
+  </section>
+
+  <section>
+    <title>Building Meta-Environment packages from Subversion</title>
+
+    <para>To initiate a build environment for the Meta-Environment can be hard
+    because: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>It is so modular, that it is hard to know which packages to
+        checkout, configure, build etc, and in which order</para>
+      </listitem>
+
+      <listitem>
+        <para>The configure and build interface of the packages (using the GNU
+        autotools) is sometimes hard to remember</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Sisyphus is a tool that manages this complexity for us. For one
+    thing, we use it in our continuous integration, but we can reuse it to
+    construct a build environment for a developer.</para>
+
+    <para>Sisyphus takes a top-level packages as argument, and a Sisyphus
+    configuration, and uses the repositories to find out in which order
+    packages need to be build and with which commands. This information is
+    cached locally in a <filename>.rollrc</filename> file. The
+    <filename>.rollrc</filename> file is constructed by running
+    <command>boot-roll</command> once. </para>
+
+    <section>
+      <title>How to use <command>boot-roll</command> and
+      <command>roll</command> to checkout and build software</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>Add /ufs/sen1/software/installed/sisyphus/linux/i686/bin to
+          your PATH or add 'sisyphus' to your .pkgrc file, or install Sisyphus
+          somewhere.</para>
+        </listitem>
+
+        <listitem>
+          <para>Make a file .bootrollrc in your home and edit the build_dir,
+          install_dir and vcs_user variables to your settings</para>
+        </listitem>
+
+        <listitem>
+          <para>Run 'boot-roll asfsdf-meta', this generates a file '.rollrc'
+          which can be used by subsequent calls to the 'roll' command.</para>
+        </listitem>
+
+        <listitem>
+          <para>Run 'roll reconf'</para>
+        </listitem>
+
+        <listitem>
+          <para>Run 'roll configure'</para>
+        </listitem>
+
+        <listitem>
+          <para>Run 'roll install'</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following is an example <filename>.bootrollrc</filename>
+      file:</para>
+
+      <programlisting>boot_roll:
+  build_dir: /ufs/jurgenv/glt/build
+  install_dir: /ufs/jurgenv/glt/installed/roll
+  vcs_user: jurgenv
+sisyphus:
+  url: sisyphus-configuration
+  host: sjofar.sen.cwi.nl
+  port: 3960
+  protocol: svn
+  user: daybuild
+  password: daybuild
+templates:
+ reconf: ./reconf
+ configure: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --enable-maintainer-mode --with-cflags="-Wall -Werror -g -O2"
+ make: echo 'use make install'
+ install: make install
+ check: make check
+ distcheck: DISTCHECK_CONFIGURE_FLAGS="&lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt;" make distcheck
+ clean: make uninstall clean 
+ update: make uninstall ; cvs update
+ maintainer-clean: make uninstall maintainer-clean
+
+ configure-user: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --with-cflags="-Wall -Werror -g -O2"
+</programlisting>
+
+      <para>If your workstation is outside the CWI domain, it is necessary to
+      use a tunnel specification. Replace the sisyphus tag with the following
+      to tunnel from ssh.cwi.nl to sjofar.sen.cwi.nl:</para>
+
+      <programlisting>sisyphus:
+  url: sisyphus-configuration
+  host: sjofar.sen.cwi.nl
+  port: 3960
+  protocol: svn
+  user: daybuild
+  password: daybuild
+  tunnel:
+    host: ssh.cwi.nl
+    user: jurgenv
+</programlisting>
+    </section>
+
+    <section>
+      <title>Notes</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>'<command>roll -h</command>' and '<command>roll -l</command>'
+          give helpful hints on the usage of roll</para>
+        </listitem>
+
+        <listitem>
+          <para>roll is no substitute for understanding the build interface of
+          the Meta-Environment. It just automates a number of repetitive
+          tasks, and manages the order in which they are executed. You are
+          expected to fully understand the contents of your .bootrollrc file
+          and your <filename>.rollrc</filename> file.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Installation of Sisyphus</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>install ruby-1.8.x</para>
+      </listitem>
+
+      <listitem>
+        <para>make sure your ruby binary is called 'ruby' and not
+        'ruby1.8'</para>
+      </listitem>
+
+      <listitem>
+        <para>install rubygems, using the following script:</para>
+
+        <programlisting>wget http://rubyforge.org/frs/download.php/5207/rubygems-0.8.11.tgz
+tar zxvf rubygems-0.8.11.tgz
+cd rubygems-0.8.11
+sudo ruby1.8 setup.rb
+sudo gem install rubygems-update
+sudo gem install rails</programlisting>
+      </listitem>
+
+      <listitem>
+        <para>install Subversion</para>
+      </listitem>
+
+      <listitem>
+        <para>download sisyphus from the <ulink
+        url="http://sisyphus.sen.cwi.nl:8080/">sisyphus website</ulink></para>
+      </listitem>
+
+      <listitem>
+        <para>./configure --prefix=/your/prefix</para>
+      </listitem>
+
+      <listitem>
+        <para>make install</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
