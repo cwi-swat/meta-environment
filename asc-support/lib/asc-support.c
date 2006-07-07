@@ -177,7 +177,7 @@ ATerm innermost(PT_Tree tree)
     PT_Args args = PT_getTreeArgs(tree);
 
     if (PT_hasProductionBracketAttr(prod)) {
-      result = innermost(PT_getArgsArgumentAt(args, 2));    
+      result = innermost(PT_getArgsTreeAt(args, 2));    
     }
     else {
       if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
