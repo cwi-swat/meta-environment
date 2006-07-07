@@ -4,6 +4,10 @@
 <article>
   <title>Coding standards for the Meta-Environment</title>
 
+  <authorblurb>
+    <para>Jurgen Vinju</para>
+  </authorblurb>
+
   <section>
     <title>Introduction</title>
 
@@ -149,7 +153,7 @@
 
       <listitem>
         <para>Non-terminals (sorts) start with a capital letter, and continue
-        with javaCase </para>
+        with javaCase</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -168,11 +172,21 @@
       </listitem>
 
       <listitem>
+        <para>Put the default equations last</para>
+      </listitem>
+
+      <listitem>
         <para>Write test equations for non-trivial functions</para>
       </listitem>
 
       <listitem>
         <para>Fix all warnings mentioned by the ASF checker</para>
+      </listitem>
+
+      <listitem>
+        <para>import basic/Whitespace and basic/Comments only in hiddens
+        sections to prevent contamination of other modules with arbitrary
+        LAYOUT definitions</para>
       </listitem>
     </itemizedlist>
   </section>

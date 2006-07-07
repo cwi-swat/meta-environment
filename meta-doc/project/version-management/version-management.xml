@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Version management in the Meta-Environment</title>
+
+  <authorblurb>
+    <para>Gerco Ballintijn</para>
+
+    <para>Jurgen Vinju</para>
+  </authorblurb>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>One can use a version management system in different ways. This
+    document describes our methods concerning checkout, commits, branching,
+    and tool support. The standard version control system is Subversion. The
+    reader of this text is therefore expected to understand Subversion
+    concepts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Repositories</para>
+      </listitem>
+
+      <listitem>
+        <para>Working copies</para>
+      </listitem>
+
+      <listitem>
+        <para>Revisions</para>
+      </listitem>
+
+      <listitem>
+        <para>Tags and branches</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following links provide ample documentation on these
+    subjects:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><ulink
+        url="http://svnbook.red-bean.com/nightly/en/svn-book.html">Subversion
+        manual</ulink></para>
+      </listitem>
+
+      <listitem>
+        <para><ulink
+        url="http://www.cwi.nl/htbin/www-cst/Twiki/view/Cst/ServerServiceSVN">CWI
+        subversion server online documentation</ulink></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Goals</title>
+
+    <para>The Meta-Environment development team has two overall version
+    management goals:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>To always have a reasonably up-to-date version available of the
+        Meta-Environment software of production quality.</para>
+      </listitem>
+
+      <listitem>
+        <para>To allow developers as much freedom to experiment as
+        possible</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The version management policies and mechanisms described here, were
+    chosen specifically to support these two goals.</para>
+  </section>
+
+  <section>
+    <title>Overview</title>
+
+    <para>The Meta-Environment consists of between 40 and 60 packages. These
+    packages are managed using the Subversion version management system,
+    stored in a single repositories located at:</para>
+
+    <para>svn+ssh://svn.cwi.nl/ To manage packages, the developers use the
+    Subversion trunk, branch, and tags concepts. Since every package is
+    individually version-managed, every package has its own trunk, zero or
+    more branches, and zero or more tags. To achieve the first goal, the
+    version of the code on the trunk should be kept stable, that is, the trunk
+    should always store a reasonably up-to-date version of the package of
+    production quality. It is the responsibility of every developer not to
+    "break the code" on the trunk. The GLT development team distinguishes two
+    types of changes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Low-impact: changes that do NOT threaten the stability of
+        code.</para>
+      </listitem>
+
+      <listitem>
+        <para>High-impact: changes that threaten the stability of the
+        code.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Low-impact changes are trivial changes, such as the correction of
+    typo's, and can be commit directly to the trunk. High-impact changes are
+    basically all other, non-trivial changes. Since non-trivial changes
+    threaten the stability of the code and the code on the trunk has to remain
+    stable, all non-trivial changes require some form of consultation, peer
+    review, and testing before being integrated into the trunk. The use of
+    branches facilitates these activities since they allow version management
+    for these changes, such as intermediate commits and rollbacks, independent
+    of code on the trunk. Branches also allow version management for
+    experiments, even if these experiments will not be integrated into the
+    trunk, thus facilitating the second goal. The GLT team also uses a
+    separate form of branches, called release branches, that facilitate
+    maintenance on previously released code. As a consequence, the GLT team
+    recognizes the following four types of branches:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The trunk (i.e., the integration branch)</para>
+      </listitem>
+
+      <listitem>
+        <para>Developmental branches</para>
+      </listitem>
+
+      <listitem>
+        <para>Experimental branches</para>
+      </listitem>
+
+      <listitem>
+        <para>Release branches</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Migration from CVS to Subversion</title>
+
+    <para>On May 12th 2006, we have migrated the GLT modules from two CVS
+    repositories, located at CWI and INRIA, to a single Subversion repository,
+    located at CWI. Because of this migration, the cvsmerge script has lost
+    its purpose. Instead you should use the SvnMerge script ("svnmerge")
+    provided with the Subversion source. </para>
+  </section>
+
+  <section>
+    <title>Development branches</title>
+
+    <para>To protect the stability of the trunk, a developer should always
+    create a branch for an intended change, unless he is sure the change is
+    trivial. When the development effort has resulted in stable code on the
+    branch, the changes can be integrated (merged) into the trunk. The trunk
+    should thus be considered the "integration branch" for the next release.
+    This way of working is described by the mainline and task-branch SCM
+    patterns. To prevent developmental and experimental branches from
+    diverging (too much) from the trunk, developers should use the SvnMerge
+    script to incorporate (merge) concurrent changes on the trunk into their
+    branch. By using the script to stay up-to-date, merging changes back into
+    the trunk becomes much easier because the process of resolving merge
+    conflicts is spread over time.</para>
+  </section>
+
+  <section>
+    <title>Release branches</title>
+
+    <para>A second source of branches is the release process. Every time a
+    package is released, a branch is created for this release. All bug fixes
+    for the released package are performed on this branch, and when desired
+    foreward ported (e.g., merged) to the trunk. Release branches are never
+    merged with the trunk. The process of forward porting changes on the
+    release branch to the trunk is NOT supported by the SvnMerge
+    script.</para>
+  </section>
+
+  <section>
+    <title>ChangeLog entries</title>
+
+    <para>Each package has a ChangeLog file in its root directory that records
+    all (important) changes to the package. The ChangeLog file consists of
+    entries that provide a description of the change, including the date of
+    the change, and that are sorted last change first. This change information
+    can then be used, for instance, during debugging. When working on a
+    branch, however, recording changes in the ChangeLog file requires special
+    attention. The problem with the ChangeLog file occurs when changes (and
+    their entries) are imported from the trunk. Since these changes have
+    occured concurrently on the trunk and other branches, their dates overlap,
+    and consequently their entries should be interleaved in the ChangeLog
+    file. Interleaving the change information like this is, however,
+    confusing. The solution to this problem is to use a separate ChangeLog
+    file per branch (e.g., ChangeLog.&lt;branch-name&gt;) and record all
+    changes on the branch in this file. This file is added to the branch and
+    grows with every commit. Change entries from imported changes would still
+    simply be added to the normal ChangeLog file. When work on the branch has
+    completed and the changes can be integrated back into the trunk (i.e.,
+    "integration branch"), two extra steps are needed. The first step is that
+    after the "svn merge" command (but before the associated commit), an entry
+    is added to the ChangeLog file, which summarizes the whole
+    ChangeLog.&lt;branch-name&gt;. The second step is the removal of the file
+    ChangeLog.&lt;branch-name&gt;, that is, the file is not added/commited to
+    the trunk.</para>
+  </section>
+
+  <section>
+    <title>The use of the SvnMerge script</title>
+
+    <section>
+      <title>Background</title>
+
+      <para>The svnmerge script simplifies the use of branches using the
+      mainline and task branch SCM patterns. In these usage patterns, the
+      Subversion trunk is a stable code line where all new features and bug
+      fixes eventually end up, that is, the trunk is the integration branch.
+      For trivial changes, a developer can simply checkout the trunk and
+      commit its changes directly to the trunk. For changes that have a larger
+      impact and require a longer development effort (the usual case),
+      branches allow independent parallel development with the possibility to
+      commit intermediate changes to the branch. These branches (and their
+      associated working copies) can be kept up-to-date with the trunk using
+      the svnmerge script. Further information can be found at: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para><ulink
+          url="http://www.dellroad.org/svnmerge/index">http://www.dellroad.org/svnmerge/index</ulink></para>
+        </listitem>
+
+        <listitem>
+          <para><ulink
+          url="http://www.sipfoundry.org/tools/svnmerge.html">http://www.sipfoundry.org/tools/svnmerge.html</ulink></para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Generated commit message</title>
+
+      <para>To ease the writing of correct commit messages the SvnMerge script
+      creates its own commit message, per default in the file
+      svnmerge-commit-message.txt. This file can be read, and edited if
+      needed, during the svn commit.</para>
+    </section>
+
+    <section>
+      <title> Differences between CvsMerge and SvnMerge</title>
+
+      <para>The following table describes some difference between the use of
+      cvsmerge and svnmerge. Options and arguments for CvsMerge and SvnMerge
+      have been left out. Unlike the CvsMerge script, the SvnMerge operations
+      are all started from the working copy of the branch. It is preferable to
+      give the trunk location explicitly with svnmerge init since svnmerge
+      sometimes computes the wrong location.</para>
+
+      <informaltable>
+        <tgroup cols="3">
+          <tbody>
+            <row>
+              <entry><emphasis role="bold">Task</emphasis></entry>
+
+              <entry><emphasis role="bold">CVS
+              implementation</emphasis></entry>
+
+              <entry><emphasis role="bold">Subversion
+              implementation</emphasis></entry>
+            </row>
+
+            <row>
+              <entry>Start a branch</entry>
+
+              <entry>cvsmerge begin-branch</entry>
+
+              <entry>svn copy svnmerge init svn commit</entry>
+            </row>
+
+            <row>
+              <entry>Track changes</entry>
+
+              <entry>(not available)</entry>
+
+              <entry>svnmerge avail</entry>
+            </row>
+
+            <row>
+              <entry>Merge changes</entry>
+
+              <entry>cvsmerge import-from-trunk cvs commit</entry>
+
+              <entry>svnmerge merge svn commit</entry>
+            </row>
+
+            <row>
+              <entry>Revert changes</entry>
+
+              <entry>rm cvs update cvsmerge reset-import </entry>
+
+              <entry>svn revert (or) cd ..; rm -rf</entry>
+            </row>
+
+            <row>
+              <entry>End a branch</entry>
+
+              <entry>cvsmerge end-branch cvs commit</entry>
+
+              <entry>svn merge svn commit</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para> </para>
+    </section>
+
+    <section>
+      <title>Example 1: Start a Branch</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>svn checkout svn+ssh://svn.cwi.nl/aterm/trunk aterm</para>
+        </listitem>
+
+        <listitem>
+          <para>cd aterm</para>
+        </listitem>
+
+        <listitem>
+          <para>svn copy . svn+ssh://svn.cwi.nl/aterm/branches/example</para>
+        </listitem>
+
+        <listitem>
+          <para>svn switch svn+ssh://svn.cwi.nl/aterm/branches/example</para>
+        </listitem>
+
+        <listitem>
+          <para>svnmerge init svn+ssh://svn.cwi.nl/aterm/trunk</para>
+        </listitem>
+
+        <listitem>
+          <para>svn propget svnmerge-integrated . # check the source and
+          revision information</para>
+        </listitem>
+
+        <listitem>
+          <para>svn commit</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Example 2: Work on Branch</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>svnmerge avail # check which revisions are available</para>
+        </listitem>
+
+        <listitem>
+          <para>svnmerge avail -l # check their commit messages</para>
+        </listitem>
+
+        <listitem>
+          <para>svnmerge avail -d # check their differences</para>
+        </listitem>
+
+        <listitem>
+          <para>svnmerge merge -r18694 # merge in a specific revision</para>
+        </listitem>
+
+        <listitem>
+          <para>[... deal with possible conflicts created by svnmerge
+          ...]</para>
+        </listitem>
+
+        <listitem>
+          <para>[... edit ChangeLog file for this branch ...]</para>
+        </listitem>
+
+        <listitem>
+          <para>svn commit</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Example 3: End a Branch</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>svn checkout svn+ssh://svn.cwi.nl/aterm/trunk aterm</para>
+        </listitem>
+
+        <listitem>
+          <para>cd aterm</para>
+        </listitem>
+
+        <listitem>
+          <para>svn merge svn+ssh://svn.cwi.nl/aterm/trunk
+          svn+ssh://svn.cwi.nl/aterm/branches/example</para>
+        </listitem>
+
+        <listitem>
+          <para>[... deal with possible conflicts created by svn ...]</para>
+        </listitem>
+
+        <listitem>
+          <para>[... edit the ChangeLog file, merge it with the ChangeLog file
+          local for the branch manually and consistently ...]</para>
+        </listitem>
+
+        <listitem>
+          <para>svn propdel svnmerge-integrated . # not needed on the
+          trunk</para>
+        </listitem>
+
+        <listitem>
+          <para>svn commit</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Document TODO's</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Examples of high- and low-impact (risk) changes</para>
+      </listitem>
+
+      <listitem>
+        <para>More explicitly mention the possibility, use, and value of
+        delayed integration of changes (branches)</para>
+      </listitem>
+
+      <listitem>
+        <para>Splitting up a specific package needs to be explained</para>
+      </listitem>
+
+      <listitem>
+        <para>Explicitly mention with new packages</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
