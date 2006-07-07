@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Recommended titles on programming and software engineering</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Sometimes a book or an article can really influence the way we think
+    about and manage Meta-Environment software. This is a very incomplete
+    list, so please help to complete it.</para>
+  </section>
+
+  <section>
+    <title>Reading list</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Code Complete (2) - Steve McConnel (on Software Construction in
+        general, on a low level of abstraction, full of best-practices and
+        hard facts)</para>
+      </listitem>
+
+      <listitem>
+        <para>The Pragmatic Programmer - Andy Hunt, Dave Thomas</para>
+      </listitem>
+
+      <listitem>
+        <para>Why Programs Fail - Andreas Zeller</para>
+      </listitem>
+
+      <listitem>
+        <para>The inmates are running the asylum: Why High Tech Products Drive
+        Us Crazy and How To Restore The Sanity - Alan Cooper</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Suggestions</title>
+
+    <para>Meta-Environment programmers are invited to add suggestions
+    here.</para>
+  </section>
+</article>
