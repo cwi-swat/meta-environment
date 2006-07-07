@@ -67,7 +67,7 @@ static PT_Tree getBuiltinArgument(PT_Tree builtin, int i)
   /* "name" L "(" L <arg0> L "," L <arg1> L "," L <arg2> L  ... */
   /* |-----4------| |------4-----| |-----4------| |-------- ... */
 
-  return PT_getArgsArgumentAt(PT_getTreeArgs(builtin),4 + 4 * i);
+  return PT_getArgsTreeAt(PT_getTreeArgs(builtin),4 + 4 * i);
 }
 
 /* Naive implementation: just do strcmp's until we find the correct
