@@ -13,10 +13,22 @@ def parse_package_file(path)
   system("#{sglr} -p #{table} -i #{path} | #{implode} > #{path}.af")
 end
 
+def substituting_in(filename)
+  content = nil
+  File.open(filename) do |f|
+    content = f.read
+  end
+  content = yield content
+  File.open(filename, 'w') do |f|
+    f.write(content)
+  end
+end
+
 
 if __FILE__ == $0 then
   # This dir should contain .tar.gz, .pkg  files
   dist_location = '/ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads'
+  collect_url = 'http://sisyphus.sen.cwi.nl:8080/downloads'
   workdir = './bla'
 
   system("mkdir -p #{workdir}")
@@ -93,17 +105,33 @@ if __FILE__ == $0 then
     end 
 
     autobundle = '/ufs/sen1/software/installed/autobundle-0.12/linux/i386/bin/autobundle'
-    packages.each do |pkg|
-      name, version = pkg.split('-')
-      if pkg.match(/^(.*)-(.*)$/) then
-        name = $1
-        version = $2
-      else
-        raise "Invalid package name: #{pkg}"
+    
+    name = root.name
+    version = root.si_revision.informative_version.strip
+    pkg = name + '-' + version
+    puts("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
+    system("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
+
+    local_dist_path = `pwd`.chomp
+    bundle = name + "-bundle-" + version
+
+    system("tar zxvf #{bundle}.tar.gz")
+    Dir.chdir(bundle) do
+      pkglistfile = 'pkg-list'
+      pkglist = nil
+      File.open(pkglistfile) do |f|
+        pkglist = f.read
       end
-      puts("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
-      system("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
+      pkglist.gsub!(collect_url, 'file://' + local_dist_path)
+      File.open(pkglistfile, 'w') do |f|
+        f.write(pkglist)
+      end
+      system('./collect.sh')
+      system("./configure --prefix=#{local_dist_path}/#{bundle}-installed")
+      system("make install distcheck")
     end
+
+
   end
 
 end
