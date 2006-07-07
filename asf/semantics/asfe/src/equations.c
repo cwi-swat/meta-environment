@@ -124,7 +124,7 @@ static unsigned hash_function(equation_table *table, PT_Production top_ofs,
 ATerm getPosInfoEquals(ASF_ASFEquation equ)
 {
   PT_Tree tree = PT_TreeFromTerm(ASF_ASFEquationToTerm(equ));
-  PT_Tree equals = PT_getArgsArgumentAt(PT_getTreeArgs(tree), 2);
+  PT_Tree equals = PT_getArgsTreeAt(PT_getTreeArgs(tree), 2);
   return ATgetAnnotation(PT_TreeToTerm(equals), posinfo);
 }
 

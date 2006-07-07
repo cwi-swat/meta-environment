@@ -469,7 +469,7 @@ PT_Tree getTupleFirst(PT_Tree tuple)
 {
    PT_Args args = PT_getTreeArgs(tuple);
 
-   return PT_getArgsArgumentAt(args, TUPLE_FIRST_POS);
+   return PT_getArgsTreeAt(args, TUPLE_FIRST_POS);
 }
 
 /*}}}  */
@@ -479,7 +479,7 @@ PT_Tree getTupleSecond(PT_Tree tuple)
 {
    PT_Args args = PT_getTreeArgs(tuple);
 
-   return PT_getArgsArgumentAt(args, TUPLE_SECOND_POS);
+   return PT_getArgsTreeAt(args, TUPLE_SECOND_POS);
 }
 
 /*}}}  */
