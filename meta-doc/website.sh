@@ -3,7 +3,7 @@
 set -x
 set -e
 
-CATEGORIES="demos howto courses project understanding"
+CATEGORIES="getting-started howto demos understanding courses project"
 WEB="./doc/html"
 
 mkdir -p ${WEB} || true
@@ -15,20 +15,25 @@ getTitle() {
   echo ${TITLE}
 }
 
+INDEX="${WEB}/index.html"
+echo "<html><head><title>" > ${INDEX}
+echo "  Meta-Environment Online Documentation" >> ${INDEX}
+echo "</title></head><body>" >> ${INDEX}
+
 for i in ${CATEGORIES}; do
+  echo "<h1>$i</h1><ul>" >> ${INDEX}
   BOOKS=`ls $i`
-  INDEX="${WEB}/$i/index.html"
   mkdir -p ${WEB}/$i || true
-  echo "<html><body><ul>" > ${INDEX}
   for b in ${BOOKS}; do
     if [ -d $i/$b ]; then
       if [ -f $i/$b/$b.xml ]; then
 	(docbook2html --output ${WEB}/$i/$b --nochunks $i/$b/$b.xml)	
 	title=`getTitle $i/$b/$b.xml`
-	echo "<li><a href=\"./$b/$b.html\">${title}</a></li>" >> ${INDEX}
+	echo "<li><a href=\"./$i/$b/$b.html\">${title}</a></li>" >> ${INDEX}
       fi
     fi
   done
-  echo "</ul></body></html>" >> ${INDEX}
+  echo "</ul>" >> ${INDEX}
 done
 
+echo "</body></html>" >> ${INDEX}
