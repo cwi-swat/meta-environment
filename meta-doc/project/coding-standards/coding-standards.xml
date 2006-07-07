@@ -17,7 +17,7 @@
 
     <itemizedlist>
       <listitem>
-        <para> "Code Complete" by Steve McConnel influences our basic guide
+        <para>"Code Complete" by Steve McConnel influences our basic guide
         lines, please read it.</para>
       </listitem>
 
@@ -145,6 +145,11 @@
 
       <listitem>
         <para>Fix all warnings mentioned by the SDF checker</para>
+      </listitem>
+
+      <listitem>
+        <para>Non-terminals (sorts) start with a capital letter, and continue
+        with javaCase </para>
       </listitem>
     </itemizedlist>
   </section>
