@@ -10,15 +10,13 @@ def parse_package_file(path)
   table = '/ufs/sen1/software/installed/autobundle-0.12/linux/i386/share/autobundle/Autobundle.tbl'
   implode = '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/implode-asfix -S'
   sglr= '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/sglr -2'
-  #sglr= 'sglr'
-  #implode = 'implodePT -t'
   system("#{sglr} -p #{table} -i #{path} | #{implode} > #{path}.af")
 end
 
 
 if __FILE__ == $0 then
   # This dir should contain .tar.gz, .pkg  files
-  dist_location = '/export/scratch1/storm/sisyphus/temp'
+  dist_location = '/ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads'
   workdir = './bla'
 
   system("mkdir -p #{workdir}")
@@ -97,7 +95,14 @@ if __FILE__ == $0 then
     autobundle = '/ufs/sen1/software/installed/autobundle-0.12/linux/i386/bin/autobundle'
     packages.each do |pkg|
       name, version = pkg.split('-')
-      system("#{autobundle} -I #{workdir} -p #{name} -v #{version} -o #{workdir}")
+      if pkg.match(/^(.*)-(.*)$/) then
+        name = $1
+        version = $2
+      else
+        raise "Invalid package name: #{pkg}"
+      end
+      puts("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
+      system("#{autobundle} -I . -p #{pkg}.pkg.af -v #{version} -o .")
     end
   end
 
