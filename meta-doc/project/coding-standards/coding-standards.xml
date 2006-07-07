@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.0//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.0/sdocbook.dtd">
+<article>
+  <title>Coding standards for the Meta-Environment</title>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>This document represents an ongoing effort to document our coding
+    standards. The descriptions are to be short and clear. This information is
+    not complete, please help.</para>
+  </section>
+
+  <section>
+    <title>Coding style in C and Java</title>
+
+    <itemizedlist>
+      <listitem>
+        <para> "Code Complete" by Steve McConnel influences our basic guide
+        lines, please read it.</para>
+      </listitem>
+
+      <listitem>
+        <para>We always use javaCase for identifiers such as function names,
+        method names and variable names. In javaCase, you start with a
+        lowercase letter, and separate words by starting new words with
+        uppercase letters.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Example: myIdentifierForExamplePurposes</para>
+          </listitem>
+
+          <listitem>
+            <para>Exception: all API in C start with a prefix start in all
+            uppercase and end with an underscore. Example:
+            PT_makeTreeAppl</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Types or classes start with capitals, and continue with
+        javaCase. There might be a prefix, which is all capitals and ends with
+        an underscore again.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Examples: ATermList, StackNode, PT_Tree</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>We never hade global variables in C or Java
+        <emphasis>public</emphasis> interfaces. Always use getters and
+        setters. Global variables are sometimes used, but not exported in any
+        interface.</para>
+      </listitem>
+
+      <listitem>
+        <para>Use -Wall -Werror for gcc</para>
+      </listitem>
+
+      <listitem>
+        <para>In C all function and variables local to a file must be declared
+        static.</para>
+      </listitem>
+
+      <listitem>
+        <para>In C all functions that do not change the value of a pointer
+        argument must declare it const.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Example: void printMessage(const char* message);</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>Options to pass to indent:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>--indent-level2 --braces-on-if-line
+            --no-space-after-function-call-names</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Coding style in Makefile.am and configure.{ac,in}</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Only Makefile.in files are instantiated at configure time by the
+        AC_OUTPUT macro, all other build/substitute/instantiation is to be
+        done by automake targets (using gcc or sed for example).</para>
+      </listitem>
+
+      <listitem>
+        <para>Do not use the name configure.in anymore, use
+        configure.ac</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Coding style in T-script (ToolBus)</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Do not use process calls with return variables that are not
+        used</para>
+      </listitem>
+
+      <listitem>
+        <para>Remove all unused variables in lets</para>
+      </listitem>
+
+      <listitem>
+        <para>Use process calls sooner than snd-msg/rec-msg for procedure
+        execution</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Coding style in SDF</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Group productions on the non-terminal on the right-hand side of
+        productions</para>
+      </listitem>
+
+      <listitem>
+        <para>Do not duplicate productions between priority sections and
+        normal syntax sections</para>
+      </listitem>
+
+      <listitem>
+        <para>Fix all warnings mentioned by the SDF checker</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Coding style in ASF+SDF</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Hide all variable definitions in SDF (hiddens)</para>
+      </listitem>
+
+      <listitem>
+        <para>Group all equations for a single outermost function in an
+        equations section</para>
+      </listitem>
+
+      <listitem>
+        <para>Write test equations for non-trivial functions</para>
+      </listitem>
+
+      <listitem>
+        <para>Fix all warnings mentioned by the ASF checker</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</article>
