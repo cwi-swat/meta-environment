@@ -8,10 +8,10 @@ require 'versioning/component'
 def parse_package_file(path)
   # Note: these commands should be evaluated with CommandSpecificShell.
   table = '/ufs/sen1/software/installed/autobundle-0.12/linux/i386/share/autobundle/Autobundle.tbl'
-#  implode = '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/implode-asfix -S'
-#  sglr= '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/sglr -2'
-  sglr= 'sglr'
-  implode = 'implodePT'
+  implode = '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/implode-asfix -S'
+  sglr= '/ufs/sen1/software/installed/strategoxt-0.10/linux/i686/bin/sglr -2'
+  #sglr= 'sglr'
+  #implode = 'implodePT -t'
   system("#{sglr} -p #{table} -i #{path} | #{implode} > #{path}.af")
 end
 
