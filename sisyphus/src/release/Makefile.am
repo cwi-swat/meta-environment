@@ -5,8 +5,7 @@ releasedir = $(pkgdatadir)/release
 
 release_DATA = $(RUBY_FILES)
 
-EXTRA_DIST = $(RUBY_FILES)
-
+EXTRA_DIST = $(RUBY_FILES) test.sh.src
 
 CLEANFILES = test
 
