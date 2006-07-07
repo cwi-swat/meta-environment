@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
 "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 <article>
-  <title>Communication Plan OpenMetaEnvironment</title>
+  <title>Communication Plan Meta-Environment</title>
 
   <section>
     <title xreflabel="section-situation-analysis">Situation analysis</title>
@@ -182,7 +182,7 @@
           </row>
 
           <row>
-            <entry>Google hits OpenMetaEnvironment</entry>
+            <entry>Google hits Meta-Environment</entry>
 
             <entry>0</entry>
 
@@ -197,7 +197,7 @@
 
     <para><remark>We are planning to organize the development of this system
     more explicitly in the fashion of an open source project. We will relabel
-    the project to "OpenMetaEnvironment" <remark>(Is this the best
+    the project to "Meta-Environment" <remark>(Is this the best
     name?)</remark>. </remark></para>
   </section>
 
@@ -206,8 +206,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>Increase the visibility of the OpenMetaEnvironment
-        project.</para>
+        <para>Increase the visibility of the Meta-Environment project.</para>
       </listitem>
 
       <listitem>
