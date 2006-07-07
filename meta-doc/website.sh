@@ -21,7 +21,7 @@ echo "  Meta-Environment Online Documentation" >> ${INDEX}
 echo "</title></head><body>" >> ${INDEX}
 
 for i in ${CATEGORIES}; do
-  echo "<h1>$i</h1><ul>" >> ${INDEX}
+  echo "<h1>`cat $i/TITLE`</h1><ul>" >> ${INDEX}
   BOOKS=`ls $i`
   mkdir -p ${WEB}/$i || true
   for b in ${BOOKS}; do
