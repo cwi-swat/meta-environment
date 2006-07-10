@@ -5,7 +5,7 @@
   <title>Recommended titles on programming and software engineering</title>
 
   <authorblurb>
-    <para> <authorinitials>Jurgen Vinju</authorinitials>,</para>
+    <para><authorinitials>Jurgen Vinju</authorinitials>,</para>
 
     <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
@@ -17,9 +17,8 @@
   <section>
     <title>Introduction</title>
 
-    <para>Sometimes a book or an article can really influence the way we think
-    about and manage Meta-Environment software. This is a very incomplete
-    list, so please help to complete it.</para>
+    <para>Meta-Environment programmers have found the following titles
+    interesting.</para>
   </section>
 
   <section>
@@ -44,13 +43,12 @@
         <para>The inmates are running the asylum: Why High Tech Products Drive
         Us Crazy and How To Restore The Sanity - Alan Cooper</para>
       </listitem>
+
+      <listitem>
+        <para>Spring into Technical Writing for Engineers and Scientists -
+        Barry J. Rosenberg (An efficient guide to writing manuals, papers and
+        other professional documentation)</para>
+      </listitem>
     </itemizedlist>
-  </section>
-
-  <section>
-    <title>Suggestions</title>
-
-    <para>Meta-Environment programmers are invited to add suggestions
-    here.</para>
   </section>
 </article>
