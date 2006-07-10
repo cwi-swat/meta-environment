@@ -124,92 +124,11 @@ def in_place(filename)
   end
 end
 
-
-require 'optparse'
-require 'ostruct'
-require 'yaml'
-require 'time'
-
-class CommandLineParser
-  def self.parse(args)
-    options = OpenStruct.new
-    options.build = nil
-    options.bundle = false
-    options.src_dists = nil
-    options.host = nil
-    options.collect_url = nil
-    options.collect_path = nil
-    options.dbconf = nil
-        
-    opts = OptionParser.new do |opts|
-      opts.banner = "Usage: sisyphus-release [options]"
-      opts.separator ""
-      opts.separator "Options:"
-
-      opts.on("-r build", "--release Build",
-              "Build to be released") do |build|
-        options.build = build.to_i
-      end
-
-      opts.on("-b", "--[no-]bundle", "Also release bundle") do |bundle|
-        options.bundle = bundle
-      end
-
-      opts.on("-h Host", "--host Host", "Host where dists are copied to.") do |host|
-        options.host = host
-      end
-      
-      opts.on("-s Path", "--source-dists Path",
-              "(Sisyphus) path containing continuous dists") do |src_dists|
-        options.src_dists = src_dists
-      end
-
-      opts.on("-u URL", "--url URL",
-              "Public URL used by collect (in package definitions)") do |collect_url|
-        options.collect_url = collect_url
-      end
-
-      opts.on("-p Path", "--path Path",
-              "Path where bundles and packages are released (= -u)") do |path|
-        options.collect_path = path
-      end
-
-      
-      opts.on("-d Dbconf", "--dbconf Dbconf", "Database config file.") do |d|
-        File.open(d) do |f|
-          options.dbconf = YAML.load(f)
-        end
-      end
-
-      begin
-        opts.parse!(args)
-      rescue OptionParser::InvalidOption => e
-        puts opts
-        exit(1)
-      end
-
-      if options.src_dists.nil? or 
-          options.collect_url.nil? or 
-          options.collect_path.nil? or 
-          options.build.nil? or
-          options.host.nil? or
-          options.dbconf.nil? then
-        puts opts
-        exit(1)
-      end
-      
-      return options
-    end
-    
-  end
-  
-end
+require 'release/options'
 
 if __FILE__ == $0 then
-  options = CommandLineParser.parse(ARGV)
+  options = Release::CommandLineParser.parse(ARGV)
 
-  puts options
-  
   dist_host = options.host
   bundles_dir = File.join(options.collect_path, 'bundles')
   packages_dir = options.collect_path # per package subdir
@@ -217,7 +136,7 @@ if __FILE__ == $0 then
   src_dist_location = options.src_dists
   dbconf = options.dbconf
   build_to_be_released = options.build
-  workdir = File.join(Dir.getwd, 'bla')
+  workdir = options.workdir
 
 
   #dist_host = 'build-www.cwi.nl'
@@ -246,30 +165,31 @@ if __FILE__ == $0 then
   
   store = Model::DBStore.new(dbconf)
   store.connect
-
-
   root = Model::SiItem.find(build_to_be_released)
 
-  builds = []
-  root.as_nodes do |n|
-    builds |= [n]
+
+  builds = [root]
+  if options.bundle then
+    root.as_nodes do |n|
+      builds |= [n]
+    end
   end
-
-  packages = package_names(builds)
   map = compute_renaming_to_informative(builds)
-
+  packages = package_names(builds)    
   Dir.chdir(workdir) do 
-
+    
     copy_src_dists(src_dist_location, packages)
     packages = rename_packages_and_archives(map, packages)
     rename_package_definitions_in_archives(map, packages)
-    bundle_name = create_bundle_for_build(root)
-    collect_bundle(bundle_name, 'file://' + workdir, collect_url)
-    bundle_archive = integrate_bundle(bundle_name)
-
-    #copy_bundle_archive
-    # copy gediste bundle naar
+  
+    if options.bundle then
+      bundle_name = create_bundle_for_build(root)
+      collect_bundle(bundle_name, 'file://' + workdir, collect_url)
+      bundle_archive = integrate_bundle(bundle_name)
+      copy_bundle_archive(bundle_archive, host, bundles_dir)
+    end
 
   end
+    
 
 end
