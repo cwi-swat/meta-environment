@@ -170,7 +170,7 @@ class CommandLineParser
       end
 
       opts.on("-p Path", "--path Path",
-              "Path where bundles and packages are released (must point to same loc. as -u)") do |path|
+              "Path where bundles and packages are released (= -u)") do |path|
         options.collect_path = path
       end
 
@@ -195,7 +195,7 @@ class CommandLineParser
           options.host.nil? or
           options.dbconf.nil? then
         puts opts
-        #exit(1)
+        exit(1)
       end
       
       return options
