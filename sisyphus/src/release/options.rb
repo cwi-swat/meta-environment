@@ -15,8 +15,10 @@ module Release
       options.bundle = false
       options.src_dists = nil
       options.host = nil
+      options.candidate = false
       options.collect_url = nil
       options.collect_path = nil
+      options.milestone = ''
       options.dbconf = nil
       
       opts = OptionParser.new do |opts|
@@ -53,8 +55,18 @@ module Release
         end
 
         opts.on("-p Path", "--path Path",
-                "Path where bundles and packages are released (= -u)") do |path|
+                "Path where bundles and packages are released (= -u; disabled)") do |path|
           options.collect_path = path
+        end
+
+        opts.on("-c", "--candidate",
+                "Make a release candidate identified by build Id") do |candidate|
+          options.candidate = candidate
+        end
+
+        opts.on("-m Milestone", "--milestone Milestone",
+                "Milestone suffix for released archives (default '')") do |milestone|
+          options.milestone = milestone
         end
         
         opts.on("-d Dbconf", "--dbconf Dbconf", "Database config file.") do |d|

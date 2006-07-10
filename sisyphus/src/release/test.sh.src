@@ -1,5 +1,17 @@
 #! /bin/sh
 
+# Example invokation:
+#./test \
+#   --release 16465 
+#   --host build-www.cwi.nl 
+#   --souce-dists /ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads 
+#   --url http://www.cwi.nl/projects/MetaEnv 
+#   --path /cwi/www/sites/www.cwi.nl/projects/MetaEnv 
+#   --dbconf ../../doc/dbconf.yml 
+#   --workdir ./bla 
+#   --bundle
+
+
 RUBY_INTERPRETER=__RUBY__
 
 DATA_DIR=__DATA_DIR__

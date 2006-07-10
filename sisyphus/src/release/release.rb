@@ -93,7 +93,6 @@ def collect_bundle(bundle_name, temp_collect_url, trg_collect_url)
   system("tar zxvf #{bundle_name}.tar.gz")
   Dir.chdir(bundle_name) do
     pkglistfile = 'pkg-list'
-    pkglist = nil
     in_place(pkglistfile) do |pkglist|
       pkglist.gsub(/,[^,]*$/, ',' + temp_collect_url)
     end
@@ -109,7 +108,33 @@ def integrate_bundle(bundle_name)
     system("./configure --prefix=#{Dir.tmpdir}")
     system("make install distcheck")
   end
-  return File.join(bundle_name, bundle_name + '.tar.gz')
+  #return File.join(bundle_name, bundle_name + '.tar.gz')
+end
+
+def package_stem(pkg_version)
+  if pkg_version =~ /^([^.]*)-.+$/ then
+    return $1
+  else
+    raise "Could not extract package stem from release name #{pkg_version}"
+  end
+end
+
+def copy_packages(packages, dist_host, packages_dir)
+  packages.each do |package|
+    stem = package_stem(package)
+    mkd = "ssh #{dist_host} mkdir -p #{packages_dir}/#{stem}"
+    system(mkd)
+    cmd = "scp #{package}.tar.gz #{dist_host}:#{packages_dir}/#{stem}"
+    system(cmd)
+    
+  end
+end
+
+def copy_bundle_archive(bundle_archive, dist_host, bundles_dir)
+  mkd = "ssh #{dist_host} mkdir -p #{bundles_dir}"
+  system(mkd)
+  cmd = "scp #{bundle_archive} #{dist_host}:#{bundles_dir}"
+  system(cmd)
 end
     
 
@@ -136,33 +161,10 @@ if __FILE__ == $0 then
   src_dist_location = options.src_dists
   dbconf = options.dbconf
   build_to_be_released = options.build
-  workdir = options.workdir
-
-
-  #dist_host = 'build-www.cwi.nl'
-  #bundles_dir = '/cwi/www/sites/www.cwi.nl/projects/MetaEnv/bundles'
-  #packages_dir = '/cwi/www/sites/www.cwi.nl/projects/MetaEnv'
-  #collect_url = 'http://www.cwi.nl/projects/MetaEnv'
-
-  # This dir should contain .tar.gz, .pkg  files
-  #sisyphus_dist_location = '/ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads'
-  #src_collect_url = 'http://sisyphus.sen.cwi.nl:8080/downloads'
-
-  #db_config_file = '../../doc/dbconf.yml'
-
-  # editor plugin
-  #build_to_be_released = 16465
-  #build_to_be_released = 16446
-
-  #dbconf = nil
-  # Just for testing now...
-  #File.open(db_config_file) do |f|
-  #  dbconf = YAML.load(f)
-  #end
+  workdir = File.expand_path(options.workdir)
 
   system("mkdir -p #{workdir}")
-  
-  
+
   store = Model::DBStore.new(dbconf)
   store.connect
   root = Model::SiItem.find(build_to_be_released)
@@ -174,6 +176,7 @@ if __FILE__ == $0 then
       builds |= [n]
     end
   end
+
   map = compute_renaming_to_informative(builds)
   packages = package_names(builds)    
   Dir.chdir(workdir) do 
@@ -185,11 +188,28 @@ if __FILE__ == $0 then
     if options.bundle then
       bundle_name = create_bundle_for_build(root)
       collect_bundle(bundle_name, 'file://' + workdir, collect_url)
-      bundle_archive = integrate_bundle(bundle_name)
-      copy_bundle_archive(bundle_archive, host, bundles_dir)
-    end
-
+      integrate_bundle(bundle_name)
+      bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')
+     
+      if options.candidate then
+        system("mv #{bundle_archive} #{bundle_name}-pre#{root.id}.tar.gz")
+      else
+        system("mv #{bundle_archive} .")
+      end
+      
+      # Disabled
+      # copy_bundle_archive(bundle_archive, dist_host, bundles_dir)
+      # copy_packages(packages, dist_host, packages_dir)
+    end  
   end
+
+  builds.each do |build|
+    build.released = true
+    build.save
+  end
+
+
+  
     
 
 end
