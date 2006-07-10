@@ -64,7 +64,7 @@ def rename_packages_and_archives(map, packages)
 end
 
 
-def rename_package_definitions_in_archives(map, packages)
+def rename_package_definitions_in_archives(map, packages, collect_url)
   packages.each do |pkg|
     system("tar zcvf #{pkg}.tar.gz #{pkg}")
     system("rm -r #{pkg}")
@@ -73,6 +73,7 @@ def rename_package_definitions_in_archives(map, packages)
     in_place(pkgfile) do |pkgdef|
       map.each_key do |version|
         pkgdef = pkgdef.gsub(version, map[version])
+        pkgdef = pkgdef.gsub(/^location=(.*)$/, "location=#{collect_url}/#{package_stem(pkg)}")
       end
       pkgdef
     end
@@ -87,6 +88,12 @@ def create_bundle_for_build(root)
   version = root.si_revision.informative_version.strip
   bundle_name = autobundle(name, version)
   return bundle_name
+end
+
+def create_bundles_for_packages(packages)
+  packages.each do |pkg|
+    autobundle(package_stem(pkg), package_version(pkg))
+  end
 end
 
 def collect_bundle(bundle_name, temp_collect_url, trg_collect_url)
@@ -106,7 +113,7 @@ end
 def integrate_bundle(bundle_name)
   Dir.chdir(bundle_name) do
     system("./configure --prefix=#{Dir.tmpdir}")
-    system("make install distcheck")
+    system("make install dist")
   end
   #return File.join(bundle_name, bundle_name + '.tar.gz')
 end
@@ -119,21 +126,30 @@ def package_stem(pkg_version)
   end
 end
 
+def package_version(pkg_version)
+  if pkg_version =~ /^([^.]*)-(.+)$/ then
+    return $2
+  else
+    raise "Could not extract package version from release name #{pkg_version}"
+  end
+end
+
 def copy_packages(packages, dist_host, packages_dir)
   packages.each do |package|
     stem = package_stem(package)
     mkd = "ssh #{dist_host} mkdir -p #{packages_dir}/#{stem}"
     system(mkd)
     cmd = "scp #{package}.tar.gz #{dist_host}:#{packages_dir}/#{stem}"
-    system(cmd)
-    
+    system(cmd)    
+    cmd = "scp #{package}.pkg* #{dist_host}:#{packages_dir}/#{stem}"
+    system(cmd)    
   end
 end
 
-def copy_bundle_archive(bundle_archive, dist_host, bundles_dir)
+def copy_bundle_archives(packages, dist_host, bundles_dir)
   mkd = "ssh #{dist_host} mkdir -p #{bundles_dir}"
   system(mkd)
-  cmd = "scp #{bundle_archive} #{dist_host}:#{bundles_dir}"
+  cmd = "scp -r *bundle*.tar.gz #{dist_host}:#{bundles_dir}"
   system(cmd)
 end
     
@@ -176,37 +192,60 @@ if __FILE__ == $0 then
       builds |= [n]
     end
   end
-
   map = compute_renaming_to_informative(builds)
   packages = package_names(builds)    
+
   Dir.chdir(workdir) do 
     
     copy_src_dists(src_dist_location, packages)
     packages = rename_packages_and_archives(map, packages)
-    rename_package_definitions_in_archives(map, packages)
-  
-    if options.bundle then
-      bundle_name = create_bundle_for_build(root)
-      collect_bundle(bundle_name, 'file://' + workdir, collect_url)
-      integrate_bundle(bundle_name)
-      bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')
-     
-      if options.candidate then
-        system("mv #{bundle_archive} #{bundle_name}-pre#{root.id}.tar.gz")
+    rename_package_definitions_in_archives(map, packages, collect_url)
+
+    create_bundles_for_packages(packages)
+
+    # This is also done by create_bundles_for_packages...
+    bundle_name = create_bundle_for_build(root)
+    collect_bundle(bundle_name, 'file://' + workdir, collect_url)
+
+    integrate_bundle(bundle_name)
+
+    bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')     
+    system("mv #{bundle_archive} ./#{bundle_name}-collected.tar.gz")
+    system("rm -r #{bundle_name}")
+
+
+    puts "Ready to release to following packages?"
+    packages.each do |pkg|
+      puts "* #{pkg}"
+    end
+    puts "Going to copy <pkg-name>.tar.gz and <pkg-name>-bundle-*.tar.gz "
+    puts "to: #{packages_dir}/<pkg-name>;"
+    puts "and <pkg-name>-bundle-*-collected.tar.gz"
+    puts "to: #{bundles_dir}."
+    puts "And the release bit will be set to true for all packages."
+    $stdout << "Are you sure? [yN] "
+    resp = gets
+    unless resp =~ /[Yy]/ then
+      puts "Exiting..."
+      exit
+    end
+
+
+    builds.each do |build|
+      if not build.released then
+        build.released = true
+        build.save
       else
-        system("mv #{bundle_archive} .")
+        puts "Build #{build} has been released already."
       end
-      
-      # Disabled
-      # copy_bundle_archive(bundle_archive, dist_host, bundles_dir)
-      # copy_packages(packages, dist_host, packages_dir)
-    end  
+    end
+
+    copy_packages(packages, dist_host, packages_dir)
+    copy_bundle_archives(packages, dist_host, bundles_dir)
+
+
   end
 
-  builds.each do |build|
-    build.released = true
-    build.save
-  end
 
 
   
