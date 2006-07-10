@@ -58,6 +58,29 @@
       </listitem>
     </itemizedlist>
 
+    <para>Apart from the global applications of the system, several
+    technologies that are used in its implementation are known and used by
+    others:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>ATerms: a tree-like datastructure used to represent intermediate
+        data.</para>
+      </listitem>
+
+      <listitem>
+        <para>SGLR: a specific technique for syntax analysis.</para>
+      </listitem>
+
+      <listitem>
+        <para>ToolBus: our component interconnection technique.</para>
+      </listitem>
+
+      <listitem>
+        <para>Rscript: a sublanguage for relational computations.</para>
+      </listitem>
+    </itemizedlist>
+
     <para>The following key words characterize this system/technology:</para>
 
     <table>
@@ -182,7 +205,7 @@
           </row>
 
           <row>
-            <entry>Google hits Meta-Environment</entry>
+            <entry>Google hits OpenMetaEnvironment</entry>
 
             <entry>0</entry>
 
@@ -197,7 +220,7 @@
 
     <para><remark>We are planning to organize the development of this system
     more explicitly in the fashion of an open source project. We will relabel
-    the project to "Meta-Environment" <remark>(Is this the best
+    the project to "OpenMetaEnvironment" <remark>(Is this the best
     name?)</remark>. </remark></para>
   </section>
 
@@ -483,6 +506,62 @@
       <listitem>
         <para>Provide (optional) online user/developer registration system:
         mailing lists, name, usage category, ...</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Logo design</title>
+
+    <para>Apart from asking Tobias Baanders, there are many logo design firms
+    on the web (search for "logo design").</para>
+
+    <para>Typically, for $300-400 a custom made logo is designed; it is
+    selected from a given set of designs and</para>
+
+    <para>is customized with text and colors. The following are the global
+    requierments on the logo:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Fits in our current web-style.</para>
+      </listitem>
+
+      <listitem>
+        <para>If we decide to have a mascotte, then it should be comtaible
+        with the logo.</para>
+      </listitem>
+
+      <listitem>
+        <para>Message: solid, simple, reliable, advanced, sophisticated,
+        futuristic.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following associations maybe useful:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Domain-specific languages: babel, babelfish, rosetta stone,
+        ...</para>
+      </listitem>
+
+      <listitem>
+        <para>Analysis: looking glass, drop of water, lens, microscope, X-ray,
+        measuring instrument, dissection, knife, scissors, </para>
+      </listitem>
+
+      <listitem>
+        <para>Transformation: Escher's triangle, arrows, full circle,
+        butterfly, from seed to plant, ...</para>
+      </listitem>
+
+      <listitem>
+        <para>Renovation (phoenix).</para>
+      </listitem>
+
+      <listitem>
+        <para>A twisted rubic-like cube (components + transformation).</para>
       </listitem>
     </itemizedlist>
   </section>
