@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Example invokation:
-#./test \
+#./release \
 #   --release 16465 
 #   --host build-www.cwi.nl 
 #   --souce-dists /ufs/daybuild/sisyphus-www/wo-sisyphus/public/downloads 
@@ -15,7 +15,7 @@
 RUBY_INTERPRETER=__RUBY__
 
 DATA_DIR=__DATA_DIR__
-CLIENT=./release.rb
+CLIENT=release/release.rb
 
 GEM_DIRS=`ls -d ${DATA_DIR}/gems/*`
 
