@@ -1,9 +1,9 @@
 
-bin_SCRIPTS	= si-cli boot-roll roll
+bin_SCRIPTS	= si-cli boot-roll roll release
 
 EXTRA_DIST	= $(wildcard *.sh.src)
 
-CLEANFILES	= si-cli boot-roll roll
+CLEANFILES	= si-cli boot-roll roll release
 
 % : %.sh.src 
 	sed "s@__PREFIX__@$(prefix)@g;\
