@@ -97,27 +97,27 @@
     <itemizedlist>
       <listitem>
         <para>Documentation on how to perform any specific task with the
-        software</para>
+        software.</para>
       </listitem>
 
       <listitem>
         <para>Technical documentation on how it works on an engineering level
-        (only on a scientific level)</para>
+        (only on a scientific level).</para>
       </listitem>
 
       <listitem>
         <para>Community support (the only help can be provided by the
-        developers, who do not always have the time)</para>
+        developers, who do not always have the time).</para>
       </listitem>
 
       <listitem>
         <para>Up-to-date documentation with respect to user-interface and
-        syntax issues</para>
+        syntax issues.</para>
       </listitem>
 
       <listitem>
         <para>An indexable overview of all documentation on the
-        Meta-Environment</para>
+        Meta-Environment.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -144,7 +144,7 @@
           </listitem>
 
           <listitem>
-            <para>To facilitate the maintenace and extension of the
+            <para>To facilitate the maintenance and extension of the
             Meta-Environment by our open-source community. This implies better
             technical documentation.</para>
           </listitem>
@@ -164,7 +164,7 @@
 
           <listitem>
             <para>We want the information to be targeted at specific
-            audiences; good documentation is written for a (more or less)
+            audiences; better documentation is written for a (more or less)
             specific audience</para>
           </listitem>
 
@@ -176,27 +176,27 @@
 
           <listitem>
             <para>We want to publish the documents in different media (online,
-            pdf, print)</para>
+            pdf, print).</para>
           </listitem>
 
           <listitem>
-            <para>We want an indexable overview</para>
+            <para>We want an indexable overview.</para>
           </listitem>
 
           <listitem>
             <para>We want low-level API documentation to be tightly integrated
-            with the code (such that it can change or migrate with it)</para>
+            with the code (such that it can change or migrate with it).</para>
           </listitem>
 
           <listitem>
             <para>We want documentation for specific use-cases, practical
             information on how to apply the technology to obtain a specific
-            goal</para>
+            goal.</para>
           </listitem>
 
           <listitem>
             <para>We want in-depth documentation on how the technology works
-            and what the engineering trade-offs are</para>
+            and what the engineering trade-offs are.</para>
           </listitem>
         </orderedlist>So, we have taken the following design decisions:</para>
 
@@ -313,31 +313,31 @@
       <para>There is a wide range of topics to discuss,
       including:<itemizedlist>
           <listitem>
-            <para>High-level descriptions of purpose and architecture</para>
+            <para>High-level descriptions of purpose and architecture.</para>
           </listitem>
 
           <listitem>
             <para>User documentation (how-to's, demonstrations, frequently
-            asked questions)</para>
+            asked questions).</para>
           </listitem>
 
           <listitem>
             <para>Detailed technical explanations of the design, algorithms
-            and engineering trade-offs</para>
+            and engineering trade-offs.</para>
           </listitem>
 
           <listitem>
-            <para>Interactive online demonstrations</para>
+            <para>Interactive online demonstrations.</para>
           </listitem>
 
           <listitem>
             <para>Descriptions of successful applications and application
-            areas</para>
+            areas.</para>
           </listitem>
 
           <listitem>
             <para>Open source project management issues (coding conventions,
-            roadmaps)</para>
+            roadmaps).</para>
           </listitem>
         </itemizedlist>Furthermore, we have some additional information that
       is probably more volatile:<itemizedlist>
@@ -363,40 +363,40 @@
         </itemizedlist>We have identified the following categories of
       topics:<itemizedlist>
           <listitem>
-            <para>Getting started - For Novice Users</para>
+            <para>Getting started - For Novice Users.</para>
           </listitem>
 
           <listitem>
-            <para>How to - For Novice and Advanced Users</para>
+            <para>How to - For Novice and Advanced Users.</para>
           </listitem>
 
           <listitem>
-            <para>Understanding - For Specialist Users and Developers</para>
+            <para>Understanding - For Specialist Users and Developers.</para>
           </listitem>
 
           <listitem>
-            <para>Project - For Developers</para>
+            <para>Project - For Developers.</para>
           </listitem>
 
           <listitem>
-            <para>Demonstrations - For Novice and Advanced Users</para>
+            <para>Demonstrations - For Novice and Advanced Users.</para>
           </listitem>
 
           <listitem>
-            <para>Applications - For Novice and Advanced Users</para>
+            <para>Applications - For Novice and Advanced Users.</para>
           </listitem>
 
           <listitem>
-            <para>Courses - For Novice and Advanced Users</para>
+            <para>Courses - For Novice and Advanced Users.</para>
           </listitem>
 
           <listitem>
             <para>Scientific Publications - For Specialists Users and
-            Developers</para>
+            Developers.</para>
           </listitem>
 
           <listitem>
-            <para>Source code/API documentation - For Developers</para>
+            <para>Source code/API documentation - For Developers.</para>
           </listitem>
         </itemizedlist></para>
     </section>
@@ -981,126 +981,213 @@
   </section>
 
   <section>
-    <title>DocBook resources</title>
+    <title>Resources</title>
 
-    <para>Useful links related to DocBook:</para>
+    <section>
+      <title>DocBook resources</title>
 
-    <itemizedlist>
-      <listitem>
-        <para><ulink url="http://www.docbook.org">www.docbook.org</ulink> (see
-        in particular the DocBook wiki at <ulink
-        url="http://wiki.docbook.org">wiki.docbook.org</ulink> with many
-        tutorials, tools and examples)</para>
-      </listitem>
+      <para>Useful links related to DocBook:</para>
 
-      <listitem>
-        <para>The DocBook project (<ulink
-        url="http://docbook.sourceforge.net">docbook.sourceforge.net</ulink>)</para>
-      </listitem>
-    </itemizedlist>
+      <itemizedlist>
+        <listitem>
+          <para><ulink url="http://www.docbook.org">www.docbook.org</ulink>
+          (see in particular the DocBook wiki at <ulink
+          url="http://wiki.docbook.org">wiki.docbook.org</ulink> with many
+          tutorials, tools and examples)</para>
+        </listitem>
 
-    <para>Useful books related to DocBook are:</para>
+        <listitem>
+          <para>The DocBook project (<ulink
+          url="http://docbook.sourceforge.net">docbook.sourceforge.net</ulink>)</para>
+        </listitem>
+      </itemizedlist>
 
-    <itemizedlist>
-      <listitem>
-        <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
-        Guide</emphasis>, O'Reilly, 1999. See also <ulink
-        url="http://docbook.org/tdg">www.docbook.org/tdg</ulink>.</para>
-      </listitem>
+      <para>Useful books related to DocBook are:</para>
 
-      <listitem>
-        <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill, 2005.
-        See also <ulink
-        url="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</ulink>.</para>
-      </listitem>
-    </itemizedlist>
+      <itemizedlist>
+        <listitem>
+          <para>N. Walsh and L. Mueller, <emphasis>DocBook: The Definitive
+          Guide</emphasis>, O'Reilly, 1999. See also <ulink
+          url="http://docbook.org/tdg">www.docbook.org/tdg</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Bob Stayton, DocBook XSL, The Complete Guide, Sagehill, 2005.
+          See also <ulink
+          url="http://www.sagehill.net/docbookxsl">www.sagehill.net/docbookxsl</ulink>.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Image resources</title>
+
+      <para>Documentation becomes more lively and inspiring with good use of
+      illustrations and pictures. Think of the following associations:</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>analysis, parsing</entry>
+
+              <entry>measurement tools, knives, microscopes, lenses,
+              etc.</entry>
+            </row>
+
+            <row>
+              <entry>user-defined syntax</entry>
+
+              <entry>masks, cameleons</entry>
+            </row>
+
+            <row>
+              <entry>transformation</entry>
+
+              <entry>various biological analogies (from seed to plant,
+              metamorphosis of butterfies), electrical transformers</entry>
+            </row>
+
+            <row>
+              <entry>term rewriting</entry>
+
+              <entry>trees, forests, ...</entry>
+            </row>
+
+            <row>
+              <entry>software renovation</entry>
+
+              <entry>renovation of buildings, cities, ...</entry>
+            </row>
+
+            <row>
+              <entry>Software components</entry>
+
+              <entry>lego bricks, (toy) building blocks, electrical outlets,
+              power adapters,</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
+      <para>Here is a list of links to collections of potentially relevant
+      images:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Image databases of the University of Amsterdam: <ulink
+          url="http://www.uba.uva.nl/dpc/beelddatabanken.cfm">www.uba.uva.nl/dpc/beelddatabanken.cfm</ulink>.
+          In particular the botany and map collections are interesting.</para>
+        </listitem>
+
+        <listitem>
+          <para>The electronic zoo: <ulink
+          url="http://netvet.wustl.edu/pix.htm">netvet.wustl.edu/pix.htm</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>CalPhotos: <ulink
+          url="http://calphotos.berkeley.edu/">calphotos.berkeley.edu</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Masks: <ulink
+          url="http://exchanges.state.gov/culprop/bolivia/sect1.htm">exchanges.state.gov/culprop/bolivia/sect1.htm</ulink>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Google image search is also highly recommended for finding
+      relevant illustrations. Be consistent in your choice of illustrations
+      (one theme per topic).</para>
+    </section>
   </section>
 
   <section>
     <title>Plan</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>Switch to DocBook for writing all documentation.</para>
-      </listitem>
+    <para><itemizedlist>
+        <listitem>
+          <para>Switch to DocBook for writing all documentation.</para>
+        </listitem>
 
-      <listitem>
-        <para>Existing documentation will be converted to DocBook.</para>
-      </listitem>
+        <listitem>
+          <para>Existing documentation will be converted to DocBook.</para>
+        </listitem>
 
-      <listitem>
-        <para>Split up ATerm manual into pieces: transform API to doxygen,
-        ToolBus howto for connection tools, and Understanding ATerms for the
-        rest, maybe a small 'How to program ATerms'</para>
-      </listitem>
+        <listitem>
+          <para>Split up ATerm manual into pieces: transform API to doxygen,
+          ToolBus howto for connection tools, and Understanding ATerms for the
+          rest, maybe a small 'How to program ATerms'</para>
+        </listitem>
 
-      <listitem>
-        <para>Existing javadoc documentation in Java will be rendered by
-        javadoc Doxygen and included in the Twiki pages.</para>
-      </listitem>
+        <listitem>
+          <para>Existing javadoc documentation in Java will be rendered by
+          javadoc Doxygen and included in the Twiki pages.</para>
+        </listitem>
 
-      <listitem>
-        <para>For all non-java documentation, we will start to write Doxygen
-        comment</para>
-      </listitem>
+        <listitem>
+          <para>For all non-java documentation, we will start to write Doxygen
+          comment</para>
+        </listitem>
 
-      <listitem>
-        <para>Use Doxygen to generate documentation for all non-java packages,
-        and include in the Twiki pages. (DONE)</para>
-      </listitem>
+        <listitem>
+          <para>Use Doxygen to generate documentation for all non-java
+          packages, and include in the Twiki pages. (DONE)</para>
+        </listitem>
 
-      <listitem>
-        <para>Add a <emphasis>doc</emphasis> target to all our packages and
-        include the documentation in the website.</para>
-      </listitem>
+        <listitem>
+          <para>Add a <emphasis>doc</emphasis> target to all our packages and
+          include the documentation in the website.</para>
+        </listitem>
 
-      <listitem>
-        <para>Man pages and API documentation will be included in each
-        package.</para>
-      </listitem>
+        <listitem>
+          <para>Man pages and API documentation will be included in each
+          package.</para>
+        </listitem>
 
-      <listitem>
-        <para>Write manpages in docbook format (in the directory that contains
-        the main() of the tool).</para>
-      </listitem>
+        <listitem>
+          <para>Write manpages in docbook format (in the directory that
+          contains the main() of the tool).</para>
+        </listitem>
 
-      <listitem>
-        <para>More global documents will be included in the meta-doc
-        package.</para>
-      </listitem>
+        <listitem>
+          <para>More global documents will be included in the meta-doc
+          package.</para>
+        </listitem>
 
-      <listitem>
-        <para>Publish meta-doc documentation in the Twiki pages
-        (continuously)</para>
-      </listitem>
+        <listitem>
+          <para>Publish meta-doc documentation in the Twiki pages
+          (continuously)</para>
+        </listitem>
 
-      <listitem>
-        <para>Extend meta-studio with a java help browser. See http <ulink
-        url="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</ulink></para>
-      </listitem>
+        <listitem>
+          <para>Extend meta-studio with a java help browser. See http <ulink
+          url="www.onjava.com/pub/a/onjave/2003/10/15/javahelp_docbook.html">www.onjava.com/pub/a/onjava/2003/10/15/javahelp_docbook.html</ulink></para>
+        </listitem>
 
-      <listitem>
-        <para>Start write <emphasis>How to</emphasis> and
-        <emphasis>Understanding</emphasis> articles, after prioritizing them,
-        reusing parts of the old documentation</para>
-      </listitem>
+        <listitem>
+          <para>Start write <emphasis>How to</emphasis> and
+          <emphasis>Understanding</emphasis> articles, after prioritizing
+          them, reusing parts of the old documentation</para>
+        </listitem>
 
-      <listitem>
-        <para>Replace Pico guided tour by interactive
-        <emphasis>Demonstration</emphasis></para>
-      </listitem>
+        <listitem>
+          <para>Replace Pico guided tour by interactive
+          <emphasis>Demonstration</emphasis></para>
+        </listitem>
 
-      <listitem>
-        <para>Make packages smaller (one tool/library, one package)</para>
-      </listitem>
+        <listitem>
+          <para>Make packages smaller (one tool/library, one package)</para>
+        </listitem>
 
-      <listitem>
-        <para>Invite people to write <emphasis>Applications</emphasis>
-        documents: Ralph Oudejans (First result), Mark van den Brand (Risla,
-        Elan4), Albert Hofkamp (Chi), Eelco Visser (StrategoXT),
-        Pierre-Etienne Moreau (Tom), Peter Mosses (Action Notation), Jan-Friso
-        Groote/Jaco van der Pol (muCRL)</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>Invite people to write <emphasis>Applications</emphasis>
+          documents: Ralph Oudejans (First result), Mark van den Brand (Risla,
+          Elan4), Albert Hofkamp (Chi), Eelco Visser (StrategoXT),
+          Pierre-Etienne Moreau (Tom), Peter Mosses (Action Notation),
+          Jan-Friso Groote/Jaco van der Pol (muCRL), Anthony Cleve (Data
+          reengineering).</para>
+        </listitem>
+      </itemizedlist></para>
   </section>
 </article>
