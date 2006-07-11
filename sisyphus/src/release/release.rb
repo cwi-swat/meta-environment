@@ -201,16 +201,13 @@ if __FILE__ == $0 then
     packages = rename_packages_and_archives(map, packages)
     rename_package_definitions_in_archives(map, packages, collect_url)
 
-    create_bundles_for_packages(packages)
-
-    # This is also done by create_bundles_for_packages...
     bundle_name = create_bundle_for_build(root)
     collect_bundle(bundle_name, 'file://' + workdir, collect_url)
 
     integrate_bundle(bundle_name)
 
     bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')     
-    system("mv #{bundle_archive} ./#{bundle_name}-collected.tar.gz")
+    #system("mv #{bundle_archive} ./#{bundle_name}-collected.tar.gz")
     system("rm -r #{bundle_name}")
 
 
@@ -218,11 +215,14 @@ if __FILE__ == $0 then
     packages.each do |pkg|
       puts "* #{pkg}"
     end
-    puts "Going to copy <pkg-name>.tar.gz and <pkg-name>-bundle-*.tar.gz "
-    puts "to: #{packages_dir}/<pkg-name>;"
-    puts "and <pkg-name>-bundle-*-collected.tar.gz"
-    puts "to: #{bundles_dir}."
-    puts "And the release bit will be set to true for all packages."
+
+    puts "Going to copy "
+    packages.each do |pkg|
+      puts " * #{pkg}.tar.gz to #{packages_dir}/#{package_stem(pkg)}"
+    end
+    puts "and "
+    puts " * #{bundle_archive} to: #{bundles_dir}."
+    puts "And the release bit will be set to true for all packages involved."
     $stdout << "Are you sure? [yN] "
     resp = gets
     unless resp =~ /[Yy]/ then
