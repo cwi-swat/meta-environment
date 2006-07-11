@@ -36,17 +36,22 @@
     fashion of an open source project. First of all, we will relabel the
     project as "Meta-Environment" <remark>(Is this the best name?)</remark>.
     Next we need to present our documentation in a coherent fashion. The
-    purpose of the current document is twofold:</para>
+    purpose of the current document is three-fold:</para>
 
     <itemizedlist>
       <listitem>
         <para>to describe a general documentation policy for the
-        Meta-Environment, and</para>
+        Meta-Environment</para>
+      </listitem>
+
+      <listitem>
+        <para>to identify precisely a number of documents that will be written
+        or rewritten</para>
       </listitem>
 
       <listitem>
         <para>to make a selection of tools and techniques that can be used to
-        implement this policy.</para>
+        implement this policy</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -120,163 +125,266 @@
   <section>
     <title>The ideal situation</title>
 
-    <para>Ideally, we want to present all information about our system in a
-    unified manner. This includes:</para>
+    <para>In an ideal situation we have a coherent plan for the
+    Meta-Environment documentation. This includes a common style, a model of
+    our audience, a framework/structure for placing documents in, targeted at
+    specific audiences, and a list of important documents.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>High-level descriptions of purpose and architecture</para>
-      </listitem>
+    <section>
+      <title>Requirements and design decisions</title>
 
-      <listitem>
-        <para>User documentation (how-to's, demonstrations, frequently asked
-        questions)</para>
-      </listitem>
+      <para>We have identified the following requirements for our
+      documents:<orderedlist>
+          <listitem>
+            <para>Ideally, we want to present all information about our system
+            in a unified (read "predictable") manner. Documentation can be
+            organized in various manners, e.g. task-oriented,
+            technology-oriented, user-oriented, developer-oriented, etc.
+            Another critical decision is to use large, integrated, manuals or
+            more loosely coupled information. The requirement is to be
+            consistent in this organization. </para>
+          </listitem>
 
-      <listitem>
-        <para>Detailed technical explanations of the design, algorithms and
-        engineering trade-offs</para>
-      </listitem>
+          <listitem>
+            <para>We want the information to be targeted at specific
+            audiences</para>
+          </listitem>
 
-      <listitem>
-        <para>Interactive online demonstrations</para>
-      </listitem>
+          <listitem>
+            <para>We want the documents to be easily extensible (to minimize
+            the effort of maintaining/updating the information</para>
+          </listitem>
 
-      <listitem>
-        <para>Descriptions of successful applications and application
-        areas</para>
-      </listitem>
+          <listitem>
+            <para>We want to publish the documents in different media (online,
+            pdf, print)</para>
+          </listitem>
 
-      <listitem>
-        <para>Open source project management issues (coding conventions,
-        roadmaps)</para>
-      </listitem>
-    </itemizedlist>
+          <listitem>
+            <para>We need an indexable overview</para>
+          </listitem>
 
-    <para>Other information that is primarily relevant for the website:</para>
+          <listitem>
+            <para>We want low-level API documentation to be tightly integrated
+            with the code</para>
+          </listitem>
 
-    <itemizedlist>
-      <listitem>
-        <para>Download area with instructions.</para>
-      </listitem>
+          <listitem>
+            <para>We want documentation for specific use-cases, not the
+            technology in general</para>
+          </listitem>
+        </orderedlist>So, we have taken the following design decisions:</para>
 
-      <listitem>
-        <para>Description of the licenses we are using.</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>We will organize the documentation in short, loosely coupled,
+          tightly integrated documents (R3,R4). Loosely coupled articles are
+          good for web presentation, and can be combined with some additional
+          glue in a paper form.</para>
+        </listitem>
 
-      <listitem>
-        <para>Access to bugtracker.</para>
-      </listitem>
+        <listitem>
+          <para>We will use a common presentation style </para>
+        </listitem>
+      </itemizedlist>
 
-      <listitem>
-        <para>Access to SVN repository.</para>
-      </listitem>
+      <para> </para>
+    </section>
 
-      <listitem>
-        <para>Access to (archived) mailing lists.</para>
-      </listitem>
-    </itemizedlist>
+    <section>
+      <title>Audience</title>
 
-    <para>Documentation can be organized in various manners, e.g.
-    task-oriented, technology-oriented, user-oriented, developer-oriented,
-    etc. Another critical decision is to use large, integrated, manuals or
-    more loosely coupled information. In the following subsections a more
-    loosely coupled organization is proposed based on
-    <emphasis>articles</emphasis> that fall in a number of categories and
-    follow common presentation styles.</para>
+      <para>Our audience consists of the following groups of people:</para>
 
-    <para>The general idea is that loosely coupled articles present well in a
-    web site, and they can be easily ordered and collected in a more
-    book-style oriented PDF format.</para>
+      <itemizedlist>
+        <listitem>
+          <para>Users of the ASF+SDF Meta-Environment.</para>
+        </listitem>
 
-    <para>Our audience consists of the following groups of people:</para>
+        <listitem>
+          <para>ASF+SDF Meta-Environment newbies.</para>
+        </listitem>
 
-    <itemizedlist>
-      <listitem>
-        <para>Users of the ASF+SDF Meta-Environment.</para>
-      </listitem>
+        <listitem>
+          <para>Users of SDF.</para>
+        </listitem>
 
-      <listitem>
-        <para>ASF+SDF Meta-Environment newbies.</para>
-      </listitem>
+        <listitem>
+          <para>Users of the ATerm library and ApiGen.</para>
+        </listitem>
 
-      <listitem>
-        <para>Users of SDF.</para>
-      </listitem>
+        <listitem>
+          <para>Bachelor and master students.</para>
+        </listitem>
 
-      <listitem>
-        <para>Users of the ATerm library and ApiGen.</para>
-      </listitem>
+        <listitem>
+          <para>Developers of any of the components.</para>
+        </listitem>
 
-      <listitem>
-        <para>Bachelor and master students.</para>
-      </listitem>
+        <listitem>
+          <para>Advanced users (contributors of applications).</para>
+        </listitem>
 
-      <listitem>
-        <para>Developers of any of the components.</para>
-      </listitem>
+        <listitem>
+          <para>Project managers.</para>
+        </listitem>
 
-      <listitem>
-        <para>Advanced users (contributors of applications).</para>
-      </listitem>
+        <listitem>
+          <para>Scientific colleagues working on related topics.</para>
+        </listitem>
 
-      <listitem>
-        <para>Project managers.</para>
-      </listitem>
+        <listitem>
+          <para>Scientific colleagues working on topics that could be
+          applications of the Meta-Environment.</para>
+        </listitem>
+      </itemizedlist>
 
-      <listitem>
-        <para>Scientific colleagues working on related topics.</para>
-      </listitem>
+      <para>To simplify this complex situation, we split these groups into two
+      main groups: <emphasis role="bold">Users</emphasis> and <emphasis
+      role="bold">Developers</emphasis>. Users are people that are not
+      interested in the source code level of the software: they deal with the
+      commandline and GUI interfaces, and nothing else. Developers are all
+      other people. Documentation can be targeted at
+      <emphasis>Users</emphasis>, or at <emphasis>Developers</emphasis>, or at
+      both at the same time. Then, we classify members of each group into
+      maturity levels:</para>
 
-      <listitem>
-        <para>Scientific colleagues working on topics that could be
-        applications of the Meta-Environment.</para>
-      </listitem>
-    </itemizedlist>
+      <orderedlist>
+        <listitem>
+          <para><emphasis role="bold">Novice</emphasis>: has expressed the
+          intention of participating, does not know where to start, or where
+          to end. Does not have an idea of scope. Has to deal with a new
+          paradigm.</para>
+        </listitem>
 
-    <para>To simplify this complex situation, we split these groups into two
-    main groups: <emphasis role="bold">Users</emphasis> and <emphasis
-    role="bold">Developers</emphasis>. Users are people that are not
-    interested in the source code level of the software: they deal with the
-    commandline and GUI interfaces, and nothing else. Developers are all other
-    people. Documentation can be targeted at <emphasis>Users</emphasis>, or at
-    <emphasis>Developers</emphasis>, or at both at the same time. Then, we
-    classify members of each group into maturity levels:</para>
+        <listitem>
+          <para><emphasis role="bold">Advanced</emphasis>: has adequate
+          experience, has a certain overview of the system, knows the scope
+          and limitations, can provide feedback to
+          <emphasis>Newbies.</emphasis></para>
+        </listitem>
 
-    <itemizedlist>
-      <listitem>
-        <para><emphasis role="bold">Newbie</emphasis>: has expressed the
-        intention of participating, does not know where to start, or where to
-        end. Does not have an idea of scope. Has to deal with a new
-        paradigm.</para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">Specialist</emphasis>: has in-depth
+          understanding of one or more particular products, can provide
+          feedback to <emphasis>Professionals. </emphasis></para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">Professional</emphasis>: has adequate
-        experience, has a certain overview of the system, knows the scope and
-        limitations, can provide feedback to
-        <emphasis>Newbies.</emphasis></para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">Owner</emphasis>: is the representative
+          of one or more particular products or applications, can provide
+          feedback to and stimulate <emphasis>Specialists.</emphasis></para>
+        </listitem>
+      </orderedlist>
 
-      <listitem>
-        <para><emphasis role="bold">Specialist</emphasis>: has in-depth
-        understanding of one or more particular products, can provide feedback
-        to <emphasis>Professionals.</emphasis></para>
-      </listitem>
+      <para>This classification helps us to think about the audience of a
+      certain document. Each document should make clear at the beginning what
+      the expected audience is.</para>
+    </section>
 
-      <listitem>
-        <para><emphasis role="bold">Owner</emphasis>: is the representative of
-        one or more particular products or applications, can provide feedback
-        to and stimulate <emphasis>Specialists.</emphasis></para>
-      </listitem>
-    </itemizedlist>
+    <section>
+      <title>Topics</title>
 
-    <para>This classification helps us to think about the audience of a
-    certain document. Each document should make clear at the beginning what
-    the expected audience is.</para>
+      <para>There is a wide range of topics to discuss,
+      including:<itemizedlist>
+          <listitem>
+            <para>High-level descriptions of purpose and architecture</para>
+          </listitem>
 
-    <para>The following sections describe the top-level document categories
-    that we have in mind.</para>
+          <listitem>
+            <para>User documentation (how-to's, demonstrations, frequently
+            asked questions)</para>
+          </listitem>
+
+          <listitem>
+            <para>Detailed technical explanations of the design, algorithms
+            and engineering trade-offs</para>
+          </listitem>
+
+          <listitem>
+            <para>Interactive online demonstrations</para>
+          </listitem>
+
+          <listitem>
+            <para>Descriptions of successful applications and application
+            areas</para>
+          </listitem>
+
+          <listitem>
+            <para>Open source project management issues (coding conventions,
+            roadmaps)</para>
+          </listitem>
+        </itemizedlist>Furthermore, we have some additional information that
+      is probably more volatile:<itemizedlist>
+          <listitem>
+            <para>Download area with instructions.</para>
+          </listitem>
+
+          <listitem>
+            <para>Description of the licenses we are using.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to bugtracker.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to SVN repository.</para>
+          </listitem>
+
+          <listitem>
+            <para>Access to (archived) mailing lists.</para>
+          </listitem>
+        </itemizedlist>We have identified the following categories of
+      topics:<itemizedlist>
+          <listitem>
+            <para>Getting started - For Novice Users </para>
+          </listitem>
+
+          <listitem>
+            <para>How to - For Novice and Advanced Users</para>
+          </listitem>
+
+          <listitem>
+            <para>Understanding - For Specialist Users and Developers</para>
+          </listitem>
+
+          <listitem>
+            <para>Project - For Developers</para>
+          </listitem>
+
+          <listitem>
+            <para>Demonstrations - For Novice and Advanced Users</para>
+          </listitem>
+
+          <listitem>
+            <para>Applications - For Novice and Advanced Users</para>
+          </listitem>
+
+          <listitem>
+            <para>Courses - For Novice and Advanced Users</para>
+          </listitem>
+
+          <listitem>
+            <para>Scientific Publications - For Specialists Users and
+            Developers</para>
+          </listitem>
+
+          <listitem>
+            <para>Source code/API documentation - For Developers</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+
+  <section>
+    <title>Documents</title>
+
+    <para>Each category will be described and a number of documents to be
+    written is identified. The idea is that these categories are easily
+    extensible with new material, because the documents are relatively small.
+    Still, this plan mentions a number of documents that need to be written to
+    get things started (or rather to catch up).</para>
 
     <section>
       <title>Getting started ...</title>
@@ -286,7 +394,7 @@
       because these articles need to be found easily online (i.e. at the top
       of a page).The idea is of course to make the technology as accessible as
       possible. These articles provide pointers to other articles and online
-      resources. Typical issues:</para>
+      resources. Typical documents:</para>
 
       <itemizedlist>
         <listitem>
@@ -374,11 +482,20 @@
         </listitem>
 
         <listitem>
-          <para>How to specify language semantics in ASF</para>
+          <para>How to specify an algebra in ASF+SDF</para>
         </listitem>
 
         <listitem>
-          <para>How to write ToolBus scripts</para>
+          <para>How to write a compiler in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to write an interpreter in ASF+SDF</para>
+        </listitem>
+
+        <listitem>
+          <para>How to use ToolBus to let tools written in different languages
+          work together</para>
         </listitem>
 
         <listitem>
@@ -420,8 +537,8 @@
         </listitem>
 
         <listitem>
-          <para>Targeted at either <emphasis role="bold">Newbie
-          Users</emphasis> or <emphasis role="bold">Professional
+          <para>Targeted at either <emphasis role="bold">Novice
+          Users</emphasis> or <emphasis role="bold">Advanced
           Users</emphasis></para>
         </listitem>
 
@@ -470,8 +587,8 @@
         </listitem>
 
         <listitem>
-          <para>Written by <emphasis role="bold">Professional Users</emphasis>
-          or <emphasis role="bold">Developers</emphasis></para>
+          <para>Written by <emphasis role="bold">Advanced Users</emphasis> or
+          <emphasis role="bold">Developers</emphasis></para>
         </listitem>
 
         <listitem>
@@ -622,7 +739,7 @@
         </listitem>
 
         <listitem>
-          <para>Understanding Autobundle source code composition tool</para>
+          <para>Understanding Source code tree composition</para>
         </listitem>
 
         <listitem>
@@ -635,7 +752,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>Written for a more specialized audience (both developers and
+          <para>Written for a more advanced audience (both developers and
           users)</para>
         </listitem>
 
