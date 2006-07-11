@@ -127,11 +127,28 @@
 
     <para>In an ideal situation we have a coherent plan for the
     Meta-Environment documentation. This includes a common style, a model of
-    our audience, a framework/structure for placing documents in, targeted at
-    specific audiences, and a list of important documents.</para>
+    our audience, a clear framework/structure for placing documents in, and a
+    list of important documents.</para>
 
     <section>
       <title>Requirements and design decisions</title>
+
+      <para>We have two main desires that this documentation plan must
+      fulfill:</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para>To facilitate the application of the Meta-Environment by
+            more people to more applications. This implies better user
+            documentation.</para>
+          </listitem>
+
+          <listitem>
+            <para>To facilitate the maintenace and extension of the
+            Meta-Environment by our open-source community. This implies better
+            technical documentation.</para>
+          </listitem>
+        </itemizedlist></para>
 
       <para>We have identified the following requirements for our
       documents:<orderedlist>
@@ -142,17 +159,19 @@
             technology-oriented, user-oriented, developer-oriented, etc.
             Another critical decision is to use large, integrated, manuals or
             more loosely coupled information. The requirement is to be
-            consistent in this organization. </para>
+            consistent in this organization.</para>
           </listitem>
 
           <listitem>
             <para>We want the information to be targeted at specific
-            audiences</para>
+            audiences; good documentation is written for a (more or less)
+            specific audience</para>
           </listitem>
 
           <listitem>
-            <para>We want the documents to be easily extensible (to minimize
-            the effort of maintaining/updating the information</para>
+            <para>We want the documentation framework to be easily extensible
+            (to minimize the effort of maintaining/updating the information,
+            adding documents, etc.)</para>
           </listitem>
 
           <listitem>
@@ -161,17 +180,23 @@
           </listitem>
 
           <listitem>
-            <para>We need an indexable overview</para>
+            <para>We want an indexable overview</para>
           </listitem>
 
           <listitem>
             <para>We want low-level API documentation to be tightly integrated
-            with the code</para>
+            with the code (such that it can change or migrate with it)</para>
           </listitem>
 
           <listitem>
-            <para>We want documentation for specific use-cases, not the
-            technology in general</para>
+            <para>We want documentation for specific use-cases, practical
+            information on how to apply the technology to obtain a specific
+            goal</para>
+          </listitem>
+
+          <listitem>
+            <para>We want in-depth documentation on how the technology works
+            and what the engineering trade-offs are</para>
           </listitem>
         </orderedlist>So, we have taken the following design decisions:</para>
 
@@ -180,15 +205,15 @@
           <para>We will organize the documentation in short, loosely coupled,
           tightly integrated documents (R3,R4). Loosely coupled articles are
           good for web presentation, and can be combined with some additional
-          glue in a paper form.</para>
+          glue in a paper form. Tight integration means that a single document
+          describes one issue completely, albeit at a certain level of
+          abstraction.</para>
         </listitem>
 
         <listitem>
-          <para>We will use a common presentation style </para>
+          <para>We will use a common presentation style</para>
         </listitem>
       </itemizedlist>
-
-      <para> </para>
     </section>
 
     <section>
@@ -338,7 +363,7 @@
         </itemizedlist>We have identified the following categories of
       topics:<itemizedlist>
           <listitem>
-            <para>Getting started - For Novice Users </para>
+            <para>Getting started - For Novice Users</para>
           </listitem>
 
           <listitem>
