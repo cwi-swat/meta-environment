@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jul 13 11:24:49 CEST 2006 <kooiker@cwi.nl>
+ * src/**/StackViewer.java:
+   - Add scrollbars to variable list (closes #380)
+
 Wed Apr  5 17:00:29 EDT 2006 <jurgenv@cwi.nl	>
  * src/**: fixed StatusBar interface problem with Studio.
 

@@ -14,6 +14,7 @@ import javax.swing.Action;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
@@ -177,10 +178,11 @@ public class StackViewer
 		frameLabels.add("West", leftLabels);
 		frameLabels.add("Center", rightLabels);
 
-		frameVars = new JList();
+        frameVars = new JList();
+        JScrollPane scrollFrameVars = new JScrollPane(frameVars);
 
 		framePanel.add("North", frameLabels);
-		framePanel.add("Center", frameVars);
+		framePanel.add("Center", scrollFrameVars);
 
 		//}}}
 
