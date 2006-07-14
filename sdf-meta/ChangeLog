@@ -1,5 +1,10 @@
 $Id$
 
+Fri Jul 14 15:58:11 CEST 2006 <kooiker@cwi.nl>
+ * tbscripts/sdf-listeners.tb:
+   - Replaced all propagation and contra propagation rules with 2 modal logic
+     based rules
+
 Fri Jun 23 16:09:43 CEST 2006 <kooiker@cwi.nl>
  * tbscripts/idle-state.tb:
    - Don't send idle when the system is already idle (when the worklist is

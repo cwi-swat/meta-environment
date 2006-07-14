@@ -13,21 +13,11 @@
 process InitializeInheritedStatus is
   /* the first one must not have any <term> holes because of a ToolBus bug */
   
-  /* once all kids are complete, we are complete */
-  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, complete, complete, all)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", child-error, complete, complete, all)
+  /* Once we are opened and our kids are opened, then we become complete */
+  MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", is-set, opened, opened, complete, all)
 
-  /* we are not complete anymore, when one of our kids is available */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, edited, opened, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, opened, opened, one)
-
-  /* if one of our kids is an error, we become a child-error */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, error, child-error, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, error, child-error, one)
-
-  /* if one of our kids is a child error, we are also a child-error  */
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", opened, child-error, child-error, one)
-  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", complete, child-error, child-error, one)
+  /* When we are not in error and one of our kids has an error, we become child-error */
+  . MM-RegisterInheritedAttribute(SDF_NAMESPACE, "status", is-not-set, error, error, child-error, one)
 
 toolbus(InitializeInheritedStatus)
 
@@ -205,7 +195,6 @@ in
       fi
     else
       MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", opened) 
-      . MM-SetAttribute(ModuleId, SDF_NAMESPACE, "status", complete) 
     fi
   )
   *
