@@ -34,7 +34,7 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 		bridge = new ModuleManagerBridge(pureFactory, this);
 		try {
 			bridge.init(args);
-			bridge.connect();
+            bridge.connect();
 		} catch (IOException e) {
 			System.err.println("Could not establish connection to ToolBus: "
 					+ e);
@@ -234,7 +234,15 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public static void main(String[] args) {
-		new ModuleManager(args);
+        args = new String[6];
+        args[0] = "-TB_HOST_NAME";
+        args[1] = "localhost";
+        args[2] = "-TB_PORT";
+        args[3] = "8999";
+        args[4] = "-TB_TOOL_NAME";
+        args[5] = "module-manager";
+
+        new ModuleManager(args);
 	}
 
 	public void attributeSet(ModuleId id, ATerm namespace, ATerm key,
@@ -254,8 +262,8 @@ public class ModuleManager implements ModuleManagerTif, AttributeSetListener {
 	}
 
 	public void registerInheritedAttribute(ATerm namespace, ATerm key,
-			ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
-		moduleDB.registerInheritedAttribute(namespace, key, oldValue, childValue, newValue,
+			ATerm negation, ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
+		moduleDB.registerInheritedAttribute(namespace, key, negation, oldValue, childValue, newValue,
 				type);
 	}
 

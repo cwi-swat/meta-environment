@@ -21,11 +21,11 @@ public class InheritedAttributeMap {
                 oldValue).insert(childValue).insert(value);
     }
 
-    public InheritedAttribute put(ATerm namespace, ATerm key, ATerm oldValue,
-            ATerm childValue, ATerm newValue, ATerm type) {
+    public InheritedAttribute put(ATerm namespace, ATerm key, ATerm negation,
+            ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
 
         InheritedAttribute attr = makeInheritedAttribute(namespace, key,
-                oldValue, childValue, newValue, type);
+                negation, oldValue, childValue, newValue, type);
 
         map.put(getKey(namespace, key, oldValue, childValue, newValue), attr);
         return attr;
@@ -49,15 +49,20 @@ public class InheritedAttributeMap {
     // }
 
     private InheritedAttribute makeInheritedAttribute(ATerm namespace,
-            ATerm key, ATerm oldValue, ATerm childValue, ATerm newValue,
-            ATerm type) {
+            ATerm key, ATerm negation, ATerm oldValue, ATerm childValue,
+            ATerm newValue, ATerm type) {
+        int negOldValue = InheritedAttribute.IS_SET;
         int inheritanceType = InheritedAttribute.INHERIT_FROM_ALL;
 
+        if (negation != null && negation.isEqual(negation.getFactory().parse("is-not-set"))) {
+            negOldValue = InheritedAttribute.IS_NOT_SET;
+        }
+        
         if (type != null && type.isEqual(type.getFactory().parse("one"))) {
             inheritanceType = InheritedAttribute.INHERIT_FROM_ONE;
         }
 
-        InheritedAttribute attr = new InheritedAttribute(namespace, key,
+        InheritedAttribute attr = new InheritedAttribute(namespace, key, negOldValue,
                 oldValue, childValue, newValue, inheritanceType);
         return attr;
     }

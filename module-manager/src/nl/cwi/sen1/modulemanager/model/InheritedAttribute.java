@@ -13,16 +13,23 @@ public class InheritedAttribute {
 
 	private ATerm newValue;
 
+    private int negation;
+    
 	private int type;
 
+    public static final int IS_SET = 0;
+
+    public static final int IS_NOT_SET = 1;
+    
 	public static final int INHERIT_FROM_ONE = 0;
 
 	public static final int INHERIT_FROM_ALL = 1;
 
-	public InheritedAttribute(ATerm namespace, ATerm key, ATerm oldValue,
+	public InheritedAttribute(ATerm namespace, ATerm key, int negation, ATerm oldValue,
 			ATerm childValue, ATerm newValue, int type) {
 		this.namespace = namespace;
 		this.key = key;
+        this.negation = negation;
 		this.newValue = newValue;
 		this.childValue = childValue;
 		this.oldValue = oldValue;
@@ -49,6 +56,14 @@ public class InheritedAttribute {
 		return oldValue;
 	}
 
+    public boolean isSet() {
+        return negation == IS_SET;
+    }
+    
+    public boolean isNotSet() {
+        return negation == IS_NOT_SET;
+    }
+    
 	public boolean inheritFromAll() {
 		return type == INHERIT_FROM_ALL;
 	}

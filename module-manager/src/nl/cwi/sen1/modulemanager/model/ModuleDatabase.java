@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import nl.cwi.sen1.moduleapi.types.AttributeStore;
 import nl.cwi.sen1.moduleapi.types.ModuleId;
@@ -23,10 +22,6 @@ public class ModuleDatabase {
 
     private Map<ModuleId, Set<ModuleId>> ascendants;
 
-    private SCCGraph sccGraph;
-
-    private Map<ModuleId, SCC> moduleSCCMap = new HashMap<ModuleId, SCC>();
-
     private AttributeSetListener listener;
 
     public ModuleDatabase(AttributeSetListener l) {
@@ -34,7 +29,6 @@ public class ModuleDatabase {
         modules = new HashMap<ModuleId, Module>();
         descendants = new HashMap<ModuleId, Set<ModuleId>>();
         ascendants = new HashMap<ModuleId, Set<ModuleId>>();
-        sccGraph = new SCCGraph();
         listener = l;
         inheritedAttributes = new InheritedAttributeMap();
     }
@@ -47,7 +41,6 @@ public class ModuleDatabase {
         modules.put(moduleId, module);
         descendants.put(moduleId, new HashSet<ModuleId>());
         ascendants.put(moduleId, new HashSet<ModuleId>());
-        computeSCCGraph();
     }
 
     public void removeModule(ModuleId moduleId) {
@@ -58,8 +51,8 @@ public class ModuleDatabase {
     }
 
     public void registerInheritedAttribute(ATerm namespace, ATerm key,
-            ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
-        inheritedAttributes.put(namespace, key, oldValue, childValue, newValue,
+            ATerm negation, ATerm oldValue, ATerm childValue, ATerm newValue, ATerm type) {
+        inheritedAttributes.put(namespace, key, negation, oldValue, childValue, newValue,
                 type);
         triggerAllAttributeOnAllModules();
     }
@@ -71,23 +64,16 @@ public class ModuleDatabase {
     }
 
     private void triggerAllAttributeOnAllModules() {
-        for (Iterator<SCC> iter = sccGraph.keyIterator(); iter.hasNext();) {
+        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
+                .hasNext();) {
             triggerAllInheritedAttributes(iter.next());
         }
     }
 
-    private void triggerAllInheritedAttributes(SCC scc) {
+    private void triggerAllInheritedAttributes(ModuleId id) {
         for (Iterator<InheritedAttribute> iter = inheritedAttributes.iterator(); iter
                 .hasNext();) {
-            inherit(iter.next(), scc);
-        }
-    }
-
-    private void triggerInheritedAttributes(SCC scc,
-            Set<InheritedAttribute> attrs) {
-        for (Iterator<InheritedAttribute> iter = attrs.iterator(); iter
-                .hasNext();) {
-            inherit(iter.next(), scc);
+            inherit(iter.next(), id);
         }
     }
 
@@ -101,37 +87,7 @@ public class ModuleDatabase {
             return;
         }
 
-        SCC scc = moduleSCCMap.get(moduleId);
-
-        Set<InheritedAttribute> attrs = inheritedAttributes.getByChildValue(
-                namespace, key, value);
-
-        if (!attrs.isEmpty()) {
-            setAttribute(scc, namespace, key, value);
-        } else {
-            updateAttribute(moduleId, namespace, key, value);
-
-            // maybe this module now matches the preconditions for an
-            // inherited attribute
-            triggerAllInheritedAttributes(scc);
-        }
-    }
-
-    private void setAttribute(SCC scc, ATerm namespace, ATerm key, ATerm value) {
-        for (Iterator<ModuleId> iter = scc.getModules().iterator(); iter
-                .hasNext();) {
-            ModuleId moduleId = iter.next();
-            updateAttribute(moduleId, namespace, key, value);
-        }
-        Set<InheritedAttribute> attrs = inheritedAttributes.getByChildValue(
-                namespace, key, value);
-        if (!attrs.isEmpty()) {
-            propagateToParents(scc, attrs);
-        }
-
-        // maybe this scc now matches the preconditions for an
-        // inherited attribute
-        triggerAllInheritedAttributes(scc);
+        updateAttribute(moduleId, namespace, key, value);
     }
 
     private void updateAttribute(ModuleId moduleId, ATerm namespace, ATerm key,
@@ -139,9 +95,28 @@ public class ModuleDatabase {
         Module module = modules.get(moduleId);
         ATerm oldValue = module.getAttribute(namespace, key);
 
+        module.deletePredicate(namespace, key);
+
         if (oldValue == null || !oldValue.isEqual(value)) {
             module.setAttribute(namespace, key, value);
             fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
+            triggerAllInheritedAttributes(moduleId);
+            propagateToParents(moduleId);
+        }
+    }
+
+    private void updatePredicate(ModuleId moduleId, ATerm namespace, ATerm key,
+            ATerm value) {
+        Module module = modules.get(moduleId);
+        ATerm oldValue = module.getPredicate(namespace, key);
+        if (oldValue == null) {
+            oldValue = module.getAttribute(namespace, key);
+        }
+
+        if (oldValue == null || !oldValue.isEqual(value)) {
+            module.setPredicate(namespace, key, value);
+            fireAttributeSetListener(moduleId, namespace, key, oldValue, value);
+            propagateToParents(moduleId);
         }
     }
 
@@ -150,13 +125,10 @@ public class ModuleDatabase {
         listener.attributeSet(id, namespace, key, oldValue, newValue);
     }
 
-    private void propagateToParents(SCC scc, Set<InheritedAttribute> attrs) {
-        for (Iterator<SCC> iter = sccGraph.keyIterator(); iter.hasNext();) {
-            SCC parent = iter.next();
-            Set<SCC> children = sccGraph.get(parent);
-            if (children.contains(scc)) {
-                triggerInheritedAttributes(parent, attrs);
-            }
+    private void propagateToParents(ModuleId id) {
+        Set<ModuleId> parents = getParents(id);
+        for (Iterator<ModuleId> iter = parents.iterator(); iter.hasNext();) {
+            triggerAllInheritedAttributes(iter.next());
         }
     }
 
@@ -165,53 +137,62 @@ public class ModuleDatabase {
      * attribute matches the registered old value (b) {all,one} of it's
      * dependencies is set to the new value
      * 
-     * Note the hidden recursion, this function calls setAttribute again which
-     * may trigger this method.
-     * 
-     * If the module is part of a cycle, and all elements of the cycle are set
-     * to the old value, we may set this module to the new value too.
-     * 
      * @param attr
      *            all info about an inherited attribute
      * @param moduleId
      *            reference to a module
      */
-    private void inherit(InheritedAttribute attr, SCC scc) {
-        for (Iterator<ModuleId> iter = scc.getModules().iterator(); iter
-                .hasNext();) {
-            Module module = modules.get(iter.next());
-            ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
+    private void inherit(InheritedAttribute attr, ModuleId id) {
+        Module module = modules.get(id);
+        ATerm comparedValue = getValueOfInheritedAttribute(attr, module);
+        ATerm namespace = attr.getNamespace();
+        ATerm key = attr.getKey();
+        ATerm oldPredicate = module.getPredicate(namespace, key);
+        ATerm newValue = attr.getNewValue();
 
-            if (noMatchForOldValue(attr, comparedValue)) {
-                return;
+        ATerm currentAttribute = module.getAttribute(namespace, key);
+
+        Boolean noMatch = noMatchForOldValue(attr, comparedValue);
+        if (attr.isNotSet()) {
+            noMatch = !noMatch;
+        }
+        
+        if (noMatch) {
+            if (oldPredicate != null && newValue.equals(oldPredicate)) {
+                module.deletePredicate(namespace, key);
+                fireAttributeSetListener(id, namespace, key, oldPredicate,
+                        currentAttribute);
+                propagateToParents(id);
             }
+            return;
         }
 
-        if (checkPreconditionOnChildren(attr, sccGraph.get(scc))) {
-            setAttribute(scc, attr.getNamespace(), attr.getKey(), attr
-                    .getNewValue());
+        if (checkPreconditionOnChildren(attr, getAllChildren(id))) {
+            updatePredicate(id, namespace, key, newValue);
+        } else if (oldPredicate != null && newValue.equals(oldPredicate)) {
+            module.deletePredicate(namespace, key);
+            fireAttributeSetListener(id, namespace, key, oldPredicate,
+                    currentAttribute);
+            propagateToParents(id);
         }
     }
 
     private boolean checkPreconditionOnChildren(InheritedAttribute attr,
-            Set<SCC> children) {
+            Set<ModuleId> children) {
         boolean allSet = true;
         boolean oneSet = false;
 
-        for (Iterator<SCC> iter = children.iterator(); iter.hasNext();) {
-            SCC scc = iter.next();
+        for (Iterator<ModuleId> iter = children.iterator(); iter.hasNext();) {
+            ModuleId id = iter.next();
 
-            for (Iterator<ModuleId> module = scc.getModules().iterator(); module
-                    .hasNext();) {
-                Module innerModule = modules.get(module.next());
+            Module innerModule = modules.get(id);
 
-                ATerm value = getValueOfInheritedAttribute(attr, innerModule);
+            ATerm value = getValueOfInheritedAttribute(attr, innerModule);
 
-                if (!value.isEqual(attr.getChildValue())) {
-                    allSet = false;
-                } else {
-                    oneSet = true;
-                }
+            if (!value.isEqual(attr.getChildValue())) {
+                allSet = false;
+            } else {
+                oneSet = true;
             }
         }
 
@@ -236,12 +217,15 @@ public class ModuleDatabase {
         Module module = modules.get(moduleId);
 
         if (module == null) {
-            System.err.println("MM - geModuleAttribute: module [" + moduleId
+            System.err.println("MM - getModuleAttribute: module [" + moduleId
                     + "] doesn't exist");
             return null;
         }
 
-        ATerm value = module.getAttribute(namespace, key);
+        ATerm value = module.getPredicate(namespace, key);
+        if (value == null) {
+            value = module.getAttribute(namespace, key);
+        }
 
         return value;
     }
@@ -253,7 +237,9 @@ public class ModuleDatabase {
             ModuleId moduleId = iter.next();
             Module module = modules.get(moduleId);
 
-            if (module.getAttribute(namespace, key).equals(value)) {
+            if (value.equals(module.getPredicate(namespace, key))) {
+                return moduleId;
+            } else if (module.getAttribute(namespace, key).equals(value)) {
                 return moduleId;
             }
         }
@@ -319,8 +305,6 @@ public class ModuleDatabase {
 
         dependencies = ascendants.get(moduleToId);
         dependencies.add(moduleFromId);
-
-        computeSCCGraph();
     }
 
     public Set<ModuleId> getChildren(ModuleId moduleId) {
@@ -413,8 +397,6 @@ public class ModuleDatabase {
 
         deps = (LinkedList) ascendants.get(moduleToId);
         deps.remove(moduleFromId);
-
-        computeSCCGraph();
     }
 
     public void deleteDependencies(ModuleId moduleId) {
@@ -439,8 +421,6 @@ public class ModuleDatabase {
 
         dependencies = descendants.get(moduleId);
         dependencies.clear();
-
-        computeSCCGraph();
     }
 
     private void deleteAllDependencies(ModuleId moduleId) {
@@ -453,108 +433,9 @@ public class ModuleDatabase {
                 dependencies.remove(moduleId);
             }
         }
-
-        computeSCCGraph();
     }
 
     public Map<ModuleId, Set<ModuleId>> getDependencies() {
         return descendants;
-    }
-
-    /*
-     * Uses Tarjans SCC algorithm. Taken from Depth-first search and linear
-     * graph algorithms (SIAM, Journal on Computing, Vol. 1, No. 2, 1972)
-     */
-    private void computeSCCGraph() {
-        Map<ModuleId, Integer> vertexNumbers = new HashMap<ModuleId, Integer>();
-        Map<ModuleId, Integer> vertexLowLinks = new HashMap<ModuleId, Integer>();
-        Stack<ModuleId> pointStack = new Stack<ModuleId>();
-        int i = 0;
-
-        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
-                .hasNext();) {
-            ModuleId id = iter.next();
-            if (!vertexNumbers.containsKey(id)) {
-                i = computeSCCs(vertexNumbers, vertexLowLinks, pointStack,
-                        moduleSCCMap, i, id);
-            }
-        }
-
-        constructSCCGraph();
-    }
-
-    private void constructSCCGraph() {
-        sccGraph.clear();
-        for (Iterator<ModuleId> iter = modules.keySet().iterator(); iter
-                .hasNext();) {
-            ModuleId id = iter.next();
-
-            Set<SCC> sccChildren = sccGraph.get(moduleSCCMap.get(id));
-            if (sccChildren == null) {
-                sccChildren = new HashSet<SCC>();
-            }
-
-            Set<ModuleId> children = getChildren(id);
-            for (Iterator<ModuleId> child = children.iterator(); child
-                    .hasNext();) {
-                SCC childSCC = moduleSCCMap.get(child.next());
-                if (!childSCC.equals(moduleSCCMap.get(id))) {
-                    sccChildren.add(childSCC);
-                }
-            }
-
-            sccGraph.put(moduleSCCMap.get(id), sccChildren);
-        }
-    }
-
-    private int computeSCCs(Map<ModuleId, Integer> vertexNumbers,
-            Map<ModuleId, Integer> vertexLowLinks, Stack<ModuleId> pointStack,
-            Map<ModuleId, SCC> moduleSCCMap, int i, ModuleId id) {
-        i++;
-        vertexNumbers.put(id, i);
-        vertexLowLinks.put(id, i);
-        pointStack.push(id);
-
-        for (Iterator<ModuleId> childIter = getChildren(id).iterator(); childIter
-                .hasNext();) {
-            ModuleId child = childIter.next();
-            if (!vertexNumbers.containsKey(child)) {
-                i = computeSCCs(vertexNumbers, vertexLowLinks, pointStack,
-                        moduleSCCMap, i, child);
-                Integer lowLinkId = vertexNumbers.get(id);
-                Integer lowLinkChild = vertexNumbers.get(child);
-                if (lowLinkChild < lowLinkId) {
-                    vertexNumbers.put(id, lowLinkChild);
-                }
-            } else if (vertexNumbers.get(child) < vertexNumbers.get(id)) {
-                if (pointStack.contains(child)) {
-                    Integer lowLinkId = vertexNumbers.get(id);
-                    Integer lowLinkChild = vertexNumbers.get(child);
-                    if (lowLinkChild < lowLinkId) {
-                        vertexNumbers.put(id, lowLinkChild);
-                    }
-                }
-            }
-        }
-
-        if (vertexLowLinks.get(id) == vertexNumbers.get(id)) {
-            Boolean complete = false;
-            SCC scc = new SCC();
-
-            // System.err.println("Root: " + id.toString());
-            while (!pointStack.isEmpty() && !complete) {
-                ModuleId top = pointStack.pop();
-                if (vertexNumbers.get(top) >= vertexNumbers.get(id)) {
-                    scc.add(top);
-                    moduleSCCMap.put(top, scc);
-                    // System.err.println("+- " + top.toString());
-                } else {
-                    pointStack.push(top);
-                    complete = true;
-                }
-            }
-        }
-
-        return i;
     }
 }

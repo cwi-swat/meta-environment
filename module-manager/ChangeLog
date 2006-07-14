@@ -1,6 +1,12 @@
 $Id$
 
 Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
+ * src/**/model/ModuleDatabase.java:
+   - Use modal logic to compute predicate values, which fixes problems with
+     propagation through cycles/SCC's
+   - Use of SCC graphs not needed anymore
+
+Tue Jun 20 16:27:40 CEST 2006 <kooiker@cwi.nl>
  * src/**/model/{ModuleDatabase,SCC}.java:
    - Applied Tarjan's algorithm to construct a SCC graph
    - SCC graph used to propagate inherited attributes
