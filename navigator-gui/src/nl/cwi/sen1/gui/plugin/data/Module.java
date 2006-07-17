@@ -22,9 +22,9 @@ public class Module implements Comparable {
 
     private List<String> _child;
 
-    private ListModel childListModel;
+    private ListModel<String> childListModel;
 
-    private ListModel parentListModel;
+    private ListModel<String> parentListModel;
 
     private int State = STATE_NORMAL;
 
@@ -34,8 +34,8 @@ public class Module implements Comparable {
         setFile(file);
         initParentList();
 
-        childListModel = new ListModel(_child);
-        parentListModel = new ListModel(_parent);
+        childListModel = new ListModel<String>(_child);
+        parentListModel = new ListModel<String>(_parent);
         initChildList();
     }
 

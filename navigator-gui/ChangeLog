@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jul 17 11:53:25 CEST 2006 <kooiker@cwi.nl>
+ * src/**/{Module,ListModel}.java:
+   - Use of generics
+
 Tue Feb 21 16:31:52 CET 2006 <kooiker@cwi.nl>
  * src/**/*.java:
    - Use configuration api
