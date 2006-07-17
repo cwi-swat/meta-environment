@@ -18,7 +18,7 @@ module Release
       options.candidate = false
       options.collect_url = nil
       options.collect_path = nil
-      options.milestone = ''
+      options.test = false
       options.dbconf = nil
       
       opts = OptionParser.new do |opts|
@@ -64,9 +64,8 @@ module Release
           options.candidate = candidate
         end
 
-        opts.on("-m Milestone", "--milestone Milestone",
-                "Milestone suffix for released archives (default '')") do |milestone|
-          options.milestone = milestone
+        opts.on("-t", "--[no-]test", "Test the created bunle using make distcheck.") do |test|
+          options.test = test
         end
         
         opts.on("-d Dbconf", "--dbconf Dbconf", "Database config file.") do |d|

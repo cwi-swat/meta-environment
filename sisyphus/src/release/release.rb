@@ -113,10 +113,15 @@ end
 def integrate_bundle(bundle_name)
   Dir.chdir(bundle_name) do
     system("./configure --prefix=#{Dir.tmpdir}")
-    system("make install dist")
+    system("make install distcheck")
   end
   #return File.join(bundle_name, bundle_name + '.tar.gz')
 end
+
+def just_archive_bundle(bundle_name)
+  system("tar zcvf #{bundle_name}.tar.gz #{bundle_name}")
+end
+
 
 def package_stem(pkg_version)
   if pkg_version =~ /^([^.]*)-.+$/ then
@@ -178,6 +183,7 @@ if __FILE__ == $0 then
   dbconf = options.dbconf
   build_to_be_released = options.build
   workdir = File.expand_path(options.workdir)
+  test = options.test
 
   system("mkdir -p #{workdir}")
 
@@ -204,7 +210,11 @@ if __FILE__ == $0 then
     bundle_name = create_bundle_for_build(root)
     collect_bundle(bundle_name, 'file://' + workdir, collect_url)
 
-    integrate_bundle(bundle_name)
+    if test then
+      integrate_bundle(bundle_name)
+    else
+      just_archive_bundle(bundle_name)
+    end
 
     bundle_archive = File.join(bundle_name, bundle_name + '.tar.gz')     
     #system("mv #{bundle_archive} ./#{bundle_name}-collected.tar.gz")
