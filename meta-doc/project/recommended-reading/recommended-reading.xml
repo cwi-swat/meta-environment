@@ -26,28 +26,38 @@
 
     <itemizedlist>
       <listitem>
-        <para>Code Complete (2) - Steve McConnel (on Software Construction in
+        <para>Alan Cooper, <emphasis>The Inmates are Running the Asylum: Why
+        High Tech Products Drive Us Crazy and How To Restore The
+        Sanity</emphasis> , </para>
+      </listitem>
+
+      <listitem>
+        <para>K. Fogel, <emphasis>Producing Open Source Software -- How to Run
+        a Successful Free Software Project,</emphasis> O"Reilly, 2006.</para>
+      </listitem>
+
+      <listitem>
+        <para>Andy Hunt, Dave Thomas, <emphasis>The Pragmatic Programmer --
+        Form Journeyman to Master</emphasis>, Addison-Wesley, 2000.</para>
+      </listitem>
+
+      <listitem>
+        <para>Steven McConnell,<emphasis> Code Complete, Second
+        Edition,</emphasis> Microsoft Press, 2004. On Software Construction in
         general, on a low level of abstraction, full of best-practices and
-        hard facts)</para>
+        hard facts.</para>
       </listitem>
 
       <listitem>
-        <para>The Pragmatic Programmer - Andy Hunt, Dave Thomas</para>
+        <para>Barry J. Rosenberg , <emphasis>Spring into Technical Writing for
+        Engineers and Scientists</emphasis>, Addison-Wesley, 2005. An
+        efficient guide to writing manuals, papers and other professional
+        documentation.</para>
       </listitem>
 
       <listitem>
-        <para>Why Programs Fail - Andreas Zeller</para>
-      </listitem>
-
-      <listitem>
-        <para>The inmates are running the asylum: Why High Tech Products Drive
-        Us Crazy and How To Restore The Sanity - Alan Cooper</para>
-      </listitem>
-
-      <listitem>
-        <para>Spring into Technical Writing for Engineers and Scientists -
-        Barry J. Rosenberg (An efficient guide to writing manuals, papers and
-        other professional documentation)</para>
+        <para>Andreas Zeller, <emphasis>Why Programs Fail -- A Guide to
+        Systematic Debugging</emphasis>, Morgan Kaufmann, 2005.</para>
       </listitem>
     </itemizedlist>
   </section>
