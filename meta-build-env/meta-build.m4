@@ -10,11 +10,11 @@ AC_DEFUN([META_SETUP],
   AC_CONFIG_SRCDIR([configure])
 
   AM_INIT_AUTOMAKE(esyscmd([grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']),esyscmd([grep "version[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']))
-  AC_CONFIG_FILES(esyscmd([printf `grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']`).pc)
+  AC_CONFIG_FILES(esyscmd([printf $(grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]')]).pc)
 
- AM_MAINTAINER_MODE
+  AM_MAINTAINER_MODE
 
- AC_MSG_CHECKING([whether CFLAGS is set])
+  AC_MSG_CHECKING([whether CFLAGS is set])
   if test "${CFLAGS+set}" = set; then
     AC_MSG_RESULT([yes])
   else
@@ -49,7 +49,7 @@ AC_ARG_WITH([$1],
   AC_MSG_CHECKING([whether location of $1 is explicitly set using --with-$1])
   if test "${AC_Var[]_PREFIX:+set}" = set; then
     AC_MSG_RESULT([yes])
-    PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$AC_Var[]_PREFIX/lib/pkgconfig"
+    PKG_CONFIG_PATH="$AC_Var[]_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH}"
     export PKG_CONFIG_PATH
   else
     AC_MSG_RESULT([no])
@@ -71,23 +71,39 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
  PKG_CHECK_MODULES([$1],[$2])
 
   AC_MSG_CHECKING([prefix of package $2])
-  $1[]_FOUND_PREFIX=`$PKG_CONFIG --variable=prefix "$2"`
+  $1[]_FOUND_PREFIX=$($PKG_CONFIG --variable=prefix "$2")
   if test -z "$$1[]_FOUND_PREFIX"; then
     AC_MSG_ERROR([package $2 does not specify its prefix in the pkg-config file.
            Report this error to the maintainer of this package.])
   fi
 
   if test "${$1[]_PREFIX:+set}" = set; then
-    if test "x$$1[]_PREFIX" = "x$$1[]_FOUND_PREFIX"; then
-      AC_MSG_RESULT([explicitly set: $$1[]_PREFIX])
+    AC_MSG_RESULT([explicitly set: $$1[]_PREFIX])
+
+    AC_MSG_CHECKING([if package $2 at this prefix equals the explicitly set package])
+    # in a bundle, the package will not yet be installed.
+    if test "${meta_bundled_packages:+set}" = set; then
+        AC_MSG_RESULT([skipped (bundle)])
     else
-      AC_MSG_ERROR([prefix of $2 explicitly set to $$1[]_PREFIX,
+      # compare found prefix to the actual prefix out of the .pc file at the given prefix
+      if test -e "$$1[]_PREFIX/lib/pkgconfig/$2.pc"; then
+        $1[]_ACTUAL_PREFIX="$(grep 'prefix=.*' $$1[]_PREFIX/lib/pkgconfig/$2.pc | cut -f2 -d= | tr -d '@<:@:blank:@:>@')"
+        if test "x$$1[]_ACTUAL_PREFIX" = "x$$1[]_FOUND_PREFIX"; then
+          AC_MSG_RESULT([yes])
+        else
+          AC_MSG_RESULT([no])
+          AC_MSG_ERROR([prefix of $2 explicitly set to $$1[]_PREFIX,
             but pkg-config found $2 at $$1[]_FOUND_PREFIX.
             Please check your PKG_CONFIG_PATH, or remove $2 from $$1[]_FOUND_PREFIX, 
             or install the packages at a unique location.])
+        fi
+      else
+        AC_MSG_RESULT([cannot check])
+        AC_MSG_ERROR([$2 does not provide a pkg-config file at $$1[]_PREFIX/lib/pkgconfig/$2.pc. Please check your installation.])
+      fi
     fi
   else
-    AC_MSG_RESULT([$$1[]_PREFIX])
+    AC_MSG_RESULT([$$1[]_FOUND_PREFIX])
   fi
 
   $1[]_PREFIX="$1[]_FOUND_PREFIX"
