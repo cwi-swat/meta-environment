@@ -3,7 +3,7 @@
 
 bin_SCRIPTS 	= meta-build 
 pkgdata_DATA 	= meta-build.m4 Makefile.meta
-EXTRA_DIST	= meta-build.src Makefile.meta meta-build.m4 
+EXTRA_DIST	= meta-build.src Makefile.meta meta-build.m4 meta-build.xml
 
 CLEANFILES = meta-build
 
