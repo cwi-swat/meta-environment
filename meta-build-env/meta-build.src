@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 prefix="__prefix__"
 datadir="__datadir__"
 pkgdatadir="${datadir}/__PACKAGE__"
@@ -8,3 +10,5 @@ rm -f meta-build.m4 Makefile.meta aclocal.m4 meta-build.xml
 ln -s "$pkgdatadir/meta-build.m4"
 ln -s "$pkgdatadir/Makefile.meta"
 ln -s "$pkgdatadir/meta-build.xml"
+
+autoreconf --install --symlink --verbose $*

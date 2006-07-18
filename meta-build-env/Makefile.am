@@ -2,7 +2,7 @@
 # Warning: the meta-build.m4 macro is NOT included in the local aclocal.m4
 
 bin_SCRIPTS 	= meta-build 
-pkgdata_DATA 	= meta-build.m4 Makefile.meta
+pkgdata_DATA 	= meta-build.m4 Makefile.meta meta-build.xml
 EXTRA_DIST	= meta-build.src Makefile.meta meta-build.m4 meta-build.xml
 
 CLEANFILES = meta-build

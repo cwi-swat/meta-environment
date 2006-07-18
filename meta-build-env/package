@@ -1,0 +1,16 @@
+package
+identification
+  name=meta-build-env
+  version=0.1
+  location=http://www.cwi.nl/projects/MetaEnv/meta-build-env
+  info=http://www.cwi.nl/projects/MetaEnv
+  description='A common build environment for all Meta-Environment packages'
+
+  keywords=meta-environment, build environment, automake, autoconf, libtool
+
+configuration interface
+
+requires
+
+configuration
+
