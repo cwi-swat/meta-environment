@@ -6,9 +6,13 @@ prefix="__prefix__"
 datadir="__datadir__"
 pkgdatadir="${datadir}/__PACKAGE__"
 
-rm -f meta-build.m4 Makefile.meta aclocal.m4 meta-build.xml
+rm -f meta-build.m4 Makefile.meta Makefile.top.meta aclocal.m4 meta-build.xml \
+      Doxyfile.meta
+
 ln -s "$pkgdatadir/meta-build.m4"
 ln -s "$pkgdatadir/Makefile.meta"
+ln -s "$pkgdatadir/Makefile.top.meta"
 ln -s "$pkgdatadir/meta-build.xml"
+ln -s "$pkgdatadir/Doxyfile.meta"
 
 autoreconf --install --symlink --verbose $*

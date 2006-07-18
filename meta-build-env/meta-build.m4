@@ -7,6 +7,7 @@ m4_pattern_forbid([^META_])
 AC_DEFUN([META_SETUP],
 [
   AM_INIT_AUTOMAKE(esyscmd([grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']),esyscmd([grep "version[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']))
+  AC_CONFIG_FILES(esyscmd([printf `grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']`).pc)
 ])
 
 # META_REQUIRE_PACKAGE(OPTION)
@@ -29,7 +30,7 @@ AC_ARG_WITH([$1],
   AC_MSG_CHECKING([whether location of $1 is explicitly set using --with-$1])
   if test "${AC_Var[]_PREFIX:+set}" = set; then
     AC_MSG_RESULT([yes])
-    PKG_CONFIG_PATH="$AC_Var[]_PREFIX/lib/pkgconfig:${PKG_CONFIG_PATH}"
+    PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:$AC_Var[]_PREFIX/lib/pkgconfig"
     export PKG_CONFIG_PATH
   else
     AC_MSG_RESULT([no])

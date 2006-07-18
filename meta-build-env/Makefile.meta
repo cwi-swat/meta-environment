@@ -12,10 +12,10 @@ AM_CPPFLAGS =
 LDADD = 
 
 SUFFIXES =
+CLEANFILES = 
 
 pkgconfigdir  = $(libdir)/pkgconfig
 docdatadir    = $(datadir)/doc/$(PACKAGE)
-
 
 if MAINTAINER_MODE
 
