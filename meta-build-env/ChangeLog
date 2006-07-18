@@ -1,0 +1,8 @@
+
+
+Tue Jul 18 10:53:01 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * a package for the standard (really!) build environment of
+   all meta-environment packages, including C, Java, ToolBus
+   and ASF+SDF stuff. This package will not depend on anything
+   but standard GNU stuff like M4, autoconf, automake, libtool.
+

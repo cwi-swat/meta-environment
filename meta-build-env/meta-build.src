@@ -1,0 +1,9 @@
+#! /bin/sh
+
+prefix="__prefix__"
+datadir="__datadir__"
+pkgdatadir="${datadir}/__PACKAGE__"
+
+rm -f meta-build.m4 Makefile.meta aclocal.m4
+ln -s "$pkgdatadir/meta-build.m4"
+ln -s "$pkgdatadir/Makefile.meta"
