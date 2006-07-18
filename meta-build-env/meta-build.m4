@@ -25,6 +25,8 @@ AC_DEFUN([META_SETUP],
       AC_MSG_RESULT([no])
     fi
   fi
+
+  META_BUNDLE_PKG_CONFIG_PATH
 ])
 
 # META_REQUIRE_PACKAGE(OPTION)
@@ -93,4 +95,23 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_SUBST([$1_CFLAGS])
   AC_SUBST([$1_LIBS])
   AC_SUBST([$1_PREFIX])
+])
+
+# Sets the PKG_CONFIG_PATH if this package is in a bundle.
+AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
+[
+  AC_ARG_WITH([bundled-packages],
+    [AS_HELP_STRING([--with-bundled-packages=PKGS], [package is installed from a bundle of PKGS @<:@none@:>@])],
+    [meta_bundled_packages=$withval],
+    [meta_bundled_packages=])
+
+  AC_MSG_CHECKING([if PKG_CONFIG_PATH needs to be extended for bundled packages])
+  if test "${meta_bundled_packages:+set}" = set; then
+    for pkg in $meta_bundled_packages; do
+      PKG_CONFIG_PATH="$(dirname $(pwd))/$pkg:${PKG_CONFIG_PATH}"
+    done
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+  fi
 ])

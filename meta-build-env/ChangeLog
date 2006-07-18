@@ -1,4 +1,15 @@
+Tue Jul 18 22:56:29 CEST 2006 <martin.bravenboer@gmail.com>
 
+	* Added a new macro META_BUNDLE_PKG_CONFIG_PATH, which is invoked
+	from META_SETUP. This macro handles the --with-bundled-packages
+	argument of autobundle and extends the PKG_CONFIG_PATH with the
+	top-level directories of the packages that are available in the
+	bundle. In this way, the uninstalled packages can be found by
+	pkg-config.
+
+	Basic bundling now works, though there was one minor problem with
+	the way autobundle passes the prefix to the subpackages. This
+	still needs to be resolved.
 
 Tue Jul 18 10:53:01 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
  * a package for the standard (really!) build environment of
