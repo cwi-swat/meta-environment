@@ -6,8 +6,25 @@ m4_pattern_forbid([^META_])
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
 [
+  AC_PREREQ([2.59])
+  AC_CONFIG_SRCDIR([configure])
+
   AM_INIT_AUTOMAKE(esyscmd([grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']),esyscmd([grep "version[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']))
   AC_CONFIG_FILES(esyscmd([printf `grep "name[:blank:]*=.*" package | cut -f2 -d= | tr -d '[:blank:]']`).pc)
+
+ AM_MAINTAINER_MODE
+
+ AC_MSG_CHECKING([whether CFLAGS is set])
+  if test "${CFLAGS+set}" = set; then
+    AC_MSG_RESULT([yes])
+  else
+    if  test "$USE_MAINTAINER_MODE" = "yes"; then
+      CFLAGS="-Wall -Werror -g -O2"
+      AC_MSG_RESULT([no, setting to maintainer default ($CFLAGS)])
+    else
+      AC_MSG_RESULT([no])
+    fi
+  fi
 ])
 
 # META_REQUIRE_PACKAGE(OPTION)

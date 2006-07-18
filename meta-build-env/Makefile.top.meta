@@ -11,6 +11,7 @@ EXTRA_DIST = $(wildcard *.m4) \
 ${PACKAGE}-${VERSION}.pkg: package Makefile
 	cp $(top_srcdir)/package $@
 
+CLEANFILES += ${PACKAGE}-${VERSION}.pkg
 
 pkgconfig_DATA = ${PACKAGE}.pc
 
