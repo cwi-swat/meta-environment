@@ -351,6 +351,7 @@ module Model
       c = SiComponent.find(:first, :conditions => ['name = ?', name])
       if c.nil? then
         c = SiComponent.new(:name => name)
+        c.save
       end
       return c
     end

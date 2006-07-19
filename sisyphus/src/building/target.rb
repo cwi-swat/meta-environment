@@ -77,6 +77,8 @@ module Building
 
     def do_the_build
       context = Context.new(config, @item)
+      @log.info("Checking out to #{path}...")
+      
       cd path do 
         execute_actions(context)
       end
@@ -87,11 +89,22 @@ module Building
       set_progress(false)
     end
 
+    def script_environment
+      env = config.environment + "\n"
+      if config.build_env_package then
+        path = File.join(File.join(config.install_dir, config.build_env_package), 'bin')
+        env += "PATH=#{path}:$PATH\n"
+        env += "export PATH\n";
+      end
+      return env
+    end
+
     def execute_actions(context)
       @item.set_success(false)
+      env = script_environment
       context.actions do |action, command|
         @log.info("Performing action #{action}: #{command}")
-        if not execute_command(action, command).success then
+        if not execute_command(action, command, env).success then
           return
         end
       end
@@ -536,14 +549,13 @@ module Building
       end
     end
     
-    def execute_command(action, command)
-      result = command_result(action, command)
+    def execute_command(action, command, env)
+      result = command_result(action, command, env)
       @item.add_action_result(action, command, result)
       return result
     end
 
-    def command_result(action, command)
-      # Please refactor.
+    def command_result(action, command, env)
       result = ActionResult.new  
       shell = Utils::EmptyShell.new
       begin

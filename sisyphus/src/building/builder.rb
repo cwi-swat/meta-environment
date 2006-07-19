@@ -40,7 +40,7 @@ module Building
 
     def requires_build?(target)
       if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
-        @log.warn("PACKAGES ARE ALWAYS BUILT!!! FIX BEFORE RELEASE!")
+        @log.warn("PACKAGES ARE ALWAYS BUILT!!!")
         return true
       end
 

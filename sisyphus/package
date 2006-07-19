@@ -8,6 +8,6 @@ identification
   keywords=software building
 configuration interface
 requires
-  ruby 1.8.2
+  ruby 1.8.4
   rubygems 0.8.10
-  subversion 1.2.3
+  subversion 1.3.2

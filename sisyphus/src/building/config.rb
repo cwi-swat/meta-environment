@@ -234,6 +234,14 @@ module Building
       return profile_value('binary_dist_dir')
     end
 
+    def build_env_package
+      begin
+        return profile_value('build-env')
+      rescue RuntimeError => e
+        return nil
+      end
+    end
+
     def collect_url   
       return profile_value('collect_url')
     end

@@ -18,6 +18,7 @@ module Versioning
       @deps = []
     end
 
+
     def add_dep(component)
       @deps << component
     end
@@ -27,6 +28,10 @@ module Versioning
     end
 
     def virtual?
+      return false
+    end
+
+    def implicit?
       return false
     end
 
@@ -65,6 +70,13 @@ module Versioning
     end
   end
 
+  class ImplicitDependencyRevision < Revision
+    def implicit? 
+      return true
+    end
+  end                    
+
+
   class VirtualRevision < Revision
     def initialize(component)
       @component = component
@@ -79,6 +91,8 @@ module Versioning
     end
 
   end
+
+
 
 
   class CheckoutFactory 
