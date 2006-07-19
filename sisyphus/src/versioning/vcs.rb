@@ -196,6 +196,61 @@ module Versioning
     
   end
 
+  class BOMReader
+    def initialize(path)
+      File.open(path) do |f|
+        @bom = f.read
+      end
+    end
+    
+  end
+
+  class PackageBOMReader < BOMReader
+    def version
+      if @bom =~ /version\s*=\s*([0-9\.a-bA-Z_\-]+)/m then
+        return $1
+      end
+      raise RuntimeError.new("error parsing version in: #{text}")
+    end
+
+    def dependencies
+      requires = @bom
+      requires.sub!(/.*requires/m, '')
+      requires.sub!(/configuration.*/m, '')
+      requires.squeeze!("\n")
+      requires.strip!
+      return remove_versions(requires.split("\n"))
+    end
+
+    private
+
+    def remove_versions(deps)
+      return deps.collect do |dep|
+        dep.split[0]
+      end.uniq
+    end  
+
+  end
+
+  class PKGConfigBOMReader < BOMReader
+    def version
+      if @bom =~ /Version\s*:\s*([0-9\.a-bA-Z_\-]+)/m then
+        return $1
+      end
+      raise RuntimeError.new("error parsing version in: #{@bom}")
+    end
+
+    def dependencies
+      if @bom =~ /^Requires\s*:\s*(.*)$/m then
+        return $1.split
+      end
+      raise RuntimeError.new("error parsing dependencies in: #{@bom}")
+    end
+
+  end
+  
+
+
   class Checkout
     attr_reader :path, :repository
 
@@ -216,18 +271,21 @@ module Versioning
       return s.gsub("\0", ' ')
     end
 
-    def extract_deps
-      path = depfile_path(@path)
-      File.open(path) do |file|
-        return parse_deps(file.read)
+    def bom_reader
+      pkg_files = Dir["#{@path}/*.pc.in"] 
+      if pkg_files.empty? then
+        return PackageBOMReader.new(depfile_path(@path))
+      else
+        return PKGConfigBOMReader.new(pkg_files[0])
       end
     end
 
+    def extract_deps
+      return bom_reader.dependencies
+    end
+
     def extract_version
-      path = depfile_path(@path)
-      File.open(path) do |file|
-        return parse_pkg_version(file.read)
-      end
+      return bom_reader.version
     end
 
     def depfile_path(root)
@@ -242,28 +300,6 @@ module Versioning
       end
       return path
     end 
-
-    def parse_pkg_version(packagedef)
-      if packagedef =~ /version\s*=\s*([0-9\.a-bA-Z_\-]+)/m then
-        return $1
-      end
-      raise RuntimeError.new("error parsing version in: #{packagedef}")
-    end
-
-    def parse_deps(packagedef)
-      requires = packagedef
-      requires.sub!(/.*requires/m, '')
-      requires.sub!(/configuration.*/m, '')
-      requires.squeeze!("\n")
-      requires.strip!
-      return remove_versions(requires.split("\n"))
-    end
-
-    def remove_versions(deps)
-      return deps.collect do |dep|
-        dep.split[0]
-      end.uniq
-    end  
 
     def to_s
       return "#{path}@#{repository}"
