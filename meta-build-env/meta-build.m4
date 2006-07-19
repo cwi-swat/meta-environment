@@ -3,10 +3,8 @@
 # a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 
-# GET_PKG_VARIABLE(VARNAME,RESULTVAR)
-# Retrieves the value of VARNAME from a pkg-config file and 
-# assigns it to RESULTVAR
-
+# GET_PKG_VARIABLE(VARNAME)
+# Is substituted by the value of VARNAME from a pkg-config file
 AC_DEFUN([GET_PKG_VARIABLE],[esyscmd([printf `grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:blank:]'`])])
 
 # Invokes all macros that always need to be invoked for a package.
