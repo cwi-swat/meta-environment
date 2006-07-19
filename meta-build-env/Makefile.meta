@@ -19,15 +19,37 @@ docdatadir    = $(datadir)/doc/$(PACKAGE)
 
 if MAINTAINER_MODE
 
-#
+SUFFIXES += .eqs .adt .idef
+
 # Make rules for ASF programs
+#%.eqs : Makefile
+#	eqs-dump -m ${TOP_MODULE} -o $@
 #
+#%.c : %.eqs
+#	asfc -i $< -o $@ -v $(ASFC_FLAGS) 
+#
+# Making an SDF definition
+#%.def : Makefile
+#	@(echo "definition" ; cat $(SDF_MODULES)) > $@
+#
+# Generating an ADT from an SDF definition
+#%.adt : %.def
+#	sdf2-to-adt --imploded --input $< --name $* 
+#
+# Generating a jar from an ADT
+#%.jar : %.adt Makefile
+#	adt-to-jave --input $< --version ${VERSION} --name $* --output .
+#	mv $*-${VERSION}.jar $*.jar
 
-ASFC = asfc
-SUFFIXES += .eqs
+# Generating C code from an ADT
+#%.c %.h : %.adt Makefile
+#	adt-to-c --input $< --prefix ${API_PREFIX} --output $*
+#	indent $*.h
+#	indent $*.c
 
-.eqs.c :
-	$(ASFC) -i $< -o $@ -v $(ASFC_FLAGS) 
-
+# Generating ToolBus interfaces
+#%.c %.h : %.idef Makefile
+#	toolbus -gentifs $<
+#	tifstoc -tool ${TOOLNAME} -tifs $*.tifs
 endif
 
