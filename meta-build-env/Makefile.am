@@ -6,7 +6,7 @@ pkgdata_DATA 	= \
 		  meta-build.m4 \
 		  Makefile.meta \
 		  Makefile.top.meta \
-		  meta-build.xml \
+		  meta-build.ant \
 		  Doxyfile.meta
 
 EXTRA_DIST	= meta-build.src $(pkgdata_DATA)
