@@ -3,9 +3,9 @@
 # a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 
-# GET_PKG_VARIABLE(VARNAME)
+# META_GET_PKG_VARIABLE(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file
-AC_DEFUN([GET_PKG_VARIABLE],[esyscmd([printf `grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:blank:]'`])])
+AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([printf `grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:blank:]'`])])
 
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
@@ -13,8 +13,8 @@ AC_DEFUN([META_SETUP],
   AC_PREREQ([2.59])
   AC_CONFIG_SRCDIR([configure])
    
-  AM_INIT_AUTOMAKE(GET_PKG_VARIABLE([Name]),GET_PKG_VARIABLE([Version]))
-  AC_CONFIG_FILES(GET_PKG_VARIABLE([Name]).pc)
+  AM_INIT_AUTOMAKE(META_GET_PKG_VARIABLE([Name]),META_GET_PKG_VARIABLE([Version]))
+  AC_CONFIG_FILES(META_GET_PKG_VARIABLE([Name]).pc)
 
   AM_MAINTAINER_MODE
 
