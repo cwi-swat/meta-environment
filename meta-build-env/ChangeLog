@@ -6,6 +6,8 @@ Wed Jul 19 11:18:07 CEST 2006 <{jurgenv,storm}@cwi.nl>
    the package files redundant.
  * meta-build.m4: factored out the esyscmd call into a macro, such
    that we can extract any variable from a <package>.pc.in file.
+ * meta-build.m4: changed :blank: to :space: in the call to esyscmd,
+   such that we can remove the wrapping `printf ` call.
 
 Wed Jul 19 09:50:13 CEST 2006 <jurgenv@cwi.nl>
  * meta-build.m4: added a $ to dereference META_FOUND_PREFIX instead

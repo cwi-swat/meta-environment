@@ -5,7 +5,7 @@ m4_pattern_forbid([^META_])
 
 # META_GET_PKG_VARIABLE(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file
-AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([printf `grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:blank:]'`])])
+AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
 
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
