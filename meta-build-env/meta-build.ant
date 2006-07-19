@@ -10,8 +10,8 @@
   <property environment="env"/>
 
   <path id="project.classpath">
-    <pathelement path="${env.LOCAL_JARS}"/>
-    <pathelement path="${env.EXTERNAL_JARS}"/>
+    <pathelement path="${env.JAVA_LOCAL_JARS}"/>
+    <pathelement path="${env.JAVA_EXTERNAL_JARS}"/>
   </path>
 
   <target name="build">
@@ -33,9 +33,9 @@
     <copy todir="${dist}/src">
       <fileset dir="${src}" includes="**/*.java"/>
     </copy>
-    <jar destfile="${env.JAR}">
+    <jar destfile="${env.JAVA_JAR}">
       <manifest>
-	<attribute name="Main-Class" value="${env.MAIN_CLASS}"/>
+	<attribute name="Main-Class" value="${env.JAVA_MAIN_CLASS}"/>
       </manifest>
       <fileset dir="${dist}"/>
     </jar>

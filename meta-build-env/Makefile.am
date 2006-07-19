@@ -6,6 +6,7 @@ pkgdata_DATA 	= \
 		  meta-build.m4 \
 		  Makefile.meta \
 		  Makefile.top.meta \
+		  Makefile.java.meta \
 		  meta-build.ant \
 		  Doxyfile.meta
 

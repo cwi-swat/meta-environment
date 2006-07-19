@@ -7,11 +7,12 @@ datadir="__datadir__"
 pkgdatadir="${datadir}/__PACKAGE__"
 
 rm -f meta-build.m4 Makefile.meta Makefile.top.meta aclocal.m4 meta-build.ant \
-      Doxyfile.meta
+      Doxyfile.meta Makefile.java.meta
 
 ln -s "$pkgdatadir/meta-build.m4"
 ln -s "$pkgdatadir/Makefile.meta"
 ln -s "$pkgdatadir/Makefile.top.meta"
+ln -s "$pkgdatadir/Makefile.java.meta"
 ln -s "$pkgdatadir/meta-build.ant"
 ln -s "$pkgdatadir/Doxyfile.meta"
 
