@@ -1,0 +1,8 @@
+prefix=@prefix@
+
+Name: meta-build-env
+Description: Standard build environment for Meta-Environment packages
+Version: 0.1
+Libs: 
+Cflags: 
+Owner: jurgenv@cwi.nl
