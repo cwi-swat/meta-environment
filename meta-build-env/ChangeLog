@@ -1,3 +1,9 @@
+
+
+Wed Jul 19 09:50:13 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: added a $ to dereference META_FOUND_PREFIX instead
+   of putting the variable name itself in it.
+
 Wed Jul 19 01:18:49 CEST 2006 <martin.bravenboer@gmail.com>
   * meta-build.m4: Fix in the determination of the filename for the
     .pc in AC_CONFIG_FILES. Strange that this worked at all ...
