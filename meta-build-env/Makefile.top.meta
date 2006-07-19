@@ -3,19 +3,11 @@ include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = $(wildcard *.m4) \
              reconf \
-             package \
 	     Doxyfile.meta \
              Makefile.meta \
              Makefile.top.meta
 
-${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $(top_srcdir)/package $@
-
-CLEANFILES += ${PACKAGE}-${VERSION}.pkg
-
 pkgconfig_DATA = ${PACKAGE}.pc
-
-noinst_DATA = $(PACKAGE)-$(VERSION).pkg
 
 if MAINTAINER_MODE
 
