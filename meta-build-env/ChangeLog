@@ -1,38 +1,38 @@
 Wed Jul 19 01:18:49 CEST 2006 <martin.bravenboer@gmail.com>
+  * meta-build.m4: Fix in the determination of the filename for the
+    .pc in AC_CONFIG_FILES. Strange that this worked at all ...
 
-	* meta-build.m4: Fix in the determination of the filename for the
-	.pc in AC_CONFIG_FILES. Strange that this worked at all ...
+    Directories of --with-pkg arguments are now placed in front of the
+    PKG_CONFIG_PATH. This can deal with a bit more usual installation
+    scenario's.
 
-	Directories of --with-pkg arguments are now placed in front of the
-	PKG_CONFIG_PATH. This can deal with a bit more usual installation
-	scenario's.
+    Major fix in the check on the found prefix of packages. Of course,
+    comparing paths by string comparison is a very bad idea, for
+    example /foo will not be equal to /foo/ and also symbolic links
+    are not supported. The check now fetches the actual prefix from
+    the .pc file in the given prefix itself and compares that value to
+    the found prefix. This check had to be disabled for bundles.
 
-	Major fix in the check on the found prefix of packages. Of course,
-	comparing paths by string comparison is a very bad idea, for
-	example /foo will not be equal to /foo/ and also symbolic links
-	are not supported. The check now fetches the actual prefix from
-	the .pc file in the given prefix itself and compares that value to
-	the found prefix. This check had to be disabled for bundles.
-
-	Fix in the reporting of prefixes if the value was not explicitly
-	specified.
+    Fix in the reporting of prefixes if the value was not explicitly
+    specified.
 	
 Tue Jul 18 22:56:29 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: 
+   Added a new macro META_BUNDLE_PKG_CONFIG_PATH, which is invoked
+   from META_SETUP. This macro handles the --with-bundled-packages
+   argument of autobundle and extends the PKG_CONFIG_PATH with the
+   top-level directories of the packages that are available in the
+   bundle. In this way, the uninstalled packages can be found by
+   pkg-config.
 
-	* Added a new macro META_BUNDLE_PKG_CONFIG_PATH, which is invoked
-	from META_SETUP. This macro handles the --with-bundled-packages
-	argument of autobundle and extends the PKG_CONFIG_PATH with the
-	top-level directories of the packages that are available in the
-	bundle. In this way, the uninstalled packages can be found by
-	pkg-config.
-
-	Basic bundling now works, though there was one minor problem with
-	the way autobundle passes the prefix to the subpackages. This
-	still needs to be resolved.
+   Basic bundling now works, though there was one minor problem with
+   the way autobundle passes the prefix to the subpackages. This
+   still needs to be resolved.
 
 Tue Jul 18 10:53:01 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
- * a package for the standard (really!) build environment of
+ * package: a package for the standard (really!) build environment of
    all meta-environment packages, including C, Java, ToolBus
    and ASF+SDF stuff. This package will not depend on anything
    but standard GNU stuff like M4, autoconf, automake, libtool.
+   One can see it as an extension to the auto* GNU tools.
 
