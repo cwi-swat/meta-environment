@@ -4,24 +4,31 @@
 m4_pattern_forbid([^META_])
 
 # META_GET_PKG_VAR(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file
-AC_DEFUN([META_GET_PKG_VAR],[esyscmd([find . -name '*.pc.in' | grep -v uninstalled | xargs cat | grep "$1:" | cut -f 2 -d ':' | tr -d '[:space:]'])])
+# Is substituted by the value of VARNAME from a pkg-config file at
+# reconf time
+AC_DEFUN([META_GET_PKG_VAR],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
 
 # META_GET_PKG_VAR_PLAIN(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file, 
-# without trimming
-AC_DEFUN([META_GET_PKG_VAR_PLAIN],[esyscmd([find . -name '*.pc.in' | grep -v uninstalled | xargs cat | grep "$1:" | cut -f 2 -d ':'])])
+# without trimming, at reconf time
+AC_DEFUN([META_GET_PKG_VAR_PLAIN],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':'])])
 
 # META_GET_PKG_USER_VAR(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file
+# Is substituted by the value of VARNAME from a pkg-config file, at reconf
+# time
 AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' | tr -d '[:space:]'])])
 
 # META_GET_PKG_USER_VAR_PLAIN(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file
+# Is substituted by the value of VARNAME from a pkg-config file at reconf time
 AC_DEFUN([META_GET_PKG_USER_VAR_PLAIN],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '='])])
 
 # META_INSTALLED_PKG_VAR(PKG,VAR)
 AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1")])
+
+dnl META_GENERATE_UNINSTALLED_PC(PKG)
+AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
+cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's#Local##g' > $1-uninstalled.pc
+])
 
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
@@ -30,9 +37,7 @@ AC_DEFUN([META_SETUP],
   AC_CONFIG_SRCDIR([configure])
    
   AM_INIT_AUTOMAKE(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]))
-  AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc)
-  META_GENERATE_UNINSTALLED_PC(META_GET_PKG_VAR([Name]),[$prefix])
-  AC_CONFIG_FILES(META_GET_PKG_VAR([Name])-uninstalled.pc)
+  AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc,META_GENERATE_UNINSTALLED_PC(META_GET_PKG_VAR([Name])))
 
   AM_MAINTAINER_MODE
 
@@ -52,19 +57,6 @@ AC_DEFUN([META_SETUP],
   META_CONFIGURE_DEPENDENCIES
 ])
 
-dnl META_GENERATE_UNINSTALLED_PC(PKG,PREFIX)
-AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
-cat > $1-uninstalled.pc.in <<EOF
-prefix=$2
-
-Name: META_GET_PKG_VAR_PLAIN([Name])
-Description: META_GET_PKG_VAR_PLAIN([Description])
-Version: META_GET_PKG_VAR_PLAIN([Version])
-Libs: META_GET_PKG_USER_VAR_PLAIN([LocalLibs])
-Cflags: META_GET_PKG_USER_VAR_PLAIN([LocalCflags])
-Requires: META_GET_PKG_VAR_PLAIN([Requires])
-EOF
-])
 
 AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
   EXTERNAL_JARS=
