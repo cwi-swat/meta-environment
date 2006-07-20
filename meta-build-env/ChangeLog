@@ -1,4 +1,13 @@
+Thu Jul 20 01:45:22 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: added PACKAGE-uninstalled.pc to the
+   AC_CONFIG_FILES. This introduces the requirement for all packages
+   to include this file.
 
+ * meta-build.m4: improved the META_GET_PKG_VARIABLE macro to deal
+   with multiple pkg-config files in the same directory. It now picks
+   only the first one. Maybe this should even be improved further,
+   since stuff might break if the uninstalled package is first in the
+   list (which would be very strange).
 
 Wed Jul 19 11:18:07 CEST 2006 <{jurgenv,storm}@cwi.nl>
  * meta-build.m4: call to AM_INIT_AUTOMAKE uses information from

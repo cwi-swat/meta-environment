@@ -5,7 +5,7 @@ m4_pattern_forbid([^META_])
 
 # META_GET_PKG_VARIABLE(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file
-AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
+AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([find . -name '*.pc.in' | head -n 1 | xargs cat | grep "$1:" | cut -f 2 -d ':' | tr -d '[:space:]'])])
 
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
@@ -15,6 +15,7 @@ AC_DEFUN([META_SETUP],
    
   AM_INIT_AUTOMAKE(META_GET_PKG_VARIABLE([Name]),META_GET_PKG_VARIABLE([Version]))
   AC_CONFIG_FILES(META_GET_PKG_VARIABLE([Name]).pc)
+  AC_CONFIG_FILES(META_GET_PKG_VARIABLE([Name])-uninstalled.pc)
 
   AM_MAINTAINER_MODE
 
