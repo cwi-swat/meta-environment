@@ -3,9 +3,21 @@
 # a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 
-# META_GET_PKG_VARIABLE(VARNAME)
+# META_GET_PKG_VAR(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file
-AC_DEFUN([META_GET_PKG_VARIABLE],[esyscmd([find . -name '*.pc.in' | grep -v uninstalled | xargs cat | grep "$1:" | cut -f 2 -d ':' | tr -d '[:space:]'])])
+AC_DEFUN([META_GET_PKG_VAR],[esyscmd([find . -name '*.pc.in' | grep -v uninstalled | xargs cat | grep "$1:" | cut -f 2 -d ':' | tr -d '[:space:]'])])
+
+# META_GET_PKG_VAR_PLAIN(VARNAME)
+# Is substituted by the value of VARNAME from a pkg-config file, 
+# without trimming
+AC_DEFUN([META_GET_PKG_VAR_PLAIN],[esyscmd([find . -name '*.pc.in' | grep -v uninstalled | xargs cat | grep "$1:" | cut -f 2 -d ':'])])
+
+# META_GET_PKG_USER_VAR(VARNAME)
+# Is substituted by the value of VARNAME from a pkg-config file
+AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' | tr -d '[:space:]'])])
+
+# META_INSTALLED_PKG_VAR(PKG,VAR)
+AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1")])
 
 # Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
@@ -13,8 +25,8 @@ AC_DEFUN([META_SETUP],
   AC_PREREQ([2.59])
   AC_CONFIG_SRCDIR([configure])
    
-  AM_INIT_AUTOMAKE(META_GET_PKG_VARIABLE([Name]),META_GET_PKG_VARIABLE([Version]))
-  AC_CONFIG_FILES(META_GET_PKG_VARIABLE([Name]).pc)
+  AM_INIT_AUTOMAKE(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]))
+  AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc)
   AC_CONFIG_FILES(META_GET_PKG_VARIABLE([Name])-uninstalled.pc)
 
   AM_MAINTAINER_MODE
@@ -32,6 +44,15 @@ AC_DEFUN([META_SETUP],
   fi
 
   META_BUNDLE_PKG_CONFIG_PATH
+  META_CONFIGURE_DEPENDENCIES
+])
+
+AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
+  EXTERNAL_JARS=
+  AC_FOREACH([Dep],META_GET_PKG_VAR_PLAIN([Requires]),[
+    META_REQUIRE_PACKAGE(Dep)
+  ])
+  AC_SUBST([EXTERNAL_JARS])
 ])
 
 # META_REQUIRE_PACKAGE(OPTION)
@@ -61,7 +82,6 @@ AC_ARG_WITH([$1],
   fi
 
   META_REQUIRE_PACKAGE_USING_PKGCONFIG(AC_Var,[$1])
-
 m4_popdef([AC_Var])dnl
 ])
 
@@ -116,6 +136,24 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_SUBST([$1_CFLAGS])
   AC_SUBST([$1_LIBS])
   AC_SUBST([$1_PREFIX])
+
+ 
+  AC_MSG_CHECKING([if CLASSPATH needs to be extended with deps of $2]) 
+  TMP_EXTERNAL_JARS=META_INSTALLED_PKG_VAR([$2],[ExternalJars])
+  if test "x${TMP_EXTERNAL_JARS}" != "x" ; then
+    EXTERNAL_JARS+=:${TMP_EXTERNAL_JARS}
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+  fi
+  AC_MSG_CHECKING([if CLASSPATH needs to be extended with jar of $2]) 
+  TMP_JARFILE=META_INSTALLED_PKG_VAR([$2],[JarFile])
+  if test "x${TMP_JARFILE}" != "x" ; then
+    EXTERNAL_JARS+=:$$1_PREFIX/share/${TMP_JARFILE}
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+  fi
 ])
 
 # Sets the PKG_CONFIG_PATH if this package is in a bundle.
@@ -139,12 +177,12 @@ AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
 
 # Sets up variables for a standard Java package
 AC_DEFUN([META_JAVA_SETUP],[
-  JAVA_JAR=META_GET_PKG_VARIABLE([JarFile])
-  JAVA_PACKAGES=META_GET_PKG_VARIABLE([Packages])
-  JAVA_LOCAL_JARS=META_GET_PKG_VARIABLE([LocalJars])
-  JAVA_EXTERNAL_JARS=META_GET_PKG_VARIABLE([ExternalJars])
-  JAVA_MAIN_CLASS=META_GET_PKG_VARIABLE([MainClass])
-  JAVA_TEST_CLASS=META_GET_PKG_VARIABLE([TestClass])
+  JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
+  JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
+  JAVA_LOCAL_JARS=META_GET_PKG_USER_VAR([LocalJars])
+  JAVA_EXTERNAL_JARS=META_GET_PKG_USER_VAR([ExternalJars])
+  JAVA_MAIN_CLASS=META_GET_PKG_USER_VAR([MainClass])
+  JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_JAR])
   AC_SUBST([JAVA_PACKAGES])
   AC_SUBST([JAVA_LOCAL_JARS])

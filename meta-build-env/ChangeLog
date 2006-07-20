@@ -9,6 +9,14 @@ Thu Jul 20 01:45:22 CEST 2006 <martin.bravenboer@gmail.com>
    since stuff might break if the uninstalled package is first in the
    list (which would be very strange).
 
+Thu Jul 20 09:40:23 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: calls META_REQUIRE_PACKAGE automatically using the
+   Requires variables from the pc.in file.
+ * meta-build.m4: builds up a EXTERNAL_JARS file to be used in the
+   setting of ClassPath. This requires each .pc.in file that needs
+   to export a classpath to set a variable:
+      ExternalJars=@EXTERNAL_JARS@
+
 Wed Jul 19 11:18:07 CEST 2006 <{jurgenv,storm}@cwi.nl>
  * meta-build.m4: call to AM_INIT_AUTOMAKE uses information from
    <package>.pc.in from now on, instead of from 'package'. This makes
