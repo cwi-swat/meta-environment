@@ -548,7 +548,7 @@
 
       <listitem>
         <para>Analysis: looking glass, drop of water, lens, microscope, X-ray,
-        measuring instrument, dissection, knife, scissors, </para>
+        measuring instrument, dissection, knife, scissors,</para>
       </listitem>
 
       <listitem>
@@ -564,6 +564,48 @@
         <para>A twisted rubic-like cube (components + transformation).</para>
       </listitem>
     </itemizedlist>
+
+    <para>Here are several attempts. The general idea is that circles</para>
+
+    <para>ome1.png ("analysis and transformation"):</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../../logos/ome1.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>ome2.png ("components for analysis and transformation):</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../../logos/ome2.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>ome3.png ("transformation"):</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../../logos/ome3.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>ome4.png ("analysis")</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../../logos/ome4.png" />
+      </imageobject>
+    </mediaobject>
+
+    <para>ome5.png ("analysis and transformation"):</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../../logos/ome5.png" />
+      </imageobject>
+    </mediaobject>
   </section>
 
   <section>
