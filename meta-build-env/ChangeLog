@@ -1,3 +1,10 @@
+
+
+Thu Jul 20 13:16:05 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build.m4: generates PACKAGE-uninstalled.pc.in file
+   from PACKAGE.pc.in file using the LocalLibs and LocalCFlags 
+   variables.
+
 Thu Jul 20 01:45:22 CEST 2006 <martin.bravenboer@gmail.com>
  * meta-build.m4: added PACKAGE-uninstalled.pc to the
    AC_CONFIG_FILES. This introduces the requirement for all packages
