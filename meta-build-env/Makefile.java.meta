@@ -1,0 +1,45 @@
+
+include $(top_srcdir)/Makefile.meta
+
+EXTRA_DIST = $(wildcard *.m4) \
+             reconf \
+             Makefile.meta \
+             Makefile.java.meta \
+	     ${JAVA_JAR}
+
+pkgconfig_DATA = ${PACKAGE}.pc
+
+JARFILE_ENV = JAR=${JAVA_JAR}
+data_DATA = ${JAVA_JAR}
+
+ANT_ENV = \
+  BUILDFILE=${top_srcdir}/meta-build.ant \
+  JAVA_JAR=${JAVA_JAR} \
+  JAVA_MAIN_CLASS=${JAVA_MAIN_CLASS} \
+  JAVA_LOCAL_JARS=${JAVA_LOCAL_JARS} \
+  JAVA_EXTERNAL_JARS=${JAVA_EXTERNAL_JARS} \
+  JAVA_PACKAGES=${JAVA_PACKAGES} \
+  JAVA_TEST_CLASS=${JAVA_TEST_CLASS} \
+  PACKAGE=${PACKAGE}
+
+
+if MAINTAINER_MODE
+
+ANT_BUILDFILE=$(top_srcdir)/meta-build.ant
+ANT = $(ANT_ENV) ant -buildfile $(ANT_BUILDFILE)
+
+dummy:
+
+${JAVA_JAR}: dummy
+	$(ANT) dist
+
+clean-local:
+	$(ANT) clean
+
+doc: dummy
+	$(ANT) doc
+
+check: dummy
+	$(ANT) check
+
+endif
