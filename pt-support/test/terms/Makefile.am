@@ -4,15 +4,15 @@
 
 EXTRA_DIST=genTermsDict.sh.src $(wildcard *.pt)
 
-noinst_LIBRARIES=libtestTerms.a
-noinst_SCRIPTS=genTermsDict.sh
+check_LIBRARIES=libtestTerms.a
+check_SCRIPTS=genTermsDict.sh
+check_HEADERS=terms_dict.h
 
-noinst_HEADERS=terms_dict.h
 libtestTerms_a_SOURCES=terms_dict.c
 
 INCLUDES=-I$(ATERM)/include
 
-terms_dict.c: terms.dict
+terms_dict.c terms_dict.h : terms.dict
 	$(ATERM)/bin/dicttoc -dict $< 
 
 terms.dict: genTermsDict.sh ${srcdir}/*.pt

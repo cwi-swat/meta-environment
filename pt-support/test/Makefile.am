@@ -4,7 +4,7 @@ SUBDIRS=terms
 
 TESTS=mept-test
 
-noinst_PROGRAMS=mept-test
+check_PROGRAMS=mept-test
 
 if MAINTAINER_MODE
 ATERM_LIB = ATerm-dbg
