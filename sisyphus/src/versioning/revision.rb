@@ -20,7 +20,7 @@ module Versioning
 
 
     def add_dep(component)
-      @deps << component
+      @deps |= [component]
     end
 
     def name

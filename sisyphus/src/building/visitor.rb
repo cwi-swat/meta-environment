@@ -74,16 +74,18 @@ module Building
       return item
     end
 
+    def implicit_dep
+      return @config.build_env_package
+    end
+
     def build_deps(revision)
-      deps = revision.deps
+      if implicit_dep and revision.name != implicit_dep then
+        revision.add_dep(Versioning::Component.new(implicit_dep))
+      end
       result = []                   
       @log.indented do
-        result = deps.collect do |dep|
+        result = revision.deps.collect do |dep|
           build_component(dep)
-        end
-        if @config.build_env_package and revision.name != @config.build_env_package then
-          c = Versioning::Component.new(@config.build_env_package)
-          result << build_component(c)
         end
       end
       return result.compact

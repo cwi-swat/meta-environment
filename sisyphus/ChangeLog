@@ -1,10 +1,16 @@
+2006-07-20    <storm@cwi.nl>
+
+	* Fix: a change in the implicit dependency build-environment
+	package would not trigger a build of everything, as it
+	should. This is now fixed.
+
 2006-07-19    <storm@cwi.nl>
 
-	* Feature: profiles can now have an entry build-env: <package> which indicates
-	that <package> is an implicit dependency for all packages that
-	will be built. When this package has been installed the path to
-	its bin-directory is added to the environment that is used to
-	build subsequent packages.
+	* Feature: profiles can now have an entry build-env: <package>
+	which indicates that <package> is an implicit dependency for all
+	packages that will be built. When this package has been installed
+	the path to its bin-directory is added to the environment that is
+	used to build subsequent packages.
 
 2006-06-28    <storm@cwi.nl>
 
