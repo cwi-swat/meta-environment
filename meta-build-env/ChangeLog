@@ -1,4 +1,13 @@
+Thu Jul 20 16:54:24 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: the generated PACKAGE-uninstalled.pc where
+   broken, since the LocalLibs and LocalCflags did not use the
+   required colon syntax. I've tweaked the generator to uncomment
+   lines from PACKAGE.pc that start with #uninstalled. Looks much
+   better as well :)
 
+   We'll probably need a mechanism to remove configuration lines as
+   well (for tools), but that's a matter of coming up with some nice
+   convention.
 
 Thu Jul 20 13:16:05 CEST 2006 <jurgenv@cwi.nl>
  * meta-build.m4: generates PACKAGE-uninstalled.pc.in file

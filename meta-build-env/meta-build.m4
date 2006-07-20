@@ -27,7 +27,7 @@ AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1")])
 
 dnl META_GENERATE_UNINSTALLED_PC(PKG)
 AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
-cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's#Local##g' > $1-uninstalled.pc
+cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 ])
 
 # Invokes all macros that always need to be invoked for a package.
