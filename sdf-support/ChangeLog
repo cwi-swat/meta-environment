@@ -1,5 +1,8 @@
 $Id$
 
+Fri Jul 21 02:01:11 CEST 2006 <martin.bravenboer@gmail.com>
+ * utils/sdf-renaming/src/Makefile.am: fix in linking order (Bug 489)
+	
 Tue May  9 16:50:47 CEST 2006 <{jurgenv,storm}@cwi.nl>
  * utils/sdf-modules/sdf-imports.c: fixed a funny bug. Renamings and
    module parameters did not support tuples! 
