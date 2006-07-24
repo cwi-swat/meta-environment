@@ -1,7 +1,7 @@
 
 
-Mon Jul 24 10:55:42 CEST 2006 <<+name+>>
- * meta-build.m4: Requires is comma separated, while we expected
+Mon Jul 24 10:55:42 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta-build.m4: 'Requires' field is comma separated, while we expected
    space separated. Fixed.
  * meta-build.m4: More use of tr to remove accidental newlines
    in data retrieved from pkg-config files.
