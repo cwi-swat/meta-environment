@@ -45,7 +45,7 @@ module Versioning
 
     def dependencies
       if @bom =~ /^Requires\s*:\s*(.*)$/m then
-        return $1.split
+        return $1.split(/[, ]/)
       end
       return []
       #raise RuntimeError.new("error parsing dependencies in: #{@bom}")
