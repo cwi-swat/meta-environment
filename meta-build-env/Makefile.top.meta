@@ -7,6 +7,8 @@ EXTRA_DIST = $(wildcard *.m4) \
              Makefile.meta \
              Makefile.top.meta
 
+CLEANFILES+= ${PACKAGE}-uninstalled.pc
+
 pkgconfig_DATA = ${PACKAGE}.pc
 
 if MAINTAINER_MODE
