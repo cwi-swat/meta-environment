@@ -7,6 +7,8 @@ EXTRA_DIST = $(wildcard *.m4) \
              Makefile.java.meta \
 	     ${JAVA_JAR}
 
+CLEANFILES+=${PACKAGE}-uninstalled.pc
+
 pkgconfig_DATA = ${PACKAGE}.pc
 
 JARFILE_ENV = JAR=${JAVA_JAR}
