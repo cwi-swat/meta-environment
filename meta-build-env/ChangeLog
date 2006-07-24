@@ -1,3 +1,11 @@
+
+
+Mon Jul 24 10:55:42 CEST 2006 <<+name+>>
+ * meta-build.m4: Requires is comma separated, while we expected
+   space separated. Fixed.
+ * meta-build.m4: More use of tr to remove accidental newlines
+   in data retrieved from pkg-config files.
+
 Thu Jul 20 16:54:24 CEST 2006 <martin.bravenboer@gmail.com>
  * meta-build.m4: the generated PACKAGE-uninstalled.pc where
    broken, since the LocalLibs and LocalCflags did not use the
