@@ -8,10 +8,10 @@ m4_pattern_forbid([^META_])
 # reconf time
 AC_DEFUN([META_GET_PKG_VAR],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
 
-# META_GET_PKG_VAR_PLAIN(VARNAME)
+# META_GET_PKG_VAR_LIST(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file, 
 # without trimming, at reconf time
-AC_DEFUN([META_GET_PKG_VAR_PLAIN],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':'])])
+AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr '[,]' '[ ]'])])
 
 # META_GET_PKG_USER_VAR(VARNAME)
 # Is substituted by the value of VARNAME from a pkg-config file, at reconf
@@ -23,7 +23,7 @@ AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' 
 AC_DEFUN([META_GET_PKG_USER_VAR_PLAIN],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '='])])
 
 # META_INSTALLED_PKG_VAR(PKG,VAR)
-AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1")])
+AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:@:space:@:>@')])
 
 dnl META_GENERATE_UNINSTALLED_PC(PKG)
 AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
@@ -60,7 +60,7 @@ AC_DEFUN([META_SETUP],
 
 AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
   EXTERNAL_JARS=
-  AC_FOREACH([Dep],META_GET_PKG_VAR_PLAIN([Requires]),[
+  AC_FOREACH([Dep],META_GET_PKG_VAR_LIST([Requires]),[
     META_REQUIRE_PACKAGE(Dep)
   ])
   AC_SUBST([EXTERNAL_JARS])
