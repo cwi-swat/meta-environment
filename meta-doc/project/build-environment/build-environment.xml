@@ -5,8 +5,8 @@
   <title>Build environment of the Meta-Environment</title>
 
   <authorblurb>
-    <para><authorinitials>Gerco Ballintijn, Tijs van der Storm, and Jurgen
-    Vinju</authorinitials>,</para>
+    <para><authorinitials>Gerco Ballintijn, Taeke Kooiker, Tijs van der Storm,
+    and Jurgen Vinju</authorinitials>,</para>
 
     <para><orgname>Centrum voor Wiskunde en Informatica</orgname>, <address>Amsterdam, The Netherlands</address><mediaobject>
         <imageobject>
@@ -53,10 +53,200 @@
   </section>
 
   <section>
-    <title>Building Meta-Environment packages from Subversion</title>
+    <title>The 'meta-build-env' package</title>
+
+    <para>Since we use autoconf, automake, gmake, and libtool, and we have a
+    rather modular package system, building a package can become complex. The
+    package <command>meta-build-env</command> helps to make this easier. The
+    goals of this package are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>to provide each package with the same build interface</para>
+      </listitem>
+
+      <listitem>
+        <para>to have no duplication/cloning of m4 macros and make
+        rules</para>
+      </listitem>
+
+      <listitem>
+        <para>to hide autoconf/automake ideosyncrasies as much as possible
+        (not 100% possible) </para>
+      </listitem>
+
+      <listitem>
+        <para>to have a single 'bill-of-materials' file for each package that
+        can be used by other tools (like sisyphys, pkg-config, autobundle,
+        etc.)</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Usage</title>
+
+      <para>To use the build environment, you first have to check it out from
+      Subversion, then configure, make and make install it. This installs the
+      tool <command>meta-build</command>, which can be seen as an extension of
+      <command>aclocal</command>. Now this is what you need to do to use the
+      build environment for a certain package:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Go to the root of the package.</para>
+        </listitem>
+
+        <listitem>
+          <para>Call <command>meta-build</command> (or<command>
+          ./reconf</command> as explained below)</para>
+        </listitem>
+
+        <listitem>
+          <para>Use the normal <command>configure</command>,
+          <command>make</command>, <command>make install</command>,
+          <command>make distcheck</command> routine that is implemented by
+          <command>automake</command> and <command>autoconf.</command></para>
+        </listitem>
+      </orderedlist>
+
+      <para>The convention is to let the <command>./reconf</command> script do
+      the call to <command>meta-build</command>. It copies all relevant build
+      environment files to the local directory, or makes a softlink to these
+      files. From now on, the package is independent of the meta-build-env
+      package, and can be distributed without it.</para>
+    </section>
+
+    <section>
+      <title>Files </title>
+
+      <para>The following files are installed by meta-build. The use of these
+      files is <emphasis>obligatory, </emphasis>not optional. This rule makes
+      sure that all packages implement the same interface.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>meta-build.m4: macros that extend autoconf to use pkg-config
+          files to retrieve dependencies, and to set up a Java build
+          environment, etc.</para>
+        </listitem>
+
+        <listitem>
+          <para>Makefile.top.meta: Makefile to include in all toplevel
+          Makefile.am's of C-based packages</para>
+        </listitem>
+
+        <listitem>
+          <para>Makefile.java.meta: Makefile to include in all toplevel
+          Makefile.am's of Java-based packages</para>
+        </listitem>
+
+        <listitem>
+          <para>Makefile.meta: Makefile to include in all other
+          Makefile.am's</para>
+        </listitem>
+
+        <listitem>
+          <para>meta-build.ant: ant targets for Java compilation</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following files should be present in the toplevel directory of
+      each package: </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>configure.ac: calls AC_INIT, then calls META_SETUP, and then
+          META_JAVA_SETUP if it is a Java package, and calls appropriate AC_
+          macros to resolve C configuration issues.</para>
+        </listitem>
+
+        <listitem>
+          <para>&lt;package&gt;.pc.in: contains most information about the
+          package, including the name and the version and the dependencies.
+          This file is used by meta-build.m4 to generate configure flags and
+          to set up the CLASSPATH, and all other things needed for modular
+          source tree composition.</para>
+        </listitem>
+
+        <listitem>
+          <para>./reconf: contains a call to meta-build</para>
+        </listitem>
+
+        <listitem>
+          <para>ChangeLog: contains a description of all changes (usually
+          equal to the commit message, but sometimes more extensive, or on a
+          slightly higher level of abstraction)</para>
+        </listitem>
+
+        <listitem>
+          <para>Makefile.am: includes either Makefile.top.meta or
+          Makefile.java.meta, and declares the SUBDIRS variable, contains
+          <computeroutput>ACLOCAL_AMFLAGS = -I .</computeroutput></para>
+        </listitem>
+
+        <listitem>
+          <para>COPYING: contains a copy of the GNU Lesser General Public
+          License</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This is an example &lt;package&gt;.pc.in file for a C based
+      package:</para>
+
+      <programlisting>prefix=@prefix@
+
+Name: toolbuslib
+Description: ToolBus adapter library
+Version: 0.8
+Libs: -L${prefix}/lib -lATB @SOCKETLIBS@
+Cflags: -I${prefix}/include
+#uninstalled Libs: -L@abs_top_builddir@/src -lATB @SOCKETLIBS@
+#uninstalled Cflags: -I@abs_top_builddir@/src
+Requires: aterm</programlisting>
+
+      <para>The prefix line is obligatory, as well as Name, Description and
+      Version. The #uninstalled lines declare the location of exported
+      libraries in the local source tree. This is used to compose source
+      trees. Libs and Cflags declare the location of headers and libraries
+      after installation. This file is constructed by
+      <command>configure</command>, so you may use configure variables that
+      you introduced in <filename>configure.ac</filename> (e.g.
+      <computeroutput>@SOCKETLIBS@</computeroutput>).</para>
+
+      <para>This is an example &lt;package&gt;.pc.in file for a Java based
+      package:</para>
+
+      <programlisting>prefix=@prefix@
+
+Name: aterm-java
+Description: Java version of the ATerm library
+Version: 1.6.3
+Requires: shared-objects,JJTraveler
+JarFile=aterm-java-1.6.3.jar
+Packages=aterm,aterm.pure,aterm.test
+LocalJars=
+ExternalJars=@EXTERNAL_JARS@
+TestClass=</programlisting>
+
+      <para>Some extra variables are declared (notice the '=', instead of the
+      ':'). Java packages all have the same directory structure. The sources
+      must be in './src'. The extra variables are used to configure ant to do
+      it's job. They are all obligatory. The ExternalJars=@EXTERNAL_JARS@ line
+      is only needed if the packages has dependencies in the 'Requires' field.
+      EXTERNAL_JARS will be substituted by all Jar files needed to compile and
+      run this package, but you may add your own external dependencies here.
+      LocalJars can be used to add jars that are needed to build the package,
+      but are not build from Java source directly. These are typically third
+      party packages like junit.jar.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Building Meta-Environment packages from Subversion using
+    Sisyphus</title>
 
     <para>To initiate a build environment for the Meta-Environment can be hard
-    because: </para>
+    because:</para>
 
     <itemizedlist>
       <listitem>
@@ -79,7 +269,7 @@
     packages need to be build and with which commands. This information is
     cached locally in a <filename>.rollrc</filename> file. The
     <filename>.rollrc</filename> file is constructed by running
-    <command>boot-roll</command> once. </para>
+    <command>boot-roll</command> once.</para>
 
     <section>
       <title>How to use <command>boot-roll</command> and
@@ -131,7 +321,7 @@ sisyphus:
   password: daybuild
 templates:
  reconf: ./reconf
- configure: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --enable-maintainer-mode --with-cflags="-Wall -Werror -g -O2"
+ configure: ./configure --prefix=&lt;%= prefix%&gt; &lt;%deps.each do |d|%&gt;--with-&lt;%= d.name%&gt;=&lt;%= d.prefix%&gt; &lt;%end%&gt; --enable-maintainer-mode
  make: echo 'use make install'
  install: make install
  check: make check
