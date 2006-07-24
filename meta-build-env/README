@@ -1,1 +1,31 @@
- See COPYING for the license 
+See COPYING for the license 
+
+This package contains the "build environment" for Meta-Environment packages.
+  - Make rules
+  - M4 macros for autoconf, pkg-config, and autobundle
+  - Ant configuration
+
+The goals are:
+  - each package should have the same build interface
+  - no duplication/cloning of m4 macros and make rules
+  - hiding autoconf/automake ideosyncrasies as much as possible
+  - having a single 'bill-of-material' file for each package that
+    can be used by other tools (like sisyphys, pkg-config, autobundle, etc.)
+
+Usage:
+The script 'meta-build' must be run from the root of a package. This copies
+the build environment files (or soft links) into the package. From that
+moment on, the package is independent from the meta-build-env package.
+The convention is to have a './reconf' script that calls 'meta-build'.
+
+Files:
+  - meta-build.m4: macros that extend autoconf to use pkg-config files
+    to retrieve dependencies, and to set up a Java build environment, etc.
+  - Makefile.top.meta: Makefile to include in all toplevel Makefile.am's of
+    C-based packages
+  - Makefile.java.meta: Makefile to include in all toplevel Makefile.am's of
+    Java-based packages
+  - Makefile.meta: Makefile to include in all other Makefile.am's.
+
+Note that each package should have a file called <package>.pc.in that
+declares the name and the version and other important stuff for a package.
