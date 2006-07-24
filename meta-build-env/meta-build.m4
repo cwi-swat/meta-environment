@@ -152,7 +152,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_MSG_CHECKING([if CLASSPATH needs to be extended with deps of $2]) 
   TMP_EXTERNAL_JARS=META_INSTALLED_PKG_VAR([$2],[ExternalJars])
   if test "x${TMP_EXTERNAL_JARS}" != "x" ; then
-    EXTERNAL_JARS+=:${TMP_EXTERNAL_JARS}
+    EXTERNAL_JARS="${EXTERNAL_JARS}:${TMP_EXTERNAL_JARS}"
     AC_MSG_RESULT([yes])
   else
     AC_MSG_RESULT([no])
@@ -160,7 +160,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_MSG_CHECKING([if CLASSPATH needs to be extended with jar of $2]) 
   TMP_JARFILE=META_INSTALLED_PKG_VAR([$2],[JarFile])
   if test "x${TMP_JARFILE}" != "x" ; then
-    EXTERNAL_JARS+=:$$1_PREFIX/share/${TMP_JARFILE}
+    EXTERNAL_JARS="${EXTERNAL_JARS}:$$1_PREFIX/share/${TMP_JARFILE}"
     AC_MSG_RESULT([yes])
   else
     AC_MSG_RESULT([no])
