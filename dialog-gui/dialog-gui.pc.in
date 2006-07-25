@@ -6,5 +6,6 @@ Description:
 Requires: aterm-java,config-support,meta-studio,toolbus,toolbus-java-adapter
 JarFile=dialog-gui-@VERSION@.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
+MainClass=nl.cwi.sen1.gui.plugin.Dialog
 ExternalJars=@EXTERNAL_JARS@
 TestClass=
