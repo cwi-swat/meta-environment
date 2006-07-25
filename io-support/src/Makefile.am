@@ -1,6 +1,6 @@
 # $Id$
 
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = in-output
 pkgdata_DATA = in-output.idef
@@ -11,28 +11,21 @@ noinst_HEADERS = in-output.tif.h
 
 INCLUDES = \
 	-I$(top_srcdir)/lib \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(CONFIG_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ATERM)/include
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(CONFIG_SUPPORT_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(ATERM_CFLAGS) 
 
 in_output_SOURCES = \
 	in-output.tif.c \
 	main.c
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 in_output_LDADD = \
 	-L$(top_builddir)/lib -lIOAPI \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(CONFIG_SUPPORT)/lib -lConfigAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -l$(ATERM_LIB) \
-	$(SOCKLIBS)
+	$(ERROR_SUPPORT_LIBS) \
+	$(CONFIG_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

@@ -14,7 +14,7 @@ libIOAPI_a_SOURCES = \
 		     IO.c \
 		     IO_dict.c
 
-INCLUDES = -I${ATERM}/include
+INCLUDES = ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 IO_MODULES = File Path StrCon
