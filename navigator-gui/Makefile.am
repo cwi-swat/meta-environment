@@ -6,7 +6,7 @@ ACLOCAL_FLAGS = -I .
 
 TOOLNAME = navigator
 
-pkgdata_DATA += $(TOOLNAME).idef
+pkgdata_DATA = $(TOOLNAME).idef
 EXTRA_DIST += $(TOOLNAME).idef.src
 
 CLEANFILES += $(TOOLNAME).idef
