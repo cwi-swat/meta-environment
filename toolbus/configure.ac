@@ -1,37 +1,6 @@
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-AC_PREREQ(2.59)
-AC_CANONICAL_TARGET([])
-
-GLT_INIT_PACKAGE
-
-AM_MAINTAINER_MODE
-
-AC_MSG_CHECKING([whether CFLAGS is already set])
-if test "${CFLAGS+set}" = set; then
-  AC_MSG_RESULT([yes])
-  toolbus_cflags_set=yes
-else
-  AC_MSG_RESULT([no])
-  toolbus_cflags_set=no
-
-  # Avoid setting of CFLAGS by AC_PROG_CC.
-  CFLAGS=""
-fi
-
-AC_AIX
-AC_PROG_CC
-AC_PROG_LIBTOOL
-
-TODO_CFLAGS=""
-if test "$GCC" = yes; then
-  if test "$toolbus_cflags_set" = no; then
-    TODO_CFLAGS="-g -O2 -Wall"
-    if test "$USE_MAINTAINER_MODE" = yes; then
-      TODO_CFLAGS="$TODO_CFLAGS -Werror"
-    fi
-  fi
-fi
+META_SETUP
+META_C_SETUP
 
 dnl CPP and FLAGS are needed by toolbus for calling preprocessor as 
 dnl configured correctly:
@@ -69,29 +38,6 @@ AC_SUBST(PYTHON_ADAPTER)
 WISH_ADAPTER=wish-adapter
 AC_SUBST(WISH_ADAPTER)
 
-
-AC_ARG_WITH(tide,
-   [  --with-tide             compile TIDE support (debugger prototype)],
-   TIDEDEF=-DUSE_TIDE
-   TIDE=${withval}
-   TIDEINC='-I$(TIDE)/include'
-)
-AC_SUBST(TIDEDEF)
-AC_SUBST(TIDE)
-AC_SUBST(TIDEINC)
-
-dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, baffle,
-   [  --with-aterm=DIR        ATerm-library is in DIR])
-AC_SUBST(ATERM)
-
-dnl Require toolbuslib library
-AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
-AC_SUBST(TOOLBUSLIB)
-
-dnl Which additional adapters to build?
-
 AC_ARG_WITH(trans,
    [  --with-trans-adapter    transparently connects to another toolbus],
    TRANS_ADAPTER=trans-adapter)
@@ -108,23 +54,12 @@ AC_CHECK_HEADER([ctype.h],[:],[AC_MSG_ERROR("*** no ctype.h")])
 AC_CHECK_HEADER([errno.h],[:],[AC_MSG_ERROR("*** no errno.h")])
 AC_CHECK_HEADER([netdb.h],[:],[AC_MSG_ERROR("*** no netdb.h")])
 AC_CHECK_HEADER([netinet/in.h],[:],[AC_MSG_ERROR("*** no netinet/in.h")])
-
-dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
-dnl you need to include standards.h aswell.
-AC_MSG_CHECKING("for netinet/tcp.h")
-AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#ifdef sgi
-#include <standards.h>
-#endif
-#include <netinet/tcp.h>
-]])],[AC_MSG_RESULT("yes")],[AC_MSG_ERROR("*** no netinet/tcp.h")])
-
-dnl AC_CHECK_HEADER([netinet/tcp.h],[:],[AC_MSG_ERROR("*** no netinet/tcp.h")])
+AC_CHECK_HEADER([netinet/tcp.h],[:],[AC_MSG_ERROR("*** no netinet/tcp.h")])
 AC_CHECK_HEADER([signal.h],[:],[AC_MSG_ERROR("*** no signal.h")])
 AC_CHECK_HEADER([stdarg.h],[:],[AC_MSG_ERROR("*** no stdarg.h")])
 AC_CHECK_HEADER([stdio.h],[:],[AC_MSG_ERROR("*** no stdio.h")])
 AC_CHECK_HEADER([stdlib.h],[:],[AC_MSG_ERROR("*** no stdlib.h")])
 AC_CHECK_HEADER([string.h],[:],[AC_MSG_ERROR("*** no string.h")])
-
 AC_CHECK_HEADER([fcntl.h],[:],[AC_MSG_ERROR("*** no fcntl.h")])
 AC_CHECK_HEADER([sys/ioctl.h],[:],[AC_MSG_ERROR("*** no sys/ioctl.h")])
 AC_CHECK_HEADER([sys/param.h],[:],[AC_MSG_ERROR("*** no sys/param.h")])
@@ -144,7 +79,6 @@ AC_CHECK_FUNCS([yywrap])
 AC_CHECK_FUNCS([lrand48 srand48])
 
 dnl Find out which libraries we need
-
 SOCKET_FOUND=no
 AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;LIBS="$LIBS -lsun"])
 if test ${SOCKET_FOUND} = no; then
@@ -175,28 +109,4 @@ AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 # C library, since using, e.g., sin leads to compilation errors
 AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
-CFLAGS="$CFLAGS $TODO_CFLAGS"
-
-dnl add outputfiles as argument below
-AC_CONFIG_FILES([Makefile
-  libtb/Makefile
-  toolbus/Makefile
-  aterm/Makefile
-  adapters/Makefile
-  adapters/wish-adapter/Makefile
-  adapters/tcltk-adapter/Makefile
-  adapters/perl-adapter/Makefile
-  adapters/gen-adapter/Makefile
-  adapters/toolbus-adapter/Makefile
-  adapters/trans-adapter/Makefile
-  adapters/trans-adapter/trans/Makefile
-  adapters/emacs-adapter/Makefile
-  adapters/python-adapter/Makefile
-  tbviz/Makefile
-  demos/Makefile 
-  demos/auction/Makefile 
-  demos/calc/Makefile
-  demos/hello/Makefile
-  demos/wave/Makefile
-  test/Makefile])
 AC_OUTPUT 

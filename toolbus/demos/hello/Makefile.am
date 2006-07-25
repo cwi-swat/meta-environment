@@ -18,8 +18,8 @@
 
 noinst_PROGRAMS		= hello hello-gen printer producer store
 
-INCLUDES		= -I$(TOOLBUSLIB)/include \
-			-I$(ATERM)/include
+INCLUDES		= $(TOOLBUSLIB_CFLAGS) \
+			$(ATERM_CFLAGS) 
 
 EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
 			hello.pl hello.pl.tb pipe.tb PC.tb producer.c store.c \
@@ -27,24 +27,24 @@ EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
 			Hello.java HelloTool.java
 
 hello_SOURCES		= hello.c
-hello_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+hello_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 hello_gen_SOURCES	= hello-gen.c hello.tif.c hello.tif.h
-hello_gen_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+hello_gen_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS)
 
 printer_SOURCES		= printer.c
-printer_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+printer_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 producer_SOURCES	= producer.c
-producer_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+producer_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 store_SOURCES		= store.c
-store_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+store_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 %.tif.c %.tif.h: hello2.tifs
 	$(top_builddir)/aterm/tifstoc -tool $* $<

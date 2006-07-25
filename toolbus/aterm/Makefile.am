@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 bin_PROGRAMS = tifstoc tblog merge-tifs
 
 EXTRA_DIST = \
@@ -11,36 +13,18 @@ CLEANFILES = \
 	tblog_dict.[ch] \
 	tblog-interface.tifs
 
-ATINC = $(ATERM)/include
-ATBIN = $(ATERM)/bin
-ATLIB = $(ATERM)/lib
-TBDIR = ${top_builddir}/toolbus
-ATBLIB = $(TOOLBUSLIB)/lib
-
 INCLUDES = \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ATINC)
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
+	$(TOOLBUSLIB_CFLAGS) \
+	$(ATERM_CFLAGS)
 
 tblog_SOURCES = tblog_dict.c logger.tif.c tblog.c
-tblog_LDADD = \
-	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -l$(ATERM_LIB)
+tblog_LDADD = $(TOOLBUSLIB_LIBS)
 
 tifstoc_SOURCES = tifs.c tifstoc.c
-tifstoc_LDADD = \
-	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -l$(ATERM_LIB)
+tifstoc_LDADD = $(TOOLBUSLIB_LIBS)
 
 merge_tifs_SOURCES = tifs.c merge-tifs.c
-merge_tifs_LDADD = \
-	-L$(ATBLIB) -lATB \
-	-L$(ATLIB) -l$(ATERM_LIB)
+merge_tifs_LDADD = $(TOOLBUSLIB_LIBS)
 
 noinst_HEADERS = logger.tif.h  tblog_dict.h  tifs.h
 
@@ -50,7 +34,7 @@ logger.tif.c logger.tif.h: tblog-interface.tifs
 	$(top_builddir)/aterm/tifstoc -tool logger $<
 
 %_dict.c %_dict.h: %.dict
-	$(ATBIN)/dicttoc -dict $<
+	$(ATERM_PREFIX)/bin/dicttoc -dict $<
 
 tblog-interface.tifs: tblog-interface.tb
-	$(TBDIR)/toolbus -gentifs -output $@ $<
+	$(TOOLBUS_PREFIX)/bin/toolbus -gentifs -output $@ $<

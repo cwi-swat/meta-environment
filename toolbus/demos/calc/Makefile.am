@@ -19,26 +19,26 @@
 EXTRA_DIST      	= calc.tb ui-calc.tcl
 CLEANFILES      	= *.tif.[ch] calc.tifs
 
-INCLUDES		= -I$(TOOLBUSLIB)/include \
-			-I$(ATERM)/include
+INCLUDES		= $(TOOLBUSLIB_CFLAGS) \
+			$(ATERM_CFLAGS) 
 
 noinst_PROGRAMS		= clock log calc batch
 
 clock_SOURCES		= clock.tif.c clock.tif.h clock.c
-clock_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+clock_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 log_SOURCES     	= log.tif.c log.tif.h log.c
-log_LDADD       	= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+log_LDADD       	= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 calc_SOURCES		= calc.tif.c calc.tif.h calc.c
-calc_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+calc_LDADD		= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 batch_SOURCES   	= batch.tif.c batch.tif.h batch.c
-batch_LDADD     	= -L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -lATerm
+batch_LDADD     	= $(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 %.tif.c %.tif.h: calc.tifs
 	$(top_builddir)/aterm/tifstoc -tool $* $<
