@@ -4,3 +4,5 @@ Name: tide-support
 Version: 1.1
 Description:
 Requires: aterm,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ltide-adapter
