@@ -16,7 +16,6 @@ module Building
     end
 
 
-
     private         
 
     def working_set_at(start)
