@@ -1,8 +1,6 @@
 #ifndef ATB_TOOL_H
 #define ATB_TOOL_H
 
-#include <sys/times.h>
-#include <sys/types.h>
 #include <string.h>
 #include <aterm1.h>
 
@@ -28,7 +26,6 @@ int    ATBpeekAny(void);
 int    ATBhandleOne(int file_desc);
 int    ATBhandleAny(void);
 
-int    ATBgetDescriptors(fd_set *set);
 
 ATbool ATBisValidConnection(int cid);
 int    ATBgetPort(int cid);

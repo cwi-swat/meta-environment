@@ -1,5 +1,15 @@
 $Id$
 
+Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * **: adapted package to use the standard meta-build-env.
+
+Wed Jul 19 10:33:50 CEST 2006 <{jurgenv,storms}@cwi.nl>
+ * aterm/*: renamed to src/*
+ * configure.ac: cleanup of checks for header files, and removed
+   dependency on -lm math library
+ * src/atb-tool.[ch]: removed dead includes
+ * toolbuslib.pc.in: declares dependencies on system socket libraries 
+
 Fri Mar 10 11:51:51 CET 2006 <kooiker@cwi.nl>
  * **/Makefile.am:
    - Maintainers use ATerm-dbg library

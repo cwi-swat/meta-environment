@@ -1,23 +1,21 @@
 /*{{{  includes */
 
+#include "atb-tool.h"
 #include <assert.h>
 #include <string.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <unistd.h>
 #include <errno.h>
 #include <netdb.h>
-#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/un.h>
 #include <sys/param.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
-#include <arpa/inet.h>
 #include <signal.h>
 
 #include <aterm2.h>
-#include "atb-tool.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -97,6 +95,8 @@ static int mwrite(int fd, char *buf, int len);
 static int mread(int fd, char *buf, int len);
 static void handshake(Connection *connection);
 /*}}}  */
+
+int    ATBgetDescriptors(fd_set *set);
 
 /*{{{  int ATBinitialize(int argc, char *argv[]) */
 
