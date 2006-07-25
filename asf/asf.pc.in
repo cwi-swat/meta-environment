@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: asf
+Version: 2.1
+Description: 
+Requires: error-support,asc-support,asf-support,sdf-support,pt-support,aterm,toolbus,toolbuslib,tide-support
