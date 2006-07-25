@@ -29,6 +29,6 @@ uninstall-hook:
 	rm -rf $$install_dir
 
 
-.PHONY: doc
-doc:
-	(cd src && $(MAKE) $(AM_MAKE_FLAGS) doc)
+#.PHONY: doc
+#doc:
+#	(cd src && $(MAKE) $(AM_MAKE_FLAGS) doc)
