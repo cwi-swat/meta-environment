@@ -8,7 +8,7 @@ SUBDIRS = lib
 
 TOOLNAME = graph-painter
 
-pkgdata_DATA += $(TOOLNAME).idef
+pkgdata_DATA = $(TOOLNAME).idef
 
 EXTRA_DIST += $(TOOLNAME).idef.src
 
