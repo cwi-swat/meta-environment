@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: asf-library
+Version: 2.0
+Description:
+Requires: sdf-library
