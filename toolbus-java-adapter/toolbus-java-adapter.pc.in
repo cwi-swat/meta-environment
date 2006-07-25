@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: toolbus-java-adapter
+Version: 1.0
+Description:
+Requires: aterm-java
