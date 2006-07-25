@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 BUILTIN_NAMES_ARITY=\
 	set-anno_3\
 	get-anno_2\
@@ -86,13 +88,13 @@ libasc_support_me_a_SOURCES = \
 
 # Default include directories
 INCLUDES = \
-	-I$(PT_SUPPORT)/include \
-	-I$(ASF_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(SGLR)/include \
-	-I$(TIDE_SUPPORT)/include \
-	-I$(ATERM)/include
+	$(PT_SUPPORT_CFLAGS) \
+	$(ASF_SUPPORT_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(SGLR_CFLAGS) \
+	$(TIDE_SUPPORT_CFLAGS) \
+	$(ATERM_CFLAGS) 
 
 TESTS=builtin-link-test
 
@@ -105,23 +107,16 @@ EXTRA_DIST = Library.def
 # it:
 check_PROGRAMS=builtin-link-test
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD = \
 	-L. -lasc-support-me \
-	-L${SGLR}/lib -lsglr \
-	-L${TIDE_SUPPORT}/lib -ltide-adapter \
-	-L${ASF_SUPPORT}/lib -lASFME \
-	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
-	-L${TOOLBUSLIB}/lib -lATB  \
-	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -l$(ATERM_LIB) \
-	${SOCKLIBS}
+	$(SGLR_LIBS) \
+	$(TIDE_SUPPORT_LIBS) \
+	$(ASF_SUPPORT_LIBS) \
+	$(PT_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(ATERM_LIBS) 
 
 UTILS=${top_srcdir}/utils
 GENFWD=${UTILS}/gen-forward.sh
