@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: navigator-gui
+Version: 1.0
+Description:
+Requires: aterm-java,config-support,graph-support,io-support,meta-studio,toolbus,toolbus-java-adapter
