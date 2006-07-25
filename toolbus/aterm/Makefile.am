@@ -8,7 +8,7 @@ EXTRA_DIST = \
 	tblog-interface.tb \
 	tblog.dict
 
-CLEANFILES = \
+CLEANFILES += \
 	logger.tif.[ch] \
 	tblog_dict.[ch] \
 	tblog-interface.tifs
