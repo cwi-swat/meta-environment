@@ -6,6 +6,4 @@ ACLOCAL_FLAGS = -I .
 
 SUBDIRS = \
 	lib \
-	util \
-	studio \
 	script
