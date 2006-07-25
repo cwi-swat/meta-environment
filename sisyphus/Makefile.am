@@ -1,17 +1,9 @@
 
+include $(top_srcdir)/Makefile.top.meta
+
 SUBDIRS = src script doc
 
 ACLOCAL_FLAGS = -I .
-
-CLEANFILES = ${PACKAGE}-${VERSION}.pkg
-
-EXTRA_DIST = reconf package
-
-noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
-
-${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $< $@
-
 
 gems		= activerecord-1.13.2 activesupport-1.2.5 postgres-pr-0.4.0
 
