@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 EXTRA_DIST = sdf-modules.idef.src
 
@@ -14,19 +14,12 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 	module-table.c \
 	sdf-imports.c
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 sdf_modules_LDADD = \
 	-L$(top_builddir)/lib -lSDFME  \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ATERM)/lib -l$(ATERM_LIB) \
-	$(SOCKLIBS)
+	$(TOOLBUSLIB_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(PT_SUPPORT_LIBS) \
+	$(ATERM_LIBS) 
 
 noinst_HEADERS = \
 	sdf-modules.tif.h \
@@ -35,11 +28,11 @@ noinst_HEADERS = \
 
 INCLUDES = \
 	-I$(top_srcdir)/lib  \
-	-I$(ATERM)/include  \
-	-I$(TOOLBUSLIB)/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(SDF_SUPPORT)/include
+	$(ATERM_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(PT_SUPPORT_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(SDF_SUPPORT_CFLAGS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

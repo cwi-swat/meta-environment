@@ -4,39 +4,33 @@
 # $Id$
 #
 
+include $(top_srcdir)/Makefile.meta
+
 TESTS = pt2sdf grammars sorts
 
 EXTRA_DIST = Booleans.pt Layout.pt BoolTerm.pt
 
 noinst_PROGRAMS = ${TESTS}
 
-AM_CFLAGS = -g -Wall -O2
-
 INCLUDES = \
 	-I${top_srcdir}/lib \
-	-I$(PT_SUPPORT)/include \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(ATERM)/include \
+	$(PT_SUPPORT_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(ATERM_CFLAGS) \
 	-DSRC_DIR=\"${srcdir}\"
 
 pt2sdf_SOURCES = pt2sdf-test.c
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 pt2sdf_LDADD = \
 	-L${top_builddir}/lib -lPT2SDF -lSDFME \
-	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-	-L$(ATERM)/lib -l$(ATERM_LIB)
+	$(PT_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(ATERM_LIBS) 
 
 LDLIBS = \
-	-L../lib -lSDFME \
-	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ATERM)/lib -l$(ATERM_LIB)
+	-L${top_builddir}/lib -lSDFME \
+	$(PT_SUPPORT_LIBS) \
+	$(ATERM_LIBS) 
 
 grammars_SOURCES = grammars.c
 grammars_LDADD = $(LDLIBS)

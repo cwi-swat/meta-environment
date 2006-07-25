@@ -20,9 +20,9 @@ libSDF2PT_a_SOURCES = sdf2pt.c
 libPT2SDF_a_SOURCES = pt2sdf.c
 
 INCLUDES = \
-	-I${ATERM}/include \
-	-I${ERROR_SUPPORT}/include \
-	-I${PT_SUPPORT}/include
+	${ATERM_CFLAGS} \
+	${ERROR_SUPPORT_CFLAGS} \
+	${PT_SUPPORT_CFLAGS}
 
 UTILSRCS = \
 	SDFME-utils.c \
