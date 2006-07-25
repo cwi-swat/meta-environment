@@ -1,4 +1,18 @@
+Tue Jul 25 20:19:22 CEST 2006 <martin.bravenboer@gmail.com>
+  * meta-build.m4: META_JAVA_SETUP: ExternalJars is subsituted, so
+    we cannot get it from the pkg-config file. For now, the value of
+    JAVA_EXTERNAL_JARS is the variable EXTERNAL_JARS, which has been
+    determined earlier.
 
+    However, I'm afraid we'll have to revise the use of ExternalJars
+    completely. The essential reason why building against uninstalled
+    packages works with pkg-config is that a package should only list
+    *its own* properties in a pkg-config file. The ExternalJars is a
+    property of a required package, which breaks. So, a package should
+    only list the jars that it provides and the required packages. If
+    the closure needs to be determined, then this should be done by a
+    configure script (meta-build.m4). The  result of that closure
+    should not be stored in a pkg-config file.
 
 Tue Jul 25 15:58:43 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * meta-build.m4: added META_C_SETUP, common macro calls for
