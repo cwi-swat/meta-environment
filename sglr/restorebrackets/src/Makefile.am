@@ -1,17 +1,17 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 EXTRA_DIST		= restorebrackets.idef.src
 
 CLEANFILES = restorebrackets.idef
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
-			-I$(PT_SUPPORT)/include \
-			-I$(ERROR_SUPPORT)/include \
-			-I$(TOOLBUSLIB)/include \
-			-I$(SGLR)/include \
-			-I$(ATERM)/include
+			$(PT_SUPPORT_CFLAGS) \
+			$(ERROR_SUPPORT_CFLAGS) \
+			$(TOOLBUSLIB_CFLAGS) \
+			$(SGLR_CFLAGS) \
+			$(ATERM_CFLAGS) 
 
 pkgdata_DATA		= restorebrackets.idef
 
@@ -19,18 +19,11 @@ bin_PROGRAMS		= restorebrackets
 
 restorebrackets_SOURCES	= restorebrackets.tif.c restorebrackets.tif.h restorebrackets-main.c
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 restorebrackets_LDADD	= -L$(top_builddir)/libsglr -lsglr \
-			-L$(PT_SUPPORT)/lib -lmept \
-			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-			-L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ATERM)/lib -l$(ATERM_LIB) \
-			$(SOCKLIBS)
+			$(PT_SUPPORT_LIBS) \
+			$(ERROR_SUPPORT_LIBS) \
+			$(TOOLBUSLIB_LIBS) \
+			$(ATERM_LIBS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
