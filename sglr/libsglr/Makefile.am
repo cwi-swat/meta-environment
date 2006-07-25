@@ -1,8 +1,7 @@
 # $Id$
 
-#CFLAGS	+= -DNO_SHARING
+include $(top_srcdir)/Makefile.meta
 
-include $(top_srcdir)/make_rules
 INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ERROR_SUPPORT)/include \
