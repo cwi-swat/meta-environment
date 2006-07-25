@@ -8,7 +8,7 @@ libMuASF_a_SOURCES	= MuASF.c MuASF_dict.c
 EXTRA_DIST		= MuASF.label.def
 
 AM_CFLAGS		= -g -Wall -O2
-INCLUDES		= -I${ATERM}/include
+INCLUDES		= ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 ATERM_LIB = ATerm-dbg

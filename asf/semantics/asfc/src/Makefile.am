@@ -1,4 +1,4 @@
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 SUBDIRS = muasf .
  
@@ -31,10 +31,10 @@ noinst_HEADERS = asfc.tif.h \
 asfc_DEPENDENCIES =
 asfc_LDADD   = \
                -L./muasf -lMuASF \
-	       $(ASC_LD_FLAGS)
+	       $(ASC_SUPPORT_LIBS)
 
-DEFINES = -DASC_INCLUDES="\"$(ASC_INCLUDES)\"" \
-          -DASC_LD_FLAGS="\"$(ASC_LD_FLAGS)\""   \
+DEFINES = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
+          -DASC_LD_FLAGS="\"$(ASC_SUPPORT_LIBS)\""   \
           -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
           -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
           -DCOMPILER="\"$(CC)\"" \

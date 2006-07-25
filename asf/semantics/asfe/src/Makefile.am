@@ -1,4 +1,4 @@
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS      = asfe
 
@@ -41,12 +41,11 @@ asfe_SOURCES =\
 
 asfe_DEPENDENCIES =
 asfe_LDADD = \
-	     -L$(ERROR_SUPPORT)/lib -lLocationAPI \
-	     $(ASC_LD_FLAGS)
+	     $(ERROR_SUPPORT_LIBS) \
+	     $(ASC_SUPPORT_LIBS)
 
-INCLUDES = $(ASC_INCLUDES) \
-	     -I$(ERROR_SUPPORT)/include \
-	     ${TRAVERSALSDEF} ${LAYOUTDEF}
+INCLUDES = $(ASC_SUPPORT_CFLAGS) \
+	     $(ERROR_SUPPORT_CFLAGS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

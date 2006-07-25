@@ -1,7 +1,7 @@
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 INCLUDES = \
-	   $(ASC_INCLUDES) \
+	   $(ASC_SUPPORT_CFLAGS) \
 	   -I$(SDF_SUPPORT)/include
 
 bin_PROGRAMS = addeqssyntax
@@ -20,8 +20,8 @@ addeqssyntax_SOURCES = \
 	addeqssyntax.tif.c
 
 addeqssyntax_LDADD = \
-		     -L$(SDF_SUPPORT)/lib -lSDFME \
-		     $(ASC_LD_FLAGS)
+		     $(SDF_SUPPORT_LIBS) \
+		     $(ASC_SUPPORT_LIBS)
 
 asfc:
 	asfc -i Add-Eqs-Syntax.eqs -o Add-Eqs-Syntax.c -v

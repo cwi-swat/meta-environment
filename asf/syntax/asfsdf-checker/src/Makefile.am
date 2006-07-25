@@ -1,8 +1,8 @@
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 INCLUDES = \
-	   $(ASC_INCLUDES)  \
-	   -I$(SDF_SUPPORT)/include  \
+	   $(ASC_SUPPORT_CFLAGS)  \
+	   $(SDF_SUPPORT_CFLAGS) \
 	   -DASF_WITH_ANNOS
 
 bin_PROGRAMS = asfsdfchecker
@@ -17,8 +17,8 @@ noinst_HEADERS = asfsdfchecker.tif.h
 
 asfsdfchecker_SOURCES = asfsdfchecker.c AsfSdf-Checker.c asfsdfchecker.tif.c
 asfsdfchecker_LDADD = \
-	-L$(SDF_SUPPORT)/lib -lSDFME \
-	$(ASC_LD_FLAGS)
+	$(SDF_SUPPORT_LIBS) \
+	$(ASC_SUPPORT_LIBS)
 
 asfc: AsfSdf-Checker.eqs
 	asfc -i $< -o AsfSdf-Checker.c -va

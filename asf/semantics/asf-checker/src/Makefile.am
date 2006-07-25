@@ -1,10 +1,10 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 INCLUDES = \
 	-I$(top_srcdir)/semantics/asf-operations/src \
-	$(ASC_INCLUDES)
+	$(ASC_SUPPORT_CFLAGS)
 
 bin_PROGRAMS = asfchecker
 
@@ -27,9 +27,8 @@ asfchecker_DEPENDENCIES = \
 
 asfchecker_LDADD   = \
 	-L$(top_builddir)/semantics/asf-operations/src -lasfnormalization \
-	$(ASC_LD_FLAGS) \
-	-L$(ERROR_SUPPORT)/lib -lLocationAPI \
-	$(SOCKLIBS)
+	$(ASC_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
