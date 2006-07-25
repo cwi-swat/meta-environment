@@ -37,7 +37,7 @@ parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_DEPENDENCIES = 
 parsetablegen_LDADD   = $(SDF_SUPPORT_LIBS) 
 
-CLEANFILES = \
+CLEANFILES += \
 	parse-sdf2 \
 	sdf2table \
 	sdf2table.1 \
