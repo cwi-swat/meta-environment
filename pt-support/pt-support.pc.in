@@ -4,3 +4,5 @@ Name: pt-support
 Version: 2.1
 Description:
 Requires: aterm,error-support,toolbuslib
+Cflags: ${prefix}/include
+Libs: ${prefix}/lib -Lmept -lPTMEPT
