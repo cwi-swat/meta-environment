@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: sdf-support
+Version: 2.2
+Description:
+Requires: aterm,error-support,pt-support,toolbuslib
