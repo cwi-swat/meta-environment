@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: sisyphus
+Version: 0.33
+Description:
+Requires: 
