@@ -1,13 +1,13 @@
 # $Id$
 
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 USER_CONFIGURATION = "./meta.buttons"
 
 INCLUDES = \
-	-I$(ATERM)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(CONFIG_SUPPORT)/include
+	$(ATERM_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(CONFIG_SUPPORT_CFLAGS) \
 
 EXTRA_DIST = \
 	configuration-manager.idef.src \
@@ -29,21 +29,14 @@ CLEANFILES = \
 	${noinst_SCRIPTS} \
 	${bin_SCRIPTS}
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 configmanager_SOURCES = \
 	configmanager.c \
 	configuration-manager.tif.c
 
 configmanager_LDADD = \
-	-L$(CONFIG_SUPPORT)/lib -lConfigAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -l$(ATERM_LIB) \
-	$(SOCKLIBS)
+	$(CONFIG_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) 
 
 absolute_srcdir=$(shell cd ${srcdir}; pwd)
 
