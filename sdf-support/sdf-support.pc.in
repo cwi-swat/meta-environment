@@ -4,3 +4,5 @@ Name: sdf-support
 Version: 2.2
 Description:
 Requires: aterm,error-support,pt-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lSDFME -lSDF2PT -lPT2SDF
