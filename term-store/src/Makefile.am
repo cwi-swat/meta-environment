@@ -1,19 +1,14 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 SUBDIRS=snapshot
 
-include $(top_srcdir)/make_rules
 
 EXTRA_DIST = term-store.idef.src
 pkgdata_DATA = term-store.idef
 
 bin_PROGRAMS = term-store
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
 
 term_store_SOURCES = \
 	main.c \
@@ -23,14 +18,13 @@ term_store_SOURCES = \
 
 term_store_LDADD = \
                    -L./snapshot -lsnapshot \
-                   -L$(TOOLBUSLIB)/lib -lATB \
-                   -L$(ATERM)/lib -l$(ATERM_LIB) \
-		   $(SOCKLIBS)
+                   $(TOOLBUSLIB_LIBS) \
+                   $(ATERM_LIBS) 
 
 noinst_HEADERS		= table.h table-store.h term-store.tif.h
 
-INCLUDES	        = -I$(ATERM)/include \
-                          -I$(TOOLBUSLIB)/include \
+INCLUDES	        = $(ATERM_CFLAGS) \
+                          $(TOOLBUSLIB_CFLAGS) \
 			  -I$(srcdir)/snapshot
 
 CLEANFILES = term-store.idef

@@ -11,7 +11,7 @@ libsnapshot_a_SOURCES = \
 	Snapshot_dict.c 
                           
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
-INCLUDES = -I${ATERM}/include
+INCLUDES = ${ATERM_CFLAGS}
 
 api: 
 	adt-to-c \
