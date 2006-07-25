@@ -1,6 +1,6 @@
 # $Id$
 
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = editor-manager
 lib_LIBRARIES = libEditorManager.a
@@ -10,17 +10,9 @@ noinst_HEADERS = \
 	EditorManager_dict.h \
 	EditorManager.h
 
-AM_CFLAGS = -g -O2 -Wall -Werror
-
 INCLUDES = \
-	-I$(ATERM)/include \
-	-I$(TOOLBUSLIB)/include
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
+	$(ATERM_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) 
 
 editor_manager_SOURCES = \
 	editor-manager.tif.c \
@@ -28,9 +20,8 @@ editor_manager_SOURCES = \
 
 editor_manager_LDADD = \
 	-L$(top_builddir)/src -lEditorManager \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -l$(ATERM_LIB) \
-	$(SOCKLIBS)
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) 
 
 libEditorManager_a_SOURCES = \
 	EditorManager.c \
