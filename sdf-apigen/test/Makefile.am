@@ -15,12 +15,6 @@ Peano_Main = PeanoTest
 # C programs
 INCLUDES                = ${ATERM_CFLAGS}
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 booltest_SOURCES	= Booleans.c Booleans_dict.c booltest.c
 booltest_LDADD		= $(ATERM_LIBS) 
 booltest_DEPENDENCIES	= booltest.pt
@@ -28,7 +22,7 @@ booltest_DEPENDENCIES	= booltest.pt
 # Java programs
 JAVAC = javac
 
-CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
+CLEANFILES		+= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
 			booltest.pt libBooleans.a \
