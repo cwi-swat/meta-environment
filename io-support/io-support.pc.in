@@ -4,3 +4,5 @@ Name: io-support
 Version: 1.0
 Description:
 Requires: aterm,config-support,error-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lIOAPI
