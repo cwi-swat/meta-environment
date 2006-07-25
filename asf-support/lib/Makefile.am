@@ -1,25 +1,23 @@
 # $Id$
 
-lib_LIBRARIES = libASFME.a
+lib_LTLIBRARIES = libASFME.la
 
 include_HEADERS = \
 	ASFME.h \
 	ASFME-utils.h \
 	ASFME_dict.h
 
-libASFME_a_SOURCES = \
+libASFME_la_SOURCES = \
 	ASFME.c \
 	ASFME_dict.c \
 	ASFME-utils.c  \
 	lift.c \
 	lower.c
 
-INCLUDES = \
-	${ATERM_CFLAGS} \
-	${ERROR_SUPPORT_CFLAGS} \
-	${PT_SUPPORT_CFLAGS}
-
-AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
+libASFME_la_CPPFLAGS = $(ATERM_CFLAGS) $(ERROR_SUPPORT_CFLAGS) $(PT_SUPPORT_CFLAGS)
+libASFME_la_CFLAGS   = -DDISABLE_DYNAMIC_CHECKING
+libASFME_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libASFME_la_LIBADD   = $(PT_SUPPORT_LIBS) $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
 
 LIBRARY=../../asf-library/library
 
