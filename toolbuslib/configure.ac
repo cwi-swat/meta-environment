@@ -1,12 +1,7 @@
 m4_pattern_forbid([^META_])
 AC_INIT
 META_SETUP
-
-AC_AIX
-AC_PROG_CC
-AC_PROG_LIBTOOL
-
-AC_PROG_MAKE_SET([])
+META_C_SETUP
 
 AC_CHECK_HEADER([assert.h],[:],[AC_MSG_ERROR("*** no assert.h")])
 AC_CHECK_HEADER([errno.h],[:],[AC_MSG_ERROR("*** no errno.h")])
@@ -44,8 +39,4 @@ fi
 SOCKETLIBS=$LIBS
 AC_SUBST(SOCKETLIBS)
 
-dnl add outputfiles as argument below
-AC_CONFIG_FILES([Makefile
-  src/Makefile
-])
 AC_OUTPUT 
