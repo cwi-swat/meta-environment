@@ -1,3 +1,0 @@
-
-ASC_INCLUDES := $(shell ${ASC_INCLUDES_SCRIPT})
-ASC_LD_FLAGS := $(shell ${ASC_LD_FLAGS_SCRIPT})
