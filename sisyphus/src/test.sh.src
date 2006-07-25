@@ -8,7 +8,7 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root aterm-java \
+    --root pt-support \
     --profile verfrol \
     --interval 120 \
     --weekday Mon \

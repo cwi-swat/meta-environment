@@ -143,7 +143,7 @@ module Versioning
       end
       raise RuntimeError.new("subversion didn't behave as expected: #{info.split.inspect}")
     end
-
+    
     
   end
 
@@ -208,15 +208,24 @@ module Versioning
   end
 
   class SVNCheckout < Checkout
-    def initialize(repository,  path, revision)
+    def initialize(repository,  path, revision = nil)
       super(repository, path, revision)
       @shell = Utils::CommandSpecificShell.new('subversion')
     end
     
     def version
-      return @revision.version
+      info = @shell.read("svn info #{@path}")
+      info.split("\n").each do |line|
+        if line =~ /Last Changed Rev: ([0-9]+)/ then
+          return $1.to_i
+        end
+      end
+      raise RuntimeError.new("subversion didn't behave as expected: #{info.split.inspect}")
     end
+  
+    #def version
+    #  return @revision.version
+    #end
   end
-
-
+  
 end

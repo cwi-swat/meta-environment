@@ -426,10 +426,10 @@ module Building
 
 
     def make_source_dists(item)
-      dister = SourceDister.new(item, @config.build_dir,
-                                @config.source_dist_dir,
-                                @config.collect_url,
-                                @log)
+      dister = Distribution::SourceDister.new(item, @config.build_dir,
+                                              @config.source_dist_dir,
+                                              @config.collect_url,
+                                              @log)
       dister.make_source_dists
     end
 
