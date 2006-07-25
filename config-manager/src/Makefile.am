@@ -7,7 +7,7 @@ USER_CONFIGURATION = "./meta.buttons"
 INCLUDES = \
 	$(ATERM_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
-	$(CONFIG_SUPPORT_CFLAGS) \
+	$(CONFIG_SUPPORT_CFLAGS) 
 
 EXTRA_DIST = \
 	configuration-manager.idef.src \
