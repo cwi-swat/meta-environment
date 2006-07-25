@@ -3,7 +3,7 @@ module BootRoll
   require 'building/config'
   require 'versioning/vcs'
   require 'versioning/component'
-  require 'verisioning/revision'
+  require 'versioning/revision'
 
   require 'yaml'
   require 'ostruct'
