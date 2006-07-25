@@ -1,6 +1,6 @@
 # $Id$
 
-include $(top_srcdir)/java_make_rules
+include $(top_srcdir)/Makefile.meta
 
 TOOLNAME = plugin-config
 JAVA_PACKAGE = nl.cwi.sen1.meta.pluginconfiguration
