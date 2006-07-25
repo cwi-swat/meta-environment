@@ -2,6 +2,7 @@ m4_pattern_forbid([^META_])
 AC_INIT
 META_SETUP
 META_C_SETUP
+AC_PROG_LIBTOOL
 
 AC_CHECK_HEADER([assert.h],[:],[AC_MSG_ERROR("*** no assert.h")])
 AC_CHECK_HEADER([errno.h],[:],[AC_MSG_ERROR("*** no errno.h")])
