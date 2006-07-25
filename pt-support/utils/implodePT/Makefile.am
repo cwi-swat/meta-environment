@@ -1,5 +1,7 @@
 # $Id$
 
+include $(top_srcdir)/Makefile.meta
+
 SUBDIRS=test
 
 bin_PROGRAMS		= implodePT 
