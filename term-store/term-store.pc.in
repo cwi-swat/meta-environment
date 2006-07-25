@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: term-store
+Version: 1.0
+Description:
+Requires: aterm,toolbuslib
