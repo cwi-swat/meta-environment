@@ -4,3 +4,7 @@ Name: progress-gui
 Version: 1.0
 Description:
 Requires: aterm-java,meta-studio,toolbus,toolbus-java-adapter
+JarFile=progress-gui-@VERSION@.jar
+Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
+ExternalJars=@EXTERNAL_JARS@
+TestClass=
