@@ -13,7 +13,7 @@ EXTRA_DIST = \
 	$(TOOLNAME).sh.src \
 	${JARFILE}
 
-CLEANFILES = $(TOOLNAME)
+CLEANFILES += $(TOOLNAME)
 
 %: %.sh.src Makefile
 	sed -e 's@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g'\
