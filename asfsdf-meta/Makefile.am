@@ -1,13 +1,5 @@
+include $(top_srcdir)/Makefile.top.meta
+
 SUBDIRS = tbscripts src demo 
 
 ACLOCAL_FLAGS = -I .
-
-CLEANFILES = ${PACKAGE}-${VERSION}.pkg
-
-noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
-
-EXTRA_DIST=package
-
-${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $< $@
-
