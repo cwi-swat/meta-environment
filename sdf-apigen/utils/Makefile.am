@@ -4,7 +4,7 @@
 # $Id$
 #
 
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-java.sh.src \
@@ -21,10 +21,10 @@ abs_top_srcdir = $(shell cd ${top_srcdir}; pwd)
 abs_top_builddir = $(shell cd ${top_builddir}; pwd)
 
 % : %.sh.src Makefile
-	sed "s@__APIGEN__@${APIGEN}@g;\
-	     s@__ATERM__@${ATERM}@g;\
-	     s@__PT_SUPPORT__@${PT_SUPPORT}@g;\
-	     s@__SGLR__@${SGLR}@g;\
+	sed "s@__APIGEN__@${APIGEN_PREFIX}@g;\
+	     s@__ATERM__@${ATERM_PREFIX}@g;\
+	     s@__PT_SUPPORT__@${PT_SUPPORT_PREFIX}@g;\
+	     s@__SGLR__@${SGLR_PREFIX}@g;\
 	     s@__PKGDATA__@${pkgdatadir}@g;\
 	     s@__SPECDATA__@${pkgdatadir}@g;\
 	     s@__SDF2ADT__@${bindir}/sdf2-to-adt@g;\
@@ -32,9 +32,9 @@ abs_top_builddir = $(shell cd ${top_builddir}; pwd)
 	     s@__PREFIX__@${prefix}@g" < $< > $@ && chmod +x $@
 
 %.test : %.sh.src Makefile
-	sed "s@__APIGEN__@${APIGEN}@g;\
-	     s@__ATERM__@${ATERM}@g;\
-	     s@__PT_SUPPORT__@${PT_SUPPORT}@g;\
+	sed "s@__APIGEN__@${APIGEN_PREFIX}@g;\
+	     s@__ATERM__@${ATERM_PREFIX}@g;\
+	     s@__PT_SUPPORT__@${PT_SUPPORT_PREFIX}@g;\
 	     s@__SGLR__@${SGLR}@g;\
 	     s@__PKGDATA__@${abs_top_srcdir}/utils@g;\
 	     s@__SPECDATA__@${abs_top_builddir}/spec@g;\
