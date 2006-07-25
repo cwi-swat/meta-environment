@@ -44,7 +44,7 @@ module Versioning
     end
 
     def dependencies
-      if @bom =~ /^Requires\s*:\s*(.*)$/m then
+      if @bom =~ /^Requires\s*:\s*([^\n]*)/m then
         return $1.split(/[, ]/)
       end
       return []

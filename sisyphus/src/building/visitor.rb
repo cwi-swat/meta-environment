@@ -4,6 +4,8 @@ module Building
   require 'versioning/revision'
   require 'model/db'
   require 'building/product'
+  require 'building/items'
+  require 'building/working-sets'
   
   require 'pp'
 
@@ -119,82 +121,59 @@ EOQ
     end
 
 
+    #############################################################
+
     def build_revision_backtracking_original(revision, limit = 10)
-      # This, the original idea, does not scale.
-      num_of_possibilities = 1
-      num_of_solutions = 0
-      items = nil
-      begin
-        puts "Iteration limit: #{limit}"
-        power_set = []
-        dep_i = 0
-        revision.deps.each do |dep|
-          my_limit = limit
-          if limit > 1 then
-            if dep_i % 2 == 0 then
-              my_limit = limit  / 2
-            end
-          end
-          dep_i += 1
-          query =<<EOQ
-select si_items.* from 
-si_items, 
-si_revisions, 
-si_components
-where 
-si_items.si_revision_id = si_revisions.id and
-si_revisions.si_component_id = si_components.id and
-si_components.name = '#{dep.name}' and
-si_items.success = true
-order by si_items.id desc
-limit #{my_limit}
-EOQ
-          items = Model::SiItem.find_by_sql(query)
-          num_of_possibilities *= items.length
-          power_set << items
-        end       
-        puts "Number of possible solutions: #{num_of_possibilities}"
-        num_of_solutions = num_of_possibilities
-      
-        prod = product_space(power_set)  
-
-        i = 1
-        prod.each do |solution|
-          set = []
-          solution.each do |item|
-            set |= extent_set(item)
-          end
-          if homogeneous(set) then
-            puts "Solution: #{i}"
-            solution.each do |item|
-              puts "\t#{item}"
-            end
-          else
-            puts "Error:"
-            puts set
-          end
-          i += 1
-        end
-       
-
-        limit += 1
-      end while num_of_solutions == 0 && !items.nil?
-
+      names = revision.deps.collect { |dep| dep.name }
+      debug_all_working_sets(names)
+      working_set = first_valid_working_set(names)
       exit!
     end
 
-    def extent_set(item)
+    def first_valid_working_set(names)
+      items = LazyItemGenerator.new(names)
+      workingsets = WorkingSetGenerator.new(items, names)
+      workingsets.each do |working_set|
+        if valid_working_set?(working_set) then
+          return working_set
+        end
+      end   
+    end
+
+    def valid_working_set?(working_set)
+      return homogeneous?(extent(working_set))
+    end
+
+    def debug_all_working_sets(names)
+      items = LazyItemGenerator.new(names)
+      workingsets = WorkingSetGenerator.new(items, names)
+      workingsets.each do |working_set|
+        if homogeneous?(extent(working_set)) then
+          puts "Valid: "
+        else
+          puts "Invalid: "
+        end
+        extent(working_set).each do |item|
+          puts "\t#{item}"
+        end
+      end
+    end
+
+    def extent(working_set)
       set = []
-      item.as_nodes do |n|
-        set |= [n]
+      working_set.each do |item|
+        set |= item.extent
       end
       return set
     end
 
-    def homogeneous(set_of_items)
+
+    def homogeneous?(set_of_items)
       names = set_of_items.collect { |i| i.name }.uniq
       return names.length == set_of_items.length
     end
+
+    ##################################################
 
     def build_revision_with_deps(revision, dep_items)
       target = @target_factory.target(revision, dep_items)

@@ -4,6 +4,8 @@ module Model
   require 'utils/diff'
   require 'utils/udir'
 
+
+
   class SiPlatform < ActiveRecord::Base
     # Fields:
     # kernel_name
@@ -147,6 +149,15 @@ module Model
     end
 
 
+    def extent
+      set = []
+      as_nodes do |n|
+        set |= [n]
+      end
+      return set
+    end
+
+
     def each_dep
       si_deps.each do |d|
         yield d
@@ -188,6 +199,12 @@ module Model
     belongs_to :si_item
   end
 
+  # Based on a view: no updates!
+  
+  class SiBuild < ActiveRecord::Base
+    belongs_to :si_item
+    #fields name, version, informative_version
+  end
 
 
   class DBStore
