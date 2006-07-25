@@ -1,10 +1,10 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = sdf-renaming.idef.src
 
-CLEANFILES = sdf-renaming.idef
+CLEANFILES += sdf-renaming.idef
 
 pkgdata_DATA = sdf-renaming.idef
 

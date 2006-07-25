@@ -1,10 +1,10 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = sdf-modules.idef.src
 
-CLEANFILES = sdf-modules.idef
+CLEANFILES += sdf-modules.idef
 
 pkgdata_DATA = sdf-modules.idef
 
