@@ -4,3 +4,5 @@ Name: asc-support
 Version: 2.3
 Description:
 Requires: asf-support,aterm,error-support,pt-support,sglr,tide-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lasc-support-me
