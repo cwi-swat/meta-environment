@@ -4,3 +4,7 @@ Name: toolbus-java-adapter
 Version: 1.0
 Description:
 Requires: aterm-java
+JarFile=toolbus-java-adapter-@VERSION@.jar
+Packages=toolbus
+ExternalJars=@EXTERNAL_JARS@
+TestClass=
