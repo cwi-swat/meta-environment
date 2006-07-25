@@ -7,4 +7,5 @@ Requires: aterm-java,graph-support,module-support,toolbus,toolbus-java-adapter
 JarFile=module-manager-@VERSION@.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.modulemanager,nl.cwi.sen1.modulemanager.model
 ExternalJars=@EXTERNAL_JARS@
+MainClass=nl.cwi.sen1.modulemanager.ModuleManager
 TestClass=

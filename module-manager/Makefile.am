@@ -1,37 +1,17 @@
 # $Id$
 
-include $(top_srcdir)/java_make_rules
-include $(top_srcdir)/toolbus_make_rules
-
-SUBDIRS = script
+include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_FLAGS = -I .
 
+SUBDIRS = script
+
 TOOLNAME = module-manager
-JAVA_PACKAGE = nl.cwi.sen1.modulemanager
-JARFILE = $(TOOLNAME)-$(VERSION).jar
-MAIN_CLASS = $(JAVA_PACKAGE).ModuleManager
 
-abstop_srcdir = $(shell cd ${top_srcdir}; pwd)
+pkgdata_DATA += $(TOOLNAME).idef
+EXTRA_DIST += $(TOOLNAME).idef.src
 
-pkgdata_DATA = $(JARFILE) $(TOOLNAME).idef
-bin_SCRIPTS = $(TOOLNAME)-config
-noinst_SCRIPTS = $(TOOLNAME)-$(VERSION).pkg
-
-EXTRA_DIST = package $(JARFILE) $(TOOLNAME).idef.src
-
-CLEANFILES = \
-	     $(TOOLNAME)-config \
-	     $(TOOLNAME)-$(VERSION).pkg \
-	     $(TOOLNAME).idef
-
-$(TOOLNAME)-config: Makefile
-	@(	echo "#! /bin/sh";\
-		echo "echo $(pkgdatadir)/$(JARFILE)" \
-	) > $@ && chmod +x $@
-
-$(TOOLNAME)-$(VERSION).pkg: package Makefile
-	cp $< $@
+CLEANFILES += $(TOOLNAME).idef
 
 %.idef: %.idef.src Makefile
 	sed -e 's@__PKGDATA__@$(pkgdatadir)@g'\
@@ -40,18 +20,3 @@ $(TOOLNAME)-$(VERSION).pkg: package Makefile
 	    -e "s@__EXTERNAL_JARS__@$(EXTERNAL_JARS)@g"\
 	    -e 's@__JARFILE__@$(JARFILE)@g'\
 	     < $< > $@
-EXTRA_DIST+=Doxyfile.src  
-
-if MAINTAINER_MODE
-
-CLEANFILES+=Doxyfile
-
-.PHONY: doc
-
-doc: Doxyfile 
-	doxygen
-
-Doxyfile: Doxyfile.src
-	sed 's@__PACKAGE__@${PACKAGE}@g' < $< > $@
-
-endif
