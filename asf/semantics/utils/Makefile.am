@@ -9,12 +9,8 @@ INCLUDES	  = $(PT_SUPPORT_CFLAGS) \
 
 bin_PROGRAMS	  = concat-asf lift-asf
 
-LDADD += $(PT_SUPPORT_LIBS) \
-        	$(ERROR_SUPPORT_LIBS) \
-         	$(ATERM_LIBS) 
-
 concat_asf = concat-asf.c
-concat_asf_LDADD   = $(ASF_SUPPORT_LIBS) 
+concat_asf_LDADD   = $(ASF_SUPPORT_LIBS) $(PT_SUPPORT_LIBS)
 
 lift_asf = lift-asf.c
-lift_asf_LDADD   = $(ASF_SUPPORT_LIBS) 
+lift_asf_LDADD   = $(ASF_SUPPORT_LIBS) $(PT_SUPPORT_LIBS)
