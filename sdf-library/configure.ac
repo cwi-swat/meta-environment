@@ -1,45 +1,5 @@
 dnl $Id$
 
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-GLT_INIT_PACKAGE
-AC_PREREQ(2.59)
-
-AM_MAINTAINER_MODE
-
-AC_PROG_MAKE_SET([])
-
-AC_CONFIG_FILES([Makefile
-   utils/Makefile
-   library/Makefile
-   library/basic/Makefile
-   library/languages/Makefile
-   library/languages/cpp/Makefile
-   library/languages/cpp/syntax/Makefile
-   library/languages/generic-cpp/Makefile
-   library/languages/generic-cpp/syntax/Makefile
-   library/languages/c/Makefile
-   library/languages/c/syntax/Makefile
-   library/languages/asfix/Makefile
-   library/languages/asfix/syntax/Makefile
-   library/languages/asf/Makefile
-   library/languages/asf/syntax/Makefile
-   library/languages/aterm/Makefile
-   library/languages/aterm/syntax/Makefile
-   library/languages/sdf2/Makefile
-   library/languages/sdf2/syntax/Makefile
-   library/languages/sdf2/idioms/Makefile
-   library/languages/pico/Makefile
-   library/languages/pico/syntax/Makefile
-   library/languages/pico/examples/Makefile
-   library/languages/box/Makefile
-   library/languages/box/syntax/Makefile
-   library/languages/casl/Makefile
-   library/languages/casl/syntax/Makefile
-   library/languages/fdl/Makefile
-   library/languages/fdl/syntax/Makefile
-   library/languages/graph/Makefile
-   library/languages/graph/syntax/Makefile
-
-])
+META_SETUP
 AC_OUTPUT
