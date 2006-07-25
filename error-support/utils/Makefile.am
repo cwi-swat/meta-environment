@@ -1,3 +1,5 @@
+include $(top_srcdir)/Makefile.meta
+
 SUBDIRS = lift-error lower-error error-diff
 
 EXTRA_DIST = \
@@ -16,14 +18,9 @@ bin_PROGRAMS = \
 
 INCLUDES = \
 	-I${top_srcdir}/lib \
-	-I${ATERM}/include \
-	-I${TOOLBUSLIB}/include 
+	${ATERM_CFLAGS} \
+	${TOOLBUSLIB_CFLAGS}
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
 
 error_support_SOURCES = \
 	error-support.tif.c \
@@ -31,11 +28,10 @@ error_support_SOURCES = \
 
 error_support_LDADD = \
 	-L../lib -lErrorAPI \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -l$(ATERM_LIB) \
-	${SOCKLIBS}
+	$(TOOLBUSLIB_LIBS) \
+	${ATERM_LIB}
 
-CLEANFILES=${bin_SCRIPTS} error-support.idef
+CLEANFILES+=${bin_SCRIPTS} error-support.idef
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

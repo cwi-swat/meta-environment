@@ -1,10 +1,11 @@
 # $Id$
+include $(top_srcdir)/Makefile.meta
 
 pkgdata_DATA = errorapi.jar locationapi.jar
 
 EXTRA_DIST = errorapi.jar locationapi.jar
 
-lib_LIBRARIES = libErrorAPI.a libLocationAPI.a
+lib_LTLIBRARIES = libErrorAPI.la libLocationAPI.la
 
 include_HEADERS = \
 	Location.h \
@@ -18,7 +19,10 @@ include_HEADERS = \
 	Error-utils.h \
 	Error-manager.h
 
-libErrorAPI_a_SOURCES = \
+libErrorAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
+libErrorAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libErrorAPI_la_LIBADD = $(ATERM_LIBS)
+libErrorAPI_la_SOURCES = \
 	Error.c \
 	Error_dict.c \
 	ParsedError.c \
@@ -29,13 +33,14 @@ libErrorAPI_a_SOURCES = \
 	lower.c \
 	manager.c
 
-libLocationAPI_a_SOURCES = \
+libLocationAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
+libLocationAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libLocationAPI_la_LIBADD = $(ATERM_LIBS)
+libLocationAPI_la_SOURCES = \
 	Location.c \
 	Location_dict.c \
 	ParsedLocation.c \
 	ParsedLocation_dict.c
-
-INCLUDES = -I${ATERM}/include
 
 if MAINTAINER_MODE
 #AM_CFLAGS += -DDISABLE_DYNAMIC_CHECKING

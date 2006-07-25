@@ -3,21 +3,15 @@
 bin_PROGRAMS = lift-error
 
 INCLUDES= \
-	-I${top_srcdir}/lib \
-	-I${ATERM}/include
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
+	-I$(top_srcdir)/lib \
+	$(ATERM_CFLAGS)
 
 lift_error_SOURCES=\
 	lift-error.c
 
 lift_error_LDADD=\
-	-L${ATERM}/lib -l$(ATERM_LIB)\
-	-L${top_builddir}/lib -lErrorAPI
+	-L$(top_builddir)/lib -lErrorAPI \
+	$(ATERM_LIBS)
 
 ERRORS=example
 EXTRA_DIST=$(wildcard *.ref) $(wildcard *.trm)
@@ -33,5 +27,5 @@ TESTS=$(foreach e, ${ERRORS}, $e.sh)
 	@(	echo "#! /bin/sh";\
 		echo "set -e";\
 		echo "./lift-error -i ${srcdir}/$*.trm -o $*.tree";\
-		echo "${ATERM}/bin/atdiff ${srcdir}/$*.ref $*.tree"\
+		echo "${ATERM_PREFIX}/bin/atdiff ${srcdir}/$*.ref $*.tree"\
 	) > $@ && chmod +x $@	

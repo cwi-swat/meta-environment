@@ -1,5 +1,29 @@
 $Id$
 
+Tue Jul 25 09:16:05 CEST 2006 <{kooiker,jurgenv}@cwi.nl,martin.bravenboer@gmail.com>
+ * **: adapted package to use the standard meta-build-env.
+ * error-support.pc.in: added locally generated jar files to ExternalJars,
+   such that these jars are added to the CLASSPATH of packages that depend on
+   error-support.
+
+Mon Jul 24 22:39:03 CEST 2006 <martin.bravenboer@gmail.com>
+  * configure.ac: invoke AC_LIBTOOL_WIN32_DLL to request the
+  construction of DLLs on windows.
+  * lib/Makefile.am: use libtool to construct libraries:
+  - libraries now have the extension .la
+  - use lib_LTLIBRARIES (not lib_LIBRARIES)
+  - use -avoid-version to avoid (the usually flawed) versioning if a
+  platform supports that.
+  - use -no-undefined to specify that libtool can safely make a
+  dynamic library on systems that do not support undefined symbols.
+  - Use _LIBADD to specify inter-library dependencies (again,
+  required for making dynamic libraries on some platforms)
+	
+Fri Jul 21 01:54:21 CEST 2006 <martin.bravenboer@gmail.com>
+ * utils/error-diff/Makefile.am: fix in linking order (Bug 489)
+ * utils/lift-error/Makefile.am: fix in linking order (Bug 489)
+	
+
 Thu Apr 13 21:23:30 CEST 2006 <jurgenv@cwi.nl>
  * lib/display.c: severely changed layout of displayed summaries.
    Also some debugging, and more support for less frequently used
