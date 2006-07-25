@@ -1,7 +1,7 @@
 
 bin_PROGRAMS=error-diff
 
-INCLUDES= \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/lib \
 	$(ATERM_CFLAGS)
 

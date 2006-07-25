@@ -1,7 +1,7 @@
 
 bin_PROGRAMS=lower-error
 
-INCLUDES=\
+AM_CPPFLAGS = \
 	-I${top_srcdir}/lib \
 	${ATERM_CFLAGS}
 

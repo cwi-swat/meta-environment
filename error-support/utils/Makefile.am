@@ -16,7 +16,7 @@ bin_SCRIPTS = ${PACKAGE}-config
 bin_PROGRAMS = \
 	error-support
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-I${top_srcdir}/lib \
 	${ATERM_CFLAGS} \
 	${TOOLBUSLIB_CFLAGS}

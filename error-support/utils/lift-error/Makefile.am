@@ -2,7 +2,7 @@
 
 bin_PROGRAMS = lift-error
 
-INCLUDES= \
+AM_CPPFLAGS = \
 	-I$(top_srcdir)/lib \
 	$(ATERM_CFLAGS)
 
