@@ -8,7 +8,7 @@ SUBDIRS = script
 
 TOOLNAME = module-manager
 
-pkgdata_DATA += $(TOOLNAME).idef
+pkgdata_DATA = $(TOOLNAME).idef
 EXTRA_DIST += $(TOOLNAME).idef.src
 
 CLEANFILES += $(TOOLNAME).idef
