@@ -1,7 +1,8 @@
 # $Id$
+include $(top_srcdir)/Makefile.meta
 
-SGLR			= ${SGLRBIN}/sglr
-SDF2TABLE		= ${PGENBIN}/sdf2table
+SGLR			= ${SGLR_PREFIX}/bin/sglr
+SDF2TABLE		= ${PGEN_PREFIX}/bin/sdf2table
 SDF2JAVA                = ${top_builddir}/utils/sdf2-to-java.test
 SDF2C                   = ${top_builddir}/utils/sdf2-to-c.test
 
@@ -12,7 +13,7 @@ check_PROGRAMS		= booltest
 Peano_Main = PeanoTest
 
 # C programs
-INCLUDES                = -I${ATERM}/include
+INCLUDES                = ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 ATERM_LIB = ATerm-dbg
@@ -21,7 +22,7 @@ ATERM_LIB = ATerm
 endif
 
 booltest_SOURCES	= Booleans.c Booleans_dict.c booltest.c
-booltest_LDADD		= -L$(ATERM)/lib -l$(ATERM_LIB)
+booltest_LDADD		= $(ATERM_LIBS) 
 booltest_DEPENDENCIES	= booltest.pt
 
 # Java programs
