@@ -4,3 +4,5 @@ Name: editor-manager
 Version: 1.0
 Description:
 Requires: aterm,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lEditorManager
