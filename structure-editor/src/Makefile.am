@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 bin_PROGRAMS = structure-editor
 lib_LIBRARIES = libStructureEditor.a
@@ -11,19 +11,11 @@ noinst_HEADERS = \
 	structure-editor.tif.h \
 	slice-tree.h
 
-AM_CFLAGS = -Wall -Werror -g -O2
-
 INCLUDES = \
-	-I$(ERROR_SUPPORT)/include \
-	-I$(PT_SUPPORT)/include \
-	-I$(TOOLBUSLIB)/include \
-	-I$(ATERM)/include
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(PT_SUPPORT_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(ATERM_CFLAGS) 
 
 structure_editor_SOURCES = \
 	structure-editor.c \
@@ -32,11 +24,10 @@ structure_editor_SOURCES = \
 
 structure_editor_LDADD = \
 	-L$(top_builddir)/src -lStructureEditor \
-	-L$(PT_SUPPORT)/lib -lmept \
-	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
-	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -l$(ATERM_LIB) \
-	$(SOCKLIBS)
+	$(PT_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) 
 
 libStructureEditor_a_SOURCES = \
 	StructureEditor.c \
