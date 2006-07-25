@@ -3,9 +3,9 @@ prefix=@prefix@
 Name: error-support
 Description: Standard Error Representation
 Version: 1.3
-Libs: -L${prefix}/lib -lErrorApi -lLocationApi
+Libs: -L${prefix}/lib -lErrorAPI -lLocationAPI
 Cflags: -I${prefix}/include
-#uninstalled Libs: -L@abs_top_builddir@/lib -lErrorApi -lLocationApi
+#uninstalled Libs: -L@abs_top_builddir@/lib -lErrorAPI -lLocationAPI
 #uninstalled Cflags: -I@abs_top_builddir@/lib
 Requires: aterm toolbuslib
 ExternalJars=${prefix}/share/error-support/errorapi.jar:${prefix}/share/error-support/locationapi.jar
