@@ -1,0 +1,30 @@
+#! /bin/sh
+
+if test "x" = "x$1"; then
+  echo "Please provide a package name"
+  exit 1
+fi
+
+PKGCONFIG=__PKGCONFIG__
+
+requires() {
+  TOP=$1
+  if (echo ${CLOSURE} | grep -q " ${TOP}") ; then
+    return
+  else
+    CLOSURE="${CLOSURE} ${TOP}"
+    PREFIX=$(${PKGCONFIG} --variable prefix $1)
+    if test "x" = "x${PREFIX}"; then
+      echo "Package ${TOP} could not be found!"
+      return
+    fi
+    KIDS=$(grep "Requires:" ${PREFIX}/lib/pkgconfig/${TOP}.pc | cut -f 2 -d ':' | tr ',' ' ')
+    for k in ${KIDS}; do
+      requires $k ${CLOSURE}
+    done
+  fi
+}
+
+CLOSURE=
+requires $1
+echo ${CLOSURE}
