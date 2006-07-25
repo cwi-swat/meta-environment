@@ -4,9 +4,9 @@ include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = sglr.idef.src
 
-CLEANFILES = sglr.idef
+CLEANFILES += sglr.idef
 
-INCLUDES = \
+AM_CPPFLAGS += \
 	-I$(top_srcdir)/libsglr \
 	$(PT_SUPPORT_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
