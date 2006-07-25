@@ -6,5 +6,7 @@ Description:
 Requires: aterm-java,config-support,graph-support,meta-studio,module-support,toolbus,toolbus-java-adapter
 JarFile=graph-gui-@VERSION@.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
-ExternalJars=@EXTERNAL_JARS@
+ExternalJars=@EXTERNAL_JARS@:@pkgdatadir@/prefuse.jar
+MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
+LocalJars=@abstop_srcdir@/lib/prefuse.jar
 TestClass=
