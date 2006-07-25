@@ -1,15 +1,16 @@
 
+include $(top_srcdir)/Makefile.meta
 
 noinst_PROGRAMS	= fac
 
 fac_SOURCES	= fac.c pico-support.c pico-support.h
 fac_LDADD	= -L../../lib-c -ltide-adapter \
-		-L${TOOLBUSLIB}/lib -lATB \
-		-L${ATERM}/lib -lATerm
+		$(TOOLBUSLIB_LIBS) \
+		$(ATERM_LIBS) \
 
 EXTRA_DIST	= fac.pico
 
 INCLUDES	= -I${top_srcdir}/lib-c \
-		-I${ATERM}/include \
-		-I${TOOLBUSLIB}/include \
+		${ATERM_CFLAGS} \
+		${TOOLBUSLIB_CFLAGS} \
                 -D__SRCDIR__="\"`cd ${srcdir}; pwd`\""
