@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: pandora
+Version: 1.4
+Description:
+Requires: asc-support,aterm,pt-support,toolbuslib
