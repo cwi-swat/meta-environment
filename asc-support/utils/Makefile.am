@@ -7,7 +7,7 @@ bin_SCRIPTS = asc-support-config
 noinst_SCRIPTS = gen-forward.sh gen-protos.sh gen-link-test.sh
 
 
-CLEANFILES = asc-support-config
+CLEANFILES += asc-support-config
 
 ASC_INCLUDES=\
         -I$(prefix)/include \
