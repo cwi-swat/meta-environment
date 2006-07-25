@@ -1,7 +1,7 @@
 
 INCLUDES = \
-	-I${ATERM}/include \
-	-I${TOOLBUSLIB}/include \
+	${ATERM_CFLAGS} \
+	${TOOLBUSLIB_CFLAGS} \
 	-DDISABLE_DYNAMIC_CHECKING
 
 lib_LIBRARIES = libtide-adapter.a
