@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: asc-support
+Version: 
+Description:
+Requires: asf-support,aterm,error-support,pt-support,sglr,tide-support,toolbuslib
