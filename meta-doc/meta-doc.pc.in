@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: meta-doc
+Version: 2.0
+Description:
+Requires: 
