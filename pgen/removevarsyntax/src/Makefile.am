@@ -1,8 +1,8 @@
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 INCLUDES = \
-	   -I$(SDF_SUPPORT)/include \
-	   $(ASC_INCLUDES)
+	   $(SDF_SUPPORT_CFLAGS) \
+	   $(ASC_SUPPORT_CFLAGS)
 
 EXTRA_DIST = removevarsyntax.idef.src 
 
@@ -18,8 +18,8 @@ removevarsyntax_SOURCES = \
 	removevarsyntax.tif.c
 
 removevarsyntax_LDADD   = \
-                       -L$(SDF_SUPPORT)/lib -lSDFME \
-                       $(ASC_LD_FLAGS) 
+                       $(SDF_SUPPORT_LIBS) \
+                       $(ASC_SUPPORT_LIBS) 
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@

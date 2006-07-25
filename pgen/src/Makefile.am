@@ -1,11 +1,10 @@
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 TESTS		= test-chars
 
 
-INCLUDES	= \
-		  ${ASC_INCLUDES} \
-		  -I${SDF_SUPPORT}/include
+INCLUDES	= ${ASC_SUPPORT_CFLAGS} \
+		  ${SDF_SUPPORT_CFLAGS}
 
 check_PROGRAMS	= test-chars
 bin_PROGRAMS	= parsetablegen
@@ -30,20 +29,13 @@ HDRS         = parsetablegen.tif.h atsets.h ksdf2table.h statistics.h \
 		characters.h item.h first.h priorities.h itemset.h \
 		pgen-symbol.h
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
-test_chars_LDADD	= -L$(ATERM)/lib -l$(ATERM_LIB) \
-                        $(SOCKLIBS)
+test_chars_LDADD	= $(ATERM_LIBS) 
 
 
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_DEPENDENCIES = 
-parsetablegen_LDADD   = -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT $(ASC_LD_FLAGS) 
+parsetablegen_LDADD   = $(SDF_SUPPORT_LIBS) 
 
 CLEANFILES = \
 	parse-sdf2 \
