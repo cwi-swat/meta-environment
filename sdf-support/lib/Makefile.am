@@ -4,7 +4,7 @@
 
 EXTRA_DIST = Sdf.label.def
 
-lib_LIBRARIES = libSDFME.a libSDF2PT.a libPT2SDF.a
+lib_LTLIBRARIES = libSDFME.la libSDF2PT.la libPT2SDF.la
 
 include_HEADERS = \
 	PT2SDF.h \
@@ -13,16 +13,19 @@ include_HEADERS = \
 	SDFME.h \
 	SDFME_dict.h
 
-libSDFME_a_SOURCES = SDFME.c SDFME_dict.c ${UTILSRCS}
+AM_CPPFLAGS = $(ATERM_CFLAGS) $(ERROR_SUPPORT_CFLAGS) $(PT_SUPPORT_CFLAGS)
 
-libSDF2PT_a_SOURCES = sdf2pt.c
+libSDFME_la_SOURCES = SDFME.c SDFME_dict.c $(UTILSRCS)
+libSDFME_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
+libSDFME_la_LIBADD  = $(ATERM_LIBADD) $(ERROR_SUPPORT_LIBADD) $(PT_SUPPORT_LIBADD)
 
-libPT2SDF_a_SOURCES = pt2sdf.c
+libSDF2PT_la_SOURCES  = sdf2pt.c
+libSDF2PT_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libSDF2PT_la_LIBADD  = $(ATERM_LIBADD) $(ERROR_SUPPORT_LIBADD) $(PT_SUPPORT_LIBADD)
 
-INCLUDES = \
-	${ATERM_CFLAGS} \
-	${ERROR_SUPPORT_CFLAGS} \
-	${PT_SUPPORT_CFLAGS}
+libPT2SDF_la_SOURCES  = pt2sdf.c
+libPT2SDF_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libPT2SDF_la_LIBADD  = $(ATERM_LIBADD) $(ERROR_SUPPORT_LIBADD) $(PT_SUPPORT_LIBADD)
 
 UTILSRCS = \
 	SDFME-utils.c \
@@ -35,15 +38,14 @@ UTILSRCS = \
 	sort.c 
 
 LIBRARY = ../../asf-library/library
-ATERM_SDF = $(shell ls ${LIBRARY}/languages/aterm/syntax/*.sdf)
-SDF2_SDF = $(shell ls ${LIBRARY}/languages/sdf2/syntax/*.sdf)
+ATERM_SDF = $(shell ls $(LIBRARY)/languages/aterm/syntax/*.sdf)
+SDF2_SDF = $(shell ls $(LIBRARY)/languages/sdf2/syntax/*.sdf)
 BASIC_SDF = \
-	${LIBRARY}/basic/Whitespace.sdf \
-	${LIBRARY}/basic/StrCon.sdf \
-	${LIBRARY}/basic/NatCon.sdf \
-	${LIBRARY}/basic/IdentifierCon.sdf \
-	${LIBRARY}/basic/Comments.sdf
-
+	$(LIBRARY)/basic/Whitespace.sdf \
+	$(LIBRARY)/basic/StrCon.sdf \
+	$(LIBRARY)/basic/NatCon.sdf \
+	$(LIBRARY)/basic/IdentifierCon.sdf \
+	$(LIBRARY)/basic/Comments.sdf
 
 # Developers only:
 api:

@@ -26,7 +26,7 @@ noinst_HEADERS = \
 	module-table.h \
 	sdf-imports.h
 
-INCLUDES = \
+AM_CPPFLAGS += \
 	-I$(top_srcdir)/lib  \
 	$(ATERM_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \

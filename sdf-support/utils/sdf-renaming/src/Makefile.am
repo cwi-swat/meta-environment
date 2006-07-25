@@ -17,14 +17,15 @@ sdf_renaming_LDADD = -L$(top_builddir)/lib -lSDFME -lSDF2PT \
                  $(TOOLBUSLIB_LIBS) \
                  $(ATERM_LIBS) 
 
-noinst_HEADERS		= sdf-renaming.tif.h
+noinst_HEADERS = sdf-renaming.tif.h
 
-INCLUDES	        = -I$(top_srcdir)/lib \
-                          $(ATERM_CFLAGS) \
-                          $(TOOLBUSLIB_CFLAGS) \
-                          $(SDF_SUPPORT_CFLAGS) \
-                          $(ERROR_SUPPORT_CFLAGS) \
-                          $(PT_SUPPORT_CFLAGS) 
+AM_CPPFLAGS += \
+  -I$(top_srcdir)/lib \
+  $(ATERM_CFLAGS) \
+  $(TOOLBUSLIB_CFLAGS) \
+  $(SDF_SUPPORT_CFLAGS) \
+  $(ERROR_SUPPORT_CFLAGS) \
+  $(PT_SUPPORT_CFLAGS)
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
