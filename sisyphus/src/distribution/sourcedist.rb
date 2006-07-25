@@ -43,21 +43,18 @@ module Distribution
     ## Need serious refactoring.
 
 
-    def bom_reader
-      pkg_files = Dir["#{@path}/*.pc.in"] 
+    def bom_reader(item)
+      path = File.join(@checkout_root, item.name)
+      pkg_files = Dir["#{path}/*.pc.in"] 
       if pkg_files.empty? then
-        return Versioning::PackageBOMReader.new(depfile_path(@path))
+        return Versioning::PackageBOMReader.new(depfile_path(path))
       else
         return Versioning::PKGConfigBOMReader.new(pkg_files[0])
       end
     end
 
-    def extract_deps
-      return bom_reader.dependencies
-    end
-
-    def extract_version
-      return bom_reader.version
+    def extract_version(item)
+      return bom_reader(item).version
     end
 
     def depfile_path(root)
