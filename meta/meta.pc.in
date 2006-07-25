@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: meta
+Version: 2.0
+Description:
+Requires: aterm-java,config-manager,dialog-gui,editor-manager,editor-plugin,error-gui,error-support,graph-gui,graph-support,io-support,meta-studio,module-details-gui,module-manager,navigator-gui,pandora,progress-gui,pt-support,sglr,structure-editor,term-store,tide,tide-support
