@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_FLAGS = -I .
 
-pkgdata_DATA += $(TOOLNAME).idef
+pkgdata_DATA = $(TOOLNAME).idef
 
 EXTRA_DIST += $(TOOLNAME).idef.src
 
