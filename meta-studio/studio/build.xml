@@ -1,4 +1,0 @@
-<project>
-  <property environment="env"/>
-  <import file="${env.BUILDFILE}"/>
-</project>
