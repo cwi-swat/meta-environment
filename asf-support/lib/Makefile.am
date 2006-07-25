@@ -15,9 +15,9 @@ libASFME_a_SOURCES = \
 	lower.c
 
 INCLUDES = \
-	-I${ATERM}/include \
-	-I${ERROR_SUPPORT}/include \
-	-I${PT_SUPPORT}/include
+	${ATERM_CFLAGS} \
+	${ERROR_SUPPORT_CFLAGS} \
+	${PT_SUPPORT_CFLAGS}
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
