@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: sdf-apigen
+Version: 3.0
+Description:
+Requires: apigen,asc-support,aterm,aterm-java,pgen,pt-support,sglr
