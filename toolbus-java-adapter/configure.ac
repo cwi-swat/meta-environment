@@ -1,30 +1,10 @@
+dnl $Id$
+
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-GLT_INIT_PACKAGE
-AC_PREREQ(2.59)
+META_SETUP
+META_JAVA_SETUP
 
-dnl Which compiler to use?
-dnl AC_REQUIRE([AC_PROG_CC])
-AC_PROG_CC
-
-AM_MAINTAINER_MODE
-
-AC_AIX
-
-AC_PROG_MAKE_SET([])
-
-dnl Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
-
-EXTERNAL_JARS=${JAVA_ATERM}
-AC_SUBST(EXTERNAL_JARS)
-
-dnl add outputfiles as argument below
-AC_CONFIG_FILES([Makefile
-  script/Makefile
+AC_CONFIG_FILES([
+  Makefile
 ])
-AC_OUTPUT 
+AC_OUTPUT
