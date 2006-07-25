@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = sglr.idef.src
 

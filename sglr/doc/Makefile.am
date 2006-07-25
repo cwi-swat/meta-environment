@@ -1,6 +1,7 @@
 # $Id$
 
 include $(top_srcdir)/Makefile.meta
+include $(srcdir)/man_make_rules
 
 POD_SRCS   = sglr.pod sglr-api.pod
 
