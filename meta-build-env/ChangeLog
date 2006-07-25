@@ -1,5 +1,13 @@
 
 
+Tue Jul 25 15:58:43 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
+ * meta-build.m4: added META_C_SETUP, common macro calls for
+   C packages. Except that AC_PROG_LIBTOOL can not go in there because
+   autoreconf scans for it in configure.ac to be able to call
+   libtoolize if necessary.
+ * meta-build.m4: added META_REQUIRE_SOFTWARE, a macro for adding
+   dependencies on third-party packages, like graphviz.
+
 Mon Jul 24 10:55:42 CEST 2006 <{jurgenv,kooiker}@cwi.nl>
  * meta-build.m4: 'Requires' field is comma separated, while we expected
    space separated. Fixed.

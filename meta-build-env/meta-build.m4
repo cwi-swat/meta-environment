@@ -1,28 +1,28 @@
 
-# META_ left in configure is the sign a macro was not defined, or there was 
-# a typo in a macro invocation.
+dnl META_ left in configure is the sign a macro was not defined, or there was 
+dnl a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 
-# META_GET_PKG_VAR(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file at
-# reconf time
+dnl META_GET_PKG_VAR(VARNAME)
+dnl Is substituted by the value of VARNAME from a pkg-config file at
+dnl reconf time
 AC_DEFUN([META_GET_PKG_VAR],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
 
-# META_GET_PKG_VAR_LIST(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file, 
-# without trimming, at reconf time
+dnl META_GET_PKG_VAR_LIST(VARNAME)
+dnl Is substituted by the value of VARNAME from a pkg-config file, 
+dnl without trimming, at reconf time
 AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr '[,]' '[ ]'])])
 
-# META_GET_PKG_USER_VAR(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file, at reconf
-# time
+dnl META_GET_PKG_USER_VAR(VARNAME)
+dnl Is substituted by the value of VARNAME from a pkg-config file, at reconf
+dnl time
 AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' | tr -d '[:space:]'])])
 
-# META_GET_PKG_USER_VAR_PLAIN(VARNAME)
-# Is substituted by the value of VARNAME from a pkg-config file at reconf time
+dnl META_GET_PKG_USER_VAR_PLAIN(VARNAME)
+dnl Is substituted by the value of VARNAME from a pkg-config file at reconf time
 AC_DEFUN([META_GET_PKG_USER_VAR_PLAIN],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '='])])
 
-# META_INSTALLED_PKG_VAR(PKG,VAR)
+dnl META_INSTALLED_PKG_VAR(PKG,VAR)
 AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:@:space:@:>@')])
 
 dnl META_GENERATE_UNINSTALLED_PC(PKG)
@@ -30,7 +30,7 @@ AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
 cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 ])
 
-# Invokes all macros that always need to be invoked for a package.
+dnl Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
 [
   AC_PREREQ([2.59])
@@ -38,6 +38,9 @@ AC_DEFUN([META_SETUP],
    
   AM_INIT_AUTOMAKE(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]))
   AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc,META_GENERATE_UNINSTALLED_PC(META_GET_PKG_VAR([Name])))
+
+  dnl We automatically generate Makefile for all Makefile.am's:
+  AC_CONFIG_FILES(esyscmd([find . -name "Makefile.am" | sed 's#\.am##']))
 
   AM_MAINTAINER_MODE
 
@@ -66,16 +69,16 @@ AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
   AC_SUBST([EXTERNAL_JARS])
 ])
 
-# META_REQUIRE_PACKAGE(OPTION)
-# --------------
-# Check for another package
-# Declaring the option --with-OPTION=ARGNAME to specify the location of
-# the package NAME.
-#
-# Store the result in the variable which name is OPTION upper cased,
-# using underscore for non letters.  $DEFAULT (note the $) is its
-# default value.
-#
+dnl META_REQUIRE_PACKAGE(OPTION)
+dnl --------------
+dnl Check for another Meta-Environment package
+dnl Declaring the option --with-OPTION=ARGNAME to specify the location of
+dnl the package NAME.
+dnl
+dnl Store the result in the variable which name is OPTION upper cased,
+dnl using underscore for non letters.  $DEFAULT (note the $) is its
+dnl default value.
+dnl
 AC_DEFUN([META_REQUIRE_PACKAGE],
 [m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
 AC_ARG_WITH([$1],
@@ -96,12 +99,12 @@ AC_ARG_WITH([$1],
 m4_popdef([AC_Var])dnl
 ])
 
-# META_REQUIRE_PACKAGE_USING_PKGCONFIG(VARIABLE,MODULE)
-#
-# Checks the existance of package 'MODULE' and sets the 
-# variables VARIABLE_PREFIX, VARIABLE_CFLAGS, and VARIABLE_LIBS
-#
-# ------------------
+dnl META_REQUIRE_PACKAGE_USING_PKGCONFIG(VARIABLE,MODULE)
+dnl
+dnl Checks the existance of package 'MODULE' and sets the 
+dnl variables VARIABLE_PREFIX, VARIABLE_CFLAGS, and VARIABLE_LIBS
+dnl
+dnl ------------------
 AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
 [AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
  PKG_CHECK_MODULES([$1],[$2])
@@ -167,7 +170,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   fi
 ])
 
-# Sets the PKG_CONFIG_PATH if this package is in a bundle.
+dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.
 AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
 [
   AC_ARG_WITH([bundled-packages],
@@ -186,7 +189,32 @@ AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
   fi
 ])
 
-# Sets up variables for a standard Java package
+dnl Check for a third party dependency
+AC_DEFUN([META_REQUIRE_SOFTWARE],
+[m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
+AC_ARG_WITH([$1],
+            [AS_HELP_STRING([--with-$1=DIR], [use $1 at DIR @<:@find $2 in path@:>@])],
+	    [AC_Var[]_PREFIX=$withval],
+	    [])
+
+  AC_MSG_CHECKING([whether location of $1 is explicitly set using --with-$1])
+  if test "${AC_Var[]_PREFIX:+set}" = set; then
+    AC_MSG_RESULT([yes])
+  else
+    AC_MSG_RESULT([no])
+    AC_MSG_CHECKING([for installed $2 program])
+    AC_PATH_PROGS(AC_Var[]_PREFIX,$2,[no])
+    if test "x$AC_Var[]_PREFIX" = "xno" ; then
+      AC_MSG_RESULT([no])
+      AC_MSG_ERROR([Required software \"$1\" not found.])
+    else
+      AC_MSG_RESULT([yes])
+    fi
+  fi
+m4_popdef([AC_Var])dnl
+])
+
+dnl Sets up variables for a standard Java package
 AC_DEFUN([META_JAVA_SETUP],[
   JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
   JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
@@ -200,4 +228,13 @@ AC_DEFUN([META_JAVA_SETUP],[
   AC_SUBST([JAVA_EXTERNAL_JARS])
   AC_SUBST([JAVA_MAIN_CLASS])
   AC_SUBST([JAVA_TEST_CLASS])
+])
+
+dnl Sets up variables for a standard C package
+AC_DEFUN([META_C_SETUP],[
+  AC_AIX
+  AC_PROG_CC
+  AC_LIBTOOL_WIN32_DLL
+dnl  AC_PROG_LIBTOOL
+  AC_PROG_MAKE_SET([])
 ])
