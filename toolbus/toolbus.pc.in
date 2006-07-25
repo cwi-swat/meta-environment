@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: toolbus
+Version: 1.5
+Description:
+Requires: aterm,toolbuslib
