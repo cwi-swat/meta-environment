@@ -6,7 +6,7 @@ noinst_PROGRAMS	= fac
 fac_SOURCES	= fac.c pico-support.c pico-support.h
 fac_LDADD	= -L../../lib-c -ltide-adapter \
 		$(TOOLBUSLIB_LIBS) \
-		$(ATERM_LIBS) \
+		$(ATERM_LIBS) 
 
 EXTRA_DIST	= fac.pico
 
