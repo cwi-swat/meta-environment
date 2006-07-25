@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: sglr
+Version: 3.16
+Description:
+Requires: aterm,error-support,pt-support,toolbuslib
