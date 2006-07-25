@@ -1,5 +1,5 @@
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 bin_PROGRAMS = layoutgraph graph2dot
 pkgdata_DATA = layout-graph.idef 
@@ -11,18 +11,12 @@ CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output layout-graph.idef
 YFLAGS = -d
 
 INCLUDES = \
-	-DDOT_COMMAND=\"${GRAPHVIZ}/bin/dot\" \
+	-DDOT_COMMAND=\"${GRAPHVIZ_PREFIX}/bin/dot\" \
         -I${top_srcdir}/lib \
-	-I${ATERM}/include \
-	-I${TOOLBUSLIB}/include
+	${ATERM_CFLAGS} \
+	${TOOLBUSLIB_CFLAGS}
 
 noinst_HEADERS = dot.h graph2dot.h layoutgraph.h
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
 
 layoutgraph_SOURCES = \
 	layoutgraph.c \
@@ -34,12 +28,8 @@ layoutgraph_SOURCES = \
 layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \
 	-L${top_builddir}/lib \
-	-L$(ATERM)/lib \
-	-L${TOOLBUSLIB}/lib \
-	-l$(ATERM_LIB) \
-	-lATB \
-	-lGraph \
-        ${SOCKLIBS}
+	$(ATERM_LIBS) \
+	$(TOOLBUSLIB_LIBS) 
 
 graph2dot_SOURCES = \
 	graph2dot.c \
@@ -47,7 +37,7 @@ graph2dot_SOURCES = \
 
 graph2dot_LDADD = \
 	-L${top_builddir}/lib -lGraph \
-	-L${ATERM}/lib -l$(ATERM_LIB)
+	$(ATERM_LIBS) 
 
 y.tab.c y.tab.h: dot.y
 	$(YACC) -v $(AM_YFLAGS) $(YFLAGS) $<

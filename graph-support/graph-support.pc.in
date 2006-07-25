@@ -3,4 +3,4 @@ prefix=@prefix@
 Name: graph-support
 Version: 1.0
 Description:
-Requires: aterm,aterm-java,error-support,pt-support,toolbuslib
+Requires: aterm,error-support,pt-support,toolbuslib

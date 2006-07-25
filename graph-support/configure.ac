@@ -2,125 +2,15 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-GLT_INIT_PACKAGE
-AC_PREREQ(2.59)
-
-AM_MAINTAINER_MODE
-
-AC_AIX
-AC_PROG_CC
+META_SETUP
+META_C_SETUP
 AC_PROG_LIBTOOL
 
-dnl {{{  Set CFLAGS
+META_REQUIRE_SOFTWARE(graphviz, dot)
 
-dnl Handle --with-cflags option
-AC_ARG_WITH(cflags,
-   [  --with-cflags=CFLAGS    standard options of c compiler],
-   CFLAGS=${withval},
-   if test "a${GCC}" = "ayes"; then
-     CFLAGS="-Wall -g -O2"
-   fi;
-)
-AC_SUBST(CFLAGS)
-
-dnl }}}
-
-dnl {{{  ATerm
-
-dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, baffle,
-   [  --with-aterm=DIR        ATerm-library is in DIR])
-AC_SUBST(ATERM)
-
-
-dnl }}}
-dnl {{{  Require ATerm Java library
-AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
-   [  --with-aterm-java=DIR   ATerm-javalibrary is in DIR])
-dnl ATERM_JAVA is not allowed in Makefile.am's
-JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
-AC_SUBST(JAVA_ATERM)
-
-dnl }}}
-dnl {{{  error-support
-
-dnl Require error-support package
-AC_PACKAGE_REQUIRE(error-support, error-support-config,
-   [  --with-error-support=DIR   error-support is in DIR])
-AC_SUBST(ERROR_SUPPORT)
-
-
-dnl }}}
-dnl {{{  pt-support
-
-dnl Require pt-support package
-AC_PACKAGE_REQUIRE(pt-support, unparsePT,
-   [  --with-pt-support=DIR   pt-support is in DIR])
-AC_SUBST(PT_SUPPORT)
-
-
-dnl }}}
-dnl {{{  ToolBus library
-
-dnl Require ToolBus library
-AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
-AC_SUBST(TOOLBUSLIB)
-
-dnl }}}
-dnl {{{  GraphViz 
-
-AC_PACKAGE_REQUIRE(graphviz, dot,
-   [  --with-graphviz=DIR     GraphViz is in DIR])
-AC_SUBST(GRAPHVIZ)
-
-dnl }}}
-
-dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}
-AC_SUBST(EXTERNAL_JARS)
-
-dnl Need lex and yacc support
 AM_PROG_LEX
 AC_PROG_YACC
 AC_CHECK_LIB(y,yyerror,YACCLIB="-ly",YACCLIB="")
 AC_SUBST(YACCLIB)
 
-dnl Our own version of libdir whose value is set dynamically
-AC_SUBST(INSTLIBDIR)
-INSTLIBDIR="$libdir"
-
-dnl {{{  Require socket/gethostname
-
-NOSOCKLIBS=$LIBS
-dnl {{{  check for socket in -lsun and -lsocket
-SOCKET_FOUND=no
-SOCKLIBS=
-AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
-if test ${SOCKET_FOUND} = no; then
-  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
-fi
-  
-dnl }}}
-dnl {{{  check for gethostname in -lsun and -lsocket
-
-GHN_FOUND=no
-AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
-if test ${GHN_FOUND} = no; then
-  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
-fi
-
-dnl }}}
-AC_SUBST(SOCKLIBS)
-LIBS=$NOSOCKLIBS
-
-dnl }}}
-
-AC_CONFIG_FILES([Makefile
-  lib/Makefile
-  utils/Makefile
-  utils/tree2graph/Makefile
-  utils/layoutgraph/Makefile
-])
 AC_OUTPUT

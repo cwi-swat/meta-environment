@@ -10,7 +10,7 @@ EXTRA_DIST = Graph.adt graph.jar
 libGraph_a_SOURCES = Graph.c Graph_dict.c
 
 JARFILE = ${top_srcdir}/lib/graph.jar
-INCLUDES = -I${ATERM}/include 
+INCLUDES = ${ATERM_CFLAGS} 
 
 if MAINTAINER_MODE
 c-api: Graph.adt

@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/make_rules
+include ${top_srcdir}/Makefile.meta
 
 EXTRA_DIST = graph-converter.idef.src
 
@@ -10,22 +10,16 @@ bin_PROGRAMS = tree2graph
 
 INCLUDES = \
   -I${top_srcdir}/lib \
-  -I${PT_SUPPORT}/include \
-  -I${ERROR_SUPPORT}/include \
-  -I${ATERM}/include \
-  -I${TOOLBUSLIB}/include
+  ${PT_SUPPORT_CFLAGS} \
+  ${ERROR_SUPPORT_CFLAGS} \
+  ${ATERM_CFLAGS} \
+  ${TOOLBUSLIB_CFLAGS}
 
 pkgdata_DATA = graph-converter.idef
 
 noinst_HEADERS = \
 	graph-converter.tif.h \
 	PT2graph.h
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
 
 tree2graph_SOURCES = \
 	PT2graph.c \
@@ -34,11 +28,11 @@ tree2graph_SOURCES = \
 
 tree2graph_LDADD = \
    -L${top_builddir}/lib/ -lGraph \
-   -L${PT_SUPPORT}/lib -lmept \
-   -L${TOOLBUSLIB}/lib -lATB \
-   -L$(ERROR_SUPPORT)/lib -lLocationAPI \
-   -L$(ERROR_SUPPORT)/lib -lErrorAPI \
-   -L${ATERM}/lib -l$(ATERM_LIB) \
+   $(PT_SUPPORT_LIBS) \
+   $(TOOLBUSLIB_LIBS) \
+   $(ERROR_SUPPORT_LIBS) \
+   $(ERROR_SUPPORT_LIBS) \
+   $(ATERM_LIBS) \
    ${SOCKLIBS}
 
 %.idef: %.idef.src Makefile
