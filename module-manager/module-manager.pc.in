@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: module-manager
+Version: 1.0
+Description:
+Requires: aterm-java,graph-support,module-support,toolbus,toolbus-java-adapter
