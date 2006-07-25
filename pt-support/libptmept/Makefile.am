@@ -13,8 +13,8 @@ EXTRA_DIST = AsFix.def
 
 INCLUDES = \
 	-I${top_srcdir}/libmept \
-	-I${ERROR_SUPPORT}/include \
-	-I${ATERM}/include  
+	${ERROR_SUPPORT_CFLAGS} \
+	${ATERM_CFLAGS}
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 

@@ -2,8 +2,6 @@
 
 SUBDIRS = implodePT 
 
-AM_CFLAGS = -Wall -Werror -g -O2
-
 EXTRA_DIST = \
 	unparser.idef.src \
 	position-annotator.idef.src \
@@ -31,9 +29,9 @@ INCLUDES = \
 	-I${top_srcdir}/libasfix2 \
 	-I${top_srcdir}/libconversion \
 	-I${top_srcdir}/libptmept  \
-	-I${ATERM}/include \
-	-I${ERROR_SUPPORT}/include \
-	-I${TOOLBUSLIB}/include
+	${ATERM_CFLAGS} \
+	${ERROR_SUPPORT_CFLAGS} \
+	${TOOLBUSLIB_CFLAGS}
 
 pkgdata_DATA = \
 	unparser.idef \
@@ -47,21 +45,13 @@ noinst_HEADERS = \
 	position-annotator.tif.h  \
 	ambiguity-reporter.tif.h 
 
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
-
 apply_function_SOURCES = \
 	apply-function.tif.c \
 	apply-function.c
 
 apply_function_LDADD = \
 	-L../libmept -lmept \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -l$(ATERM_LIB) \
-	${SOCKLIBS}
+	${TOOLBUSLIB_LIBS} 
 
 addPosInfo_SOURCES = \
 	position-annotator.tif.c \
@@ -69,23 +59,21 @@ addPosInfo_SOURCES = \
 
 addPosInfo_LDADD = \
 	-L../libmept -lmept \
-	-L${ERROR_SUPPORT}/lib -lLocationAPI \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -l$(ATERM_LIB) \
-	${SOCKLIBS}
+	${ERROR_SUPPORT_LIBS} \
+	${TOOLBUSLIB_LIBS} 
 
 flattenPT_SOURCES = flattenPT-main.c
 
 flattenPT_LDADD	= \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -l$(ATERM_LIB)
+	${ATERM_LIBS}
 
 liftPT_SOURCES	= liftPT-main.c
 
 liftPT_LDADD = \
 	-L../libptmept -lPTMEPT \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -l$(ATERM_LIB)
+	${ATERM_LIBS}
 
 unparsePT_SOURCES = \
 	unparser.tif.c \
@@ -93,22 +81,20 @@ unparsePT_SOURCES = \
 
 unparsePT_LDADD = \
 	../libmept/libmept.a \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ATERM}/lib -l$(ATERM_LIB) \
-	${SOCKLIBS}
+	${TOOLBUSLIB_LIBS}
 
 comparePT_SOURCES = \
 	comparePT-main.c
 
 comparePT_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -l$(ATERM_LIB) 
+	${ATERM_LIBS}
 
 unparseProd_SOURCES = unparseProd-main.c
 
 unparseProd_LDADD = \
 	-L../libmept -lmept \
-	-L${ATERM}/lib -l$(ATERM_LIB)
+	${ATERM_LIBS}
 
 ambtracker_SOURCES = \
 	ambtracker-main.c \
@@ -116,10 +102,8 @@ ambtracker_SOURCES = \
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
-	-L${TOOLBUSLIB}/lib -lATB \
-	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -lATerm-dbg \
-	${SOCKLIBS}
+	${TOOLBUSLIB_LIBS} \
+	${ERROR_SUPPORT_LIBS} 
 
 IDEF = idef2tif
 TIFS = tifstoc

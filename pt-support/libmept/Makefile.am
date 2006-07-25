@@ -52,11 +52,9 @@ libmept_a_SOURCES = \
 		    MEPT-yield.c \
 		    MEPT-yieldprod.c
 
-AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
-INCLUDES = \
-	-I${ATERM}/include \
-	-I${ERROR_SUPPORT}/include
+INCLUDES = ${ATERM_CFLAGS} ${ERROR_SUPPORT_CFLAGS}
 
 api: MEPT.adt
 	adt-to-c \
