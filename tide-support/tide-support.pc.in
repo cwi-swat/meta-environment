@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: tide-support
+Version: 1.1
+Description:
+Requires: aterm,toolbuslib
