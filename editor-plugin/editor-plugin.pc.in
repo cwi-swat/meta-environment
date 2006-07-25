@@ -4,3 +4,7 @@ Name: editor-plugin
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,error-support,meta-studio,toolbus-java-adapter
+JarFile=editor-plugin-@VERSION@.jar
+Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.editor
+ExternalJars=@EXTERNAL_JARS@
+TestClass=
