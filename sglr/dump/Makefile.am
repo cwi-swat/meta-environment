@@ -19,7 +19,7 @@ dump_priorities_SOURCES		= dump-priorities.c dump-skel.c dump-skel.h
 
 dump_productions_SOURCES	= dump-productions.c dump-skel.c dump-skel.h
 
-LDADD     = -L$(top_builddir)/libsglr -lsglr \
+LDADD     += -L$(top_builddir)/libsglr -lsglr \
             $(PT_SUPPORT_LIBS) \
             $(TOOLBUSLIB_LIBS) \
             $(ERROR_SUPPORT_LIBS) \
