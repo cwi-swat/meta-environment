@@ -1,5 +1,7 @@
 module Distribution
 
+  require 'versioning/boms'
+
   class SourceDister
 
     def initialize(item, checkout_root, source_dist_dir, collect_url, log)
@@ -40,18 +42,22 @@ module Distribution
     ## NB: This is duplicated from Checkout class :-(
     ## Need serious refactoring.
 
-    def extract_version(item)
-      path = depfile_path(checkout_path(item))
-      File.open(path) do |file|
-        return parse_pkg_version(file.read)
+
+    def bom_reader
+      pkg_files = Dir["#{@path}/*.pc.in"] 
+      if pkg_files.empty? then
+        return Versioning::PackageBOMReader.new(depfile_path(@path))
+      else
+        return Versioning::PKGConfigBOMReader.new(pkg_files[0])
       end
     end
 
-    def parse_pkg_version(packagedef)
-      if packagedef =~ /version\s*=\s*([0-9\.a-bA-Z_\-]+)/m then
-        return $1
-      end
-      raise RuntimeError.new("error parsing version in: #{packagedef}")
+    def extract_deps
+      return bom_reader.dependencies
+    end
+
+    def extract_version
+      return bom_reader.version
     end
 
     def depfile_path(root)
@@ -66,7 +72,6 @@ module Distribution
       end
       return path
     end 
-
 
 
     # NB: configuration invariant:
