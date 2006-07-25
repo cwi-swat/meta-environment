@@ -9,8 +9,8 @@ INCLUDES	  = $(PT_SUPPORT_CFLAGS) \
 
 bin_PROGRAMS	  = concat-asf lift-asf
 
-GENERIC_LDADD = $(PT_SUPPORT_LIBS) \
-         	$(ERROR_SUPPORT_LIBS) \
+LDADD += $(PT_SUPPORT_LIBS) \
+        	$(ERROR_SUPPORT_LIBS) \
          	$(ATERM_LIBS) 
 
 concat_asf = concat-asf.c

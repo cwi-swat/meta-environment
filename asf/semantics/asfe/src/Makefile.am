@@ -5,7 +5,7 @@ bin_PROGRAMS      = asfe
 pkgdata_DATA      = asfe.idef
 EXTRA_DIST        = asfe.idef.src
 
-CLEANFILES = asfe.idef
+CLEANFILES += asfe.idef
 
 noinst_HEADERS = \
 	asfe.tif.h \

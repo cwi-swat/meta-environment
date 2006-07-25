@@ -7,7 +7,7 @@ pkgdata_DATA     = asfc.idef
 
 EXTRA_DIST       = asfc.idef.src
 
-CLEANFILES = asfc.idef
+CLEANFILES += asfc.idef
 
 asfc_SOURCES = asfc.tif.c \
                asfc.c \
