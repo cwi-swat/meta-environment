@@ -23,7 +23,7 @@ pkgdata_DATA = \
 	configuration-manager.idef \
 	user-configuration.tb
 
-CLEANFILES = \
+CLEANFILES += \
 	user-configuration.tb \
 	configuration-manager.idef \
 	${noinst_SCRIPTS} \
