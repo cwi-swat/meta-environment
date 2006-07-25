@@ -2,6 +2,7 @@
 dnl META_ left in configure is the sign a macro was not defined, or there was 
 dnl a typo in a macro invocation.
 m4_pattern_forbid([^META_])
+m4_pattern_allow([^META_STUDIO])
 
 dnl META_GET_PKG_VAR(VARNAME)
 dnl Is substituted by the value of VARNAME from a pkg-config file at
@@ -235,6 +236,6 @@ AC_DEFUN([META_C_SETUP],[
   AC_AIX
   AC_PROG_CC
   AC_LIBTOOL_WIN32_DLL
-dnl  AC_PROG_LIBTOOL
+  AC_PROG_LIBTOOL
   AC_PROG_MAKE_SET([])
 ])
