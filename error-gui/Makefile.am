@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_FLAGS = -I .
 
-pkgdata_DATA += error-viewer.idef
+pkgdata_DATA = error-viewer.idef
 
 EXTRA_DIST += error-viewer.idef.src
 
