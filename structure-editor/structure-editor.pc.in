@@ -1,0 +1,6 @@
+prefix=@prefix@
+
+Name: structure-editor
+Version: 1.0
+Description:
+Requires: aterm,error-support,pt-support,toolbuslib
