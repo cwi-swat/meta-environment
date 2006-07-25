@@ -1,15 +1,6 @@
 
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-GLT_INIT_PACKAGE
-AC_PREREQ(2.59)
-
-AM_MAINTAINER_MODE
-
-ACLOCAL="${ACLOCAL} -I ."
-
-AC_SET_MAKE
-AC_PROG_MAKE_SET([])
+META_SETUP
 
 AC_PACKAGE_REQUIRE(ruby, ruby,
 [  --with-ruby=DIR         Ruby is in  DIR ])
@@ -27,23 +18,9 @@ AC_PACKAGE_REQUIRE(cvs, cvs,
 [  --with-cvs=DIR   CVS is in DIR ])
 AC_SUBST(CVS)
 
-
 AC_PACKAGE_REQUIRE(ssh, ssh,
 [  --with-ssh=DIR   ssh is in DIR ])
 AC_SUBST(SSH)
 
-AC_CONFIG_FILES([
-   Makefile
-   src/Makefile
-   src/building/Makefile
-   src/distribution/Makefile
-   src/model/Makefile
-   src/release/Makefile
-   src/updating/Makefile
-   src/utils/Makefile
-   src/versioning/Makefile
-   doc/Makefile
-   script/Makefile
-])
 AC_OUTPUT
 
