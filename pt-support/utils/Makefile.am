@@ -80,7 +80,7 @@ unparsePT_SOURCES = \
 	unparsePT-main.c
 
 unparsePT_LDADD = \
-	../libmept/libmept.a \
+	../libmept/libmept.la \
 	$(TOOLBUSLIB_LIBS)
 
 comparePT_SOURCES = \
