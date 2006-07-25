@@ -32,7 +32,7 @@ EXTRA_DIST = editor-manager.idef.src
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
-CLEANFILES = \
+CLEANFILES += \
 	     editor-manager.tifs \
 	     editor-manager.idef
 
