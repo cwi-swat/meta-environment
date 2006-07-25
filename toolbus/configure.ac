@@ -1,6 +1,7 @@
 AC_INIT
 META_SETUP
 META_C_SETUP
+AC_PROG_LIBTOOL
 
 dnl CPP and FLAGS are needed by toolbus for calling preprocessor as 
 dnl configured correctly:
