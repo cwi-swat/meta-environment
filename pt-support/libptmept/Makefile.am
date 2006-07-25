@@ -1,22 +1,18 @@
 # $Id$
 
-lib_LIBRARIES = libPTMEPT.a
+lib_LTLIBRARIES = libPTMEPT.la
 include_HEADERS = \
 	PTMEPT.h \
 	PTMEPT-utils.h \
 	PTMEPT_dict.h 
 
-libPTMEPT_a_SOURCES = PTMEPT.c PTMEPT_dict.c ${UTILSRCS}
+libPTMEPT_la_CPPFLAGS = -I${top_srcdir}/libmept $(ERROR_SUPPORT_CFLAGS) $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+libPTMEPT_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libPTMEPT_la_LIBADD   = ../libmept/libmept.la $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
+libPTMEPT_la_SOURCES = PTMEPT.c PTMEPT_dict.c $(UTILSRCS)
+
 UTILSRCS = lift.c lower.c
-
 EXTRA_DIST = AsFix.def
-
-INCLUDES = \
-	-I${top_srcdir}/libmept \
-	${ERROR_SUPPORT_CFLAGS} \
-	${ATERM_CFLAGS}
-
-AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 # Developers only:
 LIBRARY=../../asf-library/library

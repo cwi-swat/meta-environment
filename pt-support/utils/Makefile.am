@@ -9,10 +9,10 @@ EXTRA_DIST = \
 	ambiguity-reporter.idef.src
 
 CLEANFILES = \
-	     unparser.idef \
-	     position-annotator.idef \
-	     apply-function.idef \
-	     ambiguity-reporter.idef
+	unparser.idef \
+	position-annotator.idef \
+	apply-function.idef \
+	ambiguity-reporter.idef
 
 bin_PROGRAMS = \
 	flattenPT \
@@ -25,13 +25,13 @@ bin_PROGRAMS = \
 	comparePT
 
 INCLUDES = \
-	-I${top_srcdir}/libmept \
-	-I${top_srcdir}/libasfix2 \
-	-I${top_srcdir}/libconversion \
-	-I${top_srcdir}/libptmept  \
-	${ATERM_CFLAGS} \
-	${ERROR_SUPPORT_CFLAGS} \
-	${TOOLBUSLIB_CFLAGS}
+	-I$(top_srcdir)/libmept \
+	-I$(top_srcdir)/libasfix2 \
+	-I$(top_srcdir)/libconversion \
+	-I$(top_srcdir)/libptmept  \
+	$(ATERM_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS)
 
 pkgdata_DATA = \
 	unparser.idef \
@@ -51,7 +51,7 @@ apply_function_SOURCES = \
 
 apply_function_LDADD = \
 	-L../libmept -lmept \
-	${TOOLBUSLIB_LIBS} 
+	$(TOOLBUSLIB_LIBS)
 
 addPosInfo_SOURCES = \
 	position-annotator.tif.c \
@@ -59,21 +59,21 @@ addPosInfo_SOURCES = \
 
 addPosInfo_LDADD = \
 	-L../libmept -lmept \
-	${ERROR_SUPPORT_LIBS} \
-	${TOOLBUSLIB_LIBS} 
+	$(ERROR_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS)
 
 flattenPT_SOURCES = flattenPT-main.c
 
 flattenPT_LDADD	= \
 	-L../libmept -lmept \
-	${ATERM_LIBS}
+	$(ATERM_LIBS)
 
 liftPT_SOURCES	= liftPT-main.c
 
 liftPT_LDADD = \
 	-L../libptmept -lPTMEPT \
 	-L../libmept -lmept \
-	${ATERM_LIBS}
+	$(ATERM_LIBS)
 
 unparsePT_SOURCES = \
 	unparser.tif.c \
@@ -81,14 +81,14 @@ unparsePT_SOURCES = \
 
 unparsePT_LDADD = \
 	../libmept/libmept.a \
-	${TOOLBUSLIB_LIBS}
+	$(TOOLBUSLIB_LIBS)
 
 comparePT_SOURCES = \
 	comparePT-main.c
 
 comparePT_LDADD = \
 	-L../libmept -lmept \
-	${ATERM_LIBS}
+	$(ATERM_LIBS)
 
 unparseProd_SOURCES = unparseProd-main.c
 
@@ -102,16 +102,16 @@ ambtracker_SOURCES = \
 
 ambtracker_LDADD = \
 	-L../libmept -lmept \
-	${TOOLBUSLIB_LIBS} \
-	${ERROR_SUPPORT_LIBS} 
+	$(TOOLBUSLIB_LIBS) \
+	$(ERROR_SUPPORT_LIBS)
 
 IDEF = idef2tif
 TIFS = tifstoc
 
 tif:
 	for i in `ls *.idef`; do \
-	  ${IDEF} $$i; \
-	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
+	  $(IDEF) $$i; \
+	  $(TIFS) -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
 	done
 
 tif-clean:

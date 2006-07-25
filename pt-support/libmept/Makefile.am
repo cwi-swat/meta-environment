@@ -1,6 +1,6 @@
 # $Id$
 
-lib_LIBRARIES = libmept.a
+lib_LTLIBRARIES = libmept.la
 
 include_HEADERS = \
 	MEPT.h \
@@ -28,7 +28,10 @@ include_HEADERS = \
 	MEPT-yield.h \
 	MEPT-yieldprod.h
 
-libmept_a_SOURCES = \
+libmept_la_CPPFLAGS = $(ERROR_SUPPORT_CFLAGS) $(ATERM_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+libmept_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libmept_la_LIBADD   = $(ERROR_SUPPORT_LIBS) $(ATERM_LIBS)
+libmept_la_SOURCES = \
 		    MEPT.c \
 		    MEPT_dict.c \
 		    MEPT-ambtracker.c \
@@ -52,10 +55,6 @@ libmept_a_SOURCES = \
 		    MEPT-yield.c \
 		    MEPT-yieldprod.c
 
-AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
-
-INCLUDES = ${ATERM_CFLAGS} ${ERROR_SUPPORT_CFLAGS}
-
 api: MEPT.adt
 	adt-to-c \
 		--prefix PT_ \
@@ -63,4 +62,4 @@ api: MEPT.adt
 		--input $<
 
 api-clean:
-	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict
+	$(RM) MEPT.[ch] MEPT_dict.[ch] MEPT.dict

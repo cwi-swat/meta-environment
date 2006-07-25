@@ -16,7 +16,7 @@ mept_test_LDADD=\
 	$(ATERM_LIBS) 
 
 INCLUDES =\
-	-I${top_srcdir}/libmept\
-	-I${top_srcdir}/test/terms\
-	${ERROR_SUPPORT_CFLAGS} \
-	${ATERM_CFLAGS}
+	-I$(top_srcdir)/libmept\
+	-I$(top_srcdir)/test/terms\
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(ATERM_CFLAGS)

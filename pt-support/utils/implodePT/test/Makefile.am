@@ -38,8 +38,8 @@ testsetclean:
 	   echo '#!/bin/sh' ;\
 	   echo 'set -e' ;\
 	   echo 'cat $(srcdir)/in/$*.in | \
-                 ${IMPLODE} $($(subst -,_,$*)_flags) -o $*.tested' ;\
-	   echo '${ATERM}/bin/atdiff $*.tested $(srcdir)/out/$*.ref' ;\
+                 $(IMPLODE) $($(subst -,_,$*)_flags) -o $*.tested' ;\
+	   echo '$(ATERM_PREFIX)/bin/atdiff $*.tested $(srcdir)/out/$*.ref' ;\
 	) > $@ && chmod +x $@
 
 # To use these targets you need to have sglr and sdf2table in your path
@@ -52,4 +52,4 @@ testsetclean:
 	sdf2table -i $< -o $@
 
 %.ref :
-	cat in/$*.in | ${IMPLODE} $($(subst -,_,$*)_flags) -o out/$@
+	cat in/$*.in | $(IMPLODE) $($(subst -,_,$*)_flags) -o out/$@
