@@ -4,3 +4,5 @@ Name: graph-support
 Version: 1.0
 Description:
 Requires: aterm,error-support,pt-support,toolbuslib
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lGraph
