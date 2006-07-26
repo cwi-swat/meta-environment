@@ -6,7 +6,7 @@
 #
 #
 
-# Put very common CPPFLAGS, LDADD here, INCLUDES also here 
+# Put very common AM_CPPFLAGS, LDADD here, also here 
 # because of pkgconfig:
 AM_CPPFLAGS = 
 LDADD = 

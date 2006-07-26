@@ -10,7 +10,7 @@ pkgdata_DATA 	= \
 		  meta-build.ant \
 		  Doxyfile.meta
 
-EXTRA_DIST	= meta-build.src $(pkgdata_DATA)
+EXTRA_DIST	= meta-build.src pkg-requires.src $(pkgdata_DATA)
 
 CLEANFILES = meta-build pkg-requires
 
