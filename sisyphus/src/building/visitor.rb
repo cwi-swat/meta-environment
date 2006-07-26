@@ -72,9 +72,9 @@ module Building
     end
 
     def build_revision(revision)
-      if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
-        return build_revision_backtracking_original(revision)
-      end
+      #if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
+      #  return build_revision_backtracking_original(revision)
+      #end
       dep_items = build_deps(revision)
       return build_revision_with_deps(revision, dep_items)
     end

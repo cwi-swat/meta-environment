@@ -89,10 +89,21 @@ module Building
       set_progress(false)
     end
 
+    def find_build_for_build_env_package(build_env_package)
+      @dep_items.each do |item|
+        if item.name == build_env_package then
+          return item
+        end
+      end
+      raise "No build for build env package!"
+    end
+
     def script_environment
       env = config.environment + "\n"
-      if config.build_env_package then
-        path = File.join(File.join(config.install_dir, config.build_env_package), 'bin')
+      if config.build_env_package and @item.name != config.build_env_package then
+        item = find_build_for_build_env_package(config.build_env_package)
+        
+        path = File.join(item.prefix(config.install_dir), 'bin')
         env += "PATH=#{path}:$PATH\n"
         env += "export PATH\n";
       end
@@ -429,6 +440,7 @@ module Building
       dister = Distribution::SourceDister.new(item, @config.build_dir,
                                               @config.source_dist_dir,
                                               @config.collect_url,
+                                              @config.build_env_package,
                                               @log)
       dister.make_source_dists
     end
@@ -559,7 +571,7 @@ module Building
       result = ActionResult.new  
       shell = Utils::EmptyShell.new
       begin
-        output, errors, script = shell.read3(command, config.environment)
+        output, errors, script = shell.read3(command, env)
         result.success = true
       rescue Utils::EmptyShellFailure => e
         output = e.result.output

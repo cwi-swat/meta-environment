@@ -4,11 +4,12 @@ module Distribution
 
   class SourceDister
 
-    def initialize(item, checkout_root, source_dist_dir, collect_url, log)
+    def initialize(item, checkout_root, source_dist_dir, collect_url, build_env_package, log)
       @item = item
       @checkout_root = checkout_root
       @source_dist_dir = source_dist_dir
       @collect_url = collect_url
+      @build_env_package = build_env_package
       @log = log
     end
 
@@ -106,7 +107,9 @@ module Distribution
         f.puts("configuration interface")
         f.puts("requires")
         item.dep_items.each do |dep|
-          f.puts("#{dep.name} #{pkg_version(dep)}")
+          if dep.name != @build_env_package then
+            f.puts("#{dep.name} #{pkg_version(dep)}")
+          end
         end
       end
       parse_package_file(path)
