@@ -6,3 +6,5 @@ Description:
 Requires: aterm,error-support,pt-support,toolbuslib
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lsglr
+#uninstalled Libs: -L@abs_top_builddir@/libsglr -lsglr
+#uninstalled Cflags: -I@abs_top_builddir@/libsglr
