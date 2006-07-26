@@ -1,3 +1,12 @@
+Wed Jul 26 16:54:01 CEST 2006 <{storm,kooiker,jurgenv}@cwi.nl>
+ * configure, reconf, Makefile.src: build interface of meta-build-env now
+   does not depend on auto-tools anymore; instead it installs them
+   itself. This is implemented using a fake ./configure script which
+   instantiates a Makefile that mimics standard automake Makefile
+   targets. Make install will download autoconf, automake, libtool and
+   pkg-config and install them in the prefix passed to the fake ./configure
+   script.
+
 Wed Jul 26 14:57:01 CEST 2006 <{storm,kooiker,jurgenv}@cwi.nl>
  * meta-build.m4: added AC_REQUIRE for PKG_CONFIG and m4_allow'd patterns 
    _PKG_ERRORS.

@@ -1,0 +1,33 @@
+#! /bin/sh
+
+set -x
+set -e
+
+parse_prefix() {
+    WITH_PREFIX=$1
+    PREFIX=`echo "${WITH_PREFIX}" | sed -e 's/--prefix=\(.*\)/\1/'`
+}
+
+parse_pkgconfig_version() {
+    PACKAGE=$1
+    VERSION=`cat ${PACKAGE}.pc.in | grep Version | sed -e 's/Version: \(.*\)/\1/'`
+}
+
+
+instantiate_files() {
+    PACKAGE=meta-build-env
+    parse_prefix $1
+    parse_pkgconfig_version $PACKAGE
+    cat Makefile.src | sed \
+	-e "s/@PACKAGE@/${PACKAGE}/g" \
+	-e "s/@VERSION@/${VERSION}/g" \
+	-e "s!@PREFIX@!${PREFIX}!g" \
+	> Makefile
+    cat ${PACKAGE}.pc.in | sed \
+	-e "s!@prefix@!${PREFIX}!g" \
+	> ${PACKAGE}.pc
+}
+	
+instantiate_files $@
+
+

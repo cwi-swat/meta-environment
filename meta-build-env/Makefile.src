@@ -1,15 +1,10 @@
-
+# -*- makefile -*-
 PACKAGE=@PACKAGE@
 VERSION=@VERSION@
 prefix=@PREFIX@
-prefix=/tmp
-datadir=@DATADIR@
 
-pkgdatadir=$(datadir)/$(PACKAGE)
-pkgdatadir=/tmp/share
-
+pkgdatadir=$(prefix)/share/$(PACKAGE)
 bindir=$(prefix)/bin
-bindir=/tmp/bin
 
 
 AUTOCONF_VERSION=2.59
@@ -17,18 +12,15 @@ AUTOMAKE_VERSION=1.9.6
 LIBTOOL_VERSION=1.5.22
 PKGCONFIG_VERSION=0.20
 
-
 GNU=http://ftp.gnu.org/gnu
 AUTOCONF=$(GNU)/autoconf/autoconf-$(AUTOCONF_VERSION).tar.gz
 AUTOMAKE=$(GNU)/automake/automake-$(AUTOMAKE_VERSION).tar.gz
 LIBTOOL=$(GNU)/libtool/libtool-$(LIBTOOL_VERSION).tar.gz
-PKGCONFIG=http://pkgconfig.freedesktop.org/releases/pkg-config-$(pkgconfig_VERSION).tar.gz
+PKGCONFIG=http://pkgconfig.freedesktop.org/releases/pkg-config-$(PKGCONFIG_VERSION).tar.gz
 
 AUTO_TOOLS = $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(PKGCONFIG)
 
 CURL=curl
-
-
 
 bin_SCRIPTS 	= meta-build pkg-requires
 pkgdata_DATA 	= \
@@ -48,7 +40,7 @@ all: $(bin_SCRIPTS)
 install: all install-autotools install-binscripts install-pkgdata
 	echo "ADD ${prefix} to your PATH!"
 
-install-auto-tools:
+install-autotools:
 	( \
 	set -x ; set -e; \
 	PATH=${prefix}:${PATH}; \
