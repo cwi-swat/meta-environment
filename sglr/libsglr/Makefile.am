@@ -22,7 +22,7 @@ libsglr_la_CPPFLAGS = \
 
 libsglr_la_LDFLAGS = -avoid-version -no-undefined $(AM_LDFLAGS)
 libsglr_la_LIBADD  = \
-  $(ATERM_LIBADD) \
-  $(TOOLBUSLIB_LIBADD) \
-  $(ERROR_SUPPORT_LIBADD) \
-  $(PT_SUPPORT_LIBADD)
+  $(ATERM_LIBS) \
+  $(TOOLBUSLIB_LIBS) \
+  $(ERROR_SUPPORT_LIBS) \
+  $(PT_SUPPORT_LIBS)
