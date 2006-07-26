@@ -6,3 +6,5 @@ Description:
 Requires: aterm,error-support,pt-support
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lASFME
+#uninstalled Libs: -L@abs_top_builddir@/lib -lASFME
+#uninstalled Cflags: -I@abs_top_builddir@/lib
