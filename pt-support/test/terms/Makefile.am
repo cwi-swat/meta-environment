@@ -4,13 +4,12 @@
 
 EXTRA_DIST=genTermsDict.sh.src $(wildcard *.pt)
 
-check_LIBRARIES=libtestTerms.a
-check_SCRIPTS=genTermsDict.sh
-check_HEADERS=terms_dict.h
+check_LIBRARIES = libtestTerms.a
+check_SCRIPTS = genTermsDict.sh
+check_HEADERS = terms_dict.h
 
-libtestTerms_a_SOURCES=terms_dict.c
-
-INCLUDES=$(ATERM_CFLAGS)
+nodist_libtestTerms_a_SOURCES=terms_dict.c
+AM_CPPFLAGS=$(ATERM_CFLAGS)
 
 terms_dict.c terms_dict.h : terms.dict
 	$(ATERM_PREFIX)/bin/dicttoc -dict $< 
