@@ -209,6 +209,7 @@ AC_ARG_WITH([$1],
       AC_MSG_RESULT([no])
       AC_MSG_ERROR([Required software \"$1\" not found.])
     else
+      AC_Var[]_PREFIX=`dirname \`dirname $AC_Var[]_PREFIX\``
       AC_MSG_RESULT([yes])
     fi
   fi

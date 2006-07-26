@@ -1,4 +1,7 @@
-
+Wed Jul 26 10:45:01 CEST 2006 <{storm,kooiker}@cwi.nl>
+ * meta-build.m4: in macro META_REQUIRE_SOFTWARE finding a dependency's
+   prefix by executing a program in a path resulted in _PREFIX variables
+   containing the path of the executable instead of the prefix proper.
 
 Tue Jul 25 22:39:01 CEST 2006 <jurgenv@cwi.nl>
  * pkg-requires.src: a script that prints the reflexive and
