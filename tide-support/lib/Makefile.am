@@ -1,26 +1,26 @@
+include $(top_srcdir)/Makefile.meta
 
-INCLUDES = \
-	${ATERM_CFLAGS} \
-	${TOOLBUSLIB_CFLAGS} \
-	-DDISABLE_DYNAMIC_CHECKING
+CLEANFILES += $(wildcard *.tifs)
+EXTRA_DIST = TA.adt adapter.idef
 
-lib_LIBRARIES = libtide-adapter.a
-
+pkgdata_DATA = adapter.idef
+lib_LTLIBRARIES = libtide-adapter.la
 include_HEADERS	= \
 	TA.h \
 	TA_dict.h \
 	tide-adapter.h \
 	tide-common.h
 
-libtide_adapter_a_SOURCES = \
+libtide_adapter_la_CPPFLAGS = $(ATERM_CFLAGS) $(TOOLBUSLIB_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
+libtide_adapter_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libtide_adapter_la_LIBADD   = $(ATERM_LIBS) $(TOOLBUSLIB_LIBS)
+libtide_adapter_la_SOURCES = \
 	TA.c \
 	TA_dict.c \
 	tide-adapter.c \
 	debug-adapter.tif.c \
 	debug-adapter.tif.h \
 	debug-adapter.c
-
-pkgdata_DATA = adapter.idef
 
 tifs:
 	toolbus -gentifs adapter.idef -output adapter.idef.tifs
@@ -31,10 +31,4 @@ tifs:
 regen:
 	adt-to-c -i TA.adt --prefix TA_ --name TA
 
-
-CLEANFILES	= *.tifs
-
-EXTRA_DIST = \
-	TA.adt \
-	adapter.idef
 
