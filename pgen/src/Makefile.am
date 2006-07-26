@@ -1,11 +1,7 @@
 include $(top_srcdir)/Makefile.meta
+include $(top_srcdir)/man_make_rules
 
-TESTS		= test-chars
-
-
-INCLUDES	= ${ASC_SUPPORT_CFLAGS} \
-		  ${SDF_SUPPORT_CFLAGS}
-
+TESTS		= $(check_PROGRAMS)
 check_PROGRAMS	= test-chars
 bin_PROGRAMS	= parsetablegen
 bin_SCRIPTS	= sdf2table parse-sdf2
@@ -29,13 +25,28 @@ HDRS         = parsetablegen.tif.h atsets.h ksdf2table.h statistics.h \
 		characters.h item.h first.h priorities.h itemset.h \
 		pgen-symbol.h
 
+AM_CPPFLAGS += \
+	$(ASC_SUPPORT_CFLAGS) \
+	$(SDF_SUPPORT_CFLAGS) \
+	$(PT_SUPPORT_CFLAGS) \
+	$(ASF_SUPPORT_CFLAGS) \
+	$(ERROR_SUPPORT_CFLAGS) \
+	$(TOOLBUSLIB_CFLAGS) \
+	$(ATERM_CFLAGS)
+
 test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
 test_chars_LDADD	= $(ATERM_LIBS) 
 
-
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_DEPENDENCIES = 
-parsetablegen_LDADD   = $(SDF_SUPPORT_LIBS) 
+parsetablegen_LDADD = \
+	$(ASC_SUPPORT_LIBS) \
+	$(SDF_SUPPORT_LIBS) \
+	$(PT_SUPPORT_LIBS) \
+	$(ASF_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_CFLAGS)
 
 CLEANFILES += \
 	parse-sdf2 \
@@ -44,14 +55,17 @@ CLEANFILES += \
 	sdf2table.test \
 	parsetablegen.idef
 
+%.idef: %.idef.src Makefile
+	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
 %.test: %.src Makefile
 	sed "s@__BINDIR__@$(top_builddir)/src@g;\
              s@__ACTIVATE__@0@g;\
-             s@__SGLR__@$(SGLR)@g;\
-             s@__CHECKERDIR__@${top_builddir}/sdf-checker/src@g;\
-             s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
+             s@__SGLR__@$(SGLR_PREFIX)@g;\
+             s@__CHECKERDIR__@$(top_builddir)/sdf-checker/src@g;\
+             s@__PT_SUPPORT__@$(PT_SUPPORT_PREFIX)@g;\
              s@__DATADIR__@$(top_srcdir)/grammar@g;" < $< > $@ && \
 	chmod +x $@
 
@@ -59,10 +73,10 @@ CLEANFILES += \
 % : %.src Makefile
 	sed "s@__BINDIR__@$(bindir)@g;\
              s@__ACTIVATE__@1@g;\
-             s@__PREFIX__@${prefix}@g;\
+             s@__PREFIX__@$(prefix)@g;\
              s@__CHECKERDIR__@$(bindir)@g;\
-             s@__SGLR__@$(SGLR)@g;\
-             s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
+             s@__SGLR__@$(SGLR_PREFIX)@g;\
+             s@__PT_SUPPORT__@$(PT_SUPPORT_PREFIX)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;" < $< > $@ && \
 	chmod +x $@
 
