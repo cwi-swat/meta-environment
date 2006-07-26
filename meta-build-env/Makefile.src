@@ -1,0 +1,95 @@
+
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+prefix=@PREFIX@
+prefix=/tmp
+datadir=@DATADIR@
+
+pkgdatadir=$(datadir)/$(PACKAGE)
+pkgdatadir=/tmp/share
+
+bindir=$(prefix)/bin
+bindir=/tmp/bin
+
+
+AUTOCONF_VERSION=2.59
+AUTOMAKE_VERSION=1.9.6
+LIBTOOL_VERSION=1.5.22
+PKGCONFIG_VERSION=0.20
+
+
+GNU=http://ftp.gnu.org/gnu
+AUTOCONF=$(GNU)/autoconf/autoconf-$(AUTOCONF_VERSION).tar.gz
+AUTOMAKE=$(GNU)/automake/automake-$(AUTOMAKE_VERSION).tar.gz
+LIBTOOL=$(GNU)/libtool/libtool-$(LIBTOOL_VERSION).tar.gz
+PKGCONFIG=http://pkgconfig.freedesktop.org/releases/pkg-config-$(pkgconfig_VERSION).tar.gz
+
+AUTO_TOOLS = $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(PKGCONFIG)
+
+CURL=curl
+
+
+
+bin_SCRIPTS 	= meta-build pkg-requires
+pkgdata_DATA 	= \
+		  meta-build.m4 \
+		  Makefile.meta \
+		  Makefile.top.meta \
+		  Makefile.java.meta \
+		  meta-build.ant \
+		  Doxyfile.meta \
+
+EXTRA_DIST = meta-build.src Makefile.src $(pkgdata_DATA)
+
+CLEANFILES = meta-build
+
+all: $(bin_SCRIPTS)
+
+install: all install-autotools install-binscripts install-pkgdata
+	echo "ADD ${prefix} to your PATH!"
+
+install-auto-tools:
+	( \
+	set -x ; set -e; \
+	PATH=${prefix}:${PATH}; \
+	for tool in $(AUTO_TOOLS); do  \
+		$(CURL) $$tool | gunzip -c | tar xvf - ;\
+		cd `echo $$tool | sed -e 's/^.*\/\(.*-.*\).tar.gz/\1/'` ; \
+		./configure --prefix=${prefix}; \
+		make ; \
+		make install ; \
+		cd .. ; \
+	done )
+
+install-binscripts:
+	( \
+	set -x; set -e; \
+	mkdir -p  $(bindir); \
+	for datum in $(bin_SCRIPTS); do \
+		cp $$datum $(bindir); \
+	done \
+	)
+
+install-pkgdata:
+	( \
+	set -x; set -e; \
+	mkdir -p  $(pkgdatadir);\
+	for datum in $(pkgdata_DATA); do \
+		cp $$datum $(pkgdatadir); \
+	done \
+	)
+
+dist:
+	tar cv $(EXTRA_DIST) | gzip > $(PACKAGE)-$(VERSION).tar.gz
+
+check:
+	true
+
+distcheck:
+	true
+
+meta-build: meta-build.src
+	sed "s@__prefix__@${prefix}@g;\
+	     s@__datadir__@${datadir}@g;\
+	     s@__PACKAGE__@${PACKAGE}@g" < $< > $@ && chmod +x $@
+
