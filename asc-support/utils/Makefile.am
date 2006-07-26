@@ -20,7 +20,7 @@ ASC_INCLUDES=\
 	$(ATERM_CFLAGS) 
 
 ASC_LD_FLAGS=\
-	-L${prefix}/lib -lasc-support-me \
+	-L$(prefix)/lib -lasc-support-me \
 	$(SGLR_LIBS) \
 	$(TIDE_SUPPORT_LIBS) \
 	$(ASF_SUPPORT_LIBS) \

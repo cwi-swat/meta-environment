@@ -50,9 +50,9 @@ LIBRARY_MODULES=\
 	basic/Areas \
 	basic/ReadWriteCon \
 	basic/ParsetreeCon 
-	
 
-lib_LIBRARIES = libasc-support-me.a 
+
+lib_LTLIBRARIES = libasc-support-me.la 
 
 include_HEADERS = \
 	asc-support-me.h \
@@ -64,7 +64,18 @@ include_HEADERS = \
 	asc-ambiguity.h \
 	builtin-common.h
 
-libasc_support_me_a_SOURCES = \
+libasc_support_me_la_CPPFLAGS = $(AM_CPPFLAGS)
+libasc_support_me_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libasc_support_me_la_LIBADD = \
+	$(SGLR_LIBS) \
+	$(ASF_SUPPORT_LIBS) \
+	$(PT_SUPPORT_LIBS) \
+	$(TOOLBUSLIB_LIBS) \
+	$(TIDE_SUPPORT_LIBS) \
+	$(ERROR_SUPPORT_LIBS) \
+	$(ATERM_LIBS)
+
+libasc_support_me_la_SOURCES = \
 	asc-builtins.h \
 	asc-main.c\
 	asc-support.c \
@@ -79,15 +90,14 @@ libasc_support_me_a_SOURCES = \
 	asc-tide.c\
 	asc-ambiguity.c\
 	builtin-forward.c\
-	builtin-common.c \
 	Library.c\
 	Library.h\
 	Library_dict.c\
 	Library_dict.h\
-	${BUILTIN_SOURCEFILES} 
+	$(BUILTIN_SOURCEFILES)
 
 # Default include directories
-INCLUDES = \
+AM_CPPFLAGS += \
 	$(PT_SUPPORT_CFLAGS) \
 	$(ASF_SUPPORT_CFLAGS) \
 	$(ERROR_SUPPORT_CFLAGS) \
@@ -96,7 +106,7 @@ INCLUDES = \
 	$(TIDE_SUPPORT_CFLAGS) \
 	$(ATERM_CFLAGS) 
 
-TESTS=builtin-link-test
+TESTS = $(check_PROGRAMS)
 
 #Below here should not be changed when adding a builtin:
 
@@ -105,7 +115,7 @@ EXTRA_DIST = Library.def
 # To check whether we implemented all the builtins mentioned we
 # generate a program that calls all builtins and try to compile and link 
 # it:
-check_PROGRAMS=builtin-link-test
+check_PROGRAMS = builtin-link-test
 
 builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD = \
@@ -118,23 +128,23 @@ builtin_link_test_LDADD = \
 	$(ERROR_SUPPORT_LIBS) \
 	$(ATERM_LIBS) 
 
-UTILS=${top_srcdir}/utils
-GENFWD=${UTILS}/gen-forward.sh
-GENPRTS=${UTILS}/gen-protos.sh
-GENLNKTST=${UTILS}/gen-link-test.sh
+UTILS=$(top_srcdir)/utils
+GENFWD=$(UTILS)/gen-forward.sh
+GENPRTS=$(UTILS)/gen-protos.sh
+GENLNKTST=$(UTILS)/gen-link-test.sh
 
 CLEANFILES+=builtin-forward.c asc-builtins.h builtin-link-test.c
 
 BUILT_SOURCES=builtin-forward.c asc-builtins.h builtin-link-test.c
 
-builtin-forward.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile
-	${GENFWD} "${BUILTIN_NAMES_ARITY}" > $@
+builtin-forward.c: asc-builtins.h $(BUILTIN_SOURCEFILES) Makefile
+	$(GENFWD) "$(BUILTIN_NAMES_ARITY)" > $@
 
-asc-builtins.h: ${BUILTIN_SOURCEFILES} Makefile
-	${GENPRTS} "${BUILTIN_NAMES_ARITY}" > $@
+asc-builtins.h: $(BUILTIN_SOURCEFILES) Makefile
+	$(GENPRTS) "$(BUILTIN_NAMES_ARITY)" > $@
 
-builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile 
-	${GENLNKTST} "${BUILTIN_NAMES_ARITY}" > $@
+builtin-link-test.c: asc-builtins.h $(BUILTIN_SOURCEFILES) Makefile 
+	$(GENLNKTST) "$(BUILTIN_NAMES_ARITY)" > $@
 
 # Developers only:
 api: Library.def
@@ -144,9 +154,9 @@ api-clean:
 	rm -f Library.[ch] Library_dict.* Library.adt 
 
 LIBRARYLIST = \
-$(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)
+$(foreach i,$(LIBRARY_MODULES),$(top_srcdir)/../asf-library/library/$i.sdf)
 
 Library.def:
 	@(echo "definition" ; \
-          cat ${LIBRARYLIST}) > \
+          cat $(LIBRARYLIST)) > \
 	  $@
