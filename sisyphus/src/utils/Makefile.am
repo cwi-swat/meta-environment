@@ -11,9 +11,9 @@ CLEANFILES = environment.conf
 
 
 %.conf : %.conf.src 
-	sed "s@__CVS__@$(CVS)@g;\
-		s@__SSH__@$(SSH)@g; \
-		s@__SUBVERSION__@$(SUBVERSION)@g;" < $< > $@
+	sed "s@__CVS__@$(CVS_PREFIX)@g;\
+		s@__SSH__@$(SSH_PREFIX)@g; \
+		s@__SUBVERSION__@$(SUBVERSION_PREFIX)@g;" < $< > $@
 
 
 

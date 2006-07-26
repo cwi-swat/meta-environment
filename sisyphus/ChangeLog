@@ -1,3 +1,7 @@
+2006-07-26    <kooiker@cwi.nl>
+
+	* Fix: use _PREFIX in Makefile.am 
+
 2006-07-20    <storm@cwi.nl>
 
 	* Fix: a change in the implicit dependency build-environment

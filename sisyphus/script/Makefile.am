@@ -9,9 +9,9 @@ CLEANFILES	= si-cli boot-roll roll release
 	sed "s@__PREFIX__@$(prefix)@g;\
 		s@__BINDIR__@$(bindir)@g; \
 		s@__DATA_DIR__@$(pkgdatadir)@g;\
-		s@__SUBVERSION_BINDIR__@$(SUBVERSION)/bin@g;\
-		s@__RUBY__@$(RUBY)/bin/ruby@g;\
-		s@__RUBYGEMS_PATH__@$(RUBYGEMS)/lib/ruby/site_ruby/1.8@g;\
+		s@__SUBVERSION_BINDIR__@$(SUBVERSION_PREFIX)/bin@g;\
+		s@__RUBY__@$(RUBY_PREFIX)/bin/ruby@g;\
+		s@__RUBYGEMS_PATH__@$(RUBYGEMS_PREFIX)/lib/ruby/site_ruby/1.8@g;\
 		s@__VERSION__@$(VERSION)@g;" < $< > $@ && \
         chmod +x $@
 
