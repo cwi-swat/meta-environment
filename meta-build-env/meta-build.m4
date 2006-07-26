@@ -3,6 +3,7 @@ dnl META_ left in configure is the sign a macro was not defined, or there was
 dnl a typo in a macro invocation.
 m4_pattern_forbid([^META_])
 m4_pattern_allow([^META_STUDIO])
+m4_pattern_allow([^_PKG_ERRORS])
 
 dnl META_GET_PKG_VAR(VARNAME)
 dnl Is substituted by the value of VARNAME from a pkg-config file at
@@ -107,7 +108,8 @@ dnl variables VARIABLE_PREFIX, VARIABLE_CFLAGS, and VARIABLE_LIBS
 dnl
 dnl ------------------
 AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
-[AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
+[AC_REQUIRE([PKG_CHECK_MODULES])
+ AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
  PKG_CHECK_MODULES([$1],[$2])
 
   AC_MSG_CHECKING([prefix of package $2])
