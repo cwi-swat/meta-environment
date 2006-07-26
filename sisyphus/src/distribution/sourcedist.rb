@@ -94,6 +94,7 @@ module Distribution
     end
 
     def generate_package_file(item)
+      `mkdir -p #{@source_dist_dir}`
       path = File.join(@source_dist_dir, "#{item.name}-#{pkg_version(item)}.pkg")
       File.open(path, 'w') do |f|
         f.puts('package')
