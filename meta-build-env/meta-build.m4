@@ -198,7 +198,6 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
     fi  
   done
   AC_MSG_RESULT([$$1[]_JARS])
-  echo "EXTERNAL_JARS: ${EXTERNAL_JARS}"
 ])
 
 dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.
