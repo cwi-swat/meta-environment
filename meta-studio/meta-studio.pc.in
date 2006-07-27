@@ -1,11 +1,14 @@
 prefix=@prefix@
-Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
+datadir=@datadir@
+pkgdatadir=@pkgdatadir@
+abstop_srcdir=@abstop_srcdir@
 
 Name: meta-studio
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,toolbus,toolbus-java-adapter
+Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 JarFile= meta-studio.jar
-LocalJars=@top_srcdir@/lib/idw-gpl-1.4.0.jar
-ExternalJars=@pkgdatadir@/idw-gpl-1.4.0.jar
+Jars=${prefix}/share/${JarFile}:${pkgdatadir}/idw-gpl-1.4.0.jar
+LocalJars=${abstop_srcdir}/lib/idw-gpl-1.4.0.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.component,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.util
