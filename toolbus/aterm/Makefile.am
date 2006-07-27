@@ -37,4 +37,4 @@ logger.tif.c logger.tif.h: tblog-interface.tifs
 	$(ATERM_PREFIX)/bin/dicttoc -dict $<
 
 tblog-interface.tifs: tblog-interface.tb
-	$(TOOLBUS_PREFIX)/bin/toolbus -gentifs -output $@ $<
+	$(top_builddir)/toolbus/toolbus -gentifs -output $@ $<

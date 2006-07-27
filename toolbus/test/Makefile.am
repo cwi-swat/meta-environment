@@ -27,6 +27,9 @@ EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   test-removesocket.src anno.tb test-annos.src read.src \
 		  read.tb bug-481.tb bug-481.tb.ref dyncall.tb dyncall.src
 
+LDADD           = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
+AM_CPPFLAGS     = -I$(top_srcdir)/libdeprecated-toolbus-adapter
+
 OK_TESTS = \
 	if-ok \
 	msg-ok \
@@ -62,8 +65,6 @@ CLEANFILES = \
 	dyncall \
 	read
 
-LDADD           = -L$(top_builddir)/libtb -ltb
-INCLUDES        = -I$(top_srcdir)/libtb
 
 %-ok : %.tb
 	echo '#!/bin/sh'  > $@

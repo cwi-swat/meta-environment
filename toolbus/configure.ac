@@ -73,11 +73,10 @@ AC_CHECK_HEADER([sys/un.h],[:],[AC_MSG_ERROR("*** no sys/un.h")])
 AC_CHECK_HEADER([unistd.h],[:],[AC_MSG_ERROR("*** no unistd.h")])
 AC_CHECK_HEADER([math.h],[:],[AC_MSG_ERROR("*** no math.h")])
 
-AC_CHECK_FUNCS([mkdtemp])
-AC_CHECK_FUNCS([strerror])
-AC_CHECK_FUNCS([strdup])
-AC_CHECK_FUNCS([yywrap])
-AC_CHECK_FUNCS([lrand48 srand48])
+PREV_CFLAGS=${CFLAGS}
+CFLAGS=
+AC_CHECK_FUNCS([mkdtemp strerror strdup yywrap lrand48 srand48])
+CFLAGS=${PREV_CFLAGS}
 
 dnl Find out which libraries we need
 SOCKET_FOUND=no
