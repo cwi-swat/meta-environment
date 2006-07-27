@@ -32,9 +32,37 @@ AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
 cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 ])
 
+dnl A shell function for getting the recursive requirements of a package
+AC_DEFUN([META_RECURSIVE_REQUIRES],[
+# args: $[]1 : top module
+meta_requires() {
+  CLOSURE=
+  meta_recursive_requires $[]1
+  echo ${CLOSURE}
+}
+
+meta_recursive_requires() {
+  if (echo ${CLOSURE} | grep -q " $[]1") ; then
+    CLOSURE="${CLOSURE}"
+  else
+    PREFIX=$(${PKG_CONFIG} --variable prefix $[]1)
+    if test "x" = "x${PREFIX}"; then
+      echo "Package $[]1 could not be found!"
+      return
+    fi
+    CLOSURE="${CLOSURE} $[]1"
+    KIDS=$(grep "Requires:" ${PREFIX}/lib/pkgconfig/$[]1.pc | cut -f 2 -d ':' | tr ',' ' ')
+    for k in ${KIDS}; do
+      meta_recursive_requires $k
+    done
+  fi
+}
+])
+
 dnl Invokes all macros that always need to be invoked for a package.
 AC_DEFUN([META_SETUP],
 [
+  AC_REQUIRE([META_RECURSIVE_REQUIRES])
   AC_PREREQ([2.59])
   AC_CONFIG_SRCDIR([configure])
    
@@ -154,22 +182,23 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_SUBST([$1_PREFIX])
 
  
-  AC_MSG_CHECKING([if CLASSPATH needs to be extended with deps of $2]) 
-  TMP_EXTERNAL_JARS=META_INSTALLED_PKG_VAR([$2],[ExternalJars])
-  if test "x${TMP_EXTERNAL_JARS}" != "x" ; then
-    EXTERNAL_JARS="${EXTERNAL_JARS}:${TMP_EXTERNAL_JARS}"
-    AC_MSG_RESULT([yes])
-  else
-    AC_MSG_RESULT([no])
-  fi
-  AC_MSG_CHECKING([if CLASSPATH needs to be extended with jar of $2]) 
-  TMP_JARFILE=META_INSTALLED_PKG_VAR([$2],[JarFile])
-  if test "x${TMP_JARFILE}" != "x" ; then
-    EXTERNAL_JARS="${EXTERNAL_JARS}:$$1_PREFIX/share/${TMP_JARFILE}"
-    AC_MSG_RESULT([yes])
-  else
-    AC_MSG_RESULT([no])
-  fi
+  AC_MSG_CHECKING([if CLASSPATH needs to be extended with classpath of $2]) 
+  DEPENDENCIES=`meta_requires $2`
+  for d in ${DEPENDENCIES}; do
+    TMP_JARS=`echo META_INSTALLED_PKG_VAR([$d],[Jars]) | tr ',' ' '`
+    if test "x${TMP_JARS}" != "x" ; then
+       for j in ${TMP_JARS}; do
+         $1[]_JARS="$$1[]_JARS:$[]j"
+         if (echo ${EXTERNAL_JARS} | grep -q " $[]j"); then
+            EXTERNAL_JARS="${EXTERNAL_JARS}"
+         else
+            EXTERNAL_JARS="${EXTERNAL_JARS}:$[]j"
+         fi
+       done
+    fi  
+  done
+  AC_MSG_RESULT([$$1[]_JARS])
+  echo "EXTERNAL_JARS: ${EXTERNAL_JARS}"
 ])
 
 dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.

@@ -1,3 +1,12 @@
+
+
+Thu Jul 27 14:25:38 CEST 2006 <{jurgenv,kooiker}@cwi.nl,martin.bravenboer@gmail.com>
+ * meta-build.ant: changed default target from Java 1.4 to Java 1.5
+ * meta-build.m4: changed implementation of construction of CLASSPATH.
+   Every Java package now declares both a JarFile and Jars. Jars says
+   where the Jars of this package are installed. JarFile says which jar to
+   build from the source code of this package.
+
 Wed Jul 27 09:57:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
  * Makefile.am: removed stale pkg-requires target.
 
