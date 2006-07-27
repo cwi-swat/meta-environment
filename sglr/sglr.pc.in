@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: sglr
 Version: 3.16
 Description:
