@@ -350,8 +350,8 @@ module Model
       if h.nil? then
         p = db_platform
         h = SiHost.new(:uname => host, :si_platform => p)
+        h.save
       end
-      h.save
       return h
     end
 

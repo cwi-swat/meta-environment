@@ -255,7 +255,9 @@ module Building
     end
 
     def build_dir
-      return profile_value('build_dir')
+      dir = profile_value('build_dir')
+      `mkdir -p #{dir}`
+      return dir
     end
 
     def install_dir
