@@ -8,21 +8,23 @@ fi
 PKGCONFIG=__PKGCONFIG__
 
 requires() {
-  TOP=$1
-  if (echo ${CLOSURE} | grep -q " ${TOP}") ; then
-    return
-  else
-    CLOSURE="${CLOSURE} ${TOP}"
-    PREFIX=$(${PKGCONFIG} --variable prefix $1)
-    if test "x" = "x${PREFIX}"; then
-      echo "Package ${TOP} could not be found!"
-      return
+  while test "x$*" != "x"; do
+    if (echo ${CLOSURE} | grep -q " $1") ; then
+      CLOSURE="${CLOSURE}"
+    else
+      PREFIX=$(${PKGCONFIG} --variable prefix $1)
+      if test "x" = "x${PREFIX}"; then
+	echo "Package $1 could not be found!"
+	return
+      fi
+      CLOSURE="${CLOSURE} $1"
+      KIDS=$(grep "Requires:" ${PREFIX}/lib/pkgconfig/$1.pc | cut -f 2 -d ':' | tr ',' ' ')
+      for k in ${KIDS}; do
+	requires $k
+      done
     fi
-    KIDS=$(grep "Requires:" ${PREFIX}/lib/pkgconfig/${TOP}.pc | cut -f 2 -d ':' | tr ',' ' ')
-    for k in ${KIDS}; do
-      requires $k ${CLOSURE}
-    done
-  fi
+    shift
+  done
 }
 
 CLOSURE=

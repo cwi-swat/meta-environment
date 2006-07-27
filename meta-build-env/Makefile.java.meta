@@ -6,7 +6,8 @@ EXTRA_DIST = $(wildcard *.m4) \
              Makefile.meta \
              Makefile.java.meta \
 	     meta-build.ant \
-	     ${JAVA_JAR}
+	     ${JAVA_JAR} \
+	     $(shell find src -name "*.java")
 
 CLEANFILES+=${PACKAGE}-uninstalled.pc
 
