@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = graph-converter.idef.src
 
@@ -9,7 +9,7 @@ CLEANFILES = graph-converter.idef
 bin_PROGRAMS = tree2graph
 
 INCLUDES = \
-  -I${top_srcdir}/lib \
+  -I$(top_srcdir)/lib \
   ${PT_SUPPORT_CFLAGS} \
   ${ERROR_SUPPORT_CFLAGS} \
   ${ATERM_CFLAGS} \

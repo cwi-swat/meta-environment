@@ -1,5 +1,5 @@
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = layoutgraph graph2dot
 pkgdata_DATA = layout-graph.idef 
@@ -12,7 +12,7 @@ YFLAGS = -d
 
 INCLUDES = \
 	-DDOT_COMMAND=\"${GRAPHVIZ_PREFIX}/bin/dot\" \
-        -I${top_srcdir}/lib \
+        -I$(top_srcdir)/lib \
 	${ATERM_CFLAGS} \
 	${TOOLBUSLIB_CFLAGS}
 
