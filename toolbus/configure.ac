@@ -73,6 +73,8 @@ AC_CHECK_HEADER([sys/un.h],[:],[AC_MSG_ERROR("*** no sys/un.h")])
 AC_CHECK_HEADER([unistd.h],[:],[AC_MSG_ERROR("*** no unistd.h")])
 AC_CHECK_HEADER([math.h],[:],[AC_MSG_ERROR("*** no math.h")])
 
+dnl Because CFLAGS might set to -Werror AC_CHECK_FUNCS could fail
+dnl accidently. So we have to work around this here
 PREV_CFLAGS=${CFLAGS}
 CFLAGS=
 AC_CHECK_FUNCS([mkdtemp strerror strdup yywrap lrand48 srand48])
