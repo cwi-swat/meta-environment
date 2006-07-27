@@ -23,9 +23,9 @@ pkgdata_DATA            = tb.perl
 EXTRA_DIST           = perl-adapter.guide.tex tb.perl
 
 perl_adapter_SOURCES = perl-adapter.c
-perl_adapter_LDADD   = -L$(top_builddir)/libtb -ltb
+perl_adapter_LDADD   = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 
 PERL_DEFS            = -DTBPERL=\"$(pkgdatadir)/tb.perl\"
 
-INCLUDES             = -I $(top_srcdir)/libtb $(PERL_DEFS)
+INCLUDES             = -I $(top_srcdir)/libdeprecated-toolbus-adapter $(PERL_DEFS)
 

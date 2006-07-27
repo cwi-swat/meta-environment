@@ -27,19 +27,13 @@ include_HEADERS		= toolbus-adapter.tbi
 INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
 			$(TOOLBUSLIB_CFLAGS) \
 			-I${top_srcdir}/aterm \
-			-I${top_srcdir}/libtb \
+			-I${top_srcdir}/libdeprecated-toolbus-adapter \
 			$(ATERM_CFLAGS) 
-
-if MAINTAINER_MODE
-ATERM_LIB = ATerm-dbg
-else
-ATERM_LIB = ATerm
-endif
 
 toolbus_adapter_SOURCES = toolbus-adapter.tif.c toolbus-adapter.tif.h \
 			toolbus-adapter.c
 
-toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb \
+toolbus_adapter_LDADD   = -L${top_builddir}/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter \
                          $(TOOLBUSLIB_LIBS) \
 			 $(ATERM_LIBS) 
 

@@ -55,10 +55,10 @@ toolbus_SOURCES = \
 toolbus_LDADD = \
 	lex.yy.o \
 	y.tab.o \
-	-L$(top_builddir)/libtb -ltb 
+	-L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter 
 
 ctif_SOURCES = ctif.c
-ctif_LDADD = -L$(top_builddir)/libtb -ltb
+ctif_LDADD = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 
 CLEANFILES = \
 	lex.yy.c \
@@ -79,7 +79,7 @@ TOOLBUS_DEFS = \
 	${DEBUG_DEFS}
 
 INCLUDES = \
-	-I$(top_srcdir)/libtb \
+	-I$(top_srcdir)/libdeprecated-toolbus-adapter \
 	-I$(srcdir) \
 	-I. $(TOOLBUS_DEFS)
 

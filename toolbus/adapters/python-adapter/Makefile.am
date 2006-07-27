@@ -20,8 +20,8 @@
 EXTRA_DIST   = TBmodule.c.tex TBmodule.c.nw \
                python-adapter.guide.tex TBmodule.c
 
-dnl python_adapter_SOURCES = TBmodule.c
-dnl python_adapter_LDADD   = $(TOOLBUSLIB)/lib -ltb
+# python_adapter_SOURCES = TBmodule.c
+# python_adapter_LDADD   = $(TOOLBUSLIB)/lib -ldeprecated-toolbus-adapter
 
 INCLUDES     = -I $(TOOLBUSLIB)/include
 

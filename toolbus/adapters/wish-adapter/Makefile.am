@@ -23,12 +23,12 @@ pkgdata_DATA            = tb.tcl
 EXTRA_DIST           = wish-adapter.guide.tex tb.tcl
 
 wish_adapter_SOURCES = wish-adapter.c
-wish_adapter_LDADD   = -L$(top_builddir)/libtb -ltb
+wish_adapter_LDADD   = -L$(top_builddir)/libdeprecated-toolbus-adapter -ldeprecated-toolbus-adapter
 
 
 WISH_DEFS            = -DWISH=\"$(WISH)\" \
                        -DTBTCL=\"$(pkgdatadir)/tb.tcl\" \
                        -DLIBDIR=\"$(pkgdatadir)\"
 
-INCLUDES             = -I $(top_srcdir)/libtb $(WISH_DEFS)
+INCLUDES             = -I $(top_srcdir)/libdeprecated-toolbus-adapter $(WISH_DEFS)
 
