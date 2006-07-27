@@ -152,9 +152,9 @@ where
 ;
 
 
-create view si_latests (id, name, si_item_id) as
+create view si_latests (id, si_component_id, si_item_id) as
 select
-	si_items.si_host_id, si_components.name, max(si_items.id)
+	si_items.si_host_id, si_components.id, max(si_items.id)
 from 
 	si_revisions,
 	si_components,
@@ -165,7 +165,7 @@ where
 	si_items.si_host_id in (select id from si_hosts)
 group by 
 	si_items.si_host_id,
-	si_components.name
+	si_components.id
 ;
 
 	
