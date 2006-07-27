@@ -4,21 +4,22 @@ pkgdata_DATA = configapi.jar
 
 EXTRA_DIST = configapi.jar
 
-lib_LIBRARIES = libConfigAPI.a
+lib_LTLIBRARIES = libConfigAPI.la
 
 include_HEADERS = \
 	Config.h \
 	Config_dict.h \
 	options.h
 
+libConfigAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
+libConfigAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libConfigAPI_la_LIBADD = $(ATERM_LIBS)
 libConfigAPI_a_SOURCES = \
 	Config.c \
 	Config_dict.c \
 	options.c
 
-AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
-
-INCLUDES = ${ATERM_CFLAGS}
+AM_CPPFLAGS = -DDISABLE_DYNAMIC_CHECKING ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 CONFIG_MODULES = Keys Colors Configuration
