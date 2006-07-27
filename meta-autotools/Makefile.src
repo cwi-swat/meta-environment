@@ -76,6 +76,6 @@ dist: $(EXTRA_DIST)
 check:
 	@true
 
-distcheck:
+distcheck: dist
 	@true
 

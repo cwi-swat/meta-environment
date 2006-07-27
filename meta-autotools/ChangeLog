@@ -1,3 +1,7 @@
+2006-07-27    <storm@cwi.nl>
+
+	* Fix: distcheck didn't dist.
+
 2006-07-27    <{storm,kooiker,martinrw}@cwi.nl>
 
 	* Boot: initial version of package capturing autotools.
