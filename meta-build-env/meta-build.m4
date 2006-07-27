@@ -108,8 +108,7 @@ dnl variables VARIABLE_PREFIX, VARIABLE_CFLAGS, and VARIABLE_LIBS
 dnl
 dnl ------------------
 AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
-[AC_REQUIRE([PKG_CHECK_MODULES])
- AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
+[AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
  PKG_CHECK_MODULES([$1],[$2])
 
   AC_MSG_CHECKING([prefix of package $2])

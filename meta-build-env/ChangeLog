@@ -1,3 +1,6 @@
+Wed Jul 27 09:53:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
+ * meta-build.m4: removed incorrect call of AC_REQUIRE.
+
 Wed Jul 27 09:49:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
  * reverted previous changes.
 	
