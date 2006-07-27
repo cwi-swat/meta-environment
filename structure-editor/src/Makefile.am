@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = structure-editor
 pkgdata_DATA = structure-editor.idef
