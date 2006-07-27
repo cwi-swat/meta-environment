@@ -177,11 +177,6 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
 
   $1[]_PREFIX="$$1[]_FOUND_PREFIX"
 
-  AC_SUBST([$1_CFLAGS])
-  AC_SUBST([$1_LIBS])
-  AC_SUBST([$1_PREFIX])
-
- 
   AC_MSG_CHECKING([if CLASSPATH needs to be extended with classpath of $2]) 
   DEPENDENCIES=`meta_requires $2`
   for d in ${DEPENDENCIES}; do
@@ -198,6 +193,11 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
     fi  
   done
   AC_MSG_RESULT([$$1[]_JARS])
+
+  AC_SUBST([$1_CFLAGS])
+  AC_SUBST([$1_LIBS])
+  AC_SUBST([$1_PREFIX])
+  AC_SUBST([$1_JARS])
 ])
 
 dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.
