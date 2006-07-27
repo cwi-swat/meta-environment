@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jul 27 12:06:51 CEST 2006 <martin.bravenboer@gmail.com>
+
+ * utils/Makefile.am: removed generation of sdf-support-config,
+   which is obsolete now we are using pkg-config.
+
 Fri Jul 21 02:01:11 CEST 2006 <martin.bravenboer@gmail.com>
  * utils/sdf-renaming/src/Makefile.am: fix in linking order (Bug 489)
 	
