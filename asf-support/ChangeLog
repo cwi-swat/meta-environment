@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Jul 27 12:02:40 CEST 2006 <martin.bravenboer@gmail.com>
+
+ * utils: removed asf-support-config generation, which is obsolete
+   now we are using pkg-config.
+
 Wed May  3 13:44:09 CEST 2006 <jurgenv@cwi.nl>
  * Bumped to 1.5
 
