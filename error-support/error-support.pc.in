@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: error-support
 Description: Standard Error Representation
 Version: 1.3
