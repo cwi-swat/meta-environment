@@ -2,6 +2,6 @@
 
 include $(top_srcdir)/Makefile.java.meta
 
-ACLOCAL_FLAGS = -I .
+ACLOCAL_AMFLAGS = -I .
 
 SUBDIRS = script
