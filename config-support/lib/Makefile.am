@@ -1,6 +1,6 @@
 # $Id$
 
-pkgdata_DATA = configapi.jar
+data_DATA = configapi.jar
 
 EXTRA_DIST = configapi.jar
 
