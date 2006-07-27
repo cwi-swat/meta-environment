@@ -4,6 +4,8 @@ include $(top_srcdir)/Makefile.java.meta
 
 ACLOCAL_AMFLAGS = -I .
 
+TOOLNAME=dialog
+
 pkgdata_DATA = $(TOOLNAME).idef
 
 EXTRA_DIST += $(TOOLNAME).idef.src
