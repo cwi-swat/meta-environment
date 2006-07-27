@@ -3,7 +3,6 @@
 include ${top_srcdir}/Makefile.meta
 
 bin_PROGRAMS = structure-editor
-lib_LIBRARIES = libStructureEditor.a
 pkgdata_DATA = structure-editor.idef
 noinst_HEADERS = \
 	StructureEditor.h \
@@ -11,7 +10,7 @@ noinst_HEADERS = \
 	structure-editor.tif.h \
 	slice-tree.h
 
-INCLUDES = \
+structure_editor_CPPFLAGS = \
 	$(ERROR_SUPPORT_CFLAGS) \
 	$(PT_SUPPORT_CFLAGS) \
 	$(TOOLBUSLIB_CFLAGS) \
@@ -20,18 +19,15 @@ INCLUDES = \
 structure_editor_SOURCES = \
 	structure-editor.c \
 	structure-editor.tif.c \
-	slice-tree.c
+	slice-tree.c \
+	StructureEditor.c \
+	StructureEditor_dict.c
 
 structure_editor_LDADD = \
-	-L$(top_builddir)/src -lStructureEditor \
 	$(PT_SUPPORT_LIBS) \
 	$(ERROR_SUPPORT_LIBS) \
 	$(TOOLBUSLIB_LIBS) \
 	$(ATERM_LIBS) 
-
-libStructureEditor_a_SOURCES = \
-	StructureEditor.c \
-	StructureEditor_dict.c
 
 EXTRA_DIST = structure-editor.idef.src
 
