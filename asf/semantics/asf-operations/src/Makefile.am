@@ -5,7 +5,7 @@ include ${top_srcdir}/make_rules
 INCLUDES = $(ASC_INCLUDES)
 
 bin_PROGRAMS = asfoperations
-noinst_LIBRARIES = libasfnormalization.a
+noinst_LTLIBRARIES = libasfnormalization.la
 
 pkgdata_DATA    = asfoperations.idef
 
@@ -17,6 +17,9 @@ noinst_HEADERS 	= \
 	asfoperations.tif.h \
 	asfnormalization.h 
 
+libErrorAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
+libErrorAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libErrorAPI_la_LIBADD = $(ATERM_LIBS)
 asfoperations_SOURCES = \
 	asfoperations.c \
 	asfoperations.tif.c \
