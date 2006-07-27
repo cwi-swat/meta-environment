@@ -6,7 +6,7 @@ Version: 1.0
 Description:
 Requires: aterm-java
 JarFile=toolbus-java-adapter.jar
+Jars=${prefix}/share/${JarFile}
 Packages=toolbus
-ExternalJars=@EXTERNAL_JARS@
 MainClass=toolbus.JavaTif
 TestClass=
