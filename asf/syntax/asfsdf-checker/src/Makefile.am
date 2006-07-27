@@ -1,4 +1,4 @@
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 INCLUDES = \
 	   $(ASC_SUPPORT_CFLAGS)  \

@@ -1,6 +1,6 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.meta
+include $(top_srcdir)/Makefile.meta
 
 INCLUDES	  = $(PT_SUPPORT_CFLAGS) \
                     $(ATERM_CFLAGS) \

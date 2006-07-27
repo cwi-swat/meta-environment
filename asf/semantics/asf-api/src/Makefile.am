@@ -1,4 +1,4 @@
-include ${top_srcdir}/make_rules
+include $(top_srcdir)/make_rules
 
 pkgdata_DATA = $(wildcard *.idef)
 
