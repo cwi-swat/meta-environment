@@ -7,7 +7,7 @@ pkgdata_DATA = term-store.idef
 
 bin_PROGRAMS = term-store
 
-AM_CPPFLAGS = -DDISABLE_DYNAMIC_CHECKING
+AM_CPPFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
 term_store_SOURCES = \
 	main.c \
