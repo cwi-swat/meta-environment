@@ -1,0 +1,5 @@
+prefix=@prefix@
+
+Name: meta-autotools
+Version: 0.1
+Description: collection of autotools for Meta build environment

@@ -1,0 +1,81 @@
+# -*- makefile -*-
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+prefix=@PREFIX@
+
+STEM=$(PACKAGE)-$(VERSION)
+DIST_DIR=$(STEM)
+
+pkgdatadir=$(prefix)/share/$(PACKAGE)
+bindir=$(prefix)/bin
+
+
+AUTOCONF_VERSION=2.59
+AUTOMAKE_VERSION=1.9.6
+LIBTOOL_VERSION=1.5.22
+PKGCONFIG_VERSION=0.20
+
+AUTOCONF_ARCHIVE=autoconf-$(AUTOCONF_VERSION).tar.gz
+AUTOMAKE_ARCHIVE=automake-$(AUTOMAKE_VERSION).tar.gz
+LIBTOOL_ARCHIVE=libtool-$(LIBTOOL_VERSION).tar.gz
+PKGCONFIG_ARCHIVE=pkg-config-$(PKGCONFIG_VERSION).tar.gz
+
+AUTO_ARCHIVES = $(AUTOCONF_ARCHIVE) $(AUTOMAKE_ARCHIVE) $(LIBTOOL_ARCHIVE) $(PKGCONFIG_ARCHIVE)
+AUTO_DIRS := $(AUTO_ARCHIVES:.tar.gz=)
+
+GNU=http://ftp.gnu.org/gnu
+AUTOCONF=$(GNU)/autoconf/$(AUTOCONF_ARCHIVE)
+AUTOMAKE=$(GNU)/automake/$(AUTOMAKE_ARCHIVE)
+LIBTOOL=$(GNU)/libtool/$(LIBTOOL_ARCHIVE)
+PKGCONFIG=http://pkgconfig.freedesktop.org/releases/$(PKGCONFIG_ARCHIVE)
+
+AUTO_TOOLS = $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(PKGCONFIG)
+
+CURL=curl
+
+EXTRA_DIST = Makefile.src meta-autotools.pc.in configure reconf ChangeLog $(AUTO_ARCHIVES)
+
+CLEANFILES = meta-autotools.pc
+
+all: 
+	@true
+
+install: all install-autotools
+	@echo "ADD ${prefix}/bin to your PATH!"
+
+
+$(AUTO_ARCHIVES):
+	for tool in $(AUTO_TOOLS); do  \
+		$(CURL) -O $$tool ; \
+	done
+
+$(AUTO_DIRS): $(AUTO_ARCHIVES)
+	for tool in $(AUTO_ARCHIVES); do  \
+		gunzip -c $$tool | tar xvf - ; \
+	done 
+
+
+
+install-autotools: $(AUTO_DIRS)
+	PATH=${prefix}:${PATH}; \
+	for dir in $(AUTO_DIRS); do  \
+		cd $$dir ; \
+		./configure --prefix=${prefix}; \
+		make ; \
+		make install ; \
+		cd .. ; \
+	done 
+
+dist: $(EXTRA_DIST)
+	rm -rf $(DIST_DIR)
+	mkdir $(DIST_DIR)
+	cp $(EXTRA_DIST) $(DIST_DIR)
+	tar cv $(DIST_DIR)/* | gzip > $(STEM).tar.gz
+	rm -rf $(DIST_DIR)
+
+check:
+	@true
+
+distcheck:
+	@true
+
