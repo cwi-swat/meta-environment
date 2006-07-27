@@ -4,5 +4,5 @@ SUBDIRS =
 
 EXTRA_DIST +=  website.sh
 
-ACLOCAL_FLAGS = -I .
+ACLOCAL_AMFLAGS = -I .
 
