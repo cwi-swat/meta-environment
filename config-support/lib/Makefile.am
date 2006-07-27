@@ -14,7 +14,7 @@ include_HEADERS = \
 libConfigAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
 libConfigAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libConfigAPI_la_LIBADD = $(ATERM_LIBS)
-libConfigAPI_a_SOURCES = \
+libConfigAPI_la_SOURCES = \
 	Config.c \
 	Config_dict.c \
 	options.c
