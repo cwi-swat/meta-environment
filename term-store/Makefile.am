@@ -1,7 +1,8 @@
 # $Id$
 
-include ${top_srcdir}/Makefile.top.meta
+include $(top_srcdir)/Makefile.top.meta
 
 ACLOCAL_AMFLAGS = -I .
 
 SUBDIRS = src
+
