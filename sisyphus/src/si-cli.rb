@@ -155,7 +155,7 @@ module Sisyphus
                                                          @repo_factory, config.user, config.build_dir, time)  
       target_factory = Building::TargetFactory.new(session, config, @log)
       @builder = Building::Builder.new(@store, @forced, @log)
-      visitor = Building::Visitor.new(target_factory, revision_factory, @roots, @builder, @log, config)
+      visitor = Building::Visitor.new(target_factory, revision_factory, @roots, @builder, @log, config, @store)
       visitor.build_roots
     end
 

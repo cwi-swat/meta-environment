@@ -18,6 +18,11 @@ module Versioning
       @deps = []
     end
 
+    def dep_names
+      return @deps.collect do |dep|
+        dep.name
+      end
+    end
 
     def add_dep(component)
       @deps |= [component]

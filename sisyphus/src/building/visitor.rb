@@ -29,7 +29,7 @@ module Building
   class Visitor
     include Product
     
-    def initialize(target_factory, revision_factory, roots, builder, log, config)
+    def initialize(target_factory, revision_factory, roots, builder, log, config, store)
       @target_factory = target_factory
       @revision_factory = revision_factory
       @roots = roots
@@ -37,6 +37,7 @@ module Building
       @log = log    
       @visited = {}
       @config = config
+      @store = store
     end
 
     def build_roots
@@ -76,50 +77,22 @@ module Building
       #  return build_revision_backtracking_original(revision)
       #end
       dep_items = build_deps(revision)
+
+      #host = `uname -n`.chomp
+      #names = revision.dep_names
+      #if not names.empty? then
+      #  ws = dep_items
+      #  begin
+      #    ws = first_valid_working_set(names, host, @config, @store)
+      #  rescue
+      #  end
+      #  puts "Workingset: "
+      #  ws.each do |item|
+      #    puts item
+      #  end
+      #end
       return build_revision_with_deps(revision, dep_items)
     end
-
-    def build_revision_backtracking_simple(revision, limit = 10)
-      #dep_items = build_deps(revision)
-      # discard these, because they may have failures
-      
-      query =<<EOQ
-select si_items.* from 
-si_items, 
-si_revisions, 
-si_components
-where 
-si_items.si_revision_id = si_revisions.id and
-si_revisions.si_component_id = si_components.id and
-si_components.name = '#{revision.name}' and
-si_items.success = true 
-order by id desc
-limit #{limit}
-EOQ
-      previous_builds = Model::SiItem.find_by_sql(query)
-      item = find_newest_previous_build_using_same_deps(revision.deps, previous_builds)
-      puts item
-      item.si_deps.each do |dep|
-        puts "\t#{dep}"
-      end
-      exit!
-    end
-
-      
-    def find_newest_previous_build_using_same_deps(required_deps, previous_builds)
-      s1 = required_deps.collect { |dep| dep.name }.sort
-      #puts "S1 = #{s1.join(', ')}"
-      previous_builds.each do |item|
-        #puts item
-        s2 = item.si_deps.collect { |dep| dep.name }.sort
-        #puts "S2 = #{s2.join(', ')}"
-        if s1 == s2 then
-          return item
-        end
-      end
-      return nil
-    end
-
 
     #############################################################
 
@@ -130,8 +103,8 @@ EOQ
       exit!
     end
 
-    def first_valid_working_set(names)
-      items = LazyItemGenerator.new(names)
+    def first_valid_working_set(names, host, config, store)
+      items = LazyItemGenerator.new(names, host, config, store)
       workingsets = WorkingSetGenerator.new(items, names)
       workingsets.each do |working_set|
         if valid_working_set?(working_set) then

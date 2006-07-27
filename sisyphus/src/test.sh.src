@@ -8,8 +8,7 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root JRelCal \
-    --force JRelCal \
+    --root asfsdf-meta \
     --profile verfrol \
     --interval 120 \
     --weekday Mon \

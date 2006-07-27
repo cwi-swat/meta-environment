@@ -6,8 +6,11 @@ module Building
   class LazyItemGenerator 
     LIMIT = 100;
 
-    def initialize(names)
+    def initialize(names, host, config, store)
       @names = names
+      @host = host
+      @config = config
+      @store = store
       @builds = []
     end
 
@@ -42,8 +45,15 @@ module Building
       return "id < #{@builds.last.si_item.id}"
     end
 
+    def config_conditions
+      c = @store.db_config(@config)
+      h = @store.db_host(@host)
+      return "si_host_id = #{h.id} and si_config_id = #{c.id}"
+    end
+
     def conditions
       pat = (['name = ?'] * @names.length).join(' or ')
+      pat += ' and ' + config_conditions
       vals = @names
       if id_condition then
         if pat != '' then

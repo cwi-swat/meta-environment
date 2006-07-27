@@ -98,7 +98,6 @@ module Building
         if build_env_package == item.name then
           return item
         end
-        puts "Checking:::::::::::::::::::::::::::: #{item}"
       end      
       raise "No build for #{build_env_package}!"
     end
