@@ -1,7 +1,5 @@
 include $(top_srcdir)/Makefile.meta
 
-SUBDIRS = muasf .
- 
 bin_PROGRAMS     = asfc
 pkgdata_DATA     = asfc.idef
 
@@ -17,7 +15,10 @@ asfc_SOURCES = asfc.tif.c \
                muasf2c.c \
                c-compiler.c \
                idef.c \
-               Compiler.c
+               Compiler.c \
+	       MuASF.c \
+	       MuASF_dict.c
+
 
 noinst_HEADERS = asfc.tif.h \
 		 chars.h \
@@ -26,12 +27,12 @@ noinst_HEADERS = asfc.tif.h \
                  asfc.tif.h \
                  muasf2c.h \
                  c-compiler.h \
-                 idef.h
+                 idef.h \
+		 MuASF.h \
+		 MuASF_dict.h
 
 asfc_DEPENDENCIES =
-asfc_LDADD   = \
-               -L./muasf -lMuASF \
-	       $(ASC_SUPPORT_LIBS)
+asfc_LDADD   = $(ASC_SUPPORT_LIBS)
 
 DEFINES = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
           -DASC_LD_FLAGS="\"$(ASC_SUPPORT_LIBS)\""   \
@@ -40,12 +41,37 @@ DEFINES = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
           -DCOMPILER="\"$(CC)\"" \
           -DCOMPILERFLAGS="\"$(CFLAGS)\""
 
-INCLUDES  = $(DEFINES) \
-	    $(ASC_INCLUDES) \
-            -I$(srcdir)/muasf 
+AM_CPPFLAGS  = $(DEFINES) $(ASC_SUPPORT_CFLAGS)
 
 bootstrap: 
 	asfc -i Compiler.eqs -o Compiler.c -v
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
+
+
+EXTRA_DIST += MuASF.label.def
+
+if MAINTAINER_MODE
+
+LIBRARY=../../../../sdf-library/library
+SPEC=../../../../asf-library/library/languages/asf/compiler
+
+MuASF.label.def:
+	(echo "definition"; \
+	cat ${SPEC}/muasf/MuASF.sdf ; echo ""; \
+	cat ${LIBRARY}/basic/Whitespace.sdf; echo ""; \
+	cat ${LIBRARY}/basic/StrCon.sdf; echo ""; \
+	cat ${LIBRARY}/basic/NatCon.sdf; echo ""; \
+	cat ${LIBRARY}/basic/IdentifierCon.sdf ) > $@
+
+api: MuASF.label.def
+	sdf2-to-c \
+		--input $< \
+		--output MuASF \
+		--prefix MA_ 
+
+api-clean:
+	rm -f MuASF.[ch] MuASF_dict.* MuASF.adt
+
+endif
