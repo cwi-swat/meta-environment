@@ -2,5 +2,5 @@ include $(top_srcdir)/Makefile.top.meta
 
 SUBDIRS = libtb toolbus aterm adapters tbviz demos test
 
-ACLOCAL_FLAGS = -I .
+ACLOCAL_AMFLAGS = -I .
 
