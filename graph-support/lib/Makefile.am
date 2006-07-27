@@ -7,7 +7,7 @@ pkgdata_DATA = Graph.adt ${JARFILE}
 data_DATA = graph.jar
 EXTRA_DIST = Graph.adt graph.jar
 
-libGraph_a_SOURCES = Graph.c Graph_dict.c
+libGraph_la_SOURCES = Graph.c Graph_dict.c
 libGraph_la_CPPFLAGS = $(ATERM_CFLAGS)
 libGraph_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libGraph_la_LIBADD = $(ATERM_LIBS)
