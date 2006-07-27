@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jul 27 12:12:06 CEST 2006 <martin.bravenboer@gmail.com>
+ * utils/asc-support-config.src: removed asc-support-config
+   generation which is obsolete now we are using pkg-config.
+	
 Wed May  3 13:39:38 CEST 2006 <jurgenv@cwi.nl>
  * Bumped version to 2.3
 
