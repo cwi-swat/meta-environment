@@ -1,3 +1,6 @@
+Wed Jul 27 09:49:01 CEST 2006 <{storm,kooiker,martinrw}@cwi.nl>
+ * reverted previous changes.
+	
 Wed Jul 26 16:54:01 CEST 2006 <{storm,kooiker,jurgenv}@cwi.nl>
  * configure, reconf, Makefile.src: build interface of meta-build-env now
    does not depend on auto-tools anymore; instead it installs them
