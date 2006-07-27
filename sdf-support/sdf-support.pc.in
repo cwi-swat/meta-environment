@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: sdf-support
 Version: 2.2
 Description:
