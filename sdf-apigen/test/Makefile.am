@@ -22,7 +22,7 @@ booltest_DEPENDENCIES	= booltest.pt
 # Java programs
 JAVAC = javac
 
-CLEANFILES		+= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
+CLEANFILES		+= ${noinst_PROGRAMS}  \
 			Booleans.[ch] Booleans.dict \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
 			booltest.pt libBooleans.a \
