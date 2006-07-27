@@ -8,4 +8,4 @@ Cflags: -I${prefix}/include
 #uninstalled Libs: -L@abs_top_builddir@/lib -lErrorAPI -lLocationAPI
 #uninstalled Cflags: -I@abs_top_builddir@/lib
 Requires: aterm toolbuslib
-ExternalJars=${prefix}/share/error-support/errorapi.jar:${prefix}/share/error-support/locationapi.jar
+Jars=${prefix}/share/error-support/errorapi.jar:${prefix}/share/error-support/locationapi.jar
