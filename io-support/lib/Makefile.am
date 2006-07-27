@@ -1,20 +1,21 @@
 # $Id$
 
-pkgdata_DATA = ioapi.jar
+data_DATA = ioapi.jar
 
 EXTRA_DIST = ioapi.jar
 
-lib_LIBRARIES = libIOAPI.a
+lib_LTLIBRARIES = libIOAPI.la
 
 include_HEADERS = \
 		  IO.h \
 		  IO_dict.h
 
+libIOAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
+libIOAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libIOAPI_la_LIBADD = $(ATERM_LIBS)
 libIOAPI_a_SOURCES = \
 		     IO.c \
 		     IO_dict.c
-
-INCLUDES = ${ATERM_CFLAGS}
 
 if MAINTAINER_MODE
 IO_MODULES = File Path StrCon
