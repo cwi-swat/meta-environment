@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=kooiker@cwi.nl,jurgenv@cwi.nl
 Name: meta
 Version: 2.0
 Description:
