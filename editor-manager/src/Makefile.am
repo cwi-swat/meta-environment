@@ -3,29 +3,21 @@
 include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = editor-manager
-lib_LIBRARIES = libEditorManager.a
 pkgdata_DATA = editor-manager.idef
 noinst_HEADERS = \
 	editor-manager.tif.h \
 	EditorManager_dict.h \
 	EditorManager.h
 
-INCLUDES = \
-	$(ATERM_CFLAGS) \
-	$(TOOLBUSLIB_CFLAGS) 
-
 editor_manager_SOURCES = \
 	editor-manager.tif.c \
-	editor-manager.c
-
-editor_manager_LDADD = \
-	-L$(top_builddir)/src -lEditorManager \
-	$(TOOLBUSLIB_LIBS) \
-	$(ATERM_LIBS) 
-
-libEditorManager_a_SOURCES = \
+	editor-manager.c \
 	EditorManager.c \
 	EditorManager_dict.c
+
+editor_manager_LDADD = \
+	$(TOOLBUSLIB_LIBS) \
+	$(ATERM_LIBS) 
 
 EXTRA_DIST = editor-manager.idef.src
 
