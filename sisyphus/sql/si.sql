@@ -134,12 +134,15 @@ create table si_releases (
 );
 
 
-create view si_builds (id, name, version, informative_version, si_item_id) as
+create view si_builds 
+	(id, name, version, informative_version, si_host_id, si_config_id,  si_item_id) as
 select 
 	si_items.id, 
 	si_components.name, 
 	si_revisions.version,
 	si_revisions.informative_version,
+	si_items.si_host_id,
+	si_items.si_config_id,
 	si_items.id
 from
 	si_items, 
