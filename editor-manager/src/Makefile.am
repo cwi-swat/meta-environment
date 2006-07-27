@@ -15,9 +15,9 @@ editor_manager_SOURCES = \
 	EditorManager.c \
 	EditorManager_dict.c
 
-editor_manager_LDADD = \
-	$(TOOLBUSLIB_LIBS) \
-	$(ATERM_LIBS) 
+editor_manager_CPPFLAGS = $(TOOLBUSLIB_CFLAGS)
+
+editor_manager_LDADD = $(TOOLBUSLIB_LIBS) 
 
 EXTRA_DIST = editor-manager.idef.src
 
