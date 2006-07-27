@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.top.meta
 
 SUBDIRS = src script doc
 
-ACLOCAL_FLAGS = -I .
+ACLOCAL_AMFLAGS = -I .
 
 gems = activerecord-1.13.2 activesupport-1.2.5 postgres-pr-0.4.0
 
