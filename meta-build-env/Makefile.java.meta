@@ -30,7 +30,7 @@ ANT_ENV = \
 if MAINTAINER_MODE
 
 ANT_BUILDFILE=$(top_srcdir)/meta-build.ant
-ANT = $(ANT_ENV) ant -buildfile $(ANT_BUILDFILE)
+ANT = $(ANT_ENV) ant -lib $(JAVA_LOCAL_JARS) -buildfile $(ANT_BUILDFILE)
 
 dummy:
 
