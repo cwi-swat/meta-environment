@@ -1,12 +1,16 @@
 prefix=@prefix@
+datadir=@datadir@
+pkgdatadir=@pkgdatadir@
+abstopsrcdir=@abstopsrcdir@
+
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: graph-gui
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,graph-support,meta-studio,module-support,toolbus,toolbus-java-adapter
-JarFile=graph-gui-@VERSION@.jar
+JarFile=graph-gui.jar
+Jars=${prefix}/share/${JarFile}:${pkgdatadir}/prefuse.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
-ExternalJars=@EXTERNAL_JARS@:@pkgdatadir@/prefuse.jar
 MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
-LocalJars=@abstop_srcdir@/lib/prefuse.jar
+LocalJars=${abstop_srcdir}/lib/prefuse.jar
 TestClass=
