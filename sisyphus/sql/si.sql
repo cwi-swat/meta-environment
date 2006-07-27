@@ -151,4 +151,19 @@ where
 	si_items.success = true
 ;
 
+create view si_latests (id, name, si_item_id) as
+select
+	si_hosts.id, si_builds.name, max(si_builds.id)
+from 
+	si_builds,
+	si_items,
+	si_hosts
+where 
+	si_builds.si_item_id = si_items.id and 
+	si_items.si_host_id = si_hosts.id 
+group by 
+	si_hosts.id,
+	si_builds.name
+;
+
 	
