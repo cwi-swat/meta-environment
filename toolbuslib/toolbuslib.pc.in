@@ -1,4 +1,5 @@
 prefix=@prefix@
+Maintainers=paulk@cwi.nl,jurgenv@cwi.nl
 
 Name: toolbuslib
 Description: ToolBus adapter library
