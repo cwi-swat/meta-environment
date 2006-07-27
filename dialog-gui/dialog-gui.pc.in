@@ -5,8 +5,8 @@ Name: dialog-gui
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,meta-studio,toolbus,toolbus-java-adapter
-JarFile=dialog-gui-@VERSION@.jar
+JarFile=dialog-gui.jar
+Jars=${prefix}/share/${JarFile}
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.Dialog
-ExternalJars=@EXTERNAL_JARS@
 TestClass=
