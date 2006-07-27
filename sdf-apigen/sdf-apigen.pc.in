@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=jurgenv@cwi.nl
 Name: sdf-apigen
 Version: 3.0
 Description:
