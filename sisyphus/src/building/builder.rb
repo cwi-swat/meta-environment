@@ -3,8 +3,9 @@ module Building
   require 'model/db'
 
   class Builder
-    def initialize(store, log)
+    def initialize(store, forced, log)
       @store = store
+      @forced = forced
       @log = log
     end
 
@@ -39,8 +40,7 @@ module Building
     end
 
     def requires_build?(target)
-      if `uname -n`.chomp == 'verfrol.sen.cwi.nl' then
-        @log.warn("PACKAGES ARE ALWAYS BUILT!!!")
+      if @forced.include?(target.name) then
         return true
       end
 

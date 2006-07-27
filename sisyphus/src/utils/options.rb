@@ -21,14 +21,15 @@ module Utils
         options.dbconf = nil
         options.quiet = false
         options.options_filename = nil
-        options.addresses = []
         options.smtp_host = nil
         options.smtp_port = 25
+        options.email = false
         options.from = nil
         options.days = []
         options.before = nil
         options.after = nil
         options.command_line
+        options.forced = []
         
         opts = OptionParser.new do |opts|
           opts.banner = "Usage: si-cli [options]"
@@ -81,13 +82,19 @@ module Utils
             options.verbose = v
           end
           
-          opts.on("-m", "--mail Address", "Add email address to send mail to.") do |m|
-            options.addresses << m
+          opts.on("-m", "--[no-]mail", "Do or don't email") do |m|
+            options.email = m
           end
 
           opts.on("-f", "--from Address", "Sender email adress.") do |m|
             options.from = m
           end
+
+          opts.on("-F", "--force Package", "Force build for package") do |p|
+            options.forced << p
+          end
+
+
 
           opts.on("-s", "--smtp Host", "SMTP host to use.") do |s|
             host, port = s.split(':')
@@ -150,7 +157,7 @@ module Utils
             exit(1)
           end
           
-          if options.addresses == [] && 
+          if options.email && 
               (options.smtp_host.nil? || 
                options.from.nil?) then
             puts opts

@@ -76,6 +76,12 @@ module Building
     end
 
 
+    def deps
+      return @deps.reject do |dep| 
+        @config.build_env_packages.include?(dep.name)
+      end
+    end
+
     # BUggy?
     def trans_close(config, item)
       todo = [item]

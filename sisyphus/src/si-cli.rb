@@ -18,7 +18,7 @@ module Sisyphus
   require 'time'
 
   class SisyphusClient 
-    def initialize(host, config_manager, profile_name, interval, roots, store, verbose, quiet, days, after, before, mailer, command_line)
+    def initialize(host, config_manager, profile_name, interval, roots, store, verbose, quiet, days, after, before, mailer, forced, command_line)
       @host = host
       @config_manager = config_manager
       @profile_name = profile_name
@@ -33,6 +33,7 @@ module Sisyphus
       @before = before
       @mailer = mailer
       @log_device = STDERR
+      @forced = forced
       @command_line = command_line
       @last_updated = latest_module_time
     end
@@ -126,9 +127,7 @@ module Sisyphus
     end
 
     def mail_session(session)
-      if session.contains_failures? then
-        @mailer.mail(session)
-      end
+      @mailer.mail(session)
     end
 
     def eligible_time?(time)
@@ -155,7 +154,7 @@ module Sisyphus
                                                          config.sources.properties['externals'],
                                                          @repo_factory, config.user, config.build_dir, time)  
       target_factory = Building::TargetFactory.new(session, config, @log)
-      @builder = Building::Builder.new(@store, @log)
+      @builder = Building::Builder.new(@store, @forced, @log)
       visitor = Building::Visitor.new(target_factory, revision_factory, @roots, @builder, @log, config)
       visitor.build_roots
     end
@@ -189,10 +188,12 @@ if __FILE__ == $0 then
 
   store = Model::DBStore.new(options.dbconf)
 
-  mailer = Utils::SessionMailer.new(options.addresses, 
-                                    options.from,
-                                    options.smtp_host, 
-                                    options.smtp_port)
+  mailer = Utils::DummySessionMailer.new
+  if options.email then
+    mailer = Utils::SessionMailer.new(options.from,
+                                      options.smtp_host, 
+                                      options.smtp_port)
+  end
 
   client = Sisyphus::SisyphusClient.new(uname, 
                                         config_manager, 
@@ -206,6 +207,7 @@ if __FILE__ == $0 then
                                         options.after,
                                         options.before,
                                         mailer, 
+                                        options.forced,
                                         options.command_line)
   client.run
 end

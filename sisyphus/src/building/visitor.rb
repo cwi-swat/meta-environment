@@ -181,12 +181,17 @@ EOQ
       return item
     end
 
-    def implicit_dep
-      return @config.build_env_package
+    def implicit_deps
+      return @config.build_env_packages
     end
 
     def build_deps(revision)
-      if implicit_dep and revision.name != implicit_dep then
+      implicit_deps.each do |implicit_dep|
+        if implicit_dep == revision.name then
+          # if revision is an implicit_dep itself
+          # add only implicit deps "until" revision.name
+          break
+        end
         revision.add_dep(Versioning::Component.new(implicit_dep))
       end
       result = []                   

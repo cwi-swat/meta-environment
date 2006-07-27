@@ -158,10 +158,10 @@ module Building
       if missing_entries != [] then
         raise RuntimeError.new("missing templates for actions: #{missing_entries.inspect}")
       end
-      templates_but_no_order = script.properties['templates'].keys - script.properties['order']
-      if templates_but_no_order != [] then
-        raise RuntimeError.new("templates defined but no actions in order: #{templates_but_no_order}")
-      end
+      #templates_but_no_order = script.properties['templates'].keys - script.properties['order']
+      #if templates_but_no_order != [] then
+      #  raise RuntimeError.new("templates defined but no actions in order: #{templates_but_no_order}")
+      #end
     end
 
     def config_item(dir, name)
@@ -234,11 +234,15 @@ module Building
       return profile_value('binary_dist_dir')
     end
 
-    def build_env_package
+    def build_env_package?(name)
+      return build_env_packages.include?(name)
+    end
+
+    def build_env_packages
       begin
         return profile_value('build-env')
       rescue RuntimeError => e
-        return nil
+        return []
       end
     end
 

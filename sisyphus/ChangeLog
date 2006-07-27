@@ -1,3 +1,20 @@
+2006-07-27    <storm@cwi.nl>
+
+	* Feature: Sisyphus now support multiple build-env-packages that
+	will be implicit dependencies to all packages. NB: the order of
+	specification in profiles is significant: it is interpreted as the
+	topological order on the dependency relations *inbetween*
+	build-env packages. This means dat in the case of two build
+	environment packages [a,b], a will be put in the path when
+	building b but not vice versa.
+
+	* Feature: the Maintainers field is now read from .pc.in fields
+	and used for emailing (failed) build results. If a certain builder
+	should send email, specify the commandline -m.
+
+	* Feature: added --force option; forces a package to be built
+	regardless of the builds stored in the database. 
+
 2006-07-26    <kooiker@cwi.nl>
 
 	* Fix: use _PREFIX in Makefile.am 

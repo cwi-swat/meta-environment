@@ -8,7 +8,8 @@ PREFIX=__PREFIX__
 SICLI=$PREFIX/bin/si-cli
 
 $SICLI \
-    --root aterm \
+    --root JRelCal \
+    --force JRelCal \
     --profile verfrol \
     --interval 120 \
     --weekday Mon \
@@ -18,7 +19,7 @@ $SICLI \
     --weekday Fri \
     --after 00:01 \
     --before 23:59 \
-    --mail meta-devel-list@cwi.nl \
+    --mail \
     --from daybuild@cwi.nl \
     --smtp smtp.cwi.nl:25 \
     --config svn://sjofar.sen.cwi.nl/sisyphus-configuration \

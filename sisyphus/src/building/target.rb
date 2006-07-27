@@ -31,6 +31,10 @@ module Building
       return session.host
     end
 
+    def name
+      return revision.name
+    end
+
     def time
       return session.time
     end
@@ -91,18 +95,25 @@ module Building
 
     def find_build_for_build_env_package(build_env_package)
       @dep_items.each do |item|
-        if item.name == build_env_package then
+        if build_env_package == item.name then
           return item
         end
-      end
-      raise "No build for build env package!"
+        puts "Checking:::::::::::::::::::::::::::: #{item}"
+      end      
+      raise "No build for #{build_env_package}!"
     end
 
     def script_environment
       env = config.environment + "\n"
-      if config.build_env_package and @item.name != config.build_env_package then
-        item = find_build_for_build_env_package(config.build_env_package)
-        
+      config.build_env_packages.each do |implicit_dep|
+        # NB: build_env_packages are topologically sorted
+        # to prevent cycles, the paths of implicit_deps
+        # are only added to the environment of "later"
+        # implicit dependencies.
+        if @item.name == implicit_dep then
+          break
+        end
+        item = find_build_for_build_env_package(implicit_dep)
         path = File.join(item.prefix(config.install_dir), 'bin')
         env += "PATH=#{path}:$PATH\n"
         env += "export PATH\n";
@@ -440,7 +451,7 @@ module Building
       dister = Distribution::SourceDister.new(item, @config.build_dir,
                                               @config.source_dist_dir,
                                               @config.collect_url,
-                                              @config.build_env_package,
+                                              @config.build_env_packages,
                                               @log)
       dister.make_source_dists
     end

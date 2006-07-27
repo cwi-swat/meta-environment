@@ -37,22 +37,33 @@ module Utils
     end
   end
 
+  
+
   class SessionMailer
 
-    def initialize(addresses, from_address, smtp, port = 25, 
+    def initialize(from_address, smtp, port = 25, 
                    build_url_pattern = "http://sisyphus.sen.cwi.nl:8080/si_items/show/%d")
       @smtp = smtp
       @port = port
-      @addresses = addresses
       @from_address = from_address
       @build_url_pattern = build_url_pattern
     end
 
 
     def mail(session)
-      s = message(session)
-      @addresses.each do |address|
-        mail_to_address(s, address, session)
+      session.each_email do |addr, items|      
+        if not all_success?(items) then
+          s = message(items, session)
+          mail_to_address(s, addr, items, session)
+        end
+      end
+    end
+
+
+    private
+    def all_success?(items)
+      return items.inject(true) do |failed, item|
+        failed && item.success
       end
     end
 
@@ -92,7 +103,7 @@ module Utils
       return sprintf(fmt, comp, succ, url)
     end
 
-    def message(session)
+    def message(items, session)
       msgstr = "Sisyphus Build results\n"
       msgstr += "======================\n\n"
 
@@ -100,14 +111,14 @@ module Utils
       msgstr += "Time: #{session.time}\n\n"
       msgstr += row('Component', 'Succ', 'URL')
       msgstr += bar()
-      session.components.each do |component|
-        msgstr << format_item(component, session)
+      items.each do |item|
+        msgstr << format_item(item)
       end
       return msgstr
     end
 
-    def mail_to_address(message, address, session)
-      msgstr = mail_header(address, session)
+    def mail_to_address(message, address, items, session)
+      msgstr = mail_header(address, items, session)
       msgstr += message
 
       Net::SMTP.start(@smtp, @port) do |smtp|
@@ -115,18 +126,17 @@ module Utils
       end
     end
 
-    def format_item(component, session)
-      item = session.item(component)
+    def format_item(item)
       url = sprintf(@build_url_pattern, item.id)
       return row(item.name, item.success, url)
     end
 
-    def mail_header(address, session)
+    def mail_header(address, items, session)
       failed = 0
       total = 0
-      session.components.each do |component|
+      items.each do |item|
         total += 1
-        if not session.item(component).success then
+        if not item.success then
           failed += 1
         end
       end
@@ -141,7 +151,19 @@ END_OF_HEADER
     end
   end
 
+
+
+  class DummySessionMailer < SessionMailer
+    def initialize()
+    end
+
+    def mail(session)
+    end
+  end
+
 end
+
+
 
 if __FILE__ == $0
   i1 = Utils::MockItem.new('aterm', 3443, true)

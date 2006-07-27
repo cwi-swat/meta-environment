@@ -184,6 +184,10 @@ module Versioning
       return bom_reader.dependencies
     end
 
+    def extract_emails
+      return bom_reader.emails
+    end
+
     def extract_version
       return bom_reader.version
     end

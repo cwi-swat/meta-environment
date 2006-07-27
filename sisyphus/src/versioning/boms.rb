@@ -43,6 +43,13 @@ module Versioning
       raise RuntimeError.new("error parsing version in: #{@bom}")
     end
 
+    def emails
+      if @bom =~ /Maintainers\s*=\s*([^\n]*)/m then
+        return $1.split(',')
+      end
+      return []
+    end
+
     def dependencies
       if @bom =~ /^Requires\s*:\s*([^\n]*)/m then
         return $1.split(/[, ]/)

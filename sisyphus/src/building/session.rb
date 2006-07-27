@@ -8,6 +8,7 @@ module Building
       @time = time
       @host = host
       @built = {}
+      @emails = {}
     end
 
     def hostname
@@ -39,6 +40,16 @@ module Building
 
     def add(revision, item)
       @built[revision.component] = item
+      revision.checkout.extract_emails.each do |addr|
+        @emails[addr] ||= []
+        @emails[addr] << item
+      end
+    end
+
+    def each_email
+      @emails.each_key do |addr|
+        yield addr, @emails[addr]
+      end
     end
 
     def item(component)
