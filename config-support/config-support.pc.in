@@ -6,3 +6,4 @@ Description:
 Requires: aterm
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lConfigAPI
+Jars=${prefix}/share/configapi.jar
