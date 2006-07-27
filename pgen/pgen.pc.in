@@ -1,5 +1,5 @@
 prefix=@prefix@
-
+Maintainers=economop@cwi.nl,jurgenv@cwi.nl
 Name: pgen
 Version: 2.4
 Description:
