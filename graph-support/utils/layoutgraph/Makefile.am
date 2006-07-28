@@ -6,7 +6,7 @@ pkgdata_DATA = layout-graph.idef
 
 EXTRA_DIST = layout-graph.idef.src dot.l dot.y
 
-CLEANFILES = lex.yy.c y.tab.c y.tab.h y.output layout-graph.idef
+CLEANFILES += lex.yy.c y.tab.c y.tab.h y.output layout-graph.idef
 
 YFLAGS = -d
 
@@ -27,7 +27,7 @@ layoutgraph_SOURCES = \
 
 layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \
-	-L${top_builddir}/lib \
+	-L${top_builddir}/lib -lGraph \
 	$(ATERM_LIBS) \
 	$(TOOLBUSLIB_LIBS) 
 
