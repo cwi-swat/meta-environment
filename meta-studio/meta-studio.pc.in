@@ -9,3 +9,4 @@ JarFile= meta-studio.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/idw-gpl-1.4.0.jar
 LocalJars=lib/idw-gpl-1.4.0.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.component,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.util
+ToolBusFlags=-I${prefix}/share/meta-studio
