@@ -102,7 +102,7 @@ module Roll
       options.revert = false
       options.force = false
       options.sequence = false
-
+      options.deps_only = false
 
       opts = OptionParser.new do |opts|
 
@@ -158,6 +158,11 @@ module Roll
           options.sequence = true
         end
 
+        opts.on("-D", "--[no-]deps-only",
+                "Build only deps (transitively reachable; with -p)") do |d|
+          options.deps_only = d
+        end
+
         opts.on("-d", "--deps", "Print out dependencies") do 
           deps = the_conf['dependencies']
           deps.keys.sort.each do |client|
@@ -188,6 +193,10 @@ module Roll
       if args == [] then
         usage(opts, 1)
       end  
+
+      if options.deps_only and !options.package then
+        usage(opts, 1)
+      end
       
       opts.parse!(args)
 
@@ -237,6 +246,17 @@ module Roll
     end
   end
 
+  def Roll.transitive_closure(package, deps)
+    todo = [package]
+    result = [package]
+    while todo != [] do
+      cur = todo.pop
+      result |= deps[cur]
+      todo |= deps[cur]
+    end
+    return result
+  end
+
   def Roll.run_commands(actions, locations, deps, templates, install_dir, options)
     pwd = Dir.getwd
     order = deps.tsort
@@ -245,7 +265,17 @@ module Roll
     end
 
     if options.package then
-      todo = [options.package]
+      if options.deps_only then
+        todo_set = transitive_closure(options.package, deps)
+        todo = []
+        order.each do |p|
+          if todo_set.include?(p) then
+            todo << p
+          end
+        end
+      else
+        todo = [options.package]
+      end
     else
       above = 0
       below = order.length-1

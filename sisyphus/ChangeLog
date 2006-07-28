@@ -1,3 +1,9 @@
+2006-07-28    <{storm,kooiker}@cwi.nl>
+
+	* Feature: roll now supports an options -D that can be used in
+	combination with -p to only build a packages and its (transitive)
+	dependencies. 
+
 2006-07-27    <storm@cwi.nl>
 
 	* Feature: Sisyphus now support multiple build-env-packages that
