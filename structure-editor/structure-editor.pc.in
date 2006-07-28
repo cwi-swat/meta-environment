@@ -6,3 +6,5 @@ Description:
 Requires: aterm,error-support,pt-support,toolbuslib
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lStructureEditor
+ToolBusFlags=-I${prefix}/share/structure-editor
+
