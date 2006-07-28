@@ -6,3 +6,5 @@ Description:
 Requires: aterm,toolbuslib
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lEditorManager
+ToolBusFlags=-I${prefix}/share/editor-manager
+
