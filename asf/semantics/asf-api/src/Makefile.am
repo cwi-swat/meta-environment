@@ -1,4 +1,4 @@
-include $(top_srcdir)/make_rules
+include $(top_srcdir)/Makefile.meta
 
 pkgdata_DATA = $(wildcard *.idef)
 
@@ -12,12 +12,8 @@ ASFSDFApigen_SOURCES = \
 	ASFSDFApigen.c \
 	toolASFSDFApigen.tif.c
 
-ASFSDFApigen_LDADD = $(ASC_LD_FLAGS)
-
-INCLUDES = \
-	-DASF_MAIN \
-	-DTOOLBUS \
-	$(ASC_INCLUDES)
+ASFSDFApigen_CPPFLAGS = -DASF_MAIN -DTOOLBUS -$(ASC_SUPPORT_CPPFLAGS)
+ASFSDFApigen_LDADD = $(ASC_SUPPORT_LIBS)
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
 	asfc -i $< -o ASFSDFApigen.c -t -v -c 
