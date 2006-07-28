@@ -5,7 +5,7 @@ Name: navigator-gui
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,graph-support,io-support,meta-studio,toolbus,toolbus-java-adapter
-JarFile=navigator-gui.jar
+JarFile=navigator.jar
 Jars=${prefix}/share/${JarFile}
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
 MainClass=nl.cwi.sen1.gui.plugin.Navigator
