@@ -97,6 +97,7 @@ AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
     META_REQUIRE_PACKAGE(Dep)
   ])
   AC_SUBST([EXTERNAL_JARS])
+  AC_SUBST([EXTERNAL_INSTALLED_JARS])
 ])
 
 dnl META_REQUIRE_PACKAGE(OPTION)
@@ -131,8 +132,18 @@ m4_popdef([AC_Var])dnl
 
 dnl META_REQUIRE_PACKAGE_USING_PKGCONFIG(VARIABLE,MODULE)
 dnl
-dnl Checks the existance of package 'MODULE' and sets the 
-dnl variables VARIABLE_PREFIX, VARIABLE_CFLAGS, and VARIABLE_LIBS
+dnl Checks the existance of package 'MODULE' and sets the variables:
+dnl
+dnl   PACKAGE_PREFIX: installation prefix of package.
+dnl   PACKAGE_CFLAGS: CFLAGS for package
+dnl   PACKAGE_LIBS: native libraries to link with
+dnl   PACKAGE_JARS: JARS to use at build time.
+dnl   PACKAGE_INSTALLED_JARS: JARS to use after installation.
+dnl
+dnl and extends the variables:
+dnl
+dnl   EXTERNAL_JARS: JARS to use at build time.
+dnl   EXTERNAL_INSTALLED_JARS: JARS to use after installation.
 dnl
 dnl ------------------
 AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
@@ -181,8 +192,23 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   DEPENDENCIES=`meta_requires $2`
   for d in ${DEPENDENCIES}; do
     TMP_JARS=`echo META_INSTALLED_PKG_VAR([$d],[Jars]) | tr ',' ' '`
+    TMP_UNINSTALLED_JARS=`echo META_INSTALLED_PKG_VAR([$d],[UninstalledJars]) | tr ',' ' '`
+
+    if test "x${TMP_UNINSTALLED_JARS}" = "x" ; then
+      TMP_UNINSTALLED_JARS="${TMP_JARS}"
+    fi
+
     if test "x${TMP_JARS}" != "x" ; then
        for j in ${TMP_JARS}; do
+         $1[]_INSTALLED_JARS="$$1[]_INSTALLED_JARS:$[]j"
+         if (echo ${EXTERNAL_INSTALLED_JARS} | grep -q " $[]j"); then
+            EXTERNAL_INSTALLED_JARS="${EXTERNAL_INSTALLED_JARS}"
+         else
+            EXTERNAL_INSTALLED_JARS="${EXTERNAL_INSTALLED_JARS}:$[]j"
+         fi
+       done
+
+       for j in ${TMP_UNINSTALLED_JARS}; do
          $1[]_JARS="$$1[]_JARS:$[]j"
          if (echo ${EXTERNAL_JARS} | grep -q " $[]j"); then
             EXTERNAL_JARS="${EXTERNAL_JARS}"
@@ -190,7 +216,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
             EXTERNAL_JARS="${EXTERNAL_JARS}:$[]j"
          fi
        done
-    fi  
+    fi
   done
   AC_MSG_RESULT([$$1[]_JARS])
 
@@ -198,6 +224,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
   AC_SUBST([$1_LIBS])
   AC_SUBST([$1_PREFIX])
   AC_SUBST([$1_JARS])
+  AC_SUBST([$1_INSTALLED_JARS])
 ])
 
 dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.
@@ -250,15 +277,11 @@ AC_DEFUN([META_JAVA_SETUP],[
   JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
   JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
   JAVA_LOCAL_JARS=META_GET_PKG_USER_VAR([LocalJars])
-
-  # ExternalJars is subsituted, so we cannot get it from the pkg-config file.
-  JAVA_EXTERNAL_JARS="$EXTERNAL_JARS" dnl META_GET_PKG_USER_VAR([ExternalJars])
   JAVA_MAIN_CLASS=META_GET_PKG_USER_VAR([MainClass])
   JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_JAR])
   AC_SUBST([JAVA_PACKAGES])
   AC_SUBST([JAVA_LOCAL_JARS])
-  AC_SUBST([JAVA_EXTERNAL_JARS])
   AC_SUBST([JAVA_MAIN_CLASS])
   AC_SUBST([JAVA_TEST_CLASS])
 ])

@@ -1,4 +1,20 @@
+Fri Jul 28 02:21:27 CEST 2006 <martin.bravenboer@gmail.com>
+ * meta-build.m4: implemented support for uninstalled jars. The
+   variables are documented in meta-build.m4. A copy:
 
+   PACKAGE_JARS: JARS to use at build time.
+   PACKAGE_INSTALLED_JARS: JARS to use after installation.
+
+   EXTERNAL_JARS: JARS to use at build time.
+   EXTERNAL_INSTALLED_JARS: JARS to use after installation.
+
+ * meta-build.m4: dropped the AC_SUBST of JAVA_EXTERNAL_JARS. It is
+   kind of confusing, considering that we already substitute
+   EXTERNAL_JARS.
+
+ * Makefile.java.meta: improved the handling of local jars. Of
+   course, always passing a -lib option will break if JAVA_LOCAL_JARS
+   is empty. JAVA_LOCAL_JARS is now in a foreach.
 
 Thu Jul 27 14:25:38 CEST 2006 <{jurgenv,kooiker}@cwi.nl,martin.bravenboer@gmail.com>
  * meta-build.ant: changed default target from Java 1.4 to Java 1.5
