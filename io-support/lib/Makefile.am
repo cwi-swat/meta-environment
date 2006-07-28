@@ -13,7 +13,7 @@ include_HEADERS = \
 libIOAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
 libIOAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libIOAPI_la_LIBADD = $(ATERM_LIBS)
-libIOAPI_a_SOURCES = \
+libIOAPI_la_SOURCES = \
 		     IO.c \
 		     IO_dict.c
 
