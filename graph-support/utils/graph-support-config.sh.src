@@ -1,1 +1,0 @@
-echo "__PREFIX__/share/graph-support/graph.jar:__EXTERNAL_JARS__"
