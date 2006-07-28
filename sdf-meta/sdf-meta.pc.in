@@ -4,3 +4,4 @@ Name: sdf-meta
 Version: 1.0
 Description:
 Requires: meta,pgen,sdf-library,sdf-support,toolbus
+ToolBusFlags=${prefix}/share/sdf-meta
