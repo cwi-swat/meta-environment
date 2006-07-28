@@ -38,9 +38,11 @@ AC_DEFUN([META_SETUP],
   META_BUNDLE_PKG_CONFIG_PATH
 
   EXTERNAL_JARS=
+  TOOLBUSFLAGS=
   META_REQUIRE_PACKAGES(META_GET_PKG_VAR_LIST([Requires]))
   AC_SUBST([EXTERNAL_JARS])
   AC_SUBST([EXTERNAL_INSTALLED_JARS])
+  AC_SUBST([TOOLBUSFLAGS])
 ])
 
 
@@ -109,6 +111,7 @@ dnl   PACKAGE_CFLAGS: CFLAGS for package
 dnl   PACKAGE_LIBS: native libraries to link with
 dnl   PACKAGE_JARS: JARS to use at build time.
 dnl   PACKAGE_INSTALLED_JARS: JARS to use after installation.
+dnl   PACKAGE_TOOLBUSFLAGS: flags for ToolBus interpreter
 dnl
 dnl and extends the variables:
 dnl
@@ -157,14 +160,29 @@ AC_DEFUN([META_INSPECT_PACKAGE],
 
   AC_Var[]_PREFIX="$AC_Var[]_FOUND_PREFIX"
 
+  AC_SUBST(AC_Var[]_CFLAGS)
+  AC_SUBST(AC_Var[]_LIBS)
+  AC_SUBST(AC_Var[]_PREFIX)
 
   AC_MSG_CHECKING([the transitive closure of dependencies of $1])
   meta_dependencies=$(meta_requires $1)
   AC_MSG_RESULT([$meta_dependencies])
 
+  META_INSPECT_PACKAGE_JARS([$1],[AC_Var],[${meta_dependencies}])
+  META_INSPECT_PACKAGE_TOOLBUSFLAGS([$1],[AC_Var],[${meta_dependencies}])
+
+m4_popdef([AC_Var])dnl
+])
+
+dnl META_INSPECT_PACKAGE_JARS(PACKAGE,PACKAGEVAR,DEPENDENCIES)
+dnl
+dnl PACKAGE: the name of the package to check 
+dnl PACKAGEVAR: the names of the variable prefix
+dnl DEPENDENCIES: the transitive dependencies of the package
+AC_DEFUN([META_INSPECT_PACKAGE_JARS],[
   AC_MSG_CHECKING([if $1 provides jars])
   AC_Var[]_JARS=""
-  for d in ${meta_dependencies}; do
+  for d in $3; do
     TMP_JARS=`echo META_INSTALLED_PKG_VAR([$d],[Jars]) | tr ',' ' '`
     TMP_UNINSTALLED_JARS=`echo META_INSTALLED_PKG_VAR([$d],[UninstalledJars]) | tr ',' ' '`
 
@@ -174,7 +192,7 @@ AC_DEFUN([META_INSPECT_PACKAGE],
 
     if test "x${TMP_JARS}" != "x" ; then
        for j in ${TMP_JARS}; do
-         AC_Var[]_INSTALLED_JARS="$AC_Var[]_INSTALLED_JARS:$[]j"
+         $2[]_INSTALLED_JARS="$$2[]_INSTALLED_JARS:$[]j"
          if (echo ${EXTERNAL_INSTALLED_JARS} | grep -q " $[]j"); then
             EXTERNAL_INSTALLED_JARS="${EXTERNAL_INSTALLED_JARS}"
          else
@@ -183,7 +201,7 @@ AC_DEFUN([META_INSPECT_PACKAGE],
        done
 
        for j in ${TMP_UNINSTALLED_JARS}; do
-         AC_Var[]_JARS="$AC_Var[]_JARS:$[]j"
+         $2[]_JARS="$$2[]_JARS:$[]j"
          if (echo ${EXTERNAL_JARS} | grep -q " $[]j"); then
             EXTERNAL_JARS="${EXTERNAL_JARS}"
          else
@@ -193,18 +211,52 @@ AC_DEFUN([META_INSPECT_PACKAGE],
     fi
   done
 
-  if test -z "${AC_Var[]_JARS}"; then
+  if test -z "${$2[]_JARS}"; then
     AC_MSG_RESULT([no])
   else
-    AC_MSG_RESULT([$AC_Var[]_JARS])
+    AC_MSG_RESULT([$$2[]_JARS])
   fi
 
-  AC_SUBST(AC_Var[]_CFLAGS)
-  AC_SUBST(AC_Var[]_LIBS)
-  AC_SUBST(AC_Var[]_PREFIX)
-  AC_SUBST(AC_Var[]_JARS)
-  AC_SUBST(AC_Var[]_INSTALLED_JARS)
-m4_popdef([AC_Var])dnl
+  AC_SUBST($2[]_JARS)
+  AC_SUBST($2[]_INSTALLED_JARS)
+])
+
+dnl META_INSPECT_PACKAGE_TOOLBUSFLAGS(PACKAGE,PACKAGEVAR,DEPENDENCIES)
+dnl
+dnl PACKAGE: the name of the package to check 
+dnl PACKAGEVAR: the names of the variable prefix
+dnl DEPENDENCIES: the transitive dependencies of the package
+AC_DEFUN([META_INSPECT_PACKAGE_TOOLBUSFLAGS],[
+  AC_MSG_CHECKING([if $1 provides ToolBus flags])
+
+  $2[]_TOOLBUSFLAGS=""
+  for d in $3; do
+    TMP_TOOLBUSFLAGS=$($PKG_CONFIG --variable=ToolBusFlags "$1" $d)
+    TMP_TOOLBUSFLAGS=$(echo "${TMP_TOOLBUSFLAGS}" | sed 's@-I\w*\/@-I\/@g')
+
+    if test "x${TMP_TOOLBUSFLAGS}" != "x" ; then
+      for i in ${TMP_TOOLBUSFLAGS}; do
+        if (echo $$2[]_TOOLBUSFLAGS | grep -q [" $i"]); then
+          $2[]_TOOLBUSFLAGS="${$2[]_TOOLBUSFLAGS}"
+        else
+          $2[]_TOOLBUSFLAGS="${$2[]_TOOLBUSFLAGS} $[]i"
+        fi
+        if (echo "${TOOLBUSFLAGS}" | grep -q [" $i"]); then
+          TOOLBUSFLAGS="${TOOLBUSFLAGS}"
+        else
+          TOOLBUSFLAGS="${TOOLBUSFLAGS} $[]i"
+        fi
+      done
+    fi
+  done
+
+  if test -z "${$2[]_TOOLBUSFLAGS}"; then
+    AC_MSG_RESULT([no])
+  else
+    AC_MSG_RESULT([$$2[]_TOOLBUSFLAGS])
+  fi
+
+  AC_SUBST($2[]_TOOLBUSFLAGS)
 ])
 
 dnl META_BUNDLE_PKG_CONFIG_PATH()

@@ -1,5 +1,10 @@
-Fri Jul 28 04:49:07 CEST 2006  <martin.bravenboer@gmail.com>
 
+Fri Jul 28 11:53:45 CEST 2006 <jurgenv@cwi.nl>
+ * meta-build-m4: refactored META_INSPECT_PACKAGE to
+   call META_INSPECT_PACKAGE_JAVA and added call to
+   META_INSPECT_PACKAGE_TOOLBUS.
+
+Fri Jul 28 04:49:07 CEST 2006  <martin.bravenboer@gmail.com>
   * meta-build.m4: major refactoring of the macros, after
   discovering a few nasty bugs.
 
