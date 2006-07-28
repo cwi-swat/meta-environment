@@ -1,3 +1,4 @@
+SUBDIRS = model
 
 RUBY_FILES = $(wildcard *.rb)
 
