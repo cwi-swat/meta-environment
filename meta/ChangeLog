@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Jul 28 11:50:54 CEST 2006 <jurgenv@cwi.nl>
+ * src: removed generation of config script (replaced by pkg-config)
+
 Tue Jun 20 13:36:47 CEST 2006 <jurgenv@cwi.nl>
  * tbscripts/graph-utils.tb: creating an editor session for
    each parse tree that is viewed, such that viewers with
