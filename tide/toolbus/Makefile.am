@@ -20,4 +20,4 @@ tifs: tide.tb
 	${TOOLBUS}/bin/toolbus ${INCLUDES} -output tide.tifs -gentifs $<
 
 control.tb: control.tb.src
-	sed 's@__PKGDATA__@${pkgdatadir}@' < $< > $@
+	sed 's@__DATA__@${datadir}@' < $< > $@
