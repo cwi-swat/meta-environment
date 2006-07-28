@@ -1,4 +1,4 @@
-SUBDIRS = model
+SUBDIRS = sisyphus-model
 
 RUBY_FILES = $(wildcard *.rb)
 
