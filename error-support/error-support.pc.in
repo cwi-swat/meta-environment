@@ -9,3 +9,4 @@ Cflags: -I${prefix}/include
 #uninstalled Cflags: -I@abs_top_builddir@/lib
 Requires: aterm,toolbuslib
 Jars=${prefix}/share/error-support/errorapi.jar:${prefix}/share/error-support/locationapi.jar
+ToolBusFlags=-I${prefix}/share/error-support
