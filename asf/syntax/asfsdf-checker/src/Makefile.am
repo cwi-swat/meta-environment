@@ -1,9 +1,5 @@
 include $(top_srcdir)/Makefile.meta
 
-INCLUDES = \
-	   $(ASC_SUPPORT_CFLAGS)  \
-	   $(SDF_SUPPORT_CFLAGS) \
-	   -DASF_WITH_ANNOS
 
 bin_PROGRAMS = asfsdfchecker
 
@@ -11,10 +7,14 @@ pkgdata_DATA = asfsdfchecker.idef
 
 EXTRA_DIST = asfsdfchecker.idef.src 
 
-CLEANFILES = asfsdfchecker.idef
+CLEANFILES += asfsdfchecker.idef
 
 noinst_HEADERS = asfsdfchecker.tif.h
 
+asfsdfchecker_CPPFLAGS = \
+	   $(ASC_SUPPORT_CFLAGS)  \
+	   $(SDF_SUPPORT_CFLAGS) \
+	   -DASF_WITH_ANNOS
 asfsdfchecker_SOURCES = asfsdfchecker.c AsfSdf-Checker.c asfsdfchecker.tif.c
 asfsdfchecker_LDADD = \
 	$(SDF_SUPPORT_LIBS) \

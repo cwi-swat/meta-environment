@@ -1,8 +1,6 @@
 # $Id$
 
-include $(top_srcdir)/make_rules
-
-INCLUDES = $(ASC_INCLUDES)
+include $(top_srcdir)/Makefile.meta
 
 bin_PROGRAMS = asfoperations
 noinst_LTLIBRARIES = libasfnormalization.la
@@ -11,24 +9,25 @@ pkgdata_DATA    = asfoperations.idef
 
 EXTRA_DIST   = asfoperations.idef.src 
 
-CLEANFILES = asfoperations.idef
+CLEANFILES += asfoperations.idef
 
 noinst_HEADERS 	= \
 	asfoperations.tif.h \
 	asfnormalization.h 
 
-libErrorAPI_la_CPPFLAGS = $(ATERM_CFLAGS)
-libErrorAPI_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
-libErrorAPI_la_LIBADD = $(ATERM_LIBS)
+asfoperations_CPPFLAGS = $(ASC_SUPPORT_CFLAGS)
+asfoperations_LDADD = \
+     -L${top_builddir}/semantics/asf-operations/src -lasfnormalization \
+     $(ASC_SUPPORT_LIBS)
 asfoperations_SOURCES = \
 	asfoperations.c \
 	asfoperations.tif.c \
 	asfnormalization.c \
 	ASF-Normalization.c
 
-asfoperations_LDADD = $(ASC_LD_FLAGS)
-
-libasfnormalization_a_SOURCES = \
+libasfnormalization_la_CPPFLAGS = $(ATERM_CFLAGS)
+libasfnormalization_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
+libasfnormalization_la_SOURCES = \
 			  asfnormalization.c \
 			  ASF-Normalization.c 
 

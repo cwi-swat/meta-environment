@@ -1,8 +1,5 @@
 include $(top_srcdir)/Makefile.meta
 
-INCLUDES = \
-	   $(ASC_SUPPORT_CFLAGS) \
-	   -I$(SDF_SUPPORT)/include
 
 bin_PROGRAMS = addeqssyntax
 
@@ -10,10 +7,13 @@ pkgdata_DATA = addeqssyntax.idef
 
 EXTRA_DIST = addeqssyntax.idef.src 
 
-CLEANFILES = addeqssyntax.idef
+CLEANFILES += addeqssyntax.idef
 
 noinst_HEADERS = addeqssyntax.tif.h
 
+addeqssyntax_CPPFLAGS = \
+	   $(ASC_SUPPORT_CFLAGS) \
+	   -I$(SDF_SUPPORT)/include
 addeqssyntax_SOURCES = \
 	addeqssyntax.c \
 	Add-Eqs-Syntax.c \

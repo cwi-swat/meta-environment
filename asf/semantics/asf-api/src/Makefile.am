@@ -12,7 +12,7 @@ ASFSDFApigen_SOURCES = \
 	ASFSDFApigen.c \
 	toolASFSDFApigen.tif.c
 
-ASFSDFApigen_CPPFLAGS = -DASF_MAIN -DTOOLBUS -$(ASC_SUPPORT_CPPFLAGS)
+ASFSDFApigen_CPPFLAGS = -DASF_MAIN -DTOOLBUS $(ASC_SUPPORT_CFLAGS)
 ASFSDFApigen_LDADD = $(ASC_SUPPORT_LIBS)
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs

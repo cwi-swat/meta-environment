@@ -2,9 +2,6 @@
 
 include $(top_srcdir)/Makefile.meta
 
-INCLUDES = \
-	-I$(top_srcdir)/semantics/asf-operations/src \
-	$(ASC_SUPPORT_CFLAGS)
 
 bin_PROGRAMS = asfchecker
 
@@ -12,18 +9,19 @@ pkgdata_DATA = asfchecker.idef
 
 EXTRA_DIST = asfchecker.idef.src asfchecker.tif.c asfchecker.tif.h
 
-CLEANFILES = asfchecker.idef
+CLEANFILES += asfchecker.idef
 
 noinst_HEADERS 	= equationChecker.h asfchecker.tif.h statistics.h
+
+asfchecker_CPPFLAGS = \
+	-I$(top_srcdir)/semantics/asf-operations/src \
+	$(ASC_SUPPORT_CFLAGS)
 
 asfchecker_SOURCES = \
 	asfchecker.c \
 	equationChecker.c \
 	asfchecker.tif.c \
 	statistics.c
-
-asfchecker_DEPENDENCIES = \
-	$(top_builddir)/semantics/asf-operations/src/libasfnormalization.a 
 
 asfchecker_LDADD   = \
 	-L$(top_builddir)/semantics/asf-operations/src -lasfnormalization \
