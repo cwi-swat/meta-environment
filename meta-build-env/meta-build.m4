@@ -334,15 +334,14 @@ function meta_requires() {
 }
 
 function meta_recursive_requires() {
-  local package="$[]1"
-  local meta_require_pcfile
-  local meta_require_kids
+  meta_require_pcfile=""
+  meta_require_kids=""
 
-  if (echo ${meta_require_closure} | grep -q "$package") ; then
+  if (echo ${meta_require_closure} | grep -q "$[]1") ; then
     meta_require_closure="${meta_require_closure}"
   else
-    meta_require_pcfile=$(meta_find_pkg_config_file $package)
-    meta_require_closure="${meta_require_closure} $package"
+    meta_require_pcfile=$(meta_find_pkg_config_file $[]1)
+    meta_require_closure="${meta_require_closure} $[]1"
 
     meta_require_kids=$(grep "Requires:" ${meta_require_pcfile} | cut -f 2 -d ':' | tr ',' ' ')
     for k in ${meta_require_kids}; do
@@ -353,32 +352,31 @@ function meta_recursive_requires() {
 
 dnl This is really something that should be supported by pkg-config
 function meta_find_pkg_config_file() {
-  local package="$[]1"
-  local result=""
+  meta_find_pkg_config_result=""
 
   dnl First examine the path for uninstalled pkg-config files.
   for entry in $meta_pkg_config_path; do
-    if test -e "$entry/$package-uninstalled.pc"; then
-      result="$entry/$package-uninstalled.pc"
+    if test -e "$entry/$[]1-uninstalled.pc"; then
+      meta_find_pkg_config_result="$entry/$[]1-uninstalled.pc"
       break
     fi
   done
 
   dnl Next find the real pkg-config files.
-  if test -z "$result"; then
+  if test -z "$meta_find_pkg_config_result"; then
     for entry in $meta_pkg_config_path; do
-      if test -e "$entry/$package.pc"; then
-        result="$entry/$package.pc"
+      if test -e "$entry/$[]1.pc"; then
+        meta_find_pkg_config_result="$entry/$[]1.pc"
         break
       fi
     done
   fi
 
-  if test -z "${result}"; then
-    AC_MSG_WARN([No pkg-config file found for $package])
+  if test -z "${meta_find_pkg_config_result}"; then
+    AC_MSG_WARN([No pkg-config file found for $[]1])
   fi
 
-  echo "$result"
+  echo "$meta_find_pkg_config_result"
 }
 
 ])
