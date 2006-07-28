@@ -42,10 +42,10 @@ pkgdata_DATA = \
 	       standard.sdf.actions
 
 LIBRARY_LOCATION = \
-		   ${SDF_LIBRARY}/share/sdf-library/library
+		   ${SDF_LIBRARY_PREFIX}/share/sdf-library/library
 
 %.tb: %.tb.src Makefile
-	sed "s@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g; \
+	sed "s@__SDF2TABLE__@$(PGEN_PREFIX)/share/pgen/Sdf2.baf@g; \
              s@__SDF_META__@$(prefix)/share/sdf-meta@g;" \
 	    < $< > $@ 
 
