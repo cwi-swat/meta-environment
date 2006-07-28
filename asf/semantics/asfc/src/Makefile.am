@@ -33,15 +33,14 @@ noinst_HEADERS = asfc.tif.h \
 
 asfc_DEPENDENCIES =
 asfc_LDADD   = $(ASC_SUPPORT_LIBS)
-
-DEFINES = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
+asfc_CPPFLAGS = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
           -DASC_LD_FLAGS="\"$(ASC_SUPPORT_LIBS)\""   \
           -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
           -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
           -DCOMPILER="\"$(CC)\"" \
-          -DCOMPILERFLAGS="\"$(CFLAGS)\""
+          -DCOMPILERFLAGS="\"$(CFLAGS)\"" \
+	  $(ASC_SUPPORT_CFLAGS)
 
-AM_CPPFLAGS  = $(DEFINES) $(ASC_SUPPORT_CFLAGS)
 
 bootstrap: 
 	asfc -i Compiler.eqs -o Compiler.c -v
