@@ -5,3 +5,4 @@ Name: module-support
 Version: 1.0
 Description:
 Requires: 
+Jars=${prefix}/share/moduleapi.jar
