@@ -1,2 +1,2 @@
-pkgdata_DATA = prefuse.jar
+data_DATA = prefuse.jar
 EXTRA_DIST = prefuse.jar
