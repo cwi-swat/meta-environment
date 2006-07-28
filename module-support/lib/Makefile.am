@@ -1,6 +1,6 @@
 # $Id$
 
-pkgdata_DATA = moduleapi.jar
+data_DATA = moduleapi.jar
 
 EXTRA_DIST = moduleapi.jar
 
