@@ -34,7 +34,7 @@ EXTRA_DIST = structure-editor.idef.src
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
 
-CLEANFILES = structure-editor.tifs structure-editor.idef
+CLEANFILES += structure-editor.tifs structure-editor.idef
 
 if MAINTAINER_MODE
 
