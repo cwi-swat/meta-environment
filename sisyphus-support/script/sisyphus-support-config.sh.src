@@ -1,0 +1,21 @@
+# !/bin/sh
+
+POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+
+DB_HOST=__DATABASE_HOST__
+DB_PORT=__DATABASE_PORT__
+DB_USER=__DATABASE_USER__
+DB_NAME=__DATABASE_NAME__
+
+SCHEMA=${DATA_DIR}/schemas/sisyphus.postgresql
+
+case $1 in 
+    postgresql) echo ${POSTGRESQL} ;;
+    host) echo ${DB_HOST} ;;
+    port) echo ${DB_PORT} ;;
+    user) echo ${DB_USER} ;;
+    name) echo ${DB_NAME} ;;
+    schema) echo ${SCHEMA} ;;
+    *) echo "Invalid parameter: \"$1\"."; exit 1
+esac
+
