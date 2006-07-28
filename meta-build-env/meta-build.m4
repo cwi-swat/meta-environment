@@ -5,61 +5,10 @@ m4_pattern_forbid([^META_])
 m4_pattern_allow([^META_STUDIO])
 m4_pattern_allow([^_PKG_ERRORS])
 
-dnl META_GET_PKG_VAR(VARNAME)
-dnl Is substituted by the value of VARNAME from a pkg-config file at
-dnl reconf time
-AC_DEFUN([META_GET_PKG_VAR],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
-
-dnl META_GET_PKG_VAR_LIST(VARNAME)
-dnl Is substituted by the value of VARNAME from a pkg-config file, 
-dnl without trimming, at reconf time
-AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr '[,]' '[ ]'])])
-
-dnl META_GET_PKG_USER_VAR(VARNAME)
-dnl Is substituted by the value of VARNAME from a pkg-config file, at reconf
-dnl time
-AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' | tr -d '[:space:]'])])
-
-dnl META_GET_PKG_USER_VAR_PLAIN(VARNAME)
-dnl Is substituted by the value of VARNAME from a pkg-config file at reconf time
-AC_DEFUN([META_GET_PKG_USER_VAR_PLAIN],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '='])])
-
-dnl META_INSTALLED_PKG_VAR(PKG,VAR)
-AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:@:space:@:>@')])
-
-dnl META_GENERATE_UNINSTALLED_PC(PKG)
-AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
-cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
-])
-
-dnl A shell function for getting the recursive requirements of a package
-AC_DEFUN([META_RECURSIVE_REQUIRES],[
-# args: $[]1 : top module
-meta_requires() {
-  CLOSURE=
-  meta_recursive_requires $[]1
-  echo ${CLOSURE}
-}
-
-meta_recursive_requires() {
-  if (echo ${CLOSURE} | grep -q " $[]1") ; then
-    CLOSURE="${CLOSURE}"
-  else
-    PREFIX=$(${PKG_CONFIG} --variable prefix $[]1)
-    if test "x" = "x${PREFIX}"; then
-      echo "Package $[]1 could not be found!"
-      return
-    fi
-    CLOSURE="${CLOSURE} $[]1"
-    KIDS=$(grep "Requires:" ${PREFIX}/lib/pkgconfig/$[]1.pc | cut -f 2 -d ':' | tr ',' ' ')
-    for k in ${KIDS}; do
-      meta_recursive_requires $k
-    done
-  fi
-}
-])
-
+dnl META_SETUP()
+dnl ------------
 dnl Invokes all macros that always need to be invoked for a package.
+dnl
 AC_DEFUN([META_SETUP],
 [
   AC_REQUIRE([META_RECURSIVE_REQUIRES])
@@ -87,32 +36,45 @@ AC_DEFUN([META_SETUP],
   fi
 
   META_BUNDLE_PKG_CONFIG_PATH
-  META_CONFIGURE_DEPENDENCIES
-])
 
-
-AC_DEFUN([META_CONFIGURE_DEPENDENCIES],[
   EXTERNAL_JARS=
-  AC_FOREACH([Dep],META_GET_PKG_VAR_LIST([Requires]),[
-    META_REQUIRE_PACKAGE(Dep)
-  ])
+  META_REQUIRE_PACKAGES(META_GET_PKG_VAR_LIST([Requires]))
   AC_SUBST([EXTERNAL_JARS])
   AC_SUBST([EXTERNAL_INSTALLED_JARS])
 ])
 
-dnl META_REQUIRE_PACKAGE(OPTION)
-dnl --------------
-dnl Check for another Meta-Environment package
-dnl Declaring the option --with-OPTION=ARGNAME to specify the location of
-dnl the package NAME.
+
+dnl META_REQUIRE_PACKAGES(MODULES)
+dnl -----------------------------
 dnl
-dnl Store the result in the variable which name is OPTION upper cased,
-dnl using underscore for non letters.  $DEFAULT (note the $) is its
-dnl default value.
+AC_DEFUN([META_REQUIRE_PACKAGES],
+[
+  dnl First, construct the entire PKG_CONFIG_PATH
+  AC_FOREACH([Dep],[$1],[META_ARG_WITH_PACKAGE(Dep)])
+
+  dnl Next, let pkg-config locate the packages (and report nice errors)
+  AC_FOREACH([Dep],[$1],[META_CHECK_PACKAGE(Dep)])
+
+  dnl Finally, collect our custom information about the package.
+  AC_FOREACH([Dep],[$1],[META_INSPECT_PACKAGE(Dep)])
+])
+
+dnl META_REQUIRE_PACKAGE(MODULE)
+dnl ----------------------------
 dnl
 AC_DEFUN([META_REQUIRE_PACKAGE],
+[
+  META_REQUIRE_PACKAGES([$1])
+])
+
+dnl META_ARG_WITH_PACKAGE(MODULE)
+dnl -----------------------------
+dnl Declares the option --with-OPTION=ARGNAME to specify the location of the package
+dnl Extends the PKG_CONFIG_PATH if a location was given.
+dnl
+AC_DEFUN([META_ARG_WITH_PACKAGE],
 [m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
-AC_ARG_WITH([$1],
+  AC_ARG_WITH([$1],
             [AS_HELP_STRING([--with-$1=DIR], [use $1 at DIR @<:@find with pkg-config@:>@])],
 	    [AC_Var[]_PREFIX=$withval],
 	    [])
@@ -125,12 +87,20 @@ AC_ARG_WITH([$1],
   else
     AC_MSG_RESULT([no])
   fi
-
-  META_REQUIRE_PACKAGE_USING_PKGCONFIG(AC_Var,[$1])
 m4_popdef([AC_Var])dnl
 ])
 
-dnl META_REQUIRE_PACKAGE_USING_PKGCONFIG(VARIABLE,MODULE)
+dnl META_CHECK_PACKAGE(MODULE)
+dnl --------------------------
+dnl
+AC_DEFUN([META_CHECK_PACKAGE],
+[m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
+  PKG_CHECK_MODULES(AC_Var,[$1])
+m4_popdef([AC_Var])dnl
+])
+
+dnl META_INSPECT_PACKAGE(MODULE)
+dnl ----------------------------
 dnl
 dnl Checks the existance of package 'MODULE' and sets the variables:
 dnl
@@ -145,52 +115,56 @@ dnl
 dnl   EXTERNAL_JARS: JARS to use at build time.
 dnl   EXTERNAL_INSTALLED_JARS: JARS to use after installation.
 dnl
-dnl ------------------
-AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
-[AC_ARG_VAR([$1][_PREFIX], [prefix for $1, overriding pkg-config])dnl
- PKG_CHECK_MODULES([$1],[$2])
+AC_DEFUN([META_INSPECT_PACKAGE],
+[m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
+  AC_ARG_VAR(AC_Var[]_PREFIX, [prefix for $1, overriding pkg-config])dnl
 
-  AC_MSG_CHECKING([prefix of package $2])
-  $1[]_FOUND_PREFIX=$($PKG_CONFIG --variable=prefix "$2")
-  if test -z "$$1[]_FOUND_PREFIX"; then
-    AC_MSG_ERROR([package $2 does not specify its prefix in the pkg-config file.
+  AC_MSG_CHECKING([prefix of package $1])
+  AC_Var[]_FOUND_PREFIX=$($PKG_CONFIG --variable=prefix "$1")
+  if test -z "$AC_Var[]_FOUND_PREFIX"; then
+    AC_MSG_ERROR([package $1 does not specify its prefix in the pkg-config file.
            Report this error to the maintainer of this package.])
   fi
 
-  if test "${$1[]_PREFIX:+set}" = set; then
-    AC_MSG_RESULT([explicitly set: $$1[]_PREFIX])
+  if test "${AC_Var[]_PREFIX:+set}" = set; then
+    AC_MSG_RESULT([explicitly set: $AC_Var[]_PREFIX])
 
-    AC_MSG_CHECKING([if package $2 at this prefix equals the explicitly set package])
+    AC_MSG_CHECKING([if package $1 at this prefix equals the explicitly set package])
     # in a bundle, the package will not yet be installed.
     if test "${meta_bundled_packages:+set}" = set; then
         AC_MSG_RESULT([skipped (bundle)])
     else
       # compare found prefix to the actual prefix out of the .pc file at the given prefix
-      if test -e "$$1[]_PREFIX/lib/pkgconfig/$2.pc"; then
-        $1[]_ACTUAL_PREFIX="$(grep 'prefix=.*' $$1[]_PREFIX/lib/pkgconfig/$2.pc | cut -f2 -d= | tr -d '@<:@:blank:@:>@')"
-        if test "x$$1[]_ACTUAL_PREFIX" = "x$$1[]_FOUND_PREFIX"; then
+      if test -e "$AC_Var[]_PREFIX/lib/pkgconfig/$1.pc"; then
+        AC_Var[]_ACTUAL_PREFIX="$(grep 'prefix=.*' $AC_Var[]_PREFIX/lib/pkgconfig/$1.pc | cut -f2 -d= | tr -d '@<:@:blank:@:>@')"
+        if test "x$AC_Var[]_ACTUAL_PREFIX" = "x$AC_Var[]_FOUND_PREFIX"; then
           AC_MSG_RESULT([yes])
         else
           AC_MSG_RESULT([no])
-          AC_MSG_ERROR([prefix of $2 explicitly set to $$1[]_PREFIX,
-            but pkg-config found $2 at $$1[]_FOUND_PREFIX.
-            Please check your PKG_CONFIG_PATH, or remove $2 from $$1[]_FOUND_PREFIX, 
+          AC_MSG_ERROR([prefix of $1 explicitly set to $AC_Var[]_PREFIX,
+            but pkg-config found $1 at $AC_Var[]_FOUND_PREFIX.
+            Please check your PKG_CONFIG_PATH, or remove $2 from $AC_Var[]_FOUND_PREFIX, 
             or install the packages at a unique location.])
         fi
       else
         AC_MSG_RESULT([cannot check])
-        AC_MSG_ERROR([$2 does not provide a pkg-config file at $$1[]_PREFIX/lib/pkgconfig/$2.pc. Please check your installation.])
+        AC_MSG_ERROR([$2 does not provide a pkg-config file at $AC_Var[]_PREFIX/lib/pkgconfig/$1.pc. Please check your installation.])
       fi
     fi
   else
-    AC_MSG_RESULT([$$1[]_FOUND_PREFIX])
+    AC_MSG_RESULT([$AC_Var[]_FOUND_PREFIX])
   fi
 
-  $1[]_PREFIX="$$1[]_FOUND_PREFIX"
+  AC_Var[]_PREFIX="$AC_Var[]_FOUND_PREFIX"
 
-  AC_MSG_CHECKING([if CLASSPATH needs to be extended with classpath of $2]) 
-  DEPENDENCIES=`meta_requires $2`
-  for d in ${DEPENDENCIES}; do
+
+  AC_MSG_CHECKING([the transitive closure of dependencies of $1])
+  meta_dependencies=$(meta_requires $1)
+  AC_MSG_RESULT([$meta_dependencies])
+
+  AC_MSG_CHECKING([if $1 provides jars])
+  AC_Var[]_JARS=""
+  for d in ${meta_dependencies}; do
     TMP_JARS=`echo META_INSTALLED_PKG_VAR([$d],[Jars]) | tr ',' ' '`
     TMP_UNINSTALLED_JARS=`echo META_INSTALLED_PKG_VAR([$d],[UninstalledJars]) | tr ',' ' '`
 
@@ -200,7 +174,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
 
     if test "x${TMP_JARS}" != "x" ; then
        for j in ${TMP_JARS}; do
-         $1[]_INSTALLED_JARS="$$1[]_INSTALLED_JARS:$[]j"
+         AC_Var[]_INSTALLED_JARS="$AC_Var[]_INSTALLED_JARS:$[]j"
          if (echo ${EXTERNAL_INSTALLED_JARS} | grep -q " $[]j"); then
             EXTERNAL_INSTALLED_JARS="${EXTERNAL_INSTALLED_JARS}"
          else
@@ -209,7 +183,7 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
        done
 
        for j in ${TMP_UNINSTALLED_JARS}; do
-         $1[]_JARS="$$1[]_JARS:$[]j"
+         AC_Var[]_JARS="$AC_Var[]_JARS:$[]j"
          if (echo ${EXTERNAL_JARS} | grep -q " $[]j"); then
             EXTERNAL_JARS="${EXTERNAL_JARS}"
          else
@@ -218,16 +192,25 @@ AC_DEFUN([META_REQUIRE_PACKAGE_USING_PKGCONFIG],
        done
     fi
   done
-  AC_MSG_RESULT([$$1[]_JARS])
 
-  AC_SUBST([$1_CFLAGS])
-  AC_SUBST([$1_LIBS])
-  AC_SUBST([$1_PREFIX])
-  AC_SUBST([$1_JARS])
-  AC_SUBST([$1_INSTALLED_JARS])
+  if test -z "${AC_Var[]_JARS}"; then
+    AC_MSG_RESULT([no])
+  else
+    AC_MSG_RESULT([$AC_Var[]_JARS])
+  fi
+
+  AC_SUBST(AC_Var[]_CFLAGS)
+  AC_SUBST(AC_Var[]_LIBS)
+  AC_SUBST(AC_Var[]_PREFIX)
+  AC_SUBST(AC_Var[]_JARS)
+  AC_SUBST(AC_Var[]_INSTALLED_JARS)
+m4_popdef([AC_Var])dnl
 ])
 
+dnl META_BUNDLE_PKG_CONFIG_PATH()
+dnl -----------------------------
 dnl Sets the PKG_CONFIG_PATH if this package is in a bundle.
+dnl
 AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
 [
   AC_ARG_WITH([bundled-packages],
@@ -246,6 +229,8 @@ AC_DEFUN([META_BUNDLE_PKG_CONFIG_PATH],
   fi
 ])
 
+dnl META_REQUIRE_SOFTWARE(MODULE,WITNESS-PROGRAM)
+dnl -----------------------------
 dnl Check for a third party dependency
 AC_DEFUN([META_REQUIRE_SOFTWARE],
 [m4_pushdef([AC_Var], AS_TR_CPP([$1]))dnl
@@ -272,7 +257,10 @@ AC_ARG_WITH([$1],
 m4_popdef([AC_Var])dnl
 ])
 
+dnl META_JAVA_SETUP()
+dnl -----------------
 dnl Sets up variables for a standard Java package
+dnl
 AC_DEFUN([META_JAVA_SETUP],[
   JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
   JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
@@ -286,11 +274,111 @@ AC_DEFUN([META_JAVA_SETUP],[
   AC_SUBST([JAVA_TEST_CLASS])
 ])
 
+dnl META_C_SETUP()
+dnl --------------
 dnl Sets up variables for a standard C package
+dnl
 AC_DEFUN([META_C_SETUP],[
   AC_AIX
   AC_PROG_CC
   AC_LIBTOOL_WIN32_DLL
   AC_PROG_LIBTOOL
   AC_PROG_MAKE_SET([])
+])
+
+dnl META_GET_PKG_VAR(VARNAME)
+dnl -------------------------
+dnl Is substituted by the value of VARNAME from a pkg-config file at
+dnl reconf time
+AC_DEFUN([META_GET_PKG_VAR],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr -d '[:space:]'])])
+
+dnl META_GET_PKG_VAR_LIST(VARNAME)
+dnl ------------------------------
+dnl Is substituted by the value of VARNAME from a pkg-config file, 
+dnl without trimming, at reconf time
+AC_DEFUN([META_GET_PKG_VAR_LIST],[esyscmd([grep "$1:" *.pc.in | cut -f 2 -d ':' | tr '[,]' '[ ]'])])
+
+dnl META_GET_PKG_USER_VAR(VARNAME)
+dnl ------------------------------
+dnl Is substituted by the value of VARNAME from a pkg-config file, at reconf
+dnl time
+AC_DEFUN([META_GET_PKG_USER_VAR],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '=' | tr -d '[:space:]'])])
+
+dnl META_GET_PKG_USER_VAR_PLAIN(VARNAME)
+dnl ------------------------------------
+dnl Is substituted by the value of VARNAME from a pkg-config file at reconf time
+AC_DEFUN([META_GET_PKG_USER_VAR_PLAIN],[esyscmd([grep "$1=" *.pc.in | cut -f 2 -d '='])])
+
+dnl META_INSTALLED_PKG_VAR(PKG,VAR)
+dnl -------------------------------
+AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:@:space:@:>@')])
+
+dnl META_GENERATE_UNINSTALLED_PC(PKG)
+dnl ---------------------------------
+AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
+cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
+])
+
+dnl A shell function for getting the recursive requirements of a package
+AC_DEFUN([META_RECURSIVE_REQUIRES],[
+# args: $[]1 : top module
+function meta_requires() {
+  meta_require_closure=""
+  meta_pkg_config_path="$(echo "$[]PKG_CONFIG_PATH" | tr ':' ' ')"
+  if test -z  "${meta_pkg_config_path}"; then
+    meta_pkg_config_path="/usr/lib/pkgconfig"
+  fi
+
+  meta_recursive_requires $[]1
+  echo ${meta_require_closure}
+}
+
+function meta_recursive_requires() {
+  local package="$[]1"
+  local meta_require_pcfile
+  local meta_require_kids
+
+  if (echo ${meta_require_closure} | grep -q "$package") ; then
+    meta_require_closure="${meta_require_closure}"
+  else
+    meta_require_pcfile=$(meta_find_pkg_config_file $package)
+    meta_require_closure="${meta_require_closure} $package"
+
+    meta_require_kids=$(grep "Requires:" ${meta_require_pcfile} | cut -f 2 -d ':' | tr ',' ' ')
+    for k in ${meta_require_kids}; do
+      meta_recursive_requires $k
+    done
+  fi
+}
+
+dnl This is really something that should be supported by pkg-config
+function meta_find_pkg_config_file() {
+  local package="$[]1"
+  local result=""
+
+  dnl First examine the path for uninstalled pkg-config files.
+  for entry in $meta_pkg_config_path; do
+    if test -e "$entry/$package-uninstalled.pc"; then
+      result="$entry/$package-uninstalled.pc"
+      break
+    fi
+  done
+
+  dnl Next find the real pkg-config files.
+  if test -z "$result"; then
+    for entry in $meta_pkg_config_path; do
+      if test -e "$entry/$package.pc"; then
+        result="$entry/$package.pc"
+        break
+      fi
+    done
+  fi
+
+  if test -z "${result}"; then
+    AC_MSG_WARN([No pkg-config file found for $package])
+  fi
+
+  echo "$result"
+}
+
 ])
