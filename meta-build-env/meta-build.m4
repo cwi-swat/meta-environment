@@ -314,15 +314,22 @@ dnl -----------------
 dnl Sets up variables for a standard Java package
 dnl
 AC_DEFUN([META_JAVA_SETUP],[
+  JAVA=java
+  AC_SUBST([JAVA])
+
   JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
-  JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
-  JAVA_LOCAL_JARS=`echo META_GET_PKG_USER_VAR([LocalJars]) | tr ',' ' '`
-  JAVA_MAIN_CLASS=META_GET_PKG_USER_VAR([MainClass])
-  JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_JAR])
+
+  JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
   AC_SUBST([JAVA_PACKAGES])
+
+  JAVA_LOCAL_JARS=`echo META_GET_PKG_USER_VAR([LocalJars]) | tr ',' ' '`
   AC_SUBST([JAVA_LOCAL_JARS])
+
+  JAVA_MAIN_CLASS=META_GET_PKG_USER_VAR([MainClass])
   AC_SUBST([JAVA_MAIN_CLASS])
+
+  JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_TEST_CLASS])
 ])
 
