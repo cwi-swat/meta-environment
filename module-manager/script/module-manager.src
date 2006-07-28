@@ -4,6 +4,6 @@ set -e
 #set -x
 
 CLASSPATH=__EXTERNAL_JARS__
-CLASSPATH=$CLASSPATH:__JARDIR__/module-manager-1.0.jar
+CLASSPATH=$CLASSPATH:__JARDIR__/__JARFILE__
 
-__JAVA__ -classpath $CLASSPATH nl.cwi.sen1.modulemanager.ModuleManager $@
+__JAVA__ -classpath $CLASSPATH __MAINCLASS__ $@
