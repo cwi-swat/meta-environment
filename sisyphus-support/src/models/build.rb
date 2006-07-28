@@ -10,4 +10,7 @@ class Build < ActiveRecord::Base
   :join_table => 'dependencies',
   :foreign_key => 'build_id',
   :association_foreign_key => 'dep_id'
+
+  validates_presence_of :time
+
 end
