@@ -4,11 +4,6 @@ SUBDIRS = add-labels
 
 bin_PROGRAMS = Sdf2-to-ADT Sdf2-to-Imploded-ADT
 
-AM_CFLAGS = -DASF_MAIN
-
-INCLUDES = \
-	$(ASC_INCLUDES)
-
 pkgdata_DATA = Sdf2-to-ADT.trm.tbl
 
 EXTRA_DIST = \
@@ -17,13 +12,13 @@ EXTRA_DIST = \
 	$(wildcard *.tbl) \
 	$(wildcard *.eqs)
 
+Sdf2_to_ADT_CPPFLAGS = -DASF_MAIN $(ASC_SUPPORT_CFLAGS)
 Sdf2_to_ADT_SOURCES = Sdf2-to-AsFix2ME-ADT.c
-Sdf2_to_ADT_LDADD = \
-	$(ASC_LD_FLAGS)
+Sdf2_to_ADT_LDADD = $(ASC_SUPPORT_LIBS)
 
+Sdf2_to_Imploded_ADT_CPPFLAGS = -DASF_MAIN $(ASC_SUPPORT_CFLAGS)
 Sdf2_to_Imploded_ADT_SOURCES = Sdf2-to-Imploded-ADT.c
-Sdf2_to_Imploded_ADT_LDADD = \
-	$(ASC_LD_FLAGS)
+Sdf2_to_Imploded_ADT_LDADD = $(ASC_SUPPORT_LIBS)
 
 table:
 	pt-dump -m Sdf2-to-AsFix2ME-ADT -o Sdf2-to-ADT.trm.tbl
