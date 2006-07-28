@@ -8,3 +8,5 @@ Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -ltide-adapter
 #uninstalled Libs: -L@abs_top_builddir@/lib -ltide-adapter
 #uninstalled Cflags: -I@abs_top_builddir@/lib
+ToolBusFlags=-I${prefix}/share/tide-support
+
