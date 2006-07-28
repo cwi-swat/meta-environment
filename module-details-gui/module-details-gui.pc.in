@@ -10,3 +10,5 @@ Jars=${prefix}/share/${JarFile}
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin,nl.cwi.sen1.gui.plugin.data
 MainClass=nl.cwi.sen1.gui.plugin.Moduledetails
 TestClass=
+ToolBusFlags=-I${prefix}/share/module-details-gui
+
