@@ -14,3 +14,5 @@ Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
 LocalJars=${abstop_srcdir}/lib/prefuse.jar
 TestClass=
+ToolBusFlags=-I${prefix}/share/graph-gui
+
