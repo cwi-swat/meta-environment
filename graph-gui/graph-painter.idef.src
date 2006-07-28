@@ -73,7 +73,7 @@ process GP-PopupEvent(GraphType: str?, GraphId: term?, NodeId: term?, MenuItem: 
   rec-msg(gp-menu-selected(GraphType?, GraphId?, NodeId?, MenuItem?))
 
 process StartGraphPanel is
-  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
+  snd-msg(load-jar("file://__PKGDATA__/graph-painter.jar", "__PKGDATA__/prefuse.jar:__EXTERNAL_JARS__"))
 
 toolbus(GraphPainter)
 

@@ -5,7 +5,7 @@ Name: graph-gui
 Version: 1.0
 Description:
 Requires: aterm-java,config-support,graph-support,meta-studio,module-support,toolbus,toolbus-java-adapter
-JarFile=graph-gui.jar
+JarFile=graph-painter.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/prefuse.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
