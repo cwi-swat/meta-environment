@@ -1,6 +1,7 @@
 # !/bin/sh
 
 POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+PREFIX=__PREFIX__
 
 DB_HOST=__DATABASE_HOST__
 DB_PORT=__DATABASE_PORT__
@@ -16,6 +17,6 @@ case $1 in
     user) echo ${DB_USER} ;;
     name) echo ${DB_NAME} ;;
     schema) echo ${SCHEMA} ;;
-    *) echo "Invalid parameter: \"$1\"."; exit 1
+    *) echo ${PREFIX}
 esac
 
