@@ -1,10 +1,6 @@
-include $(top_srcdir)/make_rules
-
-INCLUDES = ${ASC_INCLUDES}
+include $(top_srcdir)/Makefile.meta
 
 EXTRA_DIST = pandora.idef.src
-
-CLEANFILES = pandora.idef
 
 bin_PROGRAMS = pandora 
 
@@ -21,7 +17,8 @@ pandora_SOURCES = \
 	Box-to-Text.c \
 	pandora.tif.c
 
-pandora_LDADD = ${ASC_LD_FLAGS}
+pandora_CPPFLAGS = ${ASC_SUPPORT_CFLAGS}
+pandora_LDADD = ${ASC_SUPPORT_LIBS}
 
 %.idef: %.idef.src Makefile
 	sed 's@__PREFIX__@${prefix}@g' < $< > $@
