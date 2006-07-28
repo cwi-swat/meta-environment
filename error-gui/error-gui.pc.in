@@ -1,6 +1,4 @@
 prefix=@prefix@
-datadir=@datadir@
-pkgdatadir=@pkgdatadir@
 
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: error-gui
@@ -8,8 +6,8 @@ Version: 1.0
 Description:
 Requires: aterm-java,error-support,meta-studio,toolbus,toolbus-java-adapter
 JarFile=error-gui.jar
-LocalJars=@top_srcdir@/lib/jlfgr-1_0.jar
-Jars=${prefix}/share/${JarFile}:${pkgdatadir}/jlfgr-1_0.jar
+LocalJars=lib/jlfgr-1_0.jar
+Jars=${prefix}/share/${JarFile}:${prefix}/share/jlfgr-1_0.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.error,nl.cwi.sen1.error.model,nl.cwi.sen1.error.viewer
 MainClass=nl.cwi.sen1.error.viewer.ErrorViewer
 TestClass=
