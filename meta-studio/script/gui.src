@@ -4,10 +4,7 @@ set -e
 #set -x
 
 CLASSPATH=__EXTERNAL_JARS__
-CLASSPATH=$CLASSPATH:__JARDIR__/idw-gpl-1.4.0.jar
-CLASSPATH=$CLASSPATH:__JARDIR__/swingx.jar
-CLASSPATH=$CLASSPATH:__JARDIR__/gui-util.jar
-CLASSPATH=$CLASSPATH:__JARDIR__/gui.jar
+CLASSPATH=$CLASSPATH:__LOCALJARS__
+CLASSPATH=$CLASSPATH:__JARDIR__/__JARFILE__
 
-__JAVA__ -Xmx256m -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@
-#__JAVA__ -classpath $CLASSPATH nl.cwi.sen1.gui.StudioImplWithPredefinedLayout $@
+__JAVA__ -classpath $CLASSPATH __MAINCLASS__ $@
