@@ -19,7 +19,7 @@ AC_DEFUN([META_SETUP],
   AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc,META_GENERATE_UNINSTALLED_PC(META_GET_PKG_VAR([Name])))
 
   dnl We automatically generate Makefile for all Makefile.am's:
-  AC_CONFIG_FILES(esyscmd([find . -name "Makefile.am" | sed 's#\.am##']))
+  AC_CONFIG_FILES(esyscmd([find . -name "Makefile.am" | sed "s#\.am##"]))
 
   AM_MAINTAINER_MODE
 
@@ -264,7 +264,7 @@ dnl
 AC_DEFUN([META_JAVA_SETUP],[
   JAVA_JAR=META_GET_PKG_USER_VAR([JarFile])
   JAVA_PACKAGES=META_GET_PKG_USER_VAR([Packages])
-  JAVA_LOCAL_JARS=META_GET_PKG_USER_VAR([LocalJars])
+  JAVA_LOCAL_JARS=`echo META_GET_PKG_USER_VAR([LocalJars]) | tr ',' ' '`
   JAVA_MAIN_CLASS=META_GET_PKG_USER_VAR([MainClass])
   JAVA_TEST_CLASS=META_GET_PKG_USER_VAR([TestClass])
   AC_SUBST([JAVA_JAR])
