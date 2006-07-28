@@ -54,7 +54,6 @@ do
     shift
 done
 
-INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
 __TOOLBUS__/bin/toolbus \
   ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
