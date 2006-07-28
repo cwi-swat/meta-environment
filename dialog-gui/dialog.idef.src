@@ -115,7 +115,7 @@ process ShowErrorDialogWithArguments(Message: str, Arguments: list) is
   snd-msg(show-error-dialog-with-arguments(Message, Arguments))
 
 process StartDialogTool is
-  snd-msg(load-jar("file://__PKGDATA__/dialog.jar", "__PKGDATA__/gui-util.jar:__EXTERNAL_JARS__"))
+  snd-msg(load-jar("file://__PKGDATA__/__JARFILE__", "__EXTERNAL_JARS__"))
 
 toolbus(Dialog)
 
