@@ -2,6 +2,6 @@
 
 include $(top_srcdir)/Makefile.top.meta
 
-SUBDIRS = library utils
+SUBDIRS = library 
 
 ACLOCAL_AMFLAGS = -I .
