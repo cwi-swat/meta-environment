@@ -1,8 +1,16 @@
 
+
+Fri Jul 28 15:15:46 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build-m4: fixed nasty bugs. If a package name is a prefix
+   of another package name, the grep trick does not work. The
+   workaround is to add a space " " to the end of the regular
+   expression. This works, but it ain't pretty.
+
 Fri Jul 28 11:53:45 CEST 2006 <jurgenv@cwi.nl>
  * meta-build-m4: refactored META_INSPECT_PACKAGE to
    call META_INSPECT_PACKAGE_JAVA and added call to
    META_INSPECT_PACKAGE_TOOLBUS.
+ 
 
 Fri Jul 28 04:49:07 CEST 2006  <martin.bravenboer@gmail.com>
   * meta-build.m4: major refactoring of the macros, after

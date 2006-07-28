@@ -241,7 +241,7 @@ AC_DEFUN([META_INSPECT_PACKAGE_TOOLBUSFLAGS],[
         else
           $2[]_TOOLBUSFLAGS="${$2[]_TOOLBUSFLAGS} $[]i"
         fi
-        if (echo "${TOOLBUSFLAGS}" | grep -q [" $i"]); then
+        if (echo "${TOOLBUSFLAGS}" | grep -q [" $i "]); then
           TOOLBUSFLAGS="${TOOLBUSFLAGS}"
         else
           TOOLBUSFLAGS="${TOOLBUSFLAGS} $[]i"
@@ -253,7 +253,7 @@ AC_DEFUN([META_INSPECT_PACKAGE_TOOLBUSFLAGS],[
   if test -z "${$2[]_TOOLBUSFLAGS}"; then
     AC_MSG_RESULT([no])
   else
-    AC_MSG_RESULT([$$2[]_TOOLBUSFLAGS])
+    AC_MSG_RESULT([yes])
   fi
 
   AC_SUBST($2[]_TOOLBUSFLAGS)
@@ -389,7 +389,7 @@ function meta_recursive_requires() {
   meta_require_pcfile=""
   meta_require_kids=""
 
-  if (echo ${meta_require_closure} | grep -q "$[]1") ; then
+  if (echo ${meta_require_closure} | grep -q "$[]1 ") ; then
     meta_require_closure="${meta_require_closure}"
   else
     meta_require_pcfile=$(meta_find_pkg_config_file $[]1)
