@@ -1,7 +1,4 @@
 prefix=@prefix@
-datadir=@datadir@
-pkgdatadir=@pkgdatadir@
-abstopsrcdir=@abstopsrcdir@
 
 Maintainers=jurgenv@cwi.nl,kooiker@cwi.nl
 Name: graph-gui
@@ -12,7 +9,7 @@ JarFile=graph-gui.jar
 Jars=${prefix}/share/${JarFile}:${prefix}/share/prefuse.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.gui,nl.cwi.sen1.gui.plugin
 MainClass=nl.cwi.sen1.gui.plugin.GraphPainter
-LocalJars=${abstop_srcdir}/lib/prefuse.jar
+LocalJars=lib/prefuse.jar
 TestClass=
 ToolBusFlags=-I${prefix}/share/graph-gui
 
