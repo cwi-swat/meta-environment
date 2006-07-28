@@ -4,3 +4,4 @@ Name: asfsdf-meta
 Version: 2.0
 Description:
 Requires: asf,asf-library,meta,sdf-meta,toolbus
+ToolBusFlags=${prefix}/share/asfsdf-meta
