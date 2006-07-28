@@ -7,4 +7,4 @@ Requires: aterm,config-support,error-support,toolbuslib
 Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib -lIOAPI
 ToolBusFlags=-I${prefix}/share/io-support
-
+Jars=${prefix}/share/ioapi.jar
