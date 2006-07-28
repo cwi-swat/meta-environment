@@ -1,7 +1,7 @@
 #! /bin/sh
 
 MODULENAME=""
-
+set -x
 me=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 myarguments="hm:V"
@@ -58,5 +58,5 @@ INCLUDES=`__PREFIX__/bin/asfsdf-meta-config --toolbus-includes`
 __TOOLBUS__/bin/toolbus \
   ${VIEWER} \
   -DMODULENAME=\\\"${MODULENAME}\\\" \
-  ${INCLUDES} \
+  __TBSCRIPTS__ \
   __PREFIX__/share/asfsdf-meta/start-meta-studio.tb $*

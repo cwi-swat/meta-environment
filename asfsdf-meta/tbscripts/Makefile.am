@@ -46,5 +46,5 @@ standard.asfsdf.actions:  standard.asfsdf.actions.src Makefile
 	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library/library@g" < $< > $@
 
 install-data-hook:
-	$(META)/bin/plugin-config -add $(pkgdatadir)/asf-initialize.tb
-	$(META)/bin/plugin-config -generate
+	$(META_PREFIX)/bin/plugin-config -add $(pkgdatadir)/asf-initialize.tb
+	$(META_PREFIX)/bin/plugin-config -generate
