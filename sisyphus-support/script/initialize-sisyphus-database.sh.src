@@ -1,0 +1,19 @@
+# !/bin/sh
+
+DATA_DIR=__DATA_DIR__
+
+POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+
+DB_HOST=__DATABASE_HOST__
+DB_PORT=__DATABASE_PORT__
+DB_USER=__DATABASE_USER__
+DB_NAME=__DATABASE_NAME__
+
+SCHEMA=${DATA_DIR}/schemas/sisyphus.postgresql
+
+echo "This will destroy any data contained in database ${DB_NAME}!"
+echo "Press Control-C to quit."
+read
+
+${POSTGRESQL} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -f ${SCHEMA}
+
