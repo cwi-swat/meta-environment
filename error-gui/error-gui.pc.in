@@ -13,3 +13,5 @@ Jars=${prefix}/share/${JarFile}:${pkgdatadir}/jlfgr-1_0.jar
 Packages=nl,nl.cwi,nl.cwi.sen1,nl.cwi.sen1.error,nl.cwi.sen1.error.model,nl.cwi.sen1.error.viewer
 MainClass=nl.cwi.sen1.error.viewer.ErrorViewer
 TestClass=
+ToolBusFlags=-I${prefix}/share/error-gui
+
