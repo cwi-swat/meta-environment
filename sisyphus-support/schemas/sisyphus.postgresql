@@ -1,5 +1,23 @@
 /* -*- sql -*- */
 
+
+drop table builds cascade;
+drop table results cascade;
+drop table trees cascade;
+drop table components cascade;
+drop table status cascade;
+drop table actions cascade;
+drop table sources cascade;
+drop table profiles cascade;
+drop table releases cascade;
+drop table integrations cascade;
+drop table designators cascade;
+drop table environments cascade;
+drop table platforms cascade;
+drop table hosts cascade;
+drop table roots cascade;
+drop table repositories cascade;
+
 create table repositories (
 	id serial primary key,
 	location text not null unique
@@ -48,7 +66,7 @@ create table profiles (
 
 create table sources (
 	id serial primary key,
-	profile_id integer references profiles
+	profile_id integer references profiles,
 	repository_id integer references repositories,
 	unique (profile_id, repository_id)
 );	
@@ -101,7 +119,7 @@ create table actions (
 	name text,
 	template text,
 	unique (profile_id, position, name)
-)
+);
 
 create table results (
 	id serial primary key,
@@ -122,7 +140,7 @@ create table releases (
 
 	
 create table status (
-	id serial primary key
+	id serial primary key,
 	host_id integer references hosts,
 	build_id integer references builds,
 	result_id integer references results,

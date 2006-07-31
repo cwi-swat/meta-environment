@@ -1,9 +1,9 @@
 
-bin_SCRIPTS     = initialize-sisyphus-database sisyphus-support-config
+bin_SCRIPTS     = initialize-sisyphus-database sisyphus-support-config psql-sisyphus
 
 EXTRA_DIST      = $(wildcard *.sh.src)
 
-CLEANFILES      = initialize-sisyphus-database sisyphus-support-config
+CLEANFILES      = initialize-sisyphus-database sisyphus-support-config psql-sisyphus
 
 % : %.sh.src
 	sed "s@__PREFIX__@$(prefix)@g;\

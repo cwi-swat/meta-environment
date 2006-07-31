@@ -7,7 +7,7 @@ META_REQUIRE_SOFTWARE(postgresql, psql)
 AC_ARG_WITH(name,
    [  --with-database-name=NAME   Sisyphus database name ],
    DATABASE_NAME=$withval,
-   DATABASE_NAME=sisyphus)
+   DATABASE_NAME=sisyphus20)
 AC_SUBST(DATABASE_NAME)
 
 AC_ARG_WITH(host,

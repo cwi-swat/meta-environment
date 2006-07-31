@@ -1,4 +1,5 @@
-# !/bin/sh
+#! /bin/sh
+
 
 DATA_DIR=__DATA_DIR__
 
@@ -15,5 +16,11 @@ echo "This will destroy any data contained in database ${DB_NAME}!"
 echo "Press Control-C to quit."
 read
 
-${POSTGRESQL} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME} -f ${SCHEMA}
+${POSTGRESQL} \
+    --output /dev/null \
+    --host ${DB_HOST} \
+    --port ${DB_PORT} \
+    --username ${DB_USER} \
+    --dbname ${DB_NAME} \
+    --file ${SCHEMA} 
 
