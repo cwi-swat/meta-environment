@@ -10,13 +10,16 @@ drop table actions cascade;
 drop table sources cascade;
 drop table profiles cascade;
 drop table releases cascade;
-drop table integrations cascade;
+drop table dependencies cascade;
 drop table designators cascade;
 drop table environments cascade;
 drop table platforms cascade;
 drop table hosts cascade;
 drop table roots cascade;
 drop table repositories cascade;
+drop table projects cascade;
+drop table projects_components cascade;
+drop table profiles_projects cascade;
 
 create table repositories (
 	id serial primary key,
@@ -42,9 +45,9 @@ create table components (
 
 create table designators (
 	id serial primary key,
-	component_id integer references components,
+	repository_id integer references repositories,
 	path text not null,
-	unique (component_id, path)
+	unique (repository_id, path)
 );
 
 
@@ -60,17 +63,35 @@ create table trees (
 create table profiles (
 	id serial primary key,
 	name varchar(32) not null,
-	version integer not null, 
+	version serial not null,
 	unique (name, version)
+);
+
+create table projects (
+	id serial primary key,
+	name text not null unique,
+	version serial not null
+);
+
+create table projects_components (
+	project_id integer references projects,
+	component_id integer references components,
+	unique (project_id, component_id)
+);
+
+create table profiles_projects (
+	profile_id integer references profiles,
+	project_id integer references projects,
+	unique (profile_id, project_id)
 );
 
 create table sources (
 	id serial primary key,
-	profile_id integer references profiles,
-	repository_id integer references repositories,
-	unique (profile_id, repository_id)
+	component_id integer references components,
+	designator_id integer references designators,
+	project_id integer references projects,
+	unique (component_id, designator_id, project_id)
 );	
-
 
 
 create table roots (
@@ -89,7 +110,8 @@ create table environments (
 create table hosts (
 	id serial primary key,
 	platform_id integer references platforms,
-	name varchar(512) not null unique
+	name varchar(512) not null,
+	unique (name, platform_id)
 );
 
 
@@ -104,8 +126,7 @@ create table builds (
 	unique (host_id, tree_id, profile_id)
 );
 
-create table integrations (
-	id serial primary key,
+create table dependencies (
 	build_id integer references builds,
 	dependency_id integer references builds,
 	unique (build_id, dependency_id)
