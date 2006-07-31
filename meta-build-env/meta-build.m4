@@ -396,6 +396,7 @@ dnl A shell function for getting the recursive requirements of a package
 AC_DEFUN([META_RECURSIVE_REQUIRES],[
 # args: $[]1 : top module
 function meta_requires() {
+set -x
   meta_require_closure=""
   meta_pkg_config_path="$(echo "$[]PKG_CONFIG_PATH" | tr ':' ' ')"
   if test -z  "${meta_pkg_config_path}"; then
@@ -404,13 +405,14 @@ function meta_requires() {
 
   meta_recursive_requires $[]1
   echo ${meta_require_closure}
+set +x
 }
 
 function meta_recursive_requires() {
   meta_require_pcfile=""
   meta_require_kids=""
 
-  META_IF_CONTAINS([${meta_require_closure}],[$1 ],[
+  META_IF_CONTAINS([${meta_require_closure}],[$[]1 ],[
     meta_require_pcfile=$(meta_find_pkg_config_file $[]1)
     meta_require_closure="${meta_require_closure} $[]1"
 
