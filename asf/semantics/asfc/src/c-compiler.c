@@ -8,27 +8,47 @@ extern ATbool run_verbose;
 extern ATbool make_toolbus_tool;
 
 void call_c_compiler(ATbool keep_annos,
-		     const char* binary, const char* name, const char* source)
+		     const char* binary, 
+		     const char* name, 
+		     const char *stem,
+		     const char* output)
 {
   char commandline[BUFFER_SIZE];
   char sourcefiles[BUFFER_SIZE];
+  char objectfiles[BUFFER_SIZE];
 
   if (make_toolbus_tool) {
-    sprintf(sourcefiles, "%s tool%s.tif.c", source, name);
+    sprintf(sourcefiles, "%s tool%s.tif.c", output, name);
+    sprintf(objectfiles, "%s.o tool%s.tif.o", stem, name);
   }
   else {
-    sprintf(sourcefiles, "%s", source);
+    sprintf(sourcefiles, "%s", output);
+    sprintf(objectfiles, "%s.o", stem);
   }
 
   sprintf(commandline,
-         COMPILER " " COMPILERFLAGS 
+         COMPILE " " 
+	 "-c %s \\\n"
+	 "\t" ASC_SUPPORT_CFLAGS "\\\n"
+	 "\t-DASF_MAIN %s\n",
+	 sourcefiles,
+	 keep_annos ? "-DASF_WITH_ANNOS" : ""
+	 );
+
+  if (run_verbose) {
+    ATwarning("%s\n",commandline);
+  }
+  
+  system(commandline);
+
+  sprintf(commandline,
+         LINK " " 
 	 " -o %s "
 	 "%s \\\n"
-	 "\t" ASC_INCLUDES "\\\n"
-	 "\t" ASC_LD_FLAGS "\\\n"
+	 "\t" ASC_SUPPORT_LIBS "\\\n"
 	 "\t-DASF_MAIN %s\n",
 	 binary, 
-	 sourcefiles,
+	 objectfiles,
 	 keep_annos ? "-DASF_WITH_ANNOS" : ""
 	 );
 

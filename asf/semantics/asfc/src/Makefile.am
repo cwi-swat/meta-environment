@@ -7,17 +7,6 @@ EXTRA_DIST       = asfc.idef.src
 
 CLEANFILES += asfc.idef
 
-asfc_SOURCES = asfc.tif.c \
-               asfc.c \
-               chars.c \
-               c-code.c \
-               asf2muasf.c \
-               muasf2c.c \
-               c-compiler.c \
-               idef.c \
-               Compiler.c \
-	       MuASF.c \
-	       MuASF_dict.c
 
 
 noinst_HEADERS = asfc.tif.h \
@@ -31,16 +20,30 @@ noinst_HEADERS = asfc.tif.h \
 		 MuASF.h \
 		 MuASF_dict.h
 
+ASFC_C_LINKER=$(shell echo $(LINK) | sed 's@${top_builddir}/libtool@${libexecdir}/libtool@g')
+
 asfc_DEPENDENCIES =
 asfc_LDADD   = $(ASC_SUPPORT_LIBS)
-asfc_CPPFLAGS = -DASC_INCLUDES="\"$(ASC_SUPPORT_CFLAGS)\"" \
-          -DASC_LD_FLAGS="\"$(ASC_SUPPORT_LIBS)\""   \
-          -DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
-          -DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
-          -DCOMPILER="\"$(CC)\"" \
-          -DCOMPILERFLAGS="\"$(CFLAGS)\"" \
-	  $(ASC_SUPPORT_CFLAGS)
+asfc_CPPFLAGS =  \
+		-DASC_SUPPORT_CFLAGS="\"$(ASC_SUPPORT_CFLAGS)\"" \
+		-DASC_SUPPORT_LIBS="\"$(ASC_SUPPORT_LIBS)\""   \
+		-DIDEF2TIF="\"$(TOOLBUS)/bin/idef2tif\"" \
+		-DTIFSTOC="\"$(TOOLBUS)/bin/tifstoc\"" \
+		-DCOMPILE="\"$(CC)\"" \
+		-DLINK="\"$(ASFC_C_LINKER)\"" \
+		$(ASC_SUPPORT_CFLAGS)
 
+asfc_SOURCES = asfc.tif.c \
+               asfc.c \
+               chars.c \
+               c-code.c \
+               asf2muasf.c \
+               muasf2c.c \
+               c-compiler.c \
+               idef.c \
+               Compiler.c \
+	       MuASF.c \
+	       MuASF_dict.c
 
 bootstrap: 
 	asfc -i Compiler.eqs -o Compiler.c -v

@@ -230,7 +230,7 @@ static PT_ParseTree compile(const char *name, ATerm eqs, ATerm parseTable,
       
       VERBOSE("invoking C compiler");
 
-      call_c_compiler(keep_annos, prefix, saveName, output);
+      call_c_compiler(keep_annos, prefix, saveName, prefix, output);
     }
 
   }
