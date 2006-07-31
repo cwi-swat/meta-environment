@@ -46,8 +46,8 @@ install: all install-autotools
 
 $(AUTO_ARCHIVES):
 	for tool in $(AUTO_TOOLS); do  \
-		$(WGET) $$tool ; \
-	done
+		$(WGET) --tries=5 $$tool ; \
+	done; \
 
 $(AUTO_DIRS): $(AUTO_ARCHIVES)
 	for tool in $(AUTO_ARCHIVES); do  \
