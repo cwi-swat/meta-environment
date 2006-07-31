@@ -64,7 +64,7 @@ booltest.pt: Booleans.trm.tbl booltest.trm  Makefile
                     --name $* \
 		    --version 0.0 \
 		    --package test 
-	${JAVAC} -classpath ${top_builddir}:${top_srcdir}:${JAVA_ATERM} \
+	${JAVAC} -classpath ${top_builddir}:${top_srcdir}:${ATERM_JAVA_INSTALLED_JARS} \
 		${top_srcdir}/test/$($*_Main).java \
 		-d ${top_builddir}
 	@(echo "#! /bin/sh";\
