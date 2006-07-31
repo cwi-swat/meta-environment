@@ -84,13 +84,13 @@ AC_DEFUN([META_ARG_WITH_PACKAGE],
   if test "${AC_Var[]_PREFIX:+set}" = set; then
     AC_MSG_RESULT([yes])
     TMP_PKGCONFIG_PATH="$AC_Var[]_PREFIX/lib/pkgconfig"
-    META_IF_CONTAINS([${PKG_CONFIG_PATH}],[${TMP_PKGCONFIG_PATH}],[
+    META_IF_NOT_CONTAINS([${PKG_CONFIG_PATH}],[${TMP_PKGCONFIG_PATH}],[
       PKG_CONFIG_PATH="${TMP_PKGCONFIG_PATH}:${PKG_CONFIG_PATH}"
     ])
     export PKG_CONFIG_PATH
     TMP_PKGCONFIG_DEPS=META_INSTALLED_PKG_CONFIG_PATH(${TMP_PKGCONFIG_PATH}/$1.pc)
     for deppath in ${TMP_PKGCONFIG_DEPS}; do
-      META_IF_CONTAINS([${PKG_CONFIG_PATH}],[${deppath}],[
+      META_IF_NOT_CONTAINS([${PKG_CONFIG_PATH}],[${deppath}],[
         PKG_CONFIG_PATH="${deppath}:${PKG_CONFIG_PATH}"
       ])
     done
@@ -202,14 +202,14 @@ AC_DEFUN([META_INSPECT_PACKAGE_JARS],[
     if test "x${TMP_JARS}" != "x" ; then
        for j in ${TMP_JARS}; do
          $2[]_INSTALLED_JARS="$$2[]_INSTALLED_JARS:$[]j"
-         META_IF_CONTAINS([${EXTERNAL_INSTALLED_JARS}],[$j],[
+         META_IF_NOT_CONTAINS([${EXTERNAL_INSTALLED_JARS}],[$j],[
             EXTERNAL_INSTALLED_JARS="${EXTERNAL_INSTALLED_JARS}:$[]j"
          ])
        done
 
        for j in ${TMP_UNINSTALLED_JARS}; do
          $2[]_JARS="$$2[]_JARS:$[]j"
-         META_IF_CONTAINS([${EXTERNAL_JARS}],[$j],[
+         META_IF_NOT_CONTAINS([${EXTERNAL_JARS}],[$j],[
             EXTERNAL_JARS="${EXTERNAL_JARS}:$[]j"
          ])
        done
@@ -241,10 +241,10 @@ AC_DEFUN([META_INSPECT_PACKAGE_TOOLBUSFLAGS],[
 
     if test "x${TMP_TOOLBUSFLAGS}" != "x" ; then
       for i in ${TMP_TOOLBUSFLAGS}; do
-        META_IF_CONTAINS($$2[]_TOOLBUSFLAGS,[ $i],
+        META_IF_NOT_CONTAINS($$2[]_TOOLBUSFLAGS,[ $i],
           $2[]_TOOLBUSFLAGS="${$2[]_TOOLBUSFLAGS} $[]i"
         )
-        META_IF_CONTAINS([${TOOLBUSFLAGS}],[ $i ],[
+        META_IF_NOT_CONTAINS([${TOOLBUSFLAGS}],[ $i ],[
           TOOLBUSFLAGS="${TOOLBUSFLAGS} $[]i "
         ])
       done
@@ -383,10 +383,10 @@ cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' >
 echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
 ])
 
-dnl META_IF_CONTAINS(STRING,SUBSTRING,CODE)
+dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
 dnl checks whether SUBSTRING is a part of STRING, and runs CODE if yes
 dnl (this is supposed to be a portable way to do this)
-AC_DEFUN([META_IF_CONTAINS],[
+AC_DEFUN([META_IF_NOT_CONTAINS],[
   if test `expr "$1" : ".*$2.*"` -eq 0 ; then
     $3
   fi
@@ -410,7 +410,7 @@ function meta_recursive_requires() {
   meta_require_pcfile=""
   meta_require_kids=""
 
-  META_IF_CONTAINS([${meta_require_closure}],[$[]1 ],[
+  META_IF_NOT_CONTAINS([${meta_require_closure}],[$[]1 ],[
     meta_require_pcfile=$(meta_find_pkg_config_file $[]1)
     meta_require_closure="${meta_require_closure} $[]1"
 
