@@ -1,7 +1,0 @@
-equations
-
-[extractInterface-1]
-	&Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody := &InterfaceDeclaration
-	=========================================================
-	extractInterface(&InterfaceDeclaration, &Rel) = 
-	&Rel union {<id2str(&Identifier), get-location(&InterfaceDeclaration)>}

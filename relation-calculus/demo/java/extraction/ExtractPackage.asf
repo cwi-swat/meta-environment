@@ -1,7 +1,0 @@
-equations
-
-[extractPackage-1]
-	package &Name ; := &PackageDeclaration
-	=========================================================
-	extractPackage(&PackageDeclaration, &Rel) =
-	&Rel union { <name2str(&Name), get-location(&PackageDeclaration)>}
