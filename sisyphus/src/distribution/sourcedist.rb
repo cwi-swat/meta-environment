@@ -15,6 +15,14 @@ module Distribution
 
     def make_source_dists
       dist = build_dist_path(@item)
+      if File.exist?(dist) then
+        make_source_dists_really(dist)
+      else
+        @log.warn("No distribution #{dist} found; none released.")
+      end
+    end
+
+    def make_source_dists_really(dist)
       @log.info("extracting #{dist}")
       `gunzip -c #{dist} | tar xf -`
       subdir = File.basename(dist, '.tar.gz')
