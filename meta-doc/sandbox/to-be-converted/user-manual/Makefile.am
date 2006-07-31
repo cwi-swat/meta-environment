@@ -2,12 +2,12 @@
 
 include $(top_srcdir)/make-rules
 
-SUBDIRS=. html
+SUBDIRS=.
 
 docdir = ${prefix}/doc
 doc_DATA = asfsdf-user-manual.pdf
 
-noinst_DATA = ${doc_DATA} html
+noinst_DATA = ${doc_DATA}
 EXTRA_DIST = ${doc_DATA}
 
 if MAINTAINER_MODE
