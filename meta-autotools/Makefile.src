@@ -31,7 +31,7 @@ PKGCONFIG=http://pkgconfig.freedesktop.org/releases/$(PKGCONFIG_ARCHIVE)
 
 AUTO_TOOLS = $(AUTOCONF) $(AUTOMAKE) $(LIBTOOL) $(PKGCONFIG)
 
-CURL=curl
+WGET=wget
 
 EXTRA_DIST = Makefile.src meta-autotools.pc.in configure reconf ChangeLog $(AUTO_ARCHIVES)
 
@@ -46,7 +46,7 @@ install: all install-autotools
 
 $(AUTO_ARCHIVES):
 	for tool in $(AUTO_TOOLS); do  \
-		$(CURL) -O $$tool ; \
+		$(WGET) $$tool ; \
 	done
 
 $(AUTO_DIRS): $(AUTO_ARCHIVES)

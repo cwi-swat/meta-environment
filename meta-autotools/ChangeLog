@@ -1,3 +1,7 @@
+2006-07-31    <storm@cwi.nl>
+
+	* Fix; moved from curl to wget.
+
 2006-07-27    <storm@cwi.nl>
 
 	* Fix: distcheck didn't dist.
