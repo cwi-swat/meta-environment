@@ -1,5 +1,14 @@
 
 
+Mon Jul 31 12:55:44 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
+ * meta-build.m4: added META_IF_CONTAINS, which replaces the old
+   'grep -q' hack (not portable), with a different implementation
+   that should be portable using test and expr.
+ * meta-build.m4: transitively closed PKG_CONFIG_PATH is stored
+   in the installed .pc file, and used to construct a PKG_CONFIG_PATH
+   BEFORE using pkg-config. This solves the problem of using
+   pkg-config while every package is installed in a different prefix.
+
 Fri Jul 28 15:15:46 CEST 2006 <{kooiker,jurgenv}@cwi.nl>
  * meta-build-m4: fixed nasty bugs. If a package name is a prefix
    of another package name, the grep trick does not work. The
