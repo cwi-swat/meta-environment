@@ -2,6 +2,9 @@
 
 Mon Jul 31 13:53:00 CEST 2006 <jurgenv@cwi.nl>
  * utils/Makefile.am: reactivated without testing 
+ * demo/*: removed Java specific stuff and put it into 
+   the new package java-source-analysis. This code will not
+   work, but we keep it anyway in that package for future reference.
 
 Thu Mar  9 15:38:10 CET 2006 <jurgenv@cwi.nl>
  * *: working on making relation-calculus an ASF+SDF library that can

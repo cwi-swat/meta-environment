@@ -44,10 +44,6 @@ Makefile
 dnl  rviz/Makefile
 dnl  demo/Makefile
 dnl  demo/pico/Makefile
-dnl  demo/java/Makefile
-dnl  demo/java/extraction/Makefile
-dnl  demo/java/grammar/Makefile
-dnl  demo/java/rscripts/Makefile
 )
 AC_OUTPUT
 
