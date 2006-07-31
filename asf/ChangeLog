@@ -1,5 +1,13 @@
 $Id$
 
+Mon Jul 31 22:37:31 CEST 2006 <jurgenv@cwi.nl>
+ * semantics/asfc/src/c-compiler.c,Makefile.am: the ASF compiler now
+   uses libtool to link ASF compiled specifications. The size of
+   the binaries reduces dramatically, also the link time is faster.
+   Let's see how this holds up in terms of portability.
+ * Makefile.am: toplevel Makefile.am installs the generated 'libtool'
+   script in prefix/libexec for use by asfc later on.
+
 Fri Jul  7 15:38:05 CEST 2006 <jurgenv@cwi.nl>
  * semantics/**/*.c: replaced PT_getArgsArgumentAt by PT_getArgsTreeAt
 
