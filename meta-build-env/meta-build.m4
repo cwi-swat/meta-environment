@@ -16,7 +16,7 @@ AC_DEFUN([META_SETUP],
   AC_CONFIG_SRCDIR([configure])
    
   AM_INIT_AUTOMAKE(META_GET_PKG_VAR([Name]),META_GET_PKG_VAR([Version]))
-  AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc,META_GENERATE_UNINSTALLED_PC(META_GET_PKG_VAR([Name])))
+  AC_CONFIG_FILES(META_GET_PKG_VAR([Name]).pc,META_GENERATE_PKG_CONFIG_FILES(META_GET_PKG_VAR([Name])))
 
   dnl We automatically generate Makefile for all Makefile.am's:
   AC_CONFIG_FILES(esyscmd([find . -name "Makefile.am" | sed "s#\.am##"]))
@@ -376,9 +376,9 @@ AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:
 dnl META_INSTALLED_PKG_CONFIG_PATH(PATH_TO_PKG_FILE)
 AC_DEFUN([META_INSTALLED_PKG_CONFIG_PATH],[$(grep "PkgConfigPath=" $1 | cut -f 2 -d '=' | tr ':' ' ')])
 
-dnl META_GENERATE_UNINSTALLED_PC(PKG)
+dnl META_GENERATE_PKG_CONFIG_FILES(PKG)
 dnl ---------------------------------
-AC_DEFUN([META_GENERATE_UNINSTALLED_PC],[
+AC_DEFUN([META_GENERATE_PKG_CONFIG_FILES],[
 cat $1.pc | grep -v "^Libs" | grep -v "^Cflags" | sed -e 's/\#uninstalled //g' > $1-uninstalled.pc
 echo "PkgConfigPath=$PKG_CONFIG_PATH" >> $1.pc
 ])
