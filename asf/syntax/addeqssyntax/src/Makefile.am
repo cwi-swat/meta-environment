@@ -13,7 +13,7 @@ noinst_HEADERS = addeqssyntax.tif.h
 
 addeqssyntax_CPPFLAGS = \
 	   $(ASC_SUPPORT_CFLAGS) \
-	   -I$(SDF_SUPPORT)/include
+	   $(SDF_SUPPORT_CFLAGS)
 addeqssyntax_SOURCES = \
 	addeqssyntax.c \
 	Add-Eqs-Syntax.c \
