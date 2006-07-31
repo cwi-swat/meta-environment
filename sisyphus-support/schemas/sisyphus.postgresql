@@ -113,8 +113,6 @@ create table results (
 	unique (build_id, action_id)
 );
 
-
-drop table releases;
 create table releases (
 	id serial primary key,
 	build_id integer references builds,
@@ -123,3 +121,12 @@ create table releases (
 );
 
 	
+create table status (
+	id serial primary key
+	host_id integer references hosts,
+	build_id integer references builds,
+	result_id integer references results,
+	message text not null
+);
+
+
