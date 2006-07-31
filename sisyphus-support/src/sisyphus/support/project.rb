@@ -8,4 +8,37 @@ class Project < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
 
+  def components_with_sources
+    return sources.collect do |source|
+      source.component
+    end
+  end
+
+  protected
+
+  def validate
+    root_components_must_be_in_sources
+    components_must_have_unique_sources
+  end
+
+  def root_components_must_be_in_sources
+    cs = components_with_sources
+    components.each do |component|
+      if not cs.include?(component) then
+        errors.add('sources', "root component #{component} has no source")
+      end
+    end
+  end
+  
+  def components_must_have_unique_sources
+    cs = components_with_sources
+    set = cs.uniq
+    diff = cs - set
+    if not diff.empty? then
+      diff.each do |component|
+        errors.add('sources', "component #{component} has duplicate sources")
+      end
+    end
+  end
+  
 end

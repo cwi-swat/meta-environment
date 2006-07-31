@@ -22,9 +22,4 @@ class Tree < ActiveRecord::Base
     return designator.path
   end
 
-  def name
-    return designator.name
-  end
-
-
 end
