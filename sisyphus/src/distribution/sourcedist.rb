@@ -15,10 +15,14 @@ module Distribution
 
     def make_source_dists
       dist = build_dist_path(@item)
-      if File.exist?(dist) then
-        make_source_dists_really(dist)
+      if dist then
+        if File.exist?(dist) then
+          make_source_dists_really(dist)
+        else
+          @log.warn("No distribution #{dist} found; none released.")
+        end
       else
-        @log.warn("No distribution #{dist} found; none released.")
+          @log.warn("Dist was nil; none released.")
       end
     end
 
