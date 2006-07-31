@@ -37,36 +37,30 @@ module Versioning
 
   class PKGConfigBOMReader < BOMReader
     def version
-      each do |line|
-        if line =~ /^Version\s*:\s*([0-9\.a-bA-Z_\-]+)$/ then
-          return $1
-        end
+      v = find(/^Version\s*:\s*([0-9\.a-bA-Z_\-]+)$/)
+      if not v then 
+        raise RuntimeError.new("error parsing version in: #{@bom}")
       end
-      raise RuntimeError.new("error parsing version in: #{@bom}")
+      return v
     end
 
     def emails
-      each do |line|
-        if line =~ /^Maintainers\s*=\s*([^\n]*)$/ then
-          return $1.split(',')
-        end
-      end
-      return []
+      e = find(/^Maintainers\s*=\s*([^\n]*)$/)
+      return e ? e.split(',') : []
     end
 
     def dependencies
-      each do |line|
-        if line =~ /^Requires\s*:\s*([^\n]*)$/ then
-          return $1.split(/[, ]/)
-        end
-      end
-      return []
+      d = find(/^Requires\s*:\s*([^\n]*)$/)
+      return d ? d.split(/[, ]/) : []
     end
 
-    def each
+    def find(regexp)
       @bom.each do |line|
-        yield line
+        if regexp.match(line)
+          return $1
+        end
       end
+      return nil
     end
 
   end
