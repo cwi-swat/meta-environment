@@ -25,7 +25,7 @@ asfoperations_SOURCES = \
 	asfnormalization.c \
 	ASF-Normalization.c
 
-libasfnormalization_la_CPPFLAGS = $(ATERM_CFLAGS)
+libasfnormalization_la_CPPFLAGS = $(ASC_SUPPORT_CFLAGS)
 libasfnormalization_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
 libasfnormalization_la_SOURCES = \
 			  asfnormalization.c \
