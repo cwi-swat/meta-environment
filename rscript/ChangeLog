@@ -1,5 +1,8 @@
 
 
+Mon Jul 31 13:53:00 CEST 2006 <jurgenv@cwi.nl>
+ * utils/Makefile.am: reactivated without testing 
+
 Thu Mar  9 15:38:10 CET 2006 <jurgenv@cwi.nl>
  * *: working on making relation-calculus an ASF+SDF library that can
    be included in the distribution:
