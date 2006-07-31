@@ -51,7 +51,7 @@ IGNORES="\
 
 TEST_MODULES_ASFE_ONLY=
 
-ASFC=${top_builddir}/semantics/asfc/src/asfc
+ASFC=${top_builddir}/semantics/asfc/src/test-asfc
 ASFE=${top_builddir}/semantics/asfe/src/asfe
 ASFCHECKER=${top_builddir}/semantics/asf-checker/src/asfchecker
 ATRMANNOS=${ATERM_PREFIX}/bin/atrmannos
