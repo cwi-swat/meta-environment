@@ -1,8 +1,10 @@
+SUBDIRS = support
+
 RUBY_FILES = $(wildcard *.rb)
 
-modelsdir = $(pkgdatadir)/models
+sisyphusdir = $(pkgdatadir)/sisyphus
 
-models_DATA = $(RUBY_FILES)
+sisyphus_DATA = $(RUBY_FILES)
 
 EXTRA_DIST = $(RUBY_FILES)
 
