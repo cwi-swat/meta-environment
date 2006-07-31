@@ -1,0 +1,12 @@
+#! /bin/sh
+
+psql -U sisyphus -h sjofar.sen.cwi.nl sisyphus20
+
+POSTGRESQL=__POSTGRESQL_PREFIX__/bin/psql
+
+DB_HOST=__DATABASE_HOST__
+DB_PORT=__DATABASE_PORT__
+DB_USER=__DATABASE_USER__
+DB_NAME=__DATABASE_NAME__
+
+${POSTGRESQL} -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} -d ${DB_NAME}
