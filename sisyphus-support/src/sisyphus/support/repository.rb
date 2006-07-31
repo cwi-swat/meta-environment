@@ -14,4 +14,13 @@ class Repository < ActiveRecord::Base
     return r
   end
 
+  def <=>(r)
+    return location <=> r.location
+  end
+
+  def ==(r)
+    return location == r.location
+  end
+
+
 end

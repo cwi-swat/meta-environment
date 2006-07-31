@@ -11,4 +11,8 @@ class Source < ActiveRecord::Base
                                              component, project])
   end
 
+  def name
+    return component.name
+  end
+
 end

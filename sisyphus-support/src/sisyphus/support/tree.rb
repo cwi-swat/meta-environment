@@ -14,4 +14,17 @@ class Tree < ActiveRecord::Base
     return t
   end
   
+  def repository
+    return designator.repository
+  end
+
+  def path
+    return designator.path
+  end
+
+  def name
+    return designator.name
+  end
+
+
 end
