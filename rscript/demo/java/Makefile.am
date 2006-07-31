@@ -1,1 +1,1 @@
-SUBDIRS	= extraction grammar rscripts
+SUBDIRS	= extraction grammar 

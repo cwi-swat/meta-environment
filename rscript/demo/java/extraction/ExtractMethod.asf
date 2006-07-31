@@ -1,9 +1,0 @@
-equations
-
-[extractMethod-1]
-	&MethodHeader &MethodBody := &MethodDeclaration,
-	&Modifiers &MethodRes &MethodDeclarator &Throws := &MethodHeader,
-	&Identifier ( &FormalParameters ) := &MethodDeclarator
-	=========================================================
-	extractMethod(&MethodDeclaration, &Rel) = 
-	&Rel union { <id2str(&Identifier), get-location(&MethodDeclaration) >}

@@ -1,7 +1,0 @@
-equations
-
-[extractCompilationUnit-start]
-	&Loc := get-location(&CompilationUnit)
-	=============================================================
-	extractCompilationUnit(&CompilationUnit, &Rel) = 
-	&Rel union {<get-filename(&Loc), &Loc>}
