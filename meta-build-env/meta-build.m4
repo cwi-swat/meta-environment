@@ -374,7 +374,7 @@ dnl -------------------------------
 AC_DEFUN([META_INSTALLED_PKG_VAR],[$($PKG_CONFIG --variable=$2 "$1" | tr -d '@<:@:space:@:>@')])
 
 dnl META_INSTALLED_PKG_CONFIG_PATH(PATH_TO_PKG_FILE)
-AC_DEFUN([META_INSTALLED_PKG_CONFIG_PATH],[$(grep "PkgConfigPath=" $1 | cut -f 2 -d '=')])
+AC_DEFUN([META_INSTALLED_PKG_CONFIG_PATH],[$(grep "PkgConfigPath=" $1 | cut -f 2 -d '=' | tr ':' ' ')])
 
 dnl META_GENERATE_UNINSTALLED_PC(PKG)
 dnl ---------------------------------
