@@ -39,7 +39,7 @@ Makefile
   spec/Makefile
   spec/relation-calculus/Makefile
   tbscripts/Makefile
-dnl  util/Makefile
+  util/Makefile
   rscripts/Makefile
 dnl  rviz/Makefile
 dnl  demo/Makefile

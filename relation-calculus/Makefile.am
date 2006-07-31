@@ -1,6 +1,6 @@
 include make_rules
 
-SUBDIRS		= spec rscripts tbscripts # demo rviz util
+SUBDIRS		= spec rscripts tbscripts util # demo rviz util
 
 ACLOCAL_FLAGS 	= -I .
 
