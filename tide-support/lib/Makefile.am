@@ -13,7 +13,6 @@ include_HEADERS	= \
 
 libtide_adapter_la_CPPFLAGS = $(ATERM_CFLAGS) $(TOOLBUSLIB_CFLAGS) -DDISABLE_DYNAMIC_CHECKING
 libtide_adapter_la_LDFLAGS  = -avoid-version -no-undefined $(AM_LDFLAGS)
-libtide_adapter_la_LIBADD   = $(ATERM_LIBS) $(TOOLBUSLIB_LIBS)
 libtide_adapter_la_SOURCES = \
 	TA.c \
 	TA_dict.c \
