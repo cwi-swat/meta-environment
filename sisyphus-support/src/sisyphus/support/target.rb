@@ -4,6 +4,7 @@ require 'active_record'
 class Target < ActiveRecord::Base
   belongs_to :project
   belongs_to :source
+  belongs_to :profile
   belongs_to :tree
 
   def name
@@ -14,12 +15,19 @@ class Target < ActiveRecord::Base
 
   def validate
     source_must_be_in_project
+    project_must_be_in_profile
     tree_must_have_same_designator_as_source
   end
 
   def source_must_be_in_project
     if source.project != project then
       errors.add('source', "the project #{target} belongs to is not the same as the project its source #{source} belongs to.")
+    end
+  end
+
+  def project_must_be_in_profile
+    if not profile.projects.include?(project) then
+      errors.add('project', "project #{project} is not part of profile #{profile}")
     end
   end
 

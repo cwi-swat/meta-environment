@@ -76,10 +76,11 @@ create table sources (
 
 create table targets (
 	id serial primary key,
+	profile_id integer references profiles,
 	project_id integer references projects,
 	source_id integer references sources,
 	tree_id integer references trees,
-	unique (project_id, source_id, tree_id)
+	unique (profile_id, project_id, source_id, tree_id)
 	
 );
 
@@ -99,13 +100,12 @@ create table hosts (
 
 create table builds (
 	id serial primary key, 
-	tree_id integer references trees,
+	target_id integer references targets,
 	host_id integer references hosts,
-	profile_id integer references profiles,
 	time timestamp not null unique,
 	created_on timestamp,
 	success boolean,
-	unique (host_id, tree_id, profile_id)
+	unique (target_id, host_id)
 );
 
 create table dependencies (
