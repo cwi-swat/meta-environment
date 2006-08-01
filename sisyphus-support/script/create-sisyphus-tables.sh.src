@@ -12,8 +12,8 @@ DB_NAME=__DATABASE_NAME__
 
 SCHEMA=${DATA_DIR}/schemas/sisyphus.postgresql
 
-echo "This will destroy any data contained in database ${DB_NAME}!"
-echo "Press Control-C to quit."
+echo "This will create the sisyphus tables in database ${DB_NAME}!"
+echo "Press Control-C to quit or any other key to continue."
 read
 
 ${POSTGRESQL} \

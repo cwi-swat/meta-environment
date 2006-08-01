@@ -2,8 +2,8 @@ require 'active_record'
 
 class Profile < ActiveRecord::Base
   has_one :environment
+  has_one :helper
   has_many :actions
-  has_many :functions
 
   has_and_belongs_to_many :projects
   

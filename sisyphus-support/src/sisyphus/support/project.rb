@@ -14,6 +14,23 @@ class Project < ActiveRecord::Base
     end
   end
 
+  def sources_for_name(name)
+    sources.each do |source|
+      if source.name == name then
+        return source
+      end
+    end
+  end
+
+  def sources_for_designator(designator)
+    sources.each do |source|
+      if source.designator == designator then
+        return source
+      end
+    end
+  end
+
+
   protected
 
   def validate
@@ -40,5 +57,5 @@ class Project < ActiveRecord::Base
       end
     end
   end
-  
+    
 end

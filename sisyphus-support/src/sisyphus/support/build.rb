@@ -1,9 +1,9 @@
 require 'active_record'
 
 class Build < ActiveRecord::Base
-  belongs_to :tree
+  belongs_to :target
   belongs_to :host
-  belongs_to :profile
+
   has_many :results
   has_and_belongs_to_many :dependencies,
   :classname => 'Build',
@@ -14,11 +14,11 @@ class Build < ActiveRecord::Base
 
   validates_presence_of :time
 
-  def self.find_by_tree_and_host_and_profile(tree, host, profile)
-    b = Build.find(:first, :conditions => ['tree_id = ? and host_id = ? and profile_id = ?',
-                                           tree, host, profile])
+  def self.find_by_target_and_host(target, host)
+    b = Build.find(:first, :conditions => ['target_id = ? and host_id = ?',
+                                           target, host])
     if not b then
-      b = Build.new(:tree => tree, :host => host, :profile => profile)
+      b = Build.new(:target => target, :host => host)
       b.save
     end
     return b
@@ -40,7 +40,7 @@ class Build < ActiveRecord::Base
 
   def validate
     result_actions_must_be_profile_actions
-    extent_must_be_homogenous
+    extent_must_be_homogeneous
     extent_must_be_single_hosted
   end
 
@@ -55,15 +55,15 @@ class Build < ActiveRecord::Base
     end
   end
 
-  def homogenous?(set)
+  def homogeneous?(set)
     names = set.collect do |build|
       build.name
     end
     return names.uniq.length == set.length
   end
 
-  def extent_must_be_homogenous
-    return homogenous?(extent)
+  def extent_must_be_homogeneous
+    return homogeneous?(extent)
   end
 
   def extent_must_be_single_hosted
