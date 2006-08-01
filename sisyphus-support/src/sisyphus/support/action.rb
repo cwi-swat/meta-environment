@@ -6,8 +6,8 @@ require 'active_record'
 # containing embedded ruby (erb). It is instantiated using +Contexts+
 
 class Action < ActiveRecord::Base
-  belongs_to :profile
-  acts_as_list :scope => :profile
+  belongs_to :script
+  acts_as_list :scope => :script
   validates_presence_of :name, :template
 end
 

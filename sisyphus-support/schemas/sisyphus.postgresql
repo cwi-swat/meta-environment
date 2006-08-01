@@ -115,14 +115,34 @@ create table dependencies (
 );
 
 
+
+create table releases (
+	id serial primary key,
+	build_id integer references builds,
+	created_on timestamp,
+	version text not null
+);
+
+	
+
+create table scripts (
+	id serial primary key,	
+	name text not null unique
+);
+
+insert into scripts values (default, 'default');
+
 create table actions (
 	id serial primary key,
 	position integer,
-	profile_id integer references profiles,
+	script_id integer references profiles,
 	name text,
 	template text,
-	unique (profile_id, position, name)
+	unique (script_id, position, name)
 );
+
+
+
 
 create table results (
 	id serial primary key,
@@ -134,14 +154,7 @@ create table results (
 	unique (build_id, action_id)
 );
 
-create table releases (
-	id serial primary key,
-	build_id integer references builds,
-	created_on timestamp,
-	version text not null
-);
 
-	
 create table status (
 	id serial primary key,
 	host_id integer references hosts,
@@ -151,12 +164,21 @@ create table status (
 );
 
 
+create table profiles_scripts (
+	profile_id integer references profiles,
+	action_id integer references actions,
+	unique (profile_id, action_id)
+);
+
+
+
+
 create table variables (
 	id serial primary key,
 	name text not null unique
 );
 
-insert into variables values (default, 'dependencies');
+insert into variables values (default, 'requires');
 insert into variables values (default, 'assets');
 insert into variables values (default, 'version');
 insert into variables values (default, 'distribution');

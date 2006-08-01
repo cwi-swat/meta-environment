@@ -25,7 +25,7 @@ class Build < ActiveRecord::Base
   end
 
   def name
-    return profile.designation(tree)
+    return target.name
   end
 
   def extent
