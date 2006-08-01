@@ -387,7 +387,7 @@ dnl META_IF_NOT_CONTAINS(STRING,SUBSTRING,CODE)
 dnl checks whether SUBSTRING is a part of STRING, and runs CODE if yes
 dnl (this is supposed to be a portable way to do this)
 AC_DEFUN([META_IF_NOT_CONTAINS],[
-  if test `expr "$1" : ".*$2.*"` -eq 0 ; then
+  if expr x"$1" : "x.*$2.*"; then :; else
     $3
   fi
 ])
