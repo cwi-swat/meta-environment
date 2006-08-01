@@ -6,7 +6,9 @@ class Function < ActiveRecord::Base
   acts_as_list :scope => :helper
   validates_presence_of :name, :template
 
-
+  def name
+    return variable.name
+  end
 
 end
 
